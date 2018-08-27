@@ -121,6 +121,34 @@
           }
         }
       }
+    },
+    "dal": {
+      "root": "libs/dal",
+      "sourceRoot": "libs/dal/src",
+      "projectType": "library",
+      "prefix": "campus",
+      "architect": {
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/dal/src/test.ts",
+            "tsConfig": "libs/dal/tsconfig.spec.json",
+            "karmaConfig": "libs/dal/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/dal/tsconfig.lib.json",
+              "libs/dal/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "cli": {

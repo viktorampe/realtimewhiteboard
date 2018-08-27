@@ -16,6 +16,9 @@
     ],
     "baseUrl": ".",
     "paths": {
+      "@campus/dal": [
+        "libs/dal/src/index.ts"
+      ]
     }
   },
   "exclude": [
