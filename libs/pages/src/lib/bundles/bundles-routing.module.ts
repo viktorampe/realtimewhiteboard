@@ -16,4 +16,4 @@ const routes: Routes = [
   exports: [RouterModule],
   providers: [BundlesResolver]
 })
-export class BundlesModule {}
+export class BundlesRoutingModule {}

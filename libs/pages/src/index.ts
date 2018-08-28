@@ -1,1 +1,1 @@
-export * from './lib/pages.module';
+export * from './lib/bundles/bundles.module';

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { BundlesViewModel } from './bundles.viewmodel';
 
 @Component({
-  selector: 'campus-bundles',
+  selector: 'campus-bundles-component',
   templateUrl: './bundles.component.html',
   styleUrls: ['./bundles.component.scss']
 })
