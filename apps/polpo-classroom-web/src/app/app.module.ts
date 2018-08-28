@@ -9,7 +9,7 @@ import { AppComponent } from './app.component';
   imports: [
     BrowserModule,
     NxModule.forRoot(),
-    RouterModule.forRoot([], { initialNavigation: 'enabled' })
+    RouterModule.forRoot([{path: 'pages', loadChildren: '@campus/pages#PagesModule'}], { initialNavigation: 'enabled' })
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -16,6 +16,9 @@
     ],
     "baseUrl": ".",
     "paths": {
+      "@campus/pages": [
+        "libs/pages/src/index.ts"
+      ]
     }
   },
   "exclude": [
