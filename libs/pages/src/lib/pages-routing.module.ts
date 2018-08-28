@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/budles', pathMatch: 'full' },
-  { path: 'bundles', loadChildren: './bundles/bundles.module#TrainingModule' }
+  { path: 'bundles', loadChildren: './bundles/bundles.module#BundlesModule' }
 ];
 
 @NgModule({
