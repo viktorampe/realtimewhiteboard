@@ -16,6 +16,27 @@
     },
     "pages": {
       "tags": []
+    },
+    "pages-bundles": {
+      "tags": []
+    },
+    "pages-logout": {
+      "tags": []
+    },
+    "pages-messages": {
+      "tags": []
+    },
+    "pages-alerts": {
+      "tags": []
+    },
+    "pages-profile": {
+      "tags": []
+    },
+    "pages-reports": {
+      "tags": []
+    },
+    "pages-tasks": {
+      "tags": []
     }
   }
 }

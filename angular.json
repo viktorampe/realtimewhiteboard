@@ -149,6 +149,202 @@
           }
         }
       }
+    },
+    "pages-bundles": {
+      "root": "libs/pages/bundles",
+      "sourceRoot": "libs/pages/bundles/src",
+      "projectType": "library",
+      "prefix": "campus",
+      "architect": {
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/pages/bundles/src/test.ts",
+            "tsConfig": "libs/pages/bundles/tsconfig.spec.json",
+            "karmaConfig": "libs/pages/bundles/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/pages/bundles/tsconfig.lib.json",
+              "libs/pages/bundles/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "pages-logout": {
+      "root": "libs/pages/logout",
+      "sourceRoot": "libs/pages/logout/src",
+      "projectType": "library",
+      "prefix": "campus",
+      "architect": {
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/pages/logout/src/test.ts",
+            "tsConfig": "libs/pages/logout/tsconfig.spec.json",
+            "karmaConfig": "libs/pages/logout/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/pages/logout/tsconfig.lib.json",
+              "libs/pages/logout/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "pages-messages": {
+      "root": "libs/pages/messages",
+      "sourceRoot": "libs/pages/messages/src",
+      "projectType": "library",
+      "prefix": "campus",
+      "architect": {
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/pages/messages/src/test.ts",
+            "tsConfig": "libs/pages/messages/tsconfig.spec.json",
+            "karmaConfig": "libs/pages/messages/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/pages/messages/tsconfig.lib.json",
+              "libs/pages/messages/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "pages-alerts": {
+      "root": "libs/pages/alerts",
+      "sourceRoot": "libs/pages/alerts/src",
+      "projectType": "library",
+      "prefix": "campus",
+      "architect": {
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/pages/alerts/src/test.ts",
+            "tsConfig": "libs/pages/alerts/tsconfig.spec.json",
+            "karmaConfig": "libs/pages/alerts/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/pages/alerts/tsconfig.lib.json",
+              "libs/pages/alerts/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "pages-profile": {
+      "root": "libs/pages/profile",
+      "sourceRoot": "libs/pages/profile/src",
+      "projectType": "library",
+      "prefix": "campus",
+      "architect": {
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/pages/profile/src/test.ts",
+            "tsConfig": "libs/pages/profile/tsconfig.spec.json",
+            "karmaConfig": "libs/pages/profile/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/pages/profile/tsconfig.lib.json",
+              "libs/pages/profile/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "pages-reports": {
+      "root": "libs/pages/reports",
+      "sourceRoot": "libs/pages/reports/src",
+      "projectType": "library",
+      "prefix": "campus",
+      "architect": {
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/pages/reports/src/test.ts",
+            "tsConfig": "libs/pages/reports/tsconfig.spec.json",
+            "karmaConfig": "libs/pages/reports/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/pages/reports/tsconfig.lib.json",
+              "libs/pages/reports/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "pages-tasks": {
+      "root": "libs/pages/tasks",
+      "sourceRoot": "libs/pages/tasks/src",
+      "projectType": "library",
+      "prefix": "campus",
+      "architect": {
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/pages/tasks/src/test.ts",
+            "tsConfig": "libs/pages/tasks/tsconfig.spec.json",
+            "karmaConfig": "libs/pages/tasks/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/pages/tasks/tsconfig.lib.json",
+              "libs/pages/tasks/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "cli": {
