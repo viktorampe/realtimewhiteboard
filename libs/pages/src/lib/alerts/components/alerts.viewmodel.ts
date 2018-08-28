@@ -1,0 +1,12 @@
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+
+@Injectable()
+export class AlertsViewModel {
+  constructor() {}
+
+  initialize(): Observable<boolean> {
+    // TODO update
+    return new BehaviorSubject<boolean>(true);
+  }
+}
