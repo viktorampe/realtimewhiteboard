@@ -10,7 +10,7 @@ import { AppComponent } from './app.component';
     BrowserModule,
     NxModule.forRoot(),
     RouterModule.forRoot(
-      [ { path: '', redirectTo: 'bundles', pathMatch: 'full'}
+      [ { path: '', redirectTo: 'bundles', pathMatch: 'full'},
         { path: 'bundles', loadChildren: '@campus/pages#BundlesModule' }],
       { initialNavigation: 'enabled', enableTracing: true }
     )
