@@ -1,12 +1,19 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
-import { AppComponent } from './app.component';
+import { BrowserModule } from '@angular/platform-browser';
 import { NxModule } from '@nrwl/nx';
+import { RouterModule } from '../../../../node_modules/@angular/router';
+import { AppComponent } from './app.component';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, NxModule.forRoot()],
+  imports: [
+    BrowserModule,
+    NxModule.forRoot(),
+    RouterModule.forRoot([
+      { path: '', pathMatch: 'full', component: AppComponent },
+      { path: 'login', loadChildren: '@campus/devlib#DevlibModule' }
+    ])
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })

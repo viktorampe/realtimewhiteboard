@@ -16,6 +16,9 @@
     ],
     "baseUrl": ".",
     "paths": {
+      "@campus/devlib": [
+        "libs/devlib/src/index.ts"
+      ]
     }
   },
   "exclude": [
