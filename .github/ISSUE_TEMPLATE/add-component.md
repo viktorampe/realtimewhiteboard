@@ -1,6 +1,6 @@
 ---
 name: add component
-about: Adding a new component to a project.
+about: Checklist for adding a new component to a project
 
 ---
 
