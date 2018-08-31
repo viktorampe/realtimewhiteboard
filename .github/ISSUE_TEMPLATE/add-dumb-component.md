@@ -1,6 +1,6 @@
 ---
 name: add dumb component
-about: Checklist for adding a new component to a project
+about: Checklist for adding a dumb component to a project
 
 ---
 
