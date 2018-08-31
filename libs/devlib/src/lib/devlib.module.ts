@@ -6,7 +6,7 @@ import { DalModule } from '@campus/dal';
 import { LoginpageComponent } from './loginpage/loginpage.component';
 @NgModule({
   imports: [
-    DalModule,
+    DalModule.forRoot(),
     FormsModule,
     CommonModule,
     RouterModule.forChild([

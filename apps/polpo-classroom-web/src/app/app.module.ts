@@ -1,7 +1,6 @@
-import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { SDKBrowserModule } from '@diekeure/polpo-api-angular-sdk';
+import { DalModule } from '@campus/dal';
 import { NxModule } from '@nrwl/nx';
 import { RouterModule } from '../../../../node_modules/@angular/router';
 import { AppComponent } from './app.component';
@@ -9,8 +8,7 @@ import { AppComponent } from './app.component';
 @NgModule({
   declarations: [AppComponent],
   imports: [
-    SDKBrowserModule.forRoot(),
-    HttpClientModule,
+    DalModule,
     BrowserModule,
     NxModule.forRoot(),
     RouterModule.forRoot([
