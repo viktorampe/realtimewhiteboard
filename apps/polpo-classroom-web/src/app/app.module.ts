@@ -12,25 +12,25 @@ import { AppComponent } from './app.component';
     RouterModule.forRoot(
       [
         { path: '', redirectTo: 'bundles', pathMatch: 'full' },
-        { path: 'alerts', loadChildren: '@campus/pages/alerts#AlertsModule' },
+        // { path: 'alerts', loadChildren: '@campus/pages/alerts#AlertsModule' },
         {
           path: 'bundles',
-          loadChildren: '@campus/pages/bundles#BundlesModule'
-        },
-        { path: 'logout', loadChildren: '@campus/pages/logout#LogoutModule' },
-        {
-          path: 'messages',
-          loadChildren: '@campus/pages/messages#MessagesModule'
-        },
-        {
-          path: 'profile',
-          loadChildren: '@campus/pages/profile#ProfileModule'
-        },
-        {
-          path: 'reports',
-          loadChildren: '@campus/pages/reports#ReportsModule'
-        },
-        { path: 'tasks', loadChildren: '@campus/pages/tasks#TasksModule' }
+          loadChildren: '@campus/pages/bundles#PagesBundlesModule'
+        }
+        // { path: 'logout', loadChildren: '@campus/pages/logout#LogoutModule' },
+        // {
+        //   path: 'messages',
+        //   loadChildren: '@campus/pages/messages#MessagesModule'
+        // },
+        // {
+        //   path: 'profile',
+        //   loadChildren: '@campus/pages/profile#ProfileModule'
+        // },
+        // {
+        //   path: 'reports',
+        //   loadChildren: '@campus/pages/reports#ReportsModule'
+        // },
+        // { path: 'tasks', loadChildren: '@campus/pages/tasks#TasksModule' }
       ],
       { initialNavigation: 'enabled', enableTracing: true }
     )
