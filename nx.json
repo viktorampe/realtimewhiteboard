@@ -13,6 +13,9 @@
     },
     "polpo-classroom-web-e2e": {
       "tags": []
+    },
+    "pages-bundles": {
+      "tags": []
     }
   }
 }
