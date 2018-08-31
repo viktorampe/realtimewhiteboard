@@ -11,26 +11,41 @@ import { AppComponent } from './app.component';
     NxModule.forRoot(),
     RouterModule.forRoot(
       [
+        {
+          path: 'tasks',
+          loadChildren: '@campus/pages/tasks#PagesTasksModule'
+        },
+
+        {
+          path: 'reports',
+          loadChildren: '@campus/pages/reports#PagesReportsModule'
+        },
+
+        {
+          path: 'profile',
+          loadChildren: '@campus/pages/profile#PagesProfileModule'
+        },
+
+        {
+          path: 'messages',
+          loadChildren: '@campus/pages/messages#PagesMessagesModule'
+        },
+
+        {
+          path: 'logout',
+          loadChildren: '@campus/pages/logout#PagesLogoutModule'
+        },
+
+        {
+          path: 'alerts',
+          loadChildren: '@campus/pages/alerts#PagesAlertsModule'
+        },
+
         { path: '', redirectTo: 'bundles', pathMatch: 'full' },
-        // { path: 'alerts', loadChildren: '@campus/pages/alerts#AlertsModule' },
         {
           path: 'bundles',
           loadChildren: '@campus/pages/bundles#PagesBundlesModule'
         }
-        // { path: 'logout', loadChildren: '@campus/pages/logout#LogoutModule' },
-        // {
-        //   path: 'messages',
-        //   loadChildren: '@campus/pages/messages#MessagesModule'
-        // },
-        // {
-        //   path: 'profile',
-        //   loadChildren: '@campus/pages/profile#ProfileModule'
-        // },
-        // {
-        //   path: 'reports',
-        //   loadChildren: '@campus/pages/reports#ReportsModule'
-        // },
-        // { path: 'tasks', loadChildren: '@campus/pages/tasks#TasksModule' }
       ],
       { initialNavigation: 'enabled', enableTracing: true }
     )
