@@ -6,4 +6,5 @@ about: Checklist for adding a library to a project.
 
 - [ ] routing
 - [ ] state management
-- [ ] configuration (optional)
+- [ ] configuration
+- [ ] import into app(s)
