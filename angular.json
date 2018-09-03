@@ -64,23 +64,6 @@
             "browserTarget": "polpo-classroom-web:build"
           }
         },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "apps/polpo-classroom-web/src/test.ts",
-            "polyfills": "apps/polpo-classroom-web/src/polyfills.ts",
-            "tsConfig": "apps/polpo-classroom-web/tsconfig.spec.json",
-            "karmaConfig": "apps/polpo-classroom-web/karma.conf.js",
-            "styles": [
-              "apps/polpo-classroom-web/src/styles.css"
-            ],
-            "scripts": [],
-            "assets": [
-              "apps/polpo-classroom-web/src/favicon.ico",
-              "apps/polpo-classroom-web/src/assets"
-            ]
-          }
-        },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
@@ -91,6 +74,14 @@
             "exclude": [
               "**/node_modules/**"
             ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "apps/polpo-classroom-web/jest.config.js",
+            "tsConfig": "apps/polpo-classroom-web/tsconfig.spec.json",
+            "setupFile": "apps/polpo-classroom-web/src/test-setup.ts"
           }
         }
       }
