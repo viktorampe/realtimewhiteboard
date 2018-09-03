@@ -42,3 +42,13 @@ Before running the tests make sure you are serving the app via `ng serve`.
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+### generate new route lib using @diekeure/angular-schematics
+
+    ng g @diekeure/angular-schematics:page --name=some-name-in-snake-case
+
+optional parameter
+--project ==> project in which the new route should be added, if not entered, the default project from angular.json will be used
+--directory ==> name of the route if it should not be 'pages'
+
+the route will be added to the libs folder

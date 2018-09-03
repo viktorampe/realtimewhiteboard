@@ -1,9 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-import { HttpClientModule } from '../../../../node_modules/@angular/common/http';
-import { SDKBrowserModule } from '../../../../node_modules/@diekeure/polpo-api-angular-sdk';
+import { HttpClientModule } from '@angular/common/http';
+import { ModuleWithProviders, NgModule } from '@angular/core';
+import { SDKBrowserModule } from '@diekeure/polpo-api-angular-sdk';
 
 @NgModule({
   imports: [CommonModule, SDKBrowserModule.forRoot(), HttpClientModule]
 })
-export class DalModule {}
+export class DalModule {
+  static forRoot(): ModuleWithProviders {
+    return {
+      ngModule: DalModule,
+      providers: []
+    };
+  }
+}

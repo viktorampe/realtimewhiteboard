@@ -8,6 +8,7 @@
     "nx.json": "*"
   },
   "projects": {
+    "@campus/devlib": ["libs/devlib/src/index.ts"],
     "polpo-classroom-web": {
       "tags": []
     },
@@ -15,6 +16,30 @@
       "tags": []
     },
     "devlib": {
+      "tags": []
+    },
+    "pages-bundles": {
+      "tags": []
+    },
+    "pages-alerts": {
+      "tags": []
+    },
+    "pages-logout": {
+      "tags": []
+    },
+    "pages-messages": {
+      "tags": []
+    },
+    "pages-profile": {
+      "tags": []
+    },
+    "pages-reports": {
+      "tags": []
+    },
+    "pages-tasks": {
+      "tags": []
+    },
+    "ui": {
       "tags": []
     },
     "dal": {
