@@ -15,8 +15,8 @@ before_install:
 before_script:
 - npm run lint
 - npm run format:check
-- npm run affected:test --base=$TRAVIS_BRANCH --head=HEAD
-- npm run affected:e2e --base=$TRAVIS_BRANCH --head=HEAD
+- npm run affected:test -- --base=$TRAVIS_BRANCH --head=HEAD
+- npm run affected:e2e -- --base=$TRAVIS_BRANCH --head=HEAD
 script: -if [[ $string = *"deploy"* ]]; then npm run affected:build --base=$TRAVIS_BRANCH
   --head=HEAD fi
 deploy:
