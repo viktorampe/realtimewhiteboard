@@ -1,6 +1,6 @@
-export { AuthService, AuthServiceToken } from './lib/auth-service';
+export * from './lib/dal.module';
+export { AuthService, AuthServiceToken } from './lib/persons/auth-service';
 export {
   AuthServiceInterface,
   LoginCredentials
-} from './lib/auth-service.interface';
-export * from './lib/dal.module';
+} from './lib/persons/auth-service.interface';
