@@ -9,7 +9,10 @@ describe('TaskEduContentService', () => {
     });
   });
 
-  it('should be created', inject([TaskEduContentsService], (service: TaskEduContentsService) => {
-    expect(service).toBeTruthy();
-  }));
+  it('should be created', inject(
+    [TaskEduContentsService],
+    (service: TaskEduContentsService) => {
+      expect(service).toBeTruthy();
+    }
+  ));
 });

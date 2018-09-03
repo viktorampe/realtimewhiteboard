@@ -1,4 +1,4 @@
-import { Observable } from '../../../../node_modules/rxjs';
+import { Observable } from '../../../../../node_modules/rxjs';
 
 export interface LoginCredentials {
   email: string;

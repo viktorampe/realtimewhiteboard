@@ -1,6 +1,6 @@
 import { Injectable, InjectionToken } from '@angular/core';
 import { LoopBackAuth, PersonApi } from '@diekeure/polpo-api-angular-sdk';
-import { Observable } from '../../../../node_modules/rxjs';
+import { Observable } from '../../../../../node_modules/rxjs';
 import {
   AuthServiceInterface,
   LoginCredentials

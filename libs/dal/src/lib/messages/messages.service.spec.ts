@@ -9,7 +9,10 @@ describe('MessagesService', () => {
     });
   });
 
-  it('should be created', inject([MessagesService], (service: MessagesService) => {
-    expect(service).toBeTruthy();
-  }));
+  it('should be created', inject(
+    [MessagesService],
+    (service: MessagesService) => {
+      expect(service).toBeTruthy();
+    }
+  ));
 });
