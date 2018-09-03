@@ -13,6 +13,33 @@
     },
     "polpo-classroom-web-e2e": {
       "tags": []
+    },
+    "pages-bundles": {
+      "tags": []
+    },
+    "pages-alerts": {
+      "tags": []
+    },
+    "pages-logout": {
+      "tags": []
+    },
+    "pages-messages": {
+      "tags": []
+    },
+    "pages-profile": {
+      "tags": []
+    },
+    "pages-reports": {
+      "tags": []
+    },
+    "pages-tasks": {
+      "tags": []
+    },
+    "ui": {
+      "tags": []
+    },
+    "dal": {
+      "tags": []
     }
   }
 }
