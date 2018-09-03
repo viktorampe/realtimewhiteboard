@@ -6,4 +6,6 @@ beforeEach(() => {
   reportsViewModel = new ReportsViewModel();
 });
 
-// TODO add test
+test("it should return", () => {
+  return;
+});

@@ -6,4 +6,6 @@ beforeEach(() => {
   messagesViewModel = new MessagesViewModel();
 });
 
-// TODO add test
+test("it should return", () => {
+  return;
+});

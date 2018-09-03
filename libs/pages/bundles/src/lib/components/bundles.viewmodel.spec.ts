@@ -5,4 +5,7 @@ let bundlesViewModel: BundlesViewModel;
 beforeEach(() => {
   bundlesViewModel = new BundlesViewModel();
 });
-// TODO add test
+
+test("it should return", () => {
+  return;
+});
