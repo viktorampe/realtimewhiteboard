@@ -20,9 +20,9 @@ html, body {
 @import 'theme-variables';
 
 // include ui lib scss file
-@import '/libs/ui/src/lib/ui-theme';
+@import 'libs/ui/src/lib/ui-theme';
 @include ui-theme(); // alternative: include individual component mixins
 
 // include pages lib scss file
-@import '/libs/pages/pages-theme';
+@import 'libs/pages/pages-theme';
 @include pages-theme();

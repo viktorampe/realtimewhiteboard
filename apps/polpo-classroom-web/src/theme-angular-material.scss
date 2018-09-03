@@ -1,5 +1,7 @@
-// created theme with http://mcg.mbitson.com/ (find main palette color next to '500 :')
+@import '~@angular/material/theming';
+@include mat-core(); // be sure to include this mixin only once
 
+// created theme with http://mcg.mbitson.com/ (find main palette color next to '500 :')
 $mat-polpo-primary: (
     50 : #eaeaea,
     100 : #cbcbcb,
@@ -68,9 +70,6 @@ $mat-polpo-accent: (
 
 $mat-polpo-warn: $mat-red;
 
-
-@import '~@angular/material/theming';
-@include mat-core(); // be sure to include this mixin only once
 // apply custom theme to my components (https://material.angular.io/guide/theming-your-components)
 $polpo-primary: mat-palette($mat-polpo-primary);
 $polpo-accent:  mat-palette($mat-polpo-accent, 500, 900, A100);
