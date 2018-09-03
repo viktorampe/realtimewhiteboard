@@ -16,6 +16,9 @@
     ],
     "baseUrl": ".",
     "paths": {
+      "@campus/ui": [
+        "libs/ui/src/index.ts"
+      ],
       "@campus/dal": [
         "libs/dal/src/index.ts"
       ]
