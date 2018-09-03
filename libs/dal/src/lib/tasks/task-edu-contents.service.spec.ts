@@ -1,15 +1,15 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { TaskEduContentService } from './task-edu-content.service';
+import { TaskEduContentsService } from './task-edu-contents.service';
 
 describe('TaskEduContentService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [TaskEduContentService]
+      providers: [TaskEduContentsService]
     });
   });
 
-  it('should be created', inject([TaskEduContentService], (service: TaskEduContentService) => {
+  it('should be created', inject([TaskEduContentsService], (service: TaskEduContentsService) => {
     expect(service).toBeTruthy();
   }));
 });

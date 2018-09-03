@@ -1,15 +1,15 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { RoutingService } from './routing.service';
+import { RoutingsService } from './routings.service';
 
 describe('RoutingService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [RoutingService]
+      providers: [RoutingsService]
     });
   });
 
-  it('should be created', inject([RoutingService], (service: RoutingService) => {
+  it('should be created', inject([RoutingsService], (service: RoutingsService) => {
     expect(service).toBeTruthy();
   }));
 });
