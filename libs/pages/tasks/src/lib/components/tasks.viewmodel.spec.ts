@@ -6,6 +6,6 @@ beforeEach(() => {
   tasksViewModel = new TasksViewModel();
 });
 
-test("it should return", () => {
+test('it should return', () => {
   return;
 });

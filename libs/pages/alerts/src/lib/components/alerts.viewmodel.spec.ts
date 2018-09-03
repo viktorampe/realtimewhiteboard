@@ -6,6 +6,6 @@ beforeEach(() => {
   alertsViewModel = new AlertsViewModel();
 });
 
-test("it should return", () => {
+test('it should return', () => {
   return;
 });

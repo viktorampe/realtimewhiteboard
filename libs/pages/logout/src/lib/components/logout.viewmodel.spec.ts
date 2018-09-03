@@ -6,6 +6,6 @@ beforeEach(() => {
   logoutViewModel = new LogoutViewModel();
 });
 
-test("it should return", () => {
+test('it should return', () => {
   return;
 });

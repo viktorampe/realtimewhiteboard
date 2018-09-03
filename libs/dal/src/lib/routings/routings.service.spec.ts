@@ -9,7 +9,10 @@ describe('RoutingService', () => {
     });
   });
 
-  it('should be created', inject([RoutingsService], (service: RoutingsService) => {
-    expect(service).toBeTruthy();
-  }));
+  it('should be created', inject(
+    [RoutingsService],
+    (service: RoutingsService) => {
+      expect(service).toBeTruthy();
+    }
+  ));
 });

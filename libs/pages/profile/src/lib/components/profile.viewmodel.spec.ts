@@ -6,6 +6,6 @@ beforeEach(() => {
   profileViewModel = new ProfileViewModel();
 });
 
-test("it should return", () => {
+test('it should return', () => {
   return;
 });

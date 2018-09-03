@@ -6,6 +6,6 @@ beforeEach(() => {
   bundlesViewModel = new BundlesViewModel();
 });
 
-test("it should return", () => {
+test('it should return', () => {
   return;
 });
