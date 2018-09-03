@@ -5,8 +5,10 @@ import { EducontentPreviewComponent } from './info-panel/educontent-preview/educ
 import { InputLabelComponent } from './info-panel/input-label/input-label.component';
 import { UserListComponent } from './info-panel/user-list/user-list.component';
 import { SelectionListComponent } from './info-panel/selection-list/selection-list.component';
+import { InfoPanelComponent } from './info-panel/info-panel.component';
 @NgModule({
   imports: [CommonModule],
-  declarations: [ActionComponent, EducontentPreviewComponent, InputLabelComponent, UserListComponent, SelectionListComponent]
+  declarations: [ActionComponent, EducontentPreviewComponent, InputLabelComponent, UserListComponent, SelectionListComponent, InfoPanelComponent],
+  exports: [InfoPanelComponent]
 })
 export class UiModule {}
