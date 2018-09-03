@@ -323,7 +323,7 @@
       "prefix": "campus",
       "architect": {
         "lint": {
-          "builder": "@angular-devkit/libs/build-angular:tslint",
+          "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
               "libs/ui/tsconfig.lib.json",
