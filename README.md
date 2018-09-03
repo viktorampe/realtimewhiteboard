@@ -55,4 +55,4 @@ the route will be added to the libs folder
 
 ### add component to UI library
 
-    ng g component {component name}--styleext=scss --project=ui --export
+    ng g component {component name} --styleext=scss --project=ui --export
