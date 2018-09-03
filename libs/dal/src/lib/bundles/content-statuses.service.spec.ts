@@ -1,6 +1,6 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { ContentStatusesService } from "./content-statuses.service";
+import { ContentStatusesService } from './content-statuses.service';
 
 describe('ContentStatusesService', () => {
   beforeEach(() => {
@@ -9,7 +9,10 @@ describe('ContentStatusesService', () => {
     });
   });
 
-  it('should be created', inject([ContentStatusesService], (service: ContentStatusesService) => {
-    expect(service).toBeTruthy();
-  }));
+  it('should be created', inject(
+    [ContentStatusesService],
+    (service: ContentStatusesService) => {
+      expect(service).toBeTruthy();
+    }
+  ));
 });

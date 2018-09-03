@@ -13,6 +13,8 @@
     "../../libs/pages/messages/src/index.ts",
     "../../libs/pages/profile/src/index.ts",
     "../../libs/pages/reports/src/index.ts",
-    "../../libs/pages/tasks/src/index.ts"
+    "../../libs/pages/tasks/src/index.ts",
+    "../../libs/dal/src/index.ts",
+    "../../libs/ui/src/index.ts"
   ]
 }
