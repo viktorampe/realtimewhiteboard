@@ -1,12 +1,12 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
-import { AppComponent } from './app.component';
+import { BrowserModule } from '@angular/platform-browser';
+import { DalModule } from '@campus/dal';
 import { NxModule } from '@nrwl/nx';
+import { AppComponent } from './app.component';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, NxModule.forRoot()],
+  imports: [BrowserModule, NxModule.forRoot(), DalModule.forRoot()],
   providers: [],
   bootstrap: [AppComponent]
 })
