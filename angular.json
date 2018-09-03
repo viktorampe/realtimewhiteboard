@@ -69,7 +69,6 @@
           "options": {
             "tsConfig": [
               "apps/polpo-classroom-web/tsconfig.app.json",
-              "apps/polpo-classroom-web/tsconfig.spec.json",
               "apps/polpo-classroom-web/tsconfig.spec.json"
             ],
             "exclude": [
