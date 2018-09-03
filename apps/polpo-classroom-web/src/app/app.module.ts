@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
+import { DalModule } from '@campus/dal';
 import { NxModule } from '@nrwl/nx';
 import { AppComponent } from './app.component';
 
@@ -9,6 +10,7 @@ import { AppComponent } from './app.component';
   imports: [
     BrowserModule,
     NxModule.forRoot(),
+    DalModule.forRoot(),
     RouterModule.forRoot(
       [
         {
