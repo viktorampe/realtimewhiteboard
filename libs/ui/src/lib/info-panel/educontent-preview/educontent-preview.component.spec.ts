@@ -1,20 +1,18 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { InfoPanelEducontentPreviewComponent } from './educontent-preview.component';
 
-import { EducontentPreviewComponent } from './educontent-preview.component';
-
-describe('EducontentPreviewComponent', () => {
-  let component: EducontentPreviewComponent;
-  let fixture: ComponentFixture<EducontentPreviewComponent>;
+describe('InfoPanelEducontentPreviewComponent', () => {
+  let component: InfoPanelEducontentPreviewComponent;
+  let fixture: ComponentFixture<InfoPanelEducontentPreviewComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EducontentPreviewComponent ]
-    })
-    .compileComponents();
+      declarations: [InfoPanelEducontentPreviewComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EducontentPreviewComponent);
+    fixture = TestBed.createComponent(InfoPanelEducontentPreviewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

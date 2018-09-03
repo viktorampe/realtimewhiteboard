@@ -1,20 +1,18 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { InfoPanelInputLabelComponent } from './input-label.component';
 
-import { InputLabelComponent } from './input-label.component';
-
-describe('InputLabelComponent', () => {
-  let component: InputLabelComponent;
-  let fixture: ComponentFixture<InputLabelComponent>;
+describe('InfoPanelInputLabelComponent', () => {
+  let component: InfoPanelInputLabelComponent;
+  let fixture: ComponentFixture<InfoPanelInputLabelComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ InputLabelComponent ]
-    })
-    .compileComponents();
+      declarations: [InfoPanelInputLabelComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(InputLabelComponent);
+    fixture = TestBed.createComponent(InfoPanelInputLabelComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

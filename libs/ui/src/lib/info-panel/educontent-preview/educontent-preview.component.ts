@@ -1,15 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'campus-educontent-preview',
+  selector: 'campus-info-panel-educontent-preview',
   templateUrl: './educontent-preview.component.html',
   styleUrls: ['./educontent-preview.component.scss']
 })
-export class EducontentPreviewComponent implements OnInit {
+export class InfoPanelEducontentPreviewComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

@@ -1,20 +1,18 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { InfoPanelSelectionListComponent } from './selection-list.component';
 
-import { SelectionListComponent } from './selection-list.component';
-
-describe('SelectionListComponent', () => {
-  let component: SelectionListComponent;
-  let fixture: ComponentFixture<SelectionListComponent>;
+describe('InfoPanelSelectionListComponent', () => {
+  let component: InfoPanelSelectionListComponent;
+  let fixture: ComponentFixture<InfoPanelSelectionListComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SelectionListComponent ]
-    })
-    .compileComponents();
+      declarations: [InfoPanelSelectionListComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SelectionListComponent);
+    fixture = TestBed.createComponent(InfoPanelSelectionListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
