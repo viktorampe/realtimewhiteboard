@@ -1,0 +1,14 @@
+// thematic variables
+$ui-bg-color-1: #fff !default;
+$ui-bg-color-2: #fff !default;
+$ui-font-color-1: #000 !default;
+$ui-font-color-2: #000 !default;
+
+
+// import all required sass files from our libs
+// @import './components/tree.components.theme'
+
+// create theme-mixin with each mixin from our library components
+@mixin ui-theme() {
+  // @include ui-tree();
+}

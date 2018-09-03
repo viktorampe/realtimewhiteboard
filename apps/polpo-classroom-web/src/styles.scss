@@ -1,0 +1,28 @@
+/*
+ * css reset
+ */
+html, body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+}
+
+/*
+ * Angular Material theme
+ */
+@import 'theme-angular-material';
+@include angular-material-theme($polpo-theme); // alternative: include individual component mixins
+
+/*
+ * POLPO theme
+ */
+// load all variables for your app theme and ui components
+@import 'theme-variables';
+
+// include ui lib scss file
+@import '/libs/ui/src/lib/ui-theme';
+@include ui-theme(); // alternative: include individual component mixins
+
+// include pages lib scss file
+@import '/libs/pages/pages-theme';
+@include pages-theme();

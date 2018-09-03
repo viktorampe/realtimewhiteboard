@@ -1,0 +1,18 @@
+// color definitions
+$color-black-1: #32323a;
+$color-black-2: #51515b;
+$color-gray-1: #95a0aa;
+$color-gray-2: #888;
+$color-blue-1: #359590;
+
+// app theme
+$color-bg-primary-1: $color-black-1;
+$color-bg-secondary-2: $color-black-2;
+$color-text-1: $color-gray-1;
+$color-text-2: $color-gray-2;
+$color-active: $color-blue-1;
+
+// ui lib theme
+$ui-bg-color-1: $color-bg-primary-1;
+$ui-font-color-1: $color-text-1;
+$ui-font-color-active: $color-active;

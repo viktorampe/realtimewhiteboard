@@ -23,7 +23,7 @@
               "apps/polpo-classroom-web/src/assets"
             ],
             "styles": [
-              "apps/polpo-classroom-web/src/styles.css"
+              "apps/polpo-classroom-web/src/styles.scss"
             ],
             "scripts": []
           },
