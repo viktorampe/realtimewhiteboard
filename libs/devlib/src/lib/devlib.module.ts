@@ -1,18 +1,19 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
 import { DalModule } from '@campus/dal';
+import { DevlibRoutingModule } from './devlib.routing.module';
 import { LoginpageComponent } from './loginpage/loginpage.component';
+import { LoginPageViewModel } from './loginpage/loginpage.viewmodel';
+
 @NgModule({
   imports: [
     DalModule.forRoot(),
     FormsModule,
     CommonModule,
-    RouterModule.forChild([
-      { path: '', pathMatch: 'full', component: LoginpageComponent }
-    ])
+    DevlibRoutingModule
   ],
+  providers: [LoginPageViewModel],
   declarations: [LoginpageComponent]
 })
 export class DevlibModule {}

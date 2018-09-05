@@ -64,21 +64,6 @@
             "browserTarget": "polpo-classroom-web:build"
           }
         },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "apps/polpo-classroom-web/src/test.ts",
-            "polyfills": "apps/polpo-classroom-web/src/polyfills.ts",
-            "tsConfig": "apps/polpo-classroom-web/tsconfig.spec.json",
-            "karmaConfig": "apps/polpo-classroom-web/karma.conf.js",
-            "styles": ["apps/polpo-classroom-web/src/styles.css"],
-            "scripts": [],
-            "assets": [
-              "apps/polpo-classroom-web/src/favicon.ico",
-              "apps/polpo-classroom-web/src/assets"
-            ]
-          }
-        },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
@@ -87,6 +72,14 @@
               "apps/polpo-classroom-web/tsconfig.spec.json"
             ],
             "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "apps/polpo-classroom-web/jest.config.js",
+            "tsConfig": "apps/polpo-classroom-web/tsconfig.spec.json",
+            "setupFile": "apps/polpo-classroom-web/src/test-setup.ts"
           }
         }
       }
@@ -149,24 +142,23 @@
       "projectType": "library",
       "prefix": "campus",
       "architect": {
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "libs/pages/bundles/src/test.ts",
-            "tsConfig": "libs/pages/bundles/tsconfig.spec.json",
-            "karmaConfig": "libs/pages/bundles/karma.conf.js"
-          }
-        },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
               "libs/pages/bundles/tsconfig.lib.json",
+              "libs/pages/bundles/tsconfig.spec.json",
               "libs/pages/bundles/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/pages/bundles/jest.config.js",
+            "tsConfig": "libs/pages/bundles/tsconfig.spec.json",
+            "setupFile": "libs/pages/bundles/src/test-setup.ts"
           }
         }
       }
@@ -177,24 +169,23 @@
       "projectType": "library",
       "prefix": "campus",
       "architect": {
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "libs/pages/alerts/src/test.ts",
-            "tsConfig": "libs/pages/alerts/tsconfig.spec.json",
-            "karmaConfig": "libs/pages/alerts/karma.conf.js"
-          }
-        },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
               "libs/pages/alerts/tsconfig.lib.json",
+              "libs/pages/alerts/tsconfig.spec.json",
               "libs/pages/alerts/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/pages/alerts/jest.config.js",
+            "tsConfig": "libs/pages/alerts/tsconfig.spec.json",
+            "setupFile": "libs/pages/alerts/src/test-setup.ts"
           }
         }
       }
@@ -205,24 +196,23 @@
       "projectType": "library",
       "prefix": "campus",
       "architect": {
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "libs/pages/logout/src/test.ts",
-            "tsConfig": "libs/pages/logout/tsconfig.spec.json",
-            "karmaConfig": "libs/pages/logout/karma.conf.js"
-          }
-        },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
               "libs/pages/logout/tsconfig.lib.json",
+              "libs/pages/logout/tsconfig.spec.json",
               "libs/pages/logout/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/pages/logout/jest.config.js",
+            "tsConfig": "libs/pages/logout/tsconfig.spec.json",
+            "setupFile": "libs/pages/logout/src/test-setup.ts"
           }
         }
       }
@@ -233,24 +223,23 @@
       "projectType": "library",
       "prefix": "campus",
       "architect": {
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "libs/pages/messages/src/test.ts",
-            "tsConfig": "libs/pages/messages/tsconfig.spec.json",
-            "karmaConfig": "libs/pages/messages/karma.conf.js"
-          }
-        },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
               "libs/pages/messages/tsconfig.lib.json",
+              "libs/pages/messages/tsconfig.spec.json",
               "libs/pages/messages/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/pages/messages/jest.config.js",
+            "tsConfig": "libs/pages/messages/tsconfig.spec.json",
+            "setupFile": "libs/pages/messages/src/test-setup.ts"
           }
         }
       }
@@ -261,24 +250,23 @@
       "projectType": "library",
       "prefix": "campus",
       "architect": {
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "libs/pages/profile/src/test.ts",
-            "tsConfig": "libs/pages/profile/tsconfig.spec.json",
-            "karmaConfig": "libs/pages/profile/karma.conf.js"
-          }
-        },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
               "libs/pages/profile/tsconfig.lib.json",
+              "libs/pages/profile/tsconfig.spec.json",
               "libs/pages/profile/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/pages/profile/jest.config.js",
+            "tsConfig": "libs/pages/profile/tsconfig.spec.json",
+            "setupFile": "libs/pages/profile/src/test-setup.ts"
           }
         }
       }
@@ -289,24 +277,23 @@
       "projectType": "library",
       "prefix": "campus",
       "architect": {
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "libs/pages/reports/src/test.ts",
-            "tsConfig": "libs/pages/reports/tsconfig.spec.json",
-            "karmaConfig": "libs/pages/reports/karma.conf.js"
-          }
-        },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
               "libs/pages/reports/tsconfig.lib.json",
+              "libs/pages/reports/tsconfig.spec.json",
               "libs/pages/reports/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/pages/reports/jest.config.js",
+            "tsConfig": "libs/pages/reports/tsconfig.spec.json",
+            "setupFile": "libs/pages/reports/src/test-setup.ts"
           }
         }
       }
@@ -317,24 +304,23 @@
       "projectType": "library",
       "prefix": "campus",
       "architect": {
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "libs/pages/tasks/src/test.ts",
-            "tsConfig": "libs/pages/tasks/tsconfig.spec.json",
-            "karmaConfig": "libs/pages/tasks/karma.conf.js"
-          }
-        },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
               "libs/pages/tasks/tsconfig.lib.json",
+              "libs/pages/tasks/tsconfig.spec.json",
               "libs/pages/tasks/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/pages/tasks/jest.config.js",
+            "tsConfig": "libs/pages/tasks/tsconfig.spec.json",
+            "setupFile": "libs/pages/tasks/src/test-setup.ts"
           }
         }
       }
@@ -345,24 +331,23 @@
       "projectType": "library",
       "prefix": "campus",
       "architect": {
-        "test": {
-          "builder": "@angular-devkit/blibs/uild-angular:karma",
-          "options": {
-            "main": "libs/ui/src/test.ts",
-            "tsConfig": "libs/ui/tsconfig.spec.json",
-            "karmaConfig": "libs/ui/karma.conf.js"
-          }
-        },
         "lint": {
-          "builder": "@angular-devkit/blibs/uild-angular:tslint",
+          "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
               "libs/ui/tsconfig.lib.json",
+              "libs/ui/tsconfig.spec.json",
               "libs/ui/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/ui/jest.config.js",
+            "tsConfig": "libs/ui/tsconfig.spec.json",
+            "setupFile": "libs/ui/src/test-setup.ts"
           }
         }
       }
@@ -373,22 +358,23 @@
       "projectType": "library",
       "prefix": "campus",
       "architect": {
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "libs/dal/src/test.ts",
-            "tsConfig": "libs/dal/tsconfig.spec.json",
-            "karmaConfig": "libs/dal/karma.conf.js"
-          }
-        },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
               "libs/dal/tsconfig.lib.json",
+              "libs/dal/tsconfig.spec.json",
               "libs/dal/tsconfig.spec.json"
             ],
             "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/dal/jest.config.js",
+            "tsConfig": "libs/dal/tsconfig.spec.json",
+            "setupFile": "libs/dal/src/test-setup.ts"
           }
         }
       }
