@@ -1,5 +1,5 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { InfoPanelComponent } from './info-panel.component';
 
 describe('InfoPanelComponent', () => {
@@ -8,9 +8,9 @@ describe('InfoPanelComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ InfoPanelComponent ]
-    })
-    .compileComponents();
+      declarations: [InfoPanelComponent],
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

@@ -1,5 +1,5 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { BundlesComponent } from './bundles.component';
 
 describe('BundlesComponent', () => {
@@ -8,7 +8,8 @@ describe('BundlesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [BundlesComponent]
+      declarations: [BundlesComponent],
+      schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
   }));
 

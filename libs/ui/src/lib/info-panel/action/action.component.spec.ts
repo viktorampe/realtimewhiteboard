@@ -1,16 +1,14 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { InfoPanelActionComponent } from './action.component';
 
-
 describe('InfoPanelActionComponent', () => {
   let component: InfoPanelActionComponent;
   let fixture: ComponentFixture<InfoPanelActionComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ InfoPanelActionComponent ]
-    })
-    .compileComponents();
+      declarations: [InfoPanelActionComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
