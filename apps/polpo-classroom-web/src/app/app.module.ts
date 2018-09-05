@@ -1,4 +1,4 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { DalModule } from '@campus/dal';
@@ -49,7 +49,7 @@ import { AppComponent } from './app.component';
           loadChildren: '@campus/pages/bundles#PagesBundlesModule'
         }
       ],
-      { initialNavigation: 'enabled', enableTracing: true }
+      { initialNavigation: 'enabled', enableTracing: false }
     )
   ],
   providers: [],
