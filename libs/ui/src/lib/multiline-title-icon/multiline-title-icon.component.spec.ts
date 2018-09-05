@@ -1,0 +1,64 @@
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { MultilineTitleIconComponent } from './multiline-title-icon.component';
+import { By } from '@angular/platform-browser';
+import { DebugElement } from '@angular/core';
+
+describe('MultilineTitleIconComponent', () => {
+  let component: MultilineTitleIconComponent;
+  let fixture: ComponentFixture<MultilineTitleIconComponent>;
+
+  let mockData: any;
+
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      declarations: [MultilineTitleIconComponent]
+    }).compileComponents();
+  }));
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(MultilineTitleIconComponent);
+    component = fixture.componentInstance;
+
+    // mock data
+    mockData = {
+      iconClass: 'polpo-wiskunde-lg',
+      title: 'Titel',
+      subTitle: 'SubTitle'
+    };
+
+    // simulate input
+    component.iconclass = mockData.iconClass;
+    component.title = mockData.title;
+    component.subtitle = mockData.subTitle;
+
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should apply the icon class', () => {
+    const iconEl = fixture.debugElement.query(By.css('i'));
+
+    expect(iconEl.nativeElement.className).toBe(mockData.iconClass);
+  });
+
+  it('shouldnt show the icon when the iconclass string is empty', () => {
+    component.iconclass = '';
+    fixture.detectChanges();
+
+    const iconDE = fixture.debugElement.query(By.css('i'));
+
+    expect(iconDE).toBeNull();
+  });
+
+  it('should display the title', () => {});
+
+  it('should display the subtitle', () => {
+    const subTitleDE = fixture.debugElement.query(By.css('small'));
+
+    expect(subTitleDE.nativeElement.textContent).toBe(mockData.subTitle);
+  });
+});
