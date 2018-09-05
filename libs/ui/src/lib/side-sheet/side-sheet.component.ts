@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 /**
  * Surface containing supplementary content that is anchored to the left or right edge of the screen.
  * Side sheets contain content that supplements the screen's primary UI region.
@@ -14,12 +14,5 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./side-sheet.component.scss']
 })
 export class SideSheetComponent {
-  @Input() position: 'left' | 'right' = 'right';
-  get classes() {
-    const cssClasses = {};
-
-    cssClasses['container--' + this.position] = true;
-    return cssClasses;
-  }
   constructor() {}
 }
