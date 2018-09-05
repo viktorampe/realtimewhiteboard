@@ -8,7 +8,7 @@ module.exports = function() {
       '!libs/**/*.spec.ts'
     ],
 
-    tests: ['apps/**/*.spec.ts', 'libs/**/*.spec.ts'],
+    tests: ['apps/**/*.spec.ts', 'libs/**/*.spec.ts', 'wallabyTest.ts'],
 
     env: {
       type: 'node',
