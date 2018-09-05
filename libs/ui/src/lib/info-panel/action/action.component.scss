@@ -1,0 +1,23 @@
+div.base {
+  display: flex;
+  flex-direction: row;
+  background-color: antiquewhite;
+  padding: 15px 25px 15px 25px;
+
+  div.text {
+    font-weight: 800;
+    width: calc(100% - 30px);
+  }
+  div.icon {
+    border-radius: 50%;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    &.red {
+      background-color: #f3565d;
+    }
+    &.gray {
+      background-color: #95a0aa;
+    }
+  }
+}

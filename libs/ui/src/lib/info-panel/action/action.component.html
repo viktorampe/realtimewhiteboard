@@ -1,3 +1,4 @@
-<p>
-  action works!
-</p>
+<div class="base">
+  <div class="text">{{actionText}}</div>
+  <div class="icon" ngClass="{{iconBackgroundColor}}" (click)="iconClicked.emit()"></div>
+</div>

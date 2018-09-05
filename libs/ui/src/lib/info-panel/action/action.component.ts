@@ -1,12 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'campus-info-panel-action',
   templateUrl: './action.component.html',
   styleUrls: ['./action.component.scss']
 })
-export class InfoPanelActionComponent implements OnInit {
-  constructor() {}
-
-  ngOnInit() {}
+export class InfoPanelActionComponent {
+  @Input() actionText: string;
+  @Input() icon: string;
+  @Input() iconBackgroundColor: 'red' | 'gray' = 'red';
+  @Output() iconClicked = new EventEmitter();
 }
