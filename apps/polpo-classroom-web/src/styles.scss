@@ -1,0 +1,15 @@
+/* You can add global styles to this file, and also import other style files */
+$fa-font-path: 'assets/webfonts';
+
+@import 'node_modules/@fortawesome/fontawesome-free/scss/fontawesome.scss';
+@import 'node_modules/@fortawesome/fontawesome-free/scss/solid.scss';
+@import 'node_modules/@fortawesome/fontawesome-free/scss/brands.scss';
+
+@mixin ui-filter-clear-icon {
+  @extend %fa-icon;
+  @extend .fas;
+
+  &:before {
+    content: fa-content($fa-var-user);
+  }
+}

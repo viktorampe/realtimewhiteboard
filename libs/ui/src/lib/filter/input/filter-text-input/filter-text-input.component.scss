@@ -1,0 +1,30 @@
+@import 'filter-text-input.component.themes.scss';
+
+.filter-text-input {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+
+  .filter-icon {
+    position: absolute;
+    color: hsl(0, 0%, 55%);
+    font-size: 18px;
+    font-style: normal;
+  }
+
+  .input {
+    color: $ui-filter-text-color;
+    background-color: $ui-filter-background-color;
+
+    &.ng-not-empty {
+      padding-right: 25px;
+    }
+  }
+
+  .clear-icon {
+    position: absolute;
+    color: #8c8c8c;
+    font-size: 18px;
+    font-style: normal;
+  }
+}

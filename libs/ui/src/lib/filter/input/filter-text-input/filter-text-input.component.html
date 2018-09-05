@@ -1,0 +1,5 @@
+<div class="filter-text-input">
+  <i class="filter-icon"></i>
+  <input class="filter" type="text" name="filter" [formControl]="$input" placeholder="{{placeholder}}" />
+  <i class="clear-icon" [hidden]="!filter" (click)="clear()">lol</i>
+</div>

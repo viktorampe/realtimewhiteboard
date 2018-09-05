@@ -1,0 +1,13 @@
+$color-black: #000000;
+$color-white: #ffffff;
+
+@mixin ui-filter-filter-icon {
+  @include filter-icon;
+}
+
+@mixin ui-filter-clear-icon {
+  @include clear-icon;
+}
+
+$ui-filter-text-color: $color-black !default;
+$ui-filter-background-color: $color-white !default;

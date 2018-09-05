@@ -23,7 +23,8 @@
               "apps/polpo-classroom-web/src/assets"
             ],
             "styles": [
-              "apps/polpo-classroom-web/src/styles.css"
+              "apps/polpo-classroom-web/src/styles.scss",
+              "node_modules/@fortawesome/fontawesome-free/scss/fontawesome.scss"
             ],
             "scripts": []
           },
@@ -31,8 +32,10 @@
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "apps/polpo-classroom-web/src/environments/environment.ts",
-                  "with": "apps/polpo-classroom-web/src/environments/environment.prod.ts"
+                  "replace":
+                    "apps/polpo-classroom-web/src/environments/environment.ts",
+                  "with":
+                    "apps/polpo-classroom-web/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -71,9 +74,6 @@
             "polyfills": "apps/polpo-classroom-web/src/polyfills.ts",
             "tsConfig": "apps/polpo-classroom-web/tsconfig.spec.json",
             "karmaConfig": "apps/polpo-classroom-web/karma.conf.js",
-            "styles": [
-              "apps/polpo-classroom-web/src/styles.css"
-            ],
             "scripts": [],
             "assets": [
               "apps/polpo-classroom-web/src/favicon.ico",
@@ -88,9 +88,7 @@
               "apps/polpo-classroom-web/tsconfig.app.json",
               "apps/polpo-classroom-web/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -102,7 +100,8 @@
         "e2e": {
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
-            "protractorConfig": "apps/polpo-classroom-web-e2e/protractor.conf.js",
+            "protractorConfig":
+              "apps/polpo-classroom-web-e2e/protractor.conf.js",
             "devServerTarget": "polpo-classroom-web:serve"
           },
           "configurations": {
@@ -115,9 +114,7 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": "apps/polpo-classroom-web-e2e/tsconfig.e2e.json",
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -143,9 +140,8 @@
               "libs/ui/tsconfig.lib.json",
               "libs/ui/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"],
+            "styles": ["node_modules/@fortawesome/fontawesome-free"]
           }
         }
       }
@@ -171,9 +167,7 @@
               "libs/dal/tsconfig.lib.json",
               "libs/dal/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
