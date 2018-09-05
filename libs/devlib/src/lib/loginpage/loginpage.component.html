@@ -1,21 +1,21 @@
 <div class="login_page_component">
 
   <div>
-    <button (click)="login('student1', 'testje')">student</button>
-    <button (click)="login('teacher1', 'testje')">teacher</button>
+    <button (click)="loginPageviewModel.login('student1', 'testje')">student</button>
+    <button (click)="loginPageviewModel.login('teacher1', 'testje')">teacher</button>
   </div>
 
 
   <div class="login_form">
-    <input placeholder="username" [(ngModel)]="name" type="text" />
-    <input placeholder="password" [(ngModel)]="password" type="password" />
-    <button (click)="login(name, password)">
+    <input placeholder="username" [(ngModel)]="loginPageviewModel.name" type="text" />
+    <input placeholder="password" [(ngModel)]="loginPageviewModel.password" type="password" />
+    <button (click)="loginPageviewModel.login(name, password)">
       login
     </button>
   </div>
 
   <div>
-    <p>{{ response }}</p>
+    <p>{{ loginPageviewModel.response }}</p>
   </div>
 
 

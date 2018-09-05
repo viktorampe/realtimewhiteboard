@@ -8,14 +8,13 @@
     "nx.json": "*"
   },
   "projects": {
-    "@campus/devlib": ["libs/devlib/src/index.ts"],
+    "devlib": {
+      "tags": []
+    },
     "polpo-classroom-web": {
       "tags": []
     },
     "polpo-classroom-web-e2e": {
-      "tags": []
-    },
-    "devlib": {
       "tags": []
     },
     "pages-bundles": {

@@ -1,6 +1,5 @@
 import { Injectable, InjectionToken } from '@angular/core';
 import { LoopBackAuth, PersonApi } from '@diekeure/polpo-api-angular-sdk';
-import { Observable } from '../../../../../node_modules/rxjs';
 import {
   AuthServiceInterface,
   LoginCredentials
@@ -14,7 +13,11 @@ export const AuthServiceToken = new InjectionToken('AuthService');
 export class AuthService implements AuthServiceInterface {
   constructor(private personApi: PersonApi, private auth: LoopBackAuth) {}
 
-  login(credentials: Partial<LoginCredentials>): Observable<Object> {
-    return this.personApi.login(credentials);
+  logout() {
+    this.personApi.logout();
+  }
+
+  login(credentials: Partial<LoginCredentials>) {
+    this.personApi.login(credentials);
   }
 }
