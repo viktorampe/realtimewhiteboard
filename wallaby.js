@@ -8,6 +8,7 @@ module.exports = function() {
 
   return {
     files: [
+      'wallaby-test-setup.ts',
       'jest.config.js',
       'apps/**/*.+(ts|html|json|snap|css|less|sass|scss|jpg|jpeg|gif|png|svg)',
       '!apps/**/*.spec.ts',
@@ -39,7 +40,7 @@ module.exports = function() {
     setup: function(wallaby) {
       var jestConfig = require('./jest.config');
       jestConfig.setupTestFrameworkScriptFile =
-        '<rootDir>/apps/polpo-classroom-web/src/test-setup.js';
+        '<rootDir>/wallaby-test-setup.js';
       wallaby.testFramework.configure(jestConfig);
     }
   };
