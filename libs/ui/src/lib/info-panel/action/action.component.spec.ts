@@ -54,4 +54,13 @@ describe('InfoPanelActionComponent', () => {
     const icon = fixture.debugElement.query(By.css('.icon.given-icon'));
     expect(icon).toBeTruthy();
   });
+  it('should emit the actionText when the icon is clicked', () => {
+    let emitedText: string;
+    component.iconClicked.subscribe((text: string) => (emitedText = text));
+
+    fixture.debugElement
+      .query(By.css('.icon'))
+      .triggerEventHandler('click', null);
+    expect(emitedText).toBe(mockData.actionText);
+  });
 });

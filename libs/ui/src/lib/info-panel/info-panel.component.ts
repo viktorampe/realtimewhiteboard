@@ -6,10 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./info-panel.component.scss']
 })
 export class InfoPanelComponent {
-  redIconClickedEvent() {
-    console.log('red icon clicked');
-  }
-  grayIconClickedEvent() {
-    console.log('gray icon clicked');
+  iconClickedEvent(text: string) {
+    console.log(text + ' icon clicked');
   }
 }
