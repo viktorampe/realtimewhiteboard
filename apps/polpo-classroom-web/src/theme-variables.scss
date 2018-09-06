@@ -12,7 +12,22 @@ $color-text-1: $color-gray-1;
 $color-text-2: $color-gray-2;
 $color-active: $color-blue-1;
 
+// app icons
+$icons: (
+  bundle: polpo "\e94f",
+  tasks: polpo "\e946",
+  books: polpo "\e965",
+  results: polpo "\e902"
+);
+
 // ui lib theme
 $ui-bg-color-1: $color-bg-primary-1;
 $ui-font-color-1: $color-text-1;
 $ui-font-color-active: $color-active;
+// lib icon overrides
+// $ui-icon-filter: polpo \e000;
+
+// pages lib theme
+$pages-bg-color-1: $color-bg-primary-1;
+$pages-font-color-1: $color-text-1;
+$pages-font-color-active: $color-active;
