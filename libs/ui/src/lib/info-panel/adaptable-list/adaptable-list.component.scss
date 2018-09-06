@@ -39,4 +39,17 @@
       }
     }
   }
+  &__icon-holder {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    padding: 4px 11px 0 0;
+    &__icon {
+      background-color: #95a0aa;
+      cursor: pointer;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+    }
+  }
 }

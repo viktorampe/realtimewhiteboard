@@ -13,10 +13,13 @@ export class InfoPanelComponent {
     { text: 'Wetenschappen - Wiskunde 4', eventId: 2 }
   ];
 
-  iconClickedEvent(text: string) {
+  actionIconClickedEvent(text: string) {
     console.log(text + ' icon clicked');
   }
-  itemIconClickedEvent(id: number) {
+  listItemIconClickedEvent(id: number) {
     console.log('item ' + id + ' icon clicked');
+  }
+  listIconClickedEvent() {
+    console.log('list icon clicked');
   }
 }

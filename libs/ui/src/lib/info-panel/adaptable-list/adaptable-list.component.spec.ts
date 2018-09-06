@@ -9,6 +9,7 @@ describe('InfoPanelAdaptableListComponent', () => {
   let mockData: {
     titleText: string;
     items: { text: string; count?: number; eventId?: number }[];
+    showIcon: boolean;
   };
 
   beforeEach(async(() => {
@@ -27,11 +28,13 @@ describe('InfoPanelAdaptableListComponent', () => {
         { text: 'item-one' },
         { text: 'item-two', count: 12 },
         { text: 'item-three', count: 44, eventId: 1 }
-      ]
+      ],
+      showIcon: true
     };
 
     component.titleText = mockData.titleText;
     component.items = mockData.items;
+    component.showIcon = mockData.showIcon;
 
     fixture.detectChanges();
   });
@@ -51,13 +54,13 @@ describe('InfoPanelAdaptableListComponent', () => {
     );
     expect(listItemCollection.length).toBe(3);
   });
-  it('should show the correct number of list with counts', () => {
+  it('should show the correct number of list items with counts', () => {
     const listItemCollection = fixture.debugElement.queryAll(
       By.css('.info-panel__adaptable-list__items__item__text__count')
     );
     expect(listItemCollection.length).toBe(2);
   });
-  it('should show the correct number of list with icon', () => {
+  it('should show the correct number of list items with icon', () => {
     const listItemCollection = fixture.debugElement.queryAll(
       By.css('.info-panel__adaptable-list__items__item__icon')
     );
@@ -80,6 +83,20 @@ describe('InfoPanelAdaptableListComponent', () => {
       const countElement = listItemCounts[i].nativeElement.textContent;
       expect(countElement).toBe('(' + mockData.items[i + 1].count + ')');
     }
+  });
+  it('should show the icon', () => {
+    const icon = fixture.debugElement.query(
+      By.css('.info-panel__adaptable-list__icon-holder__icon')
+    );
+    expect(icon).toBeTruthy();
+  });
+  it('should not show the icon if boolean is false', () => {
+    component.showIcon = false;
+    fixture.detectChanges();
 
+    const icon = fixture.debugElement.query(
+      By.css('.info-panel__adaptable-list__icon-holder__icon')
+    );
+    expect(icon).toBeFalsy();
   });
 });
