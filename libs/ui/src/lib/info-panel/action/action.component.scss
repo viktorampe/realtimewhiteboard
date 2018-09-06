@@ -1,11 +1,13 @@
 .info-panel__action {
   display: flex;
   flex-direction: row;
-  background-color: antiquewhite;
+  background-color: white;
   padding: 15px 25px 15px 25px;
 
   &__text {
-    font-weight: 800;
+    padding-top: 7px;
+    font-size: 14px;
+    font-weight: 700;
     width: calc(100% - 30px);
   }
   &__icon {

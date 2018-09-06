@@ -2,7 +2,7 @@
   <campus-info-panel-educontent-preview></campus-info-panel-educontent-preview>
   <campus-info-panel-input-label></campus-info-panel-input-label>
   <campus-info-panel-input-label></campus-info-panel-input-label>
-  <campus-info-panel-adaptable-list></campus-info-panel-adaptable-list>
+  <campus-info-panel-adaptable-list titleText="Gebruikers" [items]="items" (iconClicked)="itemIconClickedEvent($event)"></campus-info-panel-adaptable-list>
   <campus-info-panel-action actionText="Bundel verwijderen" icon="some-icon" (iconClicked)="iconClickedEvent($event)"></campus-info-panel-action>
   <campus-info-panel-action actionText="Resultaten bekijken" [iconBackgroundColor]="'gray'" icon="some-icon"
     (iconClicked)="iconClickedEvent($event)"></campus-info-panel-action>

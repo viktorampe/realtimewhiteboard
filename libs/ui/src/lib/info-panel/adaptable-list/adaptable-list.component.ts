@@ -1,12 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'campus-info-panel-adaptable-list',
   templateUrl: './adaptable-list.component.html',
   styleUrls: ['./adaptable-list.component.scss']
 })
-export class InfoPanelAdaptableListComponent implements OnInit {
-  constructor() {}
+export class InfoPanelAdaptableListComponent {
+  @Input() titleText: string;
+  @Input() items: { text: string; count?: number; eventId?: number }[];
+  @Output() iconClicked = new EventEmitter<number>();
 
-  ngOnInit() {}
+  onIconClick(eventId: number) {
+    this.iconClicked.emit(eventId);
+  }
 }

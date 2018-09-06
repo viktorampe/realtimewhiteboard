@@ -1,3 +1,11 @@
-<p>
-  selection-list works!
-</p>
+<div class="info-panel__adaptable-list">
+  <h3 class="info-panel__adaptable-list__title">{{titleText}}</h3>
+  <div class="info-panel__adaptable-list__items">
+    <div class="info-panel__adaptable-list__items__item" *ngFor="let item of items">
+      <div class="info-panel__adaptable-list__items__item__text">{{item.text}}
+        <div *ngIf="item.count" class="info-panel__adaptable-list__items__item__text__count">&nbsp;({{item.count}})</div>
+      </div>
+      <div *ngIf="item.eventId" class="info-panel__adaptable-list__items__item__icon" (click)="onIconClick(item.eventId)"></div>
+    </div>
+  </div>
+</div>
