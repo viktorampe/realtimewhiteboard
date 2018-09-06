@@ -38,8 +38,9 @@ describe('InfoPanelActionComponent', () => {
     expect(component).toBeTruthy();
   });
   it('should show the actionsText', () => {
-    const displayedText = fixture.debugElement.query(By.css('.text'))
-      .nativeElement.textContent;
+    const displayedText = fixture.debugElement.query(
+      By.css('.info-panel__action__text')
+    ).nativeElement.textContent;
     expect(displayedText).toContain(mockData.actionText);
   });
   it('should show a red classed icon element', () => {
@@ -51,7 +52,9 @@ describe('InfoPanelActionComponent', () => {
     expect(icon).toBeFalsy();
   });
   it('should show the icon in the class for the icon element', () => {
-    const icon = fixture.debugElement.query(By.css('.icon.given-icon'));
+    const icon = fixture.debugElement.query(
+      By.css('.info-panel__action__icon.given-icon')
+    );
     expect(icon).toBeTruthy();
   });
   it('should emit the actionText when the icon is clicked', () => {
@@ -59,7 +62,7 @@ describe('InfoPanelActionComponent', () => {
     component.iconClicked.subscribe((text: string) => (emitedText = text));
 
     fixture.debugElement
-      .query(By.css('.icon'))
+      .query(By.css('.info-panel__action__icon'))
       .triggerEventHandler('click', null);
     expect(emitedText).toBe(mockData.actionText);
   });

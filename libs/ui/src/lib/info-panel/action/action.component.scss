@@ -1,14 +1,14 @@
-div.base {
+.info-panel__action {
   display: flex;
   flex-direction: row;
   background-color: antiquewhite;
   padding: 15px 25px 15px 25px;
 
-  div.text {
+  &__text {
     font-weight: 800;
     width: calc(100% - 30px);
   }
-  div.icon {
+  &__icon {
     border-radius: 50%;
     cursor: pointer;
     width: 30px;
