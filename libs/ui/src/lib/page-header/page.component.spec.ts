@@ -1,23 +1,23 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MultilineTitleIconComponent } from './multiline-title-icon.component';
+import { PageHeaderComponent } from './page-header.component';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
 describe('MultilineTitleIconComponent', () => {
-  let component: MultilineTitleIconComponent;
-  let fixture: ComponentFixture<MultilineTitleIconComponent>;
+  let component: PageHeaderComponent;
+  let fixture: ComponentFixture<PageHeaderComponent>;
 
   let mockData: any;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [MultilineTitleIconComponent]
+      declarations: [PageHeaderComponent]
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MultilineTitleIconComponent);
+    fixture = TestBed.createComponent(PageHeaderComponent);
     component = fixture.componentInstance;
 
     // mock data
@@ -28,7 +28,7 @@ describe('MultilineTitleIconComponent', () => {
     };
 
     // simulate input
-    component.iconclass = mockData.iconClass;
+    component.iconClass = mockData.iconClass;
     component.title = mockData.title;
     component.subtitle = mockData.subTitle;
 
@@ -46,7 +46,7 @@ describe('MultilineTitleIconComponent', () => {
   });
 
   it('shouldnt show the icon when the iconclass string is empty', () => {
-    component.iconclass = '';
+    component.iconClass = '';
     fixture.detectChanges();
 
     const iconDE = fixture.debugElement.query(By.css('i'));
