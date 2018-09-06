@@ -26,7 +26,7 @@ describe('InfoPanelAdaptableListComponent', () => {
       items: [
         { text: 'item-one' },
         { text: 'item-two', count: 12 },
-        { text: 'item-three', count: 12, eventId: 1 }
+        { text: 'item-three', count: 44, eventId: 1 }
       ]
     };
 
@@ -63,16 +63,23 @@ describe('InfoPanelAdaptableListComponent', () => {
     );
     expect(listItemCollection.length).toBe(1);
   });
-  it('should show the label for a list element', () => {
-    const listItemText = fixture.debugElement.query(
+  it('should show the correct labels for the items', () => {
+    const listItems = fixture.debugElement.queryAll(
       By.css('.info-panel__adaptable-list__items__item__text')
-    ).nativeElement.textContent;
-    expect(listItemText).toContain(mockData.items[0].text);
+    );
+    for (let i = 0; i < listItems.length; i++) {
+      const elementText = listItems[i].nativeElement.textContent;
+      expect(elementText).toContain(mockData.items[i].text);
+    }
   });
   it('should show the count if there is one', () => {
-    const listItemText = fixture.debugElement.query(
+    const listItemCounts = fixture.debugElement.queryAll(
       By.css('.info-panel__adaptable-list__items__item__text__count')
-    ).nativeElement.textContent;
-    expect(listItemText).toContain('(' + mockData.items[1].count + ')');
+    );
+    for (let i = 0; i < listItemCounts.length; i++) {
+      const countElement = listItemCounts[i].nativeElement.textContent;
+      expect(countElement).toBe('(' + mockData.items[i + 1].count + ')');
+    }
+
   });
 });
