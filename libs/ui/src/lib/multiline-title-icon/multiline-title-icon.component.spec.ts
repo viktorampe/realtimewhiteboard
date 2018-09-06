@@ -54,7 +54,11 @@ describe('MultilineTitleIconComponent', () => {
     expect(iconDE).toBeNull();
   });
 
-  it('should display the title', () => {});
+  it('should display the title', () => {
+    const TitleDE = fixture.debugElement;
+
+    expect(TitleDE.nativeElement.textContent).toContain(mockData.title);
+  });
 
   it('should display the subtitle', () => {
     const subTitleDE = fixture.debugElement.query(By.css('small'));
