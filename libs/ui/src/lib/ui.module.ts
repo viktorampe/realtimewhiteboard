@@ -1,9 +1,9 @@
 import { NgModule, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MultilineTitleIconComponent } from './multiline-title-icon/multiline-title-icon.component';
+import { PageHeaderComponent } from './page-header/page-header.component';
 @NgModule({
   imports: [CommonModule],
-  declarations: [MultilineTitleIconComponent],
-  exports: [MultilineTitleIconComponent]
+  declarations: [PageHeaderComponent],
+  exports: [PageHeaderComponent]
 })
 export class UiModule {}
