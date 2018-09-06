@@ -8,9 +8,8 @@ describe('SideSheetComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SideSheetComponent ]
-    })
-    .compileComponents();
+      declarations: [SideSheetComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

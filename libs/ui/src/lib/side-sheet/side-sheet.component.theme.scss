@@ -1,0 +1,20 @@
+@mixin side-sheet() {
+  $header-background-color: $ui-bg-color-3;
+  $body-background-color: $ui-font-color-2;
+  $title-font-family: $ui-font-family-1;
+  $body-font-family: $ui-font-family-2;
+  $ui-font-color: $ui-font-color-2;
+  .sheet {
+    color: $ui-font-color;
+    &__header {
+      background-color: $header-background-color;
+      &__title {
+        font-family: $title-font-family;
+      }
+    }
+    &__body {
+      background-color: $body-background-color;
+      font-family: $body-font-family;
+    }
+  }
+}

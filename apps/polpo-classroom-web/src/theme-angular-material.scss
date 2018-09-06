@@ -1,77 +1,73 @@
 @import '~@angular/material/_theming';
 @include mat-core(); // be sure to include this mixin only once
-
 // created theme with http://mcg.mbitson.com/ (find main palette color next to '500 :')
 $mat-polpo-primary: (
-    50 : #eaeaea,
-    100 : #cbcbcb,
-    200 : #a8a8a8,
-    300 : #858585,
-    400 : #6b6b6b,
-    500 : #515151,
-    600 : #4a4a4a,
-    700 : #404040,
-    800 : #373737,
-    900 : #272727,
-    A100 : #f18585,
-    A200 : #ec5757,
-    A400 : #ff1111,
-    A700 : #f60000,
-    contrast: (
-        50 : #000000,
-        100 : #000000,
-        200 : #000000,
-        300 : #000000,
-        400 : #ffffff,
-        500 : #ffffff,
-        600 : #ffffff,
-        700 : #ffffff,
-        800 : #ffffff,
-        900 : #ffffff,
-        A100 : #000000,
-        A200 : #000000,
-        A400 : #ffffff,
-        A700 : #ffffff,
-    )
+  50: #eaeaea,
+  100: #cbcbcb,
+  200: #a8a8a8,
+  300: #858585,
+  400: #6b6b6b,
+  500: #515151,
+  600: #4a4a4a,
+  700: #404040,
+  800: #373737,
+  900: #272727,
+  A100: #f18585,
+  A200: #ec5757,
+  A400: #ff1111,
+  A700: #f60000,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #ffffff,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #ffffff,
+    A700: #ffffff
+  )
 );
-
 $mat-polpo-accent: (
-    50 : #eefaf8,
-    100 : #d4f2ec,
-    200 : #b7e9e0,
-    300 : #9ae0d4,
-    400 : #84d9ca,
-    500 : #6ed2c1,
-    600 : #66cdbb,
-    700 : #5bc7b3,
-    800 : #51c1ab,
-    900 : #3fb69e,
-    A100 : #ffffff,
-    A200 : #d4fff6,
-    A400 : #a1ffeb,
-    A700 : #87ffe6,
-    contrast: (
-        50 : #000000,
-        100 : #000000,
-        200 : #000000,
-        300 : #000000,
-        400 : #000000,
-        500 : #000000,
-        600 : #000000,
-        700 : #000000,
-        800 : #000000,
-        900 : #000000,
-        A100 : #000000,
-        A200 : #000000,
-        A400 : #000000,
-        A700 : #000000,
-    )
+  50: #eefaf8,
+  100: #d4f2ec,
+  200: #b7e9e0,
+  300: #9ae0d4,
+  400: #84d9ca,
+  500: #6ed2c1,
+  600: #66cdbb,
+  700: #5bc7b3,
+  800: #51c1ab,
+  900: #3fb69e,
+  A100: #ffffff,
+  A200: #d4fff6,
+  A400: #a1ffeb,
+  A700: #87ffe6,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #000000,
+    500: #000000,
+    600: #000000,
+    700: #000000,
+    800: #000000,
+    900: #000000,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000
+  )
 );
-
 $mat-polpo-warn: $mat-red;
-
 // apply custom theme to my components (https://material.angular.io/guide/theming-your-components)
 $polpo-primary: mat-palette($mat-polpo-primary);
-$polpo-accent:  mat-palette($mat-polpo-accent, 500, 900, A100);
-$polpo-warn:    mat-palette($mat-deep-orange);
-$polpo-theme:   mat-dark-theme($polpo-primary, $polpo-accent, $polpo-warn);
+$polpo-accent: mat-palette($mat-polpo-accent, 500, 900, A100);
+$polpo-warn: mat-palette($mat-deep-orange);
+$polpo-theme: mat-dark-theme($polpo-primary, $polpo-accent, $polpo-warn);
