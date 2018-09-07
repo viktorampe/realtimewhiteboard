@@ -6,6 +6,7 @@ import { InfoPanelAdaptableListComponent } from './info-panel/adaptable-list/ada
 import { InfoPanelEducontentPreviewComponent } from './info-panel/educontent-preview/educontent-preview.component';
 import { InfoPanelComponent } from './info-panel/info-panel.component';
 import { InfoPanelInputLabelComponent } from './info-panel/input-label/input-label.component';
+import { InfoPanelPeriodLabelComponent } from './info-panel/period-label/period-label.component';
 @NgModule({
   imports: [CommonModule, ReactiveFormsModule, FormsModule],
   declarations: [
@@ -13,7 +14,8 @@ import { InfoPanelInputLabelComponent } from './info-panel/input-label/input-lab
     InfoPanelEducontentPreviewComponent,
     InfoPanelInputLabelComponent,
     InfoPanelAdaptableListComponent,
-    InfoPanelComponent
+    InfoPanelComponent,
+    InfoPanelPeriodLabelComponent
   ],
   exports: [InfoPanelComponent]
 })

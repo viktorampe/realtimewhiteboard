@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'campus-info-panel',
@@ -6,12 +6,19 @@ import { Component } from '@angular/core';
   styleUrls: ['./info-panel.component.scss']
 })
 export class InfoPanelComponent {
+  @Input() title: string;
   items: { text: string; count?: number; eventId?: number }[] = [
     { text: 'Wetenschappen - Wiskunde 1', count: 20, eventId: 1 },
     { text: 'Wetenschappen - Wiskunde 2', count: 9 },
     { text: 'Wetenschappen - Wiskunde 3' },
     { text: 'Wetenschappen - Wiskunde 4', eventId: 2 }
   ];
+
+
+  period = {
+    start: new Date(new Date().setDate(new Date().getDate() - 1)),
+    end: new Date(new Date().setDate(new Date().getDate() + 1))
+  }
 
   actionIconClickedEvent(text: string): void {
     console.log(text + ' icon clicked');
@@ -29,5 +36,17 @@ export class InfoPanelComponent {
 
   saveDescriptionEvent(description: string): void {
     console.log('description save: ' + description);
+  }
+
+  savePeriodEvent(start: Date, end: Date): void {
+    console.log('start: ' + start + ' end: ' + end);
+  }
+
+  editStartEvent(): void {
+    console.log('editing start');
+  }
+
+  editEndEvent(): void {
+    console.log('editing end');
   }
 }
