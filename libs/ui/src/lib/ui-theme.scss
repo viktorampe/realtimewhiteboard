@@ -26,8 +26,10 @@ $ui-font-color-2: #000 !default;
 
 // import all required sass files from our libs
 // @import './tree-nav/tree-nav.component.theme';
+@import './page-header/page-header.component-theme.scss';
 
 // create theme-mixin with each mixin from our library components
 @mixin ui-theme() {
   // @include ui-tree-nav();
+  @include ui-page-header;
 }

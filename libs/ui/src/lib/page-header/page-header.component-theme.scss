@@ -1,0 +1,16 @@
+@mixin ui-page-header() {
+  h1.multiline {
+    font-family: 'Open Sans', Sans-Serif;
+    font-weight: 600;
+    color: #3e3e43;
+    line-height: 16px;
+    font-size: 18px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin-bottom: 25px;
+
+    // small {
+    //   color: $ui-font-color-2;
+    // }
+  }
+}
