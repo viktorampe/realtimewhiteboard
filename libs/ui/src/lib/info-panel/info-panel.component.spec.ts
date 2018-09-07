@@ -1,10 +1,13 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { InfoPanelComponent } from './info-panel.component';
 
 describe('InfoPanelComponent', () => {
   let component: InfoPanelComponent;
   let fixture: ComponentFixture<InfoPanelComponent>;
+
+  let mockData: { title: string };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -16,10 +19,21 @@ describe('InfoPanelComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(InfoPanelComponent);
     component = fixture.componentInstance;
+
+    mockData = { title: 'the-fancy-title' };
+
+    component.title = mockData.title;
+
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+  it('should show the title', () => {
+    const title = fixture.debugElement.query(
+      By.css('.info-panel__title')
+    ).nativeElement.textContent;
+    expect(title).toBe(mockData.title);
   });
 });
