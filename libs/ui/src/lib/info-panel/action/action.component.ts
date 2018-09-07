@@ -11,7 +11,7 @@ export class InfoPanelActionComponent {
   @Input() iconBackgroundColor: 'red' | 'gray' = 'red';
   @Output() iconClicked = new EventEmitter<string>();
 
-  onIconClicked() {
+  onIconClicked(): void {
     this.iconClicked.emit(this.actionText);
   }
 }

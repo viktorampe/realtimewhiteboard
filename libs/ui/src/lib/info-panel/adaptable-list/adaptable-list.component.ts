@@ -16,7 +16,7 @@ export class InfoPanelAdaptableListComponent {
     this.itemIconClicked.emit(eventId);
   }
 
-  onIconClick(eventId: number) {
+  onIconClick(): void {
     this.iconClicked.emit(true);
   }
 
