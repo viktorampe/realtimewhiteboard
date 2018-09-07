@@ -1,23 +1,16 @@
 .sheet {
-  position: sticky;
-  top: 10px;
-  overflow-x: hidden;
-  width: 290px;
-  &__header {
-    padding: 12px 25px;
-    white-space: nowrap;
-    &__title {
-      line-height: 25px;
-      margin: 0;
-      font-size: 14px;
-      font-weight: 300;
+    overflow-x: hidden;
+    width: 290px;
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 25px;
+        white-space: nowrap;
+        &__title {
+            line-height: 25px;
+            margin: 0;
+            font-size: 14px;
+            font-weight: 300;
+        }
     }
-  }
-  &__body {
-    padding: 25px;
-    text-align: left;
-    font-size: 15px;
-    line-height: 16px;
-    font-weight: 700;
-  }
 }
