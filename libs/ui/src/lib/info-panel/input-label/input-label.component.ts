@@ -9,6 +9,7 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 export class InfoPanelInputLabelComponent implements OnInit {
   @Input() title: string;
   @Input() text: string;
+  @Input() showIcon: boolean;
   @Output() saveText = new EventEmitter<string>();
 
   editing: boolean;

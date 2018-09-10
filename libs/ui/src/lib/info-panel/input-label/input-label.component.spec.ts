@@ -7,7 +7,7 @@ describe('InfoPanelInputLabelComponent', () => {
   let component: InfoPanelInputLabelComponent;
   let fixture: ComponentFixture<InfoPanelInputLabelComponent>;
 
-  let mockData: { title: string, text: string };
+  let mockData: { title: string, text: string, showIcon?: boolean };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -20,10 +20,11 @@ describe('InfoPanelInputLabelComponent', () => {
     fixture = TestBed.createComponent(InfoPanelInputLabelComponent);
     component = fixture.componentInstance;
 
-    mockData = { title: 'the-title', text: 'the-text' };
+    mockData = { title: 'the-title', text: 'the-text', showIcon: true };
 
     component.title = mockData.title;
     component.text = mockData.text;
+    component.showIcon = mockData.showIcon;
 
     fixture.detectChanges();
   });
@@ -133,5 +134,13 @@ describe('InfoPanelInputLabelComponent', () => {
       .triggerEventHandler('click', null);
     expect(text).toBe(input.value);
     expect(text).not.toBe(mockData.text);
+  });
+  it('should not show the icon if showInput is true', () => {
+    component.showIcon = false;
+    fixture.detectChanges();
+    const icon = fixture.debugElement.query(
+      By.css('.info-panel__input-label__text__label-holder__edit-icon')
+    );
+    expect(icon).toBeFalsy();
   });
 });
