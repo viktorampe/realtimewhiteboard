@@ -60,10 +60,10 @@ export class SideSheetComponent implements OnInit, OnDestroy {
         takeWhile(() => this.isAlive),
         filter(result => result.matches)
       )
-      .subscribe(result => {
+      .subscribe(() => {
         this.sheet.mode = 'over';
       });
-    this.other$.pipe(takeWhile(() => this.isAlive)).subscribe(result => {
+    this.other$.pipe(takeWhile(() => this.isAlive)).subscribe(() => {
       this.sheet.mode = 'side';
     });
   }
