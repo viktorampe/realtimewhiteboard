@@ -1,0 +1,30 @@
+<!-- Code uit student.polpo
+
+<figure ng-class="{hasThumb: vm.selection[0].thumbSmall}" class="preview">
+  <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" dk-background="{{ vm.selection[0].thumb }}"
+    alt="{{ vm.selection[0].title }}" ng-class="{book: vm.selection[0].eduContent.type === 'boek-e'}" ng-if="vm.selection[0].thumbSmall">
+</figure>
+<i class="file-extension icon-behind {{vm.selection[0].label}}">{{vm.selection[0].label}}</i>
+<h2>{{vm.selection[0].title}}</h2>
+<i class='product-type-icon icon {{vm.selection[0].icon}}'></i>
+<div ng-bind-html='vm.selection[0].description'></div>
+<ul class='methods' ng-if='vm.selection[0].eduContent'>
+  <li ng-repeat='method in vm.selection[0].eduContent.publishedEduContentMetadata.methods' class='{{method.icon}}'></li>
+</ul>
+<div class="alt">
+  <h2>Status</h2>
+  <p>Verander de status van dit lesmateriaal. Enkel jij kan deze status zien.</p>
+  <form name="vm.statusForm">
+    <p>
+      <select ng-model="vm.selection[0].singleContentStatus" ng-options="item.label for item in vm.contentStatuses track by item.id"
+        name="status">
+      </select>
+    </p>
+    <div ng-show="vm.statusForm.status.$dirty" class="animateSaveButton">
+      <a class="btn btn-primary" ng-click="vm.saveStatus($event, vm.selection[0], vm.selection[0].singleContentStatus)">
+        <i class="fa fa-floppy-o"> </i> Opslaan
+      </a>
+    </div>
+  </form>
+</div> -->
+<p>works</p>
