@@ -1,17 +1,11 @@
-<ul class="bar bar__flex-container">
-  <li class="bar__flex-item">
-    <ul class="bar__flex-container">
-      <ng-content select=".bar--left"></ng-content>
-    </ul>
-  </li>
-  <li class="bar__flex-item bar__flex-item--filler">
-    <ul class="bar__flex-container flex-center">
-      <ng-content select=".bar--center"></ng-content>
-    </ul>
-  </li>
-  <li class="bar__flex-item">
-    <ul class="bar__flex-container">
-      <ng-content select=".bar--right"></ng-content>
-    </ul>
-  </li>
-</ul>
+<header class="bar">
+  <section class="bar__section bar__section--align-start">
+    <ng-content select="[bar--left]"></ng-content>
+  </section>
+  <section class="bar__section bar__section--align-center">
+    <ng-content select="[bar--center]"></ng-content>
+  </section>
+  <section class="bar__section bar__section--align-end">
+    <ng-content select="[bar--right]"></ng-content>
+  </section>
+</header>
