@@ -3,6 +3,7 @@ import { AuthService } from './auth-service';
 
 describe('CredentialsService', () => {
   beforeEach(() => {
+    TestBed.resetTestEnvironment();
     TestBed.configureTestingModule({
       providers: [AuthService]
     });

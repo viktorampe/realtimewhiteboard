@@ -3,13 +3,18 @@ import { HttpClientModule } from '@angular/common/http';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { AuthService, AuthServiceToken } from '@campus/dal';
 import { SDKBrowserModule } from '@diekeure/polpo-api-angular-sdk';
-import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
-import {
-  initialState as bundlesInitialState,
-  bundlesReducer
-} from './+state/bundles/bundles.reducer';
+import { StoreModule } from '@ngrx/store';
 import { BundlesEffects } from './+state/bundles/bundles.effects';
+import {
+  bundlesReducer,
+  initialState as bundlesInitialState
+} from './+state/bundles/bundles.reducer';
+import { PersonsEffects } from './+state/persons/persons.effects';
+import {
+  initialPersonState as personsInitialState,
+  personsReducer
+} from './+state/persons/persons.reducer';
 
 @NgModule({
   imports: [
@@ -19,7 +24,11 @@ import { BundlesEffects } from './+state/bundles/bundles.effects';
     StoreModule.forFeature('bundles', bundlesReducer, {
       initialState: bundlesInitialState
     }),
-    EffectsModule.forFeature([BundlesEffects])
+    EffectsModule.forFeature([BundlesEffects]),
+    StoreModule.forFeature('persons', personsReducer, {
+      initialState: personsInitialState
+    }),
+    EffectsModule.forFeature([PersonsEffects])
   ]
 })
 export class DalModule {

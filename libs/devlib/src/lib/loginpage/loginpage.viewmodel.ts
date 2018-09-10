@@ -17,14 +17,7 @@ export class LoginPageViewModel implements Resolve<boolean> {
   ) {}
 
   login(name: string, password: string) {
-    this.authService.login({ username: name, password: password }).subscribe(
-      ok => {
-        //do nothing
-      },
-      error => {
-        this.response = error.message;
-      }
-    );
+    this.authService.login({ username: name, password: password });
   }
 
   /**
