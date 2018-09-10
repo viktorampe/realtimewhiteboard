@@ -1,18 +1,28 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AppBarComponent } from './app-bar.component';
+import { Component } from '@angular/core';
+import { By } from '@angular/platform-browser';
+import { element } from '@angular/core/src/render3/instructions';
 
 describe('BasicAppBarComponent', () => {
   let component: AppBarComponent;
   let fixture: ComponentFixture<AppBarComponent>;
 
+  let hostComponent: AppBarHostComponent;
+  let hostFixture: ComponentFixture<AppBarHostComponent>;
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [AppBarComponent]
+      declarations: [AppBarComponent, AppBarHostComponent]
     }).compileComponents();
   }));
 
   beforeEach(() => {
+    hostFixture = TestBed.createComponent(AppBarHostComponent);
+    hostComponent = hostFixture.componentInstance;
+    hostFixture.detectChanges();
+
     fixture = TestBed.createComponent(AppBarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -21,4 +31,50 @@ describe('BasicAppBarComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should contain 2 items in the left section', () => {
+    const hostSectionDE = hostFixture.debugElement.query(
+      By.css('.bar__section--align-start')
+    );
+    const hostSectionChildren = hostSectionDE.queryAll(By.all());
+    const childrenInSectionAmount = hostSectionChildren.length;
+
+    expect(childrenInSectionAmount).toBe(2);
+  });
+
+  it('should contain 3 items in the center section', () => {
+    const hostSectionDE = hostFixture.debugElement.query(
+      By.css('.bar__section--align-center')
+    );
+    const hostSectionChildren = hostSectionDE.queryAll(By.all());
+    const childrenInSectionAmount = hostSectionChildren.length;
+
+    expect(childrenInSectionAmount).toBe(3);
+  });
+
+  it('should contain 4 items in the right section', () => {
+    const hostSectionDE = hostFixture.debugElement.query(
+      By.css('.bar__section--align-end')
+    );
+    const hostSectionChildren = hostSectionDE.queryAll(By.all());
+    const childrenInSectionAmount = hostSectionChildren.length;
+
+    expect(childrenInSectionAmount).toBe(4);
+  });
 });
+
+@Component({
+  template: `
+  <campus-app-bar>
+    <h2 bar--left>|links1|</h2>
+    <p bar--left>|links2|</p>
+    <div bar--center>|midden1|</div>
+    <div bar--center>|midden2|</div>
+    <div bar--center>|midden3|</div>
+    <div bar--right>|rechts1|</div>
+    <div bar--right>|rechts2|</div>
+    <div bar--right>|rechts3|</div>
+    <div bar--right>|rechts4|</div>
+  </campus-app-bar>`
+})
+class AppBarHostComponent {}
