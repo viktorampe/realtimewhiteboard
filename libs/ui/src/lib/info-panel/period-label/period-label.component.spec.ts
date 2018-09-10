@@ -7,7 +7,7 @@ describe('InfoPanelPeriodLabelComponent', () => {
   let component: InfoPanelPeriodLabelComponent;
   let fixture: ComponentFixture<InfoPanelPeriodLabelComponent>;
 
-  let mockData: { title: string, period: { start: Date, end: Date } };
+  let mockData: { title: string, period: { start: Date, end: Date }, showIcons?: boolean };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -25,11 +25,13 @@ describe('InfoPanelPeriodLabelComponent', () => {
       period: {
         start: new Date(2018, 0, 1),
         end: new Date(2019, 5, 1),
-      }
+      },
+      showIcons: true
     }
 
     component.title = mockData.title;
     component.period = mockData.period;
+    component.showIcons = mockData.showIcons;
 
     fixture.detectChanges();
   });
@@ -64,5 +66,13 @@ describe('InfoPanelPeriodLabelComponent', () => {
     expect(startEvent).toBe(true);
     dates[1].triggerEventHandler('click', null);
     expect(endEvent).toBe(true);
+  });
+  it('should not show the icons if showIcons is false', () => {
+    component.showIcons = false;
+    fixture.detectChanges();
+    const icon = fixture.debugElement.query(
+      By.css('.info-panel__period-label__date-holder__icon')
+    );
+    expect(icon).toBeFalsy();
   });
 });

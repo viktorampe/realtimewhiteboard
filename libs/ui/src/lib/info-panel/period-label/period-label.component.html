@@ -5,13 +5,13 @@
       <div class="info-panel__period-label__date-holder__text__label">Van</div>
       <div class="info-panel__period-label__date-holder__text__value">{{period.start | date:'dd/MM/yyyy'}}</div>
     </div>
-    <div class="info-panel__period-label__date-holder__icon" (click)="onEditStart()"></div>
+    <div *ngIf="showIcons" class="info-panel__period-label__date-holder__icon" (click)="onEditStart()"></div>
   </div>
   <div class="info-panel__period-label__date-holder">
     <div class="info-panel__period-label__date-holder__text">
       <div class="info-panel__period-label__date-holder__text__label">Tot</div>
-      <div class="info-panel__period-label__date-holder__text__value">{{period.end  | date:'dd/MM/yyyy'}}</div>
+      <div class="info-panel__period-label__date-holder__text__value">{{period.end | date:'dd/MM/yyyy'}}</div>
     </div>
-    <div class="info-panel__period-label__date-holder__icon" (click)="onEditEnd()"></div>
+    <div *ngIf="showIcons" class="info-panel__period-label__date-holder__icon" (click)="onEditEnd()"></div>
   </div>
 </div>

@@ -8,6 +8,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 export class InfoPanelPeriodLabelComponent {
   @Input() title: string;
   @Input() period: { start: Date, end: Date };
+  @Input() showIcons: boolean;
   @Output() editStart = new EventEmitter<boolean>();
   @Output() editEnd = new EventEmitter<boolean>();
 
