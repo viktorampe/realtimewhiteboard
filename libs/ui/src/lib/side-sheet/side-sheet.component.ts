@@ -21,7 +21,7 @@ import { filter, takeWhile } from 'rxjs/operators';
 })
 export class SideSheetComponent implements OnInit, OnDestroy {
   @Input()
-  set isVisible(value) {
+  set isOpen(value) {
     this.sheet.open();
   }
 
