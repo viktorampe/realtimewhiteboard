@@ -7,8 +7,8 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class FileExtensionPresenterComponent implements OnInit {
   @Input() extension: string;
-  @Input() showTitle: boolean = true;
-  @Input() showIcon: boolean = true;
+  @Input() showTitle = true;
+  @Input() showIcon = true;
 
   get titleContent(): string {
     return this.showTitle ? this.extension : '';
