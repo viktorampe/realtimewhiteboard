@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Subject, BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'campus-bundles',
@@ -7,8 +7,8 @@ import { Subject } from 'rxjs';
   styleUrls: ['./bundles.component.scss']
 })
 export class BundlesComponent implements OnInit {
-  showInfoPanel = false;
-  showInfo$ = new Subject();
+  showInfoPanel = true;
+  showInfo$ = new BehaviorSubject<boolean>(true);
   constructor() {}
 
   ngOnInit() {}
@@ -17,9 +17,5 @@ export class BundlesComponent implements OnInit {
     // we need to change the value, otherwise the setter in the side sheet component won't trigger
     this.showInfoPanel = !this.showInfoPanel;
     this.showInfo$.next(this.showInfoPanel);
-  }
-
-  log() {
-    console.log('click arrived');
   }
 }
