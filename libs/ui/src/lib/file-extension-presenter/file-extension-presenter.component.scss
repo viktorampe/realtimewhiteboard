@@ -1,0 +1,335 @@
+.file-extension {
+  display: inline-block;
+  position: relative;
+  box-sizing: border-box;
+  border-width: 2px;
+  border-style: solid;
+  z-index: -1;
+
+  &:before {
+    width: inherit;
+    height: inherit;
+    border: inherit;
+    background: inherit;
+    content: ' ';
+    display: block;
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    z-index: -1;
+    box-sizing: border-box;
+    visibility: hidden;
+  }
+}
+
+.title {
+  font-family: 'Oswald', 'Arial Narrow', Sans-Serif;
+  font-weight: normal;
+  line-height: 20px;
+  font-size: 15px;
+  text-align: center;
+  text-transform: uppercase;
+  color: #fff;
+  height: 24px;
+  border-width: 2px;
+  border-style: solid;
+  box-sizing: border-box;
+  background-color: #666;
+  border-color: #333;
+  width: 68px !important;
+  font-style: normal;
+  position: relative;
+  z-index: -1;
+
+  &:before {
+    visibility: visible;
+  }
+}
+
+.icon {
+  padding-bottom: 92px;
+  margin-left: 9px;
+  margin-top: 11px;
+  margin-right: 8px;
+
+  &:after {
+    position: absolute;
+    width: 84px;
+    height: 107px;
+    background: transparent
+      url('/apps/polpo-classroom-web/src/assets/img/file-types.svg?v3');
+    background-size: 84.1px 1600px;
+    background-repeat: no-repeat;
+    background-position: 0px -1100px;
+    z-index: -2;
+    top: -11px;
+    left: -9px;
+    content: ' ';
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+}
+
+.file-extension {
+  &.xls,
+  &.xlsx,
+  &.ods,
+  &.xlt,
+  &.xltx {
+    border-color: #2f4f28;
+    background-color: #558b46;
+    &:after {
+      background-position: 0px -110px;
+    }
+  }
+
+  &.pptx,
+  &.ppt,
+  &.pps,
+  &.ppsx,
+  &.odp {
+    border-color: #99461c;
+    background-color: #d76228;
+    &:after {
+      background-position: 0px 0px;
+    }
+  }
+
+  &.doc,
+  &.docx,
+  &.odt,
+  &.dot,
+  &.dotx,
+  &.txt,
+  &.rtf,
+  &.md {
+    background-color: #2e84bc;
+    border-color: #2a5174;
+    &:after {
+      background-position: 0px -220px;
+    }
+  }
+
+  &.mp3,
+  &.wav,
+  &.ogg,
+  &.wma,
+  &.m4a,
+  &.m4p,
+  &.flac,
+  &.aiff,
+  &.aac {
+    background-color: #a270a1;
+    border-color: #573d56;
+    &:after {
+      background-position: 0px -660px;
+    }
+  }
+
+  &.pdf,
+  &.ps {
+    background-color: #b32328;
+    border-color: #7f181b;
+    &:after {
+      background-position: 0px -330px;
+    }
+  }
+
+  &.jpg,
+  &.svg,
+  &.png,
+  &.gif,
+  &.jpeg,
+  &.tga,
+  &.raw,
+  &.tiff,
+  &.bmp,
+  &.webp,
+  &.psd,
+  &.ai {
+    background-color: #3d4b88;
+    border-color: #202748;
+    &:after {
+      background-position: 0px -990px;
+    }
+  }
+
+  &.ggb,
+  &.geogebra {
+    background-color: #9696fa;
+    border-color: #676767;
+    &:after {
+      background-position: 0px -880px;
+    }
+  }
+
+  &.link,
+  &.lnk {
+    background-color: #7584bc;
+    border-color: #424b6c;
+    &:after {
+      background-position: 0px -440px;
+    }
+  }
+
+  &.zip,
+  &.rar {
+    background-color: #6f3f88;
+    border-color: #40234f;
+    &:after {
+      background-position: 0px -550px;
+    }
+  }
+
+  &.m4v,
+  &.mov,
+  &.flv,
+  &.wmv,
+  &.mkv,
+  &.webm,
+  &.vob,
+  &.ogv,
+  &.avi,
+  &.qt,
+  &.mp4,
+  &.asf,
+  &.mpg,
+  &.mpeg {
+    background-color: #bc4346;
+    border-color: #7f2c2d;
+    &:after {
+      background-position: 0px -1210px;
+    }
+  }
+
+  &.boek,
+  &.boek-e {
+    background-color: #21a49d;
+    border-color: #146663;
+    &:after {
+      background-position: 0px -770px;
+    }
+  }
+
+  &.oefening {
+    background-color: #21a49d;
+    border-color: #146663;
+    &:after {
+      background-position: 0px -1320px;
+    }
+  }
+
+  &.youtube {
+    background-color: #cd201f;
+    border-color: #b32328;
+    &:after {
+      background-position: 0px -440px;
+    }
+  }
+
+  &.drive {
+    background-color: #09a058;
+    border-color: #057a42;
+    &:after {
+      background-position: 0px -440px;
+    }
+  }
+
+  &.dropbox {
+    background-color: #007ee5;
+    border-color: #06559e;
+    &:after {
+      background-position: 0px -440px;
+    }
+  }
+  &.google-docs {
+    background-color: #4285f4;
+    border-color: #157fdb;
+    &:after {
+      background-position: 0px -440px;
+    }
+  }
+
+  &.presenter {
+    background-color: #2266af;
+    border-color: #157fdb;
+    &:after {
+      background-position: 0px -440px;
+    }
+  }
+
+  &.sharepoint {
+    background-color: #094ab2;
+    border-color: #157fdb;
+    &:after {
+      background-position: 0px -440px;
+    }
+  }
+
+  &.onedrive {
+    background-color: #094ab2;
+    border-color: #157fdb;
+    &:after {
+      background-position: 0px -440px;
+    }
+  }
+  &.smartschool {
+    background-color: #ff520e;
+    border-color: #ff520e;
+    &:after {
+      background-position: 0px -440px;
+    }
+  }
+  &.wikipedia {
+    background-color: #c7c8ca;
+    border-color: #939598;
+    &:after {
+      background-position: 0px -440px;
+    }
+  }
+  &.vimeo {
+    background-color: #1ab7ea;
+    border-color: #10abff;
+    &:after {
+      background-position: 0px -440px;
+    }
+  }
+  &.flickr {
+    background-color: #ff0084;
+    border-color: #0063dc;
+    &:after {
+      background-position: 0px -440px;
+    }
+  }
+  &.prezi {
+    background-color: #318bff;
+    border-color: #0063dc;
+    &:after {
+      background-position: 0px -440px;
+    }
+  }
+  &.wezooz {
+    background-color: #e77543;
+    border-color: #e4642c;
+    &:after {
+      background-position: 0px -440px;
+    }
+  }
+  &.wetransfer {
+    background-color: #2aa9fb;
+    border-color: #079ffd;
+    &:after {
+      background-position: 0px -440px;
+    }
+  }
+  &.algebrakit {
+    background-color: #009fe3;
+    border-color: #034655;
+    letter-spacing: 0px;
+    font-size: 13px;
+    &:after {
+      background-position: 0px -1428px;
+    }
+  }
+}

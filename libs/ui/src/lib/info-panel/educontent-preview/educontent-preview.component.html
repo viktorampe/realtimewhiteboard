@@ -3,7 +3,8 @@
     <img class="info-panel__educontent-preview__preview__img" [src]="preview">
   </div>
   <div class="info-panel__educontent-preview__product">
-    <div class="info-panel__educontent-preview__product__file-extention-icon"></div>
+    <campus-file-extension-presenter class="info-panel__educontent-preview__product__file-extention-icon" extension="xls"
+      [showTitle]="true" [showIcon]="true"></campus-file-extension-presenter>
     <div class="info-panel__educontent-preview__product__details">
       <div class="info-panel__educontent-preview__product__details__title">{{titleText}}</div>
       <div class="info-panel__educontent-preview__product__details__type-icon">

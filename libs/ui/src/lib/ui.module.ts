@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FileExtensionPresenterComponent } from './file-extension-presenter/file-extension-presenter.component';
 import { InfoPanelActionComponent } from './info-panel/action/action.component';
 import { InfoPanelAdaptableListComponent } from './info-panel/adaptable-list/adaptable-list.component';
 import { InfoPanelEducontentPreviewComponent } from './info-panel/educontent-preview/educontent-preview.component';
@@ -15,7 +16,8 @@ import { InfoPanelPeriodLabelComponent } from './info-panel/period-label/period-
     InfoPanelInputLabelComponent,
     InfoPanelAdaptableListComponent,
     InfoPanelComponent,
-    InfoPanelPeriodLabelComponent
+    InfoPanelPeriodLabelComponent,
+    FileExtensionPresenterComponent
   ],
   exports: [InfoPanelComponent]
 })

@@ -5,10 +5,11 @@ import { BundlesComponent } from './components/bundles.component';
 import { BundlesViewModel } from './components/bundles.viewmodel';
 import { PagesBundlesRoutingModule } from './pages-bundles-routing.module';
 
+
 @NgModule({
   imports: [CommonModule, PagesBundlesRoutingModule, UiModule],
   declarations: [BundlesComponent],
 
   providers: [BundlesViewModel]
 })
-export class PagesBundlesModule {}
+export class PagesBundlesModule { }
