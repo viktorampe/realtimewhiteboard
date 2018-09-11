@@ -24,7 +24,13 @@ export class SideSheetComponent implements OnInit, OnDestroy {
   set isOpen(value) {
     this.sheet.open();
   }
-
+  /**
+   * Reference to the material drawer component.
+   * Used to set it's properties in code (instead of in the template).
+   *
+   * @type {MatDrawer}
+   * @memberof SideSheetComponent
+   */
   @ViewChild(MatDrawer) sheet: MatDrawer;
   /**
    * Whether the component is still rendered.
@@ -41,7 +47,7 @@ export class SideSheetComponent implements OnInit, OnDestroy {
    */
   xSmall$ = this.breakPointObserver.observe([Breakpoints.XSmall]);
   /**
-   * Stream of various breakpoint events.
+   * Stream of non XSmall breakpoint events.
    *
    * @memberof SideSheetComponent
    */
@@ -53,7 +59,7 @@ export class SideSheetComponent implements OnInit, OnDestroy {
     this.setupSubscriptions();
   }
 
-  setupSubscriptions() {
+  setupSubscriptions(): void {
     // sheet property available in the OnInit life cycle
     this.xSmall$
       .pipe(
