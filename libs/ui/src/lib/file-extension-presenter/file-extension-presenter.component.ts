@@ -6,15 +6,13 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./file-extension-presenter.component.scss']
 })
 export class FileExtensionPresenterComponent implements OnInit {
-  @Input() thumb: string;
-  @Input() thumbSmall: string;
   @Input() extension: string;
-  @Input() methods: string[];
-  @Input() icon: string;
-  @Input() title: string;
-  @Input() label: string;
-  @Input() type: string;
-  @Input() description: string;
+  @Input() showTitle: boolean = true;
+  @Input() showIcon: boolean = true;
+
+  get titleContent(): string {
+    return this.showTitle ? this.extension : '';
+  }
 
   constructor() {}
 

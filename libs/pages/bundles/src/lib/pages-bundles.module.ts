@@ -1,3 +1,4 @@
+import { UiModule } from '@campus/ui';
 import { BundlesViewModel } from './components/bundles.viewmodel';
 
 import { NgModule } from '@angular/core';
@@ -7,7 +8,7 @@ import { PagesBundlesRoutingModule } from './pages-bundles-routing.module';
 import { BundlesComponent } from './components/bundles.component';
 
 @NgModule({
-  imports: [CommonModule, PagesBundlesRoutingModule],
+  imports: [CommonModule, PagesBundlesRoutingModule, UiModule],
   declarations: [BundlesComponent],
 
   providers: [BundlesViewModel]
