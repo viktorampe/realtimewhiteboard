@@ -9,7 +9,19 @@ import { SideSheetBodyDirective } from './side-sheet/directives/side-sheet-body.
 import { SideSheetPageDirective } from './side-sheet/directives/side-sheet-page.directive';
 @NgModule({
   imports: [CommonModule, MatSidenavModule, LayoutModule],
-  declarations: [SideSheetComponent, ContentComponent, SideSheetHeaderDirective, SideSheetBodyDirective, SideSheetPageDirective],
-  exports: [SideSheetComponent, MatSidenavModule, ContentComponent, SideSheetHeaderDirective, SideSheetBodyDirective, SideSheetPageDirective]
+  declarations: [
+    SideSheetComponent,
+    ContentComponent,
+    SideSheetHeaderDirective,
+    SideSheetBodyDirective,
+    SideSheetPageDirective
+  ],
+  exports: [
+    SideSheetComponent,
+    ContentComponent,
+    SideSheetHeaderDirective,
+    SideSheetBodyDirective,
+    SideSheetPageDirective
+  ]
 })
 export class UiModule {}
