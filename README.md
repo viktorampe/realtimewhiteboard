@@ -59,8 +59,8 @@ the route will be added to the libs folder
 
 ### generate state in dal lib (non root state 'bundles' example)
 
-    ng generate ngrx bundles --directory=+state/bundles --module=libs\dal\src\lib\dal.module.ts
+    ng generate ngrx bundles --directory=+state/bundles --module=libs/dal/src/lib/dal.module.ts
 
 ### generate state in app (root state 'app' example)
 
-    ng generate ngrx app --module=apps\polpo-classroom-web\src\app\app.module.ts --root
+    ng generate ngrx app --module=apps/polpo-classroom-web/src/app/app.module.ts --root
