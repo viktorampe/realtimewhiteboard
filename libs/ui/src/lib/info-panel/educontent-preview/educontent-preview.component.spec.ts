@@ -1,3 +1,4 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { InfoPanelEducontentPreviewComponent } from './educontent-preview.component';
@@ -17,7 +18,8 @@ describe('InfoPanelEducontentPreviewComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [InfoPanelEducontentPreviewComponent]
+      declarations: [InfoPanelEducontentPreviewComponent],
+      schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
   }));
 
@@ -74,17 +76,25 @@ describe('InfoPanelEducontentPreviewComponent', () => {
     expect(method).toBeFalsy();
   });
   it('should show the methods if these are given', () => {
+    component.methods = ['method-one', 'method-two', 'method-three']
+    fixture.detectChanges();
     const methods = fixture.debugElement.queryAll(
       By.css('.info-panel__educontent-preview__methods__method')
     );
-    component.methods = ['method-one', 'method-two', 'method-three']
-    fixture.detectChanges();
     expect(methods.length).toBe(3);
   });
   it('should not show contentPreview if none was given', () => {
     const preview = fixture.debugElement.query(
-      By.css('.class')
+      By.css('.info-panel__educontent-preview__preview')
     );
     expect(preview).toBeFalsy();
+  });
+  it('should not show contentPreview if none was given', () => {
+    component.preview = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
+    fixture.detectChanges();
+    const preview = fixture.debugElement.query(
+      By.css('.info-panel__educontent-preview__preview')
+    );
+    expect(preview).toBeTruthy();
   });
 });
