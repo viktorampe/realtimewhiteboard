@@ -7,7 +7,7 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
   styleUrls: ['./input-label.component.scss']
 })
 export class InfoPanelInputLabelComponent implements OnInit {
-  @Input() title: string;
+  @Input() titleText: string;
   @Input() text: string;
   @Input() showIcon: boolean;
   @Output() saveText = new EventEmitter<string>();

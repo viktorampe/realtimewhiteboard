@@ -6,7 +6,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./period-label.component.scss']
 })
 export class InfoPanelPeriodLabelComponent {
-  @Input() title: string;
+  @Input() titleText: string;
   @Input() period: { start: Date, end: Date };
   @Input() showIcons: boolean;
   @Output() editStart = new EventEmitter<boolean>();

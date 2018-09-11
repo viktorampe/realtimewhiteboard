@@ -7,7 +7,7 @@ describe('InfoPanelInputLabelComponent', () => {
   let component: InfoPanelInputLabelComponent;
   let fixture: ComponentFixture<InfoPanelInputLabelComponent>;
 
-  let mockData: { title: string, text: string, showIcon?: boolean };
+  let mockData: { titleText: string, text: string, showIcon?: boolean };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -20,9 +20,9 @@ describe('InfoPanelInputLabelComponent', () => {
     fixture = TestBed.createComponent(InfoPanelInputLabelComponent);
     component = fixture.componentInstance;
 
-    mockData = { title: 'the-title', text: 'the-text', showIcon: true };
+    mockData = { titleText: 'the-title', text: 'the-text', showIcon: true };
 
-    component.title = mockData.title;
+    component.titleText = mockData.titleText;
     component.text = mockData.text;
     component.showIcon = mockData.showIcon;
 
@@ -36,7 +36,7 @@ describe('InfoPanelInputLabelComponent', () => {
     const title = fixture.debugElement.query(
       By.css('.info-panel__input-label__title')
     ).nativeElement.textContent;
-    expect(title).toContain(mockData.title);
+    expect(title).toContain(mockData.titleText);
   });
   it('should show the text label', () => {
     const title = fixture.debugElement.query(

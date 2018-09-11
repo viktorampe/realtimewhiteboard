@@ -7,7 +7,7 @@ describe('InfoPanelPeriodLabelComponent', () => {
   let component: InfoPanelPeriodLabelComponent;
   let fixture: ComponentFixture<InfoPanelPeriodLabelComponent>;
 
-  let mockData: { title: string, period: { start: Date, end: Date }, showIcons?: boolean };
+  let mockData: { titleText: string, period: { start: Date, end: Date }, showIcons?: boolean };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -21,7 +21,7 @@ describe('InfoPanelPeriodLabelComponent', () => {
     component = fixture.componentInstance;
 
     mockData = {
-      title: 'some-title',
+      titleText: 'some-title',
       period: {
         start: new Date(2018, 0, 1),
         end: new Date(2019, 5, 1),
@@ -29,7 +29,7 @@ describe('InfoPanelPeriodLabelComponent', () => {
       showIcons: true
     }
 
-    component.title = mockData.title;
+    component.titleText = mockData.titleText;
     component.period = mockData.period;
     component.showIcons = mockData.showIcons;
 
@@ -43,7 +43,7 @@ describe('InfoPanelPeriodLabelComponent', () => {
     const title = fixture.debugElement.query(
       By.css('.info-panel__period-label__title')
     ).nativeElement.textContent;
-    expect(title).toBe(mockData.title);
+    expect(title).toBe(mockData.titleText);
   });
   it('should show the start and end date', () => {
     const dates = fixture.debugElement.queryAll(

@@ -9,8 +9,8 @@
 
 
 
-  <campus-info-panel-input-label text="Algemene bundel" title="Titel" (saveText)="saveTitleEvent($event)"></campus-info-panel-input-label>
-  <campus-info-panel-period-label [showIcons]="true" [period]="period" title="Periode" (editStart)="editStartEvent($event)"
+  <campus-info-panel-input-label text="Algemene bundel" titleText="Titel" (saveText)="saveTitleEvent($event)"></campus-info-panel-input-label>
+  <campus-info-panel-period-label [showIcons]="true" [period]="period" titleText="Periode" (editStart)="editStartEvent($event)"
     (editEnd)="editEndEvent($event)"></campus-info-panel-period-label>
   <campus-info-panel-adaptable-list titleText="Gebruikers" [items]="items" [showIcon]="true" (itemIconClicked)="listItemIconClickedEvent($event)"
     (iconClicked)=listIconClickedEvent($event)></campus-info-panel-adaptable-list>
