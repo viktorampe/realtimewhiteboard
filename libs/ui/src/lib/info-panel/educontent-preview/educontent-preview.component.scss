@@ -30,14 +30,13 @@
       }
       &__type-icon {
         display: inline-block;
-        background-color: brown;
-        height: 40px;
-        width: 40px;
-        margin-top: 10px;
-        margin-bottom: 4px;
+        display: block;
+        color: #6ed3c2;
+        font-size: 25px;
+        margin: 6px 5px 5px;
       }
       &__description {
-
+        margin-bottom: 10px;
       }
     }
   }
