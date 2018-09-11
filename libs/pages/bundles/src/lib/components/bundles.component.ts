@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Subject, BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'campus-bundles',
