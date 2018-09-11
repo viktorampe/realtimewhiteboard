@@ -15,7 +15,7 @@ import { Component, OnInit, Input, HostBinding } from '@angular/core';
   styleUrls: ['./method-icon-presenter.component.scss']
 })
 export class MethodIconPresenterComponent implements OnInit {
-  @Input() methodClass: string;
+  @Input() methodClass = '';
   @Input() colorMode: 'grey' | 'color' | 'hover';
 
   public get colorClass(): string {
