@@ -13,7 +13,7 @@
 }
 
 // icon variables
-$ui-icon-filter: FontAwesome "\f0b0" !default;
+$ui-icon-filter: FontAwesome '\f0b0' !default;
 
 // icon classes
 @include icon(ui-icon-filter, $ui-icon-filter);
@@ -26,8 +26,10 @@ $ui-font-color-2: #000 !default;
 
 // import all required sass files from our libs
 // @import './tree-nav/tree-nav.component.theme';
+@import './method-icon-presenter/method-icon-presenter.component.scss';
 
 // create theme-mixin with each mixin from our library components
 @mixin ui-theme() {
   // @include ui-tree-nav();
+  @include method-icon();
 }

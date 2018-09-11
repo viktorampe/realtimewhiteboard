@@ -1,0 +1,104 @@
+@mixin method-icon {
+  .method__icon {
+    width: 152px;
+    height: 74px;
+    display: inline-block;
+    background: transparent;
+    line-height: 500px;
+    overflow: hidden;
+    position: relative;
+    z-index: 2;
+
+    &--grey,
+    &--hover {
+      background-image: url('/apps/polpo-classroom-web/src/assets/images/methodes_grijs.png');
+    }
+
+    &:hover.method__icon--hover,
+    &--color {
+      background-image: url('/apps/polpo-classroom-web/src/assets/images/methodes_kleur.png');
+    }
+
+    &.spelen {
+      background-position: -2px -436px;
+    }
+    &.alles-im-griff {
+      background-position: -2px -83px;
+    }
+    &.alles-im-griff-update {
+      background-position: -2px -170px;
+    }
+    &.beaufort {
+      background-position: -2px -258px;
+    }
+    &.chipsandcookies {
+      background-position: -2px -348px;
+    }
+    &.cyborg {
+      background-position: -2px -0px;
+    }
+    &.integrale-opdrachten {
+      background-position: -200px -0px;
+    }
+    &.interactie {
+      background-position: -200px -83px;
+    }
+    &.isee {
+      background-position: -200px -170px;
+    }
+    &.janus {
+      background-position: -200px -258px;
+    }
+    &.kapitaal {
+      background-position: -200px -348px;
+    }
+    &.leesleerenleef {
+      background-position: -200px -436px;
+    }
+    &.nando {
+      background-position: -396px -0px;
+    }
+    &.opmijkunjerekenen {
+      background-position: -396px -83px;
+    }
+    &.pleinfeu {
+      background-position: -396px -170px;
+    }
+    &.plugin {
+      background-position: -396px -258px;
+    }
+    &.punktde {
+      background-position: -396px -348px;
+    }
+    &.sherpa {
+      background-position: -793px -348px;
+    }
+    &.shuffle {
+      background-position: -597px -0px;
+    }
+    &.shuffle-this {
+      background-position: -597px -83px;
+    }
+    &.solanum {
+      background-position: -597px -170px;
+    }
+    &.speakup {
+      background-position: -597px -258px;
+    }
+    &.spectrum {
+      background-position: -597px -348px;
+    }
+    &.surfen {
+      background-position: -793px -170px;
+    }
+    &.topos {
+      background-position: -793px -258px;
+    }
+    &.vbtl {
+      background-position: -793px -0px;
+    }
+    &.viainformatica {
+      background-position: -793px -83px;
+    }
+  }
+}
