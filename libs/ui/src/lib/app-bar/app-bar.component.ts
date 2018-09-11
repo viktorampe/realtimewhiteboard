@@ -5,6 +5,7 @@ import { Component, OnInit, Input } from '@angular/core';
  *
  * Uses css attribute selectors to project content in sections.
  * Use bar--left, bar-center and bar--right attributes to assign content to a section.
+ * Content without an attribute is projected to the left section.
  *
  * @export
  * @class AppBarComponent

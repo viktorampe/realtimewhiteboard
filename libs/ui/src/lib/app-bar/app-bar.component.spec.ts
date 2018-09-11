@@ -16,6 +16,7 @@ import { By } from '@angular/platform-browser';
     <div bar--right>|rechts2|</div>
     <div bar--right>|rechts3|</div>
     <div bar--right>|rechts4|</div>
+    <div>|geen attribute|</div>
   </campus-app-bar>`
 })
 class AppBarHostComponent {}
@@ -54,7 +55,7 @@ describe('BasicAppBarComponent', () => {
     const hostSectionChildren = hostSectionDE.queryAll(By.all());
     const childrenInSectionAmount = hostSectionChildren.length;
 
-    expect(childrenInSectionAmount).toBe(2);
+    expect(childrenInSectionAmount).toBe(3);
   });
 
   it('should contain 3 items in the center section', () => {
