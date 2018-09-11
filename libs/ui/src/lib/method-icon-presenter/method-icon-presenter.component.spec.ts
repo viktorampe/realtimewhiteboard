@@ -8,9 +8,8 @@ describe('MethodIconPresenterComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MethodIconPresenterComponent ]
-    })
-    .compileComponents();
+      declarations: [MethodIconPresenterComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
