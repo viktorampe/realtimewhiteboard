@@ -3,12 +3,13 @@
   padding: 0;
   display: flex;
   width: 100%;
+  align-items: center;
 
   &__section {
     display: inline-flex;
     flex-flow: row nowrap;
     justify-content: flex-start;
-    align-items: stretch;
+    align-items: center;
 
     &--align-start {
       padding-left: 12px;
