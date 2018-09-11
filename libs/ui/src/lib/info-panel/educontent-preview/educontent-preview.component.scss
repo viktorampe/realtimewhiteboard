@@ -1,0 +1,56 @@
+.info-panel__educontent-preview {
+  &__preview {
+    height: 205px;
+    overflow: hidden;
+    border-bottom: solid 1px #e3e6e8;
+    &__img {
+      width: 100%;
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center top;
+    }
+  }
+  &__product {
+    padding: 30px 20px 0 20px;
+    min-height: 107px;
+    &__file-extention-icon {
+      background-color: aquamarine;
+      width: 84px;
+      height: 107px;
+      float: left;
+      margin-right: 15px;
+      margin-bottom: 10px;
+    }
+    &__details {
+      &__title {
+        font-family: Oswald,Sans-Serif;
+        font-size: 17px;
+        line-height: 20px;
+        color: #3E3E43;
+        font-weight: 500;
+      }
+      &__type-icon {
+        display: inline-block;
+        background-color: brown;
+        height: 40px;
+        width: 40px;
+        margin-top: 10px;
+        margin-bottom: 4px;
+      }
+      &__description {
+
+      }
+    }
+  }
+  &__methods {
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    &__method {
+      margin-right: 10px;
+      background-color: antiquewhite;
+      width: 76px;
+      height: 37px;
+    }
+  }
+}
