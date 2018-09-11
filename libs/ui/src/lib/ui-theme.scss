@@ -14,9 +14,11 @@
 
 // icon variables
 $ui-icon-filter: FontAwesome '\f0b0' !default;
+$polpo-presentatie: polpo '\e944' !default;
 
 // icon classes
 @include icon(ui-icon-filter, $ui-icon-filter);
+@include icon(polpo-presentatie, $polpo-presentatie);
 
 // thematic variables
 $ui-bg-color-1: #fff !default;
