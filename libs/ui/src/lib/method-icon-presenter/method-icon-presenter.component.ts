@@ -1,12 +1,21 @@
 import { Component, OnInit, Input, HostBinding } from '@angular/core';
-
+/**
+ * Presents the logo of a method.
+ *
+ * @param {string} className - The Css classname associated with the method.
+ * @param {string} colorMode - Sets the color of the icon. Accepted values: 'grey', 'color' and 'hover'(default).
+ *
+ * @export
+ * @class MethodIconPresenterComponent
+ * @implements {OnInit}
+ */
 @Component({
   selector: 'campus-method-icon-presenter',
   templateUrl: './method-icon-presenter.component.html',
   styleUrls: ['./method-icon-presenter.component.scss']
 })
 export class MethodIconPresenterComponent implements OnInit {
-  @Input() methodName: string;
+  @Input() methodClass: string;
   @Input() colorMode: 'grey' | 'color' | 'hover';
 
   public get colorClass(): string {
