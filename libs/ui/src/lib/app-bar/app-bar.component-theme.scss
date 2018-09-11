@@ -1,42 +1,44 @@
-.bar {
-  background-color: cadetblue;
-  padding: 0;
-  display: flex;
-  width: 100%;
-  align-items: center;
-
-  &__section {
-    display: inline-flex;
-    flex-flow: row nowrap;
-    justify-content: flex-start;
+@mixin app-bar {
+  .bar {
+    background-color: $ui-bg-color-1;
+    padding: 0;
+    display: flex;
+    width: 100%;
     align-items: center;
 
-    &--align-start {
-      padding-left: 12px;
-      padding-right: 0;
-      -ms-flex-pack: start;
+    &__section {
+      display: inline-flex;
+      flex-flow: row nowrap;
       justify-content: flex-start;
-      -ms-flex-order: -1;
-      order: -1;
-    }
+      align-items: center;
 
-    &--align-center {
-      flex-grow: 1;
-      padding-left: 0;
-      padding-right: 0;
-      -ms-flex-pack: start;
-      justify-content: center;
-      -ms-flex-order: -1;
-      order: 0;
-    }
+      &--align-start {
+        padding-left: 12px;
+        padding-right: 0;
+        -ms-flex-pack: start;
+        justify-content: flex-start;
+        -ms-flex-order: -1;
+        order: -1;
+      }
 
-    &--align-end {
-      padding-left: 0;
-      padding-right: 12px;
-      -ms-flex-pack: end;
-      justify-content: flex-end;
-      -ms-flex-order: 1;
-      order: 1;
+      &--align-center {
+        flex-grow: 1;
+        padding-left: 0;
+        padding-right: 0;
+        -ms-flex-pack: start;
+        justify-content: center;
+        -ms-flex-order: -1;
+        order: 0;
+      }
+
+      &--align-end {
+        padding-left: 0;
+        padding-right: 12px;
+        -ms-flex-pack: end;
+        justify-content: flex-end;
+        -ms-flex-order: 1;
+        order: 1;
+      }
     }
   }
 }
