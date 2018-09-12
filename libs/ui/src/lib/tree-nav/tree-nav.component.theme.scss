@@ -1,0 +1,12 @@
+@mixin ui-tree-nav() {
+  $ui-tree-nav-toggle: FontAwesome '\f107';
+  $ui-tree-nav-toggle-inactive: FontAwesome '\f104';
+
+  .ui-tree-nav__node {
+    @include icon('ui-tree-nav__node--toggle', $ui-tree-nav-toggle);
+    @include icon(
+      'ui-tree-nav__node--inactive .ui-tree-nav__node--toggle',
+      $ui-tree-nav-toggle-inactive
+    );
+  }
+}
