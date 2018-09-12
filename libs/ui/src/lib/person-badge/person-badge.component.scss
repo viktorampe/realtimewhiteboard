@@ -1,0 +1,22 @@
+.ui-person-badge {
+  margin: 15px 25px 15px 25px;
+  display: flex;
+  &--left {
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+  }
+  &__badge {
+    border-radius: 50%;
+    background-color: gray;
+    &--medium {
+      height: 45px;
+      width: 45px;
+    }
+  }
+  &__displayName {
+    font-size: 14px;
+    font-weight: 700;
+    padding: 3px 10px;
+    color: #44b0aa;
+  }
+}

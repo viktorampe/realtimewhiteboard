@@ -8,6 +8,7 @@ import { InfoPanelEducontentPreviewComponent } from './info-panel/educontent-pre
 import { InfoPanelComponent } from './info-panel/info-panel.component';
 import { InfoPanelInputLabelComponent } from './info-panel/input-label/input-label.component';
 import { InfoPanelPeriodLabelComponent } from './info-panel/period-label/period-label.component';
+import { PersonBadgeComponent } from './person-badge/person-badge.component';
 @NgModule({
   imports: [CommonModule, ReactiveFormsModule, FormsModule],
   declarations: [
@@ -17,7 +18,8 @@ import { InfoPanelPeriodLabelComponent } from './info-panel/period-label/period-
     InfoPanelAdaptableListComponent,
     InfoPanelComponent,
     InfoPanelPeriodLabelComponent,
-    FileExtensionPresenterComponent
+    FileExtensionPresenterComponent,
+    PersonBadgeComponent
   ],
   exports: [InfoPanelComponent]
 })
