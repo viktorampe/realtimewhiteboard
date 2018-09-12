@@ -11,6 +11,5 @@ export class InfoPanelEducontentPreviewComponent {
   @Input() description: string;
   @Input() productTypeIcon: string;
   @Input() fileExtentionIcon: string;
-  @Input() contentPreview: string;
   @Input() methods: string[];
 }

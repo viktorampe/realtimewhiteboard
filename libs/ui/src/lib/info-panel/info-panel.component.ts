@@ -7,18 +7,41 @@ import { Component, Input } from '@angular/core';
 })
 export class InfoPanelComponent {
   @Input() titleText: string;
-  items: { text: string; count?: number; eventId?: number }[] = [
-    { text: 'Wetenschappen - Wiskunde 1', count: 20, eventId: 1 },
-    { text: 'Wetenschappen - Wiskunde 2', count: 9 },
-    { text: 'Wetenschappen - Wiskunde 3' },
-    { text: 'Wetenschappen - Wiskunde 4', eventId: 2 }
-  ];
+  @Input() preview = {
+    preview: 'https://d1fh3heiqa6frl.cloudfront.net/890f054414a06a81489f35e6b27fc23c9ee12d0ce4e0a867801a569a073438de/7bc034592d6ea1a4ec2f3e99eb63ad56_340-1.png',
+    titleText: 'Bundle title',
+    description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+    productTypeIcon: 'polpo-presentatie',
+    fileExtentionIcon: 'xls',
+    methods: ['topos']
+  };
+  @Input() inputs = [
+    {
+      titleText: 'Titel',
+      text: 'The Bundle'
+    },
+    {
+      titleText: 'Omschrijving',
+      text: 'The Bundle description'
+    }
+  ]
+  @Input() adaptableListItems = {
+    titleText: 'Geselecteerde items:',
+    items: [
+      {
+        text: 'De Tijd'
+      },
+      {
+        text: 'De schaal'
+      }
+    ]
+  };
 
-
-  period = {
-    start: new Date(new Date().setDate(new Date().getDate() - 1)),
-    end: new Date(new Date().setDate(new Date().getDate() + 1))
-  }
+  // @Input() titleText: string;
+  // @Input() items: { text: string; count?: number; eventId?: number }[];
+  // @Input() showIcon: boolean;
+  // @Output() iconClicked = new EventEmitter<boolean>();
+  // @Output() itemIconClicked = new EventEmitter<number>();
 
   actionIconClickedEvent(text: string): void {
     console.log(text + ' icon clicked');
