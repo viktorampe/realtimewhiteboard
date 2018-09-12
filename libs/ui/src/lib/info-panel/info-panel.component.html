@@ -1,13 +1,9 @@
 <div class="info-panel">
-  <div class="info-panel__title">{{title || 'Info'}}</div>
+  <div class="info-panel__title">{{titleText || 'Info'}}</div>
   <campus-info-panel-educontent-preview titleText="Delen" description="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
     [methods]="['rekenen','topos']" preview="https://d1fh3heiqa6frl.cloudfront.net/890f054414a06a81489f35e6b27fc23c9ee12d0ce4e0a867801a569a073438de/7bc034592d6ea1a4ec2f3e99eb63ad56_340-1.png"
     productTypeIcon="polpo-presentatie">
   </campus-info-panel-educontent-preview>
-
-
-
-
 
   <campus-info-panel-input-label text="Algemene bundel" titleText="Titel" (saveText)="saveTitleEvent($event)"></campus-info-panel-input-label>
   <campus-info-panel-period-label [showIcons]="true" [period]="period" titleText="Periode" (editStart)="editStartEvent($event)"

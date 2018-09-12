@@ -6,7 +6,7 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./info-panel.component.scss']
 })
 export class InfoPanelComponent {
-  @Input() title: string;
+  @Input() titleText: string;
   items: { text: string; count?: number; eventId?: number }[] = [
     { text: 'Wetenschappen - Wiskunde 1', count: 20, eventId: 1 },
     { text: 'Wetenschappen - Wiskunde 2', count: 9 },

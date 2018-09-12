@@ -7,7 +7,7 @@ describe('InfoPanelComponent', () => {
   let component: InfoPanelComponent;
   let fixture: ComponentFixture<InfoPanelComponent>;
 
-  let mockData: { title: string };
+  let mockData: { titleText: string };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -20,9 +20,9 @@ describe('InfoPanelComponent', () => {
     fixture = TestBed.createComponent(InfoPanelComponent);
     component = fixture.componentInstance;
 
-    mockData = { title: 'the-fancy-title' };
+    mockData = { titleText: 'the-fancy-title' };
 
-    component.title = mockData.title;
+    component.titleText = mockData.titleText;
 
     fixture.detectChanges();
   });
@@ -34,6 +34,6 @@ describe('InfoPanelComponent', () => {
     const title = fixture.debugElement.query(
       By.css('.info-panel__title')
     ).nativeElement.textContent;
-    expect(title).toBe(mockData.title);
+    expect(title).toBe(mockData.titleText);
   });
 });
