@@ -1,0 +1,21 @@
+.info-panel__status {
+  display: flex;
+  flex-direction: column;
+  &__title {
+    font-family: Oswald,Sans-Serif;
+    font-size: 17px;
+    line-height: 20px;
+    color: #3E3E43;
+    font-weight: 500;
+  }
+  &__info {
+    margin-bottom: 10px;
+    font-size: 13px;
+    font-weight: 400;
+    font-family: Arial,Sans-Serif;
+    word-break: break-word;
+  }
+  &__dropdown {
+
+  }
+}
