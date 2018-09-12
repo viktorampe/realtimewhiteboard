@@ -7,14 +7,13 @@ import { Component, OnInit, Input, HostBinding } from '@angular/core';
  *
  * @export
  * @class MethodIconPresenterComponent
- * @implements {OnInit}
  */
 @Component({
   selector: 'campus-method-icon-presenter',
   templateUrl: './method-icon-presenter.component.html',
   styleUrls: ['./method-icon-presenter.component.scss']
 })
-export class MethodIconPresenterComponent implements OnInit {
+export class MethodIconPresenterComponent {
   @Input() methodClass = '';
   @Input() colorMode: 'grey' | 'color' | 'hover';
 
@@ -38,8 +37,4 @@ export class MethodIconPresenterComponent implements OnInit {
     }
     return className;
   }
-
-  constructor() {}
-
-  ngOnInit() {}
 }

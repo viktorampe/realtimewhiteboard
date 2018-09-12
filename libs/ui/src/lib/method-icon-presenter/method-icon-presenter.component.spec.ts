@@ -18,7 +18,35 @@ describe('MethodIconPresenterComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create without any inputs', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should create with any methodClass ', () => {
+    component.methodClass = 'definitely-wrong-classname';
+    fixture.detectChanges();
+
+    expect(component).toBeTruthy();
+  });
+
+  it('should create with colorMode grey', () => {
+    component.colorMode = 'grey';
+    fixture.detectChanges();
+
+    expect(component).toBeTruthy();
+  });
+
+  it('should create with colorMode color', () => {
+    component.colorMode = 'color';
+    fixture.detectChanges();
+
+    expect(component).toBeTruthy();
+  });
+
+  it('should create with colorMode hover', () => {
+    component.colorMode = 'hover';
+    fixture.detectChanges();
+
     expect(component).toBeTruthy();
   });
 });
