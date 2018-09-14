@@ -1,5 +1,5 @@
-@mixin method-icon {
-  .method__icon {
+@mixin ui-method-icon() {
+  .ui-method__icon {
     width: 152px;
     height: 74px;
     display: inline-block;
@@ -14,7 +14,7 @@
       background-image: url('/apps/polpo-classroom-web/src/assets/images/methodes_grijs.png');
     }
 
-    &:hover.method__icon--hover,
+    &:hover&--hover,
     &--color {
       background-image: url('/apps/polpo-classroom-web/src/assets/images/methodes_kleur.png');
     }

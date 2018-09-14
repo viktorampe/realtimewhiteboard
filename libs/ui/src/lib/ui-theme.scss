@@ -31,5 +31,5 @@ $ui-font-color-2: #000 !default;
 // create theme-mixin with each mixin from our library components
 @mixin ui-theme() {
   // @include ui-tree-nav();
-  @include method-icon();
+  @include ui-method-icon();
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, HostBinding } from '@angular/core';
+import { Component, Input } from '@angular/core';
 /**
  * Presents the logo of a method.
  *
@@ -21,19 +21,19 @@ export class MethodIconPresenterComponent {
     let className: string;
     switch (this.colorMode) {
       case 'color':
-        className = 'method__icon--color';
+        className = 'ui-method__icon--color';
         break;
 
       case 'grey':
-        className = 'method__icon--grey';
+        className = 'ui-method__icon--grey';
         break;
 
       case 'hover':
-        className = 'method__icon--hover';
+        className = 'ui-method__icon--hover';
         break;
 
       default:
-        className = 'method__icon--hover';
+        className = 'ui-method__icon--hover';
     }
     return className;
   }
