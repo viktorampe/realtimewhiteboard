@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { InfoPanelStatusComponent } from './status.component';
+import { AdaptableSelectComponent } from './adaptable-select.component';
 
 
-describe('InfoPanelStatusComponent', () => {
-  let component: InfoPanelStatusComponent;
-  let fixture: ComponentFixture<InfoPanelStatusComponent>;
+describe('AdaptableSelectComponent', () => {
+  let component: AdaptableSelectComponent;
+  let fixture: ComponentFixture<AdaptableSelectComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [InfoPanelStatusComponent]
+      declarations: [AdaptableSelectComponent]
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(InfoPanelStatusComponent);
+    fixture = TestBed.createComponent(AdaptableSelectComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

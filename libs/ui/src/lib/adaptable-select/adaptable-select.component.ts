@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
-  selector: 'campus-status',
-  templateUrl: './status.component.html',
-  styleUrls: ['./status.component.scss']
+  selector: 'campus-adaptable-select',
+  templateUrl: './adaptable-select.component.html',
+  styleUrls: ['./adaptable-select.component.scss']
 })
-export class InfoPanelStatusComponent {
+export class AdaptableSelectComponent {
   @Input() states: { name: string, id: number };
   @Output() saveStatus = new EventEmitter<number>();
 }
