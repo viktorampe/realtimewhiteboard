@@ -40,6 +40,11 @@ export class InfoPanelComponent {
       }
     ]
   };
+  @Input() dropdown = {
+    options: ['option-one', 'option-two'],
+    label: 'the label',
+    text: ';lkasd  klasdjf;lkasd f;lasjdkf ja;sdkf asdkfj ;akjsdf '
+  };
 
   // @Input() titleText: string;
   // @Input() items: { text: string; count?: number; eventId?: number }[];

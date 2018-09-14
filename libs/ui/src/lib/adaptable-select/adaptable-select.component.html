@@ -1,5 +1,16 @@
 <div class="campus-adaptable-select">
-  <div class="campus-adaptable-select__title"></div>
-  <div class="campus-adaptable-select__info"></div>
-  <div class="campus-adaptable-select__dropdown"></div>
+  <div *ngIf="label"
+       class="campus-adaptable-select__label">{{label}}</div>
+  <div *ngIf="text"
+       class="campus-adaptable-select__text">{{text}}</div>
+  <div class="campus-adaptable-select__dropdown">
+    <select class="campus-adaptable-select__dropdown__select"
+            [formControl]="selectControl">
+      <option *ngFor="let option of options"
+              [ngValue]="option">{{option}}</option>
+    </select>
+    <div *ngIf="selectControl.dirty"
+         class="campus-adaptable-select__dropdown__icon"
+         (click)="iconClicked()"></div>
+  </div>
 </div>
