@@ -1,10 +1,11 @@
 <div class="info-panel__educontent-preview">
-  <div *ngIf="preview" class="info-panel__educontent-preview__preview">
-    <img class="info-panel__educontent-preview__preview__img" [src]="preview">
+  <div *ngIf="preview"
+       class="info-panel__educontent-preview__preview">
+    <img class="info-panel__educontent-preview__preview__img"
+         [src]="preview">
   </div>
   <div class="info-panel__educontent-preview__product">
-    <campus-file-extension-presenter class="info-panel__educontent-preview__product__file-extention-icon" extension="xls"
-      [showTitle]="true" [showIcon]="true"></campus-file-extension-presenter>
+    <ng-content select=""></ng-content>
     <div class="info-panel__educontent-preview__product__details">
       <div class="info-panel__educontent-preview__product__details__title">{{titleText}}</div>
       <div class="info-panel__educontent-preview__product__details__type-icon {{productTypeIcon}}">
@@ -12,8 +13,10 @@
       <div class="info-panel__educontent-preview__product__details__description">{{description}}</div>
     </div>
   </div>
-  <div *ngIf="methods" class="info-panel__educontent-preview__methods">
-    <div class="info-panel__educontent-preview__methods__method" *ngFor="let method of methods">
+  <div *ngIf="methods"
+       class="info-panel__educontent-preview__methods">
+    <div class="info-panel__educontent-preview__methods__method"
+         *ngFor="let method of methods">
       {{method}}
     </div>
   </div>
