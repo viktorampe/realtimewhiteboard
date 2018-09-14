@@ -1,33 +1,33 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { InfoPanelActionComponent } from './action.component';
+import { LabelAndIconButtonComponent } from '../label-and-icon-button/label-and-icon-button.component';
 
-describe('InfoPanelActionComponent', () => {
-  let component: InfoPanelActionComponent;
-  let fixture: ComponentFixture<InfoPanelActionComponent>;
+describe('LabelAndIconButtonComponent', () => {
+  let component: LabelAndIconButtonComponent;
+  let fixture: ComponentFixture<LabelAndIconButtonComponent>;
   let mockData: {
-    actionText: string;
+    label: string;
     icon: string;
     iconBackgroundColor: 'red' | 'gray';
   };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [InfoPanelActionComponent]
+      declarations: [LabelAndIconButtonComponent]
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(InfoPanelActionComponent);
+    fixture = TestBed.createComponent(LabelAndIconButtonComponent);
     component = fixture.componentInstance;
 
     mockData = {
-      actionText: 'desired text',
+      label: 'desired text',
       icon: 'given-icon',
       iconBackgroundColor: 'red'
     };
 
-    component.actionText = mockData.actionText;
+    component.label = mockData.label;
     component.icon = mockData.icon;
     component.iconBackgroundColor = mockData.iconBackgroundColor;
 
@@ -39,9 +39,9 @@ describe('InfoPanelActionComponent', () => {
   });
   it('should show the actionsText', () => {
     const displayedText = fixture.debugElement.query(
-      By.css('.info-panel__action__text')
+      By.css('.campus-label-and-icon-button__label')
     ).nativeElement.textContent;
-    expect(displayedText).toContain(mockData.actionText);
+    expect(displayedText).toContain(mockData.label);
   });
   it('should show a red classed icon element', () => {
     const icon = fixture.debugElement.query(By.css('.red'));
@@ -53,17 +53,17 @@ describe('InfoPanelActionComponent', () => {
   });
   it('should show the icon in the class for the icon element', () => {
     const icon = fixture.debugElement.query(
-      By.css('.info-panel__action__icon.given-icon')
+      By.css('.campus-label-and-icon-button__icon.given-icon')
     );
     expect(icon).toBeTruthy();
   });
-  it('should emit the actionText when the icon is clicked', () => {
+  it('should emit the label when the icon is clicked', () => {
     let emitedText: string;
     component.iconClicked.subscribe((text: string) => (emitedText = text));
 
     fixture.debugElement
-      .query(By.css('.info-panel__action__icon'))
+      .query(By.css('.campus-label-and-icon-button__icon'))
       .triggerEventHandler('click', null);
-    expect(emitedText).toBe(mockData.actionText);
+    expect(emitedText).toBe(mockData.label);
   });
 });
