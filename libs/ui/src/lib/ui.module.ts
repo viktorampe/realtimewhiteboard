@@ -8,9 +8,9 @@ import { FormSelectComponent } from './form/form-select/form-select.component';
 import { FormTextareaComponent } from './form/form-textarea/form-textarea.component';
 import { InfoPanelEducontentPreviewComponent } from './info-panel/educontent-preview/educontent-preview.component';
 import { InfoPanelComponent } from './info-panel/info-panel.component';
-import { InfoPanelInputLabelComponent } from './info-panel/input-label/input-label.component';
 import { InfoPanelPeriodLabelComponent } from './info-panel/period-label/period-label.component';
 import { InfoPanelStatusComponent } from './info-panel/status/status.component';
+import { InputLabelComponent } from './input-label/input-label.component';
 import { LabelAndIconButtonComponent } from './label-and-icon-button/label-and-icon-button.component';
 import { PersonBadgeComponent } from './person-badge/person-badge.component';
 @NgModule({
@@ -18,7 +18,7 @@ import { PersonBadgeComponent } from './person-badge/person-badge.component';
   declarations: [
     LabelAndIconButtonComponent,
     InfoPanelEducontentPreviewComponent,
-    InfoPanelInputLabelComponent,
+    InputLabelComponent,
     AdaptableListComponent,
     InfoPanelComponent,
     InfoPanelPeriodLabelComponent,
@@ -32,7 +32,8 @@ import { PersonBadgeComponent } from './person-badge/person-badge.component';
   exports: [
     InfoPanelComponent,
     LabelAndIconButtonComponent,
-    AdaptableListComponent
+    AdaptableListComponent,
+    InputLabelComponent
   ]
 })
 export class UiModule { }

@@ -1,0 +1,24 @@
+<div class="campus-input-label">
+  <div class="campus-input-label__title">{{titleText}}</div>
+  <div *ngIf="!editing"
+       class="campus-input-label__text">
+    <div class="campus-input-label__text__label-holder">
+      <div class="campus-input-label__text__label-holder__label">{{text}}</div>
+      <div *ngIf="showIcon"
+           class="campus-input-label__text__label-holder__edit-icon"
+           (click)="edit()"></div>
+    </div>
+  </div>
+  <div *ngIf="editing"
+       class="campus-input-label__input-holder">
+    <input class="campus-input-label__input-holder__input"
+           type="text"
+           [formControl]="inputControl">
+    <div class="campus-input-label__input-holder__icons-holder">
+      <div class="campus-input-label__input-holder__icons-holder__confirm-icon"
+           (click)="save()"></div>
+      <div class="campus-input-label__input-holder__icons-holder__cancel-icon"
+           (click)="cancel()"></div>
+    </div>
+  </div>
+</div>

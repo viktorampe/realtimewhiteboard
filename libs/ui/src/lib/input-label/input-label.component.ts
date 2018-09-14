@@ -2,11 +2,11 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'campus-info-panel-input-label',
+  selector: 'campus-input-label',
   templateUrl: './input-label.component.html',
   styleUrls: ['./input-label.component.scss']
 })
-export class InfoPanelInputLabelComponent implements OnInit {
+export class InputLabelComponent implements OnInit {
   @Input() titleText: string;
   @Input() text: string;
   @Input() showIcon: boolean;
