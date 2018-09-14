@@ -25,11 +25,6 @@
     "dep-graph": "./node_modules/.bin/nx dep-graph",
     "help": "./node_modules/.bin/nx help"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "ng lint && npm run format:check && npm test"
-    }
-  },
   "private": true,
   "dependencies": {
     "@angular/animations": "^6.1.6",
@@ -42,14 +37,13 @@
     "@angular/platform-browser": "^6.1.6",
     "@angular/platform-browser-dynamic": "^6.1.6",
     "@angular/router": "^6.1.6",
-    "core-js": "^2.5.4",
-    "rxjs": "^6.3.0",
-    "zone.js": "^0.8.26",
+    "@diekeure/polpo-api-angular-sdk": "*",
     "@ngrx/effects": "6.1.0",
     "@ngrx/entity": "^6.1.0",
     "@ngrx/router-store": "6.1.0",
     "@ngrx/store": "6.1.0",
     "@nrwl/nx": "6.3.0",
+    "angular-svg-round-progressbar": "^2.0.0",
     "core-js": "^2.5.4",
     "rxjs": "^6.3.2",
     "zone.js": "^0.8.26"

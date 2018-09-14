@@ -1,4 +1,8 @@
 <p>
   bundles works!
 </p>
-<campus-folder></campus-folder>
+<!-- <campus-folder [itemCount]="2" type="bundles-by-area" [title]="bundleData.name" [details]="folderDetails"> -->
+<campus-folder [itemCount]="2" [title]="bundleData.name" >
+  <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
+  <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
+</campus-folder>

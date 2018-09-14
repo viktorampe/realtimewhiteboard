@@ -1,3 +1,6 @@
+$lightBlue: #578ebe;
+$gray-3: #7d8e9d;
+
 :host {
   display: block;
   position: relative;
@@ -36,6 +39,14 @@
         height: 48px;
         font-size: 48px;
         margin: 0;
+        .icon-progress {
+          text-align: center;
+          color: $lightBlue;
+
+          &.polpo-lock {
+            color: $gray-3;
+          }
+        }
       }
       &__title {
         padding: 5px 25px 5px 10px;
@@ -44,6 +55,8 @@
     }
 
     &__info {
+      display: flex;
+      flex-direction: column;
       height: 50px;
       overflow: hidden;
       background-color: rgba(0, 0, 0, 0.2); // depends on type
