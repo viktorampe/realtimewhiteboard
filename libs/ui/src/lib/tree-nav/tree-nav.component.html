@@ -1,7 +1,7 @@
 <cdk-tree [dataSource]="nestedDataSource" [treeControl]="nestedTreeControl" class="ui-tree-nav__root">
   <cdk-tree-node *cdkTreeNodeDef="let node" cdkTreeNodeToggle>
     <li class="ui-tree-nav__node">
-      <a>
+      <a [routerLink]="node.link" routerLinkActive="ui-tree-nav__node--active">
         <i [class]="node.icon" *ngIf="node.icon"></i>
         {{node.title}}
       </a>
@@ -9,8 +9,8 @@
   </cdk-tree-node>
 
   <cdk-nested-tree-node *cdkTreeNodeDef="let node; when: hasChildren">
-    <li class="ui-tree-nav__node" [class.ui-tree-nav__node--inactive]="!nestedTreeControl.isExpanded(node)">
-      <a [routerLink]="node.link" cdkTreeNodeToggle>
+    <li class="ui-tree-nav__node" [class.ui-tree-nav__node--closed]="!nestedTreeControl.isExpanded(node)">
+      <a [routerLink]="node.link" routerLinkActive="ui-tree-nav__node--active" cdkTreeNodeToggle>
         <i [class]="node.icon" *ngIf="node.icon"></i>
         {{node.title}}
         <i class="ui-tree-nav__node--toggle" *ngIf="hasChildren(0, node)"></i>

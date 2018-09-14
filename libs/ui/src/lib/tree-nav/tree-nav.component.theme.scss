@@ -1,12 +1,61 @@
 @mixin ui-tree-nav() {
-  $ui-tree-nav-toggle: FontAwesome '\f107';
-  $ui-tree-nav-toggle-inactive: FontAwesome '\f104';
+  // colors
+  $ui-tree-nav-color: $ui-font-color-1 !default;
+  $ui-tree-nav-color-active: $ui-font-color-2 !default;
+
+  // icons
+  $ui-tree-nav-toggle: FontAwesome '\f107' !default;
+  $ui-tree-nav-toggle-closed: FontAwesome '\f104' !default;
+
+  @include icon('ui-tree-nav__node--toggle', $ui-tree-nav-toggle);
+  @include icon(
+    'ui-tree-nav__node--closed .ui-tree-nav__node--toggle',
+    $ui-tree-nav-toggle-closed
+  );
 
   .ui-tree-nav__node {
-    @include icon('ui-tree-nav__node--toggle', $ui-tree-nav-toggle);
-    @include icon(
-      'ui-tree-nav__node--inactive .ui-tree-nav__node--toggle',
-      $ui-tree-nav-toggle-inactive
-    );
+    > a {
+      border-left: 3px solid transparent;
+
+      // active / hover state
+      &:hover,
+      &.ui-tree-nav__node--active {
+        color: $ui-tree-nav-color-active;
+        border-left: 3px solid $ui-tree-nav-color-active;
+      }
+    }
+  }
+
+  // styling of different tree levels
+  $ui-tree-nav-levels: (
+    (
+      padding: 10px 15px,
+      border-top: 1px solid $ui-tree-nav-color-active
+    ),
+    (
+      padding: 6px 15px 6px 43px,
+      border-top: none
+    ),
+    (
+      padding: 6px 15px 6px 60px
+    )
+  ) !default;
+  @include ui-tree-nav__levels($ui-tree-nav-levels);
+}
+@mixin ui-tree-nav__levels($levels, $i: 1) {
+  @if $i <= length($levels) {
+    $level: nth($levels, $i);
+    .ui-tree-nav__node {
+      @if map-has-key($level, border-top) {
+        border-top: map-get($level, border-top);
+      }
+      @if map-has-key($level, padding) {
+        a {
+          padding: map-get($level, padding);
+        }
+      }
+      // next level
+      @include ui-tree-nav__levels($levels, $i + 1);
+    }
   }
 }
