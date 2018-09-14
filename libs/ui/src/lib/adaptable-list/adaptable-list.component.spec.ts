@@ -1,10 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { InfoPanelAdaptableListComponent } from './adaptable-list.component';
+import { AdaptableListComponent } from './adaptable-list.component';
 
-describe('InfoPanelAdaptableListComponent', () => {
-  let component: InfoPanelAdaptableListComponent;
-  let fixture: ComponentFixture<InfoPanelAdaptableListComponent>;
+describe('AdaptableListComponent', () => {
+  let component: AdaptableListComponent;
+  let fixture: ComponentFixture<AdaptableListComponent>;
 
   let mockData: {
     titleText: string;
@@ -14,12 +14,12 @@ describe('InfoPanelAdaptableListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [InfoPanelAdaptableListComponent]
+      declarations: [AdaptableListComponent]
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(InfoPanelAdaptableListComponent);
+    fixture = TestBed.createComponent(AdaptableListComponent);
     component = fixture.componentInstance;
 
     mockData = {
@@ -44,31 +44,31 @@ describe('InfoPanelAdaptableListComponent', () => {
   });
   it('should show the correct title text', () => {
     const title = fixture.debugElement.query(
-      By.css('.info-panel__adaptable-list__title')
+      By.css('.campus_adaptable-list__title')
     ).nativeElement.textContent;
     expect(title).toBe(mockData.titleText);
   });
   it('should show the correct number of list items', () => {
     const listItemCollection = fixture.debugElement.queryAll(
-      By.css('.info-panel__adaptable-list__items__item')
+      By.css('.campus_adaptable-list__items__item')
     );
     expect(listItemCollection.length).toBe(3);
   });
   it('should show the correct number of list items with counts', () => {
     const listItemCollection = fixture.debugElement.queryAll(
-      By.css('.info-panel__adaptable-list__items__item__text__count')
+      By.css('.campus_adaptable-list__items__item__text__count')
     );
     expect(listItemCollection.length).toBe(2);
   });
   it('should show the correct number of list items with icon', () => {
     const listItemCollection = fixture.debugElement.queryAll(
-      By.css('.info-panel__adaptable-list__items__item__icon')
+      By.css('.campus_adaptable-list__items__item__icon')
     );
     expect(listItemCollection.length).toBe(1);
   });
   it('should show the correct labels for the items', () => {
     const listItems = fixture.debugElement.queryAll(
-      By.css('.info-panel__adaptable-list__items__item__text')
+      By.css('.campus_adaptable-list__items__item__text')
     );
     for (let i = 0; i < listItems.length; i++) {
       const elementText = listItems[i].nativeElement.textContent;
@@ -77,7 +77,7 @@ describe('InfoPanelAdaptableListComponent', () => {
   });
   it('should show the count if there is one', () => {
     const listItemCounts = fixture.debugElement.queryAll(
-      By.css('.info-panel__adaptable-list__items__item__text__count')
+      By.css('.campus_adaptable-list__items__item__text__count')
     );
     for (let i = 0; i < listItemCounts.length; i++) {
       const countElement = listItemCounts[i].nativeElement.textContent;
@@ -86,7 +86,7 @@ describe('InfoPanelAdaptableListComponent', () => {
   });
   it('should show the icon', () => {
     const icon = fixture.debugElement.query(
-      By.css('.info-panel__adaptable-list__icon-holder__icon')
+      By.css('.campus_adaptable-list__icon-holder__icon')
     );
     expect(icon).toBeTruthy();
   });
@@ -95,7 +95,7 @@ describe('InfoPanelAdaptableListComponent', () => {
     fixture.detectChanges();
 
     const icon = fixture.debugElement.query(
-      By.css('.info-panel__adaptable-list__icon-holder__icon')
+      By.css('.campus_adaptable-list__icon-holder__icon')
     );
     expect(icon).toBeFalsy();
   });

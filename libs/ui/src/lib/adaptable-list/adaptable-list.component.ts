@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
-  selector: 'campus-info-panel-adaptable-list',
+  selector: 'campus-adaptable-list',
   templateUrl: './adaptable-list.component.html',
   styleUrls: ['./adaptable-list.component.scss']
 })
-export class InfoPanelAdaptableListComponent {
+export class AdaptableListComponent {
   @Input() titleText: string;
   @Input() items: { text: string; count?: number; eventId?: number }[];
   @Input() showIcon: boolean;
