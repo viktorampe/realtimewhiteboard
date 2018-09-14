@@ -65,20 +65,15 @@ body {
   $polpo-theme
 ); // alternative: include individual component mixins
 
-/*
- * POLPO theme
- */
+/* * POLPO theme */
 // load all variables for your app theme and ui components
 @import 'theme-variables';
-
 // include ui lib scss file
 @import 'libs/ui/src/lib/ui-theme';
 @include ui-theme(); // alternative: include individual component mixins
-
 // include pages lib scss file
 @import 'libs/pages/pages-theme';
 @include pages-theme();
-
 // create icon classes
 @if variable-exists(icons) {
   @each $class, $icon in $icons {
