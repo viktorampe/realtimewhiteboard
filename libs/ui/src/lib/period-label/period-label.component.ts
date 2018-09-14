@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
-  selector: 'campus-info-panel-period-label',
+  selector: 'campus-period-label',
   templateUrl: './period-label.component.html',
   styleUrls: ['./period-label.component.scss']
 })
-export class InfoPanelPeriodLabelComponent {
+export class PeriodLabelComponent {
   @Input() titleText: string;
   @Input() period: { start: Date, end: Date };
   @Input() showIcons: boolean;
