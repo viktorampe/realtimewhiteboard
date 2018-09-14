@@ -12,15 +12,22 @@ $color-text-1: $color-gray-1;
 $color-text-2: $color-gray-2;
 $color-active: $color-blue-1;
 
+// ui lib theme
+$ui-bg-color-1: $color-bg-primary-1;
+$ui-font-color-1: $color-text-1;
+$ui-font-color-2: $color-text-2;
+$ui-font-color-active: $color-active;
+// lib icon overrides
+// $ui-icon-filter: polpo \e000;
+
+// pages lib theme
+$pages-bg-color-1: $color-bg-primary-1;
+$pages-font-color-1: $color-text-1;
+$pages-font-color-active: $color-active;
+
 // app icons
 $icons: (
-  // lesmateriaal: polpo '\e94f',
-    // tasks: polpo '\e946',
-    // books: polpo '\e965',
-    // results: polpo '\e902',
-    // wiskunde: polpo '\e963'
-    //
-    // imported from student.polpo style.css
+  // imported from student.polpo style.css
     aardrijkskunde: polpo '\e923',
   aardrijkskunde-lg: polpo '\e961',
   add: polpo '\e94e',
@@ -145,16 +152,3 @@ $icons: (
   ww-lg: polpo '\e964',
   youtube: polpo '\e971'
 );
-
-// ui lib theme
-$ui-bg-color-1: $color-bg-primary-1;
-$ui-font-color-1: $color-text-1;
-$ui-font-color-2: $color-text-2;
-$ui-font-color-active: $color-active;
-// lib icon overrides
-// $ui-icon-filter: polpo \e000;
-
-// pages lib theme
-$pages-bg-color-1: $color-bg-primary-1;
-$pages-font-color-1: $color-text-1;
-$pages-font-color-active: $color-active;

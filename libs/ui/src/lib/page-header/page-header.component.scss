@@ -2,7 +2,6 @@
   .page-header {
     font-family: 'Open Sans', Sans-Serif;
     font-weight: 600;
-    color: $color-black-1; //$ui-font-color-1 is op dit moment nog grijs
     line-height: 16px;
     font-size: 18px;
     white-space: nowrap;
@@ -10,7 +9,6 @@
     margin-bottom: 25px;
 
     small {
-      color: $ui-font-color-2;
       font-size: 16px;
       display: block;
     }
