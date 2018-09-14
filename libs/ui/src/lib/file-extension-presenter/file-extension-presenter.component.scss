@@ -1,7 +1,7 @@
-@mixin file-extension-presenter($file-extension-width: 84) {
+@mixin ui-file-extension-presenter($file-extension-width: 84) {
   $file-extension-scale: $file-extension-width / 84; //84 is the standard width of the icon
 
-  .file-extension {
+  .ui-file-extension {
     display: inline-block;
     position: relative;
     box-sizing: border-box;
@@ -64,7 +64,7 @@
     }
   }
 
-  .file-extension__icon.file-extension__title {
+  .ui-file-extension__icon.ui-file-extension__title {
     margin-top: 11px * $file-extension-scale;
     margin-left: 8px * $file-extension-scale;
     margin-right: 8px * $file-extension-scale;
@@ -79,7 +79,7 @@
     }
   }
 
-  .file-extension {
+  .ui-file-extension {
     &.xls,
     &.xlsx,
     &.ods,
@@ -397,5 +397,3 @@
     }
   }
 }
-
-@include file-extension-presenter(200);

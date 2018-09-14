@@ -4,6 +4,6 @@ import { FileExtensionPresenterComponent } from './file-extension-presenter/file
 @NgModule({
   imports: [CommonModule],
   declarations: [FileExtensionPresenterComponent],
-  exports: [FileExtensionPresenterComponent]
+  exports: []
 })
 export class UiModule {}
