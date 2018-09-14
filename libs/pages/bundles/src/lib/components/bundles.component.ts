@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { NavItem } from '../../../../../ui/src/lib/tree-nav/tree-nav.component';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Component({
   selector: 'campus-bundles',
@@ -8,5 +10,43 @@ import { Component, OnInit } from '@angular/core';
 export class BundlesComponent implements OnInit {
   constructor() {}
 
-  ngOnInit() {}
+  nav: Observable<NavItem[]>;
+
+  ngOnInit() {
+    this.nav = new BehaviorSubject([
+      {
+        title: 'string',
+        icon: 'string',
+        link: 'string'
+      },
+      {
+        title: 'string',
+        icon: 'string',
+        children: [
+          {
+            title: 'string',
+            icon: 'string',
+            link: 'string'
+          },
+          {
+            title: 'string',
+            icon: 'string',
+            link: 'string',
+            children: [
+              {
+                title: 'string',
+                icon: 'string',
+                link: 'string'
+              }
+            ]
+          },
+          {
+            title: 'string',
+            icon: 'string',
+            link: 'string'
+          }
+        ]
+      }
+    ]);
+  }
 }
