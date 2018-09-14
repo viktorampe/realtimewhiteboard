@@ -14,7 +14,7 @@
       background-image: url('/apps/polpo-classroom-web/src/assets/images/methodes_grijs.png');
     }
 
-    &:hover&--hover,
+    &:hover.ui-method__icon--hover,
     &--color {
       background-image: url('/apps/polpo-classroom-web/src/assets/images/methodes_kleur.png');
     }
