@@ -7,15 +7,15 @@ import { By } from '@angular/platform-browser';
 @Component({
   template: `
   <campus-app-bar>
-    <h2 bar--left>|links1|</h2>
-    <p bar--left>|links2|</p>
-    <div bar--center>|midden1|</div>
-    <div bar--center>|midden2|</div>
-    <div bar--center>|midden3|</div>
-    <div bar--right>|rechts1|</div>
-    <div bar--right>|rechts2|</div>
-    <div bar--right>|rechts3|</div>
-    <div bar--right>|rechts4|</div>
+    <h2 bar__left>|links1|</h2>
+    <p bar__left>|links2|</p>
+    <div bar__center>|midden1|</div>
+    <div bar__center>|midden2|</div>
+    <div bar__center>|midden3|</div>
+    <div bar__right>|rechts1|</div>
+    <div bar__right>|rechts2|</div>
+    <div bar__right>|rechts3|</div>
+    <div bar__right>|rechts4|</div>
     <div>|geen attribute|</div>
   </campus-app-bar>`
 })
@@ -50,7 +50,7 @@ describe('BasicAppBarComponent', () => {
 
   it('should contain 2 items in the left section', () => {
     const hostSectionDE = hostFixture.debugElement.query(
-      By.css('.bar__section--align-start')
+      By.css('.ui-app-bar__section--align-start')
     );
     const hostSectionChildren = hostSectionDE.queryAll(By.all());
     const childrenInSectionAmount = hostSectionChildren.length;
@@ -60,7 +60,7 @@ describe('BasicAppBarComponent', () => {
 
   it('should contain 3 items in the center section', () => {
     const hostSectionDE = hostFixture.debugElement.query(
-      By.css('.bar__section--align-center')
+      By.css('.ui-app-bar__section--align-center')
     );
     const hostSectionChildren = hostSectionDE.queryAll(By.all());
     const childrenInSectionAmount = hostSectionChildren.length;
@@ -70,7 +70,7 @@ describe('BasicAppBarComponent', () => {
 
   it('should contain 4 items in the right section', () => {
     const hostSectionDE = hostFixture.debugElement.query(
-      By.css('.bar__section--align-end')
+      By.css('.ui-app-bar__section--align-end')
     );
     const hostSectionChildren = hostSectionDE.queryAll(By.all());
     const childrenInSectionAmount = hostSectionChildren.length;
