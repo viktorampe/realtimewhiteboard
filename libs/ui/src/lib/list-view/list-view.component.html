@@ -1,3 +1,38 @@
-<p>
-  list-view works!
-</p>
+<button (click)="toggleGrid(true)">grid</button>
+<button (click)="toggleGrid(false)">list</button>
+
+<header>Pageheader</header>
+<header>{{contentArray.length}} van {{totalItems}} weergegeven</header>
+
+
+<div class="flexbox " [ngClass]="{'flex-list': !isGrid, 'flex-grid': isGrid }">
+  <campus-list-item class="test-background" [ngClass]="{'item-selected': isSelected(item)}" *ngFor="let item of contentArray"
+    [folder]="item" [isGridElement]="isGrid" (clicked)="itemClicked($event)"></campus-list-item>
+</div>
+
+<div *ngIf=selectionArray.length>
+  Er zijn {{selectionArray.length}} items geselecteerd.
+  <ul>
+    <li *ngFor="let selectedItem of selectionArray">{{selectedItem.Name}}</li>
+  </ul>
+
+</div>
+
+
+
+<!-- <ng-container *ngIf="isGrid ; then gridTemplate; else listTemplate">
+</ng-container>
+
+<ng-template #gridTemplate>
+  <mat-grid-list cols="2" rowHeight="30px">
+    <mat-grid-tile *ngFor="let item of contentArray">{{item.Id}}</mat-grid-tile>
+  </mat-grid-list>
+</ng-template>
+
+<ng-template #listTemplate>
+  <mat-selection-list #items>
+    <mat-list-option *ngFor="let item of contentArray">
+      {{item.Id}}
+    </mat-list-option>
+  </mat-selection-list>
+</ng-template> -->
