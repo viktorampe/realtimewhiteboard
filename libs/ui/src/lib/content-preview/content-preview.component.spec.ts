@@ -1,6 +1,8 @@
-import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { UiModule } from '../../lib/ui.module';
 import { ContentPreviewComponent } from './content-preview.component';
 
 @Component({
@@ -16,7 +18,14 @@ import { ContentPreviewComponent } from './content-preview.component';
   </campus-content-preview>
   `
 })
-export class TestContainerComponent {}
+export class TestContainerComponent { }
+
+@NgModule({
+  imports: [CommonModule, UiModule],
+  exports: [TestContainerComponent],
+  declarations: [TestContainerComponent],
+})
+export class TestModule { }
 
 describe('ContentPreviewComponent', () => {
   let component: ContentPreviewComponent;
@@ -34,7 +43,7 @@ describe('ContentPreviewComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ContentPreviewComponent, TestContainerComponent],
+      imports: [TestModule],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
   }));
