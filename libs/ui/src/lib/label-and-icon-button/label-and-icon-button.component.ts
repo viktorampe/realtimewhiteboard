@@ -1,5 +1,14 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
+/**
+ *   <campus-label-and-icon-button
+                      [label]="'Titel'"
+                      [icon]="'polpo-presentatie'"
+                      [iconBackgroudColor]="'red'"></campus-label-and-icon-button>
+ * 
+ * @export
+ * @class LabelAndIconButtonComponent
+ */
 @Component({
   selector: 'campus-label-and-icon-button',
   templateUrl: './label-and-icon-button.component.html',

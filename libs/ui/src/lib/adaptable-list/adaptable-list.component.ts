@@ -1,5 +1,14 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
+/**
+ * @example
+ * <campus-adaptable-list 
+                         [titleText]="'Geselecteerd items'"
+                         [items]="[{text: 'one'},{text: 'two', count: 12},{text: 'two', count: 1, eventId: 3}]"></campus-adaptable-list>
+ * 
+ * @export
+ * @class AdaptableListComponent
+ */
 @Component({
   selector: 'campus-adaptable-list',
   templateUrl: './adaptable-list.component.html',

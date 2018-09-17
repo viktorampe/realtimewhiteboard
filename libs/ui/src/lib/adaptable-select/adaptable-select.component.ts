@@ -1,6 +1,19 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 
+/**
+ * @example
+ *   <campus-adaptable-select 
+                           [label]="'status'"
+                           [options]="['one', 'two']"
+                           [selectedOption]="'one'"
+                           [text]="'some explenation'"
+                           (saveStatus)="saveStatus($event)"></campus-adaptable-select>
+ * 
+ * @export
+ * @class AdaptableSelectComponent
+ * @implements {OnInit}
+ */
 @Component({
   selector: 'campus-adaptable-select',
   templateUrl: './adaptable-select.component.html',

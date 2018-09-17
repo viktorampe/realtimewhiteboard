@@ -1,6 +1,16 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 
+/**
+ * @example
+ *   <campus-input-label
+                      [titleText]="'Titel'"
+                      [text]="'name'"></campus-input-label>
+ * 
+ * @export
+ * @class InputLabelComponent
+ * @implements {OnInit}
+ */
 @Component({
   selector: 'campus-input-label',
   templateUrl: './input-label.component.html',
@@ -14,11 +24,6 @@ export class InputLabelComponent implements OnInit {
 
   editing: boolean;
   inputControl: FormControl;
-
-
-  constructor(private formBuilder: FormBuilder) {
-
-  }
 
   ngOnInit(): void {
     this.editing = false;

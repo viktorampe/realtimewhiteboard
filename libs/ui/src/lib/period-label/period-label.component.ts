@@ -1,5 +1,14 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
+/**
+ * @example
+ *   <campus-period-label
+                      [titleText]="'Titel'"
+                      [period]="{start: new Date(), end: new Date()}"></campus-period-label>
+ * 
+ * @export
+ * @class PeriodLabelComponent
+ */
 @Component({
   selector: 'campus-period-label',
   templateUrl: './period-label.component.html',
