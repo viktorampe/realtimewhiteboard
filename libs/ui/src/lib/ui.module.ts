@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FileExtensionPresenterComponent } from './file-extension-presenter/file-extension-presenter.component';
+import { FileExtensionComponent } from './file-extension/file-extension.component';
 @NgModule({
   imports: [CommonModule],
-  declarations: [FileExtensionPresenterComponent],
+  declarations: [FileExtensionComponent],
   exports: []
 })
 export class UiModule {}

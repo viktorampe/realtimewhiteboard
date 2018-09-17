@@ -7,14 +7,14 @@ import { Component, Input } from '@angular/core';
  * @param {boolean} showIcon - Sets the visibility of the icon on the component.
  *
  * @export
- * @class FileExtensionPresenterComponent
+ * @class FileExtensionComponent
  */
 @Component({
-  selector: 'campus-file-extension-presenter',
-  templateUrl: './file-extension-presenter.component.html',
-  styleUrls: ['./file-extension-presenter.component.scss']
+  selector: 'campus-file-extension',
+  templateUrl: './file-extension.component.html',
+  styleUrls: ['./file-extension.component.scss']
 })
-export class FileExtensionPresenterComponent {
+export class FileExtensionComponent {
   @Input() extensionClass = '';
   @Input() showTitle = true;
   @Input() showIcon = true;

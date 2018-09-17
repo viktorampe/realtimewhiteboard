@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FileExtensionPresenterComponent } from './file-extension-presenter.component';
+import { FileExtensionComponent } from './file-extension.component';
 import { compileComponentFromMetadata } from '@angular/compiler';
 
-describe('FileExtensionPresenterComponent', () => {
-  let component: FileExtensionPresenterComponent;
-  let fixture: ComponentFixture<FileExtensionPresenterComponent>;
+describe('FileExtensionComponent', () => {
+  let component: FileExtensionComponent;
+  let fixture: ComponentFixture<FileExtensionComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [FileExtensionPresenterComponent]
+      declarations: [FileExtensionComponent]
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FileExtensionPresenterComponent);
+    fixture = TestBed.createComponent(FileExtensionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

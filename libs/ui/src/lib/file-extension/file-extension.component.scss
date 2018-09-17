@@ -1,4 +1,4 @@
-@mixin ui-file-extension-presenter($file-extension-width: 84) {
+@mixin ui-file-extension($file-extension-width: 84) {
   $file-extension-scale: $file-extension-width / 84; //84 is the standard width of the icon
 
   .ui-file-extension {
@@ -50,7 +50,7 @@
         width: 84px * $file-extension-scale;
         height: 107px * $file-extension-scale;
         background: transparent
-          url('/apps/polpo-classroom-web/src/assets/img/file-types.svg?v3');
+          url('/apps/polpo-classroom-web/src/assets/images/file-types.svg?v3');
         background-size: 84.1px * $file-extension-scale 1600px *
           $file-extension-scale;
         background-repeat: no-repeat;
