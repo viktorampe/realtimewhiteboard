@@ -1,7 +1,14 @@
 <p>
-  bundles works!
-  <campus-info-panel-student-bundle [displayName]="'Tom mertens'"
-                                    [name]="'Bundle name'"
-                                    [description]="'This is the bundle description'">
-  </campus-info-panel-student-bundle>
+  <campus-info-panel>
+    <campus-person-badge person
+                         [displayName]="'Tom mertens'"
+                         [orientation]="'left'"
+                         [size]="'medium'"></campus-person-badge>
+    <campus-input-label name
+                        [titleText]="'Titel'"
+                        [text]="'name'"></campus-input-label>
+    <campus-input-label description
+                        [titleText]="'Omschrijving'"
+                        [text]="'description'"></campus-input-label>
+  </campus-info-panel>
 </p>
