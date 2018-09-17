@@ -32,6 +32,6 @@ $ui-font-color-2: #000 !default;
 @mixin ui-theme() {
   // @include ui-tree-nav();
 
-  //place desired width as parameter, default 84;
+  //place desired width as optional parameter, default 84;
   @include ui-file-extension();
 }

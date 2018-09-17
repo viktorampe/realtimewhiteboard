@@ -49,15 +49,12 @@
         position: absolute;
         width: 84px * $file-extension-scale;
         height: 107px * $file-extension-scale;
-        background: transparent
-          url('/apps/polpo-classroom-web/src/assets/images/file-types.svg?v3');
+        background: transparent url('/assets/images/file-types.svg?v3');
         background-size: 84.1px * $file-extension-scale 1600px *
           $file-extension-scale;
         background-repeat: no-repeat;
         background-position: 0px * $file-extension-scale -1100px * $file-extension-scale;
         content: ' ';
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
         box-sizing: border-box;
         z-index: -1;
       }
