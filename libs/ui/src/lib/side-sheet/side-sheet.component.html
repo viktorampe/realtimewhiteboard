@@ -1,6 +1,10 @@
 <mat-drawer-container>
-  <mat-drawer class="ui-side-sheet" #sheet position="end" [opened]="isOpenOnInit">
-    <div #header class="ui-side-sheet__header">
+  <mat-drawer class="ui-side-sheet"
+              #sheet
+              position="end"
+              [opened]="isOpenOnInit">
+    <div #header
+         class="ui-side-sheet__header">
       <ng-content select="campus-side-sheet-header"></ng-content>
       <!-- when no <campus-side-sheet-header> tag is present in the parent component, display 'Info' as a default -->
       <ng-container *ngIf="header.children.length === 1">Info</ng-container>
