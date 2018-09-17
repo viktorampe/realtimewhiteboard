@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AdaptableListComponent } from './adaptable-list/adaptable-list.component';
 import { AdaptableSelectComponent } from './adaptable-select/adaptable-select.component';
 import { ContentPreviewComponent } from './content-preview/content-preview.component';
-import { CampusContentPreviewImageDirective } from './content-preview/directives/content-preview-image.directive';
 import { FileExtensionPresenterComponent } from './file-extension-presenter/file-extension-presenter.component';
 import { InputLabelComponent } from './input-label/input-label.component';
 import { LabelAndIconButtonComponent } from './label-and-icon-button/label-and-icon-button.component';
@@ -20,8 +19,7 @@ import { PersonBadgeComponent } from './person-badge/person-badge.component';
     PeriodLabelComponent,
     AdaptableSelectComponent,
     FileExtensionPresenterComponent,
-    PersonBadgeComponent,
-    CampusContentPreviewImageDirective
+    PersonBadgeComponent
   ],
   exports: [
     LabelAndIconButtonComponent,

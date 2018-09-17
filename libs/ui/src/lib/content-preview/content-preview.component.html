@@ -5,11 +5,10 @@
          [src]="preview">
   </div>
   <div class="info-panel__educontent-preview__product">
-    <ng-content select=""></ng-content>
+    <ng-content select="[type]"></ng-content>
     <div class="info-panel__educontent-preview__product__details">
       <div class="info-panel__educontent-preview__product__details__title">{{titleText}}</div>
-      <div class="info-panel__educontent-preview__product__details__type-icon {{productTypeIcon}}">
-      </div>
+      <ng-content select="[icon]"></ng-content>
       <div class="info-panel__educontent-preview__product__details__description">{{description}}</div>
     </div>
   </div>
