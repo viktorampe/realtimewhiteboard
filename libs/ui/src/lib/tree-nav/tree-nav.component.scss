@@ -18,6 +18,11 @@
     text-decoration: none;
   }
 
+  i {
+    font-style: normal;
+    vertical-align: middle;
+  }
+
   &--closed {
     > ul {
       display: none;
@@ -25,8 +30,9 @@
   }
 
   &--toggle {
+    float: right;
+
     &:before {
-      float: right;
       width: 10px;
       text-align: center;
       margin-top: -1px;
@@ -37,7 +43,6 @@
       height: auto;
       font-weight: 300;
       text-shadow: none;
-      font-style: normal;
     }
   }
 }
