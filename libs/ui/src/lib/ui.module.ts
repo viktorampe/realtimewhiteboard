@@ -3,12 +3,9 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AdaptableListComponent } from './adaptable-list/adaptable-list.component';
 import { AdaptableSelectComponent } from './adaptable-select/adaptable-select.component';
+import { ContentPreviewComponent } from './content-preview/content-preview.component';
+import { CampusContentPreviewImageDirective } from './content-preview/directives/content-preview-image.directive';
 import { FileExtensionPresenterComponent } from './file-extension-presenter/file-extension-presenter.component';
-import { FormInputComponent } from './form/form-input/form-input.component';
-import { FormSelectComponent } from './form/form-select/form-select.component';
-import { FormTextareaComponent } from './form/form-textarea/form-textarea.component';
-import { InfoPanelEducontentPreviewComponent } from './info-panel/educontent-preview/educontent-preview.component';
-import { InfoPanelComponent } from './info-panel/info-panel.component';
 import { InputLabelComponent } from './input-label/input-label.component';
 import { LabelAndIconButtonComponent } from './label-and-icon-button/label-and-icon-button.component';
 import { PeriodLabelComponent } from './period-label/period-label.component';
@@ -17,24 +14,24 @@ import { PersonBadgeComponent } from './person-badge/person-badge.component';
   imports: [CommonModule, ReactiveFormsModule, FormsModule],
   declarations: [
     LabelAndIconButtonComponent,
-    InfoPanelEducontentPreviewComponent,
+    ContentPreviewComponent,
     InputLabelComponent,
     AdaptableListComponent,
-    InfoPanelComponent,
     PeriodLabelComponent,
     AdaptableSelectComponent,
-    FormInputComponent,
-    FormTextareaComponent,
-    FormSelectComponent,
     FileExtensionPresenterComponent,
-    PersonBadgeComponent
+    PersonBadgeComponent,
+    CampusContentPreviewImageDirective
   ],
   exports: [
-    InfoPanelComponent,
     LabelAndIconButtonComponent,
-    AdaptableListComponent,
+    ContentPreviewComponent,
     InputLabelComponent,
-    PeriodLabelComponent
+    AdaptableListComponent,
+    PeriodLabelComponent,
+    AdaptableSelectComponent,
+    FileExtensionPresenterComponent,
+    PersonBadgeComponent
   ]
 })
 export class UiModule { }

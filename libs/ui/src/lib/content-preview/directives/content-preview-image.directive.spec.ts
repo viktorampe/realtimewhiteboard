@@ -1,4 +1,4 @@
-import { CampusContentPreviewImageDirective } from './educontent-preview-image.directive';
+import { CampusContentPreviewImageDirective } from './content-preview-image.directive';
 
 describe('CampusContentPreviewImageDirective', () => {
   it('should create an instance', () => {

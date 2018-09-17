@@ -8,5 +8,4 @@ import { Directive } from '@angular/core';
 @Directive({
   selector: '[campusContentPreviewImage], campus-content-preview-image'
 })
-export class CampusContentPreviewImageDirective {
-}
+export class CampusContentPreviewImageDirective { }
