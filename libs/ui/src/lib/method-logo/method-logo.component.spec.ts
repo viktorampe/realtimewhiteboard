@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MethodIconPresenterComponent } from './method-icon-presenter.component';
+import { MethodLogoComponent } from './method-logo.component';
 
 describe('MethodIconPresenterComponent', () => {
-  let component: MethodIconPresenterComponent;
-  let fixture: ComponentFixture<MethodIconPresenterComponent>;
+  let component: MethodLogoComponent;
+  let fixture: ComponentFixture<MethodLogoComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [MethodIconPresenterComponent]
+      declarations: [MethodLogoComponent]
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MethodIconPresenterComponent);
+    fixture = TestBed.createComponent(MethodLogoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

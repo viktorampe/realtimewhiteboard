@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MethodIconPresenterComponent } from './method-icon-presenter/method-icon-presenter.component';
+import { MethodLogoComponent } from './method-logo/method-logo.component';
 @NgModule({
   imports: [CommonModule],
-  declarations: [MethodIconPresenterComponent]
+  declarations: [MethodLogoComponent]
 })
 export class UiModule {}

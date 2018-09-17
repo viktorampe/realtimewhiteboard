@@ -6,14 +6,14 @@ import { Component, Input } from '@angular/core';
  * @param {string} colorMode - Sets the color of the icon. Accepted values: 'grey', 'color' and 'hover'(default).
  *
  * @export
- * @class MethodIconPresenterComponent
+ * @class MethodLogoComponent
  */
 @Component({
-  selector: 'campus-method-icon-presenter',
-  templateUrl: './method-icon-presenter.component.html',
-  styleUrls: ['./method-icon-presenter.component.scss']
+  selector: 'campus-method-logo',
+  templateUrl: './method-logo.component.html',
+  styleUrls: ['./method-logo.component.scss']
 })
-export class MethodIconPresenterComponent {
+export class MethodLogoComponent {
   @Input() methodClass = '';
   @Input() colorMode: 'grey' | 'color' | 'hover';
 
@@ -21,19 +21,15 @@ export class MethodIconPresenterComponent {
     let className: string;
     switch (this.colorMode) {
       case 'color':
-        className = 'ui-method__icon--color';
+        className = 'ui-method__logo--color';
         break;
 
       case 'grey':
-        className = 'ui-method__icon--grey';
-        break;
-
-      case 'hover':
-        className = 'ui-method__icon--hover';
+        className = 'ui-method__logo--grey';
         break;
 
       default:
-        className = 'ui-method__icon--hover';
+        className = 'ui-method__logo--hover';
     }
     return className;
   }
