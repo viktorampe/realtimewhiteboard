@@ -29,7 +29,10 @@ export class AdaptableSelectComponent implements OnInit {
   selectControl: FormControl;
 
   ngOnInit(): void {
-    this.selectControl = new FormControl(this.selectedOption, Validators.required);
+    this.selectControl = new FormControl(
+      this.selectedOption,
+      Validators.required
+    );
   }
 
   iconClicked() {

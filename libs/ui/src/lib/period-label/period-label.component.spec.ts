@@ -7,7 +7,11 @@ describe('PeriodLabelComponent', () => {
   let component: PeriodLabelComponent;
   let fixture: ComponentFixture<PeriodLabelComponent>;
 
-  let mockData: { titleText: string, period: { start: Date, end: Date }, showIcons?: boolean };
+  let mockData: {
+    titleText: string;
+    period: { start: Date; end: Date };
+    showIcons?: boolean;
+  };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -24,10 +28,10 @@ describe('PeriodLabelComponent', () => {
       titleText: 'some-title',
       period: {
         start: new Date(2018, 0, 1),
-        end: new Date(2019, 5, 1),
+        end: new Date(2019, 5, 1)
       },
       showIcons: true
-    }
+    };
 
     component.titleText = mockData.titleText;
     component.period = mockData.period;
@@ -48,7 +52,7 @@ describe('PeriodLabelComponent', () => {
   it('should show the start and end date', () => {
     const dates = fixture.debugElement.queryAll(
       By.css('.campus-period-label__date-holder__text')
-    )
+    );
     const start = dates[0].nativeElement.textContent;
     const end = dates[1].nativeElement.textContent;
     expect(start).toBe('Van01/01/2018');
@@ -61,7 +65,7 @@ describe('PeriodLabelComponent', () => {
     component.editEnd.subscribe((e: boolean) => (endEvent = e));
     const dates = fixture.debugElement.queryAll(
       By.css('.campus-period-label__date-holder__icon')
-    )
+    );
     dates[0].triggerEventHandler('click', null);
     expect(startEvent).toBe(true);
     dates[1].triggerEventHandler('click', null);

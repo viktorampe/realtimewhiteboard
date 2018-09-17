@@ -28,5 +28,4 @@ export class AdaptableListComponent {
   onIconClick(): void {
     this.iconClicked.emit(true);
   }
-
 }

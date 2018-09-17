@@ -16,9 +16,7 @@ import { ContentPreviewComponent } from './content-preview.component';
   </campus-content-preview>
   `
 })
-export class TestContainerComponent {
-}
-
+export class TestContainerComponent {}
 
 describe('ContentPreviewComponent', () => {
   let component: ContentPreviewComponent;
@@ -26,7 +24,6 @@ describe('ContentPreviewComponent', () => {
   let testContainerFixture: ComponentFixture<TestContainerComponent>;
   let testContainerComponent: TestContainerComponent;
   let innerComponent: ContentPreviewComponent;
-
 
   let mockData: {
     titleText: string;
@@ -37,10 +34,7 @@ describe('ContentPreviewComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        ContentPreviewComponent,
-        TestContainerComponent
-      ],
+      declarations: [ContentPreviewComponent, TestContainerComponent],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
   }));
@@ -52,7 +46,7 @@ describe('ContentPreviewComponent', () => {
     mockData = {
       titleText: 'the-title',
       description:
-        'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+        'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
     };
 
     component.titleText = mockData.titleText;
@@ -63,7 +57,8 @@ describe('ContentPreviewComponent', () => {
     testContainerFixture = TestBed.createComponent(TestContainerComponent);
     testContainerComponent = testContainerFixture.componentInstance;
     innerComponent = <ContentPreviewComponent>(
-      testContainerFixture.debugElement.query(By.css('campus-content-preview')).componentInstance
+      testContainerFixture.debugElement.query(By.css('campus-content-preview'))
+        .componentInstance
     );
     testContainerFixture.detectChanges();
   });

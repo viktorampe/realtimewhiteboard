@@ -43,5 +43,4 @@ export class InputLabelComponent implements OnInit {
     this.saveText.emit(this.inputControl.value);
     this.editing = !this.editing;
   }
-
 }

@@ -31,9 +31,8 @@ describe('info-panel-student-educontent', () => {
     expect(component).toBeTruthy();
   });
   it('should show the title', () => {
-    const title = fixture.debugElement.query(
-      By.css('.info-panel__title')
-    ).nativeElement.textContent;
+    const title = fixture.debugElement.query(By.css('.info-panel__title'))
+      .nativeElement.textContent;
     expect(title).toBe(mockData.titleText);
   });
 });

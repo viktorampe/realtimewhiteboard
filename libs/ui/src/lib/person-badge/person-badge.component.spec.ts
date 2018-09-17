@@ -2,7 +2,6 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { PersonBadgeComponent } from './person-badge.component';
 
-
 describe('PersonBadgeComponent', () => {
   let component: PersonBadgeComponent;
   let fixture: ComponentFixture<PersonBadgeComponent>;
@@ -11,13 +10,12 @@ describe('PersonBadgeComponent', () => {
     orientation: string;
     size: string;
     displayName: string;
-  }
+  };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [PersonBadgeComponent]
-    })
-      .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -28,11 +26,11 @@ describe('PersonBadgeComponent', () => {
       orientation: 'left',
       size: 'medium',
       displayName: 'The name'
-    }
+    };
 
-    component.orientation = mockData.orientation
-    component.size = mockData.size
-    component.displayName = mockData.displayName
+    component.orientation = mockData.orientation;
+    component.size = mockData.size;
+    component.displayName = mockData.displayName;
 
     fixture.detectChanges();
   });

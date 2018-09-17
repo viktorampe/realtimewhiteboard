@@ -3,7 +3,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { AdaptableSelectComponent } from './adaptable-select.component';
 
-
 describe('AdaptableSelectComponent', () => {
   let component: AdaptableSelectComponent;
   let fixture: ComponentFixture<AdaptableSelectComponent>;
@@ -14,8 +13,7 @@ describe('AdaptableSelectComponent', () => {
     TestBed.configureTestingModule({
       declarations: [AdaptableSelectComponent],
       imports: [ReactiveFormsModule, FormsModule]
-    })
-      .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {

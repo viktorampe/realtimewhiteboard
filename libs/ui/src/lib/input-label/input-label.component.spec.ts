@@ -7,7 +7,7 @@ describe('InputLabelComponent', () => {
   let component: InputLabelComponent;
   let fixture: ComponentFixture<InputLabelComponent>;
 
-  let mockData: { titleText: string, text: string, showIcon?: boolean };
+  let mockData: { titleText: string; text: string; showIcon?: boolean };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -82,7 +82,9 @@ describe('InputLabelComponent', () => {
       .triggerEventHandler('click', null);
     fixture.detectChanges();
     fixture.debugElement
-      .query(By.css('.campus-input-label__input-holder__icons-holder__cancel-icon'))
+      .query(
+        By.css('.campus-input-label__input-holder__icons-holder__cancel-icon')
+      )
       .triggerEventHandler('click', null);
     fixture.detectChanges();
     const input = fixture.debugElement.query(
@@ -130,7 +132,9 @@ describe('InputLabelComponent', () => {
     input.dispatchEvent(new Event('input'));
     component.saveText.subscribe((e: string) => (text = e));
     fixture.debugElement
-      .query(By.css('.campus-input-label__input-holder__icons-holder__confirm-icon'))
+      .query(
+        By.css('.campus-input-label__input-holder__icons-holder__confirm-icon')
+      )
       .triggerEventHandler('click', null);
     expect(text).toBe(input.value);
     expect(text).not.toBe(mockData.text);
