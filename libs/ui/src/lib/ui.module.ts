@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ShellComponent, SidebarComponent } from './shell/shell.component';
+import { ShellComponent } from './shell/shell.component';
 @NgModule({
   imports: [CommonModule],
-  declarations: [ShellComponent, SidebarComponent],
+  declarations: [ShellComponent],
   exports: [ShellComponent]
 })
 export class UiModule {}
