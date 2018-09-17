@@ -1,6 +1,15 @@
-
-  <div class="side-bar">
-    <ng-content select='side-bar, .side-bar' ></ng-content>
+<div class="ui-shell">
+  <div class="ui-shell-logo">
+    <ng-content select="ui-shell-logo"></ng-content>
   </div>
-<ng-content select='app-bar,.app-bar' ></ng-content>
-<ng-content select='router-outlet'></ng-content>
+  <div class="ui-shell-left">
+    <ng-content select="ui-shell-left"></ng-content>
+  </div>
+  <div class="ui-shell-top">
+    <ng-content select="ui-shell-top"></ng-content>
+  </div>
+  <div class="ui-shell-body">
+    <ng-content></ng-content>
+  </div>
+</div>
+
