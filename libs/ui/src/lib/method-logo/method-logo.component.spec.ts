@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MethodLogoComponent } from './method-logo.component';
+import { By } from '@angular/platform-browser';
 
 describe('MethodIconPresenterComponent', () => {
   let component: MethodLogoComponent;
@@ -33,20 +34,26 @@ describe('MethodIconPresenterComponent', () => {
     component.colorMode = 'grey';
     fixture.detectChanges();
 
-    expect(component).toBeTruthy();
+    const componentDE = fixture.debugElement.query(By.css('*'));
+    const componentEL = componentDE.nativeElement;
+    expect(componentEL.className).toContain('ui-method__logo--grey');
   });
 
   it('should create with colorMode color', () => {
     component.colorMode = 'color';
     fixture.detectChanges();
 
-    expect(component).toBeTruthy();
+    const componentDE = fixture.debugElement.query(By.css('*'));
+    const componentEL = componentDE.nativeElement;
+    expect(componentEL.className).toContain('ui-method__logo--color');
   });
 
   it('should create with colorMode hover', () => {
     component.colorMode = 'hover';
     fixture.detectChanges();
 
-    expect(component).toBeTruthy();
+    const componentDE = fixture.debugElement.query(By.css('*'));
+    const componentEL = componentDE.nativeElement;
+    expect(componentEL.className).toContain('ui-method__logo--hover');
   });
 });
