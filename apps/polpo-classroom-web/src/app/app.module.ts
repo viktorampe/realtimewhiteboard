@@ -1,21 +1,21 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { DalModule } from '@campus/dal';
-import { NxModule } from '@nrwl/nx';
-import { AppComponent } from './app.component';
-import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
-import {
-  initialState as appInitialState,
-  appReducer
-} from './+state/app.reducer';
-import { AppEffects } from './+state/app.effects';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { environment } from '../environments/environment';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
+import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { NxModule } from '@nrwl/nx';
 import { storeFreeze } from 'ngrx-store-freeze';
+import { environment } from '../environments/environment';
+import { AppEffects } from './+state/app.effects';
+import {
+  appReducer,
+  initialState as appInitialState
+} from './+state/app.reducer';
+import { AppComponent } from './app.component';
 
 @NgModule({
   declarations: [AppComponent],
@@ -62,7 +62,7 @@ import { storeFreeze } from 'ngrx-store-freeze';
           loadChildren: '@campus/pages/bundles#PagesBundlesModule'
         }
       ],
-      { initialNavigation: 'enabled', enableTracing: true }
+      { initialNavigation: 'enabled', enableTracing: false }
     ),
     StoreModule.forRoot(
       { app: appReducer },

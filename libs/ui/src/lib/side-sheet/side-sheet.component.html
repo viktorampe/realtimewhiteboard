@@ -1,16 +1,16 @@
 <mat-drawer-container>
-  <mat-drawer class="sheet" #sheet position="end">
-    <div class="sheet__header">
+  <mat-drawer class="ui-side-sheet" #sheet position="end" [opened]="isOpenOnInit">
+    <div #header class="ui-side-sheet__header">
       <ng-content select="campus-side-sheet-header"></ng-content>
+      <!-- when no <campus-side-sheet-header> tag is present in the parent component, display 'Info' as a default -->
+      <ng-container *ngIf="header.children.length === 1">Info</ng-container>
       <a (click)="sheet.close()">x</a>
     </div>
-    <div class="sheet__body">
+    <div class="ui-side-sheet__body">
       <ng-content select="campus-side-sheet-body"></ng-content>
     </div>
   </mat-drawer>
   <mat-drawer-content>
-    <div class="page">
-      <ng-content select="campus-side-sheet-page"></ng-content>
-    </div>
+    <ng-content select="campus-side-sheet-page"></ng-content>
   </mat-drawer-content>
 </mat-drawer-container>

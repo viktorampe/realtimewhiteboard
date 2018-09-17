@@ -1,23 +1,23 @@
-@mixin side-sheet() {
-  $sheet-background-color: $ui-bg-color-2;
-  $header-background-color: $ui-bg-color-3;
-  $body-background-color: $ui-bg-color-1;
-  $title-font-family: $ui-font-family-1;
-  $body-font-family: $ui-font-family-2;
+@mixin ui-side-sheet() {
+  $ui-sheet-background-color: $ui-bg-color-2;
+  $ui-header-background-color: $ui-bg-color-3;
+  $ui-body-background-color: $ui-bg-color-1;
+  $ui-title-font-family: $ui-font-family-1;
+  $ui-body-font-family: $ui-font-family-2;
   $ui-font-color: $ui-font-color-2;
-  .sheet {
+  .ui-side-sheet {
     color: $ui-font-color;
-    background-color: $sheet-background-color;
+    background-color: $ui-sheet-background-color;
     &__header {
-      background-color: $header-background-color;
-      font-family: $title-font-family;
+      background-color: $ui-header-background-color;
+      font-family: $ui-title-font-family;
 
       &__title {
-        font-family: $title-font-family;
+        font-family: $ui-title-font-family;
       }
     }
     &__body {
-      font-family: $body-font-family;
+      font-family: $ui-body-font-family;
     }
   }
 }

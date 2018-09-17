@@ -1,11 +1,11 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { MatSidenavModule } from '@angular/material';
 import { LayoutModule } from '@angular/cdk/layout';
-import { SideSheetComponent } from './side-sheet/side-sheet.component';
-import { SideSheetHeaderDirective } from './side-sheet/directives/side-sheet-header.directive';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { MatSidenavModule } from '@angular/material';
 import { SideSheetBodyDirective } from './side-sheet/directives/side-sheet-body.directive';
+import { SideSheetHeaderDirective } from './side-sheet/directives/side-sheet-header.directive';
 import { SideSheetPageDirective } from './side-sheet/directives/side-sheet-page.directive';
+import { SideSheetComponent } from './side-sheet/side-sheet.component';
 @NgModule({
   imports: [CommonModule, MatSidenavModule, LayoutModule],
   declarations: [

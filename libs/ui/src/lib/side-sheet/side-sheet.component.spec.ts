@@ -1,19 +1,17 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { SideSheetComponent } from './side-sheet.component';
-
 import { Component } from '@angular/core';
-import { SideSheetHeaderDirective } from './directives/side-sheet-header.directive';
-import { By } from '@angular/platform-browser';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatSidenavModule } from '@angular/material';
+import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SideSheetBodyDirective } from './directives/side-sheet-body.directive';
+import { SideSheetHeaderDirective } from './directives/side-sheet-header.directive';
 import { SideSheetPageDirective } from './directives/side-sheet-page.directive';
+import { SideSheetComponent } from './side-sheet.component';
 
 @Component({
-  selector: 'test',
+  selector: 'campus-test-host',
   template: `
-  <campus-side-sheet [isOpen]="true">
+  <campus-side-sheet [isOpenOnInit]="true">
     <campus-side-sheet-header>Test header</campus-side-sheet-header>
     <campus-side-sheet-body>
       <div><p>Test body</p></div>
@@ -61,7 +59,7 @@ describe('SideSheetComponent', () => {
   it('should display the header text', () => {
     expect(
       fixture.debugElement.query(By.directive(SideSheetHeaderDirective))
-        .nativeElement.innerHTML
+        .nativeElement.textContent
     ).toContain('Test header');
   });
 
@@ -69,7 +67,7 @@ describe('SideSheetComponent', () => {
     expect(
       fixture.debugElement
         .query(By.directive(SideSheetBodyDirective))
-        .query(By.css('p')).nativeElement.innerHTML
+        .query(By.css('p')).nativeElement.textContent
     ).toBe('Test body');
   });
 
@@ -77,7 +75,7 @@ describe('SideSheetComponent', () => {
     expect(
       fixture.debugElement
         .query(By.directive(SideSheetPageDirective))
-        .query(By.css('div')).nativeElement.innerHTML
+        .query(By.css('div')).nativeElement.textContent
     ).toBe('This is a test page.');
   });
 

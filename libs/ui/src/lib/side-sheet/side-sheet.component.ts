@@ -1,6 +1,6 @@
-import { Component, Input, ViewChild, OnInit, OnDestroy } from '@angular/core';
-import { MatDrawer } from '@angular/material';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatDrawer } from '@angular/material';
 import { filter, takeWhile } from 'rxjs/operators';
 /**
  * Surface containing supplementary content that is anchored to the right edge of the screen.
@@ -12,7 +12,7 @@ import { filter, takeWhile } from 'rxjs/operators';
  * Material reference: https://material.io/design/components/sheets-side.html#
  *
  * A side sheet has 3 sections:
- *  - header: styled title with close action
+ *  - header: styled title with close action, defaults to 'Info' if no <campus-side-sheet-header> tag is used
  *  - body: various content rendered in the side sheet
  *  - page: the page content which interacts with the side sheet (e.g. the sheet can slide over this page content or is displayed side-by-side)
  *
@@ -37,10 +37,8 @@ import { filter, takeWhile } from 'rxjs/operators';
   styleUrls: ['./side-sheet.component.scss']
 })
 export class SideSheetComponent implements OnInit, OnDestroy {
-  @Input()
-  set isOpen(value) {
-    this.sheet.open();
-  }
+  @Input() isOpenOnInit: boolean;
+
   /**
    * Reference to the material drawer component.
    * Used to set it's properties in code (instead of in the template).
@@ -48,27 +46,31 @@ export class SideSheetComponent implements OnInit, OnDestroy {
    * @type {MatDrawer}
    * @memberof SideSheetComponent
    */
-  @ViewChild(MatDrawer) sheet: MatDrawer;
+  @ViewChild(MatDrawer) private sheet: MatDrawer;
   /**
    * Whether the component is still rendered.
    * Used for unsubscribing from subscriptions.
    *
    * @memberof SideSheetComponent
    */
-  isAlive = true;
+  private isAlive = true;
 
   /**
-   * Stream of XSmall breakpoint events.
+   * Stream of @media queries matching 'XSmall' breakpoint preset.
    *
    * @memberof SideSheetComponent
    */
-  xSmall$ = this.breakPointObserver.observe([Breakpoints.XSmall]);
+  private xSmallMediaQuery$ = this.breakPointObserver.observe([
+    Breakpoints.XSmall
+  ]);
   /**
-   * Stream of non XSmall breakpoint events.
+   * Stream of @media queries matching all breakpoints presets except 'XSmall'.
    *
    * @memberof SideSheetComponent
    */
-  other$ = this.xSmall$.pipe(filter(result => !result.matches));
+  private otherMediaQueries$ = this.xSmallMediaQuery$.pipe(
+    filter(result => !result.matches)
+  );
 
   constructor(private breakPointObserver: BreakpointObserver) {}
 
@@ -76,9 +78,9 @@ export class SideSheetComponent implements OnInit, OnDestroy {
     this.setupSubscriptions();
   }
 
-  setupSubscriptions(): void {
+  private setupSubscriptions(): void {
     // sheet property available in the OnInit life cycle
-    this.xSmall$
+    this.xSmallMediaQuery$
       .pipe(
         takeWhile(() => this.isAlive),
         filter(result => result.matches)
@@ -86,12 +88,26 @@ export class SideSheetComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.sheet.mode = 'over';
       });
-    this.other$.pipe(takeWhile(() => this.isAlive)).subscribe(() => {
-      this.sheet.mode = 'side';
-    });
+    this.otherMediaQueries$
+      .pipe(takeWhile(() => this.isAlive))
+      .subscribe(() => {
+        this.sheet.mode = 'side';
+      });
   }
-
+  /**
+   * Completes the internal streams.
+   *
+   * @memberof SideSheetComponent
+   */
   ngOnDestroy(): void {
     this.isAlive = false;
+  }
+  /**
+   * Toggle this shide sheet.
+   * @param isOpen Whether the side sheet should be open.
+   * @memberof SideSheetComponent
+   */
+  toggle(isOpen?: boolean) {
+    this.sheet.toggle(isOpen);
   }
 }

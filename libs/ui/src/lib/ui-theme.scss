@@ -28,5 +28,5 @@ $ui-font-family-2: 'Open Sans', sans-serif;
 // create theme-mixin with each mixin from our library components
 @mixin ui-theme() {
   // @include ui-tree-nav();
-  @include side-sheet();
+  @include ui-side-sheet();
 }
