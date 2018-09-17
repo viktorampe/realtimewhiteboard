@@ -1,24 +1,46 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ContentPreviewComponent } from './content-preview.component';
 
+@Component({
+  selector: 'campus-test-container',
+  template: `
+  <campus-content-preview preview>
+    <campus-file-extension-presenter type></campus-file-extension-presenter>
+    <div icon class="polpo-presentatie"></div>
+    <div badge
+         *ngFor="let badge of ['badge1', 'badge2']">
+      {{badge}}
+    </div>
+  </campus-content-preview>
+  `
+})
+export class TestContainerComponent {
+}
+
+
 describe('ContentPreviewComponent', () => {
   let component: ContentPreviewComponent;
   let fixture: ComponentFixture<ContentPreviewComponent>;
+  let testContainerFixture: ComponentFixture<TestContainerComponent>;
+  let testContainerComponent: TestContainerComponent;
+  let innerComponent: ContentPreviewComponent;
+
 
   let mockData: {
     titleText: string;
     description: string;
-    productTypeIcon: string;
-    fileExtentionIcon: string;
     contentPreview?: string;
     methods?: string[];
   };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ContentPreviewComponent],
+      declarations: [
+        ContentPreviewComponent,
+        TestContainerComponent
+      ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
   }));
@@ -31,16 +53,19 @@ describe('ContentPreviewComponent', () => {
       titleText: 'the-title',
       description:
         'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-      productTypeIcon: 'polpo-presentatie',
-      fileExtentionIcon: 'ppt'
     };
 
     component.titleText = mockData.titleText;
     component.description = mockData.description;
-    component.productTypeIcon = mockData.productTypeIcon;
-    component.fileExtentionIcon = mockData.fileExtentionIcon;
 
     fixture.detectChanges();
+
+    testContainerFixture = TestBed.createComponent(TestContainerComponent);
+    testContainerComponent = testContainerFixture.componentInstance;
+    innerComponent = <ContentPreviewComponent>(
+      testContainerFixture.debugElement.query(By.css('campus-content-preview')).componentInstance
+    );
+    testContainerFixture.detectChanges();
   });
 
   it('should create', () => {
@@ -59,14 +84,14 @@ describe('ContentPreviewComponent', () => {
     expect(title).toBe(mockData.description);
   });
   it('should show the productTypeIcon', () => {
-    const productTypeIcon = fixture.debugElement.query(
-      By.css('.info-panel__educontent-preview__product__details__type-icon')
+    const productTypeIcon = testContainerFixture.debugElement.query(
+      By.css('[icon]')
     );
     expect(productTypeIcon).toBeTruthy();
   });
   it('should show the fileExtentionIcon', () => {
-    const fileExtentionIcon = fixture.debugElement.query(
-      By.css('.info-panel__educontent-preview__product__file-extention-icon')
+    const fileExtentionIcon = testContainerFixture.debugElement.query(
+      By.css('[type]')
     );
     expect(fileExtentionIcon).toBeTruthy();
   });
@@ -77,12 +102,10 @@ describe('ContentPreviewComponent', () => {
     expect(method).toBeFalsy();
   });
   it('should show the methods if these are given', () => {
-    component.methods = ['method-one', 'method-two', 'method-three'];
-    fixture.detectChanges();
-    const methods = fixture.debugElement.queryAll(
-      By.css('.info-panel__educontent-preview__methods__method')
+    const methods = testContainerFixture.debugElement.queryAll(
+      By.css('[badge]')
     );
-    expect(methods.length).toBe(3);
+    expect(methods.length).toBe(2);
   });
   it('should not show contentPreview if none was given', () => {
     const preview = fixture.debugElement.query(
