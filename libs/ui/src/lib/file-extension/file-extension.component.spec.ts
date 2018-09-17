@@ -1,7 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FileExtensionComponent } from './file-extension.component';
-import { compileComponentFromMetadata } from '@angular/compiler';
 import { By } from '@angular/platform-browser';
 
 describe('FileExtensionComponent', () => {
