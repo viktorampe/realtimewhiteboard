@@ -7,7 +7,7 @@
     box-sizing: border-box;
     z-index: 0;
 
-    &__title {
+    &--title {
       font-family: 'Oswald', 'Arial Narrow', Sans-Serif;
       font-weight: normal;
       line-height: 20px * $file-extension-scale;
@@ -41,7 +41,7 @@
       }
     }
 
-    &__icon {
+    &--icon {
       height: 107px * $file-extension-scale;
       width: 84px * $file-extension-scale;
 
@@ -64,7 +64,7 @@
     }
   }
 
-  .ui-file-extension__icon.ui-file-extension__title {
+  .ui-file-extension--icon.ui-file-extension--title {
     margin-top: 11px * $file-extension-scale;
     margin-left: 8px * $file-extension-scale;
     margin-right: 8px * $file-extension-scale;

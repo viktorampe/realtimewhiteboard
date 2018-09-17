@@ -2,6 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FileExtensionComponent } from './file-extension.component';
 import { compileComponentFromMetadata } from '@angular/compiler';
+import { By } from '@angular/platform-browser';
 
 describe('FileExtensionComponent', () => {
   let component: FileExtensionComponent;
@@ -30,31 +31,59 @@ describe('FileExtensionComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should create with showTitle true', () => {
+  it('should apply the .ui-file-extension--title class', () => {
     component.showTitle = true;
     fixture.detectChanges();
 
-    expect(component).toBeTruthy();
+    const componentDE = fixture.debugElement.query(By.css('i'));
+    const componentEL = componentDE.nativeElement;
+    expect(componentEL.className).toContain('ui-file-extension--title');
   });
 
-  it('should create with showTitle false', () => {
+  it('shouldnt apply the .ui-file-extension--title class', () => {
     component.showTitle = false;
     fixture.detectChanges();
 
-    expect(component).toBeTruthy();
+    const componentDE = fixture.debugElement.query(By.css('i'));
+    const componentEL = componentDE.nativeElement;
+    expect(componentEL.className).not.toContain('ui-file-extension--title');
   });
 
-  it('should create withs showIcon true', () => {
+  it('should apply the .ui-file-extension--icon class', () => {
     component.showIcon = true;
     fixture.detectChanges();
 
-    expect(component).toBeTruthy();
+    const componentDE = fixture.debugElement.query(By.css('i'));
+    const componentEL = componentDE.nativeElement;
+    expect(componentEL.className).toContain('ui-file-extension--icon');
   });
 
-  it('should create withs showIcon false', () => {
+  it('shouldnt apply the .ui-file-extension--icon class', () => {
     component.showIcon = false;
     fixture.detectChanges();
 
-    expect(component).toBeTruthy();
+    const componentDE = fixture.debugElement.query(By.css('i'));
+    const componentEL = componentDE.nativeElement;
+    expect(componentEL.className).not.toContain('ui-file-extension--icon');
+  });
+
+  it('should show the title', () => {
+    component.showTitle = true;
+    component.extensionClass = 'extClass';
+    fixture.detectChanges();
+
+    const componentDE = fixture.debugElement.query(By.css('i'));
+    const componentEL = componentDE.nativeElement;
+    expect(componentEL.textContent).toContain('extClass');
+  });
+
+  it('shouldnt show the title', () => {
+    component.showTitle = false;
+    component.extensionClass = 'extClass';
+    fixture.detectChanges();
+
+    const componentDE = fixture.debugElement.query(By.css('i'));
+    const componentEL = componentDE.nativeElement;
+    expect(componentEL.textContent).not.toContain('extClass');
   });
 });
