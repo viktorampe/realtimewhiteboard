@@ -1,0 +1,119 @@
+{
+  "angular get element by css": {
+    "prefix": "ngit-element-by-css",
+    "body": ["${2:fixture}.debugElement.query(", "\tBy.css('.${1:class}')", ")"]
+  },
+  "angular get element by css in constant": {
+    "prefix": "ngit-element-constant-by-css",
+    "body": [
+      "const ${1:name} = ${4:fixture}.debugElement.query(",
+      "\tBy.css('.${2:class}')",
+      ")$3;"
+    ]
+  },
+  "angular update component input": {
+    "prefix": "ngit-update-component-input",
+    "body": [
+      "component.${1:input} = ${2:value}",
+      "${3:fixture}.detectChanges();"
+    ]
+  },
+  "angular get element nativeElement.textContent": {
+    "prefix": "ngit-native-element-textcontent",
+    "body": ".nativeElement.textContent"
+  },
+  "angular subscibe to output even": {
+    "prefix": "ngit-sub-to-eventdata",
+    "body": [
+      "let ${1:data}: ${3:type};",
+      "component.${2:event}.subscribe((e: $3) => ($1 = e));"
+    ]
+  },
+  "angular trigget element event": {
+    "prefix": "ngit-trigger-element-event",
+    "body": ["${2:element}.triggerEventHandler('${1:elementEvent}', null);"]
+  },
+  "angular click element": {
+    "prefix": "ngit-click-element",
+    "body": [
+      "${2:fixture}.debugElement",
+      "\t.query(By.css('.${1:class}'))",
+      "\t.triggerEventHandler('click', null);",
+      "${2:fixture}.detectChanges();"
+    ]
+  },
+  "angular detect changes for fixture": {
+    "prefix": "ngit-detectchanges",
+    "body": "${1:fixture}.detectChanges();"
+  },
+  "angular empty spec file to test content projection in component": {
+    "prefix": "ngit-new-spec-for-content-projection",
+    "body": [
+      "import { Component, NO_ERRORS_SCHEMA, NgModule } from '@angular/core';",
+      "import { CommonModule } from '@angular/common';",
+      "import { async, ComponentFixture, TestBed } from '@angular/core/testing';",
+      "import { By } from '@angular/platform-browser';",
+      "import { ${1:Component} } from './${2:file.name.component}';",
+      "import { ${4:ModuleName} } from '../${5:ModuleFileName}.module';",
+      "",
+      "@Component({",
+      "\t// tslint:disable-next-line:component-selector",
+      "\tselector: 'test-container',",
+      "\ttemplate: `",
+      "\t<${3:component-selector}>",
+      "\t</$3>",
+      "\t`",
+      "})",
+      "export class TestContainerComponent {",
+      "}",
+      "",
+      "@NgModule({",
+      "\tdeclarations: [TestContainerComponent],",
+      "\timports: [ CommonModule, $4 ],",
+      "\texports: [TestContainerComponent],",
+      "\tproviders: [],",
+      "})",
+      "",
+      "export class TestModule {}",
+      "",
+      "describe('$1', () => {",
+      "\tlet component: $1;",
+      "\tlet fixture: ComponentFixture<$1>;",
+      "\tlet testContainerFixture: ComponentFixture<TestContainerComponent>;",
+      "\tlet testContainerComponent: TestContainerComponent;",
+      "\tlet innerComponent: $1;",
+      "",
+      "",
+      "\tbeforeEach(async(() => {",
+      "\t\tTestBed.configureTestingModule({",
+      "\t\t\timports: [",
+      "\t\t\t\tTestModule",
+      "\t\t\t],",
+      "\t\t\tschemas: [NO_ERRORS_SCHEMA]",
+      "\t\t}).compileComponents();",
+      "\t}));",
+      "",
+      "\tbeforeEach(() => {",
+      "\t\t// regular component",
+      "\t\tfixture = TestBed.createComponent($1);",
+      "\t\tcomponent = fixture.componentInstance;",
+      "",
+      "\t\tfixture.detectChanges();",
+      "",
+      "\t\t// templated component",
+      "\t\ttestContainerFixture = TestBed.createComponent(TestContainerComponent);",
+      "\t\ttestContainerComponent = testContainerFixture.componentInstance;",
+      "\t\tinnerComponent = <$1>(",
+      "\t\t\ttestContainerFixture.debugElement.query(By.css('$3')).componentInstance",
+      "\t\t);",
+      "\t\ttestContainerFixture.detectChanges();",
+      "\t});",
+      "",
+      "\tit('should create', () => {",
+      "\t\texpect(component).toBeTruthy();",
+      "\t});",
+      "});",
+      ""
+    ]
+  }
+}
