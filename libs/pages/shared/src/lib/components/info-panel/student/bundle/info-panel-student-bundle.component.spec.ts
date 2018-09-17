@@ -1,23 +1,23 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { InfoPanelComponent } from './info-panel.component';
+import { InfoPanelStudentBundleComponent } from './info-panel-student-bundle.component';
 
-describe('InfoPanelComponent', () => {
-  let component: InfoPanelComponent;
-  let fixture: ComponentFixture<InfoPanelComponent>;
+describe('info-panel-student-bundle', () => {
+  let component: InfoPanelStudentBundleComponent;
+  let fixture: ComponentFixture<InfoPanelStudentBundleComponent>;
 
   let mockData: { titleText: string };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [InfoPanelComponent],
+      declarations: [InfoPanelStudentBundleComponent],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(InfoPanelComponent);
+    fixture = TestBed.createComponent(InfoPanelStudentBundleComponent);
     component = fixture.componentInstance;
 
     mockData = { titleText: 'the-fancy-title' };
