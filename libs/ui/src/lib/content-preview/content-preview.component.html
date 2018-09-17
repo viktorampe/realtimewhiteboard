@@ -12,11 +12,7 @@
       <div class="info-panel__educontent-preview__product__details__description">{{description}}</div>
     </div>
   </div>
-  <div *ngIf="methods"
-       class="info-panel__educontent-preview__methods">
-    <div class="info-panel__educontent-preview__methods__method"
-         *ngFor="let method of methods">
-      {{method}}
-    </div>
+  <div class="info-panel__educontent-preview__badges">
+    <ng-content select="[badge]"></ng-content>
   </div>
 </div>

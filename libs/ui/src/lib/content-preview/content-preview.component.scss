@@ -1,4 +1,4 @@
-.info-panel__educontent-preview {
+:host ::ng-deep .info-panel__educontent-preview {
   &__preview {
     height: 205px;
     overflow: hidden;
@@ -13,7 +13,7 @@
   &__product {
     padding: 30px 20px 0 20px;
     min-height: 107px;
-    &__file-extention-icon {
+    [type] {
       width: 84px;
       height: 107px;
       float: left;
@@ -28,7 +28,7 @@
         color: #3e3e43;
         font-weight: 500;
       }
-      &__type-icon {
+      [icon] {
         display: inline-block;
         display: block;
         color: #6ed3c2;
@@ -44,11 +44,11 @@
       }
     }
   }
-  &__methods {
+  &__badges {
     padding: 20px;
     display: flex;
     flex-direction: row;
-    &__method {
+    [badge] {
       margin-right: 10px;
       background-color: antiquewhite;
       width: 76px;
