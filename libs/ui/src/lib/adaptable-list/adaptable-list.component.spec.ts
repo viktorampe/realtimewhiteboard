@@ -27,7 +27,7 @@ describe('AdaptableListComponent', () => {
       items: [
         { text: 'item-one' },
         { text: 'item-two', count: 12 },
-        { text: 'item-three', count: 44, eventId: 1 }
+        { text: 'item-three', count: 44, eventId: 4 }
       ],
       showIcon: true
     };
@@ -98,5 +98,22 @@ describe('AdaptableListComponent', () => {
       By.css('.campus_adaptable-list__icon-holder__icon')
     );
     expect(icon).toBeFalsy();
+  });
+  it('should trigger icon event when icon is clicked', () => {
+    let clicked: boolean;
+    component.iconClicked.subscribe((e: boolean) => (clicked = e));
+    fixture.debugElement
+      .query(By.css('.campus_adaptable-list__icon-holder__icon'))
+      .triggerEventHandler('click', null);
+    fixture.detectChanges();
+    expect(clicked).toBe(true);
+  });
+  it('should trigger itemIcon event when one is clicked', () => {
+    let eventId: number;
+    component.itemIconClicked.subscribe((e: number) => (eventId = e));
+    fixture.debugElement
+      .query(By.css('.campus_adaptable-list__items__item__icon'))
+      .triggerEventHandler('click', null);
+    expect(eventId).toBe(mockData.items[2].eventId);
   });
 });
