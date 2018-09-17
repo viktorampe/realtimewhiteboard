@@ -8,7 +8,7 @@ import { SideSheetComponent } from '@campus/ui';
 })
 export class BundlesComponent implements OnInit {
   isOpenOnInit = true;
-  @ViewChild(SideSheetComponent) sideSheet: SideSheetComponent;
+  @ViewChild('sideSheet') sideSheet: SideSheetComponent;
 
   constructor() {}
   ngOnInit() {}

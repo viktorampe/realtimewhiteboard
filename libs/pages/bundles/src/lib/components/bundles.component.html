@@ -1,4 +1,4 @@
-<campus-side-sheet [isOpenOnInit]="isOpenOnInit">
+<campus-side-sheet #sideSheet [isOpenOnInit]="isOpenOnInit">
   <campus-side-sheet-body>
     <div style="color:black">test</div>
   </campus-side-sheet-body>
@@ -6,7 +6,7 @@
     <div style="height:10000px">
       <p>Bundles works!</p>
       <div>
-        <button (click)="toggleSideSheet()">open sheet</button>
+        <button (click)="toggleSideSheet()">toggle sheet</button>
       </div>
     </div>
   </campus-side-sheet-page>
