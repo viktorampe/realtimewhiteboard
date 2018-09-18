@@ -17,7 +17,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 export class LabelAndIconButtonComponent {
   @Input() label: string;
   @Input() icon: string;
-  @Input() iconBackgroundColor: 'red' | 'gray' = 'red';
+  @Input() iconClass: 'warning' | 'default' = 'default';
   @Output() iconClicked = new EventEmitter<string>();
 
   onIconClicked(): void {

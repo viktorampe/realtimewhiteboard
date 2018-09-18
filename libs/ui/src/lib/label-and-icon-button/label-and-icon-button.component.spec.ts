@@ -8,7 +8,7 @@ describe('LabelAndIconButtonComponent', () => {
   let mockData: {
     label: string;
     icon: string;
-    iconBackgroundColor: 'red' | 'gray';
+    iconClass: 'warning' | 'default';
   };
 
   beforeEach(async(() => {
@@ -24,12 +24,12 @@ describe('LabelAndIconButtonComponent', () => {
     mockData = {
       label: 'desired text',
       icon: 'given-icon',
-      iconBackgroundColor: 'red'
+      iconClass: 'warning'
     };
 
     component.label = mockData.label;
     component.icon = mockData.icon;
-    component.iconBackgroundColor = mockData.iconBackgroundColor;
+    component.iconClass = mockData.iconClass;
 
     fixture.detectChanges();
   });
@@ -43,12 +43,12 @@ describe('LabelAndIconButtonComponent', () => {
     ).nativeElement.textContent;
     expect(displayedText).toContain(mockData.label);
   });
-  it('should show a red classed icon element', () => {
-    const icon = fixture.debugElement.query(By.css('.red'));
+  it('should show a warning classed icon element', () => {
+    const icon = fixture.debugElement.query(By.css('.warning'));
     expect(icon).toBeTruthy();
   });
-  it('should not show a gray classed icon element', () => {
-    const icon = fixture.debugElement.query(By.css('.gray'));
+  it('should not show a default classed icon element', () => {
+    const icon = fixture.debugElement.query(By.css('.default'));
     expect(icon).toBeFalsy();
   });
   it('should show the icon in the class for the icon element', () => {
