@@ -18,14 +18,14 @@ export class EditableInlineTagListComponent {
   @Input() titleText: string;
   @Input() items: { text: string; count?: number; editable?: number }[];
   @Input() showIcon: boolean;
-  @Output() iconClicked = new EventEmitter<boolean>();
+  @Output() editClicked = new EventEmitter<boolean>();
   @Output() itemIconClicked = new EventEmitter<any>();
 
   onItemIconClick(editable: any): void {
     this.itemIconClicked.emit(editable);
   }
 
-  onIconClick(): void {
-    this.iconClicked.emit(true);
+  onEditClicked(): void {
+    this.editClicked.emit(true);
   }
 }

@@ -101,7 +101,7 @@ describe('EditableInlineTagListComponent', () => {
   });
   it('should trigger icon event when icon is clicked', () => {
     let clicked: boolean;
-    component.iconClicked.subscribe((e: boolean) => (clicked = e));
+    component.editClicked.subscribe((e: boolean) => (clicked = e));
     fixture.debugElement
       .query(By.css('.campus_editable-inline-tag-list__icon'))
       .triggerEventHandler('click', null);
