@@ -49,7 +49,7 @@ $person-badge-size-medium: 45px !default;
 @import './input-label/input-label.component.theme.scss';
 @import './label-and-icon-button/label-and-icon-button.component.theme.scss';
 @import './period-label/period-label.component.theme.scss';
-@import './person-badge/peron-badge.component.theme.scss';
+@import './person-badge/person-badge.component.theme.scss';
 
 // create theme-mixin with each mixin from our library components
 @mixin ui-theme() {
