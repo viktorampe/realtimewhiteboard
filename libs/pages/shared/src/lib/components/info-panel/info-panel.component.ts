@@ -29,7 +29,7 @@ import { Component, Input } from '@angular/core';
                           [text]="'description'"></campus-input-label>
       <campus-editable-inline-tag-list list
                             [titleText]="'Geselecteerd items'"
-                            [items]="[{text: 'one'},{text: 'two', count: 12},{text: 'two', count: 1, eventId: 3}]"></campus-editable-inline-tag-list>
+                            [items]="[{text: 'one'},{text: 'two', count: 12},{text: 'two', count: 1, editable: 3}]"></campus-editable-inline-tag-list>
       <campus-adaptable-select status
                               [label]="'status'"
                               [options]="['one', 'two']"

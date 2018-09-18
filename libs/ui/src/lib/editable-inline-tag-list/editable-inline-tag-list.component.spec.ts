@@ -8,7 +8,7 @@ describe('EditableInlineTagListComponent', () => {
 
   let mockData: {
     titleText: string;
-    items: { text: string; count?: number; eventId?: number }[];
+    items: { text: string; count?: number; editable?: number }[];
     showIcon: boolean;
   };
 
@@ -27,7 +27,7 @@ describe('EditableInlineTagListComponent', () => {
       items: [
         { text: 'item-one' },
         { text: 'item-two', count: 12 },
-        { text: 'item-three', count: 44, eventId: 4 }
+        { text: 'item-three', count: 44, editable: 4 }
       ],
       showIcon: true
     };
@@ -86,7 +86,7 @@ describe('EditableInlineTagListComponent', () => {
   });
   it('should show the icon', () => {
     const icon = fixture.debugElement.query(
-      By.css('.campus_editable-inline-tag-list__icon-holder__icon')
+      By.css('.campus_editable-inline-tag-list__icon')
     );
     expect(icon).toBeTruthy();
   });
@@ -95,7 +95,7 @@ describe('EditableInlineTagListComponent', () => {
     fixture.detectChanges();
 
     const icon = fixture.debugElement.query(
-      By.css('.campus_editable-inline-tag-list__icon-holder__icon')
+      By.css('.campus_editable-inline-tag-list__icon')
     );
     expect(icon).toBeFalsy();
   });
@@ -103,17 +103,17 @@ describe('EditableInlineTagListComponent', () => {
     let clicked: boolean;
     component.iconClicked.subscribe((e: boolean) => (clicked = e));
     fixture.debugElement
-      .query(By.css('.campus_editable-inline-tag-list__icon-holder__icon'))
+      .query(By.css('.campus_editable-inline-tag-list__icon'))
       .triggerEventHandler('click', null);
     fixture.detectChanges();
     expect(clicked).toBe(true);
   });
   it('should trigger itemIcon event when one is clicked', () => {
-    let eventId: number;
-    component.itemIconClicked.subscribe((e: number) => (eventId = e));
+    let editable: any;
+    component.itemIconClicked.subscribe((e: any) => (editable = e));
     fixture.debugElement
       .query(By.css('.campus_editable-inline-tag-list__items__item__icon'))
       .triggerEventHandler('click', null);
-    expect(eventId).toBe(mockData.items[2].eventId);
+    expect(editable).toBe(mockData.items[2]);
   });
 });

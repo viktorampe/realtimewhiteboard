@@ -15,10 +15,8 @@
         }
       }
     }
-    &__icon-holder {
-      &__icon {
-        background-color: $ui-bg-color-gray-3;
-      }
+    &__icon {
+      background-color: $ui-bg-color-gray-3;
     }
   }
 }

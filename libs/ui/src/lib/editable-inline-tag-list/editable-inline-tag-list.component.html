@@ -1,5 +1,6 @@
 <div class="campus_editable-inline-tag-list">
-  <h3 class="campus_editable-inline-tag-list__title">{{titleText}}</h3>
+  <h3 *ngIf="titleText"
+      class="campus_editable-inline-tag-list__title">{{titleText}}</h3>
   <div class="campus_editable-inline-tag-list__items">
     <div class="campus_editable-inline-tag-list__items__item"
          *ngFor="let item of items">
@@ -7,14 +8,12 @@
         <div *ngIf="item.count"
              class="campus_editable-inline-tag-list__items__item__text__count">({{item.count}})</div>
       </div>
-      <div *ngIf="item.eventId"
+      <div *ngIf="item.editable"
            class="campus_editable-inline-tag-list__items__item__icon"
-           (click)="onItemIconClick(item.eventId)"></div>
+           (click)="onItemIconClick(item)"></div>
     </div>
   </div>
   <div *ngIf="showIcon"
-       class="campus_editable-inline-tag-list__icon-holder">
-    <div class="campus_editable-inline-tag-list__icon-holder__icon"
-         (click)="onIconClick()"></div>
-  </div>
+       class="campus_editable-inline-tag-list__icon"
+       (click)="onIconClick()"></div>
 </div>
