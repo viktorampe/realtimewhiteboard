@@ -5,7 +5,7 @@
       <div class="campus-period-label__date-holder__text__label">Van</div>
       <div class="campus-period-label__date-holder__text__value">{{period.start | date:'dd/MM/yyyy'}}</div>
     </div>
-    <div *ngIf="showIcons"
+    <div *ngIf="editable"
          class="campus-period-label__date-holder__icon"
          (click)="onEditStart()"></div>
   </div>
@@ -14,7 +14,7 @@
       <div class="campus-period-label__date-holder__text__label">Tot</div>
       <div class="campus-period-label__date-holder__text__value">{{period.end | date:'dd/MM/yyyy'}}</div>
     </div>
-    <div *ngIf="showIcons"
+    <div *ngIf="editable"
          class="campus-period-label__date-holder__icon"
          (click)="onEditEnd()"></div>
   </div>

@@ -10,7 +10,7 @@ describe('PeriodLabelComponent', () => {
   let mockData: {
     titleText: string;
     period: { start: Date; end: Date };
-    showIcons?: boolean;
+    editable?: boolean;
   };
 
   beforeEach(async(() => {
@@ -30,12 +30,12 @@ describe('PeriodLabelComponent', () => {
         start: new Date(2018, 0, 1),
         end: new Date(2019, 5, 1)
       },
-      showIcons: true
+      editable: true
     };
 
     component.titleText = mockData.titleText;
     component.period = mockData.period;
-    component.showIcons = mockData.showIcons;
+    component.editable = mockData.editable;
 
     fixture.detectChanges();
   });
@@ -72,7 +72,7 @@ describe('PeriodLabelComponent', () => {
     expect(endEvent).toBe(true);
   });
   it('should not show the icons if showIcons is false', () => {
-    component.showIcons = false;
+    component.editable = false;
     fixture.detectChanges();
     const icon = fixture.debugElement.query(
       By.css('.campus-period-label__date-holder__icon')

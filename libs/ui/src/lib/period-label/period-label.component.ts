@@ -17,7 +17,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 export class PeriodLabelComponent {
   @Input() titleText: string;
   @Input() period: { start: Date; end: Date };
-  @Input() showIcons: boolean;
+  @Input() editable: boolean;
   @Output() editStart = new EventEmitter<boolean>();
   @Output() editEnd = new EventEmitter<boolean>();
 
