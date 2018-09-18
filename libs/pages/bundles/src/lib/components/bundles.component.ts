@@ -10,5 +10,4 @@ export class BundlesComponent {
   saveStatus(eventValue: any) {
     console.log(eventValue);
   }
-
 }

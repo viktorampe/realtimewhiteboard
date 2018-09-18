@@ -39,7 +39,6 @@ $ui-font-color-gray-2: #3e3e43 !default;
 $ui-font-color-gray-3: #333 !default;
 $ui-font-color-green-1: #6ed3c2 !default;
 
-
 // import all required sass files from our libs
 // @import './tree-nav/tree-nav.component.theme';
 @import './file-extension/file-extension.component.scss';
@@ -65,4 +64,3 @@ $ui-font-color-green-1: #6ed3c2 !default;
   @include period-label_theme();
   @include person-badge_theme();
 }
-

@@ -1,7 +1,7 @@
 @mixin input-label_theme() {
   .campus-input-label {
     &__title {
-      color: $ui-bg-color-gray-2
+      color: $ui-bg-color-gray-2;
     }
     &__text {
       &__label-holder {
@@ -23,5 +23,5 @@
         }
       }
     }
-  }  
+  }
 }
