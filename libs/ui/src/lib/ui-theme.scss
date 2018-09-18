@@ -32,6 +32,7 @@ $ui-bg-color-green-1: #38b0aa !default;
 $ui-border-color-gray-1: #e3e6e8 !default;
 $ui-font-color-gray-1: #f0f8ff !default;
 $ui-font-color-gray-2: #3e3e43 !default;
+$ui-font-color-gray-3: #333 !default;
 $ui-font-color-green-1: #6ed3c2 !default;
 
 
@@ -41,6 +42,7 @@ $ui-font-color-green-1: #6ed3c2 !default;
 @import './adaptable-list/adaptable-list.component.theme.scss';
 @import './adaptable-select/adaptable-select.component.theme.scss';
 @import './content-preview/content-preview.component.theme.scss';
+@import './input-label/input-label.component.theme.scss';
 
 // create theme-mixin with each mixin from our library components
 @mixin ui-theme() {
@@ -51,5 +53,6 @@ $ui-font-color-green-1: #6ed3c2 !default;
   @include adaptable-list_theme();
   @include adaptable-select_theme();
   @include content-preview_theme();
+  @include input-label_theme();
 }
 

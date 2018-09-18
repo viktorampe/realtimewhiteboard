@@ -4,7 +4,6 @@
     margin: 0;
     font-size: 13px;
     font-weight: 400;
-    color: #969fa8;
     padding: 0 0 5px 0;
     line-height: normal;
   }
@@ -15,12 +14,10 @@
       justify-content: space-between;
       padding: 3px 11px 0 5px;
       &__label {
-        color: #333;
         font-size: 14px;
         font-weight: 700;
       }
       &__edit-icon {
-        background-color: #95a0aa;
         cursor: pointer;
         width: 20px;
         height: 20px;
@@ -39,7 +36,6 @@
       justify-content: flex-end;
       padding: 4px 0 0 0;
       &__confirm-icon {
-        background-color: #95a0aa;
         cursor: pointer;
         width: 20px;
         height: 20px;
@@ -47,7 +43,6 @@
         margin-right: 5px;
       }
       &__cancel-icon {
-        background-color: #95a0aa;
         cursor: pointer;
         width: 20px;
         height: 20px;
