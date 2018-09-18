@@ -1,7 +1,7 @@
 import { ListItemComponent } from './list-item/list-item.component';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ListViewComponent, Folder } from './list-view.component';
+import { ListViewComponent } from './list-view.component';
 import { CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
@@ -11,7 +11,7 @@ describe('ListViewComponent', () => {
 
   let mockData: {
     childComponentTag: string;
-    contentArray: Folder[];
+    contentArray: object[];
     isGrid: boolean;
     placeHolderText: string;
   };
@@ -106,7 +106,7 @@ describe('ListViewComponent', () => {
     const componentDE = fixture.debugElement;
     const itemDEList = componentDE.queryAll(By.css(mockData.childComponentTag));
 
-    let selection: Folder[];
+    let selection: object[];
     component.selectionChanged.subscribe(value => (selection = value));
 
     const childComponent1EL = itemDEList[0].nativeElement as ListItemComponent;
@@ -130,7 +130,7 @@ describe('ListViewComponent', () => {
     const componentDE = fixture.debugElement;
     const itemDEList = componentDE.queryAll(By.css(mockData.childComponentTag));
 
-    let selection: Folder[];
+    let selection: object[];
     component.selectionChanged.subscribe(value => (selection = value));
 
     const childComponent1EL = itemDEList[0].nativeElement as ListItemComponent;
@@ -156,7 +156,7 @@ describe('ListViewComponent', () => {
     const componentDE = fixture.debugElement;
     const itemDEList = componentDE.queryAll(By.css(mockData.childComponentTag));
 
-    let selection: Folder[];
+    let selection: object[];
     component.selectionChanged.subscribe(value => (selection = value));
 
     const childComponent1EL = itemDEList[0].nativeElement as ListItemComponent;

@@ -11,12 +11,11 @@ github: https://github.com/angular/material2/blob/master/src/lib/list/list.ts
 import { Component, Input, EventEmitter, Output } from '@angular/core';
 
 /**
- * Places an array of Folders in a Grid or List layout.
+ * Places an array of components in a Grid or List layout.
  *
- * @param {Folder[]} contentArray - The array of folders to show.
- * @param {boolean} isGrid - (true) Show folders in a grid or (false) in a list.
- * @param {number} totalItems - The total amount of unfiltered items.
- * @param {boolean} multiSelect - Allow selection of multiple folders.
+ * @param {object[]} contentArray - The array of objects to show.
+ * @param {boolean} isGrid - (true) Show components in a grid or (false) in a list.
+ * @param {boolean} multiSelect - Allow selection of multiple components.
  * @param {string} placeHolderText - Text to display when the contentArray is empty.
  *
  * @export
@@ -28,17 +27,16 @@ import { Component, Input, EventEmitter, Output } from '@angular/core';
   styleUrls: ['./list-view.component.scss']
 })
 export class ListViewComponent {
-  @Input() contentArray: Folder[];
+  @Input() contentArray: object[];
   @Input() isGrid: boolean;
-  @Input() totalItems: number;
   @Input() multiSelect = false;
   @Input() placeHolderText = 'Er zijn geen beschikbare items.';
 
-  @Output() selectionChanged = new EventEmitter<Folder[]>();
+  @Output() selectionChanged = new EventEmitter<object[]>();
 
-  selectionArray: Folder[] = [];
+  selectionArray: object[] = [];
 
-  isSelected(item: Folder) {
+  isSelected(item: object) {
     return this.selectionArray.find(i => i === item) !== undefined;
   }
 
@@ -47,16 +45,13 @@ export class ListViewComponent {
     this.isGrid = isGrid;
   }
 
-  itemClicked(item: Folder) {
+  itemClicked(item: object) {
     if (this.multiSelect) {
       const foundItems = this.selectionArray.filter(i => i === item);
       if (foundItems.length) {
         this.selectionArray = this.selectionArray.filter(i => i !== item);
       } else {
         this.selectionArray.push(item);
-        this.selectionArray.sort((a, b) => {
-          return a.Name > b.Name ? 1 : b.Name > a.Name ? -1 : 0;
-        });
       }
     } else {
       this.selectionArray = [item];
@@ -66,9 +61,4 @@ export class ListViewComponent {
       this.selectionChanged.emit(this.selectionArray);
     }
   }
-}
-
-export class Folder {
-  Id: number;
-  Name: string;
 }
