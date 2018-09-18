@@ -16,7 +16,7 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./person-badge.component.scss']
 })
 export class PersonBadgeComponent {
-  @Input() orientation: string;
+  @Input() align: string;
   @Input() size: string;
   @Input() displayName: string;
 }

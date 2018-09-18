@@ -7,7 +7,7 @@ describe('PersonBadgeComponent', () => {
   let fixture: ComponentFixture<PersonBadgeComponent>;
 
   let mockData: {
-    orientation: string;
+    align: string;
     size: string;
     displayName: string;
   };
@@ -23,12 +23,12 @@ describe('PersonBadgeComponent', () => {
     component = fixture.componentInstance;
 
     mockData = {
-      orientation: 'left',
+      align: 'left',
       size: 'medium',
       displayName: 'The name'
     };
 
-    component.orientation = mockData.orientation;
+    component.align = mockData.align;
     component.size = mockData.size;
     component.displayName = mockData.displayName;
 
@@ -44,9 +44,9 @@ describe('PersonBadgeComponent', () => {
     );
     expect(element).toBeTruthy();
   });
-  it('should add the orientation class', () => {
+  it('should add the align class', () => {
     const element = fixture.debugElement.query(
-      By.css('.campus-person-badge--' + mockData.orientation)
+      By.css('.campus-person-badge--' + mockData.align)
     );
     expect(element).toBeTruthy();
   });
