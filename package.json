@@ -43,7 +43,6 @@
     "@ngrx/router-store": "6.1.0",
     "@ngrx/store": "6.1.0",
     "@nrwl/nx": "6.3.0",
-    "angular-svg-round-progressbar": "^2.0.0",
     "core-js": "^2.5.4",
     "rxjs": "^6.3.2",
     "zone.js": "^0.8.26"

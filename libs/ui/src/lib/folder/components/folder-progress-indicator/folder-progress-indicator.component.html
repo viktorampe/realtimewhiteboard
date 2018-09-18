@@ -1,14 +1,10 @@
 <figure>
-  <round-progress [max]="100"
-                  [current]="progress"
-                  [color]="iconColor"
-                  [background]="iconBackgroundColor"
-                  [radius]="lineView ? 16: 24"
-                  [stroke]="2"
-                  [rounded]="true"
-                  [duration]="800"
-                  [animation]="'easeInOutQuart'"
-                  [animationDelay]="0"></round-progress>
+  <mat-progress-spinner color="accent"
+                        mode="determinate"
+                        [value]="progress"
+                        [diameter]="lineView ? 24: 48"
+                        strokeWidth="2">
+  </mat-progress-spinner>
   <i *ngIf="!icon; else iconBlock"
      class="icon-progress"
      [ngClass]="{
