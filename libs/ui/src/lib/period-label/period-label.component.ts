@@ -21,11 +21,11 @@ export class PeriodLabelComponent {
   @Output() editStart = new EventEmitter<boolean>();
   @Output() editEnd = new EventEmitter<boolean>();
 
-  onEditStart() {
+  onEditStart(): void {
     this.editStart.emit(true);
   }
 
-  onEditEnd() {
+  onEditEnd(): void {
     this.editEnd.emit(true);
   }
 }

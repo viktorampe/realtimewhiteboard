@@ -35,7 +35,7 @@ export class AdaptableSelectComponent implements OnInit {
     );
   }
 
-  iconClicked() {
+  iconClicked(): void {
     this.selectControl.markAsPristine();
     this.saveStatus.emit(this.selectControl.value);
   }
