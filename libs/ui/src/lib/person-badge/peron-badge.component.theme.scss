@@ -2,6 +2,10 @@
   .campus-person-badge {
     &__badge {
       background-color: $ui-bg-color-gray-4;
+      &--medium {
+        height: $person-badge-size-medium;
+        width: $person-badge-size-medium;
+      }
     }
     &__displayName {
       color: $ui-bg-color-green-2;
