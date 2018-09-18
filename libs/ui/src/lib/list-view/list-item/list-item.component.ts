@@ -10,9 +10,11 @@ export class ListItemComponent {
   @Input() folder: Folder;
   @Input() isGridElement: boolean;
 
-  @Output() clicked = new EventEmitter<number>();
+  @Output() clicked = new EventEmitter<Folder>();
 
   onClick() {
-    this.clicked.emit(this.folder.Id);
+    if (this.clicked) {
+      this.clicked.emit(this.folder);
+    }
   }
 }

@@ -1,22 +1,33 @@
-<button (click)="toggleGrid(true)">grid</button>
-<button (click)="toggleGrid(false)">list</button>
+<ng-container *ngIf="contentArray ; then hasContentTemplate; else emptyTemplate">
+</ng-container>
 
-<header>Pageheader</header>
-<header>{{contentArray.length}} van {{totalItems}} weergegeven</header>
+<ng-template #hasContentTemplate>
+  <button (click)="toggleGrid(true)">grid</button>
+  <button (click)="toggleGrid(false)">list</button>
+
+  <header>Pageheader</header>
+  <header>{{contentArray.length}} van {{totalItems}} weergegeven</header>
 
 
-<div class="flexbox " [ngClass]="{'flex-list': !isGrid, 'flex-grid': isGrid }">
-  <campus-list-item class="test-background" [ngClass]="{'item-selected': isSelected(item)}" *ngFor="let item of contentArray"
-    [folder]="item" [isGridElement]="isGrid" (clicked)="itemClicked($event)"></campus-list-item>
-</div>
+  <div class="flexbox " [ngClass]="{'flex-list': !isGrid, 'flex-grid': isGrid }">
+    <campus-list-item class="test-background" [class.item-selected]="isSelected(item)" *ngFor="let item of contentArray"
+      [folder]="item" [isGridElement]="isGrid" (clicked)="itemClicked($event)"></campus-list-item>
+  </div>
 
-<div *ngIf=selectionArray.length>
-  Er zijn {{selectionArray.length}} items geselecteerd.
-  <ul>
-    <li *ngFor="let selectedItem of selectionArray">{{selectedItem.Name}}</li>
-  </ul>
+  <div *ngIf=selectionArray.length>
+    Er zijn {{selectionArray.length}} items geselecteerd.
+    <ul>
+      <li *ngFor="let selectedItem of selectionArray">{{selectedItem.Name}}</li>
+    </ul>
 
-</div>
+  </div>
+</ng-template>
+
+<ng-template #emptyTemplate>
+  <header>Pageheader</header>
+  <p> {{placeHolderText}} </p>
+</ng-template>
+
 
 
 

@@ -1,72 +1,70 @@
 /*
 Component list-view
-ontvangt array van objecten, zet in een lijst -> aparte componenten?
 multiselect mogelijk - selectie in array bijhouden
-moet content ook als grid kunnen weergeven
-  -> Input + ngTemplate? -> flexbox efficiënter
-clicks opvangen?
-  -> waarschijnlijk niet -> verantwoordelijkheid componenten -> die events opvangen
 wat tonen bij geen content?
 
 sources:
 material design :https://material.angular.io/components/list/overview
 github: https://github.com/angular/material2/blob/master/src/lib/list/list.ts
-  -> MatListItem nog eens grondiger bekijken
  */
 
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, Input, EventEmitter, Output } from '@angular/core';
 
+/**
+ * Places an array of Folders in a Grid or List layout.
+ *
+ * @param {Folder[]} contentArray - The array of folders to show.
+ * @param {boolean} isGrid - (true) Show folders in a grid or (false) in a list.
+ * @param {number} totalItems - The total amount of unfiltered items.
+ * @param {boolean} multiSelect - Allow selection of multiple folders.
+ * @param {string} placeHolderText - Text to display when the contentArray is empty.
+ *
+ * @export
+ * @class ListViewComponent
+ */
 @Component({
   selector: 'campus-list-view',
   templateUrl: './list-view.component.html',
   styleUrls: ['./list-view.component.scss']
 })
-export class ListViewComponent implements OnInit {
+export class ListViewComponent {
   @Input() contentArray: Folder[];
   @Input() isGrid: boolean;
   @Input() totalItems: number;
+  @Input() multiSelect = false;
+  @Input() placeHolderText = 'Er zijn geen beschikbare items.';
 
-  @Output() selectionChanged: EventEmitter<Folder[]>;
+  @Output() selectionChanged = new EventEmitter<Folder[]>();
 
-  selectionArray: Folder[];
+  selectionArray: Folder[] = [];
 
   isSelected(item: Folder) {
     return this.selectionArray.find(i => i === item) !== undefined;
   }
 
+  //TODO: verwijderen
   toggleGrid(isGrid: boolean) {
     this.isGrid = isGrid;
   }
 
-  itemClicked(id: number) {
-    const foundItem = this.selectionArray.find(i => i.Id === id);
-    if (foundItem) {
-      this.selectionArray = this.selectionArray.filter(i => i !== foundItem);
+  itemClicked(item: Folder) {
+    if (this.multiSelect) {
+      const foundItems = this.selectionArray.filter(i => i === item);
+      if (foundItems.length) {
+        this.selectionArray = this.selectionArray.filter(i => i !== item);
+      } else {
+        this.selectionArray.push(item);
+        this.selectionArray.sort((a, b) => {
+          return a.Name > b.Name ? 1 : b.Name > a.Name ? -1 : 0;
+        });
+      }
     } else {
-      const newItem = this.contentArray.find(i => i.Id === id);
-      this.selectionArray.push(newItem);
-      this.selectionArray.sort((a, b) => {
-        return a.Name > b.Name ? 1 : b.Name > a.Name ? -1 : 0;
-      });
+      this.selectionArray = [item];
     }
-    this.selectionChanged.emit(this.selectionArray);
-  }
 
-  ngOnInit() {
-    // Mockdata
-    this.contentArray = [
-      { Id: 1, Name: 'Folder1' },
-      { Id: 2, Name: 'Folder2' },
-      { Id: 3, Name: 'Folder3' },
-      { Id: 4, Name: 'Folder4' },
-      { Id: 5, Name: 'Folder5' },
-      { Id: 6, Name: 'Folder6' },
-      { Id: 7, Name: 'Folder7' },
-      { Id: 8, Name: 'Folder8' }
-    ];
-    this.totalItems = 8;
-    this.selectionArray = [];
-    this.isGrid = true;
+    if (this.selectionChanged) {
+      this.selectionChanged.emit(this.selectionArray);
+    }
   }
 }
 

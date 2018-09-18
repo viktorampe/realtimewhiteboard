@@ -2,5 +2,15 @@
   bundles works!
 </p>
 <div style="padding: 5px">
-  <campus-list-view></campus-list-view>
+  <campus-list-view [multiSelect]="true" [contentArray]="[
+  { Id: 1, Name: 'Folder1' },
+  { Id: 2, Name: 'Folder2' },
+  { Id: 3, Name: 'Folder3' },
+  { Id: 4, Name: 'Folder4' },
+  { Id: 5, Name: 'Folder5' },
+  { Id: 6, Name: 'Folder6' },
+  { Id: 7, Name: 'Folder7' },
+  { Id: 8, Name: 'Folder8' }
+]"
+    [isGrid]=true></campus-list-view>
 </div>
