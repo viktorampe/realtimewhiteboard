@@ -1,0 +1,10 @@
+@mixin person-badge_theme() {
+  .campus-person-badge {
+    &__badge {
+      background-color: $ui-bg-color-gray-4;
+    }
+    &__displayName {
+      color: $ui-bg-color-green-2;
+    }
+  }
+}
