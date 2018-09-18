@@ -4,7 +4,7 @@ figure {
   margin: 0;
   .icon-progress {
     position: absolute;
-    bottom: 18px;
+    bottom: 17px;
     left: 21px;
     font-size: 26px;
     font-style: initial;
@@ -13,6 +13,22 @@ figure {
 
     &.polpo-lock {
       color: $gray-3;
+    }
+  }
+}
+
+.mat-progress-spinner {
+  &::after {
+    content: '';
+    display: block;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: #ffffff47 2px solid;
+  }
+  &::ng-deep {
+    circle {
+      stroke: $lightBlue;
     }
   }
 }
