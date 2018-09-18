@@ -2,15 +2,15 @@
   display: flex;
   flex-direction: column;
   padding: 20px;
-  background-color: #fafafa;
-  border-top: solid 1px #e3e6e8;
-  border-bottom: solid 1px #e3e6e8;
+  // background-color: #fafafa;
+  // border-top: solid 1px #e3e6e8;
+  // border-bottom: solid 1px #e3e6e8;
   &__label {
     margin-bottom: 10px;
     font-family: Oswald, Sans-Serif;
     font-size: 17px;
     line-height: 20px;
-    color: #3e3e43;
+    // color: #3e3e43;
     font-weight: 500;
   }
   &__text {
@@ -29,7 +29,7 @@
     }
     &__icon {
       margin-left: 10px;
-      background-color: #95a0aa;
+      // background-color: #95a0aa;
       cursor: pointer;
       width: 20px;
       height: 20px;
