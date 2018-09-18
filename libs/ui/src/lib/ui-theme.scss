@@ -14,10 +14,16 @@
 
 // icon variables
 $ui-icon-filter: FontAwesome '\f0b0' !default;
+$ui-icon-hourglass: Polpo '\e96b' !default;
+$ui-icon-lock: Polpo '\e96c' !default;
+$ui-icon-checkmark: Polpo '\e966' !default;
+$ui-icon-hourglass: Polpo '\e96b' !default;
 
 // icon classes
 @include icon(ui-icon-filter, $ui-icon-filter);
-
+@include icon(polpo-hourglass, $ui-icon-hourglass);
+@include icon(polpo-lock, $ui-icon-lock);
+@include icon(polpo-checkmark, $ui-icon-checkmark);
 // thematic variables
 $ui-bg-color-1: #fff !default;
 $ui-bg-color-2: #fff !default;
@@ -26,8 +32,10 @@ $ui-font-color-2: #000 !default;
 
 // import all required sass files from our libs
 // @import './tree-nav/tree-nav.component.theme';
+@import './folder/folder.component.theme.scss';
 
 // create theme-mixin with each mixin from our library components
 @mixin ui-theme() {
   // @include ui-tree-nav();
+  @include ui-folder-theme();
 }

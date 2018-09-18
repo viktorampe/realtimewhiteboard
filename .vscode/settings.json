@@ -1,0 +1,8 @@
+{
+  "editor.formatOnSave": true,
+  "html.format.wrapAttributes": "force-aligned",
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true,
+    "html.format.wrapAttributes": true
+  }
+}

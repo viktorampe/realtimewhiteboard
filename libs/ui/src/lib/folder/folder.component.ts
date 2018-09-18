@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'campus-folder',
@@ -14,15 +14,18 @@ export class FolderComponent implements OnInit {
   @Input() backgroundColor: string;
   @Input() iconColor: string;
   @Input() iconBackgroundColor: string;
-  @Input() gradientId: number;
+  @Input() gradientId: string;
   @Input() showEmptyError: boolean;
+
+  gradientUrl: string;
 
   constructor() {}
 
   ngOnInit() {
-    this.icon = 'polpo-lock';
-    this.progress = 50;
+    this.icon = '';
+    this.progress = 0;
     this.iconColor = 'red';
     this.iconBackgroundColor = '#7D8E9D';
+    this.gradientUrl = `url(#MyGradient${this.gradientId})`;
   }
 }

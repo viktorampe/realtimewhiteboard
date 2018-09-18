@@ -1,34 +1,60 @@
 <div class="folder__header">
   <div class="folder__header__progress">
-
-    <round-progress [max]="100" [current]="progress" [color]="iconColor" [background]="iconBackgroundColor" [radius]="lineView ? 16: 24"
-      [stroke]="2" [rounded]="true" [duration]="800" [animation]="'easeInOutQuart'" [animationDelay]="0"></round-progress>
-    <i *ngIf="!icon; else iconBlock" class="icon-progress" [class]="{
+    <figure>
+      <round-progress [max]="100"
+                      [current]="progress"
+                      [color]="iconColor"
+                      [background]="iconBackgroundColor"
+                      [radius]="lineView ? 16: 24"
+                      [stroke]="2"
+                      [rounded]="true"
+                      [duration]="800"
+                      [animation]="'easeInOutQuart'"
+                      [animationDelay]="0"></round-progress>
+      <i *ngIf="!icon; else iconBlock"
+         class="icon-progress"
+         [ngClass]="{
 				'polpo-hourglass': progress > 0 && progress < 100,
 				'polpo-lock': progress === 0,
 				'polpo-checkmark': progress === 100
 			}"></i>
-    <ng-template #iconBlock><i class="icon-progress {{icon}}"></i></ng-template>
+      <ng-template #iconBlock><i class="icon-progress {{icon}}"></i></ng-template>
+    </figure>
   </div>
   <div class="folder__header__title">{{title}}</div>
-  <svg xmlns="http://www.w3.org/2000/svg" class="mask-text">
+  <svg xmlns="http://www.w3.org/2000/svg"
+       class="mask-text">
     <defs>
-      <linearGradient id="MyGradient{{gradientId}}" x1="0" x2="0" y1="1" y2="0">
-        <stop offset="5%" [attr.stop-color]="backgroundColor" stop-opacity="1"></stop>
-        <stop offset="95%" [attr.stop-color]="backgroundColor" stop-opacity="0"></stop>
+      <linearGradient id="MyGradient{{gradientId}}"
+                      x1="0"
+                      x2="0"
+                      y1="1"
+                      y2="0">
+        <stop offset="5%"
+              [attr.stop-color]="backgroundColor"
+              stop-opacity="1"></stop>
+        <stop offset="95%"
+              [attr.stop-color]="backgroundColor"
+              stop-opacity="0"></stop>
       </linearGradient>
     </defs>
-    <!-- TODO: use url(#MyGradient{{::vm.gradientId}}) -->
-    <!-- <rect [attr.fill]="gradientId" x="0" y="0" width="100%" height="100%"></rect> -->
+    <rect [attr.fill]="gradientUrl"
+          x="0"
+          y="0"
+          width="100%"
+          height="100%"></rect>
   </svg>
 </div>
 
-<div class="folder__info" [ngStyle]="{'border-color': backgroundColor}">
+<div class="folder__info"
+     [ngStyle]="{'border-color': backgroundColor}">
   <ng-content select="campus-folder-details"></ng-content>
 </div>
 <div class="folder__badge">
   <span *ngIf="!showEmptyError; else emptyErrorBlock">{{itemCount}}</span>
   <ng-template #emptyErrorBlock>
-    <span class="error" uib-tooltip="Er is nog geen inhoud voor dit item" tooltip-append-to-body="true">!</span>
+    <span class="error"
+          uib-tooltip="Er is nog geen inhoud voor dit item"
+          tooltip-append-to-body="true">!</span>
   </ng-template>
 </div>
