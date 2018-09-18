@@ -1,5 +1,6 @@
 <div class="campus-input-label">
-  <div class="campus-input-label__title">{{titleText}}</div>
+  <div *ngIf="titleText"
+       class="campus-input-label__title">{{titleText}}</div>
   <div *ngIf="!editing"
        class="campus-input-label__text">
     <div class="campus-input-label__text__label-holder">
