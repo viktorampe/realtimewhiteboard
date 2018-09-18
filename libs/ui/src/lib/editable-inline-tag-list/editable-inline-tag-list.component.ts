@@ -8,6 +8,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
  * 
  * @export
  * @class EditableInlineTagListComponent
+ * 
+ * Component to display list of items inline, and optionally let user add or remove items.
  */
 @Component({
   selector: 'campus-editable-inline-tag-list',
@@ -16,13 +18,13 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class EditableInlineTagListComponent {
   @Input() titleText: string;
-  @Input() items: { text: string; count?: number; editable?: number }[];
+  @Input() items: { text: string; count?: number; editable?: boolean, item?: any }[];
   @Input() showIcon: boolean;
   @Output() editClicked = new EventEmitter<boolean>();
-  @Output() itemIconClicked = new EventEmitter<any>();
+  @Output() itemRemoveClicked = new EventEmitter<any>();
 
-  onItemIconClick(editable: any): void {
-    this.itemIconClicked.emit(editable);
+  onItemRemoveClick(editable: any): void {
+    this.itemRemoveClicked.emit(editable);
   }
 
   onEditClicked(): void {
