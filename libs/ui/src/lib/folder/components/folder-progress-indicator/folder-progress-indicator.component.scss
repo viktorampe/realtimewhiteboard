@@ -1,0 +1,18 @@
+$lightBlue: #578ebe;
+$gray-3: #7d8e9d;
+figure {
+  margin: 0;
+  .icon-progress {
+    position: absolute;
+    bottom: 18px;
+    left: 21px;
+    font-size: 26px;
+    font-style: initial;
+    text-align: center;
+    color: $lightBlue;
+
+    &.polpo-lock {
+      color: $gray-3;
+    }
+  }
+}

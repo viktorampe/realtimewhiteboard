@@ -1,0 +1,20 @@
+<figure>
+  <round-progress [max]="100"
+                  [current]="progress"
+                  [color]="iconColor"
+                  [background]="iconBackgroundColor"
+                  [radius]="lineView ? 16: 24"
+                  [stroke]="2"
+                  [rounded]="true"
+                  [duration]="800"
+                  [animation]="'easeInOutQuart'"
+                  [animationDelay]="0"></round-progress>
+  <i *ngIf="!icon; else iconBlock"
+     class="icon-progress"
+     [ngClass]="{
+      'polpo-hourglass': progress > 0 && progress < 100,
+      'polpo-lock': progress == 0,
+      'polpo-checkmark': progress == 100
+    }"></i>
+  <ng-template #iconBlock><i class="icon-progress {{icon}}"></i></ng-template>
+</figure>

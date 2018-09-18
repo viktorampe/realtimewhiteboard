@@ -1,25 +1,11 @@
 <div class="folder__header">
-  <div class="folder__header__progress">
-    <figure>
-      <round-progress [max]="100"
-                      [current]="progress"
-                      [color]="iconColor"
-                      [background]="iconBackgroundColor"
-                      [radius]="lineView ? 16: 24"
-                      [stroke]="2"
-                      [rounded]="true"
-                      [duration]="800"
-                      [animation]="'easeInOutQuart'"
-                      [animationDelay]="0"></round-progress>
-      <i *ngIf="!icon; else iconBlock"
-         class="icon-progress"
-         [ngClass]="{
-				'polpo-hourglass': progress > 0 && progress < 100,
-				'polpo-lock': progress === 0,
-				'polpo-checkmark': progress === 100
-			}"></i>
-      <ng-template #iconBlock><i class="icon-progress {{icon}}"></i></ng-template>
-    </figure>
+  <div #icon
+       class="folder__header__icon">
+    <ng-content select="campus-folder-progress-indicator"></ng-content>
+    <ng-container *ngIf="showDefaultIcon">
+      <div class="folder__header__icon__default">
+      </div>
+    </ng-container>
   </div>
   <div class="folder__header__title">{{title}}</div>
   <svg xmlns="http://www.w3.org/2000/svg"
@@ -50,7 +36,8 @@
      [ngStyle]="{'border-color': backgroundColor}">
   <ng-content select="campus-folder-details"></ng-content>
 </div>
-<div class="folder__badge">
+<div class="folder__badge"
+     [ngStyle]="{'border-color': backgroundColor}">
   <span *ngIf="!showEmptyError; else emptyErrorBlock">{{itemCount}}</span>
   <ng-template #emptyErrorBlock>
     <span class="error"

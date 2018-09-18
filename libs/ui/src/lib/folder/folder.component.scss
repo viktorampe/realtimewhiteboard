@@ -1,9 +1,5 @@
-$lightBlue: #578ebe;
-$gray-3: #7d8e9d;
-
-i.icon-progress[class*=' polpo-'] {
-  font-size: 26px;
-}
+$red: #f00;
+$white: #fff;
 
 :host {
   display: block;
@@ -37,22 +33,12 @@ i.icon-progress[class*=' polpo-'] {
       margin-top: 15px;
       margin-bottom: 5px;
       overflow: hidden;
-      &__progress {
-        figure {
-          margin: 0;
-          .icon-progress {
-            position: absolute;
-            bottom: 18px;
-            left: 21px;
-            font-size: 26px;
-            font-style: initial;
-            text-align: center;
-            color: $lightBlue;
-
-            &.polpo-lock {
-              color: $gray-3;
-            }
-          }
+      &__icon {
+        &__default {
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          background: gray;
         }
       }
       &__title {
@@ -129,6 +115,12 @@ i.icon-progress[class*=' polpo-'] {
           opacity: 0.5;
           right: -6px;
           z-index: 1;
+        }
+
+        &.error {
+          background-color: $red;
+          border-color: $red;
+          color: $white;
         }
       }
     }
