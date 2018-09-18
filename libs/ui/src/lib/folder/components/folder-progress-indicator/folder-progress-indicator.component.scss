@@ -15,6 +15,15 @@ figure {
       color: $gray-3;
     }
   }
+  .icon {
+    position: absolute;
+    bottom: 17px;
+    left: 15px;
+    font-size: 38px;
+    font-style: initial;
+    text-align: center;
+    color: $lightBlue;
+  }
 }
 
 .mat-progress-spinner {

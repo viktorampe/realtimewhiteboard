@@ -14,10 +14,10 @@ import {
 })
 export class FolderComponent implements OnInit, AfterContentInit {
   @Input() title: string;
+  @Input() icon: string;
   @Input() itemCount: string;
   @Input() lineView: boolean;
   @Input() backgroundColor: string;
-  @Input() gradientId: string;
 
   /**
    * Reference to the folder icon.
@@ -25,7 +25,7 @@ export class FolderComponent implements OnInit, AfterContentInit {
    * @type {ElementRef<HTMLElement>}
    * @memberof FolderComponent
    */
-  @ViewChild('icon') icon: ElementRef<HTMLElement>;
+  @ViewChild('headerIcon') headerIcon: ElementRef<HTMLElement>;
 
   /**
    * Whether to show an exclamation mark when folder is empty.
@@ -43,7 +43,7 @@ export class FolderComponent implements OnInit, AfterContentInit {
       }
     }
   }
-
+  gradientId: string;
   gradientUrl: string;
   showDefaultIcon = false;
   showEmptyError: boolean;
@@ -52,6 +52,7 @@ export class FolderComponent implements OnInit, AfterContentInit {
 
   ngOnInit() {
     this.gradientUrl = `url(#MyGradient${this.gradientId})`;
+    this.gradientId = this.backgroundColor.replace('#', '');
   }
 
   /**
@@ -61,7 +62,7 @@ export class FolderComponent implements OnInit, AfterContentInit {
    * @memberof FolderComponent
    */
   ngAfterContentInit(): void {
-    // since we use a reference to projected content (#icon in the component template),
+    // since we use a reference to projected content (#headerIcon in the component template),
     // we only want to check it's value after the content has been projected.
     this.setIcon();
   }
@@ -72,7 +73,7 @@ export class FolderComponent implements OnInit, AfterContentInit {
    * @memberof FolderComponent
    */
   setIcon() {
-    if (this.icon.nativeElement.children.length === 0) {
+    if (this.headerIcon.nativeElement.children.length === 0) {
       this.showDefaultIcon = true;
     }
   }

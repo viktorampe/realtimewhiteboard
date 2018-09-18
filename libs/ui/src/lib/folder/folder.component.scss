@@ -39,6 +39,13 @@ $white: #fff;
           height: 48px;
           border-radius: 50%;
           background: gray;
+          i {
+            display: block;
+            font-size: 46px;
+            font-style: initial;
+            text-align: center;
+            line-height: 48px;
+          }
         }
       }
       &__title {

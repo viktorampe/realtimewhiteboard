@@ -1,9 +1,11 @@
 <div class="folder__header">
-  <div #icon
+  <div #headerIcon
        class="folder__header__icon">
     <ng-content select="campus-folder-progress-indicator"></ng-content>
     <ng-container *ngIf="showDefaultIcon">
       <div class="folder__header__icon__default">
+        <i *ngIf="icon"
+           class="icon {{icon}}"></i>
       </div>
     </ng-container>
   </div>

@@ -18,12 +18,14 @@ $ui-icon-hourglass: Polpo '\e96b' !default;
 $ui-icon-lock: Polpo '\e96c' !default;
 $ui-icon-checkmark: Polpo '\e966' !default;
 $ui-icon-hourglass: Polpo '\e96b' !default;
+$ui-icon-wiskunde: Polpo '\e935' !default;
 
 // icon classes
 @include icon(ui-icon-filter, $ui-icon-filter);
 @include icon(polpo-hourglass, $ui-icon-hourglass);
 @include icon(polpo-lock, $ui-icon-lock);
 @include icon(polpo-checkmark, $ui-icon-checkmark);
+@include icon(polpo-wiskunde, $ui-icon-wiskunde);
 // thematic variables
 $ui-bg-color-1: #fff !default;
 $ui-bg-color-2: #fff !default;
