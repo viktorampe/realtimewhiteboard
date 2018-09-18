@@ -57,11 +57,11 @@ $person-badge-size-medium: 45px !default;
 
   //place desired width as optional parameter, default 84;
   @include ui-file-extension();
-  @include editable-inline-tag-list_theme();
-  @include adaptable-select_theme();
-  @include content-preview_theme();
-  @include input-label_theme();
-  @include label-and-icon-button_theme();
-  @include period-label_theme();
-  @include person-badge_theme();
+  @include ui_editable-inline-tag-list_theme();
+  @include ui_adaptable-select_theme();
+  @include ui_content-preview_theme();
+  @include ui_input-label_theme();
+  @include ui_label-and-icon-button_theme();
+  @include ui_period-label_theme();
+  @include ui_person-badge_theme();
 }

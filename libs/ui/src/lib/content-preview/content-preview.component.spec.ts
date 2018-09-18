@@ -77,13 +77,13 @@ describe('ContentPreviewComponent', () => {
   });
   it('should show the title', () => {
     const title = fixture.debugElement.query(
-      By.css('.info-panel__educontent-preview__product__details__title')
+      By.css('.ui_content-preview__product__details__title')
     ).nativeElement.textContent;
     expect(title).toBe(mockData.titleText);
   });
   it('should show the description', () => {
     const title = fixture.debugElement.query(
-      By.css('.info-panel__educontent-preview__product__details__description')
+      By.css('.ui_content-preview__product__details__description')
     ).nativeElement.textContent;
     expect(title).toBe(mockData.description);
   });
@@ -101,7 +101,7 @@ describe('ContentPreviewComponent', () => {
   });
   it('should not show methods image if no methods were given', () => {
     const method = fixture.debugElement.query(
-      By.css('.info-panel__educontent-preview__methods')
+      By.css('.ui_content-preview__methods')
     );
     expect(method).toBeFalsy();
   });
@@ -113,7 +113,7 @@ describe('ContentPreviewComponent', () => {
   });
   it('should not show contentPreview if none was given', () => {
     const preview = fixture.debugElement.query(
-      By.css('.info-panel__educontent-preview__preview')
+      By.css('.ui_content-preview__preview')
     );
     expect(preview).toBeFalsy();
   });
@@ -122,7 +122,7 @@ describe('ContentPreviewComponent', () => {
       'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
     fixture.detectChanges();
     const preview = fixture.debugElement.query(
-      By.css('.info-panel__educontent-preview__preview')
+      By.css('.ui_content-preview__preview')
     );
     expect(preview).toBeTruthy();
   });

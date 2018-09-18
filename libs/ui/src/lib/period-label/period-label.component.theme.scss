@@ -1,5 +1,5 @@
-@mixin period-label_theme() {
-  .campus-period-label {
+@mixin ui_period-label_theme() {
+  .ui_period-label {
     &__title {
       color: $ui-bg-color-gray-2;
     }

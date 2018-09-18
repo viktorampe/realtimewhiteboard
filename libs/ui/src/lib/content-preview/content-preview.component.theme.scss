@@ -1,5 +1,5 @@
-@mixin content-preview_theme() {
-  .info-panel__educontent-preview {
+@mixin ui_content-preview_theme() {
+  .ui_content-preview {
     &__preview {
       border-bottom: solid 1px $ui-border-color-gray-1;
     }

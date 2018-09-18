@@ -39,7 +39,7 @@ describe('LabelAndIconButtonComponent', () => {
   });
   it('should show the actionsText', () => {
     const displayedText = fixture.debugElement.query(
-      By.css('.campus-label-and-icon-button__label')
+      By.css('.ui_label-and-icon-button__label')
     ).nativeElement.textContent;
     expect(displayedText).toContain(mockData.label);
   });
@@ -53,7 +53,7 @@ describe('LabelAndIconButtonComponent', () => {
   });
   it('should show the icon in the class for the icon element', () => {
     const icon = fixture.debugElement.query(
-      By.css('.campus-label-and-icon-button__icon.given-icon')
+      By.css('.ui_label-and-icon-button__icon.given-icon')
     );
     expect(icon).toBeTruthy();
   });
@@ -62,7 +62,7 @@ describe('LabelAndIconButtonComponent', () => {
     component.iconClicked.subscribe((text: string) => (emitedText = text));
 
     fixture.debugElement
-      .query(By.css('.campus-label-and-icon-button__icon'))
+      .query(By.css('.ui_label-and-icon-button__icon'))
       .triggerEventHandler('click', null);
     expect(emitedText).toBe(mockData.label);
   });

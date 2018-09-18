@@ -18,7 +18,7 @@ import { Component, Input } from '@angular/core';
       </campus-content-preview>
       <campus-person-badge person
                           [displayName]="'Tom Mertens'"
-                          [orientation]="'left'"
+                          [align]="'left'"
                           [size]="'medium'">
       </campus-person-badge>
       <campus-input-label name

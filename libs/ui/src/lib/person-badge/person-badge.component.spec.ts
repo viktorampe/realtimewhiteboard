@@ -40,19 +40,19 @@ describe('PersonBadgeComponent', () => {
   });
   it('should add the size class', () => {
     const element = fixture.debugElement.query(
-      By.css('.campus-person-badge__badge--' + mockData.size)
+      By.css('.ui_person-badge__badge--' + mockData.size)
     );
     expect(element).toBeTruthy();
   });
   it('should add the align class', () => {
     const element = fixture.debugElement.query(
-      By.css('.campus-person-badge--' + mockData.align)
+      By.css('.ui_person-badge--' + mockData.align)
     );
     expect(element).toBeTruthy();
   });
   it('should show the displayName', () => {
     const text = fixture.debugElement.query(
-      By.css('.campus-person-badge__displayName')
+      By.css('.ui_person-badge__displayName')
     ).nativeElement.textContent;
     expect(text).toBe(mockData.displayName);
   });

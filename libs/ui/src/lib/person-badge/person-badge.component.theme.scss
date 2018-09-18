@@ -1,5 +1,5 @@
-@mixin person-badge_theme() {
-  .campus-person-badge {
+@mixin ui_person-badge_theme() {
+  .ui_person-badge {
     &__badge {
       background-color: $ui-bg-color-gray-4;
       &--medium {

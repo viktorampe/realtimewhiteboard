@@ -45,13 +45,13 @@ describe('PeriodLabelComponent', () => {
   });
   it('should show the title', () => {
     const title = fixture.debugElement.query(
-      By.css('.campus-period-label__title')
+      By.css('.ui_period-label__title')
     ).nativeElement.textContent;
     expect(title).toBe(mockData.titleText);
   });
   it('should show the start and end date', () => {
     const dates = fixture.debugElement.queryAll(
-      By.css('.campus-period-label__date-holder__text')
+      By.css('.ui_period-label__date-holder__text')
     );
     const start = dates[0].nativeElement.textContent;
     const end = dates[1].nativeElement.textContent;
@@ -64,7 +64,7 @@ describe('PeriodLabelComponent', () => {
     let endEvent: boolean;
     component.editEnd.subscribe((e: boolean) => (endEvent = e));
     const dates = fixture.debugElement.queryAll(
-      By.css('.campus-period-label__date-holder__icon')
+      By.css('.ui_period-label__date-holder__icon')
     );
     dates[0].triggerEventHandler('click', null);
     expect(startEvent).toBe(true);
@@ -75,7 +75,7 @@ describe('PeriodLabelComponent', () => {
     component.editable = false;
     fixture.detectChanges();
     const icon = fixture.debugElement.query(
-      By.css('.campus-period-label__date-holder__icon')
+      By.css('.ui_period-label__date-holder__icon')
     );
     expect(icon).toBeFalsy();
   });

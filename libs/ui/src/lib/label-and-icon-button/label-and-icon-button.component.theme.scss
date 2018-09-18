@@ -1,5 +1,5 @@
-@mixin label-and-icon-button_theme() {
-  .campus-label-and-icon-button {
+@mixin ui_label-and-icon-button_theme() {
+  .ui_label-and-icon-button {
     background-color: $ui-bg-color-white;
     &__label {
       color: $ui-font-color-gray-3;

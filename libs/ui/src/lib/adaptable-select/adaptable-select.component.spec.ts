@@ -40,7 +40,7 @@ describe('AdaptableSelectComponent', () => {
   });
   it('should not show the save icon when no change was made', () => {
     const icon = fixture.debugElement.query(
-      By.css('.campus-adaptable-select__dropdown__icon')
+      By.css('.ui_adaptable-select__dropdown__icon')
     );
     expect(icon).toBeFalsy();
   });
@@ -48,19 +48,19 @@ describe('AdaptableSelectComponent', () => {
     component.selectControl.markAsDirty();
     fixture.detectChanges();
     const icon = fixture.debugElement.query(
-      By.css('.campus-adaptable-select__dropdown__icon')
+      By.css('.ui_adaptable-select__dropdown__icon')
     );
     expect(icon).toBeTruthy();
   });
   it('should show the label', () => {
     const label = fixture.debugElement.query(
-      By.css('.campus-adaptable-select__label')
+      By.css('.ui_adaptable-select__label')
     ).nativeElement.textContent;
     expect(label).toBe(mockData.label);
   });
   it('should show the text', () => {
     const text = fixture.debugElement.query(
-      By.css('.campus-adaptable-select__text')
+      By.css('.ui_adaptable-select__text')
     ).nativeElement.textContent;
     expect(text).toBe(mockData.text);
   });
@@ -68,12 +68,12 @@ describe('AdaptableSelectComponent', () => {
     component.selectControl.markAsDirty();
     fixture.detectChanges();
     const icon = fixture.debugElement.query(
-      By.css('.campus-adaptable-select__dropdown__icon')
+      By.css('.ui_adaptable-select__dropdown__icon')
     );
     icon.triggerEventHandler('click', null);
     fixture.detectChanges();
     const icon2 = fixture.debugElement.query(
-      By.css('.campus-adaptable-select__dropdown__icon')
+      By.css('.ui_adaptable-select__dropdown__icon')
     );
     expect(icon2).toBeFalsy();
   });
@@ -84,7 +84,7 @@ describe('AdaptableSelectComponent', () => {
     let option: string;
     component.saveStatus.subscribe((e: string) => (option = e));
     const icon = fixture.debugElement.query(
-      By.css('.campus-adaptable-select__dropdown__icon')
+      By.css('.ui_adaptable-select__dropdown__icon')
     );
     icon.triggerEventHandler('click', null);
     expect(option).toBe(mockData.options[1]);
