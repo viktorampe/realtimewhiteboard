@@ -2,7 +2,6 @@
   &__preview {
     height: 205px;
     overflow: hidden;
-    border-bottom: solid 1px #e3e6e8;
     &__img {
       width: 100%;
       background-repeat: no-repeat;
@@ -25,13 +24,11 @@
         font-family: Oswald, Sans-Serif;
         font-size: 17px;
         line-height: 20px;
-        color: #3e3e43;
         font-weight: 500;
       }
       [icon] {
         display: inline-block;
         display: block;
-        color: #6ed3c2;
         font-size: 25px;
         margin: 6px 5px 5px;
       }
@@ -50,7 +47,6 @@
     flex-direction: row;
     [badge] {
       margin-right: 10px;
-      background-color: antiquewhite;
       width: 76px;
       height: 37px;
     }
