@@ -18,13 +18,13 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class EditableInlineTagListComponent {
   @Input() titleText: string;
-  @Input() items: { text: string; count?: number; editable?: boolean, item?: any }[];
+  @Input() items: { text: string; count?: number; editable?: boolean, data?: any }[];
   @Input() showIcon: boolean;
   @Output() editClicked = new EventEmitter<boolean>();
   @Output() itemRemoveClicked = new EventEmitter<any>();
 
-  onItemRemoveClick(editable: any): void {
-    this.itemRemoveClicked.emit(editable);
+  onItemRemoveClick(item: any): void {
+    this.itemRemoveClicked.emit(item);
   }
 
   onEditClicked(): void {
