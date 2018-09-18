@@ -47,10 +47,8 @@
     "@ngrx/entity": "^6.1.0",
     "@ngrx/router-store": "6.1.0",
     "@ngrx/store": "6.1.0",
-    "@nrwl/nx": "6.3.0",
     "classlist.js": "^1.1.20150312",
     "core-js": "^2.5.4",
-    "jasmine-marbles": "^0.4.0",
     "rxjs": "^6.3.2",
     "zone.js": "^0.8.26"
   },
