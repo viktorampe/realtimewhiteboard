@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { InfoPanelComponent } from './info-panel.component';
 
-describe('info-panel-student-educontent', () => {
+describe('InfoPanelComponent', () => {
   let component: InfoPanelComponent;
   let fixture: ComponentFixture<InfoPanelComponent>;
 

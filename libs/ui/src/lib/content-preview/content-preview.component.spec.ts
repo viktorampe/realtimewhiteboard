@@ -9,7 +9,7 @@ import { ContentPreviewComponent } from './content-preview.component';
   selector: 'campus-test-container',
   template: `
   <campus-content-preview preview>
-    <campus-file-extension-presenter type></campus-file-extension-presenter>
+    <campus-file-extension type></campus-file-extension>
     <div icon class="polpo-presentatie"></div>
     <div badge
          *ngFor="let badge of ['badge1', 'badge2']">
@@ -18,14 +18,14 @@ import { ContentPreviewComponent } from './content-preview.component';
   </campus-content-preview>
   `
 })
-export class TestContainerComponent {}
+export class TestContainerComponent { }
 
 @NgModule({
   imports: [CommonModule, UiModule],
   exports: [TestContainerComponent],
   declarations: [TestContainerComponent]
 })
-export class TestModule {}
+export class TestModule { }
 
 describe('ContentPreviewComponent', () => {
   let component: ContentPreviewComponent;

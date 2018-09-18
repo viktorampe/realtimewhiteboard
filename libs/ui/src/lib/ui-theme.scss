@@ -42,7 +42,7 @@ $ui-font-color-green-1: #6ed3c2 !default;
 // import all required sass files from our libs
 // @import './tree-nav/tree-nav.component.theme';
 @import './file-extension/file-extension.component.scss';
-@import './adaptable-list/adaptable-list.component.theme.scss';
+@import './editable-inline-tag-list/editable-inline-tag-list.component.theme.scss';
 @import './adaptable-select/adaptable-select.component.theme.scss';
 @import './content-preview/content-preview.component.theme.scss';
 @import './input-label/input-label.component.theme.scss';
@@ -56,7 +56,7 @@ $ui-font-color-green-1: #6ed3c2 !default;
 
   //place desired width as optional parameter, default 84;
   @include ui-file-extension();
-  @include adaptable-list_theme();
+  @include editable-inline-tag-list_theme();
   @include adaptable-select_theme();
   @include content-preview_theme();
   @include input-label_theme();

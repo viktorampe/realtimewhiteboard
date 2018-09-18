@@ -1,10 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { AdaptableListComponent } from './adaptable-list.component';
+import { EditableInlineTagListComponent } from './editable-inline-tag-list.component';
 
-describe('AdaptableListComponent', () => {
-  let component: AdaptableListComponent;
-  let fixture: ComponentFixture<AdaptableListComponent>;
+describe('EditableInlineTagListComponent', () => {
+  let component: EditableInlineTagListComponent;
+  let fixture: ComponentFixture<EditableInlineTagListComponent>;
 
   let mockData: {
     titleText: string;
@@ -14,12 +14,12 @@ describe('AdaptableListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [AdaptableListComponent]
+      declarations: [EditableInlineTagListComponent]
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AdaptableListComponent);
+    fixture = TestBed.createComponent(EditableInlineTagListComponent);
     component = fixture.componentInstance;
 
     mockData = {
@@ -44,31 +44,31 @@ describe('AdaptableListComponent', () => {
   });
   it('should show the correct title text', () => {
     const title = fixture.debugElement.query(
-      By.css('.campus_adaptable-list__title')
+      By.css('.campus_editable-inline-tag-list__title')
     ).nativeElement.textContent;
     expect(title).toBe(mockData.titleText);
   });
   it('should show the correct number of list items', () => {
     const listItemCollection = fixture.debugElement.queryAll(
-      By.css('.campus_adaptable-list__items__item')
+      By.css('.campus_editable-inline-tag-list__items__item')
     );
     expect(listItemCollection.length).toBe(3);
   });
   it('should show the correct number of list items with counts', () => {
     const listItemCollection = fixture.debugElement.queryAll(
-      By.css('.campus_adaptable-list__items__item__text__count')
+      By.css('.campus_editable-inline-tag-list__items__item__text__count')
     );
     expect(listItemCollection.length).toBe(2);
   });
   it('should show the correct number of list items with icon', () => {
     const listItemCollection = fixture.debugElement.queryAll(
-      By.css('.campus_adaptable-list__items__item__icon')
+      By.css('.campus_editable-inline-tag-list__items__item__icon')
     );
     expect(listItemCollection.length).toBe(1);
   });
   it('should show the correct labels for the items', () => {
     const listItems = fixture.debugElement.queryAll(
-      By.css('.campus_adaptable-list__items__item__text')
+      By.css('.campus_editable-inline-tag-list__items__item__text')
     );
     for (let i = 0; i < listItems.length; i++) {
       const elementText = listItems[i].nativeElement.textContent;
@@ -77,7 +77,7 @@ describe('AdaptableListComponent', () => {
   });
   it('should show the count if there is one', () => {
     const listItemCounts = fixture.debugElement.queryAll(
-      By.css('.campus_adaptable-list__items__item__text__count')
+      By.css('.campus_editable-inline-tag-list__items__item__text__count')
     );
     for (let i = 0; i < listItemCounts.length; i++) {
       const countElement = listItemCounts[i].nativeElement.textContent;
@@ -86,7 +86,7 @@ describe('AdaptableListComponent', () => {
   });
   it('should show the icon', () => {
     const icon = fixture.debugElement.query(
-      By.css('.campus_adaptable-list__icon-holder__icon')
+      By.css('.campus_editable-inline-tag-list__icon-holder__icon')
     );
     expect(icon).toBeTruthy();
   });
@@ -95,7 +95,7 @@ describe('AdaptableListComponent', () => {
     fixture.detectChanges();
 
     const icon = fixture.debugElement.query(
-      By.css('.campus_adaptable-list__icon-holder__icon')
+      By.css('.campus_editable-inline-tag-list__icon-holder__icon')
     );
     expect(icon).toBeFalsy();
   });
@@ -103,7 +103,7 @@ describe('AdaptableListComponent', () => {
     let clicked: boolean;
     component.iconClicked.subscribe((e: boolean) => (clicked = e));
     fixture.debugElement
-      .query(By.css('.campus_adaptable-list__icon-holder__icon'))
+      .query(By.css('.campus_editable-inline-tag-list__icon-holder__icon'))
       .triggerEventHandler('click', null);
     fixture.detectChanges();
     expect(clicked).toBe(true);
@@ -112,7 +112,7 @@ describe('AdaptableListComponent', () => {
     let eventId: number;
     component.itemIconClicked.subscribe((e: number) => (eventId = e));
     fixture.debugElement
-      .query(By.css('.campus_adaptable-list__items__item__icon'))
+      .query(By.css('.campus_editable-inline-tag-list__items__item__icon'))
       .triggerEventHandler('click', null);
     expect(eventId).toBe(mockData.items[2].eventId);
   });

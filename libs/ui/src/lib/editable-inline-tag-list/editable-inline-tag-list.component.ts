@@ -2,19 +2,19 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 /**
  * @example
- * <campus-adaptable-list 
+ * <campus-editable-inline-tag-list 
                          [titleText]="'Geselecteerd items'"
-                         [items]="[{text: 'one'},{text: 'two', count: 12},{text: 'two', count: 1, eventId: 3}]"></campus-adaptable-list>
+                         [items]="[{text: 'one'},{text: 'two', count: 12},{text: 'two', count: 1, eventId: 3}]"></campus-editable-inline-tag-list>
  * 
  * @export
- * @class AdaptableListComponent
+ * @class EditableInlineTagListComponent
  */
 @Component({
-  selector: 'campus-adaptable-list',
-  templateUrl: './adaptable-list.component.html',
-  styleUrls: ['./adaptable-list.component.scss']
+  selector: 'campus-editable-inline-tag-list',
+  templateUrl: './editable-inline-tag-list.component.html',
+  styleUrls: ['./editable-inline-tag-list.component.scss']
 })
-export class AdaptableListComponent {
+export class EditableInlineTagListComponent {
   @Input() titleText: string;
   @Input() items: { text: string; count?: number; eventId?: number }[];
   @Input() showIcon: boolean;
