@@ -1,26 +1,21 @@
 .campus-label-and-icon-button {
   display: flex;
   flex-direction: row;
-  background-color: white;
   padding: 15px 25px 15px 25px;
 
   &__label {
-    color: #333;
     padding-top: 7px;
     font-size: 14px;
     font-weight: 700;
     width: calc(100% - 30px);
   }
   &__icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border-radius: 50%;
     cursor: pointer;
     width: 30px;
     height: 30px;
-    &.red {
-      background-color: #f3565d;
-    }
-    &.gray {
-      background-color: #95a0aa;
-    }
   }
 }

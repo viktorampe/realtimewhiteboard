@@ -25,12 +25,14 @@ $ui-bg-color-1: #fff !default;
 $ui-bg-color-2: #fff !default;
 $ui-font-color-1: #000 !default;
 $ui-font-color-2: #000 !default;
+$ui-bg-color-white: #fff !default;
 $ui-bg-color-gray-1: #fafafa !default;
 $ui-bg-color-gray-2: #969fa8 !default;
 $ui-bg-color-gray-3: #95a0aa !default;
 $ui-bg-color-green-1: #38b0aa !default;
+$ui-bg-color-red-1: #f3565d !default;
 $ui-border-color-gray-1: #e3e6e8 !default;
-$ui-font-color-gray-1: #f0f8ff !default;
+$ui-font-color-gray-1: #f0f8ff !default
 $ui-font-color-gray-2: #3e3e43 !default;
 $ui-font-color-gray-3: #333 !default;
 $ui-font-color-green-1: #6ed3c2 !default;
@@ -43,6 +45,7 @@ $ui-font-color-green-1: #6ed3c2 !default;
 @import './adaptable-select/adaptable-select.component.theme.scss';
 @import './content-preview/content-preview.component.theme.scss';
 @import './input-label/input-label.component.theme.scss';
+@import './label-and-icon-button/label-and-icon-button.component.theme.scss';
 
 // create theme-mixin with each mixin from our library components
 @mixin ui-theme() {
@@ -54,5 +57,6 @@ $ui-font-color-green-1: #6ed3c2 !default;
   @include adaptable-select_theme();
   @include content-preview_theme();
   @include input-label_theme();
+  @include label-and-icon-button_theme();
 }
 

@@ -1,0 +1,16 @@
+@mixin label-and-icon-button_theme() {
+  .campus-label-and-icon-button {
+    background-color: $ui-bg-color-white;
+    &__label {
+      color: $ui-font-color-gray-3;
+    }
+    &__icon {
+      &.red {
+        background-color: $ui-bg-color-red-1;
+      }
+      &.gray {
+        background-color: $ui-bg-color-gray-3;
+      }
+    }
+  }
+}
