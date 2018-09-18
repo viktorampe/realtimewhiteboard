@@ -1,6 +1,12 @@
-import { Folder } from './../list-view.component';
 import { Component, Input, EventEmitter, Output } from '@angular/core';
 
+/**
+ * Placeholder child component
+ * TODO: remove
+ *
+ * @export
+ * @class ListItemComponent
+ */
 @Component({
   selector: 'campus-list-item',
   templateUrl: './list-item.component.html',
@@ -17,4 +23,9 @@ export class ListItemComponent {
       this.clicked.emit(this.folder);
     }
   }
+}
+
+export class Folder {
+  Id: number;
+  Name: string;
 }
