@@ -1,0 +1,86 @@
+<ng-container *ngTemplateOutlet="isGrid ? gridTemplate : listTemplate"></ng-container>
+
+<ng-template #gridTemplate>
+  <div class="ui-content-preview__grid">
+    <div class="ui-content-preview__grid__header">
+      <div>contenttype</div>
+      <div>file-extension</div>
+    </div>
+    <figure class="ui-content-preview__grid__image">image/file-extension</figure>
+    <div class="ui-content-preview__grid__description">{{title}}</div>
+    <div class="ui-content-preview__grid__actions">actions</div>
+  </div>
+</ng-template>
+
+<ng-template #listTemplate>
+
+</ng-template>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Component in teacher.polpo -->
+<!-- C:\Users\david.boute\Documents\Repositories\polpo-portal-teacher\resources\teacher\app\bundles\view.bundle.html , line 296-->
+
+<!-- <article class="educontent-item list-item"
+           ng-repeat="content in vm.filteredUnlockedContent"
+           dk-selectable-item dk-item="content" dk-list="vm.filteredUnlockedContent" dk-selection="vm.selection" dk-unset-container="#bundles" dk-stop-propagation=".toolbar,.detail-panel"
+           ng-class="{	'selected': content.selected,
+                'border-warning': content.exception }">
+
+        <figure class="preview" ng-class="{hasThumb: content.eduContent.publishedEduContentMetadata.thumbSmall}">
+
+          <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+               dk-background="{{:: content.thumbSmall}}" ng-class="{book: content.eduContent.type === 'boek-e'}"
+               alt="{{:: content.title}}" width="170" height="120"
+               ng-if="content.thumbSmall">
+
+          <i class="file-extension icon-behind {{::content.label}}"
+             ng-if="!content.thumbSmall"></i>
+
+          <span class="{{::content.icon}} producttype-icon"></span>
+          <span class="file-extension {{::content.label}}">{{::content.label}}</span>
+        </figure>
+
+        <div class="info">
+          {{:: content.title}}
+        </div>
+
+        <div class="actions">
+          <i ng-if="content.eduContent && content.eduContent.publishedEduContentMetadata.fileExt !== 'ludo.zip'" ng-click="vm.openEduContent(content.eduContent)" class="polpo-eye inverted"></i>
+
+          <i ng-if="content.eduContent && content.eduContent.publishedEduContentMetadata.fileExt === 'ludo.zip'" class="polpo-eye inverted"
+             data-toggle="confirmation" data-title="De oefening tonen met antwoorden?"
+             data-on-confirm="vm.openEduContent(content.eduContent, true)" data-on-cancel="vm.openEduContent(content.eduContent, false)"
+             data-btn-ok-label="Tonen met antwoorden" data-btn-cancel-label="Tonen zonder antwoorden"
+             data-btn-ok-class="btn-primary btn-block" data-btn-cancel-class="btn-default btn-block"
+             data-placement="top"></i>
+
+             <a ng-if="content.userContent && content.userContent.type === 'link'" ng-href="{{::content.userContent.link}}" target='_blank'><i class="polpo-eye inverted"></i></a>
+          <i class="polpo-delete inverted" data-title="Ben je zeker?" data-on-confirm="vm.unlinkContent(vm.selection)" data-toggle="confirmation"></i>
+
+          <i ng-if="content.canAddToFavorites"
+             ng-click="vm.toggleFavorite('educontent', vm.learningArea, content.eduContent, content.eduContent.publishedEduContentMetadata.title)"
+             class="polpo-favorites inverted" data-title="Toevoegen aan favorieten" ng-class='{"active": vm.favoriteEduContents._mapType[content.eduContent.id]}'></i>
+
+             <i ng-if="content.exception" class="polpo-user-exception always-on" uib-tooltip="Afwijkende instellingen" tooltip-append-to-body="true"></i>
+        </div>
+      </article> -->
