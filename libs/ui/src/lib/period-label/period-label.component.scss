@@ -4,7 +4,6 @@
     margin: 0;
     font-size: 13px;
     font-weight: 400;
-    color: #969fa8;
     padding: 0 0 5px 0;
     line-height: normal;
   }
@@ -18,18 +17,15 @@
       flex-direction: row;
       &__label {
         width: 40px;
-        color: #333;
         font-size: 14px;
         font-weight: 700;
       }
       &__value {
         padding-left: 5px;
-        color: #333;
         font-size: 14px;
       }
     }
     &__icon {
-      background-color: #95a0aa;
       cursor: pointer;
       width: 20px;
       height: 20px;

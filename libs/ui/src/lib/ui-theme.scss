@@ -46,6 +46,7 @@ $ui-font-color-green-1: #6ed3c2 !default;
 @import './content-preview/content-preview.component.theme.scss';
 @import './input-label/input-label.component.theme.scss';
 @import './label-and-icon-button/label-and-icon-button.component.theme.scss';
+@import './period-label/period-label.component.theme.scss';
 
 // create theme-mixin with each mixin from our library components
 @mixin ui-theme() {
@@ -58,5 +59,6 @@ $ui-font-color-green-1: #6ed3c2 !default;
   @include content-preview_theme();
   @include input-label_theme();
   @include label-and-icon-button_theme();
+  @include period-label_theme();
 }
 

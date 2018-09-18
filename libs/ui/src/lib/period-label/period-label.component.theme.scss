@@ -1,0 +1,21 @@
+@mixin period-label_theme() {
+  .campus-period-label {
+    &__title {
+      color: $ui-bg-color-gray-2;
+    }
+    &__date-holder {
+      &__text {
+        &__label {
+          color: $ui-font-color-gray-3;
+        }
+        &__value {
+          color: $ui-font-color-gray-3;
+        }
+      }
+      &__icon {
+        background-color: $ui-bg-color-gray-3;
+      }
+    }
+  }
+  
+}
