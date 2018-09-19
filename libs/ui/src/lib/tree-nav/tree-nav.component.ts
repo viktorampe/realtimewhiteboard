@@ -7,7 +7,7 @@ import { NestedTreeControl } from '@angular/cdk/tree';
  */
 export class NavItem {
   title: string;
-  icon: string;
+  icon?: string;
   link?: string;
   children?: NavItem[];
 }
