@@ -1,34 +1,33 @@
-@mixin ui-app-shell(){
-    $ui__shell__left-width: 200px !default;
-    $ui__shell__left-background-color: #333 !default;
+@mixin ui-app-shell() {
+  $ui__shell__left-width: 200px !default;
+  $ui__shell__left-background-color: #333 !default;
 
-    $ui__shell__top-height: 50px !default;
-    $ui__shell__top-line-height: $ui__shell__top-height !default;
-    $ui__shell__top-background-color:#333 !default;
+  $ui__shell__top-height: 50px !default;
+  $ui__shell__top-line-height: $ui__shell__top-height !default;
+  $ui__shell__top-background-color: #333 !default;
 
-    
-    $ui__shell__logo-height: 50px !default;
-    $ui__shell__logo-background-color: #FFF !default;
+  $ui__shell__logo-height: 50px !default;
+  $ui__shell__logo-background-color: #fff !default;
 
-    $ui__shell__body-background-color: #E4E4E4 !default;
+  $ui__shell__body-background-color: #e4e4e4 !default;
 
-    .ui__shell__left {
-        width: $ui__shell__left-width;
-        background-color: $ui__shell__left-background-color;
-    }
-    
-    .ui__shell__logo {
-        height: $ui__shell__logo-height;
-        background-color: $ui__shell__logo-background-color;
-    }
-    
-    .ui__shell__top {
-        height: $ui__shell__top-height;
-        line-height: $ui__shell__top-line-height;
-        background-color: $ui__shell__top-background-color;
-    }
+  .ui__shell__left {
+    width: $ui__shell__left-width;
+    background-color: $ui__shell__left-background-color;
+  }
 
-    .ui__shell__body {
-        background-color: $ui__shell__body-background-color;
-    }
+  .ui__shell__logo {
+    height: $ui__shell__logo-height;
+    background-color: $ui__shell__logo-background-color;
+  }
+
+  .ui__shell__top {
+    height: $ui__shell__top-height;
+    line-height: $ui__shell__top-line-height;
+    background-color: $ui__shell__top-background-color;
+  }
+
+  .ui__shell__body {
+    background-color: $ui__shell__body-background-color;
+  }
 }

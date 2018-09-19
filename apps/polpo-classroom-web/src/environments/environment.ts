@@ -6,7 +6,7 @@ export const environment = {
   production: false,
   // promo website settings
   website: {
-    url: "http://www.polpo.localhost"
+    url: 'http://www.polpo.localhost'
   }
 };
 

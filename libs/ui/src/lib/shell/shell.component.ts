@@ -75,11 +75,8 @@ export class ShellComponent implements OnInit, OnDestroy {
       });
   }
 
-  protected get inXSmall$():Observable<Boolean> {
-    return this.xSmallMediaQuery$
-      .pipe(
-        map(result => result.matches)
-      )
+  protected get inXSmall$(): Observable<Boolean> {
+    return this.xSmallMediaQuery$.pipe(map(result => result.matches));
   }
 
   private subscribeEnterXSmallBreakpoint() {
