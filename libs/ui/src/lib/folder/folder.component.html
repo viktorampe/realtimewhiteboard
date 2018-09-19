@@ -1,49 +1,51 @@
-<div class="folder__header">
-  <div #headerIcon
-       class="folder__header__icon">
-    <ng-content select="campus-folder-progress-indicator"></ng-content>
-    <ng-container *ngIf="showDefaultIcon">
-      <div class="folder__header__icon__default">
-        <i *ngIf="icon"
-           class="icon {{icon}}"></i>
-      </div>
-    </ng-container>
-  </div>
-  <div class="folder__header__title">{{title}}</div>
-  <svg xmlns="http://www.w3.org/2000/svg"
-       class="mask-text">
-    <defs>
-      <linearGradient id="MyGradient{{gradientId}}"
-                      x1="0"
-                      x2="0"
-                      y1="1"
-                      y2="0">
-        <stop offset="5%"
-              [attr.stop-color]="backgroundColor"
-              stop-opacity="1"></stop>
-        <stop offset="95%"
-              [attr.stop-color]="backgroundColor"
-              stop-opacity="0"></stop>
-      </linearGradient>
-    </defs>
-    <rect [attr.fill]="gradientUrl"
-          x="0"
-          y="0"
-          width="100%"
-          height="100%"></rect>
-  </svg>
-</div>
+<div class="ui-folder">
+  <div class="ui-folder__header">
+    <div #headerIcon
+         class="ui-folder__header__icon">
+      <ng-content select="campus-folder-progress-indicator"></ng-content>
+      <ng-container *ngIf="showDefaultIcon">
+        <div class="ui-folder__header__icon__default">
+          <i *ngIf="icon"
+             class="icon {{icon}}"></i>
+        </div>
+      </ng-container>
+    </div>
+    <div class="ui-folder__header__title">{{title}}</div>
 
-<div class="folder__info"
-     [ngStyle]="{'border-color': backgroundColor}">
-  <ng-content select="campus-folder-details"></ng-content>
-</div>
-<div class="folder__badge"
-     [ngStyle]="{'border-color': backgroundColor}">
-  <span *ngIf="!showEmptyError; else emptyErrorBlock">{{itemCount}}</span>
-  <ng-template #emptyErrorBlock>
-    <span class="error"
-          uib-tooltip="Er is nog geen inhoud voor dit item"
-          tooltip-append-to-body="true">!</span>
-  </ng-template>
+    <svg xmlns="http://www.w3.org/2000/svg"
+         class="mask-text">
+      <defs>
+        <linearGradient id="MyGradient{{gradientId}}"
+                        x1="0"
+                        x2="0"
+                        y1="1"
+                        y2="0">
+          <stop offset="5%"
+                [attr.stop-color]="backgroundColor"
+                stop-opacity="1"></stop>
+          <stop offset="95%"
+                [attr.stop-color]="backgroundColor"
+                stop-opacity="0"></stop>
+        </linearGradient>
+      </defs>
+      <rect [attr.fill]="gradientUrl"
+            x="0"
+            y="0"
+            width="100%"
+            height="100%"></rect>
+    </svg>
+  </div>
+  <div class="ui-folder__info"
+       [ngStyle]="{'border-color': backgroundColor}">
+    <ng-content select="campus-folder-details"></ng-content>
+  </div>
+  <div class="ui-folder__badge"
+       [ngStyle]="{'border-color': backgroundColor}">
+    <span *ngIf="!showEmptyError; else emptyErrorBlock">{{itemCount}}</span>
+    <ng-template #emptyErrorBlock>
+      <span class="error"
+            uib-tooltip="Er is nog geen inhoud voor dit item"
+            tooltip-append-to-body="true">!</span>
+    </ng-template>
+  </div>
 </div>
