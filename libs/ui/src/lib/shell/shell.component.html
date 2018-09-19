@@ -1,15 +1,23 @@
-<div class="ui-shell">
-  <div class="ui-shell-logo">
-    <ng-content select="[campusShellLogo],campus-shell-logo"></ng-content>
-  </div>
-  <div class="ui-shell-left">
-    <ng-content select="[campusShellLeftContainer],campus-shell-left-container"></ng-content>
-  </div>
-  <div class="ui-shell-top">
-    <ng-content select="[campusShellTopContainer],campus-shell-top-container"></ng-content>
-  </div>
-  <div class="ui-shell-body">
-    <ng-content></ng-content>
-  </div>
-</div>
-
+<mat-drawer-container>
+  <mat-drawer #sidebar [opened]="!(inXSmall$ |async)" position="start" mode="side" >
+    <div class="ui__shell__left">
+      <div class="ui__shell__logo">
+        <ng-content select="[campusShellLogo],campus-shell-logo"></ng-content>
+      </div>
+      <div class="ui__shell__left__content">
+        <ng-content select="[campusShellLeftContainer],campus-shell-left"></ng-content>
+      </div>
+    </div>
+  </mat-drawer>
+  <mat-drawer-content>
+    <div class="ui__shell__right">
+      <div class="ui__shell__top">
+        <mat-icon (click)="sidebar.toggle()"  *ngIf="inXSmall$ |async" class="ui__shell__top__menu-icon">menu</mat-icon>
+        <ng-content select="[campusShellTopContainer],campus-shell-top"></ng-content>
+      </div>
+      <div class="ui__shell__body">
+        <ng-content></ng-content>
+      </div>
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>
