@@ -1,12 +1,15 @@
 import { Component, NO_ERRORS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, getTestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ShellComponent } from './shell.component';
 import { UiModule } from '../ui.module';
 import { ShellLogoDirective } from './directives/shell-logo.directive';
 import { ShellLeftContainerDirective } from './directives/shell-left-container.directive';
 import { ShellTopContainerDirective } from './directives/shell-top-container.directive';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { of, Subject } from 'rxjs';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -25,9 +28,9 @@ export class TestContainerComponent {
 
 @NgModule({
   declarations: [TestContainerComponent],
-  imports: [ CommonModule, UiModule ],
+  imports: [ CommonModule, UiModule, BrowserAnimationsModule],
   exports: [TestContainerComponent],
-  providers: [],
+  providers: [BreakpointObserver],
 })
 
 export class TestModule {}
@@ -38,15 +41,20 @@ describe('ShellComponent', () => {
   let testContainerFixture: ComponentFixture<TestContainerComponent>;
   let testContainerComponent: TestContainerComponent;
   let innerComponent: ShellComponent;
+  const breakpointStream: Subject<{ matches:boolean }> = new Subject();
 
 
   beforeEach(async(() => {
-    TestBed.configureTestingModule({
+    const testbed = TestBed.configureTestingModule({
       imports: [
         TestModule
       ],
       schemas: [NO_ERRORS_SCHEMA]
-    }).compileComponents();
+    });
+    const breakpointObserver:BreakpointObserver = testbed.get(BreakpointObserver);
+    jest.spyOn(breakpointObserver, 'observe').mockReturnValue(breakpointStream);
+    
+    testbed.compileComponents();
   }));
 
   beforeEach(() => {
@@ -90,11 +98,21 @@ describe('ShellComponent', () => {
     expect(logo).toBe('test-top');
   })
 
-  fit('should project the rest of the content in the body', () => {
+  it('should project the rest of the content in the body', () => {
     const bodyContent: HTMLElement = testContainerFixture.debugElement.query(
-      By.css('.ui-shell-body')
+      By.css('.ui__shell__body')
     ).nativeElement;
     expect(bodyContent.querySelector('p').textContent).toEqual('Hi there handsome');
-
   });
+
+  it('should alter sidebar behavior on small screen', () => {
+    breakpointStream.next({matches: true });
+    expect(fixture.componentInstance.sidebar.mode).toBe('over');
+    expect(fixture.componentInstance.sidebar.disableClose).toBe(false);
+    breakpointStream.next({matches: false });
+    expect(fixture.componentInstance.sidebar.mode).toBe('side');
+    expect(fixture.componentInstance.sidebar.disableClose).toBe(true);
+  })
+
+
 });

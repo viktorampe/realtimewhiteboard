@@ -43,7 +43,7 @@ export class ShellComponent implements OnInit, OnDestroy {
    *
    * @type {MatDrawer}
    */
-  @ViewChild(MatDrawer) private sidebar: MatDrawer;
+  @ViewChild(MatDrawer) public readonly sidebar: MatDrawer;
 
   /**
    * Stream of @media queries matching 'XSmall' breakpoint preset.
