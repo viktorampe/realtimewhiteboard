@@ -46,7 +46,8 @@ $gray-3: #7d8e9d;
 
   &--line {
     figure {
-      .icon-progress {
+      .icon-progress,
+      .icon {
         bottom: 12px;
         left: 8px;
         font-size: 24px;
