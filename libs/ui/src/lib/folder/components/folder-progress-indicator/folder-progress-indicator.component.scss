@@ -1,43 +1,62 @@
 $lightBlue: #578ebe;
 $gray-3: #7d8e9d;
-figure {
-  margin: 0;
-  .icon-progress {
-    position: absolute;
-    bottom: 17px;
-    left: 21px;
-    font-size: 26px;
-    font-style: initial;
-    text-align: center;
-    color: $lightBlue;
+.ui-folder-progress-indicator {
+  figure {
+    position: relative;
+    margin: 0;
+    .icon-progress {
+      position: absolute;
+      bottom: 15px;
+      left: 11px;
+      font-size: 26px;
+      font-style: initial;
+      text-align: center;
+      color: $lightBlue;
 
-    &.polpo-lock {
-      color: $gray-3;
+      &.polpo-lock {
+        color: $gray-3;
+      }
+    }
+    .icon {
+      position: absolute;
+      bottom: 17px;
+      left: 15px;
+      font-size: 38px;
+      font-style: initial;
+      text-align: center;
+      color: $lightBlue;
     }
   }
-  .icon {
-    position: absolute;
-    bottom: 17px;
-    left: 15px;
-    font-size: 38px;
-    font-style: initial;
-    text-align: center;
-    color: $lightBlue;
-  }
-}
 
-.mat-progress-spinner {
-  &::after {
-    content: '';
-    display: block;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    border: #ffffff47 2px solid;
+  .mat-progress-spinner {
+    &::after {
+      content: '';
+      display: block;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: #ffffff47 2px solid;
+    }
+    &::ng-deep {
+      circle {
+        stroke: $lightBlue;
+      }
+    }
   }
-  &::ng-deep {
-    circle {
-      stroke: $lightBlue;
+
+  &--line {
+    figure {
+      .icon-progress {
+        bottom: 12px;
+        left: 8px;
+        font-size: 24px;
+      }
+    }
+    .mat-progress-spinner {
+      &::after {
+        width: 36px;
+        height: 36px;
+      }
     }
   }
 }

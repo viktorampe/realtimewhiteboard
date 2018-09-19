@@ -1,11 +1,12 @@
 import {
   AfterContentInit,
   Component,
+  ContentChild,
   ElementRef,
   Input,
-  OnInit,
-  ViewChild
+  OnInit
 } from '@angular/core';
+import { FolderProgressIndicatorComponent } from './components/folder-progress-indicator/folder-progress-indicator.component';
 
 @Component({
   selector: 'campus-folder',
@@ -18,15 +19,6 @@ export class FolderComponent implements OnInit, AfterContentInit {
   @Input() itemCount: string;
   @Input() lineView: boolean;
   @Input() backgroundColor: string;
-
-  /**
-   * Reference to the folder icon.
-   * Used to determine whether the default icon should be visible.
-   * @type {ElementRef<HTMLElement>}
-   * @memberof FolderComponent
-   */
-  @ViewChild('headerIcon') headerIcon: ElementRef<HTMLElement>;
-
   /**
    * Whether to show an exclamation mark when folder is empty.
    *
@@ -43,6 +35,16 @@ export class FolderComponent implements OnInit, AfterContentInit {
       }
     }
   }
+
+  /**
+   * Reference to the progress indicator.
+   * Used to determine whether the default icon should be visible.
+   * @type {ElementRef<HTMLElement>}
+   * @memberof FolderComponent
+   */
+  @ContentChild(FolderProgressIndicatorComponent)
+  progressIndicator: FolderProgressIndicatorComponent;
+
   gradientId: string;
   gradientUrl: string;
   showDefaultIcon = false;
@@ -62,7 +64,7 @@ export class FolderComponent implements OnInit, AfterContentInit {
    * @memberof FolderComponent
    */
   ngAfterContentInit(): void {
-    // since we use a reference to projected content (#headerIcon in the component template),
+    // since we use a reference to projected content (FolderProgressIndicator in the component template),
     // we only want to check it's value after the content has been projected.
     this.setIcon();
   }
@@ -73,8 +75,8 @@ export class FolderComponent implements OnInit, AfterContentInit {
    * @memberof FolderComponent
    */
   setIcon() {
-    if (this.headerIcon.nativeElement.children.length === 0) {
-      this.showDefaultIcon = true;
-    }
+    console.log(this.progressIndicator);
+    this.showDefaultIcon = !this.progressIndicator;
+    console.log('should show default icon: ', this.showDefaultIcon);
   }
 }
