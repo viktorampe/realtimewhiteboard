@@ -87,7 +87,7 @@ describe('TreeNavComponent', () => {
     const node = treeNodes[0];
     expect(node.querySelector('i:first-child').className).toBe('iconClass');
   });
-  
+
   it('should not show icon on third node', () => {
     const node = treeNodes[2];
     expect(node.querySelector('i:first-child')).toBeFalsy();
@@ -124,5 +124,4 @@ describe('TreeNavComponent', () => {
     const node = treeNodes[0];
     expect(node.querySelector('a').getAttribute('href')).toBe('/route');
   });
-
 });
