@@ -5,6 +5,13 @@
   position: relative;
   box-sizing: border-box;
   border: 5px transparent solid;
+  text-align: center;
+  cursor: pointer;
+  display: block;
+  & > * {
+    height: inherit;
+    width: inherit;
+  }
 }
 
 .flex-list-item {
@@ -12,6 +19,11 @@
   height: 48px;
   box-sizing: border-box;
   border: 5px transparent solid;
+  cursor: pointer;
+  display: block;
+  & > * {
+    height: inherit;
+  }
 }
 
 .item-selected {
@@ -19,21 +31,33 @@
 }
 
 .item-selectoverlay {
-  margin-left: 50px;
   border: 5px transparent solid;
   &::before {
-    content: ' ';
+    content: 'X';
+    color: white;
+    text-align: center;
     display: block;
     width: 20px;
     height: 20px;
-    margin-left: -30px;
-    margin-top: 9px;
     float: left;
+    position: absolute;
   }
+  &.flex-list-item {
+    padding-left: 30px;
+    &::before {
+      margin-left: -30px;
+      margin-top: 9px;
+    }
+  }
+
   &:not(.item-selected)::before {
     background-color: gold;
+    opacity: 0.4;
   }
   &.item-selected::before {
     background-color: green;
+  }
+  &:hover::before {
+    opacity: 1;
   }
 }
