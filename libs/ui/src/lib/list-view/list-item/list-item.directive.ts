@@ -14,7 +14,7 @@ import {
  * @class ListItemDirective
  */
 @Directive({
-  selector: '[campus-list-item]'
+  selector: '[campusListItem]'
 })
 export class ListItemDirective {
   isSelected: boolean;
