@@ -88,17 +88,17 @@ describe('ShellComponent', () => {
   });
 
   it('should project left content', () => {
-    const logo = testContainerFixture.debugElement.query(
+    const leftContent = testContainerFixture.debugElement.query(
       By.directive(ShellLeftDirective)
     ).nativeElement.textContent;
-    expect(logo).toBe('test-left');
+    expect(leftContent).toBe('test-left');
   });
 
-  it('should project left content', () => {
-    const logo = testContainerFixture.debugElement.query(
+  it('should project top content', () => {
+    const topContent = testContainerFixture.debugElement.query(
       By.directive(ShellTopDirective)
     ).nativeElement.textContent;
-    expect(logo).toBe('test-top');
+    expect(topContent).toBe('test-top');
   });
 
   it('should project the rest of the content in the body', () => {

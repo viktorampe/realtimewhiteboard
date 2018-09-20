@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { MatDrawer, MatIcon } from '@angular/material';
-import { filter, takeWhile, map } from 'rxjs/operators';
+import { MatDrawer } from '@angular/material';
+import { filter, takeWhile, map, shareReplay } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 /**
@@ -50,7 +50,7 @@ export class ShellComponent implements OnInit, OnDestroy {
    */
   private xSmallMediaQuery$ = this.breakPointObserver.observe([
     Breakpoints.XSmall
-  ]);
+  ]).pipe(shareReplay(1));
 
   constructor(private breakPointObserver: BreakpointObserver) {}
 
