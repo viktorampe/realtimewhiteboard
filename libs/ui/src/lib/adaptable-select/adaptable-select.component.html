@@ -4,13 +4,15 @@
   <div *ngIf="text"
        class="ui_adaptable-select__text">{{text}}</div>
   <div class="ui_adaptable-select__dropdown">
-    <select class="ui_adaptable-select__dropdown__select"
-            [formControl]="selectControl">
-      <option *ngFor="let option of options"
-              [ngValue]="option">{{option}}</option>
-    </select>
+    <mat-form-field class="ui_adaptable-select__dropdown__form-field">
+      <mat-select class="ui_adaptable-select__dropdown__select"
+                  [formControl]="selectControl">
+        <mat-option *ngFor="let option of options"
+                    [value]="option">{{option}}</mat-option>
+      </mat-select>
+    </mat-form-field>
     <div *ngIf="selectControl.dirty"
-         class="ui_adaptable-select__dropdown__icon"
+         class="ui_adaptable-select__dropdown__icon polpo-presentatie"
          (click)="iconClicked()"></div>
   </div>
 </div>

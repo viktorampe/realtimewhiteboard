@@ -1,5 +1,6 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { DalModule } from '@campus/dal';
 import { EffectsModule } from '@ngrx/effects';
@@ -10,16 +11,14 @@ import { NxModule } from '@nrwl/nx';
 import { storeFreeze } from 'ngrx-store-freeze';
 import { environment } from '../environments/environment';
 import { AppEffects } from './+state/app.effects';
-import {
-  appReducer,
-  initialState as appInitialState
-} from './+state/app.reducer';
+import { appReducer, initialState as appInitialState } from './+state/app.reducer';
 import { AppComponent } from './app.component';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     NxModule.forRoot(),
     DalModule.forRoot(),
     RouterModule.forRoot(
@@ -78,4 +77,4 @@ import { AppComponent } from './app.component';
   exports: [RouterModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class AppModule {}
+export class AppModule { }

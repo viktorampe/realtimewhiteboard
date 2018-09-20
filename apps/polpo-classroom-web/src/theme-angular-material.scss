@@ -71,4 +71,4 @@ $mat-polpo-warn: $mat-red;
 $polpo-primary: mat-palette($mat-polpo-primary);
 $polpo-accent: mat-palette($mat-polpo-accent, 500, 900, A100);
 $polpo-warn: mat-palette($mat-deep-orange);
-$polpo-theme: mat-dark-theme($polpo-primary, $polpo-accent, $polpo-warn);
+$polpo-theme: mat-light-theme($polpo-primary, $polpo-accent, $polpo-warn);
