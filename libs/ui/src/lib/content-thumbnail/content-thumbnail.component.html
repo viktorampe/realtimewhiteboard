@@ -1,21 +1,52 @@
-<ng-container *ngTemplateOutlet="isGrid ? gridTemplate : listTemplate"></ng-container>
+<ng-container *ngTemplateOutlet="listFormat === 'grid' ? gridTemplate : listTemplate"></ng-container>
 
 <ng-template #gridTemplate>
-  <div class="ui-content-preview__grid">
-    <div class="ui-content-preview__grid__header">
-      <div>contenttype</div>
-      <div>file-extension</div>
+  <div class="ui-content-thumbnail ui-content-thumbnail__grid">
+    <div class="ui-content-thumbnail__grid__header">
+      <ng-container *ngTemplateOutlet="contentTypeTemplate"></ng-container>
+      <ng-container *ngTemplateOutlet="fileExtensionTemplate"></ng-container>
     </div>
-    <figure class="ui-content-preview__grid__image">image/file-extension</figure>
-    <div class="ui-content-preview__grid__description">{{title}}</div>
-    <div class="ui-content-preview__grid__actions">actions</div>
+    <figure class="ui-content-thumbnail__grid__image">
+      <img [src]=imagePath *ngIf="imagePath">
+      <div *ngIf="!imagePath">*geen imagepath*</div>
+    </figure>
+    <div class="ui-content-thumbnail__grid__title">
+      {{title}}
+    </div>
+    <div class="ui-content-thumbnail__grid__actions">
+      <ng-container *ngTemplateOutlet="actionsTemplate"></ng-container>
+    </div>
   </div>
 </ng-template>
 
 <ng-template #listTemplate>
-
+  <div class="ui-content-thumbnail ui-content-thumbnail__list">
+    <div class="ui-content-thumbnail__list__header">
+      <ng-container *ngTemplateOutlet="fileExtensionTemplate"></ng-container>
+      <ng-container *ngTemplateOutlet="contentTypeTemplate"></ng-container>
+    </div>
+    <div class="ui-content-thumbnail__list__title">
+      {{title}}
+    </div>
+    <div class="ui-content-thumbnail__list__actions">
+      <ng-container *ngTemplateOutlet="actionsTemplate"></ng-container>
+    </div>
+  </div>
 </ng-template>
 
+
+<!-- Gemeenschappelijke template gedeeltes -->
+<ng-template #fileExtensionTemplate>
+  <ng-content select=".file-extension"></ng-content>
+</ng-template>
+
+<ng-template #contentTypeTemplate>
+  <div [class]="contentTypeClass"></div>
+</ng-template>
+
+<ng-template #actionsTemplate>
+  <ng-content select=".thumbnail-actions"></ng-content>
+</ng-template>
 
 
 

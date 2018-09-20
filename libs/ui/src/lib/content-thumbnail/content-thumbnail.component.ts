@@ -6,12 +6,13 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./content-thumbnail.component.scss']
 })
 export class ContentThumbnailComponent implements OnInit {
-  @Input() isGrid = true;
+  @Input() listFormat: string;
   @Input() title: string;
   @Input() contentTypeClass: string;
-  @Input() thumbnailsrc: string;
+  @Input() imagePath: string;
   @Input() fileExtensionClass: string;
   @Input() actions: any[];
+
   constructor() {}
 
   ngOnInit() {}
