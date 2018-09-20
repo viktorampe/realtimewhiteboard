@@ -26,7 +26,9 @@
     "help": "./node_modules/.bin/nx help"
   },
   "husky": {
-    "hooks": {}
+    "hooks": {
+      "pre-push": "ng lint && npm run format:check && npm test"
+    }
   },
   "private": true,
   "dependencies": {

@@ -70,6 +70,7 @@ body {
 @include angular-material-theme(
   $polpo-theme
 ); // alternative: include individual component mixins
+
 /* * POLPO theme */
 // load all variables for your app theme and ui components
 @import 'theme-variables';
