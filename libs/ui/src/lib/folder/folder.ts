@@ -41,7 +41,6 @@ export class Folder implements OnInit, AfterContentInit {
   constructor() {}
 
   ngOnInit() {
-    this.gradientUrl = `url(#MyGradient${this.gradientId})`;
     this.gradientId = this.backgroundColor.replace('#', '');
   }
 
@@ -52,6 +51,8 @@ export class Folder implements OnInit, AfterContentInit {
    * @memberof FolderComponent
    */
   ngAfterContentInit(): void {
+    this.gradientUrl = `url(#MyGradient${this.gradientId})`;
+
     // since we use a reference to projected content (FolderProgressIndicator in the component template),
     // we only want to check it's value after the content has been projected.
     this.setIcon();

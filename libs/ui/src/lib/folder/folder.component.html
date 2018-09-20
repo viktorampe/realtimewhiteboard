@@ -1,1 +1,2 @@
-<ng-container [cdkPortalOutlet]="folderPortal"></ng-container>
+<ng-template [cdkPortalOutlet]="folderPortal"
+             (attached)="configureFolderRef($event)"></ng-template>
