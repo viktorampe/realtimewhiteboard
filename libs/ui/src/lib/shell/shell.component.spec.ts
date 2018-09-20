@@ -11,8 +11,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ShellComponent } from './shell.component';
 import { UiModule } from '../ui.module';
 import { ShellLogoDirective } from './directives/shell-logo.directive';
-import { ShellLeftContainerDirective } from './directives/shell-left-container.directive';
-import { ShellTopContainerDirective } from './directives/shell-top-container.directive';
+import { ShellLeftDirective } from './directives/shell-left.directive';
+import { ShellTopDirective } from './directives/shell-top.directive';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { of, Subject } from 'rxjs';
 
@@ -21,10 +21,10 @@ import { of, Subject } from 'rxjs';
   selector: 'test-container',
   template: `
   <campus-shell>
-    <campus-shell-top-container>test-top</campus-shell-top-container>
+    <campus-shell-top>test-top</campus-shell-top>
     <campus-shell-logo>test-logo</campus-shell-logo>
-    <campus-shell-left-container>test-left</campus-shell-left-container>
-    <p>Hi there handsome</p>
+    <campus-shell-left>test-left</campus-shell-left>
+    <campus-shell-body><p>Hi there handsome</p></campus-shell-body>
   </campus-shell>
   `
 })
@@ -89,14 +89,14 @@ describe('ShellComponent', () => {
 
   it('should project left content', () => {
     const logo = testContainerFixture.debugElement.query(
-      By.directive(ShellLeftContainerDirective)
+      By.directive(ShellLeftDirective)
     ).nativeElement.textContent;
     expect(logo).toBe('test-left');
   });
 
   it('should project left content', () => {
     const logo = testContainerFixture.debugElement.query(
-      By.directive(ShellTopContainerDirective)
+      By.directive(ShellTopDirective)
     ).nativeElement.textContent;
     expect(logo).toBe('test-top');
   });
