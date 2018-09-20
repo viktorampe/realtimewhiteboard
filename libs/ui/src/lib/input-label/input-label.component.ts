@@ -19,7 +19,7 @@ import { FormControl, Validators } from '@angular/forms';
 export class InputLabelComponent implements OnInit {
   @Input() titleText: string;
   @Input() text: string;
-  @Input() showIcon: boolean;
+  @Input() editable: boolean;
   @Output() saveText = new EventEmitter<string>();
 
   editing: boolean;

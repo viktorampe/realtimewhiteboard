@@ -18,6 +18,9 @@
         font-weight: 700;
       }
       &__edit-icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         cursor: pointer;
         width: 20px;
         height: 20px;
@@ -36,6 +39,9 @@
       justify-content: flex-end;
       padding: 4px 0 0 0;
       &__confirm-icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         cursor: pointer;
         width: 20px;
         height: 20px;
@@ -43,6 +49,9 @@
         margin-right: 5px;
       }
       &__cancel-icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         cursor: pointer;
         width: 20px;
         height: 20px;

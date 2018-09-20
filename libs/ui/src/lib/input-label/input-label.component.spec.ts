@@ -7,7 +7,7 @@ describe('InputLabelComponent', () => {
   let component: InputLabelComponent;
   let fixture: ComponentFixture<InputLabelComponent>;
 
-  let mockData: { titleText: string; text: string; showIcon?: boolean };
+  let mockData: { titleText: string; text: string; editable?: boolean };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -20,11 +20,11 @@ describe('InputLabelComponent', () => {
     fixture = TestBed.createComponent(InputLabelComponent);
     component = fixture.componentInstance;
 
-    mockData = { titleText: 'the-title', text: 'the-text', showIcon: true };
+    mockData = { titleText: 'the-title', text: 'the-text', editable: true };
 
     component.titleText = mockData.titleText;
     component.text = mockData.text;
-    component.showIcon = mockData.showIcon;
+    component.editable = mockData.editable;
 
     fixture.detectChanges();
   });
@@ -140,7 +140,7 @@ describe('InputLabelComponent', () => {
     expect(text).not.toBe(mockData.text);
   });
   it('should not show the icon if showInput is true', () => {
-    component.showIcon = false;
+    component.editable = false;
     fixture.detectChanges();
     const icon = fixture.debugElement.query(
       By.css('.ui_input-label__text__label-holder__edit-icon')
