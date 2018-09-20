@@ -19,7 +19,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 export class EditableInlineTagListComponent {
   @Input() titleText: string;
   @Input() items: { text: string; count?: number; editable?: boolean, data?: any }[];
-  @Input() showIcon: boolean;
+  @Input() editable: boolean;
   @Output() editClicked = new EventEmitter<boolean>();
   @Output() itemRemoveClicked = new EventEmitter<any>();
 

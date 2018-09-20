@@ -13,7 +13,9 @@
            (click)="onItemRemoveClick(item)"></div>
     </div>
   </div>
-  <div *ngIf="showIcon"
-       class="ui_editable-inline-tag-list__icon"
-       (click)="onEditClicked()"></div>
+  <div *ngIf="editable"
+       class="ui_editable-inline-tag-list__icons">
+    <div class="ui_editable-inline-tag-list__icons__icon polpo-presentatie"
+         (click)="onEditClicked()"></div>
+  </div>
 </div>

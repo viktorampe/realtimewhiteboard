@@ -37,13 +37,21 @@
       }
     }
   }
-  &__icon {
+  &__icons {
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
-    padding: 4px 11px 0 0;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
+    &__icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 4px 6px 0 0;
+      cursor: pointer;
+      width: 30px;
+      height: 30px;
+      min-width: 30px;
+      min-height: 30px;
+      border-radius: 50%;
+    }
   }
 }

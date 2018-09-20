@@ -34,7 +34,7 @@ describe('EditableInlineTagListComponent', () => {
 
     component.titleText = mockData.titleText;
     component.items = mockData.items;
-    component.showIcon = mockData.showIcon;
+    component.editable = mockData.showIcon;
 
     fixture.detectChanges();
   });
@@ -91,7 +91,7 @@ describe('EditableInlineTagListComponent', () => {
     expect(icon).toBeTruthy();
   });
   it('should not show the icon if boolean is false', () => {
-    component.showIcon = false;
+    component.editable = false;
     fixture.detectChanges();
 
     const icon = fixture.debugElement.query(
