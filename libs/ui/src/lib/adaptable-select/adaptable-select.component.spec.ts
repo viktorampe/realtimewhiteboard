@@ -1,7 +1,11 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 import { By } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AdaptableSelectComponent } from './adaptable-select.component';
+
 
 describe('AdaptableSelectComponent', () => {
   let component: AdaptableSelectComponent;
@@ -12,7 +16,13 @@ describe('AdaptableSelectComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [AdaptableSelectComponent],
-      imports: [ReactiveFormsModule, FormsModule]
+      imports: [
+        ReactiveFormsModule,
+        FormsModule,
+        MatSelectModule,
+        MatFormFieldModule,
+        BrowserAnimationsModule
+      ]
     }).compileComponents();
   }));
 

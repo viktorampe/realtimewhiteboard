@@ -6,7 +6,7 @@
       <div class="ui_period-label__date-holder__text__value">{{period.start | date:'dd/MM/yyyy'}}</div>
     </div>
     <div *ngIf="editable"
-         class="ui_period-label__date-holder__icon"
+         class="ui_period-label__date-holder__icon polpo-presentatie"
          (click)="onEditStart()"></div>
   </div>
   <div class="ui_period-label__date-holder">
@@ -15,7 +15,7 @@
       <div class="ui_period-label__date-holder__text__value">{{period.end | date:'dd/MM/yyyy'}}</div>
     </div>
     <div *ngIf="editable"
-         class="ui_period-label__date-holder__icon"
+         class="ui_period-label__date-holder__icon polpo-presentatie"
          (click)="onEditEnd()"></div>
   </div>
 </div>

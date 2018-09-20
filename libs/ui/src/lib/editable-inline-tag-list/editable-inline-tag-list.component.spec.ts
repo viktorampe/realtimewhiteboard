@@ -86,7 +86,7 @@ describe('EditableInlineTagListComponent', () => {
   });
   it('should show the icon', () => {
     const icon = fixture.debugElement.query(
-      By.css('.ui_editable-inline-tag-list__icon')
+      By.css('.ui_editable-inline-tag-list__icons__icon')
     );
     expect(icon).toBeTruthy();
   });
@@ -103,7 +103,7 @@ describe('EditableInlineTagListComponent', () => {
     let clicked: boolean;
     component.editClicked.subscribe((e: boolean) => (clicked = e));
     fixture.debugElement
-      .query(By.css('.ui_editable-inline-tag-list__icon'))
+      .query(By.css('.ui_editable-inline-tag-list__icons__icon'))
       .triggerEventHandler('click', null);
     fixture.detectChanges();
     expect(clicked).toBe(true);
