@@ -1,0 +1,31 @@
+<div class="ui-folder ui-folder--line">
+  <div class="wrapper">
+    <div class="ui-folder__header">
+      <div class="ui-folder__header__icon">
+        <ng-content select="campus-folder-progress-indicator"></ng-content>
+        <ng-container *ngIf="showDefaultIcon">
+          <div class="ui-folder__header__icon__default">
+            <i *ngIf="icon"
+               class="icon {{icon}}"></i>
+          </div>
+        </ng-container>
+      </div>
+
+    </div>
+    <div class="ui-folder__info"
+         [ngStyle]="{'border-color': backgroundColor}">
+      <ng-content select="campus-folder-details"></ng-content>
+    </div>
+  </div>
+  <div class="ui-folder__header__title">{{title}}</div>
+
+  <div class="ui-folder__badge"
+       [ngStyle]="{'border-color': backgroundColor}">
+    <span *ngIf="!showEmptyError; else emptyErrorBlock">{{itemCount}}</span>
+    <ng-template #emptyErrorBlock>
+      <span class="error"
+            uib-tooltip="Er is nog geen inhoud voor dit item"
+            tooltip-append-to-body="true">!</span>
+    </ng-template>
+  </div>
+</div>
