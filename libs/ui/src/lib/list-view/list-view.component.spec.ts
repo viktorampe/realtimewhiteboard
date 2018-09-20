@@ -2,150 +2,194 @@ import { ListItemDirective } from './list-item/list-item.directive';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ListViewComponent } from './list-view.component';
-import { CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
+@Component({
+  template: `
+  <campus-list-view>
+  <div campusListItem>test1</div>
+  <div campusListItem>test2</div>
+  <div campusListItem>test3</div>
+  <div campusListItem>test4</div>
+  <div campusListItem><img src="https://www.polpo.be/assets/images/polpo.svg"></div>
+  <div campusListItem><img src="https://www.polpo.be/assets/images/home-laptop-books.jpg"></div>
+  </campus-list-view>
+`
+})
+export class ListViewHostComponent {}
+
+@Component({
+  template: `
+  <campus-list-view>
+  </campus-list-view>
+`
+})
+export class EmptyListViewHostComponent {}
+
 describe('ListViewComponent', () => {
+  let hostComponent: ListViewHostComponent;
+  let hostFixture: ComponentFixture<ListViewHostComponent>;
+  let componentDE: DebugElement;
   let component: ListViewComponent;
-  let fixture: ComponentFixture<ListViewComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ListViewComponent],
+      declarations: [
+        ListViewComponent,
+        ListViewHostComponent,
+        EmptyListViewHostComponent,
+        ListItemDirective
+      ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ListViewComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    hostFixture = TestBed.createComponent(ListViewHostComponent);
+    hostComponent = hostFixture.componentInstance;
+    hostFixture.detectChanges();
+
+    componentDE = hostFixture.debugElement.query(By.css('campus-list-view'));
+    component = <ListViewComponent>componentDE.componentInstance;
+    hostFixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  // it('should show content as childcomponents', () => {
-  //   const componentDE = fixture.debugElement;
-  //   const itemDEList = componentDE.queryAll(By.css(mockData.childComponentTag));
+  it('should find projected content as children', () => {
+    expect(component.itemsAmount).toBe(6);
+  });
 
-  //   expect(itemDEList.length).toBe(mockData.contentArray.length);
-  // });
+  it('should show the text placeholder if without content', () => {
+    hostFixture = TestBed.createComponent(EmptyListViewHostComponent);
+    hostComponent = hostFixture.componentInstance;
 
-  // it('should create without content', () => {
-  //   component.contentArray = null;
-  //   fixture.detectChanges();
-  //   expect(component).toBeTruthy();
-  // });
+    component = <ListViewComponent>(
+      hostFixture.debugElement.query(By.css('campus-list-view'))
+        .componentInstance
+    );
+    hostFixture.detectChanges();
 
-  // it('should show the text placeholder if without content', () => {
-  //   component.contentArray = null;
-  //   fixture.detectChanges();
+    componentDE = hostFixture.debugElement.query(By.css('campus-list-view'));
 
-  //   const componentDE = fixture.debugElement;
+    expect(componentDE.nativeElement.textContent).toContain(
+      component.placeHolderText
+    );
+  });
 
-  //   expect(componentDE.nativeElement.textContent).toContain(
-  //     mockData.placeHolderText
-  //   );
-  // });
+  it('should apply the flex-grid class', () => {
+    component.setListFormat('grid');
+    hostFixture.detectChanges();
 
-  // it('should apply the flex-grid class', () => {
-  //   component.isGrid = true;
-  //   fixture.detectChanges();
+    const itemListDE = componentDE.query(By.css('.flexbox'));
 
-  //   const componentDE = fixture.debugElement;
-  //   const itemListDE = componentDE.query(By.css('.flexbox'));
+    expect(itemListDE.nativeElement.className).toContain('flex-grid');
+    expect(itemListDE.nativeElement.className).not.toContain('flex-list');
+  });
 
-  //   expect(itemListDE.nativeElement.className).toContain('flex-grid');
-  //   expect(itemListDE.nativeElement.className).not.toContain('flex-list');
-  // });
+  it('should apply the flex-list class', () => {
+    component.setListFormat('list');
+    hostFixture.detectChanges();
 
-  // it('should apply the flex-list class', () => {
-  //   component.isGrid = false;
-  //   fixture.detectChanges();
+    const itemListDE = componentDE.query(By.css('.flexbox'));
 
-  //   const componentDE = fixture.debugElement;
-  //   const itemListDE = componentDE.query(By.css('.flexbox'));
+    expect(itemListDE.nativeElement.className).toContain('flex-list');
+    expect(itemListDE.nativeElement.className).not.toContain('flex-grid');
+  });
 
-  //   expect(itemListDE.nativeElement.className).toContain('flex-list');
-  //   expect(itemListDE.nativeElement.className).not.toContain('flex-grid');
-  // });
+  it('should select only 1 item', () => {
+    component.multiSelect = false;
+    hostFixture.detectChanges();
 
-  // it('should select only 1 item', () => {
-  //   component.multiSelect = false;
-  //   fixture.detectChanges();
+    const itemListDE = componentDE.query(By.css('.flexbox'));
+    const itemDEList = itemListDE.queryAll(By.css('[campusListItem]'));
 
-  //   const componentDE = fixture.debugElement;
-  //   const itemDEList = componentDE.queryAll(By.css(mockData.childComponentTag));
+    const childComponent1EL = itemDEList[0].nativeElement;
+    const childComponent2EL = itemDEList[1].nativeElement;
 
-  //   let selection: object[];
-  //   component.selectionChanged.subscribe(value => (selection = value));
+    childComponent1EL.click();
+    childComponent2EL.click();
 
-  //   const childComponent1EL = itemDEList[0].nativeElement as ListItemComponent;
-  //   const childComponent2EL = itemDEList[1].nativeElement as ListItemComponent;
+    const selectedItems = component.items.filter(i => i.isSelected);
 
-  //   component.itemClicked(childComponent1EL.folder);
-  //   component.itemClicked(childComponent2EL.folder);
+    expect(selectedItems.length).toBe(1);
+  });
 
-  //   expect(component.selectionArray.length).toBe(1);
-  //   expect(component.selectionArray[0]).toBe(childComponent2EL.folder);
+  it('should select multiple items', () => {
+    component.multiSelect = true;
+    hostFixture.detectChanges();
 
-  //   //Output
-  //   expect(selection.length).toBe(1);
-  //   expect(selection).toContain(childComponent2EL.folder);
-  // });
+    const itemListDE = componentDE.query(By.css('.flexbox'));
+    const itemDEList = itemListDE.queryAll(By.css('[campusListItem]'));
 
-  // it('should select multiple items', () => {
-  //   component.multiSelect = true;
-  //   fixture.detectChanges();
+    const childComponent1EL = itemDEList[0].nativeElement;
+    const childComponent2EL = itemDEList[1].nativeElement;
 
-  //   const componentDE = fixture.debugElement;
-  //   const itemDEList = componentDE.queryAll(By.css(mockData.childComponentTag));
+    childComponent1EL.click();
+    childComponent2EL.click();
 
-  //   let selection: object[];
-  //   component.selectionChanged.subscribe(value => (selection = value));
+    const selectedItems = component.items.filter(i => i.isSelected);
 
-  //   const childComponent1EL = itemDEList[0].nativeElement as ListItemComponent;
-  //   const childComponent2EL = itemDEList[1].nativeElement as ListItemComponent;
+    expect(selectedItems.length).toBe(2);
+  });
 
-  //   component.itemClicked(childComponent1EL.folder);
-  //   component.itemClicked(childComponent2EL.folder);
+  it('should deselect an item', () => {
+    component.multiSelect = true;
+    hostFixture.detectChanges();
 
-  //   expect(component.selectionArray.length).toBe(2);
-  //   expect(component.selectionArray).toContain(childComponent1EL.folder);
-  //   expect(component.selectionArray).toContain(childComponent2EL.folder);
+    const itemListDE = componentDE.query(By.css('.flexbox'));
+    const itemDEList = itemListDE.queryAll(By.css('[campusListItem]'));
 
-  //   //Output
-  //   expect(selection.length).toBe(2);
-  //   expect(selection).toContain(childComponent1EL.folder);
-  //   expect(selection).toContain(childComponent2EL.folder);
-  // });
+    const childComponent1EL = itemDEList[0].nativeElement;
+    const childComponent2EL = itemDEList[1].nativeElement;
 
-  // it('should deselect an item', () => {
-  //   component.multiSelect = true;
-  //   fixture.detectChanges();
+    childComponent1EL.click();
+    childComponent2EL.click();
+    childComponent1EL.click();
 
-  //   const componentDE = fixture.debugElement;
-  //   const itemDEList = componentDE.queryAll(By.css(mockData.childComponentTag));
+    const selectedItems = component.items.filter(i => i.isSelected);
 
-  //   let selection: object[];
-  //   component.selectionChanged.subscribe(value => (selection = value));
+    expect(selectedItems.length).toBe(1);
+  });
 
-  //   const childComponent1EL = itemDEList[0].nativeElement as ListItemComponent;
-  //   const childComponent2EL = itemDEList[1].nativeElement as ListItemComponent;
+  it('should select all items', () => {
+    component.multiSelect = true;
+    hostFixture.detectChanges();
 
-  //   component.itemClicked(childComponent1EL.folder);
-  //   component.itemClicked(childComponent2EL.folder);
-  //   component.itemClicked(childComponent1EL.folder);
+    const itemListDE = componentDE.query(By.css('.flexbox'));
+    const itemDEList = itemListDE.queryAll(By.css('[campusListItem]'));
 
-  //   expect(component.selectionArray.length).toBe(1);
-  //   expect(component.selectionArray).not.toContain(childComponent1EL.folder);
-  //   expect(component.selectionArray).toContain(childComponent2EL.folder);
+    const childComponent1EL = itemDEList[0].nativeElement;
+    const childComponent2EL = itemDEList[1].nativeElement;
 
-  //   //Output
-  //   expect(selection.length).toBe(1);
-  //   expect(selection).not.toContain(childComponent1EL.folder);
-  //   expect(selection).toContain(childComponent2EL.folder);
-  // });
+    childComponent1EL.click();
+    childComponent2EL.click();
+    component.selectAllItems();
+
+    const selectedItems = component.items.filter(i => i.isSelected);
+
+    expect(selectedItems.length).toBe(component.itemsAmount);
+  });
+
+  it('should deselect all items', () => {
+    component.multiSelect = true;
+    hostFixture.detectChanges();
+
+    const itemListDE = componentDE.query(By.css('.flexbox'));
+    const itemDEList = itemListDE.queryAll(By.css('[campusListItem]'));
+
+    const childComponent1EL = itemDEList[0].nativeElement;
+    const childComponent2EL = itemDEList[1].nativeElement;
+
+    childComponent1EL.click();
+    childComponent2EL.click();
+    component.deselectAllItems();
+
+    const selectedItems = component.items.filter(i => i.isSelected);
+
+    expect(selectedItems.length).toBe(0);
+  });
 });

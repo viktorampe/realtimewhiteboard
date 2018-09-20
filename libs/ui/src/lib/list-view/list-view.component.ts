@@ -6,7 +6,8 @@ import {
   QueryList,
   EventEmitter,
   Output,
-  Injectable
+  Injectable,
+  forwardRef
 } from '@angular/core';
 import { ListItemDirective } from './list-item/list-item.directive';
 
@@ -36,7 +37,8 @@ export class ListViewComponent implements AfterContentInit {
   itemsAmount: number;
   itemSelectStyle = false;
 
-  @ContentChildren(ListItemDirective) items: QueryList<ListItemDirective>;
+  @ContentChildren(forwardRef(() => ListItemDirective))
+  items: QueryList<ListItemDirective>;
   ngAfterContentInit() {
     this.items.forEach(item => {
       item.itemClicked.subscribe(() => this.itemClickHandler(item));
