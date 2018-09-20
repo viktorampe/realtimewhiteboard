@@ -1,16 +1,88 @@
 import { ComponentPortal } from '@angular/cdk/portal';
-import { Component, ComponentRef, OnInit } from '@angular/core';
+import {
+  AfterContentInit,
+  Component,
+  ComponentRef,
+  ContentChild,
+  Input,
+  OnInit
+} from '@angular/core';
 import { FolderGridComponent } from './components/folder-grid/folder-grid.component';
 import { FolderLineComponent } from './components/folder-line/folder-line.component';
-import { Folder } from './folder';
+import { FolderProgressIndicatorComponent } from './components/folder-progress-indicator/folder-progress-indicator.component';
 
 @Component({
   selector: 'campus-folder',
-  templateUrl: './folder.component.html',
-  styleUrls: ['./folder.component.scss']
+  templateUrl: './folder.component.html'
 })
-export class FolderComponent extends Folder implements OnInit {
-  folderPortal: ComponentPortal<Folder>;
+export class FolderComponent implements OnInit, AfterContentInit {
+  protected folderPortal: ComponentPortal<
+    FolderLineComponent | FolderGridComponent
+  >;
+  @Input() title: string;
+  @Input() icon: string;
+  @Input() itemCount: string;
+  @Input() lineView: boolean;
+  @Input() backgroundColor: string;
+  /**
+   * Whether to show an exclamation mark when folder is empty.
+   *
+   * @memberof FolderComponent
+   */
+  @Input()
+  set errorOnEmpty(value) {
+    if (value) {
+      if (
+        isNaN(parseInt(this.itemCount, 10)) ||
+        parseInt(this.itemCount, 10) === 0
+      ) {
+        this.showEmptyError = true;
+      }
+    }
+  }
+
+  /**
+   * Reference to the progress indicator.
+   * Used to determine whether the default icon should be visible.
+   * @type {ElementRef<HTMLElement>}
+   * @memberof FolderComponent
+   */
+  @ContentChild(FolderProgressIndicatorComponent)
+  progressIndicator: FolderProgressIndicatorComponent;
+
+  gradientId: string;
+  gradientUrl: string;
+  showDefaultIcon = false;
+  showEmptyError: boolean;
+
+  constructor() {}
+
+  /**
+   * Respond after Angular projects external content into the component's view / the view that a directive is in.
+   * Called once after the first ngDoCheck().
+   *
+   * @memberof FolderComponent
+   */
+  ngAfterContentInit(): void {
+    this.gradientId = this.backgroundColor.replace('#', '');
+
+    this.gradientUrl = `url(#MyGradient${this.gradientId})`;
+
+    // since we use a reference to projected content (FolderProgressIndicator in the component template),
+    // we only want to check it's value after the content has been projected.
+    this.setIcon();
+  }
+
+  /**
+   * Checks if an icon is present, otherwise shows the default icon.
+   *
+   * @memberof FolderComponent
+   */
+  setIcon() {
+    console.log(this.progressIndicator);
+    this.showDefaultIcon = !this.progressIndicator;
+    console.log('should show default icon: ', this.showDefaultIcon);
+  }
   ngOnInit() {
     if (this.lineView) {
       this.folderPortal = new ComponentPortal(FolderLineComponent);
@@ -19,7 +91,7 @@ export class FolderComponent extends Folder implements OnInit {
     }
   }
 
-  configureFolderRef(portalRef: ComponentRef<Folder>) {
+  configureFolderRef(portalRef: ComponentRef<FolderComponent>) {
     portalRef.instance.backgroundColor = this.backgroundColor;
     portalRef.instance.errorOnEmpty = this.errorOnEmpty;
     portalRef.instance.gradientId = this.gradientId;
@@ -30,5 +102,6 @@ export class FolderComponent extends Folder implements OnInit {
     portalRef.instance.showDefaultIcon = this.showDefaultIcon;
     portalRef.instance.showEmptyError = this.showEmptyError;
     portalRef.instance.title = this.title;
+    portalRef.instance.progressIndicator = this.progressIndicator;
   }
 }

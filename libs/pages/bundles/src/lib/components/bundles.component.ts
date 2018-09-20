@@ -132,6 +132,6 @@ export class BundlesComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    this.lineView = true;
+    this.lineView = false;
   }
 }

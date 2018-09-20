@@ -22,6 +22,10 @@ import { FolderComponent } from './folder/folder.component';
     FolderDetailsDirective,
     FolderProgressIndicatorComponent
   ],
-  entryComponents: [FolderGridComponent, FolderLineComponent]
+  entryComponents: [
+    FolderGridComponent,
+    FolderLineComponent,
+    FolderProgressIndicatorComponent
+  ]
 })
 export class UiModule {}
