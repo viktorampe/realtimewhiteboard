@@ -10,6 +10,8 @@ import {
 } from '@angular/core';
 
 /**
+ * Decorator for components in campus-list-view
+ *
  * @export
  * @class ListItemDirective
  */

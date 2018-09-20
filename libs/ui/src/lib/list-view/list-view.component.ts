@@ -4,8 +4,6 @@ import {
   AfterContentInit,
   ContentChildren,
   QueryList,
-  EventEmitter,
-  Output,
   Injectable,
   forwardRef
 } from '@angular/core';
@@ -13,10 +11,12 @@ import { ListItemDirective } from './list-item/list-item.directive';
 
 /**
  * Places decorated components in a Grid or List layout.
+ * List items need to be decorated with the campusListItem attribute.
  *
  * @param {boolean} listFormat - Show components in a grid or in a list.
  * @param {boolean} multiSelect - Allow selection of multiple components.
  * @param {string} placeHolderText - Text to display when the list is empty.
+ *
  *
  * @export
  * @class ListViewComponent
