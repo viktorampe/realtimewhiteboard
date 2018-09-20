@@ -48,9 +48,9 @@ export class ShellComponent implements OnInit, OnDestroy {
   /**
    * Stream of @media queries matching 'XSmall' breakpoint preset.
    */
-  private xSmallMediaQuery$ = this.breakPointObserver.observe([
-    Breakpoints.XSmall
-  ]).pipe(shareReplay(1));
+  private xSmallMediaQuery$ = this.breakPointObserver
+    .observe([Breakpoints.XSmall])
+    .pipe(shareReplay(1));
 
   constructor(private breakPointObserver: BreakpointObserver) {}
 

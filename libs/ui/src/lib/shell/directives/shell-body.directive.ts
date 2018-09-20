@@ -4,7 +4,5 @@ import { Directive } from '@angular/core';
   selector: '[campusShellBody], campus-shell-body'
 })
 export class ShellBodyDirective {
-
-  constructor() { }
-
+  constructor() {}
 }
