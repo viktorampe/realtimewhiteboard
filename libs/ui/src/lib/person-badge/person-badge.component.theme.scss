@@ -3,8 +3,8 @@
     &__badge {
       background-color: $ui-bg-color-gray-4;
       &--medium {
-        height: $person-badge-size-medium;
-        width: $person-badge-size-medium;
+        height: $ui-person-badge-size-medium;
+        width: $ui-person-badge-size-medium;
       }
     }
     &__displayName {
