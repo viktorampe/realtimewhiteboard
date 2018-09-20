@@ -1,16 +1,39 @@
 .flex-grid-item {
   width: 215px;
   height: 119px;
-  margin: 8px;
+  margin: 3px;
   position: relative;
+  box-sizing: border-box;
+  border: 5px transparent solid;
 }
 
 .flex-list-item {
   width: 100%;
   height: 48px;
-  margin-bottom: 2px;
+  box-sizing: border-box;
+  border: 5px transparent solid;
 }
 
 .item-selected {
-  background-color: gold;
+  border: 5px blue solid;
+}
+
+.item-selectoverlay {
+  margin-left: 50px;
+  border: 5px transparent solid;
+  &::before {
+    content: ' ';
+    display: block;
+    width: 20px;
+    height: 20px;
+    margin-left: -30px;
+    margin-top: 9px;
+    float: left;
+  }
+  &:not(.item-selected)::before {
+    background-color: gold;
+  }
+  &.item-selected::before {
+    background-color: green;
+  }
 }

@@ -2,12 +2,18 @@
 </ng-container>
 
 <ng-template #hasContentTemplate>
-  <button (click)="setForm('grid')">grid</button>
-  <button (click)="setForm('list')">list</button>
+  <!-- TODO: verwijderen v -->
+  <button (click)="setListFormat('grid')">grid</button>
+  <button (click)="setListFormat('list')">list</button>
+
+  <span> Selecteer</span>
+  <button (click)="selectAllItems()">alles</button>
+  <button (click)="deselectAllItems()">geen</button>
+  <!-- TODO: verwijderen ^ -->
 
   <header>Pageheader</header>
 
-  <div class="flexbox " [ngClass]="{'flex-list': !isGrid, 'flex-grid': isGrid }">
+  <div class="flexbox " [ngClass]="{'flex-list': listFormat =='list', 'flex-grid': listFormat =='grid' }">
     <ng-content></ng-content>
   </div>
 </ng-template>

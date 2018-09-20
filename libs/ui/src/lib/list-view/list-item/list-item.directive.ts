@@ -1,27 +1,24 @@
+import { ListViewComponent } from './../list-view.component';
 import {
-  Input,
   EventEmitter,
   Output,
   Directive,
   HostBinding,
-  HostListener
+  HostListener,
+  forwardRef,
+  Inject
 } from '@angular/core';
 
 /**
- * Placeholder child component
- * TODO: remove
- *
  * @export
- * @class ListItemComponent
+ * @class ListItemDirective
  */
 @Directive({
   selector: '[campus-list-item]'
 })
 export class ListItemDirective {
-  @Input('campus-list-item') elementForm: 'grid' | 'list';
-
   isSelected: boolean;
-
+  parentList: ListViewComponent;
   @Output() itemClicked = new EventEmitter<ListItemDirective>();
 
   @HostBinding('class.item-selected')
@@ -31,16 +28,28 @@ export class ListItemDirective {
 
   @HostBinding('class.flex-grid-item')
   get isGridClass() {
-    return this.elementForm === 'grid';
+    return this.parentList.listFormat === 'grid';
   }
 
   @HostBinding('class.flex-list-item')
   get isListClass() {
-    return this.elementForm === 'list';
+    return this.parentList.listFormat === 'list';
+  }
+
+  @HostBinding('class.item-selectoverlay')
+  get isMultiSelectableClass() {
+    return this.parentList.itemSelectStyle === true;
   }
 
   @HostListener('click')
   clickEvent() {
     this.itemClicked.emit(this);
+  }
+
+  constructor(
+    @Inject(forwardRef(() => ListViewComponent))
+    parentList
+  ) {
+    this.parentList = parentList;
   }
 }
