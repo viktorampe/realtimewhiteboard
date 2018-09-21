@@ -5,15 +5,11 @@ import { Component, OnInit, Input } from '@angular/core';
   templateUrl: './content-thumbnail.component.html',
   styleUrls: ['./content-thumbnail.component.scss']
 })
-export class ContentThumbnailComponent implements OnInit {
+export class ContentThumbnailComponent {
   @Input() listFormat: string;
   @Input() title: string;
   @Input() contentTypeClass: string;
   @Input() imagePath: string;
   @Input() fileExtensionClass: string;
-  @Input() actions: any[];
-
-  constructor() {}
-
-  ngOnInit() {}
+  @Input() actionArray: any[];
 }

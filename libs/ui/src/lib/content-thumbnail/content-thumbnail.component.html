@@ -17,7 +17,7 @@
       {{title}}
     </div>
     <div class="ui-content-thumbnail__actions ui-content-thumbnail__actions--grid">
-      <ng-container *ngTemplateOutlet="actionsTemplate"></ng-container>
+      <campus-content-action-button *ngFor="let action of actionArray" [iconClass]="action.iconClass"></campus-content-action-button>
     </div>
   </div>
 </ng-template>
@@ -34,7 +34,7 @@
       {{title}}
     </div>
     <div class="ui-content-thumbnail__actions ui-content-thumbnail__actions--list">
-      <ng-container *ngTemplateOutlet="actionsTemplate"></ng-container>
+      <campus-content-action-button *ngFor="let action of actionArray" [iconClass]="action.iconClass"></campus-content-action-button>
     </div>
   </div>
 </ng-template>

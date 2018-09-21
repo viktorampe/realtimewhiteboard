@@ -19,6 +19,13 @@
     width: 100%;
     height: 48px;
     flex-direction: row;
+
+    &:hover,
+    &:active {
+      .ui-content-thumbnail__actions--list {
+        visibility: visible;
+      }
+    }
   }
 
   &__header {
@@ -78,10 +85,15 @@
   }
 
   &__actions {
-    background-color: #ebebeb;
+    display: flex;
+    align-items: center;
 
     &--grid {
       height: 45px;
+      background-color: #ebebeb;
+    }
+    &--list {
+      visibility: hidden;
     }
   }
 
@@ -92,7 +104,6 @@
     &--grid {
       color: #6ed3c2;
       margin-left: 4px;
-      margin-top: 2px;
     }
     &--list {
       color: #45b3ab;
