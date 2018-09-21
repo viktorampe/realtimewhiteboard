@@ -32,6 +32,13 @@ export interface NavItem {
   styleUrls: ['./tree-nav.component.scss']
 })
 export class TreeNavComponent {
+  /**
+   * Current tree nav
+   *
+   * @private
+   * @type {NavItem[]}
+   * @memberof TreeNavComponent
+   */
   private _treeNav: NavItem[];
 
   @Input() set treeNav(treeNav: NavItem[]) {
@@ -39,7 +46,19 @@ export class TreeNavComponent {
     this.updateTreeNav();
   };
 
+  /**
+   * Datasource for CdkTree from Angular Material CDK
+   *
+   * @type {MatTreeNestedDataSource<NavItem>}
+   * @memberof TreeNavComponent
+   */
   nestedDataSource: MatTreeNestedDataSource<NavItem>;
+  /**
+   * Nested tree control for CdkTree from Angular Material CDK
+   *
+   * @type {NestedTreeControl<NavItem>}
+   * @memberof TreeNavComponent
+   */
   nestedTreeControl: NestedTreeControl<NavItem>;
 
   constructor() {
@@ -48,19 +67,32 @@ export class TreeNavComponent {
   }
 
   /**
-   * Function that should return true if the node template should be used for the provided index and node data
+   * Function that should return true if the nested node template should be used for the provided index and node data
    * https://material.angular.io/cdk/tree/api#CdkTreeNodeDef
+   * 
+   * @param {number} _
+   * @param {NavItem} nodeData
+   * @returns {boolean}
+   * @memberof TreeNavComponent
    */
-  hasChildren = (_: number, nodeData: NavItem): boolean =>
-    nodeData.children && nodeData.children.length > 0;
+  hasChildren = (_: number, nodeData: NavItem): boolean => nodeData.children && nodeData.children.length > 0;
 
   /**
-   * Get children of selected Node
+   * Get children of selected node
+   *
+   * @private
+   * @param {NavItem} node
+   * @returns {NavItem[]}
+   * @memberof TreeNavComponent
    */
   private getChildren = (node: NavItem): NavItem[] => node.children;
 
   /**
-   * Update tree when new state is received
+   * Update tree to current state
+   * 
+   * @private
+   * @returns {void}
+   * @memberof TreeNavComponent
    */
   private updateTreeNav(): void {
     this.nestedDataSource.data = this._treeNav;
@@ -71,10 +103,14 @@ export class TreeNavComponent {
 
   /**
    * Open tree nodes where 'expanded' property is true
-   * @param nodes 
+   *
+   * @private
+   * @param {NavItem[]} nodes
+   * @returns {void}
+   * @memberof TreeNavComponent
    */
-  private setExpanded(nodes): void {
-    if (!nodes || nodes.length === 0) {
+  private setExpanded(nodes: NavItem[]): void {
+    if (!nodes) {
       return;
     }
     nodes.forEach((node) => {

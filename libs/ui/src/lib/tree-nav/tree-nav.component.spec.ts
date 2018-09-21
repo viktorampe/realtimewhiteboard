@@ -11,7 +11,9 @@ describe('TreeNavComponent', () => {
   let tree: HTMLElement;
   let treeNodes: HTMLCollection;
 
-  let mockData: any;
+  let mockData: {
+    nav: NavItem[]
+  };
 
   const createNode = (children?: NavItem[], icon?: boolean, link?: boolean) => {
     const node: NavItem = {
@@ -132,4 +134,6 @@ describe('TreeNavComponent', () => {
     fixture.detectChanges();
     expect(node.className).not.toContain('ui-tree-nav__node--closed');
   });
+
+  // no tests for click handler because that is triggered through the "cdkTreeNodeToggle" Angular Material directive
 });
