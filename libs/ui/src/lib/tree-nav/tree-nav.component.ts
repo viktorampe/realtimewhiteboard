@@ -4,6 +4,9 @@ import { NestedTreeControl } from '@angular/cdk/tree';
 
 /**
  * Json node data with nested structure. Each node has a title, an icon and optionally a list children
+ * 
+ * @export
+ * @interface NavItem
  */
 export interface NavItem {
   title: string;
@@ -13,6 +16,16 @@ export interface NavItem {
   expanded?: boolean;
 }
 
+/**
+ * Navigation tree
+ * 
+ * @example
+ *   <campus-nav-tree [treeNav]="myNavigationTree"></campus-nav-tree>
+ * @example
+ * 
+ * @export
+ * @class TreeNavComponent
+ */
 @Component({
   selector: 'campus-tree-nav',
   templateUrl: './tree-nav.component.html',
@@ -23,7 +36,7 @@ export class TreeNavComponent {
 
   @Input() set treeNav(treeNav: NavItem[]) {
     this._treeNav = treeNav;
-    this._updateTreeNav();
+    this.updateTreeNav();
   };
 
   nestedDataSource: MatTreeNestedDataSource<NavItem>;
@@ -31,7 +44,7 @@ export class TreeNavComponent {
 
   constructor() {
     this.nestedDataSource = new MatTreeNestedDataSource();
-    this.nestedTreeControl = new NestedTreeControl<NavItem>(this._getChildren);
+    this.nestedTreeControl = new NestedTreeControl<NavItem>(this.getChildren);
   }
 
   /**
@@ -44,23 +57,23 @@ export class TreeNavComponent {
   /**
    * Get children of selected Node
    */
-  private _getChildren = (node: NavItem): NavItem[] => node.children;
+  private getChildren = (node: NavItem): NavItem[] => node.children;
 
   /**
    * Update tree when new state is received
    */
-  private _updateTreeNav(): void {
+  private updateTreeNav(): void {
     this.nestedDataSource.data = this._treeNav;
     this.nestedTreeControl.dataNodes = this._treeNav;
 
-    this._setExpanded(this.nestedTreeControl.dataNodes);
+    this.setExpanded(this.nestedTreeControl.dataNodes);
   }
 
   /**
    * Open tree nodes where 'expanded' property is true
    * @param nodes 
    */
-  private _setExpanded(nodes): void {
+  private setExpanded(nodes): void {
     if (!nodes || nodes.length === 0) {
       return;
     }
@@ -68,7 +81,7 @@ export class TreeNavComponent {
       if (node.expanded) {
         this.nestedTreeControl.expand(node);
       }
-      this._setExpanded(node.children);
+      this.setExpanded(node.children);
     });
   }
 }

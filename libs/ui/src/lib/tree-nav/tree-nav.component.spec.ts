@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TreeNavComponent } from './tree-nav.component';
+import { TreeNavComponent, NavItem } from './tree-nav.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { CdkTreeModule } from '@angular/cdk/tree';
 
@@ -12,6 +12,22 @@ describe('TreeNavComponent', () => {
   let treeNodes: HTMLCollection;
 
   let mockData: any;
+
+  const createNode = (children?: NavItem[], icon?: boolean, link?: boolean) => {
+    const node: NavItem = {
+      title: 'title'
+    };
+    if (icon !== false) {
+      node.icon = 'iconClass';
+    }
+    if (link !== false) {
+      node.link = 'route';
+    }
+    if (children) {
+      node.children = children;
+    }
+    return node;
+  };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -29,43 +45,16 @@ describe('TreeNavComponent', () => {
 
     mockData = {
       nav: [
-        {
-          title: 'string',
-          icon: 'iconClass',
-          link: 'route'
-        },
-        {
-          title: 'string',
-          icon: 'iconClass',
-          children: [
-            {
-              title: 'string',
-              icon: 'iconClass',
-              link: 'route',
-              children: [
-                {
-                  title: 'string',
-                  icon: 'iconClass',
-                  link: 'route'
-                }
-              ]
-            },
-            {
-              title: 'string',
-              icon: 'iconClass',
-              link: 'route'
-            },
-            {
-              title: 'string',
-              icon: 'iconClass',
-              link: 'route'
-            }
-          ]
-        },
-        {
-          title: 'string',
-          link: 'route'
-        }
+        createNode(),
+        createNode([
+          createNode([
+            createNode()
+          ]),
+          createNode(),
+          createNode()
+        ]),
+        createNode(null, false),
+        createNode(null, true, false)
       ]
     };
 
@@ -93,7 +82,7 @@ describe('TreeNavComponent', () => {
     expect(node.querySelector('i:first-child')).toBeFalsy();
   });
 
-  it('should have children on second node', () => {
+  it('should have three children on second node', () => {
     const node = treeNodes[1];
     expect(node.tagName.toLowerCase()).toBe('cdk-nested-tree-node');
 
@@ -123,5 +112,24 @@ describe('TreeNavComponent', () => {
   it('should add link property as href', () => {
     const node = treeNodes[0];
     expect(node.querySelector('a').getAttribute('href')).toBe('/route');
+  });
+
+  it('should set href property to current url when no link is set', () => {
+    const node = treeNodes[3];
+    expect(node.querySelector('a').getAttribute('href')).toBe('/');
+  });
+
+  it('should open the second node', () => {
+    // check if default state is closed
+    let node = treeNodes[1].children[0];
+    expect(node.className).toContain('ui-tree-nav__node--closed');
+
+    // expand node
+    const newNav = mockData.nav.slice();
+    newNav[1].expanded = true;
+    // apply updated nav
+    component.treeNav = newNav;
+    fixture.detectChanges();
+    expect(node.className).not.toContain('ui-tree-nav__node--closed');
   });
 });
