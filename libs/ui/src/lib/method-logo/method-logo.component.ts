@@ -4,6 +4,7 @@ import { Component, Input } from '@angular/core';
  *
  * @param {string} className - The Css classname associated with the method.
  * @param {string} colorMode - Sets the color of the icon. Accepted values: 'grey', 'color' and 'hover'(default).
+ * @param {string} altText - Sets the value of the (invisible) textcontent.
  *
  * @export
  * @class MethodLogoComponent
@@ -16,6 +17,7 @@ import { Component, Input } from '@angular/core';
 export class MethodLogoComponent {
   @Input() methodClass = '';
   @Input() colorMode: 'grey' | 'color' | 'hover';
+  @Input() altText = '';
 
   public get colorClass(): string {
     let className: string;
