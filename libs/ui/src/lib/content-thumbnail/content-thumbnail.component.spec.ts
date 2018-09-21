@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ContentThumbnailComponent } from './content-thumbnail.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('ContentThumbnailComponent', () => {
   let component: ContentThumbnailComponent;
@@ -8,7 +9,8 @@ describe('ContentThumbnailComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ContentThumbnailComponent]
+      declarations: [ContentThumbnailComponent],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
   }));
 
