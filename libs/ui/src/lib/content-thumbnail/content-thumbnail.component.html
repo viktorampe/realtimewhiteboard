@@ -2,18 +2,21 @@
 
 <ng-template #gridTemplate>
   <div class="ui-content-thumbnail ui-content-thumbnail__grid">
-    <div class="ui-content-thumbnail__grid__header">
-      <ng-container *ngTemplateOutlet="contentTypeTemplate"></ng-container>
-      <ng-container *ngTemplateOutlet="fileExtensionTemplate"></ng-container>
+    <div class="ui-content-thumbnail__header ui-content-thumbnail__header--grid">
+      <div [ngClass]="{'ui-content-thumbnail__icon' : true, 'ui-content-thumbnail__icon--grid' : true}" [class]="contentTypeClass"></div>
+      <div class="flex-filler"></div>
+      <div [class]="fileExtensionClass">{{fileExtensionClass}}</div>
+      <!--moet fileExtensionComponent worden-->
     </div>
-    <figure class="ui-content-thumbnail__grid__image">
+    <figure class="ui-content-thumbnail__image">
       <img [src]=imagePath *ngIf="imagePath">
-      <div *ngIf="!imagePath">*geen imagepath*</div>
+      <div *ngIf="!imagePath">{{fileExtensionClass}}</div>
+      <!--moet fileExtensionComponent worden-->
     </figure>
-    <div class="ui-content-thumbnail__grid__title">
+    <div class="ui-content-thumbnail__title ui-content-thumbnail__title--grid">
       {{title}}
     </div>
-    <div class="ui-content-thumbnail__grid__actions">
+    <div class="ui-content-thumbnail__actions ui-content-thumbnail__actions--grid">
       <ng-container *ngTemplateOutlet="actionsTemplate"></ng-container>
     </div>
   </div>
@@ -21,29 +24,23 @@
 
 <ng-template #listTemplate>
   <div class="ui-content-thumbnail ui-content-thumbnail__list">
-    <div class="ui-content-thumbnail__list__header">
-      <ng-container *ngTemplateOutlet="fileExtensionTemplate"></ng-container>
-      <ng-container *ngTemplateOutlet="contentTypeTemplate"></ng-container>
+    <div class="ui-content-thumbnail__header">
+      <div [class]="fileExtensionClass">{{fileExtensionClass}}</div>
+      <!--moet fileExtensionComponent worden-->
+      <div class="flex-filler"></div>
+      <div [ngClass]="{'ui-content-thumbnail__icon' : true, 'ui-content-thumbnail__icon--list' : true}" [class]="contentTypeClass"></div>
     </div>
-    <div class="ui-content-thumbnail__list__title">
+    <div class="ui-content-thumbnail__title ui-content-thumbnail__title--list">
       {{title}}
     </div>
-    <div class="ui-content-thumbnail__list__actions">
+    <div class="ui-content-thumbnail__actions ui-content-thumbnail__actions--list">
       <ng-container *ngTemplateOutlet="actionsTemplate"></ng-container>
     </div>
   </div>
 </ng-template>
 
 
-<!-- Gemeenschappelijke template gedeeltes -->
-<ng-template #fileExtensionTemplate>
-  <ng-content select=".file-extension"></ng-content>
-</ng-template>
-
-<ng-template #contentTypeTemplate>
-  <div [class]="contentTypeClass"></div>
-</ng-template>
-
+<!-- Gemeenschappelijke template gedeeltes, voor content projection -->
 <ng-template #actionsTemplate>
   <ng-content select=".thumbnail-actions"></ng-content>
 </ng-template>
