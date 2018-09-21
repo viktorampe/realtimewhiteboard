@@ -54,7 +54,7 @@ describe('MethodIconPresenterComponent', () => {
 
     const componentDE = fixture.debugElement.query(By.css('*'));
     const componentEL = componentDE.nativeElement;
-    expect(componentEL.className).toContain('ui-method__logo--hover');
+    expect(componentEL.className).toContain('ui-method__logo--variable-hover');
   });
 
   it('should show the altText', () => {

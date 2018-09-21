@@ -31,7 +31,7 @@ export class MethodLogoComponent {
         break;
 
       default:
-        className = 'ui-method__logo--hover';
+        className = 'ui-method__logo--variable-hover';
     }
     return className;
   }

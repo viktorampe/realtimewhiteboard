@@ -8,13 +8,13 @@
 
     @if variable-exists(ui-method-logo-bgimage-grayscale) {
       &--grey,
-      &--hover {
+      &--variable-hover {
         background-image: url($ui-method-logo-bgimage-grayscale);
       }
     }
 
     @if variable-exists(ui-method-logo-bgimage-color) {
-      &:hover.ui-method__logo--hover,
+      &:hover.ui-method__logo--variable-hover,
       &--color {
         background-image: url($ui-method-logo-bgimage-color);
       }
