@@ -34,4 +34,8 @@ export class FolderProgressIndicatorComponent implements OnInit {
       this.iconBackgroundColor = '#495266';
     }
   }
+
+  setViewMode(lineView: boolean) {
+    this.lineView = lineView;
+  }
 }

@@ -6,26 +6,21 @@ import { FolderGridComponent } from './folder/components/folder-grid/folder-grid
 import { FolderLineComponent } from './folder/components/folder-line/folder-line.component';
 import { FolderProgressIndicatorComponent } from './folder/components/folder-progress-indicator/folder-progress-indicator.component';
 import { FolderDetailsDirective } from './folder/directives/folder-details.directive';
-import { FolderComponent } from './folder/folder.component';
 
 @NgModule({
   imports: [CommonModule, MatProgressSpinnerModule, PortalModule],
   declarations: [
-    FolderComponent,
     FolderDetailsDirective,
     FolderProgressIndicatorComponent,
     FolderLineComponent,
     FolderGridComponent
   ],
   exports: [
-    FolderComponent,
     FolderDetailsDirective,
-    FolderProgressIndicatorComponent
-  ],
-  entryComponents: [
-    FolderGridComponent,
+    FolderProgressIndicatorComponent,
     FolderLineComponent,
-    FolderProgressIndicatorComponent
-  ]
+    FolderGridComponent
+  ],
+  entryComponents: []
 })
 export class UiModule {}

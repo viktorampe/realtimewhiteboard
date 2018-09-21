@@ -2,7 +2,8 @@
   <div class="wrapper">
     <div class="ui-folder__header">
       <div class="ui-folder__header__icon">
-        <ng-template #progressTemplate></ng-template>
+        <ng-content select="campus-folder-progress-indicator">
+        </ng-content>
         <ng-container *ngIf="showDefaultIcon">
           <div class="ui-folder__header__icon__default">
             <i *ngIf="icon"

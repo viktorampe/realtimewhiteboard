@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
+import { BaseFolder } from '../../folder.component';
 
 @Component({
   selector: 'campus-folder-grid',
   templateUrl: './folder-grid.component.html',
   styleUrls: ['./folder-grid.component.scss']
 })
-export class FolderGridComponent {}
+export class FolderGridComponent extends BaseFolder {
+  lineView = false;
+}

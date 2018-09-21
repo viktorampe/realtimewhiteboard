@@ -1,28 +1,17 @@
-import { ComponentPortal } from '@angular/cdk/portal';
 import {
   AfterContentInit,
-  Component,
-  ComponentRef,
+  AfterViewInit,
   ContentChild,
   Input,
   OnInit
 } from '@angular/core';
-import { FolderGridComponent } from './components/folder-grid/folder-grid.component';
-import { FolderLineComponent } from './components/folder-line/folder-line.component';
 import { FolderProgressIndicatorComponent } from './components/folder-progress-indicator/folder-progress-indicator.component';
 
-@Component({
-  selector: 'campus-folder',
-  templateUrl: './folder.component.html'
-})
-export class FolderComponent implements OnInit, AfterContentInit {
-  protected folderPortal: ComponentPortal<
-    FolderLineComponent | FolderGridComponent
-  >;
+export class BaseFolder implements OnInit, AfterContentInit, AfterViewInit {
   @Input() title: string;
   @Input() icon: string;
   @Input() itemCount: string;
-  @Input() lineView: boolean;
+  // @Input() lineView: boolean;
   @Input() backgroundColor: string;
   /**
    * Whether to show an exclamation mark when folder is empty.
@@ -56,6 +45,9 @@ export class FolderComponent implements OnInit, AfterContentInit {
   showEmptyError: boolean;
 
   constructor() {}
+  ngOnInit() {}
+
+  ngAfterViewInit(): void {}
 
   /**
    * Respond after Angular projects external content into the component's view / the view that a directive is in.
@@ -80,28 +72,7 @@ export class FolderComponent implements OnInit, AfterContentInit {
    */
   setIcon() {
     console.log(this.progressIndicator);
-    this.showDefaultIcon = !this.progressIndicator;
+    // this.showDefaultIcon = !this.progressIndicator;
     console.log('should show default icon: ', this.showDefaultIcon);
-  }
-  ngOnInit() {
-    if (this.lineView) {
-      this.folderPortal = new ComponentPortal(FolderLineComponent);
-    } else {
-      this.folderPortal = new ComponentPortal(FolderGridComponent);
-    }
-  }
-
-  configureFolderRef(portalRef: ComponentRef<FolderComponent>) {
-    portalRef.instance.backgroundColor = this.backgroundColor;
-    portalRef.instance.errorOnEmpty = this.errorOnEmpty;
-    portalRef.instance.gradientId = this.gradientId;
-    portalRef.instance.gradientUrl = this.gradientUrl;
-    portalRef.instance.icon = this.icon;
-    portalRef.instance.itemCount = this.itemCount;
-    portalRef.instance.lineView = this.lineView;
-    portalRef.instance.showDefaultIcon = this.showDefaultIcon;
-    portalRef.instance.showEmptyError = this.showEmptyError;
-    portalRef.instance.title = this.title;
-    portalRef.instance.progressIndicator = this.progressIndicator;
   }
 }
