@@ -1,4 +1,33 @@
-<ng-container *ngTemplateOutlet="listFormat === 'grid' ? gridTemplate : listTemplate"></ng-container>
+<div [ngClass]="{'ui-content-thumbnail' : true, 'ui-content-thumbnail__grid' : listFormat === 'grid', 'ui-content-thumbnail__list' : listFormat === 'list'}">
+  <div [ngClass]="{'ui-content-thumbnail__header' : true, 'ui-content-thumbnail__header--grid' : listFormat === 'grid', 'ui-content-thumbnail__header--list' : listFormat === 'list'}">
+    <div [ngClass]=" { 'ui-content-thumbnail__icon' : true, 'ui-content-thumbnail__icon--grid' : listFormat==='grid',
+      'ui-content-thumbnail__icon--list' : listFormat==='list' }"
+      [class]="contentTypeClass">
+    </div>
+    <div class="flex-filler"></div>
+    <div [class]="fileExtensionClass">{{fileExtensionClass}}</div>
+    <!--moet fileExtensionComponent worden-->
+  </div>
+  <figure *ngIf="listFormat==='grid'" [ngClass]=" { 'ui-content-thumbnail__image' : true, 'ui-content-thumbnail__image--grid' : listFormat==='grid',
+      'ui-content-thumbnail__image--list' : listFormat==='list' }">
+    <img [src]=imagePath *ngIf="imagePath">
+    <div *ngIf="!imagePath">{{fileExtensionClass}}</div>
+    <!--moet fileExtensionComponent worden-->
+  </figure>
+  <div [ngClass]=" { 'ui-content-thumbnail__title' : true, 'ui-content-thumbnail__title--grid' : listFormat==='grid',
+      'ui-content-thumbnail__title--list' : listFormat==='list' }">
+    {{title}}
+  </div>
+  <div [ngClass]=" { 'ui-content-thumbnail__actions' : true, 'ui-content-thumbnail__actions--grid' : listFormat==='grid',
+      'ui-content-thumbnail__actions--list' : listFormat==='list' }">
+    <campus-content-action-button *ngFor="let action of actionArray" [iconClass]="action.iconClass"></campus-content-action-button>
+  </div>
+</div>
+
+
+
+
+<!-- <ng-container *ngTemplateOutlet="listFormat === 'grid' ? gridTemplate : listTemplate"></ng-container>
 
 <ng-template #gridTemplate>
   <div class="ui-content-thumbnail ui-content-thumbnail__grid">
@@ -7,26 +36,24 @@
       <div class="flex-filler"></div>
       <div [class]="fileExtensionClass">{{fileExtensionClass}}</div>
       <!--moet fileExtensionComponent worden-->
-    </div>
-    <figure class="ui-content-thumbnail__image">
-      <img [src]=imagePath *ngIf="imagePath">
-      <div *ngIf="!imagePath">{{fileExtensionClass}}</div>
-      <!--moet fileExtensionComponent worden-->
-    </figure>
-    <div class="ui-content-thumbnail__title ui-content-thumbnail__title--grid">
-      {{title}}
-    </div>
-    <div class="ui-content-thumbnail__actions ui-content-thumbnail__actions--grid">
-      <campus-content-action-button *ngFor="let action of actionArray" [iconClass]="action.iconClass"></campus-content-action-button>
-    </div>
-  </div>
+<!-- </div>
+<figure class="ui-content-thumbnail__image">
+  <img [src]=imagePath *ngIf="imagePath">
+  <div *ngIf="!imagePath">{{fileExtensionClass}}</div>
+</figure>
+<div class="ui-content-thumbnail__title ui-content-thumbnail__title--grid">
+  {{title}}
+</div>
+<div class="ui-content-thumbnail__actions ui-content-thumbnail__actions--grid">
+  <campus-content-action-button *ngFor="let action of actionArray" [iconClass]="action.iconClass"></campus-content-action-button>
+</div>
+</div>
 </ng-template>
 
 <ng-template #listTemplate>
   <div class="ui-content-thumbnail ui-content-thumbnail__list">
     <div class="ui-content-thumbnail__header">
       <div [class]="fileExtensionClass">{{fileExtensionClass}}</div>
-      <!--moet fileExtensionComponent worden-->
       <div class="flex-filler"></div>
       <div [ngClass]="{'ui-content-thumbnail__icon' : true, 'ui-content-thumbnail__icon--list' : true}" [class]="contentTypeClass"></div>
     </div>
@@ -37,13 +64,13 @@
       <campus-content-action-button *ngFor="let action of actionArray" [iconClass]="action.iconClass"></campus-content-action-button>
     </div>
   </div>
-</ng-template>
+</ng-template>-->
 
 
 <!-- Gemeenschappelijke template gedeeltes, voor content projection -->
-<ng-template #actionsTemplate>
+<!-- <ng-template #actionsTemplate>
   <ng-content select=".thumbnail-actions"></ng-content>
-</ng-template>
+</ng-template>  -->
 
 
 
