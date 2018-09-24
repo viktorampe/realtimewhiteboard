@@ -50,7 +50,8 @@
     "@ngrx/entity": "^6.1.0",
     "@ngrx/router-store": "6.1.0",
     "@ngrx/store": "6.1.0",
-    "@nrwl/nx": "6.3.0"
+    "@nrwl/nx": "6.3.0",
+    "jasmine-marbles": "^0.3.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.7.0",
