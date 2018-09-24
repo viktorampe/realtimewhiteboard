@@ -13,7 +13,7 @@
       <a [routerLink]="node.link" routerLinkActive="ui-tree-nav__node--active" cdkTreeNodeToggle>
         <i [className]="node.icon" *ngIf="node.icon"></i>
         {{node.title}}
-        <i class="ui-tree-nav__node--toggle" *ngIf="hasChildren(0, node)"></i>
+        <i class="ui-tree-nav__node__arrow" *ngIf="hasChildren(0, node)"></i>
       </a>
       <ul>
         <ng-container cdkTreeNodeOutlet></ng-container>

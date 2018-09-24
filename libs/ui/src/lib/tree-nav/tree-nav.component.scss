@@ -16,6 +16,10 @@
   a {
     display: block;
     text-decoration: none;
+
+    > i:first-child {
+      margin-right: 5px;
+    }
   }
 
   i {
@@ -29,7 +33,7 @@
     }
   }
 
-  &--toggle {
+  &__arrow {
     float: right;
 
     &:before {

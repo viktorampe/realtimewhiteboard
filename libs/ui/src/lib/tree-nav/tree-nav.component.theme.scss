@@ -1,3 +1,25 @@
+// Mixin 'ui-tree-nav__levels' handles layout for multi-level navigation tree
+// Called with globally overridable variable '$ui-tree-nav-levels'
+// 
+// $levels: sass list with a list of optional css-properties specified for each level
+//    supported properties: 'border-top', 'padding', 'icon-size' (= icon font-size)
+// $i: automatically calculated level, starts at '1'
+// 
+// @example
+// $ui-tree-nav-levels: (
+//   // first level
+//   (
+//     padding: 10px 15px,
+//     border-top: 1px solid $ui-tree-nav-color-separator,
+//     icon-size: 30px
+//   ),
+//   // second level (removes border-top and inherits icon-size from previous level)
+//   (
+//     padding: 6px 15px 6px 43px,
+//     border-top: none
+//   )
+// );
+// @example
 @mixin ui-tree-nav__levels($levels, $i: 1) {
   @if $i <= length($levels) {
     $level: nth($levels, $i);
@@ -31,15 +53,10 @@
   $ui-tree-nav-toggle: FontAwesome '\f107' !default;
   $ui-tree-nav-toggle-closed: FontAwesome '\f104' !default;
 
-  @include icon('ui-tree-nav__node--toggle', $ui-tree-nav-toggle);
-  @include icon(
-    'ui-tree-nav__node--closed .ui-tree-nav__node--toggle',
-    $ui-tree-nav-toggle-closed
-  );
+  @include icon('ui-tree-nav__node__arrow', $ui-tree-nav-toggle);
+  @include icon('ui-tree-nav__node--closed .ui-tree-nav__node__arrow', $ui-tree-nav-toggle-closed);
 
-  //
-
-  //
+  // 
   .ui-tree-nav__node {
     > a {
       border-left: 3px solid transparent;
@@ -59,19 +76,23 @@
 
   // styling of different tree levels
   $ui-tree-nav-levels: (
+    // first level
     (
       padding: 10px 15px,
       border-top: 1px solid $ui-tree-nav-color-separator,
       icon-size: 30px
     ),
+    // second level (removes border-top and inherits icon-size from previous level)
     (
       padding: 6px 15px 6px 43px,
-      border-top: none,
-      icon-size: 30px
+      border-top: none
     ),
+    // 3rd level (inherits border-top and icon-size settings from previous level)
     (
       padding: 6px 15px 6px 60px
     )
+    // and so on
   ) !default;
+
   @include ui-tree-nav__levels($ui-tree-nav-levels);
 }
