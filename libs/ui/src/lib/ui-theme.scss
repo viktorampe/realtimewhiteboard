@@ -34,6 +34,7 @@ $ui-font-family-1: 'Lato', sans-serif;
 $ui-font-family-2: 'Open Sans', sans-serif;
 // import all required sass files from our libs
 // @import './tree-nav/tree-nav.component.theme';
+@import './file-extension/file-extension.component.scss';
 @import './page-header/page-header.component.theme.scss';
 @import './app-bar/app-bar.component.theme.scss';
 @import './side-sheet/side-sheet.component.theme';
@@ -42,6 +43,9 @@ $ui-font-family-2: 'Open Sans', sans-serif;
 // create theme-mixin with each mixin from our library components
 @mixin ui-theme() {
   // @include ui-tree-nav();
+
+  //place desired width as optional parameter, default 84;
+  @include ui-file-extension();
   @include ui-page-header_theme();
   @include ui-app-bar();
   @include ui-app-shell();

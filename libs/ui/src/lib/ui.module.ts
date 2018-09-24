@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { MatIconModule, MatSidenavModule } from '@angular/material';
 import { AppBarComponent } from './app-bar/app-bar.component';
+import { FileExtensionComponent } from './file-extension/file-extension.component';
 import { PageHeaderComponent } from './page-header/page-header.component';
 import { ShellBodyDirective } from './shell/directives/shell-body.directive';
 import { ShellLeftDirective } from './shell/directives/shell-left.directive';
@@ -27,7 +28,8 @@ import { SideSheetComponent } from './side-sheet/side-sheet.component';
     ShellLeftDirective,
     ShellBodyDirective,
     AppBarComponent,
-    PageHeaderComponent
+    PageHeaderComponent,
+    FileExtensionComponent
   ],
   exports: [
     SideSheetComponent,
@@ -40,7 +42,8 @@ import { SideSheetComponent } from './side-sheet/side-sheet.component';
     ShellLeftDirective,
     ShellBodyDirective,
     AppBarComponent,
-    PageHeaderComponent
+    PageHeaderComponent,
+    FileExtensionComponent
   ]
 })
 export class UiModule {}
