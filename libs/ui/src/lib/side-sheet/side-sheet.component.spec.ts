@@ -12,7 +12,7 @@ import { SideSheetComponent } from './side-sheet.component';
   selector: 'campus-test-host',
   template: `
   <campus-side-sheet [isOpenOnInit]="true">
-    <campus-side-sheet-header>Test header</campus-side-sheet-header>
+    <campus-side-sheet-header *ngIf="showHeader">Test header</campus-side-sheet-header>
     <campus-side-sheet-body>
       <div><p>Test body</p></div>
     </campus-side-sheet-body>
@@ -23,6 +23,7 @@ import { SideSheetComponent } from './side-sheet.component';
 })
 export class TestHostComponent {
   isOpen: boolean;
+  showHeader = true;
 }
 
 describe('SideSheetComponent', () => {
@@ -45,6 +46,7 @@ describe('SideSheetComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TestHostComponent);
+
     hostComponent = fixture.componentInstance;
     sideSheetComp = <SideSheetComponent>(
       fixture.debugElement.query(By.css('campus-side-sheet')).componentInstance
@@ -61,6 +63,15 @@ describe('SideSheetComponent', () => {
       fixture.debugElement.query(By.directive(SideSheetHeaderDirective))
         .nativeElement.textContent
     ).toContain('Test header');
+  });
+
+  it('should display the default header text', () => {
+    hostComponent.showHeader = false;
+    fixture.detectChanges();
+    expect(
+      fixture.debugElement.query(By.css('.ui-side-sheet__header')).nativeElement
+        .textContent
+    ).toContain('Info');
   });
 
   it('should display the body content', () => {

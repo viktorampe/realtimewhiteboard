@@ -1,7 +1,15 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ContentChild,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import { MatDrawer } from '@angular/material';
 import { filter, takeWhile } from 'rxjs/operators';
+import { SideSheetHeaderDirective } from './directives/side-sheet-header.directive';
 /**
  * Surface containing supplementary content that is anchored to the right edge of the screen.
  * Side sheets contain content that supplements the screen's primary UI region.
@@ -37,6 +45,13 @@ import { filter, takeWhile } from 'rxjs/operators';
   styleUrls: ['./side-sheet.component.scss']
 })
 export class SideSheetComponent implements OnInit, OnDestroy {
+  defaultHeaderText = 'Info';
+  /**
+   * Whether the side sheet is open on first render.
+   *
+   * @type {boolean}
+   * @memberof SideSheetComponent
+   */
   @Input() isOpenOnInit: boolean;
 
   /**
@@ -48,8 +63,19 @@ export class SideSheetComponent implements OnInit, OnDestroy {
    */
   @ViewChild(MatDrawer) private sheet: MatDrawer;
   /**
+   * Reference to the header directive;
+   * Used to show/hide the default header text.
+   *
+   * @private
+   * @type {SideSheetHeaderDirective}
+   * @memberof SideSheetComponent
+   */
+  @ContentChild(SideSheetHeaderDirective)
+  private header: SideSheetHeaderDirective;
+
+  /**
    * Whether the component is still rendered.
-   * Used for unsubscribing from subscriptions.
+   * Used for unsubscribing from observables.
    *
    * @memberof SideSheetComponent
    */
@@ -94,6 +120,7 @@ export class SideSheetComponent implements OnInit, OnDestroy {
         this.sheet.mode = 'side';
       });
   }
+
   /**
    * Completes the internal streams.
    *
