@@ -13,9 +13,7 @@ $campus-method-logo-height: 74px !default;
   height: $campus-method-logo-height;
 
   @if variable-exists(campus-method-logo-bgimage-grayscale) {
-    & {
-      background-image: url($campus-method-logo-bgimage-grayscale);
-    }
+    background-image: url($campus-method-logo-bgimage-grayscale);
   }
 
   @if variable-exists(campus-method-logo-bgimage-color) {
