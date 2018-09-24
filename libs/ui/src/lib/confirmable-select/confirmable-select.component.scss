@@ -1,4 +1,4 @@
-.ui_adaptable-select {
+.ui-confirmable-select {
   display: flex;
   flex-direction: column;
   padding: 20px;
@@ -17,7 +17,7 @@
     word-break: break-word;
   }
   &__dropdown {
-    &__form-field { 
+    &__form-field {
       width: 100%;
     }
     display: flex;

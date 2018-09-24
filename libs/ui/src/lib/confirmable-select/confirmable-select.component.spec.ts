@@ -4,18 +4,17 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AdaptableSelectComponent } from './adaptable-select.component';
+import { ConfirmableSelectComponent } from './confirmable-select.component';
 
-
-describe('AdaptableSelectComponent', () => {
-  let component: AdaptableSelectComponent;
-  let fixture: ComponentFixture<AdaptableSelectComponent>;
+describe('ConfirmableSelectComponent', () => {
+  let component: ConfirmableSelectComponent;
+  let fixture: ComponentFixture<ConfirmableSelectComponent>;
 
   let mockData: any;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [AdaptableSelectComponent],
+      declarations: [ConfirmableSelectComponent],
       imports: [
         ReactiveFormsModule,
         FormsModule,
@@ -27,7 +26,7 @@ describe('AdaptableSelectComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AdaptableSelectComponent);
+    fixture = TestBed.createComponent(ConfirmableSelectComponent);
     component = fixture.componentInstance;
 
     mockData = {
@@ -50,7 +49,7 @@ describe('AdaptableSelectComponent', () => {
   });
   it('should not show the save icon when no change was made', () => {
     const icon = fixture.debugElement.query(
-      By.css('.ui_adaptable-select__dropdown__icon')
+      By.css('.ui-confirmable-select__dropdown__icon')
     );
     expect(icon).toBeFalsy();
   });
@@ -58,19 +57,19 @@ describe('AdaptableSelectComponent', () => {
     component.selectControl.markAsDirty();
     fixture.detectChanges();
     const icon = fixture.debugElement.query(
-      By.css('.ui_adaptable-select__dropdown__icon')
+      By.css('.ui-confirmable-select__dropdown__icon')
     );
     expect(icon).toBeTruthy();
   });
   it('should show the label', () => {
     const label = fixture.debugElement.query(
-      By.css('.ui_adaptable-select__label')
+      By.css('.ui-confirmable-select__label')
     ).nativeElement.textContent;
     expect(label).toBe(mockData.label);
   });
   it('should show the text', () => {
     const text = fixture.debugElement.query(
-      By.css('.ui_adaptable-select__text')
+      By.css('.ui-confirmable-select__text')
     ).nativeElement.textContent;
     expect(text).toBe(mockData.text);
   });
@@ -78,12 +77,12 @@ describe('AdaptableSelectComponent', () => {
     component.selectControl.markAsDirty();
     fixture.detectChanges();
     const icon = fixture.debugElement.query(
-      By.css('.ui_adaptable-select__dropdown__icon')
+      By.css('.ui-confirmable-select__dropdown__icon')
     );
     icon.triggerEventHandler('click', null);
     fixture.detectChanges();
     const icon2 = fixture.debugElement.query(
-      By.css('.ui_adaptable-select__dropdown__icon')
+      By.css('.ui-confirmable-select__dropdown__icon')
     );
     expect(icon2).toBeFalsy();
   });
@@ -92,9 +91,9 @@ describe('AdaptableSelectComponent', () => {
     component.selectControl.markAsDirty();
     fixture.detectChanges();
     let option: string;
-    component.saveStatus.subscribe((e: string) => (option = e));
+    component.clickConfirm.subscribe((e: string) => (option = e));
     const icon = fixture.debugElement.query(
-      By.css('.ui_adaptable-select__dropdown__icon')
+      By.css('.ui-confirmable-select__dropdown__icon')
     );
     icon.triggerEventHandler('click', null);
     expect(option).toBe(mockData.options[1]);

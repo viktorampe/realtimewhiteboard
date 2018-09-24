@@ -3,28 +3,30 @@ import { FormControl, Validators } from '@angular/forms';
 
 /**
  * @example
- *   <campus-adaptable-select 
+ *   <campus-confirmable-select 
                            [label]="'status'"
                            [options]="['one', 'two']"
                            [selectedOption]="'one'"
+                           [confirmIcon]="'polpo-presentatie'"
                            [text]="'some explenation'"
-                           (saveStatus)="saveStatus($event)"></campus-adaptable-select>
+                           (clickConfirm)="saveStatus($event)"></campus-confirmable-select>
  * 
  * @export
- * @class AdaptableSelectComponent
+ * @class confirmableSelectComponent
  * @implements {OnInit}
  */
 @Component({
-  selector: 'campus-adaptable-select',
-  templateUrl: './adaptable-select.component.html',
-  styleUrls: ['./adaptable-select.component.scss']
+  selector: 'campus-confirmable-select',
+  templateUrl: './confirmable-select.component.html',
+  styleUrls: ['./confirmable-select.component.scss']
 })
-export class AdaptableSelectComponent implements OnInit {
+export class ConfirmableSelectComponent implements OnInit {
   @Input() label: string;
   @Input() text: string;
+  @Input() confirmIcon: string;
   @Input() selectedOption: string;
   @Input() options: string[];
-  @Output() saveStatus = new EventEmitter<string>();
+  @Output() clickConfirm = new EventEmitter<string>();
 
   selectControl: FormControl;
 
@@ -35,8 +37,8 @@ export class AdaptableSelectComponent implements OnInit {
     );
   }
 
-  iconClicked(): void {
+  onClickConfirm(): void {
     this.selectControl.markAsPristine();
-    this.saveStatus.emit(this.selectControl.value);
+    this.clickConfirm.emit(this.selectControl.value);
   }
 }

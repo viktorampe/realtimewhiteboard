@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-import { AdaptableSelectComponent } from './adaptable-select/adaptable-select.component';
+import { ConfirmableSelectComponent } from './confirmable-select/confirmable-select.component';
 import { ContentPreviewComponent } from './content-preview/content-preview.component';
 import { EditableInlineTagListComponent } from './editable-inline-tag-list/editable-inline-tag-list.component';
 import { FileExtensionComponent } from './file-extension/file-extension.component';
@@ -26,7 +26,7 @@ import { PersonBadgeComponent } from './person-badge/person-badge.component';
     InputLabelComponent,
     EditableInlineTagListComponent,
     PeriodLabelComponent,
-    AdaptableSelectComponent,
+    ConfirmableSelectComponent,
     FileExtensionComponent,
     PersonBadgeComponent
   ],
@@ -36,7 +36,7 @@ import { PersonBadgeComponent } from './person-badge/person-badge.component';
     InputLabelComponent,
     EditableInlineTagListComponent,
     PeriodLabelComponent,
-    AdaptableSelectComponent,
+    ConfirmableSelectComponent,
     FileExtensionComponent,
     PersonBadgeComponent
   ]
