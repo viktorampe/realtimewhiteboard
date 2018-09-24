@@ -1,8 +1,7 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { TreeNavComponent, NavItem } from './tree-nav.component';
-import { RouterTestingModule } from '@angular/router/testing';
 import { CdkTreeModule } from '@angular/cdk/tree';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { NavItem, TreeNavComponent } from './tree-nav.component';
 
 describe('TreeNavComponent', () => {
   let component: TreeNavComponent;
@@ -12,7 +11,7 @@ describe('TreeNavComponent', () => {
   let treeNodes: HTMLCollection;
 
   let mockData: {
-    nav: NavItem[]
+    nav: NavItem[];
   };
 
   const createNode = (children?: NavItem[], icon?: boolean, link?: boolean) => {
@@ -48,13 +47,7 @@ describe('TreeNavComponent', () => {
     mockData = {
       nav: [
         createNode(),
-        createNode([
-          createNode([
-            createNode()
-          ]),
-          createNode(),
-          createNode()
-        ]),
+        createNode([createNode([createNode()]), createNode(), createNode()]),
         createNode(null, false),
         createNode(null, true, false)
       ]
@@ -101,14 +94,14 @@ describe('TreeNavComponent', () => {
     expect(childNodes.length).toBe(1);
   });
 
-  it('should show toggle icon when node has children', () => {
+  it('should show arrow icon when node has children', () => {
     const node = treeNodes[1];
-    expect(node.querySelector('i.ui-tree-nav__node--toggle')).toBeTruthy();
+    expect(node.querySelector('i.ui-tree-nav__node__arrow')).toBeTruthy();
   });
 
-  it('should not show toggle icon when node has no children', () => {
+  it('should not show arrow icon when node has no children', () => {
     const node = treeNodes[0];
-    expect(node.querySelector('i.ui-tree-nav__node--toggle')).toBeFalsy();
+    expect(node.querySelector('i.ui-tree-nav__node__arrow')).toBeFalsy();
   });
 
   it('should add link property as href', () => {
