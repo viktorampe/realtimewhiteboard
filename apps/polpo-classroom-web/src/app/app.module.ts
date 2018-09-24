@@ -16,10 +16,13 @@ import {
   initialState as appInitialState
 } from './+state/app.reducer';
 import { AppComponent } from './app.component';
+import { UiModule } from '@campus/ui';
+
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
+    UiModule,
     BrowserModule,
     BrowserAnimationsModule,
     NxModule.forRoot(),
