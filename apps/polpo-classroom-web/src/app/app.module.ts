@@ -18,7 +18,6 @@ import {
 import { AppComponent } from './app.component';
 import { UiModule } from '@campus/ui';
 
-
 @NgModule({
   declarations: [AppComponent],
   imports: [
