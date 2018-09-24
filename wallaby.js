@@ -36,7 +36,7 @@ module.exports = function() {
     preprocessors: {
       'src/**/*.js': jestTransform
     },
-
+    
     setup: function(wallaby) {
       var jestConfig = require('./jest.config');
       jestConfig.setupTestFrameworkScriptFile =

@@ -1,5 +1,6 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { DalModule } from '@campus/dal';
 import { NxModule } from '@nrwl/nx';
@@ -15,11 +16,14 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { storeFreeze } from 'ngrx-store-freeze';
+import { UiModule } from '@campus/ui';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
+    UiModule,
     BrowserModule,
+    BrowserAnimationsModule,
     NxModule.forRoot(),
     DalModule.forRoot(),
     RouterModule.forRoot(
