@@ -1,22 +1,20 @@
-@mixin ui-page-header() {
-  .page-header {
-    font-family: 'Open Sans', Sans-Serif;
-    font-weight: 600;
-    line-height: 16px;
-    font-size: 18px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    margin-bottom: 25px;
+.page-header {
+  font-family: 'Open Sans', Sans-Serif;
+  font-weight: 600;
+  line-height: 16px;
+  font-size: 18px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin-bottom: 25px;
 
-    small {
-      font-size: 16px;
-      display: block;
-    }
+  small {
+    font-size: 16px;
+    display: block;
+  }
 
-    [class*='icon-'] {
-      float: left;
-      font-size: 32px;
-      margin-right: 5px;
-    }
+  [class*='icon-'] {
+    float: left;
+    font-size: 32px;
+    margin-right: 5px;
   }
 }
