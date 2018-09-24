@@ -9,30 +9,30 @@ mat-drawer-container {
   flex: 1 0 auto;
 }
 
-.ui__shell__right {
+.ui-shell__right {
   flex: 1 100%;
   display: flex;
   flex-direction: column;
   min-height: 100%;
 
-  .ui__shell__top__menu-icon {
+  .ui-shell__top__menu-icon {
     vertical-align: middle;
     cursor: pointer;
   }
 
-  .ui__shell__body {
+  .ui-shell__body {
     flex: 1 0 auto;
   }
 }
 
-.ui__shell__left {
+.ui-shell__left {
   display: flex;
   flex-direction: column;
   overflow: auto;
   align-items: stretch;
   min-height: 100%;
 
-  .ui__shell__logo {
+  .ui-shell__logo {
     flex: 0 0 auto;
     display: flex;
     align-items: center;
@@ -40,7 +40,7 @@ mat-drawer-container {
     overflow: hidden;
   }
 
-  .ui__shell__left__content {
+  .ui-shell__left__content {
     flex: 1 0 auto;
   }
 }

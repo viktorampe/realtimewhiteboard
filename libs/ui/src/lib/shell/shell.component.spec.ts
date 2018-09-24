@@ -103,7 +103,7 @@ describe('ShellComponent', () => {
 
   it('should project the rest of the content in the body', () => {
     const bodyContent: HTMLElement = testContainerFixture.debugElement.query(
-      By.css('.ui__shell__body')
+      By.css('.ui-shell__body')
     ).nativeElement;
     expect(bodyContent.querySelector('p').textContent).toEqual(
       'Hi there handsome'
