@@ -1,28 +1,28 @@
+import { NestedTreeControl } from '@angular/cdk/tree';
 import { Component, Input } from '@angular/core';
 import { MatTreeNestedDataSource } from '@angular/material';
-import { NestedTreeControl } from '@angular/cdk/tree';
 
 /**
  * Json node data with nested structure. Each node has a title, an icon and optionally a list children
- * 
+ *
  * @export
  * @interface NavItem
  */
 export interface NavItem {
   title: string;
   icon?: string;
-  link?: string;
+  link?: any[] | string;
   children?: NavItem[];
   expanded?: boolean;
 }
 
 /**
  * Navigation tree
- * 
+ *
  * @example
- *   <campus-nav-tree [treeNav]="myNavigationTree"></campus-nav-tree>
+ *   <campus-nav-tree [treeNav]="myNavigationTree|async"></campus-nav-tree>
  * @example
- * 
+ *
  * @export
  * @class TreeNavComponent
  */
@@ -41,10 +41,11 @@ export class TreeNavComponent {
    */
   private _treeNav: NavItem[];
 
-  @Input() set treeNav(treeNav: NavItem[]) {
+  @Input()
+  set treeNav(treeNav: NavItem[]) {
     this._treeNav = treeNav;
     this.updateTreeNav();
-  };
+  }
 
   /**
    * Datasource for CdkTree from Angular Material CDK
@@ -69,13 +70,14 @@ export class TreeNavComponent {
   /**
    * Function that should return true if the nested node template should be used for the provided index and node data
    * https://material.angular.io/cdk/tree/api#CdkTreeNodeDef
-   * 
+   *
    * @param {number} _
    * @param {NavItem} nodeData
    * @returns {boolean}
    * @memberof TreeNavComponent
    */
-  hasChildren = (_: number, nodeData: NavItem): boolean => nodeData.children && nodeData.children.length > 0;
+  hasChildren = (_: number, nodeData: NavItem): boolean =>
+    nodeData.children && nodeData.children.length > 0;
 
   /**
    * Get children of selected node
@@ -89,7 +91,7 @@ export class TreeNavComponent {
 
   /**
    * Update tree to current state
-   * 
+   *
    * @private
    * @returns {void}
    * @memberof TreeNavComponent
@@ -113,7 +115,7 @@ export class TreeNavComponent {
     if (!nodes) {
       return;
     }
-    nodes.forEach((node) => {
+    nodes.forEach(node => {
       if (node.expanded) {
         this.nestedTreeControl.expand(node);
       }
