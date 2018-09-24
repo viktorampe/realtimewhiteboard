@@ -33,5 +33,4 @@ $ui-font-color-2: #000 !default;
 @mixin ui-theme() {
   // @include ui-tree-nav();
   @include ui-app-bar();
-  @include ui-app-bar_theme();
 }
