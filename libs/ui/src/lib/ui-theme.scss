@@ -2,10 +2,8 @@
 @mixin icon($cls, $icon-bundle) {
   $font: nth($icon-bundle, 1);
   $unicode: nth($icon-bundle, 2);
-
   .#{$cls} {
     font-family: $font;
-
     &:before {
       content: $unicode;
     }
@@ -29,15 +27,23 @@ $ui-icon-filter: FontAwesome '\f0b0' !default;
 // thematic variables
 $ui-bg-color-1: #fff !default;
 $ui-bg-color-2: #fff !default;
+$ui-bg-color-3: #95a0aa !default;
 $ui-font-color-1: #000 !default;
-$ui-font-color-2: #000 !default;
-
+$ui-font-color-2: #fff !default;
+$ui-font-family-1: 'Lato', sans-serif;
+$ui-font-family-2: 'Open Sans', sans-serif;
 // import all required sass files from our libs
 // @import './tree-nav/tree-nav.component.theme';
 @import './page-header/page-header.component.theme.scss';
+@import './app-bar/app-bar.component.theme.scss';
+@import './side-sheet/side-sheet.component.theme';
+@import './shell/shell.component.theme';
 
 // create theme-mixin with each mixin from our library components
 @mixin ui-theme() {
   // @include ui-tree-nav();
   @include ui-page-header_theme();
+  @include ui-app-bar();
+  @include ui-app-shell();
+  @include ui-side-sheet();
 }

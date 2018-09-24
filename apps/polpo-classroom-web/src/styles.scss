@@ -1,6 +1,7 @@
 /*
  * css reset
  */
+
 html,
 body {
   padding: 0;
@@ -11,6 +12,7 @@ body {
 /**
  * icon fonts
  */
+
 @font-face {
   font-family: FontAwesome;
   src: url(/assets/fonts/fontawesome-webfont.eot?v=4.4.0);
@@ -24,6 +26,7 @@ body {
   font-weight: 400;
   font-style: normal;
 }
+
 @font-face {
   font-family: simple-line-icons;
   src: url(/assets/fonts/Simple-Line-Icons.eot?v=2.2.2);
@@ -37,6 +40,7 @@ body {
   font-weight: 400;
   font-style: normal;
 }
+
 @font-face {
   font-family: 'Glyphicons Halflings';
   src: url(/assets/fonts/glyphicons-halflings-regular.eot);
@@ -48,6 +52,7 @@ body {
     url(/assets/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular)
       format('svg');
 }
+
 @font-face {
   font-family: polpo;
   src: url(/assets/fonts/polpo.ttf?xzjs0z) format('truetype'),
@@ -60,14 +65,14 @@ body {
 /*
  * Angular Material theme
  */
-@import 'theme-angular-material';
+@import 'scss/theme-angular-material';
 @include angular-material-theme(
   $polpo-theme
 ); // alternative: include individual component mixins
 
 /* * POLPO theme */
 // load all variables for your app theme and ui components
-@import 'theme-variables';
+@import 'scss/theme-variables';
 // include ui lib scss file
 @import 'libs/ui/src/lib/ui-theme';
 @include ui-theme(); // alternative: include individual component mixins
