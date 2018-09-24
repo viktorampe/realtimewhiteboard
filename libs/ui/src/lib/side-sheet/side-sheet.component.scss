@@ -1,0 +1,20 @@
+.ui-side-sheet {
+  overflow-x: hidden;
+  width: 290px;
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 25px;
+    white-space: nowrap;
+    line-height: 25px;
+    margin: 0;
+    font-size: 14px;
+    font-weight: 300;
+    a {
+      cursor: pointer;
+    }
+  }
+  &__body {
+    padding: 25px;
+  }
+}
