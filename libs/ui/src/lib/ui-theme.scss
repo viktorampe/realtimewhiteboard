@@ -25,13 +25,14 @@ $ui-font-family-1: 'Lato', sans-serif;
 $ui-font-family-2: 'Open Sans', sans-serif;
 // import all required sass files from our libs
 // @import './tree-nav/tree-nav.component.theme';
-
+@import './app-bar/app-bar.component.theme.scss';
 @import './side-sheet/side-sheet.component.theme';
 @import './shell/shell.component.theme';
 
 // create theme-mixin with each mixin from our library components
 @mixin ui-theme() {
   // @include ui-tree-nav();
+  @include ui-app-bar();
   @include ui-app-shell();
   @include ui-side-sheet();
 }
