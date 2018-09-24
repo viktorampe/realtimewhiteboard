@@ -1,5 +1,31 @@
-$ui-method-logo-bgimage-grayscale: '/apps/polpo-classroom-web/src/assets/images/methodes_grijs.png';
-$ui-method-logo-bgimage-color: '/apps/polpo-classroom-web/src/assets/images/methodes_kleur.png';
+$campus-method-logo-bgimage-grayscale: '/apps/polpo-classroom-web/src/assets/images/methodes_grijs.png';
+$campus-method-logo-bgimage-color: '/apps/polpo-classroom-web/src/assets/images/methodes_kleur.png';
+$campus-method-logo-width: 152px !default;
+$campus-method-logo-height: 74px !default;
+
+.campus-method__logo {
+  display: inline-block;
+  line-height: 500px;
+  overflow: hidden;
+  position: relative;
+  z-index: 2;
+  width: $campus-method-logo-width;
+  height: $campus-method-logo-height;
+  background-image: url($campus-method-logo-bgimage-grayscale);
+
+  @if variable-exists(campus-method-logo-bgimage-grayscale) {
+    &--grey:hover {
+      background-image: url($campus-method-logo-bgimage-grayscale) !important;
+    }
+  }
+
+  @if variable-exists(campus-method-logo-bgimage-color) {
+    &:hover,
+    &--color {
+      background-image: url($campus-method-logo-bgimage-color);
+    }
+  }
+}
 
 .spelen {
   background-position: -2px -436px;
