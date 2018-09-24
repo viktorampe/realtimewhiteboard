@@ -1,7 +1,12 @@
-import { Input, OnInit } from '@angular/core';
+import { AfterContentInit, Input, OnInit } from '@angular/core';
 import { FolderProgressIndicatorComponent } from './components/folder-progress-indicator/folder-progress-indicator.component';
 
-export class BaseFolder implements OnInit {
+export enum ViewMode {
+  GRID = 'grid',
+  LINE = 'line'
+}
+
+export class BaseFolder implements OnInit, AfterContentInit {
   @Input() title: string;
   @Input() icon: string;
   @Input() itemCount: string;
@@ -23,18 +28,42 @@ export class BaseFolder implements OnInit {
     }
   }
 
+  protected _progressIndicator: FolderProgressIndicatorComponent;
+
   gradientId: string;
   gradientUrl: string;
   showDefaultIcon = false;
   showEmptyError: boolean;
 
   constructor() {}
+
   ngOnInit() {
     this.gradientId = this.backgroundColor.replace('#', '');
     this.gradientUrl = `url(#MyGradient${this.gradientId})`;
   }
 
-  setIcon(progressIndicator: FolderProgressIndicatorComponent) {
-    this.showDefaultIcon = !progressIndicator;
+  ngAfterContentInit() {
+    this.setIcon();
+  }
+
+  /**
+   * Shows a default icon when the progress indicator is absent.
+   *
+   * @protected
+   * @memberof BaseFolder
+   */
+  protected setIcon() {
+    this.showDefaultIcon = !this._progressIndicator;
+  }
+
+  /**
+   * Sets the view mode of the progress indicator.
+   *
+   * @protected
+   * @param {ViewMode} viewMode
+   * @memberof BaseFolder
+   */
+  protected setProgressIndicatorViewMode(viewMode: ViewMode) {
+    if (this._progressIndicator) this._progressIndicator.viewMode = viewMode;
   }
 }

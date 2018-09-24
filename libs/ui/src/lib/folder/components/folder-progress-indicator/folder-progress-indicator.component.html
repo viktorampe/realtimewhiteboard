@@ -1,10 +1,10 @@
 <div class="ui-folder-progress-indicator"
-     [ngClass]="{'ui-folder-progress-indicator--line': lineView}">
+     [ngClass]="{'ui-folder-progress-indicator--line': viewMode === 'line'}">
   <figure>
     <mat-progress-spinner color="accent"
                           mode="determinate"
                           [value]="progress"
-                          [diameter]="lineView ? 40: 48"
+                          [diameter]="viewMode === 'line' ? 40: 48"
                           strokeWidth="2">
     </mat-progress-spinner>
     <i *ngIf="!icon; else iconBlock"

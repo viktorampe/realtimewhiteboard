@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ViewMode } from '../../folder.component';
 
 @Component({
   selector: 'campus-folder-progress-indicator',
@@ -14,7 +15,7 @@ export class FolderProgressIndicatorComponent implements OnInit {
    */
   @Input() progress: number;
   @Input() icon: string;
-  @Input() lineView: boolean;
+  @Input() viewMode: ViewMode;
 
   iconColor: string;
   iconBackgroundColor: string;
@@ -33,9 +34,5 @@ export class FolderProgressIndicatorComponent implements OnInit {
       this.iconColor = '#578EBE';
       this.iconBackgroundColor = '#495266';
     }
-  }
-
-  setViewMode(lineView: boolean) {
-    this.lineView = lineView;
   }
 }

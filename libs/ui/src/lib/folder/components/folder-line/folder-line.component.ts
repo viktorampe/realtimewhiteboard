@@ -1,5 +1,5 @@
-import { AfterContentInit, Component, ContentChild } from '@angular/core';
-import { BaseFolder } from '../../folder.component';
+import { Component, ContentChild } from '@angular/core';
+import { BaseFolder, ViewMode } from '../../folder.component';
 import { FolderProgressIndicatorComponent } from '../folder-progress-indicator/folder-progress-indicator.component';
 
 @Component({
@@ -7,8 +7,7 @@ import { FolderProgressIndicatorComponent } from '../folder-progress-indicator/f
   templateUrl: './folder-line.component.html',
   styleUrls: ['./folder-line.component.scss']
 })
-export class FolderLineComponent extends BaseFolder
-  implements AfterContentInit {
+export class FolderLineComponent extends BaseFolder {
   /**
    * Reference to the progress indicator.
    * Used to determine whether the default icon should be visible.
@@ -16,10 +15,8 @@ export class FolderLineComponent extends BaseFolder
    * @memberof FolderComponent
    */
   @ContentChild(FolderProgressIndicatorComponent)
-  progressIndicator: FolderProgressIndicatorComponent;
-
-  ngAfterContentInit() {
-    this.setIcon(this.progressIndicator);
-    if (this.progressIndicator) this.progressIndicator.lineView = true;
+  set progressIndicator(progressIndicator: FolderProgressIndicatorComponent) {
+    this._progressIndicator = progressIndicator;
+    this.setProgressIndicatorViewMode(ViewMode.LINE);
   }
 }

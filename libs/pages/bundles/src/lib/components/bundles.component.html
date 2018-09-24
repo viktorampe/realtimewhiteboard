@@ -7,8 +7,7 @@
                       gradientId="485235"
                       backgroundColor="#485235"
                       icon="polpo-wiskunde">
-    <campus-folder-progress-indicator [progress]="100"
-                                      icon="polpo-lock"></campus-folder-progress-indicator>
+    <!-- <campus-folder-progress-indicator [progress]="100"></campus-folder-progress-indicator> -->
     <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
     <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
   </campus-folder-line>
@@ -19,7 +18,8 @@
                       backgroundColor="#485235"
                       icon="polpo-wiskunde"
                       [errorOnEmpty]="true">
-    <campus-folder-progress-indicator [progress]="50"></campus-folder-progress-indicator>
+    <campus-folder-progress-indicator [progress]="50"
+                                      icon="polpo-lock"></campus-folder-progress-indicator>
     <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
   </campus-folder-grid>
 </div>
