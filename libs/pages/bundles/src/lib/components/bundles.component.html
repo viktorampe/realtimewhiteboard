@@ -28,12 +28,13 @@
   <campus-editable-inline-tag-list list
                                    [titleText]="'Geselecteerd items'"
                                    [items]="[{text: 'one'},{text: 'two', count: 12},{text: 'two', count: 1, editable: 3}]"></campus-editable-inline-tag-list>
-  <campus-adaptable-select status
-                           [label]="'status'"
-                           [options]="['one', 'two']"
-                           [selectedOption]="'one'"
-                           [text]="'some explenation'"
-                           (saveStatus)="saveStatus($event)"></campus-adaptable-select>
+  <campus-confirmable-select status
+                             [label]="'status'"
+                             [options]="['one', 'two']"
+                             [selectedOption]="'one'"
+                             [text]="'some explenation'"
+                             [confirmIcon]="'polpo-presentatie'"
+                             (saveStatus)="saveStatus($event)"></campus-confirmable-select>
   <campus-label-and-icon-button label-button
                                 [icon]="'polpo-presentatie'"
                                 [iconClass]="'warning'"
