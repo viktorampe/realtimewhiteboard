@@ -1,10 +1,30 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AppBarComponent } from './app-bar/app-bar.component';
+import { ShellComponent } from './shell/shell.component';
+import { ShellLogoDirective } from './shell/directives/shell-logo.directive';
+import { ShellTopDirective } from './shell/directives/shell-top.directive';
+import { ShellLeftDirective } from './shell/directives/shell-left.directive';
+import { MatSidenavModule, MatIconModule } from '@angular/material';
+import { ShellBodyDirective } from './shell/directives/shell-body.directive';
 
 @NgModule({
-  imports: [CommonModule],
-  declarations: [AppBarComponent],
-  exports: [AppBarComponent]
+  imports: [CommonModule, MatSidenavModule, MatIconModule],
+  declarations: [
+    ShellComponent,
+    ShellLogoDirective,
+    ShellTopDirective,
+    ShellLeftDirective,
+    ShellBodyDirective,
+    AppBarComponent
+  ],
+  exports: [
+    ShellComponent,
+    ShellLogoDirective,
+    ShellTopDirective,
+    ShellLeftDirective,
+    ShellBodyDirective,
+    AppBarComponent
+  ]
 })
 export class UiModule {}
