@@ -1,13 +1,13 @@
 import {
-  Component,
-  Input,
   AfterContentInit,
+  Component,
   ContentChildren,
-  QueryList,
+  forwardRef,
   Injectable,
-  forwardRef
+  Input,
+  QueryList
 } from '@angular/core';
-import { ListItemDirective } from './list-item/list-item.directive';
+import { ListItemDirective } from './directives/list-view-item.directive';
 
 /**
  * Places decorated components in a Grid or List layout.

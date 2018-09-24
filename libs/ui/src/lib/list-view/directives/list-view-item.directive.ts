@@ -1,13 +1,13 @@
-import { ListViewComponent } from './../list-view.component';
 import {
-  EventEmitter,
-  Output,
   Directive,
+  EventEmitter,
+  forwardRef,
   HostBinding,
   HostListener,
-  forwardRef,
-  Inject
+  Inject,
+  Output
 } from '@angular/core';
+import { ListViewComponent } from '../list-view.component';
 
 /**
  * Decorator for components in campus-list-view

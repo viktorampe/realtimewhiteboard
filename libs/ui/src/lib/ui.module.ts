@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { MatIconModule, MatSidenavModule } from '@angular/material';
 import { AppBarComponent } from './app-bar/app-bar.component';
 import { FileExtensionComponent } from './file-extension/file-extension.component';
-import { ListItemDirective } from './list-view/list-item/list-item.directive';
+import { ListItemDirective } from './list-view/directives/list-view-item.directive';
 import { ListViewComponent } from './list-view/list-view.component';
 import { PageHeaderComponent } from './page-header/page-header.component';
 import { ShellBodyDirective } from './shell/directives/shell-body.directive';
