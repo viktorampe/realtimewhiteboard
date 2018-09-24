@@ -80,6 +80,10 @@ describe('ShellComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should create innerComponent', () => {
+    expect(innerComponent).toBeTruthy();
+  });
+
   it('should project logo content', () => {
     const logo = testContainerFixture.debugElement.query(
       By.directive(ShellLogoDirective)

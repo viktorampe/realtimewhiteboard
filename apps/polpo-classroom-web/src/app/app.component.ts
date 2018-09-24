@@ -11,6 +11,4 @@ export class AppComponent {
    * the link to the promo website, used on the logo
    */
   protected websiteUrl: string = environment.website.url;
-
-  constructor() {}
 }
