@@ -7,6 +7,7 @@ $color-gray-3: #e1e5e7;
 $color-blue-1: #359590;
 $color-white-1: #fff;
 $color-blue-2: #44b0aa;
+$color-blue-3: #6ed3c2;
 
 // app theme
 $color-bg-primary-1: $color-black-1;
@@ -15,14 +16,19 @@ $color-text-1: $color-gray-1;
 $color-text-2: $color-gray-2;
 $color-text-3: $color-white-1;
 $color-active: $color-blue-1;
+$color-active-secundary: $color-blue-3;
+
 // ui lib theme
 $ui-bg-color-1: $color-bg-primary-1;
 $ui-font-color-1: $color-text-1;
 $ui-font-color-2: $color-text-2;
 $ui-font-color-active: $color-active;
 $ui-font-color-2: $color-text-3;
+$ui-font-color-active-secundary: $color-active-secundary;
+
 // lib icon overrides
 // $ui-icon-filter: polpo \e000;
+
 // pages lib theme
 $pages-bg-color-1: $color-bg-primary-1;
 $pages-font-color-1: $color-text-1;
