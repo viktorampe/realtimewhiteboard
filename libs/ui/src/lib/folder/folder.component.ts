@@ -7,7 +7,7 @@ export class BaseFolder implements OnInit {
   @Input() itemCount: string;
   @Input() backgroundColor: string;
   /**
-   * Whether to show an exclamation mark when folder is empty.
+   * Whether to show an exclamation mark when folder is empty (itemCount is zero).
    *
    * @memberof FolderComponent
    */
