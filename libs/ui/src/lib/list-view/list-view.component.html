@@ -2,15 +2,6 @@
 </ng-container>
 
 <ng-template #hasContentTemplate>
-  <!-- TODO: verwijderen v -->
-  <button (click)="setListFormat('grid')">grid</button>
-  <button (click)="setListFormat('list')">list</button>
-
-  <span> Selecteer</span>
-  <button (click)="selectAllItems()">alles</button>
-  <button (click)="deselectAllItems()">geen</button>
-  <!-- TODO: verwijderen ^ -->
-
   <div class="flexbox flex-{{listFormat}}">
     <ng-content></ng-content>
   </div>

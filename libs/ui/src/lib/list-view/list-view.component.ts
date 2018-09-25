@@ -81,9 +81,4 @@ export class ListViewComponent implements AfterContentInit {
     this.items.forEach(i => (i.isSelected = false));
     this.itemSelectableStyle = false;
   }
-
-  //TODO: verwijderen
-  setListFormat(form: string) {
-    this.listFormat = form;
-  }
 }
