@@ -1,7 +1,11 @@
 {
   "angular get element by css": {
     "prefix": "ngit-element-by-css",
-    "body": ["${2:fixture}.debugElement.query(", "\tBy.css('.${1:class}')", ")"]
+    "body": [
+      "${2:fixture}.debugElement.query(",
+      "\tBy.css('.${1:class}')",
+      ")"
+    ]
   },
   "angular get element by css in constant": {
     "prefix": "ngit-element-constant-by-css",
@@ -31,7 +35,9 @@
   },
   "angular trigget element event": {
     "prefix": "ngit-trigger-element-event",
-    "body": ["${2:element}.triggerEventHandler('${1:elementEvent}', null);"]
+    "body": [
+      "${2:element}.triggerEventHandler('${1:elementEvent}', null);"
+    ]
   },
   "angular click element": {
     "prefix": "ngit-click-element",
@@ -111,6 +117,11 @@
       "",
       "\tit('should create', () => {",
       "\t\texpect(component).toBeTruthy();",
+      "\t});",
+      "});",
+      "",
+      "\tit('should create innerComponent', () => {",
+      "\t\texpect(innerComponent).toBeTruthy();",
       "\t});",
       "});",
       ""
