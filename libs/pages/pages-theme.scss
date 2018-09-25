@@ -1,0 +1,12 @@
+// thematic variables
+$pages-bg-color-1: #fff !default;
+$pages-bg-color-2: #fff !default;
+$pages-font-color-1: #000 !default;
+$pages-font-color-2: #000 !default;
+
+// import all required sass files from our libs
+// @import './alerts/src/lib/components/alerts.components.theme'
+// create theme-mixin with each mixin from our library components
+@mixin pages-theme() {
+  // @include ui-pages-alerts();
+}

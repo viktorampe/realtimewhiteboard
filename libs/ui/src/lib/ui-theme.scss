@@ -1,0 +1,53 @@
+// icon mixin
+@mixin icon($cls, $icon-bundle) {
+  $font: nth($icon-bundle, 1);
+  $unicode: nth($icon-bundle, 2);
+  .#{$cls} {
+    font-family: $font;
+    &:before {
+      content: $unicode;
+    }
+  }
+}
+
+// icon variables
+$ui-icon-filter: FontAwesome '\f0b0' !default;
+
+// icon classes
+@include icon(ui-icon-filter, $ui-icon-filter);
+
+// icon basic style
+[class*='icon-'] {
+  font-style: normal;
+  font-weight: normal;
+  text-transform: none;
+  line-height: 1;
+}
+
+// thematic variables
+$ui-bg-color-1: #fff !default;
+$ui-bg-color-2: #fff !default;
+$ui-bg-color-3: #95a0aa !default;
+$ui-font-color-1: #000 !default;
+$ui-font-color-2: #fff !default;
+$ui-font-family-1: 'Lato', sans-serif;
+$ui-font-family-2: 'Open Sans', sans-serif;
+
+// import all required sass files from our libs
+@import './tree-nav/tree-nav.component.theme';
+@import './file-extension/file-extension.component.scss';
+@import './page-header/page-header.component.theme.scss';
+@import './app-bar/app-bar.component.theme.scss';
+@import './side-sheet/side-sheet.component.theme';
+@import './shell/shell.component.theme';
+
+// create theme-mixin with each mixin from our library components
+@mixin ui-theme() {
+  @include ui-tree-nav();
+  //place desired width as optional parameter, default 84;
+  @include ui-file-extension();
+  @include ui-page-header_theme();
+  @include ui-app-bar();
+  @include ui-app-shell();
+  @include ui-side-sheet();
+}

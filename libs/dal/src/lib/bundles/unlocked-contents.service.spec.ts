@@ -9,7 +9,10 @@ describe('UnlockedContentsService', () => {
     });
   });
 
-  it('should be created', inject([UnlockedContentsService], (service: UnlockedContentsService) => {
-    expect(service).toBeTruthy();
-  }));
+  it('should be created', inject(
+    [UnlockedContentsService],
+    (service: UnlockedContentsService) => {
+      expect(service).toBeTruthy();
+    }
+  ));
 });

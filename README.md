@@ -32,7 +32,7 @@ Run `ng build --project=myapp` to build the project. The build artifacts will be
 
 ## Running unit tests
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Run `ng test` to execute the unit tests via [Jest](https://jestjs.io/).
 
 ## Running end-to-end tests
 
@@ -42,3 +42,25 @@ Before running the tests make sure you are serving the app via `ng serve`.
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+### generate new route lib using @diekeure/angular-schematics
+
+    ng g @diekeure/angular-schematics:page --name=some-name-in-snake-case
+
+optional parameter
+--project ==> project in which the new route should be added, if not entered, the default project from angular.json will be used
+--directory ==> name of the route if it should not be 'pages'
+
+the route will be added to the libs folder
+
+### add component to UI library
+
+    ng g component {component name} --styleext=scss --project=ui --export
+
+### generate state in dal lib (non root state 'bundles' example)
+
+    ng generate ngrx bundles --directory=+state/bundles --module=libs/dal/src/lib/dal.module.ts
+
+### generate state in app (root state 'app' example)
+
+    ng generate ngrx app --module=apps/polpo-classroom-web/src/app/app.module.ts --root

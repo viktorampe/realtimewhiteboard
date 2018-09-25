@@ -9,7 +9,10 @@ describe('BundlesService', () => {
     });
   });
 
-  it('should be created', inject([BundlesService], (service: BundlesService) => {
-    expect(service).toBeTruthy();
-  }));
+  it('should be created', inject(
+    [BundlesService],
+    (service: BundlesService) => {
+      expect(service).toBeTruthy();
+    }
+  ));
 });

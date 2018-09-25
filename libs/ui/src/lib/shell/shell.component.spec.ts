@@ -1,0 +1,125 @@
+import { Component, NO_ERRORS_SCHEMA, NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import {
+  async,
+  ComponentFixture,
+  TestBed,
+  getTestBed
+} from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ShellComponent } from './shell.component';
+import { UiModule } from '../ui.module';
+import { ShellLogoDirective } from './directives/shell-logo.directive';
+import { ShellLeftDirective } from './directives/shell-left.directive';
+import { ShellTopDirective } from './directives/shell-top.directive';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { of, Subject } from 'rxjs';
+
+@Component({
+  // tslint:disable-next-line:component-selector
+  selector: 'test-container',
+  template: `
+  <campus-shell>
+    <campus-shell-top>test-top</campus-shell-top>
+    <campus-shell-logo>test-logo</campus-shell-logo>
+    <campus-shell-left>test-left</campus-shell-left>
+    <campus-shell-body><p>Hi there handsome</p></campus-shell-body>
+  </campus-shell>
+  `
+})
+export class TestContainerComponent {}
+
+@NgModule({
+  declarations: [TestContainerComponent],
+  imports: [CommonModule, UiModule, BrowserAnimationsModule],
+  exports: [TestContainerComponent],
+  providers: [BreakpointObserver]
+})
+export class TestModule {}
+
+describe('ShellComponent', () => {
+  let component: ShellComponent;
+  let fixture: ComponentFixture<ShellComponent>;
+  let testContainerFixture: ComponentFixture<TestContainerComponent>;
+  let testContainerComponent: TestContainerComponent;
+  let innerComponent: ShellComponent;
+  const breakpointStream: Subject<{ matches: boolean }> = new Subject();
+
+  beforeEach(async(() => {
+    const testbed = TestBed.configureTestingModule({
+      imports: [TestModule],
+      schemas: [NO_ERRORS_SCHEMA]
+    });
+    const breakpointObserver: BreakpointObserver = testbed.get(
+      BreakpointObserver
+    );
+    jest.spyOn(breakpointObserver, 'observe').mockReturnValue(breakpointStream);
+
+    testbed.compileComponents();
+  }));
+
+  beforeEach(() => {
+    // regular component
+    fixture = TestBed.createComponent(ShellComponent);
+    component = fixture.componentInstance;
+
+    fixture.detectChanges();
+
+    // templated component
+    testContainerFixture = TestBed.createComponent(TestContainerComponent);
+    testContainerComponent = testContainerFixture.componentInstance;
+    innerComponent = <ShellComponent>(
+      testContainerFixture.debugElement.query(By.css('campus-shell'))
+        .componentInstance
+    );
+    testContainerFixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should create innerComponent', () => {
+    expect(innerComponent).toBeTruthy();
+  });
+
+  it('should project logo content', () => {
+    const logo = testContainerFixture.debugElement.query(
+      By.directive(ShellLogoDirective)
+    ).nativeElement.textContent;
+    expect(logo).toBe('test-logo');
+  });
+
+  it('should project left content', () => {
+    const leftContent = testContainerFixture.debugElement.query(
+      By.directive(ShellLeftDirective)
+    ).nativeElement.textContent;
+    expect(leftContent).toBe('test-left');
+  });
+
+  it('should project top content', () => {
+    const topContent = testContainerFixture.debugElement.query(
+      By.directive(ShellTopDirective)
+    ).nativeElement.textContent;
+    expect(topContent).toBe('test-top');
+  });
+
+  it('should project the rest of the content in the body', () => {
+    const bodyContent: HTMLElement = testContainerFixture.debugElement.query(
+      By.css('.ui-shell__body')
+    ).nativeElement;
+    expect(bodyContent.querySelector('p').textContent).toEqual(
+      'Hi there handsome'
+    );
+  });
+
+  it('should alter sidebar behavior on small screen', () => {
+    breakpointStream.next({ matches: true });
+    expect(fixture.componentInstance.sidebar.mode).toBe('over');
+    expect(fixture.componentInstance.sidebar.disableClose).toBe(false);
+    breakpointStream.next({ matches: false });
+    expect(fixture.componentInstance.sidebar.mode).toBe('side');
+    expect(fixture.componentInstance.sidebar.disableClose).toBe(true);
+  });
+});

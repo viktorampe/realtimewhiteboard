@@ -1,6 +1,15 @@
-<div style="text-align:center">
-  <h1>Welcome to {{title}}!</h1>
-  <img width="300" src="https://raw.githubusercontent.com/nrwl/nx/master/nx-logo.png">
-</div>
-
-<campus-filter-text-input></campus-filter-text-input>
+<campus-shell>
+  <campus-shell-logo>
+    <a href="{{websiteUrl}}">
+      <img src="/assets/images/polpo.png"
+           alt="Polpo">
+    </a>
+  </campus-shell-logo>
+  <campus-shell-left>
+    <campus-tree-nav [treeNav]="nav|async"></campus-tree-nav>
+  </campus-shell-left>
+  <campus-shell-top></campus-shell-top>
+  <campus-shell-body>
+    <router-outlet></router-outlet>
+  </campus-shell-body>
+</campus-shell>
