@@ -1,0 +1,23 @@
+<cdk-tree [dataSource]="nestedDataSource" [treeControl]="nestedTreeControl" class="ui-tree-nav__root">
+  <cdk-tree-node *cdkTreeNodeDef="let node" cdkTreeNodeToggle>
+    <li class="ui-tree-nav__node">
+      <a [routerLink]="node.link" routerLinkActive="ui-tree-nav__node--active">
+        <i [className]="node.icon" *ngIf="node.icon"></i>
+        {{node.title}}
+      </a>
+    </li>
+  </cdk-tree-node>
+
+  <cdk-nested-tree-node *cdkTreeNodeDef="let node; when: hasChildren">
+    <li class="ui-tree-nav__node" [class.ui-tree-nav__node--closed]="!nestedTreeControl.isExpanded(node)">
+      <a [routerLink]="node.link" routerLinkActive="ui-tree-nav__node--active" cdkTreeNodeToggle>
+        <i [className]="node.icon" *ngIf="node.icon"></i>
+        {{node.title}}
+        <i class="ui-tree-nav__node__arrow" *ngIf="hasChildren(0, node)"></i>
+      </a>
+      <ul>
+        <ng-container cdkTreeNodeOutlet></ng-container>
+      </ul>
+    </li>
+  </cdk-nested-tree-node>
+</cdk-tree>

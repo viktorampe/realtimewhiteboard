@@ -1,7 +1,9 @@
 import { LayoutModule } from '@angular/cdk/layout';
+import { CdkTreeModule } from '@angular/cdk/tree';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { MatIconModule, MatSidenavModule } from '@angular/material';
+import { RouterModule } from '@angular/router';
 import { AppBarComponent } from './app-bar/app-bar.component';
 import { FileExtensionComponent } from './file-extension/file-extension.component';
 import { ListItemDirective } from './list-view/directives/list-view-item.directive';
@@ -16,9 +18,17 @@ import { SideSheetBodyDirective } from './side-sheet/directives/side-sheet-body.
 import { SideSheetHeaderDirective } from './side-sheet/directives/side-sheet-header.directive';
 import { SideSheetPageDirective } from './side-sheet/directives/side-sheet-page.directive';
 import { SideSheetComponent } from './side-sheet/side-sheet.component';
+import { TreeNavComponent } from './tree-nav/tree-nav.component';
 
 @NgModule({
-  imports: [CommonModule, MatSidenavModule, LayoutModule, MatIconModule],
+  imports: [
+    CommonModule,
+    MatSidenavModule,
+    LayoutModule,
+    MatIconModule,
+    RouterModule,
+    CdkTreeModule
+  ],
   declarations: [
     SideSheetComponent,
     SideSheetHeaderDirective,
@@ -33,7 +43,8 @@ import { SideSheetComponent } from './side-sheet/side-sheet.component';
     PageHeaderComponent,
     FileExtensionComponent,
     ListViewComponent,
-    ListItemDirective
+    ListItemDirective,
+    TreeNavComponent
   ],
   exports: [
     SideSheetComponent,
@@ -49,7 +60,8 @@ import { SideSheetComponent } from './side-sheet/side-sheet.component';
     PageHeaderComponent,
     FileExtensionComponent,
     ListViewComponent,
-    ListItemDirective
+    ListItemDirective,
+    TreeNavComponent
   ]
 })
 export class UiModule {}
