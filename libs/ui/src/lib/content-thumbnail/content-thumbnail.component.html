@@ -1,26 +1,26 @@
-<div [ngClass]="{'ui-content-thumbnail' : true, 'ui-content-thumbnail__grid' : listFormat === 'grid', 'ui-content-thumbnail__list' : listFormat === 'list'}">
-  <div [ngClass]="{'ui-content-thumbnail__header' : true, 'ui-content-thumbnail__header--grid' : listFormat === 'grid', 'ui-content-thumbnail__header--list' : listFormat === 'list'}">
-    <div [ngClass]=" { 'ui-content-thumbnail__icon' : true, 'ui-content-thumbnail__icon--grid' : listFormat==='grid',
-      'ui-content-thumbnail__icon--list' : listFormat==='list' }"
-      [class]="contentTypeClass">
+<div class="ui-content-thumbnail ui-content-thumbnail__{{listFormat}}">
+  <div class="ui-content-thumbnail__header ui-content-thumbnail__header--{{listFormat}}">
+    <div class="ui-content-thumbnail__icon ui-content-thumbnail__icon--{{listFormat}} {{contentTypeClass}}">
     </div>
     <div class="flex-filler"></div>
-    <div [class]="fileExtensionClass">{{fileExtensionClass}}</div>
-    <!--moet fileExtensionComponent worden-->
+    <campus-file-extension extensionClass={{fileExtensionClass}}
+                           [showIcon]=false></campus-file-extension>
   </div>
-  <figure *ngIf="listFormat==='grid'" [ngClass]=" { 'ui-content-thumbnail__image' : true, 'ui-content-thumbnail__image--grid' : listFormat==='grid',
-      'ui-content-thumbnail__image--list' : listFormat==='list' }">
-    <img [src]=imagePath *ngIf="imagePath">
-    <div *ngIf="!imagePath">{{fileExtensionClass}}</div>
-    <!--moet fileExtensionComponent worden-->
+  <figure *ngIf="listFormat==='grid'"
+          class="ui-content-thumbnail__image ui-content-thumbnail__image--{{listFormat}}">
+    <img [src]=imagePath
+         *ngIf="imagePath">
+    <campus-file-extension *ngIf="!imagePath"
+                           extensionClass={{fileExtensionClass}}
+                           [showTitle]=false></campus-file-extension>
   </figure>
-  <div [ngClass]=" { 'ui-content-thumbnail__title' : true, 'ui-content-thumbnail__title--grid' : listFormat==='grid',
-      'ui-content-thumbnail__title--list' : listFormat==='list' }">
+  <div class="ui-content-thumbnail__title ui-content-thumbnail__title--{{listFormat}}">
     {{title}}
   </div>
-  <div [ngClass]=" { 'ui-content-thumbnail__actions' : true, 'ui-content-thumbnail__actions--grid' : listFormat==='grid',
-      'ui-content-thumbnail__actions--list' : listFormat==='list' }">
-    <campus-content-action-button *ngFor="let action of actionArray" [iconClass]="action.iconClass"></campus-content-action-button>
+  <div class="ui-content-thumbnail__actions ui-content-thumbnail__actions--{{listFormat}}">
+    <campus-content-action-button *ngFor="let action of actionArray"
+                                  [iconClass]="action.iconClass">
+    </campus-content-action-button>
   </div>
 </div>
 
