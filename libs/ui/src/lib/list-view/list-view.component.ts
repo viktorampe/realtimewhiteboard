@@ -5,9 +5,10 @@ import {
   forwardRef,
   Injectable,
   Input,
+  Output,
   QueryList
 } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { ListItemDirective } from './directives/list-view-item.directive';
 
 /**
@@ -39,14 +40,16 @@ export class ListViewComponent implements AfterContentInit {
   @Input() multiSelect = false;
   @Input() placeHolderText = 'Er zijn geen beschikbare items.';
 
+  @Output() selectedItems = new BehaviorSubject([]);
+
   @ContentChildren(forwardRef(() => ListItemDirective))
   items: QueryList<ListItemDirective>;
 
   ngAfterContentInit() {
     this.items.forEach(item => {
       this.subscription.add(
-        item.itemSelectionChanged.subscribe(() =>
-          this.onItemSelectionChanged(item)
+        item.itemSelectionChanged.subscribe(changedItem =>
+          this.onItemSelectionChanged(changedItem)
         )
       );
     });
@@ -63,6 +66,9 @@ export class ListViewComponent implements AfterContentInit {
     } else {
       this.itemSelectableStyle = this.items.some(i => i.isSelected);
     }
+
+    const selectedItemsArray = this.items.filter(i => i.isSelected);
+    this.selectedItems.next(selectedItemsArray);
   }
 
   selectAllItems() {
