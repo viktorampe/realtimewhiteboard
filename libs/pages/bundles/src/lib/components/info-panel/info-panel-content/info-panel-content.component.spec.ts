@@ -30,7 +30,7 @@ describe('InfoPanelContentComponent', () => {
         status: 'string'
       },
       statusOptions: ['string']
-    }
+    };
 
     component.content = mockData.content;
     component.statusOptions = mockData.statusOptions;

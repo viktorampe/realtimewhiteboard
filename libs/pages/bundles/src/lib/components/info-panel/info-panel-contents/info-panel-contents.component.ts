@@ -6,5 +6,6 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./info-panel-contents.component.scss']
 })
 export class InfoPanelContentsComponent {
-  @Input() contents: { text: string; count?: number; editable?: boolean; data?: any }[];
+  @Input()
+  contents: { text: string; count?: number; editable?: boolean; data?: any }[];
 }

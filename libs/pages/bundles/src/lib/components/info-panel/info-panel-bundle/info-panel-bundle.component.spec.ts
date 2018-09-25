@@ -19,7 +19,11 @@ describe('InfoPanelBundleComponent', () => {
     fixture = TestBed.createComponent(InfoPanelBundleComponent);
     component = fixture.componentInstance;
 
-    mockData = { name: 'string', description: 'string', teacher: { displayName: 'string' } };
+    mockData = {
+      name: 'string',
+      description: 'string',
+      teacher: { displayName: 'string' }
+    };
     component.bundle = mockData;
 
     fixture.detectChanges();

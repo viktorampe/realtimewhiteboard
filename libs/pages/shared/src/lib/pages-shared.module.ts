@@ -6,4 +6,4 @@ import { UiModule } from '@campus/ui';
   declarations: [],
   exports: []
 })
-export class PagesSharedModule { }
+export class PagesSharedModule {}

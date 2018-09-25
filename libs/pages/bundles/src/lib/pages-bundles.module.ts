@@ -25,4 +25,4 @@ import { PagesBundlesRoutingModule } from './pages-bundles-routing.module';
 
   providers: [BundlesViewModel]
 })
-export class PagesBundlesModule { }
+export class PagesBundlesModule {}
