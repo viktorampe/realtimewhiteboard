@@ -1,42 +1,15 @@
-<campus-info-panel>
-  <campus-content-preview preview
-                          [preview]="'https://d1fh3heiqa6frl.cloudfront.net/890f054414a06a81489f35e6b27fc23c9ee12d0ce4e0a867801a569a073438de/7bc034592d6ea1a4ec2f3e99eb63ad56_340-1.png'"
-                          [titleText]="'the title'"
-                          [description]="'descriptions yo'">
-    <campus-file-extension type
-                           [extensionClass]="'xls'"></campus-file-extension>
-    <div icon
-         class="polpo-presentatie"></div>
-    <div badge
-         *ngFor="let badge of ['method1', 'method2']">
-      {{badge}}
-    </div>
-  </campus-content-preview>
-  <campus-person-badge person
-                       [displayName]="'Tom Mertens'"
-                       [align]="'left'"
-                       [size]="'medium'"></campus-person-badge>
-  <campus-input-label name
-                      [titleText]="'Titel'"
-                      [text]="'name'"></campus-input-label>
-  <campus-input-label description
-                      [titleText]="'Omschrijving'"
-                      [text]="'description'"></campus-input-label>
-  <campus-period-label period
-                       [titleText]="'periode'"
-                       [period]="period"></campus-period-label>
-  <campus-editable-inline-tag-list list
-                                   [titleText]="'Geselecteerd items'"
-                                   [items]="[{text: 'one'},{text: 'two', count: 12},{text: 'two', count: 1, editable: 3}]"></campus-editable-inline-tag-list>
-  <campus-confirmable-select status
-                             [label]="'status'"
-                             [options]="['one', 'two']"
-                             [selectedOption]="'one'"
-                             [text]="'some explenation'"
-                             [confirmIcon]="'polpo-presentatie'"
-                             (saveStatus)="saveStatus($event)"></campus-confirmable-select>
-  <campus-label-and-icon-button label-button
-                                [icon]="'polpo-presentatie'"
-                                [iconClass]="'warning'"
-                                [label]="'label'"></campus-label-and-icon-button>
-</campus-info-panel>
+<campus-info-panel-bundle [teacherDisplayName]="teacher.displayName"
+                          [bundleName]="bundle.name"
+                          [bundleDescription]="bundle.description"></campus-info-panel-bundle>
+
+<campus-info-panel-educontent [eduContentPreview]="eduContent.preview"
+                              [eduContentName]="eduContent.name"
+                              [eduContentDescription]="eduContent.description"
+                              [eduContentExtention]="eduContent.extention"
+                              [eduContentProductType]="eduContent.productType"
+                              [eduContentMethods]="eduContent.methods"
+                              [statusOptions]="eduContent.status.options"
+                              [selectedStatus]="eduContent.status.selectedstatus"
+                              [statusConfirmIcon]="'polpo-presentatie'"></campus-info-panel-educontent>
+
+<campus-info-panel-educontents [eduContentNames]="eduContentNames"></campus-info-panel-educontents>
