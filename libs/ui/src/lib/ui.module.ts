@@ -41,4 +41,4 @@ import { PersonBadgeComponent } from './person-badge/person-badge.component';
     PersonBadgeComponent
   ]
 })
-export class UiModule { }
+export class UiModule {}

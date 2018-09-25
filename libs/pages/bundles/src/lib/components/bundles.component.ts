@@ -10,7 +10,8 @@ export class BundlesComponent {
   teacher = { displayName: 'Tom mertens' };
 
   eduContent = {
-    preview: 'https://d1fh3heiqa6frl.cloudfront.net/890f054414a06a81489f35e6b27fc23c9ee12d0ce4e0a867801a569a073438de/7bc034592d6ea1a4ec2f3e99eb63ad56_340-1.png',
+    preview:
+      'https://d1fh3heiqa6frl.cloudfront.net/890f054414a06a81489f35e6b27fc23c9ee12d0ce4e0a867801a569a073438de/7bc034592d6ea1a4ec2f3e99eb63ad56_340-1.png',
     name: 'educontent name',
     description: 'educontent description',
     extention: 'ppt',
@@ -20,8 +21,7 @@ export class BundlesComponent {
       options: ['one', 'two'],
       selectedstatus: 'two'
     }
-
-  }
+  };
 
   eduContentNames = [{ text: 'one' }, { text: 'two' }, { text: 'three' }];
 

@@ -16,8 +16,13 @@ import { PagesBundlesRoutingModule } from './pages-bundles-routing.module';
     UiModule,
     PagesSharedModule
   ],
-  declarations: [BundlesComponent, InfoPanelBundleComponent, InfoPanelEducontentComponent, InfoPanelEducontentsComponent],
+  declarations: [
+    BundlesComponent,
+    InfoPanelBundleComponent,
+    InfoPanelEducontentComponent,
+    InfoPanelEducontentsComponent
+  ],
 
   providers: [BundlesViewModel]
 })
-export class PagesBundlesModule { }
+export class PagesBundlesModule {}

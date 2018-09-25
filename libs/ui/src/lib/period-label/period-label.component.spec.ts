@@ -44,9 +44,8 @@ describe('PeriodLabelComponent', () => {
     expect(component).toBeTruthy();
   });
   it('should show the title', () => {
-    const title = fixture.debugElement.query(
-      By.css('.ui_period-label__title')
-    ).nativeElement.textContent;
+    const title = fixture.debugElement.query(By.css('.ui_period-label__title'))
+      .nativeElement.textContent;
     expect(title).toBe(mockData.titleText);
   });
   it('should show the start and end date', () => {

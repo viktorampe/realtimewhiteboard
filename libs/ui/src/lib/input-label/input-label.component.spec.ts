@@ -33,9 +33,8 @@ describe('InputLabelComponent', () => {
     expect(component).toBeTruthy();
   });
   it('should show the title', () => {
-    const title = fixture.debugElement.query(
-      By.css('.ui_input-label__title')
-    ).nativeElement.textContent;
+    const title = fixture.debugElement.query(By.css('.ui_input-label__title'))
+      .nativeElement.textContent;
     expect(title).toContain(mockData.titleText);
   });
   it('should show the text label', () => {
@@ -82,9 +81,7 @@ describe('InputLabelComponent', () => {
       .triggerEventHandler('click', null);
     fixture.detectChanges();
     fixture.debugElement
-      .query(
-        By.css('.ui_input-label__input-holder__icons-holder__cancel-icon')
-      )
+      .query(By.css('.ui_input-label__input-holder__icons-holder__cancel-icon'))
       .triggerEventHandler('click', null);
     fixture.detectChanges();
     const input = fixture.debugElement.query(

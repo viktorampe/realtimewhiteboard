@@ -18,14 +18,14 @@ import { ContentPreviewComponent } from './content-preview.component';
   </campus-content-preview>
   `
 })
-export class TestContainerComponent { }
+export class TestContainerComponent {}
 
 @NgModule({
   imports: [CommonModule, UiModule],
   exports: [TestContainerComponent],
   declarations: [TestContainerComponent]
 })
-export class TestModule { }
+export class TestModule {}
 
 describe('ContentPreviewComponent', () => {
   let component: ContentPreviewComponent;

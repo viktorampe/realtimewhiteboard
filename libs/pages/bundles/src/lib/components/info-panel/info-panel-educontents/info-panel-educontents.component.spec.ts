@@ -2,7 +2,6 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { InfoPanelEducontentsComponent } from './info-panel-educontents.component';
 
-
 describe('InfoPanelEducontentsComponent', () => {
   let component: InfoPanelEducontentsComponent;
   let fixture: ComponentFixture<InfoPanelEducontentsComponent>;
@@ -11,8 +10,7 @@ describe('InfoPanelEducontentsComponent', () => {
     TestBed.configureTestingModule({
       declarations: [InfoPanelEducontentsComponent],
       schemas: [NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {

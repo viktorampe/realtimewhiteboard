@@ -8,7 +8,7 @@ describe('EditableInlineTagListComponent', () => {
 
   let mockData: {
     titleText: string;
-    items: { text: string; count?: number; editable?: any, data?: any }[];
+    items: { text: string; count?: number; editable?: any; data?: any }[];
     showIcon: boolean;
   };
 
