@@ -1,0 +1,10 @@
+<campus-info-panel class="ui-info-panel-bundle"
+                   [titleText]="'Info'">
+  <campus-person-badge person
+                       [displayName]="teacherDisplayName"
+                       [align]="'left'"
+                       [size]="'medium'"></campus-person-badge>
+  <p class="ui-info-panel-bundle__text">
+    <strong>{{bundleName}}</strong>
+    <br>{{bundleDescription}}</p>
+</campus-info-panel>
