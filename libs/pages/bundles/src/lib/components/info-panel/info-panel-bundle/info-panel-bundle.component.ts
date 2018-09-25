@@ -6,7 +6,5 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./info-panel-bundle.component.scss']
 })
 export class InfoPanelBundleComponent {
-  @Input() teacherDisplayName: string;
-  @Input() bundleName: string;
-  @Input() bundleDescription: string;
+  @Input() bundle: { name: string, description: string, teacher: { displayName: string } };
 }
