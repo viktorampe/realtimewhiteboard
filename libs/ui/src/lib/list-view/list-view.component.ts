@@ -15,10 +15,11 @@ import { ListItemDirective } from './directives/list-view-item.directive';
  * Places decorated components in a Grid or List layout.
  * List items need to be decorated with the campusListItem attribute.
  *
- * @param {boolean} listFormat - Show components in a grid or in a list.
+ * @param {string} listFormat - Show components in a grid or in a list.
  * @param {boolean} multiSelect - Allow selection of multiple components.
  * @param {string} placeHolderText - Text to display when the list is empty.
  *
+ * @emits {BehaviorSubject} - A stream of the currently selected items.
  *
  * @export
  * @class ListViewComponent
@@ -40,7 +41,7 @@ export class ListViewComponent implements AfterContentInit {
   @Input() multiSelect = false;
   @Input() placeHolderText = 'Er zijn geen beschikbare items.';
 
-  @Output() selectedItems = new BehaviorSubject([]);
+  @Output() selectedItems$ = new BehaviorSubject([]);
 
   @ContentChildren(forwardRef(() => ListItemDirective))
   items: QueryList<ListItemDirective>;
@@ -68,7 +69,7 @@ export class ListViewComponent implements AfterContentInit {
     }
 
     const selectedItemsArray = this.items.filter(i => i.isSelected);
-    this.selectedItems.next(selectedItemsArray);
+    this.selectedItems$.next(selectedItemsArray);
   }
 
   selectAllItems() {
