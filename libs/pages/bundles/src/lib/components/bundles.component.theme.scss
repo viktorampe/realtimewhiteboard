@@ -19,10 +19,10 @@
       background-color: $pages-font-color-active;
     }
 
-    &:not(.item-selected)::before {
-      border: $pages-font-color-active solid 1px;
-    }
-    &.item-selected::before {
-    }
+    // &:not(.item-selected)::before {
+    //   border: $pages-font-color-active solid 1px;
+    // }
+    // &.item-selected::before {
+    // }
   }
 }

@@ -1,9 +1,8 @@
-import { ListItemDirective } from './list-item/list-item.directive';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, DebugElement } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { ListViewComponent } from './list-view.component';
-import { CUSTOM_ELEMENTS_SCHEMA, Component, DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import { ListItemDirective } from './directives/list-view-item.directive';
+import { ListViewComponent } from './list-view.component';
 
 @Component({
   template: `
@@ -60,7 +59,7 @@ describe('ListViewComponent', () => {
   });
 
   it('should find projected content as children', () => {
-    expect(component.itemsAmount).toBe(6);
+    expect(component.items.length).toBe(6);
   });
 
   it('should show the text placeholder if without content', () => {
@@ -171,7 +170,7 @@ describe('ListViewComponent', () => {
 
     const selectedItems = component.items.filter(i => i.isSelected);
 
-    expect(selectedItems.length).toBe(component.itemsAmount);
+    expect(selectedItems.length).toBe(component.items.length);
   });
 
   it('should deselect all items', () => {
