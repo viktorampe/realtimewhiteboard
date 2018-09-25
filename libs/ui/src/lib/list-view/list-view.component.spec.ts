@@ -118,7 +118,7 @@ describe('ListViewComponent', () => {
   });
 
   it('should apply the flex-grid class', () => {
-    component.setListFormat('grid');
+    component.listFormat = 'grid';
     testContainerFixture.detectChanges();
     fixture.detectChanges();
 
@@ -129,7 +129,7 @@ describe('ListViewComponent', () => {
   });
 
   it('should apply the flex-list class', () => {
-    component.setListFormat('list');
+    component.listFormat = 'list';
     testContainerFixture.detectChanges();
 
     const itemListDE = componentDE.query(By.css('.flexbox'));
