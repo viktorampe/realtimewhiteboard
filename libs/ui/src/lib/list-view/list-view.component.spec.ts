@@ -1,60 +1,89 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, DebugElement } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import {
+  Component,
+  DebugElement,
+  NgModule,
+  NO_ERRORS_SCHEMA
+} from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { ListItemDirective } from './directives/list-view-item.directive';
+import { UiModule } from '../ui.module';
 import { ListViewComponent } from './list-view.component';
 
 @Component({
+  // tslint:disable-next-line:component-selector
+  selector: 'test-container',
   template: `
   <campus-list-view>
-  <div campusListItem>test1</div>
-  <div campusListItem>test2</div>
-  <div campusListItem>test3</div>
-  <div campusListItem>test4</div>
-  <div campusListItem><img src="https://www.polpo.be/assets/images/polpo.svg"></div>
-  <div campusListItem><img src="https://www.polpo.be/assets/images/home-laptop-books.jpg"></div>
+    <div campusListItem>test1</div>
+    <div campusListItem>test2</div>
+    <div campusListItem>test3</div>
+    <div campusListItem>test4</div>
+    <div campusListItem><img src="https://www.polpo.be/assets/images/polpo.svg"></div>
+    <div campusListItem><img src="https://www.polpo.be/assets/images/home-laptop-books.jpg"></div>
   </campus-list-view>
-`
+  `
 })
-export class ListViewHostComponent {}
+export class TestContainerComponent {}
 
 @Component({
+  // tslint:disable-next-line:component-selector
+  selector: 'empty-test-container',
   template: `
   <campus-list-view>
   </campus-list-view>
-`
+  `
 })
-export class EmptyListViewHostComponent {}
+export class EmptyTestContainerComponent {}
+
+@NgModule({
+  declarations: [TestContainerComponent, EmptyTestContainerComponent],
+  imports: [CommonModule, UiModule],
+  exports: [TestContainerComponent, EmptyTestContainerComponent],
+  providers: []
+})
+export class TestModule {}
 
 describe('ListViewComponent', () => {
-  let hostComponent: ListViewHostComponent;
-  let hostFixture: ComponentFixture<ListViewHostComponent>;
-  let componentDE: DebugElement;
   let component: ListViewComponent;
+  let fixture: ComponentFixture<ListViewComponent>;
+  let testContainerFixture: ComponentFixture<TestContainerComponent>;
+  let testContainerComponent: TestContainerComponent;
+  let componentDE: DebugElement;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        ListViewComponent,
-        ListViewHostComponent,
-        EmptyListViewHostComponent,
-        ListItemDirective
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
+      imports: [TestModule],
+      schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    hostFixture = TestBed.createComponent(ListViewHostComponent);
-    hostComponent = hostFixture.componentInstance;
-    hostFixture.detectChanges();
+    // regular component
+    fixture = TestBed.createComponent(ListViewComponent);
+    component = fixture.componentInstance;
 
-    componentDE = hostFixture.debugElement.query(By.css('campus-list-view'));
-    component = <ListViewComponent>componentDE.componentInstance;
-    hostFixture.detectChanges();
+    fixture.detectChanges();
+
+    // templated component
+    testContainerFixture = TestBed.createComponent(TestContainerComponent);
+    testContainerComponent = testContainerFixture.componentInstance;
+    component = <ListViewComponent>(
+      testContainerFixture.debugElement.query(By.css('campus-list-view'))
+        .componentInstance
+    );
+    testContainerFixture.detectChanges();
+
+    componentDE = testContainerFixture.debugElement.query(
+      By.css('campus-list-view')
+    );
   });
 
   it('should create', () => {
+    expect(testContainerComponent).toBeTruthy();
+  });
+
+  it('should create innerComponent', () => {
     expect(component).toBeTruthy();
   });
 
@@ -63,16 +92,25 @@ describe('ListViewComponent', () => {
   });
 
   it('should show the text placeholder if without content', () => {
-    hostFixture = TestBed.createComponent(EmptyListViewHostComponent);
-    hostComponent = hostFixture.componentInstance;
+    let emptyTestContainerFixture: ComponentFixture<
+      EmptyTestContainerComponent
+    >;
+    let emptyTestContainerComponent: EmptyTestContainerComponent;
+
+    emptyTestContainerFixture = TestBed.createComponent(
+      EmptyTestContainerComponent
+    );
+    emptyTestContainerComponent = emptyTestContainerFixture.componentInstance;
 
     component = <ListViewComponent>(
-      hostFixture.debugElement.query(By.css('campus-list-view'))
+      emptyTestContainerFixture.debugElement.query(By.css('campus-list-view'))
         .componentInstance
     );
-    hostFixture.detectChanges();
+    emptyTestContainerFixture.detectChanges();
 
-    componentDE = hostFixture.debugElement.query(By.css('campus-list-view'));
+    componentDE = emptyTestContainerFixture.debugElement.query(
+      By.css('campus-list-view')
+    );
 
     expect(componentDE.nativeElement.textContent).toContain(
       component.placeHolderText
@@ -81,7 +119,8 @@ describe('ListViewComponent', () => {
 
   it('should apply the flex-grid class', () => {
     component.setListFormat('grid');
-    hostFixture.detectChanges();
+    testContainerFixture.detectChanges();
+    fixture.detectChanges();
 
     const itemListDE = componentDE.query(By.css('.flexbox'));
 
@@ -91,7 +130,7 @@ describe('ListViewComponent', () => {
 
   it('should apply the flex-list class', () => {
     component.setListFormat('list');
-    hostFixture.detectChanges();
+    testContainerFixture.detectChanges();
 
     const itemListDE = componentDE.query(By.css('.flexbox'));
 
@@ -101,7 +140,7 @@ describe('ListViewComponent', () => {
 
   it('should select only 1 item', () => {
     component.multiSelect = false;
-    hostFixture.detectChanges();
+    testContainerFixture.detectChanges();
 
     const itemListDE = componentDE.query(By.css('.flexbox'));
     const itemDEList = itemListDE.queryAll(By.css('[campusListItem]'));
@@ -119,7 +158,7 @@ describe('ListViewComponent', () => {
 
   it('should select multiple items', () => {
     component.multiSelect = true;
-    hostFixture.detectChanges();
+    testContainerFixture.detectChanges();
 
     const itemListDE = componentDE.query(By.css('.flexbox'));
     const itemDEList = itemListDE.queryAll(By.css('[campusListItem]'));
@@ -137,7 +176,7 @@ describe('ListViewComponent', () => {
 
   it('should deselect an item', () => {
     component.multiSelect = true;
-    hostFixture.detectChanges();
+    testContainerFixture.detectChanges();
 
     const itemListDE = componentDE.query(By.css('.flexbox'));
     const itemDEList = itemListDE.queryAll(By.css('[campusListItem]'));
@@ -156,7 +195,7 @@ describe('ListViewComponent', () => {
 
   it('should select all items', () => {
     component.multiSelect = true;
-    hostFixture.detectChanges();
+    testContainerFixture.detectChanges();
 
     const itemListDE = componentDE.query(By.css('.flexbox'));
     const itemDEList = itemListDE.queryAll(By.css('[campusListItem]'));
@@ -175,7 +214,7 @@ describe('ListViewComponent', () => {
 
   it('should deselect all items', () => {
     component.multiSelect = true;
-    hostFixture.detectChanges();
+    testContainerFixture.detectChanges();
 
     const itemListDE = componentDE.query(By.css('.flexbox'));
     const itemDEList = itemListDE.queryAll(By.css('[campusListItem]'));
