@@ -1,4 +1,5 @@
 import { Action } from '@ngrx/store';
+import { PersonEntity } from './persons.reducer';
 
 export enum PersonsActionTypes {
   PersonLogin = '[Persons] Person Login',
@@ -51,7 +52,7 @@ export class PersonsLoadError implements Action {
 
 export class PersonsLoaded implements Action {
   readonly type = PersonsActionTypes.PersonsLoaded;
-  constructor(public payload: Object) {}
+  constructor(public payload: PersonEntity[]) {}
 }
 
 export type PersonsAction =

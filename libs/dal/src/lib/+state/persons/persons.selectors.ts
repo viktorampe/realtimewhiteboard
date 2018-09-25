@@ -17,7 +17,7 @@ const getAllPersons = createSelector(
   getPersonsState,
   getLoaded,
   (state: PersonsState, isLoaded) => {
-    return isLoaded ? state.person : [];
+    return isLoaded ? state.list : [];
   }
 );
 
@@ -43,7 +43,7 @@ const getLogoutError = createSelector(
 
 const getSelectedId = createSelector(
   getPersonsState,
-  (state: PersonsState) => state.selectedId
+  (state: PersonsState) => state.id
 );
 const getSelectedPersons = createSelector(
   getAllPersons,
@@ -55,6 +55,7 @@ const getSelectedPersons = createSelector(
 );
 
 export const personsQuery = {
+  getSelectedId,
   getLoaded,
   getError,
   getAllPersons,

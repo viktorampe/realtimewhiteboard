@@ -1,9 +1,9 @@
 import { PersonsLoaded } from './persons.actions';
 import {
-  PersonsState,
-  Entity,
-  initialState,
-  personsReducer
+  initialPersonState,
+  PersonEntity,
+  personsReducer,
+  PersonsState
 } from './persons.reducer';
 
 describe('Persons Reducer', () => {
@@ -11,7 +11,7 @@ describe('Persons Reducer', () => {
   let createPersons;
 
   beforeEach(() => {
-    createPersons = (id: string, name = ''): Entity => ({
+    createPersons = (id: string, name = ''): PersonEntity => ({
       id,
       name: name || `name-${id}`
     });
@@ -24,7 +24,7 @@ describe('Persons Reducer', () => {
         createPersons('PRODUCT-zzz')
       ];
       const action = new PersonsLoaded(personss);
-      const result: PersonsState = personsReducer(initialState, action);
+      const result: PersonsState = personsReducer(initialPersonState, action);
       const selId: string = getPersonsId(result.list[1]);
 
       expect(result.loaded).toBe(true);
@@ -36,9 +36,9 @@ describe('Persons Reducer', () => {
   describe('unknown action', () => {
     it('should return the initial state', () => {
       const action = {} as any;
-      const result = personsReducer(initialState, action);
+      const result = personsReducer(initialPersonState, action);
 
-      expect(result).toBe(initialState);
+      expect(result).toBe(initialPersonState);
     });
   });
 });

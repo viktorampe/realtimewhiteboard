@@ -21,7 +21,7 @@ export class PersonsEffects {
   loadPersons$ = this.dataPersistence.fetch(PersonsActionTypes.LoadPersons, {
     run: (action: LoadPersons, state: PersonsState) => {
       // Your custom REST 'load' logic goes here. For now just return an empty list...
-      return new PersonsLoaded({});
+      return new PersonsLoaded([]);
     },
 
     onError: (action: LoadPersons, error) => {

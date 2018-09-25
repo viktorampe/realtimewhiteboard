@@ -12,15 +12,15 @@ import { PersonsAction, PersonsActionTypes } from './persons.actions';
 export interface PersonEntity {}
 
 export interface PersonsState {
-  person: PersonEntity; // list of Persons; analogous to a sql normalized table
-  selectedId?: string | number; // which Persons record has been selected
+  list: PersonEntity[]; // list of Persons; analogous to a sql normalized table
+  id?: string | number; // which Persons record has been selected
   loaded: boolean; // has the Persons list been loaded
   error?: any; // last none error (if any)
   loggedIn: boolean;
 }
 
 export const initialPersonState: PersonsState = {
-  person: {},
+  list: [],
   loaded: false,
   loggedIn: false
 };
@@ -33,7 +33,7 @@ export function personsReducer(
     case PersonsActionTypes.PersonsLoaded: {
       state = {
         ...state,
-        person: action.payload,
+        list: action.payload,
         loaded: true
       };
       break;

@@ -1,4 +1,4 @@
-import { Entity, PersonsState } from './persons.reducer';
+import { PersonEntity } from './persons.reducer';
 import { personsQuery } from './persons.selectors';
 
 describe('Persons Selectors', () => {
@@ -8,7 +8,7 @@ describe('Persons Selectors', () => {
   let storeState;
 
   beforeEach(() => {
-    const createPersons = (id: string, name = ''): Entity => ({
+    const createPersons = (id: string, name = ''): PersonEntity => ({
       id,
       name: name || `name-${id}`
     });
@@ -19,7 +19,7 @@ describe('Persons Selectors', () => {
           createPersons('PRODUCT-BBB'),
           createPersons('PRODUCT-CCC')
         ],
-        selectedId: 'PRODUCT-BBB',
+        id: 'PRODUCT-BBB',
         error: ERROR_MSG,
         loaded: true
       }
@@ -36,10 +36,9 @@ describe('Persons Selectors', () => {
     });
 
     it('getSelectedPersons() should return the selected Entity', () => {
-      const result = personsQuery.getSelectedPersons(storeState);
-      const selId = getPersonsId(result);
+      const result = personsQuery.getSelectedId(storeState);
 
-      expect(selId).toBe('PRODUCT-BBB');
+      expect(result).toBe('PRODUCT-BBB');
     });
 
     it("getLoaded() should return the current 'loaded' status", () => {
