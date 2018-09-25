@@ -16,14 +16,6 @@ $ui-icon-filter: FontAwesome '\f0b0' !default;
 // icon classes
 @include icon(ui-icon-filter, $ui-icon-filter);
 
-// icon basic style
-[class*='icon-'] {
-  font-style: normal;
-  font-weight: normal;
-  text-transform: none;
-  line-height: 1;
-}
-
 // thematic variables
 $ui-bg-color-1: #fff !default;
 $ui-bg-color-2: #fff !default;

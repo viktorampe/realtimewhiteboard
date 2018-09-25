@@ -82,13 +82,6 @@ body {
 @import 'libs/pages/pages-theme';
 @include pages-theme();
 
-// create icon classes
-@if variable-exists(icons) {
-  @each $class, $icon in $icons {
-    @include icon(icon-#{$class}, $icon);
-  }
-}
-
 /*
  * App styles
  */
