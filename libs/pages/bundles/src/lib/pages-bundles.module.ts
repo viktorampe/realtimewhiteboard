@@ -6,7 +6,7 @@ import { BundlesComponent } from './components/bundles.component';
 import { BundlesViewModel } from './components/bundles.viewmodel';
 import { InfoPanelBundleComponent } from './components/info-panel/info-panel-bundle/info-panel-bundle.component';
 import { InfoPanelContentComponent } from './components/info-panel/info-panel-content/info-panel-content.component';
-import { InfoPanelEducontentsComponent } from './components/info-panel/info-panel-educontents/info-panel-educontents.component';
+import { InfoPanelContentsComponent } from './components/info-panel/info-panel-contents/info-panel-contents.component';
 import { PagesBundlesRoutingModule } from './pages-bundles-routing.module';
 
 @NgModule({
@@ -20,7 +20,7 @@ import { PagesBundlesRoutingModule } from './pages-bundles-routing.module';
     BundlesComponent,
     InfoPanelBundleComponent,
     InfoPanelContentComponent,
-    InfoPanelEducontentsComponent
+    InfoPanelContentsComponent
   ],
 
   providers: [BundlesViewModel]
