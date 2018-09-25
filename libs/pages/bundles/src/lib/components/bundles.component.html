@@ -1,13 +1,7 @@
 <campus-info-panel-bundle [bundle]="bundle"></campus-info-panel-bundle>
 
-<campus-info-panel-educontent [eduContentPreview]="eduContent.preview"
-                              [eduContentName]="eduContent.name"
-                              [eduContentDescription]="eduContent.description"
-                              [eduContentExtention]="eduContent.extention"
-                              [eduContentProductType]="eduContent.productType"
-                              [eduContentMethods]="eduContent.methods"
-                              [statusOptions]="eduContent.status.options"
-                              [selectedStatus]="eduContent.status.selectedstatus"
-                              [statusConfirmIcon]="'polpo-presentatie'"></campus-info-panel-educontent>
+<campus-info-panel-educontent [content]="eduContent"
+                              [statusOptions]="statusOptions"
+                              (saveStatus)="saveStatus($event)"></campus-info-panel-educontent>
 
-<campus-info-panel-educontents [eduContentNames]="eduContentNames"></campus-info-panel-educontents>
+<campus-info-panel-educontents [contents]="eduContents"></campus-info-panel-educontents>

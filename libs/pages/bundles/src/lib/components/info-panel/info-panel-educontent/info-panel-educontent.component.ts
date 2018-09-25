@@ -6,15 +6,16 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./info-panel-educontent.component.scss']
 })
 export class InfoPanelEducontentComponent {
-  @Input() eduContentPreview: string;
-  @Input() eduContentName: string;
-  @Input() eduContentDescription: string;
-  @Input() eduContentExtention: string;
-  @Input() eduContentProductType: string;
-  @Input() eduContentMethods: string;
-  @Input() statusOptions: string;
-  @Input() selectedStatus: string;
-  @Input() statusConfirmIcon: string;
+  @Input() content: {
+    preview?: string,
+    name: string,
+    description: string,
+    extention: string,
+    productType: string,
+    methods: string[],
+    status: string
+  };
+  @Input() statusOptions: string[];
   @Output() saveStatus = new EventEmitter<string>();
 
   onSaveStatus(event): void {

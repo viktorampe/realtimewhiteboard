@@ -6,8 +6,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./bundles.component.scss']
 })
 export class BundlesComponent {
-  bundle = { name: 'bundle name', description: 'bundle description' };
-  teacher = { displayName: 'Tom mertens' };
+  bundle = { name: 'bundle name', description: 'bundle description', teacher: { displayName: 'Tom mertens' } };
+  ;
 
   eduContent = {
     preview:
@@ -17,13 +17,11 @@ export class BundlesComponent {
     extention: 'ppt',
     productType: 'polpo-presentatie',
     methods: ['opmijkunjerekenen'],
-    status: {
-      options: ['one', 'two'],
-      selectedstatus: 'two'
-    }
+    status: 'two'
   };
+  statusOptions = ['one', 'two'];
 
-  eduContentNames = [{ text: 'one' }, { text: 'two' }, { text: 'three' }];
+  eduContents = [{ text: 'one' }, { text: 'two' }, { text: 'three' }];
 
   saveStatus(eventValue: any) {
     console.log(eventValue);

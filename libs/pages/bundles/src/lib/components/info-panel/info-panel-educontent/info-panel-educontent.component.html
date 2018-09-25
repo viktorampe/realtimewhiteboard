@@ -1,22 +1,21 @@
 <campus-info-panel>
-  <campus-content-preview preview
-                          [preview]="eduContentPreview"
-                          [titleText]="eduContentName"
-                          [description]="eduContentDescription">
+  <campus-content-preview [preview]="content.preview"
+                          [titleText]="content.name"
+                          [description]="content.description">
     <campus-file-extension type
-                           [extensionClass]="eduContentExtention"></campus-file-extension>
+                           [extensionClass]="content.extention"></campus-file-extension>
     <div icon
-         class="{{eduContentProductType}}"></div>
+         class="{{content.productType}}"></div>
     <div badge
-         *ngFor="let badge of eduContentMethods">
+         *ngFor="let badge of content.methods">
       {{badge}}
     </div>
   </campus-content-preview>
   <campus-confirmable-select status
                              [label]="'status'"
                              [options]="statusOptions"
-                             [selectedOption]="selectedStatus"
+                             [selectedOption]="content.status"
                              [text]="'Verander de status van dit lesmateriaal. Enkel jij kan deze status zien.'"
-                             [confirmIcon]="statusConfirmIcon"
+                             [confirmIcon]="'icon-confirm'"
                              (clickConfirm)="onSaveStatus($event)"></campus-confirmable-select>
 </campus-info-panel>

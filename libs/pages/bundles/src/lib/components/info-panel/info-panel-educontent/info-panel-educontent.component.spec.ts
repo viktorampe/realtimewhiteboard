@@ -6,6 +6,8 @@ describe('InfoPanelEducontentComponent', () => {
   let component: InfoPanelEducontentComponent;
   let fixture: ComponentFixture<InfoPanelEducontentComponent>;
 
+  let mockData: any;
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [InfoPanelEducontentComponent],
@@ -16,6 +18,23 @@ describe('InfoPanelEducontentComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(InfoPanelEducontentComponent);
     component = fixture.componentInstance;
+
+    mockData = {
+      content: {
+        preview: 'string',
+        name: 'string',
+        description: 'string',
+        extention: 'string',
+        productType: 'string',
+        methods: ['string'],
+        status: 'string'
+      },
+      statusOptions: ['string']
+    }
+
+    component.content = mockData.content;
+    component.statusOptions = mockData.statusOptions;
+
     fixture.detectChanges();
   });
 
