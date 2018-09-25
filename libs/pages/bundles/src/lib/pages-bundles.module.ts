@@ -5,7 +5,7 @@ import { UiModule } from '@campus/ui';
 import { BundlesComponent } from './components/bundles.component';
 import { BundlesViewModel } from './components/bundles.viewmodel';
 import { InfoPanelBundleComponent } from './components/info-panel/info-panel-bundle/info-panel-bundle.component';
-import { InfoPanelEducontentComponent } from './components/info-panel/info-panel-educontent/info-panel-educontent.component';
+import { InfoPanelContentComponent } from './components/info-panel/info-panel-content/info-panel-content.component';
 import { InfoPanelEducontentsComponent } from './components/info-panel/info-panel-educontents/info-panel-educontents.component';
 import { PagesBundlesRoutingModule } from './pages-bundles-routing.module';
 
@@ -19,7 +19,7 @@ import { PagesBundlesRoutingModule } from './pages-bundles-routing.module';
   declarations: [
     BundlesComponent,
     InfoPanelBundleComponent,
-    InfoPanelEducontentComponent,
+    InfoPanelContentComponent,
     InfoPanelEducontentsComponent
   ],
 

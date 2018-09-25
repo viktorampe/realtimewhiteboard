@@ -1,22 +1,22 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { InfoPanelEducontentComponent } from './info-panel-educontent.component';
+import { InfoPanelContentComponent } from './info-panel-content.component';
 
-describe('InfoPanelEducontentComponent', () => {
-  let component: InfoPanelEducontentComponent;
-  let fixture: ComponentFixture<InfoPanelEducontentComponent>;
+describe('InfoPanelContentComponent', () => {
+  let component: InfoPanelContentComponent;
+  let fixture: ComponentFixture<InfoPanelContentComponent>;
 
   let mockData: any;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [InfoPanelEducontentComponent],
+      declarations: [InfoPanelContentComponent],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(InfoPanelEducontentComponent);
+    fixture = TestBed.createComponent(InfoPanelContentComponent);
     component = fixture.componentInstance;
 
     mockData = {

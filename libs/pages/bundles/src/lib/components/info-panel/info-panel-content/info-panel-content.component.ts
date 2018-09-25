@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
-  selector: 'campus-info-panel-educontent',
-  templateUrl: './info-panel-educontent.component.html',
-  styleUrls: ['./info-panel-educontent.component.scss']
+  selector: 'campus-info-panel-content',
+  templateUrl: './info-panel-content.component.html',
+  styleUrls: ['./info-panel-content.component.scss']
 })
-export class InfoPanelEducontentComponent {
+export class InfoPanelContentComponent {
   @Input() content: {
     preview?: string,
     name: string,
