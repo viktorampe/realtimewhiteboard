@@ -1,0 +1,28 @@
+@mixin campus-list-view {
+  .flex-grid-item {
+    color: $pages-font-color-1;
+  }
+
+  .flex-list-item {
+    color: $pages-font-color-1;
+  }
+
+  .item-selected {
+    background-color: $pages-bg-color-2;
+  }
+
+  .item-selectoverlay {
+    background-color: $pages-bg-color-2;
+    &::before {
+      content: '';
+      color: $pages-bg-color-2;
+      background-color: $pages-font-color-active;
+    }
+
+    &:not(.item-selected)::before {
+      border: $pages-font-color-active solid 1px;
+    }
+    &.item-selected::before {
+    }
+  }
+}

@@ -17,6 +17,7 @@
 .flex-list-item {
   width: 100%;
   height: 48px;
+  margin-bottom: 3px;
   box-sizing: border-box;
   border: 5px transparent solid;
   cursor: pointer;
@@ -26,16 +27,11 @@
   }
 }
 
-.item-selected {
-  border: 5px blue solid;
-}
-
 .item-selectoverlay {
   border: 5px transparent solid;
   position: relative;
   &::before {
     content: '';
-    color: white;
     text-align: center;
     display: block;
     width: 20px;
@@ -53,11 +49,9 @@
   }
 
   &:not(.item-selected)::before {
-    background-color: gold;
     opacity: 0.4;
   }
   &.item-selected::before {
-    background-color: green;
     content: 'X';
   }
   &:hover::before {

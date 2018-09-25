@@ -11,8 +11,7 @@
   <button (click)="deselectAllItems()">geen</button>
   <!-- TODO: verwijderen ^ -->
 
-  <div class="flexbox "
-       [ngClass]="{'flex-list': listFormat =='list', 'flex-grid': listFormat =='grid' }">
+  <div class="flexbox flex-{{listFormat}}">
     <ng-content></ng-content>
   </div>
 </ng-template>
