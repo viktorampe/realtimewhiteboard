@@ -5,7 +5,6 @@ import { BundlesComponent } from './bundles.component';
 describe('BundlesComponent', () => {
   let component: BundlesComponent;
   let fixture: ComponentFixture<BundlesComponent>;
-
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [BundlesComponent],

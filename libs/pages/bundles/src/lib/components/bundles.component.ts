@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { SideSheetComponent } from '@campus/ui';
 
 @Component({
   selector: 'campus-bundles',
@@ -6,26 +7,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./bundles.component.scss']
 })
 export class BundlesComponent {
-  bundle = {
-    name: 'bundle name',
-    description: 'bundle description',
-    teacher: { displayName: 'Tom mertens' }
-  };
-  eduContent = {
-    preview:
-      'https://d1fh3heiqa6frl.cloudfront.net/890f054414a06a81489f35e6b27fc23c9ee12d0ce4e0a867801a569a073438de/7bc034592d6ea1a4ec2f3e99eb63ad56_340-1.png',
-    name: 'educontent name',
-    description: 'educontent description',
-    extention: 'ppt',
-    productType: 'polpo-presentatie',
-    methods: ['opmijkunjerekenen'],
-    status: 'two'
-  };
-  statusOptions = ['one', 'two'];
+  isOpenOnInit = true;
+  @ViewChild('sideSheet') sideSheet: SideSheetComponent;
 
-  eduContents = [{ text: 'one' }, { text: 'two' }, { text: 'three' }];
-
-  saveStatus(eventValue: any) {
-    console.log(eventValue);
+  toggleSideSheet() {
+    this.sideSheet.toggle();
   }
 }

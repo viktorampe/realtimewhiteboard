@@ -22,7 +22,6 @@ import { PagesBundlesRoutingModule } from './pages-bundles-routing.module';
     InfoPanelContentComponent,
     InfoPanelContentsComponent
   ],
-
   providers: [BundlesViewModel]
 })
-export class PagesBundlesModule {}
+export class PagesBundlesModule { }
