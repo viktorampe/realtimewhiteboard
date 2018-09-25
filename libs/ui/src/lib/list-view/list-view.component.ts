@@ -7,6 +7,7 @@ import {
   Input,
   QueryList
 } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { ListItemDirective } from './directives/list-view-item.directive';
 
 /**
@@ -30,40 +31,49 @@ import { ListItemDirective } from './directives/list-view-item.directive';
   providedIn: ListItemDirective
 })
 export class ListViewComponent implements AfterContentInit {
+  itemSelectableStyle = false;
+
+  private subscription = new Subscription();
+
   @Input() listFormat = 'list';
   @Input() multiSelect = false;
   @Input() placeHolderText = 'Er zijn geen beschikbare items.';
 
-  itemsAmount: number;
-  itemSelectStyle = false;
-
   @ContentChildren(forwardRef(() => ListItemDirective))
   items: QueryList<ListItemDirective>;
+
   ngAfterContentInit() {
     this.items.forEach(item => {
-      item.itemClicked.subscribe(() => this.itemClickHandler(item));
+      this.subscription.add(
+        item.itemSelectionChanged.subscribe(() =>
+          this.onItemSelectionChanged(item)
+        )
+      );
     });
-    this.itemsAmount = this.items.length;
   }
 
-  private itemClickHandler(item: ListItemDirective) {
-    item.isSelected = !item.isSelected;
+  // tslint:disable-next-line:use-life-cycle-interface
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
+  private onItemSelectionChanged(item: ListItemDirective) {
     if (!this.multiSelect) {
       this.items.filter(i => i !== item).forEach(j => (j.isSelected = false));
     } else {
-      this.itemSelectStyle = this.items.some(i => i.isSelected);
+      this.itemSelectableStyle = this.items.some(i => i.isSelected);
     }
   }
 
   selectAllItems() {
     if (this.multiSelect) {
       this.items.forEach(i => (i.isSelected = true));
-      this.itemSelectStyle = true;
+      this.itemSelectableStyle = true;
     }
   }
   deselectAllItems() {
     this.items.forEach(i => (i.isSelected = false));
-    this.itemSelectStyle = false;
+    this.itemSelectableStyle = false;
   }
 
   //TODO: verwijderen

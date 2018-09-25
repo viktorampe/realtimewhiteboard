@@ -9,8 +9,8 @@
   cursor: pointer;
   display: block;
   & > * {
-    height: inherit;
-    width: inherit;
+    height: 100%;
+    width: 100%;
   }
 }
 
@@ -22,7 +22,7 @@
   cursor: pointer;
   display: block;
   & > * {
-    height: inherit;
+    height: 100%;
   }
 }
 
@@ -32,8 +32,9 @@
 
 .item-selectoverlay {
   border: 5px transparent solid;
+  position: relative;
   &::before {
-    content: 'X';
+    content: '';
     color: white;
     text-align: center;
     display: block;
@@ -41,6 +42,7 @@
     height: 20px;
     float: left;
     position: absolute;
+    border-radius: 10px;
   }
   &.flex-list-item {
     padding-left: 30px;
@@ -56,6 +58,7 @@
   }
   &.item-selected::before {
     background-color: green;
+    content: 'X';
   }
   &:hover::before {
     opacity: 1;

@@ -1,4 +1,4 @@
-<ng-container *ngIf="itemsAmount ; then hasContentTemplate; else emptyTemplate">
+<ng-container *ngIf="items.length ; then hasContentTemplate; else emptyTemplate">
 </ng-container>
 
 <ng-template #hasContentTemplate>
@@ -11,14 +11,12 @@
   <button (click)="deselectAllItems()">geen</button>
   <!-- TODO: verwijderen ^ -->
 
-  <header>Pageheader</header>
-
-  <div class="flexbox " [ngClass]="{'flex-list': listFormat =='list', 'flex-grid': listFormat =='grid' }">
+  <div class="flexbox "
+       [ngClass]="{'flex-list': listFormat =='list', 'flex-grid': listFormat =='grid' }">
     <ng-content></ng-content>
   </div>
 </ng-template>
 
 <ng-template #emptyTemplate>
-  <header>Pageheader</header>
   <p> {{placeHolderText}} </p>
 </ng-template>

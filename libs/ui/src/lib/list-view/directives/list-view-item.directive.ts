@@ -16,12 +16,11 @@ import { ListViewComponent } from '../list-view.component';
  * @class ListItemDirective
  */
 @Directive({
-  selector: '[campusListItem]'
+  selector: '[campusListItem], [campus-list-item]'
 })
 export class ListItemDirective {
   isSelected: boolean;
-  parentList: ListViewComponent;
-  @Output() itemClicked = new EventEmitter<ListItemDirective>();
+  @Output() itemSelectionChanged = new EventEmitter<ListItemDirective>();
 
   @HostBinding('class.item-selected')
   get isSelectedClass() {
@@ -40,18 +39,17 @@ export class ListItemDirective {
 
   @HostBinding('class.item-selectoverlay')
   get isMultiSelectableClass() {
-    return this.parentList.itemSelectStyle === true;
+    return this.parentList.itemSelectableStyle === true;
   }
 
   @HostListener('click')
   clickEvent() {
-    this.itemClicked.emit(this);
+    this.isSelected = !this.isSelected;
+    this.itemSelectionChanged.emit(this);
   }
 
   constructor(
     @Inject(forwardRef(() => ListViewComponent))
-    parentList
-  ) {
-    this.parentList = parentList;
-  }
+    private parentList
+  ) {}
 }
