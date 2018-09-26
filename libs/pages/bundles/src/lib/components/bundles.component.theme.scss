@@ -1,17 +1,17 @@
 @mixin campus-list-view {
-  .flex-grid-item {
+  .flex-item--grid {
     color: $pages-font-color-1;
   }
 
-  .flex-list-item {
+  .flex-item--line {
     color: $pages-font-color-1;
   }
 
-  .item-selected {
+  .item--selected {
     background-color: $pages-bg-color-2;
   }
 
-  .item-selectoverlay {
+  .item__selectoverlay {
     background-color: $pages-bg-color-2;
     &::before {
       content: '';

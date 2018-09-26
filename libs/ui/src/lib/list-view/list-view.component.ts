@@ -15,7 +15,7 @@ import { ListItemDirective } from './directives/list-view-item.directive';
  * Places decorated components in a Grid or List layout.
  * List items need to be decorated with the campusListItem attribute.
  *
- * @param {string} listFormat - Show components in a grid or in a list.
+ * @param {string} listFormat - Show components in a grid or in a line.
  * @param {boolean} multiSelect - Allow selection of multiple components.
  * @param {string} placeHolderText - Text to display when the list is empty.
  *
@@ -37,7 +37,7 @@ export class ListViewComponent implements AfterContentInit {
 
   private subscription = new Subscription();
 
-  @Input() listFormat = 'list';
+  @Input() listFormat = 'line';
   @Input() multiSelect = false;
   @Input() placeHolderText = 'Er zijn geen beschikbare items.';
 

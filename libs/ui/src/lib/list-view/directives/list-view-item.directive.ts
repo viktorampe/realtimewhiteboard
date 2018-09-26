@@ -23,22 +23,22 @@ export class ListItemDirective {
   isSelected: boolean;
   @Output() itemSelectionChanged = new EventEmitter<ListItemDirective>();
 
-  @HostBinding('class.item-selected')
+  @HostBinding('class.item--selected')
   get isSelectedClass() {
     return this.isSelected;
   }
 
-  @HostBinding('class.flex-grid-item')
+  @HostBinding('class.flex-item--grid')
   get isGridClass() {
     return this.parentList.listFormat === 'grid';
   }
 
-  @HostBinding('class.flex-list-item')
+  @HostBinding('class.flex-item--line')
   get isListClass() {
-    return this.parentList.listFormat === 'list';
+    return this.parentList.listFormat === 'line';
   }
 
-  @HostBinding('class.item-selectoverlay')
+  @HostBinding('class.item__selectoverlay')
   get isMultiSelectableClass() {
     return this.parentList.useItemSelectableOverlayStyle === true;
   }

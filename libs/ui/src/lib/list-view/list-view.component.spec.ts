@@ -128,13 +128,13 @@ describe('ListViewComponent', () => {
     expect(itemListDE.nativeElement.className).not.toContain('flex-list');
   });
 
-  it('should apply the flex-list class', () => {
-    component.listFormat = 'list';
+  it('should apply the flex-line class', () => {
+    component.listFormat = 'line';
     testContainerFixture.detectChanges();
 
     const itemListDE = componentDE.query(By.css('.flexbox'));
 
-    expect(itemListDE.nativeElement.className).toContain('flex-list');
+    expect(itemListDE.nativeElement.className).toContain('flex-line');
     expect(itemListDE.nativeElement.className).not.toContain('flex-grid');
   });
 

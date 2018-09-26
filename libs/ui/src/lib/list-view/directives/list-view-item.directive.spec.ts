@@ -48,7 +48,7 @@ describe('ListItemDirective', () => {
     dir.isSelected = true;
     fixture.detectChanges();
 
-    expect(compDE.nativeElement.classList).toContain('item-selected');
+    expect(compDE.nativeElement.classList).toContain('item--selected');
   });
 
   it('should handle te host click event', () => {
