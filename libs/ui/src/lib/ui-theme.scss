@@ -1,15 +1,3 @@
-// icon mixin
-@mixin icon($cls, $icon-bundle) {
-  $font: nth($icon-bundle, 1);
-  $unicode: nth($icon-bundle, 2);
-  .#{$cls} {
-    font-family: $font;
-    &:before {
-      content: $unicode;
-    }
-  }
-}
-
 // icon variables
 $ui-icon-filter: FontAwesome '\f0b0' !default;
 

@@ -132,6 +132,18 @@ $icons: (
   youtube: polpo '\e971'
 );
 
+// icon mixin
+@mixin icon($cls, $icon-bundle) {
+  $font: nth($icon-bundle, 1);
+  $unicode: nth($icon-bundle, 2);
+  .#{$cls} {
+    font-family: $font;
+    &:before {
+      content: $unicode;
+    }
+  }
+}
+
 // create icon classes
 @each $class, $icon in $icons {
   @include icon(icon-#{$class}, $icon);
