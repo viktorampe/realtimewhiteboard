@@ -1,12 +1,12 @@
 import {
+  AfterContentInit,
   Directive,
   EventEmitter,
-  forwardRef,
   HostBinding,
   HostListener,
-  Inject,
   Output
 } from '@angular/core';
+import { ListViewItem } from '../base classes/list-view-item';
 import { ListViewComponent } from '../list-view.component';
 
 /**
@@ -19,7 +19,7 @@ import { ListViewComponent } from '../list-view.component';
 @Directive({
   selector: '[campusListItem]'
 })
-export class ListItemDirective {
+export class ListItemDirective implements AfterContentInit {
   isSelected: boolean;
   @Output() itemSelectionChanged = new EventEmitter<ListItemDirective>();
 
@@ -50,7 +50,11 @@ export class ListItemDirective {
   }
 
   constructor(
-    @Inject(forwardRef(() => ListViewComponent))
-    private parentList
+    private parentList: ListViewComponent,
+    private host: ListViewItem
   ) {}
+
+  ngAfterContentInit() {
+    this.host.listFormat = this.parentList.listFormat;
+  }
 }
