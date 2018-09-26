@@ -17,7 +17,7 @@ import { ListViewComponent } from '../list-view.component';
  * @class ListItemDirective
  */
 @Directive({
-  selector: '[campusListItem], [campus-list-item]'
+  selector: '[campusListItem]'
 })
 export class ListItemDirective {
   isSelected: boolean;
@@ -40,7 +40,7 @@ export class ListItemDirective {
 
   @HostBinding('class.item-selectoverlay')
   get isMultiSelectableClass() {
-    return this.parentList.itemSelectableStyle === true;
+    return this.parentList.useItemSelectableOverlayStyle === true;
   }
 
   @HostListener('click')

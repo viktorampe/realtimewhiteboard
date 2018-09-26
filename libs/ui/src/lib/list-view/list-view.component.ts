@@ -33,7 +33,7 @@ import { ListItemDirective } from './directives/list-view-item.directive';
   providedIn: ListItemDirective
 })
 export class ListViewComponent implements AfterContentInit {
-  itemSelectableStyle = false;
+  useItemSelectableOverlayStyle = false;
 
   private subscription = new Subscription();
 
@@ -65,7 +65,7 @@ export class ListViewComponent implements AfterContentInit {
     if (!this.multiSelect) {
       this.items.filter(i => i !== item).forEach(j => (j.isSelected = false));
     } else {
-      this.itemSelectableStyle = this.items.some(i => i.isSelected);
+      this.useItemSelectableOverlayStyle = this.items.some(i => i.isSelected);
     }
 
     const selectedItemsArray = this.items.filter(i => i.isSelected);
@@ -75,11 +75,11 @@ export class ListViewComponent implements AfterContentInit {
   selectAllItems() {
     if (this.multiSelect) {
       this.items.forEach(i => (i.isSelected = true));
-      this.itemSelectableStyle = true;
+      this.useItemSelectableOverlayStyle = true;
     }
   }
   deselectAllItems() {
     this.items.forEach(i => (i.isSelected = false));
-    this.itemSelectableStyle = false;
+    this.useItemSelectableOverlayStyle = false;
   }
 }
