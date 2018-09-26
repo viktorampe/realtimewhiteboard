@@ -17,6 +17,8 @@ import { SideSheetHeaderDirective } from './side-sheet/directives/side-sheet-hea
 import { SideSheetPageDirective } from './side-sheet/directives/side-sheet-page.directive';
 import { SideSheetComponent } from './side-sheet/side-sheet.component';
 import { TreeNavComponent } from './tree-nav/tree-nav.component';
+import { ToolBarComponent } from './tool-bar/tool-bar.component';
+import { ToolBarButtonComponent } from './tool-bar-button/tool-bar-button.component';
 
 @NgModule({
   imports: [
@@ -40,7 +42,9 @@ import { TreeNavComponent } from './tree-nav/tree-nav.component';
     AppBarComponent,
     PageHeaderComponent,
     FileExtensionComponent,
-    TreeNavComponent
+    TreeNavComponent,
+    ToolBarComponent,
+    ToolBarButtonComponent
   ],
   exports: [
     SideSheetComponent,
@@ -55,7 +59,9 @@ import { TreeNavComponent } from './tree-nav/tree-nav.component';
     AppBarComponent,
     PageHeaderComponent,
     FileExtensionComponent,
-    TreeNavComponent
+    TreeNavComponent,
+    ToolBarComponent,
+    ToolBarButtonComponent
   ]
 })
 export class UiModule {}
