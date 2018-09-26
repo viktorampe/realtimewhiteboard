@@ -8,6 +8,8 @@ import { AppBarComponent } from './app-bar/app-bar.component';
 import { ContentActionButtonComponent } from './content-action-button/content-action-button.component';
 import { ContentThumbnailComponent } from './content-thumbnail/content-thumbnail.component';
 import { FileExtensionComponent } from './file-extension/file-extension.component';
+import { ListItemDirective } from './list-view/directives/list-view-item.directive';
+import { ListViewComponent } from './list-view/list-view.component';
 import { PageHeaderComponent } from './page-header/page-header.component';
 import { ShellBodyDirective } from './shell/directives/shell-body.directive';
 import { ShellLeftDirective } from './shell/directives/shell-left.directive';
@@ -44,7 +46,10 @@ import { TreeNavComponent } from './tree-nav/tree-nav.component';
     FileExtensionComponent,
     TreeNavComponent,
     ContentThumbnailComponent,
-    ContentActionButtonComponent
+    ContentActionButtonComponent,
+    ListViewComponent,
+    ListItemDirective,
+    TreeNavComponent
   ],
   exports: [
     SideSheetComponent,
@@ -61,7 +66,10 @@ import { TreeNavComponent } from './tree-nav/tree-nav.component';
     FileExtensionComponent,
     TreeNavComponent,
     ContentThumbnailComponent,
-    ContentActionButtonComponent
+    ContentActionButtonComponent,
+    ListViewComponent,
+    ListItemDirective,
+    TreeNavComponent
   ]
 })
 export class UiModule {}

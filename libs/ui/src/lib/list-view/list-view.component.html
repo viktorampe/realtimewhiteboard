@@ -1,0 +1,12 @@
+<ng-container *ngIf="items.length ; then hasContentTemplate; else emptyTemplate">
+</ng-container>
+
+<ng-template #hasContentTemplate>
+  <div class="flexbox flex-{{listFormat}}">
+    <ng-content></ng-content>
+  </div>
+</ng-template>
+
+<ng-template #emptyTemplate>
+  <p> {{placeHolderText}} </p>
+</ng-template>

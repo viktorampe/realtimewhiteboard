@@ -2,27 +2,31 @@
   bundles works!
 </p>
 <div style="margin-left: 5px;">
-  <campus-content-thumbnail listFormat=grid
-                            title="Dit is de titel van de content."
-                            imagePath="https://www.polpo.be/assets/images/home-laptop-books.jpg"
-                            contentTypeClass="icon-bundle"
-                            fileExtensionClass="zip"
-                            [actionArray]="[{iconClass:'icon-book'},{iconClass:'icon-tasks'}]">
-  </campus-content-thumbnail>
+  <campus-list-view [multiSelect]="true"
+                    listFormat=line>
+    <campus-content-thumbnail listFormat=grid
+                              title="Dit is de titel van de content."
+                              imagePath="https://www.polpo.be/assets/images/home-laptop-books.jpg"
+                              contentTypeClass="icon-bundle"
+                              fileExtensionClass="zip"
+                              [actionArray]="[{iconClass:'icon-book'},{iconClass:'icon-tasks'}]">
+    </campus-content-thumbnail>
 
-  <campus-content-thumbnail listFormat=grid
-                            title="Dit is de titel van de content."
-                            contentTypeClass="icon-bundle"
-                            fileExtensionClass="zip"
-                            [actionArray]="[{iconClass:'icon-book'},{iconClass:'icon-tasks'}]">
-  </campus-content-thumbnail>
+    <campus-content-thumbnail listFormat=grid
+                              title="Dit is de titel van de content."
+                              contentTypeClass="icon-bundle"
+                              fileExtensionClass="zip"
+                              [actionArray]="[{iconClass:'icon-book'},{iconClass:'icon-tasks'}]">
+    </campus-content-thumbnail>
 
-  <campus-content-thumbnail listFormat=line
-                            title="Dit is de titel van de content."
-                            contentTypeClass="icon-bundle"
-                            fileExtensionClass="zip"
-                            [actionArray]="[{iconClass:'icon-book'},{iconClass:'icon-tasks'}]">
-  </campus-content-thumbnail>
+    <campus-content-thumbnail listFormat=line
+                              title="Dit is de titel van de content."
+                              contentTypeClass="icon-bundle"
+                              fileExtensionClass="zip"
+                              [actionArray]="[{iconClass:'icon-book'},{iconClass:'icon-tasks'}]">
+    </campus-content-thumbnail>
+  </campus-list-view>
 </div>
+
 <!-- https://www.polpo.be/assets/images/home-laptop-books.jpg -->
 <!-- https://www.polpo.be/assets/images/polpo.svg -->
