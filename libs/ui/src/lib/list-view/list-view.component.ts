@@ -3,7 +3,6 @@ import {
   Component,
   ContentChildren,
   forwardRef,
-  Injectable,
   Input,
   Output,
   QueryList
@@ -29,15 +28,12 @@ import { ListItemDirective } from './directives/list-view-item.directive';
   templateUrl: './list-view.component.html',
   styleUrls: ['./list-view.component.scss']
 })
-@Injectable({
-  providedIn: ListItemDirective
-})
 export class ListViewComponent implements AfterContentInit {
   useItemSelectableOverlayStyle = false;
 
   private subscription = new Subscription();
 
-  @Input() listFormat = 'line';
+  @Input() listFormat: 'line' | 'grid';
   @Input() multiSelect = false;
   @Input() placeHolderText = 'Er zijn geen beschikbare items.';
 

@@ -8,15 +8,20 @@
   }
 
   .item--selected {
-    background-color: $pages-bg-color-2;
+    &.flex-item--grid {
+      background-color: $pages-bg-color-2;
+    }
   }
 
   .item__selectoverlay {
-    background-color: $pages-bg-color-2;
     &::before {
       content: '';
       color: $pages-bg-color-2;
       background-color: $pages-font-color-active;
+    }
+
+    &.flex-item--grid {
+      background-color: $pages-bg-color-2;
     }
 
     // &:not(.item-selected)::before {
