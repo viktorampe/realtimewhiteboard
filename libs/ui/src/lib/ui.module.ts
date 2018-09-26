@@ -30,7 +30,6 @@ import { SideSheetPageDirective } from './side-sheet/directives/side-sheet-page.
 import { SideSheetComponent } from './side-sheet/side-sheet.component';
 import { TreeNavComponent } from './tree-nav/tree-nav.component';
 
-
 @NgModule({
   imports: [
     CommonModule,
@@ -92,4 +91,4 @@ import { TreeNavComponent } from './tree-nav/tree-nav.component';
     PersonBadgeComponent
   ]
 })
-export class UiModule { }
+export class UiModule {}

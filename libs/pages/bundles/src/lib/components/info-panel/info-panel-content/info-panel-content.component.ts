@@ -24,4 +24,3 @@ export class InfoPanelContentComponent {
     this.saveStatus.emit(event);
   }
 }
-

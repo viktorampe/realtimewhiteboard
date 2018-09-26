@@ -19,7 +19,8 @@
     align-items: center;
     flex-direction: column;
   }
-  &__badge, img {
+  &__badge,
+  img {
     border-radius: 50%;
   }
   &__displayName {

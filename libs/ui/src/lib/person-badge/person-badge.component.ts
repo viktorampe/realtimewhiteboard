@@ -21,10 +21,9 @@ export class PersonBadgeComponent {
   @Input() person: BadgePerson;
 }
 
-
 export interface BadgePerson {
-  displayName: string,
-  name?: string,
-  firstName?: string,
-  avatar?: string
+  displayName: string;
+  name?: string;
+  firstName?: string;
+  avatar?: string;
 }

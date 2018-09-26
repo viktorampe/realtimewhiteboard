@@ -5,12 +5,13 @@ import { BadgePerson } from '../person-badge.component';
   name: 'personInitials'
 })
 export class PersonInitialsPipe implements PipeTransform {
-
   transform(person: BadgePerson, args?: any): any {
     if (!person.avatar) {
-      return person.name.charAt(0).toUpperCase() + person.firstName.charAt(0).toUpperCase();
+      return (
+        person.name.charAt(0).toUpperCase() +
+        person.firstName.charAt(0).toUpperCase()
+      );
     }
     return '';
   }
-
 }

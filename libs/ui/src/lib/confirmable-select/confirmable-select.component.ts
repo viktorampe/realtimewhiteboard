@@ -39,12 +39,14 @@ export class ConfirmableSelectComponent implements OnInit {
 
   onClickConfirm(): void {
     this.selectControl.markAsPristine();
-    const returnOption = this.options.find((o) => o.value === this.selectControl.value);
+    const returnOption = this.options.find(
+      o => o.value === this.selectControl.value
+    );
     this.clickConfirm.emit(returnOption);
   }
 }
 
-
 export interface SelectOption {
-  value: any, viewValue: string
+  value: any;
+  viewValue: string;
 }

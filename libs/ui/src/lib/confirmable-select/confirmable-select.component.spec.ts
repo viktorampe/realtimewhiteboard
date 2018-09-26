@@ -4,7 +4,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ConfirmableSelectComponent, SelectOption } from './confirmable-select.component';
+import {
+  ConfirmableSelectComponent,
+  SelectOption
+} from './confirmable-select.component';
 
 describe('ConfirmableSelectComponent', () => {
   let component: ConfirmableSelectComponent;
@@ -32,7 +35,10 @@ describe('ConfirmableSelectComponent', () => {
     mockData = {
       label: 'the-title',
       text: 'this is the text for the select',
-      options: [{ value: 'option-one', viewValue: 'Option one' }, { value: 'option-two', viewValue: 'Option two' }]
+      options: [
+        { value: 'option-one', viewValue: 'Option one' },
+        { value: 'option-two', viewValue: 'Option two' }
+      ]
     };
     mockData.selectedOption = mockData.options[0].value;
 

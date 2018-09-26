@@ -7,17 +7,20 @@
       justify-content: center;
       align-items: center;
       background-color: $ui-person-badge-background-color;
-      &--medium, img {
+      &--medium,
+      img {
         font-size: $ui-person-badge-size-medium-font-size;
         height: $ui-person-badge-size-medium;
         width: $ui-person-badge-size-medium;
       }
-      &--small, img {
+      &--small,
+      img {
         font-size: $ui-person-badge-size-small-font-size;
         height: $ui-person-badge-size-small;
         width: $ui-person-badge-size-small;
       }
-      &--large, img {
+      &--large,
+      img {
         font-size: $ui-person-badge-size-large-font-size;
         height: $ui-person-badge-size-large;
         width: $ui-person-badge-size-large;
