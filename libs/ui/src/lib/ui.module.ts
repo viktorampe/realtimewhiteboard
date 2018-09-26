@@ -18,6 +18,7 @@ import { LabelAndIconButtonComponent } from './label-and-icon-button/label-and-i
 import { PageHeaderComponent } from './page-header/page-header.component';
 import { PeriodLabelComponent } from './period-label/period-label.component';
 import { PersonBadgeComponent } from './person-badge/person-badge.component';
+import { PersonInitialsPipe } from './person-badge/pipes/person-initials.pipe';
 import { ShellBodyDirective } from './shell/directives/shell-body.directive';
 import { ShellLeftDirective } from './shell/directives/shell-left.directive';
 import { ShellLogoDirective } from './shell/directives/shell-logo.directive';
@@ -64,7 +65,8 @@ import { TreeNavComponent } from './tree-nav/tree-nav.component';
     PeriodLabelComponent,
     ConfirmableSelectComponent,
     FileExtensionComponent,
-    PersonBadgeComponent
+    PersonBadgeComponent,
+    PersonInitialsPipe
   ],
   exports: [
     SideSheetComponent,

@@ -1,4 +1,8 @@
 <div class="ui_person-badge ui_person-badge--{{align}}">
-  <div class="ui_person-badge__badge ui_person-badge__badge--{{size}}"></div>
-  <div class="ui_person-badge__displayName">{{displayName}}</div>
+  <div class="ui_person-badge__badge ui_person-badge__badge--{{size}}">{{person | personInitials}}
+    <img *ngIf="person.avatar"
+         [src]="person.avatar"
+         alt="avatar">
+  </div>
+  <div class="ui_person-badge__displayName">{{person.displayName}}</div>
 </div>

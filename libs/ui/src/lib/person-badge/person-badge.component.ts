@@ -3,7 +3,7 @@ import { Component, Input } from '@angular/core';
 /**
  * @example
  * <campus-person-badge person
-                       [displayName]="'Tom Mertens'"
+                       [person]="'Tom Mertens'"
                        [align]="'left'"
                        [size]="'medium'"></campus-person-badge>
  * 
@@ -16,7 +16,15 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./person-badge.component.scss']
 })
 export class PersonBadgeComponent {
-  @Input() align: string;
-  @Input() size: string;
-  @Input() displayName: string;
+  @Input() align = 'left';
+  @Input() size = 'medium';
+  @Input() person: BadgePerson;
+}
+
+
+export interface BadgePerson {
+  displayName: string,
+  name?: string,
+  firstName?: string,
+  avatar?: string
 }

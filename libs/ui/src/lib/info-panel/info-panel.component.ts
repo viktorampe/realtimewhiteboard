@@ -17,7 +17,7 @@ import { Component, Input } from '@angular/core';
         </div>
       </campus-content-preview>
       <campus-person-badge person
-                          [displayName]="'Tom Mertens'"
+                          [person]="'Tom Mertens'"
                           [align]="'left'"
                           [size]="'medium'">
       </campus-person-badge>

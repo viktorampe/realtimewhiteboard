@@ -1,11 +1,25 @@
 .ui_person-badge {
   margin: 15px 25px 15px 25px;
   display: flex;
-  &--left {
+  &--right {
     flex-direction: row-reverse;
     justify-content: flex-start;
   }
-  &__badge {
+  &--left {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+  &--top {
+    justify-content: center;
+    align-items: center;
+    flex-direction: column-reverse;
+  }
+  &--bottom {
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  &__badge, img {
     border-radius: 50%;
   }
   &__displayName {

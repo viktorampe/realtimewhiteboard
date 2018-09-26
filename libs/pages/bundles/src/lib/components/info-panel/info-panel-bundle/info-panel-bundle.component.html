@@ -1,7 +1,6 @@
 <campus-info-panel class="ui-info-panel-bundle"
                    [titleText]="'Info'">
-  <campus-person-badge person
-                       [displayName]="bundle.teacher.displayName"
+  <campus-person-badge [person]="bundle.teacher"
                        [align]="'left'"
                        [size]="'medium'"></campus-person-badge>
   <p class="ui-info-panel-bundle__text">
