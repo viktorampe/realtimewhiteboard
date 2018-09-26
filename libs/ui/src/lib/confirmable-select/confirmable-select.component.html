@@ -8,7 +8,7 @@
       <mat-select class="ui-confirmable-select__dropdown__select"
                   [formControl]="selectControl">
         <mat-option *ngFor="let option of options"
-                    [value]="option">{{option}}</mat-option>
+                    [value]="option.value">{{option.viewValue}}</mat-option>
       </mat-select>
     </mat-form-field>
     <div *ngIf="selectControl.dirty"

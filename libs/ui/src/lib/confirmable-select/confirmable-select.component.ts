@@ -24,9 +24,9 @@ export class ConfirmableSelectComponent implements OnInit {
   @Input() label: string;
   @Input() text: string;
   @Input() confirmIcon: string;
-  @Input() selectedOption: string;
-  @Input() options: string[];
-  @Output() clickConfirm = new EventEmitter<string>();
+  @Input() selectedOption: any;
+  @Input() options: SelectOption[];
+  @Output() clickConfirm = new EventEmitter<SelectOption>();
 
   selectControl: FormControl;
 
@@ -39,6 +39,12 @@ export class ConfirmableSelectComponent implements OnInit {
 
   onClickConfirm(): void {
     this.selectControl.markAsPristine();
-    this.clickConfirm.emit(this.selectControl.value);
+    const returnOption = this.options.find((o) => o.value === this.selectControl.value);
+    this.clickConfirm.emit(returnOption);
   }
+}
+
+
+export interface SelectOption {
+  value: any, viewValue: string
 }

@@ -4,7 +4,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ConfirmableSelectComponent } from './confirmable-select.component';
+import { ConfirmableSelectComponent, SelectOption } from './confirmable-select.component';
 
 describe('ConfirmableSelectComponent', () => {
   let component: ConfirmableSelectComponent;
@@ -32,9 +32,9 @@ describe('ConfirmableSelectComponent', () => {
     mockData = {
       label: 'the-title',
       text: 'this is the text for the select',
-      options: ['option-one', 'option-two']
+      options: [{ value: 'option-one', viewValue: 'Option one' }, { value: 'option-two', viewValue: 'Option two' }]
     };
-    mockData.selectedOption = mockData.options[0];
+    mockData.selectedOption = mockData.options[0].value;
 
     component.label = mockData.label;
     component.text = mockData.text;
@@ -87,15 +87,15 @@ describe('ConfirmableSelectComponent', () => {
     expect(icon2).toBeFalsy();
   });
   it('should emit the selected option', () => {
-    component.selectControl.setValue(mockData.options[1]);
+    component.selectControl.setValue(mockData.options[1].value);
     component.selectControl.markAsDirty();
     fixture.detectChanges();
-    let option: string;
-    component.clickConfirm.subscribe((e: string) => (option = e));
+    let option: SelectOption;
+    component.clickConfirm.subscribe((e: SelectOption) => (option = e));
     const icon = fixture.debugElement.query(
       By.css('.ui-confirmable-select__dropdown__icon')
     );
     icon.triggerEventHandler('click', null);
-    expect(option).toBe(mockData.options[1]);
+    expect(option).toEqual(mockData.options[1]);
   });
 });

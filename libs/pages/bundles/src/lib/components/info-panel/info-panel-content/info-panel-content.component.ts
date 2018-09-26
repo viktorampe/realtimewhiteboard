@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { SelectOption } from '@campus/ui';
 
 @Component({
   selector: 'campus-info-panel-content',
@@ -14,12 +15,13 @@ export class InfoPanelContentComponent {
     extention: string;
     productType: string;
     methods: string[];
-    status: string;
+    status: any;
   };
-  @Input() statusOptions: string[];
+  @Input() statusOptions: SelectOption[];
   @Output() saveStatus = new EventEmitter<string>();
 
   onSaveStatus(event): void {
     this.saveStatus.emit(event);
   }
 }
+
