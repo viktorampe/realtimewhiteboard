@@ -29,28 +29,21 @@ import { SideSheetPageDirective } from './side-sheet/directives/side-sheet-page.
 import { SideSheetComponent } from './side-sheet/side-sheet.component';
 import { TreeNavComponent } from './tree-nav/tree-nav.component';
 
+
 @NgModule({
   imports: [
     CommonModule,
-    ReactiveFormsModule,
-    FormsModule,
-    MatSelectModule,
-    MatFormFieldModule
-  ],
-  exports: [
-    InfoPanelComponent,
-    LabelAndIconButtonComponent,
-    ContentPreviewComponent,
-    InputLabelComponent,
-    EditableInlineTagListComponent,
-    PeriodLabelComponent,
-    ConfirmableSelectComponent,
-    PersonBadgeComponent,
     MatSidenavModule,
     LayoutModule,
     MatIconModule,
     RouterModule,
     CdkTreeModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatSelectModule,
+    MatFormFieldModule
+  ],
+  declarations: [
     SideSheetComponent,
     SideSheetHeaderDirective,
     SideSheetBodyDirective,
@@ -62,10 +55,18 @@ import { TreeNavComponent } from './tree-nav/tree-nav.component';
     ShellBodyDirective,
     AppBarComponent,
     PageHeaderComponent,
+    TreeNavComponent,
+    InfoPanelComponent,
+    LabelAndIconButtonComponent,
+    ContentPreviewComponent,
+    InputLabelComponent,
+    EditableInlineTagListComponent,
+    PeriodLabelComponent,
+    ConfirmableSelectComponent,
     FileExtensionComponent,
-    TreeNavComponent
+    PersonBadgeComponent
   ],
-  declarations: [
+  exports: [
     SideSheetComponent,
     SideSheetHeaderDirective,
     SideSheetBodyDirective,
