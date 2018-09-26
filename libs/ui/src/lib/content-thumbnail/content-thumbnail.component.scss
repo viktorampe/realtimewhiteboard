@@ -1,5 +1,5 @@
 .flex-filler {
-  flex-grow: 1;
+  flex: 1 0 auto;
   min-width: 0px;
   min-height: 0px;
 }
@@ -8,6 +8,7 @@
   border: 1px solid #bac2ca;
   display: flex;
   box-sizing: border-box;
+  background-color: white;
 
   &__grid {
     width: 170px;
@@ -23,8 +24,8 @@
     flex-direction: row;
 
     &:hover,
-    &:active {
-      .ui-content-thumbnail__actions--list {
+    &.item--selected {
+      .ui-content-thumbnail__actions--line {
         visibility: visible;
       }
     }
@@ -34,11 +35,18 @@
     display: flex;
     align-items: center;
     box-sizing: border-box;
+    background-color: white;
 
     &--grid {
       height: 24px;
       background: rgba(52, 59, 72, 0.58);
       z-index: 1;
+    }
+
+    &--line {
+      padding-left: 20px;
+      width: 120px;
+      justify-content: space-between;
     }
 
     &--reverse {
@@ -98,12 +106,13 @@
   &__actions {
     display: flex;
     align-items: center;
+    background-color: white;
 
     &--grid {
       height: 45px;
       background-color: #ebebeb;
     }
-    &--list {
+    &--line {
       visibility: hidden;
     }
   }
