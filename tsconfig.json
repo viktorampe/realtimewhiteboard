@@ -45,9 +45,6 @@
       ],
       "@campus/pages/shared": [
         "libs/pages/shared/src/index.ts"
-      ],
-      "@campus/pages/bundle-detail": [
-        "libs/pages/bundle-detail/src/index.ts"
       ]
     }
   },
