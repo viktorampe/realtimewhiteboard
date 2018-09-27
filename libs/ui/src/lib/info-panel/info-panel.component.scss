@@ -1,0 +1,12 @@
+.info-panel {
+  min-width: 290px;
+  &__title {
+    padding: 15px 20px 15px 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: 14px;
+    background-color: #95a0aa;
+    color: #fff;
+  }
+}
