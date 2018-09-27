@@ -1,0 +1,107 @@
+$ui-list-view-font-family: $ui-font-family-2;
+$ui-list-view-font-color: $ui-font-color-1;
+$ui-list-view-selected-item-bg-color: $ui-bg-color-2;
+$ui-list-view-selection-overlay-bg-color: $ui-list-view-selected-item-bg-color;
+$ui-list-view-selection-overlay-circle-fg-color: $ui-list-view-selection-overlay-bg-color;
+$ui-list-view-selection-overlay-circle-bg-color: $ui-font-color-active;
+
+@mixin ui-list-view() {
+  .ui-list-view__list {
+    &__item {
+      &--line {
+        color: $ui-list-view-font-color;
+      }
+
+      &--grid {
+        color: $ui-list-view-font-color;
+      }
+
+      &--selected {
+        &.ui-list-view__list--grid {
+          background-color: $ui-list-view-selected-item-bg-color;
+        }
+      }
+
+      &__selectoverlay {
+        &::before {
+          content: '';
+          color: $ui-list-view-selection-overlay-circle-fg-color;
+          background-color: $ui-list-view-selection-overlay-circle-bg-color;
+          font-family: $ui-list-view-font-family;
+        }
+
+        &.ui-list-view__list__item--grid {
+          background-color: $ui-list-view-selection-overlay-bg-color;
+        }
+      }
+    }
+  }
+}
+
+@mixin ui-list-view-deep() {
+  campus-list-view {
+    .ui-list-view__list__item {
+      &--line {
+        width: 100%;
+        box-sizing: border-box;
+        border: 5px transparent solid;
+        margin-bottom: -5px;
+        cursor: pointer;
+        display: block;
+      }
+
+      &--grid {
+        margin: 3px;
+        position: relative;
+        box-sizing: border-box;
+        border: 5px transparent solid;
+        cursor: pointer;
+        display: block;
+      }
+
+      &__selectoverlay {
+        position: relative;
+        &::before {
+          content: '';
+          text-align: center;
+          display: block;
+          width: 22px;
+          height: 22px;
+          line-height: 22px;
+          float: left;
+          border-radius: 11px;
+          position: absolute;
+          z-index: 2;
+        }
+
+        &.ui-list-view__list__item--grid {
+          &::before {
+            margin-left: 4px;
+            margin-top: 2px;
+          }
+        }
+
+        &.ui-list-view__list__item--line {
+          padding-left: 30px;
+          &::before {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            margin: auto;
+          }
+        }
+
+        &:not(.ui-list-view__list__item--selected)::before {
+          opacity: 0.4;
+        }
+        &.ui-list-view__list__item--selected::before {
+          content: 'X';
+        }
+        &:hover::before {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}

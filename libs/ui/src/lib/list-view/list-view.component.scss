@@ -1,18 +1,18 @@
-.flexbox {
+.ui-list-view__list {
   padding: 0;
   display: flex;
   width: 100%;
   align-items: center;
   justify-content: flex-start;
   flex-grow: 0;
-}
 
-.flex-line {
-  flex-wrap: nowrap;
-  flex-direction: column;
-}
+  &--line {
+    flex-wrap: nowrap;
+    flex-direction: column;
+  }
 
-.flex-grid {
-  flex-wrap: wrap;
-  flex-direction: row;
+  &--grid {
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
 }
