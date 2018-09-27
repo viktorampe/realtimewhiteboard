@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BundlesComponent implements OnInit {
   bundleData = {
-    name: 'Aardrijkskunde',
+    name: 'How now brown cow? Is it wrong to be strong? Aardrijkskunde',
     icon: 'polpo-aardrijkskunde',
     color: '#485235',
     id: 1,

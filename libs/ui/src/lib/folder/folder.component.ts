@@ -1,16 +1,19 @@
-import { AfterContentInit, Input, OnInit } from '@angular/core';
-import { FolderProgressIndicatorComponent } from './components/folder-progress-indicator/folder-progress-indicator.component';
+import { Component, Input, OnInit } from '@angular/core';
+import { ListFormat } from './enums/list-format.enum';
 
-export enum ViewMode {
-  GRID = 'grid',
-  LINE = 'line'
-}
-
-export class BaseFolder implements OnInit, AfterContentInit {
+@Component({
+  selector: 'campus-folder',
+  templateUrl: './folder.component.html',
+  styleUrls: ['./folder.component.scss']
+})
+export class FolderComponent implements OnInit {
   @Input() title: string;
   @Input() icon: string;
   @Input() itemCount: string;
   @Input() backgroundColor: string;
+  @Input() listFormat: ListFormat;
+  @Input() progress: number;
+
   /**
    * Whether to show an exclamation mark when folder is empty (itemCount is zero).
    *
@@ -28,8 +31,6 @@ export class BaseFolder implements OnInit, AfterContentInit {
     }
   }
 
-  protected _progressIndicator: FolderProgressIndicatorComponent;
-
   gradientId: string;
   gradientUrl: string;
   showDefaultIcon = false;
@@ -40,30 +41,5 @@ export class BaseFolder implements OnInit, AfterContentInit {
   ngOnInit() {
     this.gradientId = this.backgroundColor.replace('#', '');
     this.gradientUrl = `url(#MyGradient${this.gradientId})`;
-  }
-
-  ngAfterContentInit() {
-    this.setIcon();
-  }
-
-  /**
-   * Shows a default icon when the progress indicator is absent.
-   *
-   * @protected
-   * @memberof BaseFolder
-   */
-  protected setIcon() {
-    this.showDefaultIcon = !this._progressIndicator;
-  }
-
-  /**
-   * Sets the view mode of the progress indicator.
-   *
-   * @protected
-   * @param {ViewMode} viewMode
-   * @memberof BaseFolder
-   */
-  protected setProgressIndicatorViewMode(viewMode: ViewMode) {
-    if (this._progressIndicator) this._progressIndicator.viewMode = viewMode;
   }
 }

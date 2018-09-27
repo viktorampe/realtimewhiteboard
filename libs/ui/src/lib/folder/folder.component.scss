@@ -1,0 +1,209 @@
+$red: #f00;
+$white: #fff;
+$light-blue: #578ebe;
+
+.ui-folder {
+  display: block;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 215px;
+  height: 119px;
+  margin: 16px 20px 20px 0;
+  cursor: pointer;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 13px;
+  line-height: 16.4px;
+  color: #95a0aa;
+  background-color: rgb(72, 82, 53); // depends on type
+
+  &__header {
+    position: relative;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    padding: 10px 0px 10px 10px;
+    overflow: hidden;
+
+    &__mask-text {
+      bottom: 0px;
+      height: 15px;
+      left: 0;
+      width: 215px;
+      position: absolute;
+    }
+
+    &__icon {
+      .mat-progress-spinner {
+        position: absolute;
+        z-index: 2;
+      }
+
+      &__wrapper {
+        z-index: 1;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        border: 2px solid gray;
+        box-sizing: border-box;
+
+        mat-icon {
+          margin: 6px;
+          width: 32px;
+          height: 32px;
+        }
+      }
+    }
+    &__title {
+      padding: 5px 25px 5px 10px;
+      max-height: 35px;
+    }
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    height: 30px;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.2); // depends on type
+    font-size: 12px;
+    font-weight: 300;
+    padding: 10px 10px;
+    span {
+      display: block;
+    }
+  }
+  &__badge {
+    position: absolute;
+    top: -16px;
+    right: 0;
+    background-color: inherit;
+    height: 32px;
+    line-height: 32px;
+    min-width: 10px;
+    border-color: rgb(72, 82, 53); // depends on type
+    &::before {
+      content: '';
+      width: 0;
+      height: 0;
+      position: absolute;
+      border-style: solid;
+      border-width: 16px 16px 16px 0;
+      border-color: transparent #3f4652;
+      border-right-color: inherit;
+      left: -16px;
+    }
+    span {
+      line-height: 20px;
+      background-color: #c6ccd1;
+      border-color: #c6ccd1;
+      border-radius: 10px !important;
+      color: #3f4652;
+      display: inline-block;
+      padding: 0 4px;
+      margin: 0 17px 0 4px;
+      text-align: center;
+      min-width: 26px;
+      position: relative;
+      z-index: 3;
+      font-weight: 700;
+      font-family: Helvetica, Arial, Sans-Serif;
+      font-size: 14px;
+      &::before,
+      &::after {
+        width: 20px;
+        height: 18px;
+        position: absolute;
+        content: ' ';
+        border-radius: 10px;
+        border: 1px solid #c6ccd1;
+        border-color: inherit;
+        border-left-color: transparent;
+        z-index: 2;
+        right: -3px;
+        top: 0;
+        opacity: 0.75;
+      }
+      &::after {
+        opacity: 0.5;
+        right: -6px;
+        z-index: 1;
+      }
+
+      &.error {
+        background-color: $red;
+        border-color: $red;
+        color: $white;
+      }
+    }
+  }
+
+  &--line {
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    height: 40px;
+    border-top: 4px solid #000;
+    border-bottom: 4px solid #000;
+    .wrapper {
+      display: flex;
+      flex: 0 1 auto;
+      background-color: rgba(0, 0, 0, 0.2);
+      height: 100%;
+      margin-right: 40px;
+    }
+
+    .ui-folder {
+      &__header {
+        margin: 0px;
+        padding-right: 10px;
+        &__icon {
+          &__wrapper {
+            width: 32px;
+            height: 32px;
+
+            mat-icon {
+              width: 20px;
+              height: 20px;
+              margin: 4px;
+            }
+          }
+        }
+        &__title {
+          flex: 1 2 auto;
+          overflow: hidden;
+          line-height: 40px;
+          text-overflow: ellipsis;
+        }
+      }
+      &__info {
+        padding: 0;
+        height: 100%;
+        background: none;
+        justify-content: center;
+        position: relative;
+        overflow: visible;
+        &::after {
+          content: '';
+          position: absolute;
+          width: 0;
+          height: 0;
+          top: 0;
+          border-style: solid;
+          border-width: 40px 40px 0 0;
+          border-color: rgba(0, 0, 0, 0.2) transparent transparent;
+          right: -40px;
+        }
+      }
+      &__badge {
+        position: relative;
+        top: 0;
+        right: 0;
+        justify-self: end;
+        &::before {
+          content: none;
+        }
+      }
+    }
+  }
+}

@@ -3,7 +3,13 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  iconMapping: {
+    lock: 'assets/icons/lock.svg',
+    checkmark: 'assets/icons/checkmark.svg',
+    hourglass: 'assets/icons/hourglass.svg',
+    'learning-area:wiskunde': 'assets/icons/wiskunde-lg.svg'
+  }
 };
 
 /*

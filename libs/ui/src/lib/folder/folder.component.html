@@ -1,0 +1,61 @@
+<div class="ui-folder "
+     [ngClass]="{'ui-folder--line': listFormat === 'line'}"
+     [ngStyle]="{'border-top-color': (backgroundColor|adjustColorBrightness:-20),'border-bottom-color': backgroundColor, 'background-color': backgroundColor }">
+    <div class="wrapper">
+        <div class="ui-folder__header">
+            <div class="ui-folder__header__icon">
+                <mat-progress-spinner mode="determinate"
+                                      [value]="progress"
+                                      [diameter]="listFormat === 'line' ? 32: 48"
+                                      strokeWidth="2"
+                                      *ngIf="progress">
+                </mat-progress-spinner>
+                <div class="ui-folder__header__icon__wrapper"
+                     *ngIf="icon">
+                    <mat-icon [svgIcon]="icon"></mat-icon>
+                </div>
+            </div>
+            <div *ngIf="listFormat === 'grid'"
+                 class="ui-folder__header__title">{{title}}</div>
+            <svg *ngIf="listFormat === 'grid'"
+                 xmlns="http://www.w3.org/2000/svg"
+                 class="ui-folder__header__mask-text">
+                <defs>
+                    <linearGradient id="MyGradient{{gradientId}}"
+                                    x1="0"
+                                    x2="0"
+                                    y1="1"
+                                    y2="0">
+                        <stop offset="5%"
+                              [attr.stop-color]="backgroundColor"
+                              stop-opacity="1"></stop>
+                        <stop offset="95%"
+                              [attr.stop-color]="backgroundColor"
+                              stop-opacity="0"></stop>
+                    </linearGradient>
+                </defs>
+                <rect [attr.fill]="gradientUrl"
+                      x="0"
+                      y="0"
+                      width="100%"
+                      height="100%"></rect>
+            </svg>
+        </div>
+        <div class="ui-folder__info"
+             [ngStyle]="{'border-color': backgroundColor}">
+            <ng-content select="campus-folder-details"></ng-content>
+        </div>
+    </div>
+    <div class="ui-folder__header__title"
+         *ngIf="listFormat === 'line'">{{title}}</div>
+
+    <div class="ui-folder__badge"
+         [ngStyle]="{'border-color': backgroundColor}">
+        <span *ngIf="!showEmptyError; else emptyErrorBlock">{{itemCount}}</span>
+        <ng-template #emptyErrorBlock>
+            <span class="error"
+                  uib-tooltip="Er is nog geen inhoud voor dit item"
+                  tooltip-append-to-body="true">!</span>
+        </ng-template>
+    </div>
+</div>
