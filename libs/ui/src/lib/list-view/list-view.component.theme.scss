@@ -1,7 +1,7 @@
 $ui-list-view-font-family: $ui-font-family-2;
 $ui-list-view-font-color: $ui-font-color-1;
-$ui-list-view-selected-item-bg-color: $ui-bg-color-2;
-$ui-list-view-selection-overlay-bg-color: $ui-list-view-selected-item-bg-color;
+$ui-list-view-selected-item-bg-color: $ui-font-color-active;
+$ui-list-view-selection-overlay-bg-color: $ui-bg-color-2;
 $ui-list-view-selection-overlay-circle-fg-color: $ui-list-view-selection-overlay-bg-color;
 $ui-list-view-selection-overlay-circle-bg-color: $ui-font-color-active;
 
@@ -17,7 +17,11 @@ $ui-list-view-selection-overlay-circle-bg-color: $ui-font-color-active;
       }
 
       &--selected {
-        &.ui-list-view__list--grid {
+        &.ui-list-view__list__item--grid {
+          background-color: $ui-list-view-selected-item-bg-color;
+        }
+
+        &.ui-list-view__list__item--line {
           background-color: $ui-list-view-selected-item-bg-color;
         }
       }
