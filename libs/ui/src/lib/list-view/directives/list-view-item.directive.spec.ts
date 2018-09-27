@@ -1,19 +1,62 @@
+import { CommonModule } from '@angular/common';
 /*
  * Testing an Angular directive
  * More info: https://angular.io/docs/ts/latest/guide/testing.html#!#pipes
  */
-import { Component, DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
+import {
+  Component,
+  DebugElement,
+  NgModule,
+  NO_ERRORS_SCHEMA
+} from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { ListViewItemInterface } from '../base classes/list-view-item';
+import { UiModule } from './../../ui.module';
 import { ListViewComponent } from './../list-view.component';
 import { ListItemDirective } from './list-view-item.directive';
 
 @Component({
+  selector: 'campus-list-view-item',
+  template: `<div>Container content</div>`,
+  providers: [
+    {
+      provide: ListViewItemInterface,
+      useExisting: HostComponent
+    }
+  ]
+})
+export class HostComponent implements ListViewItemInterface {
+  listFormat: string;
+}
+
+@Component({
+  selector: 'campus-list',
+  template: `<ng-content></ng-content>`,
+  providers: [
+    {
+      provide: ListViewComponent,
+      useClass: ListComponent
+    }
+  ]
+})
+export class ListComponent {}
+
+@Component({
   selector: 'campus-directive-container',
-  template: `<div campusListItem>Container content</div>`,
-  providers: [ListViewComponent]
+  template: `
+  <campus-list>
+    <campus-list-view-item campusListItem></campus-list-view-item>
+  </campus-list>
+  `
 })
 export class ContainerComponent {}
+
+@NgModule({
+  declarations: [ContainerComponent, HostComponent, ListComponent],
+  imports: [CommonModule, UiModule]
+})
+export class TestModule {}
 
 describe('ListItemDirective', () => {
   let fixture: ComponentFixture<ContainerComponent>;
@@ -23,7 +66,8 @@ describe('ListItemDirective', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ListItemDirective, ContainerComponent, ListViewComponent],
+      imports: [TestModule],
+      providers: [ListViewComponent, ListViewItemInterface],
       schemas: [NO_ERRORS_SCHEMA]
     });
   });
@@ -48,7 +92,9 @@ describe('ListItemDirective', () => {
     dir.isSelected = true;
     fixture.detectChanges();
 
-    expect(compDE.nativeElement.classList).toContain('item--selected');
+    expect(compDE.nativeElement.classList).toContain(
+      'ui-list-view__list__item--selected'
+    );
   });
 
   it('should handle te host click event', () => {
