@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ListViewItem } from '../list-view/base classes/list-view-item';
+import { ListViewItemInterface } from '../list-view/base classes/list-view-item';
 
 @Component({
   selector: 'campus-content-thumbnail',
@@ -7,12 +7,12 @@ import { ListViewItem } from '../list-view/base classes/list-view-item';
   styleUrls: ['./content-thumbnail.component.scss'],
   providers: [
     {
-      provide: ListViewItem,
+      provide: ListViewItemInterface,
       useExisting: ContentThumbnailComponent
     }
   ]
 })
-export class ContentThumbnailComponent implements ListViewItem {
+export class ContentThumbnailComponent implements ListViewItemInterface {
   @Input() listFormat: string;
   @Input() title: string;
   @Input() contentTypeClass: string;

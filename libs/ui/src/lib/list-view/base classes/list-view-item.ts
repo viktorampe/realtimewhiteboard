@@ -1,5 +1,5 @@
 import { Input } from '@angular/core';
 
-export abstract class ListViewItem {
+export abstract class ListViewItemInterface {
   @Input() listFormat: string;
 }

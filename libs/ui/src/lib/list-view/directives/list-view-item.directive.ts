@@ -6,7 +6,7 @@ import {
   HostListener,
   Output
 } from '@angular/core';
-import { ListViewItem } from '../base classes/list-view-item';
+import { ListViewItemInterface } from '../base classes/list-view-item';
 import { ListViewComponent } from '../list-view.component';
 
 /**
@@ -23,22 +23,22 @@ export class ListItemDirective implements AfterContentInit {
   isSelected: boolean;
   @Output() itemSelectionChanged = new EventEmitter<ListItemDirective>();
 
-  @HostBinding('class.item--selected')
+  @HostBinding('class.ui-list-view__list__item--selected')
   get isSelectedClass() {
     return this.isSelected;
   }
 
-  @HostBinding('class.flex-item--grid')
+  @HostBinding('class.ui-list-view__list__item--grid')
   get isGridClass() {
     return this.parentList.listFormat === 'grid';
   }
 
-  @HostBinding('class.flex-item--line')
+  @HostBinding('class.ui-list-view__list__item--line')
   get isListClass() {
     return this.parentList.listFormat === 'line';
   }
 
-  @HostBinding('class.item__selectoverlay')
+  @HostBinding('class.ui-list-view__list__item__selectoverlay')
   get isMultiSelectableClass() {
     return this.parentList.useItemSelectableOverlayStyle === true;
   }
@@ -51,7 +51,7 @@ export class ListItemDirective implements AfterContentInit {
 
   constructor(
     private parentList: ListViewComponent,
-    private host: ListViewItem
+    private host: ListViewItemInterface
   ) {}
 
   ngAfterContentInit() {
