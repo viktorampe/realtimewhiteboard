@@ -116,7 +116,7 @@ describe('TreeNavComponent', () => {
 
   it('should open the second node', () => {
     // check if default state is closed
-    let node = treeNodes[1].children[0];
+    const node = treeNodes[1].children[0];
     expect(node.className).toContain('ui-tree-nav__node--closed');
 
     // expand node
