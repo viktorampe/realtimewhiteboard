@@ -7,13 +7,20 @@ import {
   MatFormFieldModule,
   MatIconModule,
   MatInputModule,
+  MatSelectModule,
   MatSidenavModule
 } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { AppBarComponent } from './app-bar/app-bar.component';
+import { ConfirmableSelectComponent } from './confirmable-select/confirmable-select.component';
+import { ContentPreviewComponent } from './content-preview/content-preview.component';
+import { EditableInlineTagListComponent } from './editable-inline-tag-list/editable-inline-tag-list.component';
 import { FileExtensionComponent } from './file-extension/file-extension.component';
 import { FilterTextInputComponent } from './filter/input/filter-text-input/filter-text-input.component';
+import { InfoPanelComponent } from './info-panel/info-panel.component';
 import { PageHeaderComponent } from './page-header/page-header.component';
+import { PersonBadgeComponent } from './person-badge/person-badge.component';
+import { PersonInitialsPipe } from './person-badge/pipes/person-initials.pipe';
 import { ShellBodyDirective } from './shell/directives/shell-body.directive';
 import { ShellLeftDirective } from './shell/directives/shell-left.directive';
 import { ShellLogoDirective } from './shell/directives/shell-logo.directive';
@@ -36,7 +43,8 @@ import { TreeNavComponent } from './tree-nav/tree-nav.component';
     LayoutModule,
     MatIconModule,
     RouterModule,
-    CdkTreeModule
+    CdkTreeModule,
+    MatSelectModule
   ],
   declarations: [
     FilterTextInputComponent,
@@ -52,7 +60,13 @@ import { TreeNavComponent } from './tree-nav/tree-nav.component';
     AppBarComponent,
     PageHeaderComponent,
     FileExtensionComponent,
-    TreeNavComponent
+    TreeNavComponent,
+    InfoPanelComponent,
+    PersonBadgeComponent,
+    PersonInitialsPipe,
+    ContentPreviewComponent,
+    ConfirmableSelectComponent,
+    EditableInlineTagListComponent
   ],
   exports: [
     FilterTextInputComponent,
@@ -68,7 +82,12 @@ import { TreeNavComponent } from './tree-nav/tree-nav.component';
     AppBarComponent,
     PageHeaderComponent,
     FileExtensionComponent,
-    TreeNavComponent
+    TreeNavComponent,
+    InfoPanelComponent,
+    PersonBadgeComponent,
+    ContentPreviewComponent,
+    ConfirmableSelectComponent,
+    EditableInlineTagListComponent
   ]
 })
 export class UiModule {}
