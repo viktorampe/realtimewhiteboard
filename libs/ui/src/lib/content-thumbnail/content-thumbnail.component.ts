@@ -12,7 +12,7 @@ import { ListViewItem } from '../list-view/base classes/list-view-item';
     }
   ]
 })
-export class ContentThumbnailComponent extends ListViewItem {
+export class ContentThumbnailComponent implements ListViewItem {
   @Input() listFormat: string;
   @Input() title: string;
   @Input() contentTypeClass: string;
