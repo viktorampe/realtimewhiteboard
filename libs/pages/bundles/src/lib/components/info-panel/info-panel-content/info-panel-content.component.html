@@ -2,17 +2,15 @@
   <campus-content-preview [preview]="content.preview"
                           [titleText]="content.name"
                           [description]="content.description">
-    <campus-file-extension type
+    <campus-file-extension *ngIf="content.extention"
                            [extensionClass]="content.extention"></campus-file-extension>
-    <div icon
+    <div *ngIf="content.productType"
          class="{{content.productType}}"></div>
-    <div badge
-         *ngFor="let badge of content.methods">
+    <div *ngFor="let badge of content.methods">
       {{badge}}
     </div>
   </campus-content-preview>
-  <campus-confirmable-select status
-                             [label]="'status'"
+  <campus-confirmable-select [label]="'status'"
                              [options]="statusOptions"
                              [selectedOption]="content.status"
                              [text]="'Verander de status van dit lesmateriaal. Enkel jij kan deze status zien.'"
