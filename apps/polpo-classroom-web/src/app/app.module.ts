@@ -29,6 +29,11 @@ import { AppComponent } from './app.component';
     RouterModule.forRoot(
       [
         {
+          path: 'bundle-detail',
+          loadChildren: '@campus/pages/bundle-detail#PagesBundleDetailModule'
+        },
+
+        {
           path: 'tasks',
           loadChildren: '@campus/pages/tasks#PagesTasksModule'
         },
