@@ -1,22 +1,18 @@
-<<<<<<< HEAD
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
-import { FilterTextInputComponent } from './filter/input/filter-text-input/filter-text-input.component';
-
-@NgModule({
-  imports: [CommonModule, ReactiveFormsModule],
-  declarations: [FilterTextInputComponent],
-  exports: [FilterTextInputComponent]
-=======
 import { LayoutModule } from '@angular/cdk/layout';
-import { CommonModule } from '@angular/common';
 import { CdkTreeModule } from '@angular/cdk/tree';
-import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { MatIconModule, MatSidenavModule } from '@angular/material';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  MatFormFieldModule,
+  MatIconModule,
+  MatInputModule,
+  MatSidenavModule
+} from '@angular/material';
+import { RouterModule } from '@angular/router';
 import { AppBarComponent } from './app-bar/app-bar.component';
 import { FileExtensionComponent } from './file-extension/file-extension.component';
+import { FilterTextInputComponent } from './filter/input/filter-text-input/filter-text-input.component';
 import { PageHeaderComponent } from './page-header/page-header.component';
 import { ShellBodyDirective } from './shell/directives/shell-body.directive';
 import { ShellLeftDirective } from './shell/directives/shell-left.directive';
@@ -31,14 +27,19 @@ import { TreeNavComponent } from './tree-nav/tree-nav.component';
 
 @NgModule({
   imports: [
+    FormsModule,
+    ReactiveFormsModule,
     CommonModule,
     MatSidenavModule,
+    MatFormFieldModule,
+    MatInputModule,
     LayoutModule,
     MatIconModule,
     RouterModule,
     CdkTreeModule
   ],
   declarations: [
+    FilterTextInputComponent,
     SideSheetComponent,
     SideSheetHeaderDirective,
     SideSheetBodyDirective,
@@ -54,6 +55,7 @@ import { TreeNavComponent } from './tree-nav/tree-nav.component';
     TreeNavComponent
   ],
   exports: [
+    FilterTextInputComponent,
     SideSheetComponent,
     SideSheetHeaderDirective,
     SideSheetBodyDirective,
@@ -68,6 +70,5 @@ import { TreeNavComponent } from './tree-nav/tree-nav.component';
     FileExtensionComponent,
     TreeNavComponent
   ]
->>>>>>> develop
 })
 export class UiModule {}

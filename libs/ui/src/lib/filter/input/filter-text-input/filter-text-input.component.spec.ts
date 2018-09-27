@@ -20,4 +20,10 @@ describe('FilterTextInputComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should change placeholder text', () => {
+    expect(component).toBeTruthy();
+    console.log(component);
+    component.setPlaceHolder('test Place Holder sTriNg');
+  });
 });

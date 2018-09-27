@@ -1,30 +1,65 @@
-@import 'filter-text-input.component.themes.scss';
+// icon mixin
+@mixin icon($cls, $icon-bundle) {
+  $font: nth($icon-bundle, 1);
+  $unicode: nth($icon-bundle, 2);
+  .#{$cls} {
+    font-family: $font;
+    &:before {
+      content: $unicode;
+    }
+  }
+}
 
-.filter-text-input {
+.ui-filter-text-input {
   position: relative;
   display: inline-block;
   vertical-align: top;
 
-  .filter-icon {
-    position: absolute;
-    color: hsl(0, 0%, 55%);
-    font-size: 18px;
-    font-style: normal;
-  }
+  .example-form {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
 
-  .input {
-    color: $ui-filter-text-color;
-    background-color: $ui-filter-background-color;
-
-    &.ng-not-empty {
-      padding-right: 25px;
+    .example-full-width {
+      width: 100%;
     }
   }
 
-  .clear-icon {
+  // icons
+  $ui-filter-text-input-clear: FontAwesome '\f057' !default;
+  $ui-filter-text-input-filter: FontAwesome '\f0b0' !default;
+
+  @include icon('ui-filter-text-input-clear', $ui-filter-text-input-clear);
+  @include icon('ui-filter-text-input-filter', $ui-filter-text-input-filter);
+  /*
+  .ui-filter-text-input-filter-icon {
     position: absolute;
+    top: -4px;
+    left: 10px;
+    line-height: 26px;
     color: #8c8c8c;
     font-size: 18px;
     font-style: normal;
+    top: -3px;
   }
+
+  .ui-filter-text-input-input {
+    box-sizing: border-box;
+    color: #000000;
+    background-color: #ffffff;
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+
+  .ui-filter-text-input-clear-icon {
+    position: absolute;
+    padding-top: 0px;
+    right: 10px;
+    line-height: 26px;
+    color: #8c8c8c;
+    font-size: 18px;
+    font-style: normal;
+    top: -3px;
+  }
+  */
 }

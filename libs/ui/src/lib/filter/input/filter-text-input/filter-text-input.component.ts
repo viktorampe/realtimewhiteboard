@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Observable } from '../../../../../../../node_modules/rxjs';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { FilterTextInputComponentInterface } from './filter-text-input.component.interface';
 
 @Component({
@@ -9,29 +10,28 @@ import { FilterTextInputComponentInterface } from './filter-text-input.component
   styleUrls: ['./filter-text-input.component.scss']
 })
 export class FilterTextInputComponent
-  implements OnInit, FilterTextInputComponentInterface {
-  $input = new FormControl();
-  placeholder: string;
-  filter: boolean = false;
-
-  constructor() {
-    this.$input.valueChanges.subscribe(observer => {
-      console.log(observer);
-    });
-  }
-
-  ngOnInit() {}
+  implements FilterTextInputComponentInterface {
+  input$ = new FormControl();
+  placeholder: string = 'Filter';
 
   setvalue(value: string) {
-    this.$input.setValue(value);
+    this.input$.setValue(value);
   }
 
   clear() {
-    this.$input.reset();
+    this.input$.setValue('');
   }
 
-  onChange(): Observable<string> {
-    return this.$input.valueChanges;
+  changeInput(): Observable<string> {
+    return this.input$.valueChanges.pipe(
+      map((st: string) => {
+        console.log('value changed', st);
+        if (!st) {
+          return '';
+        }
+        return st;
+      })
+    );
   }
 
   setPlaceHolder(placeholder: string = 'Filter') {

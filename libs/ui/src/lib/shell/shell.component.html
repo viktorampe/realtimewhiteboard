@@ -1,5 +1,8 @@
 <mat-drawer-container>
-  <mat-drawer #sidebar [opened]="!(inXSmall$|async)" position="start" mode="side" >
+  <mat-drawer #sidebar
+              [opened]="!(inXSmall$|async)"
+              position="start"
+              mode="side">
     <div class="ui-shell__left">
       <div class="ui-shell__logo">
         <ng-content select="[campusShellLogo],campus-shell-logo"></ng-content>
@@ -12,7 +15,9 @@
   <mat-drawer-content>
     <div class="ui-shell__right">
       <div class="ui-shell__top">
-        <mat-icon (click)="sidebar.toggle()"  *ngIf="inXSmall$|async" class="ui-shell__top__menu-icon">menu</mat-icon>
+        <mat-icon (click)="sidebar.toggle()"
+                  *ngIf="inXSmall$|async"
+                  class="ui-shell__top__menu-icon">menu</mat-icon>
         <ng-content select="[campusShellTop],campus-shell-top"></ng-content>
       </div>
       <div class="ui-shell__body">
