@@ -6,6 +6,8 @@ body {
   padding: 0;
   margin: 0;
   height: 100%;
+
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 /*
@@ -79,7 +81,7 @@ body {
 // alternative: include individual component mixins
 
 // include pages lib scss file
-@import 'libs/pages/pages-theme';
+@import 'libs/pages/shared/src/pages-theme';
 @include pages-theme();
 
 /*
