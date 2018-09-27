@@ -1,24 +1,24 @@
-<campus-list-view [multiSelect]="true"
+<campus-list-view [multiSelect]="false"
                   listFormat=grid>
   <campus-content-thumbnail campusListItem
                             title="Dit is de titel van de content."
                             imagePath="https://www.polpo.be/assets/images/home-laptop-books.jpg"
                             contentTypeClass="icon-bundle"
                             fileExtensionClass="zip"
-                            [actionArray]="[{iconClass:'icon-book'},{iconClass:'icon-tasks'}]">
+                            [actionArray]="[{iconClass:'icon-book', tooltip:'book'},{iconClass:'icon-tasks', tooltip:'tasks'}]">
   </campus-content-thumbnail>
 
   <campus-content-thumbnail campusListItem
                             title="Dit is de titel van de content."
                             contentTypeClass="icon-bundle"
                             fileExtensionClass="zip"
-                            [actionArray]="[{iconClass:'icon-book'},{iconClass:'icon-tasks'}]">
+                            [actionArray]="[{iconClass:'icon-book', tooltip:'book'},{iconClass:'icon-tasks', tooltip:'tasks'}]">
   </campus-content-thumbnail>
 
   <campus-content-thumbnail campusListItem
                             title="Dit is de titel van de content."
                             contentTypeClass="icon-bundle"
                             fileExtensionClass="zip"
-                            [actionArray]="[{iconClass:'icon-book'},{iconClass:'icon-tasks'}]">
+                            [actionArray]="[{iconClass:'icon-book', tooltip:'book'},{iconClass:'icon-tasks', tooltip:'tasks'}]">
   </campus-content-thumbnail>
 </campus-list-view>

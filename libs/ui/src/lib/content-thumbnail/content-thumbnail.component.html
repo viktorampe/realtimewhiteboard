@@ -20,7 +20,8 @@
   </div>
   <div class="ui-content-thumbnail__actions ui-content-thumbnail__actions--{{listFormat}}">
     <campus-content-action-button *ngFor="let action of actionArray"
-                                  [iconClass]="action.iconClass">
+                                  [iconClass]="action.iconClass"
+                                  [tooltip]="action.tooltip">
     </campus-content-action-button>
   </div>
 </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'campus-content-action-button',
@@ -7,9 +7,8 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 })
 export class ContentActionButtonComponent implements OnInit {
   @Input() iconClass: string;
-  @Input() askConfirm: boolean;
   @Input() action: any; //TODO Action class maken?
-  @Input() title: string;
+  @Input() tooltip: string;
 
   @Output() click = new EventEmitter(); //TODO welke return?
 
