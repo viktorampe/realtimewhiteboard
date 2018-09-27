@@ -409,11 +409,11 @@
       "prefix": "campus",
       "architect": {
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@nrwl/builders:jest",
           "options": {
-            "main": "libs/pages/bundle-detail/src/test.ts",
+            "jestConfig": "libs/pages/bundle-detail/jest.config.js",
             "tsConfig": "libs/pages/bundle-detail/tsconfig.spec.json",
-            "karmaConfig": "libs/pages/bundle-detail/karma.conf.js"
+            "setupFile": "libs/pages/bundle-detail/src/test-setup.ts"
           }
         },
         "lint": {

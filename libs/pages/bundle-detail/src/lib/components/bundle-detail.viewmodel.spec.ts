@@ -6,4 +6,6 @@ beforeEach(() => {
   bundleDetailViewModel = new BundleDetailViewModel();
 });
 
-// TODO add test
+test('it should return', () => {
+  return;
+});
