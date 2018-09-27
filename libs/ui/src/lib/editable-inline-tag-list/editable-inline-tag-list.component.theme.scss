@@ -1,0 +1,25 @@
+@mixin ui_editable-inline-tag-list_theme() {
+  .ui_editable-inline-tag-list {
+    background-color: $ui-bg-color-gray-1;
+    border-top: solid 1px $ui-border-color-gray-1;
+    border-bottom: solid 1px $ui-border-color-gray-1;
+    &__title {
+      color: $ui-bg-color-gray-2;
+    }
+    &__items {
+      &__item {
+        color: $ui-font-color-gray-1;
+        background-color: $ui-bg-color-green-1;
+        &__icon {
+          background-color: $ui-font-color-gray-1;
+          color: $ui-bg-color-green-1;
+        }
+      }
+    }
+    &__icons {
+      &__icon {
+        background-color: $ui-bg-color-gray-3;
+      }
+    }
+  }
+}

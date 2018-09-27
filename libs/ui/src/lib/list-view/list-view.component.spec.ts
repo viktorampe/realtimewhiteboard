@@ -8,6 +8,7 @@ import {
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { UiModule } from '../ui.module';
+import { ListViewItemInterface } from './base classes/list-view-item';
 import { ListViewComponent } from './list-view.component';
 
 @Component({
@@ -39,8 +40,7 @@ export class EmptyTestContainerComponent {}
 @NgModule({
   declarations: [TestContainerComponent, EmptyTestContainerComponent],
   imports: [CommonModule, UiModule],
-  exports: [TestContainerComponent, EmptyTestContainerComponent],
-  providers: []
+  exports: [TestContainerComponent, EmptyTestContainerComponent]
 })
 export class TestModule {}
 
@@ -54,6 +54,7 @@ describe('ListViewComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [TestModule],
+      providers: [ListViewComponent, ListViewItemInterface],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
   }));
@@ -122,27 +123,35 @@ describe('ListViewComponent', () => {
     testContainerFixture.detectChanges();
     fixture.detectChanges();
 
-    const itemListDE = componentDE.query(By.css('.flexbox'));
+    const itemListDE = componentDE.query(By.css('.ui-list-view__list'));
 
-    expect(itemListDE.nativeElement.className).toContain('flex-grid');
-    expect(itemListDE.nativeElement.className).not.toContain('flex-list');
+    expect(itemListDE.nativeElement.className).toContain(
+      'ui-list-view__list--grid'
+    );
+    expect(itemListDE.nativeElement.className).not.toContain(
+      'ui-list-view__list--line'
+    );
   });
 
   it('should apply the flex-line class', () => {
     component.listFormat = 'line';
     testContainerFixture.detectChanges();
 
-    const itemListDE = componentDE.query(By.css('.flexbox'));
+    const itemListDE = componentDE.query(By.css('.ui-list-view__list'));
 
-    expect(itemListDE.nativeElement.className).toContain('flex-line');
-    expect(itemListDE.nativeElement.className).not.toContain('flex-grid');
+    expect(itemListDE.nativeElement.className).toContain(
+      'ui-list-view__list--line'
+    );
+    expect(itemListDE.nativeElement.className).not.toContain(
+      'ui-list-view__list--grid'
+    );
   });
 
   it('should select only 1 item', () => {
     component.multiSelect = false;
     testContainerFixture.detectChanges();
 
-    const itemListDE = componentDE.query(By.css('.flexbox'));
+    const itemListDE = componentDE.query(By.css('.ui-list-view__list'));
     const itemDEList = itemListDE.queryAll(By.css('[campusListItem]'));
 
     const childComponent1EL = itemDEList[0].nativeElement;
@@ -160,7 +169,7 @@ describe('ListViewComponent', () => {
     component.multiSelect = true;
     testContainerFixture.detectChanges();
 
-    const itemListDE = componentDE.query(By.css('.flexbox'));
+    const itemListDE = componentDE.query(By.css('.ui-list-view__list'));
     const itemDEList = itemListDE.queryAll(By.css('[campusListItem]'));
 
     const childComponent1EL = itemDEList[0].nativeElement;
@@ -178,7 +187,7 @@ describe('ListViewComponent', () => {
     component.multiSelect = true;
     testContainerFixture.detectChanges();
 
-    const itemListDE = componentDE.query(By.css('.flexbox'));
+    const itemListDE = componentDE.query(By.css('.ui-list-view__list'));
     const itemDEList = itemListDE.queryAll(By.css('[campusListItem]'));
 
     const childComponent1EL = itemDEList[0].nativeElement;
@@ -197,7 +206,7 @@ describe('ListViewComponent', () => {
     component.multiSelect = true;
     testContainerFixture.detectChanges();
 
-    const itemListDE = componentDE.query(By.css('.flexbox'));
+    const itemListDE = componentDE.query(By.css('.ui-list-view__list'));
     const itemDEList = itemListDE.queryAll(By.css('[campusListItem]'));
 
     const childComponent1EL = itemDEList[0].nativeElement;
@@ -216,7 +225,7 @@ describe('ListViewComponent', () => {
     component.multiSelect = true;
     testContainerFixture.detectChanges();
 
-    const itemListDE = componentDE.query(By.css('.flexbox'));
+    const itemListDE = componentDE.query(By.css('.ui-list-view__list'));
     const itemDEList = itemListDE.queryAll(By.css('[campusListItem]'));
 
     const childComponent1EL = itemDEList[0].nativeElement;

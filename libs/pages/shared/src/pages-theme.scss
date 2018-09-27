@@ -10,5 +10,4 @@ $pages-font-color-2: #000 !default;
 // create theme-mixin with each mixin from our library components
 @mixin pages-theme() {
   // @include ui-pages-alerts();
-  @include campus-list-view();
 }

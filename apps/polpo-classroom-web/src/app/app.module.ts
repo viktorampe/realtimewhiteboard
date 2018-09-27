@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { DalModule } from '@campus/dal';
+import { UiModule } from '@campus/ui';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { StoreModule } from '@ngrx/store';
@@ -16,7 +17,6 @@ import {
   initialState as appInitialState
 } from './+state/app.reducer';
 import { AppComponent } from './app.component';
-import { UiModule } from '@campus/ui';
 
 @NgModule({
   declarations: [AppComponent],

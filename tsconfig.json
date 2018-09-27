@@ -42,6 +42,9 @@
       ],
       "@campus/dal": [
         "libs/dal/src/index.ts"
+      ],
+      "@campus/pages/shared": [
+        "libs/pages/shared/src/index.ts"
       ]
     }
   },
