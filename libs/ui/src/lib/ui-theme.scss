@@ -49,6 +49,7 @@ $ui-font-family-2: 'Open Sans', sans-serif;
 @import './side-sheet/side-sheet.component.theme';
 @import './shell/shell.component.theme';
 @import './list-view/list-view.component.theme.scss';
+@import './content-thumbnail/content-thumbnail.component.theme.scss';
 
 // create theme-mixin with each mixin from our library components
 @mixin ui-theme() {
@@ -68,4 +69,5 @@ $ui-font-family-2: 'Open Sans', sans-serif;
   @include ui-side-sheet();
   @include ui-list-view();
   @include ui-list-view-deep();
+  @include ui-content-thumbnail();
 }
