@@ -1,4 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { UiModule } from '../ui.module';
 import { FolderComponent } from './folder.component';
 
 describe('FolderComponent', () => {
@@ -7,7 +8,7 @@ describe('FolderComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [FolderComponent]
+      imports: [UiModule]
     }).compileComponents();
   }));
 

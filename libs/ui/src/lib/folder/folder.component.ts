@@ -10,7 +10,7 @@ export class FolderComponent implements OnInit {
   @Input() title: string;
   @Input() icon: string;
   @Input() itemCount: string;
-  @Input() backgroundColor: string;
+  @Input() backgroundColor = '#000000';
   @Input() listFormat: ListFormat;
   @Input() progress: number;
 
