@@ -9,6 +9,10 @@ export const environment = {
     checkmark: 'assets/icons/checkmark.svg',
     hourglass: 'assets/icons/hourglass.svg',
     'learning-area:wiskunde': 'assets/icons/wiskunde-lg.svg'
+  },
+  // promo website settings
+  website: {
+    url: 'http://www.polpo.localhost'
   }
 };
 

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MatIconRegistry } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { environment } from '../environments/environment';
+
 @Component({
   selector: 'campus-root',
   templateUrl: './app.component.html',
@@ -9,6 +10,11 @@ import { environment } from '../environments/environment';
 })
 export class AppComponent {
   title = 'polpo-classroom-web';
+
+  /**
+   * the link to the promo website, used on the logo
+   */
+  protected websiteUrl: string = environment.website.url;
 
   constructor(
     private iconRegistry: MatIconRegistry,
@@ -19,7 +25,7 @@ export class AppComponent {
 
   // TODO move to bootstrap files later
   private setupIconRegistry() {
-    for (let key in environment.iconMapping) {
+    for (const key in environment.iconMapping) {
       if (key.indexOf(':') > 0) {
         this.iconRegistry.addSvgIconInNamespace(
           key.split(':')[0],
@@ -38,4 +44,5 @@ export class AppComponent {
       }
     }
   }
+  
 }
