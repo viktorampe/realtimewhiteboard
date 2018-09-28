@@ -1,0 +1,48 @@
+@mixin ui-content-thumbnail {
+  $ui-list-item-border-color: #bac2ca;
+  $ui-list-item-background-color: white;
+
+  $ui-list-item_header-background-color: rgba(52, 59, 72, 0.58);
+  $ui-list-item_icon--grid-text-color: #6ed3c2;
+  $ui-list-item_icon--line-text-color: #45b3ab;
+
+  $ui-list-item_image-background-color: #ccc;
+
+  $ui-list-item_title-text-color: #95a0aa;
+
+  $ui-list-item_actions--grid-background-color: #ebebeb;
+
+  .ui-content-thumbnail {
+    border-color: 1px solid $ui-list-item_border-color;
+    background-color: $ui-list-item_background-color;
+
+    &__header {
+      &--grid {
+        background: $ui-list-item_header-background-color;
+      }
+    }
+
+    &__image {
+      background-color: $ui-list-item_image-background-color;
+    }
+
+    &__title {
+      color: $ui-list-item_title-text-color;
+    }
+
+    &__actions {
+      &--grid {
+        background-color: $ui-list-item_actions--grid-background-color;
+      }
+    }
+
+    &__icon {
+      &--grid {
+        color: $ui-list-item_icon--grid-text-color;
+      }
+      &--line {
+        color: $ui-list-item_icon--line-text-color;
+      }
+    }
+  }
+}
