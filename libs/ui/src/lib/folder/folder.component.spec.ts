@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { UiModule } from '../ui.module';
+import { ListFormat } from './enums/list-format.enum';
 import { FolderComponent } from './folder.component';
 
 describe('FolderComponent', () => {
@@ -20,5 +21,11 @@ describe('FolderComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should have a grid class', () => {
+    component.listFormat = ListFormat.GRID;
+    fixture.detectChanges();
+    fixture.nativeElement.classList.contains('ui-folder--grid');
   });
 });

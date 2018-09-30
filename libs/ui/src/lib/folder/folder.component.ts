@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ListFormat } from './enums/list-format.enum';
 
 @Component({
@@ -6,7 +6,7 @@ import { ListFormat } from './enums/list-format.enum';
   templateUrl: './folder.component.html',
   styleUrls: ['./folder.component.scss']
 })
-export class FolderComponent implements OnInit {
+export class FolderComponent {
   @Input() title: string;
   @Input() icon: string;
   @Input() itemCount: string;
@@ -35,11 +35,4 @@ export class FolderComponent implements OnInit {
   gradientUrl: string;
   showDefaultIcon = false;
   showEmptyError: boolean;
-
-  constructor() {}
-
-  ngOnInit() {
-    this.gradientId = this.backgroundColor.replace('#', '');
-    this.gradientUrl = `url(#MyGradient${this.gradientId})`;
-  }
 }
