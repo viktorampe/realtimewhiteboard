@@ -1,15 +1,3 @@
-// icon mixin
-@mixin icon($cls, $icon-bundle) {
-  $font: nth($icon-bundle, 1);
-  $unicode: nth($icon-bundle, 2);
-  .#{$cls} {
-    font-family: $font;
-    &:before {
-      content: $unicode;
-    }
-  }
-}
-
 // icon variables
 $ui-icon-filter: FontAwesome '\f0b0' !default;
 $ui-icon-hourglass: Polpo '\e96b' !default;
@@ -28,14 +16,6 @@ $polpo-presentatie: polpo '\e944' !default;
 @include icon(ui-icon-filter, $ui-icon-filter);
 @include icon(polpo-presentatie, $polpo-presentatie);
 
-// icon basic style
-[class*='icon-'] {
-  font-style: normal;
-  font-weight: normal;
-  text-transform: none;
-  line-height: 1;
-}
-
 // thematic variables
 $ui-bg-color-1: #fff !default;
 $ui-bg-color-2: #fff !default;
@@ -51,6 +31,7 @@ $ui-bg-color-gray-1: #fafafa !default;
 $ui-bg-color-gray-2: #969fa8 !default;
 $ui-bg-color-gray-3: #95a0aa !default;
 $ui-bg-color-gray-4: #808080 !default;
+$ui-bg-color-gray-5: #ccc !default;
 $ui-bg-color-green-1: #38b0aa !default;
 $ui-bg-color-green-2: #44b0aa !default;
 $ui-bg-color-red-1: #f3565d !default;
@@ -87,6 +68,9 @@ $ui-font-family-3: 'Helvetica', 'Arial', 'Sans-Serif' !default;
 @import './app-bar/app-bar.component.theme.scss';
 @import './side-sheet/side-sheet.component.theme';
 @import './shell/shell.component.theme';
+@import './list-view/list-view.component.theme.scss';
+@import './content-thumbnail/content-thumbnail.component.theme.scss';
+@import './content-action-button/content-action-button.component.theme.scss';
 
 // create theme-mixin with each mixin from our library components
 @mixin ui-theme() {
@@ -105,4 +89,8 @@ $ui-font-family-3: 'Helvetica', 'Arial', 'Sans-Serif' !default;
   @include ui-app-bar();
   @include ui-app-shell();
   @include ui-side-sheet();
+  @include ui-list-view();
+  @include ui-list-view-deep();
+  @include ui-content-thumbnail();
+  @include ui-action-button();
 }

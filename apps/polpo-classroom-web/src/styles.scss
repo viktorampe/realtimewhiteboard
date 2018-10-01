@@ -81,12 +81,6 @@ body {
 // include pages lib scss file
 @import 'libs/pages/shared/src/pages-theme';
 @include pages-theme();
-// create icon classes
-@if variable-exists(icons) {
-  @each $class, $icon in $icons {
-    @include icon(icon-#{$class}, $icon);
-  }
-}
 
 /*
  * App styles
