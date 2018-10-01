@@ -17,7 +17,7 @@ import { FileExtensionComponent } from './file-extension/file-extension.componen
 import { InfoPanelComponent } from './info-panel/info-panel.component';
 import { InputLabelComponent } from './input-label/input-label.component';
 import { LabelAndIconButtonComponent } from './label-and-icon-button/label-and-icon-button.component';
-import { ListItemDirective } from './list-view/directives/list-view-item.directive';
+import { ListViewItemDirective } from './list-view/directives/list-view-item.directive';
 import { ListViewComponent } from './list-view/list-view.component';
 import { PageHeaderComponent } from './page-header/page-header.component';
 import { PeriodLabelComponent } from './period-label/period-label.component';
@@ -72,7 +72,7 @@ import { TreeNavComponent } from './tree-nav/tree-nav.component';
     ContentThumbnailComponent,
     ContentActionButtonComponent,
     ListViewComponent,
-    ListItemDirective,
+    ListViewItemDirective,
     TreeNavComponent,
     PersonBadgeComponent,
     PersonInitialsPipe
@@ -102,7 +102,7 @@ import { TreeNavComponent } from './tree-nav/tree-nav.component';
     ContentThumbnailComponent,
     ContentActionButtonComponent,
     ListViewComponent,
-    ListItemDirective,
+    ListViewItemDirective,
     TreeNavComponent,
     PersonBadgeComponent
   ]

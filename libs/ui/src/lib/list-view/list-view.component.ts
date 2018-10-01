@@ -8,7 +8,7 @@ import {
   QueryList
 } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
-import { ListItemDirective } from './directives/list-view-item.directive';
+import { ListViewItemDirective } from './directives/list-view-item.directive';
 
 /**
  * Places decorated components in a Grid or List layout.
@@ -29,6 +29,11 @@ import { ListItemDirective } from './directives/list-view-item.directive';
   styleUrls: ['./list-view.component.scss']
 })
 export class ListViewComponent implements AfterContentInit {
+  /**
+   * (boolean) - When multiselecting, add a css class to style the selectable items
+   *
+   * @memberof ListViewComponent
+   */
   useItemSelectableOverlayStyle = false;
 
   private subscription = new Subscription();
@@ -39,8 +44,8 @@ export class ListViewComponent implements AfterContentInit {
 
   @Output() selectedItems$ = new BehaviorSubject([]);
 
-  @ContentChildren(forwardRef(() => ListItemDirective))
-  items: QueryList<ListItemDirective>;
+  @ContentChildren(forwardRef(() => ListViewItemDirective))
+  items: QueryList<ListViewItemDirective>;
 
   ngAfterContentInit() {
     this.items.forEach(item => {
@@ -57,7 +62,7 @@ export class ListViewComponent implements AfterContentInit {
     this.subscription.unsubscribe();
   }
 
-  private onItemSelectionChanged(item: ListItemDirective) {
+  private onItemSelectionChanged(item: ListViewItemDirective) {
     if (!this.multiSelect) {
       this.items.filter(i => i !== item).forEach(j => (j.isSelected = false));
     } else {

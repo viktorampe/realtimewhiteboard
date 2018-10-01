@@ -14,7 +14,7 @@ import { By } from '@angular/platform-browser';
 import { ListViewItemInterface } from '../base classes/list-view-item';
 import { UiModule } from './../../ui.module';
 import { ListViewComponent } from './../list-view.component';
-import { ListItemDirective } from './list-view-item.directive';
+import { ListViewItemDirective } from './list-view-item.directive';
 
 @Component({
   selector: 'campus-list-view-item',
@@ -62,7 +62,7 @@ describe('ListItemDirective', () => {
   let fixture: ComponentFixture<ContainerComponent>;
   let comp: ContainerComponent;
   let compDE: DebugElement;
-  let dir: ListItemDirective;
+  let dir: ListViewItemDirective;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -79,7 +79,7 @@ describe('ListItemDirective', () => {
       fixture.detectChanges();
 
       compDE = fixture.debugElement.query(By.css('[campusListItem]'));
-      dir = compDE.injector.get(ListItemDirective);
+      dir = compDE.injector.get(ListViewItemDirective);
     });
   }));
 

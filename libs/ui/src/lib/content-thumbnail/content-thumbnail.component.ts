@@ -1,5 +1,4 @@
-import { Component, ContentChildren, Input, QueryList } from '@angular/core';
-import { ContentActionButtonComponent } from '../content-action-button/content-action-button.component';
+import { Component, Input } from '@angular/core';
 import { ListViewItemInterface } from '../list-view/base classes/list-view-item';
 
 @Component({
@@ -19,7 +18,4 @@ export class ContentThumbnailComponent implements ListViewItemInterface {
   @Input() contentTypeClass: string;
   @Input() imagePath: string;
   @Input() fileExtensionClass: string;
-
-  @ContentChildren(ContentActionButtonComponent)
-  actions: QueryList<ContentActionButtonComponent>;
 }

@@ -1,18 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'campus-content-action-button',
   templateUrl: './content-action-button.component.html',
   styleUrls: ['./content-action-button.component.scss']
 })
-export class ContentActionButtonComponent implements OnInit {
+export class ContentActionButtonComponent {
   @Input() iconClass: string;
-  @Input() action: any; //TODO Action class maken?
   @Input() tooltip: string;
-
-  @Output() click = new EventEmitter(); //TODO welke return?
-
-  constructor() {}
-
-  ngOnInit() {}
 }

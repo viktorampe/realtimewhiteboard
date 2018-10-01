@@ -1,25 +1,22 @@
 <div class="ui-content-thumbnail ui-content-thumbnail--{{listFormat}}">
-  <div class="ui-content-thumbnail__header ui-content-thumbnail__header--{{listFormat}} {{listFormat == 'line' ? 'ui-content-thumbnail__header--reverse' : ''}}">
-    <div class="ui-content-thumbnail__icon ui-content-thumbnail__icon--{{listFormat}} {{contentTypeClass}}">
+  <div class="ui-content-thumbnail__header {{listFormat == 'line' ? 'ui-content-thumbnail__header--reverse' : ''}}">
+    <div class="ui-content-thumbnail__icon {{contentTypeClass}}">
     </div>
     <div class="flex-filler"></div>
     <campus-file-extension extensionClass={{fileExtensionClass}}
                            [showIcon]=false></campus-file-extension>
   </div>
-  <figure *ngIf="listFormat==='grid'"
-          class="ui-content-thumbnail__image ui-content-thumbnail__image--{{listFormat}}">
+  <figure class="ui-content-thumbnail__image">
     <img [src]=imagePath
-         *ngIf="imagePath"
-         class="ui-content-thumbnail__image--centered-x ui-content-thumbnail__image--centered-y">
+         *ngIf="imagePath">
     <campus-file-extension *ngIf="!imagePath"
                            extensionClass={{fileExtensionClass}}
                            [showTitle]="false"></campus-file-extension>
   </figure>
-  <div class="ui-content-thumbnail__title ui-content-thumbnail__title--{{listFormat}}">
+  <div class="ui-content-thumbnail__title">
     <div>{{title}}</div>
   </div>
-  <div class="ui-content-thumbnail__actions ui-content-thumbnail__actions--{{listFormat}}"
-       *ngIf="actions.length">
-    <ng-content select="campus-content-action-button"></ng-content>
+  <div class="ui-content-thumbnail__actions">
+    <ng-content></ng-content>
   </div>
 </div>

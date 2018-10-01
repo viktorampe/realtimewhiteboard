@@ -14,14 +14,14 @@ import { ListViewComponent } from '../list-view.component';
  * Handles selection, passes format to component with Css class.
  *
  * @export
- * @class ListItemDirective
+ * @class ListViewItemDirective
  */
 @Directive({
   selector: '[campusListItem]'
 })
-export class ListItemDirective implements AfterContentInit {
+export class ListViewItemDirective implements AfterContentInit {
   isSelected: boolean;
-  @Output() itemSelectionChanged = new EventEmitter<ListItemDirective>();
+  @Output() itemSelectionChanged = new EventEmitter<ListViewItemDirective>();
 
   @HostBinding('class.ui-list-view__list__item--selected')
   get isSelectedClass() {
