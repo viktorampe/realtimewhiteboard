@@ -3,7 +3,11 @@ import { CdkTreeModule } from '@angular/cdk/tree';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatIconModule, MatSidenavModule } from '@angular/material';
+import {
+  MatIconModule,
+  MatSidenavModule,
+  MatTooltipModule
+} from '@angular/material';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
@@ -47,6 +51,7 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     MatSelectModule,
     MatFormFieldModule,
     MatProgressSpinnerModule,
+    MatTooltipModule,
     MatIconModule
   ],
   declarations: [

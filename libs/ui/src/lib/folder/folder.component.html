@@ -13,7 +13,7 @@
           <mat-icon [svgIcon]="icon"></mat-icon>
         </div>
       </div>
-      <div *ngIf="listFormat === 'grid'"
+      <div *ngIf="listFormat === listFormatEnum.GRID"
            class="ui-folder__title">{{title}}</div>
       <div class="ui-folder__mask-text"
            [ngStyle]="{color: backgroundColor}"></div>
@@ -26,7 +26,7 @@
     </div>
   </div>
   <div class="ui-folder__title"
-       *ngIf="listFormat === 'line'">{{title}}</div>
+       *ngIf="listFormat === listFormatEnum.LINE">{{title}}</div>
 
   <div class="ui-folder__badge"
        [ngStyle]="{'border-color': backgroundColor}">
@@ -34,7 +34,7 @@
           class="ui-folder__badge-number">{{itemCount}}</span>
     <ng-template #emptyErrorBlock>
       <span class="ui-folder__badge-number ui-folder__badge-number--error"
-            uib-tooltip="Er is nog geen inhoud voor dit item"
+            matTooltip="Er is nog geen inhoud voor dit item"
             tooltip-append-to-body="true">!</span>
     </ng-template>
   </div>

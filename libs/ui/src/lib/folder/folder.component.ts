@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ListFormat } from './enums/list-format.enum';
+import { ListFormat } from '../list-view/enums/list-format.enum';
 
 @Component({
   selector: 'campus-folder',
@@ -14,6 +14,7 @@ export class FolderComponent {
   @Input() listFormat: ListFormat;
   @Input() progress?: number;
 
+  protected listFormatEnum = ListFormat;
   /**
    * Whether to show an exclamation mark when folder is empty (itemCount is zero).
    *
@@ -31,6 +32,5 @@ export class FolderComponent {
     }
   }
 
-  showDefaultIcon = false;
   showEmptyError: boolean;
 }
