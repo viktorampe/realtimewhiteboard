@@ -7,6 +7,8 @@ import { ListFormat } from '../list-view/enums/list-format.enum';
   styleUrls: ['./folder.component.scss']
 })
 export class FolderComponent {
+  showEmptyError: boolean;
+
   @Input() title: string;
   @Input() icon: string;
   @Input() itemCount: string;
@@ -31,6 +33,4 @@ export class FolderComponent {
       }
     }
   }
-
-  showEmptyError: boolean;
 }
