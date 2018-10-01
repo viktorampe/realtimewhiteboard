@@ -28,14 +28,9 @@ export class ListViewItemDirective implements AfterContentInit {
     return this.isSelected;
   }
 
-  @HostBinding('class.ui-list-view__list__item--grid')
-  get isGridClass() {
-    return this.parentList.listFormat === 'grid';
-  }
-
-  @HostBinding('class.ui-list-view__list__item--line')
-  get isListClass() {
-    return this.parentList.listFormat === 'line';
+  @HostBinding('class.ui-list-view__list__item')
+  get isListItemClass() {
+    return true;
   }
 
   @HostBinding('class.ui-list-view__list__item__selectoverlay')
