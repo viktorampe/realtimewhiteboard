@@ -39,7 +39,7 @@ export class ListViewItemDirective implements AfterContentInit {
   }
 
   @HostBinding('class.ui-list-view__list__item__selectoverlay')
-  get isMultiSelectableClass() {
+  get useItemSelectableOverlayClass() {
     return this.parentList.useItemSelectableOverlayStyle === true;
   }
 
