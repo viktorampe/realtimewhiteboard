@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { OverlayContainer } from '@angular/cdk/overlay';
+import { Component, HostBinding, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, Subscription } from 'rxjs';
 import { FilterTextInputComponentInterface } from './filter-text-input.component.interface';
 
 @Component({
@@ -10,31 +10,45 @@ import { FilterTextInputComponentInterface } from './filter-text-input.component
   styleUrls: ['./filter-text-input.component.scss']
 })
 export class FilterTextInputComponent
-  implements FilterTextInputComponentInterface {
-  input$ = new FormControl();
-  placeholder: string = 'Filter';
+  implements FilterTextInputComponentInterface, OnDestroy {
+  public input$ = new FormControl();
+  public placeholder: string = 'Filter';
 
-  setvalue(value: string) {
+  @HostBinding('class') componentCssClass;
+  constructor(public overlayContainer: OverlayContainer) {}
+
+  //for some bizar reason async pipes refused to work in our html file, making this weirdness necessary
+  private hasData: boolean = false;
+  private readonly formSubscription: Subscription = this.getInput().subscribe(
+    (data: string) => {
+      if (data !== null && data.length > 0) {
+        this.hasData = true;
+      } else {
+        this.hasData = false;
+      }
+    }
+  );
+
+  ngOnDestroy() {
+    this.formSubscription.unsubscribe();
+  }
+
+  setInput(value: string): void {
     this.input$.setValue(value);
   }
-
-  clear() {
-    this.input$.setValue('');
+  clear(): void {
+    this.setInput('');
   }
 
-  changeInput(): Observable<string> {
-    return this.input$.valueChanges.pipe(
-      map((st: string) => {
-        console.log('value changed', st);
-        if (!st) {
-          return '';
-        }
-        return st;
-      })
-    );
+  isClearButtonVisible(): boolean {
+    return this.hasData;
   }
 
-  setPlaceHolder(placeholder: string = 'Filter') {
+  getInput(): Observable<string> {
+    return this.input$.valueChanges;
+  }
+
+  setPlaceHolder(placeholder: string): void {
     this.placeholder = placeholder;
   }
 }

@@ -1,25 +1,20 @@
-<div class="ui-filter-text-input">
-
-  <!--<i class="ui-filter-text-input-filter ui-filter-text-input-filter-icon"></i>
-
-  <input class="ui-filter-text-input-input"
-         type="text"
-         name="filter"
-         [formControl]="input$"
-         placeholder="{{placeholder}}" />
-
-  <i class="ui-filter-text-input-clear ui-filter-text-input-clear-icon"
-     [hidden]="(changeInput()|async).length < 1"
-     (click)="clear()"></i>-->
-
-  <form class="example-form">
-    <mat-form-field class="example-full-width">
-      <mat-icon matPrefix>mode_filter</mat-icon>
-      <input type="filter"
-             matInput
-             placeholder="{{placeholder}}">
-      <mat-icon matSuffix>mode_clear</mat-icon>
-    </mat-form-field>
-  </form>
-
-</div>
+<form id="lolform"
+      class="ui-filter-text-input">
+  <mat-form-field class="ui-filter-text-input-form">
+    <input matInput
+           class="inputField"
+           name="filter-input"
+           type="text"
+           [formControl]="input$">
+    <mat-placeholder class="placeholder">{{placeholder}}</mat-placeholder>
+    <button mat-icon-button
+            class="button"
+            matSuffix
+            *ngIf="isClearButtonVisible()"
+            mat-icon-button
+            aria-label="Clear"
+            (click)="clear()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+</form>

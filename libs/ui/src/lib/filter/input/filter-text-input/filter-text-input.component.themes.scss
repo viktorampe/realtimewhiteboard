@@ -1,14 +1,3 @@
-$color-black: #000000;
-$color-white: #ffffff;
-
-@mixin ui-filter-input() {
-  $ui-filter-text-color: $color-black !default;
-  $ui-filter-background-color: $color-white !default;
-
-  .ui-filter-text-input {
-    .ui-filter-text-input-input {
-      color: $ui-filter-text-color;
-      background-color: $ui-filter-background-color;
-    }
-  }
+@mixin ui-filter-text-input() {
+  $ui-filter-text-input-theme: white !default;
 }

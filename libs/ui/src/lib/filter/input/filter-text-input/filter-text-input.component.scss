@@ -1,65 +1,24 @@
-// icon mixin
-@mixin icon($cls, $icon-bundle) {
-  $font: nth($icon-bundle, 1);
-  $unicode: nth($icon-bundle, 2);
-  .#{$cls} {
-    font-family: $font;
-    &:before {
-      content: $unicode;
-    }
-  }
-}
-
 .ui-filter-text-input {
-  position: relative;
-  display: inline-block;
-  vertical-align: top;
+  min-width: 150px;
+  max-width: 1000px;
+  width: 100%;
 
-  .example-form {
-    min-width: 150px;
-    max-width: 500px;
+  $ui-filter-text-input-color: black;
+
+  .ui-filter-text-input-form {
     width: 100%;
+    border: 0px;
 
-    .example-full-width {
-      width: 100%;
+    .placeholder {
+      color: $ui-filter-text-input-color;
+    }
+
+    .inputField {
+      color: $ui-filter-text-input-color;
+    }
+
+    .button {
+      color: $ui-filter-text-input-color;
     }
   }
-
-  // icons
-  $ui-filter-text-input-clear: FontAwesome '\f057' !default;
-  $ui-filter-text-input-filter: FontAwesome '\f0b0' !default;
-
-  @include icon('ui-filter-text-input-clear', $ui-filter-text-input-clear);
-  @include icon('ui-filter-text-input-filter', $ui-filter-text-input-filter);
-  /*
-  .ui-filter-text-input-filter-icon {
-    position: absolute;
-    top: -4px;
-    left: 10px;
-    line-height: 26px;
-    color: #8c8c8c;
-    font-size: 18px;
-    font-style: normal;
-    top: -3px;
-  }
-
-  .ui-filter-text-input-input {
-    box-sizing: border-box;
-    color: #000000;
-    background-color: #ffffff;
-    padding-left: 25px;
-    padding-right: 25px;
-  }
-
-  .ui-filter-text-input-clear-icon {
-    position: absolute;
-    padding-top: 0px;
-    right: 10px;
-    line-height: 26px;
-    color: #8c8c8c;
-    font-size: 18px;
-    font-style: normal;
-    top: -3px;
-  }
-  */
 }

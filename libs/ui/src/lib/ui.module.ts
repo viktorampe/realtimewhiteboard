@@ -1,9 +1,11 @@
 import { LayoutModule } from '@angular/cdk/layout';
+import { OverlayModule } from '@angular/cdk/overlay';
 import { CdkTreeModule } from '@angular/cdk/tree';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
+  MatButtonModule,
   MatFormFieldModule,
   MatIconModule,
   MatInputModule,
@@ -34,6 +36,8 @@ import { TreeNavComponent } from './tree-nav/tree-nav.component';
 
 @NgModule({
   imports: [
+    OverlayModule,
+    MatButtonModule,
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
