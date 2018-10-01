@@ -1,56 +1,43 @@
 @mixin ui-content-thumbnail {
-  $ui-content-thumbnail-background-color: white;
-  $ui-content-thumbnail-border-width: 1px;
-  $ui-content-thumbnail-border-color: #bac2ca;
+  $ui-content-thumbnail-background-color: $ui-bg-color-2 !default;
+  $ui-content-thumbnail-border-width: 1px !default;
+  $ui-content-thumbnail-border-color: $ui-bg-color-3 !default;
 
-  $ui-content-thumbnail_header-background-color: rgba(52, 59, 72, 0.58);
-  $ui-content-thumbnail_header_icon-font-size: 20px;
-  $ui-content-thumbnail_header_icon-line-height: 24px;
-
-  $ui-content-thumbnail_image-background-color: #ccc;
-
-  $ui-content-thumbnail_title-text-color: #95a0aa;
-
-  /*
-  * Grid
-  */
-  $ui-content-thumbnail--grid-height: 235px;
-  $ui-content-thumbnail--grid-width: 170px;
-
-  $ui-content-thumbnail_header--grid-height: $ui-content-thumbnail_header_icon-line-height;
-  $ui-content-thumbnail_header--grid-width: 100%;
-  $ui-content-thumbnail_header_icon--grid-margin-left: 4px;
-
-  $ui-content-thumbnail_header_icon--grid-text-color: #6ed3c2;
-
-  $ui-content-thumbnail_image--grid-height: 120px;
-  $ui-content-thumbnail_image--grid-width: 100%;
-
-  $ui-content-thumbnail_title--grid-font-size: 12px;
-  $ui-content-thumbnail_title--grid-line-height: 16px;
-  $ui-content-thumbnail_title--grid-padding: 13px;
-
-  $ui-content-thumbnail_actions--grid-height: 45px;
-  $ui-content-thumbnail_actions--grid-background-color: #ebebeb;
-
-  /*
-  * Line
-  */
-  $ui-content-thumbnail--line-height: 48px;
-  $ui-content-thumbnail--line-width: 100%;
-
-  $ui-content-thumbnail_header--line-width: 120px;
-  $ui-content-thumbnail_header--padding-left: 20px;
-  $ui-content-thumbnail_header_icon--line-text-color: #45b3ab;
-
-  $ui-content-thumbnail_title--line-font-size: 16px;
-  $ui-content-thumbnail_title--line-line-height: 22px;
-  $ui-content-thumbnail_title--line-font-weight: 400;
+  $ui-content-thumbnail_header-background-opacity: 0.4 !default;
+  $ui-content-thumbnail_header-background-color: rgba(
+    $ui-font-color-gray-2,
+    $ui-content-thumbnail_header-background-opacity
+  );
+  $ui-content-thumbnail_header_icon-font-size: 20px !default;
+  $ui-content-thumbnail_header_icon-line-height: 24px !default;
+  $ui-content-thumbnail_header_icon-text-color: $ui-font-color-active !default;
+  $ui-content-thumbnail_image-background-color: $ui-bg-color-gray-5 !default;
+  $ui-content-thumbnail_title-text-color: $ui-font-color-active !default;
+  /* * Grid */
+  $ui-content-thumbnail--grid-height: 235px !default;
+  $ui-content-thumbnail--grid-width: 170px !default;
+  $ui-content-thumbnail_header--grid-height: $ui-content-thumbnail_header_icon-line-height !default;
+  $ui-content-thumbnail_header--grid-width: 100% !default;
+  $ui-content-thumbnail_header_icon--grid-margin-left: 4px !default;
+  $ui-content-thumbnail_image--grid-height: 120px !default;
+  $ui-content-thumbnail_image--grid-width: 100% !default;
+  $ui-content-thumbnail_title--grid-font-size: 12px !default;
+  $ui-content-thumbnail_title--grid-line-height: 16px !default;
+  $ui-content-thumbnail_title--grid-padding: 13px !default;
+  $ui-content-thumbnail_actions--grid-height: 45px !default;
+  $ui-content-thumbnail_actions--grid-background-color: $ui-content-thumbnail_image-background-color !default;
+  /* * Line */
+  $ui-content-thumbnail--line-height: 48px !default;
+  $ui-content-thumbnail--line-width: 100% !default;
+  $ui-content-thumbnail_header--line-width: 120px !default;
+  $ui-content-thumbnail_header--padding-left: 20px !default;
+  $ui-content-thumbnail_title--line-font-size: 16px !default;
+  $ui-content-thumbnail_title--line-line-height: 22px !default;
+  $ui-content-thumbnail_title--line-font-weight: 400 !default;
   $ui-content-thumbnail_title--line-padding: (
       $ui-content-thumbnail--line-height -
         $ui-content-thumbnail_title--line-line-height
     )/2;
-
   .ui-content-thumbnail {
     border-color: $ui-content-thumbnail-border-width solid
       $ui-content-thumbnail_border-color;
@@ -59,6 +46,7 @@
       & .ui-content-thumbnail__icon {
         font-size: $ui-content-thumbnail_header_icon-font-size;
         line-height: $ui-content-thumbnail_header_icon-line-height;
+        color: $ui-content-thumbnail_header_icon-text-color;
       }
     }
     &__image {
@@ -78,7 +66,6 @@
         background: $ui-content-thumbnail_header-background-color;
         height: $ui-content-thumbnail_header--grid-height;
         & .ui-content-thumbnail__icon {
-          color: $ui-content-thumbnail_header_icon--grid-text-color;
           margin-left: $ui-content-thumbnail_header_icon--grid-margin-left;
         }
       }
@@ -100,7 +87,7 @@
         padding-left: $ui-content-thumbnail_header--padding-left;
         width: $ui-content-thumbnail_header--line-width;
         & .ui-content-thumbnail__icon {
-          color: $ui-content-thumbnail_header_icon--line-text-color;
+          color: $ui-content-thumbnail_header_icon-text-color;
         }
       }
       & .ui-content-thumbnail__title {
