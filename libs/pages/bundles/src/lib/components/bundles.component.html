@@ -65,3 +65,91 @@
                             fileExtensionClass="zip">
   </campus-content-thumbnail>
 </campus-list-view>
+<div class="bundles-container">
+  <p>
+    bundles works!
+  </p>
+  <campus-folder [itemCount]="2"
+                 listFormat="line"
+                 [title]="bundleData.name"
+                 gradientId="485235"
+                 backgroundColor="#485235"
+                 icon="checkmark"
+                 progress="72">
+    <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
+    <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
+  </campus-folder>
+
+  <campus-folder [itemCount]="2"
+                 listFormat="line"
+                 [title]="bundleData.name"
+                 gradientId="990000"
+                 backgroundColor="#990000"
+                 icon="lock">
+    <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
+    <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
+  </campus-folder>
+
+
+  <campus-folder [itemCount]="2"
+                 listFormat="line"
+                 [title]="bundleData.name"
+                 gradientId="485235"
+                 backgroundColor="#485235"
+                 icon="hourglass">
+    <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
+    <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
+  </campus-folder>
+
+  <campus-folder [itemCount]="2"
+                 listFormat="line"
+                 [title]="bundleData.name"
+                 gradientId="485235"
+                 backgroundColor="#485235"
+                 icon="learning-area:wiskunde">
+    <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
+    <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
+  </campus-folder>
+
+  <campus-folder [itemCount]="0"
+                 listFormat="grid"
+                 [title]="bundleData.name"
+                 gradientId="485235"
+                 backgroundColor="#485235"
+                 icon="learning-area:wiskunde"
+                 [errorOnEmpty]="true">
+    <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
+    <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
+  </campus-folder>
+
+  <campus-folder [itemCount]="2"
+                 listFormat="grid"
+                 [title]="bundleData.name"
+                 gradientId="990000"
+                 backgroundColor="#990000"
+                 icon="checkmark">
+    <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
+    <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
+  </campus-folder>
+
+
+  <campus-folder [itemCount]="2"
+                 listFormat="grid"
+                 [title]="bundleData.name"
+                 gradientId="485235"
+                 backgroundColor="#485235"
+                 icon="hourglass">
+    <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
+    <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
+  </campus-folder>
+
+  <campus-folder [itemCount]="2"
+                 listFormat="grid"
+                 [title]="bundleData.name"
+                 gradientId="485235"
+                 backgroundColor="#485235"
+                 icon="learning-area:wiskunde">
+    <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
+    <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
+  </campus-folder>
+</div>

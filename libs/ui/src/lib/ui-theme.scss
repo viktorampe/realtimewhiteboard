@@ -1,8 +1,18 @@
 // icon variables
 $ui-icon-filter: FontAwesome '\f0b0' !default;
+$ui-icon-hourglass: Polpo '\e96b' !default;
+$ui-icon-lock: Polpo '\e96c' !default;
+$ui-icon-checkmark: Polpo '\e966' !default;
+$ui-icon-hourglass: Polpo '\e96b' !default;
+$ui-icon-wiskunde: Polpo '\e935' !default;
 $polpo-presentatie: polpo '\e944' !default;
 
 // icon classes
+@include icon(ui-icon-filter, $ui-icon-filter);
+@include icon(polpo-hourglass, $ui-icon-hourglass);
+@include icon(polpo-lock, $ui-icon-lock);
+@include icon(polpo-checkmark, $ui-icon-checkmark);
+@include icon(polpo-wiskunde, $ui-icon-wiskunde);
 @include icon(ui-icon-filter, $ui-icon-filter);
 @include icon(polpo-presentatie, $polpo-presentatie);
 
@@ -10,8 +20,12 @@ $polpo-presentatie: polpo '\e944' !default;
 $ui-bg-color-1: #fff !default;
 $ui-bg-color-2: #fff !default;
 $ui-bg-color-3: #95a0aa !default;
+$ui-bg-color-4: #2c354f !default;
+$ui-bg-color-5: #c6ccd1 !default;
+$ui-bg-color-6: #f00 !default;
 $ui-font-color-1: #000 !default;
 $ui-font-color-2: #fff !default;
+$ui-font-color-3: #3f4652 !default;
 $ui-bg-color-white: #fff !default;
 $ui-bg-color-gray-1: #fafafa !default;
 $ui-bg-color-gray-2: #969fa8 !default;
@@ -25,6 +39,8 @@ $ui-border-color-gray-1: #e3e6e8 !default;
 $ui-font-color-gray-1: #f0f8ff !default;
 $ui-font-color-gray-2: #3e3e43 !default;
 $ui-font-color-gray-3: #333 !default;
+$ui-font-color-gray-4: #95a0aa !default;
+
 $ui-font-color-green-1: #6ed3c2 !default;
 $ui-person-badge-size-large: 150px !default;
 $ui-person-badge-size-large-font-size: 50px !default;
@@ -32,10 +48,13 @@ $ui-person-badge-size-medium: 45px !default;
 $ui-person-badge-size-medium-font-size: 21px !default;
 $ui-person-badge-size-small: 30px !default;
 $ui-person-badge-size-small-font-size: 16px !default;
-$ui-font-family-1: 'Lato', sans-serif;
-$ui-font-family-2: 'Open Sans', sans-serif;
+$ui-font-family-1: 'Lato', sans-serif !default;
+$ui-font-family-2: 'Open Sans', sans-serif !default;
+$ui-font-family-3: 'Helvetica', 'Arial', 'Sans-Serif' !default;
 
 // import all required sass files from our libs
+// @import './tree-nav/tree-nav.component.theme';
+@import './folder/folder.component.theme.scss';
 @import './tree-nav/tree-nav.component.theme';
 @import './file-extension/file-extension.component.scss';
 @import './editable-inline-tag-list/editable-inline-tag-list.component.theme.scss';
@@ -56,6 +75,7 @@ $ui-font-family-2: 'Open Sans', sans-serif;
 // create theme-mixin with each mixin from our library components
 @mixin ui-theme() {
   @include ui-tree-nav();
+  @include ui-folder-theme();
   //place desired width as optional parameter, default 84;
   @include ui-file-extension();
   @include ui_editable-inline-tag-list_theme();
