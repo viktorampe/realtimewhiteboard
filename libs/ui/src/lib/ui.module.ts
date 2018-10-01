@@ -46,7 +46,7 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     FormsModule,
     MatSelectModule,
     MatFormFieldModule,
-    MatProgressSpinnerModule, 
+    MatProgressSpinnerModule,
     MatIconModule
   ],
   declarations: [
@@ -98,8 +98,8 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     ConfirmableSelectComponent,
     FileExtensionComponent,
     PersonBadgeComponent,
-    FolderDetailsDirective, 
-    FolderComponent, 
+    FolderDetailsDirective,
+    FolderComponent,
     AdjustColorBrightnessPipe
   ]
 })

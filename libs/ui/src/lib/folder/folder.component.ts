@@ -12,7 +12,7 @@ export class FolderComponent {
   @Input() itemCount: string;
   @Input() backgroundColor = '#000000';
   @Input() listFormat: ListFormat;
-  @Input() progress: number;
+  @Input() progress?: number;
 
   /**
    * Whether to show an exclamation mark when folder is empty (itemCount is zero).
@@ -31,8 +31,6 @@ export class FolderComponent {
     }
   }
 
-  gradientId: string;
-  gradientUrl: string;
   showDefaultIcon = false;
   showEmptyError: boolean;
 }

@@ -13,7 +13,10 @@ import { NxModule } from '@nrwl/nx';
 import { storeFreeze } from 'ngrx-store-freeze';
 import { environment } from '../environments/environment';
 import { AppEffects } from './+state/app.effects';
-import { appReducer, initialState as appInitialState } from './+state/app.reducer';
+import {
+  appReducer,
+  initialState as appInitialState
+} from './+state/app.reducer';
 import { AppComponent } from './app.component';
 
 @NgModule({

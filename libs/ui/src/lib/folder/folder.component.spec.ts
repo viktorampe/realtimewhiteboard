@@ -1,4 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { UiModule } from '../ui.module';
 import { ListFormat } from './enums/list-format.enum';
 import { FolderComponent } from './folder.component';
@@ -27,5 +28,50 @@ describe('FolderComponent', () => {
     component.listFormat = ListFormat.GRID;
     fixture.detectChanges();
     fixture.nativeElement.classList.contains('ui-folder--grid');
+  });
+
+  it('should have a line class', () => {
+    component.listFormat = ListFormat.LINE;
+    fixture.detectChanges();
+    fixture.nativeElement.classList.contains('ui-folder--line');
+  });
+
+  it('should show exclamation mark', () => {
+    component.showEmptyError = true;
+    component.itemCount = '0';
+    fixture.detectChanges();
+    expect(
+      fixture.debugElement.query(By.css('ui-folder__badge-number--error'))
+    ).toBeDefined();
+  });
+
+  it('should not show exclamation mark', () => {
+    component.showEmptyError = false;
+    component.itemCount = '0';
+    fixture.detectChanges();
+    expect(
+      fixture.debugElement.query(By.css('ui-folder__badge-number--error'))
+    ).toBeNull();
+  });
+
+  it('should show a spinner', () => {
+    component.progress = 50;
+    fixture.detectChanges();
+    expect(
+      fixture.debugElement.query(By.css('mat-progress-spinner'))
+    ).toBeDefined();
+  });
+
+  it('should not show a spinner', () => {
+    fixture.detectChanges();
+    expect(
+      fixture.debugElement.query(By.css('mat-progress-spinner'))
+    ).toBeNull();
+  });
+
+  it('should dehdej', () => {
+    expect(
+      fixture.debugElement.query(By.css('mat-progress-spinner'))
+    ).toBeUndefined();
   });
 });

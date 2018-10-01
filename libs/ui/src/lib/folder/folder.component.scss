@@ -15,13 +15,13 @@
     overflow: hidden;
     box-sizing: border-box;
 
-    &__icon {
+    &-icon {
       .mat-progress-spinner {
         position: absolute;
         z-index: 2;
       }
 
-      &__wrapper {
+      &-wrapper {
         z-index: 1;
         border-radius: 50%;
         box-sizing: border-box;
@@ -90,15 +90,13 @@
 
   &--grid {
     .ui-folder {
-      &__header {
-        &__mask-text {
-          bottom: 0px;
-          height: 20px;
-          left: 0;
-          width: 100%;
-          position: absolute;
-          box-shadow: inset 0px -20px 10px -10px;
-        }
+      &__mask-text {
+        bottom: 0px;
+        height: 20px;
+        left: 0;
+        width: 100%;
+        position: absolute;
+        box-shadow: inset 0px -20px 10px -10px;
       }
     }
   }
@@ -121,13 +119,14 @@
         margin: 0px;
         position: relative;
         z-index: 2;
-
-        &__title {
-          flex: 1 2 auto;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
       }
+
+      &__title {
+        flex: 1 2 auto;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
       &__info {
         padding: 0;
         height: 100%;
