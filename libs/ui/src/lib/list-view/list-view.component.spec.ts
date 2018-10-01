@@ -8,7 +8,8 @@ import {
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { UiModule } from '../ui.module';
-import { ListViewItemInterface } from './base classes/list-view-item';
+import { ListFormat } from './enums/list-format.enum';
+import { ListViewItemInterface } from './interfaces/list-view-item';
 import { ListViewComponent } from './list-view.component';
 
 @Component({
@@ -117,7 +118,7 @@ describe('ListViewComponent', () => {
   });
 
   it('should apply the flex-grid class', () => {
-    component.listFormat = 'grid';
+    component.listFormat = ListFormat.GRID;
     testContainerFixture.detectChanges();
     fixture.detectChanges();
 
@@ -132,7 +133,7 @@ describe('ListViewComponent', () => {
   });
 
   it('should apply the flex-line class', () => {
-    component.listFormat = 'line';
+    component.listFormat = ListFormat.LINE;
     testContainerFixture.detectChanges();
 
     const itemListDE = componentDE.query(By.css('.ui-list-view__list'));

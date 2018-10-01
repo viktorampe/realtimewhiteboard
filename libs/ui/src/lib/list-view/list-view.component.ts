@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { ListViewItemDirective } from './directives/list-view-item.directive';
+import { ListFormat } from './enums/list-format.enum';
 
 /**
  * Places decorated components in a Grid or List layout.
@@ -38,7 +39,7 @@ export class ListViewComponent implements AfterContentInit {
 
   private subscription = new Subscription();
 
-  @Input() listFormat: 'line' | 'grid';
+  @Input() listFormat: ListFormat;
   @Input() multiSelect = false;
   @Input() placeHolderText = 'Er zijn geen beschikbare items.';
 

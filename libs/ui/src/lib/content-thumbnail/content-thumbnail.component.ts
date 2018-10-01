@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { ListViewItemInterface } from '../list-view/base classes/list-view-item';
+import { ListFormat } from '../list-view/enums/list-format.enum';
+import { ListViewItemInterface } from '../list-view/interfaces/list-view-item';
 
 @Component({
   selector: 'campus-content-thumbnail',
@@ -13,7 +14,7 @@ import { ListViewItemInterface } from '../list-view/base classes/list-view-item'
   ]
 })
 export class ContentThumbnailComponent implements ListViewItemInterface {
-  @Input() listFormat: string;
+  @Input() listFormat: ListFormat;
   @Input() title: string;
   @Input() contentTypeClass: string;
   @Input() imagePath: string;

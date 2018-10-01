@@ -6,7 +6,7 @@ import {
   HostListener,
   Output
 } from '@angular/core';
-import { ListViewItemInterface } from '../base classes/list-view-item';
+import { ListViewItemInterface } from '../interfaces/list-view-item';
 import { ListViewComponent } from '../list-view.component';
 
 /**

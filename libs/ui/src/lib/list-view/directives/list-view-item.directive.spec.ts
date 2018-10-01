@@ -11,7 +11,8 @@ import {
 } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { ListViewItemInterface } from '../base classes/list-view-item';
+import { ListFormat } from '../enums/list-format.enum';
+import { ListViewItemInterface } from '../interfaces/list-view-item';
 import { UiModule } from './../../ui.module';
 import { ListViewComponent } from './../list-view.component';
 import { ListViewItemDirective } from './list-view-item.directive';
@@ -27,7 +28,7 @@ import { ListViewItemDirective } from './list-view-item.directive';
   ]
 })
 export class HostComponent implements ListViewItemInterface {
-  listFormat: string;
+  listFormat: ListFormat;
 }
 
 @Component({
