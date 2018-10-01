@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { UiModule } from '../ui.module';
-import { ListFormat } from './enums/list-format.enum';
+import { ListFormat } from '../list-view/enums/list-format.enum.ts';
 import { FolderComponent } from './folder.component';
 
 describe('FolderComponent', () => {
@@ -67,11 +67,5 @@ describe('FolderComponent', () => {
     expect(
       fixture.debugElement.query(By.css('mat-progress-spinner'))
     ).toBeNull();
-  });
-
-  it('should dehdej', () => {
-    expect(
-      fixture.debugElement.query(By.css('mat-progress-spinner'))
-    ).toBeUndefined();
   });
 });
