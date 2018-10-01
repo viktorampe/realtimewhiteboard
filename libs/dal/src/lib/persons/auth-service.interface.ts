@@ -1,3 +1,5 @@
+import { Observable } from 'rxjs';
+
 export interface LoginCredentials {
   email: string;
   password: string;
@@ -5,6 +7,7 @@ export interface LoginCredentials {
 }
 
 export interface AuthServiceInterface {
-  logout();
-  login(credentials: Partial<LoginCredentials>);
+  getCurrent(): Observable<any>;
+  logout(): Observable<any>;
+  login(credentials: Partial<LoginCredentials>): Observable<any>;
 }

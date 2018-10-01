@@ -1,9 +1,6 @@
 import { Injectable, InjectionToken } from '@angular/core';
-import { PersonsState } from '@campus/dal';
 import { LoopBackAuth, PersonApi } from '@diekeure/polpo-api-angular-sdk';
-import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { PersonsActionTypes } from '../+state/persons/persons.actions';
 import {
   AuthServiceInterface,
   LoginCredentials
@@ -15,53 +12,38 @@ export const AuthServiceToken = new InjectionToken('AuthService');
   providedIn: 'root'
 })
 export class AuthService implements AuthServiceInterface {
-  personState: Observable<PersonsState>;
+  constructor(private personApi: PersonApi, private auth: LoopBackAuth) {}
 
-  constructor(
-    private personApi: PersonApi,
-    private auth: LoopBackAuth,
-    private store: Store<PersonsState>
-  ) {
-    this.personState = this.store.select('persons');
+  /**
+   * gets the current logged in user, throws a 401 error if not logged in
+   *
+   * @returns {Observable<any>}
+   * @memberof AuthService
+   */
+  getCurrent(): Observable<any> {
+    return this.personApi.getCurrent();
   }
 
-  logout() {
-    this.personApi.logout().subscribe(
-      ob => {
-        this.store.dispatch({
-          type: PersonsActionTypes.PersonLoggedOut,
-          payload: { loggedIn: false }
-        });
-      },
-      err => {
-        this.store.dispatch({
-          type: PersonsActionTypes.PersonLoggedOut,
-          payload: {}
-        });
-      }
-    );
+  /**
+   * logs out the current user this method returns no data.
+   *
+   * @returns {Observable<any>}
+   * @memberof AuthService
+   */
+  logout(): Observable<any> {
+    return this.personApi.logout();
   }
 
-  login(credentials: Partial<LoginCredentials>) {
-    this.personApi.login(credentials).subscribe(
-      loggedInCredentials => {
-        console.log(loggedInCredentials);
-        this.store.dispatch({
-          type: PersonsActionTypes.PersonLoggedIn,
-          payload: { loggedIn: true }
-        });
-        this.store.dispatch({
-          type: PersonsActionTypes.PersonsLoaded,
-          payload: { person: loggedInCredentials }
-        });
-      },
-      err => {
-        console.log('logged in failed');
-        this.store.dispatch({
-          type: PersonsActionTypes.PersonLoginError,
-          payload: { loggedIn: false }
-        });
-      }
-    );
+  /**
+   * logs in the current user,
+   * The response body contains properties of the AccessToken created on login.
+   * Depending on the value of `include` parameter, the body may contain additional properties:
+   *
+   * @param {Partial<LoginCredentials>} credentials
+   * @returns {Observable<any>}
+   * @memberof AuthService
+   */
+  login(credentials: Partial<LoginCredentials>): Observable<any> {
+    return this.personApi.login(credentials);
   }
 }
