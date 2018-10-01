@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Observable, of, Subscription } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { Observable, Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -48,17 +47,8 @@ export class FilterTextInputViewModel {
    * @param {string} value
    * @memberof FilterTextInputComponent
    */
-  isClearButtonVisible(): Observable<boolean> {
-    return this.getInput().pipe(
-      map((str: string) => {
-        console.log(str, str.length > 0);
-        return str.length > 0;
-      }),
-      catchError(err => {
-        console.log(false);
-        return of(false);
-      })
-    );
+  isClearButtonVisible(): boolean {
+    return this.hasData;
   }
 
   /**

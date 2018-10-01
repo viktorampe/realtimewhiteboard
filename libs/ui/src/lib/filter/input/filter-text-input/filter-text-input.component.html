@@ -1,5 +1,4 @@
 <form class="ui-filter-text-input">
-  <div>{{viewModel.isClearButtonVisible() | json}}</div>
   <mat-form-field class="ui-filter-text-input-form">
     <input matInput
            name="filter-input"
@@ -9,7 +8,7 @@
     <mat-placeholder>{{viewModel.getPlaceHolder()}}</mat-placeholder>
     <button mat-icon-button
             matSuffix
-            *ngIf="viewModel.isClearButtonVisible() | async"
+            *ngIf="viewModel.isClearButtonVisible()"
             mat-icon-button
             aria-label="Clear"
             (click)="viewModel.clear()">
