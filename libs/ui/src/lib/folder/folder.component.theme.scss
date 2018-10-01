@@ -58,6 +58,11 @@
             width: $ui-folder_icon--grid-width;
             height: $ui-folder_icon--grid-height;
           }
+
+          mat-progress-spinner svg {
+            width: $ui-folder_icon-wrapper--grid-width;
+            height: $ui-folder_icon-wrapper--grid-height;
+          }
         }
       }
     }
@@ -125,6 +130,11 @@
                     $ui-folder_icon--line-width/2 -
                     $ui-folder_icon-wrapper-border-width
                 );
+              }
+
+              mat-progress-spinner svg {
+                width: $ui-folder_icon-wrapper--line-width;
+                height: $ui-folder_icon-wrapper--line-height;
               }
             }
           }
