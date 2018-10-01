@@ -69,9 +69,7 @@ body {
 @include angular-material-theme($polpo-theme);
 // alternative: include individual component mixins
 
-/*
- * POLPO theme
- */
+/* * POLPO theme */
 // load all variables for your app theme and ui components
 @import 'scss/theme-variables';
 
@@ -83,7 +81,6 @@ body {
 // include pages lib scss file
 @import 'libs/pages/shared/src/pages-theme';
 @include pages-theme();
-
 // create icon classes
 @if variable-exists(icons) {
   @each $class, $icon in $icons {

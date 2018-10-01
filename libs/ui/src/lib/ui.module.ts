@@ -3,8 +3,13 @@ import { CdkTreeModule } from '@angular/cdk/tree';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatIconModule, MatSidenavModule } from '@angular/material';
+import {
+  MatIconModule,
+  MatSidenavModule,
+  MatTooltipModule
+} from '@angular/material';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { RouterModule } from '@angular/router';
 import { AppBarComponent } from './app-bar/app-bar.component';
@@ -12,6 +17,8 @@ import { ConfirmableSelectComponent } from './confirmable-select/confirmable-sel
 import { ContentPreviewComponent } from './content-preview/content-preview.component';
 import { EditableInlineTagListComponent } from './editable-inline-tag-list/editable-inline-tag-list.component';
 import { FileExtensionComponent } from './file-extension/file-extension.component';
+import { FolderDetailsDirective } from './folder/directives/folder-details.directive';
+import { FolderComponent } from './folder/folder.component';
 import { InfoPanelComponent } from './info-panel/info-panel.component';
 import { InputLabelComponent } from './input-label/input-label.component';
 import { LabelAndIconButtonComponent } from './label-and-icon-button/label-and-icon-button.component';
@@ -29,6 +36,7 @@ import { SideSheetHeaderDirective } from './side-sheet/directives/side-sheet-hea
 import { SideSheetPageDirective } from './side-sheet/directives/side-sheet-page.directive';
 import { SideSheetComponent } from './side-sheet/side-sheet.component';
 import { TreeNavComponent } from './tree-nav/tree-nav.component';
+import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness.pipe';
 
 @NgModule({
   imports: [
@@ -41,7 +49,10 @@ import { TreeNavComponent } from './tree-nav/tree-nav.component';
     ReactiveFormsModule,
     FormsModule,
     MatSelectModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatProgressSpinnerModule,
+    MatTooltipModule,
+    MatIconModule
   ],
   declarations: [
     SideSheetComponent,
@@ -65,7 +76,10 @@ import { TreeNavComponent } from './tree-nav/tree-nav.component';
     ConfirmableSelectComponent,
     FileExtensionComponent,
     PersonBadgeComponent,
-    PersonInitialsPipe
+    PersonInitialsPipe,
+    FolderDetailsDirective,
+    FolderComponent,
+    AdjustColorBrightnessPipe
   ],
   exports: [
     SideSheetComponent,
@@ -88,7 +102,10 @@ import { TreeNavComponent } from './tree-nav/tree-nav.component';
     PeriodLabelComponent,
     ConfirmableSelectComponent,
     FileExtensionComponent,
-    PersonBadgeComponent
+    PersonBadgeComponent,
+    FolderDetailsDirective,
+    FolderComponent,
+    AdjustColorBrightnessPipe
   ]
 })
 export class UiModule {}
