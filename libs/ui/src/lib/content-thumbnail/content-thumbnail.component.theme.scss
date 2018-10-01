@@ -7,10 +7,11 @@
   $ui-content-thumbnail_header-background-color: rgba(
     $ui-font-color-gray-2,
     $ui-content-thumbnail_header-background-opacity
-  );
+  ) !default;
   $ui-content-thumbnail_header_icon-font-size: 20px !default;
-  $ui-content-thumbnail_header_icon-line-height: 24px !default;
-  $ui-content-thumbnail_header_icon-text-color: $ui-font-color-active !default;
+  $ui-content-thumbnail_header_icon-line-height: $ui-content-thumbnail_header_icon-font-size +
+    4 !default;
+  $ui-content-thumbnail_header_icon-text-color: $ui-content-thumbnail-background-color !default;
   $ui-content-thumbnail_image-background-color: $ui-bg-color-gray-5 !default;
   $ui-content-thumbnail_title-text-color: $ui-font-color-active !default;
   /* * Grid */
@@ -24,7 +25,7 @@
   $ui-content-thumbnail_title--grid-font-size: 12px !default;
   $ui-content-thumbnail_title--grid-line-height: 16px !default;
   $ui-content-thumbnail_title--grid-padding: 13px !default;
-  $ui-content-thumbnail_actions--grid-height: 45px !default;
+  $ui-content-thumbnail_actions--grid-height: 40px !default;
   $ui-content-thumbnail_actions--grid-background-color: $ui-content-thumbnail_image-background-color !default;
   /* * Line */
   $ui-content-thumbnail--line-height: 48px !default;
@@ -53,7 +54,7 @@
       background-color: $ui-content-thumbnail_image-background-color;
       height: $ui-content-thumbnail_image--grid-height;
       width: $ui-content-thumbnail_image--grid-width;
-      margin: -1 * $ui-content-thumbnail_header--grid-height 0 0 0;
+      margin: -$ui-content-thumbnail_header--grid-height 0 0 0;
     }
     &__title {
       color: $ui-content-thumbnail_title-text-color;
@@ -95,6 +96,14 @@
         font-size: $ui-content-thumbnail_title--line-font-size;
         font-weight: $ui-content-thumbnail_title--line-font-weight;
         padding: $ui-content-thumbnail_title--line-padding;
+      }
+    }
+  }
+  // action buttons zichtbaar houden indien selected
+  .ui-list-view__list__item--selected {
+    .ui-content-thumbnail--line {
+      .ui-content-thumbnail__actions {
+        display: flex !important;
       }
     }
   }

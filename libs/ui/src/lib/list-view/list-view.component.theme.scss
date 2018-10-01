@@ -1,24 +1,31 @@
-$ui-list-view-font-family: $ui-font-family-2 !default;
-$ui-list-view-font-color: $ui-font-color-1 !default;
+$ui-list-view_item-font-family: $ui-font-family-2 !default;
+$ui-list-view_item-font-color: $ui-font-color-1 !default;
+$ui-list-view_item-border-width: 4px !default;
+$ui-list-view_item-spacing: 2px !default;
+
 $ui-list-view-selected-item-border-color: $ui-font-color-active !default;
-$ui-list-view-selection-overlay-bg-color: $ui-bg-color-2 !default;
-$ui-list-view-selection-overlay-circle-fg-color: $ui-list-view-selection-overlay-bg-color !default;
+$ui-list-view-selection-overlay-border-color: $ui-bg-color-2 !default;
+
+$ui-list-view-selection-overlay-circle-fg-color: $ui-list-view-selection-overlay-border-color !default;
 $ui-list-view-selection-overlay-circle-bg-color: $ui-font-color-active !default;
+$ui-list-view-selection-overlay-circle--not-selected-opacity: 0.4 !default;
+$ui-list-view-selection-overlay-circle--selected-opacity: 1 !default;
+$ui-list-view-selection-overlay-circle--selected-content: 'X' !default;
+$ui-list-view-selection-overlay-circle-radius: 22px !default;
 
 @mixin ui-list-view() {
   .ui-list-view__list {
     &__item {
-      color: $ui-list-view-font-color;
+      color: $ui-list-view-item-font-color;
 
       &__selectoverlay {
-        background-color: $ui-list-view-selection-overlay-bg-color;
-        border: none;
+        background-color: $ui-list-view-selection-overlay-border-color;
 
         &::before {
           content: '';
           color: $ui-list-view-selection-overlay-circle-fg-color;
           background-color: $ui-list-view-selection-overlay-circle-bg-color;
-          font-family: $ui-list-view-font-family;
+          font-family: $ui-list-view-item-font-family;
         }
       }
     }
@@ -35,23 +42,23 @@ $ui-list-view-selection-overlay-circle-bg-color: $ui-font-color-active !default;
             content: '';
             text-align: center;
             display: block;
-            width: 22px;
-            height: 22px;
-            line-height: 22px;
+            width: $ui-list-view-selection-overlay-circle-radius;
+            height: $ui-list-view-selection-overlay-circle-radius;
+            line-height: $ui-list-view-selection-overlay-circle-radius;
             float: left;
-            border-radius: 11px;
+            border-radius: 50%;
             position: absolute;
             z-index: 2;
           }
 
           &:not(.ui-list-view__list__item--selected)::before {
-            opacity: 0.4;
+            opacity: $ui-list-view-selection-overlay-circle--not-selected-opacity;
           }
           &.ui-list-view__list__item--selected::before {
-            content: 'X';
+            content: $ui-list-view-selection-overlay-circle--selected-content;
           }
           &:hover::before {
-            opacity: 1;
+            opacity: $ui-list-view-selection-overlay-circle--selected-opacity;
           }
         }
       }
@@ -63,13 +70,15 @@ $ui-list-view-selection-overlay-circle-bg-color: $ui-font-color-active !default;
           box-sizing: border-box;
           cursor: pointer;
           display: block;
-          margin-bottom: 5px;
+          margin-bottom: $ui-list-view_item-border-width +
+            $ui-list-view_item-spacing;
 
           &--selected {
             &:not(.ui-list-view__list__item__selectoverlay) {
-              border: $ui-list-view-selected-item-border-color 5px solid;
-              margin-top: -5px;
-              margin-bottom: 0px;
+              border: $ui-list-view-selected-item-border-color
+                $ui-list-view_item-border-width solid;
+              margin-top: -$ui-list-view_item-border-width;
+              margin-bottom: $ui-list-view_item-spacing;
             }
           }
 
@@ -88,7 +97,7 @@ $ui-list-view-selection-overlay-circle-bg-color: $ui-font-color-active !default;
       /*Grid*/
       &--grid {
         & .ui-list-view__list__item {
-          margin: 5px;
+          margin: $ui-list-view_item-border-width + $ui-list-view_item-spacing;
           position: relative;
           box-sizing: border-box;
           cursor: pointer;
@@ -96,14 +105,16 @@ $ui-list-view-selection-overlay-circle-bg-color: $ui-font-color-active !default;
 
           &--selected {
             &:not(.ui-list-view__list__item__selectoverlay) {
-              border: $ui-list-view-selected-item-border-color 5px solid;
-              margin: 0px;
+              border: $ui-list-view-selected-item-border-color
+                $ui-list-view_item-border-width solid;
+              margin: $ui-list-view_item-spacing;
             }
           }
 
           &__selectoverlay {
-            border: $ui-list-view-selection-overlay-bg-color 5px solid;
-            margin: 0px;
+            border: $ui-list-view-selection-overlay-border-color
+              $ui-list-view_item-border-width solid;
+            margin: $ui-list-view_item-spacing;
 
             &::before {
               margin-left: 3px;
