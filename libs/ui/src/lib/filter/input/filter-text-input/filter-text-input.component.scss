@@ -1,24 +1,13 @@
-.ui-filter-text-input {
-  min-width: 150px;
-  max-width: 1000px;
-  width: 100%;
+$ui-filter-text-input-min-width: 150px;
+$ui-filter-text-input-max-width: 500px;
 
-  $ui-filter-text-input-color: black;
+.ui-filter-text-input {
+  min-width: $ui-filter-text-input-min-width;
+  max-width: $ui-filter-text-input-max-width;
+  width: 100%;
 
   .ui-filter-text-input-form {
     width: 100%;
     border: 0px;
-
-    .placeholder {
-      color: $ui-filter-text-input-color;
-    }
-
-    .inputField {
-      color: $ui-filter-text-input-color;
-    }
-
-    .button {
-      color: $ui-filter-text-input-color;
-    }
   }
 }

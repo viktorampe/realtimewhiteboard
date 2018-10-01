@@ -55,7 +55,7 @@ describe('FilterTextInputComponent', () => {
 
   it('should change placeholder text', () => {
     component.setPlaceHolder(mockData.placeHolder);
-    expect(component.placeholder).toEqual(mockData.placeHolder);
+    expect(component.getPlaceHolder()).toEqual(mockData.placeHolder);
   });
 
   it('should change input value text', () => {

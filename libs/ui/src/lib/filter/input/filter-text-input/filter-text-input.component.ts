@@ -1,54 +1,94 @@
-import { OverlayContainer } from '@angular/cdk/overlay';
-import { Component, HostBinding, OnDestroy } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { Observable, Subscription } from 'rxjs';
-import { FilterTextInputComponentInterface } from './filter-text-input.component.interface';
+import { Component, Input, OnDestroy } from '@angular/core';
+import { Observable } from 'rxjs';
+import { FilterTextInputViewModel } from './filter-text-input.viewmodel';
+
+export enum FilterTextInputTheme {
+  light = 'light',
+  dark = 'dark'
+}
 
 @Component({
   selector: 'campus-filter-text-input',
   templateUrl: './filter-text-input.component.html',
   styleUrls: ['./filter-text-input.component.scss']
 })
-export class FilterTextInputComponent
-  implements FilterTextInputComponentInterface, OnDestroy {
-  public input$ = new FormControl();
-  public placeholder: string = 'Filter';
+export class FilterTextInputComponent implements OnDestroy {
+  constructor(private viewModel: FilterTextInputViewModel) {}
 
-  @HostBinding('class') componentCssClass;
-  constructor(public overlayContainer: OverlayContainer) {}
+  @Input('theme') theme: FilterTextInputTheme;
 
-  //for some bizar reason async pipes refused to work in our html file, making this weirdness necessary
-  private hasData: boolean = false;
-  private readonly formSubscription: Subscription = this.getInput().subscribe(
-    (data: string) => {
-      if (data !== null && data.length > 0) {
-        this.hasData = true;
-      } else {
-        this.hasData = false;
-      }
-    }
-  );
+  /**
+   * sets the input value of the textfield
+   *
+   * @param {string} value
+   * @memberof FilterTextInputComponent
+   */
+  setInput(value: string): void {
+    this.viewModel.setInput(value);
+  }
+
+  /**
+   * clears the input value of the textfield
+   *
+   * @param {string} value
+   * @memberof FilterTextInputComponent
+   */
+  clear(): void {
+    return this.viewModel.clear();
+  }
+
+  /**
+   * returns whether or not the clear button is visible
+   *
+   * @param {string} value
+   * @memberof FilterTextInputComponent
+   */
+  isClearButtonVisible(): boolean {
+    return this.viewModel.isClearButtonVisible();
+  }
+
+  /**
+   * gets the input of the textfield as an observable
+   *
+   * @returns {Observable<string>}
+   * @memberof FilterTextInputComponent
+   */
+  getInput(): Observable<string> {
+    return this.viewModel.getInput();
+  }
+
+  /**
+   * sets the placeholder text
+   *
+   * @param {string} placeholder
+   * @memberof FilterTextInputComponent
+   */
+  setPlaceHolder(placeholder: string): void {
+    this.viewModel.setPlaceHolder(placeholder);
+  }
+
+  /**
+   * gets the placeholder text
+   *
+   * @returns {string}
+   * @memberof FilterTextInputComponent
+   */
+  getPlaceHolder(): string {
+    return this.viewModel.getPlaceHolder();
+  }
+
+  /**
+   * set the theme that is to be used for this component
+   *
+   * @param {FilterTextInputTheme} theme
+   * @memberof FilterTextInputComponent
+   */
+  setTheme(theme: FilterTextInputTheme) {
+    this.theme = theme;
+    //todo implement theming
+  }
 
   ngOnDestroy() {
-    this.formSubscription.unsubscribe();
-  }
-
-  setInput(value: string): void {
-    this.input$.setValue(value);
-  }
-  clear(): void {
-    this.setInput('');
-  }
-
-  isClearButtonVisible(): boolean {
-    return this.hasData;
-  }
-
-  getInput(): Observable<string> {
-    return this.input$.valueChanges;
-  }
-
-  setPlaceHolder(placeholder: string): void {
-    this.placeholder = placeholder;
+    this.viewModel.destroy();
   }
 }
