@@ -62,8 +62,6 @@ describe('ListViewComponent', () => {
   beforeEach(() => {
     // regular component
     fixture = TestBed.createComponent(ListViewComponent);
-    component = fixture.componentInstance;
-
     fixture.detectChanges();
 
     // templated component

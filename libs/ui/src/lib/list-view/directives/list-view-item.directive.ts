@@ -49,6 +49,11 @@ export class ListViewItemDirective implements AfterContentInit {
     private host: ListViewItemInterface
   ) {}
 
+  /**
+   * Sets properties on host Component after it has been projected.
+   *
+   * @memberof ListViewItemDirective
+   */
   ngAfterContentInit() {
     this.host.listFormat = this.parentList.listFormat;
   }
