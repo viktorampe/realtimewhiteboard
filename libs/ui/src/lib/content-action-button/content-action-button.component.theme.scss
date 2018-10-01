@@ -1,7 +1,7 @@
 @mixin ui-action-button {
   $ui-action-button-font-size: 20px !default;
   $ui-action-button-padding: 4px !default;
-  $ui-action-button-color: $ui-bg-color-2;
+  $ui-action-button-color: $ui-bg-color-2 !default;
   $ui-action-button-background-color: $ui-font-color-active !default;
   $ui-action-button-margin-top: 2px !default;
   $ui-action-button-margin-right: 2px !default;

@@ -14,6 +14,8 @@ import { ListViewItemInterface } from '../list-view/interfaces/list-view-item';
   ]
 })
 export class ContentThumbnailComponent implements ListViewItemInterface {
+  protected listFormatEnum = ListFormat;
+
   @Input() listFormat: ListFormat;
   @Input() title: string;
   @Input() contentTypeClass: string;
