@@ -29,6 +29,7 @@ import { AppComponent } from './app.component';
     DalModule.forRoot(),
     RouterModule.forRoot(
       [
+        { path: 'login', loadChildren: '@campus/devlib#DevlibModule' },
         {
           path: 'tasks',
           loadChildren: '@campus/pages/tasks#PagesTasksModule'

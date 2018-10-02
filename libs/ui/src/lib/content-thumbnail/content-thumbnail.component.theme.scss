@@ -1,0 +1,110 @@
+@mixin ui-content-thumbnail {
+  $ui-content-thumbnail-background-color: $ui-bg-color-2 !default;
+  $ui-content-thumbnail-border-width: 1px !default;
+  $ui-content-thumbnail-border-color: $ui-bg-color-3 !default;
+
+  $ui-content-thumbnail_header-background-opacity: 0.4 !default;
+  $ui-content-thumbnail_header-background-color: rgba(
+    $ui-font-color-gray-2,
+    $ui-content-thumbnail_header-background-opacity
+  ) !default;
+  $ui-content-thumbnail_header_icon-font-size: 20px !default;
+  $ui-content-thumbnail_header_icon-line-height: $ui-content-thumbnail_header_icon-font-size +
+    4 !default;
+  $ui-content-thumbnail_header_icon-text-color: $ui-content-thumbnail-background-color !default;
+  $ui-content-thumbnail_image-background-color: $ui-bg-color-gray-5 !default;
+  $ui-content-thumbnail_title-text-color: $ui-font-color-active !default;
+  /* * Grid */
+  $ui-content-thumbnail--grid-height: 235px !default;
+  $ui-content-thumbnail--grid-width: 170px !default;
+  $ui-content-thumbnail_header--grid-height: $ui-content-thumbnail_header_icon-line-height !default;
+  $ui-content-thumbnail_header--grid-width: 100% !default;
+  $ui-content-thumbnail_header_icon--grid-margin-left: 4px !default;
+  $ui-content-thumbnail_image--grid-height: 120px !default;
+  $ui-content-thumbnail_image--grid-width: 100% !default;
+  $ui-content-thumbnail_title--grid-font-size: 12px !default;
+  $ui-content-thumbnail_title--grid-line-height: 16px !default;
+  $ui-content-thumbnail_title--grid-padding: 13px !default;
+  $ui-content-thumbnail_actions--grid-height: 40px !default;
+  $ui-content-thumbnail_actions--grid-background-color: $ui-content-thumbnail_image-background-color !default;
+  /* * Line */
+  $ui-content-thumbnail--line-height: 48px !default;
+  $ui-content-thumbnail--line-width: 100% !default;
+  $ui-content-thumbnail_header--line-width: 120px !default;
+  $ui-content-thumbnail_header--padding-left: 20px !default;
+  $ui-content-thumbnail_title--line-font-size: 16px !default;
+  $ui-content-thumbnail_title--line-line-height: 22px !default;
+  $ui-content-thumbnail_title--line-font-weight: 400 !default;
+  $ui-content-thumbnail_title--line-padding: (
+      $ui-content-thumbnail--line-height -
+        $ui-content-thumbnail_title--line-line-height
+    )/2;
+  .ui-content-thumbnail {
+    border-color: $ui-content-thumbnail-border-width solid
+      $ui-content-thumbnail_border-color;
+    background-color: $ui-content-thumbnail_background-color;
+    &__header {
+      & .ui-content-thumbnail__icon {
+        font-size: $ui-content-thumbnail_header_icon-font-size;
+        line-height: $ui-content-thumbnail_header_icon-line-height;
+        color: $ui-content-thumbnail_header_icon-text-color;
+      }
+    }
+    &__image {
+      background-color: $ui-content-thumbnail_image-background-color;
+      height: $ui-content-thumbnail_image--grid-height;
+      width: $ui-content-thumbnail_image--grid-width;
+      margin: -$ui-content-thumbnail_header--grid-height 0 0 0;
+    }
+    &__title {
+      color: $ui-content-thumbnail_title-text-color;
+    }
+    /* Grid */
+    &--grid {
+      width: $ui-content-thumbnail--grid-width;
+      height: $ui-content-thumbnail--grid-height;
+      & .ui-content-thumbnail__header {
+        background: $ui-content-thumbnail_header-background-color;
+        height: $ui-content-thumbnail_header--grid-height;
+        & .ui-content-thumbnail__icon {
+          margin-left: $ui-content-thumbnail_header_icon--grid-margin-left;
+        }
+      }
+      & .ui-content-thumbnail__title {
+        font-size: $ui-content-thumbnail_title--grid-font-size;
+        line-height: $ui-content-thumbnail_title--grid-line-height;
+        padding: $ui-content-thumbnail_title--grid-padding;
+      }
+      & .ui-content-thumbnail__actions {
+        background-color: $ui-content-thumbnail_actions--grid-background-color;
+        height: $ui-content-thumbnail_actions--grid-height;
+      }
+    }
+    /* line */
+    &--line {
+      width: $ui-content-thumbnail--line-width;
+      height: $ui-content-thumbnail--line-height;
+      & .ui-content-thumbnail__header {
+        padding-left: $ui-content-thumbnail_header--padding-left;
+        width: $ui-content-thumbnail_header--line-width;
+        & .ui-content-thumbnail__icon {
+          color: $ui-content-thumbnail_header_icon-text-color;
+        }
+      }
+      & .ui-content-thumbnail__title {
+        line-height: $ui-content-thumbnail_title--line-line-height;
+        font-size: $ui-content-thumbnail_title--line-font-size;
+        font-weight: $ui-content-thumbnail_title--line-font-weight;
+        padding: $ui-content-thumbnail_title--line-padding;
+      }
+    }
+  }
+  // action buttons zichtbaar houden indien selected
+  .ui-list-view__list__item--selected {
+    .ui-content-thumbnail--line {
+      .ui-content-thumbnail__actions {
+        display: flex !important;
+      }
+    }
+  }
+}
