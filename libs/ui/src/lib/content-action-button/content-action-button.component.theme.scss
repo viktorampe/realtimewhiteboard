@@ -1,0 +1,17 @@
+@mixin ui-action-button {
+  $ui-action-button-font-size: 20px !default;
+  $ui-action-button-padding: 4px !default;
+  $ui-action-button-color: $ui-bg-color-2 !default;
+  $ui-action-button-background-color: $ui-font-color-active !default;
+  $ui-action-button-margin-top: 2px !default;
+  $ui-action-button-margin-right: 2px !default;
+
+  .ui-action-button {
+    font-size: $ui-action-button-font-size;
+    padding: $ui-action-button-padding;
+    color: $ui-action-button-color;
+    background-color: $ui-action-button-background-color;
+    margin-left: $ui-action-button-margin-top;
+    margin-right: $ui-action-button-margin-right;
+  }
+}

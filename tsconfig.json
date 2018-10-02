@@ -11,7 +11,6 @@
     "lib": ["es2017", "dom"],
     "baseUrl": ".",
     "paths": {
-      "@campus/devlib": ["libs/devlib/src/index.ts"],
       "@campus/pages/bundles": ["libs/pages/bundles/src/index.ts"],
       "@campus/pages/alerts": ["libs/pages/alerts/src/index.ts"],
       "@campus/pages/logout": ["libs/pages/logout/src/index.ts"],
@@ -20,7 +19,8 @@
       "@campus/pages/reports": ["libs/pages/reports/src/index.ts"],
       "@campus/pages/tasks": ["libs/pages/tasks/src/index.ts"],
       "@campus/ui": ["libs/ui/src/index.ts"],
-      "@campus/dal": ["libs/dal/src/index.ts"]
+      "@campus/dal": ["libs/dal/src/index.ts"],
+      "@campus/pages/shared": ["libs/pages/shared/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

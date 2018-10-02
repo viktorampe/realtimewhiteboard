@@ -44,6 +44,11 @@
     &--icon {
       height: 107px * $file-extension-scale;
       width: 84px * $file-extension-scale;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      margin: auto;
 
       &:before {
         position: absolute;
