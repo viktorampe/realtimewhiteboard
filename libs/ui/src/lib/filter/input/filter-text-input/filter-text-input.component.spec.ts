@@ -78,9 +78,6 @@ describe('FilterTextInputComponent', () => {
   it('clicking clear button should clear the input field', () => {
     let text: string = '';
     component.setInput(mockData.text);
-    component.text.subscribe((e: string) => {
-      console.log(e);
-    });
     fixture.detectChanges();
     let test = fixture.debugElement.query(By.css('button'));
     test.triggerEventHandler('click', null);
