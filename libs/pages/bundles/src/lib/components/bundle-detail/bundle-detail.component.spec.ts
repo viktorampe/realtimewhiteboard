@@ -17,10 +17,6 @@ describe('BundleDetailComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
   /*
     Analyse bundle detail page (Student version)
   */
@@ -56,4 +52,38 @@ describe('BundleDetailComponent', () => {
   it('should show the item descriptions in the infopanel if multiple items are selected', () => {});
 
   it('should show an error message if a bundle is no longer available', () => {});
+
+  /*
+    Analyse needed data bundle detail page (Student version)
+  */
+  it('should get the page header info', () => {});
+  // bundle icon
+  // title
+  // subtitle
+
+  it('should get an array of educontents', () => {});
+  // type icon
+  // file extension
+  // preview image
+  // title
+  // description
+  // method logo src
+  // current status
+
+  it('should get an array of actions per educontent', () => {});
+  // action icon
+  // tooltip
+  // function to call
+  // function parameters
+
+  it('should get a marker when there are afwijkende instellingen per educontent', () => {});
+
+  it('should get the teacherinfo', () => {});
+  // name
+  // avatar
+
+  it('should get the errormessage when there isnt any content', () => {});
+
+  it('should get the default list layout (gird/line) ?', () => {});
+  // is dit iets wat de pagina bijhoudt? of komt dat uit de store?
 });

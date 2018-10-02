@@ -29,6 +29,7 @@ import { SideSheetHeaderDirective } from './side-sheet/directives/side-sheet-hea
 import { SideSheetPageDirective } from './side-sheet/directives/side-sheet-page.directive';
 import { SideSheetComponent } from './side-sheet/side-sheet.component';
 import { TreeNavComponent } from './tree-nav/tree-nav.component';
+import { DetailPageComponent } from './components/detail-page/detail-page.component';
 
 @NgModule({
   imports: [
@@ -65,7 +66,8 @@ import { TreeNavComponent } from './tree-nav/tree-nav.component';
     ConfirmableSelectComponent,
     FileExtensionComponent,
     PersonBadgeComponent,
-    PersonInitialsPipe
+    PersonInitialsPipe,
+    DetailPageComponent
   ],
   exports: [
     SideSheetComponent,
@@ -88,7 +90,8 @@ import { TreeNavComponent } from './tree-nav/tree-nav.component';
     PeriodLabelComponent,
     ConfirmableSelectComponent,
     FileExtensionComponent,
-    PersonBadgeComponent
+    PersonBadgeComponent,
+    DetailPageComponent
   ]
 })
 export class UiModule {}
