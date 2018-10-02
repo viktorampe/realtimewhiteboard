@@ -1,6 +1,12 @@
-import { Component, Input, OnDestroy } from '@angular/core';
-import { Observable } from 'rxjs';
-import { FilterTextInputViewModel } from './filter-text-input.viewmodel';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  Output
+} from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { Observable, Subscription } from 'rxjs';
 
 export enum FilterTextInputTheme {
   light = 'light',
@@ -13,9 +19,24 @@ export enum FilterTextInputTheme {
   styleUrls: ['./filter-text-input.component.scss']
 })
 export class FilterTextInputComponent implements OnDestroy {
-  constructor(private viewModel: FilterTextInputViewModel) {}
-
   @Input('theme') theme: FilterTextInputTheme;
+  @Input('placeholder') placeholder: string = 'Filter';
+  @Output() text = new EventEmitter<string>();
+
+  private input = new FormControl();
+
+  //for some bizar reason async pipes refused to work in our html file, making this weirdness necessary
+  private hasData: boolean = false;
+  private readonly formSubscription: Subscription = this.getInput().subscribe(
+    (data: string) => {
+      this.text.emit(data);
+      if (data !== null && data.length > 0) {
+        this.hasData = true;
+      } else {
+        this.hasData = false;
+      }
+    }
+  );
 
   /**
    * sets the input value of the textfield
@@ -24,7 +45,7 @@ export class FilterTextInputComponent implements OnDestroy {
    * @memberof FilterTextInputComponent
    */
   setInput(value: string): void {
-    this.viewModel.setInput(value);
+    this.input.setValue(value);
   }
 
   /**
@@ -34,17 +55,7 @@ export class FilterTextInputComponent implements OnDestroy {
    * @memberof FilterTextInputComponent
    */
   clear(): void {
-    return this.viewModel.clear();
-  }
-
-  /**
-   * returns whether or not the clear button is visible
-   *
-   * @param {string} value
-   * @memberof FilterTextInputComponent
-   */
-  isClearButtonVisible(): boolean {
-    return this.viewModel.isClearButtonVisible();
+    this.setInput('');
   }
 
   /**
@@ -53,42 +64,21 @@ export class FilterTextInputComponent implements OnDestroy {
    * @returns {Observable<string>}
    * @memberof FilterTextInputComponent
    */
-  getInput(): Observable<string> {
-    return this.viewModel.getInput();
+  private getInput(): Observable<string> {
+    return this.input.valueChanges;
   }
 
   /**
-   * sets the placeholder text
+   * enter button is pressed, make sure it returns false to prevent default behavior
    *
-   * @param {string} placeholder
-   * @memberof FilterTextInputComponent
+   * @returns {boolean}
+   * @memberof FilterTextInputViewModel
    */
-  setPlaceHolder(placeholder: string): void {
-    this.viewModel.setPlaceHolder(placeholder);
-  }
-
-  /**
-   * gets the placeholder text
-   *
-   * @returns {string}
-   * @memberof FilterTextInputComponent
-   */
-  getPlaceHolder(): string {
-    return this.viewModel.getPlaceHolder();
-  }
-
-  /**
-   * set the theme that is to be used for this component
-   *
-   * @param {FilterTextInputTheme} theme
-   * @memberof FilterTextInputComponent
-   */
-  setTheme(theme: FilterTextInputTheme) {
-    this.theme = theme;
-    //todo implement theming
+  enterPressed(): boolean {
+    return false;
   }
 
   ngOnDestroy() {
-    this.viewModel.destroy();
+    this.formSubscription.unsubscribe();
   }
 }

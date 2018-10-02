@@ -7,11 +7,9 @@ import {
   MatFormFieldModule,
   MatIconModule,
   MatInputModule,
-  MatSelectModule,
-  MatSidenavModule
+  MatSelectModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterModule } from '@angular/router';
 import { FilterTextInputComponent } from './filter-text-input.component';
 
 describe('FilterTextInputComponent', () => {
@@ -32,12 +30,10 @@ describe('FilterTextInputComponent', () => {
         FormsModule,
         ReactiveFormsModule,
         CommonModule,
-        MatSidenavModule,
         MatFormFieldModule,
         MatInputModule,
         LayoutModule,
         MatIconModule,
-        RouterModule,
         MatSelectModule
       ]
     }).compileComponents();
@@ -53,23 +49,10 @@ describe('FilterTextInputComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should change placeholder text', () => {
-    component.setPlaceHolder(mockData.placeHolder);
-    expect(component.getPlaceHolder()).toEqual(mockData.placeHolder);
-  });
-
   it('should change input value text', () => {
-    component.getInput().subscribe((data: string) => {
-      expect(data).toBe(mockData.text);
-    });
+    let text: string;
+    component.text.subscribe((e: string) => (text = e));
     component.setInput(mockData.text);
-  });
-
-  it('should change clear button visibility', () => {
-    component.getInput().subscribe((data: string) => {
-      console.log(component.isClearButtonVisible());
-      expect(component.isClearButtonVisible()).toBeTruthy();
-    });
-    component.setInput(mockData.text);
+    expect(text).toEqual(text);
   });
 });

@@ -1,17 +1,17 @@
 <form class="ui-filter-text-input">
-  <mat-form-field class="ui-filter-text-input-form">
+  <mat-form-field class="ui-filter-text-input__form">
     <input matInput
            name="filter-input"
            type="text"
-           (keydown.enter)="viewModel.enterPressed()"
-           [formControl]="viewModel.input$">
-    <mat-placeholder>{{viewModel.getPlaceHolder()}}</mat-placeholder>
+           (keydown.enter)="enterPressed()"
+           [formControl]="input">
+    <mat-placeholder>{{placeholder}}</mat-placeholder>
     <button mat-icon-button
             matSuffix
-            *ngIf="viewModel.isClearButtonVisible()"
+            *ngIf="hasData"
             mat-icon-button
             aria-label="Clear"
-            (click)="viewModel.clear()">
+            (click)="clear()">
       <mat-icon>close</mat-icon>
     </button>
   </mat-form-field>
