@@ -46,7 +46,7 @@ export class ListViewItemDirective implements AfterContentInit {
 
   constructor(
     private parentList: ListViewComponent,
-    private host: ListViewItemInterface
+    public host: ListViewItemInterface
   ) {}
 
   /**
