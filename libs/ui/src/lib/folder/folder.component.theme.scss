@@ -59,7 +59,6 @@
             width: $ui-folder_icon--grid-width;
             height: $ui-folder_icon--grid-height;
           }
-
           mat-progress-spinner svg {
             width: $ui-folder_icon-wrapper--grid-width;
             height: $ui-folder_icon-wrapper--grid-height;
@@ -67,16 +66,13 @@
         }
       }
     }
-
     &__title {
       padding-left: $ui-folder-padding;
     }
-
     &__info {
       height: $ui-folder_info--grid-height;
       padding: $ui-folder-padding;
     }
-
     &__badge {
       top: -$ui-folder_badge-height/2;
       height: $ui-folder_badge-height;
@@ -97,7 +93,6 @@
         &::after {
           border: 1px solid $ui-folder_badge-background-color;
         }
-
         &--error {
           background-color: $ui-folder_badge--error-background-color;
           border-color: $ui-folder_badge--error-background-color;
@@ -105,7 +100,6 @@
         }
       }
     }
-
     &--line {
       height: $ui-folder--line-height;
       border-top-width: $ui-folder--line-border-top-width;
@@ -114,7 +108,6 @@
         &__wrapper {
           margin-right: $ui-folder--line-height;
         }
-
         &__header {
           padding-right: $ui-folder-padding;
           &-icon {
@@ -131,7 +124,6 @@
                     $ui-folder_icon-wrapper-border-width
                 );
               }
-
               mat-progress-spinner svg {
                 width: $ui-folder_icon-wrapper--line-width;
                 height: $ui-folder_icon-wrapper--line-height;
@@ -139,11 +131,9 @@
             }
           }
         }
-
         &__title {
           line-height: $ui-folder--line-height;
         }
-
         &__info {
           padding-right: $ui-folder-padding;
           &::after {
