@@ -1,0 +1,18 @@
+<form class="ui-filter-text-input">
+  <mat-form-field class="ui-filter-text-input__form">
+    <input matInput
+           name="filter-input"
+           type="text"
+           (keydown.enter)="enterPressed()"
+           [formControl]="input">
+    <mat-placeholder>{{placeholder}}</mat-placeholder>
+    <button mat-icon-button
+            matSuffix
+            *ngIf="hasData"
+            mat-icon-button
+            aria-label="Clear"
+            (click)="clear()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+</form>
