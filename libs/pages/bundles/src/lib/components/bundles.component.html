@@ -65,12 +65,13 @@
                             fileExtensionClass="zip">
   </campus-content-thumbnail>
 </campus-list-view>
-<div class="bundles-container">
-  <p>
-    bundles works!
-  </p>
+
+
+
+<campus-list-view [multiSelect]="true"
+                  listFormat="line">
   <campus-folder [itemCount]="2"
-                 listFormat="line"
+                 campusListItem
                  [title]="bundleData.name"
                  gradientId="485235"
                  backgroundColor="#485235"
@@ -81,7 +82,7 @@
   </campus-folder>
 
   <campus-folder [itemCount]="2"
-                 listFormat="line"
+                 campusListItem
                  [title]="bundleData.name"
                  gradientId="990000"
                  backgroundColor="#990000"
@@ -92,7 +93,7 @@
 
 
   <campus-folder [itemCount]="2"
-                 listFormat="line"
+                 campusListItem
                  [title]="bundleData.name"
                  gradientId="485235"
                  backgroundColor="#485235"
@@ -102,7 +103,7 @@
   </campus-folder>
 
   <campus-folder [itemCount]="2"
-                 listFormat="line"
+                 campusListItem
                  [title]="bundleData.name"
                  gradientId="485235"
                  backgroundColor="#485235"
@@ -110,9 +111,12 @@
     <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
     <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
   </campus-folder>
+</campus-list-view>
 
+<campus-list-view [multiSelect]="true"
+                  listFormat="grid">
   <campus-folder [itemCount]="0"
-                 listFormat="grid"
+                 campusListItem
                  [title]="bundleData.name"
                  gradientId="485235"
                  backgroundColor="#485235"
@@ -123,7 +127,7 @@
   </campus-folder>
 
   <campus-folder [itemCount]="2"
-                 listFormat="grid"
+                 campusListItem
                  [title]="bundleData.name"
                  gradientId="990000"
                  backgroundColor="#990000"
@@ -134,7 +138,7 @@
 
 
   <campus-folder [itemCount]="2"
-                 listFormat="grid"
+                 campusListItem
                  [title]="bundleData.name"
                  gradientId="485235"
                  backgroundColor="#485235"
@@ -144,7 +148,7 @@
   </campus-folder>
 
   <campus-folder [itemCount]="2"
-                 listFormat="grid"
+                 campusListItem
                  [title]="bundleData.name"
                  gradientId="485235"
                  backgroundColor="#485235"
@@ -152,4 +156,4 @@
     <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
     <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
   </campus-folder>
-</div>
+</campus-list-view>
