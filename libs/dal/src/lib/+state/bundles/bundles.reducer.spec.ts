@@ -1,9 +1,9 @@
 import { BundlesLoaded } from './bundles.actions';
 import {
+  bundlesReducer,
   BundlesState,
   Entity,
-  initialState,
-  bundlesReducer
+  initialState
 } from './bundles.reducer';
 
 describe('Bundles Reducer', () => {

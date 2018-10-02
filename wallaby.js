@@ -8,6 +8,7 @@ module.exports = function() {
 
   return {
     files: [
+      'tsconfig.json',
       'wallaby-test-setup.ts',
       'jest.config.js',
       'apps/**/*.+(ts|html|json|snap|css|less|sass|scss|jpg|jpeg|gif|png|svg)',
@@ -36,9 +37,18 @@ module.exports = function() {
     preprocessors: {
       'src/**/*.js': jestTransform
     },
-    
+
     setup: function(wallaby) {
       var jestConfig = require('./jest.config');
+      if (!jestConfig.moduleNameMapper) {
+        var paths = require('./tsconfig').compilerOptions.paths;
+        var jestModuleMaps = {};
+        Object.keys(paths).forEach(key => {
+          jestModuleMaps[key] =
+            '<rootDir>/' + paths[key][0].replace('.ts', '.js');
+        });
+        jestConfig.moduleNameMapper = jestModuleMaps;
+      }
       jestConfig.setupTestFrameworkScriptFile =
         '<rootDir>/wallaby-test-setup.js';
       wallaby.testFramework.configure(jestConfig);

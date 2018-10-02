@@ -8,6 +8,9 @@
     "nx.json": "*"
   },
   "projects": {
+    "devlib": {
+      "tags": []
+    },
     "polpo-classroom-web": {
       "tags": []
     },
@@ -39,6 +42,9 @@
       "tags": []
     },
     "dal": {
+      "tags": []
+    },
+    "pages-shared": {
       "tags": []
     }
   }

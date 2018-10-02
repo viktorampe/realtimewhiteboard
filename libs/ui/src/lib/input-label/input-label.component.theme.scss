@@ -1,0 +1,27 @@
+@mixin ui_input-label_theme() {
+  .ui_input-label {
+    &__title {
+      color: $ui-bg-color-gray-2;
+    }
+    &__text {
+      &__label-holder {
+        &__label {
+          color: $ui-font-color-gray-3;
+        }
+        &__edit-icon {
+          background-color: $ui-bg-color-gray-3;
+        }
+      }
+    }
+    &__input-holder {
+      &__icons-holder {
+        &__confirm-icon {
+          background-color: $ui-bg-color-gray-3;
+        }
+        &__cancel-icon {
+          background-color: $ui-bg-color-gray-3;
+        }
+      }
+    }
+  }
+}
