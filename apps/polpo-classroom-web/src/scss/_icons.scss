@@ -1,3 +1,11 @@
+// icon basic style
+[class*='icon-'] {
+  font-style: normal;
+  font-weight: normal;
+  text-transform: none;
+  line-height: 1;
+}
+
 $icons: (
   aardrijkskunde: polpo '\e923',
   aardrijkskunde-lg: polpo '\e961',
@@ -123,3 +131,20 @@ $icons: (
   ww-lg: polpo '\e964',
   youtube: polpo '\e971'
 );
+
+// icon mixin
+@mixin icon($cls, $icon-bundle) {
+  $font: nth($icon-bundle, 1);
+  $unicode: nth($icon-bundle, 2);
+  .#{$cls} {
+    font-family: $font;
+    &:before {
+      content: $unicode;
+    }
+  }
+}
+
+// create icon classes
+@each $class, $icon in $icons {
+  @include icon(icon-#{$class}, $icon);
+}

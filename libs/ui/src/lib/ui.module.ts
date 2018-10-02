@@ -9,17 +9,25 @@ import {
   MatFormFieldModule,
   MatIconModule,
   MatInputModule,
+  MatProgressSpinnerModule,
   MatSelectModule,
-  MatSidenavModule
+  MatSidenavModule,
+  MatTooltipModule
 } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { AppBarComponent } from './app-bar/app-bar.component';
 import { ConfirmableSelectComponent } from './confirmable-select/confirmable-select.component';
+import { ContentActionButtonComponent } from './content-action-button/content-action-button.component';
 import { ContentPreviewComponent } from './content-preview/content-preview.component';
+import { ContentThumbnailComponent } from './content-thumbnail/content-thumbnail.component';
 import { EditableInlineTagListComponent } from './editable-inline-tag-list/editable-inline-tag-list.component';
 import { FileExtensionComponent } from './file-extension/file-extension.component';
 import { FilterTextInputComponent } from './filter/input/filter-text-input/filter-text-input.component';
+import { FolderDetailsDirective } from './folder/directives/folder-details.directive';
+import { FolderComponent } from './folder/folder.component';
 import { InfoPanelComponent } from './info-panel/info-panel.component';
+import { ListViewItemDirective } from './list-view/directives/list-view-item.directive';
+import { ListViewComponent } from './list-view/list-view.component';
 import { PageHeaderComponent } from './page-header/page-header.component';
 import { PersonBadgeComponent } from './person-badge/person-badge.component';
 import { PersonInitialsPipe } from './person-badge/pipes/person-initials.pipe';
@@ -33,6 +41,7 @@ import { SideSheetHeaderDirective } from './side-sheet/directives/side-sheet-hea
 import { SideSheetPageDirective } from './side-sheet/directives/side-sheet-page.directive';
 import { SideSheetComponent } from './side-sheet/side-sheet.component';
 import { TreeNavComponent } from './tree-nav/tree-nav.component';
+import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness.pipe';
 
 @NgModule({
   imports: [
@@ -48,7 +57,14 @@ import { TreeNavComponent } from './tree-nav/tree-nav.component';
     MatIconModule,
     RouterModule,
     CdkTreeModule,
-    MatSelectModule
+    MatSelectModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatSelectModule,
+    MatFormFieldModule,
+    MatProgressSpinnerModule,
+    MatTooltipModule,
+    MatIconModule
   ],
   declarations: [
     FilterTextInputComponent,
@@ -70,7 +86,19 @@ import { TreeNavComponent } from './tree-nav/tree-nav.component';
     PersonInitialsPipe,
     ContentPreviewComponent,
     ConfirmableSelectComponent,
-    EditableInlineTagListComponent
+    EditableInlineTagListComponent,
+    FileExtensionComponent,
+    TreeNavComponent,
+    ContentThumbnailComponent,
+    ContentActionButtonComponent,
+    ListViewComponent,
+    ListViewItemDirective,
+    TreeNavComponent,
+    PersonBadgeComponent,
+    PersonInitialsPipe,
+    FolderDetailsDirective,
+    FolderComponent,
+    AdjustColorBrightnessPipe
   ],
   exports: [
     FilterTextInputComponent,
@@ -91,7 +119,18 @@ import { TreeNavComponent } from './tree-nav/tree-nav.component';
     PersonBadgeComponent,
     ContentPreviewComponent,
     ConfirmableSelectComponent,
-    EditableInlineTagListComponent
+    EditableInlineTagListComponent,
+    FileExtensionComponent,
+    TreeNavComponent,
+    ContentThumbnailComponent,
+    ContentActionButtonComponent,
+    ListViewComponent,
+    ListViewItemDirective,
+    TreeNavComponent,
+    PersonBadgeComponent,
+    FolderDetailsDirective,
+    FolderComponent,
+    AdjustColorBrightnessPipe
   ]
 })
 export class UiModule {}
