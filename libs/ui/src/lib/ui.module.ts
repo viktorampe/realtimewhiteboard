@@ -118,7 +118,6 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     ListViewComponent,
     ListViewItemDirective,
     TreeNavComponent,
-    PersonBadgeComponent
     PersonBadgeComponent,
     FolderDetailsDirective,
     FolderComponent,
