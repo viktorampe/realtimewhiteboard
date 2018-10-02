@@ -9,6 +9,7 @@ import {
   MatInputModule,
   MatSelectModule
 } from '@angular/material';
+import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FilterTextInputComponent } from './filter-text-input.component';
 
@@ -53,6 +54,36 @@ describe('FilterTextInputComponent', () => {
     let text: string;
     component.text.subscribe((e: string) => (text = e));
     component.setInput(mockData.text);
-    expect(text).toEqual(text);
+    expect(text).toEqual(mockData.text);
+  });
+
+  it('should show clear button', () => {
+    let text: string;
+    component.setInput(mockData.text);
+    fixture.detectChanges();
+    let test = fixture.debugElement.query(By.css('button'));
+    expect(test).toBeTruthy();
+  });
+
+  it('should hide clear button', () => {
+    let text: string;
+    component.setInput('aa');
+    fixture.detectChanges();
+    component.setInput('');
+    fixture.detectChanges();
+    let test = fixture.debugElement.query(By.css('button'));
+    expect(test).toBeFalsy();
+  });
+
+  it('clicking clear button should clear the input field', () => {
+    let text: string = '';
+    component.setInput(mockData.text);
+    component.text.subscribe((e: string) => {
+      console.log(e);
+    });
+    fixture.detectChanges();
+    let test = fixture.debugElement.query(By.css('button'));
+    test.triggerEventHandler('click', null);
+    expect(text).toBe('');
   });
 });

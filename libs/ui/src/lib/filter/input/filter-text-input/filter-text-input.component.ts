@@ -13,6 +13,14 @@ export enum FilterTextInputTheme {
   dark = 'dark'
 }
 
+/**
+ * an input field that will output text put into it, will show a clear button when text lenght > 0
+ * meant to filter by string.
+ *
+ * @export
+ * @class FilterTextInputComponent
+ * @implements {OnDestroy}
+ */
 @Component({
   selector: 'campus-filter-text-input',
   templateUrl: './filter-text-input.component.html',
