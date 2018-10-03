@@ -6,41 +6,49 @@
 }
 
 mat-drawer-container {
-  flex: 1 0 auto;
+  flex: 0 0 100%;
 }
 
 .ui-shell__right {
-  flex: 1 100%;
   display: flex;
+  height: 100%;
   flex-direction: column;
-  min-height: 100%;
 
   .ui-shell__top__menu-icon {
     vertical-align: middle;
     cursor: pointer;
   }
 
+  .ui-shell__top {
+    flex: 0 0 auto;
+  }
+
   .ui-shell__body {
-    flex: 1 0 auto;
+    overflow-y: auto;
+    flex: 0 1 auto;
+  }
+
+  .ui-shell__filler {
+    flex: 1 1 auto;
+    min-width: 0px;
+    min-height: 0px;
   }
 }
 
 .ui-shell__left {
   display: flex;
+  height: 100%;
   flex-direction: column;
-  overflow: auto;
-  align-items: stretch;
-  min-height: 100%;
 
   .ui-shell__logo {
     flex: 0 0 auto;
-    display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
   }
 
   .ui-shell__left__content {
-    flex: 1 0 auto;
+    overflow-y: auto;
+    flex: 0 1 auto;
   }
 }

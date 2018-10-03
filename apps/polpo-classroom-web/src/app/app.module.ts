@@ -1,4 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { MatIconModule } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
@@ -28,6 +29,7 @@ import { AppComponent } from './app.component';
     DalModule.forRoot(),
     RouterModule.forRoot(
       [
+        { path: 'login', loadChildren: '@campus/devlib#DevlibModule' },
         {
           path: 'tasks',
           loadChildren: '@campus/pages/tasks#PagesTasksModule'
@@ -75,7 +77,8 @@ import { AppComponent } from './app.component';
     ),
     EffectsModule.forRoot([AppEffects]),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
-    StoreRouterConnectingModule
+    StoreRouterConnectingModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent],
