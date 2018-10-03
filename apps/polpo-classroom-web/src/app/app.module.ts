@@ -60,7 +60,7 @@ import { AppComponent } from './app.component';
           loadChildren: '@campus/pages/alerts#PagesAlertsModule'
         },
 
-        { path: '', redirectTo: 'bundles', pathMatch: 'full' },
+        { path: '', redirectTo: 'login', pathMatch: 'full' },
         {
           path: 'bundles',
           loadChildren: '@campus/pages/bundles#PagesBundlesModule'

@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { EduContentInterface } from '@campus/dal';
+import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
+import { Observable } from 'rxjs';
 import { LoginPageViewModel } from './loginpage.viewmodel';
 
 @Component({
@@ -7,7 +10,20 @@ import { LoginPageViewModel } from './loginpage.viewmodel';
   styleUrls: ['./loginpage.component.css']
 })
 export class LoginpageComponent implements OnInit {
-  constructor(private loginPageviewModel: LoginPageViewModel) {}
+  educontents: Observable<EduContentInterface[]>;
+  currentUser: Observable<any>;
+  constructor(
+    private loginPageviewModel: LoginPageViewModel,
+    private personApi: PersonApi
+  ) {}
 
   ngOnInit() {}
+
+  getAllEducontents() {
+    this.educontents = this.loginPageviewModel.getEducontents();
+  }
+
+  getCurrentUser() {
+    this.currentUser = this.personApi.getCurrent();
+  }
 }
