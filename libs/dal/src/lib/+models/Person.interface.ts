@@ -1,3 +1,4 @@
+import { AccessTokenInterface } from './AccessToken.interface';
 import { AlertQueueInterface } from './AlertQueue.interface';
 import { BundleInterface } from './Bundle.interface';
 import { EduContentMetadataInterface } from './EduContentMetadata.interface';
@@ -48,7 +49,7 @@ export interface PersonInterface {
   id?: number;
   displayName?: string;
   password?: string;
-  accessTokens?: any[];
+  accessTokens?: AccessTokenInterface[];
   roles?: RoleInterface[];
   rolemappings?: RoleMappingInterface[];
   credentials?: PassportUserCredentialInterface[];
