@@ -8,10 +8,15 @@
   $ui-tool-bar-height: 50px;
   $ui-tool-bar-background-color: $ui-bg-color-4 !default;
   $ui-tool-bar_devider-background-color: $ui-bg-color-3 !default;
+  $ui-tool-bar-width: calc(100% - 210px) !default;
   .ui-tool-bar {
     background-color: $ui-tool-bar-background-color;
     height: $ui-tool-bar-height;
-    div.devider {
+    &--fixed {
+      width: $ui-tool-bar-width;
+      position: fixed;
+    }
+    div.divider {
       margin: 10px 5px;
       height: 30px;
       width: 3px;

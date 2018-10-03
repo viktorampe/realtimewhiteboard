@@ -1,10 +1,11 @@
-<campus-tool-bar>
+<campus-tool-bar [fixed]="toolbarFixed">
   <campus-tool-bar-button></campus-tool-bar-button>
   <campus-tool-bar-button></campus-tool-bar-button>
-  <div class="devider"></div>
+  <div class="divider"></div>
   <campus-tool-bar-button></campus-tool-bar-button>
   <campus-tool-bar-button></campus-tool-bar-button>
 </campus-tool-bar>
-<div class="bundles-container">
+<div class="pages-bundles__container"
+     [ngClass]="{'pages-bundles__container--fixed': toolbarFixed}">
   <div class="placeholder"></div>
 </div>

@@ -1,11 +1,14 @@
-.bundles-container {
-  overflow-y: auto;
-  flex: 0 1 auto;
+.pages-bundles {
   padding: 0 20px;
+  &__container {
+    padding: 20px;
+    &--fixed {
+      padding-top: 70px !important;
+    }
+  }
 }
 .placeholder {
   height: 2000px;
   width: 39px;
   background-color: red;
-  margin-top: 30px;
 }
