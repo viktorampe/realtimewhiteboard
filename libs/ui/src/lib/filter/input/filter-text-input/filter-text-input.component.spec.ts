@@ -17,7 +17,7 @@ describe('FilterTextInputComponent', () => {
   let component: FilterTextInputComponent;
   let fixture: ComponentFixture<FilterTextInputComponent>;
 
-  let mockData = {
+  const mockData = {
     placeHolder: 'brol',
     text: 'briel'
   };
@@ -58,28 +58,26 @@ describe('FilterTextInputComponent', () => {
   });
 
   it('should show clear button', () => {
-    let text: string;
     component.setInput(mockData.text);
     fixture.detectChanges();
-    let test = fixture.debugElement.query(By.css('button'));
+    const test = fixture.debugElement.query(By.css('button'));
     expect(test).toBeTruthy();
   });
 
   it('should hide clear button', () => {
-    let text: string;
     component.setInput('aa');
     fixture.detectChanges();
     component.setInput('');
     fixture.detectChanges();
-    let test = fixture.debugElement.query(By.css('button'));
+    const test = fixture.debugElement.query(By.css('button'));
     expect(test).toBeFalsy();
   });
 
   it('clicking clear button should clear the input field', () => {
-    let text: string = '';
+    const text = '';
     component.setInput(mockData.text);
     fixture.detectChanges();
-    let test = fixture.debugElement.query(By.css('button'));
+    const test = fixture.debugElement.query(By.css('button'));
     test.triggerEventHandler('click', null);
     expect(text).toBe('');
   });
