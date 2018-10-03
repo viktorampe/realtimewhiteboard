@@ -31,6 +31,7 @@ export class LoginPageViewModel implements Resolve<boolean> {
   isLoggedIn(): Observable<boolean> {
     return this.authService.getCurrent().pipe(
       map((currentUser: any) => {
+        console.log(currentUser);
         return true;
       }),
       catchError(err => {

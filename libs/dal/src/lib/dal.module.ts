@@ -10,6 +10,8 @@ import {
   bundlesReducer,
   initialState as bundlesInitialState
 } from './+state/bundles/bundles.reducer';
+import { initialState as userInitialState, userReducer } from './+state/user/user.reducer';
+import { UserEffects } from './+state/user/user.effects';
 
 @NgModule({
   imports: [
@@ -19,7 +21,9 @@ import {
     StoreModule.forFeature('bundles', bundlesReducer, {
       initialState: bundlesInitialState
     }),
-    EffectsModule.forFeature([BundlesEffects])
+    EffectsModule.forFeature([BundlesEffects]),
+    StoreModule.forFeature('user', userReducer, { initialState: userInitialState }),
+    EffectsModule.forFeature([UserEffects])
   ]
 })
 export class DalModule {
