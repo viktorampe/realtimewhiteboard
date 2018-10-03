@@ -34,7 +34,6 @@ describe('AppEffects', () => {
   });
 
   describe('loadApp$', () => {
-    1;
     it('should work', () => {
       actions = hot('-a-|', { a: new LoadApp() });
       expect(effects.loadApp$).toBeObservable(
