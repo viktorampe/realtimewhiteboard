@@ -26,7 +26,7 @@ import { AppComponent } from './app.component';
     BrowserModule,
     BrowserAnimationsModule,
     NxModule.forRoot(),
-    DalModule.forRoot(),
+    DalModule.forRoot({ apiBaseUrl: environment.APIBase }),
     RouterModule.forRoot(
       [
         { path: 'login', loadChildren: '@campus/devlib#DevlibModule' },
