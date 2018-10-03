@@ -7,5 +7,5 @@ export const EDUCONTENT_SERVICE_TOKEN = new InjectionToken('EducontentService');
   providedIn: 'root'
 })
 export class EduContentService {
-  constructor(private EducontentApi: EduContentApi) {}
+  constructor(private educontentApi: EduContentApi) {}
 }
