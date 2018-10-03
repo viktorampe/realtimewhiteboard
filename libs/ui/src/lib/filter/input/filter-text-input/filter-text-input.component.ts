@@ -28,13 +28,13 @@ export enum FilterTextInputTheme {
 })
 export class FilterTextInputComponent implements OnDestroy {
   @Input('theme') theme: FilterTextInputTheme;
-  @Input('placeholder') placeholder: string = 'Filter';
+  @Input('placeholder') placeholder = 'Filter';
   @Output() text = new EventEmitter<string>();
 
   private input = new FormControl();
 
   //for some bizar reason async pipes refused to work in our html file, making this weirdness necessary
-  private hasData: boolean = false;
+  private hasData = false;
   private readonly formSubscription: Subscription = this.getInput().subscribe(
     (data: string) => {
       this.text.emit(data);
