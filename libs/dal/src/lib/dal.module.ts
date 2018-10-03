@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { InjectionToken, ModuleWithProviders, NgModule } from '@angular/core';
-import { AuthService, AuthServiceToken } from '@campus/dal';
+import { ModuleWithProviders, NgModule } from '@angular/core';
 import {
   LoopBackConfig,
   SDKBrowserModule
@@ -13,12 +12,13 @@ import {
   bundlesReducer,
   initialState as bundlesInitialState
 } from './+state/bundles/bundles.reducer';
+import { EduContentService } from './educontent/edu-content.service';
+import { EDUCONTENT_SERVICE_TOKEN } from './educontent/edu-content.service.interface';
+import { AuthService, AuthServiceToken } from './persons/auth-service';
 
 interface DalOptions {
   apiBaseUrl: string;
 }
-
-export const DAL_OPTIONS = new InjectionToken<DalOptions>('DAL_OPTIONS');
 
 @NgModule({
   imports: [
@@ -29,6 +29,10 @@ export const DAL_OPTIONS = new InjectionToken<DalOptions>('DAL_OPTIONS');
       initialState: bundlesInitialState
     }),
     EffectsModule.forFeature([BundlesEffects])
+  ],
+  providers: [
+    { provide: EDUCONTENT_SERVICE_TOKEN, useClass: EduContentService },
+    { provide: AuthServiceToken, useClass: AuthService }
   ]
 })
 export class DalModule {
@@ -37,8 +41,7 @@ export class DalModule {
     LoopBackConfig.setBaseURL(options.apiBaseUrl);
     LoopBackConfig.setRequestOptionsCredentials(true);
     return {
-      ngModule: DalModule,
-      providers: [{ provide: AuthServiceToken, useClass: AuthService }]
+      ngModule: DalModule
     };
   }
 }
