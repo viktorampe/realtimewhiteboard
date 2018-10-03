@@ -1,26 +1,27 @@
-import { Injectable } from '@angular/core';
-import { Effect, Actions } from '@ngrx/effects';
+import { Inject, Injectable } from '@angular/core';
+import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
-
+import { map } from 'rxjs/operators';
+import { AuthServiceToken } from '../../persons/auth-service';
+import { AuthServiceInterface } from '../../persons/auth-service.interface';
+import { fromUserActions, LoadUser, UserActionTypes, UserLoadError } from './user.actions';
 import { UserState } from './user.reducer';
-import {
-  LoadUser,
-  UserLoaded,
-  UserLoadError,
-  UserActionTypes
-} from './user.actions';
+
 
 @Injectable()
 export class UserEffects {
   @Effect()
   loadUser$ = this.dataPersistence.fetch(UserActionTypes.LoadUser, {
     run: (action: LoadUser, state: UserState) => {
-      // Your custom REST 'load' logic goes here. For now just return an empty list...
-      return new UserLoaded([]);
+      return this.authService.getCurrent()
+        .pipe(map(r => 
+          {
+            console.log(r);
+            return new fromUserActions.UserLoaded(r);
+          }
+          ));
     },
-
     onError: (action: LoadUser, error) => {
-      console.error('Error', error);
       return new UserLoadError(error);
     }
   });
@@ -28,5 +29,6 @@ export class UserEffects {
   constructor(
     private actions$: Actions,
     private dataPersistence: DataPersistence<UserState>
+    @Inject(AuthServiceToken) private authService: AuthServiceInterface
   ) {}
 }
