@@ -1,4 +1,3 @@
-import { Entity, UserState } from './user.reducer';
 import { userQuery } from './user.selectors';
 
 describe('User Selectors', () => {
@@ -8,7 +7,7 @@ describe('User Selectors', () => {
   let storeState;
 
   beforeEach(() => {
-    const createUser = (id: string, name = ''): Entity => ({
+    const createUser = (id: string, name = ''): any => ({
       id,
       name: name || `name-${id}`
     });

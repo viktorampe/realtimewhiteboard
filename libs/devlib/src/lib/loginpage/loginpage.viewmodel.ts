@@ -1,6 +1,14 @@
 import { Inject, Injectable } from '@angular/core';
 import { Resolve } from '@angular/router';
-import { AuthServiceInterface, AuthServiceToken } from '@campus/dal';
+import {
+  AuthServiceInterface,
+  AuthServiceToken,
+  LoadUser,
+  RemoveUser,
+  userQuery,
+  UserState
+} from '@campus/dal';
+import { Store } from '@ngrx/store';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, map, take } from 'rxjs/operators';
 
@@ -15,10 +23,18 @@ export class LoginPageViewModel implements Resolve<boolean> {
   loggedIn: boolean;
 
   constructor(
+    private store: Store<UserState>,
     @Inject(AuthServiceToken) private authService: AuthServiceInterface
   ) {
-    this.isLoggedIn().subscribe((isLoggedIn: boolean) => {
-      this.loggedIn = isLoggedIn;
+    store.select(userQuery.getSelectedUser).subscribe(data => {
+      console.log('got event', data, Object.getOwnPropertyNames(data).length);
+      if (Object.getOwnPropertyNames(data).length === 0) {
+        console.log('not logged in');
+        this.loggedIn = false;
+      } else {
+        console.log('logged in');
+        this.loggedIn = true;
+      }
     });
   }
 
@@ -31,7 +47,6 @@ export class LoginPageViewModel implements Resolve<boolean> {
   isLoggedIn(): Observable<boolean> {
     return this.authService.getCurrent().pipe(
       map((currentUser: any) => {
-        console.log(currentUser);
         return true;
       }),
       catchError(err => {
@@ -50,14 +65,17 @@ export class LoginPageViewModel implements Resolve<boolean> {
   login(name: string, password: string): void {
     this.isLoggedIn().subscribe((isLoggedIn: boolean) => {
       if (!isLoggedIn) {
-        console.log('logging in');
         this.authService
           .login({ username: name, password: password })
-          .subscribe(loggedIn => {
-            this.loggedIn = true;
-          });
-      } else {
-        this.loggedIn = true;
+          .subscribe(
+            loggedIn => {
+              console.log("we successfully logged in let's call our dispatch");
+              this.store.dispatch(new LoadUser());
+            },
+            error => {
+              console.log(error);
+            }
+          );
       }
     });
   }
@@ -72,12 +90,7 @@ export class LoginPageViewModel implements Resolve<boolean> {
   logout(): void {
     this.isLoggedIn().subscribe((isLoggedIn: boolean) => {
       if (isLoggedIn) {
-        console.log('logging out');
-        this.authService.logout().subscribe((loggedOut: any) => {
-          this.loggedIn = false;
-        });
-      } else {
-        this.loggedIn = false;
+        this.store.dispatch(new RemoveUser());
       }
     });
   }

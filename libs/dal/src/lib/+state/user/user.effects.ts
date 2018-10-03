@@ -7,8 +7,10 @@ import { AuthServiceInterface } from '../../persons/auth-service.interface';
 import {
   fromUserActions,
   LoadUser,
+  RemoveUser,
   UserActionTypes,
-  UserLoadError
+  UserLoadError,
+  UserRemoveError
 } from './user.actions';
 import { UserState } from './user.reducer';
 
@@ -17,17 +19,28 @@ export class UserEffects {
   @Effect()
   loadUser$ = this.dataPersistence.fetch(UserActionTypes.LoadUser, {
     run: (action: LoadUser, state: UserState) => {
-      console.log('running action', LoadUser);
       return this.authService.getCurrent().pipe(
         map(r => {
-          console.log('effect', r);
           return new fromUserActions.UserLoaded(r);
         })
       );
     },
     onError: (action: LoadUser, error) => {
-      console.log('effect error', error);
       return new UserLoadError(error);
+    }
+  });
+  @Effect()
+  removedUser$ = this.dataPersistence.fetch(UserActionTypes.RemoveUser, {
+    run: (action: RemoveUser, state: UserState) => {
+      return this.authService.logout().pipe(
+        map(d => {
+          console.log('remove user effect', d);
+          return new fromUserActions.UserRemoved(d);
+        })
+      );
+    },
+    onError: (action: RemoveUser, error) => {
+      return new UserRemoveError(error);
     }
   });
 

@@ -1,5 +1,5 @@
 import { UserLoaded } from './user.actions';
-import { UserState, Entity, initialState, userReducer } from './user.reducer';
+import { Entity, initialState, userReducer, UserState } from './user.reducer';
 
 describe('User Reducer', () => {
   const getUserId = it => it['id'];

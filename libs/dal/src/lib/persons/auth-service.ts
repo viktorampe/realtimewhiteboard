@@ -21,7 +21,9 @@ export class AuthService implements AuthServiceInterface {
    * @memberof AuthService
    */
   getCurrent(): Observable<any> {
-    return this.personApi.getCurrent();
+    return this.personApi.getCurrent().pipe(current => {
+      return current;
+    });
   }
 
   /**
@@ -31,6 +33,7 @@ export class AuthService implements AuthServiceInterface {
    * @memberof AuthService
    */
   logout(): Observable<any> {
+    console.log('logout');
     return this.personApi.logout();
   }
 

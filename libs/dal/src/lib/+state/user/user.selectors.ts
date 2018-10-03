@@ -28,8 +28,8 @@ const getSelectedUser = createSelector(
   getAllUser,
   getSelectedId,
   (user, id) => {
-    const result = user.find(it => it['id'] === id);
-    return result ? Object.assign({}, result) : undefined;
+    console.log('getSelectedUser', user);
+    return user ? Object.assign({}, user) : undefined;
   }
 );
 
