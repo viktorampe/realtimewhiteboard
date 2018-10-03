@@ -1,0 +1,21 @@
+.ui-button {
+  display: inline-block;
+  line-height: 1;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+:host.ui-button--rounded {
+  .ui-button {
+    border-radius: 50%;
+  }
+}
+
+:host.ui-button--disabled {
+  pointer-events: visible;
+  cursor: not-allowed;
+
+  .ui-button {
+    pointer-events: none;
+  }
+}

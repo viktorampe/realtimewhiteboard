@@ -16,8 +16,14 @@ import {
 } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { AppBarComponent } from './app-bar/app-bar.component';
+import { ButtonComponent } from './button/button.component';
+import { BorderDirective } from './button/directives/border.directive';
+import { DangerDirective } from './button/directives/danger.directive';
+import { RoundedCornersDirective } from './button/directives/rounded-corners.directive';
+import { RoundedDirective } from './button/directives/rounded.directive';
+import { TooltipDirective } from './button/directives/tooltip.directive';
+import { WarningDirective } from './button/directives/warning.directive';
 import { ConfirmableSelectComponent } from './confirmable-select/confirmable-select.component';
-import { ContentActionButtonComponent } from './content-action-button/content-action-button.component';
 import { ContentPreviewComponent } from './content-preview/content-preview.component';
 import { ContentThumbnailComponent } from './content-thumbnail/content-thumbnail.component';
 import { EditableInlineTagListComponent } from './editable-inline-tag-list/editable-inline-tag-list.component';
@@ -90,7 +96,7 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     FileExtensionComponent,
     TreeNavComponent,
     ContentThumbnailComponent,
-    ContentActionButtonComponent,
+    ButtonComponent,
     ListViewComponent,
     ListViewItemDirective,
     TreeNavComponent,
@@ -98,7 +104,13 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     PersonInitialsPipe,
     FolderDetailsDirective,
     FolderComponent,
-    AdjustColorBrightnessPipe
+    AdjustColorBrightnessPipe,
+    RoundedDirective,
+    RoundedCornersDirective,
+    BorderDirective,
+    TooltipDirective,
+    DangerDirective,
+    WarningDirective
   ],
   exports: [
     FilterTextInputComponent,
@@ -123,14 +135,20 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     FileExtensionComponent,
     TreeNavComponent,
     ContentThumbnailComponent,
-    ContentActionButtonComponent,
+    ButtonComponent,
     ListViewComponent,
     ListViewItemDirective,
     TreeNavComponent,
     PersonBadgeComponent,
     FolderDetailsDirective,
     FolderComponent,
-    AdjustColorBrightnessPipe
+    AdjustColorBrightnessPipe,
+    RoundedDirective,
+    RoundedCornersDirective,
+    BorderDirective,
+    TooltipDirective,
+    DangerDirective,
+    WarningDirective
   ]
 })
 export class UiModule {}

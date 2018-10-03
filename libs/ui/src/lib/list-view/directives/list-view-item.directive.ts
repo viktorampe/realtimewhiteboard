@@ -17,7 +17,7 @@ import { ListViewComponent } from '../list-view.component';
  * @class ListViewItemDirective
  */
 @Directive({
-  selector: '[campusListItem]'
+  selector: '[campusListItem],[campus-list-item]'
 })
 export class ListViewItemDirective implements AfterContentInit {
   isSelected: boolean;

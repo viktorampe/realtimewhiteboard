@@ -1,7 +1,7 @@
-import { Resolve } from '@angular/router';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { take } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
+import { Resolve } from '@angular/router';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
