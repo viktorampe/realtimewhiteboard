@@ -10,8 +10,11 @@ import {
   bundlesReducer,
   initialState as bundlesInitialState
 } from './+state/bundles/bundles.reducer';
-import { initialState as userInitialState, userReducer } from './+state/user/user.reducer';
 import { UserEffects } from './+state/user/user.effects';
+import {
+  initialUserstate as userInitialState,
+  userReducer
+} from './+state/user/user.reducer';
 
 @NgModule({
   imports: [
@@ -22,7 +25,9 @@ import { UserEffects } from './+state/user/user.effects';
       initialState: bundlesInitialState
     }),
     EffectsModule.forFeature([BundlesEffects]),
-    StoreModule.forFeature('user', userReducer, { initialState: userInitialState }),
+    StoreModule.forFeature('user', userReducer, {
+      initialState: userInitialState
+    }),
     EffectsModule.forFeature([UserEffects])
   ]
 })

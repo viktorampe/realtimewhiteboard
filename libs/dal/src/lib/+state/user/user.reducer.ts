@@ -8,23 +8,20 @@ import { UserAction, UserActionTypes } from './user.actions';
  *  Note: replace if already defined in another module
  */
 
-/* tslint:disable:no-empty-interface */
-export interface Entity {}
-
 export interface UserState {
-  list: Entity[]; // list of User; analogous to a sql normalized table
+  list: any[]; // list of User; analogous to a sql normalized table
   selectedId?: string | number; // which User record has been selected
   loaded: boolean; // has the User list been loaded
   error?: any; // last none error (if any)
 }
 
-export const initialState: UserState = {
+export const initialUserstate: UserState = {
   list: [],
   loaded: false
 };
 
 export function userReducer(
-  state: UserState = initialState,
+  state: UserState = initialUserstate,
   action: UserAction
 ): UserState {
   switch (action.type) {

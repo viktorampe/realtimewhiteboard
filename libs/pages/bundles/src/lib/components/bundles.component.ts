@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { BundlesViewModel } from './bundles.viewmodel';
 
 @Component({
   selector: 'campus-bundles',
@@ -128,8 +129,12 @@ export class BundlesComponent implements OnInit {
     bundles: [{}, {}]
   };
 
+  vm: BundlesViewModel;
+
   lineView: boolean;
-  constructor() {}
+  constructor(vm: BundlesViewModel) {
+    this.vm = vm;
+  }
 
   ngOnInit() {
     this.lineView = false;
