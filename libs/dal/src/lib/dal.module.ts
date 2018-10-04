@@ -10,6 +10,8 @@ import {
   bundlesReducer,
   initialState as bundlesInitialState
 } from './+state/bundles/bundles.reducer';
+import { BundleService } from './bundle/bundle.service';
+import { BUNDLE_SERVICE_TOKEN } from './bundle/bundle.service.interface';
 
 @NgModule({
   imports: [
@@ -26,7 +28,10 @@ export class DalModule {
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: DalModule,
-      providers: [{ provide: AuthServiceToken, useClass: AuthService }]
+      providers: [
+        { provide: AuthServiceToken, useClass: AuthService },
+        { provide: BUNDLE_SERVICE_TOKEN, useClass: BundleService }
+      ]
     };
   }
 }
