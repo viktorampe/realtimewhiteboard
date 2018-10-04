@@ -1,11 +1,15 @@
 import { inject, TestBed } from '@angular/core/testing';
+import { LoopBackAuth, PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { AuthService } from './auth-service';
 
-describe('CredentialsService', () => {
+fdescribe('AuthService', () => {
   beforeEach(() => {
-    TestBed.resetTestEnvironment();
     TestBed.configureTestingModule({
-      providers: [AuthService]
+      providers: [
+        AuthService,
+        { provide: PersonApi, useValue: {} },
+        { provide: LoopBackAuth, useValue: {} }
+      ]
     });
   });
 

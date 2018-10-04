@@ -13,10 +13,6 @@ describe('AppEffects', () => {
   let effects: AppEffects;
 
   beforeEach(() => {
-    TestBed.resetTestEnvironment();
-  });
-
-  beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
