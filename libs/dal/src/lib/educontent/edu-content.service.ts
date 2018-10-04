@@ -6,7 +6,7 @@ import { EducontentServiceInterface } from './edu-content.service.interface';
 
 const DUMMY_DATA: EduContentInterface[] = [
   { type: 'boeke', id: 1 },
-  { type: 'file', id: 1 }
+  { type: 'file', id: 2 }
 ];
 
 @Injectable({

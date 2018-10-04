@@ -15,13 +15,15 @@ export const adapter: EntityAdapter<EduContentInterface> = createEntityAdapter<
   EduContentInterface
 >();
 
-export const initialState: EduContentsState = adapter.getInitialState({
-  // additional entity state properties
-  loaded: false
-});
+export const initialEducontentState: EduContentsState = adapter.getInitialState(
+  {
+    // additional entity state properties
+    loaded: false
+  }
+);
 
 export function reducer(
-  state = initialState,
+  state = initialEducontentState,
   action: EduContentsActions
 ): EduContentsState {
   switch (action.type) {

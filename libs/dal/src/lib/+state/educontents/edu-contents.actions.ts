@@ -5,7 +5,7 @@ import { EduContentInterface } from '../../+models';
 export enum EduContentsActionTypes {
   EducontentsLoaded = '[EduContents] EduContents Loaded',
   EducontentsLoadError = '[EduContents] EducContents Load Error',
-  LoadEduContents = '[EduContents] Load EduContentss',
+  LoadEduContents = '[EduContents] Load EduContents',
   AddEduContent = '[EduContents] Add EduContent',
   UpsertEduContent = '[EduContents] Upsert EduContent',
   AddEduContents = '[EduContents] Add EduContents',
