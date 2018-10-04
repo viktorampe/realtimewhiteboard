@@ -1,0 +1,30 @@
+<div class="login_page_component">
+  <div [hidden]="loginPageviewModel.loggedIn">
+    <div>
+      <button (click)="loginPageviewModel.login('student1', 'testje')">student</button>
+      <button (click)="loginPageviewModel.login('teacher1', 'testje')">teacher</button>
+    </div>
+
+    <div class="login_form">
+      <input placeholder="username"
+             [(ngModel)]="loginPageviewModel.name"
+             type="text" />
+      <input placeholder="password"
+             [(ngModel)]="loginPageviewModel.password"
+             type="password" />
+      <button (click)="loginPageviewModel.login(name, password)">
+        login
+      </button>
+    </div>
+  </div>
+
+  <div [hidden]="!loginPageviewModel.loggedIn">
+    <button (click)="loginPageviewModel.logout()">logout</button>
+  </div>
+
+  <div>
+    <p>{{ loginPageviewModel.response }}</p>
+  </div>
+
+
+</div>

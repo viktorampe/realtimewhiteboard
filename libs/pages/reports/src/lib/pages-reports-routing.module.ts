@@ -1,9 +1,7 @@
-import { ReportsViewModel } from './components/reports.viewmodel';
-
-import { ReportsComponent } from './components/reports.component';
-
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
+import { ReportsComponent } from './components/reports.component';
+import { ReportsViewModel } from './components/reports.viewmodel';
 
 const routes: Routes = [
   {
