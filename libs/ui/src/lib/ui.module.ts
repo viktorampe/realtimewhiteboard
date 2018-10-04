@@ -48,6 +48,7 @@ import { SideSheetPageDirective } from './side-sheet/directives/side-sheet-page.
 import { SideSheetComponent } from './side-sheet/side-sheet.component';
 import { TreeNavComponent } from './tree-nav/tree-nav.component';
 import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness.pipe';
+import { DisabledDirective } from './button/directives/disabled.directive';
 
 @NgModule({
   imports: [
@@ -110,7 +111,8 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     BorderDirective,
     TooltipDirective,
     DangerDirective,
-    WarningDirective
+    WarningDirective,
+    DisabledDirective
   ],
   exports: [
     FilterTextInputComponent,
@@ -148,7 +150,8 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     BorderDirective,
     TooltipDirective,
     DangerDirective,
-    WarningDirective
+    WarningDirective,
+    DisabledDirective
   ]
 })
 export class UiModule {}

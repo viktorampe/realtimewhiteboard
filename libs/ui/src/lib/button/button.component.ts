@@ -1,5 +1,14 @@
-import { Component, HostBinding, HostListener, Input } from '@angular/core';
+import { Component, HostListener, Input } from '@angular/core';
 
+/**
+ * Generic button
+ * Standard styles are applied with directives: border, disabled, rounded,
+ * tooltip(with string), warning and danger.
+ * The icon css class is set in [iconClass].
+ *
+ * @export
+ * @class ButtonComponent
+ */
 @Component({
   selector: 'campus-button',
   templateUrl: './button.component.html',
@@ -7,19 +16,11 @@ import { Component, HostBinding, HostListener, Input } from '@angular/core';
 })
 export class ButtonComponent {
   @Input() iconClass: string;
-  @Input() tooltip: string;
-  @Input() isEnabled = true;
 
+  // Stops click event propagation inside component
   @HostListener('click', ['$event'])
   public onClick(event: any): void {
     event.stopPropagation();
     event.preventDefault();
-
-    if (!this.isEnabled) return;
-  }
-
-  @HostBinding('class.ui-button--disabled')
-  get isDisabledClass() {
-    return !this.isEnabled;
   }
 }

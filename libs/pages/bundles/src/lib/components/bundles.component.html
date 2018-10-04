@@ -40,18 +40,18 @@
                             contentTypeClass="icon-bundle"
                             fileExtensionClass="zip">
     <campus-button rounded-corners
-                   [isEnabled]="true"
+                   disabled
                    tooltip="Dit is een tooltip van de knop">tekst</campus-button>
     <campus-button iconClass="icon-tasks"
                    rounded-corners
                    warning
-                   [isEnabled]="true"
+                   disabled
                    tooltip="Dit is een tooltip van de knop"></campus-button>
     <campus-button iconClass="icon-tasks"
                    warning
                    rounded-corners
                    bordered
-                   [isEnabled]="false"
+                   disabled
                    tooltip="Dit is een tooltip van de knop">tekst</campus-button>
   </campus-content-thumbnail>
 
@@ -61,7 +61,7 @@
                             fileExtensionClass="zip">
     <campus-button iconClass="icon-tasks"
                    danger
-                   [isEnabled]="false">tekst</campus-button>
+                   disabled>tekst</campus-button>
     <campus-button iconClass="icon-tasks"
                    danger></campus-button>
   </campus-content-thumbnail>
