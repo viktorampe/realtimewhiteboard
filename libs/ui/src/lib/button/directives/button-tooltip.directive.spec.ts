@@ -3,14 +3,14 @@ import { Component, DebugElement, NgModule } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { UiModule } from '@campus/ui';
-import { ButtonComponent } from './../button.component';
-import { RoundedCornersDirective } from './rounded-corners.directive';
+import { ButtonComponent } from '../button.component';
+import { TooltipDirective } from './button-tooltip.directive';
 
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'test-container',
   template: `
-    <campus-button rounded-corners>tekst</campus-button>
+    <campus-button tooltip="test">tekst</campus-button>
   `
 })
 export class TestContainerComponent {}
@@ -22,8 +22,8 @@ export class TestContainerComponent {}
 })
 export class TestModule {}
 
-describe('DisabledDirective', () => {
-  let directive: RoundedCornersDirective;
+describe('TooltipDirective', () => {
+  let directive: TooltipDirective;
   let component: ButtonComponent;
   let testContainerFixture: ComponentFixture<TestContainerComponent>;
   let testContainerComponent: TestContainerComponent;
@@ -43,7 +43,7 @@ describe('DisabledDirective', () => {
     );
     component = <ButtonComponent>componentDE.componentInstance;
     testContainerFixture.detectChanges();
-    directive = componentDE.injector.get(RoundedCornersDirective);
+    directive = componentDE.injector.get(TooltipDirective);
   });
 
   it('should create the host with the directive attached', () => {
@@ -51,9 +51,7 @@ describe('DisabledDirective', () => {
     expect(directive).not.toBeNull();
   });
 
-  it('should apply the correct class', () => {
-    expect(componentDE.nativeElement.classList).toContain(
-      'ui-button--rounded-corners'
-    );
+  it('should apply the tooltip text as a title attribute', () => {
+    expect(componentDE.nativeElement.getAttribute('title')).toEqual('test');
   });
 });

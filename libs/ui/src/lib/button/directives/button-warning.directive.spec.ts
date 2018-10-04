@@ -3,14 +3,14 @@ import { Component, DebugElement, NgModule } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { UiModule } from '@campus/ui';
-import { ButtonComponent } from './../button.component';
-import { TooltipDirective } from './tooltip.directive';
+import { ButtonComponent } from '../button.component';
+import { WarningDirective } from './button-warning.directive';
 
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'test-container',
   template: `
-    <campus-button tooltip="test">tekst</campus-button>
+    <campus-button warning>tekst</campus-button>
   `
 })
 export class TestContainerComponent {}
@@ -22,8 +22,8 @@ export class TestContainerComponent {}
 })
 export class TestModule {}
 
-describe('TooltipDirective', () => {
-  let directive: TooltipDirective;
+describe('WarningDirective', () => {
+  let directive: WarningDirective;
   let component: ButtonComponent;
   let testContainerFixture: ComponentFixture<TestContainerComponent>;
   let testContainerComponent: TestContainerComponent;
@@ -43,7 +43,7 @@ describe('TooltipDirective', () => {
     );
     component = <ButtonComponent>componentDE.componentInstance;
     testContainerFixture.detectChanges();
-    directive = componentDE.injector.get(TooltipDirective);
+    directive = componentDE.injector.get(WarningDirective);
   });
 
   it('should create the host with the directive attached', () => {
@@ -51,7 +51,7 @@ describe('TooltipDirective', () => {
     expect(directive).not.toBeNull();
   });
 
-  it('should apply the tooltip text as a title attribute', () => {
-    expect(componentDE.nativeElement.getAttribute('title')).toEqual('test');
+  it('should apply the correct class', () => {
+    expect(componentDE.nativeElement.classList).toContain('ui-button--warning');
   });
 });

@@ -3,14 +3,14 @@ import { Component, DebugElement, NgModule } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { UiModule } from '@campus/ui';
-import { ButtonComponent } from './../button.component';
-import { RoundedDirective } from './rounded.directive';
+import { ButtonComponent } from '../button.component';
+import { DisabledDirective } from './button-disabled.directive';
 
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'test-container',
   template: `
-    <campus-button rounded>tekst</campus-button>
+    <campus-button disabled>tekst</campus-button>
   `
 })
 export class TestContainerComponent {}
@@ -22,8 +22,8 @@ export class TestContainerComponent {}
 })
 export class TestModule {}
 
-describe('RoundedDirective', () => {
-  let directive: RoundedDirective;
+describe('DisabledDirective', () => {
+  let directive: DisabledDirective;
   let component: ButtonComponent;
   let testContainerFixture: ComponentFixture<TestContainerComponent>;
   let testContainerComponent: TestContainerComponent;
@@ -43,7 +43,7 @@ describe('RoundedDirective', () => {
     );
     component = <ButtonComponent>componentDE.componentInstance;
     testContainerFixture.detectChanges();
-    directive = componentDE.injector.get(RoundedDirective);
+    directive = componentDE.injector.get(DisabledDirective);
   });
 
   it('should create the host with the directive attached', () => {
@@ -52,6 +52,8 @@ describe('RoundedDirective', () => {
   });
 
   it('should apply the correct class', () => {
-    expect(componentDE.nativeElement.classList).toContain('ui-button--rounded');
+    expect(componentDE.nativeElement.classList).toContain(
+      'ui-button--disabled'
+    );
   });
 });

@@ -3,8 +3,8 @@ import { Component, DebugElement, NgModule } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { UiModule } from '@campus/ui';
-import { ButtonComponent } from './../button.component';
-import { DangerDirective } from './danger.directive';
+import { ButtonComponent } from '../button.component';
+import { DangerDirective } from './button-danger.directive';
 
 @Component({
   // tslint:disable-next-line:component-selector

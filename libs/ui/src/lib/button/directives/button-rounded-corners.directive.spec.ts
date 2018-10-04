@@ -3,14 +3,14 @@ import { Component, DebugElement, NgModule } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { UiModule } from '@campus/ui';
-import { ButtonComponent } from './../button.component';
-import { DisabledDirective } from './disabled.directive';
+import { ButtonComponent } from '../button.component';
+import { RoundedCornersDirective } from './button-rounded-corners.directive';
 
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'test-container',
   template: `
-    <campus-button disabled>tekst</campus-button>
+    <campus-button rounded-corners>tekst</campus-button>
   `
 })
 export class TestContainerComponent {}
@@ -23,7 +23,7 @@ export class TestContainerComponent {}
 export class TestModule {}
 
 describe('DisabledDirective', () => {
-  let directive: DisabledDirective;
+  let directive: RoundedCornersDirective;
   let component: ButtonComponent;
   let testContainerFixture: ComponentFixture<TestContainerComponent>;
   let testContainerComponent: TestContainerComponent;
@@ -43,7 +43,7 @@ describe('DisabledDirective', () => {
     );
     component = <ButtonComponent>componentDE.componentInstance;
     testContainerFixture.detectChanges();
-    directive = componentDE.injector.get(DisabledDirective);
+    directive = componentDE.injector.get(RoundedCornersDirective);
   });
 
   it('should create the host with the directive attached', () => {
@@ -53,7 +53,7 @@ describe('DisabledDirective', () => {
 
   it('should apply the correct class', () => {
     expect(componentDE.nativeElement.classList).toContain(
-      'ui-button--disabled'
+      'ui-button--rounded-corners'
     );
   });
 });

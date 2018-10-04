@@ -3,14 +3,14 @@ import { Component, DebugElement, NgModule } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { UiModule } from '@campus/ui';
-import { ButtonComponent } from './../button.component';
-import { WarningDirective } from './warning.directive';
+import { ButtonComponent } from '../button.component';
+import { BorderDirective } from './button-border.directive';
 
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'test-container',
   template: `
-    <campus-button warning>tekst</campus-button>
+    <campus-button bordered>tekst</campus-button>
   `
 })
 export class TestContainerComponent {}
@@ -22,8 +22,8 @@ export class TestContainerComponent {}
 })
 export class TestModule {}
 
-describe('WarningDirective', () => {
-  let directive: WarningDirective;
+describe('BorderDirective', () => {
+  let directive: BorderDirective;
   let component: ButtonComponent;
   let testContainerFixture: ComponentFixture<TestContainerComponent>;
   let testContainerComponent: TestContainerComponent;
@@ -43,7 +43,7 @@ describe('WarningDirective', () => {
     );
     component = <ButtonComponent>componentDE.componentInstance;
     testContainerFixture.detectChanges();
-    directive = componentDE.injector.get(WarningDirective);
+    directive = componentDE.injector.get(BorderDirective);
   });
 
   it('should create the host with the directive attached', () => {
@@ -52,6 +52,8 @@ describe('WarningDirective', () => {
   });
 
   it('should apply the correct class', () => {
-    expect(componentDE.nativeElement.classList).toContain('ui-button--warning');
+    expect(componentDE.nativeElement.classList).toContain(
+      'ui-button--bordered'
+    );
   });
 });
