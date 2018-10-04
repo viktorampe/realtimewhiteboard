@@ -8,8 +8,11 @@ const routes: Routes = [
   {
     path: '',
     component: BundlesComponent,
-    resolve: { isResolved: BundlesViewModel },
-    children: [{ path: 'bundle-detail', component: BundleDetailComponent }]
+    resolve: { isResolved: BundlesViewModel }
+  },
+  {
+    path: 'bundle-detail',
+    component: BundleDetailComponent
   }
 ];
 
