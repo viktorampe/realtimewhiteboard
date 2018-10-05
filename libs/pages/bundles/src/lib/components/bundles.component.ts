@@ -87,8 +87,8 @@ export class BundlesComponent implements OnInit {
     this.toolbarFixed = true;
   }
 
-  onChangeFilterInput([event, inputValue]: [KeyboardEvent, string]) {
-    this.filterInput$.next(inputValue);
+  onChangeFilterInput(filterInput: string): void {
+    this.filterInput$.next(filterInput);
   }
 
   resetFilterInput(): void {
