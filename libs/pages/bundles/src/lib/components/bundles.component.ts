@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LearningAreaInterface } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { debounceTime, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { BundlesViewModel } from './bundles.viewmodel';
 
 @Component({
@@ -49,7 +49,6 @@ export class BundlesComponent implements OnInit {
     filterInput$: Observable<string>
   ): Observable<LearningAreaInterface[]> {
     return combineLatest(learningAreas$, filterInput$).pipe(
-      debounceTime(200),
       map(([learningAreas, filterInput]: [LearningAreaInterface[], string]) => {
         if (!filterInput || filterInput === '') return learningAreas;
         return learningAreas.filter(learningArea =>

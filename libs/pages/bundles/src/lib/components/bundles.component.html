@@ -21,7 +21,7 @@
   </div>
   <div class="pages-bundles__container__learning-areas">
     <campus-list-view [listFormat]="listFormat$|async"
-                      [placeHolderText]="'De toegepaste filter heeft geeft geen resultaten'">
+                      [placeHolderText]="'De toegepaste filter bevat geen resultaten'">
       <!-- click event (or routerlink) needs to be added to the folder items-->
       <campus-folder *ngFor="let learningArea of displayedLearningAreas$|async"
                      campusListItem
