@@ -21,7 +21,8 @@
       "@campus/pages/tasks": ["libs/pages/tasks/src/index.ts"],
       "@campus/ui": ["libs/ui/src/index.ts"],
       "@campus/dal": ["libs/dal/src/index.ts"],
-      "@campus/pages/shared": ["libs/pages/shared/src/index.ts"]
+      "@campus/pages/shared": ["libs/pages/shared/src/index.ts"],
+      "@campus/browser": ["libs/browser/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
