@@ -1,3 +1,4 @@
+
 <campus-list-view [multiSelect]="true"
                   listFormat="line">
   <campus-content-thumbnail campusListItem
@@ -158,3 +159,11 @@
     <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
   </campus-folder>
 </campus-list-view>
+
+<campus-tool-bar [fixed]="toolbarFixed">
+  <div class="divider"></div>
+</campus-tool-bar>
+<div class="pages-bundles__container"
+     [ngClass]="{'pages-bundles__container--fixed': toolbarFixed}">
+  <div class="placeholder"></div>
+</div>
