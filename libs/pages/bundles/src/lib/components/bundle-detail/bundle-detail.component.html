@@ -3,9 +3,9 @@
   <campus-side-sheet-body>
     <campus-info-panel-bundle [bundle]="bundle"
                               *ngIf="selectedItems.length == 0"></campus-info-panel-bundle>
-    <!-- <campus-info-panel-content [content]=""
+    <campus-info-panel-content [content]="contents[0].transformToContentForInfoPanel()"
                                *ngIf="selectedItems.length == 1">
-    </campus-info-panel-content> -->
+    </campus-info-panel-content>
 
   </campus-side-sheet-body>
   <campus-side-sheet-page>
@@ -19,7 +19,7 @@
                                 campusListItem
                                 [title]="content.title"
                                 [fileExtensionClass]="content.fileExtension"
-                                [contentTypeClass]="content.icon">
+                                [contentTypeClass]="content.productType">
         <!-- Dit moet nog de generic button worden -->
         <campus-content-action-button *ngFor="let action of content.actions"
                                       [iconClass]="action.icon"

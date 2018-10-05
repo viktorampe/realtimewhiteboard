@@ -17,6 +17,10 @@ class Bundle {
   name: string;
   description: string;
   teacher: Teacher;
+
+  public constructor(init?: Partial<Bundle>) {
+    Object.assign(this, init);
+  }
 }
 
 class Teacher {
@@ -24,14 +28,22 @@ class Teacher {
   avatar: string;
   name?: string;
   firstName?: string;
+
+  public constructor(init?: Partial<Teacher>) {
+    Object.assign(this, init);
+  }
 }
 class ContentAction {
   text: string;
   icon: string;
   function: string;
+
+  public constructor(init?: Partial<ContentAction>) {
+    Object.assign(this, init);
+  }
 }
 class Content {
-  icon: string;
+  productType: string;
   fileExtension: string;
   previewImage: string;
   title: string;
@@ -39,6 +51,37 @@ class Content {
   methodLogo: string;
   actions: ContentAction[];
   status: string;
+
+  public constructor(init?: Partial<Content>) {
+    Object.assign(this, init);
+  }
+
+  transformToContentForInfoPanel(): object {
+    const contentForInfoPanel = new ContentForInfoPanel({
+      name: this.title,
+      description: this.description,
+      extention: this.fileExtension,
+      productType: this.productType,
+      methods: [this.methodLogo],
+      status: this.status
+    });
+
+    return contentForInfoPanel;
+  }
+}
+
+class ContentForInfoPanel {
+  preview?: string;
+  name: string;
+  description: string;
+  extention: string;
+  productType: string;
+  methods: string[];
+  status: any;
+
+  public constructor(init?: Partial<ContentForInfoPanel>) {
+    Object.assign(this, init);
+  }
 }
 
 @Component({
@@ -89,42 +132,42 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   getMockBundle(): Observable<Bundle> {
-    const bundle = new Bundle();
-    bundle.icon = 'icon-tasks';
-    bundle.name = 'Dit is een titel';
-    bundle.description = 'Dit is een subtitel';
-
-    const teacher = new Teacher();
-    teacher.displayName = 'Leerkracht Naam';
-    teacher.firstName = 'Leerkracht';
-    teacher.name = 'Naam';
-    bundle.teacher = teacher;
+    const bundle = new Bundle({
+      icon: 'icon-tasks',
+      name: 'Dit is een titel',
+      description: 'Dit is een subtitel',
+      teacher: new Teacher({
+        displayName: 'Leerkracht Naam',
+        firstName: 'Leerkracht',
+        name: 'Naam'
+      })
+    });
 
     return of(bundle);
   }
 
   getMockContents(): Observable<Content[]> {
-    const item1 = new Content();
-    item1.icon = 'icon-bundles';
-    item1.fileExtension = 'zip';
-    item1.previewImage = 'string';
-    item1.title = 'Dit is een titel';
-    item1.description = 'Dit is een beschrijving';
-    item1.methodLogo = 'vbtl';
-    item1.status = 'string';
+    const item1 = new Content({
+      productType: 'icon-bundles',
+      fileExtension: 'zip',
+      previewImage: 'string',
+      title: 'Dit is een titel',
+      description: 'Dit is een beschrijving',
+      methodLogo: 'vbtl',
+      status: 'string',
+      actions: [
+        new ContentAction({
+          text: 'Action tekst 1',
+          icon: 'icon-tasks'
+        }),
+        new ContentAction({
+          text: 'Action tekst 2',
+          icon: 'icon-book'
+        })
+      ]
+    });
 
-    const actions1: ContentAction[] = [];
-    const action1 = new ContentAction();
-    action1.text = 'Action tekst';
-    action1.icon = 'icon-tasks';
-    actions1.push(action1);
-    actions1.push(action1);
-    item1.actions = actions1;
-
-    const contents: Content[] = [];
-    contents.push(item1);
-    contents.push(item1);
-    contents.push(item1);
+    const contents: Content[] = [item1, item1, item1];
 
     return of(contents);
   }
