@@ -1,0 +1,30 @@
+// mixin
+// height
+// seperator settings (color, ...) for ngContent
+// padding/marging settings for ngContent, specifically, filetr input and buttons left
+// think about future favorite and history button
+// bg color
+@mixin ui-tool-bar {
+  $ui-tool-bar-height: 50px;
+  $ui-tool-bar-background-color: $ui-bg-color-4 !default;
+  $ui-tool-bar_devider-background-color: $ui-bg-color-3 !default;
+  $ui-tool-bar-width: calc(100% - 210px) !default;
+  .ui-tool-bar {
+    background-color: $ui-tool-bar-background-color;
+    height: $ui-tool-bar-height;
+    &--fixed {
+      width: $ui-tool-bar-width;
+      position: fixed;
+    }
+    div.divider {
+      margin: 10px 5px;
+      height: 30px;
+      width: 3px;
+      background-color: $ui-tool-bar_devider-background-color;
+    }
+    campus-tool-bar-button {
+      margin: 10px 5px;
+      cursor: pointer;
+    }
+  }
+}

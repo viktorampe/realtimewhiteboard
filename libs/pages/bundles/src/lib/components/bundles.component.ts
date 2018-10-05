@@ -1,27 +1,60 @@
-import { Component, ViewChild } from '@angular/core';
-import { SideSheetComponent } from '@campus/ui';
+import { Component, OnInit } from '@angular/core';
+import { LearningAreaInterface } from '@campus/dal';
+import { ListFormat } from '@campus/ui';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { BundlesViewModel } from './bundles.viewmodel';
 
 @Component({
   selector: 'campus-bundles',
   templateUrl: './bundles.component.html',
   styleUrls: ['./bundles.component.scss']
 })
-export class BundlesComponent {
-  options = [
-    { value: 23, viewValue: 'one' },
-    { value: 39, viewValue: 'two' },
-    { value: 30, viewValue: 'three' }
-  ];
+export class BundlesComponent implements OnInit {
+  toolbarFixed: boolean;
 
-  isOpenOnInit = true;
-  @ViewChild('sideSheet') sideSheet: SideSheetComponent;
+  listFormat$: Observable<ListFormat> = this.bundlesViewModel.listFormat$;
+  filterInput$ = new BehaviorSubject<string>('');
 
-  toggleSideSheet() {
-    this.sideSheet.toggle();
+  learningAreas$: Observable<LearningAreaInterface[]> = this.bundlesViewModel
+    .learningAreas$;
+
+  displayedLearningAreas$: Observable<
+    LearningAreaInterface[]
+  > = this.getDisplayedLearningAreas$(this.learningAreas$, this.filterInput$);
+
+  learningAreasCounts$: Observable<any> = this.bundlesViewModel
+    .learningAreasCounts$;
+
+  constructor(private bundlesViewModel: BundlesViewModel) {}
+
+  ngOnInit(): void {
+    this.toolbarFixed = true;
   }
 
-  onClickConfirm(eventData): void {
-    console.log('eventData');
-    console.log(eventData);
+  onChangeFilterInput(filterInput: string): void {
+    this.filterInput$.next(filterInput);
+  }
+
+  resetFilterInput(): void {
+    this.filterInput$.next('');
+  }
+
+  clickChangeListFormat(value: string): void {
+    this.bundlesViewModel.changeListFormat(ListFormat[value]);
+  }
+
+  getDisplayedLearningAreas$(
+    learningAreas$: Observable<LearningAreaInterface[]>,
+    filterInput$: Observable<string>
+  ): Observable<LearningAreaInterface[]> {
+    return combineLatest(learningAreas$, filterInput$).pipe(
+      map(([learningAreas, filterInput]: [LearningAreaInterface[], string]) => {
+        if (!filterInput || filterInput === '') return learningAreas;
+        return learningAreas.filter(learningArea =>
+          learningArea.name.toLowerCase().includes(filterInput.toLowerCase())
+        );
+      })
+    );
   }
 }

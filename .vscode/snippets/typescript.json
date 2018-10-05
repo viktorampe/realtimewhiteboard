@@ -1,11 +1,7 @@
 {
   "angular get element by css": {
     "prefix": "ngit-element-by-css",
-    "body": [
-      "${2:fixture}.debugElement.query(",
-      "\tBy.css('.${1:class}')",
-      ")"
-    ]
+    "body": ["${2:fixture}.debugElement.query(", "\tBy.css('.${1:class}')", ")"]
   },
   "angular get element by css in constant": {
     "prefix": "ngit-element-constant-by-css",
@@ -22,22 +18,20 @@
       "${3:fixture}.detectChanges();"
     ]
   },
-  "angular get element nativeElement.textContent": {
-    "prefix": "ngit-native-element-textcontent",
+  "angular get element textContent": {
+    "prefix": "ngit-element-textcontent",
     "body": ".nativeElement.textContent"
   },
-  "angular subscibe to output even": {
+  "angular subscribe to output event": {
     "prefix": "ngit-sub-to-eventdata",
     "body": [
       "let ${1:data}: ${3:type};",
       "component.${2:event}.subscribe((e: $3) => ($1 = e));"
     ]
   },
-  "angular trigget element event": {
+  "angular trigger element event": {
     "prefix": "ngit-trigger-element-event",
-    "body": [
-      "${2:element}.triggerEventHandler('${1:elementEvent}', null);"
-    ]
+    "body": ["${2:element}.triggerEventHandler('${1:elementEvent}', null);"]
   },
   "angular click element": {
     "prefix": "ngit-click-element",
@@ -51,6 +45,22 @@
   "angular detect changes for fixture": {
     "prefix": "ngit-detectchanges",
     "body": "${1:fixture}.detectChanges();"
+  },
+  "angular test if element is present in dom": {
+    "prefix": "ngit-dom-element-present",
+    "body": [
+      "expect(",
+      "\tfixture.debugElement.query(By.css('${1:css-selector}'))",
+      ").toBeDefined();"
+    ]
+  },
+  "angular test if element is not present in dom": {
+    "prefix": "ngit-dom-element-not-present",
+    "body": [
+      "expect(",
+      "\tfixture.debugElement.query(By.css('${1:css-selector}'))",
+      ").toBeNull();"
+    ]
   },
   "angular empty spec file to test content projection in component": {
     "prefix": "ngit-new-spec-for-content-projection",
