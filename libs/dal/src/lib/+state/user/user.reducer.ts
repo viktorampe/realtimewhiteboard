@@ -9,7 +9,7 @@ import { UserAction, UserActionTypes } from './user.actions';
  */
 
 export interface UserState {
-  list: any; // list of User; analogous to a sql normalized table
+  list: object; // list of User; analogous to a sql normalized table
   selectedId?: string | number; // which User record has been selected
   loaded: boolean; // has the User list been loaded
   error?: any; // last none error (if any)
@@ -43,7 +43,7 @@ export function userReducer(
     case UserActionTypes.UserRemoved: {
       state = {
         ...state,
-        list: [],
+        list: action.payload,
         loaded: false
       };
       break;

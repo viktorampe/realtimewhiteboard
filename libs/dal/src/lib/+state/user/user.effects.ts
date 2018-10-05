@@ -16,6 +16,11 @@ import { UserState } from './user.reducer';
 
 @Injectable()
 export class UserEffects {
+  /**
+   * get current from api. errors when no user is logged in.
+   *
+   * @memberof UserEffects
+   */
   @Effect()
   loadUser$ = this.dataPersistence.fetch(UserActionTypes.LoadUser, {
     run: (action: LoadUser, state: UserState) => {
@@ -29,17 +34,23 @@ export class UserEffects {
       return new UserLoadError(error);
     }
   });
+
+  /**
+   * logsout the current user and remove from store.
+   *
+   * @memberof UserEffects
+   */
   @Effect()
   removedUser$ = this.dataPersistence.fetch(UserActionTypes.RemoveUser, {
     run: (action: RemoveUser, state: UserState) => {
       return this.authService.logout().pipe(
-        map(d => {
-          console.log('remove user effect', d);
-          return new fromUserActions.UserRemoved(d);
+        map(() => {
+          return new fromUserActions.UserRemoved({});
         })
       );
     },
     onError: (action: RemoveUser, error) => {
+      console.log(action, error);
       return new UserRemoveError(error);
     }
   });

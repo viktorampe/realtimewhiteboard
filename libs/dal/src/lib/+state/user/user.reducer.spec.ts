@@ -1,12 +1,12 @@
 import { UserLoaded } from './user.actions';
-import { Entity, initialState, userReducer, UserState } from './user.reducer';
+import { initialUserstate, userReducer, UserState } from './user.reducer';
 
 describe('User Reducer', () => {
   const getUserId = it => it['id'];
   let createUser;
 
   beforeEach(() => {
-    createUser = (id: string, name = ''): Entity => ({
+    createUser = (id: string, name = ''): any => ({
       id,
       name: name || `name-${id}`
     });
@@ -16,9 +16,8 @@ describe('User Reducer', () => {
     it('should return set the list of known User', () => {
       const users = [createUser('PRODUCT-AAA'), createUser('PRODUCT-zzz')];
       const action = new UserLoaded(users);
-      const result: UserState = userReducer(initialState, action);
+      const result: UserState = userReducer(initialUserstate, action);
       const selId: string = getUserId(result.list[1]);
-
       expect(result.loaded).toBe(true);
       expect(result.list.length).toBe(2);
       expect(selId).toBe('PRODUCT-zzz');
@@ -28,9 +27,8 @@ describe('User Reducer', () => {
   describe('unknown action', () => {
     it('should return the initial state', () => {
       const action = {} as any;
-      const result = userReducer(initialState, action);
-
-      expect(result).toBe(initialState);
+      const result = userReducer(initialUserstate, action);
+      expect(result).toBe(initialUserstate);
     });
   });
 });

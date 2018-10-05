@@ -25,6 +25,7 @@ export class UserLoaded implements Action {
 
 export class RemoveUser implements Action {
   readonly type = UserActionTypes.RemoveUser;
+  constructor() {}
 }
 
 export class UserRemoved implements Action {

@@ -10,7 +10,7 @@ import {
 } from '@campus/dal';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { catchError, map, take } from 'rxjs/operators';
+import { catchError, map, switchMap, take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -27,12 +27,9 @@ export class LoginPageViewModel implements Resolve<boolean> {
     @Inject(AuthServiceToken) private authService: AuthServiceInterface
   ) {
     store.select(userQuery.getSelectedUser).subscribe(data => {
-      console.log('got event', data, Object.getOwnPropertyNames(data).length);
       if (Object.getOwnPropertyNames(data).length === 0) {
-        console.log('not logged in');
         this.loggedIn = false;
       } else {
-        console.log('logged in');
         this.loggedIn = true;
       }
     });
@@ -46,7 +43,7 @@ export class LoginPageViewModel implements Resolve<boolean> {
    */
   isLoggedIn(): Observable<boolean> {
     return this.authService.getCurrent().pipe(
-      map((currentUser: any) => {
+      map(() => {
         return true;
       }),
       catchError(err => {
@@ -63,21 +60,18 @@ export class LoginPageViewModel implements Resolve<boolean> {
    * @memberof LoginPageViewModel
    */
   login(name: string, password: string): void {
-    this.isLoggedIn().subscribe((isLoggedIn: boolean) => {
-      if (!isLoggedIn) {
-        this.authService
-          .login({ username: name, password: password })
-          .subscribe(
-            loggedIn => {
-              console.log("we successfully logged in let's call our dispatch");
-              this.store.dispatch(new LoadUser());
-            },
-            error => {
-              console.log(error);
-            }
-          );
-      }
-    });
+    this.isLoggedIn()
+      .pipe(
+        switchMap(loggedin => {
+          if (loggedin) {
+            throw new Error('login failed since we are already logged in');
+          }
+          return this.authService.login({ username: name, password: password });
+        })
+      )
+      .subscribe(() => {
+        this.store.dispatch(new LoadUser());
+      });
   }
 
   /**

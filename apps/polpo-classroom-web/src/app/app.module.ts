@@ -3,7 +3,6 @@ import { MatIconModule } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
-import { DalModule } from '@campus/dal';
 import { UiModule } from '@campus/ui';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
@@ -26,7 +25,6 @@ import { AppComponent } from './app.component';
     BrowserModule,
     BrowserAnimationsModule,
     NxModule.forRoot(),
-    DalModule.forRoot(),
     RouterModule.forRoot(
       [
         { path: 'login', loadChildren: '@campus/devlib#DevlibModule' },
