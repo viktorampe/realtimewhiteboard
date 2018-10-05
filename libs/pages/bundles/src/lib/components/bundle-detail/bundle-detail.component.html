@@ -3,10 +3,10 @@
   <campus-side-sheet-body>
     <campus-info-panel-bundle [bundle]="bundle"
                               *ngIf="selectedItems.length == 0"></campus-info-panel-bundle>
-    <campus-info-panel-content [content]=""
-                               *ngIf="selectedItems.length == 1"></campus-info-panel-content>
-    <campus-info-panel-contents [contents]=""
-                                *ngIf="selectedItems.length > 1"></campus-info-panel-contents>
+    <!-- <campus-info-panel-content [content]=""
+                               *ngIf="selectedItems.length == 1">
+    </campus-info-panel-content> -->
+
   </campus-side-sheet-body>
   <campus-side-sheet-page>
     <campus-page-header [iconClass]="bundle.icon"

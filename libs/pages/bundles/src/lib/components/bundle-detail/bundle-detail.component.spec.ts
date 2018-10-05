@@ -1,5 +1,14 @@
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { PagesBundlesModule } from './../../pages-bundles.module';
 import { BundleDetailComponent } from './bundle-detail.component';
+
+@NgModule({
+  imports: [CommonModule, PagesBundlesModule]
+})
+export class TestModule {}
 
 describe('BundleDetailComponent', () => {
   let component: BundleDetailComponent;
@@ -7,7 +16,7 @@ describe('BundleDetailComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [BundleDetailComponent]
+      imports: [TestModule, BrowserAnimationsModule]
     }).compileComponents();
   }));
 

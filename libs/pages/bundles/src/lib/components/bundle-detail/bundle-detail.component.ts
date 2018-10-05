@@ -5,10 +5,12 @@ import {
   OnInit,
   ViewChild
 } from '@angular/core';
-import { SideSheetComponent } from '@campus/ui';
+import {
+  ListViewComponent,
+  ListViewItemDirective,
+  SideSheetComponent
+} from '@campus/ui';
 import { Observable, of, Subscription } from 'rxjs';
-import { ListViewItemDirective } from './../../../../../../ui/src/lib/list-view/directives/list-view-item.directive';
-import { ListViewComponent } from './../../../../../../ui/src/lib/list-view/list-view.component';
 
 class Bundle {
   icon: string;
@@ -77,6 +79,7 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
         if (x.length > 0) {
           this.sideSheet.toggle(true);
         }
+        this.selectedItems = x;
       })
     );
   }
@@ -125,10 +128,4 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
 
     return of(contents);
   }
-}
-
-export enum Selection {
-  NONE = 'none',
-  SINGLE = 'single',
-  MULTIPLE = 'multiple'
 }
