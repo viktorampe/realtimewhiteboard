@@ -11,7 +11,6 @@
   $ui-content-thumbnail_header_icon-font-size: 20px !default;
   $ui-content-thumbnail_header_icon-line-height: $ui-content-thumbnail_header_icon-font-size +
     4 !default;
-  $ui-content-thumbnail_header_icon-text-color: $ui-content-thumbnail-background-color !default;
   $ui-content-thumbnail_image-background-color: $ui-bg-color-gray-5 !default;
   $ui-content-thumbnail_title-text-color: $ui-font-color-active !default;
   /* * Grid */
@@ -19,6 +18,7 @@
   $ui-content-thumbnail--grid-width: 170px !default;
   $ui-content-thumbnail_header--grid-height: $ui-content-thumbnail_header_icon-line-height !default;
   $ui-content-thumbnail_header--grid-width: 100% !default;
+  $ui-content-thumbnail_header_icon--grid-text-color: $ui-content-thumbnail-background-color !default;
   $ui-content-thumbnail_header_icon--grid-margin-left: 4px !default;
   $ui-content-thumbnail_image--grid-height: 120px !default;
   $ui-content-thumbnail_image--grid-width: 100% !default;
@@ -32,6 +32,7 @@
   $ui-content-thumbnail--line-width: 100% !default;
   $ui-content-thumbnail_header--line-width: 120px !default;
   $ui-content-thumbnail_header--padding-left: 20px !default;
+  $ui-content-thumbnail_header_icon--line-text-color: $ui-content-thumbnail_title-text-color !default;
   $ui-content-thumbnail_title--line-font-size: 16px !default;
   $ui-content-thumbnail_title--line-line-height: 22px !default;
   $ui-content-thumbnail_title--line-font-weight: 400 !default;
@@ -47,7 +48,6 @@
       & .ui-content-thumbnail__icon {
         font-size: $ui-content-thumbnail_header_icon-font-size;
         line-height: $ui-content-thumbnail_header_icon-line-height;
-        color: $ui-content-thumbnail_header_icon-text-color;
       }
     }
     &__image {
@@ -68,6 +68,7 @@
         height: $ui-content-thumbnail_header--grid-height;
         & .ui-content-thumbnail__icon {
           margin-left: $ui-content-thumbnail_header_icon--grid-margin-left;
+          color: $ui-content-thumbnail_header_icon--grid-text-color;
         }
       }
       & .ui-content-thumbnail__title {
@@ -88,7 +89,7 @@
         padding-left: $ui-content-thumbnail_header--padding-left;
         width: $ui-content-thumbnail_header--line-width;
         & .ui-content-thumbnail__icon {
-          color: $ui-content-thumbnail_header_icon-text-color;
+          color: $ui-content-thumbnail_header_icon--line-text-color;
         }
       }
       & .ui-content-thumbnail__title {
