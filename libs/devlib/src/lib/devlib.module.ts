@@ -9,7 +9,7 @@ import { LoginPageViewModel } from './loginpage/loginpage.viewmodel';
 
 @NgModule({
   imports: [
-    DalModule.forRoot(),
+    DalModule.forRoot({ apiBaseUrl: 'http://api.polpo.localhost:3000' }),
     FormsModule,
     CommonModule,
     DevlibRoutingModule

@@ -7,9 +7,7 @@ import { LoginPageViewModel } from './loginpage.viewmodel';
   styleUrls: ['./loginpage.component.css']
 })
 export class LoginpageComponent implements OnInit {
-  constructor(private loginPageviewModel: LoginPageViewModel) {
-    console.log(loginPageviewModel);
-  }
+  constructor(private loginPageviewModel: LoginPageViewModel) {}
 
   ngOnInit() {}
 }

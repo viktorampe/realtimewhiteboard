@@ -19,6 +19,10 @@ import {
   userReducer
 } from './+state/user/user.reducer';
 
+interface DalOptions {
+  apiBaseUrl: string;
+}
+
 @NgModule({
   imports: [
     CommonModule,
@@ -35,8 +39,9 @@ import {
   ]
 })
 export class DalModule {
-  static forRoot(): ModuleWithProviders {
-    LoopBackConfig.setBaseURL('http://api.polpo.localhost:3000');
+  constructor() {}
+  static forRoot(options: DalOptions): ModuleWithProviders {
+    LoopBackConfig.setBaseURL(options.apiBaseUrl);
     LoopBackConfig.setRequestOptionsCredentials(true);
     return {
       ngModule: DalModule,

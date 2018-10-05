@@ -1,3 +1,4 @@
+export * from './lib/+models/index';
 export * from './lib/+state/bundles/bundles.reducer';
 export * from './lib/+state/bundles/bundles.selectors';
 export * from './lib/+state/user/user.actions';
