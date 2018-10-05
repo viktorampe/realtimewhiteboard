@@ -1,4 +1,7 @@
 <campus-tool-bar [fixed]="toolbarFixed">
+  <input #filterInput
+         type="text"
+         (keyup)="onChangeFilterInput([$event, $event.target.value])">
   <div class="divider"></div>
 </campus-tool-bar>
 <div class="pages-bundles__container"
@@ -6,8 +9,11 @@
   <campus-page-header [title]="'Mijn bundels'"
                       [subtitle]="'leergebieden'"
                       [iconClass]="'polpo-lesmateriaal'"></campus-page-header>
-  <div>
-    {{(displayedLearningAreas$|async).length}} van <u>{{(learningAreas$|async).length}}</u> weergegeven
+  <div class="pages-bundles__container__learning-areas-count">
+    {{(displayedLearningAreas$|async)?.length}} van
+    <u class="pages-bundles__container__learning-areas-count__total"
+       (click)="resetFilterInput(); filterInput.value = ''">{{(learningAreas$|async)?.length}}</u>
+    weergegeven
   </div>
   <div class="pages-bundles__container__learning-areas">
     <campus-list-view [listFormat]="listFormat$|async">

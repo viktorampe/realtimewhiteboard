@@ -5,6 +5,11 @@
     &--fixed {
       padding-top: 70px !important;
     }
+    &__learning-areas-count {
+      &__total {
+        cursor: pointer;
+      }
+    }
   }
 }
 .placeholder {

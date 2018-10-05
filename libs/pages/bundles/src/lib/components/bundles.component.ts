@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LearningAreaInterface } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { debounceTime, map } from 'rxjs/operators';
 import { BundlesViewModel } from './bundles.viewmodel';
 
 @Component({
@@ -19,8 +19,7 @@ export class BundlesComponent implements OnInit {
   listFormat$: Observable<ListFormat> = new BehaviorSubject<ListFormat>(
     ListFormat.GRID
   );
-
-  filterInput$: Observable<string> = new BehaviorSubject<string>('wis');
+  filterInput$ = new BehaviorSubject<string>('');
 
   learningAreas$: Observable<LearningAreaInterface[]> = new BehaviorSubject<
     LearningAreaInterface[]
@@ -54,6 +53,7 @@ export class BundlesComponent implements OnInit {
     this.learningAreas$,
     this.filterInput$
   ).pipe(
+    debounceTime(200),
     map(([learningAreas, filterInput]: [LearningAreaInterface[], string]) => {
       if (!filterInput || filterInput === '') return learningAreas;
       return learningAreas.filter(learningArea =>
@@ -85,5 +85,13 @@ export class BundlesComponent implements OnInit {
   ngOnInit() {
     this.lineView = false;
     this.toolbarFixed = true;
+  }
+
+  onChangeFilterInput([event, inputValue]: [KeyboardEvent, string]) {
+    this.filterInput$.next(inputValue);
+  }
+
+  resetFilterInput(): void {
+    this.filterInput$.next('');
   }
 }
