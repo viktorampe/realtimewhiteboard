@@ -1,9 +1,7 @@
 export * from './lib/+models/index';
 export * from './lib/+state/bundles/bundles.reducer';
 export * from './lib/+state/bundles/bundles.selectors';
-export * from './lib/+state/educontents/edu-contents.actions';
-export * from './lib/+state/educontents/edu-contents.reducer';
-export * from './lib/+state/educontents/edu-contents.selectors';
+export * from './lib/+state/educontents';
 export * from './lib/dal.module';
 export {
   EducontentServiceInterface,

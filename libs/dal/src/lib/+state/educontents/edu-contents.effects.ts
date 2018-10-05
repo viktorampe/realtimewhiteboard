@@ -12,7 +12,7 @@ import {
   EduContentsLoadError,
   LoadEduContents
 } from './edu-contents.actions';
-import { EduContentsState } from './edu-contents.reducer';
+import { State } from './edu-contents.reducer';
 
 @Injectable()
 export class EduContentsEffects {
@@ -20,7 +20,7 @@ export class EduContentsEffects {
   loadEducontents$ = this.dataPersistence.fetch(
     EduContentsActionTypes.LoadEduContents,
     {
-      run: (action: LoadEduContents, state: EduContentsState) => {
+      run: (action: LoadEduContents, state: State) => {
         return this.eduContentService.getAll().pipe(
           map(eduContents => {
             return new AddEduContents({ eduContents });
@@ -35,7 +35,7 @@ export class EduContentsEffects {
 
   constructor(
     private actions: Actions,
-    private dataPersistence: DataPersistence<EduContentsState>,
+    private dataPersistence: DataPersistence<State>,
     @Inject(EDUCONTENT_SERVICE_TOKEN)
     private eduContentService: EducontentServiceInterface
   ) {}

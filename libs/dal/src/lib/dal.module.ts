@@ -31,7 +31,7 @@ interface DalOptions {
       initialState: bundlesInitialState
     }),
     StoreModule.forFeature('eduContents', fromEduContents.reducer, {
-      initialState: fromEduContents.initialEducontentState
+      initialState: fromEduContents.initialState
     }),
     EffectsModule.forFeature([BundlesEffects, EduContentsEffects])
   ],

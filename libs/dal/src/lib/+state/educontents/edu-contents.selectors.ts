@@ -1,23 +1,20 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { EduContentsState, selectAll } from './edu-contents.reducer';
+import { selectAll, State } from './edu-contents.reducer';
 
-const selectEduContentState = createFeatureSelector<EduContentsState>(
+export const selectEduContentState = createFeatureSelector<State>(
   'eduContents'
 );
 
-const getError = createSelector(
+export const getError = createSelector(
   selectEduContentState,
-  (state: EduContentsState) => state.error
+  (state: State) => state.error
 );
-const selectAllEduContents = createSelector(selectEduContentState, selectAll);
-
-const getLoaded = createSelector(
+export const selectAllEduContents = createSelector(
   selectEduContentState,
-  (state: EduContentsState) => state.loaded
+  selectAll
 );
 
-export const EDUCONTENT_QUERY = {
-  getLoaded,
-  getError,
-  selectAllEduContents
-};
+export const getLoaded = createSelector(
+  selectEduContentState,
+  (state: State) => state.loaded
+);

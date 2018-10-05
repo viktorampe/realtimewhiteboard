@@ -12,7 +12,7 @@ import {
  * model type by id. This interface is extended to include
  * any additional interface properties.
  */
-export interface EduContentsState extends EntityState<EduContentInterface> {
+export interface State extends EntityState<EduContentInterface> {
   // additional entities state properties
   loaded: boolean;
   error?: any;
@@ -35,17 +35,15 @@ export const adapter: EntityAdapter<EduContentInterface> = createEntityAdapter<
  * for the generated entity state. Initial state
  * additional properties can also be defined.
  */
-export const initialEducontentState: EduContentsState = adapter.getInitialState(
-  {
-    // additional entity state properties
-    loaded: false
-  }
-);
+export const initialState: State = adapter.getInitialState({
+  // additional entity state properties
+  loaded: false
+});
 
 export function reducer(
-  state = initialEducontentState,
+  state = initialState,
   action: EduContentsActions
-): EduContentsState {
+): State {
   switch (action.type) {
     case EduContentsActionTypes.AddEduContent: {
       /**
