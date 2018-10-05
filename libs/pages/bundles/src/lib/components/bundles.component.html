@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <campus-list-view [multiSelect]="true"
                   listFormat="line">
   <campus-content-thumbnail campusListItem
@@ -65,3 +66,12 @@
                             fileExtensionClass="zip">
   </campus-content-thumbnail>
 </campus-list-view>
+=======
+<campus-tool-bar [fixed]="toolbarFixed">
+  <div class="divider"></div>
+</campus-tool-bar>
+<div class="pages-bundles__container"
+     [ngClass]="{'pages-bundles__container--fixed': toolbarFixed}">
+  <div class="placeholder"></div>
+</div>
+>>>>>>> develop

@@ -12,7 +12,7 @@
       <input placeholder="password"
              [(ngModel)]="loginPageviewModel.password"
              type="password" />
-      <button (click)="loginPageviewModel.login(name, password)">
+      <button (click)="loginPageviewModel.login(loginPageviewModel.name, loginPageviewModel.password)">
         login
       </button>
     </div>
