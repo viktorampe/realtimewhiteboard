@@ -3,6 +3,9 @@
          type="text"
          (keyup)="onChangeFilterInput($event.target.value)">
   <div class="divider"></div>
+  <a (click)="clickChangeListFormat('GRID')">grid</a>
+  <div class="divider"></div>
+  <a (click)="clickChangeListFormat('LINE')">line</a>
 </campus-tool-bar>
 <div class="pages-bundles__container"
      [ngClass]="{'pages-bundles__container--fixed': toolbarFixed}">
@@ -20,6 +23,7 @@
                       [placeHolderText]="'De toegepaste filter heeft geeft geen resultaten'">
       <campus-folder *ngFor="let learningArea of displayedLearningAreas$|async"
                      campusListItem
+                     [listFormat]="listFormat$|async"
                      [itemCount]="(learningAreaCounts$|async)[learningArea.id].booksCount + (learningAreaCounts$|async)[learningArea.id].bundlesCount"
                      [title]="learningArea.name"
                      [backgroundColor]="learningArea.color"

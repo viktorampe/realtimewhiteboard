@@ -16,9 +16,7 @@ export class BundlesComponent implements OnInit {
 
   //TODO get streams from vm once that is finisched
 
-  listFormat$: Observable<ListFormat> = new BehaviorSubject<ListFormat>(
-    ListFormat.GRID
-  );
+  listFormat$ = new BehaviorSubject<ListFormat>(ListFormat.GRID);
   filterInput$ = new BehaviorSubject<string>('');
 
   learningAreas$: Observable<LearningAreaInterface[]> = new BehaviorSubject<
@@ -82,7 +80,7 @@ export class BundlesComponent implements OnInit {
 
   constructor(private bundlesViewModel: BundlesViewModel) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.lineView = false;
     this.toolbarFixed = true;
   }
@@ -93,5 +91,9 @@ export class BundlesComponent implements OnInit {
 
   resetFilterInput(): void {
     this.filterInput$.next('');
+  }
+
+  clickChangeListFormat(value: string): void {
+    this.listFormat$.next(ListFormat[value]);
   }
 }
