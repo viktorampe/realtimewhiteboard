@@ -43,6 +43,9 @@
     },
     "pages-shared": {
       "tags": []
+    },
+    "browser": {
+      "tags": []
     }
   }
 }
