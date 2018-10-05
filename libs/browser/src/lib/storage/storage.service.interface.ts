@@ -5,13 +5,8 @@ export const BROWSER_STORAGE_SERVICE_TOKEN = new InjectionToken(
 );
 
 export interface StorageServiceInterface {
-  storage: Storage;
-
   get(key: string);
-
   set(key: string, value: string);
-
   remove(key: string);
-
   clear();
 }
