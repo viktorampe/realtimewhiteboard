@@ -65,7 +65,9 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
       this.filter.text.pipe(startWith(''))
     ).pipe(
       map(([contents, filterText]) =>
-        contents.filter(c => c.title.includes(filterText))
+        contents.filter(c =>
+          c.title.toLowerCase().includes(filterText.toLowerCase())
+        )
       )
     );
   }
