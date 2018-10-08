@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { BundleDetailComponent } from './components/bundle-detail/bundle-detail.component';
+import { BundleDetailViewModel } from './components/bundle-detail/bundle-detail.viewmodel';
 import { BundlesComponent } from './components/bundles.component';
 import { BundlesViewModel } from './components/bundles.viewmodel';
 
@@ -12,7 +13,8 @@ const routes: Routes = [
   },
   {
     path: 'bundle-detail',
-    component: BundleDetailComponent
+    component: BundleDetailComponent,
+    resolve: { isResolved: BundleDetailViewModel }
   }
 ];
 
