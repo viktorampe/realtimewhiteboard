@@ -41,7 +41,8 @@ export class ListViewComponent
    */
   useItemSelectableOverlayStyle = false;
 
-  private subscription = new Subscription();
+  private itemsSubscription = new Subscription();
+  private formatSubscription = new Subscription();
 
   @Input() listFormat: ListFormat;
   @Input() multiSelect = false;
@@ -54,12 +55,29 @@ export class ListViewComponent
   items: QueryList<ListViewItemDirective>;
 
   ngAfterContentInit() {
+    // Initiële subscription
     this.items.forEach(item => {
-      this.subscription.add(
+      this.itemsSubscription.add(
         item.itemSelectionChanged.subscribe(changedItem =>
           this.onItemSelectionChanged(changedItem)
         )
       );
+    });
+
+    // nieuwe subscription als items veranderen
+    this.items.changes.subscribe(() => {
+      // Unsubscriben op all items
+      this.itemsSubscription.unsubscribe();
+
+      // Nieuwe subscription nemen zodat nieuwe waarden kunnen toegevoegd worden.
+      this.itemsSubscription = new Subscription();
+      this.items.forEach(item => {
+        this.itemsSubscription.add(
+          item.itemSelectionChanged.subscribe(changedItem =>
+            this.onItemSelectionChanged(changedItem)
+          )
+        );
+      });
     });
   }
 
@@ -70,7 +88,8 @@ export class ListViewComponent
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.itemsSubscription.unsubscribe();
+    this.formatSubscription.unsubscribe();
   }
 
   private onItemSelectionChanged(item: ListViewItemDirective) {
@@ -88,10 +107,14 @@ export class ListViewComponent
     if (this.multiSelect) {
       this.items.forEach(i => (i.isSelected = true));
       this.useItemSelectableOverlayStyle = true;
+      const selectedItemsArray = this.items.toArray();
+      this.selectedItems$.next(selectedItemsArray);
     }
   }
   deselectAllItems() {
     this.items.forEach(i => (i.isSelected = false));
     this.useItemSelectableOverlayStyle = false;
+    const selectedItemsArray = this.items.filter(i => i.isSelected);
+    this.selectedItems$.next(selectedItemsArray);
   }
 }

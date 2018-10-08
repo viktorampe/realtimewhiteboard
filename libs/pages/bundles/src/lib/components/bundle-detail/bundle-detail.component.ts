@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   OnDestroy,
   OnInit,
@@ -12,13 +13,10 @@ import {
   ListViewItemDirective,
   SideSheetComponent
 } from '@campus/ui';
-import { Observable, of, Subscription } from 'rxjs';
-import {
-  Bundle,
-  Content,
-  ContentAction,
-  Teacher
-} from './bundle-detail-classes';
+import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
+import { Content } from './bundle-detail-classes';
+import { BundleDetailViewModel } from './bundle-detail.viewmodel';
 
 @Component({
   selector: 'campus-bundle-detail',
@@ -34,12 +32,12 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   // currentBundle$: Observable<Bundle>;
 
   subscriptions = new Subscription();
-  bundle: Bundle;
-  contents: Content[];
-  filteredContents: Content[];
+  bundle$ = this.vm.getMockBundle();
+  contents$ = this.vm.getMockContents();
+  filteredContents$: Observable<Content[]>;
   selectedItems: ListViewItemDirective[] = [];
   listFormat = ListFormat;
-  currentListFormat = ListFormat.GRID;
+  currentListFormat$ = new BehaviorSubject<ListFormat>(ListFormat.GRID);
 
   public get selectedContent(): object {
     return (this.selectedItems[0]
@@ -56,24 +54,19 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(SideSheetComponent) sideSheet: SideSheetComponent;
   @ViewChild(FilterTextInputComponent) filter: FilterTextInputComponent;
 
+  constructor(
+    private vm: BundleDetailViewModel,
+    private cd: ChangeDetectorRef
+  ) {}
+
   ngOnInit() {
-    this.subscriptions.add(
-      this.getMockBundle().subscribe(x => (this.bundle = x))
-    );
-    this.subscriptions.add(
-      this.getMockContents().subscribe(x => (this.contents = x))
-    );
-    this.filteredContents = this.contents;
-    this.subscriptions.add(
-      this.filter.text.subscribe(x => {
-        if (x) {
-          this.filteredContents = this.contents.filter(c =>
-            c.title.includes(x)
-          );
-        } else {
-          this.filteredContents = this.contents;
-        }
-      })
+    this.filteredContents$ = combineLatest(
+      this.contents$,
+      this.filter.text.pipe(startWith(''))
+    ).pipe(
+      map(([contents, filterText]) =>
+        contents.filter(c => c.title.includes(filterText))
+      )
     );
   }
 
@@ -86,6 +79,12 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
         this.selectedItems = x;
       })
     );
+    this.subscriptions.add(
+      this.filteredContents$.subscribe(() => this.list.deselectAllItems())
+    );
+
+    // Nodig om ExpressionChangedAfterItHasBeenCheckedError te vermijden
+    this.cd.detectChanges();
   }
 
   ngOnDestroy() {
@@ -93,68 +92,6 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   setListFormat(format: ListFormat) {
-    this.currentListFormat = format;
-    console.log(this.currentListFormat);
-  }
-
-  getMockBundle(): Observable<Bundle> {
-    const bundle = new Bundle({
-      icon: 'icon-tasks',
-      name: 'Dit is een titel',
-      description: 'Dit is een subtitel',
-      teacher: new Teacher({
-        displayName: 'Leerkracht Naam',
-        firstName: 'Leerkracht',
-        name: 'Naam'
-      })
-    });
-
-    return of(bundle);
-  }
-
-  getMockContents(): Observable<Content[]> {
-    const item1 = new Content({
-      productType: 'icon-bundles',
-      fileExtension: 'zip',
-      previewImage: 'string',
-      title: 'Dit is een titel',
-      description: 'Dit is een beschrijving',
-      methodLogo: 'vbtl',
-      status: 'string',
-      actions: [
-        new ContentAction({
-          text: 'Action tekst 1a',
-          icon: 'icon-tasks'
-        }),
-        new ContentAction({
-          text: 'Action tekst 2a',
-          icon: 'icon-book'
-        })
-      ]
-    });
-
-    const item2 = new Content({
-      productType: 'icon-bundles',
-      fileExtension: 'xlsx',
-      previewImage: 'string',
-      title: 'Dit is een titel2',
-      description: 'Dit is een beschrijving2',
-      methodLogo: 'mundo',
-      status: 'string',
-      actions: [
-        new ContentAction({
-          text: 'Action tekst 1b',
-          icon: 'icon-tasks'
-        }),
-        new ContentAction({
-          text: 'Action tekst 2b',
-          icon: 'icon-book'
-        })
-      ]
-    });
-
-    const contents: Content[] = [item1, item2, item1];
-
-    return of(contents);
+    this.currentListFormat$.next(format);
   }
 }

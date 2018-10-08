@@ -1,7 +1,7 @@
 <campus-side-sheet isOpenOnInit=true>
   <campus-side-sheet-header>This is the header of the side sheet.</campus-side-sheet-header>
   <campus-side-sheet-body [ngSwitch]="selectedItems.length">
-    <campus-info-panel-bundle [bundle]="bundle"
+    <campus-info-panel-bundle [bundle]="bundle$ | async"
                               *ngSwitchCase="0"></campus-info-panel-bundle>
     <campus-info-panel-content [content]="selectedContent"
                                *ngSwitchCase="1">
@@ -22,15 +22,19 @@
                                     (click)="setListFormat(listFormat.GRID)"></campus-content-action-button>
       <campus-filter-text-input theme=light></campus-filter-text-input>
     </campus-app-bar>
-    <campus-page-header [iconClass]="bundle.icon"
-                        [title]="bundle.name"
-                        [subtitle]="bundle.description"></campus-page-header>
-    <div *ngIf="filteredContents !== contents">Er {{filteredContents.length > 1 ? 'worden':'wordt'}}
-      {{filteredContents.length}} {{filteredContents.length > 1 ? 'items':'item'}} van de {{contents.length}}
-      getoond. </div>
-    <campus-list-view [listFormat]="currentListFormat"
+    <campus-page-header [iconClass]="(bundle$ | async).icon"
+                        [title]="(bundle$ | async).name"
+                        [subtitle]="(bundle$ | async).description"></campus-page-header>
+    <!-- <div *ngIf="(filteredContents$ | async).length !== (contents$| async).length">
+      {{((filteredContents$ | async).length)}} {{(filteredContents$ | async).length > 1 ? 'items':'item'}} van de
+      {{(contents$| async).length}}
+      gevonden. </div>
+    <div *ngIf="(filteredContents$ | async).length == (contents$| async).length">{{(filteredContents$ | async).length}}
+      {{(filteredContents$ | async).length > 1 ?
+      'items':'item'}} beschikbaar</div> -->
+    <campus-list-view [listFormat]="currentListFormat$ | async"
                       [multiSelect]="true">
-      <campus-content-thumbnail *ngFor="let content of filteredContents"
+      <campus-content-thumbnail *ngFor="let content of (filteredContents$ | async)"
                                 campusListItem
                                 [dataObject]="content"
                                 [title]="content.title"
