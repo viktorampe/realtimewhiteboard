@@ -31,10 +31,10 @@ export class FilterTextInputComponent implements OnDestroy {
   @Input('placeholder') placeholder = 'Filter';
   @Output() text = new EventEmitter<string>();
 
-  private input = new FormControl();
+  input = new FormControl();
 
   //for some bizar reason async pipes refused to work in our html file, making this weirdness necessary
-  private hasData = false;
+  hasData = false;
   private readonly formSubscription: Subscription = this.getInput().subscribe(
     (data: string) => {
       this.text.emit(data);
