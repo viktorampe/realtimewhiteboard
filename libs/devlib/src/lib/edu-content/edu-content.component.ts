@@ -10,6 +10,6 @@ export class EduContentComponent implements OnInit {
   constructor(public viewModel: EduContentViewModel) {}
 
   ngOnInit() {
-    this.viewModel.getAllEducontents();
+    this.viewModel.getAllEduContents();
   }
 }

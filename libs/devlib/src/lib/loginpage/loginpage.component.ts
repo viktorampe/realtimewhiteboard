@@ -19,10 +19,6 @@ export class LoginpageComponent implements OnInit {
 
   ngOnInit() {}
 
-  getAllEducontents() {
-    this.educontents = this.loginPageviewModel.getEducontents();
-  }
-
   getCurrentUser() {
     this.currentUser = this.personApi.getCurrent();
   }

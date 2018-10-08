@@ -1,13 +1,19 @@
 import { Injectable } from '@angular/core';
-import { Educontent, EducontentActions, EducontentQueries } from '@campus/dal';
+import { EduContent, EduContentActions, EduContentQueries } from '@campus/dal';
 import { Store } from '@ngrx/store';
 
 @Injectable()
 export class EduContentViewModel {
-  educontents$ = this.store.select(EducontentQueries.selectAllEduContents);
-  constructor(private store: Store<Educontent.State>) {}
+  educontents$ = this.store.select(EduContentQueries.selectAllEduContents);
+  selectedEduContent$ = this.store
+    .pipe
+    // select(EduContentQueries.selectedEduContent(1))
+    ();
+  constructor(private store: Store<EduContent.State>) {}
 
-  getAllEducontents() {
-    this.store.dispatch(new EducontentActions.LoadEduContents());
+  getAllEduContents() {
+    this.store.dispatch(new EduContentActions.LoadEduContents());
   }
+
+  getEduContent(id: number) {}
 }

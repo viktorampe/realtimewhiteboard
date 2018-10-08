@@ -1,12 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { Resolve } from '@angular/router';
-import {
-  AuthServiceInterface,
-  AuthServiceToken,
-  EduContentInterface,
-  EducontentServiceInterface,
-  EDUCONTENT_SERVICE_TOKEN
-} from '@campus/dal';
+import { AuthServiceInterface, AuthServiceToken } from '@campus/dal';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, map, take } from 'rxjs/operators';
 
@@ -21,17 +15,11 @@ export class LoginPageViewModel implements Resolve<boolean> {
   loggedIn: boolean;
 
   constructor(
-    @Inject(AuthServiceToken) private authService: AuthServiceInterface,
-    @Inject(EDUCONTENT_SERVICE_TOKEN)
-    private educontentService: EducontentServiceInterface
+    @Inject(AuthServiceToken) private authService: AuthServiceInterface
   ) {
     this.isLoggedIn().subscribe((isLoggedIn: boolean) => {
       this.loggedIn = isLoggedIn;
     });
-  }
-
-  getEducontents(): Observable<EduContentInterface[]> {
-    return this.educontentService.getAll();
   }
 
   /**

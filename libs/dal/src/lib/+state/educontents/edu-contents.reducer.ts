@@ -91,11 +91,11 @@ export function reducer(
       return adapter.removeMany(action.payload.ids, state);
     }
 
-    case EduContentsActionTypes.EducontentsLoaded: {
+    case EduContentsActionTypes.EduContentsLoaded: {
       return adapter.addAll(action.payload.eduContents, state);
     }
 
-    case EduContentsActionTypes.EducontentsLoadError: {
+    case EduContentsActionTypes.EduContentsLoadError: {
       return { ...state, error: action.payload };
     }
 

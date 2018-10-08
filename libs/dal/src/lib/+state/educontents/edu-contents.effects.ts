@@ -3,7 +3,7 @@ import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { map } from 'rxjs/operators';
 import {
-  EducontentServiceInterface,
+  EduContentServiceInterface,
   EDUCONTENT_SERVICE_TOKEN
 } from '../../educontent/edu-content.service.interface';
 import {
@@ -17,7 +17,7 @@ import { State } from './edu-contents.reducer';
 @Injectable()
 export class EduContentsEffects {
   @Effect()
-  loadEducontents$ = this.dataPersistence.fetch(
+  loadEduContents$ = this.dataPersistence.fetch(
     EduContentsActionTypes.LoadEduContents,
     {
       run: (action: LoadEduContents, state: State) => {
@@ -37,6 +37,6 @@ export class EduContentsEffects {
     private actions: Actions,
     private dataPersistence: DataPersistence<State>,
     @Inject(EDUCONTENT_SERVICE_TOKEN)
-    private eduContentService: EducontentServiceInterface
+    private eduContentService: EduContentServiceInterface
   ) {}
 }

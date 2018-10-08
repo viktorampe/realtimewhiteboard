@@ -3,8 +3,8 @@ import { Action } from '@ngrx/store';
 import { EduContentInterface } from '../../+models';
 
 export enum EduContentsActionTypes {
-  EducontentsLoaded = '[EduContents] EduContents Loaded',
-  EducontentsLoadError = '[EduContents] EducContents Load Error',
+  EduContentsLoaded = '[EduContents] EduContents Loaded',
+  EduContentsLoadError = '[EduContents] EducContents Load Error',
   LoadEduContents = '[EduContents] Load EduContents',
   AddEduContent = '[EduContents] Add EduContent',
   UpsertEduContent = '[EduContents] Upsert EduContent',
@@ -24,13 +24,13 @@ export class LoadEduContents implements Action {
 }
 
 export class EduContentsLoaded implements Action {
-  readonly type = EduContentsActionTypes.EducontentsLoaded;
+  readonly type = EduContentsActionTypes.EduContentsLoaded;
 
   constructor(public payload: { eduContents: EduContentInterface[] }) {}
 }
 
 export class EduContentsLoadError implements Action {
-  readonly type = EduContentsActionTypes.EducontentsLoadError;
+  readonly type = EduContentsActionTypes.EduContentsLoadError;
   constructor(public payload: any) {}
 }
 

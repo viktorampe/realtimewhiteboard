@@ -1,5 +1,5 @@
-import * as EducontentActions from './edu-contents.actions';
-import * as Educontent from './edu-contents.reducer';
-import * as EducontentQueries from './edu-contents.selectors';
+import * as EduContentActions from './edu-contents.actions';
+import * as EduContent from './edu-contents.reducer';
+import * as EduContentQueries from './edu-contents.selectors';
 
-export { EducontentActions, Educontent, EducontentQueries };
+export { EduContentActions, EduContent, EduContentQueries };
