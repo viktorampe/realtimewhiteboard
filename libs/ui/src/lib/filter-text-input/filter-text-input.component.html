@@ -1,0 +1,13 @@
+<form class="ui-filter-text-input ui-filter-text-input--{{theme}}">
+  <i class="ui-filter-text-input__icon icon-filter"></i>
+  <input class="ui-filter-text-input__input"
+         [class.ui-filter-text-input__input--not-empty]="text|async"
+         placeholder="{{placeholder}}"
+         name="filter-input"
+         type="text"
+         (keydown.enter)="inputEnter()"
+         [formControl]="input" />
+  <a class="ui-filter-text-input__cancel icon-cancel"
+     (click)="clear()"
+     aria-label="Clear"><i class="ui-filter-text-input__cancel-icon"></i></a>
+</form>

@@ -60,16 +60,20 @@ describe('FilterTextInputComponent', () => {
   it('should show clear button', () => {
     component.setInput(mockData.text);
     fixture.detectChanges();
-    const test = fixture.debugElement.query(By.css('button'));
+    const test = fixture.debugElement.query(
+      By.css('.ui-filter-text-input__cancel')
+    );
     expect(test).toBeTruthy();
   });
 
-  it('should hide clear button', () => {
+  xit('should hide clear button -> hidden with css, not removed from DOM', () => {
     component.setInput('aa');
     fixture.detectChanges();
     component.setInput('');
     fixture.detectChanges();
-    const test = fixture.debugElement.query(By.css('button'));
+    const test = fixture.debugElement.query(
+      By.css('.ui-filter-text-input__cancel')
+    );
     expect(test).toBeFalsy();
   });
 
@@ -77,7 +81,9 @@ describe('FilterTextInputComponent', () => {
     const text = '';
     component.setInput(mockData.text);
     fixture.detectChanges();
-    const test = fixture.debugElement.query(By.css('button'));
+    const test = fixture.debugElement.query(
+      By.css('.ui-filter-text-input__cancel')
+    );
     test.triggerEventHandler('click', null);
     expect(text).toBe('');
   });

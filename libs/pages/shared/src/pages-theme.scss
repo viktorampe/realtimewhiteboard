@@ -4,10 +4,18 @@ $pages-bg-color-2: #fff !default;
 $pages-font-color-1: #000 !default;
 $pages-font-color-2: #000 !default;
 
+$pages_toolbar_filter-width: 175px !default;
+
+@mixin pages-shared() {
+  .pages__toolbar__filter {
+    width: $pages_toolbar_filter-width;
+  }
+}
+
 // import all required sass files from our libs
 // @import './alerts/src/lib/components/alerts.components.theme'
 // @import './bundles/src/lib/components/bundles.component.theme.scss';
 // create theme-mixin with each mixin from our library components
 @mixin pages-theme() {
-  // @include ui-pages-alerts();
+  @include pages-shared();
 }

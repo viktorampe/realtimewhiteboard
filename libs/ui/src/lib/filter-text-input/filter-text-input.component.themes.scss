@@ -1,0 +1,33 @@
+@mixin ui-filter-text-input() {
+  $ui-filter-text_input-icon-font-size: 16px !default;
+
+  // light theme
+  $ui-filter-text_input-background-color--light: $ui-bg-color-1 !default;
+  $ui-filter-text_input-text-color--light: $ui-font-color-1 !default;
+  // dark theme
+  $ui-filter-text_input-background-color--dark: $ui-bg-color-2 !default;
+  $ui-filter-text_input-text-color--dark: $ui-font-color-2 !default;
+
+  .ui-filter-text-input {
+    &__icon,
+    &__cancel {
+      font-size: $ui-filter-text_input-icon-font-size;
+    }
+
+    // light theme
+    &--light {
+      color: $ui-filter-text_input-text-color--light;
+    }
+    &--light &__input {
+      background-color: $ui-filter-text_input-background-color--light;
+    }
+
+    // dark theme
+    &--dark {
+      color: $ui-filter-text_input-text-color--dark;
+    }
+    &--dark &__input {
+      background-color: $ui-filter-text_input-background-color--dark;
+    }
+  }
+}

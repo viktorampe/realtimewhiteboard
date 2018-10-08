@@ -3,7 +3,6 @@ $ui-icon-filter: FontAwesome '\f0b0' !default;
 $ui-icon-hourglass: Polpo '\e96b' !default;
 $ui-icon-lock: Polpo '\e96c' !default;
 $ui-icon-checkmark: Polpo '\e966' !default;
-$ui-icon-hourglass: Polpo '\e96b' !default;
 $ui-icon-wiskunde: Polpo '\e935' !default;
 $polpo-presentatie: polpo '\e944' !default;
 
@@ -13,7 +12,6 @@ $polpo-presentatie: polpo '\e944' !default;
 @include icon(polpo-lock, $ui-icon-lock);
 @include icon(polpo-checkmark, $ui-icon-checkmark);
 @include icon(polpo-wiskunde, $ui-icon-wiskunde);
-@include icon(ui-icon-filter, $ui-icon-filter);
 @include icon(polpo-presentatie, $polpo-presentatie);
 
 // thematic variables
@@ -72,6 +70,7 @@ $ui-font-family-3: 'Helvetica', 'Arial', 'Sans-Serif' !default;
 @import './list-view/list-view.component.theme.scss';
 @import './content-thumbnail/content-thumbnail.component.theme.scss';
 @import './content-action-button/content-action-button.component.theme.scss';
+@import './filter-text-input/filter-text-input.component.themes.scss';
 
 // create theme-mixin with each mixin from our library components
 @mixin ui-theme() {
@@ -95,4 +94,5 @@ $ui-font-family-3: 'Helvetica', 'Arial', 'Sans-Serif' !default;
   @include ui-list-view-deep();
   @include ui-content-thumbnail();
   @include ui-action-button();
+  @include ui-filter-text-input();
 }

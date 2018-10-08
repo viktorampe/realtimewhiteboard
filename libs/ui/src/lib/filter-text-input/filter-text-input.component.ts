@@ -27,22 +27,18 @@ export enum FilterTextInputTheme {
   styleUrls: ['./filter-text-input.component.scss']
 })
 export class FilterTextInputComponent implements OnDestroy {
-  @Input('theme') theme: FilterTextInputTheme;
-  @Input('placeholder') placeholder = 'Filter';
+  @Input() theme: FilterTextInputTheme;
+  @Input() placeholder = 'Filter';
+  @Input()
+  set filterText(filterText: string) {
+    this.input.setValue(filterText);
+  }
   @Output() text = new EventEmitter<string>();
 
-  private input = new FormControl();
-
-  //for some bizar reason async pipes refused to work in our html file, making this weirdness necessary
-  private hasData = false;
+  private input = new FormControl(this.filterText);
   private readonly formSubscription: Subscription = this.getInput().subscribe(
     (data: string) => {
       this.text.emit(data);
-      if (data !== null && data.length > 0) {
-        this.hasData = true;
-      } else {
-        this.hasData = false;
-      }
     }
   );
 
@@ -67,6 +63,20 @@ export class FilterTextInputComponent implements OnDestroy {
   }
 
   /**
+   * enter button is pressed, make sure it returns false to prevent default behavior
+   *
+   * @returns {boolean}
+   * @memberof FilterTextInputViewModel
+   */
+  inputEnter(): boolean {
+    return false;
+  }
+
+  ngOnDestroy() {
+    this.formSubscription.unsubscribe();
+  }
+
+  /**
    * gets the input of the textfield as an observable
    *
    * @returns {Observable<string>}
@@ -74,19 +84,5 @@ export class FilterTextInputComponent implements OnDestroy {
    */
   private getInput(): Observable<string> {
     return this.input.valueChanges;
-  }
-
-  /**
-   * enter button is pressed, make sure it returns false to prevent default behavior
-   *
-   * @returns {boolean}
-   * @memberof FilterTextInputViewModel
-   */
-  enterPressed(): boolean {
-    return false;
-  }
-
-  ngOnDestroy() {
-    this.formSubscription.unsubscribe();
   }
 }
