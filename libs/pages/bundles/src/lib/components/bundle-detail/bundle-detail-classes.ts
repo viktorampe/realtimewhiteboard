@@ -28,6 +28,32 @@ export class ContentAction {
     Object.assign(this, init);
   }
 }
+
+export class ContentForInfoPanel {
+  preview?: string;
+  name: string;
+  description: string;
+  extention: string;
+  productType: string;
+  methods: string[];
+  status: any;
+
+  public constructor(init?: Partial<ContentForInfoPanel>) {
+    Object.assign(this, init);
+  }
+}
+
+export class ContentsForInfoPanel {
+  text: string;
+  count?: number;
+  editable?: boolean;
+  data?: any;
+
+  public constructor(init?: Partial<ContentsForInfoPanel>) {
+    Object.assign(this, init);
+  }
+}
+
 export class Content {
   productType: string;
   fileExtension: string;
@@ -62,30 +88,5 @@ export class Content {
     });
 
     return contentsForInfoPanel;
-  }
-}
-
-export class ContentForInfoPanel {
-  preview?: string;
-  name: string;
-  description: string;
-  extention: string;
-  productType: string;
-  methods: string[];
-  status: any;
-
-  public constructor(init?: Partial<ContentForInfoPanel>) {
-    Object.assign(this, init);
-  }
-}
-
-export class ContentsForInfoPanel {
-  text: string;
-  count?: number;
-  editable?: boolean;
-  data?: any;
-
-  public constructor(init?: Partial<ContentsForInfoPanel>) {
-    Object.assign(this, init);
   }
 }
