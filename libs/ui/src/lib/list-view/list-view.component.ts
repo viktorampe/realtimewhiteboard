@@ -4,8 +4,11 @@ import {
   ContentChildren,
   forwardRef,
   Input,
+  OnChanges,
+  OnDestroy,
   Output,
-  QueryList
+  QueryList,
+  SimpleChanges
 } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { ListViewItemDirective } from './directives/list-view-item.directive';
@@ -29,7 +32,8 @@ import { ListFormat } from './enums/list-format.enum';
   templateUrl: './list-view.component.html',
   styleUrls: ['./list-view.component.scss']
 })
-export class ListViewComponent implements AfterContentInit {
+export class ListViewComponent
+  implements AfterContentInit, OnDestroy, OnChanges {
   /**
    * (boolean) - When multiselecting, add a css class to style the selectable items
    *
@@ -44,6 +48,7 @@ export class ListViewComponent implements AfterContentInit {
   @Input() placeHolderText = 'Er zijn geen beschikbare items.';
 
   @Output() selectedItems$ = new BehaviorSubject([]);
+  @Output() listFormat$ = new BehaviorSubject(this.listFormat);
 
   @ContentChildren(forwardRef(() => ListViewItemDirective))
   items: QueryList<ListViewItemDirective>;
@@ -58,7 +63,12 @@ export class ListViewComponent implements AfterContentInit {
     });
   }
 
-  // tslint:disable-next-line:use-life-cycle-interface
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.listFormat) {
+      this.listFormat$.next(this.listFormat);
+    }
+  }
+
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }

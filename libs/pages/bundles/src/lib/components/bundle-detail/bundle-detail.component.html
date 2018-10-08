@@ -17,7 +17,7 @@
     <campus-page-header [iconClass]="bundle.icon"
                         [title]="bundle.name"
                         [subtitle]="bundle.description"></campus-page-header>
-    <campus-list-view [listFormat]="'grid'"
+    <campus-list-view [listFormat]="currentListFormat"
                       #contentList>
       <!-- dataObject moet nog toegevoegd worden -->
       <campus-content-thumbnail *ngFor="let content of contents"

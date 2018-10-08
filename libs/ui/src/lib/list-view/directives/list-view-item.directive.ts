@@ -5,8 +5,10 @@ import {
   HostBinding,
   HostListener,
   Input,
+  OnDestroy,
   Output
 } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { ListViewItemInterface } from '../interfaces/list-view-item';
 import { ListViewComponent } from '../list-view.component';
 
@@ -20,8 +22,9 @@ import { ListViewComponent } from '../list-view.component';
 @Directive({
   selector: '[campusListItem], [campus-list-item]'
 })
-export class ListViewItemDirective implements AfterContentInit {
+export class ListViewItemDirective implements AfterContentInit, OnDestroy {
   isSelected: boolean;
+  private subscriptions = new Subscription();
 
   @Input() dataObject: object;
 
@@ -53,12 +56,13 @@ export class ListViewItemDirective implements AfterContentInit {
     public host: ListViewItemInterface
   ) {}
 
-  /**
-   * Sets properties on host Component after it has been projected.
-   *
-   * @memberof ListViewItemDirective
-   */
   ngAfterContentInit() {
-    this.host.listFormat = this.parentList.listFormat;
+    this.subscriptions.add(
+      this.parentList.listFormat$.subscribe(x => (this.host.listFormat = x))
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 }
