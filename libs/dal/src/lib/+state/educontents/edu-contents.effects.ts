@@ -1,8 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
-import { Actions, Effect, ofType } from '@ngrx/effects';
+import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
-import { of } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import {
   EduContentServiceInterface,
   EDUCONTENT_SERVICE_TOKEN
@@ -11,7 +10,6 @@ import {
   EduContentsActionTypes,
   EduContentsLoaded,
   EduContentsLoadError,
-  EduContentsLoadSuccessfull,
   LoadEduContents
 } from './edu-contents.actions';
 import { State } from './edu-contents.reducer';
@@ -33,11 +31,6 @@ export class EduContentsEffects {
         return new EduContentsLoadError(error);
       }
     }
-  );
-  @Effect()
-  eduContentsLoaded$ = this.actions.pipe(
-    ofType(EduContentsActionTypes.EduContentsLoaded),
-    switchMap(a => of(new EduContentsLoadSuccessfull({ loaded: true })))
   );
 
   constructor(

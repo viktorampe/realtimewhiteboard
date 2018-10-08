@@ -4,8 +4,7 @@ import { EduContentInterface } from '../../+models';
 
 export enum EduContentsActionTypes {
   EduContentsLoaded = '[EduContents] EduContents Loaded',
-  EduContentsLoadSuccessfull = '[EduContents] EduContents Load Successfull',
-  EduContentsLoadError = '[EduContents] EducContents Load Error',
+  EduContentsLoadError = '[EduContents] Load Error',
   LoadEduContents = '[EduContents] Load EduContents',
   AddEduContent = '[EduContents] Add EduContent',
   UpsertEduContent = '[EduContents] Upsert EduContent',
@@ -28,11 +27,6 @@ export class EduContentsLoaded implements Action {
   readonly type = EduContentsActionTypes.EduContentsLoaded;
 
   constructor(public payload: { eduContents: EduContentInterface[] }) {}
-}
-
-export class EduContentsLoadSuccessfull implements Action {
-  readonly type = EduContentsActionTypes.EduContentsLoadSuccessfull;
-  constructor(public payload: { loaded: boolean }) {}
 }
 
 export class EduContentsLoadError implements Action {
@@ -79,13 +73,13 @@ export class UpdateEduContents implements Action {
 export class DeleteEduContent implements Action {
   readonly type = EduContentsActionTypes.DeleteEduContent;
 
-  constructor(public payload: { id: string }) {}
+  constructor(public payload: { id: number }) {}
 }
 
 export class DeleteEduContents implements Action {
   readonly type = EduContentsActionTypes.DeleteEduContents;
 
-  constructor(public payload: { ids: string[] }) {}
+  constructor(public payload: { ids: number[] }) {}
 }
 
 export class ClearEduContents implements Action {
@@ -95,7 +89,6 @@ export class ClearEduContents implements Action {
 export type EduContentsActions =
   | LoadEduContents
   | EduContentsLoaded
-  | EduContentsLoadSuccessfull
   | EduContentsLoadError
   | AddEduContent
   | UpsertEduContent

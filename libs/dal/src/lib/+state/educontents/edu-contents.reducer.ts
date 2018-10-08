@@ -92,15 +92,14 @@ export function reducer(
     }
 
     case EduContentsActionTypes.EduContentsLoaded: {
-      return adapter.addAll(action.payload.eduContents, state);
-    }
-
-    case EduContentsActionTypes.EduContentsLoadSuccessfull: {
-      return { ...state, loaded: action.payload.loaded };
+      return adapter.addAll(action.payload.eduContents, {
+        ...state,
+        loaded: true
+      });
     }
 
     case EduContentsActionTypes.EduContentsLoadError: {
-      return { ...state, error: action.payload };
+      return { ...state, error: action.payload, loaded: false };
     }
 
     case EduContentsActionTypes.ClearEduContents: {

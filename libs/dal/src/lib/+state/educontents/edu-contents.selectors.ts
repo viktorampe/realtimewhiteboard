@@ -32,6 +32,13 @@ export const getAllEntities = createSelector(
   selectEntities
 );
 
+/**
+ * returns array of objects in the order of the given ids
+ * @example
+ * eduContent$: EduContentInterface[] = this.store.pipe(
+    select(EduContentQueries.getByIds, { ids: [2, 1, 3] })
+  );
+ */
 export const getByIds = createSelector(
   selectEduContentState,
   (state: State, props: { ids: number[] }) => {
