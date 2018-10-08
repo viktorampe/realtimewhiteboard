@@ -1,8 +1,3 @@
-<!-- Toolbar moet nog refactored worden -> scrollbar -->
-<campus-app-bar>
-  <div>123</div>
-</campus-app-bar>
-
 <campus-side-sheet isOpenOnInit=true>
   <campus-side-sheet-header>This is the header of the side sheet.</campus-side-sheet-header>
   <campus-side-sheet-body>
@@ -14,6 +9,16 @@
 
   </campus-side-sheet-body>
   <campus-side-sheet-page>
+
+    <!-- Toolbar moet nog refactored worden -> scrollbar -->
+    <campus-app-bar>
+      <campus-content-action-button [iconClass]="'icon-checklist'"
+                                    [tooltip]="'line'"
+                                    (click)="setListFormat(listFormat.LINE)"></campus-content-action-button>
+      <campus-content-action-button [iconClass]="'icon-timeline'"
+                                    [tooltip]="'grid'"
+                                    (click)="setListFormat(listFormat.GRID)"></campus-content-action-button>
+    </campus-app-bar>
     <campus-page-header [iconClass]="bundle.icon"
                         [title]="bundle.name"
                         [subtitle]="bundle.description"></campus-page-header>

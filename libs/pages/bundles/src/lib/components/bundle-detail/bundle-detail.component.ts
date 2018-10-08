@@ -6,83 +6,18 @@ import {
   ViewChild
 } from '@angular/core';
 import {
+  ListFormat,
   ListViewComponent,
   ListViewItemDirective,
   SideSheetComponent
 } from '@campus/ui';
 import { Observable, of, Subscription } from 'rxjs';
-
-class Bundle {
-  icon: string;
-  name: string;
-  description: string;
-  teacher: Teacher;
-
-  public constructor(init?: Partial<Bundle>) {
-    Object.assign(this, init);
-  }
-}
-
-class Teacher {
-  displayName: string;
-  avatar: string;
-  name?: string;
-  firstName?: string;
-
-  public constructor(init?: Partial<Teacher>) {
-    Object.assign(this, init);
-  }
-}
-class ContentAction {
-  text: string;
-  icon: string;
-  function: string;
-
-  public constructor(init?: Partial<ContentAction>) {
-    Object.assign(this, init);
-  }
-}
-class Content {
-  productType: string;
-  fileExtension: string;
-  previewImage: string;
-  title: string;
-  description: string;
-  methodLogo: string;
-  actions: ContentAction[];
-  status: string;
-
-  public constructor(init?: Partial<Content>) {
-    Object.assign(this, init);
-  }
-
-  transformToContentForInfoPanel(): object {
-    const contentForInfoPanel = new ContentForInfoPanel({
-      name: this.title,
-      description: this.description,
-      extention: this.fileExtension,
-      productType: this.productType,
-      methods: [this.methodLogo],
-      status: this.status
-    });
-
-    return contentForInfoPanel;
-  }
-}
-
-class ContentForInfoPanel {
-  preview?: string;
-  name: string;
-  description: string;
-  extention: string;
-  productType: string;
-  methods: string[];
-  status: any;
-
-  public constructor(init?: Partial<ContentForInfoPanel>) {
-    Object.assign(this, init);
-  }
-}
+import {
+  Bundle,
+  Content,
+  ContentAction,
+  Teacher
+} from './bundle-detail-classes';
 
 @Component({
   selector: 'campus-bundle-detail',
@@ -101,6 +36,8 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   bundle: Bundle;
   contents: Content[];
   selectedItems: ListViewItemDirective[] = [];
+  listFormat = ListFormat;
+  currentListFormat = ListFormat.GRID;
 
   @ViewChild(ListViewComponent) list: ListViewComponent;
   @ViewChild(SideSheetComponent) sideSheet: SideSheetComponent;
@@ -129,6 +66,11 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnDestroy() {
     this.subscriptions.unsubscribe();
+  }
+
+  setListFormat(format: ListFormat) {
+    this.currentListFormat = format;
+    console.log(this.currentListFormat);
   }
 
   getMockBundle(): Observable<Bundle> {
