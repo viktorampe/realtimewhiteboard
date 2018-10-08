@@ -1,8 +1,7 @@
 .ui-side-sheet {
   overflow-x: hidden;
   width: 290px;
-  float: right;
-  position: relative;
+
   &__header {
     display: flex;
     justify-content: space-between;
@@ -18,5 +17,9 @@
   }
   &__body {
     padding: 25px;
+  }
+
+  &__container {
+    height: 100%;
   }
 }
