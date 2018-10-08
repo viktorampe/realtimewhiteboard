@@ -4,6 +4,7 @@ import { EduContentInterface } from '../../+models';
 
 export enum EduContentsActionTypes {
   EduContentsLoaded = '[EduContents] EduContents Loaded',
+  EduContentsLoadSuccessfull = '[EduContents] EduContents Load Successfull',
   EduContentsLoadError = '[EduContents] EducContents Load Error',
   LoadEduContents = '[EduContents] Load EduContents',
   AddEduContent = '[EduContents] Add EduContent',
@@ -27,6 +28,11 @@ export class EduContentsLoaded implements Action {
   readonly type = EduContentsActionTypes.EduContentsLoaded;
 
   constructor(public payload: { eduContents: EduContentInterface[] }) {}
+}
+
+export class EduContentsLoadSuccessfull implements Action {
+  readonly type = EduContentsActionTypes.EduContentsLoadSuccessfull;
+  constructor(public payload: { loaded: boolean }) {}
 }
 
 export class EduContentsLoadError implements Action {
@@ -89,6 +95,7 @@ export class ClearEduContents implements Action {
 export type EduContentsActions =
   | LoadEduContents
   | EduContentsLoaded
+  | EduContentsLoadSuccessfull
   | EduContentsLoadError
   | AddEduContent
   | UpsertEduContent
