@@ -54,6 +54,15 @@ export class Content {
 
     return contentForInfoPanel;
   }
+
+  transformToContentsForInfoPanel(): object {
+    const contentsForInfoPanel = new ContentsForInfoPanel({
+      text: this.title,
+      data: this
+    });
+
+    return contentsForInfoPanel;
+  }
 }
 
 export class ContentForInfoPanel {
@@ -66,6 +75,17 @@ export class ContentForInfoPanel {
   status: any;
 
   public constructor(init?: Partial<ContentForInfoPanel>) {
+    Object.assign(this, init);
+  }
+}
+
+export class ContentsForInfoPanel {
+  text: string;
+  count?: number;
+  editable?: boolean;
+  data?: any;
+
+  public constructor(init?: Partial<ContentsForInfoPanel>) {
     Object.assign(this, init);
   }
 }
