@@ -42,7 +42,7 @@ export class ListViewItemDirective implements AfterContentInit, OnDestroy {
 
   @HostBinding('class.ui-list-view__list__item__selectoverlay')
   get useItemSelectableOverlayClass() {
-    return this.parentList.useItemSelectableOverlayStyle === true;
+    return this.parentList.useItemSelectableOverlayStyle;
   }
 
   @HostListener('click')
