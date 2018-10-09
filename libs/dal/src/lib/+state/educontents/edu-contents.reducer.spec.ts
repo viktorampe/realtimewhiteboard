@@ -103,15 +103,15 @@ describe('EduContents Reducer', () => {
       );
 
       // update the original eduContent (same id)
-      const updatedEducontent = createEduContent(1, 'updated');
+      const updatedEduContent = createEduContent(1, 'updated');
       // and add to the state
       const action = new EduContentActions.UpsertEduContent({
-        eduContent: updatedEducontent
+        eduContent: updatedEduContent
       });
 
       const result = reducer(initialState, action);
 
-      expect(result.entities[updatedEducontent.id]).toBe(updatedEducontent);
+      expect(result.entities[updatedEduContent.id]).toBe(updatedEduContent);
     });
 
     it('should upsert many edu-contents', () => {
