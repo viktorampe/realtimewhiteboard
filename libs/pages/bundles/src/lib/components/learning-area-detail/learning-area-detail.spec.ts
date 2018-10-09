@@ -1,19 +1,19 @@
-import { Injectable } from '@angular/core';
-import { Resolve } from '@angular/router';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import {
   BundleInterface,
   EduContentBookInterface,
   LearningAreaInterface
 } from '@campus/dal';
-import { ListFormat } from '@campus/ui';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { LearningAreaDetailComponent } from './learning-area-detail.component';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class BundlesViewModel implements Resolve<boolean> {
-  listFormat$ = new BehaviorSubject<ListFormat>(ListFormat.GRID);
+let bundlesViewModel: MockViewModel;
+
+class MockViewModel {
+  constructor() {}
+
+  filterInput$ = new BehaviorSubject<string>('');
 
   books$: Observable<EduContentBookInterface[]> = new BehaviorSubject<
     EduContentBookInterface[]
@@ -101,14 +101,6 @@ export class BundlesViewModel implements Resolve<boolean> {
     }
   });
 
-  resolve(): Observable<boolean> {
-    return new BehaviorSubject<boolean>(true).pipe(take(1));
-  }
-
-  changeListFormat(listFormat: ListFormat): void {
-    this.listFormat$.next(listFormat);
-  }
-
   //todo remove when we have actual data
   createBundle(name: string, learningAreaId: number): BundleInterface {
     const startDate: Date = new Date();
@@ -149,3 +141,77 @@ export class BundlesViewModel implements Resolve<boolean> {
     };
   }
 }
+
+beforeEach(() => {
+  bundlesViewModel = new MockViewModel();
+});
+
+test('it should return', () => {
+  return;
+});
+
+describe('BundlesComponent', () => {
+  let component: LearningAreaDetailComponent;
+  let fixture: ComponentFixture<LearningAreaDetailComponent>;
+
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      declarations: [LearningAreaDetailComponent],
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
+  }));
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(LearningAreaDetailComponent);
+    component = fixture.componentInstance;
+    bundlesViewModel.filterInput$.next('');
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('it should return 5 bundles', () => {
+    component
+      .getDisplayedBundles(
+        bundlesViewModel.bundles$,
+        bundlesViewModel.filterInput$
+      )
+      .subscribe((bundles: BundleInterface[]) => {
+        expect(bundles.length).toBe(5);
+      });
+  });
+
+  it('it should return 5 books', () => {
+    component
+      .getDisplayedBooks(bundlesViewModel.books$)
+      .subscribe((books: EduContentBookInterface[]) => {
+        expect(books.length).toEqual(5);
+      });
+  });
+
+  it('should return a single bundle', () => {
+    bundlesViewModel.filterInput$.next('lol');
+
+    component
+      .getDisplayedBundles(
+        bundlesViewModel.bundles$,
+        bundlesViewModel.filterInput$
+      )
+      .subscribe((bundles: BundleInterface[]) => {
+        expect(bundles.length).toEqual(0);
+      });
+  });
+
+  it('bundles should be independant of filter', () => {
+    //this test might be a bit much because filter is never passed to the method but i chose to include it anway.
+    bundlesViewModel.filterInput$.next('lol');
+
+    component
+      .getDisplayedBooks(bundlesViewModel.books$)
+      .subscribe((books: EduContentBookInterface[]) => {
+        expect(books.length).toEqual(5);
+      });
+  });
+});

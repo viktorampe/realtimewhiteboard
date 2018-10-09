@@ -1,0 +1,66 @@
+<campus-tool-bar [fixed]="toolbarFixed">
+  <!-- generic input needs to be replaced by the campus filter input -->
+  <input #filterInput
+         type="text"
+         (keyup)="onChangeFilterInput($event.target.value)">
+  <div class="divider"></div>
+  <!-- links need to replaced by the button -->
+  <a (click)="clickChangeListFormat('GRID')">grid</a>
+  <a (click)="clickChangeListFormat('LINE')">line</a>
+</campus-tool-bar>
+<div class="pages-bundles-area-detail__container"
+     [ngClass]="{'pages-bundles-area-detail__container--fixed': toolbarFixed}">
+
+  <campus-page-header [title]="(learningArea$|async).icon.name"
+                      [subtitle]="''"
+                      [iconClass]="(learningArea$|async).icon"></campus-page-header>
+  <div class="pages-bundles-area-detail__container__learning-areas-count">
+    {{(displayedBundles$|async)?.length}} van
+    <u class="pages-bundles-area-detail__container__learning-areas-count__total"
+       (click)="resetFilterInput(); filterInput.value = ''">{{(bundles$|async)?.length}}</u>
+    weergegeven
+  </div>
+  <div class="pages-bundles-area-detail__container__learning-areas">
+    <campus-list-view [listFormat]="listFormat$|async"
+                      [placeHolderText]="'De toegepaste filter bevat geen resultaten'">
+      <!-- click event (or routerlink) needs to be added to the folder items-->
+      <campus-folder *ngFor="let bundle of displayedBundles$|async"
+                     campusListItem
+                     [listFormat]="listFormat$|async"
+                     [itemCount]="bundle.tasks?.length"
+                     [title]="bundle.name"
+                     [backgroundColor]="(learningArea$|async).color"
+                     [icon]="">
+        <campus-folder-details>
+          {{ bundle.description }}
+        </campus-folder-details>
+      </campus-folder>
+    </campus-list-view>
+  </div>
+
+  <div ng-if="(displayedBooks|async).length?.length">
+    <campus-page-header [title]="(learningArea$|async).icon.name"
+                        [subtitle]="'Boeken'"
+                        [iconClass]="(learningArea$|async).icon"></campus-page-header>
+    <div class="pages-bundles-area-detail__container__learning-areas-count">
+      {{(displayedBooks$|async)?.length}} van
+      <u class="pages-bundles-area-detail__container__learning-areas-count__total"
+         (click)="resetFilterInput(); filterInput.value = ''">{{(displayedBooks$|async)?.length}}</u>
+      weergegeven
+    </div>
+    <div class="pages-bundles-area-detail__container__learning-areas">
+      <campus-list-view [listFormat]="listFormat$|async"
+                        [placeHolderText]="'De toegepaste filter bevat geen resultaten'">
+        <campus-content-thumbnail *ngFor="let book of displayedBooks$|async"
+                                  campusListItem
+                                  [listFormat]="listFormat$|async"
+                                  [title]="book.title"
+                                  [contentTypeClass]="f"
+                                  [imagePath]="f"
+                                  [fileExtensionClass]="boek-e">
+        </campus-content-thumbnail>
+      </campus-list-view>
+    </div>
+  </div>
+  <!--icon {{::content.publishedEduContentMetadata.learningArea.icon}}-->
+</div>
