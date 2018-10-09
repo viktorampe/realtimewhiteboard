@@ -40,6 +40,15 @@ function createState(
 }
 
 describe('EduContents Reducer', () => {
+  let eduContents: EduContentInterface[];
+  beforeEach(() => {
+    eduContents = [
+      createEduContent(1, 'boeke'),
+      createEduContent(2, 'boeke'),
+      createEduContent(3, 'boeke')
+    ];
+  });
+
   describe('unknown action', () => {
     it('should return the initial state', () => {
       const action = {} as any;
@@ -52,10 +61,6 @@ describe('EduContents Reducer', () => {
 
   describe('loaded action', () => {
     it('should load all eduContents', () => {
-      const eduContents = [
-        createEduContent(1, 'boeke'),
-        createEduContent(2, 'boeke')
-      ];
       const action = new EduContentActions.EduContentsLoaded({ eduContents });
       const result = reducer(initialState, action);
       expect(result).toEqual(createState(eduContents, true));
@@ -71,7 +76,7 @@ describe('EduContents Reducer', () => {
 
   describe('add actions', () => {
     it('should add one edu-content', () => {
-      const eduContent = createEduContent(1, 'boeke');
+      const eduContent = eduContents[0];
       const action = new EduContentActions.AddEduContent({
         eduContent
       });
@@ -81,10 +86,6 @@ describe('EduContents Reducer', () => {
     });
 
     it('should add mulitple edu-contents', () => {
-      const eduContents = [
-        createEduContent(1, 'boeke'),
-        createEduContent(2, 'boeke')
-      ];
       const action = new EduContentActions.AddEduContents({ eduContents });
       const result = reducer(initialState, action);
 
@@ -93,7 +94,7 @@ describe('EduContents Reducer', () => {
   });
   describe('upsert actions', () => {
     it('should upsert one edu-content', () => {
-      const originalEduContent = createEduContent(1, 'boeke');
+      const originalEduContent = eduContents[0];
       // add the eduContent to the state
       reducer(
         initialState,
@@ -115,17 +116,14 @@ describe('EduContents Reducer', () => {
     });
 
     it('should upsert many edu-contents', () => {
-      const eduContents = [
-        createEduContent(1, 'boeke'),
-        createEduContent(2, 'boeke')
-      ];
       const startState = createState(eduContents);
 
       // update the original edu-contents and insert a new one
       const eduContentsToInsert = [
         createEduContent(1, 'test'),
         createEduContent(2, 'test2'),
-        createEduContent(3, 'new')
+        createEduContent(3, 'test3'),
+        createEduContent(4, 'new')
       ];
       const action = new EduContentActions.UpsertEduContents({
         eduContents: eduContentsToInsert
@@ -133,19 +131,13 @@ describe('EduContents Reducer', () => {
 
       const result = reducer(startState, action);
 
-      expect(result).toEqual(
-        createState([
-          createEduContent(1, 'test'),
-          createEduContent(2, 'test2'),
-          createEduContent(3, 'new')
-        ])
-      );
+      expect(result).toEqual(createState(eduContentsToInsert));
     });
   });
 
   describe('update actions', () => {
     it('should update an edu-content', () => {
-      const eduContent = createEduContent(1, 'boeke');
+      const eduContent = eduContents[0];
       const startState = createState([eduContent]);
       const update: Update<EduContentInterface> = {
         id: 1,
@@ -161,10 +153,6 @@ describe('EduContents Reducer', () => {
     });
 
     it('should update multiple edu-contents', () => {
-      const eduContents = [
-        createEduContent(1, 'boeke'),
-        createEduContent(2, 'boeke')
-      ];
       const startState = createState(eduContents);
       const updates: Update<EduContentInterface>[] = [
         {
@@ -186,14 +174,18 @@ describe('EduContents Reducer', () => {
       const result = reducer(startState, action);
 
       expect(result).toEqual(
-        createState([createEduContent(1, 'ppt'), createEduContent(2, 'audio')])
+        createState([
+          createEduContent(1, 'ppt'),
+          createEduContent(2, 'audio'),
+          eduContents[2]
+        ])
       );
     });
   });
 
   describe('delete actions', () => {
     it('should delete one edu-content ', () => {
-      const eduContent = createEduContent(1, 'boeke');
+      const eduContent = eduContents[0];
       const startState = createState([eduContent]);
       const action = new EduContentActions.DeleteEduContent({
         id: eduContent.id
@@ -203,11 +195,6 @@ describe('EduContents Reducer', () => {
     });
 
     it('should delete multiple edu-contents', () => {
-      const eduContents = [
-        createEduContent(1, 'boeke'),
-        createEduContent(2, 'boeke'),
-        createEduContent(3, 'boeke')
-      ];
       const startState = createState(eduContents);
       const action = new EduContentActions.DeleteEduContents({
         ids: [eduContents[0].id, eduContents[1].id]
@@ -219,10 +206,6 @@ describe('EduContents Reducer', () => {
 
   describe('clear action', () => {
     it('should clear the edu-contents collection', () => {
-      const eduContents = [
-        createEduContent(1, 'boeke'),
-        createEduContent(2, 'boeke')
-      ];
       const startState = createState(eduContents, true, 'something went wrong');
       const action = new EduContentActions.ClearEduContents();
       const result = reducer(startState, action);
