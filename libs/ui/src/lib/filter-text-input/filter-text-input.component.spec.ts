@@ -41,24 +41,24 @@ describe('FilterTextInputComponent', () => {
     expect(input.value).toEqual(mockData.text);
   });
 
-  xit('should show clear button -> displayed with css, always available in DOM', () => {
+  it('should show clear button -> displayed with css', () => {
     component.filterText = mockData.text;
     fixture.detectChanges();
-    const test = fixture.debugElement.query(
-      By.css('.ui-filter-text-input__cancel')
+    const inputNotEmpty = fixture.debugElement.query(
+      By.css('.ui-filter-text-input__input--not-empty')
     );
-    expect(test).toBeTruthy();
+    expect(inputNotEmpty).toBeTruthy();
   });
 
-  xit('should hide clear button -> hidden with css, not removed from DOM', () => {
+  it('should hide clear button -> hidden with css', () => {
     component.filterText = mockData.text;
     fixture.detectChanges();
     component.filterText = '';
     fixture.detectChanges();
-    const test = fixture.debugElement.query(
-      By.css('.ui-filter-text-input__cancel')
+    const inputNotEmpty = fixture.debugElement.query(
+      By.css('.ui-filter-text-input__input--not-empty')
     );
-    expect(test).toBeFalsy();
+    expect(inputNotEmpty).toBeNull();
   });
 
   it('clicking clear button should clear the input field', () => {
