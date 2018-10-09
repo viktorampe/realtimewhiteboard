@@ -73,13 +73,13 @@ export class UpdateEduContents implements Action {
 export class DeleteEduContent implements Action {
   readonly type = EduContentsActionTypes.DeleteEduContent;
 
-  constructor(public payload: { id: string }) {}
+  constructor(public payload: { id: number }) {}
 }
 
 export class DeleteEduContents implements Action {
   readonly type = EduContentsActionTypes.DeleteEduContents;
 
-  constructor(public payload: { ids: string[] }) {}
+  constructor(public payload: { ids: number[] }) {}
 }
 
 export class ClearEduContents implements Action {

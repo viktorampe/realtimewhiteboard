@@ -92,7 +92,10 @@ export function reducer(
     }
 
     case EduContentsActionTypes.EduContentsLoaded: {
-      return adapter.addAll(action.payload.eduContents, state);
+      return adapter.addAll(action.payload.eduContents, {
+        ...state,
+        loaded: true
+      });
     }
 
     case EduContentsActionTypes.EduContentsLoadError: {
