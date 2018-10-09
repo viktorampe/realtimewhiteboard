@@ -55,7 +55,7 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(FilterTextInputComponent) filter: FilterTextInputComponent;
 
   constructor(
-    private vm: BundleDetailViewModel,
+    public vm: BundleDetailViewModel,
     private cd: ChangeDetectorRef
   ) {}
 

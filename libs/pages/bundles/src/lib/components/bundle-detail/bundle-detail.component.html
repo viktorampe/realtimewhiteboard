@@ -27,11 +27,13 @@
                         [subtitle]="(bundle$ | async).description"></campus-page-header>
 
     <div *ngIf="(filteredContents$ | async) as fc">
-      <div *ngIf="fc.length !== (contents$| async).length">
+      <div *ngIf="fc.length !== (contents$| async).length"
+           class="itemsAmount">
         {{(fc.length)}} {{fc.length > 1 ? 'items':'item'}} van de
         {{(contents$| async).length}}
         gevonden. </div>
-      <div *ngIf="(filteredContents$ | async).length == (contents$| async).length">{{fc.length}}
+      <div *ngIf="(filteredContents$ | async).length == (contents$| async).length"
+           class="itemsAmount">{{fc.length}}
         {{fc.length > 1 ?
         'items':'item'}} beschikbaar</div>
     </div>

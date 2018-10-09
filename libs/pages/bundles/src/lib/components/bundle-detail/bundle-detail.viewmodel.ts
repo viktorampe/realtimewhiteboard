@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Resolve } from '@angular/router';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { take } from 'rxjs/operators';
 import {
@@ -12,7 +11,7 @@ import {
 @Injectable({
   providedIn: 'root'
 })
-export class BundleDetailViewModel implements Resolve<boolean> {
+export class BundleDetailViewModel {
   resolve(): Observable<boolean> {
     return new BehaviorSubject<boolean>(true).pipe(take(1));
   }
