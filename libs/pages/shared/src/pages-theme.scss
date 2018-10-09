@@ -4,12 +4,7 @@ $pages-bg-color-2: #fff !default;
 $pages-font-color-1: #000 !default;
 $pages-font-color-2: #000 !default;
 
-$pages_toolbar_filter-width: 175px !default;
-
 @mixin pages-shared() {
-  .pages__toolbar__filter {
-    width: $pages_toolbar_filter-width;
-  }
 }
 
 // import all required sass files from our libs

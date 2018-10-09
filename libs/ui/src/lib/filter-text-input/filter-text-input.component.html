@@ -5,9 +5,9 @@
          placeholder="{{placeholder}}"
          name="filter-input"
          type="text"
-         (keydown.enter)="inputEnter()"
+         (keydown.enter)="inputEnter($event)"
          [formControl]="input" />
   <a class="ui-filter-text-input__cancel icon-cancel"
      (click)="clear()"
-     aria-label="Clear"><i class="ui-filter-text-input__cancel-icon"></i></a>
+     aria-label="Cancel"></a>
 </form>

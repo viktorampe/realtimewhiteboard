@@ -13,6 +13,7 @@ $color-blue-3: #6ed3c2;
 $color-bg-primary-1: $color-black-1;
 $color-bg-secondary-1: $color-black-2;
 $color-bg-primary-contrast-1: $color-white-1;
+$color-text-primary: $color-black-1;
 $color-text-1: $color-gray-1;
 $color-text-2: $color-gray-2;
 $color-text-3: $color-white-1;
@@ -22,6 +23,7 @@ $color-active-secundary: $color-blue-3;
 // ui lib theme
 $ui-bg-color-1: $color-bg-primary-1;
 $ui-bg-color-2: $color-bg-primary-contrast-1;
+$ui-font-color-primary: $color-text-primary;
 $ui-font-color-1: $color-text-1;
 $ui-font-color-2: $color-text-2;
 $ui-font-color-active: $color-active;

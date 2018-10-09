@@ -6,9 +6,10 @@
 
   &__input {
     box-sizing: border-box;
-    width: 100%;
     padding-left: 25px;
     color: inherit;
+    font-size: inherit;
+    line-height: inherit;
 
     &--not-empty {
       padding-right: 25px;
@@ -19,22 +20,16 @@
     }
   }
 
+  &__cancel,
+  &__icon {
+    position: absolute;
+    width: 20px;
+    text-align: center;
+    font-size: inherit;
+  }
+
   &__cancel {
     display: none;
     cursor: pointer;
-    position: absolute;
-    right: 2px;
-    top: 2px;
-    bottom: 2px;
-    width: 20px;
-    text-align: center;
-  }
-
-  &__icon {
-    position: absolute;
-    left: 2px;
-    top: 2px;
-    bottom: 2px;
-    width: 25px;
   }
 }

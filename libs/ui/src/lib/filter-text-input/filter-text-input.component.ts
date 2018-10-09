@@ -6,7 +6,7 @@ import {
   Output
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 export enum FilterTextInputTheme {
   light = 'light',
@@ -35,22 +35,13 @@ export class FilterTextInputComponent implements OnDestroy {
   }
   @Output() text = new EventEmitter<string>();
 
-  private input = new FormControl(this.filterText);
-  private readonly formSubscription: Subscription = this.getInput().subscribe(
+  input = new FormControl(this.filterText);
+
+  private readonly formSubscription: Subscription = this.input.valueChanges.subscribe(
     (data: string) => {
       this.text.emit(data);
     }
   );
-
-  /**
-   * sets the input value of the textfield
-   *
-   * @param {string} value
-   * @memberof FilterTextInputComponent
-   */
-  setInput(value: string): void {
-    this.input.setValue(value);
-  }
 
   /**
    * clears the input value of the textfield
@@ -59,7 +50,7 @@ export class FilterTextInputComponent implements OnDestroy {
    * @memberof FilterTextInputComponent
    */
   clear(): void {
-    this.setInput('');
+    this.input.setValue('');
   }
 
   /**
@@ -68,21 +59,12 @@ export class FilterTextInputComponent implements OnDestroy {
    * @returns {boolean}
    * @memberof FilterTextInputViewModel
    */
-  inputEnter(): boolean {
+  inputEnter(e: KeyboardEvent): boolean {
+    e.preventDefault();
     return false;
   }
 
   ngOnDestroy() {
     this.formSubscription.unsubscribe();
-  }
-
-  /**
-   * gets the input of the textfield as an observable
-   *
-   * @returns {Observable<string>}
-   * @memberof FilterTextInputComponent
-   */
-  private getInput(): Observable<string> {
-    return this.input.valueChanges;
   }
 }
