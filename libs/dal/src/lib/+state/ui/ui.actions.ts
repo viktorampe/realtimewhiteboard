@@ -5,18 +5,13 @@ import { UiState } from './ui.reducer';
 export enum UiActionTypes {
   LoadUi = '[Ui] Load Ui',
   UiLoaded = '[Ui] Ui Loaded',
-  UiLoadError = '[Ui] Ui Load Error',
-  SaveUi = '[Ui] Ui Save to storage',
-  ToggleListFormat = '[Ui] Ui Toggle list format'
+  SaveUi = '[Ui] Ui Save To Storage',
+  SetListFormat = '[Ui] Ui Set List Format',
+  ToggleSideSheet = '[Ui] Ui Toggle Side Sheet'
 }
 
 export class LoadUi implements Action {
   readonly type = UiActionTypes.LoadUi;
-}
-
-export class UiLoadError implements Action {
-  readonly type = UiActionTypes.UiLoadError;
-  constructor(public payload: any) {}
 }
 
 export class UiLoaded implements Action {
@@ -28,22 +23,26 @@ export class SaveUi implements Action {
   readonly type = UiActionTypes.SaveUi;
 }
 
-export class ToggleListFormatUi implements Action {
-  readonly type = UiActionTypes.ToggleListFormat;
+export class SetListFormatUi implements Action {
+  readonly type = UiActionTypes.SetListFormat;
   constructor(public payload: { listFormat: ListFormat }) {}
+}
+
+export class ToggleSideSheetUi implements Action {
+  readonly type = UiActionTypes.ToggleSideSheet;
 }
 
 export type UiAction =
   | LoadUi
   | UiLoaded
-  | UiLoadError
   | SaveUi
-  | ToggleListFormatUi;
+  | SetListFormatUi
+  | ToggleSideSheetUi;
 
 export const fromUiActions = {
   LoadUi,
   UiLoaded,
-  UiLoadError,
   SaveUi,
-  ToggleListFormatUi
+  SetListFormatUi,
+  ToggleSideSheetUi
 };

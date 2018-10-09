@@ -1,27 +1,43 @@
-import { UiLoaded } from './ui.actions';
-import { UiState, Entity, initialState, uiReducer } from './ui.reducer';
+import { ListFormat } from '@campus/ui';
+import { SetListFormatUi, ToggleSideSheetUi, UiLoaded } from './ui.actions';
+import { initialState, uiReducer, UiState } from './ui.reducer';
 
 describe('Ui Reducer', () => {
-  const getUiId = it => it['id'];
-  let createUi;
+  let state: UiState;
 
   beforeEach(() => {
-    createUi = (id: string, name = ''): Entity => ({
-      id,
-      name: name || `name-${id}`
-    });
+    state = {
+      listFormat: ListFormat.GRID,
+      loaded: true
+    };
   });
 
   describe('valid Ui actions ', () => {
-    it('should return set the list of known Ui', () => {
-      const uis = [createUi('PRODUCT-AAA'), createUi('PRODUCT-zzz')];
-      const action = new UiLoaded(uis);
+    it('should return ui object', () => {
+      const action = new UiLoaded(state);
       const result: UiState = uiReducer(initialState, action);
-      const selId: string = getUiId(result.list[1]);
+      expect(result).toEqual(state);
+    });
 
-      expect(result.loaded).toBe(true);
-      expect(result.list.length).toBe(2);
-      expect(selId).toBe('PRODUCT-zzz');
+    it('should change the listFormat', () => {
+      const action = new SetListFormatUi({ listFormat: ListFormat.LINE });
+      const result: UiState = uiReducer(initialState, action);
+      expect(result.listFormat).toEqual(ListFormat.LINE);
+    });
+
+    it('should toggle the sideSheet', () => {
+      const action = new ToggleSideSheetUi();
+      const result: UiState = uiReducer(initialState, action);
+      expect(result.sideheetOpen).toBeTruthy();
+    });
+
+    it('should toggle the sideSheet', () => {
+      const action = new ToggleSideSheetUi();
+      const result: UiState = uiReducer(
+        { ...initialState, sideheetOpen: true },
+        action
+      );
+      expect(result.sideheetOpen).toBeFalsy();
     });
   });
 

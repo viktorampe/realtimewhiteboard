@@ -5,14 +5,8 @@ import {
 } from '@campus/browser';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
-import { filter, map, tap } from 'rxjs/operators';
-import {
-  LoadUi,
-  SaveUi,
-  UiActionTypes,
-  UiLoaded,
-  UiLoadError
-} from './ui.actions';
+import { filter, map } from 'rxjs/operators';
+import { LoadUi, SaveUi, UiActionTypes, UiLoaded } from './ui.actions';
 import { UiState } from './ui.reducer';
 
 @Injectable()
@@ -21,41 +15,41 @@ export class UiEffects {
   loadUi$ = this.dataPersistence.fetch(UiActionTypes.LoadUi, {
     run: (action: LoadUi, state: UiState) => {
       // todo fetch all from localStorage
-      return new UiLoaded(<UiState>{ loaded: true });
-    },
-
-    onError: (action: LoadUi, error) => {
-      console.error('Error', error);
-      return new UiLoadError(error);
+      let data;
+      try {
+        data = this.storageService.get('ui');
+        data = JSON.parse(data);
+      } catch (error) {
+        //just return the initial state on error
+        return new UiLoaded(<UiState>{ ...state, loaded: true });
+      }
+      return new UiLoaded(<UiState>{ ...data, loaded: true });
     }
   });
 
   @Effect()
   localStorage$ = this.actions$.pipe(
-    tap(console.log),
     filter(action => {
       const excludes = [
         UiActionTypes.LoadUi,
         UiActionTypes.UiLoaded,
-        UiActionTypes.UiLoadError,
         UiActionTypes.SaveUi
       ];
       return excludes.indexOf(<UiActionTypes>action.type) === -1;
     }),
-    ofType(...Object.keys(UiActionTypes)),
+    ofType(...Object.values(UiActionTypes)),
     map(() => new SaveUi())
   );
 
   @Effect()
   saveUi$ = this.dataPersistence.fetch(UiActionTypes.SaveUi, {
-    run: (action: LoadUi, state: UiState) => {
+    run: (action: SaveUi, state: UiState) => {
       // todo fetch all from localStorage
-      this.storageService.set('ui', JSON.stringify(state));
-    },
-
-    onError: (action: LoadUi, error) => {
-      console.error('Error', error);
-      return new UiLoadError(error);
+      try {
+        this.storageService.set('ui', JSON.stringify(state));
+      } catch (error) {
+        // we don't want errors on failing localstorage, because it's not breaking
+      }
     }
   });
 
