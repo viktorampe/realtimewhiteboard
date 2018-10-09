@@ -99,7 +99,7 @@ export function reducer(
     }
 
     case EduContentsActionTypes.EduContentsLoadError: {
-      return { ...state, error: action.payload };
+      return { ...state, error: action.payload, loaded: false };
     }
 
     case EduContentsActionTypes.ClearEduContents: {

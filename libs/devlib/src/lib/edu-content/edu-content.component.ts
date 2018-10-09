@@ -12,4 +12,12 @@ export class EduContentComponent implements OnInit {
   ngOnInit() {
     this.viewModel.getAllEduContents();
   }
+
+  loadEduContentAgain() {
+    this.viewModel.loadEduContentAgain();
+  }
+
+  loadEntitiesAgain() {
+    this.viewModel.loadEntitiesAgain();
+  }
 }

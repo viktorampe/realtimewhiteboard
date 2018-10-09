@@ -7,8 +7,8 @@ import {
   EDUCONTENT_SERVICE_TOKEN
 } from '../../educontent/edu-content.service.interface';
 import {
-  AddEduContents,
   EduContentsActionTypes,
+  EduContentsLoaded,
   EduContentsLoadError,
   LoadEduContents
 } from './edu-contents.actions';
@@ -23,7 +23,7 @@ export class EduContentsEffects {
       run: (action: LoadEduContents, state: State) => {
         return this.eduContentService.getAll().pipe(
           map(eduContents => {
-            return new AddEduContents({ eduContents });
+            return new EduContentsLoaded({ eduContents });
           })
         );
       },

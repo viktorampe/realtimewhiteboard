@@ -5,8 +5,8 @@ import { EduContentInterface } from '../+models/EduContent.interface';
 import { EduContentServiceInterface } from './edu-content.service.interface';
 
 const DUMMY_DATA: EduContentInterface[] = [
-  { type: 'boeke', id: 1 },
-  { type: 'file', id: 2 }
+  { type: 'file', id: 2 },
+  { type: 'boeke', id: 1 }
 ];
 
 @Injectable({

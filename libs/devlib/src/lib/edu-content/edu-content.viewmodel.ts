@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
 import { EduContent, EduContentActions, EduContentQueries } from '@campus/dal';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 
 @Injectable()
 export class EduContentViewModel {
-  educontents$ = this.store.select(EduContentQueries.selectAllEduContents);
-  selectedEduContent$ = this.store
-    .pipe
-    // select(EduContentQueries.selectedEduContent(1))
-    ();
+  educontents$: any = this.store.pipe(
+    select(EduContentQueries.getByIds, { ids: [2, 1, 3] })
+  );
+
   constructor(private store: Store<EduContent.State>) {}
 
   getAllEduContents() {
@@ -16,4 +15,12 @@ export class EduContentViewModel {
   }
 
   getEduContent(id: number) {}
+
+  loadEduContentAgain() {
+    this.educontents$ = this.store.select(EduContentQueries.getAll);
+  }
+
+  loadEntitiesAgain() {
+    this.educontents$ = this.store.select(EduContentQueries.getAllEntities);
+  }
 }
