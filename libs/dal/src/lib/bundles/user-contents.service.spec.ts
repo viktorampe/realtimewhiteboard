@@ -1,5 +1,4 @@
-import { TestBed, inject } from '@angular/core/testing';
-
+import { inject, TestBed } from '@angular/core/testing';
 import { UserContentsService } from './user-contents.service';
 
 describe('UserContentsService', () => {
