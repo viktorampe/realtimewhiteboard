@@ -10,7 +10,7 @@ import { BundleServiceInterface } from './bundle.service.interface';
 export class BundleService implements BundleServiceInterface {
   constructor(private bundleApi: BundleApi) {}
 
-  getBundles(): Observable<BundleInterface[]> {
+  getAll(): Observable<BundleInterface[]> {
     return this.bundleApi.find<BundleInterface>({});
   }
 }
