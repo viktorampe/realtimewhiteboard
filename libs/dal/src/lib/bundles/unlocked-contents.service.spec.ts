@@ -16,7 +16,7 @@ describe('UnlockedContentsService', () => {
         {
           provide: PersonApi,
           useValue: {
-            getData: jest.fn(() => mockData$)
+            getData: () => mockData$
           }
         }
       ]
