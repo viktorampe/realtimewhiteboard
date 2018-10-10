@@ -12,11 +12,8 @@ import {
 } from '@diekeure/polpo-api-angular-sdk';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
-import { BundlesEffects } from './+state/bundles/bundles.effects';
-import {
-  bundlesReducer,
-  initialState as bundlesInitialState
-} from './+state/bundles/bundles.reducer';
+import { Bundle } from './+state/bundle';
+import { BundlesEffects } from './+state/bundle/bundle.effects';
 import { UiEffects } from './+state/ui/ui.effects';
 import {
   initialState as uiInitialState,
@@ -38,8 +35,8 @@ interface DalOptions {
     CommonModule,
     SDKBrowserModule.forRoot(),
     HttpClientModule,
-    StoreModule.forFeature('bundles', bundlesReducer, {
-      initialState: bundlesInitialState
+    StoreModule.forFeature('bundles', Bundle.reducer, {
+      initialState: Bundle.initialState
     }),
     StoreModule.forFeature('ui', uiReducer, {
       initialState: uiInitialState
