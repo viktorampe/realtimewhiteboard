@@ -2,7 +2,7 @@ import { inject, TestBed } from '@angular/core/testing';
 import { LoopBackAuth, PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { AuthService } from './auth-service';
 
-fdescribe('AuthService', () => {
+describe('AuthService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [

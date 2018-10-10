@@ -70,7 +70,7 @@ export class LoginPageViewModel implements Resolve<boolean> {
         })
       )
       .subscribe(() => {
-        this.store.dispatch(new LoadUser());
+        this.store.dispatch(new LoadUser({ force: false }));
       });
   }
 

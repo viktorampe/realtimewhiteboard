@@ -24,6 +24,7 @@ export class UserEffects {
   @Effect()
   loadUser$ = this.dataPersistence.fetch(UserActionTypes.LoadUser, {
     run: (action: LoadUser, state: UserState) => {
+      if (!action.payload.force && state.loaded) return;
       return this.authService.getCurrent().pipe(
         map(r => {
           return new fromUserActions.UserLoaded(r);
@@ -45,7 +46,7 @@ export class UserEffects {
     run: (action: RemoveUser, state: UserState) => {
       return this.authService.logout().pipe(
         map(() => {
-          return new fromUserActions.UserRemoved({});
+          return new fromUserActions.UserRemoved();
         })
       );
     },

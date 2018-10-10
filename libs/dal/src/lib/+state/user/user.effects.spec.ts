@@ -7,14 +7,13 @@ import { hot } from 'jasmine-marbles';
 import { Observable, of } from 'rxjs';
 import { DalModule } from '../../dal.module';
 import { AuthServiceToken } from '../../persons/auth-service';
-import { LoadUser, RemoveUser, UserLoaded, UserLoadError, UserRemoved, UserRemoveError } from './user.actions';
+import { LoadUser, RemoveUser, UserLoaded, UserRemoved } from './user.actions';
 import { UserEffects } from './user.effects';
 import { initialUserstate, UserState } from './user.reducer';
 
 const mockUser = {
   name: 'Mertens',
   firstName: 'Tom',
-  created: '2018-10-04T08:05:15.000Z',
   gender: null,
   type: 'teacher',
   avatar: null,
@@ -54,9 +53,8 @@ describe('UserEffects', () => {
   let effects: UserEffects;
   let baseState: UserState;
 
-  const loadUserAction = new LoadUser();
+  const loadUserAction = new LoadUser({ force: true });
   const removeUserAction = new RemoveUser();
-  const removeUserError = new UserRemoveError(new Error('error'));
 
   const jestMockTokenGetUserReturnValue = () => {
     jest
@@ -70,21 +68,13 @@ describe('UserEffects', () => {
       .mockReturnValue(of(true));
   };
 
-  const jestMockTokenRemoveUserFail = () => {
-    jest.spyOn(TestBed.get(AuthServiceToken), 'logout').mockReturnValue(
-      Observable.create(ob => {
-        ob.error(new Error(''));
-      })
-    );
-  };
-
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
         EffectsModule.forRoot([]),
-        DalModule.forRoot()
+        DalModule.forRoot({ apiBaseUrl: '' })
       ],
       providers: [
         UserEffects,
@@ -113,18 +103,6 @@ describe('UserEffects', () => {
     );
   };
 
-  const expectInAndOutRemoveError = (
-    triggerAction: Action,
-    effectOutput: any
-  ) => {
-    actions = hot('-----|', { a: triggerAction });
-    expect(effects.removedUser$).toBeObservable(
-      hot('-----|', {
-        a: effectOutput
-      })
-    );
-  };
-
   describe('loadUser$', () => {
     beforeAll(() => {
       baseState = initialUserstate;
@@ -139,42 +117,13 @@ describe('UserEffects', () => {
 
   describe('removeUser$', () => {
     beforeAll(() => {
-      baseState = { list: mockUser, loaded: true };
+      baseState = { currentUser: mockUser, loaded: true };
     });
     beforeEach(() => {
       jestMockTokenRemoveUserReturnValue();
     });
     it('should trigger logout', () => {
-      expectInAndOutRemove(removeUserAction, new UserRemoved({}));
+      expectInAndOutRemove(removeUserAction, new UserRemoved());
     });
-  });
-
-  describe('removeUser$', () => {
-    beforeAll(() => {
-      baseState = { list: mockUser, loaded: true };
-    });
-    beforeEach(() => {
-      jestMockTokenRemoveUserFail();
-    });
-    it('should trigger logout failure', () => {
-      expectInAndOutRemoveError(
-        removeUserError,
-        new UserRemoveError(new Error('error'))
-      );
-    });
-
-    describe('loadUser$', () => {
-      beforeAll(() => {
-        baseState = initialUserstate;
-      });
-      beforeEach(() => {
-        jestMockTokenRemoveUserFail();
-      });
-      it('should trigger load failure', () => {
-        expectInAndOutRemoveError(
-          removeUserError,
-          new UserLoadError(new Error('error'))
-        );
-      });
   });
 });

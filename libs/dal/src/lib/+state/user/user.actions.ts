@@ -1,3 +1,4 @@
+import { PersonInterface } from '@campus/dal';
 import { Action } from '@ngrx/store';
 
 export enum UserActionTypes {
@@ -11,16 +12,17 @@ export enum UserActionTypes {
 
 export class LoadUser implements Action {
   readonly type = UserActionTypes.LoadUser;
+  constructor(public payload: { force?: boolean }) {}
 }
 
 export class UserLoadError implements Action {
   readonly type = UserActionTypes.UserLoadError;
-  constructor(public payload: any) {}
+  constructor(public payload: { error: any }) {}
 }
 
 export class UserLoaded implements Action {
   readonly type = UserActionTypes.UserLoaded;
-  constructor(public payload: any) {}
+  constructor(public payload: PersonInterface) {}
 }
 
 export class RemoveUser implements Action {
@@ -30,12 +32,12 @@ export class RemoveUser implements Action {
 
 export class UserRemoved implements Action {
   readonly type = UserActionTypes.UserRemoved;
-  constructor(public payload: any) {}
+  constructor() {}
 }
 
 export class UserRemoveError implements Action {
   readonly type = UserActionTypes.UserRemoveError;
-  constructor(public payload: any) {}
+  constructor(public payload: { error: any }) {}
 }
 
 export type UserAction =

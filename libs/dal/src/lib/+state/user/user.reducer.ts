@@ -1,3 +1,4 @@
+import { PersonInterface } from '../../+models';
 import { UserAction, UserActionTypes } from './user.actions';
 
 /**
@@ -9,14 +10,13 @@ import { UserAction, UserActionTypes } from './user.actions';
  */
 
 export interface UserState {
-  list: object; // list of User; analogous to a sql normalized table
-  selectedId?: string | number; // which User record has been selected
+  currentUser: PersonInterface; // user object
   loaded: boolean; // has the User list been loaded
   error?: any; // last none error (if any)
 }
 
 export const initialUserstate: UserState = {
-  list: {},
+  currentUser: null,
   loaded: false
 };
 
@@ -28,7 +28,7 @@ export function userReducer(
     case UserActionTypes.UserLoaded: {
       state = {
         ...state,
-        list: action.payload,
+        currentUser: action.payload,
         loaded: true
       };
       break;
@@ -43,7 +43,9 @@ export function userReducer(
     case UserActionTypes.UserRemoved: {
       state = {
         ...state,
-        list: action.payload,
+        currentUser: {
+          email: null
+        },
         loaded: false
       };
       break;

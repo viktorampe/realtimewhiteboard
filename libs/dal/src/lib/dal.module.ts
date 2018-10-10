@@ -31,11 +31,10 @@ interface DalOptions {
     StoreModule.forFeature('bundles', bundlesReducer, {
       initialState: bundlesInitialState
     }),
-    EffectsModule.forFeature([BundlesEffects]),
+    EffectsModule.forFeature([BundlesEffects, UserEffects]),
     StoreModule.forFeature('user', userReducer, {
       initialState: userInitialState
-    }),
-    EffectsModule.forFeature([UserEffects])
+    })
   ]
 })
 export class DalModule {

@@ -9,7 +9,6 @@ describe('User Selectors', () => {
   const mockUser = {
     name: 'Mertens',
     firstName: 'Tom',
-    created: '2018-10-04T08:05:15.000Z',
     gender: null,
     type: 'teacher',
     avatar: null,
@@ -51,8 +50,7 @@ describe('User Selectors', () => {
     });
     storeState = {
       user: {
-        list: mockUser,
-        selectedId: 'PRODUCT-BBB',
+        currentUser: mockUser,
         error: ERROR_MSG,
         loaded: true
       }
@@ -61,7 +59,7 @@ describe('User Selectors', () => {
 
   describe('User Selectors', () => {
     it('getAllUser() should return the a User object', () => {
-      const results = userQuery.getAllUser(storeState);
+      const results = userQuery.getCurrentUser(storeState);
       expect(results).toBe(mockUser);
     });
 
