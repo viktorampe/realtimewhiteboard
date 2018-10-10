@@ -19,7 +19,7 @@ export class ButtonComponent {
 
   // Stops click event propagation inside component
   @HostListener('click', ['$event'])
-  public onClick(event: any): void {
+  public onClick(event: MouseEvent): void {
     event.stopPropagation();
     event.preventDefault();
   }
