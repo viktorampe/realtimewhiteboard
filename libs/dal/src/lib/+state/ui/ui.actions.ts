@@ -16,7 +16,7 @@ export class LoadUi implements Action {
 
 export class UiLoaded implements Action {
   readonly type = UiActionTypes.UiLoaded;
-  constructor(public payload: UiState) {}
+  constructor(public payload: { state: UiState }) {}
 }
 
 export class SaveUi implements Action {

@@ -14,7 +14,7 @@ describe('Ui Reducer', () => {
 
   describe('valid Ui actions ', () => {
     it('should return ui object', () => {
-      const action = new UiLoaded(state);
+      const action = new UiLoaded({ state });
       const result: UiState = uiReducer(initialState, action);
       expect(result).toEqual(state);
     });
@@ -28,16 +28,16 @@ describe('Ui Reducer', () => {
     it('should toggle the sideSheet', () => {
       const action = new ToggleSideSheetUi();
       const result: UiState = uiReducer(initialState, action);
-      expect(result.sideheetOpen).toBeTruthy();
+      expect(result.sideSheetOpen).toBeTruthy();
     });
 
     it('should toggle the sideSheet', () => {
       const action = new ToggleSideSheetUi();
       const result: UiState = uiReducer(
-        { ...initialState, sideheetOpen: true },
+        { ...initialState, sideSheetOpen: true },
         action
       );
-      expect(result.sideheetOpen).toBeFalsy();
+      expect(result.sideSheetOpen).toBeFalsy();
     });
   });
 

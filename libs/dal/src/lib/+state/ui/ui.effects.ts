@@ -14,16 +14,15 @@ export class UiEffects {
   @Effect()
   loadUi$ = this.dataPersistence.fetch(UiActionTypes.LoadUi, {
     run: (action: LoadUi, state: UiState) => {
-      // todo fetch all from localStorage
       let data;
       try {
         data = this.storageService.get('ui');
         data = JSON.parse(data);
       } catch (error) {
         //just return the initial state on error
-        return new UiLoaded(<UiState>{ ...state, loaded: true });
+        return new UiLoaded({ state: { ...state, loaded: true } });
       }
-      return new UiLoaded(<UiState>{ ...data, loaded: true });
+      return new UiLoaded({ state: { ...data, loaded: true } });
     }
   });
 
@@ -35,6 +34,9 @@ export class UiEffects {
         UiActionTypes.UiLoaded,
         UiActionTypes.SaveUi
       ];
+      // exclude actions that shoiuld not trigger UI persist
+      // like eg saveUI to avoid endless loop
+      // or loadUI which would save an empty state
       return excludes.indexOf(<UiActionTypes>action.type) === -1;
     }),
     ofType(...Object.values(UiActionTypes)),
@@ -44,7 +46,6 @@ export class UiEffects {
   @Effect()
   saveUi$ = this.dataPersistence.fetch(UiActionTypes.SaveUi, {
     run: (action: SaveUi, state: UiState) => {
-      // todo fetch all from localStorage
       try {
         this.storageService.set('ui', JSON.stringify(state));
       } catch (error) {

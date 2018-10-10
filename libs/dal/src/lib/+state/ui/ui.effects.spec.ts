@@ -53,42 +53,39 @@ describe('UiEffects', () => {
       actions = hot('-a-|', { a: new LoadUi() });
       expect(effects.loadUi$).toBeObservable(
         hot('-a-|', {
-          a: new UiLoaded({ ...uiStoredData, loaded: true })
+          a: new UiLoaded({ state: { ...uiStoredData, loaded: true } })
         })
       );
     });
 
     it('should return initial state on corrupt json', () => {
-      uiStoredData = { listFormat: 'GRID' };
       spy.mockReturnValue('try-to-parse-me');
       actions = hot('-a-|', { a: new LoadUi() });
       expect(effects.loadUi$).toBeObservable(
         hot('-a-|', {
-          a: new UiLoaded({ loaded: true })
+          a: new UiLoaded({ state: { loaded: true } })
         })
       );
     });
 
     it('should return initial state on empty json', () => {
-      uiStoredData = { listFormat: 'GRID' };
       spy.mockReturnValue('');
       actions = hot('-a-|', { a: new LoadUi() });
       expect(effects.loadUi$).toBeObservable(
         hot('-a-|', {
-          a: new UiLoaded({ loaded: true })
+          a: new UiLoaded({ state: { loaded: true } })
         })
       );
     });
 
     it('should return initial state on localstorage error', () => {
-      uiStoredData = { listFormat: 'GRID' };
       spy.mockImplementation(() => {
         throw new Error();
       });
       actions = hot('-a-|', { a: new LoadUi() });
       expect(effects.loadUi$).toBeObservable(
         hot('-a-|', {
-          a: new UiLoaded({ loaded: true })
+          a: new UiLoaded({ state: { loaded: true } })
         })
       );
     });
@@ -133,8 +130,10 @@ describe('UiEffects', () => {
     });
     it('should trigger localStorage.set', () => {
       const action: UiLoaded = new UiLoaded({
-        ...initialState,
-        listFormat: ListFormat.GRID
+        state: {
+          ...initialState,
+          listFormat: ListFormat.GRID
+        }
       });
       uiReducer(initialState, action);
       hot('-a-|', {

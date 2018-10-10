@@ -39,11 +39,10 @@ interface DalOptions {
     StoreModule.forFeature('bundles', bundlesReducer, {
       initialState: bundlesInitialState
     }),
-    EffectsModule.forFeature([BundlesEffects]),
     StoreModule.forFeature('ui', uiReducer, {
       initialState: uiInitialState
     }),
-    EffectsModule.forFeature([UiEffects])
+    EffectsModule.forFeature([BundlesEffects, UiEffects])
   ],
   providers: [
     { provide: EDUCONTENT_SERVICE_TOKEN, useClass: EduContentService },

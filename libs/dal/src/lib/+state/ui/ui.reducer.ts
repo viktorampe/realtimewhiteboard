@@ -9,7 +9,7 @@ import { UiAction, UiActionTypes } from './ui.actions';
 export interface UiState {
   loaded: boolean; // has the Ui list been loaded
   listFormat?: string;
-  sideheetOpen?: boolean;
+  sideSheetOpen?: boolean;
 }
 
 export const initialState: UiState = {
@@ -24,7 +24,7 @@ export function uiReducer(
     case UiActionTypes.UiLoaded:
       state = {
         ...state,
-        ...action.payload,
+        ...action.payload.state,
         loaded: true
       };
       break;
@@ -37,7 +37,7 @@ export function uiReducer(
     case UiActionTypes.ToggleSideSheet:
       state = {
         ...state,
-        sideheetOpen: !state.sideheetOpen
+        sideSheetOpen: !state.sideSheetOpen
       };
       break;
   }

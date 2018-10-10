@@ -5,18 +5,13 @@ import { UiState } from './ui.reducer';
 const getUiState = createFeatureSelector<UiState>('ui');
 
 const getLoaded = createSelector(getUiState, (state: UiState) => state.loaded);
-const getError = createSelector(getUiState, (state: UiState) => state.error);
 
-const getAllUi = createSelector(
+const getListFormat = createSelector(
   getUiState,
-  getLoaded,
-  (state: UiState, isLoaded) => {
-    return isLoaded ? state : {};
-  }
+  (state: UiState) => state.listFormat
 );
 
 export const uiQuery = {
   getLoaded,
-  getError,
-  getAllUi
+  getListFormat
 };
