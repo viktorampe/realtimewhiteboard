@@ -5,9 +5,7 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
-import { EduContentInterface } from '../../+models/EduContent.interface';
+import { Observable, of } from 'rxjs';
 import { EduContentService } from '../../educontent/edu-content.service';
 import { EDUCONTENT_SERVICE_TOKEN } from '../../educontent/edu-content.service.interface';
 import {
@@ -23,38 +21,40 @@ describe('EduContentEffects', () => {
   let effects: EduContentsEffects;
   let usedState: any;
 
-  const unforcedLoadAction = new LoadEduContents({});
-  const forcedLoadAction = new LoadEduContents({ force: true });
-  const filledLoadedAction = new EduContentsLoaded({ eduContents: [] });
-  const loadErrorAction = new EduContentsLoadError(new Error('failed'));
-
-  const expectInAndOut = (triggerAction: Action, effectOutput: any) => {
+  const expectInAndOut = (
+    effect: Observable<any>,
+    triggerAction: Action,
+    effectOutput: any
+  ) => {
     actions = hot('-a-|', { a: triggerAction });
-    expect(effects.loadEduContents$).toBeObservable(
+    expect(effect).toBeObservable(
       hot('-a-|', {
         a: effectOutput
       })
     );
   };
 
-  const expectInNoOut = (triggerAction: Action) => {
+  const expectInNoOut = (effect: Observable<any>, triggerAction: Action) => {
     actions = hot('-a-|', { a: triggerAction });
-    expect(effects.loadEduContents$).toBeObservable(hot('---|'));
+    expect(effect).toBeObservable(hot('---|'));
   };
 
-  const jestMockTokenGetEduContentsReturnValue = () => {
-    jest
-      .spyOn(TestBed.get(EDUCONTENT_SERVICE_TOKEN), 'getAll')
-      .mockReturnValue(
-        new BehaviorSubject<EduContentInterface[]>([]).pipe(take(1))
-      );
+  const mockServiceMethodReturnValue = (
+    method: string,
+    returnValue: any,
+    service: any = EDUCONTENT_SERVICE_TOKEN
+  ) => {
+    jest.spyOn(TestBed.get(service), method).mockReturnValue(of(returnValue));
   };
-  const jestMockTokenGetEduContentsError = () => {
-    jest
-      .spyOn(TestBed.get(EDUCONTENT_SERVICE_TOKEN), 'getAll')
-      .mockImplementation(() => {
-        throw new Error('failed');
-      });
+
+  const mockServiceMethodError = (
+    method: string,
+    errorMessage: string,
+    service: any = EDUCONTENT_SERVICE_TOKEN
+  ) => {
+    jest.spyOn(TestBed.get(service), method).mockImplementation(() => {
+      throw new Error(errorMessage);
+    });
   };
 
   beforeEach(() => {
@@ -86,66 +86,94 @@ describe('EduContentEffects', () => {
     effects = TestBed.get(EduContentsEffects);
   });
 
-  describe('loadEduContent$ with initialState', () => {
-    beforeAll(() => {
-      usedState = initialState;
+  describe('loadEduContent$', () => {
+    const unforcedLoadAction = new LoadEduContents({});
+    const forcedLoadAction = new LoadEduContents({ force: true });
+    const filledLoadedAction = new EduContentsLoaded({ eduContents: [] });
+    const loadErrorAction = new EduContentsLoadError(new Error('failed'));
+    describe('with initialState', () => {
+      beforeAll(() => {
+        usedState = initialState;
+      });
+      beforeEach(() => {
+        mockServiceMethodReturnValue('getAll', []);
+      });
+      it('should trigger an api call with the initialState if force is not true', () => {
+        expectInAndOut(
+          effects.loadEduContents$,
+          unforcedLoadAction,
+          filledLoadedAction
+        );
+      });
+      it('should trigger an api call with the initialState if force is true', () => {
+        expectInAndOut(
+          effects.loadEduContents$,
+          forcedLoadAction,
+          filledLoadedAction
+        );
+      });
     });
-    beforeEach(() => {
-      jestMockTokenGetEduContentsReturnValue();
+    describe('with loaded state', () => {
+      beforeAll(() => {
+        usedState = { ...initialState, loaded: true };
+      });
+      beforeEach(() => {
+        mockServiceMethodReturnValue('getAll', []);
+      });
+      it('should not trigger an api call with the loaded state if force is not true', () => {
+        expectInNoOut(effects.loadEduContents$, unforcedLoadAction);
+      });
+      it('should trigger an api call with the loaded state if force is true', () => {
+        expectInAndOut(
+          effects.loadEduContents$,
+          forcedLoadAction,
+          filledLoadedAction
+        );
+      });
     });
-    it('should trigger an api call with the initialState if force is not true', () => {
-      expectInAndOut(unforcedLoadAction, filledLoadedAction);
+    describe('with initialState and failing api call', () => {
+      beforeAll(() => {
+        usedState = initialState;
+      });
+      beforeEach(() => {
+        mockServiceMethodError('getAll', 'failed');
+      });
+      it('should return a error action if force is not true', () => {
+        expectInAndOut(
+          effects.loadEduContents$,
+          unforcedLoadAction,
+          loadErrorAction
+        );
+      });
+      it('should return a error action if force is true', () => {
+        expectInAndOut(
+          effects.loadEduContents$,
+          forcedLoadAction,
+          loadErrorAction
+        );
+      });
     });
-    it('should trigger an api call with the initialState if force is true', () => {
-      expectInAndOut(forcedLoadAction, filledLoadedAction);
-    });
-  });
-  describe('loadEduContent$ with loaded state', () => {
-    beforeAll(() => {
-      usedState = { ...initialState, loaded: true };
-    });
-    beforeEach(() => {
-      jestMockTokenGetEduContentsReturnValue();
-    });
-    it('should not trigger an api call with the loaded state if force is not true', () => {
-      expectInNoOut(unforcedLoadAction);
-    });
-    it('should trigger an api call with the loaded state if force is true', () => {
-      expectInAndOut(forcedLoadAction, filledLoadedAction);
-    });
-  });
-
-  describe('loadEduContent$ with initialState and failing api call', () => {
-    beforeAll(() => {
-      usedState = initialState;
-    });
-    beforeEach(() => {
-      jestMockTokenGetEduContentsError();
-    });
-    it('should return a error action if force is not true', () => {
-      expectInAndOut(unforcedLoadAction, loadErrorAction);
-    });
-    it('should return a error action if force is true', () => {
-      expectInAndOut(forcedLoadAction, loadErrorAction);
-    });
-  });
-
-  describe('loadEduContent$ with loaded and failing api call', () => {
-    beforeAll(() => {
-      usedState = {
-        ...initialState,
-        loaded: true,
-        list: []
-      };
-    });
-    beforeEach(() => {
-      jestMockTokenGetEduContentsError();
-    });
-    it('should return nothing action if force is not true', () => {
-      expectInNoOut(unforcedLoadAction);
-    });
-    it('should return a error action if force is true', () => {
-      expectInAndOut(forcedLoadAction, loadErrorAction);
+    describe('with loaded and failing api call', () => {
+      beforeAll(() => {
+        usedState = {
+          ...initialState,
+          loaded: true,
+          list: []
+        };
+      });
+      beforeEach(() => {
+        mockServiceMethodError('getAll', 'failed');
+      });
+      it('should return nothing action if force is not true', () => {
+        expectInNoOut(effects.loadEduContents$, unforcedLoadAction);
+      });
+      it('should return a error action if force is true', () => {
+        expectInAndOut(
+          effects.loadEduContents$,
+          forcedLoadAction,
+          loadErrorAction
+        );
+      });
     });
   });
 });

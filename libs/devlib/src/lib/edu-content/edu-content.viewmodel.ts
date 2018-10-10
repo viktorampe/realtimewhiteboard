@@ -11,7 +11,7 @@ export class EduContentViewModel {
   constructor(private store: Store<EduContent.State>) {}
 
   getAllEduContents() {
-    this.store.dispatch(new EduContentActions.LoadEduContents());
+    this.store.dispatch(new EduContentActions.LoadEduContents({}));
   }
 
   getEduContent(id: number) {}

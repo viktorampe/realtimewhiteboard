@@ -106,7 +106,7 @@ describe('EduContents Reducer', () => {
       expect(result).toEqual(createState([eduContent], false));
     });
 
-    it('should add mulitple eduContents', () => {
+    it('should add multiple eduContents', () => {
       const action = new EduContentActions.AddEduContents({ eduContents });
       const result = reducer(initialState, action);
 
@@ -117,22 +117,22 @@ describe('EduContents Reducer', () => {
     it('should upsert one eduContent', () => {
       const originalEduContent = eduContents[0];
 
-      reducer(
+      const startState = reducer(
         initialState,
         new EduContentActions.AddEduContent({
           eduContent: originalEduContent
         })
       );
 
-      const updatedEduContent = createEduContent(1);
+      const updatedEduContent = createEduContent(eduContents[0].id, 'test');
 
       const action = new EduContentActions.UpsertEduContent({
         eduContent: updatedEduContent
       });
 
-      const result = reducer(initialState, action);
+      const result = reducer(startState, action);
 
-      expect(result.entities[updatedEduContent.id]).toBe(updatedEduContent);
+      expect(result.entities[updatedEduContent.id]).toEqual(updatedEduContent);
     });
 
     it('should upsert many eduContents', () => {

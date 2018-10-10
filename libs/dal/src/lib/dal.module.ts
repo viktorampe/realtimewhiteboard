@@ -30,7 +30,7 @@ interface DalOptions {
     StoreModule.forFeature('bundles', bundlesReducer, {
       initialState: bundlesInitialState
     }),
-    StoreModule.forFeature('eduContents', EduContent.reducer, {
+    StoreModule.forFeature('eduContent', EduContent.reducer, {
       initialState: EduContent.initialState
     }),
     EffectsModule.forFeature([BundlesEffects, EduContentsEffects])
