@@ -16,8 +16,14 @@ import {
 } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { AppBarComponent } from './app-bar/app-bar.component';
+import { ButtonComponent } from './button/button.component';
+import { BorderDirective } from './button/directives/button-border.directive';
+import { CircleDirective } from './button/directives/button-circle.directive';
+import { DangerDirective } from './button/directives/button-danger.directive';
+import { DisabledDirective } from './button/directives/button-disabled.directive';
+import { RoundedCornersDirective } from './button/directives/button-rounded-corners.directive';
+import { WarningDirective } from './button/directives/button-warning.directive';
 import { ConfirmableSelectComponent } from './confirmable-select/confirmable-select.component';
-import { ContentActionButtonComponent } from './content-action-button/content-action-button.component';
 import { ContentPreviewComponent } from './content-preview/content-preview.component';
 import { ContentThumbnailComponent } from './content-thumbnail/content-thumbnail.component';
 import { EditableInlineTagListComponent } from './editable-inline-tag-list/editable-inline-tag-list.component';
@@ -40,6 +46,7 @@ import { SideSheetBodyDirective } from './side-sheet/directives/side-sheet-body.
 import { SideSheetHeaderDirective } from './side-sheet/directives/side-sheet-header.directive';
 import { SideSheetPageDirective } from './side-sheet/directives/side-sheet-page.directive';
 import { SideSheetComponent } from './side-sheet/side-sheet.component';
+import { ToolBarComponent } from './tool-bar/tool-bar.component';
 import { TreeNavComponent } from './tree-nav/tree-nav.component';
 import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness.pipe';
 
@@ -90,7 +97,7 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     FileExtensionComponent,
     TreeNavComponent,
     ContentThumbnailComponent,
-    ContentActionButtonComponent,
+    ButtonComponent,
     ListViewComponent,
     ListViewItemDirective,
     TreeNavComponent,
@@ -98,7 +105,15 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     PersonInitialsPipe,
     FolderDetailsDirective,
     FolderComponent,
-    AdjustColorBrightnessPipe
+    AdjustColorBrightnessPipe,
+    CircleDirective,
+    RoundedCornersDirective,
+    BorderDirective,
+    DangerDirective,
+    WarningDirective,
+    DisabledDirective,
+    TreeNavComponent,
+    ToolBarComponent
   ],
   exports: [
     FilterTextInputComponent,
@@ -123,14 +138,22 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     FileExtensionComponent,
     TreeNavComponent,
     ContentThumbnailComponent,
-    ContentActionButtonComponent,
+    ButtonComponent,
     ListViewComponent,
     ListViewItemDirective,
     TreeNavComponent,
     PersonBadgeComponent,
     FolderDetailsDirective,
     FolderComponent,
-    AdjustColorBrightnessPipe
+    AdjustColorBrightnessPipe,
+    CircleDirective,
+    RoundedCornersDirective,
+    BorderDirective,
+    DangerDirective,
+    WarningDirective,
+    DisabledDirective,
+    TreeNavComponent,
+    ToolBarComponent
   ]
 })
 export class UiModule {}

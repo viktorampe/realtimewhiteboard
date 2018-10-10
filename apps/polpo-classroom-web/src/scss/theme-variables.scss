@@ -8,6 +8,8 @@ $color-blue-1: #359590;
 $color-white-1: #fff;
 $color-blue-2: #44b0aa;
 $color-blue-3: #6ed3c2;
+$color-orange-1: #ffa500;
+$color-red-1: #ff0000;
 
 // app theme
 $color-bg-primary-1: $color-black-1;
@@ -18,6 +20,8 @@ $color-text-2: $color-gray-2;
 $color-text-3: $color-white-1;
 $color-active: $color-blue-1;
 $color-active-secundary: $color-blue-3;
+$color-warning-1: $color-orange-1;
+$color-danger-1: $color-red-1;
 
 // ui lib theme
 $ui-bg-color-1: $color-bg-primary-1;
@@ -36,6 +40,15 @@ $pages-bg-color-1: $color-bg-primary-1;
 $pages-bg-color-2: $color-bg-primary-contrast-1;
 $pages-font-color-1: $color-text-1;
 $pages-font-color-active: $color-active;
+
+// app shell variables
+$ui-shell__left-width: 235px;
+$ui-shell__left-background-color: $color-black-1;
+$ui-shell__top-height: 46px;
+$ui-shell__top-background-color: $color-black-2;
+$ui-shell__logo-height: 105px;
+$ui-shell__logo-background-color: $color-blue-2;
+$ui-shell__body-background-color: $color-gray-3;
 
 @import '_logos';
 @import '_icons';

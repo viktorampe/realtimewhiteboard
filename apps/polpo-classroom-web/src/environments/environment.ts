@@ -13,7 +13,8 @@ export const environment = {
   // promo website settings
   website: {
     url: 'http://www.polpo.localhost'
-  }
+  },
+  APIBase: 'http://api.polpo.localhost:3000'
 };
 
 /*

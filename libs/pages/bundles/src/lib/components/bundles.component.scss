@@ -1,3 +1,19 @@
-.bundles-container {
+.pages-bundles {
   padding: 0 20px;
+  &__container {
+    padding: 20px;
+    &--fixed {
+      padding-top: 70px !important;
+    }
+    &__learning-areas-count {
+      &__total {
+        cursor: pointer;
+      }
+    }
+  }
+}
+.placeholder {
+  height: 2000px;
+  width: 39px;
+  background-color: red;
 }
