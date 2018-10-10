@@ -29,6 +29,7 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   contents$ = this.vm.bundleContents$;
   filteredContents$: Observable<Content[]>;
   selectedItems: ListViewItemDirective[] = [];
+  selectedItems$ = new BehaviorSubject<ListViewItemDirective[]>([]);
   listFormat = ListFormat; //enum beschikbaar maken in template
   currentListFormat$ = this.vm.listFormat$;
 
@@ -74,7 +75,7 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
         if (selectedItems.length > 0) {
           this.sideSheet.toggle(true);
         }
-        this.selectedItems = selectedItems;
+        this.selectedItems$.next(selectedItems);
       })
     );
     this.subscriptions.add(

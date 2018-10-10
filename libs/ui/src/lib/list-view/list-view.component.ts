@@ -39,10 +39,9 @@ export class ListViewComponent
    *
    * @memberof ListViewComponent
    */
-  useItemSelectableOverlayStyle = false;
+  useItemSelectableOverlayStyle$ = new BehaviorSubject(false);
 
   private itemsSubscription = new Subscription();
-  private formatSubscription = new Subscription();
 
   @Input() listFormat: ListFormat;
   @Input() multiSelect = false;
@@ -71,14 +70,17 @@ export class ListViewComponent
 
   ngOnDestroy() {
     this.itemsSubscription.unsubscribe();
-    this.formatSubscription.unsubscribe();
   }
 
   protected onItemSelectionChanged(item: ListViewItemDirective) {
     if (!this.multiSelect) {
-      this.items.filter(i => i !== item).forEach(j => (j.isSelected = false));
+      if (item.isSelected) {
+        this.items.filter(i => i !== item).forEach(j => (j.isSelected = false));
+      }
     } else {
-      this.useItemSelectableOverlayStyle = this.items.some(i => i.isSelected);
+      this.useItemSelectableOverlayStyle$.next(
+        this.items.some(i => i.isSelected)
+      );
     }
 
     const selectedItemsArray = this.items.filter(i => i.isSelected);
@@ -88,16 +90,10 @@ export class ListViewComponent
   selectAllItems() {
     if (this.multiSelect) {
       this.items.forEach(i => (i.isSelected = true));
-      this.useItemSelectableOverlayStyle = true;
-      const selectedItemsArray = this.items.toArray();
-      this.selectedItems$.next(selectedItemsArray);
     }
   }
   deselectAllItems() {
     this.items.forEach(i => (i.isSelected = false));
-    this.useItemSelectableOverlayStyle = false;
-    const selectedItemsArray = this.items.filter(i => i.isSelected);
-    this.selectedItems$.next(selectedItemsArray);
   }
 
   private setupSelectionSubscriptionsForListItems() {

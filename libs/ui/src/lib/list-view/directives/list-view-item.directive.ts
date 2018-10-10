@@ -23,7 +23,18 @@ import { ListViewComponent } from '../list-view.component';
   selector: '[campusListItem], [campus-list-item]'
 })
 export class ListViewItemDirective implements AfterContentInit, OnDestroy {
-  isSelected: boolean;
+  private _isSelected = false;
+  public get isSelected(): boolean {
+    return this._isSelected;
+  }
+
+  public set isSelected(value: boolean) {
+    if (value !== this._isSelected) {
+      this._isSelected = value;
+      this.itemSelectionChanged.emit(this);
+    }
+  }
+
   private subscriptions = new Subscription();
 
   @Input() dataObject: object;
@@ -42,13 +53,12 @@ export class ListViewItemDirective implements AfterContentInit, OnDestroy {
 
   @HostBinding('class.ui-list-view__list__item__selectoverlay')
   get useItemSelectableOverlayClass() {
-    return this.parentList.useItemSelectableOverlayStyle;
+    return this.parentList.useItemSelectableOverlayStyle$.value;
   }
 
   @HostListener('click')
   clickEvent() {
     this.isSelected = !this.isSelected;
-    this.itemSelectionChanged.emit(this);
   }
 
   constructor(
@@ -58,7 +68,7 @@ export class ListViewItemDirective implements AfterContentInit, OnDestroy {
 
   ngAfterContentInit() {
     this.subscriptions.add(
-      this.parentList.listFormat$.subscribe(x => (this.host.listFormat = x))
+      this.parentList.listFormat$.subscribe(lf => (this.host.listFormat = lf))
     );
   }
 
