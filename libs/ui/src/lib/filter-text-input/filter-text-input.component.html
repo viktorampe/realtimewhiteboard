@@ -1,13 +1,15 @@
 <form class="ui-filter-text-input ui-filter-text-input--{{theme}}">
-  <i class="ui-filter-text-input__icon icon-filter"></i>
+  <i class="ui-filter-text-input__icon icon-filter">
+    <!-- TODO use mat-icon --></i>
   <input class="ui-filter-text-input__input"
-         [class.ui-filter-text-input__input--not-empty]="text|async"
+         [class.ui-filter-text-input__input--not-empty]="input.valueChanges|async"
          placeholder="{{placeholder}}"
          name="filter-input"
          type="text"
-         (keydown.enter)="inputEnter($event)"
+         (keydown.enter)="onEnterPressed($event)"
          [formControl]="input" />
   <a class="ui-filter-text-input__cancel icon-cancel"
      (click)="clear()"
-     aria-label="Cancel"></a>
+     aria-label="Cancel">
+    <!-- TODO use mat-icon --></a>
 </form>

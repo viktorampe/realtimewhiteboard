@@ -31,7 +31,7 @@ describe('FilterTextInputComponent', () => {
 
   it('should change input value text', () => {
     let text: string;
-    component.text.subscribe((e: string) => (text = e));
+    component.filterTextChange.subscribe((e: string) => (text = e));
     component.filterText = mockData.text;
     fixture.detectChanges();
     expect(text).toEqual(mockData.text);
@@ -41,7 +41,7 @@ describe('FilterTextInputComponent', () => {
     expect(input.value).toEqual(mockData.text);
   });
 
-  it('should show clear button -> displayed with css', () => {
+  it('should show clear button (displayed with css)', () => {
     component.filterText = mockData.text;
     fixture.detectChanges();
     const inputNotEmpty = fixture.debugElement.query(
@@ -50,7 +50,7 @@ describe('FilterTextInputComponent', () => {
     expect(inputNotEmpty).toBeTruthy();
   });
 
-  it('should hide clear button -> hidden with css', () => {
+  it('should hide clear button (hidden with css)', () => {
     component.filterText = mockData.text;
     fixture.detectChanges();
     component.filterText = '';
@@ -63,7 +63,7 @@ describe('FilterTextInputComponent', () => {
 
   it('clicking clear button should clear the input field', () => {
     let text: string;
-    component.text.subscribe((e: string) => (text = e));
+    component.filterTextChange.subscribe((e: string) => (text = e));
     component.filterText = mockData.text;
     fixture.detectChanges();
     expect(text).toBe(mockData.text);

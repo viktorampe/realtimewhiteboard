@@ -1,7 +1,7 @@
 <campus-tool-bar [fixed]="toolbarFixed">
   <!-- generic input needs to be replaced by the campus filter input -->
   <campus-filter-text-input theme="dark"
-                            (text)="onChangeFilterInput($event)"
+                            (filterTextChange)="onChangeFilterInput($event)"
                             [filterText]="filterInput$|async"
                             class="pages__toolbar__filter"></campus-filter-text-input>
   <div class="divider"></div>

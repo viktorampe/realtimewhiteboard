@@ -33,13 +33,13 @@ export class FilterTextInputComponent implements OnDestroy {
   set filterText(filterText: string) {
     this.input.setValue(filterText);
   }
-  @Output() text = new EventEmitter<string>();
+  @Output() filterTextChange = new EventEmitter<string>();
 
   input = new FormControl(this.filterText);
 
   private readonly formSubscription: Subscription = this.input.valueChanges.subscribe(
     (data: string) => {
-      this.text.emit(data);
+      this.filterTextChange.emit(data);
     }
   );
 
@@ -59,7 +59,7 @@ export class FilterTextInputComponent implements OnDestroy {
    * @returns {boolean}
    * @memberof FilterTextInputViewModel
    */
-  inputEnter(e: KeyboardEvent): boolean {
+  onEnterPressed(e: KeyboardEvent): boolean {
     e.preventDefault();
     return false;
   }
