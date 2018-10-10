@@ -1,14 +1,13 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import {
-  selectAll, 
+  selectAll,
   selectEntities,
   selectIds,
   selectTotal,
-  State } from './bundle.reducer';
+  State
+} from './bundle.reducer';
 
-export const selectBundleState = createFeatureSelector<State>(
-  'bundles'
-);
+export const selectBundleState = createFeatureSelector<State>('bundles');
 
 export const getError = createSelector(
   selectBundleState,
@@ -26,10 +25,7 @@ export const getCount = createSelector(selectBundleState, selectTotal);
 
 export const getIds = createSelector(selectBundleState, selectIds);
 
-export const getAllEntities = createSelector(
-  selectBundleState,
-  selectEntities
-);
+export const getAllEntities = createSelector(selectBundleState, selectEntities);
 
 /**
  * returns array of objects in the order of the given ids
@@ -44,7 +40,6 @@ export const getByIds = createSelector(
     return props.ids.map(id => state.entities[id]);
   }
 );
-
 
 /**
  * returns array of objects in the order of the given ids

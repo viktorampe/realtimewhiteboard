@@ -36,12 +36,7 @@ describe('Bundle Selectors', () => {
   describe('Bundle Selectors', () => {
     beforeEach(() => {
       bundleState = createState(
-        [
-          createBundle(4),
-          createBundle(1),
-          createBundle(2),
-          createBundle(3)
-        ],
+        [createBundle(4), createBundle(1), createBundle(2), createBundle(3)],
         true,
         'no error'
       );

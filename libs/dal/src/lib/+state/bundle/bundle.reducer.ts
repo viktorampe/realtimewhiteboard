@@ -1,9 +1,6 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { BundleInterface } from '../../+models';
-import {
-  BundlesActions,
-  BundlesActionTypes
-} from './bundle.actions';
+import { BundlesActions, BundlesActionTypes } from './bundle.actions';
 
 /**
  * @ngrx/entity provides a predefined interface for handling
@@ -40,10 +37,7 @@ export const initialState: State = adapter.getInitialState({
   loaded: false
 });
 
-export function reducer(
-  state = initialState,
-  action: BundlesActions
-): State {
+export function reducer(state = initialState, action: BundlesActions): State {
   switch (action.type) {
     case BundlesActionTypes.AddBundle: {
       /**
