@@ -14,7 +14,7 @@ import { ListViewComponent } from '../list-view.component';
 
 /**
  * Decorator for components in campus-list-view
- * Handles selection, passes format to component with Css class.
+ * Handles selection, passes format to component.
  *
  * @export
  * @class ListViewItemDirective
