@@ -9,7 +9,10 @@ describe('InfoPanelDataConverterService', () => {
     });
   });
 
-  it('should be created', inject([InfoPanelDataConverterService], (service: InfoPanelDataConverterService) => {
-    expect(service).toBeTruthy();
-  }));
+  it('should be created', inject(
+    [InfoPanelDataConverterService],
+    (service: InfoPanelDataConverterService) => {
+      expect(service).toBeTruthy();
+    }
+  ));
 });
