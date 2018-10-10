@@ -47,8 +47,8 @@ describe('DangerDirective', () => {
   });
 
   it('should create the host with the directive attached', () => {
-    expect(component).not.toBeNull();
-    expect(directive).not.toBeNull();
+    expect(component).toBeTruthy();
+    expect(directive).toBeTruthy();
   });
 
   it('should apply the correct class', () => {
