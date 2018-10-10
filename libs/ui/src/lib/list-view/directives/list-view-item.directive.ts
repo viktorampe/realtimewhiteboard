@@ -4,6 +4,7 @@ import {
   EventEmitter,
   HostBinding,
   HostListener,
+  Input,
   Output
 } from '@angular/core';
 import { ListViewItemInterface } from '../interfaces/list-view-item';
@@ -11,16 +12,19 @@ import { ListViewComponent } from '../list-view.component';
 
 /**
  * Decorator for components in campus-list-view
- * Handles selection, passes format to component with Css class.
+ * Handles selection, passes format to component.
  *
  * @export
  * @class ListViewItemDirective
  */
 @Directive({
-  selector: '[campusListItem],[campus-list-item]'
+  selector: '[campusListItem], [campus-list-item]'
 })
 export class ListViewItemDirective implements AfterContentInit {
   isSelected: boolean;
+
+  @Input() dataObject: object;
+
   @Output() itemSelectionChanged = new EventEmitter<ListViewItemDirective>();
 
   @HostBinding('class.ui-list-view__list__item--selected')
@@ -46,7 +50,7 @@ export class ListViewItemDirective implements AfterContentInit {
 
   constructor(
     private parentList: ListViewComponent,
-    private host: ListViewItemInterface
+    public host: ListViewItemInterface
   ) {}
 
   /**

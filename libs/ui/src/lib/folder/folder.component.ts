@@ -1,12 +1,19 @@
 import { Component, Input } from '@angular/core';
 import { ListFormat } from '../list-view/enums/list-format.enum';
+import { ListViewItemInterface } from '../list-view/interfaces/list-view-item';
 
 @Component({
   selector: 'campus-folder',
   templateUrl: './folder.component.html',
-  styleUrls: ['./folder.component.scss']
+  styleUrls: ['./folder.component.scss'],
+  providers: [
+    {
+      provide: ListViewItemInterface,
+      useExisting: FolderComponent
+    }
+  ]
 })
-export class FolderComponent {
+export class FolderComponent implements ListViewItemInterface {
   showEmptyError: boolean;
 
   @Input() title: string;
