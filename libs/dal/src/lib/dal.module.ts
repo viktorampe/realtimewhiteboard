@@ -17,8 +17,12 @@ import {
   initialState as uiInitialState,
   uiReducer
 } from './+state/ui/ui.reducer';
-import { BundleService } from './bundle/bundle.service';
-import { BUNDLE_SERVICE_TOKEN } from './bundle/bundle.service.interface';
+import {
+  BundlesService,
+  BUNDLES_SERVICE_TOKEN,
+  UnlockedContentsService,
+  UNLOCKEDCONTENTS_SERVICE_TOKEN
+} from './bundles';
 import { EduContentService } from './educontent/edu-content.service';
 import { EDUCONTENT_SERVICE_TOKEN } from './educontent/edu-content.service.interface';
 import { AuthService, AuthServiceToken } from './persons/auth-service';
@@ -40,7 +44,11 @@ interface DalOptions {
   ],
   providers: [
     { provide: EDUCONTENT_SERVICE_TOKEN, useClass: EduContentService },
-    { provide: BUNDLE_SERVICE_TOKEN, useClass: BundleService },
+    { provide: BUNDLES_SERVICE_TOKEN, useClass: BundlesService },
+    {
+      provide: UNLOCKEDCONTENTS_SERVICE_TOKEN,
+      useClass: UnlockedContentsService
+    },
     { provide: BROWSER_STORAGE_SERVICE_TOKEN, useClass: StorageService },
     { provide: AuthServiceToken, useClass: AuthService }
   ]
