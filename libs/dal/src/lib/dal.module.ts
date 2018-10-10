@@ -12,8 +12,8 @@ import {
   bundlesReducer,
   initialState as bundlesInitialState
 } from './+state/bundles/bundles.reducer';
-import { EduContentsEffects } from './+state/educontents/edu-contents.effects';
-import * as fromEduContents from './+state/educontents/edu-contents.reducer';
+import { EduContent } from './+state/edu-content';
+import { EduContentsEffects } from './+state/edu-content/edu-content.effects';
 import { EduContentService } from './educontent/edu-content.service';
 import { EDUCONTENT_SERVICE_TOKEN } from './educontent/edu-content.service.interface';
 import { AuthService, AuthServiceToken } from './persons/auth-service';
@@ -30,8 +30,8 @@ interface DalOptions {
     StoreModule.forFeature('bundles', bundlesReducer, {
       initialState: bundlesInitialState
     }),
-    StoreModule.forFeature('eduContents', fromEduContents.reducer, {
-      initialState: fromEduContents.initialState
+    StoreModule.forFeature('eduContents', EduContent.reducer, {
+      initialState: EduContent.initialState
     }),
     EffectsModule.forFeature([BundlesEffects, EduContentsEffects])
   ],
