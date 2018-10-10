@@ -1,11 +1,12 @@
-@mixin ui-button {
+@mixin ui-button() {
   $ui-button-font-size: 20px !default;
   $ui-button-padding: $ui-button-font-size/5 !default;
   $ui-button-color: $ui-bg-color-2 !default;
   $ui-button-background-color: $ui-font-color-active !default;
   $ui-button-border-color: darken($ui-button-background-color, 10%) !default;
   $ui-button-margin-top: 2px !default;
-  $ui-button-margin-right: 2px !default;
+  $ui-button-margin-left: 2px !default;
+  $ui-button-margin-right: $ui-button-margin-left !default;
   //--disabled
   $ui-button--disabled-background-color: lighten(
     $ui-button-background-color,
@@ -72,7 +73,7 @@
     padding: $ui-button-padding;
     color: $ui-button-color;
     background-color: $ui-button-background-color;
-    margin-left: $ui-button-margin-top;
+    margin-left: $ui-button-margin-left;
     margin-right: $ui-button-margin-right;
     height: $ui-button-font-size;
     &:active {
