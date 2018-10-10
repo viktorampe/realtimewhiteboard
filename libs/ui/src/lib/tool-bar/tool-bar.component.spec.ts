@@ -13,18 +13,16 @@ import { ToolBarComponent } from './tool-bar.component';
   </campus-toolbar>
   `
 })
-export class TestContainerComponent {
-}
+export class TestContainerComponent {}
 
 @NgModule({
   declarations: [TestContainerComponent],
   imports: [CommonModule, UiModule],
   exports: [TestContainerComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  providers: [],
+  providers: []
 })
-
-export class TestModule { }
+export class TestModule {}
 
 describe('ToolBarComponent', () => {
   let component: ToolBarComponent;
@@ -33,12 +31,9 @@ describe('ToolBarComponent', () => {
   let testContainerComponent: TestContainerComponent;
   let innerComponent: ToolBarComponent;
 
-
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [
-        TestModule
-      ],
+      imports: [TestModule]
     }).compileComponents();
   }));
 
@@ -53,7 +48,8 @@ describe('ToolBarComponent', () => {
     testContainerFixture = TestBed.createComponent(TestContainerComponent);
     testContainerComponent = testContainerFixture.componentInstance;
     innerComponent = <ToolBarComponent>(
-      testContainerFixture.debugElement.query(By.css('campus-toolbar')).componentInstance
+      testContainerFixture.debugElement.query(By.css('campus-toolbar'))
+        .componentInstance
     );
     testContainerFixture.detectChanges();
   });
@@ -65,13 +61,7 @@ describe('ToolBarComponent', () => {
   it('should create innerComponent', () => {
     expect(innerComponent).toBeTruthy();
   });
-  it('should have the fixed modiefier if the input is true', () => {
-
-  });
-  it('should not have the fixed modiefier if the input is false', () => {
-
-  });
-  it('should project the content', () => {
-
-  });
+  it('should have the fixed modiefier if the input is true', () => {});
+  it('should not have the fixed modiefier if the input is false', () => {});
+  it('should project the content', () => {});
 });
