@@ -13,8 +13,8 @@ import {
   ListViewItemDirective,
   SideSheetComponent
 } from '@campus/ui';
-import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { combineLatest, Observable, Subscription } from 'rxjs';
+import { map, startWith, tap } from 'rxjs/operators';
 import { Content } from './bundle-detail-classes';
 import { BundleDetailViewModel } from './bundle-detail.viewmodel';
 
@@ -24,20 +24,13 @@ import { BundleDetailViewModel } from './bundle-detail.viewmodel';
   styleUrls: ['./bundle-detail.component.scss']
 })
 export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
-  // contents$: Observable<Content[]>;
-  // teacher$: Observable<Teacher[]>;
-  // filter$: Observable<string>;
-  // listFormat$: Observable<ListFormat>;
-  // selectedItems$: Observable<ListViewItemDirective[]>;
-  // currentBundle$: Observable<Bundle>;
-
   subscriptions = new Subscription();
-  bundle$ = this.vm.getMockBundle();
-  contents$ = this.vm.getMockContents();
+  bundle$ = this.vm.selectedBundle$;
+  contents$ = this.vm.bundleContents$;
   filteredContents$: Observable<Content[]>;
   selectedItems: ListViewItemDirective[] = [];
-  listFormat = ListFormat;
-  currentListFormat$ = new BehaviorSubject<ListFormat>(ListFormat.GRID);
+  listFormat = ListFormat; //enum beschikbaar maken in template
+  currentListFormat$ = this.vm.listFormat$;
 
   public get selectedContent(): object {
     return (this.selectedItems[0]
@@ -64,9 +57,12 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
       this.contents$,
       this.filter.text.pipe(startWith(''))
     ).pipe(
+      tap(() => {
+        console.log(this.contents$);
+      }),
       map(([contents, filterText]) =>
         contents.filter(c =>
-          c.title.toLowerCase().includes(filterText.toLowerCase())
+          c.name.toLowerCase().includes(filterText.toLowerCase())
         )
       )
     );
@@ -74,11 +70,11 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit() {
     this.subscriptions.add(
-      this.list.selectedItems$.subscribe(x => {
-        if (x.length > 0) {
+      this.list.selectedItems$.subscribe(selectedItems => {
+        if (selectedItems.length > 0) {
           this.sideSheet.toggle(true);
         }
-        this.selectedItems = x;
+        this.selectedItems = selectedItems;
       })
     );
     this.subscriptions.add(
@@ -94,6 +90,6 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   setListFormat(format: ListFormat) {
-    this.currentListFormat$.next(format);
+    this.vm.listFormat$.next(format);
   }
 }

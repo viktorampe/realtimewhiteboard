@@ -4,7 +4,8 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ListFormat, ListViewItemDirective } from '@campus/ui';
-import { Observable, of } from 'rxjs';
+import { ContentStatus } from '@diekeure/polpo-api-angular-sdk/models/ContentStatus';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { PagesBundlesModule } from './../../pages-bundles.module';
 import {
   Bundle,
@@ -16,6 +17,10 @@ import { BundleDetailComponent } from './bundle-detail.component';
 import { BundleDetailViewModel } from './bundle-detail.viewmodel';
 
 export class MockBundleDetailViewModel {
+  selectedBundle$ = this.getMockBundle();
+  bundleContents$ = this.getMockContents();
+  listFormat$ = new BehaviorSubject<ListFormat>(ListFormat.GRID);
+
   getMockBundle(): Observable<Bundle> {
     const bundle = new Bundle({
       icon: 'icon-tasks',
@@ -36,10 +41,10 @@ export class MockBundleDetailViewModel {
       productType: 'icon-bundles',
       fileExtension: 'zip',
       previewImage: 'string',
-      title: 'Dit is een titel',
+      name: 'Dit is een titel',
       description: 'Dit is een beschrijving',
       methodLogo: 'vbtl',
-      status: 'string',
+      status: new ContentStatus(),
       actions: [
         new ContentAction({
           text: 'Action tekst 1a',
@@ -56,10 +61,10 @@ export class MockBundleDetailViewModel {
       productType: 'icon-bundles',
       fileExtension: 'xlsx',
       previewImage: 'string',
-      title: 'Dit is een titel2',
+      name: 'Dit is een titel2',
       description: 'Dit is een beschrijving2',
       methodLogo: 'mundo',
-      status: 'string',
+      status: new ContentStatus(),
       actions: [
         new ContentAction({
           text: 'Action tekst 1b',
@@ -113,9 +118,6 @@ describe('BundleDetailComponent', () => {
   it('should show the number of available items', async(() => {
     const expectedAmount = 4;
 
-    component.vm
-      .getMockContents()
-      .subscribe(x => expect(x.length).toBe(expectedAmount));
     component.filteredContents$.subscribe(x =>
       expect(x.length).toBe(expectedAmount)
     );

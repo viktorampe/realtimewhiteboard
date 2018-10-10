@@ -55,29 +55,11 @@ export class ListViewComponent
   items: QueryList<ListViewItemDirective>;
 
   ngAfterContentInit() {
-    // Initiële subscription
-    this.items.forEach(item => {
-      this.itemsSubscription.add(
-        item.itemSelectionChanged.subscribe(changedItem =>
-          this.onItemSelectionChanged(changedItem)
-        )
-      );
-    });
+    this.setupSelectionSubscriptionsForListItems();
 
     // nieuwe subscription als items veranderen
     this.items.changes.subscribe(() => {
-      // Unsubscriben op all items
-      this.itemsSubscription.unsubscribe();
-
-      // Nieuwe subscription nemen zodat nieuwe waarden kunnen toegevoegd worden.
-      this.itemsSubscription = new Subscription();
-      this.items.forEach(item => {
-        this.itemsSubscription.add(
-          item.itemSelectionChanged.subscribe(changedItem =>
-            this.onItemSelectionChanged(changedItem)
-          )
-        );
-      });
+      this.setupSelectionSubscriptionsForListItems();
     });
   }
 
@@ -92,7 +74,7 @@ export class ListViewComponent
     this.formatSubscription.unsubscribe();
   }
 
-  private onItemSelectionChanged(item: ListViewItemDirective) {
+  protected onItemSelectionChanged(item: ListViewItemDirective) {
     if (!this.multiSelect) {
       this.items.filter(i => i !== item).forEach(j => (j.isSelected = false));
     } else {
@@ -116,5 +98,20 @@ export class ListViewComponent
     this.useItemSelectableOverlayStyle = false;
     const selectedItemsArray = this.items.filter(i => i.isSelected);
     this.selectedItems$.next(selectedItemsArray);
+  }
+
+  private setupSelectionSubscriptionsForListItems() {
+    if (this.itemsSubscription !== null) {
+      this.itemsSubscription.unsubscribe();
+    }
+    this.itemsSubscription = new Subscription();
+
+    this.items.forEach(item => {
+      this.itemsSubscription.add(
+        item.itemSelectionChanged.subscribe(changedItem =>
+          this.onItemSelectionChanged(changedItem)
+        )
+      );
+    });
   }
 }

@@ -1,5 +1,5 @@
 <campus-side-sheet isOpenOnInit=true>
-  <campus-side-sheet-header>This is the header of the side sheet.</campus-side-sheet-header>
+  <campus-side-sheet-header></campus-side-sheet-header>
   <campus-side-sheet-body [ngSwitch]="selectedItems.length">
     <campus-info-panel-bundle [bundle]="bundle$ | async"
                               *ngSwitchCase="0"></campus-info-panel-bundle>
@@ -32,11 +32,11 @@
              class="itemsAmount">
           {{(fc.length)}} {{fc.length > 1 ? 'items':'item'}} van de
           {{(contents$| async).length}}
-          gevonden. </div>
+          weergegeven. </div>
         <div *ngIf="(filteredContents$ | async).length == (contents$| async).length"
-             class="itemsAmount">{{fc.length}}
+             class="itemsAmount">Deze bundel bevat {{fc.length}}
           {{fc.length > 1 ?
-          'items':'item'}} beschikbaar</div>
+          'items':'item'}}</div>
       </div>
 
       <campus-list-view [listFormat]="currentListFormat$ | async"
@@ -44,7 +44,7 @@
         <campus-content-thumbnail *ngFor="let content of (filteredContents$ | async)"
                                   campusListItem
                                   [dataObject]="content"
-                                  [title]="content.title"
+                                  [title]="content.name"
                                   [fileExtensionClass]="content.fileExtension"
                                   [contentTypeClass]="content.productType">
           <!-- Dit moet nog de generic button worden -->

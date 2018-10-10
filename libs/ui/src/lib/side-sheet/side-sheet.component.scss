@@ -1,6 +1,10 @@
 .ui-side-sheet {
-  overflow-x: hidden;
-  width: 290px;
+  height: 100%;
+
+  &__drawer {
+    overflow-x: hidden;
+    width: 290px;
+  }
 
   &__header {
     display: flex;
@@ -17,9 +21,5 @@
   }
   &__body {
     padding: 25px;
-  }
-
-  &__container {
-    height: 100%;
   }
 }

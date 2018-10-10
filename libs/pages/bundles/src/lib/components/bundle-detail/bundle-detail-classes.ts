@@ -1,3 +1,5 @@
+import { ContentStatusInterface } from '@campus/dal';
+
 export class Bundle {
   icon: string;
   name: string;
@@ -22,7 +24,7 @@ export class Teacher {
 export class ContentAction {
   text: string;
   icon: string;
-  function: string;
+  eventHandler: string;
 
   public constructor(init?: Partial<ContentAction>) {
     Object.assign(this, init);
@@ -33,10 +35,10 @@ export class ContentForInfoPanel {
   preview?: string;
   name: string;
   description: string;
-  extention: string;
+  extension: string;
   productType: string;
   methods: string[];
-  status: any;
+  status: ContentStatusInterface;
 
   public constructor(init?: Partial<ContentForInfoPanel>) {
     Object.assign(this, init);
@@ -58,11 +60,11 @@ export class Content {
   productType: string;
   fileExtension: string;
   previewImage: string;
-  title: string;
+  name: string;
   description: string;
   methodLogo: string;
   actions: ContentAction[];
-  status: string;
+  status: ContentStatusInterface;
 
   public constructor(init?: Partial<Content>) {
     Object.assign(this, init);
@@ -70,9 +72,9 @@ export class Content {
 
   transformToContentForInfoPanel(): object {
     const contentForInfoPanel = new ContentForInfoPanel({
-      name: this.title,
+      name: this.name,
       description: this.description,
-      extention: this.fileExtension,
+      extension: this.fileExtension,
       productType: this.productType,
       methods: [this.methodLogo],
       status: this.status
@@ -83,7 +85,7 @@ export class Content {
 
   transformToContentsForInfoPanel(): object {
     const contentsForInfoPanel = new ContentsForInfoPanel({
-      text: this.title,
+      text: this.name,
       data: this
     });
 
