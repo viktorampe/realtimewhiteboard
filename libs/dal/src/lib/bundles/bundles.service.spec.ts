@@ -1,13 +1,13 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
-import { Subject } from 'rxjs';
-import { BundleInterface } from '../+models';
+import { hot } from '@nrwl/nx/testing';
+import { Observable } from 'rxjs';
 import { BundlesService } from './bundles.service';
 import { BundlesServiceInterface } from './bundles.service.interface';
 
 describe('BundlesService', () => {
   let service: BundlesServiceInterface;
-  const mockData$: Subject<object> = new Subject();
+  let mockData$: Observable<object>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -31,11 +31,14 @@ describe('BundlesService', () => {
     }
   ));
 
-  it('should return bundleContents', async () => {
-    service.getAllForUser(1).subscribe(res => {
-      expect(res).toEqual([<BundleInterface>{ id: 1 }]);
+  it('should return bundles', () => {
+    mockData$ = hot('-a-|', {
+      a: { bundles: [{ id: 12331 }] }
     });
-    // emit after subscription!
-    mockData$.next({ bundleContents: [{ id: 1 }] });
+    expect(service.getAllForUser(1)).toBeObservable(
+      hot('-a-|', {
+        a: [{ id: 12331 }]
+      })
+    );
   });
 });
