@@ -6,11 +6,11 @@ import { map } from 'rxjs/operators';
 import { BundlesViewModel } from './bundles.viewmodel';
 
 @Component({
-  selector: 'campus-bundles',
-  templateUrl: './bundles.component.html',
-  styleUrls: ['./bundles.component.scss']
+  selector: 'campus-learning-areas',
+  templateUrl: './learning-areas.component.html',
+  styleUrls: ['./learning-areas.component.scss']
 })
-export class BundlesComponent implements OnInit {
+export class LearningAreasComponent implements OnInit {
   toolbarFixed: boolean;
 
   listFormat$: Observable<ListFormat> = this.bundlesViewModel.listFormat$;

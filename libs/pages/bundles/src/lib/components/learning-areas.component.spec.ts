@@ -1,21 +1,21 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { UiModule } from '@campus/ui';
-import { BundlesComponent } from './bundles.component';
+import { LearningAreasComponent } from './learning-areas.component';
 
-describe('BundlesComponent', () => {
-  let component: BundlesComponent;
-  let fixture: ComponentFixture<BundlesComponent>;
+describe('LearningAreasComponent', () => {
+  let component: LearningAreasComponent;
+  let fixture: ComponentFixture<LearningAreasComponent>;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [UiModule],
-      declarations: [BundlesComponent],
+      declarations: [LearningAreasComponent],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(BundlesComponent);
+    fixture = TestBed.createComponent(LearningAreasComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

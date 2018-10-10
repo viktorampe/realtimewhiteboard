@@ -1,12 +1,12 @@
-import { BundlesViewModel } from './components/bundles.viewmodel';
-import { BundlesComponent } from './components/bundles.component';
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
+import { BundlesViewModel } from './components/bundles.viewmodel';
+import { LearningAreasComponent } from './components/learning-areas.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: BundlesComponent,
+    component: LearningAreasComponent,
     resolve: { isResolved: BundlesViewModel }
   }
 ];

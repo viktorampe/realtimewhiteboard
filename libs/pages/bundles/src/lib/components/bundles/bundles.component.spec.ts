@@ -6,7 +6,7 @@ import {
   LearningAreaInterface
 } from '@campus/dal';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { LearningAreaDetailComponent } from './learning-area-detail.component';
+import { BundlesComponent } from './bundles.component';
 
 let bundlesViewModel: MockViewModel;
 
@@ -150,19 +150,19 @@ test('it should return', () => {
   return;
 });
 
-describe('BundlesComponent', () => {
-  let component: LearningAreaDetailComponent;
-  let fixture: ComponentFixture<LearningAreaDetailComponent>;
+describe('LearningAreasComponent', () => {
+  let component: BundlesComponent;
+  let fixture: ComponentFixture<BundlesComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [LearningAreaDetailComponent],
+      declarations: [BundlesComponent],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LearningAreaDetailComponent);
+    fixture = TestBed.createComponent(BundlesComponent);
     component = fixture.componentInstance;
     bundlesViewModel.filterInput$.next('');
     fixture.detectChanges();

@@ -10,11 +10,11 @@ import { map } from 'rxjs/operators';
 import { BundlesViewModel } from '../bundles.viewmodel';
 
 @Component({
-  selector: 'campus-learing-area-detail',
-  templateUrl: './learning-area-detail.html',
-  styleUrls: ['./learning-area-detail.scss']
+  selector: 'campus-bundles',
+  templateUrl: './bundles.component.html',
+  styleUrls: ['./bundles.component.scss']
 })
-export class LearningAreaDetailComponent implements OnInit {
+export class BundlesComponent implements OnInit {
   learningArea$: Observable<LearningAreaInterface> = this.bundlesViewModel
     .selectedLearningArea$;
 
