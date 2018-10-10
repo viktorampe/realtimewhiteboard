@@ -3,16 +3,11 @@ import { NgModule } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ContentInterface } from '@campus/dal';
 import { ListFormat, ListViewItemDirective } from '@campus/ui';
-import { ContentStatus } from '@diekeure/polpo-api-angular-sdk/models/ContentStatus';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { PagesBundlesModule } from './../../pages-bundles.module';
-import {
-  Bundle,
-  Content,
-  ContentAction,
-  Teacher
-} from './bundle-detail-classes';
+import { Bundle, ContentAction, Teacher } from './bundle-detail-classes';
 import { BundleDetailComponent } from './bundle-detail.component';
 import { BundleDetailViewModel } from './bundle-detail.viewmodel';
 
@@ -36,15 +31,14 @@ export class MockBundleDetailViewModel {
     return of(bundle);
   }
 
-  getMockContents(): Observable<Content[]> {
-    const item1 = new Content({
+  getMockContents(): Observable<ContentInterface[]> {
+    const item1 = {
       productType: 'icon-bundles',
       fileExtension: 'zip',
       previewImage: 'string',
       name: 'Dit is een titel',
       description: 'Dit is een beschrijving',
-      methodLogo: 'vbtl',
-      status: new ContentStatus(),
+      methodLogos: ['vbtl'],
       actions: [
         new ContentAction({
           text: 'Action tekst 1a',
@@ -55,16 +49,15 @@ export class MockBundleDetailViewModel {
           icon: 'icon-book'
         })
       ]
-    });
+    } as ContentInterface;
 
-    const item2 = new Content({
+    const item2 = {
       productType: 'icon-bundles',
       fileExtension: 'xlsx',
       previewImage: 'string',
       name: 'Dit is een titel2',
       description: 'Dit is een beschrijving2',
-      methodLogo: 'mundo',
-      status: new ContentStatus(),
+      methodLogos: ['mundo'],
       actions: [
         new ContentAction({
           text: 'Action tekst 1b',
@@ -75,9 +68,9 @@ export class MockBundleDetailViewModel {
           icon: 'icon-book'
         })
       ]
-    });
+    } as ContentInterface;
 
-    const contents: Content[] = [item1, item2, item1, item2];
+    const contents: ContentInterface[] = [item1, item2, item1, item2];
 
     return of(contents);
   }
@@ -244,6 +237,7 @@ describe('BundleDetailComponent', () => {
   // it('should be able to set the item status in the infopanel if an item is selected', () => { });
 
   it('should show the item descriptions in the infopanel if multiple items are selected', () => {
+    component.list.multiSelect = true;
     component.list.selectAllItems();
     fixture.detectChanges();
 

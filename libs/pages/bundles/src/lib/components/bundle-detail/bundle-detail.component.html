@@ -1,12 +1,12 @@
 <campus-side-sheet isOpenOnInit=true>
   <campus-side-sheet-header></campus-side-sheet-header>
-  <campus-side-sheet-body [ngSwitch]="selectedItems.length">
+  <campus-side-sheet-body [ngSwitch]="(selectedItems$ | async).length">
     <campus-info-panel-bundle [bundle]="bundle$ | async"
                               *ngSwitchCase="0"></campus-info-panel-bundle>
-    <campus-info-panel-content [content]="selectedContent"
+    <campus-info-panel-content [content]="contentForInfoPanelSingle$ | async"
                                *ngSwitchCase="1">
     </campus-info-panel-content>
-    <campus-info-panel-contents [contents]="selectedContents"
+    <campus-info-panel-contents [contents]="contentForInfoPanelMultiple$ | async"
                                 *ngSwitchDefault>
     </campus-info-panel-contents>
   </campus-side-sheet-body>
@@ -14,16 +14,14 @@
 
     <!-- Toolbar moet nog refactored worden -> scrollbar -->
     <campus-app-bar>
-      <campus-content-action-button [iconClass]="'icon-timeline'"
-                                    [tooltip]="'line'"
-                                    (click)="setListFormat(listFormat.LINE)"></campus-content-action-button>
-      <campus-content-action-button [iconClass]="'icon-checklist'"
-                                    [tooltip]="'grid'"
-                                    (click)="setListFormat(listFormat.GRID)"></campus-content-action-button>
+      <campus-button [iconClass]="'icon-timeline'"
+                     (click)="setListFormat(listFormat.LINE)"></campus-button>
+      <campus-button [iconClass]="'icon-checklist'"
+                     (click)="setListFormat(listFormat.GRID)"></campus-button>
       <campus-filter-text-input theme=light></campus-filter-text-input>
     </campus-app-bar>
     <div class="campus-bundle-detail__page">
-      <campus-page-header [iconClass]="(bundle$ | async).icon"
+      <campus-page-header [iconClass]="(bundle$ | async).learningArea.icon"
                           [title]="(bundle$ | async).name"
                           [subtitle]="(bundle$ | async).description"></campus-page-header>
 
@@ -47,10 +45,10 @@
                                   [title]="content.name"
                                   [fileExtensionClass]="content.fileExtension"
                                   [contentTypeClass]="content.productType">
-          <!-- Dit moet nog de generic button worden -->
-          <campus-content-action-button *ngFor="let action of content.actions"
-                                        [iconClass]="action.icon"
-                                        [tooltip]="action.text"></campus-content-action-button>
+          <campus-button *ngFor="let action of content.actions"
+                         [iconClass]="action.icon"
+                         circle>
+          </campus-button>
         </campus-content-thumbnail>
       </campus-list-view>
     </div>

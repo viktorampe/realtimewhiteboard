@@ -6,6 +6,7 @@ import {
   OnInit,
   ViewChild
 } from '@angular/core';
+import { ContentInterface } from '@campus/dal';
 import {
   FilterTextInputComponent,
   ListFormat,
@@ -13,10 +14,10 @@ import {
   ListViewItemDirective,
   SideSheetComponent
 } from '@campus/ui';
-import { combineLatest, Observable, Subscription } from 'rxjs';
-import { map, startWith, tap } from 'rxjs/operators';
-import { Content } from './bundle-detail-classes';
+import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
+import { filter, map, startWith } from 'rxjs/operators';
 import { BundleDetailViewModel } from './bundle-detail.viewmodel';
+import { InfoPanelDataConverterService } from './services/info-panel-data-converter.service';
 
 @Component({
   selector: 'campus-bundle-detail',
@@ -27,22 +28,26 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   subscriptions = new Subscription();
   bundle$ = this.vm.selectedBundle$;
   contents$ = this.vm.bundleContents$;
-  filteredContents$: Observable<Content[]>;
-  selectedItems: ListViewItemDirective[] = [];
+  filteredContents$: Observable<ContentInterface[]>;
   selectedItems$ = new BehaviorSubject<ListViewItemDirective[]>([]);
   listFormat = ListFormat; //enum beschikbaar maken in template
   currentListFormat$ = this.vm.listFormat$;
 
-  public get selectedContent(): object {
-    return (this.selectedItems[0]
-      .dataObject as Content).transformToContentForInfoPanel();
-  }
+  contentForInfoPanelSingle$ = this.selectedItems$.pipe(
+    filter(items => items.length === 1),
+    map(items => items[0].dataObject as ContentInterface),
+    map(data =>
+      this.infoPanelDataConverter.transformToContentForInfoPanel(data)
+    )
+  );
 
-  public get selectedContents(): object[] {
-    return this.selectedItems.map(x =>
-      (x.dataObject as Content).transformToContentsForInfoPanel()
-    );
-  }
+  contentForInfoPanelMultiple$ = this.selectedItems$.pipe(
+    filter(items => items.length > 1),
+    map(items => items.map(i => i.dataObject as ContentInterface)),
+    map(dataArray =>
+      this.infoPanelDataConverter.transformToContentsForInfoPanel(dataArray)
+    )
+  );
 
   @ViewChild(ListViewComponent) list: ListViewComponent;
   @ViewChild(SideSheetComponent) sideSheet: SideSheetComponent;
@@ -50,7 +55,8 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
     public vm: BundleDetailViewModel,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    public infoPanelDataConverter: InfoPanelDataConverterService
   ) {}
 
   ngOnInit() {
@@ -58,9 +64,6 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
       this.contents$,
       this.filter.text.pipe(startWith(''))
     ).pipe(
-      tap(() => {
-        console.log(this.contents$);
-      }),
       map(([contents, filterText]) =>
         contents.filter(c =>
           c.name.toLowerCase().includes(filterText.toLowerCase())
