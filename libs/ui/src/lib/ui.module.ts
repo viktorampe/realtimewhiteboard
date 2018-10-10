@@ -22,7 +22,6 @@ import { CircleDirective } from './button/directives/button-circle.directive';
 import { DangerDirective } from './button/directives/button-danger.directive';
 import { DisabledDirective } from './button/directives/button-disabled.directive';
 import { RoundedCornersDirective } from './button/directives/button-rounded-corners.directive';
-import { TooltipDirective } from './button/directives/button-tooltip.directive';
 import { WarningDirective } from './button/directives/button-warning.directive';
 import { ConfirmableSelectComponent } from './confirmable-select/confirmable-select.component';
 import { ContentPreviewComponent } from './content-preview/content-preview.component';
@@ -109,7 +108,6 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     CircleDirective,
     RoundedCornersDirective,
     BorderDirective,
-    TooltipDirective,
     DangerDirective,
     WarningDirective,
     DisabledDirective
@@ -148,7 +146,6 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     CircleDirective,
     RoundedCornersDirective,
     BorderDirective,
-    TooltipDirective,
     DangerDirective,
     WarningDirective,
     DisabledDirective
