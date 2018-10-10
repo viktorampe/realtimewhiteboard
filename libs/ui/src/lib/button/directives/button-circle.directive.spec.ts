@@ -10,7 +10,7 @@ import { CircleDirective } from './button-circle.directive';
   // tslint:disable-next-line:component-selector
   selector: 'test-container',
   template: `
-    <campus-button rounded>tekst</campus-button>
+    <campus-button circle>tekst</campus-button>
   `
 })
 export class TestContainerComponent {}
