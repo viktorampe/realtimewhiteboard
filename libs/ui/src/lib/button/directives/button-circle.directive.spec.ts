@@ -4,7 +4,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { UiModule } from '@campus/ui';
 import { ButtonComponent } from '../button.component';
-import { RoundedDirective } from './button-rounded.directive';
+import { CircleDirective } from './button-circle.directive';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -22,8 +22,8 @@ export class TestContainerComponent {}
 })
 export class TestModule {}
 
-describe('RoundedDirective', () => {
-  let directive: RoundedDirective;
+describe('CirlcleDirective', () => {
+  let directive: CircleDirective;
   let component: ButtonComponent;
   let testContainerFixture: ComponentFixture<TestContainerComponent>;
   let testContainerComponent: TestContainerComponent;
@@ -43,7 +43,7 @@ describe('RoundedDirective', () => {
     );
     component = <ButtonComponent>componentDE.componentInstance;
     testContainerFixture.detectChanges();
-    directive = componentDE.injector.get(RoundedDirective);
+    directive = componentDE.injector.get(CircleDirective);
   });
 
   it('should create the host with the directive attached', () => {
@@ -52,6 +52,6 @@ describe('RoundedDirective', () => {
   });
 
   it('should apply the correct class', () => {
-    expect(componentDE.nativeElement.classList).toContain('ui-button--rounded');
+    expect(componentDE.nativeElement.classList).toContain('ui-button--circle');
   });
 });
