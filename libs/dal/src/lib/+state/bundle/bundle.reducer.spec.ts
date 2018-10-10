@@ -1,17 +1,17 @@
 import { Update } from '@ngrx/entity';
-import {BundleActions } from '.';
-import { initialState, reducer, State } from './bundle.reducer';
+import { BundleActions } from '.';
 import { BundleInterface } from '../../+models';
+import { initialState, reducer, State } from './bundle.reducer';
 
-/** 
+/**
  * This file is scaffolded, but needs some special attention:
- * - find and replace '__EXTRA__PROPERTY_NAME' and replace this with a property name of the Bundle entity.
- * - set the initial property value via '[__EXTRA__PROPERTY_NAME]InitialValue'.
- * - set the updated property value via '[__EXTRA__PROPERTY_NAME]UpdatedValue'.
+ * - find and replace 'name' and replace this with a property name of the Bundle entity.
+ * - set the initial property value via '[name]InitialValue'.
+ * - set the updated property value via '[name]UpdatedValue'.
  * - if a none-default sortComparer function is used, assign it to the 'sortComparer' property.
-*/
-const __EXTRA__PROPERTY_NAMEInitialValue = '';
-const __EXTRA__PROPERTY_NAMEUpdatedValue = '';
+ */
+const nameInitialValue = 'old name';
+const nameUpdatedValue = 'new name';
 const sortComparer: any = undefined;
 
 /**
@@ -19,10 +19,13 @@ const sortComparer: any = undefined;
  * @param {number} id
  * @returns {BundleInterface}
  */
-function createBundle(id: number, __EXTRA__PROPERTY_NAME:any = __EXTRA__PROPERTY_NAMEInitialValue): BundleInterface | any {
+function createBundle(
+  id: number,
+  name: any = nameInitialValue
+): BundleInterface | any {
   return {
     id: id,
-    __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAME
+    name: name
   };
 }
 
@@ -57,15 +60,10 @@ function createState(
   return state;
 }
 
-
 describe('Bundles Reducer', () => {
   let bundles: BundleInterface[];
   beforeEach(() => {
-    bundles = [
-      createBundle(1),
-      createBundle(2),
-      createBundle(3)
-    ];
+    bundles = [createBundle(1), createBundle(2), createBundle(3)];
   });
 
   describe('unknown action', () => {
@@ -114,7 +112,7 @@ describe('Bundles Reducer', () => {
   describe('upsert actions', () => {
     it('should upsert one bundle', () => {
       const originalBundle = bundles[0];
-      
+
       reducer(
         initialState,
         new BundleActions.AddBundle({
@@ -122,9 +120,8 @@ describe('Bundles Reducer', () => {
         })
       );
 
-    
       const updatedBundle = createBundle(1);
-     
+
       const action = new BundleActions.UpsertBundle({
         bundle: updatedBundle
       });
@@ -149,9 +146,7 @@ describe('Bundles Reducer', () => {
 
       const result = reducer(startState, action);
 
-      expect(result).toEqual(
-        createState(bundlesToInsert)
-      );
+      expect(result).toEqual(createState(bundlesToInsert));
     });
   });
 
@@ -162,31 +157,30 @@ describe('Bundles Reducer', () => {
       const update: Update<BundleInterface> = {
         id: 1,
         changes: {
-          __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-        } 
+          name: nameUpdatedValue
+        }
       };
       const action = new BundleActions.UpdateBundle({
         bundle: update
       });
       const result = reducer(startState, action);
-      expect(result).toEqual(createState([createBundle(1, __EXTRA__PROPERTY_NAMEUpdatedValue)]));
+      expect(result).toEqual(createState([createBundle(1, nameUpdatedValue)]));
     });
 
     it('should update multiple bundles', () => {
       const startState = createState(bundles);
       const updates: Update<BundleInterface>[] = [
-        
         {
           id: 1,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          } 
+            name: nameUpdatedValue
+          }
         },
         {
           id: 2,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          }  
+            name: nameUpdatedValue
+          }
         }
       ];
       const action = new BundleActions.UpdateBundles({
@@ -195,7 +189,11 @@ describe('Bundles Reducer', () => {
       const result = reducer(startState, action);
 
       expect(result).toEqual(
-        createState([createBundle(1, __EXTRA__PROPERTY_NAMEUpdatedValue), createBundle(2, __EXTRA__PROPERTY_NAMEUpdatedValue), bundles[2]])
+        createState([
+          createBundle(1, nameUpdatedValue),
+          createBundle(2, nameUpdatedValue),
+          bundles[2]
+        ])
       );
     });
   });
