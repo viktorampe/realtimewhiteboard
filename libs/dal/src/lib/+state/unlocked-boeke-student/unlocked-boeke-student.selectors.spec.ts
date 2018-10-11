@@ -3,19 +3,24 @@ import { UnlockedBoekeStudentInterface } from '../../+models';
 import { State } from './unlocked-boeke-student.reducer';
 
 describe('UnlockedBoekeStudent Selectors', () => {
-  function createUnlockedBoekeStudent(id: number): UnlockedBoekeStudentInterface | any {
+  function createUnlockedBoekeStudent(
+    id: number
+  ): UnlockedBoekeStudentInterface | any {
     return {
       id: id
     };
   }
-
   function createState(
     unlockedBoekeStudents: UnlockedBoekeStudentInterface[],
     loaded: boolean = false,
     error?: any
   ): State {
     return {
-      ids: unlockedBoekeStudents ? unlockedBoekeStudents.map(unlockedBoekeStudent => unlockedBoekeStudent.id) : [],
+      ids: unlockedBoekeStudents
+        ? unlockedBoekeStudents.map(
+            unlockedBoekeStudent => unlockedBoekeStudent.id
+          )
+        : [],
       entities: unlockedBoekeStudents
         ? unlockedBoekeStudents.reduce(
             (entityMap, unlockedBoekeStudent) => ({
@@ -88,11 +93,15 @@ describe('UnlockedBoekeStudent Selectors', () => {
       ]);
     });
     it('getById() should return the desired entity', () => {
-      const results = UnlockedBoekeStudentQueries.getById(storeState, { id: 2 });
+      const results = UnlockedBoekeStudentQueries.getById(storeState, {
+        id: 2
+      });
       expect(results).toEqual(createUnlockedBoekeStudent(2));
     });
     it('getById() should return undefined if the entity is not present', () => {
-      const results = UnlockedBoekeStudentQueries.getById(storeState, { id: 9 });
+      const results = UnlockedBoekeStudentQueries.getById(storeState, {
+        id: 9
+      });
       expect(results).toBe(undefined);
     });
   });
