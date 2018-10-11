@@ -1,15 +1,13 @@
 import { Injectable } from '@angular/core';
 import {
   BundleInterface,
-  ContentInterface,
-  ContentType,
   EduContentInterface,
   UserContentInterface
 } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { map, take } from 'rxjs/operators';
-import { ContentAction } from './bundle-detail-classes';
+import { DataConverterService } from './services/data-converter.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,18 +16,33 @@ export class BundleDetailViewModel {
   selectedBundle$ = this.getMockBundle();
 
   bundleContents$ = combineLatest(
+    // mockdata - Educontents
     this.getMockEducontents().pipe(
-      map(eduC => this.mapEduContentToContentInterface(eduC))
+      map(educontentsArray =>
+        educontentsArray.map(e =>
+          this.dataConverter.mapEduContentToContentInterface(e)
+        )
+      )
     ),
+    // mockdata - Usercontents
     this.getMockUsercontents().pipe(
-      map(userC => this.mapUserContentToContentInterface(userC))
+      map(usercontentsArray =>
+        usercontentsArray.map(u =>
+          this.dataConverter.mapUserContentToContentInterface(u)
+        )
+      )
     )
+  ).pipe(
+    map(arrays => Array.prototype.concat.apply([], arrays)) //flatten arrays
   );
+
   listFormat$ = new BehaviorSubject<ListFormat>(ListFormat.GRID);
 
   resolve(): Observable<boolean> {
     return new BehaviorSubject<boolean>(true).pipe(take(1));
   }
+
+  constructor(private dataConverter: DataConverterService) {}
 
   private getMockBundle(): Observable<BundleInterface> {
     const bundle = {
@@ -40,7 +53,7 @@ export class BundleDetailViewModel {
       end: new Date('2018-09-01 00:00:00'),
       learningArea: {
         name: 'Aardrijkskunde',
-        icon: 'polpo-aardrijkskunde',
+        icon: 'icon-aardrijkskunde',
         color: '#485235'
       },
       teacher: {
@@ -53,9 +66,10 @@ export class BundleDetailViewModel {
     return of(bundle);
   }
 
-  private getMockEducontents(): Observable<EduContentInterface> {
+  private getMockEducontents(): Observable<EduContentInterface[]> {
     const eduContent = {
       type: 'boek-e',
+      id: 1,
       publishedEduContentMetadata: {
         version: 1,
         metaVersion: '0.1',
@@ -68,13 +82,17 @@ export class BundleDetailViewModel {
         methods: [
           { name: 'Beautemps', icon: 'beautemps', logoUrl: 'beautemps.svg' },
           { name: 'Kapitaal', icon: 'kapitaal', logoUrl: 'kapitaal.svg' }
-        ]
+        ],
+        eduContentProductType: {
+          name: 'aardrijkskunde',
+          icon: 'icon-aardrijkskunde'
+        }
       }
     };
-    return of(eduContent);
+    return of([eduContent, eduContent]);
   }
 
-  private getMockUsercontents(): Observable<UserContentInterface> {
+  private getMockUsercontents(): Observable<UserContentInterface[]> {
     const userContent = {
       type: 'link',
       name: 'Omschrijving thesis 0',
@@ -86,61 +104,6 @@ export class BundleDetailViewModel {
         email: 'teacher2@mailinator.com'
       }
     };
-    return of(userContent);
-  }
-
-  private getExtension(fileName: string) {
-    return fileName.substring(fileName.lastIndexOf('.') + 1);
-  }
-
-  private mapEduContentToContentInterface(
-    eduContent: EduContentInterface
-  ): ContentInterface {
-    return {
-      name: eduContent.publishedEduContentMetadata.title,
-      type: ContentType.EDUCONTENT,
-      productType: eduContent.type,
-      fileExtension: this.getExtension(
-        eduContent.publishedEduContentMetadata.fileName
-      ),
-      previewImage: eduContent.publishedEduContentMetadata.thumbSmall,
-      description: eduContent.publishedEduContentMetadata.description,
-      methodLogos: eduContent.publishedEduContentMetadata.methods.map(
-        m => m.icon
-      ),
-      actions: [
-        new ContentAction({
-          text: 'Action tekst 1a',
-          icon: 'icon-tasks'
-        }),
-        new ContentAction({
-          text: 'Action tekst 2a',
-          icon: 'icon-book'
-        })
-      ],
-      status: { label: 'test' }
-    };
-  }
-  private mapUserContentToContentInterface(
-    userContent: UserContentInterface
-  ): ContentInterface {
-    return {
-      name: userContent.name,
-      type: ContentType.USERCONTENT,
-      productType: userContent.type,
-      fileExtension: 'drive',
-      description: userContent.description,
-      actions: [
-        new ContentAction({
-          text: 'Action tekst 1a',
-          icon: 'icon-tasks'
-        }),
-        new ContentAction({
-          text: 'Action tekst 2a',
-          icon: 'icon-book'
-        })
-      ],
-      status: { label: 'test' }
-    };
+    return of([userContent, userContent]);
   }
 }

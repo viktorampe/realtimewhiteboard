@@ -1,84 +1,122 @@
 import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { Inject, NgModule } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ContentInterface } from '@campus/dal';
+import {
+  BundleInterface,
+  EduContentInterface,
+  UserContentInterface
+} from '@campus/dal';
 import { ListFormat, ListViewItemDirective } from '@campus/ui';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
+import { map, take } from 'rxjs/operators';
 import { PagesBundlesModule } from './../../pages-bundles.module';
-import { Bundle, ContentAction, Teacher } from './bundle-detail-classes';
 import { BundleDetailComponent } from './bundle-detail.component';
 import { BundleDetailViewModel } from './bundle-detail.viewmodel';
+import { DataConverterService } from './services/data-converter.service';
 
+@Inject(DataConverterService)
 export class MockBundleDetailViewModel {
   selectedBundle$ = this.getMockBundle();
-  bundleContents$ = this.getMockContents();
+
+  bundleContents$ = combineLatest(
+    // mockdata - Educontents
+    this.getMockEducontents().pipe(
+      map(educontentsArray =>
+        educontentsArray.map(e =>
+          this.dataConverter.mapEduContentToContentInterface(e)
+        )
+      )
+    ),
+    // mockdata - Usercontents
+    this.getMockUsercontents().pipe(
+      map(usercontentsArray =>
+        usercontentsArray.map(u =>
+          this.dataConverter.mapUserContentToContentInterface(u)
+        )
+      )
+    )
+  ).pipe(
+    map(arrays => Array.prototype.concat.apply([], arrays)) //flatten arrays
+  );
+
   listFormat$ = new BehaviorSubject<ListFormat>(ListFormat.GRID);
 
-  getMockBundle(): Observable<Bundle> {
-    const bundle = new Bundle({
+  constructor(private dataConverter: DataConverterService) {}
+
+  resolve(): Observable<boolean> {
+    return new BehaviorSubject<boolean>(true).pipe(take(1));
+  }
+
+  private getMockBundle(): Observable<BundleInterface> {
+    const bundle = {
       icon: 'icon-tasks',
-      name: 'Dit is een titel',
+      name: 'Algemeen',
       description: 'Dit is een subtitel',
-      teacher: new Teacher({
-        displayName: 'Leerkracht Naam',
-        firstName: 'Leerkracht',
-        name: 'Naam'
-      })
-    });
+      start: new Date('2018-09-01 00:00:00'),
+      end: new Date('2018-09-01 00:00:00'),
+      learningArea: {
+        name: 'Aardrijkskunde',
+        icon: 'icon-aardrijkskunde',
+        color: '#485235'
+      },
+      teacher: {
+        firstName: 'Ella',
+        name: 'Kuipers',
+        email: 'teacher2@mailinator.com'
+      }
+    };
 
     return of(bundle);
   }
 
-  getMockContents(): Observable<ContentInterface[]> {
-    const item1 = {
-      productType: 'icon-bundles',
-      fileExtension: 'zip',
-      previewImage: 'string',
-      name: 'Dit is een titel',
-      description: 'Dit is een beschrijving',
-      methodLogos: ['vbtl'],
-      actions: [
-        new ContentAction({
-          text: 'Action tekst 1a',
-          icon: 'icon-tasks'
-        }),
-        new ContentAction({
-          text: 'Action tekst 2a',
-          icon: 'icon-book'
-        })
-      ]
-    } as ContentInterface;
+  private getMockEducontents(): Observable<EduContentInterface[]> {
+    const eduContent = {
+      type: 'boek-e',
+      id: 1,
+      publishedEduContentMetadata: {
+        version: 1,
+        metaVersion: '0.1',
+        language: 'be',
+        title: 'De wereld van de getallen',
+        description: 'Lorem ipsum dolor sit amet ... ',
+        created: new Date('2018-09-04 14:21:19'),
+        fileName: 'EXT_powerpoint_meetkunde.ppt',
+        thumbSmall: 'https://www.polpo.be/assets/images/home-laptop-books.jpg',
+        methods: [
+          { name: 'Beautemps', icon: 'beautemps', logoUrl: 'beautemps.svg' },
+          { name: 'Kapitaal', icon: 'kapitaal', logoUrl: 'kapitaal.svg' }
+        ],
+        eduContentProductType: {
+          name: 'aardrijkskunde',
+          icon: 'icon-aardrijkskunde'
+        }
+      }
+    };
+    return of([eduContent, eduContent]);
+  }
 
-    const item2 = {
-      productType: 'icon-bundles',
-      fileExtension: 'xlsx',
-      previewImage: 'string',
-      name: 'Dit is een titel2',
-      description: 'Dit is een beschrijving2',
-      methodLogos: ['mundo'],
-      actions: [
-        new ContentAction({
-          text: 'Action tekst 1b',
-          icon: 'icon-tasks'
-        }),
-        new ContentAction({
-          text: 'Action tekst 2b',
-          icon: 'icon-book'
-        })
-      ]
-    } as ContentInterface;
-
-    const contents: ContentInterface[] = [item1, item2, item1, item2];
-
-    return of(contents);
+  private getMockUsercontents(): Observable<UserContentInterface[]> {
+    const userContent = {
+      type: 'link',
+      name: 'Omschrijving thesis 0',
+      description: 'Omschrijving vereisten voor thesis op google drive',
+      link: 'http://www.google.be?q=thesisomschrijving',
+      teacher: {
+        firstName: 'Ella',
+        name: 'Kuipers',
+        email: 'teacher2@mailinator.com'
+      }
+    };
+    return of([userContent, userContent]);
   }
 }
 
 @NgModule({
   imports: [CommonModule, PagesBundlesModule],
   providers: [
+    DataConverterService,
     { provide: BundleDetailViewModel, useClass: MockBundleDetailViewModel }
   ]
 })
@@ -136,7 +174,7 @@ describe('BundleDetailComponent', () => {
   it('should be able to filter the available items', async(() => {
     const expectedAmount = 2;
 
-    component.filter.text.next('2');
+    component.filter.text.next('0');
 
     fixture.whenStable().then(() => {
       fixture.detectChanges();
@@ -182,7 +220,7 @@ describe('BundleDetailComponent', () => {
     component.list.deselectAllItems();
     fixture.detectChanges();
 
-    expect(component.selectedItems.length).toBe(0);
+    expect(component.selectedItems$.value.length).toBe(0);
 
     const infoPanelDE = fixture.debugElement.query(
       By.css('campus-side-sheet-body')
@@ -199,8 +237,6 @@ describe('BundleDetailComponent', () => {
     expect(infoPanelBundle).toBeTruthy();
     expect(infoPanelContent).toBeFalsy();
     expect(infoPanelContents).toBeFalsy();
-
-    expect(infoPanelBundle.nativeElement.textContent).toContain('Leerkracht');
   });
 
   it('should show the item info in the infopanel if an item is selected', () => {
@@ -210,7 +246,7 @@ describe('BundleDetailComponent', () => {
     listItems[0].nativeElement.click();
     fixture.detectChanges();
 
-    expect(component.selectedItems.length).toBe(1);
+    expect(component.selectedItems$.value.length).toBe(1);
 
     const infoPanelDE = fixture.debugElement.query(
       By.css('campus-side-sheet-body')
@@ -227,10 +263,6 @@ describe('BundleDetailComponent', () => {
     expect(infoPanelBundle).toBeFalsy();
     expect(infoPanelContent).toBeTruthy();
     expect(infoPanelContents).toBeFalsy();
-
-    expect(infoPanelContent.nativeElement.textContent).toContain(
-      'Dit is een titel'
-    );
   });
 
   // TODO
@@ -241,7 +273,7 @@ describe('BundleDetailComponent', () => {
     component.list.selectAllItems();
     fixture.detectChanges();
 
-    expect(component.selectedItems.length).toBe(4);
+    expect(component.selectedItems$.value.length).toBe(4);
 
     const infoPanelDE = fixture.debugElement.query(
       By.css('campus-side-sheet-body')
@@ -258,47 +290,8 @@ describe('BundleDetailComponent', () => {
     expect(infoPanelBundle).toBeFalsy();
     expect(infoPanelContent).toBeFalsy();
     expect(infoPanelContents).toBeTruthy();
-
-    const regExp = new RegExp('Dit is een titel', 'gi');
-    expect(
-      (infoPanelContents.nativeElement.textContent.match(regExp) || []).length
-    ).toBe(4);
   });
 
   // TODO
   // it('should show an error message if a bundle is no longer available', () => {});
-
-  /*
-    Analyse needed data bundle detail page (Student version)
-  */
-  // it('should get the page header info', () => {});
-  // bundle icon
-  // title
-  // subtitle
-
-  // it('should get an array of educontents', () => {});
-  // type icon
-  // file extension
-  // preview image
-  // title
-  // description
-  // method logo src
-  // current status
-
-  // it('should get an array of actions per educontent', () => {});
-  // action icon
-  // tooltip
-  // function to call
-  // function parameters
-
-  // it('should get a marker when there are afwijkende instellingen per educontent', () => {});
-
-  // it('should get the teacherinfo', () => {});
-  // name
-  // avatar
-
-  // it('should get the errormessage when there isnt any content', () => {});
-
-  // it('should get the default list layout (grid/line) ?', () => {});
-  // is dit iets wat de pagina bijhoudt? of komt dat uit de store?
 });

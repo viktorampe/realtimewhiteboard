@@ -17,7 +17,7 @@ import {
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { filter, map, startWith } from 'rxjs/operators';
 import { BundleDetailViewModel } from './bundle-detail.viewmodel';
-import { InfoPanelDataConverterService } from './services/info-panel-data-converter.service';
+import { DataConverterService } from './services/data-converter.service';
 
 @Component({
   selector: 'campus-bundle-detail',
@@ -33,19 +33,21 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   listFormat = ListFormat; //enum beschikbaar maken in template
   currentListFormat$ = this.vm.listFormat$;
 
+  contentForInfoPanelEmpty$ = this.bundle$.pipe(
+    map(bundle => this.dataConverter.transformToBundleForInfoPanel(bundle))
+  );
+
   contentForInfoPanelSingle$ = this.selectedItems$.pipe(
     filter(items => items.length === 1),
     map(items => items[0].dataObject as ContentInterface),
-    map(data =>
-      this.infoPanelDataConverter.transformToContentForInfoPanel(data)
-    )
+    map(data => this.dataConverter.transformToContentForInfoPanel(data))
   );
 
   contentForInfoPanelMultiple$ = this.selectedItems$.pipe(
     filter(items => items.length > 1),
     map(items => items.map(i => i.dataObject as ContentInterface)),
     map(dataArray =>
-      this.infoPanelDataConverter.transformToContentsForInfoPanel(dataArray)
+      this.dataConverter.transformToContentsForInfoPanel(dataArray)
     )
   );
 
@@ -56,7 +58,7 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(
     public vm: BundleDetailViewModel,
     private cd: ChangeDetectorRef,
-    public infoPanelDataConverter: InfoPanelDataConverterService
+    public dataConverter: DataConverterService
   ) {}
 
   ngOnInit() {
