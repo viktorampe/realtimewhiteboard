@@ -12,28 +12,27 @@ import {
 } from '@diekeure/polpo-api-angular-sdk';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
+import { Bundle } from './+state/bundle';
+import { BundlesEffects } from './+state/bundle/bundle.effects';
+import { EduContent } from './+state/edu-content';
+import { EduContentsEffects } from './+state/edu-content/edu-content.effects';
+import { LearningArea } from './+state/learning-area';
+import { LearningAreasEffects } from './+state/learning-area/learning-area.effects';
 import { UiEffects } from './+state/ui/ui.effects';
 import {
   initialState as uiInitialState,
   uiReducer
 } from './+state/ui/ui.reducer';
 import {
-  bundlesReducer,
-  initialState as bundlesInitialState
-} from './+state/bundles/bundles.reducer';
-import { EduContent } from './+state/edu-content';
-import { EduContentsEffects } from './+state/edu-content/edu-content.effects';
-import { EduContentService } from './edu-content/edu-content.service';
-import { EDUCONTENT_SERVICE_TOKEN } from './edu-content/edu-content.service.interface';
-import { 
-  BundlesService,
-  BUNDLES_SERVICE_TOKEN,
+  BundleService,
+  BUNDLE_SERVICE_TOKEN,
   UnlockedContentsService,
   UNLOCKEDCONTENTS_SERVICE_TOKEN
-} from './bundles';
-import { EduContentService } from './educontent/edu-content.service';
-import { EDUCONTENT_SERVICE_TOKEN } from './educontent/edu-content.service.interface';
-
+} from './bundle';
+import { EduContentService } from './edu-content/edu-content.service';
+import { EDUCONTENT_SERVICE_TOKEN } from './edu-content/edu-content.service.interface';
+import { LearningAreaService } from './learning-area/learning-area.service';
+import { LEARNINGAREA_SERVICE_TOKEN } from './learning-area/learning-area.service.interface';
 import { AuthService, AuthServiceToken } from './persons/auth-service';
 
 interface DalOptions {
@@ -49,17 +48,26 @@ interface DalOptions {
     StoreModule.forFeature('ui', uiReducer, {
       initialState: uiInitialState
     }),
-    StoreModule.forFeature('eduContents', EduContent.reducer, {
+    StoreModule.forFeature('bundle', Bundle.reducer, {
+      initialState: Bundle.initialState
+    }),
+    StoreModule.forFeature('learingArea', LearningArea.reducer, {
+      initialState: LearningArea.initialState
+    }),
+    StoreModule.forFeature('eduContent', EduContent.reducer, {
       initialState: EduContent.initialState
     }),
-    StoreModule.forFeature('bundles', bundlesReducer, {
-      initialState: bundlesInitialState
-    }),
-    EffectsModule.forFeature([BundlesEffects, EduContentsEffects,UiEffects])
+    EffectsModule.forFeature([
+      BundlesEffects,
+      EduContentsEffects,
+      UiEffects,
+      LearningAreasEffects
+    ])
   ],
   providers: [
     { provide: EDUCONTENT_SERVICE_TOKEN, useClass: EduContentService },
-    { provide: BUNDLES_SERVICE_TOKEN, useClass: BundlesService },
+    { provide: BUNDLE_SERVICE_TOKEN, useClass: BundleService },
+    { provide: LEARNINGAREA_SERVICE_TOKEN, useClass: LearningAreaService },
     {
       provide: UNLOCKEDCONTENTS_SERVICE_TOKEN,
       useClass: UnlockedContentsService

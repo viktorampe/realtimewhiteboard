@@ -3,9 +3,9 @@ import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { map } from 'rxjs/operators';
 import {
-  BundlesServiceInterface,
-  BUNDLES_SERVICE_TOKEN
-} from '../../bundles/bundles.service.interface';
+  BundleServiceInterface,
+  BUNDLE_SERVICE_TOKEN
+} from '../../bundle/bundle.service.interface';
 import {
   BundlesActionTypes,
   BundlesLoaded,
@@ -32,7 +32,6 @@ export class BundlesEffects {
   constructor(
     private actions: Actions,
     private dataPersistence: DataPersistence<State>,
-    @Inject(BUNDLES_SERVICE_TOKEN)
-    private bundleService: BundlesServiceInterface
+    @Inject(BUNDLE_SERVICE_TOKEN) private bundleService: BundleServiceInterface
   ) {}
 }

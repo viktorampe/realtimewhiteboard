@@ -1,21 +1,26 @@
 import { TestBed } from '@angular/core/testing';
-import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
+import { LearningAreaApi } from '@diekeure/polpo-api-angular-sdk';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
-import { BundleService } from '../../bundle/bundle.service';
-import { BUNDLE_SERVICE_TOKEN } from '../../bundle/bundle.service.interface';
-import { BundlesLoaded, BundlesLoadError, LoadBundles } from './bundle.actions';
-import { BundlesEffects } from './bundle.effects';
-import { initialState, reducer } from './bundle.reducer';
+import { LearningAreaService } from '../../learning-area/learning-area.service';
+import { LEARNINGAREA_SERVICE_TOKEN } from '../../learning-area/learning-area.service.interface';
+import {
+  LearningAreasLoaded,
+  LearningAreasLoadError,
+  LoadLearningAreas
+} from './learning-area.actions';
+import { LearningAreasEffects } from './learning-area.effects';
+import { initialState, reducer } from './learning-area.reducer';
 
-describe('BundleEffects', () => {
+describe('LearningAreaEffects', () => {
   let actions: Observable<any>;
-  let effects: BundlesEffects;
+  let effects: LearningAreasEffects;
   let usedState: any;
+
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -38,7 +43,7 @@ describe('BundleEffects', () => {
   const mockServiceMethodReturnValue = (
     method: string,
     returnValue: any,
-    service: any = BUNDLE_SERVICE_TOKEN
+    service: any = LEARNINGAREA_SERVICE_TOKEN
   ) => {
     jest.spyOn(TestBed.get(service), method).mockReturnValue(of(returnValue));
   };
@@ -46,7 +51,7 @@ describe('BundleEffects', () => {
   const mockServiceMethodError = (
     method: string,
     errorMessage: string,
-    service: any = BUNDLE_SERVICE_TOKEN
+    service: any = LEARNINGAREA_SERVICE_TOKEN
   ) => {
     jest.spyOn(TestBed.get(service), method).mockImplementation(() => {
       throw new Error(errorMessage);
@@ -58,52 +63,52 @@ describe('BundleEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature('bundle', reducer, {
+        StoreModule.forFeature('learningArea', reducer, {
           initialState: usedState
         }),
         EffectsModule.forRoot([]),
-        EffectsModule.forFeature([BundlesEffects])
+        EffectsModule.forFeature([LearningAreasEffects])
       ],
       providers: [
         {
-          provide: BUNDLE_SERVICE_TOKEN,
-          useClass: BundleService
+          provide: LEARNINGAREA_SERVICE_TOKEN,
+          useClass: LearningAreaService
         },
         {
-          provide: PersonApi,
+          provide: LearningAreaApi,
           userClass: {}
         },
-        BundlesEffects,
+        LearningAreasEffects,
         DataPersistence,
         provideMockActions(() => actions)
       ]
     });
 
-    effects = TestBed.get(BundlesEffects);
+    effects = TestBed.get(LearningAreasEffects);
   });
 
-  describe('loadBundle$', () => {
-    const unforcedLoadAction = new LoadBundles({});
-    const forcedLoadAction = new LoadBundles({ force: true });
-    const filledLoadedAction = new BundlesLoaded({ bundles: [] });
-    const loadErrorAction = new BundlesLoadError(new Error('failed'));
+  describe('loadLearningArea$', () => {
+    const unforcedLoadAction = new LoadLearningAreas({});
+    const forcedLoadAction = new LoadLearningAreas({ force: true });
+    const filledLoadedAction = new LearningAreasLoaded({ learningAreas: [] });
+    const loadErrorAction = new LearningAreasLoadError(new Error('failed'));
     describe('with initialState', () => {
       beforeAll(() => {
         usedState = initialState;
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAllForUser', []);
+        mockServiceMethodReturnValue('getAll', []);
       });
       it('should trigger an api call with the initialState if force is not true', () => {
         expectInAndOut(
-          effects.loadBundles$,
+          effects.loadLearningAreas$,
           unforcedLoadAction,
           filledLoadedAction
         );
       });
       it('should trigger an api call with the initialState if force is true', () => {
         expectInAndOut(
-          effects.loadBundles$,
+          effects.loadLearningAreas$,
           forcedLoadAction,
           filledLoadedAction
         );
@@ -114,14 +119,14 @@ describe('BundleEffects', () => {
         usedState = { ...initialState, loaded: true };
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAllForUser', []);
+        mockServiceMethodReturnValue('getAll', []);
       });
       it('should not trigger an api call with the loaded state if force is not true', () => {
-        expectInNoOut(effects.loadBundles$, unforcedLoadAction);
+        expectInNoOut(effects.loadLearningAreas$, unforcedLoadAction);
       });
       it('should trigger an api call with the loaded state if force is true', () => {
         expectInAndOut(
-          effects.loadBundles$,
+          effects.loadLearningAreas$,
           forcedLoadAction,
           filledLoadedAction
         );
@@ -132,17 +137,21 @@ describe('BundleEffects', () => {
         usedState = initialState;
       });
       beforeEach(() => {
-        mockServiceMethodError('getAllForUser', 'failed');
+        mockServiceMethodError('getAll', 'failed');
       });
       it('should return a error action if force is not true', () => {
         expectInAndOut(
-          effects.loadBundles$,
+          effects.loadLearningAreas$,
           unforcedLoadAction,
           loadErrorAction
         );
       });
       it('should return a error action if force is true', () => {
-        expectInAndOut(effects.loadBundles$, forcedLoadAction, loadErrorAction);
+        expectInAndOut(
+          effects.loadLearningAreas$,
+          forcedLoadAction,
+          loadErrorAction
+        );
       });
     });
     describe('with loaded and failing api call', () => {
@@ -154,13 +163,17 @@ describe('BundleEffects', () => {
         };
       });
       beforeEach(() => {
-        mockServiceMethodError('getAllForUser', 'failed');
+        mockServiceMethodError('getAll', 'failed');
       });
       it('should return nothing action if force is not true', () => {
-        expectInNoOut(effects.loadBundles$, unforcedLoadAction);
+        expectInNoOut(effects.loadLearningAreas$, unforcedLoadAction);
       });
       it('should return a error action if force is true', () => {
-        expectInAndOut(effects.loadBundles$, forcedLoadAction, loadErrorAction);
+        expectInAndOut(
+          effects.loadLearningAreas$,
+          forcedLoadAction,
+          loadErrorAction
+        );
       });
     });
   });
