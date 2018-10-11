@@ -12,6 +12,8 @@ import {
 } from '@diekeure/polpo-api-angular-sdk';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
+import { Bundle } from './+state/bundle';
+import { BundlesEffects } from './+state/bundle/bundle.effects';
 import { UiEffects } from './+state/ui/ui.effects';
 import {
   initialState as uiInitialState,
@@ -40,7 +42,10 @@ interface DalOptions {
     StoreModule.forFeature('ui', uiReducer, {
       initialState: uiInitialState
     }),
-    EffectsModule.forFeature([UiEffects])
+    StoreModule.forFeature('bundle', Bundle.reducer, {
+      initialState: Bundle.initialState
+    }),
+    EffectsModule.forFeature([UiEffects, BundlesEffects])
   ],
   providers: [
     { provide: EDUCONTENT_SERVICE_TOKEN, useClass: EduContentService },
