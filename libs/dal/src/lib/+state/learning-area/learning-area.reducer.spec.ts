@@ -1,26 +1,29 @@
 import { Update } from '@ngrx/entity';
-import {LearningAreaActions } from '.';
-import { initialState, reducer, State } from './learning-area.reducer';
+import { LearningAreaActions } from '.';
 import { LearningAreaInterface } from '../../+models';
+import { initialState, reducer, State } from './learning-area.reducer';
 
-/** 
+/**
  * This file is scaffolded, but needs some special attention:
- * - find and replace '__EXTRA__PROPERTY_NAME' and replace this with a property name of the LearningArea entity.
- * - set the initial property value via '[__EXTRA__PROPERTY_NAME]InitialValue'.
- * - set the updated property value via '[__EXTRA__PROPERTY_NAME]UpdatedValue'.
-*/
-const __EXTRA__PROPERTY_NAMEInitialValue = '';
-const __EXTRA__PROPERTY_NAMEUpdatedValue = '';
+ * - find and replace 'name' and replace this with a property name of the LearningArea entity.
+ * - set the initial property value via '[name]InitialValue'.
+ * - set the updated property value via '[name]UpdatedValue'.
+ */
+const nameInitialValue = 'me';
+const nameUpdatedValue = 'too';
 
 /**
  * Creates a LearningArea.
  * @param {number} id
  * @returns {LearningAreaInterface}
  */
-function createLearningArea(id: number, __EXTRA__PROPERTY_NAME:any = __EXTRA__PROPERTY_NAMEInitialValue): LearningAreaInterface | any {
+function createLearningArea(
+  id: number,
+  name: any = nameInitialValue
+): LearningAreaInterface | any {
   return {
     id: id,
-    __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAME
+    name: name
   };
 }
 
@@ -38,7 +41,9 @@ function createState(
   error?: any
 ): State {
   const state: any = {
-    ids: learningAreas ? learningAreas.map(learningArea => learningArea.id) : [],
+    ids: learningAreas
+      ? learningAreas.map(learningArea => learningArea.id)
+      : [],
     entities: learningAreas
       ? learningAreas.reduce(
           (entityMap, learningArea) => ({
@@ -53,7 +58,6 @@ function createState(
   if (error !== undefined) state.error = error;
   return state;
 }
-
 
 describe('LearningAreas Reducer', () => {
   let learningAreas: LearningAreaInterface[];
@@ -77,7 +81,9 @@ describe('LearningAreas Reducer', () => {
 
   describe('loaded action', () => {
     it('should load all learningAreas', () => {
-      const action = new LearningAreaActions.LearningAreasLoaded({ learningAreas });
+      const action = new LearningAreaActions.LearningAreasLoaded({
+        learningAreas
+      });
       const result = reducer(initialState, action);
       expect(result).toEqual(createState(learningAreas, true));
     });
@@ -102,7 +108,9 @@ describe('LearningAreas Reducer', () => {
     });
 
     it('should add multiple learningAreas', () => {
-      const action = new LearningAreaActions.AddLearningAreas({ learningAreas });
+      const action = new LearningAreaActions.AddLearningAreas({
+        learningAreas
+      });
       const result = reducer(initialState, action);
 
       expect(result).toEqual(createState(learningAreas, false));
@@ -111,7 +119,7 @@ describe('LearningAreas Reducer', () => {
   describe('upsert actions', () => {
     it('should upsert one learningArea', () => {
       const originalLearningArea = learningAreas[0];
-      
+
       const startState = reducer(
         initialState,
         new LearningAreaActions.AddLearningArea({
@@ -119,16 +127,20 @@ describe('LearningAreas Reducer', () => {
         })
       );
 
-    
-      const updatedLearningArea = createLearningArea(learningAreas[0].id, 'test');
-     
+      const updatedLearningArea = createLearningArea(
+        learningAreas[0].id,
+        'test'
+      );
+
       const action = new LearningAreaActions.UpsertLearningArea({
         learningArea: updatedLearningArea
       });
 
       const result = reducer(startState, action);
 
-      expect(result.entities[updatedLearningArea.id]).toEqual(updatedLearningArea);
+      expect(result.entities[updatedLearningArea.id]).toEqual(
+        updatedLearningArea
+      );
     });
 
     it('should upsert many learningAreas', () => {
@@ -146,9 +158,7 @@ describe('LearningAreas Reducer', () => {
 
       const result = reducer(startState, action);
 
-      expect(result).toEqual(
-        createState(learningAreasToInsert)
-      );
+      expect(result).toEqual(createState(learningAreasToInsert));
     });
   });
 
@@ -159,31 +169,32 @@ describe('LearningAreas Reducer', () => {
       const update: Update<LearningAreaInterface> = {
         id: 1,
         changes: {
-          __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-        } 
+          name: nameUpdatedValue
+        }
       };
       const action = new LearningAreaActions.UpdateLearningArea({
         learningArea: update
       });
       const result = reducer(startState, action);
-      expect(result).toEqual(createState([createLearningArea(1, __EXTRA__PROPERTY_NAMEUpdatedValue)]));
+      expect(result).toEqual(
+        createState([createLearningArea(1, nameUpdatedValue)])
+      );
     });
 
     it('should update multiple learningAreas', () => {
       const startState = createState(learningAreas);
       const updates: Update<LearningAreaInterface>[] = [
-        
         {
           id: 1,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          } 
+            name: nameUpdatedValue
+          }
         },
         {
           id: 2,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          }  
+            name: nameUpdatedValue
+          }
         }
       ];
       const action = new LearningAreaActions.UpdateLearningAreas({
@@ -192,7 +203,11 @@ describe('LearningAreas Reducer', () => {
       const result = reducer(startState, action);
 
       expect(result).toEqual(
-        createState([createLearningArea(1, __EXTRA__PROPERTY_NAMEUpdatedValue), createLearningArea(2, __EXTRA__PROPERTY_NAMEUpdatedValue), learningAreas[2]])
+        createState([
+          createLearningArea(1, nameUpdatedValue),
+          createLearningArea(2, nameUpdatedValue),
+          learningAreas[2]
+        ])
       );
     });
   });
@@ -220,7 +235,11 @@ describe('LearningAreas Reducer', () => {
 
   describe('clear action', () => {
     it('should clear the learningAreas collection', () => {
-      const startState = createState(learningAreas, true, 'something went wrong');
+      const startState = createState(
+        learningAreas,
+        true,
+        'something went wrong'
+      );
       const action = new LearningAreaActions.ClearLearningAreas();
       const result = reducer(startState, action);
       expect(result).toEqual(createState([], true, 'something went wrong'));
