@@ -18,8 +18,8 @@ import {
   uiReducer
 } from './+state/ui/ui.reducer';
 import {
-  BundlesService,
-  BUNDLES_SERVICE_TOKEN,
+  BundleService,
+  BUNDLE_SERVICE_TOKEN,
   UnlockedContentsService,
   UNLOCKEDCONTENTS_SERVICE_TOKEN
 } from './bundles';
@@ -44,7 +44,7 @@ interface DalOptions {
   ],
   providers: [
     { provide: EDUCONTENT_SERVICE_TOKEN, useClass: EduContentService },
-    { provide: BUNDLES_SERVICE_TOKEN, useClass: BundlesService },
+    { provide: BUNDLE_SERVICE_TOKEN, useClass: BundleService },
     {
       provide: UNLOCKEDCONTENTS_SERVICE_TOKEN,
       useClass: UnlockedContentsService

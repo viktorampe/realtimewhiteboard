@@ -3,12 +3,12 @@ import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { BundleInterface } from '../+models/Bundle.interface';
-import { BundlesServiceInterface } from './bundles.service.interface';
+import { BundleServiceInterface } from './bundle.service.interface';
 
 @Injectable({
   providedIn: 'root'
 })
-export class BundlesService implements BundlesServiceInterface {
+export class BundleService implements BundleServiceInterface {
   constructor(private personApi: PersonApi) {}
 
   getAllForUser(userId: number): Observable<BundleInterface[]> {
