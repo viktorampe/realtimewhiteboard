@@ -21,7 +21,7 @@ export class UnlockedBoekeStudentsEffects {
     UnlockedBoekeStudentsActionTypes.LoadUnlockedBoekeStudents,
     {
       run: (action: LoadUnlockedBoekeStudents, state: any) => {
-        if (!action.payload.force && state.unlockedBoekeStudent.loaded) return;
+        if (!action.payload.force && state.unlockedBoekeStudents.loaded) return;
         return this.unlockedBoekeStudentService
           .getAllForUser(2) //TODO get userId from UserState
           .pipe(

@@ -60,7 +60,7 @@ describe('UnlockedBoekeStudentEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature('unlockedBoekeStudent', reducer, {
+        StoreModule.forFeature('unlockedBoekeStudents', reducer, {
           initialState: usedState
         }),
         EffectsModule.forRoot([]),
