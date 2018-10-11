@@ -3,7 +3,7 @@ import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { UnlockedBoekeGroupInterface } from '../+models';
-import { UnlockedBoekeGroupServiceInterface } from './unlocked-boeke-group.interface';
+import { UnlockedBoekeGroupServiceInterface } from './unlocked-boeke-group.service.interface';
 
 @Injectable({
   providedIn: 'root'

@@ -1,8 +1,8 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { hot } from '@nrwl/nx/testing';
-import { UnlockedBoekeGroupServiceInterface } from './unlocked-boeke-group.interface';
 import { UnlockedBoekeGroupService } from './unlocked-boeke-group.service';
+import { UnlockedBoekeGroupServiceInterface } from './unlocked-boeke-group.service.interface';
 
 describe('UnlockedBoekeGroupService', () => {
   let service: UnlockedBoekeGroupServiceInterface;
