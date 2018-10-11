@@ -21,7 +21,7 @@ export class UnlockedBoekeGroupsEffects {
     UnlockedBoekeGroupsActionTypes.LoadUnlockedBoekeGroups,
     {
       run: (action: LoadUnlockedBoekeGroups, state: any) => {
-        if (!action.payload.force && state.unlockedBoekeGroup.loaded) return;
+        if (!action.payload.force && state.unlockedBoekeGroups.loaded) return;
         //todo match current user
         return this.unlockedBoekeGroupService
           .getAllForUser(1)
