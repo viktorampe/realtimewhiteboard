@@ -21,7 +21,7 @@ export class UnlockedContentsEffects {
     UnlockedContentsActionTypes.LoadUnlockedContents,
     {
       run: (action: LoadUnlockedContents, state: any) => {
-        if (!action.payload.force && state.unlockedContent.loaded) return;
+        if (!action.payload.force && state.unlockedContents.loaded) return;
         //todo attach current user
         return this.unlockedContentService
           .getAllForUser(1)

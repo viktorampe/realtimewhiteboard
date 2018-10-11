@@ -56,7 +56,7 @@ describe('BundleEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature('bundle', reducer, {
+        StoreModule.forFeature('bundles', reducer, {
           initialState: usedState
         }),
         EffectsModule.forRoot([]),

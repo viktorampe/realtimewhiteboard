@@ -5,18 +5,18 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
-import { UNLOCKED_CONTENT_SERVICE_TOKEN } from '../../bundle/unlocked-content.service.interface';
+import { UNLOCKED_BOEKE_STUDENT_SERVICE_TOKEN } from '../../boeke/unlocked-boeke-student.service.interface';
 import {
-  LoadUnlockedContents,
-  UnlockedContentsLoaded,
-  UnlockedContentsLoadError
-} from './unlocked-content.actions';
-import { UnlockedContentsEffects } from './unlocked-content.effects';
-import { initialState, reducer } from './unlocked-content.reducer';
+  LoadUnlockedBoekeStudents,
+  UnlockedBoekeStudentsLoaded,
+  UnlockedBoekeStudentsLoadError
+} from './unlocked-boeke-student.actions';
+import { UnlockedBoekeStudentsEffects } from './unlocked-boeke-student.effects';
+import { initialState, reducer } from './unlocked-boeke-student.reducer';
 
-describe('UnlockedContentEffects', () => {
+describe('UnlockedBoekeStudentEffects', () => {
   let actions: Observable<any>;
-  let effects: UnlockedContentsEffects;
+  let effects: UnlockedBoekeStudentsEffects;
   let usedState: any;
 
   const expectInAndOut = (
@@ -40,7 +40,7 @@ describe('UnlockedContentEffects', () => {
   const mockServiceMethodReturnValue = (
     method: string,
     returnValue: any,
-    service: any = UNLOCKED_CONTENT_SERVICE_TOKEN
+    service: any = UNLOCKED_BOEKE_STUDENT_SERVICE_TOKEN
   ) => {
     jest.spyOn(TestBed.get(service), method).mockReturnValue(of(returnValue));
   };
@@ -48,7 +48,7 @@ describe('UnlockedContentEffects', () => {
   const mockServiceMethodError = (
     method: string,
     errorMessage: string,
-    service: any = UNLOCKED_CONTENT_SERVICE_TOKEN
+    service: any = UNLOCKED_BOEKE_STUDENT_SERVICE_TOKEN
   ) => {
     jest.spyOn(TestBed.get(service), method).mockImplementation(() => {
       throw new Error(errorMessage);
@@ -60,35 +60,37 @@ describe('UnlockedContentEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature('unlockedContents', reducer, {
+        StoreModule.forFeature('unlockedBoekeStudents', reducer, {
           initialState: usedState
         }),
         EffectsModule.forRoot([]),
-        EffectsModule.forFeature([UnlockedContentsEffects])
+        EffectsModule.forFeature([UnlockedBoekeStudentsEffects])
       ],
       providers: [
         {
-          provide: UNLOCKED_CONTENT_SERVICE_TOKEN,
+          provide: UNLOCKED_BOEKE_STUDENT_SERVICE_TOKEN,
           useValue: {
             getAllForUser: () => {}
           }
         },
-        UnlockedContentsEffects,
+        UnlockedBoekeStudentsEffects,
         DataPersistence,
         provideMockActions(() => actions)
       ]
     });
 
-    effects = TestBed.get(UnlockedContentsEffects);
+    effects = TestBed.get(UnlockedBoekeStudentsEffects);
   });
 
-  describe('loadUnlockedContent$', () => {
-    const unforcedLoadAction = new LoadUnlockedContents({});
-    const forcedLoadAction = new LoadUnlockedContents({ force: true });
-    const filledLoadedAction = new UnlockedContentsLoaded({
-      unlockedContents: []
+  describe('loadUnlockedBoekeStudent$', () => {
+    const unforcedLoadAction = new LoadUnlockedBoekeStudents({});
+    const forcedLoadAction = new LoadUnlockedBoekeStudents({ force: true });
+    const filledLoadedAction = new UnlockedBoekeStudentsLoaded({
+      unlockedBoekeStudents: []
     });
-    const loadErrorAction = new UnlockedContentsLoadError(new Error('failed'));
+    const loadErrorAction = new UnlockedBoekeStudentsLoadError(
+      new Error('failed')
+    );
     describe('with initialState', () => {
       beforeAll(() => {
         usedState = initialState;
@@ -98,14 +100,14 @@ describe('UnlockedContentEffects', () => {
       });
       it('should trigger an api call with the initialState if force is not true', () => {
         expectInAndOut(
-          effects.loadUnlockedContents$,
+          effects.loadUnlockedBoekeStudents$,
           unforcedLoadAction,
           filledLoadedAction
         );
       });
       it('should trigger an api call with the initialState if force is true', () => {
         expectInAndOut(
-          effects.loadUnlockedContents$,
+          effects.loadUnlockedBoekeStudents$,
           forcedLoadAction,
           filledLoadedAction
         );
@@ -119,11 +121,11 @@ describe('UnlockedContentEffects', () => {
         mockServiceMethodReturnValue('getAllForUser', []);
       });
       it('should not trigger an api call with the loaded state if force is not true', () => {
-        expectInNoOut(effects.loadUnlockedContents$, unforcedLoadAction);
+        expectInNoOut(effects.loadUnlockedBoekeStudents$, unforcedLoadAction);
       });
       it('should trigger an api call with the loaded state if force is true', () => {
         expectInAndOut(
-          effects.loadUnlockedContents$,
+          effects.loadUnlockedBoekeStudents$,
           forcedLoadAction,
           filledLoadedAction
         );
@@ -138,14 +140,14 @@ describe('UnlockedContentEffects', () => {
       });
       it('should return a error action if force is not true', () => {
         expectInAndOut(
-          effects.loadUnlockedContents$,
+          effects.loadUnlockedBoekeStudents$,
           unforcedLoadAction,
           loadErrorAction
         );
       });
       it('should return a error action if force is true', () => {
         expectInAndOut(
-          effects.loadUnlockedContents$,
+          effects.loadUnlockedBoekeStudents$,
           forcedLoadAction,
           loadErrorAction
         );
@@ -163,11 +165,11 @@ describe('UnlockedContentEffects', () => {
         mockServiceMethodError('getAllForUser', 'failed');
       });
       it('should return nothing action if force is not true', () => {
-        expectInNoOut(effects.loadUnlockedContents$, unforcedLoadAction);
+        expectInNoOut(effects.loadUnlockedBoekeStudents$, unforcedLoadAction);
       });
       it('should return a error action if force is true', () => {
         expectInAndOut(
-          effects.loadUnlockedContents$,
+          effects.loadUnlockedBoekeStudents$,
           forcedLoadAction,
           loadErrorAction
         );

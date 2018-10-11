@@ -21,7 +21,7 @@ export class EduContentsEffects {
     EduContentsActionTypes.LoadEduContents,
     {
       run: (action: LoadEduContents, state: any) => {
-        if (!action.payload.force && state.eduContent.loaded) return;
+        if (!action.payload.force && state.eduContents.loaded) return;
         return this.eduContentService
           .getAllForUser(11) //TODO: replace with state.user.current ...
           .pipe(map(eduContents => new EduContentsLoaded({ eduContents })));

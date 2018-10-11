@@ -8,9 +8,9 @@ import {
 } from '../../learning-area/learning-area.service.interface';
 import {
   LearningAreasActionTypes,
+  LearningAreasLoaded,
   LearningAreasLoadError,
-  LoadLearningAreas,
-  LearningAreasLoaded
+  LoadLearningAreas
 } from './learning-area.actions';
 import { State } from './learning-area.reducer';
 
@@ -21,7 +21,7 @@ export class LearningAreasEffects {
     LearningAreasActionTypes.LoadLearningAreas,
     {
       run: (action: LoadLearningAreas, state: any) => {
-        if (!action.payload.force && state.learningArea.loaded) return;
+        if (!action.payload.force && state.learningAreas.loaded) return;
         return this.learningAreaService
           .getAll()
           .pipe(

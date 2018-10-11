@@ -5,18 +5,18 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
-import { UNLOCKED_CONTENT_SERVICE_TOKEN } from '../../bundle/unlocked-content.service.interface';
+import { USER_CONTENT_SERVICE_TOKEN } from '../../bundle/user-content.service.interface';
 import {
-  LoadUnlockedContents,
-  UnlockedContentsLoaded,
-  UnlockedContentsLoadError
-} from './unlocked-content.actions';
-import { UnlockedContentsEffects } from './unlocked-content.effects';
-import { initialState, reducer } from './unlocked-content.reducer';
+  LoadUserContents,
+  UserContentsLoaded,
+  UserContentsLoadError
+} from './user-content.actions';
+import { UserContentsEffects } from './user-content.effects';
+import { initialState, reducer } from './user-content.reducer';
 
-describe('UnlockedContentEffects', () => {
+describe('UserContentEffects', () => {
   let actions: Observable<any>;
-  let effects: UnlockedContentsEffects;
+  let effects: UserContentsEffects;
   let usedState: any;
 
   const expectInAndOut = (
@@ -40,7 +40,7 @@ describe('UnlockedContentEffects', () => {
   const mockServiceMethodReturnValue = (
     method: string,
     returnValue: any,
-    service: any = UNLOCKED_CONTENT_SERVICE_TOKEN
+    service: any = USER_CONTENT_SERVICE_TOKEN
   ) => {
     jest.spyOn(TestBed.get(service), method).mockReturnValue(of(returnValue));
   };
@@ -48,7 +48,7 @@ describe('UnlockedContentEffects', () => {
   const mockServiceMethodError = (
     method: string,
     errorMessage: string,
-    service: any = UNLOCKED_CONTENT_SERVICE_TOKEN
+    service: any = USER_CONTENT_SERVICE_TOKEN
   ) => {
     jest.spyOn(TestBed.get(service), method).mockImplementation(() => {
       throw new Error(errorMessage);
@@ -60,35 +60,33 @@ describe('UnlockedContentEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature('unlockedContents', reducer, {
+        StoreModule.forFeature('userContents', reducer, {
           initialState: usedState
         }),
         EffectsModule.forRoot([]),
-        EffectsModule.forFeature([UnlockedContentsEffects])
+        EffectsModule.forFeature([UserContentsEffects])
       ],
       providers: [
         {
-          provide: UNLOCKED_CONTENT_SERVICE_TOKEN,
+          provide: USER_CONTENT_SERVICE_TOKEN,
           useValue: {
             getAllForUser: () => {}
           }
         },
-        UnlockedContentsEffects,
+        UserContentsEffects,
         DataPersistence,
         provideMockActions(() => actions)
       ]
     });
 
-    effects = TestBed.get(UnlockedContentsEffects);
+    effects = TestBed.get(UserContentsEffects);
   });
 
-  describe('loadUnlockedContent$', () => {
-    const unforcedLoadAction = new LoadUnlockedContents({});
-    const forcedLoadAction = new LoadUnlockedContents({ force: true });
-    const filledLoadedAction = new UnlockedContentsLoaded({
-      unlockedContents: []
-    });
-    const loadErrorAction = new UnlockedContentsLoadError(new Error('failed'));
+  describe('loadUserContent$', () => {
+    const unforcedLoadAction = new LoadUserContents({});
+    const forcedLoadAction = new LoadUserContents({ force: true });
+    const filledLoadedAction = new UserContentsLoaded({ userContents: [] });
+    const loadErrorAction = new UserContentsLoadError(new Error('failed'));
     describe('with initialState', () => {
       beforeAll(() => {
         usedState = initialState;
@@ -98,14 +96,14 @@ describe('UnlockedContentEffects', () => {
       });
       it('should trigger an api call with the initialState if force is not true', () => {
         expectInAndOut(
-          effects.loadUnlockedContents$,
+          effects.loadUserContents$,
           unforcedLoadAction,
           filledLoadedAction
         );
       });
       it('should trigger an api call with the initialState if force is true', () => {
         expectInAndOut(
-          effects.loadUnlockedContents$,
+          effects.loadUserContents$,
           forcedLoadAction,
           filledLoadedAction
         );
@@ -119,11 +117,11 @@ describe('UnlockedContentEffects', () => {
         mockServiceMethodReturnValue('getAllForUser', []);
       });
       it('should not trigger an api call with the loaded state if force is not true', () => {
-        expectInNoOut(effects.loadUnlockedContents$, unforcedLoadAction);
+        expectInNoOut(effects.loadUserContents$, unforcedLoadAction);
       });
       it('should trigger an api call with the loaded state if force is true', () => {
         expectInAndOut(
-          effects.loadUnlockedContents$,
+          effects.loadUserContents$,
           forcedLoadAction,
           filledLoadedAction
         );
@@ -138,14 +136,14 @@ describe('UnlockedContentEffects', () => {
       });
       it('should return a error action if force is not true', () => {
         expectInAndOut(
-          effects.loadUnlockedContents$,
+          effects.loadUserContents$,
           unforcedLoadAction,
           loadErrorAction
         );
       });
       it('should return a error action if force is true', () => {
         expectInAndOut(
-          effects.loadUnlockedContents$,
+          effects.loadUserContents$,
           forcedLoadAction,
           loadErrorAction
         );
@@ -163,11 +161,11 @@ describe('UnlockedContentEffects', () => {
         mockServiceMethodError('getAllForUser', 'failed');
       });
       it('should return nothing action if force is not true', () => {
-        expectInNoOut(effects.loadUnlockedContents$, unforcedLoadAction);
+        expectInNoOut(effects.loadUserContents$, unforcedLoadAction);
       });
       it('should return a error action if force is true', () => {
         expectInAndOut(
-          effects.loadUnlockedContents$,
+          effects.loadUserContents$,
           forcedLoadAction,
           loadErrorAction
         );
