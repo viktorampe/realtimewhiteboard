@@ -26,6 +26,10 @@ import {
 import { UserContent } from './+state/user-content';
 import { UserContentsEffects } from './+state/user-content/user-content.effects';
 import {
+  UnlockedBoekeGroupService,
+  UNLOCKED_BOEKE_GROUP_SERVICE_TOKEN
+} from './boeke';
+import {
   BundleService,
   BUNDLE_SERVICE_TOKEN,
   UnlockedContentService,
@@ -78,6 +82,10 @@ interface DalOptions {
     {
       provide: UNLOCKED_CONTENT_SERVICE_TOKEN,
       useClass: UnlockedContentService
+    },
+    {
+      provide: UNLOCKED_BOEKE_GROUP_SERVICE_TOKEN,
+      useClass: UnlockedBoekeGroupService
     },
     { provide: BUNDLE_SERVICE_TOKEN, useClass: BundleService },
     { provide: LEARNINGAREA_SERVICE_TOKEN, useClass: LearningAreaService },
