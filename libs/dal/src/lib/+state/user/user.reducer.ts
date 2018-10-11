@@ -43,9 +43,7 @@ export function userReducer(
     case UserActionTypes.UserRemoved: {
       state = {
         ...state,
-        currentUser: {
-          email: null
-        },
+        currentUser: null,
         loaded: false
       };
       break;

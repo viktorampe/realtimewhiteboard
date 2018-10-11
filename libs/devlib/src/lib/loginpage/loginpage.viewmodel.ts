@@ -69,7 +69,7 @@ export class LoginPageViewModel implements Resolve<boolean> {
           return this.authService.login({ username: name, password: password });
         })
       )
-      .subscribe(out => {
+      .subscribe(() => {
         this.store.dispatch(new LoadUser({ force: false }));
       });
   }

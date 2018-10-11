@@ -17,11 +17,11 @@ const getCurrentUser = createSelector(
   getUserState,
   getLoaded,
   (state: UserState, isLoaded) => {
-    return isLoaded ? state.currentUser : [];
+    return isLoaded ? state.currentUser : null;
   }
 );
 const getSelectedUser = createSelector(getCurrentUser, user => {
-  return user ? Object.assign({}, user) : undefined;
+  return user;
 });
 
 export const userQuery = {
