@@ -9,7 +9,7 @@ export interface ContentInterface {
   previewImage?: string;
   description: string;
   methodLogos?: string[];
-  actions?: any[];
+  actions?: string[];
   status: ContentStatusInterface;
 }
 

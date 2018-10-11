@@ -45,8 +45,14 @@
                                   [title]="content.name"
                                   [fileExtensionClass]="content.fileExtension"
                                   [contentTypeClass]="content.productType">
-          <campus-button *ngFor="let action of content.actions"
-                         [iconClass]="action.icon"
+          <!-- Hier moeten de mogelijke actieknoppen met hun (Click) nog toegevoegd worden -->
+          <!-- Beslissen welke acties beschikbaar zijn wordt in de dataConverterService geregeld -->
+          <campus-button *ngIf="content.actions.includes('file')"
+                         [iconClass]="'icon-bundle'"
+                         circle>
+          </campus-button>
+          <campus-button *ngIf="content.actions.includes('link')"
+                         [iconClass]="'icon-tasks'"
                          circle>
           </campus-button>
         </campus-content-thumbnail>
