@@ -6,7 +6,7 @@ import {
   Output
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 export enum FilterTextInputTheme {
   light = 'light',
@@ -27,34 +27,21 @@ export enum FilterTextInputTheme {
   styleUrls: ['./filter-text-input.component.scss']
 })
 export class FilterTextInputComponent implements OnDestroy {
-  @Input('theme') theme: FilterTextInputTheme;
-  @Input('placeholder') placeholder = 'Filter';
-  @Output() text = new EventEmitter<string>();
+  @Input() theme: FilterTextInputTheme;
+  @Input() placeholder = 'Filter';
+  @Input()
+  set filterText(filterText: string) {
+    this.input.setValue(filterText);
+  }
+  @Output() filterTextChange = new EventEmitter<string>();
 
-  private input = new FormControl();
+  input = new FormControl(this.filterText);
 
-  //for some bizar reason async pipes refused to work in our html file, making this weirdness necessary
-  private hasData = false;
-  private readonly formSubscription: Subscription = this.getInput().subscribe(
+  private readonly formSubscription: Subscription = this.input.valueChanges.subscribe(
     (data: string) => {
-      this.text.emit(data);
-      if (data !== null && data.length > 0) {
-        this.hasData = true;
-      } else {
-        this.hasData = false;
-      }
+      this.filterTextChange.emit(data);
     }
   );
-
-  /**
-   * sets the input value of the textfield
-   *
-   * @param {string} value
-   * @memberof FilterTextInputComponent
-   */
-  setInput(value: string): void {
-    this.input.setValue(value);
-  }
 
   /**
    * clears the input value of the textfield
@@ -63,17 +50,7 @@ export class FilterTextInputComponent implements OnDestroy {
    * @memberof FilterTextInputComponent
    */
   clear(): void {
-    this.setInput('');
-  }
-
-  /**
-   * gets the input of the textfield as an observable
-   *
-   * @returns {Observable<string>}
-   * @memberof FilterTextInputComponent
-   */
-  private getInput(): Observable<string> {
-    return this.input.valueChanges;
+    this.input.setValue('');
   }
 
   /**
@@ -82,7 +59,8 @@ export class FilterTextInputComponent implements OnDestroy {
    * @returns {boolean}
    * @memberof FilterTextInputViewModel
    */
-  enterPressed(): boolean {
+  onEnterPressed(e: KeyboardEvent): boolean {
+    e.preventDefault();
     return false;
   }
 
