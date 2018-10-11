@@ -5,12 +5,7 @@ export * from './lib/+state/edu-content';
 export * from './lib/+state/ui';
 export * from './lib/+state/ui/ui.selectors';
 export * from './lib/dal.module';
-export {
-  EduContentServiceInterface,
-  EDUCONTENT_SERVICE_TOKEN
-} from './lib/edu-content/edu-content.service.interface';
+export { EduContentServiceInterface, EDUCONTENT_SERVICE_TOKEN } from './lib/edu-content/edu-content.service.interface';
 export { AuthService, AuthServiceToken } from './lib/persons/auth-service';
-export {
-  AuthServiceInterface,
-  LoginCredentials
-} from './lib/persons/auth-service.interface';
+export { AuthServiceInterface, LoginCredentials } from './lib/persons/auth-service.interface';
+
