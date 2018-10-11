@@ -2,7 +2,10 @@ import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { map } from 'rxjs/operators';
-import { LearningAreaServiceInterface, LEARNINGAREA_SERVICE_TOKEN } from '../../learning-area/learning-area.service.interface';
+import {
+  LearningAreaServiceInterface,
+  LEARNINGAREA_SERVICE_TOKEN
+} from '../../learning-area/learning-area.service.interface';
 import {
   LearningAreasActionTypes,
   LearningAreasLoadError,
@@ -21,7 +24,9 @@ export class LearningAreasEffects {
         if (!action.payload.force && state.learningArea.loaded) return;
         return this.learningAreaService
           .getAll()
-          .pipe(map(learningAreas => new LearningAreasLoaded({ learningAreas })));
+          .pipe(
+            map(learningAreas => new LearningAreasLoaded({ learningAreas }))
+          );
       },
       onError: (action: LoadLearningAreas, error) => {
         return new LearningAreasLoadError(error);

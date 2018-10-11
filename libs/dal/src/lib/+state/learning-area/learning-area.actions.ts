@@ -61,13 +61,17 @@ export class UpsertLearningAreas implements Action {
 export class UpdateLearningArea implements Action {
   readonly type = LearningAreasActionTypes.UpdateLearningArea;
 
-  constructor(public payload: { learningArea: Update<LearningAreaInterface> }) {}
+  constructor(
+    public payload: { learningArea: Update<LearningAreaInterface> }
+  ) {}
 }
 
 export class UpdateLearningAreas implements Action {
   readonly type = LearningAreasActionTypes.UpdateLearningAreas;
 
-  constructor(public payload: { learningAreas: Update<LearningAreaInterface>[] }) {}
+  constructor(
+    public payload: { learningAreas: Update<LearningAreaInterface>[] }
+  ) {}
 }
 
 export class DeleteLearningArea implements Action {

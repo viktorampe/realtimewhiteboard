@@ -26,8 +26,10 @@ import {
 import {
   BundleService,
   BUNDLE_SERVICE_TOKEN,
-  UnlockedContentsService,
-  UNLOCKEDCONTENTS_SERVICE_TOKEN
+  UnlockedContentService,
+  UNLOCKED_CONTENT_SERVICE_TOKEN,
+  UserContentService,
+  USER_CONTENT_SERVICE_TOKEN
 } from './bundle';
 import { EduContentService } from './edu-content/edu-content.service';
 import { EDUCONTENT_SERVICE_TOKEN } from './edu-content/edu-content.service.interface';
@@ -66,12 +68,13 @@ interface DalOptions {
   ],
   providers: [
     { provide: EDUCONTENT_SERVICE_TOKEN, useClass: EduContentService },
+    { provide: USER_CONTENT_SERVICE_TOKEN, useClass: UserContentService },
+    {
+      provide: UNLOCKED_CONTENT_SERVICE_TOKEN,
+      useClass: UnlockedContentService
+    },
     { provide: BUNDLE_SERVICE_TOKEN, useClass: BundleService },
     { provide: LEARNINGAREA_SERVICE_TOKEN, useClass: LearningAreaService },
-    {
-      provide: UNLOCKEDCONTENTS_SERVICE_TOKEN,
-      useClass: UnlockedContentsService
-    },
     { provide: BROWSER_STORAGE_SERVICE_TOKEN, useClass: StorageService },
     { provide: AuthServiceToken, useClass: AuthService }
   ]
