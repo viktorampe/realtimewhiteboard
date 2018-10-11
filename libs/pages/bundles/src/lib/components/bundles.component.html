@@ -1,36 +1,47 @@
-<campus-list-view [multiSelect]="true"
-                  listFormat="line">
-  <campus-content-thumbnail campusListItem
-                            title="Dit is de titel van de content. Dit is de titel van de content. Dit is de titel van de content.Dit is de titel van de content.Dit is de titel van de content.Dit is de titel van de content.Dit is de titel van de content."
-                            imagePath="https://www.polpo.be/assets/images/home-laptop-books.jpg"
-                            contentTypeClass="icon-bundle"
-                            fileExtensionClass="zip">
-    <campus-content-action-button iconClass="icon-tasks"></campus-content-action-button>
-    <campus-content-action-button iconClass="icon-tasks"></campus-content-action-button>
-  </campus-content-thumbnail>
 
-  <campus-content-thumbnail campusListItem
-                            title="Dit is de titel van de content."
-                            contentTypeClass="icon-bundle"
-                            fileExtensionClass="zip">
-    <campus-content-action-button iconClass="icon-tasks"></campus-content-action-button>
-    <campus-content-action-button iconClass="icon-tasks"></campus-content-action-button>
-  </campus-content-thumbnail>
+<campus-tool-bar [fixed]="toolbarFixed">
+  <!-- generic input needs to be replaced by the campus filter input -->
+  <campus-filter-text-input theme="dark"
+                            (filterTextChange)="onChangeFilterInput($event)"
+                            [filterText]="filterInput$|async"
+                            class="pages__toolbar__filter"></campus-filter-text-input>
+  <div class="divider"></div>
+  <!-- links need to replaced by the button -->
+  <a (click)="clickChangeListFormat('GRID')">grid</a>
+  <a (click)="clickChangeListFormat('LINE')">line</a>
+</campus-tool-bar>
+<div class="pages-bundles__container"
+     [ngClass]="{'pages-bundles__container--fixed': toolbarFixed}">
 
-  <campus-content-thumbnail campusListItem
-                            title="Dit is de titel van de content. Dit is de titel van de content. Dit is de titel van de content.Dit is de titel van de content.Dit is de titel van de content.Dit is de titel van de content.Dit is de titel van de content."
-                            imagePath="https://www.polpo.be/assets/images/home-laptop-books.jpg"
-                            contentTypeClass="icon-bundle"
-                            fileExtensionClass="zip">
-
-  </campus-content-thumbnail>
-
-  <campus-content-thumbnail campusListItem
-                            title="Dit is de titel van de content."
-                            contentTypeClass="icon-bundle"
-                            fileExtensionClass="zip">
-  </campus-content-thumbnail>
-</campus-list-view>
+  <campus-page-header [title]="'Mijn bundels'"
+                      [subtitle]="'leergebieden'"
+                      [iconClass]="'polpo-lesmateriaal'"></campus-page-header>
+  <div class="pages-bundles__container__learning-areas-count">
+    {{(displayedLearningAreas$|async)?.length}} van
+    <u class="pages-bundles__container__learning-areas-count__total"
+       (click)="resetFilterInput()">{{(learningAreas$|async)?.length}}</u>
+    weergegeven
+  </div>
+  <div class="pages-bundles__container__learning-areas">
+    <campus-list-view [listFormat]="listFormat$|async"
+                      [placeHolderText]="'De toegepaste filter bevat geen resultaten'">
+      <!-- click event (or routerlink) needs to be added to the folder items-->
+      <campus-folder *ngFor="let learningArea of displayedLearningAreas$|async"
+                     campusListItem
+                     [listFormat]="listFormat$|async"
+                     [itemCount]="(learningAreasCounts$|async)[learningArea.id].booksCount + (learningAreasCounts$|async)[learningArea.id].bundlesCount"
+                     [title]="learningArea.name"
+                     [backgroundColor]="learningArea.color"
+                     [icon]="'learning-area:'+learningArea.icon">
+        <campus-folder-details *ngIf="(learningAreasCounts$|async)[learningArea.id] as learningAreasCounts">
+          {{learningAreasCounts.booksCount}}
+          {{learningAreasCounts.booksCount === 1 ? 'boek' : 'boeken'}} |
+          {{learningAreasCounts.bundlesCount}}
+          {{learningAreasCounts.bundlesCount === 1 ? 'bundel' : 'bundels'}}</campus-folder-details>
+      </campus-folder>
+    </campus-list-view>
+  </div>
+</div>
 
 <campus-list-view [multiSelect]="true"
                   listFormat="grid">
@@ -39,117 +50,25 @@
                             imagePath="https://www.polpo.be/assets/images/home-laptop-books.jpg"
                             contentTypeClass="icon-bundle"
                             fileExtensionClass="zip">
-    <campus-content-action-button iconClass="icon-tasks"></campus-content-action-button>
-    <campus-content-action-button iconClass="icon-tasks"></campus-content-action-button>
+    <campus-button rounded-corners
+                   disabled>tekst</campus-button>
+    <campus-button iconClass="icon-tasks"
+                   warning
+                   circle></campus-button>
+    <campus-button iconClass="icon-tasks"
+                   warning
+                   rounded-corners
+                   bordered
+                   disabled>tekst</campus-button>
   </campus-content-thumbnail>
 
   <campus-content-thumbnail campusListItem
                             title="Dit is de titel van de content."
                             contentTypeClass="icon-bundle"
                             fileExtensionClass="zip">
-    <campus-content-action-button iconClass="icon-tasks"></campus-content-action-button>
-    <campus-content-action-button iconClass="icon-tasks"></campus-content-action-button>
+    <campus-button iconClass="icon-tasks"
+                   danger
+                   disabled>tekst</campus-button>
+    <campus-button iconClass="icon-tasks"
+                   danger></campus-button>
   </campus-content-thumbnail>
-
-  <campus-content-thumbnail campusListItem
-                            title="Dit is de titel van de content. Dit is de titel van de content. Dit is de titel van de content.Dit is de titel van de content.Dit is de titel van de content.Dit is de titel van de content.Dit is de titel van de content."
-                            imagePath="https://www.polpo.be/assets/images/home-laptop-books.jpg"
-                            contentTypeClass="icon-bundle"
-                            fileExtensionClass="zip">
-
-  </campus-content-thumbnail>
-
-  <campus-content-thumbnail campusListItem
-                            title="Dit is de titel van de content."
-                            contentTypeClass="icon-bundle"
-                            fileExtensionClass="zip">
-  </campus-content-thumbnail>
-</campus-list-view>
-<div class="bundles-container">
-  <p>
-    bundles works!
-  </p>
-  <campus-folder [itemCount]="2"
-                 listFormat="line"
-                 [title]="bundleData.name"
-                 gradientId="485235"
-                 backgroundColor="#485235"
-                 icon="checkmark"
-                 progress="72">
-    <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
-    <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
-  </campus-folder>
-
-  <campus-folder [itemCount]="2"
-                 listFormat="line"
-                 [title]="bundleData.name"
-                 gradientId="990000"
-                 backgroundColor="#990000"
-                 icon="lock">
-    <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
-    <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
-  </campus-folder>
-
-
-  <campus-folder [itemCount]="2"
-                 listFormat="line"
-                 [title]="bundleData.name"
-                 gradientId="485235"
-                 backgroundColor="#485235"
-                 icon="hourglass">
-    <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
-    <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
-  </campus-folder>
-
-  <campus-folder [itemCount]="2"
-                 listFormat="line"
-                 [title]="bundleData.name"
-                 gradientId="485235"
-                 backgroundColor="#485235"
-                 icon="learning-area:wiskunde">
-    <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
-    <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
-  </campus-folder>
-
-  <campus-folder [itemCount]="0"
-                 listFormat="grid"
-                 [title]="bundleData.name"
-                 gradientId="485235"
-                 backgroundColor="#485235"
-                 icon="learning-area:wiskunde"
-                 [errorOnEmpty]="true">
-    <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
-    <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
-  </campus-folder>
-
-  <campus-folder [itemCount]="2"
-                 listFormat="grid"
-                 [title]="bundleData.name"
-                 gradientId="990000"
-                 backgroundColor="#990000"
-                 icon="checkmark">
-    <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
-    <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
-  </campus-folder>
-
-
-  <campus-folder [itemCount]="2"
-                 listFormat="grid"
-                 [title]="bundleData.name"
-                 gradientId="485235"
-                 backgroundColor="#485235"
-                 icon="hourglass">
-    <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
-    <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
-  </campus-folder>
-
-  <campus-folder [itemCount]="2"
-                 listFormat="grid"
-                 [title]="bundleData.name"
-                 gradientId="485235"
-                 backgroundColor="#485235"
-                 icon="learning-area:wiskunde">
-    <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
-    <campus-folder-details>{{bundleData.bundles.length}} bundels | {{bundleData.eduContents.length}} boeken</campus-folder-details>
-  </campus-folder>
-</div>

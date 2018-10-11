@@ -2,12 +2,21 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import {
+  BrowserModule as CampusBrowserModule,
+  BROWSER_STORAGE_SERVICE_TOKEN,
+  StorageService
+} from '@campus/browser';
+import {
   LoopBackConfig,
   SDKBrowserModule
 } from '@diekeure/polpo-api-angular-sdk';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
-import { BundlesEffects } from './+state/bundles/bundles.effects';
+import { UiEffects } from './+state/ui/ui.effects';
+import {
+  initialState as uiInitialState,
+  uiReducer
+} from './+state/ui/ui.reducer';
 import {
   bundlesReducer,
   initialState as bundlesInitialState
@@ -16,6 +25,15 @@ import { EduContent } from './+state/edu-content';
 import { EduContentsEffects } from './+state/edu-content/edu-content.effects';
 import { EduContentService } from './edu-content/edu-content.service';
 import { EDUCONTENT_SERVICE_TOKEN } from './edu-content/edu-content.service.interface';
+import { 
+  BundlesService,
+  BUNDLES_SERVICE_TOKEN,
+  UnlockedContentsService,
+  UNLOCKEDCONTENTS_SERVICE_TOKEN
+} from './bundles';
+import { EduContentService } from './educontent/edu-content.service';
+import { EDUCONTENT_SERVICE_TOKEN } from './educontent/edu-content.service.interface';
+
 import { AuthService, AuthServiceToken } from './persons/auth-service';
 
 interface DalOptions {
@@ -24,19 +42,29 @@ interface DalOptions {
 
 @NgModule({
   imports: [
+    CampusBrowserModule,
     CommonModule,
     SDKBrowserModule.forRoot(),
     HttpClientModule,
-    StoreModule.forFeature('bundles', bundlesReducer, {
-      initialState: bundlesInitialState
+    StoreModule.forFeature('ui', uiReducer, {
+      initialState: uiInitialState
     }),
     StoreModule.forFeature('eduContents', EduContent.reducer, {
       initialState: EduContent.initialState
     }),
-    EffectsModule.forFeature([BundlesEffects, EduContentsEffects])
+    StoreModule.forFeature('bundles', bundlesReducer, {
+      initialState: bundlesInitialState
+    }),
+    EffectsModule.forFeature([BundlesEffects, EduContentsEffects,UiEffects])
   ],
   providers: [
     { provide: EDUCONTENT_SERVICE_TOKEN, useClass: EduContentService },
+    { provide: BUNDLES_SERVICE_TOKEN, useClass: BundlesService },
+    {
+      provide: UNLOCKEDCONTENTS_SERVICE_TOKEN,
+      useClass: UnlockedContentsService
+    },
+    { provide: BROWSER_STORAGE_SERVICE_TOKEN, useClass: StorageService },
     { provide: AuthServiceToken, useClass: AuthService }
   ]
 })

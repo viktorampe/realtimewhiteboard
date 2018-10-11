@@ -1,8 +1,11 @@
 export * from './lib/+models/index';
+
 export * from './lib/+state/bundles/bundles.reducer';
 export * from './lib/+state/bundles/bundles.selectors';
 export * from './lib/+state/edu-content';
-export * from './lib/dal.module';
+export * from './lib/+state/ui';
+export * from './lib/+state/ui/ui.selectors';
+
 export {
   EduContentServiceInterface,
   EDUCONTENT_SERVICE_TOKEN
@@ -12,3 +15,5 @@ export {
   AuthServiceInterface,
   LoginCredentials
 } from './lib/persons/auth-service.interface';
+
+export * from './lib/dal.module';
