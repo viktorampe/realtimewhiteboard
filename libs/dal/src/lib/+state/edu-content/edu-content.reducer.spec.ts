@@ -3,14 +3,8 @@ import { EduContentActions } from '.';
 import { EduContentInterface } from '../../+models';
 import { initialState, reducer, State } from './edu-content.reducer';
 
-/**
- * This file is scaffolded, but needs some special attention:
- * - find and replace '__EXTRA__PROPERTY_NAME' and replace this with a property name of the EduContent entity.
- * - set the initial property value via '[__EXTRA__PROPERTY_NAME]InitialValue'.
- * - set the updated property value via '[__EXTRA__PROPERTY_NAME]UpdatedValue'.
- */
-const __EXTRA__PROPERTY_NAMEInitialValue = '';
-const __EXTRA__PROPERTY_NAMEUpdatedValue = '';
+const typeInitialValue = 'boeke';
+const typeUpdatedValue = 'file';
 
 /**
  * Creates a EduContent.
@@ -19,11 +13,11 @@ const __EXTRA__PROPERTY_NAMEUpdatedValue = '';
  */
 function createEduContent(
   id: number,
-  __EXTRA__PROPERTY_NAME: any = __EXTRA__PROPERTY_NAMEInitialValue
+  type: any = typeInitialValue
 ): EduContentInterface | any {
   return {
     id: id,
-    __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAME
+    type: type
   };
 }
 
@@ -158,7 +152,7 @@ describe('EduContents Reducer', () => {
       const update: Update<EduContentInterface> = {
         id: 1,
         changes: {
-          __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
+          type: typeUpdatedValue
         }
       };
       const action = new EduContentActions.UpdateEduContent({
@@ -166,7 +160,7 @@ describe('EduContents Reducer', () => {
       });
       const result = reducer(startState, action);
       expect(result).toEqual(
-        createState([createEduContent(1, __EXTRA__PROPERTY_NAMEUpdatedValue)])
+        createState([createEduContent(1, typeUpdatedValue)])
       );
     });
 
@@ -176,13 +170,13 @@ describe('EduContents Reducer', () => {
         {
           id: 1,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
+            type: typeUpdatedValue
           }
         },
         {
           id: 2,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
+            type: typeUpdatedValue
           }
         }
       ];
@@ -193,8 +187,8 @@ describe('EduContents Reducer', () => {
 
       expect(result).toEqual(
         createState([
-          createEduContent(1, __EXTRA__PROPERTY_NAMEUpdatedValue),
-          createEduContent(2, __EXTRA__PROPERTY_NAMEUpdatedValue),
+          createEduContent(1, typeUpdatedValue),
+          createEduContent(2, typeUpdatedValue),
           eduContents[2]
         ])
       );
