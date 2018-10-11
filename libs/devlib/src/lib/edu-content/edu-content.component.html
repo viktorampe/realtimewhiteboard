@@ -2,14 +2,15 @@
   edu-content works!
 </p>
 
-<p (click)="this.loadEduContentAgain()">
-  content
+<p><button (click)="this.loadEduContentAgain()">
+    content
+  </button>
 </p>
-
-<p (click)="this.loadEntitiesAgain()">
-  entities
+<p>
+  <button (click)="this.loadEntitiesAgain()">
+    entities
+  </button>
 </p>
-
 
 
 <div>{{viewModel.educontents$|async|json}}</div>

@@ -1,10 +1,11 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import {
-  selectAll, 
+  selectAll,
   selectEntities,
   selectIds,
   selectTotal,
-  State } from './edu-content.reducer';
+  State
+} from './edu-content.reducer';
 
 export const selectEduContentState = createFeatureSelector<State>(
   'eduContents'
@@ -44,7 +45,6 @@ export const getByIds = createSelector(
     return props.ids.map(id => state.entities[id]);
   }
 );
-
 
 /**
  * returns array of objects in the order of the given ids

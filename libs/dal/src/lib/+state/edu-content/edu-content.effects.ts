@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators';
 import {
   EduContentServiceInterface,
   EDUCONTENT_SERVICE_TOKEN
-} from '../../educontent/edu-content.service.interface';
+} from '../../edu-content/edu-content.service.interface';
 import {
   EduContentsActionTypes,
   EduContentsLoaded,
@@ -23,7 +23,7 @@ export class EduContentsEffects {
       run: (action: LoadEduContents, state: any) => {
         if (!action.payload.force && state.eduContent.loaded) return;
         return this.eduContentService
-          .getAll()
+          .getAllForUser(11) //TODO: replace with state.user.current ...
           .pipe(map(eduContents => new EduContentsLoaded({ eduContents })));
       },
       onError: (action: LoadEduContents, error) => {

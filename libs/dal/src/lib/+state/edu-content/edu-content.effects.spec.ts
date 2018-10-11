@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
-import { EduContentApi } from '@diekeure/polpo-api-angular-sdk';
+import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
-import { EduContentService } from '../../educontent/edu-content.service';
-import { EDUCONTENT_SERVICE_TOKEN } from '../../educontent/edu-content.service.interface';
+import { EduContentService } from '../../edu-content/edu-content.service';
+import { EDUCONTENT_SERVICE_TOKEN } from '../../edu-content/edu-content.service.interface';
 import {
   EduContentsLoaded,
   EduContentsLoadError,
@@ -74,7 +74,7 @@ describe('EduContentEffects', () => {
           useClass: EduContentService
         },
         {
-          provide: EduContentApi,
+          provide: PersonApi,
           userClass: {}
         },
         EduContentsEffects,
@@ -96,7 +96,7 @@ describe('EduContentEffects', () => {
         usedState = initialState;
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAll', []);
+        mockServiceMethodReturnValue('getAllForUser', []);
       });
       it('should trigger an api call with the initialState if force is not true', () => {
         expectInAndOut(
@@ -118,7 +118,7 @@ describe('EduContentEffects', () => {
         usedState = { ...initialState, loaded: true };
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAll', []);
+        mockServiceMethodReturnValue('getAllForUser', []);
       });
       it('should not trigger an api call with the loaded state if force is not true', () => {
         expectInNoOut(effects.loadEduContents$, unforcedLoadAction);
@@ -136,7 +136,7 @@ describe('EduContentEffects', () => {
         usedState = initialState;
       });
       beforeEach(() => {
-        mockServiceMethodError('getAll', 'failed');
+        mockServiceMethodError('getAllForUser', 'failed');
       });
       it('should return a error action if force is not true', () => {
         expectInAndOut(
@@ -162,7 +162,7 @@ describe('EduContentEffects', () => {
         };
       });
       beforeEach(() => {
-        mockServiceMethodError('getAll', 'failed');
+        mockServiceMethodError('getAllForUser', 'failed');
       });
       it('should return nothing action if force is not true', () => {
         expectInNoOut(effects.loadEduContents$, unforcedLoadAction);

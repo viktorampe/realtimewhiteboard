@@ -5,14 +5,12 @@ import { initialState, reducer, State } from './edu-content.reducer';
 
 /**
  * This file is scaffolded, but needs some special attention:
- * - find and replace 'type' and replace this with a property name of the EduContent entity.
- * - set the initial property value via '[type]InitialValue'.
- * - set the updated property value via '[type]UpdatedValue'.
- * - if a none-default sortComparer function is used, assign it to the 'sortComparer' property.
+ * - find and replace '__EXTRA__PROPERTY_NAME' and replace this with a property name of the EduContent entity.
+ * - set the initial property value via '[__EXTRA__PROPERTY_NAME]InitialValue'.
+ * - set the updated property value via '[__EXTRA__PROPERTY_NAME]UpdatedValue'.
  */
-const typeInitialValue = 'initialValue';
-const typeUpdatedValue = 'updatedValue';
-const sortComparer: any = undefined;
+const __EXTRA__PROPERTY_NAMEInitialValue = '';
+const __EXTRA__PROPERTY_NAMEUpdatedValue = '';
 
 /**
  * Creates a EduContent.
@@ -21,11 +19,11 @@ const sortComparer: any = undefined;
  */
 function createEduContent(
   id: number,
-  type: any = typeInitialValue
+  __EXTRA__PROPERTY_NAME: any = __EXTRA__PROPERTY_NAMEInitialValue
 ): EduContentInterface | any {
   return {
     id: id,
-    type: type
+    __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAME
   };
 }
 
@@ -56,7 +54,6 @@ function createState(
     loaded: loaded
   };
   if (error !== undefined) state.error = error;
-  if (sortComparer && eduContents) state.ids = state.ids.sort(sortComparer);
   return state;
 }
 
@@ -161,7 +158,7 @@ describe('EduContents Reducer', () => {
       const update: Update<EduContentInterface> = {
         id: 1,
         changes: {
-          type: typeUpdatedValue
+          __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
         }
       };
       const action = new EduContentActions.UpdateEduContent({
@@ -169,7 +166,7 @@ describe('EduContents Reducer', () => {
       });
       const result = reducer(startState, action);
       expect(result).toEqual(
-        createState([createEduContent(1, typeUpdatedValue)])
+        createState([createEduContent(1, __EXTRA__PROPERTY_NAMEUpdatedValue)])
       );
     });
 
@@ -179,13 +176,13 @@ describe('EduContents Reducer', () => {
         {
           id: 1,
           changes: {
-            type: typeUpdatedValue
+            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
           }
         },
         {
           id: 2,
           changes: {
-            type: typeUpdatedValue
+            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
           }
         }
       ];
@@ -196,8 +193,8 @@ describe('EduContents Reducer', () => {
 
       expect(result).toEqual(
         createState([
-          createEduContent(1, typeUpdatedValue),
-          createEduContent(2, typeUpdatedValue),
+          createEduContent(1, __EXTRA__PROPERTY_NAMEUpdatedValue),
+          createEduContent(2, __EXTRA__PROPERTY_NAMEUpdatedValue),
           eduContents[2]
         ])
       );
