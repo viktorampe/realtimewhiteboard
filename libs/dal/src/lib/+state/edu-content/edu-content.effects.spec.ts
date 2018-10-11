@@ -60,7 +60,7 @@ describe('EduContentEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature('eduContent', reducer, {
+        StoreModule.forFeature('eduContents', reducer, {
           initialState: usedState
         }),
         EffectsModule.forRoot([]),

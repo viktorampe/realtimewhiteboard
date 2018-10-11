@@ -21,7 +21,7 @@ export class UserContentsEffects {
     UserContentsActionTypes.LoadUserContents,
     {
       run: (action: LoadUserContents, state: any) => {
-        if (!action.payload.force && state.userContent.loaded) return;
+        if (!action.payload.force && state.userContents.loaded) return;
         //TODO, get current user id
         return this.userContentService
           .getAllForUser(1)
