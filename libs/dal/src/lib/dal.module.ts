@@ -23,6 +23,8 @@ import {
   initialState as uiInitialState,
   uiReducer
 } from './+state/ui/ui.reducer';
+import { UserContent } from './+state/user-content';
+import { UserContentsEffects } from './+state/user-content/user-content.effects';
 import {
   BundleService,
   BUNDLE_SERVICE_TOKEN,
@@ -59,11 +61,15 @@ interface DalOptions {
     StoreModule.forFeature('eduContent', EduContent.reducer, {
       initialState: EduContent.initialState
     }),
+    StoreModule.forFeature('userContent', UserContent.reducer, {
+      initialState: UserContent.initialState
+    }),
     EffectsModule.forFeature([
       BundlesEffects,
       EduContentsEffects,
       UiEffects,
-      LearningAreasEffects
+      LearningAreasEffects,
+      UserContentsEffects
     ])
   ],
   providers: [
