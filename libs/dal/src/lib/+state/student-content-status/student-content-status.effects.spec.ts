@@ -70,7 +70,7 @@ describe('StudentContentStatusEffects', () => {
         {
           provide: STUDENT_CONTENT_STATUS_SERVICE_TOKEN,
           useValue: {
-            getAll: () => {}
+            getAllByStudentId: () => {}
           }
         },
         StudentContentStatusesEffects,
@@ -83,8 +83,11 @@ describe('StudentContentStatusEffects', () => {
   });
 
   describe('loadStudentContentStatus$', () => {
-    const unforcedLoadAction = new LoadStudentContentStatuses({});
-    const forcedLoadAction = new LoadStudentContentStatuses({ force: true });
+    const unforcedLoadAction = new LoadStudentContentStatuses({ studentId: 1 });
+    const forcedLoadAction = new LoadStudentContentStatuses({
+      force: true,
+      studentId: 1
+    });
     const filledLoadedAction = new StudentContentStatusesLoaded({
       StudentContentStatuses: []
     });
@@ -96,7 +99,7 @@ describe('StudentContentStatusEffects', () => {
         usedState = initialState;
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAll', []);
+        mockServiceMethodReturnValue('getAllByStudentId', []);
       });
       it('should trigger an api call with the initialState if force is not true', () => {
         expectInAndOut(
@@ -118,7 +121,7 @@ describe('StudentContentStatusEffects', () => {
         usedState = { ...initialState, loaded: true };
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAll', []);
+        mockServiceMethodReturnValue('getAllByStudentId', []);
       });
       it('should not trigger an api call with the loaded state if force is not true', () => {
         expectInNoOut(effects.loadStudentContentStatuses$, unforcedLoadAction);
@@ -136,7 +139,7 @@ describe('StudentContentStatusEffects', () => {
         usedState = initialState;
       });
       beforeEach(() => {
-        mockServiceMethodError('getAll', 'failed');
+        mockServiceMethodError('getAllByStudentId', 'failed');
       });
       it('should return a error action if force is not true', () => {
         expectInAndOut(
@@ -162,7 +165,7 @@ describe('StudentContentStatusEffects', () => {
         };
       });
       beforeEach(() => {
-        mockServiceMethodError('getAll', 'failed');
+        mockServiceMethodError('getAllByStudentId', 'failed');
       });
       it('should return nothing action if force is not true', () => {
         expectInNoOut(effects.loadStudentContentStatuses$, unforcedLoadAction);

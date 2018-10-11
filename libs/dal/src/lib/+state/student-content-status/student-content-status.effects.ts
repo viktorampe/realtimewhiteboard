@@ -22,7 +22,9 @@ export class StudentContentStatusesEffects {
     {
       run: (action: LoadStudentContentStatuses, state: any) => {
         if (!action.payload.force && state.studentContentStatus.loaded) return;
-        return this.StudentContentStatuseservice.getAll().pipe(
+        return this.StudentContentStatuseservice.getAllByStudentId(
+          action.payload.studentId
+        ).pipe(
           map(
             StudentContentStatuses =>
               new StudentContentStatusesLoaded({ StudentContentStatuses })

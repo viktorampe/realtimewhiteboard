@@ -11,7 +11,21 @@ export class StudentContentStatusService
   implements StudentContentStatusServiceInterface {
   constructor(private studentContentStatusApi: StudentContentStatusApi) {}
 
-  getAll(): Observable<StudentContentStatusInterface[]> {
-    return this.studentContentStatusApi.find<StudentContentStatusInterface>({});
+  getAllByStudentId(
+    studentId: number
+  ): Observable<StudentContentStatusInterface[]> {
+    return this.studentContentStatusApi.find<StudentContentStatusInterface>({
+      where: { personId: studentId }
+    });
+  }
+
+  updateStudentContentStatus(
+    studentContentStatus: StudentContentStatusInterface
+  ): Observable<StudentContentStatusInterface> {
+    const response$ = this.studentContentStatusApi.updateAttributes<
+      StudentContentStatusInterface
+    >(studentContentStatus.id, studentContentStatus);
+
+    return response$;
   }
 }

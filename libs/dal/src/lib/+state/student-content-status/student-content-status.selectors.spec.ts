@@ -12,18 +12,18 @@ describe('StudentContentStatus Selectors', () => {
   }
 
   function createState(
-    StudentContentStatuses: StudentContentStatusInterface[],
+    studentContentStatuses: StudentContentStatusInterface[],
     loaded: boolean = false,
     error?: any
   ): State {
     return {
-      ids: StudentContentStatuses
-        ? StudentContentStatuses.map(
+      ids: studentContentStatuses
+        ? studentContentStatuses.map(
             studentContentStatus => studentContentStatus.id
           )
         : [],
-      entities: StudentContentStatuses
-        ? StudentContentStatuses.reduce(
+      entities: studentContentStatuses
+        ? studentContentStatuses.reduce(
             (entityMap, studentContentStatus) => ({
               ...entityMap,
               [studentContentStatus.id]: studentContentStatus
@@ -36,12 +36,12 @@ describe('StudentContentStatus Selectors', () => {
     };
   }
 
-  let StudentContentStatusestate: State;
+  let studentContentStatusesState: State;
   let storeState: any;
 
   describe('StudentContentStatus Selectors', () => {
     beforeEach(() => {
-      StudentContentStatusestate = createState(
+      studentContentStatusesState = createState(
         [
           createStudentContentStatus(4),
           createStudentContentStatus(1),
@@ -51,15 +51,15 @@ describe('StudentContentStatus Selectors', () => {
         true,
         'no error'
       );
-      storeState = { StudentContentStatuses: StudentContentStatusestate };
+      storeState = { StudentContentStatuses: studentContentStatusesState };
     });
     it('getError() should return the error', () => {
       const results = StudentContentStatusQueries.getError(storeState);
-      expect(results).toBe(StudentContentStatusestate.error);
+      expect(results).toBe(studentContentStatusesState.error);
     });
     it('getLoaded() should return the loaded boolean', () => {
       const results = StudentContentStatusQueries.getLoaded(storeState);
-      expect(results).toBe(StudentContentStatusestate.loaded);
+      expect(results).toBe(studentContentStatusesState.loaded);
     });
     it('getAll() should return an array of the entities in the order from the ids', () => {
       const results = StudentContentStatusQueries.getAll(storeState);
@@ -80,7 +80,7 @@ describe('StudentContentStatus Selectors', () => {
     });
     it('getAllEntities() should return a key value object with all the entities', () => {
       const results = StudentContentStatusQueries.getAllEntities(storeState);
-      expect(results).toEqual(StudentContentStatusestate.entities);
+      expect(results).toEqual(studentContentStatusesState.entities);
     });
     it('getByIds() should return an array of the requested entities in order and undefined if the id is not present', () => {
       const results = StudentContentStatusQueries.getByIds(storeState, {
