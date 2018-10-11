@@ -1,13 +1,13 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
-import { Subject } from 'rxjs';
-import { UnlockedContentInterface } from '../+models';
+import { hot } from '@nrwl/nx/testing';
+import { Observable } from 'rxjs';
 import { UnlockedContentsService } from './unlocked-contents.service';
 import { UnlockedContentsServiceInterface } from './unlocked-contents.service.interface';
 
 describe('UnlockedContentsService', () => {
   let service: UnlockedContentsServiceInterface;
-  const mockData$: Subject<object> = new Subject();
+  let mockData$: Observable<object>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -31,11 +31,14 @@ describe('UnlockedContentsService', () => {
     }
   ));
 
-  it('should return unlockedContents', async () => {
-    service.getAllForUser(1).subscribe(res => {
-      expect(res).toEqual([<UnlockedContentInterface>{ id: 1, index: 10 }]);
+  it('should return unlockedContents', () => {
+    mockData$ = hot('-a-|', {
+      a: { unlockedContents: [{ id: 1, index: 10 }] }
     });
-    // emit after subscription!
-    mockData$.next({ unlockedContents: [{ id: 1, index: 10 }] });
+    expect(service.getAllForUser(1)).toBeObservable(
+      hot('-a-|', {
+        a: [{ id: 1, index: 10 }]
+      })
+    );
   });
 });
