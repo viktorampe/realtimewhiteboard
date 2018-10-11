@@ -60,7 +60,7 @@ describe('UserContentEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature('userContent', reducer, {
+        StoreModule.forFeature('userContents', reducer, {
           initialState: usedState
         }),
         EffectsModule.forRoot([]),

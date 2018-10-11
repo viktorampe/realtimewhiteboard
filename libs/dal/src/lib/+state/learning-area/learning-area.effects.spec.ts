@@ -60,7 +60,7 @@ describe('LearningAreaEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature('learningArea', reducer, {
+        StoreModule.forFeature('learningAreas', reducer, {
           initialState: usedState
         }),
         EffectsModule.forRoot([]),

@@ -19,7 +19,7 @@ export class BundlesEffects {
   @Effect()
   loadBundles$ = this.dataPersistence.fetch(BundlesActionTypes.LoadBundles, {
     run: (action: LoadBundles, state: any) => {
-      if (!action.payload.force && state.bundle.loaded) return;
+      if (!action.payload.force && state.bundles.loaded) return;
       return this.bundleService
         .getAllForUser(1)
         .pipe(map(bundles => new BundlesLoaded({ bundles })));
