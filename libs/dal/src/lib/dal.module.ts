@@ -23,6 +23,8 @@ import {
   initialState as uiInitialState,
   uiReducer
 } from './+state/ui/ui.reducer';
+import { UnlockedBoekeGroup } from './+state/unlocked-boeke-group';
+import { UnlockedBoekeGroupsEffects } from './+state/unlocked-boeke-group/unlocked-boeke-group.effects';
 import { UnlockedBoekeStudent } from './+state/unlocked-boeke-student';
 import { UnlockedBoekeStudentsEffects } from './+state/unlocked-boeke-student/unlocked-boeke-student.effects';
 import { UnlockedContent } from './+state/unlocked-content';
@@ -77,8 +79,11 @@ interface DalOptions {
     StoreModule.forFeature('userContents', UserContent.reducer, {
       initialState: UserContent.initialState
     }),
+    StoreModule.forFeature('unlockedBoekeGroups', UnlockedBoekeGroup.reducer, {
+      initialState: UnlockedBoekeGroup.initialState
+    }),
     StoreModule.forFeature(
-      'unlockedBoekeStudent',
+      'unlockedBoekeStudents',
       UnlockedBoekeStudent.reducer,
       {
         initialState: UnlockedBoekeStudent.initialState
@@ -89,6 +94,8 @@ interface DalOptions {
       EduContentsEffects,
       UiEffects,
       LearningAreasEffects,
+      UserContentsEffects,
+      UnlockedBoekeGroupsEffects,
       UnlockedContentsEffects,
       UserContentsEffects,
       UnlockedBoekeStudentsEffects
