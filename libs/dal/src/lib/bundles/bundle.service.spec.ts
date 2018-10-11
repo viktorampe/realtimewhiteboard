@@ -2,17 +2,17 @@ import { inject, TestBed } from '@angular/core/testing';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { hot } from '@nrwl/nx/testing';
 import { Observable } from 'rxjs';
-import { BundlesService } from './bundles.service';
-import { BundlesServiceInterface } from './bundles.service.interface';
+import { BundleService } from './bundle.service';
+import { BundleServiceInterface } from './bundle.service.interface';
 
-describe('BundlesService', () => {
-  let service: BundlesServiceInterface;
+describe('BundleService', () => {
+  let service: BundleServiceInterface;
   let mockData$: Observable<object>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        BundlesService,
+        BundleService,
         {
           provide: PersonApi,
           useValue: {
@@ -21,13 +21,13 @@ describe('BundlesService', () => {
         }
       ]
     });
-    service = TestBed.get(BundlesService);
+    service = TestBed.get(BundleService);
   });
 
   it('should be created and available via DI', inject(
-    [BundlesService],
-    (bundlesService: BundlesService) => {
-      expect(bundlesService).toBeTruthy();
+    [BundleService],
+    (bundleService: BundleService) => {
+      expect(bundleService).toBeTruthy();
     }
   ));
 

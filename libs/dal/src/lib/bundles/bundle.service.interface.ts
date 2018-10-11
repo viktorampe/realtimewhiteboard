@@ -2,8 +2,8 @@ import { InjectionToken } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BundleInterface } from '../+models';
 
-export const BUNDLES_SERVICE_TOKEN = new InjectionToken('BundlesService');
+export const BUNDLE_SERVICE_TOKEN = new InjectionToken('BundleService');
 
-export interface BundlesServiceInterface {
+export interface BundleServiceInterface {
   getAllForUser(userId: number): Observable<BundleInterface[]>;
 }
