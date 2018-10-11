@@ -23,6 +23,8 @@ import {
   initialState as uiInitialState,
   uiReducer
 } from './+state/ui/ui.reducer';
+import { UnlockedContent } from './+state/unlocked-content';
+import { UnlockedContentsEffects } from './+state/unlocked-content/unlocked-content.effects';
 import {
   BundleService,
   BUNDLE_SERVICE_TOKEN,
@@ -59,11 +61,15 @@ interface DalOptions {
     StoreModule.forFeature('eduContent', EduContent.reducer, {
       initialState: EduContent.initialState
     }),
+    StoreModule.forFeature('unlockedContent', UnlockedContent.reducer, {
+      initialState: UnlockedContent.initialState
+    }),
     EffectsModule.forFeature([
       BundlesEffects,
       EduContentsEffects,
       UiEffects,
-      LearningAreasEffects
+      LearningAreasEffects,
+      UnlockedContentsEffects
     ])
   ],
   providers: [
