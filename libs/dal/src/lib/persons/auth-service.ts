@@ -12,6 +12,8 @@ export const AuthServiceToken = new InjectionToken('AuthService');
   providedIn: 'root'
 })
 export class AuthService implements AuthServiceInterface {
+  private id: number = Math.random();
+
   constructor(private personApi: PersonApi, private auth: LoopBackAuth) {}
 
   /**
@@ -21,6 +23,7 @@ export class AuthService implements AuthServiceInterface {
    * @memberof AuthService
    */
   getCurrent(): Observable<any> {
+    console.log(this.id);
     return this.personApi.getCurrent();
   }
 
@@ -44,6 +47,7 @@ export class AuthService implements AuthServiceInterface {
    * @memberof AuthService
    */
   login(credentials: Partial<LoginCredentials>): Observable<any> {
+    console.log(this.id);
     return this.personApi.login(credentials);
   }
 }

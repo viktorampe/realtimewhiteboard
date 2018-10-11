@@ -51,7 +51,6 @@ export class UserEffects {
       );
     },
     onError: (action: RemoveUser, error) => {
-      console.log(action, error);
       return new UserRemoveError(error);
     }
   });
