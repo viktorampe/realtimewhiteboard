@@ -14,6 +14,8 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { Bundle } from './+state/bundle';
 import { BundlesEffects } from './+state/bundle/bundle.effects';
+import { EduContent } from './+state/edu-content';
+import { EduContentsEffects } from './+state/edu-content/edu-content.effects';
 import { LearningArea } from './+state/learning-area';
 import { LearningAreasEffects } from './+state/learning-area/learning-area.effects';
 import { UiEffects } from './+state/ui/ui.effects';
@@ -27,8 +29,8 @@ import {
   UnlockedContentsService,
   UNLOCKEDCONTENTS_SERVICE_TOKEN
 } from './bundle';
-import { EduContentService } from './educontent/edu-content.service';
-import { EDUCONTENT_SERVICE_TOKEN } from './educontent/edu-content.service.interface';
+import { EduContentService } from './edu-content/edu-content.service';
+import { EDUCONTENT_SERVICE_TOKEN } from './edu-content/edu-content.service.interface';
 import { LearningAreaService } from './learning-area/learning-area.service';
 import { LEARNINGAREA_SERVICE_TOKEN } from './learning-area/learning-area.service.interface';
 import { AuthService, AuthServiceToken } from './persons/auth-service';
@@ -52,7 +54,15 @@ interface DalOptions {
     StoreModule.forFeature('learingArea', LearningArea.reducer, {
       initialState: LearningArea.initialState
     }),
-    EffectsModule.forFeature([UiEffects, BundlesEffects, LearningAreasEffects])
+    StoreModule.forFeature('eduContent', EduContent.reducer, {
+      initialState: EduContent.initialState
+    }),
+    EffectsModule.forFeature([
+      BundlesEffects,
+      EduContentsEffects,
+      UiEffects,
+      LearningAreasEffects
+    ])
   ],
   providers: [
     { provide: EDUCONTENT_SERVICE_TOKEN, useClass: EduContentService },
