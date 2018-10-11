@@ -21,7 +21,6 @@ describe('LearningAreaEffects', () => {
   let effects: LearningAreasEffects;
   let usedState: any;
 
-
   const expectInAndOut = (
     effect: Observable<any>,
     triggerAction: Action,

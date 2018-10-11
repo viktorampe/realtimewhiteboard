@@ -15,7 +15,9 @@ describe('LearningArea Selectors', () => {
     error?: any
   ): State {
     return {
-      ids: learningAreas ? learningAreas.map(learningArea => learningArea.id) : [],
+      ids: learningAreas
+        ? learningAreas.map(learningArea => learningArea.id)
+        : [],
       entities: learningAreas
         ? learningAreas.reduce(
             (entityMap, learningArea) => ({
