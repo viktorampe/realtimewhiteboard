@@ -1,12 +1,10 @@
 import { TestBed } from '@angular/core/testing';
-import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
-import { UserContentService } from '../../bundle/user-content.service';
 import { USER_CONTENT_SERVICE_TOKEN } from '../../bundle/user-content.service.interface';
 import {
   LoadUserContents,
@@ -71,11 +69,9 @@ describe('UserContentEffects', () => {
       providers: [
         {
           provide: USER_CONTENT_SERVICE_TOKEN,
-          useClass: UserContentService
-        },
-        {
-          provide: PersonApi,
-          userClass: {}
+          useValue: {
+            getAllForUser: () => {}
+          }
         },
         UserContentsEffects,
         DataPersistence,
