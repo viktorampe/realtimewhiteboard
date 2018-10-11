@@ -25,6 +25,8 @@ import {
 } from './+state/ui/ui.reducer';
 import { UserContent } from './+state/user-content';
 import { UserContentsEffects } from './+state/user-content/user-content.effects';
+import { UnlockedBoekeStudentService } from './boeke/unlocked-boeke-student.service';
+import { UNLOCKED_BOEKE_STUDENT_SERVICE_TOKEN } from './boeke/unlocked-boeke-student.service.interface';
 import {
   UnlockedBoekeGroupService,
   UNLOCKED_BOEKE_GROUP_SERVICE_TOKEN
@@ -79,6 +81,10 @@ interface DalOptions {
   providers: [
     { provide: EDUCONTENT_SERVICE_TOKEN, useClass: EduContentService },
     { provide: USER_CONTENT_SERVICE_TOKEN, useClass: UserContentService },
+    {
+      provide: UNLOCKED_BOEKE_STUDENT_SERVICE_TOKEN,
+      useClass: UnlockedBoekeStudentService
+    },
     {
       provide: UNLOCKED_CONTENT_SERVICE_TOKEN,
       useClass: UnlockedContentService
