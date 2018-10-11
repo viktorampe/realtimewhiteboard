@@ -22,7 +22,7 @@ import {
   BUNDLE_SERVICE_TOKEN,
   UnlockedContentsService,
   UNLOCKEDCONTENTS_SERVICE_TOKEN
-} from './bundles';
+} from './bundle';
 import { EduContentService } from './educontent/edu-content.service';
 import { EDUCONTENT_SERVICE_TOKEN } from './educontent/edu-content.service.interface';
 import { AuthService, AuthServiceToken } from './persons/auth-service';

@@ -6,8 +6,8 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
-import { BundlesService } from '../../bundles/bundles.service';
-import { BUNDLES_SERVICE_TOKEN } from '../../bundles/bundles.service.interface';
+import { BundleService } from '../../bundle/bundle.service';
+import { BUNDLE_SERVICE_TOKEN } from '../../bundle/bundle.service.interface';
 import { BundlesLoaded, BundlesLoadError, LoadBundles } from './bundle.actions';
 import { BundlesEffects } from './bundle.effects';
 import { initialState, reducer } from './bundle.reducer';
@@ -38,7 +38,7 @@ describe('BundleEffects', () => {
   const mockServiceMethodReturnValue = (
     method: string,
     returnValue: any,
-    service: any = BUNDLES_SERVICE_TOKEN
+    service: any = BUNDLE_SERVICE_TOKEN
   ) => {
     jest.spyOn(TestBed.get(service), method).mockReturnValue(of(returnValue));
   };
@@ -46,7 +46,7 @@ describe('BundleEffects', () => {
   const mockServiceMethodError = (
     method: string,
     errorMessage: string,
-    service: any = BUNDLES_SERVICE_TOKEN
+    service: any = BUNDLE_SERVICE_TOKEN
   ) => {
     jest.spyOn(TestBed.get(service), method).mockImplementation(() => {
       throw new Error(errorMessage);
@@ -66,8 +66,8 @@ describe('BundleEffects', () => {
       ],
       providers: [
         {
-          provide: BUNDLES_SERVICE_TOKEN,
-          useClass: BundlesService
+          provide: BUNDLE_SERVICE_TOKEN,
+          useClass: BundleService
         },
         {
           provide: PersonApi,
