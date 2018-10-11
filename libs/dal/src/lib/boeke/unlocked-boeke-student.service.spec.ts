@@ -4,7 +4,7 @@ import { hot } from '@nrwl/nx/testing';
 import { Observable } from 'rxjs';
 import { UnlockedBoekeStudentService } from './unlocked-boeke-student.service';
 
-describe('UnlockedBoekeStudentServiceService', () => {
+describe('UnlockedBoekeStudentService', () => {
   let service: UnlockedBoekeStudentService;
   let mockData$: Observable<object>;
 
