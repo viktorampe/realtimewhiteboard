@@ -1,10 +1,11 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import {
-  selectAll, 
+  selectAll,
   selectEntities,
   selectIds,
   selectTotal,
-  State } from './unlocked-content.reducer';
+  State
+} from './unlocked-content.reducer';
 
 export const selectUnlockedContentState = createFeatureSelector<State>(
   'unlockedContents'
@@ -44,7 +45,6 @@ export const getByIds = createSelector(
     return props.ids.map(id => state.entities[id]);
   }
 );
-
 
 /**
  * returns array of objects in the order of the given ids

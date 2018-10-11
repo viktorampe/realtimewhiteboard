@@ -15,7 +15,9 @@ describe('UnlockedContent Selectors', () => {
     error?: any
   ): State {
     return {
-      ids: unlockedContents ? unlockedContents.map(unlockedContent => unlockedContent.id) : [],
+      ids: unlockedContents
+        ? unlockedContents.map(unlockedContent => unlockedContent.id)
+        : [],
       entities: unlockedContents
         ? unlockedContents.reduce(
             (entityMap, unlockedContent) => ({

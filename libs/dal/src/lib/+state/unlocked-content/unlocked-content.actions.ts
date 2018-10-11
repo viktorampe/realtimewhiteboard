@@ -26,7 +26,9 @@ export class LoadUnlockedContents implements Action {
 export class UnlockedContentsLoaded implements Action {
   readonly type = UnlockedContentsActionTypes.UnlockedContentsLoaded;
 
-  constructor(public payload: { unlockedContents: UnlockedContentInterface[] }) {}
+  constructor(
+    public payload: { unlockedContents: UnlockedContentInterface[] }
+  ) {}
 }
 
 export class UnlockedContentsLoadError implements Action {
@@ -49,25 +51,33 @@ export class UpsertUnlockedContent implements Action {
 export class AddUnlockedContents implements Action {
   readonly type = UnlockedContentsActionTypes.AddUnlockedContents;
 
-  constructor(public payload: { unlockedContents: UnlockedContentInterface[] }) {}
+  constructor(
+    public payload: { unlockedContents: UnlockedContentInterface[] }
+  ) {}
 }
 
 export class UpsertUnlockedContents implements Action {
   readonly type = UnlockedContentsActionTypes.UpsertUnlockedContents;
 
-  constructor(public payload: { unlockedContents: UnlockedContentInterface[] }) {}
+  constructor(
+    public payload: { unlockedContents: UnlockedContentInterface[] }
+  ) {}
 }
 
 export class UpdateUnlockedContent implements Action {
   readonly type = UnlockedContentsActionTypes.UpdateUnlockedContent;
 
-  constructor(public payload: { unlockedContent: Update<UnlockedContentInterface> }) {}
+  constructor(
+    public payload: { unlockedContent: Update<UnlockedContentInterface> }
+  ) {}
 }
 
 export class UpdateUnlockedContents implements Action {
   readonly type = UnlockedContentsActionTypes.UpdateUnlockedContents;
 
-  constructor(public payload: { unlockedContents: Update<UnlockedContentInterface>[] }) {}
+  constructor(
+    public payload: { unlockedContents: Update<UnlockedContentInterface>[] }
+  ) {}
 }
 
 export class DeleteUnlockedContent implements Action {
