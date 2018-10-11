@@ -105,6 +105,12 @@ export class BundlesViewModel implements Resolve<boolean> {
     return new BehaviorSubject<boolean>(true).pipe(take(1));
   }
 
+  getBundleItemCount(bundle: BundleInterface): number {
+    //todo should be something like this
+    // bundle.eduContents.length + bundle.userContents.length according to Thomas
+    return 0;
+  }
+
   changeListFormat(listFormat: ListFormat): void {
     this.listFormat$.next(listFormat);
   }

@@ -8,50 +8,50 @@
   <a (click)="clickChangeListFormat('GRID')">grid</a>
   <a (click)="clickChangeListFormat('LINE')">line</a>
 </campus-tool-bar>
-<div class="pages-bundles-area-detail__container"
-     [ngClass]="{'pages-bundles-area-detail__container--fixed': toolbarFixed}">
+<div class="pages-bundles__container"
+     [ngClass]="{'pages-bundles__container--fixed': toolbarFixed}">
 
   <campus-page-header [title]="(learningArea$|async).icon.name"
-                      [subtitle]="''"
+                      [subtitle]="'Bundels'"
                       [iconClass]="(learningArea$|async).icon"></campus-page-header>
-  <div class="pages-bundles-area-detail__container__learning-areas-count">
+  <div class="pages-bundles__container__learning-areas-count">
     {{(displayedBundles$|async)?.length}} van
-    <u class="pages-bundles-area-detail__container__learning-areas-count__total"
+    <u class="pages-bundles__container__learning-areas-count__total"
        (click)="resetFilterInput(); filterInput.value = ''">{{(bundles$|async)?.length}}</u>
     weergegeven
   </div>
-  <div class="pages-bundles-area-detail__container__learning-areas">
+  <div class="pages-bundles__container__learning-areas">
     <campus-list-view [listFormat]="listFormat$|async"
                       [placeHolderText]="'De toegepaste filter bevat geen resultaten'">
       <!-- click event (or routerlink) needs to be added to the folder items-->
       <campus-folder *ngFor="let bundle of displayedBundles$|async"
                      campusListItem
                      [listFormat]="listFormat$|async"
-                     [itemCount]="bundle.tasks?.length"
+                     [itemCount]="bundlesViewModel.getBundleItemCount(bundle)"
                      [title]="bundle.name"
                      [backgroundColor]="(learningArea$|async).color"
                      [icon]="">
         <campus-folder-details>
-          {{ bundle.description }}
+          {{ bundlesViewModel.getBundleItemCount(bundle) + " item(s)" }}
         </campus-folder-details>
       </campus-folder>
     </campus-list-view>
   </div>
 
-  <div ng-if="(displayedBooks|async).length?.length">
+  <div ng-if="(books$|async).length">
     <campus-page-header [title]="(learningArea$|async).icon.name"
                         [subtitle]="'Boeken'"
                         [iconClass]="(learningArea$|async).icon"></campus-page-header>
-    <div class="pages-bundles-area-detail__container__learning-areas-count">
-      {{(displayedBooks$|async)?.length}} van
-      <u class="pages-bundles-area-detail__container__learning-areas-count__total"
-         (click)="resetFilterInput(); filterInput.value = ''">{{(displayedBooks$|async)?.length}}</u>
+    <div class="pages-bundles__container__learning-areas-count">
+      {{(books$|async).length}} van
+      <u class="pages-bundles__container__learning-areas-count__total"
+         (click)="resetFilterInput(); filterInput.value = ''">{{(books$|async)?.length}}</u>
       weergegeven
     </div>
-    <div class="pages-bundles-area-detail__container__learning-areas">
+    <div class="pages-bundles__container__learning-areas">
       <campus-list-view [listFormat]="listFormat$|async"
                         [placeHolderText]="'De toegepaste filter bevat geen resultaten'">
-        <campus-content-thumbnail *ngFor="let book of displayedBooks$|async"
+        <campus-content-thumbnail *ngFor="let book of books$|async"
                                   campusListItem
                                   [listFormat]="listFormat$|async"
                                   [title]="book.title"

@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import {
   BundleInterface,
   EduContentBookInterface,
+  EduContentInterface,
   LearningAreaInterface
 } from '@campus/dal';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -12,8 +13,6 @@ let bundlesViewModel: MockViewModel;
 
 class MockViewModel {
   constructor() {}
-
-  filterInput$ = new BehaviorSubject<string>('');
 
   books$: Observable<EduContentBookInterface[]> = new BehaviorSubject<
     EduContentBookInterface[]
@@ -101,6 +100,10 @@ class MockViewModel {
     }
   });
 
+  getBundleItemCount(bundle: BundleInterface): number {
+    return 0;
+  }
+
   //todo remove when we have actual data
   createBundle(name: string, learningAreaId: number): BundleInterface {
     const startDate: Date = new Date();
@@ -115,29 +118,19 @@ class MockViewModel {
       description: 'this description includes' + name,
       start: startDate,
       end: endDate,
-      tasks: [
-        {
-          name: 'task1'
-        },
-        {
-          name: 'task2'
-        },
-        {
-          name: 'task3'
-        },
-        {
-          name: 'task4'
-        },
-        {
-          name: 'task5'
-        },
-        {
-          name: 'task6'
-        },
-        {
-          name: 'task7'
-        }
+      eduContents: [
+        this.createEduContent(),
+        this.createEduContent(),
+        this.createEduContent(),
+        this.createEduContent(),
+        this.createEduContent()
       ]
+    };
+  }
+
+  private createEduContent(): EduContentInterface {
+    return {
+      type: '?'
     };
   }
 }
@@ -150,7 +143,7 @@ test('it should return', () => {
   return;
 });
 
-describe('LearningAreasComponent', () => {
+describe('BundlesComponent', () => {
   let component: BundlesComponent;
   let fixture: ComponentFixture<BundlesComponent>;
 
@@ -164,7 +157,7 @@ describe('LearningAreasComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(BundlesComponent);
     component = fixture.componentInstance;
-    bundlesViewModel.filterInput$.next('');
+    component.filterInput$.next('');
     fixture.detectChanges();
   });
 
@@ -174,44 +167,24 @@ describe('LearningAreasComponent', () => {
 
   it('it should return 5 bundles', () => {
     component
-      .getDisplayedBundles(
-        bundlesViewModel.bundles$,
-        bundlesViewModel.filterInput$
-      )
+      .getDisplayedBundles(bundlesViewModel.bundles$, component.filterInput$)
       .subscribe((bundles: BundleInterface[]) => {
         expect(bundles.length).toBe(5);
       });
   });
 
   it('it should return 5 books', () => {
-    component
-      .getDisplayedBooks(bundlesViewModel.books$)
-      .subscribe((books: EduContentBookInterface[]) => {
-        expect(books.length).toEqual(5);
-      });
+    component.books$.subscribe((books: EduContentBookInterface[]) => {
+      expect(books.length).toEqual(5);
+    });
   });
 
   it('should return a single bundle', () => {
-    bundlesViewModel.filterInput$.next('lol');
-
+    component.filterInput$.next('lol');
     component
-      .getDisplayedBundles(
-        bundlesViewModel.bundles$,
-        bundlesViewModel.filterInput$
-      )
+      .getDisplayedBundles(bundlesViewModel.bundles$, component.filterInput$)
       .subscribe((bundles: BundleInterface[]) => {
         expect(bundles.length).toEqual(0);
-      });
-  });
-
-  it('bundles should be independant of filter', () => {
-    //this test might be a bit much because filter is never passed to the method but i chose to include it anway.
-    bundlesViewModel.filterInput$.next('lol');
-
-    component
-      .getDisplayedBooks(bundlesViewModel.books$)
-      .subscribe((books: EduContentBookInterface[]) => {
-        expect(books.length).toEqual(5);
       });
   });
 });

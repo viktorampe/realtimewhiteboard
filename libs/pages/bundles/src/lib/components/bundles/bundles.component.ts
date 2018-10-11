@@ -40,9 +40,7 @@ export class BundlesComponent implements OnInit {
     this.filterInput$
   );
 
-  displayedBooks$: Observable<
-    EduContentBookInterface[]
-  > = this.getDisplayedBooks(this.bundlesViewModel.books$);
+  books$: Observable<EduContentBookInterface[]> = this.bundlesViewModel.books$;
 
   constructor(private bundlesViewModel: BundlesViewModel) {}
 
@@ -60,12 +58,6 @@ export class BundlesComponent implements OnInit {
 
   clickChangeListFormat(value: string): void {
     this.bundlesViewModel.changeListFormat(ListFormat[value]);
-  }
-
-  getDisplayedBooks(
-    books$: Observable<EduContentBookInterface[]>
-  ): Observable<EduContentBookInterface[]> {
-    return books$;
   }
 
   getDisplayedBundles(
