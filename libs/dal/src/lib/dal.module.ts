@@ -23,11 +23,27 @@ import {
   initialState as uiInitialState,
   uiReducer
 } from './+state/ui/ui.reducer';
+import { UnlockedBoekeGroup } from './+state/unlocked-boeke-group';
+import { UnlockedBoekeGroupsEffects } from './+state/unlocked-boeke-group/unlocked-boeke-group.effects';
+import { UnlockedBoekeStudent } from './+state/unlocked-boeke-student';
+import { UnlockedBoekeStudentsEffects } from './+state/unlocked-boeke-student/unlocked-boeke-student.effects';
+import { UnlockedContent } from './+state/unlocked-content';
+import { UnlockedContentsEffects } from './+state/unlocked-content/unlocked-content.effects';
+import { UserContent } from './+state/user-content';
+import { UserContentsEffects } from './+state/user-content/user-content.effects';
+import {
+  UnlockedBoekeGroupService,
+  UnlockedBoekeStudentService,
+  UNLOCKED_BOEKE_GROUP_SERVICE_TOKEN,
+  UNLOCKED_BOEKE_STUDENT_SERVICE_TOKEN
+} from './boeke';
 import {
   BundleService,
   BUNDLE_SERVICE_TOKEN,
-  UnlockedContentsService,
-  UNLOCKEDCONTENTS_SERVICE_TOKEN
+  UnlockedContentService,
+  UNLOCKED_CONTENT_SERVICE_TOKEN,
+  UserContentService,
+  USER_CONTENT_SERVICE_TOKEN
 } from './bundle';
 import { EduContentService } from './edu-content/edu-content.service';
 import { EDUCONTENT_SERVICE_TOKEN } from './edu-content/edu-content.service.interface';
@@ -48,30 +64,60 @@ interface DalOptions {
     StoreModule.forFeature('ui', uiReducer, {
       initialState: uiInitialState
     }),
-    StoreModule.forFeature('bundle', Bundle.reducer, {
+    StoreModule.forFeature('bundles', Bundle.reducer, {
       initialState: Bundle.initialState
     }),
-    StoreModule.forFeature('learingArea', LearningArea.reducer, {
+    StoreModule.forFeature('learingAreas', LearningArea.reducer, {
       initialState: LearningArea.initialState
     }),
-    StoreModule.forFeature('eduContent', EduContent.reducer, {
+    StoreModule.forFeature('eduContents', EduContent.reducer, {
       initialState: EduContent.initialState
     }),
+    StoreModule.forFeature('unlockedContents', UnlockedContent.reducer, {
+      initialState: UnlockedContent.initialState
+    }),
+    StoreModule.forFeature('userContents', UserContent.reducer, {
+      initialState: UserContent.initialState
+    }),
+    StoreModule.forFeature('unlockedBoekeGroups', UnlockedBoekeGroup.reducer, {
+      initialState: UnlockedBoekeGroup.initialState
+    }),
+    StoreModule.forFeature(
+      'unlockedBoekeStudents',
+      UnlockedBoekeStudent.reducer,
+      {
+        initialState: UnlockedBoekeStudent.initialState
+      }
+    ),
     EffectsModule.forFeature([
       BundlesEffects,
       EduContentsEffects,
       UiEffects,
-      LearningAreasEffects
+      LearningAreasEffects,
+      UserContentsEffects,
+      UnlockedBoekeGroupsEffects,
+      UnlockedContentsEffects,
+      UserContentsEffects,
+      UnlockedBoekeStudentsEffects
     ])
   ],
   providers: [
     { provide: EDUCONTENT_SERVICE_TOKEN, useClass: EduContentService },
+    { provide: USER_CONTENT_SERVICE_TOKEN, useClass: UserContentService },
+    {
+      provide: UNLOCKED_BOEKE_STUDENT_SERVICE_TOKEN,
+      useClass: UnlockedBoekeStudentService
+    },
+    {
+      provide: UNLOCKED_CONTENT_SERVICE_TOKEN,
+      useClass: UnlockedContentService
+    },
+    {
+      provide: UNLOCKED_BOEKE_GROUP_SERVICE_TOKEN,
+      useClass: UnlockedBoekeGroupService
+    },
     { provide: BUNDLE_SERVICE_TOKEN, useClass: BundleService },
     { provide: LEARNINGAREA_SERVICE_TOKEN, useClass: LearningAreaService },
-    {
-      provide: UNLOCKEDCONTENTS_SERVICE_TOKEN,
-      useClass: UnlockedContentsService
-    },
     { provide: BROWSER_STORAGE_SERVICE_TOKEN, useClass: StorageService },
     { provide: AuthServiceToken, useClass: AuthService }
   ]

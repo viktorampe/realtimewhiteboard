@@ -2,9 +2,10 @@ import { InjectionToken } from '@angular/core';
 import { Observable } from 'rxjs';
 import { UnlockedContentInterface } from '../+models';
 
-export const UNLOCKEDCONTENTS_SERVICE_TOKEN = new InjectionToken(
-  'UnlockedContentsService'
+export const UNLOCKED_CONTENT_SERVICE_TOKEN = new InjectionToken(
+  'UnlockedContentService'
 );
-export interface UnlockedContentsServiceInterface {
+
+export interface UnlockedContentServiceInterface {
   getAllForUser(userId: number): Observable<UnlockedContentInterface[]>;
 }
