@@ -4,5 +4,5 @@ import { EduContentInterface } from '../+models/EduContent.interface';
 
 export const EDUCONTENT_SERVICE_TOKEN = new InjectionToken('EduContentService');
 export interface EduContentServiceInterface {
-  getAll(): Observable<EduContentInterface[]>;
+  getAllForUser(userId: number): Observable<EduContentInterface[]>;
 }

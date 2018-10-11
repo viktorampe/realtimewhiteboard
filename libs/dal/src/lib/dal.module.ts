@@ -14,8 +14,8 @@ import {
 } from './+state/bundles/bundles.reducer';
 import { EduContent } from './+state/edu-content';
 import { EduContentsEffects } from './+state/edu-content/edu-content.effects';
-import { EduContentService } from './educontent/edu-content.service';
-import { EDUCONTENT_SERVICE_TOKEN } from './educontent/edu-content.service.interface';
+import { EduContentService } from './edu-content/edu-content.service';
+import { EDUCONTENT_SERVICE_TOKEN } from './edu-content/edu-content.service.interface';
 import { AuthService, AuthServiceToken } from './persons/auth-service';
 
 interface DalOptions {

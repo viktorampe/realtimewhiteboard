@@ -6,7 +6,7 @@ export * from './lib/dal.module';
 export {
   EduContentServiceInterface,
   EDUCONTENT_SERVICE_TOKEN
-} from './lib/educontent/edu-content.service.interface';
+} from './lib/edu-content/edu-content.service.interface';
 export { AuthService, AuthServiceToken } from './lib/persons/auth-service';
 export {
   AuthServiceInterface,
