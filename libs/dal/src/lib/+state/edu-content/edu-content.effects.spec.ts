@@ -1,12 +1,10 @@
 import { TestBed } from '@angular/core/testing';
-import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
-import { EduContentService } from '../../edu-content/edu-content.service';
 import { EDUCONTENT_SERVICE_TOKEN } from '../../edu-content/edu-content.service.interface';
 import {
   EduContentsLoaded,
@@ -71,11 +69,9 @@ describe('EduContentEffects', () => {
       providers: [
         {
           provide: EDUCONTENT_SERVICE_TOKEN,
-          useClass: EduContentService
-        },
-        {
-          provide: PersonApi,
-          userClass: {}
+          useValue: {
+            getAllForUser: () => {}
+          }
         },
         EduContentsEffects,
         DataPersistence,

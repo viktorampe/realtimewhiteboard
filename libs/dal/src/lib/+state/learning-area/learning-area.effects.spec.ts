@@ -1,12 +1,10 @@
 import { TestBed } from '@angular/core/testing';
-import { LearningAreaApi } from '@diekeure/polpo-api-angular-sdk';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
-import { LearningAreaService } from '../../learning-area/learning-area.service';
 import { LEARNINGAREA_SERVICE_TOKEN } from '../../learning-area/learning-area.service.interface';
 import {
   LearningAreasLoaded,
@@ -71,11 +69,9 @@ describe('LearningAreaEffects', () => {
       providers: [
         {
           provide: LEARNINGAREA_SERVICE_TOKEN,
-          useClass: LearningAreaService
-        },
-        {
-          provide: LearningAreaApi,
-          userClass: {}
+          useValue: {
+            getAll: () => {}
+          }
         },
         LearningAreasEffects,
         DataPersistence,

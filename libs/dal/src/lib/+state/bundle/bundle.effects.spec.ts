@@ -1,12 +1,10 @@
 import { TestBed } from '@angular/core/testing';
-import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
-import { BundleService } from '../../bundle/bundle.service';
 import { BUNDLE_SERVICE_TOKEN } from '../../bundle/bundle.service.interface';
 import { BundlesLoaded, BundlesLoadError, LoadBundles } from './bundle.actions';
 import { BundlesEffects } from './bundle.effects';
@@ -67,11 +65,9 @@ describe('BundleEffects', () => {
       providers: [
         {
           provide: BUNDLE_SERVICE_TOKEN,
-          useClass: BundleService
-        },
-        {
-          provide: PersonApi,
-          userClass: {}
+          useValue: {
+            getAllForUser: () => {}
+          }
         },
         BundlesEffects,
         DataPersistence,
