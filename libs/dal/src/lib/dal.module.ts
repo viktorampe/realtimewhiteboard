@@ -25,11 +25,11 @@ import {
 } from './+state/ui/ui.reducer';
 import { UserContent } from './+state/user-content';
 import { UserContentsEffects } from './+state/user-content/user-content.effects';
-import { UnlockedBoekeStudentService } from './boeke/unlocked-boeke-student.service';
-import { UNLOCKED_BOEKE_STUDENT_SERVICE_TOKEN } from './boeke/unlocked-boeke-student.service.interface';
 import {
   UnlockedBoekeGroupService,
-  UNLOCKED_BOEKE_GROUP_SERVICE_TOKEN
+  UnlockedBoekeStudentService,
+  UNLOCKED_BOEKE_GROUP_SERVICE_TOKEN,
+  UNLOCKED_BOEKE_STUDENT_SERVICE_TOKEN
 } from './boeke';
 import {
   BundleService,
