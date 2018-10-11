@@ -1,8 +1,10 @@
+
 <campus-tool-bar [fixed]="toolbarFixed">
   <!-- generic input needs to be replaced by the campus filter input -->
-  <input #filterInput
-         type="text"
-         (keyup)="onChangeFilterInput($event.target.value)">
+  <campus-filter-text-input theme="dark"
+                            (filterTextChange)="onChangeFilterInput($event)"
+                            [filterText]="filterInput$|async"
+                            class="pages__toolbar__filter"></campus-filter-text-input>
   <div class="divider"></div>
   <!-- links need to replaced by the button -->
   <a (click)="clickChangeListFormat('GRID')">grid</a>
@@ -17,7 +19,7 @@
   <div class="pages-bundles__container__learning-areas-count">
     {{(displayedLearningAreas$|async)?.length}} van
     <u class="pages-bundles__container__learning-areas-count__total"
-       (click)="resetFilterInput(); filterInput.value = ''">{{(learningAreas$|async)?.length}}</u>
+       (click)="resetFilterInput()">{{(learningAreas$|async)?.length}}</u>
     weergegeven
   </div>
   <div class="pages-bundles__container__learning-areas">
@@ -40,3 +42,33 @@
     </campus-list-view>
   </div>
 </div>
+
+<campus-list-view [multiSelect]="true"
+                  listFormat="grid">
+  <campus-content-thumbnail campusListItem
+                            title="Dit is de titel van de content. Dit is de titel van de content. Dit is de titel van de content.Dit is de titel van de content.Dit is de titel van de content.Dit is de titel van de content.Dit is de titel van de content."
+                            imagePath="https://www.polpo.be/assets/images/home-laptop-books.jpg"
+                            contentTypeClass="icon-bundle"
+                            fileExtensionClass="zip">
+    <campus-button rounded-corners
+                   disabled>tekst</campus-button>
+    <campus-button iconClass="icon-tasks"
+                   warning
+                   circle></campus-button>
+    <campus-button iconClass="icon-tasks"
+                   warning
+                   rounded-corners
+                   bordered
+                   disabled>tekst</campus-button>
+  </campus-content-thumbnail>
+
+  <campus-content-thumbnail campusListItem
+                            title="Dit is de titel van de content."
+                            contentTypeClass="icon-bundle"
+                            fileExtensionClass="zip">
+    <campus-button iconClass="icon-tasks"
+                   danger
+                   disabled>tekst</campus-button>
+    <campus-button iconClass="icon-tasks"
+                   danger></campus-button>
+  </campus-content-thumbnail>

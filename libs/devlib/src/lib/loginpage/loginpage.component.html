@@ -28,3 +28,11 @@
 
 
 </div>
+
+<button (click)="getCurrentUser()">fetch current user</button>
+<div>
+  {{currentUser|async|json}}
+</div>
+
+
+<a [routerLink]="['educontent']">educontent test page</a>
