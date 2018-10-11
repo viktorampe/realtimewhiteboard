@@ -75,7 +75,7 @@ describe('LearningAreaEffects', () => {
         },
         {
           provide: LearningAreaApi,
-          userClass: {}
+          useClass: {}
         },
         LearningAreasEffects,
         DataPersistence,

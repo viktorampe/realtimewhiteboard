@@ -71,7 +71,7 @@ describe('BundleEffects', () => {
         },
         {
           provide: PersonApi,
-          userClass: {}
+          useClass: {}
         },
         BundlesEffects,
         DataPersistence,

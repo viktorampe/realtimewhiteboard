@@ -75,7 +75,7 @@ describe('EduContentEffects', () => {
         },
         {
           provide: PersonApi,
-          userClass: {}
+          useClass: {}
         },
         EduContentsEffects,
         DataPersistence,
