@@ -12,6 +12,8 @@ import {
   bundlesReducer,
   initialState as bundlesInitialState
 } from './+state/bundles/bundles.reducer';
+import { UnlockedContentService } from './bundles/unlocked-content.service';
+import { UNLOCKED_CONTENT_SERVICE_TOKEN } from './bundles/unlocked-content.service.interface';
 import { EduContentService } from './educontent/edu-content.service';
 import { EDUCONTENT_SERVICE_TOKEN } from './educontent/edu-content.service.interface';
 import { AuthService, AuthServiceToken } from './persons/auth-service';
@@ -32,6 +34,10 @@ interface DalOptions {
   ],
   providers: [
     { provide: EDUCONTENT_SERVICE_TOKEN, useClass: EduContentService },
+    {
+      provide: UNLOCKED_CONTENT_SERVICE_TOKEN,
+      useClass: UnlockedContentService
+    },
     { provide: AuthServiceToken, useClass: AuthService }
   ]
 })

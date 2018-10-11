@@ -2,17 +2,17 @@ import { inject, TestBed } from '@angular/core/testing';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Subject } from 'rxjs';
 import { UnlockedContentInterface } from '../+models';
-import { UnlockedContentsService } from './unlocked-contents.service';
-import { UnlockedContentsServiceInterface } from './unlocked-contents.service.interface';
+import { UnlockedContentService } from './unlocked-content.service';
+import { UnlockedContentServiceInterface } from './unlocked-content.service.interface';
 
-describe('UnlockedContentsService', () => {
-  let service: UnlockedContentsServiceInterface;
+describe('UnlockedContentService', () => {
+  let service: UnlockedContentServiceInterface;
   const mockData$: Subject<object> = new Subject();
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        UnlockedContentsService,
+        UnlockedContentService,
         {
           provide: PersonApi,
           useValue: {
@@ -21,13 +21,13 @@ describe('UnlockedContentsService', () => {
         }
       ]
     });
-    service = TestBed.get(UnlockedContentsService);
+    service = TestBed.get(UnlockedContentService);
   });
 
   it('should be created and available via DI', inject(
-    [UnlockedContentsService],
-    (unlockedContentsService: UnlockedContentsService) => {
-      expect(unlockedContentsService).toBeTruthy();
+    [UnlockedContentService],
+    (unlockedContentService: UnlockedContentService) => {
+      expect(unlockedContentService).toBeTruthy();
     }
   ));
 

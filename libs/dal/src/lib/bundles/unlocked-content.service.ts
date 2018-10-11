@@ -3,13 +3,12 @@ import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { UnlockedContentInterface } from '../+models';
-import { UnlockedContentsServiceInterface } from './unlocked-contents.service.interface';
+import { UnlockedContentServiceInterface } from './unlocked-content.service.interface';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UnlockedContentsService
-  implements UnlockedContentsServiceInterface {
+export class UnlockedContentService implements UnlockedContentServiceInterface {
   getAllForUser(userId: number): Observable<UnlockedContentInterface[]> {
     return this.personApi
       .getData(userId, 'unlockedContents')
