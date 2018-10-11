@@ -1,10 +1,11 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import {
-  selectAll, 
+  selectAll,
   selectEntities,
   selectIds,
   selectTotal,
-  State } from './unlocked-boeke-student.reducer';
+  State
+} from './unlocked-boeke-student.reducer';
 
 export const selectUnlockedBoekeStudentState = createFeatureSelector<State>(
   'unlockedBoekeStudents'
@@ -20,11 +21,20 @@ export const getLoaded = createSelector(
   (state: State) => state.loaded
 );
 
-export const getAll = createSelector(selectUnlockedBoekeStudentState, selectAll);
+export const getAll = createSelector(
+  selectUnlockedBoekeStudentState,
+  selectAll
+);
 
-export const getCount = createSelector(selectUnlockedBoekeStudentState, selectTotal);
+export const getCount = createSelector(
+  selectUnlockedBoekeStudentState,
+  selectTotal
+);
 
-export const getIds = createSelector(selectUnlockedBoekeStudentState, selectIds);
+export const getIds = createSelector(
+  selectUnlockedBoekeStudentState,
+  selectIds
+);
 
 export const getAllEntities = createSelector(
   selectUnlockedBoekeStudentState,
@@ -44,7 +54,6 @@ export const getByIds = createSelector(
     return props.ids.map(id => state.entities[id]);
   }
 );
-
 
 /**
  * returns array of objects in the order of the given ids

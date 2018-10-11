@@ -26,48 +26,67 @@ export class LoadUnlockedBoekeStudents implements Action {
 export class UnlockedBoekeStudentsLoaded implements Action {
   readonly type = UnlockedBoekeStudentsActionTypes.UnlockedBoekeStudentsLoaded;
 
-  constructor(public payload: { unlockedBoekeStudents: UnlockedBoekeStudentInterface[] }) {}
+  constructor(
+    public payload: { unlockedBoekeStudents: UnlockedBoekeStudentInterface[] }
+  ) {}
 }
 
 export class UnlockedBoekeStudentsLoadError implements Action {
-  readonly type = UnlockedBoekeStudentsActionTypes.UnlockedBoekeStudentsLoadError;
+  readonly type =
+    UnlockedBoekeStudentsActionTypes.UnlockedBoekeStudentsLoadError;
   constructor(public payload: any) {}
 }
 
 export class AddUnlockedBoekeStudent implements Action {
   readonly type = UnlockedBoekeStudentsActionTypes.AddUnlockedBoekeStudent;
 
-  constructor(public payload: { unlockedBoekeStudent: UnlockedBoekeStudentInterface }) {}
+  constructor(
+    public payload: { unlockedBoekeStudent: UnlockedBoekeStudentInterface }
+  ) {}
 }
 
 export class UpsertUnlockedBoekeStudent implements Action {
   readonly type = UnlockedBoekeStudentsActionTypes.UpsertUnlockedBoekeStudent;
 
-  constructor(public payload: { unlockedBoekeStudent: UnlockedBoekeStudentInterface }) {}
+  constructor(
+    public payload: { unlockedBoekeStudent: UnlockedBoekeStudentInterface }
+  ) {}
 }
 
 export class AddUnlockedBoekeStudents implements Action {
   readonly type = UnlockedBoekeStudentsActionTypes.AddUnlockedBoekeStudents;
 
-  constructor(public payload: { unlockedBoekeStudents: UnlockedBoekeStudentInterface[] }) {}
+  constructor(
+    public payload: { unlockedBoekeStudents: UnlockedBoekeStudentInterface[] }
+  ) {}
 }
 
 export class UpsertUnlockedBoekeStudents implements Action {
   readonly type = UnlockedBoekeStudentsActionTypes.UpsertUnlockedBoekeStudents;
 
-  constructor(public payload: { unlockedBoekeStudents: UnlockedBoekeStudentInterface[] }) {}
+  constructor(
+    public payload: { unlockedBoekeStudents: UnlockedBoekeStudentInterface[] }
+  ) {}
 }
 
 export class UpdateUnlockedBoekeStudent implements Action {
   readonly type = UnlockedBoekeStudentsActionTypes.UpdateUnlockedBoekeStudent;
 
-  constructor(public payload: { unlockedBoekeStudent: Update<UnlockedBoekeStudentInterface> }) {}
+  constructor(
+    public payload: {
+      unlockedBoekeStudent: Update<UnlockedBoekeStudentInterface>;
+    }
+  ) {}
 }
 
 export class UpdateUnlockedBoekeStudents implements Action {
   readonly type = UnlockedBoekeStudentsActionTypes.UpdateUnlockedBoekeStudents;
 
-  constructor(public payload: { unlockedBoekeStudents: Update<UnlockedBoekeStudentInterface>[] }) {}
+  constructor(
+    public payload: {
+      unlockedBoekeStudents: Update<UnlockedBoekeStudentInterface>[];
+    }
+  ) {}
 }
 
 export class DeleteUnlockedBoekeStudent implements Action {

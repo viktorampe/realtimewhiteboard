@@ -11,9 +11,9 @@ export interface State extends EntityState<UnlockedBoekeStudentInterface> {
   error?: any;
 }
 
-export const adapter: EntityAdapter<UnlockedBoekeStudentInterface> = createEntityAdapter<
+export const adapter: EntityAdapter<
   UnlockedBoekeStudentInterface
->();
+> = createEntityAdapter<UnlockedBoekeStudentInterface>();
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties
@@ -58,7 +58,10 @@ export function reducer(
     }
 
     case UnlockedBoekeStudentsActionTypes.UnlockedBoekeStudentsLoaded: {
-      return adapter.addAll(action.payload.unlockedBoekeStudents, { ...state, loaded: true });
+      return adapter.addAll(action.payload.unlockedBoekeStudents, {
+        ...state,
+        loaded: true
+      });
     }
 
     case UnlockedBoekeStudentsActionTypes.UnlockedBoekeStudentsLoadError: {
