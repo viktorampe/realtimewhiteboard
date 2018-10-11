@@ -3,7 +3,7 @@ import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { map } from 'rxjs/operators';
 import {
-  StudentContentStatuseserviceInterface,
+  StudentContentStatusServiceInterface,
   STUDENT_CONTENT_STATUS_SERVICE_TOKEN
 } from '../../student-content-status/student-content-status.service.interface';
 import {
@@ -39,6 +39,6 @@ export class StudentContentStatusesEffects {
     private actions: Actions,
     private dataPersistence: DataPersistence<State>,
     @Inject(STUDENT_CONTENT_STATUS_SERVICE_TOKEN)
-    private StudentContentStatuseservice: StudentContentStatuseserviceInterface
+    private StudentContentStatuseservice: StudentContentStatusServiceInterface
   ) {}
 }

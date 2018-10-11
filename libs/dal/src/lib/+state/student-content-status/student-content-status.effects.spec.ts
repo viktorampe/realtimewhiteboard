@@ -5,6 +5,7 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
+import { STUDENT_CONTENT_STATUS_SERVICE_TOKEN } from '../../student-content-status/student-content-status.service.interface';
 import {
   LoadStudentContentStatuses,
   StudentContentStatusesLoaded,
@@ -39,7 +40,7 @@ describe('StudentContentStatusEffects', () => {
   const mockServiceMethodReturnValue = (
     method: string,
     returnValue: any,
-    service: any = STUDENT_CONTENT - STATUS_SERVICE_TOKEN
+    service: any = STUDENT_CONTENT_STATUS_SERVICE_TOKEN
   ) => {
     jest.spyOn(TestBed.get(service), method).mockReturnValue(of(returnValue));
   };
@@ -47,7 +48,7 @@ describe('StudentContentStatusEffects', () => {
   const mockServiceMethodError = (
     method: string,
     errorMessage: string,
-    service: any = STUDENT_CONTENT - STATUS_SERVICE_TOKEN
+    service: any = STUDENT_CONTENT_STATUS_SERVICE_TOKEN
   ) => {
     jest.spyOn(TestBed.get(service), method).mockImplementation(() => {
       throw new Error(errorMessage);
@@ -67,7 +68,7 @@ describe('StudentContentStatusEffects', () => {
       ],
       providers: [
         {
-          provide: STUDENT_CONTENT - STATUS_SERVICE_TOKEN,
+          provide: STUDENT_CONTENT_STATUS_SERVICE_TOKEN,
           useValue: {
             getAll: () => {}
           }
