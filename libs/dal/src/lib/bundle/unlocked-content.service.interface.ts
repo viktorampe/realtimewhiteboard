@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { UnlockedContentInterface } from '../+models';
 
 export const UNLOCKED_CONTENT_SERVICE_TOKEN = new InjectionToken(
-  'UnlockedContent'
+  'UnlockedContentService'
 );
 
 export interface UnlockedContentServiceInterface {
