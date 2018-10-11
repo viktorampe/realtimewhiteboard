@@ -31,7 +31,7 @@
           {{(fc.length)}} {{fc.length > 1 ? 'items':'item'}} van de
           {{(contents$| async).length}}
           weergegeven. </div>
-        <div *ngIf="(filteredContents$ | async).length == (contents$| async).length"
+        <div *ngIf="fc.length == (contents$| async).length"
              class="itemsAmount">Deze bundel bevat {{fc.length}}
           {{fc.length > 1 ?
           'items':'item'}}</div>
