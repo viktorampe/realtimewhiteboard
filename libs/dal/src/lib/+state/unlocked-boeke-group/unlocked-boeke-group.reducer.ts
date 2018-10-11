@@ -11,9 +11,9 @@ export interface State extends EntityState<UnlockedBoekeGroupInterface> {
   error?: any;
 }
 
-export const adapter: EntityAdapter<UnlockedBoekeGroupInterface> = createEntityAdapter<
+export const adapter: EntityAdapter<
   UnlockedBoekeGroupInterface
->();
+> = createEntityAdapter<UnlockedBoekeGroupInterface>();
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties
@@ -58,7 +58,10 @@ export function reducer(
     }
 
     case UnlockedBoekeGroupsActionTypes.UnlockedBoekeGroupsLoaded: {
-      return adapter.addAll(action.payload.unlockedBoekeGroups, { ...state, loaded: true });
+      return adapter.addAll(action.payload.unlockedBoekeGroups, {
+        ...state,
+        loaded: true
+      });
     }
 
     case UnlockedBoekeGroupsActionTypes.UnlockedBoekeGroupsLoadError: {

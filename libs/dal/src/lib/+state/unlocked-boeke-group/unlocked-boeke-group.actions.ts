@@ -26,7 +26,9 @@ export class LoadUnlockedBoekeGroups implements Action {
 export class UnlockedBoekeGroupsLoaded implements Action {
   readonly type = UnlockedBoekeGroupsActionTypes.UnlockedBoekeGroupsLoaded;
 
-  constructor(public payload: { unlockedBoekeGroups: UnlockedBoekeGroupInterface[] }) {}
+  constructor(
+    public payload: { unlockedBoekeGroups: UnlockedBoekeGroupInterface[] }
+  ) {}
 }
 
 export class UnlockedBoekeGroupsLoadError implements Action {
@@ -37,37 +39,51 @@ export class UnlockedBoekeGroupsLoadError implements Action {
 export class AddUnlockedBoekeGroup implements Action {
   readonly type = UnlockedBoekeGroupsActionTypes.AddUnlockedBoekeGroup;
 
-  constructor(public payload: { unlockedBoekeGroup: UnlockedBoekeGroupInterface }) {}
+  constructor(
+    public payload: { unlockedBoekeGroup: UnlockedBoekeGroupInterface }
+  ) {}
 }
 
 export class UpsertUnlockedBoekeGroup implements Action {
   readonly type = UnlockedBoekeGroupsActionTypes.UpsertUnlockedBoekeGroup;
 
-  constructor(public payload: { unlockedBoekeGroup: UnlockedBoekeGroupInterface }) {}
+  constructor(
+    public payload: { unlockedBoekeGroup: UnlockedBoekeGroupInterface }
+  ) {}
 }
 
 export class AddUnlockedBoekeGroups implements Action {
   readonly type = UnlockedBoekeGroupsActionTypes.AddUnlockedBoekeGroups;
 
-  constructor(public payload: { unlockedBoekeGroups: UnlockedBoekeGroupInterface[] }) {}
+  constructor(
+    public payload: { unlockedBoekeGroups: UnlockedBoekeGroupInterface[] }
+  ) {}
 }
 
 export class UpsertUnlockedBoekeGroups implements Action {
   readonly type = UnlockedBoekeGroupsActionTypes.UpsertUnlockedBoekeGroups;
 
-  constructor(public payload: { unlockedBoekeGroups: UnlockedBoekeGroupInterface[] }) {}
+  constructor(
+    public payload: { unlockedBoekeGroups: UnlockedBoekeGroupInterface[] }
+  ) {}
 }
 
 export class UpdateUnlockedBoekeGroup implements Action {
   readonly type = UnlockedBoekeGroupsActionTypes.UpdateUnlockedBoekeGroup;
 
-  constructor(public payload: { unlockedBoekeGroup: Update<UnlockedBoekeGroupInterface> }) {}
+  constructor(
+    public payload: { unlockedBoekeGroup: Update<UnlockedBoekeGroupInterface> }
+  ) {}
 }
 
 export class UpdateUnlockedBoekeGroups implements Action {
   readonly type = UnlockedBoekeGroupsActionTypes.UpdateUnlockedBoekeGroups;
 
-  constructor(public payload: { unlockedBoekeGroups: Update<UnlockedBoekeGroupInterface>[] }) {}
+  constructor(
+    public payload: {
+      unlockedBoekeGroups: Update<UnlockedBoekeGroupInterface>[];
+    }
+  ) {}
 }
 
 export class DeleteUnlockedBoekeGroup implements Action {
