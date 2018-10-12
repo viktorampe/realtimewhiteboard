@@ -28,7 +28,7 @@ import { ContentPreviewComponent } from './content-preview/content-preview.compo
 import { ContentThumbnailComponent } from './content-thumbnail/content-thumbnail.component';
 import { EditableInlineTagListComponent } from './editable-inline-tag-list/editable-inline-tag-list.component';
 import { FileExtensionComponent } from './file-extension/file-extension.component';
-import { FilterTextInputComponent } from './filter/input/filter-text-input/filter-text-input.component';
+import { FilterTextInputComponent } from './filter-text-input/filter-text-input.component';
 import { FolderDetailsDirective } from './folder/directives/folder-details.directive';
 import { FolderComponent } from './folder/folder.component';
 import { InfoPanelComponent } from './info-panel/info-panel.component';

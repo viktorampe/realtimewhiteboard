@@ -1,0 +1,59 @@
+@mixin ui-filter-text-input() {
+  $ui-filter-text_input-font-size: 18px !default;
+  $ui-filter-text_input-line-height: 26px !default;
+  $ui-filter-text_input-padding: 5px !default;
+  $ui-filter-text_input_input-width: 95px !default;
+  $ui-filter-text_input_input-width--focus: 150px !default;
+
+  // light theme
+  $ui-filter-text_input-background-color--light: $ui-bg-color-1 !default;
+  $ui-filter-text_input-text-color--light: $ui-font-color-1 !default;
+  // dark theme
+  $ui-filter-text_input-background-color--dark: $ui-bg-color-2 !default;
+  $ui-filter-text_input-text-color--dark: $ui-font-color-2 !default;
+
+  .ui-filter-text-input {
+    font-size: $ui-filter-text_input-font-size;
+    line-height: $ui-filter-text_input-line-height;
+
+    &__input {
+      width: $ui-filter-text_input_input-width;
+      transition: width 0.3s;
+
+      &--not-empty {
+        width: $ui-filter-text_input_input-width--focus;
+      }
+    }
+
+    &__icon,
+    &__cancel {
+      top: $ui-filter-text_input-padding +
+        ($ui-filter-text_input-line-height - $ui-filter-text_input-font-size)/2;
+      bottom: $ui-filter-text_input-padding;
+      line-height: $ui-filter-text_input-font-size;
+    }
+    &__icon {
+      left: $ui-filter-text_input-padding;
+    }
+    &__cancel {
+      right: $ui-filter-text_input-padding;
+    }
+
+    // light theme
+    &--light {
+      color: $ui-filter-text_input-text-color--light;
+    }
+    &--light &__input {
+      background-color: $ui-filter-text_input-background-color--light;
+    }
+
+    // dark theme
+    &--dark {
+      color: $ui-filter-text_input-text-color--dark;
+    }
+    &--dark &__input {
+      padding: $ui-filter-text_input-padding $ui-filter-text_input-padding;
+      background-color: $ui-filter-text_input-background-color--dark;
+    }
+  }
+}

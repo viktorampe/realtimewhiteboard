@@ -5,7 +5,7 @@ import { PersonInterface } from './Person.interface';
 export interface UnlockedBoekeGroupInterface {
   id?: number;
   eduContentId?: number;
-  groupId?: number;
+  groupId: number;
   teacherId?: number;
   eduContent?: EduContentInterface;
   group?: GroupInterface;
