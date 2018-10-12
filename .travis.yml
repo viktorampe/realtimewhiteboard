@@ -1,32 +1,31 @@
 sudo: false
 language: node_js
 node_js:
-- 10.3
+  - 10.3
 addons:
   hosts:
-  - teacher.polpo.localhost
-  - student.polpo.localhost
+    - teacher.polpo.localhost
+    - student.polpo.localhost
 branches:
   only:
-  - develop
-  - deploy/staging-polpo-classroom-web
+    - develop
+    - deploy/staging-polpo-classroom-web
 before_install:
-- npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
+  - npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
 before_script:
-- npm run lint
-- npm run format:check
-- npm run affected:test -- --base=$TRAVIS_BRANCH --head=HEAD
-- npm run affected:e2e -- --base=$TRAVIS_BRANCH --head=HEAD
-script: -if [[ $TRAVIS_BRANCH = *"deploy"* ]]; then npm run affected:build --base=$TRAVIS_BRANCH
-  --head=HEAD fi
+  - npm run lint
+  - npm run format:check
+  - npm run test
+  - npm run e2e
+script: -if [[ echo "$TRAVIS_BRANCH" | grep 'deploy' ]]; then npm run build fi
 deploy:
-- provider: s3
-  bucket: site.student-staging-polpo-be
-  access_key_id: AKIAJGQLNGBYXV4THJLQ
-  secret_access_key: 
-    secure: ZQr+6G0Q0SIO/xck0TFe2y/xIPIIRavj2gKPZCNjg93v51CzaN6nZRcR5D9zmK9yzfmAI6bse2pP6uH8hp5+0UiN6TkPN0poPqFFAXCaPorOrQvN4wbdJTVa/Pe1k69MaSavLp9WnVVdTv53rv909N9gPa3KrKFoBbW+RFpaZOM5TVgq6R5aT2E4s5F1krrjX6mWf/21P4S4Sq5XOLUji2ZPRrV6YC3xgOVSO1CtIGeCl4/cfs5SdG+c/nLteEwqTjdaDHgSTCYWLDntkEqAB5vjG/jYqrZbfP2TW6J5CLeusULnMXrdSiih7pJc+9VTqBQdN9uvdzMexvGdNqaPo6dkg+lfyaZQyhVtcnh4O1qAQU2+CZWESsCa34y+SgZbEOdeoOb5axUjadJZyp+qbksVpke7LhPZOS1bCbHa5dfePog54jCI9t3j9brw1oOUTK4Llt4bYVfWPelCCAYEufmI4/K1KP3engtKCY/3/FVRcnGlHZDcueeyQ26bz7hEhfmoJCeNibMkzxTxFuMUzL8e/hAYFY2RJj+iEeGwK8MKOxXju323E4jovD01OZ6D29NWIqxzmlYC7Nj+WW+2qezz1OtNrnCqL7O9/tBgIKp+17Y2Yn0rG+bLjpSs4/3z8DnlWzfySKobLCwvzi/j2ZbcT2u+P0XQf3KYxOuzk6g=
-  skip_cleanup: true
-  region: eu-west-1
-  local_dir: dist/app/polpo-classroom-web
-  on:
-    branch: disabledfornow
+  - provider: s3
+    bucket: site.student-staging-polpo-be
+    access_key_id: AKIAJGQLNGBYXV4THJLQ
+    secret_access_key:
+      secure: ZQr+6G0Q0SIO/xck0TFe2y/xIPIIRavj2gKPZCNjg93v51CzaN6nZRcR5D9zmK9yzfmAI6bse2pP6uH8hp5+0UiN6TkPN0poPqFFAXCaPorOrQvN4wbdJTVa/Pe1k69MaSavLp9WnVVdTv53rv909N9gPa3KrKFoBbW+RFpaZOM5TVgq6R5aT2E4s5F1krrjX6mWf/21P4S4Sq5XOLUji2ZPRrV6YC3xgOVSO1CtIGeCl4/cfs5SdG+c/nLteEwqTjdaDHgSTCYWLDntkEqAB5vjG/jYqrZbfP2TW6J5CLeusULnMXrdSiih7pJc+9VTqBQdN9uvdzMexvGdNqaPo6dkg+lfyaZQyhVtcnh4O1qAQU2+CZWESsCa34y+SgZbEOdeoOb5axUjadJZyp+qbksVpke7LhPZOS1bCbHa5dfePog54jCI9t3j9brw1oOUTK4Llt4bYVfWPelCCAYEufmI4/K1KP3engtKCY/3/FVRcnGlHZDcueeyQ26bz7hEhfmoJCeNibMkzxTxFuMUzL8e/hAYFY2RJj+iEeGwK8MKOxXju323E4jovD01OZ6D29NWIqxzmlYC7Nj+WW+2qezz1OtNrnCqL7O9/tBgIKp+17Y2Yn0rG+bLjpSs4/3z8DnlWzfySKobLCwvzi/j2ZbcT2u+P0XQf3KYxOuzk6g=
+    skip_cleanup: true
+    region: eu-west-1
+    local_dir: dist/app/polpo-classroom-web
+    on:
+      branch: disabledfornow

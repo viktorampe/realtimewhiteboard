@@ -10,6 +10,10 @@ body {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 /*
  * icon fonts
  */
@@ -69,7 +73,9 @@ body {
 @include angular-material-theme($polpo-theme);
 // alternative: include individual component mixins
 
-/* * POLPO theme */
+/*
+ * POLPO theme
+ */
 // load all variables for your app theme and ui components
 @import 'scss/theme-variables';
 
@@ -81,6 +87,7 @@ body {
 // include pages lib scss file
 @import 'libs/pages/shared/src/pages-theme';
 @include pages-theme();
+
 /*
  * App styles
  */
@@ -99,5 +106,20 @@ body {
     border-top: 12px solid transparent;
     border-bottom: 12px solid transparent;
     border-right: 12px solid #e1e5e7;
+  }
+}
+
+.ui-tool-bar {
+  height: 60px;
+  padding: 10px;
+
+  .ui-filter-text-input {
+    &__input {
+      border: solid 2px $color-active;
+    }
+    &__icon,
+    &__cancel {
+      margin: 2px 0; // to offset top position with input border
+    }
   }
 }

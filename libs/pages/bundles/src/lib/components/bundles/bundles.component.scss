@@ -5,7 +5,12 @@
     &--fixed {
       padding-top: 70px !important;
     }
-    &__learning-areas-count {
+    &__bundles-count {
+      &__total {
+        cursor: pointer;
+      }
+    }
+    &__books-count {
       &__total {
         cursor: pointer;
       }

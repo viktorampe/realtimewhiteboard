@@ -179,7 +179,7 @@ describe('BundlesComponent', () => {
     });
   });
 
-  it('should return a single bundle', () => {
+  it('should return a no bundles', () => {
     component.filterInput$.next('lol');
     component
       .getDisplayedBundles(bundlesViewModel.bundles$, component.filterInput$)

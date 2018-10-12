@@ -14,9 +14,9 @@
   <campus-page-header [title]="(learningArea$|async).icon.name"
                       [subtitle]="'Bundels'"
                       [iconClass]="(learningArea$|async).icon"></campus-page-header>
-  <div class="pages-bundles__container__learning-areas-count">
+  <div class="pages-bundles__container__bundles-count">
     {{(displayedBundles$|async)?.length}} van
-    <u class="pages-bundles__container__learning-areas-count__total"
+    <u class="pages-bundles__container__bundles-count__total"
        (click)="resetFilterInput(); filterInput.value = ''">{{(bundles$|async)?.length}}</u>
     weergegeven
   </div>
@@ -42,15 +42,11 @@
     <campus-page-header [title]="(learningArea$|async).icon.name"
                         [subtitle]="'Boeken'"
                         [iconClass]="(learningArea$|async).icon"></campus-page-header>
-    <div class="pages-bundles__container__learning-areas-count">
-      {{(books$|async).length}} van
-      <u class="pages-bundles__container__learning-areas-count__total"
-         (click)="resetFilterInput(); filterInput.value = ''">{{(books$|async)?.length}}</u>
-      weergegeven
+    <div class="pages-bundles__container__books-count">
+      je hebt {{(books$|async).length}} boek voor {{ (learningArea$|async).name }}
     </div>
-    <div class="pages-bundles__container__learning-areas">
-      <campus-list-view [listFormat]="listFormat$|async"
-                        [placeHolderText]="'De toegepaste filter bevat geen resultaten'">
+    <div class="pages-bundles__container__books">
+      <campus-list-view [listFormat]="listFormat$|async">
         <campus-content-thumbnail *ngFor="let book of books$|async"
                                   campusListItem
                                   [listFormat]="listFormat$|async"

@@ -29,7 +29,7 @@ import { AppComponent } from './app.component';
     DalModule.forRoot({ apiBaseUrl: environment.APIBase }),
     RouterModule.forRoot(
       [
-        { path: 'login', loadChildren: '@campus/devlib#DevlibModule' },
+        { path: 'dev', loadChildren: '@campus/devlib#DevlibModule' },
         {
           path: 'tasks',
           loadChildren: '@campus/pages/tasks#PagesTasksModule'
@@ -54,7 +54,12 @@ import { AppComponent } from './app.component';
           path: 'alerts',
           loadChildren: '@campus/pages/alerts#PagesAlertsModule'
         },
+<<<<<<< HEAD
         { path: '', redirectTo: 'bundles', pathMatch: 'full' },
+=======
+
+        { path: '', redirectTo: 'dev/educontent', pathMatch: 'full' },
+>>>>>>> develop
         {
           path: 'bundles',
           loadChildren: '@campus/pages/bundles#PagesBundlesModule'
