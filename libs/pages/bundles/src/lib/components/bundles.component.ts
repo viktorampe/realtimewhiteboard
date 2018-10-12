@@ -24,7 +24,7 @@ export class BundlesComponent implements OnInit {
   > = this.getDisplayedLearningAreas$(this.learningAreas$, this.filterInput$);
 
   learningAreasCounts$: Observable<any> = this.bundlesViewModel
-    .learningAreasCounts$;
+    .sharedLearningAreasCount$;
 
   constructor(private bundlesViewModel: BundlesViewModel) {}
 

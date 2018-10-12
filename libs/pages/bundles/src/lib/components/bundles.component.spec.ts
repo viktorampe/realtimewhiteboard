@@ -1,7 +1,14 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ActivatedRoute } from '@angular/router';
 import { UiModule } from '@campus/ui';
 import { BundlesComponent } from './bundles.component';
+import {
+  BundleService,
+  EduContentService,
+  LearningAreaService,
+  UnlockedContentService
+} from './bundles.viewmodel';
 
 describe('BundlesComponent', () => {
   let component: BundlesComponent;
@@ -10,7 +17,17 @@ describe('BundlesComponent', () => {
     TestBed.configureTestingModule({
       imports: [UiModule],
       declarations: [BundlesComponent],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
+      providers: [
+        LearningAreaService,
+        BundleService,
+        UnlockedContentService,
+        EduContentService,
+        {
+          provide: ActivatedRoute,
+          useValue: []
+        }
+      ]
     }).compileComponents();
   }));
 
