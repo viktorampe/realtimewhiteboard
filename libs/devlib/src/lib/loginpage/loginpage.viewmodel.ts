@@ -26,12 +26,8 @@ export class LoginPageViewModel implements Resolve<boolean> {
     private store: Store<UserState>,
     @Inject(AuthServiceToken) private authService: AuthServiceInterface
   ) {
-    store.select(userQuery.getSelectedUser).subscribe(data => {
-      if (Object.getOwnPropertyNames(data).length === 0) {
-        this.loggedIn = false;
-      } else {
-        this.loggedIn = true;
-      }
+    store.select(userQuery.getCurrentUser).subscribe(data => {
+      this.loggedIn = data != null;
     });
   }
 

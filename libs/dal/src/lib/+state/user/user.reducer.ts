@@ -17,7 +17,8 @@ export interface UserState {
 
 export const initialUserstate: UserState = {
   currentUser: null,
-  loaded: false
+  loaded: false,
+  error: null
 };
 
 export function userReducer(

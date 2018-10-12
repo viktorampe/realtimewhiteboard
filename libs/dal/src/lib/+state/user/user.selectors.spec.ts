@@ -63,8 +63,8 @@ describe('User Selectors', () => {
       expect(results).toBe(mockUser);
     });
 
-    it('getSelectedUser() should return the selected Entity', () => {
-      const result = userQuery.getSelectedUser(storeState);
+    it('getCurrentUser() should return the selected Entity', () => {
+      const result = userQuery.getCurrentUser(storeState);
       const selId = getUserId(result);
       expect(selId).toBe(186);
     });

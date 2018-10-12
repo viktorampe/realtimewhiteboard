@@ -20,13 +20,9 @@ const getCurrentUser = createSelector(
     return isLoaded ? state.currentUser : null;
   }
 );
-const getSelectedUser = createSelector(getCurrentUser, user => {
-  return user;
-});
 
 export const userQuery = {
   getLoaded,
   getError,
-  getCurrentUser,
-  getSelectedUser
+  getCurrentUser
 };
