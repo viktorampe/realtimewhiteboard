@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import {
   BundleInterface,
   ContentInterface,
-  ContentType,
   EduContentInterface,
   UserContentInterface
 } from '@campus/dal';
@@ -11,55 +10,6 @@ import {
   providedIn: 'root'
 })
 export class DataConverterService {
-  /**
-   * Maps EduContent to more generic ContentInterface for use in page
-   *
-   * @param {EduContentInterface} eduContent
-   * @returns {ContentInterface}
-   * @memberof DataConverterService
-   */
-  public mapEduContentToContentInterface(
-    eduContent: EduContentInterface
-  ): ContentInterface {
-    return {
-      name: eduContent.publishedEduContentMetadata.title,
-      type: ContentType.EDUCONTENT,
-      productType:
-        eduContent.publishedEduContentMetadata.eduContentProductType.icon,
-      fileExtension: this.getExtension(
-        eduContent.publishedEduContentMetadata.fileName
-      ),
-      previewImage: eduContent.publishedEduContentMetadata.thumbSmall,
-      description: eduContent.publishedEduContentMetadata.description,
-      methodLogos: eduContent.publishedEduContentMetadata.methods.map(
-        m => m.icon
-      ),
-      actions: this.getActionsFromEducontent(eduContent),
-      status: { label: 'test' }
-    };
-  }
-
-  /**
-   * Maps UserContent to more generic ContentInterface for use in page
-   *
-   * @param {UserContentInterface} userContent
-   * @returns {ContentInterface}
-   * @memberof DataConverterService
-   */
-  public mapUserContentToContentInterface(
-    userContent: UserContentInterface
-  ): ContentInterface {
-    return {
-      name: userContent.name,
-      type: ContentType.USERCONTENT,
-      productType: userContent.type,
-      fileExtension: 'drive',
-      description: userContent.description,
-      actions: this.getActionsFromUsercontent(userContent),
-      status: { label: 'test' }
-    };
-  }
-
   /**
    * Transform Bundle to object for use in info-panel-bundle
    *
@@ -92,8 +42,7 @@ export class DataConverterService {
       description: data.description,
       extension: data.fileExtension,
       productType: data.productType,
-      methods: data.methodLogos,
-      status: data.status
+      methods: data.methodLogos
     };
   }
 
