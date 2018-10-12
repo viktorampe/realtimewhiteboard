@@ -4,9 +4,11 @@
          type="text"
          (keyup)="onChangeFilterInput($event.target.value)">
   <div class="divider"></div>
-  <!-- links need to replaced by the button -->
-  <a (click)="clickChangeListFormat('GRID')">grid</a>
-  <a (click)="clickChangeListFormat('LINE')">line</a>
+  <campus-button iconClass="icon-tasks"
+                 (click)="clickChangeListFormat(listFormatEnum.GRID)"></campus-button>
+  <campus-button iconClass="icon-tasks"
+                 (click)="clickChangeListFormat(listFormatEnum.LINE)"></campus-button>
+
 </campus-tool-bar>
 <div class="pages-bundles__container"
      [ngClass]="{'pages-bundles__container--fixed': toolbarFixed}">
@@ -51,9 +53,9 @@
                                   campusListItem
                                   [listFormat]="listFormat$|async"
                                   [title]="book.title"
-                                  [contentTypeClass]="f"
-                                  [imagePath]="f"
-                                  [fileExtensionClass]="boek-e">
+                                  [contentTypeClass]="icon-boek"
+                                  [imagePath]=""
+                                  [fileExtensionClass]="">
         </campus-content-thumbnail>
       </campus-list-view>
     </div>

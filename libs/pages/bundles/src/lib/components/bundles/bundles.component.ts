@@ -15,6 +15,8 @@ import { BundlesViewModel } from '../bundles.viewmodel';
   styleUrls: ['./bundles.component.scss']
 })
 export class BundlesComponent implements OnInit {
+  protected listFormatEnum = ListFormat;
+
   learningArea$: Observable<LearningAreaInterface> = this.bundlesViewModel
     .selectedLearningArea$;
 
@@ -56,8 +58,8 @@ export class BundlesComponent implements OnInit {
     this.filterInput$.next('');
   }
 
-  clickChangeListFormat(value: string): void {
-    this.bundlesViewModel.changeListFormat(ListFormat[value]);
+  clickChangeListFormat(format: ListFormat): void {
+    this.bundlesViewModel.changeListFormat(format);
   }
 
   getDisplayedBundles(
