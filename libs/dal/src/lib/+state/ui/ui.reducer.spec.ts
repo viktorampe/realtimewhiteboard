@@ -1,6 +1,6 @@
 import { ListFormat } from '@campus/ui';
 import { SetListFormatUi, ToggleSideSheetUi, UiLoaded } from './ui.actions';
-import { initialState, uiReducer, UiState } from './ui.reducer';
+import { initialState, reducer, UiState } from './ui.reducer';
 
 describe('Ui Reducer', () => {
   let state: UiState;
@@ -15,25 +15,25 @@ describe('Ui Reducer', () => {
   describe('valid Ui actions ', () => {
     it('should return ui object', () => {
       const action = new UiLoaded({ state });
-      const result: UiState = uiReducer(initialState, action);
+      const result: UiState = reducer(initialState, action);
       expect(result).toEqual(state);
     });
 
     it('should change the listFormat', () => {
       const action = new SetListFormatUi({ listFormat: ListFormat.LINE });
-      const result: UiState = uiReducer(initialState, action);
+      const result: UiState = reducer(initialState, action);
       expect(result.listFormat).toEqual(ListFormat.LINE);
     });
 
     it('should toggle the sideSheet', () => {
       const action = new ToggleSideSheetUi();
-      const result: UiState = uiReducer(initialState, action);
+      const result: UiState = reducer(initialState, action);
       expect(result.sideSheetOpen).toBeTruthy();
     });
 
     it('should toggle the sideSheet', () => {
       const action = new ToggleSideSheetUi();
-      const result: UiState = uiReducer(
+      const result: UiState = reducer(
         { ...initialState, sideSheetOpen: true },
         action
       );
@@ -44,7 +44,7 @@ describe('Ui Reducer', () => {
   describe('unknown action', () => {
     it('should return the initial state', () => {
       const action = {} as any;
-      const result = uiReducer(initialState, action);
+      const result = reducer(initialState, action);
 
       expect(result).toBe(initialState);
     });

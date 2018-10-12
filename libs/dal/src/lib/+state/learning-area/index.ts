@@ -1,5 +1,11 @@
 import * as LearningAreaActions from './learning-area.actions';
-import * as LearningArea from './learning-area.reducer';
+import { LearningAreasEffects } from './learning-area.effects';
+import * as LearningAreaReducer from './learning-area.reducer';
 import * as LearningAreaQueries from './learning-area.selectors';
 
-export { LearningAreaActions, LearningArea, LearningAreaQueries };
+export {
+  LearningAreaActions,
+  LearningAreaReducer,
+  LearningAreaQueries,
+  LearningAreasEffects
+};
