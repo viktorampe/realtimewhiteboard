@@ -14,3 +14,6 @@ export {
   AuthServiceInterface,
   LoginCredentials
 } from './lib/persons/auth-service.interface';
+export {
+  StudentContentStatusService
+} from './lib/student-content-status/student-content-status.service';

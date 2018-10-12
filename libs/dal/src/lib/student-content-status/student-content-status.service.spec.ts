@@ -1,8 +1,12 @@
 import { inject, TestBed } from '@angular/core/testing';
-import { StudentContentStatusApi } from '@diekeure/polpo-api-angular-sdk';
+import {
+  PersonApi,
+  StudentContentStatusApi
+} from '@diekeure/polpo-api-angular-sdk';
 import { StudentContentStatusService } from './student-content-status.service';
 
 export class MockStudentContentStatusApi {}
+export class MockPersonApi {}
 
 describe('StudentContentStatusService', () => {
   beforeEach(() => {
@@ -12,6 +16,10 @@ describe('StudentContentStatusService', () => {
         {
           provide: StudentContentStatusApi,
           useClass: MockStudentContentStatusApi
+        },
+        {
+          provide: PersonApi,
+          useClass: MockPersonApi
         }
       ]
     });

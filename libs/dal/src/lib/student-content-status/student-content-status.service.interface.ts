@@ -6,10 +6,11 @@ export const STUDENT_CONTENT_STATUS_SERVICE_TOKEN = new InjectionToken(
   'StudentContentStatusService'
 );
 export interface StudentContentStatusServiceInterface {
+  getById(statusId: number): Observable<StudentContentStatusInterface>;
   getAllByStudentId(
     studentId: number
   ): Observable<StudentContentStatusInterface[]>;
   updateStudentContentStatus(
     studentContentStatus: StudentContentStatusInterface
-  ): Observable<StudentContentStatusInterface>;
+  ): Observable<boolean>;
 }
