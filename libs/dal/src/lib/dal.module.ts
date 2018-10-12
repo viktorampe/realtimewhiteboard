@@ -13,7 +13,7 @@ import {
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { BundleReducer, BundlesEffects } from './+state/bundle';
-import { EduContent, EduContentsEffects } from './+state/edu-content';
+import { EduContentReducer, EduContentsEffects } from './+state/edu-content';
 import {
   LearningAreaReducer,
   LearningAreasEffects
@@ -71,8 +71,8 @@ interface DalOptions {
     StoreModule.forFeature('learingAreas', LearningAreaReducer.reducer, {
       initialState: LearningAreaReducer.initialState
     }),
-    StoreModule.forFeature('eduContents', EduContent.reducer, {
-      initialState: EduContent.initialState
+    StoreModule.forFeature('eduContents', EduContentReducer.reducer, {
+      initialState: EduContentReducer.initialState
     }),
     StoreModule.forFeature('unlockedContents', UnlockedContentReducer.reducer, {
       initialState: UnlockedContentReducer.initialState
