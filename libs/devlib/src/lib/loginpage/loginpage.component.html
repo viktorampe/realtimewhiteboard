@@ -38,15 +38,8 @@
 <a [routerLink]="['educontent']">educontent test page</a>
 
 <div>
-  <button (click)="getStudentContentStatus(6)">getByID - 6</button>
+  <button (click)="getStudentContentStatusFromStore(6)">Store</button>
   <div>
-    <p>{{ response$ | async |json}}</p>
-  </div>
-</div>
-
-<div>
-  <button (click)="updateStudentContentStatus()">update</button>
-  <div>
-    <p>{{ response2$ | async}}</p>
+    <p>{{ response3$ | async}}</p>
   </div>
 </div>

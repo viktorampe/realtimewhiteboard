@@ -2,6 +2,7 @@ export * from './lib/+models/index';
 export * from './lib/+state/bundle/bundle.reducer';
 export * from './lib/+state/bundle/bundle.selectors';
 export * from './lib/+state/edu-content';
+export * from './lib/+state/student-content-status';
 export * from './lib/+state/ui';
 export * from './lib/+state/ui/ui.selectors';
 export * from './lib/dal.module';

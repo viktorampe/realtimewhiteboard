@@ -18,6 +18,8 @@ import { EduContent } from './+state/edu-content';
 import { EduContentsEffects } from './+state/edu-content/edu-content.effects';
 import { LearningArea } from './+state/learning-area';
 import { LearningAreasEffects } from './+state/learning-area/learning-area.effects';
+import { StudentContentStatus } from './+state/student-content-status';
+import { StudentContentStatusesEffects } from './+state/student-content-status/student-content-status.effects';
 import { UiEffects } from './+state/ui/ui.effects';
 import {
   initialState as uiInitialState,
@@ -38,6 +40,8 @@ import { EDUCONTENT_SERVICE_TOKEN } from './edu-content/edu-content.service.inte
 import { LearningAreaService } from './learning-area/learning-area.service';
 import { LEARNINGAREA_SERVICE_TOKEN } from './learning-area/learning-area.service.interface';
 import { AuthService, AuthServiceToken } from './persons/auth-service';
+import { StudentContentStatusService } from './student-content-status/student-content-status.service';
+import { STUDENT_CONTENT_STATUS_SERVICE_TOKEN } from './student-content-status/student-content-status.service.interface';
 
 interface DalOptions {
   apiBaseUrl: string;
@@ -55,7 +59,7 @@ interface DalOptions {
     StoreModule.forFeature('bundle', Bundle.reducer, {
       initialState: Bundle.initialState
     }),
-    StoreModule.forFeature('learingArea', LearningArea.reducer, {
+    StoreModule.forFeature('learningArea', LearningArea.reducer, {
       initialState: LearningArea.initialState
     }),
     StoreModule.forFeature('eduContent', EduContent.reducer, {
@@ -64,12 +68,20 @@ interface DalOptions {
     StoreModule.forFeature('userContent', UserContent.reducer, {
       initialState: UserContent.initialState
     }),
+    StoreModule.forFeature(
+      'studentContentStatus',
+      StudentContentStatus.reducer,
+      {
+        initialState: StudentContentStatus.initialState
+      }
+    ),
     EffectsModule.forFeature([
       BundlesEffects,
       EduContentsEffects,
       UiEffects,
       LearningAreasEffects,
-      UserContentsEffects
+      UserContentsEffects,
+      StudentContentStatusesEffects
     ])
   ],
   providers: [
@@ -82,6 +94,10 @@ interface DalOptions {
     { provide: BUNDLE_SERVICE_TOKEN, useClass: BundleService },
     { provide: LEARNINGAREA_SERVICE_TOKEN, useClass: LearningAreaService },
     { provide: BROWSER_STORAGE_SERVICE_TOKEN, useClass: StorageService },
+    {
+      provide: STUDENT_CONTENT_STATUS_SERVICE_TOKEN,
+      useClass: StudentContentStatusService
+    },
     { provide: AuthServiceToken, useClass: AuthService }
   ]
 })

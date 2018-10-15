@@ -7,37 +7,37 @@ import {
   State
 } from './student-content-status.reducer';
 
-export const selectStudentContentStatusestate = createFeatureSelector<State>(
-  'StudentContentStatuses'
+export const selectStudentContentStatusesState = createFeatureSelector<State>(
+  'studentContentStatus'
 );
 
 export const getError = createSelector(
-  selectStudentContentStatusestate,
+  selectStudentContentStatusesState,
   (state: State) => state.error
 );
 
 export const getLoaded = createSelector(
-  selectStudentContentStatusestate,
+  selectStudentContentStatusesState,
   (state: State) => state.loaded
 );
 
 export const getAll = createSelector(
-  selectStudentContentStatusestate,
+  selectStudentContentStatusesState,
   selectAll
 );
 
 export const getCount = createSelector(
-  selectStudentContentStatusestate,
+  selectStudentContentStatusesState,
   selectTotal
 );
 
 export const getIds = createSelector(
-  selectStudentContentStatusestate,
+  selectStudentContentStatusesState,
   selectIds
 );
 
 export const getAllEntities = createSelector(
-  selectStudentContentStatusestate,
+  selectStudentContentStatusesState,
   selectEntities
 );
 
@@ -49,7 +49,7 @@ export const getAllEntities = createSelector(
   );
  */
 export const getByIds = createSelector(
-  selectStudentContentStatusestate,
+  selectStudentContentStatusesState,
   (state: State, props: { ids: number[] }) => {
     return props.ids.map(id => state.entities[id]);
   }
@@ -63,6 +63,6 @@ export const getByIds = createSelector(
   );
  */
 export const getById = createSelector(
-  selectStudentContentStatusestate,
+  selectStudentContentStatusesState,
   (state: State, props: { id: number }) => state.entities[props.id]
 );

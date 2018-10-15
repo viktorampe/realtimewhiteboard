@@ -1,8 +1,15 @@
 import { Inject, Injectable } from '@angular/core';
 import { Resolve } from '@angular/router';
-import { AuthServiceInterface, AuthServiceToken } from '@campus/dal';
+import {
+  AuthServiceInterface,
+  AuthServiceToken,
+  StudentContentStatusService
+} from '@campus/dal';
+import { Store } from '@ngrx/store';
+import { LoadStudentContentStatuses } from 'libs/dal/src/lib/+state/student-content-status/student-content-status.actions';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, map, take } from 'rxjs/operators';
+import { State } from './../../../../dal/src/lib/+state/student-content-status/student-content-status.reducer';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +22,9 @@ export class LoginPageViewModel implements Resolve<boolean> {
   loggedIn: boolean;
 
   constructor(
-    @Inject(AuthServiceToken) private authService: AuthServiceInterface
+    @Inject(AuthServiceToken) private authService: AuthServiceInterface,
+    public studentContentStatusService: StudentContentStatusService,
+    public studentContentStatusStore: Store<State>
   ) {
     this.isLoggedIn().subscribe((isLoggedIn: boolean) => {
       this.loggedIn = isLoggedIn;
@@ -89,6 +98,10 @@ export class LoginPageViewModel implements Resolve<boolean> {
    * @memberOf LoginPageViewModel
    */
   resolve(): Observable<boolean> {
+    this.studentContentStatusStore.dispatch(
+      new LoadStudentContentStatuses({ studentId: 6 })
+    );
+
     return new BehaviorSubject<boolean>(true).pipe(take(1));
   }
 }
