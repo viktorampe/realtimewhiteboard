@@ -21,8 +21,9 @@ export class StudentContentStatusesEffects {
     StudentContentStatusesActionTypes.LoadStudentContentStatuses,
     {
       run: (action: LoadStudentContentStatuses, state: any) => {
-        if (!action.payload.force && state.studentContentStatus.loaded) return;
-        return this.StudentContentStatuseservice.getAllByStudentId(
+        if (!action.payload.force && state.studentContentStatuses.loaded)
+          return;
+        return this.StudentContentStatusesService.getAllByStudentId(
           action.payload.studentId
         ).pipe(
           map(
@@ -41,6 +42,6 @@ export class StudentContentStatusesEffects {
     private actions: Actions,
     private dataPersistence: DataPersistence<State>,
     @Inject(STUDENT_CONTENT_STATUS_SERVICE_TOKEN)
-    private StudentContentStatuseservice: StudentContentStatusServiceInterface
+    private StudentContentStatusesService: StudentContentStatusServiceInterface
   ) {}
 }

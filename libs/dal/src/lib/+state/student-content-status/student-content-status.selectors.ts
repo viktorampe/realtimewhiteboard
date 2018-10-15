@@ -8,7 +8,7 @@ import {
 } from './student-content-status.reducer';
 
 export const selectStudentContentStatusesState = createFeatureSelector<State>(
-  'studentContentStatus'
+  'studentContentStatuses'
 );
 
 export const getError = createSelector(

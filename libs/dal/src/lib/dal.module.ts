@@ -85,7 +85,7 @@ interface DalOptions {
       initialState: UserContentReducer.initialState
     }),
     StoreModule.forFeature(
-      'studentContentStatus',
+      'studentContentStatuses',
       StudentContentStatus.reducer,
       {
         initialState: StudentContentStatus.initialState

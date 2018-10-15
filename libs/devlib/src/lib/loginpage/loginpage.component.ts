@@ -1,8 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { EduContentInterface, StudentContentStatusQueries } from '@campus/dal';
+import {
+  EduContentInterface,
+  StudentContentStatusActions,
+  StudentContentStatusQueries
+} from '@campus/dal';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { select } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { StudentContentStatusInterface } from './../../../../dal/src/lib/+models/StudentContentStatus.interface';
 import { LoginPageViewModel } from './loginpage.viewmodel';
 
 @Component({
@@ -26,9 +31,18 @@ export class LoginpageComponent implements OnInit {
 
   // tslint:disable-next-line:member-ordering
   response3$: any;
-  getStudentContentStatusFromStore(id: number) {
+  getStudentContentStatusFromStoreById(id: number) {
     this.response3$ = this.loginPageviewModel.studentContentStatusStore.pipe(
-      select(StudentContentStatusQueries.getLoaded)
+      select(StudentContentStatusQueries.getById, { id: id })
+    );
+  }
+
+  setStudentContentStatusInStore(
+    id: number,
+    status: StudentContentStatusInterface
+  ) {
+    this.loginPageviewModel.studentContentStatusStore.dispatch(
+      new StudentContentStatusActions.UpdateStudentContentStatus()
     );
   }
 }
