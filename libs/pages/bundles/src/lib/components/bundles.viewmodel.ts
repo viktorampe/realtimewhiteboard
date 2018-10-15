@@ -6,8 +6,8 @@ import {
   LearningAreaInterface
 } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { map, take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -15,23 +15,44 @@ import { take } from 'rxjs/operators';
 export class BundlesViewModel implements Resolve<boolean> {
   listFormat$ = new BehaviorSubject<ListFormat>(ListFormat.GRID);
 
+  //mock data
   books$: Observable<EduContentBookInterface[]> = new BehaviorSubject<
     EduContentBookInterface[]
   >([
     {
-      title: 'boek1'
+      title: 'boek1',
+      method: {
+        name: 'none',
+        logoUrl: 'roadToNowhere'
+      }
     },
     {
-      title: 'boek2'
+      title: 'boek2',
+      method: {
+        name: 'none',
+        logoUrl: 'roadToNowhere'
+      }
     },
     {
-      title: 'boek3'
+      title: 'boek3',
+      method: {
+        name: 'none',
+        logoUrl: 'roadToNowhere'
+      }
     },
     {
-      title: 'boek4'
+      title: 'boek4',
+      method: {
+        name: 'none',
+        logoUrl: 'roadToNowhere'
+      }
     },
     {
-      title: 'boek5'
+      title: 'boek5',
+      method: {
+        name: 'none',
+        logoUrl: 'roadToNowhere'
+      }
     }
   ]);
 
@@ -44,7 +65,7 @@ export class BundlesViewModel implements Resolve<boolean> {
     name: 'Wiskunde'
   });
 
-  bundles$: Observable<BundleInterface[]> = new BehaviorSubject<
+  private mockbundles$: Observable<BundleInterface[]> = new BehaviorSubject<
     BundleInterface[]
   >([
     this.createBundle('bundle', 19),
@@ -101,21 +122,21 @@ export class BundlesViewModel implements Resolve<boolean> {
     }
   });
 
-  resolve(): Observable<boolean> {
-    return new BehaviorSubject<boolean>(true).pipe(take(1));
-  }
+  //actual data
+  bundles$: Observable<BundleInterface[]> = combineLatest(
+    this.selectedLearningArea$,
+    this.mockbundles$
+  ).pipe(
+    map(
+      ([learningArea, bundles]: [LearningAreaInterface, BundleInterface[]]) => {
+        return bundles.filter(bundle => {
+          return bundle.learningAreaId === learningArea.id;
+        });
+      }
+    )
+  );
 
-  getBundleItemCount(bundle: BundleInterface): number {
-    //todo should be something like this
-    // bundle.eduContents.length + bundle.userContents.length according to Thomas
-    return 0;
-  }
-
-  changeListFormat(listFormat: ListFormat): void {
-    this.listFormat$.next(listFormat);
-  }
-
-  //todo remove when we have actual data
+  // mock methods
   createBundle(name: string, learningAreaId: number): BundleInterface {
     const startDate: Date = new Date();
     const endDate: Date = new Date();
@@ -153,5 +174,36 @@ export class BundlesViewModel implements Resolve<boolean> {
         }
       ]
     };
+  }
+
+  //actual methods
+  resolve(): Observable<boolean> {
+    return new BehaviorSubject<boolean>(true).pipe(take(1));
+  }
+
+  getBundleItemCount(bundle: BundleInterface): number {
+    //todo should be something like this
+    // bundle.eduContents.length + bundle.userContents.length according to Thomas
+    return 0;
+  }
+
+  changeListFormat(listFormat: ListFormat): void {
+    this.listFormat$.next(listFormat);
+  }
+
+  getDisplayedBundles(
+    bundles$: Observable<BundleInterface[]>,
+    filterInput$: BehaviorSubject<string>
+  ): Observable<BundleInterface[]> {
+    return combineLatest(bundles$, filterInput$).pipe(
+      map(([bundles, filterInput]: [BundleInterface[], string]) => {
+        if (!filterInput || filterInput === '') {
+          return bundles;
+        }
+        return bundles.filter(bundle =>
+          bundle.name.toLowerCase().includes(filterInput.toLowerCase())
+        );
+      })
+    );
   }
 }

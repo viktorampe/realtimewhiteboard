@@ -5,8 +5,7 @@ import {
   LearningAreaInterface
 } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { BundlesViewModel } from '../bundles.viewmodel';
 
 @Component({
@@ -24,26 +23,16 @@ export class BundlesComponent implements OnInit {
   listFormat$: Observable<ListFormat> = this.bundlesViewModel.listFormat$;
   filterInput$ = new BehaviorSubject<string>('');
 
-  bundles$: Observable<BundleInterface[]> = combineLatest(
-    this.learningArea$,
-    this.bundlesViewModel.bundles$
-  ).pipe(
-    map(
-      ([learningArea, bundles]: [LearningAreaInterface, BundleInterface[]]) => {
-        return bundles.filter(bundle => {
-          return bundle.learningAreaId === learningArea.id;
-        });
-      }
-    )
-  );
-
-  displayedBundles$: Observable<BundleInterface[]> = this.getDisplayedBundles(
-    this.bundles$,
+  displayedBundles$: Observable<
+    BundleInterface[]
+  > = this.bundlesViewModel.getDisplayedBundles(
+    this.bundlesViewModel.bundles$,
     this.filterInput$
   );
 
   books$: Observable<EduContentBookInterface[]> = this.bundlesViewModel.books$;
 
+  //
   constructor(private bundlesViewModel: BundlesViewModel) {}
 
   ngOnInit(): void {
@@ -60,21 +49,5 @@ export class BundlesComponent implements OnInit {
 
   clickChangeListFormat(format: ListFormat): void {
     this.bundlesViewModel.changeListFormat(format);
-  }
-
-  getDisplayedBundles(
-    bundles$: Observable<BundleInterface[]>,
-    filterInput$: BehaviorSubject<string>
-  ): Observable<BundleInterface[]> {
-    return combineLatest(bundles$, filterInput$).pipe(
-      map(([bundles, filterInput]: [BundleInterface[], string]) => {
-        if (!filterInput || filterInput === '') {
-          return bundles;
-        }
-        return bundles.filter(bundle =>
-          bundle.name.toLowerCase().includes(filterInput.toLowerCase())
-        );
-      })
-    );
   }
 }

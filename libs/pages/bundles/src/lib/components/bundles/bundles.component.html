@@ -22,17 +22,18 @@
        (click)="resetFilterInput(); filterInput.value = ''">{{(bundles$|async)?.length}}</u>
     weergegeven
   </div>
-  <div class="pages-bundles__container__learning-areas">
+  <div class="pages-bundles__container__bundles">
     <campus-list-view [listFormat]="listFormat$|async"
                       [placeHolderText]="'De toegepaste filter bevat geen resultaten'">
-      <!-- click event (or routerlink) needs to be added to the folder items-->
-      <campus-folder *ngFor="let bundle of displayedBundles$|async"
+
+      <campus-folder [routerLink]="['']"
+                     *ngFor="let bundle of displayedBundles$|async"
                      campusListItem
                      [listFormat]="listFormat$|async"
                      [itemCount]="bundlesViewModel.getBundleItemCount(bundle)"
                      [title]="bundle.name"
                      [backgroundColor]="(learningArea$|async).color"
-                     [icon]="">
+                     [icon]="(learningArea$|async).icon.name">
         <campus-folder-details>
           {{ bundlesViewModel.getBundleItemCount(bundle) + " item(s)" }}
         </campus-folder-details>
@@ -49,16 +50,16 @@
     </div>
     <div class="pages-bundles__container__books">
       <campus-list-view [listFormat]="listFormat$|async">
-        <campus-content-thumbnail *ngFor="let book of books$|async"
+        <campus-content-thumbnail [routerLink]="['']"
+                                  *ngFor="let book of books$|async"
                                   campusListItem
                                   [listFormat]="listFormat$|async"
                                   [title]="book.title"
                                   [contentTypeClass]="icon-boek"
-                                  [imagePath]=""
-                                  [fileExtensionClass]="">
+                                  [imagePath]="book.method.logoUrl"
+                                  [fileExtensionClass]="book.type">
         </campus-content-thumbnail>
       </campus-list-view>
     </div>
   </div>
-  <!--icon {{::content.publishedEduContentMetadata.learningArea.icon}}-->
 </div>

@@ -7,30 +7,49 @@ import {
   LearningAreaInterface
 } from '@campus/dal';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { BundlesViewModel } from '../bundles.viewmodel';
 import { BundlesComponent } from './bundles.component';
 
 let bundlesViewModel: MockViewModel;
 
-class MockViewModel {
-  constructor() {}
-
+class MockViewModel extends BundlesViewModel {
   books$: Observable<EduContentBookInterface[]> = new BehaviorSubject<
     EduContentBookInterface[]
   >([
     {
-      title: 'boek1'
+      title: 'boek1',
+      method: {
+        name: 'none',
+        logoUrl: 'roadToNowhere'
+      }
     },
     {
-      title: 'boek2'
+      title: 'boek2',
+      method: {
+        name: 'none',
+        logoUrl: 'roadToNowhere'
+      }
     },
     {
-      title: 'boek3'
+      title: 'boek3',
+      method: {
+        name: 'none',
+        logoUrl: 'roadToNowhere'
+      }
     },
     {
-      title: 'boek4'
+      title: 'boek4',
+      method: {
+        name: 'none',
+        logoUrl: 'roadToNowhere'
+      }
     },
     {
-      title: 'boek5'
+      title: 'boek5',
+      method: {
+        name: 'none',
+        logoUrl: 'roadToNowhere'
+      }
     }
   ]);
 
@@ -166,9 +185,10 @@ describe('BundlesComponent', () => {
   });
 
   it('it should return 5 bundles', () => {
-    component
+    bundlesViewModel
       .getDisplayedBundles(bundlesViewModel.bundles$, component.filterInput$)
       .subscribe((bundles: BundleInterface[]) => {
+        console.log(bundles[0].eduContents[0].publishedEduContentMetadata);
         expect(bundles.length).toBe(5);
       });
   });
@@ -179,9 +199,18 @@ describe('BundlesComponent', () => {
     });
   });
 
+  it('should filter out all but 1 bundle, case insensitve', () => {
+    component.filterInput$.next('BunDlE oF Joy');
+    bundlesViewModel
+      .getDisplayedBundles(bundlesViewModel.bundles$, component.filterInput$)
+      .subscribe((bundles: BundleInterface[]) => {
+        expect(bundles.length).toEqual(1);
+      });
+  });
+
   it('should return a no bundles', () => {
     component.filterInput$.next('lol');
-    component
+    bundlesViewModel
       .getDisplayedBundles(bundlesViewModel.bundles$, component.filterInput$)
       .subscribe((bundles: BundleInterface[]) => {
         expect(bundles.length).toEqual(0);
