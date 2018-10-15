@@ -52,3 +52,18 @@ export const getById = createSelector(
   selectBundleState,
   (state: State, props: { id: number }) => state.entities[props.id]
 );
+
+export const getByLearningAreaIds = createSelector(
+  selectBundleState,
+  (state: State, props: { ids: number[] }) => {
+    const byKey = {};
+    props.ids.forEach(id => {
+      const item = state.entities[id];
+      if (!byKey[item.learningAreaId]) {
+        byKey[item.learningAreaId] = [];
+      }
+      byKey[item.learningAreaId].push(item);
+    });
+    return byKey;
+  }
+);

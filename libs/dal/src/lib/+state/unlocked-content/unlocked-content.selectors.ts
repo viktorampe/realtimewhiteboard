@@ -57,3 +57,18 @@ export const getById = createSelector(
   selectUnlockedContentState,
   (state: State, props: { id: number }) => state.entities[props.id]
 );
+
+export const getByBundleIds = createSelector(
+  selectUnlockedContentState,
+  (state: State, props: { ids: number[] }) => {
+    const byKey = {};
+    props.ids.forEach(id => {
+      const item = state.entities[id];
+      if (!byKey[item.bundleId]) {
+        byKey[item.bundleId] = [];
+      }
+      byKey[item.bundleId].push(item);
+    });
+    return byKey;
+  }
+);

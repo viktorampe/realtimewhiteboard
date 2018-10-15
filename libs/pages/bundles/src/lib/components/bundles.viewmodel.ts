@@ -2,25 +2,28 @@ import { Injectable } from '@angular/core';
 import { ActivatedRoute, Resolve } from '@angular/router';
 import {
   BundleInterface,
+  ContentInterface,
   EduContentInterface,
   EduContentMetadataInterface,
   LearningAreaInterface,
   PersonInterface,
-  State,
+  uiQuery,
   UnlockedBoekeGroupInterface,
   UnlockedBoekeStudentInterface,
-  UnlockedContentInterface,
-  UserContentInterface
+  UnlockedContentInterface
 } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
+import { BundleQueries } from 'libs/dal/src/lib/+state/bundle';
+import { LearningAreaQueries } from 'libs/dal/src/lib/+state/learning-area';
+import { fromUiActions } from 'libs/dal/src/lib/+state/ui/ui.actions';
+import { UnlockedBoekeGroupQueries } from 'libs/dal/src/lib/+state/unlocked-boeke-group';
+import { UnlockedBoekeStudentQueries } from 'libs/dal/src/lib/+state/unlocked-boeke-student';
+import { UnlockedContentQueries } from 'libs/dal/src/lib/+state/unlocked-content';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { filter, map, shareReplay, switchMap, take } from 'rxjs/operators';
 
-/**
- * TODO: create interface for uniform ContentType
- */
-export type ContentType = EduContentInterface | UserContentInterface;
+export class DalState {}
 
 // TODO import real services
 // mock services
@@ -55,9 +58,8 @@ export class EduContentService {
   providedIn: 'root'
 })
 export class BundlesViewModel implements Resolve<boolean> {
-  // source streams (mocked)
-  // TODO get from store
-  listFormat$: BehaviorSubject<ListFormat>;
+  // source streams
+  listFormat$: Observable<ListFormat>;
   user$: Observable<PersonInterface>;
   learningAreas$: Observable<LearningAreaInterface[]>;
   bundles$: Observable<BundleInterface[]>;
@@ -66,8 +68,7 @@ export class BundlesViewModel implements Resolve<boolean> {
   unlockedBookStudents$: Observable<UnlockedBoekeStudentInterface[]>;
   coupledPersons$: Observable<PersonInterface[]>;
 
-  // intermediate streams
-  // maps
+  // intermediate streams (maps)
   bundlesByLearningArea$: Observable<{
     [key: number]: BundleInterface[];
   }>;
@@ -85,7 +86,7 @@ export class BundlesViewModel implements Resolve<boolean> {
   bundleContentsCount$: Observable<{
     [key: number]: number;
   }>;
-  bundleContents$: Observable<ContentType[]>;
+  bundleContents$: Observable<ContentInterface[]>;
   // > books
   private sharedBooks$: Observable<EduContentMetadataInterface[]>;
   sharedBooksByLearningArea$: Observable<{
@@ -110,38 +111,46 @@ export class BundlesViewModel implements Resolve<boolean> {
 
   constructor(
     private route: ActivatedRoute,
-    private bundleStore: Store<State>,
-    // TODO replace mocked services with @Inject(token) ...
+    private store: Store<DalState>,
+    // TODO replace services with store selectors
     private learningAreaService: LearningAreaService,
-    private bundleService: BundleService,
-    private unlockedContentService: UnlockedContentService,
     private eduContentService: EduContentService
   ) {}
 
   resolve(): Observable<boolean> {
     // mock data from store
-    this.listFormat$ = new BehaviorSubject<ListFormat>(ListFormat.GRID);
+    // TODO get user from store
     this.user$ = new BehaviorSubject({
       id: 1,
       email: ''
     });
-    this.learningAreas$ = this.learningAreaService.getAll();
-    this.bundles$ = this.bundleService.getAll();
-    this.unlockedContents$ = this.unlockedContentService.getAll();
-    this.unlockedBookGroups$ = new BehaviorSubject([]);
-    this.unlockedBookStudents$ = new BehaviorSubject([]);
-    this.coupledPersons$ = new BehaviorSubject([]);
+    this.coupledPersons$ = new BehaviorSubject([]); // TODO add TeacherStudent state
+
+    this.listFormat$ = this.store.pipe(
+      select(uiQuery.getListFormat),
+      map(listFormat => <ListFormat>listFormat)
+    );
+    this.learningAreas$ = this.store.pipe(select(LearningAreaQueries.getAll));
+    this.bundles$ = this.store.pipe(select(BundleQueries.getAll));
+    this.unlockedContents$ = this.store.pipe(
+      select(UnlockedContentQueries.getAll)
+    );
+    this.unlockedBookGroups$ = this.store.pipe(
+      select(UnlockedBoekeGroupQueries.getAll)
+    );
+    this.unlockedBookStudents$ = this.store.pipe(
+      select(UnlockedBoekeStudentQueries.getAll)
+    );
 
     // intermediate streams
-    // maps (TODO get through selector?)
-    this.bundlesByLearningArea$ = this.groupStreamByKey(
-      this.bundles$,
-      'learningAreaId'
+    this.bundlesByLearningArea$ = this.store.pipe(
+      select(BundleQueries.getByLearningAreaIds)
     );
-    this.unlockedContentByBundle$ = this.groupStreamByKey(
-      this.unlockedContents$,
-      'bundleId'
+    this.unlockedContentByBundle$ = this.store.pipe(
+      select(UnlockedContentQueries.getByBundleIds)
     );
+
+    // ** FROM HERE ** \\
 
     // presentation streams
     // shared
@@ -196,26 +205,28 @@ export class BundlesViewModel implements Resolve<boolean> {
   }
 
   changeListFormat(listFormat: ListFormat): void {
-    this.listFormat$.next(listFormat);
+    this.store.dispatch(new fromUiActions.SetListFormatUi({ listFormat }));
   }
 
   /**
    * Return contents for bundle
    *
-   * @returns {Observable<ContentType[]>}
+   * @param {*} bundleId$
+   * @param {*} unlockedContentByBundle$
+   * @returns {Observable<ContentInterface[]>}
    * @memberof BundlesViewModel
    */
   getBundleContents(
     bundleId$,
     unlockedContentByBundle$
-  ): Observable<ContentType[]> {
+  ): Observable<ContentInterface[]> {
     return combineLatest(bundleId$, unlockedContentByBundle$).pipe(
       map(([bundleId, unlockedContentsMap]) => unlockedContentsMap[bundleId]),
       filter(unlockedContents => !!unlockedContents), // check if bundle exists
       map(unlockedContents =>
         unlockedContents.sort((a, b) => a.index - b.index).map(
-          (unlockedContent): ContentType => {
-            // TODO convert eduContent and userContent to uniform ContentType
+          (unlockedContent): ContentInterface => {
+            // TODO convert eduContent and userContent to uniform ContentInterface
             if (unlockedContent.eduContentId) {
               return unlockedContent.eduContent;
             }
