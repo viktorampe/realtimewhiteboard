@@ -6,6 +6,7 @@ import {
   EduContentMetadataInterface,
   LearningAreaInterface,
   PersonInterface,
+  State,
   UnlockedBoekeGroupInterface,
   UnlockedBoekeStudentInterface,
   UnlockedContentInterface,
@@ -13,7 +14,6 @@ import {
 } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
 import { Store } from '@ngrx/store';
-import { BundlesState } from 'libs/dal/src/lib/+state/bundles/bundles.reducer';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { filter, map, shareReplay, switchMap, take } from 'rxjs/operators';
 
@@ -110,7 +110,7 @@ export class BundlesViewModel implements Resolve<boolean> {
 
   constructor(
     private route: ActivatedRoute,
-    private store: Store<BundlesState>,
+    private bundleStore: Store<State>,
     // TODO replace mocked services with @Inject(token) ...
     private learningAreaService: LearningAreaService,
     private bundleService: BundleService,
@@ -155,7 +155,10 @@ export class BundlesViewModel implements Resolve<boolean> {
       this.unlockedContentByBundle$
     );
     this.bundleContents$ = this.getBundleContents(
-      this.route.params,
+      this.route.params.pipe(
+        map(params => params.bundle),
+        filter(bundleId => !!bundleId)
+      ),
       this.unlockedContentByBundle$
     );
     // > books
@@ -203,17 +206,11 @@ export class BundlesViewModel implements Resolve<boolean> {
    * @memberof BundlesViewModel
    */
   getBundleContents(
-    routeParams,
+    bundleId$,
     unlockedContentByBundle$
   ): Observable<ContentType[]> {
-    return combineLatest(routeParams, unlockedContentByBundle$).pipe(
-      map(([routeParams, unlockedContentsMap]) => {
-        const bundleId = routeParams['bundle'];
-        if (!bundleId) {
-          return null;
-        }
-        return unlockedContentsMap[bundleId];
-      }),
+    return combineLatest(bundleId$, unlockedContentByBundle$).pipe(
+      map(([bundleId, unlockedContentsMap]) => unlockedContentsMap[bundleId]),
       filter(unlockedContents => !!unlockedContents), // check if bundle exists
       map(unlockedContents =>
         unlockedContents.sort((a, b) => a.index - b.index).map(

@@ -1,4 +1,5 @@
 import { ActivatedRoute } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 import {
   BundleService,
@@ -13,6 +14,7 @@ let bundlesViewModel: BundlesViewModel;
 beforeEach(() => {
   bundlesViewModel = new BundlesViewModel(
     <ActivatedRoute>{},
+    <Store<any>>{},
     <LearningAreaService>{
       getAll: () => new Subject(),
       getByIds: () => new Subject()

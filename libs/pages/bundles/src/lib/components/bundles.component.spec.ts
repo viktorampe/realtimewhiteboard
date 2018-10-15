@@ -1,8 +1,8 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute } from '@angular/router';
 import { UiModule } from '@campus/ui';
+import { Store } from '@ngrx/store';
 import { BundlesComponent } from './bundles.component';
 import {
   BundleService,
@@ -11,12 +11,13 @@ import {
   UnlockedContentService
 } from './bundles.viewmodel';
 
+// TODO fix this test
 describe('BundlesComponent', () => {
   let component: BundlesComponent;
   let fixture: ComponentFixture<BundlesComponent>;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [UiModule, NoopAnimationsModule],
+      imports: [UiModule],
       declarations: [BundlesComponent],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
@@ -27,6 +28,10 @@ describe('BundlesComponent', () => {
         {
           provide: ActivatedRoute,
           useValue: []
+        },
+        {
+          provide: Store,
+          useValue: {}
         }
       ]
     }).compileComponents();
