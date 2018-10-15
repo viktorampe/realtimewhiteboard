@@ -1,5 +1,11 @@
 import * as UnlockedContentActions from './unlocked-content.actions';
-import * as UnlockedContent from './unlocked-content.reducer';
+import { UnlockedContentsEffects } from './unlocked-content.effects';
+import * as UnlockedContentReducer from './unlocked-content.reducer';
 import * as UnlockedContentQueries from './unlocked-content.selectors';
 
-export { UnlockedContentActions, UnlockedContent, UnlockedContentQueries };
+export {
+  UnlockedContentActions,
+  UnlockedContentReducer,
+  UnlockedContentQueries,
+  UnlockedContentsEffects
+};

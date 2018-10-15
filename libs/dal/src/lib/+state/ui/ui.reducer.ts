@@ -16,7 +16,7 @@ export const initialState: UiState = {
   loaded: false
 };
 
-export function uiReducer(
+export function reducer(
   state: UiState = initialState,
   action: UiAction
 ): UiState {

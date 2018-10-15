@@ -12,25 +12,27 @@ import {
 } from '@diekeure/polpo-api-angular-sdk';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
-import { Bundle } from './+state/bundle';
+import { BundleReducer } from './+state/bundle';
 import { BundlesEffects } from './+state/bundle/bundle.effects';
 import { EduContentReducer } from './+state/edu-content';
 import { EduContentsEffects } from './+state/edu-content/edu-content.effects';
-import { LearningArea } from './+state/learning-area';
+import { LearningAreaReducer } from './+state/learning-area';
 import { LearningAreasEffects } from './+state/learning-area/learning-area.effects';
+import { uiReducer } from './+state/ui/';
 import { UiEffects } from './+state/ui/ui.effects';
 import {
-  initialState as uiInitialState,
-  uiReducer
-} from './+state/ui/ui.reducer';
-import { UnlockedBoekeGroup } from './+state/unlocked-boeke-group';
-import { UnlockedBoekeGroupsEffects } from './+state/unlocked-boeke-group/unlocked-boeke-group.effects';
-import { UnlockedBoekeStudent } from './+state/unlocked-boeke-student';
-import { UnlockedBoekeStudentsEffects } from './+state/unlocked-boeke-student/unlocked-boeke-student.effects';
-import { UnlockedContent } from './+state/unlocked-content';
-import { UnlockedContentsEffects } from './+state/unlocked-content/unlocked-content.effects';
-import { UserContent } from './+state/user-content';
-import { UserContentsEffects } from './+state/user-content/user-content.effects';
+  UnlockedBoekeGroupReducer,
+  UnlockedBoekeGroupsEffects
+} from './+state/unlocked-boeke-group';
+import {
+  UnlockedBoekeStudentReducer,
+  UnlockedBoekeStudentsEffects
+} from './+state/unlocked-boeke-student';
+import {
+  UnlockedContentReducer,
+  UnlockedContentsEffects
+} from './+state/unlocked-content';
+import { UserContentReducer, UserContentsEffects } from './+state/user-content';
 import {
   UnlockedBoekeGroupService,
   UnlockedBoekeStudentService,
@@ -61,32 +63,39 @@ interface DalOptions {
     CommonModule,
     SDKBrowserModule.forRoot(),
     HttpClientModule,
-    StoreModule.forFeature('ui', uiReducer, {
-      initialState: uiInitialState
+    StoreModule.forFeature('ui', uiReducer.reducer, {
+      initialState: uiReducer.initialState
     }),
-    StoreModule.forFeature('bundles', Bundle.reducer, {
-      initialState: Bundle.initialState
-    }),
-    StoreModule.forFeature('learingAreas', LearningArea.reducer, {
-      initialState: LearningArea.initialState
+    StoreModule.forFeature('bundles', BundleReducer.reducer, {
+      initialState: BundleReducer.initialState
     }),
     StoreModule.forFeature('eduContents', EduContentReducer.reducer, {
       initialState: EduContentReducer.initialState
     }),
-    StoreModule.forFeature('unlockedContents', UnlockedContent.reducer, {
-      initialState: UnlockedContent.initialState
+    StoreModule.forFeature('learingAreas', LearningAreaReducer.reducer, {
+      initialState: LearningAreaReducer.initialState
     }),
-    StoreModule.forFeature('userContents', UserContent.reducer, {
-      initialState: UserContent.initialState
+    StoreModule.forFeature('eduContents', EduContentReducer.reducer, {
+      initialState: EduContentReducer.initialState
     }),
-    StoreModule.forFeature('unlockedBoekeGroups', UnlockedBoekeGroup.reducer, {
-      initialState: UnlockedBoekeGroup.initialState
+    StoreModule.forFeature('unlockedContents', UnlockedContentReducer.reducer, {
+      initialState: UnlockedContentReducer.initialState
+    }),
+    StoreModule.forFeature('userContents', UserContentReducer.reducer, {
+      initialState: UserContentReducer.initialState
     }),
     StoreModule.forFeature(
-      'unlockedBoekeStudents',
-      UnlockedBoekeStudent.reducer,
+      'unlockedBoekeGroups',
+      UnlockedBoekeGroupReducer.reducer,
       {
-        initialState: UnlockedBoekeStudent.initialState
+        initialState: UnlockedBoekeGroupReducer.initialState
+      }
+    ),
+    StoreModule.forFeature(
+      'unlockedBoekeStudents',
+      UnlockedBoekeStudentReducer.reducer,
+      {
+        initialState: UnlockedBoekeStudentReducer.initialState
       }
     ),
     EffectsModule.forFeature([

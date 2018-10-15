@@ -1,9 +1,11 @@
 import * as UnlockedBoekeGroupActions from './unlocked-boeke-group.actions';
-import * as UnlockedBoekeGroup from './unlocked-boeke-group.reducer';
+import { UnlockedBoekeGroupsEffects } from './unlocked-boeke-group.effects';
+import * as UnlockedBoekeGroupReducer from './unlocked-boeke-group.reducer';
 import * as UnlockedBoekeGroupQueries from './unlocked-boeke-group.selectors';
 
 export {
   UnlockedBoekeGroupActions,
-  UnlockedBoekeGroup,
-  UnlockedBoekeGroupQueries
+  UnlockedBoekeGroupReducer,
+  UnlockedBoekeGroupQueries,
+  UnlockedBoekeGroupsEffects
 };
