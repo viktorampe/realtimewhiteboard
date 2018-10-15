@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { Resolve } from '@angular/router';
 import {
   LearningAreaInterface,
+  StudentContentStatusActions,
   StudentContentStatusInterface,
+  StudentContentStatusReducer,
   UiActions
 } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
@@ -65,7 +67,7 @@ export class BundlesViewModel implements Resolve<boolean> {
 
   constructor(
     private uiStore: Store<UiState>,
-    private studentContentStatusStore: Store<StudentContentStatusState>
+    private studentContentStatusStore: Store<StudentContentStatusReducer.State>
   ) {}
 
   resolve(): Observable<boolean> {

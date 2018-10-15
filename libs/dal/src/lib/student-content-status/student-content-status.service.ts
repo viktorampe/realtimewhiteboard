@@ -33,8 +33,8 @@ export class StudentContentStatusService
   ): Observable<boolean> {
     return this.studentContentStatusApi
       .updateAttributes<StudentContentStatusInterface>(
-        studentContentStatus.id,
-        studentContentStatus
+        { id: studentContentStatus.id },
+        { contentStatusId: studentContentStatus.contentStatusId }
       )
       .pipe(map(returnValue => returnValue.id === studentContentStatus.id));
   }

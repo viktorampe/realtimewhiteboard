@@ -34,11 +34,11 @@ export function reducer(
     }
 
     case StudentContentStatusesActionTypes.AddStudentContentStatuses: {
-      return adapter.addMany(action.payload.StudentContentStatuses, state);
+      return adapter.addMany(action.payload.studentContentStatuses, state);
     }
 
     case StudentContentStatusesActionTypes.UpsertStudentContentStatuses: {
-      return adapter.upsertMany(action.payload.StudentContentStatuses, state);
+      return adapter.upsertMany(action.payload.studentContentStatuses, state);
     }
 
     case StudentContentStatusesActionTypes.UpdateStudentContentStatus: {
@@ -46,7 +46,7 @@ export function reducer(
     }
 
     case StudentContentStatusesActionTypes.UpdateStudentContentStatuses: {
-      return adapter.updateMany(action.payload.StudentContentStatuses, state);
+      return adapter.updateMany(action.payload.studentContentStatuses, state);
     }
 
     case StudentContentStatusesActionTypes.DeleteStudentContentStatus: {
@@ -58,7 +58,7 @@ export function reducer(
     }
 
     case StudentContentStatusesActionTypes.StudentContentStatusesLoaded: {
-      return adapter.addAll(action.payload.StudentContentStatuses, {
+      return adapter.addAll(action.payload.studentContentStatuses, {
         ...state,
         loaded: true
       });

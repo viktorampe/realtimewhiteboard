@@ -11,6 +11,7 @@ export enum StudentContentStatusesActionTypes {
   AddStudentContentStatuses = '[StudentContentStatuses] Add StudentContentStatuses',
   UpsertStudentContentStatuses = '[StudentContentStatuses] Upsert StudentContentStatuses',
   UpdateStudentContentStatus = '[StudentContentStatuses] Update StudentContentStatus',
+
   UpdateStudentContentStatuses = '[StudentContentStatuses] Update StudentContentStatuses',
   DeleteStudentContentStatus = '[StudentContentStatuses] Delete StudentContentStatus',
   DeleteStudentContentStatuses = '[StudentContentStatuses] Delete StudentContentStatuses',
@@ -28,7 +29,7 @@ export class StudentContentStatusesLoaded implements Action {
     StudentContentStatusesActionTypes.StudentContentStatusesLoaded;
 
   constructor(
-    public payload: { StudentContentStatuses: StudentContentStatusInterface[] }
+    public payload: { studentContentStatuses: StudentContentStatusInterface[] }
   ) {}
 }
 
@@ -58,7 +59,7 @@ export class AddStudentContentStatuses implements Action {
   readonly type = StudentContentStatusesActionTypes.AddStudentContentStatuses;
 
   constructor(
-    public payload: { StudentContentStatuses: StudentContentStatusInterface[] }
+    public payload: { studentContentStatuses: StudentContentStatusInterface[] }
   ) {}
 }
 
@@ -67,7 +68,7 @@ export class UpsertStudentContentStatuses implements Action {
     StudentContentStatusesActionTypes.UpsertStudentContentStatuses;
 
   constructor(
-    public payload: { StudentContentStatuses: StudentContentStatusInterface[] }
+    public payload: { studentContentStatuses: StudentContentStatusInterface[] }
   ) {}
 }
 
@@ -87,7 +88,7 @@ export class UpdateStudentContentStatuses implements Action {
 
   constructor(
     public payload: {
-      StudentContentStatuses: Update<StudentContentStatusInterface>[];
+      studentContentStatuses: Update<StudentContentStatusInterface>[];
     }
   ) {}
 }

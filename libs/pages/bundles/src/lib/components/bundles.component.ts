@@ -16,7 +16,7 @@ import { BundlesViewModel } from './bundles.viewmodel';
 export class BundlesComponent implements OnInit {
   toolbarFixed: boolean;
 
-  listFormat$: Observable<ListFormat> = this.bundlesViewModel.listFormat$;
+  // listFormat$: Observable<ListFormat> = this.bundlesViewModel.listFormat$;
   filterInput$ = new BehaviorSubject<string>('');
 
   learningAreas$: Observable<LearningAreaInterface[]> = this.bundlesViewModel
