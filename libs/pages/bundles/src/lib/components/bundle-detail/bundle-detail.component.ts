@@ -6,18 +6,16 @@ import {
   OnInit,
   ViewChild
 } from '@angular/core';
-import { ContentInterface } from '@campus/dal';
+import { BundleInterface, ContentInterface } from '@campus/dal';
 import {
   FilterTextInputComponent,
   ListFormat,
   ListViewComponent,
-  ListViewItemDirective,
   SideSheetComponent
 } from '@campus/ui';
-import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
+import { combineLatest, Observable, Subscription } from 'rxjs';
 import { filter, map, startWith } from 'rxjs/operators';
 import { BundleDetailViewModel } from './bundle-detail.viewmodel';
-import { DataConverterService } from './services/data-converter.service';
 
 @Component({
   selector: 'campus-bundle-detail',
@@ -28,28 +26,14 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   subscriptions = new Subscription();
   bundle$ = this.vm.selectedBundle$;
   contents$ = this.vm.bundleContents$;
-  filteredContents$: Observable<ContentInterface[]>;
-  selectedItems$ = new BehaviorSubject<ListViewItemDirective[]>([]);
   listFormat = ListFormat; //enum beschikbaar maken in template
   currentListFormat$ = this.vm.listFormat$;
 
-  contentForInfoPanelEmpty$ = this.bundle$.pipe(
-    map(bundle => this.dataConverter.transformToBundleForInfoPanel(bundle))
-  );
+  filteredContents$: Observable<ContentInterface[]>;
 
-  contentForInfoPanelSingle$ = this.selectedItems$.pipe(
-    filter(items => items.length === 1),
-    map(items => items[0].dataObject as ContentInterface),
-    map(data => this.dataConverter.transformToContentForInfoPanel(data))
-  );
-
-  contentForInfoPanelMultiple$ = this.selectedItems$.pipe(
-    filter(items => items.length > 1),
-    map(items => items.map(i => i.dataObject as ContentInterface)),
-    map(dataArray =>
-      this.dataConverter.transformToContentsForInfoPanel(dataArray)
-    )
-  );
+  contentForInfoPanelEmpty$: Observable<BundleInterface>;
+  contentForInfoPanelSingle$: Observable<ContentInterface>;
+  contentForInfoPanelMultiple$: Observable<ContentInterface[]>;
 
   @ViewChild(ListViewComponent) list: ListViewComponent;
   @ViewChild(SideSheetComponent) sideSheet: SideSheetComponent;
@@ -57,14 +41,15 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
     public vm: BundleDetailViewModel,
-    private cd: ChangeDetectorRef,
-    public dataConverter: DataConverterService
+    private cd: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
+    this.contentForInfoPanelEmpty$ = this.bundle$;
+
     this.filteredContents$ = combineLatest(
       this.contents$,
-      this.filter.text.pipe(startWith(''))
+      this.filter.filterTextChange.pipe(startWith(''))
     ).pipe(
       map(([contents, filterText]) =>
         contents.filter(c =>
@@ -75,12 +60,21 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit() {
+    this.contentForInfoPanelSingle$ = this.list.selectedItems$.pipe(
+      filter(items => items.length === 1),
+      map(items => items[0].dataObject as ContentInterface)
+    );
+
+    this.contentForInfoPanelMultiple$ = this.list.selectedItems$.pipe(
+      filter(items => items.length > 1),
+      map(items => items.map(i => i.dataObject as ContentInterface))
+    );
+
     this.subscriptions.add(
       this.list.selectedItems$.subscribe(selectedItems => {
         if (selectedItems.length > 0) {
           this.sideSheet.toggle(true);
         }
-        this.selectedItems$.next(selectedItems);
       })
     );
     this.subscriptions.add(

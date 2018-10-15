@@ -1,51 +1,38 @@
 import { Injectable } from '@angular/core';
 import {
   BundleInterface,
-  EduContentInterface,
-  UserContentInterface
+  ContentInterface,
+  EduContent,
+  UserContent
 } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { map, take } from 'rxjs/operators';
-import { DataConverterService } from './services/data-converter.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BundleDetailViewModel {
-  selectedBundle$ = this.getMockBundle();
-
-  bundleContents$ = combineLatest(
-    // mockdata - Educontents
-    this.getMockEducontents().pipe(
-      map(educontentsArray =>
-        educontentsArray.map(e =>
-          this.dataConverter.mapEduContentToContentInterface(e)
-        )
-      )
-    ),
-    // mockdata - Usercontents
-    this.getMockUsercontents().pipe(
-      map(usercontentsArray =>
-        usercontentsArray.map(u =>
-          this.dataConverter.mapUserContentToContentInterface(u)
-        )
-      )
-    )
-  ).pipe(
-    map(arrays => Array.prototype.concat.apply([], arrays)) //flatten arrays
-  );
-
-  listFormat$ = new BehaviorSubject<ListFormat>(ListFormat.GRID);
+  selectedBundle$: Observable<BundleInterface>;
+  bundleContents$: Observable<ContentInterface[]>;
+  listFormat$: BehaviorSubject<ListFormat>;
 
   resolve(): Observable<boolean> {
+    this.selectedBundle$ = this.getMockBundle();
+
+    this.bundleContents$ = <Observable<ContentInterface[]>>(
+      combineLatest(this.getMockEducontents(), this.getMockUsercontents()).pipe(
+        map(arrays => Array.prototype.concat.apply([], arrays))
+      )
+    );
+
+    this.listFormat$ = new BehaviorSubject<ListFormat>(ListFormat.GRID);
+
     return new BehaviorSubject<boolean>(true).pipe(take(1));
   }
 
-  constructor(private dataConverter: DataConverterService) {}
-
   private getMockBundle(): Observable<BundleInterface> {
-    const bundle = {
+    const bundle = <BundleInterface>{
       icon: 'icon-tasks',
       name: 'Algemeen',
       description: 'Dit is een subtitel',
@@ -66,8 +53,8 @@ export class BundleDetailViewModel {
     return of(bundle);
   }
 
-  private getMockEducontents(): Observable<EduContentInterface[]> {
-    const eduContent = {
+  private getMockEducontents(): Observable<ContentInterface[]> {
+    const mock = <EduContent>{
       type: 'boek-e',
       id: 1,
       publishedEduContentMetadata: {
@@ -89,11 +76,13 @@ export class BundleDetailViewModel {
         }
       }
     };
+    const eduContent = Object.assign(new EduContent(), mock);
+
     return of([eduContent, eduContent]);
   }
 
-  private getMockUsercontents(): Observable<UserContentInterface[]> {
-    const userContent = {
+  private getMockUsercontents(): Observable<ContentInterface[]> {
+    const mock = <UserContent>{
       type: 'link',
       name: 'Omschrijving thesis 0',
       description: 'Omschrijving vereisten voor thesis op google drive',
@@ -104,6 +93,8 @@ export class BundleDetailViewModel {
         email: 'teacher2@mailinator.com'
       }
     };
+
+    const userContent = Object.assign(new UserContent(), mock);
     return of([userContent, userContent]);
   }
 }

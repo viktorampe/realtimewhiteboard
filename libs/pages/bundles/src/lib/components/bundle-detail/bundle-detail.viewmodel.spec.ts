@@ -1,11 +1,9 @@
 import { BundleDetailViewModel } from './bundle-detail.viewmodel';
-import { DataConverterService } from './services/data-converter.service';
 
 let bundleDetailViewModel: BundleDetailViewModel;
-const dataconverterService = new DataConverterService();
 
 beforeEach(() => {
-  bundleDetailViewModel = new BundleDetailViewModel(dataconverterService);
+  bundleDetailViewModel = new BundleDetailViewModel();
 });
 
 test('it should return', () => {

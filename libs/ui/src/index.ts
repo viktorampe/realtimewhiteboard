@@ -3,7 +3,7 @@ export {
 } from './lib/confirmable-select/confirmable-select.component';
 export {
   FilterTextInputComponent
-} from './lib/filter/input/filter-text-input/filter-text-input.component';
+} from './lib/filter-text-input/filter-text-input.component';
 export {
   ListViewItemDirective
 } from './lib/list-view/directives/list-view-item.directive';

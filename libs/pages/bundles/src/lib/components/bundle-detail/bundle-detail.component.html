@@ -1,6 +1,6 @@
 <campus-side-sheet isOpenOnInit=true>
   <campus-side-sheet-header></campus-side-sheet-header>
-  <campus-side-sheet-body [ngSwitch]="(selectedItems$ | async).length">
+  <campus-side-sheet-body [ngSwitch]="(list.selectedItems$ | async).length">
     <campus-info-panel-bundle [bundle]="bundle$ | async"
                               *ngSwitchCase="0"></campus-info-panel-bundle>
     <campus-info-panel-content [content]="contentForInfoPanelSingle$ | async"
@@ -20,7 +20,7 @@
                      (click)="setListFormat(listFormat.GRID)"></campus-button>
       <campus-filter-text-input theme=light></campus-filter-text-input>
     </campus-app-bar>
-    <div class="campus-bundle-detail__page">
+    <div class="campus-page">
       <campus-page-header [iconClass]="(bundle$ | async).learningArea.icon"
                           [title]="(bundle$ | async).name"
                           [subtitle]="(bundle$ | async).description"></campus-page-header>
@@ -46,13 +46,10 @@
                                   [fileExtensionClass]="content.fileExtension"
                                   [contentTypeClass]="content.productType">
           <!-- Hier moeten de mogelijke actieknoppen met hun (Click) nog toegevoegd worden -->
-          <!-- Beslissen welke acties beschikbaar zijn wordt in de dataConverterService geregeld -->
-          <campus-button *ngIf="content.actions.includes('file')"
-                         [iconClass]="'icon-bundle'"
+          <campus-button [iconClass]="'icon-bundle'"
                          circle>
           </campus-button>
-          <campus-button *ngIf="content.actions.includes('link')"
-                         [iconClass]="'icon-tasks'"
+          <campus-button [iconClass]="'icon-tasks'"
                          circle>
           </campus-button>
         </campus-content-thumbnail>

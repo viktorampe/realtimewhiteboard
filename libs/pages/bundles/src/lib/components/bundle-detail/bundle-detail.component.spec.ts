@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Inject, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   BundleInterface,
-  EduContentInterface,
-  UserContentInterface
+  ContentInterface,
+  EduContent,
+  UserContent
 } from '@campus/dal';
 import { ListFormat, ListViewItemDirective } from '@campus/ui';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
@@ -14,43 +15,32 @@ import { map, take } from 'rxjs/operators';
 import { PagesBundlesModule } from './../../pages-bundles.module';
 import { BundleDetailComponent } from './bundle-detail.component';
 import { BundleDetailViewModel } from './bundle-detail.viewmodel';
-import { DataConverterService } from './services/data-converter.service';
 
-@Inject(DataConverterService)
 export class MockBundleDetailViewModel {
-  selectedBundle$ = this.getMockBundle();
+  selectedBundle$: Observable<BundleInterface>;
+  bundleContents$: Observable<ContentInterface[]>;
+  listFormat$: BehaviorSubject<ListFormat>;
 
-  bundleContents$ = combineLatest(
-    // mockdata - Educontents
-    this.getMockEducontents().pipe(
-      map(educontentsArray =>
-        educontentsArray.map(e =>
-          this.dataConverter.mapEduContentToContentInterface(e)
-        )
-      )
-    ),
-    // mockdata - Usercontents
-    this.getMockUsercontents().pipe(
-      map(usercontentsArray =>
-        usercontentsArray.map(u =>
-          this.dataConverter.mapUserContentToContentInterface(u)
-        )
-      )
-    )
-  ).pipe(
-    map(arrays => Array.prototype.concat.apply([], arrays)) //flatten arrays
-  );
-
-  listFormat$ = new BehaviorSubject<ListFormat>(ListFormat.GRID);
-
-  constructor(private dataConverter: DataConverterService) {}
+  constructor() {
+    this.resolve().subscribe();
+  }
 
   resolve(): Observable<boolean> {
+    this.selectedBundle$ = this.getMockBundle();
+
+    this.bundleContents$ = <Observable<ContentInterface[]>>(
+      combineLatest(this.getMockEducontents(), this.getMockUsercontents()).pipe(
+        map(arrays => Array.prototype.concat.apply([], arrays))
+      )
+    );
+
+    this.listFormat$ = new BehaviorSubject<ListFormat>(ListFormat.GRID);
+
     return new BehaviorSubject<boolean>(true).pipe(take(1));
   }
 
   private getMockBundle(): Observable<BundleInterface> {
-    const bundle = {
+    const bundle = <BundleInterface>{
       icon: 'icon-tasks',
       name: 'Algemeen',
       description: 'Dit is een subtitel',
@@ -71,8 +61,8 @@ export class MockBundleDetailViewModel {
     return of(bundle);
   }
 
-  private getMockEducontents(): Observable<EduContentInterface[]> {
-    const eduContent = {
+  private getMockEducontents(): Observable<ContentInterface[]> {
+    const mock = <EduContent>{
       type: 'boek-e',
       id: 1,
       publishedEduContentMetadata: {
@@ -94,11 +84,13 @@ export class MockBundleDetailViewModel {
         }
       }
     };
+    const eduContent = Object.assign(new EduContent(), mock);
+
     return of([eduContent, eduContent]);
   }
 
-  private getMockUsercontents(): Observable<UserContentInterface[]> {
-    const userContent = {
+  private getMockUsercontents(): Observable<ContentInterface[]> {
+    const mock = <UserContent>{
       type: 'link',
       name: 'Omschrijving thesis 0',
       description: 'Omschrijving vereisten voor thesis op google drive',
@@ -109,6 +101,8 @@ export class MockBundleDetailViewModel {
         email: 'teacher2@mailinator.com'
       }
     };
+
+    const userContent = Object.assign(new UserContent(), mock);
     return of([userContent, userContent]);
   }
 }
@@ -116,7 +110,6 @@ export class MockBundleDetailViewModel {
 @NgModule({
   imports: [CommonModule, PagesBundlesModule],
   providers: [
-    DataConverterService,
     { provide: BundleDetailViewModel, useClass: MockBundleDetailViewModel }
   ]
 })
@@ -174,18 +167,19 @@ describe('BundleDetailComponent', () => {
   it('should be able to filter the available items', async(() => {
     const expectedAmount = 2;
 
-    component.filter.text.next('0');
+    component.filter.filterTextChange.next('0');
 
     fixture.whenStable().then(() => {
       fixture.detectChanges();
-      const listDE = fixture.debugElement.query(By.css('campus-list-view'));
-      const listItems = listDE.queryAll(By.directive(ListViewItemDirective));
+      const listItems = fixture.debugElement.queryAll(
+        By.directive(ListViewItemDirective)
+      );
       expect(listItems.length).toBe(expectedAmount);
     });
   }));
 
   it('should be able to toggle the list between list and grid view', () => {
-    component.currentListFormat$.next(ListFormat.GRID);
+    component.vm.listFormat$.next(ListFormat.GRID);
     fixture.whenStable().then(() => {
       fixture.detectChanges();
       const listDE = fixture.debugElement.query(By.css('campus-list-view'));
@@ -194,7 +188,7 @@ describe('BundleDetailComponent', () => {
       );
     });
 
-    component.currentListFormat$.next(ListFormat.LINE);
+    component.vm.listFormat$.next(ListFormat.GRID);
     fixture.whenStable().then(() => {
       fixture.detectChanges();
       const listDE = fixture.debugElement.query(By.css('campus-list-view'));
@@ -220,7 +214,7 @@ describe('BundleDetailComponent', () => {
     component.list.deselectAllItems();
     fixture.detectChanges();
 
-    expect(component.selectedItems$.value.length).toBe(0);
+    expect(component.list.selectedItems$.value.length).toBe(0);
 
     const infoPanelDE = fixture.debugElement.query(
       By.css('campus-side-sheet-body')
@@ -246,7 +240,7 @@ describe('BundleDetailComponent', () => {
     listItems[0].nativeElement.click();
     fixture.detectChanges();
 
-    expect(component.selectedItems$.value.length).toBe(1);
+    expect(component.list.selectedItems$.value.length).toBe(1);
 
     const infoPanelDE = fixture.debugElement.query(
       By.css('campus-side-sheet-body')
@@ -273,7 +267,7 @@ describe('BundleDetailComponent', () => {
     component.list.selectAllItems();
     fixture.detectChanges();
 
-    expect(component.selectedItems$.value.length).toBe(4);
+    expect(component.list.selectedItems$.value.length).toBe(4);
 
     const infoPanelDE = fixture.debugElement.query(
       By.css('campus-side-sheet-body')
