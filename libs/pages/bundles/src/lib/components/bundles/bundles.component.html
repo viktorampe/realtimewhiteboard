@@ -25,9 +25,6 @@
   <div class="pages-bundles__container__bundles">
     <campus-list-view [listFormat]="listFormat$|async"
                       [placeHolderText]="'De toegepaste filter bevat geen resultaten'">
-
-      <!--todo is routerlink correct ? -->
-
       <campus-folder *ngFor="let bundle of displayedBundles$|async"
                      [routerLink]="[(learningArea$|async).id+'/'+bundle.id]"
                      campusListItem
