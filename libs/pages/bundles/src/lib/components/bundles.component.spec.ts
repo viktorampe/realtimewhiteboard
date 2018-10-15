@@ -1,5 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute } from '@angular/router';
 import { UiModule } from '@campus/ui';
 import { BundlesComponent } from './bundles.component';
@@ -15,7 +16,7 @@ describe('BundlesComponent', () => {
   let fixture: ComponentFixture<BundlesComponent>;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [UiModule],
+      imports: [UiModule, NoopAnimationsModule],
       declarations: [BundlesComponent],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [

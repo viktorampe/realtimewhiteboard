@@ -1,3 +1,4 @@
-import * as fromReducer from './ui.reducer';
+import { UiEffects } from './ui.effects';
+import * as uiReducer from './ui.reducer';
 
-export { fromReducer };
+export { uiReducer, UiEffects };

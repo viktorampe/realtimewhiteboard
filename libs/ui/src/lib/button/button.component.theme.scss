@@ -75,7 +75,6 @@
     background-color: $ui-button-background-color;
     margin-left: $ui-button-margin-left;
     margin-right: $ui-button-margin-right;
-    height: $ui-button-font-size;
     &:active {
       background-color: $ui-button--active-background-color;
       color: $ui-button--active-color;
@@ -102,12 +101,6 @@
   .ui-button--rounded-corners {
     .ui-button {
       border-radius: $ui-button--rounded-corner-border-radius;
-    }
-  }
-  // --circle
-  .ui-button--circle {
-    .ui-button {
-      height: $ui-button-font-size;
     }
   }
   // --disabled

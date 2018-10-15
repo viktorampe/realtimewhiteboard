@@ -9,7 +9,7 @@ import { hot } from '@nrwl/nx/testing';
 import { Observable } from 'rxjs';
 import { LoadUi, SaveUi, SetListFormatUi, UiLoaded } from './ui.actions';
 import { UiEffects } from './ui.effects';
-import { initialState, uiReducer } from './ui.reducer';
+import { initialState, reducer } from './ui.reducer';
 
 describe('UiEffects', () => {
   let actions: Observable<any>;
@@ -135,7 +135,7 @@ describe('UiEffects', () => {
           listFormat: ListFormat.GRID
         }
       });
-      uiReducer(initialState, action);
+      reducer(initialState, action);
       hot('-a-|', {
         a: new SaveUi()
       }).subscribe(() => {
