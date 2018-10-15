@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { LearningAreaInterface } from '@campus/dal';
+import {
+  LearningAreaInterface,
+  StudentContentStatusInterface
+} from '@campus/dal';
 import { ListFormat } from '@campus/ui';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -42,6 +45,12 @@ export class BundlesComponent implements OnInit {
 
   clickChangeListFormat(value: string): void {
     this.bundlesViewModel.changeListFormat(ListFormat[value]);
+  }
+
+  clickSaveStudentContentStatus(
+    studentContentStatus: StudentContentStatusInterface
+  ) {
+    this.bundlesViewModel.saveStudentContentStatus(studentContentStatus);
   }
 
   getDisplayedLearningAreas$(

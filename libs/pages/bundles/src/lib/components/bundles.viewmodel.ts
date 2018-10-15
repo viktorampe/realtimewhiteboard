@@ -1,7 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Resolve } from '@angular/router';
-import { LearningAreaInterface } from '@campus/dal';
+import {
+  LearningAreaInterface,
+  StudentContentStatusInterface,
+  UiActions
+} from '@campus/dal';
 import { ListFormat } from '@campus/ui';
+import { Update } from '@ngrx/entity';
+import { Store } from '@ngrx/store';
+import { UiState } from 'libs/dal/src/lib/+state/ui/ui.reducer';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 
@@ -9,7 +16,6 @@ import { take } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class BundlesViewModel implements Resolve<boolean> {
-  listFormat$ = new BehaviorSubject<ListFormat>(ListFormat.GRID);
   learningAreas$: Observable<LearningAreaInterface[]> = new BehaviorSubject<
     LearningAreaInterface[]
   >([
@@ -57,11 +63,33 @@ export class BundlesViewModel implements Resolve<boolean> {
     }
   });
 
+  constructor(
+    private uiStore: Store<UiState>,
+    private studentContentStatusStore: Store<StudentContentStatusState>
+  ) {}
+
   resolve(): Observable<boolean> {
     return new BehaviorSubject<boolean>(true).pipe(take(1));
   }
 
   changeListFormat(listFormat: ListFormat): void {
-    this.listFormat$.next(listFormat);
+    this.uiStore.dispatch(new UiActions.SetListFormatUi({ listFormat }));
+  }
+
+  saveStudentContentStatus(
+    studentContentStatus: StudentContentStatusInterface
+  ) {
+    const updatedStudentContentStatus: Update<StudentContentStatusInterface> = {
+      id: studentContentStatus.id,
+      changes: {
+        contentStatusId: studentContentStatus.contentStatusId
+      }
+    };
+
+    this.studentContentStatusStore.dispatch(
+      new StudentContentStatusActions.UpdateStudentContentStatus({
+        studentContentStatus: updatedStudentContentStatus
+      })
+    );
   }
 }
