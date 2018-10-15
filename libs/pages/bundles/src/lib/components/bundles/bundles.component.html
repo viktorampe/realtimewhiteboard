@@ -26,8 +26,10 @@
     <campus-list-view [listFormat]="listFormat$|async"
                       [placeHolderText]="'De toegepaste filter bevat geen resultaten'">
 
-      <campus-folder [routerLink]="['']"
-                     *ngFor="let bundle of displayedBundles$|async"
+      <!--todo is routerlink correct ? -->
+
+      <campus-folder *ngFor="let bundle of displayedBundles$|async"
+                     [routerLink]="[(learningArea$|async).id'/'+bundle.id]"
                      campusListItem
                      [listFormat]="listFormat$|async"
                      [itemCount]="bundlesViewModel.getBundleItemCount(bundle)"
@@ -50,8 +52,7 @@
     </div>
     <div class="pages-bundles__container__books">
       <campus-list-view [listFormat]="listFormat$|async">
-        <campus-content-thumbnail [routerLink]="['']"
-                                  *ngFor="let book of books$|async"
+        <campus-content-thumbnail *ngFor="let book of books$|async"
                                   campusListItem
                                   [listFormat]="listFormat$|async"
                                   [title]="book.title"
