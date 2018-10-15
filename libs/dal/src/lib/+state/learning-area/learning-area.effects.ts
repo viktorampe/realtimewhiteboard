@@ -29,6 +29,7 @@ export class LearningAreasEffects {
           );
       },
       onError: (action: LoadLearningAreas, error) => {
+        console.log({ error });
         return new LearningAreasLoadError(error);
       }
     }

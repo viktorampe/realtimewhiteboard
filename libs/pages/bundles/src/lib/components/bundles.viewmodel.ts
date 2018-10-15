@@ -1,9 +1,27 @@
 import { Injectable } from '@angular/core';
 import { Resolve } from '@angular/router';
-import { LearningAreaInterface } from '@campus/dal';
+import {
+  BundleActions,
+  BundleQueries,
+  DalState,
+  EduContentActions,
+  EduContentQueries,
+  LearningAreaActions,
+  LearningAreaInterface,
+  LearningAreaQueries,
+  UnlockedBoekeGroupActions,
+  UnlockedBoekeGroupQueries,
+  UnlockedBoekeStudentActions,
+  UnlockedBoekeStudentQueries,
+  UnlockedContentActions,
+  UnlockedContentQueries,
+  UserContentActions,
+  UserContentQueries
+} from '@campus/dal';
 import { ListFormat } from '@campus/ui';
+import { Action, Selector, Store } from '@ngrx/store';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { ViewModelResolver } from './viewmodel.resolver';
 
 @Injectable({
   providedIn: 'root'
@@ -58,8 +76,40 @@ export class BundlesViewModel implements Resolve<boolean> {
   });
 
   resolve(): Observable<boolean> {
-    return new BehaviorSubject<boolean>(true).pipe(take(1));
+    return this.viewModelResolver.resolve(
+      this.getLoadableActions(),
+      this.getResolvedQueries()
+    );
   }
+
+  protected getLoadableActions(): Action[] {
+    return [
+      new LearningAreaActions.LoadLearningAreas(),
+      new BundleActions.LoadBundles(),
+      new EduContentActions.LoadEduContents(),
+      new UserContentActions.LoadUserContents(),
+      new UnlockedContentActions.LoadUnlockedContents(),
+      new UnlockedBoekeGroupActions.LoadUnlockedBoekeGroups(),
+      new UnlockedBoekeStudentActions.LoadUnlockedBoekeStudents()
+    ];
+  }
+
+  protected getResolvedQueries(): Selector<object, boolean>[] {
+    return [
+      LearningAreaQueries.getLoaded,
+      BundleQueries.getLoaded,
+      EduContentQueries.getLoaded,
+      UserContentQueries.getLoaded,
+      UnlockedContentQueries.getLoaded,
+      UnlockedBoekeGroupQueries.getLoaded,
+      UnlockedBoekeStudentQueries.getLoaded
+    ];
+  }
+
+  constructor(
+    store: Store<DalState>,
+    private viewModelResolver: ViewModelResolver
+  ) {}
 
   changeListFormat(listFormat: ListFormat): void {
     this.listFormat$.next(listFormat);
