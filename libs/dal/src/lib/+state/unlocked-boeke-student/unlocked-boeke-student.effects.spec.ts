@@ -5,18 +5,18 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
-import { LEARNINGAREA_SERVICE_TOKEN } from '../../learning-area/learning-area.service.interface';
+import { UNLOCKED_BOEKE_STUDENT_SERVICE_TOKEN } from '../../boeke/unlocked-boeke-student.service.interface';
 import {
-  LearningAreasLoaded,
-  LearningAreasLoadError,
-  LoadLearningAreas
-} from './learning-area.actions';
-import { LearningAreasEffects } from './learning-area.effects';
-import { initialState, reducer } from './learning-area.reducer';
+  LoadUnlockedBoekeStudents,
+  UnlockedBoekeStudentsLoaded,
+  UnlockedBoekeStudentsLoadError
+} from './unlocked-boeke-student.actions';
+import { UnlockedBoekeStudentsEffects } from './unlocked-boeke-student.effects';
+import { initialState, reducer } from './unlocked-boeke-student.reducer';
 
-describe('LearningAreaEffects', () => {
+describe('UnlockedBoekeStudentEffects', () => {
   let actions: Observable<any>;
-  let effects: LearningAreasEffects;
+  let effects: UnlockedBoekeStudentsEffects;
   let usedState: any;
 
   const expectInAndOut = (
@@ -40,7 +40,7 @@ describe('LearningAreaEffects', () => {
   const mockServiceMethodReturnValue = (
     method: string,
     returnValue: any,
-    service: any = LEARNINGAREA_SERVICE_TOKEN
+    service: any = UNLOCKED_BOEKE_STUDENT_SERVICE_TOKEN
   ) => {
     jest.spyOn(TestBed.get(service), method).mockReturnValue(of(returnValue));
   };
@@ -48,7 +48,7 @@ describe('LearningAreaEffects', () => {
   const mockServiceMethodError = (
     method: string,
     errorMessage: string,
-    service: any = LEARNINGAREA_SERVICE_TOKEN
+    service: any = UNLOCKED_BOEKE_STUDENT_SERVICE_TOKEN
   ) => {
     jest.spyOn(TestBed.get(service), method).mockImplementation(() => {
       throw new Error(errorMessage);
@@ -60,50 +60,54 @@ describe('LearningAreaEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature('learningAreas', reducer, {
+        StoreModule.forFeature('unlockedBoekeStudents', reducer, {
           initialState: usedState
         }),
         EffectsModule.forRoot([]),
-        EffectsModule.forFeature([LearningAreasEffects])
+        EffectsModule.forFeature([UnlockedBoekeStudentsEffects])
       ],
       providers: [
         {
-          provide: LEARNINGAREA_SERVICE_TOKEN,
+          provide: UNLOCKED_BOEKE_STUDENT_SERVICE_TOKEN,
           useValue: {
-            getAll: () => {}
+            getAllForUser: () => {}
           }
         },
-        LearningAreasEffects,
+        UnlockedBoekeStudentsEffects,
         DataPersistence,
         provideMockActions(() => actions)
       ]
     });
 
-    effects = TestBed.get(LearningAreasEffects);
+    effects = TestBed.get(UnlockedBoekeStudentsEffects);
   });
 
-  describe('loadLearningArea$', () => {
-    const unforcedLoadAction = new LoadLearningAreas({});
-    const forcedLoadAction = new LoadLearningAreas({ force: true });
-    const filledLoadedAction = new LearningAreasLoaded({ learningAreas: [] });
-    const loadErrorAction = new LearningAreasLoadError(new Error('failed'));
+  describe('loadUnlockedBoekeStudent$', () => {
+    const unforcedLoadAction = new LoadUnlockedBoekeStudents({});
+    const forcedLoadAction = new LoadUnlockedBoekeStudents({ force: true });
+    const filledLoadedAction = new UnlockedBoekeStudentsLoaded({
+      unlockedBoekeStudents: []
+    });
+    const loadErrorAction = new UnlockedBoekeStudentsLoadError(
+      new Error('failed')
+    );
     describe('with initialState', () => {
       beforeAll(() => {
         usedState = initialState;
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAll', []);
+        mockServiceMethodReturnValue('getAllForUser', []);
       });
       it('should trigger an api call with the initialState if force is not true', () => {
         expectInAndOut(
-          effects.loadLearningAreas$,
+          effects.loadUnlockedBoekeStudents$,
           unforcedLoadAction,
           filledLoadedAction
         );
       });
       it('should trigger an api call with the initialState if force is true', () => {
         expectInAndOut(
-          effects.loadLearningAreas$,
+          effects.loadUnlockedBoekeStudents$,
           forcedLoadAction,
           filledLoadedAction
         );
@@ -114,14 +118,14 @@ describe('LearningAreaEffects', () => {
         usedState = { ...initialState, loaded: true };
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAll', []);
+        mockServiceMethodReturnValue('getAllForUser', []);
       });
       it('should not trigger an api call with the loaded state if force is not true', () => {
-        expectInNoOut(effects.loadLearningAreas$, unforcedLoadAction);
+        expectInNoOut(effects.loadUnlockedBoekeStudents$, unforcedLoadAction);
       });
       it('should trigger an api call with the loaded state if force is true', () => {
         expectInAndOut(
-          effects.loadLearningAreas$,
+          effects.loadUnlockedBoekeStudents$,
           forcedLoadAction,
           filledLoadedAction
         );
@@ -132,18 +136,18 @@ describe('LearningAreaEffects', () => {
         usedState = initialState;
       });
       beforeEach(() => {
-        mockServiceMethodError('getAll', 'failed');
+        mockServiceMethodError('getAllForUser', 'failed');
       });
       it('should return a error action if force is not true', () => {
         expectInAndOut(
-          effects.loadLearningAreas$,
+          effects.loadUnlockedBoekeStudents$,
           unforcedLoadAction,
           loadErrorAction
         );
       });
       it('should return a error action if force is true', () => {
         expectInAndOut(
-          effects.loadLearningAreas$,
+          effects.loadUnlockedBoekeStudents$,
           forcedLoadAction,
           loadErrorAction
         );
@@ -158,14 +162,14 @@ describe('LearningAreaEffects', () => {
         };
       });
       beforeEach(() => {
-        mockServiceMethodError('getAll', 'failed');
+        mockServiceMethodError('getAllForUser', 'failed');
       });
       it('should return nothing action if force is not true', () => {
-        expectInNoOut(effects.loadLearningAreas$, unforcedLoadAction);
+        expectInNoOut(effects.loadUnlockedBoekeStudents$, unforcedLoadAction);
       });
       it('should return a error action if force is true', () => {
         expectInAndOut(
-          effects.loadLearningAreas$,
+          effects.loadUnlockedBoekeStudents$,
           forcedLoadAction,
           loadErrorAction
         );
