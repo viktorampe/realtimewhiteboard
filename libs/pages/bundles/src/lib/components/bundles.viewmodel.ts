@@ -12,6 +12,8 @@ import {
   UserContentInterface
 } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
+import { Store } from '@ngrx/store';
+import { BundlesState } from 'libs/dal/src/lib/+state/bundles/bundles.reducer';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { filter, map, shareReplay, switchMap, take } from 'rxjs/operators';
 
@@ -55,78 +57,60 @@ export class EduContentService {
 export class BundlesViewModel implements Resolve<boolean> {
   // source streams (mocked)
   // TODO get from store
-  listFormat$ = new BehaviorSubject<ListFormat>(ListFormat.GRID);
-  user$: Observable<PersonInterface> = new BehaviorSubject({
-    id: 1,
-    email: ''
-  });
-  learningAreas$: Observable<
-    LearningAreaInterface[]
-  > = this.learningAreaService.getAll();
-  bundles$: Observable<BundleInterface[]> = this.bundleService.getAll();
-  unlockedContents$: Observable<
-    UnlockedContentInterface[]
-  > = this.unlockedContentService.getAll();
-  unlockedBookGroups$: Observable<
-    UnlockedBoekeGroupInterface[]
-  > = new BehaviorSubject([]);
-  unlockedBookStudents$: Observable<
-    UnlockedBoekeStudentInterface[]
-  > = new BehaviorSubject([]);
-  coupledPersons$: Observable<PersonInterface[]> = new BehaviorSubject([]);
+  listFormat$: BehaviorSubject<ListFormat>;
+  user$: Observable<PersonInterface>;
+  learningAreas$: Observable<LearningAreaInterface[]>;
+  bundles$: Observable<BundleInterface[]>;
+  unlockedContents$: Observable<UnlockedContentInterface[]>;
+  unlockedBookGroups$: Observable<UnlockedBoekeGroupInterface[]>;
+  unlockedBookStudents$: Observable<UnlockedBoekeStudentInterface[]>;
+  coupledPersons$: Observable<PersonInterface[]>;
 
   // intermediate streams
-  // maps (TODO get through selector?)
+  // maps
   bundlesByLearningArea$: Observable<{
     [key: number]: BundleInterface[];
-  }> = this.groupStreamByKey(this.bundles$, 'learningAreaId');
+  }>;
   unlockedContentByBundle$: Observable<{
     [key: number]: UnlockedContentInterface[];
-  }> = this.groupStreamByKey(this.unlockedContents$, 'bundleId');
+  }>;
 
   // presentation streams
   // shared
   // > bundles
-  private sharedBundles$: Observable<
-    BundleInterface[]
-  > = this.getSharedBundles();
+  private sharedBundles$: Observable<BundleInterface[]>;
   sharedBundlesByLearningArea$: Observable<{
     [key: number]: EduContentMetadataInterface[];
-  }> = this.groupStreamByKey(this.sharedBundles$, 'learningAreaId');
+  }>;
   bundleContentsCount$: Observable<{
     [key: number]: number;
-  }> = this.getBundleContentsCount();
-  bundleContents$: Observable<ContentType[]> = this.getBundleContents();
+  }>;
+  bundleContents$: Observable<ContentType[]>;
   // > books
-  private sharedBooks$: Observable<
-    EduContentMetadataInterface[]
-  > = this.getSharedBooks();
+  private sharedBooks$: Observable<EduContentMetadataInterface[]>;
   sharedBooksByLearningArea$: Observable<{
     [key: number]: EduContentMetadataInterface[];
-  }> = this.groupStreamByKey(this.sharedBooks$, 'learningAreaId');
+  }>;
   // > learningAreas
-  sharedLearningAreas$: Observable<
-    LearningAreaInterface[]
-  > = this.getLearningAreasWithContent(this.sharedBundles$, this.sharedBooks$);
+  sharedLearningAreas$: Observable<LearningAreaInterface[]>;
   sharedLearningAreasCount$: Observable<{
     [key: number]: {
       bundlesCount: number;
       booksCount: number;
     };
-  }> = this.getSharedLearningAreasCount();
+  }>;
 
   // own (TODO teacher)
   // > bundles
-  private ownBundles$: Observable<BundleInterface[]> = this.getOwnBundles();
+  private ownBundles$: Observable<BundleInterface[]>;
   // > books
-  private ownBooks$: Observable<EduContentMetadataInterface[]> = of([]); // TODO favorited books
+  private ownBooks$: Observable<EduContentMetadataInterface[]>;
   // > learningAreas
-  learningAreasWithOwnBundles$: Observable<
-    LearningAreaInterface[]
-  > = this.getLearningAreasWithContent(this.ownBundles$, this.ownBooks$);
+  learningAreasWithOwnBundles$: Observable<LearningAreaInterface[]>;
 
   constructor(
     private route: ActivatedRoute,
+    private store: Store<BundlesState>,
     // TODO replace mocked services with @Inject(token) ...
     private learningAreaService: LearningAreaService,
     private bundleService: BundleService,
@@ -135,6 +119,76 @@ export class BundlesViewModel implements Resolve<boolean> {
   ) {}
 
   resolve(): Observable<boolean> {
+    // mock data from store
+    this.listFormat$ = new BehaviorSubject<ListFormat>(ListFormat.GRID);
+    this.user$ = new BehaviorSubject({
+      id: 1,
+      email: ''
+    });
+    this.learningAreas$ = this.learningAreaService.getAll();
+    this.bundles$ = this.bundleService.getAll();
+    this.unlockedContents$ = this.unlockedContentService.getAll();
+    this.unlockedBookGroups$ = new BehaviorSubject([]);
+    this.unlockedBookStudents$ = new BehaviorSubject([]);
+    this.coupledPersons$ = new BehaviorSubject([]);
+
+    // intermediate streams
+    // maps (TODO get through selector?)
+    this.bundlesByLearningArea$ = this.groupStreamByKey(
+      this.bundles$,
+      'learningAreaId'
+    );
+    this.unlockedContentByBundle$ = this.groupStreamByKey(
+      this.unlockedContents$,
+      'bundleId'
+    );
+
+    // presentation streams
+    // shared
+    // > bundles
+    this.sharedBundles$ = this.getSharedBundles(this.bundles$);
+    this.sharedBundlesByLearningArea$ = this.groupStreamByKey(
+      this.sharedBundles$,
+      'learningAreaId'
+    );
+    this.bundleContentsCount$ = this.getBundleContentsCount(
+      this.unlockedContentByBundle$
+    );
+    this.bundleContents$ = this.getBundleContents(
+      this.route.params,
+      this.unlockedContentByBundle$
+    );
+    // > books
+    this.sharedBooks$ = this.getSharedBooks(
+      this.unlockedBookStudents$,
+      this.unlockedBookGroups$
+    );
+    this.sharedBooksByLearningArea$ = this.groupStreamByKey(
+      this.sharedBooks$,
+      'learningAreaId'
+    );
+    // > learningAreas
+    this.sharedLearningAreas$ = this.getLearningAreasWithContent(
+      this.sharedBundles$,
+      this.sharedBooks$
+    );
+    this.sharedLearningAreasCount$ = this.getSharedLearningAreasCount(
+      this.learningAreas$,
+      this.bundlesByLearningArea$,
+      this.sharedBooksByLearningArea$
+    );
+
+    // own (TODO teacher)
+    // > bundles
+    this.ownBundles$ = this.getOwnBundles(this.bundles$);
+    // > books
+    this.ownBooks$ = of([]); // TODO favorited books
+    // > learningAreas
+    this.learningAreasWithOwnBundles$ = this.getLearningAreasWithContent(
+      this.ownBundles$,
+      this.ownBooks$
+    );
+
     return new BehaviorSubject<boolean>(true).pipe(take(1));
   }
 
@@ -148,8 +202,11 @@ export class BundlesViewModel implements Resolve<boolean> {
    * @returns {Observable<ContentType[]>}
    * @memberof BundlesViewModel
    */
-  getBundleContents(): Observable<ContentType[]> {
-    return combineLatest(this.route.params, this.unlockedContentByBundle$).pipe(
+  getBundleContents(
+    routeParams,
+    unlockedContentByBundle$
+  ): Observable<ContentType[]> {
+    return combineLatest(routeParams, unlockedContentByBundle$).pipe(
       map(([routeParams, unlockedContentsMap]) => {
         const bundleId = routeParams['bundle'];
         if (!bundleId) {
@@ -180,11 +237,14 @@ export class BundlesViewModel implements Resolve<boolean> {
    * TODO get through selector?
    *
    * @private
+   * @param {Observable<BundleInterface[]>} bundles$
    * @returns {Observable<BundleInterface[]>}
    * @memberof BundlesViewModel
    */
-  private getSharedBundles(): Observable<BundleInterface[]> {
-    return combineLatest(this.user$, this.bundles$).pipe(
+  private getSharedBundles(
+    bundles$: Observable<BundleInterface[]>
+  ): Observable<BundleInterface[]> {
+    return combineLatest(this.user$, bundles$).pipe(
       map(
         ([user, bundles]): BundleInterface[] =>
           bundles.filter(bundle => bundle.teacherId !== user.id)
@@ -197,14 +257,19 @@ export class BundlesViewModel implements Resolve<boolean> {
    * Get book educontent that is shared with me
    *
    * @private
+   * @param {Observable<UnlockedBoekeStudentInterface[]>} unlockedBookStudents$
+   * @param {Observable<UnlockedBoekeGroupInterface[]>} unlockedBookGroups$
    * @returns {Observable<EduContentMetadataInterface[]>}
    * @memberof BundlesViewModel
    */
-  private getSharedBooks(): Observable<EduContentMetadataInterface[]> {
+  private getSharedBooks(
+    unlockedBookStudents$: Observable<UnlockedBoekeStudentInterface[]>,
+    unlockedBookGroups$: Observable<UnlockedBoekeGroupInterface[]>
+  ): Observable<EduContentMetadataInterface[]> {
     return combineLatest(
       this.user$,
-      this.unlockedBookGroups$,
-      this.unlockedBookStudents$
+      unlockedBookGroups$,
+      unlockedBookStudents$
     ).pipe(
       map(
         ([user, unlockedBookGroups, unlockedBookStudents]): number[] => {
@@ -232,11 +297,18 @@ export class BundlesViewModel implements Resolve<boolean> {
    * Count number of unlockedContent per bundle
    *
    * @private
-   * @returns {Observable<{[key: number]: number}>}
+   * @param {Observable<{
+   *     [key: number]: UnlockedContentInterface[];
+   *   }>} unlockedContentByBundle$
+   * @returns {Observable<{ [key: number]: number }>}
    * @memberof BundlesViewModel
    */
-  private getBundleContentsCount(): Observable<{ [key: number]: number }> {
-    return this.unlockedContentByBundle$.pipe(
+  private getBundleContentsCount(
+    unlockedContentByBundle$: Observable<{
+      [key: number]: UnlockedContentInterface[];
+    }>
+  ): Observable<{ [key: number]: number }> {
+    return unlockedContentByBundle$.pipe(
       map(unlockedContentsByBundle => {
         const countByBundle = {};
         Object.keys(unlockedContentsByBundle).forEach(key => {
@@ -253,11 +325,14 @@ export class BundlesViewModel implements Resolve<boolean> {
    * TODO get through selector?
    *
    * @private
+   * @param {Observable<BundleInterface[]>} bundles$
    * @returns {Observable<BundleInterface[]>}
    * @memberof BundlesViewModel
    */
-  private getOwnBundles(): Observable<BundleInterface[]> {
-    return combineLatest(this.user$, this.bundles$).pipe(
+  private getOwnBundles(
+    bundles$: Observable<BundleInterface[]>
+  ): Observable<BundleInterface[]> {
+    return combineLatest(this.user$, bundles$).pipe(
       map(
         ([user, bundles]): BundleInterface[] =>
           bundles.filter(bundle => bundle.teacherId === user.id)
@@ -293,16 +368,43 @@ export class BundlesViewModel implements Resolve<boolean> {
     );
   }
 
-  private getSharedLearningAreasCount(): Observable<{
+  /**
+   * Get count of bundles and books by learning area
+   *
+   * @private
+   * @param {Observable<LearningAreaInterface[]>} learningAreas$
+   * @param {Observable<{
+   *       [key: number]: BundleInterface[];
+   *     }>} bundlesByLearningArea$
+   * @param {Observable<{
+   *       [key: number]: EduContentMetadataInterface[];
+   *     }>} sharedBooksByLearningArea$
+   * @returns {Observable<{
+   *     [key: number]: {
+   *       bundlesCount: number;
+   *       booksCount: number;
+   *     };
+   *   }>}
+   * @memberof BundlesViewModel
+   */
+  private getSharedLearningAreasCount(
+    learningAreas$: Observable<LearningAreaInterface[]>,
+    bundlesByLearningArea$: Observable<{
+      [key: number]: BundleInterface[];
+    }>,
+    sharedBooksByLearningArea$: Observable<{
+      [key: number]: EduContentMetadataInterface[];
+    }>
+  ): Observable<{
     [key: number]: {
       bundlesCount: number;
       booksCount: number;
     };
   }> {
     return combineLatest(
-      this.learningAreas$,
-      this.bundlesByLearningArea$,
-      this.sharedBooksByLearningArea$
+      learningAreas$,
+      bundlesByLearningArea$,
+      sharedBooksByLearningArea$
     ).pipe(
       map(([learningAreas, bundles, books]) => {
         const learningAreaCounts = {};
