@@ -29,7 +29,7 @@
       <!--todo is routerlink correct ? -->
 
       <campus-folder *ngFor="let bundle of displayedBundles$|async"
-                     [routerLink]="[(learningArea$|async).id'/'+bundle.id]"
+                     [routerLink]="[(learningArea$|async).id+'/'+bundle.id]"
                      campusListItem
                      [listFormat]="listFormat$|async"
                      [itemCount]="bundlesViewModel.getBundleItemCount(bundle)"
