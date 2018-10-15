@@ -2,14 +2,19 @@ import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { map } from 'rxjs/operators';
-import { ContentStatusServiceInterface, CONTENT_STATUS_SERVICE_TOKEN } from '../../content-status/content-status.service.interface';
+import {
+  ContentStatusServiceInterface,
+  CONTENT_STATUS_SERVICE_TOKEN
+} from '../../content-status/content-status.service.interface';
 import {
   ContentStatusesActionTypes,
+  ContentStatusesLoaded,
   ContentStatusesLoadError,
-  LoadContentStatuses,
-  ContentStatusesLoaded
+  LoadContentStatuses
 } from './content-status.actions';
 import { State } from './content-status.reducer';
+
+// TODO: the injected service will have to be replaced by the 'student content status service'-token
 
 @Injectable()
 export class ContentStatusesEffects {
@@ -21,7 +26,11 @@ export class ContentStatusesEffects {
         if (!action.payload.force && state.contentStatuses.loaded) return;
         return this.contentStatusService
           .getAll()
-          .pipe(map(contentStatuses => new ContentStatusesLoaded({ contentStatuses })));
+          .pipe(
+            map(
+              contentStatuses => new ContentStatusesLoaded({ contentStatuses })
+            )
+          );
       },
       onError: (action: LoadContentStatuses, error) => {
         return new ContentStatusesLoadError(error);

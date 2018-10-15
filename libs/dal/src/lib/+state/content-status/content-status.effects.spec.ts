@@ -5,7 +5,6 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
-import { ContentStatusService } from '../../content-status/content-status.service';
 import { CONTENT_STATUS_SERVICE_TOKEN } from '../../content-status/content-status.service.interface';
 import {
   ContentStatusesLoaded,
@@ -15,11 +14,12 @@ import {
 import { ContentStatusesEffects } from './content-status.effects';
 import { initialState, reducer } from './content-status.reducer';
 
+// TODO: the injected service will have to be replaced by the 'student content status service'-token
+
 describe('ContentStatusEffects', () => {
   let actions: Observable<any>;
   let effects: ContentStatusesEffects;
   let usedState: any;
-
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -87,7 +87,9 @@ describe('ContentStatusEffects', () => {
   describe('loadContentStatus$', () => {
     const unforcedLoadAction = new LoadContentStatuses({});
     const forcedLoadAction = new LoadContentStatuses({ force: true });
-    const filledLoadedAction = new ContentStatusesLoaded({ contentStatuses: [] });
+    const filledLoadedAction = new ContentStatusesLoaded({
+      contentStatuses: []
+    });
     const loadErrorAction = new ContentStatusesLoadError(new Error('failed'));
     describe('with initialState', () => {
       beforeAll(() => {

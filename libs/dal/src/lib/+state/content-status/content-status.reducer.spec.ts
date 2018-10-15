@@ -1,26 +1,23 @@
 import { Update } from '@ngrx/entity';
-import {ContentStatusActions } from '.';
-import { initialState, reducer, State } from './content-status.reducer';
+import { ContentStatusActions } from '.';
 import { ContentStatusInterface } from '../../+models';
+import { initialState, reducer, State } from './content-status.reducer';
 
-/** 
- * This file is scaffolded, but needs some special attention:
- * - find and replace '__EXTRA__PROPERTY_NAME' and replace this with a property name of the ContentStatus entity.
- * - set the initial property value via '[__EXTRA__PROPERTY_NAME]InitialValue'.
- * - set the updated property value via '[__EXTRA__PROPERTY_NAME]UpdatedValue'.
-*/
-const __EXTRA__PROPERTY_NAMEInitialValue = ;
-const __EXTRA__PROPERTY_NAMEUpdatedValue = ;
+const labelInitialValue = 'IN_PROGRESS';
+const labelUpdatedValue = 'FINISHED';
 
 /**
  * Creates a ContentStatus.
  * @param {number} id
  * @returns {ContentStatusInterface}
  */
-function createContentStatus(id: number, __EXTRA__PROPERTY_NAME:any = __EXTRA__PROPERTY_NAMEInitialValue): ContentStatusInterface | any {
+function createContentStatus(
+  id: number,
+  label: any = labelInitialValue
+): ContentStatusInterface | any {
   return {
     id: id,
-    __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAME
+    label: label
   };
 }
 
@@ -38,7 +35,9 @@ function createState(
   error?: any
 ): State {
   const state: any = {
-    ids: contentStatuses ? contentStatuses.map(contentStatus => contentStatus.id) : [],
+    ids: contentStatuses
+      ? contentStatuses.map(contentStatus => contentStatus.id)
+      : [],
     entities: contentStatuses
       ? contentStatuses.reduce(
           (entityMap, contentStatus) => ({
@@ -53,7 +52,6 @@ function createState(
   if (error !== undefined) state.error = error;
   return state;
 }
-
 
 describe('ContentStatuses Reducer', () => {
   let contentStatuses: ContentStatusInterface[];
@@ -77,7 +75,9 @@ describe('ContentStatuses Reducer', () => {
 
   describe('loaded action', () => {
     it('should load all contentStatuses', () => {
-      const action = new ContentStatusActions.ContentStatusesLoaded({ contentStatuses });
+      const action = new ContentStatusActions.ContentStatusesLoaded({
+        contentStatuses
+      });
       const result = reducer(initialState, action);
       expect(result).toEqual(createState(contentStatuses, true));
     });
@@ -102,7 +102,9 @@ describe('ContentStatuses Reducer', () => {
     });
 
     it('should add multiple contentStatuses', () => {
-      const action = new ContentStatusActions.AddContentStatuses({ contentStatuses });
+      const action = new ContentStatusActions.AddContentStatuses({
+        contentStatuses
+      });
       const result = reducer(initialState, action);
 
       expect(result).toEqual(createState(contentStatuses, false));
@@ -111,7 +113,7 @@ describe('ContentStatuses Reducer', () => {
   describe('upsert actions', () => {
     it('should upsert one contentStatus', () => {
       const originalContentStatus = contentStatuses[0];
-      
+
       const startState = reducer(
         initialState,
         new ContentStatusActions.AddContentStatus({
@@ -119,16 +121,20 @@ describe('ContentStatuses Reducer', () => {
         })
       );
 
-    
-      const updatedContentStatus = createContentStatus(contentStatuses[0].id, 'test');
-     
+      const updatedContentStatus = createContentStatus(
+        contentStatuses[0].id,
+        'test'
+      );
+
       const action = new ContentStatusActions.UpsertContentStatus({
         contentStatus: updatedContentStatus
       });
 
       const result = reducer(startState, action);
 
-      expect(result.entities[updatedContentStatus.id]).toEqual(updatedContentStatus);
+      expect(result.entities[updatedContentStatus.id]).toEqual(
+        updatedContentStatus
+      );
     });
 
     it('should upsert many contentStatuses', () => {
@@ -146,9 +152,7 @@ describe('ContentStatuses Reducer', () => {
 
       const result = reducer(startState, action);
 
-      expect(result).toEqual(
-        createState(contentStatusesToInsert)
-      );
+      expect(result).toEqual(createState(contentStatusesToInsert));
     });
   });
 
@@ -159,31 +163,32 @@ describe('ContentStatuses Reducer', () => {
       const update: Update<ContentStatusInterface> = {
         id: 1,
         changes: {
-          __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-        } 
+          label: labelUpdatedValue
+        }
       };
       const action = new ContentStatusActions.UpdateContentStatus({
         contentStatus: update
       });
       const result = reducer(startState, action);
-      expect(result).toEqual(createState([createContentStatus(1, __EXTRA__PROPERTY_NAMEUpdatedValue)]));
+      expect(result).toEqual(
+        createState([createContentStatus(1, labelUpdatedValue)])
+      );
     });
 
     it('should update multiple contentStatuses', () => {
       const startState = createState(contentStatuses);
       const updates: Update<ContentStatusInterface>[] = [
-        
         {
           id: 1,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          } 
+            label: labelUpdatedValue
+          }
         },
         {
           id: 2,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          }  
+            label: labelUpdatedValue
+          }
         }
       ];
       const action = new ContentStatusActions.UpdateContentStatuses({
@@ -192,7 +197,11 @@ describe('ContentStatuses Reducer', () => {
       const result = reducer(startState, action);
 
       expect(result).toEqual(
-        createState([createContentStatus(1, __EXTRA__PROPERTY_NAMEUpdatedValue), createContentStatus(2, __EXTRA__PROPERTY_NAMEUpdatedValue), contentStatuses[2]])
+        createState([
+          createContentStatus(1, labelUpdatedValue),
+          createContentStatus(2, labelUpdatedValue),
+          contentStatuses[2]
+        ])
       );
     });
   });
@@ -220,8 +229,12 @@ describe('ContentStatuses Reducer', () => {
 
   describe('clear action', () => {
     it('should clear the contentStatuses collection', () => {
-      const startState = createState(contentStatuses, true, 'something went wrong');
-      const action = new ContentStatusActions.ClearContentStatuss();
+      const startState = createState(
+        contentStatuses,
+        true,
+        'something went wrong'
+      );
+      const action = new ContentStatusActions.ClearContentStatuses();
       const result = reducer(startState, action);
       expect(result).toEqual(createState([], true, 'something went wrong'));
     });
