@@ -2,6 +2,10 @@
   "name": "campus",
   "version": "0.0.0",
   "license": "MIT",
+  "husky": {
+    "hooks": {
+      "pre-push": "ng lint && npm run format:check && npm test"
+    }
   },
   "scripts": {
     "ng": "ng",
