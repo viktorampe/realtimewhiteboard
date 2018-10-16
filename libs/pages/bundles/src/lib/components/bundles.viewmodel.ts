@@ -191,7 +191,7 @@ export class BundlesViewModel implements Resolve<boolean> {
   /**
    * Get bundles for specified learning area
    *
-   * @param {Observable<number>} learningAreaId
+   * @param {Observable<number>} learningAreaId$
    * @param {Observable<{
    *       [key: number]: BundleInterface[];
    *     }>} bundlesByLearningArea$
@@ -199,12 +199,12 @@ export class BundlesViewModel implements Resolve<boolean> {
    * @memberof BundlesViewModel
    */
   private getLearningAreaBundles(
-    learningAreaId: Observable<number>,
+    learningAreaId$: Observable<number>,
     bundlesByLearningArea$: Observable<{
       [key: number]: BundleInterface[];
     }>
   ): Observable<BundleInterface[]> {
-    return combineLatest(learningAreaId, bundlesByLearningArea$).pipe(
+    return combineLatest(learningAreaId$, bundlesByLearningArea$).pipe(
       map(
         ([learningAreaId, bundlesByLearningArea]) =>
           bundlesByLearningArea[learningAreaId]
@@ -216,7 +216,7 @@ export class BundlesViewModel implements Resolve<boolean> {
   /**
    * Get books for specified learning area
    *
-   * @param {Observable<number>} learningAreaId
+   * @param {Observable<number>} learningAreaId$
    * @param {Observable<{
    *       [key: number]: EduContentMetadataInterface[];
    *     }>} booksByLearningArea$
@@ -224,12 +224,12 @@ export class BundlesViewModel implements Resolve<boolean> {
    * @memberof BundlesViewModel
    */
   private getLearningAreaBooks(
-    learningAreaId: Observable<number>,
+    learningAreaId$: Observable<number>,
     booksByLearningArea$: Observable<{
       [key: number]: EduContentMetadataInterface[];
     }>
   ): Observable<EduContentMetadataInterface[]> {
-    return combineLatest(learningAreaId, booksByLearningArea$).pipe(
+    return combineLatest(learningAreaId$, booksByLearningArea$).pipe(
       map(
         ([learningAreaId, booksByLearningArea]) =>
           booksByLearningArea[learningAreaId]
