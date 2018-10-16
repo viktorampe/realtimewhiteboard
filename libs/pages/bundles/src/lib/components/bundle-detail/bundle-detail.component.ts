@@ -23,7 +23,6 @@ import { BundleDetailViewModel } from './bundle-detail.viewmodel';
   styleUrls: ['./bundle-detail.component.scss']
 })
 export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
-  subscriptions = new Subscription();
   bundle$ = this.vm.selectedBundle$;
   contents$ = this.vm.bundleContents$;
   listFormat = ListFormat; //enum beschikbaar maken in template
@@ -34,6 +33,8 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   contentForInfoPanelEmpty$: Observable<BundleInterface>;
   contentForInfoPanelSingle$: Observable<ContentInterface>;
   contentForInfoPanelMultiple$: Observable<ContentInterface[]>;
+
+  private subscriptions = new Subscription();
 
   @ViewChild(ListViewComponent) list: ListViewComponent;
   @ViewChild(SideSheetComponent) sideSheet: SideSheetComponent;
@@ -47,27 +48,18 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit() {
     this.contentForInfoPanelEmpty$ = this.bundle$;
 
-    this.filteredContents$ = combineLatest(
-      this.contents$,
-      this.filter.filterTextChange.pipe(startWith(''))
-    ).pipe(
-      map(([contents, filterText]) =>
-        contents.filter(c =>
-          c.name.toLowerCase().includes(filterText.toLowerCase())
-        )
-      )
-    );
+    this.setupFilteredContentStream();
   }
 
   ngAfterViewInit() {
     this.contentForInfoPanelSingle$ = this.list.selectedItems$.pipe(
       filter(items => items.length === 1),
-      map(items => items[0].dataObject as ContentInterface)
+      map(items => items[0].dataObject)
     );
 
     this.contentForInfoPanelMultiple$ = this.list.selectedItems$.pipe(
       filter(items => items.length > 1),
-      map(items => items.map(i => i.dataObject as ContentInterface))
+      map(items => items.map(i => i.dataObject))
     );
 
     this.subscriptions.add(
@@ -81,7 +73,7 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
       this.filteredContents$.subscribe(() => this.list.deselectAllItems())
     );
 
-    // Nodig om ExpressionChangedAfterItHasBeenCheckedError te vermijden
+    // Needed to avoid ExpressionChangedAfterItHasBeenCheckedError
     this.cd.detectChanges();
   }
 
@@ -91,5 +83,18 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
 
   setListFormat(format: ListFormat) {
     this.vm.listFormat$.next(format);
+  }
+
+  private setupFilteredContentStream() {
+    return (this.filteredContents$ = combineLatest(
+      this.contents$,
+      this.filter.filterTextChange.pipe(startWith(''))
+    ).pipe(
+      map(([contents, filterText]) =>
+        contents.filter(c =>
+          c.name.toLowerCase().includes(filterText.toLowerCase())
+        )
+      )
+    ));
   }
 }

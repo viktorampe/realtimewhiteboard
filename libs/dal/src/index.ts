@@ -1,4 +1,3 @@
-export { ContentInterface } from './lib/+models/Content.interface';
 export * from './lib/+models/index';
 export * from './lib/+state/bundle/bundle.reducer';
 export * from './lib/+state/bundle/bundle.selectors';

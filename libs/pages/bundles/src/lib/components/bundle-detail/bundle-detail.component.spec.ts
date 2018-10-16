@@ -11,33 +11,19 @@ import {
 } from '@campus/dal';
 import { ListFormat, ListViewItemDirective } from '@campus/ui';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { PagesBundlesModule } from './../../pages-bundles.module';
 import { BundleDetailComponent } from './bundle-detail.component';
 import { BundleDetailViewModel } from './bundle-detail.viewmodel';
 
 export class MockBundleDetailViewModel {
-  selectedBundle$: Observable<BundleInterface>;
-  bundleContents$: Observable<ContentInterface[]>;
-  listFormat$: BehaviorSubject<ListFormat>;
-
-  constructor() {
-    this.resolve().subscribe();
-  }
-
-  resolve(): Observable<boolean> {
-    this.selectedBundle$ = this.getMockBundle();
-
-    this.bundleContents$ = <Observable<ContentInterface[]>>(
-      combineLatest(this.getMockEducontents(), this.getMockUsercontents()).pipe(
-        map(arrays => Array.prototype.concat.apply([], arrays))
-      )
-    );
-
-    this.listFormat$ = new BehaviorSubject<ListFormat>(ListFormat.GRID);
-
-    return new BehaviorSubject<boolean>(true).pipe(take(1));
-  }
+  selectedBundle$ = this.getMockBundle();
+  bundleContents$ = (this.bundleContents$ = <Observable<ContentInterface[]>>(
+    combineLatest(this.getMockEducontents(), this.getMockUsercontents()).pipe(
+      map(arrays => Array.prototype.concat.apply([], arrays))
+    )
+  ));
+  listFormat$ = new BehaviorSubject<ListFormat>(ListFormat.GRID);
 
   private getMockBundle(): Observable<BundleInterface> {
     const bundle = <BundleInterface>{
@@ -139,46 +125,37 @@ describe('BundleDetailComponent', () => {
 
   // it('should show a pageheader with the bundle icon, name and description ', () => {});
 
-  it('should show the number of available items', async(() => {
+  it('should show the number of available items', () => {
     const expectedAmount = 4;
 
-    component.filteredContents$.subscribe(x =>
-      expect(x.length).toBe(expectedAmount)
+    fixture.detectChanges();
+    const amountDE = fixture.debugElement.query(By.css('.itemsAmount'));
+    expect(amountDE.nativeElement.textContent).toContain(expectedAmount);
+  });
+
+  it('should show a list of all available items in the bundle', () => {
+    const expectedAmount = 4;
+
+    fixture.detectChanges();
+    const listItems = fixture.debugElement.queryAll(
+      By.directive(ListViewItemDirective)
     );
+    expect(listItems.length).toBe(expectedAmount);
+  });
 
-    fixture.whenStable().then(() => {
-      fixture.detectChanges();
-      const amountDE = fixture.debugElement.query(By.css('.itemsAmount'));
-      expect(amountDE.nativeElement.textContent).toContain(expectedAmount);
-    });
-  }));
-
-  it('should show a list of all available items in the bundle', async(() => {
-    const expectedAmount = 4;
-
-    fixture.whenStable().then(() => {
-      fixture.detectChanges();
-      const listDE = fixture.debugElement.query(By.css('campus-list-view'));
-      const listItems = listDE.queryAll(By.directive(ListViewItemDirective));
-      expect(listItems.length).toBe(expectedAmount);
-    });
-  }));
-
-  it('should be able to filter the available items', async(() => {
+  it('should be able to filter the available items', () => {
     const expectedAmount = 2;
 
     component.filter.filterTextChange.next('0');
 
-    fixture.whenStable().then(() => {
-      fixture.detectChanges();
-      const listItems = fixture.debugElement.queryAll(
-        By.directive(ListViewItemDirective)
-      );
-      expect(listItems.length).toBe(expectedAmount);
-    });
-  }));
+    fixture.detectChanges();
+    const listItems = fixture.debugElement.queryAll(
+      By.directive(ListViewItemDirective)
+    );
+    expect(listItems.length).toBe(expectedAmount);
+  });
 
-  it('should be able to toggle the list between list and grid view', () => {
+  it('should notify the viewmodel on listFormatChanged', () => {
     component.vm.listFormat$.next(ListFormat.GRID);
     fixture.whenStable().then(() => {
       fixture.detectChanges();
@@ -197,18 +174,6 @@ describe('BundleDetailComponent', () => {
       );
     });
   });
-
-  // TODO: info komt uit store?
-  // it('should start the list in grid view on desktop', () => {});
-
-  // TODO: info komt uit store?
-  // it('should start the list in list view on mobile', () => {});
-
-  // it('should show an infopanel', () => {});
-
-  // it('should show the infopanel next to the the list on desktop', () => {});
-
-  // it('should show the infopanel as a side drawer on mobile', () => {});
 
   it('should show the teacher info in the infopanel if no item is selected', () => {
     component.list.deselectAllItems();
@@ -258,9 +223,6 @@ describe('BundleDetailComponent', () => {
     expect(infoPanelContent).toBeTruthy();
     expect(infoPanelContents).toBeFalsy();
   });
-
-  // TODO
-  // it('should be able to set the item status in the infopanel if an item is selected', () => { });
 
   it('should show the item descriptions in the infopanel if multiple items are selected', () => {
     component.list.multiSelect = true;

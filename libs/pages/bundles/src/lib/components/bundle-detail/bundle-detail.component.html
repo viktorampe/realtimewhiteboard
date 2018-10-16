@@ -1,4 +1,4 @@
-<campus-side-sheet isOpenOnInit=true>
+<campus-side-sheet [isOpenOnInit]="true">
   <campus-side-sheet-header></campus-side-sheet-header>
   <campus-side-sheet-body [ngSwitch]="(list.selectedItems$ | async).length">
     <campus-info-panel-bundle [bundle]="bundle$ | async"

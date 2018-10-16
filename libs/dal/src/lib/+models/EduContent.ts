@@ -26,24 +26,36 @@ export class EduContent implements EduContentInterface, ContentInterface {
   notes?: EduContentNoteInterface[];
   favorites?: FavoriteInterface[];
   get name(): string {
-    return this.publishedEduContentMetadata.title;
+    return this.publishedEduContentMetadata
+      ? this.publishedEduContentMetadata.title
+      : '';
   }
 
   get productType(): string {
-    return this.publishedEduContentMetadata.eduContentProductType.icon;
+    return this.publishedEduContentMetadata
+      ? this.publishedEduContentMetadata.eduContentProductType.icon
+      : '';
   }
   get fileExtension(): string {
-    return this.publishedEduContentMetadata.fileName.substring(
-      this.publishedEduContentMetadata.fileName.lastIndexOf('.') + 1
-    );
+    return this.publishedEduContentMetadata
+      ? this.publishedEduContentMetadata.fileName.substring(
+          this.publishedEduContentMetadata.fileName.lastIndexOf('.') + 1
+        )
+      : '';
   }
   get previewImage(): string {
-    return this.publishedEduContentMetadata.thumbSmall;
+    return this.publishedEduContentMetadata
+      ? this.publishedEduContentMetadata.thumbSmall
+      : '';
   }
   get description(): string {
-    return this.publishedEduContentMetadata.description;
+    return this.publishedEduContentMetadata
+      ? this.publishedEduContentMetadata.description
+      : '';
   }
   get methodLogos(): string[] {
-    return this.publishedEduContentMetadata.methods.map(m => m.icon);
+    return this.publishedEduContentMetadata
+      ? this.publishedEduContentMetadata.methods.map(m => m.icon)
+      : [];
   }
 }

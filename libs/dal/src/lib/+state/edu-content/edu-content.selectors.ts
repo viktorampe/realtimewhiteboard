@@ -59,13 +59,13 @@ export const getById = createSelector(
   (state: State, props: { id: number }) => state.entities[props.id]
 );
 
-export const getAllAsContents = createSelector(getAll, entities =>
+export const getAllAsEduContents = createSelector(getAll, entities =>
   entities.map(item =>
     Object.assign<EduContent, EduContentInterface>(new EduContent(), item)
   )
 );
 
-export const getByIdAsContents = createSelector(
+export const getByIdAsEduContents = createSelector(
   selectEduContentState,
   (state: State, props: { id: number }) =>
     Object.assign<EduContent, EduContentInterface>(

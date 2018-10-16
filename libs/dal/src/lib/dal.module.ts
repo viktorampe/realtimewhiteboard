@@ -12,14 +12,13 @@ import {
 } from '@diekeure/polpo-api-angular-sdk';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
-import { BundleReducer } from './+state/bundle';
-import { BundlesEffects } from './+state/bundle/bundle.effects';
-import { EduContentReducer } from './+state/edu-content';
-import { EduContentsEffects } from './+state/edu-content/edu-content.effects';
-import { LearningAreaReducer } from './+state/learning-area';
-import { LearningAreasEffects } from './+state/learning-area/learning-area.effects';
-import { uiReducer } from './+state/ui/';
-import { UiEffects } from './+state/ui/ui.effects';
+import { BundleReducer, BundlesEffects } from './+state/bundle';
+import { EduContentReducer, EduContentsEffects } from './+state/edu-content';
+import {
+  LearningAreaReducer,
+  LearningAreasEffects
+} from './+state/learning-area';
+import { UiEffects, uiReducer } from './+state/ui/';
 import {
   UnlockedBoekeGroupReducer,
   UnlockedBoekeGroupsEffects
@@ -52,7 +51,6 @@ import { EDUCONTENT_SERVICE_TOKEN } from './edu-content/edu-content.service.inte
 import { LearningAreaService } from './learning-area/learning-area.service';
 import { LEARNINGAREA_SERVICE_TOKEN } from './learning-area/learning-area.service.interface';
 import { AuthService, AuthServiceToken } from './persons/auth-service';
-
 interface DalOptions {
   apiBaseUrl: string;
 }
@@ -74,9 +72,6 @@ interface DalOptions {
     }),
     StoreModule.forFeature('learingAreas', LearningAreaReducer.reducer, {
       initialState: LearningAreaReducer.initialState
-    }),
-    StoreModule.forFeature('eduContents', EduContentReducer.reducer, {
-      initialState: EduContentReducer.initialState
     }),
     StoreModule.forFeature('unlockedContents', UnlockedContentReducer.reducer, {
       initialState: UnlockedContentReducer.initialState
