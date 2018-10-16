@@ -2,6 +2,7 @@ import {
   BundleReducer,
   EduContentReducer,
   LearningAreaReducer,
+  uiReducer,
   UnlockedBoekeGroupReducer,
   UnlockedBoekeStudentReducer,
   UnlockedContentReducer,
@@ -9,11 +10,12 @@ import {
 } from '../..';
 
 export interface DalState {
-  learningAreaState: LearningAreaReducer.State;
-  bundleState: BundleReducer.State;
-  eduContentState: EduContentReducer.State;
-  userContentState: UserContentReducer.State;
-  unlockedContentState: UnlockedContentReducer.State;
-  unlockedBoekeGroupState: UnlockedBoekeGroupReducer.State;
-  unlockedBoekeStudentState: UnlockedBoekeStudentReducer.State;
+  ui: uiReducer.UiState;
+  learningAreas: LearningAreaReducer.State;
+  bundles: BundleReducer.State;
+  eduContents: EduContentReducer.State;
+  userContents: UserContentReducer.State;
+  unlockedContents: UnlockedContentReducer.State;
+  unlockedBoekeGroups: UnlockedBoekeGroupReducer.State;
+  unlockedBoekeStudents: UnlockedBoekeStudentReducer.State;
 }
