@@ -2,24 +2,24 @@ import { Injectable } from '@angular/core';
 import { ActivatedRoute, Resolve } from '@angular/router';
 import {
   BundleInterface,
+  BundleQueries,
   ContentInterface,
   EduContentInterface,
   EduContentMetadataInterface,
   LearningAreaInterface,
+  LearningAreaQueries,
   PersonInterface,
-  uiQuery,
+  UiActions,
+  UiQuery,
   UnlockedBoekeGroupInterface,
+  UnlockedBoekeGroupQueries,
   UnlockedBoekeStudentInterface,
-  UnlockedContentInterface
+  UnlockedBoekeStudentQueries,
+  UnlockedContentInterface,
+  UnlockedContentQueries
 } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
 import { select, Store } from '@ngrx/store';
-import { BundleQueries } from 'libs/dal/src/lib/+state/bundle';
-import { LearningAreaQueries } from 'libs/dal/src/lib/+state/learning-area';
-import { fromUiActions } from 'libs/dal/src/lib/+state/ui/ui.actions';
-import { UnlockedBoekeGroupQueries } from 'libs/dal/src/lib/+state/unlocked-boeke-group';
-import { UnlockedBoekeStudentQueries } from 'libs/dal/src/lib/+state/unlocked-boeke-student';
-import { UnlockedContentQueries } from 'libs/dal/src/lib/+state/unlocked-content';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { filter, map, shareReplay, switchMap, take } from 'rxjs/operators';
 
@@ -127,7 +127,7 @@ export class BundlesViewModel implements Resolve<boolean> {
     this.coupledPersons$ = new BehaviorSubject([]); // TODO add TeacherStudent state
 
     this.listFormat$ = this.store.pipe(
-      select(uiQuery.getListFormat),
+      select(UiQuery.getListFormat),
       map(listFormat => <ListFormat>listFormat)
     );
     this.learningAreas$ = this.store.pipe(select(LearningAreaQueries.getAll));
@@ -144,7 +144,7 @@ export class BundlesViewModel implements Resolve<boolean> {
 
     // intermediate streams
     this.bundlesByLearningArea$ = this.store.pipe(
-      select(BundleQueries.getByLearningAreaIds)
+      select(BundleQueries.getByLearningAreaId)
     );
     this.unlockedContentByBundle$ = this.store.pipe(
       select(UnlockedContentQueries.getByBundleIds)
@@ -205,7 +205,7 @@ export class BundlesViewModel implements Resolve<boolean> {
   }
 
   changeListFormat(listFormat: ListFormat): void {
-    this.store.dispatch(new fromUiActions.SetListFormatUi({ listFormat }));
+    this.store.dispatch(new UiActions.SetListFormatUi({ listFormat }));
   }
 
   /**
