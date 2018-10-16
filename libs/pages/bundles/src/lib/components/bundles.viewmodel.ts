@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { Resolve } from '@angular/router';
 import {
   BundleInterface,
-  EduContentBookInterface,
+  EduContentMetadataInterface,
   LearningAreaInterface
 } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -15,195 +15,25 @@ import { map, take } from 'rxjs/operators';
 export class BundlesViewModel implements Resolve<boolean> {
   listFormat$ = new BehaviorSubject<ListFormat>(ListFormat.GRID);
 
-  //mock data
-  books$: Observable<EduContentBookInterface[]> = new BehaviorSubject<
-    EduContentBookInterface[]
-  >([
-    {
-      title: 'boek1',
-      method: {
-        name: 'none',
-        logoUrl: 'roadToNowhere'
-      }
-    },
-    {
-      title: 'boek2',
-      method: {
-        name: 'none',
-        logoUrl: 'roadToNowhere'
-      }
-    },
-    {
-      title: 'boek3',
-      method: {
-        name: 'none',
-        logoUrl: 'roadToNowhere'
-      }
-    },
-    {
-      title: 'boek4',
-      method: {
-        name: 'none',
-        logoUrl: 'roadToNowhere'
-      }
-    },
-    {
-      title: 'boek5',
-      method: {
-        name: 'none',
-        logoUrl: 'roadToNowhere'
-      }
-    }
-  ]);
+  bundleContentsCount$: Observable<{
+    [key: number]: number;
+  }> = new BehaviorSubject<{ [key: number]: number }>({});
 
-  selectedLearningArea$: Observable<
-    LearningAreaInterface
-  > = new BehaviorSubject<LearningAreaInterface>({
-    icon: 'polpo-wiskunde',
-    id: 19,
-    color: '#2c354f',
-    name: 'Wiskunde'
-  });
+  learningAreas$: Observable<LearningAreaInterface[]> = new BehaviorSubject([]);
 
-  private mockbundles$: Observable<BundleInterface[]> = new BehaviorSubject<
-    BundleInterface[]
-  >([
-    this.createBundle('bundle', 19),
-    this.createBundle('bundle 2: the bundleing', 19),
-    this.createBundle('bundle 3: a bundle of sticks', 19),
-    this.createBundle('bundle 4: bundle of joy', 19),
-    this.createBundle('bundle 5: bundle of rights', 19)
-  ]);
+  sharedLearningAreaBundles$: Observable<{
+    [key: number]: BundleInterface[];
+  }> = new BehaviorSubject({});
 
-  learningAreas$: Observable<LearningAreaInterface[]> = new BehaviorSubject<
-    LearningAreaInterface[]
-  >([
-    {
-      icon: 'polpo-wiskunde',
-      id: 19,
-      color: '#2c354f',
-      name: 'Wiskunde'
-    },
-    {
-      icon: 'polpo-aardrijkskunde',
-      id: 1,
-      color: '#485235',
-      name: 'Aardrijkskunde'
-    },
-    {
-      icon: 'polpo-frans',
-      id: 2,
-      color: '#385343',
-      name: 'Frans'
-    },
-    {
-      icon: 'polpo-godsdienst',
-      id: 13,
-      color: '#325235',
-      name: 'Godsdienst, Didactische & Pedagogische ondersteuning'
-    }
-  ]);
-  learningAreasCounts$: Observable<any> = new BehaviorSubject<any>({
-    1: {
-      booksCount: 1,
-      bundlesCount: 2
-    },
-    2: {
-      booksCount: 4,
-      bundlesCount: 0
-    },
-    13: {
-      booksCount: 0,
-      bundlesCount: 0
-    },
-    19: {
-      booksCount: 9,
-      bundlesCount: 7
-    }
-  });
+  sharedLearningAreaBooks$: Observable<{
+    [key: number]: EduContentMetadataInterface[];
+  }> = new BehaviorSubject({});
 
-  //actual data
-  bundles$: Observable<BundleInterface[]> = combineLatest(
-    this.selectedLearningArea$,
-    this.mockbundles$
-  ).pipe(
-    map(
-      ([learningArea, bundles]: [LearningAreaInterface, BundleInterface[]]) => {
-        return bundles.filter(bundle => {
-          return bundle.learningAreaId === learningArea.id;
-        });
-      }
-    )
-  );
-
-  // mock methods
-  createBundle(name: string, learningAreaId: number): BundleInterface {
-    const startDate: Date = new Date();
-    const endDate: Date = new Date();
-    endDate.setHours(endDate.getHours() + 2);
-
-    return {
-      id: Math.round(Math.random() * 10000),
-      teacherId: Math.round(Math.random() * 10000),
-      learningAreaId: learningAreaId,
-      name: name,
-      description: 'this description includes' + name,
-      start: startDate,
-      end: endDate,
-      tasks: [
-        {
-          name: 'task1'
-        },
-        {
-          name: 'task2'
-        },
-        {
-          name: 'task3'
-        },
-        {
-          name: 'task4'
-        },
-        {
-          name: 'task5'
-        },
-        {
-          name: 'task6'
-        },
-        {
-          name: 'task7'
-        }
-      ]
-    };
-  }
-
-  //actual methods
   resolve(): Observable<boolean> {
     return new BehaviorSubject<boolean>(true).pipe(take(1));
   }
 
-  getBundleItemCount(bundle: BundleInterface): number {
-    //todo should be something like this
-    // bundle.eduContents.length + bundle.userContents.length according to Thomas
-    return 0;
-  }
-
   changeListFormat(listFormat: ListFormat): void {
     this.listFormat$.next(listFormat);
-  }
-
-  getDisplayedBundles(
-    bundles$: Observable<BundleInterface[]>,
-    filterInput$: BehaviorSubject<string>
-  ): Observable<BundleInterface[]> {
-    return combineLatest(bundles$, filterInput$).pipe(
-      map(([bundles, filterInput]: [BundleInterface[], string]) => {
-        if (!filterInput || filterInput === '') {
-          return bundles;
-        }
-        return bundles.filter(bundle =>
-          bundle.name.toLowerCase().includes(filterInput.toLowerCase())
-        );
-      })
-    );
   }
 }

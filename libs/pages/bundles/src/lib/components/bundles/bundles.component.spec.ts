@@ -6,6 +6,7 @@ import {
   EduContentInterface,
   LearningAreaInterface
 } from '@campus/dal';
+import { ListFormat } from '@campus/ui';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { BundlesViewModel } from '../bundles.viewmodel';
 import { BundlesComponent } from './bundles.component';
@@ -53,15 +54,6 @@ class MockViewModel extends BundlesViewModel {
     }
   ]);
 
-  selectedLearningArea$: Observable<
-    LearningAreaInterface
-  > = new BehaviorSubject<LearningAreaInterface>({
-    icon: 'polpo-wiskunde',
-    id: 19,
-    color: '#2c354f',
-    name: 'Wiskunde'
-  });
-
   bundles$: Observable<BundleInterface[]> = new BehaviorSubject<
     BundleInterface[]
   >([
@@ -100,24 +92,6 @@ class MockViewModel extends BundlesViewModel {
       name: 'Godsdienst, Didactische & Pedagogische ondersteuning'
     }
   ]);
-  learningAreasCounts$: Observable<any> = new BehaviorSubject<any>({
-    1: {
-      booksCount: 1,
-      bundlesCount: 2
-    },
-    2: {
-      booksCount: 4,
-      bundlesCount: 0
-    },
-    13: {
-      booksCount: 0,
-      bundlesCount: 0
-    },
-    19: {
-      booksCount: 9,
-      bundlesCount: 7
-    }
-  });
 
   getBundleItemCount(bundle: BundleInterface): number {
     return 0;
@@ -185,7 +159,7 @@ describe('BundlesComponent', () => {
   });
 
   it('it should return 5 bundles', () => {
-    bundlesViewModel
+    component
       .getDisplayedBundles(bundlesViewModel.bundles$, component.filterInput$)
       .subscribe((bundles: BundleInterface[]) => {
         console.log(bundles[0].eduContents[0].publishedEduContentMetadata);
@@ -193,15 +167,9 @@ describe('BundlesComponent', () => {
       });
   });
 
-  it('it should return 5 books', () => {
-    component.books$.subscribe((books: EduContentBookInterface[]) => {
-      expect(books.length).toEqual(5);
-    });
-  });
-
   it('should filter out all but 1 bundle, case insensitve', () => {
     component.filterInput$.next('BunDlE oF Joy');
-    bundlesViewModel
+    component
       .getDisplayedBundles(bundlesViewModel.bundles$, component.filterInput$)
       .subscribe((bundles: BundleInterface[]) => {
         expect(bundles.length).toEqual(1);
@@ -210,10 +178,32 @@ describe('BundlesComponent', () => {
 
   it('should return a no bundles', () => {
     component.filterInput$.next('lol');
-    bundlesViewModel
+    component
       .getDisplayedBundles(bundlesViewModel.bundles$, component.filterInput$)
       .subscribe((bundles: BundleInterface[]) => {
         expect(bundles.length).toEqual(0);
       });
+  });
+
+  it('should reset filter input', () => {
+    component.filterInput$.next('lol');
+    component.resetFilterInput();
+    component.filterInput$.subscribe(obs => {
+      expect(obs).toBe('');
+    });
+  });
+
+  it('should change filter input', () => {
+    component.onChangeFilterInput('changedFilterINput');
+    component.filterInput$.subscribe(obs => {
+      expect(obs).toBe('changedFilterINput');
+    });
+  });
+
+  it('should change listformat', () => {
+    component.clickChangeListFormat(ListFormat.LINE);
+    component.listFormat$.subscribe(obs => {
+      expect(obs).toBe(ListFormat.LINE);
+    });
   });
 });

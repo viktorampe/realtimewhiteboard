@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import {
   BundleInterface,
-  EduContentBookInterface,
+  EduContentMetadataInterface,
   LearningAreaInterface
 } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { BundlesViewModel } from '../bundles.viewmodel';
 
 @Component({
@@ -15,22 +16,50 @@ import { BundlesViewModel } from '../bundles.viewmodel';
 })
 export class BundlesComponent implements OnInit {
   protected listFormatEnum = ListFormat;
+  private currentLearningArea = 0; // todo replace with actual learning area when viewmodel is updated
 
-  learningArea$: Observable<LearningAreaInterface> = this.bundlesViewModel
-    .selectedLearningArea$;
+  learningArea$: Observable<
+    LearningAreaInterface
+  > = this.bundlesViewModel.learningAreas$.pipe(
+    map(areas => {
+      return {
+        icon: 'polpo-wiskunde',
+        id: 19,
+        color: '#2c354f',
+        name: 'Wiskunde'
+      };
+    })
+  );
 
   toolbarFixed: boolean;
   listFormat$: Observable<ListFormat> = this.bundlesViewModel.listFormat$;
   filterInput$ = new BehaviorSubject<string>('');
+  bundleContentsCount$ = this.bundlesViewModel.bundleContentsCount$;
 
-  displayedBundles$: Observable<
+  allBundles$: Observable<
     BundleInterface[]
-  > = this.bundlesViewModel.getDisplayedBundles(
-    this.bundlesViewModel.bundles$,
+  > = this.bundlesViewModel.sharedLearningAreaBundles$.pipe(
+    map(
+      bundles =>
+        bundles[this.currentLearningArea]
+          ? bundles[this.currentLearningArea]
+          : []
+    )
+  );
+
+  displayedBundles$: Observable<BundleInterface[]> = this.getDisplayedBundles(
+    this.allBundles$,
     this.filterInput$
   );
 
-  books$: Observable<EduContentBookInterface[]> = this.bundlesViewModel.books$;
+  books$: Observable<
+    EduContentMetadataInterface[]
+  > = this.bundlesViewModel.sharedLearningAreaBooks$.pipe(
+    map(
+      books =>
+        books[this.currentLearningArea] ? books[this.currentLearningArea] : []
+    )
+  );
 
   //
   constructor(private bundlesViewModel: BundlesViewModel) {}
@@ -49,5 +78,21 @@ export class BundlesComponent implements OnInit {
 
   clickChangeListFormat(format: ListFormat): void {
     this.bundlesViewModel.changeListFormat(format);
+  }
+
+  getDisplayedBundles(
+    bundles$: Observable<BundleInterface[]>,
+    filterInput$: BehaviorSubject<string>
+  ): Observable<BundleInterface[]> {
+    return combineLatest(bundles$, filterInput$).pipe(
+      map(([bundles, filterInput]: [BundleInterface[], string]) => {
+        if (!filterInput || filterInput === '') {
+          return bundles;
+        }
+        return bundles.filter(bundle =>
+          bundle.name.toLowerCase().includes(filterInput.toLowerCase())
+        );
+      })
+    );
   }
 }

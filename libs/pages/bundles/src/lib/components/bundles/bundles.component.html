@@ -11,15 +11,16 @@
 
 </campus-tool-bar>
 <div class="pages-bundles__container"
-     [ngClass]="{'pages-bundles__container--fixed': toolbarFixed}">
-
+     [ngClass]="{'pages-bundles__container--fixed': toolbarFixed}"
+     *ngIf="(allBundles$|async).length && (bundleContentsCount$|async) as bundlesContentCount">
   <campus-page-header [title]="(learningArea$|async).icon.name"
                       [subtitle]="'Bundels'"
-                      [iconClass]="(learningArea$|async).icon"></campus-page-header>
+                      [iconClass]="(learningArea$|async).icon">
+  </campus-page-header>
   <div class="pages-bundles__container__bundles-count">
     {{(displayedBundles$|async)?.length}} van
     <u class="pages-bundles__container__bundles-count__total"
-       (click)="resetFilterInput(); filterInput.value = ''">{{(bundles$|async)?.length}}</u>
+       (click)="resetFilterInput(); filterInput.value = ''">{{(allBundles$|async)?.length}}</u>
     weergegeven
   </div>
   <div class="pages-bundles__container__bundles">
@@ -28,19 +29,18 @@
       <campus-folder *ngFor="let bundle of displayedBundles$|async"
                      [routerLink]="[(learningArea$|async).id, bundle.id]"
                      campusListItem
-                     [listFormat]="listFormat$|async"
-                     [itemCount]="bundlesViewModel.getBundleItemCount(bundle)"
+                     [itemCount]="bundlesContentCount[bundle.id]"
                      [title]="bundle.name"
                      [backgroundColor]="(learningArea$|async).color"
                      [icon]="(learningArea$|async).icon.name">
         <campus-folder-details>
-          {{ bundlesViewModel.getBundleItemCount(bundle) + " item(s)" }}
+          {{ bundlesCount[bundle.id] + " item(s)" }}
         </campus-folder-details>
       </campus-folder>
     </campus-list-view>
   </div>
 
-  <div ng-if="(books$|async).length">
+  <div *ngIf="(books$|async).length">
     <campus-page-header [title]="(learningArea$|async).icon.name"
                         [subtitle]="'Boeken'"
                         [iconClass]="(learningArea$|async).icon"></campus-page-header>
@@ -51,11 +51,10 @@
       <campus-list-view [listFormat]="listFormat$|async">
         <campus-content-thumbnail *ngFor="let book of books$|async"
                                   campusListItem
-                                  [listFormat]="listFormat$|async"
                                   [title]="book.title"
                                   [contentTypeClass]="icon-boek"
-                                  [imagePath]="book.method.logoUrl"
-                                  [fileExtensionClass]="book.type">
+                                  [imagePath]="book.method[0].logoUrl"
+                                  [fileExtensionClass]="book.EduContentProductTypeInterface.type">
         </campus-content-thumbnail>
       </campus-list-view>
     </div>
