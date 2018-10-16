@@ -74,3 +74,23 @@ export const getByLearningAreaId = createSelector(
     return byKey;
   }
 );
+
+export const getShared = createSelector(
+  selectBundleState,
+  (state: State, props: { userId: number }) => {
+    const ids: number[] = <number[]>state.ids;
+    return ids
+      .filter(id => state.entities[id].teacherId !== props.userId)
+      .map(id => state.entities[id]);
+  }
+);
+
+export const getOwn = createSelector(
+  selectBundleState,
+  (state: State, props: { userId: number }) => {
+    const ids: number[] = <number[]>state.ids;
+    return ids
+      .filter(id => state.entities[id].teacherId === props.userId)
+      .map(id => state.entities[id]);
+  }
+);

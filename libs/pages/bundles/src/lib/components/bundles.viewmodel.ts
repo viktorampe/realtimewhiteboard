@@ -120,7 +120,7 @@ export class BundlesViewModel implements Resolve<boolean> {
     // presentation streams
     // shared
     // > bundles
-    this.sharedBundles$ = this.getSharedBundles(this.bundles$);
+    this.sharedBundles$ = this.getSharedBundles();
     this.sharedBundlesByLearningArea$ = this.groupStreamByKey(
       this.sharedBundles$,
       'learningAreaId'
@@ -165,13 +165,13 @@ export class BundlesViewModel implements Resolve<boolean> {
     );
     this.sharedLearningAreasCount$ = this.getSharedLearningAreasCount(
       this.sharedLearningAreas$,
-      this.bundlesByLearningArea$,
+      this.sharedBundlesByLearningArea$,
       this.sharedBooksByLearningArea$
     );
 
     // own (TODO teacher)
     // > bundles
-    this.ownBundles$ = this.getOwnBundles(this.bundles$);
+    this.ownBundles$ = this.getOwnBundles();
     // > books
     this.ownBooks$ = of([]); // TODO favorited books
     // > learningAreas
@@ -296,19 +296,14 @@ export class BundlesViewModel implements Resolve<boolean> {
    * TODO get through selector?
    *
    * @private
-   * @param {Observable<BundleInterface[]>} bundles$
    * @returns {Observable<BundleInterface[]>}
    * @memberof BundlesViewModel
    */
-  private getSharedBundles(
-    bundles$: Observable<BundleInterface[]>
-  ): Observable<BundleInterface[]> {
-    return combineLatest(this.user$, bundles$).pipe(
-      map(
-        ([user, bundles]): BundleInterface[] =>
-          bundles.filter(bundle => bundle.teacherId !== user.id)
-      ),
-      shareReplay(1)
+  private getSharedBundles(): Observable<BundleInterface[]> {
+    return this.user$.pipe(
+      switchMap(user =>
+        this.store.pipe(select(BundleQueries.getShared, { userId: user.id }))
+      )
     );
   }
 
@@ -392,15 +387,11 @@ export class BundlesViewModel implements Resolve<boolean> {
    * @returns {Observable<BundleInterface[]>}
    * @memberof BundlesViewModel
    */
-  private getOwnBundles(
-    bundles$: Observable<BundleInterface[]>
-  ): Observable<BundleInterface[]> {
-    return combineLatest(this.user$, bundles$).pipe(
-      map(
-        ([user, bundles]): BundleInterface[] =>
-          bundles.filter(bundle => bundle.teacherId === user.id)
-      ),
-      shareReplay(1)
+  private getOwnBundles(): Observable<BundleInterface[]> {
+    return this.user$.pipe(
+      switchMap(user =>
+        this.store.pipe(select(BundleQueries.getOwn, { userId: user.id }))
+      )
     );
   }
 
@@ -440,7 +431,7 @@ export class BundlesViewModel implements Resolve<boolean> {
    * @param {Observable<LearningAreaInterface[]>} learningAreas$
    * @param {Observable<{
    *       [key: number]: BundleInterface[];
-   *     }>} bundlesByLearningArea$
+   *     }>} sharedBundlesByLearningArea$
    * @param {Observable<{
    *       [key: number]: EduContentMetadataInterface[];
    *     }>} sharedBooksByLearningArea$
@@ -454,7 +445,7 @@ export class BundlesViewModel implements Resolve<boolean> {
    */
   private getSharedLearningAreasCount(
     learningAreas$: Observable<LearningAreaInterface[]>,
-    bundlesByLearningArea$: Observable<{
+    sharedBundlesByLearningArea$: Observable<{
       [key: number]: BundleInterface[];
     }>,
     sharedBooksByLearningArea$: Observable<{
@@ -468,7 +459,7 @@ export class BundlesViewModel implements Resolve<boolean> {
   }> {
     return combineLatest(
       learningAreas$,
-      bundlesByLearningArea$,
+      sharedBundlesByLearningArea$,
       sharedBooksByLearningArea$
     ).pipe(
       map(([learningAreas, bundles, books]) => {
