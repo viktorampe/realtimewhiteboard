@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Resolve } from '@angular/router';
 import {
   BundleActions,
   BundleQueries,
@@ -26,8 +25,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class BundlesViewModel
-  implements Resolve<boolean>, StateResolverInterface {
+export class BundlesViewModel implements StateResolverInterface {
   listFormat$ = new BehaviorSubject<ListFormat>(ListFormat.GRID);
   learningAreas$: Observable<LearningAreaInterface[]> = new BehaviorSubject<
     LearningAreaInterface[]

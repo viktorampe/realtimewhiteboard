@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Resolve } from '@angular/router';
 import { DalState } from '@campus/dal';
 import { Action, Selector, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
@@ -33,7 +34,7 @@ export class StateResolver {
   }
 }
 
-export interface StateResolverInterface {
+export interface StateResolverInterface extends Resolve<boolean> {
   getLoadableActions(): Action[];
   getResolvedQueries(): Selector<object, boolean>[];
 }
