@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import {
   BundleActions,
   BundleQueries,
-  DalState,
   EduContentActions,
   EduContentQueries,
   LearningAreaActions,
@@ -19,7 +18,7 @@ import {
 } from '@campus/dal';
 import { StateResolver, StateResolverInterface } from '@campus/pages/shared';
 import { ListFormat } from '@campus/ui';
-import { Action, Selector, Store } from '@ngrx/store';
+import { Action, Selector } from '@ngrx/store';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
@@ -106,7 +105,7 @@ export class BundlesViewModel implements StateResolverInterface {
   }
 
   constructor(
-    store: Store<DalState>,
+    // store: Store<DalState>,
     private viewModelResolver: StateResolver
   ) {}
 
