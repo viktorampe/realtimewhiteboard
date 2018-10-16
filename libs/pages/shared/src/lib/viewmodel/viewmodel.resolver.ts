@@ -1,8 +1,12 @@
+import { Injectable } from '@angular/core';
 import { DalState } from '@campus/dal';
 import { Action, Selector, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
 
+@Injectable({
+  providedIn: 'root'
+})
 export class ViewModelResolver {
   constructor(private store: Store<DalState>) {}
 
