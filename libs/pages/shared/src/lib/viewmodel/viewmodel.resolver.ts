@@ -1,7 +1,7 @@
+import { DalState } from '@campus/dal';
 import { Action, Selector, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
-import { DalState } from '../../../../../dal/src';
 
 export class ViewModelResolver {
   constructor(private store: Store<DalState>) {}
@@ -27,4 +27,9 @@ export class ViewModelResolver {
       take(1)
     );
   }
+}
+
+export abstract class AbstractViewModelResolver {
+  protected abstract getLoadableActions(): Action[];
+  protected abstract getResolvedQueries(): Selector<object, boolean>[];
 }

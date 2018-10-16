@@ -18,15 +18,19 @@ import {
   UserContentActions,
   UserContentQueries
 } from '@campus/dal';
+import {
+  AbstractViewModelResolver,
+  ViewModelResolver
+} from '@campus/pages/shared';
 import { ListFormat } from '@campus/ui';
 import { Action, Selector, Store } from '@ngrx/store';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { ViewModelResolver } from './viewmodel.resolver';
 
 @Injectable({
   providedIn: 'root'
 })
-export class BundlesViewModel implements Resolve<boolean> {
+export class BundlesViewModel
+  implements Resolve<boolean>, AbstractViewModelResolver {
   listFormat$ = new BehaviorSubject<ListFormat>(ListFormat.GRID);
   learningAreas$: Observable<LearningAreaInterface[]> = new BehaviorSubject<
     LearningAreaInterface[]
