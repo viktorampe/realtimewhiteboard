@@ -117,14 +117,6 @@ describe('BundleDetailComponent', () => {
     fixture.detectChanges();
   });
 
-  /*
-    Analyse bundle detail page (Student version)
-  */
-
-  // it('should show a toolbar at the top of the page', () => {});
-
-  // it('should show a pageheader with the bundle icon, name and description ', () => {});
-
   it('should show the number of available items', () => {
     const expectedAmount = 4;
 
