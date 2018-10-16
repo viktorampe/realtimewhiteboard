@@ -4,7 +4,7 @@ import {
   EduContentQueries,
   EduContentReducer
 } from '@campus/dal';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 
 // TODO replace state object with actual DalState import
 export class DalState {}
@@ -22,10 +22,12 @@ export class EduContentViewModel {
   getEduContent(id: number) {}
 
   loadEduContentAgain() {
-    this.educontents$ = this.store.select(EduContentQueries.getAll);
+    this.educontents$ = this.store.pipe(select(EduContentQueries.getAll));
   }
 
   loadEntitiesAgain() {
-    this.educontents$ = this.store.select(EduContentQueries.getAllEntities);
+    this.educontents$ = this.store.pipe(
+      select(EduContentQueries.getAllEntities)
+    );
   }
 }
