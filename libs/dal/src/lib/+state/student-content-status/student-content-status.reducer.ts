@@ -29,6 +29,10 @@ export function reducer(
       return adapter.addOne(action.payload.studentContentStatus, state);
     }
 
+    case StudentContentStatusesActionTypes.UndoAddStudentContentStatus: {
+      return adapter.removeOne(action.payload.studentContentStatus.id, state);
+    }
+
     case StudentContentStatusesActionTypes.UpsertStudentContentStatus: {
       return adapter.upsertOne(action.payload.studentContentStatus, state);
     }

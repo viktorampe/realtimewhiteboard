@@ -8,10 +8,12 @@ import {
   STUDENT_CONTENT_STATUS_SERVICE_TOKEN
 } from '../../student-content-status/student-content-status.service.interface';
 import {
+  AddStudentContentStatus,
   LoadStudentContentStatuses,
   StudentContentStatusesActionTypes,
   StudentContentStatusesLoaded,
   StudentContentStatusesLoadError,
+  UndoAddStudentContentStatus,
   UndoUpdateStudentContentStatus,
   UpdateStudentContentStatus
 } from './student-content-status.actions';
@@ -81,6 +83,36 @@ export class StudentContentStatusesEffects {
         return;
       },
       onError: (action: UpdateStudentContentStatus, e: any) => {}
+    }
+  );
+
+  @Effect()
+  addStudentContentStatuses$ = this.dataPersistence.optimisticUpdate(
+    StudentContentStatusesActionTypes.AddStudentContentStatus,
+    {
+      run: (action: AddStudentContentStatus, state: any) => {
+        const newValue = action.payload.studentContentStatus;
+
+        return this.studentContentStatusesService
+          .addStudentContentStatus(newValue)
+          .pipe(map(x => null)); //TODO fout afhandelen, verwacht een Action
+      },
+      undoAction: (action: AddStudentContentStatus, e: any) => {
+        console.error(e);
+
+        return new UndoAddStudentContentStatus(action.payload);
+      }
+    }
+  );
+
+  @Effect({ dispatch: false })
+  undoAddStudentContentStatuses$ = this.dataPersistence.pessimisticUpdate(
+    StudentContentStatusesActionTypes.UndoAddStudentContentStatus,
+    {
+      run: (action: AddStudentContentStatus, state: any) => {
+        return;
+      },
+      onError: (action: AddStudentContentStatus, e: any) => {}
     }
   );
 

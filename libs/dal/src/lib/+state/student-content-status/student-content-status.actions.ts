@@ -7,6 +7,7 @@ export enum StudentContentStatusesActionTypes {
   StudentContentStatusesLoadError = '[StudentContentStatuses] Load Error',
   LoadStudentContentStatuses = '[StudentContentStatuses] Load StudentContentStatuses',
   AddStudentContentStatus = '[StudentContentStatuses] Add StudentContentStatus',
+  UndoAddStudentContentStatus = '[StudentContentStatuses] Undo Add StudentContentStatus',
   UpsertStudentContentStatus = '[StudentContentStatuses] Upsert StudentContentStatus',
   AddStudentContentStatuses = '[StudentContentStatuses] Add StudentContentStatuses',
   UpsertStudentContentStatuses = '[StudentContentStatuses] Upsert StudentContentStatuses',
@@ -41,6 +42,14 @@ export class StudentContentStatusesLoadError implements Action {
 
 export class AddStudentContentStatus implements Action {
   readonly type = StudentContentStatusesActionTypes.AddStudentContentStatus;
+
+  constructor(
+    public payload: { studentContentStatus: StudentContentStatusInterface }
+  ) {}
+}
+
+export class UndoAddStudentContentStatus implements Action {
+  readonly type = StudentContentStatusesActionTypes.UndoAddStudentContentStatus;
 
   constructor(
     public payload: { studentContentStatus: StudentContentStatusInterface }
@@ -128,6 +137,7 @@ export type StudentContentStatusesActions =
   | StudentContentStatusesLoaded
   | StudentContentStatusesLoadError
   | AddStudentContentStatus
+  | UndoAddStudentContentStatus
   | UpsertStudentContentStatus
   | AddStudentContentStatuses
   | UpsertStudentContentStatuses

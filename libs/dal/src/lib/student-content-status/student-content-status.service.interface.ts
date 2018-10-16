@@ -12,5 +12,8 @@ export interface StudentContentStatusServiceInterface {
   ): Observable<StudentContentStatusInterface[]>;
   updateStudentContentStatus(
     studentContentStatus: StudentContentStatusInterface
-  ): Observable<boolean>;
+  ): Observable<StudentContentStatusInterface>;
+  addStudentContentStatus(
+    studentContentStatus: StudentContentStatusInterface
+  ): Observable<StudentContentStatusInterface>;
 }
