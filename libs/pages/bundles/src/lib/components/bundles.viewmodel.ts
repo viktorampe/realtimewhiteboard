@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Resolve } from '@angular/router';
-import { LearningAreaInterface, UiActions } from '@campus/dal';
+import { LearningAreaInterface, UiActions, uiReducer } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
 import { Store } from '@ngrx/store';
-import { UiState } from 'libs/dal/src/lib/+state/ui/ui.reducer';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 
@@ -58,7 +57,7 @@ export class BundlesViewModel implements Resolve<boolean> {
     }
   });
 
-  constructor(private uiStore: Store<UiState>) {}
+  constructor(private uiStore: Store<uiReducer.UiState>) {}
 
   resolve(): Observable<boolean> {
     return new BehaviorSubject<boolean>(true).pipe(take(1));
