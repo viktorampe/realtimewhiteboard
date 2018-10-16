@@ -52,7 +52,7 @@ export class BundlesViewModel implements Resolve<boolean> {
   // > bundles
   private sharedBundles$: Observable<BundleInterface[]>;
   sharedBundlesByLearningArea$: Observable<{
-    [key: number]: EduContentMetadataInterface[];
+    [key: number]: BundleInterface[];
   }>;
   bundleContentsCount$: Observable<{
     [key: number]: number;
@@ -71,6 +71,8 @@ export class BundlesViewModel implements Resolve<boolean> {
       booksCount: number;
     };
   }>;
+  sharedLearningAreaBundles$: Observable<BundleInterface[]>;
+  sharedLearningAreaBooks$: Observable<EduContentMetadataInterface[]>;
 
   // own (TODO teacher)
   // > bundles
@@ -123,6 +125,20 @@ export class BundlesViewModel implements Resolve<boolean> {
       this.sharedBundles$,
       'learningAreaId'
     );
+    this.sharedLearningAreaBundles$ = this.getLearningAreaBundles(
+      this.route.params.pipe(
+        map(params => params.area),
+        filter(areaId => !!areaId)
+      ),
+      this.sharedBundlesByLearningArea$
+    );
+    this.sharedLearningAreaBooks$ = this.getLearningAreaBooks(
+      this.route.params.pipe(
+        map(params => params.area),
+        filter(areaId => !!areaId)
+      ),
+      this.sharedBooksByLearningArea$
+    );
     this.bundleContentsCount$ = this.getBundleContentsCount(
       this.unlockedContentByBundle$
     );
@@ -173,6 +189,56 @@ export class BundlesViewModel implements Resolve<boolean> {
   }
 
   /**
+   * Get bundles for specified learning area
+   *
+   * @param {Observable<number>} learningAreaId
+   * @param {Observable<{
+   *       [key: number]: BundleInterface[];
+   *     }>} bundlesByLearningArea$
+   * @returns {Observable<BundleInterface[]>}
+   * @memberof BundlesViewModel
+   */
+  private getLearningAreaBundles(
+    learningAreaId: Observable<number>,
+    bundlesByLearningArea$: Observable<{
+      [key: number]: BundleInterface[];
+    }>
+  ): Observable<BundleInterface[]> {
+    return combineLatest(learningAreaId, bundlesByLearningArea$).pipe(
+      map(
+        ([learningAreaId, bundlesByLearningArea]) =>
+          bundlesByLearningArea[learningAreaId]
+      ),
+      filter(bundles => !!bundles) // check if bundle exists in learningArea
+    );
+  }
+
+  /**
+   * Get books for specified learning area
+   *
+   * @param {Observable<number>} learningAreaId
+   * @param {Observable<{
+   *       [key: number]: EduContentMetadataInterface[];
+   *     }>} booksByLearningArea$
+   * @returns {Observable<EduContentMetadataInterface[]>}
+   * @memberof BundlesViewModel
+   */
+  private getLearningAreaBooks(
+    learningAreaId: Observable<number>,
+    booksByLearningArea$: Observable<{
+      [key: number]: EduContentMetadataInterface[];
+    }>
+  ): Observable<EduContentMetadataInterface[]> {
+    return combineLatest(learningAreaId, booksByLearningArea$).pipe(
+      map(
+        ([learningAreaId, booksByLearningArea]) =>
+          booksByLearningArea[learningAreaId]
+      ),
+      filter(books => !!books) // check if bundle exists in learningArea
+    );
+  }
+
+  /**
    * Return contents for bundle
    *
    * @param {Observable<number>} bundleId$
@@ -182,7 +248,7 @@ export class BundlesViewModel implements Resolve<boolean> {
    * @returns {Observable<ContentInterface[]>}
    * @memberof BundlesViewModel
    */
-  getBundleContents(
+  private getBundleContents(
     bundleId$: Observable<number>,
     unlockedContentByBundle$: Observable<{
       [key: number]: UnlockedContentInterface[];
