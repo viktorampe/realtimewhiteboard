@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LearningAreaInterface } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { BundlesViewModel } from './bundles.viewmodel';
 
@@ -23,8 +23,7 @@ export class LearningAreasComponent implements OnInit {
     LearningAreaInterface[]
   > = this.getDisplayedLearningAreas$(this.learningAreas$, this.filterInput$);
 
-  learningAreasCounts$: Observable<any> = this.bundlesViewModel
-    .learningAreasCounts$;
+  learningAreasCounts$: Observable<any> = of(0);
 
   constructor(private bundlesViewModel: BundlesViewModel) {}
 
