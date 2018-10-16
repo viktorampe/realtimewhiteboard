@@ -4,12 +4,6 @@ import { ActivatedRoute } from '@angular/router';
 import { UiModule } from '@campus/ui';
 import { Store } from '@ngrx/store';
 import { BundlesComponent } from './bundles.component';
-import {
-  BundleService,
-  EduContentService,
-  LearningAreaService,
-  UnlockedContentService
-} from './bundles.viewmodel';
 
 // TODO fix this test
 describe('BundlesComponent', () => {
@@ -21,10 +15,6 @@ describe('BundlesComponent', () => {
       declarations: [BundlesComponent],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
-        LearningAreaService,
-        BundleService,
-        UnlockedContentService,
-        EduContentService,
         {
           provide: ActivatedRoute,
           useValue: []

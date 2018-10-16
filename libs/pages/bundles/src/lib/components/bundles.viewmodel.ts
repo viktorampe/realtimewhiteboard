@@ -4,8 +4,8 @@ import {
   BundleInterface,
   BundleQueries,
   ContentInterface,
-  EduContentInterface,
   EduContentMetadataInterface,
+  EduContentQueries,
   LearningAreaInterface,
   LearningAreaQueries,
   PersonInterface,
@@ -24,35 +24,6 @@ import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { filter, map, shareReplay, switchMap, take } from 'rxjs/operators';
 
 export class DalState {}
-
-// TODO import real services
-// mock services
-export class LearningAreaService {
-  getAll(): Observable<LearningAreaInterface[]> {
-    return of([]);
-  }
-  getByIds(ids: number[]): Observable<LearningAreaInterface[]> {
-    return of([]);
-  }
-}
-export class BundleService {
-  getAll(): Observable<BundleInterface[]> {
-    return of([]);
-  }
-  getById(ids: number): Observable<BundleInterface> {
-    return of();
-  }
-}
-export class UnlockedContentService {
-  getAll(): Observable<UnlockedContentInterface[]> {
-    return of([]);
-  }
-}
-export class EduContentService {
-  getByIds(ids: number[]): Observable<EduContentInterface[]> {
-    return of([]);
-  }
-}
 
 @Injectable({
   providedIn: 'root'
@@ -109,13 +80,7 @@ export class BundlesViewModel implements Resolve<boolean> {
   // > learningAreas
   learningAreasWithOwnBundles$: Observable<LearningAreaInterface[]>;
 
-  constructor(
-    private route: ActivatedRoute,
-    private store: Store<DalState>,
-    // TODO replace services with store selectors
-    private learningAreaService: LearningAreaService,
-    private eduContentService: EduContentService
-  ) {}
+  constructor(private route: ActivatedRoute, private store: Store<DalState>) {}
 
   resolve(): Observable<boolean> {
     // mock data from store
@@ -150,8 +115,6 @@ export class BundlesViewModel implements Resolve<boolean> {
       select(UnlockedContentQueries.getByBundleIds)
     );
 
-    // ** FROM HERE ** \\
-
     // presentation streams
     // shared
     // > bundles
@@ -185,7 +148,7 @@ export class BundlesViewModel implements Resolve<boolean> {
       this.sharedBooks$
     );
     this.sharedLearningAreasCount$ = this.getSharedLearningAreasCount(
-      this.learningAreas$,
+      this.sharedLearningAreas$,
       this.bundlesByLearningArea$,
       this.sharedBooksByLearningArea$
     );
@@ -201,6 +164,7 @@ export class BundlesViewModel implements Resolve<boolean> {
       this.ownBooks$
     );
 
+    // TODO update with StateResolverInterface
     return new BehaviorSubject<boolean>(true).pipe(take(1));
   }
 
@@ -211,14 +175,18 @@ export class BundlesViewModel implements Resolve<boolean> {
   /**
    * Return contents for bundle
    *
-   * @param {*} bundleId$
-   * @param {*} unlockedContentByBundle$
+   * @param {Observable<number>} bundleId$
+   * @param {Observable<{
+   *       [key: number]: UnlockedContentInterface[];
+   *     }>} unlockedContentByBundle$
    * @returns {Observable<ContentInterface[]>}
    * @memberof BundlesViewModel
    */
   getBundleContents(
-    bundleId$,
-    unlockedContentByBundle$
+    bundleId$: Observable<number>,
+    unlockedContentByBundle$: Observable<{
+      [key: number]: UnlockedContentInterface[];
+    }>
   ): Observable<ContentInterface[]> {
     return combineLatest(bundleId$, unlockedContentByBundle$).pipe(
       map(([bundleId, unlockedContentsMap]) => unlockedContentsMap[bundleId]),
@@ -228,10 +196,27 @@ export class BundlesViewModel implements Resolve<boolean> {
           (unlockedContent): ContentInterface => {
             // TODO convert eduContent and userContent to uniform ContentInterface
             if (unlockedContent.eduContentId) {
-              return unlockedContent.eduContent;
+              const content =
+                unlockedContent.eduContent.publishedEduContentMetadata;
+              return {
+                id: content.id,
+                name: content.title,
+                description: content.description,
+                productType: unlockedContent.eduContent.type,
+                fileExtension: content.fileExt,
+                previewImage: content.thumbSmall
+              };
             }
             if (unlockedContent.userContentId) {
-              return unlockedContent.userContent;
+              const content = unlockedContent.userContent;
+              return {
+                id: content.id,
+                name: content.name,
+                description: content.description,
+                productType: content.type,
+                fileExtension: content.fileExt,
+                previewImage: null
+              };
             }
           }
         )
@@ -292,7 +277,11 @@ export class BundlesViewModel implements Resolve<boolean> {
           ];
         }
       ),
-      switchMap(this.eduContentService.getByIds),
+      switchMap(eduContentIds =>
+        this.store.pipe(
+          select(EduContentQueries.getByIds, { ids: eduContentIds })
+        )
+      ),
       map(
         (eduContents): EduContentMetadataInterface[] =>
           eduContents.map(eduContent => eduContent.publishedEduContentMetadata)
@@ -369,7 +358,9 @@ export class BundlesViewModel implements Resolve<boolean> {
             ...bundles.map(bundle => bundle.learningAreaId),
             ...books.map(book => book.learningAreaId)
           ];
-          return this.learningAreaService.getByIds(learningAreaIds);
+          return this.store.pipe(
+            select(LearningAreaQueries.getByIds, { ids: learningAreaIds })
+          );
         }
       ),
       shareReplay(1)
