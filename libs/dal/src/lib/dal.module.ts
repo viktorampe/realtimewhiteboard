@@ -6,6 +6,7 @@ import {
   BROWSER_STORAGE_SERVICE_TOKEN,
   StorageService
 } from '@campus/browser';
+import { AuthService, AuthServiceToken } from '@campus/dal';
 import {
   LoopBackConfig,
   SDKBrowserModule
@@ -32,6 +33,11 @@ import {
   UnlockedContentsEffects
 } from './+state/unlocked-content';
 import { UserContentReducer, UserContentsEffects } from './+state/user-content';
+import { UserEffects } from './+state/user/user.effects';
+import {
+  initialUserstate as userInitialState,
+  userReducer
+} from './+state/user/user.reducer';
 import {
   UnlockedBoekeGroupService,
   UnlockedBoekeStudentService,
@@ -50,7 +56,6 @@ import { EduContentService } from './edu-content/edu-content.service';
 import { EDUCONTENT_SERVICE_TOKEN } from './edu-content/edu-content.service.interface';
 import { LearningAreaService } from './learning-area/learning-area.service';
 import { LEARNINGAREA_SERVICE_TOKEN } from './learning-area/learning-area.service.interface';
-import { AuthService, AuthServiceToken } from './persons/auth-service';
 
 interface DalOptions {
   apiBaseUrl: string;
@@ -87,6 +92,10 @@ interface DalOptions {
         initialState: UnlockedBoekeGroupReducer.initialState
       }
     ),
+    EffectsModule.forFeature([BundlesEffects, UserEffects]),
+    StoreModule.forFeature('user', userReducer, {
+      initialState: userInitialState
+    }),
     StoreModule.forFeature(
       'unlockedBoekeStudents',
       UnlockedBoekeStudentReducer.reducer,
@@ -133,7 +142,8 @@ export class DalModule {
     LoopBackConfig.setBaseURL(options.apiBaseUrl);
     LoopBackConfig.setRequestOptionsCredentials(true);
     return {
-      ngModule: DalModule
+      ngModule: DalModule,
+      providers: [{ provide: AuthServiceToken, useClass: AuthService }]
     };
   }
 }

@@ -15,7 +15,6 @@ describe('PersonsService', () => {
   it('should be created', inject(
     [PersonServiceToken],
     (service: PersonServiceInterface) => {
-      console.log(service);
       expect(service).toBeTruthy();
     }
   ));

@@ -4,6 +4,9 @@ export * from './lib/+state/bundle/bundle.selectors';
 export * from './lib/+state/edu-content';
 export * from './lib/+state/ui';
 export * from './lib/+state/ui/ui.selectors';
+export * from './lib/+state/user/user.actions';
+export * from './lib/+state/user/user.reducer';
+export * from './lib/+state/user/user.selectors';
 export * from './lib/dal.module';
 export {
   EduContentServiceInterface,
