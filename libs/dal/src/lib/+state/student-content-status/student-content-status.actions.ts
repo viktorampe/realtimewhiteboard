@@ -11,7 +11,7 @@ export enum StudentContentStatusesActionTypes {
   AddStudentContentStatuses = '[StudentContentStatuses] Add StudentContentStatuses',
   UpsertStudentContentStatuses = '[StudentContentStatuses] Upsert StudentContentStatuses',
   UpdateStudentContentStatus = '[StudentContentStatuses] Update StudentContentStatus',
-
+  UndoUpdateStudentContentStatus = '[StudentContentStatuses] Undo Update StudentContentStatus',
   UpdateStudentContentStatuses = '[StudentContentStatuses] Update StudentContentStatuses',
   DeleteStudentContentStatus = '[StudentContentStatuses] Delete StudentContentStatus',
   DeleteStudentContentStatuses = '[StudentContentStatuses] Delete StudentContentStatuses',
@@ -78,6 +78,19 @@ export class UpdateStudentContentStatus implements Action {
   constructor(
     public payload: {
       studentContentStatus: Update<StudentContentStatusInterface>;
+      oldStudentContentStatus?: Update<StudentContentStatusInterface>;
+    }
+  ) {}
+}
+
+export class UndoUpdateStudentContentStatus implements Action {
+  readonly type =
+    StudentContentStatusesActionTypes.UndoUpdateStudentContentStatus;
+
+  constructor(
+    public payload: {
+      studentContentStatus: Update<StudentContentStatusInterface>;
+      oldStudentContentStatus?: Update<StudentContentStatusInterface>;
     }
   ) {}
 }
@@ -119,6 +132,7 @@ export type StudentContentStatusesActions =
   | AddStudentContentStatuses
   | UpsertStudentContentStatuses
   | UpdateStudentContentStatus
+  | UndoUpdateStudentContentStatus
   | UpdateStudentContentStatuses
   | DeleteStudentContentStatus
   | DeleteStudentContentStatuses

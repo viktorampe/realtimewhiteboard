@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import {
   EduContentInterface,
   StudentContentStatusActions,
-  StudentContentStatusInterface,
   StudentContentStatusQueries
 } from '@campus/dal';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Update } from '@ngrx/entity';
 import { select } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
+import { StudentContentStatusInterface } from './../../../../dal/src/lib/+models/StudentContentStatus.interface';
 import { LoginPageViewModel } from './loginpage.viewmodel';
 
 @Component({
@@ -20,7 +21,7 @@ export class LoginpageComponent implements OnInit {
   educontents: Observable<EduContentInterface[]>;
   currentUser: Observable<any>;
   constructor(
-    private loginPageviewModel: LoginPageViewModel,
+    public loginPageviewModel: LoginPageViewModel,
     private personApi: PersonApi
   ) {}
 
@@ -33,9 +34,12 @@ export class LoginpageComponent implements OnInit {
   // tslint:disable-next-line:member-ordering
   response3$: any;
   getStudentContentStatusFromStoreById(id: number) {
-    this.response3$ = this.loginPageviewModel.studentContentStatusStore.pipe(
+    const res$ = this.loginPageviewModel.studentContentStatusStore.pipe(
       select(StudentContentStatusQueries.getById, { id: id })
     );
+
+    this.response3$ = res$;
+    return res$;
   }
 
   // setStudentContentStatusInStore(
@@ -57,10 +61,34 @@ export class LoginpageComponent implements OnInit {
       }
     };
 
-    this.loginPageviewModel.studentContentStatusStore.dispatch(
-      new StudentContentStatusActions.UpdateStudentContentStatus({
-        studentContentStatus: updatedStudentContentStatus
-      })
+    const oldStudentContentStatus = this.getStudentContentStatusFromStoreById(
+      studentContentStatus.id
     );
+
+    oldStudentContentStatus.pipe(take(1)).subscribe(oldValue =>
+      this.loginPageviewModel.studentContentStatusStore.dispatch(
+        new StudentContentStatusActions.UpdateStudentContentStatus({
+          studentContentStatus: updatedStudentContentStatus,
+          oldStudentContentStatus: this.getUndoUpdateStudentContentStatus(
+            updatedStudentContentStatus,
+            oldValue
+          )
+        })
+      )
+    );
+  }
+
+  private getUndoUpdateStudentContentStatus(
+    updateStudentContentStatus: Update<StudentContentStatusInterface>,
+    oldStudentContentStatus: StudentContentStatusInterface
+  ): Update<StudentContentStatusInterface> {
+    const undoUpdate: Update<StudentContentStatusInterface> = {
+      id: oldStudentContentStatus.id,
+      // Even gewoon alle originele waarden terugzetten, verfijning is mogelijk
+      changes: {
+        ...oldStudentContentStatus
+      }
+    };
+    return undoUpdate;
   }
 }

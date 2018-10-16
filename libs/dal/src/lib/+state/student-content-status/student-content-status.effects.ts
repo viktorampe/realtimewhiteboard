@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
+import { StudentContentStatusInterface } from '@campus/dal';
 import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { map } from 'rxjs/operators';
@@ -6,7 +7,6 @@ import {
   StudentContentStatusServiceInterface,
   STUDENT_CONTENT_STATUS_SERVICE_TOKEN
 } from '../../student-content-status/student-content-status.service.interface';
-import { StudentContentStatusInterface } from './../../+models/StudentContentStatus.interface';
 import {
   LoadStudentContentStatuses,
   StudentContentStatusesActionTypes,
@@ -40,26 +40,37 @@ export class StudentContentStatusesEffects {
     }
   );
 
-  @Effect()
+  @Effect({ dispatch: false }) // nodig als je geen action returned
   updateStudentContentStatuses$ = this.dataPersistence.optimisticUpdate(
     StudentContentStatusesActionTypes.UpdateStudentContentStatus,
     {
       run: (action: UpdateStudentContentStatus, state: any) => {
+        const statusId = <number>action.payload.studentContentStatus.id;
+
         const newValue: StudentContentStatusInterface = {
-          ...{ id: <number>action.payload.studentContentStatus.id },
+          ...{ id: statusId },
           ...action.payload.studentContentStatus.changes
         };
-        this.studentContentStatusesService
-          .updateStudentContentStatus(newValue)
-          .subscribe();
+
+        this.studentContentStatusesService.updateStudentContentStatus(newValue);
         // TODO: return type? research optimistic updates
       },
       undoAction: (action: UpdateStudentContentStatus, e: any) => {
         return {
-          type: 'UNDO_UPDATE_TODO',
+          type:
+            StudentContentStatusesActionTypes.UndoUpdateStudentContentStatus,
           payload: action
         };
       }
+    }
+  );
+
+  @Effect()
+  undoUpdateStudentContentStatuses$ = this.dataPersistence.pessimisticUpdate(
+    StudentContentStatusesActionTypes.UndoUpdateStudentContentStatus,
+    {
+      run: (action: UpdateStudentContentStatus, state: any) => {},
+      onError: (action: UpdateStudentContentStatus, e: any) => {}
     }
   );
 

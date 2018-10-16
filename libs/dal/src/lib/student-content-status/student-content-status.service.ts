@@ -4,7 +4,7 @@ import {
   StudentContentStatusApi
 } from '@diekeure/polpo-api-angular-sdk';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { StudentContentStatusInterface } from '../+models/StudentContentStatus.interface';
 import { StudentContentStatusServiceInterface } from './student-content-status.service.interface';
 
@@ -30,12 +30,18 @@ export class StudentContentStatusService
 
   updateStudentContentStatus(
     studentContentStatus: StudentContentStatusInterface
-  ): Observable<boolean> {
-    return this.studentContentStatusApi
-      .updateAttributes<StudentContentStatusInterface>(
-        { id: studentContentStatus.id },
-        { contentStatusId: studentContentStatus.contentStatusId }
+  ) {
+    this.studentContentStatusApi
+      .patchAttributes(studentContentStatus.id, {
+        contentStatusId: studentContentStatus.contentStatusId
+      })
+      .pipe(
+        map(returnValue => returnValue.id === studentContentStatus.id),
+        catchError(err => {
+          console.error(err);
+          throw err;
+        })
       )
-      .pipe(map(returnValue => returnValue.id === studentContentStatus.id));
+      .subscribe();
   }
 }
