@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
-import { EduContentActions, EduContentQueries } from '@campus/dal';
+import {
+  EduContentActions,
+  EduContentQueries,
+  EduContentReducer
+} from '@campus/dal';
 import { Store } from '@ngrx/store';
 
 // TODO replace state object with actual DalState import
@@ -9,7 +13,7 @@ export class DalState {}
 export class EduContentViewModel {
   educontents$: any;
 
-  constructor(private store: Store<DalState>) {}
+  constructor(private store: Store<EduContentReducer.State>) {}
 
   getAllEduContents() {
     this.store.dispatch(new EduContentActions.LoadEduContents({ force: true }));
