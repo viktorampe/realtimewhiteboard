@@ -18,10 +18,7 @@ import {
   UserContentActions,
   UserContentQueries
 } from '@campus/dal';
-import {
-  ViewModelResolver,
-  ViewModelResolverInterface
-} from '@campus/pages/shared';
+import { StateResolver, StateResolverInterface } from '@campus/pages/shared';
 import { ListFormat } from '@campus/ui';
 import { Action, Selector, Store } from '@ngrx/store';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -30,7 +27,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class BundlesViewModel
-  implements Resolve<boolean>, ViewModelResolverInterface {
+  implements Resolve<boolean>, StateResolverInterface {
   listFormat$ = new BehaviorSubject<ListFormat>(ListFormat.GRID);
   learningAreas$: Observable<LearningAreaInterface[]> = new BehaviorSubject<
     LearningAreaInterface[]
@@ -112,7 +109,7 @@ export class BundlesViewModel
 
   constructor(
     store: Store<DalState>,
-    private viewModelResolver: ViewModelResolver
+    private viewModelResolver: StateResolver
   ) {}
 
   changeListFormat(listFormat: ListFormat): void {

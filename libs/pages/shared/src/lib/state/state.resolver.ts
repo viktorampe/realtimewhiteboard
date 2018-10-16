@@ -7,7 +7,7 @@ import { filter, map, take } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
-export class ViewModelResolver {
+export class StateResolver {
   constructor(private store: Store<DalState>) {}
 
   resolve(
@@ -33,7 +33,7 @@ export class ViewModelResolver {
   }
 }
 
-export interface ViewModelResolverInterface {
+export interface StateResolverInterface {
   getLoadableActions(): Action[];
   getResolvedQueries(): Selector<object, boolean>[];
 }
