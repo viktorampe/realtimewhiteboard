@@ -64,3 +64,5 @@ the route will be added to the libs folder
 ### generate state in app (root state 'app' example)
 
     ng generate ngrx app --module=apps/polpo-classroom-web/src/app/app.module.ts --root
+
+test
