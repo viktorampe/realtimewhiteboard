@@ -67,9 +67,14 @@ export const getAllAsEduContents = createSelector(getAll, entities =>
 
 export const getByIdAsEduContents = createSelector(
   selectEduContentState,
-  (state: State, props: { id: number }) =>
-    Object.assign<EduContent, EduContentInterface>(
-      new EduContent(),
-      state.entities[props.id]
-    )
+  (state: State, props: { id: number }) => {
+    if (state.entities[props.id]) {
+      return Object.assign<EduContent, EduContentInterface>(
+        new EduContent(),
+        state.entities[props.id]
+      );
+    } else {
+      return undefined;
+    }
+  }
 );
