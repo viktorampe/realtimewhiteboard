@@ -1,3 +1,4 @@
+import { Dictionary } from 'lodash';
 import { StudentContentStatusQueries } from '.';
 import { StudentContentStatusInterface } from '../../+models';
 import { State } from './student-content-status.reducer';
@@ -23,12 +24,14 @@ describe('StudentContentStatus Selectors', () => {
           )
         : [],
       entities: studentContentStatuses
-        ? studentContentStatuses.reduce(
-            (entityMap, studentContentStatus) => ({
-              ...entityMap,
-              [studentContentStatus.id]: studentContentStatus
-            }),
-            {}
+        ? <Dictionary<StudentContentStatusInterface>>(
+            studentContentStatuses.reduce(
+              (entityMap, studentContentStatus) => ({
+                ...entityMap,
+                [studentContentStatus.id]: studentContentStatus
+              }),
+              {}
+            )
           )
         : {},
       loaded: loaded,
@@ -51,7 +54,7 @@ describe('StudentContentStatus Selectors', () => {
         true,
         'no error'
       );
-      storeState = { StudentContentStatuses: studentContentStatusesState };
+      storeState = { studentContentStatuses: studentContentStatusesState };
     });
     it('getError() should return the error', () => {
       const results = StudentContentStatusQueries.getError(storeState);

@@ -56,9 +56,9 @@ function createState(
 }
 
 describe('StudentContentStatuses Reducer', () => {
-  let StudentContentStatuses: StudentContentStatusInterface[];
+  let studentContentStatuses: StudentContentStatusInterface[];
   beforeEach(() => {
-    StudentContentStatuses = [
+    studentContentStatuses = [
       createStudentContentStatus(1),
       createStudentContentStatus(2),
       createStudentContentStatus(3)
@@ -78,10 +78,10 @@ describe('StudentContentStatuses Reducer', () => {
   describe('loaded action', () => {
     it('should load all StudentContentStatuses', () => {
       const action = new StudentContentStatusActions.StudentContentStatusesLoaded(
-        { StudentContentStatuses }
+        { studentContentStatuses }
       );
       const result = reducer(initialState, action);
-      expect(result).toEqual(createState(StudentContentStatuses, true));
+      expect(result).toEqual(createState(studentContentStatuses, true));
     });
 
     it('should error', () => {
@@ -96,7 +96,7 @@ describe('StudentContentStatuses Reducer', () => {
 
   describe('add actions', () => {
     it('should add one studentContentStatus', () => {
-      const studentContentStatus = StudentContentStatuses[0];
+      const studentContentStatus = studentContentStatuses[0];
       const action = new StudentContentStatusActions.AddStudentContentStatus({
         studentContentStatus
       });
@@ -107,16 +107,16 @@ describe('StudentContentStatuses Reducer', () => {
 
     it('should add multiple StudentContentStatuses', () => {
       const action = new StudentContentStatusActions.AddStudentContentStatuses({
-        StudentContentStatuses
+        studentContentStatuses
       });
       const result = reducer(initialState, action);
 
-      expect(result).toEqual(createState(StudentContentStatuses, false));
+      expect(result).toEqual(createState(studentContentStatuses, false));
     });
   });
   describe('upsert actions', () => {
     it('should upsert one studentContentStatus', () => {
-      const originalStudentContentStatus = StudentContentStatuses[0];
+      const originalStudentContentStatus = studentContentStatuses[0];
 
       const startState = reducer(
         initialState,
@@ -126,7 +126,7 @@ describe('StudentContentStatuses Reducer', () => {
       );
 
       const updatedStudentContentStatus = createStudentContentStatus(
-        StudentContentStatuses[0].id,
+        studentContentStatuses[0].id,
         'test'
       );
 
@@ -144,7 +144,7 @@ describe('StudentContentStatuses Reducer', () => {
     });
 
     it('should upsert many StudentContentStatuses', () => {
-      const startState = createState(StudentContentStatuses);
+      const startState = createState(studentContentStatuses);
 
       const StudentContentStatusesToInsert = [
         createStudentContentStatus(1),
@@ -154,7 +154,7 @@ describe('StudentContentStatuses Reducer', () => {
       ];
       const action = new StudentContentStatusActions.UpsertStudentContentStatuses(
         {
-          StudentContentStatuses: StudentContentStatusesToInsert
+          studentContentStatuses: StudentContentStatusesToInsert
         }
       );
 
@@ -166,7 +166,7 @@ describe('StudentContentStatuses Reducer', () => {
 
   describe('update actions', () => {
     it('should update an studentContentStatus', () => {
-      const studentContentStatus = StudentContentStatuses[0];
+      const studentContentStatus = studentContentStatuses[0];
       const startState = createState([studentContentStatus]);
       const update: Update<StudentContentStatusInterface> = {
         id: 1,
@@ -186,7 +186,7 @@ describe('StudentContentStatuses Reducer', () => {
     });
 
     it('should update multiple StudentContentStatuses', () => {
-      const startState = createState(StudentContentStatuses);
+      const startState = createState(studentContentStatuses);
       const updates: Update<StudentContentStatusInterface>[] = [
         {
           id: 1,
@@ -203,7 +203,7 @@ describe('StudentContentStatuses Reducer', () => {
       ];
       const action = new StudentContentStatusActions.UpdateStudentContentStatuses(
         {
-          StudentContentStatuses: updates
+          studentContentStatuses: updates
         }
       );
       const result = reducer(startState, action);
@@ -212,7 +212,7 @@ describe('StudentContentStatuses Reducer', () => {
         createState([
           createStudentContentStatus(1, personIdUpdatedValue),
           createStudentContentStatus(2, personIdUpdatedValue),
-          StudentContentStatuses[2]
+          studentContentStatuses[2]
         ])
       );
     });
@@ -220,7 +220,7 @@ describe('StudentContentStatuses Reducer', () => {
 
   describe('delete actions', () => {
     it('should delete one studentContentStatus ', () => {
-      const studentContentStatus = StudentContentStatuses[0];
+      const studentContentStatus = studentContentStatuses[0];
       const startState = createState([studentContentStatus]);
       const action = new StudentContentStatusActions.DeleteStudentContentStatus(
         {
@@ -232,21 +232,21 @@ describe('StudentContentStatuses Reducer', () => {
     });
 
     it('should delete multiple StudentContentStatuses', () => {
-      const startState = createState(StudentContentStatuses);
+      const startState = createState(studentContentStatuses);
       const action = new StudentContentStatusActions.DeleteStudentContentStatuses(
         {
-          ids: [StudentContentStatuses[0].id, StudentContentStatuses[1].id]
+          ids: [studentContentStatuses[0].id, studentContentStatuses[1].id]
         }
       );
       const result = reducer(startState, action);
-      expect(result).toEqual(createState([StudentContentStatuses[2]]));
+      expect(result).toEqual(createState([studentContentStatuses[2]]));
     });
   });
 
   describe('clear action', () => {
     it('should clear the StudentContentStatuses collection', () => {
       const startState = createState(
-        StudentContentStatuses,
+        studentContentStatuses,
         true,
         'something went wrong'
       );

@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
-import { EduContentActions, EduContentQueries, EduContentReducer } from '@campus/dal';
+import {
+  EduContentActions,
+  EduContentQueries,
+  EduContentReducer
+} from '@campus/dal';
 import { Store } from '@ngrx/store';
 
 @Injectable()

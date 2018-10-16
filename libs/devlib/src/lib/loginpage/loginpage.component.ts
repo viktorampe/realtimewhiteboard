@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {
   EduContentInterface,
   StudentContentStatusActions,
+  StudentContentStatusInterface,
   StudentContentStatusQueries
 } from '@campus/dal';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
@@ -9,7 +10,6 @@ import { Update } from '@ngrx/entity';
 import { select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { StudentContentStatusInterface } from './../../../../dal/src/lib/+models/StudentContentStatus.interface';
 import { LoginPageViewModel } from './loginpage.viewmodel';
 
 @Component({
@@ -41,15 +41,6 @@ export class LoginpageComponent implements OnInit {
     this.response3$ = res$;
     return res$;
   }
-
-  // setStudentContentStatusInStore(
-  //   id: number,
-  //   status: StudentContentStatusInterface
-  // ) {
-  //   this.loginPageviewModel.studentContentStatusStore.dispatch(
-  //     new StudentContentStatusActions.UpdateStudentContentStatus(status)
-  //   );
-  // }
 
   saveStudentContentStatus(
     studentContentStatus: StudentContentStatusInterface

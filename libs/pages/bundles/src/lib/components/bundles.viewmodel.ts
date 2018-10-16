@@ -1,14 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Resolve } from '@angular/router';
-import {
-  LearningAreaInterface,
-  StudentContentStatusActions,
-  StudentContentStatusInterface,
-  StudentContentStatusReducer,
-  UiActions
-} from '@campus/dal';
+import { LearningAreaInterface, UiActions } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
-import { Update } from '@ngrx/entity';
 import { Store } from '@ngrx/store';
 import { UiState } from 'libs/dal/src/lib/+state/ui/ui.reducer';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -65,10 +58,7 @@ export class BundlesViewModel implements Resolve<boolean> {
     }
   });
 
-  constructor(
-    private uiStore: Store<UiState>,
-    private studentContentStatusStore: Store<StudentContentStatusReducer.State>
-  ) {}
+  constructor(private uiStore: Store<UiState>) {}
 
   resolve(): Observable<boolean> {
     return new BehaviorSubject<boolean>(true).pipe(take(1));
@@ -76,22 +66,5 @@ export class BundlesViewModel implements Resolve<boolean> {
 
   changeListFormat(listFormat: ListFormat): void {
     this.uiStore.dispatch(new UiActions.SetListFormatUi({ listFormat }));
-  }
-
-  saveStudentContentStatus(
-    studentContentStatus: StudentContentStatusInterface
-  ) {
-    const updatedStudentContentStatus: Update<StudentContentStatusInterface> = {
-      id: studentContentStatus.id,
-      changes: {
-        contentStatusId: studentContentStatus.contentStatusId
-      }
-    };
-
-    this.studentContentStatusStore.dispatch(
-      new StudentContentStatusActions.UpdateStudentContentStatus({
-        studentContentStatus: updatedStudentContentStatus
-      })
-    );
   }
 }

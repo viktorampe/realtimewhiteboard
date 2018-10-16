@@ -60,7 +60,7 @@ describe('StudentContentStatusEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature('studentContentStatus', reducer, {
+        StoreModule.forFeature('studentContentStatuses', reducer, {
           initialState: usedState
         }),
         EffectsModule.forRoot([]),
@@ -89,7 +89,7 @@ describe('StudentContentStatusEffects', () => {
       studentId: 1
     });
     const filledLoadedAction = new StudentContentStatusesLoaded({
-      StudentContentStatuses: []
+      studentContentStatuses: []
     });
     const loadErrorAction = new StudentContentStatusesLoadError(
       new Error('failed')
