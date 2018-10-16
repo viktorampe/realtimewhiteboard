@@ -1,0 +1,177 @@
+@mixin ui-button() {
+  $ui-button-font-size: 20px !default;
+  $ui-button-padding: $ui-button-font-size/5 !default;
+  $ui-button-color: $ui-bg-color-2 !default;
+  $ui-button-background-color: $ui-font-color-active !default;
+  $ui-button-border-color: darken($ui-button-background-color, 10%) !default;
+  $ui-button-margin-top: 2px !default;
+  $ui-button-margin-left: 2px !default;
+  $ui-button-margin-right: $ui-button-margin-left !default;
+  //--disabled
+  $ui-button--disabled-background-color: lighten(
+    $ui-button-background-color,
+    20%
+  ) !default;
+  $ui-button--disabled-border-color: lighten(
+    $ui-button-border-color,
+    20%
+  ) !default;
+  // --hover
+  $ui-button--hover-color: $ui-button-background-color !default;
+  $ui-button--hover-background-color: $ui-button-color !default;
+  // --active
+  $ui-button--active-color: $ui-button-background-color !default;
+  $ui-button--active-background-color: $ui-button-color !default;
+  // --rounded-corner
+  $ui-button--rounded-corner-border-radius: $ui-button-font-size / 4 !default;
+  // --danger
+  $ui-button--danger-color: $ui-button-color !default;
+  $ui-button--danger-background-color: $color-danger-1 !default;
+  $ui-button--danger-border-color: darken(
+    $ui-button--danger-background-color,
+    10%
+  ) !default;
+  // --danger--disabled
+  $ui-button--danger--disabled-background-color: lighten(
+    $ui-button--danger-background-color,
+    20%
+  ) !default;
+  $ui-button--danger--disabled-border-color: lighten(
+    $ui-button--danger-border-color,
+    20%
+  ) !default;
+  // --danger--hover
+  $ui-button--danger--hover-color: $ui-button--danger-background-color !default;
+  $ui-button--danger--hover-background-color: $ui-button--danger-color !default;
+  // --danger--active
+  $ui-button--danger--active-color: $ui-button--danger-background-color !default;
+  $ui-button--danger--active-background-color: $ui-button--danger-color !default;
+  // --warning
+  $ui-button--warning-color: $ui-button-color !default;
+  $ui-button--warning-background-color: $color-warning-1 !default;
+  $ui-button--warning-border-color: darken(
+    $ui-button--warning-background-color,
+    10%
+  ) !default;
+  // --warning--disabled
+  $ui-button--warning--disabled-background-color: lighten(
+    $ui-button--warning-background-color,
+    20%
+  ) !default;
+  $ui-button--warning--disabled-border-color: lighten(
+    $ui-button--warning-border-color,
+    20%
+  ) !default;
+  // --warning--hover
+  $ui-button--warning--hover-color: $ui-button--warning-background-color !default;
+  $ui-button--warning--hover-background-color: $ui-button--warning-color !default;
+  // --warning--active
+  $ui-button--warning--active-color: $ui-button--warning-background-color !default;
+  $ui-button--warning--active-background-color: $ui-button--warning-color !default;
+  .ui-button {
+    font-size: $ui-button-font-size;
+    padding: $ui-button-padding;
+    color: $ui-button-color;
+    background-color: $ui-button-background-color;
+    margin-left: $ui-button-margin-left;
+    margin-right: $ui-button-margin-right;
+    &:active {
+      background-color: $ui-button--active-background-color;
+      color: $ui-button--active-color;
+    }
+    &:hover {
+      background-color: $ui-button--hover-background-color;
+      color: $ui-button--hover-color;
+    }
+  }
+  // --bordered
+  .ui-button--bordered {
+    .ui-button {
+      border-color: $ui-button-border-color;
+      border-style: solid;
+      border-width: 1px;
+    } // --bordered--disabled
+    &.ui-button--disabled {
+      .ui-button {
+        border-color: $ui-button--disabled-border-color;
+      }
+    }
+  }
+  // --rounded-corners
+  .ui-button--rounded-corners {
+    .ui-button {
+      border-radius: $ui-button--rounded-corner-border-radius;
+    }
+  }
+  // --disabled
+  .ui-button--disabled {
+    .ui-button {
+      background-color: $ui-button--disabled-background-color;
+      &::before {
+        opacity: 0.5;
+      }
+    }
+  }
+  // --danger
+  .ui-button--danger {
+    .ui-button {
+      background-color: $ui-button--danger-background-color;
+      &:active {
+        background-color: $ui-button--danger--active-background-color;
+        color: $ui-button--danger--active-color;
+      }
+      &:hover {
+        background-color: $ui-button--danger--hover-background-color;
+        color: $ui-button--danger--hover-color;
+      }
+    }
+    // --danger--disabled
+    &.ui-button--disabled {
+      .ui-button {
+        background-color: $ui-button--danger--disabled-background-color;
+      }
+    }
+    // --danger--bordered
+    &.ui-button--bordered {
+      .ui-button {
+        border-color: $ui-button--danger-border-color;
+      } // --danger--bordered--disabled
+      &.ui-button--disabled {
+        .ui-button {
+          border-color: $ui-button--danger--disabled-border-color;
+        }
+      }
+    }
+  }
+  // --warning
+  .ui-button--warning {
+    .ui-button {
+      background-color: $ui-button--warning-background-color;
+      &:active {
+        background-color: $ui-button--warning--active-background-color;
+        color: $ui-button--warning--active-color;
+      }
+      &:hover {
+        background-color: $ui-button--warning--hover-background-color;
+        color: $ui-button--warning--hover-color;
+      }
+    }
+    // --warning--disabled
+    &.ui-button--disabled {
+      .ui-button {
+        background-color: $ui-button--warning--disabled-background-color;
+      }
+    }
+    // --warning--bordered
+    &.ui-button--bordered {
+      .ui-button {
+        border-color: $ui-button--warning-border-color;
+      } // --warning--bordered--disabled
+      &.ui-button--disabled {
+        .ui-button {
+          border-color: $ui-button--warning--disabled-border-color;
+        }
+      }
+    }
+  }
+}

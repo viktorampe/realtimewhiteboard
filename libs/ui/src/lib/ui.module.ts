@@ -16,13 +16,19 @@ import {
 } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { AppBarComponent } from './app-bar/app-bar.component';
+import { ButtonComponent } from './button/button.component';
+import { BorderDirective } from './button/directives/button-border.directive';
+import { CircleDirective } from './button/directives/button-circle.directive';
+import { DangerDirective } from './button/directives/button-danger.directive';
+import { DisabledDirective } from './button/directives/button-disabled.directive';
+import { RoundedCornersDirective } from './button/directives/button-rounded-corners.directive';
+import { WarningDirective } from './button/directives/button-warning.directive';
 import { ConfirmableSelectComponent } from './confirmable-select/confirmable-select.component';
-import { ContentActionButtonComponent } from './content-action-button/content-action-button.component';
 import { ContentPreviewComponent } from './content-preview/content-preview.component';
 import { ContentThumbnailComponent } from './content-thumbnail/content-thumbnail.component';
 import { EditableInlineTagListComponent } from './editable-inline-tag-list/editable-inline-tag-list.component';
 import { FileExtensionComponent } from './file-extension/file-extension.component';
-import { FilterTextInputComponent } from './filter/input/filter-text-input/filter-text-input.component';
+import { FilterTextInputComponent } from './filter-text-input/filter-text-input.component';
 import { FolderDetailsDirective } from './folder/directives/folder-details.directive';
 import { FolderComponent } from './folder/folder.component';
 import { InfoPanelComponent } from './info-panel/info-panel.component';
@@ -91,7 +97,7 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     FileExtensionComponent,
     TreeNavComponent,
     ContentThumbnailComponent,
-    ContentActionButtonComponent,
+    ButtonComponent,
     ListViewComponent,
     ListViewItemDirective,
     TreeNavComponent,
@@ -100,6 +106,12 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     FolderDetailsDirective,
     FolderComponent,
     AdjustColorBrightnessPipe,
+    CircleDirective,
+    RoundedCornersDirective,
+    BorderDirective,
+    DangerDirective,
+    WarningDirective,
+    DisabledDirective,
     TreeNavComponent,
     ToolBarComponent
   ],
@@ -126,7 +138,7 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     FileExtensionComponent,
     TreeNavComponent,
     ContentThumbnailComponent,
-    ContentActionButtonComponent,
+    ButtonComponent,
     ListViewComponent,
     ListViewItemDirective,
     TreeNavComponent,
@@ -134,6 +146,12 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     FolderDetailsDirective,
     FolderComponent,
     AdjustColorBrightnessPipe,
+    CircleDirective,
+    RoundedCornersDirective,
+    BorderDirective,
+    DangerDirective,
+    WarningDirective,
+    DisabledDirective,
     TreeNavComponent,
     ToolBarComponent
   ]

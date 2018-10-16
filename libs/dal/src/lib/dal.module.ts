@@ -1,6 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { ModuleWithProviders, NgModule } from '@angular/core';
+import {
+  BrowserModule as CampusBrowserModule,
+  BROWSER_STORAGE_SERVICE_TOKEN,
+  StorageService
+} from '@campus/browser';
 import { AuthService, AuthServiceToken } from '@campus/dal';
 import {
   LoopBackConfig,
@@ -8,16 +13,49 @@ import {
 } from '@diekeure/polpo-api-angular-sdk';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
-import { BundlesEffects } from './+state/bundles/bundles.effects';
+import { BundleReducer, BundlesEffects } from './+state/bundle';
+import { EduContentReducer, EduContentsEffects } from './+state/edu-content';
 import {
-  bundlesReducer,
-  initialState as bundlesInitialState
-} from './+state/bundles/bundles.reducer';
+  LearningAreaReducer,
+  LearningAreasEffects
+} from './+state/learning-area';
+import { UiEffects, uiReducer } from './+state/ui/';
+import {
+  UnlockedBoekeGroupReducer,
+  UnlockedBoekeGroupsEffects
+} from './+state/unlocked-boeke-group';
+import {
+  UnlockedBoekeStudentReducer,
+  UnlockedBoekeStudentsEffects
+} from './+state/unlocked-boeke-student';
+import {
+  UnlockedContentReducer,
+  UnlockedContentsEffects
+} from './+state/unlocked-content';
+import { UserContentReducer, UserContentsEffects } from './+state/user-content';
 import { UserEffects } from './+state/user/user.effects';
 import {
   initialUserstate as userInitialState,
   userReducer
 } from './+state/user/user.reducer';
+import {
+  UnlockedBoekeGroupService,
+  UnlockedBoekeStudentService,
+  UNLOCKED_BOEKE_GROUP_SERVICE_TOKEN,
+  UNLOCKED_BOEKE_STUDENT_SERVICE_TOKEN
+} from './boeke';
+import {
+  BundleService,
+  BUNDLE_SERVICE_TOKEN,
+  UnlockedContentService,
+  UNLOCKED_CONTENT_SERVICE_TOKEN,
+  UserContentService,
+  USER_CONTENT_SERVICE_TOKEN
+} from './bundle';
+import { EduContentService } from './edu-content/edu-content.service';
+import { EDUCONTENT_SERVICE_TOKEN } from './edu-content/edu-content.service.interface';
+import { LearningAreaService } from './learning-area/learning-area.service';
+import { LEARNINGAREA_SERVICE_TOKEN } from './learning-area/learning-area.service.interface';
 
 interface DalOptions {
   apiBaseUrl: string;
@@ -25,16 +63,77 @@ interface DalOptions {
 
 @NgModule({
   imports: [
+    CampusBrowserModule,
     CommonModule,
     SDKBrowserModule.forRoot(),
     HttpClientModule,
-    StoreModule.forFeature('bundles', bundlesReducer, {
-      initialState: bundlesInitialState
+    StoreModule.forFeature('ui', uiReducer.reducer, {
+      initialState: uiReducer.initialState
     }),
+    StoreModule.forFeature('bundles', BundleReducer.reducer, {
+      initialState: BundleReducer.initialState
+    }),
+    StoreModule.forFeature('learingAreas', LearningAreaReducer.reducer, {
+      initialState: LearningAreaReducer.initialState
+    }),
+    StoreModule.forFeature('eduContents', EduContentReducer.reducer, {
+      initialState: EduContentReducer.initialState
+    }),
+    StoreModule.forFeature('unlockedContents', UnlockedContentReducer.reducer, {
+      initialState: UnlockedContentReducer.initialState
+    }),
+    StoreModule.forFeature('userContents', UserContentReducer.reducer, {
+      initialState: UserContentReducer.initialState
+    }),
+    StoreModule.forFeature(
+      'unlockedBoekeGroups',
+      UnlockedBoekeGroupReducer.reducer,
+      {
+        initialState: UnlockedBoekeGroupReducer.initialState
+      }
+    ),
     EffectsModule.forFeature([BundlesEffects, UserEffects]),
     StoreModule.forFeature('user', userReducer, {
       initialState: userInitialState
-    })
+    }),
+    StoreModule.forFeature(
+      'unlockedBoekeStudents',
+      UnlockedBoekeStudentReducer.reducer,
+      {
+        initialState: UnlockedBoekeStudentReducer.initialState
+      }
+    ),
+    EffectsModule.forFeature([
+      BundlesEffects,
+      EduContentsEffects,
+      UiEffects,
+      LearningAreasEffects,
+      UserContentsEffects,
+      UnlockedBoekeGroupsEffects,
+      UnlockedContentsEffects,
+      UserContentsEffects,
+      UnlockedBoekeStudentsEffects
+    ])
+  ],
+  providers: [
+    { provide: EDUCONTENT_SERVICE_TOKEN, useClass: EduContentService },
+    { provide: USER_CONTENT_SERVICE_TOKEN, useClass: UserContentService },
+    {
+      provide: UNLOCKED_BOEKE_STUDENT_SERVICE_TOKEN,
+      useClass: UnlockedBoekeStudentService
+    },
+    {
+      provide: UNLOCKED_CONTENT_SERVICE_TOKEN,
+      useClass: UnlockedContentService
+    },
+    {
+      provide: UNLOCKED_BOEKE_GROUP_SERVICE_TOKEN,
+      useClass: UnlockedBoekeGroupService
+    },
+    { provide: BUNDLE_SERVICE_TOKEN, useClass: BundleService },
+    { provide: LEARNINGAREA_SERVICE_TOKEN, useClass: LearningAreaService },
+    { provide: BROWSER_STORAGE_SERVICE_TOKEN, useClass: StorageService },
+    { provide: AuthServiceToken, useClass: AuthService }
   ]
 })
 export class DalModule {
