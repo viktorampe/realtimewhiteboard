@@ -19,8 +19,8 @@ import {
   UserContentQueries
 } from '@campus/dal';
 import {
-  AbstractViewModelResolver,
-  ViewModelResolver
+  ViewModelResolver,
+  ViewModelResolverInterface
 } from '@campus/pages/shared';
 import { ListFormat } from '@campus/ui';
 import { Action, Selector, Store } from '@ngrx/store';
@@ -30,7 +30,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class BundlesViewModel
-  implements Resolve<boolean>, AbstractViewModelResolver {
+  implements Resolve<boolean>, ViewModelResolverInterface {
   listFormat$ = new BehaviorSubject<ListFormat>(ListFormat.GRID);
   learningAreas$: Observable<LearningAreaInterface[]> = new BehaviorSubject<
     LearningAreaInterface[]
@@ -86,7 +86,7 @@ export class BundlesViewModel
     );
   }
 
-  protected getLoadableActions(): Action[] {
+  getLoadableActions(): Action[] {
     return [
       new LearningAreaActions.LoadLearningAreas(),
       new BundleActions.LoadBundles(),
@@ -98,7 +98,7 @@ export class BundlesViewModel
     ];
   }
 
-  protected getResolvedQueries(): Selector<object, boolean>[] {
+  getResolvedQueries(): Selector<object, boolean>[] {
     return [
       LearningAreaQueries.getLoaded,
       BundleQueries.getLoaded,

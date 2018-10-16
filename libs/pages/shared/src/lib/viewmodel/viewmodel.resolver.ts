@@ -29,7 +29,7 @@ export class ViewModelResolver {
   }
 }
 
-export abstract class AbstractViewModelResolver {
-  protected abstract getLoadableActions(): Action[];
-  protected abstract getResolvedQueries(): Selector<object, boolean>[];
+export interface ViewModelResolverInterface {
+  getLoadableActions(): Action[];
+  getResolvedQueries(): Selector<object, boolean>[];
 }
