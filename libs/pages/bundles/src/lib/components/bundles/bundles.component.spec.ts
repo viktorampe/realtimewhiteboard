@@ -2,7 +2,6 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import {
   BundleInterface,
-  EduContentBookInterface,
   EduContentInterface,
   LearningAreaInterface
 } from '@campus/dal';
@@ -14,46 +13,6 @@ import { BundlesComponent } from './bundles.component';
 let bundlesViewModel: MockViewModel;
 
 class MockViewModel extends BundlesViewModel {
-  books$: Observable<EduContentBookInterface[]> = new BehaviorSubject<
-    EduContentBookInterface[]
-  >([
-    {
-      title: 'boek1',
-      method: {
-        name: 'none',
-        logoUrl: 'roadToNowhere'
-      }
-    },
-    {
-      title: 'boek2',
-      method: {
-        name: 'none',
-        logoUrl: 'roadToNowhere'
-      }
-    },
-    {
-      title: 'boek3',
-      method: {
-        name: 'none',
-        logoUrl: 'roadToNowhere'
-      }
-    },
-    {
-      title: 'boek4',
-      method: {
-        name: 'none',
-        logoUrl: 'roadToNowhere'
-      }
-    },
-    {
-      title: 'boek5',
-      method: {
-        name: 'none',
-        logoUrl: 'roadToNowhere'
-      }
-    }
-  ]);
-
   bundles$: Observable<BundleInterface[]> = new BehaviorSubject<
     BundleInterface[]
   >([
