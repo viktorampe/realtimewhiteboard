@@ -7,7 +7,7 @@ import { BundlesComponent } from './components/bundles/bundles.component';
 import { InfoPanelBundleComponent } from './components/info-panel/info-panel-bundle/info-panel-bundle.component';
 import { InfoPanelContentComponent } from './components/info-panel/info-panel-content/info-panel-content.component';
 import { InfoPanelContentsComponent } from './components/info-panel/info-panel-contents/info-panel-contents.component';
-import { LearningAreasComponent } from './components/learning-areas.component';
+import { LearningAreasComponent } from './components/learning-areas/learning-areas.component';
 import { PagesBundlesRoutingModule } from './pages-bundles-routing.module';
 
 @NgModule({

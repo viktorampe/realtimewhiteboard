@@ -23,20 +23,9 @@ import { BundlesViewModel } from '../bundles.viewmodel';
 })
 export class BundlesComponent implements OnInit {
   protected listFormatEnum = ListFormat;
-  private currentLearningArea = 0; // todo replace with actual learning area when viewmodel is updated
 
-  learningArea$: Observable<
-    LearningAreaInterface
-  > = this.bundlesViewModel.learningAreas$.pipe(
-    map(areas => {
-      return {
-        icon: 'polpo-wiskunde',
-        id: 19,
-        color: '#2c354f',
-        name: 'Wiskunde'
-      };
-    })
-  );
+  learningArea$: Observable<LearningAreaInterface> = this.bundlesViewModel
+    .activeLearningArea$;
 
   toolbarFixed: boolean;
   listFormat$: Observable<ListFormat> = this.bundlesViewModel.listFormat$;
@@ -57,16 +46,8 @@ export class BundlesComponent implements OnInit {
    *   >}
    * @memberof BundlesComponent
    */
-  allBundles$: Observable<
-    BundleInterface[]
-  > = this.bundlesViewModel.sharedLearningAreaBundles$.pipe(
-    map(
-      bundles =>
-        bundles[this.currentLearningArea]
-          ? bundles[this.currentLearningArea]
-          : []
-    )
-  );
+  bundles$: Observable<BundleInterface[]> = this.bundlesViewModel
+    .sharedLearningAreaBundles$;
 
   /**
    * list of filtered bundles available to the current learning area
@@ -75,7 +56,7 @@ export class BundlesComponent implements OnInit {
    * @memberof BundlesComponent
    */
   displayedBundles$: Observable<BundleInterface[]> = this.getDisplayedBundles(
-    this.allBundles$,
+    this.bundles$,
     this.filterInput$
   );
 
@@ -87,14 +68,8 @@ export class BundlesComponent implements OnInit {
    *   >}
    * @memberof BundlesComponent
    */
-  books$: Observable<
-    EduContentMetadataInterface[]
-  > = this.bundlesViewModel.sharedLearningAreaBooks$.pipe(
-    map(
-      books =>
-        books[this.currentLearningArea] ? books[this.currentLearningArea] : []
-    )
-  );
+  books$: Observable<EduContentMetadataInterface[]> = this.bundlesViewModel
+    .sharedLearningAreaBooks$;
 
   //
   constructor(private bundlesViewModel: BundlesViewModel) {}

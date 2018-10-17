@@ -1,5 +1,5 @@
 <campus-tool-bar [fixed]="toolbarFixed">
-  <!-- generic input needs to be replaced by the campus filter input -->
+  <!-- TODO generic input needs to be replaced by the campus filter input -->
   <input #filterInput
          type="text"
          (keyup)="onChangeFilterInput($event.target.value)">
@@ -12,27 +12,28 @@
 </campus-tool-bar>
 <div class="pages-bundles__container"
      [ngClass]="{'pages-bundles__container--fixed': toolbarFixed}"
-     *ngIf="(allBundles$|async).length && (bundleContentsCount$|async) as bundlesContentCount">
-  <campus-page-header [title]="(learningArea$|async).icon.name"
+     *ngIf="learningArea$|async as learningArea">
+  <campus-page-header [title]="learningArea.name"
                       [subtitle]="'Bundels'"
-                      [iconClass]="(learningArea$|async).icon">
+                      [iconClass]="learningArea.icon">
   </campus-page-header>
   <div class="pages-bundles__container__bundles-count">
     {{(displayedBundles$|async)?.length}} van
     <u class="pages-bundles__container__bundles-count__total"
-       (click)="resetFilterInput(); filterInput.value = ''">{{(allBundles$|async)?.length}}</u>
+       (click)="resetFilterInput(); filterInput.value = ''">{{(bundles$|async)?.length}}</u>
     weergegeven
   </div>
-  <div class="pages-bundles__container__bundles">
+  <div class="pages-bundles__container__bundles"
+       *ngIf="bundleContentsCount$|async as bundlesContentCount">
     <campus-list-view [listFormat]="listFormat$|async"
                       [placeHolderText]="'De toegepaste filter bevat geen resultaten'">
       <campus-folder *ngFor="let bundle of displayedBundles$|async"
-                     [routerLink]="[(learningArea$|async).id, bundle.id]"
+                     [routerLink]="[learningArea.id, bundle.id]"
                      campusListItem
                      [itemCount]="bundlesContentCount[bundle.id]"
                      [title]="bundle.name"
-                     [backgroundColor]="(learningArea$|async).color"
-                     [icon]="(learningArea$|async).icon.name">
+                     [backgroundColor]="learningArea.color"
+                     [icon]="learningArea.icon.name">
         <campus-folder-details>
           {{ bundlesCount[bundle.id] + " item(s)" }}
         </campus-folder-details>
@@ -41,11 +42,11 @@
   </div>
 
   <div *ngIf="(books$|async).length">
-    <campus-page-header [title]="(learningArea$|async).icon.name"
+    <campus-page-header [title]="learningArea.name"
                         [subtitle]="'Boeken'"
-                        [iconClass]="(learningArea$|async).icon"></campus-page-header>
+                        [iconClass]="learningArea.icon"></campus-page-header>
     <div class="pages-bundles__container__books-count">
-      je hebt {{(books$|async).length}} boek voor {{ (learningArea$|async).name }}
+      je hebt {{(books$|async).length}} boek voor {{ learningArea.name }}
     </div>
     <div class="pages-bundles__container__books">
       <campus-list-view [listFormat]="listFormat$|async">
