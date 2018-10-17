@@ -18,7 +18,9 @@
     </div>
   </div>
 
-  <div [hidden]="!loginPageviewModel.loggedIn">
+  <!-- [hidden]="!loginPageviewModel.loggedIn" -->
+
+  <div>
     <button (click)="loginPageviewModel.logout()">logout</button>
   </div>
 
@@ -36,3 +38,19 @@
 
 
 <a [routerLink]="['educontent']">educontent test page</a>
+
+<div>
+  <button (click)="getStudentContentStatusFromStoreById(6)">Store</button>
+  <div>
+    <p>{{ response3$ | async | json}}</p>
+  </div>
+</div>
+
+
+<div>
+  <button (click)="saveStudentContentStatus({id: 6, contentStatusId: 1})">Store - 1</button>
+</div>
+
+<div>
+  <button (click)="saveStudentContentStatus({id: 6, contentStatusId: 2})">Store - 2</button>
+</div>

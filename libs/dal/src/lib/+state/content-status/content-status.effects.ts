@@ -3,9 +3,9 @@ import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { map } from 'rxjs/operators';
 import {
-  ContentStatusServiceInterface,
-  CONTENT_STATUS_SERVICE_TOKEN
-} from '../../content-status/content-status.service.interface';
+  StudentContentStatusServiceInterface,
+  STUDENT_CONTENT_STATUS_SERVICE_TOKEN
+} from '../../student-content-status/student-content-status.service.interface';
 import {
   ContentStatusesActionTypes,
   ContentStatusesLoaded,
@@ -25,7 +25,7 @@ export class ContentStatusesEffects {
       run: (action: LoadContentStatuses, state: any) => {
         if (!action.payload.force && state.contentStatuses.loaded) return;
         return this.contentStatusService
-          .getAll()
+          .getAllConstentStatuses()
           .pipe(
             map(
               contentStatuses => new ContentStatusesLoaded({ contentStatuses })
@@ -41,7 +41,7 @@ export class ContentStatusesEffects {
   constructor(
     private actions: Actions,
     private dataPersistence: DataPersistence<State>,
-    @Inject(CONTENT_STATUS_SERVICE_TOKEN)
-    private contentStatusService: ContentStatusServiceInterface
+    @Inject(STUDENT_CONTENT_STATUS_SERVICE_TOKEN)
+    private contentStatusService: StudentContentStatusServiceInterface
   ) {}
 }

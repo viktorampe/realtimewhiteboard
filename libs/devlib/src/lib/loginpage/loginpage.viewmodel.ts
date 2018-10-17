@@ -1,8 +1,19 @@
 import { Inject, Injectable } from '@angular/core';
 import { Resolve } from '@angular/router';
-import { AuthServiceInterface, AuthServiceToken } from '@campus/dal';
+import {
+  AuthServiceInterface,
+  AuthServiceToken,
+  LoadUser,
+  RemoveUser,
+  StudentContentStatusActions,
+  StudentContentStatusReducer,
+  userQuery,
+  UserState
+} from '@campus/dal';
+import { Store } from '@ngrx/store';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { catchError, map, take } from 'rxjs/operators';
+import { catchError, map, switchMap, take } from 'rxjs/operators';
+import { StudentContentStatusService } from '../../../../dal/src/lib/student-content-status/student-content-status.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,10 +26,13 @@ export class LoginPageViewModel implements Resolve<boolean> {
   loggedIn: boolean;
 
   constructor(
-    @Inject(AuthServiceToken) private authService: AuthServiceInterface
+    private store: Store<UserState>,
+    @Inject(AuthServiceToken) private authService: AuthServiceInterface,
+    public studentContentStatusService: StudentContentStatusService,
+    public studentContentStatusStore: Store<StudentContentStatusReducer.State>
   ) {
-    this.isLoggedIn().subscribe((isLoggedIn: boolean) => {
-      this.loggedIn = isLoggedIn;
+    store.select(userQuery.getCurrentUser).subscribe(data => {
+      this.loggedIn = data != null;
     });
   }
 
@@ -30,7 +44,7 @@ export class LoginPageViewModel implements Resolve<boolean> {
    */
   isLoggedIn(): Observable<boolean> {
     return this.authService.getCurrent().pipe(
-      map((currentUser: any) => {
+      map(() => {
         return true;
       }),
       catchError(err => {
@@ -47,18 +61,18 @@ export class LoginPageViewModel implements Resolve<boolean> {
    * @memberof LoginPageViewModel
    */
   login(name: string, password: string): void {
-    this.isLoggedIn().subscribe((isLoggedIn: boolean) => {
-      if (!isLoggedIn) {
-        console.log('logging in');
-        this.authService
-          .login({ username: name, password: password })
-          .subscribe(loggedIn => {
-            this.loggedIn = true;
-          });
-      } else {
-        this.loggedIn = true;
-      }
-    });
+    this.isLoggedIn()
+      .pipe(
+        switchMap(loggedin => {
+          if (loggedin) {
+            throw new Error('login failed since we are already logged in');
+          }
+          return this.authService.login({ username: name, password: password });
+        })
+      )
+      .subscribe(() => {
+        this.store.dispatch(new LoadUser({ force: false }));
+      });
   }
 
   /**
@@ -71,12 +85,7 @@ export class LoginPageViewModel implements Resolve<boolean> {
   logout(): void {
     this.isLoggedIn().subscribe((isLoggedIn: boolean) => {
       if (isLoggedIn) {
-        console.log('logging out');
-        this.authService.logout().subscribe((loggedOut: any) => {
-          this.loggedIn = false;
-        });
-      } else {
-        this.loggedIn = false;
+        this.store.dispatch(new RemoveUser());
       }
     });
   }
@@ -89,6 +98,12 @@ export class LoginPageViewModel implements Resolve<boolean> {
    * @memberOf LoginPageViewModel
    */
   resolve(): Observable<boolean> {
+    this.studentContentStatusStore.dispatch(
+      new StudentContentStatusActions.LoadStudentContentStatuses({
+        studentId: 6
+      })
+    );
+
     return new BehaviorSubject<boolean>(true).pipe(take(1));
   }
 }
