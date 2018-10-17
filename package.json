@@ -2,6 +2,11 @@
   "name": "campus",
   "version": "0.0.0",
   "license": "MIT",
+  "husky": {
+    "hooks": {
+      "pre-push": "ng lint && npm run format:check && npm test"
+    }
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -59,7 +64,7 @@
     "@angular/cli": "6.1.5",
     "@angular/compiler-cli": "^6.1.6",
     "@angular/language-service": "^6.1.6",
-    "@diekeure/angular-schematics": "0.1.5",
+    "@diekeure/angular-schematics": "0.1.6",
     "@ngrx/schematics": "6.1.0",
     "@ngrx/store-devtools": "6.1.0",
     "@nrwl/builders": "6.3.0",
