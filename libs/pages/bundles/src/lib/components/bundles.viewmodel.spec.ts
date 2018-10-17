@@ -1,77 +1,53 @@
-import { UiActions, uiReducer } from '@campus/dal';
+import { inject, TestBed } from '@angular/core/testing';
+import { DalState, UiActions } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
 import { BundlesViewModel } from './bundles.viewmodel';
 
-class TestStore<T> {
-  private state: BehaviorSubject<T> = new BehaviorSubject(undefined);
+describe('bundlesViewModel', () => {
+  let bundlesViewModel: BundlesViewModel;
+  let store: Store<DalState>;
+  let dispatchSpy: any;
 
-  setState(data: T) {
-    this.state.next(data);
-  }
-
-  select(selector?: any): Observable<T> {
-    return this.state.asObservable();
-  }
-
-  dispatch(action: any) {}
-}
-let dispatchSpy;
-
-let bundlesViewModel: BundlesViewModel;
-const uiStore = new TestStore<uiReducer.UiState>();
-// const studentContentStatusStore = new TestStore<any>();
-
-beforeEach(() => {
-  bundlesViewModel = new BundlesViewModel(uiStore);
-  dispatchSpy = jest.spyOn(uiStore, 'dispatch');
-});
-
-afterEach(() => {
-  dispatchSpy.mockRestore();
-});
-
-test('it should return', () => {
-  return;
-});
-
-describe('list format', () => {
-  it('should set the list format to grid', () => {
-    bundlesViewModel.changeListFormat(ListFormat.GRID);
-    expect(dispatchSpy).toHaveBeenCalledTimes(1);
-    expect(dispatchSpy).toHaveBeenCalledWith(
-      new UiActions.SetListFormatUi({ listFormat: ListFormat.GRID })
-    );
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        BundlesViewModel,
+        {
+          provide: Store,
+          useValue: {
+            dispatch: () => {}
+          }
+        }
+      ]
+    });
+    bundlesViewModel = TestBed.get(BundlesViewModel);
+    store = TestBed.get(Store);
+    dispatchSpy = jest.spyOn(store, 'dispatch');
   });
 
-  it('should set the list format to line', () => {
-    bundlesViewModel.changeListFormat(ListFormat.LINE);
-    expect(dispatchSpy).toHaveBeenCalledTimes(1);
-    expect(dispatchSpy).toHaveBeenCalledWith(
-      new UiActions.SetListFormatUi({ listFormat: ListFormat.LINE })
-    );
-  });
-});
+  it('should be created and available via DI', inject(
+    [BundlesViewModel],
+    (viewModel: BundlesViewModel) => {
+      expect(viewModel).toBeTruthy();
+    }
+  ));
 
-describe('save student content status', () => {
-  // it('should update the student content status', () => {
-  //   const studentContentStatus: StudentContentStatusInterface = {
-  //     id: 1,
-  //     unlockedContentId: 2,
-  //     contentStatusId: 3
-  //   };
-  //   bundlesViewModel.saveStudentContentStatus(studentContentStatus);
-  //   expect(dispatchSpy).toHaveBeenCalledTimes(1);
-  //   expect(dispatchSpy).toHaveBeenCalledWith(
-  //     new StudentContentInterfaceActions.UpdateStudentContentStatus({
-  //       studentContentStatus: {
-  //         id: 1,
-  //         changes: {
-  //           unlockedContentId: 2,
-  //           contentStatusId: 3
-  //         }
-  //       }
-  //     })
-  //   );
-  // });
+  describe('list format', () => {
+    it('should set the list format to grid', () => {
+      bundlesViewModel.changeListFormat(ListFormat.GRID);
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        new UiActions.SetListFormatUi({ listFormat: ListFormat.GRID })
+      );
+    });
+
+    it('should set the list format to line', () => {
+      bundlesViewModel.changeListFormat(ListFormat.LINE);
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        new UiActions.SetListFormatUi({ listFormat: ListFormat.LINE })
+      );
+    });
+  });
 });

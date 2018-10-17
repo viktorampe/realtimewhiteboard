@@ -6,6 +6,7 @@ import { UiModule } from '@campus/ui';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { BundlesComponent } from './bundles.component';
+import { BundlesViewModel } from './bundles.viewmodel';
 
 class TestStore<T> {
   private state: BehaviorSubject<T> = new BehaviorSubject(undefined);
@@ -29,6 +30,12 @@ describe('BundlesComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [UiModule, NoopAnimationsModule],
+      providers: [
+        {
+          provide: BundlesViewModel,
+          useValue: {}
+        }
+      ],
       declarations: [BundlesComponent],
       providers: [{ provide: Store, useclass: uiStore }],
       schemas: [NO_ERRORS_SCHEMA]
