@@ -1,7 +1,7 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { Store, StoreModule } from '@ngrx/store';
 import { BundlesViewModel } from '../bundles.viewmodel';
 import { LearningAreasComponent } from './learning-areas.component';
 
@@ -23,8 +23,14 @@ describe('LearningAreasComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [StoreModule.forRoot({})],
       declarations: [LearningAreasComponent],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
+      providers: [
+        BundlesViewModel,
+        { provide: ActivatedRoute, useValue: {} },
+        Store
+      ]
     }).compileComponents();
   }));
 
