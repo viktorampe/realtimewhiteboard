@@ -73,7 +73,7 @@ interface DalOptions {
     StoreModule.forFeature('bundles', BundleReducer.reducer, {
       initialState: BundleReducer.initialState
     }),
-    StoreModule.forFeature('learingAreas', LearningAreaReducer.reducer, {
+    StoreModule.forFeature('learningAreas', LearningAreaReducer.reducer, {
       initialState: LearningAreaReducer.initialState
     }),
     StoreModule.forFeature('eduContents', EduContentReducer.reducer, {

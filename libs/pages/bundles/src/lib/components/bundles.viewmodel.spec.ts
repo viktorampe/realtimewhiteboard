@@ -1,10 +1,4 @@
-import { BundlesViewModel } from './bundles.viewmodel';
-
-let bundlesViewModel: BundlesViewModel;
-
-beforeEach(() => {
-  bundlesViewModel = new BundlesViewModel();
-});
+beforeEach(() => {});
 
 test('it should return', () => {
   return;
