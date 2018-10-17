@@ -19,13 +19,13 @@ export class StateResolver {
     return this.actionsLoaded(resolvedQueries.map(q => this.store.select(q)));
   }
 
-  private loadActions(actions: Action[]) {
+  private loadActions(actions: Action[]): void {
     actions.forEach(action => {
       this.store.dispatch(action);
     });
   }
 
-  private actionsLoaded(loaded$: Observable<boolean>[]) {
+  private actionsLoaded(loaded$: Observable<boolean>[]): Observable<boolean> {
     return combineLatest(loaded$).pipe(
       map(loadedArray => loadedArray.every(loaded => loaded)),
       filter(loaded => loaded),

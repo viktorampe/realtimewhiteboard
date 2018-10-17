@@ -2,6 +2,7 @@ import { createSelector } from '@ngrx/store';
 import { BundleInterface } from '../+models';
 import { BundleQueries, BundleReducer } from './bundle';
 
+// this is a placeholder example and can be removed when no longer needed
 export const getLearningAreaBundles = createSelector(
   BundleQueries.selectBundleState,
   BundleQueries.getAll,
