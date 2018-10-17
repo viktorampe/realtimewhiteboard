@@ -3,6 +3,7 @@ import { StudentContentStatusInterface } from '@campus/dal';
 import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { map } from 'rxjs/operators';
+import { DalActions } from '..';
 import {
   StudentContentStatusServiceInterface,
   STUDENT_CONTENT_STATUS_SERVICE_TOKEN
@@ -13,8 +14,6 @@ import {
   StudentContentStatusesActionTypes,
   StudentContentStatusesLoaded,
   StudentContentStatusesLoadError,
-  UndoAddStudentContentStatus,
-  UndoUpdateStudentContentStatus,
   UpdateStudentContentStatus
 } from './student-content-status.actions';
 import { State } from './student-content-status.reducer';
@@ -57,32 +56,20 @@ export class StudentContentStatusesEffects {
 
         return this.studentContentStatusesService
           .updateStudentContentStatus(newValue)
-          .pipe(map(x => null)); //TODO fout afhandelen, verwacht een Action
+          .pipe(
+            map(
+              () =>
+                new DalActions.ActionSuccessful({
+                  successfulAction: action.type
+                })
+            )
+          );
       },
-      undoAction: (action: UpdateStudentContentStatus, e: any) => {
-        console.error(e);
-
-        if (action.payload.oldStudentContentStatus) {
-          return new UndoUpdateStudentContentStatus({
-            studentContentStatus: action.payload.studentContentStatus,
-            oldStudentContentStatus: action.payload.oldStudentContentStatus
-          });
-        } else {
-          console.log('UndoAction not possible: no orginal value provided');
-          return;
-        }
+      undoAction: (action: UpdateStudentContentStatus, error: any) => {
+        //TODO handle the undo
+        console.log({ error, action });
+        return null;
       }
-    }
-  );
-
-  @Effect({ dispatch: false })
-  undoUpdateStudentContentStatuses$ = this.dataPersistence.pessimisticUpdate(
-    StudentContentStatusesActionTypes.UndoUpdateStudentContentStatus,
-    {
-      run: (action: UpdateStudentContentStatus, state: any) => {
-        return;
-      },
-      onError: (action: UpdateStudentContentStatus, e: any) => {}
     }
   );
 
@@ -95,24 +82,20 @@ export class StudentContentStatusesEffects {
 
         return this.studentContentStatusesService
           .addStudentContentStatus(newValue)
-          .pipe(map(x => null)); //TODO fout afhandelen, verwacht een Action
+          .pipe(
+            map(
+              () =>
+                new DalActions.ActionSuccessful({
+                  successfulAction: action.type
+                })
+            )
+          );
       },
-      undoAction: (action: AddStudentContentStatus, e: any) => {
-        console.error(e);
-
-        return new UndoAddStudentContentStatus(action.payload);
+      undoAction: (action: AddStudentContentStatus, error: any) => {
+        //TODO handle the undo
+        console.log({ error, action });
+        return null;
       }
-    }
-  );
-
-  @Effect({ dispatch: false })
-  undoAddStudentContentStatuses$ = this.dataPersistence.pessimisticUpdate(
-    StudentContentStatusesActionTypes.UndoAddStudentContentStatus,
-    {
-      run: (action: AddStudentContentStatus, state: any) => {
-        return;
-      },
-      onError: (action: AddStudentContentStatus, e: any) => {}
     }
   );
 

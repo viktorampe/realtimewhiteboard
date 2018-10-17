@@ -59,27 +59,9 @@ export class LoginpageComponent implements OnInit {
     oldStudentContentStatus.pipe(take(1)).subscribe(oldValue =>
       this.loginPageviewModel.studentContentStatusStore.dispatch(
         new StudentContentStatusActions.UpdateStudentContentStatus({
-          studentContentStatus: updatedStudentContentStatus,
-          oldStudentContentStatus: this.getUndoUpdateStudentContentStatus(
-            updatedStudentContentStatus,
-            oldValue
-          )
+          studentContentStatus: updatedStudentContentStatus
         })
       )
     );
-  }
-
-  private getUndoUpdateStudentContentStatus(
-    updateStudentContentStatus: Update<StudentContentStatusInterface>,
-    oldStudentContentStatus: StudentContentStatusInterface
-  ): Update<StudentContentStatusInterface> {
-    const undoUpdate: Update<StudentContentStatusInterface> = {
-      id: oldStudentContentStatus.id,
-      // Even gewoon alle originele waarden terugzetten, verfijning is mogelijk
-      changes: {
-        ...oldStudentContentStatus
-      }
-    };
-    return undoUpdate;
   }
 }

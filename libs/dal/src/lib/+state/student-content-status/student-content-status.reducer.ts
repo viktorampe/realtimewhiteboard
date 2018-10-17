@@ -29,10 +29,6 @@ export function reducer(
       return adapter.addOne(action.payload.studentContentStatus, state);
     }
 
-    case StudentContentStatusesActionTypes.UndoAddStudentContentStatus: {
-      return adapter.removeOne(action.payload.studentContentStatus.id, state);
-    }
-
     case StudentContentStatusesActionTypes.UpsertStudentContentStatus: {
       return adapter.upsertOne(action.payload.studentContentStatus, state);
     }
@@ -47,10 +43,6 @@ export function reducer(
 
     case StudentContentStatusesActionTypes.UpdateStudentContentStatus: {
       return adapter.updateOne(action.payload.studentContentStatus, state);
-    }
-
-    case StudentContentStatusesActionTypes.UndoUpdateStudentContentStatus: {
-      return adapter.updateOne(action.payload.oldStudentContentStatus, state);
     }
 
     case StudentContentStatusesActionTypes.UpdateStudentContentStatuses: {

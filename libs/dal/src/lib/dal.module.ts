@@ -18,8 +18,10 @@ import {
   LearningAreaReducer,
   LearningAreasEffects
 } from './+state/learning-area';
-import { StudentContentStatus } from './+state/student-content-status';
-import { StudentContentStatusesEffects } from './+state/student-content-status/student-content-status.effects';
+import {
+  StudentContentStatusesEffects,
+  StudentContentStatusReducer
+} from './+state/student-content-status';
 import { UiEffects, uiReducer } from './+state/ui/';
 import {
   UnlockedBoekeGroupReducer,
@@ -86,9 +88,9 @@ interface DalOptions {
     }),
     StoreModule.forFeature(
       'studentContentStatuses',
-      StudentContentStatus.reducer,
+      StudentContentStatusReducer.reducer,
       {
-        initialState: StudentContentStatus.initialState
+        initialState: StudentContentStatusReducer.initialState
       }
     ),
     StoreModule.forFeature(

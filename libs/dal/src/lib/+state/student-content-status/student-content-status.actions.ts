@@ -7,12 +7,10 @@ export enum StudentContentStatusesActionTypes {
   StudentContentStatusesLoadError = '[StudentContentStatuses] Load Error',
   LoadStudentContentStatuses = '[StudentContentStatuses] Load StudentContentStatuses',
   AddStudentContentStatus = '[StudentContentStatuses] Add StudentContentStatus',
-  UndoAddStudentContentStatus = '[StudentContentStatuses] Undo Add StudentContentStatus',
   UpsertStudentContentStatus = '[StudentContentStatuses] Upsert StudentContentStatus',
   AddStudentContentStatuses = '[StudentContentStatuses] Add StudentContentStatuses',
   UpsertStudentContentStatuses = '[StudentContentStatuses] Upsert StudentContentStatuses',
   UpdateStudentContentStatus = '[StudentContentStatuses] Update StudentContentStatus',
-  UndoUpdateStudentContentStatus = '[StudentContentStatuses] Undo Update StudentContentStatus',
   UpdateStudentContentStatuses = '[StudentContentStatuses] Update StudentContentStatuses',
   DeleteStudentContentStatus = '[StudentContentStatuses] Delete StudentContentStatus',
   DeleteStudentContentStatuses = '[StudentContentStatuses] Delete StudentContentStatuses',
@@ -42,14 +40,6 @@ export class StudentContentStatusesLoadError implements Action {
 
 export class AddStudentContentStatus implements Action {
   readonly type = StudentContentStatusesActionTypes.AddStudentContentStatus;
-
-  constructor(
-    public payload: { studentContentStatus: StudentContentStatusInterface }
-  ) {}
-}
-
-export class UndoAddStudentContentStatus implements Action {
-  readonly type = StudentContentStatusesActionTypes.UndoAddStudentContentStatus;
 
   constructor(
     public payload: { studentContentStatus: StudentContentStatusInterface }
@@ -92,18 +82,6 @@ export class UpdateStudentContentStatus implements Action {
   ) {}
 }
 
-export class UndoUpdateStudentContentStatus implements Action {
-  readonly type =
-    StudentContentStatusesActionTypes.UndoUpdateStudentContentStatus;
-
-  constructor(
-    public payload: {
-      studentContentStatus: Update<StudentContentStatusInterface>;
-      oldStudentContentStatus?: Update<StudentContentStatusInterface>;
-    }
-  ) {}
-}
-
 export class UpdateStudentContentStatuses implements Action {
   readonly type =
     StudentContentStatusesActionTypes.UpdateStudentContentStatuses;
@@ -137,12 +115,10 @@ export type StudentContentStatusesActions =
   | StudentContentStatusesLoaded
   | StudentContentStatusesLoadError
   | AddStudentContentStatus
-  | UndoAddStudentContentStatus
   | UpsertStudentContentStatus
   | AddStudentContentStatuses
   | UpsertStudentContentStatuses
   | UpdateStudentContentStatus
-  | UndoUpdateStudentContentStatus
   | UpdateStudentContentStatuses
   | DeleteStudentContentStatus
   | DeleteStudentContentStatuses
