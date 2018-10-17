@@ -6,11 +6,7 @@ import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
 import { UNLOCKED_BOEKE_GROUP_SERVICE_TOKEN } from '../../boeke/unlocked-boeke-group.service.interface';
-import {
-  LoadUnlockedBoekeGroups,
-  UnlockedBoekeGroupsLoaded,
-  UnlockedBoekeGroupsLoadError
-} from './unlocked-boeke-group.actions';
+import { LoadUnlockedBoekeGroups, UnlockedBoekeGroupsLoaded, UnlockedBoekeGroupsLoadError } from './unlocked-boeke-group.actions';
 import { UnlockedBoekeGroupsEffects } from './unlocked-boeke-group.effects';
 import { initialState, reducer } from './unlocked-boeke-group.reducer';
 
@@ -96,7 +92,7 @@ describe('UnlockedBoekeGroupEffects', () => {
         usedState = initialState;
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAllForUser', []);
+        mockServiceMethodReturnValue('getAllForUsers', []);
       });
       it('should trigger an api call with the initialState if force is not true', () => {
         expectInAndOut(
