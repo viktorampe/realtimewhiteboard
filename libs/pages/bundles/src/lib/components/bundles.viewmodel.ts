@@ -2,11 +2,13 @@ import { Injectable } from '@angular/core';
 import {
   BundleActions,
   BundleQueries,
+  DalState,
   EduContentActions,
   EduContentQueries,
   LearningAreaActions,
   LearningAreaInterface,
   LearningAreaQueries,
+  UiActions,
   UnlockedBoekeGroupActions,
   UnlockedBoekeGroupQueries,
   UnlockedBoekeStudentActions,
@@ -18,7 +20,7 @@ import {
 } from '@campus/dal';
 import { StateResolver, StateResolverInterface } from '@campus/pages/shared';
 import { ListFormat } from '@campus/ui';
-import { Action, Selector } from '@ngrx/store';
+import { Action, Selector, Store } from '@ngrx/store';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
@@ -73,6 +75,11 @@ export class BundlesViewModel implements StateResolverInterface {
     }
   });
 
+  constructor(
+    private store: Store<DalState>,
+    private viewModelResolver: StateResolver
+  ) {}
+
   resolve(): Observable<boolean> {
     return this.viewModelResolver.resolve(
       this.getLoadableActions(),
@@ -104,12 +111,7 @@ export class BundlesViewModel implements StateResolverInterface {
     ];
   }
 
-  constructor(
-    // store: Store<DalState>,
-    private viewModelResolver: StateResolver
-  ) {}
-
   changeListFormat(listFormat: ListFormat): void {
-    this.listFormat$.next(listFormat);
+    this.store.dispatch(new UiActions.SetListFormatUi({ listFormat }));
   }
 }

@@ -1,0 +1,50 @@
+import { Injectable } from '@angular/core';
+import {
+  PersonApi,
+  StudentContentStatusApi
+} from '@diekeure/polpo-api-angular-sdk';
+import { Observable } from 'rxjs';
+import { StudentContentStatusInterface } from '../+models/StudentContentStatus.interface';
+import { StudentContentStatusServiceInterface } from './student-content-status.service.interface';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class StudentContentStatusService
+  implements StudentContentStatusServiceInterface {
+  constructor(
+    private studentContentStatusApi: StudentContentStatusApi,
+    private personApi: PersonApi
+  ) {}
+
+  getById(statusId: number): Observable<StudentContentStatusInterface> {
+    return this.studentContentStatusApi.findById(statusId);
+  }
+
+  getAllByStudentId(
+    studentId: number
+  ): Observable<StudentContentStatusInterface[]> {
+    return this.personApi.getStudentContentStatuses(studentId);
+  }
+
+  updateStudentContentStatus(
+    studentContentStatus: StudentContentStatusInterface
+  ): Observable<StudentContentStatusInterface> {
+    // throw new Error('fout');
+
+    return this.studentContentStatusApi.patchAttributes(
+      studentContentStatus.id,
+      {
+        contentStatusId: studentContentStatus.contentStatusId
+      }
+    );
+  }
+
+  addStudentContentStatus(
+    studentContentStatus: StudentContentStatusInterface
+  ): Observable<StudentContentStatusInterface> {
+    // throw new Error('fout');
+
+    return this.studentContentStatusApi.patchOrCreate(studentContentStatus);
+  }
+}

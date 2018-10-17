@@ -19,6 +19,10 @@ import {
   LearningAreaReducer,
   LearningAreasEffects
 } from './+state/learning-area';
+import {
+  StudentContentStatusesEffects,
+  StudentContentStatusReducer
+} from './+state/student-content-status';
 import { UiEffects, uiReducer } from './+state/ui/';
 import {
   UnlockedBoekeGroupReducer,
@@ -56,6 +60,8 @@ import { EduContentService } from './edu-content/edu-content.service';
 import { EDUCONTENT_SERVICE_TOKEN } from './edu-content/edu-content.service.interface';
 import { LearningAreaService } from './learning-area/learning-area.service';
 import { LEARNINGAREA_SERVICE_TOKEN } from './learning-area/learning-area.service.interface';
+import { StudentContentStatusService } from './student-content-status/student-content-status.service';
+import { STUDENT_CONTENT_STATUS_SERVICE_TOKEN } from './student-content-status/student-content-status.service.interface';
 
 interface DalOptions {
   apiBaseUrl: string;
@@ -86,6 +92,13 @@ interface DalOptions {
       initialState: UserContentReducer.initialState
     }),
     StoreModule.forFeature(
+      'studentContentStatuses',
+      StudentContentStatusReducer.reducer,
+      {
+        initialState: StudentContentStatusReducer.initialState
+      }
+    ),
+    StoreModule.forFeature(
       'unlockedBoekeGroups',
       UnlockedBoekeGroupReducer.reducer,
       {
@@ -109,6 +122,7 @@ interface DalOptions {
       UiEffects,
       LearningAreasEffects,
       UserContentsEffects,
+      StudentContentStatusesEffects,
       UnlockedBoekeGroupsEffects,
       UnlockedContentsEffects,
       UserContentsEffects,
@@ -133,6 +147,10 @@ interface DalOptions {
     { provide: BUNDLE_SERVICE_TOKEN, useClass: BundleService },
     { provide: LEARNINGAREA_SERVICE_TOKEN, useClass: LearningAreaService },
     { provide: BROWSER_STORAGE_SERVICE_TOKEN, useClass: StorageService },
+    {
+      provide: STUDENT_CONTENT_STATUS_SERVICE_TOKEN,
+      useClass: StudentContentStatusService
+    },
     { provide: AuthServiceToken, useClass: AuthService }
   ]
 })
