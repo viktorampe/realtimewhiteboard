@@ -7,13 +7,13 @@ import {
   RemoveUser,
   StudentContentStatusActions,
   StudentContentStatusReducer,
-  StudentContentStatusService,
   userQuery,
   UserState
 } from '@campus/dal';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, map, switchMap, take } from 'rxjs/operators';
+import { StudentContentStatusService } from '../../../../dal/src/lib/student-content-status/student-content-status.service';
 
 @Injectable({
   providedIn: 'root'

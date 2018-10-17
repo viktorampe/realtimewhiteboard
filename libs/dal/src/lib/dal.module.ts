@@ -14,6 +14,8 @@ import {
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { BundleReducer, BundlesEffects } from './+state/bundle';
+import { ContentStatusReducer } from './+state/content-status';
+import { ContentStatusesEffects } from './+state/content-status/content-status.effects';
 import { EduContentReducer, EduContentsEffects } from './+state/edu-content';
 import {
   LearningAreaReducer,
@@ -116,6 +118,9 @@ interface DalOptions {
         initialState: UnlockedBoekeStudentReducer.initialState
       }
     ),
+    StoreModule.forFeature('contentStatuses', ContentStatusReducer.reducer, {
+      initialState: ContentStatusReducer.initialState
+    }),
     EffectsModule.forFeature([
       BundlesEffects,
       EduContentsEffects,
@@ -126,7 +131,8 @@ interface DalOptions {
       UnlockedBoekeGroupsEffects,
       UnlockedContentsEffects,
       UserContentsEffects,
-      UnlockedBoekeStudentsEffects
+      UnlockedBoekeStudentsEffects,
+      ContentStatusesEffects
     ])
   ],
   providers: [

@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import {
+  ContentStatusApi,
   PersonApi,
   StudentContentStatusApi
 } from '@diekeure/polpo-api-angular-sdk';
 import { Observable } from 'rxjs';
+import { ContentStatusInterface } from '../+models';
 import { StudentContentStatusInterface } from '../+models/StudentContentStatus.interface';
 import { StudentContentStatusServiceInterface } from './student-content-status.service.interface';
 
@@ -14,7 +16,8 @@ export class StudentContentStatusService
   implements StudentContentStatusServiceInterface {
   constructor(
     private studentContentStatusApi: StudentContentStatusApi,
-    private personApi: PersonApi
+    private personApi: PersonApi,
+    private contentStatusApi: ContentStatusApi
   ) {}
 
   getById(statusId: number): Observable<StudentContentStatusInterface> {
@@ -46,5 +49,9 @@ export class StudentContentStatusService
     // throw new Error('fout');
 
     return this.studentContentStatusApi.patchOrCreate(studentContentStatus);
+  }
+
+  getAllConstentStatuses(): Observable<ContentStatusInterface[]> {
+    return this.contentStatusApi.find<ContentStatusInterface>();
   }
 }

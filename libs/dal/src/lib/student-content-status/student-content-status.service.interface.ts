@@ -1,5 +1,6 @@
 import { InjectionToken } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ContentStatusInterface } from '../+models';
 import { StudentContentStatusInterface } from '../+models/StudentContentStatus.interface';
 
 export const STUDENT_CONTENT_STATUS_SERVICE_TOKEN = new InjectionToken(
@@ -16,4 +17,5 @@ export interface StudentContentStatusServiceInterface {
   addStudentContentStatus(
     studentContentStatus: StudentContentStatusInterface
   ): Observable<StudentContentStatusInterface>;
+  getAllConstentStatuses(): Observable<ContentStatusInterface[]>;
 }
