@@ -77,7 +77,6 @@ export class UpdateStudentContentStatus implements Action {
   constructor(
     public payload: {
       studentContentStatus: Update<StudentContentStatusInterface>;
-      oldStudentContentStatus?: Update<StudentContentStatusInterface>;
     }
   ) {}
 }

@@ -1,18 +1,33 @@
 import { TestBed } from '@angular/core/testing';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
+import { Update } from '@ngrx/entity';
 import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
+import { StudentContentStatusInterface } from '../../+models';
 import { STUDENT_CONTENT_STATUS_SERVICE_TOKEN } from '../../student-content-status/student-content-status.service.interface';
+import { ActionSuccessful } from '../dal.actions';
 import {
+  AddStudentContentStatus,
   LoadStudentContentStatuses,
   StudentContentStatusesLoaded,
-  StudentContentStatusesLoadError
+  StudentContentStatusesLoadError,
+  UpdateStudentContentStatus
 } from './student-content-status.actions';
 import { StudentContentStatusesEffects } from './student-content-status.effects';
 import { initialState, reducer } from './student-content-status.reducer';
+
+function createStudentContentStatus(
+  id: number,
+  personId: number
+): StudentContentStatusInterface | any {
+  return {
+    id: id,
+    personId: personId
+  };
+}
 
 describe('StudentContentStatusEffects', () => {
   let actions: Observable<any>;
@@ -70,7 +85,9 @@ describe('StudentContentStatusEffects', () => {
         {
           provide: STUDENT_CONTENT_STATUS_SERVICE_TOKEN,
           useValue: {
-            getAllByStudentId: () => {}
+            getAllByStudentId: () => {},
+            addStudentContentStatus: () => {},
+            updateStudentContentStatus: () => {}
           }
         },
         StudentContentStatusesEffects,
@@ -175,6 +192,59 @@ describe('StudentContentStatusEffects', () => {
           effects.loadStudentContentStatuses$,
           forcedLoadAction,
           loadErrorAction
+        );
+      });
+    });
+  });
+  describe('updateStudentContentStatus$', () => {
+    const update: Update<StudentContentStatusInterface> = {
+      id: 1,
+      changes: {
+        personId: 1
+      }
+    };
+    const updateAction = new UpdateStudentContentStatus({
+      studentContentStatus: update
+    });
+    const successAction = new ActionSuccessful({
+      successfulAction: updateAction.type
+    });
+    describe('with initialState', () => {
+      beforeAll(() => {
+        usedState = initialState;
+      });
+      beforeEach(() => {
+        mockServiceMethodReturnValue('updateStudentContentStatus', []);
+      });
+      it('should trigger an api call with the initialState if force is not true', () => {
+        expectInAndOut(
+          effects.updateStudentContentStatus$,
+          updateAction,
+          successAction
+        );
+      });
+    });
+  });
+  describe('addStudentContentStatus$', () => {
+    const studentContentStatus = createStudentContentStatus(1, 1);
+    const addAction = new AddStudentContentStatus({
+      studentContentStatus
+    });
+    const successAction = new ActionSuccessful({
+      successfulAction: addAction.type
+    });
+    describe('with initialState', () => {
+      beforeAll(() => {
+        usedState = initialState;
+      });
+      beforeEach(() => {
+        mockServiceMethodReturnValue('addStudentContentStatus', []);
+      });
+      it('should trigger an api call with the initialState if force is not true', () => {
+        expectInAndOut(
+          effects.addStudentContentStatuses$,
+          addAction,
+          successAction
         );
       });
     });

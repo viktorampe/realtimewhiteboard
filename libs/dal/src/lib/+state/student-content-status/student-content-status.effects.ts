@@ -43,7 +43,7 @@ export class StudentContentStatusesEffects {
   );
 
   @Effect()
-  updateStudentContentStatuses$ = this.dataPersistence.optimisticUpdate(
+  updateStudentContentStatus$ = this.dataPersistence.optimisticUpdate(
     StudentContentStatusesActionTypes.UpdateStudentContentStatus,
     {
       run: (action: UpdateStudentContentStatus, state: any) => {
