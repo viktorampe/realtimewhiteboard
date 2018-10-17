@@ -1,6 +1,6 @@
 export * from './lib/+models/index';
+export { DalState } from './lib/+state';
 export * from './lib/+state/bundle';
-export { DalState } from './lib/+state/dal.state.interface';
 export * from './lib/+state/edu-content';
 export * from './lib/+state/learning-area';
 export * from './lib/+state/ui';
