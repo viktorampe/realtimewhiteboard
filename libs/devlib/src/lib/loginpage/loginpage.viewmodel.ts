@@ -3,9 +3,13 @@ import { Resolve } from '@angular/router';
 import {
   AuthServiceInterface,
   AuthServiceToken,
+  LoadUser,
+  RemoveUser,
   StudentContentStatusActions,
   StudentContentStatusReducer,
-  StudentContentStatusService
+  StudentContentStatusService,
+  userQuery,
+  UserState
 } from '@campus/dal';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, Observable, of } from 'rxjs';
@@ -22,6 +26,7 @@ export class LoginPageViewModel implements Resolve<boolean> {
   loggedIn: boolean;
 
   constructor(
+    private store: Store<UserState>,
     @Inject(AuthServiceToken) private authService: AuthServiceInterface,
     public studentContentStatusService: StudentContentStatusService,
     public studentContentStatusStore: Store<StudentContentStatusReducer.State>
