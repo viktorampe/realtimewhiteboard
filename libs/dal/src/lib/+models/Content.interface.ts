@@ -6,6 +6,4 @@ export interface ContentInterface {
   previewImage?: string;
   description: string;
   methodLogos?: string[];
-  fileExt?: string;
-  fileLabel?: string;
 }
