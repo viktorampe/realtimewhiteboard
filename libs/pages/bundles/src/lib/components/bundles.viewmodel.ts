@@ -23,6 +23,7 @@ import { select, Store } from '@ngrx/store';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { filter, map, shareReplay, switchMap, take } from 'rxjs/operators';
 
+// TODO replace with actual DalState
 export class DalState {}
 
 @Injectable({
@@ -30,6 +31,9 @@ export class DalState {}
 })
 export class BundlesViewModel implements Resolve<boolean> {
   // source streams
+  learningAreaId$: Observable<number>;
+  bundleId$: Observable<number>;
+
   listFormat$: Observable<ListFormat>;
   user$: Observable<PersonInterface>;
   learningAreas$: Observable<LearningAreaInterface[]>;
@@ -50,6 +54,7 @@ export class BundlesViewModel implements Resolve<boolean> {
   // presentation streams
   // shared
   // > bundles
+  activeBundle$: Observable<BundleInterface>;
   private sharedBundles$: Observable<BundleInterface[]>;
   sharedBundlesByLearningArea$: Observable<{
     [key: number]: BundleInterface[];
@@ -64,6 +69,7 @@ export class BundlesViewModel implements Resolve<boolean> {
     [key: number]: EduContentMetadataInterface[];
   }>;
   // > learningAreas
+  activeLearningArea$: Observable<LearningAreaInterface>;
   sharedLearningAreas$: Observable<LearningAreaInterface[]>;
   sharedLearningAreasCount$: Observable<{
     [key: number]: {
@@ -85,11 +91,21 @@ export class BundlesViewModel implements Resolve<boolean> {
   constructor(private route: ActivatedRoute, private store: Store<DalState>) {}
 
   resolve(): Observable<boolean> {
+    this.learningAreaId$ = this.route.params.pipe(
+      map((params): number => params.area || 0)
+    );
+    this.bundleId$ = this.route.params.pipe(
+      map((params): number => params.bundle || 0)
+    );
+
     // mock data from store
     // TODO get user from store
     this.user$ = new BehaviorSubject({
       id: 1,
-      email: ''
+      name: 'foo',
+      firstName: 'bar',
+      email: '',
+      avatar: null
     });
     this.coupledPersons$ = new BehaviorSubject([]); // TODO add TeacherStudent state
 
@@ -120,33 +136,30 @@ export class BundlesViewModel implements Resolve<boolean> {
     // presentation streams
     // shared
     // > bundles
+    this.activeBundle$ = this.bundleId$.pipe(
+      switchMap(
+        (bundleId: number): Observable<BundleInterface> =>
+          this.store.pipe(select(BundleQueries.getById, { id: bundleId }))
+      )
+    );
     this.sharedBundles$ = this.getSharedBundles();
     this.sharedBundlesByLearningArea$ = this.groupStreamByKey(
       this.sharedBundles$,
       'learningAreaId'
     );
     this.sharedLearningAreaBundles$ = this.getLearningAreaBundles(
-      this.route.params.pipe(
-        map(params => params.area),
-        filter(areaId => !!areaId)
-      ),
+      this.learningAreaId$,
       this.sharedBundlesByLearningArea$
     );
     this.sharedLearningAreaBooks$ = this.getLearningAreaBooks(
-      this.route.params.pipe(
-        map(params => params.area),
-        filter(areaId => !!areaId)
-      ),
+      this.learningAreaId$,
       this.sharedBooksByLearningArea$
     );
     this.bundleContentsCount$ = this.getBundleContentsCount(
       this.unlockedContentByBundle$
     );
     this.bundleContents$ = this.getBundleContents(
-      this.route.params.pipe(
-        map(params => params.bundle),
-        filter(bundleId => !!bundleId)
-      ),
+      this.bundleId$,
       this.unlockedContentByBundle$
     );
     // > books
@@ -159,6 +172,12 @@ export class BundlesViewModel implements Resolve<boolean> {
       'learningAreaId'
     );
     // > learningAreas
+    this.activeLearningArea$ = this.learningAreaId$.pipe(
+      switchMap(
+        (areaId: number): Observable<LearningAreaInterface> =>
+          this.store.pipe(select(LearningAreaQueries.getById, { id: areaId }))
+      )
+    );
     this.sharedLearningAreas$ = this.getLearningAreasWithContent(
       this.sharedBundles$,
       this.sharedBooks$
@@ -260,7 +279,7 @@ export class BundlesViewModel implements Resolve<boolean> {
       map(unlockedContents =>
         unlockedContents.sort((a, b) => a.index - b.index).map(
           (unlockedContent): ContentInterface => {
-            // TODO convert eduContent and userContent to uniform ContentInterface
+            // TODO move to service
             if (unlockedContent.eduContentId) {
               const content =
                 unlockedContent.eduContent.publishedEduContentMetadata;

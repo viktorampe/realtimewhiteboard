@@ -7,15 +7,10 @@ import {
   ViewChild
 } from '@angular/core';
 import { BundleInterface, ContentInterface } from '@campus/dal';
-import {
-  FilterTextInputComponent,
-  ListFormat,
-  ListViewComponent,
-  SideSheetComponent
-} from '@campus/ui';
-import { combineLatest, Observable, Subscription } from 'rxjs';
-import { filter, map, startWith } from 'rxjs/operators';
-import { BundleDetailViewModel } from './bundle-detail.viewmodel';
+import { ListFormat, ListViewComponent, SideSheetComponent } from '@campus/ui';
+import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
+import { BundlesViewModel } from '../bundles.viewmodel';
 
 @Component({
   selector: 'campus-bundle-detail',
@@ -23,11 +18,12 @@ import { BundleDetailViewModel } from './bundle-detail.viewmodel';
   styleUrls: ['./bundle-detail.component.scss']
 })
 export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
-  bundle$ = this.vm.selectedBundle$;
-  contents$ = this.vm.bundleContents$;
+  bundle$ = this.bundlesViewModel.activeBundle$;
+  contents$ = this.bundlesViewModel.bundleContents$;
   listFormat = ListFormat; //enum beschikbaar maken in template
-  currentListFormat$ = this.vm.listFormat$;
+  currentListFormat$ = this.bundlesViewModel.listFormat$;
 
+  filterInput$ = new BehaviorSubject<string>('');
   filteredContents$: Observable<ContentInterface[]>;
 
   contentForInfoPanelEmpty$: Observable<BundleInterface>;
@@ -38,17 +34,15 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChild(ListViewComponent) list: ListViewComponent;
   @ViewChild(SideSheetComponent) sideSheet: SideSheetComponent;
-  @ViewChild(FilterTextInputComponent) filter: FilterTextInputComponent;
 
   constructor(
-    public vm: BundleDetailViewModel,
+    public bundlesViewModel: BundlesViewModel,
     private cd: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
     this.contentForInfoPanelEmpty$ = this.bundle$;
-
-    this.setupFilteredContentStream();
+    this.filteredContents$ = this.getFilteredContentStream();
   }
 
   ngAfterViewInit() {
@@ -81,20 +75,25 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subscriptions.unsubscribe();
   }
 
-  setListFormat(format: ListFormat) {
-    this.vm.listFormat$.next(format);
+  onChangeFilterInput(filterInput: string): void {
+    this.filterInput$.next(filterInput);
   }
 
-  private setupFilteredContentStream() {
-    return (this.filteredContents$ = combineLatest(
-      this.contents$,
-      this.filter.filterTextChange.pipe(startWith(''))
-    ).pipe(
-      map(([contents, filterText]) =>
-        contents.filter(c =>
-          c.name.toLowerCase().includes(filterText.toLowerCase())
+  resetFilterInput(): void {
+    this.filterInput$.next('');
+  }
+
+  setListFormat(format: ListFormat) {
+    this.bundlesViewModel.changeListFormat(format);
+  }
+
+  private getFilteredContentStream() {
+    return combineLatest(this.contents$, this.filterInput$).pipe(
+      map(([contents, filterInput]) =>
+        contents.filter(content =>
+          content.name.toLowerCase().includes(filterInput.toLowerCase())
         )
       )
-    ));
+    );
   }
 }
