@@ -2,14 +2,16 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { BundleInterface, EduContentInterface } from '@campus/dal';
+import { StateResolver } from '@campus/pages/shared';
 import { ListFormat } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { BundlesViewModel } from '../bundles.viewmodel';
 import { BundlesComponent } from './bundles.component';
 
-let bundlesViewModel: MockViewModel;
 class MockViewModel extends BundlesViewModel {}
+
+let bundlesViewModel: MockViewModel;
 
 function createEduContent(): EduContentInterface {
   return {
@@ -60,7 +62,10 @@ function filterBundlesExpect(
 }
 
 beforeEach(() => {
-  bundlesViewModel = new MockViewModel(<ActivatedRoute>{}, <Store<any>>{});
+  bundlesViewModel = new MockViewModel(
+    <Store<any>>{},
+    new StateResolver(<Store<any>>{})
+  );
 });
 
 describe('BundlesComponent', () => {

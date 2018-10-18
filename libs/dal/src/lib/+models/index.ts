@@ -6,6 +6,7 @@ export * from './Bundle.interface';
 export * from './BundleGroup.interface';
 export * from './BundlePerson.interface';
 export * from './ContactformEntry.interface';
+export * from './Content.interface';
 export * from './ContentStatus.interface';
 export * from './ConversationInfo.interface';
 export * from './EditorStatus.interface';

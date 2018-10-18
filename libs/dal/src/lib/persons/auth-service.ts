@@ -1,5 +1,9 @@
 import { Injectable, InjectionToken } from '@angular/core';
-import { LoopBackAuth, PersonApi } from '@diekeure/polpo-api-angular-sdk';
+import {
+  LoopBackAuth,
+  PersonApi,
+  PersonInterface
+} from '@diekeure/polpo-api-angular-sdk';
 import { Observable } from 'rxjs';
 import {
   AuthServiceInterface,
@@ -20,7 +24,7 @@ export class AuthService implements AuthServiceInterface {
    * @returns {Observable<any>}
    * @memberof AuthService
    */
-  getCurrent(): Observable<any> {
+  getCurrent(): Observable<PersonInterface> {
     return this.personApi.getCurrent();
   }
 
