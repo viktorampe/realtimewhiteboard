@@ -18,7 +18,8 @@ import {
   UnlockedBoekeStudentQueries,
   UnlockedContentInterface,
   UnlockedContentQueries,
-  UserContentQueries
+  UserContentQueries,
+  userQuery
 } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
 import { select, Store } from '@ngrx/store';
@@ -100,15 +101,7 @@ export class BundlesViewModel implements Resolve<boolean> {
       map((params): number => params.bundle || 0)
     );
 
-    // mock data from store
-    // TODO get user from store
-    this.user$ = new BehaviorSubject({
-      id: 1,
-      name: 'foo',
-      firstName: 'bar',
-      email: '',
-      avatar: null
-    });
+    this.user$ = this.store.pipe(select(userQuery.getCurrentUser));
     this.coupledPersons$ = new BehaviorSubject([]); // TODO add TeacherStudent state
 
     this.listFormat$ = this.store.pipe(
@@ -142,28 +135,6 @@ export class BundlesViewModel implements Resolve<boolean> {
       switchMap(
         (bundleId: number): Observable<BundleInterface> =>
           this.store.pipe(select(BundleQueries.getById, { id: bundleId }))
-      ),
-      // TODO remove (mock data)
-      map(
-        (): BundleInterface => ({
-          id: 1,
-          name: 'bundel 1',
-          start: new Date(),
-          end: new Date(),
-          learningAreaId: 1,
-          learningArea: {
-            id: 1,
-            name: 'Wiskunde',
-            icon: 'wiskunde',
-            color: '#00aaff'
-          },
-          teacher: {
-            id: 1,
-            name: 'foo',
-            firstName: 'bar',
-            email: ''
-          }
-        })
       )
     );
     this.sharedBundles$ = this.getSharedBundles();
@@ -296,16 +267,6 @@ export class BundlesViewModel implements Resolve<boolean> {
   ): Observable<ContentInterface[]> {
     return combineLatest(bundleId$, unlockedContentByBundle$).pipe(
       map(([bundleId, unlockedContentsMap]) => unlockedContentsMap[bundleId]),
-      // TODO remove (mock data)
-      map(
-        (): UnlockedContentInterface[] => [
-          {
-            id: 1,
-            index: 1,
-            eduContentId: 1
-          }
-        ]
-      ),
       filter(unlockedContents => !!unlockedContents), // check if bundle exists
       switchMap(
         (unlockedContents): Observable<ContentInterface[]> =>
