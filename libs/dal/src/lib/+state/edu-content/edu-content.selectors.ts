@@ -43,7 +43,7 @@ export const getAllEntities = createSelector(
 export const getByIds = createSelector(
   selectEduContentState,
   (state: State, props: { ids: number[] }) => {
-    return props.ids.map(id => state.entities[id]);
+    return props.ids.map(id => asEduContent(state.entities[id]));
   }
 );
 
@@ -56,25 +56,15 @@ export const getByIds = createSelector(
  */
 export const getById = createSelector(
   selectEduContentState,
-  (state: State, props: { id: number }) => state.entities[props.id]
+  (state: State, props: { id: number }) =>
+    asEduContent(state.entities[props.id])
 );
 
-export const getAllAsEduContents = createSelector(getAll, entities =>
-  entities.map(item =>
-    Object.assign<EduContent, EduContentInterface>(new EduContent(), item)
-  )
-);
-
-export const getByIdAsEduContents = createSelector(
-  selectEduContentState,
-  (state: State, props: { id: number }) => {
-    if (state.entities[props.id]) {
-      return Object.assign<EduContent, EduContentInterface>(
-        new EduContent(),
-        state.entities[props.id]
-      );
-    } else {
-      return undefined;
-    }
+function asEduContent(item: EduContentInterface): EduContent {
+  if (item) {
+    return Object.assign<EduContent, EduContentInterface>(
+      new EduContent(),
+      item
+    );
   }
-);
+}

@@ -1,4 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { UnlockedBoekeGroup, UnlockedBoekeGroupInterface } from '../../+models';
 import {
   selectAll,
   selectEntities,
@@ -60,3 +61,38 @@ export const getById = createSelector(
   selectUnlockedBoekeGroupState,
   (state: State, props: { id: number }) => state.entities[props.id]
 );
+
+export const getShared = createSelector(
+  selectUnlockedBoekeGroupState,
+  (state: State, props: { userId: number }) => {
+    const ids: number[] = <number[]>state.ids;
+    return ids
+      .filter(
+        id => !asUnlockedBoekeStudent(state.entities[id]).isOwn(props.userId)
+      )
+      .map(id => state.entities[id]);
+  }
+);
+
+export const getOwn = createSelector(
+  selectUnlockedBoekeGroupState,
+  (state: State, props: { userId: number }) => {
+    const ids: number[] = <number[]>state.ids;
+    return ids
+      .filter(id =>
+        asUnlockedBoekeStudent(state.entities[id]).isOwn(props.userId)
+      )
+      .map(id => state.entities[id]);
+  }
+);
+
+function asUnlockedBoekeStudent(
+  item: UnlockedBoekeGroupInterface
+): UnlockedBoekeGroup {
+  if (item) {
+    return Object.assign<UnlockedBoekeGroup, UnlockedBoekeGroupInterface>(
+      new UnlockedBoekeGroup(),
+      item
+    );
+  }
+}

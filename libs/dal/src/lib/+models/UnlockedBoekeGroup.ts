@@ -1,8 +1,9 @@
 import { EduContentInterface } from './EduContent.interface';
 import { GroupInterface } from './Group.interface';
 import { PersonInterface } from './Person.interface';
+import { UnlockedBoekeGroupInterface } from './UnlockedBoekeGroup.interface';
 
-export interface UnlockedBoekeGroupInterface {
+export class UnlockedBoekeGroup implements UnlockedBoekeGroupInterface {
   id?: number;
   eduContentId?: number;
   groupId: number;
@@ -11,5 +12,7 @@ export interface UnlockedBoekeGroupInterface {
   group?: GroupInterface;
   teacher?: PersonInterface;
 
-  isOwn(userId: number): boolean;
+  isOwn(userId: number): boolean {
+    return this.teacherId === userId;
+  }
 }

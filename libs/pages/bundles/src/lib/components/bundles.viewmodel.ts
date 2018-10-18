@@ -4,6 +4,7 @@ import {
   BundleInterface,
   BundleQueries,
   ContentInterface,
+  EduContentInterface,
   EduContentMetadataInterface,
   EduContentQueries,
   LearningAreaInterface,
@@ -16,7 +17,9 @@ import {
   UnlockedBoekeStudentInterface,
   UnlockedBoekeStudentQueries,
   UnlockedContentInterface,
-  UnlockedContentQueries
+  UnlockedContentQueries,
+  UserContentQueries,
+  userQuery
 } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
 import { select, Store } from '@ngrx/store';
@@ -39,8 +42,8 @@ export class BundlesViewModel implements Resolve<boolean> {
   learningAreas$: Observable<LearningAreaInterface[]>;
   bundles$: Observable<BundleInterface[]>;
   unlockedContents$: Observable<UnlockedContentInterface[]>;
-  unlockedBookGroups$: Observable<UnlockedBoekeGroupInterface[]>;
-  unlockedBookStudents$: Observable<UnlockedBoekeStudentInterface[]>;
+  sharedUnlockedBookGroups$: Observable<UnlockedBoekeGroupInterface[]>;
+  sharedUnlockedBookStudents$: Observable<UnlockedBoekeStudentInterface[]>;
   coupledPersons$: Observable<PersonInterface[]>;
 
   // intermediate streams (maps)
@@ -64,9 +67,9 @@ export class BundlesViewModel implements Resolve<boolean> {
   }>;
   bundleContents$: Observable<ContentInterface[]>;
   // > books
-  private sharedBooks$: Observable<EduContentMetadataInterface[]>;
+  private sharedBooks$: Observable<EduContentInterface[]>;
   sharedBooksByLearningArea$: Observable<{
-    [key: number]: EduContentMetadataInterface[];
+    [key: number]: ContentInterface[];
   }>;
   // > learningAreas
   activeLearningArea$: Observable<LearningAreaInterface>;
@@ -78,13 +81,13 @@ export class BundlesViewModel implements Resolve<boolean> {
     };
   }>;
   sharedLearningAreaBundles$: Observable<BundleInterface[]>;
-  sharedLearningAreaBooks$: Observable<EduContentMetadataInterface[]>;
+  sharedLearningAreaBooks$: Observable<ContentInterface[]>;
 
   // own (TODO teacher)
   // > bundles
   private ownBundles$: Observable<BundleInterface[]>;
   // > books
-  private ownBooks$: Observable<EduContentMetadataInterface[]>;
+  private ownBooks$: Observable<EduContentInterface[]>;
   // > learningAreas
   learningAreasWithOwnBundles$: Observable<LearningAreaInterface[]>;
 
@@ -98,15 +101,7 @@ export class BundlesViewModel implements Resolve<boolean> {
       map((params): number => params.bundle || 0)
     );
 
-    // mock data from store
-    // TODO get user from store
-    this.user$ = new BehaviorSubject({
-      id: 1,
-      name: 'foo',
-      firstName: 'bar',
-      email: '',
-      avatar: null
-    });
+    this.user$ = this.store.pipe(select(userQuery.getCurrentUser));
     this.coupledPersons$ = new BehaviorSubject([]); // TODO add TeacherStudent state
 
     this.listFormat$ = this.store.pipe(
@@ -118,11 +113,11 @@ export class BundlesViewModel implements Resolve<boolean> {
     this.unlockedContents$ = this.store.pipe(
       select(UnlockedContentQueries.getAll)
     );
-    this.unlockedBookGroups$ = this.store.pipe(
-      select(UnlockedBoekeGroupQueries.getAll)
+    this.sharedUnlockedBookGroups$ = this.store.pipe(
+      select(UnlockedBoekeGroupQueries.getShared)
     );
-    this.unlockedBookStudents$ = this.store.pipe(
-      select(UnlockedBoekeStudentQueries.getAll)
+    this.sharedUnlockedBookStudents$ = this.store.pipe(
+      select(UnlockedBoekeStudentQueries.getShared)
     );
 
     // intermediate streams
@@ -163,10 +158,7 @@ export class BundlesViewModel implements Resolve<boolean> {
       this.unlockedContentByBundle$
     );
     // > books
-    this.sharedBooks$ = this.getSharedBooks(
-      this.unlockedBookStudents$,
-      this.unlockedBookGroups$
-    );
+    this.sharedBooks$ = this.getSharedBooks();
     this.sharedBooksByLearningArea$ = this.groupStreamByKey(
       this.sharedBooks$,
       'learningAreaId'
@@ -241,9 +233,9 @@ export class BundlesViewModel implements Resolve<boolean> {
   private getLearningAreaBooks(
     learningAreaId$: Observable<number>,
     booksByLearningArea$: Observable<{
-      [key: number]: EduContentMetadataInterface[];
+      [key: number]: ContentInterface[];
     }>
-  ): Observable<EduContentMetadataInterface[]> {
+  ): Observable<ContentInterface[]> {
     return combineLatest(learningAreaId$, booksByLearningArea$).pipe(
       map(
         ([learningAreaId, booksByLearningArea]) =>
@@ -270,35 +262,28 @@ export class BundlesViewModel implements Resolve<boolean> {
     return combineLatest(bundleId$, unlockedContentByBundle$).pipe(
       map(([bundleId, unlockedContentsMap]) => unlockedContentsMap[bundleId]),
       filter(unlockedContents => !!unlockedContents), // check if bundle exists
-      map(unlockedContents =>
-        unlockedContents.sort((a, b) => a.index - b.index).map(
-          (unlockedContent): ContentInterface => {
-            // TODO move to service
-            if (unlockedContent.eduContentId) {
-              const content =
-                unlockedContent.eduContent.publishedEduContentMetadata;
-              return {
-                id: content.id,
-                name: content.title,
-                description: content.description,
-                productType: unlockedContent.eduContent.type,
-                fileExtension: content.fileExt,
-                previewImage: content.thumbSmall
-              };
-            }
-            if (unlockedContent.userContentId) {
-              const content = unlockedContent.userContent;
-              return {
-                id: content.id,
-                name: content.name,
-                description: content.description,
-                productType: content.type,
-                fileExtension: content.fileExt,
-                previewImage: null
-              };
-            }
-          }
-        )
+      switchMap(
+        (unlockedContents): Observable<ContentInterface[]> =>
+          combineLatest(
+            ...unlockedContents.sort((a, b) => a.index - b.index).map(
+              (unlockedContent): Observable<ContentInterface> => {
+                if (unlockedContent.eduContentId) {
+                  return this.store.pipe(
+                    select(EduContentQueries.getById, {
+                      id: unlockedContent.eduContentId
+                    })
+                  );
+                }
+                if (unlockedContent.userContentId) {
+                  return this.store.pipe(
+                    select(UserContentQueries.getById, {
+                      id: unlockedContent.userContentId
+                    })
+                  );
+                }
+              }
+            )
+          )
       ),
       shareReplay(1)
     );
@@ -326,39 +311,31 @@ export class BundlesViewModel implements Resolve<boolean> {
    * @private
    * @param {Observable<UnlockedBoekeStudentInterface[]>} unlockedBookStudents$
    * @param {Observable<UnlockedBoekeGroupInterface[]>} unlockedBookGroups$
-   * @returns {Observable<EduContentMetadataInterface[]>}
+   * @returns {Observable<EduContentInterface[]>}
    * @memberof BundlesViewModel
    */
-  private getSharedBooks(
-    unlockedBookStudents$: Observable<UnlockedBoekeStudentInterface[]>,
-    unlockedBookGroups$: Observable<UnlockedBoekeGroupInterface[]>
-  ): Observable<EduContentMetadataInterface[]> {
-    return combineLatest(
-      this.user$,
-      unlockedBookGroups$,
-      unlockedBookStudents$
-    ).pipe(
-      map(
-        ([user, unlockedBookGroups, unlockedBookStudents]): number[] => {
-          // get array of unlocked book IDs
-          return [
-            ...unlockedBookGroups
-              .filter(g => g.teacherId !== user.id)
-              .map(g => g.eduContentId),
-            ...unlockedBookStudents
-              .filter(s => s.teacherId !== user.id)
-              .map(s => s.eduContentId)
-          ];
-        }
-      ),
-      switchMap(eduContentIds =>
-        this.store.pipe(
-          select(EduContentQueries.getByIds, { ids: eduContentIds })
+  private getSharedBooks(): Observable<EduContentInterface[]> {
+    return this.user$.pipe(
+      switchMap(user =>
+        combineLatest(
+          this.store.pipe(
+            select(UnlockedBoekeGroupQueries.getShared, { userId: user.id })
+          ),
+          this.store.pipe(
+            select(UnlockedBoekeStudentQueries.getShared, { userId: user.id })
+          )
         )
       ),
-      map(
-        (eduContents): EduContentMetadataInterface[] =>
-          eduContents.map(eduContent => eduContent.publishedEduContentMetadata)
+      switchMap(([unlockedBookGroups, unlockedBookStudents]) =>
+        this.store.pipe(
+          select(EduContentQueries.getByIds, {
+            ids: [
+              // extract all IDs from unlockedBook arrays
+              ...unlockedBookGroups.map(g => g.eduContentId),
+              ...unlockedBookStudents.map(s => s.eduContentId)
+            ]
+          })
+        )
       ),
       shareReplay(1)
     );
@@ -411,20 +388,24 @@ export class BundlesViewModel implements Resolve<boolean> {
    *
    * @private
    * @param {Observable<BundleInterface[]>} bundles$
-   * @param {Observable<EduContentMetadataInterface[]>} books$
+   * @param {Observable<ContentInterface[]>} books$
    * @returns {Observable<LearningAreaInterface[]>}
    * @memberof BundlesViewModel
    */
   private getLearningAreasWithContent(
     bundles$: Observable<BundleInterface[]>,
-    books$: Observable<EduContentMetadataInterface[]>
+    books$: Observable<EduContentInterface[]>
   ): Observable<LearningAreaInterface[]> {
     return combineLatest(bundles$, books$).pipe(
       switchMap(
         ([bundles, books]): Observable<LearningAreaInterface[]> => {
           const learningAreaIds = [
             ...bundles.map(bundle => bundle.learningAreaId),
-            ...books.map(book => book.learningAreaId)
+            ...books.map(
+              book =>
+                book.publishedEduContentMetadata &&
+                book.publishedEduContentMetadata.learningAreaId
+            )
           ];
           return this.store.pipe(
             select(LearningAreaQueries.getByIds, { ids: learningAreaIds })
@@ -451,7 +432,7 @@ export class BundlesViewModel implements Resolve<boolean> {
       [key: number]: BundleInterface[];
     }>,
     sharedBooksByLearningArea$: Observable<{
-      [key: number]: EduContentMetadataInterface[];
+      [key: number]: ContentInterface[];
     }>
   ): Observable<{
     [key: number]: {
