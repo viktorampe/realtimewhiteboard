@@ -5,8 +5,10 @@ import {
   HostBinding,
   HostListener,
   Input,
+  OnDestroy,
   Output
 } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { ListViewItemInterface } from '../interfaces/list-view-item';
 import { ListViewComponent } from '../list-view.component';
 
@@ -20,8 +22,20 @@ import { ListViewComponent } from '../list-view.component';
 @Directive({
   selector: '[campusListItem], [campus-list-item]'
 })
-export class ListViewItemDirective implements AfterContentInit {
-  isSelected: boolean;
+export class ListViewItemDirective implements AfterContentInit, OnDestroy {
+  private _isSelected = false;
+  public get isSelected(): boolean {
+    return this._isSelected;
+  }
+
+  public set isSelected(value: boolean) {
+    if (value !== this._isSelected) {
+      this._isSelected = value;
+      this.itemSelectionChanged.emit(this);
+    }
+  }
+
+  private subscriptions = new Subscription();
 
   @Input() dataObject: object;
 
@@ -39,13 +53,12 @@ export class ListViewItemDirective implements AfterContentInit {
 
   @HostBinding('class.ui-list-view__list__item__selectoverlay')
   get useItemSelectableOverlayClass() {
-    return this.parentList.useItemSelectableOverlayStyle === true;
+    return this.parentList.useItemSelectableOverlayStyle$.value;
   }
 
   @HostListener('click')
   clickEvent() {
     this.isSelected = !this.isSelected;
-    this.itemSelectionChanged.emit(this);
   }
 
   constructor(
@@ -53,12 +66,13 @@ export class ListViewItemDirective implements AfterContentInit {
     public host: ListViewItemInterface
   ) {}
 
-  /**
-   * Sets properties on host Component after it has been projected.
-   *
-   * @memberof ListViewItemDirective
-   */
   ngAfterContentInit() {
-    this.host.listFormat = this.parentList.listFormat;
+    this.subscriptions.add(
+      this.parentList.listFormat$.subscribe(lf => (this.host.listFormat = lf))
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 }

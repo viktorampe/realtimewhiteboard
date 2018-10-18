@@ -1,4 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { EduContent, EduContentInterface } from '../../+models';
 import {
   selectAll,
   selectEntities,
@@ -56,4 +57,24 @@ export const getByIds = createSelector(
 export const getById = createSelector(
   selectEduContentState,
   (state: State, props: { id: number }) => state.entities[props.id]
+);
+
+export const getAllAsEduContents = createSelector(getAll, entities =>
+  entities.map(item =>
+    Object.assign<EduContent, EduContentInterface>(new EduContent(), item)
+  )
+);
+
+export const getByIdAsEduContents = createSelector(
+  selectEduContentState,
+  (state: State, props: { id: number }) => {
+    if (state.entities[props.id]) {
+      return Object.assign<EduContent, EduContentInterface>(
+        new EduContent(),
+        state.entities[props.id]
+      );
+    } else {
+      return undefined;
+    }
+  }
 );

@@ -56,7 +56,6 @@ import { EDUCONTENT_SERVICE_TOKEN } from './edu-content/edu-content.service.inte
 import { LearningAreaService } from './learning-area/learning-area.service';
 import { LEARNINGAREA_SERVICE_TOKEN } from './learning-area/learning-area.service.interface';
 import { AuthService, AuthServiceToken } from './persons/auth-service';
-
 interface DalOptions {
   apiBaseUrl: string;
 }
@@ -73,11 +72,11 @@ interface DalOptions {
     StoreModule.forFeature('bundles', BundleReducer.reducer, {
       initialState: BundleReducer.initialState
     }),
-    StoreModule.forFeature('learingAreas', LearningAreaReducer.reducer, {
-      initialState: LearningAreaReducer.initialState
-    }),
     StoreModule.forFeature('eduContents', EduContentReducer.reducer, {
       initialState: EduContentReducer.initialState
+    }),
+    StoreModule.forFeature('learingAreas', LearningAreaReducer.reducer, {
+      initialState: LearningAreaReducer.initialState
     }),
     StoreModule.forFeature('unlockedContents', UnlockedContentReducer.reducer, {
       initialState: UnlockedContentReducer.initialState

@@ -1,3 +1,4 @@
+import { EduContent } from '@campus/dal';
 import { EduContentQueries } from '.';
 import { EduContentInterface } from '../../+models';
 import { State } from './edu-content.reducer';
@@ -93,6 +94,28 @@ describe('EduContent Selectors', () => {
     });
     it('getById() should return undefined if the entity is not present', () => {
       const results = EduContentQueries.getById(storeState, { id: 9 });
+      expect(results).toBe(undefined);
+    });
+
+    it('getAllAsEduContents() should return an array of Educontent in the order from the ids', () => {
+      const results = EduContentQueries.getAllAsEduContents(storeState);
+      expect(results).toEqual([
+        createEduContent(4) as EduContent,
+        createEduContent(1) as EduContent,
+        createEduContent(2) as EduContent,
+        createEduContent(3) as EduContent
+      ]);
+    });
+    it('getByIdAsEduContents() should return the desired Educontent', () => {
+      const results = EduContentQueries.getByIdAsEduContents(storeState, {
+        id: 2
+      });
+      expect(results).toEqual(createEduContent(2) as EduContent);
+    });
+    it('getByIdAsEduContents() should return undefined if the entity is not present', () => {
+      const results = EduContentQueries.getByIdAsEduContents(storeState, {
+        id: 9
+      });
       expect(results).toBe(undefined);
     });
   });

@@ -8,6 +8,7 @@ import { InfoPanelBundleComponent } from './components/info-panel/info-panel-bun
 import { InfoPanelContentComponent } from './components/info-panel/info-panel-content/info-panel-content.component';
 import { InfoPanelContentsComponent } from './components/info-panel/info-panel-contents/info-panel-contents.component';
 import { PagesBundlesRoutingModule } from './pages-bundles-routing.module';
+import { BundleDetailComponent } from './components/bundle-detail/bundle-detail.component';
 
 @NgModule({
   imports: [
@@ -20,8 +21,10 @@ import { PagesBundlesRoutingModule } from './pages-bundles-routing.module';
     BundlesComponent,
     InfoPanelBundleComponent,
     InfoPanelContentComponent,
-    InfoPanelContentsComponent
+    InfoPanelContentsComponent,
+    BundleDetailComponent
   ],
-  providers: [BundlesViewModel]
+  providers: [BundlesViewModel],
+  exports: [BundleDetailComponent]
 })
 export class PagesBundlesModule {}
