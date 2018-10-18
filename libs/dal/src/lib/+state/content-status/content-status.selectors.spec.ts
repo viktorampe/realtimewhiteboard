@@ -15,7 +15,9 @@ describe('ContentStatus Selectors', () => {
     error?: any
   ): State {
     return {
-      ids: contentStatuses ? contentStatuses.map(contentStatus => contentStatus.id) : [],
+      ids: contentStatuses
+        ? contentStatuses.map(contentStatus => contentStatus.id)
+        : [],
       entities: contentStatuses
         ? contentStatuses.reduce(
             (entityMap, contentStatus) => ({

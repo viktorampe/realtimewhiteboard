@@ -61,13 +61,17 @@ export class UpsertContentStatuses implements Action {
 export class UpdateContentStatus implements Action {
   readonly type = ContentStatusesActionTypes.UpdateContentStatus;
 
-  constructor(public payload: { contentStatus: Update<ContentStatusInterface> }) {}
+  constructor(
+    public payload: { contentStatus: Update<ContentStatusInterface> }
+  ) {}
 }
 
 export class UpdateContentStatuses implements Action {
   readonly type = ContentStatusesActionTypes.UpdateContentStatuses;
 
-  constructor(public payload: { contentStatuses: Update<ContentStatusInterface>[] }) {}
+  constructor(
+    public payload: { contentStatuses: Update<ContentStatusInterface>[] }
+  ) {}
 }
 
 export class DeleteContentStatus implements Action {

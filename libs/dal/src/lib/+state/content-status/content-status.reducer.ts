@@ -11,9 +11,9 @@ export interface State extends EntityState<ContentStatusInterface> {
   error?: any;
 }
 
-export const adapter: EntityAdapter<ContentStatusInterface> = createEntityAdapter<
+export const adapter: EntityAdapter<
   ContentStatusInterface
->();
+> = createEntityAdapter<ContentStatusInterface>();
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties
@@ -58,7 +58,10 @@ export function reducer(
     }
 
     case ContentStatusesActionTypes.ContentStatusesLoaded: {
-      return adapter.addAll(action.payload.contentStatuses, { ...state, loaded: true });
+      return adapter.addAll(action.payload.contentStatuses, {
+        ...state,
+        loaded: true
+      });
     }
 
     case ContentStatusesActionTypes.ContentStatusesLoadError: {
