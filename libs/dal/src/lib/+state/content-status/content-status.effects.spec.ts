@@ -5,7 +5,7 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
-import { CONTENT_STATUS_SERVICE_TOKEN } from '../../content-status/content-status.service.interface';
+import { STUDENT_CONTENT_STATUS_SERVICE_TOKEN } from '../../student-content-status/student-content-status.service.interface';
 import {
   ContentStatusesLoaded,
   ContentStatusesLoadError,
@@ -42,7 +42,7 @@ describe('ContentStatusEffects', () => {
   const mockServiceMethodReturnValue = (
     method: string,
     returnValue: any,
-    service: any = CONTENT_STATUS_SERVICE_TOKEN
+    service: any = STUDENT_CONTENT_STATUS_SERVICE_TOKEN
   ) => {
     jest.spyOn(TestBed.get(service), method).mockReturnValue(of(returnValue));
   };
@@ -50,7 +50,7 @@ describe('ContentStatusEffects', () => {
   const mockServiceMethodError = (
     method: string,
     errorMessage: string,
-    service: any = CONTENT_STATUS_SERVICE_TOKEN
+    service: any = STUDENT_CONTENT_STATUS_SERVICE_TOKEN
   ) => {
     jest.spyOn(TestBed.get(service), method).mockImplementation(() => {
       throw new Error(errorMessage);
@@ -70,9 +70,9 @@ describe('ContentStatusEffects', () => {
       ],
       providers: [
         {
-          provide: CONTENT_STATUS_SERVICE_TOKEN,
+          provide: STUDENT_CONTENT_STATUS_SERVICE_TOKEN,
           useValue: {
-            getAll: () => {}
+            getAllConstentStatuses: () => {}
           }
         },
         ContentStatusesEffects,
@@ -96,7 +96,7 @@ describe('ContentStatusEffects', () => {
         usedState = initialState;
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAll', []);
+        mockServiceMethodReturnValue('getAllConstentStatuses', []);
       });
       it('should trigger an api call with the initialState if force is not true', () => {
         expectInAndOut(
@@ -118,7 +118,7 @@ describe('ContentStatusEffects', () => {
         usedState = { ...initialState, loaded: true };
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAll', []);
+        mockServiceMethodReturnValue('getAllConstentStatuses', []);
       });
       it('should not trigger an api call with the loaded state if force is not true', () => {
         expectInNoOut(effects.loadContentStatuses$, unforcedLoadAction);
@@ -136,7 +136,7 @@ describe('ContentStatusEffects', () => {
         usedState = initialState;
       });
       beforeEach(() => {
-        mockServiceMethodError('getAll', 'failed');
+        mockServiceMethodError('getAllConstentStatuses', 'failed');
       });
       it('should return a error action if force is not true', () => {
         expectInAndOut(
@@ -162,7 +162,7 @@ describe('ContentStatusEffects', () => {
         };
       });
       beforeEach(() => {
-        mockServiceMethodError('getAll', 'failed');
+        mockServiceMethodError('getAllConstentStatuses', 'failed');
       });
       it('should return nothing action if force is not true', () => {
         expectInNoOut(effects.loadContentStatuses$, unforcedLoadAction);

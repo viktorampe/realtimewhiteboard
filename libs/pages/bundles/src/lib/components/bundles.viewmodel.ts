@@ -1,19 +1,26 @@
 import { Injectable } from '@angular/core';
 import {
   BundleActions,
+  BundleInterface,
   BundleQueries,
+  ContentInterface,
   DalState,
   EduContentActions,
+  EduContentMetadataInterface,
   EduContentQueries,
   LearningAreaActions,
   LearningAreaInterface,
   LearningAreaQueries,
+  PersonInterface,
   UiActions,
   UnlockedBoekeGroupActions,
+  UnlockedBoekeGroupInterface,
   UnlockedBoekeGroupQueries,
   UnlockedBoekeStudentActions,
+  UnlockedBoekeStudentInterface,
   UnlockedBoekeStudentQueries,
   UnlockedContentActions,
+  UnlockedContentInterface,
   UnlockedContentQueries,
   UserContentActions,
   UserContentQueries
@@ -27,6 +34,41 @@ import { BehaviorSubject, Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class BundlesViewModel implements StateResolverInterface {
+  // source streams
+  user$: Observable<PersonInterface>;
+  bundles$: Observable<BundleInterface[]>;
+  unlockedContents$: Observable<UnlockedContentInterface[]>;
+  unlockedBookGroups$: Observable<UnlockedBoekeGroupInterface[]>;
+  unlockedBookStudents$: Observable<UnlockedBoekeStudentInterface[]>;
+  coupledPersons$: Observable<PersonInterface[]>;
+
+  // presentation streams
+  // shared
+  // > bundles
+  private sharedBundles$: Observable<BundleInterface[]>;
+  sharedBundlesByLearningArea$: Observable<{
+    [key: number]: BundleInterface[];
+  }>;
+  bundleContentsCount$: Observable<{
+    [key: number]: number;
+  }>;
+  bundleContents$: Observable<ContentInterface[]>;
+  // > books
+  private sharedBooks$: Observable<EduContentMetadataInterface[]>;
+  sharedBooksByLearningArea$: Observable<{
+    [key: number]: EduContentMetadataInterface[];
+  }>;
+  // > learningAreas
+  activeLearningArea$: Observable<LearningAreaInterface>;
+  sharedLearningAreas$: Observable<LearningAreaInterface[]>;
+  sharedLearningAreasCount$: Observable<{
+    [key: number]: {
+      bundlesCount: number;
+      booksCount: number;
+    };
+  }>;
+  sharedLearningAreaBundles$: Observable<BundleInterface[]>;
+  sharedLearningAreaBooks$: Observable<EduContentMetadataInterface[]>;
   listFormat$ = new BehaviorSubject<ListFormat>(ListFormat.GRID);
   learningAreas$: Observable<LearningAreaInterface[]> = new BehaviorSubject<
     LearningAreaInterface[]

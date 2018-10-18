@@ -3,33 +3,42 @@ import { LearningAreaInterface } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { BundlesViewModel } from './bundles.viewmodel';
+import { BundlesViewModel } from '../bundles.viewmodel';
 
 @Component({
-  selector: 'campus-bundles',
-  templateUrl: './bundles.component.html',
-  styleUrls: ['./bundles.component.scss']
+  selector: 'campus-learning-areas',
+  templateUrl: './learning-areas.component.html',
+  styleUrls: ['./learning-areas.component.scss']
 })
-export class BundlesComponent implements OnInit {
+export class LearningAreasComponent implements OnInit {
   toolbarFixed: boolean;
 
-  // listFormat$: Observable<ListFormat> = this.bundlesViewModel.listFormat$;
+  listFormat$: Observable<ListFormat>;
   filterInput$ = new BehaviorSubject<string>('');
 
-  learningAreas$: Observable<LearningAreaInterface[]> = this.bundlesViewModel
-    .learningAreas$;
-
-  displayedLearningAreas$: Observable<
-    LearningAreaInterface[]
-  > = this.getDisplayedLearningAreas$(this.learningAreas$, this.filterInput$);
-
-  learningAreasCounts$: Observable<any> = this.bundlesViewModel
-    .learningAreasCounts$;
+  sharedLearningAreas$: Observable<LearningAreaInterface[]>;
+  displayedLearningAreas$: Observable<LearningAreaInterface[]>;
+  learningAreasCounts$: Observable<{
+    [key: number]: {
+      bundlesCount: number;
+      booksCount: number;
+    };
+  }>;
 
   constructor(private bundlesViewModel: BundlesViewModel) {}
 
   ngOnInit(): void {
     this.toolbarFixed = true;
+
+    this.listFormat$ = this.bundlesViewModel.listFormat$;
+
+    this.sharedLearningAreas$ = this.bundlesViewModel.sharedLearningAreas$;
+    // TODO find out why learningarea name is not displayed
+    this.displayedLearningAreas$ = this.getDisplayedLearningAreas$(
+      this.sharedLearningAreas$,
+      this.filterInput$
+    );
+    this.learningAreasCounts$ = this.bundlesViewModel.sharedLearningAreasCount$;
   }
 
   onChangeFilterInput(filterInput: string): void {
@@ -50,7 +59,9 @@ export class BundlesComponent implements OnInit {
   ): Observable<LearningAreaInterface[]> {
     return combineLatest(learningAreas$, filterInput$).pipe(
       map(([learningAreas, filterInput]: [LearningAreaInterface[], string]) => {
-        if (!filterInput || filterInput === '') return learningAreas;
+        if (!filterInput) {
+          return learningAreas;
+        }
         return learningAreas.filter(learningArea =>
           learningArea.name.toLowerCase().includes(filterInput.toLowerCase())
         );
