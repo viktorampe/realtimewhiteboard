@@ -211,9 +211,7 @@ export class BundlesViewModel implements Resolve<boolean> {
    * Get bundles for specified learning area
    *
    * @param {Observable<number>} learningAreaId$
-   * @param {Observable<{
-   *       [key: number]: BundleInterface[];
-   *     }>} bundlesByLearningArea$
+   * @param {Observable<{[key: number]: BundleInterface[];}>} bundlesByLearningArea$
    * @returns {Observable<BundleInterface[]>}
    * @memberof BundlesViewModel
    */
@@ -236,9 +234,7 @@ export class BundlesViewModel implements Resolve<boolean> {
    * Get books for specified learning area
    *
    * @param {Observable<number>} learningAreaId$
-   * @param {Observable<{
-   *       [key: number]: EduContentMetadataInterface[];
-   *     }>} booksByLearningArea$
+   * @param {Observable<{[key: number]: EduContentMetadataInterface[];}>} booksByLearningArea$
    * @returns {Observable<EduContentMetadataInterface[]>}
    * @memberof BundlesViewModel
    */
@@ -261,9 +257,7 @@ export class BundlesViewModel implements Resolve<boolean> {
    * Return contents for bundle
    *
    * @param {Observable<number>} bundleId$
-   * @param {Observable<{
-   *       [key: number]: UnlockedContentInterface[];
-   *     }>} unlockedContentByBundle$
+   * @param {Observable<{[key: number]: UnlockedContentInterface[];}>} unlockedContentByBundle$
    * @returns {Observable<ContentInterface[]>}
    * @memberof BundlesViewModel
    */
@@ -374,9 +368,7 @@ export class BundlesViewModel implements Resolve<boolean> {
    * Count number of unlockedContent per bundle
    *
    * @private
-   * @param {Observable<{
-   *     [key: number]: UnlockedContentInterface[];
-   *   }>} unlockedContentByBundle$
+   * @param {Observable<{[key: number]: UnlockedContentInterface[];}>} unlockedContentByBundle$
    * @returns {Observable<{ [key: number]: number }>}
    * @memberof BundlesViewModel
    */
@@ -448,18 +440,9 @@ export class BundlesViewModel implements Resolve<boolean> {
    *
    * @private
    * @param {Observable<LearningAreaInterface[]>} learningAreas$
-   * @param {Observable<{
-   *       [key: number]: BundleInterface[];
-   *     }>} sharedBundlesByLearningArea$
-   * @param {Observable<{
-   *       [key: number]: EduContentMetadataInterface[];
-   *     }>} sharedBooksByLearningArea$
-   * @returns {Observable<{
-   *     [key: number]: {
-   *       bundlesCount: number;
-   *       booksCount: number;
-   *     };
-   *   }>}
+   * @param {Observable<{[key: number]: BundleInterface[];}>} sharedBundlesByLearningArea$
+   * @param {Observable<{[key: number]: EduContentMetadataInterface[];}>} sharedBooksByLearningArea$
+   * @returns {Observable<{[key: number]: {bundlesCount: number;booksCount: number;};}>}
    * @memberof BundlesViewModel
    */
   private getSharedLearningAreasCount(

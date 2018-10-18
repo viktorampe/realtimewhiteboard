@@ -149,9 +149,9 @@ describe('BundlesViewModel', () => {
     ).toBeObservable(hot('a-|', { a: { 1: 3, 2: 2 } }));
   });
 
-  it('getBundleContents()', () => {
-    return;
-  });
+  // it('getBundleContents()', () => {
+  //   return;
+  // });
 
   // it('getSharedBooks()', () => {
   //   return;
