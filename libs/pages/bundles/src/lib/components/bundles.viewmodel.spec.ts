@@ -31,12 +31,12 @@ describe('BundlesViewModel', () => {
     };
   }
 
-  let bundlesByLearningArea: { [key: number]: BundleInterface[] } = {
+  const bundlesByLearningArea: { [key: number]: BundleInterface[] } = {
     1: [bundle(1, 1), bundle(2, 1), bundle(3, 1)],
     2: [bundle(4, 2), bundle(5, 2), bundle(6, 2)],
     3: [bundle(7, 3), bundle(8, 3), bundle(9, 3)]
   };
-  let booksByLearningArea: {
+  const booksByLearningArea: {
     [key: number]: EduContentMetadataInterface[];
   } = {
     1: [book(1, 1), book(2, 1), book(3, 1)],
