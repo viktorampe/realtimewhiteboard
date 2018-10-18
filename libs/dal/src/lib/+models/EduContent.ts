@@ -30,14 +30,15 @@ export class EduContent implements EduContentInterface, ContentInterface {
       ? this.publishedEduContentMetadata.title
       : '';
   }
-
   get productType(): string {
-    return this.publishedEduContentMetadata
+    return this.publishedEduContentMetadata &&
+      this.publishedEduContentMetadata.eduContentProductType
       ? this.publishedEduContentMetadata.eduContentProductType.icon
       : '';
   }
   get fileExtension(): string {
-    return this.publishedEduContentMetadata
+    return this.publishedEduContentMetadata &&
+      this.publishedEduContentMetadata.fileName
       ? this.publishedEduContentMetadata.fileName.substring(
           this.publishedEduContentMetadata.fileName.lastIndexOf('.') + 1
         )
@@ -54,7 +55,8 @@ export class EduContent implements EduContentInterface, ContentInterface {
       : '';
   }
   get methodLogos(): string[] {
-    return this.publishedEduContentMetadata
+    return this.publishedEduContentMetadata &&
+      this.publishedEduContentMetadata.methods
       ? this.publishedEduContentMetadata.methods.map(m => m.icon)
       : [];
   }
