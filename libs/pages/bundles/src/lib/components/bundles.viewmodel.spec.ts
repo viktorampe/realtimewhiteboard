@@ -1,7 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
-import { BundleInterface, EduContentMetadataInterface } from '@campus/dal';
+import {
+  BundleInterface,
+  EduContentMetadataInterface,
+  UnlockedContentInterface
+} from '@campus/dal';
 import { Store, StoreModule } from '@ngrx/store';
+import { hot } from 'jasmine-marbles';
 import { Observable } from 'rxjs';
 import { marbles } from 'rxjs-marbles';
 import { BundlesViewModel } from './bundles.viewmodel';
@@ -28,6 +33,18 @@ describe('BundlesViewModel', () => {
       metaVersion: '',
       language: 'nl',
       created: new Date()
+    };
+  }
+
+  function unlockedContentInterface(
+    index: number,
+    id: number,
+    bundleId: number
+  ): UnlockedContentInterface {
+    return {
+      index: index,
+      id: id,
+      bundleId: bundleId
     };
   }
 
@@ -112,16 +129,33 @@ describe('BundlesViewModel', () => {
   );
 
   it('getBundleContentsCount()', () => {
-    return;
+    const unlockedContentByBundle$: Observable<{
+      [key: number]: UnlockedContentInterface[];
+    }> = hot('a-|', {
+      a: <{ [key: number]: UnlockedContentInterface[] }>{
+        1: [
+          unlockedContentInterface(1, 1, 1),
+          unlockedContentInterface(2, 2, 1),
+          unlockedContentInterface(3, 3, 1)
+        ],
+        2: [
+          unlockedContentInterface(10, 10, 2),
+          unlockedContentInterface(20, 20, 2)
+        ]
+      }
+    });
+    expect(
+      bundlesViewModel['getBundleContentsCount'](unlockedContentByBundle$)
+    ).toBeObservable(hot('a-|', { a: { 1: 3, 2: 2 } }));
   });
 
   it('getBundleContents()', () => {
     return;
   });
 
-  it('getSharedBooks()', () => {
-    return;
-  });
+  // it('getSharedBooks()', () => {
+  //   return;
+  // });
 
   it('getLearningAreasWithContent()', () => {
     return;
