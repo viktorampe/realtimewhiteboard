@@ -20,7 +20,7 @@ export enum LearningAreasActionTypes {
 export class LoadLearningAreas implements Action {
   readonly type = LearningAreasActionTypes.LoadLearningAreas;
 
-  constructor(public payload: { force?: boolean }) {}
+  constructor(public payload: { force?: boolean } = {}) {}
 }
 
 export class LearningAreasLoaded implements Action {

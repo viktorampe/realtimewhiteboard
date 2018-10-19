@@ -50,7 +50,7 @@ describe('UnlockedBoekeGroup Selectors', () => {
         true,
         'no error'
       );
-      storeState = { unlockedBoekeGroup: unlockedBoekeGroupState };
+      storeState = { unlockedBoekeGroups: unlockedBoekeGroupState };
     });
     it('getError() should return the error', () => {
       const results = UnlockedBoekeGroupQueries.getError(storeState);

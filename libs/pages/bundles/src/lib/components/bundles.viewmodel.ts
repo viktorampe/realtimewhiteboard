@@ -1,33 +1,39 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Resolve } from '@angular/router';
 import {
+  BundleActions,
   BundleInterface,
   BundleQueries,
   ContentInterface,
+  DalState,
+  EduContentActions,
   EduContentInterface,
   EduContentQueries,
+  LearningAreaActions,
   LearningAreaInterface,
   LearningAreaQueries,
   PersonInterface,
   UiActions,
   UiQuery,
+  UnlockedBoekeGroupActions,
   UnlockedBoekeGroupInterface,
   UnlockedBoekeGroupQueries,
+  UnlockedBoekeStudentActions,
   UnlockedBoekeStudentInterface,
   UnlockedBoekeStudentQueries,
+  UnlockedContentActions,
   UnlockedContentInterface,
   UnlockedContentQueries,
+  UserContentActions,
   UserContentQueries,
   userQuery
 } from '@campus/dal';
+import { StateResolver } from '@campus/pages/shared';
 import { ListFormat } from '@campus/ui';
 import { Dictionary } from '@ngrx/entity';
-import { select, Store } from '@ngrx/store';
+import { Action, select, Selector, Store } from '@ngrx/store';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
-import { filter, map, shareReplay, switchMap, take } from 'rxjs/operators';
-
-// TODO replace with actual DalState
-export class DalState {}
+import { filter, map, shareReplay, switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -81,7 +87,11 @@ export class BundlesViewModel implements Resolve<boolean> {
   // > learningAreas
   learningAreasWithOwnBundles$: Observable<LearningAreaInterface[]>;
 
-  constructor(private route: ActivatedRoute, private store: Store<DalState>) {}
+  constructor(
+    private viewModelResolver: StateResolver,
+    private store: Store<DalState>,
+    private route: ActivatedRoute
+  ) {}
 
   resolve(): Observable<boolean> {
     this.learningAreaId$ = this.route.params.pipe(
@@ -180,9 +190,34 @@ export class BundlesViewModel implements Resolve<boolean> {
       this.ownBundles$,
       this.ownBooks$
     );
+    return this.viewModelResolver.resolve(
+      this.getLoadableActions(),
+      this.getResolvedQueries()
+    );
+  }
 
-    // TODO update with StateResolverInterface
-    return new BehaviorSubject<boolean>(true).pipe(take(1));
+  getLoadableActions(): Action[] {
+    return [
+      new LearningAreaActions.LoadLearningAreas(),
+      new BundleActions.LoadBundles(),
+      new EduContentActions.LoadEduContents(),
+      new UserContentActions.LoadUserContents(),
+      new UnlockedContentActions.LoadUnlockedContents(),
+      new UnlockedBoekeGroupActions.LoadUnlockedBoekeGroups(),
+      new UnlockedBoekeStudentActions.LoadUnlockedBoekeStudents()
+    ];
+  }
+
+  getResolvedQueries(): Selector<object, boolean>[] {
+    return [
+      LearningAreaQueries.getLoaded,
+      BundleQueries.getLoaded,
+      EduContentQueries.getLoaded,
+      UserContentQueries.getLoaded,
+      UnlockedContentQueries.getLoaded,
+      UnlockedBoekeGroupQueries.getLoaded,
+      UnlockedBoekeStudentQueries.getLoaded
+    ];
   }
 
   changeListFormat(listFormat: ListFormat): void {

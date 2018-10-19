@@ -9,7 +9,7 @@ import {
 } from './unlocked-boeke-group.reducer';
 
 export const selectUnlockedBoekeGroupState = createFeatureSelector<State>(
-  'unlockedBoekeGroup'
+  'unlockedBoekeGroups'
 );
 
 export const getError = createSelector(
