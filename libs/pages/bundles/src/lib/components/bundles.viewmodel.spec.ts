@@ -5,6 +5,7 @@ import {
   EduContentMetadataInterface,
   UnlockedContentInterface
 } from '@campus/dal';
+import { Dictionary } from '@ngrx/entity';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from 'jasmine-marbles';
 import { Observable } from 'rxjs';
@@ -48,14 +49,12 @@ describe('BundlesViewModel', () => {
     };
   }
 
-  const bundlesByLearningArea: { [key: number]: BundleInterface[] } = {
+  const bundlesByLearningArea: Dictionary<BundleInterface[]> = {
     1: [bundle(1, 1), bundle(2, 1), bundle(3, 1)],
     2: [bundle(4, 2), bundle(5, 2), bundle(6, 2)],
     3: [bundle(7, 3), bundle(8, 3), bundle(9, 3)]
   };
-  const booksByLearningArea: {
-    [key: number]: EduContentMetadataInterface[];
-  } = {
+  const booksByLearningArea: Dictionary<EduContentMetadataInterface[]> = {
     1: [book(1, 1), book(2, 1), book(3, 1)],
     2: [book(4, 2), book(5, 2), book(6, 2)],
     3: [book(7, 3), book(8, 3), book(9, 3)]
@@ -129,10 +128,10 @@ describe('BundlesViewModel', () => {
   );
 
   it('getBundleContentsCount()', () => {
-    const unlockedContentByBundle$: Observable<{
-      [key: number]: UnlockedContentInterface[];
-    }> = hot('a-|', {
-      a: <{ [key: number]: UnlockedContentInterface[] }>{
+    const unlockedContentByBundle$: Observable<
+      Dictionary<UnlockedContentInterface[]>
+    > = hot('a-|', {
+      a: {
         1: [
           unlockedContentInterface(1, 1, 1),
           unlockedContentInterface(2, 2, 1),

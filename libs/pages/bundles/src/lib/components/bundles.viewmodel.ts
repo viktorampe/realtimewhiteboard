@@ -5,7 +5,6 @@ import {
   BundleQueries,
   ContentInterface,
   EduContentInterface,
-  EduContentMetadataInterface,
   EduContentQueries,
   LearningAreaInterface,
   LearningAreaQueries,
@@ -22,6 +21,7 @@ import {
   userQuery
 } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
+import { Dictionary } from '@ngrx/entity';
 import { select, Store } from '@ngrx/store';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { filter, map, shareReplay, switchMap, take } from 'rxjs/operators';
@@ -47,39 +47,29 @@ export class BundlesViewModel implements Resolve<boolean> {
   coupledPersons$: Observable<PersonInterface[]>;
 
   // intermediate streams (maps)
-  bundlesByLearningArea$: Observable<{
-    [key: number]: BundleInterface[];
-  }>;
-  unlockedContentByBundle$: Observable<{
-    [key: number]: UnlockedContentInterface[];
-  }>;
+  bundlesByLearningArea$: Observable<Dictionary<BundleInterface[]>>;
+  unlockedContentByBundle$: Observable<Dictionary<UnlockedContentInterface[]>>;
 
   // presentation streams
   // shared
   // > bundles
   activeBundle$: Observable<BundleInterface>;
   private sharedBundles$: Observable<BundleInterface[]>;
-  sharedBundlesByLearningArea$: Observable<{
-    [key: number]: BundleInterface[];
-  }>;
-  bundleContentsCount$: Observable<{
-    [key: number]: number;
-  }>;
+  sharedBundlesByLearningArea$: Observable<Dictionary<BundleInterface[]>>;
+  bundleContentsCount$: Observable<Dictionary<number>>;
   bundleContents$: Observable<ContentInterface[]>;
   // > books
   private sharedBooks$: Observable<EduContentInterface[]>;
-  sharedBooksByLearningArea$: Observable<{
-    [key: number]: ContentInterface[];
-  }>;
+  sharedBooksByLearningArea$: Observable<Dictionary<ContentInterface[]>>;
   // > learningAreas
   activeLearningArea$: Observable<LearningAreaInterface>;
   sharedLearningAreas$: Observable<LearningAreaInterface[]>;
-  sharedLearningAreasCount$: Observable<{
-    [key: number]: {
+  sharedLearningAreasCount$: Observable<
+    Dictionary<{
       bundlesCount: number;
       booksCount: number;
-    };
-  }>;
+    }>
+  >;
   sharedLearningAreaBundles$: Observable<BundleInterface[]>;
   sharedLearningAreaBooks$: Observable<ContentInterface[]>;
 
@@ -199,19 +189,9 @@ export class BundlesViewModel implements Resolve<boolean> {
     this.store.dispatch(new UiActions.SetListFormatUi({ listFormat }));
   }
 
-  /**
-   * Get bundles for specified learning area
-   *
-   * @param {Observable<number>} learningAreaId$
-   * @param {Observable<{[key: number]: BundleInterface[];}>} bundlesByLearningArea$
-   * @returns {Observable<BundleInterface[]>}
-   * @memberof BundlesViewModel
-   */
   private getLearningAreaBundles(
     learningAreaId$: Observable<number>,
-    bundlesByLearningArea$: Observable<{
-      [key: number]: BundleInterface[];
-    }>
+    bundlesByLearningArea$: Observable<Dictionary<BundleInterface[]>>
   ): Observable<BundleInterface[]> {
     return combineLatest(learningAreaId$, bundlesByLearningArea$).pipe(
       map(
@@ -222,19 +202,9 @@ export class BundlesViewModel implements Resolve<boolean> {
     );
   }
 
-  /**
-   * Get books for specified learning area
-   *
-   * @param {Observable<number>} learningAreaId$
-   * @param {Observable<{[key: number]: EduContentMetadataInterface[];}>} booksByLearningArea$
-   * @returns {Observable<EduContentMetadataInterface[]>}
-   * @memberof BundlesViewModel
-   */
   private getLearningAreaBooks(
     learningAreaId$: Observable<number>,
-    booksByLearningArea$: Observable<{
-      [key: number]: ContentInterface[];
-    }>
+    booksByLearningArea$: Observable<Dictionary<ContentInterface[]>>
   ): Observable<ContentInterface[]> {
     return combineLatest(learningAreaId$, booksByLearningArea$).pipe(
       map(
@@ -245,19 +215,9 @@ export class BundlesViewModel implements Resolve<boolean> {
     );
   }
 
-  /**
-   * Return contents for bundle
-   *
-   * @param {Observable<number>} bundleId$
-   * @param {Observable<{[key: number]: UnlockedContentInterface[];}>} unlockedContentByBundle$
-   * @returns {Observable<ContentInterface[]>}
-   * @memberof BundlesViewModel
-   */
   private getBundleContents(
     bundleId$: Observable<number>,
-    unlockedContentByBundle$: Observable<{
-      [key: number]: UnlockedContentInterface[];
-    }>
+    unlockedContentByBundle$: Observable<Dictionary<UnlockedContentInterface[]>>
   ): Observable<ContentInterface[]> {
     return combineLatest(bundleId$, unlockedContentByBundle$).pipe(
       map(([bundleId, unlockedContentsMap]) => unlockedContentsMap[bundleId]),
@@ -289,14 +249,6 @@ export class BundlesViewModel implements Resolve<boolean> {
     );
   }
 
-  /**
-   * Get only bundles that are shared with me, not my own
-   * TODO get through selector?
-   *
-   * @private
-   * @returns {Observable<BundleInterface[]>}
-   * @memberof BundlesViewModel
-   */
   private getSharedBundles(): Observable<BundleInterface[]> {
     return this.user$.pipe(
       switchMap(user =>
@@ -305,15 +257,6 @@ export class BundlesViewModel implements Resolve<boolean> {
     );
   }
 
-  /**
-   * Get book educontent that is shared with me
-   *
-   * @private
-   * @param {Observable<UnlockedBoekeStudentInterface[]>} unlockedBookStudents$
-   * @param {Observable<UnlockedBoekeGroupInterface[]>} unlockedBookGroups$
-   * @returns {Observable<EduContentInterface[]>}
-   * @memberof BundlesViewModel
-   */
   private getSharedBooks(): Observable<EduContentInterface[]> {
     return this.user$.pipe(
       switchMap(user =>
@@ -341,19 +284,9 @@ export class BundlesViewModel implements Resolve<boolean> {
     );
   }
 
-  /**
-   * Count number of unlockedContent per bundle
-   *
-   * @private
-   * @param {Observable<{[key: number]: UnlockedContentInterface[];}>} unlockedContentByBundle$
-   * @returns {Observable<{ [key: number]: number }>}
-   * @memberof BundlesViewModel
-   */
   private getBundleContentsCount(
-    unlockedContentByBundle$: Observable<{
-      [key: number]: UnlockedContentInterface[];
-    }>
-  ): Observable<{ [key: number]: number }> {
+    unlockedContentByBundle$: Observable<Dictionary<UnlockedContentInterface[]>>
+  ): Observable<Dictionary<number>> {
     return unlockedContentByBundle$.pipe(
       map(unlockedContentsByBundle => {
         const countByBundle = {};
@@ -366,15 +299,6 @@ export class BundlesViewModel implements Resolve<boolean> {
     );
   }
 
-  /**
-   * Get only bundles that I own, not shared with me
-   * TODO get through selector?
-   *
-   * @private
-   * @param {Observable<BundleInterface[]>} bundles$
-   * @returns {Observable<BundleInterface[]>}
-   * @memberof BundlesViewModel
-   */
   private getOwnBundles(): Observable<BundleInterface[]> {
     return this.user$.pipe(
       switchMap(user =>
@@ -383,15 +307,6 @@ export class BundlesViewModel implements Resolve<boolean> {
     );
   }
 
-  /**
-   * Get learning areas with shared bundels or books
-   *
-   * @private
-   * @param {Observable<BundleInterface[]>} bundles$
-   * @param {Observable<ContentInterface[]>} books$
-   * @returns {Observable<LearningAreaInterface[]>}
-   * @memberof BundlesViewModel
-   */
   private getLearningAreasWithContent(
     bundles$: Observable<BundleInterface[]>,
     books$: Observable<EduContentInterface[]>
@@ -416,30 +331,16 @@ export class BundlesViewModel implements Resolve<boolean> {
     );
   }
 
-  /**
-   * Get count of bundles and books by learning area
-   *
-   * @private
-   * @param {Observable<LearningAreaInterface[]>} learningAreas$
-   * @param {Observable<{[key: number]: BundleInterface[];}>} sharedBundlesByLearningArea$
-   * @param {Observable<{[key: number]: EduContentMetadataInterface[];}>} sharedBooksByLearningArea$
-   * @returns {Observable<{[key: number]: {bundlesCount: number;booksCount: number;};}>}
-   * @memberof BundlesViewModel
-   */
   private getSharedLearningAreasCount(
     learningAreas$: Observable<LearningAreaInterface[]>,
-    sharedBundlesByLearningArea$: Observable<{
-      [key: number]: BundleInterface[];
-    }>,
-    sharedBooksByLearningArea$: Observable<{
-      [key: number]: ContentInterface[];
-    }>
-  ): Observable<{
-    [key: number]: {
+    sharedBundlesByLearningArea$: Observable<Dictionary<BundleInterface[]>>,
+    sharedBooksByLearningArea$: Observable<Dictionary<ContentInterface[]>>
+  ): Observable<
+    Dictionary<{
       bundlesCount: number;
       booksCount: number;
-    };
-  }> {
+    }>
+  > {
     return combineLatest(
       learningAreas$,
       sharedBundlesByLearningArea$,
@@ -463,19 +364,13 @@ export class BundlesViewModel implements Resolve<boolean> {
     );
   }
 
-  /**
-   * Map an array from a stream to an object mapped by specified ID
-   *
-   * @private
-   * @param {Observable<any[]>} stream$
-   * @param {string} key
-   * @returns
-   * @memberof BundlesViewModel
-   */
-  private groupStreamByKey(stream$: Observable<any[]>, key: string) {
+  private groupStreamByKey(
+    stream$: Observable<any[]>,
+    key: string
+  ): Observable<Dictionary<any[]>> {
     return stream$.pipe(
       map(
-        (arr: any[]): { [key: number]: any[] } => {
+        (arr: any[]): Dictionary<any[]> => {
           const byKey = {};
           arr.forEach(item => {
             if (!byKey[item[key]]) {
