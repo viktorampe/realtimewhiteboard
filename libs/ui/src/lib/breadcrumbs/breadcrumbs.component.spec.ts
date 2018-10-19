@@ -17,27 +17,15 @@ describe('BreadcrumbsComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+  it('should create', () => {});
 
-  it('should show the home icon when the linkArray is empty', () => {
-    expect(component).toBeTruthy();
-  });
+  it('should show the home icon when the linkArray is empty', () => {});
 
-  it('should show all breadcrumbs', () => {
-    expect(component).toBeTruthy();
-  });
+  it('should show all breadcrumbs', () => {});
 
-  it('should show the correct link separator string', () => {
-    expect(component).toBeTruthy();
-  });
+  it('should show the correct link-separator string', () => {});
 
-  it('should show the correct number of breadcrumbs', () => {
-    expect(component).toBeTruthy();
-  });
+  it('should show the correct number of breadcrumbs', () => {});
 
-  it('should show the correct links hidden string', () => {
-    expect(component).toBeTruthy();
-  });
+  it('should show the correct links-hidden string', () => {});
 });

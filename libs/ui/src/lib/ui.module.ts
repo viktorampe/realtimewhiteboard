@@ -51,6 +51,7 @@ import { TreeNavComponent } from './tree-nav/tree-nav.component';
 import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness.pipe';
 import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
 import { DropdownMenuComponent } from './dropdown-menu/dropdown-menu.component';
+import { NotificationDropdownItemComponent } from './notification-dropdown-item/notification-dropdown-item.component';
 
 @NgModule({
   imports: [
@@ -117,7 +118,8 @@ import { DropdownMenuComponent } from './dropdown-menu/dropdown-menu.component';
     TreeNavComponent,
     ToolBarComponent,
     BreadcrumbsComponent,
-    DropdownMenuComponent
+    DropdownMenuComponent,
+    NotificationDropdownItemComponent
   ],
   exports: [
     FilterTextInputComponent,
@@ -159,7 +161,8 @@ import { DropdownMenuComponent } from './dropdown-menu/dropdown-menu.component';
     TreeNavComponent,
     ToolBarComponent,
     BreadcrumbsComponent,
-    DropdownMenuComponent
+    DropdownMenuComponent,
+    NotificationDropdownItemComponent
   ]
 })
 export class UiModule {}

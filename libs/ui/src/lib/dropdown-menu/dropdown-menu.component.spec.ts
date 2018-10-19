@@ -21,19 +21,11 @@ describe('DropdownMenuComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should show the header if needed', () => {
-    expect(component).toBeTruthy();
-  });
+  it('should show the header if needed', () => {});
 
-  it('should show the header icon if provided', () => {
-    expect(component).toBeTruthy();
-  });
+  it('should show the header icon if provided', () => {});
 
-  it('should show the text if provided', () => {
-    expect(component).toBeTruthy();
-  });
+  it('should show the text if provided', () => {});
 
-  it('should show the link if both text and url are provided', () => {
-    expect(component).toBeTruthy();
-  });
+  it('should show the link if both text and url are provided', () => {});
 });
