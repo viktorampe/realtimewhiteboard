@@ -3,8 +3,12 @@ $pages-bg-color-1: #fff !default;
 $pages-bg-color-2: #fff !default;
 $pages-font-color-1: #000 !default;
 $pages-font-color-2: #000 !default;
+$pages-padding: 10px !default;
 
 @mixin pages-shared() {
+  .campus-page {
+    padding: $pages-padding;
+  }
 }
 
 // import all required sass files from our libs

@@ -16,14 +16,16 @@ export class LearningAreasComponent implements OnInit {
   listFormat$: Observable<ListFormat>;
   filterInput$ = new BehaviorSubject<string>('');
 
+  learningAreas$: Observable<LearningAreaInterface[]> = this.bundlesViewModel
+    .learningAreas$;
+
+  displayedLearningAreas$: Observable<
+    LearningAreaInterface[]
+  > = this.getDisplayedLearningAreas$(this.learningAreas$, this.filterInput$);
+
+  learningAreasCounts$: Observable<any> = this.bundlesViewModel
+    .sharedLearningAreasCount$;
   sharedLearningAreas$: Observable<LearningAreaInterface[]>;
-  displayedLearningAreas$: Observable<LearningAreaInterface[]>;
-  learningAreasCounts$: Observable<{
-    [key: number]: {
-      bundlesCount: number;
-      booksCount: number;
-    };
-  }>;
 
   constructor(private bundlesViewModel: BundlesViewModel) {}
 

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {
   BundleInterface,
+  ContentInterface,
   EduContentMetadataInterface,
   LearningAreaInterface
 } from '@campus/dal';
@@ -68,7 +69,7 @@ export class BundlesComponent implements OnInit {
    *   >}
    * @memberof BundlesComponent
    */
-  books$: Observable<EduContentMetadataInterface[]> = this.bundlesViewModel
+  books$: Observable<ContentInterface[]> = this.bundlesViewModel
     .sharedLearningAreaBooks$;
 
   //

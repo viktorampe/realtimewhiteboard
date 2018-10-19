@@ -24,10 +24,9 @@ describe('InfoPanelContentComponent', () => {
         preview: 'string',
         name: 'string',
         description: 'string',
-        extention: 'string',
+        extension: 'string',
         productType: 'string',
-        methods: ['string'],
-        status: 'string'
+        methods: ['string']
       },
       statusOptions: ['string']
     };

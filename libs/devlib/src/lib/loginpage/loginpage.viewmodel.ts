@@ -10,7 +10,7 @@ import {
   userQuery,
   UserState
 } from '@campus/dal';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, map, switchMap, take } from 'rxjs/operators';
 import { StudentContentStatusService } from '../../../../dal/src/lib/student-content-status/student-content-status.service';
@@ -31,7 +31,7 @@ export class LoginPageViewModel implements Resolve<boolean> {
     public studentContentStatusService: StudentContentStatusService,
     public studentContentStatusStore: Store<StudentContentStatusReducer.State>
   ) {
-    store.select(userQuery.getCurrentUser).subscribe(data => {
+    store.pipe(select(userQuery.getCurrentUser)).subscribe(data => {
       this.loggedIn = data != null;
     });
   }

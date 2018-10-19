@@ -4,8 +4,11 @@ import {
   ContentChildren,
   forwardRef,
   Input,
+  OnChanges,
+  OnDestroy,
   Output,
-  QueryList
+  QueryList,
+  SimpleChanges
 } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { ListViewItemDirective } from './directives/list-view-item.directive';
@@ -29,45 +32,55 @@ import { ListFormat } from './enums/list-format.enum';
   templateUrl: './list-view.component.html',
   styleUrls: ['./list-view.component.scss']
 })
-export class ListViewComponent implements AfterContentInit {
+export class ListViewComponent
+  implements AfterContentInit, OnDestroy, OnChanges {
   /**
    * (boolean) - When multiselecting, add a css class to style the selectable items
    *
    * @memberof ListViewComponent
    */
-  useItemSelectableOverlayStyle = false;
+  useItemSelectableOverlayStyle$ = new BehaviorSubject(false);
 
-  private subscription = new Subscription();
+  private itemsSubscription = new Subscription();
 
   @Input() listFormat: ListFormat;
   @Input() multiSelect = false;
   @Input() placeHolderText = 'Er zijn geen beschikbare items.';
 
   @Output() selectedItems$ = new BehaviorSubject([]);
+  @Output() listFormat$ = new BehaviorSubject(this.listFormat);
 
   @ContentChildren(forwardRef(() => ListViewItemDirective))
   items: QueryList<ListViewItemDirective>;
 
   ngAfterContentInit() {
-    this.items.forEach(item => {
-      this.subscription.add(
-        item.itemSelectionChanged.subscribe(changedItem =>
-          this.onItemSelectionChanged(changedItem)
-        )
-      );
+    this.setupSelectionSubscriptionsForListItems();
+
+    // nieuwe subscription als items veranderen
+    this.items.changes.subscribe(() => {
+      this.setupSelectionSubscriptionsForListItems();
     });
   }
 
-  // tslint:disable-next-line:use-life-cycle-interface
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.listFormat) {
+      this.listFormat$.next(this.listFormat);
+    }
   }
 
-  private onItemSelectionChanged(item: ListViewItemDirective) {
+  ngOnDestroy() {
+    this.itemsSubscription.unsubscribe();
+  }
+
+  protected onItemSelectionChanged(item: ListViewItemDirective) {
     if (!this.multiSelect) {
-      this.items.filter(i => i !== item).forEach(j => (j.isSelected = false));
+      if (item.isSelected) {
+        this.items.filter(i => i !== item).forEach(j => (j.isSelected = false));
+      }
     } else {
-      this.useItemSelectableOverlayStyle = this.items.some(i => i.isSelected);
+      this.useItemSelectableOverlayStyle$.next(
+        this.items.some(i => i.isSelected)
+      );
     }
 
     const selectedItemsArray = this.items.filter(i => i.isSelected);
@@ -77,11 +90,24 @@ export class ListViewComponent implements AfterContentInit {
   selectAllItems() {
     if (this.multiSelect) {
       this.items.forEach(i => (i.isSelected = true));
-      this.useItemSelectableOverlayStyle = true;
     }
   }
   deselectAllItems() {
     this.items.forEach(i => (i.isSelected = false));
-    this.useItemSelectableOverlayStyle = false;
+  }
+
+  private setupSelectionSubscriptionsForListItems() {
+    if (this.itemsSubscription !== null) {
+      this.itemsSubscription.unsubscribe();
+    }
+    this.itemsSubscription = new Subscription();
+
+    this.items.forEach(item => {
+      this.itemsSubscription.add(
+        item.itemSelectionChanged.subscribe(changedItem =>
+          this.onItemSelectionChanged(changedItem)
+        )
+      );
+    });
   }
 }

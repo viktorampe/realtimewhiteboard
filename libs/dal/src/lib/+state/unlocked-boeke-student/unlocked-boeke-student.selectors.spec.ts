@@ -7,7 +7,8 @@ describe('UnlockedBoekeStudent Selectors', () => {
     id: number
   ): UnlockedBoekeStudentInterface | any {
     return {
-      id: id
+      id: id,
+      teacherId: Math.round(id / 2)
     };
   }
   function createState(
@@ -103,6 +104,25 @@ describe('UnlockedBoekeStudent Selectors', () => {
         id: 9
       });
       expect(results).toBe(undefined);
+    });
+
+    it('getShared() should return undefined if the entity is not present', () => {
+      const results = UnlockedBoekeStudentQueries.getShared(storeState, {
+        userId: 1
+      });
+      expect(results).toEqual([
+        createUnlockedBoekeStudent(4),
+        createUnlockedBoekeStudent(3)
+      ]);
+    });
+    it('getOwn() should return the desired entity', () => {
+      const results = UnlockedBoekeStudentQueries.getOwn(storeState, {
+        userId: 1
+      });
+      expect(results).toEqual([
+        createUnlockedBoekeStudent(1),
+        createUnlockedBoekeStudent(2)
+      ]);
     });
   });
 });

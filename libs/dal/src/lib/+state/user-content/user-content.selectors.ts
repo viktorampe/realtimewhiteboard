@@ -1,4 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { UserContent, UserContentInterface } from '../../+models';
 import {
   selectAll,
   selectEntities,
@@ -42,7 +43,7 @@ export const getAllEntities = createSelector(
 export const getByIds = createSelector(
   selectUserContentState,
   (state: State, props: { ids: number[] }) => {
-    return props.ids.map(id => state.entities[id]);
+    return props.ids.map(id => asUserContent(state.entities[id]));
   }
 );
 
@@ -55,5 +56,15 @@ export const getByIds = createSelector(
  */
 export const getById = createSelector(
   selectUserContentState,
-  (state: State, props: { id: number }) => state.entities[props.id]
+  (state: State, props: { id: number }) =>
+    asUserContent(state.entities[props.id])
 );
+
+function asUserContent(item: UserContentInterface): UserContent {
+  if (item) {
+    return Object.assign<UserContent, UserContentInterface>(
+      new UserContent(),
+      item
+    );
+  }
+}

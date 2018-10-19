@@ -1,5 +1,5 @@
 import { ListFormat } from '@campus/ui';
-import { uiQuery } from './ui.selectors';
+import { UiQuery } from './ui.selectors';
 
 describe('Ui Selectors', () => {
   const ERROR_MSG = 'No Error Available';
@@ -18,12 +18,12 @@ describe('Ui Selectors', () => {
 
   describe('Ui Selectors', () => {
     it("getLoaded() should return the current 'loaded' status", () => {
-      const result = uiQuery.getLoaded(storeState);
+      const result = UiQuery.getLoaded(storeState);
       expect(result).toBe(true);
     });
 
     it("getListFormat() should return the current 'listFormat' setting", () => {
-      const result = uiQuery.getListFormat(storeState);
+      const result = UiQuery.getListFormat(storeState);
       expect(result).toBe(ListFormat.GRID);
     });
   });

@@ -65,4 +65,6 @@ export interface EduContentMetadataInterface {
   grades?: GradeInterface[];
   eduContentTOC?: EduContentTOCInterface[];
   eduContentSource?: EduContentSourceInterface;
+  fileExt?: string;
+  fileLabel?: string;
 }

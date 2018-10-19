@@ -46,9 +46,9 @@ export class ListComponent {}
 @Component({
   selector: 'campus-directive-container',
   template: `
-  <campus-list>
+  <campus-list-view>
     <campus-list-view-item campusListItem></campus-list-view-item>
-  </campus-list>
+  </campus-list-view>
   `
 })
 export class ContainerComponent {}

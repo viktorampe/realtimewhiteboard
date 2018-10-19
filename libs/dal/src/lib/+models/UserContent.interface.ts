@@ -8,4 +8,6 @@ export interface UserContentInterface {
   id?: number;
   teacherId?: number;
   teacher?: PersonInterface;
+  fileExt?: string;
+  fileLabel?: string;
 }

@@ -35,7 +35,7 @@
                      [backgroundColor]="learningArea.color"
                      [icon]="learningArea.icon.name">
         <campus-folder-details>
-          {{ bundlesCount[bundle.id] + " item(s)" }}
+          {{ bundleContentsCount$[bundle.id] + " item(s)" }}
         </campus-folder-details>
       </campus-folder>
     </campus-list-view>
@@ -52,10 +52,10 @@
       <campus-list-view [listFormat]="listFormat$|async">
         <campus-content-thumbnail *ngFor="let book of books$|async"
                                   campusListItem
-                                  [title]="book.title"
-                                  [contentTypeClass]="icon-boek"
-                                  [imagePath]="book.method[0].logoUrl"
-                                  [fileExtensionClass]="book.EduContentProductTypeInterface.type">
+                                  [title]="book.name"
+                                  [contentTypeClass]="'icon-boek'"
+                                  [imagePath]="book.previewImage"
+                                  [fileExtensionClass]="book.fileExtension">
         </campus-content-thumbnail>
       </campus-list-view>
     </div>
