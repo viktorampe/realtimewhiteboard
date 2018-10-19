@@ -307,27 +307,37 @@ export class BundlesViewModel implements Resolve<boolean> {
     );
   }
 
-  private getLearningAreasWithContent(
+  private getLearningAreaIdsWithContent(
     bundles$: Observable<BundleInterface[]>,
     books$: Observable<EduContentInterface[]>
-  ): Observable<LearningAreaInterface[]> {
+  ): Observable<number[]> {
     return combineLatest(bundles$, books$).pipe(
-      switchMap(
-        ([bundles, books]): Observable<LearningAreaInterface[]> => {
-          const learningAreaIds = [
+      map(
+        ([bundles, books]): number[] => {
+          return [
             ...bundles.map(bundle => bundle.learningAreaId),
             ...books.map(
               book =>
                 book.publishedEduContentMetadata &&
                 book.publishedEduContentMetadata.learningAreaId
             )
-          ];
-          return this.store.pipe(
-            select(LearningAreaQueries.getByIds, { ids: learningAreaIds })
-          );
+          ].filter((v, i, n) => n.indexOf(v) === i);
         }
       ),
       shareReplay(1)
+    );
+  }
+
+  private getLearningAreasWithContent(
+    bundles$: Observable<BundleInterface[]>,
+    books$: Observable<EduContentInterface[]>
+  ): Observable<LearningAreaInterface[]> {
+    return this.getLearningAreaIdsWithContent(bundles$, books$).pipe(
+      switchMap(learningAreaIds => {
+        return this.store.pipe(
+          select(LearningAreaQueries.getByIds, { ids: learningAreaIds })
+        );
+      })
     );
   }
 

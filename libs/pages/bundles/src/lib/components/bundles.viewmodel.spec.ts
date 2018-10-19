@@ -2,7 +2,9 @@ import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import {
   BundleInterface,
+  EduContentInterface,
   EduContentMetadataInterface,
+  LearningAreaInterface,
   UnlockedContentInterface
 } from '@campus/dal';
 import { Dictionary } from '@ngrx/entity';
@@ -10,12 +12,21 @@ import { Store, StoreModule } from '@ngrx/store';
 import { hot } from 'jasmine-marbles';
 import { Observable } from 'rxjs';
 import { marbles } from 'rxjs-marbles';
+import { DalState } from '../../../../../devlib/src/lib/edu-content/edu-content.viewmodel';
 import { BundlesViewModel } from './bundles.viewmodel';
 
 describe('BundlesViewModel', () => {
   let bundlesViewModel: BundlesViewModel;
 
-  function bundle(id, learningAreaId): BundleInterface {
+  function createLearningArea(id: number, name: string): LearningAreaInterface {
+    return {
+      id: id,
+      name: name,
+      color: 'color'
+    };
+  }
+
+  function createBundle(id, learningAreaId): BundleInterface {
     return {
       id: id,
       learningAreaId: learningAreaId,
@@ -24,7 +35,7 @@ describe('BundlesViewModel', () => {
       end: new Date()
     };
   }
-  function book(id, learningAreaId): EduContentMetadataInterface {
+  function createBookMetaData(id, learningAreaId): EduContentMetadataInterface {
     return {
       id: id,
       learningAreaId: learningAreaId,
@@ -37,7 +48,7 @@ describe('BundlesViewModel', () => {
     };
   }
 
-  function unlockedContentInterface(
+  function createUnlockedContentInterface(
     index: number,
     id: number,
     bundleId: number
@@ -50,14 +61,28 @@ describe('BundlesViewModel', () => {
   }
 
   const bundlesByLearningArea: Dictionary<BundleInterface[]> = {
-    1: [bundle(1, 1), bundle(2, 1), bundle(3, 1)],
-    2: [bundle(4, 2), bundle(5, 2), bundle(6, 2)],
-    3: [bundle(7, 3), bundle(8, 3), bundle(9, 3)]
+    1: [createBundle(1, 1), createBundle(2, 1), createBundle(3, 1)],
+    2: [createBundle(4, 2), createBundle(5, 2), createBundle(6, 2)],
+    3: [createBundle(7, 3), createBundle(8, 3), createBundle(9, 3)]
   };
-  const booksByLearningArea: Dictionary<EduContentMetadataInterface[]> = {
-    1: [book(1, 1), book(2, 1), book(3, 1)],
-    2: [book(4, 2), book(5, 2), book(6, 2)],
-    3: [book(7, 3), book(8, 3), book(9, 3)]
+  const booksMetaDataByLearningArea: Dictionary<
+    EduContentMetadataInterface[]
+  > = {
+    1: [
+      createBookMetaData(1, 1),
+      createBookMetaData(2, 1),
+      createBookMetaData(3, 1)
+    ],
+    2: [
+      createBookMetaData(4, 2),
+      createBookMetaData(5, 2),
+      createBookMetaData(6, 2)
+    ],
+    3: [
+      createBookMetaData(7, 3),
+      createBookMetaData(8, 3),
+      createBookMetaData(9, 3)
+    ]
   };
 
   beforeEach(() => {
@@ -66,7 +91,8 @@ describe('BundlesViewModel', () => {
       providers: [
         BundlesViewModel,
         { provide: ActivatedRoute, useValue: {} },
-        Store
+        Store,
+        DalState
       ]
     });
     bundlesViewModel = TestBed.get(BundlesViewModel);
@@ -110,7 +136,7 @@ describe('BundlesViewModel', () => {
         b: 2
       });
       const booksByLearningArea$ = m.hot('--a---|', {
-        a: booksByLearningArea
+        a: booksMetaDataByLearningArea
       });
       const result = '--a--b|';
 
@@ -118,11 +144,11 @@ describe('BundlesViewModel', () => {
         EduContentMetadataInterface[]
       > = bundlesViewModel['getLearningAreaBooks'](
         learningAreaId$,
-        booksByLearningArea$
+        booksByLearningArea$ //TODO typing needs to be fixed
       );
       m.expect(result$).toBeObservable(result, {
-        a: booksByLearningArea[1],
-        b: booksByLearningArea[2]
+        a: booksMetaDataByLearningArea[1],
+        b: booksMetaDataByLearningArea[2]
       });
     })
   );
@@ -133,13 +159,13 @@ describe('BundlesViewModel', () => {
     > = hot('a-|', {
       a: {
         1: [
-          unlockedContentInterface(1, 1, 1),
-          unlockedContentInterface(2, 2, 1),
-          unlockedContentInterface(3, 3, 1)
+          createUnlockedContentInterface(1, 1, 1),
+          createUnlockedContentInterface(2, 2, 1),
+          createUnlockedContentInterface(3, 3, 1)
         ],
         2: [
-          unlockedContentInterface(10, 10, 2),
-          unlockedContentInterface(20, 20, 2)
+          createUnlockedContentInterface(10, 10, 2),
+          createUnlockedContentInterface(20, 20, 2)
         ]
       }
     });
@@ -156,15 +182,66 @@ describe('BundlesViewModel', () => {
   //   return;
   // });
 
-  it('getLearningAreasWithContent()', () => {
-    return;
+  it('getLearningAreaIdsWithContent()', () => {
+    const bundles$: Observable<BundleInterface[]> = hot('-a-|', {
+      a: [
+        createBundle(1, 1),
+        createBundle(2, 1),
+        createBundle(3, 1),
+        createBundle(4, 2)
+      ]
+    });
+    const books$: Observable<EduContentInterface[]> = hot('-a-|', {
+      a: [
+        { publishedEduContentMetadata: createBookMetaData(1, 1) },
+        { publishedEduContentMetadata: createBookMetaData(2, 2) },
+        { publishedEduContentMetadata: createBookMetaData(3, 3) }
+      ]
+    });
+    expect(
+      bundlesViewModel['getLearningAreaIdsWithContent'](bundles$, books$)
+    ).toBeObservable(hot('-a-|', { a: [1, 2, 3] }));
   });
 
-  it('getSharedLearningAreasCount()', () => {
-    return;
+  it('getLearningAreasWithContent()', () => {
+    const bundles$: Observable<BundleInterface[]> = hot('-a-|', {
+      a: [
+        createBundle(1, 1),
+        createBundle(2, 1),
+        createBundle(3, 1),
+        createBundle(4, 2)
+      ]
+    });
+    const books$: Observable<EduContentInterface[]> = hot('-a-|', {
+      a: [
+        { publishedEduContentMetadata: createBookMetaData(1, 1) },
+        { publishedEduContentMetadata: createBookMetaData(2, 2) },
+        { publishedEduContentMetadata: createBookMetaData(3, 3) }
+      ]
+    });
+    const learningArea$ = hot('-a-|', { a: createLearningArea(1, 'name') });
+    const spy = jest
+      .spyOn(bundlesViewModel['store'], 'pipe')
+      .mockReturnValue(learningArea$);
+    expect(
+      bundlesViewModel['getLearningAreasWithContent'](bundles$, books$)
+    ).toBeObservable(learningArea$);
+    expect(spy).toHaveBeenCalledTimes(1);
   });
 
   it('getOwnBundles()', () => {
+    const ownBundles$ = hot('-a-|', {
+      a: [createBundle(1, 2), createBundle(2, 3)]
+    });
+    bundlesViewModel.user$ = hot('a--|', { a: { id: 1 } });
+    const spy = jest
+      .spyOn(bundlesViewModel['store'], 'pipe')
+      .mockReturnValue(ownBundles$);
+    expect(bundlesViewModel['getOwnBundles']()).toBeObservable(ownBundles$);
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('getSharedLearningAreasCount()', () => {
     return;
   });
 });
