@@ -49,6 +49,7 @@ import { SideSheetComponent } from './side-sheet/side-sheet.component';
 import { ToolBarComponent } from './tool-bar/tool-bar.component';
 import { TreeNavComponent } from './tree-nav/tree-nav.component';
 import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness.pipe';
+import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 
 @NgModule({
   imports: [
@@ -113,7 +114,8 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     WarningDirective,
     DisabledDirective,
     TreeNavComponent,
-    ToolBarComponent
+    ToolBarComponent,
+    BreadcrumbComponent
   ],
   exports: [
     FilterTextInputComponent,
@@ -153,7 +155,8 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     WarningDirective,
     DisabledDirective,
     TreeNavComponent,
-    ToolBarComponent
+    ToolBarComponent,
+    BreadcrumbComponent
   ]
 })
 export class UiModule {}
