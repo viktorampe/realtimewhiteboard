@@ -1,30 +1,51 @@
 import { Injectable } from '@angular/core';
 import { AlertQueueInterface } from '@campus/dal';
-import { AlertQueueApi, PersonApi } from '@diekeure/polpo-api-angular-sdk';
+import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AlertService {
-  constructor(private alertApi: AlertQueueApi, private personApi: PersonApi) {}
+  constructor(private personApi: PersonApi) {}
 
+  /**
+   * Returns an array of all alerts for the specified user in an Observable.
+   *
+   * @param {number} userId The recipientId to find by.
+   * @param {Date} lastUpdateTime (Optional) Return alerts with a validFrom greater than this.
+   * @returns {Observable<AlertQueueInterface[]>}
+   * @memberof AlertService
+   */
   getAllAlertsForCurrentUser(
-    userId: number
-  ): Observable<AlertQueueInterface[]> {
-    return this.personApi.getAlertQueues(userId);
-  }
-
-  getAlertsForCurrentUserByDate(
     userId: number,
-    lastUpdateTime: Date
+    lastUpdateTime?: Date
   ): Observable<AlertQueueInterface[]> {
-    const dateString = lastUpdateTime.toISOString();
-    const dateFilter = { where: { sentAt: { gt: dateString } } };
+    let dateFilter = {};
+    if (lastUpdateTime) {
+      const dateString = lastUpdateTime.toISOString();
+      dateFilter = { where: { validFrom: { gt: dateString } } };
+    }
+
     return this.personApi.getAlertQueues(userId, dateFilter);
   }
 
-  setAlertAsRead(userId: number, alertId: number): Observable<object> {
-    return this.personApi.setAlertRead(userId, alertId, true, true);
+  /**
+   * Sets the alert(s) as read. Returns the number of affected records.
+   *
+   * @param {number} userId
+   * @param {(number | number[])} alertId
+   * @param {read} (Optional) The read status to set (default: true).
+   * @param {intended} (Optional) The intended status to set (default: true). Represents if the read status is set by a user interaction.
+   * @returns {Observable<object>}  An object with the count of the affected records in an Observable.
+   * @memberof AlertService
+   */
+  setAlertAsRead(
+    userId: number,
+    alertId: number | number[],
+    read = true,
+    intended = true
+  ): Observable<object> {
+    return this.personApi.setAlertRead(userId, alertId, read, intended);
   }
 }
