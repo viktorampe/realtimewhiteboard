@@ -1,0 +1,9 @@
+.shared-header {
+  &__app-bar {
+    height: 50px;
+  }
+  &__page-bar {
+    background-color: red;
+    height: 55px;
+  }
+}
