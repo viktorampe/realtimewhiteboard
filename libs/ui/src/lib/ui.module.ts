@@ -32,8 +32,10 @@ import { FilterTextInputComponent } from './filter-text-input/filter-text-input.
 import { FolderDetailsDirective } from './folder/directives/folder-details.directive';
 import { FolderComponent } from './folder/folder.component';
 import { InfoPanelComponent } from './info-panel/info-panel.component';
-import { ListViewItemDirective } from './list-view/directives/list-view-item.directive';
-import { ListViewComponent } from './list-view/list-view.component';
+import {
+  ListViewComponent,
+  ListViewItemDirective
+} from './list-view/list-view.component';
 import { PageHeaderComponent } from './page-header/page-header.component';
 import { PersonBadgeComponent } from './person-badge/person-badge.component';
 import { PersonInitialsPipe } from './person-badge/pipes/person-initials.pipe';
