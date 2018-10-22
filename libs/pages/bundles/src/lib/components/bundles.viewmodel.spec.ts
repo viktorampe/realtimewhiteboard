@@ -90,8 +90,7 @@ describe('BundlesViewModel', () => {
       providers: [
         BundlesViewModel,
         { provide: ActivatedRoute, useValue: {} },
-        Store,
-        DalState
+        Store
       ]
     });
     bundlesViewModel = TestBed.get(BundlesViewModel);
