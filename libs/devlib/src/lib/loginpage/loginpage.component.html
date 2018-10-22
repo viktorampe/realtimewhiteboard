@@ -1,3 +1,7 @@
+<campus-page-bar>
+  testing something new here
+</campus-page-bar>
+
 <div class="login_page_component">
   <div [hidden]="loginPageviewModel.loggedIn">
     <div>
@@ -38,19 +42,3 @@
 
 
 <a [routerLink]="['educontent']">educontent test page</a>
-
-<div>
-  <button (click)="getStudentContentStatusFromStoreById(6)">Store</button>
-  <div>
-    <p>{{ response3$ | async | json}}</p>
-  </div>
-</div>
-
-
-<div>
-  <button (click)="saveStudentContentStatus({id: 6, contentStatusId: 1})">Store - 1</button>
-</div>
-
-<div>
-  <button (click)="saveStudentContentStatus({id: 6, contentStatusId: 2})">Store - 2</button>
-</div>
