@@ -21,6 +21,8 @@ describe('DropdownMenuComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should drop down if needed', () => {});
+
   it('should show the header if needed', () => {});
 
   it('should show the header icon if provided', () => {});

@@ -3,7 +3,10 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'campus-notification-dropdown-item',
   templateUrl: './notification-dropdown-item.component.html',
-  styleUrls: ['./notification-dropdown-item.component.scss']
+  styleUrls: [
+    './notification-dropdown-item.component.scss',
+    './notification-dropdown-item.component.theme.scss'
+  ]
 })
 export class NotificationDropdownItemComponent implements OnInit {
   constructor() {}

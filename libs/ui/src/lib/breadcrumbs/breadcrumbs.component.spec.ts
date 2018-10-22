@@ -23,6 +23,10 @@ describe('BreadcrumbsComponent', () => {
 
   it('should show all breadcrumbs', () => {});
 
+  it('should apply the correct link on the home icon', () => {});
+
+  it('should aplly the correct link on crumbs', () => {});
+
   it('should show the correct link-separator string', () => {});
 
   it('should show the correct number of breadcrumbs', () => {});
