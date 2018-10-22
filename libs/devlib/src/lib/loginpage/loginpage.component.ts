@@ -37,7 +37,7 @@ export class LoginpageComponent implements OnInit {
   getAllAlertsSinceDate() {
     this.response2$ = this.alertService.getAlertsForCurrentUserByDate(
       6,
-      new Date(Date.now())
+      new Date(2018, 8, 1)
     );
   }
 
