@@ -32,8 +32,10 @@ import { FilterTextInputComponent } from './filter-text-input/filter-text-input.
 import { FolderDetailsDirective } from './folder/directives/folder-details.directive';
 import { FolderComponent } from './folder/folder.component';
 import { InfoPanelComponent } from './info-panel/info-panel.component';
-import { ListViewItemDirective } from './list-view/directives/list-view-item.directive';
-import { ListViewComponent } from './list-view/list-view.component';
+import {
+  ListViewComponent,
+  ListViewItemDirective
+} from './list-view/list-view.component';
 import { PageHeaderComponent } from './page-header/page-header.component';
 import { PersonBadgeComponent } from './person-badge/person-badge.component';
 import { PersonInitialsPipe } from './person-badge/pipes/person-initials.pipe';
@@ -49,6 +51,9 @@ import { SideSheetComponent } from './side-sheet/side-sheet.component';
 import { ToolBarComponent } from './tool-bar/tool-bar.component';
 import { TreeNavComponent } from './tree-nav/tree-nav.component';
 import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness.pipe';
+import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
+import { DropdownMenuComponent } from './dropdown-menu/dropdown-menu.component';
+import { NotificationDropdownItemComponent } from './notification-dropdown-item/notification-dropdown-item.component';
 
 @NgModule({
   imports: [
@@ -113,7 +118,10 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     WarningDirective,
     DisabledDirective,
     TreeNavComponent,
-    ToolBarComponent
+    ToolBarComponent,
+    BreadcrumbsComponent,
+    DropdownMenuComponent,
+    NotificationDropdownItemComponent
   ],
   exports: [
     FilterTextInputComponent,
@@ -153,7 +161,10 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     WarningDirective,
     DisabledDirective,
     TreeNavComponent,
-    ToolBarComponent
+    ToolBarComponent,
+    BreadcrumbsComponent,
+    DropdownMenuComponent,
+    NotificationDropdownItemComponent
   ]
 })
 export class UiModule {}
