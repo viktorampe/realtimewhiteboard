@@ -5,7 +5,8 @@ import { State } from './unlocked-content.reducer';
 describe('UnlockedContent Selectors', () => {
   function createUnlockedContent(id: number): UnlockedContentInterface | any {
     return {
-      id: id
+      id: id,
+      bundleId: Math.round(id / 2)
     };
   }
 
@@ -96,6 +97,13 @@ describe('UnlockedContent Selectors', () => {
     it('getById() should return undefined if the entity is not present', () => {
       const results = UnlockedContentQueries.getById(storeState, { id: 9 });
       expect(results).toBe(undefined);
+    });
+    it('getByBundleIds() should return undefined if the entity is not present', () => {
+      const results = UnlockedContentQueries.getByBundleIds(storeState);
+      expect(results).toEqual({
+        1: [createUnlockedContent(1), createUnlockedContent(2)],
+        2: [createUnlockedContent(4), createUnlockedContent(3)]
+      });
     });
   });
 });

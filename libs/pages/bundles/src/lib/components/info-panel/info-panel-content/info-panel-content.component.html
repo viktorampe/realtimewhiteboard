@@ -2,8 +2,8 @@
   <campus-content-preview [preview]="content.preview"
                           [titleText]="content.name"
                           [description]="content.description">
-    <campus-file-extension *ngIf="content.extention"
-                           [extensionClass]="content.extention"></campus-file-extension>
+    <campus-file-extension *ngIf="content.extension"
+                           [extensionClass]="content.extension"></campus-file-extension>
     <div *ngIf="content.productType"
          class="{{content.productType}}"></div>
     <div *ngFor="let badge of content.methods">

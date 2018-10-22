@@ -1,0 +1,63 @@
+<campus-tool-bar [fixed]="toolbarFixed">
+  <!-- TODO generic input needs to be replaced by the campus filter input -->
+  <input #filterInput
+         type="text"
+         (keyup)="onChangeFilterInput($event.target.value)">
+  <div class="divider"></div>
+  <campus-button iconClass="icon-tasks"
+                 (click)="clickChangeListFormat(listFormatEnum.GRID)"></campus-button>
+  <campus-button iconClass="icon-tasks"
+                 (click)="clickChangeListFormat(listFormatEnum.LINE)"></campus-button>
+
+</campus-tool-bar>
+<div class="pages-bundles__container"
+     [ngClass]="{'pages-bundles__container--fixed': toolbarFixed}"
+     *ngIf="learningArea$|async as learningArea">
+  <campus-page-header [title]="learningArea.name"
+                      [subtitle]="'Bundels'"
+                      [iconClass]="learningArea.icon">
+  </campus-page-header>
+  <div class="pages-bundles__container__bundles-count">
+    {{(displayedBundles$|async)?.length}} van
+    <u class="pages-bundles__container__bundles-count__total"
+       (click)="resetFilterInput(); filterInput.value = ''">{{(bundles$|async)?.length}}</u>
+    weergegeven
+  </div>
+  <div class="pages-bundles__container__bundles"
+       *ngIf="bundleContentsCount$|async as bundlesContentCount">
+    <campus-list-view [listFormat]="listFormat$|async"
+                      [placeHolderText]="'De toegepaste filter bevat geen resultaten'">
+      <campus-folder *ngFor="let bundle of displayedBundles$|async"
+                     [routerLink]="[learningArea.id, bundle.id]"
+                     campusListItem
+                     [itemCount]="bundlesContentCount[bundle.id]"
+                     [title]="bundle.name"
+                     [backgroundColor]="learningArea.color"
+                     [icon]="learningArea.icon.name">
+        <campus-folder-details>
+          {{ bundleContentsCount$[bundle.id] + " item(s)" }}
+        </campus-folder-details>
+      </campus-folder>
+    </campus-list-view>
+  </div>
+
+  <div *ngIf="(books$|async).length">
+    <campus-page-header [title]="learningArea.name"
+                        [subtitle]="'Boeken'"
+                        [iconClass]="learningArea.icon"></campus-page-header>
+    <div class="pages-bundles__container__books-count">
+      je hebt {{(books$|async).length}} boek voor {{ learningArea.name }}
+    </div>
+    <div class="pages-bundles__container__books">
+      <campus-list-view [listFormat]="listFormat$|async">
+        <campus-content-thumbnail *ngFor="let book of books$|async"
+                                  campusListItem
+                                  [title]="book.name"
+                                  [contentTypeClass]="'icon-boek'"
+                                  [imagePath]="book.previewImage"
+                                  [fileExtensionClass]="book.fileExtension">
+        </campus-content-thumbnail>
+      </campus-list-view>
+    </div>
+  </div>
+</div>

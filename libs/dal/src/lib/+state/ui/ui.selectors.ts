@@ -11,7 +11,7 @@ const getListFormat = createSelector(
   (state: UiState) => state.listFormat
 );
 
-export const uiQuery = {
+export const UiQuery = {
   getLoaded,
   getListFormat
 };
