@@ -51,7 +51,9 @@ import { SideSheetComponent } from './side-sheet/side-sheet.component';
 import { ToolBarComponent } from './tool-bar/tool-bar.component';
 import { TreeNavComponent } from './tree-nav/tree-nav.component';
 import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness.pipe';
-import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
+import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
+import { DropdownMenuComponent } from './dropdown-menu/dropdown-menu.component';
+import { NotificationDropdownItemComponent } from './notification-dropdown-item/notification-dropdown-item.component';
 
 @NgModule({
   imports: [
@@ -117,7 +119,9 @@ import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
     DisabledDirective,
     TreeNavComponent,
     ToolBarComponent,
-    BreadcrumbComponent
+    BreadcrumbsComponent,
+    DropdownMenuComponent,
+    NotificationDropdownItemComponent
   ],
   exports: [
     FilterTextInputComponent,
@@ -158,7 +162,9 @@ import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
     DisabledDirective,
     TreeNavComponent,
     ToolBarComponent,
-    BreadcrumbComponent
+    BreadcrumbsComponent,
+    DropdownMenuComponent,
+    NotificationDropdownItemComponent
   ]
 })
 export class UiModule {}

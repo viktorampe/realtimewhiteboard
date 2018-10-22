@@ -12,7 +12,6 @@ import { Store, StoreModule } from '@ngrx/store';
 import { hot } from 'jasmine-marbles';
 import { Observable } from 'rxjs';
 import { marbles } from 'rxjs-marbles';
-import { DalState } from '../../../../../devlib/src/lib/edu-content/edu-content.viewmodel';
 import { BundlesViewModel } from './bundles.viewmodel';
 
 describe('BundlesViewModel', () => {
@@ -91,8 +90,7 @@ describe('BundlesViewModel', () => {
       providers: [
         BundlesViewModel,
         { provide: ActivatedRoute, useValue: {} },
-        Store,
-        DalState
+        Store
       ]
     });
     bundlesViewModel = TestBed.get(BundlesViewModel);
