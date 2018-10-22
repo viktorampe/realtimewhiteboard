@@ -49,6 +49,9 @@
     },
     "browser": {
       "tags": []
+    },
+    "shared": {
+      "tags": []
     }
   }
 }
