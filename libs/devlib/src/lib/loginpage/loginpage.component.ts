@@ -3,7 +3,6 @@ import { AlertQueueInterface, EduContentInterface } from '@campus/dal';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { AlertService } from 'libs/dal/src/lib/alert/alert.service';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { LoginPageViewModel } from './loginpage.viewmodel';
 
 @Component({
@@ -37,21 +36,13 @@ export class LoginpageComponent implements OnInit {
   getAllAlertsSinceDate() {
     this.response2$ = this.alertService.getAlertsForCurrentUserByDate(
       6,
-      new Date(2018, 8, 1)
+      new Date(2018, 9 - 1, 4, 14 + 2, 37, 0, 0) // month in 0-based array + GMT+2 -> 2 uur compenseren
     );
   }
 
   // tslint:disable-next-line:member-ordering
   response3$: Observable<AlertQueueInterface>;
   setAlertRead() {
-    const alert = <AlertQueueInterface>(
-      this.alertService
-        .getAllAlertsForCurrentUser(6)
-        .pipe(map(arr => arr.filter(a => !a.read)))[0]
-    );
-
-    this.response3$ = this.alertService.setAlertAsRead(alert);
+    this.response3$ = this.alertService.setAlertAsRead(6, 25);
   }
-
-  setAlertUnRead() {}
 }
