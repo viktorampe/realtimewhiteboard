@@ -39,18 +39,3 @@
 <div>
   <a [routerLink]="['educontent']">educontent test page</a>
 </div>
-
-<button (click)="getAllAlerts()">All Alerts</button>
-<div>
-  {{response1$|async|json}}
-</div>
-
-<button (click)="getAllAlertsSinceDate()">Recent Alerts</button>
-<div>
-  {{response2$|async|json}}
-</div>
-
-<button (click)="setAlertRead()">Set as read</button>
-<div>
-  {{response3$|async|json}}
-</div>
