@@ -12,7 +12,6 @@ import { Store, StoreModule } from '@ngrx/store';
 import { hot } from 'jasmine-marbles';
 import { Observable } from 'rxjs';
 import { marbles } from 'rxjs-marbles';
-import { DalState } from '../../../../../devlib/src/lib/edu-content/edu-content.viewmodel';
 import { BundlesViewModel } from './bundles.viewmodel';
 
 describe('BundlesViewModel', () => {
