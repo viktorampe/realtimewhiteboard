@@ -12,7 +12,7 @@ export class InfoPanelContentComponent {
     preview?: string;
     name: string;
     description: string;
-    extention: string;
+    extension: string;
     productType: string;
     methods: string[];
     status: any;

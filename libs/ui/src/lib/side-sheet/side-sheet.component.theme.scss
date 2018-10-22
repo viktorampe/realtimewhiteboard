@@ -6,8 +6,13 @@
   $ui-body-font-family: $ui-font-family-2;
   $ui-font-color: $ui-font-color-3;
   .ui-side-sheet {
-    color: $ui-font-color;
-    background-color: $ui-sheet-background-color;
+    background-color: unset;
+
+    &__drawer {
+      color: $ui-font-color;
+      background-color: $ui-sheet-background-color;
+    }
+
     &__header {
       background-color: $ui-header-background-color;
       font-family: $ui-title-font-family;

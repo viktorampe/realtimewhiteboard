@@ -5,12 +5,15 @@ import {
   AuthServiceToken,
   LoadUser,
   RemoveUser,
+  StudentContentStatusActions,
+  StudentContentStatusReducer,
   userQuery,
   UserState
 } from '@campus/dal';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, map, switchMap, take } from 'rxjs/operators';
+import { StudentContentStatusService } from '../../../../dal/src/lib/student-content-status/student-content-status.service';
 
 @Injectable({
   providedIn: 'root'
@@ -24,9 +27,11 @@ export class LoginPageViewModel implements Resolve<boolean> {
 
   constructor(
     private store: Store<UserState>,
-    @Inject(AuthServiceToken) private authService: AuthServiceInterface
+    @Inject(AuthServiceToken) private authService: AuthServiceInterface,
+    public studentContentStatusService: StudentContentStatusService,
+    public studentContentStatusStore: Store<StudentContentStatusReducer.State>
   ) {
-    store.select(userQuery.getCurrentUser).subscribe(data => {
+    store.pipe(select(userQuery.getCurrentUser)).subscribe(data => {
       this.loggedIn = data != null;
     });
   }
@@ -93,6 +98,12 @@ export class LoginPageViewModel implements Resolve<boolean> {
    * @memberOf LoginPageViewModel
    */
   resolve(): Observable<boolean> {
+    this.studentContentStatusStore.dispatch(
+      new StudentContentStatusActions.LoadStudentContentStatuses({
+        studentId: 6
+      })
+    );
+
     return new BehaviorSubject<boolean>(true).pipe(take(1));
   }
 }

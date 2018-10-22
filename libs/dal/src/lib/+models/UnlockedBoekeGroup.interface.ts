@@ -10,4 +10,6 @@ export interface UnlockedBoekeGroupInterface {
   eduContent?: EduContentInterface;
   group?: GroupInterface;
   teacher?: PersonInterface;
+
+  isOwn(userId: number): boolean;
 }

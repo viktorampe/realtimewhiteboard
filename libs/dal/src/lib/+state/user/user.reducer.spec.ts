@@ -73,7 +73,6 @@ describe('User Reducer', () => {
         const error = 'Something went wrong';
         const action = new UserLoadError({ error });
         const result = userReducer(initialUserstate, action);
-        console.log(result);
         expect(result).toEqual(createState(null, false, { error }));
       });
     });

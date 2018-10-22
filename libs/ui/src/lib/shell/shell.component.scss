@@ -29,7 +29,7 @@ mat-drawer-container {
   }
 
   .ui-shell__filler {
-    flex: 1 1 auto;
+    flex: 1 1 100%;
     min-width: 0px;
     min-height: 0px;
   }
@@ -50,5 +50,11 @@ mat-drawer-container {
   .ui-shell__left__content {
     overflow-y: auto;
     flex: 0 1 auto;
+  }
+
+  .ui-shell__filler {
+    flex: 1 1 100%;
+    min-width: 0px;
+    min-height: 0px;
   }
 }

@@ -5,7 +5,9 @@ import { State } from './bundle.reducer';
 describe('Bundle Selectors', () => {
   function createBundle(id: number): BundleInterface | any {
     return {
-      id: id
+      id: id,
+      learningAreaId: Math.round(id / 2),
+      teacherId: Math.round(id / 2)
     };
   }
 
@@ -89,6 +91,22 @@ describe('Bundle Selectors', () => {
     it('getById() should return undefined if the entity is not present', () => {
       const results = BundleQueries.getById(storeState, { id: 9 });
       expect(results).toBe(undefined);
+    });
+
+    it('getByLearningAreaId() should return a map by learningAreaId', () => {
+      const results = BundleQueries.getByLearningAreaId(storeState);
+      expect(results).toEqual({
+        1: [createBundle(1), createBundle(2)],
+        2: [createBundle(4), createBundle(3)]
+      });
+    });
+    it('getShared() should return undefined if the entity is not present', () => {
+      const results = BundleQueries.getShared(storeState, { userId: 1 });
+      expect(results).toEqual([createBundle(4), createBundle(3)]);
+    });
+    it('getOwn() should return the desired entity', () => {
+      const results = BundleQueries.getOwn(storeState, { userId: 1 });
+      expect(results).toEqual([createBundle(1), createBundle(2)]);
     });
   });
 });

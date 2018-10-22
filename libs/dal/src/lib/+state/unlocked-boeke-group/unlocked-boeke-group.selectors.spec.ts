@@ -7,7 +7,8 @@ describe('UnlockedBoekeGroup Selectors', () => {
     id: number
   ): UnlockedBoekeGroupInterface | any {
     return {
-      id: id
+      id: id,
+      teacherId: Math.round(id / 2)
     };
   }
 
@@ -49,7 +50,7 @@ describe('UnlockedBoekeGroup Selectors', () => {
         true,
         'no error'
       );
-      storeState = { unlockedBoekeGroup: unlockedBoekeGroupState };
+      storeState = { unlockedBoekeGroups: unlockedBoekeGroupState };
     });
     it('getError() should return the error', () => {
       const results = UnlockedBoekeGroupQueries.getError(storeState);
@@ -99,5 +100,24 @@ describe('UnlockedBoekeGroup Selectors', () => {
       const results = UnlockedBoekeGroupQueries.getById(storeState, { id: 9 });
       expect(results).toBe(undefined);
     });
+  });
+
+  it('getShared() should return undefined if the entity is not present', () => {
+    const results = UnlockedBoekeGroupQueries.getShared(storeState, {
+      userId: 1
+    });
+    expect(results).toEqual([
+      createUnlockedBoekeGroup(4),
+      createUnlockedBoekeGroup(3)
+    ]);
+  });
+  it('getOwn() should return the desired entity', () => {
+    const results = UnlockedBoekeGroupQueries.getOwn(storeState, {
+      userId: 1
+    });
+    expect(results).toEqual([
+      createUnlockedBoekeGroup(1),
+      createUnlockedBoekeGroup(2)
+    ]);
   });
 });

@@ -9,4 +9,6 @@ export interface UnlockedBoekeStudentInterface {
   eduContent?: EduContentInterface;
   student?: PersonInterface;
   teacher?: PersonInterface;
+
+  isOwn(userId: number): boolean;
 }
