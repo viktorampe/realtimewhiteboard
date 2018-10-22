@@ -10,7 +10,10 @@ import { By } from '@angular/platform-browser';
 import { UiModule } from '../ui.module';
 import { ListFormat } from './enums/list-format.enum';
 import { ListViewItemInterface } from './interfaces/list-view-item';
-import { ListViewComponent } from './list-view.component';
+import {
+  ListViewComponent,
+  ListViewItemDirective
+} from './list-view.component';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -237,5 +240,100 @@ describe('ListViewComponent', () => {
     const selectedItems = component.items.filter(i => i.isSelected);
 
     expect(selectedItems.length).toBe(0);
+  });
+});
+
+/*
+ * Testing an Angular directive
+ * More info: https://angular.io/docs/ts/latest/guide/testing.html#!#pipes
+ */
+
+@Component({
+  selector: 'campus-list-view-item',
+  template: `<div>Container content</div>`,
+  providers: [
+    {
+      provide: ListViewItemInterface,
+      useExisting: HostComponent
+    }
+  ]
+})
+export class HostComponent implements ListViewItemInterface {
+  listFormat: ListFormat;
+}
+
+@Component({
+  selector: 'campus-list',
+  template: `<ng-content></ng-content>`,
+  providers: [
+    {
+      provide: ListViewComponent,
+      useClass: ListComponent
+    }
+  ]
+})
+export class ListComponent {}
+
+@Component({
+  selector: 'campus-directive-container',
+  template: `
+  <campus-list-view>
+    <campus-list-view-item campusListItem></campus-list-view-item>
+  </campus-list-view>
+  `
+})
+export class ContainerComponent {}
+
+@NgModule({
+  declarations: [ContainerComponent, HostComponent, ListComponent],
+  imports: [CommonModule, UiModule]
+})
+export class TestModuleForDirective {}
+
+describe('ListItemDirective', () => {
+  let fixture: ComponentFixture<ContainerComponent>;
+  let comp: ContainerComponent;
+  let compDE: DebugElement;
+  let dir: ListViewItemDirective;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [TestModuleForDirective],
+      providers: [ListViewComponent, ListViewItemInterface],
+      schemas: [NO_ERRORS_SCHEMA]
+    });
+  });
+
+  beforeEach(async(() => {
+    TestBed.compileComponents().then(() => {
+      fixture = TestBed.createComponent(ContainerComponent);
+      comp = fixture.componentInstance;
+      fixture.detectChanges();
+
+      compDE = fixture.debugElement.query(By.css('[campusListItem]'));
+      dir = compDE.injector.get(ListViewItemDirective);
+    });
+  }));
+
+  it('should create the host with the directive attached', () => {
+    expect(compDE).not.toBeNull();
+    expect(dir).not.toBeNull();
+  });
+
+  it('should apply the .item-selected class', () => {
+    dir.isSelected = true;
+    fixture.detectChanges();
+
+    expect(compDE.nativeElement.classList).toContain(
+      'ui-list-view__list__item--selected'
+    );
+  });
+
+  it('should handle te host click event', () => {
+    const isSelected = dir.isSelected;
+    compDE.nativeElement.click();
+    fixture.detectChanges();
+
+    expect(dir.isSelected).toBe(!isSelected);
   });
 });
