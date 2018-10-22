@@ -1,25 +1,62 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { ModuleWithProviders, NgModule } from '@angular/core';
-import { BrowserModule as CampusBrowserModule, BROWSER_STORAGE_SERVICE_TOKEN, StorageService } from '@campus/browser';
-import { LoopBackConfig, SDKBrowserModule } from '@diekeure/polpo-api-angular-sdk';
+import {
+  BrowserModule as CampusBrowserModule,
+  BROWSER_STORAGE_SERVICE_TOKEN,
+  StorageService
+} from '@campus/browser';
+import {
+  LoopBackConfig,
+  SDKBrowserModule
+} from '@diekeure/polpo-api-angular-sdk';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { BundleReducer, BundlesEffects } from './+state/bundle';
 import { ContentStatusReducer } from './+state/content-status';
 import { ContentStatusesEffects } from './+state/content-status/content-status.effects';
 import { EduContentReducer, EduContentsEffects } from './+state/edu-content';
-import { LearningAreaReducer, LearningAreasEffects } from './+state/learning-area';
-import { StudentContentStatusesEffects, StudentContentStatusReducer } from './+state/student-content-status';
+import {
+  LearningAreaReducer,
+  LearningAreasEffects
+} from './+state/learning-area';
+import {
+  StudentContentStatusesEffects,
+  StudentContentStatusReducer
+} from './+state/student-content-status';
 import { UiEffects, uiReducer } from './+state/ui/';
-import { UnlockedBoekeGroupReducer, UnlockedBoekeGroupsEffects } from './+state/unlocked-boeke-group';
-import { UnlockedBoekeStudentReducer, UnlockedBoekeStudentsEffects } from './+state/unlocked-boeke-student';
-import { UnlockedContentReducer, UnlockedContentsEffects } from './+state/unlocked-content';
+import {
+  UnlockedBoekeGroupReducer,
+  UnlockedBoekeGroupsEffects
+} from './+state/unlocked-boeke-group';
+import {
+  UnlockedBoekeStudentReducer,
+  UnlockedBoekeStudentsEffects
+} from './+state/unlocked-boeke-student';
+import {
+  UnlockedContentReducer,
+  UnlockedContentsEffects
+} from './+state/unlocked-content';
 import { UserContentReducer, UserContentsEffects } from './+state/user-content';
 import { UserEffects } from './+state/user/user.effects';
-import { initialUserstate as userInitialState, userReducer } from './+state/user/user.reducer';
-import { UnlockedBoekeGroupService, UnlockedBoekeStudentService, UNLOCKED_BOEKE_GROUP_SERVICE_TOKEN, UNLOCKED_BOEKE_STUDENT_SERVICE_TOKEN } from './boeke';
-import { BundleService, BUNDLE_SERVICE_TOKEN, UnlockedContentService, UNLOCKED_CONTENT_SERVICE_TOKEN, UserContentService, USER_CONTENT_SERVICE_TOKEN } from './bundle';
+import {
+  initialUserstate as userInitialState,
+  userReducer
+} from './+state/user/user.reducer';
+import {
+  UnlockedBoekeGroupService,
+  UnlockedBoekeStudentService,
+  UNLOCKED_BOEKE_GROUP_SERVICE_TOKEN,
+  UNLOCKED_BOEKE_STUDENT_SERVICE_TOKEN
+} from './boeke';
+import {
+  BundleService,
+  BUNDLE_SERVICE_TOKEN,
+  UnlockedContentService,
+  UNLOCKED_CONTENT_SERVICE_TOKEN,
+  UserContentService,
+  USER_CONTENT_SERVICE_TOKEN
+} from './bundle';
 import { EduContentService } from './edu-content/edu-content.service';
 import { EDUCONTENT_SERVICE_TOKEN } from './edu-content/edu-content.service.interface';
 import { LearningAreaService } from './learning-area/learning-area.service';
