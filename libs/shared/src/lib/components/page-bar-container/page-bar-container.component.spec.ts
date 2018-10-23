@@ -78,6 +78,7 @@ describe('PageBarComponent', () => {
     // component.ngAfterViewInit();
     // fixture.detectChanges();
     // testContainerFixture.detectChanges();
+    // this test will be replaced by an e2e test, see https://github.com/diekeure/campus/issues/206
 
     return fixture.whenStable().then(() => {
       const containerText = testContainerFixture.debugElement.query(
