@@ -39,7 +39,7 @@ export class LoginPageViewModel implements Resolve<boolean> {
    */
   isLoggedIn(): Observable<boolean> {
     return this.authService.getCurrent().pipe(
-      map(() => {
+      map(user => {
         return true;
       }),
       catchError(err => {
@@ -59,14 +59,14 @@ export class LoginPageViewModel implements Resolve<boolean> {
     this.isLoggedIn()
       .pipe(
         switchMap(loggedin => {
-          if (loggedin) {
-            throw new Error('login failed since we are already logged in');
-          }
+          // if (loggedin) {
+          //   throw new Error('login failed since we are already logged in');
+          // }
           return this.authService.login({ username: name, password: password });
         })
       )
       .subscribe(() => {
-        this.store.dispatch(new LoadUser({ force: false }));
+        this.store.dispatch(new LoadUser({ force: true }));
       });
   }
 

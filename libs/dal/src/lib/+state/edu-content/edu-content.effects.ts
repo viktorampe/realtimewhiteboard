@@ -23,7 +23,7 @@ export class EduContentsEffects {
       run: (action: LoadEduContents, state: any) => {
         if (!action.payload.force && state.eduContents.loaded) return;
         return this.eduContentService
-          .getAllForUser(11) //TODO: replace with state.user.current ...
+          .getAllForUser(action.payload.userId)
           .pipe(map(eduContents => new EduContentsLoaded({ eduContents })));
       },
       onError: (action: LoadEduContents, error) => {

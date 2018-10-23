@@ -22,9 +22,8 @@ export class UnlockedBoekeGroupsEffects {
     {
       run: (action: LoadUnlockedBoekeGroups, state: any) => {
         if (!action.payload.force && state.unlockedBoekeGroups.loaded) return;
-        //todo match current user
         return this.unlockedBoekeGroupService
-          .getAllForUser(1)
+          .getAllForUser(action.payload.userId)
           .pipe(
             map(
               unlockedBoekeGroups =>

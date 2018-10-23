@@ -23,7 +23,7 @@ export class UnlockedBoekeStudentsEffects {
       run: (action: LoadUnlockedBoekeStudents, state: any) => {
         if (!action.payload.force && state.unlockedBoekeStudents.loaded) return;
         return this.unlockedBoekeStudentService
-          .getAllForUser(2) //TODO get userId from UserState
+          .getAllForUser(action.payload.userId)
           .pipe(
             map(
               unlockedBoekeStudents =>

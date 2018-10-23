@@ -21,7 +21,7 @@ export class BundlesEffects {
     run: (action: LoadBundles, state: any) => {
       if (!action.payload.force && state.bundles.loaded) return;
       return this.bundleService
-        .getAllForUser(1)
+        .getAllForUser(action.payload.userId)
         .pipe(map(bundles => new BundlesLoaded({ bundles })));
     },
     onError: (action: LoadBundles, error) => {

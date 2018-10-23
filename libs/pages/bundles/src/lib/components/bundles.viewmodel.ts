@@ -190,21 +190,29 @@ export class BundlesViewModel implements Resolve<boolean> {
       this.ownBundles$,
       this.ownBooks$
     );
-    return this.viewModelResolver.resolve(
-      this.getLoadableActions(),
-      this.getResolvedQueries()
+    return this.user$.pipe(
+      switchMap(user => {
+        return this.viewModelResolver.resolve(
+          this.getLoadableActions(user),
+          this.getResolvedQueries()
+        );
+      })
     );
   }
 
-  getLoadableActions(): Action[] {
+  getLoadableActions(user: PersonInterface): Action[] {
     return [
       new LearningAreaActions.LoadLearningAreas(),
-      new BundleActions.LoadBundles(),
-      new EduContentActions.LoadEduContents(),
-      new UserContentActions.LoadUserContents(),
-      new UnlockedContentActions.LoadUnlockedContents(),
-      new UnlockedBoekeGroupActions.LoadUnlockedBoekeGroups(),
-      new UnlockedBoekeStudentActions.LoadUnlockedBoekeStudents()
+      new BundleActions.LoadBundles({ userId: user.id }),
+      new EduContentActions.LoadEduContents({ userId: user.id }),
+      new UserContentActions.LoadUserContents({ userId: user.id }),
+      new UnlockedContentActions.LoadUnlockedContents({ userId: user.id }),
+      new UnlockedBoekeGroupActions.LoadUnlockedBoekeGroups({
+        userId: user.id
+      }),
+      new UnlockedBoekeStudentActions.LoadUnlockedBoekeStudents({
+        userId: user.id
+      })
     ];
   }
 

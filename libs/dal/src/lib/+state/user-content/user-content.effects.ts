@@ -22,9 +22,8 @@ export class UserContentsEffects {
     {
       run: (action: LoadUserContents, state: any) => {
         if (!action.payload.force && state.userContents.loaded) return;
-        //TODO, get current user id
         return this.userContentService
-          .getAllForUser(1)
+          .getAllForUser(action.payload.userId)
           .pipe(map(userContents => new UserContentsLoaded({ userContents })));
       },
       onError: (action: LoadUserContents, error) => {
