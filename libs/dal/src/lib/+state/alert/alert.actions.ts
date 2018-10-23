@@ -8,15 +8,17 @@ export enum AlertsActionTypes {
   LoadAlerts = '[Alerts] Load Alerts',
   NewAlertsLoaded = '[Alerts] New Alerts Loaded',
   LoadNewAlerts = '[Alerts] Load New Alerts',
-  AddAlert = '[Alerts] Add Alert',
-  UpsertAlert = '[Alerts] Upsert Alert',
-  AddAlerts = '[Alerts] Add Alerts',
-  UpsertAlerts = '[Alerts] Upsert Alerts',
-  UpdateAlert = '[Alerts] Update Alert',
-  UpdateAlerts = '[Alerts] Update Alerts',
-  DeleteAlert = '[Alerts] Delete Alert',
-  DeleteAlerts = '[Alerts] Delete Alerts',
-  ClearAlerts = '[Alerts] Clear Alerts'
+  SetReadAlert = '[Alerts] Set as Read Alert',
+  SetReadAlerts = '[Alerts] Set as Read Alerts'
+  // AddAlert = '[Alerts] Add Alert',
+  // UpsertAlert = '[Alerts] Upsert Alert',
+  // AddAlerts = '[Alerts] Add Alerts',
+  // UpsertAlerts = '[Alerts] Upsert Alerts',
+  // UpdateAlert = '[Alerts] Update Alert',
+  // UpdateAlerts = '[Alerts] Update Alerts',
+  // DeleteAlert = '[Alerts] Delete Alert',
+  // DeleteAlerts = '[Alerts] Delete Alerts',
+  // ClearAlerts = '[Alerts] Clear Alerts'
 }
 
 export class LoadAlerts implements Action {
@@ -64,45 +66,57 @@ export class UpsertAlert implements Action {
   constructor(public payload: { alert: AlertQueueInterface }) {}
 }
 
-export class AddAlerts implements Action {
-  readonly type = AlertsActionTypes.AddAlerts;
+// export class AddAlert implements Action {
+//   readonly type = AlertsActionTypes.AddAlert;
 
-  constructor(public payload: { alerts: AlertQueueInterface[] }) {}
-}
+//   constructor(public payload: { alert: AlertQueueInterface }) {}
+// }
 
-export class UpsertAlerts implements Action {
-  readonly type = AlertsActionTypes.UpsertAlerts;
+// export class UpsertAlert implements Action {
+//   readonly type = AlertsActionTypes.UpsertAlert;
 
-  constructor(public payload: { alerts: AlertQueueInterface[] }) {}
-}
+//   constructor(public payload: { alert: AlertQueueInterface }) {}
+// }
 
-export class UpdateAlert implements Action {
-  readonly type = AlertsActionTypes.UpdateAlert;
+// export class AddAlerts implements Action {
+//   readonly type = AlertsActionTypes.AddAlerts;
 
-  constructor(public payload: { alert: Update<AlertQueueInterface> }) {}
-}
+//   constructor(public payload: { alerts: AlertQueueInterface[] }) {}
+// }
 
-export class UpdateAlerts implements Action {
-  readonly type = AlertsActionTypes.UpdateAlerts;
+// export class UpsertAlerts implements Action {
+//   readonly type = AlertsActionTypes.UpsertAlerts;
 
-  constructor(public payload: { alerts: Update<AlertQueueInterface>[] }) {}
-}
+//   constructor(public payload: { alerts: AlertQueueInterface[] }) {}
+// }
 
-export class DeleteAlert implements Action {
-  readonly type = AlertsActionTypes.DeleteAlert;
+// export class UpdateAlert implements Action {
+//   readonly type = AlertsActionTypes.UpdateAlert;
 
-  constructor(public payload: { id: number }) {}
-}
+//   constructor(public payload: { alert: Update<AlertQueueInterface> }) {}
+// }
 
-export class DeleteAlerts implements Action {
-  readonly type = AlertsActionTypes.DeleteAlerts;
+// export class UpdateAlerts implements Action {
+//   readonly type = AlertsActionTypes.UpdateAlerts;
 
-  constructor(public payload: { ids: number[] }) {}
-}
+//   constructor(public payload: { alerts: Update<AlertQueueInterface>[] }) {}
+// }
 
-export class ClearAlerts implements Action {
-  readonly type = AlertsActionTypes.ClearAlerts;
-}
+// export class DeleteAlert implements Action {
+//   readonly type = AlertsActionTypes.DeleteAlert;
+
+//   constructor(public payload: { id: number }) {}
+// }
+
+// export class DeleteAlerts implements Action {
+//   readonly type = AlertsActionTypes.DeleteAlerts;
+
+//   constructor(public payload: { ids: number[] }) {}
+// }
+
+// export class ClearAlerts implements Action {
+//   readonly type = AlertsActionTypes.ClearAlerts;
+// }
 
 export type AlertsActions =
   | LoadAlerts
@@ -110,12 +124,14 @@ export type AlertsActions =
   | AlertsLoadError
   | LoadNewAlerts
   | NewAlertsLoaded
-  | AddAlert
-  | UpsertAlert
-  | AddAlerts
-  | UpsertAlerts
-  | UpdateAlert
-  | UpdateAlerts
-  | DeleteAlert
-  | DeleteAlerts
-  | ClearAlerts;
+  | SetReadAlert
+  | SetReadAlerts;
+// | AddAlert
+// | UpsertAlert
+// | AddAlerts
+// | UpsertAlerts
+// | UpdateAlert
+// | UpdateAlerts
+// | DeleteAlert
+// | DeleteAlerts
+// | ClearAlerts;
