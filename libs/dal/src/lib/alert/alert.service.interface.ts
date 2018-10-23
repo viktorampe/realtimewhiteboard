@@ -4,11 +4,9 @@ import { Observable } from 'rxjs';
 
 export const ALERT_SERVICE_TOKEN = new InjectionToken('AlertService');
 export interface AlertServiceInterface {
-  getAllAlertsForCurrentUser(userId: number): Observable<AlertQueueInterface[]>;
-
-  getAlertsForCurrentUserByDate(
+  getAllAlertsForCurrentUser(
     userId: number,
-    lastUpdateTime: Date
+    lastUpdateTime?: Date
   ): Observable<AlertQueueInterface[]>;
 
   setAlertAsRead(alert: AlertQueueInterface);
