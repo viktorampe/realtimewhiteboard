@@ -1,16 +1,16 @@
 import { AlertQueries } from '.';
-import { AlertInterface } from '../../+models';
+import { AlertQueueInterface } from '../../+models';
 import { State } from './alert.reducer';
 
 describe('Alert Selectors', () => {
-  function createAlert(id: number): AlertInterface | any {
+  function createAlert(id: number): AlertQueueInterface | any {
     return {
       id: id
     };
   }
 
   function createState(
-    alerts: AlertInterface[],
+    alerts: AlertQueueInterface[],
     loaded: boolean = false,
     error?: any
   ): State {
@@ -36,12 +36,7 @@ describe('Alert Selectors', () => {
   describe('Alert Selectors', () => {
     beforeEach(() => {
       alertState = createState(
-        [
-          createAlert(4),
-          createAlert(1),
-          createAlert(2),
-          createAlert(3)
-        ],
+        [createAlert(4), createAlert(1), createAlert(2), createAlert(3)],
         true,
         'no error'
       );

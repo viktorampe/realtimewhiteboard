@@ -5,13 +5,8 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
-import { AlertService } from '../../alert/alert.service';
 import { ALERT_SERVICE_TOKEN } from '../../alert/alert.service.interface';
-import {
-  AlertsLoaded,
-  AlertsLoadError,
-  LoadAlerts
-} from './alert.actions';
+import { AlertsLoaded, AlertsLoadError, LoadAlerts } from './alert.actions';
 import { AlertsEffects } from './alert.effects';
 import { initialState, reducer } from './alert.reducer';
 
@@ -20,6 +15,7 @@ describe('AlertEffects', () => {
   let effects: AlertsEffects;
   let usedState: any;
 
+  const mockData = { userId: 1 };
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -85,8 +81,11 @@ describe('AlertEffects', () => {
   });
 
   describe('loadAlert$', () => {
-    const unforcedLoadAction = new LoadAlerts({});
-    const forcedLoadAction = new LoadAlerts({ force: true });
+    const unforcedLoadAction = new LoadAlerts({ userId: mockData.userId });
+    const forcedLoadAction = new LoadAlerts({
+      force: true,
+      userId: mockData.userId
+    });
     const filledLoadedAction = new AlertsLoaded({ alerts: [] });
     const loadErrorAction = new AlertsLoadError(new Error('failed'));
     describe('with initialState', () => {
@@ -144,11 +143,7 @@ describe('AlertEffects', () => {
         );
       });
       it('should return a error action if force is true', () => {
-        expectInAndOut(
-          effects.loadAlerts$,
-          forcedLoadAction,
-          loadErrorAction
-        );
+        expectInAndOut(effects.loadAlerts$, forcedLoadAction, loadErrorAction);
       });
     });
     describe('with loaded and failing api call', () => {
@@ -166,11 +161,7 @@ describe('AlertEffects', () => {
         expectInNoOut(effects.loadAlerts$, unforcedLoadAction);
       });
       it('should return a error action if force is true', () => {
-        expectInAndOut(
-          effects.loadAlerts$,
-          forcedLoadAction,
-          loadErrorAction
-        );
+        expectInAndOut(effects.loadAlerts$, forcedLoadAction, loadErrorAction);
       });
     });
   });

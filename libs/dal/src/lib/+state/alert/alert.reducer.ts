@@ -1,18 +1,16 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
-import { AlertInterface } from '../../+models';
-import {
-  AlertsActions,
-  AlertsActionTypes
-} from './alert.actions';
+import { AlertQueueInterface } from '../../+models';
+import { AlertsActions, AlertsActionTypes } from './alert.actions';
 
-export interface State extends EntityState<AlertInterface> {
+export interface State extends EntityState<AlertQueueInterface> {
   // additional entities state properties
   loaded: boolean;
+  lastUpdateTimeStamp?: Date;
   error?: any;
 }
 
-export const adapter: EntityAdapter<AlertInterface> = createEntityAdapter<
-  AlertInterface
+export const adapter: EntityAdapter<AlertQueueInterface> = createEntityAdapter<
+  AlertQueueInterface
 >();
 
 export const initialState: State = adapter.getInitialState({
@@ -20,10 +18,7 @@ export const initialState: State = adapter.getInitialState({
   loaded: false
 });
 
-export function reducer(
-  state = initialState,
-  action: AlertsActions
-): State {
+export function reducer(state = initialState, action: AlertsActions): State {
   switch (action.type) {
     case AlertsActionTypes.AddAlert: {
       return adapter.addOne(action.payload.alert, state);
@@ -58,7 +53,18 @@ export function reducer(
     }
 
     case AlertsActionTypes.AlertsLoaded: {
-      return adapter.addAll(action.payload.alerts, { ...state, loaded: true });
+      return adapter.addAll(action.payload.alerts, {
+        ...state,
+        loaded: true,
+        lastUpdateTimeStamp: new Date()
+      });
+    }
+
+    case AlertsActionTypes.NewAlertsLoaded: {
+      return adapter.addAll(action.payload.alerts, {
+        ...state,
+        lastUpdateTimeStamp: action.payload.timeStamp
+      });
     }
 
     case AlertsActionTypes.AlertsLoadError: {

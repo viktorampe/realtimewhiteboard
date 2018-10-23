@@ -1,14 +1,13 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import {
-  selectAll, 
+  selectAll,
   selectEntities,
   selectIds,
   selectTotal,
-  State } from './alert.reducer';
+  State
+} from './alert.reducer';
 
-export const selectAlertState = createFeatureSelector<State>(
-  'alerts'
-);
+export const selectAlertState = createFeatureSelector<State>('alerts');
 
 export const getError = createSelector(
   selectAlertState,
@@ -26,15 +25,12 @@ export const getCount = createSelector(selectAlertState, selectTotal);
 
 export const getIds = createSelector(selectAlertState, selectIds);
 
-export const getAllEntities = createSelector(
-  selectAlertState,
-  selectEntities
-);
+export const getAllEntities = createSelector(selectAlertState, selectEntities);
 
 /**
  * returns array of objects in the order of the given ids
  * @example
- * alert$: AlertInterface[] = this.store.pipe(
+ * alert$: AlertQueueInterface[] = this.store.pipe(
     select(AlertQueries.getByIds, { ids: [2, 1, 3] })
   );
  */
@@ -45,15 +41,24 @@ export const getByIds = createSelector(
   }
 );
 
-
 /**
  * returns array of objects in the order of the given ids
  * @example
- * alert$: AlertInterface = this.store.pipe(
+ * alert$: AlertQueueInterface = this.store.pipe(
     select(AlertQueries.getById, { id: 3 })
   );
  */
 export const getById = createSelector(
   selectAlertState,
   (state: State, props: { id: number }) => state.entities[props.id]
+);
+
+export const getUnread = createSelector(selectAlertState, (state: State) =>
+  state.entities.filter(alert => alert.read)
+);
+
+export const getRecent = createSelector(
+  selectAlertState,
+  (state: State, props: { timeThreshold: Date }) =>
+    state.entities.filter(alert => alert.validFrom >= props.timeThreshold)
 );

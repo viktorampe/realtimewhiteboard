@@ -6,6 +6,8 @@ export enum AlertsActionTypes {
   AlertsLoaded = '[Alerts] Alerts Loaded',
   AlertsLoadError = '[Alerts] Load Error',
   LoadAlerts = '[Alerts] Load Alerts',
+  NewAlertsLoaded = '[Alerts] New Alerts Loaded',
+  LoadNewAlerts = '[Alerts] Load New Alerts',
   AddAlert = '[Alerts] Add Alert',
   UpsertAlert = '[Alerts] Upsert Alert',
   AddAlerts = '[Alerts] Add Alerts',
@@ -27,6 +29,22 @@ export class AlertsLoaded implements Action {
   readonly type = AlertsActionTypes.AlertsLoaded;
 
   constructor(public payload: { alerts: AlertQueueInterface[] }) {}
+}
+
+export class LoadNewAlerts implements Action {
+  readonly type = AlertsActionTypes.LoadNewAlerts;
+
+  constructor(
+    public payload: { force?: boolean; userId: number; timeStamp: Date }
+  ) {}
+}
+
+export class NewAlertsLoaded implements Action {
+  readonly type = AlertsActionTypes.NewAlertsLoaded;
+
+  constructor(
+    public payload: { alerts: AlertQueueInterface[]; timeStamp: Date }
+  ) {}
 }
 
 export class AlertsLoadError implements Action {
@@ -90,6 +108,8 @@ export type AlertsActions =
   | LoadAlerts
   | AlertsLoaded
   | AlertsLoadError
+  | LoadNewAlerts
+  | NewAlertsLoaded
   | AddAlert
   | UpsertAlert
   | AddAlerts

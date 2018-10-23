@@ -10,7 +10,9 @@ import {
   AlertsActionTypes,
   AlertsLoaded,
   AlertsLoadError,
-  LoadAlerts
+  LoadAlerts,
+  LoadNewAlerts,
+  NewAlertsLoaded
 } from './alert.actions';
 import { State } from './alert.reducer';
 
@@ -21,10 +23,30 @@ export class AlertsEffects {
     run: (action: LoadAlerts, state: any) => {
       if (!action.payload.force && state.alerts.loaded) return;
       return this.alertService
-        .getAlertsForCurrentUserByDate(action.payload.userId)
+        .getAllAlertsForCurrentUser(action.payload.userId)
         .pipe(map(alerts => new AlertsLoaded({ alerts })));
     },
     onError: (action: LoadAlerts, error) => {
+      return new AlertsLoadError(error);
+    }
+  });
+
+  @Effect()
+  loadNewAlerts$ = this.dataPersistence.fetch(AlertsActionTypes.LoadNewAlerts, {
+    run: (action: LoadNewAlerts, state: any) => {
+      if (!state.alerts.loaded) return;
+
+      const timeStamp = action.payload.timeStamp;
+      const updateTimeDeltaInMilliseconds =
+        (<Date>state.alerts.lastUpdateTimeStamp).getTime() -
+        timeStamp.getTime();
+      if (!action.payload.force && updateTimeDeltaInMilliseconds < 3000) return;
+
+      return this.alertService
+        .getAllAlertsForCurrentUser(action.payload.userId, timeStamp)
+        .pipe(map(alerts => new NewAlertsLoaded({ alerts, timeStamp })));
+    },
+    onError: (action: LoadNewAlerts, error) => {
       return new AlertsLoadError(error);
     }
   });
