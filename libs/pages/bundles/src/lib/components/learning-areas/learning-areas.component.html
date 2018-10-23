@@ -1,4 +1,4 @@
-<campus-tool-bar [fixed]="toolbarFixed">
+<campus-page-bar>
   <campus-filter-text-input theme="dark"
                             (filterTextChange)="onChangeFilterInput($event)"
                             [filterText]="filterInput$|async"
@@ -7,9 +7,8 @@
   <!-- links need to replaced by the button -->
   <a (click)="clickChangeListFormat('GRID')">grid</a>
   <a (click)="clickChangeListFormat('LINE')">line</a>
-</campus-tool-bar>
+</campus-page-bar>
 <div class="pages-bundles__container"
-     [ngClass]="{'pages-bundles__container--fixed': toolbarFixed}"
      *ngIf="sharedLearningAreas$|async as learningAreas">
 
   <campus-page-header [title]="'Mijn bundels'"
