@@ -17,7 +17,7 @@ export class AlertService {
    * @returns {Observable<AlertQueueInterface[]>}
    * @memberof AlertService
    */
-  getAllAlertsForCurrentUser(
+  getAllForUser(
     userId: number,
     lastUpdateTime?: Date
   ): Observable<AlertQueueInterface[]> {

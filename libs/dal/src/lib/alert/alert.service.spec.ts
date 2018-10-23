@@ -19,7 +19,7 @@ export class MockPersonApi {
     intended?: any,
     customHeaders?: Function
   ): Observable<object> {
-    return;
+    return of({});
   }
 }
 
@@ -44,7 +44,7 @@ describe('AlertsService', () => {
     spyOn(personApi, 'getAlertQueues');
     const mockId = 1;
 
-    alertService.getAllAlertsForCurrentUser(mockId);
+    alertService.getAllForUser(mockId);
 
     expect(personApi.getAlertQueues).toHaveBeenCalledWith(mockId, {});
   });
@@ -54,7 +54,7 @@ describe('AlertsService', () => {
     const mockId = 1;
     const mockDate = new Date(Date.now());
 
-    alertService.getAllAlertsForCurrentUser(mockId, mockDate);
+    alertService.getAllForUser(mockId, mockDate);
 
     expect(personApi.getAlertQueues).toHaveBeenCalledWith(mockId, {
       where: { validFrom: { gt: mockDate.toISOString() } }
