@@ -10,12 +10,22 @@ import {
 } from '@angular/core';
 
 /**
- * if the campus-header component is used,
- * the content of the campus-page-bar element will be projected inside the page-bar div of the campus-header component
+ * if the `campus-header` component is used,
+ * the content of the `campus-page-bar` element will be projected inside the page-bar div of the `campus-header` component
+ * 
+ * scss for the content is managed in the `campus-header` component under the `.shared-header { &__page-bar {} }` ruleset
  * @example
- * <campus-page-bar>
- *  content that will be projected
- * </campus-page-bar>
+    <campus-page-bar>
+      <campus-filter-text-input theme="dark"
+                                (filterTextChange)="onChangeFilterInput($event)"
+                                [filterText]="filterInput$|async"
+                                class="pages__toolbar__filter"></campus-filter-text-input>
+      <div class="divider"></div>
+      <campus-button [iconClass]="'icon-timeline'"
+                    (click)="setListFormat(listFormat.LINE)"></campus-button>
+      <campus-button [iconClass]="'icon-checklist'"
+                    (click)="setListFormat(listFormat.GRID)"></campus-button>
+    </campus-page-bar>
  *
  * @export
  * @class PageBarContainerComponent
