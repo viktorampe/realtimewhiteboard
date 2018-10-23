@@ -6,7 +6,6 @@ import {
   ComponentFactoryResolver,
   Injector,
   OnDestroy,
-  OnInit,
   ViewChild
 } from '@angular/core';
 
@@ -15,8 +14,7 @@ import {
   templateUrl: './page-bar-container.component.html',
   styleUrls: ['./page-bar-container.component.scss']
 })
-export class PageBarContainerComponent
-  implements OnInit, AfterViewInit, OnDestroy {
+export class PageBarContainerComponent implements AfterViewInit, OnDestroy {
   private portalHost: PortalHost;
   @ViewChild(CdkPortal) portal;
 
@@ -25,8 +23,6 @@ export class PageBarContainerComponent
     private injector: Injector,
     private appRef: ApplicationRef
   ) {}
-
-  ngOnInit() {}
 
   ngAfterViewInit(): void {
     // Create a portalHost from a DOM element
