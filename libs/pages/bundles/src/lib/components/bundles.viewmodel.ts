@@ -1,6 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { ActivatedRoute, Resolve } from '@angular/router';
 import {
+  AuthServiceInterface,
+  AUTH_SERVICE_TOKEN,
   BundleActions,
   BundleInterface,
   BundleQueries,
@@ -90,7 +92,8 @@ export class BundlesViewModel implements Resolve<boolean> {
   constructor(
     private viewModelResolver: StateResolver,
     private store: Store<DalState>,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
   ) {}
 
   resolve(): Observable<boolean> {
@@ -190,28 +193,31 @@ export class BundlesViewModel implements Resolve<boolean> {
       this.ownBundles$,
       this.ownBooks$
     );
-    return this.user$.pipe(
-      switchMap(user => {
-        return this.viewModelResolver.resolve(
-          this.getLoadableActions(user),
-          this.getResolvedQueries()
-        );
-      })
+
+    return this.viewModelResolver.resolve(
+      this.getLoadableActions(),
+      this.getResolvedQueries()
     );
   }
 
-  getLoadableActions(user: PersonInterface): Action[] {
+  getLoadableActions(): Action[] {
     return [
       new LearningAreaActions.LoadLearningAreas(),
-      new BundleActions.LoadBundles({ userId: user.id }),
-      new EduContentActions.LoadEduContents({ userId: user.id }),
-      new UserContentActions.LoadUserContents({ userId: user.id }),
-      new UnlockedContentActions.LoadUnlockedContents({ userId: user.id }),
+      new BundleActions.LoadBundles({ userId: this.authService.userId }),
+      new EduContentActions.LoadEduContents({
+        userId: this.authService.userId
+      }),
+      new UserContentActions.LoadUserContents({
+        userId: this.authService.userId
+      }),
+      new UnlockedContentActions.LoadUnlockedContents({
+        userId: this.authService.userId
+      }),
       new UnlockedBoekeGroupActions.LoadUnlockedBoekeGroups({
-        userId: user.id
+        userId: this.authService.userId
       }),
       new UnlockedBoekeStudentActions.LoadUnlockedBoekeStudents({
-        userId: user.id
+        userId: this.authService.userId
       })
     ];
   }
