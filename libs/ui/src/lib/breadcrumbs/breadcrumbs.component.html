@@ -5,7 +5,9 @@
 </div>-->
 <div class="ui-breadcrumbs">
   <ul class="ui-breadcrumbs__holder">
-    <i [className]="homeIcon"></i>
+    <a href="{{homeUrl}}">
+      <i [className]="homeIcon"></i>
+    </a>
     <div class="ui-breadcrumbs__holder__breadcrumbs">
       <li *ngFor="let breadCrumb of breadCrumbs">
         <i [className]="seperator"></i>

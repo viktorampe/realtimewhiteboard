@@ -1,8 +1,31 @@
-$ui-icon-home: FontAwesome '\e069' !default;
-$ui-icon-breadcrumb-seperator: FontAwesome '\f105' !default;
+@mixin ui-breadcrumbs_theme() {
+  $ui-breadcrumbs-crumb-text-color: #888 !default;
+  $ui-breadcrumbs-crumb-text-size: 14px !default;
 
-@include icon(ui-icon-home, $ui-breadcrumbs__holder__home-icon);
-@include icon(
-  ui-icon-breadcrumb-seperator,
-  $ui-breadcrumbs__holder__breadcrumbs__seperator-icon
-);
+  .ui-breadcrumbs {
+    &__holder {
+      display: flex;
+      flex-direction: row;
+      margin: 0;
+      list-style: none;
+
+      &__breadcrumbs {
+        display: flex;
+        flex-direction: row;
+        padding: 8px;
+        margin: 0;
+        list-style: none;
+
+        li {
+          display: inline-block;
+          a,
+          span {
+            color: $ui-breadcrumbs__crumb-color;
+            font-size: $ui-breadcrumbs-crumb-text-size;
+            text-shadow: none;
+          }
+        }
+      }
+    }
+  }
+}

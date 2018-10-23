@@ -11,6 +11,7 @@ export class BreadcrumbsComponent {
   @Input() homeIcon: String = 'home';
   @Input() hidden: String = '...';
   @Input() maxLen: number;
+  @Input() homeUrl: String = '/';
 }
 
 export interface BreadcumbLinkInterface {

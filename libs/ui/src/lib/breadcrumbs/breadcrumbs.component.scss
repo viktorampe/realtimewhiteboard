@@ -1,3 +1,5 @@
+$ui-breadcrumbs__crumb-color: #888;
+
 .ui-breadcrumbs {
   &__holder {
     display: flex;
@@ -17,7 +19,7 @@
         display: inline-block;
         a,
         span {
-          color: #888;
+          color: $ui-breadcrumbs__crumb-color;
           font-size: 14px;
           text-shadow: none;
         }

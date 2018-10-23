@@ -11,6 +11,7 @@ describe('BreadcrumbComponent', () => {
     maxLen: 3,
     homeIcon: 'homeIconMock',
     seperator: 'seperatorMock',
+    homeUrl: 'homeUrlMock',
     breadCrumbs: [
       {
         displayText: 'crumb1',
@@ -45,6 +46,7 @@ describe('BreadcrumbComponent', () => {
     component.maxLen = mockData.maxLen;
     component.seperator = mockData.seperator;
     component.homeIcon = mockData.homeIcon;
+    component.homeUrl = mockData.homeUrl;
     fixture.detectChanges();
   });
 
@@ -78,11 +80,20 @@ describe('BreadcrumbComponent', () => {
     );
   });
 
+  it('should set the correct link on the home icon', () => {
+    const breadcrumbs = fixture.debugElement.query(
+      By.css('.ui-breadcrumbs__holder')
+    );
+    expect(breadcrumbs.children[0].nativeElement.href).toContain(
+      mockData.homeUrl
+    );
+  });
+
   it('should show the correct home icon', () => {
     const breadcrumbs = fixture.debugElement.query(
       By.css('.ui-breadcrumbs__holder')
     );
-    expect(breadcrumbs.children[0].nativeElement.className).toBe(
+    expect(breadcrumbs.children[0].children[0].nativeElement.className).toBe(
       mockData.homeIcon
     );
   });
