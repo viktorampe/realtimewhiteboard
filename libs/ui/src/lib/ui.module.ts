@@ -54,6 +54,7 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
 import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
 import { DropdownMenuComponent } from './dropdown-menu/dropdown-menu.component';
 import { NotificationDropdownItemComponent } from './notification-dropdown-item/notification-dropdown-item.component';
+import { ToolbarItemDropdownComponent } from './toolbar-item-dropdown/toolbar-item-dropdown.component';
 
 @NgModule({
   imports: [
@@ -121,7 +122,8 @@ import { NotificationDropdownItemComponent } from './notification-dropdown-item/
     ToolBarComponent,
     BreadcrumbsComponent,
     DropdownMenuComponent,
-    NotificationDropdownItemComponent
+    NotificationDropdownItemComponent,
+    ToolbarItemDropdownComponent
   ],
   exports: [
     FilterTextInputComponent,
@@ -164,7 +166,8 @@ import { NotificationDropdownItemComponent } from './notification-dropdown-item/
     ToolBarComponent,
     BreadcrumbsComponent,
     DropdownMenuComponent,
-    NotificationDropdownItemComponent
+    NotificationDropdownItemComponent,
+    ToolbarItemDropdownComponent
   ]
 })
 export class UiModule {}
