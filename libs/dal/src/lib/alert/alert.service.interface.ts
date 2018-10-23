@@ -9,5 +9,10 @@ export interface AlertServiceInterface {
     lastUpdateTime?: Date
   ): Observable<AlertQueueInterface[]>;
 
-  setAlertAsRead(alert: AlertQueueInterface);
+  setAlertAsRead(
+    userId: number,
+    alertId: number | number[],
+    read?: boolean,
+    intended?: boolean
+  );
 }
