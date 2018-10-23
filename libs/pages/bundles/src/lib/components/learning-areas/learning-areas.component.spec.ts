@@ -1,7 +1,7 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
-import { LearningAreaInterface } from '@campus/dal';
+import { AUTH_SERVICE_TOKEN, LearningAreaInterface } from '@campus/dal';
 import { StateResolver } from '@campus/pages/shared';
 import { ListFormat } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
@@ -13,10 +13,9 @@ let bundlesViewModel: MockViewModel;
 class MockViewModel extends BundlesViewModel {}
 
 beforeEach(() => {
-  bundlesViewModel = new MockViewModel(
-    <Store<any>>{},
-    new StateResolver(<Store<any>>{})
-  );
+  bundlesViewModel = new MockViewModel(new StateResolver(<Store<any>>{}), <
+    Store<any>
+  >{});
 });
 
 test('it should return', () => {
@@ -60,6 +59,7 @@ describe('LearningAreasComponent', () => {
       providers: [
         BundlesViewModel,
         { provide: ActivatedRoute, useValue: {} },
+        { provide: AUTH_SERVICE_TOKEN, useValue: {} },
         Store
       ]
     }).compileComponents();
