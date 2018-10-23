@@ -6,14 +6,14 @@ import {
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { filter, map } from 'rxjs/operators';
+import { DalState } from '..';
 import { LoadUi, SaveUi, UiActionTypes, UiLoaded } from './ui.actions';
-import { UiState } from './ui.reducer';
 
 @Injectable()
 export class UiEffects {
   @Effect()
   loadUi$ = this.dataPersistence.fetch(UiActionTypes.LoadUi, {
-    run: (action: LoadUi, state: UiState) => {
+    run: (action: LoadUi, state: DalState) => {
       let data;
       try {
         data = this.storageService.get('ui');
@@ -45,7 +45,7 @@ export class UiEffects {
 
   @Effect()
   saveUi$ = this.dataPersistence.fetch(UiActionTypes.SaveUi, {
-    run: (action: SaveUi, state: UiState) => {
+    run: (action: SaveUi, state: DalState) => {
       try {
         this.storageService.set('ui', JSON.stringify(state));
       } catch (error) {
@@ -56,7 +56,7 @@ export class UiEffects {
 
   constructor(
     private actions$: Actions,
-    private dataPersistence: DataPersistence<UiState>,
+    private dataPersistence: DataPersistence<DalState>,
     @Inject(BROWSER_STORAGE_SERVICE_TOKEN)
     private storageService: StorageServiceInterface
   ) {}

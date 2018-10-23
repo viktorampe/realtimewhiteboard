@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { map } from 'rxjs/operators';
+import { DalState } from '..';
 import {
   UnlockedBoekeGroupServiceInterface,
   UNLOCKED_BOEKE_GROUP_SERVICE_TOKEN
@@ -12,7 +13,6 @@ import {
   UnlockedBoekeGroupsLoaded,
   UnlockedBoekeGroupsLoadError
 } from './unlocked-boeke-group.actions';
-import { State } from './unlocked-boeke-group.reducer';
 
 @Injectable()
 export class UnlockedBoekeGroupsEffects {
@@ -20,7 +20,7 @@ export class UnlockedBoekeGroupsEffects {
   loadUnlockedBoekeGroups$ = this.dataPersistence.fetch(
     UnlockedBoekeGroupsActionTypes.LoadUnlockedBoekeGroups,
     {
-      run: (action: LoadUnlockedBoekeGroups, state: any) => {
+      run: (action: LoadUnlockedBoekeGroups, state: DalState) => {
         if (!action.payload.force && state.unlockedBoekeGroups.loaded) return;
         return this.unlockedBoekeGroupService
           .getAllForUser(action.payload.userId)
@@ -39,7 +39,7 @@ export class UnlockedBoekeGroupsEffects {
 
   constructor(
     private actions: Actions,
-    private dataPersistence: DataPersistence<State>,
+    private dataPersistence: DataPersistence<DalState>,
     @Inject(UNLOCKED_BOEKE_GROUP_SERVICE_TOKEN)
     private unlockedBoekeGroupService: UnlockedBoekeGroupServiceInterface
   ) {}
