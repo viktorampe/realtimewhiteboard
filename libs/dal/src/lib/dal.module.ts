@@ -12,7 +12,7 @@ import {
 } from '@diekeure/polpo-api-angular-sdk';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
-import { AlertEffects, AlertReducer } from './+state/alert';
+import { AlertReducer, AlertsEffects } from './+state/alert';
 import { BundleReducer, BundlesEffects } from './+state/bundle';
 import { ContentStatusReducer } from './+state/content-status';
 import { ContentStatusesEffects } from './+state/content-status/content-status.effects';
@@ -44,6 +44,8 @@ import {
   initialUserstate as userInitialState,
   userReducer
 } from './+state/user/user.reducer';
+import { AlertService } from './alert/alert.service';
+import { ALERT_SERVICE_TOKEN } from './alert/alert.service.interface';
 import {
   UnlockedBoekeGroupService,
   UnlockedBoekeStudentService,
@@ -140,7 +142,7 @@ interface DalOptions {
       UserContentsEffects,
       UnlockedBoekeStudentsEffects,
       ContentStatusesEffects,
-      AlertEffects
+      AlertsEffects
     ])
   ],
   providers: [
@@ -164,6 +166,10 @@ interface DalOptions {
     {
       provide: STUDENT_CONTENT_STATUS_SERVICE_TOKEN,
       useClass: StudentContentStatusService
+    },
+    {
+      provide: ALERT_SERVICE_TOKEN,
+      useClass: AlertService
     },
     { provide: AuthServiceToken, useClass: AuthService }
   ]
