@@ -12,12 +12,8 @@ import {
 
 @Component({
   selector: 'campus-page-bar',
-  template: `
-  <ng-template cdk-portal>
-    <ng-content></ng-content>
-  </ng-template>
-  `,
-  styles: []
+  templateUrl: './page-bar-container.component.html',
+  styleUrls: ['./page-bar-container.component.scss']
 })
 export class PageBarContainerComponent
   implements OnInit, AfterViewInit, OnDestroy {
