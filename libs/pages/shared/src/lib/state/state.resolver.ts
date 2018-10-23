@@ -35,6 +35,6 @@ export class StateResolver {
 }
 
 export interface StateResolverInterface extends Resolve<boolean> {
-  getLoadableActions(data: any): Action[];
+  getLoadableActions(): Action[];
   getResolvedQueries(): Selector<object, boolean>[];
 }
