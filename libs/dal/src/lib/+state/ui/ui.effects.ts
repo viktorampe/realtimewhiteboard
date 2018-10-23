@@ -20,7 +20,7 @@ export class UiEffects {
         data = JSON.parse(data);
       } catch (error) {
         //just return the initial state on error
-        return new UiLoaded({ state: { ...state, loaded: true } });
+        return new UiLoaded({ state: { ...state.ui, loaded: true } });
       }
       return new UiLoaded({ state: { ...data, loaded: true } });
     }
