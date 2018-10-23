@@ -9,6 +9,19 @@ import {
   ViewChild
 } from '@angular/core';
 
+/**
+ * if the campus-header component is used,
+ * the content of the campus-page-bar element will be projected inside the page-bar div of the campus-header component
+ * @example
+ * <campus-page-bar>
+ *  content that will be projected
+ * </campus-page-bar>
+ *
+ * @export
+ * @class PageBarContainerComponent
+ * @implements {AfterViewInit}
+ * @implements {OnDestroy}
+ */
 @Component({
   selector: 'campus-page-bar',
   templateUrl: './page-bar-container.component.html',
