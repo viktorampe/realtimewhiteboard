@@ -24,7 +24,9 @@ export function reducer(state = initialState, action: AlertsActions): State {
       return adapter.addAll(action.payload.alerts, {
         ...state,
         loaded: true,
-        lastUpdateTimeStamp: new Date()
+        lastUpdateTimeStamp: action.payload.timeStamp
+          ? action.payload.timeStamp
+          : new Date()
       });
     }
 
@@ -39,8 +41,12 @@ export function reducer(state = initialState, action: AlertsActions): State {
       return { ...state, error: action.payload, loaded: false };
     }
 
-    case AlertsActionTypes.ClearAlerts: {
-      return adapter.removeAll(state);
+    case AlertsActionTypes.SetReadAlert: {
+      return adapter.updateOne(action.updatePayload, state);
+    }
+
+    case AlertsActionTypes.SetReadAlerts: {
+      return adapter.updateMany(action.updatePayload, state);
     }
 
     // case AlertsActionTypes.AddAlert: {

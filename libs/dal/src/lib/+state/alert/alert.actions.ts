@@ -24,20 +24,24 @@ export enum AlertsActionTypes {
 export class LoadAlerts implements Action {
   readonly type = AlertsActionTypes.LoadAlerts;
 
-  constructor(public payload: { force?: boolean; userId: number }) {}
+  constructor(
+    public payload: { force?: boolean; userId: number; timeStamp?: Date }
+  ) {}
 }
 
 export class AlertsLoaded implements Action {
   readonly type = AlertsActionTypes.AlertsLoaded;
 
-  constructor(public payload: { alerts: AlertQueueInterface[] }) {}
+  constructor(
+    public payload: { alerts: AlertQueueInterface[]; timeStamp: Date }
+  ) {}
 }
 
 export class LoadNewAlerts implements Action {
   readonly type = AlertsActionTypes.LoadNewAlerts;
 
   constructor(
-    public payload: { force?: boolean; userId: number; timeStamp: Date }
+    public payload: { force?: boolean; userId: number; timeStamp?: Date }
   ) {}
 }
 
@@ -54,16 +58,51 @@ export class AlertsLoadError implements Action {
   constructor(public payload: any) {}
 }
 
-export class AddAlert implements Action {
-  readonly type = AlertsActionTypes.AddAlert;
+export class SetReadAlert implements Action {
+  readonly type = AlertsActionTypes.SetReadAlert;
+  readonly updatePayload: Update<AlertQueueInterface>;
 
-  constructor(public payload: { alert: AlertQueueInterface }) {}
+  constructor(
+    public payload: {
+      personId: number;
+      alertId: number;
+      read?: boolean;
+      intended?: boolean;
+    }
+  ) {
+    this.updatePayload = {
+      id: payload.alertId,
+      changes: {
+        read: payload.read === false ? false : true
+      }
+    };
+  }
 }
 
-export class UpsertAlert implements Action {
-  readonly type = AlertsActionTypes.UpsertAlert;
+export class SetReadAlerts implements Action {
+  readonly type = AlertsActionTypes.SetReadAlerts;
+  readonly updatePayload: Update<AlertQueueInterface>[];
 
-  constructor(public payload: { alert: AlertQueueInterface }) {}
+  constructor(
+    public payload: {
+      personId: number;
+      alertIds: number[];
+      read?: boolean;
+      intended?: boolean;
+    }
+  ) {
+    this.updatePayload = payload.alertIds.map(alertId =>
+      Object.assign(
+        {},
+        {
+          id: alertId,
+          changes: {
+            read: payload.read === false ? false : true
+          }
+        }
+      )
+    );
+  }
 }
 
 // export class AddAlert implements Action {

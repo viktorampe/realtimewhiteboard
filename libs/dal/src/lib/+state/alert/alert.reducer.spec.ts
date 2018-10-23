@@ -5,12 +5,12 @@ import { initialState, reducer, State } from './alert.reducer';
 
 /**
  * This file is scaffolded, but needs some special attention:
- * - find and replace 'title' and replace this with a property name of the Alert entity.
- * - set the initial property value via '[title]InitialValue'.
- * - set the updated property value via '[title]UpdatedValue'.
+ * - find and replace 'read' and replace this with a property name of the Alert entity.
+ * - set the initial property value via '[read]InitialValue'.
+ * - set the updated property value via '[read]UpdatedValue'.
  */
-const titleInitialValue = 'initial';
-const titleUpdatedValue = 'updated';
+const readInitialValue = false;
+const readUpdatedValue = true;
 
 /**
  * Creates a Alert.
@@ -19,11 +19,11 @@ const titleUpdatedValue = 'updated';
  */
 function createAlert(
   id: number,
-  title: any = titleInitialValue
+  read: any = readInitialValue
 ): AlertQueueInterface | any {
   return {
     id: id,
-    title: title
+    read: read
   };
 }
 
@@ -38,6 +38,7 @@ function createAlert(
 function createState(
   alerts: AlertQueueInterface[],
   loaded: boolean = false,
+  lastUpdateTimeStamp?: Date,
   error?: any
 ): State {
   const state: any = {
@@ -53,14 +54,19 @@ function createState(
       : {},
     loaded: loaded
   };
+  if (lastUpdateTimeStamp) {
+    Object.assign(state, { lastUpdateTimeStamp: lastUpdateTimeStamp });
+  }
   if (error !== undefined) state.error = error;
   return state;
 }
 
 describe('Alerts Reducer', () => {
   let alerts: AlertQueueInterface[];
+  let updateTime: Date;
   beforeEach(() => {
     alerts = [createAlert(1), createAlert(2), createAlert(3)];
+    updateTime = new Date(1983, 4, 6);
   });
 
   describe('unknown action', () => {
@@ -75,60 +81,68 @@ describe('Alerts Reducer', () => {
 
   describe('loaded action', () => {
     it('should load all alerts', () => {
-      const action = new AlertActions.AlertsLoaded({ alerts });
+      const action = new AlertActions.AlertsLoaded({
+        alerts,
+        timeStamp: updateTime
+      });
       const result = reducer(initialState, action);
-      expect(result).toEqual(createState(alerts, true));
+      expect(result).toEqual(createState(alerts, true, updateTime));
     });
 
     it('should error', () => {
       const error = 'Something went wrong';
       const action = new AlertActions.AlertsLoadError(error);
       const result = reducer(initialState, action);
+      expect(result).toEqual(createState([], false, null, error));
     });
   });
 
-  describe('update actions', () => {
-    it('should update an alert', () => {
+  describe('set read actions', () => {
+    it('should set read on an alert', () => {
       const alert = alerts[0];
-      const startState = createState([alert]);
+      const startState = createState([alert], true);
       const update: Update<AlertQueueInterface> = {
         id: 1,
         changes: {
-          title: titleUpdatedValue
+          read: true
         }
       };
-      const action = new AlertActions.UpdateAlert({
-        alert: update
+      const action = new AlertActions.SetReadAlert({
+        personId: alert.recipientId,
+        alertId: alert.id
       });
       const result = reducer(startState, action);
-      expect(result).toEqual(createState([createAlert(1, titleUpdatedValue)]));
+      expect(result).toEqual(
+        createState([createAlert(1, readUpdatedValue)], true)
+      );
     });
 
-    it('should update multiple alerts', () => {
+    it('should set read on multiple alerts', () => {
       const startState = createState(alerts);
       const updates: Update<AlertQueueInterface>[] = [
         {
           id: 1,
           changes: {
-            title: titleUpdatedValue
+            read: true
           }
         },
         {
           id: 2,
           changes: {
-            title: titleUpdatedValue
+            read: true
           }
         }
       ];
-      const action = new AlertActions.UpdateAlerts({
-        alerts: updates
+      const action = new AlertActions.SetReadAlerts({
+        personId: alerts[0].recipientId,
+        alertIds: updates.map(a => <number>a.id)
       });
       const result = reducer(startState, action);
 
       expect(result).toEqual(
         createState([
-          createAlert(1, titleUpdatedValue),
-          createAlert(2, titleUpdatedValue),
+          createAlert(1, readUpdatedValue),
+          createAlert(2, readUpdatedValue),
           alerts[2]
         ])
       );

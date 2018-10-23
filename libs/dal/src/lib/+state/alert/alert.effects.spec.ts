@@ -15,7 +15,7 @@ describe('AlertEffects', () => {
   let effects: AlertsEffects;
   let usedState: any;
 
-  const mockData = { userId: 1 };
+  const mockData = { userId: 1, updateTime: new Date(1983, 4, 6) };
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -68,7 +68,7 @@ describe('AlertEffects', () => {
         {
           provide: ALERT_SERVICE_TOKEN,
           useValue: {
-            getAll: () => {}
+            getAllForUser: (userId: number) => {}
           }
         },
         AlertsEffects,
@@ -81,19 +81,26 @@ describe('AlertEffects', () => {
   });
 
   describe('loadAlert$', () => {
-    const unforcedLoadAction = new LoadAlerts({ userId: mockData.userId });
+    const unforcedLoadAction = new LoadAlerts({
+      userId: mockData.userId,
+      timeStamp: mockData.updateTime
+    });
     const forcedLoadAction = new LoadAlerts({
       force: true,
-      userId: mockData.userId
+      userId: mockData.userId,
+      timeStamp: mockData.updateTime
     });
-    const filledLoadedAction = new AlertsLoaded({ alerts: [] });
+    const filledLoadedAction = new AlertsLoaded({
+      alerts: [],
+      timeStamp: mockData.updateTime
+    });
     const loadErrorAction = new AlertsLoadError(new Error('failed'));
     describe('with initialState', () => {
       beforeAll(() => {
         usedState = initialState;
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAll', []);
+        mockServiceMethodReturnValue('getAllForUser', []);
       });
       it('should trigger an api call with the initialState if force is not true', () => {
         expectInAndOut(
@@ -115,7 +122,7 @@ describe('AlertEffects', () => {
         usedState = { ...initialState, loaded: true };
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAll', []);
+        mockServiceMethodReturnValue('getAllForUser', []);
       });
       it('should not trigger an api call with the loaded state if force is not true', () => {
         expectInNoOut(effects.loadAlerts$, unforcedLoadAction);
@@ -133,7 +140,7 @@ describe('AlertEffects', () => {
         usedState = initialState;
       });
       beforeEach(() => {
-        mockServiceMethodError('getAll', 'failed');
+        mockServiceMethodError('getAllForUser', 'failed');
       });
       it('should return a error action if force is not true', () => {
         expectInAndOut(
@@ -155,7 +162,7 @@ describe('AlertEffects', () => {
         };
       });
       beforeEach(() => {
-        mockServiceMethodError('getAll', 'failed');
+        mockServiceMethodError('getAllForUser', 'failed');
       });
       it('should return nothing action if force is not true', () => {
         expectInNoOut(effects.loadAlerts$, unforcedLoadAction);
