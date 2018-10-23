@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 import { AlertQueueInterface } from '@campus/dal';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Observable } from 'rxjs';
+import { AlertServiceInterface } from './alert.service.interface';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AlertService {
+export class AlertService implements AlertServiceInterface {
   constructor(private personApi: PersonApi) {}
 
   /**
