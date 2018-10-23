@@ -1,0 +1,8 @@
+$ui-icon-home: FontAwesome '\e069' !default;
+$ui-icon-breadcrumb-seperator: FontAwesome '\f105' !default;
+
+@include icon(ui-icon-home, $ui-breadcrumbs__holder__home-icon);
+@include icon(
+  ui-icon-breadcrumb-seperator,
+  $ui-breadcrumbs__holder__breadcrumbs__seperator-icon
+);

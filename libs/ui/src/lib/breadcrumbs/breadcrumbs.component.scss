@@ -1,0 +1,27 @@
+.ui-breadcrumbs {
+  &__holder {
+    display: flex;
+    flex-direction: row;
+    padding: 8px;
+    margin: 0;
+    list-style: none;
+
+    &__breadcrumbs {
+      display: flex;
+      flex-direction: row;
+      padding: 8px;
+      margin: 0;
+      list-style: none;
+
+      li {
+        display: inline-block;
+        a,
+        span {
+          color: #888;
+          font-size: 14px;
+          text-shadow: none;
+        }
+      }
+    }
+  }
+}

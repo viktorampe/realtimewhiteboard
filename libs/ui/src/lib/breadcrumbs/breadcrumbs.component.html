@@ -1,3 +1,18 @@
-<p>
-  breadcrumbs works!
-</p>
+<!--<div class="ui-breadcrumbs">
+  <div *ngFor="let breadCrumb of breadCrumbs">
+    <a href="{{ breadCrumb.href }}">{{ breadCrumb.displayText }}</a> <img src="{{ seperator }}" />
+  </div>
+</div>-->
+<div class="ui-breadcrumbs">
+  <ul class="ui-breadcrumbs__holder">
+    <i [className]="homeIcon"></i>
+    <div class="ui-breadcrumbs__holder__breadcrumbs">
+      <li *ngFor="let breadCrumb of breadCrumbs">
+        <i [className]="seperator"></i>
+        <a href="{{breadCrumb.href}}">{{breadCrumb.displayText | slice: 0:maxLen}}{{breadCrumb.displayText.length >
+          maxLen ?
+          hidden : ''}}</a>
+      </li>
+    </div>
+  </ul>
+</div>
