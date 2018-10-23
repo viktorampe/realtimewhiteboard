@@ -54,11 +54,18 @@ export const getById = createSelector(
 );
 
 export const getUnread = createSelector(selectAlertState, (state: State) =>
-  state.entities.filter(alert => alert.read)
+  Object.entries(state.entities)
+    .filter(([key, value]) => !value.read)
+    .map(([key, value]) => ({ [key]: value }))
 );
 
-export const getRecent = createSelector(
+export const getRecentByDate = createSelector(
   selectAlertState,
   (state: State, props: { timeThreshold: Date }) =>
-    state.entities.filter(alert => alert.validFrom >= props.timeThreshold)
+    Object.entries(state.entities)
+      .filter(
+        ([key, value]) => new Date(value.validFrom) >= props.timeThreshold
+        // value.validFrom.toString() >= props.timeThreshold.toString()
+      )
+      .map(([key, value]) => ({ [key]: value }))
 );
