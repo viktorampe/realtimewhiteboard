@@ -12,6 +12,7 @@ import {
 } from '@diekeure/polpo-api-angular-sdk';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
+import { AlertEffects, AlertReducer } from './+state/alert';
 import { BundleReducer, BundlesEffects } from './+state/bundle';
 import { ContentStatusReducer } from './+state/content-status';
 import { ContentStatusesEffects } from './+state/content-status/content-status.effects';
@@ -124,6 +125,9 @@ interface DalOptions {
     StoreModule.forFeature('contentStatuses', ContentStatusReducer.reducer, {
       initialState: ContentStatusReducer.initialState
     }),
+    StoreModule.forFeature('alerts', AlertReducer.reducer, {
+      initialState: AlertReducer.initialState
+    }),
     EffectsModule.forFeature([
       BundlesEffects,
       EduContentsEffects,
@@ -135,7 +139,8 @@ interface DalOptions {
       UnlockedContentsEffects,
       UserContentsEffects,
       UnlockedBoekeStudentsEffects,
-      ContentStatusesEffects
+      ContentStatusesEffects,
+      AlertEffects
     ])
   ],
   providers: [

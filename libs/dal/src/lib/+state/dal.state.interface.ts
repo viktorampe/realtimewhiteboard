@@ -1,4 +1,5 @@
 import {
+  AlertReducer,
   BundleReducer,
   EduContentReducer,
   LearningAreaReducer,
@@ -18,4 +19,5 @@ export interface DalState {
   unlockedContents: UnlockedContentReducer.State;
   unlockedBoekeGroups: UnlockedBoekeGroupReducer.State;
   unlockedBoekeStudents: UnlockedBoekeStudentReducer.State;
+  alerts: AlertReducer.State;
 }
