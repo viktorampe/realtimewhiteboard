@@ -14,8 +14,9 @@ class MockViewModel extends BundlesViewModel {}
 
 beforeEach(() => {
   bundlesViewModel = new MockViewModel(
+    new StateResolver(<Store<any>>{}),
     <Store<any>>{},
-    new StateResolver(<Store<any>>{})
+    new ActivatedRoute()
   );
 });
 
