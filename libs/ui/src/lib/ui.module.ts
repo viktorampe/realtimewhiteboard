@@ -9,6 +9,7 @@ import {
   MatFormFieldModule,
   MatIconModule,
   MatInputModule,
+  MatMenuModule,
   MatProgressSpinnerModule,
   MatSelectModule,
   MatSidenavModule,
@@ -16,6 +17,7 @@ import {
 } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { AppBarComponent } from './app-bar/app-bar.component';
+import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
 import { ButtonComponent } from './button/button.component';
 import { BorderDirective } from './button/directives/button-border.directive';
 import { CircleDirective } from './button/directives/button-circle.directive';
@@ -26,6 +28,7 @@ import { WarningDirective } from './button/directives/button-warning.directive';
 import { ConfirmableSelectComponent } from './confirmable-select/confirmable-select.component';
 import { ContentPreviewComponent } from './content-preview/content-preview.component';
 import { ContentThumbnailComponent } from './content-thumbnail/content-thumbnail.component';
+import { DropdownMenuComponent } from './dropdown-menu/dropdown-menu.component';
 import { EditableInlineTagListComponent } from './editable-inline-tag-list/editable-inline-tag-list.component';
 import { FileExtensionComponent } from './file-extension/file-extension.component';
 import { FilterTextInputComponent } from './filter-text-input/filter-text-input.component';
@@ -36,6 +39,7 @@ import {
   ListViewComponent,
   ListViewItemDirective
 } from './list-view/list-view.component';
+import { NotificationDropdownItemComponent } from './notification-dropdown-item/notification-dropdown-item.component';
 import { PageHeaderComponent } from './page-header/page-header.component';
 import { PersonBadgeComponent } from './person-badge/person-badge.component';
 import { PersonInitialsPipe } from './person-badge/pipes/person-initials.pipe';
@@ -49,12 +53,9 @@ import { SideSheetHeaderDirective } from './side-sheet/directives/side-sheet-hea
 import { SideSheetPageDirective } from './side-sheet/directives/side-sheet-page.directive';
 import { SideSheetComponent } from './side-sheet/side-sheet.component';
 import { ToolBarComponent } from './tool-bar/tool-bar.component';
+import { ToolbarItemDropdownComponent } from './toolbar-item-dropdown/toolbar-item-dropdown.component';
 import { TreeNavComponent } from './tree-nav/tree-nav.component';
 import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness.pipe';
-import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
-import { DropdownMenuComponent } from './dropdown-menu/dropdown-menu.component';
-import { NotificationDropdownItemComponent } from './notification-dropdown-item/notification-dropdown-item.component';
-import { ToolbarItemDropdownComponent } from './toolbar-item-dropdown/toolbar-item-dropdown.component';
 
 @NgModule({
   imports: [
@@ -77,7 +78,8 @@ import { ToolbarItemDropdownComponent } from './toolbar-item-dropdown/toolbar-it
     MatFormFieldModule,
     MatProgressSpinnerModule,
     MatTooltipModule,
-    MatIconModule
+    MatIconModule,
+    MatMenuModule
   ],
   declarations: [
     FilterTextInputComponent,

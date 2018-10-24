@@ -1,0 +1,20 @@
+@mixin ui-toolbar-item-dropdown {
+  $ui-toolbar-item-dropdown-width: 350px !default;
+  $ui-toolbar-item-dropdown-background: #95a0aa !default;
+  $ui-toolbar-item-dropdown-color: #32323a !default;
+
+  .ui-toolbar-item-dropdown {
+    color: $ui-toolbar-item-dropdown-color;
+    &__header {
+      background: $ui-toolbar-item-dropdown-background;
+      font-family: $ui-font-family-1;
+      a {
+        color: $ui-toolbar-item-dropdown-color;
+      }
+    }
+  }
+  .mat-menu-panel.ui-toolbar-item-dropdown {
+    width: $ui-toolbar-item-dropdown-width;
+    max-width: none;
+  }
+}
