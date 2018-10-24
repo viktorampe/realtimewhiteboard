@@ -6,7 +6,7 @@ import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from 'jasmine-marbles';
 import { Observable, of } from 'rxjs';
 import { DalModule } from '../../dal.module';
-import { AuthServiceToken } from '../../persons/auth-service';
+import { AuthServiceToken } from '../../person/auth-service';
 import { LoadUser, RemoveUser, UserLoaded, UserRemoved } from './user.actions';
 import { UserEffects } from './user.effects';
 import { initialUserstate, UserState } from './user.reducer';

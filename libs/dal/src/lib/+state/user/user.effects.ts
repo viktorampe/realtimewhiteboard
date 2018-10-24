@@ -2,8 +2,8 @@ import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { map } from 'rxjs/operators';
-import { AuthServiceToken } from '../../persons/auth-service';
-import { AuthServiceInterface } from '../../persons/auth-service.interface';
+import { AuthServiceToken } from '../../person/auth-service';
+import { AuthServiceInterface } from '../../person/auth-service.interface';
 import {
   fromUserActions,
   LoadUser,

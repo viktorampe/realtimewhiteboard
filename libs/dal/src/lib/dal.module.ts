@@ -61,7 +61,13 @@ import { EduContentService } from './edu-content/edu-content.service';
 import { EDUCONTENT_SERVICE_TOKEN } from './edu-content/edu-content.service.interface';
 import { LearningAreaService } from './learning-area/learning-area.service';
 import { LEARNINGAREA_SERVICE_TOKEN } from './learning-area/learning-area.service.interface';
-import { AuthService, AuthServiceToken } from './persons/auth-service';
+import {
+  LinkedPersonService,
+  LINKEDPERSON_SERVICE_TOKEN,
+  PersonService,
+  PERSON_SERVICE_TOKEN
+} from './person';
+import { AuthService, AuthServiceToken } from './person/auth-service';
 import { StudentContentStatusService } from './student-content-status/student-content-status.service';
 import { STUDENT_CONTENT_STATUS_SERVICE_TOKEN } from './student-content-status/student-content-status.service.interface';
 
@@ -160,6 +166,8 @@ interface DalOptions {
       provide: STUDENT_CONTENT_STATUS_SERVICE_TOKEN,
       useClass: StudentContentStatusService
     },
+    { provide: PERSON_SERVICE_TOKEN, useClass: PersonService },
+    { provide: LINKEDPERSON_SERVICE_TOKEN, useClass: LinkedPersonService },
     { provide: AuthServiceToken, useClass: AuthService }
   ]
 })

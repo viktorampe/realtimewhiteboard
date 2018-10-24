@@ -92,4 +92,7 @@ export interface PersonInterface {
   alertQueues?: AlertQueueInterface[];
   userContents?: UserContentInterface[];
   personToggleFeatures?: PersonToggleFeatureInterface[];
+  receiveMessages?: boolean;
+  publicKey?: string;
+  favoriteLearningAreaIds?: number[];
 }
