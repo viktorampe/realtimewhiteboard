@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component } from '@angular/core';
 /**
  * Provides a flexbox container to use as a Top App Bar.
  * https://material.io/develop/android/components/app-bar-layout/

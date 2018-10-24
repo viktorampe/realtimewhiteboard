@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HeaderViewModel } from './header.viewmodel';
 
 @Component({
@@ -6,6 +6,18 @@ import { HeaderViewModel } from './header.viewmodel';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent {
-  constructor(public vm: HeaderViewModel) {}
+export class HeaderComponent implements OnInit {
+  enableAlerts: boolean;
+  enableMessages: boolean;
+
+  constructor(public headerViewModel: HeaderViewModel) {}
+
+  ngOnInit(): void {
+    this.loadFeatureToggles();
+  }
+
+  private loadFeatureToggles() {
+    this.enableAlerts = this.headerViewModel.enableAlerts;
+    this.enableMessages = this.headerViewModel.enableMessages;
+  }
 }

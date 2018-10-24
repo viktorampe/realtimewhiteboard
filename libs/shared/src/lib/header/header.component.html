@@ -1,6 +1,23 @@
 <div class="shared-header">
   <div class="shared-header__app-bar">
-    <campus-app-bar></campus-app-bar>
+    <campus-app-bar>
+      <campus-breadcrumbs bar__left>
+        breadcrumbs
+      </campus-breadcrumbs>
+      <div class="shared-header__app-bar__alerts"
+           bar__right
+           *ngIf="enableAlerts">
+      </div>
+      <div class="shared-header__app-bar__messages"
+           bar__right
+           *ngIf="enableMessages">
+        messages
+      </div>
+      <div class="shared-header__app-bar__profile-menu"
+           bar__right>
+        profile menu
+      </div>
+    </campus-app-bar>
   </div>
   <div class="shared-header__page-bar"
        id="page-bar-container">
