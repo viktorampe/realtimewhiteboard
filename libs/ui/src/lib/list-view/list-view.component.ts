@@ -53,6 +53,7 @@ export class ListViewComponent
   @Output() selectedItems$ = new BehaviorSubject([]);
   @Output() listFormat$ = new BehaviorSubject(this.listFormat);
 
+  // tslint:disable-next-line
   @ContentChildren(forwardRef(() => ListViewItemDirective))
   items: QueryList<ListViewItemDirective>;
 
