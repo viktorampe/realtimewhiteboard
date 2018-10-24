@@ -42,10 +42,6 @@ export function reducer(state = initialState, action: AlertsActions): State {
     }
 
     case AlertsActionTypes.SetReadAlert: {
-      return adapter.updateOne(action.updatePayload, state);
-    }
-
-    case AlertsActionTypes.SetReadAlerts: {
       return adapter.updateMany(action.updatePayload, state);
     }
 

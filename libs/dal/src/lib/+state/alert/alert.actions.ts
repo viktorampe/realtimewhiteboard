@@ -1,5 +1,6 @@
 import { Update } from '@ngrx/entity';
 import { Action } from '@ngrx/store';
+import { isNullOrUndefined } from 'util';
 import { AlertQueueInterface } from '../../+models';
 
 export enum AlertsActionTypes {
@@ -8,8 +9,7 @@ export enum AlertsActionTypes {
   LoadAlerts = '[Alerts] Load Alerts',
   NewAlertsLoaded = '[Alerts] New Alerts Loaded',
   LoadNewAlerts = '[Alerts] Load New Alerts',
-  SetReadAlert = '[Alerts] Set as Read Alert',
-  SetReadAlerts = '[Alerts] Set as Read Alerts'
+  SetReadAlert = '[Alerts] Set as Read Alert'
   // AddAlert = '[Alerts] Add Alert',
   // UpsertAlert = '[Alerts] Upsert Alert',
   // AddAlerts = '[Alerts] Add Alerts',
@@ -60,44 +60,34 @@ export class AlertsLoadError implements Action {
 
 export class SetReadAlert implements Action {
   readonly type = AlertsActionTypes.SetReadAlert;
-  readonly updatePayload: Update<AlertQueueInterface>;
-
-  constructor(
-    public payload: {
-      personId: number;
-      alertId: number;
-      read?: boolean;
-      intended?: boolean;
-    }
-  ) {
-    this.updatePayload = {
-      id: payload.alertId,
-      changes: {
-        read: payload.read === false ? false : true
-      }
-    };
-  }
-}
-
-export class SetReadAlerts implements Action {
-  readonly type = AlertsActionTypes.SetReadAlerts;
   readonly updatePayload: Update<AlertQueueInterface>[];
 
   constructor(
     public payload: {
       personId: number;
-      alertIds: number[];
+      alertIds: number | number[];
       read?: boolean;
       intended?: boolean;
     }
   ) {
-    this.updatePayload = payload.alertIds.map(alertId =>
+    // alertIds altijd in een array
+    let alertIds: number[];
+    if (typeof payload.alertIds === 'number') {
+      alertIds = [payload.alertIds];
+    } else {
+      alertIds = payload.alertIds;
+    }
+
+    // read moet boolean zijn, default: true
+    const readStatus = isNullOrUndefined(payload.read) ? true : payload.read;
+
+    this.updatePayload = alertIds.map(alertId =>
       Object.assign(
         {},
         {
           id: alertId,
           changes: {
-            read: payload.read === false ? false : true
+            read: readStatus
           }
         }
       )
@@ -163,8 +153,7 @@ export type AlertsActions =
   | AlertsLoadError
   | LoadNewAlerts
   | NewAlertsLoaded
-  | SetReadAlert
-  | SetReadAlerts;
+  | SetReadAlert;
 // | AddAlert
 // | UpsertAlert
 // | AddAlerts

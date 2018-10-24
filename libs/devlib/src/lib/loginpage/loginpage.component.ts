@@ -45,7 +45,7 @@ export class LoginpageComponent implements OnInit {
 
   dispatchSetAsReadAction() {
     this.store.dispatch(
-      new AlertActions.SetReadAlerts({
+      new AlertActions.SetReadAlert({
         personId: 6,
         alertIds: [25, 4681],
         read: false

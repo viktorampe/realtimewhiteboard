@@ -101,19 +101,28 @@ describe('Alerts Reducer', () => {
     it('should set read on an alert', () => {
       const alert = alerts[0];
       const startState = createState([alert], true);
-      const update: Update<AlertQueueInterface> = {
-        id: 1,
-        changes: {
-          read: true
-        }
-      };
+
       const action = new AlertActions.SetReadAlert({
         personId: alert.recipientId,
-        alertId: alert.id
+        alertIds: alert.id,
+        read: readUpdatedValue
       });
       const result = reducer(startState, action);
       expect(result).toEqual(
         createState([createAlert(1, readUpdatedValue)], true)
+      );
+
+      // Also check if read can be set back to initial
+      // (check needed because of default values)
+      const actionInitial = new AlertActions.SetReadAlert({
+        personId: alert.recipientId,
+        alertIds: alert.id,
+        read: readInitialValue
+      });
+
+      const resultInitial = reducer(result, actionInitial);
+      expect(resultInitial).toEqual(
+        createState([createAlert(1, readInitialValue)], true)
       );
     });
 
@@ -123,17 +132,17 @@ describe('Alerts Reducer', () => {
         {
           id: 1,
           changes: {
-            read: true
+            read: readUpdatedValue
           }
         },
         {
           id: 2,
           changes: {
-            read: true
+            read: readUpdatedValue
           }
         }
       ];
-      const action = new AlertActions.SetReadAlerts({
+      const action = new AlertActions.SetReadAlert({
         personId: alerts[0].recipientId,
         alertIds: updates.map(a => <number>a.id)
       });
@@ -143,6 +152,23 @@ describe('Alerts Reducer', () => {
         createState([
           createAlert(1, readUpdatedValue),
           createAlert(2, readUpdatedValue),
+          alerts[2]
+        ])
+      );
+
+      // Also check if read can be set back to initial
+      // (check needed because of default values)
+      const actionInitial = new AlertActions.SetReadAlert({
+        personId: alerts[0].recipientId,
+        alertIds: [alerts[0].id, alerts[1].id],
+        read: readInitialValue
+      });
+
+      const resultInitial = reducer(result, actionInitial);
+      expect(resultInitial).toEqual(
+        createState([
+          createAlert(1, readInitialValue),
+          createAlert(2, readInitialValue),
           alerts[2]
         ])
       );

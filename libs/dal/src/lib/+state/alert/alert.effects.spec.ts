@@ -6,7 +6,15 @@ import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
 import { ALERT_SERVICE_TOKEN } from '../../alert/alert.service.interface';
-import { AlertsLoaded, AlertsLoadError, LoadAlerts } from './alert.actions';
+import { ActionSuccessful } from '../dal.actions';
+import {
+  AlertsLoaded,
+  AlertsLoadError,
+  LoadAlerts,
+  LoadNewAlerts,
+  NewAlertsLoaded,
+  SetReadAlert
+} from './alert.actions';
 import { AlertsEffects } from './alert.effects';
 import { initialState, reducer } from './alert.reducer';
 
@@ -15,7 +23,17 @@ describe('AlertEffects', () => {
   let effects: AlertsEffects;
   let usedState: any;
 
-  const mockData = { userId: 1, updateTime: new Date(1983, 3, 6) };
+  const mockData = {
+    userId: 1,
+    updateTime: new Date(1983, 3, 6),
+    timeDeltaInMinutes: 15,
+    personId: 2,
+    alertId: 42
+  };
+
+  function addMinutes(date: Date, minutes: number): Date {
+    return new Date(date.getTime() + minutes * 60000);
+  }
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -68,7 +86,13 @@ describe('AlertEffects', () => {
         {
           provide: ALERT_SERVICE_TOKEN,
           useValue: {
-            getAllForUser: (userId: number) => {}
+            getAllForUser: (userId: number) => {},
+            setAlertAsRead: (
+              userId: number,
+              alertId: number | number[],
+              read?: boolean,
+              intended?: boolean
+            ) => {}
           }
         },
         AlertsEffects,
@@ -169,6 +193,210 @@ describe('AlertEffects', () => {
       });
       it('should return a error action if force is true', () => {
         expectInAndOut(effects.loadAlerts$, forcedLoadAction, loadErrorAction);
+      });
+    });
+  });
+
+  describe('loadNewAlert$', () => {
+    const unforcedNewLoadActionWithoutTimeDelta = new LoadNewAlerts({
+      userId: mockData.userId,
+      timeStamp: mockData.updateTime
+    });
+    const unforcedNewLoadActionWithTimeDelta = new LoadNewAlerts({
+      userId: mockData.userId,
+      timeStamp: addMinutes(mockData.updateTime, mockData.timeDeltaInMinutes)
+    });
+    const forcedNewLoadAction = new LoadNewAlerts({
+      force: true,
+      userId: mockData.userId,
+      timeStamp: mockData.updateTime
+    });
+    const filledNewLoadedAction = new NewAlertsLoaded({
+      alerts: [],
+      timeStamp: mockData.updateTime
+    });
+    const loadErrorAction = new AlertsLoadError(new Error('failed'));
+
+    describe('with initialState', () => {
+      beforeAll(() => {
+        usedState = initialState;
+      });
+      it('should should return nothing if the state is not loaded', () => {
+        expectInNoOut(
+          effects.loadNewAlerts$,
+          unforcedNewLoadActionWithoutTimeDelta
+        );
+      });
+    });
+
+    describe('with loaded state', () => {
+      beforeAll(() => {
+        usedState = {
+          ...initialState,
+          loaded: true,
+          lastUpdateTimeStamp: mockData.updateTime
+        };
+      });
+      beforeEach(() => {
+        mockServiceMethodReturnValue('getAllForUser', []);
+      });
+      it('should not trigger an api call with the loaded state if force is not true', () => {
+        expectInNoOut(
+          effects.loadAlerts$,
+          unforcedNewLoadActionWithoutTimeDelta
+        );
+      });
+      it('should trigger an api call with the loaded state if force is true', () => {
+        expectInAndOut(
+          effects.loadNewAlerts$,
+          forcedNewLoadAction,
+          filledNewLoadedAction
+        );
+      });
+      it('should trigger an api call with the loaded state if the timeDelta is big enough', () => {
+        const filledNewLoadedActionWithTimeDelta = new NewAlertsLoaded({
+          alerts: [],
+          timeStamp: addMinutes(
+            mockData.updateTime,
+            mockData.timeDeltaInMinutes
+          )
+        });
+
+        expectInAndOut(
+          effects.loadNewAlerts$,
+          unforcedNewLoadActionWithTimeDelta,
+          filledNewLoadedActionWithTimeDelta
+        );
+      });
+    });
+    describe('with loaded and failing api call', () => {
+      beforeAll(() => {
+        usedState = {
+          ...initialState,
+          loaded: true,
+          lastUpdateTimeStamp: mockData.updateTime,
+          list: []
+        };
+      });
+      beforeEach(() => {
+        mockServiceMethodError('getAllForUser', 'failed');
+      });
+      it('should return nothing  if force is not true and the timeDelta isnt big enough', () => {
+        expectInNoOut(
+          effects.loadNewAlerts$,
+          unforcedNewLoadActionWithoutTimeDelta
+        );
+      });
+      it('should return an error if the timeDelta is big enough', () => {
+        expectInAndOut(
+          effects.loadNewAlerts$,
+          unforcedNewLoadActionWithTimeDelta,
+          loadErrorAction
+        );
+      });
+      it('should return an error action if force is true', () => {
+        expectInAndOut(
+          effects.loadNewAlerts$,
+          forcedNewLoadAction,
+          loadErrorAction
+        );
+      });
+    });
+  });
+
+  describe('pollAlerts$', () => {
+    const newLoadAction = new LoadNewAlerts({
+      userId: mockData.userId
+    });
+
+    beforeAll(() => {
+      usedState = initialState;
+    });
+
+    beforeEach(() => {
+      mockServiceMethodReturnValue('getAllForUser', []);
+    });
+
+    it('should dispatch a new LoadNewAlerts action after every interval', () => {
+      // TODO: figure this out
+    });
+  });
+
+  describe('setReadAlert$', () => {
+    const setReadSingleAction = new SetReadAlert({
+      personId: mockData.personId,
+      alertIds: mockData.alertId
+    });
+    const setReadMultipleAction = new SetReadAlert({
+      personId: mockData.personId,
+      alertIds: [mockData.alertId, mockData.alertId + 1]
+    });
+    const successAction = new ActionSuccessful({
+      successfulAction: 'alert updated'
+    });
+    const loadErrorAction = new AlertsLoadError(
+      new Error('Unable to update alert')
+    );
+    describe('with initialState', () => {
+      beforeAll(() => {
+        usedState = initialState;
+      });
+      beforeEach(() => {
+        mockServiceMethodReturnValue('setAlertAsRead', []);
+      });
+      it('should return nothing when calling with a single id', () => {
+        expectInNoOut(effects.setReadAlert$, setReadSingleAction);
+      });
+      it('should return nothing when calling with multiple ids', () => {
+        expectInNoOut(effects.setReadAlert$, setReadMultipleAction);
+      });
+    });
+    describe('with loaded state', () => {
+      beforeAll(() => {
+        usedState = { ...initialState, loaded: true };
+      });
+      beforeEach(() => {
+        mockServiceMethodReturnValue('setAlertAsRead', []);
+      });
+      it('should trigger an api call with the loaded state when calling with a single id', () => {
+        expectInAndOut(
+          effects.setReadAlert$,
+          setReadSingleAction,
+          successAction
+        );
+      });
+      it('should trigger an api call with the loaded state when calling with multiple ids', () => {
+        expectInAndOut(
+          effects.setReadAlert$,
+          setReadMultipleAction,
+          successAction
+        );
+      });
+    });
+    describe('with loaded and failing api call', () => {
+      beforeAll(() => {
+        usedState = {
+          ...initialState,
+          loaded: true,
+          list: []
+        };
+      });
+      beforeEach(() => {
+        mockServiceMethodError('setAlertAsRead', 'failed');
+      });
+      it('should return a error action when calling with a single id', () => {
+        expectInAndOut(
+          effects.setReadAlert$,
+          setReadSingleAction,
+          loadErrorAction
+        );
+      });
+      it('should return a error action when calling with multiple ids', () => {
+        expectInAndOut(
+          effects.setReadAlert$,
+          setReadMultipleAction,
+          loadErrorAction
+        );
       });
     });
   });
