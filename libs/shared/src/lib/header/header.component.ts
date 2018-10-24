@@ -7,5 +7,5 @@ import { HeaderViewModel } from './header.viewmodel';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
-  constructor(public vm: HeaderViewModel) {}
+  constructor(public headerViewModel: HeaderViewModel) {}
 }
