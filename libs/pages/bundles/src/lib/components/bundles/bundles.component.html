@@ -1,4 +1,4 @@
-<campus-tool-bar [fixed]="toolbarFixed">
+<campus-page-bar>
   <!-- TODO generic input needs to be replaced by the campus filter input -->
   <input #filterInput
          type="text"
@@ -8,10 +8,8 @@
                  (click)="clickChangeListFormat(listFormatEnum.GRID)"></campus-button>
   <campus-button iconClass="icon-tasks"
                  (click)="clickChangeListFormat(listFormatEnum.LINE)"></campus-button>
-
-</campus-tool-bar>
+</campus-page-bar>
 <div class="pages-bundles__container"
-     [ngClass]="{'pages-bundles__container--fixed': toolbarFixed}"
      *ngIf="learningArea$|async as learningArea">
   <campus-page-header [title]="learningArea.name"
                       [subtitle]="'Bundels'"
