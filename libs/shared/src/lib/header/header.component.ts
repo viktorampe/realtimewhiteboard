@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { HeaderViewModel } from './header.viewmodel';
 
 @Component({
@@ -6,8 +6,6 @@ import { HeaderViewModel } from './header.viewmodel';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
   constructor(public vm: HeaderViewModel) {}
-
-  ngOnInit() {}
 }
