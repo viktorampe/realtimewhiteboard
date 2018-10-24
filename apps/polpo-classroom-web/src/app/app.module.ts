@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { DalModule } from '@campus/dal';
+import { SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
@@ -24,6 +25,7 @@ import { AppComponent } from './app.component';
   imports: [
     UiModule,
     BrowserModule,
+    SharedModule.forRoot(environment.features),
     BrowserAnimationsModule,
     NxModule.forRoot(),
     DalModule.forRoot({ apiBaseUrl: environment.APIBase }),

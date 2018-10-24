@@ -16,6 +16,7 @@ import {
 } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { AppBarComponent } from './app-bar/app-bar.component';
+import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
 import { ButtonComponent } from './button/button.component';
 import { BorderDirective } from './button/directives/button-border.directive';
 import { CircleDirective } from './button/directives/button-circle.directive';
@@ -26,6 +27,7 @@ import { WarningDirective } from './button/directives/button-warning.directive';
 import { ConfirmableSelectComponent } from './confirmable-select/confirmable-select.component';
 import { ContentPreviewComponent } from './content-preview/content-preview.component';
 import { ContentThumbnailComponent } from './content-thumbnail/content-thumbnail.component';
+import { DropdownMenuComponent } from './dropdown-menu/dropdown-menu.component';
 import { EditableInlineTagListComponent } from './editable-inline-tag-list/editable-inline-tag-list.component';
 import { FileExtensionComponent } from './file-extension/file-extension.component';
 import { FilterTextInputComponent } from './filter-text-input/filter-text-input.component';
@@ -36,6 +38,7 @@ import {
   ListViewComponent,
   ListViewItemDirective
 } from './list-view/list-view.component';
+import { NotificationDropdownItemComponent } from './notification-dropdown-item/notification-dropdown-item.component';
 import { PageHeaderComponent } from './page-header/page-header.component';
 import { PersonBadgeComponent } from './person-badge/person-badge.component';
 import { PersonInitialsPipe } from './person-badge/pipes/person-initials.pipe';
@@ -48,12 +51,8 @@ import { SideSheetBodyDirective } from './side-sheet/directives/side-sheet-body.
 import { SideSheetHeaderDirective } from './side-sheet/directives/side-sheet-header.directive';
 import { SideSheetPageDirective } from './side-sheet/directives/side-sheet-page.directive';
 import { SideSheetComponent } from './side-sheet/side-sheet.component';
-import { ToolBarComponent } from './tool-bar/tool-bar.component';
 import { TreeNavComponent } from './tree-nav/tree-nav.component';
 import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness.pipe';
-import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
-import { DropdownMenuComponent } from './dropdown-menu/dropdown-menu.component';
-import { NotificationDropdownItemComponent } from './notification-dropdown-item/notification-dropdown-item.component';
 
 @NgModule({
   imports: [
@@ -118,7 +117,6 @@ import { NotificationDropdownItemComponent } from './notification-dropdown-item/
     WarningDirective,
     DisabledDirective,
     TreeNavComponent,
-    ToolBarComponent,
     BreadcrumbsComponent,
     DropdownMenuComponent,
     NotificationDropdownItemComponent
@@ -161,7 +159,6 @@ import { NotificationDropdownItemComponent } from './notification-dropdown-item/
     WarningDirective,
     DisabledDirective,
     TreeNavComponent,
-    ToolBarComponent,
     BreadcrumbsComponent,
     DropdownMenuComponent,
     NotificationDropdownItemComponent

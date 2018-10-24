@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { PagesSharedModule } from '@campus/pages/shared';
+import { SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
+import { BundleDetailComponent } from './components/bundle-detail/bundle-detail.component';
 import { BundlesViewModel } from './components/bundles.viewmodel';
 import { BundlesComponent } from './components/bundles/bundles.component';
 import { InfoPanelBundleComponent } from './components/info-panel/info-panel-bundle/info-panel-bundle.component';
@@ -9,14 +11,14 @@ import { InfoPanelContentComponent } from './components/info-panel/info-panel-co
 import { InfoPanelContentsComponent } from './components/info-panel/info-panel-contents/info-panel-contents.component';
 import { LearningAreasComponent } from './components/learning-areas/learning-areas.component';
 import { PagesBundlesRoutingModule } from './pages-bundles-routing.module';
-import { BundleDetailComponent } from './components/bundle-detail/bundle-detail.component';
 
 @NgModule({
   imports: [
     CommonModule,
     PagesBundlesRoutingModule,
     UiModule,
-    PagesSharedModule
+    PagesSharedModule,
+    SharedModule
   ],
   declarations: [
     LearningAreasComponent,
