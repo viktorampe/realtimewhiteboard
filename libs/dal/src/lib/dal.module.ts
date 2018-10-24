@@ -64,6 +64,7 @@ import { LEARNINGAREA_SERVICE_TOKEN } from './learning-area/learning-area.servic
 import { AuthService, AuthServiceToken } from './persons/auth-service';
 import { StudentContentStatusService } from './student-content-status/student-content-status.service';
 import { STUDENT_CONTENT_STATUS_SERVICE_TOKEN } from './student-content-status/student-content-status.service.interface';
+import { HumanDateTimePipe } from './human-date-time.pipe';
 
 interface DalOptions {
   apiBaseUrl: string;
@@ -161,7 +162,9 @@ interface DalOptions {
       useClass: StudentContentStatusService
     },
     { provide: AuthServiceToken, useClass: AuthService }
-  ]
+  ],
+  declarations: [HumanDateTimePipe],
+  exports: [HumanDateTimePipe]
 })
 export class DalModule {
   constructor() {}
