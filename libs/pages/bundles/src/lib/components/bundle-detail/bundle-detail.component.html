@@ -1,12 +1,13 @@
 <campus-page-bar>
-  <campus-button [iconClass]="'icon-timeline'"
-                 (click)="setListFormat(listFormat.LINE)"></campus-button>
-  <campus-button [iconClass]="'icon-checklist'"
-                 (click)="setListFormat(listFormat.GRID)"></campus-button>
   <campus-filter-text-input theme="dark"
                             (filterTextChange)="onChangeFilterInput($event)"
                             [filterText]="filterInput$|async"
                             class="pages__toolbar__filter"></campus-filter-text-input>
+  <div class="divider"></div>
+  <campus-button [iconClass]="'icon-timeline'"
+                 (click)="setListFormat(listFormat.LINE)"></campus-button>
+  <campus-button [iconClass]="'icon-checklist'"
+                 (click)="setListFormat(listFormat.GRID)"></campus-button>
 </campus-page-bar>
 
 <campus-side-sheet [isOpenOnInit]="true"
