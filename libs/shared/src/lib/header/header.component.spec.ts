@@ -53,7 +53,7 @@ describe('HeaderComponent', () => {
         fixture.debugElement.query(By.css('.shared-header__app-bar__messages'))
       ).toBeTruthy();
     });
-    it('should show the feature components if false', () => {
+    it('should not show the feature components if false', () => {
       component.enableAlerts = false;
       component.enableMessages = false;
       fixture.detectChanges();
