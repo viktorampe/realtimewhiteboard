@@ -53,19 +53,29 @@ export const getById = createSelector(
   (state: State, props: { id: number }) => state.entities[props.id]
 );
 
+/**
+ * returns array of Alerts that are unread
+ * @example
+ * alert$: AlertQueueInterface = this.store.pipe(select(AlertQueries.getUnread));
+ */
 export const getUnread = createSelector(selectAlertState, (state: State) =>
   Object.entries(state.entities)
     .filter(([key, value]) => !value.read)
-    .map(([key, value]) => ({ [key]: value }))
+    .map(([key, value]) => state.entities[key])
 );
 
+/**
+ * returns array of Alerts with a validFrom >= a timeThreshold
+ * @example
+ * alert$: AlertQueueInterface = select(AlertQueries.getRecentByDate,
+ *    {timeThreshold: someDateValue})
+ */
 export const getRecentByDate = createSelector(
   selectAlertState,
   (state: State, props: { timeThreshold: Date }) =>
     Object.entries(state.entities)
       .filter(
         ([key, value]) => new Date(value.validFrom) >= props.timeThreshold
-        // value.validFrom.toString() >= props.timeThreshold.toString()
       )
-      .map(([key, value]) => ({ [key]: value }))
+      .map(([key, value]) => state.entities[key])
 );
