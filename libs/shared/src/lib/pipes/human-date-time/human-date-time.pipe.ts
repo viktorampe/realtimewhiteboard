@@ -91,7 +91,7 @@ export class HumanDateTimePipe implements PipeTransform {
    * @private
    * @memberof HumanDateTimePipe
    */
-  private maxDaysBackInSeconds = this.dayInSeconds * 7;
+  private weekInSeconds = this.dayInSeconds * 7;
 
   /**
    * takes a date object and transforms it to a human readable string
@@ -109,44 +109,41 @@ export class HumanDateTimePipe implements PipeTransform {
       const differenceInSeconds: number =
         Math.round(currentDate.getTime() / 1000) - valueInSeconds;
 
-      if (differenceInSeconds < this.minuteInSeconds) {
-        return HumanDateTimePipe.just;
-      } else if (differenceInSeconds < this.hourInSeconds) {
-        const minutes: number = Math.floor(
-          differenceInSeconds / this.minuteInSeconds
-        );
-        return (
-          minutes.toString() +
-          ' ' +
-          (minutes > 1
-            ? HumanDateTimePipe.minutes
-            : HumanDateTimePipe.singleMinute)
-        );
-      } else if (differenceInSeconds < this.dayInSeconds) {
-        const hours: number = Math.floor(
-          differenceInSeconds / this.hourInSeconds
-        );
-        return (
-          hours.toString() +
-          ' ' +
-          (hours > 1 ? HumanDateTimePipe.hours : HumanDateTimePipe.singleHour)
-        );
-      } else if (differenceInSeconds < this.maxDaysBackInSeconds) {
-        const daysBack: number = Math.floor(
-          differenceInSeconds / this.dayInSeconds
-        );
-        let actualDay: number = currentDate.getDay() - daysBack;
-        if (actualDay < 0) {
-          actualDay = HumanDateTimePipe.weekdays.length - Math.abs(actualDay);
-        }
-        return HumanDateTimePipe.weekdays[actualDay];
-      } else {
-        // for some reason getting a localized date string is not working in tests
-        // in an ideal world we could use value.toLocaleDateString('nl-BE') then again in a ideal world Javascript wouldnt exist either
-        const day = value.getDate();
-        const month = value.getMonth() + 1;
-        const year = value.getFullYear();
-        return day + '/' + month + '/' + year;
+      switch (true) {
+        case differenceInSeconds < this.minuteInSeconds:
+          return HumanDateTimePipe.just;
+        case differenceInSeconds < this.hourInSeconds:
+          const minutes: number = Math.floor(
+            differenceInSeconds / this.minuteInSeconds
+          );
+          return `${minutes} ${
+            minutes > 1
+              ? HumanDateTimePipe.minutes
+              : HumanDateTimePipe.singleMinute
+          }`;
+        case differenceInSeconds < this.dayInSeconds:
+          const hours: number = Math.floor(
+            differenceInSeconds / this.hourInSeconds
+          );
+          return `${hours} ${
+            hours > 1 ? HumanDateTimePipe.hours : HumanDateTimePipe.singleHour
+          }`;
+        case differenceInSeconds < this.weekInSeconds:
+          const daysBack: number = Math.floor(
+            differenceInSeconds / this.dayInSeconds
+          );
+          let actualDay: number = currentDate.getDay() - daysBack;
+          if (actualDay < 0) {
+            actualDay = HumanDateTimePipe.weekdays.length - Math.abs(actualDay);
+          }
+          return HumanDateTimePipe.weekdays[actualDay];
+        default:
+          // for some reason getting a localized date string is not working in tests
+          // in an ideal world we could use value.toLocaleDateString('nl-BE') then again in a ideal world Javascript wouldnt exist either
+          const day = value.getDate();
+          const month = value.getMonth() + 1;
+          const year = value.getFullYear();
+          return day + '/' + month + '/' + year;
       }
     }
     return '';
