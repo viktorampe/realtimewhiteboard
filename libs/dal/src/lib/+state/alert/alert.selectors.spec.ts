@@ -2,10 +2,26 @@ import { AlertQueries } from '.';
 import { AlertQueueInterface } from '../../+models';
 import { State } from './alert.reducer';
 
+let mockData: {
+  timeStamp: Date;
+};
+
+function addMinutes(date: Date, minutes: number): Date {
+  return new Date(date.getTime() + minutes * 60000);
+}
+
 describe('Alert Selectors', () => {
+  mockData = { timeStamp: new Date(1983, 3, 6) };
+
   function createAlert(id: number): AlertQueueInterface | any {
     return {
-      id: id
+      id: id,
+      // Adds the id in minutes to the validFrom Date
+      // Since the ids are 1 -> 4, this gives 4 alerts with an interval of 1 minute
+      validFrom: addMinutes(mockData.timeStamp, id),
+      // Returns a boolean based on the id
+      // Even ids return true, odd ids return false
+      read: Number.isInteger(id / 2)
     };
   }
 
@@ -89,6 +105,18 @@ describe('Alert Selectors', () => {
     it('getById() should return undefined if the entity is not present', () => {
       const results = AlertQueries.getById(storeState, { id: 9 });
       expect(results).toBe(undefined);
+    });
+
+    it('getUnread() should return alerts with the read property set to false', () => {
+      const results = AlertQueries.getUnread(storeState);
+      expect(results).toEqual([createAlert(1), createAlert(3)]);
+    });
+
+    it('getRecent() should return alerts with the ValidFrom property >= the thresholdDate', () => {
+      const results = AlertQueries.getRecentByDate(storeState, {
+        timeThreshold: addMinutes(mockData.timeStamp, 2)
+      });
+      expect(results).toEqual([createAlert(2), createAlert(3), createAlert(4)]);
     });
   });
 });

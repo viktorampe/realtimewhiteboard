@@ -15,7 +15,7 @@ describe('AlertEffects', () => {
   let effects: AlertsEffects;
   let usedState: any;
 
-  const mockData = { userId: 1, updateTime: new Date(1983, 4, 6) };
+  const mockData = { userId: 1, updateTime: new Date(1983, 3, 6) };
 
   const expectInAndOut = (
     effect: Observable<any>,
