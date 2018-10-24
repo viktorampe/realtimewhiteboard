@@ -27,16 +27,11 @@ export class UserEffects {
   loadUser$ = this.dataPersistence.fetch(UserActionTypes.LoadUser, {
     run: (action: LoadUser, state: DalState) => {
       if (!action.payload.force && state.user.loaded) return;
-      return this.authService
-        .login({
-          username: action.payload.username,
-          password: action.payload.password
+      return this.authService.getCurrent().pipe(
+        map(r => {
+          return new fromUserActions.UserLoaded(r);
         })
-        .pipe(
-          map(r => {
-            return new fromUserActions.UserLoaded(r.user);
-          })
-        );
+      );
     },
     onError: (action: LoadUser, error) => {
       return new UserLoadError(error);
