@@ -1,0 +1,7 @@
+$shared-bg-color-1: #32323a !default;
+
+@import './header/header.component.theme';
+
+@mixin shared-theme() {
+  @include shared-header();
+}

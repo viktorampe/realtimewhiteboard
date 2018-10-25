@@ -1,0 +1,9 @@
+.shared-header {
+  &__page-bar {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    padding-left: 10px;
+  }
+}

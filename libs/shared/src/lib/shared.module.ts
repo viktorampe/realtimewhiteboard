@@ -1,9 +1,33 @@
-import { NgModule } from '@angular/core';
+import { LayoutModule } from '@angular/cdk/layout';
+import { PortalModule } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
+import { ModuleWithProviders, NgModule } from '@angular/core';
+import { UiModule } from '@campus/ui';
+import { PageBarContainerComponent } from './components/page-bar-container/page-bar-container.component';
 import { HeaderComponent } from './header/header.component';
+import {
+  EnvironmentFeaturesInterface,
+  ENVIRONMENT_FEATURES_TOKEN
+} from './interfaces';
 @NgModule({
-  imports: [CommonModule],
-  declarations: [HeaderComponent],
-  exports: [HeaderComponent]
+  imports: [CommonModule, UiModule, PortalModule, LayoutModule],
+  declarations: [HeaderComponent, PageBarContainerComponent],
+  exports: [
+    HeaderComponent,
+    PortalModule,
+    LayoutModule,
+    PageBarContainerComponent
+  ]
 })
-export class SharedModule {}
+export class SharedModule {
+  static forRoot(
+    environmentFeatures: EnvironmentFeaturesInterface
+  ): ModuleWithProviders {
+    return {
+      ngModule: SharedModule,
+      providers: [
+        { provide: ENVIRONMENT_FEATURES_TOKEN, useValue: environmentFeatures }
+      ]
+    };
+  }
+}

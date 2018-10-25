@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {
   BundleInterface,
   ContentInterface,
@@ -22,13 +22,12 @@ import { BundlesViewModel } from '../bundles.viewmodel';
   templateUrl: './bundles.component.html',
   styleUrls: ['./bundles.component.scss']
 })
-export class BundlesComponent implements OnInit {
+export class BundlesComponent {
   protected listFormatEnum = ListFormat;
 
   learningArea$: Observable<LearningAreaInterface> = this.bundlesViewModel
     .activeLearningArea$;
 
-  toolbarFixed: boolean;
   listFormat$: Observable<ListFormat> = this.bundlesViewModel.listFormat$;
   filterInput$ = new BehaviorSubject<string>('');
 
@@ -74,10 +73,6 @@ export class BundlesComponent implements OnInit {
 
   //
   constructor(private bundlesViewModel: BundlesViewModel) {}
-
-  ngOnInit(): void {
-    this.toolbarFixed = true;
-  }
 
   /**
    * changes the filter's input

@@ -51,7 +51,7 @@
     "body": [
       "expect(",
       "\tfixture.debugElement.query(By.css('${1:css-selector}'))",
-      ").toBeDefined();"
+      ").toBeTruthy();"
     ]
   },
   "angular test if element is not present in dom": {
@@ -59,7 +59,7 @@
     "body": [
       "expect(",
       "\tfixture.debugElement.query(By.css('${1:css-selector}'))",
-      ").toBeNull();"
+      ").toBeFalsy();"
     ]
   },
   "angular empty spec file to test content projection in component": {
