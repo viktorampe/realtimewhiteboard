@@ -1,0 +1,17 @@
+<div class="ui-dropdown-menu-item">
+  <div>
+    <div *ngIf="title"
+         class="ui-dropdown-menu-item__title">
+      <div>{{title}}</div>
+    </div>
+    <div>
+      <a href="{{link}}">
+        <i *ngIf="icon && !image"
+           [className]="icon"></i>
+        <img *ngIf="image && !icon"
+             src="{{image}}"
+             alt="{{imageAltText}}" /> {{description}}
+      </a>
+    </div>
+  </div>
+</div>

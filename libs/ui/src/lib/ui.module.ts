@@ -27,6 +27,7 @@ import { WarningDirective } from './button/directives/button-warning.directive';
 import { ConfirmableSelectComponent } from './confirmable-select/confirmable-select.component';
 import { ContentPreviewComponent } from './content-preview/content-preview.component';
 import { ContentThumbnailComponent } from './content-thumbnail/content-thumbnail.component';
+import { DropdownMenuItemComponent } from './dropdown-menu-item/dropdown-menu-item.component';
 import { DropdownMenuComponent } from './dropdown-menu/dropdown-menu.component';
 import { EditableInlineTagListComponent } from './editable-inline-tag-list/editable-inline-tag-list.component';
 import { FileExtensionComponent } from './file-extension/file-extension.component';
@@ -119,7 +120,8 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     TreeNavComponent,
     BreadcrumbsComponent,
     DropdownMenuComponent,
-    NotificationDropdownItemComponent
+    NotificationDropdownItemComponent,
+    DropdownMenuItemComponent
   ],
   exports: [
     FilterTextInputComponent,
@@ -161,7 +163,8 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     TreeNavComponent,
     BreadcrumbsComponent,
     DropdownMenuComponent,
-    NotificationDropdownItemComponent
+    NotificationDropdownItemComponent,
+    DropdownMenuItemComponent
   ]
 })
 export class UiModule {}
