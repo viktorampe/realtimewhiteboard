@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { Resolve } from '@angular/router';
 import {
   AuthServiceInterface,
-  AuthServiceToken,
+  AUTH_SERVICE_TOKEN,
   LoadUser,
   RemoveUser,
   userQuery,
@@ -24,7 +24,7 @@ export class LoginPageViewModel implements Resolve<boolean> {
 
   constructor(
     private store: Store<UserState>,
-    @Inject(AuthServiceToken) private authService: AuthServiceInterface
+    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
   ) {
     store.pipe(select(userQuery.getCurrentUser)).subscribe(data => {
       this.loggedIn = data != null;

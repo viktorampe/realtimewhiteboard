@@ -20,7 +20,9 @@ export enum UnlockedContentsActionTypes {
 export class LoadUnlockedContents implements Action {
   readonly type = UnlockedContentsActionTypes.LoadUnlockedContents;
 
-  constructor(public payload: { force?: boolean } = {}) {}
+  constructor(
+    public payload: { force?: boolean; userId: number } = { userId: null }
+  ) {}
 }
 
 export class UnlockedContentsLoaded implements Action {

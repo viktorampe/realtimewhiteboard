@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { map } from 'rxjs/operators';
+import { DalState } from '..';
 import {
   StudentContentStatusServiceInterface,
   STUDENT_CONTENT_STATUS_SERVICE_TOKEN
@@ -12,7 +13,6 @@ import {
   ContentStatusesLoadError,
   LoadContentStatuses
 } from './content-status.actions';
-import { State } from './content-status.reducer';
 
 // TODO: the injected service will have to be replaced by the 'student content status service'-token
 
@@ -22,7 +22,7 @@ export class ContentStatusesEffects {
   loadContentStatuses$ = this.dataPersistence.fetch(
     ContentStatusesActionTypes.LoadContentStatuses,
     {
-      run: (action: LoadContentStatuses, state: any) => {
+      run: (action: LoadContentStatuses, state: DalState) => {
         if (!action.payload.force && state.contentStatuses.loaded) return;
         return this.contentStatusService
           .getAllConstentStatuses()
@@ -40,7 +40,7 @@ export class ContentStatusesEffects {
 
   constructor(
     private actions: Actions,
-    private dataPersistence: DataPersistence<State>,
+    private dataPersistence: DataPersistence<DalState>,
     @Inject(STUDENT_CONTENT_STATUS_SERVICE_TOKEN)
     private contentStatusService: StudentContentStatusServiceInterface
   ) {}

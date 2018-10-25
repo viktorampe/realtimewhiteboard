@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { map } from 'rxjs/operators';
+import { DalState } from '..';
 import {
   UnlockedContentServiceInterface,
   UNLOCKED_CONTENT_SERVICE_TOKEN
@@ -12,7 +13,6 @@ import {
   UnlockedContentsLoaded,
   UnlockedContentsLoadError
 } from './unlocked-content.actions';
-import { State } from './unlocked-content.reducer';
 
 @Injectable()
 export class UnlockedContentsEffects {
@@ -20,11 +20,10 @@ export class UnlockedContentsEffects {
   loadUnlockedContents$ = this.dataPersistence.fetch(
     UnlockedContentsActionTypes.LoadUnlockedContents,
     {
-      run: (action: LoadUnlockedContents, state: any) => {
+      run: (action: LoadUnlockedContents, state: DalState) => {
         if (!action.payload.force && state.unlockedContents.loaded) return;
-        //todo attach current user
         return this.unlockedContentService
-          .getAllForUser(1)
+          .getAllForUser(action.payload.userId)
           .pipe(
             map(
               unlockedContents =>
@@ -40,7 +39,7 @@ export class UnlockedContentsEffects {
 
   constructor(
     private actions: Actions,
-    private dataPersistence: DataPersistence<State>,
+    private dataPersistence: DataPersistence<DalState>,
     @Inject(UNLOCKED_CONTENT_SERVICE_TOKEN)
     private unlockedContentService: UnlockedContentServiceInterface
   ) {}

@@ -1,4 +1,4 @@
-import { Injectable, InjectionToken } from '@angular/core';
+import { Injectable } from '@angular/core';
 import {
   LoopBackAuth,
   PersonApi,
@@ -10,12 +10,14 @@ import {
   LoginCredentials
 } from './auth-service.interface';
 
-export const AuthServiceToken = new InjectionToken('AuthService');
-
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService implements AuthServiceInterface {
+  get userId(): number {
+    return this.personApi.getCurrentId();
+  }
+
   constructor(private personApi: PersonApi, private auth: LoopBackAuth) {}
 
   /**
