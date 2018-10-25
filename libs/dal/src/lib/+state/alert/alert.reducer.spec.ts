@@ -1,6 +1,6 @@
 import { Update } from '@ngrx/entity';
 import { AlertActions } from '.';
-import { AlertQueueInterface } from '../../+models';
+import { AlertQueueInterface } from './../../+models/AlertQueue.interface';
 import { initialState, reducer, State } from './alert.reducer';
 
 /**
@@ -64,9 +64,11 @@ function createState(
 describe('Alerts Reducer', () => {
   let alerts: AlertQueueInterface[];
   let updateTime: Date;
+  let newUpdateTime: Date;
   beforeEach(() => {
     alerts = [createAlert(1), createAlert(2), createAlert(3)];
-    updateTime = new Date(1983, 4, 6);
+    updateTime = new Date(1983, 3, 6);
+    newUpdateTime = new Date(1983, 3, 6, 1);
   });
 
   describe('unknown action', () => {
@@ -94,6 +96,31 @@ describe('Alerts Reducer', () => {
       const action = new AlertActions.AlertsLoadError(error);
       const result = reducer(initialState, action);
       expect(result).toEqual(createState([], false, null, error));
+    });
+  });
+
+  describe('new loaded action', () => {
+    it('should add new alerts', () => {
+      const loadedState = createState(alerts, true, updateTime);
+      const newAlerts: AlertQueueInterface[] = [
+        createAlert(3),
+        createAlert(4),
+        createAlert(5)
+      ];
+
+      const action = new AlertActions.NewAlertsLoaded({
+        alerts: newAlerts,
+        timeStamp: newUpdateTime
+      });
+      const result = reducer(loadedState, action);
+
+      // merge arrays and eliminate duplicates
+      const mergedAlerts: AlertQueueInterface[] = alerts;
+      newAlerts.map(a => {
+        if (!alerts.filter(x => x.id === a.id).length) mergedAlerts.push(a);
+      });
+
+      expect(result).toEqual(createState(mergedAlerts, true, newUpdateTime));
     });
   });
 

@@ -31,7 +31,7 @@ export function reducer(state = initialState, action: AlertsActions): State {
     }
 
     case AlertsActionTypes.NewAlertsLoaded: {
-      return adapter.addAll(action.payload.alerts, {
+      return adapter.addMany(action.payload.alerts, {
         ...state,
         lastUpdateTimeStamp: action.payload.timeStamp
       });
