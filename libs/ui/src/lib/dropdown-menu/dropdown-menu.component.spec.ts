@@ -98,7 +98,7 @@ describe('DropdownMenuComponent', () => {
     expect(header).toBeFalsy();
   });
 
-  describe('menu with header', () => {
+  describe('dropdown with header', () => {
     beforeEach(() => {
       component.showHeader = true;
       component.open();
@@ -115,6 +115,10 @@ describe('DropdownMenuComponent', () => {
       expect(
         fixture.debugElement.query(By.css(`.${mockData.headerIcon}`))
       ).toBeTruthy();
+
+      component.headerIcon = '';
+      fixture.detectChanges();
+      expect(fixture.debugElement.query(By.css('h3 i'))).toBeFalsy();
     });
 
     it('should show the text if provided', () => {
