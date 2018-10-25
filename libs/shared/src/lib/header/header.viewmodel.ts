@@ -60,10 +60,6 @@ export class HeaderViewModel implements StateResolverInterface {
   ) {}
 
   resolve(): Observable<boolean> {
-    console.log(
-      '%cresolving shared headerViewModel',
-      'color: red; font-weight: bold;'
-    );
     this.loadStateStreams();
     this.loadDisplayStream();
     this.loadFeatureToggles();
