@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { DalModule } from '@campus/dal';
-import { SharedModule } from '@campus/shared';
+import { HeaderViewModel, SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
@@ -56,7 +56,12 @@ import { AppComponent } from './app.component';
           path: 'alerts',
           loadChildren: '@campus/pages/alerts#PagesAlertsModule'
         },
-        { path: '', redirectTo: 'bundles', pathMatch: 'full' },
+        {
+          path: '',
+          redirectTo: 'bundles',
+          pathMatch: 'full',
+          resolve: HeaderViewModel
+        },
         {
           path: 'bundles',
           loadChildren: '@campus/pages/bundles#PagesBundlesModule'

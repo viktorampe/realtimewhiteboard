@@ -7,9 +7,11 @@ import {
   MessageInterface,
   PersonInterface
 } from '@campus/dal';
-import { Store } from '@ngrx/store';
+import { StateResolver, StateResolverInterface } from '@campus/pages/shared';
+import { Action, select, Selector, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, shareReplay } from 'rxjs/operators';
+import { UserQueries } from '../../../../dal/src/lib/+state/user';
 import {
   EnvironmentFeaturesInterface,
   ENVIRONMENT_FEATURES_TOKEN
@@ -35,72 +37,98 @@ export interface DropdownItemInterface {
 @Injectable({
   providedIn: 'root'
 })
-export class HeaderViewModel {
+export class HeaderViewModel implements StateResolverInterface {
+  //publics
   enableAlerts: boolean;
   enableMessages: boolean;
+  //state presentation streams
   breadCrumbs$: Observable<BreadCrumbLinkInterface[]>; // TODO to be replaced by custom interface once the breadcrumbsComponent is done
   currentUser$: Observable<PersonInterface>;
-  recentAlerts$: Observable<DropdownItemInterface>; //TODO replace interface with the actual dropdown interface
+  //presentation stream
+  recentAlerts$: Observable<DropdownItemInterface[]>; //TODO replace interface with the actual dropdown interface
   recentMessages$: Observable<DropdownItemInterface[]>; //TODO replace interface with the actual dropdown interface
-
-  //TODO add correct custom interfaces
-
-  private currentRoute$: Observable<CurrentRouteInterface[]>;
+  //state source streams
   private alertsForUser$: Observable<AlertQueueInterface[]>;
-  private MessagesForUser$: Observable<MessageInterface[]>;
-  private UiState$: Observable<any>;
+  private messagesForUser$: Observable<MessageInterface[]>;
 
   constructor(
+    private stateResolver: StateResolver,
     @Inject(ENVIRONMENT_FEATURES_TOKEN)
     private environmentFeatures: EnvironmentFeaturesInterface,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     private store: Store<DalState>
-  ) {
+  ) {}
+
+  resolve(): Observable<boolean> {
+    console.log(
+      '%cresolving shared headerViewModel',
+      'color: red; font-weight: bold;'
+    );
+    this.loadStateStreams();
+    this.loadDisplayStream();
     this.loadFeatureToggles();
+    return this.stateResolver.resolve(
+      this.getLoadableActions(),
+      this.getResolvedQueries()
+    );
+  }
+
+  getLoadableActions(): Action[] {
+    return [
+      // TODO add load actions, eg. new LearningAreaActions.LoadLearningAreas()
+    ];
+  }
+
+  getResolvedQueries(): Selector<object, boolean>[] {
+    return [
+      // TODO add loaded queries, eg. LearningAreaQueries.getLoaded
+    ];
   }
 
   //remark: i think these two getters can be removed and replaced by 2 load actions in the resolver
-  getNewAlerts() {
+  getNewAlerts(): void {
     //TODO update to the correct action
     // this.store.dispatch(new AlertQueries.getNewAlerts(this.authService.userId))
   }
-  getNewMessages() {
+  getNewMessages(): void {
     //TODO update to the correct action
     // this.store.dispatch(new MessageQueries.getNewMessages(this.authService.userId))
   }
 
-  setAlertAsRead(eventData: any) {
+  setAlertAsRead(eventData: any): void {
     //TODO update to correct action and update eventData to correct name and type
     // this.store.dispatch(new AlertQueries.SetReadAlert(eventData.alertId));
   }
-  setMessageAsRead(eventData: any) {
+  setMessageAsRead(eventData: any): void {
     //TODO update to correct action and update eventData to correct name and type
     // this.store.dispatch(new MessageQueries.SetMessageAsReadAction(eventData.alertId));
   }
 
-  private loadFeatureToggles() {
+  private loadStateStreams(): void {
+    //source state streams
+    // this.alertsForUser$ = this.store.pipe(
+    //   select(AlertQueries.getForUser, { userId: this.authService.userId })
+    // );
+    // this.messagesForUser$ = this.store.pipe(
+    //   select(MessageQueries.getForUser, { userId: this.authService.userId })
+    // );
+    //presentation state streams
+    this.currentUser$ = this.store.pipe(select(UserQueries.getCurrentUser));
+    // this.breadCrumbs$ = this.store.pipe(select(BreadCrumbsQueries.getAllLinks));
+  }
+
+  private loadDisplayStream(): void {
+    this.recentAlerts$ = this.getRecentAlerts(this.alertsForUser$);
+    this.recentMessages$ = this.getRecentMessages(this.messagesForUser$);
+  }
+
+  private loadFeatureToggles(): void {
     this.enableAlerts =
       this.environmentFeatures.alerts.enabled &&
       this.environmentFeatures.alerts.hasAppBarDropDown;
     this.enableMessages =
       this.environmentFeatures.messages.enabled &&
       this.environmentFeatures.messages.hasAppBarDropDown;
-  }
-
-  private getbreadCrumbs(
-    currentRoute$: Observable<CurrentRouteInterface>
-  ): Observable<BreadCrumbLinkInterface[]> {
-    return currentRoute$.pipe(
-      map(currentRoute => {
-        //TODO actually map to the interface
-        return <BreadCrumbLinkInterface[]>[
-          {
-            displayText: 'temp',
-            routerLink: '/'
-          }
-        ];
-      })
-    );
   }
 
   private getRecentAlerts(
@@ -114,7 +142,8 @@ export class HeaderViewModel {
             text: 'temp alert'
           }
         ];
-      })
+      }),
+      shareReplay(1)
     );
   }
 
@@ -129,7 +158,8 @@ export class HeaderViewModel {
             text: 'temp message'
           }
         ];
-      })
+      }),
+      shareReplay(1)
     );
   }
 }
