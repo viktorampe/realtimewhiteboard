@@ -1,3 +1,19 @@
-<p>
-  notification-dropdown-item works!
-</p>
+<a class="ui-notification-dropdown-item"
+   [class.ui-notification-dropdown-item--accent]="accented"
+   [class.ui-no-link]="!link"
+   [routerLink]="link">
+  <i *ngIf="icon"
+     class="ui-notification-dropdown-item-icon {{icon}}"></i>
+  <campus-person-badge *ngIf="person"
+                       class="ui-notification-dropdown-item-badge"
+                       [person]="person"
+                       [align]="'left'"
+                       [size]="'medium'"></campus-person-badge>
+  <div *ngIf="notificationDate"
+       class="ui-notification-dropdown-item-date">{{notificationDate}}</div><!-- TODO: '| humanDateTime' -->
+  <div *ngIf="titleText"
+       class="ui-notification-dropdown-item-title">{{titleText}}</div>
+  <div class="ui-notification-dropdown-item-text">{{notificationText}}<span *ngIf="accented && link">-> <span>Lees
+        meer...</span></span>
+  </div>
+</a>

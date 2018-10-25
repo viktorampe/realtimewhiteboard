@@ -1,4 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { RouterTestingModule } from '@angular/router/testing';
+import { PersonBadgeComponent } from '../person-badge/person-badge.component';
+import { PersonInitialsPipe } from '../person-badge/pipes/person-initials.pipe';
 import { NotificationDropdownItemComponent } from './notification-dropdown-item.component';
 
 describe('NotificationDropdownItemComponent', () => {
@@ -7,7 +11,12 @@ describe('NotificationDropdownItemComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [NotificationDropdownItemComponent]
+      imports: [RouterTestingModule],
+      declarations: [
+        NotificationDropdownItemComponent,
+        PersonBadgeComponent,
+        PersonInitialsPipe
+      ]
     }).compileComponents();
   }));
 
@@ -21,15 +30,121 @@ describe('NotificationDropdownItemComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should should show the users avatar, if provided', () => {});
+  it('should not show an icon', () => {
+    component.icon = null;
+    fixture.detectChanges();
 
-  it('should should show the users initials, if provided AND no avatar is provided', () => {});
+    const iconNode = fixture.debugElement.query(
+      By.css('i.ui-notification-dropdown-item-icon')
+    );
+    expect(iconNode).toBeNull();
+  });
 
-  it('should should show an icon, if provided AND no avatar or initials are provided', () => {});
+  it('should show an icon', () => {
+    component.icon = 'foo';
+    fixture.detectChanges();
 
-  it('should should show a title, if provided', () => {});
+    const iconNode = fixture.debugElement.query(
+      By.css('i.ui-notification-dropdown-item-icon')
+    );
+    expect(iconNode).toBeTruthy();
+    expect(iconNode.nativeElement.classList).toContain('foo');
+  });
 
-  it('should should show a title as a link, if both text and url are provided', () => {});
+  it('should show user badge', () => {
+    component.person = {
+      displayName: 'foo bar',
+      name: 'foo',
+      firstName: 'bar',
+      avatar: null
+    };
+    fixture.detectChanges();
 
-  it('should should show the notification date in a human readable format', () => {});
+    const badgeNode = fixture.debugElement.query(By.css('campus-person-badge'));
+    expect(badgeNode).toBeTruthy();
+  });
+
+  it('should not show a title', () => {
+    component.titleText = null;
+    fixture.detectChanges();
+
+    const textNode = fixture.debugElement.query(
+      By.css('.ui-notification-dropdown-item-title')
+    );
+    expect(textNode).toBeNull();
+  });
+
+  it('should show a title', () => {
+    component.titleText = 'foo';
+    fixture.detectChanges();
+
+    const textNode = fixture.debugElement.query(
+      By.css('.ui-notification-dropdown-item-title')
+    );
+    expect(textNode).toBeTruthy();
+    expect(textNode.nativeElement.textContent).toBe('foo');
+  });
+
+  it('should not show a description', () => {
+    component.notificationText = null;
+    fixture.detectChanges();
+
+    const textNode = fixture.debugElement.query(
+      By.css('.ui-notification-dropdown-item-text')
+    );
+    expect(textNode.nativeElement.textContent).toBe('');
+  });
+
+  it('should show a description', () => {
+    component.notificationText = 'foo';
+    fixture.detectChanges();
+
+    const textNode = fixture.debugElement.query(
+      By.css('.ui-notification-dropdown-item-text')
+    );
+    expect(textNode).toBeTruthy();
+    expect(textNode.nativeElement.textContent).toBe('foo');
+  });
+
+  it('should show a link if `accented=true`', () => {
+    component.accented = true;
+    fixture.detectChanges();
+
+    const textNode = fixture.debugElement.query(
+      By.css('.ui-notification-dropdown-item-text > span')
+    );
+    expect(textNode).toBeNull();
+  });
+
+  it('should not show a link if `accented=false`', () => {
+    component.accented = false;
+    fixture.detectChanges();
+
+    const textNode = fixture.debugElement.query(
+      By.css('.ui-notification-dropdown-item-text > span')
+    );
+    expect(textNode).toBeNull();
+  });
+
+  it('should show the notification date', () => {
+    // human readable with humanDateTime pipe
+    component.notificationDate = 'foo';
+    fixture.detectChanges();
+
+    const dateNode = fixture.debugElement.query(
+      By.css('.ui-notification-dropdown-item-date')
+    );
+    expect(dateNode).toBeTruthy();
+    expect(dateNode.nativeElement.textContent).toBe('foo');
+  });
+
+  it('should not show the notification date', () => {
+    component.notificationDate = null;
+    fixture.detectChanges();
+
+    const dateNode = fixture.debugElement.query(
+      By.css('.ui-notification-dropdown-item-date')
+    );
+    expect(dateNode).toBeNull();
+  });
 });

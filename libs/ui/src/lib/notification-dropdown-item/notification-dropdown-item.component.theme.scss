@@ -1,0 +1,38 @@
+@mixin ui-notification-dropdown-item() {
+  $ui-notification-dropdown-item-icon-color: $ui-font-color-inverse;
+  $ui-notification-dropdown-item-icon-bg-color: $ui-bg-color-5;
+  $ui-notification-dropdown-item-color: $ui-font-color-primary;
+  $ui-notification-dropdown-item-title-color: $ui-font-color-active-secundary;
+
+  .ui-notification-dropdown-item {
+    border-left: solid 3px transparent;
+    color: $ui-notification-dropdown-item-color;
+
+    &--accent &-icon {
+      background-color: $ui-notification-dropdown-item-title-color;
+    }
+
+    &--unread {
+      border-left: solid 3px $ui-notification-dropdown-item-title-color;
+    }
+
+    &-icon {
+      color: $ui-notification-dropdown-item-icon-color;
+      background-color: $ui-notification-dropdown-item-icon-bg-color;
+    }
+
+    &-date {
+      background-color: $ui-notification-dropdown-item-icon-color;
+    }
+
+    &-title {
+      font-weight: bold;
+      color: $ui-notification-dropdown-item-title-color;
+    }
+
+    // must add this style in theme, or it will not project to person-badge child component
+    .ui_person-badge__displayName {
+      display: none;
+    }
+  }
+}

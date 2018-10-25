@@ -1,15 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { BadgePerson } from '../person-badge/person-badge.component';
 
 @Component({
   selector: 'campus-notification-dropdown-item',
   templateUrl: './notification-dropdown-item.component.html',
-  styleUrls: [
-    './notification-dropdown-item.component.scss',
-    './notification-dropdown-item.component.theme.scss'
-  ]
+  styleUrls: ['./notification-dropdown-item.component.scss']
 })
-export class NotificationDropdownItemComponent implements OnInit {
-  constructor() {}
-
-  ngOnInit() {}
+export class NotificationDropdownItemComponent {
+  @Input() icon: string;
+  @Input() person: BadgePerson;
+  @Input() titleText: string;
+  @Input() link: string;
+  @Input() notificationText: string;
+  @Input() notificationDate: string;
+  @Input() accented: boolean;
 }
