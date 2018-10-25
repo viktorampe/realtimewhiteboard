@@ -5,13 +5,13 @@ import {
   AUTH_SERVICE_TOKEN,
   DalState,
   MessageInterface,
-  PersonInterface
+  PersonInterface,
+  UserQueries
 } from '@campus/dal';
 import { StateResolver, StateResolverInterface } from '@campus/pages/shared';
 import { Action, select, Selector, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
-import { UserQueries } from '../../../../dal/src/lib/+state/user';
 import {
   EnvironmentFeaturesInterface,
   ENVIRONMENT_FEATURES_TOKEN
