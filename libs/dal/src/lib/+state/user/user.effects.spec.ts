@@ -6,7 +6,7 @@ import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from 'jasmine-marbles';
 import { Observable, of } from 'rxjs';
 import { DalModule } from '../../dal.module';
-import { AuthServiceToken } from '../../persons/auth-service';
+import { AUTH_SERVICE_TOKEN } from '../../persons/auth-service.interface';
 import { LoadUser, RemoveUser, UserLoaded, UserRemoved } from './user.actions';
 import { UserEffects } from './user.effects';
 import { initialUserstate, UserState } from './user.reducer';
@@ -58,13 +58,13 @@ describe('UserEffects', () => {
 
   const jestMockTokenGetUserReturnValue = () => {
     jest
-      .spyOn(TestBed.get(AuthServiceToken), 'getCurrent')
+      .spyOn(TestBed.get(AUTH_SERVICE_TOKEN), 'getCurrent')
       .mockReturnValue(of(mockUser));
   };
 
   const jestMockTokenRemoveUserReturnValue = () => {
     jest
-      .spyOn(TestBed.get(AuthServiceToken), 'logout')
+      .spyOn(TestBed.get(AUTH_SERVICE_TOKEN), 'logout')
       .mockReturnValue(of(true));
   };
 
