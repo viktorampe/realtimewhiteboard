@@ -7,7 +7,17 @@ import { HeaderViewModel } from './header.viewmodel';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-  constructor(public vm: HeaderViewModel) {}
+  enableAlerts: boolean;
+  enableMessages: boolean;
 
-  ngOnInit() {}
+  constructor(public headerViewModel: HeaderViewModel) {}
+
+  ngOnInit(): void {
+    this.loadFeatureToggles();
+  }
+
+  private loadFeatureToggles() {
+    this.enableAlerts = this.headerViewModel.enableAlerts;
+    this.enableMessages = this.headerViewModel.enableMessages;
+  }
 }

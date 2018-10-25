@@ -1,0 +1,26 @@
+@mixin shared-header {
+  $shared-header__app-bar-height: 50px !default;
+  $shared-header__page-bar-height: 55px !default;
+  $shared-header__page-bar-background-color: $shared-bg-color-1 !default;
+  $shared-header__page-bar__divider-background-color: #057a74 !default;
+  $shared-header__page-bar__divider-height: 40px !default;
+  $shared-header__page-bar__divider-width: 2px !default;
+  $shared-header__page-bar__divider-marging-left-right: 10px !default;
+
+  .shared-header {
+    &__app-bar {
+      height: $shared-header__app-bar-height;
+    }
+    &__page-bar {
+      height: $shared-header__page-bar-height;
+      background-color: $shared-header__page-bar-background-color;
+      div.divider {
+        margin-left: $shared-header__page-bar__divider-marging-left-right;
+        margin-right: $shared-header__page-bar__divider-marging-left-right;
+        height: $shared-header__page-bar__divider-height;
+        width: $shared-header__page-bar__divider-width;
+        background-color: $shared-header__page-bar__divider-background-color;
+      }
+    }
+  }
+}

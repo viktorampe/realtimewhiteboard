@@ -6,13 +6,13 @@ import {
   LearningAreaServiceInterface,
   LEARNINGAREA_SERVICE_TOKEN
 } from '../../learning-area/learning-area.service.interface';
+import { DalState } from '../dal.state.interface';
 import {
   LearningAreasActionTypes,
   LearningAreasLoaded,
   LearningAreasLoadError,
   LoadLearningAreas
 } from './learning-area.actions';
-import { State } from './learning-area.reducer';
 
 @Injectable()
 export class LearningAreasEffects {
@@ -20,7 +20,7 @@ export class LearningAreasEffects {
   loadLearningAreas$ = this.dataPersistence.fetch(
     LearningAreasActionTypes.LoadLearningAreas,
     {
-      run: (action: LoadLearningAreas, state: any) => {
+      run: (action: LoadLearningAreas, state: DalState) => {
         if (!action.payload.force && state.learningAreas.loaded) return;
         return this.learningAreaService
           .getAll()
@@ -36,7 +36,7 @@ export class LearningAreasEffects {
 
   constructor(
     private actions: Actions,
-    private dataPersistence: DataPersistence<State>,
+    private dataPersistence: DataPersistence<DalState>,
     @Inject(LEARNINGAREA_SERVICE_TOKEN)
     private learningAreaService: LearningAreaServiceInterface
   ) {}
