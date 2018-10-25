@@ -1,12 +1,26 @@
-import {
-  Component,
-  Input,
-  OnInit,
-  ViewChild,
-  ViewEncapsulation
-} from '@angular/core';
+import { Component, Input, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material';
-
+/**
+ * Dropdown menu with optional header and a body with projected content.
+ *  - Usage: appears upon interaction with an element (e.g. button) or when a user performs a specific action.
+ *    Exposes an 'open' method for this purpose.
+ *  - Placement: the menu is positioned relative to both the element that generates them and the edges of the screen or browser.
+ *    They can appear in front of, beside, above, or below the element that generates them.
+ * @example
+ *  <campus-dropdown-menu #dropDown
+ *              [showHeader]="true"
+                headerIcon="icon-timeline"
+                linkText="alle meldingen"
+                linkUrl="/notifications"
+                newItemCount="16"
+                itemType="meldingen">
+      <div>I am projected inside the dropdown body</div>
+ *  </campus-dropdown-menu>
+ * @example
+ * @export
+ * @class DropdownMenuComponent
+ * @implements {OnInit}
+ */
 @Component({
   selector: 'campus-dropdown-menu',
   templateUrl: './dropdown-menu.component.html',
@@ -16,7 +30,7 @@ import { MatMenuTrigger } from '@angular/material';
   ],
   encapsulation: ViewEncapsulation.None
 })
-export class DropdownMenuComponent implements OnInit {
+export class DropdownMenuComponent {
   @Input() showHeader = false;
   @Input() headerIcon: string;
   @Input() itemType: string;
@@ -25,9 +39,6 @@ export class DropdownMenuComponent implements OnInit {
   @Input() linkUrl: string;
 
   @ViewChild(MatMenuTrigger) private trigger: MatMenuTrigger;
-  constructor() {}
-
-  ngOnInit() {}
 
   open() {
     this.trigger.openMenu();
