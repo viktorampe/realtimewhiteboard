@@ -114,7 +114,7 @@ describe('Alerts Reducer', () => {
       });
       const result = reducer(loadedState, action);
 
-      // merge arrays and eliminate duplicates
+      // merge arrays without duplicates
       const mergedAlerts: AlertQueueInterface[] = alerts;
       newAlerts.map(a => {
         if (!alerts.filter(x => x.id === a.id).length) mergedAlerts.push(a);
