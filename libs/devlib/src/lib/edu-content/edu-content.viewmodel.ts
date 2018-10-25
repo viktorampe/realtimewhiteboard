@@ -16,7 +16,9 @@ export class EduContentViewModel {
   constructor(private store: Store<EduContentReducer.State>) {}
 
   getAllEduContents() {
-    this.store.dispatch(new EduContentActions.LoadEduContents({ force: true }));
+    this.store.dispatch(
+      new EduContentActions.LoadEduContents({ force: true, userId: 11 }) //hard coded user id for testing purposes
+    );
   }
 
   getEduContent(id: number) {}

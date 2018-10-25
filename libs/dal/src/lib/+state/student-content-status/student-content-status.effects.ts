@@ -8,6 +8,7 @@ import {
   StudentContentStatusServiceInterface,
   STUDENT_CONTENT_STATUS_SERVICE_TOKEN
 } from '../../student-content-status/student-content-status.service.interface';
+import { DalState } from '../dal.state.interface';
 import {
   AddStudentContentStatus,
   LoadStudentContentStatuses,
@@ -16,7 +17,6 @@ import {
   StudentContentStatusesLoadError,
   UpdateStudentContentStatus
 } from './student-content-status.actions';
-import { State } from './student-content-status.reducer';
 
 @Injectable()
 export class StudentContentStatusesEffects {
@@ -24,7 +24,7 @@ export class StudentContentStatusesEffects {
   loadStudentContentStatuses$ = this.dataPersistence.fetch(
     StudentContentStatusesActionTypes.LoadStudentContentStatuses,
     {
-      run: (action: LoadStudentContentStatuses, state: any) => {
+      run: (action: LoadStudentContentStatuses, state: DalState) => {
         if (!action.payload.force && state.studentContentStatuses.loaded)
           return;
         return this.studentContentStatusesService
@@ -46,7 +46,7 @@ export class StudentContentStatusesEffects {
   updateStudentContentStatus$ = this.dataPersistence.optimisticUpdate(
     StudentContentStatusesActionTypes.UpdateStudentContentStatus,
     {
-      run: (action: UpdateStudentContentStatus, state: any) => {
+      run: (action: UpdateStudentContentStatus, state: DalState) => {
         const statusId = <number>action.payload.studentContentStatus.id;
 
         const newValue: StudentContentStatusInterface = {
@@ -77,7 +77,7 @@ export class StudentContentStatusesEffects {
   addStudentContentStatuses$ = this.dataPersistence.optimisticUpdate(
     StudentContentStatusesActionTypes.AddStudentContentStatus,
     {
-      run: (action: AddStudentContentStatus, state: any) => {
+      run: (action: AddStudentContentStatus, state: DalState) => {
         const newValue = action.payload.studentContentStatus;
 
         return this.studentContentStatusesService
@@ -101,7 +101,7 @@ export class StudentContentStatusesEffects {
 
   constructor(
     private actions: Actions,
-    private dataPersistence: DataPersistence<State>,
+    private dataPersistence: DataPersistence<DalState>,
     @Inject(STUDENT_CONTENT_STATUS_SERVICE_TOKEN)
     private studentContentStatusesService: StudentContentStatusServiceInterface
   ) {}
