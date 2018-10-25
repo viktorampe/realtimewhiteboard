@@ -62,12 +62,13 @@ import { EDUCONTENT_SERVICE_TOKEN } from './edu-content/edu-content.service.inte
 import { LearningAreaService } from './learning-area/learning-area.service';
 import { LEARNINGAREA_SERVICE_TOKEN } from './learning-area/learning-area.service.interface';
 import {
+  AuthService,
+  AUTH_SERVICE_TOKEN,
   LinkedPersonService,
   LINKEDPERSON_SERVICE_TOKEN,
   PersonService,
   PERSON_SERVICE_TOKEN
 } from './person';
-import { AuthService, AuthServiceToken } from './person/auth-service';
 import { StudentContentStatusService } from './student-content-status/student-content-status.service';
 import { STUDENT_CONTENT_STATUS_SERVICE_TOKEN } from './student-content-status/student-content-status.service.interface';
 
@@ -168,7 +169,7 @@ interface DalOptions {
     },
     { provide: PERSON_SERVICE_TOKEN, useClass: PersonService },
     { provide: LINKEDPERSON_SERVICE_TOKEN, useClass: LinkedPersonService },
-    { provide: AuthServiceToken, useClass: AuthService }
+    { provide: AUTH_SERVICE_TOKEN, useClass: AuthService }
   ]
 })
 export class DalModule {
@@ -177,8 +178,7 @@ export class DalModule {
     LoopBackConfig.setBaseURL(options.apiBaseUrl);
     LoopBackConfig.setRequestOptionsCredentials(true);
     return {
-      ngModule: DalModule,
-      providers: [{ provide: AuthServiceToken, useClass: AuthService }]
+      ngModule: DalModule
     };
   }
 }

@@ -1,6 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { ActivatedRoute, Resolve } from '@angular/router';
 import {
+  AuthServiceInterface,
+  AUTH_SERVICE_TOKEN,
   BundleActions,
   BundleInterface,
   BundleQueries,
@@ -90,7 +92,8 @@ export class BundlesViewModel implements Resolve<boolean> {
   constructor(
     private viewModelResolver: StateResolver,
     private store: Store<DalState>,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
   ) {}
 
   resolve(): Observable<boolean> {
@@ -190,6 +193,7 @@ export class BundlesViewModel implements Resolve<boolean> {
       this.ownBundles$,
       this.ownBooks$
     );
+
     return this.viewModelResolver.resolve(
       this.getLoadableActions(),
       this.getResolvedQueries()
@@ -199,12 +203,22 @@ export class BundlesViewModel implements Resolve<boolean> {
   getLoadableActions(): Action[] {
     return [
       new LearningAreaActions.LoadLearningAreas(),
-      new BundleActions.LoadBundles(),
-      new EduContentActions.LoadEduContents(),
-      new UserContentActions.LoadUserContents(),
-      new UnlockedContentActions.LoadUnlockedContents(),
-      new UnlockedBoekeGroupActions.LoadUnlockedBoekeGroups(),
-      new UnlockedBoekeStudentActions.LoadUnlockedBoekeStudents()
+      new BundleActions.LoadBundles({ userId: this.authService.userId }),
+      new EduContentActions.LoadEduContents({
+        userId: this.authService.userId
+      }),
+      new UserContentActions.LoadUserContents({
+        userId: this.authService.userId
+      }),
+      new UnlockedContentActions.LoadUnlockedContents({
+        userId: this.authService.userId
+      }),
+      new UnlockedBoekeGroupActions.LoadUnlockedBoekeGroups({
+        userId: this.authService.userId
+      }),
+      new UnlockedBoekeStudentActions.LoadUnlockedBoekeStudents({
+        userId: this.authService.userId
+      })
     ];
   }
 

@@ -18,8 +18,9 @@ export {
   EduContentServiceInterface,
   EDUCONTENT_SERVICE_TOKEN
 } from './lib/edu-content/edu-content.service.interface';
-export { AuthService, AuthServiceToken } from './lib/person/auth-service';
 export {
+  AuthService,
   AuthServiceInterface,
+  AUTH_SERVICE_TOKEN,
   LoginCredentials
-} from './lib/person/auth-service.interface';
+} from './lib/person';

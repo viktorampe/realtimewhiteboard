@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { map } from 'rxjs/operators';
+import { DalState } from '..';
 import {
   EduContentServiceInterface,
   EDUCONTENT_SERVICE_TOKEN
@@ -12,7 +13,6 @@ import {
   EduContentsLoadError,
   LoadEduContents
 } from './edu-content.actions';
-import { State } from './edu-content.reducer';
 
 @Injectable()
 export class EduContentsEffects {
@@ -20,10 +20,10 @@ export class EduContentsEffects {
   loadEduContents$ = this.dataPersistence.fetch(
     EduContentsActionTypes.LoadEduContents,
     {
-      run: (action: LoadEduContents, state: any) => {
+      run: (action: LoadEduContents, state: DalState) => {
         if (!action.payload.force && state.eduContents.loaded) return;
         return this.eduContentService
-          .getAllForUser(11) //TODO: replace with state.user.current ...
+          .getAllForUser(action.payload.userId)
           .pipe(map(eduContents => new EduContentsLoaded({ eduContents })));
       },
       onError: (action: LoadEduContents, error) => {
@@ -34,7 +34,7 @@ export class EduContentsEffects {
 
   constructor(
     private actions: Actions,
-    private dataPersistence: DataPersistence<State>,
+    private dataPersistence: DataPersistence<DalState>,
     @Inject(EDUCONTENT_SERVICE_TOKEN)
     private eduContentService: EduContentServiceInterface
   ) {}

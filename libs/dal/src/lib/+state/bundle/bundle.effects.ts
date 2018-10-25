@@ -6,22 +6,22 @@ import {
   BundleServiceInterface,
   BUNDLE_SERVICE_TOKEN
 } from '../../bundle/bundle.service.interface';
+import { DalState } from '../dal.state.interface';
 import {
   BundlesActionTypes,
   BundlesLoaded,
   BundlesLoadError,
   LoadBundles
 } from './bundle.actions';
-import { State } from './bundle.reducer';
 
 @Injectable()
 export class BundlesEffects {
   @Effect()
   loadBundles$ = this.dataPersistence.fetch(BundlesActionTypes.LoadBundles, {
-    run: (action: LoadBundles, state: any) => {
+    run: (action: LoadBundles, state: DalState) => {
       if (!action.payload.force && state.bundles.loaded) return;
       return this.bundleService
-        .getAllForUser(1)
+        .getAllForUser(action.payload.userId)
         .pipe(map(bundles => new BundlesLoaded({ bundles })));
     },
     onError: (action: LoadBundles, error) => {
@@ -31,7 +31,7 @@ export class BundlesEffects {
 
   constructor(
     private actions: Actions,
-    private dataPersistence: DataPersistence<State>,
+    private dataPersistence: DataPersistence<DalState>,
     @Inject(BUNDLE_SERVICE_TOKEN) private bundleService: BundleServiceInterface
   ) {}
 }

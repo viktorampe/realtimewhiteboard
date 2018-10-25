@@ -8,6 +8,9 @@ import {
   UnlockedContentReducer,
   UserContentReducer
 } from '../..';
+import { ContentStatusReducer } from './content-status';
+import { StudentContentStatusReducer } from './student-content-status';
+import { UserReducer } from './user';
 
 export interface DalState {
   ui: uiReducer.UiState;
@@ -18,4 +21,7 @@ export interface DalState {
   unlockedContents: UnlockedContentReducer.State;
   unlockedBoekeGroups: UnlockedBoekeGroupReducer.State;
   unlockedBoekeStudents: UnlockedBoekeStudentReducer.State;
+  contentStatuses: ContentStatusReducer.State;
+  user: UserReducer.UserState;
+  studentContentStatuses: StudentContentStatusReducer.State;
 }

@@ -20,7 +20,9 @@ export enum UnlockedBoekeGroupsActionTypes {
 export class LoadUnlockedBoekeGroups implements Action {
   readonly type = UnlockedBoekeGroupsActionTypes.LoadUnlockedBoekeGroups;
 
-  constructor(public payload: { force?: boolean } = {}) {}
+  constructor(
+    public payload: { force?: boolean; userId: number } = { userId: null }
+  ) {}
 }
 
 export class UnlockedBoekeGroupsLoaded implements Action {
