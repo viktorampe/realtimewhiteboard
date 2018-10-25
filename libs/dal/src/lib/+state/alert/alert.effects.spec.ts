@@ -1,4 +1,8 @@
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import {
+  EnvironmentFeaturesInterface,
+  ENVIRONMENT_FEATURES_TOKEN
+} from '@campus/shared';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
@@ -22,6 +26,7 @@ describe('AlertEffects', () => {
   let actions: Observable<any>;
   let effects: AlertsEffects;
   let usedState: any;
+  let environment: EnvironmentFeaturesInterface;
 
   const mockData = {
     userId: 1,
@@ -95,6 +100,7 @@ describe('AlertEffects', () => {
             ) => {}
           }
         },
+        ENVIRONMENT_FEATURES_TOKEN,
         AlertsEffects,
         DataPersistence,
         provideMockActions(() => actions)
@@ -102,6 +108,7 @@ describe('AlertEffects', () => {
     });
 
     effects = TestBed.get(AlertsEffects);
+    environment = TestBed.get(ENVIRONMENT_FEATURES_TOKEN);
   });
 
   describe('loadAlert$', () => {
@@ -320,7 +327,7 @@ describe('AlertEffects', () => {
     it(
       'should dispatch a new LoadNewAlerts action after every interval',
       fakeAsync(() => {
-        const intervalTime = 3000;
+        const intervalTime = environment.alerts.appBarPollingInterval;
         const actionArray: LoadNewAlerts[] = [];
         const pollingSubscription = effects.pollAlerts$.subscribe(x =>
           actionArray.push(x)

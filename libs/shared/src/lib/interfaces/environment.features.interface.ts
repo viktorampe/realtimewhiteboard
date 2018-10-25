@@ -8,6 +8,7 @@ export interface EnvironmentFeaturesInterface {
   alerts: {
     enabled: boolean;
     hasAppBarDropDown: boolean;
+    appBarPollingInterval: number;
   };
   messages: {
     enabled: boolean;

@@ -1,5 +1,9 @@
 import { Inject, Injectable } from '@angular/core';
 import { AlertQueueInterface } from '@campus/dal';
+import {
+  EnvironmentFeaturesInterface,
+  ENVIRONMENT_FEATURES_TOKEN
+} from '@campus/shared';
 import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { interval } from 'rxjs';
@@ -83,7 +87,7 @@ export class AlertsEffects {
   });
 
   @Effect()
-  pollAlerts$ = interval(3000).pipe(
+  pollAlerts$ = interval(this.environment.alerts.appBarPollingInterval).pipe(
     map(() => new LoadNewAlerts({ userId: 6 }))
   );
 
@@ -119,7 +123,9 @@ export class AlertsEffects {
   constructor(
     private actions: Actions,
     private dataPersistence: DataPersistence<DalState>,
-    @Inject(ALERT_SERVICE_TOKEN) private alertService: AlertServiceInterface
+    @Inject(ALERT_SERVICE_TOKEN) private alertService: AlertServiceInterface,
+    @Inject(ENVIRONMENT_FEATURES_TOKEN)
+    private environment: EnvironmentFeaturesInterface
   ) {}
 
   /**
