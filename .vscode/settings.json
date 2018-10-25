@@ -1,7 +1,5 @@
 {
-  "editor.rulers": [
-    140
-  ],
+  "editor.rulers": [140],
   "editor.formatOnSave": true,
   "editor.lineNumbers": "on",
   "editor.tabSize": 2,
@@ -13,48 +11,5 @@
   "editor.codeActionsOnSave": {
     "source.organizeImports": true
   },
-  "html.format.wrapAttributes": "force-aligned",
-  "favorites.sortDirection": "ASC",
-  "favorites.groupsFirst": true,
-  "favorites.root": [
-    {
-      "type": "Directory",
-      "name": "c:\\Users\\david.boute\\Documents\\Repositories\\campus\\libs\\ui\\src\\lib",
-      "parent_id": null,
-      "workspacePath": "libs\\ui\\src\\lib",
-      "id": "E3phmvGS70WytgOj",
-      "label": "ui-components"
-    },
-    {
-      "type": "Directory",
-      "name": "c:\\Users\\david.boute\\Documents\\Repositories\\campus\\libs\\devlib\\src\\lib\\loginpage",
-      "parent_id": null,
-      "workspacePath": "libs\\devlib\\src\\lib\\loginpage",
-      "id": "i3V4TRakYbyPAO6j",
-      "label": "devlib-loginpage"
-    },
-    {
-      "type": "Directory",
-      "name": "c:\\Users\\david.boute\\Documents\\Repositories\\campus\\libs\\dal\\src\\lib\\+models",
-      "parent_id": null,
-      "workspacePath": "libs\\dal\\src\\lib\\+models",
-      "id": "LJO7TAjvYtWVPdz4"
-    },
-    {
-      "type": "Directory",
-      "name": "c:\\Users\\david.boute\\Documents\\Repositories\\campus\\libs\\dal\\src\\lib\\+state",
-      "parent_id": null,
-      "workspacePath": "libs\\dal\\src\\lib\\+state",
-      "id": "HCXIUJDVAftbyP9x"
-    },
-    {
-      "type": "Directory",
-      "name": "c:\\Users\\david.boute\\Documents\\Repositories\\campus\\node_modules\\@diekeure\\polpo-api-angular-sdk\\services\\custom",
-      "parent_id": null,
-      "workspacePath": "node_modules\\@diekeure\\polpo-api-angular-sdk\\services\\custom",
-      "id": "JekaQY5rRCPqUjAF",
-      "label": "APIs"
-    }
-  ],
+  "html.format.wrapAttributes": "force-aligned"
 }
-
