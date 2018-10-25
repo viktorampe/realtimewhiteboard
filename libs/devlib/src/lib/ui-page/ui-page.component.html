@@ -1,3 +1,16 @@
-<p>
-  ui-page works!
-</p>
+<button (click)="dropDown.open()">trigger dropdown</button>
+<campus-dropdown-menu #dropDown
+                      [showHeader]="true"
+                      headerIcon="icon-timeline"
+                      linkText="alle meldingen"
+                      linkUrl="/notifications"
+                      newItemCount="16"
+                      itemType="meldingen">
+  <button mat-menu-item>settings</button>
+  <button mat-menu-item>options</button>
+  <button mat-menu-item>options</button>
+  <button mat-menu-item>options</button>
+  <button mat-menu-item>options</button>
+  <button mat-menu-item>options</button>
+  <button mat-menu-item>options</button>
+</campus-dropdown-menu>

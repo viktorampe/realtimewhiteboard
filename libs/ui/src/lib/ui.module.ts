@@ -123,7 +123,8 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     ToolBarComponent,
     BreadcrumbsComponent,
     DropdownMenuComponent,
-    NotificationDropdownItemComponent
+    NotificationDropdownItemComponent,
+    DropdownMenuComponent
   ],
   exports: [
     FilterTextInputComponent,
@@ -166,7 +167,8 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     ToolBarComponent,
     BreadcrumbsComponent,
     DropdownMenuComponent,
-    NotificationDropdownItemComponent
+    NotificationDropdownItemComponent,
+    DropdownMenuComponent
   ]
 })
 export class UiModule {}

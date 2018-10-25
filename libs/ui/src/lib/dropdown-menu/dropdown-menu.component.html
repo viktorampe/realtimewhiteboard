@@ -1,16 +1,15 @@
 <div [matMenuTriggerFor]="toolBarItemDropdown"></div>
 <mat-menu #toolBarItemDropdown="matMenu"
-          class="ui-toolbar-item-dropdown">
+          class="ui-dropdown-menu">
   <div *ngIf="showHeader"
-       class="ui-toolbar-item-dropdown__header">
+       class="ui-dropdown-menu__header">
     <h3>
       <i [class]="headerIcon"></i>
       <span class="bold">{{newItemCount}} nieuwe</span> {{itemType}}
     </h3>
-    <span>-> <a [routerLink]="linkUrl"
-         routerLinkActive="router-link-active">{{linkText}}</a></span>
+    <span *ngIf="linkText && linkUrl">-> <a [routerLink]="linkUrl">{{linkText}}</a></span>
   </div>
-  <div class="ui-toolbar-item-dropdown__body">
+  <div class="ui-dropdown-menu__body">
     <ng-content></ng-content>
   </div>
 </mat-menu>
