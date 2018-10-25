@@ -53,7 +53,6 @@ import { SideSheetHeaderDirective } from './side-sheet/directives/side-sheet-hea
 import { SideSheetPageDirective } from './side-sheet/directives/side-sheet-page.directive';
 import { SideSheetComponent } from './side-sheet/side-sheet.component';
 import { ToolBarComponent } from './tool-bar/tool-bar.component';
-import { ToolbarItemDropdownComponent } from './toolbar-item-dropdown/toolbar-item-dropdown.component';
 import { TreeNavComponent } from './tree-nav/tree-nav.component';
 import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness.pipe';
 
@@ -124,8 +123,7 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     ToolBarComponent,
     BreadcrumbsComponent,
     DropdownMenuComponent,
-    NotificationDropdownItemComponent,
-    ToolbarItemDropdownComponent
+    NotificationDropdownItemComponent
   ],
   exports: [
     FilterTextInputComponent,
@@ -168,8 +166,7 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     ToolBarComponent,
     BreadcrumbsComponent,
     DropdownMenuComponent,
-    NotificationDropdownItemComponent,
-    ToolbarItemDropdownComponent
+    NotificationDropdownItemComponent
   ]
 })
 export class UiModule {}

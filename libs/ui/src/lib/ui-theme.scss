@@ -72,7 +72,7 @@ $ui-font-family-3: 'Helvetica', 'Arial', 'Sans-Serif' !default;
 @import './content-thumbnail/content-thumbnail.component.theme.scss';
 @import './filter-text-input/filter-text-input.component.themes.scss';
 @import './button/button.component.theme.scss';
-@import './toolbar-item-dropdown/toolbar-item-dropdown.component.theme.scss';
+@import './dropdown-menu/dropdown-menu.component.theme.scss';
 
 // create theme-mixin with each mixin from our library components
 @mixin ui-theme() {
@@ -97,5 +97,5 @@ $ui-font-family-3: 'Helvetica', 'Arial', 'Sans-Serif' !default;
   @include ui-content-thumbnail();
   @include ui-filter-text-input();
   @include ui-button();
-  @include ui-toolbar-item-dropdown();
+  @include ui-dropdown-menu();
 }

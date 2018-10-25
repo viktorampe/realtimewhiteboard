@@ -1,0 +1,20 @@
+@mixin ui-dropdown-menu {
+  $ui-dropdown-menu-width: 350px !default;
+  $ui-dropdown-menu-background: #95a0aa !default;
+  $ui-dropdown-menu-color: #32323a !default;
+
+  .ui-dropdown-menu {
+    color: $ui-dropdown-menu-color;
+    &__header {
+      background: $ui-dropdown-menu-background;
+      font-family: $ui-font-family-1;
+      a {
+        color: $ui-dropdown-menu-color;
+      }
+    }
+  }
+  .mat-menu-panel.ui-dropdown-menu {
+    width: $ui-dropdown-menu-width;
+    max-width: none;
+  }
+}
