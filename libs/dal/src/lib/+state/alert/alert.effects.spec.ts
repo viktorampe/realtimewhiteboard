@@ -100,7 +100,14 @@ describe('AlertEffects', () => {
             ) => {}
           }
         },
-        ENVIRONMENT_FEATURES_TOKEN,
+        {
+          provide: ENVIRONMENT_FEATURES_TOKEN,
+          useValue: {
+            alerts: {
+              appBarPollingInterval: 3000
+            }
+          }
+        },
         AlertsEffects,
         DataPersistence,
         provideMockActions(() => actions)
