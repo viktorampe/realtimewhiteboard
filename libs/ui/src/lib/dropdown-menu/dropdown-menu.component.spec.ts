@@ -11,7 +11,6 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { UiModule } from '../ui.module';
 import { DropdownMenuComponent } from './dropdown-menu.component';
-// file.only
 
 const mockData = {
   showHeader: false,
