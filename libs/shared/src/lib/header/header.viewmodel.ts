@@ -1,7 +1,10 @@
 import { Inject, Injectable } from '@angular/core';
-import { Resolve } from '@angular/router';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
+import {
+  AlertQueueInterface,
+  MessageInterface,
+  PersonInterface
+} from '@campus/dal';
+import { Observable } from 'rxjs';
 import {
   EnvironmentFeaturesInterface,
   ENVIRONMENT_FEATURES_TOKEN
@@ -10,9 +13,20 @@ import {
 @Injectable({
   providedIn: 'root'
 })
-export class HeaderViewModel implements Resolve<boolean> {
+export class HeaderViewModel {
   enableAlerts: boolean;
   enableMessages: boolean;
+
+  currentRoute$: Observable<{ label: string; url: string }[]>; // TODO to be replaced by custom interface once the breadcrumbsComponent is done
+  recentAlerts$: Observable<AlertQueueInterface[]>;
+  recentMessages$: Observable<MessageInterface[]>;
+  currentUser$: Observable<PersonInterface>;
+
+  private breadCrumbs$: Observable<any>;
+  private alertsForUser$: Observable<any>;
+  private ConversationsForUser$: Observable<any>;
+  private Person$: Observable<any>;
+  private UiState$: Observable<any>;
 
   constructor(
     @Inject(ENVIRONMENT_FEATURES_TOKEN)
@@ -21,9 +35,6 @@ export class HeaderViewModel implements Resolve<boolean> {
     this.loadFeatureToggles();
   }
 
-  resolve(): Observable<boolean> {
-    return new BehaviorSubject<boolean>(true).pipe(take(1));
-  }
   private loadFeatureToggles() {
     this.enableAlerts =
       this.environmentFeatures.alerts.enabled &&
