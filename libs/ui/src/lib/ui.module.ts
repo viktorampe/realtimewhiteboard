@@ -52,7 +52,6 @@ import { SideSheetBodyDirective } from './side-sheet/directives/side-sheet-body.
 import { SideSheetHeaderDirective } from './side-sheet/directives/side-sheet-header.directive';
 import { SideSheetPageDirective } from './side-sheet/directives/side-sheet-page.directive';
 import { SideSheetComponent } from './side-sheet/side-sheet.component';
-import { ToolBarComponent } from './tool-bar/tool-bar.component';
 import { TreeNavComponent } from './tree-nav/tree-nav.component';
 import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness.pipe';
 
@@ -120,7 +119,6 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     WarningDirective,
     DisabledDirective,
     TreeNavComponent,
-    ToolBarComponent,
     BreadcrumbsComponent,
     DropdownMenuComponent,
     NotificationDropdownItemComponent,
@@ -164,7 +162,6 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     WarningDirective,
     DisabledDirective,
     TreeNavComponent,
-    ToolBarComponent,
     BreadcrumbsComponent,
     DropdownMenuComponent,
     NotificationDropdownItemComponent,

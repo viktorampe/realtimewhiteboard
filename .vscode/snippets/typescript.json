@@ -59,7 +59,7 @@
     "body": [
       "expect(",
       "\tfixture.debugElement.query(By.css('${1:css-selector}'))",
-      ").toBeNull();"
+      ").toBeFalsy();"
     ]
   },
   "angular empty spec file to test content projection in component": {
