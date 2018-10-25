@@ -28,7 +28,7 @@ import {
   UnlockedContentQueries,
   UserContentActions,
   UserContentQueries,
-  userQuery
+  UserQueries
 } from '@campus/dal';
 import { StateResolver } from '@campus/pages/shared';
 import { ListFormat } from '@campus/ui';
@@ -104,7 +104,7 @@ export class BundlesViewModel implements Resolve<boolean> {
       map((params): number => params.bundle || 0)
     );
 
-    this.user$ = this.store.pipe(select(userQuery.getCurrentUser));
+    this.user$ = this.store.pipe(select(UserQueries.getCurrentUser));
     this.coupledPersons$ = new BehaviorSubject([]); // TODO add TeacherStudent state
 
     this.listFormat$ = this.store.pipe(

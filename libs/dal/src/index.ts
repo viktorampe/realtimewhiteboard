@@ -8,10 +8,8 @@ export * from './lib/+state/ui';
 export * from './lib/+state/unlocked-boeke-group';
 export * from './lib/+state/unlocked-boeke-student';
 export * from './lib/+state/unlocked-content';
+export * from './lib/+state/user';
 export * from './lib/+state/user-content';
-export * from './lib/+state/user/user.actions';
-export * from './lib/+state/user/user.reducer';
-export * from './lib/+state/user/user.selectors';
 export * from './lib/dal.module';
 export {
   EduContentServiceInterface,
