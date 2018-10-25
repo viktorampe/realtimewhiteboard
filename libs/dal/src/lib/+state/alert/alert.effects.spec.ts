@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
@@ -317,9 +317,22 @@ describe('AlertEffects', () => {
       mockServiceMethodReturnValue('getAllForUser', []);
     });
 
-    it('should dispatch a new LoadNewAlerts action after every interval', () => {
-      // TODO: figure this out
-    });
+    it(
+      'should dispatch a new LoadNewAlerts action after every interval',
+      fakeAsync(() => {
+        const intervalTime = 3000;
+        const actionArray: LoadNewAlerts[] = [];
+        const pollingSubscription = effects.pollAlerts$.subscribe(x =>
+          actionArray.push(x)
+        );
+        expect(actionArray.length).toBe(0);
+        tick(intervalTime);
+        expect(actionArray.length).toBe(1);
+        tick(intervalTime);
+        expect(actionArray.length).toBe(2);
+        pollingSubscription.unsubscribe();
+      })
+    );
   });
 
   describe('setReadAlert$', () => {
