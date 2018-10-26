@@ -9,6 +9,7 @@ import {
   MatFormFieldModule,
   MatIconModule,
   MatInputModule,
+  MatMenuModule,
   MatProgressSpinnerModule,
   MatSelectModule,
   MatSidenavModule,
@@ -75,7 +76,8 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     MatFormFieldModule,
     MatProgressSpinnerModule,
     MatTooltipModule,
-    MatIconModule
+    MatIconModule,
+    MatMenuModule
   ],
   declarations: [
     FilterTextInputComponent,
@@ -119,7 +121,8 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     TreeNavComponent,
     BreadcrumbsComponent,
     DropdownMenuComponent,
-    NotificationDropdownItemComponent
+    NotificationDropdownItemComponent,
+    DropdownMenuComponent
   ],
   exports: [
     FilterTextInputComponent,
@@ -161,7 +164,8 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     TreeNavComponent,
     BreadcrumbsComponent,
     DropdownMenuComponent,
-    NotificationDropdownItemComponent
+    NotificationDropdownItemComponent,
+    DropdownMenuComponent
   ]
 })
 export class UiModule {}
