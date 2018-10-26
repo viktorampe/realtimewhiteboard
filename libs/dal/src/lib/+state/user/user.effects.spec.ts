@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { ENVIRONMENT_FEATURES_TOKEN } from '@campus/shared';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
@@ -80,14 +79,6 @@ describe('UserEffects', () => {
       providers: [
         UserEffects,
         DataPersistence,
-        {
-          provide: ENVIRONMENT_FEATURES_TOKEN,
-          useValue: {
-            alerts: {
-              appBarPollingInterval: 3000
-            }
-          }
-        },
         provideMockActions(() => actions)
       ]
     });
