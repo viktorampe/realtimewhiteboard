@@ -43,6 +43,13 @@
     align-items: flex-start;
   }
 
+  &__footer {
+    display: flex;
+    flex-direction: row;
+    flex-shrink: 0;
+    align-items: center;
+  }
+
   &__actions {
     align-items: center;
     flex-shrink: 0;
@@ -87,6 +94,10 @@
 
     & .ui-content-thumbnail__actions {
       display: none;
+
+      &--visible {
+        display: flex;
+      }
     }
   }
 }

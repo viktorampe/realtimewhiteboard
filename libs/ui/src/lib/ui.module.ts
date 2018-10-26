@@ -23,6 +23,7 @@ import { CircleDirective } from './button/directives/button-circle.directive';
 import { DangerDirective } from './button/directives/button-danger.directive';
 import { DisabledDirective } from './button/directives/button-disabled.directive';
 import { RoundedCornersDirective } from './button/directives/button-rounded-corners.directive';
+import { VisibleDirective } from './button/directives/button-visible.directive';
 import { WarningDirective } from './button/directives/button-warning.directive';
 import { ConfirmableSelectComponent } from './confirmable-select/confirmable-select.component';
 import { ContentPreviewComponent } from './content-preview/content-preview.component';
@@ -53,6 +54,8 @@ import { SideSheetPageDirective } from './side-sheet/directives/side-sheet-page.
 import { SideSheetComponent } from './side-sheet/side-sheet.component';
 import { TreeNavComponent } from './tree-nav/tree-nav.component';
 import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness.pipe';
+import { HideDesktopDirective } from './utils/directives/hide-desktop.directive';
+import { HideMobileDirective } from './utils/directives/hide-mobile.directive';
 
 @NgModule({
   imports: [
@@ -119,7 +122,10 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     TreeNavComponent,
     BreadcrumbsComponent,
     DropdownMenuComponent,
-    NotificationDropdownItemComponent
+    NotificationDropdownItemComponent,
+    VisibleDirective,
+    HideDesktopDirective,
+    HideMobileDirective
   ],
   exports: [
     FilterTextInputComponent,
@@ -161,7 +167,10 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     TreeNavComponent,
     BreadcrumbsComponent,
     DropdownMenuComponent,
-    NotificationDropdownItemComponent
+    NotificationDropdownItemComponent,
+    VisibleDirective,
+    HideDesktopDirective,
+    HideMobileDirective
   ]
 })
 export class UiModule {}

@@ -50,3 +50,55 @@
 <div>
   <a [routerLink]="['educontent']">educontent test page</a>
 </div>
+
+<div>
+  <campus-content-thumbnail [listFormat]="'line'"
+                            [title]="'Title'"
+                            [fileExtensionClass]="'xlsx'">
+    <!-- Hier moeten de mogelijke actieknoppen met hun (Click) nog toegevoegd worden -->
+    <campus-button [iconClass]="'icon-bundle'"
+                   circle>
+    </campus-button>
+    <campus-button [iconClass]="'icon-tasks'"
+                   circle>
+    </campus-button>
+    <campus-button [iconClass]="'icon-tasks'"
+                   rounded-corners
+                   visible
+                   hide-desktop
+                   warning>
+    </campus-button>
+    <campus-button [iconClass]="'icon-tasks'"
+                   rounded-corners
+                   visible
+                   hide-mobile
+                   danger>
+    </campus-button>
+  </campus-content-thumbnail>
+</div>
+
+<div>
+  <campus-content-thumbnail [listFormat]="'grid'"
+                            [title]="'Title'"
+                            [fileExtensionClass]="'xlsx'">
+    <!-- Hier moeten de mogelijke actieknoppen met hun (Click) nog toegevoegd worden -->
+    <campus-button [iconClass]="'icon-bundle'"
+                   circle>
+    </campus-button>
+    <campus-button [iconClass]="'icon-tasks'"
+                   circle>
+    </campus-button>
+    <campus-button [iconClass]="'icon-tasks'"
+                   rounded-corners
+                   visible
+                   hide-desktop
+                   warning>
+    </campus-button>
+    <campus-button [iconClass]="'icon-tasks'"
+                   rounded-corners
+                   visible
+                   hide-mobile
+                   danger>
+    </campus-button>
+  </campus-content-thumbnail>
+</div>

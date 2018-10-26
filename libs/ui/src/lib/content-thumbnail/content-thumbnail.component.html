@@ -16,7 +16,12 @@
   <div class="ui-content-thumbnail__title">
     <div>{{title}}</div>
   </div>
-  <div class="ui-content-thumbnail__actions">
-    <ng-content></ng-content>
+  <div class="ui-content-thumbnail__footer">
+    <div class="ui-content-thumbnail__actions">
+      <ng-content></ng-content>
+    </div>
+    <div class="ui-content-thumbnail__actions ui-content-thumbnail__actions--visible">
+      <ng-content select="[visible]"></ng-content>
+    </div>
   </div>
 </div>
