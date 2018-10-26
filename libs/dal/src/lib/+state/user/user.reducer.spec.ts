@@ -1,11 +1,12 @@
-import { PersonInterface, UserLoaded, userReducer } from '@campus/dal';
+import { PersonInterface, UserActions } from '@campus/dal';
+import { UserReducer } from '.';
 import { UserLoadError, UserRemoved, UserRemoveError } from './user.actions';
-import { initialUserstate, UserState } from './user.reducer';
+import { initialUserstate, State } from './user.reducer';
 
 describe('User Reducer', () => {
   beforeEach(() => {});
 
-  function createFilledUserState(): UserState {
+  function createFilledUserState(): State {
     return {
       currentUser: {
         email: 'test'
@@ -45,8 +46,8 @@ describe('User Reducer', () => {
     user: PersonInterface,
     loaded: boolean = false,
     error?: any
-  ): UserState {
-    const state: UserState = {
+  ): State {
+    const state: State = {
       currentUser: user,
       loaded: loaded,
       error: error
@@ -64,15 +65,15 @@ describe('User Reducer', () => {
 
     describe('loaded action', () => {
       it('should load user', () => {
-        const action = new UserLoaded(user);
-        const result = userReducer(initialUserstate, action);
+        const action = new UserActions.UserLoaded(user);
+        const result = UserReducer.reducer(initialUserstate, action);
         expect(result).toEqual(createState(user, true, null));
       });
 
       it('should error', () => {
         const error = 'Something went wrong';
         const action = new UserLoadError({ error });
-        const result = userReducer(initialUserstate, action);
+        const result = UserReducer.reducer(initialUserstate, action);
         expect(result).toEqual(createState(null, false, { error }));
       });
     });
@@ -80,14 +81,14 @@ describe('User Reducer', () => {
     describe('removed action', () => {
       it('should remove user', () => {
         const action = new UserRemoved();
-        const result = userReducer(createFilledUserState(), action);
+        const result = UserReducer.reducer(createFilledUserState(), action);
         expect(result).toEqual(initialUserstate);
       });
 
       it('should error', () => {
         const error = 'Something went wrong';
         const action = new UserRemoveError({ error });
-        const result = userReducer(createFilledUserState(), action);
+        const result = UserReducer.reducer(createFilledUserState(), action);
         expect(result).toEqual(
           createState(
             createFilledUserState().currentUser,

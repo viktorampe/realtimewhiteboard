@@ -22,7 +22,7 @@ export class LoginPageViewModel implements Resolve<boolean> {
   loggedIn: boolean;
 
   constructor(
-    private store: Store<UserReducer.UserState>,
+    private store: Store<UserReducer.State>,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
   ) {
     store.pipe(select(UserQueries.getCurrentUser)).subscribe(data => {

@@ -41,7 +41,7 @@ import { UserContentReducer, UserContentsEffects } from './+state/user-content';
 import { UserEffects } from './+state/user/user.effects';
 import {
   initialUserstate as userInitialState,
-  userReducer
+  reducer
 } from './+state/user/user.reducer';
 import {
   UnlockedBoekeGroupService,
@@ -112,7 +112,7 @@ interface DalOptions {
       }
     ),
     EffectsModule.forFeature([BundlesEffects, UserEffects]),
-    StoreModule.forFeature('user', userReducer, {
+    StoreModule.forFeature('user', reducer, {
       initialState: userInitialState
     }),
     StoreModule.forFeature(

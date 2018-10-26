@@ -9,7 +9,7 @@ import { DalModule } from '../../dal.module';
 import { AUTH_SERVICE_TOKEN } from '../../persons/auth-service.interface';
 import { LoadUser, RemoveUser, UserLoaded, UserRemoved } from './user.actions';
 import { UserEffects } from './user.effects';
-import { initialUserstate, UserState } from './user.reducer';
+import { initialUserstate, State } from './user.reducer';
 
 const mockUser = {
   name: 'Mertens',
@@ -51,7 +51,7 @@ const mockUser = {
 describe('UserEffects', () => {
   let actions: Observable<any>;
   let effects: UserEffects;
-  let baseState: UserState;
+  let baseState: State;
 
   const loadUserAction = new LoadUser({ force: true });
   const removeUserAction = new RemoveUser();

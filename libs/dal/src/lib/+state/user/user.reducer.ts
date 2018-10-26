@@ -9,22 +9,22 @@ import { UserAction, UserActionTypes } from './user.actions';
  *  Note: replace if already defined in another module
  */
 
-export interface UserState {
+export interface State {
   currentUser: PersonInterface; // user object
   loaded: boolean; // has the User list been loaded
   error?: any; // last none error (if any)
 }
 
-export const initialUserstate: UserState = {
+export const initialUserstate: State = {
   currentUser: null,
   loaded: false,
   error: null
 };
 
-export function userReducer(
-  state: UserState = initialUserstate,
+export function reducer(
+  state: State = initialUserstate,
   action: UserAction
-): UserState {
+): State {
   switch (action.type) {
     case UserActionTypes.UserLoaded: {
       state = {
