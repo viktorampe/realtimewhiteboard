@@ -30,9 +30,7 @@ export class AlertsEffects {
       const userId = action.payload.userId;
 
       // If not provided, set update time to now
-      const timeStamp = action.payload.timeStamp
-        ? action.payload.timeStamp
-        : Date.now();
+      const timeStamp = action.payload.timeStamp || Date.now();
 
       return this.alertService
         .getAllForUser(userId)
@@ -46,7 +44,8 @@ export class AlertsEffects {
   @Effect()
   loadNewAlerts$ = this.dataPersistence.fetch(AlertsActionTypes.LoadNewAlerts, {
     run: (action: LoadNewAlerts, state: DalState) => {
-      if (!state.alerts.loaded) return;
+      if (!state.alerts.loaded)
+        return new LoadAlerts({ userId: action.payload.userId });
 
       // Minimum time between Api calls
       const requiredTimeDeltaInMilliseconds = 3000;

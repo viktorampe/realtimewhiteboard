@@ -212,16 +212,20 @@ describe('AlertEffects', () => {
       alerts: [],
       timeStamp: mockData.updateTime
     });
+    const unforcedLoadAction = new LoadAlerts({
+      userId: mockData.userId
+    });
     const loadErrorAction = new AlertsLoadError(new Error('failed'));
 
     describe('with initialState', () => {
       beforeAll(() => {
         usedState = initialState;
       });
-      it('should should return nothing if the state is not loaded', () => {
-        expectInNoOut(
+      it('should should return a LoadAlert action if the state is not loaded', () => {
+        expectInAndOut(
           effects.loadNewAlerts$,
-          unforcedNewLoadActionWithoutTimeDelta
+          unforcedNewLoadActionWithoutTimeDelta,
+          unforcedLoadAction
         );
       });
     });
@@ -349,7 +353,7 @@ describe('AlertEffects', () => {
           loadAlertsAction
         );
       });
-      it('should return nothing when calling with multiple ids', () => {
+      it('should return a LoadAlerts action when calling with multiple ids', () => {
         expectInAndOut(
           effects.setReadAlert$,
           setReadMultipleAction,
