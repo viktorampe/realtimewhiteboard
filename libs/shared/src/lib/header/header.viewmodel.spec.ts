@@ -1,6 +1,9 @@
-import { AuthService, DalState } from '@campus/dal';
+// file.only
+
+import { AlertQueueInterface, AuthService, DalState } from '@campus/dal';
 import { StateResolver } from '@campus/pages/shared';
 import { Store } from '@ngrx/store';
+import { hot } from '@nrwl/nx/testing';
 import {
   EnvironmentAlertsFeatureInterface,
   EnvironmentMessagesFeatureInterface
@@ -18,6 +21,9 @@ let environmentAlertsFeature: EnvironmentAlertsFeatureInterface = {
 let headerViewModel: HeaderViewModel;
 
 describe('headerViewModel', () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
   describe('loadFeatureToggles and enableAlerts, enableMessage', () => {
     function expectEnablesToBe(
       enabled: boolean,
@@ -110,31 +116,50 @@ describe('headerViewModel', () => {
       headerViewModel['stateResolver'].resolve = jest.fn(() => {});
       spy = jest.spyOn(headerViewModel['stateResolver'], 'resolve');
     });
-    afterEach(() => {
-      jest.restoreAllMocks();
-    });
     it('should call loadDisplayStream once', () => {
       headerViewModel['loadDisplayStream'] = jest.fn;
       headerViewModel.resolve();
       expect(spy).toHaveBeenCalledWith(1, 2);
     });
   });
-});
-
-test('it should provide a stream with the array of breadcrumbs', () => {
-  return;
-});
-
-test('it should (conditionally) provide a stream with the array of recent Alerts', () => {
-  return;
-});
-
-test('it should (conditionally) provide a stream with the array of recent Messages', () => {
-  return;
-});
-
-test('it should provide a stream with the logged in users details', () => {
-  return;
+  describe('methods', () => {
+    let spy;
+    beforeEach(() => {
+      spy = jest.fn(() => {});
+      headerViewModel = new HeaderViewModel(
+        <StateResolver>{},
+        environmentAlertsFeature,
+        environmentMessagesFeature,
+        <AuthService>{},
+        <Store<DalState>>{}
+      );
+    });
+    it('should have loadStateStreams call pipe one time for each store selection', () => {
+      headerViewModel['store'].pipe = spy;
+      headerViewModel['loadStateStreams']();
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+    it('should have loadDisplayStream call all individual builder methods one time', () => {
+      headerViewModel['getRecentAlerts'] = spy;
+      headerViewModel['getRecentMessages'] = spy;
+      headerViewModel['loadDisplayStream']();
+      expect(spy).toHaveBeenCalledTimes(2);
+    });
+    it('should have getRecentAlerts return ...', () => {
+      const alertsForUser$ = hot('-a-|', { a: <AlertQueueInterface[]>{} });
+      const actual = headerViewModel['getRecentAlerts'](alertsForUser$);
+      expect(actual).toBeObservable(
+        hot('-a-|', { a: [{ text: 'temp alert' }] })
+      );
+    });
+    it('should have getRecentMessages return ...', () => {
+      const alertsForUser$ = hot('-a-|', { a: <AlertQueueInterface[]>{} });
+      const actual = headerViewModel['getRecentMessages'](alertsForUser$);
+      expect(actual).toBeObservable(
+        hot('-a-|', { a: [{ text: 'temp message' }] })
+      );
+    });
+  });
 });
 
 test('it should dispatch an action to poll the server every x seconds', () => {
