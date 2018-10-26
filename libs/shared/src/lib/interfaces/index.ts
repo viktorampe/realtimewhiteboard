@@ -1,1 +1,1 @@
-export * from './environment.features.interface';
+export * from './environment.features.interfaces';
