@@ -1,12 +1,11 @@
 import { PersonInterface, UserActions } from '@campus/dal';
 import { UserReducer } from '.';
 import { UserLoadError, UserRemoved, UserRemoveError } from './user.actions';
-import { initialUserstate, State } from './user.reducer';
 
 describe('User Reducer', () => {
   beforeEach(() => {});
 
-  function createFilledUserState(): State {
+  function createFilledUserState(): UserReducer.State {
     return {
       currentUser: {
         email: 'test'
@@ -46,8 +45,8 @@ describe('User Reducer', () => {
     user: PersonInterface,
     loaded: boolean = false,
     error?: any
-  ): State {
-    const state: State = {
+  ): UserReducer.State {
+    const state: UserReducer.State = {
       currentUser: user,
       loaded: loaded,
       error: error
@@ -66,14 +65,14 @@ describe('User Reducer', () => {
     describe('loaded action', () => {
       it('should load user', () => {
         const action = new UserActions.UserLoaded(user);
-        const result = UserReducer.reducer(initialUserstate, action);
+        const result = UserReducer.reducer(UserReducer.initialState, action);
         expect(result).toEqual(createState(user, true, null));
       });
 
       it('should error', () => {
         const error = 'Something went wrong';
         const action = new UserLoadError({ error });
-        const result = UserReducer.reducer(initialUserstate, action);
+        const result = UserReducer.reducer(UserReducer.initialState, action);
         expect(result).toEqual(createState(null, false, { error }));
       });
     });
@@ -82,7 +81,7 @@ describe('User Reducer', () => {
       it('should remove user', () => {
         const action = new UserRemoved();
         const result = UserReducer.reducer(createFilledUserState(), action);
-        expect(result).toEqual(initialUserstate);
+        expect(result).toEqual(UserReducer.initialState);
       });
 
       it('should error', () => {
