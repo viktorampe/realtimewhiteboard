@@ -1,92 +1,54 @@
-import { CommonModule, DOCUMENT } from '@angular/common';
-import { Component, NgModule } from '@angular/core';
+import { CdkPortal } from '@angular/cdk/portal';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { SharedModule } from '../../shared.module';
 import { PageBarContainerComponent } from './page-bar-container.component';
 
-@Component({
-  // tslint:disable-next-line:component-selector
-  selector: 'test-container',
-  template: `
-  <div id="test-div">
-    <div id="page-bar-container"></div>
-    <campus-page-bar>
-      this is a test text
-    </campus-page-bar>
-  </div>
-  `
-})
-export class TestContainerComponent {}
+class MockPortalHost {
+  attach() {}
+  detach() {}
+}
 
-@NgModule({
-  declarations: [TestContainerComponent],
-  imports: [CommonModule, SharedModule],
-  exports: [TestContainerComponent],
-  providers: [{ provide: document, useValue: DOCUMENT }]
-})
-export class TestModule {}
-
-describe('PageBarComponent', () => {
+describe('PageBarContainerComponent', () => {
   let component: PageBarContainerComponent;
   let fixture: ComponentFixture<PageBarContainerComponent>;
-  let testContainerFixture: ComponentFixture<TestContainerComponent>;
-  let testContainerComponent: TestContainerComponent;
-  let innerComponent: PageBarContainerComponent;
-
+  let mockPortalHost;
+  let spy;
+  beforeAll(() => {
+    mockPortalHost = new MockPortalHost();
+  });
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [TestModule]
+      declarations: [PageBarContainerComponent]
     }).compileComponents();
   }));
-  beforeEach(() => {
-    // templated component
-    testContainerFixture = TestBed.createComponent(TestContainerComponent);
-    testContainerComponent = testContainerFixture.componentInstance;
-    innerComponent = <PageBarContainerComponent>(
-      testContainerFixture.debugElement.query(By.css('campus-page-bar'))
-        .componentInstance
-    );
-    testContainerFixture.detectChanges();
-
-    // return TestContainerComponent div with id 'page-bar-container'
-    jest.spyOn(document, 'querySelector').mockImplementation(() => {
-      return testContainerFixture.nativeElement.querySelector(
-        '#page-bar-container'
-      );
-    });
-    // regular component
-    fixture = TestBed.createComponent(PageBarContainerComponent);
-    component = fixture.componentInstance;
-
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
-  it('should create innerComponent', () => {
-    expect(innerComponent).toBeTruthy();
-  });
-  it('should display the div with the id page-bar-container', () => {
-    expect(
-      testContainerFixture.debugElement.query(By.css('#page-bar-container'))
-    ).toBeTruthy();
-  });
-  xit('should show the text from the campus-page-bar inside the page-bar-constainer', async () => {
-    // component.ngAfterViewInit();
-    // fixture.detectChanges();
-    // testContainerFixture.detectChanges();
-    // this test will be replaced by an e2e test, see https://github.com/diekeure/campus/issues/206
-
-    return fixture.whenStable().then(() => {
-      const containerText = testContainerFixture.debugElement.query(
-        By.css('#page-bar-container')
-      ).nativeElement.textContent;
+  describe('creation', () => {
+    beforeEach(() => {
+      fixture = TestBed.createComponent(PageBarContainerComponent);
+      component = fixture.componentInstance;
+      spy = jest.fn().mockReturnValue(mockPortalHost);
+      component['getPortalHost'] = spy;
       fixture.detectChanges();
-      testContainerFixture.detectChanges();
-      expect(containerText).toBe('this is a the text');
+    });
+    it('should create', () => {
+      expect(component).toBeTruthy();
+    });
+    it('should call getPortalHost during init', () => {
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('methods', () => {
+    beforeEach(() => {
+      fixture = TestBed.createComponent(PageBarContainerComponent);
+      component = fixture.componentInstance;
+      spy = jest.fn().mockReturnValue(mockPortalHost);
+      component['getPortalHost'] = spy;
+      component.portal = <CdkPortal>{};
+    });
+    it('should call attacher when initializing', () => {
+      const actual = jest.spyOn(mockPortalHost, 'attach');
+      component.portal = 'expected value';
+      component.ngAfterViewInit();
+      expect(actual).toHaveBeenCalledWith('expected value');
     });
   });
 });
