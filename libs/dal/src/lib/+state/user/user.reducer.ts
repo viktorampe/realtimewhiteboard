@@ -15,14 +15,14 @@ export interface State {
   error?: any; // last none error (if any)
 }
 
-export const initialUserstate: State = {
+export const initialState: State = {
   currentUser: null,
   loaded: false,
   error: null
 };
 
 export function reducer(
-  state: State = initialUserstate,
+  state: State = initialState,
   action: UserAction
 ): State {
   switch (action.type) {
