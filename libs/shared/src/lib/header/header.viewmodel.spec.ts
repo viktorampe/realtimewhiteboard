@@ -1,7 +1,11 @@
-import { EnvironmentFeaturesInterface } from '../interfaces';
+import {
+  EnvironmentAlertsFeatureInterface,
+  EnvironmentMessagesFeatureInterface
+} from '../interfaces';
 import { HeaderViewModel } from './header.viewmodel';
 
-let environmentFeatures: EnvironmentFeaturesInterface;
+let environmentMessagesFeature: EnvironmentMessagesFeatureInterface;
+let environmentAlertsFeature: EnvironmentAlertsFeatureInterface;
 let headerViewModel: HeaderViewModel;
 
 describe('loadFeatureToggles and enableAlerts, enableMessages', () => {
@@ -10,17 +14,18 @@ describe('loadFeatureToggles and enableAlerts, enableMessages', () => {
     haveDropDown: boolean,
     expectedEnabled: boolean
   ) {
-    environmentFeatures = {
-      alerts: {
-        enabled: enabled,
-        hasAppBarDropDown: haveDropDown
-      },
-      messages: {
-        enabled: enabled,
-        hasAppBarDropDown: haveDropDown
-      }
+    environmentMessagesFeature = {
+      enabled: enabled,
+      hasAppBarDropDown: haveDropDown
     };
-    headerViewModel = new HeaderViewModel(environmentFeatures);
+    environmentAlertsFeature = {
+      enabled: enabled,
+      hasAppBarDropDown: haveDropDown
+    };
+    headerViewModel = new HeaderViewModel(
+      environmentAlertsFeature,
+      environmentMessagesFeature
+    );
     expect(headerViewModel.enableAlerts).toBe(expectedEnabled);
     expect(headerViewModel.enableMessages).toBe(expectedEnabled);
   }
