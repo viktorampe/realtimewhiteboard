@@ -6,9 +6,7 @@
     h3 {
       margin: 0;
       padding: 0;
-      font-size: 13px;
       display: block;
-      font-weight: 300;
       .bold {
         font-weight: 700 !important;
       }
@@ -21,16 +19,13 @@
       }
     }
     a {
-      font-size: 12px;
       text-decoration: underline;
       font-style: italic;
       margin-top: 2px;
-      line-height: 14px;
     }
   }
 
   &__body {
-    height: 275px;
     overflow: auto;
     // shout-out to the chrome users - WOOP WOOP !
     &::-webkit-scrollbar {

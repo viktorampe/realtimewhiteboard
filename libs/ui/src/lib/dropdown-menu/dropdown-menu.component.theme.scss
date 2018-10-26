@@ -1,5 +1,6 @@
 @mixin ui-dropdown-menu {
   $ui-dropdown-menu-width: 350px !default;
+  $ui-dropdown-menu-body-height: 275px !default;
   $ui-dropdown-menu-background: #95a0aa !default;
   $ui-dropdown-menu-color: #32323a !default;
 
@@ -11,6 +12,9 @@
       a {
         color: $ui-dropdown-menu-color;
       }
+    }
+    &__body {
+      height: $ui-dropdown-menu-body-height;
     }
   }
   .mat-menu-panel.ui-dropdown-menu {
