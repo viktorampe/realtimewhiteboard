@@ -6,8 +6,10 @@ import { UiModule } from '@campus/ui';
 import { PageBarContainerComponent } from './components/page-bar-container/page-bar-container.component';
 import { HeaderComponent } from './header/header.component';
 import {
-  EnvironmentFeaturesInterface,
-  ENVIRONMENT_FEATURES_TOKEN
+  EnvironmentAlertsFeatureInterface,
+  EnvironmentMessagesFeatureInterface,
+  ENVIRONMENT_ALERTS_FEATURE_TOKEN,
+  ENVIRONMENT_MESSAGES_FEATURE_TOKEN
 } from './interfaces';
 @NgModule({
   imports: [CommonModule, UiModule, PortalModule, LayoutModule],
@@ -21,12 +23,20 @@ import {
 })
 export class SharedModule {
   static forRoot(
-    environmentFeatures: EnvironmentFeaturesInterface
+    environmentAlertsFeature: EnvironmentAlertsFeatureInterface,
+    environmentMessagesFeature: EnvironmentMessagesFeatureInterface
   ): ModuleWithProviders {
     return {
       ngModule: SharedModule,
       providers: [
-        { provide: ENVIRONMENT_FEATURES_TOKEN, useValue: environmentFeatures }
+        {
+          provide: ENVIRONMENT_ALERTS_FEATURE_TOKEN,
+          useValue: environmentAlertsFeature
+        },
+        {
+          provide: ENVIRONMENT_MESSAGES_FEATURE_TOKEN,
+          useValue: environmentMessagesFeature
+        }
       ]
     };
   }

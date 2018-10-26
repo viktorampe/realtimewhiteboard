@@ -3,8 +3,10 @@ import { Resolve } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import {
-  EnvironmentFeaturesInterface,
-  ENVIRONMENT_FEATURES_TOKEN
+  EnvironmentAlertsFeatureInterface,
+  EnvironmentMessagesFeatureInterface,
+  ENVIRONMENT_ALERTS_FEATURE_TOKEN,
+  ENVIRONMENT_MESSAGES_FEATURE_TOKEN
 } from '../interfaces';
 
 @Injectable({
@@ -15,8 +17,10 @@ export class HeaderViewModel implements Resolve<boolean> {
   enableMessages: boolean;
 
   constructor(
-    @Inject(ENVIRONMENT_FEATURES_TOKEN)
-    private environmentFeatures: EnvironmentFeaturesInterface
+    @Inject(ENVIRONMENT_ALERTS_FEATURE_TOKEN)
+    private environmentAlertsFeature: EnvironmentAlertsFeatureInterface,
+    @Inject(ENVIRONMENT_MESSAGES_FEATURE_TOKEN)
+    private environmentMessagesFeature: EnvironmentMessagesFeatureInterface
   ) {
     this.loadFeatureToggles();
   }
@@ -26,10 +30,10 @@ export class HeaderViewModel implements Resolve<boolean> {
   }
   private loadFeatureToggles() {
     this.enableAlerts =
-      this.environmentFeatures.alerts.enabled &&
-      this.environmentFeatures.alerts.hasAppBarDropDown;
+      this.environmentAlertsFeature.enabled &&
+      this.environmentAlertsFeature.hasAppBarDropDown;
     this.enableMessages =
-      this.environmentFeatures.messages.enabled &&
-      this.environmentFeatures.messages.hasAppBarDropDown;
+      this.environmentMessagesFeature.enabled &&
+      this.environmentMessagesFeature.hasAppBarDropDown;
   }
 }
