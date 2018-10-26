@@ -15,7 +15,8 @@ export const adapter: EntityAdapter<AlertQueueInterface> = createEntityAdapter<
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties
-  loaded: false
+  loaded: false,
+  lastUpdateTimeStamp: null
 });
 
 export function reducer(state = initialState, action: AlertsActions): State {
@@ -24,9 +25,7 @@ export function reducer(state = initialState, action: AlertsActions): State {
       return adapter.addAll(action.payload.alerts, {
         ...state,
         loaded: true,
-        lastUpdateTimeStamp: action.payload.timeStamp
-          ? action.payload.timeStamp
-          : Date.now()
+        lastUpdateTimeStamp: action.payload.timeStamp || Date.now()
       });
     }
 

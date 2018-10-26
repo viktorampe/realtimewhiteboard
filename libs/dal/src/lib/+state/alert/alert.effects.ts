@@ -52,9 +52,7 @@ export class AlertsEffects {
       const requiredTimeDeltaInMilliseconds = 3000;
 
       // If not provided, set update time to now
-      const timeStamp = action.payload.timeStamp
-        ? action.payload.timeStamp
-        : Date.now();
+      const timeStamp = action.payload.timeStamp || Date.now();
 
       const lastUpdateTimeStamp = state.alerts.lastUpdateTimeStamp;
 
@@ -65,8 +63,9 @@ export class AlertsEffects {
           action.payload.force ||
           updateTimeDeltaInMilliseconds > requiredTimeDeltaInMilliseconds
         )
-      )
+      ) {
         return;
+      }
 
       return this.alertService
         .getAllForUser(action.payload.userId, timeStamp)

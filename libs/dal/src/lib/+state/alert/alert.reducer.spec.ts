@@ -54,9 +54,9 @@ function createState(
       : {},
     loaded: loaded
   };
-  if (lastUpdateTimeStamp) {
-    Object.assign(state, { lastUpdateTimeStamp: lastUpdateTimeStamp });
-  }
+  if (lastUpdateTimeStamp !== undefined)
+    state.lastUpdateTimeStamp = lastUpdateTimeStamp;
+
   if (error !== undefined) state.error = error;
   return state;
 }
