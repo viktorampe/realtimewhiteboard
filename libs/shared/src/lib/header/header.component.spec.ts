@@ -1,25 +1,18 @@
+import { Injectable } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { UiModule } from '@campus/ui';
-import {
-  EnvironmentAlertsFeatureInterface,
-  EnvironmentMessagesFeatureInterface,
-  ENVIRONMENT_ALERTS_FEATURE_TOKEN,
-  ENVIRONMENT_MESSAGES_FEATURE_TOKEN
-} from '../interfaces';
 import { HeaderComponent } from './header.component';
+import { HeaderViewModel } from './header.viewmodel';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class MockHeaderViewModel {}
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
-  const environmentMessagesFeature: EnvironmentMessagesFeatureInterface = {
-    enabled: false,
-    hasAppBarDropDown: false
-  };
-  const environmentAlertsFeature: EnvironmentAlertsFeatureInterface = {
-    enabled: false,
-    hasAppBarDropDown: false
-  };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -27,12 +20,8 @@ describe('HeaderComponent', () => {
       declarations: [HeaderComponent],
       providers: [
         {
-          provide: ENVIRONMENT_MESSAGES_FEATURE_TOKEN,
-          useValue: environmentMessagesFeature
-        },
-        {
-          provide: ENVIRONMENT_ALERTS_FEATURE_TOKEN,
-          useValue: environmentAlertsFeature
+          provide: HeaderViewModel,
+          useClass: MockHeaderViewModel
         }
       ]
     }).compileComponents();
