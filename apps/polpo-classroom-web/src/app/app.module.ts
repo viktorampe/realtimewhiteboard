@@ -25,7 +25,10 @@ import { AppComponent } from './app.component';
   imports: [
     UiModule,
     BrowserModule,
-    SharedModule.forRoot(environment.features),
+    SharedModule.forRoot(
+      environment.features.alerts,
+      environment.features.messages
+    ),
     BrowserAnimationsModule,
     NxModule.forRoot(),
     DalModule.forRoot({ apiBaseUrl: environment.APIBase }),

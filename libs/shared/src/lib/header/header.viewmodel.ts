@@ -13,8 +13,10 @@ import { Action, select, Selector, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import {
-  EnvironmentFeaturesInterface,
-  ENVIRONMENT_FEATURES_TOKEN
+  EnvironmentAlertsFeatureInterface,
+  EnvironmentMessagesFeatureInterface,
+  ENVIRONMENT_ALERTS_FEATURE_TOKEN,
+  ENVIRONMENT_MESSAGES_FEATURE_TOKEN
 } from '../interfaces';
 
 //TODO replace with actual interface
@@ -53,8 +55,10 @@ export class HeaderViewModel implements StateResolverInterface {
 
   constructor(
     private stateResolver: StateResolver,
-    @Inject(ENVIRONMENT_FEATURES_TOKEN)
-    private environmentFeatures: EnvironmentFeaturesInterface,
+    @Inject(ENVIRONMENT_ALERTS_FEATURE_TOKEN)
+    private environmentAlertsFeature: EnvironmentAlertsFeatureInterface,
+    @Inject(ENVIRONMENT_MESSAGES_FEATURE_TOKEN)
+    private environmentMessagesFeature: EnvironmentMessagesFeatureInterface,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     private store: Store<DalState>
   ) {}
@@ -120,11 +124,11 @@ export class HeaderViewModel implements StateResolverInterface {
 
   private loadFeatureToggles(): void {
     this.enableAlerts =
-      this.environmentFeatures.alerts.enabled &&
-      this.environmentFeatures.alerts.hasAppBarDropDown;
+      this.environmentAlertsFeature.enabled &&
+      this.environmentAlertsFeature.hasAppBarDropDown;
     this.enableMessages =
-      this.environmentFeatures.messages.enabled &&
-      this.environmentFeatures.messages.hasAppBarDropDown;
+      this.environmentMessagesFeature.enabled &&
+      this.environmentMessagesFeature.hasAppBarDropDown;
   }
 
   private getRecentAlerts(

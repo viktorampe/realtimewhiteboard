@@ -1,20 +1,19 @@
-// file.only
-
 import { AuthService, DalState } from '@campus/dal';
 import { StateResolver } from '@campus/pages/shared';
 import { Store } from '@ngrx/store';
-import { EnvironmentFeaturesInterface } from '../interfaces';
+import {
+  EnvironmentAlertsFeatureInterface,
+  EnvironmentMessagesFeatureInterface
+} from '../interfaces';
 import { HeaderViewModel } from './header.viewmodel';
 
-let environmentFeatures: EnvironmentFeaturesInterface = {
-  alerts: {
-    enabled: true,
-    hasAppBarDropDown: true
-  },
-  messages: {
-    enabled: true,
-    hasAppBarDropDown: true
-  }
+let environmentMessagesFeature: EnvironmentMessagesFeatureInterface = {
+  enabled: false,
+  hasAppBarDropDown: false
+};
+let environmentAlertsFeature: EnvironmentAlertsFeatureInterface = {
+  enabled: false,
+  hasAppBarDropDown: false
 };
 let headerViewModel: HeaderViewModel;
 
@@ -25,19 +24,18 @@ describe('headerViewModel', () => {
       haveDropDown: boolean,
       expectedEnabled: boolean
     ) {
-      environmentFeatures = {
-        alerts: {
-          enabled: enabled,
-          hasAppBarDropDown: haveDropDown
-        },
-        messages: {
-          enabled: enabled,
-          hasAppBarDropDown: haveDropDown
-        }
+      environmentMessagesFeature = {
+        enabled: enabled,
+        hasAppBarDropDown: haveDropDown
+      };
+      environmentAlertsFeature = {
+        enabled: enabled,
+        hasAppBarDropDown: haveDropDown
       };
       headerViewModel = new HeaderViewModel(
         <StateResolver>{},
-        environmentFeatures,
+        environmentAlertsFeature,
+        environmentMessagesFeature,
         <AuthService>{},
         <Store<DalState>>{}
       );
@@ -66,7 +64,8 @@ describe('headerViewModel', () => {
     beforeEach(() => {
       headerViewModel = new HeaderViewModel(
         <StateResolver>{},
-        environmentFeatures,
+        environmentAlertsFeature,
+        environmentMessagesFeature,
         <AuthService>{},
         <Store<DalState>>{}
       );
@@ -99,7 +98,8 @@ describe('headerViewModel', () => {
     beforeEach(() => {
       headerViewModel = new HeaderViewModel(
         <StateResolver>{},
-        environmentFeatures,
+        environmentAlertsFeature,
+        environmentMessagesFeature,
         <AuthService>{},
         <Store<DalState>>{}
       );
