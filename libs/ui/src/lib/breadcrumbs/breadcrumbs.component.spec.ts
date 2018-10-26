@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { UiModule } from '../ui.module';
 import { BreadcrumbsComponent } from './breadcrumbs.component';
 
 describe('BreadcrumbComponent', () => {
@@ -34,7 +35,7 @@ describe('BreadcrumbComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [BreadcrumbsComponent]
+      imports: [UiModule]
     }).compileComponents();
   }));
 
@@ -45,7 +46,6 @@ describe('BreadcrumbComponent', () => {
     component.hidden = mockData.hidden;
     component.maxLen = mockData.maxLen;
     component.seperator = mockData.seperator;
-    component.baseIcon = mockData.homeIcon;
     component.baseUrl = mockData.homeUrl;
     fixture.detectChanges();
   });
@@ -86,15 +86,6 @@ describe('BreadcrumbComponent', () => {
     );
     expect(breadcrumbs.children[0].nativeElement.href).toContain(
       mockData.homeUrl
-    );
-  });
-
-  it('should show the correct home icon', () => {
-    const breadcrumbs = fixture.debugElement.query(
-      By.css('.ui-breadcrumbs__holder')
-    );
-    expect(breadcrumbs.children[0].children[0].nativeElement.className).toBe(
-      mockData.homeIcon
     );
   });
 

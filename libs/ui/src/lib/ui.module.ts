@@ -67,7 +67,6 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     MatFormFieldModule,
     MatInputModule,
     LayoutModule,
-    MatIconModule,
     RouterModule,
     CdkTreeModule,
     MatSelectModule,

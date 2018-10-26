@@ -6,7 +6,7 @@
     <div class="ui-breadcrumbs__holder__breadcrumbs">
       <li *ngFor="let breadCrumb of breadCrumbs">
         <i [className]="seperator"></i>
-        <a href="{{breadCrumb.href}}"> {{breadCrumb.displayText | truncateString:hidden:maxLen}} </a>
+        <a href="{{breadCrumb.href}}">{{breadCrumb.displayText | truncateString:hidden:maxLen}}</a>
       </li>
     </div>
   </ul>
