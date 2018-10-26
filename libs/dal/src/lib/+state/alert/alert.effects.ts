@@ -1,13 +1,8 @@
 import { Inject, Injectable } from '@angular/core';
-import { AlertQueueInterface } from '@campus/dal';
-import {
-  EnvironmentFeaturesInterface,
-  ENVIRONMENT_FEATURES_TOKEN
-} from '@campus/shared';
 import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { interval } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import {
   AlertServiceInterface,
   ALERT_SERVICE_TOKEN
@@ -21,6 +16,7 @@ import {
   LoadAlerts,
   LoadNewAlerts,
   NewAlertsLoaded,
+  PollAlerts,
   SetReadAlert
 } from './alert.actions';
 
@@ -74,10 +70,7 @@ export class AlertsEffects {
 
       return this.alertService
         .getAllForUser(action.payload.userId, timeStamp)
-        .pipe(
-          tap(alerts => this.checkAlertsForTasks(alerts)),
-          map(alerts => new NewAlertsLoaded({ alerts, timeStamp }))
-        );
+        .pipe(map(alerts => new NewAlertsLoaded({ alerts, timeStamp })));
     },
     onError: (action: LoadNewAlerts, error) => {
       return new AlertsLoadError(error);
@@ -85,16 +78,24 @@ export class AlertsEffects {
   });
 
   @Effect()
-  pollAlerts$ = interval(this.environment.alerts.appBarPollingInterval).pipe(
-    map(() => new LoadNewAlerts({ userId: 6 }))
-  );
+  pollAlerts$ = this.dataPersistence.fetch(AlertsActionTypes.PollAlerts, {
+    run: (action: PollAlerts, state: DalState) => {
+      return interval(action.payload.pollingInterval).pipe(
+        map(values => new LoadNewAlerts({ userId: action.payload.userId }))
+      );
+    },
+    onError: (action: PollAlerts, error) => {
+      return error;
+    }
+  });
 
   @Effect()
   setReadAlert$ = this.dataPersistence.optimisticUpdate(
     AlertsActionTypes.SetReadAlert,
     {
       run: (action: SetReadAlert, state: DalState) => {
-        if (!state.alerts.loaded) return;
+        if (!state.alerts.loaded)
+          return new LoadAlerts({ userId: action.payload.personId });
 
         return this.alertService
           .setAlertAsRead(
@@ -121,23 +122,6 @@ export class AlertsEffects {
   constructor(
     private actions: Actions,
     private dataPersistence: DataPersistence<DalState>,
-    @Inject(ALERT_SERVICE_TOKEN) private alertService: AlertServiceInterface,
-    @Inject(ENVIRONMENT_FEATURES_TOKEN)
-    private environment: EnvironmentFeaturesInterface
+    @Inject(ALERT_SERVICE_TOKEN) private alertService: AlertServiceInterface
   ) {}
-
-  /**
-   * Checks an array of Alerts for Tasks and dispatches appropriate Actions
-   *
-   * @private
-   * @param {AlertQueueInterface[]} alertArray
-   * @memberof AlertsEffects
-   */
-  private checkAlertsForTasks(alertArray: AlertQueueInterface[]) {
-    if (alertArray.filter(alert => alert.taskId)) {
-      // TODO: Dispatch LOAD_TASKS action
-      // this.dataPersistence.store.dispatch();
-      console.log('Load tasks now!');
-    }
-  }
 }

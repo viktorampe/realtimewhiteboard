@@ -1,6 +1,5 @@
 import { Update } from '@ngrx/entity';
 import { Action } from '@ngrx/store';
-import { isNullOrUndefined } from 'util';
 import { AlertQueueInterface } from '../../+models';
 
 export enum AlertsActionTypes {
@@ -9,7 +8,8 @@ export enum AlertsActionTypes {
   LoadAlerts = '[Alerts] Load Alerts',
   NewAlertsLoaded = '[Alerts] New Alerts Loaded',
   LoadNewAlerts = '[Alerts] Load New Alerts',
-  SetReadAlert = '[Alerts] Set as Read Alert'
+  SetReadAlert = '[Alerts] Set as Read Alert',
+  PollAlerts = '[Alerts] Poll Alerts'
   // AddAlert = '[Alerts] Add Alert',
   // UpsertAlert = '[Alerts] Upsert Alert',
   // AddAlerts = '[Alerts] Add Alerts',
@@ -58,6 +58,11 @@ export class AlertsLoadError implements Action {
   constructor(public payload: any) {}
 }
 
+export class PollAlerts implements Action {
+  readonly type = AlertsActionTypes.PollAlerts;
+  constructor(public payload: { pollingInterval: number; userId: number }) {}
+}
+
 export class SetReadAlert implements Action {
   readonly type = AlertsActionTypes.SetReadAlert;
   readonly updatePayload: Update<AlertQueueInterface>[];
@@ -79,19 +84,16 @@ export class SetReadAlert implements Action {
     }
 
     // read moet boolean zijn, default: true
-    const readStatus = isNullOrUndefined(payload.read) ? true : payload.read;
+    const readStatus = payload.read !== false;
 
-    this.updatePayload = alertIds.map(alertId =>
-      Object.assign(
-        {},
-        {
-          id: alertId,
-          changes: {
-            read: readStatus
-          }
+    this.updatePayload = alertIds.map(alertId => {
+      return {
+        id: alertId,
+        changes: {
+          read: readStatus
         }
-      )
-    );
+      };
+    });
   }
 }
 
@@ -153,7 +155,8 @@ export type AlertsActions =
   | AlertsLoadError
   | LoadNewAlerts
   | NewAlertsLoaded
-  | SetReadAlert;
+  | SetReadAlert
+  | PollAlerts;
 // | AddAlert
 // | UpsertAlert
 // | AddAlerts
