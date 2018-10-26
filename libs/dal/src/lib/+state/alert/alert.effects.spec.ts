@@ -1,8 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import {
-  EnvironmentFeaturesInterface,
-  ENVIRONMENT_FEATURES_TOKEN
-} from '@campus/shared';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
@@ -26,14 +22,14 @@ describe('AlertEffects', () => {
   let actions: Observable<any>;
   let effects: AlertsEffects;
   let usedState: any;
-  let environment: EnvironmentFeaturesInterface;
 
   const mockData = {
     userId: 1,
     updateTime: new Date(1983, 3, 6).getTime(),
     timeDeltaInMinutes: 15,
     personId: 2,
-    alertId: 42
+    alertId: 42,
+    interval: 30000
   };
 
   const expectInAndOut = (
@@ -96,14 +92,6 @@ describe('AlertEffects', () => {
             ) => {}
           }
         },
-        {
-          provide: ENVIRONMENT_FEATURES_TOKEN,
-          useValue: {
-            alerts: {
-              appBarPollingInterval: 3000
-            }
-          }
-        },
         AlertsEffects,
         DataPersistence,
         provideMockActions(() => actions)
@@ -111,7 +99,6 @@ describe('AlertEffects', () => {
     });
 
     effects = TestBed.get(AlertsEffects);
-    environment = TestBed.get(ENVIRONMENT_FEATURES_TOKEN);
   });
 
   describe('loadAlert$', () => {
