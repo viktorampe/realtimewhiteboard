@@ -38,7 +38,7 @@ export class LoginpageComponent implements OnInit {
     this.store.dispatch(
       new AlertActions.LoadNewAlerts({
         userId: 6,
-        timeStamp: new Date(2018, 8, 4)
+        timeStamp: new Date(2018, 8, 4).getTime()
       })
     );
   }
@@ -64,7 +64,16 @@ export class LoginpageComponent implements OnInit {
   getRecentAlerts() {
     this.response2$ = this.store.pipe(
       select(AlertQueries.getRecentByDate, {
-        timeThreshold: new Date(2018, 9 - 1, 4, 16, 27, 15)
+        timeThreshold: new Date(2018, 9 - 1, 4, 16, 27, 15).getTime()
+      })
+    );
+  }
+
+  startPolling() {
+    this.store.dispatch(
+      new AlertActions.PollAlerts({
+        userId: 6,
+        pollingInterval: 1000
       })
     );
   }

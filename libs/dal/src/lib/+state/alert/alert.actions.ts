@@ -25,7 +25,7 @@ export class LoadAlerts implements Action {
   readonly type = AlertsActionTypes.LoadAlerts;
 
   constructor(
-    public payload: { force?: boolean; userId: number; timeStamp?: Date }
+    public payload: { force?: boolean; userId: number; timeStamp?: number }
   ) {}
 }
 
@@ -33,7 +33,7 @@ export class AlertsLoaded implements Action {
   readonly type = AlertsActionTypes.AlertsLoaded;
 
   constructor(
-    public payload: { alerts: AlertQueueInterface[]; timeStamp: Date }
+    public payload: { alerts: AlertQueueInterface[]; timeStamp: number }
   ) {}
 }
 
@@ -41,7 +41,7 @@ export class LoadNewAlerts implements Action {
   readonly type = AlertsActionTypes.LoadNewAlerts;
 
   constructor(
-    public payload: { force?: boolean; userId: number; timeStamp?: Date }
+    public payload: { force?: boolean; userId: number; timeStamp?: number }
   ) {}
 }
 
@@ -49,7 +49,7 @@ export class NewAlertsLoaded implements Action {
   readonly type = AlertsActionTypes.NewAlertsLoaded;
 
   constructor(
-    public payload: { alerts: AlertQueueInterface[]; timeStamp: Date }
+    public payload: { alerts: AlertQueueInterface[]; timeStamp: number }
   ) {}
 }
 

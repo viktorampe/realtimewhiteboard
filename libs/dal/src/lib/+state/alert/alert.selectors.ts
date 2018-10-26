@@ -67,15 +67,16 @@ export const getUnread = createSelector(selectAlertState, (state: State) =>
 /**
  * returns array of Alerts with a validFrom >= a timeThreshold
  * @example
- * alert$: AlertQueueInterface = select(AlertQueries.getRecentByDate,
+ * alert$: AlertQueueInterface = this.store.pipe(select(AlertQueries.getRecentByDate,
  *    {timeThreshold: someDateValue})
  */
 export const getRecentByDate = createSelector(
   selectAlertState,
-  (state: State, props: { timeThreshold: Date }) =>
+  (state: State, props: { timeThreshold: number }) =>
     Object.entries(state.entities)
       .filter(
-        ([key, value]) => new Date(value.validFrom) >= props.timeThreshold
+        ([key, value]) =>
+          new Date(value.validFrom).getTime() >= props.timeThreshold
       )
       .map(([key, value]) => state.entities[key])
 );

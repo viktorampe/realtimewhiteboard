@@ -6,7 +6,7 @@ export const ALERT_SERVICE_TOKEN = new InjectionToken('AlertService');
 export interface AlertServiceInterface {
   getAllForUser(
     userId: number,
-    lastUpdateTime?: Date
+    lastUpdateTime?: number
   ): Observable<AlertQueueInterface[]>;
 
   setAlertAsRead(

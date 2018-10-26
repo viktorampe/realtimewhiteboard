@@ -38,7 +38,7 @@ function createAlert(
 function createState(
   alerts: AlertQueueInterface[],
   loaded: boolean = false,
-  lastUpdateTimeStamp?: Date,
+  lastUpdateTimeStamp?: number,
   error?: any
 ): State {
   const state: any = {
@@ -63,12 +63,12 @@ function createState(
 
 describe('Alerts Reducer', () => {
   let alerts: AlertQueueInterface[];
-  let updateTime: Date;
-  let newUpdateTime: Date;
+  let updateTime: number;
+  let newUpdateTime: number;
   beforeEach(() => {
     alerts = [createAlert(1), createAlert(2), createAlert(3)];
-    updateTime = new Date(1983, 3, 6);
-    newUpdateTime = new Date(1983, 3, 6, 1);
+    updateTime = new Date(1983, 3, 6).getTime();
+    newUpdateTime = new Date(1983, 3, 6, 1).getTime();
   });
 
   describe('unknown action', () => {

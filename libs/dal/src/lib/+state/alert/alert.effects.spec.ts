@@ -30,15 +30,11 @@ describe('AlertEffects', () => {
 
   const mockData = {
     userId: 1,
-    updateTime: new Date(1983, 3, 6),
+    updateTime: new Date(1983, 3, 6).getTime(),
     timeDeltaInMinutes: 15,
     personId: 2,
     alertId: 42
   };
-
-  function addMinutes(date: Date, minutes: number): Date {
-    return new Date(date.getTime() + minutes * 60000);
-  }
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -218,7 +214,7 @@ describe('AlertEffects', () => {
     });
     const unforcedNewLoadActionWithTimeDelta = new LoadNewAlerts({
       userId: mockData.userId,
-      timeStamp: addMinutes(mockData.updateTime, mockData.timeDeltaInMinutes)
+      timeStamp: mockData.updateTime + mockData.timeDeltaInMinutes * 60000
     });
     const forcedNewLoadAction = new LoadNewAlerts({
       force: true,
@@ -270,10 +266,7 @@ describe('AlertEffects', () => {
       it('should trigger an api call with the loaded state if the timeDelta is big enough', () => {
         const filledNewLoadedActionWithTimeDelta = new NewAlertsLoaded({
           alerts: [],
-          timeStamp: addMinutes(
-            mockData.updateTime,
-            mockData.timeDeltaInMinutes
-          )
+          timeStamp: mockData.updateTime + mockData.timeDeltaInMinutes * 60000
         });
 
         expectInAndOut(

@@ -3,7 +3,7 @@ import { AlertQueueInterface } from '../../+models';
 import { State } from './alert.reducer';
 
 let mockData: {
-  timeStamp: Date;
+  timeStamp: number;
 };
 
 function addMinutes(date: Date, minutes: number): Date {
@@ -11,14 +11,14 @@ function addMinutes(date: Date, minutes: number): Date {
 }
 
 describe('Alert Selectors', () => {
-  mockData = { timeStamp: new Date(1983, 3, 6) };
+  mockData = { timeStamp: new Date(1983, 3, 6).getTime() };
 
   function createAlert(id: number): AlertQueueInterface | any {
     return {
       id: id,
       // Adds the id in minutes to the validFrom Date
       // Since the ids are 1 -> 4, this gives 4 alerts with an interval of 1 minute
-      validFrom: addMinutes(mockData.timeStamp, id),
+      validFrom: mockData.timeStamp + id * 60000,
       // Returns a boolean based on the id
       // Even ids return true, odd ids return false
       read: Number.isInteger(id / 2)
@@ -114,7 +114,7 @@ describe('Alert Selectors', () => {
 
     it('getRecent() should return alerts with the ValidFrom property >= the thresholdDate', () => {
       const results = AlertQueries.getRecentByDate(storeState, {
-        timeThreshold: addMinutes(mockData.timeStamp, 2)
+        timeThreshold: mockData.timeStamp + 2 * 60000
       });
       expect(results).toEqual([createAlert(2), createAlert(3), createAlert(4)]);
     });

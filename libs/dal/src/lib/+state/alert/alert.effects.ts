@@ -32,12 +32,11 @@ export class AlertsEffects {
       if (!action.payload.force && state.alerts.loaded) return;
 
       const userId = action.payload.userId;
-      const pollingInterval = 30000;
 
       // If not provided, set update time to now
       const timeStamp = action.payload.timeStamp
         ? action.payload.timeStamp
-        : new Date();
+        : Date.now();
 
       return this.alertService
         .getAllForUser(userId)
@@ -59,12 +58,11 @@ export class AlertsEffects {
       // If not provided, set update time to now
       const timeStamp = action.payload.timeStamp
         ? action.payload.timeStamp
-        : new Date();
+        : Date.now();
 
-      const lastUpdateTimeStamp = <Date>state.alerts.lastUpdateTimeStamp;
+      const lastUpdateTimeStamp = state.alerts.lastUpdateTimeStamp;
 
-      const updateTimeDeltaInMilliseconds =
-        timeStamp.getTime() - lastUpdateTimeStamp.getTime();
+      const updateTimeDeltaInMilliseconds = timeStamp - lastUpdateTimeStamp;
 
       if (
         !(

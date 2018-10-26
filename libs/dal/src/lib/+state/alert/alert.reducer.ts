@@ -5,7 +5,7 @@ import { AlertsActions, AlertsActionTypes } from './alert.actions';
 export interface State extends EntityState<AlertQueueInterface> {
   // additional entities state properties
   loaded: boolean;
-  lastUpdateTimeStamp?: Date;
+  lastUpdateTimeStamp?: number;
   error?: any;
 }
 
@@ -26,7 +26,7 @@ export function reducer(state = initialState, action: AlertsActions): State {
         loaded: true,
         lastUpdateTimeStamp: action.payload.timeStamp
           ? action.payload.timeStamp
-          : new Date()
+          : Date.now()
       });
     }
 
