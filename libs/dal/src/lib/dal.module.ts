@@ -25,7 +25,7 @@ import {
   StudentContentStatusesEffects,
   StudentContentStatusReducer
 } from './+state/student-content-status';
-import { UiEffects, uiReducer } from './+state/ui/';
+import { UiEffects, UiReducer } from './+state/ui/';
 import {
   UnlockedBoekeGroupReducer,
   UnlockedBoekeGroupsEffects
@@ -79,8 +79,8 @@ interface DalOptions {
     CommonModule,
     SDKBrowserModule.forRoot(),
     HttpClientModule,
-    StoreModule.forFeature('ui', uiReducer.reducer, {
-      initialState: uiReducer.initialState
+    StoreModule.forFeature('ui', UiReducer.reducer, {
+      initialState: UiReducer.initialState
     }),
     StoreModule.forFeature('bundles', BundleReducer.reducer, {
       initialState: BundleReducer.initialState
