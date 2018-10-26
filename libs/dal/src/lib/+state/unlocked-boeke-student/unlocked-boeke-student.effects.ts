@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { map } from 'rxjs/operators';
+import { DalState } from '..';
 import {
   UnlockedBoekeStudentServiceInterface,
   UNLOCKED_BOEKE_STUDENT_SERVICE_TOKEN
@@ -12,7 +13,6 @@ import {
   UnlockedBoekeStudentsLoaded,
   UnlockedBoekeStudentsLoadError
 } from './unlocked-boeke-student.actions';
-import { State } from './unlocked-boeke-student.reducer';
 
 @Injectable()
 export class UnlockedBoekeStudentsEffects {
@@ -20,10 +20,10 @@ export class UnlockedBoekeStudentsEffects {
   loadUnlockedBoekeStudents$ = this.dataPersistence.fetch(
     UnlockedBoekeStudentsActionTypes.LoadUnlockedBoekeStudents,
     {
-      run: (action: LoadUnlockedBoekeStudents, state: any) => {
+      run: (action: LoadUnlockedBoekeStudents, state: DalState) => {
         if (!action.payload.force && state.unlockedBoekeStudents.loaded) return;
         return this.unlockedBoekeStudentService
-          .getAllForUser(2) //TODO get userId from UserState
+          .getAllForUser(action.payload.userId)
           .pipe(
             map(
               unlockedBoekeStudents =>
@@ -39,7 +39,7 @@ export class UnlockedBoekeStudentsEffects {
 
   constructor(
     private actions: Actions,
-    private dataPersistence: DataPersistence<State>,
+    private dataPersistence: DataPersistence<DalState>,
     @Inject(UNLOCKED_BOEKE_STUDENT_SERVICE_TOKEN)
     private unlockedBoekeStudentService: UnlockedBoekeStudentServiceInterface
   ) {}

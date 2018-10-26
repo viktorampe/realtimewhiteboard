@@ -20,7 +20,9 @@ export enum BundlesActionTypes {
 export class LoadBundles implements Action {
   readonly type = BundlesActionTypes.LoadBundles;
 
-  constructor(public payload: { force?: boolean } = {}) {}
+  constructor(
+    public payload: { force?: boolean; userId: number } = { userId: null }
+  ) {}
 }
 
 export class BundlesLoaded implements Action {
