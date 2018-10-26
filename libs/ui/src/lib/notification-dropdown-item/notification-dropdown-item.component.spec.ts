@@ -35,7 +35,7 @@ describe('NotificationDropdownItemComponent', () => {
     fixture.detectChanges();
 
     const iconNode = fixture.debugElement.query(
-      By.css('i.ui-notification-dropdown-item-icon')
+      By.css('i.ui-notification-dropdown-item__icon')
     );
     expect(iconNode).toBeNull();
   });
@@ -45,7 +45,7 @@ describe('NotificationDropdownItemComponent', () => {
     fixture.detectChanges();
 
     const iconNode = fixture.debugElement.query(
-      By.css('i.ui-notification-dropdown-item-icon')
+      By.css('i.ui-notification-dropdown-item__icon')
     );
     expect(iconNode).toBeTruthy();
     expect(iconNode.nativeElement.classList).toContain('foo');
@@ -69,7 +69,7 @@ describe('NotificationDropdownItemComponent', () => {
     fixture.detectChanges();
 
     const textNode = fixture.debugElement.query(
-      By.css('.ui-notification-dropdown-item-title')
+      By.css('.ui-notification-dropdown-item__title')
     );
     expect(textNode).toBeNull();
   });
@@ -79,7 +79,7 @@ describe('NotificationDropdownItemComponent', () => {
     fixture.detectChanges();
 
     const textNode = fixture.debugElement.query(
-      By.css('.ui-notification-dropdown-item-title')
+      By.css('.ui-notification-dropdown-item__title')
     );
     expect(textNode).toBeTruthy();
     expect(textNode.nativeElement.textContent).toBe('foo');
@@ -90,7 +90,7 @@ describe('NotificationDropdownItemComponent', () => {
     fixture.detectChanges();
 
     const textNode = fixture.debugElement.query(
-      By.css('.ui-notification-dropdown-item-text')
+      By.css('.ui-notification-dropdown-item__text')
     );
     expect(textNode.nativeElement.textContent).toBe('');
   });
@@ -100,7 +100,7 @@ describe('NotificationDropdownItemComponent', () => {
     fixture.detectChanges();
 
     const textNode = fixture.debugElement.query(
-      By.css('.ui-notification-dropdown-item-text')
+      By.css('.ui-notification-dropdown-item__text')
     );
     expect(textNode).toBeTruthy();
     expect(textNode.nativeElement.textContent).toBe('foo');
@@ -111,7 +111,7 @@ describe('NotificationDropdownItemComponent', () => {
     fixture.detectChanges();
 
     const textNode = fixture.debugElement.query(
-      By.css('.ui-notification-dropdown-item-text > span')
+      By.css('.ui-notification-dropdown-item__text > span')
     );
     expect(textNode).toBeNull();
   });
@@ -121,7 +121,7 @@ describe('NotificationDropdownItemComponent', () => {
     fixture.detectChanges();
 
     const textNode = fixture.debugElement.query(
-      By.css('.ui-notification-dropdown-item-text > span')
+      By.css('.ui-notification-dropdown-item__text > span')
     );
     expect(textNode).toBeNull();
   });
@@ -132,7 +132,7 @@ describe('NotificationDropdownItemComponent', () => {
     fixture.detectChanges();
 
     const dateNode = fixture.debugElement.query(
-      By.css('.ui-notification-dropdown-item-date')
+      By.css('.ui-notification-dropdown-item__date')
     );
     expect(dateNode).toBeTruthy();
     expect(dateNode.nativeElement.textContent).toBe('foo');
@@ -143,7 +143,7 @@ describe('NotificationDropdownItemComponent', () => {
     fixture.detectChanges();
 
     const dateNode = fixture.debugElement.query(
-      By.css('.ui-notification-dropdown-item-date')
+      By.css('.ui-notification-dropdown-item__date')
     );
     expect(dateNode).toBeNull();
   });
