@@ -8,10 +8,10 @@ import { Component, Input } from '@angular/core';
 export class BreadcrumbsComponent {
   @Input() seperator: String = 'seperator';
   @Input() breadCrumbs: BreadcumbLinkInterface[] = [];
-  @Input() homeIcon: String = 'home';
+  @Input() baseIcon: String = 'home';
   @Input() hidden: String = '...';
   @Input() maxLen: number;
-  @Input() homeUrl: String = '/';
+  @Input() baseUrl: String = '/';
 }
 
 export interface BreadcumbLinkInterface {
