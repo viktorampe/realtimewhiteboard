@@ -10,11 +10,11 @@ export class BreadcrumbsComponent {
   @Input() breadCrumbs: BreadcumbLinkInterface[] = [];
   @Input() baseIcon: String = 'home';
   @Input() hidden: String = '...';
-  @Input() maxLen: number;
+  @Input() maxLength: number;
   @Input() baseUrl: String = '/';
 }
 
 export interface BreadcumbLinkInterface {
   displayText: String;
-  href: String;
+  link: String;
 }

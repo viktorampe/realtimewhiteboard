@@ -1,12 +1,12 @@
 <div class="ui-breadcrumbs">
   <ul class="ui-breadcrumbs__holder">
-    <a href="{{baseUrl}}">
+    <a routerLink="{{baseUrl}}">
       <mat-icon [svgIcon]="baseIcon"></mat-icon>
     </a>
     <div class="ui-breadcrumbs__holder__breadcrumbs">
       <li *ngFor="let breadCrumb of breadCrumbs">
         <i [className]="seperator"></i>
-        <a href="{{breadCrumb.href}}">{{breadCrumb.displayText | truncateString:hidden:maxLen}}</a>
+        <a routerLink="{{breadCrumb.link}}">{{breadCrumb.displayText | truncateString:hidden:maxLength}}</a>
       </li>
     </div>
   </ul>
