@@ -15,6 +15,7 @@ import {
   MatTooltipModule
 } from '@angular/material';
 import { RouterModule } from '@angular/router';
+import { SharedModule } from '@campus/shared';
 import { AppBarComponent } from './app-bar/app-bar.component';
 import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
 import { ButtonComponent } from './button/button.component';
@@ -76,7 +77,8 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     MatFormFieldModule,
     MatProgressSpinnerModule,
     MatTooltipModule,
-    MatIconModule
+    MatIconModule,
+    SharedModule
   ],
   declarations: [
     FilterTextInputComponent,

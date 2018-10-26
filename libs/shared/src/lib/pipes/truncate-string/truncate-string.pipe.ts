@@ -1,19 +1,19 @@
-import { TruncateStringPipe } from './truncate-string.pipe.spec';
+import { Pipe, PipeTransform } from '@angular/core';
 
-describe('HumanDateTimePipe', () => {
-  it('create an instance', () => {
-    const pipe = new TruncateStringPipe();
-    expect(pipe).toBeTruthy();
-  });
-
-  it('should show the text for less than a minute', () => {
-    const date: Date = new Date();
-    const pipe = new TruncateStringPipe();
-    const output = pipe.transform(
-      'this string will be truncated to three chars',
-      '...',
-      3
-    );
-    expect(output).toBe('');
-  });
-});
+@Pipe({
+  name: 'truncateString'
+})
+export class TruncateStringPipe implements PipeTransform {
+  transform(
+    value: String,
+    overflow: String = '...',
+    maxLength: number = -1
+  ): String {
+    if (maxLength > 0) {
+      if (value && value.length > maxLength) {
+        value = value.slice(0, maxLength) + overflow;
+      }
+    }
+    return value;
+  }
+}

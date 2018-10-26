@@ -45,8 +45,8 @@ describe('BreadcrumbComponent', () => {
     component.hidden = mockData.hidden;
     component.maxLen = mockData.maxLen;
     component.seperator = mockData.seperator;
-    component.homeIcon = mockData.homeIcon;
-    component.homeUrl = mockData.homeUrl;
+    component.baseIcon = mockData.homeIcon;
+    component.baseUrl = mockData.homeUrl;
     fixture.detectChanges();
   });
 
