@@ -19,6 +19,6 @@
   }
   .mat-menu-panel.ui-dropdown-menu {
     width: $ui-dropdown-menu-width;
-    max-width: none;
+    max-width: $ui-dropdown-menu-width;
   }
 }

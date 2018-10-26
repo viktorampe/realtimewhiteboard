@@ -5,8 +5,8 @@
        class="ui-dropdown-menu__header">
     <h3>
       <i *ngIf="headerIcon"
-         [class]="headerIcon"></i>
-      <span class="bold">{{newItemCount}} nieuwe</span> {{itemType}}
+         [className]="headerIcon"></i>
+      <strong>{{newItemCount}} nieuwe</strong> {{itemType}}
     </h3>
     <span *ngIf="linkText && linkUrl">-> <a [routerLink]="linkUrl">{{linkText}}</a></span>
   </div>

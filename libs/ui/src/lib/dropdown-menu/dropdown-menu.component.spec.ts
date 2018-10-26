@@ -80,7 +80,7 @@ describe('DropdownMenuComponent', () => {
     ).toBeFalsy();
 
     // dropdown is triggered --> should be present
-    component.open();
+    component.toggle();
     fixture.detectChanges();
     expect(triggerSpy).toHaveBeenCalledTimes(1);
     expect(
@@ -89,7 +89,7 @@ describe('DropdownMenuComponent', () => {
   });
 
   it('should not show the header', () => {
-    component.open();
+    component.toggle();
     fixture.detectChanges();
     const header = fixture.debugElement.query(
       By.css('.ui-dropdown-menu__header')
@@ -100,7 +100,7 @@ describe('DropdownMenuComponent', () => {
   describe('dropdown with header', () => {
     beforeEach(() => {
       component.showHeader = true;
-      component.open();
+      component.toggle();
       fixture.detectChanges();
     });
     it('should show the header', () => {
@@ -145,6 +145,9 @@ describe('DropdownMenuComponent', () => {
       component.linkUrl = mockData.linkUrl;
       fixture.detectChanges();
       expect(fixture.debugElement.query(By.css('span a'))).toBeTruthy();
+      expect(
+        fixture.debugElement.query(By.css('span a')).nativeElement.textContent
+      ).toBe(mockData.linkText);
     });
   });
 
@@ -156,7 +159,7 @@ describe('DropdownMenuComponent', () => {
       hostFixture.detectChanges();
     });
     it('should show the projected content', () => {
-      hostComponent.dropdown.open();
+      hostComponent.dropdown.toggle();
 
       const projectedContent = hostFixture.debugElement
         .query(By.directive(DropdownMenuComponent))

@@ -3,7 +3,7 @@ import { MatMenuTrigger } from '@angular/material';
 /**
  * Dropdown menu with optional header and a body with projected content.
  *  - Usage: appears upon interaction with an element (e.g. button) or when a user performs a specific action.
- *    Exposes an 'open' method for this purpose.
+ *    Exposes an 'toggle' method for this purpose.
  *  - Placement: the menu is positioned relative to both the element that generates them and the edges of the screen or browser.
  *    They can appear in front of, beside, above, or below the element that generates them.
  * @example
@@ -40,7 +40,7 @@ export class DropdownMenuComponent {
 
   @ViewChild(MatMenuTrigger) private trigger: MatMenuTrigger;
 
-  open() {
+  toggle() {
     this.trigger.openMenu();
   }
 }
