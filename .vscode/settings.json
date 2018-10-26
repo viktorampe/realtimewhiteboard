@@ -14,7 +14,5 @@
     "source.organizeImports": true
   },
   "html.format.wrapAttributes": "force-aligned",
-  "favorites.sortDirection": "ASC",
-  "favorites.groupsFirst": true,
 }
 
