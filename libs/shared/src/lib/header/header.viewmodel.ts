@@ -8,8 +8,7 @@ import {
   PersonInterface,
   UserQueries
 } from '@campus/dal';
-import { StateResolver, StateResolverInterface } from '@campus/pages/shared';
-import { Action, select, Selector, Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import {
@@ -39,7 +38,7 @@ export interface DropdownItemInterface {
 @Injectable({
   providedIn: 'root'
 })
-export class HeaderViewModel implements StateResolverInterface {
+export class HeaderViewModel {
   //publics
   enableAlerts: boolean;
   enableMessages: boolean;
@@ -54,45 +53,16 @@ export class HeaderViewModel implements StateResolverInterface {
   private messagesForUser$: Observable<MessageInterface[]>;
 
   constructor(
-    private stateResolver: StateResolver,
     @Inject(ENVIRONMENT_ALERTS_FEATURE_TOKEN)
     private environmentAlertsFeature: EnvironmentAlertsFeatureInterface,
     @Inject(ENVIRONMENT_MESSAGES_FEATURE_TOKEN)
     private environmentMessagesFeature: EnvironmentMessagesFeatureInterface,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     private store: Store<DalState>
-  ) {}
-
-  resolve(): Observable<boolean> {
+  ) {
     this.loadStateStreams();
     this.loadDisplayStream();
     this.loadFeatureToggles();
-    return this.stateResolver.resolve(
-      this.getLoadableActions(),
-      this.getResolvedQueries()
-    );
-  }
-
-  getLoadableActions(): Action[] {
-    return [
-      // TODO add load actions, eg. new LearningAreaActions.LoadLearningAreas()
-    ];
-  }
-
-  getResolvedQueries(): Selector<object, boolean>[] {
-    return [
-      // TODO add loaded queries, eg. LearningAreaQueries.getLoaded
-    ];
-  }
-
-  //remark: i think these two getters can be removed and replaced by 2 load actions in the resolver
-  getNewAlerts(): void {
-    //TODO update to the correct action
-    // this.store.dispatch(new AlertQueries.getNewAlerts(this.authService.userId))
-  }
-  getNewMessages(): void {
-    //TODO update to the correct action
-    // this.store.dispatch(new MessageQueries.getNewMessages(this.authService.userId))
   }
 
   setAlertAsRead(eventData: any): void {
