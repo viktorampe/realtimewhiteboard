@@ -124,9 +124,7 @@
               "libs/devlib/tsconfig.spec.json",
               "libs/devlib/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "test": {
@@ -350,7 +348,9 @@
           "options": {
             "jestConfig": "libs/ui/jest.config.js",
             "tsConfig": "libs/ui/tsconfig.spec.json",
-            "setupFile": "libs/ui/src/test-setup.ts"
+            "setupFile": "libs/ui/src/test-setup.ts",
+            "runInBand": true,
+            "bail": true
           }
         }
       }
@@ -421,9 +421,7 @@
               "libs/browser/tsconfig.lib.json",
               "libs/browser/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "test": {
@@ -449,9 +447,7 @@
               "libs/shared/tsconfig.lib.json",
               "libs/shared/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "test": {
