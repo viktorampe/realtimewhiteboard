@@ -8,8 +8,7 @@
       <mat-icon [svgIcon]="seperator"></mat-icon>
       <a routerLink="{{breadCrumbs[(breadCrumbs.length - 1) - maxLength].link}}">{{overflowedLinkString}}</a>
     </div>
-    <div class="
-         ui-breadcrumbs__holder__breadcrumbs"
+    <div class="ui-breadcrumbs__holder__breadcrumbs"
          *ngFor="let breadCrumb of breadCrumbs | slice:-maxLength">
       <mat-icon [svgIcon]="seperator"></mat-icon>
       <a routerLink="{{breadCrumb.link}}">{{breadCrumb.displayText}}</a>

@@ -10,7 +10,7 @@ describe('BreadcrumbComponent', () => {
   let breadcrumbs;
 
   const mockData = {
-    hidden: '???',
+    overflowedLinkString: '???',
     maxLen: 3,
     homeIcon: 'homeIconMock',
     seperator: 'seperatorMock',
@@ -31,6 +31,38 @@ describe('BreadcrumbComponent', () => {
       {
         displayText: 'crumb4',
         link: 'crumb4'
+      },
+      {
+        displayText: 'crumb5',
+        link: 'crumb5'
+      },
+      {
+        displayText: 'crumb6',
+        link: 'crumb6'
+      },
+      {
+        displayText: 'crumb7',
+        link: 'crumb7'
+      },
+      {
+        displayText: 'crumb8',
+        link: 'crumb8'
+      },
+      {
+        displayText: 'crumb9',
+        link: 'crumb9'
+      },
+      {
+        displayText: 'crumb10',
+        link: 'crumb10'
+      },
+      {
+        displayText: 'crumb11',
+        link: 'crumb11'
+      },
+      {
+        displayText: 'crumb12',
+        link: 'crumb12'
       }
     ]
   };
@@ -43,12 +75,10 @@ describe('BreadcrumbComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(BreadcrumbsComponent);
-    breadcrumbs = fixture.debugElement.query(
-      By.css('.ui-breadcrumbs__holder__breadcrumbs')
-    );
+    breadcrumbs = fixture.debugElement.query(By.css('.ui-breadcrumbs__holder'));
     component = fixture.componentInstance;
     component.breadCrumbs = mockData.breadCrumbs;
-    component.hidden = mockData.hidden;
+    component.overflowedLinkString = mockData.overflowedLinkString;
     component.maxLength = mockData.maxLen;
     component.seperator = mockData.seperator;
     fixture.detectChanges();
@@ -58,26 +88,42 @@ describe('BreadcrumbComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should show 4 breadcrumbs', () => {
+  it('should have 5 children breadcrumbs (home button, overflow button, and 3 children links', () => {
+    expect(breadcrumbs.children.length).toBe(5);
+  });
+
+  it('should have 4 children breadcrumbs (home button, overflow button, and 2 children links', () => {
+    component.maxLength = 2;
+    fixture.detectChanges();
     expect(breadcrumbs.children.length).toBe(4);
   });
 
-  it('should show 3 first letters of first mock item breadcrumb followed by hidden string', () => {
-    expect(breadcrumbs.children[0].children[1].nativeElement.innerHTML).toBe(
-      mockData.breadCrumbs[0].displayText.substr(0, mockData.maxLen) +
-        mockData.hidden
+  it('should display the last item from the array', () => {
+    component.maxLength = 1;
+    fixture.detectChanges();
+    expect(breadcrumbs.children[2].children[1].nativeElement.href).toContain(
+      mockData.breadCrumbs[11].link
     );
   });
 
-  it('should have correct href for first breadcrumb', () => {
-    expect(breadcrumbs.children[0].children[1].nativeElement.href).toContain(
-      mockData.breadCrumbs[0].link
+  it('should not display overflow when maxlen is not exceeded', () => {
+    component.maxLength = 99;
+    component.breadCrumbs = [
+      {
+        displayText: 'crumb1',
+        link: 'crumb1'
+      }
+    ];
+    fixture.detectChanges();
+    expect(breadcrumbs.children.length).toBe(2);
+    expect(breadcrumbs.children[1].children[1].nativeElement.href).toContain(
+      'crumb1'
     );
   });
 
-  it('should show the correct seperator icon', () => {
-    expect(breadcrumbs.children[0].children[0].nativeElement.className).toBe(
-      mockData.seperator
+  it('should display correct overflow linnk', () => {
+    expect(breadcrumbs.children[1].children[1].nativeElement.href).toContain(
+      mockData.breadCrumbs[8].link
     );
   });
 });
