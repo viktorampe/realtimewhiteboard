@@ -3,14 +3,13 @@ import { Component, DebugElement, NgModule } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { UiModule } from '@campus/ui';
-import { ButtonComponent } from '../button.component';
-import { VisibleDirective } from './button-visible.directive';
+import { VisibleDirective } from './action-visible.directive';
 
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'test-container',
   template: `
-    <campus-button visible>tekst</campus-button>
+    <div action-visible>tekst</div>
   `
 })
 export class TestContainerComponent {}
@@ -24,7 +23,6 @@ export class TestModule {}
 
 describe('VisibleDirective', () => {
   let directive: VisibleDirective;
-  let component: ButtonComponent;
   let testContainerFixture: ComponentFixture<TestContainerComponent>;
   let testContainerComponent: TestContainerComponent;
   let componentDE: DebugElement;
@@ -38,20 +36,14 @@ describe('VisibleDirective', () => {
   beforeEach(() => {
     testContainerFixture = TestBed.createComponent(TestContainerComponent);
     testContainerComponent = testContainerFixture.componentInstance;
-    componentDE = testContainerFixture.debugElement.query(
-      By.css('campus-button')
-    );
-    component = <ButtonComponent>componentDE.componentInstance;
+    componentDE = testContainerFixture.debugElement.query(By.css('div'));
     testContainerFixture.detectChanges();
+
     directive = componentDE.injector.get(VisibleDirective);
   });
 
   it('should create the host with the directive attached', () => {
-    expect(component).toBeTruthy();
+    expect(componentDE).toBeTruthy();
     expect(directive).toBeTruthy();
-  });
-
-  it('should apply the correct class', () => {
-    expect(componentDE.nativeElement.classList).toContain('ui-button--visible');
   });
 });
