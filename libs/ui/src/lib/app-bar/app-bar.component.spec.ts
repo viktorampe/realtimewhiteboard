@@ -1,8 +1,7 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { AppBarComponent } from './app-bar.component';
 import { Component } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { AppBarComponent } from './app-bar.component';
 
 @Component({
   template: `
@@ -21,7 +20,7 @@ import { By } from '@angular/platform-browser';
 })
 class AppBarHostComponent {}
 
-describe('BasicAppBarComponent', () => {
+xdescribe('BasicAppBarComponent', () => {
   let component: AppBarComponent;
   let fixture: ComponentFixture<AppBarComponent>;
 
