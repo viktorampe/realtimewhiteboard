@@ -1,13 +1,18 @@
 <div class="ui-breadcrumbs">
-  <ul class="ui-breadcrumbs__holder">
+  <div class="ui-breadcrumbs__holder">
     <a routerLink="{{baseUrl}}">
       <mat-icon [svgIcon]="baseIcon"></mat-icon>
     </a>
-    <div class="ui-breadcrumbs__holder__breadcrumbs">
-      <li *ngFor="let breadCrumb of breadCrumbs">
-        <i [className]="seperator"></i>
-        <a routerLink="{{breadCrumb.link}}">{{breadCrumb.displayText | truncateString:hidden:maxLength}}</a>
-      </li>
+    <div class="ui-breadcrumbs__holder__breadcrumbs"
+         *ngIf="breadCrumbs.length > maxLength">
+      <mat-icon [svgIcon]="seperator"></mat-icon>
+      <a routerLink="{{breadCrumbs[(breadCrumbs.length - 1) - maxLength].link}}">{{overflowedLinkString}}</a>
     </div>
-  </ul>
+    <div class="
+         ui-breadcrumbs__holder__breadcrumbs"
+         *ngFor="let breadCrumb of breadCrumbs | slice:-maxLength">
+      <mat-icon [svgIcon]="seperator"></mat-icon>
+      <a routerLink="{{breadCrumb.link}}">{{breadCrumb.displayText}}</a>
+    </div>
+  </div>
 </div>

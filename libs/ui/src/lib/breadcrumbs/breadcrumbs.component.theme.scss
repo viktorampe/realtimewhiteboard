@@ -6,24 +6,22 @@
     &__holder {
       display: flex;
       flex-direction: row;
+      padding: 8px;
       margin: 0;
-      list-style: none;
 
       &__breadcrumbs {
         display: flex;
         flex-direction: row;
         padding: 8px;
         margin: 0;
-        list-style: none;
 
-        li {
-          display: inline-block;
-          a,
-          span {
-            color: $ui-breadcrumbs-crumb-color;
-            font-size: $ui-breadcrumbs-crumb-text-size;
-            text-shadow: none;
-          }
+        display: inline-block;
+        a,
+        span {
+          color: $ui-breadcrumbs-crumb-color;
+          font-size: $ui-breadcrumbs-crumb-text-size;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
       }
     }
