@@ -205,7 +205,6 @@ describe('AlertEffects', () => {
       timeStamp: mockData.updateTime + mockData.timeDeltaInMinutes * 60000
     });
     const forcedNewLoadAction = new LoadNewAlerts({
-      force: true,
       userId: mockData.userId,
       timeStamp: mockData.updateTime
     });
@@ -242,12 +241,6 @@ describe('AlertEffects', () => {
       beforeEach(() => {
         mockServiceMethodReturnValue('getAllForUser', []);
       });
-      it('should not trigger an api call with the loaded state if force is not true', () => {
-        expectInNoOut(
-          effects.loadNewAlerts$,
-          unforcedNewLoadActionWithoutTimeDelta
-        );
-      });
       it('should trigger an api call with the loaded state if force is true', () => {
         expectInAndOut(
           effects.loadNewAlerts$,
@@ -279,12 +272,6 @@ describe('AlertEffects', () => {
       });
       beforeEach(() => {
         mockServiceMethodError('getAllForUser', 'failed');
-      });
-      it('should return nothing  if force is not true and the timeDelta isnt big enough', () => {
-        expectInNoOut(
-          effects.loadNewAlerts$,
-          unforcedNewLoadActionWithoutTimeDelta
-        );
       });
       it('should return an error if the timeDelta is big enough', () => {
         expectInAndOut(

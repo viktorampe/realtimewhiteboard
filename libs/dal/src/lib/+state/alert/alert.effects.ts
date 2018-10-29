@@ -20,6 +20,8 @@ import {
   StartPollAlerts
 } from './alert.actions';
 
+const MINIMUM_POLLING_INTERVAL = 3000;
+
 @Injectable()
 export class AlertsEffects {
   // Timer singleton
@@ -58,24 +60,8 @@ export class AlertsEffects {
       if (!state.alerts.loaded)
         return new LoadAlerts({ userId: action.payload.userId });
 
-      // Minimum time between Api calls
-      const requiredTimeDeltaInMilliseconds = 500;
-
       // If not provided, set update time to now
       const timeStamp = action.payload.timeStamp || Date.now();
-
-      const lastUpdateTimeStamp = state.alerts.lastUpdateTimeStamp;
-
-      const updateTimeDeltaInMilliseconds = timeStamp - lastUpdateTimeStamp;
-
-      if (
-        !(
-          action.payload.force ||
-          updateTimeDeltaInMilliseconds > requiredTimeDeltaInMilliseconds
-        )
-      ) {
-        return;
-      }
 
       return this.alertService
         .getAllForUser(action.payload.userId, timeStamp)
@@ -126,7 +112,12 @@ export class AlertsEffects {
     this.stopTimer$.next(true); // Complete current timer
     this.stopTimer$.next(false);
 
-    this.pollingTimer$ = interval(startPollAction.payload.pollingInterval).pipe(
+    const timerInterval = Math.min(
+      startPollAction.payload.pollingInterval,
+      MINIMUM_POLLING_INTERVAL
+    );
+
+    this.pollingTimer$ = interval(timerInterval).pipe(
       takeWhile(() => !this.stopTimer$.isStopped),
       map(
         values => new LoadNewAlerts({ userId: startPollAction.payload.userId })

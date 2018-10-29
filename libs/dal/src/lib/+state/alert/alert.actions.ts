@@ -40,9 +40,7 @@ export class AlertsLoaded implements Action {
 export class LoadNewAlerts implements Action {
   readonly type = AlertsActionTypes.LoadNewAlerts;
 
-  constructor(
-    public payload: { force?: boolean; userId: number; timeStamp?: number }
-  ) {}
+  constructor(public payload: { userId: number; timeStamp?: number }) {}
 }
 
 export class NewAlertsLoaded implements Action {
