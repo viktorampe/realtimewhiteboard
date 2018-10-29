@@ -1,23 +1,25 @@
 import { Injectable } from '@angular/core';
 import { Resolve } from '@angular/router';
 import { DalState } from '@campus/dal';
-import { Action, Selector, Store } from '@ngrx/store';
+import { Action, select, Selector, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
-export class StateResolver {
+export abstract class StateResolver implements Resolve<boolean> {
   constructor(private store: Store<DalState>) {}
 
-  resolve(
-    actions: Action[],
-    resolvedQueries: Selector<object, boolean>[]
-  ): Observable<boolean> {
-    this.loadActions(actions);
-    return this.actionsLoaded(resolvedQueries.map(q => this.store.select(q)));
+  resolve(): Observable<boolean> {
+    this.loadActions(this.getLoadableActions());
+    return this.actionsLoaded(
+      this.getResolvedQueries().map(query => this.store.pipe(select(query)))
+    );
   }
+
+  protected abstract getLoadableActions(): Action[];
+  protected abstract getResolvedQueries(): Selector<object, boolean>[];
 
   private loadActions(actions: Action[]): void {
     actions.forEach(action => {
@@ -32,9 +34,4 @@ export class StateResolver {
       take(1)
     );
   }
-}
-
-export interface StateResolverInterface extends Resolve<boolean> {
-  getLoadableActions(): Action[];
-  getResolvedQueries(): Selector<object, boolean>[];
 }

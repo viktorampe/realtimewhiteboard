@@ -3,6 +3,7 @@ export { DalState } from './lib/+state';
 export * from './lib/+state/bundle';
 export * from './lib/+state/edu-content';
 export * from './lib/+state/learning-area';
+export * from './lib/+state/resolver';
 export * from './lib/+state/student-content-status';
 export * from './lib/+state/ui';
 export * from './lib/+state/unlocked-boeke-group';
