@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
+import { Actions, Effect, ofType } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
-import { interval } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject, interval, Observable } from 'rxjs';
+import { map, switchMap, takeWhile } from 'rxjs/operators';
 import {
   AlertServiceInterface,
   ALERT_SERVICE_TOKEN
@@ -16,12 +16,23 @@ import {
   LoadAlerts,
   LoadNewAlerts,
   NewAlertsLoaded,
-  PollAlerts,
-  SetReadAlert
+  SetReadAlert,
+  StartPollAlerts
 } from './alert.actions';
 
 @Injectable()
 export class AlertsEffects {
+  // Timer singleton
+  private pollingTimer$: Observable<LoadNewAlerts>;
+  // finishes the Timer
+  private stopTimer$ = new BehaviorSubject(false);
+
+  @Effect()
+  startpollAlerts$ = this.actions.pipe(
+    ofType(AlertsActionTypes.StartPollAlerts),
+    switchMap(action => this.getNewTimer(<StartPollAlerts>action))
+  );
+
   @Effect()
   loadAlerts$ = this.dataPersistence.fetch(AlertsActionTypes.LoadAlerts, {
     run: (action: LoadAlerts, state: DalState) => {
@@ -48,7 +59,7 @@ export class AlertsEffects {
         return new LoadAlerts({ userId: action.payload.userId });
 
       // Minimum time between Api calls
-      const requiredTimeDeltaInMilliseconds = 3000;
+      const requiredTimeDeltaInMilliseconds = 500;
 
       // If not provided, set update time to now
       const timeStamp = action.payload.timeStamp || Date.now();
@@ -72,18 +83,6 @@ export class AlertsEffects {
     },
     onError: (action: LoadNewAlerts, error) => {
       return new AlertsLoadError(error);
-    }
-  });
-
-  @Effect()
-  pollAlerts$ = this.dataPersistence.fetch(AlertsActionTypes.PollAlerts, {
-    run: (action: PollAlerts, state: DalState) => {
-      return interval(action.payload.pollingInterval).pipe(
-        map(values => new LoadNewAlerts({ userId: action.payload.userId }))
-      );
-    },
-    onError: (action: PollAlerts, error) => {
-      return error;
     }
   });
 
@@ -122,4 +121,17 @@ export class AlertsEffects {
     private dataPersistence: DataPersistence<DalState>,
     @Inject(ALERT_SERVICE_TOKEN) private alertService: AlertServiceInterface
   ) {}
+
+  private getNewTimer(startPollAction: StartPollAlerts) {
+    this.stopTimer$.next(true); // Complete current timer
+    this.stopTimer$.next(false);
+
+    this.pollingTimer$ = interval(startPollAction.payload.pollingInterval).pipe(
+      takeWhile(() => !this.stopTimer$.isStopped),
+      map(
+        values => new LoadNewAlerts({ userId: startPollAction.payload.userId })
+      )
+    );
+    return this.pollingTimer$;
+  }
 }

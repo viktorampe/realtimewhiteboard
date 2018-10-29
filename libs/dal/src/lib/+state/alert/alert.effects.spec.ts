@@ -13,7 +13,8 @@ import {
   LoadAlerts,
   LoadNewAlerts,
   NewAlertsLoaded,
-  SetReadAlert
+  SetReadAlert,
+  StartPollAlerts
 } from './alert.actions';
 import { AlertsEffects } from './alert.effects';
 import { initialState, reducer } from './alert.reducer';
@@ -243,7 +244,7 @@ describe('AlertEffects', () => {
       });
       it('should not trigger an api call with the loaded state if force is not true', () => {
         expectInNoOut(
-          effects.loadAlerts$,
+          effects.loadNewAlerts$,
           unforcedNewLoadActionWithoutTimeDelta
         );
       });
@@ -302,7 +303,12 @@ describe('AlertEffects', () => {
     });
   });
 
-  describe('pollAlerts$', () => {
+  describe('startpollAlerts$', () => {
+    const startPollAction = new StartPollAlerts({
+      userId: mockData.userId,
+      pollingInterval: mockData.interval
+    });
+
     const newLoadAction = new LoadNewAlerts({
       userId: mockData.userId
     });
@@ -316,7 +322,7 @@ describe('AlertEffects', () => {
     });
 
     it('should dispatch a new LoadNewAlerts action after every interval', () => {
-      // TODO
+      //TODO
     });
   });
 

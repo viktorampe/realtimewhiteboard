@@ -171,7 +171,7 @@ describe('Alerts Reducer', () => {
       ];
       const action = new AlertActions.SetReadAlert({
         personId: alerts[0].recipientId,
-        alertIds: updates.map(a => <number>a.id)
+        alertIds: [1, 2]
       });
       const result = reducer(startState, action);
 

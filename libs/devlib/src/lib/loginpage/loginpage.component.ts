@@ -71,9 +71,18 @@ export class LoginpageComponent implements OnInit {
 
   startPolling() {
     this.store.dispatch(
-      new AlertActions.PollAlerts({
+      new AlertActions.StartPollAlerts({
         userId: 6,
-        pollingInterval: 1000
+        pollingInterval: 10000
+      })
+    );
+  }
+
+  startPolling2() {
+    this.store.dispatch(
+      new AlertActions.StartPollAlerts({
+        userId: 6,
+        pollingInterval: 1200
       })
     );
   }

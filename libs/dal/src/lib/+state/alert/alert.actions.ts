@@ -9,7 +9,7 @@ export enum AlertsActionTypes {
   NewAlertsLoaded = '[Alerts] New Alerts Loaded',
   LoadNewAlerts = '[Alerts] Load New Alerts',
   SetReadAlert = '[Alerts] Set as Read Alert',
-  PollAlerts = '[Alerts] Poll Alerts'
+  StartPollAlerts = '[Alerts] Poll Alerts'
   // AddAlert = '[Alerts] Add Alert',
   // UpsertAlert = '[Alerts] Upsert Alert',
   // AddAlerts = '[Alerts] Add Alerts',
@@ -58,8 +58,8 @@ export class AlertsLoadError implements Action {
   constructor(public payload: any) {}
 }
 
-export class PollAlerts implements Action {
-  readonly type = AlertsActionTypes.PollAlerts;
+export class StartPollAlerts implements Action {
+  readonly type = AlertsActionTypes.StartPollAlerts;
   constructor(public payload: { pollingInterval: number; userId: number }) {}
 }
 
@@ -156,7 +156,7 @@ export type AlertsActions =
   | LoadNewAlerts
   | NewAlertsLoaded
   | SetReadAlert
-  | PollAlerts;
+  | StartPollAlerts;
 // | AddAlert
 // | UpsertAlert
 // | AddAlerts
