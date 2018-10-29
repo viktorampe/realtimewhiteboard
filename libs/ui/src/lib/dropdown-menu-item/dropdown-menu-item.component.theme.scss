@@ -1,0 +1,37 @@
+@mixin ui-dropdown-menu-item-theme() {
+  $ui-dropdown-menu-item-title-color: #777 !default;
+  $ui-dropdown-menu-item-title-size: 12px !default;
+
+  .ui-dropdown-menu-item {
+    &__title {
+      font-size: $ui-dropdown-menu-item-title-size;
+      color: $ui-dropdown-menu-item-title-color;
+      padding: 8px 14px 2px;
+    }
+
+    i {
+      width: 15px;
+      height: 15px;
+      display: inline-block;
+      margin-right: 9px;
+    }
+
+    a {
+      display: block;
+      line-height: 1.42857143;
+      white-space: nowrap;
+      padding: 8px 14px;
+      color: #555;
+      text-decoration: none;
+      font-weight: 300;
+      line-height: 18px;
+    }
+
+    img {
+      width: 15px;
+      height: 15px;
+      display: inline-block;
+      margin-right: 9px;
+    }
+  }
+}

@@ -10,6 +10,7 @@ import { EduContentComponent } from './edu-content/edu-content.component';
 import { EduContentViewModel } from './edu-content/edu-content.viewmodel';
 import { LoginpageComponent } from './loginpage/loginpage.component';
 import { LoginPageViewModel } from './loginpage/loginpage.viewmodel';
+import { UiPageComponent } from './ui-page/ui-page.component';
 
 @NgModule({
   imports: [
@@ -21,7 +22,7 @@ import { LoginPageViewModel } from './loginpage/loginpage.viewmodel';
     SharedModule
   ],
   providers: [LoginPageViewModel, EduContentViewModel],
-  declarations: [LoginpageComponent, EduContentComponent]
+  declarations: [LoginpageComponent, EduContentComponent, UiPageComponent]
 })
 export class DevlibModule {
   static forRoot(): ModuleWithProviders {
