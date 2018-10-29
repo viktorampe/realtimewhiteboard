@@ -3,7 +3,7 @@ import { By } from '@angular/platform-browser';
 import { DropdownMenuItemComponent } from './dropdown-menu-item.component';
 
 const mockData = {
-  title: 'brol',
+  title: 'foo',
   link: 'link',
   alt: 'alt',
   image: '/image.png',

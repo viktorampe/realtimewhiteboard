@@ -2,16 +2,23 @@
   <div>
     <div *ngIf="title"
          class="ui-dropdown-menu-item__title">
-      <div>{{title}}</div>
+      {{title}}
     </div>
-    <div>
-      <a href="{{link}}">
-        <i *ngIf="icon && !image"
-           [className]="icon"></i>
-        <img *ngIf="image && !icon"
-             src="{{image}}"
-             alt="{{imageAltText}}" /> {{description}}
-      </a>
-    </div>
+    <a *ngIf="internalLink"
+       [routerLink]="internalLink">
+      <mat-icon *ngIf="icon && !image"
+                [svgIcon]="icon"></mat-icon>
+      <img *ngIf="image && !icon"
+           src="{{image}}"
+           alt="{{imageAltText}}" /> {{description}}
+    </a>
+    <a *ngIf="externalLink"
+       href="externalLink">
+      <mat-icon *ngIf="icon && !image"
+                [svgIcon]="icon"></mat-icon>
+      <img *ngIf="image && !icon"
+           src="{{image}}"
+           alt="{{imageAltText}}" /> {{description}}
+    </a>
   </div>
 </div>
