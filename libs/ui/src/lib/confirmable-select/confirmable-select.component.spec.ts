@@ -4,10 +4,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { takeWhile } from 'rxjs/operators';
 import {
   ConfirmableSelectComponent,
   SelectOption
 } from './confirmable-select.component';
+
+let isAlive = true;
 
 describe('ConfirmableSelectComponent', () => {
   let component: ConfirmableSelectComponent;
@@ -97,7 +100,12 @@ describe('ConfirmableSelectComponent', () => {
     component.selectControl.markAsDirty();
     fixture.detectChanges();
     let option: SelectOption;
-    component.clickConfirm.subscribe((e: SelectOption) => (option = e));
+    component.clickConfirm
+      .pipe(takeWhile(() => isAlive))
+      .subscribe((e: SelectOption) => {
+        option = e;
+        isAlive = false;
+      });
     const icon = fixture.debugElement.query(
       By.css('.ui-confirmable-select__dropdown__icon')
     );
