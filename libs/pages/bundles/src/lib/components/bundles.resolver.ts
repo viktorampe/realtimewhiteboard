@@ -1,4 +1,4 @@
-import { Inject } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
@@ -21,6 +21,9 @@ import {
 } from '@campus/dal';
 import { Action, Selector, Store } from '@ngrx/store';
 
+@Injectable({
+  providedIn: 'root'
+})
 export class BundlesResolver extends StateResolver {
   constructor(
     private store: Store<DalState>,
