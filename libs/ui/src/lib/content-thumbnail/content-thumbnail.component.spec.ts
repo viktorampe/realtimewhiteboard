@@ -1,9 +1,8 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { ContentThumbnailComponent } from './content-thumbnail.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ContentThumbnailComponent } from './content-thumbnail.component';
 
-describe('ContentThumbnailComponent', () => {
+xdescribe('ContentThumbnailComponent', () => {
   let component: ContentThumbnailComponent;
   let fixture: ComponentFixture<ContentThumbnailComponent>;
 

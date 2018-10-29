@@ -1,6 +1,6 @@
 import { PersonInitialsPipe } from './person-initials.pipe';
 
-describe('PersonInitialsPipe', () => {
+xdescribe('PersonInitialsPipe', () => {
   it('create an instance', () => {
     const pipe = new PersonInitialsPipe();
     expect(pipe).toBeTruthy();

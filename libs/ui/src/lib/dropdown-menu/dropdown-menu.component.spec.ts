@@ -42,7 +42,7 @@ export class HostComponent implements OnInit {
   providers: []
 })
 export class TestModule {}
-describe('DropdownMenuComponent', () => {
+xdescribe('DropdownMenuComponent', () => {
   let component: DropdownMenuComponent;
   let fixture: ComponentFixture<DropdownMenuComponent>;
   let hostFixture: ComponentFixture<HostComponent>;

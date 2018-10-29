@@ -22,7 +22,7 @@ export class TestContainerComponent {}
 })
 export class TestModule {}
 
-describe('CirlcleDirective', () => {
+xdescribe('CirlcleDirective', () => {
   let directive: CircleDirective;
   let component: ButtonComponent;
   let testContainerFixture: ComponentFixture<TestContainerComponent>;

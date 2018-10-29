@@ -290,7 +290,7 @@ export class ContainerComponent {}
 })
 export class TestModuleForDirective {}
 
-describe('ListItemDirective', () => {
+xdescribe('ListItemDirective', () => {
   let fixture: ComponentFixture<ContainerComponent>;
   let comp: ContainerComponent;
   let compDE: DebugElement;
