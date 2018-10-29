@@ -7,6 +7,5 @@ module.exports = {
   moduleFileExtensions: ['ts', 'js', 'html'],
   collectCoverage: true,
   coverageReporters: ['html'],
-  verbose: true,
   bail: true
 };
