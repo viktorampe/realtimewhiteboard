@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { LabelAndIconButtonComponent } from '../label-and-icon-button/label-and-icon-button.component';
 
-describe('LabelAndIconButtonComponent', () => {
+xdescribe('LabelAndIconButtonComponent', () => {
   let component: LabelAndIconButtonComponent;
   let fixture: ComponentFixture<LabelAndIconButtonComponent>;
   let mockData: {

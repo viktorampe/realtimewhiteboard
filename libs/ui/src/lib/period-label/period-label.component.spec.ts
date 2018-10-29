@@ -3,7 +3,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { PeriodLabelComponent } from './period-label.component';
 
-describe('PeriodLabelComponent', () => {
+xdescribe('PeriodLabelComponent', () => {
   let component: PeriodLabelComponent;
   let fixture: ComponentFixture<PeriodLabelComponent>;
 

@@ -349,7 +349,7 @@
             "jestConfig": "libs/ui/jest.config.js",
             "tsConfig": "libs/ui/tsconfig.spec.json",
             "setupFile": "libs/ui/src/test-setup.ts",
-            "maxWorkers": 2
+            "runInBand": true
           }
         }
       }
