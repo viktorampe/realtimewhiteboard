@@ -1,13 +1,9 @@
-import { Injectable } from '@angular/core';
 import { Resolve } from '@angular/router';
 import { DalState } from '@campus/dal';
 import { Action, select, Selector, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
 
-@Injectable({
-  providedIn: 'root'
-})
 export abstract class StateResolver implements Resolve<boolean> {
   constructor(private superStore: Store<DalState>) {}
 
