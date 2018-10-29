@@ -9,12 +9,14 @@ import { filter, map, take } from 'rxjs/operators';
   providedIn: 'root'
 })
 export abstract class StateResolver implements Resolve<boolean> {
-  constructor(private store: Store<DalState>) {}
+  constructor(private superStore: Store<DalState>) {}
 
   resolve(): Observable<boolean> {
     this.loadActions(this.getLoadableActions());
     return this.actionsLoaded(
-      this.getResolvedQueries().map(query => this.store.pipe(select(query)))
+      this.getResolvedQueries().map(query =>
+        this.superStore.pipe(select(query))
+      )
     );
   }
 
@@ -23,7 +25,7 @@ export abstract class StateResolver implements Resolve<boolean> {
 
   private loadActions(actions: Action[]): void {
     actions.forEach(action => {
-      this.store.dispatch(action);
+      this.superStore.dispatch(action);
     });
   }
 
