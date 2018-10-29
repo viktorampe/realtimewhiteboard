@@ -42,7 +42,7 @@ describe('HumanDateTimePipe', () => {
     );
   });
 
-  it('should show the text for 4 hours ago', () => {
+  it('should show the text for 1 hour ago', () => {
     const hours = 1;
     const date: Date = new Date();
     date.setMilliseconds(date.getMilliseconds() - 1000 * 60 * 60 * hours);
