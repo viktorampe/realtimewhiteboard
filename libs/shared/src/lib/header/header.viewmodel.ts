@@ -17,6 +17,7 @@ import {
   ENVIRONMENT_ALERTS_FEATURE_TOKEN,
   ENVIRONMENT_MESSAGES_FEATURE_TOKEN
 } from '../interfaces';
+import { HeaderResolver } from './header.resolver';
 
 //TODO replace with actual interface
 export interface BreadCrumbLinkInterface {
@@ -58,8 +59,10 @@ export class HeaderViewModel {
     @Inject(ENVIRONMENT_MESSAGES_FEATURE_TOKEN)
     private environmentMessagesFeature: EnvironmentMessagesFeatureInterface,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
-    private store: Store<DalState>
+    private store: Store<DalState>,
+    private headerResolver: HeaderResolver
   ) {
+    this.headerResolver.resolve();
     this.loadStateStreams();
     this.loadDisplayStream();
     this.loadFeatureToggles();
