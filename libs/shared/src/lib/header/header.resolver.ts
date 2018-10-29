@@ -10,12 +10,12 @@ export class HeaderResolver extends StateResolver {
     super(store);
   }
 
-  getLoadableActions(): Action[] {
+  protected getLoadableActions(): Action[] {
     return [
       //TODO add load actions
     ];
   }
-  getResolvedQueries(): Selector<object, boolean>[] {
+  protected getResolvedQueries(): Selector<object, boolean>[] {
     return [
       //TODO add resolvable boolean selectors
     ];
