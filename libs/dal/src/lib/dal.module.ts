@@ -14,7 +14,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { BundleReducer, BundlesEffects } from './+state/bundle';
 import { ContentStatusReducer } from './+state/content-status';
 import { ContentStatusesEffects } from './+state/content-status/content-status.effects';
-import { getStoreModuleForFeatures } from './+state/dal.state.selectors';
+import { getStoreModuleForFeatures } from './+state/dal.state.feature.builder';
 import { EduContentReducer, EduContentsEffects } from './+state/edu-content';
 import {
   LearningAreaReducer,
