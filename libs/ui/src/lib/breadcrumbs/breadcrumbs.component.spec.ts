@@ -18,51 +18,51 @@ describe('BreadcrumbComponent', () => {
     breadCrumbs: [
       {
         displayText: 'crumb1',
-        link: 'crumb1'
+        link: ['crumb1']
       },
       {
         displayText: 'crumb2',
-        link: 'crumb2'
+        link: ['crumb2']
       },
       {
         displayText: 'crumb3',
-        link: 'crumb3'
+        link: ['crumb3']
       },
       {
         displayText: 'crumb4',
-        link: 'crumb4'
+        link: ['crumb4']
       },
       {
         displayText: 'crumb5',
-        link: 'crumb5'
+        link: ['crumb5']
       },
       {
         displayText: 'crumb6',
-        link: 'crumb6'
+        link: ['crumb6']
       },
       {
         displayText: 'crumb7',
-        link: 'crumb7'
+        link: ['crumb7']
       },
       {
         displayText: 'crumb8',
-        link: 'crumb8'
+        link: ['crumb8']
       },
       {
         displayText: 'crumb9',
-        link: 'crumb9'
+        link: ['crumb9']
       },
       {
         displayText: 'crumb10',
-        link: 'crumb10'
+        link: ['crumb10']
       },
       {
         displayText: 'crumb11',
-        link: 'crumb11'
+        link: ['crumb11']
       },
       {
         displayText: 'crumb12',
-        link: 'crumb12'
+        link: ['crumb12']
       }
     ]
   };
@@ -111,7 +111,7 @@ describe('BreadcrumbComponent', () => {
     component.breadCrumbs = [
       {
         displayText: 'crumb1',
-        link: 'crumb1'
+        link: ['crumb1']
       }
     ];
     fixture.detectChanges();

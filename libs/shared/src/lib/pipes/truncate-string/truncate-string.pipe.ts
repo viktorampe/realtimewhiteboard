@@ -6,7 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class TruncateStringPipe implements PipeTransform {
   transform(
     value: String,
-    overflow: String = '...',
+    overflow: String = '…',
     maxLength: number = -1
   ): String {
     if (maxLength > 0) {

@@ -11,10 +11,10 @@ describe('TruncateStringPipe', () => {
     const pipe = new TruncateStringPipe();
     const output = pipe.transform(
       'this string will be truncated to three chars',
-      '...',
+      '…',
       3
     );
-    expect(output).toBe('thi...');
+    expect(output).toBe('thi…');
   });
 
   it('should not limit text length', () => {
