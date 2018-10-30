@@ -310,7 +310,7 @@ describe('AlertEffects', () => {
     });
 
     it('should dispatch a new LoadNewAlerts action after every interval', () => {
-      const INTERVAL_AMOUNT = 42;
+      const INTERVAL_AMOUNT = 4;
       const testScheduler = getTestScheduler();
 
       const effect = effects.startpollAlerts$.pipe(take(INTERVAL_AMOUNT));
@@ -318,19 +318,18 @@ describe('AlertEffects', () => {
       const effectOutput = newLoadAction;
 
       // build expected string, based on amount of intervals
-      // divide interval by 10, because a frame is 10ms outside of testScheduler (and 1ms inside)
       // subtract 1 from interval inside loop, because emmitting values advances 1 frame
-      let expected = mockData.interval / 10 + 'ms ';
+      let expected = mockData.interval + 'ms ';
       for (let index = 1; index < INTERVAL_AMOUNT; index++) {
-        expected += 'a ' + (mockData.interval / 10 - 1).toString() + 'ms ';
+        expected += 'a ' + (mockData.interval - 1).toString() + 'ms ';
       }
       expected += '(a|)';
+      // expected output: 30000ms a 29999ms a 29999ms a 29999ms (a|)
 
       // default testing method not usable, because time progression syntax is not available
       // https://github.com/ReactiveX/rxjs/blob/master/doc/marble-testing.md#behavior-is-different-outside-of-testschedulerruncallback
       testScheduler.run(helpers => {
         actions = hot('a-|', { a: triggerAction });
-
         helpers.expectObservable(effect).toBe(expected, {
           a: effectOutput
         });

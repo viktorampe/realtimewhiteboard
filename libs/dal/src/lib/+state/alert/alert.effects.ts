@@ -112,13 +112,13 @@ export class AlertsEffects {
     this.stopTimer$.next(true); // Complete current timer
     this.stopTimer$.next(false);
 
-    const timerInterval = Math.min(
+    const timerInterval = Math.max(
       startPollAction.payload.pollingInterval,
       MINIMUM_POLLING_INTERVAL
     );
 
     this.pollingTimer$ = interval(timerInterval).pipe(
-      takeWhile(() => !this.stopTimer$.isStopped),
+      takeWhile(() => !this.stopTimer$.getValue()),
       map(
         values => new LoadNewAlerts({ userId: startPollAction.payload.userId })
       )
