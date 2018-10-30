@@ -4,12 +4,12 @@ import { By } from '@angular/platform-browser';
 import { DropdownMenuItemComponent } from './dropdown-menu-item.component';
 
 const mockData = {
-  title: 'foo',
+  header: 'foo',
   link: 'link',
   alt: 'alt',
   image: '/image.png',
   icon: 'icon-brol',
-  header: 'foobar'
+  description: 'foobar'
 };
 
 describe('DropdownMenuItemComponent', () => {
@@ -33,20 +33,20 @@ describe('DropdownMenuItemComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should show correct title', () => {
-    component.title = mockData.title;
+  it('should show correct header', () => {
+    component.header = mockData.header;
     fixture.detectChanges();
     const element = fixture.debugElement.query(
-      By.css('.ui-dropdown-menu-item__title')
+      By.css('.ui-dropdown-menu-item__header')
     );
-    expect(element.nativeElement.textContent).toBe(mockData.title);
+    expect(element.nativeElement.textContent).toBe(mockData.header);
   });
 
-  it('should not show the title', () => {
-    component.title = '';
+  it('should not show the header if the string is empty', () => {
+    component.header = '';
     fixture.detectChanges();
     const element = fixture.debugElement.query(
-      By.css('.ui-dropdown-menu-item__title')
+      By.css('.ui-dropdown-menu-item__header')
     );
     expect(element).toBeFalsy();
   });
@@ -96,35 +96,65 @@ describe('DropdownMenuItemComponent', () => {
     expect(element).toBeTruthy();
   });
 
-  it('should show an header if internal link is set', () => {
-    component.header = mockData.header;
+  it('should show an description if internal link is set', () => {
+    component.description = mockData.description;
     component.internalLink = 'a';
     component.imageAltText = mockData.alt;
     fixture.detectChanges();
     const element = fixture.debugElement.query(
-      By.css('.ui-dropdown-menu-item__header')
+      By.css('.ui-dropdown-menu-item__description')
     );
     expect(element).toBeTruthy();
   });
 
-  it('should show an header if external link is set', () => {
-    component.header = mockData.header;
+  it('should show an description if external link is set', () => {
+    component.description = mockData.description;
     component.externalLink = 'a';
     component.imageAltText = mockData.alt;
     fixture.detectChanges();
     const element = fixture.debugElement.query(
-      By.css('.ui-dropdown-menu-item__header')
+      By.css('.ui-dropdown-menu-item__description')
     );
     expect(element).toBeTruthy();
   });
 
-  it('should not show an header if no link is set', () => {
-    component.header = mockData.header;
+  it('should not show an description if no link is set', () => {
+    component.description = mockData.description;
     component.imageAltText = mockData.alt;
     fixture.detectChanges();
     const element = fixture.debugElement.query(
-      By.css('.ui-dropdown-menu-item__header')
+      By.css('.ui-dropdown-menu-item__description')
     );
     expect(element).toBeFalsy();
+  });
+
+  it('should show neither icon nor image when both are set', () => {
+    component.icon = mockData.icon;
+    component.image = mockData.image;
+    component.externalLink = mockData.link;
+    fixture.detectChanges();
+    let element = fixture.debugElement.query(By.css('img'));
+    expect(element).toBeFalsy();
+    element = fixture.debugElement.query(By.css('mat-icon'));
+    expect(element).toBeFalsy();
+  });
+
+  it('should correct description', () => {
+    component.externalLink = mockData.link;
+    component.description = mockData.description;
+    fixture.detectChanges();
+    const element = fixture.debugElement.query(
+      By.css('.ui-dropdown-menu-item__description')
+    );
+    expect(element.nativeElement.textContent).toBe(mockData.description);
+  });
+
+  it('should correct image alt', () => {
+    component.image = mockData.image;
+    component.externalLink = mockData.link;
+    component.imageAltText = mockData.alt;
+    fixture.detectChanges();
+    const element = fixture.debugElement.query(By.css('img'));
+    expect(element.nativeElement.alt).toBe(mockData.alt);
   });
 });

@@ -1,5 +1,5 @@
 .ui-dropdown-menu-item {
-  &__title {
+  &__header {
     font-size: 12px;
     color: #777;
     padding-left: 8px;
@@ -21,7 +21,7 @@
     padding-left: 8px;
   }
 
-  &__header {
+  &__description {
     margin-left: 5px;
     padding-bottom: 1px;
     color: #777;

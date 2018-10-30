@@ -6,8 +6,8 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./dropdown-menu-item.component.scss']
 })
 export class DropdownMenuItemComponent {
-  @Input() title: string;
   @Input() header: string;
+  @Input() description: string;
   @Input() icon: string;
   @Input() image: string;
   @Input() internalLink: string;
