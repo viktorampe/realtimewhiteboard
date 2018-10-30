@@ -79,7 +79,8 @@
           "options": {
             "jestConfig": "apps/polpo-classroom-web/jest.config.js",
             "tsConfig": "apps/polpo-classroom-web/tsconfig.spec.json",
-            "setupFile": "apps/polpo-classroom-web/src/test-setup.ts"
+            "setupFile": "apps/polpo-classroom-web/src/test-setup.ts",
+            "maxWorkers": 2
           }
         }
       }
@@ -151,7 +152,8 @@
           "options": {
             "jestConfig": "libs/pages/bundles/jest.config.js",
             "tsConfig": "libs/pages/bundles/tsconfig.spec.json",
-            "setupFile": "libs/pages/bundles/src/test-setup.ts"
+            "setupFile": "libs/pages/bundles/src/test-setup.ts",
+            "maxWorkers": 2
           }
         }
       }
@@ -178,7 +180,8 @@
           "options": {
             "jestConfig": "libs/pages/alerts/jest.config.js",
             "tsConfig": "libs/pages/alerts/tsconfig.spec.json",
-            "setupFile": "libs/pages/alerts/src/test-setup.ts"
+            "setupFile": "libs/pages/alerts/src/test-setup.ts",
+            "maxWorkers": 2
           }
         }
       }
@@ -205,7 +208,8 @@
           "options": {
             "jestConfig": "libs/pages/logout/jest.config.js",
             "tsConfig": "libs/pages/logout/tsconfig.spec.json",
-            "setupFile": "libs/pages/logout/src/test-setup.ts"
+            "setupFile": "libs/pages/logout/src/test-setup.ts",
+            "maxWorkers": 2
           }
         }
       }
@@ -232,7 +236,8 @@
           "options": {
             "jestConfig": "libs/pages/messages/jest.config.js",
             "tsConfig": "libs/pages/messages/tsconfig.spec.json",
-            "setupFile": "libs/pages/messages/src/test-setup.ts"
+            "setupFile": "libs/pages/messages/src/test-setup.ts",
+            "maxWorkers": 2
           }
         }
       }
@@ -259,7 +264,8 @@
           "options": {
             "jestConfig": "libs/pages/profile/jest.config.js",
             "tsConfig": "libs/pages/profile/tsconfig.spec.json",
-            "setupFile": "libs/pages/profile/src/test-setup.ts"
+            "setupFile": "libs/pages/profile/src/test-setup.ts",
+            "maxWorkers": 2
           }
         }
       }
@@ -286,7 +292,8 @@
           "options": {
             "jestConfig": "libs/pages/reports/jest.config.js",
             "tsConfig": "libs/pages/reports/tsconfig.spec.json",
-            "setupFile": "libs/pages/reports/src/test-setup.ts"
+            "setupFile": "libs/pages/reports/src/test-setup.ts",
+            "maxWorkers": 2
           }
         }
       }
@@ -313,7 +320,8 @@
           "options": {
             "jestConfig": "libs/pages/tasks/jest.config.js",
             "tsConfig": "libs/pages/tasks/tsconfig.spec.json",
-            "setupFile": "libs/pages/tasks/src/test-setup.ts"
+            "setupFile": "libs/pages/tasks/src/test-setup.ts",
+            "maxWorkers": 2
           }
         }
       }
@@ -340,7 +348,8 @@
           "options": {
             "jestConfig": "libs/ui/jest.config.js",
             "tsConfig": "libs/ui/tsconfig.spec.json",
-            "setupFile": "libs/ui/src/test-setup.ts"
+            "setupFile": "libs/ui/src/test-setup.ts",
+            "maxWorkers": 2
           }
         }
       }
@@ -367,7 +376,8 @@
           "options": {
             "jestConfig": "libs/dal/jest.config.js",
             "tsConfig": "libs/dal/tsconfig.spec.json",
-            "setupFile": "libs/dal/src/test-setup.ts"
+            "setupFile": "libs/dal/src/test-setup.ts",
+            "maxWorkers": 2
           }
         }
       }
@@ -393,7 +403,8 @@
           "options": {
             "jestConfig": "libs/pages/shared/jest.config.js",
             "tsConfig": "libs/pages/shared/tsconfig.spec.json",
-            "setupFile": "libs/pages/shared/src/test-setup.ts"
+            "setupFile": "libs/pages/shared/src/test-setup.ts",
+            "maxWorkers": 2
           }
         }
       }
@@ -419,7 +430,8 @@
           "options": {
             "jestConfig": "libs/browser/jest.config.js",
             "tsConfig": "libs/browser/tsconfig.spec.json",
-            "setupFile": "libs/browser/src/test-setup.ts"
+            "setupFile": "libs/browser/src/test-setup.ts",
+            "maxWorkers": 2
           }
         }
       }
@@ -445,7 +457,8 @@
           "options": {
             "jestConfig": "libs/shared/jest.config.js",
             "tsConfig": "libs/shared/tsconfig.spec.json",
-            "setupFile": "libs/shared/src/test-setup.ts"
+            "setupFile": "libs/shared/src/test-setup.ts",
+            "maxWorkers": 2
           }
         }
       }
