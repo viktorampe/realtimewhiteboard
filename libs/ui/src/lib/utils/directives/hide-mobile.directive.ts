@@ -22,7 +22,9 @@ export class HideMobileDirective implements OnInit, OnDestroy {
       this.breakPointObserver
         .observe([Breakpoints.XSmall])
         .pipe(map(result => result.matches))
-        .subscribe(result => (this.isMobile = result))
+        .subscribe(result => {
+          this.isMobile = result;
+        })
     );
   }
 

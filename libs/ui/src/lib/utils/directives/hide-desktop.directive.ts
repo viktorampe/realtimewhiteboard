@@ -22,7 +22,9 @@ export class HideDesktopDirective implements OnInit, OnDestroy {
       this.breakPointObserver
         .observe([Breakpoints.XSmall])
         .pipe(map(result => result.matches))
-        .subscribe(result => (this.isDesktop = !result))
+        .subscribe(result => {
+          this.isDesktop = !result;
+        })
     );
   }
 
