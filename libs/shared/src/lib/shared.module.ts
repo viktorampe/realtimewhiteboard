@@ -11,14 +11,16 @@ import {
   ENVIRONMENT_ALERTS_FEATURE_TOKEN,
   ENVIRONMENT_MESSAGES_FEATURE_TOKEN
 } from './interfaces';
+import { HumanDateTimePipe } from './pipes/human-date-time/human-date-time.pipe';
 @NgModule({
   imports: [CommonModule, UiModule, PortalModule, LayoutModule],
-  declarations: [HeaderComponent, PageBarContainerComponent],
+  declarations: [HeaderComponent, PageBarContainerComponent, HumanDateTimePipe],
   exports: [
     HeaderComponent,
     PortalModule,
     LayoutModule,
-    PageBarContainerComponent
+    PageBarContainerComponent,
+    HumanDateTimePipe
   ]
 })
 export class SharedModule {
