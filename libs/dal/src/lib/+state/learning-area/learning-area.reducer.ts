@@ -5,6 +5,7 @@ import {
   LearningAreasActionTypes
 } from './learning-area.actions';
 
+export const NAME = 'learningAreas';
 /**
  * @ngrx/entity provides a predefined interface for handling
  * a structured dictionary of records. This interface

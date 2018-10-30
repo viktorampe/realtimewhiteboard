@@ -9,6 +9,8 @@ import { UserAction, UserActionTypes } from './user.actions';
  *  Note: replace if already defined in another module
  */
 
+export const NAME = 'user';
+
 export interface State {
   currentUser: PersonInterface; // user object
   loaded: boolean; // has the User list been loaded

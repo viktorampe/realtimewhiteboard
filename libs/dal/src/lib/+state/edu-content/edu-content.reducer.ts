@@ -5,6 +5,8 @@ import {
   EduContentsActionTypes
 } from './edu-content.actions';
 
+export const NAME = 'eduContents';
+
 /**
  * @ngrx/entity provides a predefined interface for handling
  * a structured dictionary of records. This interface
