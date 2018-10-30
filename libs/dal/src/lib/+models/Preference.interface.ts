@@ -1,5 +1,7 @@
 export enum ALTERNATIVE_PLATFORM_USAGE {
-  HOMESCHOOLING = 'homeschooling'
+  HOMESCHOOLING = 'homeschooling',
+  TEACHERTRAINING = 'teachertraining',
+  OTHER = 'other'
 }
 
 export interface PreferenceInterface {
