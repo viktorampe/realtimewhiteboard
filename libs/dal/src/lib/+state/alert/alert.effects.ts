@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
-import { BehaviorSubject, interval, Observable } from 'rxjs';
-import { map, switchMap, takeWhile } from 'rxjs/operators';
+import { interval, Observable, Subject } from 'rxjs';
+import { map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import {
   AlertServiceInterface,
   ALERT_SERVICE_TOKEN
@@ -27,12 +27,18 @@ export class AlertsEffects {
   // Timer singleton
   private pollingTimer$: Observable<LoadNewAlerts>;
   // finishes the Timer
-  private stopTimer$ = new BehaviorSubject(false);
+  private stopTimer$: Subject<void> = new Subject();
 
   @Effect()
   startpollAlerts$ = this.actions.pipe(
     ofType(AlertsActionTypes.StartPollAlerts),
     switchMap(action => this.getNewTimer(<StartPollAlerts>action))
+  );
+
+  @Effect({ dispatch: false })
+  stopPollAlerts$ = this.actions.pipe(
+    ofType(AlertsActionTypes.StopPollAlerts),
+    tap(_ => this.stopTimer$.next())
   );
 
   @Effect()
@@ -109,8 +115,7 @@ export class AlertsEffects {
   ) {}
 
   private getNewTimer(startPollAction: StartPollAlerts) {
-    this.stopTimer$.next(true); // Complete current timer
-    this.stopTimer$.next(false);
+    this.stopTimer$.next(); // Complete current timer
 
     const timerInterval = Math.max(
       startPollAction.payload.pollingInterval,
@@ -118,11 +123,12 @@ export class AlertsEffects {
     );
 
     this.pollingTimer$ = interval(timerInterval).pipe(
-      takeWhile(() => !this.stopTimer$.getValue()),
+      takeUntil(this.stopTimer$.pipe(take(1))),
       map(
         values => new LoadNewAlerts({ userId: startPollAction.payload.userId })
       )
     );
+
     return this.pollingTimer$;
   }
 }
