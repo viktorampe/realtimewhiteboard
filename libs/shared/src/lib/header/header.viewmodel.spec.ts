@@ -45,11 +45,10 @@ describe('headerViewModel', () => {
     usedUserState = {};
   });
   beforeEach(() => {
-    console.log({ usedUserState });
     TestBed.configureTestingModule({
       imports: [
         StoreModule.forRoot({}),
-        StateFeatureBuilder.getModuleWithForFeatureProviders([
+        ...StateFeatureBuilder.getModuleWithForFeatureProviders([
           {
             NAME: UserReducer.NAME,
             reducer: UserReducer.reducer,
