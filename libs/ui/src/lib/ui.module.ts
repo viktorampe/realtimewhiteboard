@@ -28,7 +28,6 @@ import { WarningDirective } from './button/directives/button-warning.directive';
 import { ConfirmableSelectComponent } from './confirmable-select/confirmable-select.component';
 import { ContentPreviewComponent } from './content-preview/content-preview.component';
 import { ContentThumbnailComponent } from './content-thumbnail/content-thumbnail.component';
-import { VisibleDirective } from './content-thumbnail/directives/action-visible.directive';
 import { DropdownMenuComponent } from './dropdown-menu/dropdown-menu.component';
 import { EditableInlineTagListComponent } from './editable-inline-tag-list/editable-inline-tag-list.component';
 import { FileExtensionComponent } from './file-extension/file-extension.component';
@@ -125,7 +124,6 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     BreadcrumbsComponent,
     DropdownMenuComponent,
     NotificationDropdownItemComponent,
-    VisibleDirective,
     HideDesktopDirective,
     HideMobileDirective,
     DropdownMenuComponent
@@ -171,7 +169,6 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     BreadcrumbsComponent,
     DropdownMenuComponent,
     NotificationDropdownItemComponent,
-    VisibleDirective,
     HideDesktopDirective,
     HideMobileDirective,
     DropdownMenuComponent
