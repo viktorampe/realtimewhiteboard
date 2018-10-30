@@ -5,6 +5,7 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
+import { LearningAreaReducer } from '.';
 import { LEARNINGAREA_SERVICE_TOKEN } from '../../learning-area/learning-area.service.interface';
 import {
   LearningAreasLoaded,
@@ -12,7 +13,6 @@ import {
   LoadLearningAreas
 } from './learning-area.actions';
 import { LearningAreasEffects } from './learning-area.effects';
-import { initialState, reducer } from './learning-area.reducer';
 
 describe('LearningAreaEffects', () => {
   let actions: Observable<any>;
@@ -60,9 +60,13 @@ describe('LearningAreaEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature('learningAreas', reducer, {
-          initialState: usedState
-        }),
+        StoreModule.forFeature(
+          LearningAreaReducer.NAME,
+          LearningAreaReducer.reducer,
+          {
+            initialState: usedState
+          }
+        ),
         EffectsModule.forRoot([]),
         EffectsModule.forFeature([LearningAreasEffects])
       ],
@@ -89,7 +93,7 @@ describe('LearningAreaEffects', () => {
     const loadErrorAction = new LearningAreasLoadError(new Error('failed'));
     describe('with initialState', () => {
       beforeAll(() => {
-        usedState = initialState;
+        usedState = LearningAreaReducer.initialState;
       });
       beforeEach(() => {
         mockServiceMethodReturnValue('getAll', []);
@@ -111,7 +115,7 @@ describe('LearningAreaEffects', () => {
     });
     describe('with loaded state', () => {
       beforeAll(() => {
-        usedState = { ...initialState, loaded: true };
+        usedState = { ...LearningAreaReducer.initialState, loaded: true };
       });
       beforeEach(() => {
         mockServiceMethodReturnValue('getAll', []);
@@ -129,7 +133,7 @@ describe('LearningAreaEffects', () => {
     });
     describe('with initialState and failing api call', () => {
       beforeAll(() => {
-        usedState = initialState;
+        usedState = LearningAreaReducer.initialState;
       });
       beforeEach(() => {
         mockServiceMethodError('getAll', 'failed');
@@ -152,7 +156,7 @@ describe('LearningAreaEffects', () => {
     describe('with loaded and failing api call', () => {
       beforeAll(() => {
         usedState = {
-          ...initialState,
+          ...LearningAreaReducer.initialState,
           loaded: true,
           list: []
         };
