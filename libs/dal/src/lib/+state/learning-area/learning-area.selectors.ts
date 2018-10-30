@@ -1,5 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import {
+  NAME,
   selectAll,
   selectEntities,
   selectIds,
@@ -7,9 +8,7 @@ import {
   State
 } from './learning-area.reducer';
 
-export const selectLearningAreaState = createFeatureSelector<State>(
-  'learningAreas'
-);
+export const selectLearningAreaState = createFeatureSelector<State>(NAME);
 
 export const getError = createSelector(
   selectLearningAreaState,

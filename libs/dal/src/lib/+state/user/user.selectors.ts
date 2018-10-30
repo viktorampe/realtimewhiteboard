@@ -1,8 +1,8 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { State } from './user.reducer';
+import { NAME, State } from './user.reducer';
 
 // Lookup the 'User' feature state managed by NgRx
-const getUserState = createFeatureSelector<State>('user');
+const getUserState = createFeatureSelector<State>(NAME);
 
 export const getLoaded = createSelector(
   getUserState,
