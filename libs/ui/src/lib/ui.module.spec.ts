@@ -1,7 +1,7 @@
 import { async, TestBed } from '@angular/core/testing';
 import { UiModule } from './ui.module';
 
-xdescribe('UiModule', () => {
+describe('UiModule', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [UiModule]

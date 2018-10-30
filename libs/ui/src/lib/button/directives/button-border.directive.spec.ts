@@ -22,7 +22,7 @@ export class TestContainerComponent {}
 })
 export class TestModule {}
 
-xdescribe('BorderDirective', () => {
+describe('BorderDirective', () => {
   let directive: BorderDirective;
   let component: ButtonComponent;
   let testContainerFixture: ComponentFixture<TestContainerComponent>;

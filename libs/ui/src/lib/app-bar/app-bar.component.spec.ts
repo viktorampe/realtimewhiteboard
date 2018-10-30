@@ -20,7 +20,7 @@ import { AppBarComponent } from './app-bar.component';
 })
 class AppBarHostComponent {}
 
-xdescribe('BasicAppBarComponent', () => {
+describe('BasicAppBarComponent', () => {
   let component: AppBarComponent;
   let fixture: ComponentFixture<AppBarComponent>;
 

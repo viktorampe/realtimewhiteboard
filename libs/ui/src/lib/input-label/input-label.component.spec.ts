@@ -3,7 +3,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { InputLabelComponent } from './input-label.component';
 
-xdescribe('InputLabelComponent', () => {
+describe('InputLabelComponent', () => {
   let component: InputLabelComponent;
   let fixture: ComponentFixture<InputLabelComponent>;
 

@@ -1,6 +1,6 @@
 import { AdjustColorBrightnessPipe } from './adjust-color-brightness.pipe';
 
-xdescribe('AdjustColorBrightnessPipe', () => {
+describe('AdjustColorBrightnessPipe', () => {
   it('create an instance', () => {
     const pipe = new AdjustColorBrightnessPipe();
     expect(pipe).toBeTruthy();

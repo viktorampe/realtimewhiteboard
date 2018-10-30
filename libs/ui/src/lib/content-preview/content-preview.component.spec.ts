@@ -27,7 +27,7 @@ export class TestContainerComponent {}
 })
 export class TestModule {}
 
-xdescribe('ContentPreviewComponent', () => {
+describe('ContentPreviewComponent', () => {
   let component: ContentPreviewComponent;
   let fixture: ComponentFixture<ContentPreviewComponent>;
   let testContainerFixture: ComponentFixture<TestContainerComponent>;

@@ -33,7 +33,7 @@ export class TestContainerComponent {}
 })
 export class TestModule {}
 
-xdescribe('ShellComponent', () => {
+describe('ShellComponent', () => {
   let component: ShellComponent;
   let fixture: ComponentFixture<ShellComponent>;
   let testContainerFixture: ComponentFixture<TestContainerComponent>;

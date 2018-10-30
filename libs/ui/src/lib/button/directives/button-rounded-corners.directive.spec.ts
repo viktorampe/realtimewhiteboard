@@ -22,7 +22,7 @@ export class TestContainerComponent {}
 })
 export class TestModule {}
 
-xdescribe('DisabledDirective', () => {
+describe('DisabledDirective', () => {
   let directive: RoundedCornersDirective;
   let component: ButtonComponent;
   let testContainerFixture: ComponentFixture<TestContainerComponent>;

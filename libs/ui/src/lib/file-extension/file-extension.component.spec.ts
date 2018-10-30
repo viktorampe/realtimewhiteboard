@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { FileExtensionComponent } from './file-extension.component';
 
-xdescribe('FileExtensionComponent', () => {
+describe('FileExtensionComponent', () => {
   let component: FileExtensionComponent;
   let fixture: ComponentFixture<FileExtensionComponent>;
 

@@ -3,7 +3,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { FilterTextInputComponent } from './filter-text-input.component';
 
-xdescribe('FilterTextInputComponent', () => {
+describe('FilterTextInputComponent', () => {
   let component: FilterTextInputComponent;
   let fixture: ComponentFixture<FilterTextInputComponent>;
 

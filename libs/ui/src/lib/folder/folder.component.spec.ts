@@ -4,7 +4,7 @@ import { ListFormat } from '../list-view/enums/list-format.enum';
 import { UiModule } from '../ui.module';
 import { FolderComponent } from './folder.component';
 
-xdescribe('FolderComponent', () => {
+describe('FolderComponent', () => {
   let component: FolderComponent;
   let fixture: ComponentFixture<FolderComponent>;
 

@@ -1,6 +1,6 @@
 import { SideSheetHeaderDirective } from './side-sheet-header.directive';
 
-xdescribe('SideSheetHeaderDirective', () => {
+describe('SideSheetHeaderDirective', () => {
   beforeEach(() => {});
   it('should create an instance', () => {
     const directive = new SideSheetHeaderDirective();

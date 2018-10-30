@@ -26,7 +26,7 @@ export class TestHostComponent {
   showHeader = true;
 }
 
-xdescribe('SideSheetComponent', () => {
+describe('SideSheetComponent', () => {
   let hostComponent: TestHostComponent;
   let fixture: ComponentFixture<TestHostComponent>;
   let sideSheetComp: SideSheetComponent;

@@ -1,6 +1,6 @@
 import { SideSheetBodyDirective } from './side-sheet-body.directive';
 
-xdescribe('SideSheetBodyDirective', () => {
+describe('SideSheetBodyDirective', () => {
   it('should create an instance', () => {
     const directive = new SideSheetBodyDirective();
     expect(directive).toBeTruthy();

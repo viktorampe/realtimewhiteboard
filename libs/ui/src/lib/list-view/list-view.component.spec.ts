@@ -48,7 +48,7 @@ export class EmptyTestContainerComponent {}
 })
 export class TestModule {}
 
-xdescribe('ListViewComponent', () => {
+describe('ListViewComponent', () => {
   let component: ListViewComponent;
   let fixture: ComponentFixture<ListViewComponent>;
   let testContainerFixture: ComponentFixture<TestContainerComponent>;
@@ -290,7 +290,7 @@ export class ContainerComponent {}
 })
 export class TestModuleForDirective {}
 
-xdescribe('ListItemDirective', () => {
+describe('ListItemDirective', () => {
   let fixture: ComponentFixture<ContainerComponent>;
   let comp: ContainerComponent;
   let compDE: DebugElement;

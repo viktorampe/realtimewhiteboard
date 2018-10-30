@@ -25,7 +25,7 @@ export class TestContainerComponent {
 })
 export class TestModule {}
 
-xdescribe('ButtonComponent', () => {
+describe('ButtonComponent', () => {
   let component: ButtonComponent;
   let testContainerFixture: ComponentFixture<TestContainerComponent>;
   let testContainerComponent: TestContainerComponent;

@@ -3,7 +3,7 @@ import { By } from '@angular/platform-browser';
 import { PersonBadgeComponent } from './person-badge.component';
 import { PersonInitialsPipe } from './pipes/person-initials.pipe';
 
-xdescribe('PersonBadgeComponent', () => {
+describe('PersonBadgeComponent', () => {
   let component: PersonBadgeComponent;
   let fixture: ComponentFixture<PersonBadgeComponent>;
 

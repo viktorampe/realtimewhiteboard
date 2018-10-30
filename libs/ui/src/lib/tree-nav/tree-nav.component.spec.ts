@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NavItem, TreeNavComponent } from './tree-nav.component';
 
-xdescribe('TreeNavComponent', () => {
+describe('TreeNavComponent', () => {
   let component: TreeNavComponent;
   let fixture: ComponentFixture<TreeNavComponent>;
 

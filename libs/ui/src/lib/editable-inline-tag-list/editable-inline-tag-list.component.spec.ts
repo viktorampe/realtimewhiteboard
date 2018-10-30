@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { EditableInlineTagListComponent } from './editable-inline-tag-list.component';
 
-xdescribe('EditableInlineTagListComponent', () => {
+describe('EditableInlineTagListComponent', () => {
   let component: EditableInlineTagListComponent;
   let fixture: ComponentFixture<EditableInlineTagListComponent>;
 
