@@ -1,19 +1,16 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'campus-dropdown-menu-item',
   templateUrl: './dropdown-menu-item.component.html',
   styleUrls: ['./dropdown-menu-item.component.scss']
 })
-export class DropdownMenuItemComponent implements OnInit {
+export class DropdownMenuItemComponent {
   @Input() title: string;
-  @Input() description: string;
+  @Input() header: string;
   @Input() icon: string;
   @Input() image: string;
-  @Input() link: string;
+  @Input() internalLink: string;
+  @Input() externalLink: string;
   @Input() imageAltText: string;
-
-  constructor() {}
-
-  ngOnInit() {}
 }

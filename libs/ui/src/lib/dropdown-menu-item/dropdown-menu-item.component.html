@@ -5,12 +5,13 @@
       {{title}}
     </div>
     <a *ngIf="internalLink"
-       [routerLink]="internalLink">
+       routerLink="internalLink">
       <mat-icon *ngIf="icon && !image"
                 [svgIcon]="icon"></mat-icon>
       <img *ngIf="image && !icon"
            src="{{image}}"
-           alt="{{imageAltText}}" /> {{description}}
+           alt="{{imageAltText}}" />
+      <div class="header">{{header}}</div>
     </a>
     <a *ngIf="externalLink"
        href="externalLink">
@@ -18,7 +19,8 @@
                 [svgIcon]="icon"></mat-icon>
       <img *ngIf="image && !icon"
            src="{{image}}"
-           alt="{{imageAltText}}" /> {{description}}
+           alt="{{imageAltText}}" />
+      <div class="header">{{header}}</div>
     </a>
   </div>
 </div>

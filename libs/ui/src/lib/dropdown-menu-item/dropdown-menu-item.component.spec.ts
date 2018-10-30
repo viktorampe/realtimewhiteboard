@@ -1,4 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatIconModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { DropdownMenuItemComponent } from './dropdown-menu-item.component';
 
@@ -16,7 +17,8 @@ describe('DropdownMenuItemComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [DropdownMenuItemComponent]
+      declarations: [DropdownMenuItemComponent],
+      imports: [MatIconModule]
     }).compileComponents();
   }));
 
