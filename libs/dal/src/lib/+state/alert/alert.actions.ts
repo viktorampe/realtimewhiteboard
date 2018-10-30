@@ -9,7 +9,7 @@ export enum AlertsActionTypes {
   NewAlertsLoaded = '[Alerts] New Alerts Loaded',
   LoadNewAlerts = '[Alerts] Load New Alerts',
   SetReadAlert = '[Alerts] Set as Read Alert',
-  StartPollAlerts = '[Alerts] Poll Alerts'
+  StartPollAlerts = '[Alerts] Start Poll Alerts'
   // AddAlert = '[Alerts] Add Alert',
   // UpsertAlert = '[Alerts] Upsert Alert',
   // AddAlerts = '[Alerts] Add Alerts',

@@ -3,8 +3,9 @@ import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
-import { hot } from '@nrwl/nx/testing';
+import { getTestScheduler, hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { ALERT_SERVICE_TOKEN } from '../../alert/alert.service.interface';
 import { ActionSuccessful } from '../dal.actions';
 import {
@@ -30,7 +31,7 @@ describe('AlertEffects', () => {
     timeDeltaInMinutes: 15,
     personId: 2,
     alertId: 42,
-    interval: 30000
+    interval: 30000 //should be a factor of 10
   };
 
   const expectInAndOut = (
@@ -309,7 +310,31 @@ describe('AlertEffects', () => {
     });
 
     it('should dispatch a new LoadNewAlerts action after every interval', () => {
-      //TODO
+      const INTERVAL_AMOUNT = 42;
+      const testScheduler = getTestScheduler();
+
+      const effect = effects.startpollAlerts$.pipe(take(INTERVAL_AMOUNT));
+      const triggerAction = startPollAction;
+      const effectOutput = newLoadAction;
+
+      // build expected string, based on amount of intervals
+      // divide interval by 10, because a frame is 10ms outside of testScheduler (and 1ms inside)
+      // subtract 1 from interval inside loop, because emmitting values advances 1 frame
+      let expected = mockData.interval / 10 + 'ms ';
+      for (let index = 1; index < INTERVAL_AMOUNT; index++) {
+        expected += 'a ' + (mockData.interval / 10 - 1).toString() + 'ms ';
+      }
+      expected += '(a|)';
+
+      // default testing method not usable, because time progression syntax is not available
+      // https://github.com/ReactiveX/rxjs/blob/master/doc/marble-testing.md#behavior-is-different-outside-of-testschedulerruncallback
+      testScheduler.run(helpers => {
+        actions = hot('a-|', { a: triggerAction });
+
+        helpers.expectObservable(effect).toBe(expected, {
+          a: effectOutput
+        });
+      });
     });
   });
 
