@@ -81,10 +81,10 @@
   <campus-content-thumbnail campusListItem
                             [title]="'Title'"
                             [fileExtensionClass]="'xlsx'"
-                            class='ui-hide__container--not-hover ui-hide__container--not-selected'>
+                            class='ui-hide__container'>
     <!-- Hier moeten de mogelijke actieknoppen met hun (Click) nog toegevoegd worden -->
     <campus-button [iconClass]="'icon-bundle'"
-                   class="ui-hide__item"
+                   class="ui-hide__item--not-hover"
                    circle>
     </campus-button>
     <campus-button [iconClass]="'icon-tasks'"
@@ -105,13 +105,14 @@
   <campus-content-thumbnail campusListItem
                             [title]="'Title'"
                             [fileExtensionClass]="'xlsx'"
-                            class='ui-hide__container--not-hover'>
+                            class='ui-hide__container'>
     <!-- Hier moeten de mogelijke actieknoppen met hun (Click) nog toegevoegd worden -->
     <campus-button [iconClass]="'icon-bundle'"
-                   class="ui-hide__item"
+                   class="ui-hide__item--not-selected ui-hide__item--not-hover"
                    circle>
     </campus-button>
     <campus-button [iconClass]="'icon-tasks'"
+                   class="ui-hide__item--not-selected ui-hide__item--not-hover"
                    circle>
     </campus-button>
     <campus-button [iconClass]="'icon-tasks'"
@@ -123,7 +124,8 @@
                    rounded-corners
                    action-visible
                    hide-mobile
-                   danger>
+                   danger
+                   class="ui-hide__item--not-selected ui-hide__item--not-hover">
     </campus-button>
   </campus-content-thumbnail>
 </campus-list-view>
