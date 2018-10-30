@@ -11,19 +11,16 @@ import {
   SDKBrowserModule
 } from '@diekeure/polpo-api-angular-sdk';
 import { EffectsModule } from '@ngrx/effects';
-import { StoreModule } from '@ngrx/store';
 import { BundleReducer, BundlesEffects } from './+state/bundle';
 import { ContentStatusReducer } from './+state/content-status';
 import { ContentStatusesEffects } from './+state/content-status/content-status.effects';
+import { getStoreModuleForFeatures } from './+state/dal.state.selectors';
 import { EduContentReducer, EduContentsEffects } from './+state/edu-content';
 import {
   LearningAreaReducer,
   LearningAreasEffects
 } from './+state/learning-area';
-import {
-  StudentContentStatusesEffects,
-  StudentContentStatusReducer
-} from './+state/student-content-status';
+import { StudentContentStatusesEffects } from './+state/student-content-status';
 import { UiEffects, uiReducer } from './+state/ui/';
 import {
   UnlockedBoekeGroupReducer,
@@ -72,57 +69,21 @@ interface DalOptions {
     CommonModule,
     SDKBrowserModule.forRoot(),
     HttpClientModule,
-    StoreModule.forFeature('ui', uiReducer.reducer, {
-      initialState: uiReducer.initialState
-    }),
-    StoreModule.forFeature('bundles', BundleReducer.reducer, {
-      initialState: BundleReducer.initialState
-    }),
-    StoreModule.forFeature('learningAreas', LearningAreaReducer.reducer, {
-      initialState: LearningAreaReducer.initialState
-    }),
-    StoreModule.forFeature('eduContents', EduContentReducer.reducer, {
-      initialState: EduContentReducer.initialState
-    }),
-    StoreModule.forFeature('learningAreas', LearningAreaReducer.reducer, {
-      initialState: LearningAreaReducer.initialState
-    }),
-    StoreModule.forFeature('unlockedContents', UnlockedContentReducer.reducer, {
-      initialState: UnlockedContentReducer.initialState
-    }),
-    StoreModule.forFeature('userContents', UserContentReducer.reducer, {
-      initialState: UserContentReducer.initialState
-    }),
-    StoreModule.forFeature(
-      'studentContentStatuses',
-      StudentContentStatusReducer.reducer,
-      {
-        initialState: StudentContentStatusReducer.initialState
-      }
-    ),
-    StoreModule.forFeature(
-      'unlockedBoekeGroups',
-      UnlockedBoekeGroupReducer.reducer,
-      {
-        initialState: UnlockedBoekeGroupReducer.initialState
-      }
-    ),
-    EffectsModule.forFeature([BundlesEffects, UserEffects]),
-    StoreModule.forFeature('user', UserReducer.reducer, {
-      initialState: UserReducer.initialState
-    }),
-    StoreModule.forFeature(
-      'unlockedBoekeStudents',
-      UnlockedBoekeStudentReducer.reducer,
-      {
-        initialState: UnlockedBoekeStudentReducer.initialState
-      }
-    ),
-    StoreModule.forFeature('contentStatuses', ContentStatusReducer.reducer, {
-      initialState: ContentStatusReducer.initialState
-    }),
+    ...getStoreModuleForFeatures([
+      LearningAreaReducer,
+      UserContentReducer,
+      UnlockedContentReducer,
+      EduContentReducer,
+      BundleReducer,
+      uiReducer,
+      UnlockedBoekeGroupReducer,
+      UnlockedBoekeStudentReducer,
+      ContentStatusReducer,
+      UserReducer
+    ]),
     EffectsModule.forFeature([
       BundlesEffects,
+      UserEffects,
       EduContentsEffects,
       UiEffects,
       LearningAreasEffects,
