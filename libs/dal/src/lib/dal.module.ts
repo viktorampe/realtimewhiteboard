@@ -20,7 +20,10 @@ import {
   LearningAreaReducer,
   LearningAreasEffects
 } from './+state/learning-area';
-import { StudentContentStatusesEffects } from './+state/student-content-status';
+import {
+  StudentContentStatusesEffects,
+  StudentContentStatusReducer
+} from './+state/student-content-status';
 import { UiEffects, uiReducer } from './+state/ui/';
 import {
   UnlockedBoekeGroupReducer,
@@ -73,6 +76,7 @@ interface DalOptions {
       LearningAreaReducer,
       UserContentReducer,
       UnlockedContentReducer,
+      StudentContentStatusReducer,
       EduContentReducer,
       BundleReducer,
       uiReducer,
