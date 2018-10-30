@@ -63,9 +63,10 @@ export class HeaderViewModel {
     private headerResolver: HeaderResolver
   ) {
     this.headerResolver.resolve();
-    this.loadStateStreams();
-    this.loadDisplayStream();
     this.loadFeatureToggles();
+    this.loadStateStreams();
+    //TODO remove comment once the states have been added
+    //this.loadDisplayStream();
   }
 
   setAlertAsRead(eventData: any): void {
