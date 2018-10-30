@@ -50,26 +50,3 @@
 <div>
   <a [routerLink]="['educontent']">educontent test page</a>
 </div>
-
-<div>
-  <button (click)="dispatchLoadAction()">Load</button>
-</div>
-
-<div>
-  <button (click)="dispatchLoadNewAction()">Load New</button>
-</div>
-<div>
-  <button (click)="dispatchSetAsReadAction()">Set Read</button>
-</div>
-<div>
-  <button (click)="getUnreadAlerts()">Get unread</button>
-  <div>{{response1$ |async|json }}</div>
-</div>
-<div>
-  <button (click)="getRecentAlerts()">Get recent</button>
-  <div>{{response2$ |async|json }}</div>
-</div>
-<div>
-  <button (click)="startPolling()">Start polling</button>
-  <button (click)="startPolling2()">Start polling2</button>
-</div>

@@ -1,12 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  AlertActions,
-  AlertQueries,
-  AlertReducer,
-  EduContentInterface
-} from '@campus/dal';
+import { AlertReducer, EduContentInterface } from '@campus/dal';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
-import { select, Store } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { LoginPageViewModel } from './loginpage.viewmodel';
 
@@ -28,62 +23,5 @@ export class LoginpageComponent implements OnInit {
 
   getCurrentUser() {
     this.currentUser = this.personApi.getCurrent();
-  }
-
-  dispatchLoadAction() {
-    this.store.dispatch(new AlertActions.LoadAlerts({ userId: 6 }));
-  }
-
-  dispatchLoadNewAction() {
-    this.store.dispatch(
-      new AlertActions.LoadNewAlerts({
-        userId: 6,
-        timeStamp: new Date(2018, 8, 4).getTime()
-      })
-    );
-  }
-
-  dispatchSetAsReadAction() {
-    this.store.dispatch(
-      new AlertActions.SetReadAlert({
-        personId: 6,
-        alertIds: [25, 4681],
-        read: false
-      })
-    );
-  }
-
-  // tslint:disable-next-line:member-ordering
-  response1$: Observable<any>;
-  getUnreadAlerts() {
-    this.response1$ = this.store.pipe(select(AlertQueries.getUnread));
-  }
-
-  // tslint:disable-next-line:member-ordering
-  response2$: Observable<any>;
-  getRecentAlerts() {
-    this.response2$ = this.store.pipe(
-      select(AlertQueries.getRecentByDate, {
-        timeThreshold: new Date(2018, 9 - 1, 4, 16, 27, 15).getTime()
-      })
-    );
-  }
-
-  startPolling() {
-    this.store.dispatch(
-      new AlertActions.StartPollAlerts({
-        userId: 6,
-        pollingInterval: 10000
-      })
-    );
-  }
-
-  startPolling2() {
-    this.store.dispatch(
-      new AlertActions.StartPollAlerts({
-        userId: 6,
-        pollingInterval: 1200
-      })
-    );
   }
 }
