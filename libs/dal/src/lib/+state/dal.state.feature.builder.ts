@@ -1,6 +1,6 @@
 import { InjectionToken, ModuleWithProviders } from '@angular/core';
 import { Action, ActionReducer, StoreModule } from '@ngrx/store';
-interface ReducerNamespaceInterface {
+export interface ReducerNamespaceInterface {
   NAME: string;
   reducer:
     | ActionReducer<any, Action>
@@ -8,6 +8,32 @@ interface ReducerNamespaceInterface {
   initialState: any;
 }
 
+/**
+ * secondary function to build` StoreModule.forFeature()` array that can be imported in another module
+ * 
+ * if for some reason, a namespace can not contain all properties to make use of the `getStoreModuleForFeatures` function,
+ * this function can be used to build the input objects yourself
+ * 
+ * this function is accessable outside this lib using the barraled `StateFeatureBuilder`
+ * 
+ * @example
+ * @example
+ * imports: [
+ *  OtherImports,
+ *  ...getModuleWithForFeatureProviders([
+ *    { NAME: 'someName', reducer: theReducer, initialState: someInitialState }
+ *  ]),
+    ...getStoreModuleForFeatures([
+      NameSpaceOfReducer,
+      NameSpaceOfOtherReducer
+    ])
+  ]
+ *
+ *
+ * @export
+ * @param {ReducerNamespaceInterface[]} reducers
+ * @returns {ModuleWithProviders[]}
+ */
 export function getModuleWithForFeatureProviders(
   reducers: ReducerNamespaceInterface[]
 ): ModuleWithProviders[] {
@@ -42,6 +68,26 @@ function throwMissingReducerProperty(property: string, index: number) {
   );
 }
 
+/**
+ * function to build `StoreModule.forFeature()` array that can be imported in another module
+ * 
+ * if the namespace is missing a property, a runtime error will be thrown with the index of the reducer that is missing a property and the missing property
+ * 
+ * this function is accessable outside this lib using the barraled `StateFeatureBuilder`
+ * 
+ * @example
+ * imports: [
+ *  OtherImports,
+    ...getStoreModuleForFeatures([
+      NameSpaceOfReducer,
+      NameSpaceOfOtherReducer
+    ])
+  ]
+ *
+ * @export
+ * @param {any[]} reducerNameSpaces
+ * @returns {ModuleWithProviders[]}
+ */
 export function getStoreModuleForFeatures(
   reducerNameSpaces: any[]
 ): ModuleWithProviders[] {
