@@ -100,12 +100,4 @@
       }
     }
   }
-  // action buttons zichtbaar houden indien selected
-  .ui-list-view__list__item--selected {
-    .ui-content-thumbnail--line {
-      .ui-content-thumbnail__actions {
-        display: flex !important;
-      }
-    }
-  }
 }

@@ -17,13 +17,6 @@
     <div>{{title}}</div>
   </div>
   <div class="ui-content-thumbnail__footer">
-    <!-- Content hidden by default if Listformat == Line -->
-    <div class="ui-content-thumbnail__actions">
-      <ng-content></ng-content>
-    </div>
-    <!-- Content not hidden -->
-    <div class="ui-content-thumbnail__actions ui-content-thumbnail__actions--visible">
-      <ng-content select="[action-visible]"></ng-content>
-    </div>
+    <ng-content></ng-content>
   </div>
 </div>
