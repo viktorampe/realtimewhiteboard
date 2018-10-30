@@ -64,13 +64,11 @@
     </campus-button>
     <campus-button [iconClass]="'icon-tasks'"
                    rounded-corners
-                   action-visible
                    hide-desktop
                    warning>
     </campus-button>
     <campus-button [iconClass]="'icon-tasks'"
                    rounded-corners
-                   action-visible
                    hide-mobile
                    danger>
     </campus-button>
@@ -81,10 +79,10 @@
   <campus-content-thumbnail campusListItem
                             [title]="'Title'"
                             [fileExtensionClass]="'xlsx'"
-                            class='ui-hide__container'>
+                            class='ui-has-hidden-items'>
     <!-- Hier moeten de mogelijke actieknoppen met hun (Click) nog toegevoegd worden -->
     <campus-button [iconClass]="'icon-bundle'"
-                   class="ui-hide__item--not-hover"
+                   class="ui-hidden-item--not-hover"
                    circle>
     </campus-button>
     <campus-button [iconClass]="'icon-tasks'"
@@ -105,14 +103,14 @@
   <campus-content-thumbnail campusListItem
                             [title]="'Title'"
                             [fileExtensionClass]="'xlsx'"
-                            class='ui-hide__container'>
+                            class='ui-has-hidden-items'>
     <!-- Hier moeten de mogelijke actieknoppen met hun (Click) nog toegevoegd worden -->
     <campus-button [iconClass]="'icon-bundle'"
-                   class="ui-hide__item--not-selected ui-hide__item--not-hover"
+                   class="ui-hidden-item--not-selected ui-hidden-item--not-hover"
                    circle>
     </campus-button>
     <campus-button [iconClass]="'icon-tasks'"
-                   class="ui-hide__item--not-selected ui-hide__item--not-hover"
+                   class="ui-hidden-item--not-selected ui-hidden-item--not-hover"
                    circle>
     </campus-button>
     <campus-button [iconClass]="'icon-tasks'"
@@ -125,7 +123,7 @@
                    action-visible
                    hide-mobile
                    danger
-                   class="ui-hide__item--not-selected ui-hide__item--not-hover">
+                   class="ui-hidden-item--not-selected ui-hidden-item--not-hover">
     </campus-button>
   </campus-content-thumbnail>
 </campus-list-view>

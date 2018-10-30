@@ -128,20 +128,20 @@ body {
   }
 }
 
-.ui-hide__container {
-  // .ui-hide__item--not-hover
+.ui-has-hidden-items {
+  // .ui-hidden-item--not-hover
   // only hide if container is not hover()
-  &:not(:hover) .ui-hide__item--not-hover:not(.ui-hide__item--not-selected),
+  &:not(:hover) .ui-hidden-item--not-hover:not(.ui-hidden-item--not-selected),
 
-  // .ui-hide__item--not-selected
+  // .ui-hidden-item--not-selected
   // only hide if container is not selected -> .ui-list-view__list__item--selected
   &:not(.ui-list-view__list__item--selected)
-    .ui-hide__item--not-selected:not(.ui-hide__item--not-hover),
+    .ui-hidden-item--not-selected:not(.ui-hidden-item--not-hover),
 
-  // .ui-hide__item--not-hover AND .ui-hide__item--not-selected
+  // .ui-hidden-item--not-hover AND .ui-hidden-item--not-selected
   // only hide if container is not hover() AND not selected
   &:not(:hover):not(.ui-list-view__list__item--selected)
-    .ui-hide__item--not-hover.ui-hide__item--not-selected {
+    .ui-hidden-item--not-hover.ui-hidden-item--not-selected {
     display: none;
   }
 }
