@@ -128,22 +128,24 @@ body {
   }
 }
 
-.ui-hide__container--not-hover {
-  &:hover .ui-hide__item {
-    display: unset;
+.ui-hide__container {
+  &--not hover {
+    &:hover .ui-hide__item {
+      display: unset;
+    }
+
+    .ui-hide__item {
+      display: none;
+    }
   }
 
-  .ui-hide__item {
-    display: none;
-  }
-}
+  &--not-selected {
+    &.ui-list-view__list__item--selected .ui-hide__item {
+      display: unset;
+    }
 
-.ui-hide__container--not-selected {
-  &.ui-list-view__list__item--selected .ui-hide__item {
-    display: unset;
-  }
-
-  .ui-hide__item {
-    display: none;
+    .ui-hide__item {
+      display: none;
+    }
   }
 }
