@@ -1,7 +1,6 @@
 import { InjectionToken, ModuleWithProviders } from '@angular/core';
 import { Action, ActionReducer, StoreModule } from '@ngrx/store';
-
-export interface ReducerNamespaceInterface {
+interface ReducerNamespaceInterface {
   NAME: string;
   reducer:
     | ActionReducer<any, Action>
@@ -9,9 +8,9 @@ export interface ReducerNamespaceInterface {
   initialState: any;
 }
 
-export function getModuleWithForFeatureProviders<
-  T extends ReducerNamespaceInterface
->(reducers: T[]): ModuleWithProviders[] {
+export function getModuleWithForFeatureProviders(
+  reducers: ReducerNamespaceInterface[]
+): ModuleWithProviders[] {
   return reducers.map(reducer => {
     return StoreModule.forFeature(
       reducer.NAME,
