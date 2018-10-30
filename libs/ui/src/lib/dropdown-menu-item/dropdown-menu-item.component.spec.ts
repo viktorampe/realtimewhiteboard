@@ -8,7 +8,8 @@ const mockData = {
   link: 'link',
   alt: 'alt',
   image: '/image.png',
-  icon: 'icon-brol'
+  icon: 'icon-brol',
+  header: 'foobar'
 };
 
 describe('DropdownMenuItemComponent', () => {
@@ -47,11 +48,11 @@ describe('DropdownMenuItemComponent', () => {
     const element = fixture.debugElement.query(
       By.css('.ui-dropdown-menu-item__title')
     );
-    expect(element).toBe(null);
+    expect(element).toBeFalsy();
   });
 
-  it('should have the correct link', () => {
-    component.link = mockData.link;
+  it('should have the correct link external', () => {
+    component.externalLink = mockData.link;
     fixture.detectChanges();
     const element = fixture.debugElement.query(
       By.css('.ui-dropdown-menu-item a')
@@ -59,83 +60,71 @@ describe('DropdownMenuItemComponent', () => {
     expect(element.nativeElement.href).toContain(mockData.link);
   });
 
-  it('should have the correct img alt', () => {
-    component.image = mockData.image;
-    component.imageAltText = mockData.alt;
-    fixture.detectChanges();
-    const element = fixture.debugElement.query(
-      By.css('.ui-dropdown-menu-item img')
-    );
-    expect(element.nativeElement.alt).toBe(mockData.alt);
-  });
-
-  it('should show the correct img', () => {
-    component.image = mockData.image;
-    component.imageAltText = mockData.alt;
-    fixture.detectChanges();
-    const element = fixture.debugElement.query(
-      By.css('.ui-dropdown-menu-item img')
-    );
-    expect(element.nativeElement.src).toContain(mockData.image);
-  });
-
   it('should not show an image if none is set', () => {
     component.image = '';
+    component.externalLink = 'a';
+    component.imageAltText = mockData.alt;
+    fixture.detectChanges();
+    const element = fixture.debugElement.query(By.css('img'));
+    expect(element).toBeFalsy();
+  });
+
+  it('should show an image if set', () => {
+    component.image = 'a';
+    component.externalLink = 'a';
+    component.imageAltText = mockData.alt;
+    fixture.detectChanges();
+    const element = fixture.debugElement.query(By.css('img'));
+    expect(element).toBeTruthy();
+  });
+
+  it('should not show an icon if none set', () => {
+    component.icon = '';
+    component.externalLink = 'a';
+    component.imageAltText = mockData.alt;
+    fixture.detectChanges();
+    const element = fixture.debugElement.query(By.css('mat-icon'));
+    expect(element).toBeFalsy();
+  });
+
+  it('should show an icon if set', () => {
+    component.icon = 'a';
+    component.externalLink = 'a';
+    component.imageAltText = mockData.alt;
+    fixture.detectChanges();
+    const element = fixture.debugElement.query(By.css('mat-icon'));
+    expect(element).toBeTruthy();
+  });
+
+  it('should show an header if internal link is set', () => {
+    component.header = mockData.header;
+    component.internalLink = 'a';
     component.imageAltText = mockData.alt;
     fixture.detectChanges();
     const element = fixture.debugElement.query(
-      By.css('.ui-dropdown-menu-item img')
-    );
-    expect(element).toBe(null);
-  });
-
-  it('should not show an image if none is set', () => {
-    component.image = '';
-    component.imageAltText = mockData.alt;
-    fixture.detectChanges();
-    const element = fixture.debugElement.query(
-      By.css('.ui-dropdown-menu-item img')
-    );
-    expect(element).toBe(null);
-  });
-
-  it('should not show an image if an icon is set', () => {
-    component.image = mockData.image;
-    component.icon = mockData.icon;
-    component.imageAltText = mockData.alt;
-    fixture.detectChanges();
-    const element = fixture.debugElement.query(
-      By.css('.ui-dropdown-menu-item img')
-    );
-    expect(element).toBe(null);
-  });
-
-  it('should not show an icon if an image is set', () => {
-    component.image = mockData.image;
-    component.icon = mockData.icon;
-    component.imageAltText = mockData.alt;
-    fixture.detectChanges();
-    const element = fixture.debugElement.query(
-      By.css('.ui-dropdown-menu-item i')
-    );
-    expect(element).toBe(null);
-  });
-
-  it('should show an icon if icon is set', () => {
-    component.icon = mockData.icon;
-    fixture.detectChanges();
-    const element = fixture.debugElement.query(
-      By.css('.ui-dropdown-menu-item i')
+      By.css('.ui-dropdown-menu-item__header')
     );
     expect(element).toBeTruthy();
   });
 
-  it('should show the correct icon', () => {
-    component.icon = mockData.icon;
+  it('should show an header if external link is set', () => {
+    component.header = mockData.header;
+    component.externalLink = 'a';
+    component.imageAltText = mockData.alt;
     fixture.detectChanges();
     const element = fixture.debugElement.query(
-      By.css('.ui-dropdown-menu-item i')
+      By.css('.ui-dropdown-menu-item__header')
     );
-    expect(element.nativeElement.className).toBe(mockData.icon);
+    expect(element).toBeTruthy();
+  });
+
+  it('should not show an header if no link is set', () => {
+    component.header = mockData.header;
+    component.imageAltText = mockData.alt;
+    fixture.detectChanges();
+    const element = fixture.debugElement.query(
+      By.css('.ui-dropdown-menu-item__header')
+    );
+    expect(element).toBeFalsy();
   });
 });

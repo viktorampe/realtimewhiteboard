@@ -1,9 +1,7 @@
 <div class="ui-dropdown-menu-item">
   <div>
     <div *ngIf="title"
-         class="ui-dropdown-menu-item__title">
-      {{title}}
-    </div>
+         class="ui-dropdown-menu-item__title">{{title}}</div>
     <a *ngIf="internalLink"
        routerLink="internalLink">
       <mat-icon *ngIf="icon && !image"
@@ -11,16 +9,16 @@
       <img *ngIf="image && !icon"
            src="{{image}}"
            alt="{{imageAltText}}" />
-      <div class="header">{{header}}</div>
+      <div class="ui-dropdown-menu-item__header">{{header}}</div>
     </a>
     <a *ngIf="externalLink"
-       href="externalLink">
+       href="{{externalLink}}">
       <mat-icon *ngIf="icon && !image"
                 [svgIcon]="icon"></mat-icon>
       <img *ngIf="image && !icon"
            src="{{image}}"
            alt="{{imageAltText}}" />
-      <div class="header">{{header}}</div>
+      <div class="ui-dropdown-menu-item__header">{{header}}</div>
     </a>
   </div>
 </div>
