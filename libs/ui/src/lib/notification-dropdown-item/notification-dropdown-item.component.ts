@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { BadgePerson } from '../person-badge/person-badge.component';
+import { BadgePersonInterface } from '../person-badge/person-badge.component';
 
 @Component({
   selector: 'campus-notification-dropdown-item',
@@ -8,7 +8,7 @@ import { BadgePerson } from '../person-badge/person-badge.component';
 })
 export class NotificationDropdownItemComponent {
   @Input() icon: string;
-  @Input() person: BadgePerson;
+  @Input() person: BadgePersonInterface;
   @Input() titleText: string;
   @Input() link: string;
   @Input() notificationText: string;
