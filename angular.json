@@ -342,6 +342,15 @@
             ],
             "exclude": ["**/node_modules/**"]
           }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/ui/jest.config.js",
+            "tsConfig": "libs/ui/tsconfig.spec.json",
+            "setupFile": "libs/ui/src/test-setup.ts",
+            "runInBand": true
+          }
         }
       }
     },
