@@ -72,7 +72,7 @@ function throwMissingReducerProperty(property: string, index: number) {
  * 
  * if the namespace is missing a property, a runtime error will be thrown with the index of the reducer that is missing a property and the missing property
  * 
- * this function is accessable outside this lib using the barraled `StateFeatureBuilder`
+ * this function is accessable outside this lib using the barrelled `StateFeatureBuilder`
  * 
  * @example
  * imports: [
