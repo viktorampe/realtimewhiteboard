@@ -24,6 +24,6 @@ export interface DalState {
   unlockedBoekeStudents: UnlockedBoekeStudentReducer.State;
   alerts: AlertReducer.State;
   contentStatuses: ContentStatusReducer.State;
-  user: UserReducer.UserState;
+  user: UserReducer.State;
   studentContentStatuses: StudentContentStatusReducer.State;
 }

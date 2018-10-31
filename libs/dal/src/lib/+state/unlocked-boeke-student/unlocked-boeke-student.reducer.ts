@@ -5,6 +5,8 @@ import {
   UnlockedBoekeStudentsActionTypes
 } from './unlocked-boeke-student.actions';
 
+export const NAME = 'unlockedBoekeStudents';
+
 export interface State extends EntityState<UnlockedBoekeStudentInterface> {
   // additional entities state properties
   loaded: boolean;

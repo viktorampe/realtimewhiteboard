@@ -1,72 +1,132 @@
+import { Injectable } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import {
+  AUTH_SERVICE_TOKEN,
+  PersonInterface,
+  StateFeatureBuilder,
+  UserActions,
+  UserReducer
+} from '@campus/dal';
+import { Store, StoreModule } from '@ngrx/store';
+import { hot } from '@nrwl/nx/testing';
 import {
   EnvironmentAlertsFeatureInterface,
-  EnvironmentMessagesFeatureInterface
-} from '../interfaces';
+  EnvironmentMessagesFeatureInterface,
+  ENVIRONMENT_ALERTS_FEATURE_TOKEN,
+  ENVIRONMENT_MESSAGES_FEATURE_TOKEN
+} from '../interfaces/environment.features.interfaces';
+import { HeaderResolver } from './header.resolver';
 import { HeaderViewModel } from './header.viewmodel';
 
-let environmentMessagesFeature: EnvironmentMessagesFeatureInterface;
-let environmentAlertsFeature: EnvironmentAlertsFeatureInterface;
+let environmentMessagesFeature: EnvironmentMessagesFeatureInterface = {
+  enabled: false,
+  hasAppBarDropDown: false
+};
+let environmentAlertsFeature: EnvironmentAlertsFeatureInterface = {
+  enabled: false,
+  hasAppBarDropDown: false
+};
 let headerViewModel: HeaderViewModel;
+let usedUserState: any;
+let spy;
 
-describe('loadFeatureToggles and enableAlerts, enableMessages', () => {
-  function expectEnablesToBe(
-    enabled: boolean,
-    haveDropDown: boolean,
-    expectedEnabled: boolean
-  ) {
-    environmentMessagesFeature = {
-      enabled: enabled,
-      hasAppBarDropDown: haveDropDown
-    };
-    environmentAlertsFeature = {
-      enabled: enabled,
-      hasAppBarDropDown: haveDropDown
-    };
-    headerViewModel = new HeaderViewModel(
-      environmentAlertsFeature,
-      environmentMessagesFeature
-    );
-    expect(headerViewModel.enableAlerts).toBe(expectedEnabled);
-    expect(headerViewModel.enableMessages).toBe(expectedEnabled);
-  }
-  it('should be true if enable and hasDropDown are true', () => {
-    expectEnablesToBe(true, true, true);
+@Injectable({
+  providedIn: 'root'
+})
+class MockHeaderResolver {
+  resolve = spy;
+}
+
+describe('headerViewModel', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+    usedUserState = {};
   });
-  it('should be false if enable is false and hasDropDown is true', () => {
-    expectEnablesToBe(false, true, false);
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        StoreModule.forRoot({}),
+        ...StateFeatureBuilder.getModuleWithForFeatureProviders([
+          {
+            NAME: UserReducer.NAME,
+            reducer: UserReducer.reducer,
+            initialState: {
+              initialState: usedUserState
+            }
+          }
+        ])
+      ],
+      providers: [
+        HeaderViewModel,
+        {
+          provide: ENVIRONMENT_ALERTS_FEATURE_TOKEN,
+          useValue: environmentAlertsFeature
+        },
+        {
+          provide: ENVIRONMENT_MESSAGES_FEATURE_TOKEN,
+          useValue: environmentMessagesFeature
+        },
+        { provide: AUTH_SERVICE_TOKEN, useValue: {} },
+        { provide: HeaderResolver, useClass: MockHeaderResolver },
+        Store
+      ]
+    });
+    headerViewModel = TestBed.get(HeaderViewModel);
   });
-  it('should be false if enable is true and hasDropDown is false', () => {
-    expectEnablesToBe(true, false, false);
+  describe('creation', () => {
+    beforeAll(() => {
+      usedUserState = UserReducer.initialState;
+      spy = jest.fn();
+    });
+    it('should be defined', () => {
+      expect(headerViewModel).toBeDefined();
+    });
+    it('should call the headerResolver.resolve', () => {
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
   });
-  it('should be false if enable is false and hasDropDown is false', () => {
-    expectEnablesToBe(false, false, false);
+  describe('feature toggles', () => {
+    function checkFeatureToggles(
+      enabled: boolean,
+      hasAppBarDropDown: boolean,
+      expectedResult
+    ) {
+      describe(`env enabled is ${enabled} and hasAppBarDropDown is ${hasAppBarDropDown}`, () => {
+        beforeAll(() => {
+          usedUserState = UserReducer.initialState;
+          environmentMessagesFeature = {
+            enabled: enabled,
+            hasAppBarDropDown: hasAppBarDropDown
+          };
+          environmentAlertsFeature = {
+            enabled: enabled,
+            hasAppBarDropDown: hasAppBarDropDown
+          };
+        });
+        it(`should be ${expectedResult}`, () => {
+          expect(headerViewModel.enableAlerts).toBe(expectedResult);
+          expect(headerViewModel.enableMessages).toBe(expectedResult);
+        });
+      });
+    }
+    checkFeatureToggles(true, true, true);
+    checkFeatureToggles(true, false, false);
+    checkFeatureToggles(false, false, false);
+    checkFeatureToggles(false, true, false);
   });
-});
-
-test('it should provide a stream with the array of breadcrumbs', () => {
-  return;
-});
-
-test('it should (conditionally) provide a stream with the array of recent Alerts', () => {
-  return;
-});
-
-test('it should (conditionally) provide a stream with the array of recent Messages', () => {
-  return;
-});
-
-test('it should provide a stream with the logged in users details', () => {
-  return;
-});
-
-test('it should dispatch an action to poll the server every x seconds', () => {
-  return;
-});
-
-test('it should dispatch an action set an alert as read', () => {
-  return;
-});
-
-test('it should dispatch an action set a message as read', () => {
-  return;
+  describe('state streams', () => {
+    let user: PersonInterface;
+    beforeAll(() => {
+      user = { email: 'email expected' };
+      usedUserState = UserReducer.reducer(
+        UserReducer.initialState,
+        new UserActions.UserLoaded(user)
+      );
+    });
+    it('should get the user from the provided state', () => {
+      expect(headerViewModel.currentUser$).toBeObservable(
+        hot('a', { a: user })
+      );
+    });
+  });
 });

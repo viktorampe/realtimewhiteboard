@@ -1,4 +1,4 @@
-import { userQuery } from './user.selectors';
+import { UserQueries } from '.';
 
 describe('User Selectors', () => {
   const ERROR_MSG = 'No Error Available';
@@ -59,23 +59,23 @@ describe('User Selectors', () => {
 
   describe('User Selectors', () => {
     it('getAllUser() should return the a User object', () => {
-      const results = userQuery.getCurrentUser(storeState);
+      const results = UserQueries.getCurrentUser(storeState);
       expect(results).toBe(mockUser);
     });
 
     it('getCurrentUser() should return the selected Entity', () => {
-      const result = userQuery.getCurrentUser(storeState);
+      const result = UserQueries.getCurrentUser(storeState);
       const selId = getUserId(result);
       expect(selId).toBe(186);
     });
 
     it("getLoaded() should return the current 'loaded' status", () => {
-      const result = userQuery.getLoaded(storeState);
+      const result = UserQueries.getLoaded(storeState);
       expect(result).toBe(true);
     });
 
     it("getError() should return the current 'error' storeState", () => {
-      const result = userQuery.getError(storeState);
+      const result = UserQueries.getError(storeState);
       expect(result).toBe(ERROR_MSG);
     });
   });

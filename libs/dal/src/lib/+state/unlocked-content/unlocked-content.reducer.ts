@@ -5,6 +5,8 @@ import {
   UnlockedContentsActionTypes
 } from './unlocked-content.actions';
 
+export const NAME = 'unlockedContents';
+
 /**
  * @ngrx/entity provides a predefined interface for handling
  * a structured dictionary of records. This interface

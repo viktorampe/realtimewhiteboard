@@ -6,16 +6,12 @@ import {
   BundleInterface,
   EduContentInterface
 } from '@campus/dal';
-import { StateResolver } from '@campus/pages/shared';
 import { ListFormat } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { BundlesViewModel } from '../bundles.viewmodel';
+import { MockViewModel } from '../bundles.viewmodel.mocks';
 import { BundlesComponent } from './bundles.component';
-
-class MockViewModel extends BundlesViewModel {}
-
-let bundlesViewModel: MockViewModel;
 
 function createEduContent(): EduContentInterface {
   return {
@@ -65,14 +61,6 @@ function filterBundlesExpect(
   );
 }
 
-beforeEach(() => {
-  bundlesViewModel = new MockViewModel(
-    new StateResolver(<Store<any>>{}),
-    <Store<any>>{},
-    new ActivatedRoute()
-  );
-});
-
 describe('BundlesComponent', () => {
   let component: BundlesComponent;
   let fixture: ComponentFixture<BundlesComponent>;
@@ -88,10 +76,9 @@ describe('BundlesComponent', () => {
       declarations: [BundlesComponent],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
-        BundlesViewModel,
+        { provide: BundlesViewModel, useClass: MockViewModel },
         { provide: ActivatedRoute, value: {} },
         { provide: AUTH_SERVICE_TOKEN, useValue: {} },
-
         Store
       ]
     }).compileComponents();

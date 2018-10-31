@@ -5,11 +5,11 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from 'jasmine-marbles';
 import { Observable, of } from 'rxjs';
+import { UserReducer } from '.';
 import { DalModule } from '../../dal.module';
 import { AUTH_SERVICE_TOKEN } from '../../persons/auth-service.interface';
 import { LoadUser, RemoveUser, UserLoaded, UserRemoved } from './user.actions';
 import { UserEffects } from './user.effects';
-import { initialUserstate, UserState } from './user.reducer';
 
 const mockUser = {
   name: 'Mertens',
@@ -51,7 +51,7 @@ const mockUser = {
 describe('UserEffects', () => {
   let actions: Observable<any>;
   let effects: UserEffects;
-  let baseState: UserState;
+  let baseState: UserReducer.State;
 
   const loadUserAction = new LoadUser({ force: true });
   const removeUserAction = new RemoveUser();
@@ -105,7 +105,7 @@ describe('UserEffects', () => {
 
   describe('loadUser$', () => {
     beforeAll(() => {
-      baseState = initialUserstate;
+      baseState = UserReducer.initialState;
     });
     beforeEach(() => {
       jestMockTokenGetUserReturnValue();

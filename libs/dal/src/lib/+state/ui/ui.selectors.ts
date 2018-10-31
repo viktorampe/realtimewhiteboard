@@ -1,8 +1,8 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { UiState } from './ui.reducer';
+import { NAME, UiState } from './ui.reducer';
 
 // Lookup the 'Ui' feature state managed by NgRx
-const getUiState = createFeatureSelector<UiState>('ui');
+const getUiState = createFeatureSelector<UiState>(NAME);
 
 const getLoaded = createSelector(getUiState, (state: UiState) => state.loaded);
 
