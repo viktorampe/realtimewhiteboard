@@ -1,5 +1,6 @@
 export * from './lib/+models/index';
 export { DalState } from './lib/+state';
+export * from './lib/+state/alert';
 export * from './lib/+state/bundle';
 export * from './lib/+state/edu-content';
 export * from './lib/+state/learning-area';

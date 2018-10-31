@@ -1,7 +1,7 @@
 import { Action } from '@ngrx/store';
 
 export enum DalActionTypes {
-  ActionSuccessful = '[DalActions] Action Successfull'
+  ActionSuccessful = '[DalActions] Action Successful'
 }
 
 export class ActionSuccessful implements Action {
