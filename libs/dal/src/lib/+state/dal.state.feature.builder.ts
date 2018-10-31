@@ -17,7 +17,6 @@ export interface ReducerNamespaceInterface {
  * this function is accessable outside this lib using the barrelled `StateFeatureBuilder`
  * 
  * @example
- * @example
  * imports: [
  *  OtherImports,
  *  ...getModuleWithForFeatureProviders([
