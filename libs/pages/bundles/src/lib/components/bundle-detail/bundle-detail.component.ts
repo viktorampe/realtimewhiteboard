@@ -19,7 +19,8 @@ import { BundlesViewModel } from '../bundles.viewmodel';
 })
 export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   bundle$ = this.bundlesViewModel.activeBundle$;
-  contents$ = this.bundlesViewModel.bundleContents$;
+  contents$ = this.bundlesViewModel.activeBundleContents$;
+
   listFormat = ListFormat; //enum beschikbaar maken in template
   currentListFormat$ = this.bundlesViewModel.listFormat$;
 

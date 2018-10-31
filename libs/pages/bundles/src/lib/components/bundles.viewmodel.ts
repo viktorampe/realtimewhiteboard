@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { ActivatedRoute, Resolve } from '@angular/router';
+import { ActivatedRoute, Params, Resolve } from '@angular/router';
 import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
@@ -34,28 +34,17 @@ import { ListFormat } from '@campus/ui';
 import { Dictionary } from '@ngrx/entity';
 import { Action, select, Selector, Store } from '@ngrx/store';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { filter, map, shareReplay, switchMap } from 'rxjs/operators';
-
-export interface LearningAreaWithBundleInstanceInfo {
-  learningAreas: {
-    learningArea: LearningAreaInterface;
-    bundleCount: number;
-    bookCount: number;
-  }[];
-}
-
-export interface BundleInstanceWithEduContentInfo extends BundleInterface {
-  eduContentsCount: number;
-}
+import { filter, map, shareReplay, switchMap, tap } from 'rxjs/operators';
+import {
+  BundlesWithContentInfo,
+  LearningAreasWithBundlesInfo
+} from './bundles.viewmodel.interfaces';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BundlesViewModel implements Resolve<boolean> {
   // source streams
-  learningAreaId$: Observable<number>;
-  bundleId$: Observable<number>;
-
   listFormat$: Observable<ListFormat>;
   user$: Observable<PersonInterface>;
   learningAreas$: Observable<LearningAreaInterface[]>;
@@ -65,34 +54,34 @@ export class BundlesViewModel implements Resolve<boolean> {
   sharedUnlockedBookStudents$: Observable<UnlockedBoekeStudentInterface[]>;
   coupledPersons$: Observable<PersonInterface[]>;
 
+  private routeParams$: Observable<Params> = this.route.params;
+
   // intermediate streams (maps)
-  bundlesByLearningArea$: Observable<Dictionary<BundleInterface[]>>;
-  unlockedContentByBundle$: Observable<Dictionary<UnlockedContentInterface[]>>;
+  // private bundlesByLearningArea$: Observable<Dictionary<BundleInterface[]>>;
+  // private unlockedContentByBundle$: Observable<Dictionary<UnlockedContentInterface[]>>;
+  // > learningareas page
+  private sharedBundles$: Observable<BundleInterface[]>;
+  private sharedBundlesByLearningArea$: Observable<
+    Dictionary<BundleInterface[]>
+  >;
+  private sharedBooks$: Observable<EduContentInterface[]>;
+  private sharedBooksByLearningArea$: Observable<
+    Dictionary<ContentInterface[]>
+  >;
+  // > bundles page
+  private learningAreaId$: Observable<number>;
+  // > bundle detail page
+  private bundleId$: Observable<number>;
 
   // presentation streams
-  // shared
-  // > bundles
-  activeBundle$: Observable<BundleInterface>;
-  private sharedBundles$: Observable<BundleInterface[]>;
-  sharedBundlesByLearningArea$: Observable<Dictionary<BundleInterface[]>>;
-  bundleContentsCount$: Observable<Dictionary<number>>;
-  bundleContents$: Observable<ContentInterface[]>;
-  // > books
-  private sharedBooks$: Observable<EduContentInterface[]>;
-  sharedBooksByLearningArea$: Observable<Dictionary<ContentInterface[]>>;
-  // > learningAreas
+  // > learningareas page
+  sharedLearningAreas$: Observable<LearningAreasWithBundlesInfo>;
+  // > bundles page
   activeLearningArea$: Observable<LearningAreaInterface>;
-  sharedLearningAreas$: Observable<LearningAreaWithBundleInstanceInfo>;
-  sharedLearningAreaBundles$: Observable<BundleInterface[]>;
-  sharedLearningAreaBooks$: Observable<ContentInterface[]>;
-
-  // own (TODO teacher)
-  // > bundles
-  private ownBundles$: Observable<BundleInterface[]>;
-  // > books
-  private ownBooks$: Observable<EduContentInterface[]>;
-  // > learningAreas
-  learningAreasWithOwnBundles$: Observable<LearningAreaInterface[]>;
+  activeLearningAreaBundles$: Observable<BundlesWithContentInfo>;
+  // > bundle detail page
+  activeBundle$: Observable<BundleInterface>;
+  activeBundleContents$: Observable<ContentInterface[]>;
 
   constructor(
     private viewModelResolver: StateResolver,
@@ -102,10 +91,12 @@ export class BundlesViewModel implements Resolve<boolean> {
   ) {}
 
   resolve(): Observable<boolean> {
-    this.learningAreaId$ = this.route.params.pipe(
-      map((params): number => params.area || 0)
+    this.learningAreaId$ = this.routeParams$.pipe(
+      // TODO why params always empty?
+      tap(console.log),
+      map((params): number => params.area || 19)
     );
-    this.bundleId$ = this.route.params.pipe(
+    this.bundleId$ = this.routeParams$.pipe(
       map((params): number => params.bundle || 0)
     );
 
@@ -128,33 +119,18 @@ export class BundlesViewModel implements Resolve<boolean> {
     );
 
     // intermediate streams
-    this.bundlesByLearningArea$ = this.store.pipe(
-      select(BundleQueries.getByLearningAreaId)
-    );
-    this.unlockedContentByBundle$ = this.store.pipe(
-      select(UnlockedContentQueries.getByBundleIds)
-    );
-
-    // presentation streams
-    // shared
-    // > bundles
-    this.activeBundle$ = this.bundleId$.pipe(
-      switchMap(
-        (bundleId: number): Observable<BundleInterface> =>
-          this.store.pipe(select(BundleQueries.getById, { id: bundleId }))
-      )
-    );
+    // this.bundlesByLearningArea$ = this.store.pipe(
+    //   select(BundleQueries.getByLearningAreaId)
+    // );
+    // this.unlockedContentByBundle$ = this.store.pipe(
+    //   select(UnlockedContentQueries.getByBundleIds)
+    // );
+    // > learningarea page
     this.sharedBundles$ = this.getSharedBundles();
     this.sharedBundlesByLearningArea$ = this.groupStreamByKey(
       this.sharedBundles$,
       'learningAreaId'
     );
-    // this.sharedLearningAreaBundles$ = this.getLearningAreaBundles(
-    //   this.learningAreaId$,
-    //   this.sharedBundlesByLearningArea$
-    // );
-
-    // > books
     this.sharedBooks$ = this.getSharedBooks();
     this.sharedBooksByLearningArea$ = this.sharedBooks$.pipe(
       map(sharedBooks => {
@@ -169,40 +145,39 @@ export class BundlesViewModel implements Resolve<boolean> {
       }),
       shareReplay(1)
     );
-    // this.sharedLearningAreaBooks$ = this.getLearningAreaBooks(
-    //   this.learningAreaId$,
-    //   this.sharedBooksByLearningArea$
-    // );
+    // > bundles page
 
-    this.bundleContentsCount$ = this.getBundleContentsCount(
-      this.unlockedContentByBundle$
-    );
-    this.bundleContents$ = this.getBundleContents(
-      this.bundleId$,
-      this.unlockedContentByBundle$
+    // presentation streams
+    // > learningarea page
+    this.sharedLearningAreas$ = this.getLearningAreasWithBundleInfo(
+      this.sharedBundlesByLearningArea$,
+      this.sharedBooksByLearningArea$
     );
 
-    // > learningAreas
+    // > bundles page
     this.activeLearningArea$ = this.learningAreaId$.pipe(
       switchMap(
         (areaId: number): Observable<LearningAreaInterface> =>
           this.store.pipe(select(LearningAreaQueries.getById, { id: areaId }))
       )
     );
-    this.sharedLearningAreas$ = this.getLearningAreasWithBundleInfo(
+    this.activeLearningAreaBundles$ = this.getBundlesWithContentInfo(
+      this.learningAreaId$,
       this.sharedBundlesByLearningArea$,
       this.sharedBooksByLearningArea$
     );
 
-    // // own (TODO teacher)
-    // // > bundles
-    // this.ownBundles$ = this.getOwnBundles();
-    // // > books
-    // this.ownBooks$ = of([]); // TODO favorited books
-    // // > learningAreas
-    // this.learningAreasWithOwnBundles$ = this.getLearningAreasWithBundleInfo(
-    //   this.groupStreamByKey(this.ownBundles$, 'learningAreaId'),
-    //   this.groupStreamByKey(this.ownBooks$, 'learningAreaId')
+    // > bundle detail page
+    // this.activeBundle$ = this.bundleId$.pipe(
+    //   switchMap(
+    //     (bundleId: number): Observable<BundleInterface> =>
+    //       this.store.pipe(select(BundleQueries.getById, { id: bundleId }))
+    //   )
+    // );
+
+    // this.bundleContents$ = this.getBundleContents(
+    //   this.bundleId$,
+    //   this.unlockedContentByBundle$
     // );
 
     return this.viewModelResolver.resolve(
@@ -249,31 +224,67 @@ export class BundlesViewModel implements Resolve<boolean> {
     this.store.dispatch(new UiActions.SetListFormatUi({ listFormat }));
   }
 
-  private getLearningAreaBundles(
-    learningAreaId$: Observable<number>,
-    bundlesByLearningArea$: Observable<Dictionary<BundleInterface[]>>
-  ): Observable<BundleInterface[]> {
-    return combineLatest(learningAreaId$, bundlesByLearningArea$).pipe(
-      map(
-        ([learningAreaId, bundlesByLearningArea]) =>
-          bundlesByLearningArea[learningAreaId]
-      ),
-      filter(bundles => !!bundles) // check if bundle exists in learningArea
-    );
+  /**
+   * TODO: move to service
+   * Filter an array by specified key with partial value
+   *
+   * @param {any[]} list
+   * @param {(string | string[])} key
+   * @param {string} value
+   * @param {boolean} [ignoreCase=true]
+   * @returns {any[]}
+   * @memberof BundlesViewModel
+   */
+  public filterArray(
+    list: any[],
+    key: string | string[],
+    value: string,
+    ignoreCase: boolean = true
+  ): any[] {
+    if (!value) {
+      return list;
+    }
+
+    return list.filter(item => {
+      if (typeof key === 'string') {
+        key = key.split('.');
+      }
+      let prop = key.reduce((p: any, k: string) => {
+        return p[k] || '';
+      }, item);
+      if (ignoreCase) {
+        value = value.toLowerCase();
+        prop = prop.toLowerCase();
+      }
+      return prop.includes(value);
+    });
   }
 
-  private getLearningAreaBooks(
-    learningAreaId$: Observable<number>,
-    booksByLearningArea$: Observable<Dictionary<ContentInterface[]>>
-  ): Observable<ContentInterface[]> {
-    return combineLatest(learningAreaId$, booksByLearningArea$).pipe(
-      map(
-        ([learningAreaId, booksByLearningArea]) =>
-          booksByLearningArea[learningAreaId]
-      ),
-      filter(books => !!books) // check if bundle exists in learningArea
-    );
-  }
+  // private getLearningAreaBundles(
+  //   learningAreaId$: Observable<number>,
+  //   bundlesByLearningArea$: Observable<Dictionary<BundleInterface[]>>
+  // ): Observable<BundleInterface[]> {
+  //   return combineLatest(learningAreaId$, bundlesByLearningArea$).pipe(
+  //     map(
+  //       ([learningAreaId, bundlesByLearningArea]) =>
+  //         bundlesByLearningArea[learningAreaId]
+  //     ),
+  //     filter(bundles => !!bundles) // check if bundle exists in learningArea
+  //   );
+  // }
+
+  // private getLearningAreaBooks(
+  //   learningAreaId$: Observable<number>,
+  //   booksByLearningArea$: Observable<Dictionary<ContentInterface[]>>
+  // ): Observable<ContentInterface[]> {
+  //   return combineLatest(learningAreaId$, booksByLearningArea$).pipe(
+  //     map(
+  //       ([learningAreaId, booksByLearningArea]) =>
+  //         booksByLearningArea[learningAreaId]
+  //     ),
+  //     filter(books => !!books) // check if bundle exists in learningArea
+  //   );
+  // }
 
   private getBundleContents(
     bundleId$: Observable<number>,
@@ -345,31 +356,10 @@ export class BundlesViewModel implements Resolve<boolean> {
     );
   }
 
-  private getBundleContentsCount(
-    unlockedContentByBundle$: Observable<Dictionary<UnlockedContentInterface[]>>
-  ): Observable<Dictionary<number>> {
-    return unlockedContentByBundle$.pipe(
-      map(unlockedContentsByBundle => {
-        const countByBundle = {};
-        Object.keys(unlockedContentsByBundle).forEach(key => {
-          countByBundle[key] = unlockedContentsByBundle[key].length;
-        });
-        return countByBundle;
-      }),
-      shareReplay(1)
-    );
-  }
-
-  private getOwnBundles(): Observable<BundleInterface[]> {
-    return this.store.pipe(
-      select(BundleQueries.getOwn, { userId: this.authService.userId })
-    );
-  }
-
   private getLearningAreasWithBundleInfo(
     bundlesByLearningArea$: Observable<Dictionary<BundleInterface[]>>,
     booksByLearningArea$: Observable<Dictionary<ContentInterface[]>>
-  ): Observable<LearningAreaWithBundleInstanceInfo> {
+  ): Observable<LearningAreasWithBundlesInfo> {
     return combineLatest(
       this.learningAreas$,
       bundlesByLearningArea$,
@@ -380,7 +370,7 @@ export class BundlesViewModel implements Resolve<boolean> {
           learningAreas,
           bundlesByLearningArea,
           booksByLearningArea
-        ]): LearningAreaWithBundleInstanceInfo => {
+        ]): LearningAreasWithBundlesInfo => {
           return {
             learningAreas: learningAreas
               .map(learningArea => ({
@@ -398,23 +388,34 @@ export class BundlesViewModel implements Resolve<boolean> {
               )
           };
         }
-        // learningAreas
-        //   .map(
-        //     (learningArea): LearningAreaWithBundleInstanceInfo => ({
-        //       learning
-        //       learningArea: learningArea,
-        //       bundleCount: bundlesByLearningArea[learningArea.id]
-        //         ? bundlesByLearningArea[learningArea.id].length
-        //         : 0,
-        //       bookCount: booksByLearningArea[learningArea.id]
-        //         ? booksByLearningArea[learningArea.id].length
-        //         : 0
-        //     })
-        //   )
-        //   .filter(
-        //     learningArea =>
-        //       learningArea.bundleCount > 0 || learningArea.bookCount > 0
-        //   )
+      )
+    );
+  }
+
+  private getBundlesWithContentInfo(
+    learningAreaId$,
+    sharedBundlesByLearningArea$,
+    sharedBooksByLearningArea$
+  ): Observable<BundlesWithContentInfo> {
+    return combineLatest(
+      learningAreaId$,
+      sharedBundlesByLearningArea$,
+      sharedBooksByLearningArea$
+    ).pipe(
+      map(
+        ([learningAreaId, bundlesByArea, booksByArea]: [
+          number,
+          Dictionary<BundleInterface[]>,
+          Dictionary<ContentInterface[]>
+        ]): BundlesWithContentInfo => {
+          return {
+            bundles: (bundlesByArea[learningAreaId] || []).map(bundle => ({
+              bundle: bundle,
+              contentsCount: 0
+            })),
+            books: booksByArea[learningAreaId] || []
+          };
+        }
       )
     );
   }

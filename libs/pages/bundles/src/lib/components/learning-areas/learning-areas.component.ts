@@ -2,10 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ListFormat } from '@campus/ui';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import {
-  BundlesViewModel,
-  LearningAreaWithBundleInstanceInfo
-} from '../bundles.viewmodel';
+import { BundlesViewModel } from '../bundles.viewmodel';
+import { LearningAreasWithBundlesInfo } from '../bundles.viewmodel.interfaces';
 
 @Component({
   selector: 'campus-learning-areas',
@@ -16,8 +14,8 @@ export class LearningAreasComponent implements OnInit {
   listFormat$: Observable<ListFormat>;
   filterInput$ = new BehaviorSubject<string>('');
 
-  sharedInfo$: Observable<LearningAreaWithBundleInstanceInfo>;
-  filteredSharedInfo$: Observable<LearningAreaWithBundleInstanceInfo>;
+  sharedInfo$: Observable<LearningAreasWithBundlesInfo>;
+  filteredSharedInfo$: Observable<LearningAreasWithBundlesInfo>;
 
   constructor(private bundlesViewModel: BundlesViewModel) {}
 
@@ -30,6 +28,10 @@ export class LearningAreasComponent implements OnInit {
     );
   }
 
+  clickChangeListFormat(value: string): void {
+    this.bundlesViewModel.changeListFormat(ListFormat[value]);
+  }
+
   onChangeFilterInput(filterInput: string): void {
     this.filterInput$.next(filterInput);
   }
@@ -38,30 +40,19 @@ export class LearningAreasComponent implements OnInit {
     this.filterInput$.next('');
   }
 
-  clickChangeListFormat(value: string): void {
-    this.bundlesViewModel.changeListFormat(ListFormat[value]);
-  }
-
   filterLearningAreas(
-    learningAreas$: Observable<LearningAreaWithBundleInstanceInfo>,
+    learningAreas$: Observable<LearningAreasWithBundlesInfo>,
     filterInput$: Observable<string>
-  ): Observable<LearningAreaWithBundleInstanceInfo> {
+  ): Observable<LearningAreasWithBundlesInfo> {
     return combineLatest(learningAreas$, filterInput$).pipe(
-      map(
-        ([info, filterInput]: [LearningAreaWithBundleInstanceInfo, string]) => {
-          if (!filterInput) {
-            return info;
-          }
-          return {
-            ...info,
-            learningAreas: info.learningAreas.filter(learningAreaInfo =>
-              learningAreaInfo.learningArea.name
-                .toLowerCase()
-                .includes(filterInput.toLowerCase())
-            )
-          };
-        }
-      )
+      map(([info, filterInput]: [LearningAreasWithBundlesInfo, string]) => ({
+        ...info,
+        learningAreas: this.bundlesViewModel.filterArray(
+          info.learningAreas,
+          'learningArea.name',
+          filterInput
+        )
+      }))
     );
   }
 }

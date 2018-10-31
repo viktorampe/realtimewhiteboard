@@ -1,61 +1,71 @@
 <campus-page-bar>
-  <!-- TODO generic input needs to be replaced by the campus filter input -->
-  <input #filterInput
-         type="text"
-         (keyup)="onChangeFilterInput($event.target.value)">
+  <campus-filter-text-input theme="dark"
+                            (filterTextChange)="onChangeFilterInput($event)"
+                            [filterText]="filterInput$|async"
+                            class="pages__toolbar__filter"></campus-filter-text-input>
   <div class="divider"></div>
   <campus-button iconClass="icon-tasks"
                  (click)="clickChangeListFormat(listFormatEnum.GRID)"></campus-button>
   <campus-button iconClass="icon-tasks"
                  (click)="clickChangeListFormat(listFormatEnum.LINE)"></campus-button>
 </campus-page-bar>
-<div class="pages-bundles__container"
-     *ngIf="learningArea$|async as learningArea">
-  <campus-page-header [title]="learningArea.name"
-                      [subtitle]="'Bundels'"
-                      [iconClass]="learningArea.icon">
-  </campus-page-header>
-  <div class="pages-bundles__container__bundles-count">
-    {{(displayedBundles$|async)?.length}} van
-    <u class="pages-bundles__container__bundles-count__total"
-       (click)="resetFilterInput(); filterInput.value = ''">{{(bundles$|async)?.length}}</u>
-    weergegeven
-  </div>
-  <div class="pages-bundles__container__bundles"
-       *ngIf="bundleContentsCount$|async as bundlesContentCount">
-    <campus-list-view [listFormat]="listFormat$|async"
-                      [placeHolderText]="'De toegepaste filter bevat geen resultaten'">
-      <campus-folder *ngFor="let bundle of displayedBundles$|async"
-                     [routerLink]="[learningArea.id, bundle.id]"
-                     campusListItem
-                     [itemCount]="bundlesContentCount[bundle.id]"
-                     [title]="bundle.name"
-                     [backgroundColor]="learningArea.color"
-                     [icon]="learningArea.icon.name">
-        <campus-folder-details>
-          {{ bundleContentsCount$[bundle.id] + " item(s)" }}
-        </campus-folder-details>
-      </campus-folder>
-    </campus-list-view>
-  </div>
 
-  <div *ngIf="(books$|async).length">
+<ng-container *ngIf="learningArea$|async as learningArea">
+  <div class="pages-bundles__container"
+       *ngIf="sharedInfo$|async as sharedInfo">
+
     <campus-page-header [title]="learningArea.name"
-                        [subtitle]="'Boeken'"
-                        [iconClass]="learningArea.icon"></campus-page-header>
-    <div class="pages-bundles__container__books-count">
-      je hebt {{(books$|async).length}} boek voor {{ learningArea.name }}
-    </div>
-    <div class="pages-bundles__container__books">
-      <campus-list-view [listFormat]="listFormat$|async">
-        <campus-content-thumbnail *ngFor="let book of books$|async"
-                                  campusListItem
-                                  [title]="book.name"
-                                  [contentTypeClass]="'icon-boek'"
-                                  [imagePath]="book.previewImage"
-                                  [fileExtensionClass]="book.fileExtension">
-        </campus-content-thumbnail>
-      </campus-list-view>
-    </div>
+                        [subtitle]="'Bundels'"
+                        [iconClass]="learningArea.icon">
+    </campus-page-header>
+
+    <ng-template #noSharedInfo>Er zijn momenteel geen bundels voor jou klaargezet.</ng-template>
+    <ng-container *ngIf="sharedInfo.bundles.length > 0; else noSharedInfo">
+      <ng-container *ngIf="filteredSharedInfo$|async as filteredSharedInfo">
+        <div class="pages-bundles__container__bundles-count">
+          {{filteredSharedInfo.bundles.length}} van
+          <u class="pages-bundles__container__bundles-count__total"
+             (click)="resetFilterInput()">{{sharedInfo.bundles.length}}</u>
+          weergegeven
+        </div>
+
+        <div class="pages-bundles__container__bundles">
+          <campus-list-view [listFormat]="listFormat$|async"
+                            [placeHolderText]="'De toegepaste filter bevat geen resultaten'">
+            <campus-folder *ngFor="let bundleInfo of filteredSharedInfo.bundles"
+                           campusListItem
+                           [routerLink]="[bundleInfo.bundle.id]"
+                           [itemCount]="bundleInfo.contentsCount"
+                           [title]="bundleInfo.bundle.name"
+                           [backgroundColor]="learningArea.color"
+                           [icon]="'learning-area:' + learningArea.icon.name">
+              <campus-folder-details>
+                {{bundleInfo.contentsCount}} {{bundleInfo.contentsCount === 1 ? 'item' : 'items'}}
+              </campus-folder-details>
+            </campus-folder>
+          </campus-list-view>
+        </div>
+
+        <div *ngIf="filteredSharedInfo.books.length">
+          <campus-page-header [title]="learningArea.name"
+                              [subtitle]="'Boeken'"
+                              [iconClass]="learningArea.icon"></campus-page-header>
+          <div class="pages-bundles__container__books-count">
+            je hebt {{filteredSharedInfo.books.length}} boek(en) voor {{ learningArea.name }}
+          </div>
+          <div class="pages-bundles__container__books">
+            <campus-list-view [listFormat]="listFormat$|async">
+              <campus-content-thumbnail *ngFor="let book of filteredSharedInfo.books"
+                                        campusListItem
+                                        [title]="book.name"
+                                        [contentTypeClass]="'icon-boek'"
+                                        [imagePath]="book.previewImage"
+                                        [fileExtensionClass]="book.fileExtension">
+              </campus-content-thumbnail>
+            </campus-list-view>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
   </div>
-</div>
+</ng-container>

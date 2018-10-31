@@ -1,14 +1,10 @@
 import { Component } from '@angular/core';
-import {
-  BundleInterface,
-  ContentInterface,
-  EduContentMetadataInterface,
-  LearningAreaInterface
-} from '@campus/dal';
+import { LearningAreaInterface } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { BundlesViewModel } from '../bundles.viewmodel';
+import { BundlesWithContentInfo } from '../bundles.viewmodel.interfaces';
 
 /**
  * component listing bundles en book-e's for learning area
@@ -25,105 +21,51 @@ import { BundlesViewModel } from '../bundles.viewmodel';
 export class BundlesComponent {
   protected listFormatEnum = ListFormat;
 
-  learningArea$: Observable<LearningAreaInterface> = this.bundlesViewModel
-    .activeLearningArea$;
-
-  listFormat$: Observable<ListFormat> = this.bundlesViewModel.listFormat$;
+  listFormat$: Observable<ListFormat>;
   filterInput$ = new BehaviorSubject<string>('');
 
-  /**
-   * map of content length per bundle id
-   *
-   * @memberof BundlesComponent
-   */
-  bundleContentsCount$ = this.bundlesViewModel.bundleContentsCount$;
+  learningArea$: Observable<LearningAreaInterface>;
+  sharedInfo$: Observable<BundlesWithContentInfo>;
+  filteredSharedInfo$: Observable<BundlesWithContentInfo>;
 
-  /**
-   * lists all bundles available to the current learning area
-   *
-   * @type {Observable<
-   *     BundleInterface[]
-   *   >}
-   * @memberof BundlesComponent
-   */
-  bundles$: Observable<BundleInterface[]> = this.bundlesViewModel
-    .sharedLearningAreaBundles$;
-
-  /**
-   * list of filtered bundles available to the current learning area
-   *
-   * @type {Observable<BundleInterface[]>}
-   * @memberof BundlesComponent
-   */
-  displayedBundles$: Observable<BundleInterface[]> = this.getDisplayedBundles(
-    this.bundles$,
-    this.filterInput$
-  );
-
-  /**
-   * list of book-e available to the current learning area
-   *
-   * @type {Observable<
-   *     EduContentMetadataInterface[]
-   *   >}
-   * @memberof BundlesComponent
-   */
-  books$: Observable<ContentInterface[]> = this.bundlesViewModel
-    .sharedLearningAreaBooks$;
-
-  //
   constructor(private bundlesViewModel: BundlesViewModel) {}
 
-  /**
-   * changes the filter's input
-   *
-   * @param {string} filterInput
-   * @memberof BundlesComponent
-   */
+  ngOnInit(): void {
+    this.learningArea$ = this.bundlesViewModel.activeLearningArea$;
+    this.listFormat$ = this.bundlesViewModel.listFormat$;
+    this.sharedInfo$ = this.bundlesViewModel.activeLearningAreaBundles$;
+    this.filteredSharedInfo$ = this.filterBundles(
+      this.sharedInfo$,
+      this.filterInput$
+    );
+  }
+
+  clickChangeListFormat(value: string): void {
+    this.bundlesViewModel.changeListFormat(ListFormat[value]);
+  }
+
   onChangeFilterInput(filterInput: string): void {
     this.filterInput$.next(filterInput);
   }
 
-  /**
-   * resets filter's input
-   *
-   * @memberof BundlesComponent
-   */
   resetFilterInput(): void {
     this.filterInput$.next('');
   }
 
-  /**
-   * set the list's format
-   *
-   * @param {ListFormat} format
-   * @memberof BundlesComponent
-   */
-  clickChangeListFormat(format: ListFormat): void {
-    this.bundlesViewModel.changeListFormat(format);
-  }
-
-  /**
-   * get list of filtered bundles
-   *
-   * @param {Observable<BundleInterface[]>} bundles$
-   * @param {BehaviorSubject<string>} filterInput$
-   * @returns {Observable<BundleInterface[]>}
-   * @memberof BundlesComponent
-   */
-  getDisplayedBundles(
-    bundles$: Observable<BundleInterface[]>,
-    filterInput$: BehaviorSubject<string>
-  ): Observable<BundleInterface[]> {
+  filterBundles(
+    bundles$: Observable<BundlesWithContentInfo>,
+    filterInput$: Observable<string>
+  ): Observable<BundlesWithContentInfo> {
     return combineLatest(bundles$, filterInput$).pipe(
-      map(([bundles, filterInput]: [BundleInterface[], string]) => {
-        if (!filterInput || filterInput === '') {
-          return bundles;
-        }
-        return bundles.filter(bundle =>
-          bundle.name.toLowerCase().includes(filterInput.toLowerCase())
-        );
-      })
+      map(([info, filterInput]: [BundlesWithContentInfo, string]) => ({
+        ...info,
+        bundles: this.bundlesViewModel.filterArray(
+          info.bundles,
+          'bundle.name',
+          filterInput
+        )
+      })),
+      tap(console.log)
     );
   }
 }
