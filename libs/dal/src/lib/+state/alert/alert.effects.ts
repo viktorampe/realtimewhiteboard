@@ -28,7 +28,7 @@ export class AlertsEffects {
   // Timer singleton
   private pollingTimer$: Observable<LoadNewAlerts>;
   // finishes the Timer
-  private stopTimer$: Subject<void> = new Subject();
+  private timerStopper$: Subject<void> = new Subject();
 
   @Effect()
   startpollAlerts$ = this.actions.pipe(
@@ -36,9 +36,6 @@ export class AlertsEffects {
     switchMap(action => this.getNewTimer(<StartPollAlerts>action))
   );
 
-  // stops the current polling and completes stopTimer$
-  // for use in onDestroy
-  // if a new polling is started, it wil be <dramatic pauze> unstoppable!
   @Effect()
   stopPollAlerts$ = this.actions.pipe(
     ofType(AlertsActionTypes.StopPollAlerts),
@@ -125,7 +122,7 @@ export class AlertsEffects {
   ) {}
 
   private getNewTimer(startPollAction: StartPollAlerts) {
-    this.stopTimer$.next(); // Complete current timer
+    this.stopTimer();
 
     const timerInterval = Math.max(
       startPollAction.payload.pollingInterval,
@@ -133,7 +130,7 @@ export class AlertsEffects {
     );
 
     this.pollingTimer$ = interval(timerInterval).pipe(
-      takeUntil(this.stopTimer$.pipe(take(1))),
+      takeUntil(this.timerStopper$.pipe(take(1))),
       map(
         values => new LoadNewAlerts({ userId: startPollAction.payload.userId })
       )
@@ -143,7 +140,6 @@ export class AlertsEffects {
   }
 
   private stopTimer() {
-    this.stopTimer$.next(); // Complete current timer
-    this.stopTimer$.complete();
+    this.timerStopper$.next(); // Complete current timer
   }
 }
