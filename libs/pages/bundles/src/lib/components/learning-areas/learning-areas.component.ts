@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { LearningAreaInterface } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { BundlesViewModel } from '../bundles.viewmodel';
+import {
+  BundlesViewModel,
+  LearningAreaWithBundleInstanceInfo
+} from '../bundles.viewmodel';
 
 @Component({
   selector: 'campus-learning-areas',
@@ -14,29 +16,18 @@ export class LearningAreasComponent implements OnInit {
   listFormat$: Observable<ListFormat>;
   filterInput$ = new BehaviorSubject<string>('');
 
-  learningAreas$: Observable<LearningAreaInterface[]> = this.bundlesViewModel
-    .learningAreas$;
-
-  displayedLearningAreas$: Observable<
-    LearningAreaInterface[]
-  > = this.getDisplayedLearningAreas$(this.learningAreas$, this.filterInput$);
-
-  learningAreasCounts$: Observable<any> = this.bundlesViewModel
-    .sharedLearningAreasCount$;
-  sharedLearningAreas$: Observable<LearningAreaInterface[]>;
+  sharedInfo$: Observable<LearningAreaWithBundleInstanceInfo>;
+  filteredSharedInfo$: Observable<LearningAreaWithBundleInstanceInfo>;
 
   constructor(private bundlesViewModel: BundlesViewModel) {}
 
   ngOnInit(): void {
     this.listFormat$ = this.bundlesViewModel.listFormat$;
-
-    this.sharedLearningAreas$ = this.bundlesViewModel.sharedLearningAreas$;
-    // TODO find out why learningarea name is not displayed
-    this.displayedLearningAreas$ = this.getDisplayedLearningAreas$(
-      this.sharedLearningAreas$,
+    this.sharedInfo$ = this.bundlesViewModel.sharedLearningAreas$;
+    this.filteredSharedInfo$ = this.filterLearningAreas(
+      this.sharedInfo$,
       this.filterInput$
     );
-    this.learningAreasCounts$ = this.bundlesViewModel.sharedLearningAreasCount$;
   }
 
   onChangeFilterInput(filterInput: string): void {
@@ -51,19 +42,26 @@ export class LearningAreasComponent implements OnInit {
     this.bundlesViewModel.changeListFormat(ListFormat[value]);
   }
 
-  getDisplayedLearningAreas$(
-    learningAreas$: Observable<LearningAreaInterface[]>,
+  filterLearningAreas(
+    learningAreas$: Observable<LearningAreaWithBundleInstanceInfo>,
     filterInput$: Observable<string>
-  ): Observable<LearningAreaInterface[]> {
+  ): Observable<LearningAreaWithBundleInstanceInfo> {
     return combineLatest(learningAreas$, filterInput$).pipe(
-      map(([learningAreas, filterInput]: [LearningAreaInterface[], string]) => {
-        if (!filterInput) {
-          return learningAreas;
+      map(
+        ([info, filterInput]: [LearningAreaWithBundleInstanceInfo, string]) => {
+          if (!filterInput) {
+            return info;
+          }
+          return {
+            ...info,
+            learningAreas: info.learningAreas.filter(learningAreaInfo =>
+              learningAreaInfo.learningArea.name
+                .toLowerCase()
+                .includes(filterInput.toLowerCase())
+            )
+          };
         }
-        return learningAreas.filter(learningArea =>
-          learningArea.name.toLowerCase().includes(filterInput.toLowerCase())
-        );
-      })
+      )
     );
   }
 }

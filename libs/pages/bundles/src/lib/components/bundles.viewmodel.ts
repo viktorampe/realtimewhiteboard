@@ -27,15 +27,26 @@ import {
   UnlockedContentInterface,
   UnlockedContentQueries,
   UserContentActions,
-  UserContentQueries,
-  userQuery
+  UserContentQueries
 } from '@campus/dal';
 import { StateResolver } from '@campus/pages/shared';
 import { ListFormat } from '@campus/ui';
 import { Dictionary } from '@ngrx/entity';
 import { Action, select, Selector, Store } from '@ngrx/store';
-import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { filter, map, shareReplay, switchMap } from 'rxjs/operators';
+
+export interface LearningAreaWithBundleInstanceInfo {
+  learningAreas: {
+    learningArea: LearningAreaInterface;
+    bundleCount: number;
+    bookCount: number;
+  }[];
+}
+
+export interface BundleInstanceWithEduContentInfo extends BundleInterface {
+  eduContentsCount: number;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -71,13 +82,7 @@ export class BundlesViewModel implements Resolve<boolean> {
   sharedBooksByLearningArea$: Observable<Dictionary<ContentInterface[]>>;
   // > learningAreas
   activeLearningArea$: Observable<LearningAreaInterface>;
-  sharedLearningAreas$: Observable<LearningAreaInterface[]>;
-  sharedLearningAreasCount$: Observable<
-    Dictionary<{
-      bundlesCount: number;
-      booksCount: number;
-    }>
-  >;
+  sharedLearningAreas$: Observable<LearningAreaWithBundleInstanceInfo>;
   sharedLearningAreaBundles$: Observable<BundleInterface[]>;
   sharedLearningAreaBooks$: Observable<ContentInterface[]>;
 
@@ -104,7 +109,6 @@ export class BundlesViewModel implements Resolve<boolean> {
       map((params): number => params.bundle || 0)
     );
 
-    this.user$ = this.store.pipe(select(userQuery.getCurrentUser));
     this.coupledPersons$ = new BehaviorSubject([]); // TODO add TeacherStudent state
 
     this.listFormat$ = this.store.pipe(
@@ -145,14 +149,31 @@ export class BundlesViewModel implements Resolve<boolean> {
       this.sharedBundles$,
       'learningAreaId'
     );
-    this.sharedLearningAreaBundles$ = this.getLearningAreaBundles(
-      this.learningAreaId$,
-      this.sharedBundlesByLearningArea$
+    // this.sharedLearningAreaBundles$ = this.getLearningAreaBundles(
+    //   this.learningAreaId$,
+    //   this.sharedBundlesByLearningArea$
+    // );
+
+    // > books
+    this.sharedBooks$ = this.getSharedBooks();
+    this.sharedBooksByLearningArea$ = this.sharedBooks$.pipe(
+      map(sharedBooks => {
+        const byArea = {};
+        sharedBooks.forEach(book => {
+          if (!byArea[book.publishedEduContentMetadata.learningAreaId]) {
+            byArea[book.publishedEduContentMetadata.learningAreaId] = [];
+          }
+          byArea[book.publishedEduContentMetadata.learningAreaId].push(book);
+        });
+        return byArea;
+      }),
+      shareReplay(1)
     );
-    this.sharedLearningAreaBooks$ = this.getLearningAreaBooks(
-      this.learningAreaId$,
-      this.sharedBooksByLearningArea$
-    );
+    // this.sharedLearningAreaBooks$ = this.getLearningAreaBooks(
+    //   this.learningAreaId$,
+    //   this.sharedBooksByLearningArea$
+    // );
+
     this.bundleContentsCount$ = this.getBundleContentsCount(
       this.unlockedContentByBundle$
     );
@@ -160,12 +181,7 @@ export class BundlesViewModel implements Resolve<boolean> {
       this.bundleId$,
       this.unlockedContentByBundle$
     );
-    // > books
-    this.sharedBooks$ = this.getSharedBooks();
-    this.sharedBooksByLearningArea$ = this.groupStreamByKey(
-      this.sharedBooks$,
-      'learningAreaId'
-    );
+
     // > learningAreas
     this.activeLearningArea$ = this.learningAreaId$.pipe(
       switchMap(
@@ -173,26 +189,21 @@ export class BundlesViewModel implements Resolve<boolean> {
           this.store.pipe(select(LearningAreaQueries.getById, { id: areaId }))
       )
     );
-    this.sharedLearningAreas$ = this.getLearningAreasWithContent(
-      this.sharedBundles$,
-      this.sharedBooks$
-    );
-    this.sharedLearningAreasCount$ = this.getSharedLearningAreasCount(
-      this.sharedLearningAreas$,
+    this.sharedLearningAreas$ = this.getLearningAreasWithBundleInfo(
       this.sharedBundlesByLearningArea$,
       this.sharedBooksByLearningArea$
     );
 
-    // own (TODO teacher)
-    // > bundles
-    this.ownBundles$ = this.getOwnBundles();
-    // > books
-    this.ownBooks$ = of([]); // TODO favorited books
-    // > learningAreas
-    this.learningAreasWithOwnBundles$ = this.getLearningAreasWithContent(
-      this.ownBundles$,
-      this.ownBooks$
-    );
+    // // own (TODO teacher)
+    // // > bundles
+    // this.ownBundles$ = this.getOwnBundles();
+    // // > books
+    // this.ownBooks$ = of([]); // TODO favorited books
+    // // > learningAreas
+    // this.learningAreasWithOwnBundles$ = this.getLearningAreasWithBundleInfo(
+    //   this.groupStreamByKey(this.ownBundles$, 'learningAreaId'),
+    //   this.groupStreamByKey(this.ownBooks$, 'learningAreaId')
+    // );
 
     return this.viewModelResolver.resolve(
       this.getLoadableActions(),
@@ -299,33 +310,34 @@ export class BundlesViewModel implements Resolve<boolean> {
   }
 
   private getSharedBundles(): Observable<BundleInterface[]> {
-    return this.user$.pipe(
-      switchMap(user =>
-        this.store.pipe(select(BundleQueries.getShared, { userId: user.id }))
-      )
+    return this.store.pipe(
+      select(BundleQueries.getShared, { userId: this.authService.userId })
     );
   }
 
   private getSharedBooks(): Observable<EduContentInterface[]> {
-    return this.user$.pipe(
-      switchMap(user =>
-        combineLatest(
-          this.store.pipe(
-            select(UnlockedBoekeGroupQueries.getShared, { userId: user.id })
-          ),
-          this.store.pipe(
-            select(UnlockedBoekeStudentQueries.getShared, { userId: user.id })
-          )
-        )
+    return combineLatest(
+      this.store.pipe(
+        select(UnlockedBoekeGroupQueries.getShared, {
+          userId: this.authService.userId
+        })
       ),
+      this.store.pipe(
+        select(UnlockedBoekeStudentQueries.getShared, {
+          userId: this.authService.userId
+        })
+      )
+    ).pipe(
       switchMap(([unlockedBookGroups, unlockedBookStudents]) =>
         this.store.pipe(
           select(EduContentQueries.getByIds, {
-            ids: [
-              // extract all IDs from unlockedBook arrays
-              ...unlockedBookGroups.map(g => g.eduContentId),
-              ...unlockedBookStudents.map(s => s.eduContentId)
-            ]
+            // extract all IDs from unlockedBook arrays (remove duplicates)
+            ids: Array.from(
+              new Set([
+                ...unlockedBookGroups.map(g => g.eduContentId),
+                ...unlockedBookStudents.map(s => s.eduContentId)
+              ])
+            )
           })
         )
       ),
@@ -349,77 +361,61 @@ export class BundlesViewModel implements Resolve<boolean> {
   }
 
   private getOwnBundles(): Observable<BundleInterface[]> {
-    return this.user$.pipe(
-      switchMap(user =>
-        this.store.pipe(select(BundleQueries.getOwn, { userId: user.id }))
-      )
+    return this.store.pipe(
+      select(BundleQueries.getOwn, { userId: this.authService.userId })
     );
   }
 
-  private getLearningAreaIdsWithContent(
-    bundles$: Observable<BundleInterface[]>,
-    books$: Observable<EduContentInterface[]>
-  ): Observable<number[]> {
-    return combineLatest(bundles$, books$).pipe(
-      map(
-        ([bundles, books]): number[] => {
-          return [
-            ...bundles.map(bundle => bundle.learningAreaId),
-            ...books.map(
-              book =>
-                book.publishedEduContentMetadata &&
-                book.publishedEduContentMetadata.learningAreaId
-            )
-          ].filter((v, i, n) => n.indexOf(v) === i);
-        }
-      ),
-      shareReplay(1)
-    );
-  }
-
-  private getLearningAreasWithContent(
-    bundles$: Observable<BundleInterface[]>,
-    books$: Observable<EduContentInterface[]>
-  ): Observable<LearningAreaInterface[]> {
-    return this.getLearningAreaIdsWithContent(bundles$, books$).pipe(
-      switchMap(learningAreaIds => {
-        return this.store.pipe(
-          select(LearningAreaQueries.getByIds, { ids: learningAreaIds })
-        );
-      })
-    );
-  }
-
-  private getSharedLearningAreasCount(
-    learningAreas$: Observable<LearningAreaInterface[]>,
-    sharedBundlesByLearningArea$: Observable<Dictionary<BundleInterface[]>>,
-    sharedBooksByLearningArea$: Observable<Dictionary<ContentInterface[]>>
-  ): Observable<
-    Dictionary<{
-      bundlesCount: number;
-      booksCount: number;
-    }>
-  > {
+  private getLearningAreasWithBundleInfo(
+    bundlesByLearningArea$: Observable<Dictionary<BundleInterface[]>>,
+    booksByLearningArea$: Observable<Dictionary<ContentInterface[]>>
+  ): Observable<LearningAreaWithBundleInstanceInfo> {
     return combineLatest(
-      learningAreas$,
-      sharedBundlesByLearningArea$,
-      sharedBooksByLearningArea$
+      this.learningAreas$,
+      bundlesByLearningArea$,
+      booksByLearningArea$
     ).pipe(
-      map(([learningAreas, bundles, books]) => {
-        const learningAreaCounts = {};
-        learningAreas.forEach(learningArea => {
-          learningAreaCounts[learningArea.id] = {
-            bundlesCount: bundles[learningArea.id]
-              ? bundles[learningArea.id].length
-              : 0,
-            booksCount: books[learningArea.id]
-              ? books[learningArea.id].length
-              : 0
+      map(
+        ([
+          learningAreas,
+          bundlesByLearningArea,
+          booksByLearningArea
+        ]): LearningAreaWithBundleInstanceInfo => {
+          return {
+            learningAreas: learningAreas
+              .map(learningArea => ({
+                learningArea: learningArea,
+                bundleCount: bundlesByLearningArea[learningArea.id]
+                  ? bundlesByLearningArea[learningArea.id].length
+                  : 0,
+                bookCount: booksByLearningArea[learningArea.id]
+                  ? booksByLearningArea[learningArea.id].length
+                  : 0
+              }))
+              .filter(
+                learningArea =>
+                  learningArea.bundleCount > 0 || learningArea.bookCount > 0
+              )
           };
-        });
-        return learningAreaCounts;
-      }),
-      shareReplay(1)
+        }
+        // learningAreas
+        //   .map(
+        //     (learningArea): LearningAreaWithBundleInstanceInfo => ({
+        //       learning
+        //       learningArea: learningArea,
+        //       bundleCount: bundlesByLearningArea[learningArea.id]
+        //         ? bundlesByLearningArea[learningArea.id].length
+        //         : 0,
+        //       bookCount: booksByLearningArea[learningArea.id]
+        //         ? booksByLearningArea[learningArea.id].length
+        //         : 0
+        //     })
+        //   )
+        //   .filter(
+        //     learningArea =>
+        //       learningArea.bundleCount > 0 || learningArea.bookCount > 0
+        //   )
+      )
     );
   }
 
