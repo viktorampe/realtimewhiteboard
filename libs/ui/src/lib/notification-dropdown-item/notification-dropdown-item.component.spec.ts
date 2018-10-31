@@ -3,6 +3,7 @@ import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { PersonBadgeComponent } from '../person-badge/person-badge.component';
 import { PersonInitialsPipe } from '../person-badge/pipes/person-initials.pipe';
+import { HumanDateTimePipe } from '../utils/pipes/human-date-time/human-date-time.pipe';
 import { NotificationDropdownItemComponent } from './notification-dropdown-item.component';
 
 describe('NotificationDropdownItemComponent', () => {
@@ -15,7 +16,8 @@ describe('NotificationDropdownItemComponent', () => {
       declarations: [
         NotificationDropdownItemComponent,
         PersonBadgeComponent,
-        PersonInitialsPipe
+        PersonInitialsPipe,
+        HumanDateTimePipe
       ]
     }).compileComponents();
   }));
