@@ -10,7 +10,7 @@
                        align="left"
                        size="medium"></campus-person-badge>
   <div *ngIf="notificationDate"
-       class="ui-notification-dropdown-item__date">{{notificationDate}}</div><!-- TODO: '| humanDateTime' -->
+       class="ui-notification-dropdown-item__date">{{notificationDate | humanDateTime}}</div>
   <div *ngIf="titleText"
        class="ui-notification-dropdown-item__title">{{titleText}}</div>
   <div class="ui-notification-dropdown-item__text">{{notificationText}}<span *ngIf="accented && link">-> <span>Lees
