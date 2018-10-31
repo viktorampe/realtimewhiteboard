@@ -49,17 +49,22 @@ export class PageBarContainerComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     // Create a portalHost from a DOM element
-    this.portalHost = new DomPortalHost(
-      document.querySelector('#page-bar-container'),
-      this.componentFactoryResolver,
-      this.appRef,
-      this.injector
-    );
+    this.portalHost = this.getPortalHost('#page-bar-container');
     // Attach portal to host
     this.portalHost.attach(this.portal);
   }
 
   ngOnDestroy(): void {
     this.portalHost.detach();
+  }
+
+  private getPortalHost(selector: string) {
+    //TODO  e2e test, see https://github.com/diekeure/campus/issues/206
+    return new DomPortalHost(
+      document.querySelector(selector),
+      this.componentFactoryResolver,
+      this.appRef,
+      this.injector
+    );
   }
 }

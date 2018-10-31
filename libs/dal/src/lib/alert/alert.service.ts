@@ -20,11 +20,11 @@ export class AlertService implements AlertServiceInterface {
    */
   getAllForUser(
     userId: number,
-    lastUpdateTime?: Date
+    lastUpdateTime?: number
   ): Observable<AlertQueueInterface[]> {
     let dateFilter = {};
     if (lastUpdateTime) {
-      const dateString = lastUpdateTime.toISOString();
+      const dateString = new Date(lastUpdateTime).toISOString();
       dateFilter = { where: { validFrom: { gt: dateString } } };
     }
 
