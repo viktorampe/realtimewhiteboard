@@ -10,7 +10,7 @@ export class BreadcrumbsComponent {
   @Input() breadCrumbs: BreadcrumbLinkInterface[] = [];
   @Input() baseIcon = 'home';
   @Input() overflowedLinkString = '…';
-  @Input() maxLength = 4;
+  @Input() maxLength = 99;
   @Input() baseUrl = '/';
 }
 

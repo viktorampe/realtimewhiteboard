@@ -4,24 +4,11 @@
 
   .ui-breadcrumbs {
     &__holder {
-      display: flex;
-      flex-direction: row;
-      padding: 8px;
-      margin: 0;
-
       &__breadcrumbs {
-        display: flex;
-        flex-direction: row;
-        padding: 8px;
-        margin: 0;
-
-        display: inline-block;
         a,
         span {
           color: $ui-breadcrumbs-crumb-color;
           font-size: $ui-breadcrumbs-crumb-text-size;
-          overflow: hidden;
-          text-overflow: ellipsis;
         }
       }
     }
