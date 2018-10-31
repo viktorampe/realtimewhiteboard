@@ -18,10 +18,10 @@ import { Component, Input } from '@angular/core';
 export class PersonBadgeComponent {
   @Input() align = 'left';
   @Input() size = 'medium';
-  @Input() person: BadgePerson;
+  @Input() person: BadgePersonInterface;
 }
 
-export interface BadgePerson {
+export interface BadgePersonInterface {
   displayName: string;
   name?: string;
   firstName?: string;

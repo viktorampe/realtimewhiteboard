@@ -97,7 +97,9 @@ describe('ConfirmableSelectComponent', () => {
     component.selectControl.markAsDirty();
     fixture.detectChanges();
     let option: SelectOption;
-    component.clickConfirm.subscribe((e: SelectOption) => (option = e));
+    component.clickConfirm.subscribe((e: SelectOption) => {
+      option = e;
+    });
     const icon = fixture.debugElement.query(
       By.css('.ui-confirmable-select__dropdown__icon')
     );
