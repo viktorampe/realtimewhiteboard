@@ -53,6 +53,8 @@ import { SideSheetHeaderDirective } from './side-sheet/directives/side-sheet-hea
 import { SideSheetPageDirective } from './side-sheet/directives/side-sheet-page.directive';
 import { SideSheetComponent } from './side-sheet/side-sheet.component';
 import { TreeNavComponent } from './tree-nav/tree-nav.component';
+import { HideDesktopDirective } from './utils/directives/hide-desktop.directive';
+import { HideMobileDirective } from './utils/directives/hide-mobile.directive';
 import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness/adjust-color-brightness.pipe';
 import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time.pipe';
 
@@ -123,6 +125,8 @@ import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time
     BreadcrumbsComponent,
     DropdownMenuComponent,
     NotificationDropdownItemComponent,
+    HideDesktopDirective,
+    HideMobileDirective,
     DropdownMenuComponent,
     HumanDateTimePipe
   ],
@@ -167,6 +171,8 @@ import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time
     BreadcrumbsComponent,
     DropdownMenuComponent,
     NotificationDropdownItemComponent,
+    HideDesktopDirective,
+    HideMobileDirective,
     DropdownMenuComponent,
     HumanDateTimePipe
   ]
