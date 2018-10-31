@@ -55,7 +55,8 @@ import { SideSheetComponent } from './side-sheet/side-sheet.component';
 import { TreeNavComponent } from './tree-nav/tree-nav.component';
 import { HideDesktopDirective } from './utils/directives/hide-desktop.directive';
 import { HideMobileDirective } from './utils/directives/hide-mobile.directive';
-import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness.pipe';
+import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness/adjust-color-brightness.pipe';
+import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time.pipe';
 
 @NgModule({
   imports: [
@@ -126,7 +127,8 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     NotificationDropdownItemComponent,
     HideDesktopDirective,
     HideMobileDirective,
-    DropdownMenuComponent
+    DropdownMenuComponent,
+    HumanDateTimePipe
   ],
   exports: [
     FilterTextInputComponent,
@@ -171,7 +173,8 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     NotificationDropdownItemComponent,
     HideDesktopDirective,
     HideMobileDirective,
-    DropdownMenuComponent
+    DropdownMenuComponent,
+    HumanDateTimePipe
   ]
 })
 export class UiModule {}
