@@ -6,7 +6,7 @@ import { ListFormat } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { BundlesViewModel } from '../bundles.viewmodel';
-import { MockViewModel } from '../bundles.viewmodel.spec';
+import { MockViewModel } from '../bundles.viewmodel.mocks';
 import { LearningAreasComponent } from './learning-areas.component';
 
 let bundlesViewModel;
