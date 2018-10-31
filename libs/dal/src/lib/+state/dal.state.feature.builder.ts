@@ -14,7 +14,7 @@ export interface ReducerNamespaceInterface {
  * if for some reason, a namespace can not contain all properties to make use of the `getStoreModuleForFeatures` function,
  * this function can be used to build the input objects yourself
  * 
- * this function is accessable outside this lib using the barraled `StateFeatureBuilder`
+ * this function is accessable outside this lib using the barrelled `StateFeatureBuilder`
  * 
  * @example
  * @example
