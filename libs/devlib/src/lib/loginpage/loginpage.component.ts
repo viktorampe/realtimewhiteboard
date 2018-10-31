@@ -13,7 +13,7 @@ export class LoginpageComponent implements OnInit {
   educontents: Observable<EduContentInterface[]>;
   currentUser: Observable<any>;
   constructor(
-    private loginPageviewModel: LoginPageViewModel,
+    public loginPageviewModel: LoginPageViewModel,
     private personApi: PersonApi
   ) {}
 
