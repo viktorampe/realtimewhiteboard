@@ -121,7 +121,7 @@ describe('BreadcrumbComponent', () => {
     );
   });
 
-  it('should display correct overflow linnk', () => {
+  it('should display correct overflow link', () => {
     expect(breadcrumbs.children[1].children[1].nativeElement.href).toContain(
       mockData.breadCrumbs[8].link
     );
