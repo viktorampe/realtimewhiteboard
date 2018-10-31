@@ -5,6 +5,8 @@ import {
   ContentStatusesActionTypes
 } from './content-status.actions';
 
+export const NAME = 'contentStatuses';
+
 export interface State extends EntityState<ContentStatusInterface> {
   // additional entities state properties
   loaded: boolean;

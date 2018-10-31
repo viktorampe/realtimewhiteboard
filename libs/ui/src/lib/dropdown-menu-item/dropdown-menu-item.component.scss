@@ -1,0 +1,32 @@
+.ui-dropdown-menu-item {
+  &__header {
+    font-size: 12px;
+    color: #777;
+    padding-left: 8px;
+  }
+
+  i,
+  img {
+    width: 15px;
+    height: 15x;
+    display: inline-block;
+  }
+
+  a {
+    text-decoration: none;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 8px;
+  }
+
+  &__description {
+    margin-left: 5px;
+    padding-bottom: 1px;
+    color: #777;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

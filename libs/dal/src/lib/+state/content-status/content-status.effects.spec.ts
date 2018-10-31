@@ -5,6 +5,7 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
+import { ContentStatusReducer } from '.';
 import { STUDENT_CONTENT_STATUS_SERVICE_TOKEN } from '../../student-content-status/student-content-status.service.interface';
 import {
   ContentStatusesLoaded,
@@ -12,7 +13,6 @@ import {
   LoadContentStatuses
 } from './content-status.actions';
 import { ContentStatusesEffects } from './content-status.effects';
-import { initialState, reducer } from './content-status.reducer';
 
 // TODO: the injected service will have to be replaced by the 'student content status service'-token
 
@@ -62,9 +62,13 @@ describe('ContentStatusEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature('contentStatuses', reducer, {
-          initialState: usedState
-        }),
+        StoreModule.forFeature(
+          ContentStatusReducer.NAME,
+          ContentStatusReducer.reducer,
+          {
+            initialState: usedState
+          }
+        ),
         EffectsModule.forRoot([]),
         EffectsModule.forFeature([ContentStatusesEffects])
       ],
@@ -93,7 +97,7 @@ describe('ContentStatusEffects', () => {
     const loadErrorAction = new ContentStatusesLoadError(new Error('failed'));
     describe('with initialState', () => {
       beforeAll(() => {
-        usedState = initialState;
+        usedState = ContentStatusReducer.initialState;
       });
       beforeEach(() => {
         mockServiceMethodReturnValue('getAllConstentStatuses', []);
@@ -115,7 +119,7 @@ describe('ContentStatusEffects', () => {
     });
     describe('with loaded state', () => {
       beforeAll(() => {
-        usedState = { ...initialState, loaded: true };
+        usedState = { ...ContentStatusReducer.initialState, loaded: true };
       });
       beforeEach(() => {
         mockServiceMethodReturnValue('getAllConstentStatuses', []);
@@ -133,7 +137,7 @@ describe('ContentStatusEffects', () => {
     });
     describe('with initialState and failing api call', () => {
       beforeAll(() => {
-        usedState = initialState;
+        usedState = ContentStatusReducer.initialState;
       });
       beforeEach(() => {
         mockServiceMethodError('getAllConstentStatuses', 'failed');
@@ -156,7 +160,7 @@ describe('ContentStatusEffects', () => {
     describe('with loaded and failing api call', () => {
       beforeAll(() => {
         usedState = {
-          ...initialState,
+          ...ContentStatusReducer.initialState,
           loaded: true,
           list: []
         };

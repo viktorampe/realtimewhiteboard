@@ -41,9 +41,7 @@ export class BundlesComponent {
   /**
    * lists all bundles available to the current learning area
    *
-   * @type {Observable<
-   *     BundleInterface[]
-   *   >}
+   * @type {Observable<BundleInterface[]>}
    * @memberof BundlesComponent
    */
   bundles$: Observable<BundleInterface[]> = this.bundlesViewModel
@@ -63,9 +61,7 @@ export class BundlesComponent {
   /**
    * list of book-e available to the current learning area
    *
-   * @type {Observable<
-   *     EduContentMetadataInterface[]
-   *   >}
+   * @type {Observable<EduContentMetadataInterface[]>}
    * @memberof BundlesComponent
    */
   books$: Observable<ContentInterface[]> = this.bundlesViewModel

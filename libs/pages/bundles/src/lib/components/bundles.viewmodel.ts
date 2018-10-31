@@ -1,46 +1,38 @@
 import { Inject, Injectable } from '@angular/core';
-import { ActivatedRoute, Resolve } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
-  BundleActions,
   BundleInterface,
   BundleQueries,
   ContentInterface,
   DalState,
-  EduContentActions,
   EduContentInterface,
   EduContentQueries,
-  LearningAreaActions,
   LearningAreaInterface,
   LearningAreaQueries,
   PersonInterface,
   UiActions,
   UiQuery,
-  UnlockedBoekeGroupActions,
   UnlockedBoekeGroupInterface,
   UnlockedBoekeGroupQueries,
-  UnlockedBoekeStudentActions,
   UnlockedBoekeStudentInterface,
   UnlockedBoekeStudentQueries,
-  UnlockedContentActions,
   UnlockedContentInterface,
   UnlockedContentQueries,
-  UserContentActions,
   UserContentQueries,
-  userQuery
+  UserQueries
 } from '@campus/dal';
-import { StateResolver } from '@campus/pages/shared';
 import { ListFormat } from '@campus/ui';
 import { Dictionary } from '@ngrx/entity';
-import { Action, select, Selector, Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { filter, map, shareReplay, switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
-export class BundlesViewModel implements Resolve<boolean> {
+export class BundlesViewModel {
   // source streams
   learningAreaId$: Observable<number>;
   bundleId$: Observable<number>;
@@ -90,13 +82,14 @@ export class BundlesViewModel implements Resolve<boolean> {
   learningAreasWithOwnBundles$: Observable<LearningAreaInterface[]>;
 
   constructor(
-    private viewModelResolver: StateResolver,
     private store: Store<DalState>,
     private route: ActivatedRoute,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
-  ) {}
+  ) {
+    this.initialize();
+  }
 
-  resolve(): Observable<boolean> {
+  initialize(): void {
     this.learningAreaId$ = this.route.params.pipe(
       map((params): number => params.area || 0)
     );
@@ -104,7 +97,7 @@ export class BundlesViewModel implements Resolve<boolean> {
       map((params): number => params.bundle || 0)
     );
 
-    this.user$ = this.store.pipe(select(userQuery.getCurrentUser));
+    this.user$ = this.store.pipe(select(UserQueries.getCurrentUser));
     this.coupledPersons$ = new BehaviorSubject([]); // TODO add TeacherStudent state
 
     this.listFormat$ = this.store.pipe(
@@ -193,45 +186,6 @@ export class BundlesViewModel implements Resolve<boolean> {
       this.ownBundles$,
       this.ownBooks$
     );
-
-    return this.viewModelResolver.resolve(
-      this.getLoadableActions(),
-      this.getResolvedQueries()
-    );
-  }
-
-  getLoadableActions(): Action[] {
-    return [
-      new LearningAreaActions.LoadLearningAreas(),
-      new BundleActions.LoadBundles({ userId: this.authService.userId }),
-      new EduContentActions.LoadEduContents({
-        userId: this.authService.userId
-      }),
-      new UserContentActions.LoadUserContents({
-        userId: this.authService.userId
-      }),
-      new UnlockedContentActions.LoadUnlockedContents({
-        userId: this.authService.userId
-      }),
-      new UnlockedBoekeGroupActions.LoadUnlockedBoekeGroups({
-        userId: this.authService.userId
-      }),
-      new UnlockedBoekeStudentActions.LoadUnlockedBoekeStudents({
-        userId: this.authService.userId
-      })
-    ];
-  }
-
-  getResolvedQueries(): Selector<object, boolean>[] {
-    return [
-      LearningAreaQueries.getLoaded,
-      BundleQueries.getLoaded,
-      EduContentQueries.getLoaded,
-      UserContentQueries.getLoaded,
-      UnlockedContentQueries.getLoaded,
-      UnlockedBoekeGroupQueries.getLoaded,
-      UnlockedBoekeStudentQueries.getLoaded
-    ];
   }
 
   changeListFormat(listFormat: ListFormat): void {

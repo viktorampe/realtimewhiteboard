@@ -1,5 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import {
+  NAME,
   selectAll,
   selectEntities,
   selectIds,
@@ -8,7 +9,7 @@ import {
 } from './student-content-status.reducer';
 
 export const selectStudentContentStatusesState = createFeatureSelector<State>(
-  'studentContentStatuses'
+  NAME
 );
 
 export const getError = createSelector(

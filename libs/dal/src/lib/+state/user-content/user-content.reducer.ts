@@ -5,6 +5,8 @@ import {
   UserContentsActionTypes
 } from './user-content.actions';
 
+export const NAME = 'userContents';
+
 /**
  * @ngrx/entity provides a predefined interface for handling
  * a structured dictionary of records. This interface

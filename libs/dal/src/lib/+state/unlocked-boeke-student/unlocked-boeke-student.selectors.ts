@@ -4,6 +4,7 @@ import {
   UnlockedBoekeStudentInterface
 } from '../../+models';
 import {
+  NAME,
   selectAll,
   selectEntities,
   selectIds,
@@ -12,7 +13,7 @@ import {
 } from './unlocked-boeke-student.reducer';
 
 export const selectUnlockedBoekeStudentState = createFeatureSelector<State>(
-  'unlockedBoekeStudents'
+  NAME
 );
 
 export const getError = createSelector(

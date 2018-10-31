@@ -16,6 +16,7 @@ import { AlertReducer, AlertsEffects } from './+state/alert';
 import { BundleReducer, BundlesEffects } from './+state/bundle';
 import { ContentStatusReducer } from './+state/content-status';
 import { ContentStatusesEffects } from './+state/content-status/content-status.effects';
+import { getStoreModuleForFeatures } from './+state/dal.state.feature.builder';
 import { EduContentReducer, EduContentsEffects } from './+state/edu-content';
 import {
   LearningAreaReducer,
@@ -38,8 +39,8 @@ import {
   UnlockedContentReducer,
   UnlockedContentsEffects
 } from './+state/unlocked-content';
+import { UserEffects, UserReducer } from './+state/user';
 import { UserContentReducer, UserContentsEffects } from './+state/user-content';
-import { UserEffects } from './+state/user/user.effects';
 import {
   initialUserstate as userInitialState,
   userReducer
@@ -64,14 +65,8 @@ import { EduContentService } from './edu-content/edu-content.service';
 import { EDUCONTENT_SERVICE_TOKEN } from './edu-content/edu-content.service.interface';
 import { LearningAreaService } from './learning-area/learning-area.service';
 import { LEARNINGAREA_SERVICE_TOKEN } from './learning-area/learning-area.service.interface';
-import {
-  AuthService,
-  AUTH_SERVICE_TOKEN,
-  LinkedPersonService,
-  LINKEDPERSON_SERVICE_TOKEN,
-  PersonService,
-  PERSON_SERVICE_TOKEN
-} from './person';
+import { AuthService } from './persons/auth-service';
+import { AUTH_SERVICE_TOKEN } from './persons/auth-service.interface';
 import { StudentContentStatusService } from './student-content-status/student-content-status.service';
 import { STUDENT_CONTENT_STATUS_SERVICE_TOKEN } from './student-content-status/student-content-status.service.interface';
 
@@ -85,60 +80,23 @@ interface DalOptions {
     CommonModule,
     SDKBrowserModule.forRoot(),
     HttpClientModule,
-    StoreModule.forFeature('ui', UiReducer.reducer, {
-      initialState: UiReducer.initialState
-    }),
-    StoreModule.forFeature('bundles', BundleReducer.reducer, {
-      initialState: BundleReducer.initialState
-    }),
-    StoreModule.forFeature('learningAreas', LearningAreaReducer.reducer, {
-      initialState: LearningAreaReducer.initialState
-    }),
-    StoreModule.forFeature('eduContents', EduContentReducer.reducer, {
-      initialState: EduContentReducer.initialState
-    }),
-    StoreModule.forFeature('learningAreas', LearningAreaReducer.reducer, {
-      initialState: LearningAreaReducer.initialState
-    }),
-    StoreModule.forFeature('unlockedContents', UnlockedContentReducer.reducer, {
-      initialState: UnlockedContentReducer.initialState
-    }),
-    StoreModule.forFeature('userContents', UserContentReducer.reducer, {
-      initialState: UserContentReducer.initialState
-    }),
-    StoreModule.forFeature(
-      'studentContentStatuses',
-      StudentContentStatusReducer.reducer,
-      {
-        initialState: StudentContentStatusReducer.initialState
-      }
-    ),
-    StoreModule.forFeature(
-      'unlockedBoekeGroups',
-      UnlockedBoekeGroupReducer.reducer,
-      {
-        initialState: UnlockedBoekeGroupReducer.initialState
-      }
-    ),
-    EffectsModule.forFeature([BundlesEffects, UserEffects]),
-    StoreModule.forFeature('user', userReducer, {
-      initialState: userInitialState
-    }),
-    StoreModule.forFeature(
-      'unlockedBoekeStudents',
-      UnlockedBoekeStudentReducer.reducer,
-      {
-        initialState: UnlockedBoekeStudentReducer.initialState
-      }
-    ),
-    StoreModule.forFeature('contentStatuses', ContentStatusReducer.reducer, {
-      initialState: ContentStatusReducer.initialState
-    }),
-    StoreModule.forFeature('alerts', AlertReducer.reducer, {
-      initialState: AlertReducer.initialState
-    }),
+    ...getStoreModuleForFeatures([
+      LearningAreaReducer,
+      UserContentReducer,
+      UnlockedContentReducer,
+      StudentContentStatusReducer,
+      EduContentReducer,
+      BundleReducer,
+      uiReducer,
+      UnlockedBoekeGroupReducer,
+      UnlockedBoekeStudentReducer,
+      ContentStatusReducer,
+      UserReducer
+      //todo add alerts reducer
+    ]),
     EffectsModule.forFeature([
       BundlesEffects,
+      UserEffects,
       EduContentsEffects,
       UiEffects,
       LearningAreasEffects,
@@ -146,7 +104,6 @@ interface DalOptions {
       StudentContentStatusesEffects,
       UnlockedBoekeGroupsEffects,
       UnlockedContentsEffects,
-      UserContentsEffects,
       UnlockedBoekeStudentsEffects,
       ContentStatusesEffects,
       AlertsEffects

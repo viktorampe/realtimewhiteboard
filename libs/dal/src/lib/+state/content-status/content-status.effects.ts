@@ -14,8 +14,6 @@ import {
   LoadContentStatuses
 } from './content-status.actions';
 
-// TODO: the injected service will have to be replaced by the 'student content status service'-token
-
 @Injectable()
 export class ContentStatusesEffects {
   @Effect()

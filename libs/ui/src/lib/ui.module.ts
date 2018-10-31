@@ -4,17 +4,7 @@ import { CdkTreeModule } from '@angular/cdk/tree';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {
-  MatButtonModule,
-  MatFormFieldModule,
-  MatIconModule,
-  MatInputModule,
-  MatMenuModule,
-  MatProgressSpinnerModule,
-  MatSelectModule,
-  MatSidenavModule,
-  MatTooltipModule
-} from '@angular/material';
+import { MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule, MatMenuModule, MatProgressSpinnerModule, MatSelectModule, MatSidenavModule, MatTooltipModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { AppBarComponent } from './app-bar/app-bar.component';
 import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
@@ -28,6 +18,7 @@ import { WarningDirective } from './button/directives/button-warning.directive';
 import { ConfirmableSelectComponent } from './confirmable-select/confirmable-select.component';
 import { ContentPreviewComponent } from './content-preview/content-preview.component';
 import { ContentThumbnailComponent } from './content-thumbnail/content-thumbnail.component';
+import { DropdownMenuItemComponent } from './dropdown-menu-item/dropdown-menu-item.component';
 import { DropdownMenuComponent } from './dropdown-menu/dropdown-menu.component';
 import { EditableInlineTagListComponent } from './editable-inline-tag-list/editable-inline-tag-list.component';
 import { FileExtensionComponent } from './file-extension/file-extension.component';
@@ -35,10 +26,7 @@ import { FilterTextInputComponent } from './filter-text-input/filter-text-input.
 import { FolderDetailsDirective } from './folder/directives/folder-details.directive';
 import { FolderComponent } from './folder/folder.component';
 import { InfoPanelComponent } from './info-panel/info-panel.component';
-import {
-  ListViewComponent,
-  ListViewItemDirective
-} from './list-view/list-view.component';
+import { ListViewComponent, ListViewItemDirective } from './list-view/list-view.component';
 import { NotificationDropdownItemComponent } from './notification-dropdown-item/notification-dropdown-item.component';
 import { PageHeaderComponent } from './page-header/page-header.component';
 import { PersonBadgeComponent } from './person-badge/person-badge.component';
@@ -53,6 +41,8 @@ import { SideSheetHeaderDirective } from './side-sheet/directives/side-sheet-hea
 import { SideSheetPageDirective } from './side-sheet/directives/side-sheet-page.directive';
 import { SideSheetComponent } from './side-sheet/side-sheet.component';
 import { TreeNavComponent } from './tree-nav/tree-nav.component';
+import { HideDesktopDirective } from './utils/directives/hide-desktop.directive';
+import { HideMobileDirective } from './utils/directives/hide-mobile.directive';
 import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness/adjust-color-brightness.pipe';
 import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time.pipe';
 import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-string.pipe';
@@ -124,8 +114,12 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     DropdownMenuComponent,
     NotificationDropdownItemComponent,
     DropdownMenuComponent,
-    HumanDateTimePipe,
     TruncateStringPipe
+    DropdownMenuItemComponent
+    HideDesktopDirective,
+    HideMobileDirective,
+    HumanDateTimePipe
+
   ],
   exports: [
     FilterTextInputComponent,
@@ -169,8 +163,11 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     DropdownMenuComponent,
     NotificationDropdownItemComponent,
     DropdownMenuComponent,
-    HumanDateTimePipe,
-    TruncateStringPipe
+    TruncateStringPipe,
+    DropdownMenuItemComponent,
+    HideDesktopDirective,
+    HideMobileDirective,
+    HumanDateTimePipe
   ]
 })
 export class UiModule {}
