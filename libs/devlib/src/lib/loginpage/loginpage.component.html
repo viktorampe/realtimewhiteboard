@@ -1,3 +1,15 @@
+<campus-dropdown-menu-item header="test description"
+                           image="assets/images/icon-smartschool.png"
+                           internalLink="test"
+                           title="text title"></campus-dropdown-menu-item>
+
+<!--@Input() title: string;
+@Input() header: string;
+@Input() icon: string;
+@Input() image: string;
+@Input() link: string;
+@Input() imageAltText: string;-->
+
 <campus-page-bar>
   <campus-filter-text-input theme="dark"
                             (filterTextChange)="onChangeFilterInput($event)"
@@ -50,3 +62,10 @@
 <div>
   <a [routerLink]="['educontent']">educontent test page</a>
 </div>
+
+<campus-dropdown-menu-item title="title"
+                           image="/assets/images/icon-smartschool.png"
+                           link="/"
+                           icon="icon-user"
+                           imageAltText="this is a link"
+                           description="description"></campus-dropdown-menu-item>
