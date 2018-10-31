@@ -6,7 +6,6 @@ export * from './lib/+state/edu-content';
 export * from './lib/+state/learning-area';
 export * from './lib/+state/student-content-status';
 export * from './lib/+state/ui';
-export * from './lib/+state/ui/ui.selectors';
 export * from './lib/+state/unlocked-boeke-group';
 export * from './lib/+state/unlocked-boeke-student';
 export * from './lib/+state/unlocked-content';
@@ -19,9 +18,4 @@ export {
   EduContentServiceInterface,
   EDUCONTENT_SERVICE_TOKEN
 } from './lib/edu-content/edu-content.service.interface';
-export {
-  AuthService,
-  AuthServiceInterface,
-  AUTH_SERVICE_TOKEN,
-  LoginCredentials
-} from './lib/person';
+export * from './lib/persons';

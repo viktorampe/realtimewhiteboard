@@ -15,7 +15,6 @@ import { PassportUserCredentialInterface } from './PassportUserCredential.interf
 import { PassportUserIdentityInterface } from './PassportUserIdentity.interface';
 import { PersonPreferenceInterface } from './PersonPreference.interface';
 import { PersonToggleFeatureInterface } from './PersonToggleFeature.interface';
-import { PreferenceInterface } from './Preference.interface';
 import { PurchaseInterface } from './Purchase.interface';
 import { PurchaseAddressInterface } from './PurchaseAddress.interface';
 import { ResultInterface } from './Result.interface';
@@ -64,7 +63,6 @@ export interface PersonInterface {
   messages?: MessageInterface[];
   ownsGroups?: GroupInterface[];
   personPreferences?: PersonPreferenceInterface[];
-  preferences?: PreferenceInterface;
   methods?: MethodInterface[];
   licenses?: LicenseInterface[];
   teacherUnlockedContents?: UnlockedContentInterface[];
@@ -94,5 +92,4 @@ export interface PersonInterface {
   alertQueues?: AlertQueueInterface[];
   userContents?: UserContentInterface[];
   personToggleFeatures?: PersonToggleFeatureInterface[];
-  favoriteLearningAreaIds?: number[];
 }
