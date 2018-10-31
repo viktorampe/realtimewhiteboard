@@ -1,33 +1,47 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
-import {
-  AuthService,
-  AUTH_SERVICE_TOKEN,
-  LearningAreaInterface
-} from '@campus/dal';
-import { StateResolver } from '@campus/pages/shared';
+import { AUTH_SERVICE_TOKEN, LearningAreaInterface } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
+import { Dictionary } from '@ngrx/entity';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { BundlesViewModel } from '../bundles.viewmodel';
 import { LearningAreasComponent } from './learning-areas.component';
 
-let bundlesViewModel: MockViewModel;
-class MockViewModel extends BundlesViewModel {}
-
-beforeEach(() => {
-  bundlesViewModel = new MockViewModel(
-    new StateResolver(<Store<any>>{}),
-    <Store<any>>{},
-    new ActivatedRoute(),
-    <AuthService>{}
+let bundlesViewModel;
+class MockViewModel {
+  listFormat$: Observable<ListFormat> = new BehaviorSubject<ListFormat>(
+    ListFormat.GRID
   );
-});
+  learningAreas$: Observable<LearningAreaInterface[]> = new BehaviorSubject<
+    LearningAreaInterface[]
+  >([{ name: 'name', color: 'color', id: 1 }]);
+  sharedLearningAreasCount$: Observable<
+    Dictionary<{
+      booksCount: number;
+      bundlesCount: number;
+    }>
+  > = new BehaviorSubject<
+    Dictionary<{
+      booksCount: number;
+      bundlesCount: number;
+    }>
+  >({
+    1: {
+      booksCount: 2,
+      bundlesCount: 3
+    }
+  });
+  sharedLearningAreas$: Observable<
+    LearningAreaInterface[]
+  > = new BehaviorSubject<LearningAreaInterface[]>([
+    { name: 'shared name', color: 'shared color', id: 1 }
+  ]);
 
-test('it should return', () => {
-  return;
-});
+  changeListFormat() {}
+}
 
 describe('LearningAreasComponent', () => {
   let component: LearningAreasComponent;
@@ -64,25 +78,29 @@ describe('LearningAreasComponent', () => {
       declarations: [LearningAreasComponent],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
-        BundlesViewModel,
+        { provide: BundlesViewModel, useClass: MockViewModel },
         { provide: ActivatedRoute, useValue: {} },
         { provide: AUTH_SERVICE_TOKEN, useValue: {} },
         Store
       ]
     }).compileComponents();
+    bundlesViewModel = TestBed.get(BundlesViewModel);
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(LearningAreasComponent);
     component = fixture.componentInstance;
-    component.filterInput$.next('');
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+  it('should start with an empty filterInput string', () => {
+    expect(component.filterInput$).toBeObservable(hot('a', { a: '' }));
+  });
   it('should reset the filterInput$ when calling resetFilterInput', () => {
+    component.filterInput$.next('not empty');
     component.resetFilterInput();
     expect(component.filterInput$).toBeObservable(hot('a', { a: '' }));
   });
@@ -93,10 +111,33 @@ describe('LearningAreasComponent', () => {
     );
   });
   it('should call the viewModel changListFormat method when calling clickChangeListFormat', () => {
-    const spy = jest.spyOn(component['bundlesViewModel'], 'changeListFormat');
+    const spy = jest.spyOn(bundlesViewModel, 'changeListFormat');
     component.clickChangeListFormat('GRID');
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith(ListFormat.GRID);
+  });
+  it('should get the listFormat$, learningAreas$, sharedLearningAreas$ and learningAreasCounts$ from the bundlesViewModel', () => {
+    expect(component.listFormat$).toBeObservable(
+      hot('a', { a: ListFormat.GRID })
+    );
+    expect(component.learningAreas$).toBeObservable(
+      hot('a', { a: [{ name: 'name', color: 'color', id: 1 }] })
+    );
+    expect(component.sharedLearningAreas$).toBeObservable(
+      hot('a', {
+        a: [{ name: 'shared name', color: 'shared color', id: 1 }]
+      })
+    );
+    expect(component.learningAreasCounts$).toBeObservable(
+      hot('a', {
+        a: {
+          1: {
+            booksCount: 2,
+            bundlesCount: 3
+          }
+        }
+      })
+    );
   });
   it('should filter the learningAreas with case insensitivity', () => {
     const learningAreas$ = hot('a--|', { a: learningAreas });

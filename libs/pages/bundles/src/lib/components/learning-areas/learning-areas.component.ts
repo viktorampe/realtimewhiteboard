@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LearningAreaInterface } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
+import { Dictionary } from '@ngrx/entity';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { BundlesViewModel } from '../bundles.viewmodel';
@@ -11,32 +12,27 @@ import { BundlesViewModel } from '../bundles.viewmodel';
   styleUrls: ['./learning-areas.component.scss']
 })
 export class LearningAreasComponent implements OnInit {
-  listFormat$: Observable<ListFormat>;
   filterInput$ = new BehaviorSubject<string>('');
-
-  learningAreas$: Observable<LearningAreaInterface[]> = this.bundlesViewModel
-    .learningAreas$;
-
-  displayedLearningAreas$: Observable<
-    LearningAreaInterface[]
-  > = this.getDisplayedLearningAreas$(this.learningAreas$, this.filterInput$);
-
-  learningAreasCounts$: Observable<any> = this.bundlesViewModel
-    .sharedLearningAreasCount$;
+  listFormat$: Observable<ListFormat>;
+  learningAreas$: Observable<LearningAreaInterface[]>;
+  learningAreasCounts$: Observable<
+    Dictionary<{ bundlesCount: number; booksCount: number }>
+  >;
   sharedLearningAreas$: Observable<LearningAreaInterface[]>;
+  displayedLearningAreas$: Observable<LearningAreaInterface[]>;
 
   constructor(private bundlesViewModel: BundlesViewModel) {}
 
   ngOnInit(): void {
     this.listFormat$ = this.bundlesViewModel.listFormat$;
-
+    this.learningAreas$ = this.bundlesViewModel.learningAreas$;
+    this.learningAreasCounts$ = this.bundlesViewModel.sharedLearningAreasCount$;
     this.sharedLearningAreas$ = this.bundlesViewModel.sharedLearningAreas$;
     // TODO find out why learningarea name is not displayed
     this.displayedLearningAreas$ = this.getDisplayedLearningAreas$(
       this.sharedLearningAreas$,
       this.filterInput$
     );
-    this.learningAreasCounts$ = this.bundlesViewModel.sharedLearningAreasCount$;
   }
 
   onChangeFilterInput(filterInput: string): void {
