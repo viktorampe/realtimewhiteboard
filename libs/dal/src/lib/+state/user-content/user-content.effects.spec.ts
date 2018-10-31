@@ -5,8 +5,8 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
+import { UserContentReducer } from '.';
 import { USER_CONTENT_SERVICE_TOKEN } from '../../bundle/user-content.service.interface';
-import { UserReducer } from '../user';
 import {
   LoadUserContents,
   UserContentsLoaded,
@@ -60,9 +60,13 @@ describe('UserContentEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature(UserReducer.NAME, UserReducer.reducer, {
-          initialState: usedState
-        }),
+        StoreModule.forFeature(
+          UserContentReducer.NAME,
+          UserContentReducer.reducer,
+          {
+            initialState: usedState
+          }
+        ),
         EffectsModule.forRoot([]),
         EffectsModule.forFeature([UserContentsEffects])
       ],
@@ -89,7 +93,7 @@ describe('UserContentEffects', () => {
     const loadErrorAction = new UserContentsLoadError(new Error('failed'));
     describe('with initialState', () => {
       beforeAll(() => {
-        usedState = UserReducer.initialState;
+        usedState = UserContentReducer.initialState;
       });
       beforeEach(() => {
         mockServiceMethodReturnValue('getAllForUser', []);
@@ -111,7 +115,7 @@ describe('UserContentEffects', () => {
     });
     describe('with loaded state', () => {
       beforeAll(() => {
-        usedState = { ...UserReducer.initialState, loaded: true };
+        usedState = { ...UserContentReducer.initialState, loaded: true };
       });
       beforeEach(() => {
         mockServiceMethodReturnValue('getAllForUser', []);
@@ -129,7 +133,7 @@ describe('UserContentEffects', () => {
     });
     describe('with initialState and failing api call', () => {
       beforeAll(() => {
-        usedState = UserReducer.initialState;
+        usedState = UserContentReducer.initialState;
       });
       beforeEach(() => {
         mockServiceMethodError('getAllForUser', 'failed');
@@ -152,7 +156,7 @@ describe('UserContentEffects', () => {
     describe('with loaded and failing api call', () => {
       beforeAll(() => {
         usedState = {
-          ...UserReducer.initialState,
+          ...UserContentReducer.initialState,
           loaded: true,
           list: []
         };
