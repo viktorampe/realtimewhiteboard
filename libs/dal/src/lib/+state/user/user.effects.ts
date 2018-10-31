@@ -3,10 +3,7 @@ import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { map } from 'rxjs/operators';
 import { DalState } from '..';
-import {
-  AuthServiceInterface,
-  AUTH_SERVICE_TOKEN
-} from '../../persons/auth-service.interface';
+import { AuthServiceInterface, AUTH_SERVICE_TOKEN } from '../../person';
 import {
   fromUserActions,
   LoadUser,
