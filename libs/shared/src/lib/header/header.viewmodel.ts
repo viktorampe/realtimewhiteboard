@@ -16,7 +16,7 @@ import {
   EnvironmentMessagesFeatureInterface,
   ENVIRONMENT_ALERTS_FEATURE_TOKEN,
   ENVIRONMENT_MESSAGES_FEATURE_TOKEN
-} from '../interfaces';
+} from '../interfaces/environment.features.interfaces';
 import { HeaderResolver } from './header.resolver';
 
 //TODO replace with actual interface

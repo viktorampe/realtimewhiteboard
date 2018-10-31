@@ -14,7 +14,7 @@ import {
   EnvironmentMessagesFeatureInterface,
   ENVIRONMENT_ALERTS_FEATURE_TOKEN,
   ENVIRONMENT_MESSAGES_FEATURE_TOKEN
-} from '../interfaces';
+} from '../interfaces/environment.features.interfaces';
 import { HeaderResolver } from './header.resolver';
 import { HeaderViewModel } from './header.viewmodel';
 
@@ -67,15 +67,15 @@ describe('headerViewModel', () => {
           useValue: environmentMessagesFeature
         },
         { provide: AUTH_SERVICE_TOKEN, useValue: {} },
-        Store,
-        { provide: HeaderResolver, useClass: MockHeaderResolver }
+        { provide: HeaderResolver, useClass: MockHeaderResolver },
+        Store
       ]
     });
     headerViewModel = TestBed.get(HeaderViewModel);
   });
   describe('creation', () => {
     beforeAll(() => {
-      // usedState = UserReducer.initialState;
+      usedUserState = UserReducer.initialState;
       spy = jest.fn();
     });
     it('should be defined', () => {
