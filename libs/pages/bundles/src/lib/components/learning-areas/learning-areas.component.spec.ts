@@ -3,45 +3,13 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { AUTH_SERVICE_TOKEN, LearningAreaInterface } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
-import { Dictionary } from '@ngrx/entity';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
-import { BehaviorSubject, Observable } from 'rxjs';
 import { BundlesViewModel } from '../bundles.viewmodel';
+import { MockViewModel } from '../bundles.viewmodel.spec';
 import { LearningAreasComponent } from './learning-areas.component';
 
 let bundlesViewModel;
-class MockViewModel {
-  listFormat$: Observable<ListFormat> = new BehaviorSubject<ListFormat>(
-    ListFormat.GRID
-  );
-  learningAreas$: Observable<LearningAreaInterface[]> = new BehaviorSubject<
-    LearningAreaInterface[]
-  >([{ name: 'name', color: 'color', id: 1 }]);
-  sharedLearningAreasCount$: Observable<
-    Dictionary<{
-      booksCount: number;
-      bundlesCount: number;
-    }>
-  > = new BehaviorSubject<
-    Dictionary<{
-      booksCount: number;
-      bundlesCount: number;
-    }>
-  >({
-    1: {
-      booksCount: 2,
-      bundlesCount: 3
-    }
-  });
-  sharedLearningAreas$: Observable<
-    LearningAreaInterface[]
-  > = new BehaviorSubject<LearningAreaInterface[]>([
-    { name: 'shared name', color: 'shared color', id: 1 }
-  ]);
-
-  changeListFormat() {}
-}
 
 describe('LearningAreasComponent', () => {
   let component: LearningAreasComponent;
