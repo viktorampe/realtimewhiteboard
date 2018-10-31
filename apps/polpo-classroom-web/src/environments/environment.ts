@@ -18,7 +18,8 @@ export const environment = {
   features: {
     alerts: {
       enabled: true,
-      hasAppBarDropDown: true
+      hasAppBarDropDown: true,
+      appBarPollingInterval: 3000
     },
     messages: {
       enabled: true,

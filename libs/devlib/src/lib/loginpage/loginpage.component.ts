@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { EduContentInterface } from '@campus/dal';
+import { AlertReducer, EduContentInterface } from '@campus/dal';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
+import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { LoginPageViewModel } from './loginpage.viewmodel';
 
@@ -14,7 +15,8 @@ export class LoginpageComponent implements OnInit {
   currentUser: Observable<any>;
   constructor(
     private loginPageviewModel: LoginPageViewModel,
-    private personApi: PersonApi
+    private personApi: PersonApi,
+    private store: Store<AlertReducer.State>
   ) {}
 
   ngOnInit() {}
