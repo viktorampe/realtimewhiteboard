@@ -130,14 +130,14 @@ describe('NotificationDropdownItemComponent', () => {
 
   it('should show the notification date', () => {
     // human readable with humanDateTime pipe
-    component.notificationDate = 'foo';
+    component.notificationDate = new Date();
     fixture.detectChanges();
 
     const dateNode = fixture.debugElement.query(
       By.css('.ui-notification-dropdown-item__date')
     );
     expect(dateNode).toBeTruthy();
-    expect(dateNode.nativeElement.textContent).toBe('foo');
+    expect(dateNode.nativeElement.textContent).toBe('zonet');
   });
 
   it('should not show the notification date', () => {
