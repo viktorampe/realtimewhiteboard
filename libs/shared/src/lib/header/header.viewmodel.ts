@@ -111,6 +111,7 @@ export class HeaderViewModel {
     return alertsForUser$.pipe(
       map(alerts => {
         //TODO actually map to the correct interface
+        //TODO there should be a selector for this once all things are merged, see https://github.com/diekeure/campus/issues/175
         return <DropdownItemInterface[]>[
           {
             text: 'temp alert'
