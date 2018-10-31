@@ -16,7 +16,7 @@ before_script:
   - npm run lint
   - npm run format:check
   - npm run test
-  - npm run e2e
+  #- npm run e2e
 script: -if [[ echo "$TRAVIS_BRANCH" | grep 'deploy' ]]; then npm run build fi
 deploy:
   - provider: s3
