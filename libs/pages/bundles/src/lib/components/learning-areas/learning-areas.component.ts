@@ -11,8 +11,6 @@ import { BundlesViewModel } from '../bundles.viewmodel';
   styleUrls: ['./learning-areas.component.scss']
 })
 export class LearningAreasComponent implements OnInit {
-  toolbarFixed: boolean;
-
   listFormat$: Observable<ListFormat>;
   filterInput$ = new BehaviorSubject<string>('');
 
@@ -30,8 +28,6 @@ export class LearningAreasComponent implements OnInit {
   constructor(private bundlesViewModel: BundlesViewModel) {}
 
   ngOnInit(): void {
-    this.toolbarFixed = true;
-
     this.listFormat$ = this.bundlesViewModel.listFormat$;
 
     this.sharedLearningAreas$ = this.bundlesViewModel.sharedLearningAreas$;

@@ -1,11 +1,44 @@
+import { LayoutModule } from '@angular/cdk/layout';
+import { PortalModule } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { ModuleWithProviders, NgModule } from '@angular/core';
+import { UiModule } from '@campus/ui';
+import { PageBarContainerComponent } from './components/page-bar-container/page-bar-container.component';
 import { HeaderComponent } from './header/header.component';
-import { TruncateStringPipe } from './pipes/truncate-string/truncate-string.pipe';
+import {
+  EnvironmentAlertsFeatureInterface,
+  EnvironmentMessagesFeatureInterface,
+  ENVIRONMENT_ALERTS_FEATURE_TOKEN,
+  ENVIRONMENT_MESSAGES_FEATURE_TOKEN
+} from './interfaces';
 
 @NgModule({
-  imports: [CommonModule],
-  declarations: [HeaderComponent, TruncateStringPipe],
-  exports: [HeaderComponent, TruncateStringPipe]
+  imports: [CommonModule, UiModule, PortalModule, LayoutModule],
+  declarations: [HeaderComponent, PageBarContainerComponent],
+  exports: [
+    HeaderComponent,
+    PortalModule,
+    LayoutModule,
+    PageBarContainerComponent
+  ]
 })
-export class SharedModule {}
+export class SharedModule {
+  static forRoot(
+    environmentAlertsFeature: EnvironmentAlertsFeatureInterface,
+    environmentMessagesFeature: EnvironmentMessagesFeatureInterface
+  ): ModuleWithProviders {
+    return {
+      ngModule: SharedModule,
+      providers: [
+        {
+          provide: ENVIRONMENT_ALERTS_FEATURE_TOKEN,
+          useValue: environmentAlertsFeature
+        },
+        {
+          provide: ENVIRONMENT_MESSAGES_FEATURE_TOKEN,
+          useValue: environmentMessagesFeature
+        }
+      ]
+    };
+  }
+}

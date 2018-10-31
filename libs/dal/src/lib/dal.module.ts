@@ -12,6 +12,7 @@ import {
 } from '@diekeure/polpo-api-angular-sdk';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
+import { AlertReducer, AlertsEffects } from './+state/alert';
 import { BundleReducer, BundlesEffects } from './+state/bundle';
 import { ContentStatusReducer } from './+state/content-status';
 import { ContentStatusesEffects } from './+state/content-status/content-status.effects';
@@ -24,7 +25,7 @@ import {
   StudentContentStatusesEffects,
   StudentContentStatusReducer
 } from './+state/student-content-status';
-import { UiEffects, uiReducer } from './+state/ui/';
+import { UiEffects, UiReducer } from './+state/ui/';
 import {
   UnlockedBoekeGroupReducer,
   UnlockedBoekeGroupsEffects
@@ -43,6 +44,8 @@ import {
   initialUserstate as userInitialState,
   userReducer
 } from './+state/user/user.reducer';
+import { AlertService } from './alert/alert.service';
+import { ALERT_SERVICE_TOKEN } from './alert/alert.service.interface';
 import {
   UnlockedBoekeGroupService,
   UnlockedBoekeStudentService,
@@ -61,7 +64,14 @@ import { EduContentService } from './edu-content/edu-content.service';
 import { EDUCONTENT_SERVICE_TOKEN } from './edu-content/edu-content.service.interface';
 import { LearningAreaService } from './learning-area/learning-area.service';
 import { LEARNINGAREA_SERVICE_TOKEN } from './learning-area/learning-area.service.interface';
-import { AuthService, AuthServiceToken } from './persons/auth-service';
+import {
+  AuthService,
+  AUTH_SERVICE_TOKEN,
+  LinkedPersonService,
+  LINKEDPERSON_SERVICE_TOKEN,
+  PersonService,
+  PERSON_SERVICE_TOKEN
+} from './person';
 import { StudentContentStatusService } from './student-content-status/student-content-status.service';
 import { STUDENT_CONTENT_STATUS_SERVICE_TOKEN } from './student-content-status/student-content-status.service.interface';
 
@@ -75,8 +85,8 @@ interface DalOptions {
     CommonModule,
     SDKBrowserModule.forRoot(),
     HttpClientModule,
-    StoreModule.forFeature('ui', uiReducer.reducer, {
-      initialState: uiReducer.initialState
+    StoreModule.forFeature('ui', UiReducer.reducer, {
+      initialState: UiReducer.initialState
     }),
     StoreModule.forFeature('bundles', BundleReducer.reducer, {
       initialState: BundleReducer.initialState
@@ -124,6 +134,9 @@ interface DalOptions {
     StoreModule.forFeature('contentStatuses', ContentStatusReducer.reducer, {
       initialState: ContentStatusReducer.initialState
     }),
+    StoreModule.forFeature('alerts', AlertReducer.reducer, {
+      initialState: AlertReducer.initialState
+    }),
     EffectsModule.forFeature([
       BundlesEffects,
       EduContentsEffects,
@@ -135,7 +148,8 @@ interface DalOptions {
       UnlockedContentsEffects,
       UserContentsEffects,
       UnlockedBoekeStudentsEffects,
-      ContentStatusesEffects
+      ContentStatusesEffects,
+      AlertsEffects
     ])
   ],
   providers: [
@@ -160,7 +174,13 @@ interface DalOptions {
       provide: STUDENT_CONTENT_STATUS_SERVICE_TOKEN,
       useClass: StudentContentStatusService
     },
-    { provide: AuthServiceToken, useClass: AuthService }
+    {
+      provide: ALERT_SERVICE_TOKEN,
+      useClass: AlertService
+    },
+    { provide: PERSON_SERVICE_TOKEN, useClass: PersonService },
+    { provide: LINKEDPERSON_SERVICE_TOKEN, useClass: LinkedPersonService },
+    { provide: AUTH_SERVICE_TOKEN, useClass: AuthService }
   ]
 })
 export class DalModule {
@@ -169,8 +189,7 @@ export class DalModule {
     LoopBackConfig.setBaseURL(options.apiBaseUrl);
     LoopBackConfig.setRequestOptionsCredentials(true);
     return {
-      ngModule: DalModule,
-      providers: [{ provide: AuthServiceToken, useClass: AuthService }]
+      ngModule: DalModule
     };
   }
 }

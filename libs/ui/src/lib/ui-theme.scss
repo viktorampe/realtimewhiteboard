@@ -41,6 +41,8 @@ $ui-font-color-gray-3: #333 !default;
 $ui-font-color-gray-4: #95a0aa !default;
 
 $ui-font-color-green-1: #6ed3c2 !default;
+$ui-font-color-active: #6ed3c2 !default;
+$ui-font-color-inverse: $ui-bg-color-white !default;
 $ui-person-badge-size-large: 150px !default;
 $ui-person-badge-size-large-font-size: 50px !default;
 $ui-person-badge-size-medium: 45px !default;
@@ -50,6 +52,11 @@ $ui-person-badge-size-small-font-size: 16px !default;
 $ui-font-family-1: 'Lato', sans-serif !default;
 $ui-font-family-2: 'Open Sans', sans-serif !default;
 $ui-font-family-3: 'Helvetica', 'Arial', 'Sans-Serif' !default;
+
+// helper classes
+.ui-no-link {
+  cursor: inherit;
+}
 
 // import all required sass files from our libs
 // @import './tree-nav/tree-nav.component.theme';
@@ -67,11 +74,12 @@ $ui-font-family-3: 'Helvetica', 'Arial', 'Sans-Serif' !default;
 @import './app-bar/app-bar.component.theme.scss';
 @import './side-sheet/side-sheet.component.theme';
 @import './shell/shell.component.theme';
-@import './tool-bar/tool-bar.component.theme.scss';
 @import './list-view/list-view.component.theme.scss';
 @import './content-thumbnail/content-thumbnail.component.theme.scss';
 @import './filter-text-input/filter-text-input.component.themes.scss';
 @import './button/button.component.theme.scss';
+@import './notification-dropdown-item/notification-dropdown-item.component.theme';
+@import './dropdown-menu/dropdown-menu.component.theme.scss';
 
 // create theme-mixin with each mixin from our library components
 @mixin ui-theme() {
@@ -90,10 +98,11 @@ $ui-font-family-3: 'Helvetica', 'Arial', 'Sans-Serif' !default;
   @include ui-app-bar();
   @include ui-app-shell();
   @include ui-side-sheet();
-  @include ui-tool-bar();
   @include ui-list-view();
   @include ui-list-view-deep();
   @include ui-content-thumbnail();
   @include ui-filter-text-input();
   @include ui-button();
+  @include ui-notification-dropdown-item();
+  @include ui-dropdown-menu();
 }

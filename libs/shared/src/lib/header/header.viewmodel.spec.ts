@@ -1,13 +1,46 @@
+import {
+  EnvironmentAlertsFeatureInterface,
+  EnvironmentMessagesFeatureInterface
+} from '../interfaces';
 import { HeaderViewModel } from './header.viewmodel';
 
+let environmentMessagesFeature: EnvironmentMessagesFeatureInterface;
+let environmentAlertsFeature: EnvironmentAlertsFeatureInterface;
 let headerViewModel: HeaderViewModel;
 
-beforeEach(() => {
-  headerViewModel = new HeaderViewModel();
-});
-
-test('it should return', () => {
-  return;
+describe('loadFeatureToggles and enableAlerts, enableMessages', () => {
+  function expectEnablesToBe(
+    enabled: boolean,
+    haveDropDown: boolean,
+    expectedEnabled: boolean
+  ) {
+    environmentMessagesFeature = {
+      enabled: enabled,
+      hasAppBarDropDown: haveDropDown
+    };
+    environmentAlertsFeature = {
+      enabled: enabled,
+      hasAppBarDropDown: haveDropDown
+    };
+    headerViewModel = new HeaderViewModel(
+      environmentAlertsFeature,
+      environmentMessagesFeature
+    );
+    expect(headerViewModel.enableAlerts).toBe(expectedEnabled);
+    expect(headerViewModel.enableMessages).toBe(expectedEnabled);
+  }
+  it('should be true if enable and hasDropDown are true', () => {
+    expectEnablesToBe(true, true, true);
+  });
+  it('should be false if enable is false and hasDropDown is true', () => {
+    expectEnablesToBe(false, true, false);
+  });
+  it('should be false if enable is true and hasDropDown is false', () => {
+    expectEnablesToBe(true, false, false);
+  });
+  it('should be false if enable is false and hasDropDown is false', () => {
+    expectEnablesToBe(false, false, false);
+  });
 });
 
 test('it should provide a stream with the array of breadcrumbs', () => {

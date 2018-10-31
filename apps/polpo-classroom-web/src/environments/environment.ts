@@ -14,7 +14,18 @@ export const environment = {
   website: {
     url: 'http://www.polpo.localhost'
   },
-  APIBase: 'http://api.polpo.localhost:3000'
+  APIBase: 'http://api.polpo.localhost:3000',
+  features: {
+    alerts: {
+      enabled: true,
+      hasAppBarDropDown: true,
+      appBarPollingInterval: 3000
+    },
+    messages: {
+      enabled: true,
+      hasAppBarDropDown: true
+    }
+  }
 };
 
 /*

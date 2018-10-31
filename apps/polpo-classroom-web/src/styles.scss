@@ -88,6 +88,10 @@ body {
 @import 'libs/pages/shared/src/pages-theme';
 @include pages-theme();
 
+// include shared lib scss
+@import 'libs/shared/src/lib/shared-theme';
+@include shared-theme();
+
 /*
  * App styles
  */
