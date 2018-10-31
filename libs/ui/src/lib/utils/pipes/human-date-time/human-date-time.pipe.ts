@@ -93,6 +93,12 @@ export class HumanDateTimePipe implements PipeTransform {
    */
   private weekInSeconds = this.dayInSeconds * 7;
 
+  constructor(public date?: Date) {
+    if (!this.date) {
+      this.date = new Date();
+    }
+  }
+
   /**
    * takes a date object and transforms it to a human readable string
    * returns empty string when date is undefined or null
@@ -104,7 +110,7 @@ export class HumanDateTimePipe implements PipeTransform {
    */
   transform(value: Date, args?: String): String {
     if (value) {
-      const currentDate: Date = new Date();
+      const currentDate: Date = this.date;
       const valueInSeconds: number = Math.round(value.getTime() / 1000);
       const differenceInSeconds: number =
         Math.round(currentDate.getTime() / 1000) - valueInSeconds;

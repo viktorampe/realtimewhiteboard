@@ -1,6 +1,9 @@
 import { HumanDateTimePipe } from './human-date-time.pipe';
 
 describe('HumanDateTimePipe', () => {
+  const baseDateTime = 1540375469127;
+  const baseDate = new Date(baseDateTime);
+
   it('create an instance', () => {
     const pipe = new HumanDateTimePipe();
     expect(pipe).toBeTruthy();
@@ -75,36 +78,36 @@ describe('HumanDateTimePipe', () => {
   it('should show the text for 1 day ago', () => {
     const hours = 25;
     //Wednesday 24/10/2018
-    const date: Date = new Date(1540375469127);
+    const date: Date = new Date(baseDateTime);
     date.setMilliseconds(date.getMilliseconds() - 1000 * 60 * 60 * hours);
-    const pipe = new HumanDateTimePipe();
+    const pipe = new HumanDateTimePipe(baseDate);
     expect(pipe.transform(date)).toBe(HumanDateTimePipe.weekdays[2]);
   });
 
   it('should show the text for 2 day ago', () => {
     const hours = 24 * 2 + 1;
     //Wednesday 24/10/2018
-    const date: Date = new Date(1540375469127);
+    const date: Date = new Date(baseDateTime);
     date.setMilliseconds(date.getMilliseconds() - 1000 * 60 * 60 * hours);
-    const pipe = new HumanDateTimePipe();
+    const pipe = new HumanDateTimePipe(baseDate);
     expect(pipe.transform(date)).toBe(HumanDateTimePipe.weekdays[1]);
   });
 
   it('should show the text for 3 day ago', () => {
     const hours = 24 * 3 + 1;
     //Wednesday 24/10/2018
-    const date: Date = new Date(1540375469127);
+    const date: Date = new Date(baseDateTime);
     date.setMilliseconds(date.getMilliseconds() - 1000 * 60 * 60 * hours);
-    const pipe = new HumanDateTimePipe();
+    const pipe = new HumanDateTimePipe(baseDate);
     expect(pipe.transform(date)).toBe(HumanDateTimePipe.weekdays[0]);
   });
 
   it('should show the text for 4 day ago', () => {
     const hours = 24 * 4 + 1;
     //Wednesday 24/10/2018
-    const date: Date = new Date(1540375469127);
+    const date: Date = new Date(baseDateTime);
     date.setMilliseconds(date.getMilliseconds() - 1000 * 60 * 60 * hours);
-    const pipe = new HumanDateTimePipe();
+    const pipe = new HumanDateTimePipe(baseDate);
     console.log(pipe.transform(date));
     expect(pipe.transform(date)).toBe(HumanDateTimePipe.weekdays[6]);
   });
@@ -112,9 +115,9 @@ describe('HumanDateTimePipe', () => {
   it('should show the text for 5 day ago', () => {
     const hours = 24 * 5 + 1;
     //Wednesday 24/10/2018
-    const date: Date = new Date(1540375469127);
+    const date: Date = new Date(baseDateTime);
     date.setMilliseconds(date.getMilliseconds() - 1000 * 60 * 60 * hours);
-    const pipe = new HumanDateTimePipe();
+    const pipe = new HumanDateTimePipe(baseDate);
     console.log(pipe.transform(date));
     expect(pipe.transform(date)).toBe(HumanDateTimePipe.weekdays[5]);
   });
@@ -122,9 +125,9 @@ describe('HumanDateTimePipe', () => {
   it('should show the text for 6 day ago', () => {
     const hours = 24 * 6 + 1;
     //Wednesday 24/10/2018
-    const date: Date = new Date(1540375469127);
+    const date: Date = new Date(baseDateTime);
     date.setMilliseconds(date.getMilliseconds() - 1000 * 60 * 60 * hours);
-    const pipe = new HumanDateTimePipe();
+    const pipe = new HumanDateTimePipe(baseDate);
     console.log(pipe.transform(date));
     expect(pipe.transform(date)).toBe(HumanDateTimePipe.weekdays[4]);
   });
@@ -132,9 +135,9 @@ describe('HumanDateTimePipe', () => {
   it('should show the text for dateformat', () => {
     const hours = 24 * 99 + 1;
     //Wednesday 24/10/2018
-    const date: Date = new Date(1540375469127);
+    const date: Date = new Date(baseDateTime);
     date.setMilliseconds(date.getMilliseconds() - 1000 * 60 * 60 * hours);
-    const pipe = new HumanDateTimePipe();
+    const pipe = new HumanDateTimePipe(baseDate);
     expect(pipe.transform(date)).toBe('17/7/2018');
   });
 
