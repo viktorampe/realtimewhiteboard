@@ -3,6 +3,7 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { interval, Observable, Subject } from 'rxjs';
 import { map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
+import { DalActions } from '..';
 import {
   AlertServiceInterface,
   ALERT_SERVICE_TOKEN
@@ -35,10 +36,19 @@ export class AlertsEffects {
     switchMap(action => this.getNewTimer(<StartPollAlerts>action))
   );
 
-  @Effect({ dispatch: false })
+  // stops the current polling and completes stopTimer$
+  // for use in onDestroy
+  // if a new polling is started, it wil be <dramatic pauze> unstoppable!
+  @Effect()
   stopPollAlerts$ = this.actions.pipe(
     ofType(AlertsActionTypes.StopPollAlerts),
-    tap(_ => this.stopTimer$.next())
+    tap(_ => this.stopTimer()),
+    map(
+      _ =>
+        new DalActions.ActionSuccessful({
+          successfulAction: 'polling stopped'
+        })
+    )
   );
 
   @Effect()
@@ -130,5 +140,10 @@ export class AlertsEffects {
     );
 
     return this.pollingTimer$;
+  }
+
+  private stopTimer() {
+    this.stopTimer$.next(); // Complete current timer
+    this.stopTimer$.complete();
   }
 }

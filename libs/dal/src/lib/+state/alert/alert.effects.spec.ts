@@ -7,7 +7,7 @@ import { getTestScheduler, hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { ALERT_SERVICE_TOKEN } from '../../alert/alert.service.interface';
-import { ActionSuccessful } from '../dal.actions';
+import { ActionSuccessful } from './../dal.actions';
 import {
   AlertsLoaded,
   AlertsLoadError,
@@ -15,7 +15,8 @@ import {
   LoadNewAlerts,
   NewAlertsLoaded,
   SetReadAlert,
-  StartPollAlerts
+  StartPollAlerts,
+  StopPollAlerts
 } from './alert.actions';
 import { AlertsEffects } from './alert.effects';
 import { initialState, reducer } from './alert.reducer';
@@ -334,6 +335,31 @@ describe('AlertEffects', () => {
           a: effectOutput
         });
       });
+    });
+  });
+
+  describe('stopPollAlerts$', () => {
+    const startPollAction = new StartPollAlerts({
+      userId: mockData.userId,
+      pollingInterval: mockData.interval
+    });
+
+    const stopPollAction = new StopPollAlerts();
+
+    const newLoadAction = new LoadNewAlerts({
+      userId: mockData.userId
+    });
+
+    const successAction = new ActionSuccessful({
+      successfulAction: 'polling stopped'
+    });
+
+    beforeAll(() => {
+      usedState = initialState;
+    });
+
+    it('should dispatch an ActionSuccessful', () => {
+      expectInAndOut(effects.stopPollAlerts$, stopPollAction, successAction);
     });
   });
 
