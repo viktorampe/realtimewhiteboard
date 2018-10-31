@@ -45,6 +45,7 @@ import { HideDesktopDirective } from './utils/directives/hide-desktop.directive'
 import { HideMobileDirective } from './utils/directives/hide-mobile.directive';
 import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness/adjust-color-brightness.pipe';
 import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time.pipe';
+import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-string.pipe';
 
 @NgModule({
   imports: [
@@ -57,7 +58,6 @@ import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time
     MatFormFieldModule,
     MatInputModule,
     LayoutModule,
-    MatIconModule,
     RouterModule,
     CdkTreeModule,
     MatSelectModule,
@@ -113,10 +113,13 @@ import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time
     BreadcrumbsComponent,
     DropdownMenuComponent,
     NotificationDropdownItemComponent,
+    DropdownMenuComponent,
+    TruncateStringPipe
     DropdownMenuItemComponent
     HideDesktopDirective,
     HideMobileDirective,
     HumanDateTimePipe
+
   ],
   exports: [
     FilterTextInputComponent,
@@ -159,7 +162,9 @@ import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time
     BreadcrumbsComponent,
     DropdownMenuComponent,
     NotificationDropdownItemComponent,
-    DropdownMenuItemComponent
+    DropdownMenuComponent,
+    TruncateStringPipe,
+    DropdownMenuItemComponent,
     HideDesktopDirective,
     HideMobileDirective,
     HumanDateTimePipe
