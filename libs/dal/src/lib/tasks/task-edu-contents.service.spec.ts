@@ -1,11 +1,16 @@
-import { TestBed, inject } from '@angular/core/testing';
-
+import { inject, TestBed } from '@angular/core/testing';
+import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { TaskEduContentsService } from './task-edu-contents.service';
+
+class MockPersonApi {}
 
 describe('TaskEduContentService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [TaskEduContentsService]
+      providers: [
+        TaskEduContentsService,
+        { provide: PersonApi, useClass: MockPersonApi }
+      ]
     });
   });
 

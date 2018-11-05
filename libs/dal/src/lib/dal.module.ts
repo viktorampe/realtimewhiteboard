@@ -69,8 +69,8 @@ import {
 import { PersonService, PERSON_SERVICE_TOKEN } from './persons/persons.service';
 import { StudentContentStatusService } from './student-content-status/student-content-status.service';
 import { STUDENT_CONTENT_STATUS_SERVICE_TOKEN } from './student-content-status/student-content-status.service.interface';
-import { TASK_EDU_CONTENT_SERVICE_TOKEN } from './task-educontent/task-educonent.service.interface';
-import { TaskEducontentService } from './task-educontent/task-educontent.service';
+import { TaskEduContentsService } from './tasks/task-edu-contents.service';
+import { TASK_EDU_CONTENT_SERVICE_TOKEN } from './tasks/task-edu-contents.service.interface';
 import { TASK_SERVICE_TOKEN } from './tasks/task.service.interface';
 import { TaskService } from './tasks/tasks.service';
 
@@ -143,7 +143,10 @@ interface DalOptions {
     { provide: LINKED_PERSON_SERVICE_TOKEN, useClass: LinkedPersonService },
     { provide: AUTH_SERVICE_TOKEN, useClass: AuthService },
     { provide: TASK_SERVICE_TOKEN, useClass: TaskService },
-    { provide: TASK_EDU_CONTENT_SERVICE_TOKEN, useClass: TaskEducontentService }
+    {
+      provide: TASK_EDU_CONTENT_SERVICE_TOKEN,
+      useClass: TaskEduContentsService
+    }
   ]
 })
 export class DalModule {

@@ -6,6 +6,6 @@ export const TASK_EDU_CONTENT_SERVICE_TOKEN = new InjectionToken(
   'TaskEducontentService'
 );
 
-export interface TaskEducontentServiceInterface {
+export interface TaskEduContentsInterface {
   getAllForUser(userId: number): Observable<TaskEduContentInterface[]>;
 }
