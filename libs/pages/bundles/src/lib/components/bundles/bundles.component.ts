@@ -23,8 +23,6 @@ import { BundlesViewModel } from '../bundles.viewmodel';
   styleUrls: ['./bundles.component.scss']
 })
 export class BundlesComponent {
-  protected listFormatEnum = ListFormat;
-
   learningArea$: Observable<LearningAreaInterface> = this.bundlesViewModel
     .activeLearningArea$;
 
