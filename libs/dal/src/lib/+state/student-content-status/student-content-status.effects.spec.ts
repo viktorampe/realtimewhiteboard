@@ -6,6 +6,7 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
+import { StudentContentStatusReducer } from '.';
 import { StudentContentStatusInterface } from '../../+models';
 import { STUDENT_CONTENT_STATUS_SERVICE_TOKEN } from '../../student-content-status/student-content-status.service.interface';
 import { ActionSuccessful } from '../dal.actions';
@@ -17,7 +18,6 @@ import {
   UpdateStudentContentStatus
 } from './student-content-status.actions';
 import { StudentContentStatusesEffects } from './student-content-status.effects';
-import { initialState, reducer } from './student-content-status.reducer';
 
 function createStudentContentStatus(
   id: number,
@@ -75,9 +75,13 @@ describe('StudentContentStatusEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature('studentContentStatuses', reducer, {
-          initialState: usedState
-        }),
+        StoreModule.forFeature(
+          StudentContentStatusReducer.NAME,
+          StudentContentStatusReducer.reducer,
+          {
+            initialState: usedState
+          }
+        ),
         EffectsModule.forRoot([]),
         EffectsModule.forFeature([StudentContentStatusesEffects])
       ],
@@ -113,7 +117,7 @@ describe('StudentContentStatusEffects', () => {
     );
     describe('with initialState', () => {
       beforeAll(() => {
-        usedState = initialState;
+        usedState = StudentContentStatusReducer.initialState;
       });
       beforeEach(() => {
         mockServiceMethodReturnValue('getAllByStudentId', []);
@@ -135,7 +139,10 @@ describe('StudentContentStatusEffects', () => {
     });
     describe('with loaded state', () => {
       beforeAll(() => {
-        usedState = { ...initialState, loaded: true };
+        usedState = {
+          ...StudentContentStatusReducer.initialState,
+          loaded: true
+        };
       });
       beforeEach(() => {
         mockServiceMethodReturnValue('getAllByStudentId', []);
@@ -153,7 +160,7 @@ describe('StudentContentStatusEffects', () => {
     });
     describe('with initialState and failing api call', () => {
       beforeAll(() => {
-        usedState = initialState;
+        usedState = StudentContentStatusReducer.initialState;
       });
       beforeEach(() => {
         mockServiceMethodError('getAllByStudentId', 'failed');
@@ -176,7 +183,7 @@ describe('StudentContentStatusEffects', () => {
     describe('with loaded and failing api call', () => {
       beforeAll(() => {
         usedState = {
-          ...initialState,
+          ...StudentContentStatusReducer.initialState,
           loaded: true,
           list: []
         };
@@ -211,7 +218,7 @@ describe('StudentContentStatusEffects', () => {
     });
     describe('with initialState', () => {
       beforeAll(() => {
-        usedState = initialState;
+        usedState = StudentContentStatusReducer.initialState;
       });
       beforeEach(() => {
         mockServiceMethodReturnValue('updateStudentContentStatus', []);
@@ -235,7 +242,7 @@ describe('StudentContentStatusEffects', () => {
     });
     describe('with initialState', () => {
       beforeAll(() => {
-        usedState = initialState;
+        usedState = StudentContentStatusReducer.initialState;
       });
       beforeEach(() => {
         mockServiceMethodReturnValue('addStudentContentStatus', []);

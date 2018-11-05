@@ -28,6 +28,7 @@ import { WarningDirective } from './button/directives/button-warning.directive';
 import { ConfirmableSelectComponent } from './confirmable-select/confirmable-select.component';
 import { ContentPreviewComponent } from './content-preview/content-preview.component';
 import { ContentThumbnailComponent } from './content-thumbnail/content-thumbnail.component';
+import { DropdownMenuItemComponent } from './dropdown-menu-item/dropdown-menu-item.component';
 import { DropdownMenuComponent } from './dropdown-menu/dropdown-menu.component';
 import { EditableInlineTagListComponent } from './editable-inline-tag-list/editable-inline-tag-list.component';
 import { FileExtensionComponent } from './file-extension/file-extension.component';
@@ -57,6 +58,7 @@ import { HideDesktopDirective } from './utils/directives/hide-desktop.directive'
 import { HideMobileDirective } from './utils/directives/hide-mobile.directive';
 import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness/adjust-color-brightness.pipe';
 import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time.pipe';
+import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-string.pipe';
 
 @NgModule({
   imports: [
@@ -69,7 +71,6 @@ import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time
     MatFormFieldModule,
     MatInputModule,
     LayoutModule,
-    MatIconModule,
     RouterModule,
     CdkTreeModule,
     MatSelectModule,
@@ -125,9 +126,11 @@ import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time
     BreadcrumbsComponent,
     DropdownMenuComponent,
     NotificationDropdownItemComponent,
+    DropdownMenuComponent,
+    TruncateStringPipe,
+    DropdownMenuItemComponent,
     HideDesktopDirective,
     HideMobileDirective,
-    DropdownMenuComponent,
     HumanDateTimePipe
   ],
   exports: [
@@ -171,9 +174,11 @@ import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time
     BreadcrumbsComponent,
     DropdownMenuComponent,
     NotificationDropdownItemComponent,
+    DropdownMenuComponent,
+    TruncateStringPipe,
+    DropdownMenuItemComponent,
     HideDesktopDirective,
     HideMobileDirective,
-    DropdownMenuComponent,
     HumanDateTimePipe
   ]
 })

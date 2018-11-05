@@ -2,6 +2,8 @@ import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { BundleInterface } from '../../+models';
 import { BundlesActions, BundlesActionTypes } from './bundle.actions';
 
+export const NAME = 'bundles';
+
 /**
  * @ngrx/entity provides a predefined interface for handling
  * a structured dictionary of records. This interface

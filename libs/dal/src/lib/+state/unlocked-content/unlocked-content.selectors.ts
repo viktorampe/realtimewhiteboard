@@ -1,5 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import {
+  NAME,
   selectAll,
   selectEntities,
   selectIds,
@@ -7,9 +8,7 @@ import {
   State
 } from './unlocked-content.reducer';
 
-export const selectUnlockedContentState = createFeatureSelector<State>(
-  'unlockedContents'
-);
+export const selectUnlockedContentState = createFeatureSelector<State>(NAME);
 
 export const getError = createSelector(
   selectUnlockedContentState,

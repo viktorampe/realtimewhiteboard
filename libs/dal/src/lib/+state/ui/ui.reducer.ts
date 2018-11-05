@@ -5,6 +5,7 @@ import { UiAction, UiActionTypes } from './ui.actions';
  *  - UiState, and
  *  - uiReducer
  */
+export const NAME = 'ui';
 
 export interface UiState {
   loaded: boolean; // has the Ui list been loaded

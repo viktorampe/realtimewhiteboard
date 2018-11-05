@@ -3,10 +3,9 @@ import { Resolve } from '@angular/router';
 import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
-  LoadUser,
-  RemoveUser,
-  userQuery,
-  UserState
+  UserActions,
+  UserQueries,
+  UserReducer
 } from '@campus/dal';
 import { select, Store } from '@ngrx/store';
 import { BehaviorSubject, Observable, of } from 'rxjs';
@@ -23,10 +22,10 @@ export class LoginPageViewModel implements Resolve<boolean> {
   loggedIn: boolean;
 
   constructor(
-    private store: Store<UserState>,
+    private store: Store<UserReducer.State>,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
   ) {
-    store.pipe(select(userQuery.getCurrentUser)).subscribe(data => {
+    store.pipe(select(UserQueries.getCurrentUser)).subscribe(data => {
       this.loggedIn = data != null;
     });
   }
@@ -66,7 +65,7 @@ export class LoginPageViewModel implements Resolve<boolean> {
         })
       )
       .subscribe(() => {
-        this.store.dispatch(new LoadUser({ force: false }));
+        this.store.dispatch(new UserActions.LoadUser({ force: false }));
       });
   }
 
@@ -80,7 +79,7 @@ export class LoginPageViewModel implements Resolve<boolean> {
   logout(): void {
     this.isLoggedIn().subscribe((isLoggedIn: boolean) => {
       if (isLoggedIn) {
-        this.store.dispatch(new RemoveUser());
+        this.store.dispatch(new UserActions.RemoveUser());
       }
     });
   }

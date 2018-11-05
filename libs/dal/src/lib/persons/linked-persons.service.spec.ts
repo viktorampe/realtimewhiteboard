@@ -1,17 +1,16 @@
-import { TestBed, inject } from '@angular/core/testing';
-
-import { LinkedPersonsService } from './linked-persons.service';
+import { inject, TestBed } from '@angular/core/testing';
+import { LinkedPersonService } from './linked-persons.service';
 
 describe('LinkedPersonsService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [LinkedPersonsService]
+      providers: [LinkedPersonService]
     });
   });
 
   it('should be created', inject(
-    [LinkedPersonsService],
-    (service: LinkedPersonsService) => {
+    [LinkedPersonService],
+    (service: LinkedPersonService) => {
       expect(service).toBeTruthy();
     }
   ));

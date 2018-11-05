@@ -5,6 +5,7 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
+import { UnlockedContentReducer } from '.';
 import { UNLOCKED_CONTENT_SERVICE_TOKEN } from '../../bundle/unlocked-content.service.interface';
 import {
   LoadUnlockedContents,
@@ -12,7 +13,6 @@ import {
   UnlockedContentsLoadError
 } from './unlocked-content.actions';
 import { UnlockedContentsEffects } from './unlocked-content.effects';
-import { initialState, reducer } from './unlocked-content.reducer';
 
 describe('UnlockedContentEffects', () => {
   let actions: Observable<any>;
@@ -60,9 +60,13 @@ describe('UnlockedContentEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature('unlockedContents', reducer, {
-          initialState: usedState
-        }),
+        StoreModule.forFeature(
+          UnlockedContentReducer.NAME,
+          UnlockedContentReducer.reducer,
+          {
+            initialState: usedState
+          }
+        ),
         EffectsModule.forRoot([]),
         EffectsModule.forFeature([UnlockedContentsEffects])
       ],
@@ -83,15 +87,18 @@ describe('UnlockedContentEffects', () => {
   });
 
   describe('loadUnlockedContent$', () => {
-    const unforcedLoadAction = new LoadUnlockedContents({});
-    const forcedLoadAction = new LoadUnlockedContents({ force: true });
+    const unforcedLoadAction = new LoadUnlockedContents({ userId: 1 });
+    const forcedLoadAction = new LoadUnlockedContents({
+      force: true,
+      userId: 1
+    });
     const filledLoadedAction = new UnlockedContentsLoaded({
       unlockedContents: []
     });
     const loadErrorAction = new UnlockedContentsLoadError(new Error('failed'));
     describe('with initialState', () => {
       beforeAll(() => {
-        usedState = initialState;
+        usedState = UnlockedContentReducer.initialState;
       });
       beforeEach(() => {
         mockServiceMethodReturnValue('getAllForUser', []);
@@ -113,7 +120,7 @@ describe('UnlockedContentEffects', () => {
     });
     describe('with loaded state', () => {
       beforeAll(() => {
-        usedState = { ...initialState, loaded: true };
+        usedState = { ...UnlockedContentReducer.initialState, loaded: true };
       });
       beforeEach(() => {
         mockServiceMethodReturnValue('getAllForUser', []);
@@ -131,7 +138,7 @@ describe('UnlockedContentEffects', () => {
     });
     describe('with initialState and failing api call', () => {
       beforeAll(() => {
-        usedState = initialState;
+        usedState = UnlockedContentReducer.initialState;
       });
       beforeEach(() => {
         mockServiceMethodError('getAllForUser', 'failed');
@@ -154,7 +161,7 @@ describe('UnlockedContentEffects', () => {
     describe('with loaded and failing api call', () => {
       beforeAll(() => {
         usedState = {
-          ...initialState,
+          ...UnlockedContentReducer.initialState,
           loaded: true,
           list: []
         };

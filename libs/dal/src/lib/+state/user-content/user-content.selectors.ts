@@ -1,6 +1,7 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { UserContent, UserContentInterface } from '../../+models';
 import {
+  NAME,
   selectAll,
   selectEntities,
   selectIds,
@@ -8,9 +9,7 @@ import {
   State
 } from './user-content.reducer';
 
-export const selectUserContentState = createFeatureSelector<State>(
-  'userContents'
-);
+export const selectUserContentState = createFeatureSelector<State>(NAME);
 
 export const getError = createSelector(
   selectUserContentState,

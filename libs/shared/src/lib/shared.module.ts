@@ -12,6 +12,7 @@ import {
   ENVIRONMENT_ALERTS_FEATURE_TOKEN,
   ENVIRONMENT_MESSAGES_FEATURE_TOKEN
 } from './interfaces';
+
 @NgModule({
   imports: [CommonModule, UiModule, PortalModule, LayoutModule, MatIconModule],
   declarations: [HeaderComponent, PageBarContainerComponent],

@@ -1,0 +1,23 @@
+.ui-breadcrumbs {
+  &__holder {
+    display: flex;
+    flex-direction: row;
+    padding: 8px;
+    margin: 0;
+
+    &__breadcrumbs {
+      display: flex;
+      flex-direction: row;
+      padding: 8px;
+      margin: 0;
+
+      a,
+      span {
+        color: #888;
+        font-size: 14px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+}

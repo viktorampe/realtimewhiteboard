@@ -5,10 +5,10 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
+import { BundleReducer } from '.';
 import { BUNDLE_SERVICE_TOKEN } from '../../bundle/bundle.service.interface';
 import { BundlesLoaded, BundlesLoadError, LoadBundles } from './bundle.actions';
 import { BundlesEffects } from './bundle.effects';
-import { initialState, reducer } from './bundle.reducer';
 
 describe('BundleEffects', () => {
   let actions: Observable<any>;
@@ -56,7 +56,7 @@ describe('BundleEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature('bundles', reducer, {
+        StoreModule.forFeature(BundleReducer.NAME, BundleReducer.reducer, {
           initialState: usedState
         }),
         EffectsModule.forRoot([]),
@@ -79,13 +79,13 @@ describe('BundleEffects', () => {
   });
 
   describe('loadBundle$', () => {
-    const unforcedLoadAction = new LoadBundles({});
-    const forcedLoadAction = new LoadBundles({ force: true });
+    const unforcedLoadAction = new LoadBundles({ userId: 1 });
+    const forcedLoadAction = new LoadBundles({ force: true, userId: 1 });
     const filledLoadedAction = new BundlesLoaded({ bundles: [] });
     const loadErrorAction = new BundlesLoadError(new Error('failed'));
     describe('with initialState', () => {
       beforeAll(() => {
-        usedState = initialState;
+        usedState = BundleReducer.initialState;
       });
       beforeEach(() => {
         mockServiceMethodReturnValue('getAllForUser', []);
@@ -107,7 +107,7 @@ describe('BundleEffects', () => {
     });
     describe('with loaded state', () => {
       beforeAll(() => {
-        usedState = { ...initialState, loaded: true };
+        usedState = { ...BundleReducer.initialState, loaded: true };
       });
       beforeEach(() => {
         mockServiceMethodReturnValue('getAllForUser', []);
@@ -125,7 +125,7 @@ describe('BundleEffects', () => {
     });
     describe('with initialState and failing api call', () => {
       beforeAll(() => {
-        usedState = initialState;
+        usedState = BundleReducer.initialState;
       });
       beforeEach(() => {
         mockServiceMethodError('getAllForUser', 'failed');
@@ -144,7 +144,7 @@ describe('BundleEffects', () => {
     describe('with loaded and failing api call', () => {
       beforeAll(() => {
         usedState = {
-          ...initialState,
+          ...BundleReducer.initialState,
           loaded: true,
           list: []
         };

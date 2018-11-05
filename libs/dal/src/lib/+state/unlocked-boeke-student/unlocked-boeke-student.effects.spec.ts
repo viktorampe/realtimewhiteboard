@@ -5,6 +5,7 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
+import { UnlockedBoekeStudentReducer } from '.';
 import { UNLOCKED_BOEKE_STUDENT_SERVICE_TOKEN } from '../../boeke/unlocked-boeke-student.service.interface';
 import {
   LoadUnlockedBoekeStudents,
@@ -12,7 +13,6 @@ import {
   UnlockedBoekeStudentsLoadError
 } from './unlocked-boeke-student.actions';
 import { UnlockedBoekeStudentsEffects } from './unlocked-boeke-student.effects';
-import { initialState, reducer } from './unlocked-boeke-student.reducer';
 
 describe('UnlockedBoekeStudentEffects', () => {
   let actions: Observable<any>;
@@ -60,9 +60,13 @@ describe('UnlockedBoekeStudentEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature('unlockedBoekeStudents', reducer, {
-          initialState: usedState
-        }),
+        StoreModule.forFeature(
+          UnlockedBoekeStudentReducer.NAME,
+          UnlockedBoekeStudentReducer.reducer,
+          {
+            initialState: usedState
+          }
+        ),
         EffectsModule.forRoot([]),
         EffectsModule.forFeature([UnlockedBoekeStudentsEffects])
       ],
@@ -83,8 +87,11 @@ describe('UnlockedBoekeStudentEffects', () => {
   });
 
   describe('loadUnlockedBoekeStudent$', () => {
-    const unforcedLoadAction = new LoadUnlockedBoekeStudents({});
-    const forcedLoadAction = new LoadUnlockedBoekeStudents({ force: true });
+    const unforcedLoadAction = new LoadUnlockedBoekeStudents({ userId: 1 });
+    const forcedLoadAction = new LoadUnlockedBoekeStudents({
+      force: true,
+      userId: 1
+    });
     const filledLoadedAction = new UnlockedBoekeStudentsLoaded({
       unlockedBoekeStudents: []
     });
@@ -93,7 +100,7 @@ describe('UnlockedBoekeStudentEffects', () => {
     );
     describe('with initialState', () => {
       beforeAll(() => {
-        usedState = initialState;
+        usedState = UnlockedBoekeStudentReducer.initialState;
       });
       beforeEach(() => {
         mockServiceMethodReturnValue('getAllForUser', []);
@@ -115,7 +122,10 @@ describe('UnlockedBoekeStudentEffects', () => {
     });
     describe('with loaded state', () => {
       beforeAll(() => {
-        usedState = { ...initialState, loaded: true };
+        usedState = {
+          ...UnlockedBoekeStudentReducer.initialState,
+          loaded: true
+        };
       });
       beforeEach(() => {
         mockServiceMethodReturnValue('getAllForUser', []);
@@ -133,7 +143,7 @@ describe('UnlockedBoekeStudentEffects', () => {
     });
     describe('with initialState and failing api call', () => {
       beforeAll(() => {
-        usedState = initialState;
+        usedState = UnlockedBoekeStudentReducer.initialState;
       });
       beforeEach(() => {
         mockServiceMethodError('getAllForUser', 'failed');
@@ -156,7 +166,7 @@ describe('UnlockedBoekeStudentEffects', () => {
     describe('with loaded and failing api call', () => {
       beforeAll(() => {
         usedState = {
-          ...initialState,
+          ...UnlockedBoekeStudentReducer.initialState,
           loaded: true,
           list: []
         };

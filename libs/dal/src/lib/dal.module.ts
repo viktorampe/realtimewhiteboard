@@ -11,11 +11,11 @@ import {
   SDKBrowserModule
 } from '@diekeure/polpo-api-angular-sdk';
 import { EffectsModule } from '@ngrx/effects';
-import { StoreModule } from '@ngrx/store';
-import { AlertReducer, AlertsEffects } from './+state/alert';
+import { AlertsEffects } from './+state/alert';
 import { BundleReducer, BundlesEffects } from './+state/bundle';
 import { ContentStatusReducer } from './+state/content-status';
 import { ContentStatusesEffects } from './+state/content-status/content-status.effects';
+import { getStoreModuleForFeatures } from './+state/dal.state.feature.builder';
 import { EduContentReducer, EduContentsEffects } from './+state/edu-content';
 import {
   LearningAreaReducer,
@@ -38,12 +38,8 @@ import {
   UnlockedContentReducer,
   UnlockedContentsEffects
 } from './+state/unlocked-content';
+import { UserEffects, UserReducer } from './+state/user';
 import { UserContentReducer, UserContentsEffects } from './+state/user-content';
-import { UserEffects } from './+state/user/user.effects';
-import {
-  initialUserstate as userInitialState,
-  userReducer
-} from './+state/user/user.reducer';
 import { AlertService } from './alert/alert.service';
 import { ALERT_SERVICE_TOKEN } from './alert/alert.service.interface';
 import {
@@ -66,8 +62,15 @@ import { LearningAreaService } from './learning-area/learning-area.service';
 import { LEARNINGAREA_SERVICE_TOKEN } from './learning-area/learning-area.service.interface';
 import { AuthService } from './persons/auth-service';
 import { AUTH_SERVICE_TOKEN } from './persons/auth-service.interface';
+import {
+  LinkedPersonService,
+  LINKED_PERSON_SERVICE_TOKEN
+} from './persons/linked-persons.service';
+import { PersonService, PERSON_SERVICE_TOKEN } from './persons/persons.service';
 import { StudentContentStatusService } from './student-content-status/student-content-status.service';
 import { STUDENT_CONTENT_STATUS_SERVICE_TOKEN } from './student-content-status/student-content-status.service.interface';
+import { TASK_SERVICE_TOKEN } from './tasks/task.service.interface';
+import { TaskService } from './tasks/tasks.service';
 
 interface DalOptions {
   apiBaseUrl: string;
@@ -79,60 +82,23 @@ interface DalOptions {
     CommonModule,
     SDKBrowserModule.forRoot(),
     HttpClientModule,
-    StoreModule.forFeature('ui', UiReducer.reducer, {
-      initialState: UiReducer.initialState
-    }),
-    StoreModule.forFeature('bundles', BundleReducer.reducer, {
-      initialState: BundleReducer.initialState
-    }),
-    StoreModule.forFeature('learningAreas', LearningAreaReducer.reducer, {
-      initialState: LearningAreaReducer.initialState
-    }),
-    StoreModule.forFeature('eduContents', EduContentReducer.reducer, {
-      initialState: EduContentReducer.initialState
-    }),
-    StoreModule.forFeature('learningAreas', LearningAreaReducer.reducer, {
-      initialState: LearningAreaReducer.initialState
-    }),
-    StoreModule.forFeature('unlockedContents', UnlockedContentReducer.reducer, {
-      initialState: UnlockedContentReducer.initialState
-    }),
-    StoreModule.forFeature('userContents', UserContentReducer.reducer, {
-      initialState: UserContentReducer.initialState
-    }),
-    StoreModule.forFeature(
-      'studentContentStatuses',
-      StudentContentStatusReducer.reducer,
-      {
-        initialState: StudentContentStatusReducer.initialState
-      }
-    ),
-    StoreModule.forFeature(
-      'unlockedBoekeGroups',
-      UnlockedBoekeGroupReducer.reducer,
-      {
-        initialState: UnlockedBoekeGroupReducer.initialState
-      }
-    ),
-    EffectsModule.forFeature([BundlesEffects, UserEffects]),
-    StoreModule.forFeature('user', userReducer, {
-      initialState: userInitialState
-    }),
-    StoreModule.forFeature(
-      'unlockedBoekeStudents',
-      UnlockedBoekeStudentReducer.reducer,
-      {
-        initialState: UnlockedBoekeStudentReducer.initialState
-      }
-    ),
-    StoreModule.forFeature('contentStatuses', ContentStatusReducer.reducer, {
-      initialState: ContentStatusReducer.initialState
-    }),
-    StoreModule.forFeature('alerts', AlertReducer.reducer, {
-      initialState: AlertReducer.initialState
-    }),
+    ...getStoreModuleForFeatures([
+      LearningAreaReducer,
+      UserContentReducer,
+      UnlockedContentReducer,
+      StudentContentStatusReducer,
+      EduContentReducer,
+      BundleReducer,
+      UiReducer,
+      UnlockedBoekeGroupReducer,
+      UnlockedBoekeStudentReducer,
+      ContentStatusReducer,
+      UserReducer
+      //todo add alerts reducer
+    ]),
     EffectsModule.forFeature([
       BundlesEffects,
+      UserEffects,
       EduContentsEffects,
       UiEffects,
       LearningAreasEffects,
@@ -140,7 +106,6 @@ interface DalOptions {
       StudentContentStatusesEffects,
       UnlockedBoekeGroupsEffects,
       UnlockedContentsEffects,
-      UserContentsEffects,
       UnlockedBoekeStudentsEffects,
       ContentStatusesEffects,
       AlertsEffects
@@ -173,8 +138,9 @@ interface DalOptions {
       useClass: AlertService
     },
     { provide: PERSON_SERVICE_TOKEN, useClass: PersonService },
-    { provide: LINKEDPERSON_SERVICE_TOKEN, useClass: LinkedPersonService },
-    { provide: AUTH_SERVICE_TOKEN, useClass: AuthService }
+    { provide: LINKED_PERSON_SERVICE_TOKEN, useClass: LinkedPersonService },
+    { provide: AUTH_SERVICE_TOKEN, useClass: AuthService },
+    { provide: TASK_SERVICE_TOKEN, useClass: TaskService }
   ]
 })
 export class DalModule {

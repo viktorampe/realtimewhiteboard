@@ -5,6 +5,7 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
+import { UnlockedBoekeGroupReducer } from '.';
 import { UNLOCKED_BOEKE_GROUP_SERVICE_TOKEN } from '../../boeke/unlocked-boeke-group.service.interface';
 import {
   LoadUnlockedBoekeGroups,
@@ -12,7 +13,6 @@ import {
   UnlockedBoekeGroupsLoadError
 } from './unlocked-boeke-group.actions';
 import { UnlockedBoekeGroupsEffects } from './unlocked-boeke-group.effects';
-import { initialState, reducer } from './unlocked-boeke-group.reducer';
 
 describe('UnlockedBoekeGroupEffects', () => {
   let actions: Observable<any>;
@@ -60,9 +60,13 @@ describe('UnlockedBoekeGroupEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature('unlockedBoekeGroups', reducer, {
-          initialState: usedState
-        }),
+        StoreModule.forFeature(
+          UnlockedBoekeGroupReducer.NAME,
+          UnlockedBoekeGroupReducer.reducer,
+          {
+            initialState: usedState
+          }
+        ),
         EffectsModule.forRoot([]),
         EffectsModule.forFeature([UnlockedBoekeGroupsEffects])
       ],
@@ -83,8 +87,11 @@ describe('UnlockedBoekeGroupEffects', () => {
   });
 
   describe('loadUnlockedBoekeGroup$', () => {
-    const unforcedLoadAction = new LoadUnlockedBoekeGroups({});
-    const forcedLoadAction = new LoadUnlockedBoekeGroups({ force: true });
+    const unforcedLoadAction = new LoadUnlockedBoekeGroups({ userId: 1 });
+    const forcedLoadAction = new LoadUnlockedBoekeGroups({
+      force: true,
+      userId: 1
+    });
     const filledLoadedAction = new UnlockedBoekeGroupsLoaded({
       unlockedBoekeGroups: []
     });
@@ -93,7 +100,7 @@ describe('UnlockedBoekeGroupEffects', () => {
     );
     describe('with initialState', () => {
       beforeAll(() => {
-        usedState = initialState;
+        usedState = UnlockedBoekeGroupReducer.initialState;
       });
       beforeEach(() => {
         mockServiceMethodReturnValue('getAllForUser', []);
@@ -115,7 +122,7 @@ describe('UnlockedBoekeGroupEffects', () => {
     });
     describe('with loaded state', () => {
       beforeAll(() => {
-        usedState = { ...initialState, loaded: true };
+        usedState = { ...UnlockedBoekeGroupReducer.initialState, loaded: true };
       });
       beforeEach(() => {
         mockServiceMethodReturnValue('getAllForUser', []);
@@ -133,7 +140,7 @@ describe('UnlockedBoekeGroupEffects', () => {
     });
     describe('with initialState and failing api call', () => {
       beforeAll(() => {
-        usedState = initialState;
+        usedState = UnlockedBoekeGroupReducer.initialState;
       });
       beforeEach(() => {
         mockServiceMethodError('getAllForUser', 'failed');
@@ -156,7 +163,7 @@ describe('UnlockedBoekeGroupEffects', () => {
     describe('with loaded and failing api call', () => {
       beforeAll(() => {
         usedState = {
-          ...initialState,
+          ...UnlockedBoekeGroupReducer.initialState,
           loaded: true,
           list: []
         };

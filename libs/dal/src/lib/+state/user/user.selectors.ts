@@ -1,28 +1,22 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { UserState } from './user.reducer';
+import { NAME, State } from './user.reducer';
 
 // Lookup the 'User' feature state managed by NgRx
-const getUserState = createFeatureSelector<UserState>('user');
+const getUserState = createFeatureSelector<State>(NAME);
 
-const getLoaded = createSelector(
+export const getLoaded = createSelector(
   getUserState,
-  (state: UserState) => state.loaded
+  (state: State) => state.loaded
 );
-const getError = createSelector(
+export const getError = createSelector(
   getUserState,
-  (state: UserState) => state.error
+  (state: State) => state.error
 );
 
-const getCurrentUser = createSelector(
+export const getCurrentUser = createSelector(
   getUserState,
   getLoaded,
-  (state: UserState, isLoaded) => {
+  (state: State, isLoaded) => {
     return isLoaded ? state.currentUser : null;
   }
 );
-
-export const userQuery = {
-  getLoaded,
-  getError,
-  getCurrentUser
-};
