@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { RouterTestingModule } from '@angular/router/testing';
 import { UiModule } from '@campus/ui';
 import { HeaderComponent } from './header.component';
 import { HeaderViewModel } from './header.viewmodel';
@@ -8,7 +9,10 @@ import { HeaderViewModel } from './header.viewmodel';
 @Injectable({
   providedIn: 'root'
 })
-export class MockHeaderViewModel {}
+export class MockHeaderViewModel {
+  enableAlerts: true;
+  enableMessages: true;
+}
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -16,7 +20,7 @@ describe('HeaderComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [UiModule],
+      imports: [UiModule, RouterTestingModule],
       declarations: [HeaderComponent],
       providers: [
         {
