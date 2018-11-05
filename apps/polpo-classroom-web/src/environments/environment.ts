@@ -32,7 +32,7 @@ export const environment = {
     'learning-area:spaans': 'assets/icons/learning-area/spaans.svg',
     'learning-area:techniek': 'assets/icons/learning-area/techniek.svg',
     'learning-area:wiskunde': 'assets/icons/learning-area/wiskunde.svg',
-    'learning-area:ww': 'assets/icons/learning-area/ww.svg'
+    'learning-area:ww': 'assets/icons/learning-area/ww.svg',
     // 'learning-area:aardrijkskunde-lg':
     //   'assets/icons/learning-area/aardrijkskunde-lg.svg',
     // 'learning-area:biologie-lg': 'assets/icons/learning-area/biologie-lg.svg',
@@ -82,6 +82,8 @@ export const environment = {
     // verwijder: 'assets/icons/verwijder.svg',
 
     // -> product types
+    'list-view': 'assets/icons/material/list-view.svg',
+    'grid-view': 'assets/icons/material/grid-view.svg'
     // algebrakit: 'assets/icons/algebrakit.svg',
     // 'archive-box': 'assets/icons/archive-box.svg',
     // 'archive-box-lg': 'assets/icons/archive-box-lg.svg',

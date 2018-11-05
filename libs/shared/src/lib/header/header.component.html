@@ -1,5 +1,6 @@
 <div class="shared-header">
-  <div class="shared-header__app-bar">
+  <div hide-mobile
+       class="shared-header__app-bar">
     <campus-app-bar>
       <campus-breadcrumbs bar__left>
         breadcrumbs
@@ -36,8 +37,10 @@
       </div>
     </campus-app-bar>
   </div>
-  <div class="shared-header__page-bar"
-       id="page-bar-container">
-
+  <div class="shared-header__page-bar">
+    <mat-icon class="shared-header__page-bar_menu-icon"
+              hide-desktop>menu</mat-icon>
+    <div id="page-bar-container">
+    </div>
   </div>
 </div>
