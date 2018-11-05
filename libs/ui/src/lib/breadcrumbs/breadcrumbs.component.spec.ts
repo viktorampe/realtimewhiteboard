@@ -121,7 +121,7 @@ describe('BreadcrumbComponent', () => {
     );
   });
 
-  it('should display correct overflow string / link', () => {
+  it('should display correct overflow string', () => {
     component.maxLength = 1;
     component.breadCrumbs = [
       {
@@ -149,10 +149,6 @@ describe('BreadcrumbComponent', () => {
 
     expect(breadcrumbs.children[1].children[1].nativeElement.innerHTML).toBe(
       mockData.overflowedLinkString
-    );
-
-    expect(breadcrumbs.children[1].children[1].nativeElement.href).toContain(
-      'crumb4'
     );
   });
 });
