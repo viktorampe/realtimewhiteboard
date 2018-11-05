@@ -1,26 +1,29 @@
 import { Update } from '@ngrx/entity';
-import {TaskActions } from '.';
-import { initialState, reducer, State } from './task.reducer';
+import { TaskActions } from '.';
 import { TaskInterface } from '../../+models';
+import { initialState, reducer, State } from './task.reducer';
 
-/** 
+/**
  * This file is scaffolded, but needs some special attention:
- * - find and replace '__EXTRA__PROPERTY_NAME' and replace this with a property name of the Task entity.
- * - set the initial property value via '[__EXTRA__PROPERTY_NAME]InitialValue'.
- * - set the updated property value via '[__EXTRA__PROPERTY_NAME]UpdatedValue'.
-*/
-const __EXTRA__PROPERTY_NAMEInitialValue = ;
-const __EXTRA__PROPERTY_NAMEUpdatedValue = ;
+ * - find and replace 'name' and replace this with a property name of the Task entity.
+ * - set the initial property value via '[name]InitialValue'.
+ * - set the updated property value via '[name]UpdatedValue'.
+ */
+const nameInitialValue = 'first this is the name';
+const nameUpdatedValue = 'then this is the name';
 
 /**
  * Creates a Task.
  * @param {number} id
  * @returns {TaskInterface}
  */
-function createTask(id: number, __EXTRA__PROPERTY_NAME:any = __EXTRA__PROPERTY_NAMEInitialValue): TaskInterface | any {
+function createTask(
+  id: number,
+  name: any = nameInitialValue
+): TaskInterface | any {
   return {
     id: id,
-    __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAME
+    name: name
   };
 }
 
@@ -54,15 +57,10 @@ function createState(
   return state;
 }
 
-
 describe('Tasks Reducer', () => {
   let tasks: TaskInterface[];
   beforeEach(() => {
-    tasks = [
-      createTask(1),
-      createTask(2),
-      createTask(3)
-    ];
+    tasks = [createTask(1), createTask(2), createTask(3)];
   });
 
   describe('unknown action', () => {
@@ -111,7 +109,6 @@ describe('Tasks Reducer', () => {
   describe('upsert actions', () => {
     it('should upsert one task', () => {
       const originalTask = tasks[0];
-      
       const startState = reducer(
         initialState,
         new TaskActions.AddTask({
@@ -119,9 +116,8 @@ describe('Tasks Reducer', () => {
         })
       );
 
-    
       const updatedTask = createTask(tasks[0].id, 'test');
-     
+
       const action = new TaskActions.UpsertTask({
         task: updatedTask
       });
@@ -146,9 +142,7 @@ describe('Tasks Reducer', () => {
 
       const result = reducer(startState, action);
 
-      expect(result).toEqual(
-        createState(tasksToInsert)
-      );
+      expect(result).toEqual(createState(tasksToInsert));
     });
   });
 
@@ -159,31 +153,30 @@ describe('Tasks Reducer', () => {
       const update: Update<TaskInterface> = {
         id: 1,
         changes: {
-          __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-        } 
+          name: nameUpdatedValue
+        }
       };
       const action = new TaskActions.UpdateTask({
         task: update
       });
       const result = reducer(startState, action);
-      expect(result).toEqual(createState([createTask(1, __EXTRA__PROPERTY_NAMEUpdatedValue)]));
+      expect(result).toEqual(createState([createTask(1, nameUpdatedValue)]));
     });
 
     it('should update multiple tasks', () => {
       const startState = createState(tasks);
       const updates: Update<TaskInterface>[] = [
-        
         {
           id: 1,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          } 
+            name: nameUpdatedValue
+          }
         },
         {
           id: 2,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          }  
+            name: nameUpdatedValue
+          }
         }
       ];
       const action = new TaskActions.UpdateTasks({
@@ -192,7 +185,11 @@ describe('Tasks Reducer', () => {
       const result = reducer(startState, action);
 
       expect(result).toEqual(
-        createState([createTask(1, __EXTRA__PROPERTY_NAMEUpdatedValue), createTask(2, __EXTRA__PROPERTY_NAMEUpdatedValue), tasks[2]])
+        createState([
+          createTask(1, nameUpdatedValue),
+          createTask(2, nameUpdatedValue),
+          tasks[2]
+        ])
       );
     });
   });

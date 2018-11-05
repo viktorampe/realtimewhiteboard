@@ -1,11 +1,12 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import {
   NAME,
-  selectAll, 
+  selectAll,
   selectEntities,
   selectIds,
   selectTotal,
-  State } from './task.reducer';
+  State
+} from './task.reducer';
 
 export const selectTaskState = createFeatureSelector<State>(NAME);
 
@@ -25,10 +26,7 @@ export const getCount = createSelector(selectTaskState, selectTotal);
 
 export const getIds = createSelector(selectTaskState, selectIds);
 
-export const getAllEntities = createSelector(
-  selectTaskState,
-  selectEntities
-);
+export const getAllEntities = createSelector(selectTaskState, selectEntities);
 
 /**
  * returns array of objects in the order of the given ids
@@ -43,7 +41,6 @@ export const getByIds = createSelector(
     return props.ids.map(id => state.entities[id]);
   }
 );
-
 
 /**
  * returns array of objects in the order of the given ids

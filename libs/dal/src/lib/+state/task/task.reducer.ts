@@ -1,11 +1,8 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { TaskInterface } from '../../+models';
-import {
-  TasksActions,
-  TasksActionTypes
-} from './task.actions';
+import { TasksActions, TasksActionTypes } from './task.actions';
 
-export const NAME = 'Tasks';
+export const NAME = 'tasks';
 
 export interface State extends EntityState<TaskInterface> {
   // additional entities state properties
@@ -22,10 +19,7 @@ export const initialState: State = adapter.getInitialState({
   loaded: false
 });
 
-export function reducer(
-  state = initialState,
-  action: TasksActions
-): State {
+export function reducer(state = initialState, action: TasksActions): State {
   switch (action.type) {
     case TasksActionTypes.AddTask: {
       return adapter.addOne(action.payload.task, state);

@@ -5,21 +5,15 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
-import { TaskService } from '../../task/task.service';
-import { TASK_SERVICE_TOKEN } from '../../task/task.service.interface';
 import { TaskReducer } from '.';
-import {
-  TasksLoaded,
-  TasksLoadError,
-  LoadTasks
-} from './task.actions';
-import { TasksEffects } from './task.effects';
+import { TASK_SERVICE_TOKEN } from '../../tasks/task.service.interface';
+import { LoadTasks, TasksLoaded, TasksLoadError } from './task.actions';
+import { TaskEffects } from './task.effects';
 
 describe('TaskEffects', () => {
   let actions: Observable<any>;
-  let effects: TasksEffects;
+  let effects: TaskEffects;
   let usedState: any;
-
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -62,11 +56,11 @@ describe('TaskEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature(TaskReducer.NAME , TaskReducer.reducer, {
+        StoreModule.forFeature(TaskReducer.NAME, TaskReducer.reducer, {
           initialState: usedState
         }),
         EffectsModule.forRoot([]),
-        EffectsModule.forFeature([TasksEffects])
+        EffectsModule.forFeature([TaskEffects])
       ],
       providers: [
         {
@@ -75,18 +69,18 @@ describe('TaskEffects', () => {
             getAll: () => {}
           }
         },
-        TasksEffects,
+        TaskEffects,
         DataPersistence,
         provideMockActions(() => actions)
       ]
     });
 
-    effects = TestBed.get(TasksEffects);
+    effects = TestBed.get(TaskEffects);
   });
 
   describe('loadTask$', () => {
-    const unforcedLoadAction = new LoadTasks({});
-    const forcedLoadAction = new LoadTasks({ force: true });
+    const unforcedLoadAction = new LoadTasks({ userId: 1 });
+    const forcedLoadAction = new LoadTasks({ force: true, userId: 1 });
     const filledLoadedAction = new TasksLoaded({ tasks: [] });
     const loadErrorAction = new TasksLoadError(new Error('failed'));
     describe('with initialState', () => {
@@ -137,18 +131,10 @@ describe('TaskEffects', () => {
         mockServiceMethodError('getAll', 'failed');
       });
       it('should return a error action if force is not true', () => {
-        expectInAndOut(
-          effects.loadTasks$,
-          unforcedLoadAction,
-          loadErrorAction
-        );
+        expectInAndOut(effects.loadTasks$, unforcedLoadAction, loadErrorAction);
       });
       it('should return a error action if force is true', () => {
-        expectInAndOut(
-          effects.loadTasks$,
-          forcedLoadAction,
-          loadErrorAction
-        );
+        expectInAndOut(effects.loadTasks$, forcedLoadAction, loadErrorAction);
       });
     });
     describe('with loaded and failing api call', () => {
@@ -166,11 +152,7 @@ describe('TaskEffects', () => {
         expectInNoOut(effects.loadTasks$, unforcedLoadAction);
       });
       it('should return a error action if force is true', () => {
-        expectInAndOut(
-          effects.loadTasks$,
-          forcedLoadAction,
-          loadErrorAction
-        );
+        expectInAndOut(effects.loadTasks$, forcedLoadAction, loadErrorAction);
       });
     });
   });
