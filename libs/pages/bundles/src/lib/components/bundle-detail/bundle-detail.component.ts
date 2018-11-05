@@ -9,7 +9,7 @@ import {
 import { BundleInterface, ContentInterface } from '@campus/dal';
 import { ListFormat, ListViewComponent, SideSheetComponent } from '@campus/ui';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { BundlesViewModel } from '../bundles.viewmodel';
 
 @Component({
@@ -85,8 +85,6 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // Needed to avoid ExpressionChangedAfterItHasBeenCheckedError
     this.cd.detectChanges();
-
-    this.list.selectedItems$.subscribe(console.log);
   }
 
   ngOnDestroy() {
@@ -112,8 +110,7 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
     return combineLatest(contents$, filterInput$).pipe(
       map(([contents, filterInput]: [ContentInterface[], string]) =>
         this.bundlesViewModel.filterArray(contents, 'name', filterInput)
-      ),
-      tap(console.log)
+      )
     );
   }
 }

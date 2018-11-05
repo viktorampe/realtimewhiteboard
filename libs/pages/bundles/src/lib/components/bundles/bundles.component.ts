@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { LearningAreaInterface } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { BundlesViewModel } from '../bundles.viewmodel';
 import { BundlesWithContentInfo } from '../bundles.viewmodel.interfaces';
 
@@ -64,8 +64,7 @@ export class BundlesComponent {
           'bundle.name',
           filterInput
         )
-      })),
-      tap(console.log)
+      }))
     );
   }
 }

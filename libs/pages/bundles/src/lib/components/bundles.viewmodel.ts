@@ -57,10 +57,6 @@ export class BundlesViewModel implements Resolve<boolean> {
   private routeParams$: Observable<Params> = this.route.params;
 
   // intermediate streams (maps)
-  // private bundlesByLearningArea$: Observable<Dictionary<BundleInterface[]>>;
-  private unlockedContentsByBundle$: Observable<
-    Dictionary<UnlockedContentInterface[]>
-  >;
   // > learningareas page
   private sharedBundles$: Observable<BundleInterface[]>;
   private sharedBundlesByLearningArea$: Observable<
@@ -72,6 +68,9 @@ export class BundlesViewModel implements Resolve<boolean> {
   >;
   // > bundles page
   private learningAreaId$: Observable<number>;
+  private unlockedContentsByBundle$: Observable<
+    Dictionary<UnlockedContentInterface[]>
+  >;
   // > bundle detail page
   private bundleId$: Observable<number>;
 
@@ -94,7 +93,6 @@ export class BundlesViewModel implements Resolve<boolean> {
   ) {}
 
   resolve(): Observable<boolean> {
-    console.log('resolving');
     this.learningAreaId$ = this.routeParams$.pipe(
       // TODO why params always empty?
       map((params): number => params.area || 19)
@@ -103,8 +101,7 @@ export class BundlesViewModel implements Resolve<boolean> {
       map((params): number => params.bundle || 1)
     );
 
-    this.coupledPersons$ = new BehaviorSubject([]); // TODO add TeacherStudent state
-
+    // source streams
     this.listFormat$ = this.store.pipe(
       select(UiQuery.getListFormat),
       map(listFormat => <ListFormat>listFormat)
@@ -120,11 +117,10 @@ export class BundlesViewModel implements Resolve<boolean> {
     this.sharedUnlockedBookStudents$ = this.store.pipe(
       select(UnlockedBoekeStudentQueries.getShared)
     );
+    // TODO add TeacherStudent state
+    this.coupledPersons$ = new BehaviorSubject([]);
 
     // intermediate streams
-    this.unlockedContentsByBundle$ = this.store.pipe(
-      select(UnlockedContentQueries.getByBundleIds)
-    );
     // > learningarea page
     this.sharedBundles$ = this.getSharedBundles();
     this.sharedBundlesByLearningArea$ = this.groupStreamByKey(
@@ -146,6 +142,9 @@ export class BundlesViewModel implements Resolve<boolean> {
       shareReplay(1)
     );
     // > bundles page
+    this.unlockedContentsByBundle$ = this.store.pipe(
+      select(UnlockedContentQueries.getByBundleIds)
+    );
 
     // presentation streams
     // > learningarea page
@@ -178,6 +177,8 @@ export class BundlesViewModel implements Resolve<boolean> {
     this.activeBundleOwner$ = this.activeBundle$.pipe(
       switchMap(
         (bundle): Observable<PersonInterface> =>
+          // TODO implement personqueries
+          // this.store.pipe(select(PersonQueries.getById, { id: bundle.teacherId }))
           of({
             id: 1,
             firstName: 'foo',
@@ -186,8 +187,6 @@ export class BundlesViewModel implements Resolve<boolean> {
             email: '',
             avatar: null
           })
-        // TODO implement personqueries
-        // this.store.pipe(select(PersonQueries.getById, { id: bundle.teacherId }))
       )
     );
     this.activeBundleContents$ = this.getBundleContents(
@@ -240,7 +239,7 @@ export class BundlesViewModel implements Resolve<boolean> {
   }
 
   /**
-   * TODO: move to service
+   * TODO: move to service?
    * Filter an array by specified key with partial value
    *
    * @param {any[]} list
@@ -248,7 +247,6 @@ export class BundlesViewModel implements Resolve<boolean> {
    * @param {string} value
    * @param {boolean} [ignoreCase=true]
    * @returns {any[]}
-   * @memberof BundlesViewModel
    */
   public filterArray(
     list: any[],
