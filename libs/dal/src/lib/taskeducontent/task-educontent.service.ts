@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { TaskEduContentApi } from '@diekeure/polpo-api-angular-sdk';
+import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { TaskEduContentInterface } from '../+models';
 import { TaskEducontentServiceInterface } from './task-educonent.service.interface';
 
@@ -8,9 +9,14 @@ import { TaskEducontentServiceInterface } from './task-educonent.service.interfa
   providedIn: 'root'
 })
 export class TaskEducontentService implements TaskEducontentServiceInterface {
-  constructor(private api: TaskEduContentApi) {}
+  constructor(private api: PersonApi) {}
 
   getAllForUser(userId: number): Observable<TaskEduContentInterface[]> {
-    return null;
+    return this.api.getTaskEduContents(userId).pipe(
+      map(educontent => {
+        console.log(educontent);
+        return educontent;
+      })
+    );
   }
 }
