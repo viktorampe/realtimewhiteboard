@@ -7,6 +7,7 @@ import {
   TaskInstanceInterface,
   TaskInterface
 } from '@campus/dal';
+import { ListFormat } from '@campus/ui';
 import { BehaviorSubject, Observable } from 'rxjs';
 import {
   LearningAreasWithTaskInstanceInfoInterface,
@@ -30,6 +31,8 @@ export class TasksViewModel {
   taskInstanceWithEduContents$: Observable<
     TaskInstanceWithEduContentsInfoInterface
   >;
+  listFormat$: Observable<ListFormat>;
+  // routeParams$: TODO type?
 
   constructor() {
     this.loadMockData();
@@ -41,6 +44,7 @@ export class TasksViewModel {
     this.taskInstancesByLearningArea$ = this.getMockTaskInstancesByLearningArea();
     this.selectedTaskInstance$ = this.getMockSelectedTaskInstance();
     this.taskInstanceWithEduContents$ = this.getMockTaskInstanceWithEduContents();
+    this.listFormat$ = this.getMockListFormat();
   }
 
   private getMockLearningAreasWithTaskInstances(): Observable<
@@ -164,6 +168,7 @@ export class TasksViewModel {
 
   private getMockTaskInstances(): TaskInstanceInterface[] {
     const mockTasks = this.getMockTasks();
+    const mockStudent = this.getMockStudent();
 
     let mockTaskInstance1: TaskInstanceInterface;
     mockTaskInstance1 = {
@@ -172,7 +177,9 @@ export class TasksViewModel {
       alerted: true,
       id: 1,
       taskId: mockTasks[0].id,
-      task: mockTasks[0]
+      task: mockTasks[0],
+      personId: mockStudent.id,
+      student: mockStudent
     };
 
     let mockTaskInstance2: TaskInstanceInterface;
@@ -182,7 +189,9 @@ export class TasksViewModel {
       alerted: true,
       id: 2,
       taskId: mockTasks[1].id,
-      task: mockTasks[1]
+      task: mockTasks[1],
+      personId: mockStudent.id,
+      student: mockStudent
     };
 
     let mockTaskInstance3: TaskInstanceInterface;
@@ -192,7 +201,9 @@ export class TasksViewModel {
       alerted: false,
       id: 3,
       taskId: mockTasks[2].id,
-      task: mockTasks[2]
+      task: mockTasks[2],
+      personId: mockStudent.id,
+      student: mockStudent
     };
     let mockTaskInstance4: TaskInstanceInterface;
     mockTaskInstance4 = {
@@ -201,7 +212,9 @@ export class TasksViewModel {
       alerted: true,
       id: 4,
       taskId: mockTasks[0].id,
-      task: mockTasks[0]
+      task: mockTasks[0],
+      personId: mockStudent.id,
+      student: mockStudent
     };
 
     return [
@@ -222,10 +235,10 @@ export class TasksViewModel {
       index: 10000,
       id: 1,
       teacherId: mockTeacher.id,
-      eduContentId: 1,
-      taskId: 1,
       teacher: mockTeacher,
+      eduContentId: mockEducontents[0].id,
       eduContent: mockEducontents[0],
+      taskId: mockTasks[0].id,
       task: mockTasks[0]
     };
 
@@ -234,10 +247,10 @@ export class TasksViewModel {
       index: 10000,
       id: 2,
       teacherId: mockTeacher.id,
-      eduContentId: 2,
-      taskId: 2,
       teacher: mockTeacher,
+      eduContentId: mockEducontents[1].id,
       eduContent: mockEducontents[1],
+      taskId: mockTasks[1].id,
       task: mockTasks[1]
     };
 
@@ -246,10 +259,10 @@ export class TasksViewModel {
       index: 10000,
       id: 3,
       teacherId: mockTeacher.id,
-      eduContentId: 3,
-      taskId: 3,
       teacher: mockTeacher,
+      eduContentId: mockEducontents[2].id,
       eduContent: mockEducontents[2],
+      taskId: mockTasks[2].id,
       task: mockTasks[2]
     };
 
@@ -258,10 +271,10 @@ export class TasksViewModel {
       index: 10000,
       id: 4,
       teacherId: mockTeacher.id,
-      eduContentId: 4,
-      taskId: 1,
       teacher: mockTeacher,
+      eduContentId: mockEducontents[0].id,
       eduContent: mockEducontents[0],
+      taskId: mockTasks[0].id,
       task: mockTasks[0]
     };
 
@@ -299,8 +312,9 @@ export class TasksViewModel {
         'Maak deze taak als voorbereiding op de overhoring van volgende week.',
       id: 1,
       personId: mockTeacher.id,
+      teacher: mockTeacher,
       learningAreaId: mockLearningAreas[0].id,
-      teacher: mockTeacher
+      learningArea: mockLearningAreas[0]
     };
 
     let mockTask2: TaskInterface;
@@ -310,8 +324,9 @@ export class TasksViewModel {
         'Maak deze taak als extra herhaling op de leerstof van vorige week.',
       id: 2,
       personId: mockTeacher.id,
+      teacher: mockTeacher,
       learningAreaId: mockLearningAreas[1].id,
-      teacher: mockTeacher
+      learningArea: mockLearningAreas[1]
     };
 
     let mockTask3: TaskInterface;
@@ -321,8 +336,9 @@ export class TasksViewModel {
         'Maak deze taak als voorbereiding op de overhoring van volgende week.',
       id: 3,
       personId: mockTeacher.id,
+      teacher: mockTeacher,
       learningAreaId: mockLearningAreas[2].id,
-      teacher: mockTeacher
+      learningArea: mockLearningAreas[2]
     };
 
     return [mockTask1, mockTask2, mockTask3];
@@ -354,5 +370,27 @@ export class TasksViewModel {
     };
 
     return [mockEducontent1, mockEducontent2, mockEducontent3, mockEducontent4];
+  }
+
+  getMockStudent(): PersonInterface {
+    let mockStudent: PersonInterface;
+    mockStudent = {
+      name: 'Bakker',
+      firstName: 'Manon',
+      created: new Date('2018-09-04 14:21:14'),
+      email: 'student0@mailinator.com',
+      currentSchoolYear: 2018,
+      terms: true,
+      username: 'student1',
+      emailVerified: true,
+      id: 6,
+      displayName: 'Manon Bakker'
+    };
+
+    return mockStudent;
+  }
+
+  getMockListFormat(): Observable<ListFormat> {
+    return new BehaviorSubject(ListFormat.GRID);
   }
 }
