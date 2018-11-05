@@ -122,8 +122,32 @@ describe('BreadcrumbComponent', () => {
   });
 
   it('should display correct overflow link', () => {
-    expect(breadcrumbs.children[1].children[1].nativeElement.href).toContain(
-      mockData.breadCrumbs[8].link
-    );
+    breadcrumbs.maxlen = 1;
+    component.breadCrumbs = [
+      {
+        displayText: 'crumb1',
+        link: ['crumb1']
+      },
+      {
+        displayText: 'crumb1',
+        link: ['crumb1']
+      },
+      {
+        displayText: 'crumb1',
+        link: ['crumb1']
+      },
+      {
+        displayText: 'crumb1',
+        link: ['crumb1']
+      },
+      {
+        displayText: 'crumb1',
+        link: ['crumb1']
+      }
+    ];
+    fixture.detectChanges();
+    expect(
+      breadcrumbs.children[1].children[1].nativeElement.innerHTML
+    ).toContain(mockData.overflowedLinkString);
   });
 });
