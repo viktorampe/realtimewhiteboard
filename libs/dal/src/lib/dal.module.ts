@@ -63,15 +63,14 @@ import { LEARNINGAREA_SERVICE_TOKEN } from './learning-area/learning-area.servic
 import { AuthService } from './persons/auth-service';
 import { AUTH_SERVICE_TOKEN } from './persons/auth-service.interface';
 import {
-  LinkedPersonsService,
-  LINKEDPERSON_SERVICE_TOKEN
+  LinkedPersonService,
+  LINKED_PERSON_SERVICE_TOKEN
 } from './persons/linked-persons.service';
-import {
-  PersonsService,
-  PERSON_SERVICE_TOKEN
-} from './persons/persons.service';
+import { PersonService, PERSON_SERVICE_TOKEN } from './persons/persons.service';
 import { StudentContentStatusService } from './student-content-status/student-content-status.service';
 import { STUDENT_CONTENT_STATUS_SERVICE_TOKEN } from './student-content-status/student-content-status.service.interface';
+import { TASK_SERVICE_TOKEN } from './tasks/task.service.interface';
+import { TaskService } from './tasks/tasks.service';
 
 interface DalOptions {
   apiBaseUrl: string;
@@ -138,9 +137,10 @@ interface DalOptions {
       provide: ALERT_SERVICE_TOKEN,
       useClass: AlertService
     },
-    { provide: PERSON_SERVICE_TOKEN, useClass: PersonsService },
-    { provide: LINKEDPERSON_SERVICE_TOKEN, useClass: LinkedPersonsService },
-    { provide: AUTH_SERVICE_TOKEN, useClass: AuthService }
+    { provide: PERSON_SERVICE_TOKEN, useClass: PersonService },
+    { provide: LINKED_PERSON_SERVICE_TOKEN, useClass: LinkedPersonService },
+    { provide: AUTH_SERVICE_TOKEN, useClass: AuthService },
+    { provide: TASK_SERVICE_TOKEN, useClass: TaskService }
   ]
 })
 export class DalModule {
