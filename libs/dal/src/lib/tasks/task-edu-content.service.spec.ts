@@ -1,6 +1,6 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
-import { TaskEduContentsService } from './task-edu-contents.service';
+import { TaskEduContentService } from './task-edu-content.service';
 
 class MockPersonApi {}
 
@@ -8,15 +8,15 @@ describe('TaskEduContentService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        TaskEduContentsService,
+        TaskEduContentService,
         { provide: PersonApi, useClass: MockPersonApi }
       ]
     });
   });
 
   it('should be created', inject(
-    [TaskEduContentsService],
-    (service: TaskEduContentsService) => {
+    [TaskEduContentService],
+    (service: TaskEduContentService) => {
       expect(service).toBeTruthy();
     }
   ));

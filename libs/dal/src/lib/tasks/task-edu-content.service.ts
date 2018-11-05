@@ -1,15 +1,13 @@
 import { Injectable } from '@angular/core';
-import {
-  PersonApi,
-  TaskEduContentInterface
-} from '@diekeure/polpo-api-angular-sdk';
+import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Observable } from 'rxjs';
-import { TaskEduContentsInterface } from './task-edu-contents.service.interface';
+import { TaskEduContentInterface } from '../+models';
+import { TaskEduContentServiceInterface } from './task-edu-content.service.interface';
 
 @Injectable({
   providedIn: 'root'
 })
-export class TaskEduContentsService implements TaskEduContentsInterface {
+export class TaskEduContentService implements TaskEduContentServiceInterface {
   constructor(private api: PersonApi) {}
 
   getAllForUser(userId: number): Observable<TaskEduContentInterface[]> {
