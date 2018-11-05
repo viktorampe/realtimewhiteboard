@@ -33,7 +33,7 @@ import { StateResolver } from '@campus/pages/shared';
 import { ListFormat } from '@campus/ui';
 import { Dictionary } from '@ngrx/entity';
 import { Action, select, Selector, Store } from '@ngrx/store';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { filter, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import {
   BundlesWithContentInfo,
@@ -58,7 +58,9 @@ export class BundlesViewModel implements Resolve<boolean> {
 
   // intermediate streams (maps)
   // private bundlesByLearningArea$: Observable<Dictionary<BundleInterface[]>>;
-  // private unlockedContentByBundle$: Observable<Dictionary<UnlockedContentInterface[]>>;
+  private unlockedContentsByBundle$: Observable<
+    Dictionary<UnlockedContentInterface[]>
+  >;
   // > learningareas page
   private sharedBundles$: Observable<BundleInterface[]>;
   private sharedBundlesByLearningArea$: Observable<
@@ -81,6 +83,7 @@ export class BundlesViewModel implements Resolve<boolean> {
   activeLearningAreaBundles$: Observable<BundlesWithContentInfo>;
   // > bundle detail page
   activeBundle$: Observable<BundleInterface>;
+  activeBundleOwner$: Observable<PersonInterface>;
   activeBundleContents$: Observable<ContentInterface[]>;
 
   constructor(
@@ -91,13 +94,15 @@ export class BundlesViewModel implements Resolve<boolean> {
   ) {}
 
   resolve(): Observable<boolean> {
+    console.log('resolving');
     this.learningAreaId$ = this.routeParams$.pipe(
       // TODO why params always empty?
-      tap(console.log),
-      map((params): number => params.area || 19)
+      map((params): number => params.area || 19),
+      tap(console.log)
     );
     this.bundleId$ = this.routeParams$.pipe(
-      map((params): number => params.bundle || 0)
+      map((params): number => params.bundle || 1),
+      tap(console.log)
     );
 
     this.coupledPersons$ = new BehaviorSubject([]); // TODO add TeacherStudent state
@@ -122,9 +127,9 @@ export class BundlesViewModel implements Resolve<boolean> {
     // this.bundlesByLearningArea$ = this.store.pipe(
     //   select(BundleQueries.getByLearningAreaId)
     // );
-    // this.unlockedContentByBundle$ = this.store.pipe(
-    //   select(UnlockedContentQueries.getByBundleIds)
-    // );
+    this.unlockedContentsByBundle$ = this.store.pipe(
+      select(UnlockedContentQueries.getByBundleIds)
+    );
     // > learningarea page
     this.sharedBundles$ = this.getSharedBundles();
     this.sharedBundlesByLearningArea$ = this.groupStreamByKey(
@@ -159,26 +164,42 @@ export class BundlesViewModel implements Resolve<boolean> {
       switchMap(
         (areaId: number): Observable<LearningAreaInterface> =>
           this.store.pipe(select(LearningAreaQueries.getById, { id: areaId }))
-      )
+      ),
+      tap(console.log)
     );
     this.activeLearningAreaBundles$ = this.getBundlesWithContentInfo(
       this.learningAreaId$,
       this.sharedBundlesByLearningArea$,
-      this.sharedBooksByLearningArea$
+      this.sharedBooksByLearningArea$,
+      this.unlockedContentsByBundle$
     );
 
     // > bundle detail page
-    // this.activeBundle$ = this.bundleId$.pipe(
-    //   switchMap(
-    //     (bundleId: number): Observable<BundleInterface> =>
-    //       this.store.pipe(select(BundleQueries.getById, { id: bundleId }))
-    //   )
-    // );
-
-    // this.bundleContents$ = this.getBundleContents(
-    //   this.bundleId$,
-    //   this.unlockedContentByBundle$
-    // );
+    this.activeBundle$ = this.bundleId$.pipe(
+      switchMap(
+        (bundleId: number): Observable<BundleInterface> =>
+          this.store.pipe(select(BundleQueries.getById, { id: bundleId }))
+      )
+    );
+    this.activeBundleOwner$ = this.activeBundle$.pipe(
+      switchMap(
+        (bundle): Observable<PersonInterface> =>
+          of({
+            id: 1,
+            firstName: 'foo',
+            name: 'bar',
+            displayName: 'foo bar',
+            email: '',
+            avatar: null
+          })
+        // TODO implement personqueries
+        // this.store.pipe(select(PersonQueries.getById, { id: bundle.teacherId }))
+      )
+    );
+    this.activeBundleContents$ = this.getBundleContents(
+      this.bundleId$,
+      this.unlockedContentsByBundle$
+    );
 
     return this.viewModelResolver.resolve(
       this.getLoadableActions(),
@@ -229,7 +250,7 @@ export class BundlesViewModel implements Resolve<boolean> {
    * Filter an array by specified key with partial value
    *
    * @param {any[]} list
-   * @param {(string | string[])} key
+   * @param {string} key
    * @param {string} value
    * @param {boolean} [ignoreCase=true]
    * @returns {any[]}
@@ -237,21 +258,19 @@ export class BundlesViewModel implements Resolve<boolean> {
    */
   public filterArray(
     list: any[],
-    key: string | string[],
+    key: string,
     value: string,
     ignoreCase: boolean = true
   ): any[] {
     if (!value) {
       return list;
     }
-
+    const keys: string[] = key.split('.');
     return list.filter(item => {
-      if (typeof key === 'string') {
-        key = key.split('.');
-      }
-      let prop = key.reduce((p: any, k: string) => {
+      let prop = keys.reduce((p: any, k: string) => {
         return p[k] || '';
       }, item);
+      console.log(prop);
       if (ignoreCase) {
         value = value.toLowerCase();
         prop = prop.toLowerCase();
@@ -259,32 +278,6 @@ export class BundlesViewModel implements Resolve<boolean> {
       return prop.includes(value);
     });
   }
-
-  // private getLearningAreaBundles(
-  //   learningAreaId$: Observable<number>,
-  //   bundlesByLearningArea$: Observable<Dictionary<BundleInterface[]>>
-  // ): Observable<BundleInterface[]> {
-  //   return combineLatest(learningAreaId$, bundlesByLearningArea$).pipe(
-  //     map(
-  //       ([learningAreaId, bundlesByLearningArea]) =>
-  //         bundlesByLearningArea[learningAreaId]
-  //     ),
-  //     filter(bundles => !!bundles) // check if bundle exists in learningArea
-  //   );
-  // }
-
-  // private getLearningAreaBooks(
-  //   learningAreaId$: Observable<number>,
-  //   booksByLearningArea$: Observable<Dictionary<ContentInterface[]>>
-  // ): Observable<ContentInterface[]> {
-  //   return combineLatest(learningAreaId$, booksByLearningArea$).pipe(
-  //     map(
-  //       ([learningAreaId, booksByLearningArea]) =>
-  //         booksByLearningArea[learningAreaId]
-  //     ),
-  //     filter(books => !!books) // check if bundle exists in learningArea
-  //   );
-  // }
 
   private getBundleContents(
     bundleId$: Observable<number>,
@@ -394,24 +387,32 @@ export class BundlesViewModel implements Resolve<boolean> {
 
   private getBundlesWithContentInfo(
     learningAreaId$,
-    sharedBundlesByLearningArea$,
-    sharedBooksByLearningArea$
+    bundlesByLearningArea$,
+    booksByLearningArea$,
+    unlockedContentsByBundle$
   ): Observable<BundlesWithContentInfo> {
     return combineLatest(
       learningAreaId$,
-      sharedBundlesByLearningArea$,
-      sharedBooksByLearningArea$
+      bundlesByLearningArea$,
+      booksByLearningArea$,
+      unlockedContentsByBundle$
     ).pipe(
       map(
-        ([learningAreaId, bundlesByArea, booksByArea]: [
+        ([
+          learningAreaId,
+          bundlesByArea,
+          booksByArea,
+          unlockedContentsByBundle
+        ]: [
           number,
           Dictionary<BundleInterface[]>,
-          Dictionary<ContentInterface[]>
+          Dictionary<ContentInterface[]>,
+          Dictionary<UnlockedContentInterface[]>
         ]): BundlesWithContentInfo => {
           return {
             bundles: (bundlesByArea[learningAreaId] || []).map(bundle => ({
               bundle: bundle,
-              contentsCount: 0
+              contentsCount: (unlockedContentsByBundle[bundle.id] || []).length
             })),
             books: booksByArea[learningAreaId] || []
           };

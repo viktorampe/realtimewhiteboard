@@ -9,7 +9,7 @@ import {
 import { BundleInterface, ContentInterface } from '@campus/dal';
 import { ListFormat, ListViewComponent, SideSheetComponent } from '@campus/ui';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, tap } from 'rxjs/operators';
 import { BundlesViewModel } from '../bundles.viewmodel';
 
 @Component({
@@ -18,8 +18,12 @@ import { BundlesViewModel } from '../bundles.viewmodel';
   styleUrls: ['./bundle-detail.component.scss']
 })
 export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
+  learningArea$ = this.bundlesViewModel.activeLearningArea$;
   bundle$ = this.bundlesViewModel.activeBundle$;
+  bundleOwner$ = this.bundlesViewModel.activeBundleOwner$;
   contents$ = this.bundlesViewModel.activeBundleContents$;
+
+  isReady$ = new BehaviorSubject(false);
 
   listFormat = ListFormat; //enum beschikbaar maken in template
   currentListFormat$ = this.bundlesViewModel.listFormat$;
@@ -33,8 +37,16 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private subscriptions = new Subscription();
 
-  @ViewChild(ListViewComponent) list: ListViewComponent;
-  @ViewChild(SideSheetComponent) sideSheet: SideSheetComponent;
+  private list: ListViewComponent;
+  @ViewChild('bundleListview')
+  set listViewComponent(list: ListViewComponent) {
+    this.list = list;
+  }
+  private sideSheet: SideSheetComponent;
+  @ViewChild('bundleSidesheet')
+  set sideSheetComponent(sidesheet: SideSheetComponent) {
+    this.sideSheet = sidesheet;
+  }
 
   constructor(
     public bundlesViewModel: BundlesViewModel,
@@ -43,10 +55,13 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit() {
     this.contentForInfoPanelEmpty$ = this.bundle$;
-    this.filteredContents$ = this.getFilteredContentStream();
+    this.filteredContents$ = this.filterContents(
+      this.contents$,
+      this.filterInput$
+    );
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.contentForInfoPanelSingle$ = this.list.selectedItems$.pipe(
       filter(items => items.length === 1),
       map(items => items[0].dataObject)
@@ -70,10 +85,16 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // Needed to avoid ExpressionChangedAfterItHasBeenCheckedError
     this.cd.detectChanges();
+
+    this.list.selectedItems$.subscribe(console.log);
   }
 
   ngOnDestroy() {
     this.subscriptions.unsubscribe();
+  }
+
+  clickChangeListFormat(value: string): void {
+    this.bundlesViewModel.changeListFormat(ListFormat[value]);
   }
 
   onChangeFilterInput(filterInput: string): void {
@@ -84,17 +105,15 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
     this.filterInput$.next('');
   }
 
-  setListFormat(format: ListFormat) {
-    this.bundlesViewModel.changeListFormat(format);
-  }
-
-  private getFilteredContentStream() {
-    return combineLatest(this.contents$, this.filterInput$).pipe(
-      map(([contents, filterInput]) =>
-        contents.filter(content =>
-          content.name.toLowerCase().includes(filterInput.toLowerCase())
-        )
-      )
+  filterContents(
+    contents$: Observable<ContentInterface[]>,
+    filterInput$: Observable<string>
+  ): Observable<ContentInterface[]> {
+    return combineLatest(contents$, filterInput$).pipe(
+      map(([contents, filterInput]: [ContentInterface[], string]) =>
+        this.bundlesViewModel.filterArray(contents, 'name', filterInput)
+      ),
+      tap(console.log)
     );
   }
 }

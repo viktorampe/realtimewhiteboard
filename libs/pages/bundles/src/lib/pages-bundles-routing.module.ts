@@ -17,7 +17,8 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: BundlesComponent
+        component: BundlesComponent,
+        resolve: { isResolved: BundlesViewModel }
       },
       {
         path: ':bundle',

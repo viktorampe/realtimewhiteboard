@@ -4,44 +4,57 @@
                             [filterText]="filterInput$|async"
                             class="pages__toolbar__filter"></campus-filter-text-input>
   <div class="divider"></div>
-  <campus-button [iconClass]="'icon-timeline'"
-                 (click)="setListFormat(listFormat.LINE)"></campus-button>
-  <campus-button [iconClass]="'icon-checklist'"
-                 (click)="setListFormat(listFormat.GRID)"></campus-button>
+  <campus-button iconClass="icon-tasks"
+                 (click)="clickChangeListFormat(listFormatEnum.GRID)"></campus-button>
+  <campus-button iconClass="icon-tasks"
+                 (click)="clickChangeListFormat(listFormatEnum.LINE)"></campus-button>
 </campus-page-bar>
 
-<campus-side-sheet [isOpenOnInit]="true"
-                   *ngIf="bundle$|async as bundle">
-  <campus-side-sheet-header></campus-side-sheet-header>
-  <campus-side-sheet-body *ngIf="list"
-                          [ngSwitch]="(list.selectedItems$ | async).length">
-    <campus-info-panel-bundle [bundle]="bundle"
-                              *ngSwitchCase="0"></campus-info-panel-bundle>
-    <campus-info-panel-content [content]="contentForInfoPanelSingle$ | async"
-                               *ngSwitchCase="1">
-    </campus-info-panel-content>
-    <campus-info-panel-contents [contents]="contentForInfoPanelMultiple$ | async"
-                                *ngSwitchDefault>
-    </campus-info-panel-contents>
-  </campus-side-sheet-body>
+<ng-template #noBundle>Deze bundel is niet beschikbaar.</ng-template>
+<ng-template #noListview>Deze listview is niet beschikbaar.</ng-template>
+<div *ngIf="list">
+  <div *ngIf="(list.selectedItems$)|async as blabla; else noListview">test{{blabla.length}}</div>
+</div>
+
+<campus-side-sheet #bundleSidesheet
+                   [isOpenOnInit]="true"
+                   *ngIf="bundle$|async as bundle; else noBundle">
+
+  <ng-container *ngIf="list">
+    <ng-container *ngIf="(list.selectedItems$)|async as selection">
+      <campus-side-sheet-header></campus-side-sheet-header>
+      <campus-side-sheet-body [ngSwitch]="selection.length">
+        <ng-container *ngIf="true">
+          <campus-info-panel-bundle [bundle]="{name: bundle.name, description: bundle.description, teacher: {firstName: 'bla', name: 'ba'}}"
+                                    *ngSwitchCase="0"></campus-info-panel-bundle>
+        </ng-container>
+        <campus-info-panel-content [content]="contentForInfoPanelSingle$ | async"
+                                   *ngSwitchCase="1">
+        </campus-info-panel-content>
+        <campus-info-panel-contents [contents]="contentForInfoPanelMultiple$ | async"
+                                    *ngSwitchDefault>
+        </campus-info-panel-contents>
+      </campus-side-sheet-body>
+    </ng-container>
+  </ng-container>
 
   <campus-side-sheet-page>
-
     <div class="campus-page">
-      <campus-page-header [iconClass]="bundle.learningArea.icon"
-                          [title]="bundle.name"
-                          [subtitle]="bundle.description"></campus-page-header>
+      <campus-page-header [title]="bundle.name"
+                          [subtitle]="bundle.description"
+                          [iconClass]="(learningArea$|async)?.icon">
+      </campus-page-header>
 
       <ng-container *ngIf="(contents$| async) as contents">
         <ng-container *ngIf="(filteredContents$ | async) as filteredContents">
-          <div>
-            <div *ngIf="filteredContents.length === contents.length"
-                 class="itemsAmount">
-              {{filteredContents.length}} van <u (click)="resetFilterInput()">{{contents.length}}</u> weergegeven
-            </div>
+          <div class="itemsAmount">
+            {{filteredContents.length}} van
+            <u (click)="resetFilterInput()">{{contents.length}}</u>
+            weergegeven
           </div>
 
-          <campus-list-view [listFormat]="currentListFormat$ | async"
+          <campus-list-view #bundleListview
+                            [listFormat]="currentListFormat$ | async"
                             [multiSelect]="true">
             <campus-content-thumbnail *ngFor="let content of filteredContents"
                                       campusListItem
@@ -49,7 +62,7 @@
                                       [title]="content.name"
                                       [fileExtensionClass]="content.fileExtension"
                                       [contentTypeClass]="content.productType">
-              <!-- Hier moeten de mogelijke actieknoppen met hun (Click) nog toegevoegd worden -->
+              <!-- TODO Hier moeten de mogelijke actieknoppen met hun (Click) nog toegevoegd worden -->
               <campus-button [iconClass]="'icon-bundle'"
                              circle>
               </campus-button>
@@ -62,4 +75,5 @@
       </ng-container>
     </div>
   </campus-side-sheet-page>
+
 </campus-side-sheet>
