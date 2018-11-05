@@ -69,6 +69,8 @@ import {
 import { PersonService, PERSON_SERVICE_TOKEN } from './persons/persons.service';
 import { StudentContentStatusService } from './student-content-status/student-content-status.service';
 import { STUDENT_CONTENT_STATUS_SERVICE_TOKEN } from './student-content-status/student-content-status.service.interface';
+import { TASK_SERVICE_TOKEN } from './tasks/task.service.interface';
+import { TaskService } from './tasks/tasks.service';
 
 interface DalOptions {
   apiBaseUrl: string;
@@ -137,7 +139,8 @@ interface DalOptions {
     },
     { provide: PERSON_SERVICE_TOKEN, useClass: PersonService },
     { provide: LINKED_PERSON_SERVICE_TOKEN, useClass: LinkedPersonService },
-    { provide: AUTH_SERVICE_TOKEN, useClass: AuthService }
+    { provide: AUTH_SERVICE_TOKEN, useClass: AuthService },
+    { provide: TASK_SERVICE_TOKEN, useClass: TaskService }
   ]
 })
 export class DalModule {
