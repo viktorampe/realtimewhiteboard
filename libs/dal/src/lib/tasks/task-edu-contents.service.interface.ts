@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { TaskEduContentInterface } from '../+models';
 
 export const TASK_EDU_CONTENT_SERVICE_TOKEN = new InjectionToken(
-  'TaskEducontentService'
+  'TaskEduContentsService'
 );
 
 export interface TaskEduContentsInterface {
