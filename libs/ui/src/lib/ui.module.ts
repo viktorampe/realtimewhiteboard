@@ -4,7 +4,17 @@ import { CdkTreeModule } from '@angular/cdk/tree';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule, MatMenuModule, MatProgressSpinnerModule, MatSelectModule, MatSidenavModule, MatTooltipModule } from '@angular/material';
+import {
+  MatButtonModule,
+  MatFormFieldModule,
+  MatIconModule,
+  MatInputModule,
+  MatMenuModule,
+  MatProgressSpinnerModule,
+  MatSelectModule,
+  MatSidenavModule,
+  MatTooltipModule
+} from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { AppBarComponent } from './app-bar/app-bar.component';
 import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
@@ -26,7 +36,10 @@ import { FilterTextInputComponent } from './filter-text-input/filter-text-input.
 import { FolderDetailsDirective } from './folder/directives/folder-details.directive';
 import { FolderComponent } from './folder/folder.component';
 import { InfoPanelComponent } from './info-panel/info-panel.component';
-import { ListViewComponent, ListViewItemDirective } from './list-view/list-view.component';
+import {
+  ListViewComponent,
+  ListViewItemDirective
+} from './list-view/list-view.component';
 import { NotificationDropdownItemComponent } from './notification-dropdown-item/notification-dropdown-item.component';
 import { PageHeaderComponent } from './page-header/page-header.component';
 import { PersonBadgeComponent } from './person-badge/person-badge.component';
@@ -114,12 +127,11 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     DropdownMenuComponent,
     NotificationDropdownItemComponent,
     DropdownMenuComponent,
-    TruncateStringPipe
-    DropdownMenuItemComponent
+    TruncateStringPipe,
+    DropdownMenuItemComponent,
     HideDesktopDirective,
     HideMobileDirective,
     HumanDateTimePipe
-
   ],
   exports: [
     FilterTextInputComponent,

@@ -11,8 +11,7 @@ import {
   SDKBrowserModule
 } from '@diekeure/polpo-api-angular-sdk';
 import { EffectsModule } from '@ngrx/effects';
-import { StoreModule } from '@ngrx/store';
-import { AlertReducer, AlertsEffects } from './+state/alert';
+import { AlertsEffects } from './+state/alert';
 import { BundleReducer, BundlesEffects } from './+state/bundle';
 import { ContentStatusReducer } from './+state/content-status';
 import { ContentStatusesEffects } from './+state/content-status/content-status.effects';
@@ -41,10 +40,6 @@ import {
 } from './+state/unlocked-content';
 import { UserEffects, UserReducer } from './+state/user';
 import { UserContentReducer, UserContentsEffects } from './+state/user-content';
-import {
-  initialUserstate as userInitialState,
-  userReducer
-} from './+state/user/user.reducer';
 import { AlertService } from './alert/alert.service';
 import { ALERT_SERVICE_TOKEN } from './alert/alert.service.interface';
 import {
@@ -67,6 +62,14 @@ import { LearningAreaService } from './learning-area/learning-area.service';
 import { LEARNINGAREA_SERVICE_TOKEN } from './learning-area/learning-area.service.interface';
 import { AuthService } from './persons/auth-service';
 import { AUTH_SERVICE_TOKEN } from './persons/auth-service.interface';
+import {
+  LinkedPersonsService,
+  LINKEDPERSON_SERVICE_TOKEN
+} from './persons/linked-persons.service';
+import {
+  PersonsService,
+  PERSON_SERVICE_TOKEN
+} from './persons/persons.service';
 import { StudentContentStatusService } from './student-content-status/student-content-status.service';
 import { STUDENT_CONTENT_STATUS_SERVICE_TOKEN } from './student-content-status/student-content-status.service.interface';
 
@@ -87,7 +90,7 @@ interface DalOptions {
       StudentContentStatusReducer,
       EduContentReducer,
       BundleReducer,
-      uiReducer,
+      UiReducer,
       UnlockedBoekeGroupReducer,
       UnlockedBoekeStudentReducer,
       ContentStatusReducer,
@@ -135,8 +138,8 @@ interface DalOptions {
       provide: ALERT_SERVICE_TOKEN,
       useClass: AlertService
     },
-    { provide: PERSON_SERVICE_TOKEN, useClass: PersonService },
-    { provide: LINKEDPERSON_SERVICE_TOKEN, useClass: LinkedPersonService },
+    { provide: PERSON_SERVICE_TOKEN, useClass: PersonsService },
+    { provide: LINKEDPERSON_SERVICE_TOKEN, useClass: LinkedPersonsService },
     { provide: AUTH_SERVICE_TOKEN, useClass: AuthService }
   ]
 })

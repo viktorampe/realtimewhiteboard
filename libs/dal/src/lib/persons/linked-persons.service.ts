@@ -1,4 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Injectable, InjectionToken } from '@angular/core';
+
+export const LINKEDPERSON_SERVICE_TOKEN = new InjectionToken(
+  'LinkedPersonsService'
+);
+
+// tslint:disable-next-line:no-empty-interface
+export interface LinkedPersonsServiceInterface {}
 
 @Injectable({
   providedIn: 'root'
