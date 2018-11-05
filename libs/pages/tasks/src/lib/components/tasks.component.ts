@@ -7,7 +7,7 @@ import { TasksViewModel } from './tasks.viewmodel';
   styleUrls: ['./tasks.component.scss']
 })
 export class TasksComponent implements OnInit {
-  constructor(public vm: TasksViewModel) {}
+  constructor(public taskViewModel: TasksViewModel) {}
 
   ngOnInit() {}
 }
