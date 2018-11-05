@@ -11,6 +11,8 @@ import { LearningAreasWithBundlesInfo } from '../bundles.viewmodel.interfaces';
   styleUrls: ['./learning-areas.component.scss']
 })
 export class LearningAreasComponent implements OnInit {
+  protected listFormat = ListFormat;
+
   listFormat$: Observable<ListFormat>;
   filterInput$ = new BehaviorSubject<string>('');
 
@@ -28,8 +30,8 @@ export class LearningAreasComponent implements OnInit {
     );
   }
 
-  clickChangeListFormat(value: string): void {
-    this.bundlesViewModel.changeListFormat(ListFormat[value]);
+  clickChangeListFormat(value: ListFormat): void {
+    this.bundlesViewModel.changeListFormat(this.listFormat[value]);
   }
 
   onChangeFilterInput(filterInput: string): void {

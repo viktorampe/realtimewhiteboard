@@ -14,6 +14,7 @@ import { hot } from 'jasmine-marbles';
 import { Observable } from 'rxjs';
 import { marbles } from 'rxjs-marbles';
 import { BundlesViewModel } from './bundles.viewmodel';
+import { MockActivatedRoute } from './bundles.viewmodel.mocks';
 
 describe('BundlesViewModel', () => {
   let bundlesViewModel: BundlesViewModel;
@@ -90,7 +91,7 @@ describe('BundlesViewModel', () => {
       imports: [StoreModule.forRoot({})],
       providers: [
         BundlesViewModel,
-        { provide: ActivatedRoute, useValue: {} },
+        { provide: ActivatedRoute, useClass: MockActivatedRoute },
         { provide: AUTH_SERVICE_TOKEN, useValue: {} },
         Store
       ]
@@ -233,7 +234,6 @@ describe('BundlesViewModel', () => {
     const ownBundles$ = hot('-a-|', {
       a: [createBundle(1, 2), createBundle(2, 3)]
     });
-    bundlesViewModel.user$ = hot('a--|', { a: { id: 1 } });
     const spy = jest
       .spyOn(bundlesViewModel['store'], 'pipe')
       .mockReturnValue(ownBundles$);

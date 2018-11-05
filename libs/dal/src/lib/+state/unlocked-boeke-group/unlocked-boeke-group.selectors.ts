@@ -1,6 +1,7 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { UnlockedBoekeGroup, UnlockedBoekeGroupInterface } from '../../+models';
 import {
+  NAME,
   selectAll,
   selectEntities,
   selectIds,
@@ -8,9 +9,7 @@ import {
   State
 } from './unlocked-boeke-group.reducer';
 
-export const selectUnlockedBoekeGroupState = createFeatureSelector<State>(
-  'unlockedBoekeGroups'
-);
+export const selectUnlockedBoekeGroupState = createFeatureSelector<State>(NAME);
 
 export const getError = createSelector(
   selectUnlockedBoekeGroupState,

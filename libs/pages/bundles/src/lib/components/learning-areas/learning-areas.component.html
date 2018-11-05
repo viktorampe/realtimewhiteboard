@@ -5,8 +5,8 @@
                             class="pages__toolbar__filter"></campus-filter-text-input>
   <div class="divider"></div>
   <!-- links need to replaced by the button -->
-  <a (click)="clickChangeListFormat('GRID')">grid</a>
-  <a (click)="clickChangeListFormat('LINE')">line</a>
+  <a (click)="clickChangeListFormat(listFormat.GRID)">grid</a>
+  <a (click)="clickChangeListFormat(listFormat.LINE)">line</a>
 </campus-page-bar>
 <div class="pages-bundles__container"
      *ngIf="sharedInfo$|async as sharedInfo">

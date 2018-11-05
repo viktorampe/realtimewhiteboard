@@ -6,7 +6,12 @@ import {
   OnInit,
   ViewChild
 } from '@angular/core';
-import { BundleInterface, ContentInterface } from '@campus/dal';
+import {
+  BundleInterface,
+  ContentInterface,
+  LearningAreaInterface,
+  PersonInterface
+} from '@campus/dal';
 import { ListFormat, ListViewComponent, SideSheetComponent } from '@campus/ui';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
@@ -18,17 +23,18 @@ import { BundlesViewModel } from '../bundles.viewmodel';
   styleUrls: ['./bundle-detail.component.scss']
 })
 export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
-  learningArea$ = this.bundlesViewModel.activeLearningArea$;
-  bundle$ = this.bundlesViewModel.activeBundle$;
-  bundleOwner$ = this.bundlesViewModel.activeBundleOwner$;
-  contents$ = this.bundlesViewModel.activeBundleContents$;
+  protected listFormat = ListFormat; //enum beschikbaar maken in template
 
-  isReady$ = new BehaviorSubject(false);
-
-  listFormat = ListFormat; //enum beschikbaar maken in template
-  currentListFormat$ = this.bundlesViewModel.listFormat$;
-
+  listFormat$: Observable<ListFormat> = this.bundlesViewModel.listFormat$;
   filterInput$ = new BehaviorSubject<string>('');
+
+  learningArea$: Observable<LearningAreaInterface> = this.bundlesViewModel
+    .activeLearningArea$;
+  bundle$: Observable<BundleInterface> = this.bundlesViewModel.activeBundle$;
+  bundleOwner$: Observable<PersonInterface> = this.bundlesViewModel
+    .activeBundleOwner$;
+  contents$: Observable<ContentInterface[]> = this.bundlesViewModel
+    .activeBundleContents$;
   filteredContents$: Observable<ContentInterface[]>;
 
   contentForInfoPanelEmpty$: Observable<BundleInterface>;
@@ -51,7 +57,9 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(
     public bundlesViewModel: BundlesViewModel,
     private cd: ChangeDetectorRef
-  ) {}
+  ) {
+    console.log('bundles-detail component');
+  }
 
   ngOnInit() {
     this.contentForInfoPanelEmpty$ = this.bundle$;
@@ -91,8 +99,8 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subscriptions.unsubscribe();
   }
 
-  clickChangeListFormat(value: string): void {
-    this.bundlesViewModel.changeListFormat(ListFormat[value]);
+  clickChangeListFormat(value: ListFormat): void {
+    this.bundlesViewModel.changeListFormat(this.listFormat[value]);
   }
 
   onChangeFilterInput(filterInput: string): void {

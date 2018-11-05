@@ -1,8 +1,9 @@
 import {
+  AlertReducer,
   BundleReducer,
   EduContentReducer,
   LearningAreaReducer,
-  uiReducer,
+  UiReducer,
   UnlockedBoekeGroupReducer,
   UnlockedBoekeStudentReducer,
   UnlockedContentReducer,
@@ -13,7 +14,7 @@ import { StudentContentStatusReducer } from './student-content-status';
 import { UserReducer } from './user';
 
 export interface DalState {
-  ui: uiReducer.UiState;
+  ui: UiReducer.UiState;
   learningAreas: LearningAreaReducer.State;
   bundles: BundleReducer.State;
   eduContents: EduContentReducer.State;
@@ -21,7 +22,8 @@ export interface DalState {
   unlockedContents: UnlockedContentReducer.State;
   unlockedBoekeGroups: UnlockedBoekeGroupReducer.State;
   unlockedBoekeStudents: UnlockedBoekeStudentReducer.State;
+  alerts: AlertReducer.State;
   contentStatuses: ContentStatusReducer.State;
-  user: UserReducer.UserState;
+  user: UserReducer.State;
   studentContentStatuses: StudentContentStatusReducer.State;
 }

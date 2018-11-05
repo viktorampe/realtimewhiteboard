@@ -1,5 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import {
+  NAME,
   selectAll,
   selectEntities,
   selectIds,
@@ -7,7 +8,7 @@ import {
   State
 } from './bundle.reducer';
 
-export const selectBundleState = createFeatureSelector<State>('bundles');
+export const selectBundleState = createFeatureSelector<State>(NAME);
 
 export const getError = createSelector(
   selectBundleState,

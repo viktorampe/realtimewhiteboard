@@ -28,6 +28,7 @@ import { WarningDirective } from './button/directives/button-warning.directive';
 import { ConfirmableSelectComponent } from './confirmable-select/confirmable-select.component';
 import { ContentPreviewComponent } from './content-preview/content-preview.component';
 import { ContentThumbnailComponent } from './content-thumbnail/content-thumbnail.component';
+import { DropdownMenuItemComponent } from './dropdown-menu-item/dropdown-menu-item.component';
 import { DropdownMenuComponent } from './dropdown-menu/dropdown-menu.component';
 import { EditableInlineTagListComponent } from './editable-inline-tag-list/editable-inline-tag-list.component';
 import { FileExtensionComponent } from './file-extension/file-extension.component';
@@ -53,7 +54,11 @@ import { SideSheetHeaderDirective } from './side-sheet/directives/side-sheet-hea
 import { SideSheetPageDirective } from './side-sheet/directives/side-sheet-page.directive';
 import { SideSheetComponent } from './side-sheet/side-sheet.component';
 import { TreeNavComponent } from './tree-nav/tree-nav.component';
-import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness.pipe';
+import { HideDesktopDirective } from './utils/directives/hide-desktop.directive';
+import { HideMobileDirective } from './utils/directives/hide-mobile.directive';
+import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness/adjust-color-brightness.pipe';
+import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time.pipe';
+import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-string.pipe';
 
 @NgModule({
   imports: [
@@ -66,7 +71,6 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     MatFormFieldModule,
     MatInputModule,
     LayoutModule,
-    MatIconModule,
     RouterModule,
     CdkTreeModule,
     MatSelectModule,
@@ -122,7 +126,12 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     BreadcrumbsComponent,
     DropdownMenuComponent,
     NotificationDropdownItemComponent,
-    DropdownMenuComponent
+    DropdownMenuComponent,
+    TruncateStringPipe,
+    DropdownMenuItemComponent,
+    HideDesktopDirective,
+    HideMobileDirective,
+    HumanDateTimePipe
   ],
   exports: [
     FilterTextInputComponent,
@@ -165,7 +174,12 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
     BreadcrumbsComponent,
     DropdownMenuComponent,
     NotificationDropdownItemComponent,
-    DropdownMenuComponent
+    DropdownMenuComponent,
+    TruncateStringPipe,
+    DropdownMenuItemComponent,
+    HideDesktopDirective,
+    HideMobileDirective,
+    HumanDateTimePipe
   ]
 })
 export class UiModule {}

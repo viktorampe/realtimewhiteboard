@@ -127,3 +127,21 @@ body {
     }
   }
 }
+
+.hidden-item__container {
+  // .hidden-item--not-hover
+  // only hide if container is not hover()
+  &:not(:hover) .hidden-item--not-hover:not(.hidden-item--not-selected),
+
+  // .hidden-item--not-selected
+  // only hide if container is not selected -> .ui-list-view__list__item--selected
+  &:not(.ui-list-view__list__item--selected)
+    .hidden-item--not-selected:not(.hidden-item--not-hover),
+
+  // .hidden-item--not-hover AND .hidden-item--not-selected
+  // only hide if container is not hover() AND not selected
+  &:not(:hover):not(.ui-list-view__list__item--selected)
+    .hidden-item--not-hover.hidden-item--not-selected {
+    display: none;
+  }
+}

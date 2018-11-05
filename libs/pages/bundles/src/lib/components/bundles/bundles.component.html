@@ -5,9 +5,9 @@
                             class="pages__toolbar__filter"></campus-filter-text-input>
   <div class="divider"></div>
   <campus-button iconClass="icon-tasks"
-                 (click)="clickChangeListFormat(listFormatEnum.GRID)"></campus-button>
+                 (click)="clickChangeListFormat(listFormat.GRID)"></campus-button>
   <campus-button iconClass="icon-tasks"
-                 (click)="clickChangeListFormat(listFormatEnum.LINE)"></campus-button>
+                 (click)="clickChangeListFormat(listFormat.LINE)"></campus-button>
 </campus-page-bar>
 
 <ng-container *ngIf="learningArea$|async as learningArea">

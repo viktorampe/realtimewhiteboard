@@ -1,3 +1,4 @@
+import { ListFormat } from '@campus/ui';
 import { UiAction, UiActionTypes } from './ui.actions';
 
 /**
@@ -5,6 +6,7 @@ import { UiAction, UiActionTypes } from './ui.actions';
  *  - UiState, and
  *  - uiReducer
  */
+export const NAME = 'ui';
 
 export interface UiState {
   loaded: boolean; // has the Ui list been loaded
@@ -13,7 +15,7 @@ export interface UiState {
 }
 
 export const initialState: UiState = {
-  listFormat: 'grid',
+  listFormat: ListFormat.GRID,
   sideSheetOpen: true,
   loaded: false
 };

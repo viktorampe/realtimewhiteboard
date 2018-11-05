@@ -1,15 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'campus-breadcrumbs',
   templateUrl: './breadcrumbs.component.html',
-  styleUrls: [
-    './breadcrumbs.component.scss',
-    './breadcrumbs.component.theme.scss'
-  ]
+  styleUrls: ['./breadcrumbs.component.scss']
 })
-export class BreadcrumbsComponent implements OnInit {
-  constructor() {}
+export class BreadcrumbsComponent {
+  @Input() seperator = 'seperator';
+  @Input() breadCrumbs: BreadcrumbLinkInterface[] = [];
+  @Input() baseIcon = 'home';
+  @Input() overflowedLinkString = '…';
+  @Input() maxLength = 99;
+  @Input() baseUrl = '/';
+}
 
-  ngOnInit() {}
+export interface BreadcrumbLinkInterface {
+  displayText: string;
+  link: any[]; // see routerlink docs
 }

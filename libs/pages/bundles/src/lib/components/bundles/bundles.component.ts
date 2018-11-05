@@ -19,7 +19,7 @@ import { BundlesWithContentInfo } from '../bundles.viewmodel.interfaces';
   styleUrls: ['./bundles.component.scss']
 })
 export class BundlesComponent {
-  protected listFormatEnum = ListFormat;
+  protected listFormat = ListFormat;
 
   listFormat$: Observable<ListFormat>;
   filterInput$ = new BehaviorSubject<string>('');
@@ -28,7 +28,9 @@ export class BundlesComponent {
   sharedInfo$: Observable<BundlesWithContentInfo>;
   filteredSharedInfo$: Observable<BundlesWithContentInfo>;
 
-  constructor(private bundlesViewModel: BundlesViewModel) {}
+  constructor(private bundlesViewModel: BundlesViewModel) {
+    console.log('bundlescomponent');
+  }
 
   ngOnInit(): void {
     this.learningArea$ = this.bundlesViewModel.activeLearningArea$;
@@ -40,8 +42,8 @@ export class BundlesComponent {
     );
   }
 
-  clickChangeListFormat(value: string): void {
-    this.bundlesViewModel.changeListFormat(ListFormat[value]);
+  clickChangeListFormat(value: ListFormat): void {
+    this.bundlesViewModel.changeListFormat(this.listFormat[value]);
   }
 
   onChangeFilterInput(filterInput: string): void {

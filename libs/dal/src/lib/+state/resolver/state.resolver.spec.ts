@@ -1,7 +1,15 @@
+import { Injectable } from '@angular/core';
 import { inject, TestBed } from '@angular/core/testing';
-import { Action, createFeatureSelector, Store } from '@ngrx/store';
+import {
+  Action,
+  createFeatureSelector,
+  Selector,
+  Store,
+  StoreModule
+} from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { Observable } from 'rxjs';
+import { DalState } from '..';
 import { StateResolver } from './state.resolver';
 
 class ActionOne implements Action {
@@ -13,29 +21,38 @@ class ActionTwo implements Action {
 }
 
 const mockSelector = createFeatureSelector<any>('learningAreas');
+let resolvedQueries = [];
+
+@Injectable({
+  providedIn: 'root'
+})
+class MockStateResolver extends StateResolver {
+  constructor(private store: Store<DalState>) {
+    super(store);
+  }
+
+  protected getLoadableActions(): Action[] {
+    return [];
+  }
+  protected getResolvedQueries(): Selector<object, boolean>[] {
+    return resolvedQueries;
+  }
+}
 
 describe('stateResolver', () => {
-  let stateResolver: StateResolver;
+  let stateResolver: MockStateResolver;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        StateResolver,
-        {
-          provide: Store,
-          useValue: {
-            dispatch: () => {},
-            select: () => {}
-          }
-        }
-      ]
+      imports: [StoreModule.forRoot({})],
+      providers: [MockStateResolver, Store]
     });
-    stateResolver = TestBed.get(StateResolver);
+    stateResolver = TestBed.get(MockStateResolver);
   });
 
   it('should be created and available via DI', inject(
-    [StateResolver],
-    (service: StateResolver) => {
+    [MockStateResolver],
+    (service: MockStateResolver) => {
       expect(service).toBeTruthy();
     }
   ));
@@ -74,22 +91,30 @@ describe('stateResolver', () => {
     let loadActionsSpy;
     let actionsLoadedSpy;
     let selector;
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
     beforeEach(() => {
-      loadActionsSpy = jest.spyOn(TestBed.get(StateResolver), 'loadActions');
+      loadActionsSpy = jest.spyOn(
+        TestBed.get(MockStateResolver),
+        'loadActions'
+      );
       actionsLoadedSpy = jest.spyOn(
-        TestBed.get(StateResolver),
+        TestBed.get(MockStateResolver),
         'actionsLoaded'
       );
-      selector = jest.spyOn(TestBed.get(Store), 'select');
+      selector = jest.spyOn(TestBed.get(Store), 'pipe');
     });
     it('should call loadActions and actionsLoaded', () => {
-      stateResolver.resolve([], []);
+      stateResolver.resolve();
       expect(loadActionsSpy).toHaveBeenCalledWith([]);
       expect(actionsLoadedSpy).toHaveBeenCalledWith([]);
+      expect(selector).toHaveBeenCalledTimes(0);
     });
     it('should map to the store selector', () => {
-      stateResolver.resolve([], [mockSelector, mockSelector]);
-      expect(selector).toHaveBeenCalledTimes(2);
+      resolvedQueries = [mockSelector, mockSelector, mockSelector];
+      stateResolver.resolve();
+      expect(selector).toHaveBeenCalled();
     });
   });
 });

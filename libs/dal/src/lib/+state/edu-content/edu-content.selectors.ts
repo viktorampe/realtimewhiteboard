@@ -1,6 +1,7 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { EduContent, EduContentInterface } from '../../+models';
 import {
+  NAME,
   selectAll,
   selectEntities,
   selectIds,
@@ -8,9 +9,7 @@ import {
   State
 } from './edu-content.reducer';
 
-export const selectEduContentState = createFeatureSelector<State>(
-  'eduContents'
-);
+export const selectEduContentState = createFeatureSelector<State>(NAME);
 
 export const getError = createSelector(
   selectEduContentState,

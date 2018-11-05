@@ -59,7 +59,11 @@ import { AppComponent } from './app.component';
           path: 'alerts',
           loadChildren: '@campus/pages/alerts#PagesAlertsModule'
         },
-        { path: '', redirectTo: 'bundles', pathMatch: 'full' },
+        {
+          path: '',
+          redirectTo: 'bundles',
+          pathMatch: 'full'
+        },
         {
           path: 'bundles',
           loadChildren: '@campus/pages/bundles#PagesBundlesModule'
