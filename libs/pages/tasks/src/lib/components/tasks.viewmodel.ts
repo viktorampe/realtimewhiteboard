@@ -349,7 +349,6 @@ export class TasksViewModel {
 
   private getMockEducontents(): EduContentInterface[] {
     const mockLearningAreas = this.getMockLearningAreas();
-    const mockEducontents = this.getMockEducontents();
     const mockEducontentProductTypes = this.getMockEduContentProductTypes();
     const mockMethods = this.getMockMethods();
 
@@ -369,8 +368,6 @@ export class TasksViewModel {
         link: '908500016',
         commitMessage: 'Initial publish',
         id: 1,
-        eduContentId: mockEducontents[0].id,
-        eduContent: mockEducontents[0],
         learningAreaId: mockLearningAreas[0].id,
         learningArea: mockLearningAreas[0],
         eduContentProductTypeId: mockEducontentProductTypes[0].id,
@@ -395,8 +392,6 @@ export class TasksViewModel {
         link: 'https://drive.google.com/',
         commitMessage: 'Initial publish',
         id: 2,
-        eduContentId: mockEducontents[1].id,
-        eduContent: mockEducontents[1],
         learningAreaId: mockLearningAreas[1].id,
         learningArea: mockLearningAreas[1],
         eduContentProductTypeId: mockEducontentProductTypes[1].id,
@@ -423,8 +418,6 @@ export class TasksViewModel {
         checksum: 'f0ffb8dbde05931dfb9baeee5c86b27',
         commitMessage: 'Initial publish',
         id: 3,
-        eduContentId: mockEducontents[2].id,
-        eduContent: mockEducontents[2],
         learningAreaId: mockLearningAreas[2].id,
         learningArea: mockLearningAreas[2],
         eduContentProductTypeId: mockEducontentProductTypes[2].id,
@@ -451,8 +444,6 @@ export class TasksViewModel {
         checksum: 'f0ffb8dbde05931dfb9baeee5c86b211',
         commitMessage: 'Initial publish',
         id: 4,
-        eduContentId: mockEducontents[0].id,
-        eduContent: mockEducontents[0],
         learningAreaId: mockLearningAreas[0].id,
         learningArea: mockLearningAreas[0],
         eduContentProductTypeId: mockEducontentProductTypes[0].id,
