@@ -34,7 +34,7 @@ import { ListFormat } from '@campus/ui';
 import { Dictionary } from '@ngrx/entity';
 import { Action, select, Selector, Store } from '@ngrx/store';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
-import { filter, map, shareReplay, switchMap, tap } from 'rxjs/operators';
+import { filter, map, shareReplay, switchMap } from 'rxjs/operators';
 import {
   BundlesWithContentInfo,
   LearningAreasWithBundlesInfo
@@ -97,12 +97,10 @@ export class BundlesViewModel implements Resolve<boolean> {
     console.log('resolving');
     this.learningAreaId$ = this.routeParams$.pipe(
       // TODO why params always empty?
-      map((params): number => params.area || 19),
-      tap(console.log)
+      map((params): number => params.area || 19)
     );
     this.bundleId$ = this.routeParams$.pipe(
-      map((params): number => params.bundle || 1),
-      tap(console.log)
+      map((params): number => params.bundle || 1)
     );
 
     this.coupledPersons$ = new BehaviorSubject([]); // TODO add TeacherStudent state
@@ -124,9 +122,6 @@ export class BundlesViewModel implements Resolve<boolean> {
     );
 
     // intermediate streams
-    // this.bundlesByLearningArea$ = this.store.pipe(
-    //   select(BundleQueries.getByLearningAreaId)
-    // );
     this.unlockedContentsByBundle$ = this.store.pipe(
       select(UnlockedContentQueries.getByBundleIds)
     );
@@ -164,8 +159,7 @@ export class BundlesViewModel implements Resolve<boolean> {
       switchMap(
         (areaId: number): Observable<LearningAreaInterface> =>
           this.store.pipe(select(LearningAreaQueries.getById, { id: areaId }))
-      ),
-      tap(console.log)
+      )
     );
     this.activeLearningAreaBundles$ = this.getBundlesWithContentInfo(
       this.learningAreaId$,
@@ -266,13 +260,14 @@ export class BundlesViewModel implements Resolve<boolean> {
       return list;
     }
     const keys: string[] = key.split('.');
+    if (ignoreCase) {
+      value = value.toLowerCase();
+    }
     return list.filter(item => {
       let prop = keys.reduce((p: any, k: string) => {
         return p[k] || '';
       }, item);
-      console.log(prop);
       if (ignoreCase) {
-        value = value.toLowerCase();
         prop = prop.toLowerCase();
       }
       return prop.includes(value);
@@ -381,7 +376,8 @@ export class BundlesViewModel implements Resolve<boolean> {
               )
           };
         }
-      )
+      ),
+      shareReplay(1)
     );
   }
 
@@ -417,7 +413,8 @@ export class BundlesViewModel implements Resolve<boolean> {
             books: booksByArea[learningAreaId] || []
           };
         }
-      )
+      ),
+      shareReplay(1)
     );
   }
 

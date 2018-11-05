@@ -11,32 +11,28 @@
 </campus-page-bar>
 
 <ng-template #noBundle>Deze bundel is niet beschikbaar.</ng-template>
-<ng-template #noListview>Deze listview is niet beschikbaar.</ng-template>
-<div *ngIf="list">
-  <div *ngIf="(list.selectedItems$)|async as blabla; else noListview">test{{blabla.length}}</div>
-</div>
-
 <campus-side-sheet #bundleSidesheet
                    [isOpenOnInit]="true"
                    *ngIf="bundle$|async as bundle; else noBundle">
 
-  <ng-container *ngIf="list">
-    <ng-container *ngIf="(list.selectedItems$)|async as selection">
-      <campus-side-sheet-header></campus-side-sheet-header>
-      <campus-side-sheet-body [ngSwitch]="selection.length">
-        <ng-container *ngIf="true">
-          <campus-info-panel-bundle [bundle]="{name: bundle.name, description: bundle.description, teacher: {firstName: 'bla', name: 'ba'}}"
-                                    *ngSwitchCase="0"></campus-info-panel-bundle>
+  <campus-side-sheet-header></campus-side-sheet-header>
+  <campus-side-sheet-body>
+    <ng-container *ngIf="list && (list.selectedItems$)|async as selection">
+      <ng-container *ngIf="bundleOwner$|async as teacher">
+        <ng-container [ngSwitch]="selection.length">
+          <campus-info-panel-bundle *ngSwitchCase="0"
+                                    [bundle]="{name: bundle.name, description: bundle.description, teacher: teacher}">
+          </campus-info-panel-bundle>
+          <campus-info-panel-content [content]="contentForInfoPanelSingle$ | async"
+                                     *ngSwitchCase="1">
+          </campus-info-panel-content>
+          <campus-info-panel-contents [contents]="contentForInfoPanelMultiple$ | async"
+                                      *ngSwitchDefault>
+          </campus-info-panel-contents>
         </ng-container>
-        <campus-info-panel-content [content]="contentForInfoPanelSingle$ | async"
-                                   *ngSwitchCase="1">
-        </campus-info-panel-content>
-        <campus-info-panel-contents [contents]="contentForInfoPanelMultiple$ | async"
-                                    *ngSwitchDefault>
-        </campus-info-panel-contents>
-      </campus-side-sheet-body>
+      </ng-container>
     </ng-container>
-  </ng-container>
+  </campus-side-sheet-body>
 
   <campus-side-sheet-page>
     <div class="campus-page">
