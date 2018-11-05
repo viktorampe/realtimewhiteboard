@@ -1,9 +1,15 @@
 import { Injectable } from '@angular/core';
+import { EduContentApi } from '@diekeure/polpo-api-angular-sdk';
+import { Observable } from 'rxjs';
+import { ContentRequestServiceInterface } from './content-request.service.interface';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ContentRequestService {
+export class ContentRequestService implements ContentRequestServiceInterface {
+  constructor(private educontentApi: EduContentApi) {}
 
-  constructor() { }
+  requestUrl(contentId: number): Observable<string> {
+    return this.educontentApi.requestURLRemote(contentId);
+  }
 }
