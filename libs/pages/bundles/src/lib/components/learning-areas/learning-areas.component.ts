@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { ListFormat } from '@campus/ui';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FilterTextInputComponent, ListFormat } from '@campus/ui';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { BundlesViewModel } from '../bundles.viewmodel';
-import { LearningAreasWithBundlesInfo } from '../bundles.viewmodel.interfaces';
+import { LearningAreasWithBundlesInfoInterface } from '../bundles.viewmodel.interfaces';
 
 @Component({
   selector: 'campus-learning-areas',
@@ -16,45 +15,20 @@ export class LearningAreasComponent implements OnInit {
   listFormat$: Observable<ListFormat>;
   filterInput$ = new BehaviorSubject<string>('');
 
-  sharedInfo$: Observable<LearningAreasWithBundlesInfo>;
-  filteredSharedInfo$: Observable<LearningAreasWithBundlesInfo>;
+  sharedInfo$: Observable<LearningAreasWithBundlesInfoInterface>;
+  filteredSharedInfo$ = new BehaviorSubject<any[]>([]);
+
+  @ViewChild(FilterTextInputComponent)
+  filterTextInput: FilterTextInputComponent;
 
   constructor(private bundlesViewModel: BundlesViewModel) {}
 
   ngOnInit(): void {
     this.listFormat$ = this.bundlesViewModel.listFormat$;
     this.sharedInfo$ = this.bundlesViewModel.sharedLearningAreas$;
-    this.filteredSharedInfo$ = this.filterLearningAreas(
-      this.sharedInfo$,
-      this.filterInput$
-    );
   }
 
   clickChangeListFormat(value: ListFormat): void {
     this.bundlesViewModel.changeListFormat(this.listFormat[value]);
-  }
-
-  onChangeFilterInput(filterInput: string): void {
-    this.filterInput$.next(filterInput);
-  }
-
-  resetFilterInput(): void {
-    this.filterInput$.next('');
-  }
-
-  filterLearningAreas(
-    learningAreas$: Observable<LearningAreasWithBundlesInfo>,
-    filterInput$: Observable<string>
-  ): Observable<LearningAreasWithBundlesInfo> {
-    return combineLatest(learningAreas$, filterInput$).pipe(
-      map(([info, filterInput]: [LearningAreasWithBundlesInfo, string]) => ({
-        ...info,
-        learningAreas: this.bundlesViewModel.filterArray(
-          info.learningAreas,
-          'learningArea.name',
-          filterInput
-        )
-      }))
-    );
   }
 }

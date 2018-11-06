@@ -1,7 +1,8 @@
 <campus-page-bar>
   <campus-filter-text-input theme="dark"
-                            (filterTextChange)="onChangeFilterInput($event)"
-                            [filterText]="filterInput$|async"
+                            [source]="contents$|async"
+                            [filterKey]="'name'"
+                            (filtered)="filteredContents$.next($event)"
                             class="pages__toolbar__filter"></campus-filter-text-input>
   <div class="divider"></div>
   <campus-button iconClass="icon-tasks"
@@ -17,19 +18,18 @@
 
   <campus-side-sheet-header></campus-side-sheet-header>
   <campus-side-sheet-body>
-    <ng-container *ngIf="list && (list.selectedItems$)|async as selection">
-      <ng-container *ngIf="bundleOwner$|async as teacher">
-        <ng-container [ngSwitch]="selection.length">
-          <campus-info-panel-bundle *ngSwitchCase="0"
-                                    [bundle]="{name: bundle.name, description: bundle.description, teacher: teacher}">
-          </campus-info-panel-bundle>
-          <campus-info-panel-content [content]="contentForInfoPanelSingle$ | async"
-                                     *ngSwitchCase="1">
-          </campus-info-panel-content>
-          <campus-info-panel-contents [contents]="contentForInfoPanelMultiple$ | async"
-                                      *ngSwitchDefault>
-          </campus-info-panel-contents>
-        </ng-container>
+    <ng-container *ngIf="list">
+      <ng-container [ngSwitch]="(list.selectedItems$|async)?.length">
+        <campus-info-panel-bundle *ngSwitchCase="0"
+                                  [bundle]="bundle"
+                                  [teacher]="bundleOwner$|async">
+        </campus-info-panel-bundle>
+        <campus-info-panel-content *ngSwitchCase="1"
+                                   [content]="contentForInfoPanelSingle$|async">
+        </campus-info-panel-content>
+        <campus-info-panel-contents *ngSwitchDefault
+                                    [contents]="contentForInfoPanelMultiple$|async">
+        </campus-info-panel-contents>
       </ng-container>
     </ng-container>
   </campus-side-sheet-body>
@@ -41,16 +41,16 @@
                           [iconClass]="(learningArea$|async)?.icon">
       </campus-page-header>
 
-      <ng-container *ngIf="(contents$| async) as contents">
-        <ng-container *ngIf="(filteredContents$ | async) as filteredContents">
+      <ng-container *ngIf="(contents$|async) as contents">
+        <ng-container *ngIf="(filteredContents$|async) as filteredContents">
           <div class="itemsAmount">
             {{filteredContents.length}} van
-            <u (click)="resetFilterInput()">{{contents.length}}</u>
+            <u (click)="filterTextInput.clear()">{{contents.length}}</u>
             weergegeven
           </div>
 
           <campus-list-view #bundleListview
-                            [listFormat]="listFormat$ | async"
+                            [listFormat]="listFormat$|async"
                             [multiSelect]="true">
             <campus-content-thumbnail *ngFor="let content of filteredContents"
                                       campusListItem

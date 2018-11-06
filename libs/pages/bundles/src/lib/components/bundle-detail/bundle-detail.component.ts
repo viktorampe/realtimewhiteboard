@@ -3,7 +3,6 @@ import {
   ChangeDetectorRef,
   Component,
   OnDestroy,
-  OnInit,
   ViewChild
 } from '@angular/core';
 import {
@@ -12,8 +11,13 @@ import {
   LearningAreaInterface,
   PersonInterface
 } from '@campus/dal';
-import { ListFormat, ListViewComponent, SideSheetComponent } from '@campus/ui';
-import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
+import {
+  FilterTextInputComponent,
+  ListFormat,
+  ListViewComponent,
+  SideSheetComponent
+} from '@campus/ui';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { BundlesViewModel } from '../bundles.viewmodel';
 
@@ -22,11 +26,10 @@ import { BundlesViewModel } from '../bundles.viewmodel';
   templateUrl: './bundle-detail.component.html',
   styleUrls: ['./bundle-detail.component.scss']
 })
-export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
+export class BundleDetailComponent implements OnDestroy, AfterViewInit {
   protected listFormat = ListFormat; //enum beschikbaar maken in template
 
   listFormat$: Observable<ListFormat> = this.bundlesViewModel.listFormat$;
-  filterInput$ = new BehaviorSubject<string>('');
 
   learningArea$: Observable<LearningAreaInterface> = this.bundlesViewModel
     .activeLearningArea$;
@@ -35,15 +38,15 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
     .activeBundleOwner$;
   contents$: Observable<ContentInterface[]> = this.bundlesViewModel
     .activeBundleContents$;
-  filteredContents$: Observable<ContentInterface[]>;
+  filteredContents$ = new BehaviorSubject<ContentInterface[]>([]);
 
-  contentForInfoPanelEmpty$: Observable<BundleInterface>;
   contentForInfoPanelSingle$: Observable<ContentInterface>;
   contentForInfoPanelMultiple$: Observable<ContentInterface[]>;
 
-  private subscriptions = new Subscription();
+  @ViewChild(FilterTextInputComponent)
+  filterTextInput: FilterTextInputComponent;
 
-  private list: ListViewComponent;
+  list: ListViewComponent;
   @ViewChild('bundleListview')
   set listViewComponent(list: ListViewComponent) {
     this.list = list;
@@ -54,20 +57,12 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
     this.sideSheet = sidesheet;
   }
 
+  private subscriptions = new Subscription();
+
   constructor(
     public bundlesViewModel: BundlesViewModel,
     private cd: ChangeDetectorRef
-  ) {
-    console.log('bundles-detail component');
-  }
-
-  ngOnInit() {
-    this.contentForInfoPanelEmpty$ = this.bundle$;
-    this.filteredContents$ = this.filterContents(
-      this.contents$,
-      this.filterInput$
-    );
-  }
+  ) {}
 
   ngAfterViewInit(): void {
     this.contentForInfoPanelSingle$ = this.list.selectedItems$.pipe(
@@ -101,24 +96,5 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
 
   clickChangeListFormat(value: ListFormat): void {
     this.bundlesViewModel.changeListFormat(this.listFormat[value]);
-  }
-
-  onChangeFilterInput(filterInput: string): void {
-    this.filterInput$.next(filterInput);
-  }
-
-  resetFilterInput(): void {
-    this.filterInput$.next('');
-  }
-
-  filterContents(
-    contents$: Observable<ContentInterface[]>,
-    filterInput$: Observable<string>
-  ): Observable<ContentInterface[]> {
-    return combineLatest(contents$, filterInput$).pipe(
-      map(([contents, filterInput]: [ContentInterface[], string]) =>
-        this.bundlesViewModel.filterArray(contents, 'name', filterInput)
-      )
-    );
   }
 }

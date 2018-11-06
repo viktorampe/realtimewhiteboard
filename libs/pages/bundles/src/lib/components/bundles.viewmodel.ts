@@ -28,8 +28,8 @@ import { select, Store } from '@ngrx/store';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { filter, map, shareReplay, switchMap } from 'rxjs/operators';
 import {
-  BundlesWithContentInfo,
-  LearningAreasWithBundlesInfo
+  BundlesWithContentInfoInterface,
+  LearningAreasWithBundlesInfoInterface
 } from './bundles.viewmodel.interfaces';
 
 @Injectable({
@@ -67,10 +67,10 @@ export class BundlesViewModel {
 
   // presentation streams
   // > learningareas page
-  sharedLearningAreas$: Observable<LearningAreasWithBundlesInfo>;
+  sharedLearningAreas$: Observable<LearningAreasWithBundlesInfoInterface>;
   // > bundles page
   activeLearningArea$: Observable<LearningAreaInterface>;
-  activeLearningAreaBundles$: Observable<BundlesWithContentInfo>;
+  activeLearningAreaBundles$: Observable<BundlesWithContentInfoInterface>;
   // > bundle detail page
   activeBundle$: Observable<BundleInterface>;
   activeBundleOwner$: Observable<PersonInterface>;
@@ -120,18 +120,9 @@ export class BundlesViewModel {
       'learningAreaId'
     );
     this.sharedBooks$ = this.getSharedBooks();
-    this.sharedBooksByLearningArea$ = this.sharedBooks$.pipe(
-      map(sharedBooks => {
-        const byArea = {};
-        sharedBooks.forEach(book => {
-          if (!byArea[book.publishedEduContentMetadata.learningAreaId]) {
-            byArea[book.publishedEduContentMetadata.learningAreaId] = [];
-          }
-          byArea[book.publishedEduContentMetadata.learningAreaId].push(book);
-        });
-        return byArea;
-      }),
-      shareReplay(1)
+    this.sharedBooksByLearningArea$ = this.groupStreamByKey(
+      this.sharedBooks$,
+      'publishedEduContentMetadata.learningAreaId'
     );
     // > bundles page
     this.unlockedContentsByBundle$ = this.store.pipe(
@@ -146,12 +137,7 @@ export class BundlesViewModel {
     );
 
     // > bundles page
-    this.activeLearningArea$ = this.learningAreaId$.pipe(
-      switchMap(
-        (areaId: number): Observable<LearningAreaInterface> =>
-          this.store.pipe(select(LearningAreaQueries.getById, { id: areaId }))
-      )
-    );
+    this.activeLearningArea$ = this.getActiveLearningArea();
     this.activeLearningAreaBundles$ = this.getBundlesWithContentInfo(
       this.learningAreaId$,
       this.sharedBundlesByLearningArea$,
@@ -160,13 +146,40 @@ export class BundlesViewModel {
     );
 
     // > bundle detail page
-    this.activeBundle$ = this.bundleId$.pipe(
+    this.activeBundle$ = this.getActiveBundle();
+    this.activeBundleOwner$ = this.getBundleOwner(this.activeBundle$);
+    this.activeBundleContents$ = this.getBundleContents(
+      this.bundleId$,
+      this.unlockedContentsByBundle$
+    );
+  }
+
+  changeListFormat(listFormat: ListFormat): void {
+    this.store.dispatch(new UiActions.SetListFormatUi({ listFormat }));
+  }
+
+  private getActiveLearningArea(): Observable<LearningAreaInterface> {
+    return this.learningAreaId$.pipe(
+      switchMap(
+        (areaId: number): Observable<LearningAreaInterface> =>
+          this.store.pipe(select(LearningAreaQueries.getById, { id: areaId }))
+      )
+    );
+  }
+
+  private getActiveBundle(): Observable<BundleInterface> {
+    return this.bundleId$.pipe(
       switchMap(
         (bundleId: number): Observable<BundleInterface> =>
           this.store.pipe(select(BundleQueries.getById, { id: bundleId }))
       )
     );
-    this.activeBundleOwner$ = this.activeBundle$.pipe(
+  }
+
+  private getBundleOwner(
+    bundle$: Observable<BundleInterface>
+  ): Observable<PersonInterface> {
+    return bundle$.pipe(
       switchMap(
         (bundle): Observable<PersonInterface> =>
           // TODO implement personqueries
@@ -181,48 +194,6 @@ export class BundlesViewModel {
           })
       )
     );
-    this.activeBundleContents$ = this.getBundleContents(
-      this.bundleId$,
-      this.unlockedContentsByBundle$
-    );
-  }
-
-  changeListFormat(listFormat: ListFormat): void {
-    this.store.dispatch(new UiActions.SetListFormatUi({ listFormat }));
-  }
-
-  /**
-   * TODO: move to service?
-   * Filter an array by specified key with partial value
-   *
-   * @param {any[]} list
-   * @param {string} key
-   * @param {string} value
-   * @param {boolean} [ignoreCase=true]
-   * @returns {any[]}
-   */
-  public filterArray(
-    list: any[],
-    key: string,
-    value: string,
-    ignoreCase: boolean = true
-  ): any[] {
-    if (!value) {
-      return list;
-    }
-    const keys: string[] = key.split('.');
-    if (ignoreCase) {
-      value = value.toLowerCase();
-    }
-    return list.filter(item => {
-      let prop = keys.reduce((p: any, k: string) => {
-        return p[k] || '';
-      }, item);
-      if (ignoreCase) {
-        prop = prop.toLowerCase();
-      }
-      return prop.includes(value);
-    });
   }
 
   private getBundleContents(
@@ -291,6 +262,21 @@ export class BundlesViewModel {
           })
         )
       ),
+      map(
+        (eduContents): EduContentInterface[] => {
+          return eduContents.sort((a, b) => {
+            const nameA = a.name && a.name.toLowerCase();
+            const nameB = b.name && b.name.toLowerCase();
+            if (nameA < nameB) {
+              return -1;
+            }
+            if (nameA > nameB) {
+              return 1;
+            }
+            return 0;
+          });
+        }
+      ),
       shareReplay(1)
     );
   }
@@ -298,7 +284,7 @@ export class BundlesViewModel {
   private getLearningAreasWithBundleInfo(
     bundlesByLearningArea$: Observable<Dictionary<BundleInterface[]>>,
     booksByLearningArea$: Observable<Dictionary<ContentInterface[]>>
-  ): Observable<LearningAreasWithBundlesInfo> {
+  ): Observable<LearningAreasWithBundlesInfoInterface> {
     return combineLatest(
       this.learningAreas$,
       bundlesByLearningArea$,
@@ -309,7 +295,7 @@ export class BundlesViewModel {
           learningAreas,
           bundlesByLearningArea,
           booksByLearningArea
-        ]): LearningAreasWithBundlesInfo => {
+        ]): LearningAreasWithBundlesInfoInterface => {
           return {
             learningAreas: learningAreas
               .map(learningArea => ({
@@ -333,11 +319,13 @@ export class BundlesViewModel {
   }
 
   private getBundlesWithContentInfo(
-    learningAreaId$,
-    bundlesByLearningArea$,
-    booksByLearningArea$,
-    unlockedContentsByBundle$
-  ): Observable<BundlesWithContentInfo> {
+    learningAreaId$: Observable<number>,
+    bundlesByLearningArea$: Observable<Dictionary<BundleInterface[]>>,
+    booksByLearningArea$: Observable<Dictionary<ContentInterface[]>>,
+    unlockedContentsByBundle$: Observable<
+      Dictionary<UnlockedContentInterface[]>
+    >
+  ): Observable<BundlesWithContentInfoInterface> {
     return combineLatest(
       learningAreaId$,
       bundlesByLearningArea$,
@@ -355,7 +343,7 @@ export class BundlesViewModel {
           Dictionary<BundleInterface[]>,
           Dictionary<ContentInterface[]>,
           Dictionary<UnlockedContentInterface[]>
-        ]): BundlesWithContentInfo => {
+        ]): BundlesWithContentInfoInterface => {
           return {
             bundles: (bundlesByArea[learningAreaId] || []).map(bundle => ({
               bundle: bundle,
@@ -377,15 +365,35 @@ export class BundlesViewModel {
       map(
         (arr: any[]): Dictionary<any[]> => {
           const byKey = {};
+          const keys = key.split('.');
           arr.forEach(item => {
-            if (!byKey[item[key]]) {
-              byKey[item[key]] = [];
+            const prop = keys.reduce((p, k) => p[k] || '', item);
+            if (!byKey[prop]) {
+              byKey[prop] = [];
             }
-            byKey[item[key]].push(item);
+            byKey[prop].push(item);
           });
           return byKey;
         }
       ),
+      shareReplay(1)
+    );
+  }
+
+  private groupBooksByLearningArea(
+    books$: Observable<EduContentInterface[]>
+  ): Observable<Dictionary<ContentInterface[]>> {
+    return books$.pipe(
+      map(sharedBooks => {
+        const byArea = {};
+        sharedBooks.forEach(book => {
+          if (!byArea[book.publishedEduContentMetadata.learningAreaId]) {
+            byArea[book.publishedEduContentMetadata.learningAreaId] = [];
+          }
+          byArea[book.publishedEduContentMetadata.learningAreaId].push(book);
+        });
+        return byArea;
+      }),
       shareReplay(1)
     );
   }

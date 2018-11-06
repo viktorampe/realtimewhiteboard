@@ -4,7 +4,7 @@ import {
   LearningAreaInterface
 } from '@campus/dal';
 
-export interface LearningAreasWithBundlesInfo {
+export interface LearningAreasWithBundlesInfoInterface {
   learningAreas: {
     learningArea: LearningAreaInterface;
     bundleCount: number;
@@ -12,7 +12,7 @@ export interface LearningAreasWithBundlesInfo {
   }[];
 }
 
-export interface BundlesWithContentInfo {
+export interface BundlesWithContentInfoInterface {
   bundles: {
     bundle: BundleInterface;
     contentsCount: number;

@@ -1,7 +1,8 @@
 <campus-page-bar>
   <campus-filter-text-input theme="dark"
-                            (filterTextChange)="onChangeFilterInput($event)"
-                            [filterText]="filterInput$|async"
+                            [source]="(sharedInfo$|async)?.bundles"
+                            [filterKey]="'bundle.name'"
+                            (filtered)="filteredBundles$.next($event)"
                             class="pages__toolbar__filter"></campus-filter-text-input>
   <div class="divider"></div>
   <campus-button iconClass="icon-tasks"
@@ -21,18 +22,18 @@
 
     <ng-template #noSharedInfo>Er zijn momenteel geen bundels voor jou klaargezet.</ng-template>
     <ng-container *ngIf="sharedInfo.bundles.length > 0; else noSharedInfo">
-      <ng-container *ngIf="filteredSharedInfo$|async as filteredSharedInfo">
+      <ng-container *ngIf="filteredBundles$|async as filteredBundles">
         <div class="pages-bundles__container__bundles-count">
-          {{filteredSharedInfo.bundles.length}} van
+          {{filteredBundles.length}} van
           <u class="pages-bundles__container__bundles-count__total"
-             (click)="resetFilterInput()">{{sharedInfo.bundles.length}}</u>
+             (click)="filterTextInput.clear()">{{sharedInfo.bundles.length}}</u>
           weergegeven
         </div>
 
         <div class="pages-bundles__container__bundles">
           <campus-list-view [listFormat]="listFormat$|async"
                             [placeHolderText]="'De toegepaste filter bevat geen resultaten'">
-            <campus-folder *ngFor="let bundleInfo of filteredSharedInfo.bundles"
+            <campus-folder *ngFor="let bundleInfo of filteredBundles"
                            campusListItem
                            [routerLink]="[bundleInfo.bundle.id]"
                            [itemCount]="bundleInfo.contentsCount"
@@ -45,27 +46,28 @@
             </campus-folder>
           </campus-list-view>
         </div>
-
-        <div *ngIf="filteredSharedInfo.books.length">
-          <campus-page-header [title]="learningArea.name"
-                              [subtitle]="'Boeken'"
-                              [iconClass]="learningArea.icon"></campus-page-header>
-          <div class="pages-bundles__container__books-count">
-            je hebt {{filteredSharedInfo.books.length}} boek(en) voor {{ learningArea.name }}
-          </div>
-          <div class="pages-bundles__container__books">
-            <campus-list-view [listFormat]="listFormat$|async">
-              <campus-content-thumbnail *ngFor="let book of filteredSharedInfo.books"
-                                        campusListItem
-                                        [title]="book.name"
-                                        [contentTypeClass]="'icon-boek'"
-                                        [imagePath]="book.previewImage"
-                                        [fileExtensionClass]="book.fileExtension">
-              </campus-content-thumbnail>
-            </campus-list-view>
-          </div>
-        </div>
       </ng-container>
     </ng-container>
+
+    <div *ngIf="sharedInfo.books.length">
+      <div>&nbsp;</div>
+      <campus-page-header [title]="learningArea.name"
+                          [subtitle]="'Boeken'"
+                          [iconClass]="learningArea.icon"></campus-page-header>
+      <div class="pages-bundles__container__books-count">
+        Je hebt {{sharedInfo.books.length}} boek(en) voor {{ learningArea.name }}
+      </div>
+      <div class="pages-bundles__container__books">
+        <campus-list-view [listFormat]="listFormat$|async">
+          <campus-content-thumbnail *ngFor="let book of sharedInfo.books"
+                                    campusListItem
+                                    [title]="book.name"
+                                    [contentTypeClass]="'icon-boek'"
+                                    [imagePath]="book.previewImage"
+                                    [fileExtensionClass]="book.fileExtension">
+          </campus-content-thumbnail>
+        </campus-list-view>
+      </div>
+    </div>
   </div>
 </ng-container>
