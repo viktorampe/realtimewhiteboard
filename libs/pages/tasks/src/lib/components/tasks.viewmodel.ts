@@ -1,21 +1,8 @@
 import { Injectable } from '@angular/core';
-import {
-  EduContentInterface,
-  EduContentProductTypeInterface,
-  LearningAreaInterface,
-  MethodInterface,
-  PersonInterface,
-  TaskEduContentInterface,
-  TaskInstanceInterface,
-  TaskInterface
-} from '@campus/dal';
+import { EduContentInterface, EduContentProductTypeInterface, LearningAreaInterface, MethodInterface, PersonInterface, TaskEduContentInterface, TaskInstanceInterface, TaskInterface } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
 import { BehaviorSubject, Observable } from 'rxjs';
-import {
-  LearningAreasWithTaskInstanceInfoInterface,
-  TaskInstancesWithEduContentInfoInterface,
-  TaskInstanceWithEduContentsInfoInterface
-} from './tasks.viewmodel.interfaces';
+import { LearningAreasWithTaskInstanceInfoInterface, TaskInstancesWithEduContentInfoInterface, TaskInstanceWithEduContentsInfoInterface } from './tasks.viewmodel.interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -39,6 +26,8 @@ export class TasksViewModel {
   constructor() {
     this.loadMockData();
   }
+  
+  public changeListFormat(value: ListFormat) {}
 
   private loadMockData() {
     this.learningAreasWithTaskInstances$ = this.getMockLearningAreasWithTaskInstances();

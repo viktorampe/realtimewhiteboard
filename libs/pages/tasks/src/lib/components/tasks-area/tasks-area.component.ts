@@ -23,7 +23,6 @@ export class TasksAreaComponent implements OnInit {
   ngOnInit() {
     this.listFormat$ = this.tasksViewModel.listFormat$;
     this.learningAreas$ = this.tasksViewModel.learningAreasWithTaskInstances$;
-    // TODO find out why learningarea name is not displayed
     this.displayedLearningAreas$ = this.getDisplayedLearningAreas$(
       this.learningAreas$,
       this.filterInput$
@@ -38,8 +37,8 @@ export class TasksAreaComponent implements OnInit {
     this.filterInput$.next('');
   }
 
-  clickChangeListFormat(value: string): void {
-    // this.tasksViewModel.changeListFormat(ListFormat[value]);
+  clickChangeListFormat(value: ListFormat): void {
+    this.tasksViewModel.changeListFormat(value);
   }
 
   getDisplayedLearningAreas$(
