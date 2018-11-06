@@ -73,8 +73,12 @@ export class TasksViewModel {
           closedTasks: 0
         }
       ],
-      totalTasks: 9
+      totalTasks: 0
     };
+    mock.totalTasks = mock.learningAreas.reduce(
+      (total, area) => total + area.openTasks + area.closedTasks,
+      0
+    );
 
     return new BehaviorSubject(mock);
   }
