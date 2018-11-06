@@ -28,13 +28,13 @@
       <div class="pages-tasks__container__learning-areas">
         <campus-list-view [listFormat]="listFormat$|async"
                           [placeHolderText]="'De toegepaste filter bevat geen resultaten'">
-          <ng-container *ngIf="(learningAreas$|async)?.totalTasks as taskCounts">
+          <ng-container *ngIf="(displayedLearningAreas$|async)?.totalTasks as taskCounts">
             <!-- click event (or routerlink) needs to be added to the folder items-->
             <campus-folder *ngFor="let learningArea of displayedLearningAreas"
                            campusListItem
                            [routerLink]="learningArea.learningArea.id"
                            [listFormat]="listFormat$|async"
-                           [itemCount]="learningArea.openTasks + learningArea.closedTasks"
+                           [itemCount]="learningArea.openTasks"
                            [title]="learningArea.learningArea.name"
                            [backgroundColor]="learningArea.learningArea.color"
                            [icon]="'learning-area:'+learningArea.learningArea.icon">
