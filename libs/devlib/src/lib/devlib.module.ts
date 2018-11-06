@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { BrowserModule } from '@campus/browser';
 import { DalModule } from '@campus/dal';
 import { SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
@@ -19,7 +20,8 @@ import { UiPageComponent } from './ui-page/ui-page.component';
     CommonModule,
     UiModule,
     DevlibRoutingModule,
-    SharedModule
+    SharedModule,
+    BrowserModule
   ],
   providers: [LoginPageViewModel, EduContentViewModel],
   declarations: [LoginpageComponent, EduContentComponent, UiPageComponent]

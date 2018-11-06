@@ -8,6 +8,10 @@ import {
   UserReducer
 } from '@campus/dal';
 import { select, Store } from '@ngrx/store';
+import {
+  WindowServiceInterface,
+  WINDOW_SERVICE_TOKEN
+} from 'libs/browser/src/lib/window/window.service.interface';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, map, switchMap, take } from 'rxjs/operators';
 
@@ -23,11 +27,14 @@ export class LoginPageViewModel implements Resolve<boolean> {
 
   constructor(
     private store: Store<UserReducer.State>,
-    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
+    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
+    @Inject(WINDOW_SERVICE_TOKEN) private windowService: WindowServiceInterface
   ) {
     store.pipe(select(UserQueries.getCurrentUser)).subscribe(data => {
       this.loggedIn = data != null;
     });
+    this.windowService.openWindow('lalala', 'https://www.google.com');
+    this.windowService.closeWindow('lalala');
   }
 
   /**

@@ -6,7 +6,7 @@ import { WindowServiceInterface } from './window.service.interface';
 })
 export class WindowService implements WindowServiceInterface {
   private nativeWindow = window;
-  private windows: { [name: string]: Window };
+  private windows: { [name: string]: Window } = {};
   constructor() {}
 
   openWindow(name: string, url: string) {
