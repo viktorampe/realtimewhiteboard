@@ -1,0 +1,12 @@
+// Dit is een kopie van \pages\bundles\...\learning-areas.component.scss
+.pages-tasks {
+  padding: 0 20px;
+  &__container {
+    padding: 20px;
+    &__learning-areas-count {
+      &__total {
+        cursor: pointer;
+      }
+    }
+  }
+}

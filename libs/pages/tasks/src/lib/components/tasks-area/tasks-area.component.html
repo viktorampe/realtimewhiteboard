@@ -7,23 +7,26 @@
   <campus-button (click)="clickChangeListFormat('GRID')">grid</campus-button>
   <campus-button (click)="clickChangeListFormat('LINE')">line</campus-button>
 </campus-page-bar>
-<div class="pages-bundles__container"
-     *ngIf="sharedLearningAreas$|async as learningAreas">
+
+
+<div class="pages-tasks__container"
+     *ngIf="learningAreas$|async as learningAreas">
 
   <campus-page-header [title]="'Mijn bundels'"
                       [subtitle]="'leergebieden'"
                       [iconClass]="'polpo-lesmateriaal'"></campus-page-header>
 
   <ng-template #noLearningAreas>Er zijn momenteel geen bundels voor jou klaargezet.</ng-template>
+
   <ng-container *ngIf="learningAreas.length > 0; else noLearningAreas">
     <ng-container *ngIf="displayedLearningAreas$|async as displayedLearningAreas">
-      <div class="pages-bundles__container__learning-areas-count">
+      <div class="pages-tasks__container__learning-areas-count">
         {{displayedLearningAreas.length}} van
-        <u class="pages-bundles__container__learning-areas-count__total"
-           (click)="resetFilterInput(); filterInput.value = ''">{{(sharedLearningAreas$|async)?.length}}</u>
+        <u class="pages-tasks__container__learning-areas-count__total"
+           (click)="resetFilterInput(); filterInput.value = ''">{{(learningAreas$|async)?.length}}</u>
         weergegeven
       </div>
-      <div class="pages-bundles__container__learning-areas">
+      <div class="pages-tasks__container__learning-areas">
         <campus-list-view [listFormat]="listFormat$|async"
                           [placeHolderText]="'De toegepaste filter bevat geen resultaten'">
           <ng-container *ngIf="learningAreasCounts$|async as areasCounts">
