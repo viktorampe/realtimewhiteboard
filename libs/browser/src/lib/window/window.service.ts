@@ -15,5 +15,6 @@ export class WindowService implements WindowServiceInterface {
   }
   closeWindow(name: string) {
     this.windows[name].close();
+    delete this.windows[name];
   }
 }
