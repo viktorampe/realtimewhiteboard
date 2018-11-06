@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { LearningAreaInterface } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { TasksViewModel } from './../tasks.viewmodel';
+import { LearningAreasWithTaskInstanceInfoInterface } from './../tasks.viewmodel.interfaces';
 
 @Component({
   selector: 'campus-tasks-area',
@@ -13,14 +13,16 @@ import { TasksViewModel } from './../tasks.viewmodel';
 export class TasksAreaComponent implements OnInit {
   filterInput$ = new BehaviorSubject<string>('');
   listFormat$: Observable<ListFormat>;
-  learningAreas$: Observable<LearningAreaInterface[]>;
-  displayedLearningAreas$: Observable<LearningAreaInterface[]>;
+  learningAreas$: Observable<LearningAreasWithTaskInstanceInfoInterface>;
+  displayedLearningAreas$: Observable<
+    LearningAreasWithTaskInstanceInfoInterface
+  >;
 
   constructor(private tasksViewModel: TasksViewModel) {}
 
   ngOnInit() {
-    // this.listFormat$ = this.tasksViewModel.listFormat$;
-    // this.learningAreas$ = this.tasksViewModel.learningAreas$;
+    this.listFormat$ = this.tasksViewModel.listFormat$;
+    this.learningAreas$ = this.tasksViewModel.learningAreasWithTaskInstances$;
     // TODO find out why learningarea name is not displayed
     this.displayedLearningAreas$ = this.getDisplayedLearningAreas$(
       this.learningAreas$,
@@ -41,18 +43,38 @@ export class TasksAreaComponent implements OnInit {
   }
 
   getDisplayedLearningAreas$(
-    learningAreas$: Observable<LearningAreaInterface[]>,
+    learningAreas$: Observable<LearningAreasWithTaskInstanceInfoInterface>,
     filterInput$: Observable<string>
-  ): Observable<LearningAreaInterface[]> {
+  ): Observable<LearningAreasWithTaskInstanceInfoInterface> {
     return combineLatest(learningAreas$, filterInput$).pipe(
-      map(([learningAreas, filterInput]: [LearningAreaInterface[], string]) => {
-        if (!filterInput) {
-          return learningAreas;
+      map(
+        ([learningAreas, filterInput]: [
+          LearningAreasWithTaskInstanceInfoInterface,
+          string
+        ]) => {
+          if (!filterInput) {
+            return learningAreas;
+          }
+
+          const learningAreaArray = learningAreas.learningAreas.filter(
+            learningArea =>
+              learningArea.learningArea.name
+                .toLowerCase()
+                .includes(filterInput.toLowerCase())
+          );
+
+          let learningAreaWithTaskInstanceInfo: LearningAreasWithTaskInstanceInfoInterface;
+          learningAreaWithTaskInstanceInfo = {
+            learningAreas: learningAreaArray,
+            totalTasks: learningAreaArray.reduce(
+              (total, area) => total + area.openTasks + area.closedTasks,
+              0
+            )
+          };
+
+          return learningAreaWithTaskInstanceInfo;
         }
-        return learningAreas.filter(learningArea =>
-          learningArea.name.toLowerCase().includes(filterInput.toLowerCase())
-        );
-      })
+      )
     );
   }
 }
