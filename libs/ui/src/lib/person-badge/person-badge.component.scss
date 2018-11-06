@@ -3,28 +3,67 @@
   &--right {
     flex-direction: row-reverse;
     justify-content: flex-start;
+    .ui_person-badge__display {
+      &__name,
+      &__subtext {
+        flex-direction: row-reverse;
+        justify-content: flex-start;
+      }
+    }
   }
   &--left {
     flex-direction: row;
     justify-content: flex-start;
+    .ui_person-badge__display {
+      &__name,
+      &__subtext {
+        flex-direction: row;
+        justify-content: flex-start;
+      }
+    }
   }
   &--top {
     justify-content: center;
     align-items: center;
     flex-direction: column-reverse;
+    .ui_person-badge__display {
+      &__name,
+      &__subtext {
+        justify-content: center;
+        align-items: center;
+        flex-direction: column-reverse;
+      }
+    }
   }
   &--bottom {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    .ui_person-badge__display {
+      &__name,
+      &__subtext {
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+    }
   }
   &__badge,
   img {
     border-radius: 50%;
   }
-  &__displayName {
-    font-size: 14px;
-    font-weight: 700;
-    padding: 3px 10px;
+  &__display {
+    &__name {
+      display: flex;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 3px 10px;
+    }
+    &__subtext {
+      display: flex;
+      font-size: 14px;
+      font-weight: 200;
+      padding: 3px 10px;
+    }
   }
 }
