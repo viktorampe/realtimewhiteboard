@@ -1,5 +1,5 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { TasksAreaComponent } from './tasks-area.component';
 
 describe('TasksAreaComponent', () => {
@@ -8,7 +8,8 @@ describe('TasksAreaComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [TasksAreaComponent]
+      declarations: [TasksAreaComponent],
+      schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
   }));
 
