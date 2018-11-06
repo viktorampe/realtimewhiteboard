@@ -1,0 +1,14 @@
+.pages-tasks {
+  padding: 0 20px;
+  &__container {
+    padding: 20px;
+    &--fixed {
+      padding-top: 70px !important;
+    }
+    &__tasks-count {
+      &__total {
+        cursor: pointer;
+      }
+    }
+  }
+}

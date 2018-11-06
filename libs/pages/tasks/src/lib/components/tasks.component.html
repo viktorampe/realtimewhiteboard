@@ -1,20 +1,20 @@
-<div>
-  <campus-page-bar>
-    <campus-filter-text-input theme="dark"
-                              (filterTextChange)="onChangeFilterInput($event)"
-                              [filterText]="filterInput$|async"></campus-filter-text-input>
-    <div class="divider"></div>
-    <campus-button [iconClass]="'icon-timeline'"
-                   (click)="setListFormat(listFormat.LINE)"></campus-button>
-    <campus-button [iconClass]="'icon-checklist'"
-                   (click)="setListFormat(listFormat.GRID)"></campus-button>
-  </campus-page-bar>
+<campus-page-bar>
+  <campus-filter-text-input theme="dark"
+                            (filterTextChange)="onChangeFilterInput($event)"
+                            [filterText]="filterInput$|async"></campus-filter-text-input>
+  <div class="divider"></div>
+  <campus-button [iconClass]="'icon-timeline'"
+                 (click)="setListFormat(listFormat.LINE)"></campus-button>
+  <campus-button [iconClass]="'icon-checklist'"
+                 (click)="setListFormat(listFormat.GRID)"></campus-button>
+</campus-page-bar>
 
-  <campus-page-header [title]="'learningareaname'"
-                      [subtitle]="'Taken'"
-                      [iconClass]="'icon-checklist'">
-  </campus-page-header>
-  <div>
+<campus-page-header [title]="'learningareaname'"
+                    [subtitle]="'Taken'"
+                    [iconClass]="'icon-checklist'">
+</campus-page-header>
+<div class="pages-tasks__container">
+  <div class="pages-bundles__container__tasks-count">
     {{(displayedTaskInstances$|async)?.instances.length}} van
     <u (click)="resetFilterInput(); filterInput.value = ''">{{(taskInstances$|async)?.instances.length}}</u>
     weergegeven
