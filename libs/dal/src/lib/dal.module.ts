@@ -25,7 +25,8 @@ import {
   StudentContentStatusesEffects,
   StudentContentStatusReducer
 } from './+state/student-content-status';
-import { UiEffects, UiReducer } from './+state/ui/';
+import { TaskEffects, TaskReducer } from './+state/task';
+import { UiEffects, UiReducer } from './+state/ui';
 import {
   UnlockedBoekeGroupReducer,
   UnlockedBoekeGroupsEffects
@@ -93,7 +94,8 @@ interface DalOptions {
       UnlockedBoekeGroupReducer,
       UnlockedBoekeStudentReducer,
       ContentStatusReducer,
-      UserReducer
+      UserReducer,
+      TaskReducer
       //todo add alerts reducer
     ]),
     EffectsModule.forFeature([
@@ -108,6 +110,7 @@ interface DalOptions {
       UnlockedContentsEffects,
       UnlockedBoekeStudentsEffects,
       ContentStatusesEffects,
+      TaskEffects,
       AlertsEffects
     ])
   ],
