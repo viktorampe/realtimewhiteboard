@@ -5,12 +5,15 @@ import { WindowServiceInterface } from './window.service.interface';
   providedIn: 'root'
 })
 export class WindowService implements WindowServiceInterface {
+  private nativeWindow = window;
+  private windows: { [name: string]: Window };
   constructor() {}
 
   openWindow(name: string, url: string) {
-    throw new Error('Method not implemented.');
+    const openedWindow = this.nativeWindow.open(url, name);
+    this.windows[name] = openedWindow;
   }
   closeWindow(name: string) {
-    throw new Error('Method not implemented.');
+    this.windows[name].close();
   }
 }
