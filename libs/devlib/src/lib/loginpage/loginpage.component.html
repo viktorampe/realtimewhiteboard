@@ -59,3 +59,10 @@
 <div>
   {{currentUser|async|json}}
 </div>
+
+<button (click)="loadCurrentUserinState()">Load user</button>
+
+<button (click)="getResultForTask()">Result Task</button>
+<div>
+  {{resultTask$|async|json}}
+</div>

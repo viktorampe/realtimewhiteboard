@@ -3,6 +3,8 @@ import { AlertReducer, EduContentInterface } from '@campus/dal';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { LoadUser } from './../../../../dal/src/lib/+state/user/user.actions';
+import { ScormResultsService } from './../../../../pages/shared/src/lib/scorm/scorm-results.service';
 import { LoginPageViewModel } from './loginpage.viewmodel';
 
 @Component({
@@ -16,12 +18,24 @@ export class LoginpageComponent implements OnInit {
   constructor(
     public loginPageviewModel: LoginPageViewModel,
     private personApi: PersonApi,
-    private store: Store<AlertReducer.State>
+    private store: Store<AlertReducer.State>,
+    private scormResultsService: ScormResultsService
   ) {}
 
   ngOnInit() {}
 
   getCurrentUser() {
     this.currentUser = this.personApi.getCurrent();
+  }
+
+  loadCurrentUserinState() {
+    this.store.dispatch(new LoadUser({ force: true }));
+  }
+
+  // tslint:disable-next-line:member-ordering
+  resultTask$: any;
+  getResultForTask() {
+    const result = this.scormResultsService.getResultsForStudent(6);
+    this.resultTask$ = result;
   }
 }
