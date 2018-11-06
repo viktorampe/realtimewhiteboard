@@ -4,9 +4,8 @@
                             [filterText]="filterInput$|async"
                             class="pages__toolbar__filter"></campus-filter-text-input>
   <div class="divider"></div>
-  <!-- links need to replaced by the button -->
-  <a (click)="clickChangeListFormat('GRID')">grid</a>
-  <a (click)="clickChangeListFormat('LINE')">line</a>
+  <campus-button (click)="clickChangeListFormat('GRID')">grid</campus-button>
+  <campus-button (click)="clickChangeListFormat('LINE')">line</campus-button>
 </campus-page-bar>
 <div class="pages-bundles__container"
      *ngIf="sharedLearningAreas$|async as learningAreas">
