@@ -1,3 +1,33 @@
 <p>
   tasks works!
 </p>
+
+<div>
+  <h3>taskViewModel.learningAreasWithTaskInstances$</h3>
+  {{taskViewModel.learningAreasWithTaskInstances$ | async | json}}
+</div>
+
+<div>
+  <h3>taskViewModel.selectedLearningArea$</h3>
+  {{taskViewModel.selectedLearningArea$ | async | json}}
+</div>
+
+<div>
+  <h3>taskViewModel.taskInstancesByLearningArea$</h3>
+  {{taskViewModel.taskInstancesByLearningArea$ | async | json}}
+</div>
+
+<div>
+  <h3>taskViewModel.selectedTaskInstance$</h3>
+  {{taskViewModel.selectedTaskInstance$ | async | json}}
+</div>
+
+<div>
+  <h3>taskViewModel.taskInstanceWithEduContents$</h3>
+  {{taskViewModel.taskInstanceWithEduContents$ | async | json}}
+</div>
+
+<div>
+  <h3>taskViewModel.listFormat$</h3>
+  {{taskViewModel.listFormat$ | async | json}}
+</div>
