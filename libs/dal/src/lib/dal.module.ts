@@ -57,7 +57,7 @@ import {
   USER_CONTENT_SERVICE_TOKEN
 } from './bundle';
 import { ContentRequestService } from './content-request/content-request.service';
-import { CONTENTREQUEST_SERVICE_TOKEN } from './content-request/content-request.service.interface';
+import { CONTENT_REQUEST_SERVICE_TOKEN } from './content-request/content-request.service.interface';
 import { EduContentService } from './edu-content/edu-content.service';
 import { EDUCONTENT_SERVICE_TOKEN } from './edu-content/edu-content.service.interface';
 import { LearningAreaService } from './learning-area/learning-area.service';
@@ -143,7 +143,7 @@ interface DalOptions {
     { provide: LINKED_PERSON_SERVICE_TOKEN, useClass: LinkedPersonService },
     { provide: AUTH_SERVICE_TOKEN, useClass: AuthService },
     { provide: TASK_SERVICE_TOKEN, useClass: TaskService },
-    { provide: CONTENTREQUEST_SERVICE_TOKEN, useClass: ContentRequestService }
+    { provide: CONTENT_REQUEST_SERVICE_TOKEN, useClass: ContentRequestService }
   ]
 })
 export class DalModule {
