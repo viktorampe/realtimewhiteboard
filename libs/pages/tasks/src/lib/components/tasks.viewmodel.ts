@@ -151,21 +151,21 @@ export class TasksViewModel {
     let mockLearningArea1: LearningAreaInterface;
     mockLearningArea1 = {
       name: 'Wiskunde',
-      icon: 'polpo-wiskunde',
+      icon: 'wiskunde',
       color: '#2c354f'
     };
 
     let mockLearningArea2: LearningAreaInterface;
     mockLearningArea2 = {
       name: 'Moderne Wetenschappen',
-      icon: 'polpo-natuurwetenschappen',
+      icon: 'natuurwetenschappen',
       color: '#5e3b47'
     };
 
     let mockLearningArea3: LearningAreaInterface;
     mockLearningArea3 = {
       name: 'Engels',
-      icon: 'polpo-engels',
+      icon: 'engels',
       color: '#553030'
     };
 
