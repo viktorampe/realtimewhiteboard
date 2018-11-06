@@ -1,0 +1,51 @@
+<campus-page-bar>
+  <campus-filter-text-input theme="dark"
+                            (filterTextChange)="onChangeFilterInput($event)"
+                            [filterText]="filterInput$|async"
+                            class="pages__toolbar__filter"></campus-filter-text-input>
+  <div class="divider"></div>
+  <!-- links need to replaced by the button -->
+  <a (click)="clickChangeListFormat('GRID')">grid</a>
+  <a (click)="clickChangeListFormat('LINE')">line</a>
+</campus-page-bar>
+<div class="pages-bundles__container"
+     *ngIf="sharedLearningAreas$|async as learningAreas">
+
+  <campus-page-header [title]="'Mijn bundels'"
+                      [subtitle]="'leergebieden'"
+                      [iconClass]="'polpo-lesmateriaal'"></campus-page-header>
+
+  <ng-template #noLearningAreas>Er zijn momenteel geen bundels voor jou klaargezet.</ng-template>
+  <ng-container *ngIf="learningAreas.length > 0; else noLearningAreas">
+    <ng-container *ngIf="displayedLearningAreas$|async as displayedLearningAreas">
+      <div class="pages-bundles__container__learning-areas-count">
+        {{displayedLearningAreas.length}} van
+        <u class="pages-bundles__container__learning-areas-count__total"
+           (click)="resetFilterInput(); filterInput.value = ''">{{(sharedLearningAreas$|async)?.length}}</u>
+        weergegeven
+      </div>
+      <div class="pages-bundles__container__learning-areas">
+        <campus-list-view [listFormat]="listFormat$|async"
+                          [placeHolderText]="'De toegepaste filter bevat geen resultaten'">
+          <ng-container *ngIf="learningAreasCounts$|async as areasCounts">
+            <!-- click event (or routerlink) needs to be added to the folder items-->
+            <campus-folder *ngFor="let learningArea of displayedLearningAreas"
+                           campusListItem
+                           [routerLink]="[learningArea.id]"
+                           [listFormat]="listFormat$|async"
+                           [itemCount]="areasCounts[learningArea.id].booksCount + areasCounts[learningArea.id].bundlesCount"
+                           [title]="learningArea.name"
+                           [backgroundColor]="learningArea.color"
+                           [icon]="'learning-area:'+learningArea.icon">
+              <campus-folder-details>
+                {{areasCounts[learningArea.id].booksCount}}
+                {{areasCounts[learningArea.id].booksCount === 1 ? 'boek' : 'boeken'}} |
+                {{areasCounts[learningArea.id].bundlesCount}}
+                {{areasCounts[learningArea.id].bundlesCount === 1 ? 'bundel' : 'bundels'}}</campus-folder-details>
+            </campus-folder>
+          </ng-container>
+        </campus-list-view>
+      </div>
+    </ng-container>
+  </ng-container>
+</div>
