@@ -5,9 +5,9 @@
                             class="pages__toolbar__filter"></campus-filter-text-input>
   <div class="divider"></div>
   <campus-button iconClass="list-view"
-                 (click)="clickChangeListFormat('GRID')"></campus-button>
+                 (click)="setListFormat(listFormat.LINE)"></campus-button>
   <campus-button iconClass="grid-view"
-                 (click)="clickChangeListFormat('LINE')"></campus-button>
+                 (click)="setListFormat(listFormat.GRID)"></campus-button>
 </campus-page-bar>
 
 <campus-side-sheet [isOpenOnInit]="true"
