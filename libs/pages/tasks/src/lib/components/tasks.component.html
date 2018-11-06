@@ -1,3 +1,42 @@
-<p>
-  tasks works!
-</p>
+<div>
+  <campus-page-bar>
+    <campus-filter-text-input theme="dark"
+                              (filterTextChange)="onChangeFilterInput($event)"
+                              [filterText]="filterInput$|async"></campus-filter-text-input>
+    <div class="divider"></div>
+    <campus-button [iconClass]="'icon-timeline'"
+                   (click)="setListFormat(listFormat.LINE)"></campus-button>
+    <campus-button [iconClass]="'icon-checklist'"
+                   (click)="setListFormat(listFormat.GRID)"></campus-button>
+  </campus-page-bar>
+
+  <campus-page-header [title]="'learningareaname'"
+                      [subtitle]="'Taken'"
+                      [iconClass]="'icon-checklist'">
+  </campus-page-header>
+  <div>
+    {{(displayedTaskInstances$|async)?.instances.length}} van
+    <u (click)="resetFilterInput(); filterInput.value = ''">{{(taskInstances$|async)?.instances.length}}</u>
+    weergegeven
+  </div>
+
+  <campus-list-view [listFormat]="listFormat$|async"
+                    [placeHolderText]="''">
+
+    <campus-folder *ngFor="let instance of (displayedTaskInstances$|async).instances"
+                   [routerLink]="[instance.taskInstance.id]"
+                   campusListItem
+                   [progress]="75"
+                   [itemCount]="instance.taskEduContentsCount"
+                   [title]="instance.taskInstance.name"
+                   [backgroundColor]=""
+                   [icon]="'icon-checklist'">
+      <campus-folder-details>
+        {{ instance.taskEduContentsCount + " item(s)" }}<br />
+        {{"Deadline: " + "insert date here" }}
+      </campus-folder-details>
+    </campus-folder>
+
+  </campus-list-view>
+
+</div>
