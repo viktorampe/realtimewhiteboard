@@ -148,4 +148,16 @@ describe('TasksAreaComponent', () => {
 
     expect(componentDE.nativeElement.textContent).toContain(amountOfAreasText);
   });
+
+  it('should show the amount of tasks per learningArea', () => {
+    const amountOfOpenTasksText = '2 open taken';
+    const amountOfClosedTasksText = '3 gesloten taken';
+
+    const folderDE = fixture.debugElement.query(By.css('campus-folder'));
+
+    expect(folderDE.nativeElement.textContent).toContain(amountOfOpenTasksText);
+    expect(folderDE.nativeElement.textContent).toContain(
+      amountOfClosedTasksText
+    );
+  });
 });
