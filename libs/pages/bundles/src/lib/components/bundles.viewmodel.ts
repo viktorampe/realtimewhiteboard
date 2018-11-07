@@ -379,22 +379,4 @@ export class BundlesViewModel {
       shareReplay(1)
     );
   }
-
-  private groupBooksByLearningArea(
-    books$: Observable<EduContentInterface[]>
-  ): Observable<Dictionary<ContentInterface[]>> {
-    return books$.pipe(
-      map(sharedBooks => {
-        const byArea = {};
-        sharedBooks.forEach(book => {
-          if (!byArea[book.publishedEduContentMetadata.learningAreaId]) {
-            byArea[book.publishedEduContentMetadata.learningAreaId] = [];
-          }
-          byArea[book.publishedEduContentMetadata.learningAreaId].push(book);
-        });
-        return byArea;
-      }),
-      shareReplay(1)
-    );
-  }
 }
