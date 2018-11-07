@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatIconModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
-import { UiModule } from '@campus/ui';
+import { BreadcrumbLinkInterface, UiModule } from '@campus/ui';
+import { BehaviorSubject } from 'rxjs';
 import { HeaderComponent } from './header.component';
-import { HeaderViewModel } from './header.viewmodel';
+import { HeaderViewModel, mockBreadCrumbs } from './header.viewmodel';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +14,9 @@ import { HeaderViewModel } from './header.viewmodel';
 export class MockHeaderViewModel {
   enableAlerts: true;
   enableMessages: true;
+  breadCrumbs$ = new BehaviorSubject<BreadcrumbLinkInterface[]>(
+    mockBreadCrumbs
+  );
 }
 
 describe('HeaderComponent', () => {
@@ -20,7 +25,7 @@ describe('HeaderComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [UiModule, RouterTestingModule],
+      imports: [UiModule, RouterTestingModule, MatIconModule],
       declarations: [HeaderComponent],
       providers: [
         {

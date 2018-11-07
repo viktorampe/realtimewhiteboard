@@ -70,7 +70,7 @@ describe('HideDesktopDirective', () => {
     breakpointStream.next({ matches: !isMobileBreakpoint });
     testContainerFixture.detectChanges();
 
-    expect(componentDE.nativeElement.hidden).toBe(true);
+    expect(componentDE.nativeElement.style.display).toBe('none');
 
     breakpointStream.next({ matches: isMobileBreakpoint });
     testContainerFixture.detectChanges();

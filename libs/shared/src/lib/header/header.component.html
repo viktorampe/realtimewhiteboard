@@ -40,10 +40,10 @@
     </campus-app-bar>
   </div>
   <div class="shared-header__page-bar">
-    <ng-container *ngIf="pageBarNavigation$|async as navItem">
+    <ng-container *ngIf="pageBarNavItem$|async as navItem">
 
-      <mat-icon routerLink="{{navItem.link}}"
-                class="shared-header__page-bar_menu-icon"
+      <mat-icon (click)="onPageBarNavigation(navItem)"
+                class="shared-header__page-bar_nav-icon"
                 [svgIcon]="navItem.icon"
                 hide-desktop></mat-icon>
     </ng-container>

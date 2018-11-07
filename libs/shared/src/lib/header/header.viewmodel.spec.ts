@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { MatIconModule } from '@angular/material';
+import { RouterTestingModule } from '@angular/router/testing';
 import {
   AUTH_SERVICE_TOKEN,
   PersonInterface,
@@ -54,7 +56,9 @@ describe('headerViewModel', () => {
               initialState: usedUserState
             }
           }
-        ])
+        ]),
+        RouterTestingModule,
+        MatIconModule
       ],
       providers: [
         HeaderViewModel,

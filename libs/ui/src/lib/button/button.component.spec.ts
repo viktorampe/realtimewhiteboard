@@ -67,9 +67,9 @@ describe('ButtonComponent', () => {
     component.iconClass = mockIconClass;
     testContainerFixture.detectChanges();
 
-    const iconDE = componentDE.query(By.css('i'));
+    const iconDE = componentDE.query(By.css('mat-icon'));
 
-    expect(iconDE.nativeElement.classList).toContain(mockIconClass);
+    expect(iconDE.nativeElement).toBeTruthy();
   });
 
   it('shouldnt project the content', () => {

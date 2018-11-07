@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import {
   AlertQueueInterface,
   AuthServiceInterface,
@@ -6,6 +7,7 @@ import {
   DalState,
   MessageInterface,
   PersonInterface,
+  UiActions,
   UserQueries
 } from '@campus/dal';
 import { BreadcrumbLinkInterface } from '@campus/ui';
@@ -33,24 +35,29 @@ export interface DropdownItemInterface {
   text: string;
 }
 
+export interface PageBarNavItem {
+  icon: string;
+  link?: any[];
+}
+
 // remove when breadcrumb logic is finished
-const mockBreadCrumbs: BreadcrumbLinkInterface[] = [
+export const mockBreadCrumbs: BreadcrumbLinkInterface[] = [
   {
     displayText: 'level 0',
     link: ['/level0']
-  },
-  {
-    displayText: 'level 1',
-    link: ['/level1']
-  },
-  {
-    displayText: 'level 2',
-    link: ['/level2']
-  },
-  {
-    displayText: 'level 3',
-    link: ['/level3']
   }
+  // {
+  //   displayText: 'level 1',
+  //   link: ['/level1']
+  // }
+  // {
+  //   displayText: 'level 2',
+  //   link: ['/level2']
+  // },
+  // {
+  //   displayText: 'level 3',
+  //   link: ['/level3']
+  // }
 ];
 
 @Injectable({
@@ -66,11 +73,11 @@ export class HeaderViewModel {
   //presentation stream
   recentAlerts$: Observable<DropdownItemInterface[]>; //TODO replace interface with the actual dropdown interface
   recentMessages$: Observable<DropdownItemInterface[]>; //TODO replace interface with the actual dropdown interface
+  pageBarNavItem$: Observable<PageBarNavItem> = this.setupPageBarNavigation();
+
   //state source streams
   private alertsForUser$: Observable<AlertQueueInterface[]>;
   private messagesForUser$: Observable<MessageInterface[]>;
-
-  pageBarNavigation$ = this.setupPageBarNavigation();
 
   constructor(
     @Inject(ENVIRONMENT_ALERTS_FEATURE_TOKEN)
@@ -79,7 +86,8 @@ export class HeaderViewModel {
     private environmentMessagesFeature: EnvironmentMessagesFeatureInterface,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     private store: Store<DalState>,
-    private headerResolver: HeaderResolver
+    private headerResolver: HeaderResolver,
+    private router: Router
   ) {
     this.headerResolver.resolve();
     this.loadFeatureToggles();
@@ -157,16 +165,25 @@ export class HeaderViewModel {
     );
   }
 
-  setupPageBarNavigation(): Observable<any> {
+  setupPageBarNavigation(): Observable<PageBarNavItem> {
     return this.breadCrumbs$.pipe(
       map(breadCrumbs => {
         return breadCrumbs.length < 2
-          ? { icon: 'menu', link: ['/'] }
+          ? { icon: 'menu' }
           : {
               icon: 'arrow-back',
               link: breadCrumbs[breadCrumbs.length - 2].link
             };
       })
     );
+  }
+
+  onPageBarNavigation(navItem: PageBarNavItem) {
+    if (navItem.link) {
+      this.router.navigate(navItem.link);
+    } else {
+      // open the side nav
+      this.store.dispatch(new UiActions.ToggleSideNav());
+    }
   }
 }

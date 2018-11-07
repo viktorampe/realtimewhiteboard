@@ -7,7 +7,8 @@ export enum UiActionTypes {
   UiLoaded = '[Ui] Ui Loaded',
   SaveUi = '[Ui] Ui Save To Storage',
   SetListFormat = '[Ui] Ui Set List Format',
-  ToggleSideSheet = '[Ui] Ui Toggle Side Sheet'
+  ToggleSideSheet = '[Ui] Ui Toggle Side Sheet',
+  ToggleSideNav = '[Ui] Ui Toggle Side Nav'
 }
 
 export class LoadUi implements Action {
@@ -32,17 +33,23 @@ export class ToggleSideSheetUi implements Action {
   readonly type = UiActionTypes.ToggleSideSheet;
 }
 
+export class ToggleSideNav implements Action {
+  readonly type = UiActionTypes.ToggleSideNav;
+}
+
 export type UiAction =
   | LoadUi
   | UiLoaded
   | SaveUi
   | SetListFormatUi
-  | ToggleSideSheetUi;
+  | ToggleSideSheetUi
+  | ToggleSideNav;
 
 export const fromUiActions = {
   LoadUi,
   UiLoaded,
   SaveUi,
   SetListFormatUi,
-  ToggleSideSheetUi
+  ToggleSideSheetUi,
+  ToggleSideNav
 };

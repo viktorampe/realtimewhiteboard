@@ -11,6 +11,7 @@ export interface UiState {
   loaded: boolean; // has the Ui list been loaded
   listFormat?: string;
   sideSheetOpen?: boolean;
+  sideNavOpen?: boolean;
 }
 
 export const initialState: UiState = {
@@ -39,6 +40,12 @@ export function reducer(
       state = {
         ...state,
         sideSheetOpen: !state.sideSheetOpen
+      };
+      break;
+    case UiActionTypes.ToggleSideNav:
+      state = {
+        ...state,
+        sideNavOpen: !state.sideNavOpen
       };
       break;
   }
