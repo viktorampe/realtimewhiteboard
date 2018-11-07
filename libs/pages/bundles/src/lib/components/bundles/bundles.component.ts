@@ -1,9 +1,15 @@
 import { Component, ViewChild } from '@angular/core';
 import { LearningAreaInterface } from '@campus/dal';
 import { FilterTextInputComponent, ListFormat } from '@campus/ui';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
+import { FilterService } from '../bundles.filter';
 import { BundlesViewModel } from '../bundles.viewmodel';
-import { BundlesWithContentInfoInterface } from '../bundles.viewmodel.interfaces';
+import {
+  BundleInfoInterface,
+  BundlesWithContentInfoInterface
+} from '../bundles.viewmodel.interfaces';
+
+type NestedPartial<T> = { [P in keyof T]?: NestedPartial<T[P]> };
 
 /**
  * component listing bundles en book-e's for learning area
@@ -21,18 +27,23 @@ export class BundlesComponent {
   protected listFormat = ListFormat;
 
   listFormat$: Observable<ListFormat>;
-  filterInput$ = new BehaviorSubject<string>('');
 
   learningArea$: Observable<LearningAreaInterface>;
   sharedInfo$: Observable<BundlesWithContentInfoInterface>;
-  filteredBundles$ = new BehaviorSubject<any[]>([]);
 
   @ViewChild(FilterTextInputComponent)
-  filterTextInput: FilterTextInputComponent;
+  filterTextInput: FilterTextInputComponent<
+    BundlesWithContentInfoInterface,
+    BundleInfoInterface
+  >;
 
-  constructor(private bundlesViewModel: BundlesViewModel) {}
+  constructor(
+    private bundlesViewModel: BundlesViewModel,
+    private filterService: FilterService
+  ) {}
 
   ngOnInit(): void {
+    this.filterTextInput.filterFn = this.filterFn.bind(this);
     this.learningArea$ = this.bundlesViewModel.activeLearningArea$;
     this.listFormat$ = this.bundlesViewModel.listFormat$;
     this.sharedInfo$ = this.bundlesViewModel.activeLearningAreaBundles$;
@@ -42,11 +53,12 @@ export class BundlesComponent {
     this.bundlesViewModel.changeListFormat(this.listFormat[value]);
   }
 
-  onChangeFilterInput(filterInput: string): void {
-    this.filterInput$.next(filterInput);
-  }
-
-  resetFilterInput(): void {
-    this.filterInput$.next('');
+  private filterFn(
+    info: BundlesWithContentInfoInterface,
+    searchText: string
+  ): BundleInfoInterface[] {
+    return this.filterService.filter(info.bundles, {
+      bundle: { name: searchText }
+    });
   }
 }

@@ -1,8 +1,6 @@
 <campus-page-bar>
   <campus-filter-text-input theme="dark"
-                            [source]="(sharedInfo$|async)?.bundles"
-                            [filterKey]="'bundle.name'"
-                            (filtered)="filteredBundles$.next($event)"
+                            [source]="(sharedInfo$|async)"
                             class="pages__toolbar__filter"></campus-filter-text-input>
   <div class="divider"></div>
   <campus-button iconClass="icon-tasks"
@@ -22,20 +20,22 @@
 
     <ng-template #noSharedInfo>Er zijn momenteel geen bundels voor jou klaargezet.</ng-template>
     <ng-container *ngIf="sharedInfo.bundles.length > 0; else noSharedInfo">
-      <ng-container *ngIf="filteredBundles$|async as filteredBundles">
+      <ng-container *ngIf="filterTextInput.result$|async as filteredBundlesInfo">
         <div class="pages-bundles__container__bundles-count">
-          {{filteredBundles.length}} van
+          {{filteredBundlesInfo.length}} van
           <u class="pages-bundles__container__bundles-count__total"
              (click)="filterTextInput.clear()">{{sharedInfo.bundles.length}}</u>
           weergegeven
         </div>
 
-        <div class="pages-bundles__container__bundles">
-          <campus-list-view [listFormat]="listFormat$|async"
+        <div class="pages-bundles__container__bundles"
+             *ngIf="listFormat$|async as gridListFormat">
+          <campus-list-view [listFormat]="gridListFormat"
                             [placeHolderText]="'De toegepaste filter bevat geen resultaten'">
-            <campus-folder *ngFor="let bundleInfo of filteredBundles"
+            <campus-folder *ngFor="let bundleInfo of filteredBundlesInfo"
                            campusListItem
                            [routerLink]="[bundleInfo.bundle.id]"
+                           [listFormat]="gridListFormat"
                            [itemCount]="bundleInfo.contentsCount"
                            [title]="bundleInfo.bundle.name"
                            [backgroundColor]="learningArea.color"

@@ -1,8 +1,6 @@
 <campus-page-bar>
   <campus-filter-text-input theme="dark"
-                            [source]="(sharedInfo$|async)?.learningAreas"
-                            [filterKey]="'learningArea.name'"
-                            (filtered)="filteredSharedInfo$.next($event)"
+                            [source]="sharedInfo$|async"
                             class="pages__toolbar__filter"></campus-filter-text-input>
   <div class="divider"></div>
   <!-- links need to replaced by the button -->
@@ -19,20 +17,21 @@
 
   <ng-template #noSharedInfo>Er zijn momenteel geen bundels voor jou klaargezet.</ng-template>
   <ng-container *ngIf="sharedInfo.learningAreas.length > 0; else noSharedInfo">
-    <ng-container *ngIf="filteredSharedInfo$|async as filteredSharedLearningAreaInfo">
+    <ng-container *ngIf="filterTextInput.result$|async as filteredSharedLearningAreaInfo">
       <div class="pages-bundles__container__learning-areas-count">
         {{filteredSharedLearningAreaInfo.length}} van
         <u class="pages-bundles__container__learning-areas-count__total"
            (click)="filterTextInput.clear()">{{sharedInfo.learningAreas.length}}</u>
         weergegeven
       </div>
-      <div class="pages-bundles__container__learning-areas">
-        <campus-list-view [listFormat]="listFormat$|async"
+      <div class="pages-bundles__container__learning-areas"
+           *ngIf="listFormat$|async as gridListFormat">
+        <campus-list-view [listFormat]="gridListFormat"
                           [placeHolderText]="'De toegepaste filter bevat geen resultaten'">
           <campus-folder *ngFor="let learningAreaInfo of filteredSharedLearningAreaInfo"
                          campusListItem
                          [routerLink]="[learningAreaInfo.learningArea.id]"
-                         [listFormat]="listFormat$|async"
+                         [listFormat]="gridListFormat"
                          [itemCount]="learningAreaInfo.bookCount + learningAreaInfo.bundleCount"
                          [title]="learningAreaInfo.learningArea.name"
                          [backgroundColor]="learningAreaInfo.learningArea.color"

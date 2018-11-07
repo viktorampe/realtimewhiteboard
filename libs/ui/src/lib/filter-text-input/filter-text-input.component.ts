@@ -1,12 +1,6 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  Output
-} from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 
 export enum FilterTextInputTheme {
@@ -27,22 +21,19 @@ export enum FilterTextInputTheme {
   templateUrl: './filter-text-input.component.html',
   styleUrls: ['./filter-text-input.component.scss']
 })
-export class FilterTextInputComponent implements OnDestroy {
+export class FilterTextInputComponent<I, O> {
+  public filterFn: (source: I, filterText: string | number) => O[];
+  public result$: Observable<O[]>;
   private input = new FormControl('');
-  private subscriptions = new Subscription();
 
-  @Input()
-  set source(source: any[]) {
-    this.subscriptions.add(this.filterSource(source));
-  }
-  @Input() filterKey: string;
-  @Input() filterIgnoreCase?: boolean = true;
   @Input() theme: FilterTextInputTheme;
   @Input() placeholder = 'Filter';
-  @Output() filtered = new EventEmitter<any[]>();
-
-  ngOnDestroy() {
-    this.subscriptions.unsubscribe();
+  @Input()
+  set source(source: I) {
+    this.result$ = this.input.valueChanges.pipe(
+      startWith(''),
+      map(filterText => this.filterFn(source, filterText))
+    );
   }
 
   /**
@@ -68,52 +59,5 @@ export class FilterTextInputComponent implements OnDestroy {
   onEnterPressed(e: KeyboardEvent): boolean {
     e.preventDefault();
     return false;
-  }
-
-  private filterSource(source: any[]): Subscription {
-    return this.input.valueChanges
-      .pipe(
-        startWith(''),
-        map(filterText =>
-          this.filter(source, this.filterKey, filterText, this.filterIgnoreCase)
-        )
-      )
-      .subscribe(filtered => {
-        this.filtered.emit(filtered);
-      });
-  }
-
-  /**
-   * Filter an array where key matches value partially
-   *
-   * @param {T[]} list array of object to filter
-   * @param {string} key (path to) object key with value to compare
-   * @param {string} filterText text to filter on
-   * @param {boolean} ignoreCase if filter is case sensitive
-   * @returns {T[]}
-   */
-  private filter<T>(
-    list: T[],
-    key: string,
-    filterText: string,
-    ignoreCase: boolean
-  ): T[] {
-    if (!filterText) {
-      return list;
-    }
-    if (ignoreCase) {
-      filterText = filterText.toLowerCase();
-    }
-    const keys: string[] = key.split('.');
-    return list.filter(item => {
-      // traverse object until we reach the specified key
-      let prop: string = keys.reduce((p: T, k: string) => {
-        return p[k] || '';
-      }, item);
-      if (ignoreCase) {
-        prop = prop.toLowerCase();
-      }
-      return prop.includes(filterText);
-    });
   }
 }

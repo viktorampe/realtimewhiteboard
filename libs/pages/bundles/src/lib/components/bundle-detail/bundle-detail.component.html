@@ -1,8 +1,6 @@
 <campus-page-bar>
   <campus-filter-text-input theme="dark"
                             [source]="contents$|async"
-                            [filterKey]="'name'"
-                            (filtered)="filteredContents$.next($event)"
                             class="pages__toolbar__filter"></campus-filter-text-input>
   <div class="divider"></div>
   <campus-button iconClass="icon-tasks"
@@ -42,7 +40,7 @@
       </campus-page-header>
 
       <ng-container *ngIf="(contents$|async) as contents">
-        <ng-container *ngIf="(filteredContents$|async) as filteredContents">
+        <ng-container *ngIf="(filterTextInput.result$|async) as filteredContents">
           <div class="itemsAmount">
             {{filteredContents.length}} van
             <u (click)="filterTextInput.clear()">{{contents.length}}</u>
@@ -54,6 +52,7 @@
                             [multiSelect]="true">
             <campus-content-thumbnail *ngFor="let content of filteredContents"
                                       campusListItem
+                                      [listFormat]="listFormat$|async"
                                       [dataObject]="content"
                                       [title]="content.name"
                                       [fileExtensionClass]="content.fileExtension"

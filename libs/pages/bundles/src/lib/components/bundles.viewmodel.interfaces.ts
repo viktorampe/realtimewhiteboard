@@ -4,18 +4,22 @@ import {
   LearningAreaInterface
 } from '@campus/dal';
 
+export interface LearningAreaInfoInterface {
+  learningArea: LearningAreaInterface;
+  bundleCount: number;
+  bookCount: number;
+}
+
 export interface LearningAreasWithBundlesInfoInterface {
-  learningAreas: {
-    learningArea: LearningAreaInterface;
-    bundleCount: number;
-    bookCount: number;
-  }[];
+  learningAreas: LearningAreaInfoInterface[];
+}
+
+export interface BundleInfoInterface {
+  bundle: BundleInterface;
+  contentsCount: number;
 }
 
 export interface BundlesWithContentInfoInterface {
-  bundles: {
-    bundle: BundleInterface;
-    contentsCount: number;
-  }[];
+  bundles: BundleInfoInterface[];
   books: ContentInterface[];
 }

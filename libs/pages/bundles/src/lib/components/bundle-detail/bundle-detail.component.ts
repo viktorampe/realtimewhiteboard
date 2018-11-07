@@ -3,6 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   OnDestroy,
+  OnInit,
   ViewChild
 } from '@angular/core';
 import {
@@ -17,8 +18,9 @@ import {
   ListViewComponent,
   SideSheetComponent
 } from '@campus/ui';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
+import { FilterService } from '../bundles.filter';
 import { BundlesViewModel } from '../bundles.viewmodel';
 
 @Component({
@@ -26,7 +28,7 @@ import { BundlesViewModel } from '../bundles.viewmodel';
   templateUrl: './bundle-detail.component.html',
   styleUrls: ['./bundle-detail.component.scss']
 })
-export class BundleDetailComponent implements OnDestroy, AfterViewInit {
+export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   protected listFormat = ListFormat; //enum beschikbaar maken in template
 
   listFormat$: Observable<ListFormat> = this.bundlesViewModel.listFormat$;
@@ -38,13 +40,12 @@ export class BundleDetailComponent implements OnDestroy, AfterViewInit {
     .activeBundleOwner$;
   contents$: Observable<ContentInterface[]> = this.bundlesViewModel
     .activeBundleContents$;
-  filteredContents$ = new BehaviorSubject<ContentInterface[]>([]);
 
   contentForInfoPanelSingle$: Observable<ContentInterface>;
   contentForInfoPanelMultiple$: Observable<ContentInterface[]>;
 
   @ViewChild(FilterTextInputComponent)
-  filterTextInput: FilterTextInputComponent;
+  filterTextInput: FilterTextInputComponent<ContentInterface, ContentInterface>;
 
   list: ListViewComponent;
   @ViewChild('bundleListview')
@@ -61,8 +62,13 @@ export class BundleDetailComponent implements OnDestroy, AfterViewInit {
 
   constructor(
     public bundlesViewModel: BundlesViewModel,
+    private filterService: FilterService,
     private cd: ChangeDetectorRef
   ) {}
+
+  ngOnInit(): void {
+    this.filterTextInput.filterFn = this.filterFn.bind(this);
+  }
 
   ngAfterViewInit(): void {
     this.contentForInfoPanelSingle$ = this.list.selectedItems$.pipe(
@@ -83,7 +89,7 @@ export class BundleDetailComponent implements OnDestroy, AfterViewInit {
       })
     );
     this.subscriptions.add(
-      this.filteredContents$.subscribe(() => this.list.deselectAllItems())
+      this.filterTextInput.result$.subscribe(() => this.list.deselectAllItems())
     );
 
     // Needed to avoid ExpressionChangedAfterItHasBeenCheckedError
@@ -96,5 +102,14 @@ export class BundleDetailComponent implements OnDestroy, AfterViewInit {
 
   clickChangeListFormat(value: ListFormat): void {
     this.bundlesViewModel.changeListFormat(this.listFormat[value]);
+  }
+
+  private filterFn(
+    info: ContentInterface[],
+    searchText: string
+  ): ContentInterface[] {
+    return this.filterService.filter(info, {
+      name: searchText
+    });
   }
 }
