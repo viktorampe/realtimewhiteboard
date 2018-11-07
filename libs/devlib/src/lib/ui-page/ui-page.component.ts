@@ -6,6 +6,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./ui-page.component.scss']
 })
 export class UiPageComponent implements OnInit {
+  teacher = {
+    displayName: 'leerkracht een',
+    name: 'Leerkracht',
+    firstName: 'Een'
+  };
   constructor() {}
 
   ngOnInit() {}
