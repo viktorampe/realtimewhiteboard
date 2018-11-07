@@ -83,7 +83,7 @@ export const environment = {
 
     // -> product types
     'list-view': 'assets/icons/material/list-view.svg',
-    'grid-view': 'assets/icons/material/grid-view.svg'
+    'grid-view': 'assets/icons/material/grid-view.svg',
     // algebrakit: 'assets/icons/algebrakit.svg',
     // 'archive-box': 'assets/icons/archive-box.svg',
     // 'archive-box-lg': 'assets/icons/archive-box-lg.svg',

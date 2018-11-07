@@ -3,8 +3,10 @@
                             (filterTextChange)="onChangeFilterInput($event)"
                             class="pages__toolbar__filter"></campus-filter-text-input>
   <div class="divider"></div>
-  <campus-button (click)="clickChangeListFormat(listFormat.GRID)">grid</campus-button>
-  <campus-button (click)="clickChangeListFormat(listFormat.LINE)">line</campus-button>
+  <campus-button (click)="clickChangeListFormat(listFormat.GRID)"
+                 iconClass="grid-view"></campus-button>
+  <campus-button (click)="clickChangeListFormat(listFormat.LINE)"
+                 iconClass="list-view"></campus-button>
 </campus-page-bar>
 
 
