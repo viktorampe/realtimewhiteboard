@@ -1,6 +1,11 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
-import { Component, DebugElement, NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
+import {
+  Component,
+  DebugElement,
+  NgModule,
+  NO_ERRORS_SCHEMA
+} from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { UiModule } from '@campus/ui';
