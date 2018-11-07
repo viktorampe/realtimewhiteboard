@@ -3,6 +3,7 @@ import { TaskInstanceInterface } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { TasksViewModel } from './tasks.viewmodel';
 
 interface TaskInstancesWithEduContentInfo {
   instances: {
@@ -23,7 +24,7 @@ export class TasksComponent implements OnInit {
   taskInstances$: Observable<TaskInstancesWithEduContentInfo>;
   displayedTaskInstances$: Observable<TaskInstancesWithEduContentInfo>;
 
-  constructor() {
+  constructor(private viewModel: TasksViewModel) {
     const taskinstances: TaskInstancesWithEduContentInfo = {
       instances: [
         {
@@ -135,7 +136,7 @@ export class TasksComponent implements OnInit {
    * @returns {Observable<TaskInstancesWithEduContentInfo>}
    * @memberof TasksComponent
    */
-  getDisplayedTaskInstances(
+  private getDisplayedTaskInstances(
     taskInstances$: Observable<TaskInstancesWithEduContentInfo>,
     filterInput$: BehaviorSubject<string>
   ): Observable<TaskInstancesWithEduContentInfo> {
@@ -158,5 +159,20 @@ export class TasksComponent implements OnInit {
         }
       )
     );
+  }
+
+  getDeadLineString(taskInstance: TaskInstanceInterface): string {
+    if (taskInstance.end) {
+      const MM = (taskInstance.end.getMonth() + 1).toString();
+      const dd = taskInstance.end.getDate().toString();
+      const yy = taskInstance.end
+        .getFullYear()
+        .toString()
+        .substr(2, 2);
+      const hh = taskInstance.end.getHours().toString();
+      const mm = taskInstance.end.getMinutes().toString();
+      return dd + '/' + MM + '/' + yy + ' ' + hh + ':' + mm;
+    }
+    return '';
   }
 }

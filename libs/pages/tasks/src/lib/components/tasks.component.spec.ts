@@ -1,4 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { SharedModule } from '@campus/shared';
+import { UiModule } from '@campus/ui';
 import { TasksComponent } from './tasks.component';
 
 describe('TasksComponent', () => {
@@ -7,7 +9,8 @@ describe('TasksComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [TasksComponent]
+      declarations: [TasksComponent],
+      imports: [UiModule, SharedModule]
     }).compileComponents();
   }));
 
