@@ -1,5 +1,6 @@
 @mixin ui_person-badge_theme() {
   $ui-person-badge-background-color: $ui-bg-color-gray-4 !default;
+  $ui-person-badge-subtext-color: $ui-font-color-gray-4 !default;
 
   .ui_person-badge {
     &__badge {
@@ -26,8 +27,13 @@
         width: $ui-person-badge-size-large;
       }
     }
-    &__displayName {
-      color: $ui-bg-color-green-2;
+    &__display {
+      &__name {
+        color: $ui-bg-color-green-2;
+      }
+      &__subtext {
+        color: $ui-person-badge-subtext-color;
+      }
     }
   }
 }

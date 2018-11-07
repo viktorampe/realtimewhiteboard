@@ -11,6 +11,7 @@ import {
 } from '../..';
 import { ContentStatusReducer } from './content-status';
 import { StudentContentStatusReducer } from './student-content-status';
+import { TaskReducer } from './task';
 import { UserReducer } from './user';
 
 export interface DalState {
@@ -26,4 +27,5 @@ export interface DalState {
   contentStatuses: ContentStatusReducer.State;
   user: UserReducer.State;
   studentContentStatuses: StudentContentStatusReducer.State;
+  tasks: TaskReducer.State;
 }
