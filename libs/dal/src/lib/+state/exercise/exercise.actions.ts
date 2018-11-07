@@ -1,8 +1,16 @@
+import { ExerciseInterface } from '@campus/dal';
 import { Update } from '@ngrx/entity';
 import { Action } from '@ngrx/store';
-import { ExerciseInterface } from '../../+models';
 
 export enum ExercisesActionTypes {
+  // Current Exercise Actions
+  StartExercise = '[Exercises] Start Exercise',
+  ExerciseUrlLoaded = '[Exercises] Exercise Url Loaded',
+  ExerciseResultLoaded = '[Exercises] Exercise Result Loaded',
+  ExerciseError = '[Exercises] Exercise Error',
+  SaveExercise = '[Exercises] Save Exercise',
+  // also: UpdateExercise
+
   ExercisesLoaded = '[Exercises] Exercises Loaded',
   ExercisesLoadError = '[Exercises] Load Error',
   LoadExercises = '[Exercises] Load Exercises',
@@ -17,11 +25,37 @@ export enum ExercisesActionTypes {
   ClearExercises = '[Exercises] Clear Exercises'
 }
 
+export class StartExercise implements Action {
+  readonly type = ExercisesActionTypes.StartExercise;
+
+  constructor(public payload: any) {}
+}
+export class ExerciseUrlLoaded implements Action {
+  readonly type = ExercisesActionTypes.ExerciseUrlLoaded;
+
+  constructor(public payload: any) {}
+}
+export class ExerciseResultLoaded implements Action {
+  readonly type = ExercisesActionTypes.ExerciseResultLoaded;
+
+  constructor(public payload: any) {}
+}
+export class ExerciseError implements Action {
+  readonly type = ExercisesActionTypes.ExerciseError;
+
+  constructor(public payload: any) {}
+}
+export class SaveExercise implements Action {
+  readonly type = ExercisesActionTypes.SaveExercise;
+
+  constructor(public payload: any) {}
+}
+
 export class LoadExercises implements Action {
   readonly type = ExercisesActionTypes.LoadExercises;
 
   constructor(
-    public payload: { force?: boolean, userId: number } = { userId: null }
+    public payload: { force?: boolean; userId: number } = { userId: null }
   ) {}
 }
 
@@ -100,4 +134,9 @@ export type ExercisesActions =
   | UpdateExercises
   | DeleteExercise
   | DeleteExercises
-  | ClearExercises;
+  | ClearExercises
+  | StartExercise
+  | ExerciseUrlLoaded
+  | ExerciseResultLoaded
+  | ExerciseError
+  | SaveExercise;
