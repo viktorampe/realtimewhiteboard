@@ -1,13 +1,17 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, InjectionToken } from '@angular/core';
 import { WindowServiceInterface } from './window.service.interface';
+
+export const WINDOW = new InjectionToken('WindowToken', {
+  providedIn: 'root',
+  factory: () => window
+});
 
 @Injectable({
   providedIn: 'root'
 })
 export class WindowService implements WindowServiceInterface {
-  private nativeWindow = window;
   private openedWindows: { [name: string]: Window } = {};
-  constructor() {}
+  constructor(@Inject(WINDOW) private nativeWindow: Window) {}
 
   openWindow(name: string, url: string) {
     const openedWindow = this.nativeWindow.open(url, name);
