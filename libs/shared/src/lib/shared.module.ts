@@ -3,6 +3,7 @@ import { PortalModule } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { MatIconModule } from '@angular/material';
+import { RouterModule } from '@angular/router';
 import { UiModule } from '@campus/ui';
 import { PageBarContainerComponent } from './components/page-bar-container/page-bar-container.component';
 import { HeaderComponent } from './header/header.component';
@@ -14,7 +15,14 @@ import {
 } from './interfaces';
 
 @NgModule({
-  imports: [CommonModule, UiModule, PortalModule, LayoutModule, MatIconModule],
+  imports: [
+    CommonModule,
+    UiModule,
+    PortalModule,
+    LayoutModule,
+    MatIconModule,
+    RouterModule
+  ],
   declarations: [HeaderComponent, PageBarContainerComponent],
   exports: [
     HeaderComponent,

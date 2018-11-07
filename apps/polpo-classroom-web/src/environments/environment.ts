@@ -82,8 +82,7 @@ export const environment = {
     // verwijder: 'assets/icons/verwijder.svg',
 
     // -> product types
-    'list-view': 'assets/icons/material/list-view.svg',
-    'grid-view': 'assets/icons/material/grid-view.svg'
+
     // algebrakit: 'assets/icons/algebrakit.svg',
     // 'archive-box': 'assets/icons/archive-box.svg',
     // 'archive-box-lg': 'assets/icons/archive-box-lg.svg',
@@ -99,6 +98,12 @@ export const environment = {
     // youtube: 'assets/icons/youtube.svg',
 
     // -> other
+    'list-view': 'assets/icons/material/list-view.svg',
+    'grid-view': 'assets/icons/material/grid-view.svg',
+    home: 'assets/icons/material/home.svg',
+    'chevron-right': 'assets/icons/material/chevron-right.svg',
+    'arrow-back': 'assets/icons/material/arrow-back.svg',
+    menu: 'assets/icons/material/menu.svg'
     // alert: 'assets/icons/alert.svg',
     // 'at-sign': 'assets/icons/at-sign.svg',
     // balance: 'assets/icons/balance.svg',

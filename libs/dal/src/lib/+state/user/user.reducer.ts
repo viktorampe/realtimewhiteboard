@@ -18,8 +18,23 @@ export interface State {
 }
 
 export const initialState: State = {
-  currentUser: null,
-  loaded: false,
+  currentUser: {
+    name: 'Bakker',
+    firstName: 'Manon',
+    gender: null,
+    type: 'student',
+    avatar: null,
+    email: 'student0@mailinator.com',
+    currentSchoolYear: 2018,
+    terms: true,
+    realm: null,
+    username: 'student1',
+    emailVerified: true,
+    id: 11,
+    displayName: 'Manon Bakker',
+    roles: [{ name: 'student' }]
+  },
+  loaded: true,
   error: null
 };
 

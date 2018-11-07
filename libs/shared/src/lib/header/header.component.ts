@@ -9,6 +9,8 @@ import { HeaderViewModel } from './header.viewmodel';
 export class HeaderComponent implements OnInit {
   enableAlerts: boolean;
   enableMessages: boolean;
+  breadCrumbs$ = this.headerViewModel.breadCrumbs$;
+  pageBarNavigation$ = this.headerViewModel.pageBarNavigation$;
 
   constructor(public headerViewModel: HeaderViewModel) {}
 

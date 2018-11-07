@@ -2,8 +2,10 @@
   <div hide-mobile
        class="shared-header__app-bar">
     <campus-app-bar>
-      <campus-breadcrumbs bar__left>
-        breadcrumbs
+      <campus-breadcrumbs bar__left
+                          [breadCrumbs]="breadCrumbs$|async"
+                          [baseIcon]="'home'"
+                          [seperator]="'chevron-right'">
       </campus-breadcrumbs>
       <div class="shared-header__app-bar__alerts"
            bar__right
@@ -38,8 +40,13 @@
     </campus-app-bar>
   </div>
   <div class="shared-header__page-bar">
-    <mat-icon class="shared-header__page-bar_menu-icon"
-              hide-desktop>menu</mat-icon>
+    <ng-container *ngIf="pageBarNavigation$|async as navItem">
+
+      <mat-icon routerLink="{{navItem.link}}"
+                class="shared-header__page-bar_menu-icon"
+                [svgIcon]="navItem.icon"
+                hide-desktop></mat-icon>
+    </ng-container>
     <div id="page-bar-container">
     </div>
   </div>

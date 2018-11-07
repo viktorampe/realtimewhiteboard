@@ -8,8 +8,9 @@ import {
   PersonInterface,
   UserQueries
 } from '@campus/dal';
+import { BreadcrumbLinkInterface } from '@campus/ui';
 import { select, Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import {
   EnvironmentAlertsFeatureInterface,
@@ -20,10 +21,6 @@ import {
 import { HeaderResolver } from './header.resolver';
 
 //TODO replace with actual interface
-export interface BreadCrumbLinkInterface {
-  displayText: String;
-  routerLink: String;
-}
 
 //TODO replace with actual interface
 export interface CurrentRouteInterface {
@@ -36,6 +33,26 @@ export interface DropdownItemInterface {
   text: string;
 }
 
+// remove when breadcrumb logic is finished
+const mockBreadCrumbs: BreadcrumbLinkInterface[] = [
+  {
+    displayText: 'level 0',
+    link: ['/level0']
+  },
+  {
+    displayText: 'level 1',
+    link: ['/level1']
+  },
+  {
+    displayText: 'level 2',
+    link: ['/level2']
+  },
+  {
+    displayText: 'level 3',
+    link: ['/level3']
+  }
+];
+
 @Injectable({
   providedIn: 'root'
 })
@@ -44,7 +61,7 @@ export class HeaderViewModel {
   enableAlerts: boolean;
   enableMessages: boolean;
   //state presentation streams
-  breadCrumbs$: Observable<BreadCrumbLinkInterface[]>; // TODO to be replaced by custom interface once the breadcrumbsComponent is done
+  breadCrumbs$: Observable<BreadcrumbLinkInterface[]> = of(mockBreadCrumbs); // TODO select breadcrumbs from store
   currentUser$: Observable<PersonInterface>;
   //presentation stream
   recentAlerts$: Observable<DropdownItemInterface[]>; //TODO replace interface with the actual dropdown interface
@@ -52,6 +69,8 @@ export class HeaderViewModel {
   //state source streams
   private alertsForUser$: Observable<AlertQueueInterface[]>;
   private messagesForUser$: Observable<MessageInterface[]>;
+
+  pageBarNavigation$ = this.setupPageBarNavigation();
 
   constructor(
     @Inject(ENVIRONMENT_ALERTS_FEATURE_TOKEN)
@@ -135,6 +154,19 @@ export class HeaderViewModel {
         ];
       }),
       shareReplay(1)
+    );
+  }
+
+  setupPageBarNavigation(): Observable<any> {
+    return this.breadCrumbs$.pipe(
+      map(breadCrumbs => {
+        return breadCrumbs.length < 2
+          ? { icon: 'menu', link: ['/'] }
+          : {
+              icon: 'arrow-back',
+              link: breadCrumbs[breadCrumbs.length - 2].link
+            };
+      })
     );
   }
 }
