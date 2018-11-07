@@ -11,6 +11,14 @@ export class UiPageComponent implements OnInit {
     name: 'Leerkracht',
     firstName: 'Een'
   };
+
+  task = {
+    name: 'taak 1',
+    description:
+      'this is a description of the first task jsut to see what will happen to the displayment of this task',
+    teacher: this.teacher,
+    start: new Date()
+  };
   constructor() {}
 
   ngOnInit() {}

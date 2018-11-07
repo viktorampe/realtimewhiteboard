@@ -5,6 +5,7 @@ import { DalModule } from '@campus/dal';
 import { SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
 import { LoopBackConfig } from '@diekeure/polpo-api-angular-sdk';
+import { InfoPanelTaskComponent } from '../../../pages/tasks/src/lib/components/info-panel/info-panel-task/info-panel-task.component';
 import { DevlibRoutingModule } from './devlib.routing.module';
 import { EduContentComponent } from './edu-content/edu-content.component';
 import { EduContentViewModel } from './edu-content/edu-content.viewmodel';
@@ -22,7 +23,12 @@ import { UiPageComponent } from './ui-page/ui-page.component';
     SharedModule
   ],
   providers: [LoginPageViewModel, EduContentViewModel],
-  declarations: [LoginpageComponent, EduContentComponent, UiPageComponent]
+  declarations: [
+    LoginpageComponent,
+    EduContentComponent,
+    UiPageComponent,
+    InfoPanelTaskComponent
+  ]
 })
 export class DevlibModule {
   static forRoot(): ModuleWithProviders {
