@@ -6,15 +6,15 @@ import { WindowServiceInterface } from './window.service.interface';
 })
 export class WindowService implements WindowServiceInterface {
   private nativeWindow = window;
-  private windows: { [name: string]: Window } = {};
+  private openedWindows: { [name: string]: Window } = {};
   constructor() {}
 
   openWindow(name: string, url: string) {
     const openedWindow = this.nativeWindow.open(url, name);
-    this.windows[name] = openedWindow;
+    this.openedWindows[name] = openedWindow;
   }
   closeWindow(name: string) {
-    this.windows[name].close();
-    delete this.windows[name];
+    this.openedWindows[name].close();
+    delete this.openedWindows[name];
   }
 }
