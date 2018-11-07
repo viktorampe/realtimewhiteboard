@@ -151,7 +151,7 @@ describe('TasksAreaComponent', () => {
 
   it('should show the amount of tasks per learningArea', () => {
     const amountOfOpenTasksText = '2 open taken';
-    const amountOfClosedTasksText = '3 gesloten taken';
+    const amountOfClosedTasksText = '3 afgewerkte taken';
 
     const folderDE = fixture.debugElement.query(By.css('campus-folder'));
 

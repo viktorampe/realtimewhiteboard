@@ -3,8 +3,8 @@
                             (filterTextChange)="onChangeFilterInput($event)"
                             class="pages__toolbar__filter"></campus-filter-text-input>
   <div class="divider"></div>
-  <campus-button (click)="clickChangeListFormat('GRID')">grid</campus-button>
-  <campus-button (click)="clickChangeListFormat('LINE')">line</campus-button>
+  <campus-button (click)="clickChangeListFormat(listFormat.GRID)">grid</campus-button>
+  <campus-button (click)="clickChangeListFormat(listFormat.LINE)">line</campus-button>
 </campus-page-bar>
 
 
@@ -27,13 +27,11 @@
       </div>
       <div class="pages-tasks__container__learning-areas">
         <campus-list-view [listFormat]="listFormat$|async"
-                          [placeHolderText]="'De toegepaste filter bevat geen resultaten'">
+                          [placeHolderText]="'De toegepaste filter bevat geen resultaten.'">
           <ng-container *ngIf="(displayedLearningAreas$|async)?.totalTasks as taskCounts">
-            <!-- click event (or routerlink) needs to be added to the folder items-->
             <campus-folder *ngFor="let learningArea of displayedLearningAreas"
                            campusListItem
                            [routerLink]="learningArea.learningArea.id"
-                           [listFormat]="listFormat$|async"
                            [itemCount]="learningArea.openTasks"
                            [title]="learningArea.learningArea.name"
                            [backgroundColor]="learningArea.learningArea.color"
@@ -42,7 +40,7 @@
                 {{learningArea.openTasks}}
                 {{'open ' + (learningArea.openTasks === 1 ? 'taak' : 'taken')}}<br>
                 {{learningArea.closedTasks}}
-                {{'gesloten ' + (learningArea.closedTasks === 1 ? 'taak' : 'taken')}}
+                {{'afgewerkte ' + (learningArea.closedTasks === 1 ? 'taak' : 'taken')}}
               </campus-folder-details>
             </campus-folder>
           </ng-container>

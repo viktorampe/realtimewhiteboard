@@ -11,6 +11,7 @@ import { LearningAreasWithTaskInstanceInfoInterface } from './../tasks.viewmodel
   styleUrls: ['./tasks-area.component.scss']
 })
 export class TasksAreaComponent implements OnInit {
+  protected listFormat = ListFormat;
   filterInput$ = new BehaviorSubject<string>('');
   listFormat$: Observable<ListFormat>;
   learningAreas$: Observable<LearningAreasWithTaskInstanceInfoInterface>;
