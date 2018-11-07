@@ -1,0 +1,7 @@
+<campus-person-badge [person]="task.teacher"
+                     [align]="'right'"
+                     [size]="'medium'"
+                     [subText]="task.start | date:'dd-MM-yyyy HH:mm:ss'"></campus-person-badge>
+<p class="ui-info-panel-task__text">
+  <strong>{{task.name}}</strong>
+  <br>{{task.description}}</p>
