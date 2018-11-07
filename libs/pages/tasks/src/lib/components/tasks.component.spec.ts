@@ -612,6 +612,10 @@ describe('TasksComponent', () => {
     expect(component.getProgress(null, null)).toBe(0);
   });
 
+  it('should return the correct icon', () => {
+    expect(component.getIcon(true)).toBe('icon-checkmark');
+  });
+
   it('it should return the correct deadline string', () => {
     const date = new Date(1541599801751);
     expect(component.getDeadLineString(date)).toBe('7/11/18 15:10');

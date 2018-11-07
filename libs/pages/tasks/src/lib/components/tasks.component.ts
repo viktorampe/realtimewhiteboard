@@ -86,7 +86,7 @@ export class TasksComponent implements OnInit {
   }
 
   getIcon(finished: boolean): string {
-    return finished ? 'checkmark' : '';
+    return finished ? 'icon-checkmark' : '';
   }
 
   getProgress(start: Date, end: Date): number {
