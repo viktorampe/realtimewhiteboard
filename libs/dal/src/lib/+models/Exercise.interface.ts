@@ -4,4 +4,5 @@ export interface ExerciseInterface {
   cmiMode: string; //?
   result: ResultInterface;
   saveToApi: boolean;
+  url: string;
 }

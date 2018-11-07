@@ -1,9 +1,6 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
-import { ExerciseInterface } from '../../+models';
-import {
-  ExercisesActions,
-  ExercisesActionTypes
-} from './exercise.actions';
+import { ExerciseInterface } from './../../+models/Exercise.interface';
+import { ExercisesActions, ExercisesActionTypes } from './exercise.actions';
 
 export const NAME = 'exercises';
 
@@ -11,6 +8,7 @@ export interface State extends EntityState<ExerciseInterface> {
   // additional entities state properties
   loaded: boolean;
   error?: any;
+  currentExercise?: ExerciseInterface;
 }
 
 export const adapter: EntityAdapter<ExerciseInterface> = createEntityAdapter<
@@ -22,10 +20,7 @@ export const initialState: State = adapter.getInitialState({
   loaded: false
 });
 
-export function reducer(
-  state = initialState,
-  action: ExercisesActions
-): State {
+export function reducer(state = initialState, action: ExercisesActions): State {
   switch (action.type) {
     case ExercisesActionTypes.AddExercise: {
       return adapter.addOne(action.payload.exercise, state);
@@ -60,7 +55,10 @@ export function reducer(
     }
 
     case ExercisesActionTypes.ExercisesLoaded: {
-      return adapter.addAll(action.payload.exercises, { ...state, loaded: true });
+      return adapter.addAll(action.payload.exercises, {
+        ...state,
+        loaded: true
+      });
     }
 
     case ExercisesActionTypes.ExercisesLoadError: {
@@ -69,6 +67,14 @@ export function reducer(
 
     case ExercisesActionTypes.ClearExercises: {
       return adapter.removeAll(state);
+    }
+
+    case ExercisesActionTypes.CurrentExerciseLoaded: {
+      return { ...state, currentExercise: action.payload };
+    }
+
+    case ExercisesActionTypes.CurrentExerciseError: {
+      return { ...state, currentExercise: null, error: action.payload };
     }
 
     default: {

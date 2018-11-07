@@ -5,10 +5,11 @@ import { Action } from '@ngrx/store';
 export enum ExercisesActionTypes {
   // Current Exercise Actions
   StartExercise = '[Exercises] Start Exercise',
-  ExerciseUrlLoaded = '[Exercises] Exercise Url Loaded',
-  ExerciseResultLoaded = '[Exercises] Exercise Result Loaded',
-  ExerciseError = '[Exercises] Exercise Error',
-  SaveExercise = '[Exercises] Save Exercise',
+  CurrentExerciseLoaded = '[Exercises] Current Exercise Loaded',
+  ExerciseUrlLoaded = '[Exercises] Exercise Url Loaded', // Nodig?
+  ExerciseResultLoaded = '[Exercises] Exercise Result Loaded', // Nodig?
+  CurrentExerciseError = '[Exercises] Current Exercise Error',
+  SaveCurrentExercise = '[Exercises] Save Current Exercise',
   // also: UpdateExercise
 
   ExercisesLoaded = '[Exercises] Exercises Loaded',
@@ -28,7 +29,20 @@ export enum ExercisesActionTypes {
 export class StartExercise implements Action {
   readonly type = ExercisesActionTypes.StartExercise;
 
-  constructor(public payload: any) {}
+  constructor(
+    public payload: {
+      userId: number;
+      educontentId: number;
+      taskId?: number;
+      unlockedContentId?: number;
+    }
+  ) {}
+}
+
+export class CurrentExerciseLoaded implements Action {
+  readonly type = ExercisesActionTypes.CurrentExerciseLoaded;
+
+  constructor(public payload: ExerciseInterface) {}
 }
 export class ExerciseUrlLoaded implements Action {
   readonly type = ExercisesActionTypes.ExerciseUrlLoaded;
@@ -40,13 +54,13 @@ export class ExerciseResultLoaded implements Action {
 
   constructor(public payload: any) {}
 }
-export class ExerciseError implements Action {
-  readonly type = ExercisesActionTypes.ExerciseError;
+export class CurrentExerciseError implements Action {
+  readonly type = ExercisesActionTypes.CurrentExerciseError;
 
   constructor(public payload: any) {}
 }
-export class SaveExercise implements Action {
-  readonly type = ExercisesActionTypes.SaveExercise;
+export class SaveCurrentExercise implements Action {
+  readonly type = ExercisesActionTypes.SaveCurrentExercise;
 
   constructor(public payload: any) {}
 }
@@ -136,7 +150,8 @@ export type ExercisesActions =
   | DeleteExercises
   | ClearExercises
   | StartExercise
+  | CurrentExerciseLoaded
   | ExerciseUrlLoaded
   | ExerciseResultLoaded
-  | ExerciseError
-  | SaveExercise;
+  | CurrentExerciseError
+  | SaveCurrentExercise;
