@@ -1,17 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { TaskInstanceInterface } from '@campus/dal';
+import { LearningAreaInterface } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
-import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { TasksViewModel } from './tasks.viewmodel';
-
-interface TaskInstancesWithEduContentInfo {
-  instances: {
-    taskInstance: TaskInstanceInterface;
-    taskEduContentsCount: number;
-    finished: boolean;
-  }[];
-}
+import { TaskInstancesWithEduContentInfoInterface } from './tasks.viewmodel.interfaces';
 
 @Component({
   selector: 'campus-tasks',
@@ -19,88 +12,20 @@ interface TaskInstancesWithEduContentInfo {
   styleUrls: ['./tasks.component.scss']
 })
 export class TasksComponent implements OnInit {
-  //listFormat$: Observable<ListFormat> = this.viewmodel.listFormat$;
+  listFormat$: Observable<ListFormat> = this.viewModel.listFormat$;
   filterInput$ = new BehaviorSubject<string>('');
-  taskInstances$: Observable<TaskInstancesWithEduContentInfo>;
-  displayedTaskInstances$: Observable<TaskInstancesWithEduContentInfo>;
 
-  constructor(private viewModel: TasksViewModel) {
-    const taskinstances: TaskInstancesWithEduContentInfo = {
-      instances: [
-        {
-          taskInstance: {
-            start: new Date(),
-            end: new Date(),
-            alerted: false,
-            id: 0,
-            task: {
-              name: 'task'
-            }
-          },
-          taskEduContentsCount: 4,
-          finished: false
-        },
-        {
-          taskInstance: {
-            start: new Date(),
-            end: new Date(),
-            alerted: false,
-            id: 0,
-            task: {
-              name: 'task'
-            }
-          },
-          taskEduContentsCount: 4,
-          finished: false
-        },
-        {
-          taskInstance: {
-            start: new Date(),
-            end: new Date(),
-            alerted: false,
-            id: 0,
-            task: {
-              name: 'task'
-            }
-          },
-          taskEduContentsCount: 4,
-          finished: false
-        },
-        {
-          taskInstance: {
-            start: new Date(),
-            end: new Date(),
-            alerted: false,
-            id: 0,
-            task: {
-              name: 'task'
-            }
-          },
-          taskEduContentsCount: 4,
-          finished: false
-        },
-        {
-          taskInstance: {
-            start: new Date(),
-            end: new Date(),
-            alerted: false,
-            id: 0,
-            task: {
-              name: 'task'
-            }
-          },
-          taskEduContentsCount: 4,
-          finished: false
-        }
-      ]
-    };
+  taskInstances$: Observable<TaskInstancesWithEduContentInfoInterface> = this
+    .viewModel.taskInstancesByLearningArea$;
 
-    this.taskInstances$ = of(taskinstances);
-    this.displayedTaskInstances$ = this.getDisplayedTaskInstances(
-      this.taskInstances$,
-      this.filterInput$
-    );
-  }
+  displayedTaskInstances$: Observable<
+    TaskInstancesWithEduContentInfoInterface
+  > = this.getDisplayedTaskInstances(this.taskInstances$, this.filterInput$);
+
+  learningArea$: Observable<LearningAreaInterface> = this.viewModel
+    .selectedLearningArea$;
+
+  constructor(private viewModel: TasksViewModel) {}
 
   ngOnInit() {}
 
@@ -123,9 +48,8 @@ export class TasksComponent implements OnInit {
     this.filterInput$.next('');
   }
 
-  //todo
   setListFormat(format: ListFormat) {
-    //this.viewmodel.changeListFormat(format);
+    this.viewModel.changeListFormat(format);
   }
 
   /**
@@ -137,13 +61,13 @@ export class TasksComponent implements OnInit {
    * @memberof TasksComponent
    */
   private getDisplayedTaskInstances(
-    taskInstances$: Observable<TaskInstancesWithEduContentInfo>,
+    taskInstances$: Observable<TaskInstancesWithEduContentInfoInterface>,
     filterInput$: BehaviorSubject<string>
-  ): Observable<TaskInstancesWithEduContentInfo> {
+  ): Observable<TaskInstancesWithEduContentInfoInterface> {
     return combineLatest(taskInstances$, filterInput$).pipe(
       map(
         ([taskInstances, filterInput]: [
-          TaskInstancesWithEduContentInfo,
+          TaskInstancesWithEduContentInfoInterface,
           string
         ]) => {
           if (!filterInput || filterInput === '') {
@@ -161,16 +85,46 @@ export class TasksComponent implements OnInit {
     );
   }
 
-  getDeadLineString(taskInstance: TaskInstanceInterface): string {
-    if (taskInstance.end) {
-      const MM = (taskInstance.end.getMonth() + 1).toString();
-      const dd = taskInstance.end.getDate().toString();
-      const yy = taskInstance.end
+  getIcon(finished: boolean): string {
+    return finished ? 'checkmark' : '';
+  }
+
+  getProgress(start: Date, end: Date): number {
+    if (start && end) {
+      const full: number = end.getTime() - start.getTime();
+      if (full < 0) {
+        return 0;
+      }
+      const current: number = this.getDate().getTime() - start.getTime();
+      if (full === 0) {
+        return 100;
+      }
+      if (current < 0) {
+        return 100;
+      } else {
+        const percent = Math.round((current / full) * 100);
+        if (percent > 100) {
+          return 100;
+        }
+      }
+    }
+    return 0;
+  }
+
+  getDate(): Date {
+    return new Date();
+  }
+
+  getDeadLineString(end: Date): string {
+    if (end) {
+      const MM = (end.getMonth() + 1).toString();
+      const dd = end.getDate().toString();
+      const yy = end
         .getFullYear()
         .toString()
         .substr(2, 2);
-      const hh = taskInstance.end.getHours().toString();
-      const mm = taskInstance.end.getMinutes().toString();
+      const hh = end.getHours().toString();
+      const mm = end.getMinutes().toString();
       return dd + '/' + MM + '/' + yy + ' ' + hh + ':' + mm;
     }
     return '';

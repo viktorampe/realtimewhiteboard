@@ -9,9 +9,9 @@
                  (click)="setListFormat(listFormat.GRID)"></campus-button>
 </campus-page-bar>
 
-<campus-page-header [title]="'learningareaname'"
+<campus-page-header [title]="(learningArea$|async).name"
                     [subtitle]="'Taken'"
-                    [iconClass]="'icon-timeline'">
+                    [iconClass]="(learningArea$|async).icon">
 </campus-page-header>
 <div class="pages-tasks__container">
   <div class="pages-bundles__container__tasks-count">
@@ -27,14 +27,14 @@
     <campus-folder *ngFor="let instance of (displayedTaskInstances$|async).instances"
                    [routerLink]="[instance.taskInstance.id]"
                    campusListItem
-                   [progress]="75"
+                   progress="{{getProgress(instance.taskInstance.start, instance.taskInstance.end)}}"
                    [itemCount]="instance.taskEduContentsCount"
                    [title]="instance.taskInstance.name"
-                   [backgroundColor]=""
-                   [icon]="'icon-timeline'">
+                   [backgroundColor]="(learningArea$|async).color"
+                   [icon]="getIcon(instance.finished)">
       <campus-folder-details>
         {{ instance.taskEduContentsCount + " item(s)" }}<br />
-        {{"Deadline: " + getDeadLineString(instance.taskInstance) }}
+        {{"Deadline: " + getDeadLineString(instance.taskInstance.end) }}
       </campus-folder-details>
     </campus-folder>
 

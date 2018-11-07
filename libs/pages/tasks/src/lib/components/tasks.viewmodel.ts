@@ -564,4 +564,6 @@ export class TasksViewModel {
   getMockListFormat(): Observable<ListFormat> {
     return new BehaviorSubject(ListFormat.GRID);
   }
+
+  changeListFormat(listFormat: ListFormat): void {}
 }
