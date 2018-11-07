@@ -12,9 +12,9 @@ export class HideDesktopDirective implements OnInit, OnDestroy {
 
   constructor(private breakPointObserver: BreakpointObserver) {}
 
-  @HostBinding('hidden')
+  @HostBinding('style.display')
   get isHidden() {
-    return this.isDesktop;
+    return this.isDesktop ? 'none' : '';
   }
 
   ngOnInit() {
