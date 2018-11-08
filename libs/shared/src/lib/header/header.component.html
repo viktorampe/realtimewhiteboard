@@ -5,7 +5,7 @@
       <campus-breadcrumbs bar__left
                           [breadCrumbs]="breadCrumbs$|async"
                           [baseIcon]="'home'"
-                          [seperator]="'chevron-right'">
+                          [seperator]="'breadcrumb-separator'">
       </campus-breadcrumbs>
       <div class="shared-header__app-bar__alerts"
            bar__right
@@ -40,13 +40,16 @@
     </campus-app-bar>
   </div>
   <div class="shared-header__page-bar">
-    <ng-container *ngIf="pageBarNavItem$|async as navItem">
-
-      <mat-icon (click)="onPageBarNavigation(navItem)"
-                class="shared-header__page-bar_nav-icon"
-                [svgIcon]="navItem.icon"
-                hide-desktop></mat-icon>
-    </ng-container>
+    <mat-icon *ngIf="(backLink$|async) as link"
+              [routerLink]="link"
+              class="shared-header__page-bar_nav-icon"
+              [svgIcon]="'arrow-back'"
+              hide-desktop></mat-icon>
+    <mat-icon *ngIf="!(backLink$|async)"
+              (click)="onMenuClick()"
+              class="shared-header__page-bar_nav-icon"
+              [svgIcon]="'menu'"
+              hide-desktop></mat-icon>
     <div id="page-bar-container">
     </div>
   </div>

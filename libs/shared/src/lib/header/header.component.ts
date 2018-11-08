@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HeaderViewModel, PageBarNavItem } from './header.viewmodel';
+import { HeaderViewModel } from './header.viewmodel';
 
 @Component({
   selector: 'campus-header',
@@ -10,7 +10,7 @@ export class HeaderComponent implements OnInit {
   enableAlerts: boolean;
   enableMessages: boolean;
   breadCrumbs$ = this.headerViewModel.breadCrumbs$;
-  pageBarNavItem$ = this.headerViewModel.pageBarNavItem$;
+  backLink$ = this.headerViewModel.backLink$;
 
   constructor(public headerViewModel: HeaderViewModel) {}
 
@@ -23,7 +23,7 @@ export class HeaderComponent implements OnInit {
     this.enableMessages = this.headerViewModel.enableMessages;
   }
 
-  onPageBarNavigation(navItem: PageBarNavItem) {
-    this.headerViewModel.onPageBarNavigation(navItem);
+  onMenuClick() {
+    this.headerViewModel.onMenuClick();
   }
 }

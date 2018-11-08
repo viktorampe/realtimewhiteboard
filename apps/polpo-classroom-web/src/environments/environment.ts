@@ -101,7 +101,7 @@ export const environment = {
     'list-view': 'assets/icons/material/list-view.svg',
     'grid-view': 'assets/icons/material/grid-view.svg',
     home: 'assets/icons/material/home.svg',
-    'chevron-right': 'assets/icons/material/chevron-right.svg',
+    'breadcrumb-separator': 'assets/icons/material/chevron-right.svg',
     'arrow-back': 'assets/icons/material/arrow-back.svg',
     menu: 'assets/icons/material/menu.svg'
     // alert: 'assets/icons/alert.svg',

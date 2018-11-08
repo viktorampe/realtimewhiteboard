@@ -69,7 +69,7 @@ import { AppComponent } from './app.component';
           loadChildren: '@campus/pages/bundles#PagesBundlesModule'
         }
       ],
-      { initialNavigation: 'enabled', enableTracing: true }
+      { initialNavigation: 'enabled', enableTracing: false }
     ),
     StoreModule.forRoot(
       { app: appReducer },

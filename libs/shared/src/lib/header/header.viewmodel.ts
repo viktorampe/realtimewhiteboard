@@ -35,11 +35,6 @@ export interface DropdownItemInterface {
   text: string;
 }
 
-export interface PageBarNavItem {
-  icon: string;
-  link?: any[];
-}
-
 // remove when breadcrumb logic is finished
 export const mockBreadCrumbs: BreadcrumbLinkInterface[] = [
   {
@@ -73,7 +68,7 @@ export class HeaderViewModel {
   //presentation stream
   recentAlerts$: Observable<DropdownItemInterface[]>; //TODO replace interface with the actual dropdown interface
   recentMessages$: Observable<DropdownItemInterface[]>; //TODO replace interface with the actual dropdown interface
-  pageBarNavItem$: Observable<PageBarNavItem> = this.setupPageBarNavigation();
+  backLink$: Observable<string[] | undefined> = this.setupPageBarNavigation();
 
   //state source streams
   private alertsForUser$: Observable<AlertQueueInterface[]>;
@@ -165,25 +160,18 @@ export class HeaderViewModel {
     );
   }
 
-  setupPageBarNavigation(): Observable<PageBarNavItem> {
+  setupPageBarNavigation(): Observable<string[] | undefined> {
     return this.breadCrumbs$.pipe(
       map(breadCrumbs => {
         return breadCrumbs.length < 2
-          ? { icon: 'menu' }
-          : {
-              icon: 'arrow-back',
-              link: breadCrumbs[breadCrumbs.length - 2].link
-            };
+          ? undefined
+          : breadCrumbs[breadCrumbs.length - 2].link;
       })
     );
   }
 
-  onPageBarNavigation(navItem: PageBarNavItem) {
-    if (navItem.link) {
-      this.router.navigate(navItem.link);
-    } else {
-      // open the side nav
-      this.store.dispatch(new UiActions.ToggleSideNav());
-    }
+  onMenuClick() {
+    // open the side nav
+    this.store.dispatch(new UiActions.ToggleSideNav());
   }
 }
