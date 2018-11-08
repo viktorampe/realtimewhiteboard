@@ -2,16 +2,19 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   Component,
+  Inject,
   OnDestroy,
   OnInit,
   ViewChild
 } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import {
   BundleInterface,
   ContentInterface,
   LearningAreaInterface,
   PersonInterface
 } from '@campus/dal';
+import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/shared';
 import {
   FilterTextInputComponent,
   ListFormat,
@@ -19,8 +22,7 @@ import {
   SideSheetComponent
 } from '@campus/ui';
 import { Observable, Subscription } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { FilterService } from '../bundles.filter';
+import { filter, map, shareReplay, switchMap } from 'rxjs/operators';
 import { BundlesViewModel } from '../bundles.viewmodel';
 
 @Component({
@@ -33,13 +35,10 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
 
   listFormat$: Observable<ListFormat> = this.bundlesViewModel.listFormat$;
 
-  learningArea$: Observable<LearningAreaInterface> = this.bundlesViewModel
-    .activeLearningArea$;
-  bundle$: Observable<BundleInterface> = this.bundlesViewModel.activeBundle$;
-  bundleOwner$: Observable<PersonInterface> = this.bundlesViewModel
-    .activeBundleOwner$;
-  contents$: Observable<ContentInterface[]> = this.bundlesViewModel
-    .activeBundleContents$;
+  learningArea$: Observable<LearningAreaInterface>;
+  bundle$: Observable<BundleInterface>;
+  bundleOwner$: Observable<PersonInterface>;
+  contents$: Observable<ContentInterface[]>;
 
   contentForInfoPanelSingle$: Observable<ContentInterface>;
   contentForInfoPanelMultiple$: Observable<ContentInterface[]>;
@@ -58,15 +57,22 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
     this.sideSheet = sidesheet;
   }
 
+  private routeParams$ = this.route.params.pipe(shareReplay(1));
   private subscriptions = new Subscription();
 
   constructor(
+    private route: ActivatedRoute,
     public bundlesViewModel: BundlesViewModel,
-    private filterService: FilterService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface
   ) {}
 
   ngOnInit(): void {
+    this.learningArea$ = this.getLearningArea();
+    this.bundle$ = this.getBundle();
+    this.bundleOwner$ = this.bundlesViewModel.getBundleOwner(this.bundle$);
+    this.contents$ = this.getBundleContents();
+
     this.filterTextInput.filterFn = this.filterFn.bind(this);
   }
 
@@ -88,9 +94,6 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       })
     );
-    this.subscriptions.add(
-      this.filterTextInput.result$.subscribe(() => this.list.deselectAllItems())
-    );
 
     // Needed to avoid ExpressionChangedAfterItHasBeenCheckedError
     this.cd.detectChanges();
@@ -104,10 +107,37 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
     this.bundlesViewModel.changeListFormat(this.listFormat[value]);
   }
 
+  private getLearningArea(): Observable<LearningAreaInterface> {
+    return this.routeParams$.pipe(
+      switchMap(params => {
+        return this.bundlesViewModel.getLearningAreaById(params.area);
+      })
+    );
+  }
+
+  private getBundle(): Observable<BundleInterface> {
+    return this.routeParams$.pipe(
+      switchMap(params => {
+        return this.bundlesViewModel.getBundleById(params.bundle);
+      })
+    );
+  }
+
+  private getBundleContents(): Observable<ContentInterface[]> {
+    return this.routeParams$.pipe(
+      switchMap(params => {
+        return this.bundlesViewModel.getBundleContents(params.bundle);
+      })
+    );
+  }
+
   private filterFn(
     info: ContentInterface[],
     searchText: string
   ): ContentInterface[] {
+    if (this.list) {
+      this.list.deselectAllItems();
+    }
     return this.filterService.filter(info, {
       name: searchText
     });

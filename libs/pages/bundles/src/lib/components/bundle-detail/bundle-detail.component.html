@@ -16,19 +16,18 @@
 
   <campus-side-sheet-header></campus-side-sheet-header>
   <campus-side-sheet-body>
-    <ng-container *ngIf="list">
-      <ng-container [ngSwitch]="(list.selectedItems$|async)?.length">
-        <campus-info-panel-bundle *ngSwitchCase="0"
-                                  [bundle]="bundle"
-                                  [teacher]="bundleOwner$|async">
-        </campus-info-panel-bundle>
-        <campus-info-panel-content *ngSwitchCase="1"
-                                   [content]="contentForInfoPanelSingle$|async">
-        </campus-info-panel-content>
-        <campus-info-panel-contents *ngSwitchDefault
-                                    [contents]="contentForInfoPanelMultiple$|async">
-        </campus-info-panel-contents>
-      </ng-container>
+    <ng-container *ngIf="list"
+                  [ngSwitch]="(list.selectedItems$|async)?.length">
+      <campus-info-panel-bundle *ngSwitchCase="0"
+                                [bundle]="bundle"
+                                [teacher]="bundleOwner$|async">
+      </campus-info-panel-bundle>
+      <campus-info-panel-content *ngSwitchCase="1"
+                                 [content]="contentForInfoPanelSingle$|async">
+      </campus-info-panel-content>
+      <campus-info-panel-contents *ngSwitchDefault
+                                  [contents]="contentForInfoPanelMultiple$|async">
+      </campus-info-panel-contents>
     </ng-container>
   </campus-side-sheet-body>
 
@@ -49,10 +48,10 @@
 
           <campus-list-view #bundleListview
                             [listFormat]="listFormat$|async"
+                            [placeHolderText]="'De toegepaste filter bevat geen resultaten.'"
                             [multiSelect]="true">
             <campus-content-thumbnail *ngFor="let content of filteredContents"
                                       campusListItem
-                                      [listFormat]="listFormat$|async"
                                       [dataObject]="content"
                                       [title]="content.name"
                                       [fileExtensionClass]="content.fileExtension"

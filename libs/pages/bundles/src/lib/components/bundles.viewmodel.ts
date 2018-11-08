@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
 import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
@@ -7,16 +6,13 @@ import {
   BundleQueries,
   ContentInterface,
   DalState,
-  EduContentInterface,
   EduContentQueries,
   LearningAreaInterface,
   LearningAreaQueries,
   PersonInterface,
   UiActions,
   UiQuery,
-  UnlockedBoekeGroupInterface,
   UnlockedBoekeGroupQueries,
-  UnlockedBoekeStudentInterface,
   UnlockedBoekeStudentQueries,
   UnlockedContentInterface,
   UnlockedContentQueries,
@@ -25,7 +21,7 @@ import {
 import { ListFormat } from '@campus/ui';
 import { Dictionary } from '@ngrx/entity';
 import { select, Store } from '@ngrx/store';
-import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
+import { combineLatest, Observable, of } from 'rxjs';
 import { filter, map, shareReplay, switchMap } from 'rxjs/operators';
 import {
   BundlesWithContentInfoInterface,
@@ -38,14 +34,7 @@ import {
 export class BundlesViewModel {
   // source streams
   listFormat$: Observable<ListFormat>;
-  learningAreas$: Observable<LearningAreaInterface[]>;
-  bundles$: Observable<BundleInterface[]>;
-  unlockedContents$: Observable<UnlockedContentInterface[]>;
-  sharedUnlockedBookGroups$: Observable<UnlockedBoekeGroupInterface[]>;
-  sharedUnlockedBookStudents$: Observable<UnlockedBoekeStudentInterface[]>;
-  coupledPersons$: Observable<PersonInterface[]>;
-
-  private routeParams$: Observable<Params> = this.route.params;
+  private learningAreas$: Observable<LearningAreaInterface[]>;
 
   // intermediate streams (maps)
   // > learningareas page
@@ -53,64 +42,37 @@ export class BundlesViewModel {
   private sharedBundlesByLearningArea$: Observable<
     Dictionary<BundleInterface[]>
   >;
-  private sharedBooks$: Observable<EduContentInterface[]>;
+  private sharedBooks$: Observable<ContentInterface[]>;
   private sharedBooksByLearningArea$: Observable<
     Dictionary<ContentInterface[]>
   >;
   // > bundles page
-  private learningAreaId$: Observable<number>;
+  // private learningAreaId$: Observable<number>;
   private unlockedContentsByBundle$: Observable<
     Dictionary<UnlockedContentInterface[]>
   >;
   // > bundle detail page
-  private bundleId$: Observable<number>;
+  // private bundleId$: Observable<number>;
 
   // presentation streams
   // > learningareas page
   sharedLearningAreas$: Observable<LearningAreasWithBundlesInfoInterface>;
-  // > bundles page
-  activeLearningArea$: Observable<LearningAreaInterface>;
-  activeLearningAreaBundles$: Observable<BundlesWithContentInfoInterface>;
-  // > bundle detail page
-  activeBundle$: Observable<BundleInterface>;
-  activeBundleOwner$: Observable<PersonInterface>;
-  activeBundleContents$: Observable<ContentInterface[]>;
   // TODO: contentstatus
 
   constructor(
     private store: Store<DalState>,
-    private route: ActivatedRoute,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
   ) {
     this.initialize();
   }
 
   initialize(): void {
-    this.learningAreaId$ = this.route.params.pipe(
-      map((params): number => params.area || 19)
-    );
-    this.bundleId$ = this.routeParams$.pipe(
-      map((params): number => params.bundle || 1)
-    );
-
     // source streams
     this.listFormat$ = this.store.pipe(
       select(UiQuery.getListFormat),
       map(listFormat => <ListFormat>listFormat)
     );
     this.learningAreas$ = this.store.pipe(select(LearningAreaQueries.getAll));
-    this.bundles$ = this.store.pipe(select(BundleQueries.getAll));
-    this.unlockedContents$ = this.store.pipe(
-      select(UnlockedContentQueries.getAll)
-    );
-    this.sharedUnlockedBookGroups$ = this.store.pipe(
-      select(UnlockedBoekeGroupQueries.getShared)
-    );
-    this.sharedUnlockedBookStudents$ = this.store.pipe(
-      select(UnlockedBoekeStudentQueries.getShared)
-    );
-    // TODO add TeacherStudent state
-    this.coupledPersons$ = new BehaviorSubject([]);
 
     // intermediate streams
     // > learningarea page
@@ -135,48 +97,21 @@ export class BundlesViewModel {
       this.sharedBundlesByLearningArea$,
       this.sharedBooksByLearningArea$
     );
-
-    // > bundles page
-    this.activeLearningArea$ = this.getActiveLearningArea();
-    this.activeLearningAreaBundles$ = this.getBundlesWithContentInfo(
-      this.learningAreaId$,
-      this.sharedBundlesByLearningArea$,
-      this.sharedBooksByLearningArea$,
-      this.unlockedContentsByBundle$
-    );
-
-    // > bundle detail page
-    this.activeBundle$ = this.getActiveBundle();
-    this.activeBundleOwner$ = this.getBundleOwner(this.activeBundle$);
-    this.activeBundleContents$ = this.getBundleContents(
-      this.bundleId$,
-      this.unlockedContentsByBundle$
-    );
   }
 
   changeListFormat(listFormat: ListFormat): void {
     this.store.dispatch(new UiActions.SetListFormatUi({ listFormat }));
   }
 
-  private getActiveLearningArea(): Observable<LearningAreaInterface> {
-    return this.learningAreaId$.pipe(
-      switchMap(
-        (areaId: number): Observable<LearningAreaInterface> =>
-          this.store.pipe(select(LearningAreaQueries.getById, { id: areaId }))
-      )
-    );
+  getLearningAreaById(areaId: number): Observable<LearningAreaInterface> {
+    return this.store.pipe(select(LearningAreaQueries.getById, { id: areaId }));
   }
 
-  private getActiveBundle(): Observable<BundleInterface> {
-    return this.bundleId$.pipe(
-      switchMap(
-        (bundleId: number): Observable<BundleInterface> =>
-          this.store.pipe(select(BundleQueries.getById, { id: bundleId }))
-      )
-    );
+  getBundleById(bundleId: number): Observable<BundleInterface> {
+    return this.store.pipe(select(BundleQueries.getById, { id: bundleId }));
   }
 
-  private getBundleOwner(
+  getBundleOwner(
     bundle$: Observable<BundleInterface>
   ): Observable<PersonInterface> {
     return bundle$.pipe(
@@ -196,12 +131,9 @@ export class BundlesViewModel {
     );
   }
 
-  private getBundleContents(
-    bundleId$: Observable<number>,
-    unlockedContentByBundle$: Observable<Dictionary<UnlockedContentInterface[]>>
-  ): Observable<ContentInterface[]> {
-    return combineLatest(bundleId$, unlockedContentByBundle$).pipe(
-      map(([bundleId, unlockedContentsMap]) => unlockedContentsMap[bundleId]),
+  getBundleContents(bundleId: number): Observable<ContentInterface[]> {
+    return this.unlockedContentsByBundle$.pipe(
+      map(unlockedContentsMap => unlockedContentsMap[bundleId]),
       filter(unlockedContents => !!unlockedContents), // check if bundle exists
       switchMap(
         (unlockedContents): Observable<ContentInterface[]> =>
@@ -236,7 +168,7 @@ export class BundlesViewModel {
     );
   }
 
-  private getSharedBooks(): Observable<EduContentInterface[]> {
+  private getSharedBooks(): Observable<ContentInterface[]> {
     return combineLatest(
       this.store.pipe(
         select(UnlockedBoekeGroupQueries.getShared, {
@@ -249,21 +181,24 @@ export class BundlesViewModel {
         })
       )
     ).pipe(
-      switchMap(([unlockedBookGroups, unlockedBookStudents]) =>
-        this.store.pipe(
-          select(EduContentQueries.getByIds, {
-            // extract all IDs from unlockedBook arrays (remove duplicates)
-            ids: Array.from(
-              new Set([
-                ...unlockedBookGroups.map(g => g.eduContentId),
-                ...unlockedBookStudents.map(s => s.eduContentId)
-              ])
-            )
-          })
-        )
+      switchMap(
+        ([unlockedBookGroups, unlockedBookStudents]): Observable<
+          ContentInterface[]
+        > =>
+          this.store.pipe(
+            select(EduContentQueries.getByIds, {
+              // extract all IDs from unlockedBook arrays (remove duplicates)
+              ids: Array.from(
+                new Set([
+                  ...unlockedBookGroups.map(g => g.eduContentId),
+                  ...unlockedBookStudents.map(s => s.eduContentId)
+                ])
+              )
+            })
+          )
       ),
       map(
-        (eduContents): EduContentInterface[] => {
+        (eduContents): ContentInterface[] => {
           return eduContents.sort((a, b) => {
             const nameA = a.name && a.name.toLowerCase();
             const nameB = b.name && b.name.toLowerCase();
@@ -318,28 +253,32 @@ export class BundlesViewModel {
     );
   }
 
+  getSharedBundlesWithContentInfo(
+    learningAreaId: number
+  ): Observable<BundlesWithContentInfoInterface> {
+    return this.getBundlesWithContentInfo(
+      learningAreaId,
+      this.sharedBundlesByLearningArea$,
+      this.sharedBooksByLearningArea$,
+      this.unlockedContentsByBundle$
+    );
+  }
+
   private getBundlesWithContentInfo(
-    learningAreaId$: Observable<number>,
+    learningAreaId: number,
     bundlesByLearningArea$: Observable<Dictionary<BundleInterface[]>>,
     booksByLearningArea$: Observable<Dictionary<ContentInterface[]>>,
     unlockedContentsByBundle$: Observable<
       Dictionary<UnlockedContentInterface[]>
     >
-  ): Observable<BundlesWithContentInfoInterface> {
+  ) {
     return combineLatest(
-      learningAreaId$,
       bundlesByLearningArea$,
       booksByLearningArea$,
       unlockedContentsByBundle$
     ).pipe(
       map(
-        ([
-          learningAreaId,
-          bundlesByArea,
-          booksByArea,
-          unlockedContentsByBundle
-        ]: [
-          number,
+        ([bundlesByArea, booksByArea, unlockedContentsByBundle]: [
           Dictionary<BundleInterface[]>,
           Dictionary<ContentInterface[]>,
           Dictionary<UnlockedContentInterface[]>
@@ -357,13 +296,13 @@ export class BundlesViewModel {
     );
   }
 
-  private groupStreamByKey(
-    stream$: Observable<any[]>,
+  private groupStreamByKey<T>(
+    stream$: Observable<T[]>,
     key: string
-  ): Observable<Dictionary<any[]>> {
+  ): Observable<Dictionary<T[]>> {
     return stream$.pipe(
       map(
-        (arr: any[]): Dictionary<any[]> => {
+        (arr: T[]): Dictionary<T[]> => {
           const byKey = {};
           const keys = key.split('.');
           arr.forEach(item => {

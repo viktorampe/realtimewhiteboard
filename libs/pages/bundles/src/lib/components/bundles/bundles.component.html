@@ -28,14 +28,12 @@
           weergegeven
         </div>
 
-        <div class="pages-bundles__container__bundles"
-             *ngIf="listFormat$|async as gridListFormat">
-          <campus-list-view [listFormat]="gridListFormat"
+        <div class="pages-bundles__container__bundles">
+          <campus-list-view [listFormat]="listFormat$|async"
                             [placeHolderText]="'De toegepaste filter bevat geen resultaten'">
             <campus-folder *ngFor="let bundleInfo of filteredBundlesInfo"
                            campusListItem
                            [routerLink]="[bundleInfo.bundle.id]"
-                           [listFormat]="gridListFormat"
                            [itemCount]="bundleInfo.contentsCount"
                            [title]="bundleInfo.bundle.name"
                            [backgroundColor]="learningArea.color"

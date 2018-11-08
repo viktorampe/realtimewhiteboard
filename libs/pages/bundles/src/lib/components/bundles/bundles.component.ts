@@ -1,15 +1,15 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, Inject, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { LearningAreaInterface } from '@campus/dal';
+import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/shared';
 import { FilterTextInputComponent, ListFormat } from '@campus/ui';
 import { Observable } from 'rxjs';
-import { FilterService } from '../bundles.filter';
+import { map, shareReplay, switchMap } from 'rxjs/operators';
 import { BundlesViewModel } from '../bundles.viewmodel';
 import {
   BundleInfoInterface,
   BundlesWithContentInfoInterface
 } from '../bundles.viewmodel.interfaces';
-
-type NestedPartial<T> = { [P in keyof T]?: NestedPartial<T[P]> };
 
 /**
  * component listing bundles en book-e's for learning area
@@ -37,20 +37,41 @@ export class BundlesComponent {
     BundleInfoInterface
   >;
 
+  private routeParams$ = this.route.params.pipe(shareReplay(1));
+
   constructor(
+    private route: ActivatedRoute,
     private bundlesViewModel: BundlesViewModel,
-    private filterService: FilterService
+    @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface
   ) {}
 
   ngOnInit(): void {
+    this.learningArea$ = this.getLearningArea();
+    this.sharedInfo$ = this.getSharedInfo();
+
     this.filterTextInput.filterFn = this.filterFn.bind(this);
-    this.learningArea$ = this.bundlesViewModel.activeLearningArea$;
     this.listFormat$ = this.bundlesViewModel.listFormat$;
-    this.sharedInfo$ = this.bundlesViewModel.activeLearningAreaBundles$;
   }
 
   clickChangeListFormat(value: ListFormat): void {
     this.bundlesViewModel.changeListFormat(this.listFormat[value]);
+  }
+
+  private getLearningArea(): Observable<LearningAreaInterface> {
+    return this.routeParams$.pipe(
+      switchMap(params => {
+        return this.bundlesViewModel.getLearningAreaById(params.area);
+      })
+    );
+  }
+
+  private getSharedInfo(): Observable<BundlesWithContentInfoInterface> {
+    return this.routeParams$.pipe(
+      map(params => params.area),
+      switchMap(areaId => {
+        return this.bundlesViewModel.getSharedBundlesWithContentInfo(areaId);
+      })
+    );
   }
 
   private filterFn(

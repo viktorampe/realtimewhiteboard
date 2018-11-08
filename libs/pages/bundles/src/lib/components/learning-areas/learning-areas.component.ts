@@ -1,7 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/shared';
 import { FilterTextInputComponent, ListFormat } from '@campus/ui';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { FilterService } from '../bundles.filter';
+import { Observable } from 'rxjs';
 import { BundlesViewModel } from '../bundles.viewmodel';
 import {
   LearningAreaInfoInterface,
@@ -17,10 +17,7 @@ export class LearningAreasComponent implements OnInit {
   protected listFormat = ListFormat;
 
   listFormat$: Observable<ListFormat>;
-  filterInput$ = new BehaviorSubject<string>('');
-
   sharedInfo$: Observable<LearningAreasWithBundlesInfoInterface>;
-  filteredSharedInfo$ = new BehaviorSubject<any[]>([]);
 
   @ViewChild(FilterTextInputComponent)
   filterTextInput: FilterTextInputComponent<
@@ -30,7 +27,7 @@ export class LearningAreasComponent implements OnInit {
 
   constructor(
     private bundlesViewModel: BundlesViewModel,
-    private filterService: FilterService
+    @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface
   ) {}
 
   ngOnInit(): void {

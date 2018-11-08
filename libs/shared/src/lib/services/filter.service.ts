@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
-
-type NestedPartial<T> = { [P in keyof T]?: NestedPartial<T[P]> };
+import {
+  FilterServiceInterface,
+  NestedPartial
+} from './filter.service.interface';
 
 @Injectable({
   providedIn: 'root'
 })
-export class FilterService {
+export class FilterService implements FilterServiceInterface {
   filter<T>(
     list: T[],
     filters: NestedPartial<T>,
@@ -14,7 +16,7 @@ export class FilterService {
     return list.filter(item => this.compareObjects(item, filters, ignoreCase));
   }
 
-  compareObjects<T>(
+  private compareObjects<T>(
     item: T,
     filters: NestedPartial<T>,
     ignoreCase: boolean = true
