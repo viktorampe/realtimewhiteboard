@@ -1,13 +1,14 @@
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { Injectable } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { BreadcrumbLinkInterface, UiModule } from '@campus/ui';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of, Subject } from 'rxjs';
 import { HeaderComponent } from './header.component';
 import { HeaderViewModel, mockBreadCrumbs } from './header.viewmodel';
-
+// file.only
 @Injectable({
   providedIn: 'root'
 })
@@ -22,6 +23,8 @@ export class MockHeaderViewModel {
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
+  let headerViewModel: MockHeaderViewModel;
+  const breakpointStream: Subject<{ matches: boolean }> = new Subject();
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -31,9 +34,15 @@ describe('HeaderComponent', () => {
         {
           provide: HeaderViewModel,
           useClass: MockHeaderViewModel
-        }
+        },
+        BreakpointObserver
       ]
     }).compileComponents();
+    headerViewModel = TestBed.get(HeaderViewModel);
+    const breakpointObserver: BreakpointObserver = TestBed.get(
+      BreakpointObserver
+    );
+    jest.spyOn(breakpointObserver, 'observe').mockReturnValue(breakpointStream);
   }));
 
   beforeEach(() => {
@@ -75,5 +84,18 @@ describe('HeaderComponent', () => {
     expect(
       fixture.debugElement.query(By.css('#page-bar-container'))
     ).toBeTruthy();
+  });
+
+  describe('should be responsive', () => {
+    it('should show the menu button when we are on the base route', () => {
+      component.pageBarNavItem$ = of({ icon: 'arrow-back', link: ['/'] });
+      breakpointStream.next({ matches: true });
+
+      fixture.detectChanges();
+      const debugEl = fixture.debugElement.query(
+        By.css('.shared-header__page-bar_nav-icon')
+      );
+      expect(debugEl.nativeElement.style.display).toBe('none');
+    });
   });
 });
