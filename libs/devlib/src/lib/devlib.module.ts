@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DalModule } from '@campus/dal';
+import { ScormModule } from '@campus/scorm';
 import { SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
 import { LoopBackConfig } from '@diekeure/polpo-api-angular-sdk';
@@ -19,7 +20,8 @@ import { UiPageComponent } from './ui-page/ui-page.component';
     CommonModule,
     UiModule,
     DevlibRoutingModule,
-    SharedModule
+    SharedModule,
+    ScormModule
   ],
   providers: [LoginPageViewModel, EduContentViewModel],
   declarations: [LoginpageComponent, EduContentComponent, UiPageComponent]

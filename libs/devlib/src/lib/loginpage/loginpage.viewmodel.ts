@@ -7,6 +7,11 @@ import {
   UserQueries,
   UserReducer
 } from '@campus/dal';
+import {
+  ScormApiServiceInterface,
+  ScormCMIMode,
+  SCORM_API_SERVICE_TOKEN
+} from '@campus/scorm';
 import { select, Store } from '@ngrx/store';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, map, switchMap, take } from 'rxjs/operators';
@@ -23,11 +28,14 @@ export class LoginPageViewModel implements Resolve<boolean> {
 
   constructor(
     private store: Store<UserReducer.State>,
-    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
+    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
+    @Inject(SCORM_API_SERVICE_TOKEN)
+    private scormApiService: ScormApiServiceInterface
   ) {
     store.pipe(select(UserQueries.getCurrentUser)).subscribe(data => {
       this.loggedIn = data != null;
     });
+    this.scormApiService.init(ScormCMIMode.CMI_MODE_NORMAL);
   }
 
   /**
