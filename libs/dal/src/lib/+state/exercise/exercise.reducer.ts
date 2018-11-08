@@ -1,37 +1,37 @@
-import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { ExerciseInterface } from './../../+models/Exercise.interface';
 import { ExercisesActions, ExercisesActionTypes } from './exercise.actions';
 
 export const NAME = 'exercises';
 
-export interface State extends EntityState<ExerciseInterface> {
+export interface State {
   // additional entities state properties
   loaded: boolean;
   error?: any;
   currentExercise?: ExerciseInterface;
 }
 
-export const adapter: EntityAdapter<ExerciseInterface> = createEntityAdapter<
-  ExerciseInterface
->();
-
-export const initialState: State = adapter.getInitialState({
+export const initialState: State = {
   // additional entity state properties
   loaded: false
-});
+};
 
 export function reducer(state = initialState, action: ExercisesActions): State {
   switch (action.type) {
     case ExercisesActionTypes.ClearCurrentExercise: {
-      return { ...state, currentExercise: null };
+      return { ...state, currentExercise: null, loaded: true };
     }
 
     case ExercisesActionTypes.CurrentExerciseLoaded: {
-      return { ...state, currentExercise: action.payload };
+      return { ...state, currentExercise: action.payload, loaded: true };
     }
 
     case ExercisesActionTypes.CurrentExerciseError: {
-      return { ...state, currentExercise: null, error: action.payload };
+      return {
+        ...state,
+        currentExercise: null,
+        error: action.payload,
+        loaded: false
+      };
     }
 
     default: {
@@ -39,10 +39,3 @@ export function reducer(state = initialState, action: ExercisesActions): State {
     }
   }
 }
-
-export const {
-  selectIds,
-  selectEntities,
-  selectAll,
-  selectTotal
-} = adapter.getSelectors();

@@ -1,16 +1,17 @@
 import { TestBed } from '@angular/core/testing';
+import { ExerciseInterface } from '@campus/dal';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
-import { EXERCISE_SERVICE_TOKEN } from '../../exercise/exercise.service.interface';
 import { ExerciseReducer } from '.';
+import { EXERCISE_SERVICE_TOKEN } from '../../exercise/exercise.service.interface';
 import {
-  ExercisesLoaded,
-  ExercisesLoadError,
-  LoadExercises
+  CurrentExerciseError,
+  CurrentExerciseLoaded,
+  StartExercise
 } from './exercise.actions';
 import { ExerciseEffects } from './exercise.effects';
 
@@ -18,7 +19,7 @@ describe('ExerciseEffects', () => {
   let actions: Observable<any>;
   let effects: ExerciseEffects;
   let usedState: any;
-
+  let mockExercise: ExerciseInterface;
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -61,7 +62,7 @@ describe('ExerciseEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature(ExerciseReducer.NAME , ExerciseReducer.reducer, {
+        StoreModule.forFeature(ExerciseReducer.NAME, ExerciseReducer.reducer, {
           initialState: usedState
         }),
         EffectsModule.forRoot([]),
@@ -71,7 +72,9 @@ describe('ExerciseEffects', () => {
         {
           provide: EXERCISE_SERVICE_TOKEN,
           useValue: {
-            getAllForUser: () => {}
+            getAllForUser: () => {},
+            startExercise: () => {},
+            saveExercise: () => {}
           }
         },
         ExerciseEffects,
@@ -83,29 +86,47 @@ describe('ExerciseEffects', () => {
     effects = TestBed.get(ExerciseEffects);
   });
 
-  describe('loadExercise$', () => {
-    const unforcedLoadAction = new LoadExercises({ userId: 1 });
-    const forcedLoadAction = new LoadExercises({ force: true, userId: 1 });
-    const filledLoadedAction = new ExercisesLoaded({ exercises: [] });
-    const loadErrorAction = new ExercisesLoadError(new Error('failed'));
+  describe('startExercise$', () => {
+    mockExercise = {
+      eduContent: undefined,
+      cmiMode: 'normal',
+      result: undefined,
+      saveToApi: true,
+      url: 'dit is een url'
+    };
+
+    const startTaskExerciseAction = new StartExercise({
+      userId: 6,
+      educontentId: 1,
+      taskId: 1
+    });
+    const startUnlockedContentExerciseAction = new StartExercise({
+      userId: 6,
+      educontentId: 1,
+      unlockedContentId: 1
+    });
+    const filledLoadedAction = new CurrentExerciseLoaded(mockExercise);
+    const loadErrorAction = new CurrentExerciseError(new Error('failed'));
     describe('with initialState', () => {
       beforeAll(() => {
         usedState = ExerciseReducer.initialState;
       });
       beforeEach(() => {
         mockServiceMethodReturnValue('getAllForUser', []);
+        mockServiceMethodReturnValue('startExercise', mockExercise);
+        mockServiceMethodReturnValue('saveExercise', mockExercise);
       });
-      it('should trigger an api call with the initialState if force is not true', () => {
+      it('should trigger an api call with the initialState for a task', () => {
         expectInAndOut(
-          effects.loadExercises$,
-          unforcedLoadAction,
+          effects.startExercise$,
+          startTaskExerciseAction,
           filledLoadedAction
         );
       });
-      it('should trigger an api call with the initialState if force is true', () => {
+      it('should trigger an api call with the initialState for an unlockedContent', () => {
         expectInAndOut(
-          effects.loadExercises$,
-          forcedLoadAction,
+          effects.startExercise$,
+          startUnlockedContentExerciseAction,
           filledLoadedAction
         );
       });
@@ -113,17 +134,30 @@ describe('ExerciseEffects', () => {
     describe('with loaded state', () => {
       beforeAll(() => {
         usedState = { ...ExerciseReducer.initialState, loaded: true };
+        mockExercise = {
+          eduContent: undefined,
+          cmiMode: 'normal',
+          result: undefined,
+          saveToApi: true,
+          url: 'dit is een url'
+        };
       });
       beforeEach(() => {
         mockServiceMethodReturnValue('getAllForUser', []);
+        mockServiceMethodReturnValue('startExercise', mockExercise);
+        mockServiceMethodReturnValue('saveExercise', mockExercise);
       });
-      it('should not trigger an api call with the loaded state if force is not true', () => {
-        expectInNoOut(effects.loadExercises$, unforcedLoadAction);
-      });
-      it('should trigger an api call with the loaded state if force is true', () => {
+      it('should trigger an api call with the with the loaded state for a task', () => {
         expectInAndOut(
-          effects.loadExercises$,
-          forcedLoadAction,
+          effects.startExercise$,
+          startTaskExerciseAction,
+          filledLoadedAction
+        );
+      });
+      it('should trigger an api call with the with the loaded state for an unlockedContent', () => {
+        expectInAndOut(
+          effects.startExercise$,
+          startUnlockedContentExerciseAction,
           filledLoadedAction
         );
       });
@@ -134,6 +168,8 @@ describe('ExerciseEffects', () => {
       });
       beforeEach(() => {
         mockServiceMethodError('getAllForUser', 'failed');
+        mockServiceMethodReturnValue('startExercise', []);
+        mockServiceMethodReturnValue('saveExercise', []);
       });
       it('should return a error action if force is not true', () => {
         expectInAndOut(

@@ -42,16 +42,14 @@ export class ExerciseEffects {
     ExercisesActionTypes.SaveCurrentExercise,
     {
       run: (action: SaveCurrentExercise, state: DalState) => {
-        return this.exerciseService
-          .saveExercise(action.payload.userId, action.payload.exercise)
-          .pipe(
-            map(
-              ex =>
-                new DalActions.ActionSuccessful({
-                  successfulAction: 'Exercise saved'
-                })
-            )
-          );
+        return this.exerciseService.saveExercise(action.payload.exercise).pipe(
+          map(
+            ex =>
+              new DalActions.ActionSuccessful({
+                successfulAction: 'Exercise saved'
+              })
+          )
+        );
       },
       onError: (action: SaveCurrentExercise, error) => {
         return new CurrentExerciseError(error);
