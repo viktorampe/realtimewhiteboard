@@ -1,5 +1,6 @@
 import { ResultInterface } from '@campus/dal';
 import { Observable } from 'rxjs';
+import { CmiInterface } from './interfaces/cmi.interface';
 
 export interface ScormResultsServiceInterface {
   getResultsForStudent(userId: number): Observable<Object>;
@@ -19,9 +20,6 @@ export interface ScormResultsServiceInterface {
   saveResult(
     userId: number,
     resultId: number,
-    time: number,
-    status: string,
-    score?: number,
-    cmi?: any
+    cmi: CmiInterface
   ): Observable<Object>;
 }
