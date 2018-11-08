@@ -1,5 +1,5 @@
 import { ListFormat } from '@campus/ui';
-import { SetListFormatUi, ToggleSideSheetUi, UiLoaded } from './ui.actions';
+import { SetListFormat, ToggleSideSheet, UiLoaded } from './ui.actions';
 import { initialState, reducer, UiState } from './ui.reducer';
 
 describe('Ui Reducer', () => {
@@ -20,19 +20,19 @@ describe('Ui Reducer', () => {
     });
 
     it('should change the listFormat', () => {
-      const action = new SetListFormatUi({ listFormat: ListFormat.LINE });
+      const action = new SetListFormat({ listFormat: ListFormat.LINE });
       const result: UiState = reducer(initialState, action);
       expect(result.listFormat).toEqual(ListFormat.LINE);
     });
 
     it('should toggle the sideSheet', () => {
-      const action = new ToggleSideSheetUi();
+      const action = new ToggleSideSheet();
       const result: UiState = reducer(initialState, action);
       expect(result.sideSheetOpen).toBeTruthy();
     });
 
     it('should toggle the sideSheet', () => {
-      const action = new ToggleSideSheetUi();
+      const action = new ToggleSideSheet();
       const result: UiState = reducer(
         { ...initialState, sideSheetOpen: true },
         action

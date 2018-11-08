@@ -24,12 +24,12 @@ export class SaveUi implements Action {
   readonly type = UiActionTypes.SaveUi;
 }
 
-export class SetListFormatUi implements Action {
+export class SetListFormat implements Action {
   readonly type = UiActionTypes.SetListFormat;
   constructor(public payload: { listFormat: ListFormat }) {}
 }
 
-export class ToggleSideSheetUi implements Action {
+export class ToggleSideSheet implements Action {
   readonly type = UiActionTypes.ToggleSideSheet;
 }
 
@@ -41,15 +41,15 @@ export type UiAction =
   | LoadUi
   | UiLoaded
   | SaveUi
-  | SetListFormatUi
-  | ToggleSideSheetUi
+  | SetListFormat
+  | ToggleSideSheet
   | ToggleSideNav;
 
 export const fromUiActions = {
   LoadUi,
   UiLoaded,
   SaveUi,
-  SetListFormatUi,
-  ToggleSideSheetUi,
+  SetListFormat,
+  ToggleSideSheet,
   ToggleSideNav
 };

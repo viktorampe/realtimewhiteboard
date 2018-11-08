@@ -155,7 +155,7 @@ export class BundlesViewModel {
     );
     // > books
     this.sharedBooks$ = this.getSharedBooks();
-    this.sharedBooksByLearningArea$ = this.groupStreamByKey(
+    this.sharedBooksByLearningArea$ = SetListFormatmByKey(
       this.sharedBooks$,
       'learningAreaId'
     );
@@ -189,7 +189,7 @@ export class BundlesViewModel {
   }
 
   changeListFormat(listFormat: ListFormat): void {
-    this.store.dispatch(new UiActions.SetListFormatUi({ listFormat }));
+    this.store.dispatch(new UiActions.SetListFormat({ listFormat }));
   }
 
   private getLearningAreaBundles(
