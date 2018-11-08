@@ -16,12 +16,12 @@ export class TasksAreaComponent implements OnInit {
   listFormat$: Observable<ListFormat>;
   learningAreasWithInfo$: Observable<
     LearningAreasWithTaskInstanceInfoInterface
-    >;
+  >;
   displayedLearningAreasWithInfo$: Observable<
     LearningAreasWithTaskInstanceInfoInterface
-    >;
+  >;
 
-  constructor(private tasksViewModel: TasksViewModel) { }
+  constructor(private tasksViewModel: TasksViewModel) {}
 
   ngOnInit() {
     this.listFormat$ = this.tasksViewModel.listFormat$;
@@ -68,7 +68,7 @@ export class TasksAreaComponent implements OnInit {
           const learningAreaWithTaskInstanceInfo = {
             ...learningAreas,
             learningAreas: learningAreaArray
-          }
+          };
 
           return learningAreaWithTaskInstanceInfo;
         }

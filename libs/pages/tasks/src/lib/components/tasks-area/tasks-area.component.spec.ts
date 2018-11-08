@@ -15,7 +15,7 @@ describe('TasksAreaComponent', () => {
   let tasksViewModel: TasksViewModel;
   let learningAreas$: BehaviorSubject<
     LearningAreasWithTaskInstanceInfoInterface
-    >;
+  >;
   let learningAreasValue: LearningAreasWithTaskInstanceInfoInterface;
   let listFormat$: BehaviorSubject<ListFormat>;
   let listFormatValue: ListFormat;
@@ -31,7 +31,7 @@ describe('TasksAreaComponent', () => {
 
     learningAreas$ = tasksViewModel.learningAreasWithTaskInstances$ as BehaviorSubject<
       LearningAreasWithTaskInstanceInfoInterface
-      >;
+    >;
     learningAreasValue = learningAreas$.value;
 
     listFormat$ = tasksViewModel.listFormat$ as BehaviorSubject<ListFormat>;
