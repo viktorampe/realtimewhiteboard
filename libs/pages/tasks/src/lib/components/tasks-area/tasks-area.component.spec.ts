@@ -98,7 +98,7 @@ describe('TasksAreaComponent', () => {
 
     // Enkel wiskunde
     const expectedB = {
-      learningAreas: [
+      learningAreasWithInfo: [
         {
           learningArea: {
             name: 'Wiskunde',
@@ -109,11 +109,11 @@ describe('TasksAreaComponent', () => {
           closedTasks: 3
         }
       ],
-      totalTasks: 5
+      totalTasks: 9
     };
 
     // Leeg
-    const expectedC = { learningAreas: [], totalTasks: 0 };
+    const expectedC = { learningAreasWithInfo: [], totalTasks: 9 };
 
     expect(
       component.getDisplayedLearningAreas$(learningAreas$, filterInput$)

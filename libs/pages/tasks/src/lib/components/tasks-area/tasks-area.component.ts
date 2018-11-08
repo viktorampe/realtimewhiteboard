@@ -67,7 +67,7 @@ export class TasksAreaComponent implements OnInit {
 
           const learningAreaWithTaskInstanceInfo = {
             ...learningAreas,
-            learningAreas: learningAreaArray
+            learningAreasWithInfo: learningAreaArray
           };
 
           return learningAreaWithTaskInstanceInfo;
