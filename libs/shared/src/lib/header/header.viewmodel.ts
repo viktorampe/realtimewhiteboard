@@ -170,8 +170,7 @@ export class HeaderViewModel {
     );
   }
 
-  onMenuClick() {
-    // open the side nav
+  toggleSideNav() {
     this.store.dispatch(new UiActions.ToggleSideNav());
   }
 }

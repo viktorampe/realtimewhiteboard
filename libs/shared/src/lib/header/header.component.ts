@@ -24,6 +24,6 @@ export class HeaderComponent implements OnInit {
   }
 
   onMenuClick() {
-    this.headerViewModel.onMenuClick();
+    this.headerViewModel.toggleSideNav();
   }
 }

@@ -155,7 +155,7 @@ export class BundlesViewModel {
     );
     // > books
     this.sharedBooks$ = this.getSharedBooks();
-    this.sharedBooksByLearningArea$ = SetListFormatmByKey(
+    this.sharedBooksByLearningArea$ = this.groupStreamByKey(
       this.sharedBooks$,
       'learningAreaId'
     );
