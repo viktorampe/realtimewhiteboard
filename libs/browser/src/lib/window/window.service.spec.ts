@@ -1,7 +1,16 @@
-import { inject, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { WINDOW, WindowService } from './window.service';
 
-const mockWindow = <Window>{
+const currentMockWindow = <Window>{
+  open: () => {
+    return newMockWindow;
+  },
+  close: () => {
+    return;
+  }
+};
+
+const newMockWindow = <Window>{
   open: () => {
     return;
   },
@@ -9,28 +18,31 @@ const mockWindow = <Window>{
     return;
   }
 };
-// file.only
+
 describe('WindowService', () => {
   let windowService: WindowService;
-  let openSpy: jasmine.Spy;
-  let closeSpy: jasmine.Spy;
+  let openSpy: jest.SpyInstance;
+  let closeSpy: jest.SpyInstance;
+  let closeWindowSpy: jest.SpyInstance;
   let openedWindows: { [name: string]: Window };
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [WindowService, { provide: WINDOW, useValue: mockWindow }]
+      providers: [
+        WindowService,
+        { provide: WINDOW, useValue: currentMockWindow }
+      ]
     });
 
     windowService = TestBed.get(WindowService);
-    openSpy = spyOn(windowService['nativeWindow'], 'open').and.returnValue(
-      mockWindow
-    );
-    closeSpy = spyOn(windowService['nativeWindow'], 'close').and.stub();
+    openSpy = jest.spyOn(currentMockWindow, 'open');
+    closeSpy = jest.spyOn(currentMockWindow, 'close');
+    closeWindowSpy = jest.spyOn(windowService, 'closeWindow');
     openedWindows = windowService['openedWindows'];
   });
 
-  it('should be created', inject([WindowService], (service: WindowService) => {
-    expect(service).toBeTruthy();
-  }));
+  it('should be created', () => {
+    expect(windowService).toBeTruthy();
+  });
 
   it('should open a new window', () => {
     windowService.openWindow('testName', 'www.testurl.com');
@@ -41,31 +53,19 @@ describe('WindowService', () => {
   });
 
   it('should close the right window', () => {
-    openedWindows['toBeClosed'] = mockWindow;
-    openedWindows['stillOpen'] = mockWindow;
-
-    const closeSpyOnWindowInstance = spyOn(
-      openedWindows['toBeClosed'],
-      'close'
-    );
+    openedWindows['toBeClosed'] = currentMockWindow;
+    openedWindows['stillOpen'] = currentMockWindow;
 
     windowService.closeWindow('toBeClosed');
 
-    expect(closeSpyOnWindowInstance).toHaveBeenCalledTimes(1);
+    expect(closeSpy).toHaveBeenCalledTimes(1);
     expect(openedWindows['toBeClosed']).toBeFalsy();
     expect(openedWindows['stillOpen']).toBeTruthy();
   });
 
-  it('should keep a record of opened windows', () => {
-    windowService.openWindow('window1', 'www.url1.com');
-    windowService.openWindow('window2', 'www.url2.com');
-    windowService.openWindow('window3', 'www.url3.com');
-    windowService.openWindow('window4', 'www.url4.com');
-
-    windowService.closeWindow('window3');
-    expect(openedWindows.window1).toBeTruthy();
-    expect(openedWindows.window2).toBeTruthy();
-    expect(openedWindows.window3).toBeFalsy();
-    expect(openedWindows.window4).toBeTruthy();
+  it(`should not close non-existing windows`, () => {
+    // we have to provide the 'this' context otherwise test fails
+    windowService.closeWindow.call(windowService, 'nonExistingWindow');
+    expect(closeWindowSpy).toHaveBeenCalledTimes(1);
   });
 });
