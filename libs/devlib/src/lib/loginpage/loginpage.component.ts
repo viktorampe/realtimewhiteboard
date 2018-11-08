@@ -6,13 +6,11 @@ import {
 } from '@campus/dal';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Store } from '@ngrx/store';
+import { ScormCMIMode } from 'libs/pages/shared/src/lib/scorm/enums/cmi-mode.enum';
+import { ScormStatus } from 'libs/pages/shared/src/lib/scorm/enums/scorm-status.enum';
 import { Observable } from 'rxjs';
 import { LoadUser } from './../../../../dal/src/lib/+state/user/user.actions';
-import {
-  ScormCMIMode,
-  ScormResultsService,
-  ScormStatus
-} from './../../../../pages/shared/src/lib/scorm/scorm-results.service';
+import { ScormResultsService } from './../../../../pages/shared/src/lib/scorm/scorm-results.service';
 import { LoginPageViewModel } from './loginpage.viewmodel';
 
 @Component({
@@ -61,14 +59,7 @@ export class LoginpageComponent implements OnInit {
   // tslint:disable-next-line:member-ordering
   resultSaved$: any;
   saveResult() {
-    const result = this.scormResultsService.saveResult(
-      6,
-      3,
-      Date.now(),
-      ScormStatus.STATUS_COMPLETED,
-      75,
-      JSON.stringify(this.cmi)
-    );
+    const result = this.scormResultsService.saveResult(6, 2, this.cmi);
 
     this.resultSaved$ = result;
   }
@@ -82,44 +73,6 @@ export class LoginpageComponent implements OnInit {
       lesson_status: ScormStatus.STATUS_COMPLETED,
       total_time: '0:1:4.76',
       session_time: '0000:00:00'
-    },
-    objectives: [{ score: { raw: 3 }, status: 'not attempted', id: 'points' }],
-    suspend_data: {
-      elements: [
-        {
-          id: 263230,
-          finished: true,
-          attemptedSolutions: [
-            null,
-            [{ id: 1059120, selected: true, index: 15, valid: false }]
-          ]
-        },
-        {
-          id: 267121,
-          finished: true,
-          attemptedSolutions: [
-            null,
-            [{ id: 1063702, selected: true, index: 15, valid: false }]
-          ]
-        },
-        {
-          id: 267122,
-          finished: true,
-          attemptedSolutions: [
-            null,
-            [{ id: 1063721, selected: true, index: 14, valid: false }]
-          ]
-        },
-        {
-          id: 267123,
-          finished: true,
-          attemptedSolutions: [
-            null,
-            [{ id: 1063740, selected: true, index: 14, valid: false }]
-          ]
-        }
-      ],
-      suspendedTimes: [{ startTime: 1479887890779, endTime: 1479887955540 }]
     }
   };
 }
