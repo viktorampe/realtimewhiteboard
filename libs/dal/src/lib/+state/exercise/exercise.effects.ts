@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { map } from 'rxjs/operators';
-import { DalState } from '..';
+import { DalActions, DalState } from '..';
 import {
   ExerciseServiceInterface,
   EXERCISE_SERVICE_TOKEN
@@ -11,30 +11,12 @@ import {
   CurrentExerciseError,
   CurrentExerciseLoaded,
   ExercisesActionTypes,
-  ExercisesLoaded,
-  ExercisesLoadError,
-  LoadExercises,
+  SaveCurrentExercise,
   StartExercise
 } from './exercise.actions';
 
 @Injectable()
 export class ExerciseEffects {
-  @Effect()
-  loadExercises$ = this.dataPersistence.fetch(
-    ExercisesActionTypes.LoadExercises,
-    {
-      run: (action: LoadExercises, state: DalState) => {
-        if (!action.payload.force && state.exercises.loaded) return;
-        return this.exerciseService
-          .getAllForUser(action.payload.userId)
-          .pipe(map(exercises => new ExercisesLoaded({ exercises })));
-      },
-      onError: (action: LoadExercises, error) => {
-        return new ExercisesLoadError(error);
-      }
-    }
-  );
-
   @Effect()
   startExercise$ = this.dataPersistence.pessimisticUpdate(
     ExercisesActionTypes.StartExercise,
@@ -50,6 +32,28 @@ export class ExerciseEffects {
           .pipe(map(ex => new CurrentExerciseLoaded(ex)));
       },
       onError: (action: StartExercise, error) => {
+        return new CurrentExerciseError(error);
+      }
+    }
+  );
+
+  @Effect()
+  saveExercise$ = this.dataPersistence.pessimisticUpdate(
+    ExercisesActionTypes.SaveCurrentExercise,
+    {
+      run: (action: SaveCurrentExercise, state: DalState) => {
+        return this.exerciseService
+          .saveExercise(action.payload.userId, action.payload.exercise)
+          .pipe(
+            map(
+              ex =>
+                new DalActions.ActionSuccessful({
+                  successfulAction: 'Exercise saved'
+                })
+            )
+          );
+      },
+      onError: (action: SaveCurrentExercise, error) => {
         return new CurrentExerciseError(error);
       }
     }

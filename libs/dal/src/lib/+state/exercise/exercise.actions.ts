@@ -1,29 +1,13 @@
-import { ExerciseInterface } from '@campus/dal';
-import { Update } from '@ngrx/entity';
 import { Action } from '@ngrx/store';
+import { ExerciseInterface } from './../../+models/Exercise.interface';
 
 export enum ExercisesActionTypes {
-  // Current Exercise Actions
   StartExercise = '[Exercises] Start Exercise',
   CurrentExerciseLoaded = '[Exercises] Current Exercise Loaded',
-  ExerciseUrlLoaded = '[Exercises] Exercise Url Loaded', // Nodig?
-  ExerciseResultLoaded = '[Exercises] Exercise Result Loaded', // Nodig?
   CurrentExerciseError = '[Exercises] Current Exercise Error',
   SaveCurrentExercise = '[Exercises] Save Current Exercise',
-  // also: UpdateExercise
-
-  ExercisesLoaded = '[Exercises] Exercises Loaded',
-  ExercisesLoadError = '[Exercises] Load Error',
-  LoadExercises = '[Exercises] Load Exercises',
-  AddExercise = '[Exercises] Add Exercise',
-  UpsertExercise = '[Exercises] Upsert Exercise',
-  AddExercises = '[Exercises] Add Exercises',
-  UpsertExercises = '[Exercises] Upsert Exercises',
-  UpdateExercise = '[Exercises] Update Exercise',
-  UpdateExercises = '[Exercises] Update Exercises',
-  DeleteExercise = '[Exercises] Delete Exercise',
-  DeleteExercises = '[Exercises] Delete Exercises',
-  ClearExercises = '[Exercises] Clear Exercises'
+  UpdateCurrentExercise = '[Exercises] Update Current Exercise',
+  ClearCurrentExercise = '[Exercises] Clear Current Exercise'
 }
 
 export class StartExercise implements Action {
@@ -44,114 +28,31 @@ export class CurrentExerciseLoaded implements Action {
 
   constructor(public payload: ExerciseInterface) {}
 }
-export class ExerciseUrlLoaded implements Action {
-  readonly type = ExercisesActionTypes.ExerciseUrlLoaded;
 
-  constructor(public payload: any) {}
-}
-export class ExerciseResultLoaded implements Action {
-  readonly type = ExercisesActionTypes.ExerciseResultLoaded;
-
-  constructor(public payload: any) {}
-}
 export class CurrentExerciseError implements Action {
   readonly type = ExercisesActionTypes.CurrentExerciseError;
 
   constructor(public payload: any) {}
 }
+
 export class SaveCurrentExercise implements Action {
   readonly type = ExercisesActionTypes.SaveCurrentExercise;
 
-  constructor(public payload: any) {}
-}
-
-export class LoadExercises implements Action {
-  readonly type = ExercisesActionTypes.LoadExercises;
-
   constructor(
-    public payload: { force?: boolean; userId: number } = { userId: null }
+    public payload: {
+      userId: number;
+      exercise: ExerciseInterface;
+    }
   ) {}
 }
 
-export class ExercisesLoaded implements Action {
-  readonly type = ExercisesActionTypes.ExercisesLoaded;
-
-  constructor(public payload: { exercises: ExerciseInterface[] }) {}
-}
-
-export class ExercisesLoadError implements Action {
-  readonly type = ExercisesActionTypes.ExercisesLoadError;
-  constructor(public payload: any) {}
-}
-
-export class AddExercise implements Action {
-  readonly type = ExercisesActionTypes.AddExercise;
-
-  constructor(public payload: { exercise: ExerciseInterface }) {}
-}
-
-export class UpsertExercise implements Action {
-  readonly type = ExercisesActionTypes.UpsertExercise;
-
-  constructor(public payload: { exercise: ExerciseInterface }) {}
-}
-
-export class AddExercises implements Action {
-  readonly type = ExercisesActionTypes.AddExercises;
-
-  constructor(public payload: { exercises: ExerciseInterface[] }) {}
-}
-
-export class UpsertExercises implements Action {
-  readonly type = ExercisesActionTypes.UpsertExercises;
-
-  constructor(public payload: { exercises: ExerciseInterface[] }) {}
-}
-
-export class UpdateExercise implements Action {
-  readonly type = ExercisesActionTypes.UpdateExercise;
-
-  constructor(public payload: { exercise: Update<ExerciseInterface> }) {}
-}
-
-export class UpdateExercises implements Action {
-  readonly type = ExercisesActionTypes.UpdateExercises;
-
-  constructor(public payload: { exercises: Update<ExerciseInterface>[] }) {}
-}
-
-export class DeleteExercise implements Action {
-  readonly type = ExercisesActionTypes.DeleteExercise;
-
-  constructor(public payload: { id: number }) {}
-}
-
-export class DeleteExercises implements Action {
-  readonly type = ExercisesActionTypes.DeleteExercises;
-
-  constructor(public payload: { ids: number[] }) {}
-}
-
-export class ClearExercises implements Action {
-  readonly type = ExercisesActionTypes.ClearExercises;
+export class ClearCurrentExercise implements Action {
+  readonly type = ExercisesActionTypes.ClearCurrentExercise;
 }
 
 export type ExercisesActions =
-  | LoadExercises
-  | ExercisesLoaded
-  | ExercisesLoadError
-  | AddExercise
-  | UpsertExercise
-  | AddExercises
-  | UpsertExercises
-  | UpdateExercise
-  | UpdateExercises
-  | DeleteExercise
-  | DeleteExercises
-  | ClearExercises
   | StartExercise
   | CurrentExerciseLoaded
-  | ExerciseUrlLoaded
-  | ExerciseResultLoaded
   | CurrentExerciseError
-  | SaveCurrentExercise;
+  | SaveCurrentExercise
+  | ClearCurrentExercise;
