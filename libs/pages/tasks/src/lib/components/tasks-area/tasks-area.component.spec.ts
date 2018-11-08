@@ -15,7 +15,7 @@ describe('TasksAreaComponent', () => {
   let tasksViewModel: TasksViewModel;
   let learningAreas$: BehaviorSubject<
     LearningAreasWithTaskInstanceInfoInterface
-  >;
+    >;
   let learningAreasValue: LearningAreasWithTaskInstanceInfoInterface;
   let listFormat$: BehaviorSubject<ListFormat>;
   let listFormatValue: ListFormat;
@@ -31,7 +31,7 @@ describe('TasksAreaComponent', () => {
 
     learningAreas$ = tasksViewModel.learningAreasWithTaskInstances$ as BehaviorSubject<
       LearningAreasWithTaskInstanceInfoInterface
-    >;
+      >;
     learningAreasValue = learningAreas$.value;
 
     listFormat$ = tasksViewModel.listFormat$ as BehaviorSubject<ListFormat>;
@@ -81,7 +81,7 @@ describe('TasksAreaComponent', () => {
     expect(component.listFormat$).toBeObservable(
       hot('a', { a: listFormatValue })
     );
-    expect(component.learningAreas$).toBeObservable(
+    expect(component.learningAreasWithInfo$).toBeObservable(
       hot('a', { a: learningAreasValue })
     );
   });
@@ -129,7 +129,7 @@ describe('TasksAreaComponent', () => {
   it('should show the placeholder text when no learningAreas are available', () => {
     const placeholderText = 'Er zijn momenteel geen taken voor jou klaargezet.';
 
-    learningAreas$.next({ learningAreas: [], totalTasks: 0 });
+    learningAreas$.next({ learningAreasWithInfo: [], totalTasks: 0 });
     fixture.detectChanges();
 
     const componentDE = fixture.debugElement.query(
