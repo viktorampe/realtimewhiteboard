@@ -48,7 +48,17 @@ export class ExerciseService implements ExerciseServiceInterface {
     return exercise$;
   }
 
-  public saveExercise() {}
+  public saveExercise(
+    exercise: ExerciseInterface
+  ): Observable<ExerciseInterface> {
+    const userId = exercise.result.personId;
+    const resultId = exercise.result.id;
+    const cmi = exercise.result.cmi;
+
+    const result$ = this.resultsService.saveResult(userId, resultId, cmi);
+
+    return result$;
+  }
 
   constructor(
     private resultsService: ResultsService,

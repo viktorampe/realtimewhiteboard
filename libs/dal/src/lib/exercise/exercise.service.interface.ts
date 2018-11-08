@@ -13,5 +13,6 @@ export interface ExerciseServiceInterface {
     taskId?: number,
     unlockedContentId?: number
   ): Observable<ExerciseInterface>;
-  saveExercise();
+
+  saveExercise(exercise: ExerciseInterface): Observable<ExerciseInterface>;
 }
