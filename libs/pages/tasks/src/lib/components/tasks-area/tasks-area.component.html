@@ -20,11 +20,11 @@
   <ng-template #noLearningAreas>Er zijn momenteel geen taken voor jou klaargezet.</ng-template>
 
   <ng-container *ngIf="learningAreas.length > 0; else noLearningAreas">
-    <ng-container *ngIf="(displayedLearningAreas$|async).learningAreas as displayedLearningAreas">
+    <ng-container *ngIf="(displayedLearningAreasWithInfo$|async).learningAreas as displayedLearningAreas">
       <div class="pages-tasks__container__learning-areas-count">
         {{displayedLearningAreas.length}} van
         <u class="pages-tasks__container__learning-areas-count__total"
-           (click)="resetFilterInput(); filterInput.value = ''">{{(learningAreas$|async)?.learningAreas.length}}</u>
+           (click)="resetFilterInput(); filterInput.value = ''">{{learningAreas.length}}</u>
         weergegeven
       </div>
       <div class="pages-tasks__container__learning-areas">
