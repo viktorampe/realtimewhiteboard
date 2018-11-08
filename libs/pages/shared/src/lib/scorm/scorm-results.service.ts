@@ -5,6 +5,21 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ScormResultsServiceInterface } from './scorm-results.service.interface';
 
+export enum ScormCMIMode {
+  CMI_MODE_NORMAL = 'normal',
+  CMI_MODE_BROWSE = 'browse',
+  CMI_MODE_REVIEW = 'review',
+  CMI_MODE_PREVIEW = 'preview'
+}
+
+export enum ScormStatus {
+  STATUS_INCOMPLETE = 'incomplete',
+  STATUS_COMPLETED = 'completed',
+  STATUS_PASSED = 'passed',
+  STATUS_FAILED = 'failed',
+  STATUS_BROWSED = 'browsed'
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -15,7 +30,6 @@ export class ScormResultsService implements ScormResultsServiceInterface {
     return this.personApi.studentResultsExtendedForStudent(userId);
   }
 
-  // werkt nog niet, GET verkeerd opgebouwd
   /**
    * Checks the polpo-api if a result exists and returns it if it is in progress.
    * Creates a new result if it doesn't exist and returns it.
@@ -37,7 +51,6 @@ export class ScormResultsService implements ScormResultsServiceInterface {
       .pipe(map(res => res as ResultInterface));
   }
 
-  // werkt nog niet, GET verkeerd opgebouwd
   /**
    * Checks the polpo-api if a result exists and returns it if it is in progress.
    * Creates a new result if it doesn't exist and returns it.
@@ -59,16 +72,15 @@ export class ScormResultsService implements ScormResultsServiceInterface {
       .pipe(map(res => res as ResultInterface));
   }
 
-  // werkt nog niet, POST verkeerd opgebouwd
   /**
    *
    *
    * @param {number} userId
    * @param {number} resultId
    * @param {number} time
-   * @param {string} status 'incomplete' | 'completed'
+   * @param {string} status 'incomplete' | 'completed' |'passed" | 'failed' | 'browsed'
    * @param {number} [score]
-   * @param {*} [cmi]
+   * @param {*} [cmi] json-string
    * @returns {Observable<Object>}
    * @memberof ScormResultsService
    */
