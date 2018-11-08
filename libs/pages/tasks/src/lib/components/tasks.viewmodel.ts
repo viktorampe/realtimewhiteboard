@@ -1,21 +1,8 @@
 import { Injectable } from '@angular/core';
-import {
-  EduContentInterface,
-  EduContentProductTypeInterface,
-  LearningAreaInterface,
-  MethodInterface,
-  PersonInterface,
-  TaskEduContentInterface,
-  TaskInstanceInterface,
-  TaskInterface
-} from '@campus/dal';
+import { EduContentInterface, EduContentProductTypeInterface, LearningAreaInterface, MethodInterface, PersonInterface, TaskEduContentInterface, TaskInstanceInterface, TaskInterface } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
 import { BehaviorSubject, Observable } from 'rxjs';
-import {
-  LearningAreasWithTaskInstanceInfoInterface,
-  TaskInstancesWithEduContentInfoInterface,
-  TaskInstanceWithEduContentsInfoInterface
-} from './tasks.viewmodel.interfaces';
+import { LearningAreasWithTaskInstanceInfoInterface, TaskInstancesWithEduContentInfoInterface, TaskInstanceWithEduContentsInfoInterface } from './tasks.viewmodel.interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -24,15 +11,15 @@ import {
 export class TasksViewModel {
   learningAreasWithTaskInstances$: Observable<
     LearningAreasWithTaskInstanceInfoInterface
-  >;
+    >;
   selectedLearningArea$: Observable<LearningAreaInterface>;
   taskInstancesByLearningArea$: Observable<
     TaskInstancesWithEduContentInfoInterface
-  >;
+    >;
   selectedTaskInstance$: Observable<TaskInstanceInterface>;
   taskInstanceWithEduContents$: Observable<
     TaskInstanceWithEduContentsInfoInterface
-  >;
+    >;
   listFormat$: Observable<ListFormat>;
   // routeParams$: TODO type?
 
@@ -40,7 +27,7 @@ export class TasksViewModel {
     this.loadMockData();
   }
 
-  public changeListFormat(value: ListFormat) {}
+  public changeListFormat(value: ListFormat) { }
 
   private loadMockData() {
     this.learningAreasWithTaskInstances$ = this.getMockLearningAreasWithTaskInstances();
@@ -53,12 +40,12 @@ export class TasksViewModel {
 
   private getMockLearningAreasWithTaskInstances(): Observable<
     LearningAreasWithTaskInstanceInfoInterface
-  > {
+    > {
     const mockLearningAreas = this.getMockLearningAreas();
 
     let mock: LearningAreasWithTaskInstanceInfoInterface;
     mock = {
-      learningAreas: [
+      learningAreasWithInfo: [
         {
           learningArea: mockLearningAreas[0],
           openTasks: 2,
@@ -77,7 +64,7 @@ export class TasksViewModel {
       ],
       totalTasks: 0
     };
-    mock.totalTasks = mock.learningAreas.reduce(
+    mock.totalTasks = mock.learningAreasWithInfo.reduce(
       (total, area) => total + area.openTasks + area.closedTasks,
       0
     );
@@ -94,7 +81,7 @@ export class TasksViewModel {
 
   private getMockTaskInstancesByLearningArea(): Observable<
     TaskInstancesWithEduContentInfoInterface
-  > {
+    > {
     const mockTaskInstancesAll = this.getMockTaskInstances();
 
     let mockTaskInstances: TaskInstancesWithEduContentInfoInterface;

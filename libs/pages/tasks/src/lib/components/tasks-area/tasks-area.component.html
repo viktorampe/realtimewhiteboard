@@ -11,7 +11,7 @@
 
 
 <div class="pages-tasks__container"
-     *ngIf="(learningAreas$|async).learningAreas as learningAreas">
+     *ngIf="(learningAreasWithInfo$|async).learningAreas as learningAreas">
 
   <campus-page-header [title]="'Mijn taken'"
                       [subtitle]="'leergebieden'"
@@ -30,22 +30,20 @@
       <div class="pages-tasks__container__learning-areas">
         <campus-list-view [listFormat]="listFormat$|async"
                           [placeHolderText]="'De toegepaste filter bevat geen resultaten.'">
-          <ng-container *ngIf="(displayedLearningAreas$|async)?.totalTasks as taskCounts">
-            <campus-folder *ngFor="let learningArea of displayedLearningAreas"
-                           campusListItem
-                           [routerLink]="learningArea.learningArea.id"
-                           [itemCount]="learningArea.openTasks"
-                           [title]="learningArea.learningArea.name"
-                           [backgroundColor]="learningArea.learningArea.color"
-                           [icon]="'learning-area:'+learningArea.learningArea.icon">
-              <campus-folder-details>
-                {{learningArea.openTasks}}
-                {{'open ' + (learningArea.openTasks === 1 ? 'taak' : 'taken')}}<br>
-                {{learningArea.closedTasks}}
-                {{'afgewerkte ' + (learningArea.closedTasks === 1 ? 'taak' : 'taken')}}
-              </campus-folder-details>
-            </campus-folder>
-          </ng-container>
+          <campus-folder *ngFor="let learningAreaWithInfo of displayedLearningAreas"
+                         campusListItem
+                         [routerLink]="learningAreaWithInfo.learningArea.id"
+                         [itemCount]="learningAreaWithInfo.openTasks"
+                         [title]="learningAreaWithInfo.learningArea.name"
+                         [backgroundColor]="learningAreaWithInfo.learningArea.color"
+                         [icon]="'learning-area:'+learningAreaWithInfo.learningArea.icon">
+            <campus-folder-details>
+              {{learningAreaWithInfo.openTasks}}
+              {{'open ' + (learningAreaWithInfo.openTasks === 1 ? 'taak' : 'taken')}}<br>
+              {{learningAreaWithInfo.closedTasks}}
+              {{'afgewerkte ' + (learningAreaWithInfo.closedTasks === 1 ? 'taak' : 'taken')}}
+            </campus-folder-details>
+          </campus-folder>
         </campus-list-view>
       </div>
     </ng-container>

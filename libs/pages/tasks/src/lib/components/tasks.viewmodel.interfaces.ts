@@ -1,11 +1,7 @@
-import {
-  LearningAreaInterface,
-  TaskEduContentInterface,
-  TaskInstanceInterface
-} from '@campus/dal';
+import { LearningAreaInterface, TaskEduContentInterface, TaskInstanceInterface } from '@campus/dal';
 
 export interface LearningAreasWithTaskInstanceInfoInterface {
-  learningAreas: {
+  learningAreasWithInfo: {
     learningArea: LearningAreaInterface;
     openTasks: number;
     closedTasks: number;

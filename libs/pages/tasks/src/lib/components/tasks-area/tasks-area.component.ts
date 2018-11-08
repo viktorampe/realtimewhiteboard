@@ -14,18 +14,20 @@ export class TasksAreaComponent implements OnInit {
   protected listFormat = ListFormat;
   filterInput$ = new BehaviorSubject<string>('');
   listFormat$: Observable<ListFormat>;
-  learningAreas$: Observable<LearningAreasWithTaskInstanceInfoInterface>;
-  displayedLearningAreas$: Observable<
+  learningAreasWithInfo$: Observable<
     LearningAreasWithTaskInstanceInfoInterface
-  >;
+    >;
+  displayedLearningAreasWithInfo$: Observable<
+    LearningAreasWithTaskInstanceInfoInterface
+    >;
 
-  constructor(private tasksViewModel: TasksViewModel) {}
+  constructor(private tasksViewModel: TasksViewModel) { }
 
   ngOnInit() {
     this.listFormat$ = this.tasksViewModel.listFormat$;
-    this.learningAreas$ = this.tasksViewModel.learningAreasWithTaskInstances$;
-    this.displayedLearningAreas$ = this.getDisplayedLearningAreas$(
-      this.learningAreas$,
+    this.learningAreasWithInfo$ = this.tasksViewModel.learningAreasWithTaskInstances$;
+    this.displayedLearningAreasWithInfo$ = this.getDisplayedLearningAreas$(
+      this.learningAreasWithInfo$,
       this.filterInput$
     );
   }
@@ -56,21 +58,17 @@ export class TasksAreaComponent implements OnInit {
             return learningAreas;
           }
 
-          const learningAreaArray = learningAreas.learningAreas.filter(
-            learningArea =>
-              learningArea.learningArea.name
+          const learningAreaArray = learningAreas.learningAreasWithInfo.filter(
+            learningAreaWithInfo =>
+              learningAreaWithInfo.learningArea.name
                 .toLowerCase()
                 .includes(filterInput.toLowerCase())
           );
 
-          let learningAreaWithTaskInstanceInfo: LearningAreasWithTaskInstanceInfoInterface;
-          learningAreaWithTaskInstanceInfo = {
-            learningAreas: learningAreaArray,
-            totalTasks: learningAreaArray.reduce(
-              (total, area) => total + area.openTasks + area.closedTasks,
-              0
-            )
-          };
+          const learningAreaWithTaskInstanceInfo = {
+            ...learningAreas,
+            learningAreas: learningAreaArray
+          }
 
           return learningAreaWithTaskInstanceInfo;
         }
