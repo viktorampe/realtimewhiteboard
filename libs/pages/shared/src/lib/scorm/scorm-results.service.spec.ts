@@ -54,6 +54,7 @@ describe('ScormResultsService', () => {
     });
     expect(service.getResultForTask(6, 1, 1)).toBeObservable(
       hot('-a-|', {
+        // tslint:disable-next-line
         a: response as ResultInterface
       })
     );
@@ -77,6 +78,7 @@ describe('ScormResultsService', () => {
     });
     expect(service.getResultForUnlockedContent(6, 1, 1)).toBeObservable(
       hot('-a-|', {
+        // tslint:disable-next-line
         a: response as ResultInterface
       })
     );

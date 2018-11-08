@@ -6,10 +6,14 @@ import {
 } from '@campus/dal';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Store } from '@ngrx/store';
+// tslint:disable-next-line:nx-enforce-module-boundaries
 import { ScormCMIMode } from 'libs/pages/shared/src/lib/scorm/enums/cmi-mode.enum';
+// tslint:disable-next-line:nx-enforce-module-boundaries
 import { ScormStatus } from 'libs/pages/shared/src/lib/scorm/enums/scorm-status.enum';
 import { Observable } from 'rxjs';
+// tslint:disable-next-line:nx-enforce-module-boundaries
 import { LoadUser } from './../../../../dal/src/lib/+state/user/user.actions';
+// tslint:disable-next-line:nx-enforce-module-boundaries
 import { ScormResultsService } from './../../../../pages/shared/src/lib/scorm/scorm-results.service';
 import { LoginPageViewModel } from './loginpage.viewmodel';
 
