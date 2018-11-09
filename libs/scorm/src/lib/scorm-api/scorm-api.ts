@@ -21,7 +21,7 @@ export enum ErrorCodes {
 
 export class ScormApi implements ScormApiInterface {
   currentUser: any = null; // TODO: check if this is necessary?
-  currentResult: { cmi: CmiInterface };
+  currentResult: CmiInterface;
   currentEduContent: any = null;
   lastErrorCode: ErrorCodes = ErrorCodes.NO_ERROR;
   lastDiagnosticMessage = '';
@@ -42,7 +42,7 @@ export class ScormApi implements ScormApiInterface {
     this.reset();
     //check exerciseId and exercise info availability
     if (this.mode === ScormCMIMode.CMI_MODE_PREVIEW) {
-      this.currentResult = { cmi: this.getNewCmi() };
+      this.currentResult = this.getNewCmi();
     } else {
       if (!this.currentEduContent) {
         this.lastErrorCode = ErrorCodes.GENERAL_ERROR;
@@ -51,16 +51,16 @@ export class ScormApi implements ScormApiInterface {
         return 'false';
       }
 
-      if (this.currentResult.cmi) {
-        if (typeof this.currentResult.cmi === 'string') {
-          this.currentResult.cmi = JSON.parse(this.currentResult.cmi);
+      if (this.currentResult) {
+        if (typeof this.currentResult === 'string') {
+          this.currentResult = JSON.parse(this.currentResult);
         }
       } else {
-        this.currentResult.cmi = this.getNewCmi();
+        this.currentResult = this.getNewCmi();
       }
     }
 
-    this.currentResult.cmi.mode = this.mode;
+    this.currentResult.mode = this.mode;
     this.lastErrorCode = ErrorCodes.NO_ERROR;
     this.lastDiagnosticMessage = this.LMSGetErrorString(this.lastErrorCode);
 
@@ -88,7 +88,7 @@ export class ScormApi implements ScormApiInterface {
     }
 
     if (
-      this.currentResult.cmi.core.lesson_status !== ScormStatus.STATUS_COMPLETED
+      this.currentResult.core.lesson_status !== ScormStatus.STATUS_COMPLETED
     ) {
       return 'false';
     }
@@ -276,7 +276,7 @@ export class ScormApi implements ScormApiInterface {
     return cool;
   }
 
-  private getReferenceFromDotString(parameter: string, exercise: any) {
+  private getReferenceFromDotString(parameter: string, exercise: CmiInterface) {
     function index(obj, i) {
       if (obj === undefined) {
         return undefined;
@@ -290,7 +290,7 @@ export class ScormApi implements ScormApiInterface {
   private setReferenceFromDotString(
     parameter: string,
     value: string,
-    exercise: any
+    exercise: CmiInterface
   ) {
     function index(obj, i, currentIndex, arr) {
       if (obj === undefined) {
