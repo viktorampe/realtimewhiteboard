@@ -12,6 +12,10 @@ import {
   ENVIRONMENT_ALERTS_FEATURE_TOKEN,
   ENVIRONMENT_MESSAGES_FEATURE_TOKEN
 } from './interfaces';
+import {
+  ScormResultsServiceInterface,
+  SCORM_RESULTS_SERVICE_TOKEN
+} from './scorm/scorm-results.service.interface';
 
 @NgModule({
   imports: [CommonModule, UiModule, PortalModule, LayoutModule, MatIconModule],
@@ -26,7 +30,8 @@ import {
 export class SharedModule {
   static forRoot(
     environmentAlertsFeature: EnvironmentAlertsFeatureInterface,
-    environmentMessagesFeature: EnvironmentMessagesFeatureInterface
+    environmentMessagesFeature: EnvironmentMessagesFeatureInterface,
+    scormResultsService: ScormResultsServiceInterface
   ): ModuleWithProviders {
     return {
       ngModule: SharedModule,
@@ -38,6 +43,10 @@ export class SharedModule {
         {
           provide: ENVIRONMENT_MESSAGES_FEATURE_TOKEN,
           useValue: environmentMessagesFeature
+        },
+        {
+          provide: SCORM_RESULTS_SERVICE_TOKEN,
+          useValue: scormResultsService
         }
       ]
     };

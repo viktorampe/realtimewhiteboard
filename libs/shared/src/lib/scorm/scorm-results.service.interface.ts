@@ -1,6 +1,11 @@
+import { InjectionToken } from '@angular/core';
 import { ResultInterface } from '@campus/dal';
 import { Observable } from 'rxjs';
 import { CmiInterface } from './interfaces/cmi.interface';
+
+export const SCORM_RESULTS_SERVICE_TOKEN = new InjectionToken(
+  'ScormResultsServiceInterface'
+);
 
 export interface ScormResultsServiceInterface {
   getResultsForStudent(userId: number): Observable<Object>;

@@ -42,7 +42,7 @@ describe('ScormResultsService', () => {
       time: null,
       status: 'incomplete',
       cm: null,
-      created: '2018-11-07T16:06:15.000Z',
+      created: new Date('2018-11-07T16:06:15.000Z'),
       id: 2,
       eduContentId: 1,
       personId: 6,
@@ -54,7 +54,6 @@ describe('ScormResultsService', () => {
     });
     expect(service.getResultForTask(6, 1, 1)).toBeObservable(
       hot('-a-|', {
-        // tslint:disable-next-line
         a: response as ResultInterface
       })
     );
@@ -66,7 +65,7 @@ describe('ScormResultsService', () => {
       time: null,
       status: 'incomplete',
       cm: null,
-      created: '2018-11-07T16:06:15.000Z',
+      created: new Date('2018-11-07T16:06:15.000Z'),
       id: 2,
       eduContentId: 1,
       personId: 6,
@@ -78,7 +77,6 @@ describe('ScormResultsService', () => {
     });
     expect(service.getResultForUnlockedContent(6, 1, 1)).toBeObservable(
       hot('-a-|', {
-        // tslint:disable-next-line
         a: response as ResultInterface
       })
     );
