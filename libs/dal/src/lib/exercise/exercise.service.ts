@@ -78,11 +78,19 @@ export class ExerciseService implements ExerciseServiceInterface {
       );
     }
 
-    let tempUrl$: Observable<any>; //TODO: Type this
+    let tempUrl$: Observable<string>;
     tempUrl$ = this.tempUrlService.getTempUrl();
 
     const exercise$ = combineLatest(result$, tempUrl$).pipe(
-      map(([result, url]) => {}) //TODO: map this to ExerciseInterface
+      map(([result, url]) => {
+        return {
+          eduContent: result.eduContent,
+          cmiMode: result.cmi.mode,
+          result: result,
+          saveToApi: true, //afhankelijk van cmi.mode
+          url: url
+        } as ExerciseInterface;
+      })
     );
 
     return exercise$;
