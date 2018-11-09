@@ -47,12 +47,10 @@ export class BundlesViewModel {
     Dictionary<ContentInterface[]>
   >;
   // > bundles page
-  // private learningAreaId$: Observable<number>;
   private unlockedContentsByBundle$: Observable<
     Dictionary<UnlockedContentInterface[]>
   >;
   // > bundle detail page
-  // private bundleId$: Observable<number>;
 
   // presentation streams
   // > learningareas page
