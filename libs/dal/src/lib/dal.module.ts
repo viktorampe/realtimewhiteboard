@@ -25,7 +25,8 @@ import {
   StudentContentStatusesEffects,
   StudentContentStatusReducer
 } from './+state/student-content-status';
-import { UiEffects, UiReducer } from './+state/ui/';
+import { TaskEffects, TaskReducer } from './+state/task';
+import { UiEffects, UiReducer } from './+state/ui';
 import {
   UnlockedBoekeGroupReducer,
   UnlockedBoekeGroupsEffects
@@ -56,6 +57,8 @@ import {
   UserContentService,
   USER_CONTENT_SERVICE_TOKEN
 } from './bundle';
+import { ContentRequestService } from './content-request/content-request.service';
+import { CONTENT_REQUEST_SERVICE_TOKEN } from './content-request/content-request.service.interface';
 import { EduContentService } from './edu-content/edu-content.service';
 import { EDUCONTENT_SERVICE_TOKEN } from './edu-content/edu-content.service.interface';
 import { LearningAreaService } from './learning-area/learning-area.service';
@@ -69,6 +72,8 @@ import {
 import { PersonService, PERSON_SERVICE_TOKEN } from './persons/persons.service';
 import { StudentContentStatusService } from './student-content-status/student-content-status.service';
 import { STUDENT_CONTENT_STATUS_SERVICE_TOKEN } from './student-content-status/student-content-status.service.interface';
+import { TaskEduContentService } from './tasks/task-edu-content.service';
+import { TASK_EDU_CONTENT_SERVICE_TOKEN } from './tasks/task-edu-content.service.interface';
 import { TASK_SERVICE_TOKEN } from './tasks/task.service.interface';
 import { TaskService } from './tasks/tasks.service';
 
@@ -93,7 +98,8 @@ interface DalOptions {
       UnlockedBoekeGroupReducer,
       UnlockedBoekeStudentReducer,
       ContentStatusReducer,
-      UserReducer
+      UserReducer,
+      TaskReducer
       //todo add alerts reducer
     ]),
     EffectsModule.forFeature([
@@ -108,6 +114,7 @@ interface DalOptions {
       UnlockedContentsEffects,
       UnlockedBoekeStudentsEffects,
       ContentStatusesEffects,
+      TaskEffects,
       AlertsEffects
     ])
   ],
@@ -140,7 +147,12 @@ interface DalOptions {
     { provide: PERSON_SERVICE_TOKEN, useClass: PersonService },
     { provide: LINKED_PERSON_SERVICE_TOKEN, useClass: LinkedPersonService },
     { provide: AUTH_SERVICE_TOKEN, useClass: AuthService },
-    { provide: TASK_SERVICE_TOKEN, useClass: TaskService }
+    { provide: TASK_SERVICE_TOKEN, useClass: TaskService },
+    {
+      provide: TASK_EDU_CONTENT_SERVICE_TOKEN,
+      useClass: TaskEduContentService
+    },
+    { provide: CONTENT_REQUEST_SERVICE_TOKEN, useClass: ContentRequestService }
   ]
 })
 export class DalModule {

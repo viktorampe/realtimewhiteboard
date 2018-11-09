@@ -1,15 +1,11 @@
-import { TasksViewModel } from './components/tasks.viewmodel';
-
-import { TasksComponent } from './components/tasks.component';
-
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
+import { TasksComponent } from './components/tasks.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: TasksComponent,
-    resolve: { isResolved: TasksViewModel }
+    component: TasksComponent
   }
 ];
 

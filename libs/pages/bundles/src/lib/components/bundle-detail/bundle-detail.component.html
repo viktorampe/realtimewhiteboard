@@ -3,10 +3,10 @@
                             [source]="contents$|async"
                             class="pages__toolbar__filter"></campus-filter-text-input>
   <div class="divider"></div>
-  <campus-button iconClass="icon-tasks"
-                 (click)="clickChangeListFormat(listFormat.GRID)"></campus-button>
-  <campus-button iconClass="icon-tasks"
+  <campus-button iconClass="list-view"
                  (click)="clickChangeListFormat(listFormat.LINE)"></campus-button>
+  <campus-button iconClass="grid-view"
+                 (click)="clickChangeListFormat(listFormat.GRID)"></campus-button>
 </campus-page-bar>
 
 <ng-template #noBundle>Deze bundel is niet beschikbaar.</ng-template>

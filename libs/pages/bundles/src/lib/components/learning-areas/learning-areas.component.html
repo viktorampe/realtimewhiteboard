@@ -3,9 +3,10 @@
                             [source]="sharedInfo$|async"
                             class="pages__toolbar__filter"></campus-filter-text-input>
   <div class="divider"></div>
-  <!-- links need to replaced by the button -->
-  <a (click)="clickChangeListFormat(listFormat.GRID)">grid</a>
-  <a (click)="clickChangeListFormat(listFormat.LINE)">line</a>
+  <campus-button iconClass="list-view"
+                 (click)="clickChangeListFormat(listFormat.LINE)"></campus-button>
+  <campus-button iconClass="grid-view"
+                 (click)="clickChangeListFormat(listFormat.GRID)"></campus-button>
 </campus-page-bar>
 
 <div class="pages-bundles__container"

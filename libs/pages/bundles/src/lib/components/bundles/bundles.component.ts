@@ -54,7 +54,7 @@ export class BundlesComponent {
   }
 
   clickChangeListFormat(value: ListFormat): void {
-    this.bundlesViewModel.changeListFormat(this.listFormat[value]);
+    this.bundlesViewModel.changeListFormat(value);
   }
 
   private getLearningArea(): Observable<LearningAreaInterface> {
