@@ -1,6 +1,12 @@
 import { Inject, Injectable } from '@angular/core';
 import { Resolve } from '@angular/router';
-import { AuthServiceInterface, AUTH_SERVICE_TOKEN, UserActions, UserQueries, UserReducer } from '@campus/dal';
+import {
+  AuthServiceInterface,
+  AUTH_SERVICE_TOKEN,
+  UserActions,
+  UserQueries,
+  UserReducer
+} from '@campus/dal';
 import { select, Store } from '@ngrx/store';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -44,21 +50,22 @@ export class LoginPageViewModel implements Resolve<boolean> {
    * @memberof LoginPageViewModel
    */
   login(name: string, password: string) {
-    this.isLoggedIn().subscribe(loggedin => {
-        console.log('login', loggedin);
+    this.isLoggedIn().subscribe(isLoggedIn => {
+      console.log('login', isLoggedIn);
 
-        if (loggedin) {
-          throw new Error('login failed since we are already logged in');
-        }
+      if (isLoggedIn) {
+        console.error('login failed since we are already logged in');
+        this.store.dispatch(new fromUserActions.LoadUser({ force: false }));
+      } else {
         this.store.dispatch(
           new fromUserActions.LogInUser({
             username: name,
             password: password
           })
         );
-        return;
-      })
-    );
+      }
+      return;
+    });
   }
 
   /**
@@ -69,9 +76,12 @@ export class LoginPageViewModel implements Resolve<boolean> {
    * @memberof LoginPageViewModel
    */
   logout(): void {
-    this.isLoggedIn().subscribe((isLoggedIn: boolean) => {
+    this.isLoggedIn().subscribe(isLoggedIn => {
+      console.log('logout', isLoggedIn);
       if (isLoggedIn) {
         this.store.dispatch(new UserActions.RemoveUser());
+      } else {
+        console.error('logout failed');
       }
     });
   }
