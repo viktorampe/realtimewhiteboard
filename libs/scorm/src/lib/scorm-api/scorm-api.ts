@@ -25,6 +25,7 @@ export class ScormApi implements ScormApiInterface {
   currentEduContent: any = null;
   lastErrorCode: ErrorCodes = ErrorCodes.NO_ERROR;
   lastDiagnosticMessage = '';
+  connectedStatus = true;
 
   constructor(private mode: ScormCMIMode) {}
 
@@ -38,6 +39,7 @@ export class ScormApi implements ScormApiInterface {
    * @memberof ScormApi
    */
   LMSInitialize(): 'true' | 'false' {
+    this.reset();
     //check exerciseId and exercise info availability
     if (this.mode === ScormCMIMode.CMI_MODE_PREVIEW) {
       this.currentResult = { cmi: this.getNewCmi() };
@@ -304,5 +306,11 @@ export class ScormApi implements ScormApiInterface {
     }
 
     return parameter.split('.').reduce(index, exercise);
+  }
+
+  private reset() {
+    this.lastErrorCode = ErrorCodes.NOT_INITIALIZED_ERROR;
+    this.lastDiagnosticMessage = 'De oefening werd niet correct opgestart.';
+    this.connectedStatus = true;
   }
 }
