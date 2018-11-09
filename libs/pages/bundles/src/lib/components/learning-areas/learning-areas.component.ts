@@ -12,6 +12,8 @@ import { BundlesViewModel } from '../bundles.viewmodel';
   styleUrls: ['./learning-areas.component.scss']
 })
 export class LearningAreasComponent implements OnInit {
+  protected listFormat = ListFormat;
+
   filterInput$ = new BehaviorSubject<string>('');
   listFormat$: Observable<ListFormat>;
   learningAreas$: Observable<LearningAreaInterface[]>;
