@@ -16,17 +16,17 @@
 
   <campus-side-sheet-header></campus-side-sheet-header>
   <campus-side-sheet-body>
-    <ng-container *ngIf="list"
-                  [ngSwitch]="(list.selectedItems$|async)?.length">
+    <ng-container *ngIf="list && (list.selectedItems$|async) as selectedItems"
+                  [ngSwitch]="selectedItems.length">
       <campus-info-panel-bundle *ngSwitchCase="0"
                                 [bundle]="bundle"
                                 [teacher]="bundleOwner$|async">
       </campus-info-panel-bundle>
       <campus-info-panel-content *ngSwitchCase="1"
-                                 [content]="contentForInfoPanelSingle$|async">
+                                 [content]="selectedItems">
       </campus-info-panel-content>
       <campus-info-panel-contents *ngSwitchDefault
-                                  [contents]="contentForInfoPanelMultiple$|async">
+                                  [contents]="selectedItems">
       </campus-info-panel-contents>
     </ng-container>
   </campus-side-sheet-body>

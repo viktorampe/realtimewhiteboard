@@ -22,7 +22,7 @@ import {
   SideSheetComponent
 } from '@campus/ui';
 import { Observable, Subscription } from 'rxjs';
-import { filter, map, shareReplay, switchMap } from 'rxjs/operators';
+import { shareReplay, switchMap } from 'rxjs/operators';
 import { BundlesViewModel } from '../bundles.viewmodel';
 
 @Component({
@@ -40,15 +40,12 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   bundleOwner$: Observable<PersonInterface>;
   contents$: Observable<ContentInterface[]>;
 
-  contentForInfoPanelSingle$: Observable<ContentInterface>;
-  contentForInfoPanelMultiple$: Observable<ContentInterface[]>;
-
   @ViewChild(FilterTextInputComponent)
   filterTextInput: FilterTextInputComponent<ContentInterface, ContentInterface>;
 
-  list: ListViewComponent;
+  list: ListViewComponent<ContentInterface>;
   @ViewChild('bundleListview')
-  set listViewComponent(list: ListViewComponent) {
+  set listViewComponent(list: ListViewComponent<ContentInterface>) {
     this.list = list;
   }
   private sideSheet: SideSheetComponent;
@@ -77,22 +74,14 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.contentForInfoPanelSingle$ = this.list.selectedItems$.pipe(
-      filter(items => items.length === 1),
-      map(items => items[0].dataObject)
-    );
-
-    this.contentForInfoPanelMultiple$ = this.list.selectedItems$.pipe(
-      filter(items => items.length > 1),
-      map(items => items.map(i => i.dataObject))
-    );
-
     this.subscriptions.add(
-      this.list.selectedItems$.subscribe(selectedItems => {
-        if (selectedItems.length > 0) {
-          this.sideSheet.toggle(true);
+      this.list.selectedItems$.subscribe(
+        (selectedItems: ContentInterface[]) => {
+          if (selectedItems.length > 0) {
+            this.sideSheet.toggle(true);
+          }
         }
-      })
+      )
     );
 
     // Needed to avoid ExpressionChangedAfterItHasBeenCheckedError
