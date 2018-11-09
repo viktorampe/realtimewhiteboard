@@ -31,7 +31,7 @@ describe('TaskEduContentService', () => {
     }
   ));
 
-  it('should return tasks', () => {
+  it('should return tasksEduContents', () => {
     mockData$ = hot('-a-|', {
       a: { taskEduContents: [{ id: 12331 }] }
     });
