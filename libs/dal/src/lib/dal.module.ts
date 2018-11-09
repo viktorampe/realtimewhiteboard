@@ -25,7 +25,8 @@ import {
   StudentContentStatusesEffects,
   StudentContentStatusReducer
 } from './+state/student-content-status';
-import { UiEffects, UiReducer } from './+state/ui/';
+import { TaskEffects, TaskReducer } from './+state/task';
+import { UiEffects, UiReducer } from './+state/ui';
 import {
   UnlockedBoekeGroupReducer,
   UnlockedBoekeGroupsEffects
@@ -56,6 +57,8 @@ import {
   UserContentService,
   USER_CONTENT_SERVICE_TOKEN
 } from './bundle';
+import { ContentRequestService } from './content-request/content-request.service';
+import { CONTENT_REQUEST_SERVICE_TOKEN } from './content-request/content-request.service.interface';
 import { EduContentService } from './edu-content/edu-content.service';
 import { EDUCONTENT_SERVICE_TOKEN } from './edu-content/edu-content.service.interface';
 import { LearningAreaService } from './learning-area/learning-area.service';
@@ -95,7 +98,8 @@ interface DalOptions {
       UnlockedBoekeGroupReducer,
       UnlockedBoekeStudentReducer,
       ContentStatusReducer,
-      UserReducer
+      UserReducer,
+      TaskReducer
       //todo add alerts reducer
     ]),
     EffectsModule.forFeature([
@@ -110,6 +114,7 @@ interface DalOptions {
       UnlockedContentsEffects,
       UnlockedBoekeStudentsEffects,
       ContentStatusesEffects,
+      TaskEffects,
       AlertsEffects
     ])
   ],
@@ -146,7 +151,8 @@ interface DalOptions {
     {
       provide: TASK_EDU_CONTENT_SERVICE_TOKEN,
       useClass: TaskEduContentService
-    }
+    },
+    { provide: CONTENT_REQUEST_SERVICE_TOKEN, useClass: ContentRequestService }
   ]
 })
 export class DalModule {

@@ -121,9 +121,34 @@ describe('BreadcrumbComponent', () => {
     );
   });
 
-  it('should display correct overflow link', () => {
-    expect(breadcrumbs.children[1].children[1].nativeElement.href).toContain(
-      mockData.breadCrumbs[8].link
+  it('should display correct overflow string', () => {
+    component.maxLength = 1;
+    component.breadCrumbs = [
+      {
+        displayText: 'crumb1',
+        link: ['crumb1']
+      },
+      {
+        displayText: 'crumb2',
+        link: ['crumb2']
+      },
+      {
+        displayText: 'crumb3',
+        link: ['crumb3']
+      },
+      {
+        displayText: 'crumb4',
+        link: ['crumb4']
+      },
+      {
+        displayText: 'crumb5',
+        link: ['crumb5']
+      }
+    ];
+    fixture.detectChanges();
+
+    expect(breadcrumbs.children[1].children[1].nativeElement.innerHTML).toBe(
+      mockData.overflowedLinkString
     );
   });
 });
