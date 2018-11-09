@@ -4,7 +4,7 @@ import {
   PersonApi,
   PersonInterface
 } from '@diekeure/polpo-api-angular-sdk';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import {
   AuthServiceInterface,
   LoginCredentials
@@ -28,6 +28,22 @@ export class AuthService implements AuthServiceInterface {
    */
   getCurrent(): Observable<PersonInterface> {
     return this.personApi.getCurrent();
+  }
+
+  /**
+   * gets the current logged in user, throws a 401 error if not logged in
+   *
+   * @returns {Observable<any>}
+   * @memberof AuthService
+   */
+  public isAuthenticated(): Observable<boolean> {
+    console.log('inside isAuthenticated');
+
+    const res = this.personApi.isAuthenticated();
+
+    console.log(res);
+
+    return of(res);
   }
 
   /**

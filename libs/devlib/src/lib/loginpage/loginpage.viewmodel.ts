@@ -1,15 +1,10 @@
 import { Inject, Injectable } from '@angular/core';
 import { Resolve } from '@angular/router';
-import {
-  AuthServiceInterface,
-  AUTH_SERVICE_TOKEN,
-  UserActions,
-  UserQueries,
-  UserReducer
-} from '@campus/dal';
+import { AuthServiceInterface, AUTH_SERVICE_TOKEN, UserActions, UserQueries, UserReducer } from '@campus/dal';
 import { select, Store } from '@ngrx/store';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { catchError, map, switchMap, take } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
+import { fromUserActions } from './../../../../dal/src/lib/+state/user/user.actions';
 
 @Injectable({
   providedIn: 'root'
@@ -37,14 +32,8 @@ export class LoginPageViewModel implements Resolve<boolean> {
    * @memberof LoginPageViewModel
    */
   isLoggedIn(): Observable<boolean> {
-    return this.authService.getCurrent().pipe(
-      map(() => {
-        return true;
-      }),
-      catchError(err => {
-        return of(false);
-      })
-    );
+    console.log('inside isLoggedIn');
+    return this.authService.isAuthenticated();
   }
 
   /**
@@ -54,19 +43,22 @@ export class LoginPageViewModel implements Resolve<boolean> {
    * @param {string} password
    * @memberof LoginPageViewModel
    */
-  login(name: string, password: string): void {
-    this.isLoggedIn()
-      .pipe(
-        switchMap(loggedin => {
-          if (loggedin) {
-            throw new Error('login failed since we are already logged in');
-          }
-          return this.authService.login({ username: name, password: password });
-        })
-      )
-      .subscribe(() => {
-        this.store.dispatch(new UserActions.LoadUser({ force: false }));
-      });
+  login(name: string, password: string) {
+    this.isLoggedIn().subscribe(loggedin => {
+        console.log('login', loggedin);
+
+        if (loggedin) {
+          throw new Error('login failed since we are already logged in');
+        }
+        this.store.dispatch(
+          new fromUserActions.LogInUser({
+            username: name,
+            password: password
+          })
+        );
+        return;
+      })
+    );
   }
 
   /**

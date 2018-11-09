@@ -10,6 +10,7 @@ import {
 import {
   fromUserActions,
   LoadUser,
+  LogInUser,
   RemoveUser,
   UserActionTypes,
   UserLoadError,
@@ -37,6 +38,28 @@ export class UserEffects {
       return new UserLoadError(error);
     }
   });
+
+  /**
+   * logs a user in.
+   *
+   * @memberof UserEffects
+   */
+  @Effect()
+  loginUser$ = this.dataPersistence.pessimisticUpdate(
+    UserActionTypes.LogInUser,
+    {
+      run: (action: LogInUser, state: DalState) => {
+        return this.authService.login(action.payload).pipe(
+          map(() => {
+            return new fromUserActions.LoadUser({ force: false });
+          })
+        );
+      },
+      onError: (action: LogInUser, error) => {
+        return new UserRemoveError(error);
+      }
+    }
+  );
 
   /**
    * logsout the current user and remove from store.
