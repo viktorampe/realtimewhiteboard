@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { ExerciseInterface } from '@campus/dal';
+import { DalActions, ExerciseInterface } from '@campus/dal';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
@@ -11,6 +11,7 @@ import { EXERCISE_SERVICE_TOKEN } from '../../exercise/exercise.service.interfac
 import {
   CurrentExerciseError,
   CurrentExerciseLoaded,
+  SaveCurrentExercise,
   StartExercise
 } from './exercise.actions';
 import { ExerciseEffects } from './exercise.effects';
@@ -73,8 +74,8 @@ describe('ExerciseEffects', () => {
           provide: EXERCISE_SERVICE_TOKEN,
           useValue: {
             getAllForUser: () => {},
-            startExercise: () => {},
-            saveExercise: () => {}
+            startExercise: () => mockExercise,
+            saveExercise: () => mockExercise
           }
         },
         ExerciseEffects,
@@ -112,9 +113,7 @@ describe('ExerciseEffects', () => {
         usedState = ExerciseReducer.initialState;
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAllForUser', []);
         mockServiceMethodReturnValue('startExercise', mockExercise);
-        mockServiceMethodReturnValue('saveExercise', mockExercise);
       });
       it('should trigger an api call with the initialState for a task', () => {
         expectInAndOut(
@@ -143,9 +142,7 @@ describe('ExerciseEffects', () => {
         };
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAllForUser', []);
         mockServiceMethodReturnValue('startExercise', mockExercise);
-        mockServiceMethodReturnValue('saveExercise', mockExercise);
       });
       it('should trigger an api call with the with the loaded state for a task', () => {
         expectInAndOut(
@@ -167,21 +164,12 @@ describe('ExerciseEffects', () => {
         usedState = ExerciseReducer.initialState;
       });
       beforeEach(() => {
-        mockServiceMethodError('getAllForUser', 'failed');
-        mockServiceMethodReturnValue('startExercise', []);
-        mockServiceMethodReturnValue('saveExercise', []);
+        mockServiceMethodError('startExercise', 'failed');
       });
-      it('should return a error action if force is not true', () => {
+      it('should return a error action ', () => {
         expectInAndOut(
-          effects.loadExercises$,
-          unforcedLoadAction,
-          loadErrorAction
-        );
-      });
-      it('should return a error action if force is true', () => {
-        expectInAndOut(
-          effects.loadExercises$,
-          forcedLoadAction,
+          effects.startExercise$,
+          startTaskExerciseAction,
           loadErrorAction
         );
       });
@@ -190,20 +178,105 @@ describe('ExerciseEffects', () => {
       beforeAll(() => {
         usedState = {
           ...ExerciseReducer.initialState,
-          loaded: true,
-          list: []
+          loaded: true
         };
       });
       beforeEach(() => {
-        mockServiceMethodError('getAllForUser', 'failed');
+        mockServiceMethodError('startExercise', 'failed');
       });
-      it('should return nothing action if force is not true', () => {
-        expectInNoOut(effects.loadExercises$, unforcedLoadAction);
-      });
-      it('should return a error action if force is true', () => {
+      it('should return a error action ', () => {
         expectInAndOut(
-          effects.loadExercises$,
-          forcedLoadAction,
+          effects.startExercise$,
+          startTaskExerciseAction,
+          loadErrorAction
+        );
+      });
+    });
+  });
+
+  describe('saveExercise$', () => {
+    mockExercise = {
+      eduContent: undefined,
+      cmiMode: 'normal',
+      result: undefined,
+      saveToApi: true,
+      url: 'dit is een url'
+    };
+
+    const saveExerciseAction = new SaveCurrentExercise({
+      userId: 6,
+      exercise: mockExercise
+    });
+    const genericSuccessAction = new DalActions.ActionSuccessful({
+      successfulAction: 'Exercise saved'
+    });
+    const loadErrorAction = new CurrentExerciseError(new Error('failed'));
+    describe('with initialState', () => {
+      beforeAll(() => {
+        usedState = ExerciseReducer.initialState;
+      });
+      beforeEach(() => {
+        mockServiceMethodReturnValue('saveExercise', mockExercise);
+      });
+      it('should trigger an api call with the initialState', () => {
+        expectInAndOut(
+          effects.saveExercise$,
+          saveExerciseAction,
+          genericSuccessAction
+        );
+      });
+    });
+    describe('with loaded state', () => {
+      beforeAll(() => {
+        usedState = { ...ExerciseReducer.initialState, loaded: true };
+        mockExercise = {
+          eduContent: undefined,
+          cmiMode: 'normal',
+          result: undefined,
+          saveToApi: true,
+          url: 'dit is een url'
+        };
+      });
+      beforeEach(() => {
+        mockServiceMethodReturnValue('saveExercise', mockExercise);
+      });
+      it('should trigger an api call with the with the loaded state', () => {
+        expectInAndOut(
+          effects.saveExercise$,
+          saveExerciseAction,
+          genericSuccessAction
+        );
+      });
+    });
+    describe('with initialState and failing api call', () => {
+      beforeAll(() => {
+        usedState = ExerciseReducer.initialState;
+      });
+      beforeEach(() => {
+        mockServiceMethodError('saveExercise', 'failed');
+      });
+      it('should return a error action ', () => {
+        expectInAndOut(
+          effects.saveExercise$,
+          saveExerciseAction,
+          loadErrorAction
+        );
+      });
+    });
+    describe('with loaded and failing api call', () => {
+      beforeAll(() => {
+        usedState = {
+          ...ExerciseReducer.initialState,
+          loaded: true
+        };
+      });
+      beforeEach(() => {
+        mockServiceMethodError('saveExercise', 'failed');
+      });
+      it('should return a error action ', () => {
+        expectInAndOut(
+          effects.saveExercise$,
+          saveExerciseAction,
           loadErrorAction
         );
       });
