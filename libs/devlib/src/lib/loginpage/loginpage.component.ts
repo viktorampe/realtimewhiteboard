@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {
   AlertReducer,
   EduContentInterface,
-  ResultInterface
+  ResultInterface,
+  UserActions
 } from '@campus/dal';
 import { ScormCMIMode, ScormResultsService, ScormStatus } from '@campus/shared';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
@@ -32,7 +33,7 @@ export class LoginpageComponent implements OnInit {
   }
 
   loadCurrentUserinState() {
-    this.store.dispatch(new LoadUser({ force: true }));
+    this.store.dispatch(new UserActions.LoadUser({ force: true }));
   }
 
   // tslint:disable-next-line:member-ordering
