@@ -44,18 +44,21 @@ export class UserEffects {
    * @memberof UserEffects
    */
   @Effect()
-  removedUser$ = this.dataPersistence.fetch(UserActionTypes.RemoveUser, {
-    run: (action: RemoveUser, state: DalState) => {
-      return this.authService.logout().pipe(
-        map(() => {
-          return new fromUserActions.UserRemoved();
-        })
-      );
-    },
-    onError: (action: RemoveUser, error) => {
-      return new UserRemoveError(error);
+  removedUser$ = this.dataPersistence.pessimisticUpdate(
+    UserActionTypes.RemoveUser,
+    {
+      run: (action: RemoveUser, state: DalState) => {
+        return this.authService.logout().pipe(
+          map(() => {
+            return new fromUserActions.UserRemoved();
+          })
+        );
+      },
+      onError: (action: RemoveUser, error) => {
+        return new UserRemoveError(error);
+      }
     }
-  });
+  );
 
   constructor(
     private actions$: Actions,
