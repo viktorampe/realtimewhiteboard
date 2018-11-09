@@ -42,6 +42,7 @@ export interface CmiInterface {
     session_time?: string; //'0000:00:00'
   };
   objectives?: {
+    // check if interface is correct
     score: {
       raw: number; //0
       min: number; //undefined

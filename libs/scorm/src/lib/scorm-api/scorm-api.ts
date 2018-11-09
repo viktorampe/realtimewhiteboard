@@ -1,3 +1,4 @@
+import { Subject } from 'rxjs';
 import {
   CmiInterface,
   ScormApiInterface,
@@ -20,14 +21,21 @@ export enum ErrorCodes {
 }
 
 export class ScormApi implements ScormApiInterface {
-  currentUser: any = null; // TODO: check if this is necessary?
-  currentResult: CmiInterface;
-  currentEduContent: any = null;
   lastErrorCode: ErrorCodes = ErrorCodes.NO_ERROR;
   lastDiagnosticMessage = '';
   connectedStatus = true;
+  commit$ = new Subject<{
+    score: number;
+    time: number;
+    status: string;
+    cmi: CmiInterface;
+  }>();
+  cmi$ = new Subject<CmiInterface>();
 
-  constructor(private mode: ScormCMIMode) {}
+  constructor(
+    private currentResult: CmiInterface,
+    private mode: ScormCMIMode
+  ) {}
 
   /**
    * Initialize the API and exercise.
@@ -44,13 +52,6 @@ export class ScormApi implements ScormApiInterface {
     if (this.mode === ScormCMIMode.CMI_MODE_PREVIEW) {
       this.currentResult = this.getNewCmi();
     } else {
-      if (!this.currentEduContent) {
-        this.lastErrorCode = ErrorCodes.GENERAL_ERROR;
-        this.lastDiagnosticMessage =
-          'Geen oefening-info beschikbaar, probeer aub opnieuw...';
-        return 'false';
-      }
-
       if (this.currentResult) {
         if (typeof this.currentResult === 'string') {
           this.currentResult = JSON.parse(this.currentResult);
@@ -141,7 +142,7 @@ export class ScormApi implements ScormApiInterface {
 
     this.setReferenceFromDotString(parameter, value, this.currentResult);
 
-    this.LMSCommit();
+    this.cmi$.next(this.currentResult);
 
     return 'true';
   }
@@ -161,7 +162,7 @@ export class ScormApi implements ScormApiInterface {
       return 'false';
     }
 
-    //TODO:  dispatches SAVE_EXERCISE_RESULT_ACTION, depending on mode, with debounce functionality.
+    this.commit$.next(this.createCommitData());
     return 'true';
   }
   /**
@@ -265,10 +266,8 @@ export class ScormApi implements ScormApiInterface {
       return true;
     }
 
-    const cool =
-      this.currentEduContent !== null &&
-      this.currentResult !== null &&
-      this.currentUser !== null;
+    const cool = this.currentResult !== null;
+
     if (!cool) {
       this.lastErrorCode = ErrorCodes.NOT_INITIALIZED_ERROR;
     }
@@ -312,5 +311,26 @@ export class ScormApi implements ScormApiInterface {
     this.lastErrorCode = ErrorCodes.NOT_INITIALIZED_ERROR;
     this.lastDiagnosticMessage = 'De oefening werd niet correct opgestart.';
     this.connectedStatus = true;
+  }
+
+  private createCommitData(): {
+    score: number;
+    time: number;
+    status: string;
+    cmi: CmiInterface;
+  } {
+    const timepieces = this.LMSGetValue('cmi.core.total_time').split(':');
+    const timespan =
+      parseInt(timepieces[0], 10) * 3600000 +
+      parseInt(timepieces[1], 10) * 60000 +
+      parseFloat(timepieces[2]) * 1000;
+    const data = {
+      score: parseInt(this.LMSGetValue('cmi.core.score.raw'), 10),
+      time: timespan,
+      status: this.LMSGetValue('cmi.core.lesson_status'),
+      cmi: this.currentResult
+    };
+
+    return data;
   }
 }

@@ -1,26 +1,36 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Subject } from 'rxjs';
 import { ScormApi } from './scorm-api';
 import { CmiInterface, ScormCMIMode } from './scorm-api.interface';
+import { ScormApiServiceInterface } from './scorm-api.service.interface';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ScormApiService {
+export class ScormApiService implements ScormApiServiceInterface {
   private window = window; //TODO: replace with injected window from window service
 
-  cmi$: Observable<{
+  commit$ = new Subject<{
     score: number;
     time: number;
     status: string;
     cmi: CmiInterface;
-  }>;
+  }>();
+
+  cmi$ = new Subject<CmiInterface>();
 
   constructor() {}
 
-  init(mode: ScormCMIMode) {
-    const API = new ScormApi(mode);
+  init(cmi: CmiInterface, mode: ScormCMIMode) {
+    if (!this.window['API']) {
+      const API = new ScormApi(cmi, mode);
 
-    this.window['API'] = API;
+      API.commit$.subscribe(val => {
+        this.commit$.next(val);
+      });
+      API.cmi$.subscribe(val => this.cmi$.next(val));
+
+      this.window['API'] = API;
+    }
   }
 }
