@@ -5,8 +5,6 @@ import { Observable } from 'rxjs';
 export const EXERCISE_SERVICE_TOKEN = new InjectionToken('ExerciseService');
 
 export interface ExerciseServiceInterface {
-  getAllForUser(userId: number): Observable<ExerciseInterface[]>;
-
   startExercise(
     userId: number,
     educontentId: number,
