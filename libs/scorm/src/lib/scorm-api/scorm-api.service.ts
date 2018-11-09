@@ -61,10 +61,10 @@ export interface CmiInterface {
   }[];
 }
 
-export interface ScormApi {
+export interface ScormApiInterface {
   LMSInitialize(): 'true' | 'false';
   LMSFinish(): 'true' | 'false';
-  LMSGetValue(): 'false' | string;
+  LMSGetValue(value: string): 'false' | string;
   LMSSetValue(): string;
   LMSCommit(): string;
   LMSGetLastError(): string;
@@ -87,28 +87,37 @@ export class ScormApiService {
   constructor() {}
 
   init(mode: ScormCMIMode) {
-    const API = new ScormApi(mode);
+    const API = new ScormApiInterface(mode);
 
     this.window['API'] = API;
   }
 }
 
-export class ScormApi implements ScormApi {
-  GENERAL_ERROR = '101';
-  NO_ERROR = '0';
+export class ScormApiInterface implements ScormApiInterface {
+  currentUser: any = null; // TODO: check if this is necessary?
   currentResult: { cmi: CmiInterface };
   currentEduContent: any = null;
-  lastErrorCode = '0';
+  lastErrorCode: ErrorCodes = ErrorCodes.NO_ERROR;
   lastDiagnosticMessage = '';
 
   constructor(private mode: ScormCMIMode) {}
 
-  LMSInitialize() {
+  /**
+   * Initialize the API and exercise.
+   *
+   * Resets the API, reads the right data from the window object
+   * and sets the default values for the CMI data model.
+   *
+   * @returns {('true' | 'false')}
+   * @memberof ScormApi
+   */
+  LMSInitialize(): 'true' | 'false' {
+    //check exerciseId and exercise info availability
     if (this.mode === ScormCMIMode.CMI_MODE_PREVIEW) {
       this.currentResult = { cmi: this.getNewCmi() };
     } else {
       if (!this.currentEduContent) {
-        this.lastErrorCode = this.GENERAL_ERROR;
+        this.lastErrorCode = ErrorCodes.GENERAL_ERROR;
         this.lastDiagnosticMessage =
           'Geen oefening-info beschikbaar, probeer aub opnieuw...';
         return 'false';
@@ -124,18 +133,85 @@ export class ScormApi implements ScormApi {
     }
 
     this.currentResult.cmi.mode = this.mode;
-    this.lastErrorCode = this.NO_ERROR;
+    this.lastErrorCode = ErrorCodes.NO_ERROR;
     this.lastDiagnosticMessage = this.LMSGetErrorString(this.lastErrorCode);
+
+    return 'true';
   }
 
-  LMSGetErrorString(code: string) {
+  /**
+   * Finish the exercise.
+   *
+   * Saves the data to the server, removes the exercise window from above the game.
+   *
+   * @returns {('true' | 'false')}
+   * @memberof ScormApiInterface
+   */
+  LMSFinish(): 'true' | 'false' {
+    //check exerciseId and exercise info availability
+    if (this.mode === ScormCMIMode.CMI_MODE_PREVIEW) {
+      return 'true';
+    }
+
+    this.LMSCommit();
+
+    if (this.checkInitialized() === false) {
+      return 'false';
+    }
+
+    if (
+      this.currentResult.cmi.core.lesson_status !== ScormStatus.STATUS_COMPLETED
+    ) {
+      return 'false';
+    }
+
+    return 'true';
+  }
+
+  LMSGetValue(value: string): 'false' | string {}
+
+  /**
+   * Get a short description for the specified errorCode
+   *
+   * @param {ErrorCodes} code code that identifies the error message
+   * @returns {String} CMIErrorMessage
+   * @memberof ScormApi
+   */
+  LMSGetErrorString(code: ErrorCodes): string {
     let errorString = '';
     switch (code) {
       case ErrorCodes.NO_ERROR:
         errorString = 'Geen vuiltje aan de lucht...';
         break;
-
+      case ErrorCodes.INVALID_ARGUMENT_ERROR:
+        errorString = 'Foutief argument:';
+        break;
+      case ErrorCodes.ELEMENT_CANNOT_HAVE_CHILDREN_ERROR:
+        errorString = 'Dit element heeft geen _children';
+        break;
+      case ErrorCodes.ELEMENT_CANNOT_HAVE_COUNT_ERROR:
+        errorString = 'Dit element heeft geen _count';
+        break;
+      case ErrorCodes.NOT_INITIALIZED_ERROR:
+        errorString = 'De oefening werd niet correct opgestart';
+        break;
+      case ErrorCodes.NOT_IMPLEMENTED_ERROR:
+        errorString = 'Deze feature werd niet geïmplementeerd door het LMS';
+        break;
+      case ErrorCodes.INVALID_SET_VALUE_ELEMENT_IS_KEYWORD_ERROR:
+        errorString = 'Je kan geen waardes zetten voor keywords';
+        break;
+      case ErrorCodes.READ_ONLY_ERROR:
+        errorString = 'Dit element is alleen-lezen';
+        break;
+      case ErrorCodes.WRITE_ONLY_ERROR:
+        errorString = 'Dit element is alleen-schrijven';
+        break;
+      case ErrorCodes.INCORRECT_DATA_TYPE_ERROR:
+        errorString = 'De waarde die je wil schrijven is niet geldig';
+        break;
       default:
+        errorString = 'Algemene fout:';
         break;
     }
     return errorString;
@@ -169,6 +245,22 @@ export class ScormApi implements ScormApi {
       ],
       suspend_data: []
     };
+  }
+
+  private checkInitialized(): boolean {
+    if (this.mode === ScormCMIMode.CMI_MODE_PREVIEW) {
+      return true;
+    }
+
+    const cool =
+      this.currentEduContent !== null &&
+      this.currentResult !== null &&
+      this.currentUser !== null;
+    if (!cool) {
+      this.lastErrorCode = ErrorCodes.NOT_INITIALIZED_ERROR;
+    }
+    this.lastDiagnosticMessage = this.LMSGetErrorString(this.lastErrorCode);
+    return cool;
   }
 
   private setCurrentEduContent(eduContent, result) {
