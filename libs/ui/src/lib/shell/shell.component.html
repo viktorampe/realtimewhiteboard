@@ -15,9 +15,6 @@
 
     <div class="ui-shell__right">
       <div class="ui-shell__top">
-        <mat-icon (click)="sidebar.toggle()"
-                  *ngIf="inXSmall$|async"
-                  class="ui-shell__top__menu-icon">menu</mat-icon>
         <ng-content select="[campusShellTop],campus-shell-top"></ng-content>
       </div>
       <div class="ui-shell__body ui-shell__filler">
