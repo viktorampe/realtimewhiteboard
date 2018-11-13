@@ -1,4 +1,4 @@
-import { Inject, Injectable, OnDestroy } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Resolve } from '@angular/router';
 import {
   AuthServiceInterface,
@@ -7,21 +7,16 @@ import {
   UserReducer
 } from '@campus/dal';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
-export class LoginPageViewModel implements Resolve<boolean>, OnDestroy {
+export class LoginPageViewModel implements Resolve<boolean> {
   name: string;
   password: string;
   response: string;
-  subscriptions = new Subscription();
-
-  ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
-  }
 
   constructor(
     private store: Store<UserReducer.State>,
@@ -39,7 +34,7 @@ export class LoginPageViewModel implements Resolve<boolean>, OnDestroy {
    * @memberof LoginPageViewModel
    */
   isLoggedIn(): boolean {
-    return this.authService.hasCookie();
+    return this.authService.isLoggedIn();
   }
 
   /**
@@ -58,17 +53,6 @@ export class LoginPageViewModel implements Resolve<boolean>, OnDestroy {
         new UserActions.LogInUser({
           username: name,
           password: password
-        })
-      );
-
-      // avoids issue with loopback token
-      // it is not set correctly on login
-      this.subscriptions.add(
-        this.store.subscribe(x => {
-          // wait for cookies to be set
-          if (this.isLoggedIn()) {
-            window.location.reload(false);
-          }
         })
       );
     }
