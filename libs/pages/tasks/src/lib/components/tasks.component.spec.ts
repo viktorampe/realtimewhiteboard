@@ -4,8 +4,9 @@ import { By } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import {
   EduContentInterface,
+  EduContentProductTypeInterface,
   LearningAreaInterface,
-  PersonInterface,
+  MethodInterface,
   TaskEduContentInterface,
   TaskInstanceInterface,
   TaskInterface
@@ -17,6 +18,7 @@ import { LearningAreaFixture } from 'libs/dal/src/lib/+fixtures/LearningArea.fix
 import { MethodFixture } from 'libs/dal/src/lib/+fixtures/Method.fixture';
 import { PersonFixture } from 'libs/dal/src/lib/+fixtures/Person.fixture';
 import { TaskFixture } from 'libs/dal/src/lib/+fixtures/Task.fixture';
+import { TaskEduContentFixture } from 'libs/dal/src/lib/+fixtures/TaskEduContent.fixture';
 import { TaskInstanceFixture } from 'libs/dal/src/lib/+fixtures/TaskInstance.fixture';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { marbles } from 'rxjs-marbles';
@@ -200,69 +202,7 @@ class MockViewModel {
   }
 
   private getMockTaskEducontents(): TaskEduContentInterface[] {
-    const mockTeacher = this.getMockTeacher();
-    const mockTasks = this.getMockTasks();
-    const mockEducontents = this.getMockEducontents();
-
-    let mockTaskEducontents1: TaskEduContentInterface;
-    mockTaskEducontents1 = {
-      index: 10000,
-      id: 1,
-      teacherId: mockTeacher.id,
-      teacher: mockTeacher,
-      eduContentId: mockEducontents[0].id,
-      eduContent: mockEducontents[0],
-      taskId: mockTasks[0].id,
-      task: mockTasks[0]
-    };
-
-    let mockTaskEducontents2: TaskEduContentInterface;
-    mockTaskEducontents2 = {
-      index: 10000,
-      id: 2,
-      teacherId: mockTeacher.id,
-      teacher: mockTeacher,
-      eduContentId: mockEducontents[1].id,
-      eduContent: mockEducontents[1],
-      taskId: mockTasks[1].id,
-      task: mockTasks[1]
-    };
-
-    let mockTaskEducontents3: TaskEduContentInterface;
-    mockTaskEducontents3 = {
-      index: 10000,
-      id: 3,
-      teacherId: mockTeacher.id,
-      teacher: mockTeacher,
-      eduContentId: mockEducontents[2].id,
-      eduContent: mockEducontents[2],
-      taskId: mockTasks[2].id,
-      task: mockTasks[2]
-    };
-
-    let mockTaskEducontents4: TaskEduContentInterface;
-    mockTaskEducontents4 = {
-      index: 10000,
-      id: 4,
-      teacherId: mockTeacher.id,
-      teacher: mockTeacher,
-      eduContentId: mockEducontents[0].id,
-      eduContent: mockEducontents[0],
-      taskId: mockTasks[0].id,
-      task: mockTasks[0]
-    };
-
-    return [
-      mockTaskEducontents1,
-      mockTaskEducontents2,
-      mockTaskEducontents3,
-      mockTaskEducontents4
-    ];
-  }
-
-  private getMockTeacher(): PersonInterface {
-    let mockTeacher: PersonInterface;
-    mockTeacher = {
+    const mockTeacher = new PersonFixture({
       name: 'Mertens',
       firstName: 'Tom',
       created: new Date('2018-09-04 14:21:15'),
@@ -270,15 +210,63 @@ class MockViewModel {
       currentSchoolYear: 2018,
       id: 187,
       displayName: 'Tom Mertens'
-      // Avatar:
-    };
+    });
+    const mockTasks = this.getMockTasks();
+    const mockEducontents = this.getMockEducontents();
 
-    return mockTeacher;
+    return [
+      new TaskEduContentFixture({
+        index: 10000,
+        id: 1,
+        teacherId: mockTeacher.id,
+        teacher: mockTeacher,
+        eduContentId: mockEducontents[0].id,
+        eduContent: mockEducontents[0],
+        taskId: mockTasks[0].id,
+        task: mockTasks[0]
+      }),
+      new TaskEduContentFixture({
+        index: 10000,
+        id: 2,
+        teacherId: mockTeacher.id,
+        teacher: mockTeacher,
+        eduContentId: mockEducontents[1].id,
+        eduContent: mockEducontents[1],
+        taskId: mockTasks[1].id,
+        task: mockTasks[1]
+      }),
+      new TaskEduContentFixture({
+        index: 10000,
+        id: 3,
+        teacherId: mockTeacher.id,
+        teacher: mockTeacher,
+        eduContentId: mockEducontents[2].id,
+        eduContent: mockEducontents[2],
+        taskId: mockTasks[2].id,
+        task: mockTasks[2]
+      }),
+      new TaskEduContentFixture({
+        index: 10000,
+        id: 4,
+        teacherId: mockTeacher.id,
+        teacher: mockTeacher,
+        eduContentId: mockEducontents[0].id,
+        eduContent: mockEducontents[0],
+        taskId: mockTasks[0].id,
+        task: mockTasks[0]
+      })
+    ];
   }
 
   private getMockTasks(): TaskInterface[] {
     const mockTeacher = new PersonFixture({
-      id: 666
+      name: 'Mertens',
+      firstName: 'Tom',
+      created: new Date('2018-09-04 14:21:15'),
+      email: 'teacher1@mailinator.com',
+      currentSchoolYear: 2018,
+      id: 187,
+      displayName: 'Tom Mertens'
     });
     const mockLearningAreas = this.getMockLearningAreas();
 
