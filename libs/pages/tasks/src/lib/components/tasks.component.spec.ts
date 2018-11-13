@@ -1,5 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import {
   EduContentInterface,
@@ -13,6 +14,7 @@ import {
 } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { marbles } from 'rxjs-marbles';
 import { TasksComponent } from './tasks.component';
 import { TasksViewModel } from './tasks.viewmodel';
 import {
@@ -614,6 +616,7 @@ describe('TasksComponent', () => {
 
   it('should return the correct icon', () => {
     expect(component.getIcon(true)).toBe('icon-checkmark');
+    expect(component.getIcon(false)).toBe(''); //no icon shown
   });
 
   it('it should return the correct deadline string', () => {
@@ -624,4 +627,96 @@ describe('TasksComponent', () => {
   it('it should return an empty deadline if no date is set', () => {
     expect(component.getDeadLineString(null)).toBe('');
   });
+
+  it('should display all tasks', () => {
+    const tasksContainer = fixture.debugElement.query(
+      By.css('.pages-tasks__container')
+    );
+    expect(tasksContainer).toBeTruthy();
+    expect(tasksContainer.children[1].nativeElement.children.length).toBe(4);
+  });
+
+  it('should filter out tasks', () => {
+    const tasksContainer = fixture.debugElement.query(
+      By.css('.pages-tasks__container')
+    );
+    expect(tasksContainer).toBeTruthy();
+    expect(tasksContainer.children[1].nativeElement.children.length).toBe(4);
+    component.filterInput$.next('test');
+    fixture.detectChanges();
+    expect(tasksContainer.children[1].nativeElement.children.length).toBe(0);
+    component.filterInput$.next('Overhoring');
+    fixture.detectChanges();
+    expect(tasksContainer.children[1].nativeElement.children.length).toBe(2);
+    component.filterInput$.next('');
+    fixture.detectChanges();
+    expect(tasksContainer.children[1].nativeElement.children.length).toBe(4);
+  });
+
+  it('should display correct tasks count text', () => {
+    const tasksText = fixture.debugElement.query(
+      By.css('.pages-tasks__container__tasks-count')
+    );
+    expect(tasksText).toBeTruthy();
+    expect(tasksText.nativeElement.innerHTML).toBe(
+      ' 4 van <u>4</u> weergegeven '
+    );
+  });
+
+  it('should display correct tasks count text when filtered', () => {
+    const tasksText = fixture.debugElement.query(
+      By.css('.pages-tasks__container__tasks-count')
+    );
+    expect(tasksText).toBeTruthy();
+    expect(tasksText.nativeElement.innerHTML).toBe(
+      ' 4 van <u>4</u> weergegeven '
+    );
+    component.filterInput$.next('overhoring');
+    fixture.detectChanges();
+    expect(tasksText.nativeElement.innerHTML).toBe(
+      ' 2 van <u>4</u> weergegeven '
+    );
+  });
+
+  it('should reset the filter', () => {
+    const tasksContainer = fixture.debugElement.query(
+      By.css('.pages-tasks__container')
+    );
+    component.filterInput$.next('test');
+    fixture.detectChanges();
+    expect(tasksContainer.children[1].nativeElement.children.length).toBe(0);
+    component.resetFilterInput();
+    fixture.detectChanges();
+    expect(tasksContainer.children[1].nativeElement.children.length).toBe(4);
+  });
+
+  it('should change the filter input', () => {
+    const tasksContainer = fixture.debugElement.query(
+      By.css('.pages-tasks__container')
+    );
+    component.onChangeFilterInput('test');
+    fixture.detectChanges();
+    expect(tasksContainer.children[1].nativeElement.children.length).toBe(0);
+    component.onChangeFilterInput('');
+    fixture.detectChanges();
+    expect(tasksContainer.children[1].nativeElement.children.length).toBe(4);
+  });
+
+  it(
+    'listformats$',
+    marbles(m => {
+      const listformats$ = m.hot('--a--b|', {
+        a: ListFormat.GRID,
+        b: ListFormat.LINE
+      });
+
+      const result = '--a--b|';
+      const result$: Observable<ListFormat> = listformats$;
+
+      m.expect(result$).toBeObservable(result, {
+        a: ListFormat.GRID,
+        b: ListFormat.LINE
+      });
+    })
+  );
 });
