@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
+import { InfoPanelContentComponent } from '../../../pages/tasks/src/lib/components/info-panel/info-panel-content/info-panel-content.component';
 import { InfoPanelTaskComponent } from '../../../pages/tasks/src/lib/components/info-panel/info-panel-task/info-panel-task.component';
 import { DevlibRoutingModule } from './devlib.routing.module';
 import { EduContentComponent } from './edu-content/edu-content.component';
@@ -24,7 +25,8 @@ import { UiPageComponent } from './ui-page/ui-page.component';
     LoginpageComponent,
     EduContentComponent,
     UiPageComponent,
-    InfoPanelTaskComponent
+    InfoPanelTaskComponent,
+    InfoPanelContentComponent
   ]
 })
 export class DevlibModule {}
