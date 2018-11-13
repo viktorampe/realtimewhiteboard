@@ -1,0 +1,12 @@
+<campus-content-preview
+  [titleText]="content.name"
+  [description]="content.description"
+>
+  <campus-file-extension
+    type
+    *ngIf="content.extension"
+    [extensionClass]="content.extension"
+  ></campus-file-extension>
+  <div icon *ngIf="content.productType" class="{{content.productType}}"></div>
+  <div badge *ngFor="let badge of content.methods">{{ badge }}</div>
+</campus-content-preview>
