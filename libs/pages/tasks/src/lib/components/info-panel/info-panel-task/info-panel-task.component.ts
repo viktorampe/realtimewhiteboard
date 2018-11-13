@@ -1,4 +1,6 @@
 import { Component, Input } from '@angular/core';
+import { TaskInterface } from '@campus/dal';
+import { BadgePersonInterface } from '@campus/ui';
 
 @Component({
   selector: 'campus-info-panel-task',
@@ -6,11 +8,6 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./info-panel-task.component.scss']
 })
 export class InfoPanelTaskComponent {
-  @Input()
-  task: {
-    name: string;
-    description: string;
-    teacher: { displayName: string };
-    start: Date;
-  };
+  @Input() teacher: BadgePersonInterface;
+  @Input() task: TaskInterface;
 }
