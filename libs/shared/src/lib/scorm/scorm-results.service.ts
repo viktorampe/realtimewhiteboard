@@ -33,6 +33,7 @@ export class ScormResultsService implements ScormResultsServiceInterface {
     eduContentId: number
   ): Observable<ResultInterface> {
     return this.personApi.resultForTask(userId, taskId, eduContentId).pipe(
+      // TODO: handle error in effect
       catchError(err => {
         console.log(err.message);
         return of({});
@@ -59,6 +60,7 @@ export class ScormResultsService implements ScormResultsServiceInterface {
     return this.personApi
       .resultForUnlockedContent(userId, unlockedContentId, eduContentId)
       .pipe(
+        // TODO: handle error in effect
         catchError(err => {
           console.log(err.message);
           return of({});
@@ -83,19 +85,14 @@ export class ScormResultsService implements ScormResultsServiceInterface {
     userId: number,
     resultId: number,
     cmi: CmiInterface
-  ): Observable<Object> {
+  ): Observable<ResultInterface> {
     const score = cmi.core.score.raw;
     const time = this.convertCmiTimeStringToNumber(cmi.core.total_time);
     const status = cmi.core.lesson_status;
 
-    return this.personApi.saveResult(
-      userId,
-      resultId,
-      score,
-      time,
-      status,
-      cmi
-    );
+    return this.personApi
+      .saveResult(userId, resultId, score, time, status, cmi)
+      .pipe(map(res => res as ResultInterface));
   }
 
   private convertCmiTimeStringToNumber(cmiTimeString: string): number {
@@ -110,26 +107,3 @@ export class ScormResultsService implements ScormResultsServiceInterface {
     return timespan;
   }
 }
-
-// code in student portal
-
-// window.API.$timeoutPromise = $timeout(function () {
-//   var timepieces = window.API.LMSGetValue('cmi.core.total_time').split(':');
-//   var timespan = timepieces[0] * 3600000 + timepieces[1] * 60000 + parseFloat(timepieces[2]) * 1000;
-
-//   getCurrentResult().dirty = true;
-//   Person.saveResult({
-//       id: getCurrentUser().id,
-//       resultId: getCurrentResult().id
-//   }, {
-//       score: window.API.LMSGetValue('cmi.core.score.raw'),
-//       time: timespan,
-//       status: window.API.LMSGetValue('cmi.core.lesson_status'),
-//       cmi: getCurrentResult().cmi
-//   }).$promise
-//       .then(function () {
-//           getCurrentResult().dirty = false;
-//       }).catch(function (err) {
-//       console.log(err);
-//   });
-// }, 50);

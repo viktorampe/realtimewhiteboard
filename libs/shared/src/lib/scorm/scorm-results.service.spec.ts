@@ -9,7 +9,7 @@ import { ScormResultsServiceInterface } from './scorm-results.service.interface'
 
 describe('ScormResultsService', () => {
   let service: ScormResultsServiceInterface;
-  let mockData$: Observable<object>;
+  let mockData$: Observable<ResultInterface>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({

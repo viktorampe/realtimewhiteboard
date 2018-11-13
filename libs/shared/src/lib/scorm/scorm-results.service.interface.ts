@@ -26,5 +26,5 @@ export interface ScormResultsServiceInterface {
     userId: number,
     resultId: number,
     cmi: CmiInterface
-  ): Observable<Object>;
+  ): Observable<ResultInterface>;
 }
