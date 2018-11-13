@@ -57,7 +57,7 @@ export class LoginpageComponent implements OnInit {
   // tslint:disable-next-line:member-ordering
   resultSaved$: any;
   saveResult() {
-    const result = this.scormResultsService.saveResult(6, 2, this.cmi);
+    const result = this.scormResultsService.saveResult(6, 5, this.cmi);
 
     this.resultSaved$ = result;
   }
