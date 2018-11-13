@@ -1,30 +1,21 @@
 import { TestBed } from '@angular/core/testing';
 import { WINDOW, WindowService } from './window.service';
 
-const currentMockWindow = <Window>{
-  open: () => {
-    return newMockWindow;
-  },
-  close: () => {
-    return;
-  }
+const newMockWindow = {
+  open: jest.fn(),
+  close: jest.fn()
 };
 
-const newMockWindow = <Window>{
-  open: () => {
-    return;
-  },
-  close: () => {
-    return;
-  }
+const currentMockWindow = {
+  open: jest.fn().mockReturnValue(newMockWindow),
+  close: jest.fn()
 };
 
 describe('WindowService', () => {
   let windowService: WindowService;
-  let openSpy: jest.SpyInstance;
   let closeSpy: jest.SpyInstance;
   let closeWindowSpy: jest.SpyInstance;
-  let openedWindows: { [name: string]: Window };
+  let openedWindows: { [name: string]: any };
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
@@ -34,7 +25,6 @@ describe('WindowService', () => {
     });
 
     windowService = TestBed.get(WindowService);
-    openSpy = jest.spyOn(currentMockWindow, 'open');
     closeSpy = jest.spyOn(currentMockWindow, 'close');
     closeWindowSpy = jest.spyOn(windowService, 'closeWindow');
     openedWindows = windowService['openedWindows'];
@@ -46,8 +36,11 @@ describe('WindowService', () => {
 
   it('should open a new window', () => {
     windowService.openWindow('testName', 'www.testurl.com');
-    expect(openSpy).toHaveBeenCalledTimes(1);
-    expect(openSpy).toHaveBeenCalledWith('www.testurl.com', 'testName');
+    expect(currentMockWindow.open).toHaveBeenCalledTimes(1);
+    expect(currentMockWindow.open).toHaveBeenCalledWith(
+      'www.testurl.com',
+      'testName'
+    );
 
     expect(openedWindows['testName']).toBeTruthy();
   });
@@ -58,7 +51,6 @@ describe('WindowService', () => {
 
     windowService.closeWindow('toBeClosed');
 
-    expect(closeSpy).toHaveBeenCalledTimes(1);
     expect(openedWindows['toBeClosed']).toBeFalsy();
     expect(openedWindows['stillOpen']).toBeTruthy();
   });
