@@ -1,10 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { DalModule } from '@campus/dal';
 import { SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
-import { LoopBackConfig } from '@diekeure/polpo-api-angular-sdk';
 import { InfoPanelTaskComponent } from '../../../pages/tasks/src/lib/components/info-panel/info-panel-task/info-panel-task.component';
 import { DevlibRoutingModule } from './devlib.routing.module';
 import { EduContentComponent } from './edu-content/edu-content.component';
@@ -15,7 +13,6 @@ import { UiPageComponent } from './ui-page/ui-page.component';
 
 @NgModule({
   imports: [
-    DalModule.forRoot({ apiBaseUrl: 'http://api.polpo.localhost:3000' }),
     FormsModule,
     CommonModule,
     UiModule,
@@ -30,12 +27,4 @@ import { UiPageComponent } from './ui-page/ui-page.component';
     InfoPanelTaskComponent
   ]
 })
-export class DevlibModule {
-  static forRoot(): ModuleWithProviders {
-    LoopBackConfig.setBaseURL('http://api.polpo.localhost:3000');
-    LoopBackConfig.setRequestOptionsCredentials(true);
-    return {
-      ngModule: DevlibModule
-    };
-  }
-}
+export class DevlibModule {}
