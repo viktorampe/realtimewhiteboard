@@ -5,28 +5,6 @@
   title="text title"
 ></campus-dropdown-menu-item>
 
-<!--
-  @Input() title: string;
-
-
-  @Input() header: string;
-
-
-
-  @Input() icon: string;
-
-
-
-  @Input() image: string;
-
-
-
-  @Input() link: string;
-
-
-
-  @Input() imageAltText: string;
--->
 
 <campus-page-bar>
   <campus-filter-text-input
@@ -47,7 +25,7 @@
 </campus-page-bar>
 
 <div class="login_page_component">
-  <div [hidden]="loginPageviewModel.loggedIn">
+  <div [hidden]="loginPageviewModel.isLoggedIn()">
     <div>
       <button (click)="loginPageviewModel.login('student1', 'testje')">
         student
@@ -81,9 +59,10 @@
     </div>
   </div>
 
-  <!-- [hidden]="!loginPageviewModel.loggedIn" -->
 
-  <div><button (click)="loginPageviewModel.logout()">logout</button></div>
+  <div [hidden]="!loginPageviewModel.isLoggedIn()">
+    <button (click)="loginPageviewModel.logout()">logout</button>
+  </div>
 
   <div>
     <p>{{ loginPageviewModel.response }}</p>
