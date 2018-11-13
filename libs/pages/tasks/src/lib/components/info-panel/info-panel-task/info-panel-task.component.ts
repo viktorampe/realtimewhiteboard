@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { TaskInterface } from '@campus/dal';
+import { TaskInstanceInterface } from '@campus/dal';
 import { BadgePersonInterface } from '@campus/ui';
 
 @Component({
@@ -8,6 +8,6 @@ import { BadgePersonInterface } from '@campus/ui';
   styleUrls: ['./info-panel-task.component.scss']
 })
 export class InfoPanelTaskComponent {
-  @Input() teacher: BadgePersonInterface;
-  @Input() task: TaskInterface;
+  @Input() person: BadgePersonInterface;
+  @Input() taskInstance: TaskInstanceInterface;
 }

@@ -23,12 +23,17 @@ describe('InfoPanelTaskComponent', () => {
     component = fixture.componentInstance;
 
     mockData = {
-      name: 'name',
-      description: 'description',
-      teacher: { displayName: 'display name' },
-      start: new Date()
+      person: { displayName: 'display name' },
+      taskInstance: {
+        task: {
+          name: 'name',
+          description: 'description'
+        },
+        start: new Date()
+      }
     };
-    component.task = mockData;
+    component.taskInstance = mockData.taskInstance;
+    component.person = mockData.person;
 
     fixture.detectChanges();
   });
