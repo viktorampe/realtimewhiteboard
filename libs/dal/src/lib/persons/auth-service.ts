@@ -31,6 +31,21 @@ export class AuthService implements AuthServiceInterface {
   }
 
   /**
+   * checks if a Loopback-cookie exists
+   *
+   * @returns Boolean
+   * @memberof AuthService
+   */
+  public hasCookie(): boolean {
+    const hasLoopbackCookie =
+      document.cookie
+        .split(';')
+        .filter(item => item.includes('$LoopBackSDK$id')).length !== 0;
+
+    return hasLoopbackCookie;
+  }
+
+  /**
    * logs out the current user this method returns no data.
    *
    * @returns {Observable<any>}
