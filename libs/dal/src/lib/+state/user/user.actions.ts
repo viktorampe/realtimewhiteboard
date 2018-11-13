@@ -7,7 +7,13 @@ export enum UserActionTypes {
   UserLoadError = '[User] User Load Error',
   RemoveUser = '[User] Remove User',
   UserRemoved = '[User] User Removed',
-  UserRemoveError = '[User] User Remove Error'
+  UserRemoveError = '[User] User Remove Error',
+  LogInUser = '[User] Log In User'
+}
+
+export class LogInUser implements Action {
+  readonly type = UserActionTypes.LogInUser;
+  constructor(public payload: { username: string; password: string }) {}
 }
 
 export class LoadUser implements Action {
@@ -46,7 +52,8 @@ export type UserAction =
   | UserLoadError
   | RemoveUser
   | UserRemoved
-  | UserRemoveError;
+  | UserRemoveError
+  | LogInUser;
 
 export const fromUserActions = {
   LoadUser,
@@ -54,5 +61,6 @@ export const fromUserActions = {
   UserLoadError,
   RemoveUser,
   UserRemoved,
-  UserRemoveError
+  UserRemoveError,
+  LogInUser
 };
