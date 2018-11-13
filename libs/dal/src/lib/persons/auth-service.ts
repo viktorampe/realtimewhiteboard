@@ -1,7 +1,14 @@
 import { Injectable } from '@angular/core';
-import { LoopBackAuth, PersonApi, PersonInterface } from '@diekeure/polpo-api-angular-sdk';
-import { Observable, of } from 'rxjs';
-import { AuthServiceInterface, LoginCredentials } from './auth-service.interface';
+import {
+  LoopBackAuth,
+  PersonApi,
+  PersonInterface
+} from '@diekeure/polpo-api-angular-sdk';
+import { Observable } from 'rxjs';
+import {
+  AuthServiceInterface,
+  LoginCredentials
+} from './auth-service.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -24,22 +31,18 @@ export class AuthService implements AuthServiceInterface {
   }
 
   /**
-   * gets the current logged in user, throws a 401 error if not logged in
+   * checks if a Loopback-cookie exists
    *
-   * @returns {Observable<any>}
+   * @returns Boolean
    * @memberof AuthService
    */
-  public isAuthenticated(): Observable<boolean> {
-    const allCookie = document.cookie;
-    console.log('cookies',allCookie);
-    const hasLoopbackCookie = allCookie.split(';')
-    .filter(
-      (item) => item.includes('$LoopBackSDK$userId')
-      )
-      .length !== 0);
-    console.log('loopback',hasLoopbackCookie);
+  public hasCookie(): boolean {
+    const hasLoopbackCookie =
+      document.cookie
+        .split(';')
+        .filter(item => item.includes('$LoopBackSDK$id')).length !== 0;
 
-    return of(hasLoopbackCookie);
+    return hasLoopbackCookie;
   }
 
   /**

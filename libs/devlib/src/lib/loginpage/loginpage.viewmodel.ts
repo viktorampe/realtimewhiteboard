@@ -4,13 +4,11 @@ import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   UserActions,
-  UserQueries,
   UserReducer
 } from '@campus/dal';
-import { select, Store } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { fromUserActions } from './../../../../dal/src/lib/+state/user/user.actions';
 
 @Injectable({
   providedIn: 'root'
@@ -20,15 +18,13 @@ export class LoginPageViewModel implements Resolve<boolean> {
   password: string;
   response: string;
 
-  loggedIn: boolean;
-
   constructor(
     private store: Store<UserReducer.State>,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
   ) {
-    store.pipe(select(UserQueries.getCurrentUser)).subscribe(data => {
-      this.loggedIn = data != null;
-    });
+    if (this.isLoggedIn()) {
+      store.dispatch(new UserActions.LoadUser({ force: false }));
+    }
   }
 
   /**
@@ -37,9 +33,8 @@ export class LoginPageViewModel implements Resolve<boolean> {
    * @returns {Observable<boolean>}
    * @memberof LoginPageViewModel
    */
-  isLoggedIn(): Observable<boolean> {
-    console.log('inside isLoggedIn');
-    return this.authService.isAuthenticated();
+  isLoggedIn(): boolean {
+    return this.authService.hasCookie();
   }
 
   /**
@@ -50,22 +45,22 @@ export class LoginPageViewModel implements Resolve<boolean> {
    * @memberof LoginPageViewModel
    */
   login(name: string, password: string) {
-    this.isLoggedIn().subscribe(isLoggedIn => {
-      console.log('login', isLoggedIn);
+    if (this.isLoggedIn()) {
+      console.error('login failed since we are already logged in');
+      this.store.dispatch(new UserActions.LoadUser({ force: false }));
+    } else {
+      this.store.dispatch(
+        new UserActions.LogInUser({
+          username: name,
+          password: password
+        })
+      );
 
-      if (isLoggedIn) {
-        console.error('login failed since we are already logged in');
-        this.store.dispatch(new fromUserActions.LoadUser({ force: false }));
-      } else {
-        this.store.dispatch(
-          new fromUserActions.LogInUser({
-            username: name,
-            password: password
-          })
-        );
-      }
-      return;
-    });
+      // avoids issue with loopback token
+      // it is not set correctly on login
+      window.location.reload(false);
+    }
+    return;
   }
 
   /**
@@ -76,14 +71,11 @@ export class LoginPageViewModel implements Resolve<boolean> {
    * @memberof LoginPageViewModel
    */
   logout(): void {
-    this.isLoggedIn().subscribe(isLoggedIn => {
-      console.log('logout', isLoggedIn);
-      if (isLoggedIn) {
-        this.store.dispatch(new UserActions.RemoveUser());
-      } else {
-        console.error('logout failed');
-      }
-    });
+    if (this.isLoggedIn) {
+      this.store.dispatch(new UserActions.RemoveUser());
+    } else {
+      console.error('logout failed');
+    }
   }
 
   /**

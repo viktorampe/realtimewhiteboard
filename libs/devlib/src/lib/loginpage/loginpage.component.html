@@ -23,7 +23,7 @@
 </campus-page-bar>
 
 <div class="login_page_component">
-  <div [hidden]="loginPageviewModel.loggedIn">
+  <div [hidden]="loginPageviewModel.isLoggedIn()">
     <div>
       <button (click)="loginPageviewModel.login('student1', 'testje')">student</button>
       <button (click)="loginPageviewModel.login('teacher1', 'testje')">teacher</button>
@@ -42,9 +42,8 @@
     </div>
   </div>
 
-  <!-- [hidden]="!loginPageviewModel.loggedIn" -->
 
-  <div>
+  <div [hidden]="!loginPageviewModel.isLoggedIn()">
     <button (click)="loginPageviewModel.logout()">logout</button>
   </div>
 
