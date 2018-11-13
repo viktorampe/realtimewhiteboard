@@ -1,7 +1,7 @@
 <campus-page-bar>
   <campus-filter-text-input theme="dark"
-                            (filterTextChange)="onChangeFilterInput($event)"
-                            class="pages__toolbar__filter"></campus-filter-text-input>
+                            class="pages__toolbar__filter"
+                            [source] ="(learningAreasWithInfo$|async)"></campus-filter-text-input>
   <div class="divider"></div>
   <campus-button (click)="clickChangeListFormat(listFormat.GRID)"
                  iconClass="grid-view"></campus-button>
@@ -20,17 +20,16 @@
   <ng-template #noLearningAreas>Er zijn momenteel geen taken voor jou klaargezet.</ng-template>
 
   <ng-container *ngIf="learningAreas.length > 0; else: noLearningAreas">
-    <ng-container *ngIf="(displayedLearningAreasWithInfo$ | async)?.learningAreasWithInfo as displayedLearningAreas">
+    <ng-container *ngIf="(filterTextInput.result$|async) as filteredLearningAreas">
       <div class="pages-tasks__container__learning-areas-count">
-        {{ displayedLearningAreas.length }} van
-        <u class="pages-tasks__container__learning-areas-count__total"
-           (click)="resetFilterInput(); filterInput.value = ''">{{ learningAreas.length }}</u>
+        {{ filteredLearningAreas.length }} van
+        <u class="pages-tasks__container__learning-areas-count__total">{{ learningAreas.length }}</u>
         weergegeven
       </div>
       <div class="pages-tasks__container__learning-areas">
         <campus-list-view [listFormat]="listFormat$ | async"
                           [placeHolderText]="'De toegepaste filter bevat geen resultaten.'">
-          <campus-folder *ngFor="let learningAreaWithInfo of displayedLearningAreas"
+          <campus-folder *ngFor="let learningAreaWithInfo of filteredLearningAreas"
                          campusListItem
                          [routerLink]="learningAreaWithInfo.learningArea.id"
                          [itemCount]="learningAreaWithInfo.openTasks"
