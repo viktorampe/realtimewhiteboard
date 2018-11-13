@@ -4,15 +4,20 @@ import { By } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import {
   EduContentInterface,
-  EduContentProductTypeInterface,
   LearningAreaInterface,
-  MethodInterface,
   PersonInterface,
   TaskEduContentInterface,
   TaskInstanceInterface,
   TaskInterface
 } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
+import { EduContentFixture } from 'libs/dal/src/lib/+fixtures/EduContent.fixture';
+import { EduContentProductTypeFixture } from 'libs/dal/src/lib/+fixtures/EduContentProductType.fixture';
+import { LearningAreaFixture } from 'libs/dal/src/lib/+fixtures/LearningArea.fixture';
+import { MethodFixture } from 'libs/dal/src/lib/+fixtures/Method.fixture';
+import { PersonFixture } from 'libs/dal/src/lib/+fixtures/Person.fixture';
+import { TaskFixture } from 'libs/dal/src/lib/+fixtures/Task.fixture';
+import { TaskInstanceFixture } from 'libs/dal/src/lib/+fixtures/TaskInstance.fixture';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { marbles } from 'rxjs-marbles';
 import { TasksComponent } from './tasks.component';
@@ -127,86 +132,70 @@ class MockViewModel {
   }
 
   private getMockLearningAreas(): LearningAreaInterface[] {
-    let mockLearningArea1: LearningAreaInterface;
-    mockLearningArea1 = {
-      name: 'Wiskunde',
-      icon: 'wiskunde',
-      color: '#2c354f'
-    };
-
-    let mockLearningArea2: LearningAreaInterface;
-    mockLearningArea2 = {
-      name: 'Moderne Wetenschappen',
-      icon: 'natuurwetenschappen',
-      color: '#5e3b47'
-    };
-
-    let mockLearningArea3: LearningAreaInterface;
-    mockLearningArea3 = {
-      name: 'Engels',
-      icon: 'engels',
-      color: '#553030'
-    };
-
-    return [mockLearningArea1, mockLearningArea2, mockLearningArea3];
+    return [
+      new LearningAreaFixture({
+        name: 'Wiskunde',
+        icon: 'wiskunde',
+        color: '#2c354f'
+      }),
+      new LearningAreaFixture({
+        name: 'Moderne Wetenschappen',
+        icon: 'natuurwetenschappen',
+        color: '#5e3b47'
+      }),
+      new LearningAreaFixture({
+        name: 'Engels',
+        icon: 'engels',
+        color: '#553030'
+      })
+    ];
   }
 
   private getMockTaskInstances(): TaskInstanceInterface[] {
     const mockTasks = this.getMockTasks();
-    const mockStudent = this.getMockStudent();
-
-    let mockTaskInstance1: TaskInstanceInterface;
-    mockTaskInstance1 = {
-      start: new Date(2018, 11 - 1, 5, 0 + 2),
-      end: new Date(2018, 11 - 1, 15, 0 + 2),
-      alerted: true,
-      id: 1,
-      taskId: mockTasks[0].id,
-      task: mockTasks[0],
-      personId: mockStudent.id,
-      student: mockStudent
-    };
-
-    let mockTaskInstance2: TaskInstanceInterface;
-    mockTaskInstance2 = {
-      start: new Date(2018, 11 - 1, 5, 0 + 2),
-      end: new Date(2018, 11 - 1, 6, 0 + 2),
-      alerted: true,
-      id: 2,
-      taskId: mockTasks[1].id,
-      task: mockTasks[1],
-      personId: mockStudent.id,
-      student: mockStudent
-    };
-
-    let mockTaskInstance3: TaskInstanceInterface;
-    mockTaskInstance3 = {
-      start: new Date(2018, 11 - 1, 15, 0 + 2),
-      end: new Date(2018, 11 - 1, 30, 0 + 2),
-      alerted: false,
-      id: 3,
-      taskId: mockTasks[2].id,
-      task: mockTasks[2],
-      personId: mockStudent.id,
-      student: mockStudent
-    };
-    let mockTaskInstance4: TaskInstanceInterface;
-    mockTaskInstance4 = {
-      start: new Date(2018, 11 - 1, 15, 0 + 2),
-      end: new Date(2018, 11 - 1, 30, 0 + 2),
-      alerted: true,
-      id: 4,
-      taskId: mockTasks[0].id,
-      task: mockTasks[0],
-      personId: mockStudent.id,
-      student: mockStudent
-    };
+    const mockStudent = new PersonFixture();
 
     return [
-      mockTaskInstance1,
-      mockTaskInstance2,
-      mockTaskInstance3,
-      mockTaskInstance4
+      new TaskInstanceFixture({
+        start: new Date(2018, 11 - 1, 5, 0 + 2),
+        end: new Date(2018, 11 - 1, 15, 0 + 2),
+        alerted: true,
+        id: 1,
+        taskId: mockTasks[0].id,
+        task: mockTasks[0],
+        personId: mockStudent.id,
+        student: mockStudent
+      }),
+      new TaskInstanceFixture({
+        start: new Date(2018, 11 - 1, 5, 0 + 2),
+        end: new Date(2018, 11 - 1, 6, 0 + 2),
+        alerted: true,
+        id: 2,
+        taskId: mockTasks[1].id,
+        task: mockTasks[1],
+        personId: mockStudent.id,
+        student: mockStudent
+      }),
+      new TaskInstanceFixture({
+        start: new Date(2018, 11 - 1, 15, 0 + 2),
+        end: new Date(2018, 11 - 1, 30, 0 + 2),
+        alerted: false,
+        id: 3,
+        taskId: mockTasks[2].id,
+        task: mockTasks[2],
+        personId: mockStudent.id,
+        student: mockStudent
+      }),
+      new TaskInstanceFixture({
+        start: new Date(2018, 11 - 1, 15, 0 + 2),
+        end: new Date(2018, 11 - 1, 30, 0 + 2),
+        alerted: true,
+        id: 4,
+        taskId: mockTasks[0].id,
+        task: mockTasks[0],
+        personId: mockStudent.id,
+        student: mockStudent
+      })
     ];
   }
 
@@ -288,46 +277,43 @@ class MockViewModel {
   }
 
   private getMockTasks(): TaskInterface[] {
-    const mockTeacher = this.getMockTeacher();
+    const mockTeacher = new PersonFixture({
+      id: 666
+    });
     const mockLearningAreas = this.getMockLearningAreas();
 
-    let mockTask1: TaskInterface;
-    mockTask1 = {
-      name: 'Overhoring 1',
-      description:
-        'Maak deze taak als voorbereiding op de overhoring van volgende week.',
-      id: 1,
-      personId: mockTeacher.id,
-      teacher: mockTeacher,
-      learningAreaId: mockLearningAreas[0].id,
-      learningArea: mockLearningAreas[0]
-    };
-
-    let mockTask2: TaskInterface;
-    mockTask2 = {
-      name: 'Herhaling 1',
-      description:
-        'Maak deze taak als extra herhaling op de leerstof van vorige week.',
-      id: 2,
-      personId: mockTeacher.id,
-      teacher: mockTeacher,
-      learningAreaId: mockLearningAreas[1].id,
-      learningArea: mockLearningAreas[1]
-    };
-
-    let mockTask3: TaskInterface;
-    mockTask3 = {
-      name: 'Archief groepstaak 1',
-      description:
-        'Maak deze taak als voorbereiding op de overhoring van volgende week.',
-      id: 3,
-      personId: mockTeacher.id,
-      teacher: mockTeacher,
-      learningAreaId: mockLearningAreas[2].id,
-      learningArea: mockLearningAreas[2]
-    };
-
-    return [mockTask1, mockTask2, mockTask3];
+    return [
+      new TaskFixture({
+        name: 'Overhoring 1',
+        description:
+          'Maak deze taak als voorbereiding op de overhoring van volgende week.',
+        id: 1,
+        personId: mockTeacher.id,
+        teacher: mockTeacher,
+        learningAreaId: mockLearningAreas[0].id,
+        learningArea: mockLearningAreas[0]
+      }),
+      new TaskFixture({
+        name: 'Herhaling 1',
+        description:
+          'Maak deze taak als extra herhaling op de leerstof van vorige week.',
+        id: 2,
+        personId: mockTeacher.id,
+        teacher: mockTeacher,
+        learningAreaId: mockLearningAreas[1].id,
+        learningArea: mockLearningAreas[1]
+      }),
+      new TaskFixture({
+        name: 'Archief groepstaak 1',
+        description:
+          'Maak deze taak als voorbereiding op de overhoring van volgende week.',
+        id: 3,
+        personId: mockTeacher.id,
+        teacher: mockTeacher,
+        learningAreaId: mockLearningAreas[2].id,
+        learningArea: mockLearningAreas[2]
+      })
+    ];
   }
 
   private getMockEducontents(): EduContentInterface[] {
@@ -335,209 +321,170 @@ class MockViewModel {
     const mockEducontentProductTypes = this.getMockEduContentProductTypes();
     const mockMethods = this.getMockMethods();
 
-    let mockEducontent1: EduContentInterface;
-    mockEducontent1 = {
-      type: 'boek-e',
-      id: 1,
-      publishedEduContentMetadata: {
-        version: 1,
-        metaVersion: '0.1',
-        language: 'be',
-        title: 'De wereld van de getallen',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
-        created: new Date('2018-09-04 14:21:19'),
-        quotable: false,
-        taskAllowed: true,
-        link: '908500016',
-        commitMessage: 'Initial publish',
+    return [
+      new EduContentFixture({
+        type: 'boek-e',
         id: 1,
-        learningAreaId: mockLearningAreas[0].id,
-        learningArea: mockLearningAreas[0],
-        eduContentProductTypeId: mockEducontentProductTypes[0].id,
-        eduContentProductType: mockEducontentProductTypes[0],
-        methods: mockMethods.filter(method => method.id === 1)
-      }
-    };
-
-    let mockEducontent2: EduContentInterface;
-    mockEducontent2 = {
-      type: 'link',
-      id: 2,
-      publishedEduContentMetadata: {
-        version: 1,
-        metaVersion: '0.1',
-        language: 'be',
-        title: 'Uit het leven gegrepen',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
-        created: new Date('2018-09-04 14:21:19'),
-        quotable: false,
-        taskAllowed: true,
-        link: 'https://drive.google.com/',
-        commitMessage: 'Initial publish',
+        publishedEduContentMetadata: {
+          version: 1,
+          metaVersion: '0.1',
+          language: 'be',
+          title: 'De wereld van de getallen',
+          description:
+            'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
+          created: new Date('2018-09-04 14:21:19'),
+          quotable: false,
+          taskAllowed: true,
+          link: '908500016',
+          commitMessage: 'Initial publish',
+          id: 1,
+          learningAreaId: mockLearningAreas[0].id,
+          learningArea: mockLearningAreas[0],
+          eduContentProductTypeId: mockEducontentProductTypes[0].id,
+          eduContentProductType: mockEducontentProductTypes[0],
+          methods: mockMethods.filter(method => method.id === 1)
+        }
+      }),
+      new EduContentFixture({
+        type: 'link',
         id: 2,
-        learningAreaId: mockLearningAreas[1].id,
-        learningArea: mockLearningAreas[1],
-        eduContentProductTypeId: mockEducontentProductTypes[1].id,
-        eduContentProductType: mockEducontentProductTypes[1],
-        methods: mockMethods.filter(method => method.id !== 3)
-      }
-    };
-
-    let mockEducontent3: EduContentInterface;
-    mockEducontent3 = {
-      type: 'exercise',
-      id: 3,
-      publishedEduContentMetadata: {
-        version: 1,
-        metaVersion: '0.1',
-        language: 'be',
-        title: 'Het gemiddelde',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
-        created: new Date('2018-09-04 14:21:19'),
-        quotable: true,
-        taskAllowed: true,
-        fileName: '19462.ludo.zip',
-        file: '9-f0ffb8dbde05931dfb9baeee5c86b27.ludo.zip',
-        checksum: 'f0ffb8dbde05931dfb9baeee5c86b27',
-        commitMessage: 'Initial publish',
+        publishedEduContentMetadata: {
+          version: 1,
+          metaVersion: '0.1',
+          language: 'be',
+          title: 'Uit het leven gegrepen',
+          description:
+            'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
+          created: new Date('2018-09-04 14:21:19'),
+          quotable: false,
+          taskAllowed: true,
+          link: 'https://drive.google.com/',
+          commitMessage: 'Initial publish',
+          id: 2,
+          learningAreaId: mockLearningAreas[1].id,
+          learningArea: mockLearningAreas[1],
+          eduContentProductTypeId: mockEducontentProductTypes[1].id,
+          eduContentProductType: mockEducontentProductTypes[1],
+          methods: mockMethods.filter(method => method.id !== 3)
+        }
+      }),
+      new EduContentFixture({
+        type: 'exercise',
         id: 3,
-        learningAreaId: mockLearningAreas[2].id,
-        learningArea: mockLearningAreas[2],
-        eduContentProductTypeId: mockEducontentProductTypes[2].id,
-        eduContentProductType: mockEducontentProductTypes[2],
-        methods: mockMethods
-      }
-    };
-
-    let mockEducontent4: EduContentInterface;
-    mockEducontent4 = {
-      type: 'file',
-      id: 4,
-      publishedEduContentMetadata: {
-        version: 1,
-        metaVersion: '0.1',
-        language: 'be',
-        title: 'Percentrekenen',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
-        created: new Date('2018-09-04 14:21:19'),
-        quotable: false,
-        taskAllowed: true,
-        fileName: 'HAN_meetkunde_tso_geogebra_p23_stelling_van_Thales.ggb',
-        file: '13-f0ffb8dbde05931dfb9baeee5c86b211.ggb',
-        checksum: 'f0ffb8dbde05931dfb9baeee5c86b211',
-        commitMessage: 'Initial publish',
+        publishedEduContentMetadata: {
+          version: 1,
+          metaVersion: '0.1',
+          language: 'be',
+          title: 'Het gemiddelde',
+          description:
+            'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
+          created: new Date('2018-09-04 14:21:19'),
+          quotable: true,
+          taskAllowed: true,
+          fileName: '19462.ludo.zip',
+          file: '9-f0ffb8dbde05931dfb9baeee5c86b27.ludo.zip',
+          checksum: 'f0ffb8dbde05931dfb9baeee5c86b27',
+          commitMessage: 'Initial publish',
+          id: 3,
+          learningAreaId: mockLearningAreas[2].id,
+          learningArea: mockLearningAreas[2],
+          eduContentProductTypeId: mockEducontentProductTypes[2].id,
+          eduContentProductType: mockEducontentProductTypes[2],
+          methods: mockMethods
+        }
+      }),
+      new EduContentFixture({
+        type: 'file',
         id: 4,
-        learningAreaId: mockLearningAreas[0].id,
-        learningArea: mockLearningAreas[0],
-        eduContentProductTypeId: mockEducontentProductTypes[0].id,
-        eduContentProductType: mockEducontentProductTypes[0],
-        methods: mockMethods
-      }
-    };
-
-    return [mockEducontent1, mockEducontent2, mockEducontent3, mockEducontent4];
-  }
-
-  getMockStudent(): PersonInterface {
-    let mockStudent: PersonInterface;
-    mockStudent = {
-      name: 'Bakker',
-      firstName: 'Manon',
-      created: new Date('2018-09-04 14:21:14'),
-      email: 'student0@mailinator.com',
-      currentSchoolYear: 2018,
-      terms: true,
-      username: 'student1',
-      emailVerified: true,
-      id: 6,
-      displayName: 'Manon Bakker'
-    };
-
-    return mockStudent;
+        publishedEduContentMetadata: {
+          version: 1,
+          metaVersion: '0.1',
+          language: 'be',
+          title: 'Percentrekenen',
+          description:
+            'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
+          created: new Date('2018-09-04 14:21:19'),
+          quotable: false,
+          taskAllowed: true,
+          fileName: 'HAN_meetkunde_tso_geogebra_p23_stelling_van_Thales.ggb',
+          file: '13-f0ffb8dbde05931dfb9baeee5c86b211.ggb',
+          checksum: 'f0ffb8dbde05931dfb9baeee5c86b211',
+          commitMessage: 'Initial publish',
+          id: 4,
+          learningAreaId: mockLearningAreas[0].id,
+          learningArea: mockLearningAreas[0],
+          eduContentProductTypeId: mockEducontentProductTypes[0].id,
+          eduContentProductType: mockEducontentProductTypes[0],
+          methods: mockMethods
+        }
+      })
+    ];
   }
 
   getMockEduContentProductTypes(): EduContentProductTypeInterface[] {
-    let mockProductType1: EduContentProductTypeInterface;
-    mockProductType1 = {
-      name: 'Jaarplan',
-      icon: 'polpo-lesmateriaal',
-      pedagogic: true,
-      excludeFromFilter: false,
-      id: 2
-    };
-
-    let mockProductType2: EduContentProductTypeInterface;
-    mockProductType2 = {
-      name: 'Online oefeningen',
-      icon: 'polpo-tasks',
-      pedagogic: false,
-      excludeFromFilter: false,
-      id: 4
-    };
-
-    let mockProductType3: EduContentProductTypeInterface;
-    mockProductType3 = {
-      name: 'Lessuggesties',
-      icon: 'polpo-lesmateriaal',
-      pedagogic: true,
-      excludeFromFilter: false,
-      id: 6
-    };
-
-    let mockProductType4: EduContentProductTypeInterface;
-    mockProductType4 = {
-      name: 'Links',
-      icon: 'polpo-website',
-      pedagogic: false,
-      excludeFromFilter: false,
-      id: 18
-    };
-
     return [
-      mockProductType1,
-      mockProductType2,
-      mockProductType3,
-      mockProductType4
+      new EduContentProductTypeFixture({
+        name: 'Jaarplan',
+        icon: 'polpo-lesmateriaal',
+        pedagogic: true,
+        excludeFromFilter: false,
+        id: 2
+      }),
+      new EduContentProductTypeFixture({
+        name: 'Online oefeningen',
+        icon: 'polpo-tasks',
+        pedagogic: false,
+        excludeFromFilter: false,
+        id: 4
+      }),
+      new EduContentProductTypeFixture({
+        name: 'Lessuggesties',
+        icon: 'polpo-lesmateriaal',
+        pedagogic: true,
+        excludeFromFilter: false,
+        id: 6
+      }),
+      new EduContentProductTypeFixture({
+        name: 'Links',
+        icon: 'polpo-website',
+        pedagogic: false,
+        excludeFromFilter: false,
+        id: 18
+      })
     ];
   }
 
   getMockMethods(): MethodInterface[] {
     const mockLearningAreas = this.getMockLearningAreas();
-
-    let mockMethod1: MethodInterface;
-    mockMethod1 = {
-      name: 'Beautemps',
-      icon: 'beautemps',
-      logoUrl: 'beautemps.svg',
-      experimental: false,
-      id: 1,
-      learningAreaId: mockLearningAreas[0].id,
-      learningArea: mockLearningAreas[0]
-    };
-
-    let mockMethod2: MethodInterface;
-    mockMethod2 = {
-      name: 'Kapitaal',
-      icon: 'kapitaal',
-      logoUrl: 'kapitaal.svg',
-      experimental: false,
-      id: 2,
-      learningAreaId: mockLearningAreas[1].id,
-      learningArea: mockLearningAreas[1]
-    };
-
-    let mockMethod3: MethodInterface;
-    mockMethod3 = {
-      name: 'Beaufort',
-      icon: 'beaufort',
-      logoUrl: 'beaufort.svg',
-      experimental: false,
-      id: 3,
-      learningAreaId: mockLearningAreas[2].id,
-      learningArea: mockLearningAreas[2]
-    };
-
-    return [mockMethod1, mockMethod2, mockMethod3];
+    return [
+      new MethodFixture({
+        name: 'Beautemps',
+        icon: 'beautemps',
+        logoUrl: 'beautemps.svg',
+        experimental: false,
+        id: 1,
+        learningAreaId: mockLearningAreas[0].id,
+        learningArea: mockLearningAreas[0]
+      }),
+      new MethodFixture({
+        name: 'Kapitaal',
+        icon: 'kapitaal',
+        logoUrl: 'kapitaal.svg',
+        experimental: false,
+        id: 2,
+        learningAreaId: mockLearningAreas[1].id,
+        learningArea: mockLearningAreas[1]
+      }),
+      new MethodFixture({
+        name: 'Beaufort',
+        icon: 'beaufort',
+        logoUrl: 'beaufort.svg',
+        experimental: false,
+        id: 3,
+        learningAreaId: mockLearningAreas[2].id,
+        learningArea: mockLearningAreas[2]
+      })
+    ];
   }
 
   getMockListFormat(): Observable<ListFormat> {
