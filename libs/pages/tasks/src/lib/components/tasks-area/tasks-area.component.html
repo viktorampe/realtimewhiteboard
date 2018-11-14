@@ -23,7 +23,7 @@
     <ng-container *ngIf="(filterTextInput.result$|async) as filteredLearningAreas">
       <div class="pages-tasks__container__learning-areas-count">
         {{ filteredLearningAreas.length }} van
-        <u class="pages-tasks__container__learning-areas-count__total" (click)="resetFilterComponent()">{{ learningAreas.length }}</u>
+        <u class="pages-tasks__container__learning-areas-count__total" (click)="filterTextInput.clear()">{{ learningAreas.length }}</u>
         weergegeven
       </div>
       <div class="pages-tasks__container__learning-areas">
