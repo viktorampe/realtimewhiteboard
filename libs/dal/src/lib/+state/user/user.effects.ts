@@ -10,6 +10,7 @@ import {
 import {
   fromUserActions,
   LoadUser,
+  LogInUser,
   RemoveUser,
   UserActionTypes,
   UserLoadError,
@@ -39,23 +40,48 @@ export class UserEffects {
   });
 
   /**
+   * logs a user in.
+   *
+   * @memberof UserEffects
+   */
+  @Effect()
+  loginUser$ = this.dataPersistence.pessimisticUpdate(
+    UserActionTypes.LogInUser,
+    {
+      run: (action: LogInUser, state: DalState) => {
+        return this.authService.login(action.payload).pipe(
+          map(() => {
+            return new fromUserActions.LoadUser({ force: false });
+          })
+        );
+      },
+      onError: (action: LogInUser, error) => {
+        return new UserRemoveError(error);
+      }
+    }
+  );
+
+  /**
    * logsout the current user and remove from store.
    *
    * @memberof UserEffects
    */
   @Effect()
-  removedUser$ = this.dataPersistence.fetch(UserActionTypes.RemoveUser, {
-    run: (action: RemoveUser, state: DalState) => {
-      return this.authService.logout().pipe(
-        map(() => {
-          return new fromUserActions.UserRemoved();
-        })
-      );
-    },
-    onError: (action: RemoveUser, error) => {
-      return new UserRemoveError(error);
+  removedUser$ = this.dataPersistence.pessimisticUpdate(
+    UserActionTypes.RemoveUser,
+    {
+      run: (action: RemoveUser, state: DalState) => {
+        return this.authService.logout().pipe(
+          map(() => {
+            return new fromUserActions.UserRemoved();
+          })
+        );
+      },
+      onError: (action: RemoveUser, error) => {
+        return new UserRemoveError(error);
+      }
     }
-  });
+  );
 
   constructor(
     private actions$: Actions,

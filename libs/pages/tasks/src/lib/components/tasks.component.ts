@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TasksViewModel } from './tasks.viewmodel';
 
 @Component({
   selector: 'campus-tasks',
@@ -6,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./tasks.component.scss']
 })
 export class TasksComponent implements OnInit {
-  constructor() {}
+  constructor(public taskViewModel: TasksViewModel) {}
 
   ngOnInit() {}
 }

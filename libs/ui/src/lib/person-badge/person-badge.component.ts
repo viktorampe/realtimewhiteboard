@@ -19,6 +19,7 @@ export class PersonBadgeComponent {
   @Input() align = 'left';
   @Input() size = 'medium';
   @Input() person: BadgePersonInterface;
+  @Input() subText: string;
 }
 
 export interface BadgePersonInterface {

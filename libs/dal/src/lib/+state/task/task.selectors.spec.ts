@@ -36,12 +36,7 @@ describe('Task Selectors', () => {
   describe('Task Selectors', () => {
     beforeEach(() => {
       taskState = createState(
-        [
-          createTask(4),
-          createTask(1),
-          createTask(2),
-          createTask(3)
-        ],
+        [createTask(4), createTask(1), createTask(2), createTask(3)],
         true,
         'no error'
       );

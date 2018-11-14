@@ -8,6 +8,7 @@ describe('Ui Reducer', () => {
   beforeEach(() => {
     state = {
       listFormat: ListFormat.GRID,
+      sideSheetOpen: true,
       loaded: true
     };
   });
@@ -27,7 +28,10 @@ describe('Ui Reducer', () => {
 
     it('should toggle the sideSheet', () => {
       const action = new ToggleSideSheetUi();
-      const result: UiState = reducer(initialState, action);
+      const result: UiState = reducer(
+        { ...initialState, sideSheetOpen: false },
+        action
+      );
       expect(result.sideSheetOpen).toBeTruthy();
     });
 
