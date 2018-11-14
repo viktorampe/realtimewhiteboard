@@ -4,7 +4,6 @@ import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { CmiInterface } from './interfaces/cmi.interface';
-import { ResultAreasInterface } from './interfaces/resultAreas.interface';
 import { ScormResultsServiceInterface } from './scorm-results.service.interface';
 
 @Injectable({
@@ -12,14 +11,6 @@ import { ScormResultsServiceInterface } from './scorm-results.service.interface'
 })
 export class ScormResultsService implements ScormResultsServiceInterface {
   constructor(private personApi: PersonApi) {}
-
-  public getResultsForStudent(
-    userId: number
-  ): Observable<ResultAreasInterface> {
-    return this.personApi
-      .studentResultsExtendedForStudent(userId)
-      .pipe(map(res => res as ResultAreasInterface));
-  }
 
   /**
    * Checks the polpo-api if a result exists and returns it if it is in progress.
