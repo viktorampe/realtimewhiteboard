@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { LearningAreaInterface } from '@campus/dal';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/shared';
 import { FilterTextInputComponent, ListFormat } from '@campus/ui';
-import { FilterableItem } from 'libs/ui/src/lib/filter-text-input/filter-text-input.component';
 import { Observable } from 'rxjs';
 import { map, shareReplay, switchMap } from 'rxjs/operators';
 import { BundlesViewModel } from '../bundles.viewmodel';
@@ -24,10 +23,7 @@ import {
   templateUrl: './bundles.component.html',
   styleUrls: ['./bundles.component.scss']
 })
-export class BundlesComponent
-  implements
-    OnInit,
-    FilterableItem<BundlesWithContentInfoInterface, BundleInfoInterface> {
+export class BundlesComponent implements OnInit {
   protected listFormat = ListFormat;
 
   listFormat$: Observable<ListFormat>;
