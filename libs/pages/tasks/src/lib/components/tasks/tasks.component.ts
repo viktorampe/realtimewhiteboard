@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { LearningAreaInterface } from '@campus/dal';
-import { ListFormat } from '@campus/ui';
+import { FilterTextInputComponent, ListFormat } from '@campus/ui';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { TasksViewModel } from '../tasks.viewmodel';
@@ -25,9 +25,19 @@ export class TasksComponent implements OnInit {
   learningArea$: Observable<LearningAreaInterface> = this.viewModel
     .selectedLearningArea$;
 
-  constructor(private viewModel: TasksViewModel) {}
+  @ViewChild(FilterTextInputComponent)
+  filterTextInput: FilterTextInputComponent<
+    TaskInstancesWithEduContentInfoInterface
+  >;
 
-  ngOnInit() {}
+  constructor(
+    private viewModel: TasksViewModel,
+    @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface
+  ) {}
+
+  ngOnInit() {
+    this.filterTextInput.filterFn = this.filterFn.bind(this);
+  }
 
   /**
    * changes the filter's input
@@ -128,5 +138,14 @@ export class TasksComponent implements OnInit {
       return dd + '/' + MM + '/' + yy + ' ' + hh + ':' + mm;
     }
     return '';
+  }
+
+  private filterFn(
+    info: TaskInstancesWithEduContentInfoInterface,
+    searchText: string
+  ): TaskInstancesWithEduContentInfoInterface[] {
+    return this.filterService.filter(info.learningAreasWithInfo, {
+      learningArea: { name: searchText }
+    });
   }
 }
