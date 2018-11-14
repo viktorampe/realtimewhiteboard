@@ -14,18 +14,6 @@ export interface CmiInterface {
     total_time: string; //'0000:00:00'
     session_time?: string; //'0000:00:00'
   };
-  objectives?: {
-    score: {
-      raw: number; //0
-      min: number; //undefined
-      max: number; //undefined
-      scale: any; //undefined
-    };
-    status: ScormStatus;
-    id: string; //'points'
-  }[];
-  suspend_data?: {
-    startTime: number;
-    endTime: number;
-  }[];
+  objectives?: any;
+  suspend_data?: any;
 }

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ResultInterface } from '@campus/dal';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
-import { Observable, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { CmiInterface } from './interfaces/cmi.interface';
 import { ScormResultsServiceInterface } from './scorm-results.service.interface';
 
@@ -28,14 +28,9 @@ export class ScormResultsService implements ScormResultsServiceInterface {
     taskId: number,
     eduContentId: number
   ): Observable<ResultInterface> {
-    return this.personApi.resultForTask(userId, taskId, eduContentId).pipe(
-      // TODO: handle error in effect
-      catchError(err => {
-        console.log(err.message);
-        return of({});
-      }),
-      map(res => res as ResultInterface)
-    );
+    return this.personApi
+      .resultForTask(userId, taskId, eduContentId)
+      .pipe(map(res => res as ResultInterface));
   }
 
   /**
@@ -55,26 +50,16 @@ export class ScormResultsService implements ScormResultsServiceInterface {
   ): Observable<ResultInterface> {
     return this.personApi
       .resultForUnlockedContent(userId, unlockedContentId, eduContentId)
-      .pipe(
-        // TODO: handle error in effect
-        catchError(err => {
-          console.log(err.message);
-          return of({});
-        }),
-        map(res => res as ResultInterface)
-      );
+      .pipe(map(res => res as ResultInterface));
   }
 
   /**
-   *
+   * Saves a result to the Api, returns the saved result
    *
    * @param {number} userId
    * @param {number} resultId
-   * @param {number} time
-   * @param {string} status
-   * @param {number} [score]
-   * @param {*} [cmi]
-   * @returns {Observable<Object>}
+   * @param {CmiInterface} cmi
+   * @returns {Observable<ResultInterface>}
    * @memberof ScormResultsService
    */
   public saveResult(
@@ -94,10 +79,8 @@ export class ScormResultsService implements ScormResultsServiceInterface {
   private convertCmiTimeStringToNumber(cmiTimeString: string): number {
     const timepieces = cmiTimeString.split(':');
     const timespan =
-      // tslint:disable-next-line:radix
-      parseInt(timepieces[0]) * 3600000 +
-      // tslint:disable-next-line:radix
-      parseInt(timepieces[1]) * 60000 +
+      parseInt(timepieces[0], 10) * 3600000 +
+      parseInt(timepieces[1], 10) * 60000 +
       parseFloat(timepieces[2]) * 1000;
 
     return timespan;
