@@ -1,25 +1,30 @@
 import { ExerciseActions } from '.';
-import { ExerciseInterface } from '../../+models';
-import { initialState, reducer, State } from './current-exercise.reducer';
+import { ScormCMIMode } from '../../exercise/exercise.service';
+import {
+  CurrentExerciseInterface,
+  initialState,
+  reducer,
+  State
+} from './current-exercise.reducer';
 
 function createState(
-  exercise: ExerciseInterface,
+  exercise: CurrentExerciseInterface,
   loaded: boolean = false,
   error?: any
 ): State {
   return {
-    currentExercise: exercise,
+    ...exercise,
     loaded: loaded,
     error: error
   };
 }
-let mockExercise: ExerciseInterface;
+let mockExercise: CurrentExerciseInterface;
 
 describe('Exercises Reducer', () => {
   beforeEach(() => {
     mockExercise = {
       eduContent: undefined,
-      cmiMode: 'normal',
+      cmiMode: ScormCMIMode.CMI_MODE_NORMAL,
       result: undefined,
       saveToApi: true,
       url: 'dit is een url'

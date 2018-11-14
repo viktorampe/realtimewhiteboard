@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { DalActions, ExerciseInterface } from '@campus/dal';
+import { DalActions } from '@campus/dal';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
@@ -7,6 +7,7 @@ import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
 import { ExerciseReducer } from '.';
+import { ScormCMIMode } from '../../exercise/exercise.service';
 import { EXERCISE_SERVICE_TOKEN } from '../../exercise/exercise.service.interface';
 import {
   CurrentExerciseError,
@@ -15,12 +16,13 @@ import {
   StartExercise
 } from './current-exercise.actions';
 import { ExerciseEffects } from './current-exercise.effects';
+import { CurrentExerciseInterface } from './current-exercise.reducer';
 
 describe('ExerciseEffects', () => {
   let actions: Observable<any>;
   let effects: ExerciseEffects;
   let usedState: any;
-  let mockExercise: ExerciseInterface;
+  let mockExercise: CurrentExerciseInterface;
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -90,7 +92,7 @@ describe('ExerciseEffects', () => {
   describe('startExercise$', () => {
     mockExercise = {
       eduContent: undefined,
-      cmiMode: 'normal',
+      cmiMode: ScormCMIMode.CMI_MODE_NORMAL,
       result: undefined,
       saveToApi: true,
       url: 'dit is een url'
@@ -135,7 +137,7 @@ describe('ExerciseEffects', () => {
         usedState = { ...ExerciseReducer.initialState, loaded: true };
         mockExercise = {
           eduContent: undefined,
-          cmiMode: 'normal',
+          cmiMode: ScormCMIMode.CMI_MODE_NORMAL,
           result: undefined,
           saveToApi: true,
           url: 'dit is een url'
@@ -197,7 +199,7 @@ describe('ExerciseEffects', () => {
   describe('saveExercise$', () => {
     mockExercise = {
       eduContent: undefined,
-      cmiMode: 'normal',
+      cmiMode: ScormCMIMode.CMI_MODE_NORMAL,
       result: undefined,
       saveToApi: true,
       url: 'dit is een url'
@@ -231,7 +233,7 @@ describe('ExerciseEffects', () => {
         usedState = { ...ExerciseReducer.initialState, loaded: true };
         mockExercise = {
           eduContent: undefined,
-          cmiMode: 'normal',
+          cmiMode: ScormCMIMode.CMI_MODE_NORMAL,
           result: undefined,
           saveToApi: true,
           url: 'dit is een url'

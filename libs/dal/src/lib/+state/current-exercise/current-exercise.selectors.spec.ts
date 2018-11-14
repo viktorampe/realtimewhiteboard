@@ -1,15 +1,15 @@
 import { ExerciseQueries } from '.';
-import { ExerciseInterface } from '../../+models';
-import { State } from './current-exercise.reducer';
+import { ScormCMIMode } from '../../exercise/exercise.service';
+import { CurrentExerciseInterface, State } from './current-exercise.reducer';
 
 describe('Exercise Selectors', () => {
   function createState(
-    exercise: ExerciseInterface,
+    exercise: CurrentExerciseInterface,
     loaded: boolean = false,
     error?: any
   ): State {
     return {
-      currentExercise: exercise,
+      ...exercise,
       loaded: loaded,
       error: error
     };
@@ -20,9 +20,9 @@ describe('Exercise Selectors', () => {
 
   describe('Exercise Selectors', () => {
     beforeEach(() => {
-      const mockExercise: ExerciseInterface = {
+      const mockExercise: CurrentExerciseInterface = {
         eduContent: undefined,
-        cmiMode: 'normal',
+        cmiMode: ScormCMIMode.CMI_MODE_NORMAL,
         result: undefined,
         saveToApi: true,
         url: 'dit is een url'
@@ -41,7 +41,7 @@ describe('Exercise Selectors', () => {
     });
     it('getCurrentExercise() should return the current exercise', () => {
       const results = ExerciseQueries.getCurrentExercise(storeState);
-      expect(results).toBe(exerciseState.currentExercise);
+      expect(results).toBe(exerciseState as CurrentExerciseInterface);
     });
   });
 });

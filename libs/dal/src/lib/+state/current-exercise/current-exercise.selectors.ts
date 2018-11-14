@@ -1,5 +1,9 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { NAME, State } from './current-exercise.reducer';
+import {
+  CurrentExerciseInterface,
+  NAME,
+  State
+} from './current-exercise.reducer';
 
 export const selectExerciseState = createFeatureSelector<State>(NAME);
 
@@ -15,5 +19,5 @@ export const getLoaded = createSelector(
 
 export const getCurrentExercise = createSelector(
   selectExerciseState,
-  (state: State) => state.currentExercise
+  (state: State) => state as CurrentExerciseInterface
 );

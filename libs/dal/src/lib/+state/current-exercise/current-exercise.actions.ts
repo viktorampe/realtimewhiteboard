@@ -1,13 +1,13 @@
 import { Action } from '@ngrx/store';
-import { ExerciseInterface } from './../../+models/Exercise.interface';
+import { CurrentExerciseInterface } from './current-exercise.reducer';
 
 export enum ExercisesActionTypes {
-  StartExercise = '[Exercises] Start Exercise',
-  CurrentExerciseLoaded = '[Exercises] Current Exercise Loaded',
-  CurrentExerciseError = '[Exercises] Current Exercise Error',
-  SaveCurrentExercise = '[Exercises] Save Current Exercise',
-  UpdateCurrentExercise = '[Exercises] Update Current Exercise',
-  ClearCurrentExercise = '[Exercises] Clear Current Exercise'
+  StartExercise = '[Current Exercise] Start Exercise',
+  CurrentExerciseLoaded = '[Current Exercise] Current Exercise Loaded',
+  CurrentExerciseError = '[Current Exercise] Current Exercise Error',
+  SaveCurrentExercise = '[Current Exercise] Save Current Exercise',
+  UpdateCurrentExercise = '[Current Exercise] Update Current Exercise',
+  ClearCurrentExercise = '[Current Exercise] Clear Current Exercise'
 }
 
 export class StartExercise implements Action {
@@ -26,7 +26,7 @@ export class StartExercise implements Action {
 export class CurrentExerciseLoaded implements Action {
   readonly type = ExercisesActionTypes.CurrentExerciseLoaded;
 
-  constructor(public payload: ExerciseInterface) {}
+  constructor(public payload: CurrentExerciseInterface) {}
 }
 
 export class CurrentExerciseError implements Action {
@@ -41,7 +41,7 @@ export class SaveCurrentExercise implements Action {
   constructor(
     public payload: {
       userId: number;
-      exercise: ExerciseInterface;
+      exercise: CurrentExerciseInterface;
     }
   ) {}
 }

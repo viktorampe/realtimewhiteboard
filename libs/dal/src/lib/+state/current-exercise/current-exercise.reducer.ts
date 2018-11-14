@@ -1,37 +1,68 @@
-import { ExerciseInterface } from '../../+models/Exercise.interface';
+import { EduContentInterface, ResultInterface } from '@campus/dal';
+import { ScormCMIMode } from '../../exercise/exercise.service';
 import {
   ExercisesActions,
   ExercisesActionTypes
 } from './current-exercise.actions';
 
-export const NAME = 'exercises';
+export const NAME = 'current-exercise';
 
-export interface State {
-  // additional entities state properties
+export interface State extends CurrentExerciseInterface {
   loaded: boolean;
   error?: any;
-  currentExercise?: ExerciseInterface;
+}
+
+export interface CurrentExerciseInterface {
+  eduContent: EduContentInterface;
+  cmiMode: ScormCMIMode;
+  result: ResultInterface;
+  saveToApi: boolean;
+  url: string;
 }
 
 export const initialState: State = {
-  // additional entity state properties
+  eduContent: null,
+  cmiMode: null,
+  result: null,
+  saveToApi: null,
+  url: null,
   loaded: false
 };
 
 export function reducer(state = initialState, action: ExercisesActions): State {
   switch (action.type) {
     case ExercisesActionTypes.ClearCurrentExercise: {
-      return { ...state, currentExercise: null, loaded: true };
+      return {
+        ...state,
+        eduContent: null,
+        cmiMode: null,
+        result: null,
+        saveToApi: null,
+        url: null,
+        loaded: true
+      };
     }
 
     case ExercisesActionTypes.CurrentExerciseLoaded: {
-      return { ...state, currentExercise: action.payload, loaded: true };
+      return {
+        ...state,
+        eduContent: action.payload.eduContent,
+        cmiMode: action.payload.cmiMode,
+        result: action.payload.result,
+        saveToApi: action.payload.saveToApi,
+        url: action.payload.url,
+        loaded: true
+      };
     }
 
     case ExercisesActionTypes.CurrentExerciseError: {
       return {
         ...state,
-        currentExercise: null,
+        eduContent: null,
+        cmiMode: null,
+        result: null,
+        saveToApi: null,
+        url: null,
         error: action.payload,
         loaded: false
       };
