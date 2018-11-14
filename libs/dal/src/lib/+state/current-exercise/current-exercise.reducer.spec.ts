@@ -1,6 +1,6 @@
 import { ExerciseActions } from '.';
 import { ExerciseInterface } from '../../+models';
-import { initialState, reducer, State } from './exercise.reducer';
+import { initialState, reducer, State } from './current-exercise.reducer';
 
 function createState(
   exercise: ExerciseInterface,

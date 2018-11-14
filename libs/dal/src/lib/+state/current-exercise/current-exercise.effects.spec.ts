@@ -13,8 +13,8 @@ import {
   CurrentExerciseLoaded,
   SaveCurrentExercise,
   StartExercise
-} from './exercise.actions';
-import { ExerciseEffects } from './exercise.effects';
+} from './current-exercise.actions';
+import { ExerciseEffects } from './current-exercise.effects';
 
 describe('ExerciseEffects', () => {
   let actions: Observable<any>;

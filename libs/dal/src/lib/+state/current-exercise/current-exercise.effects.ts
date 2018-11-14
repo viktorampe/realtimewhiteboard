@@ -13,7 +13,7 @@ import {
   ExercisesActionTypes,
   SaveCurrentExercise,
   StartExercise
-} from './exercise.actions';
+} from './current-exercise.actions';
 
 @Injectable()
 export class ExerciseEffects {

@@ -1,5 +1,8 @@
-import { ExerciseInterface } from './../../+models/Exercise.interface';
-import { ExercisesActions, ExercisesActionTypes } from './exercise.actions';
+import { ExerciseInterface } from '../../+models/Exercise.interface';
+import {
+  ExercisesActions,
+  ExercisesActionTypes
+} from './current-exercise.actions';
 
 export const NAME = 'exercises';
 

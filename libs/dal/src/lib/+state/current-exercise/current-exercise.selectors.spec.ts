@@ -1,6 +1,6 @@
 import { ExerciseQueries } from '.';
 import { ExerciseInterface } from '../../+models';
-import { State } from './exercise.reducer';
+import { State } from './current-exercise.reducer';
 
 describe('Exercise Selectors', () => {
   function createState(
