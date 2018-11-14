@@ -2,14 +2,27 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   Component,
+  Inject,
   OnDestroy,
   OnInit,
   ViewChild
 } from '@angular/core';
-import { BundleInterface, ContentInterface } from '@campus/dal';
-import { ListFormat, ListViewComponent, SideSheetComponent } from '@campus/ui';
-import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
+import {
+  BundleInterface,
+  ContentInterface,
+  LearningAreaInterface,
+  PersonInterface
+} from '@campus/dal';
+import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/shared';
+import {
+  FilterTextInputComponent,
+  ListFormat,
+  ListViewComponent,
+  SideSheetComponent
+} from '@campus/ui';
+import { Observable, Subscription } from 'rxjs';
+import { shareReplay, switchMap } from 'rxjs/operators';
 import { BundlesViewModel } from '../bundles.viewmodel';
 
 @Component({
@@ -18,53 +31,57 @@ import { BundlesViewModel } from '../bundles.viewmodel';
   styleUrls: ['./bundle-detail.component.scss']
 })
 export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
-  bundle$ = this.bundlesViewModel.activeBundle$;
-  contents$ = this.bundlesViewModel.bundleContents$;
-  listFormat = ListFormat; //enum beschikbaar maken in template
-  currentListFormat$ = this.bundlesViewModel.listFormat$;
+  protected listFormat = ListFormat; //enum beschikbaar maken in template
 
-  filterInput$ = new BehaviorSubject<string>('');
-  filteredContents$: Observable<ContentInterface[]>;
+  listFormat$: Observable<ListFormat> = this.bundlesViewModel.listFormat$;
 
-  contentForInfoPanelEmpty$: Observable<BundleInterface>;
-  contentForInfoPanelSingle$: Observable<ContentInterface>;
-  contentForInfoPanelMultiple$: Observable<ContentInterface[]>;
+  learningArea$: Observable<LearningAreaInterface>;
+  bundle$: Observable<BundleInterface>;
+  bundleOwner$: Observable<PersonInterface>;
+  contents$: Observable<ContentInterface[]>;
 
-  private subscriptions = new Subscription();
+  @ViewChild(FilterTextInputComponent)
+  filterTextInput: FilterTextInputComponent<ContentInterface, ContentInterface>;
 
-  @ViewChild(ListViewComponent) list: ListViewComponent;
-  @ViewChild(SideSheetComponent) sideSheet: SideSheetComponent;
-
-  constructor(
-    public bundlesViewModel: BundlesViewModel,
-    private cd: ChangeDetectorRef
-  ) {}
-
-  ngOnInit() {
-    this.contentForInfoPanelEmpty$ = this.bundle$;
-    this.filteredContents$ = this.getFilteredContentStream();
+  list: ListViewComponent<ContentInterface>;
+  @ViewChild('bundleListview')
+  set listViewComponent(list: ListViewComponent<ContentInterface>) {
+    this.list = list;
+  }
+  private sideSheet: SideSheetComponent;
+  @ViewChild('bundleSidesheet')
+  set sideSheetComponent(sidesheet: SideSheetComponent) {
+    this.sideSheet = sidesheet;
   }
 
-  ngAfterViewInit() {
-    this.contentForInfoPanelSingle$ = this.list.selectedItems$.pipe(
-      filter(items => items.length === 1),
-      map(items => items[0].dataObject)
-    );
+  private routeParams$ = this.route.params.pipe(shareReplay(1));
+  private subscriptions = new Subscription();
 
-    this.contentForInfoPanelMultiple$ = this.list.selectedItems$.pipe(
-      filter(items => items.length > 1),
-      map(items => items.map(i => i.dataObject))
-    );
+  constructor(
+    private route: ActivatedRoute,
+    public bundlesViewModel: BundlesViewModel,
+    private cd: ChangeDetectorRef,
+    @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface
+  ) {}
 
+  ngOnInit(): void {
+    this.learningArea$ = this.getLearningArea();
+    this.bundle$ = this.getBundle();
+    this.bundleOwner$ = this.bundlesViewModel.getBundleOwner(this.bundle$);
+    this.contents$ = this.getBundleContents();
+
+    this.filterTextInput.filterFn = this.filterFn.bind(this);
+  }
+
+  ngAfterViewInit(): void {
     this.subscriptions.add(
-      this.list.selectedItems$.subscribe(selectedItems => {
-        if (selectedItems.length > 0) {
-          this.sideSheet.toggle(true);
+      this.list.selectedItems$.subscribe(
+        (selectedItems: ContentInterface[]) => {
+          if (selectedItems.length > 0) {
+            this.sideSheet.toggle(true);
+          }
         }
-      })
-    );
-    this.subscriptions.add(
-      this.filteredContents$.subscribe(() => this.list.deselectAllItems())
+      )
     );
 
     // Needed to avoid ExpressionChangedAfterItHasBeenCheckedError
@@ -75,25 +92,43 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subscriptions.unsubscribe();
   }
 
-  onChangeFilterInput(filterInput: string): void {
-    this.filterInput$.next(filterInput);
+  clickChangeListFormat(value: ListFormat): void {
+    this.bundlesViewModel.changeListFormat(value);
   }
 
-  resetFilterInput(): void {
-    this.filterInput$.next('');
-  }
-
-  setListFormat(format: ListFormat) {
-    this.bundlesViewModel.changeListFormat(format);
-  }
-
-  private getFilteredContentStream() {
-    return combineLatest(this.contents$, this.filterInput$).pipe(
-      map(([contents, filterInput]) =>
-        contents.filter(content =>
-          content.name.toLowerCase().includes(filterInput.toLowerCase())
-        )
-      )
+  private getLearningArea(): Observable<LearningAreaInterface> {
+    return this.routeParams$.pipe(
+      switchMap(params => {
+        return this.bundlesViewModel.getLearningAreaById(params.area);
+      })
     );
+  }
+
+  private getBundle(): Observable<BundleInterface> {
+    return this.routeParams$.pipe(
+      switchMap(params => {
+        return this.bundlesViewModel.getBundleById(params.bundle);
+      })
+    );
+  }
+
+  private getBundleContents(): Observable<ContentInterface[]> {
+    return this.routeParams$.pipe(
+      switchMap(params => {
+        return this.bundlesViewModel.getBundleContents(params.bundle);
+      })
+    );
+  }
+
+  private filterFn(
+    info: ContentInterface[],
+    searchText: string
+  ): ContentInterface[] {
+    if (this.list) {
+      this.list.deselectAllItems();
+    }
+    return this.filterService.filter(info, {
+      name: searchText
+    });
   }
 }

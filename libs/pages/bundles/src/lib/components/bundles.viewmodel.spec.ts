@@ -1,11 +1,13 @@
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
 import {
   AUTH_SERVICE_TOKEN,
+  BundleFixture,
   BundleInterface,
   EduContentInterface,
+  EduContentMetadataFixture,
   EduContentMetadataInterface,
-  LearningAreaInterface,
+  LearningAreaFixture,
+  UnlockedContentFixture,
   UnlockedContentInterface
 } from '@campus/dal';
 import { Dictionary } from '@ngrx/entity';
@@ -14,75 +16,47 @@ import { hot } from 'jasmine-marbles';
 import { Observable } from 'rxjs';
 import { marbles } from 'rxjs-marbles';
 import { BundlesViewModel } from './bundles.viewmodel';
-import { MockActivatedRoute } from './bundles.viewmodel.mocks';
 
 describe('BundlesViewModel', () => {
+  let storeState;
+
   let bundlesViewModel: BundlesViewModel;
 
-  function createLearningArea(id: number, name: string): LearningAreaInterface {
-    return {
-      id: id,
-      name: name,
-      color: 'color'
-    };
-  }
-
-  function createBundle(id, learningAreaId): BundleInterface {
-    return {
-      id: id,
-      learningAreaId: learningAreaId,
-      name: 'foo',
-      start: new Date(),
-      end: new Date()
-    };
-  }
-  function createBookMetaData(id, learningAreaId): EduContentMetadataInterface {
-    return {
-      id: id,
-      learningAreaId: learningAreaId,
-      title: 'foo',
-      description: '',
-      version: 1,
-      metaVersion: '',
-      language: 'nl',
-      created: new Date()
-    };
-  }
-
-  function createUnlockedContentInterface(
-    index: number,
-    id: number,
-    bundleId: number
-  ): UnlockedContentInterface {
-    return {
-      index: index,
-      id: id,
-      bundleId: bundleId
-    };
-  }
-
   const bundlesByLearningArea: Dictionary<BundleInterface[]> = {
-    1: [createBundle(1, 1), createBundle(2, 1), createBundle(3, 1)],
-    2: [createBundle(4, 2), createBundle(5, 2), createBundle(6, 2)],
-    3: [createBundle(7, 3), createBundle(8, 3), createBundle(9, 3)]
+    1: [
+      new BundleFixture({ id: 1, learningAreaId: 1 }),
+      new BundleFixture({ id: 2, learningAreaId: 1 }),
+      new BundleFixture({ id: 3, learningAreaId: 1 })
+    ],
+    2: [
+      new BundleFixture({ id: 4, learningAreaId: 2 }),
+      new BundleFixture({ id: 5, learningAreaId: 2 }),
+      new BundleFixture({ id: 6, learningAreaId: 2 })
+    ],
+    3: [
+      new BundleFixture({ id: 7, learningAreaId: 3 }),
+      new BundleFixture({ id: 8, learningAreaId: 3 }),
+      new BundleFixture({ id: 9, learningAreaId: 3 })
+    ]
   };
+
   const booksMetaDataByLearningArea: Dictionary<
     EduContentMetadataInterface[]
   > = {
     1: [
-      createBookMetaData(1, 1),
-      createBookMetaData(2, 1),
-      createBookMetaData(3, 1)
+      new EduContentMetadataFixture({ id: 1, learningAreaId: 1 }),
+      new EduContentMetadataFixture({ id: 2, learningAreaId: 1 }),
+      new EduContentMetadataFixture({ id: 3, learningAreaId: 1 })
     ],
     2: [
-      createBookMetaData(4, 2),
-      createBookMetaData(5, 2),
-      createBookMetaData(6, 2)
+      new EduContentMetadataFixture({ id: 4, learningAreaId: 2 }),
+      new EduContentMetadataFixture({ id: 5, learningAreaId: 2 }),
+      new EduContentMetadataFixture({ id: 6, learningAreaId: 2 })
     ],
     3: [
-      createBookMetaData(7, 3),
-      createBookMetaData(8, 3),
-      createBookMetaData(9, 3)
+      new EduContentMetadataFixture({ id: 7, learningAreaId: 3 }),
+      new EduContentMetadataFixture({ id: 8, learningAreaId: 3 }),
+      new EduContentMetadataFixture({ id: 9, learningAreaId: 3 })
     ]
   };
 
@@ -91,12 +65,18 @@ describe('BundlesViewModel', () => {
       imports: [StoreModule.forRoot({})],
       providers: [
         BundlesViewModel,
-        { provide: ActivatedRoute, useClass: MockActivatedRoute },
-        { provide: AUTH_SERVICE_TOKEN, useValue: {} },
-        Store
+        Store,
+        { provide: AUTH_SERVICE_TOKEN, useValue: {} }
       ]
     });
     bundlesViewModel = TestBed.get(BundlesViewModel);
+
+    storeState = {
+      bundles: {
+        bundles: [], // TODO fill with new BundleFixture()
+        loaded: true
+      }
+    };
   });
 
   it('should work', () => {
@@ -160,13 +140,13 @@ describe('BundlesViewModel', () => {
     > = hot('a-|', {
       a: {
         1: [
-          createUnlockedContentInterface(1, 1, 1),
-          createUnlockedContentInterface(2, 2, 1),
-          createUnlockedContentInterface(3, 3, 1)
+          new UnlockedContentFixture({ index: 1, id: 1, bundleId: 1 }),
+          new UnlockedContentFixture({ index: 2, id: 2, bundleId: 1 }),
+          new UnlockedContentFixture({ index: 3, id: 3, bundleId: 1 })
         ],
         2: [
-          createUnlockedContentInterface(10, 10, 2),
-          createUnlockedContentInterface(20, 20, 2)
+          new UnlockedContentFixture({ index: 10, id: 10, bundleId: 2 }),
+          new UnlockedContentFixture({ index: 20, id: 20, bundleId: 2 })
         ]
       }
     });
@@ -186,17 +166,32 @@ describe('BundlesViewModel', () => {
   it('getLearningAreaIdsWithContent()', () => {
     const bundles$: Observable<BundleInterface[]> = hot('-a-|', {
       a: [
-        createBundle(1, 1),
-        createBundle(2, 1),
-        createBundle(3, 1),
-        createBundle(4, 2)
+        new BundleFixture({ id: 1, learningAreaId: 1 }),
+        new BundleFixture({ id: 2, learningAreaId: 1 }),
+        new BundleFixture({ id: 3, learningAreaId: 1 }),
+        new BundleFixture({ id: 4, learningAreaId: 2 })
       ]
     });
     const books$: Observable<EduContentInterface[]> = hot('-a-|', {
       a: [
-        { publishedEduContentMetadata: createBookMetaData(1, 1) },
-        { publishedEduContentMetadata: createBookMetaData(2, 2) },
-        { publishedEduContentMetadata: createBookMetaData(3, 3) }
+        {
+          publishedEduContentMetadata: new EduContentMetadataFixture({
+            id: 1,
+            learningAreaId: 1
+          })
+        },
+        {
+          publishedEduContentMetadata: new EduContentMetadataFixture({
+            id: 2,
+            learningAreaId: 2
+          })
+        },
+        {
+          publishedEduContentMetadata: new EduContentMetadataFixture({
+            id: 3,
+            learningAreaId: 3
+          })
+        }
       ]
     });
     expect(
@@ -207,20 +202,35 @@ describe('BundlesViewModel', () => {
   it('getLearningAreasWithContent()', () => {
     const bundles$: Observable<BundleInterface[]> = hot('-a-|', {
       a: [
-        createBundle(1, 1),
-        createBundle(2, 1),
-        createBundle(3, 1),
-        createBundle(4, 2)
+        new BundleFixture({ id: 1, learningAreaId: 1 }),
+        new BundleFixture({ id: 2, learningAreaId: 1 }),
+        new BundleFixture({ id: 3, learningAreaId: 1 }),
+        new BundleFixture({ id: 4, learningAreaId: 2 })
       ]
     });
     const books$: Observable<EduContentInterface[]> = hot('-a-|', {
       a: [
-        { publishedEduContentMetadata: createBookMetaData(1, 1) },
-        { publishedEduContentMetadata: createBookMetaData(2, 2) },
-        { publishedEduContentMetadata: createBookMetaData(3, 3) }
+        {
+          publishedEduContentMetadata: new EduContentMetadataFixture({
+            id: 1,
+            learningAreaId: 1
+          })
+        },
+        {
+          publishedEduContentMetadata: new EduContentMetadataFixture({
+            id: 2,
+            learningAreaId: 2
+          })
+        },
+        {
+          publishedEduContentMetadata: new EduContentMetadataFixture({
+            id: 3,
+            learningAreaId: 3
+          })
+        }
       ]
     });
-    const learningArea$ = hot('-a-|', { a: createLearningArea(1, 'name') });
+    const learningArea$ = hot('-a-|', { a: new LearningAreaFixture() });
     const spy = jest
       .spyOn(bundlesViewModel['store'], 'pipe')
       .mockReturnValue(learningArea$);
@@ -232,9 +242,11 @@ describe('BundlesViewModel', () => {
 
   it('getOwnBundles()', () => {
     const ownBundles$ = hot('-a-|', {
-      a: [createBundle(1, 2), createBundle(2, 3)]
+      a: [
+        new BundleFixture({ id: 1, learningAreaId: 2 }),
+        new BundleFixture({ id: 2, learningAreaId: 3 })
+      ]
     });
-    bundlesViewModel.user$ = hot('a--|', { a: { id: 1 } });
     const spy = jest
       .spyOn(bundlesViewModel['store'], 'pipe')
       .mockReturnValue(ownBundles$);
