@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@angular/core';
-import { Resolve } from '@angular/router';
 import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
@@ -7,13 +6,12 @@ import {
   UserReducer
 } from '@campus/dal';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class LoginPageViewModel implements Resolve<boolean> {
+export class LoginPageViewModel {
   name: string;
   password: string;
   response: string;
@@ -72,16 +70,5 @@ export class LoginPageViewModel implements Resolve<boolean> {
     } else {
       console.error('logout failed');
     }
-  }
-
-  /**
-   * initializes the LoginPageViewModel
-   *
-   * @returns {boolean} not used, returning boolean so the resolver will work
-   *
-   * @memberOf LoginPageViewModel
-   */
-  resolve(): Observable<boolean> {
-    return new BehaviorSubject<boolean>(true).pipe(take(1));
   }
 }

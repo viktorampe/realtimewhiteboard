@@ -1,7 +1,8 @@
-mport { TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { FilterService } from './filter.service';
 import { FilterServiceInterface } from './filter.service.interface';
- describe('FilterService', () => {
+
+describe('FilterService', () => {
   let filterService: FilterServiceInterface;
   const mockData = {
     list: [
@@ -31,22 +32,27 @@ import { FilterServiceInterface } from './filter.service.interface';
       }
     ]
   };
-   beforeEach(() => {
+
+  beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [FilterService]
     });
-     filterService = TestBed.get(FilterService);
+
+    filterService = TestBed.get(FilterService);
   });
-   it('should be created', () => {
+
+  it('should be created', () => {
     expect(filterService).toBeTruthy();
   });
-   it('should filter by text property', () => {
+
+  it('should filter by text property', () => {
     const result = filterService.filter(mockData.list, { text: 'foo' });
     expect(result.length).toBe(2);
     expect(result[0]).toBe(mockData.list[0]);
     expect(result[1]).toBe(mockData.list[2]);
   });
-   it('should filter by nested text property', () => {
+
+  it('should filter by nested text property', () => {
     const result = filterService.filter(mockData.list, {
       nested: { text: 'foo' }
     });
@@ -54,17 +60,20 @@ import { FilterServiceInterface } from './filter.service.interface';
     expect(result[0]).toBe(mockData.list[1]);
     expect(result[1]).toBe(mockData.list[2]);
   });
-   it('should filter by case sensitive text property', () => {
+
+  it('should filter by case sensitive text property', () => {
     const result = filterService.filter(mockData.list, { text: 'foo' }, false);
     expect(result.length).toBe(1);
     expect(result[0]).toBe(mockData.list[0]);
   });
-   it('should filter by numeric property', () => {
+
+  it('should filter by numeric property', () => {
     const result = filterService.filter(mockData.list, { numeric: 2 });
     expect(result.length).toBe(1);
     expect(result[0]).toBe(mockData.list[1]);
   });
-   it('should filter by date property', () => {
+
+  it('should filter by date property', () => {
     const result = filterService.filter(mockData.list, {
       date: new Date(2000, 1, 2)
     });
@@ -72,7 +81,8 @@ import { FilterServiceInterface } from './filter.service.interface';
     expect(result[0]).toBe(mockData.list[0]);
     expect(result[1]).toBe(mockData.list[1]);
   });
-   it('should filter by combined date and nested text property', () => {
+
+  it('should filter by combined date and nested text property', () => {
     const result = filterService.filter(mockData.list, {
       nested: { text: 'foo' },
       date: new Date(2000, 1, 2)
