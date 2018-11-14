@@ -5,7 +5,7 @@ import {
   ExercisesActionTypes
 } from './current-exercise.actions';
 
-export const NAME = 'current-exercise';
+export const NAME = 'currentExercise';
 
 export interface State extends CurrentExerciseInterface {
   loaded: boolean;

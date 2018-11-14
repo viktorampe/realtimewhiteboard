@@ -16,7 +16,7 @@ import {
 } from './current-exercise.actions';
 
 @Injectable()
-export class ExerciseEffects {
+export class CurrentExerciseEffects {
   @Effect()
   startExercise$ = this.dataPersistence.pessimisticUpdate(
     ExercisesActionTypes.StartExercise,

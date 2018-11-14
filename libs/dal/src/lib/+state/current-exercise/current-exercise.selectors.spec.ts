@@ -1,4 +1,4 @@
-import { ExerciseQueries } from '.';
+import { CurrentExerciseQueries } from '.';
 import { ScormCMIMode } from '../../exercise/exercise.service';
 import {
   CurrentExerciseInterface,
@@ -36,15 +36,15 @@ describe('Exercise Selectors', () => {
       storeState = { [NAME]: exerciseState };
     });
     it('getError() should return the error', () => {
-      const results = ExerciseQueries.getError(storeState);
+      const results = CurrentExerciseQueries.getError(storeState);
       expect(results).toBe(exerciseState.error);
     });
     it('getLoaded() should return the loaded boolean', () => {
-      const results = ExerciseQueries.getLoaded(storeState);
+      const results = CurrentExerciseQueries.getLoaded(storeState);
       expect(results).toBe(exerciseState.loaded);
     });
     it('getCurrentExercise() should return the current exercise', () => {
-      const results = ExerciseQueries.getCurrentExercise(storeState);
+      const results = CurrentExerciseQueries.getCurrentExercise(storeState);
       expect(results).toBe(exerciseState as CurrentExerciseInterface);
     });
   });

@@ -1,4 +1,4 @@
-import { ExerciseActions } from '.';
+import { CurrentExerciseActions } from '.';
 import { ScormCMIMode } from '../../exercise/exercise.service';
 import {
   CurrentExerciseInterface,
@@ -52,14 +52,16 @@ describe('Exercises Reducer', () => {
 
   describe('loaded action', () => {
     it('should load all exercises', () => {
-      const action = new ExerciseActions.CurrentExerciseLoaded(mockExercise);
+      const action = new CurrentExerciseActions.CurrentExerciseLoaded(
+        mockExercise
+      );
       const result = reducer(initialState, action);
       expect(result).toEqual(createState(mockExercise, true));
     });
 
     it('should error', () => {
       const error = 'Something went wrong';
-      const action = new ExerciseActions.CurrentExerciseError(error);
+      const action = new CurrentExerciseActions.CurrentExerciseError(error);
       const result = reducer(initialState, action);
       expect(result).toEqual(createState(emptyExercise, false, error));
     });
@@ -72,7 +74,7 @@ describe('Exercises Reducer', () => {
         true,
         'something went wrong'
       );
-      const action = new ExerciseActions.ClearCurrentExercise();
+      const action = new CurrentExerciseActions.ClearCurrentExercise();
       const result = reducer(startState, action);
       expect(result).toEqual(
         createState(emptyExercise, true, 'something went wrong')

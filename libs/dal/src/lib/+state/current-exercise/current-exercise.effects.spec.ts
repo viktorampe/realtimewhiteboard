@@ -6,7 +6,7 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
-import { ExerciseReducer } from '.';
+import { CurrentExerciseReducer } from '.';
 import { ScormCMIMode } from '../../exercise/exercise.service';
 import { EXERCISE_SERVICE_TOKEN } from '../../exercise/exercise.service.interface';
 import {
@@ -15,12 +15,12 @@ import {
   SaveCurrentExercise,
   StartExercise
 } from './current-exercise.actions';
-import { ExerciseEffects } from './current-exercise.effects';
+import { CurrentExerciseEffects } from './current-exercise.effects';
 import { CurrentExerciseInterface } from './current-exercise.reducer';
 
 describe('ExerciseEffects', () => {
   let actions: Observable<any>;
-  let effects: ExerciseEffects;
+  let effects: CurrentExerciseEffects;
   let usedState: any;
   let mockExercise: CurrentExerciseInterface;
 
@@ -65,11 +65,15 @@ describe('ExerciseEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature(ExerciseReducer.NAME, ExerciseReducer.reducer, {
-          initialState: usedState
-        }),
+        StoreModule.forFeature(
+          CurrentExerciseReducer.NAME,
+          CurrentExerciseReducer.reducer,
+          {
+            initialState: usedState
+          }
+        ),
         EffectsModule.forRoot([]),
-        EffectsModule.forFeature([ExerciseEffects])
+        EffectsModule.forFeature([CurrentExerciseEffects])
       ],
       providers: [
         {
@@ -80,13 +84,13 @@ describe('ExerciseEffects', () => {
             saveExercise: () => mockExercise
           }
         },
-        ExerciseEffects,
+        CurrentExerciseEffects,
         DataPersistence,
         provideMockActions(() => actions)
       ]
     });
 
-    effects = TestBed.get(ExerciseEffects);
+    effects = TestBed.get(CurrentExerciseEffects);
   });
 
   describe('startExercise$', () => {
@@ -112,7 +116,7 @@ describe('ExerciseEffects', () => {
     const loadErrorAction = new CurrentExerciseError(new Error('failed'));
     describe('with initialState', () => {
       beforeAll(() => {
-        usedState = ExerciseReducer.initialState;
+        usedState = CurrentExerciseReducer.initialState;
       });
       beforeEach(() => {
         mockServiceMethodReturnValue('startExercise', mockExercise);
@@ -134,7 +138,7 @@ describe('ExerciseEffects', () => {
     });
     describe('with loaded state', () => {
       beforeAll(() => {
-        usedState = { ...ExerciseReducer.initialState, loaded: true };
+        usedState = { ...CurrentExerciseReducer.initialState, loaded: true };
         mockExercise = {
           eduContent: undefined,
           cmiMode: ScormCMIMode.CMI_MODE_NORMAL,
@@ -163,7 +167,7 @@ describe('ExerciseEffects', () => {
     });
     describe('with initialState and failing api call', () => {
       beforeAll(() => {
-        usedState = ExerciseReducer.initialState;
+        usedState = CurrentExerciseReducer.initialState;
       });
       beforeEach(() => {
         mockServiceMethodError('startExercise', 'failed');
@@ -179,7 +183,7 @@ describe('ExerciseEffects', () => {
     describe('with loaded and failing api call', () => {
       beforeAll(() => {
         usedState = {
-          ...ExerciseReducer.initialState,
+          ...CurrentExerciseReducer.initialState,
           loaded: true
         };
       });
@@ -215,7 +219,7 @@ describe('ExerciseEffects', () => {
     const loadErrorAction = new CurrentExerciseError(new Error('failed'));
     describe('with initialState', () => {
       beforeAll(() => {
-        usedState = ExerciseReducer.initialState;
+        usedState = CurrentExerciseReducer.initialState;
       });
       beforeEach(() => {
         mockServiceMethodReturnValue('saveExercise', mockExercise);
@@ -230,7 +234,7 @@ describe('ExerciseEffects', () => {
     });
     describe('with loaded state', () => {
       beforeAll(() => {
-        usedState = { ...ExerciseReducer.initialState, loaded: true };
+        usedState = { ...CurrentExerciseReducer.initialState, loaded: true };
         mockExercise = {
           eduContent: undefined,
           cmiMode: ScormCMIMode.CMI_MODE_NORMAL,
@@ -252,7 +256,7 @@ describe('ExerciseEffects', () => {
     });
     describe('with initialState and failing api call', () => {
       beforeAll(() => {
-        usedState = ExerciseReducer.initialState;
+        usedState = CurrentExerciseReducer.initialState;
       });
       beforeEach(() => {
         mockServiceMethodError('saveExercise', 'failed');
@@ -268,7 +272,7 @@ describe('ExerciseEffects', () => {
     describe('with loaded and failing api call', () => {
       beforeAll(() => {
         usedState = {
-          ...ExerciseReducer.initialState,
+          ...CurrentExerciseReducer.initialState,
           loaded: true
         };
       });
