@@ -37,6 +37,13 @@ export class LoginpageComponent implements OnInit {
   }
 
   // tslint:disable-next-line:member-ordering
+  results$: Observable<Object>;
+  getAllResults() {
+    const result = this.scormResultsService.getResultsForStudent(6);
+    this.results$ = result;
+  }
+
+  // tslint:disable-next-line:member-ordering
   resultTask$: Observable<ResultInterface>;
   getResultForTask() {
     const result = this.scormResultsService.getResultForTask(6, 1, 1);

@@ -73,6 +73,12 @@
 <div>{{ currentUser | async | json }}</div>
 
 <button (click)="loadCurrentUserinState()">Load user</button>
+
+<div>
+  <button (click)="getAllResults()">All results</button>
+  <div>{{ results$ | async | json }}</div>
+</div>
+
 <div>
   <button (click)="getResultForTask()">Result Task</button>
   <div>{{ resultTask$ | async | json }}</div>

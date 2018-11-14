@@ -2,13 +2,14 @@ import { InjectionToken } from '@angular/core';
 import { ResultInterface } from '@campus/dal';
 import { Observable } from 'rxjs';
 import { CmiInterface } from './interfaces/cmi.interface';
+import { ResultAreasInterface } from './interfaces/resultAreas.interface';
 
 export const SCORM_RESULTS_SERVICE_TOKEN = new InjectionToken(
   'ScormResultsServiceInterface'
 );
 
 export interface ScormResultsServiceInterface {
-  getResultsForStudent(userId: number): Observable<Object>;
+  getResultsForStudent(userId: number): Observable<ResultAreasInterface>;
 
   getResultForTask(
     userId: number,
