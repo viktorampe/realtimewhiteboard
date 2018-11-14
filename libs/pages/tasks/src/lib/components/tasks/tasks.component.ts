@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { TasksViewModel } from './tasks.viewmodel';
+import { TasksViewModel } from '../tasks.viewmodel';
 
 @Component({
   selector: 'campus-tasks',
