@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
+import { BundleInterface } from '@campus/dal';
 import { BadgePersonInterface } from '@campus/ui';
-import { BundleInterface } from '@diekeure/polpo-api-angular-sdk';
 
 @Component({
   selector: 'campus-info-panel-bundle',

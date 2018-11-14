@@ -6,6 +6,7 @@ import {
   BundleQueries,
   ContentInterface,
   DalState,
+  EduContent,
   EduContentQueries,
   LearningAreaInterface,
   LearningAreaQueries,
@@ -28,6 +29,8 @@ import {
   LearningAreasWithBundlesInfoInterface
 } from './bundles.viewmodel.interfaces';
 
+export type NestedPartial<T> = { [P in keyof T]?: NestedPartial<T[P]> };
+
 @Injectable({
   providedIn: 'root'
 })
@@ -42,10 +45,8 @@ export class BundlesViewModel {
   private sharedBundlesByLearningArea$: Observable<
     Dictionary<BundleInterface[]>
   >;
-  private sharedBooks$: Observable<ContentInterface[]>;
-  private sharedBooksByLearningArea$: Observable<
-    Dictionary<ContentInterface[]>
-  >;
+  private sharedBooks$: Observable<EduContent[]>;
+  private sharedBooksByLearningArea$: Observable<Dictionary<EduContent[]>>;
   // > bundles page
   private unlockedContentsByBundle$: Observable<
     Dictionary<UnlockedContentInterface[]>
@@ -77,13 +78,12 @@ export class BundlesViewModel {
     this.sharedBundles$ = this.getSharedBundles();
     this.sharedBundlesByLearningArea$ = this.groupStreamByKey(
       this.sharedBundles$,
-      'learningAreaId'
+      { learningAreaId: 0 }
     );
     this.sharedBooks$ = this.getSharedBooks();
-    this.sharedBooksByLearningArea$ = this.groupStreamByKey(
-      this.sharedBooks$,
-      'publishedEduContentMetadata.learningAreaId'
-    );
+    this.sharedBooksByLearningArea$ = this.groupStreamByKey(this.sharedBooks$, {
+      publishedEduContentMetadata: { learningAreaId: 0 }
+    });
     // > bundles page
     this.unlockedContentsByBundle$ = this.store.pipe(
       select(UnlockedContentQueries.getByBundleIds)
@@ -166,7 +166,7 @@ export class BundlesViewModel {
     );
   }
 
-  private getSharedBooks(): Observable<ContentInterface[]> {
+  private getSharedBooks(): Observable<EduContent[]> {
     return combineLatest(
       this.store.pipe(
         select(UnlockedBoekeGroupQueries.getShared, {
@@ -181,7 +181,7 @@ export class BundlesViewModel {
     ).pipe(
       switchMap(
         ([unlockedBookGroups, unlockedBookStudents]): Observable<
-          ContentInterface[]
+          EduContent[]
         > =>
           this.store.pipe(
             select(EduContentQueries.getByIds, {
@@ -196,7 +196,7 @@ export class BundlesViewModel {
           )
       ),
       map(
-        (eduContents): ContentInterface[] => {
+        (eduContents): EduContent[] => {
           return eduContents.sort((a, b) => {
             const nameA = a.name && a.name.toLowerCase();
             const nameB = b.name && b.name.toLowerCase();
@@ -216,7 +216,7 @@ export class BundlesViewModel {
 
   private getLearningAreasWithBundleInfo(
     bundlesByLearningArea$: Observable<Dictionary<BundleInterface[]>>,
-    booksByLearningArea$: Observable<Dictionary<ContentInterface[]>>
+    booksByLearningArea$: Observable<Dictionary<EduContent[]>>
   ): Observable<LearningAreasWithBundlesInfoInterface> {
     return combineLatest(
       this.learningAreas$,
@@ -265,7 +265,7 @@ export class BundlesViewModel {
   private getBundlesWithContentInfo(
     learningAreaId: number,
     bundlesByLearningArea$: Observable<Dictionary<BundleInterface[]>>,
-    booksByLearningArea$: Observable<Dictionary<ContentInterface[]>>,
+    booksByLearningArea$: Observable<Dictionary<EduContent[]>>,
     unlockedContentsByBundle$: Observable<
       Dictionary<UnlockedContentInterface[]>
     >
@@ -278,7 +278,7 @@ export class BundlesViewModel {
       map(
         ([bundlesByArea, booksByArea, unlockedContentsByBundle]: [
           Dictionary<BundleInterface[]>,
-          Dictionary<ContentInterface[]>,
+          Dictionary<EduContent[]>,
           Dictionary<UnlockedContentInterface[]>
         ]): BundlesWithContentInfoInterface => {
           return {
@@ -296,15 +296,14 @@ export class BundlesViewModel {
 
   private groupStreamByKey<T>(
     stream$: Observable<T[]>,
-    key: string
+    key: NestedPartial<T>
   ): Observable<Dictionary<T[]>> {
     return stream$.pipe(
       map(
         (arr: T[]): Dictionary<T[]> => {
           const byKey = {};
-          const keys = key.split('.');
           arr.forEach(item => {
-            const prop = keys.reduce((p, k) => p[k] || '', item);
+            const prop = this.getPropertyByKey(item, key);
             if (!byKey[prop]) {
               byKey[prop] = [];
             }
@@ -315,5 +314,16 @@ export class BundlesViewModel {
       ),
       shareReplay(1)
     );
+  }
+
+  private getPropertyByKey<T>(
+    item: T,
+    keys: NestedPartial<T>
+  ): number | string {
+    if (typeof item === 'string' || typeof item === 'number') {
+      return item;
+    }
+    const key = Object.keys(keys)[0];
+    return this.getPropertyByKey(item[key], keys[key]);
   }
 }

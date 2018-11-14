@@ -25,14 +25,12 @@
            (click)="filterTextInput.clear()">{{sharedInfo.learningAreas.length}}</u>
         weergegeven
       </div>
-      <div class="pages-bundles__container__learning-areas"
-           *ngIf="listFormat$|async as gridListFormat">
-        <campus-list-view [listFormat]="gridListFormat"
+      <div class="pages-bundles__container__learning-areas">
+        <campus-list-view [listFormat]="listFormat$|async"
                           [placeHolderText]="'De toegepaste filter bevat geen resultaten'">
           <campus-folder *ngFor="let learningAreaInfo of filteredSharedLearningAreaInfo"
                          campusListItem
                          [routerLink]="[learningAreaInfo.learningArea.id]"
-                         [listFormat]="gridListFormat"
                          [itemCount]="learningAreaInfo.bookCount + learningAreaInfo.bundleCount"
                          [title]="learningAreaInfo.learningArea.name"
                          [backgroundColor]="learningAreaInfo.learningArea.color"
