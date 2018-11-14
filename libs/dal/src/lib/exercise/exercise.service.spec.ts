@@ -1,13 +1,13 @@
 import { inject, TestBed } from '@angular/core/testing';
-import { ResultInterface } from '@campus/dal';
 import { hot } from 'jasmine-marbles';
 import { Observable } from 'rxjs';
+import { CurrentExerciseFixture } from '../+fixtures';
 import { CurrentExerciseInterface } from '../+state/current-exercise/current-exercise.reducer';
+import { ResultFixture } from './../+fixtures/Result.fixture';
 import {
   ContentRequestService,
   ExerciseService,
-  ResultsService,
-  ScormCMIMode
+  ResultsService
 } from './exercise.service';
 import { ExerciseServiceInterface } from './exercise.service.interface';
 
@@ -22,8 +22,9 @@ describe('ExerciseService', () => {
     taskId?: number;
     unlockedContentId?: number;
     url?: string;
-    cmiMode?: ScormCMIMode;
   };
+
+  let mockExercise: CurrentExerciseInterface;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -46,6 +47,16 @@ describe('ExerciseService', () => {
     });
 
     service = TestBed.get(ExerciseService);
+
+    mockData = {
+      eduContentId: 1,
+      taskId: 1,
+      url: 'tempurl'
+    };
+
+    mockExercise = new CurrentExerciseFixture({
+      result: new ResultFixture({ cmi: { mode: 'normal' } })
+    });
   }),
     it('should be created and available via DI', inject(
       [ExerciseService],
@@ -55,22 +66,8 @@ describe('ExerciseService', () => {
     ));
 
   it('should return an exercise for a task', () => {
-    mockData = {
-      userId: 6,
-      eduContentId: 1,
-      taskId: 1,
-      url: 'tempurl',
-      cmiMode: ScormCMIMode.CMI_MODE_NORMAL
-    };
-
     mockResult$ = hot('-a-|', {
-      a: {
-        id: 1,
-        eduContentId: mockData.eduContentId,
-        personId: mockData.userId,
-        taskId: mockData.taskId,
-        cmi: { mode: 'normal' }
-      } as ResultInterface
+      a: new ResultFixture({ cmi: { mode: 'normal' } })
     });
 
     mockUrl$ = hot('-a-|', {
@@ -86,19 +83,7 @@ describe('ExerciseService', () => {
       )
     ).toBeObservable(
       hot('-a-|', {
-        a: {
-          eduContent: undefined,
-          cmiMode: ScormCMIMode.CMI_MODE_NORMAL,
-          result: {
-            id: 1,
-            eduContentId: mockData.eduContentId,
-            personId: mockData.userId,
-            taskId: mockData.taskId,
-            cmi: { mode: ScormCMIMode.CMI_MODE_NORMAL }
-          },
-          saveToApi: true,
-          url: 'tempurl'
-        }
+        a: mockExercise
       })
     );
   });
@@ -108,18 +93,11 @@ describe('ExerciseService', () => {
       userId: 6,
       eduContentId: 1,
       unlockedContentId: 1,
-      url: 'tempurl',
-      cmiMode: ScormCMIMode.CMI_MODE_NORMAL
+      url: 'tempurl'
     };
 
     mockResult$ = hot('-a-|', {
-      a: {
-        id: 1,
-        eduContentId: mockData.eduContentId,
-        personId: mockData.userId,
-        unlockedContentId: mockData.unlockedContentId,
-        cmi: { mode: 'normal' }
-      } as ResultInterface
+      a: new ResultFixture({ cmi: { mode: 'normal' } })
     });
 
     mockUrl$ = hot('-a-|', {
@@ -135,19 +113,7 @@ describe('ExerciseService', () => {
       )
     ).toBeObservable(
       hot('-a-|', {
-        a: {
-          eduContent: undefined,
-          cmiMode: ScormCMIMode.CMI_MODE_NORMAL,
-          result: {
-            id: 1,
-            eduContentId: mockData.eduContentId,
-            personId: mockData.userId,
-            unlockedContentId: mockData.unlockedContentId,
-            cmi: { mode: ScormCMIMode.CMI_MODE_NORMAL }
-          },
-          saveToApi: true,
-          url: 'tempurl'
-        }
+        a: mockExercise
       })
     );
   });
