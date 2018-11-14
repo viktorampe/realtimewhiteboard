@@ -8,6 +8,10 @@ export enum FilterTextInputTheme {
   dark = 'dark'
 }
 
+export interface FilterableItem<I, O> {
+  filterFn(source: I, filterText: string | number): O[];
+}
+
 /**
  * an input field that will output text put into it, will show a clear button when text lenght > 0
  * meant to filter by string.
@@ -22,9 +26,9 @@ export enum FilterTextInputTheme {
   styleUrls: ['./filter-text-input.component.scss']
 })
 export class FilterTextInputComponent<I, O> {
-  public filterFn: (source: I, filterText: string | number) => O[];
   public result$: Observable<O[]>;
   private input = new FormControl('');
+  private filterableItem: FilterableItem<I, O>;
 
   @Input() theme: FilterTextInputTheme;
   @Input() placeholder = 'Filter';
@@ -32,7 +36,11 @@ export class FilterTextInputComponent<I, O> {
   set source(source: I) {
     this.result$ = this.input.valueChanges.pipe(
       startWith(''),
-      map(filterText => this.filterFn(source, filterText))
+      map(filterText => {
+        if (this.filterableItem) {
+          return this.filterableItem.filterFn(source, filterText);
+        }
+      })
     );
   }
 
@@ -48,6 +56,10 @@ export class FilterTextInputComponent<I, O> {
 
   setValue(filterInput: string): void {
     this.input.setValue(filterInput);
+  }
+
+  setFilterableItem(filterableItem: FilterableItem<I, O>) {
+    this.filterableItem = filterableItem;
   }
 
   /**
