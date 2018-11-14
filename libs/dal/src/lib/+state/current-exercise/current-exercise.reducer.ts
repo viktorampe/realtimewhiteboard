@@ -1,8 +1,8 @@
 import { EduContentInterface, ResultInterface } from '@campus/dal';
 import { ScormCMIMode } from '../../exercise/exercise.service';
 import {
-  ExercisesActions,
-  ExercisesActionTypes
+  CurrentExerciseActions,
+  CurrentExerciseActionTypes
 } from './current-exercise.actions';
 
 export const NAME = 'currentExercise';
@@ -29,9 +29,12 @@ export const initialState: State = {
   loaded: false
 };
 
-export function reducer(state = initialState, action: ExercisesActions): State {
+export function reducer(
+  state = initialState,
+  action: CurrentExerciseActions
+): State {
   switch (action.type) {
-    case ExercisesActionTypes.ClearCurrentExercise: {
+    case CurrentExerciseActionTypes.ClearCurrentExercise: {
       return {
         ...state,
         eduContent: null,
@@ -43,7 +46,7 @@ export function reducer(state = initialState, action: ExercisesActions): State {
       };
     }
 
-    case ExercisesActionTypes.CurrentExerciseLoaded: {
+    case CurrentExerciseActionTypes.CurrentExerciseLoaded: {
       return {
         ...state,
         eduContent: action.payload.eduContent,
@@ -55,7 +58,7 @@ export function reducer(state = initialState, action: ExercisesActions): State {
       };
     }
 
-    case ExercisesActionTypes.CurrentExerciseError: {
+    case CurrentExerciseActionTypes.CurrentExerciseError: {
       return {
         ...state,
         eduContent: null,

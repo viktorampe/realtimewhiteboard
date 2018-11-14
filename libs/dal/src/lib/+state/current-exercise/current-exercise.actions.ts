@@ -1,7 +1,7 @@
 import { Action } from '@ngrx/store';
 import { CurrentExerciseInterface } from './current-exercise.reducer';
 
-export enum ExercisesActionTypes {
+export enum CurrentExerciseActionTypes {
   StartExercise = '[Current Exercise] Start Exercise',
   CurrentExerciseLoaded = '[Current Exercise] Current Exercise Loaded',
   CurrentExerciseError = '[Current Exercise] Current Exercise Error',
@@ -11,7 +11,7 @@ export enum ExercisesActionTypes {
 }
 
 export class StartExercise implements Action {
-  readonly type = ExercisesActionTypes.StartExercise;
+  readonly type = CurrentExerciseActionTypes.StartExercise;
 
   constructor(
     public payload: {
@@ -24,19 +24,19 @@ export class StartExercise implements Action {
 }
 
 export class CurrentExerciseLoaded implements Action {
-  readonly type = ExercisesActionTypes.CurrentExerciseLoaded;
+  readonly type = CurrentExerciseActionTypes.CurrentExerciseLoaded;
 
   constructor(public payload: CurrentExerciseInterface) {}
 }
 
 export class CurrentExerciseError implements Action {
-  readonly type = ExercisesActionTypes.CurrentExerciseError;
+  readonly type = CurrentExerciseActionTypes.CurrentExerciseError;
 
   constructor(public payload: any) {}
 }
 
 export class SaveCurrentExercise implements Action {
-  readonly type = ExercisesActionTypes.SaveCurrentExercise;
+  readonly type = CurrentExerciseActionTypes.SaveCurrentExercise;
 
   constructor(
     public payload: {
@@ -47,10 +47,10 @@ export class SaveCurrentExercise implements Action {
 }
 
 export class ClearCurrentExercise implements Action {
-  readonly type = ExercisesActionTypes.ClearCurrentExercise;
+  readonly type = CurrentExerciseActionTypes.ClearCurrentExercise;
 }
 
-export type ExercisesActions =
+export type CurrentExerciseActions =
   | StartExercise
   | CurrentExerciseLoaded
   | CurrentExerciseError

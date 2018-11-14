@@ -8,9 +8,9 @@ import {
   EXERCISE_SERVICE_TOKEN
 } from '../../exercise/exercise.service.interface';
 import {
+  CurrentExerciseActionTypes,
   CurrentExerciseError,
   CurrentExerciseLoaded,
-  ExercisesActionTypes,
   SaveCurrentExercise,
   StartExercise
 } from './current-exercise.actions';
@@ -19,7 +19,7 @@ import {
 export class CurrentExerciseEffects {
   @Effect()
   startExercise$ = this.dataPersistence.pessimisticUpdate(
-    ExercisesActionTypes.StartExercise,
+    CurrentExerciseActionTypes.StartExercise,
     {
       run: (action: StartExercise, state: DalState) => {
         return this.exerciseService
@@ -39,7 +39,7 @@ export class CurrentExerciseEffects {
 
   @Effect()
   saveExercise$ = this.dataPersistence.pessimisticUpdate(
-    ExercisesActionTypes.SaveCurrentExercise,
+    CurrentExerciseActionTypes.SaveCurrentExercise,
     {
       run: (action: SaveCurrentExercise, state: DalState) => {
         return this.exerciseService.saveExercise(action.payload.exercise).pipe(
