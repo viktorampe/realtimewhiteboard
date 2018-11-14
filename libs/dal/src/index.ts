@@ -1,3 +1,11 @@
+export * from './lib/+fixtures/EduContent.fixture';
+export * from './lib/+fixtures/EduContentProductType.fixture';
+export * from './lib/+fixtures/LearningArea.fixture';
+export * from './lib/+fixtures/Method.fixture';
+export * from './lib/+fixtures/Person.fixture';
+export * from './lib/+fixtures/Task.fixture';
+export * from './lib/+fixtures/TaskEduContent.fixture';
+export * from './lib/+fixtures/TaskInstance.fixture';
 export * from './lib/+models/index';
 export * from './lib/+state';
 export { DalState } from './lib/+state';

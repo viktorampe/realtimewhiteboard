@@ -3,32 +3,32 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import {
+  EduContentFixture,
   EduContentInterface,
+  EduContentProductTypeFixture,
   EduContentProductTypeInterface,
+  LearningAreaFixture,
   LearningAreaInterface,
+  MethodFixture,
   MethodInterface,
+  PersonFixture,
+  TaskEduContentFixture,
   TaskEduContentInterface,
+  TaskFixture,
+  TaskInstanceFixture,
   TaskInstanceInterface,
   TaskInterface
 } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
-import { EduContentFixture } from 'libs/dal/src/lib/+fixtures/EduContent.fixture';
-import { EduContentProductTypeFixture } from 'libs/dal/src/lib/+fixtures/EduContentProductType.fixture';
-import { LearningAreaFixture } from 'libs/dal/src/lib/+fixtures/LearningArea.fixture';
-import { MethodFixture } from 'libs/dal/src/lib/+fixtures/Method.fixture';
-import { PersonFixture } from 'libs/dal/src/lib/+fixtures/Person.fixture';
-import { TaskFixture } from 'libs/dal/src/lib/+fixtures/Task.fixture';
-import { TaskEduContentFixture } from 'libs/dal/src/lib/+fixtures/TaskEduContent.fixture';
-import { TaskInstanceFixture } from 'libs/dal/src/lib/+fixtures/TaskInstance.fixture';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { marbles } from 'rxjs-marbles';
-import { TasksComponent } from './tasks.component';
-import { TasksViewModel } from './tasks.viewmodel';
+import { TasksViewModel } from '../tasks.viewmodel';
 import {
   LearningAreasWithTaskInstanceInfoInterface,
   TaskInstancesWithEduContentInfoInterface,
   TaskInstanceWithEduContentsInfoInterface
-} from './tasks.viewmodel.interfaces';
+} from '../tasks.viewmodel.interfaces';
+import { TasksComponent } from './tasks.component';
 
 class MockViewModel {
   selectedLearningArea$ = this.getMockSelectedLearningArea();

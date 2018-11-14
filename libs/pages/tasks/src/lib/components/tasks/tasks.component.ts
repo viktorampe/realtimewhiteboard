@@ -3,8 +3,8 @@ import { LearningAreaInterface } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { TasksViewModel } from './tasks.viewmodel';
-import { TaskInstancesWithEduContentInfoInterface } from './tasks.viewmodel.interfaces';
+import { TasksViewModel } from '../tasks.viewmodel';
+import { TaskInstancesWithEduContentInfoInterface } from '../tasks.viewmodel.interfaces';
 
 @Component({
   selector: 'campus-tasks',
