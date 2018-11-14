@@ -6,12 +6,13 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./info-panel-content.component.scss']
 })
 export class InfoPanelContentComponent {
-  @Input()
-  content: {
-    name: string;
-    description: string;
-    extension: string;
-    productType: string;
-    methods: string[];
-  };
+  @Input() content: TaskInfoPanelContentInterface;
+}
+
+export interface TaskInfoPanelContentInterface {
+  name: string;
+  description: string;
+  extension: string;
+  productType: string;
+  methods: string[];
 }

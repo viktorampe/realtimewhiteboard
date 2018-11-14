@@ -45,11 +45,11 @@ describe('InfoPanelTaskComponent', () => {
     const text = fixture.debugElement
       .query(By.css('.ui-info-panel-task__text'))
       .query(By.css('strong')).nativeElement.textContent;
-    expect(text).toBe(mockData.name);
+    expect(text).toBe(mockData.taskInstance.task.name);
   });
   it('should show the description of the task', () => {
     const text = fixture.debugElement.query(By.css('.ui-info-panel-task__text'))
       .nativeElement.textContent;
-    expect(text.substring(mockData.name.length)).toBe(mockData.description);
+    expect(text).toContain(mockData.taskInstance.task.description);
   });
 });
