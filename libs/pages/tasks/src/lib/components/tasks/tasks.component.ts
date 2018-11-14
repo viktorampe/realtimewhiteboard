@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { LearningAreaInterface } from '@campus/dal';
-import { ListFormat } from '@campus/ui';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/shared';
+import { FilterTextInputComponent, ListFormat } from '@campus/ui';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { TasksViewModel } from '../tasks.viewmodel';
 import { TaskInstancesWithEduContentInfoInterface } from '../tasks.viewmodel.interfaces';
 
@@ -13,43 +13,46 @@ import { TaskInstancesWithEduContentInfoInterface } from '../tasks.viewmodel.int
 })
 export class TasksComponent implements OnInit {
   listFormat$: Observable<ListFormat> = this.viewModel.listFormat$;
-  filterInput$ = new BehaviorSubject<string>('');
 
   taskInstances$: Observable<TaskInstancesWithEduContentInfoInterface> = this
     .viewModel.taskInstancesByLearningArea$;
 
-  displayedTaskInstances$: Observable<
+  /*displayedTaskInstances$: Observable<
     TaskInstancesWithEduContentInfoInterface
-  > = this.getDisplayedTaskInstances(this.taskInstances$, this.filterInput$);
+  > = this.getDisplayedTaskInstances(this.taskInstances$, this.filterInput$);*/
 
   learningArea$: Observable<LearningAreaInterface> = this.viewModel
     .selectedLearningArea$;
 
-  constructor(private viewModel: TasksViewModel) {}
+  @ViewChild(FilterTextInputComponent)
+  filterTextInput: FilterTextInputComponent<
+    TaskInstancesWithEduContentInfoInterface,
+    TaskInstancesWithEduContentInfoInterface
+  >;
 
-  ngOnInit() {}
+  constructor(
+    private viewModel: TasksViewModel,
+    @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface
+  ) {}
 
-  /**
-   * changes the filter's input
-   *
-   * @param {string} filterInput
-   * @memberof TasksComponent
-   */
-  onChangeFilterInput(filterInput: string): void {
-    this.filterInput$.next(filterInput);
-  }
-
-  /**
-   * resets filter's input
-   *
-   * @memberof TasksComponent
-   */
-  resetFilterInput(): void {
-    this.filterInput$.next('');
+  ngOnInit() {
+    this.filterTextInput.filterFn = this.filterFn.bind(this);
   }
 
   setListFormat(format: ListFormat) {
     this.viewModel.changeListFormat(format);
+  }
+
+  filterFn(
+    source: TaskInstancesWithEduContentInfoInterface,
+    searchText: string
+  ): TaskInstancesWithEduContentInfoInterface {
+    const instances = this.filterService.filter(source.instances, {
+      taskInstance: {
+        task: { name: searchText }
+      }
+    });
+    return { instances };
   }
 
   /**
@@ -60,7 +63,7 @@ export class TasksComponent implements OnInit {
    * @returns {Observable<TaskInstancesWithEduContentInfo>}
    * @memberof TasksComponent
    */
-  private getDisplayedTaskInstances(
+  /*private getDisplayedTaskInstances(
     taskInstances$: Observable<TaskInstancesWithEduContentInfoInterface>,
     filterInput$: BehaviorSubject<string>
   ): Observable<TaskInstancesWithEduContentInfoInterface> {
@@ -83,7 +86,7 @@ export class TasksComponent implements OnInit {
         }
       )
     );
-  }
+  }*/
 
   getIcon(finished: boolean): string {
     return finished ? 'icon-checkmark' : '';

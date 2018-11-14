@@ -14,11 +14,13 @@ export interface LearningAreasWithTaskInstanceInfoInterface {
 }
 
 export interface TaskInstancesWithEduContentInfoInterface {
-  instances: {
-    taskInstance: TaskInstanceInterface;
-    taskEduContentsCount: number;
-    finished: boolean;
-  }[];
+  instances: TaskInstancesWithEduContentInfo[];
+}
+
+export interface TaskInstancesWithEduContentInfo {
+  taskInstance: TaskInstanceInterface;
+  taskEduContentsCount: number;
+  finished: boolean;
 }
 
 export interface TaskInstanceWithEduContentsInfoInterface {
