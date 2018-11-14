@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { ExerciseInterface, ResultInterface } from '@campus/dal';
+import { ResultInterface } from '@campus/dal';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { CurrentExerciseInterface } from '../+state/current-exercise/current-exercise.reducer';
 import { ExerciseServiceInterface } from './exercise.service.interface';
 
 // TODO: remove vvv and fix imports
@@ -34,7 +35,10 @@ export class ResultsService {
     return;
   }
 
-  public saveResult(userId: number, cmi: any): Observable<ExerciseInterface> {
+  public saveResult(
+    userId: number,
+    cmi: any
+  ): Observable<CurrentExerciseInterface> {
     return;
   }
 }
@@ -57,7 +61,7 @@ export class ExerciseService implements ExerciseServiceInterface {
     educontentId: number,
     taskId?: number,
     unlockedContentId?: number
-  ): Observable<ExerciseInterface> {
+  ): Observable<CurrentExerciseInterface> {
     let result$: Observable<ResultInterface>;
 
     if (!(taskId || unlockedContentId) || (taskId && unlockedContentId)) {
@@ -89,7 +93,7 @@ export class ExerciseService implements ExerciseServiceInterface {
           result: result,
           saveToApi: true, //afhankelijk van cmi.mode
           url: url
-        } as ExerciseInterface;
+        } as CurrentExerciseInterface;
       })
     );
 
@@ -97,8 +101,8 @@ export class ExerciseService implements ExerciseServiceInterface {
   }
 
   public saveExercise(
-    exercise: ExerciseInterface
-  ): Observable<ExerciseInterface> {
+    exercise: CurrentExerciseInterface
+  ): Observable<CurrentExerciseInterface> {
     const userId = exercise.result.personId;
     const resultId = exercise.result.id;
     const cmi = exercise.result.cmi;

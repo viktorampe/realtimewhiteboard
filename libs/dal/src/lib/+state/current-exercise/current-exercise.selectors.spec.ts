@@ -1,6 +1,10 @@
 import { ExerciseQueries } from '.';
 import { ScormCMIMode } from '../../exercise/exercise.service';
-import { CurrentExerciseInterface, State } from './current-exercise.reducer';
+import {
+  CurrentExerciseInterface,
+  NAME,
+  State
+} from './current-exercise.reducer';
 
 describe('Exercise Selectors', () => {
   function createState(
@@ -29,7 +33,7 @@ describe('Exercise Selectors', () => {
       };
 
       exerciseState = createState(mockExercise, true, 'no error');
-      storeState = { exercises: exerciseState };
+      storeState = { [NAME]: exerciseState };
     });
     it('getError() should return the error', () => {
       const results = ExerciseQueries.getError(storeState);

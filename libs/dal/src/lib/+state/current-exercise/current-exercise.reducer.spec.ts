@@ -19,6 +19,7 @@ function createState(
   };
 }
 let mockExercise: CurrentExerciseInterface;
+let emptyExercise: CurrentExerciseInterface;
 
 describe('Exercises Reducer', () => {
   beforeEach(() => {
@@ -28,6 +29,14 @@ describe('Exercises Reducer', () => {
       result: undefined,
       saveToApi: true,
       url: 'dit is een url'
+    };
+
+    emptyExercise = {
+      eduContent: null,
+      cmiMode: null,
+      result: null,
+      saveToApi: null,
+      url: null
     };
   });
 
@@ -52,7 +61,7 @@ describe('Exercises Reducer', () => {
       const error = 'Something went wrong';
       const action = new ExerciseActions.CurrentExerciseError(error);
       const result = reducer(initialState, action);
-      expect(result).toEqual(createState(null, false, error));
+      expect(result).toEqual(createState(emptyExercise, false, error));
     });
   });
 
@@ -65,7 +74,9 @@ describe('Exercises Reducer', () => {
       );
       const action = new ExerciseActions.ClearCurrentExercise();
       const result = reducer(startState, action);
-      expect(result).toEqual(createState(null, true, 'something went wrong'));
+      expect(result).toEqual(
+        createState(emptyExercise, true, 'something went wrong')
+      );
     });
   });
 });

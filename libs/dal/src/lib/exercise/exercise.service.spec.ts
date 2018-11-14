@@ -1,7 +1,8 @@
 import { inject, TestBed } from '@angular/core/testing';
-import { ExerciseInterface, ResultInterface } from '@campus/dal';
+import { ResultInterface } from '@campus/dal';
 import { hot } from 'jasmine-marbles';
 import { Observable } from 'rxjs';
+import { CurrentExerciseInterface } from '../+state/current-exercise/current-exercise.reducer';
 import {
   ExerciseService,
   ResultsService,
@@ -12,7 +13,7 @@ import { ExerciseServiceInterface } from './exercise.service.interface';
 
 describe('ExerciseService', () => {
   let service: ExerciseServiceInterface;
-  let mockResult$: Observable<ExerciseInterface>;
+  let mockResult$: Observable<CurrentExerciseInterface>;
   let mockUrl$: Observable<any>;
 
   let mockData: {

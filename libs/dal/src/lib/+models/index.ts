@@ -25,7 +25,6 @@ export * from './EduContentTOC.interface';
 export * from './EduNet.interface';
 export * from './ElasticsearchEduContentMetadata.interface';
 export * from './Email.interface';
-export * from './Exercise.interface';
 export * from './Faq.interface';
 export * from './FaqCategory.interface';
 export * from './FaqCategoryFaq.interface';

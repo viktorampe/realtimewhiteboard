@@ -146,14 +146,14 @@ describe('ExerciseEffects', () => {
       beforeEach(() => {
         mockServiceMethodReturnValue('startExercise', mockExercise);
       });
-      it('should trigger an api call with the with the loaded state for a task', () => {
+      it('should trigger an api call with the loaded state for a task', () => {
         expectInAndOut(
           effects.startExercise$,
           startTaskExerciseAction,
           filledLoadedAction
         );
       });
-      it('should trigger an api call with the with the loaded state for an unlockedContent', () => {
+      it('should trigger an api call with the loaded state for an unlockedContent', () => {
         expectInAndOut(
           effects.startExercise$,
           startUnlockedContentExerciseAction,
@@ -242,7 +242,7 @@ describe('ExerciseEffects', () => {
       beforeEach(() => {
         mockServiceMethodReturnValue('saveExercise', mockExercise);
       });
-      it('should trigger an api call with the with the loaded state', () => {
+      it('should trigger an api call with the loaded state', () => {
         expectInAndOut(
           effects.saveExercise$,
           saveExerciseAction,
