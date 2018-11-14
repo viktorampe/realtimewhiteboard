@@ -1,22 +1,13 @@
-import {
-  EduContentMetadataInterface,
-  FavoriteInterface,
-  LearningAreaInterface,
-  LearningDomainInterface,
-  MethodInterface
-} from '../+models';
+import { LearningAreaInterface } from '../+models';
 
 export class LearningAreaFixture implements LearningAreaInterface {
-  name: string;
-  icon?: string;
-  color: string;
-  id?: number;
-  eduContentMetadata?: EduContentMetadataInterface[];
-  methods?: MethodInterface[];
-  learningDomains?: LearningDomainInterface[];
-  favorites?: FavoriteInterface[];
+  // defaults
+  name: string = 'foo';
+  icon: string = 'bar';
+  color: string = '#f00';
+  id: number = 1;
 
-  constructor(props: Partial<LearningAreaFixture> = {}) {
+  constructor(props: Partial<LearningAreaInterface> = {}) {
     // overwrite defaults
     Object.assign(this, props);
   }
