@@ -115,7 +115,7 @@ describe('LearningAreasComponent', () => {
       c: 'nothing nothing nothing'
     });
     expect(
-      component.getDisplayedLearningAreas$(learningAreas$, filterInput$)
+      component.filterLearningAreas(learningAreas$, filterInput$)
     ).toBeObservable(
       hot('abc|', { a: learningAreas, b: [learningAreas[0]], c: [] })
     );
