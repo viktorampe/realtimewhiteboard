@@ -12,7 +12,6 @@ import {
   ENVIRONMENT_ALERTS_FEATURE_TOKEN,
   ENVIRONMENT_MESSAGES_FEATURE_TOKEN
 } from './interfaces';
-import { ScormResultsService, SCORM_RESULTS_SERVICE_TOKEN } from './scorm';
 
 @NgModule({
   imports: [CommonModule, UiModule, PortalModule, LayoutModule, MatIconModule],
@@ -39,10 +38,6 @@ export class SharedModule {
         {
           provide: ENVIRONMENT_MESSAGES_FEATURE_TOKEN,
           useValue: environmentMessagesFeature
-        },
-        {
-          provide: SCORM_RESULTS_SERVICE_TOKEN,
-          useClass: ScormResultsService
         }
       ]
     };

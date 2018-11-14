@@ -3,11 +3,11 @@ import { ResultInterface } from '@campus/dal';
 import { Observable } from 'rxjs';
 import { CmiInterface } from './interfaces/cmi.interface';
 
-export const SCORM_RESULTS_SERVICE_TOKEN = new InjectionToken(
-  'ScormResultsServiceInterface'
+export const RESULTS_SERVICE_TOKEN = new InjectionToken(
+  'ResultsServiceInterface'
 );
 
-export interface ScormResultsServiceInterface {
+export interface ResultsServiceInterface {
   getResultForTask(
     userId: number,
     taskId: number,
