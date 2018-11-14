@@ -10,7 +10,7 @@ import { ExerciseServiceInterface } from './exercise.service.interface';
 @Injectable({
   providedIn: 'root'
 })
-export class TempUrlService {
+export class ContentRequestService {
   public getTempUrl(): Observable<string> {
     return;
   }
@@ -114,6 +114,6 @@ export class ExerciseService implements ExerciseServiceInterface {
 
   constructor(
     private resultsService: ResultsService,
-    private tempUrlService: TempUrlService
+    private tempUrlService: ContentRequestService
   ) {}
 }

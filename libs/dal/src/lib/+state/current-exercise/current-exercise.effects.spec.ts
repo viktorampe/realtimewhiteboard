@@ -9,7 +9,12 @@ import { Observable, of } from 'rxjs';
 import { CurrentExerciseReducer } from '.';
 import { ScormCMIMode } from '../../exercise/exercise.service';
 import { EXERCISE_SERVICE_TOKEN } from '../../exercise/exercise.service.interface';
-import { CurrentExerciseError, CurrentExerciseLoaded, SaveCurrentExercise, StartExercise } from './current-exercise.actions';
+import {
+  CurrentExerciseError,
+  CurrentExerciseLoaded,
+  SaveCurrentExercise,
+  StartExercise
+} from './current-exercise.actions';
 import { CurrentExerciseEffects } from './current-exercise.effects';
 import { CurrentExerciseInterface } from './current-exercise.reducer';
 

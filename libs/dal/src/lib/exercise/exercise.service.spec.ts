@@ -4,10 +4,10 @@ import { hot } from 'jasmine-marbles';
 import { Observable } from 'rxjs';
 import { CurrentExerciseInterface } from '../+state/current-exercise/current-exercise.reducer';
 import {
+  ContentRequestService,
   ExerciseService,
   ResultsService,
-  ScormCMIMode,
-  TempUrlService
+  ScormCMIMode
 } from './exercise.service';
 import { ExerciseServiceInterface } from './exercise.service.interface';
 
@@ -37,7 +37,7 @@ describe('ExerciseService', () => {
           }
         },
         {
-          provide: TempUrlService,
+          provide: ContentRequestService,
           useValue: {
             getTempUrl: () => mockUrl$
           }

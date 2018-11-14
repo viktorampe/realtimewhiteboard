@@ -7,17 +7,16 @@ import {
 
 export const NAME = 'currentExercise';
 
-export interface State extends CurrentExerciseInterface {
-  loaded: boolean;
-  error?: any;
-}
-
 export interface CurrentExerciseInterface {
   eduContent: EduContentInterface;
   cmiMode: ScormCMIMode;
   result: ResultInterface;
   saveToApi: boolean;
   url: string;
+}
+export interface State extends CurrentExerciseInterface {
+  loaded: boolean;
+  error?: any;
 }
 
 export const initialState: State = {
