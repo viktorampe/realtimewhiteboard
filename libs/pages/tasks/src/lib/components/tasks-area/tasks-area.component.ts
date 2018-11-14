@@ -42,6 +42,10 @@ export class TasksAreaComponent implements OnInit {
     this.tasksViewModel.changeListFormat(value);
   }
 
+  resetFilterComponent() {
+    this.filterTextInput.clear();
+  }
+
   private filterFn(
     info: LearningAreasWithTaskInstanceInfoInterface,
     searchText: string

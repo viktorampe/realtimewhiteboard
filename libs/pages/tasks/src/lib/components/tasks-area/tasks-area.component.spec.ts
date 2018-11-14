@@ -115,9 +115,7 @@ describe('TasksAreaComponent', () => {
     // Leeg
     const expectedC = { learningAreasWithInfo: [], totalTasks: 9 };
 
-    expect(
-      component.getDisplayedLearningAreas$(learningAreas$, filterInput$)
-    ).toBeObservable(
+    expect(component.filter(learningAreas$, filterInput$)).toBeObservable(
       hot('abc', {
         a: expectedA,
         b: expectedB,
