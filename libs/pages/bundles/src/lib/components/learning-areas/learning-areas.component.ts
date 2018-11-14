@@ -31,7 +31,8 @@ export class LearningAreasComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.filterTextInput.filterFn = this.filterFn.bind(this);
+    this.filterTextInput.filterFn = (info, searchText) =>
+      this.filterFn(info, searchText.toString());
     this.listFormat$ = this.bundlesViewModel.listFormat$;
     this.sharedInfo$ = this.bundlesViewModel.sharedLearningAreas$;
   }
@@ -40,7 +41,7 @@ export class LearningAreasComponent implements OnInit {
     this.bundlesViewModel.changeListFormat(value);
   }
 
-  private filterFn(
+  filterFn(
     info: LearningAreasWithBundlesInfoInterface,
     searchText: string
   ): LearningAreaInfoInterface[] {

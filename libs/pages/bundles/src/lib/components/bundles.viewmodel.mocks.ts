@@ -1,7 +1,19 @@
-import { LearningAreaInterface } from '@campus/dal';
+import {
+  BundleFixture,
+  BundleInterface,
+  ContentFixture,
+  ContentInterface,
+  LearningAreaFixture,
+  LearningAreaInterface,
+  PersonFixture,
+  PersonInterface
+} from '@campus/dal';
 import { ListFormat } from '@campus/ui';
-import { Dictionary } from '@ngrx/entity';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import {
+  BundlesWithContentInfoInterface,
+  LearningAreasWithBundlesInfoInterface
+} from './bundles.viewmodel.interfaces';
 
 export class MockActivatedRoute {
   params: Observable<any> = new BehaviorSubject<any>({
@@ -13,30 +25,49 @@ export class MockViewModel {
   listFormat$: Observable<ListFormat> = new BehaviorSubject<ListFormat>(
     ListFormat.GRID
   );
-  learningAreas$: Observable<LearningAreaInterface[]> = new BehaviorSubject<
-    LearningAreaInterface[]
-  >([{ name: 'name', color: 'color', id: 1 }]);
-  sharedLearningAreasCount$: Observable<
-    Dictionary<{
-      booksCount: number;
-      bundlesCount: number;
-    }>
-  > = new BehaviorSubject<
-    Dictionary<{
-      booksCount: number;
-      bundlesCount: number;
-    }>
-  >({
-    1: {
-      booksCount: 2,
-      bundlesCount: 3
-    }
-  });
+
   sharedLearningAreas$: Observable<
-    LearningAreaInterface[]
-  > = new BehaviorSubject<LearningAreaInterface[]>([
-    { name: 'shared name', color: 'shared color', id: 1 }
-  ]);
+    LearningAreasWithBundlesInfoInterface
+  > = new BehaviorSubject<LearningAreasWithBundlesInfoInterface>({
+    learningAreas: [
+      {
+        learningArea: {
+          id: 1,
+          name: 'foo',
+          color: '#fff'
+        },
+        bundleCount: 0,
+        bookCount: 0
+      }
+    ]
+  });
 
   changeListFormat() {}
+
+  getLearningAreaById(areaId: number): Observable<LearningAreaInterface> {
+    return of(new LearningAreaFixture());
+  }
+
+  getSharedBundlesWithContentInfo(
+    learningAreaId: number
+  ): Observable<BundlesWithContentInfoInterface> {
+    return of({
+      bundles: [],
+      books: []
+    });
+  }
+
+  getBundleById(bundleId: number): Observable<BundleInterface> {
+    return of(new BundleFixture());
+  }
+
+  getBundleOwner(
+    bundle$: Observable<BundleInterface>
+  ): Observable<PersonInterface> {
+    return of(new PersonFixture());
+  }
+
+  getBundleContents(bundleId: number): Observable<ContentInterface[]> {
+    return of([new ContentFixture()]);
+  }
 }

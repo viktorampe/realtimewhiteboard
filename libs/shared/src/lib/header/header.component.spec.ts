@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatIconModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { UiModule } from '@campus/ui';
@@ -20,7 +21,7 @@ describe('HeaderComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [UiModule, RouterTestingModule],
+      imports: [UiModule, RouterTestingModule, MatIconModule],
       declarations: [HeaderComponent],
       providers: [
         {
