@@ -97,16 +97,12 @@ describe('HeaderComponent', () => {
         });
 
         it('should show the menu button', () => {
-          const debugEl: HTMLElement = fixture.debugElement.query(
-            By.css('.shared-header__page-bar_nav-icon')
-          ).nativeElement;
-          expect(debugEl.getAttribute('ng-reflect-svg-icon')).toBe('menu');
+          expect(pageBarNavIcon.getAttribute('ng-reflect-svg-icon')).toBe(
+            'menu'
+          );
         });
         it('should toggle the side nav', () => {
-          const debugEl: HTMLElement = fixture.debugElement.query(
-            By.css('.shared-header__page-bar_nav-icon')
-          ).nativeElement;
-          debugEl.click();
+          pageBarNavIcon.click();
           expect(headerViewModel.toggleSideNav).toHaveBeenCalledTimes(1);
         });
       });
