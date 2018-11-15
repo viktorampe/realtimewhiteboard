@@ -3,7 +3,6 @@ import {
   FilterServiceInterface,
   NestedPartial
 } from './filter.service.interface';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -15,7 +14,6 @@ export class FilterService implements FilterServiceInterface {
   ): T[] {
     return list.filter(item => this.compareObjects(item, filters, ignoreCase));
   }
-
   private compareObjects<T>(
     item: T,
     filters: NestedPartial<T>,
@@ -29,7 +27,6 @@ export class FilterService implements FilterServiceInterface {
       filterDate.setHours(0, 0, 0);
       return itemDate.getTime() === filterDate.getTime();
     }
-
     // smart way to check if the object is not a primitive type (underscore.js way)
     if (filters === Object(filters)) {
       // check all properties in filters
@@ -40,12 +37,10 @@ export class FilterService implements FilterServiceInterface {
         );
       }, true);
     }
-
     // check for exact matches on number
     if (typeof item === 'number' && typeof filters === 'number') {
       return item === filters;
     }
-
     // check for partial match on string
     let itemStr = item.toString();
     let filterStr = filters.toString();

@@ -1,5 +1,9 @@
-<h1 class="page-header">
-  <i [class]="iconClass" *ngIf="iconClass"></i>
+<h1 class="ui-page-header">
+  <div class="ui-page-header__icon-wrapper"
+       *ngIf="iconClass">
+    <mat-icon [svgIcon]="iconClass"></mat-icon>
+  </div>
+
   {{title}}
   <small>{{subtitle}}</small>
 </h1>
