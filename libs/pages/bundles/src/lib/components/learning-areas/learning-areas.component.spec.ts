@@ -1,7 +1,7 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { FILTER_SERVICE_TOKEN } from '@campus/shared';
+import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/shared';
 import { ListFormat, UiModule } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
 import { BundlesViewModel } from '../bundles.viewmodel';
@@ -12,6 +12,7 @@ describe('LearningAreasComponent', () => {
   let bundlesViewModel: BundlesViewModel;
   let component: LearningAreasComponent;
   let fixture: ComponentFixture<LearningAreasComponent>;
+  let filterService: FilterServiceInterface;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -23,13 +24,14 @@ describe('LearningAreasComponent', () => {
         {
           provide: FILTER_SERVICE_TOKEN,
           useValue: {
-            filter: () => {}
+            filter: () => []
           }
         },
         Store
       ]
     }).compileComponents();
     bundlesViewModel = TestBed.get(BundlesViewModel);
+    filterService = TestBed.get(FILTER_SERVICE_TOKEN);
   }));
 
   beforeEach(() => {
@@ -55,8 +57,13 @@ describe('LearningAreasComponent', () => {
   });
 
   it('should call vm.filterFn when filterTextInput.filterFn is called', () => {
-    const spy = jest.spyOn(component, 'filterFn');
-    component.filterTextInput.filterFn({ learningAreas: [] }, '');
+    const filterSource = { learningAreas: [] };
+    const filterText = '';
+    const spy = jest.spyOn(filterService, 'filter');
+    component.filterTextInput.filterFn(filterSource, filterText);
     expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith(filterSource.learningAreas, {
+      learningArea: { name: filterText }
+    });
   });
 });

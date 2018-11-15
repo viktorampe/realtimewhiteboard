@@ -1,27 +1,20 @@
-import { CommonModule } from '@angular/common';
-import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
+//file.only
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Params } from '@angular/router';
+import { ContentFixture } from '@campus/dal';
 import { FILTER_SERVICE_TOKEN } from '@campus/shared';
 import { ListFormat, ListViewItemDirective, UiModule } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
-import { BehaviorSubject, Subject } from 'rxjs';
-import { PagesBundlesModule } from '../../pages-bundles.module';
+import { BehaviorSubject, of } from 'rxjs';
 import { BundlesViewModel } from '../bundles.viewmodel';
 import { MockViewModel } from '../bundles.viewmodel.mocks';
 import { BundleDetailComponent } from './bundle-detail.component';
 
-@NgModule({
-  imports: [CommonModule, PagesBundlesModule],
-  providers: [{ provide: BundlesViewModel, useClass: MockViewModel }]
-})
-export class TestModule {}
-
-// help I can't make this work...!
-xdescribe('BundleDetailComponent', () => {
-  let params: Subject<Params>;
+describe('BundleDetailComponent', () => {
+  let params: BehaviorSubject<Params>;
   let bundlesViewModel: BundlesViewModel;
   let component: BundleDetailComponent;
   let fixture: ComponentFixture<BundleDetailComponent>;
@@ -29,18 +22,21 @@ xdescribe('BundleDetailComponent', () => {
   beforeEach(async(() => {
     params = new BehaviorSubject<Params>({ area: 1, bundle: 1 });
     TestBed.configureTestingModule({
-      // imports: [TestModule, BrowserAnimationsModule],
       imports: [StoreModule.forRoot({}), UiModule, BrowserAnimationsModule],
       declarations: [BundleDetailComponent],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         { provide: ActivatedRoute, useValue: { params: params } },
         { provide: BundlesViewModel, useClass: MockViewModel },
-        // ChangeDetectorRef,
         {
           provide: FILTER_SERVICE_TOKEN,
           useValue: {
-            filter: () => []
+            filter: () => [
+              new ContentFixture(),
+              new ContentFixture(),
+              new ContentFixture(),
+              new ContentFixture()
+            ]
           }
         },
         Store
@@ -143,6 +139,13 @@ xdescribe('BundleDetailComponent', () => {
     expect(infoPanelContents).toBeTruthy();
   });
 
-  // TODO
-  // it('should show an error message if a bundle is no longer available', () => {});
+  it('should show an error message if a bundle is no longer available', () => {
+    component.bundle$ = of(null);
+    fixture.detectChanges();
+
+    expect(fixture.debugElement.query(By.css('campus-side-sheet'))).toBeFalsy();
+    expect(fixture.debugElement.nativeElement.textContent).toContain(
+      'Deze bundel is niet beschikbaar'
+    );
+  });
 });

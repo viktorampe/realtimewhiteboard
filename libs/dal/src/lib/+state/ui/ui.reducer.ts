@@ -10,7 +10,7 @@ export const NAME = 'ui';
 
 export interface UiState {
   loaded: boolean; // has the Ui list been loaded
-  listFormat?: string;
+  listFormat?: ListFormat;
   sideSheetOpen?: boolean;
 }
 

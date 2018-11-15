@@ -33,7 +33,7 @@ describe('BundlesComponent', () => {
         {
           provide: FILTER_SERVICE_TOKEN,
           useValue: {
-            filter: () => {}
+            filter: () => []
           }
         },
         Store

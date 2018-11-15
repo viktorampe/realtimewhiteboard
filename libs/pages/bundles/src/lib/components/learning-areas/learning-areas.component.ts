@@ -41,7 +41,7 @@ export class LearningAreasComponent implements OnInit {
     this.bundlesViewModel.changeListFormat(value);
   }
 
-  filterFn(
+  private filterFn(
     info: LearningAreasWithBundlesInfoInterface,
     searchText: string
   ): LearningAreaInfoInterface[] {
