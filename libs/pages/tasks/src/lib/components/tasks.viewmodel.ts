@@ -40,6 +40,8 @@ export class TasksViewModel {
     this.loadMockData();
   }
 
+  public changeListFormat(value: ListFormat) {}
+
   private loadMockData() {
     this.learningAreasWithTaskInstances$ = this.getMockLearningAreasWithTaskInstances();
     this.selectedLearningArea$ = this.getMockSelectedLearningArea();
@@ -56,7 +58,7 @@ export class TasksViewModel {
 
     let mock: LearningAreasWithTaskInstanceInfoInterface;
     mock = {
-      learningAreas: [
+      learningAreasWithInfo: [
         {
           learningArea: mockLearningAreas[0],
           openTasks: 2,
@@ -75,7 +77,7 @@ export class TasksViewModel {
       ],
       totalTasks: 0
     };
-    mock.totalTasks = mock.learningAreas.reduce(
+    mock.totalTasks = mock.learningAreasWithInfo.reduce(
       (total, area) => total + area.openTasks + area.closedTasks,
       0
     );

@@ -56,7 +56,7 @@ describe('ButtonComponent', () => {
   });
 
   it('shouldnt show the icon, if not provided', () => {
-    const iconDE = componentDE.query(By.css('i'));
+    const iconDE = componentDE.query(By.css('mat-icon'));
 
     expect(iconDE).toBeFalsy();
   });
@@ -67,9 +67,9 @@ describe('ButtonComponent', () => {
     component.iconClass = mockIconClass;
     testContainerFixture.detectChanges();
 
-    const iconDE = componentDE.query(By.css('mat-icon'));
+    const iconEl = testContainerFixture.debugElement.query(By.css('mat-icon'));
 
-    expect(iconDE.nativeElement).toBeTruthy();
+    expect(iconEl).toBeTruthy();
   });
 
   it('shouldnt project the content', () => {

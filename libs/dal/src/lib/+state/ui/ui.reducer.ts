@@ -1,3 +1,4 @@
+import { ListFormat } from '@campus/ui';
 import { UiAction, UiActionTypes } from './ui.actions';
 
 /**
@@ -15,6 +16,8 @@ export interface UiState {
 }
 
 export const initialState: UiState = {
+  listFormat: ListFormat.GRID,
+  sideSheetOpen: true,
   loaded: false
 };
 

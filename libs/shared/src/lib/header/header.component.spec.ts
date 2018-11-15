@@ -9,7 +9,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { HeaderComponent } from './header.component';
 import { HeaderViewModel } from './header.viewmodel';
 import { RouterLinkDirectiveStub } from './router-link-directive.stub';
-// file.only
+
 @Injectable({
   providedIn: 'root'
 })
