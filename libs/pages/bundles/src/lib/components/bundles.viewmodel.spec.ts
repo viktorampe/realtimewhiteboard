@@ -34,7 +34,6 @@ import {
 import { ListFormat } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from 'jasmine-marbles';
-import { UiState } from 'libs/dal/src/lib/+state/ui/ui.reducer';
 import { of } from 'rxjs';
 import { BundlesViewModel } from './bundles.viewmodel';
 import { LearningAreasWithBundlesInfoInterface } from './bundles.viewmodel.interfaces';
@@ -49,7 +48,7 @@ describe('BundlesViewModel', () => {
   let unlockedContentState: any;
   let eduContentState: any;
 
-  let ui: UiState;
+  let ui: UiReducer.UiState;
   let learningAreas: LearningAreaInterface[];
   let bundles: BundleInterface[];
   let unlockedBoekeGroups: UnlockedBoekeGroupInterface[];
