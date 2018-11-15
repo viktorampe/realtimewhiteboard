@@ -12,7 +12,7 @@ export class HeaderComponent implements OnInit {
   breadCrumbs$ = this.headerViewModel.breadCrumbs$;
   backLink$ = this.headerViewModel.backLink$;
 
-  constructor(public headerViewModel: HeaderViewModel) {}
+  constructor(private headerViewModel: HeaderViewModel) {}
 
   ngOnInit(): void {
     this.loadFeatureToggles();

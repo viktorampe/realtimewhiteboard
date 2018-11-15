@@ -9,8 +9,6 @@ import { HeaderComponent } from './header.component';
 import { HeaderViewModel } from './header.viewmodel';
 import { MockViewModel } from './header.viewmodel.mock';
 
-// file.only
-
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
