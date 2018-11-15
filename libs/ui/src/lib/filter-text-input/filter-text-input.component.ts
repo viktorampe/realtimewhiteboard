@@ -1,12 +1,7 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  Output
-} from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 
 export enum FilterTextInputTheme {
   light = 'light',
@@ -26,22 +21,20 @@ export enum FilterTextInputTheme {
   templateUrl: './filter-text-input.component.html',
   styleUrls: ['./filter-text-input.component.scss']
 })
-export class FilterTextInputComponent implements OnDestroy {
+export class FilterTextInputComponent<I, O> {
+  public filterFn: (source: I, filterText: string | number) => O[];
+  public result$: Observable<O[]>;
+  private input = new FormControl('');
+
   @Input() theme: FilterTextInputTheme;
   @Input() placeholder = 'Filter';
   @Input()
-  set filterText(filterText: string) {
-    this.input.setValue(filterText);
+  set source(source: I) {
+    this.result$ = this.input.valueChanges.pipe(
+      startWith(''),
+      map(filterText => this.filterFn(source, filterText))
+    );
   }
-  @Output() filterTextChange = new EventEmitter<string>();
-
-  input = new FormControl(this.filterText);
-
-  private readonly formSubscription: Subscription = this.input.valueChanges.subscribe(
-    (data: string) => {
-      this.filterTextChange.emit(data);
-    }
-  );
 
   /**
    * clears the input value of the textfield
@@ -53,6 +46,10 @@ export class FilterTextInputComponent implements OnDestroy {
     this.input.setValue('');
   }
 
+  setValue(filterInput: string): void {
+    this.input.setValue(filterInput);
+  }
+
   /**
    * enter button is pressed, make sure it returns false to prevent default behavior
    *
@@ -62,9 +59,5 @@ export class FilterTextInputComponent implements OnDestroy {
   onEnterPressed(e: KeyboardEvent): boolean {
     e.preventDefault();
     return false;
-  }
-
-  ngOnDestroy() {
-    this.formSubscription.unsubscribe();
   }
 }

@@ -35,7 +35,7 @@ import { ListViewItemInterface } from './interfaces/list-view-item';
   templateUrl: './list-view.component.html',
   styleUrls: ['./list-view.component.scss']
 })
-export class ListViewComponent
+export class ListViewComponent<dataObjectType>
   implements AfterContentInit, OnDestroy, OnChanges {
   /**
    * (boolean) - When multiselecting, add a css class to style the selectable items
@@ -50,12 +50,12 @@ export class ListViewComponent
   @Input() multiSelect = false;
   @Input() placeHolderText = 'Er zijn geen beschikbare items.';
 
-  @Output() selectedItems$ = new BehaviorSubject([]);
+  @Output() selectedItems$ = new BehaviorSubject<dataObjectType[]>([]);
   @Output() listFormat$ = new BehaviorSubject(this.listFormat);
 
   // tslint:disable-next-line
   @ContentChildren(forwardRef(() => ListViewItemDirective))
-  items: QueryList<ListViewItemDirective>;
+  items: QueryList<ListViewItemDirective<dataObjectType>>;
 
   ngAfterContentInit() {
     this.setupSelectionSubscriptionsForListItems();
@@ -76,7 +76,9 @@ export class ListViewComponent
     this.itemsSubscription.unsubscribe();
   }
 
-  protected onItemSelectionChanged(item: ListViewItemDirective) {
+  protected onItemSelectionChanged(
+    item: ListViewItemDirective<dataObjectType>
+  ) {
     if (!this.multiSelect) {
       if (item.isSelected) {
         this.items.filter(i => i !== item).forEach(j => (j.isSelected = false));
@@ -87,8 +89,11 @@ export class ListViewComponent
       );
     }
 
-    const selectedItemsArray = this.items.filter(i => i.isSelected);
-    this.selectedItems$.next(selectedItemsArray);
+    this.selectedItems$.next(
+      this.items
+        .filter(i => i.isSelected)
+        .map((i): dataObjectType => i.dataObject)
+    );
   }
 
   selectAllItems() {
@@ -126,7 +131,8 @@ export class ListViewComponent
 @Directive({
   selector: '[campusListItem], [campus-list-item]'
 })
-export class ListViewItemDirective implements AfterContentInit, OnDestroy {
+export class ListViewItemDirective<dataObjectType>
+  implements AfterContentInit, OnDestroy {
   private _isSelected = false;
   public get isSelected(): boolean {
     return this._isSelected;
@@ -141,9 +147,12 @@ export class ListViewItemDirective implements AfterContentInit, OnDestroy {
 
   private subscriptions = new Subscription();
 
-  @Input() dataObject: object;
+  @Input() dataObject: dataObjectType;
 
-  @Output() itemSelectionChanged = new EventEmitter<ListViewItemDirective>();
+  @Output()
+  itemSelectionChanged = new EventEmitter<
+    ListViewItemDirective<dataObjectType>
+  >();
 
   @HostBinding('class.ui-list-view__list__item--selected')
   get isSelectedClass() {
@@ -166,7 +175,7 @@ export class ListViewItemDirective implements AfterContentInit, OnDestroy {
   }
 
   constructor(
-    private parentList: ListViewComponent,
+    private parentList: ListViewComponent<dataObjectType>,
     public host: ListViewItemInterface
   ) {}
 

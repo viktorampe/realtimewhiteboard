@@ -1,11 +1,8 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
-import {
-  AUTH_SERVICE_TOKEN,
-  BundleInterface,
-  EduContentInterface
-} from '@campus/dal';
+import { BundleInterface, EduContentInterface } from '@campus/dal';
+import { FILTER_SERVICE_TOKEN } from '@campus/shared';
 import { ListFormat } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
@@ -76,9 +73,14 @@ describe('BundlesComponent', () => {
       declarations: [BundlesComponent],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
-        { provide: BundlesViewModel, useClass: MockViewModel },
         { provide: ActivatedRoute, value: {} },
-        { provide: AUTH_SERVICE_TOKEN, useValue: {} },
+        { provide: BundlesViewModel, useClass: MockViewModel },
+        {
+          provide: FILTER_SERVICE_TOKEN,
+          useValue: {
+            filter: () => {}
+          }
+        },
         Store
       ]
     }).compileComponents();

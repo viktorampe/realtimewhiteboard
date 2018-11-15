@@ -7,12 +7,6 @@
 
 
 <campus-page-bar>
-  <campus-filter-text-input
-    theme="dark"
-    (filterTextChange)="onChangeFilterInput($event)"
-    [filterText]="filterInput$ | async"
-    class="pages__toolbar__filter"
-  ></campus-filter-text-input>
   <div class="divider"></div>
   <campus-button
     [iconClass]="'icon-timeline'"
@@ -71,25 +65,3 @@
 
 <button (click)="getCurrentUser()">fetch current user</button>
 <div>{{ currentUser | async | json }}</div>
-
-<button (click)="loadCurrentUserinState()">Load user</button>
-
-<div>
-  <button (click)="getAllResults()">All results</button>
-  <div>{{ results$ | async | json }}</div>
-</div>
-
-<div>
-  <button (click)="getResultForTask()">Result Task</button>
-  <div>{{ resultTask$ | async | json }}</div>
-</div>
-<div>
-  <button (click)="getResultForUnlockedContent()">
-    Result UnlockedContent
-  </button>
-  <div>{{ resultUnlockedContent$ | async | json }}</div>
-</div>
-<div>
-  <button (click)="saveResult()">Save result 2</button>
-  <div>{{ resultSaved$ | async | json }}</div>
-</div>

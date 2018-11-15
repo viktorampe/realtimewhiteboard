@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
@@ -28,7 +28,8 @@ describe('HeaderComponent', () => {
           provide: HeaderViewModel,
           useClass: MockHeaderViewModel
         }
-      ]
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
   }));
 
