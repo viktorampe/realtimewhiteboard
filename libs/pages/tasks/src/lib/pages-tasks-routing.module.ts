@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { TasksComponent } from './components/tasks/tasks.component';
+import { TasksAreaComponent } from './components/tasks-area/tasks-area.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: TasksComponent
+    component: TasksAreaComponent
   }
 ];
 

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertReducer, EduContentInterface } from '@campus/dal';
+import { AlertReducer, EduContentInterface, UserActions } from '@campus/dal';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -23,5 +23,9 @@ export class LoginpageComponent implements OnInit {
 
   getCurrentUser() {
     this.currentUser = this.personApi.getCurrent();
+  }
+
+  loadCurrentUserinState() {
+    this.store.dispatch(new UserActions.LoadUser({ force: true }));
   }
 }

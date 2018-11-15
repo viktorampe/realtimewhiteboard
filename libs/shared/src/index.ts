@@ -1,4 +1,5 @@
 export * from './lib/interfaces';
+export * from './lib/services/filter.service';
 export {
   FilterServiceInterface,
   FILTER_SERVICE_TOKEN

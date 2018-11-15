@@ -12,9 +12,9 @@ export class HideMobileDirective implements OnInit, OnDestroy {
 
   constructor(private breakPointObserver: BreakpointObserver) {}
 
-  @HostBinding('hidden')
+  @HostBinding('style.display')
   get isHidden() {
-    return this.isMobile;
+    return this.isMobile ? 'none' : '';
   }
 
   ngOnInit() {
