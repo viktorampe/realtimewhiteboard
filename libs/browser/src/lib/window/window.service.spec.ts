@@ -13,7 +13,6 @@ const currentMockWindow = {
 
 describe('WindowService', () => {
   let windowService: WindowService;
-  let closeSpy: jest.SpyInstance;
   let closeWindowSpy: jest.SpyInstance;
   let openedWindows: { [name: string]: any };
   beforeEach(() => {
@@ -25,7 +24,6 @@ describe('WindowService', () => {
     });
 
     windowService = TestBed.get(WindowService);
-    closeSpy = jest.spyOn(currentMockWindow, 'close');
     closeWindowSpy = jest.spyOn(windowService, 'closeWindow');
     openedWindows = windowService['openedWindows'];
   });
@@ -46,13 +44,17 @@ describe('WindowService', () => {
   });
 
   it('should close the right window', () => {
-    openedWindows['toBeClosed'] = currentMockWindow;
-    openedWindows['stillOpen'] = currentMockWindow;
+    windowService.openWindow('toBeClosed', 'www.foo.com');
+    windowService.openWindow('stillOpen', 'www.bar.com');
+
+    const toBeClosed = windowService.openedWindows.toBeClosed;
+    const stillOpen = windowService.openedWindows.stillOpen;
 
     windowService.closeWindow('toBeClosed');
 
-    expect(openedWindows['toBeClosed']).toBeFalsy();
-    expect(openedWindows['stillOpen']).toBeTruthy();
+    expect(toBeClosed.close).toHaveBeenCalledTimes(1);
+    expect(windowService.openedWindows.toBeClosed).toBeUndefined();
+    expect(windowService.openedWindows.stillOpen).toBe(stillOpen);
   });
 
   it(`should not close non-existing windows`, () => {

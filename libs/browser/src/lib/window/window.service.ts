@@ -10,17 +10,21 @@ export const WINDOW = new InjectionToken('WindowToken', {
   providedIn: 'root'
 })
 export class WindowService implements WindowServiceInterface {
-  private openedWindows: { [name: string]: Window } = {};
+  private _openedWindows: { [name: string]: Window } = {};
   constructor(@Inject(WINDOW) private nativeWindow: Window) {}
 
   openWindow(name: string, url: string) {
     const openedWindow = this.nativeWindow.open(url, name);
-    this.openedWindows[name] = openedWindow;
+    this._openedWindows[name] = openedWindow;
   }
   closeWindow(name: string) {
-    if (this.openedWindows[name]) {
-      this.openedWindows[name].close();
-      delete this.openedWindows[name];
+    if (this._openedWindows[name]) {
+      this._openedWindows[name].close();
+      delete this._openedWindows[name];
     }
+  }
+
+  get openedWindows() {
+    return this._openedWindows;
   }
 }
