@@ -1,4 +1,4 @@
-import { ScormCMIMode } from '../exercise/exercise.service';
+import { ScormCMIMode } from '../results/enums/cmi-mode.enum';
 import { CurrentExerciseInterface } from './../+state/current-exercise/current-exercise.reducer';
 
 export class CurrentExerciseFixture implements CurrentExerciseInterface {

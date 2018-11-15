@@ -1,5 +1,5 @@
 import { EduContentInterface, ResultInterface } from '@campus/dal';
-import { ScormCMIMode } from '../../exercise/exercise.service';
+import { ScormCMIMode } from '../../results/enums/cmi-mode.enum';
 import {
   CurrentExerciseActions,
   CurrentExerciseActionTypes

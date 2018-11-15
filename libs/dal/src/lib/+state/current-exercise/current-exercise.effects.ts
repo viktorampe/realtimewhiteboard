@@ -26,6 +26,7 @@ export class CurrentExerciseEffects {
           .startExercise(
             action.payload.userId,
             action.payload.educontentId,
+            action.payload.saveToApi,
             action.payload.taskId,
             action.payload.unlockedContentId
           )

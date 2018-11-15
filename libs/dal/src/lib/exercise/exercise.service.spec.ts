@@ -1,14 +1,13 @@
 import { inject, TestBed } from '@angular/core/testing';
+import { EduContentApi, PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { hot } from 'jasmine-marbles';
 import { Observable } from 'rxjs';
 import { CurrentExerciseFixture } from '../+fixtures';
 import { CurrentExerciseInterface } from '../+state/current-exercise/current-exercise.reducer';
+import { ContentRequestService } from '../content-request/content-request.service';
+import { ResultsService } from '../results/results.service';
 import { ResultFixture } from './../+fixtures/Result.fixture';
-import {
-  ContentRequestService,
-  ExerciseService,
-  ResultsService
-} from './exercise.service';
+import { ExerciseService } from './exercise.service';
 import { ExerciseServiceInterface } from './exercise.service.interface';
 
 describe('ExerciseService', () => {
@@ -19,6 +18,7 @@ describe('ExerciseService', () => {
   let mockData: {
     userId?: number;
     eduContentId?: number;
+    saveToApi?: boolean;
     taskId?: number;
     unlockedContentId?: number;
     url?: string;
@@ -40,8 +40,16 @@ describe('ExerciseService', () => {
         {
           provide: ContentRequestService,
           useValue: {
-            getTempUrl: () => mockUrl$
+            requestUrl: () => mockUrl$
           }
+        },
+        {
+          provide: PersonApi,
+          useValue: {}
+        },
+        {
+          provide: EduContentApi,
+          useValue: {}
         }
       ]
     });
@@ -51,6 +59,7 @@ describe('ExerciseService', () => {
     mockData = {
       eduContentId: 1,
       taskId: 1,
+      saveToApi: true,
       url: 'tempurl'
     };
 
@@ -78,6 +87,7 @@ describe('ExerciseService', () => {
       service.startExercise(
         mockData.userId,
         mockData.eduContentId,
+        mockData.saveToApi,
         mockData.taskId,
         null
       )
@@ -92,6 +102,7 @@ describe('ExerciseService', () => {
     mockData = {
       userId: 6,
       eduContentId: 1,
+      saveToApi: true,
       unlockedContentId: 1,
       url: 'tempurl'
     };
@@ -108,6 +119,7 @@ describe('ExerciseService', () => {
       service.startExercise(
         mockData.userId,
         mockData.eduContentId,
+        mockData.saveToApi,
         null,
         mockData.unlockedContentId
       )

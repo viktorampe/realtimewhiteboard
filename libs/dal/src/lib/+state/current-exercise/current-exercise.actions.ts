@@ -17,6 +17,7 @@ export class StartExercise implements Action {
     public payload: {
       userId: number;
       educontentId: number;
+      saveToApi: boolean;
       taskId?: number;
       unlockedContentId?: number;
     }

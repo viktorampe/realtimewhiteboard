@@ -8,6 +8,7 @@ export interface ExerciseServiceInterface {
   startExercise(
     userId: number,
     educontentId: number,
+    saveToApi: boolean,
     taskId?: number,
     unlockedContentId?: number
   ): Observable<CurrentExerciseInterface>;
