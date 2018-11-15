@@ -4,4 +4,6 @@ export * from './EduContent.fixture';
 export * from './EduContentMetadata.fixture';
 export * from './LearningArea.fixture';
 export * from './Person.fixture';
+export * from './unlockedBoekeGroup.fixture';
+export * from './unlockedBoekeStudent.fixture';
 export * from './UnlockedContent.fixture';
