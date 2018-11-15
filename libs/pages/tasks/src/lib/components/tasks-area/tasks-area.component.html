@@ -1,5 +1,6 @@
 <campus-page-bar>
-  <campus-filter-text-input theme="dark"
+  <campus-filter-text-input #filterInput
+                            theme="dark"
                             class="pages__toolbar__filter"
                             [source] ="(learningAreasWithInfo$|async)"></campus-filter-text-input>
   <div class="divider"></div>
@@ -10,9 +11,8 @@
 </campus-page-bar>
 
 <div class="pages-tasks__container"
-     *ngIf="
-    (learningAreasWithInfo$ | async)?.learningAreasWithInfo as learningAreas
-  ">
+     *ngIf="(learningAreasWithInfo$ | async)?.learningAreasWithInfo as learningAreas">
+
   <campus-page-header [title]="'Mijn taken'"
                       [subtitle]="'Leergebieden'"
                       [iconClass]="'tasks'"></campus-page-header>
@@ -21,6 +21,7 @@
 
   <ng-container *ngIf="learningAreas.length > 0; else: noLearningAreas">
     <ng-container *ngIf="(filterTextInput.result$|async) as filteredLearningAreas">
+        <div class="test">123</div>
       <div class="pages-tasks__container__learning-areas-count">
         {{ filteredLearningAreas.length }} van
         <u class="pages-tasks__container__learning-areas-count__total" (click)="filterTextInput.clear()">{{ learningAreas.length }}</u>

@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/shared';
 import { FilterTextInputComponent, ListFormat } from '@campus/ui';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { TasksViewModel } from './../tasks.viewmodel';
 import {
   LearningAreasWithTaskInstanceInfoInterface,
@@ -15,13 +15,12 @@ import {
 })
 export class TasksAreaComponent implements OnInit {
   protected listFormat = ListFormat;
-  filterInput$ = new BehaviorSubject<string>('');
   listFormat$: Observable<ListFormat>;
   learningAreasWithInfo$: Observable<
     LearningAreasWithTaskInstanceInfoInterface
   >;
 
-  @ViewChild(FilterTextInputComponent)
+  @ViewChild('filterInput')
   filterTextInput: FilterTextInputComponent<
     LearningAreasWithTaskInstanceInfoInterface,
     LearningAreaWithTaskInfo
