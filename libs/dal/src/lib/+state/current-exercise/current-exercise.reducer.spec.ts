@@ -1,5 +1,5 @@
 import { CurrentExerciseActions } from '.';
-import { ScormCMIMode } from '../../results/enums/cmi-mode.enum';
+import { CurrentExerciseFixture } from '../../+fixtures';
 import {
   CurrentExerciseInterface,
   initialState,
@@ -23,13 +23,7 @@ let emptyExercise: CurrentExerciseInterface;
 
 describe('Exercises Reducer', () => {
   beforeEach(() => {
-    mockExercise = {
-      eduContent: undefined,
-      cmiMode: ScormCMIMode.CMI_MODE_NORMAL,
-      result: undefined,
-      saveToApi: true,
-      url: 'dit is een url'
-    };
+    mockExercise = new CurrentExerciseFixture();
 
     emptyExercise = {
       eduContent: null,

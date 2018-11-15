@@ -62,16 +62,14 @@ export class ExerciseService implements ExerciseServiceInterface {
     const userId = exercise.result.personId;
     const resultId = exercise.result.id;
     const cmi = exercise.result.cmi;
-    const url = exercise.url;
 
     const result$ = this.resultsService.saveResult(userId, resultId, cmi).pipe(
       map(result => {
         return {
+          ...exercise,
           eduContent: result.eduContent,
           cmiMode: result.cmi.mode,
-          result: result,
-          saveToApi: true,
-          url: url
+          result: result
         } as CurrentExerciseInterface;
       })
     );

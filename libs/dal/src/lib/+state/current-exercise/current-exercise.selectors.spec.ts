@@ -1,5 +1,5 @@
 import { CurrentExerciseQueries } from '.';
-import { ScormCMIMode } from '../../results/enums/cmi-mode.enum';
+import { CurrentExerciseFixture } from './../../+fixtures/CurrentExercise.fixture';
 import {
   CurrentExerciseInterface,
   NAME,
@@ -24,13 +24,7 @@ describe('Exercise Selectors', () => {
 
   describe('Exercise Selectors', () => {
     beforeEach(() => {
-      const mockExercise: CurrentExerciseInterface = {
-        eduContent: undefined,
-        cmiMode: ScormCMIMode.CMI_MODE_NORMAL,
-        result: undefined,
-        saveToApi: true,
-        url: 'dit is een url'
-      };
+      const mockExercise = new CurrentExerciseFixture();
 
       exerciseState = createState(mockExercise, true, 'no error');
       storeState = { [NAME]: exerciseState };

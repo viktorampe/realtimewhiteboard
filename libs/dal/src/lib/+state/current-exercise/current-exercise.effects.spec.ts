@@ -7,8 +7,8 @@ import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
 import { CurrentExerciseReducer } from '.';
-import { ScormCMIMode } from '../../exercise/exercise.service';
 import { EXERCISE_SERVICE_TOKEN } from '../../exercise/exercise.service.interface';
+import { ScormCMIMode } from '../../results/enums/cmi-mode.enum';
 import {
   CurrentExerciseError,
   CurrentExerciseLoaded,
@@ -105,11 +105,13 @@ describe('ExerciseEffects', () => {
     const startTaskExerciseAction = new StartExercise({
       userId: 6,
       educontentId: 1,
+      saveToApi: true,
       taskId: 1
     });
     const startUnlockedContentExerciseAction = new StartExercise({
       userId: 6,
       educontentId: 1,
+      saveToApi: true,
       unlockedContentId: 1
     });
     const filledLoadedAction = new CurrentExerciseLoaded(mockExercise);
