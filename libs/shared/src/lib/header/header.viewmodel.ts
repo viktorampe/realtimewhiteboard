@@ -1,9 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import {
   AlertQueueInterface,
-  AuthServiceInterface,
-  AUTH_SERVICE_TOKEN,
   DalState,
   MessageInterface,
   PersonInterface,
@@ -40,19 +37,19 @@ export const mockBreadCrumbs: BreadcrumbLinkInterface[] = [
   {
     displayText: 'level 0',
     link: ['/level0']
+  },
+  {
+    displayText: 'level 1',
+    link: ['/level1']
+  },
+  {
+    displayText: 'level 2',
+    link: ['/level2']
+  },
+  {
+    displayText: 'level 3',
+    link: ['/level3']
   }
-  // {
-  //   displayText: 'level 1',
-  //   link: ['/level1']
-  // },
-  // {
-  //   displayText: 'level 2',
-  //   link: ['/level2']
-  // },
-  // {
-  //   displayText: 'level 3',
-  //   link: ['/level3']
-  // }
 ];
 
 @Injectable({
@@ -79,10 +76,8 @@ export class HeaderViewModel {
     private environmentAlertsFeature: EnvironmentAlertsFeatureInterface,
     @Inject(ENVIRONMENT_MESSAGES_FEATURE_TOKEN)
     private environmentMessagesFeature: EnvironmentMessagesFeatureInterface,
-    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     private store: Store<DalState>,
-    private headerResolver: HeaderResolver,
-    private router: Router
+    private headerResolver: HeaderResolver
   ) {
     this.headerResolver.resolve();
     this.loadFeatureToggles();

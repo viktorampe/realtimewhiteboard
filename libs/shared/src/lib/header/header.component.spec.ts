@@ -1,43 +1,30 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { Injectable } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
-import { BreadcrumbLinkInterface, UiModule } from '@campus/ui';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { UiModule } from '@campus/ui';
+import { Subject } from 'rxjs';
 import { HeaderComponent } from './header.component';
 import { HeaderViewModel } from './header.viewmodel';
-import { RouterLinkDirectiveStub } from './router-link-directive.stub';
+import { MockViewModel } from './header.viewmodel.mock';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class MockHeaderViewModel {
-  enableAlerts: true;
-  enableMessages: true;
-  breadCrumbs$ = new BehaviorSubject<BreadcrumbLinkInterface[]>([
-    {
-      displayText: 'level 0',
-      link: ['/level0']
-    }
-  ]);
-}
+// file.only
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
-  let headerViewModel: MockHeaderViewModel;
+  let headerViewModel: MockViewModel;
   const breakpointStream: Subject<{ matches: boolean }> = new Subject();
   let pageBarNavIcon: HTMLElement;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [UiModule, RouterTestingModule, MatIconModule],
-      declarations: [HeaderComponent, RouterLinkDirectiveStub],
+      declarations: [HeaderComponent],
       providers: [
         {
           provide: HeaderViewModel,
-          useClass: MockHeaderViewModel
+          useClass: MockViewModel
         },
         BreakpointObserver
       ]
@@ -95,18 +82,18 @@ describe('HeaderComponent', () => {
       // mock that we're on small sreen size
       breakpointStream.next({ matches: true });
       fixture.detectChanges();
-
-      // this is the menu or arrow-back icon
-      pageBarNavIcon = fixture.debugElement.query(
-        By.css('.shared-header__page-bar_nav-icon')
-      ).nativeElement;
     });
     describe('page bar navigation', () => {
       describe('when there are no higher level routes', () => {
         beforeEach(() => {
           // mock that there is no (breadcrumb) level up
-          headerViewModel.breadCrumbs$.next([]);
+          headerViewModel.backLink$.next(undefined);
+
           fixture.detectChanges();
+          // this is the menu or arrow-back icon
+          pageBarNavIcon = fixture.debugElement.query(
+            By.css('.shared-header__page-bar_nav-icon')
+          ).nativeElement;
         });
 
         it('should show the menu button', () => {
@@ -116,43 +103,34 @@ describe('HeaderComponent', () => {
           expect(debugEl.getAttribute('ng-reflect-svg-icon')).toBe('menu');
         });
         it('should toggle the side nav', () => {
-          const spy: jest.SpyInstance = jest.spyOn(component, 'onMenuClick');
           const debugEl: HTMLElement = fixture.debugElement.query(
             By.css('.shared-header__page-bar_nav-icon')
           ).nativeElement;
           debugEl.click();
-          expect(spy).toHaveBeenCalledTimes(1);
+          expect(headerViewModel.toggleSideNav).toHaveBeenCalledTimes(1);
         });
       });
     });
     describe('when there is a higher level route', () => {
-      let routerLinks: RouterLinkDirectiveStub[];
+      const backLink = '/level-1';
       beforeEach(() => {
-        headerViewModel.breadCrumbs$.next([
-          { displayText: 'level 1', link: ['/level-1'] },
-          { displayText: 'level 2', link: ['/level-2'] }
-        ]);
-        // component.backLink$ = of(['/level-2']);
+        headerViewModel.backLink$.next(backLink);
         fixture.detectChanges();
-        // find DebugElements with an attached RouterLinkStubDirective
-        const linkDes = fixture.debugElement.queryAll(
-          By.directive(RouterLinkDirectiveStub)
-        );
-
-        routerLinks = linkDes.map(de =>
-          de.injector.get(RouterLinkDirectiveStub)
-        );
+        // this is the menu or arrow-back icon
+        pageBarNavIcon = fixture.debugElement.query(
+          By.css('.shared-header__page-bar_nav-icon')
+        ).nativeElement;
       });
 
       it('should show a back button', () => {
-        const debugEl: HTMLElement = fixture.debugElement.query(
-          By.css('.shared-header__page-bar_nav-icon')
-        ).nativeElement;
-        expect(debugEl.getAttribute('ng-reflect-svg-icon')).toBe('arrow-back');
+        expect(pageBarNavIcon.getAttribute('ng-reflect-svg-icon')).toBe(
+          'arrow-back'
+        );
       });
-      it('should navigate back', () => {
-        pageBarNavIcon.click();
-        expect(routerLinks[0].linkParams).toEqual(['/level-2']);
+      it('should have the correct back link', () => {
+        expect(pageBarNavIcon.getAttribute('ng-reflect-router-link')).toBe(
+          backLink
+        );
       });
     });
   });
