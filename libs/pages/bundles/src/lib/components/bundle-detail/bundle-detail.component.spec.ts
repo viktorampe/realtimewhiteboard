@@ -1,14 +1,14 @@
 // file.only
-
 import { CommonModule } from '@angular/common';
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Params } from '@angular/router';
 import { FILTER_SERVICE_TOKEN } from '@campus/shared';
 import { ListFormat, ListViewItemDirective, UiModule } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { PagesBundlesModule } from '../../pages-bundles.module';
 import { BundlesViewModel } from '../bundles.viewmodel';
 import { MockViewModel } from '../bundles.viewmodel.mocks';
@@ -28,10 +28,10 @@ xdescribe('BundleDetailComponent', () => {
   let fixture: ComponentFixture<BundleDetailComponent>;
 
   beforeEach(async(() => {
-    params = new Subject<Params>();
+    params = new BehaviorSubject<Params>({ area: 1, bundle: 1 });
     TestBed.configureTestingModule({
       // imports: [TestModule, BrowserAnimationsModule],
-      imports: [StoreModule.forRoot({}), UiModule],
+      imports: [StoreModule.forRoot({}), UiModule, BrowserAnimationsModule],
       declarations: [BundleDetailComponent],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
@@ -41,7 +41,7 @@ xdescribe('BundleDetailComponent', () => {
         {
           provide: FILTER_SERVICE_TOKEN,
           useValue: {
-            filter: () => {}
+            filter: () => []
           }
         },
         Store
