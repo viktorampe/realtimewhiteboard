@@ -40,16 +40,18 @@
     </campus-app-bar>
   </div>
   <div class="shared-header__page-bar">
-    <mat-icon *ngIf="(backLink$|async) as link"
-              [routerLink]="link"
-              class="shared-header__page-bar_nav-icon"
-              [svgIcon]="'arrow-back'"
-              hide-desktop></mat-icon>
-    <mat-icon *ngIf="!(backLink$|async)"
+        <mat-icon *ngIf="(backLink$|async) as link; else hamburgerMenu"
+                  [routerLink]="link"
+                  class="shared-header__page-bar_nav-icon"
+                  [svgIcon]="'arrow-back'"
+                  hide-desktop></mat-icon>
+      <ng-template #hamburgerMenu>
+        <mat-icon
               (click)="onMenuClick()"
               class="shared-header__page-bar_nav-icon"
               [svgIcon]="'menu'"
               hide-desktop></mat-icon>
+      </ng-template>
     <div id="page-bar-container">
     </div>
   </div>

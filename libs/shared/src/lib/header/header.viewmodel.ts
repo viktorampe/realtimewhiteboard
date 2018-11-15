@@ -44,7 +44,7 @@ export const mockBreadCrumbs: BreadcrumbLinkInterface[] = [
   // {
   //   displayText: 'level 1',
   //   link: ['/level1']
-  // }
+  // },
   // {
   //   displayText: 'level 2',
   //   link: ['/level2']
@@ -68,7 +68,7 @@ export class HeaderViewModel {
   //presentation stream
   recentAlerts$: Observable<DropdownItemInterface[]>; //TODO replace interface with the actual dropdown interface
   recentMessages$: Observable<DropdownItemInterface[]>; //TODO replace interface with the actual dropdown interface
-  backLink$: Observable<string[] | undefined> = this.setupPageBarNavigation();
+  backLink$: Observable<string | undefined> = this.setupPageBarNavigation();
 
   //state source streams
   private alertsForUser$: Observable<AlertQueueInterface[]>;
@@ -160,12 +160,12 @@ export class HeaderViewModel {
     );
   }
 
-  setupPageBarNavigation(): Observable<string[] | undefined> {
+  setupPageBarNavigation(): Observable<string | undefined> {
     return this.breadCrumbs$.pipe(
-      map(breadCrumbs => {
+      map((breadCrumbs: BreadcrumbLinkInterface[]) => {
         return breadCrumbs.length < 2
           ? undefined
-          : breadCrumbs[breadCrumbs.length - 2].link;
+          : breadCrumbs[breadCrumbs.length - 2].link.toString();
       })
     );
   }

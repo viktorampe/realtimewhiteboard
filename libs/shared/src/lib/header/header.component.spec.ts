@@ -5,9 +5,9 @@ import { MatIconModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { BreadcrumbLinkInterface, UiModule } from '@campus/ui';
-import { BehaviorSubject, of, Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { HeaderComponent } from './header.component';
-import { HeaderViewModel, mockBreadCrumbs } from './header.viewmodel';
+import { HeaderViewModel } from './header.viewmodel';
 import { RouterLinkDirectiveStub } from './router-link-directive.stub';
 // file.only
 @Injectable({
@@ -16,9 +16,12 @@ import { RouterLinkDirectiveStub } from './router-link-directive.stub';
 export class MockHeaderViewModel {
   enableAlerts: true;
   enableMessages: true;
-  breadCrumbs$ = new BehaviorSubject<BreadcrumbLinkInterface[]>(
-    mockBreadCrumbs
-  );
+  breadCrumbs$ = new BehaviorSubject<BreadcrumbLinkInterface[]>([
+    {
+      displayText: 'level 0',
+      link: ['/level0']
+    }
+  ]);
 }
 
 describe('HeaderComponent', () => {
@@ -49,7 +52,6 @@ describe('HeaderComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;
-
     fixture.detectChanges();
   });
 
@@ -103,12 +105,11 @@ describe('HeaderComponent', () => {
       describe('when there are no higher level routes', () => {
         beforeEach(() => {
           // mock that there is no (breadcrumb) level up
-          component.backLink$ = of(undefined);
+          headerViewModel.breadCrumbs$.next([]);
           fixture.detectChanges();
         });
 
         it('should show the menu button', () => {
-          fixture.detectChanges();
           const debugEl: HTMLElement = fixture.debugElement.query(
             By.css('.shared-header__page-bar_nav-icon')
           ).nativeElement;
@@ -127,7 +128,11 @@ describe('HeaderComponent', () => {
     describe('when there is a higher level route', () => {
       let routerLinks: RouterLinkDirectiveStub[];
       beforeEach(() => {
-        component.backLink$ = of(['/level-2']);
+        headerViewModel.breadCrumbs$.next([
+          { displayText: 'level 1', link: ['/level-1'] },
+          { displayText: 'level 2', link: ['/level-2'] }
+        ]);
+        // component.backLink$ = of(['/level-2']);
         fixture.detectChanges();
         // find DebugElements with an attached RouterLinkStubDirective
         const linkDes = fixture.debugElement.queryAll(
@@ -138,7 +143,7 @@ describe('HeaderComponent', () => {
           de.injector.get(RouterLinkDirectiveStub)
         );
       });
-      beforeAll(() => {});
+
       it('should show a back button', () => {
         const debugEl: HTMLElement = fixture.debugElement.query(
           By.css('.shared-header__page-bar_nav-icon')
