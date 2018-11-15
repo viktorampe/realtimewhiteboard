@@ -5,7 +5,7 @@ import {
 
 export class EduContentProductTypeFixture
   implements EduContentProductTypeInterface {
-  name: string;
+  name = 'correctiesleutel';
   icon?: string;
   pedagogic?: boolean;
   excludeFromFilter?: boolean;

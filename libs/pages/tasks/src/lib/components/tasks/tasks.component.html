@@ -40,7 +40,7 @@
         *ngFor="let instance of filteredTaskInstances.instances"
         [routerLink]="[instance.taskInstance.id]"
         campusListItem
-        progress="{{getProgress(instance.taskInstance.start, instance.taskInstance.end)}}"
+        progress="{{instance.taskInstance.getProgress()}}"
         [itemCount]="instance.taskEduContentsCount"
         [title]="instance.taskInstance.name"
         [backgroundColor]="(learningArea$ | async).color"
@@ -48,7 +48,7 @@
       >
         <campus-folder-details>
           {{ instance.taskEduContentsCount + ' item(s)' }}<br />
-          {{ 'Deadline: ' + getDeadLineString(instance.taskInstance.end) }}
+          {{ instance.taskInstance.end | date: 'short' }}
         </campus-folder-details>
       </campus-folder>
     </campus-list-view>

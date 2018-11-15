@@ -8,7 +8,7 @@ import { PersonFixture } from './Person.fixture';
 
 export class TaskInstanceFixture implements TaskInstanceInterface {
   start: Date = new Date();
-  end: Date = new Date();
+  end: Date = new Date(new Date().getTime() + 3600 * 24 * 7 * 1000);
   alerted = true;
   id? = 1;
   taskId?: number;
@@ -21,5 +21,9 @@ export class TaskInstanceFixture implements TaskInstanceInterface {
   constructor(props: Partial<TaskInstanceInterface> = {}) {
     // overwrite defaults
     Object.assign(this, props);
+  }
+
+  getProgress(): number {
+    return 0;
   }
 }

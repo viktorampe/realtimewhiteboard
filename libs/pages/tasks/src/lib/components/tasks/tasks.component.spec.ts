@@ -19,7 +19,8 @@ import {
   TaskInstanceInterface,
   TaskInterface
 } from '@campus/dal';
-import { ListFormat } from '@campus/ui';
+import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/shared';
+import { FilterTextInputComponent, ListFormat } from '@campus/ui';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { marbles } from 'rxjs-marbles';
 import { TasksViewModel } from '../tasks.viewmodel';
@@ -29,6 +30,18 @@ import {
   TaskInstanceWithEduContentsInfoInterface
 } from '../tasks.viewmodel.interfaces';
 import { TasksComponent } from './tasks.component';
+
+class MockFilterService implements FilterServiceInterface {
+  filter<T>(
+    list: T[],
+    filters: import('/Users/mkellner/Desktop/projects/campus/libs/shared/src/lib/services/filter.service.interface').NestedPartial<
+      T
+    >,
+    ignoreCase?: boolean
+  ): T[] {
+    return list;
+  }
+}
 
 class MockViewModel {
   selectedLearningArea$ = this.getMockSelectedLearningArea();
@@ -488,10 +501,11 @@ describe('TasksComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [TasksComponent],
+      declarations: [TasksComponent, FilterTextInputComponent],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         { provide: TasksViewModel, useClass: MockViewModel },
+        { provide: FILTER_SERVICE_TOKEN, useClass: MockFilterService },
         { provide: ActivatedRoute, value: {} }
       ]
     }).compileComponents();
@@ -507,60 +521,9 @@ describe('TasksComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('it should return 100 as progress if startdate == endDate', () => {
-    const startDate = new Date(1541599801751);
-    const endDate = new Date(1541599801751);
-    const currentDate = new Date();
-    jest.spyOn(component, 'getDate').mockReturnValue(currentDate);
-    expect(component.getProgress(startDate, endDate)).toBe(100);
-  });
-
-  it('it should return 0 as progress if startDate == currentDate && enddate > startDate', () => {
-    const startDate = new Date(1541599801751);
-    const endDate = new Date(1541999801751);
-    const currentDate = startDate;
-    jest.spyOn(component, 'getDate').mockReturnValue(currentDate);
-    expect(component.getProgress(startDate, endDate)).toBe(0);
-  });
-
-  it('should return 100 if the currentdate > enddate', () => {
-    const startDate = new Date(1541599801751);
-    const endDate = new Date(1541999801751);
-    const currentDate = new Date(2541999801751);
-    jest.spyOn(component, 'getDate').mockReturnValue(currentDate);
-    expect(component.getProgress(startDate, endDate)).toBe(100);
-  });
-
-  it('should return 0 if startdate > enddate', () => {
-    const startDate = new Date(2541599801751);
-    const endDate = new Date(1541999801751);
-    const currentDate = new Date(1641999801751);
-    jest.spyOn(component, 'getDate').mockReturnValue(currentDate);
-    expect(component.getProgress(startDate, endDate)).toBe(0);
-  });
-
-  it('should return 0 if startdate and or enddate is missing', () => {
-    const startDate = new Date(2541599801751);
-    const endDate = new Date(1541999801751);
-    const currentDate = new Date(1641999801751);
-    jest.spyOn(component, 'getDate').mockReturnValue(currentDate);
-    expect(component.getProgress(null, endDate)).toBe(0);
-    expect(component.getProgress(startDate, null)).toBe(0);
-    expect(component.getProgress(null, null)).toBe(0);
-  });
-
   it('should return the correct icon', () => {
     expect(component.getIcon(true)).toBe('icon-checkmark');
-    expect(component.getIcon(false)).toBe(''); //no icon shown
-  });
-
-  it('it should return the correct deadline string', () => {
-    const date = new Date(1541599801751);
-    expect(component.getDeadLineString(date)).toBe('7/11/18 15:10');
-  });
-
-  it('it should return an empty deadline if no date is set', () => {
-    expect(component.getDeadLineString(null)).toBe('');
+    expect(component.getIcon(false)).toBe('icon-hourglass');
   });
 
   it('should display all tasks', () => {
@@ -568,23 +531,6 @@ describe('TasksComponent', () => {
       By.css('.pages-tasks__container')
     );
     expect(tasksContainer).toBeTruthy();
-    expect(tasksContainer.children[1].nativeElement.children.length).toBe(4);
-  });
-
-  it('should filter out tasks', () => {
-    const tasksContainer = fixture.debugElement.query(
-      By.css('.pages-tasks__container')
-    );
-    expect(tasksContainer).toBeTruthy();
-    expect(tasksContainer.children[1].nativeElement.children.length).toBe(4);
-    component.filterInput$.next('test');
-    fixture.detectChanges();
-    expect(tasksContainer.children[1].nativeElement.children.length).toBe(0);
-    component.filterInput$.next('Overhoring');
-    fixture.detectChanges();
-    expect(tasksContainer.children[1].nativeElement.children.length).toBe(2);
-    component.filterInput$.next('');
-    fixture.detectChanges();
     expect(tasksContainer.children[1].nativeElement.children.length).toBe(4);
   });
 
@@ -596,45 +542,6 @@ describe('TasksComponent', () => {
     expect(tasksText.nativeElement.innerHTML).toBe(
       ' 4 van <u>4</u> weergegeven '
     );
-  });
-
-  it('should display correct tasks count text when filtered', () => {
-    const tasksText = fixture.debugElement.query(
-      By.css('.pages-tasks__container__tasks-count')
-    );
-    expect(tasksText).toBeTruthy();
-    expect(tasksText.nativeElement.innerHTML).toBe(
-      ' 4 van <u>4</u> weergegeven '
-    );
-    component.filterInput$.next('overhoring');
-    fixture.detectChanges();
-    expect(tasksText.nativeElement.innerHTML).toBe(
-      ' 2 van <u>4</u> weergegeven '
-    );
-  });
-
-  it('should reset the filter', () => {
-    const tasksContainer = fixture.debugElement.query(
-      By.css('.pages-tasks__container')
-    );
-    component.filterInput$.next('test');
-    fixture.detectChanges();
-    expect(tasksContainer.children[1].nativeElement.children.length).toBe(0);
-    component.resetFilterInput();
-    fixture.detectChanges();
-    expect(tasksContainer.children[1].nativeElement.children.length).toBe(4);
-  });
-
-  it('should change the filter input', () => {
-    const tasksContainer = fixture.debugElement.query(
-      By.css('.pages-tasks__container')
-    );
-    component.onChangeFilterInput('test');
-    fixture.detectChanges();
-    expect(tasksContainer.children[1].nativeElement.children.length).toBe(0);
-    component.onChangeFilterInput('');
-    fixture.detectChanges();
-    expect(tasksContainer.children[1].nativeElement.children.length).toBe(4);
   });
 
   it(

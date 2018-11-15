@@ -185,7 +185,10 @@ export class TasksViewModel {
       taskId: mockTasks[0].id,
       task: mockTasks[0],
       personId: mockStudent.id,
-      student: mockStudent
+      student: mockStudent,
+      getProgress() {
+        return 0;
+      }
     };
 
     let mockTaskInstance2: TaskInstanceInterface;
@@ -197,7 +200,10 @@ export class TasksViewModel {
       taskId: mockTasks[1].id,
       task: mockTasks[1],
       personId: mockStudent.id,
-      student: mockStudent
+      student: mockStudent,
+      getProgress() {
+        return 0;
+      }
     };
 
     let mockTaskInstance3: TaskInstanceInterface;
@@ -209,7 +215,10 @@ export class TasksViewModel {
       taskId: mockTasks[2].id,
       task: mockTasks[2],
       personId: mockStudent.id,
-      student: mockStudent
+      student: mockStudent,
+      getProgress() {
+        return 0;
+      }
     };
     let mockTaskInstance4: TaskInstanceInterface;
     mockTaskInstance4 = {
@@ -220,7 +229,10 @@ export class TasksViewModel {
       taskId: mockTasks[0].id,
       task: mockTasks[0],
       personId: mockStudent.id,
-      student: mockStudent
+      student: mockStudent,
+      getProgress() {
+        return 0;
+      }
     };
 
     return [
