@@ -21,7 +21,7 @@ import {
   providedIn: 'root'
 })
 // implements TasksResolver
-export class TasksViewModel {
+export class MockTasksViewModel {
   learningAreasWithTaskInstances$: Observable<
     LearningAreasWithTaskInstanceInfoInterface
   >;
@@ -40,7 +40,7 @@ export class TasksViewModel {
     this.loadMockData();
   }
 
-  public changeListFormat(value: ListFormat) {}
+  changeListFormat() {}
 
   private loadMockData() {
     this.learningAreasWithTaskInstances$ = this.getMockLearningAreasWithTaskInstances();
