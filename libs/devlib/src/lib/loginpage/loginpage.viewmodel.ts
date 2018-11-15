@@ -8,8 +8,8 @@ import {
   UserReducer
 } from '@campus/dal';
 import {
-  CmiInterface,
   ScormApiServiceInterface,
+  ScormCmiInterface,
   ScormCMIMode,
   SCORM_API_SERVICE_TOKEN
 } from '@campus/scorm';
@@ -36,7 +36,10 @@ export class LoginPageViewModel implements Resolve<boolean> {
     store.pipe(select(UserQueries.getCurrentUser)).subscribe(data => {
       this.loggedIn = data != null;
     });
-    this.scormApiService.init(<CmiInterface>{}, ScormCMIMode.CMI_MODE_NORMAL);
+    this.scormApiService.init(
+      <ScormCmiInterface>{},
+      ScormCMIMode.CMI_MODE_NORMAL
+    );
     this.scormApiService.commit$.subscribe(console.log);
   }
 

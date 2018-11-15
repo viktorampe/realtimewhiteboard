@@ -1,39 +1,34 @@
 import { Subject } from 'rxjs';
 import {
-  CmiInterface,
   ScormApiInterface,
+  ScormCmiInterface,
   ScormCMIMode,
+  ScormErrorCodes,
   ScormStatus
 } from './scorm-api.interface';
 
-export enum ErrorCodes {
-  NO_ERROR = '0',
-  GENERAL_ERROR = '101',
-  INVALID_ARGUMENT_ERROR = '201',
-  ELEMENT_CANNOT_HAVE_CHILDREN_ERROR = '202',
-  ELEMENT_CANNOT_HAVE_COUNT_ERROR = '203',
-  NOT_INITIALIZED_ERROR = '301',
-  NOT_IMPLEMENTED_ERROR = '401',
-  INVALID_SET_VALUE_ELEMENT_IS_KEYWORD_ERROR = '402',
-  READ_ONLY_ERROR = '403',
-  WRITE_ONLY_ERROR = '404',
-  INCORRECT_DATA_TYPE_ERROR = '405'
-}
-
 export class ScormApi implements ScormApiInterface {
-  lastErrorCode: ErrorCodes = ErrorCodes.NO_ERROR;
+  lastErrorCode: ScormErrorCodes = ScormErrorCodes.NO_ERROR;
   lastDiagnosticMessage = '';
   connectedStatus = true;
-  commit$ = new Subject<{
-    score: number;
-    time: number;
-    status: string;
-    cmi: CmiInterface;
-  }>();
-  cmi$ = new Subject<CmiInterface>();
+
+  /**
+   * Stream that emits when the CMI data model needs to be saved to the server.
+   *
+   * @memberof ScormApi
+   */
+  commit$ = new Subject<ScormCmiInterface>();
+
+  /**
+   * Stream that emits when the CMI data model has changed.
+   * Used to updated the state.
+   *
+   * @memberof ScormApi
+   */
+  cmi$ = new Subject<ScormCmiInterface>();
 
   constructor(
-    private currentResult: CmiInterface,
+    private currentResult: ScormCmiInterface,
     private mode: ScormCMIMode
   ) {}
 
@@ -62,7 +57,7 @@ export class ScormApi implements ScormApiInterface {
     }
 
     this.currentResult.mode = this.mode;
-    this.lastErrorCode = ErrorCodes.NO_ERROR;
+    this.lastErrorCode = ScormErrorCodes.NO_ERROR;
     this.lastDiagnosticMessage = this.LMSGetErrorString(this.lastErrorCode);
 
     return 'true';
@@ -111,12 +106,12 @@ export class ScormApi implements ScormApiInterface {
     const value = this.getReferenceFromDotString(parameter, this.currentResult);
 
     if (parameter !== undefined) {
-      this.lastErrorCode = ErrorCodes.NO_ERROR;
+      this.lastErrorCode = ScormErrorCodes.NO_ERROR;
       return parameter;
     }
 
     // no parameter available, pity
-    this.lastErrorCode = ErrorCodes.NOT_IMPLEMENTED_ERROR;
+    this.lastErrorCode = ScormErrorCodes.NOT_IMPLEMENTED_ERROR;
     this.lastDiagnosticMessage =
       'Deze info (' + parameter + ') is niet beschikbaar';
     return 'false';
@@ -162,7 +157,7 @@ export class ScormApi implements ScormApiInterface {
       return 'false';
     }
 
-    this.commit$.next(this.createCommitData());
+    this.commit$.next(this.currentResult);
     return 'true';
   }
   /**
@@ -171,7 +166,7 @@ export class ScormApi implements ScormApiInterface {
    * @returns
    * @memberof ScormApi
    */
-  LMSGetLastError(): ErrorCodes {
+  LMSGetLastError(): ScormErrorCodes {
     return this.lastErrorCode;
   }
   /**
@@ -187,41 +182,41 @@ export class ScormApi implements ScormApiInterface {
   /**
    * Get a short description for the specified errorCode
    *
-   * @param {ErrorCodes} code code that identifies the error message
+   * @param {ScormErrorCodes} code code that identifies the error message
    * @returns {String} CMIErrorMessage
    * @memberof ScormApi
    */
-  LMSGetErrorString(code: ErrorCodes): string {
+  LMSGetErrorString(code: ScormErrorCodes): string {
     let errorString = '';
     switch (code) {
-      case ErrorCodes.NO_ERROR:
+      case ScormErrorCodes.NO_ERROR:
         errorString = 'Geen vuiltje aan de lucht...';
         break;
-      case ErrorCodes.INVALID_ARGUMENT_ERROR:
+      case ScormErrorCodes.INVALID_ARGUMENT_ERROR:
         errorString = 'Foutief argument:';
         break;
-      case ErrorCodes.ELEMENT_CANNOT_HAVE_CHILDREN_ERROR:
+      case ScormErrorCodes.ELEMENT_CANNOT_HAVE_CHILDREN_ERROR:
         errorString = 'Dit element heeft geen _children';
         break;
-      case ErrorCodes.ELEMENT_CANNOT_HAVE_COUNT_ERROR:
+      case ScormErrorCodes.ELEMENT_CANNOT_HAVE_COUNT_ERROR:
         errorString = 'Dit element heeft geen _count';
         break;
-      case ErrorCodes.NOT_INITIALIZED_ERROR:
+      case ScormErrorCodes.NOT_INITIALIZED_ERROR:
         errorString = 'De oefening werd niet correct opgestart';
         break;
-      case ErrorCodes.NOT_IMPLEMENTED_ERROR:
+      case ScormErrorCodes.NOT_IMPLEMENTED_ERROR:
         errorString = 'Deze feature werd niet geïmplementeerd door het LMS';
         break;
-      case ErrorCodes.INVALID_SET_VALUE_ELEMENT_IS_KEYWORD_ERROR:
+      case ScormErrorCodes.INVALID_SET_VALUE_ELEMENT_IS_KEYWORD_ERROR:
         errorString = 'Je kan geen waardes zetten voor keywords';
         break;
-      case ErrorCodes.READ_ONLY_ERROR:
+      case ScormErrorCodes.READ_ONLY_ERROR:
         errorString = 'Dit element is alleen-lezen';
         break;
-      case ErrorCodes.WRITE_ONLY_ERROR:
+      case ScormErrorCodes.WRITE_ONLY_ERROR:
         errorString = 'Dit element is alleen-schrijven';
         break;
-      case ErrorCodes.INCORRECT_DATA_TYPE_ERROR:
+      case ScormErrorCodes.INCORRECT_DATA_TYPE_ERROR:
         errorString = 'De waarde die je wil schrijven is niet geldig';
         break;
       default:
@@ -231,7 +226,7 @@ export class ScormApi implements ScormApiInterface {
     return errorString;
   }
 
-  private getNewCmi(): CmiInterface {
+  private getNewCmi(): ScormCmiInterface {
     return {
       mode: this.mode,
       core: {
@@ -269,13 +264,16 @@ export class ScormApi implements ScormApiInterface {
     const cool = this.currentResult !== null;
 
     if (!cool) {
-      this.lastErrorCode = ErrorCodes.NOT_INITIALIZED_ERROR;
+      this.lastErrorCode = ScormErrorCodes.NOT_INITIALIZED_ERROR;
     }
     this.lastDiagnosticMessage = this.LMSGetErrorString(this.lastErrorCode);
     return cool;
   }
 
-  private getReferenceFromDotString(parameter: string, exercise: CmiInterface) {
+  private getReferenceFromDotString(
+    parameter: string,
+    exercise: ScormCmiInterface
+  ) {
     function index(obj, i) {
       if (obj === undefined) {
         return undefined;
@@ -289,7 +287,7 @@ export class ScormApi implements ScormApiInterface {
   private setReferenceFromDotString(
     parameter: string,
     value: string,
-    exercise: CmiInterface
+    exercise: ScormCmiInterface
   ) {
     function index(obj, i, currentIndex, arr) {
       if (obj === undefined) {
@@ -308,29 +306,8 @@ export class ScormApi implements ScormApiInterface {
   }
 
   private reset() {
-    this.lastErrorCode = ErrorCodes.NOT_INITIALIZED_ERROR;
+    this.lastErrorCode = ScormErrorCodes.NOT_INITIALIZED_ERROR;
     this.lastDiagnosticMessage = 'De oefening werd niet correct opgestart.';
     this.connectedStatus = true;
-  }
-
-  private createCommitData(): {
-    score: number;
-    time: number;
-    status: string;
-    cmi: CmiInterface;
-  } {
-    const timepieces = this.LMSGetValue('cmi.core.total_time').split(':');
-    const timespan =
-      parseInt(timepieces[0], 10) * 3600000 +
-      parseInt(timepieces[1], 10) * 60000 +
-      parseFloat(timepieces[2]) * 1000;
-    const data = {
-      score: parseInt(this.LMSGetValue('cmi.core.score.raw'), 10),
-      time: timespan,
-      status: this.LMSGetValue('cmi.core.lesson_status'),
-      cmi: this.currentResult
-    };
-
-    return data;
   }
 }

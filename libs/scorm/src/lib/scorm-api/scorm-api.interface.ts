@@ -1,17 +1,28 @@
-import { ErrorCodes } from './scorm-api';
-
 export interface ScormApiInterface {
   LMSInitialize(): 'true' | 'false';
   LMSFinish(): 'true' | 'false';
   LMSGetValue(parameter: string): 'false' | string;
   LMSSetValue(parameter: string, value: string): 'true' | 'false';
   LMSCommit(): string;
-  LMSGetLastError(): ErrorCodes;
+  LMSGetLastError(): ScormErrorCodes;
   LMSGetErrorString(code: string): string;
   LMSGetDiagnostic(): string;
 }
 
-// TODO: remove these interfaces when all scorm related code is merged
+export enum ScormErrorCodes {
+  NO_ERROR = '0',
+  GENERAL_ERROR = '101',
+  INVALID_ARGUMENT_ERROR = '201',
+  ELEMENT_CANNOT_HAVE_CHILDREN_ERROR = '202',
+  ELEMENT_CANNOT_HAVE_COUNT_ERROR = '203',
+  NOT_INITIALIZED_ERROR = '301',
+  NOT_IMPLEMENTED_ERROR = '401',
+  INVALID_SET_VALUE_ELEMENT_IS_KEYWORD_ERROR = '402',
+  READ_ONLY_ERROR = '403',
+  WRITE_ONLY_ERROR = '404',
+  INCORRECT_DATA_TYPE_ERROR = '405'
+}
+
 export enum ScormCMIMode {
   CMI_MODE_NORMAL = 'normal',
   CMI_MODE_BROWSE = 'browse',
@@ -28,7 +39,7 @@ export enum ScormStatus {
   STATUS_NOT_ATTEMPTED = 'not attempted'
 }
 
-export interface CmiInterface {
+export interface ScormCmiInterface {
   mode: ScormCMIMode;
   core: {
     score: {
@@ -41,19 +52,6 @@ export interface CmiInterface {
     total_time: string; //'0000:00:00'
     session_time?: string; //'0000:00:00'
   };
-  objectives?: {
-    // check if interface is correct
-    score: {
-      raw: number; //0
-      min: number; //undefined
-      max: number; //undefined
-      scale: any; //undefined
-    };
-    status: ScormStatus;
-    id: string; //'points'
-  }[];
-  suspend_data?: {
-    startTime: number;
-    endTime: number;
-  }[];
+  objectives?: any;
+  suspend_data?: any;
 }
