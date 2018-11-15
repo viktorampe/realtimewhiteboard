@@ -1,20 +1,24 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, InjectionToken } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ScormApi } from './scorm-api';
 import { ScormCmiInterface, ScormCMIMode } from './scorm-api.interface';
 import { ScormApiServiceInterface } from './scorm-api.service.interface';
 
+// TODO: remove this when window service is available
+export const WINDOW = new InjectionToken('WindowToken', {
+  providedIn: 'root',
+  factory: () => window
+});
+
 @Injectable({
   providedIn: 'root'
 })
 export class ScormApiService implements ScormApiServiceInterface {
-  private window = window; //TODO: replace with injected window from window service
-
   commit$ = new Subject<ScormCmiInterface>();
 
   cmi$ = new Subject<ScormCmiInterface>();
 
-  constructor() {}
+  constructor(@Inject(WINDOW) private window: Window) {}
 
   init(cmi: ScormCmiInterface, mode: ScormCMIMode) {
     if (!this.window['API']) {
