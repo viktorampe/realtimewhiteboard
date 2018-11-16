@@ -1,13 +1,25 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { PagesSharedModule } from '@campus/pages/shared';
+import { SharedModule } from '@campus/shared';
+import { UiModule } from '@campus/ui';
+import { TasksAreaComponent } from './components/tasks-area/tasks-area.component';
 import { TasksComponent } from './components/tasks.component';
 import { TasksViewModel } from './components/tasks.viewmodel';
 import { PagesTasksRoutingModule } from './pages-tasks-routing.module';
 
 @NgModule({
-  imports: [CommonModule, PagesTasksRoutingModule],
-  declarations: [TasksComponent],
+  imports: [
+    CommonModule,
+    PagesTasksRoutingModule,
+    UiModule,
+    PagesSharedModule,
+    SharedModule
+  ],
+  declarations: [TasksComponent, TasksAreaComponent],
 
-  providers: [TasksViewModel]
+  providers: [TasksViewModel],
+
+  exports: [TasksAreaComponent]
 })
 export class PagesTasksModule {}

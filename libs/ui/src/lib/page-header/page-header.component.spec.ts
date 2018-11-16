@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { UiModule } from '../ui.module';
 import { PageHeaderComponent } from './page-header.component';
 
 describe('PageHeaderComponent', () => {
@@ -10,7 +11,7 @@ describe('PageHeaderComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [PageHeaderComponent]
+      imports: [UiModule]
     }).compileComponents();
   }));
 
@@ -37,17 +38,19 @@ describe('PageHeaderComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should apply the icon class', () => {
-    const iconEl = fixture.debugElement.query(By.css('i'));
+  it('should show the icon', () => {
+    const iconEl = fixture.debugElement.query(By.css('mat-icon'));
 
-    expect(iconEl.nativeElement.className).toBe(mockData.iconClass);
+    expect(iconEl).toBeTruthy();
   });
 
   it('shouldnt show the icon when the iconclass string is empty', () => {
     component.iconClass = '';
     fixture.detectChanges();
 
-    const iconDE = fixture.debugElement.query(By.css('i'));
+    const iconDE = fixture.debugElement.query(
+      By.css('.ui-page-header__icon-wrapper')
+    );
 
     expect(iconDE).toBeNull();
   });
