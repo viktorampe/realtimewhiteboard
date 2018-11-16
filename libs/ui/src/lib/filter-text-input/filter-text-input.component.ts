@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { filter, map, startWith } from 'rxjs/operators';
 
 export enum FilterTextInputTheme {
   light = 'light',
@@ -35,13 +35,21 @@ export class FilterTextInputComponent<I, O> {
   @Input()
   set source(source: I) {
     this.result$ = this.input.valueChanges.pipe(
+      filter(() => !!this.filterableItem),
+      startWith(''),
+      map(filterText => {
+        return this.filterableItem.filterFn(source, filterText);
+      })
+    );
+
+    /*this.result$ = this.input.valueChanges.pipe(
       startWith(''),
       map(filterText => {
         if (this.filterableItem) {
           return this.filterableItem.filterFn(source, filterText);
         }
       })
-    );
+    );*/
   }
 
   /**
@@ -58,9 +66,7 @@ export class FilterTextInputComponent<I, O> {
     this.input.setValue(filterInput);
   }
 
-  setFilterableItem(filterableItem: {
-    filterFn: (source: I, filterText: string | number) => O[];
-  }) {
+  setFilterableItem(filterableItem: FilterableItem<I, O>) {
     this.filterableItem = filterableItem;
   }
 
