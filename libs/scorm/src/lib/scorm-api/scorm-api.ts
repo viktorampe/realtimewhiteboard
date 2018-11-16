@@ -28,7 +28,7 @@ export class ScormApi implements ScormApiInterface {
   cmi$ = new Subject<ScormCmiInterface>();
 
   constructor(
-    private currentResult: ScormCmiInterface,
+    private currentResult: ScormCmiInterface | string,
     private mode: ScormCMIMode
   ) {}
 
@@ -105,9 +105,9 @@ export class ScormApi implements ScormApiInterface {
 
     const value = this.getReferenceFromDotString(parameter, this.currentResult);
 
-    if (parameter !== undefined) {
+    if (value !== undefined) {
       this.lastErrorCode = ScormErrorCodes.NO_ERROR;
-      return parameter;
+      return value;
     }
 
     // no parameter available, pity
