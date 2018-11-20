@@ -1,18 +1,31 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {
+  AuthServiceInterface,
+  AUTH_SERVICE_TOKEN,
+  DalState,
   EduContentInterface,
   EduContentProductTypeInterface,
+  EduContentQueries,
   LearningAreaInterface,
+  LearningAreaQueries,
   MethodInterface,
   PersonInterface,
+  ResultInterface,
   TaskEduContentInterface,
   TaskInstanceInterface,
-  TaskInterface
+  TaskInterface,
+  TaskQueries,
+  UiQuery,
+  UserQueries
 } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { select, Store } from '@ngrx/store';
+import { combineLatest, Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { ScormStatus } from './../../../../../dal/src/lib/results/enums/scorm-status.enum';
 import {
   LearningAreasWithTaskInstanceInfoInterface,
+  LearningAreaWithTaskInfo,
   TaskInstancesWithEduContentInfoInterface,
   TaskInstanceWithEduContentsInfoInterface
 } from './tasks.viewmodel.interfaces';
@@ -20,133 +33,226 @@ import {
 @Injectable({
   providedIn: 'root'
 })
-// implements TasksResolver
 export class TasksViewModel {
-  learningAreasWithTaskInstances$: Observable<
+  //source streams //TODO private zetten waar nodig
+  public listFormat$: Observable<ListFormat>;
+  currentUser$: Observable<PersonInterface>;
+  learningAreas$: Observable<LearningAreaInterface[]>;
+  teachers$: Observable<PersonInterface[]>;
+  tasks$: Observable<TaskInterface[]>;
+  educontents$: Observable<EduContentInterface[]>;
+  taskInstances$: Observable<TaskInstanceInterface[]>;
+  results$: Observable<ResultInterface[]>;
+  taskEducontents$: Observable<TaskEduContentInterface[]>;
+
+  //intermediate streams  //TODO private zetten waar nodig
+  tasksWithRelationInfo$: Observable<TaskInterface[]>;
+  taskInstancesWithRelationInfo$: Observable<
+    TaskInstanceWithRelationInfoInterface[]
+  >;
+  tasksWithInstances$: Observable<TaskWithInstanceInterface[]>;
+  learningAreasWithTasks$: Observable<LearningAreaWithTasksInterface[]>;
+
+  // presentation streams
+  public learningAreasWithTaskInstances$: Observable<
     LearningAreasWithTaskInstanceInfoInterface
   >;
-  selectedLearningArea$: Observable<LearningAreaInterface>;
-  taskInstancesByLearningArea$: Observable<
-    TaskInstancesWithEduContentInfoInterface
+
+  public taskInstancesByLearningArea$: Observable<
+    TaskInstancesWithEduContentInfoInterface[]
   >;
-  selectedTaskInstance$: Observable<TaskInstanceInterface>;
-  taskInstanceWithEduContents$: Observable<
+
+  public taskInstanceWithEduContents$: Observable<
     TaskInstanceWithEduContentsInfoInterface
   >;
-  listFormat$: Observable<ListFormat>;
-  // routeParams$: TODO type?
 
-  constructor() {
+  constructor(
+    private store: Store<DalState>,
+    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
+  ) {
     this.loadMockData();
+    this.setSourceStreams();
+    this.setIntermediateStreams();
+    this.setPresentationStreams();
   }
 
   public changeListFormat(value: ListFormat) {}
 
-  private loadMockData() {
-    this.learningAreasWithTaskInstances$ = this.getMockLearningAreasWithTaskInstances();
-    this.selectedLearningArea$ = this.getMockSelectedLearningArea();
-    this.taskInstancesByLearningArea$ = this.getMockTaskInstancesByLearningArea();
-    this.selectedTaskInstance$ = this.getMockSelectedTaskInstance();
-    this.taskInstanceWithEduContents$ = this.getMockTaskInstanceWithEduContents();
-    this.listFormat$ = this.getMockListFormat();
+  public getLearningAreaById(
+    areaId: number
+  ): Observable<LearningAreaInterface> {
+    return this.store.pipe(select(LearningAreaQueries.getById, { id: areaId }));
   }
 
-  private getMockLearningAreasWithTaskInstances(): Observable<
-    LearningAreasWithTaskInstanceInfoInterface
-  > {
-    const mockLearningAreas = this.getMockLearningAreas();
+  public getTaskById(taskId: number): Observable<TaskInterface> {
+    return this.store.pipe(select(TaskQueries.getById, { id: taskId }));
+  }
 
-    let mock: LearningAreasWithTaskInstanceInfoInterface;
-    mock = {
-      learningAreasWithInfo: [
-        {
-          learningArea: mockLearningAreas[0],
-          openTasks: 2,
-          closedTasks: 3
-        },
-        {
-          learningArea: mockLearningAreas[1],
-          openTasks: 0,
-          closedTasks: 2
-        },
-        {
-          learningArea: mockLearningAreas[2],
-          openTasks: 2,
-          closedTasks: 0
-        }
-      ],
-      totalTasks: 0
-    };
-    mock.totalTasks = mock.learningAreasWithInfo.reduce(
-      (total, area) => total + area.openTasks + area.closedTasks,
-      0
+  // Alles hier is nog TODO: ophalen uit state
+  private loadMockData() {
+    this.taskInstances$ = of(this.getMockTaskInstances());
+    this.results$ = of([]);
+    this.teachers$ = of([this.getMockTeacher()]);
+  }
+
+  private setSourceStreams() {
+    this.listFormat$ = this.store.pipe(
+      select(UiQuery.getListFormat),
+      map(listFormat => <ListFormat>listFormat)
     );
 
-    return new BehaviorSubject(mock);
+    this.currentUser$ = this.store.pipe(
+      select(UserQueries.getCurrentUser),
+      map(user => <PersonInterface>user)
+    );
+
+    this.learningAreas$ = this.store.pipe(select(LearningAreaQueries.getAll));
+
+    //this.teachers$ = this.store.pipe(select(UserQueries.));
+
+    this.tasks$ = this.store.pipe(select(TaskQueries.getAll));
+
+    this.educontents$ = this.store.pipe(select(EduContentQueries.getAll));
+
+    //this.taskInstances$
   }
 
-  private getMockSelectedLearningArea(
-    id: 0 | 1 | 2 = 0
-  ): Observable<LearningAreaInterface> {
-    const mockLearningAreas = this.getMockLearningAreas();
-    return new BehaviorSubject(mockLearningAreas[id]);
+  private setIntermediateStreams() {
+    this.tasksWithRelationInfo$ = combineLatest(
+      this.tasks$,
+      this.taskEducontents$,
+      this.educontents$,
+      this.learningAreas$,
+      this.teachers$
+    ).pipe(
+      map(([tasks, taskEducontents, educontents, learningAreas, teachers]) =>
+        tasks.map(task => {
+          task.eduContents = educontents.filter(educontent =>
+            taskEducontents.some(
+              tE => tE.taskId === task.id && tE.eduContentId === educontent.id
+            )
+          );
+
+          task.learningArea = learningAreas.find(
+            learningArea => learningArea.id === task.learningAreaId
+          );
+          task.teacher = teachers.find(teacher => task.personId === teacher.id);
+
+          return task;
+        })
+      )
+    );
+
+    this.taskInstancesWithRelationInfo$ = combineLatest(
+      this.taskInstances$,
+      this.tasksWithRelationInfo$,
+      this.results$
+    ).pipe(
+      map(([taskInstances, tasks, results]) =>
+        taskInstances.map(instance => {
+          const instanceWithRelations = instance as TaskInstanceWithRelationInfoInterface;
+
+          instanceWithRelations.task = tasks.find(
+            task => task.id === instance.taskId
+          );
+
+          instanceWithRelations.results = results.filter(
+            result =>
+              result.taskId === instanceWithRelations.taskId &&
+              result.personId === instanceWithRelations.personId
+          );
+
+          instanceWithRelations.isFinished = instanceWithRelations.results.some(
+            result => result.status !== ScormStatus.STATUS_COMPLETED
+          );
+
+          return instanceWithRelations;
+        })
+      )
+    );
+
+    this.tasksWithInstances$ = combineLatest(
+      this.tasks$,
+      this.taskInstancesWithRelationInfo$
+    ).pipe(
+      map(([tasks, taskInstances]) =>
+        tasks.map(task => {
+          const taskWithInstanceInfo = task as TaskWithInstanceInterface;
+          taskWithInstanceInfo.taskInstances = taskInstances.filter(
+            instance => instance.taskId === taskWithInstanceInfo.id
+          );
+          return taskWithInstanceInfo;
+        })
+      )
+    );
+
+    this.learningAreasWithTasks$ = combineLatest(
+      this.tasksWithInstances$,
+      this.learningAreas$
+    ).pipe(
+      map(([tasks, learningAreas]) =>
+        learningAreas.map(learningArea => {
+          const learningAreasWithTasks = learningArea as LearningAreaWithTasksInterface;
+          learningAreasWithTasks.tasks = tasks.filter(
+            task => task.learningAreaId === learningArea.id
+          );
+
+          return learningAreasWithTasks;
+        })
+      )
+    );
   }
 
-  private getMockTaskInstancesByLearningArea(): Observable<
-    TaskInstancesWithEduContentInfoInterface
-  > {
-    const mockTaskInstancesAll = this.getMockTaskInstances();
+  private setPresentationStreams() {
+    this.learningAreasWithTaskInstances$ = this.learningAreasWithTasks$.pipe(
+      map(
+        (learningAreas): LearningAreasWithTaskInstanceInfoInterface => {
+          const learningAreasWithInfo: LearningAreaWithTaskInfo[] = learningAreas.map(
+            area => {
+              const totalTasksInArea = area.tasks.filter(
+                task => task.instances.length !== 0
+              ).length;
 
-    let mockTaskInstances: TaskInstancesWithEduContentInfoInterface;
-    mockTaskInstances = {
-      instances: [
-        {
-          taskInstance: mockTaskInstancesAll[0],
-          taskEduContentsCount: 1,
-          finished: true
-        },
-        {
-          taskInstance: mockTaskInstancesAll[1],
-          taskEduContentsCount: 2,
-          finished: true
-        },
-        {
-          taskInstance: mockTaskInstancesAll[2],
-          taskEduContentsCount: 1,
-          finished: false
-        },
-        {
-          taskInstance: mockTaskInstancesAll[3],
-          taskEduContentsCount: 2,
-          finished: false
+              const tasksFinishedAmount = area.tasks.filter(task =>
+                task.instances.filter(instance => instance.isFinished)
+              ).length;
+
+              return {
+                learningArea: area,
+                openTasks: totalTasksInArea - tasksFinishedAmount,
+                closedTasks: tasksFinishedAmount
+              };
+            }
+          );
+
+          const totalTasks = learningAreasWithInfo.reduce(
+            (total, area) => total + area.openTasks + area.closedTasks,
+            0
+          );
+
+          return {
+            learningAreasWithInfo: learningAreasWithInfo,
+            totalTasks: totalTasks
+          };
         }
-      ]
-    };
+      )
+    );
 
-    return new BehaviorSubject(mockTaskInstances);
-  }
+    this.taskInstanceWithEduContents$ = this.taskInstancesWithRelationInfo$.pipe(
+      map(
+        (instances): TaskInstanceWithEduContentsInfoInterface => {
+          instances.map(instance => {
+            return {
+              taskInstance: instance as TaskInstanceInterface,
+              eduContents: instance.task.eduContents,
+              finished: instance.isFinished
+            };
+          });
 
-  private getMockSelectedTaskInstance(
-    id: 0 | 1 | 2 | 3 = 0
-  ): Observable<TaskInstanceInterface> {
-    return new BehaviorSubject(this.getMockTaskInstances()[id]);
-  }
-
-  private getMockTaskInstanceWithEduContents(
-    id: 0 | 1 | 2 | 3 = 0,
-    finished = false
-  ): Observable<TaskInstanceWithEduContentsInfoInterface> {
-    const mockTaskInstance = this.getMockTaskInstances()[id];
-    const mockTaskEducontents = this.getMockTaskEducontents();
-
-    let mockTaskInstanceWithEducontent: TaskInstanceWithEduContentsInfoInterface;
-    mockTaskInstanceWithEducontent = {
-      taskInstance: mockTaskInstance,
-      taskEduContents: mockTaskEducontents,
-      finished: finished
-    };
-
-    return new BehaviorSubject(mockTaskInstanceWithEducontent);
+          return;
+        }
+      )
+    );
   }
 
   private getMockLearningAreas(): LearningAreaInterface[] {
@@ -233,67 +339,6 @@ export class TasksViewModel {
     ];
   }
 
-  private getMockTaskEducontents(): TaskEduContentInterface[] {
-    const mockTeacher = this.getMockTeacher();
-    const mockTasks = this.getMockTasks();
-    const mockEducontents = this.getMockEducontents();
-
-    let mockTaskEducontents1: TaskEduContentInterface;
-    mockTaskEducontents1 = {
-      index: 10000,
-      id: 1,
-      teacherId: mockTeacher.id,
-      teacher: mockTeacher,
-      eduContentId: mockEducontents[0].id,
-      eduContent: mockEducontents[0],
-      taskId: mockTasks[0].id,
-      task: mockTasks[0]
-    };
-
-    let mockTaskEducontents2: TaskEduContentInterface;
-    mockTaskEducontents2 = {
-      index: 10000,
-      id: 2,
-      teacherId: mockTeacher.id,
-      teacher: mockTeacher,
-      eduContentId: mockEducontents[1].id,
-      eduContent: mockEducontents[1],
-      taskId: mockTasks[1].id,
-      task: mockTasks[1]
-    };
-
-    let mockTaskEducontents3: TaskEduContentInterface;
-    mockTaskEducontents3 = {
-      index: 10000,
-      id: 3,
-      teacherId: mockTeacher.id,
-      teacher: mockTeacher,
-      eduContentId: mockEducontents[2].id,
-      eduContent: mockEducontents[2],
-      taskId: mockTasks[2].id,
-      task: mockTasks[2]
-    };
-
-    let mockTaskEducontents4: TaskEduContentInterface;
-    mockTaskEducontents4 = {
-      index: 10000,
-      id: 4,
-      teacherId: mockTeacher.id,
-      teacher: mockTeacher,
-      eduContentId: mockEducontents[0].id,
-      eduContent: mockEducontents[0],
-      taskId: mockTasks[0].id,
-      task: mockTasks[0]
-    };
-
-    return [
-      mockTaskEducontents1,
-      mockTaskEducontents2,
-      mockTaskEducontents3,
-      mockTaskEducontents4
-    ];
-  }
-
   private getMockTeacher(): PersonInterface {
     let mockTeacher: PersonInterface;
     mockTeacher = {
@@ -351,114 +396,6 @@ export class TasksViewModel {
     };
 
     return [mockTask1, mockTask2, mockTask3];
-  }
-
-  private getMockEducontents(): EduContentInterface[] {
-    const mockLearningAreas = this.getMockLearningAreas();
-    const mockEducontentProductTypes = this.getMockEduContentProductTypes();
-    const mockMethods = this.getMockMethods();
-
-    let mockEducontent1: EduContentInterface;
-    mockEducontent1 = {
-      type: 'boek-e',
-      id: 1,
-      publishedEduContentMetadata: {
-        version: 1,
-        metaVersion: '0.1',
-        language: 'be',
-        title: 'De wereld van de getallen',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
-        created: new Date('2018-09-04 14:21:19'),
-        quotable: false,
-        taskAllowed: true,
-        link: '908500016',
-        commitMessage: 'Initial publish',
-        id: 1,
-        learningAreaId: mockLearningAreas[0].id,
-        learningArea: mockLearningAreas[0],
-        eduContentProductTypeId: mockEducontentProductTypes[0].id,
-        eduContentProductType: mockEducontentProductTypes[0],
-        methods: mockMethods.filter(method => method.id === 1)
-      }
-    };
-
-    let mockEducontent2: EduContentInterface;
-    mockEducontent2 = {
-      type: 'link',
-      id: 2,
-      publishedEduContentMetadata: {
-        version: 1,
-        metaVersion: '0.1',
-        language: 'be',
-        title: 'Uit het leven gegrepen',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
-        created: new Date('2018-09-04 14:21:19'),
-        quotable: false,
-        taskAllowed: true,
-        link: 'https://drive.google.com/',
-        commitMessage: 'Initial publish',
-        id: 2,
-        learningAreaId: mockLearningAreas[1].id,
-        learningArea: mockLearningAreas[1],
-        eduContentProductTypeId: mockEducontentProductTypes[1].id,
-        eduContentProductType: mockEducontentProductTypes[1],
-        methods: mockMethods.filter(method => method.id !== 3)
-      }
-    };
-
-    let mockEducontent3: EduContentInterface;
-    mockEducontent3 = {
-      type: 'exercise',
-      id: 3,
-      publishedEduContentMetadata: {
-        version: 1,
-        metaVersion: '0.1',
-        language: 'be',
-        title: 'Het gemiddelde',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
-        created: new Date('2018-09-04 14:21:19'),
-        quotable: true,
-        taskAllowed: true,
-        fileName: '19462.ludo.zip',
-        file: '9-f0ffb8dbde05931dfb9baeee5c86b27.ludo.zip',
-        checksum: 'f0ffb8dbde05931dfb9baeee5c86b27',
-        commitMessage: 'Initial publish',
-        id: 3,
-        learningAreaId: mockLearningAreas[2].id,
-        learningArea: mockLearningAreas[2],
-        eduContentProductTypeId: mockEducontentProductTypes[2].id,
-        eduContentProductType: mockEducontentProductTypes[2],
-        methods: mockMethods
-      }
-    };
-
-    let mockEducontent4: EduContentInterface;
-    mockEducontent4 = {
-      type: 'file',
-      id: 4,
-      publishedEduContentMetadata: {
-        version: 1,
-        metaVersion: '0.1',
-        language: 'be',
-        title: 'Percentrekenen',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
-        created: new Date('2018-09-04 14:21:19'),
-        quotable: false,
-        taskAllowed: true,
-        fileName: 'HAN_meetkunde_tso_geogebra_p23_stelling_van_Thales.ggb',
-        file: '13-f0ffb8dbde05931dfb9baeee5c86b211.ggb',
-        checksum: 'f0ffb8dbde05931dfb9baeee5c86b211',
-        commitMessage: 'Initial publish',
-        id: 4,
-        learningAreaId: mockLearningAreas[0].id,
-        learningArea: mockLearningAreas[0],
-        eduContentProductTypeId: mockEducontentProductTypes[0].id,
-        eduContentProductType: mockEducontentProductTypes[0],
-        methods: mockMethods
-      }
-    };
-
-    return [mockEducontent1, mockEducontent2, mockEducontent3, mockEducontent4];
   }
 
   getMockStudent(): PersonInterface {
@@ -562,8 +499,18 @@ export class TasksViewModel {
 
     return [mockMethod1, mockMethod2, mockMethod3];
   }
+}
 
-  getMockListFormat(): Observable<ListFormat> {
-    return new BehaviorSubject(ListFormat.GRID);
-  }
+export interface LearningAreaWithTasksInterface extends LearningAreaInterface {
+  tasks: TaskWithInstanceInterface[];
+}
+
+export interface TaskWithInstanceInterface extends TaskInterface {
+  instances: TaskInstanceWithRelationInfoInterface[];
+}
+
+export interface TaskInstanceWithRelationInfoInterface
+  extends TaskInstanceInterface {
+  results: ResultInterface[];
+  isFinished: boolean;
 }

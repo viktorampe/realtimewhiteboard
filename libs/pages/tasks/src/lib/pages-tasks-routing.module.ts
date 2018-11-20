@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { TasksAreaComponent } from './components/tasks-area/tasks-area.component';
+import { TasksComponent } from './components/tasks.component';
+import { TasksResolver } from './components/tasks.resolver';
 
 const routes: Routes = [
   {
     path: '',
-    component: TasksAreaComponent
+    component: TasksComponent, //TODO: terugzetten op TasksAreaComponent
+    resolve: { isResolved: TasksResolver }
   }
 ];
 
