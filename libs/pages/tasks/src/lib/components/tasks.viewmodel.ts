@@ -85,7 +85,7 @@ export class TasksViewModel {
     return new BehaviorSubject(mock);
   }
 
-  private getMockSelectedLearningArea(
+  getMockSelectedLearningArea(
     id: 0 | 1 | 2 = 0
   ): Observable<LearningAreaInterface> {
     const mockLearningAreas = this.getMockLearningAreas();
@@ -126,7 +126,7 @@ export class TasksViewModel {
     return new BehaviorSubject(mockTaskInstances);
   }
 
-  private getMockSelectedTaskInstance(
+  getMockSelectedTaskInstance(
     id: 0 | 1 | 2 | 3 = 0
   ): Observable<TaskInstanceInterface> {
     return new BehaviorSubject(this.getMockTaskInstances()[id]);
@@ -233,7 +233,7 @@ export class TasksViewModel {
     ];
   }
 
-  private getMockTaskEducontents(): TaskEduContentInterface[] {
+  getMockTaskEducontents(): TaskEduContentInterface[] {
     const mockTeacher = this.getMockTeacher();
     const mockTasks = this.getMockTasks();
     const mockEducontents = this.getMockEducontents();
