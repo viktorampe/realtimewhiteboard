@@ -73,8 +73,11 @@
                 [fileExtensionClass]="content.fileExtension"
                 [contentTypeClass]="content.productType"
               >
-                <campus-button [iconClass]="'icon-tasks'" circle>
-                </campus-button>
+                <campus-button
+                  [iconClass]="'tasks'"
+                  circle
+                  (click)="clickOpenContent(content)"
+                ></campus-button>
               </campus-content-thumbnail>
             </campus-list-view>
           </ng-container>

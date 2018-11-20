@@ -138,6 +138,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
             <ContentInterface>{
               description: taskEduContent.task.description,
               name: taskEduContent.task.name,
+              id: taskEduContent.id,
               fileExtension: 'xls',
               methodLogos: ['fillerMethod'],
               productType: taskEduContent.eduContent.type
@@ -150,6 +151,12 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
   //event handlers
   clickChangeListFormat(format: ListFormat): void {
     this.taskViewModel.changeListFormat(format);
+  }
+
+  clickOpenContent(content: ContentInterface): void {
+    //TODO contact viewmodel to open new window
+    console.log('%cclickOpenContent:', 'color: orange; font-weight: bold;');
+    console.log({ content });
   }
 
   //filterFunction
