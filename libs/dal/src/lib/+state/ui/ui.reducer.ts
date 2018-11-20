@@ -18,6 +18,7 @@ export interface UiState {
 export const initialState: UiState = {
   listFormat: ListFormat.GRID,
   sideSheetOpen: true,
+  sideNavOpen: true,
   loaded: false
 };
 
