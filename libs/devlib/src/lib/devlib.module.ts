@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material';
 import { SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
 import { InfoPanelContentComponent } from '../../../pages/tasks/src/lib/components/info-panel/info-panel-content/info-panel-content.component';
@@ -18,7 +19,8 @@ import { UiPageComponent } from './ui-page/ui-page.component';
     CommonModule,
     UiModule,
     DevlibRoutingModule,
-    SharedModule
+    SharedModule,
+    MatIconModule
   ],
   providers: [LoginPageViewModel, EduContentViewModel],
   declarations: [
