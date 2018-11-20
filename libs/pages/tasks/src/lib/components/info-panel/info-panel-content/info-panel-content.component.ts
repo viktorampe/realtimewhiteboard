@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { ContentInterface } from '@campus/dal';
 
 @Component({
   selector: 'campus-info-panel-content',
@@ -6,13 +7,5 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./info-panel-content.component.scss']
 })
 export class InfoPanelContentComponent {
-  @Input() content: TaskInfoPanelContentInterface;
-}
-
-export interface TaskInfoPanelContentInterface {
-  name: string;
-  description: string;
-  extension: string;
-  productType: string;
-  methods: string[];
+  @Input() content: ContentInterface;
 }
