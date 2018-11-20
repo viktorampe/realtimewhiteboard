@@ -1,4 +1,11 @@
+// file.only
+
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ActivatedRoute } from '@angular/router';
+import { FilterService, FILTER_SERVICE_TOKEN } from '@campus/shared';
+import { FilterTextInputComponent, ListViewComponent } from '@campus/ui';
+import { MockActivatedRoute } from '../tasks.viewmodel.mock';
 import { TaskDetailComponent } from './task-detail.component';
 
 describe('TaskDetailComponent', () => {
@@ -7,7 +14,16 @@ describe('TaskDetailComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [TaskDetailComponent]
+      declarations: [
+        TaskDetailComponent,
+        FilterTextInputComponent,
+        ListViewComponent
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+      providers: [
+        { provide: ActivatedRoute, useClass: MockActivatedRoute },
+        { provide: FILTER_SERVICE_TOKEN, useClass: FilterService }
+      ]
     }).compileComponents();
   }));
 

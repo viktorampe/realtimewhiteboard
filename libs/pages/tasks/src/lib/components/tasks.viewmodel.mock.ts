@@ -17,6 +17,12 @@ import {
   TaskInstanceWithEduContentsInfoInterface
 } from './tasks.viewmodel.interfaces';
 
+export class MockActivatedRoute {
+  params: Observable<any> = new BehaviorSubject<any>({
+    params: { task: 1, area: 1 }
+  });
+}
+
 @Injectable({
   providedIn: 'root'
 })
