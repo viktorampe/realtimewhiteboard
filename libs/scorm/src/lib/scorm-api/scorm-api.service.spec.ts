@@ -1,7 +1,8 @@
 import { TestBed } from '@angular/core/testing';
+import { WINDOW } from '@campus/browser';
 import { ScormApi } from './scorm-api';
 import { ScormCmiInterface, ScormCMIMode } from './scorm-api.interface';
-import { ScormApiService, WINDOW } from './scorm-api.service';
+import { ScormApiService } from './scorm-api.service';
 
 describe('ScormApiService', () => {
   let scormApiService: ScormApiService;

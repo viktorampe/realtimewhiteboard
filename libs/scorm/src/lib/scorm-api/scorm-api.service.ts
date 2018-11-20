@@ -1,14 +1,9 @@
-import { Inject, Injectable, InjectionToken } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
+import { WINDOW } from '@campus/browser';
 import { Subject } from 'rxjs';
 import { ScormApi } from './scorm-api';
 import { ScormCmiInterface, ScormCMIMode } from './scorm-api.interface';
 import { ScormApiServiceInterface } from './scorm-api.service.interface';
-
-// TODO: remove this when window service is available
-export const WINDOW = new InjectionToken('WindowToken', {
-  providedIn: 'root',
-  factory: () => window
-});
 
 @Injectable({
   providedIn: 'root'
