@@ -114,18 +114,39 @@ describe('The scorm API', () => {
 
   describe('#LMSGetValue', () => {
     it('should return the parameter as string', () => {
+      const paramValue = [{ test: 'test' }];
       setupTest(
         new ScormCmiFixture({
           mode: ScormCMIMode.CMI_MODE_NORMAL,
-          suspended_data: [{ test: 'test' }]
+          suspend_data: paramValue
         }),
         ScormCMIMode.CMI_MODE_NORMAL
       );
-      const paramValue = scormApi.LMSGetValue('suspended_data');
-      expect(paramValue).toEqual([{ test: 'test' }]);
+      const expectedParamValue = scormApi.LMSGetValue('suspend_data');
+      expect(expectedParamValue).toBe(paramValue);
+    });
+
+    it('should return false when the parameter does not exist', () => {
+      setupTest(new ScormCmiFixture(), ScormCMIMode.CMI_MODE_NORMAL);
+      const result = scormApi.LMSGetValue('i-do-not-exist');
+      expect(result).toBe('false');
+      expect(scormApi.lastErrorCode).toBe(
+        ScormErrorCodes.NOT_IMPLEMENTED_ERROR
+      );
+      expect(scormApi.lastDiagnosticMessage).toBe(
+        `Deze info (i-do-not-exist) is niet beschikbaar`
+      );
     });
   });
-  describe('#LMSSetValue', () => {});
+  describe('#LMSSetValue', () => {
+    it('should set a value for the CMI data model', () => {
+      setupTest(new ScormCmiFixture(), ScormCMIMode.CMI_MODE_NORMAL);
+      expect(scormApi.LMSSetValue('mode', ScormCMIMode.CMI_MODE_BROWSE)).toBe(
+        'true'
+      );
+      expect(scormApi.LMSGetValue('mode')).toBe(ScormCMIMode.CMI_MODE_BROWSE);
+    });
+  });
   describe('#LMSCommit', () => {});
   describe('#LMSGetLastError', () => {});
   describe('#LMSGetDiagnostic', () => {});

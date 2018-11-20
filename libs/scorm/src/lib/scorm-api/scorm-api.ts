@@ -112,8 +112,7 @@ export class ScormApi implements ScormApiInterface {
 
     // no parameter available, pity
     this.lastErrorCode = ScormErrorCodes.NOT_IMPLEMENTED_ERROR;
-    this.lastDiagnosticMessage =
-      'Deze info (' + parameter + ') is niet beschikbaar';
+    this.lastDiagnosticMessage = `Deze info (${parameter}) is niet beschikbaar`;
     return 'false';
   }
 
@@ -280,7 +279,7 @@ export class ScormApi implements ScormApiInterface {
       }
       return obj[i];
     }
-
+    console.log(parameter.split('.').reduce(index, exercise));
     return parameter.split('.').reduce(index, exercise);
   }
 
