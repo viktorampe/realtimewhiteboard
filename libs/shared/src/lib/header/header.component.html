@@ -1,5 +1,6 @@
 <div class="shared-header">
-  <div class="shared-header__app-bar">
+  <div hide-mobile
+       class="shared-header__app-bar">
     <campus-app-bar>
       <campus-breadcrumbs bar__left>
         breadcrumbs
@@ -7,19 +8,39 @@
       <div class="shared-header__app-bar__alerts"
            bar__right
            *ngIf="enableAlerts">
+        <campus-button (click)="dropDownAlerts.toggle()">Meldingen</campus-button>
+        <campus-dropdown-menu #dropDownAlerts
+                              showHeader="true"
+                              [newItemCount]=""
+                              [headerIcon]=""
+                              itemType="meldingen"
+                              linkText="Alle meldingen"
+                              linkUrl="/notifications"></campus-dropdown-menu>
       </div>
       <div class="shared-header__app-bar__messages"
            bar__right
            *ngIf="enableMessages">
-        messages
+        <campus-button (click)="dropDownMessages.toggle()">Berichten</campus-button>
+        <campus-dropdown-menu #dropDownMessages
+                              showHeader="true"
+                              [newItemCount]=""
+                              [headerIcon]=""
+                              itemType="berichten"
+                              linkText="Nieuw bericht"
+                              linkUrl="/messages"></campus-dropdown-menu>
       </div>
       <div class="shared-header__app-bar__profile-menu"
            bar__right>
-        profile menu
+        <campus-button (click)="dropDownProfile.toggle()">Profile</campus-button>
+        <campus-dropdown-menu #dropDownProfile
+                              showheader="false"></campus-dropdown-menu>
       </div>
     </campus-app-bar>
   </div>
-  <div class="shared-header__page-bar"
-       id="page-bar-container">
+  <div class="shared-header__page-bar">
+    <mat-icon class="shared-header__page-bar_menu-icon"
+              hide-desktop>menu</mat-icon>
+    <div id="page-bar-container">
+    </div>
   </div>
 </div>

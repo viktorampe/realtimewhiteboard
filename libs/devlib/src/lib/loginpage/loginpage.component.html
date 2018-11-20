@@ -1,61 +1,65 @@
-<campus-dropdown-menu-item header="test description"
-                           image="assets/images/icon-smartschool.png"
-                           internalLink="test"
-                           title="text title"></campus-dropdown-menu-item>
-
-<!--@Input() title: string;
-@Input() header: string;
-@Input() icon: string;
-@Input() image: string;
-@Input() link: string;
-@Input() imageAltText: string;-->
+<campus-dropdown-menu-item
+  header="test description"
+  image="assets/images/icon-smartschool.png"
+  internalLink="test"
+  title="text title"
+></campus-dropdown-menu-item>
 
 <campus-page-bar>
-  <!-- <campus-filter-text-input theme="dark"
-                            (filterTextChange)="onChangeFilterInput($event)"
-                            [filterText]="filterInput$|async"
-                            class="pages__toolbar__filter"></campus-filter-text-input> -->
   <div class="divider"></div>
-  <campus-button [iconClass]="'icon-timeline'"
-                 (click)="setListFormat(listFormat.LINE)"></campus-button>
-  <campus-button [iconClass]="'icon-checklist'"
-                 (click)="setListFormat(listFormat.GRID)"></campus-button>
+  <campus-button
+    [iconClass]="'icon-timeline'"
+    (click)="setListFormat(listFormat.LINE)"
+  ></campus-button>
+  <campus-button
+    [iconClass]="'icon-checklist'"
+    (click)="setListFormat(listFormat.GRID)"
+  ></campus-button>
 </campus-page-bar>
 
 <div class="login_page_component">
-  <div [hidden]="loginPageviewModel.loggedIn">
+  <div [hidden]="loginPageviewModel.isLoggedIn()">
     <div>
-      <button (click)="loginPageviewModel.login('student1', 'testje')">student</button>
-      <button (click)="loginPageviewModel.login('teacher1', 'testje')">teacher</button>
+      <button (click)="loginPageviewModel.login('student1', 'testje')">
+        student
+      </button>
+      <button (click)="loginPageviewModel.login('teacher1', 'testje')">
+        teacher
+      </button>
     </div>
 
     <div class="login_form">
-      <input placeholder="username"
-             [(ngModel)]="loginPageviewModel.name"
-             type="text" />
-      <input placeholder="password"
-             [(ngModel)]="loginPageviewModel.password"
-             type="password" />
-      <button (click)="loginPageviewModel.login(loginPageviewModel.name, loginPageviewModel.password)">
+      <input
+        placeholder="username"
+        [(ngModel)]="loginPageviewModel.name"
+        type="text"
+      />
+      <input
+        placeholder="password"
+        [(ngModel)]="loginPageviewModel.password"
+        type="password"
+      />
+      <button
+        (click)="
+          loginPageviewModel.login(
+            loginPageviewModel.name,
+            loginPageviewModel.password
+          )
+        "
+      >
         login
       </button>
     </div>
   </div>
 
-  <!-- [hidden]="!loginPageviewModel.loggedIn" -->
-
-  <div>
+  <div [hidden]="!loginPageviewModel.isLoggedIn()">
     <button (click)="loginPageviewModel.logout()">logout</button>
   </div>
 
   <div>
     <p>{{ loginPageviewModel.response }}</p>
   </div>
-
-
 </div>
 
 <button (click)="getCurrentUser()">fetch current user</button>
-<div>
-  {{currentUser|async|json}}
-</div>
+<div>{{ currentUser | async | json }}</div>

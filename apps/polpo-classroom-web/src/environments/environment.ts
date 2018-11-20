@@ -32,7 +32,7 @@ export const environment = {
     'learning-area:spaans': 'assets/icons/learning-area/spaans.svg',
     'learning-area:techniek': 'assets/icons/learning-area/techniek.svg',
     'learning-area:wiskunde': 'assets/icons/learning-area/wiskunde.svg',
-    'learning-area:ww': 'assets/icons/learning-area/ww.svg'
+    'learning-area:ww': 'assets/icons/learning-area/ww.svg',
     // 'learning-area:aardrijkskunde-lg':
     //   'assets/icons/learning-area/aardrijkskunde-lg.svg',
     // 'learning-area:biologie-lg': 'assets/icons/learning-area/biologie-lg.svg',
@@ -82,6 +82,8 @@ export const environment = {
     // verwijder: 'assets/icons/verwijder.svg',
 
     // -> product types
+    'list-view': 'assets/icons/material/list-view.svg',
+    'grid-view': 'assets/icons/material/grid-view.svg',
     // algebrakit: 'assets/icons/algebrakit.svg',
     // 'archive-box': 'assets/icons/archive-box.svg',
     // 'archive-box-lg': 'assets/icons/archive-box-lg.svg',
@@ -90,7 +92,7 @@ export const environment = {
     // music: 'assets/icons/music.svg',
     // presentatie: 'assets/icons/presentatie.svg',
     // presentation: 'assets/icons/presentation.svg',
-    // tasks: 'assets/icons/tasks.svg',
+    tasks: 'assets/icons/tasks.svg'
     // 'tasks-complete': 'assets/icons/tasks-complete.svg',
     // video: 'assets/icons/video.svg',
     // website: 'assets/icons/website.svg',
@@ -148,7 +150,7 @@ export const environment = {
     // student: 'assets/icons/student.svg',
     // student2: 'assets/icons/student2.svg',
     // taak: 'assets/icons/taak.svg',
-    // task: 'assets/icons/task.svg',
+    // task: 'assets/icons/task.svg'
     // timeline: 'assets/icons/timeline.svg',
     // twitter: 'assets/icons/twitter.svg',
     // 'user-exception': 'assets/icons/user-exception.svg',

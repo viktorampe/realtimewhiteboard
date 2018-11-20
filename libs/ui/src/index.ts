@@ -9,6 +9,9 @@ export {
   ListViewComponent,
   ListViewItemDirective
 } from './lib/list-view/list-view.component';
+export {
+  BadgePersonInterface
+} from './lib/person-badge/person-badge.component';
 export { SideSheetComponent } from './lib/side-sheet/side-sheet.component';
 export { NavItem } from './lib/tree-nav/tree-nav.component';
 export * from './lib/ui.module';

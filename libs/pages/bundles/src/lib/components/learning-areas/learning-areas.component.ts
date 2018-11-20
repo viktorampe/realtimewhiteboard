@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { LearningAreaInterface } from '@campus/dal';
-import { ListFormat } from '@campus/ui';
-import { Dictionary } from '@ngrx/entity';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/shared';
+import { FilterTextInputComponent, ListFormat } from '@campus/ui';
+import { Observable } from 'rxjs';
 import { BundlesViewModel } from '../bundles.viewmodel';
+import {
+  LearningAreaInfoInterface,
+  LearningAreasWithBundlesInfoInterface
+} from '../bundles.viewmodel.interfaces';
 
 @Component({
   selector: 'campus-learning-areas',
@@ -12,54 +14,38 @@ import { BundlesViewModel } from '../bundles.viewmodel';
   styleUrls: ['./learning-areas.component.scss']
 })
 export class LearningAreasComponent implements OnInit {
-  filterInput$ = new BehaviorSubject<string>('');
-  listFormat$: Observable<ListFormat>;
-  learningAreas$: Observable<LearningAreaInterface[]>;
-  learningAreasCounts$: Observable<
-    Dictionary<{ bundlesCount: number; booksCount: number }>
-  >;
-  sharedLearningAreas$: Observable<LearningAreaInterface[]>;
-  displayedLearningAreas$: Observable<LearningAreaInterface[]>;
+  protected listFormat = ListFormat;
 
-  constructor(private bundlesViewModel: BundlesViewModel) {}
+  listFormat$: Observable<ListFormat>;
+  sharedInfo$: Observable<LearningAreasWithBundlesInfoInterface>;
+
+  @ViewChild(FilterTextInputComponent)
+  filterTextInput: FilterTextInputComponent<
+    LearningAreasWithBundlesInfoInterface,
+    LearningAreaInfoInterface
+  >;
+
+  constructor(
+    private bundlesViewModel: BundlesViewModel,
+    @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface
+  ) {}
 
   ngOnInit(): void {
+    this.filterTextInput.filterFn = this.filterFn.bind(this);
     this.listFormat$ = this.bundlesViewModel.listFormat$;
-    this.learningAreas$ = this.bundlesViewModel.learningAreas$;
-    this.learningAreasCounts$ = this.bundlesViewModel.sharedLearningAreasCount$;
-    this.sharedLearningAreas$ = this.bundlesViewModel.sharedLearningAreas$;
-    // TODO find out why learningarea name is not displayed
-    this.displayedLearningAreas$ = this.getDisplayedLearningAreas$(
-      this.sharedLearningAreas$,
-      this.filterInput$
-    );
+    this.sharedInfo$ = this.bundlesViewModel.sharedLearningAreas$;
   }
 
-  onChangeFilterInput(filterInput: string): void {
-    this.filterInput$.next(filterInput);
+  clickChangeListFormat(value: ListFormat): void {
+    this.bundlesViewModel.changeListFormat(value);
   }
 
-  resetFilterInput(): void {
-    this.filterInput$.next('');
-  }
-
-  clickChangeListFormat(value: string): void {
-    this.bundlesViewModel.changeListFormat(ListFormat[value]);
-  }
-
-  getDisplayedLearningAreas$(
-    learningAreas$: Observable<LearningAreaInterface[]>,
-    filterInput$: Observable<string>
-  ): Observable<LearningAreaInterface[]> {
-    return combineLatest(learningAreas$, filterInput$).pipe(
-      map(([learningAreas, filterInput]: [LearningAreaInterface[], string]) => {
-        if (!filterInput) {
-          return learningAreas;
-        }
-        return learningAreas.filter(learningArea =>
-          learningArea.name.toLowerCase().includes(filterInput.toLowerCase())
-        );
-      })
-    );
+  private filterFn(
+    info: LearningAreasWithBundlesInfoInterface,
+    searchText: string
+  ): LearningAreaInfoInterface[] {
+    return this.filterService.filter(info.learningAreas, {
+      learningArea: { name: searchText }
+    });
   }
 }

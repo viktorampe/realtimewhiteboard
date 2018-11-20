@@ -1,33 +1,28 @@
 import { Inject, Injectable } from '@angular/core';
-import { Resolve } from '@angular/router';
 import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   UserActions,
-  UserQueries,
   UserReducer
 } from '@campus/dal';
-import { select, Store } from '@ngrx/store';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { catchError, map, switchMap, take } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class LoginPageViewModel implements Resolve<boolean> {
+export class LoginPageViewModel {
   name: string;
   password: string;
   response: string;
-
-  loggedIn: boolean;
 
   constructor(
     private store: Store<UserReducer.State>,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
   ) {
-    store.pipe(select(UserQueries.getCurrentUser)).subscribe(data => {
-      this.loggedIn = data != null;
-    });
+    if (this.isLoggedIn()) {
+      store.dispatch(new UserActions.LoadUser({ force: false }));
+    }
   }
 
   /**
@@ -36,15 +31,8 @@ export class LoginPageViewModel implements Resolve<boolean> {
    * @returns {Observable<boolean>}
    * @memberof LoginPageViewModel
    */
-  isLoggedIn(): Observable<boolean> {
-    return this.authService.getCurrent().pipe(
-      map(() => {
-        return true;
-      }),
-      catchError(err => {
-        return of(false);
-      })
-    );
+  isLoggedIn(): boolean {
+    return this.authService.isLoggedIn();
   }
 
   /**
@@ -54,19 +42,19 @@ export class LoginPageViewModel implements Resolve<boolean> {
    * @param {string} password
    * @memberof LoginPageViewModel
    */
-  login(name: string, password: string): void {
-    this.isLoggedIn()
-      .pipe(
-        switchMap(loggedin => {
-          if (loggedin) {
-            throw new Error('login failed since we are already logged in');
-          }
-          return this.authService.login({ username: name, password: password });
+  login(name: string, password: string) {
+    if (this.isLoggedIn()) {
+      console.error('login failed since we are already logged in');
+      this.store.dispatch(new UserActions.LoadUser({ force: false }));
+    } else {
+      this.store.dispatch(
+        new UserActions.LogInUser({
+          username: name,
+          password: password
         })
-      )
-      .subscribe(() => {
-        this.store.dispatch(new UserActions.LoadUser({ force: false }));
-      });
+      );
+    }
+    return;
   }
 
   /**
@@ -77,21 +65,10 @@ export class LoginPageViewModel implements Resolve<boolean> {
    * @memberof LoginPageViewModel
    */
   logout(): void {
-    this.isLoggedIn().subscribe((isLoggedIn: boolean) => {
-      if (isLoggedIn) {
-        this.store.dispatch(new UserActions.RemoveUser());
-      }
-    });
-  }
-
-  /**
-   * initializes the LoginPageViewModel
-   *
-   * @returns {boolean} not used, returning boolean so the resolver will work
-   *
-   * @memberOf LoginPageViewModel
-   */
-  resolve(): Observable<boolean> {
-    return new BehaviorSubject<boolean>(true).pipe(take(1));
+    if (this.isLoggedIn) {
+      this.store.dispatch(new UserActions.RemoveUser());
+    } else {
+      console.error('logout failed');
+    }
   }
 }
