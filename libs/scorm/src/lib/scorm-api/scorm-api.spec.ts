@@ -138,6 +138,7 @@ describe('The scorm API', () => {
       );
     });
   });
+
   describe('#LMSSetValue', () => {
     it('should set a value for the CMI data model', () => {
       setupTest(new ScormCmiFixture(), ScormCMIMode.CMI_MODE_NORMAL);
@@ -146,11 +147,71 @@ describe('The scorm API', () => {
       );
       expect(scormApi.LMSGetValue('mode')).toBe(ScormCMIMode.CMI_MODE_BROWSE);
     });
+
+    it('should not set a value if we are in preview mode', () => {
+      setupTest(
+        new ScormCmiFixture({ mode: ScormCMIMode.CMI_MODE_PREVIEW }),
+        ScormCMIMode.CMI_MODE_PREVIEW
+      );
+
+      expect(scormApi.LMSSetValue('mode', ScormCMIMode.CMI_MODE_REVIEW)).toBe(
+        'false'
+      );
+      expect(scormApi.LMSGetValue('mode')).toBe(ScormCMIMode.CMI_MODE_PREVIEW);
+    });
   });
-  describe('#LMSCommit', () => {});
-  describe('#LMSGetLastError', () => {});
-  describe('#LMSGetDiagnostic', () => {});
-  describe('#LMSGetErrorString', () => {});
+
+  describe('#LMSCommit', () => {
+    it('should return false when we are in preview mode', () => {
+      setupTest(
+        new ScormCmiFixture({ mode: ScormCMIMode.CMI_MODE_PREVIEW }),
+        ScormCMIMode.CMI_MODE_PREVIEW
+      );
+
+      expect(scormApi.LMSCommit()).toBe('false');
+    });
+
+    it('should trigger the commit stream with the current result', () => {
+      const result = new ScormCmiFixture({
+        mode: ScormCMIMode.CMI_MODE_BROWSE
+      });
+      setupTest(result, ScormCMIMode.CMI_MODE_BROWSE);
+
+      expect(scormApi.LMSCommit()).toBe('true');
+      expect(commitSpy).toHaveBeenCalledTimes(1);
+      expect(commitSpy).toHaveBeenCalledWith(result);
+    });
+  });
+
+  describe('#LMSGetLastError', () => {
+    it('should return the last error code', () => {
+      setupTest(new ScormCmiFixture(), ScormCMIMode.CMI_MODE_BROWSE);
+      scormApi.lastErrorCode = ScormErrorCodes.NOT_INITIALIZED_ERROR;
+      expect(scormApi.LMSGetLastError()).toBe(
+        ScormErrorCodes.NOT_INITIALIZED_ERROR
+      );
+    });
+  });
+
+  describe('#LMSGetDiagnostic', () => {
+    it('should return the last diagnostic message', () => {
+      setupTest(new ScormCmiFixture(), ScormCMIMode.CMI_MODE_BROWSE);
+      scormApi.lastDiagnosticMessage = 'this is a test diagnostic message';
+      expect(scormApi.LMSGetDiagnostic()).toBe(
+        'this is a test diagnostic message'
+      );
+    });
+  });
+  describe('#LMSGetErrorString', () => {
+    it('should return an error description for the specified error code', () => {
+      setupTest(new ScormCmiFixture(), ScormCMIMode.CMI_MODE_BROWSE);
+      expect(
+        scormApi.LMSGetErrorString(
+          ScormErrorCodes.INVALID_SET_VALUE_ELEMENT_IS_KEYWORD_ERROR
+        )
+      ).toBe('Je kan geen waardes zetten voor keywords');
+    });
+  });
 });
 
 function setupTest(

@@ -186,43 +186,30 @@ export class ScormApi implements ScormApiInterface {
    * @memberof ScormApi
    */
   LMSGetErrorString(code: ScormErrorCodes): string {
-    let errorString = '';
     switch (code) {
       case ScormErrorCodes.NO_ERROR:
-        errorString = 'Geen vuiltje aan de lucht...';
-        break;
+        return 'Geen vuiltje aan de lucht...';
       case ScormErrorCodes.INVALID_ARGUMENT_ERROR:
-        errorString = 'Foutief argument:';
-        break;
+        return 'Foutief argument:';
       case ScormErrorCodes.ELEMENT_CANNOT_HAVE_CHILDREN_ERROR:
-        errorString = 'Dit element heeft geen _children';
-        break;
+        return 'Dit element heeft geen _children';
       case ScormErrorCodes.ELEMENT_CANNOT_HAVE_COUNT_ERROR:
-        errorString = 'Dit element heeft geen _count';
-        break;
+        return 'Dit element heeft geen _count';
       case ScormErrorCodes.NOT_INITIALIZED_ERROR:
-        errorString = 'De oefening werd niet correct opgestart';
-        break;
+        return 'De oefening werd niet correct opgestart';
       case ScormErrorCodes.NOT_IMPLEMENTED_ERROR:
-        errorString = 'Deze feature werd niet geïmplementeerd door het LMS';
-        break;
+        return 'Deze feature werd niet geïmplementeerd door het LMS';
       case ScormErrorCodes.INVALID_SET_VALUE_ELEMENT_IS_KEYWORD_ERROR:
-        errorString = 'Je kan geen waardes zetten voor keywords';
-        break;
+        return 'Je kan geen waardes zetten voor keywords';
       case ScormErrorCodes.READ_ONLY_ERROR:
-        errorString = 'Dit element is alleen-lezen';
-        break;
+        return 'Dit element is alleen-lezen';
       case ScormErrorCodes.WRITE_ONLY_ERROR:
-        errorString = 'Dit element is alleen-schrijven';
-        break;
+        return 'Dit element is alleen-schrijven';
       case ScormErrorCodes.INCORRECT_DATA_TYPE_ERROR:
-        errorString = 'De waarde die je wil schrijven is niet geldig';
-        break;
+        return 'De waarde die je wil schrijven is niet geldig';
       default:
-        errorString = 'Algemene fout:';
-        break;
+        return 'Algemene fout:';
     }
-    return errorString;
   }
 
   private getNewCmi(): ScormCmiInterface {
