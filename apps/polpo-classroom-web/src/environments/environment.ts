@@ -91,6 +91,7 @@ export const environment = {
     // media: 'assets/icons/media.svg',
     // music: 'assets/icons/music.svg',
     // presentatie: 'assets/icons/presentatie.svg',
+    'polpo-presentatie': 'assets/icons/presentatie.svg',
     // presentation: 'assets/icons/presentation.svg',
     tasks: 'assets/icons/tasks.svg'
     // 'tasks-complete': 'assets/icons/tasks-complete.svg',
