@@ -37,16 +37,16 @@ import {
   providedIn: 'root'
 })
 export class TasksViewModel {
-  //source streams //TODO private zetten waar nodig
+  //source streams
   public listFormat$: Observable<ListFormat>;
-  currentUser$: Observable<PersonInterface>;
-  learningAreas$: Observable<LearningAreaInterface[]>;
-  teachers$: Observable<PersonInterface[]>;
-  tasks$: Observable<TaskInterface[]>;
-  educontents$: Observable<EduContentInterface[]>;
-  taskInstances$: Observable<TaskInstanceInterface[]>;
-  results$: Observable<ResultInterface[]>;
-  taskEducontents$: Observable<TaskEduContentInterface[]>;
+  public currentUser$: Observable<PersonInterface>;
+  private learningAreas$: Observable<LearningAreaInterface[]>;
+  private teachers$: Observable<PersonInterface[]>;
+  private tasks$: Observable<TaskInterface[]>;
+  private educontents$: Observable<EduContentInterface[]>;
+  private taskInstances$: Observable<TaskInstanceInterface[]>;
+  private results$: Observable<ResultInterface[]>;
+  private taskEducontents$: Observable<TaskEduContentInterface[]>;
 
   //intermediate streams  //TODO private zetten waar nodig
   tasksWithRelationInfo$: Observable<TaskInterface[]>;
@@ -133,18 +133,18 @@ export class TasksViewModel {
     ).pipe(
       map(([tasks, taskEducontents, educontents, learningAreas, teachers]) =>
         tasks.map(task => {
-          task.eduContents = educontents.filter(educontent =>
-            taskEducontents.some(
-              tE => tE.taskId === task.id && tE.eduContentId === educontent.id
-            )
-          );
-
-          task.learningArea = learningAreas.find(
-            learningArea => learningArea.id === task.learningAreaId
-          );
-          task.teacher = teachers.find(teacher => task.personId === teacher.id);
-
-          return task;
+          return {
+            ...task,
+            eduContents: educontents.filter(educontent =>
+              taskEducontents.some(
+                tE => tE.taskId === task.id && tE.eduContentId === educontent.id
+              )
+            ),
+            learningArea: learningAreas.find(
+              learningArea => learningArea.id === task.learningAreaId
+            ),
+            teacher: teachers.find(teacher => task.personId === teacher.id)
+          };
         })
       )
     );
@@ -156,23 +156,15 @@ export class TasksViewModel {
     ).pipe(
       map(([taskInstances, tasks, results]) =>
         taskInstances.map(instance => {
-          const instanceWithRelations = instance as TaskInstanceWithRelationInfoInterface;
-
-          instanceWithRelations.task = tasks.find(
-            task => task.id === instance.taskId
-          );
-
-          instanceWithRelations.results = results.filter(
-            result =>
-              result.taskId === instanceWithRelations.taskId &&
-              result.personId === instanceWithRelations.personId
-          );
-
-          instanceWithRelations.isFinished = instanceWithRelations.results.some(
-            result => result.status !== ScormStatus.STATUS_COMPLETED
-          );
-
-          return instanceWithRelations;
+          return {
+            ...instance,
+            task: tasks.find(task => task.id === instance.taskId),
+            results: results.filter(
+              result =>
+                result.taskId === instance.taskId &&
+                result.personId === instance.personId
+            )
+          };
         })
       )
     );
@@ -183,11 +175,12 @@ export class TasksViewModel {
     ).pipe(
       map(([tasks, taskInstances]) =>
         tasks.map(task => {
-          const taskWithInstanceInfo = task as TaskWithInstanceInterface;
-          taskWithInstanceInfo.taskInstances = taskInstances.filter(
-            instance => instance.taskId === taskWithInstanceInfo.id
-          );
-          return taskWithInstanceInfo;
+          return {
+            ...task,
+            instances: taskInstances.filter(
+              instance => instance.taskId === task.id
+            )
+          };
         })
       )
     );
@@ -198,12 +191,10 @@ export class TasksViewModel {
     ).pipe(
       map(([tasks, learningAreas]) =>
         learningAreas.map(learningArea => {
-          const learningAreasWithTasks = learningArea as LearningAreaWithTasksInterface;
-          learningAreasWithTasks.tasks = tasks.filter(
-            task => task.learningAreaId === learningArea.id
-          );
-
-          return learningAreasWithTasks;
+          return {
+            ...learningArea,
+            tasks: tasks.filter(task => task.learningAreaId === learningArea.id)
+          };
         })
       )
     );
@@ -219,8 +210,8 @@ export class TasksViewModel {
                 task => task.instances.length !== 0
               ).length;
 
-              const tasksFinishedAmount = area.tasks.filter(task =>
-                task.instances.filter(instance => instance.isFinished)
+              const tasksFinishedAmount = area.tasks.filter(
+                task => task.instances.filter(instance => instance.isFinished) //TODO: aanpassen
               ).length;
 
               return {
@@ -251,7 +242,7 @@ export class TasksViewModel {
             return {
               taskInstance: instance as TaskInstanceInterface,
               eduContents: instance.task.eduContents,
-              finished: instance.isFinished
+              finished: instance.isFinished //TODO: aanpassen
             };
           });
 
@@ -275,9 +266,15 @@ export class TasksViewModel {
 
   private getMockResults(): ResultInterface[] {
     return [
-      new ResultFixture({ id: 1 }),
-      new ResultFixture({ id: 2 }),
-      new ResultFixture({ id: 3, status: ScormStatus.STATUS_INCOMPLETE })
+      new ResultFixture({ id: 1, eduContentId: 1, taskId: 1, personId: 1 }),
+      new ResultFixture({ id: 2, eduContentId: 2, taskId: 1, personId: 1 }),
+      new ResultFixture({
+        id: 3,
+        eduContentId: 2,
+        taskId: 1,
+        personId: 1,
+        status: ScormStatus.STATUS_INCOMPLETE
+      })
     ];
   }
 
@@ -293,6 +290,12 @@ export class TasksViewModel {
         id: 2,
         teacherId: 187,
         taskId: 2,
+        eduContentId: 2
+      }),
+      new TaskEduContentFixture({
+        id: 3,
+        teacherId: 187,
+        taskId: 1,
         eduContentId: 2
       })
     ];
@@ -310,5 +313,4 @@ export interface TaskWithInstanceInterface extends TaskInterface {
 export interface TaskInstanceWithRelationInfoInterface
   extends TaskInstanceInterface {
   results: ResultInterface[];
-  isFinished: boolean;
 }
