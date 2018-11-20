@@ -12,6 +12,8 @@ import {
   ENVIRONMENT_ALERTS_FEATURE_TOKEN,
   ENVIRONMENT_MESSAGES_FEATURE_TOKEN
 } from './interfaces';
+import { FilterService } from './services/filter.service';
+import { FILTER_SERVICE_TOKEN } from './services/filter.service.interface';
 
 @NgModule({
   imports: [CommonModule, UiModule, PortalModule, LayoutModule, MatIconModule],
@@ -21,7 +23,8 @@ import {
     PortalModule,
     LayoutModule,
     PageBarContainerComponent
-  ]
+  ],
+  providers: [{ provide: FILTER_SERVICE_TOKEN, useClass: FilterService }]
 })
 export class SharedModule {
   static forRoot(

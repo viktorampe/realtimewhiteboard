@@ -70,6 +70,8 @@ import {
   LINKED_PERSON_SERVICE_TOKEN
 } from './persons/linked-persons.service';
 import { PersonService, PERSON_SERVICE_TOKEN } from './persons/persons.service';
+import { ResultsService } from './results/results.service';
+import { RESULTS_SERVICE_TOKEN } from './results/results.service.interface';
 import { StudentContentStatusService } from './student-content-status/student-content-status.service';
 import { STUDENT_CONTENT_STATUS_SERVICE_TOKEN } from './student-content-status/student-content-status.service.interface';
 import { TaskEduContentService } from './tasks/task-edu-content.service';
@@ -152,7 +154,8 @@ interface DalOptions {
       provide: TASK_EDU_CONTENT_SERVICE_TOKEN,
       useClass: TaskEduContentService
     },
-    { provide: CONTENT_REQUEST_SERVICE_TOKEN, useClass: ContentRequestService }
+    { provide: CONTENT_REQUEST_SERVICE_TOKEN, useClass: ContentRequestService },
+    { provide: RESULTS_SERVICE_TOKEN, useClass: ResultsService }
   ]
 })
 export class DalModule {

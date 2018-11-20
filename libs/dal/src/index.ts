@@ -1,3 +1,4 @@
+export * from './lib/+fixtures/index';
 export * from './lib/+models/index';
 export * from './lib/+state';
 export { DalState } from './lib/+state';
