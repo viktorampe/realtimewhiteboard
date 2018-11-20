@@ -61,8 +61,10 @@ describe('BundleDetailComponent', () => {
     fixture.detectChanges();
 
     fixture.whenStable().then(() => {
-      const listItems = listDE.queryAll(By.directive(ListViewItemDirective));
-      expect(listItems.length).toBe(3);
+      const filteredListItems = listDE.queryAll(
+        By.directive(ListViewItemDirective)
+      );
+      expect(filteredListItems.length).toBe(3);
     });
   }));
 

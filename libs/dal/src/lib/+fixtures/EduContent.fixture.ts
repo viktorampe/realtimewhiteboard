@@ -3,8 +3,8 @@ import { EduContentMetadataFixture } from './EduContentMetadata.fixture';
 
 export class EduContentFixture implements EduContentInterface {
   // defaults
-  type: string = 'foo';
-  id: number = 1;
+  type = 'foo';
+  id = 1;
   publishedEduContentMetadataId: 1;
   publishedEduContentMetadata: EduContentMetadataInterface = new EduContentMetadataFixture(
     { id: this.publishedEduContentMetadataId }
