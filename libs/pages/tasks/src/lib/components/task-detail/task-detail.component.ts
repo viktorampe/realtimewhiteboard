@@ -137,7 +137,10 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
             //TODO replace by custom viewModel method, this is a testing placeholder
             <ContentInterface>{
               description: taskEduContent.task.description,
-              name: taskEduContent.task.name
+              name: taskEduContent.task.name,
+              fileExtension: 'xls',
+              methodLogos: ['fillerMethod'],
+              productType: taskEduContent.eduContent.type
             }
         );
       })

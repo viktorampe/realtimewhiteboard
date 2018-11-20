@@ -1,0 +1,9 @@
+$pages-tasks__font-color-gray-1: #3e3e43 !default;
+
+@import './components/info-panel/info-panel-task/info-panel-task.component.theme';
+@import './components/info-panel/info-panel-content/info-panel-task.component.theme';
+
+@mixin pages-tasks-theme() {
+  @include pages-tasks-info-panel-task-theme();
+  @include pages-tasks-info-panel-content-theme();
+}
