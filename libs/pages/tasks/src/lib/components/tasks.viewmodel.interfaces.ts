@@ -15,7 +15,7 @@ export interface LearningAreaWithTaskInfo {
   closedTasks: number;
 }
 
-export interface TaskInstancesWithEduContentInfoInterface {
+export interface TaskInstanceWithEduContentInfoInterface {
   instances: TaskInstancesWithEduContentInfo[];
 }
 

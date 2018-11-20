@@ -29,11 +29,10 @@ export class TaskInstance implements TaskInstanceInterface {
       }
       if (current < 0) {
         return 0;
+      } else if (current > full) {
+        return 100;
       } else {
-        const percent = Math.round((current / full) * 100);
-        if (percent > 100) {
-          return 100;
-        }
+        return Math.round((current / full) * 100);
       }
     }
     return 0;

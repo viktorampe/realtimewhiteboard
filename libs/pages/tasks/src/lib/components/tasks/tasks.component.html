@@ -17,9 +17,10 @@
 </campus-page-bar>
 
 <campus-page-header
-  [title]="(learningArea$ | async).name"
+  *ngIf="(learningArea$ | async) as learningArea"
+  [title]="learningArea.name"
   [subtitle]="'Taken'"
-  [iconClass]="(learningArea$ | async).icon"
+  [iconClass]="learningArea.icon"
 >
 </campus-page-header>
 
@@ -28,7 +29,7 @@
 >
   <div class="pages-tasks__container">
     <div class="pages-tasks__container__tasks-count">
-      {{ filteredTaskInstances.instances.length }} van
+      {{ filteredTaskInstances.length }} van
       <u (click)="filterTextInput.clear()">{{
         (taskInstances$ | async)?.instances.length
       }}</u>
@@ -37,8 +38,8 @@
 
     <campus-list-view [listFormat]="listFormat$ | async" [placeHolderText]="''">
       <campus-folder
-        *ngFor="let instance of filteredTaskInstances.instances"
-        [routerLink]="[instance.taskInstance.id]"
+        *ngFor="let instance of filteredTaskInstances"
+        [routerLink]="[instance.taskInstance.taskId]"
         campusListItem
         progress="{{instance.taskInstance.getProgress()}}"
         [itemCount]="instance.taskEduContentsCount"

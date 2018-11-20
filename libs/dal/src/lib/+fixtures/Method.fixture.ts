@@ -1,10 +1,4 @@
-import {
-  EduContentBookInterface,
-  EduContentMetadataInterface,
-  LearningAreaInterface,
-  MethodInterface,
-  ProductContentInterface
-} from '../+models';
+import { LearningAreaInterface, MethodInterface } from '../+models';
 
 export class MethodFixture implements MethodInterface {
   name: string;
@@ -13,10 +7,7 @@ export class MethodFixture implements MethodInterface {
   experimental?: boolean;
   id?: number;
   learningAreaId?: number;
-  productContents?: ProductContentInterface[];
-  eduContentMetadata?: EduContentMetadataInterface[];
   learningArea?: LearningAreaInterface;
-  eduContentBooks?: EduContentBookInterface[];
 
   constructor(props: Partial<MethodFixture> = {}) {
     // overwrite defaults

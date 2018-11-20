@@ -180,7 +180,6 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     HideDesktopDirective,
     HideMobileDirective,
     HumanDateTimePipe
-  ],
-  providers: [ListViewComponent]
+  ]
 })
 export class UiModule {}

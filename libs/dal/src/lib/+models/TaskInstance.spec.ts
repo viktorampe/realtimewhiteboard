@@ -42,6 +42,13 @@ describe('TaskInstance', () => {
     expect(taskInstance.getProgress()).toBe(100);
   });
 
+  it('should return 60', () => {
+    taskInstance.start = new Date(1541599801751);
+    taskInstance.end = new Date(1641999801751);
+    mockDate(1601999801751);
+    expect(taskInstance.getProgress()).toBe(60);
+  });
+
   it('should throw an error if startdate > enddate', () => {
     let caughtError: Error = null;
     taskInstance.start = new Date(2541599801751);

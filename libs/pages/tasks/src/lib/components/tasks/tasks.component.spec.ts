@@ -26,19 +26,15 @@ import { marbles } from 'rxjs-marbles';
 import { TasksViewModel } from '../tasks.viewmodel';
 import {
   LearningAreasWithTaskInstanceInfoInterface,
-  TaskInstancesWithEduContentInfoInterface,
+  TaskInstanceWithEduContentInfoInterface,
   TaskInstanceWithEduContentsInfoInterface
 } from '../tasks.viewmodel.interfaces';
 import { TasksComponent } from './tasks.component';
 
+export type NestedPartial<T> = { [P in keyof T]?: NestedPartial<T[P]> };
+
 class MockFilterService implements FilterServiceInterface {
-  filter<T>(
-    list: T[],
-    filters: import('/Users/mkellner/Desktop/projects/campus/libs/shared/src/lib/services/filter.service.interface').NestedPartial<
-      T
-    >,
-    ignoreCase?: boolean
-  ): T[] {
+  filter<T>(list: T[], filters: NestedPartial<T>, ignoreCase?: boolean): T[] {
     return list;
   }
 }
@@ -55,7 +51,7 @@ class MockViewModel {
 
     let mock: LearningAreasWithTaskInstanceInfoInterface;
     mock = {
-      learningAreas: [
+      learningAreasWithInfo: [
         {
           learningArea: mockLearningAreas[0],
           openTasks: 2,
@@ -74,7 +70,7 @@ class MockViewModel {
       ],
       totalTasks: 0
     };
-    mock.totalTasks = mock.learningAreas.reduce(
+    mock.totalTasks = mock.learningAreasWithInfo.reduce(
       (total, area) => total + area.openTasks + area.closedTasks,
       0
     );
@@ -90,11 +86,11 @@ class MockViewModel {
   }
 
   private getMockTaskInstancesByLearningArea(): Observable<
-    TaskInstancesWithEduContentInfoInterface
+    TaskInstanceWithEduContentInfoInterface
   > {
     const mockTaskInstancesAll = this.getMockTaskInstances();
 
-    let mockTaskInstances: TaskInstancesWithEduContentInfoInterface;
+    let mockTaskInstances: TaskInstanceWithEduContentInfoInterface;
     mockTaskInstances = {
       instances: [
         {

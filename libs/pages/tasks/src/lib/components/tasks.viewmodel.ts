@@ -13,7 +13,7 @@ import { ListFormat } from '@campus/ui';
 import { BehaviorSubject, Observable } from 'rxjs';
 import {
   LearningAreasWithTaskInstanceInfoInterface,
-  TaskInstancesWithEduContentInfoInterface,
+  TaskInstanceWithEduContentInfoInterface,
   TaskInstanceWithEduContentsInfoInterface
 } from './tasks.viewmodel.interfaces';
 
@@ -27,7 +27,7 @@ export class TasksViewModel {
   >;
   selectedLearningArea$: Observable<LearningAreaInterface>;
   taskInstancesByLearningArea$: Observable<
-    TaskInstancesWithEduContentInfoInterface
+    TaskInstanceWithEduContentInfoInterface
   >;
   selectedTaskInstance$: Observable<TaskInstanceInterface>;
   taskInstanceWithEduContents$: Observable<
@@ -39,8 +39,6 @@ export class TasksViewModel {
   constructor() {
     this.loadMockData();
   }
-
-  public changeListFormat(value: ListFormat) {}
 
   private loadMockData() {
     this.learningAreasWithTaskInstances$ = this.getMockLearningAreasWithTaskInstances();
@@ -93,11 +91,11 @@ export class TasksViewModel {
   }
 
   private getMockTaskInstancesByLearningArea(): Observable<
-    TaskInstancesWithEduContentInfoInterface
+    TaskInstanceWithEduContentInfoInterface
   > {
     const mockTaskInstancesAll = this.getMockTaskInstances();
 
-    let mockTaskInstances: TaskInstancesWithEduContentInfoInterface;
+    let mockTaskInstances: TaskInstanceWithEduContentInfoInterface;
     mockTaskInstances = {
       instances: [
         {
