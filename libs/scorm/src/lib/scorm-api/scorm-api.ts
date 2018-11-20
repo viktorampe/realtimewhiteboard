@@ -28,7 +28,7 @@ export class ScormApi implements ScormApiInterface {
   cmi$ = new Subject<ScormCmiInterface>();
 
   constructor(
-    private currentResult: ScormCmiInterface,
+    private currentResult: ScormCmiInterface | any,
     private mode: ScormCmiMode
   ) {}
 
