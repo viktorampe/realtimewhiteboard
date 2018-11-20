@@ -14,6 +14,7 @@ describe('Ui Reducer', () => {
     state = {
       listFormat: ListFormat.GRID,
       sideSheetOpen: true,
+      sideNavOpen: true,
       loaded: true
     };
   });
