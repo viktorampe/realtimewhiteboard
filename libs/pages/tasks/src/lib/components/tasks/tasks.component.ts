@@ -4,9 +4,12 @@ import { LearningAreaInterface } from '@campus/dal';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/shared';
 import { FilterTextInputComponent, ListFormat } from '@campus/ui';
 import { Observable } from 'rxjs';
-import { shareReplay } from 'rxjs/operators';
+import { map, shareReplay, switchMap } from 'rxjs/operators';
 import { TasksViewModel } from '../tasks.viewmodel';
-import { TaskInstanceWithEduContentInfoInterface } from '../tasks.viewmodel.interfaces';
+import {
+  TaskInstanceWithEduContentInfo,
+  TaskInstanceWithEduContentInfoInterface
+} from '../tasks.viewmodel.interfaces';
 
 @Component({
   selector: 'campus-tasks',
@@ -16,16 +19,13 @@ import { TaskInstanceWithEduContentInfoInterface } from '../tasks.viewmodel.inte
 export class TasksComponent implements OnInit {
   listFormat$: Observable<ListFormat> = this.viewModel.listFormat$;
 
-  taskInstances$: Observable<TaskInstanceWithEduContentInfoInterface> = this
-    .viewModel.taskInstancesByLearningArea$;
-
-  learningArea$: Observable<LearningAreaInterface> = this.viewModel
-    .selectedLearningArea$;
+  taskInstances$: Observable<TaskInstanceWithEduContentInfoInterface>;
+  learningArea$: Observable<LearningAreaInterface>;
 
   @ViewChild(FilterTextInputComponent)
   filterTextInput: FilterTextInputComponent<
     TaskInstanceWithEduContentInfoInterface,
-    TaskInstanceWithEduContentInfoInterface[]
+    TaskInstanceWithEduContentInfo[]
   >;
 
   private routeParams$ = this.route.params.pipe(shareReplay(1));
@@ -37,6 +37,8 @@ export class TasksComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.taskInstances$ = this.getTaskInstances();
+    this.learningArea$ = this.getLearningArea();
     this.filterTextInput.filterFn = this.filterFn.bind(this);
   }
 
@@ -47,7 +49,7 @@ export class TasksComponent implements OnInit {
   filterFn(
     source: TaskInstanceWithEduContentInfoInterface,
     searchText: string
-  ): TaskInstanceWithEduContentInfoInterface[] {
+  ): TaskInstanceWithEduContentInfo[] {
     const instances = this.filterService.filter(source.instances, {
       taskInstance: {
         task: { name: searchText }
@@ -56,17 +58,23 @@ export class TasksComponent implements OnInit {
     return instances;
   }
 
-  getTaskInstances(): Observable<TaskInstanceWithEduContentInfoInterface> {
-    /*taskInstances$: Observable<TaskInstanceWithEduContentInfoInterface> = this
-    .viewModel.taskInstancesByLearningArea$;*/
+  private getLearningArea(): Observable<LearningAreaInterface> {
+    return this.routeParams$.pipe(
+      switchMap(params => {
+        return this.viewModel.getLearningAreaById(params.area);
+      })
+    );
+  }
 
+  private getTaskInstances(): Observable<
+    TaskInstanceWithEduContentInfoInterface
+  > {
     return this.routeParams$.pipe(
       map(params => params.area),
       switchMap(areaId => {
         return this.viewModel.taskInstancesByLearningArea(areaId);
       })
     );
-    return null;
   }
 
   getIcon(finished: boolean): string {

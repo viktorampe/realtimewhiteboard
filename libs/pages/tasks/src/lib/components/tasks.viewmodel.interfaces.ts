@@ -16,10 +16,10 @@ export interface LearningAreaWithTaskInfo {
 }
 
 export interface TaskInstanceWithEduContentInfoInterface {
-  instances: TaskInstancesWithEduContentInfo[];
+  instances: TaskInstanceWithEduContentInfo[];
 }
 
-export interface TaskInstancesWithEduContentInfo {
+export interface TaskInstanceWithEduContentInfo {
   taskInstance: TaskInstanceInterface;
   taskEduContentsCount: number;
   finished: boolean;

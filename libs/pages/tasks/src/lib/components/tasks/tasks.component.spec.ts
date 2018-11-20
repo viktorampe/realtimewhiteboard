@@ -1,34 +1,13 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
-import {
-  EduContentFixture,
-  EduContentInterface,
-  EduContentProductTypeFixture,
-  EduContentProductTypeInterface,
-  LearningAreaFixture,
-  LearningAreaInterface,
-  MethodFixture,
-  MethodInterface,
-  PersonFixture,
-  TaskEduContentFixture,
-  TaskEduContentInterface,
-  TaskFixture,
-  TaskInstanceFixture,
-  TaskInstanceInterface,
-  TaskInterface
-} from '@campus/dal';
+import { ActivatedRoute, Params } from '@angular/router';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/shared';
 import { FilterTextInputComponent, ListFormat } from '@campus/ui';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { marbles } from 'rxjs-marbles';
 import { TasksViewModel } from '../tasks.viewmodel';
-import {
-  LearningAreasWithTaskInstanceInfoInterface,
-  TaskInstanceWithEduContentInfoInterface,
-  TaskInstanceWithEduContentsInfoInterface
-} from '../tasks.viewmodel.interfaces';
+import { MockTasksViewModel } from '../tasks.viewmodel.mock';
 import { TasksComponent } from './tasks.component';
 
 export type NestedPartial<T> = { [P in keyof T]?: NestedPartial<T[P]> };
@@ -39,7 +18,7 @@ class MockFilterService implements FilterServiceInterface {
   }
 }
 
-class MockViewModel {
+/*class MockViewModel {
   selectedLearningArea$ = this.getMockSelectedLearningArea();
   taskInstancesByLearningArea$ = this.getMockTaskInstancesByLearningArea();
   listFormat$ = this.getMockListFormat();
@@ -489,20 +468,27 @@ class MockViewModel {
   }
 
   changeListFormat(listFormat: ListFormat): void {}
-}
+}*/
 
 describe('TasksComponent', () => {
   let component: TasksComponent;
   let fixture: ComponentFixture<TasksComponent>;
 
   beforeEach(async(() => {
+    const params: Params = {};
+
     TestBed.configureTestingModule({
       declarations: [TasksComponent, FilterTextInputComponent],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
-        { provide: TasksViewModel, useClass: MockViewModel },
+        { provide: TasksViewModel, useClass: MockTasksViewModel },
         { provide: FILTER_SERVICE_TOKEN, useClass: MockFilterService },
-        { provide: ActivatedRoute, value: {} }
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            params: of(params)
+          }
+        }
       ]
     }).compileComponents();
   }));
