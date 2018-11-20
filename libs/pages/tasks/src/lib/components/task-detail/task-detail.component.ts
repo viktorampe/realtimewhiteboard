@@ -1,12 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import {
+  ContentInterface,
   LearningAreaInterface,
-  TaskEduContentInterface,
   TaskInstanceInterface
 } from '@campus/dal';
-import { Observable } from 'rxjs';
-import { shareReplay } from 'rxjs/operators';
+import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/shared';
+import {
+  FilterTextInputComponent,
+  ListFormat,
+  ListViewComponent,
+  SideSheetComponent
+} from '@campus/ui';
+import { Observable, Subscription } from 'rxjs';
+import { shareReplay, switchMap } from 'rxjs/operators';
 import { TasksViewModel } from '../tasks.viewmodel';
 
 @Component({
@@ -14,53 +28,129 @@ import { TasksViewModel } from '../tasks.viewmodel';
   templateUrl: './task-detail.component.html',
   styleUrls: ['./task-detail.component.scss']
 })
-export class TaskDetailComponent implements OnInit {
+export class TaskDetailComponent implements OnInit, AfterViewInit {
+  subscriptions: Subscription;
+  listFormat: typeof ListFormat;
+
   //input streams
   routerParams$: Params;
 
-  //intermediate streams
-  taskEduContents$: Observable<TaskEduContentInterface[]>;
-
   //output streams
-  learingArea$: Observable<LearningAreaInterface>;
+  listFormat$: Observable<ListFormat>;
+  learningArea$: Observable<LearningAreaInterface>;
   taskInstance$: Observable<TaskInstanceInterface>;
-  filteredTaskEduContents$: Observable<TaskEduContentInterface[]>;
-  selectedTaskEduContent$: Observable<TaskEduContentInterface>;
+  contents$: Observable<ContentInterface[]>;
+
+  //viewChildren
+  @ViewChild(FilterTextInputComponent)
+  filterTextInput: FilterTextInputComponent<ContentInterface, ContentInterface>;
+
+  list: ListViewComponent<ContentInterface>;
+  @ViewChild('taskInstanceListview')
+  set listViewComponent(list: ListViewComponent<ContentInterface>) {
+    this.list = list;
+  }
+
+  private sideSheet: SideSheetComponent;
+  @ViewChild('taskIntanceSidesheet')
+  set sideSheetComponent(sidesheet: SideSheetComponent) {
+    this.sideSheet = sidesheet;
+  }
 
   constructor(
     private taskViewModel: TasksViewModel,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private changeDetector: ChangeDetectorRef,
+    @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface
   ) {}
 
+  //life cycle hooks
   ngOnInit(): void {
+    this.initializeProperties();
     this.loadInputParams();
-    this.loadIntermediateStreams();
     this.loadOutputStreams();
+  }
+
+  ngAfterViewInit(): void {
+    this.setupListSubscription();
+  }
+
+  //initializer methods
+  private initializeProperties(): void {
+    this.subscriptions = new Subscription();
+    this.listFormat = ListFormat;
   }
 
   private loadInputParams(): void {
     this.routerParams$ = this.activatedRoute.params.pipe(shareReplay(1));
   }
 
-  private loadIntermediateStreams(): void {
-    //TODO add
-  }
-
   private loadOutputStreams(): void {
-    this.learingArea$ = this.getLearingArea();
+    this.listFormat$ = this.taskViewModel.listFormat$;
+    this.learningArea$ = this.getLearingArea();
     this.taskInstance$ = this.getTaskInstance();
-    //TODO expand
-    // filteredTaskEduContents$
-    // selectedTaskEduContent$
+    this.contents$ = this.getContents();
+    this.filterTextInput.filterFn = this.filterFn.bind(this);
   }
 
+  private setupListSubscription(): void {
+    this.subscriptions.add(
+      this.list.selectedItems$.subscribe(
+        (selectedItems: ContentInterface[]) => {
+          if (selectedItems.length > 0) {
+            this.sideSheet.toggle(true);
+          }
+        }
+      )
+    );
+
+    // Needed to avoid ExpressionChangedAfterItHasBeenCheckedError
+    this.changeDetector.detectChanges();
+  }
+
+  //stream getters
   private getLearingArea(): Observable<LearningAreaInterface> {
-    //TODO needs to be
-    return this.taskViewModel.selectedLearningArea$;
+    return this.routerParams$.pipe(
+      switchMap(params => {
+        //TODO change to getLearningAreaById when method exists in viewModel
+        return this.taskViewModel.getMockSelectedLearningArea();
+      })
+    );
   }
 
   private getTaskInstance(): Observable<TaskInstanceInterface> {
-    //TODO needs to be
-    return this.taskViewModel.selectedTaskInstance$;
+    return this.routerParams$.pipe(
+      switchMap(params => {
+        //TODO change to getTaskInstanceById when method exists in viewModel
+        return this.taskViewModel.getMockSelectedTaskInstance();
+      })
+    );
+  }
+
+  private getContents(): Observable<ContentInterface[]> {
+    return this.routerParams$.pipe(
+      switchMap(params => {
+        //TODO change to getTaskEducontentsByTaskId
+        return this.taskViewModel.getMockTaskEducontents();
+      })
+    );
+  }
+
+  //event handlers
+  clickChangeListFormat(format: ListFormat): void {
+    this.taskViewModel.changeListFormat(format);
+  }
+
+  //filterFunction
+  private filterFn(
+    info: ContentInterface[],
+    searchText: string
+  ): ContentInterface[] {
+    if (this.list) {
+      this.list.deselectAllItems();
+    }
+    return this.filterService.filter(info, {
+      name: searchText
+    });
   }
 }

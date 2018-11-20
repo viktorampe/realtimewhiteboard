@@ -1,1 +1,82 @@
-task details works
+<campus-page-bar>
+  <campus-filter-text-input
+    theme="dark"
+    [source]="contents$ | async"
+    class="pages__toolbar__filter"
+  ></campus-filter-text-input>
+  <div class="divider"></div>
+  <campus-button
+    iconClass="list-view"
+    (click)="clickChangeListFormat(listFormat.LINE)"
+  ></campus-button>
+  <campus-button
+    iconClass="grid-view"
+    (click)="clickChangeListFormat(listFormat.GRID)"
+  ></campus-button>
+</campus-page-bar>
+
+<ng-template #noTaskInstance>Deze taak is niet langer beschikbaar.</ng-template>
+
+<campus-side-sheet
+  #taskIntanceSidesheet
+  [isOpenOnInit]="true"
+  *ngIf="(taskInstance$ | async) as taskInstance; else: noTaskInstance"
+>
+  <campus-side-sheet-header></campus-side-sheet-header>
+  <campus-side-sheet-body>
+    <ng-container
+      *ngIf="list && (list.selectedItems$ | async) as selectedItems"
+      [ngSwitch]="selectedItems.length"
+    >
+      <campus-info-panel-task
+        *ngSwitchCase="0"
+        [taskInstance]="taskInstance"
+        [person]="taskInstance.task.teacher"
+      >
+      </campus-info-panel-task>
+      <campus-info-panel-content *ngSwitchCase="1" [content]="selectedItems[0]">
+      </campus-info-panel-content>
+    </ng-container>
+  </campus-side-sheet-body>
+
+  <campus-side-sheet-page>
+    <div class="campus-page">
+      <campus-page-header
+        [title]="taskInstance.task.name"
+        [subtitle]="taskInstance.task.description"
+        [iconClass]="(learningArea$ | async)?.icon"
+      >
+      </campus-page-header>
+
+      <ng-container *ngIf="(contents$ | async) as contents">
+        <ng-container
+          *ngIf="(filterTextInput.result$ | async) as filteredContents"
+        >
+          <div class="itemsAmount">
+            {{ filteredContents.length }} van
+            <u (click)="filterTextInput.clear()">{{ contents.length }}</u>
+            weergegeven
+          </div>
+
+          <campus-list-view
+            #taskInstanceListview
+            [listFormat]="listFormat$ | async"
+            [placeHolderText]="'De toegepaste filter bevat geen resultaten.'"
+            [multiSelect]="true"
+          >
+            <campus-content-thumbnail
+              *ngFor="let content of filteredContents"
+              campusListItem
+              [dataObject]="content"
+              [title]="content.name"
+              [fileExtensionClass]="content.fileExtension"
+              [contentTypeClass]="content.productType"
+            >
+              <campus-button [iconClass]="'icon-tasks'" circle> </campus-button>
+            </campus-content-thumbnail>
+          </campus-list-view>
+        </ng-container>
+      </ng-container>
+    </div>
+  </campus-side-sheet-page>
+</campus-side-sheet>
