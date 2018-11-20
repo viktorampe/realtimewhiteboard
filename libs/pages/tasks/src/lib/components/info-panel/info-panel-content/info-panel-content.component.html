@@ -7,6 +7,10 @@
     *ngIf="content.extension"
     [extensionClass]="content.extension"
   ></campus-file-extension>
-  <div icon *ngIf="content.productType" class="{{content.productType}}"></div>
+  <mat-icon
+    icon
+    [svgIcon]="content.productType"
+    *ngIf="content.productType"
+  ></mat-icon>
   <div badge *ngFor="let badge of content.methods">{{ badge }}</div>
 </campus-content-preview>
