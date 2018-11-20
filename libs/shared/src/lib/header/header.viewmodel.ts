@@ -65,7 +65,7 @@ export class HeaderViewModel {
   //presentation stream
   recentAlerts$: Observable<DropdownItemInterface[]>; //TODO replace interface with the actual dropdown interface
   recentMessages$: Observable<DropdownItemInterface[]>; //TODO replace interface with the actual dropdown interface
-  backLink$: Observable<string | undefined> = this.setupPageBarNavigation();
+  backLink$: Observable<string | undefined>;
 
   //state source streams
   private alertsForUser$: Observable<AlertQueueInterface[]>;
@@ -82,6 +82,7 @@ export class HeaderViewModel {
     this.headerResolver.resolve();
     this.loadFeatureToggles();
     this.loadStateStreams();
+    this.backLink$ = this.setupPageBarNavigation(); // TODO: move to loadDisplayStream()
     //TODO remove comment once the states have been added
     //this.loadDisplayStream();
   }
