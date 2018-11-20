@@ -2,7 +2,7 @@ import { Subject } from 'rxjs';
 import {
   ScormApiInterface,
   ScormCmiInterface,
-  ScormCMIMode,
+  ScormCmiMode,
   ScormErrorCodes,
   ScormStatus
 } from './scorm-api.interface';
@@ -28,8 +28,8 @@ export class ScormApi implements ScormApiInterface {
   cmi$ = new Subject<ScormCmiInterface>();
 
   constructor(
-    private currentResult: ScormCmiInterface | string,
-    private mode: ScormCMIMode
+    private currentResult: ScormCmiInterface,
+    private mode: ScormCmiMode
   ) {}
 
   /**
@@ -44,12 +44,21 @@ export class ScormApi implements ScormApiInterface {
   LMSInitialize(): 'true' | 'false' {
     this.reset();
     //check exerciseId and exercise info availability
-    if (this.mode === ScormCMIMode.CMI_MODE_PREVIEW) {
+    if (this.mode === ScormCmiMode.CMI_MODE_PREVIEW) {
       this.currentResult = this.getNewCmi();
     } else {
       if (this.currentResult) {
         if (typeof this.currentResult === 'string') {
-          this.currentResult = JSON.parse(this.currentResult);
+          try {
+            this.currentResult = JSON.parse(this.currentResult);
+          } catch (error) {
+            this.lastErrorCode = ScormErrorCodes.NOT_INITIALIZED_ERROR;
+            this.lastDiagnosticMessage = this.LMSGetErrorString(
+              this.lastErrorCode
+            );
+
+            return 'false';
+          }
         }
       } else {
         this.currentResult = this.getNewCmi();
@@ -73,7 +82,7 @@ export class ScormApi implements ScormApiInterface {
    */
   LMSFinish(): 'true' | 'false' {
     //check exerciseId and exercise info availability
-    if (this.mode === ScormCMIMode.CMI_MODE_PREVIEW) {
+    if (this.mode === ScormCmiMode.CMI_MODE_PREVIEW) {
       return 'true';
     }
 
@@ -126,7 +135,7 @@ export class ScormApi implements ScormApiInterface {
    */
   LMSSetValue(parameter: string, value: string): 'true' | 'false' {
     //check exerciseId and exercise info availability
-    if (this.mode === ScormCMIMode.CMI_MODE_PREVIEW) {
+    if (this.mode === ScormCmiMode.CMI_MODE_PREVIEW) {
       return 'false';
     }
 
@@ -152,7 +161,7 @@ export class ScormApi implements ScormApiInterface {
     }
 
     //check exerciseId and exercise info availability
-    if (this.mode === ScormCMIMode.CMI_MODE_PREVIEW) {
+    if (this.mode === ScormCmiMode.CMI_MODE_PREVIEW) {
       return 'false';
     }
 
@@ -243,7 +252,7 @@ export class ScormApi implements ScormApiInterface {
   }
 
   private checkInitialized(): boolean {
-    if (this.mode === ScormCMIMode.CMI_MODE_PREVIEW) {
+    if (this.mode === ScormCmiMode.CMI_MODE_PREVIEW) {
       return true;
     }
 
@@ -262,7 +271,7 @@ export class ScormApi implements ScormApiInterface {
   ) {
     function index(obj, i) {
       if (obj === undefined) {
-        return undefined;
+        return;
       }
       return obj[i];
     }

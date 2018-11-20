@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { WINDOW } from '@campus/browser';
 import { Subject } from 'rxjs';
 import { ScormApi } from './scorm-api';
-import { ScormCmiInterface, ScormCMIMode } from './scorm-api.interface';
+import { ScormCmiInterface, ScormCmiMode } from './scorm-api.interface';
 import { ScormApiServiceInterface } from './scorm-api.service.interface';
 
 @Injectable({
@@ -15,14 +15,12 @@ export class ScormApiService implements ScormApiServiceInterface {
 
   constructor(@Inject(WINDOW) private window: Window) {}
 
-  init(cmi: ScormCmiInterface, mode: ScormCMIMode) {
+  init(cmi: ScormCmiInterface, mode: ScormCmiMode) {
     if (!this.window['API']) {
       const API = new ScormApi(cmi, mode);
 
-      API.commit$.subscribe(val => {
-        this.commit$.next(val);
-      });
-      API.cmi$.subscribe(val => this.cmi$.next(val));
+      this.commit$ = API.commit$;
+      this.cmi$ = API.cmi$;
 
       this.window['API'] = API;
     }

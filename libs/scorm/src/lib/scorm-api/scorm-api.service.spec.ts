@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { WINDOW } from '@campus/browser';
 import { ScormApi } from './scorm-api';
-import { ScormCmiInterface, ScormCMIMode } from './scorm-api.interface';
+import { ScormCmiInterface, ScormCmiMode } from './scorm-api.interface';
 import { ScormApiService } from './scorm-api.service';
-
+// file.only
 describe('ScormApiService', () => {
   let scormApiService: ScormApiService;
   let window: any;
@@ -29,7 +29,7 @@ describe('ScormApiService', () => {
     it('should not do anything', () => {
       scormApiService.init(
         {} as ScormCmiInterface,
-        ScormCMIMode.CMI_MODE_NORMAL
+        ScormCmiMode.CMI_MODE_NORMAL
       );
       expect(window.API).toBe(fakeScormApi);
     });
@@ -42,7 +42,7 @@ describe('ScormApiService', () => {
     it('should be added to the window', () => {
       scormApiService.init(
         {} as ScormCmiInterface,
-        ScormCMIMode.CMI_MODE_NORMAL
+        ScormCmiMode.CMI_MODE_NORMAL
       );
       expect(window.API).toBeDefined();
       expect(window.API.constructor.name).toBe(ScormApi.name);
@@ -57,27 +57,27 @@ describe('ScormApiService', () => {
       // initialize the API  (it wil be placed on the window.API)
       scormApiService.init(
         {} as ScormCmiInterface,
-        ScormCMIMode.CMI_MODE_NORMAL
+        ScormCmiMode.CMI_MODE_NORMAL
       );
 
       commitSpy = jest.spyOn(scormApiService.commit$, 'next');
       cmiSpy = jest.spyOn(scormApiService.cmi$, 'next');
     });
     it('should pass the commit stream values from the scorm API to the scormApiService', () => {
-      window.API.commit$.next({ mode: ScormCMIMode.CMI_MODE_BROWSE });
+      window.API.commit$.next({ mode: ScormCmiMode.CMI_MODE_BROWSE });
 
       expect(commitSpy).toHaveBeenCalledTimes(1);
       expect(commitSpy).toHaveBeenCalledWith({
-        mode: ScormCMIMode.CMI_MODE_BROWSE
+        mode: ScormCmiMode.CMI_MODE_BROWSE
       });
     });
 
     it('should pass the cmi stream values from the scorm API to the scormApiService', () => {
-      window.API.cmi$.next({ mode: ScormCMIMode.CMI_MODE_NORMAL });
+      window.API.cmi$.next({ mode: ScormCmiMode.CMI_MODE_NORMAL });
 
       expect(cmiSpy).toHaveBeenCalledTimes(1);
       expect(cmiSpy).toHaveBeenCalledWith({
-        mode: ScormCMIMode.CMI_MODE_NORMAL
+        mode: ScormCmiMode.CMI_MODE_NORMAL
       });
     });
   });

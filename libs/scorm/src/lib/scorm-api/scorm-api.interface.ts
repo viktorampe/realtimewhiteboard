@@ -23,7 +23,7 @@ export enum ScormErrorCodes {
   INCORRECT_DATA_TYPE_ERROR = '405'
 }
 
-export enum ScormCMIMode {
+export enum ScormCmiMode {
   CMI_MODE_NORMAL = 'normal',
   CMI_MODE_BROWSE = 'browse',
   CMI_MODE_REVIEW = 'review',
@@ -40,7 +40,7 @@ export enum ScormStatus {
 }
 
 export interface ScormCmiInterface {
-  mode: ScormCMIMode;
+  mode: ScormCmiMode;
   core: {
     score: {
       raw: number;
