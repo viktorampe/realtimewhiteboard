@@ -3,4 +3,8 @@ export * from './EduContent.fixture';
 export * from './EduContentMetadata.fixture';
 export * from './LearningArea.fixture';
 export * from './Person.fixture';
+export * from './Result.fixture';
+export * from './Task.fixture';
+export * from './TaskEduContent.fixture';
+export * from './TaskInstance.fixture';
 export * from './UnlockedContent.fixture';
