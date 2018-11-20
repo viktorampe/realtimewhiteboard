@@ -1,9 +1,12 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/shared';
-import { ListFormat, UiModule } from '@campus/ui';
-import { Store, StoreModule } from '@ngrx/store';
+import { By } from '@angular/platform-browser';
+import {
+  FilterService,
+  FilterServiceInterface,
+  FILTER_SERVICE_TOKEN
+} from '@campus/shared';
+import { ListFormat, ListViewItemDirective, UiModule } from '@campus/ui';
 import { BundlesViewModel } from '../bundles.viewmodel';
 import { MockViewModel } from '../bundles.viewmodel.mocks';
 import { LearningAreasComponent } from './learning-areas.component';
@@ -16,18 +19,12 @@ describe('LearningAreasComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [StoreModule.forRoot({}), RouterTestingModule, UiModule],
+      imports: [UiModule],
       declarations: [LearningAreasComponent],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         { provide: BundlesViewModel, useClass: MockViewModel },
-        {
-          provide: FILTER_SERVICE_TOKEN,
-          useValue: {
-            filter: () => []
-          }
-        },
-        Store
+        { provide: FILTER_SERVICE_TOKEN, useClass: FilterService }
       ]
     }).compileComponents();
     bundlesViewModel = TestBed.get(BundlesViewModel);
@@ -66,4 +63,18 @@ describe('LearningAreasComponent', () => {
       learningArea: { name: filterText }
     });
   });
+
+  it('should apply the filter case insensitive on the list of learning areas', async(() => {
+    const listDE = fixture.debugElement.query(By.css('campus-list-view'));
+    const listItems = listDE.queryAll(By.directive(ListViewItemDirective));
+    expect(listItems.length).toBe(4);
+
+    component.filterTextInput.setValue('foo');
+    fixture.detectChanges();
+
+    fixture.whenStable().then(() => {
+      const listItems = listDE.queryAll(By.directive(ListViewItemDirective));
+      expect(listItems.length).toBe(3);
+    });
+  }));
 });

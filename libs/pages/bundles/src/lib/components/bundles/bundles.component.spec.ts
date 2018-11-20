@@ -6,11 +6,11 @@ import {
   TestBed,
   tick
 } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { ActivatedRoute, Params } from '@angular/router';
-import { FILTER_SERVICE_TOKEN } from '@campus/shared';
-import { ListFormat, UiModule } from '@campus/ui';
-import { Store, StoreModule } from '@ngrx/store';
-import { Subject } from 'rxjs';
+import { FilterService, FILTER_SERVICE_TOKEN } from '@campus/shared';
+import { ListFormat, ListViewItemDirective, UiModule } from '@campus/ui';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { BundlesViewModel } from '../bundles.viewmodel';
 import { MockViewModel } from '../bundles.viewmodel.mocks';
 import { BundlesComponent } from './bundles.component';
@@ -22,21 +22,15 @@ describe('BundlesComponent', () => {
   let fixture: ComponentFixture<BundlesComponent>;
 
   beforeEach(async(() => {
-    params = new Subject<Params>();
+    params = new BehaviorSubject<Params>({ area: 1 });
     TestBed.configureTestingModule({
-      imports: [StoreModule.forRoot({}), UiModule],
+      imports: [UiModule],
       declarations: [BundlesComponent],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         { provide: ActivatedRoute, useValue: { params: params } },
         { provide: BundlesViewModel, useClass: MockViewModel },
-        {
-          provide: FILTER_SERVICE_TOKEN,
-          useValue: {
-            filter: () => []
-          }
-        },
-        Store
+        { provide: FILTER_SERVICE_TOKEN, useClass: FilterService }
       ]
     }).compileComponents();
     bundlesViewModel = TestBed.get(BundlesViewModel);
@@ -63,6 +57,20 @@ describe('BundlesComponent', () => {
     expect(component.listFormat$).toBe(bundlesViewModel.listFormat$);
   });
 
+  it('should apply the filter case insensitive on the list of bundles', async(() => {
+    const listDE = fixture.debugElement.query(By.css('campus-list-view'));
+    const listItems = listDE.queryAll(By.directive(ListViewItemDirective));
+    expect(listItems.length).toBe(4);
+
+    component.filterTextInput.setValue('foo');
+    fixture.detectChanges();
+
+    fixture.whenStable().then(() => {
+      const listItems = listDE.queryAll(By.directive(ListViewItemDirective));
+      expect(listItems.length).toBe(3);
+    });
+  }));
+
   it(
     'should call vm.getLearningAreaById and vm.getSharedBundlesWithContentInfo on route change',
     fakeAsync(() => {
@@ -79,7 +87,7 @@ describe('BundlesComponent', () => {
 
       expect(spyLearningArea).toHaveBeenCalledTimes(1);
       expect(spyLearningArea).toHaveBeenCalledWith(2);
-      expect(spyBundles).toHaveBeenCalledTimes(1);
+      expect(spyBundles).toHaveBeenCalledTimes(2); // subscribed 2 times to sharedInfo$ in the template
       expect(spyBundles).toHaveBeenCalledWith(2);
     })
   );

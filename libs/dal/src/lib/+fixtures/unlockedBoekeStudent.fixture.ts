@@ -1,5 +1,7 @@
-import { UnlockedBoekeStudent } from '@diekeure/polpo-api-angular-sdk';
-import { UnlockedBoekeStudentInterface } from '../+models';
+import {
+  UnlockedBoekeStudent,
+  UnlockedBoekeStudentInterface
+} from '../+models';
 
 export class UnlockedBoekeStudentFixture extends UnlockedBoekeStudent {
   // defaults

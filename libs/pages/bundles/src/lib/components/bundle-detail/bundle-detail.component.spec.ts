@@ -3,10 +3,8 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Params } from '@angular/router';
-import { ContentFixture } from '@campus/dal';
-import { FILTER_SERVICE_TOKEN } from '@campus/shared';
+import { FilterService, FILTER_SERVICE_TOKEN } from '@campus/shared';
 import { ListFormat, ListViewItemDirective, UiModule } from '@campus/ui';
-import { Store, StoreModule } from '@ngrx/store';
 import { BehaviorSubject, of } from 'rxjs';
 import { BundlesViewModel } from '../bundles.viewmodel';
 import { MockViewModel } from '../bundles.viewmodel.mocks';
@@ -21,24 +19,13 @@ describe('BundleDetailComponent', () => {
   beforeEach(async(() => {
     params = new BehaviorSubject<Params>({ area: 1, bundle: 1 });
     TestBed.configureTestingModule({
-      imports: [StoreModule.forRoot({}), UiModule, BrowserAnimationsModule],
+      imports: [UiModule, BrowserAnimationsModule],
       declarations: [BundleDetailComponent],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         { provide: ActivatedRoute, useValue: { params: params } },
         { provide: BundlesViewModel, useClass: MockViewModel },
-        {
-          provide: FILTER_SERVICE_TOKEN,
-          useValue: {
-            filter: () => [
-              new ContentFixture(),
-              new ContentFixture(),
-              new ContentFixture(),
-              new ContentFixture()
-            ]
-          }
-        },
-        Store
+        { provide: FILTER_SERVICE_TOKEN, useClass: FilterService }
       ]
     }).compileComponents();
     bundlesViewModel = TestBed.get(BundlesViewModel);
@@ -64,6 +51,20 @@ describe('BundleDetailComponent', () => {
   it('should get the listFormat$ from the vm', () => {
     expect(component.listFormat$).toBe(bundlesViewModel.listFormat$);
   });
+
+  it('should apply the filter case insensitive on the list of educontent', async(() => {
+    const listDE = fixture.debugElement.query(By.css('campus-list-view'));
+    const listItems = listDE.queryAll(By.directive(ListViewItemDirective));
+    expect(listItems.length).toBe(4);
+
+    component.filterTextInput.setValue('foo');
+    fixture.detectChanges();
+
+    fixture.whenStable().then(() => {
+      const listItems = listDE.queryAll(By.directive(ListViewItemDirective));
+      expect(listItems.length).toBe(3);
+    });
+  }));
 
   it('should show the teacher info in the infopanel if no item is selected', () => {
     component.list.deselectAllItems();

@@ -40,13 +40,13 @@ import { LearningAreasWithBundlesInfoInterface } from './bundles.viewmodel.inter
 
 describe('BundlesViewModel', () => {
   let bundlesViewModel: BundlesViewModel;
-  let uiState: any;
-  let learningAreaState: any;
-  let bundleState: any;
-  let unlockedBoekeGroupState: any;
-  let unlockedBoekeStudentState: any;
-  let unlockedContentState: any;
-  let eduContentState: any;
+  let uiState: UiReducer.UiState;
+  let learningAreaState: LearningAreaReducer.State;
+  let bundleState: BundleReducer.State;
+  let unlockedBoekeGroupState: UnlockedBoekeGroupReducer.State;
+  let unlockedBoekeStudentState: UnlockedBoekeStudentReducer.State;
+  let unlockedContentState: UnlockedContentReducer.State;
+  let eduContentState: EduContentReducer.State;
 
   let ui: UiReducer.UiState;
   let learningAreas: LearningAreaInterface[];

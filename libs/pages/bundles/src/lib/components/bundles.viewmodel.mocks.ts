@@ -31,11 +31,22 @@ export class MockViewModel {
   > = new BehaviorSubject<LearningAreasWithBundlesInfoInterface>({
     learningAreas: [
       {
-        learningArea: {
-          id: 1,
-          name: 'foo',
-          color: '#fff'
-        },
+        learningArea: new LearningAreaFixture({ name: 'Foo' }),
+        bundleCount: 0,
+        bookCount: 0
+      },
+      {
+        learningArea: new LearningAreaFixture({ name: 'Foo bar' }),
+        bundleCount: 0,
+        bookCount: 0
+      },
+      {
+        learningArea: new LearningAreaFixture({ name: 'Bar' }),
+        bundleCount: 0,
+        bookCount: 0
+      },
+      {
+        learningArea: new LearningAreaFixture({ name: 'Bar foo' }),
         bundleCount: 0,
         bookCount: 0
       }
@@ -52,8 +63,25 @@ export class MockViewModel {
     learningAreaId: number
   ): Observable<BundlesWithContentInfoInterface> {
     return of({
-      bundles: [],
-      books: []
+      bundles: [
+        {
+          bundle: new BundleFixture({ name: 'Foo' }),
+          contentsCount: 4
+        },
+        {
+          bundle: new BundleFixture({ name: 'Foo bar' }),
+          contentsCount: 0
+        },
+        {
+          bundle: new BundleFixture({ name: 'Bar' }),
+          contentsCount: 0
+        },
+        {
+          bundle: new BundleFixture({ name: 'Bar foo' }),
+          contentsCount: 0
+        }
+      ],
+      books: [new ContentFixture({ id: 1 })]
     });
   }
 
@@ -68,6 +96,11 @@ export class MockViewModel {
   }
 
   getBundleContents(bundleId: number): Observable<ContentInterface[]> {
-    return of([new ContentFixture()]);
+    return of([
+      new ContentFixture({ name: 'Foo' }),
+      new ContentFixture({ name: 'Foo bar' }),
+      new ContentFixture({ name: 'Bar' }),
+      new ContentFixture({ name: 'Bar foo' })
+    ]);
   }
 }
