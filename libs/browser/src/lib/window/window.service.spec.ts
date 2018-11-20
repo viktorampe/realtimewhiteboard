@@ -15,6 +15,7 @@ describe('WindowService', () => {
   let windowService: WindowService;
   let closeWindowSpy: jest.SpyInstance;
   let openedWindows: { [name: string]: any };
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
@@ -48,18 +49,24 @@ describe('WindowService', () => {
     windowService.openWindow('stillOpen', 'www.bar.com');
 
     const toBeClosed = windowService.openedWindows.toBeClosed;
-    const stillOpen = windowService.openedWindows.stillOpen;
 
     windowService.closeWindow('toBeClosed');
 
     expect(toBeClosed.close).toHaveBeenCalledTimes(1);
-    expect(windowService.openedWindows.toBeClosed).toBeUndefined();
-    expect(windowService.openedWindows.stillOpen).toBe(stillOpen);
+    expect(Object.keys(windowService.openedWindows)).toEqual(['stillOpen']);
   });
 
   it(`should not close non-existing windows`, () => {
-    // we have to provide the 'this' context otherwise test fails
-    windowService.closeWindow.call(windowService, 'nonExistingWindow');
+    // open some windows
+    windowService.openWindow('windowFoo', 'www.foo.com');
+    windowService.openWindow('windowBar', 'www.bar.com');
+
+    windowService.closeWindow('nonExistingWindow');
     expect(closeWindowSpy).toHaveBeenCalledTimes(1);
+
+    expect(Object.keys(windowService.openedWindows)).toEqual([
+      'windowFoo',
+      'windowBar'
+    ]);
   });
 });
