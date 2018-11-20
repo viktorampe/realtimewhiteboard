@@ -3,7 +3,7 @@ import { WINDOW } from '@campus/browser';
 import { ScormApi } from './scorm-api';
 import { ScormCmiInterface, ScormCmiMode } from './scorm-api.interface';
 import { ScormApiService } from './scorm-api.service';
-// file.only
+
 describe('ScormApiService', () => {
   let scormApiService: ScormApiService;
   let window: any;
