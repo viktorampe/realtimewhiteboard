@@ -20,7 +20,7 @@ import {
   SideSheetComponent
 } from '@campus/ui';
 import { Observable, Subscription } from 'rxjs';
-import { shareReplay, switchMap } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { TasksViewModel } from '../tasks.viewmodel';
 
 @Component({
@@ -33,7 +33,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
   listFormat: typeof ListFormat;
 
   //input streams
-  routerParams$: Params;
+  routerParams$: Observable<Params>;
 
   //output streams
   listFormat$: Observable<ListFormat>;
@@ -52,7 +52,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
   }
 
   private sideSheet: SideSheetComponent;
-  @ViewChild('taskIntanceSidesheet')
+  @ViewChild('taskInstanceSidesheet')
   set sideSheetComponent(sidesheet: SideSheetComponent) {
     this.sideSheet = sidesheet;
   }
@@ -82,7 +82,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
   }
 
   private loadInputParams(): void {
-    this.routerParams$ = this.activatedRoute.params.pipe(shareReplay(1));
+    this.routerParams$ = this.activatedRoute.params;
   }
 
   private loadOutputStreams(): void {
@@ -129,9 +129,17 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
 
   private getContents(): Observable<ContentInterface[]> {
     return this.routerParams$.pipe(
-      switchMap(params => {
+      //TODO may need to change to other operator
+      map(params => {
         //TODO change to getTaskEducontentsByTaskId
-        return this.taskViewModel.getMockTaskEducontents();
+        return this.taskViewModel.getMockTaskEducontents().map(
+          taskEduContent =>
+            //TODO replace by custom viewModel method, this is a testing placeholder
+            <ContentInterface>{
+              description: taskEduContent.task.description,
+              name: taskEduContent.task.name
+            }
+        );
       })
     );
   }

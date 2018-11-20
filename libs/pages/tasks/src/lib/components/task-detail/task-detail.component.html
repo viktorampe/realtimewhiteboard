@@ -18,7 +18,7 @@
 <ng-template #noTaskInstance>Deze taak is niet langer beschikbaar.</ng-template>
 
 <campus-side-sheet
-  #taskIntanceSidesheet
+  #taskInstanceSidesheet
   [isOpenOnInit]="true"
   *ngIf="(taskInstance$ | async) as taskInstance; else: noTaskInstance"
 >
@@ -49,34 +49,40 @@
       </campus-page-header>
 
       <ng-container *ngIf="(contents$ | async) as contents">
-        <ng-container
-          *ngIf="(filterTextInput.result$ | async) as filteredContents"
-        >
-          <div class="itemsAmount">
-            {{ filteredContents.length }} van
-            <u (click)="filterTextInput.clear()">{{ contents.length }}</u>
-            weergegeven
-          </div>
-
-          <campus-list-view
-            #taskInstanceListview
-            [listFormat]="listFormat$ | async"
-            [placeHolderText]="'De toegepaste filter bevat geen resultaten.'"
-            [multiSelect]="true"
+        <ng-container *ngIf="contents.length > 0; else: noTaskInstanceContents">
+          <ng-container
+            *ngIf="(filterTextInput.result$ | async) as filteredContents"
           >
-            <campus-content-thumbnail
-              *ngFor="let content of filteredContents"
-              campusListItem
-              [dataObject]="content"
-              [title]="content.name"
-              [fileExtensionClass]="content.fileExtension"
-              [contentTypeClass]="content.productType"
+            <div class="itemsAmount">
+              {{ filteredContents.length }} van
+              <u (click)="filterTextInput.clear()">{{ contents.length }}</u>
+              weergegeven
+            </div>
+
+            <campus-list-view
+              #taskInstanceListview
+              [listFormat]="listFormat$ | async"
+              [placeHolderText]="'De toegepaste filter bevat geen resultaten.'"
+              [multiSelect]="false"
             >
-              <campus-button [iconClass]="'icon-tasks'" circle> </campus-button>
-            </campus-content-thumbnail>
-          </campus-list-view>
+              <campus-content-thumbnail
+                *ngFor="let content of filteredContents"
+                campusListItem
+                [dataObject]="content"
+                [title]="content.name"
+                [fileExtensionClass]="content.fileExtension"
+                [contentTypeClass]="content.productType"
+              >
+                <campus-button [iconClass]="'icon-tasks'" circle>
+                </campus-button>
+              </campus-content-thumbnail>
+            </campus-list-view>
+          </ng-container>
         </ng-container>
       </ng-container>
+      <ng-template #noTaskInstanceContents
+        >Deze taak bevat geen inhoud</ng-template
+      >
     </div>
   </campus-side-sheet-page>
 </campus-side-sheet>
