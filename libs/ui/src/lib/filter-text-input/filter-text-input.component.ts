@@ -1,11 +1,15 @@
 import { Component, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { filter, map, startWith } from 'rxjs/operators';
 
 export enum FilterTextInputTheme {
   light = 'light',
   dark = 'dark'
+}
+
+export interface FilterableItem<I, O> {
+  filterFn(source: I, filterText: string | number): O[];
 }
 
 /**
@@ -22,18 +26,30 @@ export enum FilterTextInputTheme {
   styleUrls: ['./filter-text-input.component.scss']
 })
 export class FilterTextInputComponent<I, O> {
-  public filterFn: (source: I, filterText: string | number) => O[];
   public result$: Observable<O[]>;
   private input = new FormControl('');
+  private filterableItem: FilterableItem<I, O>;
 
   @Input() theme: FilterTextInputTheme;
   @Input() placeholder = 'Filter';
   @Input()
   set source(source: I) {
     this.result$ = this.input.valueChanges.pipe(
+      filter(() => !!this.filterableItem),
       startWith(''),
-      map(filterText => this.filterFn(source, filterText))
+      map(filterText => {
+        return this.filterableItem.filterFn(source, filterText);
+      })
     );
+
+    /*this.result$ = this.input.valueChanges.pipe(
+      startWith(''),
+      map(filterText => {
+        if (this.filterableItem) {
+          return this.filterableItem.filterFn(source, filterText);
+        }
+      })
+    );*/
   }
 
   /**
@@ -48,6 +64,12 @@ export class FilterTextInputComponent<I, O> {
 
   setValue(filterInput: string): void {
     this.input.setValue(filterInput);
+  }
+
+  setFilterableItem(filterableItem: {
+    filterFn: (source: I, filterText: string | number) => O[];
+  }) {
+    this.filterableItem = filterableItem;
   }
 
   /**
