@@ -27,7 +27,6 @@ describe('FilterTextInputComponent', () => {
     fixture = TestBed.createComponent(FilterTextInputComponent);
     component = fixture.componentInstance;
     component.source = mockData.source;
-    component.filterFn = mockData.filterFn;
     fixture.detectChanges();
   });
 

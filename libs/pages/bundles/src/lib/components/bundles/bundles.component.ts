@@ -1,4 +1,4 @@
-import { Component, Inject, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LearningAreaInterface } from '@campus/dal';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/shared';
@@ -23,7 +23,7 @@ import {
   templateUrl: './bundles.component.html',
   styleUrls: ['./bundles.component.scss']
 })
-export class BundlesComponent {
+export class BundlesComponent implements OnInit {
   protected listFormat = ListFormat;
 
   listFormat$: Observable<ListFormat>;
@@ -49,7 +49,7 @@ export class BundlesComponent {
     this.learningArea$ = this.getLearningArea();
     this.sharedInfo$ = this.getSharedInfo();
 
-    this.filterTextInput.filterFn = this.filterFn.bind(this);
+    this.filterTextInput.setFilterableItem(this);
     this.listFormat$ = this.bundlesViewModel.listFormat$;
   }
 
@@ -74,7 +74,7 @@ export class BundlesComponent {
     );
   }
 
-  private filterFn(
+  filterFn(
     info: BundlesWithContentInfoInterface,
     searchText: string
   ): BundleInfoInterface[] {
