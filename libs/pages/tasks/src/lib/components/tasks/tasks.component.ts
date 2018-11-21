@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { map, shareReplay, switchMap } from 'rxjs/operators';
 import { TasksViewModel } from '../tasks.viewmodel';
 import {
-  TaskInstanceWithEduContentInfo,
+  TaskInstancesWithEduContentInfoInterface,
   TaskInstanceWithEduContentInfoInterface
 } from '../tasks.viewmodel.interfaces';
 
@@ -19,13 +19,13 @@ import {
 export class TasksComponent implements OnInit {
   listFormat$: Observable<ListFormat> = this.viewModel.listFormat$;
 
-  taskInstances$: Observable<TaskInstanceWithEduContentInfoInterface>;
+  taskInstances$: Observable<TaskInstancesWithEduContentInfoInterface>;
   learningArea$: Observable<LearningAreaInterface>;
 
   @ViewChild(FilterTextInputComponent)
   filterTextInput: FilterTextInputComponent<
-    TaskInstanceWithEduContentInfoInterface,
-    TaskInstanceWithEduContentInfo[]
+    TaskInstancesWithEduContentInfoInterface,
+    TaskInstanceWithEduContentInfoInterface[]
   >;
 
   private routeParams$ = this.route.params.pipe(shareReplay(1));
@@ -47,9 +47,9 @@ export class TasksComponent implements OnInit {
   }
 
   filterFn(
-    source: TaskInstanceWithEduContentInfoInterface,
+    source: TaskInstancesWithEduContentInfoInterface,
     searchText: string
-  ): TaskInstanceWithEduContentInfo[] {
+  ): TaskInstanceWithEduContentInfoInterface[] {
     const instances = this.filterService.filter(source.instances, {
       taskInstance: {
         task: { name: searchText }
@@ -67,7 +67,7 @@ export class TasksComponent implements OnInit {
   }
 
   private getTaskInstances(): Observable<
-    TaskInstanceWithEduContentInfoInterface
+    TaskInstancesWithEduContentInfoInterface
   > {
     return this.routeParams$.pipe(
       map(params => params.area),

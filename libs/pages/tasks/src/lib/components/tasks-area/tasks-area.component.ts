@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { TasksViewModel } from './../tasks.viewmodel';
 import {
   LearningAreasWithTaskInstanceInfoInterface,
-  LearningAreaWithTaskInfo
+  LearningAreaWithTaskInfoInterface
 } from './../tasks.viewmodel.interfaces';
 
 @Component({
@@ -23,7 +23,7 @@ export class TasksAreaComponent implements OnInit {
   @ViewChild('filterInput')
   filterTextInput: FilterTextInputComponent<
     LearningAreasWithTaskInstanceInfoInterface,
-    LearningAreaWithTaskInfo
+    LearningAreaWithTaskInfoInterface
   >;
 
   constructor(
@@ -44,7 +44,7 @@ export class TasksAreaComponent implements OnInit {
   private filterFn(
     info: LearningAreasWithTaskInstanceInfoInterface,
     searchText: string
-  ): LearningAreaWithTaskInfo[] {
+  ): LearningAreaWithTaskInfoInterface[] {
     return this.filterService.filter(info.learningAreasWithInfo, {
       learningArea: { name: searchText }
     });

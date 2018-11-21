@@ -5,21 +5,21 @@ import {
 } from '@campus/dal';
 
 export interface LearningAreasWithTaskInstanceInfoInterface {
-  learningAreasWithInfo: LearningAreaWithTaskInfo[];
+  learningAreasWithInfo: LearningAreaWithTaskInfoInterface[];
   totalTasks: number;
 }
 
-export interface LearningAreaWithTaskInfo {
+export interface LearningAreaWithTaskInfoInterface {
   learningArea: LearningAreaInterface;
   openTasks: number;
   closedTasks: number;
 }
 
-export interface TaskInstanceWithEduContentInfoInterface {
-  instances: TaskInstanceWithEduContentInfo[];
+export interface TaskInstancesWithEduContentInfoInterface {
+  instances: TaskInstanceWithEduContentInfoInterface[];
 }
 
-export interface TaskInstanceWithEduContentInfo {
+export interface TaskInstanceWithEduContentInfoInterface {
   taskInstance: TaskInstanceInterface;
   taskEduContentsCount: number;
   finished: boolean;
