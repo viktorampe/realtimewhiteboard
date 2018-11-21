@@ -66,7 +66,9 @@ export class FilterTextInputComponent<I, O> {
     this.input.setValue(filterInput);
   }
 
-  setFilterableItem(filterableItem: FilterableItem<I, O>) {
+  setFilterableItem(filterableItem: {
+    filterFn: (source: I, filterText: string | number) => O[];
+  }) {
     this.filterableItem = filterableItem;
   }
 
