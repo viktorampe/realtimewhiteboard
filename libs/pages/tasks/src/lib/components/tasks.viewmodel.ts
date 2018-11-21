@@ -17,13 +17,13 @@ import {
   TaskInstanceInterface,
   TaskInterface,
   TaskQueries,
-  UiQuery,
-  UserQueries
+  UiActions,
+  UiQuery
 } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { flatMap, map } from 'rxjs/operators';
 import { ScormStatus } from './../../../../../dal/src/lib/results/enums/scorm-status.enum';
 import { TasksResolver } from './tasks.resolver';
 import {
@@ -39,14 +39,18 @@ import {
 export class TasksViewModel {
   //source streams
   public listFormat$: Observable<ListFormat>;
-  public currentUser$: Observable<PersonInterface>;
   protected learningAreas$: Observable<LearningAreaInterface[]>;
   protected teachers$: Observable<PersonInterface[]>;
-  protected tasks$: Observable<TaskInterface[]>;
+  protected sharedTasks$: Observable<TaskInterface[]>;
   protected educontents$: Observable<EduContentInterface[]>;
   protected taskInstances$: Observable<TaskInstanceInterface[]>;
   protected results$: Observable<ResultInterface[]>;
   protected taskEducontents$: Observable<TaskEduContentInterface[]>;
+
+  //dictionaries
+  private EduContentIdsPerTaskId$: Observable<Map<number, number[]>>;
+  private TaskIdsPerLearningAreaId$: Observable<Map<number, number[]>>;
+  private TaskIdsPerTeacherId$: Observable<Map<number, number[]>>;
 
   //intermediate streams  //TODO private zetten waar nodig
   tasksWithRelationInfo$: Observable<TaskInterface[]>;
@@ -81,7 +85,9 @@ export class TasksViewModel {
     this.setPresentationStreams();
   }
 
-  public changeListFormat(value: ListFormat) {}
+  public changeListFormat(listFormat: ListFormat): void {
+    this.store.dispatch(new UiActions.SetListFormatUi({ listFormat }));
+  }
 
   public getLearningAreaById(
     areaId: number
@@ -104,42 +110,80 @@ export class TasksViewModel {
   public setSourceStreams() {
     this.listFormat$ = this.store.pipe(
       select(UiQuery.getListFormat),
-      map(listFormat => <ListFormat>listFormat)
+      map(listFormat => <ListFormat>listFormat) //TODO: remove mapping
     );
 
-    this.currentUser$ = this.store.pipe(
-      select(UserQueries.getCurrentUser),
-      map(user => <PersonInterface>user)
+    this.sharedTasks$ = this.store.pipe(
+      select(TaskQueries.getShared, { userId: this.authService.userId })
     );
 
-    this.learningAreas$ = this.store.pipe(select(LearningAreaQueries.getAll));
+    this.TaskIdsPerLearningAreaId$ = this.getTaskIdsPerLearningAreaId$(
+      this.sharedTasks$
+    );
 
-    //this.teachers$ = this.store.pipe(select(UserQueries.));
+    this.learningAreas$ = this.TaskIdsPerLearningAreaId$.pipe(
+      flatMap(ids =>
+        this.store.pipe(
+          select(LearningAreaQueries.getByIds, { ids: Array.from(ids.keys()) })
+        )
+      )
+    );
 
-    this.tasks$ = this.store.pipe(select(TaskQueries.getAll));
+    this.TaskIdsPerTeacherId$ = this.getTaskIdsPerTeacherId$(this.sharedTasks$);
+    //this.teachers$ = this.store.pipe(select(UserQueries.getByIds, { ids: Array.from(ids.keys()) };
 
-    this.educontents$ = this.store.pipe(select(EduContentQueries.getAll));
+    //this.taskEducontents$ //TODO selector maken voor sharedTask- en ownedTaskEducontent
 
-    //this.taskInstances$
+    this.EduContentIdsPerTaskId$ = this.getEduContentIdsPerTaskId$(
+      this.taskEducontents$
+    );
+    const UniqueEduContentIds$ = this.EduContentIdsPerTaskId$.pipe(
+      map(dict => this.flattenArrayToUniqueValues(Array.from(dict.values())))
+    );
+
+    this.educontents$ = UniqueEduContentIds$.pipe(
+      flatMap(ids =>
+        this.store.pipe(
+          select(EduContentQueries.getByIds, {
+            ids: Array.from(ids)
+          })
+        )
+      )
+    );
+
+    //this.taskInstances$ //TODO selector maken voor sharedTask- en ownedTaskInstances
+    const sharedTaskInstanceIds$ = combineLatest(
+      this.sharedTasks$,
+      this.taskInstances$
+    ).pipe(
+      map(([tasks, taskInstances]) =>
+        taskInstances
+          .filter(tI => tasks.some(task => task.id === tI.taskId))
+          .reduce(
+            (array, tI) => {
+              if (!array.includes(tI.id)) {
+                array.push(tI.id);
+              }
+              return array;
+            },
+            [] as number[]
+          )
+      )
+    );
   }
 
   private setIntermediateStreams() {
     this.tasksWithRelationInfo$ = combineLatest(
-      this.tasks$,
-      this.taskEducontents$,
+      this.sharedTasks$,
       this.educontents$,
       this.learningAreas$,
       this.teachers$
     ).pipe(
-      map(([tasks, taskEducontents, educontents, learningAreas, teachers]) =>
+      map(([tasks, educontents, learningAreas, teachers]) =>
         tasks.map(task => {
           return {
             ...task,
-            eduContents: educontents.filter(educontent =>
-              taskEducontents.some(
-                tE => tE.taskId === task.id && tE.eduContentId === educontent.id
-              )
-            ),
+            eduContents: educontents,
             learningArea: learningAreas.find(
               learningArea => learningArea.id === task.learningAreaId
             ),
@@ -170,7 +214,7 @@ export class TasksViewModel {
     );
 
     this.tasksWithInstances$ = combineLatest(
-      this.tasks$,
+      this.sharedTasks$,
       this.taskInstancesWithRelationInfo$
     ).pipe(
       map(([tasks, taskInstances]) =>
@@ -250,6 +294,80 @@ export class TasksViewModel {
         }
       )
     );
+  }
+
+  // creates a Map<number, number[]>
+  // the keys are the learningAreaId
+  // the values are an array of the ids of the associated tasks
+  private getTaskIdsPerLearningAreaId$(tasks$: Observable<TaskInterface[]>) {
+    return tasks$.pipe(
+      map(tasks =>
+        tasks.reduce((dict, task) => {
+          let taskIds: number[];
+          if (dict.has(task.learningAreaId)) {
+            taskIds = dict.get(task.learningAreaId);
+            taskIds.push(task.id);
+          } else {
+            taskIds = [task.id];
+          }
+          dict.set(task.learningAreaId, taskIds);
+
+          return dict;
+        }, new Map<number, number[]>())
+      )
+    );
+  }
+
+  // creates a Map<number, number[]>
+  // the keys are the taskId
+  // the values are an array of the ids of the associated Educontent
+  private getEduContentIdsPerTaskId$(
+    taskEducontents$: Observable<TaskEduContentInterface[]>
+  ) {
+    return taskEducontents$.pipe(
+      map(taskEducontents =>
+        taskEducontents.reduce((dict, taskEducontent) => {
+          let educontentIds: number[];
+          if (dict.has(taskEducontent.taskId)) {
+            educontentIds = dict.get(taskEducontent.taskId);
+            educontentIds.push(taskEducontent.eduContentId);
+          } else {
+            educontentIds = [taskEducontent.eduContentId];
+          }
+          dict.set(taskEducontent.taskId, educontentIds);
+
+          return dict;
+        }, new Map<number, number[]>())
+      )
+    );
+  }
+
+  // creates a Map<number, number[]>
+  // the keys are the teacherId
+  // the values are an array of the ids of the associated tasks
+  private getTaskIdsPerTeacherId$(tasks$: Observable<TaskInterface[]>) {
+    return tasks$.pipe(
+      map(tasks =>
+        tasks.reduce((dict, task) => {
+          let taskIds: number[];
+          if (dict.has(task.personId)) {
+            taskIds = dict.get(task.personId);
+            taskIds.push(task.id);
+          } else {
+            taskIds = [task.id];
+          }
+          dict.set(task.personId, taskIds);
+
+          return dict;
+        }, new Map<number, number[]>())
+      )
+    );
+  }
+
+  private flattenArrayToUniqueValues(array: any[]): any[] {
+    return Array.from(
+      new Set(Array.from(array).reduce((acc, val) => acc.concat(val), []))
+    ).sort();
   }
 
   private getMockTaskInstances(): TaskInstanceInterface[] {

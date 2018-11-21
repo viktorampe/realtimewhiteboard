@@ -2,11 +2,11 @@ import { TaskInterface } from '../+models';
 
 export class TaskFixture implements TaskInterface {
   // defaults
-  name: string = 'foo';
-  id: number = 1;
-  description: string = 'Lorem ipsum etcetera';
-  archivedAt: Date = new Date(2018, 11 - 1, 20);
-  archivedYear: number = 2018;
+  name = 'foo';
+  id = 1;
+  description = 'Lorem ipsum etcetera';
+  archivedAt = new Date(2018, 11 - 1, 20);
+  archivedYear = 2018;
 
   constructor(props: Partial<TaskInterface> = {}) {
     // overwrite defaults

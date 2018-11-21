@@ -53,3 +53,23 @@ export const getById = createSelector(
   selectTaskState,
   (state: State, props: { id: number }) => state.entities[props.id]
 );
+
+export const getShared = createSelector(
+  selectTaskState,
+  (state: State, props: { userId: number }) => {
+    const ids: number[] = <number[]>state.ids;
+    return ids
+      .filter(id => state.entities[id].personId !== props.userId) //personId === teacherId
+      .map(id => state.entities[id]);
+  }
+);
+
+export const getOwn = createSelector(
+  selectTaskState,
+  (state: State, props: { userId: number }) => {
+    const ids: number[] = <number[]>state.ids;
+    return ids
+      .filter(id => state.entities[id].personId === props.userId) //personId === teacherId
+      .map(id => state.entities[id]);
+  }
+);

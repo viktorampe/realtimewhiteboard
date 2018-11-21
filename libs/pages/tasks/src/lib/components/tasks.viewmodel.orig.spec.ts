@@ -23,7 +23,6 @@ import {
   TaskInterface,
   TaskReducer,
   UiReducer,
-  UserActions,
   UserReducer
 } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
@@ -124,7 +123,7 @@ describe('TasksViewModel met State', () => {
       ],
       providers: [
         TasksViewModel,
-        { provide: AUTH_SERVICE_TOKEN, useValue: {} },
+        { provide: AUTH_SERVICE_TOKEN, useValue: { userId: 1 } },
         { provide: TasksResolver, useValue: { resolve: jest.fn() } },
         Store
       ]
@@ -133,7 +132,6 @@ describe('TasksViewModel met State', () => {
     taskResolver = TestBed.get(TasksResolver);
   });
 
-  let user: PersonInterface;
   let learningAreas: LearningAreaInterface[];
   let teachers: PersonInterface[];
   let tasks: TaskInterface[];
@@ -144,13 +142,6 @@ describe('TasksViewModel met State', () => {
   let listFormat: ListFormat;
 
   function setInitialState() {
-    // Current User State
-    user = new PersonFixture();
-    usedUserState = UserReducer.reducer(
-      UserReducer.initialState,
-      new UserActions.UserLoaded(user)
-    );
-
     // Learning Area State
     learningAreas = [
       new LearningAreaFixture({ id: 1 }),
@@ -262,10 +253,6 @@ describe('TasksViewModel met State', () => {
       setInitialState();
     });
 
-    it('should get the user from the provided state', () => {
-      expect(tasksViewModel.currentUser$).toBeObservable(hot('a', { a: user }));
-    });
-
     it('should get the learningAreas from the provided state', () => {
       expect(tasksViewModel['learningAreas$']).toBeObservable(
         hot('a', { a: learningAreas })
@@ -279,7 +266,9 @@ describe('TasksViewModel met State', () => {
     });
 
     it('should get the tasks from the provided state', () => {
-      expect(tasksViewModel['tasks$']).toBeObservable(hot('a', { a: tasks }));
+      expect(tasksViewModel['sharedTasks$']).toBeObservable(
+        hot('a', { a: tasks })
+      );
     });
 
     it('should get the educontents from the provided state', () => {
