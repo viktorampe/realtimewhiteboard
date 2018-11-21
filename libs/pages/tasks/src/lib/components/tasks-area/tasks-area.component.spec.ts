@@ -60,11 +60,11 @@ describe('TasksAreaComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call the filter service when filterTextInput.filterFn is called', () => {
+  it('should call the filter service when filterTextInput.filterFn is called, and display the correct count/learning areas', () => {
     const filterSource = {
       learningAreasWithInfo: []
     } as LearningAreasWithTaskInstanceInfoInterface;
-    const filterText = 'a';
+    const filterText = '';
     component.filterTextInput.setFilterableItem(component);
 
     const spyFilterService = jest.spyOn(component, 'filterFn');
@@ -100,8 +100,23 @@ describe('TasksAreaComponent', () => {
         ],
         totalTasks: 9
       },
-      'a'
+      ''
     );
+
+    fixture.detectChanges();
+    const componentDE = fixture.debugElement.query(
+      By.css('.pages-tasks__container')
+    );
+    expect(componentDE.nativeElement.textContent).toContain('3 van 3');
+    const tasksArea = fixture.debugElement.query(
+      By.css('.pages-tasks__container__learning-areas')
+    );
+    expect(tasksArea.children[0].children[0].children.length).toBe(3);
+
+    component.filterTextInput.setValue('a');
+    fixture.detectChanges();
+    expect(componentDE.nativeElement.textContent).toContain('1 van 3');
+    expect(tasksArea.children[0].children[0].children.length).toBe(1);
   });
 
   it('should filter the learningAreas with case insensitivity', () => {
@@ -125,7 +140,6 @@ describe('TasksAreaComponent', () => {
     component.filterTextInput.setFilterableItem(component);
 
     let filteredResult = component.filterFn(filterSource, filterText);
-
     expect(filteredResult).toEqual(learningAreasValue.learningAreasWithInfo);
 
     filterText = 'wISKUN';

@@ -40,15 +40,7 @@ export class TasksViewModel {
     this.loadMockData();
   }
 
-  getLearningAreaById(areaId: number): Observable<LearningAreaInterface> {
-    return of(this.getMockLearningAreas()[0]);
-  }
-
-  taskInstancesByLearningArea(
-    learningAreaId: number
-  ): Observable<TaskInstancesWithEduContentInfoInterface> {
-    return this.getMockTaskInstancesByLearningArea();
-  }
+  public changeListFormat(value: ListFormat) {}
 
   private loadMockData() {
     this.learningAreasWithTaskInstances$ = this.getMockLearningAreasWithTaskInstances();
@@ -57,6 +49,16 @@ export class TasksViewModel {
     this.selectedTaskInstance$ = this.getMockSelectedTaskInstance();
     this.taskInstanceWithEduContents$ = this.getMockTaskInstanceWithEduContents();
     this.listFormat$ = this.getMockListFormat();
+  }
+
+  getLearningAreaById(areaId: number): Observable<LearningAreaInterface> {
+    return of(this.getMockLearningAreas()[0]);
+  }
+
+  taskInstancesByLearningArea(
+    learningAreaId: number
+  ): Observable<TaskInstancesWithEduContentInfoInterface> {
+    return this.getMockTaskInstancesByLearningArea();
   }
 
   private getMockLearningAreasWithTaskInstances(): Observable<
@@ -195,10 +197,7 @@ export class TasksViewModel {
       taskId: mockTasks[0].id,
       task: mockTasks[0],
       personId: mockStudent.id,
-      student: mockStudent,
-      getProgress() {
-        return 0;
-      }
+      student: mockStudent
     };
 
     let mockTaskInstance2: TaskInstanceInterface;
@@ -210,10 +209,7 @@ export class TasksViewModel {
       taskId: mockTasks[1].id,
       task: mockTasks[1],
       personId: mockStudent.id,
-      student: mockStudent,
-      getProgress() {
-        return 0;
-      }
+      student: mockStudent
     };
 
     let mockTaskInstance3: TaskInstanceInterface;
@@ -225,10 +221,7 @@ export class TasksViewModel {
       taskId: mockTasks[2].id,
       task: mockTasks[2],
       personId: mockStudent.id,
-      student: mockStudent,
-      getProgress() {
-        return 0;
-      }
+      student: mockStudent
     };
     let mockTaskInstance4: TaskInstanceInterface;
     mockTaskInstance4 = {
@@ -239,10 +232,7 @@ export class TasksViewModel {
       taskId: mockTasks[0].id,
       task: mockTasks[0],
       personId: mockStudent.id,
-      student: mockStudent,
-      getProgress() {
-        return 0;
-      }
+      student: mockStudent
     };
 
     return [
@@ -586,6 +576,4 @@ export class TasksViewModel {
   getMockListFormat(): Observable<ListFormat> {
     return new BehaviorSubject(ListFormat.GRID);
   }
-
-  changeListFormat(listFormat: ListFormat): void {}
 }

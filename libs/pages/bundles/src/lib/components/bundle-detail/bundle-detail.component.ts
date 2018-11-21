@@ -79,7 +79,7 @@ export class BundleDetailComponent
     this.bundleOwner$ = this.bundlesViewModel.getBundleOwner(this.bundle$);
     this.contents$ = this.getBundleContents();
 
-    this.filterTextInput.setFilterableItem(this); // = this.filterFn.bind(this);
+    this.filterTextInput.setFilterableItem(this);
   }
 
   ngAfterViewInit(): void {
