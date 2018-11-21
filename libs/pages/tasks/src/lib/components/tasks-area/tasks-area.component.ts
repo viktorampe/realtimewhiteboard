@@ -1,6 +1,10 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/shared';
-import { FilterTextInputComponent, ListFormat } from '@campus/ui';
+import {
+  FilterableItem,
+  FilterTextInputComponent,
+  ListFormat
+} from '@campus/ui';
 import { Observable } from 'rxjs';
 import { TasksViewModel } from './../tasks.viewmodel';
 import {
@@ -13,7 +17,13 @@ import {
   templateUrl: './tasks-area.component.html',
   styleUrls: ['./tasks-area.component.scss']
 })
-export class TasksAreaComponent implements OnInit {
+export class TasksAreaComponent
+  implements
+    OnInit,
+    FilterableItem<
+      LearningAreasWithTaskInstanceInfoInterface,
+      LearningAreaWithTaskInfo
+    > {
   protected listFormat = ListFormat;
   listFormat$: Observable<ListFormat>;
   learningAreasWithInfo$: Observable<
@@ -34,14 +44,14 @@ export class TasksAreaComponent implements OnInit {
   ngOnInit() {
     this.listFormat$ = this.tasksViewModel.listFormat$;
     this.learningAreasWithInfo$ = this.tasksViewModel.learningAreasWithTaskInstances$;
-    this.filterTextInput.filterFn = this.filterFn.bind(this);
+    this.filterTextInput.setFilterableItem(this);
   }
 
   clickChangeListFormat(value: ListFormat): void {
     this.tasksViewModel.changeListFormat(value);
   }
 
-  private filterFn(
+  filterFn(
     info: LearningAreasWithTaskInstanceInfoInterface,
     searchText: string
   ): LearningAreaWithTaskInfo[] {
