@@ -25,7 +25,7 @@ export class TasksComponent implements OnInit {
   @ViewChild(FilterTextInputComponent)
   filterTextInput: FilterTextInputComponent<
     TaskInstancesWithEduContentInfoInterface,
-    TaskInstanceWithEduContentInfoInterface[]
+    TaskInstanceWithEduContentInfoInterface
   >;
 
   private routeParams$ = this.route.params.pipe(shareReplay(1));
@@ -39,23 +39,11 @@ export class TasksComponent implements OnInit {
   ngOnInit() {
     this.taskInstances$ = this.getTaskInstances();
     this.learningArea$ = this.getLearningArea();
-    this.filterTextInput.filterFn = this.filterFn.bind(this);
+    this.filterTextInput.setFilterableItem(this);
   }
 
   setListFormat(format: ListFormat) {
     this.viewModel.changeListFormat(format);
-  }
-
-  filterFn(
-    source: TaskInstancesWithEduContentInfoInterface,
-    searchText: string
-  ): TaskInstanceWithEduContentInfoInterface[] {
-    const instances = this.filterService.filter(source.instances, {
-      taskInstance: {
-        task: { name: searchText }
-      }
-    });
-    return instances;
   }
 
   private getLearningArea(): Observable<LearningAreaInterface> {
@@ -79,5 +67,17 @@ export class TasksComponent implements OnInit {
 
   getIcon(finished: boolean): string {
     return finished ? 'icon-checkmark' : 'icon-hourglass';
+  }
+
+  filterFn(
+    source: TaskInstancesWithEduContentInfoInterface,
+    searchText: string
+  ): TaskInstanceWithEduContentInfoInterface[] {
+    const instances = this.filterService.filter(source.instances, {
+      taskInstance: {
+        task: { name: searchText }
+      }
+    });
+    return instances;
   }
 }

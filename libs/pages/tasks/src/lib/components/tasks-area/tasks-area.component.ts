@@ -1,10 +1,6 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/shared';
-import {
-  FilterableItem,
-  FilterTextInputComponent,
-  ListFormat
-} from '@campus/ui';
+import { FilterTextInputComponent, ListFormat } from '@campus/ui';
 import { Observable } from 'rxjs';
 import { TasksViewModel } from './../tasks.viewmodel';
 import {
@@ -17,13 +13,7 @@ import {
   templateUrl: './tasks-area.component.html',
   styleUrls: ['./tasks-area.component.scss']
 })
-export class TasksAreaComponent
-  implements
-    OnInit,
-    FilterableItem<
-      LearningAreasWithTaskInstanceInfoInterface,
-      LearningAreaWithTaskInfo
-    > {
+export class TasksAreaComponent implements OnInit {
   protected listFormat = ListFormat;
   listFormat$: Observable<ListFormat>;
   learningAreasWithInfo$: Observable<
