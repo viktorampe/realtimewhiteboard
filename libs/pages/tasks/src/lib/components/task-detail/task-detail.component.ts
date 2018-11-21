@@ -1,27 +1,11 @@
-import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  Inject,
-  OnInit,
-  ViewChild
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import {
-  ContentInterface,
-  LearningAreaInterface,
-  TaskInstanceInterface
-} from '@campus/dal';
+import { EduContent, LearningAreaInterface, TaskInstanceInterface } from '@campus/dal';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/shared';
-import {
-  FilterTextInputComponent,
-  ListFormat,
-  ListViewComponent,
-  SideSheetComponent
-} from '@campus/ui';
+import { FilterTextInputComponent, ListFormat, ListViewComponent, SideSheetComponent } from '@campus/ui';
 import { Observable, Subscription } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
-import { TasksViewModel } from '../tasks.viewmodel';
+import { switchMap } from 'rxjs/operators';
+import { MockTasksViewModel } from '../tasks.viewmodel.mock';
 
 @Component({
   selector: 'campus-task-detail',
@@ -39,15 +23,18 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
   listFormat$: Observable<ListFormat>;
   learningArea$: Observable<LearningAreaInterface>;
   taskInstance$: Observable<TaskInstanceInterface>;
-  contents$: Observable<ContentInterface[]>;
+  contents$: Observable<EduContent[]>;
 
   //viewChildren
   @ViewChild(FilterTextInputComponent)
-  filterTextInput: FilterTextInputComponent<ContentInterface, ContentInterface>;
+  filterTextInput: FilterTextInputComponent<
+    EduContent[],
+    EduContent
+  >;
 
-  list: ListViewComponent<ContentInterface>;
+  list: ListViewComponent<EduContent>;
   @ViewChild('taskInstanceListview')
-  set listViewComponent(list: ListViewComponent<ContentInterface>) {
+  set listViewComponent(list: ListViewComponent<EduContent>) {
     this.list = list;
   }
 
@@ -58,7 +45,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
   }
 
   constructor(
-    private taskViewModel: TasksViewModel,
+    private taskViewModel: MockTasksViewModel, // TODO replace by TasksViewModel
     private activatedRoute: ActivatedRoute,
     private changeDetector: ChangeDetectorRef,
     @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface
@@ -87,16 +74,19 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
 
   private loadOutputStreams(): void {
     this.listFormat$ = this.taskViewModel.listFormat$;
-    this.learningArea$ = this.getLearingArea();
+    this.learningArea$ = this.getLearningArea();
     this.taskInstance$ = this.getTaskInstance();
     this.contents$ = this.getContents();
-    this.filterTextInput.filterFn = this.filterFn.bind(this);
+    this.filterTextInput.filterFn = (
+      info: EduContent[],
+      searchText: string
+    ) => this.filterFn(info, searchText);
   }
 
   private setupListSubscription(): void {
     this.subscriptions.add(
       this.list.selectedItems$.subscribe(
-        (selectedItems: ContentInterface[]) => {
+        (selectedItems: EduContent[]) => {
           if (selectedItems.length > 0) {
             this.sideSheet.toggle(true);
           }
@@ -109,11 +99,10 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
   }
 
   //stream getters
-  private getLearingArea(): Observable<LearningAreaInterface> {
+  private getLearningArea(): Observable<LearningAreaInterface> {
     return this.routerParams$.pipe(
       switchMap(params => {
-        //TODO change to getLearningAreaById when method exists in viewModel
-        return this.taskViewModel.getMockSelectedLearningArea();
+        return this.taskViewModel.getLearningAreaById(params.area);
       })
     );
   }
@@ -121,30 +110,15 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
   private getTaskInstance(): Observable<TaskInstanceInterface> {
     return this.routerParams$.pipe(
       switchMap(params => {
-        //TODO change to getTaskInstanceById when method exists in viewModel
-        return this.taskViewModel.getMockSelectedTaskInstance();
+        return this.taskViewModel.getTaskById(params.task);
       })
     );
   }
 
-  private getContents(): Observable<ContentInterface[]> {
+  private getContents(): Observable<EduContent[]> {
     return this.routerParams$.pipe(
-      //TODO may need to change to other operator
-      map(params => {
-        //TODO change to getTaskEducontentsByTaskId
-        return this.taskViewModel.getMockTaskEducontents().map(
-          taskEduContent =>
-            //TODO replace by custom viewModel method, this is a testing placeholder
-            <ContentInterface>{
-              description: taskEduContent.task.description,
-              name: taskEduContent.task.name,
-              id: taskEduContent.id,
-              fileExtension: 'xls',
-              methodLogos: ['fillerMethod'],
-              productType: taskEduContent.eduContent.type
-            }
-        );
-      })
+      // TODO check actual viewmodel method name
+      switchMap(params => this.taskViewModel.getTaskEduContents(params.task))
     );
   }
 
@@ -153,7 +127,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
     this.taskViewModel.changeListFormat(format);
   }
 
-  clickOpenContent(content: ContentInterface): void {
+  clickOpenContent(content: EduContent): void {
     //TODO contact viewmodel to open new window
     console.log('%cclickOpenContent:', 'color: orange; font-weight: bold;');
     console.log({ content });
@@ -161,9 +135,9 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
 
   //filterFunction
   private filterFn(
-    info: ContentInterface[],
+    info: EduContent[],
     searchText: string
-  ): ContentInterface[] {
+  ): EduContent[] {
     if (this.list) {
       this.list.deselectAllItems();
     }

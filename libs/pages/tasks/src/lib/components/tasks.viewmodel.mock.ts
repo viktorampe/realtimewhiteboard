@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
+import { Params } from '@angular/router';
 import {
+  EduContent,
   EduContentInterface,
   EduContentProductTypeInterface,
   LearningAreaInterface,
@@ -18,9 +20,7 @@ import {
 } from './tasks.viewmodel.interfaces';
 
 export class MockActivatedRoute {
-  params: Observable<any> = new BehaviorSubject<any>({
-    params: { task: 1, area: 1 }
-  });
+  params: Observable<any> = new BehaviorSubject<Params>({ task: 1, area: 1 });
 }
 
 @Injectable({
@@ -40,14 +40,19 @@ export class MockTasksViewModel {
     TaskInstanceWithEduContentsInfoInterface
   >;
   listFormat$: Observable<ListFormat>;
-  // routeParams$: TODO type?
 
   constructor() {
     this.loadMockData();
   }
 
-  changeListFormat() {}
+  // public method mocks
+  changeListFormat = value => {};
+  getLearningAreaById = this.getMockSelectedLearningArea;
+  getTaskById = this.getMockSelectedTaskInstance;
+  getTaskEduContents = (taskId: number) =>
+    new BehaviorSubject(this.getMockEducontents());
 
+  // mockdata
   private loadMockData() {
     this.learningAreasWithTaskInstances$ = this.getMockLearningAreasWithTaskInstances();
     this.selectedLearningArea$ = this.getMockSelectedLearningArea();
@@ -359,7 +364,7 @@ export class MockTasksViewModel {
     return [mockTask1, mockTask2, mockTask3];
   }
 
-  private getMockEducontents(): EduContentInterface[] {
+  private getMockEducontents(): EduContent[] {
     const mockLearningAreas = this.getMockLearningAreas();
     const mockEducontentProductTypes = this.getMockEduContentProductTypes();
     const mockMethods = this.getMockMethods();
@@ -464,7 +469,12 @@ export class MockTasksViewModel {
       }
     };
 
-    return [mockEducontent1, mockEducontent2, mockEducontent3, mockEducontent4];
+    return [
+      Object.assign(new EduContent(), mockEducontent1),
+      Object.assign(new EduContent(), mockEducontent2),
+      Object.assign(new EduContent(), mockEducontent3),
+      Object.assign(new EduContent(), mockEducontent4)
+    ];
   }
 
   getMockStudent(): PersonInterface {
