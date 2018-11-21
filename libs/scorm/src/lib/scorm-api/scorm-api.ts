@@ -275,7 +275,6 @@ export class ScormApi implements ScormApiInterface {
       }
       return obj[i];
     }
-    console.log(parameter.split('.').reduce(index, exercise));
     return parameter.split('.').reduce(index, exercise);
   }
 

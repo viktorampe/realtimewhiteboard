@@ -13,7 +13,9 @@ describe('The scorm API', () => {
     describe('when not in preview mode', () => {
       describe('and a current exercise as object is provided', () => {
         beforeEach(() => {
-          setupTest(new ScormCmiFixture(), ScormCmiMode.CMI_MODE_NORMAL);
+          setupTest(
+            new ScormCmiFixture({ mode: ScormCmiMode.CMI_MODE_NORMAL })
+          );
         });
         it('should reset the API', () => {
           expect(scormApi.lastErrorCode).toBe(ScormErrorCodes.NO_ERROR);
@@ -61,19 +63,8 @@ describe('The scorm API', () => {
           );
 
           // this is the result from the private getNewCmi() function
-          const expectedValue = {
+          const expectedValue = new ScormCmiFixture({
             mode: ScormCmiMode.CMI_MODE_BROWSE,
-            core: {
-              score: {
-                raw: 0,
-                min: undefined,
-                max: undefined
-              },
-              lesson_location: '',
-              lesson_status: ScormStatus.STATUS_NOT_ATTEMPTED,
-              total_time: '0000:00:00',
-              session_time: '0000:00:00'
-            },
             objectives: [
               {
                 score: {
@@ -87,7 +78,8 @@ describe('The scorm API', () => {
               }
             ],
             suspend_data: []
-          };
+          });
+
           checkOutput(commitSpy, expectedValue);
         });
       });

@@ -9,9 +9,9 @@ import { ScormApiServiceInterface } from './scorm-api.service.interface';
   providedIn: 'root'
 })
 export class ScormApiService implements ScormApiServiceInterface {
-  commit$ = new Subject<ScormCmiInterface>();
+  commit$: Subject<ScormCmiInterface>;
 
-  cmi$ = new Subject<ScormCmiInterface>();
+  cmi$: Subject<ScormCmiInterface>;
 
   constructor(@Inject(WINDOW) private window: Window) {}
 
