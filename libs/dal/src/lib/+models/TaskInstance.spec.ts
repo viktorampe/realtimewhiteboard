@@ -50,17 +50,12 @@ describe('TaskInstance', () => {
   });
 
   it('should throw an error if startdate > enddate', () => {
-    let caughtError: Error = null;
     taskInstance.start = new Date(2541599801751);
     taskInstance.end = new Date(1541999801751);
     mockDate(1641999801751);
-    //cant get jest toThrowError to work for some reason
-    try {
-      taskInstance.getProgress();
-    } catch (error) {
-      caughtError = error;
-    }
-    expect(caughtError).toBeTruthy();
+    expect(taskInstance.getProgress.bind(taskInstance)).toThrowError(
+      'start date is greater than enddate'
+    );
   });
 
   it('should return 0 if before startdate', () => {
