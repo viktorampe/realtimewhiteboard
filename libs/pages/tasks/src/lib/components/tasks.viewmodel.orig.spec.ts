@@ -1,4 +1,3 @@
-import { Injectable } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import {
   AUTH_SERVICE_TOKEN,
@@ -30,8 +29,9 @@ import {
 import { ListFormat } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
+import { of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ScormStatus } from './../../../../../dal/src/lib/results/enums/scorm-status.enum';
+import { ScormStatus } from '../../../../../dal/src/lib/results/enums/scorm-status.enum';
 import { TasksResolver } from './tasks.resolver';
 import { TasksViewModel } from './tasks.viewmodel';
 
@@ -44,15 +44,8 @@ let usedTaskInstanceState;
 let usedResultState;
 let usedTaskEducontentState;
 let usedUiState;
-let spy;
+let taskResolver: TasksResolver;
 let tasksViewModel: TasksViewModel;
-
-@Injectable({
-  providedIn: 'root'
-})
-class MockResolver {
-  resolve = spy;
-}
 
 describe('TasksViewModel met State', () => {
   afterEach(() => {
@@ -132,11 +125,12 @@ describe('TasksViewModel met State', () => {
       providers: [
         TasksViewModel,
         { provide: AUTH_SERVICE_TOKEN, useValue: {} },
-        { provide: TasksResolver, useClass: MockResolver },
+        { provide: TasksResolver, useValue: { resolve: jest.fn() } },
         Store
       ]
     });
     tasksViewModel = TestBed.get(TasksViewModel);
+    taskResolver = TestBed.get(TasksResolver);
   });
 
   let user: PersonInterface;
@@ -255,14 +249,11 @@ describe('TasksViewModel met State', () => {
   }
 
   describe('creation', () => {
-    beforeAll(() => {
-      spy = jest.fn();
-    });
     it('should be defined', () => {
       expect(tasksViewModel).toBeDefined();
     });
     it('should call the TasksResolver.resolve', () => {
-      expect(spy).toHaveBeenCalledTimes(1);
+      expect(taskResolver.resolve).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -338,15 +329,6 @@ describe('TasksViewModel met State', () => {
         );
 
         expect(outputAmount$).toBeObservable(hot('a', { a: 3 }));
-
-        // usedTaskState = TaskReducer.reducer(
-        //   usedTaskState,
-        //   new TaskActions.AddTask({ task: new TaskFixture({ id: 4 }) })
-        // );
-
-        // console.log(usedTaskState.ids.length);
-
-        // expect(outputAmount$).toBeObservable(hot('b', { b: 4 }));
       });
 
       it('should return a stream with the correct amount of educontents per task', () => {
@@ -727,6 +709,81 @@ describe('TasksViewModel met State', () => {
       expect(tasksViewModel['learningAreasWithTasks$']).toBeObservable(
         hot('a', { a: expectedResult })
       );
+    });
+  });
+
+  describe('single task to test on', () => {
+    let mockTask;
+    let mockLearningArea;
+    let mockEducontent;
+    let mockTeacher;
+    let mockTaskEducontent;
+
+    let expectedTaskResult;
+    let expectedTaskInstanceResult;
+
+    beforeAll(() => {
+      jest.spyOn(tasksViewModel, 'loadMockData').mockImplementation();
+
+      mockTask = new TaskFixture({ personId: 186, learningAreaId: 1 });
+      mockLearningArea = new LearningAreaFixture();
+      mockEducontent = new EduContentFixture();
+      mockTeacher = new PersonFixture({ id: 186 });
+      mockTaskEducontent = new TaskEduContentFixture({
+        id: 1,
+        teacherId: 186,
+        taskId: 1,
+        eduContentId: 1
+      });
+
+      usedTaskState = TaskReducer.reducer(
+        TaskReducer.initialState,
+        new TaskActions.TasksLoaded({ tasks: [mockTask] })
+      );
+
+      usedLearningAreaState = LearningAreaReducer.reducer(
+        LearningAreaReducer.initialState,
+        new LearningAreaActions.LearningAreasLoaded({
+          learningAreas: [mockLearningArea]
+        })
+      );
+
+      usedEducontentState = EduContentReducer.reducer(
+        EduContentReducer.initialState,
+        new EduContentActions.EduContentsLoaded({
+          eduContents: [mockEducontent]
+        })
+      );
+    });
+
+    beforeEach(() => {
+      tasksViewModel['results$'] = of([]);
+    });
+
+    it('tasksWithRelationInfo$ should return a single task with related info', () => {
+      expectedTaskResult = {
+        ...mockTask,
+        eduContents: [mockEducontent],
+        learningArea: mockLearningArea,
+        teacher: mockTeacher
+      };
+
+      expect(tasksViewModel.tasksWithRelationInfo$).toBeObservable(
+        hot('a', { a: [expectedTaskResult] })
+      );
+    });
+
+    it('taskInstancesWithRelationInfo$ should return a single taskInstance with related info', () => {
+      expectedTaskInstanceResult = {
+        ...mockTask,
+        eduContents: [mockEducontent],
+        learningArea: mockLearningArea,
+        teacher: mockTeacher
+      };
+
+      // expect(tasksViewModel.taskInstancesWithRelationInfo$).toBeObservable(
+      //   hot('a', { a: [expectedTaskInstanceResult] })
+      // );
     });
   });
 });

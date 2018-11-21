@@ -40,13 +40,13 @@ export class TasksViewModel {
   //source streams
   public listFormat$: Observable<ListFormat>;
   public currentUser$: Observable<PersonInterface>;
-  private learningAreas$: Observable<LearningAreaInterface[]>;
-  private teachers$: Observable<PersonInterface[]>;
-  private tasks$: Observable<TaskInterface[]>;
-  private educontents$: Observable<EduContentInterface[]>;
-  private taskInstances$: Observable<TaskInstanceInterface[]>;
-  private results$: Observable<ResultInterface[]>;
-  private taskEducontents$: Observable<TaskEduContentInterface[]>;
+  protected learningAreas$: Observable<LearningAreaInterface[]>;
+  protected teachers$: Observable<PersonInterface[]>;
+  protected tasks$: Observable<TaskInterface[]>;
+  protected educontents$: Observable<EduContentInterface[]>;
+  protected taskInstances$: Observable<TaskInstanceInterface[]>;
+  protected results$: Observable<ResultInterface[]>;
+  protected taskEducontents$: Observable<TaskEduContentInterface[]>;
 
   //intermediate streams  //TODO private zetten waar nodig
   tasksWithRelationInfo$: Observable<TaskInterface[]>;
@@ -94,14 +94,14 @@ export class TasksViewModel {
   }
 
   // Alles hier is nog TODO: ophalen uit state
-  private loadMockData() {
+  public loadMockData() {
     this.taskInstances$ = of(this.getMockTaskInstances());
     this.results$ = of(this.getMockResults());
     this.teachers$ = of(this.getMockTeachers());
     this.taskEducontents$ = of(this.getMockTaskEduContents());
   }
 
-  private setSourceStreams() {
+  public setSourceStreams() {
     this.listFormat$ = this.store.pipe(
       select(UiQuery.getListFormat),
       map(listFormat => <ListFormat>listFormat)
