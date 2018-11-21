@@ -93,7 +93,7 @@ export const environment = {
     // presentatie: 'assets/icons/presentatie.svg',
     'polpo-presentatie': 'assets/icons/presentatie.svg',
     // presentation: 'assets/icons/presentation.svg',
-    tasks: 'assets/icons/tasks.svg'
+    tasks: 'assets/icons/tasks.svg',
     // 'tasks-complete': 'assets/icons/tasks-complete.svg',
     // video: 'assets/icons/video.svg',
     // website: 'assets/icons/website.svg',
@@ -110,7 +110,7 @@ export const environment = {
     // call: 'assets/icons/call.svg',
     // caret: 'assets/icons/caret.svg',
     // 'check-off': 'assets/icons/check-off.svg',
-    // 'check-on': 'assets/icons/check-on.svg',
+    'check-on': 'assets/icons/check-on.svg',
     // checklist: 'assets/icons/checklist.svg',
     // checkmark: 'assets/icons/checkmark.svg',
     // clock: 'assets/icons/clock.svg',
@@ -118,7 +118,7 @@ export const environment = {
     // code: 'assets/icons/code.svg',
     // creditcard: 'assets/icons/creditcard.svg',
     // 'die-keure': 'assets/icons/die-keure.svg',
-    // eye: 'assets/icons/eye.svg',
+    eye: 'assets/icons/eye.svg'
     // eye2: 'assets/icons/eye2.svg',
     // facebook: 'assets/icons/facebook.svg',
     // favorite: 'assets/icons/favorite.svg',

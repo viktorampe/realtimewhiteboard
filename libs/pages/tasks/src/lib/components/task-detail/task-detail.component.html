@@ -74,7 +74,7 @@
                 [contentTypeClass]="content.productType"
               >
                 <campus-button
-                  [iconClass]="'tasks'"
+                  [iconClass]="content.submitted ? 'check-on' : 'eye'"
                   circle
                   (click)="clickOpenContent(content)"
                 ></campus-button>
