@@ -64,17 +64,43 @@ describe('TasksAreaComponent', () => {
     const filterSource = {
       learningAreasWithInfo: []
     } as LearningAreasWithTaskInstanceInfoInterface;
-    const filterText = '';
+    const filterText = 'a';
+    component.filterTextInput.setFilterableItem(component);
 
-    const spyFilterService = jest.spyOn(filterService, 'filter');
-    component.filterTextInput.filterFn(filterSource, filterText);
+    const spyFilterService = jest.spyOn(component, 'filterFn');
+    component.filterTextInput.setValue(filterText);
 
     expect(spyFilterService).toHaveBeenCalledTimes(1);
     expect(spyFilterService).toHaveBeenCalledWith(
-      filterSource.learningAreasWithInfo,
       {
-        learningArea: { name: filterText }
-      }
+        learningAreasWithInfo: [
+          {
+            closedTasks: 3,
+            learningArea: {
+              color: '#2c354f',
+              icon: 'wiskunde',
+              name: 'Wiskunde'
+            },
+            openTasks: 2
+          },
+          {
+            closedTasks: 2,
+            learningArea: {
+              color: '#5e3b47',
+              icon: 'natuurwetenschappen',
+              name: 'Moderne Wetenschappen'
+            },
+            openTasks: 0
+          },
+          {
+            closedTasks: 0,
+            learningArea: { color: '#553030', icon: 'engels', name: 'Engels' },
+            openTasks: 2
+          }
+        ],
+        totalTasks: 9
+      },
+      'a'
     );
   });
 
@@ -95,24 +121,19 @@ describe('TasksAreaComponent', () => {
     ];
 
     let filterText = '';
-    let filteredResult = component.filterTextInput.filterFn(
-      filterSource,
-      filterText
-    );
+
+    component.filterTextInput.setFilterableItem(component);
+
+    let filteredResult = component.filterFn(filterSource, filterText);
+
     expect(filteredResult).toEqual(learningAreasValue.learningAreasWithInfo);
 
     filterText = 'wISKUN';
-    filteredResult = component.filterTextInput.filterFn(
-      filterSource,
-      filterText
-    );
+    filteredResult = component.filterFn(filterSource, filterText);
     expect(filteredResult).toEqual(expectedOnlyWiskunde);
 
     filterText = 'nothing nothing nothing';
-    filteredResult = component.filterTextInput.filterFn(
-      filterSource,
-      filterText
-    );
+    filteredResult = component.filterFn(filterSource, filterText);
     expect(filteredResult).toEqual([]);
   });
 
