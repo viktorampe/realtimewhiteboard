@@ -1,4 +1,5 @@
 import { ResultInterface } from '../+models';
+import { ScormStatus } from '../results/enums/scorm-status.enum';
 
 export class ResultFixture implements ResultInterface {
   // defaults
@@ -6,8 +7,7 @@ export class ResultFixture implements ResultInterface {
   eduContentId = 1;
   personId = 6;
   taskId = 1;
-  cmi = undefined;
-  status = undefined;
+  status = ScormStatus.STATUS_NOT_ATTEMPTED;
 
   constructor(props: Partial<ResultInterface> = {}) {
     // overwrite defaults

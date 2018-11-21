@@ -23,6 +23,7 @@ describe('ExerciseEffects', () => {
   let effects: CurrentExerciseEffects;
   let usedState: any;
   let mockExercise: CurrentExerciseInterface;
+  let mockExerciseNoSave: CurrentExerciseInterface;
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -123,14 +124,14 @@ describe('ExerciseEffects', () => {
       beforeEach(() => {
         mockServiceMethodReturnValue('startExercise', mockExercise);
       });
-      it('should trigger an api call with the initialState for a task', () => {
+      it('should trigger an api call for a task', () => {
         expectInAndOut(
           effects.startExercise$,
           startTaskExerciseAction,
           filledLoadedAction
         );
       });
-      it('should trigger an api call with the initialState for an unlockedContent', () => {
+      it('should trigger an api call for an unlockedContent', () => {
         expectInAndOut(
           effects.startExercise$,
           startUnlockedContentExerciseAction,
@@ -138,56 +139,9 @@ describe('ExerciseEffects', () => {
         );
       });
     });
-    describe('with loaded state', () => {
-      beforeAll(() => {
-        usedState = { ...CurrentExerciseReducer.initialState, loaded: true };
-        mockExercise = {
-          eduContent: undefined,
-          cmiMode: ScormCMIMode.CMI_MODE_NORMAL,
-          result: undefined,
-          saveToApi: true,
-          url: 'dit is een url'
-        };
-      });
-      beforeEach(() => {
-        mockServiceMethodReturnValue('startExercise', mockExercise);
-      });
-      it('should trigger an api call with the loaded state for a task', () => {
-        expectInAndOut(
-          effects.startExercise$,
-          startTaskExerciseAction,
-          filledLoadedAction
-        );
-      });
-      it('should trigger an api call with the loaded state for an unlockedContent', () => {
-        expectInAndOut(
-          effects.startExercise$,
-          startUnlockedContentExerciseAction,
-          filledLoadedAction
-        );
-      });
-    });
-    describe('with initialState and failing api call', () => {
+    describe('with failing api call', () => {
       beforeAll(() => {
         usedState = CurrentExerciseReducer.initialState;
-      });
-      beforeEach(() => {
-        mockServiceMethodError('startExercise', 'failed');
-      });
-      it('should return a error action ', () => {
-        expectInAndOut(
-          effects.startExercise$,
-          startTaskExerciseAction,
-          loadErrorAction
-        );
-      });
-    });
-    describe('with loaded and failing api call', () => {
-      beforeAll(() => {
-        usedState = {
-          ...CurrentExerciseReducer.initialState,
-          loaded: true
-        };
       });
       beforeEach(() => {
         mockServiceMethodError('startExercise', 'failed');
@@ -211,10 +165,21 @@ describe('ExerciseEffects', () => {
       url: 'dit is een url'
     };
 
+    mockExerciseNoSave = {
+      ...mockExercise,
+      saveToApi: false
+    };
+
     const saveExerciseAction = new SaveCurrentExercise({
       userId: 6,
       exercise: mockExercise
     });
+
+    const noSaveExerciseAction = new SaveCurrentExercise({
+      userId: 6,
+      exercise: mockExerciseNoSave
+    });
+
     const genericSuccessAction = new DalActions.ActionSuccessful({
       successfulAction: 'Exercise saved'
     });
@@ -226,57 +191,22 @@ describe('ExerciseEffects', () => {
       beforeEach(() => {
         mockServiceMethodReturnValue('saveExercise', mockExercise);
       });
-      it('should trigger an api call with the initialState', () => {
+      it('should trigger an api call', () => {
         expectInAndOut(
           effects.saveExercise$,
           saveExerciseAction,
           genericSuccessAction
         );
       });
-    });
-    describe('with loaded state', () => {
-      beforeAll(() => {
-        usedState = { ...CurrentExerciseReducer.initialState, loaded: true };
-        mockExercise = {
-          eduContent: undefined,
-          cmiMode: ScormCMIMode.CMI_MODE_NORMAL,
-          result: undefined,
-          saveToApi: true,
-          url: 'dit is een url'
-        };
-      });
-      beforeEach(() => {
-        mockServiceMethodReturnValue('saveExercise', mockExercise);
-      });
-      it('should trigger an api call with the loaded state', () => {
-        expectInAndOut(
-          effects.saveExercise$,
-          saveExerciseAction,
-          genericSuccessAction
-        );
+
+      it('should not trigger an api call if saveToApi is false', () => {
+        expectInNoOut(effects.saveExercise$, noSaveExerciseAction);
       });
     });
-    describe('with initialState and failing api call', () => {
+
+    describe('with failing api call', () => {
       beforeAll(() => {
         usedState = CurrentExerciseReducer.initialState;
-      });
-      beforeEach(() => {
-        mockServiceMethodError('saveExercise', 'failed');
-      });
-      it('should return a error action ', () => {
-        expectInAndOut(
-          effects.saveExercise$,
-          saveExerciseAction,
-          loadErrorAction
-        );
-      });
-    });
-    describe('with loaded and failing api call', () => {
-      beforeAll(() => {
-        usedState = {
-          ...CurrentExerciseReducer.initialState,
-          loaded: true
-        };
       });
       beforeEach(() => {
         mockServiceMethodError('saveExercise', 'failed');

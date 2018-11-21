@@ -8,14 +8,13 @@ import {
 export const NAME = 'currentExercise';
 
 export interface CurrentExerciseInterface {
-  eduContent: EduContentInterface;
+  eduContent?: EduContentInterface;
   cmiMode: ScormCMIMode;
-  result: ResultInterface;
+  result?: ResultInterface;
   saveToApi: boolean;
   url: string;
 }
 export interface State extends CurrentExerciseInterface {
-  loaded: boolean;
   error?: any;
 }
 
@@ -24,8 +23,7 @@ export const initialState: State = {
   cmiMode: null,
   result: null,
   saveToApi: null,
-  url: null,
-  loaded: false
+  url: null
 };
 
 export function reducer(
@@ -40,8 +38,7 @@ export function reducer(
         cmiMode: null,
         result: null,
         saveToApi: null,
-        url: null,
-        loaded: true
+        url: null
       };
     }
 
@@ -52,8 +49,7 @@ export function reducer(
         cmiMode: action.payload.cmiMode,
         result: action.payload.result,
         saveToApi: action.payload.saveToApi,
-        url: action.payload.url,
-        loaded: true
+        url: action.payload.url
       };
     }
 
@@ -65,8 +61,7 @@ export function reducer(
         result: null,
         saveToApi: null,
         url: null,
-        error: action.payload,
-        loaded: false
+        error: action.payload
       };
     }
 

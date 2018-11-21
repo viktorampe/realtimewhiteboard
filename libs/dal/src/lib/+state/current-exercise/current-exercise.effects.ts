@@ -43,7 +43,11 @@ export class CurrentExerciseEffects {
     CurrentExerciseActionTypes.SaveCurrentExercise,
     {
       run: (action: SaveCurrentExercise, state: DalState) => {
-        return this.exerciseService.saveExercise(action.payload.exercise).pipe(
+        const exercise = action.payload.exercise;
+
+        if (!exercise.saveToApi) return;
+
+        return this.exerciseService.saveExercise(exercise).pipe(
           map(
             ex =>
               new DalActions.ActionSuccessful({

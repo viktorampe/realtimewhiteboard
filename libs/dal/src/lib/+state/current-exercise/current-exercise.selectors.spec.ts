@@ -14,7 +14,6 @@ describe('Exercise Selectors', () => {
   ): State {
     return {
       ...exercise,
-      loaded: loaded,
       error: error
     };
   }
@@ -32,10 +31,6 @@ describe('Exercise Selectors', () => {
     it('getError() should return the error', () => {
       const results = CurrentExerciseQueries.getError(storeState);
       expect(results).toBe(exerciseState.error);
-    });
-    it('getLoaded() should return the loaded boolean', () => {
-      const results = CurrentExerciseQueries.getLoaded(storeState);
-      expect(results).toBe(exerciseState.loaded);
     });
     it('getCurrentExercise() should return the current exercise', () => {
       const results = CurrentExerciseQueries.getCurrentExercise(storeState);

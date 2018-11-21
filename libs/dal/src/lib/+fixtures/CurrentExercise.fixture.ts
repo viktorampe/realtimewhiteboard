@@ -3,9 +3,7 @@ import { CurrentExerciseInterface } from './../+state/current-exercise/current-e
 
 export class CurrentExerciseFixture implements CurrentExerciseInterface {
   // defaults
-  eduContent = undefined;
   cmiMode = ScormCMIMode.CMI_MODE_NORMAL;
-  result = undefined;
   saveToApi = true;
   url = 'tempurl';
 

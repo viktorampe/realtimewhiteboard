@@ -14,7 +14,6 @@ function createState(
 ): State {
   return {
     ...exercise,
-    loaded: loaded,
     error: error
   };
 }
@@ -45,7 +44,7 @@ describe('Exercises Reducer', () => {
   });
 
   describe('loaded action', () => {
-    it('should load all exercises', () => {
+    it('should load the exercise', () => {
       const action = new CurrentExerciseActions.CurrentExerciseLoaded(
         mockExercise
       );
