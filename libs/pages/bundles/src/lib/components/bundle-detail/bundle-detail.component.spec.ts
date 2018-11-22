@@ -1,113 +1,34 @@
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {
-  BundleInterface,
-  ContentInterface,
-  EduContent,
-  UserContent
-} from '@campus/dal';
-import { ListFormat, ListViewItemDirective } from '@campus/ui';
-import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { ActivatedRoute, Params } from '@angular/router';
+import { FilterService, FILTER_SERVICE_TOKEN } from '@campus/shared';
+import { ListFormat, ListViewItemDirective, UiModule } from '@campus/ui';
+import { BehaviorSubject, of } from 'rxjs';
 import { BundlesViewModel } from '../bundles.viewmodel';
-import { PagesBundlesModule } from './../../pages-bundles.module';
+import { MockViewModel } from '../bundles.viewmodel.mocks';
 import { BundleDetailComponent } from './bundle-detail.component';
 
-export class MockBundlesViewModel {
-  selectedBundle$ = this.getMockBundle();
-  bundleContents$ = (this.bundleContents$ = <Observable<ContentInterface[]>>(
-    combineLatest(this.getMockEducontents(), this.getMockUsercontents()).pipe(
-      map(arrays => Array.prototype.concat.apply([], arrays))
-    )
-  ));
-  listFormat$ = new BehaviorSubject<ListFormat>(ListFormat.GRID);
-
-  private getMockBundle(): Observable<BundleInterface> {
-    const bundle = <BundleInterface>{
-      icon: 'icon-tasks',
-      name: 'Algemeen',
-      description: 'Dit is een subtitel',
-      start: new Date('2018-09-01 00:00:00'),
-      end: new Date('2018-09-01 00:00:00'),
-      learningArea: {
-        name: 'Aardrijkskunde',
-        icon: 'icon-aardrijkskunde',
-        color: '#485235'
-      },
-      teacher: {
-        firstName: 'Ella',
-        name: 'Kuipers',
-        email: 'teacher2@mailinator.com'
-      }
-    };
-
-    return of(bundle);
-  }
-
-  private getMockEducontents(): Observable<ContentInterface[]> {
-    const mock = <EduContent>{
-      type: 'boek-e',
-      id: 1,
-      publishedEduContentMetadata: {
-        version: 1,
-        metaVersion: '0.1',
-        language: 'be',
-        title: 'De wereld van de getallen',
-        description: 'Lorem ipsum dolor sit amet ... ',
-        created: new Date('2018-09-04 14:21:19'),
-        fileName: 'EXT_powerpoint_meetkunde.ppt',
-        thumbSmall: 'https://www.polpo.be/assets/images/home-laptop-books.jpg',
-        methods: [
-          { name: 'Beautemps', icon: 'beautemps', logoUrl: 'beautemps.svg' },
-          { name: 'Kapitaal', icon: 'kapitaal', logoUrl: 'kapitaal.svg' }
-        ],
-        eduContentProductType: {
-          name: 'aardrijkskunde',
-          icon: 'icon-aardrijkskunde'
-        }
-      }
-    };
-    const eduContent = Object.assign(new EduContent(), mock);
-
-    return of([eduContent, eduContent]);
-  }
-
-  private getMockUsercontents(): Observable<ContentInterface[]> {
-    const mock = <UserContent>{
-      type: 'link',
-      name: 'Omschrijving thesis 0',
-      description: 'Omschrijving vereisten voor thesis op google drive',
-      link: 'http://www.google.be?q=thesisomschrijving',
-      teacher: {
-        firstName: 'Ella',
-        name: 'Kuipers',
-        email: 'teacher2@mailinator.com'
-      }
-    };
-
-    const userContent = Object.assign(new UserContent(), mock);
-    return of([userContent, userContent]);
-  }
-}
-
-@NgModule({
-  imports: [CommonModule, PagesBundlesModule],
-  providers: [{ provide: BundlesViewModel, useClass: MockBundlesViewModel }]
-})
-export class TestModule {}
-
-// TODO fix tests
-xdescribe('BundleDetailComponent', () => {
+describe('BundleDetailComponent', () => {
+  let params: BehaviorSubject<Params>;
+  let bundlesViewModel: BundlesViewModel;
   let component: BundleDetailComponent;
   let fixture: ComponentFixture<BundleDetailComponent>;
 
   beforeEach(async(() => {
+    params = new BehaviorSubject<Params>({ area: 1, bundle: 1 });
     TestBed.configureTestingModule({
-      imports: [TestModule, BrowserAnimationsModule]
+      imports: [UiModule, BrowserAnimationsModule],
+      declarations: [BundleDetailComponent],
+      schemas: [NO_ERRORS_SCHEMA],
+      providers: [
+        { provide: ActivatedRoute, useValue: { params: params } },
+        { provide: BundlesViewModel, useClass: MockViewModel },
+        { provide: FILTER_SERVICE_TOKEN, useClass: FilterService }
+      ]
     }).compileComponents();
+    bundlesViewModel = TestBed.get(BundlesViewModel);
   }));
 
   beforeEach(() => {
@@ -116,35 +37,36 @@ xdescribe('BundleDetailComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should show the number of available items', () => {
-    const expectedAmount = 4;
-
-    fixture.detectChanges();
-    const amountDE = fixture.debugElement.query(By.css('.itemsAmount'));
-    expect(amountDE.nativeElement.textContent).toContain(expectedAmount);
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('should show a list of all available items in the bundle', () => {
-    const expectedAmount = 4;
-
-    fixture.detectChanges();
-    const listItems = fixture.debugElement.queryAll(
-      By.directive(ListViewItemDirective)
-    );
-    expect(listItems.length).toBe(expectedAmount);
+  it('should call the viewModel changeListFormat method when calling clickChangeListFormat', () => {
+    const spy = jest.spyOn(bundlesViewModel, 'changeListFormat');
+    component.clickChangeListFormat(ListFormat.GRID);
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith(ListFormat.GRID);
   });
 
-  it('should be able to filter the available items', () => {
-    const expectedAmount = 2;
-
-    component.filterInput$.next('0');
-
-    fixture.detectChanges();
-    const listItems = fixture.debugElement.queryAll(
-      By.directive(ListViewItemDirective)
-    );
-    expect(listItems.length).toBe(expectedAmount);
+  it('should get the listFormat$ from the vm', () => {
+    expect(component.listFormat$).toBe(bundlesViewModel.listFormat$);
   });
+
+  it('should apply the filter case insensitive on the list of educontent', async(() => {
+    const listDE = fixture.debugElement.query(By.css('campus-list-view'));
+    const listItems = listDE.queryAll(By.directive(ListViewItemDirective));
+    expect(listItems.length).toBe(4);
+
+    component.filterTextInput.setValue('foo');
+    fixture.detectChanges();
+
+    fixture.whenStable().then(() => {
+      const filteredListItems = listDE.queryAll(
+        By.directive(ListViewItemDirective)
+      );
+      expect(filteredListItems.length).toBe(3);
+    });
+  }));
 
   it('should show the teacher info in the infopanel if no item is selected', () => {
     component.list.deselectAllItems();
@@ -219,6 +141,13 @@ xdescribe('BundleDetailComponent', () => {
     expect(infoPanelContents).toBeTruthy();
   });
 
-  // TODO
-  // it('should show an error message if a bundle is no longer available', () => {});
+  it('should show an error message if a bundle is no longer available', () => {
+    component.bundle$ = of(null);
+    fixture.detectChanges();
+
+    expect(fixture.debugElement.query(By.css('campus-side-sheet'))).toBeFalsy();
+    expect(fixture.debugElement.nativeElement.textContent).toContain(
+      'Deze bundel is niet beschikbaar'
+    );
+  });
 });

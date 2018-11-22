@@ -1,260 +1,309 @@
+import { ModuleWithProviders } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import {
   AUTH_SERVICE_TOKEN,
+  BundleActions,
   BundleFixture,
   BundleInterface,
+  BundleReducer,
+  EduContentActions,
+  EduContentFixture,
   EduContentInterface,
-  EduContentMetadataFixture,
-  EduContentMetadataInterface,
+  EduContentReducer,
+  LearningAreaActions,
   LearningAreaFixture,
+  LearningAreaInterface,
+  LearningAreaReducer,
+  PersonFixture,
+  PersonInterface,
+  StateFeatureBuilder,
+  UiActions,
+  UiReducer,
+  UnlockedBoekeGroupActions,
+  UnlockedBoekeGroupFixture,
+  UnlockedBoekeGroupInterface,
+  UnlockedBoekeGroupReducer,
+  UnlockedBoekeStudentActions,
+  UnlockedBoekeStudentInterface,
+  UnlockedBoekeStudentReducer,
+  UnlockedContentActions,
   UnlockedContentFixture,
-  UnlockedContentInterface
+  UnlockedContentInterface,
+  UnlockedContentReducer
 } from '@campus/dal';
-import { Dictionary } from '@ngrx/entity';
+import { ListFormat } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from 'jasmine-marbles';
-import { Observable } from 'rxjs';
-import { marbles } from 'rxjs-marbles';
+import { of } from 'rxjs';
 import { BundlesViewModel } from './bundles.viewmodel';
+import { LearningAreasWithBundlesInfoInterface } from './bundles.viewmodel.interfaces';
 
 describe('BundlesViewModel', () => {
-  let storeState;
-
   let bundlesViewModel: BundlesViewModel;
+  let uiState: UiReducer.UiState;
+  let learningAreaState: LearningAreaReducer.State;
+  let bundleState: BundleReducer.State;
+  let unlockedBoekeGroupState: UnlockedBoekeGroupReducer.State;
+  let unlockedBoekeStudentState: UnlockedBoekeStudentReducer.State;
+  let unlockedContentState: UnlockedContentReducer.State;
+  let eduContentState: EduContentReducer.State;
 
-  const bundlesByLearningArea: Dictionary<BundleInterface[]> = {
-    1: [
-      new BundleFixture({ id: 1, learningAreaId: 1 }),
-      new BundleFixture({ id: 2, learningAreaId: 1 }),
-      new BundleFixture({ id: 3, learningAreaId: 1 })
-    ],
-    2: [
-      new BundleFixture({ id: 4, learningAreaId: 2 }),
-      new BundleFixture({ id: 5, learningAreaId: 2 }),
-      new BundleFixture({ id: 6, learningAreaId: 2 })
-    ],
-    3: [
-      new BundleFixture({ id: 7, learningAreaId: 3 }),
-      new BundleFixture({ id: 8, learningAreaId: 3 }),
-      new BundleFixture({ id: 9, learningAreaId: 3 })
-    ]
-  };
+  let ui: UiReducer.UiState;
+  let learningAreas: LearningAreaInterface[];
+  let bundles: BundleInterface[];
+  let unlockedBoekeGroups: UnlockedBoekeGroupInterface[];
+  let unlockedBoekeStudents: UnlockedBoekeStudentInterface[];
+  let unlockedContents: UnlockedContentInterface[];
+  let eduContents: EduContentInterface[];
+  let coupledPersons: PersonInterface[];
 
-  const booksMetaDataByLearningArea: Dictionary<
-    EduContentMetadataInterface[]
-  > = {
-    1: [
-      new EduContentMetadataFixture({ id: 1, learningAreaId: 1 }),
-      new EduContentMetadataFixture({ id: 2, learningAreaId: 1 }),
-      new EduContentMetadataFixture({ id: 3, learningAreaId: 1 })
-    ],
-    2: [
-      new EduContentMetadataFixture({ id: 4, learningAreaId: 2 }),
-      new EduContentMetadataFixture({ id: 5, learningAreaId: 2 }),
-      new EduContentMetadataFixture({ id: 6, learningAreaId: 2 })
-    ],
-    3: [
-      new EduContentMetadataFixture({ id: 7, learningAreaId: 3 }),
-      new EduContentMetadataFixture({ id: 8, learningAreaId: 3 }),
-      new EduContentMetadataFixture({ id: 9, learningAreaId: 3 })
-    ]
-  };
+  beforeAll(() => {
+    loadState();
+  });
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [StoreModule.forRoot({})],
+      imports: [StoreModule.forRoot({}), ...getModuleWithForFeatureProviders()],
       providers: [
         BundlesViewModel,
         Store,
-        { provide: AUTH_SERVICE_TOKEN, useValue: {} }
+        { provide: AUTH_SERVICE_TOKEN, useValue: { userId: 1 } }
       ]
     });
-    bundlesViewModel = TestBed.get(BundlesViewModel);
 
-    storeState = {
-      bundles: {
-        bundles: [], // TODO fill with new BundleFixture()
-        loaded: true
-      }
-    };
+    bundlesViewModel = TestBed.get(BundlesViewModel);
   });
 
-  it('should work', () => {
+  it('should be defined', () => {
     expect(bundlesViewModel).toBeDefined();
   });
 
-  it('getSharedBundles()', () => {
-    return;
-  });
-
-  it(
-    'getLearningAreaBundles()',
-    marbles(m => {
-      const learningAreaId$ = m.hot('--a--b|', {
-        a: 1,
-        b: 2
-      });
-      const bundlesByLearningArea$ = m.hot('-a----|', {
-        a: bundlesByLearningArea
-      });
-      const result = '--a--b|';
-
-      const result$: Observable<BundleInterface[]> = bundlesViewModel[
-        'getLearningAreaBundles'
-      ](learningAreaId$, bundlesByLearningArea$);
-      m.expect(result$).toBeObservable(result, {
-        a: bundlesByLearningArea[1],
-        b: bundlesByLearningArea[2]
-      });
-    })
-  );
-
-  it(
-    'getLearningAreaBooks()',
-    marbles(m => {
-      const learningAreaId$ = m.hot('--a--b|', {
-        a: 1,
-        b: 2
-      });
-      const booksByLearningArea$ = m.hot('--a---|', {
-        a: booksMetaDataByLearningArea
-      });
-      const result = '--a--b|';
-
-      const result$: Observable<
-        EduContentMetadataInterface[]
-      > = bundlesViewModel['getLearningAreaBooks'](
-        learningAreaId$,
-        booksByLearningArea$ //TODO typing needs to be fixed
-      );
-      m.expect(result$).toBeObservable(result, {
-        a: booksMetaDataByLearningArea[1],
-        b: booksMetaDataByLearningArea[2]
-      });
-    })
-  );
-
-  it('getBundleContentsCount()', () => {
-    const unlockedContentByBundle$: Observable<
-      Dictionary<UnlockedContentInterface[]>
-    > = hot('a-|', {
-      a: {
-        1: [
-          new UnlockedContentFixture({ index: 1, id: 1, bundleId: 1 }),
-          new UnlockedContentFixture({ index: 2, id: 2, bundleId: 1 }),
-          new UnlockedContentFixture({ index: 3, id: 3, bundleId: 1 })
-        ],
-        2: [
-          new UnlockedContentFixture({ index: 10, id: 10, bundleId: 2 }),
-          new UnlockedContentFixture({ index: 20, id: 20, bundleId: 2 })
-        ]
-      }
-    });
-    expect(
-      bundlesViewModel['getBundleContentsCount'](unlockedContentByBundle$)
-    ).toBeObservable(hot('a-|', { a: { 1: 3, 2: 2 } }));
-  });
-
-  // it('getBundleContents()', () => {
-  //   return;
-  // });
-
-  // it('getSharedBooks()', () => {
-  //   return;
-  // });
-
-  it('getLearningAreaIdsWithContent()', () => {
-    const bundles$: Observable<BundleInterface[]> = hot('-a-|', {
-      a: [
-        new BundleFixture({ id: 1, learningAreaId: 1 }),
-        new BundleFixture({ id: 2, learningAreaId: 1 }),
-        new BundleFixture({ id: 3, learningAreaId: 1 }),
-        new BundleFixture({ id: 4, learningAreaId: 2 })
-      ]
-    });
-    const books$: Observable<EduContentInterface[]> = hot('-a-|', {
-      a: [
-        {
-          publishedEduContentMetadata: new EduContentMetadataFixture({
-            id: 1,
-            learningAreaId: 1
-          })
-        },
-        {
-          publishedEduContentMetadata: new EduContentMetadataFixture({
-            id: 2,
-            learningAreaId: 2
-          })
-        },
-        {
-          publishedEduContentMetadata: new EduContentMetadataFixture({
-            id: 3,
-            learningAreaId: 3
-          })
-        }
-      ]
-    });
-    expect(
-      bundlesViewModel['getLearningAreaIdsWithContent'](bundles$, books$)
-    ).toBeObservable(hot('-a-|', { a: [1, 2, 3] }));
-  });
-
-  it('getLearningAreasWithContent()', () => {
-    const bundles$: Observable<BundleInterface[]> = hot('-a-|', {
-      a: [
-        new BundleFixture({ id: 1, learningAreaId: 1 }),
-        new BundleFixture({ id: 2, learningAreaId: 1 }),
-        new BundleFixture({ id: 3, learningAreaId: 1 }),
-        new BundleFixture({ id: 4, learningAreaId: 2 })
-      ]
-    });
-    const books$: Observable<EduContentInterface[]> = hot('-a-|', {
-      a: [
-        {
-          publishedEduContentMetadata: new EduContentMetadataFixture({
-            id: 1,
-            learningAreaId: 1
-          })
-        },
-        {
-          publishedEduContentMetadata: new EduContentMetadataFixture({
-            id: 2,
-            learningAreaId: 2
-          })
-        },
-        {
-          publishedEduContentMetadata: new EduContentMetadataFixture({
-            id: 3,
-            learningAreaId: 3
-          })
-        }
-      ]
-    });
-    const learningArea$ = hot('-a-|', { a: new LearningAreaFixture() });
-    const spy = jest
-      .spyOn(bundlesViewModel['store'], 'pipe')
-      .mockReturnValue(learningArea$);
-    expect(
-      bundlesViewModel['getLearningAreasWithContent'](bundles$, books$)
-    ).toBeObservable(learningArea$);
+  it('changeListFormat() should update uiStore', () => {
+    const spy = jest.spyOn(UiActions, 'SetListFormat');
+    const listFormat = ListFormat.GRID;
+    bundlesViewModel.changeListFormat(listFormat);
     expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith({ listFormat });
   });
 
-  it('getOwnBundles()', () => {
-    const ownBundles$ = hot('-a-|', {
-      a: [
-        new BundleFixture({ id: 1, learningAreaId: 2 }),
-        new BundleFixture({ id: 2, learningAreaId: 3 })
-      ]
-    });
-    const spy = jest
-      .spyOn(bundlesViewModel['store'], 'pipe')
-      .mockReturnValue(ownBundles$);
-    expect(bundlesViewModel['getOwnBundles']()).toBeObservable(ownBundles$);
-    expect(spy).toHaveBeenCalled();
+  it('sharedLearningAreas$', () => {
+    expect(bundlesViewModel.sharedLearningAreas$).toBeObservable(
+      hot('a', {
+        a: <LearningAreasWithBundlesInfoInterface>{
+          learningAreas: [
+            {
+              learningArea: learningAreas[0],
+              bundleCount: 1,
+              bookCount: 2
+            },
+            {
+              learningArea: learningAreas[1],
+              bundleCount: 1,
+              bookCount: 1
+            },
+            {
+              learningArea: learningAreas[2],
+              bundleCount: 1,
+              bookCount: 0
+            }
+          ]
+        }
+      })
+    );
   });
 
-  it('getSharedLearningAreasCount()', () => {
-    return;
+  it('getLearningAreaById()', () => {
+    expect(bundlesViewModel.getLearningAreaById(1)).toBeObservable(
+      hot('a', {
+        a: learningAreas[0]
+      })
+    );
   });
+
+  it('getBundleById()', () => {
+    expect(bundlesViewModel.getBundleById(1)).toBeObservable(
+      hot('a', {
+        a: bundles[0]
+      })
+    );
+  });
+
+  // TODO enable when coupledPerson state is added
+  xit('getBundleOwner()', () => {
+    expect(bundlesViewModel.getBundleOwner(of(bundles[0]))).toBeObservable(
+      hot('a', {
+        a: coupledPersons[0]
+      })
+    );
+  });
+
+  it('getBundleContents()', () => {
+    expect(bundlesViewModel.getBundleContents(1)).toBeObservable(
+      hot('a', {
+        a: [eduContents[0]]
+      })
+    );
+  });
+
+  it('getSharedBundlesWithContentInfo()', () => {
+    expect(bundlesViewModel.getSharedBundlesWithContentInfo(1)).toBeObservable(
+      hot('a', {
+        a: {
+          bundles: [
+            {
+              bundle: bundles[0],
+              contentsCount: 1
+            }
+          ],
+          books: [eduContents[0], eduContents[1]]
+        }
+      })
+    );
+  });
+
+  function loadState() {
+    ui = {
+      listFormat: ListFormat.LINE,
+      loaded: true
+    };
+    uiState = UiReducer.reducer(
+      UiReducer.initialState,
+      new UiActions.UiLoaded({ state: ui })
+    );
+
+    learningAreas = [
+      new LearningAreaFixture({ id: 1 }),
+      new LearningAreaFixture({ id: 2 }),
+      new LearningAreaFixture({ id: 3 }),
+      new LearningAreaFixture({ id: 4 }),
+      new LearningAreaFixture({ id: 5 })
+    ];
+    learningAreaState = LearningAreaReducer.reducer(
+      LearningAreaReducer.initialState,
+      new LearningAreaActions.LearningAreasLoaded({
+        learningAreas: learningAreas
+      })
+    );
+
+    bundles = [
+      // shared
+      new BundleFixture({ id: 1, teacherId: 2, learningAreaId: 1 }),
+      new BundleFixture({ id: 2, teacherId: 2, learningAreaId: 2 }),
+      new BundleFixture({ id: 3, teacherId: 2, learningAreaId: 3 }),
+      // own
+      new BundleFixture({ id: 4, teacherId: 1, learningAreaId: 4 }),
+      new BundleFixture({ id: 5, teacherId: 1, learningAreaId: 5 })
+    ];
+    bundleState = BundleReducer.reducer(
+      BundleReducer.initialState,
+      new BundleActions.BundlesLoaded({
+        bundles: bundles
+      })
+    );
+
+    unlockedBoekeStudents = [];
+    unlockedBoekeStudentState = UnlockedBoekeStudentReducer.reducer(
+      UnlockedBoekeStudentReducer.initialState,
+      new UnlockedBoekeStudentActions.UnlockedBoekeStudentsLoaded({
+        unlockedBoekeStudents: unlockedBoekeStudents
+      })
+    );
+
+    unlockedBoekeGroups = [
+      // shared books
+      new UnlockedBoekeGroupFixture({ id: 1, teacherId: 2, eduContentId: 1 }),
+      new UnlockedBoekeGroupFixture({ id: 2, teacherId: 2, eduContentId: 2 }),
+      new UnlockedBoekeGroupFixture({ id: 3, teacherId: 2, eduContentId: 3 })
+    ];
+    unlockedBoekeGroupState = UnlockedBoekeGroupReducer.reducer(
+      UnlockedBoekeGroupReducer.initialState,
+      new UnlockedBoekeGroupActions.UnlockedBoekeGroupsLoaded({
+        unlockedBoekeGroups: unlockedBoekeGroups
+      })
+    );
+
+    unlockedContents = [
+      // shared
+      new UnlockedContentFixture({ id: 1, bundleId: 1, teacherId: 2 }),
+      new UnlockedContentFixture({ id: 2, bundleId: 2, teacherId: 2 }),
+      new UnlockedContentFixture({ id: 3, bundleId: 3, teacherId: 2 })
+    ];
+    unlockedContentState = UnlockedContentReducer.reducer(
+      UnlockedContentReducer.initialState,
+      new UnlockedContentActions.UnlockedContentsLoaded({
+        unlockedContents: unlockedContents
+      })
+    );
+
+    eduContents = [
+      // shared books
+      new EduContentFixture({ id: 1 }, { learningAreaId: 1 }),
+      new EduContentFixture({ id: 2 }, { learningAreaId: 1 }),
+      new EduContentFixture({ id: 3 }, { learningAreaId: 2 })
+    ];
+    eduContentState = EduContentReducer.reducer(
+      EduContentReducer.initialState,
+      new EduContentActions.EduContentsLoaded({
+        eduContents: eduContents
+      })
+    );
+
+    // TODO when coupledPerson state is added
+    coupledPersons = [new PersonFixture({ id: 2 })];
+  }
+
+  function getModuleWithForFeatureProviders(): ModuleWithProviders[] {
+    return StateFeatureBuilder.getModuleWithForFeatureProviders([
+      {
+        NAME: UiReducer.NAME,
+        reducer: UiReducer.reducer,
+        initialState: {
+          initialState: uiState
+        }
+      },
+      {
+        NAME: LearningAreaReducer.NAME,
+        reducer: LearningAreaReducer.reducer,
+        initialState: {
+          initialState: learningAreaState
+        }
+      },
+      {
+        NAME: BundleReducer.NAME,
+        reducer: BundleReducer.reducer,
+        initialState: {
+          initialState: bundleState
+        }
+      },
+      {
+        NAME: UnlockedBoekeGroupReducer.NAME,
+        reducer: UnlockedBoekeGroupReducer.reducer,
+        initialState: {
+          initialState: unlockedBoekeGroupState
+        }
+      },
+      {
+        NAME: UnlockedBoekeStudentReducer.NAME,
+        reducer: UnlockedBoekeStudentReducer.reducer,
+        initialState: {
+          initialState: unlockedBoekeStudentState
+        }
+      },
+      {
+        NAME: UnlockedContentReducer.NAME,
+        reducer: UnlockedContentReducer.reducer,
+        initialState: {
+          initialState: unlockedContentState
+        }
+      },
+      {
+        NAME: EduContentReducer.NAME,
+        reducer: EduContentReducer.reducer,
+        initialState: {
+          initialState: eduContentState
+        }
+      }
+      // TODO when coupledPersonState is added
+    ]);
+  }
 });

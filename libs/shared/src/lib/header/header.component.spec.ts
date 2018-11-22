@@ -1,24 +1,20 @@
-import { Injectable, NO_ERRORS_SCHEMA } from '@angular/core';
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { UiModule } from '@campus/ui';
+import { Subject } from 'rxjs';
 import { HeaderComponent } from './header.component';
 import { HeaderViewModel } from './header.viewmodel';
-
-@Injectable({
-  providedIn: 'root'
-})
-export class MockHeaderViewModel {
-  enableAlerts: true;
-  enableMessages: true;
-}
+import { MockViewModel } from './header.viewmodel.mock';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
-
+  let headerViewModel: MockViewModel;
+  const breakpointStream: Subject<{ matches: boolean }> = new Subject();
+  let pageBarNavIcon: HTMLElement;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [UiModule, RouterTestingModule, MatIconModule],
@@ -26,11 +22,16 @@ describe('HeaderComponent', () => {
       providers: [
         {
           provide: HeaderViewModel,
-          useClass: MockHeaderViewModel
-        }
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
+          useClass: MockViewModel
+        },
+        BreakpointObserver
+      ]
     }).compileComponents();
+    headerViewModel = TestBed.get(HeaderViewModel);
+    const breakpointObserver: BreakpointObserver = TestBed.get(
+      BreakpointObserver
+    );
+    jest.spyOn(breakpointObserver, 'observe').mockReturnValue(breakpointStream);
   }));
 
   beforeEach(() => {
@@ -72,5 +73,59 @@ describe('HeaderComponent', () => {
     expect(
       fixture.debugElement.query(By.css('#page-bar-container'))
     ).toBeTruthy();
+  });
+
+  describe('should be mobile friendly', () => {
+    beforeEach(() => {
+      // mock that we're on small sreen size
+      breakpointStream.next({ matches: true });
+      fixture.detectChanges();
+    });
+    describe('page bar navigation', () => {
+      describe('when there are no higher level routes', () => {
+        beforeEach(() => {
+          // mock that there is no (breadcrumb) level up
+          headerViewModel.backLink$.next(undefined);
+
+          fixture.detectChanges();
+          // this is the menu or arrow-back icon
+          pageBarNavIcon = fixture.debugElement.query(
+            By.css('.shared-header__page-bar_nav-icon')
+          ).nativeElement;
+        });
+
+        it('should show the menu button', () => {
+          expect(pageBarNavIcon.getAttribute('ng-reflect-svg-icon')).toBe(
+            'menu'
+          );
+        });
+        it('should toggle the side nav', () => {
+          pageBarNavIcon.click();
+          expect(headerViewModel.toggleSideNav).toHaveBeenCalledTimes(1);
+        });
+      });
+    });
+    describe('when there is a higher level route', () => {
+      const backLink = '/level-1';
+      beforeEach(() => {
+        headerViewModel.backLink$.next(backLink);
+        fixture.detectChanges();
+        // this is the menu or arrow-back icon
+        pageBarNavIcon = fixture.debugElement.query(
+          By.css('.shared-header__page-bar_nav-icon')
+        ).nativeElement;
+      });
+
+      it('should show a back button', () => {
+        expect(pageBarNavIcon.getAttribute('ng-reflect-svg-icon')).toBe(
+          'arrow-back'
+        );
+      });
+      it('should have the correct back link', () => {
+        expect(pageBarNavIcon.getAttribute('ng-reflect-router-link')).toBe(
+          backLink
+        );
+      });
+    });
   });
 });

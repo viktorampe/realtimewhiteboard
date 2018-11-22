@@ -100,6 +100,10 @@ export const environment = {
     // youtube: 'assets/icons/youtube.svg',
 
     // -> other
+    home: 'assets/icons/material/home.svg',
+    'breadcrumb-separator': 'assets/icons/material/chevron-right.svg',
+    'arrow-back': 'assets/icons/material/arrow-back.svg',
+    menu: 'assets/icons/material/menu.svg'
     // alert: 'assets/icons/alert.svg',
     // 'at-sign': 'assets/icons/at-sign.svg',
     // balance: 'assets/icons/balance.svg',

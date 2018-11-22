@@ -1,8 +1,24 @@
-import { AfterViewInit, ChangeDetectorRef, Component, Inject, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { EduContent, LearningAreaInterface, TaskInstanceInterface } from '@campus/dal';
+import {
+  EduContent,
+  LearningAreaInterface,
+  TaskInstanceInterface
+} from '@campus/dal';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/shared';
-import { FilterTextInputComponent, ListFormat, ListViewComponent, SideSheetComponent } from '@campus/ui';
+import {
+  FilterTextInputComponent,
+  ListFormat,
+  ListViewComponent,
+  SideSheetComponent
+} from '@campus/ui';
 import { Observable, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { MockTasksViewModel } from '../tasks.viewmodel.mock';
@@ -27,10 +43,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
 
   //viewChildren
   @ViewChild(FilterTextInputComponent)
-  filterTextInput: FilterTextInputComponent<
-    EduContent[],
-    EduContent
-  >;
+  filterTextInput: FilterTextInputComponent<EduContent[], EduContent>;
 
   list: ListViewComponent<EduContent>;
   @ViewChild('taskInstanceListview')
@@ -77,21 +90,16 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
     this.learningArea$ = this.getLearningArea();
     this.taskInstance$ = this.getTaskInstance();
     this.contents$ = this.getContents();
-    this.filterTextInput.filterFn = (
-      info: EduContent[],
-      searchText: string
-    ) => this.filterFn(info, searchText);
+    this.filterTextInput.setFilterableItem(this);
   }
 
   private setupListSubscription(): void {
     this.subscriptions.add(
-      this.list.selectedItems$.subscribe(
-        (selectedItems: EduContent[]) => {
-          if (selectedItems.length > 0) {
-            this.sideSheet.toggle(true);
-          }
+      this.list.selectedItems$.subscribe((selectedItems: EduContent[]) => {
+        if (selectedItems.length > 0) {
+          this.sideSheet.toggle(true);
         }
-      )
+      })
     );
 
     // Needed to avoid ExpressionChangedAfterItHasBeenCheckedError
@@ -134,10 +142,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
   }
 
   //filterFunction
-  private filterFn(
-    info: EduContent[],
-    searchText: string
-  ): EduContent[] {
+  filterFn(info: EduContent[], searchText: string): EduContent[] {
     if (this.list) {
       this.list.deselectAllItems();
     }

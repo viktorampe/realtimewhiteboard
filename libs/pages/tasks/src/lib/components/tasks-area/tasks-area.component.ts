@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { TasksViewModel } from './../tasks.viewmodel';
 import {
   LearningAreasWithTaskInstanceInfoInterface,
-  LearningAreaWithTaskInfo
+  LearningAreaWithTaskInfoInterface
 } from './../tasks.viewmodel.interfaces';
 
 @Component({
@@ -23,7 +23,7 @@ export class TasksAreaComponent implements OnInit {
   @ViewChild('filterInput')
   filterTextInput: FilterTextInputComponent<
     LearningAreasWithTaskInstanceInfoInterface,
-    LearningAreaWithTaskInfo
+    LearningAreaWithTaskInfoInterface
   >;
 
   constructor(
@@ -34,17 +34,17 @@ export class TasksAreaComponent implements OnInit {
   ngOnInit() {
     this.listFormat$ = this.tasksViewModel.listFormat$;
     this.learningAreasWithInfo$ = this.tasksViewModel.learningAreasWithTaskInstances$;
-    this.filterTextInput.filterFn = this.filterFn.bind(this);
+    this.filterTextInput.setFilterableItem(this);
   }
 
   clickChangeListFormat(value: ListFormat): void {
     this.tasksViewModel.changeListFormat(value);
   }
 
-  private filterFn(
+  filterFn(
     info: LearningAreasWithTaskInstanceInfoInterface,
     searchText: string
-  ): LearningAreaWithTaskInfo[] {
+  ): LearningAreaWithTaskInfoInterface[] {
     return this.filterService.filter(info.learningAreasWithInfo, {
       learningArea: { name: searchText }
     });

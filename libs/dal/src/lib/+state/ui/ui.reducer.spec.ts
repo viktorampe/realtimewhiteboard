@@ -1,5 +1,10 @@
 import { ListFormat } from '@campus/ui';
-import { SetListFormatUi, ToggleSideSheetUi, UiLoaded } from './ui.actions';
+import {
+  SetListFormat,
+  ToggleSideNav,
+  ToggleSideSheet,
+  UiLoaded
+} from './ui.actions';
 import { initialState, reducer, UiState } from './ui.reducer';
 
 describe('Ui Reducer', () => {
@@ -9,6 +14,7 @@ describe('Ui Reducer', () => {
     state = {
       listFormat: ListFormat.GRID,
       sideSheetOpen: true,
+      sideNavOpen: true,
       loaded: true
     };
   });
@@ -21,13 +27,13 @@ describe('Ui Reducer', () => {
     });
 
     it('should change the listFormat', () => {
-      const action = new SetListFormatUi({ listFormat: ListFormat.LINE });
+      const action = new SetListFormat({ listFormat: ListFormat.LINE });
       const result: UiState = reducer(initialState, action);
       expect(result.listFormat).toEqual(ListFormat.LINE);
     });
 
-    it('should toggle the sideSheet', () => {
-      const action = new ToggleSideSheetUi();
+    it('should open the sideSheet', () => {
+      const action = new ToggleSideSheet();
       const result: UiState = reducer(
         { ...initialState, sideSheetOpen: false },
         action
@@ -35,13 +41,19 @@ describe('Ui Reducer', () => {
       expect(result.sideSheetOpen).toBeTruthy();
     });
 
-    it('should toggle the sideSheet', () => {
-      const action = new ToggleSideSheetUi();
+    it('should close the sideSheet', () => {
+      const action = new ToggleSideSheet();
       const result: UiState = reducer(
         { ...initialState, sideSheetOpen: true },
         action
       );
       expect(result.sideSheetOpen).toBeFalsy();
+    });
+
+    it('should toggle the side nav', () => {
+      const action = new ToggleSideNav();
+      const result: UiState = reducer(initialState, action);
+      expect(result.sideNavOpen).toBe(!initialState.sideNavOpen);
     });
   });
 

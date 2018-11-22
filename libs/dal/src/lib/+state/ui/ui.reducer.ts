@@ -10,13 +10,15 @@ export const NAME = 'ui';
 
 export interface UiState {
   loaded: boolean; // has the Ui list been loaded
-  listFormat?: string;
+  listFormat?: ListFormat;
   sideSheetOpen?: boolean;
+  sideNavOpen?: boolean;
 }
 
 export const initialState: UiState = {
   listFormat: ListFormat.GRID,
   sideSheetOpen: true,
+  sideNavOpen: true,
   loaded: false
 };
 
@@ -42,6 +44,12 @@ export function reducer(
       state = {
         ...state,
         sideSheetOpen: !state.sideSheetOpen
+      };
+      break;
+    case UiActionTypes.ToggleSideNav:
+      state = {
+        ...state,
+        sideNavOpen: !state.sideNavOpen
       };
       break;
   }

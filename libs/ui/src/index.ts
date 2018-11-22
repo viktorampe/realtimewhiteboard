@@ -1,7 +1,11 @@
 export {
+  BreadcrumbLinkInterface
+} from './lib/breadcrumbs/breadcrumbs.component';
+export {
   SelectOption
 } from './lib/confirmable-select/confirmable-select.component';
 export {
+  FilterableItem,
   FilterTextInputComponent
 } from './lib/filter-text-input/filter-text-input.component';
 export { ListFormat } from './lib/list-view/enums/list-format.enum';
