@@ -60,22 +60,63 @@ describe('TasksAreaComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call the filter service when filterTextInput.filterFn is called', () => {
+  it('should call the filter service when filterTextInput.filterFn is called, and display the correct count/learning areas', () => {
     const filterSource = {
       learningAreasWithInfo: []
     } as LearningAreasWithTaskInstanceInfoInterface;
     const filterText = '';
+    component.filterTextInput.setFilterableItem(component);
 
-    const spyFilterService = jest.spyOn(filterService, 'filter');
-    component.filterTextInput.filterFn(filterSource, filterText);
+    const spyFilterService = jest.spyOn(component, 'filterFn');
+    component.filterTextInput.setValue(filterText);
 
     expect(spyFilterService).toHaveBeenCalledTimes(1);
     expect(spyFilterService).toHaveBeenCalledWith(
-      filterSource.learningAreasWithInfo,
       {
-        learningArea: { name: filterText }
-      }
+        learningAreasWithInfo: [
+          {
+            closedTasks: 3,
+            learningArea: {
+              color: '#2c354f',
+              icon: 'wiskunde',
+              name: 'Wiskunde'
+            },
+            openTasks: 2
+          },
+          {
+            closedTasks: 2,
+            learningArea: {
+              color: '#5e3b47',
+              icon: 'natuurwetenschappen',
+              name: 'Moderne Wetenschappen'
+            },
+            openTasks: 0
+          },
+          {
+            closedTasks: 0,
+            learningArea: { color: '#553030', icon: 'engels', name: 'Engels' },
+            openTasks: 2
+          }
+        ],
+        totalTasks: 9
+      },
+      ''
     );
+
+    fixture.detectChanges();
+    const componentDE = fixture.debugElement.query(
+      By.css('.pages-tasks__container')
+    );
+    expect(componentDE.nativeElement.textContent).toContain('3 van 3');
+    const tasksArea = fixture.debugElement.query(
+      By.css('.pages-tasks__container__learning-areas')
+    );
+    expect(tasksArea.children[0].children[0].children.length).toBe(3);
+
+    component.filterTextInput.setValue('a');
+    fixture.detectChanges();
+    expect(componentDE.nativeElement.textContent).toContain('1 van 3');
+    expect(tasksArea.children[0].children[0].children.length).toBe(1);
   });
 
   it('should filter the learningAreas with case insensitivity', () => {
@@ -95,24 +136,18 @@ describe('TasksAreaComponent', () => {
     ];
 
     let filterText = '';
-    let filteredResult = component.filterTextInput.filterFn(
-      filterSource,
-      filterText
-    );
+
+    component.filterTextInput.setFilterableItem(component);
+
+    let filteredResult = component.filterFn(filterSource, filterText);
     expect(filteredResult).toEqual(learningAreasValue.learningAreasWithInfo);
 
     filterText = 'wISKUN';
-    filteredResult = component.filterTextInput.filterFn(
-      filterSource,
-      filterText
-    );
+    filteredResult = component.filterFn(filterSource, filterText);
     expect(filteredResult).toEqual(expectedOnlyWiskunde);
 
     filterText = 'nothing nothing nothing';
-    filteredResult = component.filterTextInput.filterFn(
-      filterSource,
-      filterText
-    );
+    filteredResult = component.filterFn(filterSource, filterText);
     expect(filteredResult).toEqual([]);
   });
 

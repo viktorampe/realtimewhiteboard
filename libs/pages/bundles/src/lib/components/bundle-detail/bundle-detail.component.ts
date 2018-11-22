@@ -16,6 +16,7 @@ import {
 } from '@campus/dal';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/shared';
 import {
+  FilterableItem,
   FilterTextInputComponent,
   ListFormat,
   ListViewComponent,
@@ -30,7 +31,12 @@ import { BundlesViewModel } from '../bundles.viewmodel';
   templateUrl: './bundle-detail.component.html',
   styleUrls: ['./bundle-detail.component.scss']
 })
-export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
+export class BundleDetailComponent
+  implements
+    OnInit,
+    OnDestroy,
+    AfterViewInit,
+    FilterableItem<ContentInterface[], ContentInterface> {
   protected listFormat = ListFormat; //enum beschikbaar maken in template
 
   listFormat$: Observable<ListFormat> = this.bundlesViewModel.listFormat$;
@@ -41,7 +47,10 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   contents$: Observable<ContentInterface[]>;
 
   @ViewChild(FilterTextInputComponent)
-  filterTextInput: FilterTextInputComponent<ContentInterface, ContentInterface>;
+  filterTextInput: FilterTextInputComponent<
+    ContentInterface[],
+    ContentInterface
+  >;
 
   list: ListViewComponent<ContentInterface>;
   @ViewChild('bundleListview')
@@ -70,7 +79,7 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
     this.bundleOwner$ = this.bundlesViewModel.getBundleOwner(this.bundle$);
     this.contents$ = this.getBundleContents();
 
-    this.filterTextInput.filterFn = this.filterFn.bind(this);
+    this.filterTextInput.setFilterableItem(this);
   }
 
   ngAfterViewInit(): void {
@@ -120,15 +129,12 @@ export class BundleDetailComponent implements OnInit, OnDestroy, AfterViewInit {
     );
   }
 
-  private filterFn(
-    info: ContentInterface[],
-    searchText: string
-  ): ContentInterface[] {
+  filterFn(source: ContentInterface[], filterText: string): ContentInterface[] {
     if (this.list) {
       this.list.deselectAllItems();
     }
-    return this.filterService.filter(info, {
-      name: searchText
+    return this.filterService.filter(source, {
+      name: filterText
     });
   }
 }
