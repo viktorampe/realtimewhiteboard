@@ -91,10 +91,6 @@ export class ScormApi implements ScormApiInterface {
 
     this.LMSCommit();
 
-    if (this.checkInitialized() === false) {
-      return 'false';
-    }
-
     if (
       this.currentResult.core.lesson_status !== ScormStatus.STATUS_COMPLETED
     ) {
