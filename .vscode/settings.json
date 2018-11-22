@@ -11,5 +11,6 @@
   "editor.codeActionsOnSave": {
     "source.organizeImports": true
   },
-  "html.format.wrapAttributes": "force-aligned"
+  "html.format.wrapAttributes": "force-aligned",
+  "python.pythonPath": "/usr/local/opt/python@2/bin/python2.7"
 }
