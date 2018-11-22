@@ -1,4 +1,4 @@
-import { ScormCmiFixture } from '@campus/dal';
+import { ScormCmiFixture } from './+fixtures/ScormCmi.fixture';
 import { ScormApi } from './scorm-api';
 import {
   ScormCmiMode,
