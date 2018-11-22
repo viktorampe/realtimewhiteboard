@@ -92,13 +92,17 @@ export const environment = {
     // music: 'assets/icons/music.svg',
     // presentatie: 'assets/icons/presentatie.svg',
     // presentation: 'assets/icons/presentation.svg',
-    tasks: 'assets/icons/tasks.svg'
+    tasks: 'assets/icons/tasks.svg',
     // 'tasks-complete': 'assets/icons/tasks-complete.svg',
     // video: 'assets/icons/video.svg',
     // website: 'assets/icons/website.svg',
     // youtube: 'assets/icons/youtube.svg',
 
     // -> other
+    home: 'assets/icons/material/home.svg',
+    'breadcrumb-separator': 'assets/icons/material/chevron-right.svg',
+    'arrow-back': 'assets/icons/material/arrow-back.svg',
+    menu: 'assets/icons/material/menu.svg'
     // alert: 'assets/icons/alert.svg',
     // 'at-sign': 'assets/icons/at-sign.svg',
     // balance: 'assets/icons/balance.svg',

@@ -1,4 +1,4 @@
-import { ScormCmiFixture } from '@campus/dal';
+import { ScormCmiFixture } from './+fixtures/ScormCmi.fixture';
 import { ScormApi } from './scorm-api';
 import {
   ScormCmiMode,
@@ -7,11 +7,13 @@ import {
 } from './scorm-api.interface';
 
 let scormApi: ScormApi;
-let commitSpy: jest.SpyInstance;
+let commit$Spy: jest.SpyInstance;
+let cmi$Spy: jest.SpyInstance;
+let LMSCommitSpy: jest.SpyInstance;
 describe('The scorm API', () => {
   describe('#LMSInitialize - should initialize the API and exercise', () => {
     describe('when not in preview mode', () => {
-      describe('and a current exercise as object is provided', () => {
+      describe('and a current exercise is provided as object', () => {
         beforeEach(() => {
           setupTest(
             new ScormCmiFixture({ mode: ScormCmiMode.CMI_MODE_NORMAL })
@@ -24,37 +26,52 @@ describe('The scorm API', () => {
           );
 
           scormApi.LMSCommit();
-          expect(commitSpy).toHaveBeenCalledWith(
+          expect(commit$Spy).toHaveBeenCalledWith(
             new ScormCmiFixture({ mode: ScormCmiMode.CMI_MODE_NORMAL })
           );
         });
       });
-      describe('and a current exercise is provided', () => {
-        beforeEach(() => {
-          scormApi = new ScormApi(
-            JSON.stringify(
-              new ScormCmiFixture({ mode: ScormCmiMode.CMI_MODE_NORMAL })
-            ),
-            ScormCmiMode.CMI_MODE_NORMAL
-          );
-          scormApi.LMSInitialize();
-        });
-        it('should reset the API', () => {
-          expect(scormApi.lastErrorCode).toBe(ScormErrorCodes.NO_ERROR);
-          expect(scormApi.lastDiagnosticMessage).toBe(
-            'Geen vuiltje aan de lucht...'
-          );
+      describe('and a current exercise is provided as string ', () => {
+        describe('and is valid', () => {
+          beforeEach(() => {
+            scormApi = new ScormApi(
+              JSON.stringify(
+                new ScormCmiFixture({ mode: ScormCmiMode.CMI_MODE_NORMAL })
+              ),
+              ScormCmiMode.CMI_MODE_NORMAL
+            );
+            scormApi.LMSInitialize();
+          });
+          it('should reset the API', () => {
+            expect(scormApi.lastErrorCode).toBe(ScormErrorCodes.NO_ERROR);
+            expect(scormApi.lastDiagnosticMessage).toBe(
+              'Geen vuiltje aan de lucht...'
+            );
 
-          checkOutput(commitSpy, {
-            mode: ScormCmiMode.CMI_MODE_NORMAL
+            checkOutput(commit$Spy, {
+              mode: ScormCmiMode.CMI_MODE_NORMAL
+            });
+          });
+        });
+
+        describe('and is not valid', () => {
+          beforeEach(() => {
+            scormApi = new ScormApi('lalala', ScormCmiMode.CMI_MODE_NORMAL);
+          });
+          it('should return false', () => {
+            expect(scormApi.LMSInitialize()).toBe('false');
+            expect(scormApi.lastErrorCode).toBe(
+              ScormErrorCodes.NOT_INITIALIZED_ERROR
+            );
+            expect(scormApi.lastDiagnosticMessage).toBe(
+              'De oefening werd niet correct opgestart'
+            );
           });
         });
       });
       describe('and no current exercise is provided', () => {
         beforeEach(() => {
-          scormApi = new ScormApi(undefined, ScormCmiMode.CMI_MODE_BROWSE);
-          scormApi.LMSInitialize();
-          commitSpy = jest.spyOn(scormApi.commit$, 'next');
+          setupTest(undefined);
         });
         it('should reset the API', () => {
           expect(scormApi.lastErrorCode).toBe(ScormErrorCodes.NO_ERROR);
@@ -80,7 +97,7 @@ describe('The scorm API', () => {
             suspend_data: []
           });
 
-          checkOutput(commitSpy, expectedValue);
+          checkOutput(commit$Spy, expectedValue);
         });
       });
     });
@@ -91,7 +108,7 @@ describe('The scorm API', () => {
       });
       it('should reset the API', () => {
         scormApi.LMSCommit();
-        expect(commitSpy).not.toHaveBeenCalled();
+        expect(commit$Spy).not.toHaveBeenCalled();
         expect(scormApi.lastErrorCode).toBe(ScormErrorCodes.NO_ERROR);
         expect(scormApi.lastDiagnosticMessage).toBe(
           'Geen vuiltje aan de lucht...'
@@ -101,26 +118,35 @@ describe('The scorm API', () => {
   });
 
   describe('#LMSFinish', () => {
-    let LMSCommitSpy: jest.SpyInstance;
-
     describe('when in preview mode', () => {
       beforeEach(() => {
         setupTest(new ScormCmiFixture({ mode: ScormCmiMode.CMI_MODE_PREVIEW }));
-        LMSCommitSpy = jest.spyOn(scormApi, 'LMSCommit');
       });
-      it(`should not do anything`, () => {
+      it(`should not do anything (do not set value or commit)`, () => {
         expect(scormApi.LMSFinish()).toBe('true');
-
         expect(LMSCommitSpy).not.toHaveBeenCalled();
       });
     });
-    describe('when not in preview mode', () => {
+
+    describe('when in review mode', () => {
+      beforeEach(() => {
+        setupTest(new ScormCmiFixture({ mode: ScormCmiMode.CMI_MODE_REVIEW }));
+      });
+      it(`should not do anything (do not set value or commit)`, () => {
+        expect(scormApi.LMSFinish()).toBe('true');
+        expect(LMSCommitSpy).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('when not in preview or review mode', () => {
       describe('and the lesson is not completed', () => {
         it(`should return 'false'`, () => {
           setupTest(
-            new ScormCmiFixture({ mode: ScormCmiMode.CMI_MODE_BROWSE })
+            new ScormCmiFixture({
+              mode: ScormCmiMode.CMI_MODE_BROWSE,
+              core: { ...this, lesson_status: ScormStatus.STATUS_INCOMPLETE }
+            })
           );
-          LMSCommitSpy = jest.spyOn(scormApi, 'LMSCommit');
           expect(scormApi.LMSFinish()).toBe('false');
 
           expect(LMSCommitSpy).toHaveBeenCalledTimes(1);
@@ -134,7 +160,6 @@ describe('The scorm API', () => {
               core: { ...this, lesson_status: ScormStatus.STATUS_COMPLETED }
             })
           );
-          LMSCommitSpy = jest.spyOn(scormApi, 'LMSCommit');
 
           expect(scormApi.LMSFinish()).toBe('true');
 
@@ -168,6 +193,17 @@ describe('The scorm API', () => {
         `Deze info (i-do-not-exist) is niet beschikbaar`
       );
     });
+
+    it('should not get a value when no exercise is present', () => {
+      setupTest(null, true);
+      expect(scormApi.LMSGetValue('mode')).toBe('false');
+      expect(scormApi.lastErrorCode).toBe(
+        ScormErrorCodes.NOT_INITIALIZED_ERROR
+      );
+      expect(scormApi.lastDiagnosticMessage).toBe(
+        'De oefening werd niet correct opgestart'
+      );
+    });
   });
 
   describe('#LMSSetValue', () => {
@@ -187,13 +223,53 @@ describe('The scorm API', () => {
       );
       expect(scormApi.LMSGetValue('mode')).toBe(ScormCmiMode.CMI_MODE_PREVIEW);
     });
+
+    it('should not set a value if we are in review mode', () => {
+      setupTest(new ScormCmiFixture({ mode: ScormCmiMode.CMI_MODE_REVIEW }));
+
+      expect(scormApi.LMSSetValue('mode', ScormCmiMode.CMI_MODE_NORMAL)).toBe(
+        'false'
+      );
+      expect(scormApi.LMSGetValue('mode')).toBe(ScormCmiMode.CMI_MODE_REVIEW);
+    });
+
+    it('should not set a value when no exercise is present', () => {
+      setupTest(null, true);
+      expect(scormApi.LMSSetValue('mode', ScormCmiMode.CMI_MODE_NORMAL)).toBe(
+        'false'
+      );
+      expect(cmi$Spy).not.toHaveBeenCalled();
+      expect(scormApi.lastErrorCode).toBe(
+        ScormErrorCodes.NOT_INITIALIZED_ERROR
+      );
+      expect(scormApi.lastDiagnosticMessage).toBe(
+        'De oefening werd niet correct opgestart'
+      );
+    });
   });
 
   describe('#LMSCommit', () => {
-    it('should return false when we are in preview mode', () => {
+    it('should not commit when we are in preview mode', () => {
       setupTest(new ScormCmiFixture({ mode: ScormCmiMode.CMI_MODE_PREVIEW }));
+      expect(scormApi.LMSCommit()).toBe('false');
+    });
+
+    it('should not commit when we are in review mode', () => {
+      setupTest(new ScormCmiFixture({ mode: ScormCmiMode.CMI_MODE_REVIEW }));
 
       expect(scormApi.LMSCommit()).toBe('false');
+      expect(commit$Spy).not.toHaveBeenCalled();
+    });
+
+    it('should not commit when there is no current result', () => {
+      setupTest(null, true);
+      expect(scormApi.LMSCommit()).toBe('false');
+      expect(scormApi.lastErrorCode).toBe(
+        ScormErrorCodes.NOT_INITIALIZED_ERROR
+      );
+      expect(scormApi.lastDiagnosticMessage).toBe(
+        'De oefening werd niet correct opgestart'
+      );
     });
 
     it('should trigger the commit stream with the current result', () => {
@@ -203,8 +279,8 @@ describe('The scorm API', () => {
       setupTest(result);
 
       expect(scormApi.LMSCommit()).toBe('true');
-      expect(commitSpy).toHaveBeenCalledTimes(1);
-      expect(commitSpy).toHaveBeenCalledWith(result);
+      expect(commit$Spy).toHaveBeenCalledTimes(1);
+      expect(commit$Spy).toHaveBeenCalledWith(result);
     });
   });
 
@@ -239,11 +315,20 @@ describe('The scorm API', () => {
   });
 });
 
-function setupTest(scormCmiFixture: ScormCmiFixture | any) {
-  scormApi = new ScormApi(scormCmiFixture, scormCmiFixture.mode);
-  commitSpy = jest.spyOn(scormApi.commit$, 'next');
+function setupTest(
+  scormCmiFixture: ScormCmiFixture | any,
+  skipInitialize = false
+) {
+  if (!scormCmiFixture) {
+    scormApi = new ScormApi(null, ScormCmiMode.CMI_MODE_BROWSE);
+  } else {
+    scormApi = new ScormApi(scormCmiFixture, scormCmiFixture.mode);
+  }
+  commit$Spy = jest.spyOn(scormApi.commit$, 'next');
+  cmi$Spy = jest.spyOn(scormApi.cmi$, 'next');
+  LMSCommitSpy = jest.spyOn(scormApi, 'LMSCommit');
 
-  scormApi.LMSInitialize();
+  if (!skipInitialize) scormApi.LMSInitialize();
 }
 
 function checkOutput(spy: jest.SpyInstance, expectedValue: any) {

@@ -82,15 +82,14 @@ export class ScormApi implements ScormApiInterface {
    */
   LMSFinish(): 'true' | 'false' {
     //check exerciseId and exercise info availability
-    if (this.mode === ScormCmiMode.CMI_MODE_PREVIEW) {
+    if (
+      this.mode === ScormCmiMode.CMI_MODE_PREVIEW ||
+      this.mode === ScormCmiMode.CMI_MODE_REVIEW
+    ) {
       return 'true';
     }
 
     this.LMSCommit();
-
-    if (this.checkInitialized() === false) {
-      return 'false';
-    }
 
     if (
       this.currentResult.core.lesson_status !== ScormStatus.STATUS_COMPLETED
@@ -135,7 +134,10 @@ export class ScormApi implements ScormApiInterface {
    */
   LMSSetValue(parameter: string, value: string): 'true' | 'false' {
     //check exerciseId and exercise info availability
-    if (this.mode === ScormCmiMode.CMI_MODE_PREVIEW) {
+    if (
+      this.mode === ScormCmiMode.CMI_MODE_PREVIEW ||
+      this.mode === ScormCmiMode.CMI_MODE_REVIEW
+    ) {
       return 'false';
     }
 
@@ -161,7 +163,10 @@ export class ScormApi implements ScormApiInterface {
     }
 
     //check exerciseId and exercise info availability
-    if (this.mode === ScormCmiMode.CMI_MODE_PREVIEW) {
+    if (
+      this.mode === ScormCmiMode.CMI_MODE_PREVIEW ||
+      this.mode === ScormCmiMode.CMI_MODE_REVIEW
+    ) {
       return 'false';
     }
 

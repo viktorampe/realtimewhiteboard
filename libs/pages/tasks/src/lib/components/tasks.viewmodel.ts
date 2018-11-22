@@ -6,6 +6,7 @@ import {
   MethodInterface,
   PersonInterface,
   TaskEduContentInterface,
+  TaskInstanceFixture,
   TaskInstanceInterface,
   TaskInterface
 } from '@campus/dal';
@@ -189,7 +190,7 @@ export class TasksViewModel {
     const mockStudent = this.getMockStudent();
 
     let mockTaskInstance1: TaskInstanceInterface;
-    mockTaskInstance1 = {
+    mockTaskInstance1 = new TaskInstanceFixture({
       start: new Date(2018, 11 - 1, 5, 0 + 2),
       end: new Date(2018, 11 - 1, 15, 0 + 2),
       alerted: true,
@@ -198,10 +199,10 @@ export class TasksViewModel {
       task: mockTasks[0],
       personId: mockStudent.id,
       student: mockStudent
-    };
+    });
 
     let mockTaskInstance2: TaskInstanceInterface;
-    mockTaskInstance2 = {
+    mockTaskInstance2 = new TaskInstanceFixture({
       start: new Date(2018, 11 - 1, 5, 0 + 2),
       end: new Date(2018, 11 - 1, 6, 0 + 2),
       alerted: true,
@@ -210,10 +211,10 @@ export class TasksViewModel {
       task: mockTasks[1],
       personId: mockStudent.id,
       student: mockStudent
-    };
+    });
 
     let mockTaskInstance3: TaskInstanceInterface;
-    mockTaskInstance3 = {
+    mockTaskInstance3 = new TaskInstanceFixture({
       start: new Date(2018, 11 - 1, 15, 0 + 2),
       end: new Date(2018, 11 - 1, 30, 0 + 2),
       alerted: false,
@@ -222,9 +223,9 @@ export class TasksViewModel {
       task: mockTasks[2],
       personId: mockStudent.id,
       student: mockStudent
-    };
+    });
     let mockTaskInstance4: TaskInstanceInterface;
-    mockTaskInstance4 = {
+    mockTaskInstance4 = new TaskInstanceFixture({
       start: new Date(2018, 11 - 1, 15, 0 + 2),
       end: new Date(2018, 11 - 1, 30, 0 + 2),
       alerted: true,
@@ -233,7 +234,7 @@ export class TasksViewModel {
       task: mockTasks[0],
       personId: mockStudent.id,
       student: mockStudent
-    };
+    });
 
     return [
       mockTaskInstance1,
