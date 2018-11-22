@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HeaderViewModel } from './header.viewmodel';
+import { MockHeaderViewModel } from './header.viewmodel.mock';
 
 @Component({
   selector: 'campus-header',
@@ -8,11 +8,13 @@ import { HeaderViewModel } from './header.viewmodel';
 })
 export class HeaderComponent implements OnInit {
   enableAlerts: boolean;
-  enableMessages: boolean;
+
   breadCrumbs$ = this.headerViewModel.breadCrumbs$;
+  recentAlerts$ = this.headerViewModel.recentAlerts$;
+  recentAlertCount$ = this.headerViewModel.recentAlertCount$;
   backLink$ = this.headerViewModel.backLink$;
 
-  constructor(private headerViewModel: HeaderViewModel) {}
+  constructor(private headerViewModel: MockHeaderViewModel) {}
 
   ngOnInit(): void {
     this.loadFeatureToggles();
@@ -20,7 +22,6 @@ export class HeaderComponent implements OnInit {
 
   private loadFeatureToggles() {
     this.enableAlerts = this.headerViewModel.enableAlerts;
-    this.enableMessages = this.headerViewModel.enableMessages;
   }
 
   onMenuClick() {

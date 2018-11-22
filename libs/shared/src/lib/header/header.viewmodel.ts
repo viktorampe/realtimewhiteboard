@@ -9,15 +9,14 @@ import {
 } from '@campus/dal';
 import { BreadcrumbLinkInterface } from '@campus/ui';
 import { select, Store } from '@ngrx/store';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import {
   EnvironmentAlertsFeatureInterface,
-  EnvironmentMessagesFeatureInterface,
-  ENVIRONMENT_ALERTS_FEATURE_TOKEN,
-  ENVIRONMENT_MESSAGES_FEATURE_TOKEN
+  ENVIRONMENT_ALERTS_FEATURE_TOKEN
 } from '../interfaces/environment.features.interfaces';
 import { HeaderResolver } from './header.resolver';
+import { MockHeaderViewModel, NotificationItem } from './header.viewmodel.mock';
 
 //TODO replace with actual interface
 
@@ -32,52 +31,28 @@ export interface DropdownItemInterface {
   text: string;
 }
 
-// remove when breadcrumb logic is finished
-export const mockBreadCrumbs: BreadcrumbLinkInterface[] = [
-  {
-    displayText: 'level 0',
-    link: ['/level0']
-  },
-  {
-    displayText: 'level 1',
-    link: ['/level1']
-  },
-  {
-    displayText: 'level 2',
-    link: ['/level2']
-  },
-  {
-    displayText: 'level 3',
-    link: ['/level3']
-  }
-];
-
 @Injectable({
   providedIn: 'root'
 })
 export class HeaderViewModel {
   //publics
   enableAlerts: boolean;
-  enableMessages: boolean;
-  //state presentation streams
-  breadCrumbs$: Observable<BreadcrumbLinkInterface[]> = of(mockBreadCrumbs); // TODO select breadcrumbs from store
+  //source streams
+  breadCrumbs$: Observable<BreadcrumbLinkInterface[]>; // TODO select breadcrumbs from store
   currentUser$: Observable<PersonInterface>;
   //presentation stream
-  recentAlerts$: Observable<DropdownItemInterface[]>; //TODO replace interface with the actual dropdown interface
-  recentMessages$: Observable<DropdownItemInterface[]>; //TODO replace interface with the actual dropdown interface
+  recentAlerts$: Observable<NotificationItem[]>; //TODO replace interface with the actual dropdown interface
   backLink$: Observable<string | undefined>;
 
   //state source streams
-  private alertsForUser$: Observable<AlertQueueInterface[]>;
-  private messagesForUser$: Observable<MessageInterface[]>;
+  private alerts$: Observable<AlertQueueInterface[]>;
 
   constructor(
     @Inject(ENVIRONMENT_ALERTS_FEATURE_TOKEN)
     private environmentAlertsFeature: EnvironmentAlertsFeatureInterface,
-    @Inject(ENVIRONMENT_MESSAGES_FEATURE_TOKEN)
-    private environmentMessagesFeature: EnvironmentMessagesFeatureInterface,
     private store: Store<DalState>,
-    private headerResolver: HeaderResolver
+    private headerResolver: HeaderResolver,
+    private mockViewModel: MockHeaderViewModel
   ) {
     this.headerResolver.resolve();
     this.loadFeatureToggles();
@@ -110,7 +85,7 @@ export class HeaderViewModel {
   }
 
   private loadDisplayStream(): void {
-    this.recentAlerts$ = this.getRecentAlerts(this.alertsForUser$);
+    this.recentAlerts$ = this.getRecentAlerts(this.alerts$);
     this.recentMessages$ = this.getRecentMessages(this.messagesForUser$);
   }
 

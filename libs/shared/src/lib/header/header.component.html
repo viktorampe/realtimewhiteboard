@@ -13,24 +13,20 @@
         <campus-button (click)="dropDownAlerts.toggle()">Meldingen</campus-button>
         <campus-dropdown-menu #dropDownAlerts
                               showHeader="true"
-                              [newItemCount]=""
+                              [newItemCount]="recentAlertCount$|async"
                               [headerIcon]=""
                               itemType="meldingen"
                               linkText="Alle meldingen"
-                              linkUrl="/notifications"></campus-dropdown-menu>
+                              linkUrl="/notifications">
+          <ng-container *ngIf="(recentAlerts$|async) as recentAlerts">
+            <campus-notification-dropdown-item *ngFor="let alert of recentAlerts"
+                                               [titleText]="alert.titleText"
+                                               [icon]="alert.icon"></campus-notification-dropdown-item>
+          </ng-container>
+
+        </campus-dropdown-menu>
       </div>
-      <div class="shared-header__app-bar__messages"
-           bar__right
-           *ngIf="enableMessages">
-        <campus-button (click)="dropDownMessages.toggle()">Berichten</campus-button>
-        <campus-dropdown-menu #dropDownMessages
-                              showHeader="true"
-                              [newItemCount]=""
-                              [headerIcon]=""
-                              itemType="berichten"
-                              linkText="Nieuw bericht"
-                              linkUrl="/messages"></campus-dropdown-menu>
-      </div>
+
       <div class="shared-header__app-bar__profile-menu"
            bar__right>
         <campus-button (click)="dropDownProfile.toggle()">Profile</campus-button>
@@ -40,18 +36,17 @@
     </campus-app-bar>
   </div>
   <div class="shared-header__page-bar">
-        <mat-icon *ngIf="(backLink$|async) as link; else hamburgerMenu"
-                  [routerLink]="link"
-                  class="shared-header__page-bar_nav-icon"
-                  [svgIcon]="'arrow-back'"
-                  hide-desktop></mat-icon>
-      <ng-template #hamburgerMenu>
-        <mat-icon
-              (click)="onMenuClick()"
+    <mat-icon *ngIf="(backLink$|async) as link; else hamburgerMenu"
+              [routerLink]="link"
               class="shared-header__page-bar_nav-icon"
-              [svgIcon]="'menu'"
+              [svgIcon]="'arrow-back'"
               hide-desktop></mat-icon>
-      </ng-template>
+    <ng-template #hamburgerMenu>
+      <mat-icon (click)="onMenuClick()"
+                class="shared-header__page-bar_nav-icon"
+                [svgIcon]="'menu'"
+                hide-desktop></mat-icon>
+    </ng-template>
     <div id="page-bar-container">
     </div>
   </div>
