@@ -1,4 +1,5 @@
 export * from './Bundle.fixture';
+export * from './Content.fixture';
 export * from './EduContent.fixture';
 export * from './EduContentMetadata.fixture';
 export * from './EduContentProductType.fixture';
@@ -8,4 +9,6 @@ export * from './Person.fixture';
 export * from './Task.fixture';
 export * from './TaskEduContent.fixture';
 export * from './TaskInstance.fixture';
+export * from './unlockedBoekeGroup.fixture';
+export * from './unlockedBoekeStudent.fixture';
 export * from './UnlockedContent.fixture';

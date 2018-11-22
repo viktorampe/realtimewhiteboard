@@ -1,95 +1,44 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
-import { BundleInterface, EduContentInterface } from '@campus/dal';
-import { FILTER_SERVICE_TOKEN } from '@campus/shared';
-import { ListFormat } from '@campus/ui';
-import { Store, StoreModule } from '@ngrx/store';
-import { hot } from '@nrwl/nx/testing';
+import {
+  async,
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick
+} from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { ActivatedRoute, Params } from '@angular/router';
+import { FilterService, FILTER_SERVICE_TOKEN } from '@campus/shared';
+import { ListFormat, ListViewItemDirective, UiModule } from '@campus/ui';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { BundlesViewModel } from '../bundles.viewmodel';
 import { MockViewModel } from '../bundles.viewmodel.mocks';
 import { BundlesComponent } from './bundles.component';
 
-function createEduContent(): EduContentInterface {
-  return {
-    type: '?'
-  };
-}
-
-function createBundle(name: string, learningAreaId: number): BundleInterface {
-  const startDate: Date = new Date();
-  const endDate: Date = new Date();
-  endDate.setHours(endDate.getHours() + 2);
-
-  return {
-    id: Math.round(Math.random() * 10000),
-    teacherId: Math.round(Math.random() * 10000),
-    learningAreaId: learningAreaId,
-    name: name,
-    description: 'this description includes' + name,
-    start: startDate,
-    end: endDate,
-    eduContents: [
-      createEduContent(),
-      createEduContent(),
-      createEduContent(),
-      createEduContent(),
-      createEduContent()
-    ]
-  };
-}
-
-function filterBundlesExpect(
-  component: BundlesComponent,
-  filterInput: string,
-  allBundles: BundleInterface[],
-  filteredBundles: BundleInterface[]
-) {
-  component.filterInput$.next(filterInput);
-  expect(
-    component.getDisplayedBundles(
-      hot('a', { a: allBundles }),
-      component.filterInput$
-    )
-  ).toBeObservable(
-    hot('a', {
-      a: filteredBundles
-    })
-  );
-}
-
 describe('BundlesComponent', () => {
+  let params: Subject<Params>;
+  let bundlesViewModel: BundlesViewModel;
   let component: BundlesComponent;
   let fixture: ComponentFixture<BundlesComponent>;
 
-  const bundle1 = createBundle('text for search one', 19);
-  const bundle2 = createBundle('text for search two', 20);
-  const bundle3 = createBundle('text for search three', 983);
-  const bundle4 = createBundle('text for search four', 378);
-
   beforeEach(async(() => {
+    params = new BehaviorSubject<Params>({ area: 1 });
     TestBed.configureTestingModule({
-      imports: [StoreModule.forRoot({})],
+      imports: [UiModule],
       declarations: [BundlesComponent],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
-        { provide: ActivatedRoute, value: {} },
+        { provide: ActivatedRoute, useValue: { params: params } },
         { provide: BundlesViewModel, useClass: MockViewModel },
-        {
-          provide: FILTER_SERVICE_TOKEN,
-          useValue: {
-            filter: () => {}
-          }
-        },
-        Store
+        { provide: FILTER_SERVICE_TOKEN, useClass: FilterService }
       ]
     }).compileComponents();
+    bundlesViewModel = TestBed.get(BundlesViewModel);
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(BundlesComponent);
     component = fixture.componentInstance;
-    component.filterInput$.next('');
     fixture.detectChanges();
   });
 
@@ -97,50 +46,51 @@ describe('BundlesComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('it should return all bundles', () => {
-    filterBundlesExpect(
-      component,
-      '',
-      [bundle1, bundle2, bundle3, bundle4],
-      [bundle1, bundle2, bundle3, bundle4]
-    );
-  });
-
-  it('should filter out all but 1 bundle, case insensitve', () => {
-    filterBundlesExpect(
-      component,
-      'tWo',
-      [bundle1, bundle2, bundle3, bundle4],
-      [bundle2]
-    );
-  });
-
-  it('should return a no bundles', () => {
-    filterBundlesExpect(
-      component,
-      'not in the list',
-      [bundle1, bundle2, bundle3, bundle4],
-      []
-    );
-  });
-
-  it('should reset filter input', () => {
-    component.filterInput$.next('lol');
-    component.resetFilterInput();
-    expect(component.filterInput$).toBeObservable(hot('a', { a: '' }));
-  });
-
-  it('should change filter input', () => {
-    component.onChangeFilterInput('changedFilterInput');
-    expect(component.filterInput$).toBeObservable(
-      hot('a', { a: 'changedFilterInput' })
-    );
-  });
-
-  it('should change listformat', () => {
-    const spy = jest.spyOn(component['bundlesViewModel'], 'changeListFormat');
-    component.clickChangeListFormat(ListFormat.LINE);
+  it('should call the viewModel changeListFormat method when calling clickChangeListFormat', () => {
+    const spy = jest.spyOn(bundlesViewModel, 'changeListFormat');
+    component.clickChangeListFormat(ListFormat.GRID);
     expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy).toHaveBeenCalledWith(ListFormat.LINE);
+    expect(spy).toHaveBeenCalledWith(ListFormat.GRID);
   });
+
+  it('should get the listFormat$ from the vm', () => {
+    expect(component.listFormat$).toBe(bundlesViewModel.listFormat$);
+  });
+
+  it('should apply the filter case insensitive on the list of bundles', async(() => {
+    const listDE = fixture.debugElement.query(By.css('campus-list-view'));
+    const listItems = listDE.queryAll(By.directive(ListViewItemDirective));
+    expect(listItems.length).toBe(4);
+
+    component.filterTextInput.setValue('foo');
+    fixture.detectChanges();
+
+    fixture.whenStable().then(() => {
+      const filteredListItems = listDE.queryAll(
+        By.directive(ListViewItemDirective)
+      );
+      expect(filteredListItems.length).toBe(3);
+    });
+  }));
+
+  it(
+    'should call vm.getLearningAreaById and vm.getSharedBundlesWithContentInfo on route change',
+    fakeAsync(() => {
+      const spyLearningArea = jest.spyOn(
+        bundlesViewModel,
+        'getLearningAreaById'
+      );
+      const spyBundles = jest.spyOn(
+        bundlesViewModel,
+        'getSharedBundlesWithContentInfo'
+      );
+      params.next({ area: 2 });
+      tick(); // make sure the async observable resolves
+
+      expect(spyLearningArea).toHaveBeenCalledTimes(1);
+      expect(spyLearningArea).toHaveBeenCalledWith(2);
+      expect(spyBundles).toHaveBeenCalledTimes(2); // subscribed 2 times to sharedInfo$ in the template
+      expect(spyBundles).toHaveBeenCalledWith(2);
+    })
+  );
 });
