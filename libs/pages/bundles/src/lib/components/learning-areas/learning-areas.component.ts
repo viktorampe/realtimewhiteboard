@@ -1,6 +1,10 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/shared';
-import { FilterTextInputComponent, ListFormat } from '@campus/ui';
+import {
+  FilterableItem,
+  FilterTextInputComponent,
+  ListFormat
+} from '@campus/ui';
 import { Observable } from 'rxjs';
 import { BundlesViewModel } from '../bundles.viewmodel';
 import {
@@ -13,7 +17,13 @@ import {
   templateUrl: './learning-areas.component.html',
   styleUrls: ['./learning-areas.component.scss']
 })
-export class LearningAreasComponent implements OnInit {
+export class LearningAreasComponent
+  implements
+    OnInit,
+    FilterableItem<
+      LearningAreasWithBundlesInfoInterface,
+      LearningAreaInfoInterface
+    > {
   protected listFormat = ListFormat;
 
   listFormat$: Observable<ListFormat>;
@@ -31,17 +41,16 @@ export class LearningAreasComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.filterTextInput.filterFn = (info, searchText) =>
-      this.filterFn(info, searchText.toString());
     this.listFormat$ = this.bundlesViewModel.listFormat$;
     this.sharedInfo$ = this.bundlesViewModel.sharedLearningAreas$;
+    this.filterTextInput.setFilterableItem(this);
   }
 
   clickChangeListFormat(value: ListFormat): void {
     this.bundlesViewModel.changeListFormat(value);
   }
 
-  private filterFn(
+  filterFn(
     info: LearningAreasWithBundlesInfoInterface,
     searchText: string
   ): LearningAreaInfoInterface[] {

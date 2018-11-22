@@ -49,7 +49,7 @@ export class BundlesComponent implements OnInit {
     this.learningArea$ = this.getLearningArea();
     this.sharedInfo$ = this.getSharedInfo();
 
-    this.filterTextInput.filterFn = this.filterFn.bind(this);
+    this.filterTextInput.setFilterableItem(this);
     this.listFormat$ = this.bundlesViewModel.listFormat$;
   }
 
@@ -74,7 +74,7 @@ export class BundlesComponent implements OnInit {
     );
   }
 
-  private filterFn(
+  filterFn(
     info: BundlesWithContentInfoInterface,
     searchText: string
   ): BundleInfoInterface[] {
