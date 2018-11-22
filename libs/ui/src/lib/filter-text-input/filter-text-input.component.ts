@@ -41,15 +41,6 @@ export class FilterTextInputComponent<I, O> {
         return this.filterableItem.filterFn(source, filterText);
       })
     );
-
-    /*this.result$ = this.input.valueChanges.pipe(
-      startWith(''),
-      map(filterText => {
-        if (this.filterableItem) {
-          return this.filterableItem.filterFn(source, filterText);
-        }
-      })
-    );*/
   }
 
   /**

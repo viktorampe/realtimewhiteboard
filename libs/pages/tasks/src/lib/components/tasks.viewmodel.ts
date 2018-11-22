@@ -10,7 +10,7 @@ import {
   TaskInterface
 } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import {
   LearningAreasWithTaskInstanceInfoInterface,
   TaskInstancesWithEduContentInfoInterface,
@@ -49,6 +49,16 @@ export class TasksViewModel {
     this.selectedTaskInstance$ = this.getMockSelectedTaskInstance();
     this.taskInstanceWithEduContents$ = this.getMockTaskInstanceWithEduContents();
     this.listFormat$ = this.getMockListFormat();
+  }
+
+  getLearningAreaById(areaId: number): Observable<LearningAreaInterface> {
+    return of(this.getMockLearningAreas()[0]);
+  }
+
+  taskInstancesByLearningArea(
+    learningAreaId: number
+  ): Observable<TaskInstancesWithEduContentInfoInterface> {
+    return this.getMockTaskInstancesByLearningArea();
   }
 
   private getMockLearningAreasWithTaskInstances(): Observable<

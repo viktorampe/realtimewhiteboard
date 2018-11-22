@@ -7,6 +7,7 @@ import {
   FILTER_SERVICE_TOKEN
 } from '@campus/shared';
 import { ListFormat, ListViewItemDirective, UiModule } from '@campus/ui';
+import 'jest'; // required to use `expect` from jest instead of the implementation from jasmine
 import { BundlesViewModel } from '../bundles.viewmodel';
 import { MockViewModel } from '../bundles.viewmodel.mocks';
 import { LearningAreasComponent } from './learning-areas.component';
@@ -53,15 +54,16 @@ describe('LearningAreasComponent', () => {
     expect(component.sharedInfo$).toBe(bundlesViewModel.sharedLearningAreas$);
   });
 
-  it('should call vm.filterFn when filterTextInput.filterFn is called', () => {
-    const filterSource = { learningAreas: [] };
-    const filterText = '';
+  it('should call vm.filterFn when filterTextInput is changed', () => {
+    const filterText = 'foo';
     const spy = jest.spyOn(filterService, 'filter');
-    component.filterTextInput.filterFn(filterSource, filterText);
+    component.filterTextInput.setValue(filterText);
+    fixture.detectChanges();
     expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy).toHaveBeenCalledWith(filterSource.learningAreas, {
-      learningArea: { name: filterText }
-    });
+    expect(spy).toHaveBeenCalledWith(
+      expect.arrayContaining([expect.anything()]),
+      { learningArea: { name: filterText } }
+    );
   });
 
   it('should apply the filter case insensitive on the list of learning areas', async(() => {
