@@ -52,6 +52,8 @@ export class MockTasksViewModel {
   getTaskById = this.getMockSelectedTaskInstance;
   getTaskEduContents = (taskId: number) =>
     new BehaviorSubject(this.getMockEducontents());
+  taskInstancesByLearningArea = (learningAreaId: number) =>
+    this.getMockTaskInstancesByLearningArea();
 
   // mockdata
   private loadMockData() {
