@@ -17,6 +17,7 @@ import {
   styleUrls: ['./tasks.component.scss']
 })
 export class TasksComponent implements OnInit {
+  protected listFormat = ListFormat;
   listFormat$: Observable<ListFormat> = this.viewModel.listFormat$;
 
   taskInstances$: Observable<TaskInstancesWithEduContentInfoInterface>;
@@ -60,7 +61,7 @@ export class TasksComponent implements OnInit {
     return this.routeParams$.pipe(
       map(params => params.area),
       switchMap(areaId => {
-        return this.viewModel.taskInstancesByLearningArea(areaId);
+        return this.viewModel.taskInstancesByLearningArea();
       })
     );
   }

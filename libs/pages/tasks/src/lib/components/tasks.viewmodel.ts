@@ -20,17 +20,17 @@ import {
   UiActions,
   UiQuery
 } from '@campus/dal';
+import { ScormStatus } from '@campus/scorm';
 import { ListFormat } from '@campus/ui';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable, of } from 'rxjs';
 import { flatMap, map } from 'rxjs/operators';
-import { ScormStatus } from './../../../../../dal/src/lib/results/enums/scorm-status.enum';
 import { TasksResolver } from './tasks.resolver';
 import {
   LearningAreasWithTaskInstanceInfoInterface,
-  LearningAreaWithTaskInfo,
+  LearningAreaWithTaskInfoInterface,
   TaskInstancesWithEduContentInfoInterface,
-  TaskInstanceWithEduContentsInfoInterface
+  TaskInstanceWithEduContentInfoInterface
 } from './tasks.viewmodel.interfaces';
 
 @Injectable({
@@ -50,7 +50,9 @@ export class TasksViewModel {
   >;
 
   //dictionaries
-  private eduContentIdsPerTaskId$: Observable<Map<number, number[]>>;
+  private eduContentIdsPerTaskId$: Observable<
+    Map<number, Map<number, boolean>[]>
+  >;
   private tasksPerLearningAreaId$: Observable<Map<number, TaskInterface[]>>;
   private tasksPerTeacherId$: Observable<Map<number, TaskInterface[]>>;
   // private resultsPerTaskInstanceId$: Observable<Map<number, ResultInterface[]>>;
@@ -72,7 +74,7 @@ export class TasksViewModel {
   >;
 
   public taskInstanceWithEduContents$: Observable<
-    TaskInstanceWithEduContentsInfoInterface
+    TaskInstanceWithEduContentInfoInterface
   >;
 
   constructor(
@@ -174,13 +176,15 @@ export class TasksViewModel {
       this.eduContentIdsPerTaskId$,
       this.teachers$
     ).pipe(
-      map(([tasks, educontents, educontentIdsPerTaskId, teachers]) =>
+      map(([tasks, eduContents, eduContentIdsPerTaskId, teachers]) =>
         tasks.map(task => {
           return {
             ...task,
-            eduContents: educontentIdsPerTaskId
-              .get(task.id)
-              .map(id => educontents.find(eduC => eduC.id === id)),
+            eduContents: this.getEduContentWithSubmitted(
+              task.id,
+              eduContents,
+              eduContentIdsPerTaskId
+            ),
             teacher: teachers.find(teacher => task.personId === teacher.id)
           };
         })
@@ -228,20 +232,12 @@ export class TasksViewModel {
     this.learningAreasWithTaskInstanceInfo$ = this.learningAreasWithTasks$.pipe(
       map(
         (learningAreas): LearningAreasWithTaskInstanceInfoInterface => {
-          const learningAreasWithInfo: LearningAreaWithTaskInfo[] = learningAreas.map(
+          const learningAreasWithInfo: LearningAreaWithTaskInfoInterface[] = learningAreas.map(
             area => {
               const totalTasksInArea = area.tasks.length;
-              const tasksFinishedAmount = area.tasks.reduce(
-                (totalAllTasks, task) => {
-                  return (
-                    this.getFinishedEduContentInTaskInstanceCount(
-                      task.instance,
-                      task.eduContents
-                    ) + totalAllTasks
-                  );
-                },
-                0
-              );
+              const tasksFinishedAmount = area.tasks.filter(task =>
+                this.isTaskFinished(task)
+              ).length;
 
               return {
                 learningArea: area,
@@ -266,11 +262,12 @@ export class TasksViewModel {
 
     this.taskInstanceWithEduContents$ = this.taskInstanceWithResults$.pipe(
       map(
-        (instance): TaskInstanceWithEduContentsInfoInterface => {
+        (instance): TaskInstanceWithEduContentInfoInterface => {
           return {
             taskInstance: instance as TaskInstanceInterface,
             taskEduContents: instance.task.taskEduContents,
-            finished: instance.isFinished //TODO: aanpassen
+            taskEduContentsCount: instance.task.taskEduContents.length,
+            finished: (instance.task as TaskWithFinishedInterface).finished
           };
         }
       )
@@ -299,28 +296,45 @@ export class TasksViewModel {
     );
   }
 
-  // creates a Map<number, number[]>
+  // creates a Map<number, Map<number, boolean>[]>
   // the keys are the taskId
-  // the values are an array of the ids of the associated Educontent
+  // the values are an array of the dictionaries of the associated EducontentId and its submitted value
+  // gist: Map<taskId, [Map<eduContentId, eduContentSubmitted>]>
+  // example: Map<1, [Map<2, true>]>
   private getEduContentIdsPerTaskId$(
     taskEducontents$: Observable<TaskEduContentWithSubmittedInterface[]>
   ) {
     return taskEducontents$.pipe(
       map(taskEducontents =>
         taskEducontents.reduce((dict, taskEducontent) => {
-          let educontentIds: number[];
+          let educontentIds: Map<number, boolean>[];
           if (dict.has(taskEducontent.taskId)) {
             educontentIds = dict.get(taskEducontent.taskId);
-            educontentIds.push(taskEducontent.eduContentId);
+            educontentIds.push(
+              this.getSubmittedPerEduContentId(taskEducontent)
+            );
           } else {
-            educontentIds = [taskEducontent.eduContentId];
+            educontentIds = [this.getSubmittedPerEduContentId(taskEducontent)];
           }
           dict.set(taskEducontent.taskId, educontentIds);
 
           return dict;
-        }, new Map<number, number[]>())
+        }, new Map<number, Map<number, boolean>[]>())
       )
     );
+  }
+
+  // creates a Map<number, boolean>
+  // the keys are the educontentId
+  // the value is the eduContent.submitted
+  // note: this assumes that every task has a single taskInstance,
+  // which is true for Student
+  private getSubmittedPerEduContentId(
+    taskEduContent: TaskEduContentWithSubmittedInterface
+  ) {
+    return new Map<number, boolean>([
+      [taskEduContent.eduContentId, taskEduContent.submitted]
+    ]);
   }
 
   // creates a Map<number, TaskInterface[]>
@@ -390,16 +404,30 @@ export class TasksViewModel {
     );
   }
 
-  private getFinishedEduContentInTaskInstanceCount(
-    taskInstance: TaskInstanceWithResultsInterface,
-    taskEducontents: EduContentInterface[]
-  ): number {
-    return 1;
+  private getEduContentWithSubmitted(
+    taskId: number,
+    eduContents: EduContentInterface[],
+    educontentIdsPerTaskId: Map<number, Map<number, boolean>[]>
+  ): EduContentWithSubmittedInterface[] {
+    return educontentIdsPerTaskId
+      .get(taskId)
+      .map(dictOfEducontentIdAndSubmitted =>
+        Array.from(dictOfEducontentIdAndSubmitted.entries()).map(
+          ([educontentId, submittedValue]) => {
+            return {
+              ...eduContents.find(eduC => eduC.id === educontentId),
+              submitted: submittedValue
+            } as EduContentWithSubmittedInterface;
+          }
+        )
+      )
+      .reduce((acc, val) => acc.concat(val), []);
+  }
 
-    // return taskInstance.results.every(
-    //       result => result.status === ScormStatus.STATUS_COMPLETED
-    //     ) //TODO: aanpassen
-    // ).length;
+  private isTaskFinished(task: TaskInterface): boolean {
+    return task.eduContents
+      .map(eduC => eduC as EduContentWithSubmittedInterface)
+      .every(eduC => eduC.submitted);
   }
 
   private flattenArrayToUniqueValues(array: any[]): any[] {
@@ -484,4 +512,12 @@ export interface TaskInstanceWithResultsInterface
 export interface TaskEduContentWithSubmittedInterface
   extends TaskEduContentInterface {
   submitted: boolean;
+}
+
+export interface EduContentWithSubmittedInterface extends EduContentInterface {
+  submitted: boolean;
+}
+
+export interface TaskWithFinishedInterface extends TaskInterface {
+  finished: boolean;
 }

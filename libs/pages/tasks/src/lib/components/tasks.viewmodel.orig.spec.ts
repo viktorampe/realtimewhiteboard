@@ -16,7 +16,6 @@ import {
   StateFeatureBuilder,
   TaskActions,
   TaskEduContentFixture,
-  TaskEduContentInterface,
   TaskFixture,
   TaskInstanceFixture,
   TaskInstanceInterface,
@@ -28,11 +27,12 @@ import {
 import { ListFormat } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
-import { of } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { ScormStatus } from '../../../../../dal/src/lib/results/enums/scorm-status.enum';
 import { TasksResolver } from './tasks.resolver';
-import { TasksViewModel } from './tasks.viewmodel';
+import {
+  TaskEduContentWithSubmittedInterface,
+  TasksViewModel
+} from './tasks.viewmodel';
 
 let usedUserState;
 let usedLearningAreaState;
@@ -136,9 +136,9 @@ describe('TasksViewModel met State', () => {
   let teachers: PersonInterface[];
   let tasks: TaskInterface[];
   let eduContents: EduContentInterface[];
-  let taskInstances: TaskInstanceInterface[];
+  let taskInstance: TaskInstanceInterface;
   let results: ResultInterface[];
-  let taskEduContents: TaskEduContentInterface[];
+  let taskEduContents: TaskEduContentWithSubmittedInterface[];
   let listFormat: ListFormat;
 
   function setInitialState() {
@@ -181,14 +181,10 @@ describe('TasksViewModel met State', () => {
     );
 
     // Taskinstance State
-    taskInstances = [
-      new TaskInstanceFixture({ id: 1, taskId: 1, personId: 1 }),
-      new TaskInstanceFixture({ id: 2, taskId: 2, personId: 1 }),
-      new TaskInstanceFixture({ id: 3, taskId: 3, personId: 1 })
-    ];
+    taskInstance = new TaskInstanceFixture({ id: 1, taskId: 1, personId: 1 });
     // usedTaskInstanceState = TaskInstanceReducer.reducer(
     //   TaskInstanceReducer.initialState,
-    //   new TaskInstanceActions.TaskInstancesLoaded({ taskInstances })
+    //   new TaskInstanceActions.TaskInstancesLoaded({ taskInstance })
     // );
 
     // Result State
@@ -210,24 +206,33 @@ describe('TasksViewModel met State', () => {
 
     // TaskEducontent State
     taskEduContents = [
-      new TaskEduContentFixture({
-        id: 1,
-        teacherId: 186,
-        taskId: 1,
-        eduContentId: 1
-      }),
-      new TaskEduContentFixture({
-        id: 2,
-        teacherId: 187,
-        taskId: 2,
-        eduContentId: 2
-      }),
-      new TaskEduContentFixture({
-        id: 3,
-        teacherId: 187,
-        taskId: 1,
-        eduContentId: 2
-      })
+      {
+        ...new TaskEduContentFixture({
+          id: 1,
+          teacherId: 186,
+          taskId: 1,
+          eduContentId: 1
+        }),
+        submitted: true
+      },
+      {
+        ...new TaskEduContentFixture({
+          id: 2,
+          teacherId: 187,
+          taskId: 2,
+          eduContentId: 2
+        }),
+        submitted: true
+      },
+      {
+        ...new TaskEduContentFixture({
+          id: 3,
+          teacherId: 187,
+          taskId: 1,
+          eduContentId: 2
+        }),
+        submitted: true
+      }
     ];
     // usedTaskEducontentState = TaskEduContentReducer.reducer(
     //   TaskEduContentReducer.initialState,
@@ -278,8 +283,8 @@ describe('TasksViewModel met State', () => {
     });
 
     it('should get the taskInstances from the provided state', () => {
-      expect(tasksViewModel['taskInstances$']).toBeObservable(
-        hot('(a|)', { a: taskInstances })
+      expect(tasksViewModel['taskInstance$']).toBeObservable(
+        hot('(a|)', { a: taskInstance })
       );
     });
 
@@ -299,480 +304,6 @@ describe('TasksViewModel met State', () => {
       expect(tasksViewModel.listFormat$).toBeObservable(
         hot('a', { a: listFormat })
       );
-    });
-  });
-
-  describe('intermediate streams', () => {
-    describe('tasksWithRelationInfo$', () => {
-      beforeEach(() => {
-        setInitialState();
-      });
-
-      it('should return', () => {
-        expect(tasksViewModel['tasksWithRelationInfo$']).toBeTruthy();
-      });
-
-      it('should return a stream with the correct amount of tasks', () => {
-        const outputAmount$ = tasksViewModel['tasksWithRelationInfo$'].pipe(
-          map(tasksArray => tasksArray.length)
-        );
-
-        expect(outputAmount$).toBeObservable(hot('a', { a: 3 }));
-      });
-
-      it('should return a stream with the correct amount of educontents per task', () => {
-        const outputAmount$ = tasksViewModel['tasksWithRelationInfo$'].pipe(
-          map(tasksArray => tasksArray[0].eduContents.length)
-        );
-
-        expect(outputAmount$).toBeObservable(hot('a', { a: 2 }));
-      });
-
-      it('should return the correct stream', () => {
-        const expectedResult = [
-          new TaskFixture({
-            id: 1,
-            personId: 186,
-            learningAreaId: 1,
-            eduContents: [
-              new EduContentFixture({ id: 1 }),
-              new EduContentFixture({ id: 2 })
-            ],
-            learningArea: new LearningAreaFixture(),
-            teacher: new PersonFixture({ id: 186 })
-          }),
-          new TaskFixture({
-            id: 2,
-            personId: 187,
-            learningAreaId: 1,
-            eduContents: [new EduContentFixture({ id: 2 })],
-            learningArea: new LearningAreaFixture(),
-            teacher: new PersonFixture({ id: 187 })
-          }),
-          new TaskFixture({
-            id: 3,
-            personId: 187,
-            learningAreaId: 2,
-            eduContents: [],
-            learningArea: new LearningAreaFixture({ id: 2 }),
-            teacher: new PersonFixture({ id: 187 })
-          })
-        ];
-
-        expect(tasksViewModel['tasksWithRelationInfo$']).toBeObservable(
-          hot('a', { a: expectedResult })
-        );
-      });
-    });
-  });
-
-  describe('taskInstancesWithRelationInfo$', () => {
-    beforeEach(() => {
-      setInitialState();
-    });
-
-    it('should return', () => {
-      expect(tasksViewModel['taskInstancesWithRelationInfo$']).toBeTruthy();
-    });
-
-    it('should return the correct stream', () => {
-      const expectedResult = [
-        {
-          ...new TaskInstanceFixture({
-            id: 1,
-            taskId: 1,
-            personId: 1,
-            task: new TaskFixture({
-              id: 1,
-              personId: 186,
-              learningAreaId: 1,
-              eduContents: [
-                new EduContentFixture({ id: 1 }),
-                new EduContentFixture({ id: 2 })
-              ],
-              learningArea: new LearningAreaFixture(),
-              teacher: new PersonFixture({ id: 186 })
-            })
-          }),
-          results: [
-            new ResultFixture({
-              id: 1,
-              eduContentId: 1,
-              taskId: 1,
-              personId: 1
-            }),
-            new ResultFixture({
-              id: 2,
-              eduContentId: 2,
-              taskId: 1,
-              personId: 1
-            }),
-            new ResultFixture({
-              id: 3,
-              eduContentId: 2,
-              taskId: 1,
-              personId: 1,
-              status: ScormStatus.STATUS_INCOMPLETE
-            })
-          ]
-        },
-        {
-          ...new TaskInstanceFixture({
-            id: 2,
-            taskId: 2,
-            personId: 1,
-            task: new TaskFixture({
-              id: 2,
-              personId: 187,
-              learningAreaId: 1,
-              eduContents: [new EduContentFixture({ id: 2 })],
-              learningArea: new LearningAreaFixture(),
-              teacher: new PersonFixture({ id: 187 })
-            })
-          }),
-          results: []
-        },
-        {
-          ...new TaskInstanceFixture({
-            id: 3,
-            taskId: 3,
-            personId: 1,
-            task: new TaskFixture({
-              id: 3,
-              personId: 187,
-              learningAreaId: 2,
-              eduContents: [],
-              learningArea: new LearningAreaFixture({ id: 2 }),
-              teacher: new PersonFixture({ id: 187 })
-            })
-          }),
-          results: []
-        }
-      ];
-
-      expect(tasksViewModel['taskInstancesWithRelationInfo$']).toBeObservable(
-        hot('a', { a: expectedResult })
-      );
-    });
-  });
-
-  describe('tasksWithInstances$', () => {
-    beforeEach(() => {
-      setInitialState();
-    });
-
-    it('should return', () => {
-      expect(tasksViewModel['tasksWithInstances$']).toBeTruthy();
-    });
-
-    it('should return the correct stream', () => {
-      const expectedResult = [
-        {
-          ...new TaskFixture({
-            id: 1,
-            personId: 186,
-            learningAreaId: 1
-          }),
-          instances: [
-            {
-              ...new TaskInstanceFixture({
-                id: 1,
-                taskId: 1,
-                personId: 1,
-                task: new TaskFixture({
-                  id: 1,
-                  personId: 186,
-                  learningAreaId: 1,
-                  eduContents: [
-                    new EduContentFixture({ id: 1 }),
-                    new EduContentFixture({ id: 2 })
-                  ],
-                  learningArea: new LearningAreaFixture(),
-                  teacher: new PersonFixture({ id: 186 })
-                })
-              }),
-              results: [
-                new ResultFixture({
-                  id: 1,
-                  eduContentId: 1,
-                  taskId: 1,
-                  personId: 1
-                }),
-                new ResultFixture({
-                  id: 2,
-                  eduContentId: 2,
-                  taskId: 1,
-                  personId: 1
-                }),
-                new ResultFixture({
-                  id: 3,
-                  eduContentId: 2,
-                  taskId: 1,
-                  personId: 1,
-                  status: ScormStatus.STATUS_INCOMPLETE
-                })
-              ]
-            }
-          ]
-        },
-
-        {
-          ...new TaskFixture({
-            id: 2,
-            personId: 187,
-            learningAreaId: 1
-          }),
-          instances: [
-            {
-              ...new TaskInstanceFixture({
-                id: 2,
-                taskId: 2,
-                personId: 1,
-                task: new TaskFixture({
-                  id: 2,
-                  personId: 187,
-                  learningAreaId: 1,
-                  eduContents: [new EduContentFixture({ id: 2 })],
-                  learningArea: new LearningAreaFixture(),
-                  teacher: new PersonFixture({ id: 187 })
-                })
-              }),
-              results: []
-            }
-          ]
-        },
-        {
-          ...new TaskFixture({
-            id: 3,
-            personId: 187,
-            learningAreaId: 2
-          }),
-          instances: [
-            {
-              ...new TaskInstanceFixture({
-                id: 3,
-                taskId: 3,
-                personId: 1,
-                task: new TaskFixture({
-                  id: 3,
-                  personId: 187,
-                  learningAreaId: 2,
-                  eduContents: [],
-                  learningArea: new LearningAreaFixture({ id: 2 }),
-                  teacher: new PersonFixture({ id: 187 })
-                })
-              }),
-              results: []
-            }
-          ]
-        }
-      ];
-
-      expect(tasksViewModel['tasksWithInstances$']).toBeObservable(
-        hot('a', { a: expectedResult })
-      );
-    });
-  });
-
-  describe('learningAreasWithTasks$', () => {
-    beforeEach(() => {
-      setInitialState();
-    });
-
-    it('should return', () => {
-      expect(tasksViewModel['learningAreasWithTasks$']).toBeTruthy();
-    });
-
-    it('should return the correct stream', () => {
-      const expectedResult = [
-        {
-          ...new LearningAreaFixture({}),
-          tasks: [
-            {
-              ...new TaskFixture({
-                id: 1,
-                personId: 186,
-                learningAreaId: 1
-              }),
-              instances: [
-                {
-                  ...new TaskInstanceFixture({
-                    id: 1,
-                    taskId: 1,
-                    personId: 1,
-                    task: new TaskFixture({
-                      id: 1,
-                      personId: 186,
-                      learningAreaId: 1,
-                      eduContents: [
-                        new EduContentFixture({ id: 1 }),
-                        new EduContentFixture({ id: 2 })
-                      ],
-                      learningArea: new LearningAreaFixture(),
-                      teacher: new PersonFixture({ id: 186 })
-                    })
-                  }),
-                  results: [
-                    new ResultFixture({
-                      id: 1,
-                      eduContentId: 1,
-                      taskId: 1,
-                      personId: 1
-                    }),
-                    new ResultFixture({
-                      id: 2,
-                      eduContentId: 2,
-                      taskId: 1,
-                      personId: 1
-                    }),
-                    new ResultFixture({
-                      id: 3,
-                      eduContentId: 2,
-                      taskId: 1,
-                      personId: 1,
-                      status: ScormStatus.STATUS_INCOMPLETE
-                    })
-                  ]
-                }
-              ]
-            },
-            {
-              ...new TaskFixture({
-                id: 2,
-                personId: 187,
-                learningAreaId: 1
-              }),
-              instances: [
-                {
-                  ...new TaskInstanceFixture({
-                    id: 2,
-                    taskId: 2,
-                    personId: 1,
-                    task: new TaskFixture({
-                      id: 2,
-                      personId: 187,
-                      learningAreaId: 1,
-                      eduContents: [new EduContentFixture({ id: 2 })],
-                      learningArea: new LearningAreaFixture(),
-                      teacher: new PersonFixture({ id: 187 })
-                    })
-                  }),
-                  results: []
-                }
-              ]
-            }
-          ]
-        },
-        {
-          ...new LearningAreaFixture({ id: 2 }),
-          tasks: [
-            {
-              ...new TaskFixture({
-                id: 3,
-                personId: 187,
-                learningAreaId: 2
-              }),
-              instances: [
-                {
-                  ...new TaskInstanceFixture({
-                    id: 3,
-                    taskId: 3,
-                    personId: 1,
-                    task: new TaskFixture({
-                      id: 3,
-                      personId: 187,
-                      learningAreaId: 2,
-                      eduContents: [],
-                      learningArea: new LearningAreaFixture({ id: 2 }),
-                      teacher: new PersonFixture({ id: 187 })
-                    })
-                  }),
-                  results: []
-                }
-              ]
-            }
-          ]
-        }
-      ];
-
-      expect(tasksViewModel['learningAreasWithTasks$']).toBeObservable(
-        hot('a', { a: expectedResult })
-      );
-    });
-  });
-
-  describe('single task to test on', () => {
-    let mockTask;
-    let mockLearningArea;
-    let mockEducontent;
-    let mockTeacher;
-    let mockTaskEducontent;
-
-    let expectedTaskResult;
-    let expectedTaskInstanceResult;
-
-    beforeAll(() => {
-      jest.spyOn(tasksViewModel, 'loadMockData').mockImplementation();
-
-      mockTask = new TaskFixture({ personId: 186, learningAreaId: 1 });
-      mockLearningArea = new LearningAreaFixture();
-      mockEducontent = new EduContentFixture();
-      mockTeacher = new PersonFixture({ id: 186 });
-      mockTaskEducontent = new TaskEduContentFixture({
-        id: 1,
-        teacherId: 186,
-        taskId: 1,
-        eduContentId: 1
-      });
-
-      usedTaskState = TaskReducer.reducer(
-        TaskReducer.initialState,
-        new TaskActions.TasksLoaded({ tasks: [mockTask] })
-      );
-
-      usedLearningAreaState = LearningAreaReducer.reducer(
-        LearningAreaReducer.initialState,
-        new LearningAreaActions.LearningAreasLoaded({
-          learningAreas: [mockLearningArea]
-        })
-      );
-
-      usedEducontentState = EduContentReducer.reducer(
-        EduContentReducer.initialState,
-        new EduContentActions.EduContentsLoaded({
-          eduContents: [mockEducontent]
-        })
-      );
-    });
-
-    beforeEach(() => {
-      tasksViewModel['results$'] = of([]);
-    });
-
-    it('tasksWithRelationInfo$ should return a single task with related info', () => {
-      expectedTaskResult = {
-        ...mockTask,
-        eduContents: [mockEducontent],
-        learningArea: mockLearningArea,
-        teacher: mockTeacher
-      };
-
-      expect(tasksViewModel['tasksWithRelationInfo$']).toBeObservable(
-        hot('a', { a: [expectedTaskResult] })
-      );
-    });
-
-    it('taskInstancesWithRelationInfo$ should return a single taskInstance with related info', () => {
-      expectedTaskInstanceResult = {
-        ...mockTask,
-        eduContents: [mockEducontent],
-        learningArea: mockLearningArea,
-        teacher: mockTeacher
-      };
-
-      // expect(tasksViewModel.taskInstancesWithRelationInfo$).toBeObservable(
-      //   hot('a', { a: [expectedTaskInstanceResult] })
-      // );
     });
   });
 });

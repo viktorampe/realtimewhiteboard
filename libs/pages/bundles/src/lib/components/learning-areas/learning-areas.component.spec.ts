@@ -7,7 +7,6 @@ import {
   FILTER_SERVICE_TOKEN
 } from '@campus/shared';
 import { ListFormat, ListViewItemDirective, UiModule } from '@campus/ui';
-import 'jest'; // required to use `expect` from jest instead of the implementation from jasmine
 import { BundlesViewModel } from '../bundles.viewmodel';
 import { MockViewModel } from '../bundles.viewmodel.mocks';
 import { LearningAreasComponent } from './learning-areas.component';
@@ -60,10 +59,9 @@ describe('LearningAreasComponent', () => {
     component.filterTextInput.setValue(filterText);
     fixture.detectChanges();
     expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy).toHaveBeenCalledWith(
-      expect.arrayContaining([expect.anything()]),
-      { learningArea: { name: filterText } }
-    );
+    expect(spy).toHaveBeenCalledWith(jasmine.anything(), {
+      learningArea: { name: filterText }
+    });
   });
 
   it('should apply the filter case insensitive on the list of learning areas', async(() => {
