@@ -82,7 +82,10 @@ export class ScormApi implements ScormApiInterface {
    */
   LMSFinish(): 'true' | 'false' {
     //check exerciseId and exercise info availability
-    if (this.mode === ScormCmiMode.CMI_MODE_PREVIEW) {
+    if (
+      this.mode === ScormCmiMode.CMI_MODE_PREVIEW ||
+      this.mode === ScormCmiMode.CMI_MODE_REVIEW
+    ) {
       return 'true';
     }
 
@@ -135,7 +138,10 @@ export class ScormApi implements ScormApiInterface {
    */
   LMSSetValue(parameter: string, value: string): 'true' | 'false' {
     //check exerciseId and exercise info availability
-    if (this.mode === ScormCmiMode.CMI_MODE_PREVIEW) {
+    if (
+      this.mode === ScormCmiMode.CMI_MODE_PREVIEW ||
+      this.mode === ScormCmiMode.CMI_MODE_REVIEW
+    ) {
       return 'false';
     }
 
@@ -161,7 +167,10 @@ export class ScormApi implements ScormApiInterface {
     }
 
     //check exerciseId and exercise info availability
-    if (this.mode === ScormCmiMode.CMI_MODE_PREVIEW) {
+    if (
+      this.mode === ScormCmiMode.CMI_MODE_PREVIEW ||
+      this.mode === ScormCmiMode.CMI_MODE_REVIEW
+    ) {
       return 'false';
     }
 
