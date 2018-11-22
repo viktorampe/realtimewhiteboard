@@ -757,7 +757,7 @@ describe('TasksViewModel met State', () => {
         teacher: mockTeacher
       };
 
-      expect(tasksViewModel.tasksWithRelationInfo$).toBeObservable(
+      expect(tasksViewModel['tasksWithRelationInfo$']).toBeObservable(
         hot('a', { a: [expectedTaskResult] })
       );
     });
