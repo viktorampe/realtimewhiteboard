@@ -9,8 +9,10 @@ import { HeaderViewModel } from './header.viewmodel';
 export class HeaderComponent implements OnInit {
   enableAlerts: boolean;
   enableMessages: boolean;
+  breadCrumbs$ = this.headerViewModel.breadCrumbs$;
+  backLink$ = this.headerViewModel.backLink$;
 
-  constructor(public headerViewModel: HeaderViewModel) {}
+  constructor(private headerViewModel: HeaderViewModel) {}
 
   ngOnInit(): void {
     this.loadFeatureToggles();
@@ -19,5 +21,9 @@ export class HeaderComponent implements OnInit {
   private loadFeatureToggles() {
     this.enableAlerts = this.headerViewModel.enableAlerts;
     this.enableMessages = this.headerViewModel.enableMessages;
+  }
+
+  onMenuClick() {
+    this.headerViewModel.toggleSideNav();
   }
 }

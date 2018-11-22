@@ -98,7 +98,7 @@ export class BundlesViewModel {
   }
 
   changeListFormat(listFormat: ListFormat): void {
-    this.store.dispatch(new UiActions.SetListFormatUi({ listFormat }));
+    this.store.dispatch(new UiActions.SetListFormat({ listFormat }));
   }
 
   getLearningAreaById(areaId: number): Observable<LearningAreaInterface> {

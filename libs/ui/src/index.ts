@@ -1,4 +1,7 @@
 export {
+  BreadcrumbLinkInterface
+} from './lib/breadcrumbs/breadcrumbs.component';
+export {
   SelectOption
 } from './lib/confirmable-select/confirmable-select.component';
 export {
