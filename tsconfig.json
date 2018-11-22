@@ -54,6 +54,9 @@
       ],
       "@campus/shared": [
         "libs/shared/src/index.ts"
+      ],
+      "@campus/scorm": [
+        "libs/scorm/src/index.ts"
       ]
     }
   },

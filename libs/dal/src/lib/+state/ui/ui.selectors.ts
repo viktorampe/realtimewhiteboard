@@ -11,7 +11,13 @@ const getListFormat = createSelector(
   (state: UiState) => state.listFormat
 );
 
+const getSideNavOpen = createSelector(
+  getUiState,
+  (state: UiState) => state.sideNavOpen
+);
+
 export const UiQuery = {
   getLoaded,
-  getListFormat
+  getListFormat,
+  getSideNavOpen
 };

@@ -11,4 +11,8 @@ export class TaskInstanceFixture implements TaskInstanceInterface {
     // overwrite defaults
     Object.assign(this, props);
   }
+
+  getProgress(): number {
+    return 0;
+  }
 }

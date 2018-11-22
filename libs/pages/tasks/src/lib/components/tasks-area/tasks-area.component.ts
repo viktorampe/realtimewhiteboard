@@ -1,15 +1,11 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/shared';
-import {
-  FilterableItem,
-  FilterTextInputComponent,
-  ListFormat
-} from '@campus/ui';
+import { FilterTextInputComponent, ListFormat } from '@campus/ui';
 import { Observable } from 'rxjs';
 import { TasksViewModel } from './../tasks.viewmodel';
 import {
   LearningAreasWithTaskInstanceInfoInterface,
-  LearningAreaWithTaskInfo
+  LearningAreaWithTaskInfoInterface
 } from './../tasks.viewmodel.interfaces';
 
 @Component({
@@ -17,13 +13,7 @@ import {
   templateUrl: './tasks-area.component.html',
   styleUrls: ['./tasks-area.component.scss']
 })
-export class TasksAreaComponent
-  implements
-    OnInit,
-    FilterableItem<
-      LearningAreasWithTaskInstanceInfoInterface,
-      LearningAreaWithTaskInfo
-    > {
+export class TasksAreaComponent implements OnInit {
   protected listFormat = ListFormat;
   listFormat$: Observable<ListFormat>;
   learningAreasWithInfo$: Observable<
@@ -33,7 +23,7 @@ export class TasksAreaComponent
   @ViewChild('filterInput')
   filterTextInput: FilterTextInputComponent<
     LearningAreasWithTaskInstanceInfoInterface,
-    LearningAreaWithTaskInfo
+    LearningAreaWithTaskInfoInterface
   >;
 
   constructor(
@@ -54,7 +44,7 @@ export class TasksAreaComponent
   filterFn(
     info: LearningAreasWithTaskInstanceInfoInterface,
     searchText: string
-  ): LearningAreaWithTaskInfo[] {
+  ): LearningAreaWithTaskInfoInterface[] {
     return this.filterService.filter(info.learningAreasWithInfo, {
       learningArea: { name: searchText }
     });

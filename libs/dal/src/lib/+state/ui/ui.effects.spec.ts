@@ -7,7 +7,7 @@ import { StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable } from 'rxjs';
-import { LoadUi, SaveUi, SetListFormatUi, UiLoaded } from './ui.actions';
+import { LoadUi, SaveUi, SetListFormat, UiLoaded } from './ui.actions';
 import { UiEffects } from './ui.effects';
 import { initialState, reducer } from './ui.reducer';
 
@@ -94,7 +94,7 @@ describe('UiEffects', () => {
   describe('localStorage$', () => {
     it('should trigger saveUi$', () => {
       actions = hot('-a-|', {
-        a: new SetListFormatUi({ listFormat: ListFormat.GRID })
+        a: new SetListFormat({ listFormat: ListFormat.GRID })
       });
       expect(effects.localStorage$).toBeObservable(
         hot('-a-|', { a: new SaveUi() })
