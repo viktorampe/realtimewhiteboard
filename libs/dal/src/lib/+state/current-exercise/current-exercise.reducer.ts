@@ -1,5 +1,5 @@
 import { EduContentInterface, ResultInterface } from '@campus/dal';
-import { ScormCMIMode } from '../../results/enums/cmi-mode.enum';
+import { ScormCmiMode } from '@campus/scorm';
 import {
   CurrentExerciseActions,
   CurrentExerciseActionTypes
@@ -9,7 +9,7 @@ export const NAME = 'currentExercise';
 
 export interface CurrentExerciseInterface {
   eduContent?: EduContentInterface;
-  cmiMode: ScormCMIMode;
+  cmiMode: ScormCmiMode;
   result?: ResultInterface;
   saveToApi: boolean;
   url: string;

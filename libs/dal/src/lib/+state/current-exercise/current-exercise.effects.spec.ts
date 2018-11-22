@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { DalActions } from '@campus/dal';
+import { ScormCmiMode } from '@campus/scorm';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
@@ -8,7 +9,6 @@ import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
 import { CurrentExerciseReducer } from '.';
 import { EXERCISE_SERVICE_TOKEN } from '../../exercise/exercise.service.interface';
-import { ScormCMIMode } from '../../results/enums/cmi-mode.enum';
 import {
   CurrentExerciseError,
   CurrentExerciseLoaded,
@@ -97,7 +97,7 @@ describe('ExerciseEffects', () => {
   describe('startExercise$', () => {
     mockExercise = {
       eduContent: undefined,
-      cmiMode: ScormCMIMode.CMI_MODE_NORMAL,
+      cmiMode: ScormCmiMode.CMI_MODE_NORMAL,
       result: undefined,
       saveToApi: true,
       url: 'dit is een url'
@@ -159,7 +159,7 @@ describe('ExerciseEffects', () => {
   describe('saveExercise$', () => {
     mockExercise = {
       eduContent: undefined,
-      cmiMode: ScormCMIMode.CMI_MODE_NORMAL,
+      cmiMode: ScormCmiMode.CMI_MODE_NORMAL,
       result: undefined,
       saveToApi: true,
       url: 'dit is een url'
