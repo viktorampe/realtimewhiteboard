@@ -1,7 +1,12 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { ListFormat } from '@campus/ui';
+import {
+  FilterService,
+  FilterServiceInterface,
+  FILTER_SERVICE_TOKEN
+} from '@campus/shared';
+import { ListFormat, UiModule } from '@campus/ui';
 import { hot } from 'jasmine-marbles';
 import { BehaviorSubject } from 'rxjs';
 import { TasksViewModel } from '../tasks.viewmodel';
@@ -13,6 +18,8 @@ describe('TasksAreaComponent', () => {
   let component: TasksAreaComponent;
   let fixture: ComponentFixture<TasksAreaComponent>;
   let tasksViewModel: TasksViewModel;
+  let filterService: FilterServiceInterface;
+
   let learningAreas$: BehaviorSubject<
     LearningAreasWithTaskInstanceInfoInterface
   >;
@@ -22,12 +29,17 @@ describe('TasksAreaComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [UiModule],
       declarations: [TasksAreaComponent],
       schemas: [NO_ERRORS_SCHEMA],
-      providers: [{ provide: TasksViewModel, useClass: MockTasksViewModel }]
+      providers: [
+        { provide: TasksViewModel, useClass: MockTasksViewModel },
+        { provide: FILTER_SERVICE_TOKEN, useClass: FilterService }
+      ]
     }).compileComponents();
 
     tasksViewModel = TestBed.get(TasksViewModel);
+    filterService = TestBed.get(FILTER_SERVICE_TOKEN);
 
     learningAreas$ = tasksViewModel.learningAreasWithTaskInstances$ as BehaviorSubject<
       LearningAreasWithTaskInstanceInfoInterface
@@ -48,21 +60,95 @@ describe('TasksAreaComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should start with an empty filterInput string', () => {
-    expect(component.filterInput$).toBeObservable(hot('a', { a: '' }));
-  });
+  it('should call the filter service when filterTextInput.filterFn is called, and display the correct count/learning areas', () => {
+    const filterSource = {
+      learningAreasWithInfo: []
+    } as LearningAreasWithTaskInstanceInfoInterface;
+    const filterText = '';
+    component.filterTextInput.setFilterableItem(component);
 
-  it('should reset the filterInput$ when calling resetFilterInput', () => {
-    component.filterInput$.next('not empty');
-    component.resetFilterInput();
-    expect(component.filterInput$).toBeObservable(hot('a', { a: '' }));
-  });
+    const spyFilterService = jest.spyOn(component, 'filterFn');
+    component.filterTextInput.setValue(filterText);
 
-  it('should change the filterInput$ when calling onChangeFilterInput', () => {
-    component.onChangeFilterInput('the new value');
-    expect(component.filterInput$).toBeObservable(
-      hot('a', { a: 'the new value' })
+    expect(spyFilterService).toHaveBeenCalledTimes(1);
+    expect(spyFilterService).toHaveBeenCalledWith(
+      {
+        learningAreasWithInfo: [
+          {
+            closedTasks: 3,
+            learningArea: {
+              color: '#2c354f',
+              icon: 'wiskunde',
+              name: 'Wiskunde'
+            },
+            openTasks: 2
+          },
+          {
+            closedTasks: 2,
+            learningArea: {
+              color: '#5e3b47',
+              icon: 'natuurwetenschappen',
+              name: 'Moderne Wetenschappen'
+            },
+            openTasks: 0
+          },
+          {
+            closedTasks: 0,
+            learningArea: { color: '#553030', icon: 'engels', name: 'Engels' },
+            openTasks: 2
+          }
+        ],
+        totalTasks: 9
+      },
+      ''
     );
+
+    fixture.detectChanges();
+    const componentDE = fixture.debugElement.query(
+      By.css('.pages-tasks__container')
+    );
+    expect(componentDE.nativeElement.textContent).toContain('3 van 3');
+    const tasksArea = fixture.debugElement.query(
+      By.css('.pages-tasks__container__learning-areas')
+    );
+    expect(tasksArea.children[0].children[0].children.length).toBe(3);
+
+    component.filterTextInput.setValue('a');
+    fixture.detectChanges();
+    expect(componentDE.nativeElement.textContent).toContain('1 van 3');
+    expect(tasksArea.children[0].children[0].children.length).toBe(1);
+  });
+
+  it('should filter the learningAreas with case insensitivity', () => {
+    const filterSource = learningAreasValue;
+
+    // Enkel wiskunde
+    const expectedOnlyWiskunde = [
+      {
+        learningArea: {
+          name: 'Wiskunde',
+          icon: 'wiskunde',
+          color: '#2c354f'
+        },
+        openTasks: 2,
+        closedTasks: 3
+      }
+    ];
+
+    let filterText = '';
+
+    component.filterTextInput.setFilterableItem(component);
+
+    let filteredResult = component.filterFn(filterSource, filterText);
+    expect(filteredResult).toEqual(learningAreasValue.learningAreasWithInfo);
+
+    filterText = 'wISKUN';
+    filteredResult = component.filterFn(filterSource, filterText);
+    expect(filteredResult).toEqual(expectedOnlyWiskunde);
+
+    filterText = 'nothing nothing nothing';
+    filteredResult = component.filterFn(filterSource, filterText);
+    expect(filteredResult).toEqual([]);
   });
 
   it('should call the viewModel changeListFormat method when calling clickChangeListFormat', () => {
@@ -86,44 +172,6 @@ describe('TasksAreaComponent', () => {
     );
   });
 
-  it('should filter the learningAreas with case insensitivity and count the totalTasks correctly', () => {
-    const filterInput$ = hot('abc|', {
-      a: undefined,
-      b: 'wISKUN',
-      c: 'nothing nothing nothing'
-    });
-
-    // Alles
-    const expectedA = learningAreasValue;
-
-    // Enkel wiskunde
-    const expectedB = {
-      learningAreasWithInfo: [
-        {
-          learningArea: {
-            name: 'Wiskunde',
-            icon: 'wiskunde',
-            color: '#2c354f'
-          },
-          openTasks: 2,
-          closedTasks: 3
-        }
-      ],
-      totalTasks: 9
-    };
-
-    // Leeg
-    const expectedC = { learningAreasWithInfo: [], totalTasks: 9 };
-
-    expect(component.filter(learningAreas$, filterInput$)).toBeObservable(
-      hot('abc', {
-        a: expectedA,
-        b: expectedB,
-        c: expectedC
-      })
-    );
-  });
-
   it('should show the placeholder text when no learningAreas are available', () => {
     const placeholderText = 'Er zijn momenteel geen taken voor jou klaargezet.';
 
@@ -134,7 +182,7 @@ describe('TasksAreaComponent', () => {
       By.css('.pages-tasks__container')
     );
 
-    expect(componentDE.nativeElement.textContent).toBe(placeholderText);
+    expect(componentDE.nativeElement.textContent).toContain(placeholderText);
   });
 
   it('should show the amount of available learningAreas', () => {

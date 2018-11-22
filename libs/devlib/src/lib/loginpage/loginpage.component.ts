@@ -3,7 +3,8 @@ import {
   AlertReducer,
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
-  EduContentInterface
+  EduContentInterface,
+  UserActions
 } from '@campus/dal';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Store } from '@ngrx/store';
@@ -29,5 +30,9 @@ export class LoginpageComponent implements OnInit {
 
   getCurrentUser() {
     this.currentUser = this.authService.getCurrent();
+  }
+
+  loadCurrentUserinState() {
+    this.store.dispatch(new UserActions.LoadUser({ force: true }));
   }
 }

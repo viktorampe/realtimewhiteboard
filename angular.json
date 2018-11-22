@@ -462,6 +462,33 @@
           }
         }
       }
+    },
+    "scorm": {
+      "root": "libs/scorm",
+      "sourceRoot": "libs/scorm/src",
+      "projectType": "library",
+      "prefix": "campus",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/scorm/tsconfig.lib.json",
+              "libs/scorm/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/scorm/jest.config.js",
+            "tsConfig": "libs/scorm/tsconfig.spec.json",
+            "setupFile": "libs/scorm/src/test-setup.ts",
+            "maxWorkers": 2
+          }
+        }
+      }
     }
   },
   "cli": {

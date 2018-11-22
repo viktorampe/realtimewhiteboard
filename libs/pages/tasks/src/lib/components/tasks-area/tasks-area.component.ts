@@ -1,11 +1,11 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/shared';
 import { FilterTextInputComponent, ListFormat } from '@campus/ui';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { TasksViewModel } from './../tasks.viewmodel';
 import {
   LearningAreasWithTaskInstanceInfoInterface,
-  LearningAreaWithTaskInfo
+  LearningAreaWithTaskInfoInterface
 } from './../tasks.viewmodel.interfaces';
 
 @Component({
@@ -15,16 +15,15 @@ import {
 })
 export class TasksAreaComponent implements OnInit {
   protected listFormat = ListFormat;
-  filterInput$ = new BehaviorSubject<string>('');
   listFormat$: Observable<ListFormat>;
   learningAreasWithInfo$: Observable<
     LearningAreasWithTaskInstanceInfoInterface
   >;
 
-  @ViewChild(FilterTextInputComponent)
+  @ViewChild('filterInput')
   filterTextInput: FilterTextInputComponent<
     LearningAreasWithTaskInstanceInfoInterface,
-    LearningAreaWithTaskInfo
+    LearningAreaWithTaskInfoInterface
   >;
 
   constructor(
@@ -35,17 +34,17 @@ export class TasksAreaComponent implements OnInit {
   ngOnInit() {
     this.listFormat$ = this.tasksViewModel.listFormat$;
     this.learningAreasWithInfo$ = this.tasksViewModel.learningAreasWithTaskInstances$;
-    this.filterTextInput.filterFn = this.filterFn.bind(this);
+    this.filterTextInput.setFilterableItem(this);
   }
 
   clickChangeListFormat(value: ListFormat): void {
     this.tasksViewModel.changeListFormat(value);
   }
 
-  private filterFn(
+  filterFn(
     info: LearningAreasWithTaskInstanceInfoInterface,
     searchText: string
-  ): LearningAreaWithTaskInfo[] {
+  ): LearningAreaWithTaskInfoInterface[] {
     return this.filterService.filter(info.learningAreasWithInfo, {
       learningArea: { name: searchText }
     });
