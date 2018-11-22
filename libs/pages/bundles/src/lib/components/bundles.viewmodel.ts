@@ -10,6 +10,7 @@ import {
   EduContentQueries,
   LearningAreaInterface,
   LearningAreaQueries,
+  PersonFixture,
   PersonInterface,
   UiActions,
   UiQuery,
@@ -67,10 +68,7 @@ export class BundlesViewModel {
 
   initialize(): void {
     // source streams
-    this.listFormat$ = this.store.pipe(
-      select(UiQuery.getListFormat),
-      map(listFormat => <ListFormat>listFormat)
-    );
+    this.listFormat$ = this.store.pipe(select(UiQuery.getListFormat));
     this.learningAreas$ = this.store.pipe(select(LearningAreaQueries.getAll));
 
     // intermediate streams
@@ -98,7 +96,7 @@ export class BundlesViewModel {
   }
 
   changeListFormat(listFormat: ListFormat): void {
-    this.store.dispatch(new UiActions.SetListFormatUi({ listFormat }));
+    this.store.dispatch(new UiActions.SetListFormat({ listFormat }));
   }
 
   getLearningAreaById(areaId: number): Observable<LearningAreaInterface> {
@@ -115,16 +113,9 @@ export class BundlesViewModel {
     return bundle$.pipe(
       switchMap(
         (bundle): Observable<PersonInterface> =>
-          // TODO implement personqueries
+          // TODO implement personqueries and enable test
           // this.store.pipe(select(PersonQueries.getById, { id: bundle.teacherId }))
-          of({
-            id: 1,
-            firstName: 'foo',
-            name: 'bar',
-            displayName: 'foo bar',
-            email: '',
-            avatar: null
-          })
+          of(new PersonFixture({ id: bundle.teacherId }))
       )
     );
   }

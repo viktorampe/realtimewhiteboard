@@ -1,15 +1,15 @@
 import { Inject, Injectable } from '@angular/core';
 import {
   AlertQueueInterface,
-  AuthServiceInterface,
-  AUTH_SERVICE_TOKEN,
   DalState,
   MessageInterface,
   PersonInterface,
+  UiActions,
   UserQueries
 } from '@campus/dal';
+import { BreadcrumbLinkInterface } from '@campus/ui';
 import { select, Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import {
   EnvironmentAlertsFeatureInterface,
@@ -20,10 +20,6 @@ import {
 import { HeaderResolver } from './header.resolver';
 
 //TODO replace with actual interface
-export interface BreadCrumbLinkInterface {
-  displayText: String;
-  routerLink: String;
-}
 
 //TODO replace with actual interface
 export interface CurrentRouteInterface {
@@ -36,6 +32,26 @@ export interface DropdownItemInterface {
   text: string;
 }
 
+// remove when breadcrumb logic is finished
+export const mockBreadCrumbs: BreadcrumbLinkInterface[] = [
+  {
+    displayText: 'level 0',
+    link: ['/level0']
+  },
+  {
+    displayText: 'level 1',
+    link: ['/level1']
+  },
+  {
+    displayText: 'level 2',
+    link: ['/level2']
+  },
+  {
+    displayText: 'level 3',
+    link: ['/level3']
+  }
+];
+
 @Injectable({
   providedIn: 'root'
 })
@@ -44,11 +60,13 @@ export class HeaderViewModel {
   enableAlerts: boolean;
   enableMessages: boolean;
   //state presentation streams
-  breadCrumbs$: Observable<BreadCrumbLinkInterface[]>; // TODO to be replaced by custom interface once the breadcrumbsComponent is done
+  breadCrumbs$: Observable<BreadcrumbLinkInterface[]> = of(mockBreadCrumbs); // TODO select breadcrumbs from store
   currentUser$: Observable<PersonInterface>;
   //presentation stream
   recentAlerts$: Observable<DropdownItemInterface[]>; //TODO replace interface with the actual dropdown interface
   recentMessages$: Observable<DropdownItemInterface[]>; //TODO replace interface with the actual dropdown interface
+  backLink$: Observable<string | undefined>;
+
   //state source streams
   private alertsForUser$: Observable<AlertQueueInterface[]>;
   private messagesForUser$: Observable<MessageInterface[]>;
@@ -58,13 +76,13 @@ export class HeaderViewModel {
     private environmentAlertsFeature: EnvironmentAlertsFeatureInterface,
     @Inject(ENVIRONMENT_MESSAGES_FEATURE_TOKEN)
     private environmentMessagesFeature: EnvironmentMessagesFeatureInterface,
-    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     private store: Store<DalState>,
     private headerResolver: HeaderResolver
   ) {
     this.headerResolver.resolve();
     this.loadFeatureToggles();
     this.loadStateStreams();
+    this.backLink$ = this.setupPageBarNavigation(); // TODO: move to loadDisplayStream()
     //TODO remove comment once the states have been added
     //this.loadDisplayStream();
   }
@@ -136,5 +154,19 @@ export class HeaderViewModel {
       }),
       shareReplay(1)
     );
+  }
+
+  setupPageBarNavigation(): Observable<string | undefined> {
+    return this.breadCrumbs$.pipe(
+      map((breadCrumbs: BreadcrumbLinkInterface[]) => {
+        return breadCrumbs.length < 2
+          ? undefined
+          : breadCrumbs[breadCrumbs.length - 2].link.toString();
+      })
+    );
+  }
+
+  toggleSideNav() {
+    this.store.dispatch(new UiActions.ToggleSideNav());
   }
 }

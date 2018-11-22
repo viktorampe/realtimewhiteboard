@@ -7,7 +7,8 @@ export enum UiActionTypes {
   UiLoaded = '[Ui] Ui Loaded',
   SaveUi = '[Ui] Ui Save To Storage',
   SetListFormat = '[Ui] Ui Set List Format',
-  ToggleSideSheet = '[Ui] Ui Toggle Side Sheet'
+  ToggleSideSheet = '[Ui] Ui Toggle Side Sheet',
+  ToggleSideNav = '[Ui] Ui Toggle Side Nav'
 }
 
 export class LoadUi implements Action {
@@ -23,26 +24,32 @@ export class SaveUi implements Action {
   readonly type = UiActionTypes.SaveUi;
 }
 
-export class SetListFormatUi implements Action {
+export class SetListFormat implements Action {
   readonly type = UiActionTypes.SetListFormat;
   constructor(public payload: { listFormat: ListFormat }) {}
 }
 
-export class ToggleSideSheetUi implements Action {
+export class ToggleSideSheet implements Action {
   readonly type = UiActionTypes.ToggleSideSheet;
+}
+
+export class ToggleSideNav implements Action {
+  readonly type = UiActionTypes.ToggleSideNav;
 }
 
 export type UiAction =
   | LoadUi
   | UiLoaded
   | SaveUi
-  | SetListFormatUi
-  | ToggleSideSheetUi;
+  | SetListFormat
+  | ToggleSideSheet
+  | ToggleSideNav;
 
 export const fromUiActions = {
   LoadUi,
   UiLoaded,
   SaveUi,
-  SetListFormatUi,
-  ToggleSideSheetUi
+  SetListFormat,
+  ToggleSideSheet,
+  ToggleSideNav
 };
