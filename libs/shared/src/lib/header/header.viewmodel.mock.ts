@@ -34,6 +34,8 @@ export class MockHeaderViewModel {
   ];
 
   // source streams
+  isResolved$: Observable<boolean>;
+
   breadCrumbs$: Observable<BreadcrumbLinkInterface[]> = new BehaviorSubject<
     BreadcrumbLinkInterface[]
   >([

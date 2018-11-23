@@ -1,53 +1,70 @@
 <div class="shared-header">
-  <div hide-mobile
-       class="shared-header__app-bar">
-    <campus-app-bar>
-      <campus-breadcrumbs bar__left
-                          [breadCrumbs]="breadCrumbs$|async"
-                          [baseIcon]="'home'"
-                          [seperator]="'breadcrumb-separator'">
-      </campus-breadcrumbs>
-      <div class="shared-header__app-bar__alerts"
-           bar__right
-           *ngIf="enableAlerts">
-        <campus-button (click)="dropDownAlerts.toggle()">Meldingen</campus-button>
-        <campus-dropdown-menu #dropDownAlerts
-                              showHeader="true"
-                              [newItemCount]="recentAlertCount$|async"
-                              [headerIcon]=""
-                              itemType="meldingen"
-                              linkText="Alle meldingen"
-                              linkUrl="/notifications">
-          <ng-container *ngIf="(recentAlerts$|async) as recentAlerts">
-            <campus-notification-dropdown-item *ngFor="let alert of recentAlerts"
-                                               [titleText]="alert.titleText"
-                                               [icon]="alert.icon"></campus-notification-dropdown-item>
+  <ng-container *ngIf="isResolved$|async;else notResolved">
+    <div hide-mobile
+         class="shared-header__app-bar">
+      <campus-app-bar>
+
+        <campus-breadcrumbs bar__left
+                            [breadCrumbs]="breadCrumbs$|async"
+                            [baseIcon]="'home'"
+                            [seperator]="'breadcrumb-separator'">
+        </campus-breadcrumbs>
+        <div class="shared-header__app-bar__alerts"
+             bar__right
+             *ngIf="enableAlerts">
+          <campus-button (click)="dropDownAlerts.toggle()">Meldingen</campus-button>
+          <campus-dropdown-menu #dropDownAlerts
+                                showHeader="true"
+                                [newItemCount]="unreadAlertCount$|async"
+                                [headerIcon]=""
+                                itemType="meldingen"
+                                linkText="Alle meldingen"
+                                linkUrl="/notifications">
+            <ng-container *ngIf="(alertNotifications$|async) as notifications">
+              <campus-notification-dropdown-item *ngFor="let alert of notifications"
+                                                 [titleText]="alert.titleText"
+                                                 [icon]="alert.icon"></campus-notification-dropdown-item>
+            </ng-container>
+
+          </campus-dropdown-menu>
+        </div>
+
+        <div class="shared-header__app-bar__profile-menu"
+             bar__right>
+          <ng-container *ngIf="currentUser$|async as user">
+            <campus-person-badge (click)="dropDownProfile.toggle()"
+                                 [person]="user"
+                                 size="small"></campus-person-badge>
+
           </ng-container>
-
-        </campus-dropdown-menu>
-      </div>
-
-      <div class="shared-header__app-bar__profile-menu"
-           bar__right>
-        <campus-button (click)="dropDownProfile.toggle()">Profile</campus-button>
-        <campus-dropdown-menu #dropDownProfile
-                              showheader="false"></campus-dropdown-menu>
-      </div>
-    </campus-app-bar>
-  </div>
-  <div class="shared-header__page-bar">
-    <mat-icon *ngIf="(backLink$|async) as link; else hamburgerMenu"
-              [routerLink]="link"
-              class="shared-header__page-bar_nav-icon"
-              [svgIcon]="'arrow-back'"
-              hide-desktop></mat-icon>
-    <ng-template #hamburgerMenu>
-      <mat-icon (click)="onMenuClick()"
-                class="shared-header__page-bar_nav-icon"
-                [svgIcon]="'menu'"
-                hide-desktop></mat-icon>
-    </ng-template>
-    <div id="page-bar-container">
+          <campus-dropdown-menu #dropDownProfile
+                                showheader="false">
+            <campus-dropdown-menu-item *ngFor="let menuItem of profileMenuItems"
+                                       [icon]='menuItem.icon'
+                                       [description]='menuItem.description'
+                                       [internalLink]="menuItem.internalLink"></campus-dropdown-menu-item>
+          </campus-dropdown-menu>
+        </div>
+      </campus-app-bar>
     </div>
+  </ng-container>
+  <div class="shared-header__page-bar">
+    <ng-container *ngIf="isResolved$|async;else notResolved">
+      <mat-icon *ngIf="(backLink$|async) as link; else hamburgerMenu"
+                [routerLink]="link"
+                class="shared-header__page-bar_nav-icon"
+                [svgIcon]="'arrow-back'"
+                hide-desktop></mat-icon>
+      <ng-template #hamburgerMenu>
+        <mat-icon (click)="onMenuClick()"
+                  class="shared-header__page-bar_nav-icon"
+                  [svgIcon]="'menu'"
+                  hide-desktop></mat-icon>
+      </ng-template>
+    </ng-container>
+    <div id="page-bar-container"></div>
   </div>
 </div>
+
+
+<ng-template #notResolved>Not resolved ...</ng-template>
