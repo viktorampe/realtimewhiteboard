@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import {
+  AlertService,
   AUTH_SERVICE_TOKEN,
   EduContentActions,
   EduContentFixture,
@@ -125,6 +126,7 @@ describe('TasksViewModel met State', () => {
         TasksViewModel,
         { provide: AUTH_SERVICE_TOKEN, useValue: { userId: 1 } },
         { provide: TasksResolver, useValue: { resolve: jest.fn() } },
+        { provide: AlertService, useValue: {} },
         Store
       ]
     });
@@ -136,7 +138,7 @@ describe('TasksViewModel met State', () => {
   let teachers: PersonInterface[];
   let tasks: TaskInterface[];
   let eduContents: EduContentInterface[];
-  let taskInstance: TaskInstanceInterface;
+  let taskInstances: TaskInstanceInterface[];
   let results: ResultInterface[];
   let taskEduContents: TaskEduContentWithSubmittedInterface[];
   let listFormat: ListFormat;
@@ -177,11 +179,15 @@ describe('TasksViewModel met State', () => {
     ];
     usedEducontentState = EduContentReducer.reducer(
       EduContentReducer.initialState,
-      new EduContentActions.EduContentsLoaded({ eduContents })
+      new EduContentActions.EduContentsLoaded({ eduContents: eduContents })
     );
 
     // Taskinstance State
-    taskInstance = new TaskInstanceFixture({ id: 1, taskId: 1, personId: 1 });
+    taskInstances = [
+      new TaskInstanceFixture({ id: 1, taskId: 1, personId: 1 }),
+      new TaskInstanceFixture({ id: 2, taskId: 2, personId: 1 }),
+      new TaskInstanceFixture({ id: 3, taskId: 3, personId: 1 })
+    ];
     // usedTaskInstanceState = TaskInstanceReducer.reducer(
     //   TaskInstanceReducer.initialState,
     //   new TaskInstanceActions.TaskInstancesLoaded({ taskInstance })
@@ -277,14 +283,19 @@ describe('TasksViewModel met State', () => {
     });
 
     it('should get the educontents from the provided state', () => {
-      expect(tasksViewModel['educontents$']).toBeObservable(
+      // check unique Id value calculation
+      expect(tasksViewModel['uniqueEduContentIds$']).toBeObservable(
+        hot('(a|)', { a: [1, 2] })
+      );
+
+      expect(tasksViewModel['eduContents$']).toBeObservable(
         hot('a', { a: eduContents })
       );
     });
 
     it('should get the taskInstances from the provided state', () => {
-      expect(tasksViewModel['taskInstance$']).toBeObservable(
-        hot('(a|)', { a: taskInstance })
+      expect(tasksViewModel['taskInstances$']).toBeObservable(
+        hot('(a|)', { a: taskInstances })
       );
     });
 

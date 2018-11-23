@@ -33,7 +33,7 @@ export class TasksAreaComponent implements OnInit {
 
   ngOnInit() {
     this.listFormat$ = this.tasksViewModel.listFormat$;
-    this.learningAreasWithInfo$ = this.tasksViewModel.learningAreasWithTaskInstances$;
+    this.learningAreasWithInfo$ = this.tasksViewModel.learningAreasWithTaskInstanceInfo$;
     this.filterTextInput.setFilterableItem(this);
   }
 

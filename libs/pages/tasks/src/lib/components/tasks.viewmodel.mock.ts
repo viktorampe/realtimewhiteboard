@@ -15,7 +15,7 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import {
   LearningAreasWithTaskInstanceInfoInterface,
   TaskInstancesWithEduContentInfoInterface,
-  TaskInstanceWithEduContentsInfoInterface
+  TaskInstanceWithEduContentInfoInterface
 } from './tasks.viewmodel.interfaces';
 
 @Injectable({
@@ -23,7 +23,7 @@ import {
 })
 // implements TasksResolver
 export class MockTasksViewModel {
-  learningAreasWithTaskInstances$: Observable<
+  learningAreasWithTaskInstanceInfo$: Observable<
     LearningAreasWithTaskInstanceInfoInterface
   >;
   selectedLearningArea$: Observable<LearningAreaInterface>;
@@ -31,8 +31,8 @@ export class MockTasksViewModel {
     TaskInstancesWithEduContentInfoInterface
   >;
   selectedTaskInstance$: Observable<TaskInstanceInterface>;
-  taskInstanceWithEduContents$: Observable<
-    TaskInstanceWithEduContentsInfoInterface
+  taskInstancesWithEduContents$: Observable<
+    TaskInstanceWithEduContentInfoInterface[]
   >;
   listFormat$: Observable<ListFormat>;
   // routeParams$: TODO type?
@@ -45,7 +45,7 @@ export class MockTasksViewModel {
     return of(this.getMockLearningAreas()[0]);
   }
 
-  taskInstancesByLearningArea(
+  getTaskInstancesByLearningAreaId(
     learningAreaId: number
   ): Observable<TaskInstancesWithEduContentInfoInterface> {
     return this.getMockTaskInstancesByLearningArea();
@@ -54,11 +54,11 @@ export class MockTasksViewModel {
   changeListFormat() {}
 
   private loadMockData() {
-    this.learningAreasWithTaskInstances$ = this.getMockLearningAreasWithTaskInstances();
+    this.learningAreasWithTaskInstanceInfo$ = this.getMockLearningAreasWithTaskInstances();
     this.selectedLearningArea$ = this.getMockSelectedLearningArea();
     this.taskInstancesByLearningArea$ = this.getMockTaskInstancesByLearningArea();
     this.selectedTaskInstance$ = this.getMockSelectedTaskInstance();
-    this.taskInstanceWithEduContents$ = this.getMockTaskInstanceWithEduContents();
+    this.taskInstancesWithEduContents$ = this.getMockTaskInstancesWithEduContents();
     this.listFormat$ = this.getMockListFormat();
   }
 
@@ -114,21 +114,25 @@ export class MockTasksViewModel {
         {
           taskInstance: mockTaskInstancesAll[0],
           taskEduContentsCount: 1,
+          taskEduContents: [],
           finished: true
         },
         {
           taskInstance: mockTaskInstancesAll[1],
           taskEduContentsCount: 2,
+          taskEduContents: [],
           finished: true
         },
         {
           taskInstance: mockTaskInstancesAll[2],
           taskEduContentsCount: 1,
+          taskEduContents: [],
           finished: false
         },
         {
           taskInstance: mockTaskInstancesAll[3],
           taskEduContentsCount: 2,
+          taskEduContents: [],
           finished: false
         }
       ]
@@ -143,21 +147,22 @@ export class MockTasksViewModel {
     return new BehaviorSubject(this.getMockTaskInstances()[id]);
   }
 
-  private getMockTaskInstanceWithEduContents(
+  private getMockTaskInstancesWithEduContents(
     id: 0 | 1 | 2 | 3 = 0,
     finished = false
-  ): Observable<TaskInstanceWithEduContentsInfoInterface> {
+  ): Observable<TaskInstanceWithEduContentInfoInterface[]> {
     const mockTaskInstance = this.getMockTaskInstances()[id];
     const mockTaskEducontents = this.getMockTaskEducontents();
 
-    let mockTaskInstanceWithEducontent: TaskInstanceWithEduContentsInfoInterface;
+    let mockTaskInstanceWithEducontent: TaskInstanceWithEduContentInfoInterface;
     mockTaskInstanceWithEducontent = {
       taskInstance: mockTaskInstance,
+      taskEduContentsCount: 1,
       taskEduContents: mockTaskEducontents,
       finished: finished
     };
 
-    return new BehaviorSubject(mockTaskInstanceWithEducontent);
+    return new BehaviorSubject([mockTaskInstanceWithEducontent]);
   }
 
   private getMockLearningAreas(): LearningAreaInterface[] {

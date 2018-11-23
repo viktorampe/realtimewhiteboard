@@ -61,7 +61,7 @@ export class TasksComponent implements OnInit {
     return this.routeParams$.pipe(
       map(params => params.area),
       switchMap(areaId => {
-        return this.viewModel.taskInstancesByLearningArea();
+        return this.viewModel.getTaskInstancesByLearningAreaId(areaId);
       })
     );
   }

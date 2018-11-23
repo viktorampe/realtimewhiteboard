@@ -15,6 +15,7 @@ export * from './lib/+state/unlocked-boeke-student';
 export * from './lib/+state/unlocked-content';
 export * from './lib/+state/user';
 export * from './lib/+state/user-content';
+export * from './lib/alert';
 export * from './lib/dal.module';
 export {
   EduContentServiceInterface,

@@ -41,7 +41,7 @@ describe('TasksAreaComponent', () => {
     tasksViewModel = TestBed.get(TasksViewModel);
     filterService = TestBed.get(FILTER_SERVICE_TOKEN);
 
-    learningAreas$ = tasksViewModel.learningAreasWithTaskInstances$ as BehaviorSubject<
+    learningAreas$ = tasksViewModel.learningAreasWithTaskInstanceInfo$ as BehaviorSubject<
       LearningAreasWithTaskInstanceInfoInterface
     >;
     learningAreasValue = learningAreas$.value;

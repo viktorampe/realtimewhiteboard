@@ -1,4 +1,5 @@
 import {
+  EduContentInterface,
   LearningAreaInterface,
   TaskEduContentInterface,
   TaskInstanceInterface
@@ -22,11 +23,10 @@ export interface TaskInstancesWithEduContentInfoInterface {
 export interface TaskInstanceWithEduContentInfoInterface {
   taskInstance: TaskInstanceInterface;
   taskEduContentsCount: number;
+  taskEduContents: TaskEduContentInterface[];
   finished: boolean;
 }
 
-export interface TaskInstanceWithEduContentsInfoInterface {
-  taskInstance: TaskInstanceInterface;
-  taskEduContents: TaskEduContentInterface[];
-  finished: boolean;
+export interface EduContentWithSubmittedInterface extends EduContentInterface {
+  submitted: boolean;
 }

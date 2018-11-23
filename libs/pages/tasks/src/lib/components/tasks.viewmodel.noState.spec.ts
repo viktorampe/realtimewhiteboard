@@ -1,6 +1,7 @@
 import { Inject } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import {
+  AlertService,
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   DalState,
@@ -24,7 +25,8 @@ import { TasksResolver } from './tasks.resolver';
 import {
   TaskEduContentWithSubmittedInterface,
   TaskInstanceWithResultsInterface,
-  TasksViewModel
+  TasksViewModel,
+  TaskWithRelationsInterface
 } from './tasks.viewmodel';
 
 let tasksViewModel: TestViewModel;
@@ -47,11 +49,11 @@ export class TestViewModel extends TasksViewModel {
   }
 
   setEducontents$(stream: Observable<EduContentInterface[]>) {
-    this.educontents$ = stream;
+    this.eduContents$ = stream;
   }
 
-  setTaskInstance$(stream: Observable<TaskInstanceInterface>) {
-    this.taskInstance$ = stream;
+  setTaskInstance$(stream: Observable<TaskInstanceInterface[]>) {
+    this.taskInstances$ = stream;
   }
 
   setResults$(stream: Observable<ResultInterface[]>) {
@@ -75,9 +77,10 @@ export class TestViewModel extends TasksViewModel {
   constructor(
     store: Store<DalState>,
     @Inject(AUTH_SERVICE_TOKEN) authService: AuthServiceInterface,
-    tasksResolver: TasksResolver
+    tasksResolver: TasksResolver,
+    alertService: AlertService
   ) {
-    super(store, authService, tasksResolver);
+    super(store, authService, tasksResolver, alertService);
   }
 }
 
@@ -92,7 +95,8 @@ describe('TasksViewModel zonder State', () => {
         { provide: TasksViewModel, useClass: TestViewModel },
         { provide: AUTH_SERVICE_TOKEN, useValue: { userId: 1 } },
         { provide: TasksResolver, useValue: { resolve: jest.fn() } },
-        Store
+        Store,
+        { provide: AlertService, useValue: {} }
       ]
     });
     tasksViewModel = TestBed.get(TasksViewModel) as TestViewModel;
@@ -167,11 +171,31 @@ describe('TasksViewModel zonder State', () => {
     expect(constructedMap).toBeObservable(hot('(a|)', { a: expectedMap }));
   });
 
+  it('getSubmittedPerEduContentId should cast taskEduContent to a Map<number,boolean>', () => {
+    let taskEduContent = {
+      ...new TaskEduContentFixture({ eduContentId: 1 }),
+      submitted: true
+    } as TaskEduContentWithSubmittedInterface;
+    let expectedMap = new Map<number, boolean>([[1, true]]);
+
+    expect(
+      tasksViewModel['getSubmittedPerEduContentId'](taskEduContent)
+    ).toEqual(expectedMap);
+
+    taskEduContent = {
+      ...new TaskEduContentFixture({ eduContentId: 2 }),
+      submitted: false
+    } as TaskEduContentWithSubmittedInterface;
+    expectedMap = new Map<number, boolean>([[2, false]]);
+
+    expect(
+      tasksViewModel['getSubmittedPerEduContentId'](taskEduContent)
+    ).toEqual(expectedMap);
+  });
+
   it(' flattenArrayToUniqueValues should reduce a nested array to an array of unique values', () => {
     const dictionary = new Map<Number, Number[]>([[1, [1, 4]], [2, [2, 1]]]);
-
     const expectedArray = [1, 2, 4];
-
     const reducedArray = tasksViewModel['flattenArrayToUniqueValues'](
       Array.from(dictionary.values())
     );
@@ -237,35 +261,45 @@ describe('TasksViewModel zonder State', () => {
       new ResultFixture({ id: 8, taskId: 1, personId: 10 })
     ]);
 
-    const taskInstance$ = of(
+    const taskInstances$ = of([
       new TaskInstanceFixture({
         id: 1,
         taskId: 1,
         personId: 9
       })
-    );
+    ]);
 
-    const tasks$ = of([new TaskFixture({ id: 1 }), new TaskFixture({ id: 2 })]);
+    const tasks$ = of([
+      new TaskFixture({ id: 1, eduContents: [] }) as TaskWithRelationsInterface,
+      new TaskFixture({ id: 2, eduContents: [] }) as TaskWithRelationsInterface
+    ]);
 
-    const expectedInstance: TaskInstanceWithResultsInterface = {
-      ...new TaskInstanceFixture({
-        id: 1,
-        taskId: 1,
-        personId: 9
-      }),
-      task: new TaskFixture({ id: 1 }),
-      results: [
-        new ResultFixture({ id: 5, taskId: 1, personId: 9 }),
-        new ResultFixture({ id: 6, taskId: 1, personId: 9 })
-      ]
-    };
+    const expectedInstances: TaskInstanceWithResultsInterface[] = [
+      {
+        ...new TaskInstanceFixture({
+          id: 1,
+          taskId: 1,
+          personId: 9
+        }),
+        task: new TaskFixture({
+          id: 1,
+          eduContents: []
+        }) as TaskWithRelationsInterface,
+        results: [
+          new ResultFixture({ id: 5, taskId: 1, personId: 9 }),
+          new ResultFixture({ id: 6, taskId: 1, personId: 9 })
+        ]
+      }
+    ];
 
-    const constructedMap = tasksViewModel['getTaskInstanceWithRelations$'](
+    const constructedMap = tasksViewModel['getTaskInstancesWithRelations$'](
       results$,
-      taskInstance$,
+      taskInstances$,
       tasks$
     );
 
-    expect(constructedMap).toBeObservable(hot('(a|)', { a: expectedInstance }));
+    expect(constructedMap).toBeObservable(
+      hot('(a|)', { a: expectedInstances })
+    );
   });
 });
