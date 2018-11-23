@@ -7,27 +7,31 @@ import {
   PersonInterface
 } from '@campus/dal';
 import {
-  BadgePersonInterface,
   BreadcrumbLinkInterface,
-  ListFormat
+  DropdownMenuItemInterface,
+  ListFormat,
+  NotificationItemInterface
 } from '@campus/ui';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-export interface NotificationItemInterface {
-  icon: string;
-  person: BadgePersonInterface;
-  titleText: string;
-  link: string;
-  notificationText: string;
-  notificationDate: Date;
-  accented: boolean;
-}
 @Injectable({
   providedIn: 'root'
 })
 export class MockHeaderViewModel {
   enableAlerts = true;
+  profileMenuItems: DropdownMenuItemInterface[] = [
+    {
+      icon: '',
+      description: 'Profiel',
+      internalLink: '/profile'
+    },
+    {
+      icon: '',
+      description: 'Afmelden',
+      internalLink: '/logout'
+    }
+  ];
 
   // source streams
   breadCrumbs$: Observable<BreadcrumbLinkInterface[]> = new BehaviorSubject<
@@ -56,6 +60,7 @@ export class MockHeaderViewModel {
   recentAlerts$: Observable<NotificationItemInterface[]>;
   recentAlertCount$: Observable<number>;
   backLink$: Observable<string | undefined>;
+  profileLink$: Observable<DropdownMenuItemInterface[]>;
 
   toggleSideNav = () => {};
 
@@ -80,7 +85,7 @@ export class MockHeaderViewModel {
       map(([alerts, user]) => {
         return alerts.filter(alert => !alert.read).map(alert => {
           const notification: NotificationItemInterface = {
-            icon: 'alert',
+            icon: 'lesmateriaal', // TODO: depends on the alert.type
             titleText: alert.title,
             person: {
               displayName: user.displayName
