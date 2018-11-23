@@ -241,25 +241,11 @@ export class TasksViewModel {
 
   //#region set intermediateStreams
   protected setIntermediateStreams() {
-    this.tasksWithRelationInfo$ = combineLatest(
+    this.tasksWithRelationInfo$ = this.getTasksWithRelationInfo$(
       this.sharedTasks$,
       this.eduContents$,
       this.eduContentIdsPerTaskId$,
       this.teachers$
-    ).pipe(
-      map(([tasks, eduContents, eduContentIdsPerTaskId, teachers]) =>
-        tasks.map(task => {
-          return {
-            ...task,
-            eduContents: this.getEduContentWithSubmitted(
-              task.id,
-              eduContents,
-              eduContentIdsPerTaskId
-            ),
-            teacher: teachers.find(teacher => task.personId === teacher.id)
-          };
-        })
-      )
     );
 
     this.taskInstancesWithResults$ = this.getTaskInstancesWithRelations$(
@@ -448,6 +434,35 @@ export class TasksViewModel {
 
           return dict;
         }, new Map<number, ResultInterface[]>())
+      )
+    );
+  }
+
+  // Returns an array of Tasks with the related EduContents and Teacher
+  private getTasksWithRelationInfo$(
+    sharedTasks$: Observable<TaskInterface[]>,
+    eduContents$: Observable<EduContentInterface[]>,
+    eduContentIdsPerTaskId$: Observable<Map<number, Map<number, boolean>[]>>,
+    teachers$: Observable<PersonInterface[]>
+  ) {
+    return combineLatest(
+      sharedTasks$,
+      eduContents$,
+      eduContentIdsPerTaskId$,
+      teachers$
+    ).pipe(
+      map(([tasks, eduContents, eduContentIdsPerTaskId, teachers]) =>
+        tasks.map(task => {
+          return {
+            ...task,
+            eduContents: this.getEduContentWithSubmitted(
+              task.id,
+              eduContents,
+              eduContentIdsPerTaskId
+            ),
+            teacher: teachers.find(teacher => task.personId === teacher.id)
+          };
+        })
       )
     );
   }

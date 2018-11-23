@@ -22,6 +22,7 @@ import {
   TaskInstanceInterface,
   TaskInterface,
   TaskReducer,
+  UiActions,
   UiReducer,
   UserReducer
 } from '@campus/dal';
@@ -314,6 +315,40 @@ describe('TasksViewModel met State', () => {
     it('should get the ListFormat from the provided state', () => {
       expect(tasksViewModel.listFormat$).toBeObservable(
         hot('a', { a: listFormat })
+      );
+    });
+  });
+
+  describe('public functions directly dependent on store', () => {
+    it('changeListFormat', () => {
+      const store = TestBed.get(Store);
+      spyOn(store, 'dispatch');
+
+      const expectedAction = new UiActions.SetListFormat({
+        listFormat: ListFormat.LINE
+      });
+
+      tasksViewModel.changeListFormat(ListFormat.LINE);
+
+      expect(store.dispatch).toHaveBeenCalledWith(expectedAction);
+    });
+
+    it('getLearningAreaById', () => {
+      const expectedLearningArea = new LearningAreaFixture();
+
+      expect(tasksViewModel.getLearningAreaById(1)).toBeObservable(
+        hot('a', { a: expectedLearningArea })
+      );
+    });
+
+    it('getTaskById', () => {
+      const expectedTask = new TaskFixture({
+        personId: 186,
+        learningAreaId: 1
+      });
+
+      expect(tasksViewModel.getTaskById(1)).toBeObservable(
+        hot('a', { a: expectedTask })
       );
     });
   });

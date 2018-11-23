@@ -7,6 +7,7 @@ import {
   DalState,
   EduContentInterface,
   LearningAreaInterface,
+  PersonFixture,
   ResultFixture,
   ResultInterface,
   StateFeatureBuilder,
@@ -20,6 +21,7 @@ import { PersonInterface } from '@diekeure/polpo-api-angular-sdk';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
+import { EduContentFixture } from './../../../../../dal/src/lib/+fixtures/EduContent.fixture';
 import { TaskInstanceFixture } from './../../../../../dal/src/lib/+fixtures/TaskInstance.fixture';
 import { TasksResolver } from './tasks.resolver';
 import {
@@ -28,6 +30,7 @@ import {
   TasksViewModel,
   TaskWithRelationsInterface
 } from './tasks.viewmodel';
+import { EduContentWithSubmittedInterface } from './tasks.viewmodel.interfaces';
 
 let tasksViewModel: TestViewModel;
 
@@ -251,6 +254,56 @@ describe('TasksViewModel zonder State', () => {
     const constructedMap = tasksViewModel['getResultsPerTaskId$'](results$);
 
     expect(constructedMap).toBeObservable(hot('(a|)', { a: expectedMap }));
+  });
+
+  it('should build TasksWithRelationInfo$', () => {
+    const tasks$ = of([new TaskFixture({ id: 1 }), new TaskFixture({ id: 2 })]);
+
+    const eduContents$ = of([
+      {
+        ...new EduContentFixture(),
+        submitted: true
+      } as EduContentWithSubmittedInterface,
+      {
+        ...new EduContentFixture({ id: 2 }),
+        submitted: false
+      } as EduContentWithSubmittedInterface
+    ]);
+
+    const dict$ = of(
+      new Map<number, Map<number, boolean>[]>([
+        [
+          1,
+          [
+            new Map<number, boolean>([[11, true]]),
+            new Map<number, boolean>([[14, false]])
+          ]
+        ],
+        [
+          2,
+          [
+            new Map<number, boolean>([[12, true]]),
+            new Map<number, boolean>([[11, true]])
+          ]
+        ]
+      ])
+    );
+
+    const teachers$ = of([
+      new PersonFixture({ id: 186 }),
+      new PersonFixture({ id: 187 })
+    ]);
+
+    const expectedArray = [];
+
+    const constructedArray = tasksViewModel['getTasksWithRelationInfo$'](
+      tasks$,
+      eduContents$,
+      dict$,
+      teachers$
+    );
+
+    expect(constructedArray).toBeObservable(hot('(a|)', { a: expectedArray }));
   });
 
   it('should build TaskInstanceWithResults$', () => {
