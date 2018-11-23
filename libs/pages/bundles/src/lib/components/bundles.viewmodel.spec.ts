@@ -79,7 +79,7 @@ describe('BundlesViewModel', () => {
   });
 
   it('changeListFormat() should update uiStore', () => {
-    const spy = jest.spyOn(UiActions, 'SetListFormatUi');
+    const spy = jest.spyOn(UiActions, 'SetListFormat');
     const listFormat = ListFormat.GRID;
     bundlesViewModel.changeListFormat(listFormat);
     expect(spy).toHaveBeenCalledTimes(1);
