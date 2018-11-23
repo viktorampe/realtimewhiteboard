@@ -1,5 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ContentFixture } from '@campus/dal';
 import { InfoPanelContentComponent } from './info-panel-content.component';
 
 describe('InfoPanelContentComponent', () => {
@@ -20,13 +21,13 @@ describe('InfoPanelContentComponent', () => {
     component = fixture.componentInstance;
 
     mockData = {
-      content: {
+      content: new ContentFixture({
         name: 'string',
         description: 'string',
-        extension: 'string',
+        fileExtension: 'string',
         productType: 'string',
-        methods: ['string']
-      }
+        methodLogos: ['string']
+      })
     };
 
     component.content = mockData.content;
