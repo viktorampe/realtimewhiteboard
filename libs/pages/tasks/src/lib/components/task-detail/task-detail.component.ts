@@ -21,7 +21,9 @@ import {
 } from '@campus/ui';
 import { Observable, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { MockTasksViewModel } from '../tasks.viewmodel.mock';
+// TODO replace import
+// import { TasksViewModel } from '../tasks.viewmodel';
+import { MockTasksViewModel as TasksViewModel } from '../tasks.viewmodel.mock';
 
 @Component({
   selector: 'campus-task-detail',
@@ -58,7 +60,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
   }
 
   constructor(
-    private taskViewModel: MockTasksViewModel, // TODO replace by TasksViewModel
+    private taskViewModel: TasksViewModel,
     private activatedRoute: ActivatedRoute,
     private changeDetector: ChangeDetectorRef,
     @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface
@@ -125,8 +127,9 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
 
   private getContents(): Observable<EduContent[]> {
     return this.routerParams$.pipe(
-      // TODO check actual viewmodel method name
-      switchMap(params => this.taskViewModel.getTaskEduContents(params.task))
+      switchMap(params =>
+        this.taskViewModel.getEduContentsWithSubmittedByTaskId(params.task)
+      )
     );
   }
 

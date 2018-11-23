@@ -9,9 +9,8 @@ import {
 import { ListFormat, UiModule } from '@campus/ui';
 import { hot } from 'jasmine-marbles';
 import { BehaviorSubject } from 'rxjs';
-import { TasksViewModel } from '../tasks.viewmodel';
 import { LearningAreasWithTaskInstanceInfoInterface } from '../tasks.viewmodel.interfaces';
-import { MockTasksViewModel } from '../tasks.viewmodel.mock';
+import { MockTasksViewModel as TasksViewModel } from '../tasks.viewmodel.mock';
 import { TasksAreaComponent } from './tasks-area.component';
 
 describe('TasksAreaComponent', () => {
@@ -33,7 +32,7 @@ describe('TasksAreaComponent', () => {
       declarations: [TasksAreaComponent],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
-        { provide: TasksViewModel, useClass: MockTasksViewModel },
+        TasksViewModel,
         { provide: FILTER_SERVICE_TOKEN, useClass: FilterService }
       ]
     }).compileComponents();
@@ -61,9 +60,6 @@ describe('TasksAreaComponent', () => {
   });
 
   it('should call the filter service when filterTextInput.filterFn is called, and display the correct count/learning areas', () => {
-    const filterSource = {
-      learningAreasWithInfo: []
-    } as LearningAreasWithTaskInstanceInfoInterface;
     const filterText = '';
     component.filterTextInput.setFilterableItem(component);
 
@@ -71,37 +67,7 @@ describe('TasksAreaComponent', () => {
     component.filterTextInput.setValue(filterText);
 
     expect(spyFilterService).toHaveBeenCalledTimes(1);
-    expect(spyFilterService).toHaveBeenCalledWith(
-      {
-        learningAreasWithInfo: [
-          {
-            closedTasks: 3,
-            learningArea: {
-              color: '#2c354f',
-              icon: 'wiskunde',
-              name: 'Wiskunde'
-            },
-            openTasks: 2
-          },
-          {
-            closedTasks: 2,
-            learningArea: {
-              color: '#5e3b47',
-              icon: 'natuurwetenschappen',
-              name: 'Moderne Wetenschappen'
-            },
-            openTasks: 0
-          },
-          {
-            closedTasks: 0,
-            learningArea: { color: '#553030', icon: 'engels', name: 'Engels' },
-            openTasks: 2
-          }
-        ],
-        totalTasks: 9
-      },
-      ''
-    );
+    expect(spyFilterService).toHaveBeenCalledWith(learningAreasValue, '');
 
     fixture.detectChanges();
     const componentDE = fixture.debugElement.query(

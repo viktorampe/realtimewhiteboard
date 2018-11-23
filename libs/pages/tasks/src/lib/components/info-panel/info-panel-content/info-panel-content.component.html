@@ -1,16 +1,14 @@
-<campus-content-preview
-  [titleText]="content.name"
-  [description]="content.description"
->
-  <campus-file-extension
-    type
-    *ngIf="content.fileExtension"
-    [extensionClass]="content.fileExtension"
-  ></campus-file-extension>
-  <mat-icon
-    icon
-    [svgIcon]="content.productType"
-    *ngIf="content.productType"
-  ></mat-icon>
-  <div badge *ngFor="let badge of content.methodLogos">{{ badge }}</div>
+<campus-content-preview [titleText]="content.name"
+                        [description]="content.description">
+  <campus-file-extension type
+                         *ngIf="content.fileExtension"
+                         [extensionClass]="content.fileExtension"></campus-file-extension>
+  <mat-icon icon
+            [svgIcon]="content.productType"
+            *ngIf="content.productType"></mat-icon>
+  <div *ngIf="content.methodLogos && content.methodLogos.length">
+    <img *ngFor="let badge of content.methodLogos"
+         [src]="badge" />
+  </div>
+
 </campus-content-preview>

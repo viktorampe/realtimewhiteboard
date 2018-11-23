@@ -14,6 +14,7 @@ import {
 } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { TasksViewModel } from './tasks.viewmodel';
 import {
   LearningAreasWithTaskInstanceInfoInterface,
   TaskInstancesWithEduContentInfoInterface,
@@ -28,7 +29,7 @@ export class MockActivatedRoute {
   providedIn: 'root'
 })
 // implements TasksResolver
-export class MockTasksViewModel {
+export class MockTasksViewModel implements TasksViewModel {
   learningAreasWithTaskInstances$: Observable<
     LearningAreasWithTaskInstanceInfoInterface
   >;
@@ -50,7 +51,7 @@ export class MockTasksViewModel {
   changeListFormat = value => {};
   getLearningAreaById = this.getMockSelectedLearningArea;
   getTaskById = this.getMockSelectedTaskInstance;
-  getTaskEduContents = (taskId: number) =>
+  getEduContentsWithSubmittedByTaskId = (taskId: number) =>
     new BehaviorSubject(this.getMockEducontents());
   taskInstancesByLearningArea = (learningAreaId: number) =>
     this.getMockTaskInstancesByLearningArea();
