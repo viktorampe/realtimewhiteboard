@@ -9,6 +9,7 @@ import {
   EduContentInterface,
   LearningAreaFixture,
   LearningAreaInterface,
+  PersonInterface,
   StateFeatureBuilder,
   TaskEduContentFixture,
   TaskEduContentInterface,
@@ -18,7 +19,6 @@ import {
   TaskInterface
 } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
-import { PersonInterface } from '@diekeure/polpo-api-angular-sdk';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
@@ -670,5 +670,43 @@ describe('TasksViewModel zonder State', () => {
     expect(constructedLearningAreas).toBeObservable(
       hot('(a|)', { a: expectedLearningAreas })
     );
+  });
+
+  it('getEduContentsWithSubmittedByTaskId should return the correct EduContents', () => {
+    const mockTaskArray = [
+      new TaskFixture({ id: 1, personId: 186 }),
+      new TaskFixture({ id: 2, personId: 187 })
+    ];
+
+    const mockEduContentArray = [
+      new EduContentFixture({ id: 3 }),
+      new EduContentFixture({ id: 4 })
+    ];
+
+    const mockTaskEducontentArray = [
+      new TaskEduContentFixture({
+        id: 5,
+        taskId: 1,
+        eduContentId: 3,
+        submitted: true
+      })
+    ];
+
+    const tasks$ = of(mockTaskArray);
+    const eduContents$ = of(mockEduContentArray);
+    const taskEduContent$ = of(mockTaskEducontentArray);
+
+    // source streams voor this.tasksWithRelationInfo$
+    tasksViewModel.setSharedTasks$(tasks$);
+    tasksViewModel.setEducontents$(eduContents$);
+    tasksViewModel.setTaskEducontents$(taskEduContent$);
+
+    // waarschijnlijk wordt dictionary niet gebouwd
+
+    const constructedEduContents = tasksViewModel.getEduContentsWithSubmittedByTaskId(
+      1
+    );
+
+    expect(constructedEduContents).toBeObservable(hot('a', { a: [] }));
   });
 });

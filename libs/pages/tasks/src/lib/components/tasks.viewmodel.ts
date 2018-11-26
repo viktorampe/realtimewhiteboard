@@ -135,7 +135,7 @@ export class TasksViewModel {
       map(alerts =>
         alerts.filter(alert => alert.taskId === taskId).map(alert => alert.id)
       ),
-      tap(ids => this.alertService.setAlertAsRead(userId, ids))
+      tap(ids => this.alertService.setAlertAsRead(userId, ids, true, false))
     );
   }
 
