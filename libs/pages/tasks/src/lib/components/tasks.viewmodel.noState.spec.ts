@@ -30,7 +30,6 @@ import {
   TasksViewModel,
   TaskWithRelationsInterface
 } from './tasks.viewmodel';
-import { EduContentWithSubmittedInterface } from './tasks.viewmodel.interfaces';
 
 let tasksViewModel: TestViewModel;
 
@@ -106,32 +105,30 @@ describe('TasksViewModel zonder State', () => {
   });
 
   it('should build TasksPerLearningAreaId$', () => {
-    const tasks$ = of([
+    const mockTaskArray = [
       new TaskFixture({ id: 1, learningAreaId: 1 }),
       new TaskFixture({ id: 2, learningAreaId: 1 }),
       new TaskFixture({ id: 3, learningAreaId: 2 }),
       new TaskFixture({ id: 4, learningAreaId: 3 })
-    ]);
+    ];
+
+    const tasks$ = of(mockTaskArray);
 
     const expectedMap = new Map<Number, TaskInterface[]>([
-      [
-        1,
-        [
-          new TaskFixture({ id: 1, learningAreaId: 1 }),
-          new TaskFixture({ id: 2, learningAreaId: 1 })
-        ]
-      ],
-      [2, [new TaskFixture({ id: 3, learningAreaId: 2 })]],
-      [3, [new TaskFixture({ id: 4, learningAreaId: 3 })]]
+      [1, [mockTaskArray[0], mockTaskArray[1]]],
+      [2, [mockTaskArray[2]]],
+      [3, [mockTaskArray[3]]]
     ]);
 
-    const constructedMap = tasksViewModel['getTasksPerLearningAreaId$'](tasks$);
+    const constructedMap = tasksViewModel['getTasksPerLearningAreaIdDict$'](
+      tasks$
+    );
 
     expect(constructedMap).toBeObservable(hot('(a|)', { a: expectedMap }));
   });
 
   it('should build EduContentIdsPerTaskId$', () => {
-    const tasksEduContents$ = of([
+    const mockTaskEduContentArray: TaskEduContentWithSubmittedInterface[] = [
       {
         ...new TaskEduContentFixture({ id: 5, taskId: 1, eduContentId: 11 }),
         submitted: true
@@ -148,26 +145,48 @@ describe('TasksViewModel zonder State', () => {
         ...new TaskEduContentFixture({ id: 8, taskId: 1, eduContentId: 14 }),
         submitted: false
       }
-    ]);
+    ];
+
+    const tasksEduContents$ = of(mockTaskEduContentArray);
 
     const expectedMap = new Map<Number, Map<number, boolean>[]>([
       [
         1,
         [
-          new Map<number, boolean>([[11, true]]),
-          new Map<number, boolean>([[14, false]])
+          new Map<number, boolean>([
+            [
+              mockTaskEduContentArray[0].eduContentId,
+              mockTaskEduContentArray[0].submitted
+            ]
+          ]),
+          new Map<number, boolean>([
+            [
+              mockTaskEduContentArray[3].eduContentId,
+              mockTaskEduContentArray[3].submitted
+            ]
+          ])
         ]
       ],
       [
         2,
         [
-          new Map<number, boolean>([[12, true]]),
-          new Map<number, boolean>([[11, true]])
+          new Map<number, boolean>([
+            [
+              mockTaskEduContentArray[1].eduContentId,
+              mockTaskEduContentArray[1].submitted
+            ]
+          ]),
+          new Map<number, boolean>([
+            [
+              mockTaskEduContentArray[0].eduContentId,
+              mockTaskEduContentArray[0].submitted
+            ]
+          ])
         ]
       ]
     ]);
 
-    const constructedMap = tasksViewModel['getEduContentIdsPerTaskId$'](
+    const constructedMap = tasksViewModel['getEduContentIdsPerTaskIdDict$'](
       tasksEduContents$
     );
 
@@ -175,10 +194,10 @@ describe('TasksViewModel zonder State', () => {
   });
 
   it('getSubmittedPerEduContentId should cast taskEduContent to a Map<number,boolean>', () => {
-    let taskEduContent = {
+    let taskEduContent: TaskEduContentWithSubmittedInterface = {
       ...new TaskEduContentFixture({ eduContentId: 1 }),
       submitted: true
-    } as TaskEduContentWithSubmittedInterface;
+    };
     let expectedMap = new Map<number, boolean>([[1, true]]);
 
     expect(
@@ -188,7 +207,7 @@ describe('TasksViewModel zonder State', () => {
     taskEduContent = {
       ...new TaskEduContentFixture({ eduContentId: 2 }),
       submitted: false
-    } as TaskEduContentWithSubmittedInterface;
+    };
     expectedMap = new Map<number, boolean>([[2, false]]);
 
     expect(
@@ -207,94 +226,123 @@ describe('TasksViewModel zonder State', () => {
   });
 
   it('should build TasksPerTeacherId$', () => {
-    const tasks$ = of([
+    const mockTaskArray = [
       new TaskFixture({ id: 5, personId: 1 }),
       new TaskFixture({ id: 6, personId: 2 }),
       new TaskFixture({ id: 7, personId: 2 }),
       new TaskFixture({ id: 8, personId: 3 })
-    ]);
+    ];
+
+    const tasks$ = of(mockTaskArray);
 
     const expectedMap = new Map<Number, TaskInterface[]>([
-      [1, [new TaskFixture({ id: 5, personId: 1 })]],
-      [
-        2,
-        [
-          new TaskFixture({ id: 6, personId: 2 }),
-          new TaskFixture({ id: 7, personId: 2 })
-        ]
-      ],
-      [3, [new TaskFixture({ id: 8, personId: 3 })]]
+      [1, [mockTaskArray[0]]],
+      [2, [mockTaskArray[1], mockTaskArray[2]]],
+      [3, [mockTaskArray[3]]]
     ]);
 
-    const constructedMap = tasksViewModel['getTasksPerTeacherId$'](tasks$);
+    const constructedMap = tasksViewModel['getTasksPerTeacherIdDict$'](tasks$);
 
     expect(constructedMap).toBeObservable(hot('(a|)', { a: expectedMap }));
   });
 
   it('should build ResultsPerTaskId$', () => {
-    const results$ = of([
+    const mockResultArray = [
       new ResultFixture({ id: 5, taskId: 1 }),
       new ResultFixture({ id: 6, taskId: 2 }),
       new ResultFixture({ id: 7, taskId: 2 }),
       new ResultFixture({ id: 8, taskId: 3 })
-    ]);
+    ];
+
+    const results$ = of(mockResultArray);
 
     const expectedMap = new Map<Number, ResultInterface[]>([
-      [1, [new ResultFixture({ id: 5, taskId: 1 })]],
-      [
-        2,
-        [
-          new ResultFixture({ id: 6, taskId: 2 }),
-          new ResultFixture({ id: 7, taskId: 2 })
-        ]
-      ],
-      [3, [new ResultFixture({ id: 8, taskId: 3 })]]
+      [1, [mockResultArray[0]]],
+      [2, [mockResultArray[1], mockResultArray[2]]],
+      [3, [mockResultArray[3]]]
     ]);
 
-    const constructedMap = tasksViewModel['getResultsPerTaskId$'](results$);
+    const constructedMap = tasksViewModel['getResultsPerTaskIdDict$'](results$);
 
     expect(constructedMap).toBeObservable(hot('(a|)', { a: expectedMap }));
   });
 
   it('should build TasksWithRelationInfo$', () => {
-    const tasks$ = of([new TaskFixture({ id: 1 }), new TaskFixture({ id: 2 })]);
+    const mockTaskArray = [
+      new TaskFixture({ id: 1, personId: 186 }),
+      new TaskFixture({ id: 2, personId: 187 })
+    ];
 
-    const eduContents$ = of([
+    const mockEduContentArray = [
       {
-        ...new EduContentFixture(),
-        submitted: true
-      } as EduContentWithSubmittedInterface,
+        ...new EduContentFixture()
+      },
       {
-        ...new EduContentFixture({ id: 2 }),
-        submitted: false
-      } as EduContentWithSubmittedInterface
-    ]);
+        ...new EduContentFixture({ id: 2 })
+      }
+    ];
 
-    const dict$ = of(
+    const mockDictionary = of(
       new Map<number, Map<number, boolean>[]>([
         [
           1,
           [
-            new Map<number, boolean>([[11, true]]),
-            new Map<number, boolean>([[14, false]])
+            new Map<number, boolean>([[1, true]]),
+            new Map<number, boolean>([[2, false]])
           ]
         ],
         [
           2,
           [
-            new Map<number, boolean>([[12, true]]),
-            new Map<number, boolean>([[11, true]])
+            new Map<number, boolean>([[1, true]]),
+            new Map<number, boolean>([[2, true]])
           ]
         ]
       ])
     );
 
-    const teachers$ = of([
+    const mockTeacherArray = [
       new PersonFixture({ id: 186 }),
       new PersonFixture({ id: 187 })
-    ]);
+    ];
 
-    const expectedArray = [];
+    const tasks$ = of(mockTaskArray);
+    const eduContents$ = of(mockEduContentArray);
+    const teachers$ = of(mockTeacherArray);
+    const dict$ = of(mockDictionary);
+
+    const expectedArray = [
+      {
+        ...mockTaskArray[0],
+        personId: mockTeacherArray[0].id,
+        eduContents: [
+          {
+            ...mockEduContentArray[0],
+            submitted: true
+          },
+          {
+            ...mockEduContentArray[1],
+            submitted: false
+          }
+        ],
+        teacher: mockTeacherArray[0]
+      },
+      {
+        ...mockTaskArray[1],
+        personId: mockTeacherArray[1].id,
+        eduContents: [
+          {
+            ...mockEduContentArray[0],
+            submitted: true
+          },
+          {
+            ...mockEduContentArray[1],
+            submitted: true
+          }
+        ],
+        teacher: mockTeacherArray[1]
+      }
+    ];
 
     const constructedArray = tasksViewModel['getTasksWithRelationInfo$'](
       tasks$,
@@ -307,20 +355,24 @@ describe('TasksViewModel zonder State', () => {
   });
 
   it('should build TaskInstanceWithResults$', () => {
-    const results$ = of([
+    const mockResultArray = [
       new ResultFixture({ id: 5, taskId: 1, personId: 9 }),
       new ResultFixture({ id: 6, taskId: 1, personId: 9 }),
       new ResultFixture({ id: 7, taskId: 2, personId: 9 }),
       new ResultFixture({ id: 8, taskId: 1, personId: 10 })
-    ]);
+    ];
 
-    const taskInstances$ = of([
+    const results$ = of(mockResultArray);
+
+    const mockTaskInstanceArray = [
       new TaskInstanceFixture({
         id: 1,
         taskId: 1,
         personId: 9
       })
-    ]);
+    ];
+
+    const taskInstances$ = of(mockTaskInstanceArray);
 
     const tasks$ = of([
       new TaskFixture({ id: 1, eduContents: [] }) as TaskWithRelationsInterface,

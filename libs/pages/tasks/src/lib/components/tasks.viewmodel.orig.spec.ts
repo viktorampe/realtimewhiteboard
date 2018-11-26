@@ -285,7 +285,7 @@ describe('TasksViewModel met State', () => {
 
     it('should get the educontents from the provided state', () => {
       // check unique Id value calculation
-      expect(tasksViewModel['uniqueEduContentIds$']).toBeObservable(
+      expect(tasksViewModel['uniqueEduContentIdsDict$']).toBeObservable(
         hot('(a|)', { a: [1, 2] })
       );
 
