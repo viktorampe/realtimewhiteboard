@@ -43,14 +43,15 @@ export class MockTasksViewModel implements TasksViewModel {
   >;
   listFormat$: Observable<ListFormat>;
 
+  getLearningAreaById = this.getMockSelectedLearningArea;
+  getTaskById = this.getMockSelectedTaskInstance;
+
   constructor() {
     this.loadMockData();
   }
 
   // public method mocks
   changeListFormat = value => {};
-  getLearningAreaById = this.getMockSelectedLearningArea;
-  getTaskById = this.getMockSelectedTaskInstance;
   getEduContentsWithSubmittedByTaskId = (taskId: number) =>
     new BehaviorSubject(this.getMockEducontents());
   taskInstancesByLearningArea = (learningAreaId: number) =>
