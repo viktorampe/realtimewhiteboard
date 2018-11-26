@@ -11,7 +11,6 @@ import {
 import { ListFormat } from '@campus/ui';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { BooksResolver } from './books.resolver';
 import { MockBooksViewModel } from './books.viewmodel.mock';
 
 @Injectable({
@@ -28,11 +27,8 @@ export class BooksViewModel {
 
   constructor(
     private vmMock: MockBooksViewModel,
-    private store: Store<DalState>,
-    private booksResolver: BooksResolver
+    private store: Store<DalState>
   ) {
-    this.booksResolver.resolve();
-
     this.initialize();
   }
 
