@@ -35,8 +35,8 @@ import { AppComponent } from './app.component';
     RouterModule.forRoot(
       [
         {
-          path: 'book',
-          loadChildren: '@campus/pages/books#BooksModule'
+          path: 'books',
+          loadChildren: '@campus/pages/books#PagesBooksModule'
         },
         { path: 'dev', loadChildren: '@campus/devlib#DevlibModule' },
         {

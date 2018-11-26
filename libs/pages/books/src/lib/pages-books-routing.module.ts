@@ -1,13 +1,13 @@
-import { BooksViewModel } from './components/books.viewmodel';
-import { BooksComponent } from './components/books.component';
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
+import { BooksResolver } from './components/books.resolver';
+import { BooksComponent } from './components/books/books.component';
 
 const routes: Routes = [
   {
     path: '',
     component: BooksComponent,
-    resolve: { isResolved: BooksViewModel }
+    resolve: { isResolved: BooksResolver }
   }
 ];
 

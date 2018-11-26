@@ -326,6 +326,34 @@
         }
       }
     },
+    "pages-books": {
+      "root": "libs/pages/books",
+      "sourceRoot": "libs/pages/books/src",
+      "projectType": "library",
+      "prefix": "campus",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/pages/books/tsconfig.lib.json",
+              "libs/pages/books/tsconfig.spec.json",
+              "libs/pages/books/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/pages/books/jest.config.js",
+            "tsConfig": "libs/pages/books/tsconfig.spec.json",
+            "setupFile": "libs/pages/books/src/test-setup.ts",
+            "maxWorkers": 2
+          }
+        }
+      }
+    },
     "ui": {
       "root": "libs/ui",
       "sourceRoot": "libs/ui/src",
