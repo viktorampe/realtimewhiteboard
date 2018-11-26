@@ -7,6 +7,7 @@ import {
   DalState,
   EduContentFixture,
   EduContentInterface,
+  LearningAreaFixture,
   LearningAreaInterface,
   StateFeatureBuilder,
   TaskEduContentFixture,
@@ -21,15 +22,16 @@ import { PersonInterface } from '@diekeure/polpo-api-angular-sdk';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
-import { LearningAreaFixture } from './../../../../../dal/src/lib/+fixtures/LearningArea.fixture';
 import { TasksResolver } from './tasks.resolver';
 import {
-  TaskInstanceWithResultsInterface,
+  LearningAreaWithTasksInterface,
+  TaskInstanceWithTaskInterface,
   TasksViewModel,
   TaskWithRelationsInterface
 } from './tasks.viewmodel';
 import {
   EduContentWithSubmittedInterface,
+  LearningAreasWithTaskInstanceInfoInterface,
   TaskInstanceWithEduContentInfoInterface
 } from './tasks.viewmodel.interfaces';
 
@@ -305,7 +307,7 @@ describe('TasksViewModel zonder State', () => {
       new TaskFixture({ id: 2, eduContents: [] }) as TaskWithRelationsInterface
     ];
 
-    const mockTaskInstanceArray: TaskInstanceWithResultsInterface[] = [
+    const mockTaskInstanceArray: TaskInstanceWithTaskInterface[] = [
       {
         ...new TaskInstanceFixture({
           id: 1,
@@ -553,5 +555,120 @@ describe('TasksViewModel zonder State', () => {
     constructedFinished = tasksViewModel['isTaskFinished'](mockTask);
 
     expect(constructedFinished).toBe(true);
+  });
+
+  it('getLearningAreaWithInfo should count the open and closed tasks', () => {
+    const mockEduContentsArray: EduContentWithSubmittedInterface[] = [
+      { ...new EduContentFixture({ id: 1 }), submitted: true },
+      { ...new EduContentFixture({ id: 2 }), submitted: false }
+    ];
+
+    const mockTaskOpen = {
+      ...new TaskFixture({ id: 8 }),
+      eduContents: [mockEduContentsArray[1]]
+    } as TaskWithRelationsInterface;
+
+    const mockTaskClosed = {
+      ...new TaskFixture({ id: 8 }),
+      eduContents: [mockEduContentsArray[0]]
+    } as TaskWithRelationsInterface;
+
+    const mockLearningArea: LearningAreaWithTasksInterface = {
+      ...new LearningAreaFixture(),
+      tasks: [mockTaskOpen]
+    };
+
+    let constructedLearningAreaWithInfo = tasksViewModel[
+      'getLearningAreaWithInfo'
+    ](mockLearningArea);
+
+    expect(constructedLearningAreaWithInfo.openTasks).toBe(1);
+    expect(constructedLearningAreaWithInfo.closedTasks).toBe(0);
+
+    mockLearningArea.tasks = [mockTaskClosed];
+
+    constructedLearningAreaWithInfo = tasksViewModel['getLearningAreaWithInfo'](
+      mockLearningArea
+    );
+
+    expect(constructedLearningAreaWithInfo.openTasks).toBe(0);
+    expect(constructedLearningAreaWithInfo.closedTasks).toBe(1);
+
+    mockLearningArea.tasks = [mockTaskOpen, mockTaskClosed, mockTaskOpen];
+
+    constructedLearningAreaWithInfo = tasksViewModel['getLearningAreaWithInfo'](
+      mockLearningArea
+    );
+
+    expect(constructedLearningAreaWithInfo.openTasks).toBe(2);
+    expect(constructedLearningAreaWithInfo.closedTasks).toBe(1);
+  });
+
+  it('should build LearningAreasWithTaskInstanceInfo', () => {
+    const mockEduContentsArray: EduContentWithSubmittedInterface[] = [
+      { ...new EduContentFixture({ id: 9 }), submitted: true },
+      { ...new EduContentFixture({ id: 10 }), submitted: false }
+    ];
+
+    const mockTasksArray: TaskWithRelationsInterface[] = [
+      {
+        ...new TaskFixture({
+          id: 1,
+          learningAreaId: 8
+        }),
+        eduContents: mockEduContentsArray
+      } as TaskWithRelationsInterface,
+      {
+        ...new TaskFixture({
+          id: 2,
+          learningAreaId: 9
+        }),
+        eduContents: [mockEduContentsArray[0]]
+      } as TaskWithRelationsInterface,
+      {
+        ...new TaskFixture({
+          id: 3,
+          learningAreaId: 8
+        }),
+        eduContents: [mockEduContentsArray[1]]
+      } as TaskWithRelationsInterface
+    ];
+
+    const mockLearningAreaArray: LearningAreaWithTasksInterface[] = [
+      {
+        ...new LearningAreaFixture({ id: 8 }),
+        tasks: [mockTasksArray[0], mockTasksArray[2]]
+      },
+      {
+        ...new LearningAreaFixture({ id: 9 }),
+        tasks: [mockTasksArray[1]]
+      }
+    ];
+
+    const learningAreasWithTasks$ = of(mockLearningAreaArray);
+
+    const constructedLearningAreas = tasksViewModel[
+      'getLearningAreasWithTaskInstanceInfo$'
+    ](learningAreasWithTasks$);
+
+    const expectedLearningAreas: LearningAreasWithTaskInstanceInfoInterface = {
+      learningAreasWithInfo: [
+        {
+          learningArea: mockLearningAreaArray[0],
+          openTasks: 2,
+          closedTasks: 0
+        },
+        {
+          learningArea: mockLearningAreaArray[1],
+          openTasks: 0,
+          closedTasks: 1
+        }
+      ],
+      totalTasks: 3
+    };
+
+    expect(constructedLearningAreas).toBeObservable(
+      hot('(a|)', { a: expectedLearningAreas })
+    );
   });
 });

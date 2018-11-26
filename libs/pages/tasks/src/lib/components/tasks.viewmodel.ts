@@ -252,33 +252,8 @@ export class TasksViewModel {
 
   //#region set presentationStreams
   protected setPresentationStreams() {
-    this.learningAreasWithTaskInstanceInfo$ = this.learningAreasWithTasks$.pipe(
-      map(
-        (learningAreas): LearningAreasWithTaskInstanceInfoInterface => {
-          const learningAreasWithInfo = learningAreas.map(area => {
-            const totalTasksInArea = area.tasks.length;
-            const tasksFinishedAmount = area.tasks.filter(task =>
-              this.isTaskFinished(task)
-            ).length;
-
-            return {
-              learningArea: area,
-              openTasks: totalTasksInArea - tasksFinishedAmount,
-              closedTasks: tasksFinishedAmount
-            };
-          });
-
-          const totalTasks = learningAreasWithInfo.reduce(
-            (total, area) => total + area.openTasks + area.closedTasks,
-            0
-          );
-
-          return {
-            learningAreasWithInfo: learningAreasWithInfo,
-            totalTasks: totalTasks
-          };
-        }
-      )
+    this.learningAreasWithTaskInstanceInfo$ = this.getLearningAreasWithTaskInstanceInfo$(
+      this.learningAreasWithTasks$
     );
   }
   //#endregion
@@ -396,7 +371,7 @@ export class TasksViewModel {
   private getLearningAreasWithTasks$(
     learningAreas$: Observable<LearningAreaInterface[]>,
     tasksWithInstance$: Observable<TaskWithRelationsInterface[]>
-  ) {
+  ): Observable<LearningAreaWithTasksInterface[]> {
     return combineLatest(
       learningAreas$,
       this.getTasksPerLearningAreaIdDict$(tasksWithInstance$) //dit cast naar TaskInterface
@@ -475,6 +450,45 @@ export class TasksViewModel {
         }, new Map<number, TaskInstanceWithEduContentInfoInterface[]>())
       )
     );
+  }
+
+  private getLearningAreasWithTaskInstanceInfo$(
+    learningAreasWithTasks$: Observable<LearningAreaWithTasksInterface[]>
+  ): Observable<LearningAreasWithTaskInstanceInfoInterface> {
+    return learningAreasWithTasks$.pipe(
+      map(
+        (learningAreas): LearningAreasWithTaskInstanceInfoInterface => {
+          const learningAreaWithInfoArray = learningAreas.map(area =>
+            this.getLearningAreaWithInfo(area)
+          );
+
+          const totalTasks = learningAreaWithInfoArray.reduce(
+            (total, area) => total + area.openTasks + area.closedTasks,
+            0
+          );
+
+          return {
+            learningAreasWithInfo: learningAreaWithInfoArray,
+            totalTasks: totalTasks
+          };
+        }
+      )
+    );
+  }
+
+  private getLearningAreaWithInfo(
+    learningArea: LearningAreaWithTasksInterface
+  ) {
+    const totalTasksInArea = learningArea.tasks.length;
+    const tasksFinishedAmount = learningArea.tasks.filter(task =>
+      this.isTaskFinished(task)
+    ).length;
+
+    return {
+      learningArea: learningArea,
+      openTasks: totalTasksInArea - tasksFinishedAmount,
+      closedTasks: tasksFinishedAmount
+    };
   }
 
   private isTaskFinished(task: TaskWithRelationsInterface): boolean {
