@@ -9,18 +9,17 @@ import {
   UnlockedBoekeStudent,
   UnlockedBoekeStudentFixture
 } from '@campus/dal';
+import { ListFormat } from '@campus/ui';
 import { BehaviorSubject, Observable } from 'rxjs';
-
-export class MockActivatedRoute {
-  params: Observable<any> = new BehaviorSubject<any>({
-    params: { bundle: 1, area: 1 }
-  });
-}
 
 @Injectable({
   providedIn: 'root'
 })
 export class MockBooksViewModel {
+  listFormat$: Observable<ListFormat> = new BehaviorSubject<ListFormat>(
+    ListFormat.GRID
+  );
+
   // source
   learningAreas$: Observable<LearningAreaInterface[]> = new BehaviorSubject([
     new LearningAreaFixture({ id: 1, name: 'foo' }),
@@ -31,14 +30,14 @@ export class MockBooksViewModel {
 
   // TODO change to <EduContent[]> when tasks branch is merged
   eduContents$: Observable<EduContentInterface[]> = new BehaviorSubject([
-    new EduContentFixture({ id: 1 }, { id: 1, title: 'foo' }),
-    new EduContentFixture({ id: 2 }, { id: 2, title: 'foo' }),
-    new EduContentFixture({ id: 3 }, { id: 3, title: 'foo' }),
-    new EduContentFixture({ id: 4 }, { id: 4, title: 'foo' }),
-    new EduContentFixture({ id: 5 }, { id: 5, title: 'foo' }),
-    new EduContentFixture({ id: 6 }, { id: 6, title: 'foo' }),
-    new EduContentFixture({ id: 6 }, { id: 7, title: 'foo' }),
-    new EduContentFixture({ id: 7 }, { id: 8, title: 'foo' })
+    new EduContentFixture({ id: 1, publishedEduContentMetadataId: 1 }),
+    new EduContentFixture({ id: 2, publishedEduContentMetadataId: 2 }),
+    new EduContentFixture({ id: 3, publishedEduContentMetadataId: 3 }),
+    new EduContentFixture({ id: 4, publishedEduContentMetadataId: 4 }),
+    new EduContentFixture({ id: 5, publishedEduContentMetadataId: 5 }),
+    new EduContentFixture({ id: 6, publishedEduContentMetadataId: 6 }),
+    new EduContentFixture({ id: 7, publishedEduContentMetadataId: 7 }),
+    new EduContentFixture({ id: 8, publishedEduContentMetadataId: 8 })
   ]);
 
   unlockedBoekeGroups$: Observable<UnlockedBoekeGroup[]> = new BehaviorSubject([
@@ -60,13 +59,37 @@ export class MockBooksViewModel {
   // presentation
   // TODO change to <EduContent[]> when tasks branch is merged
   sharedBooks$: Observable<EduContentInterface[]> = new BehaviorSubject([
-    new EduContentFixture({ id: 1, publishedEduContentMetadataId: 1 }),
-    new EduContentFixture({ id: 2, publishedEduContentMetadataId: 2 }),
-    new EduContentFixture({ id: 3, publishedEduContentMetadataId: 3 }),
-    new EduContentFixture({ id: 4, publishedEduContentMetadataId: 4 }),
-    new EduContentFixture({ id: 5, publishedEduContentMetadataId: 5 }),
-    new EduContentFixture({ id: 6, publishedEduContentMetadataId: 6 }),
-    new EduContentFixture({ id: 7, publishedEduContentMetadataId: 7 }),
-    new EduContentFixture({ id: 8, publishedEduContentMetadataId: 8 })
+    new EduContentFixture(
+      { id: 1, publishedEduContentMetadataId: 1 },
+      { learningAreaId: 1, learningArea: new LearningAreaFixture({ id: 1 }) }
+    ),
+    new EduContentFixture(
+      { id: 2, publishedEduContentMetadataId: 2 },
+      { learningAreaId: 1, learningArea: new LearningAreaFixture({ id: 1 }) }
+    ),
+    new EduContentFixture(
+      { id: 3, publishedEduContentMetadataId: 3 },
+      { learningAreaId: 2, learningArea: new LearningAreaFixture({ id: 2 }) }
+    ),
+    new EduContentFixture(
+      { id: 4, publishedEduContentMetadataId: 4 },
+      { learningAreaId: 2, learningArea: new LearningAreaFixture({ id: 2 }) }
+    ),
+    new EduContentFixture(
+      { id: 5, publishedEduContentMetadataId: 5 },
+      { learningAreaId: 3, learningArea: new LearningAreaFixture({ id: 3 }) }
+    ),
+    new EduContentFixture(
+      { id: 6, publishedEduContentMetadataId: 6 },
+      { learningAreaId: 3, learningArea: new LearningAreaFixture({ id: 3 }) }
+    ),
+    new EduContentFixture(
+      { id: 7, publishedEduContentMetadataId: 7 },
+      { learningAreaId: 4, learningArea: new LearningAreaFixture({ id: 4 }) }
+    ),
+    new EduContentFixture(
+      { id: 8, publishedEduContentMetadataId: 8 },
+      { learningAreaId: 4, learningArea: new LearningAreaFixture({ id: 4 }) }
+    )
   ]);
 }

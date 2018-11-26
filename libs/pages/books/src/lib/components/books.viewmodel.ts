@@ -3,10 +3,13 @@ import {
   DalState,
   EduContentInterface,
   LearningAreaInterface,
+  LearningAreaQueries,
+  UiQuery,
   UnlockedBoekeGroup,
   UnlockedBoekeStudent
 } from '@campus/dal';
-import { Store } from '@ngrx/store';
+import { ListFormat } from '@campus/ui';
+import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { BooksResolver } from './books.resolver';
 import { MockBooksViewModel } from './books.viewmodel.mock';
@@ -15,6 +18,8 @@ import { MockBooksViewModel } from './books.viewmodel.mock';
   providedIn: 'root'
 })
 export class BooksViewModel {
+  listFormat$: Observable<ListFormat>;
+
   // TODO change to <EduContent[]> when tasks branch is merged
   sharedBooks$: Observable<EduContentInterface[]>;
 
@@ -35,7 +40,9 @@ export class BooksViewModel {
   }
 
   initialize() {
-    this.learningAreas$ = this.vmMock.learningAreas$;
+    this.listFormat$ = this.store.pipe(select(UiQuery.getListFormat));
+    this.learningAreas$ = this.store.pipe(select(LearningAreaQueries.getAll));
+
     this.eduContents$ = this.vmMock.eduContents$;
     this.unlockedBoekeGroups$ = this.vmMock.unlockedBoekeGroups$;
     this.unlockedBoekeStudents$ = this.vmMock.unlockedBoekeStudents$;
