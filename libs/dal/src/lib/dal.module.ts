@@ -27,6 +27,10 @@ import {
 } from './+state/student-content-status';
 import { TaskEffects, TaskReducer } from './+state/task';
 import {
+  TaskEduContentEffects,
+  TaskEduContentReducer
+} from './+state/task-edu-content';
+import {
   TaskInstanceEffects,
   TaskInstanceReducer
 } from './+state/task-instance';
@@ -108,7 +112,8 @@ interface DalOptions {
       ContentStatusReducer,
       UserReducer,
       TaskReducer,
-      TaskInstanceReducer
+      TaskInstanceReducer,
+      TaskEduContentReducer
       //todo add alerts reducer
     ]),
     EffectsModule.forFeature([
@@ -125,7 +130,8 @@ interface DalOptions {
       ContentStatusesEffects,
       TaskEffects,
       TaskInstanceEffects,
-      AlertsEffects
+      AlertsEffects,
+      TaskEduContentEffects
     ])
   ],
   providers: [
