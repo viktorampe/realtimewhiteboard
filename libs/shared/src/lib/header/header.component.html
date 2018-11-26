@@ -16,7 +16,7 @@
           <campus-dropdown-menu #dropDownAlerts
                                 showHeader="true"
                                 [newItemCount]="unreadAlertCount$|async"
-                                [headerIcon]=""
+                                [headerIcon]="'notifications'"
                                 itemType="meldingen"
                                 linkText="Alle meldingen"
                                 linkUrl="/notifications">
@@ -69,4 +69,4 @@
 </div>
 
 
-<ng-template #notResolved>Not resolved ...</ng-template>
+<ng-template #notResolved>Laden...</ng-template>

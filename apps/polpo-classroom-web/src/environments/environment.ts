@@ -87,12 +87,12 @@ export const environment = {
     // algebrakit: 'assets/icons/algebrakit.svg',
     // 'archive-box': 'assets/icons/archive-box.svg',
     // 'archive-box-lg': 'assets/icons/archive-box-lg.svg',
-    // lesmateriaal: 'assets/icons/lesmateriaal.svg',
+    lesmateriaal: 'assets/icons/lesmateriaal.svg',
     // media: 'assets/icons/media.svg',
     // music: 'assets/icons/music.svg',
     // presentatie: 'assets/icons/presentatie.svg',
     // presentation: 'assets/icons/presentation.svg',
-    tasks: 'assets/icons/tasks.svg',
+    // tasks: 'assets/icons/tasks.svg',
     // 'tasks-complete': 'assets/icons/tasks-complete.svg',
     // video: 'assets/icons/video.svg',
     // website: 'assets/icons/website.svg',
@@ -102,8 +102,9 @@ export const environment = {
     home: 'assets/icons/material/home.svg',
     'breadcrumb-separator': 'assets/icons/material/chevron-right.svg',
     'arrow-back': 'assets/icons/material/arrow-back.svg',
-    menu: 'assets/icons/material/menu.svg'
+    menu: 'assets/icons/material/menu.svg',
     // alert: 'assets/icons/alert.svg',
+    notifications: 'assets/icons/material/notifications.svg'
     // 'at-sign': 'assets/icons/at-sign.svg',
     // balance: 'assets/icons/balance.svg',
     // 'book-not': 'assets/icons/book-not.svg',
@@ -171,8 +172,8 @@ export const environment = {
       appBarPollingInterval: 3000
     },
     messages: {
-      enabled: true,
-      hasAppBarDropDown: true
+      enabled: false,
+      hasAppBarDropDown: false
     }
   }
 };

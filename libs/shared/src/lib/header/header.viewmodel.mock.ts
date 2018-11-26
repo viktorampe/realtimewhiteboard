@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   AlertFixture,
   AlertQueueInterface,
-  BreadcrumbFixture,
+  BreadcrumbLinkFixture,
   PersonFixture,
   PersonInterface
 } from '@campus/dal';
@@ -63,9 +63,9 @@ export class MockHeaderViewModel {
   breadCrumbs$: Observable<BreadcrumbLinkInterface[]> = new BehaviorSubject<
     BreadcrumbLinkInterface[]
   >([
-    new BreadcrumbFixture(),
-    new BreadcrumbFixture(),
-    new BreadcrumbFixture()
+    new BreadcrumbLinkFixture(),
+    new BreadcrumbLinkFixture(),
+    new BreadcrumbLinkFixture()
   ]);
 
   unreadAlerts$: Observable<AlertQueueInterface[]> = new BehaviorSubject<

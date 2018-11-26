@@ -1,6 +1,6 @@
 import { BreadcrumbLinkInterface } from '@campus/ui';
 
-export class BreadcrumbFixture implements BreadcrumbLinkInterface {
+export class BreadcrumbLinkFixture implements BreadcrumbLinkInterface {
   displayText = 'breadcrumb link';
   link: any[] = ['/link'];
   constructor(props: Partial<BreadcrumbLinkInterface> = {}) {

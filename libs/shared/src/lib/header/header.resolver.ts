@@ -25,7 +25,6 @@ export class HeaderResolver extends StateResolver {
 
   protected getLoadableActions(): Action[] {
     return [
-      //TODO add load actions
       new UserActions.LoadUser({ force: false }),
       new AlertActions.LoadAlerts({ userId: this.authService.userId }),
       new UiActions.LoadUi()
@@ -35,7 +34,6 @@ export class HeaderResolver extends StateResolver {
   }
   protected getResolvedQueries(): Selector<object, boolean>[] {
     return [
-      //TODO add resolvable boolean selectors
       AlertQueries.getLoaded,
       UiQuery.getLoaded
       // TODO: BreadcrumbQueries.getLoaded
