@@ -50,7 +50,7 @@ export class HeaderViewModel {
   // source streams
   breadCrumbs$: Observable<BreadcrumbLinkInterface[]>; // TODO select breadcrumbs from store
   currentUser$: Observable<PersonInterface>;
-  private unreadAlerts$: Observable<AlertQueueInterface[]>;
+  unreadAlerts$: Observable<AlertQueueInterface[]>;
 
   // presentation stream
   alertNotifications$: Observable<NotificationItemInterface[]>;
@@ -72,14 +72,12 @@ export class HeaderViewModel {
   }
 
   loadResolver() {
-    this.isResolved$ = this.headerResolver.resolve().pipe(shareReplay(1));
+    this.isResolved$ = this.headerResolver.resolve();
   }
 
   private loadStateStreams(): void {
     //source state streams
-    this.unreadAlerts$ = this.store.pipe(
-      select(AlertQueries.getUnread, { userId: this.authService.userId })
-    );
+    this.unreadAlerts$ = this.store.pipe(select(AlertQueries.getUnread));
 
     //presentation state streams
     this.currentUser$ = this.store.pipe(select(UserQueries.getCurrentUser));

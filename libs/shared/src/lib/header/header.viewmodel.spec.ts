@@ -1,26 +1,36 @@
+// file.only
 import { Injectable } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { MatIconModule } from '@angular/material';
-import { RouterTestingModule } from '@angular/router/testing';
-import { PersonInterface, StateFeatureBuilder, UserActions, UserReducer } from '@campus/dal';
+import {
+  AlertActions,
+  AlertFixture,
+  AlertQueueInterface,
+  AlertReducer,
+  AUTH_SERVICE_TOKEN,
+  PersonInterface,
+  StateFeatureBuilder,
+  UserActions,
+  UserReducer
+} from '@campus/dal';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
-import { EnvironmentAlertsFeatureInterface, EnvironmentMessagesFeatureInterface, ENVIRONMENT_ALERTS_FEATURE_TOKEN, ENVIRONMENT_MESSAGES_FEATURE_TOKEN } from '../interfaces/environment.features.interfaces';
+import {
+  EnvironmentAlertsFeatureInterface,
+  ENVIRONMENT_ALERTS_FEATURE_TOKEN
+} from '../interfaces/environment.features.interfaces';
 import { HeaderResolver } from './header.resolver';
 import { HeaderViewModel } from './header.viewmodel';
 
-
-let environmentMessagesFeature: EnvironmentMessagesFeatureInterface = {
-  enabled: false,
-  hasAppBarDropDown: false
-};
 let environmentAlertsFeature: EnvironmentAlertsFeatureInterface = {
   enabled: false,
   hasAppBarDropDown: false
 };
 let headerViewModel: HeaderViewModel;
+let user: PersonInterface;
+let unreadAlerts: AlertQueueInterface[];
 let usedUserState: any;
-let spy;
+let usedUnreadAlertsState: any;
+let spy: jest.SpyInstance;
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +42,6 @@ class MockHeaderResolver {
 describe('headerViewModel', () => {
   afterEach(() => {
     jest.clearAllMocks();
-    usedUserState = {};
   });
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -45,20 +54,25 @@ describe('headerViewModel', () => {
             initialState: {
               initialState: usedUserState
             }
+          },
+          {
+            NAME: AlertReducer.NAME,
+            reducer: AlertReducer.reducer,
+            initialState: {
+              initialState: usedUnreadAlertsState
+            }
           }
-        ]),
-        RouterTestingModule,
-        MatIconModule
+        ])
       ],
       providers: [
         HeaderViewModel,
         {
-          provide: ENVIRONMENT_ALERTS_FEATURE_TOKEN,
-          useValue: environmentAlertsFeature
+          provide: AUTH_SERVICE_TOKEN,
+          useValue: { userId: 1 }
         },
         {
-          provide: ENVIRONMENT_MESSAGES_FEATURE_TOKEN,
-          useValue: environmentMessagesFeature
+          provide: ENVIRONMENT_ALERTS_FEATURE_TOKEN,
+          useValue: environmentAlertsFeature
         },
         { provide: HeaderResolver, useClass: MockHeaderResolver },
         Store
@@ -68,7 +82,6 @@ describe('headerViewModel', () => {
   });
   describe('creation', () => {
     beforeAll(() => {
-      usedUserState = UserReducer.initialState;
       spy = jest.fn();
     });
     it('should be defined', () => {
@@ -86,11 +99,6 @@ describe('headerViewModel', () => {
     ) {
       describe(`env enabled is ${enabled} and hasAppBarDropDown is ${hasAppBarDropDown}`, () => {
         beforeAll(() => {
-          usedUserState = UserReducer.initialState;
-          environmentMessagesFeature = {
-            enabled: enabled,
-            hasAppBarDropDown: hasAppBarDropDown
-          };
           environmentAlertsFeature = {
             enabled: enabled,
             hasAppBarDropDown: hasAppBarDropDown
@@ -98,7 +106,6 @@ describe('headerViewModel', () => {
         });
         it(`should be ${expectedResult}`, () => {
           expect(headerViewModel.enableAlerts).toBe(expectedResult);
-          expect(headerViewModel.enableMessages).toBe(expectedResult);
         });
       });
     }
@@ -108,18 +115,41 @@ describe('headerViewModel', () => {
     checkFeatureToggles(false, true, false);
   });
   describe('state streams', () => {
-    let user: PersonInterface;
     beforeAll(() => {
-      user = { email: 'email expected' };
-      usedUserState = UserReducer.reducer(
-        UserReducer.initialState,
-        new UserActions.UserLoaded(user)
-      );
+      setInitialState();
     });
     it('should get the user from the provided state', () => {
       expect(headerViewModel.currentUser$).toBeObservable(
         hot('a', { a: user })
       );
     });
+
+    it('should get unread alerts from the provided state', () => {
+      expect(headerViewModel.unreadAlerts$).toBeObservable(
+        hot('a', { a: unreadAlerts })
+      );
+    });
   });
 });
+
+function setInitialState() {
+  user = { email: 'email expected' };
+  usedUserState = UserReducer.reducer(
+    UserReducer.initialState,
+    new UserActions.UserLoaded(user)
+  );
+
+  unreadAlerts = [
+    new AlertFixture({ id: 1, sentAt: new Date() }),
+    new AlertFixture({ id: 2, sentAt: new Date() })
+  ];
+  usedUnreadAlertsState = AlertReducer.reducer(
+    AlertReducer.initialState,
+    new AlertActions.AlertsLoaded({
+      alerts: unreadAlerts,
+      timeStamp: Date.now()
+    })
+  );
+
+  // TODO: add breadcrumbs state
+}
