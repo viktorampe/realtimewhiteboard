@@ -4,12 +4,12 @@ import { HumanDateTimePipe } from '../utils/pipes/human-date-time/human-date-tim
 
 export interface NotificationItemInterface {
   icon: string;
-  person: BadgePersonInterface;
+  person?: BadgePersonInterface;
   titleText: string;
   link: string;
-  notificationText: string;
+  notificationText?: string;
   notificationDate: Date;
-  accented: boolean;
+  accented?: boolean;
 }
 @Component({
   selector: 'campus-notification-dropdown-item',
