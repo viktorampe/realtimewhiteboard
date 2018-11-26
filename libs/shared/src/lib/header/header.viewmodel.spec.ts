@@ -2,13 +2,22 @@ import { Injectable } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MatIconModule } from '@angular/material';
 import { RouterTestingModule } from '@angular/router/testing';
-import { PersonInterface, StateFeatureBuilder, UserActions, UserReducer } from '@campus/dal';
+import {
+  PersonInterface,
+  StateFeatureBuilder,
+  UserActions,
+  UserReducer
+} from '@campus/dal';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
-import { EnvironmentAlertsFeatureInterface, EnvironmentMessagesFeatureInterface, ENVIRONMENT_ALERTS_FEATURE_TOKEN, ENVIRONMENT_MESSAGES_FEATURE_TOKEN } from '../interfaces/environment.features.interfaces';
+import {
+  EnvironmentAlertsFeatureInterface,
+  EnvironmentMessagesFeatureInterface,
+  ENVIRONMENT_ALERTS_FEATURE_TOKEN,
+  ENVIRONMENT_MESSAGES_FEATURE_TOKEN
+} from '../interfaces/environment.features.interfaces';
 import { HeaderResolver } from './header.resolver';
 import { HeaderViewModel } from './header.viewmodel';
-
 
 let environmentMessagesFeature: EnvironmentMessagesFeatureInterface = {
   enabled: false,
