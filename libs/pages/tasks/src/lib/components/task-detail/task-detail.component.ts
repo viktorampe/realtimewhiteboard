@@ -41,6 +41,8 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
   listFormat$: Observable<ListFormat>;
   learningArea$: Observable<LearningAreaInterface>;
   taskInstance$: Observable<TaskInstanceInterface>;
+  //TODO convert to TaskEduContent once the backend has been changed to implement the submitted prop
+  //see https://github.com/diekeure/campus/pull/291#discussion-diff-235280582R74
   contents$: Observable<EduContent[]>;
 
   //viewChildren
