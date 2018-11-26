@@ -9,9 +9,9 @@ import {
 } from '../+models';
 
 export class AlertFixture implements AlertQueueInterface {
-  title = 'Tom Mertens heeft de bundel «Algemeen» aangepast.';
+  title = 'Er is een bundel aangepast.';
   type = 'bundle';
-  link? = '/link';
+  link? = '/linknaarbundle';
   validFrom = new Date();
   validUntil?: Date;
   created = new Date();

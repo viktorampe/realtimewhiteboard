@@ -12,13 +12,37 @@ import {
   ListFormat,
   NotificationItemInterface
 } from '@campus/ui';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MockHeaderViewModel {
+  // recent alerts fixture
+  private alertNotifications: NotificationItemInterface[] = [
+    {
+      icon: 'lesmateriaal',
+      titleText: 'alert title',
+      link: '/linkToAlert',
+      notificationText: 'this is an alert',
+      notificationDate: new Date()
+    },
+    {
+      icon: 'lesmateriaal',
+      titleText: 'alert title',
+      link: '/linkToAlert',
+      notificationText: 'this is an alert',
+      notificationDate: new Date()
+    },
+    {
+      icon: 'lesmateriaal',
+      titleText: 'alert title',
+      link: '/linkToAlert',
+      notificationText: 'this is an alert',
+      notificationDate: new Date()
+    }
+  ];
+
   enableAlerts = true;
   profileMenuItems: DropdownMenuItemInterface[] = [
     {
@@ -34,7 +58,7 @@ export class MockHeaderViewModel {
   ];
 
   // source streams
-  isResolved$: Observable<boolean>;
+  isResolved$ = new BehaviorSubject<boolean>(false);
 
   breadCrumbs$: Observable<BreadcrumbLinkInterface[]> = new BehaviorSubject<
     BreadcrumbLinkInterface[]
@@ -44,7 +68,7 @@ export class MockHeaderViewModel {
     new BreadcrumbFixture()
   ]);
 
-  alerts$: Observable<AlertQueueInterface[]> = new BehaviorSubject<
+  unreadAlerts$: Observable<AlertQueueInterface[]> = new BehaviorSubject<
     AlertQueueInterface[]
   >([new AlertFixture(), new AlertFixture(), new AlertFixture({ read: true })]);
 
@@ -59,55 +83,13 @@ export class MockHeaderViewModel {
   // intermediate streams
 
   //presentation stream
-  recentAlerts$: Observable<NotificationItemInterface[]>;
-  recentAlertCount$: Observable<number>;
-  backLink$: Observable<string | undefined>;
-  profileLink$: Observable<DropdownMenuItemInterface[]>;
+  alertNotifications$ = new BehaviorSubject<NotificationItemInterface[]>(
+    this.alertNotifications
+  );
+  unreadAlertCount$ = new BehaviorSubject<number>(0);
+  backLink$ = new BehaviorSubject<string | undefined>('');
 
   toggleSideNav = () => {};
 
-  constructor() {
-    this.backLink$ = this.setupPageBarNavigation();
-    this.recentAlerts$ = this.setupRecentAlerts();
-    this.recentAlertCount$ = this.setupRecentAlertCount();
-  }
-
-  setupPageBarNavigation(): Observable<string | undefined> {
-    return this.breadCrumbs$.pipe(
-      map((breadCrumbs: BreadcrumbLinkInterface[]) => {
-        return breadCrumbs.length < 2
-          ? undefined
-          : breadCrumbs[breadCrumbs.length - 2].link.toString();
-      })
-    );
-  }
-
-  setupRecentAlerts(): Observable<NotificationItemInterface[]> {
-    return combineLatest(this.alerts$, this.currentUser$).pipe(
-      map(([alerts, user]) => {
-        return alerts.filter(alert => !alert.read).map(alert => {
-          const notification: NotificationItemInterface = {
-            icon: 'lesmateriaal', // TODO: depends on the alert.type
-            titleText: alert.title,
-            person: {
-              displayName: user.displayName
-            },
-            link: alert.title,
-            notificationText: alert.message,
-            notificationDate: alert.sentAt,
-            accented: true
-          };
-          return notification;
-        });
-      })
-    );
-  }
-
-  setupRecentAlertCount(): Observable<number> {
-    return this.recentAlerts$.pipe(
-      map(alerts => {
-        return alerts.length;
-      })
-    );
-  }
+  constructor() {}
 }
