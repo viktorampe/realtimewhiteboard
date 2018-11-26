@@ -71,7 +71,7 @@ export class HeaderViewModel {
     this.loadDisplayStream();
   }
 
-  loadResolver() {
+  private loadResolver() {
     this.isResolved$ = this.headerResolver.resolve();
   }
 
@@ -126,9 +126,12 @@ export class HeaderViewModel {
   private getBackLink(): Observable<string | undefined> {
     return this.breadCrumbs$.pipe(
       map((breadCrumbs: BreadcrumbLinkInterface[]) => {
-        return breadCrumbs.length < 2
-          ? undefined
-          : breadCrumbs[breadCrumbs.length - 2].link.toString();
+        const check =
+          breadCrumbs.length < 2
+            ? undefined
+            : breadCrumbs[breadCrumbs.length - 2].link.toString();
+        console.log(breadCrumbs);
+        return check;
       })
     );
   }
