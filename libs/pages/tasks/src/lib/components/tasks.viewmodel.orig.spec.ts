@@ -12,11 +12,10 @@ import {
   LearningAreaReducer,
   PersonFixture,
   PersonInterface,
-  ResultFixture,
-  ResultInterface,
   StateFeatureBuilder,
   TaskActions,
   TaskEduContentFixture,
+  TaskEduContentInterface,
   TaskFixture,
   TaskInstanceFixture,
   TaskInstanceInterface,
@@ -29,12 +28,8 @@ import {
 import { ListFormat } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
-import { ScormStatus } from '../../../../../dal/src/lib/results/enums/scorm-status.enum';
 import { TasksResolver } from './tasks.resolver';
-import {
-  TaskEduContentWithSubmittedInterface,
-  TasksViewModel
-} from './tasks.viewmodel';
+import { TasksViewModel } from './tasks.viewmodel';
 
 let usedUserState;
 let usedLearningAreaState;
@@ -42,7 +37,6 @@ let usedTeacherState;
 let usedTaskState;
 let usedEducontentState;
 let usedTaskInstanceState;
-let usedResultState;
 let usedTaskEducontentState;
 let usedUiState;
 let taskResolver: TasksResolver;
@@ -101,13 +95,6 @@ describe('TasksViewModel met State', () => {
           //   }
           // },
           // {
-          //   NAME: ResultReducer.NAME,
-          //   reducer: ResultReducer.reducer,
-          //   initialState: {
-          //     initialState: usedResultState
-          //   }
-          // },
-          // {
           //   NAME: TaskEducontentReducer.NAME,
           //   reducer: TaskEducontentReducer.reducer,
           //   initialState: {
@@ -140,8 +127,7 @@ describe('TasksViewModel met State', () => {
   let tasks: TaskInterface[];
   let eduContents: EduContentInterface[];
   let taskInstances: TaskInstanceInterface[];
-  let results: ResultInterface[];
-  let taskEduContents: TaskEduContentWithSubmittedInterface[];
+  let taskEduContents: TaskEduContentInterface[];
   let listFormat: ListFormat;
 
   function setInitialState() {
@@ -192,23 +178,6 @@ describe('TasksViewModel met State', () => {
     // usedTaskInstanceState = TaskInstanceReducer.reducer(
     //   TaskInstanceReducer.initialState,
     //   new TaskInstanceActions.TaskInstancesLoaded({ taskInstance })
-    // );
-
-    // Result State
-    results = [
-      new ResultFixture({ id: 1, eduContentId: 1, taskId: 1, personId: 1 }),
-      new ResultFixture({ id: 2, eduContentId: 2, taskId: 1, personId: 1 }),
-      new ResultFixture({
-        id: 3,
-        eduContentId: 2,
-        taskId: 1,
-        personId: 1,
-        status: ScormStatus.STATUS_INCOMPLETE
-      })
-    ];
-    // usedResultState = ResultReducer.reducer(
-    //   ResultReducer.initialState,
-    //   new ResultActions.ResultssLoaded({ results })
     // );
 
     // TaskEducontent State
@@ -300,12 +269,6 @@ describe('TasksViewModel met State', () => {
       );
     });
 
-    it('should get the results from the provided state', () => {
-      expect(tasksViewModel['results$']).toBeObservable(
-        hot('(a|)', { a: results })
-      );
-    });
-
     it('should get the taskEduContents from the provided state', () => {
       expect(tasksViewModel['taskEducontents$']).toBeObservable(
         hot('(a|)', { a: taskEduContents })
@@ -349,6 +312,14 @@ describe('TasksViewModel met State', () => {
 
       expect(tasksViewModel.getTaskById(1)).toBeObservable(
         hot('a', { a: expectedTask })
+      );
+    });
+
+    it('getTeacherById', () => {
+      const expectedTeacher = new PersonFixture({ id: 186 });
+
+      expect(tasksViewModel.getTeacherById(186)).toBeObservable(
+        hot('(a|)', { a: expectedTeacher })
       );
     });
   });

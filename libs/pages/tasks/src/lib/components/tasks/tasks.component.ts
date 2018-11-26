@@ -61,8 +61,7 @@ export class TasksComponent implements OnInit {
     return this.routeParams$.pipe(
       map(params => params.area),
       switchMap(areaId => {
-        this.viewModel.setCurrentLearningAreaId(areaId); // TODO: Afhandelen in constructor?
-        return this.viewModel.taskInstancesByLearningArea$;
+        return this.viewModel.getTaskInstancesByLearningAreaId(areaId);
       })
     );
   }

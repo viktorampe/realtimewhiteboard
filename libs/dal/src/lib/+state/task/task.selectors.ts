@@ -59,7 +59,7 @@ export const getShared = createSelector(
   (state: State, props: { userId: number }) => {
     const ids: number[] = <number[]>state.ids;
     return ids
-      .filter(id => state.entities[id].personId !== props.userId) //personId === teacherId
+      .filter(id => state.entities[id].personId !== props.userId) //personId is the teacherId
       .map(id => state.entities[id]);
   }
 );
@@ -69,7 +69,7 @@ export const getOwn = createSelector(
   (state: State, props: { userId: number }) => {
     const ids: number[] = <number[]>state.ids;
     return ids
-      .filter(id => state.entities[id].personId === props.userId) //personId === teacherId
+      .filter(id => state.entities[id].personId === props.userId) //personId is the teacherId
       .map(id => state.entities[id]);
   }
 );
