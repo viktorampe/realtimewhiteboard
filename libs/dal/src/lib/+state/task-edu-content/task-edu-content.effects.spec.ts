@@ -5,12 +5,12 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
-import { TASK_EDU_CONTENT_SERVICE_TOKEN } from '../../task-edu-content/task-edu-content.service.interface';
 import { TaskEduContentReducer } from '.';
+import { TASK_EDU_CONTENT_SERVICE_TOKEN } from '../../tasks/task-edu-content.service.interface';
 import {
+  LoadTaskEduContents,
   TaskEduContentsLoaded,
-  TaskEduContentsLoadError,
-  LoadTaskEduContents
+  TaskEduContentsLoadError
 } from './task-edu-content.actions';
 import { TaskEduContentEffects } from './task-edu-content.effects';
 
@@ -18,7 +18,6 @@ describe('TaskEduContentEffects', () => {
   let actions: Observable<any>;
   let effects: TaskEduContentEffects;
   let usedState: any;
-
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -61,9 +60,13 @@ describe('TaskEduContentEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature(TaskEduContentReducer.NAME , TaskEduContentReducer.reducer, {
-          initialState: usedState
-        }),
+        StoreModule.forFeature(
+          TaskEduContentReducer.NAME,
+          TaskEduContentReducer.reducer,
+          {
+            initialState: usedState
+          }
+        ),
         EffectsModule.forRoot([]),
         EffectsModule.forFeature([TaskEduContentEffects])
       ],
@@ -85,8 +88,13 @@ describe('TaskEduContentEffects', () => {
 
   describe('loadTaskEduContent$', () => {
     const unforcedLoadAction = new LoadTaskEduContents({ userId: 1 });
-    const forcedLoadAction = new LoadTaskEduContents({ force: true, userId: 1 });
-    const filledLoadedAction = new TaskEduContentsLoaded({ taskEduContents: [] });
+    const forcedLoadAction = new LoadTaskEduContents({
+      force: true,
+      userId: 1
+    });
+    const filledLoadedAction = new TaskEduContentsLoaded({
+      taskEduContents: []
+    });
     const loadErrorAction = new TaskEduContentsLoadError(new Error('failed'));
     describe('with initialState', () => {
       beforeAll(() => {

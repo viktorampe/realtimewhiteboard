@@ -1,26 +1,29 @@
 import { Update } from '@ngrx/entity';
-import {TaskEduContentActions } from '.';
-import { initialState, reducer, State } from './task-edu-content.reducer';
+import { TaskEduContentActions } from '.';
 import { TaskEduContentInterface } from '../../+models';
+import { initialState, reducer, State } from './task-edu-content.reducer';
 
-/** 
+/**
  * This file is scaffolded, but needs some special attention:
- * - find and replace '__EXTRA__PROPERTY_NAME' and replace this with a property name of the TaskEduContent entity.
- * - set the initial property value via '[__EXTRA__PROPERTY_NAME]InitialValue'.
- * - set the updated property value via '[__EXTRA__PROPERTY_NAME]UpdatedValue'.
-*/
-const __EXTRA__PROPERTY_NAMEInitialValue = ;
-const __EXTRA__PROPERTY_NAMEUpdatedValue = ;
+ * - find and replace 'index' and replace this with a property name of the TaskEduContent entity.
+ * - set the initial property value via '[index]InitialValue'.
+ * - set the updated property value via '[index]UpdatedValue'.
+ */
+const indexInitialValue = 1;
+const indexUpdatedValue = 1;
 
 /**
  * Creates a TaskEduContent.
  * @param {number} id
  * @returns {TaskEduContentInterface}
  */
-function createTaskEduContent(id: number, __EXTRA__PROPERTY_NAME:any = __EXTRA__PROPERTY_NAMEInitialValue): TaskEduContentInterface | any {
+function createTaskEduContent(
+  id: number,
+  index: any = indexInitialValue
+): TaskEduContentInterface | any {
   return {
     id: id,
-    __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAME
+    index: index
   };
 }
 
@@ -38,7 +41,9 @@ function createState(
   error?: any
 ): State {
   const state: any = {
-    ids: taskEduContents ? taskEduContents.map(taskEduContent => taskEduContent.id) : [],
+    ids: taskEduContents
+      ? taskEduContents.map(taskEduContent => taskEduContent.id)
+      : [],
     entities: taskEduContents
       ? taskEduContents.reduce(
           (entityMap, taskEduContent) => ({
@@ -53,7 +58,6 @@ function createState(
   if (error !== undefined) state.error = error;
   return state;
 }
-
 
 describe('TaskEduContents Reducer', () => {
   let taskEduContents: TaskEduContentInterface[];
@@ -77,7 +81,9 @@ describe('TaskEduContents Reducer', () => {
 
   describe('loaded action', () => {
     it('should load all taskEduContents', () => {
-      const action = new TaskEduContentActions.TaskEduContentsLoaded({ taskEduContents });
+      const action = new TaskEduContentActions.TaskEduContentsLoaded({
+        taskEduContents
+      });
       const result = reducer(initialState, action);
       expect(result).toEqual(createState(taskEduContents, true));
     });
@@ -102,7 +108,9 @@ describe('TaskEduContents Reducer', () => {
     });
 
     it('should add multiple taskEduContents', () => {
-      const action = new TaskEduContentActions.AddTaskEduContents({ taskEduContents });
+      const action = new TaskEduContentActions.AddTaskEduContents({
+        taskEduContents
+      });
       const result = reducer(initialState, action);
 
       expect(result).toEqual(createState(taskEduContents, false));
@@ -111,7 +119,7 @@ describe('TaskEduContents Reducer', () => {
   describe('upsert actions', () => {
     it('should upsert one taskEduContent', () => {
       const originalTaskEduContent = taskEduContents[0];
-      
+
       const startState = reducer(
         initialState,
         new TaskEduContentActions.AddTaskEduContent({
@@ -119,16 +127,20 @@ describe('TaskEduContents Reducer', () => {
         })
       );
 
-    
-      const updatedTaskEduContent = createTaskEduContent(taskEduContents[0].id, 'test');
-     
+      const updatedTaskEduContent = createTaskEduContent(
+        taskEduContents[0].id,
+        'test'
+      );
+
       const action = new TaskEduContentActions.UpsertTaskEduContent({
         taskEduContent: updatedTaskEduContent
       });
 
       const result = reducer(startState, action);
 
-      expect(result.entities[updatedTaskEduContent.id]).toEqual(updatedTaskEduContent);
+      expect(result.entities[updatedTaskEduContent.id]).toEqual(
+        updatedTaskEduContent
+      );
     });
 
     it('should upsert many taskEduContents', () => {
@@ -146,9 +158,7 @@ describe('TaskEduContents Reducer', () => {
 
       const result = reducer(startState, action);
 
-      expect(result).toEqual(
-        createState(taskEduContentsToInsert)
-      );
+      expect(result).toEqual(createState(taskEduContentsToInsert));
     });
   });
 
@@ -159,31 +169,32 @@ describe('TaskEduContents Reducer', () => {
       const update: Update<TaskEduContentInterface> = {
         id: 1,
         changes: {
-          __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-        } 
+          index: indexUpdatedValue
+        }
       };
       const action = new TaskEduContentActions.UpdateTaskEduContent({
         taskEduContent: update
       });
       const result = reducer(startState, action);
-      expect(result).toEqual(createState([createTaskEduContent(1, __EXTRA__PROPERTY_NAMEUpdatedValue)]));
+      expect(result).toEqual(
+        createState([createTaskEduContent(1, indexUpdatedValue)])
+      );
     });
 
     it('should update multiple taskEduContents', () => {
       const startState = createState(taskEduContents);
       const updates: Update<TaskEduContentInterface>[] = [
-        
         {
           id: 1,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          } 
+            index: indexUpdatedValue
+          }
         },
         {
           id: 2,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          }  
+            index: indexUpdatedValue
+          }
         }
       ];
       const action = new TaskEduContentActions.UpdateTaskEduContents({
@@ -192,7 +203,11 @@ describe('TaskEduContents Reducer', () => {
       const result = reducer(startState, action);
 
       expect(result).toEqual(
-        createState([createTaskEduContent(1, __EXTRA__PROPERTY_NAMEUpdatedValue), createTaskEduContent(2, __EXTRA__PROPERTY_NAMEUpdatedValue), taskEduContents[2]])
+        createState([
+          createTaskEduContent(1, indexUpdatedValue),
+          createTaskEduContent(2, indexUpdatedValue),
+          taskEduContents[2]
+        ])
       );
     });
   });
@@ -220,7 +235,11 @@ describe('TaskEduContents Reducer', () => {
 
   describe('clear action', () => {
     it('should clear the taskEduContents collection', () => {
-      const startState = createState(taskEduContents, true, 'something went wrong');
+      const startState = createState(
+        taskEduContents,
+        true,
+        'something went wrong'
+      );
       const action = new TaskEduContentActions.ClearTaskEduContents();
       const result = reducer(startState, action);
       expect(result).toEqual(createState([], true, 'something went wrong'));
