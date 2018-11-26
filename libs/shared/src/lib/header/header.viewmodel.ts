@@ -83,7 +83,7 @@ export class HeaderViewModel {
 
     //presentation state streams
     this.currentUser$ = this.store.pipe(select(UserQueries.getCurrentUser));
-    // this.breadCrumbs$ = this.store.pipe(select(BreadCrumbsQueries.getAllLinks));
+    // this.breadCrumbs$ = this.store.pipe(select(BreadCrumbsQueries.getAllLinks)); // TODO: uncomment when breadcrumbs state is available
     this.breadCrumbs$ = this.mockViewModel.breadCrumbs$; //TODO: remove when breadcrumbs state is available
   }
 
@@ -102,17 +102,13 @@ export class HeaderViewModel {
   private getAlertNotifications(): Observable<NotificationItemInterface[]> {
     return this.unreadAlerts$.pipe(
       map(alerts => {
-        return alerts.map(alert => {
+        return alerts.filter(alert => alert.type !== 'message').map(alert => {
           const notification: NotificationItemInterface = {
-            icon: 'lesmateriaal', // TODO: depends on the alert.type
+            icon: this.getAlertIcon(alert.type),
             titleText: alert.title,
-            person: {
-              displayName: 'To be checked' //TODO: check if this is correct
-            },
-            link: alert.title,
+            link: alert.link, // TODO: check the link format (external or internal)
             notificationText: alert.message,
-            notificationDate: alert.sentAt,
-            accented: true
+            notificationDate: new Date(alert.sentAt)
           };
           return notification;
         });
@@ -139,10 +135,36 @@ export class HeaderViewModel {
     );
   }
 
-  // user interactions
+  private getAlertIcon(type: string): string {
+    switch (type) {
+      case 'educontent':
+        return 'polpo-lesmateriaal';
+
+      case 'message':
+        return 'icon-envelope-open';
+
+      case 'bundle':
+        return 'polpo-lesmateriaal';
+
+      case 'task':
+      case 'task-start':
+      case 'task-end':
+        return 'polpo-tasks';
+
+      case 'boek-e':
+        return 'polpo-book';
+
+      case 'marketing':
+        return 'polpo-polpo';
+
+      default:
+        return 'icon-bell';
+    }
+  }
+
+  // user interactions //
 
   setAlertAsRead(alertId: number): void {
-    //TODO update to correct action and update eventData to correct name and type
     this.store.dispatch(
       new AlertActions.SetReadAlert({
         alertIds: alertId,

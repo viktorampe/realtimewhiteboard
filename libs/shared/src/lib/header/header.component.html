@@ -22,8 +22,10 @@
                                 linkUrl="/notifications">
             <ng-container *ngIf="(alertNotifications$|async) as notifications">
               <campus-notification-dropdown-item *ngFor="let alert of notifications"
+                                                 [icon]="alert.icon"
                                                  [titleText]="alert.titleText"
-                                                 [icon]="alert.icon"></campus-notification-dropdown-item>
+                                                 [link]="alert.link"
+                                                 [notificationDate]="alert.notificationDate"></campus-notification-dropdown-item>
             </ng-container>
 
           </campus-dropdown-menu>
