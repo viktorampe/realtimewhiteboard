@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
   DalState,
-  EduContentInterface,
+  EduContent,
   LearningAreaInterface,
   LearningAreaQueries,
   UiQuery,
@@ -19,13 +19,10 @@ import { MockBooksViewModel } from './books.viewmodel.mock';
 })
 export class BooksViewModel {
   listFormat$: Observable<ListFormat>;
-
-  // TODO change to <EduContent[]> when tasks branch is merged
-  sharedBooks$: Observable<EduContentInterface[]>;
+  sharedBooks$: Observable<EduContent[]>;
 
   private learningAreas$: Observable<LearningAreaInterface[]>;
-  // TODO change to <EduContent[]> when tasks branch is merged
-  private eduContents$: Observable<EduContentInterface[]>;
+  private eduContents$: Observable<EduContent[]>;
   private unlockedBoekeGroups$: Observable<UnlockedBoekeGroup[]>;
   private unlockedBoekeStudents$: Observable<UnlockedBoekeStudent[]>;
 

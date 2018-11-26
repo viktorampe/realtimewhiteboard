@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
+  EduContent,
   EduContentFixture,
-  EduContentInterface,
   LearningAreaFixture,
   LearningAreaInterface,
   UnlockedBoekeGroup,
@@ -28,8 +28,7 @@ export class MockBooksViewModel {
     new LearningAreaFixture({ id: 4, name: 'foo' })
   ]);
 
-  // TODO change to <EduContent[]> when tasks branch is merged
-  eduContents$: Observable<EduContentInterface[]> = new BehaviorSubject([
+  eduContents$: Observable<EduContent[]> = new BehaviorSubject([
     new EduContentFixture({ id: 1, publishedEduContentMetadataId: 1 }),
     new EduContentFixture({ id: 2, publishedEduContentMetadataId: 2 }),
     new EduContentFixture({ id: 3, publishedEduContentMetadataId: 3 }),
@@ -57,8 +56,7 @@ export class MockBooksViewModel {
   ]);
 
   // presentation
-  // TODO change to <EduContent[]> when tasks branch is merged
-  sharedBooks$: Observable<EduContentInterface[]> = new BehaviorSubject([
+  sharedBooks$: Observable<EduContent[]> = new BehaviorSubject([
     new EduContentFixture(
       { id: 1, publishedEduContentMetadataId: 1 },
       { learningAreaId: 1, learningArea: new LearningAreaFixture({ id: 1 }) }
