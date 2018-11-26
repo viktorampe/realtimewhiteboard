@@ -1,26 +1,29 @@
 import { Update } from '@ngrx/entity';
-import {TaskInstanceActions } from '.';
-import { initialState, reducer, State } from './task-instance.reducer';
+import { TaskInstanceActions } from '.';
 import { TaskInstanceInterface } from '../../+models';
+import { initialState, reducer, State } from './task-instance.reducer';
 
-/** 
+/**
  * This file is scaffolded, but needs some special attention:
- * - find and replace '__EXTRA__PROPERTY_NAME' and replace this with a property name of the TaskInstance entity.
- * - set the initial property value via '[__EXTRA__PROPERTY_NAME]InitialValue'.
- * - set the updated property value via '[__EXTRA__PROPERTY_NAME]UpdatedValue'.
-*/
-const __EXTRA__PROPERTY_NAMEInitialValue = ;
-const __EXTRA__PROPERTY_NAMEUpdatedValue = ;
+ * - find and replace 'alerted' and replace this with a property name of the TaskInstance entity.
+ * - set the initial property value via '[alerted]InitialValue'.
+ * - set the updated property value via '[alerted]UpdatedValue'.
+ */
+const alertedInitialValue = true;
+const alertedUpdatedValue = false;
 
 /**
  * Creates a TaskInstance.
  * @param {number} id
  * @returns {TaskInstanceInterface}
  */
-function createTaskInstance(id: number, __EXTRA__PROPERTY_NAME:any = __EXTRA__PROPERTY_NAMEInitialValue): TaskInstanceInterface | any {
+function createTaskInstance(
+  id: number,
+  alerted: any = alertedInitialValue
+): TaskInstanceInterface | any {
   return {
     id: id,
-    __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAME
+    alerted: alerted
   };
 }
 
@@ -38,7 +41,9 @@ function createState(
   error?: any
 ): State {
   const state: any = {
-    ids: taskInstances ? taskInstances.map(taskInstance => taskInstance.id) : [],
+    ids: taskInstances
+      ? taskInstances.map(taskInstance => taskInstance.id)
+      : [],
     entities: taskInstances
       ? taskInstances.reduce(
           (entityMap, taskInstance) => ({
@@ -53,7 +58,6 @@ function createState(
   if (error !== undefined) state.error = error;
   return state;
 }
-
 
 describe('TaskInstances Reducer', () => {
   let taskInstances: TaskInstanceInterface[];
@@ -77,7 +81,9 @@ describe('TaskInstances Reducer', () => {
 
   describe('loaded action', () => {
     it('should load all taskInstances', () => {
-      const action = new TaskInstanceActions.TaskInstancesLoaded({ taskInstances });
+      const action = new TaskInstanceActions.TaskInstancesLoaded({
+        taskInstances
+      });
       const result = reducer(initialState, action);
       expect(result).toEqual(createState(taskInstances, true));
     });
@@ -102,7 +108,9 @@ describe('TaskInstances Reducer', () => {
     });
 
     it('should add multiple taskInstances', () => {
-      const action = new TaskInstanceActions.AddTaskInstances({ taskInstances });
+      const action = new TaskInstanceActions.AddTaskInstances({
+        taskInstances
+      });
       const result = reducer(initialState, action);
 
       expect(result).toEqual(createState(taskInstances, false));
@@ -111,7 +119,7 @@ describe('TaskInstances Reducer', () => {
   describe('upsert actions', () => {
     it('should upsert one taskInstance', () => {
       const originalTaskInstance = taskInstances[0];
-      
+
       const startState = reducer(
         initialState,
         new TaskInstanceActions.AddTaskInstance({
@@ -119,16 +127,20 @@ describe('TaskInstances Reducer', () => {
         })
       );
 
-    
-      const updatedTaskInstance = createTaskInstance(taskInstances[0].id, 'test');
-     
+      const updatedTaskInstance = createTaskInstance(
+        taskInstances[0].id,
+        'test'
+      );
+
       const action = new TaskInstanceActions.UpsertTaskInstance({
         taskInstance: updatedTaskInstance
       });
 
       const result = reducer(startState, action);
 
-      expect(result.entities[updatedTaskInstance.id]).toEqual(updatedTaskInstance);
+      expect(result.entities[updatedTaskInstance.id]).toEqual(
+        updatedTaskInstance
+      );
     });
 
     it('should upsert many taskInstances', () => {
@@ -146,9 +158,7 @@ describe('TaskInstances Reducer', () => {
 
       const result = reducer(startState, action);
 
-      expect(result).toEqual(
-        createState(taskInstancesToInsert)
-      );
+      expect(result).toEqual(createState(taskInstancesToInsert));
     });
   });
 
@@ -159,31 +169,32 @@ describe('TaskInstances Reducer', () => {
       const update: Update<TaskInstanceInterface> = {
         id: 1,
         changes: {
-          __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-        } 
+          alerted: alertedUpdatedValue
+        }
       };
       const action = new TaskInstanceActions.UpdateTaskInstance({
         taskInstance: update
       });
       const result = reducer(startState, action);
-      expect(result).toEqual(createState([createTaskInstance(1, __EXTRA__PROPERTY_NAMEUpdatedValue)]));
+      expect(result).toEqual(
+        createState([createTaskInstance(1, alertedUpdatedValue)])
+      );
     });
 
     it('should update multiple taskInstances', () => {
       const startState = createState(taskInstances);
       const updates: Update<TaskInstanceInterface>[] = [
-        
         {
           id: 1,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          } 
+            alerted: alertedUpdatedValue
+          }
         },
         {
           id: 2,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          }  
+            alerted: alertedUpdatedValue
+          }
         }
       ];
       const action = new TaskInstanceActions.UpdateTaskInstances({
@@ -192,7 +203,11 @@ describe('TaskInstances Reducer', () => {
       const result = reducer(startState, action);
 
       expect(result).toEqual(
-        createState([createTaskInstance(1, __EXTRA__PROPERTY_NAMEUpdatedValue), createTaskInstance(2, __EXTRA__PROPERTY_NAMEUpdatedValue), taskInstances[2]])
+        createState([
+          createTaskInstance(1, alertedUpdatedValue),
+          createTaskInstance(2, alertedUpdatedValue),
+          taskInstances[2]
+        ])
       );
     });
   });
@@ -220,7 +235,11 @@ describe('TaskInstances Reducer', () => {
 
   describe('clear action', () => {
     it('should clear the taskInstances collection', () => {
-      const startState = createState(taskInstances, true, 'something went wrong');
+      const startState = createState(
+        taskInstances,
+        true,
+        'something went wrong'
+      );
       const action = new TaskInstanceActions.ClearTaskInstances();
       const result = reducer(startState, action);
       expect(result).toEqual(createState([], true, 'something went wrong'));
