@@ -5,6 +5,7 @@ import {
   EduContentReducer,
   LearningAreaReducer,
   StudentContentStatusReducer,
+  TaskEduContentReducer,
   TaskInstanceReducer,
   TaskReducer,
   UiReducer,
@@ -30,4 +31,5 @@ export interface DalState {
   studentContentStatuses: StudentContentStatusReducer.State;
   tasks: TaskReducer.State;
   taskInstances: TaskInstanceReducer.State;
+  taskEduContents: TaskEduContentReducer.State;
 }
