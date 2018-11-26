@@ -45,6 +45,9 @@ describe('HeaderComponent', () => {
   });
 
   describe('feature toggles', () => {
+    beforeEach(() => {
+      headerViewModel.isResolved$.next(true);
+    });
     it('should show the feature components if true', () => {
       component.enableAlerts = true;
       fixture.detectChanges();
@@ -70,6 +73,8 @@ describe('HeaderComponent', () => {
 
   describe('should be mobile friendly', () => {
     beforeEach(() => {
+      headerViewModel.isResolved$.next(true);
+
       // mock that we're on small sreen size
       breakpointStream.next({ matches: true });
       fixture.detectChanges();

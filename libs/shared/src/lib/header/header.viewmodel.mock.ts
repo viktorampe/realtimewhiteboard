@@ -89,7 +89,7 @@ export class MockHeaderViewModel {
   unreadAlertCount$ = new BehaviorSubject<number>(0);
   backLink$ = new BehaviorSubject<string | undefined>('');
 
-  toggleSideNav = () => {};
+  toggleSideNav = jest.fn();
 
   constructor() {}
 }

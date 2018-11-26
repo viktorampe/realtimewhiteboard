@@ -130,7 +130,6 @@ export class HeaderViewModel {
           breadCrumbs.length < 2
             ? undefined
             : breadCrumbs[breadCrumbs.length - 2].link.toString();
-        console.log(breadCrumbs);
         return check;
       })
     );
