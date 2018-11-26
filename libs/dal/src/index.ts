@@ -20,3 +20,7 @@ export {
   EDUCONTENT_SERVICE_TOKEN
 } from './lib/edu-content/edu-content.service.interface';
 export * from './lib/persons';
+export {
+  ScormExerciseServiceInterface,
+  SCORM_EXERCISE_SERVICE_TOKEN
+} from './lib/scorm/scorm-exercise.service.interface';

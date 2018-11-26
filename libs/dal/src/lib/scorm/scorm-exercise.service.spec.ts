@@ -20,5 +20,7 @@ describe('ScormExerciseService', () => {
     expect(scormExerciseService).toBeTruthy();
   });
 
-  it('should start an preview exercise', () => {});
+  it('should start an preview exercise', () => {
+    scormExerciseService.startExerciseAsPreviewWithAnswers();
+  });
 });

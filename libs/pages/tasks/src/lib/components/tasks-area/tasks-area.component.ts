@@ -1,4 +1,8 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import {
+  ScormExerciseServiceInterface,
+  SCORM_EXERCISE_SERVICE_TOKEN
+} from '@campus/dal';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/shared';
 import { FilterTextInputComponent, ListFormat } from '@campus/ui';
 import { Observable } from 'rxjs';
@@ -28,8 +32,14 @@ export class TasksAreaComponent implements OnInit {
 
   constructor(
     private tasksViewModel: TasksViewModel,
+    @Inject(SCORM_EXERCISE_SERVICE_TOKEN)
+    private exerciseService: ScormExerciseServiceInterface,
     @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface
   ) {}
+
+  startEx() {
+    this.exerciseService.startExerciseAsPreviewWithAnswers();
+  }
 
   ngOnInit() {
     this.listFormat$ = this.tasksViewModel.listFormat$;

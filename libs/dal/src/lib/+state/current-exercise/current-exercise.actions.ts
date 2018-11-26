@@ -12,7 +12,6 @@ export enum CurrentExerciseActionTypes {
 
 export class StartExercise implements Action {
   readonly type = CurrentExerciseActionTypes.StartExercise;
-
   constructor(
     public payload: {
       userId: number;

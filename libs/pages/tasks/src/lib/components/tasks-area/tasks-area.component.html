@@ -2,13 +2,15 @@
   <campus-filter-text-input #filterInput
                             theme="dark"
                             class="pages__toolbar__filter"
-                            [source] ="(learningAreasWithInfo$|async)"></campus-filter-text-input>
+                            [source]="(learningAreasWithInfo$|async)"></campus-filter-text-input>
   <div class="divider"></div>
   <campus-button (click)="clickChangeListFormat(listFormat.GRID)"
                  iconClass="grid-view"></campus-button>
   <campus-button (click)="clickChangeListFormat(listFormat.LINE)"
                  iconClass="list-view"></campus-button>
 </campus-page-bar>
+
+<button (click)="startEx()">OK</button>
 
 <div class="pages-tasks__container"
      *ngIf="(learningAreasWithInfo$ | async)?.learningAreasWithInfo as learningAreas">
@@ -21,10 +23,11 @@
 
   <ng-container *ngIf="learningAreas.length > 0; else: noLearningAreas">
     <ng-container *ngIf="(filterTextInput.result$|async) as filteredLearningAreas">
-        <div class="test">123</div>
+      <div class="test">123</div>
       <div class="pages-tasks__container__learning-areas-count">
         {{ filteredLearningAreas.length }} van
-        <u class="pages-tasks__container__learning-areas-count__total" (click)="filterTextInput.clear()">{{ learningAreas.length }}</u>
+        <u class="pages-tasks__container__learning-areas-count__total"
+           (click)="filterTextInput.clear()">{{ learningAreas.length }}</u>
         weergegeven
       </div>
       <div class="pages-tasks__container__learning-areas">
