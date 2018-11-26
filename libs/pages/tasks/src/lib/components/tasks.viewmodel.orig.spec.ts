@@ -22,8 +22,7 @@ import {
   TaskInterface,
   TaskReducer,
   UiActions,
-  UiReducer,
-  UserReducer
+  UiReducer
 } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
@@ -31,13 +30,12 @@ import { hot } from '@nrwl/nx/testing';
 import { TasksResolver } from './tasks.resolver';
 import { TasksViewModel } from './tasks.viewmodel';
 
-let usedUserState;
 let usedLearningAreaState;
-let usedTeacherState;
+// let usedTeacherState;
 let usedTaskState;
 let usedEducontentState;
-let usedTaskInstanceState;
-let usedTaskEducontentState;
+// let usedTaskInstanceState;
+// let usedTaskEducontentState;
 let usedUiState;
 let taskResolver: TasksResolver;
 let tasksViewModel: TasksViewModel;
@@ -52,13 +50,6 @@ describe('TasksViewModel met State', () => {
       imports: [
         StoreModule.forRoot({}),
         ...StateFeatureBuilder.getModuleWithForFeatureProviders([
-          {
-            NAME: UserReducer.NAME,
-            reducer: UserReducer.reducer,
-            initialState: {
-              initialState: usedUserState
-            }
-          },
           {
             NAME: LearningAreaReducer.NAME,
             reducer: LearningAreaReducer.reducer,
