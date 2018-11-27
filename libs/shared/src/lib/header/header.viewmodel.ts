@@ -34,18 +34,6 @@ export class HeaderViewModel {
 
   // publics
   enableAlerts: boolean;
-  profileMenuItems: DropdownMenuItemInterface[] = [
-    {
-      icon: '',
-      description: 'Profiel',
-      internalLink: '/profile'
-    },
-    {
-      icon: '',
-      description: 'Afmelden',
-      internalLink: '/logout'
-    }
-  ];
 
   // source streams
   breadCrumbs$: Observable<BreadcrumbLinkInterface[]>; // TODO select breadcrumbs from store
@@ -56,6 +44,7 @@ export class HeaderViewModel {
   alertNotifications$: Observable<NotificationItemInterface[]>;
   unreadAlertCount$: Observable<number>;
   backLink$: Observable<string | undefined>;
+  profileMenuItems$: Observable<DropdownMenuItemInterface[]>;
 
   constructor(
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
@@ -89,6 +78,7 @@ export class HeaderViewModel {
     this.backLink$ = this.getBackLink();
     this.alertNotifications$ = this.getAlertNotifications();
     this.unreadAlertCount$ = this.getUnreadAlertCount();
+    this.profileMenuItems$ = this.mockViewModel.profileMenuItems$;
   }
 
   private loadFeatureToggles(): void {

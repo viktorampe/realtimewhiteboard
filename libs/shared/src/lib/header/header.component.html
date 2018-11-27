@@ -41,7 +41,7 @@
           </ng-container>
           <campus-dropdown-menu #dropDownProfile
                                 [showHeader]="false">
-            <campus-dropdown-menu-item *ngFor="let menuItem of profileMenuItems"
+            <campus-dropdown-menu-item *ngFor="let menuItem of (profileMenuItems$|async)"
                                        [icon]='menuItem.icon'
                                        [description]='menuItem.description'
                                        [internalLink]="menuItem.internalLink"></campus-dropdown-menu-item>

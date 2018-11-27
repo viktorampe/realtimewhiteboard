@@ -8,8 +8,8 @@ import { HeaderViewModel } from './header.viewmodel';
 })
 export class HeaderComponent implements OnInit {
   enableAlerts: boolean;
-  profileMenuItems = this.headerViewModel.profileMenuItems;
 
+  profileMenuItems$ = this.headerViewModel.profileMenuItems$;
   isResolved$ = this.headerViewModel.isResolved$;
   breadCrumbs$ = this.headerViewModel.breadCrumbs$;
   alertNotifications$ = this.headerViewModel.alertNotifications$;

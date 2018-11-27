@@ -44,7 +44,9 @@ export class MockHeaderViewModel {
   ];
 
   enableAlerts = true;
-  profileMenuItems: DropdownMenuItemInterface[] = [
+  profileMenuItems$: Observable<
+    DropdownMenuItemInterface[]
+  > = new BehaviorSubject([
     {
       icon: '',
       description: 'Profiel',
@@ -55,7 +57,7 @@ export class MockHeaderViewModel {
       description: 'Afmelden',
       internalLink: '/logout'
     }
-  ];
+  ]);
 
   // source streams
   isResolved$ = new BehaviorSubject<boolean>(false);

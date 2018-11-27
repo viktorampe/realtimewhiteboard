@@ -98,8 +98,9 @@ describe('HeaderComponent', () => {
           );
         });
         it('should toggle the side nav', () => {
+          const toggleSideNavSpy = jest.spyOn(headerViewModel, 'toggleSideNav');
           pageBarNavIcon.click();
-          expect(headerViewModel.toggleSideNav).toHaveBeenCalledTimes(1);
+          expect(toggleSideNavSpy).toHaveBeenCalledTimes(1);
         });
       });
     });
