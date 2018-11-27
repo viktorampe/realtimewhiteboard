@@ -41,7 +41,7 @@ export class Alert implements AlertQueueInterface {
         return 'educontent';
 
       case 'message':
-        return 'envelope-open';
+        return 'messages';
 
       case 'bundle':
         return 'educontent';
@@ -55,7 +55,7 @@ export class Alert implements AlertQueueInterface {
         return 'book';
 
       case 'marketing':
-        return 'polpo';
+        return 'marketing-message';
 
       default:
         return 'notifications';

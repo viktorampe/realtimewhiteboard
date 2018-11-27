@@ -1,4 +1,5 @@
 import {
+  Alert,
   AlertMarketingInterface,
   AlertQueueInterface,
   BundleInterface,
@@ -8,7 +9,7 @@ import {
   UnlockedContentInterface
 } from '../+models';
 
-export class AlertFixture implements AlertQueueInterface {
+export class AlertFixture extends Alert {
   title = 'Er is een bundel aangepast.';
   type = 'bundle';
   link? = '/linknaarbundle';
@@ -38,33 +39,7 @@ export class AlertFixture implements AlertQueueInterface {
   alertMarketing?: AlertMarketingInterface;
 
   constructor(props: Partial<AlertQueueInterface> = {}) {
+    super();
     return Object.assign(this, props);
-  }
-
-  get icon() {
-    switch (this.type) {
-      case 'educontent':
-        return 'educontent';
-
-      case 'message':
-        return 'envelope-open';
-
-      case 'bundle':
-        return 'educontent';
-
-      case 'task':
-      case 'task-start':
-      case 'task-end':
-        return 'tasks';
-
-      case 'boek-e':
-        return 'book';
-
-      case 'marketing':
-        return 'polpo';
-
-      default:
-        return 'notifications';
-    }
   }
 }
