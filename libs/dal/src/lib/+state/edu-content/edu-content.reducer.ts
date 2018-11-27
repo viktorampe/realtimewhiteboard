@@ -7,6 +7,24 @@ import {
 
 export const NAME = 'eduContents';
 
+const sortByName = (a: EduContentInterface, b: EduContentInterface) => {
+  const getTitle = eduContent =>
+    (eduContent.publishedEduContentMetadata &&
+      eduContent.publishedEduContentMetadata.title &&
+      eduContent.publishedEduContentMetadata.title.toLowerCase()) ||
+    '';
+  const titleA = getTitle(a);
+  const titleB = getTitle(b);
+
+  if (titleA < titleB) {
+    return -1;
+  }
+  if (titleA > titleB) {
+    return 1;
+  }
+  return 0;
+};
+
 /**
  * @ngrx/entity provides a predefined interface for handling
  * a structured dictionary of records. This interface
@@ -30,7 +48,9 @@ export interface State extends EntityState<EduContentInterface> {
  */
 export const adapter: EntityAdapter<EduContentInterface> = createEntityAdapter<
   EduContentInterface
->();
+>({
+  sortComparer: sortByName
+});
 
 /**
  * getInitialState returns the default initial state
