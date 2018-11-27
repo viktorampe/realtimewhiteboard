@@ -14,7 +14,7 @@
              *ngIf="enableAlerts">
           <campus-button (click)="dropDownAlerts.toggle()">Meldingen</campus-button>
           <campus-dropdown-menu #dropDownAlerts
-                                showHeader="true"
+                                [showHeader]="true"
                                 [newItemCount]="unreadAlertCount$|async"
                                 [headerIcon]="'notifications'"
                                 itemType="meldingen"
@@ -40,7 +40,7 @@
 
           </ng-container>
           <campus-dropdown-menu #dropDownProfile
-                                showheader="false">
+                                [showHeader]="false">
             <campus-dropdown-menu-item *ngFor="let menuItem of profileMenuItems"
                                        [icon]='menuItem.icon'
                                        [description]='menuItem.description'

@@ -1,4 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatIconModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { PersonBadgeComponent } from '../person-badge/person-badge.component';
@@ -12,7 +13,7 @@ describe('NotificationDropdownItemComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
+      imports: [RouterTestingModule, MatIconModule],
       declarations: [
         NotificationDropdownItemComponent,
         PersonBadgeComponent,

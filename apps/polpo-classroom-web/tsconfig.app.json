@@ -16,6 +16,7 @@
     "../../libs/pages/tasks/src/index.ts",
     "../../libs/devlib/src/index.ts",
     "../../libs/dal/src/index.ts",
-    "../../libs/ui/src/index.ts"
+    "../../libs/ui/src/index.ts",
+    "../../libs/shared/src/index.ts"
   ]
 }
