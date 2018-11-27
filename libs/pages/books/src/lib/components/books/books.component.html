@@ -1,3 +1,67 @@
+<campus-page-bar>
+  <campus-filter-text-input
+    theme="dark"
+    class="pages__toolbar__filter"
+    [source]="books$ | async"
+  ></campus-filter-text-input>
+
+  <div class="divider"></div>
+  <campus-button
+    [iconClass]="'list-view'"
+    (click)="setListFormat(listFormat.LINE)"
+  ></campus-button>
+  <campus-button
+    [iconClass]="'grid-view'"
+    (click)="setListFormat(listFormat.GRID)"
+  ></campus-button>
+</campus-page-bar>
+
+<campus-page-header
+  *ngIf="(books$ | async) as books"
+  [title]="'Boeken'"
+  [iconClass]="'learning-area:godsdienst-lg'"
+>
+</campus-page-header>
+
+<ng-template #noBooks>
 <div>
-  books page works!
+  Er zijn momenteel geen boeken met jou gedeeld.
 </div>
+</ng-template>
+
+<ng-container
+  *ngIf="(filterTextInput.result$ | async) as filteredBooks; else noBooks"
+>
+  <div class="pages-tasks__container">
+    <div class="pages-tasks__container__tasks-count"
+    *ngIf="filteredBooks.length === (books$ | async)?.length;
+          then noFilter;
+          else filter" ></div>
+    <ng-template #noFilter>
+      Je hebt <b>{{ filteredBooks.length }}</b> boeken
+    </ng-template>
+
+    <ng-template #filter>
+      {{ filteredBooks.length }} van
+      <u (click)="filterTextInput.clear()">{{
+        (books$ | async)?.length
+      }}</u>
+      weergegeven
+    </ng-template>
+
+    <campus-list-view [listFormat]="listFormat$ | async">
+      <campus-content-thumbnail
+        *ngFor="let book of filteredBooks"
+        [routerLink]="[book.id]"
+        campusListItem
+        [title]="book.name"
+        [contentTypeClass]="book.publishedEduContentMetadata.learningArea.icon"
+        [fileExtensionClass]="book.fileExtension"
+        [imagePath]="book.methodLogos[0]"
+      >
+      <campus-button circle [iconClass]="'eye'"></campus-button>
+      </campus-content-thumbnail>
+    </campus-list-view>
+  </div>
+</ng-container>
+
