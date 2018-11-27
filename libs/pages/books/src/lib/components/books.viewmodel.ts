@@ -7,6 +7,7 @@ import {
   EduContentQueries,
   LearningAreaInterface,
   LearningAreaQueries,
+  UiActions,
   UiQuery,
   UnlockedBoekeGroup,
   UnlockedBoekeGroupInterface,
@@ -45,6 +46,10 @@ export class BooksViewModel {
     this.unlockedBoekeGroups$ = this.getUnlockedBoekeGroups();
     this.unlockedBoekeStudents$ = this.getUnlockedBoekeStudent();
     this.sharedBooks$ = this.getSharedBooks();
+  }
+
+  changeListFormat(listFormat: ListFormat): void {
+    this.store.dispatch(new UiActions.SetListFormat({ listFormat }));
   }
 
   private getListFormat(): Observable<ListFormat> {
