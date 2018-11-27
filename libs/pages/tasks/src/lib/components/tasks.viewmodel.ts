@@ -1,35 +1,11 @@
 import { Inject, Injectable } from '@angular/core';
-import {
-  AlertService,
-  AuthServiceInterface,
-  AUTH_SERVICE_TOKEN,
-  DalState,
-  EduContentInterface,
-  EduContentQueries,
-  LearningAreaInterface,
-  LearningAreaQueries,
-  PersonFixture,
-  PersonInterface,
-  TaskEduContentFixture,
-  TaskEduContentInterface,
-  TaskInstanceFixture,
-  TaskInstanceInterface,
-  TaskInterface,
-  TaskQueries,
-  UiActions,
-  UiQuery
-} from '@campus/dal';
+import { AlertService, AuthServiceInterface, AUTH_SERVICE_TOKEN, DalState, EduContentInterface, EduContentQueries, LearningAreaInterface, LearningAreaQueries, PersonFixture, PersonInterface, TaskEduContentFixture, TaskEduContentInterface, TaskInstanceFixture, TaskInstanceInterface, TaskInterface, TaskQueries, UiActions, UiQuery } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable, of } from 'rxjs';
 import { flatMap, map, tap } from 'rxjs/operators';
 import { TasksResolver } from './tasks.resolver';
-import {
-  EduContentWithSubmittedInterface,
-  LearningAreasWithTaskInstanceInfoInterface,
-  TaskInstancesWithEduContentInfoInterface,
-  TaskInstanceWithEduContentInfoInterface
-} from './tasks.viewmodel.interfaces';
+import { EduContentWithSubmittedInterface, LearningAreasWithTaskInstanceInfoInterface, TaskInstancesWithEduContentInfoInterface, TaskInstanceWithEduContentInfoInterface } from './tasks.viewmodel.interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -110,7 +86,7 @@ export class TasksViewModel {
     return this.store.pipe(select(TaskQueries.getById, { id: taskId }));
   }
 
-  public getTeacherById(teacherId: number): Observable<PersonInterface> {
+  private getTeacherById(teacherId: number): Observable<PersonInterface> {
     return this.teachers$.pipe(
       map(teachers => teachers.find(teacher => teacher.id === teacherId))
     );
