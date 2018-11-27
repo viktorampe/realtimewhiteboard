@@ -3,12 +3,6 @@ import { TaskEduContentActions } from '.';
 import { TaskEduContentInterface } from '../../+models';
 import { initialState, reducer, State } from './task-edu-content.reducer';
 
-/**
- * This file is scaffolded, but needs some special attention:
- * - find and replace 'index' and replace this with a property name of the TaskEduContent entity.
- * - set the initial property value via '[index]InitialValue'.
- * - set the updated property value via '[index]UpdatedValue'.
- */
 const indexInitialValue = 1;
 const indexUpdatedValue = 1;
 

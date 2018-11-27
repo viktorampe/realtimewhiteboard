@@ -3,12 +3,6 @@ import { TaskInstanceActions } from '.';
 import { TaskInstanceInterface } from '../../+models';
 import { initialState, reducer, State } from './task-instance.reducer';
 
-/**
- * This file is scaffolded, but needs some special attention:
- * - find and replace 'alerted' and replace this with a property name of the TaskInstance entity.
- * - set the initial property value via '[alerted]InitialValue'.
- * - set the updated property value via '[alerted]UpdatedValue'.
- */
 const alertedInitialValue = true;
 const alertedUpdatedValue = false;
 
