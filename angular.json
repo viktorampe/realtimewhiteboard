@@ -539,7 +539,8 @@
           "options": {
             "jestConfig": "libs/guards/jest.config.js",
             "tsConfig": "libs/guards/tsconfig.spec.json",
-            "setupFile": "libs/guards/src/test-setup.ts"
+            "setupFile": "libs/guards/src/test-setup.ts",
+            "maxWorkers": 2
           }
         }
       }
