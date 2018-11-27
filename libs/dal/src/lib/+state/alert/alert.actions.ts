@@ -1,7 +1,7 @@
 import { Update } from '@ngrx/entity';
 import { Action } from '@ngrx/store';
 import { AlertQueueInterface } from '../../+models';
-
+export type NestedPartial<T> = { [P in keyof T]?: NestedPartial<T[P]> };
 export enum AlertsActionTypes {
   AlertsLoaded = '[Alerts] Alerts Loaded',
   AlertsLoadError = '[Alerts] Load Error',
@@ -9,6 +9,7 @@ export enum AlertsActionTypes {
   NewAlertsLoaded = '[Alerts] New Alerts Loaded',
   LoadNewAlerts = '[Alerts] Load New Alerts',
   SetReadAlert = '[Alerts] Set as Read Alert',
+  SetAlertReadByFilter = '[Alerts] Set Alert Read By Filter',
   StartPollAlerts = '[Alerts] Start Poll Alerts',
   StopPollAlerts = '[Alerts] Stop Poll Alerts',
   AddAlert = '[Alerts] Add Alert',
@@ -101,6 +102,19 @@ export class SetReadAlert implements Action {
   }
 }
 
+export class SetAlertReadByFilter implements Action {
+  readonly type = AlertsActionTypes.SetAlertReadByFilter;
+
+  constructor(
+    public payload: {
+      personId: number;
+      filter: NestedPartial<AlertQueueInterface>;
+      read?: boolean;
+      intended?: boolean;
+    }
+  ) {}
+}
+
 export class AddAlert implements Action {
   readonly type = AlertsActionTypes.AddAlert;
 
@@ -160,6 +174,7 @@ export type AlertsActions =
   | LoadNewAlerts
   | NewAlertsLoaded
   | SetReadAlert
+  | SetAlertReadByFilter
   | StartPollAlerts
   | StopPollAlerts
   | AddAlert
