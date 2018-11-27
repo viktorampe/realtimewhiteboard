@@ -3,4 +3,9 @@ import { TaskInstanceEffects } from './task-instance.effects';
 import * as TaskInstanceReducer from './task-instance.reducer';
 import * as TaskInstanceQueries from './task-instance.selectors';
 
-export { TaskInstanceActions, TaskInstanceReducer, TaskInstanceQueries, TaskInstanceEffects };
+export {
+  TaskInstanceActions,
+  TaskInstanceReducer,
+  TaskInstanceQueries,
+  TaskInstanceEffects
+};
