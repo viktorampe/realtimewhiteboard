@@ -106,4 +106,6 @@ export class MockBooksViewModel {
       { learningAreaId: 4, learningArea: new LearningAreaFixture({ id: 4 }) }
     )
   ]);
+
+  changeListFormat(listFormat: ListFormat): void {}
 }
