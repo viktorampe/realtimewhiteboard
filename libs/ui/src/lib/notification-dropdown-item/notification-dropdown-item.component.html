@@ -4,9 +4,7 @@
    [routerLink]="link">
   <mat-icon [svgIcon]="icon"
             *ngIf="icon"
-            class="ui-notification-dropdown-item__icon {{icon}}"></mat-icon>
-  <!-- <i *ngIf="icon"
-     class="ui-notification-dropdown-item__icon {{icon}}"></i> -->
+            class="ui-notification-dropdown-item__icon"></mat-icon>
   <campus-person-badge *ngIf="person"
                        class="ui-notification-dropdown-item__badge"
                        [person]="person"

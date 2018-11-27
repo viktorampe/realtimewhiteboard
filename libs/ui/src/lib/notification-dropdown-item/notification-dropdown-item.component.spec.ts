@@ -38,7 +38,7 @@ describe('NotificationDropdownItemComponent', () => {
     fixture.detectChanges();
 
     const iconNode = fixture.debugElement.query(
-      By.css('i.ui-notification-dropdown-item__icon')
+      By.css('.ui-notification-dropdown-item__icon')
     );
     expect(iconNode).toBeNull();
   });
@@ -48,10 +48,12 @@ describe('NotificationDropdownItemComponent', () => {
     fixture.detectChanges();
 
     const iconNode = fixture.debugElement.query(
-      By.css('i.ui-notification-dropdown-item__icon')
+      By.css('mat-icon.ui-notification-dropdown-item__icon')
+    );
+    expect(iconNode.nativeElement.getAttribute(['ng-reflect-svg-icon'])).toBe(
+      'foo'
     );
     expect(iconNode).toBeTruthy();
-    expect(iconNode.nativeElement.classList).toContain('foo');
   });
 
   it('should show user badge', () => {
