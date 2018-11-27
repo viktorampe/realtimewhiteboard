@@ -31,11 +31,16 @@ export class CoupledTeacherGuard implements CanLoad {
 
   canLoad(route: Route): Observable<boolean> | Promise<boolean> | boolean {
     return combineLatest(
+      this.currentUser$,
       this.isStudent$,
       this.isTeacher$,
       this.hasTeachers$
     ).pipe(
-      map(([isStudent, isTeacher, hasTeachers]) => {
+      map(([currentUser, isStudent, isTeacher, hasTeachers]) => {
+        if (!currentUser) {
+          this.router.navigate(['/login']);
+          return false;
+        }
         if (isStudent && !isTeacher && hasTeachers) return true;
         this.router.navigate(['/settings']);
         return false;
@@ -52,20 +57,22 @@ export class CoupledTeacherGuard implements CanLoad {
 
   private loadIntermediateStream(): void {
     this.isStudent$ = this.currentUser$.pipe(
-      map(currentUser =>
-        this.containsRole(currentUser.roles, RolesEnum.Student)
-      )
+      map(currentUser => {
+        if (!currentUser) return false;
+        return this.containsRole(currentUser.roles, RolesEnum.Student);
+      })
     );
     this.isTeacher$ = this.currentUser$.pipe(
-      map(currentUser =>
-        this.containsRole(currentUser.roles, RolesEnum.Teacher)
-      )
+      map(currentUser => {
+        if (!currentUser) return false;
+        return this.containsRole(currentUser.roles, RolesEnum.Teacher);
+      })
     );
     this.hasTeachers$ = this.currentUser$.pipe(
-      map(
-        currentUser =>
-          currentUser.teachers ? currentUser.teachers.length > 0 : false
-      )
+      map(currentUser => {
+        if (!currentUser) return false;
+        return currentUser.teachers ? currentUser.teachers.length > 0 : false;
+      })
     );
   }
 
