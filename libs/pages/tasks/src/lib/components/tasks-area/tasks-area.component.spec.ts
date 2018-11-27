@@ -1,12 +1,12 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { ListFormat, UiModule } from '@campus/ui';
 import {
   FilterService,
   FilterServiceInterface,
   FILTER_SERVICE_TOKEN
-} from '@campus/shared';
-import { ListFormat, UiModule } from '@campus/ui';
+} from '@campus/utils';
 import { hot } from 'jasmine-marbles';
 import { BehaviorSubject } from 'rxjs';
 import { TasksViewModel } from '../tasks.viewmodel';
