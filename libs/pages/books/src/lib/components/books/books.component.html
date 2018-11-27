@@ -20,53 +20,45 @@
   <campus-page-header
     *ngIf="books$ | async"
     [title]="'Boeken'"
-    [iconClass]="'learning-area:godsdienst-lg'"
-  >
+    [iconClass]="'learning-area:godsdienst-lg'">
   </campus-page-header>
 
   <ng-template #noBooks>
-  <div>
-    Er zijn momenteel geen boeken met jou gedeeld.
-  </div>
+    <div>    Er zijn momenteel geen boeken met jou gedeeld.  </div>
   </ng-template>
 
   <ng-container *ngIf="(books$ | async)?.length !== 0; else noBooks">
+    <ng-container *ngIf="(filterTextInput.result$ | async) as filteredBooks">
+      <div class="pages-books__container__books-count"
+      *ngIf="filteredBooks.length === (books$ | async).length;
+            then noFilter;
+            else filter" ></div>
+      <ng-template #noFilter>
+        Je hebt <b>{{ filteredBooks.length }}</b> boeken
+      </ng-template>
 
-  <ng-container
-    *ngIf="(filterTextInput.result$ | async) as filteredBooks"
-  >
+      <ng-template #filter>
+        {{ filteredBooks.length }} van
+        <u (click)="filterTextInput.clear()">{{
+          (books$ | async)?.length
+        }}</u>
+        weergegeven
+      </ng-template>
 
-    <div class="pages-books__container__books-count"
-    *ngIf="filteredBooks.length === (books$ | async).length;
-          then noFilter;
-          else filter" ></div>
-    <ng-template #noFilter>
-      Je hebt <b>{{ filteredBooks.length }}</b> boeken
-    </ng-template>
-
-    <ng-template #filter>
-      {{ filteredBooks.length }} van
-      <u (click)="filterTextInput.clear()">{{
-        (books$ | async)?.length
-      }}</u>
-      weergegeven
-    </ng-template>
-
-    <campus-list-view [listFormat]="listFormat$ | async">
-      <campus-content-thumbnail
-        *ngFor="let book of filteredBooks"
-        [routerLink]="[book.id]"
-        campusListItem
-        [title]="book.name"
-        [contentTypeClass]="book.publishedEduContentMetadata.learningArea.icon"
-        [fileExtensionClass]="book.fileExtension"
-        [imagePath]="book.methodLogos[0]"
-      >
-      <campus-button circle [iconClass]="'eye'"></campus-button>
-      </campus-content-thumbnail>
-    </campus-list-view>
-
-</ng-container>
-</ng-container>
+      <campus-list-view [listFormat]="listFormat$ | async">
+        <campus-content-thumbnail
+          *ngFor="let book of filteredBooks"
+          [routerLink]="[book.id]"
+          campusListItem
+          [title]="book.name"
+          [contentTypeClass]="book.publishedEduContentMetadata.learningArea.icon"
+          [fileExtensionClass]="book.fileExtension"
+          [imagePath]="book.methodLogos[0]"
+        >
+          <campus-button circle [iconClass]="'eye'"></campus-button>
+        </campus-content-thumbnail>
+      </campus-list-view>
+    </ng-container>
+  </ng-container>
 </div>
 
