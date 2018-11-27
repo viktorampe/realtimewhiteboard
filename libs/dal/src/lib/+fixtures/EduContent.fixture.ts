@@ -1,8 +1,9 @@
-import { EduContentInterface, EduContentMetadataInterface } from '../+models';
+import { EduContent, EduContentMetadataInterface } from '../+models';
 import { EduContentMetadataFixture } from './EduContentMetadata.fixture';
 
-export class EduContentFixture implements EduContentInterface {
+export class EduContentFixture extends EduContent {
   // defaults
+  contentType = 'exercise';
   type = 'foo';
   id = 1;
   publishedEduContentMetadataId: 1;
@@ -11,9 +12,10 @@ export class EduContentFixture implements EduContentInterface {
   );
 
   constructor(
-    props: Partial<EduContentInterface> = {},
+    props: Partial<EduContent> = {},
     metadata: Partial<EduContentMetadataInterface> = {}
   ) {
+    super();
     // overwrite defaults
     Object.assign(this, props);
     Object.assign(this.publishedEduContentMetadata, metadata);
