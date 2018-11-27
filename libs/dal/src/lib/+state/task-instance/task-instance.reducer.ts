@@ -13,9 +13,9 @@ export interface State extends EntityState<TaskInstanceInterface> {
   error?: any;
 }
 
-export const adapter: EntityAdapter<TaskInstanceInterface> = createEntityAdapter<
+export const adapter: EntityAdapter<
   TaskInstanceInterface
->();
+> = createEntityAdapter<TaskInstanceInterface>();
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties
@@ -60,7 +60,10 @@ export function reducer(
     }
 
     case TaskInstancesActionTypes.TaskInstancesLoaded: {
-      return adapter.addAll(action.payload.taskInstances, { ...state, loaded: true });
+      return adapter.addAll(action.payload.taskInstances, {
+        ...state,
+        loaded: true
+      });
     }
 
     case TaskInstancesActionTypes.TaskInstancesLoadError: {
