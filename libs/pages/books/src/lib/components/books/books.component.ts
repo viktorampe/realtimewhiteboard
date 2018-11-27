@@ -1,10 +1,8 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { EduContent } from '@campus/dal';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/shared';
 import { FilterTextInputComponent, ListFormat } from '@campus/ui';
 import { Observable } from 'rxjs';
-import { shareReplay, tap } from 'rxjs/operators';
 import { BooksViewModel } from '../books.viewmodel';
 
 @Component({
@@ -20,17 +18,14 @@ export class BooksComponent implements OnInit {
   @ViewChild(FilterTextInputComponent)
   filterTextInput: FilterTextInputComponent<EduContent[], EduContent>;
 
-  private routeParams$ = this.route.params.pipe(shareReplay(1));
-
   constructor(
-    private route: ActivatedRoute,
     private viewModel: BooksViewModel,
     @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface
   ) {}
 
   ngOnInit() {
     //TODO: in de gaten houden waarom dit 4x triggert, mss gevolg van mock?
-    this.books$ = this.viewModel.sharedBooks$.pipe(tap(x => console.log(x)));
+    this.books$ = this.viewModel.sharedBooks$;
     this.filterTextInput.setFilterableItem(this);
   }
 
