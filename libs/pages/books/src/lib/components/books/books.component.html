@@ -16,26 +16,27 @@
   ></campus-button>
 </campus-page-bar>
 
-<campus-page-header
-  *ngIf="books$ | async"
-  [title]="'Boeken'"
-  [iconClass]="'learning-area:godsdienst-lg'"
->
-</campus-page-header>
+<div class="pages-books__container">
+  <campus-page-header
+    *ngIf="books$ | async"
+    [title]="'Boeken'"
+    [iconClass]="'learning-area:godsdienst-lg'"
+  >
+  </campus-page-header>
 
-<ng-template #noBooks>
-<div>
-  Er zijn momenteel geen boeken met jou gedeeld.
-</div>
-</ng-template>
+  <ng-template #noBooks>
+  <div>
+    Er zijn momenteel geen boeken met jou gedeeld.
+  </div>
+  </ng-template>
 
-<ng-container *ngIf="(books$ | async)?.length !== 0; else noBooks">
+  <ng-container *ngIf="(books$ | async)?.length !== 0; else noBooks">
 
-<ng-container
-  *ngIf="(filterTextInput.result$ | async) as filteredBooks"
->
-  <div class="pages-tasks__container">
-    <div class="pages-tasks__container__tasks-count"
+  <ng-container
+    *ngIf="(filterTextInput.result$ | async) as filteredBooks"
+  >
+
+    <div class="pages-books__container__books-count"
     *ngIf="filteredBooks.length === (books$ | async).length;
           then noFilter;
           else filter" ></div>
@@ -64,7 +65,8 @@
       <campus-button circle [iconClass]="'eye'"></campus-button>
       </campus-content-thumbnail>
     </campus-list-view>
-  </div>
+
 </ng-container>
 </ng-container>
+</div>
 
