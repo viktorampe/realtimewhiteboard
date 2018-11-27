@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
+import { FilterService } from '@campus/utils';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { interval, Observable, Subject } from 'rxjs';
@@ -17,6 +18,7 @@ import {
   LoadAlerts,
   LoadNewAlerts,
   NewAlertsLoaded,
+  SetAlertReadByFilter,
   SetReadAlert,
   StartPollAlerts
 } from './alert.actions';
@@ -110,6 +112,41 @@ export class AlertsEffects {
           );
       },
       undoAction: (action: SetReadAlert, state: any) => {
+        return new AlertsLoadError(new Error('Unable to update alert'));
+      }
+    }
+  );
+
+  @Effect()
+  setAlertReadByFilter$ = this.dataPersistence.optimisticUpdate(
+    AlertsActionTypes.SetAlertReadByFilter,
+    {
+      run: (action: SetAlertReadByFilter, state: DalState) => {
+        if (!state.alerts.loaded)
+          return new LoadAlerts({ userId: action.payload.personId });
+
+        let service = new FilterService();
+        const ids = service
+          .filter(Object.values(state.alerts.entities), action.payload.filter)
+          .map(i => i.id);
+
+        return this.alertService
+          .setAlertAsRead(
+            action.payload.personId,
+            ids,
+            action.payload.read,
+            action.payload.intended
+          )
+          .pipe(
+            map(
+              affectedRows =>
+                new ActionSuccessful({
+                  successfulAction: 'alert updated'
+                })
+            )
+          );
+      },
+      undoAction: (action: SetAlertReadByFilter, state: any) => {
         return new AlertsLoadError(new Error('Unable to update alert'));
       }
     }
