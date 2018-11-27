@@ -16,11 +16,9 @@ import { BreadcrumbLinkInterface, NotificationItemInterface } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { BehaviorSubject } from 'rxjs';
-import { MatIconModule } from '@angular/material';
-import { RouterTestingModule } from '@angular/router/testing';
 import {
   EnvironmentAlertsFeatureInterface,
-  ENVIRONMENT_ALERTS_FEATURE_TOKEN,
+  ENVIRONMENT_ALERTS_FEATURE_TOKEN
 } from '../interfaces/environment.features.interfaces';
 import { HeaderResolver } from './header.resolver';
 import { HeaderViewModel } from './header.viewmodel';
