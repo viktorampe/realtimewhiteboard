@@ -1,35 +1,40 @@
 import { Injectable } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { MatIconModule } from '@angular/material';
-import { RouterTestingModule } from '@angular/router/testing';
 import {
+  Alert,
+  AlertActions,
+  AlertFixture,
+  AlertReducer,
+  AUTH_SERVICE_TOKEN,
   PersonInterface,
   StateFeatureBuilder,
+  UiActions,
   UserActions,
   UserReducer
 } from '@campus/dal';
+import { BreadcrumbLinkInterface, NotificationItemInterface } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
+import { BehaviorSubject } from 'rxjs';
 import {
   EnvironmentAlertsFeatureInterface,
-  EnvironmentMessagesFeatureInterface,
-  ENVIRONMENT_ALERTS_FEATURE_TOKEN,
-  ENVIRONMENT_MESSAGES_FEATURE_TOKEN
+  ENVIRONMENT_ALERTS_FEATURE_TOKEN
 } from '../interfaces/environment.features.interfaces';
 import { HeaderResolver } from './header.resolver';
 import { HeaderViewModel } from './header.viewmodel';
 
-let environmentMessagesFeature: EnvironmentMessagesFeatureInterface = {
-  enabled: false,
-  hasAppBarDropDown: false
-};
 let environmentAlertsFeature: EnvironmentAlertsFeatureInterface = {
   enabled: false,
   hasAppBarDropDown: false
 };
 let headerViewModel: HeaderViewModel;
+
+let user: PersonInterface;
+let unreadAlerts: Alert[];
 let usedUserState: any;
-let spy;
+let usedUnreadAlertsState: any;
+let spy: jest.SpyInstance;
+let dispatchSpy: jest.SpyInstance;
 
 @Injectable({
   providedIn: 'root'
@@ -41,8 +46,8 @@ class MockHeaderResolver {
 describe('headerViewModel', () => {
   afterEach(() => {
     jest.clearAllMocks();
-    usedUserState = {};
   });
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -54,30 +59,36 @@ describe('headerViewModel', () => {
             initialState: {
               initialState: usedUserState
             }
+          },
+          {
+            NAME: AlertReducer.NAME,
+            reducer: AlertReducer.reducer,
+            initialState: {
+              initialState: usedUnreadAlertsState
+            }
           }
-        ]),
-        RouterTestingModule,
-        MatIconModule
+        ])
       ],
       providers: [
         HeaderViewModel,
+
+        {
+          provide: AUTH_SERVICE_TOKEN,
+          useValue: { userId: 1 }
+        },
         {
           provide: ENVIRONMENT_ALERTS_FEATURE_TOKEN,
           useValue: environmentAlertsFeature
-        },
-        {
-          provide: ENVIRONMENT_MESSAGES_FEATURE_TOKEN,
-          useValue: environmentMessagesFeature
         },
         { provide: HeaderResolver, useClass: MockHeaderResolver },
         Store
       ]
     });
     headerViewModel = TestBed.get(HeaderViewModel);
+    dispatchSpy = jest.spyOn(TestBed.get(Store), 'dispatch');
   });
   describe('creation', () => {
     beforeAll(() => {
-      usedUserState = UserReducer.initialState;
       spy = jest.fn();
     });
     it('should be defined', () => {
@@ -95,11 +106,6 @@ describe('headerViewModel', () => {
     ) {
       describe(`env enabled is ${enabled} and hasAppBarDropDown is ${hasAppBarDropDown}`, () => {
         beforeAll(() => {
-          usedUserState = UserReducer.initialState;
-          environmentMessagesFeature = {
-            enabled: enabled,
-            hasAppBarDropDown: hasAppBarDropDown
-          };
           environmentAlertsFeature = {
             enabled: enabled,
             hasAppBarDropDown: hasAppBarDropDown
@@ -107,7 +113,6 @@ describe('headerViewModel', () => {
         });
         it(`should be ${expectedResult}`, () => {
           expect(headerViewModel.enableAlerts).toBe(expectedResult);
-          expect(headerViewModel.enableMessages).toBe(expectedResult);
         });
       });
     }
@@ -117,18 +122,109 @@ describe('headerViewModel', () => {
     checkFeatureToggles(false, true, false);
   });
   describe('state streams', () => {
-    let user: PersonInterface;
     beforeAll(() => {
-      user = { email: 'email expected' };
-      usedUserState = UserReducer.reducer(
-        UserReducer.initialState,
-        new UserActions.UserLoaded(user)
-      );
+      setInitialState();
     });
     it('should get the user from the provided state', () => {
       expect(headerViewModel.currentUser$).toBeObservable(
         hot('a', { a: user })
       );
     });
+
+    it('should get unread alerts from the provided state', () => {
+      expect(headerViewModel.unreadAlerts$).toBeObservable(
+        hot('a', { a: unreadAlerts })
+      );
+    });
+  });
+
+  describe('display streams', () => {
+    it('should setup the unread alert count stream', () => {
+      const expected = unreadAlerts.length;
+      expect(headerViewModel.unreadAlertCount$).toBeObservable(
+        hot('a', { a: expected })
+      );
+    });
+    it('should setup the alert notifications stream', () => {
+      const expected: NotificationItemInterface[] = unreadAlerts.map(
+        (alert: Alert) => {
+          return {
+            icon: alert.icon,
+            titleText: alert.title,
+            link: alert.link,
+            notificationText: alert.message,
+            notificationDate: new Date(alert.sentAt)
+          };
+        }
+      );
+
+      expect(headerViewModel.alertNotifications$).toBeObservable(
+        hot('a', { a: expected })
+      );
+    });
+
+    describe('should setup the back link stream', () => {
+      it('should return a link when one is available', () => {
+        const expected = '/link';
+        expect(headerViewModel.backLink$).toBeObservable(
+          hot('a', { a: expected })
+        );
+      });
+
+      xit('should not return a link when none is available', () => {
+        // this test is skipped because the UI state still needs to add the breadcrumbs property
+        // when the breadcrumbs are added, use the setInitialState() method to manipulate the UI state
+        headerViewModel.breadCrumbs$ = new BehaviorSubject<
+          BreadcrumbLinkInterface[]
+        >([]);
+        headerViewModel['loadDisplayStream'](); // need to trigger this, otherwise breadcrumbs$ won't be reset
+        const expected = undefined;
+        expect(headerViewModel.backLink$).toBeObservable(
+          hot('a', { a: expected })
+        );
+      });
+    });
+  });
+
+  describe('user interactions', () => {
+    it('should set alert as read', () => {
+      headerViewModel.setAlertAsRead(1);
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        new AlertActions.SetReadAlert({
+          alertIds: 1,
+          personId: 1,
+          read: true
+        })
+      );
+    });
+
+    it('should toggle the side nav', () => {
+      headerViewModel.toggleSideNav();
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledWith(new UiActions.ToggleSideNav());
+    });
   });
 });
+
+function setInitialState() {
+  user = { email: 'email expected' };
+  usedUserState = UserReducer.reducer(
+    UserReducer.initialState,
+    new UserActions.UserLoaded(user)
+  );
+
+  unreadAlerts = [
+    new AlertFixture({ id: 1, sentAt: new Date(), type: 'bundle' }),
+    new AlertFixture({ id: 2, sentAt: new Date(), type: 'educontent' })
+  ];
+  usedUnreadAlertsState = AlertReducer.reducer(
+    AlertReducer.initialState,
+    new AlertActions.AlertsLoaded({
+      alerts: unreadAlerts,
+      timeStamp: Date.now()
+    })
+  );
+
+  // TODO: add UI state for breadcrumbs
+}

@@ -13,9 +13,9 @@ export interface State extends EntityState<TaskEduContentInterface> {
   error?: any;
 }
 
-export const adapter: EntityAdapter<TaskEduContentInterface> = createEntityAdapter<
+export const adapter: EntityAdapter<
   TaskEduContentInterface
->();
+> = createEntityAdapter<TaskEduContentInterface>();
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties
@@ -60,7 +60,10 @@ export function reducer(
     }
 
     case TaskEduContentsActionTypes.TaskEduContentsLoaded: {
-      return adapter.addAll(action.payload.taskEduContents, { ...state, loaded: true });
+      return adapter.addAll(action.payload.taskEduContents, {
+        ...state,
+        loaded: true
+      });
     }
 
     case TaskEduContentsActionTypes.TaskEduContentsLoadError: {

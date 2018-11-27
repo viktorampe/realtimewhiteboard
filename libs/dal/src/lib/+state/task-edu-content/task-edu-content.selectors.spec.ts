@@ -15,7 +15,9 @@ describe('TaskEduContent Selectors', () => {
     error?: any
   ): State {
     return {
-      ids: taskEduContents ? taskEduContents.map(taskEduContent => taskEduContent.id) : [],
+      ids: taskEduContents
+        ? taskEduContents.map(taskEduContent => taskEduContent.id)
+        : [],
       entities: taskEduContents
         ? taskEduContents.reduce(
             (entityMap, taskEduContent) => ({

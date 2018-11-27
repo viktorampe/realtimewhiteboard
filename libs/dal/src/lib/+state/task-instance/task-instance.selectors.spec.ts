@@ -15,7 +15,9 @@ describe('TaskInstance Selectors', () => {
     error?: any
   ): State {
     return {
-      ids: taskInstances ? taskInstances.map(taskInstance => taskInstance.id) : [],
+      ids: taskInstances
+        ? taskInstances.map(taskInstance => taskInstance.id)
+        : [],
       entities: taskInstances
         ? taskInstances.reduce(
             (entityMap, taskInstance) => ({
