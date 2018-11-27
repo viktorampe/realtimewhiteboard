@@ -34,7 +34,7 @@ export class BooksComponent implements OnInit {
   }
 
   setListFormat(format: ListFormat) {
-    // this.viewModel.changeListFormat(format);
+    this.viewModel.changeListFormat(format);
   }
 
   filterFn(source: EduContent[], searchText: string): EduContent[] {

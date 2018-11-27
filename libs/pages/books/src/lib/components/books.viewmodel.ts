@@ -4,6 +4,7 @@ import {
   EduContent,
   LearningAreaInterface,
   LearningAreaQueries,
+  UiActions,
   UiQuery,
   UnlockedBoekeGroup,
   UnlockedBoekeStudent
@@ -40,5 +41,9 @@ export class BooksViewModel {
     this.unlockedBoekeGroups$ = this.vmMock.unlockedBoekeGroups$;
     this.unlockedBoekeStudents$ = this.vmMock.unlockedBoekeStudents$;
     this.sharedBooks$ = this.vmMock.sharedBooks$;
+  }
+
+  changeListFormat(listFormat: ListFormat): void {
+    this.store.dispatch(new UiActions.SetListFormat({ listFormat }));
   }
 }
