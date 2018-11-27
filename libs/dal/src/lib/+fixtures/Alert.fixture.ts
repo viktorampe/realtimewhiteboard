@@ -40,4 +40,8 @@ export class AlertFixture implements AlertQueueInterface {
   constructor(props: Partial<AlertQueueInterface> = {}) {
     return Object.assign(this, props);
   }
+
+  get icon() {
+    return 'icon';
+  }
 }

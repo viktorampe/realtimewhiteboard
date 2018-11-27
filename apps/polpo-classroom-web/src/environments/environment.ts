@@ -92,11 +92,12 @@ export const environment = {
     // music: 'assets/icons/music.svg',
     // presentatie: 'assets/icons/presentatie.svg',
     // presentation: 'assets/icons/presentation.svg',
-    // tasks: 'assets/icons/tasks.svg',
+    tasks: 'assets/icons/tasks.svg',
     // 'tasks-complete': 'assets/icons/tasks-complete.svg',
     // video: 'assets/icons/video.svg',
     // website: 'assets/icons/website.svg',
     // youtube: 'assets/icons/youtube.svg',
+    educontent: 'assets/icons/lesmateriaal.svg',
 
     // -> other
     home: 'assets/icons/material/home.svg',
@@ -104,11 +105,12 @@ export const environment = {
     'arrow-back': 'assets/icons/material/arrow-back.svg',
     menu: 'assets/icons/material/menu.svg',
     // alert: 'assets/icons/alert.svg',
-    notifications: 'assets/icons/material/notifications.svg'
+    notifications: 'assets/icons/material/notifications.svg',
+    'envelope-open': 'assets/icons/material/envelope-open',
     // 'at-sign': 'assets/icons/at-sign.svg',
     // balance: 'assets/icons/balance.svg',
     // 'book-not': 'assets/icons/book-not.svg',
-    // book: 'assets/icons/book.svg',
+    book: 'assets/icons/book.svg',
     // bundle: 'assets/icons/bundle.svg',
     // bundles: 'assets/icons/bundles.svg',
     // call: 'assets/icons/call.svg',
@@ -142,7 +144,7 @@ export const environment = {
     // phone: 'assets/icons/phone.svg',
     // pinterest: 'assets/icons/pinterest.svg',
     // 'polpo-small': 'assets/icons/polpo-small.svg',
-    // polpo: 'assets/icons/polpo.svg',
+    polpo: 'assets/icons/polpo.svg'
     // 'power-on': 'assets/icons/power-on.svg',
     // 'smartschool:orange':
     //   'assets/icons/smartschool/s_logo_sso_button_orange_22x36.svg',

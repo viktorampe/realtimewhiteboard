@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@angular/core';
 import {
+  Alert,
   AlertActions,
   AlertQueries,
-  AlertQueueInterface,
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   DalState,
@@ -38,7 +38,7 @@ export class HeaderViewModel {
   // source streams
   breadCrumbs$: Observable<BreadcrumbLinkInterface[]>; // TODO select breadcrumbs from store
   currentUser$: Observable<PersonInterface>;
-  unreadAlerts$: Observable<AlertQueueInterface[]>;
+  unreadAlerts$: Observable<Alert[]>;
 
   // presentation stream
   alertNotifications$: Observable<NotificationItemInterface[]>;
@@ -92,7 +92,7 @@ export class HeaderViewModel {
       map(alerts => {
         return alerts.filter(alert => alert.type !== 'message').map(alert => {
           const notification: NotificationItemInterface = {
-            icon: this.getAlertIcon(alert.type),
+            icon: alert.icon,
             titleText: alert.title,
             link: alert.link, // TODO: check the link format (external or internal)
             notificationText: alert.message,
@@ -123,33 +123,6 @@ export class HeaderViewModel {
         return check;
       })
     );
-  }
-
-  private getAlertIcon(type: string): string {
-    switch (type) {
-      case 'educontent':
-        return 'polpo-lesmateriaal';
-
-      case 'message':
-        return 'icon-envelope-open';
-
-      case 'bundle':
-        return 'polpo-lesmateriaal';
-
-      case 'task':
-      case 'task-start':
-      case 'task-end':
-        return 'polpo-tasks';
-
-      case 'boek-e':
-        return 'polpo-book';
-
-      case 'marketing':
-        return 'polpo-polpo';
-
-      default:
-        return 'icon-bell';
-    }
   }
 
   // user interactions //
