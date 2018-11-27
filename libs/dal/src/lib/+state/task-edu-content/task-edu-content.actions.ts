@@ -21,7 +21,7 @@ export class LoadTaskEduContents implements Action {
   readonly type = TaskEduContentsActionTypes.LoadTaskEduContents;
 
   constructor(
-    public payload: { force?: boolean, userId: number } = { userId: null }
+    public payload: { force?: boolean; userId: number } = { userId: null }
   ) {}
 }
 
@@ -63,13 +63,17 @@ export class UpsertTaskEduContents implements Action {
 export class UpdateTaskEduContent implements Action {
   readonly type = TaskEduContentsActionTypes.UpdateTaskEduContent;
 
-  constructor(public payload: { taskEduContent: Update<TaskEduContentInterface> }) {}
+  constructor(
+    public payload: { taskEduContent: Update<TaskEduContentInterface> }
+  ) {}
 }
 
 export class UpdateTaskEduContents implements Action {
   readonly type = TaskEduContentsActionTypes.UpdateTaskEduContents;
 
-  constructor(public payload: { taskEduContents: Update<TaskEduContentInterface>[] }) {}
+  constructor(
+    public payload: { taskEduContents: Update<TaskEduContentInterface>[] }
+  ) {}
 }
 
 export class DeleteTaskEduContent implements Action {

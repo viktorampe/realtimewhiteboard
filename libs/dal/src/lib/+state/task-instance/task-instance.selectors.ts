@@ -45,7 +45,6 @@ export const getByIds = createSelector(
   }
 );
 
-
 /**
  * returns array of objects in the order of the given ids
  * @example
