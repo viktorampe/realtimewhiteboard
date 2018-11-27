@@ -1,11 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanLoad, Route, Router } from '@angular/router';
-import {
-  DalState,
-  PersonInterface,
-  RoleInterface,
-  UserQueries
-} from '@campus/dal';
+import { DalState, PersonInterface, RoleInterface, UserQueries } from '@campus/dal';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
@@ -80,6 +75,7 @@ export class CoupledTeacherGuard implements CanLoad {
     personRoles: RoleInterface[],
     desiredRole: RolesEnum
   ): boolean {
+    if (!personRoles) return false;
     return personRoles.findIndex(role => {
       return role.name === desiredRole;
     }) > -1
