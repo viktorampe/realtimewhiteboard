@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import {
+  Alert,
   AlertActions,
   AlertFixture,
-  AlertQueueInterface,
   AlertReducer,
   AUTH_SERVICE_TOKEN,
   PersonInterface,
@@ -30,7 +30,7 @@ let environmentAlertsFeature: EnvironmentAlertsFeatureInterface = {
 let headerViewModel: HeaderViewModel;
 
 let user: PersonInterface;
-let unreadAlerts: AlertQueueInterface[];
+let unreadAlerts: Alert[];
 let usedUserState: any;
 let usedUnreadAlertsState: any;
 let spy: jest.SpyInstance;
@@ -147,9 +147,9 @@ describe('headerViewModel', () => {
     });
     it('should setup the alert notifications stream', () => {
       const expected: NotificationItemInterface[] = unreadAlerts.map(
-        (alert: AlertQueueInterface) => {
+        (alert: Alert) => {
           return {
-            icon: 'polpo-lesmateriaal',
+            icon: alert.icon,
             titleText: alert.title,
             link: alert.link,
             notificationText: alert.message,
@@ -214,8 +214,8 @@ function setInitialState() {
   );
 
   unreadAlerts = [
-    new AlertFixture({ id: 1, sentAt: new Date() }),
-    new AlertFixture({ id: 2, sentAt: new Date() })
+    new AlertFixture({ id: 1, sentAt: new Date(), type: 'bundle' }),
+    new AlertFixture({ id: 2, sentAt: new Date(), type: 'educontent' })
   ];
   usedUnreadAlertsState = AlertReducer.reducer(
     AlertReducer.initialState,

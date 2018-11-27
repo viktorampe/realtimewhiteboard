@@ -42,6 +42,29 @@ export class AlertFixture implements AlertQueueInterface {
   }
 
   get icon() {
-    return 'icon';
+    switch (this.type) {
+      case 'educontent':
+        return 'educontent';
+
+      case 'message':
+        return 'envelope-open';
+
+      case 'bundle':
+        return 'educontent';
+
+      case 'task':
+      case 'task-start':
+      case 'task-end':
+        return 'tasks';
+
+      case 'boek-e':
+        return 'book';
+
+      case 'marketing':
+        return 'polpo';
+
+      default:
+        return 'notifications';
+    }
   }
 }
