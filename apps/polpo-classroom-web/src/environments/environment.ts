@@ -42,8 +42,8 @@ export const environment = {
     // 'learning-area:fysica-lg': 'assets/icons/learning-area/fysica-lg.svg',
     // 'learning-area:geschiedenis-lg':
     //   'assets/icons/learning-area/geschiedenis-lg.svg',
-    // 'learning-area:godsdienst-lg':
-    //   'assets/icons/learning-area/godsdienst-lg.svg',
+    'learning-area:godsdienst-lg':
+      'assets/icons/learning-area/godsdienst-lg.svg',
     // 'learning-area:informatica-lg':
     //   'assets/icons/learning-area/informatica-lg.svg',
     // 'learning-area:integraleopdrachten-lg':
@@ -102,12 +102,12 @@ export const environment = {
     home: 'assets/icons/material/home.svg',
     'breadcrumb-separator': 'assets/icons/material/chevron-right.svg',
     'arrow-back': 'assets/icons/material/arrow-back.svg',
-    menu: 'assets/icons/material/menu.svg'
+    menu: 'assets/icons/material/menu.svg',
     // alert: 'assets/icons/alert.svg',
     // 'at-sign': 'assets/icons/at-sign.svg',
     // balance: 'assets/icons/balance.svg',
     // 'book-not': 'assets/icons/book-not.svg',
-    // book: 'assets/icons/book.svg',
+    book: 'assets/icons/book.svg',
     // bundle: 'assets/icons/bundle.svg',
     // bundles: 'assets/icons/bundles.svg',
     // call: 'assets/icons/call.svg',
@@ -121,7 +121,7 @@ export const environment = {
     // code: 'assets/icons/code.svg',
     // creditcard: 'assets/icons/creditcard.svg',
     // 'die-keure': 'assets/icons/die-keure.svg',
-    // eye: 'assets/icons/eye.svg',
+    eye: 'assets/icons/eye.svg'
     // eye2: 'assets/icons/eye2.svg',
     // facebook: 'assets/icons/facebook.svg',
     // favorite: 'assets/icons/favorite.svg',
