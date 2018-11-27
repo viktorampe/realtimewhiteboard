@@ -34,6 +34,10 @@ import { AppComponent } from './app.component';
     DalModule.forRoot({ apiBaseUrl: environment.APIBase }),
     RouterModule.forRoot(
       [
+        {
+          path: 'books',
+          loadChildren: '@campus/pages/books#PagesBooksModule'
+        },
         { path: 'dev', loadChildren: '@campus/devlib#DevlibModule' },
         {
           path: 'tasks',
