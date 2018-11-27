@@ -87,7 +87,7 @@ export const environment = {
     // algebrakit: 'assets/icons/algebrakit.svg',
     // 'archive-box': 'assets/icons/archive-box.svg',
     // 'archive-box-lg': 'assets/icons/archive-box-lg.svg',
-    // lesmateriaal: 'assets/icons/lesmateriaal.svg',
+    lesmateriaal: 'assets/icons/lesmateriaal.svg',
     // media: 'assets/icons/media.svg',
     // music: 'assets/icons/music.svg',
     // presentatie: 'assets/icons/presentatie.svg',
@@ -97,17 +97,21 @@ export const environment = {
     // video: 'assets/icons/video.svg',
     // website: 'assets/icons/website.svg',
     // youtube: 'assets/icons/youtube.svg',
+    educontent: 'assets/icons/lesmateriaal.svg',
 
     // -> other
     home: 'assets/icons/material/home.svg',
     'breadcrumb-separator': 'assets/icons/material/chevron-right.svg',
     'arrow-back': 'assets/icons/material/arrow-back.svg',
-    menu: 'assets/icons/material/menu.svg'
+    menu: 'assets/icons/material/menu.svg',
     // alert: 'assets/icons/alert.svg',
+    notifications: 'assets/icons/material/notifications.svg',
+    messages: 'assets/icons/material/envelope-open',
+    'marketing-message': 'assets/icons/polpo.svg',
     // 'at-sign': 'assets/icons/at-sign.svg',
     // balance: 'assets/icons/balance.svg',
     // 'book-not': 'assets/icons/book-not.svg',
-    // book: 'assets/icons/book.svg',
+    book: 'assets/icons/book.svg',
     // bundle: 'assets/icons/bundle.svg',
     // bundles: 'assets/icons/bundles.svg',
     // call: 'assets/icons/call.svg',
@@ -141,7 +145,7 @@ export const environment = {
     // phone: 'assets/icons/phone.svg',
     // pinterest: 'assets/icons/pinterest.svg',
     // 'polpo-small': 'assets/icons/polpo-small.svg',
-    // polpo: 'assets/icons/polpo.svg',
+    polpo: 'assets/icons/polpo.svg'
     // 'power-on': 'assets/icons/power-on.svg',
     // 'smartschool:orange':
     //   'assets/icons/smartschool/s_logo_sso_button_orange_22x36.svg',
@@ -171,8 +175,8 @@ export const environment = {
       appBarPollingInterval: 3000
     },
     messages: {
-      enabled: true,
-      hasAppBarDropDown: true
+      enabled: false,
+      hasAppBarDropDown: false
     }
   }
 };

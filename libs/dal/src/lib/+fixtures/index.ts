@@ -1,3 +1,5 @@
+export * from './Alert.fixture';
+export * from './Breadcrumb.fixture';
 export * from './Bundle.fixture';
 export * from './Content.fixture';
 export * from './EduContent.fixture';

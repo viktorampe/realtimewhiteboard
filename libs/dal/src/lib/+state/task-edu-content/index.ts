@@ -3,4 +3,9 @@ import { TaskEduContentEffects } from './task-edu-content.effects';
 import * as TaskEduContentReducer from './task-edu-content.reducer';
 import * as TaskEduContentQueries from './task-edu-content.selectors';
 
-export { TaskEduContentActions, TaskEduContentReducer, TaskEduContentQueries, TaskEduContentEffects };
+export {
+  TaskEduContentActions,
+  TaskEduContentReducer,
+  TaskEduContentQueries,
+  TaskEduContentEffects
+};
