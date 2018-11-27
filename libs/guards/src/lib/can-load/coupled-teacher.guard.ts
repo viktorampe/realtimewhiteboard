@@ -8,7 +8,7 @@ import {
 } from '@campus/dal';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, shareReplay } from 'rxjs/operators';
 
 export enum RolesEnum {
   Teacher = 'teacher',
@@ -44,7 +44,10 @@ export class CoupledTeacherGuard implements CanLoad {
   }
 
   private initialiseInputStreams(): void {
-    this.currentUser$ = this.store.pipe(select(UserQueries.getCurrentUser));
+    this.currentUser$ = this.store.pipe(
+      select(UserQueries.getCurrentUser),
+      shareReplay(1)
+    );
   }
 
   private loadIntermediateStream(): void {
@@ -59,7 +62,10 @@ export class CoupledTeacherGuard implements CanLoad {
       )
     );
     this.hasTeachers$ = this.currentUser$.pipe(
-      map(currentUser => currentUser.teachers.length > 0)
+      map(
+        currentUser =>
+          currentUser.teachers ? currentUser.teachers.length > 0 : false
+      )
     );
   }
 
