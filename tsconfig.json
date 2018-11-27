@@ -25,7 +25,8 @@
       "@campus/pages/shared": ["libs/pages/shared/src/index.ts"],
       "@campus/browser": ["libs/browser/src/index.ts"],
       "@campus/shared": ["libs/shared/src/index.ts"],
-      "@campus/scorm": ["libs/scorm/src/index.ts"]
+      "@campus/scorm": ["libs/scorm/src/index.ts"],
+      "@campus/guards": ["libs/guards/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
