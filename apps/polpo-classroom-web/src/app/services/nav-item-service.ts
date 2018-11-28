@@ -11,31 +11,30 @@ import { Dictionary } from '@ngrx/entity';
   providedIn: 'root'
 })
 export class NavItemService {
-  // icons zijn waarden uit huidige site
   private standardNavItems: Dictionary<NavItem> = {
-    taken: { title: 'Taken', icon: 'polpo-taak', link: '/tasks' },
-    boeken: { title: 'Boeken', icon: 'polpo-book', link: '/books' },
-    bundels: { title: 'Bundels', icon: 'polpo-lesmateriaal', link: '/bundles' },
+    taken: { title: 'Taken', icon: 'taak', link: '/tasks' },
+    boeken: { title: 'Boeken', icon: 'book', link: '/books' },
+    bundels: { title: 'Bundels', icon: 'lesmateriaal', link: '/bundles' },
     resultaten: {
       title: 'Resultaten',
-      icon: 'polpo-increase',
+      icon: 'increase',
       link: '/results'
     },
-    dashboard: { title: 'Dashboard', icon: 'ico-home', link: '/dashboard' },
-    bordboeken: { title: 'Bordboeken', icon: 'polpo-book', link: '/books' },
+    dashboard: { title: 'Dashboard', icon: 'home', link: '/dashboard' },
+    bordboeken: { title: 'Bordboeken', icon: 'book', link: '/books' },
     lesmateriaal: {
       title: 'Lesmateriaal',
-      icon: 'polpo-lesmateriaal',
+      icon: 'lesmateriaal',
       link: '/eduContent'
     },
     leerlingen: {
       title: 'Leerlingen',
-      icon: 'polpo-student2',
+      icon: 'student2',
       link: '/students'
     },
     help: {
       title: 'Veelgestelde vragen',
-      icon: 'ico-help',
+      icon: 'help',
       link: 'https://www.polpo.be/veelgestelde-vragen'
     }
   };
