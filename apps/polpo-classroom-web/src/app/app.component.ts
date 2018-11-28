@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MatIconRegistry } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { environment } from '../environments/environment';
+import { AppViewModel } from './app.viewmodel';
 
 @Component({
   selector: 'campus-root',
@@ -10,6 +11,7 @@ import { environment } from '../environments/environment';
 })
 export class AppComponent {
   title = 'polpo-classroom-web';
+  nav = this.appViewModel.sideNavItems$; //Tijdelijk, moet via store gebeuren
 
   /**
    * the link to the promo website, used on the logo
@@ -18,7 +20,8 @@ export class AppComponent {
 
   constructor(
     private iconRegistry: MatIconRegistry,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private appViewModel: AppViewModel
   ) {
     this.setupIconRegistry();
   }
