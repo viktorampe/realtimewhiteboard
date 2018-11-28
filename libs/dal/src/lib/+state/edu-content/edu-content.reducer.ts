@@ -7,12 +7,30 @@ import {
 
 export const NAME = 'eduContents';
 
-const sortByName = (a: EduContentInterface, b: EduContentInterface) => {
-  const getTitle = eduContent =>
-    (eduContent.publishedEduContentMetadata &&
-      eduContent.publishedEduContentMetadata.title &&
-      eduContent.publishedEduContentMetadata.title.toLowerCase()) ||
-    '';
+function sortByName(a: EduContentInterface, b: EduContentInterface): number {
+  function getProp(obj: any, prop: string, notFound: number): number; // number overload
+  function getProp(obj: any, prop: string, notFound: string): string; // string overload
+  function getProp(
+    obj: any,
+    prop: string,
+    notFound: string | number = ''
+  ): string | number {
+    const p = prop.split('.');
+    const val = p.reduce((o, p) => o[p] || notFound, obj);
+    if (typeof notFound === 'number') {
+      return Number(val);
+    }
+    return val.toString();
+  }
+
+  // sort by title
+  function getTitle(eduContent: EduContentInterface): string {
+    return getProp(
+      eduContent,
+      'publishedEduContentMetadata.title',
+      ''
+    ).toLowerCase();
+  }
   const titleA = getTitle(a);
   const titleB = getTitle(b);
 
@@ -22,8 +40,24 @@ const sortByName = (a: EduContentInterface, b: EduContentInterface) => {
   if (titleA > titleB) {
     return 1;
   }
-  return 0;
-};
+
+  // then sort by year
+  function getYear(eduContent: EduContentInterface): number {
+    return getProp(eduContent, 'publishedEduContentMetadata.years.0.name', 0);
+  }
+  const yearA = getYear(a);
+  const yearB = getYear(b);
+
+  if (yearA < yearB) {
+    return -1;
+  }
+  if (yearA > yearB) {
+    return 1;
+  }
+
+  // finally sort by id
+  return a.id - b.id;
+}
 
 /**
  * @ngrx/entity provides a predefined interface for handling

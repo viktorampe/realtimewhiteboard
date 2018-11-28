@@ -10,7 +10,7 @@ export const NAME = 'unlockedContents';
 const sortByIndex = (
   a: UnlockedContentInterface,
   b: UnlockedContentInterface
-) => a.index - b.index;
+) => a.index - b.index || a.id - b.id; // if index is equal, sort by id asc
 
 /**
  * @ngrx/entity provides a predefined interface for handling
