@@ -17,3 +17,11 @@ export interface EnvironmentMessagesFeatureInterface {
   enabled: boolean;
   hasAppBarDropDown: boolean;
 }
+
+export const ENVIRONMENT_ERROR_MANAGEMENT_FEATURE_TOKEN = new InjectionToken(
+  'environmentErrorManagementFeature'
+);
+
+export interface EnvironmentErrorManagementFeatureInterface {
+  managedStatusCodes: number[];
+}

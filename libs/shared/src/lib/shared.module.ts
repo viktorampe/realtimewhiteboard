@@ -9,8 +9,10 @@ import { PageBarContainerComponent } from './components/page-bar-container/page-
 import { HeaderComponent } from './header/header.component';
 import {
   EnvironmentAlertsFeatureInterface,
+  EnvironmentErrorManagementFeatureInterface,
   EnvironmentMessagesFeatureInterface,
   ENVIRONMENT_ALERTS_FEATURE_TOKEN,
+  ENVIRONMENT_ERROR_MANAGEMENT_FEATURE_TOKEN,
   ENVIRONMENT_MESSAGES_FEATURE_TOKEN
 } from './interfaces';
 import { FilterService } from './services/filter.service';
@@ -37,7 +39,8 @@ import { FILTER_SERVICE_TOKEN } from './services/filter.service.interface';
 export class SharedModule {
   static forRoot(
     environmentAlertsFeature: EnvironmentAlertsFeatureInterface,
-    environmentMessagesFeature: EnvironmentMessagesFeatureInterface
+    environmentMessagesFeature: EnvironmentMessagesFeatureInterface,
+    environmentErrorManagementFeature: EnvironmentErrorManagementFeatureInterface
   ): ModuleWithProviders {
     return {
       ngModule: SharedModule,
@@ -49,6 +52,10 @@ export class SharedModule {
         {
           provide: ENVIRONMENT_MESSAGES_FEATURE_TOKEN,
           useValue: environmentMessagesFeature
+        },
+        {
+          provide: ENVIRONMENT_ERROR_MANAGEMENT_FEATURE_TOKEN,
+          useValue: environmentErrorManagementFeature
         }
       ]
     };
