@@ -74,7 +74,8 @@ export class MockBooksViewModel {
             name: 'VBTL',
             icon: '/assets/images/vbtl.jpg'
           })
-        ]
+        ],
+        link: '908500016'
       }
     ),
     new EduContentFixture(

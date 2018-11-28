@@ -24,9 +24,13 @@ export class BooksComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    //TODO: in de gaten houden waarom dit 4x triggert, mss gevolg van mock?
     this.books$ = this.viewModel.sharedBooks$;
     this.filterTextInput.setFilterableItem(this);
+  }
+
+  openBook(bookId: number) {
+    //TODO: actually open a book
+    console.log('open book:', bookId);
   }
 
   setListFormat(format: ListFormat) {
