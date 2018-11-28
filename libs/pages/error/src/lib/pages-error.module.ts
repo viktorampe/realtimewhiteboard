@@ -1,16 +1,10 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { NgModule } from '@angular/core';
 import { ErrorComponent } from './error/error.component';
+import { PagesErrorRoutingModule } from './error/pages-error-routing.module';
 
 @NgModule({
-  imports: [
-    CommonModule,
-
-    RouterModule.forChild([
-      /* {path: '', pathMatch: 'full', component: InsertYourComponentHere} */
-    ])
-  ],
+  imports: [CommonModule, PagesErrorRoutingModule],
   declarations: [ErrorComponent]
 })
 export class PagesErrorModule {}

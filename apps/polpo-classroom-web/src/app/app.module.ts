@@ -64,6 +64,11 @@ import { AppComponent } from './app.component';
           loadChildren: '@campus/pages/alerts#PagesAlertsModule'
         },
         {
+          path: 'error',
+          loadChildren: '@campus/pages/error#PagesErrorModule'
+        },
+
+        {
           path: '',
           redirectTo: 'bundles',
           pathMatch: 'full'
