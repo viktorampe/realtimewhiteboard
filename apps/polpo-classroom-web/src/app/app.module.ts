@@ -1,10 +1,11 @@
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { MatIconModule } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { DalModule } from '@campus/dal';
-import { SharedModule } from '@campus/shared';
+import { CampusHttpInterceptor, SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
@@ -27,7 +28,8 @@ import { AppComponent } from './app.component';
     BrowserModule,
     SharedModule.forRoot(
       environment.features.alerts,
-      environment.features.messages
+      environment.features.messages,
+      environment.features.errorManagement
     ),
     BrowserAnimationsModule,
     NxModule.forRoot(),
@@ -87,7 +89,9 @@ import { AppComponent } from './app.component';
     StoreRouterConnectingModule,
     MatIconModule
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: CampusHttpInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent],
   exports: [RouterModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
