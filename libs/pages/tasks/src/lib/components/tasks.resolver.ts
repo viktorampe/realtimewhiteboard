@@ -9,6 +9,10 @@ import {
   LearningAreaQueries,
   StateResolver,
   TaskActions,
+  TaskEduContentActions,
+  TaskEduContentQueries,
+  TaskInstanceActions,
+  TaskInstanceQueries,
   TaskQueries,
   UserActions,
   UserQueries
@@ -32,7 +36,13 @@ export class TasksResolver extends StateResolver {
       new EduContentActions.LoadEduContents({
         userId: this.authService.userId
       }),
-      new TaskActions.LoadTasks({ userId: this.authService.userId })
+      new TaskActions.LoadTasks({ userId: this.authService.userId }),
+      new TaskEduContentActions.LoadTaskEduContents({
+        userId: this.authService.userId
+      }),
+      new TaskInstanceActions.LoadTaskInstances({
+        userId: this.authService.userId
+      })
     ];
   }
 
@@ -41,7 +51,9 @@ export class TasksResolver extends StateResolver {
       UserQueries.getLoaded, //todo move to guard
       LearningAreaQueries.getLoaded,
       EduContentQueries.getLoaded,
-      TaskQueries.getLoaded
+      TaskQueries.getLoaded,
+      TaskInstanceQueries.getLoaded,
+      TaskEduContentQueries.getLoaded
     ];
   }
 }

@@ -37,5 +37,5 @@ function getPropertyByKey<T>(item: T, keys: NestedPartial<T>): number | string {
     return item;
   }
   const key = Object.keys(keys)[0];
-  return this.getPropertyByKey(item[key], keys[key]);
+  return getPropertyByKey(item[key], keys[key]);
 }
