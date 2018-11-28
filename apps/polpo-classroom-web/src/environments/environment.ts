@@ -177,6 +177,9 @@ export const environment = {
     messages: {
       enabled: false,
       hasAppBarDropDown: false
+    },
+    errorManagement: {
+      managedStatusCodes: [500, 401, 0]
     }
   }
 };
