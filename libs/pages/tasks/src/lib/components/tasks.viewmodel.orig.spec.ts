@@ -226,7 +226,7 @@ describe('TasksViewModel met State', () => {
     });
 
     it('should get the learningAreas from the provided state', () => {
-      expect(tasksViewModel['learningAreas$']).toBeObservable(
+      expect(tasksViewModel['sharedLearningAreas$']).toBeObservable(
         hot('a', { a: learningAreas })
       );
     });

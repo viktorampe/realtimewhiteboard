@@ -1,9 +1,4 @@
-import {
-  EduContentInterface,
-  LearningAreaInterface,
-  TaskEduContentInterface,
-  TaskInstanceInterface
-} from '@campus/dal';
+import { LearningAreaInterface, TaskEduContentInterface, TaskInstanceInterface } from '@campus/dal';
 
 export interface LearningAreasWithTaskInstanceInfoInterface {
   learningAreasWithInfo: LearningAreaWithTaskInfoInterface[];
@@ -25,8 +20,4 @@ export interface TaskInstanceWithEduContentInfoInterface {
   taskEduContentsCount: number;
   taskEduContents: TaskEduContentInterface[];
   finished: boolean;
-}
-
-export interface EduContentWithSubmittedInterface extends EduContentInterface {
-  submitted: boolean;
 }

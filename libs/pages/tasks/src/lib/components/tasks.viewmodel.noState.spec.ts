@@ -1,39 +1,13 @@
 import { Inject } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import {
-  AlertService,
-  AuthServiceInterface,
-  AUTH_SERVICE_TOKEN,
-  DalState,
-  EduContentFixture,
-  EduContentInterface,
-  LearningAreaFixture,
-  LearningAreaInterface,
-  PersonInterface,
-  StateFeatureBuilder,
-  TaskEduContentFixture,
-  TaskEduContentInterface,
-  TaskFixture,
-  TaskInstanceFixture,
-  TaskInstanceInterface,
-  TaskInterface
-} from '@campus/dal';
+import { AlertService, AuthServiceInterface, AUTH_SERVICE_TOKEN, DalState, EduContentFixture, EduContentInterface, LearningAreaFixture, LearningAreaInterface, PersonInterface, StateFeatureBuilder, TaskEduContentFixture, TaskEduContentInterface, TaskFixture, TaskInstanceFixture, TaskInstanceInterface, TaskInterface } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
 import { TasksResolver } from './tasks.resolver';
-import {
-  LearningAreaWithTasksInterface,
-  TaskInstanceWithTaskInterface,
-  TasksViewModel,
-  TaskWithRelationsInterface
-} from './tasks.viewmodel';
-import {
-  EduContentWithSubmittedInterface,
-  LearningAreasWithTaskInstanceInfoInterface,
-  TaskInstanceWithEduContentInfoInterface
-} from './tasks.viewmodel.interfaces';
+import { LearningAreaWithTasksInterface, TaskInstanceWithTaskInterface, TasksViewModel, TaskWithRelationsInterface } from './tasks.viewmodel';
+import { EduContentWithSubmittedInterface, LearningAreasWithTaskInstanceInfoInterface, TaskInstanceWithEduContentInfoInterface } from './tasks.viewmodel.interfaces';
 
 let tasksViewModel: TestViewModel;
 
@@ -43,7 +17,7 @@ export class TestViewModel extends TasksViewModel {
   }
 
   setLearningAreas$(stream: Observable<LearningAreaInterface[]>) {
-    this.learningAreas$ = stream;
+    this.sharedLearningAreas$ = stream;
   }
 
   setTeachers$(stream: Observable<PersonInterface[]>) {
