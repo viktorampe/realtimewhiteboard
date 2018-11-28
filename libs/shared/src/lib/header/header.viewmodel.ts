@@ -90,16 +90,18 @@ export class HeaderViewModel {
   private getAlertNotifications(): Observable<NotificationItemInterface[]> {
     return this.unreadAlerts$.pipe(
       map(alerts => {
-        return alerts.filter(alert => alert.type !== 'message').map(alert => {
-          const notification: NotificationItemInterface = {
-            icon: alert.icon,
-            titleText: alert.title,
-            link: alert.link, // TODO: check the link format (external or internal)
-            notificationText: alert.message,
-            notificationDate: new Date(alert.sentAt)
-          };
-          return notification;
-        });
+        return alerts
+          .filter(alert => alert.type !== 'message')
+          .map(alert => {
+            const notification: NotificationItemInterface = {
+              icon: alert.icon,
+              titleText: alert.title,
+              link: alert.link, // TODO: check the link format (external or internal)
+              notificationText: alert.message,
+              notificationDate: new Date(alert.sentAt)
+            };
+            return notification;
+          });
       }),
       shareReplay(1)
     );

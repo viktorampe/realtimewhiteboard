@@ -19,14 +19,18 @@ import {
   // tslint:disable-next-line:component-selector
   selector: 'test-container',
   template: `
-  <campus-list-view>
-    <div campusListItem>test1</div>
-    <div campusListItem>test2</div>
-    <div campusListItem>test3</div>
-    <div campusListItem>test4</div>
-    <div campusListItem><img src="https://www.polpo.be/assets/images/polpo.svg"></div>
-    <div campusListItem><img src="https://www.polpo.be/assets/images/home-laptop-books.jpg"></div>
-  </campus-list-view>
+    <campus-list-view>
+      <div campusListItem>test1</div>
+      <div campusListItem>test2</div>
+      <div campusListItem>test3</div>
+      <div campusListItem>test4</div>
+      <div campusListItem>
+        <img src="https://www.polpo.be/assets/images/polpo.svg" />
+      </div>
+      <div campusListItem>
+        <img src="https://www.polpo.be/assets/images/home-laptop-books.jpg" />
+      </div>
+    </campus-list-view>
   `
 })
 export class TestContainerComponent {}
@@ -35,8 +39,7 @@ export class TestContainerComponent {}
   // tslint:disable-next-line:component-selector
   selector: 'empty-test-container',
   template: `
-  <campus-list-view>
-  </campus-list-view>
+    <campus-list-view> </campus-list-view>
   `
 })
 export class EmptyTestContainerComponent {}
@@ -250,7 +253,9 @@ describe('ListViewComponent', () => {
 
 @Component({
   selector: 'campus-list-view-item',
-  template: `<div>Container content</div>`,
+  template: `
+    <div>Container content</div>
+  `,
   providers: [
     {
       provide: ListViewItemInterface,
@@ -264,7 +269,9 @@ export class HostComponent implements ListViewItemInterface {
 
 @Component({
   selector: 'campus-list',
-  template: `<ng-content></ng-content>`,
+  template: `
+    <ng-content></ng-content>
+  `,
   providers: [
     {
       provide: ListViewComponent,
@@ -277,9 +284,9 @@ export class ListComponent {}
 @Component({
   selector: 'campus-directive-container',
   template: `
-  <campus-list-view>
-    <campus-list-view-item campusListItem></campus-list-view-item>
-  </campus-list-view>
+    <campus-list-view>
+      <campus-list-view-item campusListItem></campus-list-view-item>
+    </campus-list-view>
   `
 })
 export class ContainerComponent {}

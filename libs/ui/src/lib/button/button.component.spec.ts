@@ -9,9 +9,7 @@ import { ButtonComponent } from './button.component';
   // tslint:disable-next-line:component-selector
   selector: 'test-container',
   template: `
-  <div (click)="this.onClick()">
-    <campus-button>tekst</campus-button>
-  </div>
+    <div (click)="this.onClick()"><campus-button>tekst</campus-button></div>
   `
 })
 export class TestContainerComponent {
