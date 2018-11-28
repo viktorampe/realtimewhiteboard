@@ -4,7 +4,7 @@ import { ErrorComponent } from './error.component';
 
 const routes: Routes = [
   {
-    path: '',
+    path: ':code',
     component: ErrorComponent
   }
 ];
