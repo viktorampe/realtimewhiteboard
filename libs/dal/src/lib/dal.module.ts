@@ -11,7 +11,7 @@ import {
   SDKBrowserModule
 } from '@diekeure/polpo-api-angular-sdk';
 import { EffectsModule } from '@ngrx/effects';
-import { AlertsEffects } from './+state/alert';
+import { AlertReducer, AlertsEffects } from './+state/alert';
 import { BundleReducer, BundlesEffects } from './+state/bundle';
 import { ContentStatusReducer } from './+state/content-status';
 import { ContentStatusesEffects } from './+state/content-status/content-status.effects';
@@ -112,9 +112,9 @@ interface DalOptions {
       ContentStatusReducer,
       UserReducer,
       TaskReducer,
+      AlertReducer,
       TaskInstanceReducer,
       TaskEduContentReducer
-      //todo add alerts reducer
     ]),
     EffectsModule.forFeature([
       BundlesEffects,
