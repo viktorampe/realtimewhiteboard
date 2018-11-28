@@ -58,6 +58,9 @@
     },
     "scorm": {
       "tags": []
+    },
+    "pages-error": {
+      "tags": []
     }
   }
 }
