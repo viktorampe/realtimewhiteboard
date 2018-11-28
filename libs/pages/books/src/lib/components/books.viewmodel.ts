@@ -85,15 +85,17 @@ export class BooksViewModel {
     ).pipe(
       switchMap(
         ([ubGroups, ubStudents]): Observable<EduContent[]> => {
-          const ids = Array.from([
-            // remove duplicate ids
-            ...ubGroups.map(g => g.eduContentId),
-            ...ubStudents.map(s => s.eduContentId)
-          ]);
+          // remove duplicate ids
+          const ids = Array.from(
+            new Set([
+              ...ubGroups.map(g => g.eduContentId),
+              ...ubStudents.map(s => s.eduContentId)
+            ])
+          );
           return this.store.pipe(select(EduContentQueries.getByIds, { ids }));
         }
       ),
-      switchMap(this.addLearningAreaToBooks),
+      switchMap(eduContents => this.addLearningAreaToBooks(eduContents)),
       shareReplay(1)
     );
   }
