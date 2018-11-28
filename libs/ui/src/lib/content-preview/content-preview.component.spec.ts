@@ -76,13 +76,13 @@ describe('ContentPreviewComponent', () => {
     const title = fixture.debugElement.query(
       By.css('.ui_content-preview__product__details__title')
     ).nativeElement.textContent;
-    expect(title).toBe(mockData.titleText);
+    expect(title).toContain(mockData.titleText);
   });
   it('should show the description', () => {
     const title = fixture.debugElement.query(
       By.css('.ui_content-preview__product__details__description')
     ).nativeElement.textContent;
-    expect(title).toBe(mockData.description);
+    expect(title).toContain(mockData.description);
   });
   it('should show the productTypeIcon', () => {
     const productTypeIcon = testContainerFixture.debugElement.query(

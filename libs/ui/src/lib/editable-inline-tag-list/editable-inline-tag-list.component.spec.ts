@@ -46,7 +46,7 @@ describe('EditableInlineTagListComponent', () => {
     const title = fixture.debugElement.query(
       By.css('.ui_editable-inline-tag-list__title')
     ).nativeElement.textContent;
-    expect(title).toBe(mockData.titleText);
+    expect(title).toContain(mockData.titleText);
   });
   it('should show the correct number of list items', () => {
     const listItemCollection = fixture.debugElement.queryAll(
@@ -81,7 +81,7 @@ describe('EditableInlineTagListComponent', () => {
     );
     for (let i = 0; i < listItemCounts.length; i++) {
       const countElement = listItemCounts[i].nativeElement.textContent;
-      expect(countElement).toBe('(' + mockData.items[i + 1].count + ')');
+      expect(countElement).toContain('(' + mockData.items[i + 1].count + ')');
     }
   });
   it('should show the icon', () => {

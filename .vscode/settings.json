@@ -11,6 +11,5 @@
   "editor.codeActionsOnSave": {
     "source.organizeImports": true
   },
-  "html.format.wrapAttributes": "force-aligned",
-  "prettier.disableLanguages": ["vue", "html"]
+  "html.format.wrapAttributes": "force-aligned"
 }
