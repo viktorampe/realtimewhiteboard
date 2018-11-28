@@ -24,7 +24,7 @@ export class ErrorComponent implements OnInit {
     this.currentUser$ = this.getUser();
   }
 
-  getStatusCode(): Observable<number> {
+  private getStatusCode(): Observable<number> {
     return this.routeParams$.pipe(
       map(params => {
         return params.code;
@@ -32,7 +32,7 @@ export class ErrorComponent implements OnInit {
     );
   }
 
-  getUser(): Observable<PersonInterface> {
+  private getUser(): Observable<PersonInterface> {
     return this.store.select(UserQueries.getCurrentUser);
   }
 }
