@@ -73,18 +73,24 @@ describe('BundlesComponent', () => {
     });
   }));
 
-  it('should call vm.getLearningAreaById and vm.getSharedBundlesWithContentInfo on route change', fakeAsync(() => {
-    const spyLearningArea = jest.spyOn(bundlesViewModel, 'getLearningAreaById');
-    const spyBundles = jest.spyOn(
-      bundlesViewModel,
-      'getSharedBundlesWithContentInfo'
-    );
-    params.next({ area: 2 });
-    tick(); // make sure the async observable resolves
+  it(
+    'should call vm.getLearningAreaById and vm.getSharedBundlesWithContentInfo on route change',
+    fakeAsync(() => {
+      const spyLearningArea = jest.spyOn(
+        bundlesViewModel,
+        'getLearningAreaById'
+      );
+      const spyBundles = jest.spyOn(
+        bundlesViewModel,
+        'getSharedBundlesWithContentInfo'
+      );
+      params.next({ area: 2 });
+      tick(); // make sure the async observable resolves
 
-    expect(spyLearningArea).toHaveBeenCalledTimes(1);
-    expect(spyLearningArea).toHaveBeenCalledWith(2);
-    expect(spyBundles).toHaveBeenCalledTimes(2); // subscribed 2 times to sharedInfo$ in the template
-    expect(spyBundles).toHaveBeenCalledWith(2);
-  }));
+      expect(spyLearningArea).toHaveBeenCalledTimes(1);
+      expect(spyLearningArea).toHaveBeenCalledWith(2);
+      expect(spyBundles).toHaveBeenCalledTimes(2); // subscribed 2 times to sharedInfo$ in the template
+      expect(spyBundles).toHaveBeenCalledWith(2);
+    })
+  );
 });

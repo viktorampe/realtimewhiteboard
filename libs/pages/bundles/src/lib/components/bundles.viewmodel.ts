@@ -127,26 +127,24 @@ export class BundlesViewModel {
       switchMap(
         (unlockedContents): Observable<ContentInterface[]> =>
           combineLatest(
-            ...unlockedContents
-              .sort((a, b) => a.index - b.index)
-              .map(
-                (unlockedContent): Observable<ContentInterface> => {
-                  if (unlockedContent.eduContentId) {
-                    return this.store.pipe(
-                      select(EduContentQueries.getById, {
-                        id: unlockedContent.eduContentId
-                      })
-                    );
-                  }
-                  if (unlockedContent.userContentId) {
-                    return this.store.pipe(
-                      select(UserContentQueries.getById, {
-                        id: unlockedContent.userContentId
-                      })
-                    );
-                  }
+            ...unlockedContents.sort((a, b) => a.index - b.index).map(
+              (unlockedContent): Observable<ContentInterface> => {
+                if (unlockedContent.eduContentId) {
+                  return this.store.pipe(
+                    select(EduContentQueries.getById, {
+                      id: unlockedContent.eduContentId
+                    })
+                  );
                 }
-              )
+                if (unlockedContent.userContentId) {
+                  return this.store.pipe(
+                    select(UserContentQueries.getById, {
+                      id: unlockedContent.userContentId
+                    })
+                  );
+                }
+              }
+            )
           )
       ),
       shareReplay(1)

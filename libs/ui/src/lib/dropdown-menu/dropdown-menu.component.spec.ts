@@ -24,11 +24,9 @@ const mockData = {
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'host-component',
-  template: `
-    <campus-dropdown-menu>
-      <button id="projectedButton">menu</button>
-    </campus-dropdown-menu>
-  `
+  template: `<campus-dropdown-menu>
+                <button id="projectedButton">menu</button>
+              </campus-dropdown-menu>`
 })
 export class HostComponent implements OnInit {
   @ViewChild(DropdownMenuComponent) dropdown: DropdownMenuComponent;
