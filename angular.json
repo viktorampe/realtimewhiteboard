@@ -85,32 +85,6 @@
         }
       }
     },
-    "polpo-classroom-web-e2e": {
-      "root": "apps/polpo-classroom-web-e2e/",
-      "projectType": "application",
-      "architect": {
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig":
-              "apps/polpo-classroom-web-e2e/protractor.conf.js",
-            "devServerTarget": "polpo-classroom-web:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "polpo-classroom-web:serve:production"
-            }
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": "apps/polpo-classroom-web-e2e/tsconfig.e2e.json",
-            "exclude": ["**/node_modules/**"]
-          }
-        }
-      }
-    },
     "devlib": {
       "root": "libs/devlib",
       "sourceRoot": "libs/devlib/src",
