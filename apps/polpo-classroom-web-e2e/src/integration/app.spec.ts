@@ -3,9 +3,9 @@
 import { getGreeting } from '../support/app.po';
 
 describe('Hello Nx', () => {
-  beforeEach(() => cy.visit('/'));
+  beforeEach(() => cy.visit('/dev'));
 
   it('should display welcome message', () => {
-    getGreeting().contains('Welcome to apps-polpo-classroom-web!');
+    getGreeting().contains('Welcome to the dev side');
   });
 });
