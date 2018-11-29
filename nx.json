@@ -55,6 +55,12 @@
     },
     "scorm": {
       "tags": []
+    },
+    "apps-polpo-classroom-web": {
+      "tags": []
+    },
+    "apps-polpo-classroom-web-e2e": {
+      "tags": []
     }
   }
 }

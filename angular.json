@@ -22,17 +22,17 @@
               "apps/polpo-classroom-web/src/favicon.ico",
               "apps/polpo-classroom-web/src/assets"
             ],
-            "styles": ["apps/polpo-classroom-web/src/styles.scss"],
+            "styles": [
+              "apps/polpo-classroom-web/src/styles.scss"
+            ],
             "scripts": []
           },
           "configurations": {
             "production": {
               "fileReplacements": [
                 {
-                  "replace":
-                    "apps/polpo-classroom-web/src/environments/environment.ts",
-                  "with":
-                    "apps/polpo-classroom-web/src/environments/environment.prod.ts"
+                  "replace": "apps/polpo-classroom-web/src/environments/environment.ts",
+                  "with": "apps/polpo-classroom-web/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -71,7 +71,9 @@
               "apps/polpo-classroom-web/tsconfig.app.json",
               "apps/polpo-classroom-web/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         },
         "test": {
@@ -99,7 +101,9 @@
               "libs/devlib/tsconfig.spec.json",
               "libs/devlib/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         }
       }
@@ -118,7 +122,9 @@
               "libs/pages/bundles/tsconfig.spec.json",
               "libs/pages/bundles/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         },
         "test": {
@@ -146,7 +152,9 @@
               "libs/pages/alerts/tsconfig.spec.json",
               "libs/pages/alerts/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         },
         "test": {
@@ -174,7 +182,9 @@
               "libs/pages/logout/tsconfig.spec.json",
               "libs/pages/logout/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         },
         "test": {
@@ -202,7 +212,9 @@
               "libs/pages/messages/tsconfig.spec.json",
               "libs/pages/messages/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         },
         "test": {
@@ -230,7 +242,9 @@
               "libs/pages/profile/tsconfig.spec.json",
               "libs/pages/profile/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         },
         "test": {
@@ -258,7 +272,9 @@
               "libs/pages/reports/tsconfig.spec.json",
               "libs/pages/reports/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         },
         "test": {
@@ -286,7 +302,9 @@
               "libs/pages/tasks/tsconfig.spec.json",
               "libs/pages/tasks/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         },
         "test": {
@@ -314,7 +332,9 @@
               "libs/pages/books/tsconfig.spec.json",
               "libs/pages/books/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         },
         "test": {
@@ -342,7 +362,9 @@
               "libs/ui/tsconfig.spec.json",
               "libs/ui/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         },
         "test": {
@@ -370,7 +392,9 @@
               "libs/dal/tsconfig.spec.json",
               "libs/dal/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         },
         "test": {
@@ -397,7 +421,9 @@
               "libs/pages/shared/tsconfig.lib.json",
               "libs/pages/shared/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         },
         "test": {
@@ -424,7 +450,9 @@
               "libs/browser/tsconfig.lib.json",
               "libs/browser/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         },
         "test": {
@@ -451,7 +479,9 @@
               "libs/shared/tsconfig.lib.json",
               "libs/shared/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         },
         "test": {
@@ -478,7 +508,9 @@
               "libs/scorm/tsconfig.lib.json",
               "libs/scorm/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         },
         "test": {
@@ -488,6 +520,129 @@
             "tsConfig": "libs/scorm/tsconfig.spec.json",
             "setupFile": "libs/scorm/src/test-setup.ts",
             "maxWorkers": 2
+          }
+        }
+      }
+    },
+    "apps-polpo-classroom-web": {
+      "root": "apps/apps/polpo-classroom-web/",
+      "sourceRoot": "apps/apps/polpo-classroom-web/src",
+      "projectType": "application",
+      "prefix": "campus",
+      "schematics": {
+        "@schematics/angular:component": {
+          "styleext": "scss"
+        }
+      },
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/apps/polpo-classroom-web",
+            "index": "apps/apps/polpo-classroom-web/src/index.html",
+            "main": "apps/apps/polpo-classroom-web/src/main.ts",
+            "polyfills": "apps/apps/polpo-classroom-web/src/polyfills.ts",
+            "tsConfig": "apps/apps/polpo-classroom-web/tsconfig.app.json",
+            "assets": [
+              "apps/apps/polpo-classroom-web/src/favicon.ico",
+              "apps/apps/polpo-classroom-web/src/assets"
+            ],
+            "styles": [
+              "apps/apps/polpo-classroom-web/src/styles.scss"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/apps/polpo-classroom-web/src/environments/environment.ts",
+                  "with": "apps/apps/polpo-classroom-web/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "apps-polpo-classroom-web:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "apps-polpo-classroom-web:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "apps-polpo-classroom-web:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/apps/polpo-classroom-web/tsconfig.app.json",
+              "apps/apps/polpo-classroom-web/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "apps/apps/polpo-classroom-web/jest.config.js",
+            "tsConfig": "apps/apps/polpo-classroom-web/tsconfig.spec.json",
+            "setupFile": "apps/apps/polpo-classroom-web/src/test-setup.ts"
+          }
+        }
+      }
+    },
+    "apps-polpo-classroom-web-e2e": {
+      "root": "apps/apps/polpo-classroom-web-e2e",
+      "projectType": "application",
+      "prefix": "",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/builders:cypress",
+          "options": {
+            "cypressConfig": "apps/apps/polpo-classroom-web-e2e/cypress.json",
+            "tsConfig": "apps/apps/polpo-classroom-web-e2e/tsconfig.e2e.json",
+            "devServerTarget": "apps-polpo-classroom-web:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "apps-polpo-classroom-web:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": "apps/apps/polpo-classroom-web-e2e/tsconfig.e2e.json",
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         }
       }
