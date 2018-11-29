@@ -74,9 +74,6 @@ export const getOwn = createSelector(
   }
 );
 
-/**
- * returns a set of task Ids for tasks where not all task-educontents is finished
- */
 export const getSharedLearningAreaIds = createSelector(
   selectTaskState,
   (state: State, props: { userId: number }) => {
@@ -88,9 +85,6 @@ export const getSharedLearningAreaIds = createSelector(
   }
 );
 
-/**
- * returns a set of task Ids for tasks where not all task-educontents is finished
- */
 export const getSharedTaskIdsByLearningAreaId = createSelector(
   selectTaskState,
   (state: State, props: { userId: number; learningAreaId: number }) => {
