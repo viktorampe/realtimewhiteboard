@@ -1,6 +1,4 @@
-<ng-container
-  *ngIf="items.length; then: hasContentTemplate; else: emptyTemplate"
->
+<ng-container *ngIf="items.length ; then hasContentTemplate; else emptyTemplate">
 </ng-container>
 
 <ng-template #hasContentTemplate>
@@ -10,5 +8,5 @@
 </ng-template>
 
 <ng-template #emptyTemplate>
-  <p>{{ placeHolderText }}</p>
+  <p> {{placeHolderText}} </p>
 </ng-template>
