@@ -1,7 +1,7 @@
+import { NestedPartial } from '@campus/utils';
 import { Update } from '@ngrx/entity';
 import { Action } from '@ngrx/store';
 import { AlertQueueInterface } from '../../+models';
-export type NestedPartial<T> = { [P in keyof T]?: NestedPartial<T[P]> };
 export enum AlertsActionTypes {
   AlertsLoaded = '[Alerts] Alerts Loaded',
   AlertsLoadError = '[Alerts] Load Error',
