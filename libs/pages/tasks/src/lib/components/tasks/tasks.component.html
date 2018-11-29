@@ -1,55 +1,44 @@
 <campus-page-bar>
-  <campus-filter-text-input
-    theme="dark"
-    class="pages__toolbar__filter"
-    [source]="taskInstances$ | async"
-  ></campus-filter-text-input>
+  <campus-filter-text-input theme="dark"
+                            class="pages__toolbar__filter"
+                            [source]="taskInstances$ | async"></campus-filter-text-input>
 
   <div class="divider"></div>
-  <campus-button
-    [iconClass]="'icon-timeline'"
-    (click)="setListFormat(listFormat.LINE)"
-  ></campus-button>
-  <campus-button
-    [iconClass]="'icon-checklist'"
-    (click)="setListFormat(listFormat.GRID)"
-  ></campus-button>
+  <campus-button [iconClass]="'list-view'"
+                 (click)="setListFormat(listFormat.LINE)"></campus-button>
+  <campus-button [iconClass]="'grid-view'"
+                 (click)="setListFormat(listFormat.GRID)"></campus-button>
 </campus-page-bar>
 
-<campus-page-header
-  *ngIf="(learningArea$ | async) as learningArea"
-  [title]="learningArea.name"
-  [subtitle]="'Taken'"
-  [iconClass]="learningArea.icon"
->
+<campus-page-header *ngIf="(learningArea$ | async) as learningArea"
+                    [title]="learningArea.name"
+                    [subtitle]="'Taken'"
+                    [iconClass]="'learning-area:' + learningArea.icon">
 </campus-page-header>
 
-<ng-container
-  *ngIf="(filterTextInput.result$ | async) as filteredTaskInstances"
->
+<ng-container *ngIf="(filterTextInput.result$ | async) as filteredTaskInstances">
   <div class="pages-tasks__container">
     <div class="pages-tasks__container__tasks-count">
       {{ filteredTaskInstances.length }} van
       <u (click)="filterTextInput.clear()">{{
         (taskInstances$ | async)?.instances.length
-      }}</u>
+        }}</u>
       weergegeven
     </div>
 
-    <campus-list-view [listFormat]="listFormat$ | async" [placeHolderText]="''">
-      <campus-folder
-        *ngFor="let instance of filteredTaskInstances"
-        [routerLink]="[instance.taskInstance.taskId]"
-        campusListItem
-        progress="{{instance.taskInstance.progress}}"
-        [itemCount]="instance.taskEduContentsCount"
-        [title]="instance.taskInstance.name"
-        [backgroundColor]="(learningArea$ | async).color"
-        [icon]="getIcon(instance.finished)"
-      >
+    <campus-list-view [listFormat]="listFormat$ | async"
+                      [placeHolderText]="''">
+      <campus-folder *ngFor="let instance of filteredTaskInstances"
+                     [routerLink]="[instance.taskInstance.taskId]"
+                     campusListItem
+                     progress="{{instance.taskInstance.progress}}"
+                     [itemCount]="instance.taskEduContentsCount"
+                     [title]="instance.taskInstance.task.name"
+                     [backgroundColor]="(learningArea$ | async).color"
+                     [icon]="getIcon(instance.finished)">
         <campus-folder-details>
           {{ instance.taskEduContentsCount + ' item(s)' }}<br />
-          {{ instance.taskInstance.end | date: 'short' }}
+          {{ instance.taskInstance.end | date: 'dd/MM HH:mm' }}
         </campus-folder-details>
       </campus-folder>
     </campus-list-view>

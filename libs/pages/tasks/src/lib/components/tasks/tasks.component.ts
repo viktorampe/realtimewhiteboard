@@ -50,7 +50,7 @@ export class TasksComponent implements OnInit {
   private getLearningArea(): Observable<LearningAreaInterface> {
     return this.routeParams$.pipe(
       switchMap(params => {
-        return this.viewModel.getLearningAreaById(params.area);
+        return this.viewModel.getLearningAreaById(parseInt(params.area));
       })
     );
   }
@@ -59,7 +59,7 @@ export class TasksComponent implements OnInit {
     TaskInstancesWithEduContentInfoInterface
   > {
     return this.routeParams$.pipe(
-      map(params => params.area),
+      map(params => parseInt(params.area)),
       switchMap(areaId => {
         return this.viewModel.getTaskInstancesByLearningAreaId(areaId);
       })
@@ -67,7 +67,7 @@ export class TasksComponent implements OnInit {
   }
 
   getIcon(finished: boolean): string {
-    return finished ? 'icon-checkmark' : 'icon-hourglass';
+    return finished ? 'finished' : 'unfinished';
   }
 
   filterFn(
