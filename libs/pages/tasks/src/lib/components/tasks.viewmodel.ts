@@ -65,21 +65,32 @@ export class TasksViewModel {
       this.store.pipe(
         select(TaskQueries.getSharedTaskIdsByLearningAreaId, props)
       ),
+      this.store.pipe(select(TaskQueries.getAllEntities)),
       this.store.pipe(select(TaskInstanceQueries.getAllGroupedByTaskId)),
       this.store.pipe(select(TaskEduContentQueries.getAllGroupedByTaskId))
     ).pipe(
-      map(([taskIds, taskInstancesByTaskId, taskEduContentsByTaskId]) => {
-        return {
-          instances: taskIds.map(id => {
-            return {
-              taskInstance: taskInstancesByTaskId[id][0],
-              taskEduContents: taskEduContentsByTaskId[id],
-              finished: taskEduContentsByTaskId[id].every(te => te.submitted),
-              taskEduContentsCount: taskEduContentsByTaskId[id].length
-            };
-          })
-        };
-      })
+      map(
+        ([
+          taskIds,
+          taskEntities,
+          taskInstancesByTaskId,
+          taskEduContentsByTaskId
+        ]) => {
+          return {
+            instances: taskIds.map(id => {
+              return {
+                taskInstance: {
+                  ...taskInstancesByTaskId[id][0],
+                  task: taskEntities[id]
+                },
+                taskEduContents: taskEduContentsByTaskId[id],
+                finished: taskEduContentsByTaskId[id].every(te => te.submitted),
+                taskEduContentsCount: taskEduContentsByTaskId[id].length
+              };
+            })
+          };
+        }
+      )
     );
   }
 
@@ -115,7 +126,6 @@ export class TasksViewModel {
 
   private getLearningAreasWithTaskInstanceInfo() {
     let props = { userId: this.authService.userId };
-
     this.learningAreasWithTaskInstanceInfo$ = combineLatest(
       this.store.pipe(select(LearningAreaQueries.getAllEntities)),
       this.store.pipe(select(TaskEduContentQueries.getUnfinishedTaskIds)),
