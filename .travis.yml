@@ -2,6 +2,13 @@ sudo: false
 language: node_js
 node_js:
   - 10.3
+cache:
+  # cache both npm modules and Cypress binary
+  npm: true
+  directories:
+    - ~/.cache
+  override:
+    - npm ci
 addons:
   hosts:
     - teacher.polpo.localhost
