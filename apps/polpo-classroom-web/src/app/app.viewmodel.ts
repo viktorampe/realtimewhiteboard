@@ -4,14 +4,15 @@ import {
   FavoriteInterface,
   LearningAreaFixture,
   PassportUserCredentialInterface,
-  PersonFixture,
   PersonInterface,
-  UiActions
+  UiActions,
+  UiQuery,
+  UserQueries
 } from '@campus/dal';
 import { NavItem } from '@campus/ui';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { filter, map, shareReplay } from 'rxjs/operators';
 import { AppResolver } from './app.resolver';
 import { NavItemService } from './services/nav-item-service';
 
@@ -19,14 +20,12 @@ import { NavItemService } from './services/nav-item-service';
   providedIn: 'root'
 })
 export class AppViewModel {
-  // source streams
-  private currentUser$: Observable<PersonInterface>;
-  private favorites$: Observable<FavoriteInterface[]>;
-  private credentials$: Observable<PassportUserCredentialInterface[]>;
-
   // intermediate streams
-  public sideNavItems$: Observable<NavItem[]>;
+  private sideNavItems$: Observable<NavItem[]>;
   private profileMenuItems$: Observable<NavItem[]>;
+
+  // presentation stream
+  public navigationItems$: Observable<NavItem[]>;
 
   constructor(
     private store: Store<DalState>,
@@ -38,50 +37,49 @@ export class AppViewModel {
 
   initialize() {
     this.resolver.resolve(); //TODO add to routing somehow
-    this.setSourceStreams();
     this.setIntermediateStreams();
     this.subscribeToStreams();
-  }
-
-  private setSourceStreams() {
-    this.currentUser$ = this.getCurrentUser();
-    this.favorites$ = this.getFavorites();
-    this.credentials$ = this.getCredentials();
+    this.setPresentationStreams();
   }
 
   private setIntermediateStreams() {
-    this.sideNavItems$ = combineLatest(this.currentUser$, this.favorites$).pipe(
+    this.sideNavItems$ = combineLatest(
+      this.getCurrentUser().pipe(filter(x => !!x)), // TODO komt waarschijnlijk in orde via guard
+      this.getFavorites()
+    ).pipe(
       map(([user, favorites]) =>
         this.navItemService.getSideNavItems(user, favorites)
-      )
+      ),
+      shareReplay(1)
     );
 
     this.profileMenuItems$ = combineLatest(
-      this.currentUser$,
-      this.credentials$
+      this.getCurrentUser().pipe(filter(x => !!x)), // TODO komt waarschijnlijk in orde via guard
+      this.getCredentials()
     ).pipe(
       map(([user, credentials]) =>
         this.navItemService.getProfileMenuItems(user, credentials)
-      )
+      ),
+      shareReplay(1)
     );
   }
 
   private subscribeToStreams() {
-    this.sideNavItems$.subscribe(
-      // TODO updateSideNavContent action gebruiken wanneer beschikbaar
-      navItems => this.store.dispatch(new UiActions.ToggleSideNav())
+    this.sideNavItems$.subscribe(navItems =>
+      this.store.dispatch(new UiActions.SetSideNavItems({ navItems }))
     );
 
-    this.profileMenuItems$.subscribe(
-      // TODO updateProfileMenuContent action gebruiken wanneer beschikbaar
-      navItems => this.store.dispatch(new UiActions.ToggleSideNav())
+    this.profileMenuItems$.subscribe(navItems =>
+      this.store.dispatch(new UiActions.SetProfileMenuItems({ navItems }))
     );
   }
 
+  private setPresentationStreams() {
+    this.navigationItems$ = this.store.pipe(select(UiQuery.getSideNavItems));
+  }
+
   private getCurrentUser(): Observable<PersonInterface> {
-    return of(new PersonFixture());
-    // TODO echte waarde currentUser gebruiken
-    //return this.store.pipe(select(UserQueries.getCurrentUser, {}));
+    return this.store.pipe(select(UserQueries.getCurrentUser));
   }
 
   // TODO Service/State needed
@@ -98,6 +96,11 @@ export class AppViewModel {
 
   // TODO Service/State needed
   private getCredentials(): Observable<PassportUserCredentialInterface[]> {
-    return of([{ profile: {}, provider: 'smartschool' }]);
+    return of([
+      {
+        profile: { platform: 'url-van-smartschoolplatform' },
+        provider: 'smartschool'
+      }
+    ]);
   }
 }

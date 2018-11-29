@@ -55,24 +55,47 @@ export class NavItemService {
   ): NavItem[] {
     const navItems: NavItem[] = [];
 
-    const favoritesNavItems = favorites.map(
-      (favoriet): NavItem => ({
-        title: favoriet.learningArea.name,
-        icon: favoriet.learningArea.icon,
-        link: favoriet.learningAreaId.toString() //wordt nog overschreven
-      })
-    );
+    /*
+      Het is op dit moment nog niet helemaal duidelijk op welke basis
+      zal beslist worden wie welke items te zien krijgt.
+      Nu: hardcoded items toevoegen voor students
+    */
+    if (user.roles.some(role => role.name === 'student')) {
+      navItems.push(Object.assign({}, this.standardNavItems.bundels));
+      navItems.push(Object.assign({}, this.standardNavItems.taken));
+      navItems.push(Object.assign({}, this.standardNavItems.boeken));
+      navItems.push(Object.assign({}, this.standardNavItems.resultaten));
+    }
 
-    navItems.push(
-      this.withFavorites(this.standardNavItems.bundels, favoritesNavItems)
-    );
-    navItems.push(
-      this.withFavorites(this.standardNavItems.taken, favoritesNavItems)
-    );
-    navItems.push(
-      this.withFavorites(this.standardNavItems.boeken, favoritesNavItems)
-    );
-    navItems.push(this.standardNavItems.resultaten);
+    if (user.roles.some(role => role.name === 'teacher')) {
+      const favoritesNavItems = favorites.map(
+        (favoriet): NavItem => ({
+          title: favoriet.learningArea.name,
+          icon: favoriet.learningArea.icon,
+          link: favoriet.learningAreaId.toString() //wordt nog overschreven
+        })
+      );
+
+      navItems.push(
+        this.withFavorites(
+          Object.assign({}, this.standardNavItems.bundels),
+          favoritesNavItems
+        )
+      );
+      navItems.push(
+        this.withFavorites(
+          Object.assign({}, this.standardNavItems.taken),
+          favoritesNavItems
+        )
+      );
+      navItems.push(
+        this.withFavorites(
+          Object.assign({}, this.standardNavItems.boeken),
+          favoritesNavItems
+        )
+      );
+      navItems.push(Object.assign({}, this.standardNavItems.resultaten));
+    }
 
     console.log('service: getSideNavItems', navItems);
     return navItems;
@@ -90,7 +113,10 @@ export class NavItemService {
         cred => cred.provider === 'smartschool'
       );
       if (smartschoolCredential) {
-        const smartschoolItem = this.standardProfileMenuItems.smartschool;
+        const smartschoolItem = Object.assign(
+          {},
+          this.standardProfileMenuItems.smartschool
+        );
         smartschoolItem.link = smartschoolCredential.profile.platform;
         navItems.push(smartschoolItem);
       }
@@ -103,10 +129,11 @@ export class NavItemService {
   }
 
   private withFavorites(navItem: NavItem, favorites: NavItem[]): NavItem {
-    const parentLink = navItem.link;
-    navItem.children = favorites.map(fav => {
-      return { ...fav, link: parentLink + '/' + fav.link };
+    const children = favorites.map(fav => {
+      return { ...fav, link: navItem.link + '/' + fav.link };
     });
+
+    navItem.children = children;
 
     return navItem;
   }

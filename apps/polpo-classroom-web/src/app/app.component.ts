@@ -11,7 +11,7 @@ import { AppViewModel } from './app.viewmodel';
 })
 export class AppComponent {
   title = 'polpo-classroom-web';
-  nav = this.appViewModel.sideNavItems$; //Tijdelijk, moet via store gebeuren
+  navItems$ = this.appViewModel.navigationItems$;
 
   /**
    * the link to the promo website, used on the logo
