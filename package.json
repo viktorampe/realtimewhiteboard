@@ -37,7 +37,7 @@
     "@angular/platform-browser": "^7.1.0",
     "@angular/platform-browser-dynamic": "^7.1.0",
     "@angular/router": "^7.1.0",
-    "@diekeure/polpo-api-angular-sdk": "^2.1.4",
+    "@diekeure/polpo-api-angular-sdk": "^2.1.5",
     "@ngrx/effects": "6.1.2",
     "@ngrx/entity": "6.1.2",
     "@ngrx/router-store": "6.1.2",
