@@ -6,8 +6,8 @@
     <li class="ui-tree-nav__node">
       <a [routerLink]="node.link"
          routerLinkActive="ui-tree-nav__node--active">
-        <i [className]="node.icon"
-           *ngIf="node.icon"></i>
+        <mat-icon [svgIcon]="node.icon"
+                  *ngIf="node.icon"></mat-icon>
         {{node.title}}
       </a>
     </li>
