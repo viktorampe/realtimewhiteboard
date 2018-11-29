@@ -125,8 +125,7 @@ export class AlertsEffects {
         if (!state.alerts.loaded)
           return new LoadAlerts({ userId: action.payload.personId });
 
-        let service = new FilterService();
-        const ids = service
+        const ids = new FilterService()
           .filter(Object.values(state.alerts.entities), action.payload.filter)
           .map(i => i.id);
 
