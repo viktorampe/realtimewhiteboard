@@ -60,7 +60,7 @@ export class TasksViewModel {
   public getTaskInstancesByLearningAreaId(
     areaId: number
   ): Observable<TaskInstancesWithEduContentInfoInterface> {
-    let props = { userId: this.authService.userId, learningAreaId: areaId };
+    const props = { userId: this.authService.userId, learningAreaId: areaId };
     return combineLatest(
       this.store.pipe(
         select(TaskQueries.getSharedTaskIdsByLearningAreaId, props)
@@ -79,10 +79,8 @@ export class TasksViewModel {
           return {
             instances: taskIds.map(id => {
               return {
-                taskInstance: {
-                  ...taskInstancesByTaskId[id][0],
-                  task: taskEntities[id]
-                },
+                task: taskEntities[id],
+                taskInstance: taskInstancesByTaskId[id][0],
                 taskEduContents: taskEduContentsByTaskId[id],
                 finished: taskEduContentsByTaskId[id].every(te => te.submitted),
                 taskEduContentsCount: taskEduContentsByTaskId[id].length

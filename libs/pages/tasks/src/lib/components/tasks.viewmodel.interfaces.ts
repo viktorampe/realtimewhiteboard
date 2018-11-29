@@ -1,7 +1,8 @@
 import {
   LearningAreaInterface,
   TaskEduContentInterface,
-  TaskInstanceInterface
+  TaskInstanceInterface,
+  TaskInterface
 } from '@campus/dal';
 
 export interface LearningAreasWithTaskInstanceInfoInterface {
@@ -20,6 +21,7 @@ export interface TaskInstancesWithEduContentInfoInterface {
 }
 
 export interface TaskInstanceWithEduContentInfoInterface {
+  task: TaskInterface;
   taskInstance: TaskInstanceInterface;
   taskEduContentsCount: number;
   taskEduContents: TaskEduContentInterface[];

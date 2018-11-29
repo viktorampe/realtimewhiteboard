@@ -96,11 +96,11 @@ describe('Task Selectors', () => {
       const results = TaskQueries.getById(storeState, { id: 9 });
       expect(results).toBe(undefined);
     });
-    it('getShared() should the tasks you do not own', () => {
+    it('getShared() should return the tasks you do not own', () => {
       const results = TaskQueries.getShared(storeState, { userId: 1 });
       expect(results).toEqual([createTask(2, 2), createTask(3, 2)]);
     });
-    it('getOwn() should the tasks you own', () => {
+    it('getOwn() should return the tasks you own', () => {
       const results = TaskQueries.getOwn(storeState, { userId: 1 });
       expect(results).toEqual([createTask(4, 1), createTask(1, 1)]);
     });

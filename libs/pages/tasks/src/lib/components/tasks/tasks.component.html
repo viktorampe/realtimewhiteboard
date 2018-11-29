@@ -33,7 +33,7 @@
                      campusListItem
                      progress="{{instance.taskInstance.progress}}"
                      [itemCount]="instance.taskEduContentsCount"
-                     [title]="instance.taskInstance.task.name"
+                     [title]="instance.task.name"
                      [backgroundColor]="(learningArea$ | async).color"
                      [icon]="getIcon(instance.finished)">
         <campus-folder-details>

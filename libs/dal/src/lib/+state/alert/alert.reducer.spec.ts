@@ -238,10 +238,10 @@ describe('Alerts Reducer', () => {
         }
       });
       const result = reducer(startState, action);
-      expect(result.entities[1].read).toBeTruthy();
-      expect(result.entities[2].read).toBeTruthy();
-      expect(result.entities[3].read).toBeFalsy();
-      expect(result.entities[4].read).toBeTruthy();
+      expect(result.entities[1].read).toBe(true);
+      expect(result.entities[2].read).toBe(true);
+      expect(result.entities[3].read).toBe(false);
+      expect(result.entities[4].read).toBe(true);
     });
 
     it('should set al alerts unread for given taskId', () => {
@@ -253,10 +253,10 @@ describe('Alerts Reducer', () => {
         }
       });
       const result = reducer(startState, action);
-      expect(result.entities[1].read).toBeFalsy();
-      expect(result.entities[2].read).toBeFalsy();
-      expect(result.entities[3].read).toBeFalsy();
-      expect(result.entities[4].read).toBeTruthy();
+      expect(result.entities[1].read).toBe(false);
+      expect(result.entities[2].read).toBe(false);
+      expect(result.entities[3].read).toBe(false);
+      expect(result.entities[4].read).toBe(true);
     });
   });
 
