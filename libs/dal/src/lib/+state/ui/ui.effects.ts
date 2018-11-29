@@ -47,7 +47,7 @@ export class UiEffects {
   saveUi$ = this.dataPersistence.fetch(UiActionTypes.SaveUi, {
     run: (action: SaveUi, state: DalState) => {
       try {
-        this.storageService.set('ui', JSON.stringify(state));
+        this.storageService.set('ui', JSON.stringify(state.ui));
       } catch (error) {
         // we don't want errors on failing localstorage, because it's not breaking
       }
