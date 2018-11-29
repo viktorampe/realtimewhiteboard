@@ -66,9 +66,11 @@ export const getUnfinishedTaskIds = createSelector(
   selectTaskEduContentState,
   (state: State) => {
     return new Set(
-      Object.values(state.entities)
-        .filter(taskEducontent => taskEducontent.submitted !== true)
-        .map(taskEducontent => taskEducontent.taskId)
+      Object.values(state.entities).reduce(
+        (prev, curr, idx, acc) =>
+          curr.submitted ? acc : [...acc, curr.taskId],
+        []
+      )
     );
   }
 );
