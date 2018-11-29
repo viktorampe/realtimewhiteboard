@@ -17,3 +17,7 @@ export interface EnvironmentMessagesFeatureInterface {
   enabled: boolean;
   hasAppBarDropDown: boolean;
 }
+
+export const ENVIRONMENT_ICON_MAPPING_TOKEN = new InjectionToken(
+  'environmentIconMapping'
+);
