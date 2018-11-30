@@ -15,6 +15,8 @@ describe('Ui Reducer', () => {
       listFormat: ListFormat.GRID,
       sideSheetOpen: true,
       sideNavOpen: true,
+      sideNavItems: [],
+      profileMenuItems: [],
       loaded: true
     };
   });
