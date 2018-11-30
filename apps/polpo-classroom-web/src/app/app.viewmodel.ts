@@ -13,7 +13,6 @@ import { NavItem } from '@campus/ui';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable, of } from 'rxjs';
 import { filter, map, shareReplay } from 'rxjs/operators';
-import { AppResolver } from './app.resolver';
 import { NavItemService } from './services/nav-item-service';
 
 @Injectable({
@@ -29,14 +28,12 @@ export class AppViewModel {
 
   constructor(
     private store: Store<DalState>,
-    private resolver: AppResolver,
     private navItemService: NavItemService
   ) {
     this.initialize();
   }
 
   initialize() {
-    this.resolver.resolve(); //TODO add to routing somehow
     this.setIntermediateStreams();
     this.subscribeToStreams();
     this.setPresentationStreams();
@@ -44,23 +41,21 @@ export class AppViewModel {
 
   private setIntermediateStreams() {
     this.sideNavItems$ = combineLatest(
-      this.getCurrentUser().pipe(filter(x => !!x)), // TODO komt waarschijnlijk in orde via guard
+      this.getCurrentUser(),
       this.getFavorites()
     ).pipe(
       map(([user, favorites]) =>
         this.navItemService.getSideNavItems(user, favorites)
-      ),
-      shareReplay(1)
+      )
     );
 
     this.profileMenuItems$ = combineLatest(
-      this.getCurrentUser().pipe(filter(x => !!x)), // TODO komt waarschijnlijk in orde via guard
+      this.getCurrentUser(),
       this.getCredentials()
     ).pipe(
       map(([user, credentials]) =>
         this.navItemService.getProfileMenuItems(user, credentials)
-      ),
-      shareReplay(1)
+      )
     );
   }
 

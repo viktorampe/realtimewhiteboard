@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DalState, StateResolver } from '@campus/dal';
+import { DalState, StateResolver, UserActions, UserQueries } from '@campus/dal';
 import { Action, Selector, Store } from '@ngrx/store';
 
 @Injectable({
@@ -12,12 +12,14 @@ export class AppResolver extends StateResolver {
 
   protected getLoadableActions(): Action[] {
     return [
-      //TODO add load actions
+      new UserActions.LoadUser({ force: false })
+      // credentials
     ];
   }
   protected getResolvedQueries(): Selector<object, boolean>[] {
     return [
-      //TODO add resolvable boolean selectors
+      UserQueries.getLoaded
+      // credentials
     ];
   }
 }
