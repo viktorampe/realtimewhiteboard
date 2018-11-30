@@ -69,7 +69,7 @@ export class AppViewModel {
     );
   }
 
-  private setPresentationStreams() {
+  protected setPresentationStreams() {
     this.navigationItems$ = this.store.pipe(select(UiQuery.getSideNavItems));
   }
 
@@ -78,19 +78,19 @@ export class AppViewModel {
   }
 
   // TODO Service/State needed
-  private getFavorites(): Observable<FavoriteInterface[]> {
+  protected getFavorites(): Observable<FavoriteInterface[]> {
     return of([
       {
         type: 'area', // TODO in selector: filter on type:'area'
         learningAreaId: 1,
         learningArea: new LearningAreaFixture({ icon: 'wiskunde' }),
-        created: new Date()
+        created: new Date(2018, 11 - 1, 30)
       }
     ]);
   }
 
   // TODO Service/State needed
-  private getCredentials(): Observable<PassportUserCredentialInterface[]> {
+  protected getCredentials(): Observable<PassportUserCredentialInterface[]> {
     return of([
       {
         profile: { platform: 'url-van-smartschoolplatform' },
