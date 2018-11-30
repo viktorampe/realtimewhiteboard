@@ -73,18 +73,17 @@ export class HeaderViewModel {
     this.currentUser$ = this.store.pipe(select(UserQueries.getCurrentUser));
     // this.breadCrumbs$ = this.store.pipe(select(BreadCrumbsQueries.getAllLinks)); // TODO: uncomment when breadcrumbs state is available
     this.breadCrumbs$ = this.mockViewModel.breadCrumbs$; //TODO: remove when breadcrumbs state is available
-    this.profileMenuItems$ = this.store
-      .pipe(select(UiQuery.getProfileMenuItems))
-      .pipe(
-        map(
-          navItems =>
-            navItems.map(item => ({
-              icon: item.icon,
-              description: item.title,
-              internalLink: item.link ? <string>item.link : '1' // link mag niet leeg zijn
-            })) //TODO deze mapping zou eigenlijk niet nodig mogen zijn, DropDownMenuItem en NavItem hebben zelfde functionaliteit
-        )
-      );
+    this.profileMenuItems$ = this.store.pipe(
+      select(UiQuery.getProfileMenuItems),
+      map(
+        navItems =>
+          navItems.map(item => ({
+            icon: item.icon,
+            description: item.title,
+            internalLink: <string>item.link
+          })) //TODO deze mapping zou eigenlijk niet nodig mogen zijn, DropDownMenuItem en NavItem hebben zelfde functionaliteit
+      )
+    );
   }
 
   private loadDisplayStream(): void {

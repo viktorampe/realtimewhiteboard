@@ -12,7 +12,7 @@ import {
 import { NavItem } from '@campus/ui';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable, of } from 'rxjs';
-import { filter, map, shareReplay } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { NavItemService } from './services/nav-item-service';
 
 @Injectable({
@@ -81,7 +81,7 @@ export class AppViewModel {
   private getFavorites(): Observable<FavoriteInterface[]> {
     return of([
       {
-        type: '',
+        type: 'area', // TODO in selector: filter on type:'area'
         learningAreaId: 1,
         learningArea: new LearningAreaFixture({ icon: 'wiskunde' }),
         created: new Date()
