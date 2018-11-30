@@ -73,7 +73,7 @@ export const environment = {
     // delete: 'assets/icons/delete.svg',
     // edit: 'assets/icons/edit.svg',
     // filter: 'assets/icons/filter.svg',
-    // lock: 'assets/icons/lock.svg',
+    lock: 'assets/icons/lock.svg',
     // open: 'assets/icons/open.svg',
     // play: 'assets/icons/play.svg',
     // print: 'assets/icons/print.svg',
@@ -146,9 +146,9 @@ export const environment = {
     // pinterest: 'assets/icons/pinterest.svg',
     // 'polpo-small': 'assets/icons/polpo-small.svg',
     polpo: 'assets/icons/polpo.svg',
-    // 'power-on': 'assets/icons/power-on.svg',
-    // 'smartschool:orange':
-    //   'assets/icons/smartschool/s_logo_sso_button_orange_22x36.svg',
+    'power-on': 'assets/icons/power-on.svg',
+    'smartschool:orange':
+      'assets/icons/smartschool/s_logo_sso_button_orange_22x36.svg',
     // 'smartschool:white':
     //   'assets/icons/smartschool/s_logo_sso_button_orange_22x362.svg',
     // school: 'assets/icons/school.svg',
@@ -157,11 +157,12 @@ export const environment = {
     // 'split-arrow': 'assets/icons/split-arrow.svg',
     // student: 'assets/icons/student.svg',
     student2: 'assets/icons/student2.svg',
-    taak: 'assets/icons/taak.svg'
+    taak: 'assets/icons/taak.svg',
     // task: 'assets/icons/task.svg'
     // timeline: 'assets/icons/timeline.svg',
     // twitter: 'assets/icons/twitter.svg',
     // 'user-exception': 'assets/icons/user-exception.svg',
+    account: 'assets/icons/account-circle.svg'
   },
   // promo website settings
   website: {

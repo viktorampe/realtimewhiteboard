@@ -39,13 +39,13 @@ export class NavItemService {
     }
   };
 
-  // icons zijn waarden uit huidige site
   private standardProfileMenuItems: Dictionary<NavItem> = {
-    profiel: { title: 'Profiel', icon: 'icon-user' },
-    afmelden: { title: 'Afmelden', icon: 'icon-key' },
+    profiel: { title: 'Profiel', icon: 'account', link: '/profile' }, // icon-user in current site
+    afmelden: { title: 'Afmelden', icon: 'lock', link: '/logout' }, // icon-key in current site
     smartschool: {
       title: 'Ga naar Smartschool',
-      icon: '/img/icon-smartschool.png'
+      icon: 'smartschool:orange'
+      // link will be added later
     }
   };
 
