@@ -10,7 +10,7 @@ import {
 import { hot } from 'jasmine-marbles';
 import { BehaviorSubject } from 'rxjs';
 import { TasksViewModel } from '../tasks.viewmodel';
-import { LearningAreasWithTaskInstanceInfoInterface } from '../tasks.viewmodel.interfaces';
+import { LearningAreasWithTaskInfoInterface } from '../tasks.viewmodel.interfaces';
 import { MockTasksViewModel } from '../tasks.viewmodel.mock';
 import { TasksAreaComponent } from './tasks-area.component';
 
@@ -20,10 +20,8 @@ describe('TasksAreaComponent', () => {
   let tasksViewModel: TasksViewModel;
   let filterService: FilterServiceInterface;
 
-  let learningAreas$: BehaviorSubject<
-    LearningAreasWithTaskInstanceInfoInterface
-  >;
-  let learningAreasValue: LearningAreasWithTaskInstanceInfoInterface;
+  let learningAreas$: BehaviorSubject<LearningAreasWithTaskInfoInterface>;
+  let learningAreasValue: LearningAreasWithTaskInfoInterface;
   let listFormat$: BehaviorSubject<ListFormat>;
   let listFormatValue: ListFormat;
 
@@ -41,8 +39,8 @@ describe('TasksAreaComponent', () => {
     tasksViewModel = TestBed.get(TasksViewModel);
     filterService = TestBed.get(FILTER_SERVICE_TOKEN);
 
-    learningAreas$ = tasksViewModel.learningAreasWithTaskInstanceInfo$ as BehaviorSubject<
-      LearningAreasWithTaskInstanceInfoInterface
+    learningAreas$ = tasksViewModel.learningAreasWithTaskInfo$ as BehaviorSubject<
+      LearningAreasWithTaskInfoInterface
     >;
     learningAreasValue = learningAreas$.value;
 
@@ -63,7 +61,7 @@ describe('TasksAreaComponent', () => {
   it('should call the filter service when filterTextInput.filterFn is called, and display the correct count/learning areas', () => {
     const filterSource = {
       learningAreasWithInfo: []
-    } as LearningAreasWithTaskInstanceInfoInterface;
+    } as LearningAreasWithTaskInfoInterface;
     const filterText = '';
     component.filterTextInput.setFilterableItem(component);
 

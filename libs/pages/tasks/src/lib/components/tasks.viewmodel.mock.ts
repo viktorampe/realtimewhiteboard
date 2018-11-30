@@ -13,9 +13,9 @@ import {
 import { ListFormat } from '@campus/ui';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import {
-  LearningAreasWithTaskInstanceInfoInterface,
-  TaskInstancesWithEduContentInfoInterface,
-  TaskInstanceWithEduContentInfoInterface
+  LearningAreasWithTaskInfoInterface,
+  TasksWithInfoInterface,
+  TaskWithInfoInterface
 } from './tasks.viewmodel.interfaces';
 
 @Injectable({
@@ -24,16 +24,12 @@ import {
 // implements TasksResolver
 export class MockTasksViewModel {
   learningAreasWithTaskInstanceInfo$: Observable<
-    LearningAreasWithTaskInstanceInfoInterface
+    LearningAreasWithTaskInfoInterface
   >;
   selectedLearningArea$: Observable<LearningAreaInterface>;
-  taskInstancesByLearningArea$: Observable<
-    TaskInstancesWithEduContentInfoInterface
-  >;
+  taskInstancesByLearningArea$: Observable<TasksWithInfoInterface>;
   selectedTaskInstance$: Observable<TaskInstanceInterface>;
-  taskInstancesWithEduContents$: Observable<
-    TaskInstanceWithEduContentInfoInterface[]
-  >;
+  taskInstancesWithEduContents$: Observable<TaskWithInfoInterface[]>;
   listFormat$: Observable<ListFormat>;
   // routeParams$: TODO type?
 
@@ -47,7 +43,7 @@ export class MockTasksViewModel {
 
   getTaskInstancesByLearningAreaId(
     learningAreaId: number
-  ): Observable<TaskInstancesWithEduContentInfoInterface> {
+  ): Observable<TasksWithInfoInterface> {
     return this.getMockTaskInstancesByLearningArea();
   }
 
@@ -63,11 +59,11 @@ export class MockTasksViewModel {
   }
 
   private getMockLearningAreasWithTaskInstances(): Observable<
-    LearningAreasWithTaskInstanceInfoInterface
+    LearningAreasWithTaskInfoInterface
   > {
     const mockLearningAreas = this.getMockLearningAreas();
 
-    let mock: LearningAreasWithTaskInstanceInfoInterface;
+    let mock: LearningAreasWithTaskInfoInterface;
     mock = {
       learningAreasWithInfo: [
         {
@@ -104,14 +100,15 @@ export class MockTasksViewModel {
   }
 
   private getMockTaskInstancesByLearningArea(): Observable<
-    TaskInstancesWithEduContentInfoInterface
+    TasksWithInfoInterface
   > {
     const mockTaskInstancesAll = this.getMockTaskInstances();
 
-    let mockTaskInstances: TaskInstancesWithEduContentInfoInterface;
+    let mockTaskInstances: TasksWithInfoInterface;
     mockTaskInstances = {
-      instances: [
+      taskInfos: [
         {
+          task: {},
           taskInstance: mockTaskInstancesAll[0],
           taskEduContentsCount: 1,
           taskEduContents: [],

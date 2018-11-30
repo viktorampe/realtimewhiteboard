@@ -1,4 +1,3 @@
-import { FilterService } from '@campus/utils';
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { AlertQueueInterface } from '../../+models';
 import { AlertsActions, AlertsActionTypes } from './alert.actions';
@@ -45,22 +44,6 @@ export function reducer(state = initialState, action: AlertsActions): State {
 
     case AlertsActionTypes.SetReadAlert: {
       return adapter.updateMany(action.updatePayload, state);
-    }
-
-    case AlertsActionTypes.SetAlertReadByFilter: {
-      const service = new FilterService();
-      const updatePayload = service
-        .filter(Object.values(state.entities), action.payload.filter)
-        .map(i => {
-          return {
-            id: i.id,
-            changes: {
-              read: action.payload.read !== false
-            }
-          };
-        });
-
-      return adapter.updateMany(updatePayload, state);
     }
 
     case AlertsActionTypes.AddAlert: {

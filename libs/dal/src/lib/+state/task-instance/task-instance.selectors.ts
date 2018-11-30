@@ -86,6 +86,22 @@ export const getAllByTaskId = createSelector(
   }
 );
 
+export const getActiveTaskIds = createSelector(
+  selectTaskInstanceState,
+  (state: State) => {
+    const d = new Date();
+    return new Set(
+      (<number[]>state.ids).reduce(
+        (prev, id, idx, acc) =>
+          state.entities[id].end > d && d > state.entities[id].start
+            ? [...acc, state.entities[id].taskId]
+            : acc,
+        []
+      )
+    );
+  }
+);
+
 function asTaskInstance(item: TaskInstanceInterface): TaskInstance {
   if (item) {
     return Object.assign<TaskInstance, TaskInstanceInterface>(

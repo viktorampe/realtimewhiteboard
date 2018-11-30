@@ -1,3 +1,4 @@
+import { FilterService } from '@campus/utils';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { Alert, AlertQueueInterface } from '../../+models';
 import {
@@ -80,6 +81,15 @@ export const getRecentByDate = createSelector(
           new Date(value.validFrom).getTime() >= props.timeThreshold
       )
       .map(([key, value]) => state.entities[key])
+);
+
+export const getAlertIdsByFilter = createSelector(
+  selectAlertState,
+  (state: State, props: { filter: Partial<AlertQueueInterface> }) => {
+    return new FilterService()
+      .filter(Object.values(state.entities), props.filter)
+      .map(i => i.id);
+  }
 );
 
 function asAlert(item: AlertQueueInterface): Alert {

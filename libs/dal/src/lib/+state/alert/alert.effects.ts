@@ -1,14 +1,12 @@
 import { Inject, Injectable } from '@angular/core';
-import { FilterService } from '@campus/utils';
 import { Actions, Effect, ofType } from '@ngrx/effects';
+import { select } from '@ngrx/store';
 import { DataPersistence } from '@nrwl/nx';
 import { interval, Observable, Subject } from 'rxjs';
 import { map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
+import { AlertQueries } from '.';
 import { DalActions } from '..';
-import {
-  AlertServiceInterface,
-  ALERT_SERVICE_TOKEN
-} from '../../alert/alert.service.interface';
+import { ALERT_SERVICE_TOKEN } from '../../alert/alert.service.interface';
 import { ActionSuccessful } from './../dal.actions';
 import { DalState } from './../dal.state.interface';
 import {
@@ -46,6 +44,31 @@ export class AlertsEffects {
       _ =>
         new DalActions.ActionSuccessful({
           successfulAction: 'polling stopped'
+        })
+    )
+  );
+
+  @Effect()
+  setAlertsReadByFilter$ = this.actions.pipe(
+    ofType(AlertsActionTypes.SetAlertReadByFilter),
+    switchMap(
+      (
+        action: SetAlertReadByFilter
+      ): Observable<[number[], SetAlertReadByFilter]> => {
+        return this.dataPersistence.store.pipe(
+          select(AlertQueries.getAlertIdsByFilter, {
+            filter: action.payload.filter
+          })
+        );
+      }
+    ),
+    map(
+      ([ids, action]) =>
+        new SetReadAlert({
+          personId: action.payload.personId,
+          alertIds: ids,
+          intended: action.payload.intended,
+          read: action.payload.read
         })
     )
   );
@@ -112,40 +135,6 @@ export class AlertsEffects {
           );
       },
       undoAction: (action: SetReadAlert, state: any) => {
-        return new AlertsLoadError(new Error('Unable to update alert'));
-      }
-    }
-  );
-
-  @Effect()
-  setAlertReadByFilter$ = this.dataPersistence.optimisticUpdate(
-    AlertsActionTypes.SetAlertReadByFilter,
-    {
-      run: (action: SetAlertReadByFilter, state: DalState) => {
-        if (!state.alerts.loaded)
-          return new LoadAlerts({ userId: action.payload.personId });
-
-        const ids = new FilterService()
-          .filter(Object.values(state.alerts.entities), action.payload.filter)
-          .map(i => i.id);
-
-        return this.alertService
-          .setAlertAsRead(
-            action.payload.personId,
-            ids,
-            action.payload.read,
-            action.payload.intended
-          )
-          .pipe(
-            map(
-              affectedRows =>
-                new ActionSuccessful({
-                  successfulAction: 'alert updated'
-                })
-            )
-          );
-      },
-      undoAction: (action: SetAlertReadByFilter, state: any) => {
         return new AlertsLoadError(new Error('Unable to update alert'));
       }
     }

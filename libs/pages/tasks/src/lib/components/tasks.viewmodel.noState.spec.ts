@@ -31,7 +31,7 @@ import {
 } from './tasks.viewmodel';
 import {
   EduContentWithSubmittedInterface,
-  LearningAreasWithTaskInstanceInfoInterface,
+  LearningAreasWithTaskInfoInterface,
   TaskInstanceWithEduContentInfoInterface
 } from './tasks.viewmodel.interfaces';
 
@@ -651,7 +651,7 @@ describe('TasksViewModel zonder State', () => {
       'getLearningAreasWithTaskInstanceInfo$'
     ](learningAreasWithTasks$);
 
-    const expectedLearningAreas: LearningAreasWithTaskInstanceInfoInterface = {
+    const expectedLearningAreas: LearningAreasWithTaskInfoInterface = {
       learningAreasWithInfo: [
         {
           learningArea: mockLearningAreaArray[0],

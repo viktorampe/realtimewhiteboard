@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import {
+  AlertActions,
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   DalState,
@@ -15,12 +16,13 @@ import {
 } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
 import { select, Store } from '@ngrx/store';
+import { MemoizedSelectorWithProps } from '@ngrx/store/src/selector';
 import { combineLatest, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import {
-  LearningAreasWithTaskInstanceInfoInterface,
-  TaskInstancesWithEduContentInfoInterface,
-  TaskInstanceWithEduContentInfoInterface
+  LearningAreasWithTaskInfoInterface,
+  TasksWithInfoInterface,
+  TaskWithInfoInterface
 } from './tasks.viewmodel.interfaces';
 
 @Injectable({
@@ -31,8 +33,8 @@ export class TasksViewModel {
   public listFormat$: Observable<ListFormat>;
 
   // presentation streams
-  public learningAreasWithTaskInstanceInfo$: Observable<
-    LearningAreasWithTaskInstanceInfoInterface
+  public learningAreasWithTaskInfo$: Observable<
+    LearningAreasWithTaskInfoInterface
   >;
 
   constructor(
@@ -53,52 +55,60 @@ export class TasksViewModel {
     return this.store.pipe(select(LearningAreaQueries.getById, { id: areaId }));
   }
 
+  public setTaskAlertRead(taskId: number): void {
+    this.store.dispatch(
+      new AlertActions.SetAlertReadByFilter({
+        personId: this.authService.userId,
+        intended: false,
+        filter: {
+          taskId: taskId
+        },
+        read: true
+      })
+    );
+  }
+
   public startExercise(eduContentId: number): void {
     //waiting for Service
   }
 
-  public getTaskInstancesByLearningAreaId(
+  public getTasksByLearningAreaId(
     areaId: number
-  ): Observable<TaskInstancesWithEduContentInfoInterface> {
+  ): Observable<TasksWithInfoInterface> {
     const props = { userId: this.authService.userId, learningAreaId: areaId };
     return combineLatest(
-      this.store.pipe(
-        select(TaskQueries.getSharedTaskIdsByLearningAreaId, props)
-      ),
-      this.store.pipe(select(TaskQueries.getAllEntities)),
-      this.store.pipe(select(TaskInstanceQueries.getAllGroupedByTaskId)),
-      this.store.pipe(select(TaskEduContentQueries.getAllGroupedByTaskId))
+      this.select(TaskQueries.getSharedTaskIdsByLearningAreaId, props),
+      this.select(TaskInstanceQueries.getActiveTaskIds),
+      this.select(TaskQueries.getAllEntities),
+      this.select(TaskInstanceQueries.getAllGroupedByTaskId),
+      this.select(TaskEduContentQueries.getAllGroupedByTaskId)
     ).pipe(
-      map(
-        ([
-          taskIds,
-          taskEntities,
-          taskInstancesByTaskId,
-          taskEduContentsByTaskId
-        ]) => {
-          return {
-            instances: taskIds.map(id => {
-              return {
-                task: taskEntities[id],
-                taskInstance: taskInstancesByTaskId[id][0],
-                taskEduContents: taskEduContentsByTaskId[id],
-                finished: taskEduContentsByTaskId[id].every(te => te.submitted),
-                taskEduContentsCount: taskEduContentsByTaskId[id].length
-              };
-            })
-          };
-        }
-      )
+      map(([ids, activeIds, entities, instancesById, taskEducontentById]) => {
+        return {
+          taskInfos: ids.reduce((prev, id, next, acc) => {
+            return activeIds.has(id)
+              ? [
+                  ...acc,
+                  {
+                    task: entities[id],
+                    taskInstance: instancesById[id][0],
+                    taskEduContents: taskEducontentById[id],
+                    finished: taskEducontentById[id].every(te => te.submitted),
+                    taskEduContentsCount: taskEducontentById[id].length
+                  }
+                ]
+              : acc;
+          }, [])
+        };
+      })
     );
   }
 
-  public getTaskInstanceWithEduContents(
-    taskId: number
-  ): Observable<TaskInstanceWithEduContentInfoInterface> {
+  public getTaskWithInfo(taskId: number): Observable<TaskWithInfoInterface> {
     return combineLatest(
-      this.store.pipe(select(TaskInstanceQueries.getAllByTaskId, { taskId })),
-      this.store.pipe(select(TaskEduContentQueries.getAllByTaskId, { taskId })),
-      this.store.pipe(select(TaskQueries.getById, { id: taskId })),
+      this.select(TaskInstanceQueries.getAllByTaskId, { taskId }),
+      this.select(TaskEduContentQueries.getAllByTaskId, { taskId }),
+      this.select(TaskQueries.getById, { id: taskId }),
       this.getMockTeachers() //todo select teacher entities here
     ).pipe(
       map(([taskInstances, taskEduContents, task, teachers]) => {
@@ -115,30 +125,32 @@ export class TasksViewModel {
   }
 
   private setSourceStreams() {
-    this.listFormat$ = this.store.pipe(select(UiQuery.getListFormat));
+    this.listFormat$ = this.select(UiQuery.getListFormat);
   }
 
   private setPresentationStreams() {
-    this.getLearningAreasWithTaskInstanceInfo();
+    this.getLearningAreasWithTaskInfo();
   }
 
-  private getLearningAreasWithTaskInstanceInfo() {
-    let props = { userId: this.authService.userId };
-    this.learningAreasWithTaskInstanceInfo$ = combineLatest(
-      this.store.pipe(select(LearningAreaQueries.getAllEntities)),
-      this.store.pipe(select(TaskEduContentQueries.getUnfinishedTaskIds)),
-      this.store.pipe(select(TaskQueries.getShared, props)),
-      this.store.pipe(select(TaskQueries.getSharedLearningAreaIds, props))
+  private getLearningAreasWithTaskInfo() {
+    const props = { userId: this.authService.userId };
+    this.learningAreasWithTaskInfo$ = combineLatest(
+      this.select(LearningAreaQueries.getAllEntities),
+      this.select(TaskEduContentQueries.getUnfinishedTaskIds),
+      this.select(TaskInstanceQueries.getActiveTaskIds),
+      this.select(TaskQueries.getShared, props),
+      this.select(TaskQueries.getSharedLearningAreaIds, props)
     ).pipe(
-      map(([areaEntities, unfinishedTaskIds, sharedTasks, areaIds]) => {
+      map(([areaEntities, unfinishedIds, activeIds, sharedTasks, areaIds]) => {
         return {
           learningAreasWithInfo: Array.from(areaIds.values()).map(id => {
-            let tasks = sharedTasks.filter(t => t.learningAreaId === id);
+            const tasks = sharedTasks.filter(
+              t => t.learningAreaId === id && activeIds.has(t.id)
+            );
             return {
               learningArea: areaEntities[id],
-              openTasks: tasks.filter(t => unfinishedTaskIds.has(t.id)).length,
-              closedTasks: tasks.filter(t => !unfinishedTaskIds.has(t.id))
-                .length
+              openTasks: tasks.filter(t => unfinishedIds.has(t.id)).length,
+              closedTasks: tasks.filter(t => !unfinishedIds.has(t.id)).length
             };
           }),
           totalTasks: sharedTasks.length
@@ -149,5 +161,12 @@ export class TasksViewModel {
 
   private getMockTeachers(): Observable<PersonInterface[]> {
     return of([new PersonFixture({ id: 186 }), new PersonFixture({ id: 187 })]);
+  }
+
+  private select<T, Props>(
+    selector: MemoizedSelectorWithProps<DalState, Props, T>,
+    payload?: Props
+  ): Observable<T> {
+    return this.store.pipe(select(selector, payload));
   }
 }

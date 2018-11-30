@@ -7,8 +7,8 @@ import { Observable } from 'rxjs';
 import { map, shareReplay, switchMap } from 'rxjs/operators';
 import { TasksViewModel } from '../tasks.viewmodel';
 import {
-  TaskInstancesWithEduContentInfoInterface,
-  TaskInstanceWithEduContentInfoInterface
+  TasksWithInfoInterface,
+  TaskWithInfoInterface
 } from '../tasks.viewmodel.interfaces';
 
 @Component({
@@ -20,13 +20,13 @@ export class TasksComponent implements OnInit {
   protected listFormat = ListFormat;
   listFormat$: Observable<ListFormat> = this.viewModel.listFormat$;
 
-  taskInstances$: Observable<TaskInstancesWithEduContentInfoInterface>;
+  taskInstances$: Observable<TasksWithInfoInterface>;
   learningArea$: Observable<LearningAreaInterface>;
 
   @ViewChild(FilterTextInputComponent)
   filterTextInput: FilterTextInputComponent<
-    TaskInstancesWithEduContentInfoInterface,
-    TaskInstanceWithEduContentInfoInterface
+    TasksWithInfoInterface,
+    TaskWithInfoInterface
   >;
 
   private routeParams$ = this.route.params.pipe(shareReplay(1));
@@ -50,18 +50,16 @@ export class TasksComponent implements OnInit {
   private getLearningArea(): Observable<LearningAreaInterface> {
     return this.routeParams$.pipe(
       switchMap(params => {
-        return this.viewModel.getLearningAreaById(parseInt(params.area));
+        return this.viewModel.getLearningAreaById(parseInt(params.area, 10));
       })
     );
   }
 
-  private getTaskInstances(): Observable<
-    TaskInstancesWithEduContentInfoInterface
-  > {
+  private getTaskInstances(): Observable<TasksWithInfoInterface> {
     return this.routeParams$.pipe(
-      map(params => parseInt(params.area)),
+      map(params => parseInt(params.area, 10)),
       switchMap(areaId => {
-        return this.viewModel.getTaskInstancesByLearningAreaId(areaId);
+        return this.viewModel.getTasksByLearningAreaId(areaId);
       })
     );
   }
@@ -71,10 +69,10 @@ export class TasksComponent implements OnInit {
   }
 
   filterFn(
-    source: TaskInstancesWithEduContentInfoInterface,
+    source: TasksWithInfoInterface,
     searchText: string
-  ): TaskInstanceWithEduContentInfoInterface[] {
-    const instances = this.filterService.filter(source.instances, {
+  ): TaskWithInfoInterface[] {
+    const instances = this.filterService.filter(source.taskInfos, {
       taskInstance: {
         task: { name: searchText }
       }
