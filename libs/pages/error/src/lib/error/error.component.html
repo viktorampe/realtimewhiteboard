@@ -1,11 +1,17 @@
 <ng-container *ngIf="(statusCode$|async) as statusCode">
 
   <div [ngSwitch]="statusCode">
-    <p *ngSwitchCase="401">Je bent niet aangemeld. Klik <a href="{{polpoUrl}}">hier</a> om in te loggen.</p>
-    <p *ngSwitchCase="403">Je hebt niet de juiste bevoegdheden om deze actie uit te voeren.<ng-container *ngIf="(currentUser$|async) as user">
-        Je ben aangemeld als
-        {{user.types[0]}}.</ng-container>
-    </p>
+    <ng-container *ngSwitchCase="401">
+      <ng-container *ngIf="(currentUser$|async) as user; else noUser">
+          <p>Je hebt niet de juiste bevoegdheden om deze actie uit te voeren.
+              Je ben aangemeld als {{user.type}}.</p>
+      </ng-container>
+
+    <ng-template #noUser>
+        <p>Je bent niet aangemeld. Klik <a href="{{polpoUrl}}">hier</a> om in te loggen.</p>
+    </ng-template>
+   </ng-container>
+
     <p *ngSwitchCase="500">Er is iets fout gegaan. Probeer opnieuw.</p>
     <p *ngSwitchDefault>Er is iets fout gegaan. Probeer opnieuw.</p>
   </div>
