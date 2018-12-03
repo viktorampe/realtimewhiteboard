@@ -20,7 +20,7 @@ describe('ErrorComponent', () => {
   let store: Store<DalState>;
 
   let usedUserState = {
-    currentUser: new PersonFixture({ type: 'student' }),
+    currentUser: new PersonFixture({ displayName: 'Foo Bar' }),
     loaded: true
   };
 
@@ -75,7 +75,7 @@ describe('ErrorComponent', () => {
     it('should show the correct error message', () => {
       assertErrorMessage(
         401,
-        'Je hebt niet de juiste bevoegdheden om deze actie uit te voeren. Je ben aangemeld als student.'
+        'Je hebt niet de juiste bevoegdheden om deze actie uit te voeren. Je ben aangemeld als Foo Bar.'
       );
     });
   });
