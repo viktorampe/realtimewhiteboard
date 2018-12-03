@@ -6,7 +6,9 @@ import { MatIconModule, MatIconRegistry } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { UiModule } from '@campus/ui';
+import { OPEN_STATIC_CONTENT_SERVICE_TOKEN } from '..';
 import { PageBarContainerComponent } from './components/page-bar-container/page-bar-container.component';
+import { OpenStaticContentService } from './content/open-static-content.service';
 import { HeaderComponent } from './header/header.component';
 import {
   EnvironmentAlertsFeatureInterface,
@@ -35,7 +37,13 @@ import { FILTER_SERVICE_TOKEN } from './services/filter.service.interface';
     LayoutModule,
     PageBarContainerComponent
   ],
-  providers: [{ provide: FILTER_SERVICE_TOKEN, useClass: FilterService }]
+  providers: [
+    { provide: FILTER_SERVICE_TOKEN, useClass: FilterService },
+    {
+      provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
+      useClass: OpenStaticContentService
+    }
+  ]
 })
 export class SharedModule {
   constructor(

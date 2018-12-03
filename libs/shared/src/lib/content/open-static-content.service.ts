@@ -6,7 +6,7 @@ import { OpenStaticContentServiceInterface } from './open-static-content.interfa
 @Injectable({
   providedIn: 'root'
 })
-export class OpenStaticContentServiceService
+export class OpenStaticContentService
   implements OpenStaticContentServiceInterface {
   constructor(
     @Inject(WINDOW) window: Window,
