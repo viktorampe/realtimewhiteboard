@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { WINDOW } from '@campus/browser';
 import { ENVIRONMENT_API_BASE } from '../interfaces';
 import { OpenStaticContentService } from './open-static-content.service';
-// file.only
+
 describe('OpenStaticContentServiceService', () => {
   let service: OpenStaticContentService;
   let mockWindow = { open: jest.fn() };
