@@ -1,3 +1,4 @@
+import { TaskFixture } from '@campus/dal';
 import { TaskQueries } from '.';
 import { TaskInterface } from '../../+models';
 import { State } from './task.reducer';
@@ -103,6 +104,34 @@ describe('Task Selectors', () => {
     it('getOwn() should return the tasks you own', () => {
       const results = TaskQueries.getOwn(storeState, { userId: 1 });
       expect(results).toEqual([createTask(4, 1), createTask(1, 1)]);
+    });
+
+    it('getSharedLearningAreaIds', () => {
+      const results = TaskQueries.getSharedLearningAreaIds(
+        {
+          tasks: createState([
+            new TaskFixture({ id: 1, personId: 3, learningAreaId: 1 }),
+            new TaskFixture({ id: 2, personId: 3, learningAreaId: 2 }),
+            new TaskFixture({ id: 3, learningAreaId: 1 })
+          ])
+        },
+        { userId: 3 }
+      );
+      expect(results).toEqual(new Set([1]));
+    });
+
+    it('getSharedTaskIdsByLearningAreaId', () => {
+      const results = TaskQueries.getSharedTaskIdsByLearningAreaId(
+        {
+          tasks: createState([
+            new TaskFixture({ id: 1, personId: 3, learningAreaId: 1 }),
+            new TaskFixture({ id: 2, personId: 3, learningAreaId: 2 }),
+            new TaskFixture({ id: 3, learningAreaId: 1 })
+          ])
+        },
+        { learningAreaId: 1, userId: 3 }
+      );
+      expect(results).toEqual([3]);
     });
   });
 });
