@@ -1,6 +1,8 @@
-import { ListFormat } from '@campus/ui';
+import { ListFormat, NavItem } from '@campus/ui';
 import {
   SetListFormat,
+  SetProfileMenuItems,
+  SetSideNavItems,
   ToggleSideNav,
   ToggleSideSheet,
   UiLoaded
@@ -9,6 +11,12 @@ import { initialState, reducer, UiState } from './ui.reducer';
 
 describe('Ui Reducer', () => {
   let state: UiState;
+
+  let mockNavItem: NavItem;
+
+  beforeAll(() => {
+    mockNavItem = { title: 'mockNavItem' };
+  });
 
   beforeEach(() => {
     state = {
@@ -56,6 +64,18 @@ describe('Ui Reducer', () => {
       const action = new ToggleSideNav();
       const result: UiState = reducer(initialState, action);
       expect(result.sideNavOpen).toBe(!initialState.sideNavOpen);
+    });
+
+    it('should set the sideNavItems', () => {
+      const action = new SetSideNavItems({ navItems: [mockNavItem] });
+      const result: UiState = reducer(initialState, action);
+      expect(result.sideNavItems).toEqual([mockNavItem]);
+    });
+
+    it('should set the profileMenuItems', () => {
+      const action = new SetProfileMenuItems({ navItems: [mockNavItem] });
+      const result: UiState = reducer(initialState, action);
+      expect(result.profileMenuItems).toEqual([mockNavItem]);
     });
   });
 
