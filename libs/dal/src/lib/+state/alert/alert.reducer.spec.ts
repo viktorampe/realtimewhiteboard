@@ -1,6 +1,5 @@
 import { Update } from '@ngrx/entity';
 import { AlertActions } from '.';
-import { AlertFixture } from '../../+fixtures';
 import { AlertQueueInterface } from './../../+models/AlertQueue.interface';
 import { initialState, reducer, State } from './alert.reducer';
 
@@ -200,63 +199,6 @@ describe('Alerts Reducer', () => {
           alerts[2]
         ])
       );
-    });
-  });
-
-  describe('set alerts read by filter', () => {
-    let startState;
-    beforeEach(() => {
-      startState = createState([
-        new AlertFixture({
-          id: 1,
-          taskId: 10,
-          read: false
-        }),
-        new AlertFixture({
-          id: 2,
-          taskId: 10,
-          read: true
-        }),
-        new AlertFixture({
-          id: 3,
-          taskId: 11,
-          read: false
-        }),
-        new AlertFixture({
-          id: 4,
-          taskId: 11,
-          read: true
-        })
-      ]);
-    });
-
-    it('should set al alerts read for given taskId', () => {
-      const action = new AlertActions.SetAlertReadByFilter({
-        personId: 1,
-        filter: {
-          taskId: 10
-        }
-      });
-      const result = reducer(startState, action);
-      expect(result.entities[1].read).toBe(true);
-      expect(result.entities[2].read).toBe(true);
-      expect(result.entities[3].read).toBe(false);
-      expect(result.entities[4].read).toBe(true);
-    });
-
-    it('should set al alerts unread for given taskId', () => {
-      const action = new AlertActions.SetAlertReadByFilter({
-        personId: 1,
-        read: false,
-        filter: {
-          taskId: 10
-        }
-      });
-      const result = reducer(startState, action);
-      expect(result.entities[1].read).toBe(false);
-      expect(result.entities[2].read).toBe(false);
-      expect(result.entities[3].read).toBe(false);
-      expect(result.entities[4].read).toBe(true);
     });
   });
 
