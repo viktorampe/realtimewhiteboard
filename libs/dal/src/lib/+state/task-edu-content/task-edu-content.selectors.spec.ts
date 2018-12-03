@@ -1,4 +1,3 @@
-//file.only
 import { TaskEduContentQueries } from '.';
 import { TaskEduContentFixture } from '../../+fixtures';
 import { TaskEduContentInterface } from '../../+models';
