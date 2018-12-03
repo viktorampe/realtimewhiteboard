@@ -1,21 +1,28 @@
 import { async, TestBed } from '@angular/core/testing';
 import {
+  DalState,
   LearningAreaFixture,
   PersonFixture,
   PersonInterface,
   StateFeatureBuilder,
+  UiQuery,
+  UiReducer,
   UserActions,
   UserReducer
 } from '@campus/dal';
-import { Store, StoreModule } from '@ngrx/store';
+import { NavItem } from '@campus/ui';
+import { select, Store, StoreModule } from '@ngrx/store';
+import { hot } from 'jasmine-marbles';
 import { AppResolver } from './app.resolver';
 import { AppViewModel } from './app.viewmodel';
 import { NavItemService } from './services/nav-item-service';
+
 describe('AppViewModel', () => {
   let usedUserState;
   let user: PersonInterface;
   let viewModel: AppViewModel;
-  let appResolver: AppResolver;
+  let mockNavItem: NavItem;
+  let store: Store<DalState>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -28,29 +35,36 @@ describe('AppViewModel', () => {
             initialState: {
               initialState: usedUserState
             }
+          },
+          {
+            NAME: UiReducer.NAME,
+            reducer: UiReducer.reducer,
+            initialState: UiReducer.initialState
           }
         ])
       ],
       providers: [
         AppViewModel,
-        Store,
         { provide: AppResolver, useValue: { resolve: jest.fn() } },
         {
           provide: NavItemService,
           useValue: {
-            getSideNavItems: jest.fn(),
-            getProfileMenuItems: jest.fn()
+            getSideNavItems: jest.fn().mockReturnValue([mockNavItem]),
+            getProfileMenuItems: jest
+              .fn()
+              .mockReturnValue([mockNavItem, mockNavItem])
           }
         }
       ]
     }).compileComponents();
 
     viewModel = TestBed.get(AppViewModel);
-    appResolver = TestBed.get(AppResolver);
+    store = TestBed.get(Store);
   }));
 
   beforeAll(() => {
     user = new PersonFixture();
+    mockNavItem = { title: 'mock' };
 
     usedUserState = UserReducer.reducer(
       UserReducer.initialState,
@@ -61,9 +75,6 @@ describe('AppViewModel', () => {
   describe('creation', () => {
     it('should be defined', () => {
       expect(viewModel).toBeDefined();
-    });
-    it('should call the TasksResolver.resolve', () => {
-      expect(appResolver.resolve).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -100,6 +111,21 @@ describe('AppViewModel', () => {
       );
     });
 
-    it('should dispatch actions', () => {});
+    it('should build the presentationstream', () => {
+      expect(store.pipe(select(UiQuery.getSideNavItems))).toBeObservable(
+        hot('a', { a: [mockNavItem] })
+      );
+
+      expect(viewModel.navigationItems$).toBeObservable(
+        hot('a', { a: [mockNavItem] })
+      );
+    });
+
+    it('should build store the navItems in the state', async(() => {
+      store.subscribe(state => {
+        expect(state.ui.sideNavItems).toEqual([mockNavItem]);
+        expect(state.ui.profileMenuItems).toEqual([mockNavItem, mockNavItem]);
+      });
+    }));
   });
 });

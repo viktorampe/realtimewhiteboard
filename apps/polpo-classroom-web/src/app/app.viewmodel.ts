@@ -69,7 +69,7 @@ export class AppViewModel {
     );
   }
 
-  protected setPresentationStreams() {
+  private setPresentationStreams() {
     this.navigationItems$ = this.store.pipe(select(UiQuery.getSideNavItems));
   }
 
@@ -78,7 +78,7 @@ export class AppViewModel {
   }
 
   // TODO Service/State needed
-  protected getFavorites(): Observable<FavoriteInterface[]> {
+  private getFavorites(): Observable<FavoriteInterface[]> {
     return of([
       {
         type: 'area', // TODO in selector: filter on type:'area'
@@ -90,7 +90,7 @@ export class AppViewModel {
   }
 
   // TODO Service/State needed
-  protected getCredentials(): Observable<PassportUserCredentialInterface[]> {
+  private getCredentials(): Observable<PassportUserCredentialInterface[]> {
     return of([
       {
         profile: { platform: 'url-van-smartschoolplatform' },
