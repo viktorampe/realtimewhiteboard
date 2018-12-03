@@ -33,7 +33,7 @@
 
       <ng-template #filter>
         {{ filteredBooks.length }} van
-        <u (click)="filterTextInput.clear()">{{(books$|async)?.length}}</u>
+        <u (click)="filterTextInput.clear()">{{books.length}}</u>
         weergegeven
       </ng-template>
 
