@@ -6,13 +6,12 @@ import {
   PersonInterface,
   StateFeatureBuilder,
   UiActions,
-  UiQuery,
   UiReducer,
   UserActions,
   UserReducer
 } from '@campus/dal';
 import { DropdownMenuItemInterface, NavItem } from '@campus/ui';
-import { select, Store, StoreModule } from '@ngrx/store';
+import { Store, StoreModule } from '@ngrx/store';
 import { hot } from 'jasmine-marbles';
 import { AppResolver } from './app.resolver';
 import { AppViewModel } from './app.viewmodel';
@@ -116,32 +115,22 @@ describe('AppViewModel', () => {
     });
 
     it('should build the presentationstream', () => {
-      expect(store.pipe(select(UiQuery.getSideNavItems))).toBeObservable(
-        hot('a', { a: [mockNavItem] })
-      );
-
       expect(viewModel.navigationItems$).toBeObservable(
         hot('a', { a: [mockNavItem] })
       );
     });
 
-    it('should dispatch actions on initialisation', () => {
-      // force initialisation of a viewmodel
-      const newVM = new AppViewModel(store, TestBed.get(NavItemService));
+    it('should dispatch actions on user update', () => {
+      store.dispatch(new UserActions.UserLoaded(new PersonFixture()));
 
       expect(store.dispatch).toHaveBeenCalledWith(
         new UiActions.SetSideNavItems({ navItems: [mockNavItem] })
       );
       expect(store.dispatch).toHaveBeenCalledWith(
-        new UiActions.SetProfileMenuItems({ menuItems: [mockProfileMenuItem] })
+        new UiActions.SetProfileMenuItems({
+          menuItems: [mockProfileMenuItem]
+        })
       );
     });
-
-    it('should build store the navItems in the state', async(() => {
-      store.subscribe(state => {
-        expect(state.ui.sideNavItems).toEqual([mockNavItem]);
-        expect(state.ui.profileMenuItems).toEqual([mockProfileMenuItem]);
-      });
-    }));
   });
 });
