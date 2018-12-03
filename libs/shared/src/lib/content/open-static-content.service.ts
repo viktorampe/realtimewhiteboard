@@ -9,12 +9,12 @@ import { OpenStaticContentServiceInterface } from './open-static-content.interfa
 export class OpenStaticContentService
   implements OpenStaticContentServiceInterface {
   constructor(
-    @Inject(WINDOW) window: Window,
+    @Inject(WINDOW) private window: Window,
     @Inject(ENVIRONMENT_API_BASE) private apiBase: string
   ) {}
 
   open(contentId: number): void {
     const url = `${this.apiBase}/api/eduContents/${contentId}/redirectURL`;
-    window.open(url);
+    this.window.open(url);
   }
 }
