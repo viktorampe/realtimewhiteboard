@@ -12,7 +12,7 @@ import {
   SDKBrowserModule
 } from '@diekeure/polpo-api-angular-sdk';
 import { EffectsModule } from '@ngrx/effects';
-import { AlertsEffects } from './+state/alert';
+import { AlertReducer, AlertsEffects } from './+state/alert';
 import { BundleReducer, BundlesEffects } from './+state/bundle';
 import { ContentStatusReducer } from './+state/content-status';
 import { ContentStatusesEffects } from './+state/content-status/content-status.effects';
@@ -31,6 +31,14 @@ import {
   StudentContentStatusReducer
 } from './+state/student-content-status';
 import { TaskEffects, TaskReducer } from './+state/task';
+import {
+  TaskEduContentEffects,
+  TaskEduContentReducer
+} from './+state/task-edu-content';
+import {
+  TaskInstanceEffects,
+  TaskInstanceReducer
+} from './+state/task-instance';
 import { UiEffects, UiReducer } from './+state/ui';
 import {
   UnlockedBoekeGroupReducer,
@@ -85,6 +93,8 @@ import { StudentContentStatusService } from './student-content-status/student-co
 import { STUDENT_CONTENT_STATUS_SERVICE_TOKEN } from './student-content-status/student-content-status.service.interface';
 import { TaskEduContentService } from './tasks/task-edu-content.service';
 import { TASK_EDU_CONTENT_SERVICE_TOKEN } from './tasks/task-edu-content.service.interface';
+import { TaskInstanceService } from './tasks/task-instance.service';
+import { TASK_INSTANCE_SERVICE_TOKEN } from './tasks/task-instance.service.interface';
 import { TASK_SERVICE_TOKEN } from './tasks/task.service.interface';
 import { TaskService } from './tasks/tasks.service';
 
@@ -112,8 +122,10 @@ interface DalOptions {
       ContentStatusReducer,
       UserReducer,
       TaskReducer,
+      AlertReducer,
+      TaskInstanceReducer,
+      TaskEduContentReducer,
       CurrentExerciseReducer
-      //todo add alerts reducer
     ]),
     EffectsModule.forFeature([
       BundlesEffects,
@@ -128,7 +140,9 @@ interface DalOptions {
       UnlockedBoekeStudentsEffects,
       ContentStatusesEffects,
       TaskEffects,
+      TaskInstanceEffects,
       AlertsEffects,
+      TaskEduContentEffects,
       CurrentExerciseEffects
     ])
   ],
@@ -164,6 +178,7 @@ interface DalOptions {
     { provide: LINKED_PERSON_SERVICE_TOKEN, useClass: LinkedPersonService },
     { provide: AUTH_SERVICE_TOKEN, useClass: AuthService },
     { provide: TASK_SERVICE_TOKEN, useClass: TaskService },
+    { provide: TASK_INSTANCE_SERVICE_TOKEN, useClass: TaskInstanceService },
     {
       provide: TASK_EDU_CONTENT_SERVICE_TOKEN,
       useClass: TaskEduContentService

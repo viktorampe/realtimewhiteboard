@@ -2,6 +2,15 @@ import { Component, Input } from '@angular/core';
 import { BadgePersonInterface } from '../person-badge/person-badge.component';
 import { HumanDateTimePipe } from '../utils/pipes/human-date-time/human-date-time.pipe';
 
+export interface NotificationItemInterface {
+  icon: string;
+  person?: BadgePersonInterface;
+  titleText: string;
+  link: string;
+  notificationText?: string;
+  notificationDate: Date;
+  accented?: boolean;
+}
 @Component({
   selector: 'campus-notification-dropdown-item',
   templateUrl: './notification-dropdown-item.component.html',

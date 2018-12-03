@@ -1,26 +1,99 @@
+import { Injectable } from '@angular/core';
 import {
-  AlertQueueInterface,
-  MessageInterface,
+  Alert,
+  AlertFixture,
+  BreadcrumbLinkFixture,
   PersonFixture,
   PersonInterface
 } from '@campus/dal';
-import { BreadcrumbLinkInterface } from '@campus/ui';
-import { BehaviorSubject } from 'rxjs';
-import { DropdownItemInterface } from './header.viewmodel';
+import {
+  BreadcrumbLinkInterface,
+  DropdownMenuItemInterface,
+  ListFormat,
+  NotificationItemInterface
+} from '@campus/ui';
+import { BehaviorSubject, Observable } from 'rxjs';
 
-export class MockViewModel {
-  enableAlerts = false;
-  enableMessages = false;
-  //state presentation streams
-  breadCrumbs$ = new BehaviorSubject<BreadcrumbLinkInterface[]>([]);
-  currentUser$ = new BehaviorSubject<PersonInterface>(new PersonFixture());
+@Injectable({
+  providedIn: 'root'
+})
+export class MockHeaderViewModel {
+  // recent alerts fixture
+  private alertNotifications: NotificationItemInterface[] = [
+    {
+      icon: 'lesmateriaal',
+      titleText: 'alert title',
+      link: '/linkToAlert',
+      notificationText: 'this is an alert',
+      notificationDate: new Date()
+    },
+    {
+      icon: 'lesmateriaal',
+      titleText: 'alert title',
+      link: '/linkToAlert',
+      notificationText: 'this is an alert',
+      notificationDate: new Date()
+    },
+    {
+      icon: 'lesmateriaal',
+      titleText: 'alert title',
+      link: '/linkToAlert',
+      notificationText: 'this is an alert',
+      notificationDate: new Date()
+    }
+  ];
+
+  enableAlerts = true;
+  profileMenuItems$: Observable<
+    DropdownMenuItemInterface[]
+  > = new BehaviorSubject([
+    {
+      icon: '',
+      description: 'Profiel',
+      internalLink: '/profile'
+    },
+    {
+      icon: '',
+      description: 'Afmelden',
+      internalLink: '/logout'
+    }
+  ]);
+
+  // source streams
+  isResolved$ = new BehaviorSubject<boolean>(false);
+
+  breadCrumbs$: Observable<BreadcrumbLinkInterface[]> = new BehaviorSubject<
+    BreadcrumbLinkInterface[]
+  >([
+    new BreadcrumbLinkFixture(),
+    new BreadcrumbLinkFixture(),
+    new BreadcrumbLinkFixture()
+  ]);
+
+  unreadAlerts$: Observable<Alert[]> = new BehaviorSubject<Alert[]>([
+    new AlertFixture(),
+    new AlertFixture(),
+    new AlertFixture({ read: true })
+  ]);
+
+  currentUser$: Observable<PersonInterface> = new BehaviorSubject<
+    PersonInterface
+  >(new PersonFixture());
+
+  listFormat$: Observable<ListFormat> = new BehaviorSubject<ListFormat>(
+    ListFormat.GRID
+  );
+
+  // intermediate streams
+
   //presentation stream
-  recentAlerts$ = new BehaviorSubject<DropdownItemInterface[]>([]);
-  recentMessages$ = new BehaviorSubject<DropdownItemInterface[]>([]);
-  backLink$ = new BehaviorSubject<string | undefined>(undefined);
+  alertNotifications$ = new BehaviorSubject<NotificationItemInterface[]>(
+    this.alertNotifications
+  );
+  unreadAlertCount$ = new BehaviorSubject<number>(0);
+  backLink$ = new BehaviorSubject<string | undefined>('');
 
-  //state source streams
-  private alertsForUser$ = new BehaviorSubject<AlertQueueInterface[]>([]);
-  private messagesForUser$ = new BehaviorSubject<MessageInterface[]>([]);
-  toggleSideNav = jest.fn();
+  toggleSideNav = () => {};
+
+  constructor() {}
 }

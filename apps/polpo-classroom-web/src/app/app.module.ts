@@ -1,5 +1,4 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
-import { MatIconModule } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
@@ -27,13 +26,18 @@ import { AppComponent } from './app.component';
     BrowserModule,
     SharedModule.forRoot(
       environment.features.alerts,
-      environment.features.messages
+      environment.features.messages,
+      environment.iconMapping
     ),
     BrowserAnimationsModule,
     NxModule.forRoot(),
     DalModule.forRoot({ apiBaseUrl: environment.APIBase }),
     RouterModule.forRoot(
       [
+        {
+          path: 'books',
+          loadChildren: '@campus/pages/books#PagesBooksModule'
+        },
         { path: 'dev', loadChildren: '@campus/devlib#DevlibModule' },
         {
           path: 'tasks',
@@ -80,8 +84,7 @@ import { AppComponent } from './app.component';
     ),
     EffectsModule.forRoot([AppEffects]),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
-    StoreRouterConnectingModule,
-    MatIconModule
+    StoreRouterConnectingModule
   ],
   providers: [],
   bootstrap: [AppComponent],
