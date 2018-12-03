@@ -5,6 +5,7 @@ import {
   PersonFixture,
   PersonInterface,
   StateFeatureBuilder,
+  UiActions,
   UiQuery,
   UiReducer,
   UserActions,
@@ -61,6 +62,7 @@ describe('AppViewModel', () => {
 
     viewModel = TestBed.get(AppViewModel);
     store = TestBed.get(Store);
+    spyOn(store, 'dispatch').and.callThrough();
   }));
 
   beforeAll(() => {
@@ -120,6 +122,18 @@ describe('AppViewModel', () => {
 
       expect(viewModel.navigationItems$).toBeObservable(
         hot('a', { a: [mockNavItem] })
+      );
+    });
+
+    it('should dispatch actions on initialisation', () => {
+      // force initialisation of a viewmodel
+      const newVM = new AppViewModel(store, TestBed.get(NavItemService));
+
+      expect(store.dispatch).toHaveBeenCalledWith(
+        new UiActions.SetSideNavItems({ navItems: [mockNavItem] })
+      );
+      expect(store.dispatch).toHaveBeenCalledWith(
+        new UiActions.SetProfileMenuItems({ menuItems: [mockProfileMenuItem] })
       );
     });
 
