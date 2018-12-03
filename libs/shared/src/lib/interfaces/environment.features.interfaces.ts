@@ -25,3 +25,7 @@ export const ENVIRONMENT_ERROR_MANAGEMENT_FEATURE_TOKEN = new InjectionToken(
 export interface EnvironmentErrorManagementFeatureInterface {
   managedStatusCodes: number[];
 }
+
+export const ENVIRONMENT_ICON_MAPPING_TOKEN = new InjectionToken(
+  'environmentIconMapping'
+);
