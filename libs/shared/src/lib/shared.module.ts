@@ -12,6 +12,7 @@ import {
   EnvironmentAlertsFeatureInterface,
   EnvironmentMessagesFeatureInterface,
   ENVIRONMENT_ALERTS_FEATURE_TOKEN,
+  ENVIRONMENT_API_BASE,
   ENVIRONMENT_ICON_MAPPING_TOKEN,
   ENVIRONMENT_MESSAGES_FEATURE_TOKEN
 } from './interfaces';
@@ -48,7 +49,8 @@ export class SharedModule {
   static forRoot(
     environmentAlertsFeature: EnvironmentAlertsFeatureInterface,
     environmentMessagesFeature: EnvironmentMessagesFeatureInterface,
-    iconMapping: { [key: string]: string }
+    iconMapping: { [key: string]: string },
+    apiBase: string
   ): ModuleWithProviders {
     return {
       ngModule: SharedModule,
@@ -64,6 +66,10 @@ export class SharedModule {
         {
           provide: ENVIRONMENT_ICON_MAPPING_TOKEN,
           useValue: iconMapping
+        },
+        {
+          provide: ENVIRONMENT_API_BASE,
+          useValue: apiBase
         }
       ]
     };
