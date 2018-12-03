@@ -7,14 +7,17 @@ import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
 import { TaskInstanceReducer } from '.';
 import { TASK_INSTANCE_SERVICE_TOKEN } from '../../tasks/task-instance.service.interface';
-import { LoadTaskInstances, TaskInstancesLoaded, TaskInstancesLoadError } from './task-instance.actions';
+import {
+  LoadTaskInstances,
+  TaskInstancesLoaded,
+  TaskInstancesLoadError
+} from './task-instance.actions';
 import { TaskInstanceEffects } from './task-instance.effects';
 
 describe('TaskInstanceEffects', () => {
   let actions: Observable<any>;
   let effects: TaskInstanceEffects;
   let usedState: any;
-
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -57,9 +60,13 @@ describe('TaskInstanceEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature(TaskInstanceReducer.NAME , TaskInstanceReducer.reducer, {
-          initialState: usedState
-        }),
+        StoreModule.forFeature(
+          TaskInstanceReducer.NAME,
+          TaskInstanceReducer.reducer,
+          {
+            initialState: usedState
+          }
+        ),
         EffectsModule.forRoot([]),
         EffectsModule.forFeature([TaskInstanceEffects])
       ],

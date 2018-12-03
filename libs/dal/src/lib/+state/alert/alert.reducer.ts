@@ -2,6 +2,8 @@ import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { AlertQueueInterface } from '../../+models';
 import { AlertsActions, AlertsActionTypes } from './alert.actions';
 
+export const NAME = 'alerts';
+
 export interface State extends EntityState<AlertQueueInterface> {
   // additional entities state properties
   loaded: boolean;

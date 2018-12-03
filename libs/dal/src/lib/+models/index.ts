@@ -1,4 +1,5 @@
 export * from './AccessToken.interface';
+export * from './Alert';
 export * from './AlertMarketing.interface';
 export * from './AlertQueue.interface';
 export * from './AlgebrakitSession.interface';

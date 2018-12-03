@@ -1,4 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { Alert, AlertQueueInterface } from '../../+models';
 import {
   selectAll,
   selectEntities,
@@ -61,7 +62,7 @@ export const getById = createSelector(
 export const getUnread = createSelector(selectAlertState, (state: State) =>
   Object.entries(state.entities)
     .filter(([key, value]) => !value.read)
-    .map(([key, value]) => state.entities[key])
+    .map(([key, value]) => asAlert(state.entities[key]))
 );
 
 /**
@@ -80,3 +81,9 @@ export const getRecentByDate = createSelector(
       )
       .map(([key, value]) => state.entities[key])
 );
+
+function asAlert(item: AlertQueueInterface): Alert {
+  if (item) {
+    return Object.assign<Alert, AlertQueueInterface>(new Alert(), item);
+  }
+}

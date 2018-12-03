@@ -111,13 +111,11 @@ describe('DropdownMenuComponent', () => {
     });
 
     it('should show the header icon if provided', () => {
-      expect(
-        fixture.debugElement.query(By.css(`.${mockData.headerIcon}`))
-      ).toBeTruthy();
+      expect(fixture.debugElement.query(By.css(`.icon`))).toBeTruthy();
 
       component.headerIcon = '';
       fixture.detectChanges();
-      expect(fixture.debugElement.query(By.css('h3 i'))).toBeFalsy();
+      expect(fixture.debugElement.query(By.css('h3 .icon'))).toBeFalsy();
     });
 
     it('should show the text if provided', () => {

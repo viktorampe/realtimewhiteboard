@@ -7,12 +7,12 @@ import { UiModule } from '@campus/ui';
 import { Subject } from 'rxjs';
 import { HeaderComponent } from './header.component';
 import { HeaderViewModel } from './header.viewmodel';
-import { MockViewModel } from './header.viewmodel.mock';
+import { MockHeaderViewModel } from './header.viewmodel.mock';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
-  let headerViewModel: MockViewModel;
+  let headerViewModel: MockHeaderViewModel;
   const breakpointStream: Subject<{ matches: boolean }> = new Subject();
   let pageBarNavIcon: HTMLElement;
   beforeEach(async(() => {
@@ -22,7 +22,7 @@ describe('HeaderComponent', () => {
       providers: [
         {
           provide: HeaderViewModel,
-          useClass: MockViewModel
+          useClass: MockHeaderViewModel
         },
         BreakpointObserver
       ]
@@ -45,26 +45,22 @@ describe('HeaderComponent', () => {
   });
 
   describe('feature toggles', () => {
+    beforeEach(() => {
+      headerViewModel.isResolved$.next(true);
+    });
     it('should show the feature components if true', () => {
       component.enableAlerts = true;
-      component.enableMessages = true;
       fixture.detectChanges();
       expect(
         fixture.debugElement.query(By.css('.shared-header__app-bar__alerts'))
-      ).toBeTruthy();
-      expect(
-        fixture.debugElement.query(By.css('.shared-header__app-bar__messages'))
       ).toBeTruthy();
     });
     it('should not show the feature components if false', () => {
       component.enableAlerts = false;
-      component.enableMessages = false;
+
       fixture.detectChanges();
       expect(
         fixture.debugElement.query(By.css('.shared-header__app-bar__alerts'))
-      ).toBeFalsy();
-      expect(
-        fixture.debugElement.query(By.css('.shared-header__app-bar__messages'))
       ).toBeFalsy();
     });
   });
@@ -77,6 +73,8 @@ describe('HeaderComponent', () => {
 
   describe('should be mobile friendly', () => {
     beforeEach(() => {
+      headerViewModel.isResolved$.next(true);
+
       // mock that we're on small sreen size
       breakpointStream.next({ matches: true });
       fixture.detectChanges();
@@ -100,8 +98,9 @@ describe('HeaderComponent', () => {
           );
         });
         it('should toggle the side nav', () => {
+          const toggleSideNavSpy = jest.spyOn(headerViewModel, 'toggleSideNav');
           pageBarNavIcon.click();
-          expect(headerViewModel.toggleSideNav).toHaveBeenCalledTimes(1);
+          expect(toggleSideNavSpy).toHaveBeenCalledTimes(1);
         });
       });
     });

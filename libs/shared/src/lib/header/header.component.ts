@@ -8,9 +8,14 @@ import { HeaderViewModel } from './header.viewmodel';
 })
 export class HeaderComponent implements OnInit {
   enableAlerts: boolean;
-  enableMessages: boolean;
+
+  profileMenuItems$ = this.headerViewModel.profileMenuItems$;
+  isResolved$ = this.headerViewModel.isResolved$;
   breadCrumbs$ = this.headerViewModel.breadCrumbs$;
+  alertNotifications$ = this.headerViewModel.alertNotifications$;
+  unreadAlertCount$ = this.headerViewModel.unreadAlertCount$;
   backLink$ = this.headerViewModel.backLink$;
+  currentUser$ = this.headerViewModel.currentUser$;
 
   constructor(private headerViewModel: HeaderViewModel) {}
 
@@ -20,7 +25,6 @@ export class HeaderComponent implements OnInit {
 
   private loadFeatureToggles() {
     this.enableAlerts = this.headerViewModel.enableAlerts;
-    this.enableMessages = this.headerViewModel.enableMessages;
   }
 
   onMenuClick() {
