@@ -4,12 +4,14 @@ import {
   ScormCmiInterface,
   SCORM_API_SERVICE_TOKEN
 } from '@campus/scorm';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import {
   CurrentExerciseActions,
+  CurrentExerciseQueries,
   CurrentExerciseReducer
 } from '../+state/current-exercise';
+import { CurrentExerciseInterface } from '../+state/current-exercise/current-exercise.reducer';
 import { ScormExerciseServiceInterface } from './scorm-exercise.service.interface';
 
 @Injectable({
@@ -17,6 +19,7 @@ import { ScormExerciseServiceInterface } from './scorm-exercise.service.interfac
 })
 export class ScormExerciseService implements ScormExerciseServiceInterface {
   currentURL: Observable<String>;
+  private currentExercise$: Observable<CurrentExerciseInterface>;
   private currentResult$: Observable<ScormCmiInterface>;
   private commit$: Observable<any>;
   private scormWindow: Window;
@@ -24,7 +27,11 @@ export class ScormExerciseService implements ScormExerciseServiceInterface {
   constructor(
     @Inject(SCORM_API_SERVICE_TOKEN) private scormApi: ScormApiServiceInterface,
     private store: Store<CurrentExerciseReducer.State>
-  ) {}
+  ) {
+    this.currentExercise$ = this.store.pipe(
+      select(CurrentExerciseQueries.getCurrentExercise)
+    );
+  }
 
   startExerciseAsPreviewWithAnswers(): void {
     this.saveExerciseToStore(17, 19, false, null, 2);
