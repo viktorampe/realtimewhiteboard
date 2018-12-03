@@ -92,7 +92,7 @@ export const getActiveTaskIds = createSelector(
     const d = new Date();
     return new Set(
       (<number[]>state.ids).reduce(
-        (prev, id, idx, acc) =>
+        (acc, id) =>
           state.entities[id].end > d && d > state.entities[id].start
             ? [...acc, state.entities[id].taskId]
             : acc,

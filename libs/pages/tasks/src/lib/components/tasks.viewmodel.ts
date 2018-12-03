@@ -85,7 +85,7 @@ export class TasksViewModel {
     ).pipe(
       map(([ids, activeIds, entities, instancesById, taskEducontentById]) => {
         return {
-          taskInfos: ids.reduce((prev, id, next, acc) => {
+          taskInfos: ids.reduce((acc, id) => {
             return activeIds.has(id)
               ? [
                   ...acc,
@@ -153,7 +153,7 @@ export class TasksViewModel {
               closedTasks: tasks.filter(t => !unfinishedIds.has(t.id)).length
             };
           }),
-          totalTasks: sharedTasks.length
+          totalTasks: sharedTasks.filter(t => activeIds.has(t.id)).length
         };
       })
     );

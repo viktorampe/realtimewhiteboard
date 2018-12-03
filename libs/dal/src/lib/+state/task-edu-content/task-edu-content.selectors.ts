@@ -67,8 +67,7 @@ export const getUnfinishedTaskIds = createSelector(
   (state: State) => {
     return new Set(
       Object.values(state.entities).reduce(
-        (prev, curr, idx, acc) =>
-          curr.submitted ? acc : [...acc, curr.taskId],
+        (acc, curr) => (curr.submitted ? acc : [...acc, curr.taskId]),
         []
       )
     );

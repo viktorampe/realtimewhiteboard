@@ -2,8 +2,8 @@ import { TaskInstanceInterface } from '../+models';
 
 export class TaskInstanceFixture implements TaskInstanceInterface {
   // defaults
-  start = new Date(2018, 11 - 1, 20, 7);
-  end = new Date(2018, 11 - 1, 21, 7);
+  start: Date = new Date(new Date().getTime() - 1000); // defaults
+  end: Date = new Date(new Date().getTime() + 3600 * 24 * 7 * 1000);
   alerted = true;
   id = 1;
 
