@@ -15,7 +15,7 @@ export const environment = {
       hasAppBarDropDown: true
     },
     errorManagement: {
-      managedStatusCodes: [500, 401, 0]
+      managedStatusCodes: [500, 401, 404]
     }
   }
 };

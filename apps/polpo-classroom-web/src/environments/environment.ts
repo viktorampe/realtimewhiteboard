@@ -179,7 +179,7 @@ export const environment = {
       hasAppBarDropDown: false
     },
     errorManagement: {
-      managedStatusCodes: [500, 401, 0]
+      managedStatusCodes: [500, 401, 404]
     }
   }
 };
