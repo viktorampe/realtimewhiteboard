@@ -1,4 +1,4 @@
-import { ListFormat, NavItem } from '@campus/ui';
+import { DropdownMenuItemInterface, ListFormat, NavItem } from '@campus/ui';
 import { UiQuery } from './ui.selectors';
 
 describe('Ui Selectors', () => {
@@ -6,9 +6,11 @@ describe('Ui Selectors', () => {
 
   let storeState;
   let mockNavItem: NavItem;
+  let mockProfileMenuItem: DropdownMenuItemInterface;
 
   beforeAll(() => {
     mockNavItem = { title: 'mockNavItem' };
+    mockProfileMenuItem = { description: 'mock' };
   });
 
   beforeEach(() => {
@@ -18,7 +20,7 @@ describe('Ui Selectors', () => {
         loaded: true,
         listFormat: ListFormat.GRID,
         sideNavItems: [mockNavItem],
-        profileMenuItems: [mockNavItem, mockNavItem]
+        profileMenuItems: [mockProfileMenuItem]
       }
     };
   });
@@ -41,7 +43,7 @@ describe('Ui Selectors', () => {
 
     it("getProfileMenuItems() should return the current 'profileMenuItems' setting", () => {
       const result = UiQuery.getProfileMenuItems(storeState);
-      expect(result).toEqual([mockNavItem, mockNavItem]);
+      expect(result).toEqual([mockProfileMenuItem]);
     });
   });
 });

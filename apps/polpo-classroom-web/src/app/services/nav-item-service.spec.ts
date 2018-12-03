@@ -1,4 +1,3 @@
-//File.only
 import { inject, TestBed } from '@angular/core/testing';
 import {
   FavoriteFixture,
@@ -170,7 +169,7 @@ describe('NavItemServiceService', () => {
     beforeEach(() => {
       mockUser = new PersonFixture();
       mockCredential = {
-        profile: { platform: 'url-van-smartschoolplatform' },
+        profile: { platform: 'foo.smartschool.be' },
         provider: 'smartschool'
       };
     });
@@ -180,8 +179,16 @@ describe('NavItemServiceService', () => {
 
       const result = navService.getProfileMenuItems(mockUser, []);
       const expected = [
-        { title: 'Profiel', icon: 'account', link: '/profile' },
-        { title: 'Afmelden', icon: 'lock', link: '/logout' }
+        {
+          description: 'Profiel',
+          icon: 'account',
+          internalLink: '/profile'
+        },
+        {
+          description: 'Afmelden',
+          icon: 'lock',
+          internalLink: '/logout'
+        }
       ];
 
       expect(result).toEqual(expected);
@@ -192,13 +199,22 @@ describe('NavItemServiceService', () => {
 
       const result = navService.getProfileMenuItems(mockUser, [mockCredential]);
       const expected = [
-        { title: 'Profiel', icon: 'account', link: '/profile' },
         {
-          title: 'Ga naar Smartschool',
-          icon: 'smartschool:orange',
-          link: 'url-van-smartschoolplatform'
+          description: 'Profiel',
+          icon: 'account',
+          internalLink: '/profile'
         },
-        { title: 'Afmelden', icon: 'lock', link: '/logout' }
+        {
+          description: 'foo',
+          externalLink: 'foo.smartschool.be',
+          header: 'Ga naar Smartschool',
+          image: '/assets/images/icon-smartschool.png'
+        },
+        {
+          description: 'Afmelden',
+          icon: 'lock',
+          internalLink: '/logout'
+        }
       ];
 
       expect(result).toEqual(expected);
@@ -209,8 +225,16 @@ describe('NavItemServiceService', () => {
 
       const result = navService.getProfileMenuItems(mockUser, []);
       const expected = [
-        { title: 'Profiel', icon: 'account', link: '/profile' },
-        { title: 'Afmelden', icon: 'lock', link: '/logout' }
+        {
+          description: 'Profiel',
+          icon: 'account',
+          internalLink: '/profile'
+        },
+        {
+          description: 'Afmelden',
+          icon: 'lock',
+          internalLink: '/logout'
+        }
       ];
 
       expect(result).toEqual(expected);
@@ -224,18 +248,28 @@ describe('NavItemServiceService', () => {
         mockCredential
       ]);
       const expected = [
-        { title: 'Profiel', icon: 'account', link: '/profile' },
         {
-          title: 'Ga naar Smartschool',
-          icon: 'smartschool:orange',
-          link: 'url-van-smartschoolplatform'
+          description: 'Profiel',
+          icon: 'account',
+          internalLink: '/profile'
         },
         {
-          title: 'Ga naar Smartschool',
-          icon: 'smartschool:orange',
-          link: 'url-van-smartschoolplatform'
+          description: 'foo',
+          externalLink: 'foo.smartschool.be',
+          header: 'Ga naar Smartschool',
+          image: '/assets/images/icon-smartschool.png'
         },
-        { title: 'Afmelden', icon: 'lock', link: '/logout' }
+        {
+          description: 'foo',
+          externalLink: 'foo.smartschool.be',
+          header: 'Ga naar Smartschool',
+          image: '/assets/images/icon-smartschool.png'
+        },
+        {
+          description: 'Afmelden',
+          icon: 'lock',
+          internalLink: '/logout'
+        }
       ];
 
       expect(result).toEqual(expected);

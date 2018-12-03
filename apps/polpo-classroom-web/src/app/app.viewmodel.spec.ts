@@ -10,7 +10,7 @@ import {
   UserActions,
   UserReducer
 } from '@campus/dal';
-import { NavItem } from '@campus/ui';
+import { DropdownMenuItemInterface, NavItem } from '@campus/ui';
 import { select, Store, StoreModule } from '@ngrx/store';
 import { hot } from 'jasmine-marbles';
 import { AppResolver } from './app.resolver';
@@ -22,6 +22,7 @@ describe('AppViewModel', () => {
   let user: PersonInterface;
   let viewModel: AppViewModel;
   let mockNavItem: NavItem;
+  let mockProfileMenuItem: DropdownMenuItemInterface;
   let store: Store<DalState>;
 
   beforeEach(async(() => {
@@ -52,7 +53,7 @@ describe('AppViewModel', () => {
             getSideNavItems: jest.fn().mockReturnValue([mockNavItem]),
             getProfileMenuItems: jest
               .fn()
-              .mockReturnValue([mockNavItem, mockNavItem])
+              .mockReturnValue([mockProfileMenuItem])
           }
         }
       ]
@@ -65,6 +66,7 @@ describe('AppViewModel', () => {
   beforeAll(() => {
     user = new PersonFixture();
     mockNavItem = { title: 'mock' };
+    mockProfileMenuItem = { description: 'mock' };
 
     usedUserState = UserReducer.reducer(
       UserReducer.initialState,
@@ -95,7 +97,7 @@ describe('AppViewModel', () => {
       // current value hardcoded in viewmodel
       const mockCredentials = [
         {
-          profile: { platform: 'url-van-smartschoolplatform' },
+          profile: { platform: 'foo.smartschool.be' },
           provider: 'smartschool'
         }
       ];
@@ -124,7 +126,7 @@ describe('AppViewModel', () => {
     it('should build store the navItems in the state', async(() => {
       store.subscribe(state => {
         expect(state.ui.sideNavItems).toEqual([mockNavItem]);
-        expect(state.ui.profileMenuItems).toEqual([mockNavItem, mockNavItem]);
+        expect(state.ui.profileMenuItems).toEqual([mockProfileMenuItem]);
       });
     }));
   });

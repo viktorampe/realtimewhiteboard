@@ -1,4 +1,4 @@
-import { ListFormat, NavItem } from '@campus/ui';
+import { DropdownMenuItemInterface, ListFormat, NavItem } from '@campus/ui';
 import { Action } from '@ngrx/store';
 import { UiState } from './ui.reducer';
 
@@ -46,7 +46,7 @@ export class SetSideNavItems implements Action {
 
 export class SetProfileMenuItems implements Action {
   readonly type = UiActionTypes.SetProfileMenuItems;
-  constructor(public payload: { navItems: NavItem[] }) {}
+  constructor(public payload: { menuItems: DropdownMenuItemInterface[] }) {}
 }
 
 export type UiAction =

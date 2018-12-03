@@ -9,7 +9,7 @@ import {
   UiQuery,
   UserQueries
 } from '@campus/dal';
-import { NavItem } from '@campus/ui';
+import { DropdownMenuItemInterface, NavItem } from '@campus/ui';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -21,7 +21,7 @@ import { NavItemService } from './services/nav-item-service';
 export class AppViewModel {
   // intermediate streams
   private sideNavItems$: Observable<NavItem[]>;
-  private profileMenuItems$: Observable<NavItem[]>;
+  private profileMenuItems$: Observable<DropdownMenuItemInterface[]>;
 
   // presentation stream
   public navigationItems$: Observable<NavItem[]>;
@@ -64,8 +64,8 @@ export class AppViewModel {
       this.store.dispatch(new UiActions.SetSideNavItems({ navItems }))
     );
 
-    this.profileMenuItems$.subscribe(navItems =>
-      this.store.dispatch(new UiActions.SetProfileMenuItems({ navItems }))
+    this.profileMenuItems$.subscribe(menuItems =>
+      this.store.dispatch(new UiActions.SetProfileMenuItems({ menuItems }))
     );
   }
 
@@ -93,7 +93,7 @@ export class AppViewModel {
   private getCredentials(): Observable<PassportUserCredentialInterface[]> {
     return of([
       {
-        profile: { platform: 'url-van-smartschoolplatform' },
+        profile: { platform: 'foo.smartschool.be' },
         provider: 'smartschool'
       }
     ]);

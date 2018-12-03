@@ -4,7 +4,7 @@ import {
   PassportUserCredentialInterface,
   PersonInterface
 } from '@campus/dal';
-import { NavItem } from '@campus/ui';
+import { DropdownMenuItemInterface, NavItem } from '@campus/ui';
 import { Dictionary } from '@ngrx/entity';
 
 @Injectable({
@@ -39,12 +39,21 @@ export class NavItemService {
     }
   };
 
-  private standardProfileMenuItems: Dictionary<NavItem> = {
-    profiel: { title: 'Profiel', icon: 'account', link: '/profile' }, // icon-user in current site
-    afmelden: { title: 'Afmelden', icon: 'lock', link: '/logout' }, // icon-key in current site
+  private standardProfileMenuItems: Dictionary<DropdownMenuItemInterface> = {
+    profiel: {
+      description: 'Profiel',
+      icon: 'account',
+      internalLink: '/profile'
+    }, // icon-user in current site
+    afmelden: {
+      description: 'Afmelden',
+      icon: 'lock',
+      internalLink: '/logout'
+    }, // icon-key in current site
     smartschool: {
-      title: 'Ga naar Smartschool',
-      icon: 'smartschool:orange'
+      header: 'Ga naar Smartschool',
+      // description will be added later
+      image: '/assets/images/icon-smartschool.png'
       // link will be added later
     }
   };
@@ -101,21 +110,22 @@ export class NavItemService {
   public getProfileMenuItems(
     user: PersonInterface,
     credentials: PassportUserCredentialInterface[]
-  ): NavItem[] {
-    let navItems: NavItem[] = [];
-    navItems.push({ ...this.standardProfileMenuItems.profiel });
-    navItems = navItems.concat(
+  ): DropdownMenuItemInterface[] {
+    let menuItems: DropdownMenuItemInterface[] = [];
+    menuItems.push({ ...this.standardProfileMenuItems.profiel });
+    menuItems = menuItems.concat(
       this.getSmartschoolProfileMenuItems(credentials)
     );
-    navItems.push({ ...this.standardProfileMenuItems.afmelden });
+    menuItems.push({ ...this.standardProfileMenuItems.afmelden });
 
-    return navItems;
+    return menuItems;
   }
 
   private withFavorites(navItem: NavItem, favorites: NavItem[]): NavItem {
-    const children = favorites.map(fav => {
-      return { ...fav, link: navItem.link + '/' + fav.link };
-    });
+    const children = favorites.map(fav => ({
+      ...fav,
+      link: navItem.link + '/' + fav.link
+    }));
 
     navItem.children = children;
 
@@ -124,12 +134,19 @@ export class NavItemService {
 
   private getSmartschoolProfileMenuItems(
     credentials: PassportUserCredentialInterface[]
-  ): NavItem[] {
+  ): DropdownMenuItemInterface[] {
     return credentials
       .filter(cred => cred.provider === 'smartschool')
       .map(smartschoolCredential => ({
         ...this.standardProfileMenuItems.smartschool,
-        ...{ link: smartschoolCredential.profile.platform }
+        description: this.extractPlatformName(
+          smartschoolCredential.profile.platform
+        ),
+        externalLink: smartschoolCredential.profile.platform
       }));
+  }
+
+  private extractPlatformName(platformUrl: string) {
+    return platformUrl.replace('.smartschool.be', '');
   }
 }

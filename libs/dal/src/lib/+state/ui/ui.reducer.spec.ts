@@ -1,4 +1,4 @@
-import { ListFormat, NavItem } from '@campus/ui';
+import { DropdownMenuItemInterface, ListFormat, NavItem } from '@campus/ui';
 import {
   SetListFormat,
   SetProfileMenuItems,
@@ -13,9 +13,11 @@ describe('Ui Reducer', () => {
   let state: UiState;
 
   let mockNavItem: NavItem;
+  let mockProfileMenuItem: DropdownMenuItemInterface;
 
   beforeAll(() => {
     mockNavItem = { title: 'mockNavItem' };
+    mockProfileMenuItem = { description: 'mock' };
   });
 
   beforeEach(() => {
@@ -73,9 +75,11 @@ describe('Ui Reducer', () => {
     });
 
     it('should set the profileMenuItems', () => {
-      const action = new SetProfileMenuItems({ navItems: [mockNavItem] });
+      const action = new SetProfileMenuItems({
+        menuItems: [mockProfileMenuItem]
+      });
       const result: UiState = reducer(initialState, action);
-      expect(result.profileMenuItems).toEqual([mockNavItem]);
+      expect(result.profileMenuItems).toEqual([mockProfileMenuItem]);
     });
   });
 

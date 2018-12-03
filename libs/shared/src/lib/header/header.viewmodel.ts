@@ -74,15 +74,7 @@ export class HeaderViewModel {
     // this.breadCrumbs$ = this.store.pipe(select(BreadCrumbsQueries.getAllLinks)); // TODO: uncomment when breadcrumbs state is available
     this.breadCrumbs$ = this.mockViewModel.breadCrumbs$; //TODO: remove when breadcrumbs state is available
     this.profileMenuItems$ = this.store.pipe(
-      select(UiQuery.getProfileMenuItems),
-      map(
-        navItems =>
-          navItems.map(item => ({
-            icon: item.icon,
-            description: item.title,
-            internalLink: <string>item.link
-          })) //TODO deze mapping zou eigenlijk niet nodig mogen zijn, DropDownMenuItem en NavItem hebben zelfde functionaliteit
-      )
+      select(UiQuery.getProfileMenuItems)
     );
   }
 
