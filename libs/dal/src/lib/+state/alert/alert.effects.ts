@@ -6,7 +6,10 @@ import { interval, Observable, Subject } from 'rxjs';
 import { map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { AlertQueries } from '.';
 import { DalActions } from '..';
-import { ALERT_SERVICE_TOKEN } from '../../alert/alert.service.interface';
+import {
+  AlertServiceInterface,
+  ALERT_SERVICE_TOKEN
+} from '../../alert/alert.service.interface';
 import { ActionSuccessful } from './../dal.actions';
 import { DalState } from './../dal.state.interface';
 import {
@@ -49,27 +52,25 @@ export class AlertsEffects {
   );
 
   @Effect()
-  setAlertsReadByFilter$ = this.actions.pipe(
+  setAlertsReadByFilter$ = this.dataPersistence.actions.pipe(
     ofType(AlertsActionTypes.SetAlertReadByFilter),
     switchMap(
-      (
-        action: SetAlertReadByFilter
-      ): Observable<[number[], SetAlertReadByFilter]> => {
+      (action: SetAlertReadByFilter): Observable<SetReadAlert> => {
         return this.dataPersistence.store.pipe(
           select(AlertQueries.getAlertIdsByFilter, {
             filter: action.payload.filter
-          })
+          }),
+          map(ids => {
+            return new SetReadAlert({
+              personId: action.payload.personId,
+              alertIds: ids,
+              intended: action.payload.intended,
+              read: action.payload.read
+            });
+          }),
+          take(1)
         );
       }
-    ),
-    map(
-      ([ids, action]) =>
-        new SetReadAlert({
-          personId: action.payload.personId,
-          alertIds: ids,
-          intended: action.payload.intended,
-          read: action.payload.read
-        })
     )
   );
 

@@ -1,4 +1,4 @@
-import { FilterService } from '@campus/utils';
+import { FilterService, NestedPartial } from '@campus/utils';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { Alert, AlertQueueInterface } from '../../+models';
 import {
@@ -85,7 +85,10 @@ export const getRecentByDate = createSelector(
 
 export const getAlertIdsByFilter = createSelector(
   selectAlertState,
-  (state: State, props: { filter: Partial<AlertQueueInterface> }) => {
+  (
+    state: State,
+    props: { filter: NestedPartial<AlertQueueInterface> }
+  ): number[] => {
     return new FilterService()
       .filter(Object.values(state.entities), props.filter)
       .map(i => i.id);

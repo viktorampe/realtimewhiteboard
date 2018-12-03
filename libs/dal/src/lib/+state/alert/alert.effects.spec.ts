@@ -462,7 +462,7 @@ describe('AlertEffects', () => {
   });
 
   describe('setAlertsReadByFilter', () => {
-    const setAlertAction = new SetAlertReadByFilter({
+    const setAlertByFilterAction = new SetAlertReadByFilter({
       personId: mockData.userId,
       read: true,
       filter: {
@@ -470,14 +470,13 @@ describe('AlertEffects', () => {
       },
       intended: false
     });
-    const successAction = new ActionSuccessful({
-      successfulAction: 'alert updated'
-    });
-    const loadAlertsAction = new LoadAlerts({
-      userId: mockData.userId
-    });
 
-    let serviceSpy;
+    const setAlertReadAction = new SetReadAlert({
+      personId: mockData.userId,
+      read: true,
+      alertIds: [4],
+      intended: false
+    });
 
     beforeAll(() => {
       usedState = {
@@ -490,21 +489,11 @@ describe('AlertEffects', () => {
       };
     });
 
-    beforeEach(() => {
-      serviceSpy = mockServiceMethodReturnValue('setAlertAsRead', []);
-    });
-
     it('should trigger an api call to set the alerts read', () => {
       expectInAndOut(
-        effects.setAlertReadByFilter$,
-        setAlertAction,
-        successAction
-      );
-      expect(serviceSpy).toHaveBeenCalledWith(
-        mockData.userId,
-        [4],
-        true,
-        false
+        effects.setAlertsReadByFilter$,
+        setAlertByFilterAction,
+        setAlertReadAction
       );
     });
   });

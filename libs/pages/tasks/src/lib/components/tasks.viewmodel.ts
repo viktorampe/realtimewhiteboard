@@ -129,10 +129,10 @@ export class TasksViewModel {
   }
 
   private setPresentationStreams() {
-    this.getLearningAreasWithTaskInfo();
+    this.setLearningAreasWithTaskInfo();
   }
 
-  private getLearningAreasWithTaskInfo() {
+  private setLearningAreasWithTaskInfo() {
     const props = { userId: this.authService.userId };
     this.learningAreasWithTaskInfo$ = combineLatest(
       this.select(LearningAreaQueries.getAllEntities),
