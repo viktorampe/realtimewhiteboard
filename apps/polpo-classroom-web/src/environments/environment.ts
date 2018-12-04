@@ -42,8 +42,8 @@ export const environment = {
     // 'learning-area:fysica-lg': 'assets/icons/learning-area/fysica-lg.svg',
     // 'learning-area:geschiedenis-lg':
     //   'assets/icons/learning-area/geschiedenis-lg.svg',
-    'learning-area:godsdienst-lg':
-      'assets/icons/learning-area/godsdienst-lg.svg',
+    // 'learning-area:godsdienst-lg':
+    //   'assets/icons/learning-area/godsdienst-lg.svg',
     // 'learning-area:informatica-lg':
     //   'assets/icons/learning-area/informatica-lg.svg',
     // 'learning-area:integraleopdrachten-lg':
