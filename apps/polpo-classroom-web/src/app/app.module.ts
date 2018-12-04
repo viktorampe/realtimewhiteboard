@@ -38,7 +38,8 @@ import { AppComponent } from './app.component';
       [
         {
           path: 'books',
-          loadChildren: '@campus/pages/books#PagesBooksModule'
+          loadChildren: '@campus/pages/books#PagesBooksModule',
+          canLoad: [CoupledTeacherGuard]
         },
         { path: 'dev', loadChildren: '@campus/devlib#DevlibModule' },
         {
