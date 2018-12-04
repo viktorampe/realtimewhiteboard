@@ -73,7 +73,8 @@ import { AppComponent } from './app.component';
         },
         {
           path: 'bundles',
-          loadChildren: '@campus/pages/bundles#PagesBundlesModule'
+          loadChildren: '@campus/pages/bundles#PagesBundlesModule',
+          canLoad: [CoupledTeacherGuard]
         }
       ],
       { initialNavigation: 'enabled', enableTracing: false }
