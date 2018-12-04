@@ -1,12 +1,13 @@
 import {
   GroupInterface,
   PersonInterface,
+  TaskInstance,
   TaskInstanceInterface,
   TaskInterface
 } from '../+models';
 import { PersonFixture } from './Person.fixture';
 
-export class TaskInstanceFixture implements TaskInstanceInterface {
+export class TaskInstanceFixture extends TaskInstance {
   start: Date = new Date();
   end: Date = new Date(new Date().getTime() + 3600 * 24 * 7 * 1000);
   alerted = true;
@@ -19,11 +20,7 @@ export class TaskInstanceFixture implements TaskInstanceInterface {
   group?: GroupInterface;
 
   constructor(props: Partial<TaskInstanceInterface> = {}) {
-    // overwrite defaults
+    super();
     Object.assign(this, props);
-  }
-
-  getProgress(): number {
-    return 0;
   }
 }
