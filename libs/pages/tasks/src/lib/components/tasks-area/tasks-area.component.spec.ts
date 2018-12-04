@@ -7,7 +7,7 @@ import {
   FILTER_SERVICE_TOKEN
 } from '@campus/shared';
 import { ListFormat, UiModule } from '@campus/ui';
-import { hot } from 'jasmine-marbles';
+import { hot } from '@nrwl/nx/testing';
 import { BehaviorSubject } from 'rxjs';
 import { LearningAreasWithTaskInstanceInfoInterface } from '../tasks.viewmodel.interfaces';
 import { MockTasksViewModel as TasksViewModel } from '../tasks.viewmodel.mock';

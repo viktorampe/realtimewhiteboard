@@ -10,7 +10,7 @@ import {
 } from '@campus/dal';
 import { FilterService, FILTER_SERVICE_TOKEN } from '@campus/shared';
 import { ListFormat, ListViewItemDirective, UiModule } from '@campus/ui';
-import { hot } from 'jasmine-marbles';
+import { hot } from '@nrwl/nx/testing';
 import { BehaviorSubject, of } from 'rxjs';
 import {
   MockActivatedRoute,
