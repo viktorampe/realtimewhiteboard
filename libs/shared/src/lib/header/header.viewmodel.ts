@@ -1,167 +1,138 @@
 import { Inject, Injectable } from '@angular/core';
 import {
-  AlertQueueInterface,
+  Alert,
+  AlertActions,
+  AlertQueries,
+  AuthServiceInterface,
+  AUTH_SERVICE_TOKEN,
   DalState,
-  MessageInterface,
   PersonInterface,
   UiActions,
   UserQueries
 } from '@campus/dal';
-import { BreadcrumbLinkInterface } from '@campus/ui';
+import {
+  BreadcrumbLinkInterface,
+  DropdownMenuItemInterface,
+  NotificationItemInterface
+} from '@campus/ui';
 import { select, Store } from '@ngrx/store';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import {
   EnvironmentAlertsFeatureInterface,
-  EnvironmentMessagesFeatureInterface,
-  ENVIRONMENT_ALERTS_FEATURE_TOKEN,
-  ENVIRONMENT_MESSAGES_FEATURE_TOKEN
+  ENVIRONMENT_ALERTS_FEATURE_TOKEN
 } from '../interfaces/environment.features.interfaces';
 import { HeaderResolver } from './header.resolver';
-
-//TODO replace with actual interface
-
-//TODO replace with actual interface
-export interface CurrentRouteInterface {
-  label: string;
-  url: string;
-}
-
-//TODO replace wit actual interface
-export interface DropdownItemInterface {
-  text: string;
-}
-
-// remove when breadcrumb logic is finished
-export const mockBreadCrumbs: BreadcrumbLinkInterface[] = [
-  {
-    displayText: 'level 0',
-    link: ['/level0']
-  },
-  {
-    displayText: 'level 1',
-    link: ['/level1']
-  },
-  {
-    displayText: 'level 2',
-    link: ['/level2']
-  },
-  {
-    displayText: 'level 3',
-    link: ['/level3']
-  }
-];
+import { MockHeaderViewModel } from './header.viewmodel.mock';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HeaderViewModel {
-  //publics
-  enableAlerts: boolean;
-  enableMessages: boolean;
-  //state presentation streams
-  breadCrumbs$: Observable<BreadcrumbLinkInterface[]> = of(mockBreadCrumbs); // TODO select breadcrumbs from store
-  currentUser$: Observable<PersonInterface>;
-  //presentation stream
-  recentAlerts$: Observable<DropdownItemInterface[]>; //TODO replace interface with the actual dropdown interface
-  recentMessages$: Observable<DropdownItemInterface[]>; //TODO replace interface with the actual dropdown interface
-  backLink$: Observable<string | undefined>;
+  // resolver check
+  isResolved$: Observable<boolean>;
 
-  //state source streams
-  private alertsForUser$: Observable<AlertQueueInterface[]>;
-  private messagesForUser$: Observable<MessageInterface[]>;
+  // publics
+  enableAlerts: boolean;
+
+  // source streams
+  breadCrumbs$: Observable<BreadcrumbLinkInterface[]>; // TODO select breadcrumbs from store
+  currentUser$: Observable<PersonInterface>;
+  unreadAlerts$: Observable<Alert[]>;
+
+  // presentation stream
+  alertNotifications$: Observable<NotificationItemInterface[]>;
+  unreadAlertCount$: Observable<number>;
+  backLink$: Observable<string | undefined>;
+  profileMenuItems$: Observable<DropdownMenuItemInterface[]>;
 
   constructor(
+    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     @Inject(ENVIRONMENT_ALERTS_FEATURE_TOKEN)
     private environmentAlertsFeature: EnvironmentAlertsFeatureInterface,
-    @Inject(ENVIRONMENT_MESSAGES_FEATURE_TOKEN)
-    private environmentMessagesFeature: EnvironmentMessagesFeatureInterface,
     private store: Store<DalState>,
-    private headerResolver: HeaderResolver
+    private headerResolver: HeaderResolver,
+    private mockViewModel: MockHeaderViewModel // TODO: remove when all data is available
   ) {
-    this.headerResolver.resolve();
+    this.loadResolver();
     this.loadFeatureToggles();
     this.loadStateStreams();
-    this.backLink$ = this.setupPageBarNavigation(); // TODO: move to loadDisplayStream()
-    //TODO remove comment once the states have been added
-    //this.loadDisplayStream();
+    this.loadDisplayStream();
   }
 
-  setAlertAsRead(eventData: any): void {
-    //TODO update to correct action and update eventData to correct name and type
-    // this.store.dispatch(new AlertQueries.SetReadAlert(eventData.alertId));
-  }
-  setMessageAsRead(eventData: any): void {
-    //TODO update to correct action and update eventData to correct name and type
-    // this.store.dispatch(new MessageQueries.SetMessageAsReadAction(eventData.alertId));
+  private loadResolver() {
+    this.isResolved$ = this.headerResolver.resolve();
   }
 
   private loadStateStreams(): void {
     //source state streams
-    // this.alertsForUser$ = this.store.pipe(
-    //   select(AlertQueries.getForUser, { userId: this.authService.userId })
-    // );
-    // this.messagesForUser$ = this.store.pipe(
-    //   select(MessageQueries.getForUser, { userId: this.authService.userId })
-    // );
+    this.unreadAlerts$ = this.store.pipe(select(AlertQueries.getUnread));
+
     //presentation state streams
     this.currentUser$ = this.store.pipe(select(UserQueries.getCurrentUser));
-    // this.breadCrumbs$ = this.store.pipe(select(BreadCrumbsQueries.getAllLinks));
+    // this.breadCrumbs$ = this.store.pipe(select(BreadCrumbsQueries.getAllLinks)); // TODO: uncomment when breadcrumbs state is available
+    this.breadCrumbs$ = this.mockViewModel.breadCrumbs$; //TODO: remove when breadcrumbs state is available
   }
 
   private loadDisplayStream(): void {
-    this.recentAlerts$ = this.getRecentAlerts(this.alertsForUser$);
-    this.recentMessages$ = this.getRecentMessages(this.messagesForUser$);
+    this.backLink$ = this.getBackLink();
+    this.alertNotifications$ = this.getAlertNotifications();
+    this.unreadAlertCount$ = this.getUnreadAlertCount();
+    this.profileMenuItems$ = this.mockViewModel.profileMenuItems$;
   }
 
   private loadFeatureToggles(): void {
     this.enableAlerts =
       this.environmentAlertsFeature.enabled &&
       this.environmentAlertsFeature.hasAppBarDropDown;
-    this.enableMessages =
-      this.environmentMessagesFeature.enabled &&
-      this.environmentMessagesFeature.hasAppBarDropDown;
   }
 
-  private getRecentAlerts(
-    alertsForUser$: Observable<AlertQueueInterface[]>
-  ): Observable<DropdownItemInterface[]> {
-    return alertsForUser$.pipe(
+  private getAlertNotifications(): Observable<NotificationItemInterface[]> {
+    return this.unreadAlerts$.pipe(
       map(alerts => {
-        //TODO actually map to the correct interface
-        //TODO there should be a selector for this once all things are merged, see https://github.com/diekeure/campus/issues/175
-        return <DropdownItemInterface[]>[
-          {
-            text: 'temp alert'
-          }
-        ];
+        return alerts.filter(alert => alert.type !== 'message').map(alert => {
+          const notification: NotificationItemInterface = {
+            icon: alert.icon,
+            titleText: alert.title,
+            link: alert.link, // TODO: check the link format (external or internal)
+            notificationText: alert.message,
+            notificationDate: new Date(alert.sentAt)
+          };
+          return notification;
+        });
       }),
       shareReplay(1)
     );
   }
 
-  private getRecentMessages(
-    messagesForUser$: Observable<MessageInterface[]>
-  ): Observable<DropdownItemInterface[]> {
-    return messagesForUser$.pipe(
-      map(messages => {
-        //TODO actually map to the correct interface
-        return <DropdownItemInterface[]>[
-          {
-            text: 'temp message'
-          }
-        ];
-      }),
-      shareReplay(1)
+  private getUnreadAlertCount(): Observable<number> {
+    return this.unreadAlerts$.pipe(
+      map(alerts => {
+        return alerts.length;
+      })
     );
   }
 
-  setupPageBarNavigation(): Observable<string | undefined> {
+  private getBackLink(): Observable<string | undefined> {
     return this.breadCrumbs$.pipe(
       map((breadCrumbs: BreadcrumbLinkInterface[]) => {
-        return breadCrumbs.length < 2
-          ? undefined
-          : breadCrumbs[breadCrumbs.length - 2].link.toString();
+        const check =
+          breadCrumbs.length < 2
+            ? undefined
+            : breadCrumbs[breadCrumbs.length - 2].link.toString();
+        return check;
+      })
+    );
+  }
+
+  // user interactions //
+
+  setAlertAsRead(alertId: number): void {
+    this.store.dispatch(
+      new AlertActions.SetReadAlert({
+        alertIds: alertId,
+        personId: this.authService.userId,
+        read: true
       })
     );
   }

@@ -7,7 +7,6 @@ import {
   FILTER_SERVICE_TOKEN
 } from '@campus/shared';
 import { ListFormat, ListViewItemDirective, UiModule } from '@campus/ui';
-// import 'jest'; // required to use `expect` from jest instead of the implementation from jasmine
 import { BundlesViewModel } from '../bundles.viewmodel';
 import { MockViewModel } from '../bundles.viewmodel.mocks';
 import { LearningAreasComponent } from './learning-areas.component';

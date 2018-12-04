@@ -17,7 +17,7 @@ before_script:
   - npm run format:check
   - npm run test
   #- npm run e2e
-script: -if [[ echo "$TRAVIS_BRANCH" | grep 'deploy' ]]; then npm run build fi
+script: if [[ echo "$TRAVIS_BRANCH" | grep 'deploy' ]]; then npm run build fi
 deploy:
   - provider: s3
     bucket: site.student-staging-polpo-be
