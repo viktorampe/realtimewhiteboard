@@ -8,6 +8,9 @@ export class ResultFixture implements ResultInterface {
   status = ScormStatus.STATUS_COMPLETED;
   created = new Date(2018, 11 - 1, 20);
   id = 1;
+  eduContentId = 1;
+  personId = 6;
+  taskId = 1;
 
   constructor(props: Partial<ResultInterface> = {}) {
     // overwrite defaults
