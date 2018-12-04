@@ -1,8 +1,8 @@
-// file.only
 import { ModuleWithProviders } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import {
   AUTH_SERVICE_TOKEN,
+  DalState,
   EduContentActions,
   EduContentFixture,
   EduContentInterface,
@@ -19,6 +19,7 @@ import {
   UnlockedBoekeGroupInterface,
   UnlockedBoekeGroupReducer,
   UnlockedBoekeStudentActions,
+  UnlockedBoekeStudentFixture,
   UnlockedBoekeStudentInterface,
   UnlockedBoekeStudentReducer
 } from '@campus/dal';
@@ -29,6 +30,7 @@ import { BooksViewModel } from './books.viewmodel';
 
 describe('BooksViewModel', () => {
   let booksViewModel: BooksViewModel;
+  let store: Store<DalState>;
   let uiState: UiReducer.UiState;
   let learningAreaState: LearningAreaReducer.State;
   let unlockedBoekeGroupState: UnlockedBoekeGroupReducer.State;
@@ -56,6 +58,7 @@ describe('BooksViewModel', () => {
     });
 
     booksViewModel = TestBed.get(BooksViewModel);
+    store = TestBed.get(Store);
   });
 
   it('should be defined', () => {
@@ -70,18 +73,46 @@ describe('BooksViewModel', () => {
     expect(spy).toHaveBeenCalledWith({ listFormat });
   });
 
-  it('sharedBooks$', () => {
-    const expected = eduContents.map(book => {
-      return new EduContentFixture(book, {
-        learningArea: learningAreas.find(
-          learningArea =>
-            learningArea.id === book.publishedEduContentMetadata.learningAreaId
-        )
+  describe('sharedBooks$', () => {
+    it('should return only shared books', () => {
+      const expected = eduContents.filter(book => book.id <= 3).map(book => {
+        return new EduContentFixture(book, {
+          learningArea: learningAreas.find(
+            learningArea =>
+              learningArea.id ===
+              book.publishedEduContentMetadata.learningAreaId
+          )
+        });
       });
+      expect(booksViewModel.sharedBooks$).toBeObservable(
+        hot('a', { a: expected })
+      );
     });
-    expect(booksViewModel.sharedBooks$).toBeObservable(
-      hot('a', { a: expected })
-    );
+
+    it('should also include newly shared book', () => {
+      store.dispatch(
+        new UnlockedBoekeStudentActions.AddUnlockedBoekeStudent({
+          unlockedBoekeStudent: new UnlockedBoekeStudentFixture({
+            id: 1,
+            teacherId: 2,
+            eduContentId: 4
+          })
+        })
+      );
+
+      const expected = eduContents.filter(book => book.id <= 4).map(book => {
+        return new EduContentFixture(book, {
+          learningArea: learningAreas.find(
+            learningArea =>
+              learningArea.id ===
+              book.publishedEduContentMetadata.learningAreaId
+          )
+        });
+      });
+      expect(booksViewModel.sharedBooks$).toBeObservable(
+        hot('a', { a: expected })
+      );
+    });
   });
 
   function loadState() {
@@ -130,10 +161,11 @@ describe('BooksViewModel', () => {
     );
 
     eduContents = [
-      // shared books
       new EduContentFixture({ id: 1 }, { learningAreaId: 1 }),
       new EduContentFixture({ id: 2 }, { learningAreaId: 1 }),
-      new EduContentFixture({ id: 3 }, { learningAreaId: 2 })
+      new EduContentFixture({ id: 3 }, { learningAreaId: 2 }),
+      new EduContentFixture({ id: 4 }, { learningAreaId: 2 }),
+      new EduContentFixture({ id: 5 }, { learningAreaId: 2 })
     ];
     eduContentState = EduContentReducer.reducer(
       EduContentReducer.initialState,

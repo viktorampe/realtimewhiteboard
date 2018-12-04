@@ -7,7 +7,35 @@ import {
 
 export const NAME = 'eduContents';
 
-function sortByName(a: EduContentInterface, b: EduContentInterface): number {
+export function sortEduContent(
+  a: EduContentInterface,
+  b: EduContentInterface
+): number {
+  const titleA = getTitle(a);
+  const titleB = getTitle(b);
+
+  // sort by title
+  if (titleA < titleB) {
+    return -1;
+  }
+  if (titleA > titleB) {
+    return 1;
+  }
+
+  // then sort by year
+  const yearA = getYear(a);
+  const yearB = getYear(b);
+
+  if (yearA < yearB) {
+    return -1;
+  }
+  if (yearA > yearB) {
+    return 1;
+  }
+
+  // finally sort by id
+  return a.id - b.id;
+
   function getProp(obj: any, prop: string, notFound: number): number; // number overload
   function getProp(obj: any, prop: string, notFound: string): string; // string overload
   function getProp(
@@ -23,7 +51,6 @@ function sortByName(a: EduContentInterface, b: EduContentInterface): number {
     return val.toString();
   }
 
-  // sort by title
   function getTitle(eduContent: EduContentInterface): string {
     return getProp(
       eduContent,
@@ -31,32 +58,10 @@ function sortByName(a: EduContentInterface, b: EduContentInterface): number {
       ''
     ).toLowerCase();
   }
-  const titleA = getTitle(a);
-  const titleB = getTitle(b);
 
-  if (titleA < titleB) {
-    return -1;
-  }
-  if (titleA > titleB) {
-    return 1;
-  }
-
-  // then sort by year
   function getYear(eduContent: EduContentInterface): number {
     return getProp(eduContent, 'publishedEduContentMetadata.years.0.name', 0);
   }
-  const yearA = getYear(a);
-  const yearB = getYear(b);
-
-  if (yearA < yearB) {
-    return -1;
-  }
-  if (yearA > yearB) {
-    return 1;
-  }
-
-  // finally sort by id
-  return a.id - b.id;
 }
 
 /**
@@ -83,7 +88,7 @@ export interface State extends EntityState<EduContentInterface> {
 export const adapter: EntityAdapter<EduContentInterface> = createEntityAdapter<
   EduContentInterface
 >({
-  sortComparer: sortByName
+  sortComparer: sortEduContent
 });
 
 /**
