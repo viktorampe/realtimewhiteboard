@@ -2,8 +2,9 @@
    [class.ui-notification-dropdown-item--accent]="accented"
    [class.ui-no-link]="!link"
    [routerLink]="link">
-  <i *ngIf="icon"
-     class="ui-notification-dropdown-item__icon {{icon}}"></i>
+  <mat-icon [svgIcon]="icon"
+            *ngIf="icon"
+            class="ui-notification-dropdown-item__icon"></mat-icon>
   <campus-person-badge *ngIf="person"
                        class="ui-notification-dropdown-item__badge"
                        [person]="person"
