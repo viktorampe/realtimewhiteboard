@@ -37,6 +37,9 @@ export class EduContent implements EduContentInterface, ContentInterface {
       : '';
   }
   get fileExtension(): string {
+    if (this.type === 'link') {
+      return 'link';
+    }
     return this.publishedEduContentMetadata &&
       this.publishedEduContentMetadata.fileName
       ? this.publishedEduContentMetadata.fileName.substring(

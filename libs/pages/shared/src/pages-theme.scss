@@ -9,6 +9,10 @@ $pages-padding: 10px !default;
   .campus-page {
     padding: $pages-padding;
   }
+
+  .mat-drawer-container {
+    background-color: $pages-bg-color-1;
+  }
 }
 
 // import all required sass files from our libs

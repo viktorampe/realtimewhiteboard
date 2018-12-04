@@ -14,44 +14,45 @@ $polpo-presentatie: polpo '\e944' !default;
 @include icon(polpo-wiskunde, $ui-icon-wiskunde);
 @include icon(polpo-presentatie, $polpo-presentatie);
 
-// thematic variables
-$ui-bg-color-1: #fff !default;
-$ui-bg-color-2: #fff !default;
-$ui-bg-color-3: #95a0aa !default;
-$ui-bg-color-4: #2c354f !default;
-$ui-bg-color-5: #c6ccd1 !default;
-$ui-bg-color-6: #f00 !default;
-$ui-font-color-primary: #000 !default;
-$ui-font-color-1: #000 !default;
-$ui-font-color-2: #fff !default;
-$ui-font-color-3: #3f4652 !default;
-$ui-bg-color-white: #fff !default;
-$ui-bg-color-gray-1: #fafafa !default;
-$ui-bg-color-gray-2: #969fa8 !default;
-$ui-bg-color-gray-3: #95a0aa !default;
-$ui-bg-color-gray-4: #808080 !default;
-$ui-bg-color-gray-5: #ccc !default;
-$ui-bg-color-green-1: #38b0aa !default;
-$ui-bg-color-green-2: #44b0aa !default;
-$ui-bg-color-red-1: #f3565d !default;
-$ui-border-color-gray-1: #e3e6e8 !default;
-$ui-font-color-gray-1: #f0f8ff !default;
-$ui-font-color-gray-2: #3e3e43 !default;
-$ui-font-color-gray-3: #333 !default;
-$ui-font-color-gray-4: #95a0aa !default;
+// main body
+$ui-primary-bg-color: #fff !default;
+$ui-primary-font-color: #000 !default;
+$ui-primary-color-accent: #fff !default; // link, button (borders)
+$ui-primary-font-color-2: #aaa !default; // subtitle
+$ui-primary-font-family: 'Helvetica', 'Arial', 'Open Sans', sans-serif !default;
+$ui-primary-font-family-2: 'Lato', sans-serif !default; // title
+$ui-primary-font-family-3: 'Oswald', 'Arial Narrow', Sans-Serif !default; // list item label
+$ui-danger-bg-color: #f00 !default;
+$ui-danger-font-color: #fff !default;
+$ui-warning-bg-color: #f00 !default;
+$ui-warning-font-color: #fff !default;
 
-$ui-font-color-green-1: #6ed3c2 !default;
-$ui-font-color-active: #6ed3c2 !default;
-$ui-font-color-inverse: $ui-bg-color-white !default;
+// nav + site header (shell)
+$ui-secondary-bg-color: #fff !default;
+$ui-secondary-font-color: #000 !default;
+$ui-secondary-bg-color-accent: #f00 !default; // active button, badge
+$ui-secondary-font-color-accent: #fff !default; // link, button (borders)
+
+// panel
+$ui-tertiary-bg-color: $ui-primary-bg-color !default;
+$ui-tertiary-font-color: $ui-primary-font-color !default;
+$ui-tertiary-bg-color-2: #999 !default; // header
+$ui-tertiary-font-color-2: #fff !default; // header
+
+// forms
+$ui-formitem-bg-color: $ui-primary-bg-color !default;
+$ui-formitem-font-color: $ui-primary-font-color !default;
+$ui-formitem-border-color: $ui-primary-font-color !default;
+$ui-button-bg-color: $ui-primary-color-accent !default;
+$ui-button-font-color: #fff !default;
+
+// sizes
 $ui-person-badge-size-large: 150px !default;
 $ui-person-badge-size-large-font-size: 50px !default;
 $ui-person-badge-size-medium: 45px !default;
 $ui-person-badge-size-medium-font-size: 21px !default;
 $ui-person-badge-size-small: 30px !default;
 $ui-person-badge-size-small-font-size: 16px !default;
-$ui-font-family-1: 'Lato', sans-serif !default;
-$ui-font-family-2: 'Open Sans', sans-serif !default;
-$ui-font-family-3: 'Helvetica', 'Arial', 'Sans-Serif' !default;
 
 // helper classes
 .ui-no-link {
@@ -59,7 +60,6 @@ $ui-font-family-3: 'Helvetica', 'Arial', 'Sans-Serif' !default;
 }
 
 // import all required sass files from our libs
-// @import './tree-nav/tree-nav.component.theme';
 @import './folder/folder.component.theme.scss';
 @import './tree-nav/tree-nav.component.theme';
 @import './file-extension/file-extension.component.scss';

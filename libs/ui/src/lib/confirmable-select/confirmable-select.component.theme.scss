@@ -1,8 +1,9 @@
 @mixin ui-confirmable-select_theme() {
-  $ui-confirmable-select-bg-color: $ui-bg-color-gray-1 !default;
-  $ui-confirmable-select-border-color: $ui-border-color-gray-1 !default;
-  $ui-confirmable-select-label-text-color: $ui-font-color-gray-2 !default;
-  $ui-confirmable-select-icon-bg-color: $ui-bg-color-gray-3 !default;
+  $ui-confirmable-select-bg-color: $ui-formitem-bg-color !default;
+  $ui-confirmable-select-border-color: $ui-formitem-border-color !default;
+  $ui-confirmable-select-label-text-color: $ui-formitem-font-color !default;
+  $ui-confirmable-select-icon-bg-color: $ui-primary-color-accent !default;
+
   .ui-confirmable-select {
     background-color: $ui-confirmable-select-bg-color;
     border-top: solid 1px $ui-confirmable-select-border-color;

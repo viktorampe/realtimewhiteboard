@@ -5,6 +5,7 @@
   $ui-shell__top-height: 50px !default;
   $ui-shell__top-line-height: $ui-shell__top-height !default;
   $ui-shell__top-background-color: #333 !default;
+  $ui-shell__top-font-color: $ui-secondary-font-color;
 
   $ui-shell__logo-height: 50px !default;
   $ui-shell__logo-background-color: #fff !default;
@@ -25,6 +26,7 @@
     height: $ui-shell__top-height;
     line-height: $ui-shell__top-line-height;
     background-color: $ui-shell__top-background-color;
+    color: $ui-shell__top-font-color;
   }
 
   .ui-shell__body {

@@ -6,11 +6,11 @@
   $ui-filter-text_input_input-width--focus: 150px !default;
 
   // light theme
-  $ui-filter-text_input-background-color--light: $ui-bg-color-1 !default;
-  $ui-filter-text_input-text-color--light: $ui-font-color-1 !default;
+  $ui-filter-text_input-background-color--light: $ui-formitem-bg-color !default;
+  $ui-filter-text_input-text-color--light: $ui-formitem-font-color !default;
   // dark theme
-  $ui-filter-text_input-background-color--dark: $ui-bg-color-2 !default;
-  $ui-filter-text_input-text-color--dark: $ui-font-color-2 !default;
+  $ui-filter-text_input-background-color--dark: $ui-formitem-bg-color !default;
+  $ui-filter-text_input-text-color--dark: $ui-formitem-font-color !default;
 
   .ui-filter-text-input {
     font-size: $ui-filter-text_input-font-size;

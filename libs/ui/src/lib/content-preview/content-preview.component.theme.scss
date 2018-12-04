@@ -1,15 +1,19 @@
 @mixin ui_content-preview_theme() {
+  $ui-content-preview-border-color: $ui-primary-font-color-2 !default;
+  $ui-content-preview-color: $ui-primary-font-color-2 !default;
+  $ui-content-preview-color-accent: $ui-primary-color-accent !default;
+
   .ui_content-preview {
     &__preview {
-      border-bottom: solid 1px $ui-border-color-gray-1;
+      border-bottom: solid 1px $ui-content-preview-border-color;
     }
     &__product {
       &__details {
         &__title {
-          color: $ui-font-color-gray-2;
+          color: $ui-content-preview-color;
         }
         [icon] {
-          color: $ui-font-color-green-1;
+          color: $ui-content-preview-color-accent;
         }
       }
     }
