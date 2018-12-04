@@ -97,7 +97,7 @@ describe('NotificationDropdownItemComponent', () => {
     const textNode = fixture.debugElement.query(
       By.css('.ui-notification-dropdown-item__text')
     );
-    expect(textNode.nativeElement.textContent).toContain('');
+    expect(textNode.nativeElement.textContent.trim()).toBe('');
   });
 
   it('should show a description', () => {

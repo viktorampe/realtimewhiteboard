@@ -90,6 +90,6 @@ describe('PersonBadgeComponent', () => {
     fixture.detectChanges();
     const badge = fixture.debugElement.query(By.css('.ui_person-badge__badge'))
       .nativeElement.textContent;
-    expect(badge).toContain('T');
+    expect(badge.trim()).toBe('T');
   });
 });
