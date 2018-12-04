@@ -126,7 +126,7 @@ export const environment = {
     // code: 'assets/icons/code.svg',
     // creditcard: 'assets/icons/creditcard.svg',
     // 'die-keure': 'assets/icons/die-keure.svg',
-    eye: 'assets/icons/eye.svg'
+    eye: 'assets/icons/eye.svg',
     // eye2: 'assets/icons/eye2.svg',
     // facebook: 'assets/icons/facebook.svg',
     // favorite: 'assets/icons/favorite.svg',
