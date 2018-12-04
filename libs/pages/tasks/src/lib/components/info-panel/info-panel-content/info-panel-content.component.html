@@ -12,5 +12,9 @@
     [svgIcon]="content.productType"
     *ngIf="content.productType"
   ></mat-icon>
-  <img badge *ngFor="let badge of content.methodLogos" [src]="badge" />
+  <mat-icon
+    badge
+    *ngFor="let badge of content.methodLogos"
+    [svgIcon]="'method:' + badge"
+  ></mat-icon>
 </campus-content-preview>
