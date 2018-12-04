@@ -1,7 +1,10 @@
+// file.only
+
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
+  DalState,
   PersonFixture,
   StateFeatureBuilder,
   UserActions,
@@ -15,25 +18,10 @@ describe('coupledTeacherGuard', () => {
   let usedUserState: UserReducer.State;
   let coupledTeacherGuard: CoupledTeacherGuard;
   const spy = jest.fn();
+  let store: Store<DalState>;
 
   class MockRouter {
     navigate = spy;
-  }
-
-  function stateTest(
-    testName: string,
-    testShould: string,
-    userState: UserReducer.State,
-    itFunction: Function
-  ) {
-    describe(testName, () => {
-      beforeAll(() => {
-        usedUserState = userState;
-      });
-      it(testShould, () => {
-        itFunction();
-      });
-    });
   }
 
   afterEach(() => {
@@ -44,15 +32,7 @@ describe('coupledTeacherGuard', () => {
     TestBed.configureTestingModule({
       imports: [
         StoreModule.forRoot({}),
-        ...StateFeatureBuilder.getModuleWithForFeatureProviders([
-          {
-            NAME: UserReducer.NAME,
-            reducer: UserReducer.reducer,
-            initialState: {
-              initialState: usedUserState
-            }
-          }
-        ]),
+        ...StateFeatureBuilder.getStoreModuleForFeatures([UserReducer]),
         RouterTestingModule
       ],
       providers: [
@@ -62,128 +42,91 @@ describe('coupledTeacherGuard', () => {
       ]
     });
     coupledTeacherGuard = TestBed.get(CoupledTeacherGuard);
+    store = TestBed.get(Store);
   });
-  stateTest('guard', 'should be defined', UserReducer.initialState, () => {
-    expect(coupledTeacherGuard).toBeDefined();
+  it('should return false with an initialState', () => {
+    expect(coupledTeacherGuard.canLoad({})).toBeObservable(
+      hot('a', { a: false })
+    );
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith(['/login']);
   });
-  stateTest(
-    'guard.canLoad',
-    'should return false with an initialState',
-    UserReducer.initialState,
-    () => {
-      expect(coupledTeacherGuard.canLoad({})).toBeObservable(
-        hot('a', { a: false })
-      );
-      expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith(['/login']);
-    }
-  );
-  stateTest(
-    'guard.canLoad',
-    'should return false if the user has undefined teachers',
-    UserReducer.reducer(
-      UserReducer.initialState,
+  it('should return false if the user has undefined teachers', () => {
+    store.dispatch(
       new UserActions.UserLoaded(
         new PersonFixture({ roles: [], teachers: undefined })
       )
-    ),
-    () => {
-      expect(coupledTeacherGuard.canLoad({})).toBeObservable(
-        hot('a', { a: false })
-      );
-      expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith(['/settings']);
-    }
-  );
-  stateTest(
-    'guard.canLoad',
-    'should return false if the user has undefined roles',
-    UserReducer.reducer(
-      UserReducer.initialState,
+    );
+    expect(coupledTeacherGuard.canLoad({})).toBeObservable(
+      hot('a', { a: false })
+    );
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith(['/settings']);
+  });
+  it('should return false if the user has undefined roles', () => {
+    store.dispatch(
       new UserActions.UserLoaded(
         new PersonFixture({ roles: undefined, teachers: [new PersonFixture()] })
       )
-    ),
-    () => {
-      expect(coupledTeacherGuard.canLoad({})).toBeObservable(
-        hot('a', { a: false })
-      );
-      expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith(['/settings']);
-    }
-  );
-  stateTest(
-    'guard.canLoad',
-    'should return false if the user has no roles and no teachers',
-    UserReducer.reducer(
-      UserReducer.initialState,
+    );
+    expect(coupledTeacherGuard.canLoad({})).toBeObservable(
+      hot('a', { a: false })
+    );
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith(['/settings']);
+  });
+  it('should return false if the user has no roles and no teachers', () => {
+    store.dispatch(
       new UserActions.UserLoaded(new PersonFixture({ roles: [], teachers: [] }))
-    ),
-    () => {
-      expect(coupledTeacherGuard.canLoad({})).toBeObservable(
-        hot('a', { a: false })
-      );
-      expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith(['/settings']);
-    }
-  );
-  stateTest(
-    'guard.canLoad',
-    'should return false if the user is a teacher and has teachers',
-    UserReducer.reducer(
-      UserReducer.initialState,
+    );
+    expect(coupledTeacherGuard.canLoad({})).toBeObservable(
+      hot('a', { a: false })
+    );
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith(['/settings']);
+  });
+  it('should return false if the user is a teacher and has teachers', () => {
+    store.dispatch(
       new UserActions.UserLoaded(
         new PersonFixture({
           roles: [{ name: 'teacher' }],
           teachers: [new PersonFixture()]
         })
       )
-    ),
-    () => {
-      expect(coupledTeacherGuard.canLoad({})).toBeObservable(
-        hot('a', { a: false })
-      );
-      expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith(['/settings']);
-    }
-  );
-  stateTest(
-    'guard.canLoad',
-    'should return false if the user is a teacher and a student and has teachers',
-    UserReducer.reducer(
-      UserReducer.initialState,
+    );
+    expect(coupledTeacherGuard.canLoad({})).toBeObservable(
+      hot('a', { a: false })
+    );
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith(['/settings']);
+  });
+  it('should return false if the user is a teacher and a student and has teachers', () => {
+    store.dispatch(
       new UserActions.UserLoaded(
         new PersonFixture({
           roles: [{ name: 'teacher' }, { name: 'student' }],
           teachers: [new PersonFixture()]
         })
       )
-    ),
-    () => {
-      expect(coupledTeacherGuard.canLoad({})).toBeObservable(
-        hot('a', { a: false })
-      );
-      expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith(['/settings']);
-    }
-  );
-  stateTest(
-    'guard.canLoad',
-    'should return true if the user is and a student, not a teacher and has teachers',
-    UserReducer.reducer(
-      UserReducer.initialState,
+    );
+    expect(coupledTeacherGuard.canLoad({})).toBeObservable(
+      hot('a', { a: false })
+    );
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith(['/settings']);
+  });
+  it('should return true if the user is a student, not a teacher and has teachers', () => {
+    store.dispatch(
       new UserActions.UserLoaded(
         new PersonFixture({
           roles: [{ name: 'student' }],
           teachers: [new PersonFixture()]
         })
       )
-    ),
-    () => {
-      expect(coupledTeacherGuard.canLoad({})).toBeObservable(
-        hot('a', { a: true })
-      );
-      expect(spy).toHaveBeenCalledTimes(0);
-    }
-  );
+    );
+    expect(coupledTeacherGuard.canLoad({})).toBeObservable(
+      hot('a', { a: true })
+    );
+    expect(spy).toHaveBeenCalledTimes(0);
+  });
 });
