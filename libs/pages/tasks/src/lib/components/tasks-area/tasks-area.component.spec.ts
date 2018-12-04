@@ -69,37 +69,7 @@ describe('TasksAreaComponent', () => {
     component.filterTextInput.setValue(filterText);
 
     expect(spyFilterService).toHaveBeenCalledTimes(1);
-    expect(spyFilterService).toHaveBeenCalledWith(
-      {
-        learningAreasWithInfo: [
-          {
-            closedTasks: 3,
-            learningArea: {
-              color: '#2c354f',
-              icon: 'wiskunde',
-              name: 'Wiskunde'
-            },
-            openTasks: 2
-          },
-          {
-            closedTasks: 2,
-            learningArea: {
-              color: '#5e3b47',
-              icon: 'natuurwetenschappen',
-              name: 'Moderne Wetenschappen'
-            },
-            openTasks: 0
-          },
-          {
-            closedTasks: 0,
-            learningArea: { color: '#553030', icon: 'engels', name: 'Engels' },
-            openTasks: 2
-          }
-        ],
-        totalTasks: 9
-      },
-      ''
-    );
+    expect(spyFilterService).toHaveBeenCalledWith(learningAreasValue, '');
 
     fixture.detectChanges();
     const componentDE = fixture.debugElement.query(
@@ -121,20 +91,10 @@ describe('TasksAreaComponent', () => {
     const filterSource = learningAreasValue;
 
     // Enkel wiskunde
-    const expectedOnlyWiskunde = [
-      {
-        learningArea: {
-          name: 'Wiskunde',
-          icon: 'wiskunde',
-          color: '#2c354f'
-        },
-        openTasks: 2,
-        closedTasks: 3
-      }
-    ];
-
+    const expectedOnlyWiskunde = learningAreasValue.learningAreasWithInfo.filter(
+      t => t.learningArea.id === 1
+    );
     let filterText = '';
-
     component.filterTextInput.setFilterableItem(component);
 
     let filteredResult = component.filterFn(filterSource, filterText);

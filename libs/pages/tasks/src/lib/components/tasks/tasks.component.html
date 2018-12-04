@@ -21,7 +21,7 @@
     <div class="pages-tasks__container__tasks-count">
       {{ filteredTaskInstances.length }} van
       <u (click)="filterTextInput.clear()">{{
-        (taskInstances$ | async)?.instances.length
+        (taskInstances$ | async)?.taskInfos.length
         }}</u>
       weergegeven
     </div>

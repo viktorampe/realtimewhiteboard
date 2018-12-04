@@ -1,5 +1,6 @@
 import { LearningAreaFixture } from '.';
 import { EduContentMetadataInterface } from '../+models';
+import { EduContentProductTypeFixture } from './EduContentProductType.fixture';
 import { MethodFixture } from './Method.fixture';
 
 export class EduContentMetadataFixture implements EduContentMetadataInterface {
@@ -38,6 +39,7 @@ export class EduContentMetadataFixture implements EduContentMetadataInterface {
   fileExt = 'zip';
   fileLabel = 'oefening';
   methods = [new MethodFixture({ id: 6 })];
+  eduContentProductType = new EduContentProductTypeFixture({ id: 33 });
 
   constructor(props: Partial<EduContentMetadataInterface> = {}) {
     // overwrite defaults

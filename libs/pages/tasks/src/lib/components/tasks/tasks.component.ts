@@ -73,9 +73,7 @@ export class TasksComponent implements OnInit {
     searchText: string
   ): TaskWithInfoInterface[] {
     const instances = this.filterService.filter(source.taskInfos, {
-      taskInstance: {
-        task: { name: searchText }
-      }
+      task: { name: searchText }
     });
     return instances;
   }

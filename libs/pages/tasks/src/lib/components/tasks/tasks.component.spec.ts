@@ -1,4 +1,3 @@
-//file.only;
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
@@ -47,8 +46,8 @@ describe('TasksComponent', () => {
   });
 
   it('should return the correct icon', () => {
-    expect(component.getIcon(true)).toBe('icon-checkmark');
-    expect(component.getIcon(false)).toBe('icon-hourglass');
+    expect(component.getIcon(true)).toBe('finished');
+    expect(component.getIcon(false)).toBe('unfinished');
   });
 
   it('should display all tasks', () => {

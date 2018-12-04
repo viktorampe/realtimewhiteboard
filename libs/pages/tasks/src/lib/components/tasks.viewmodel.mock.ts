@@ -1,15 +1,13 @@
 import { Injectable } from '@angular/core';
 import {
-  EduContentProductTypeInterface,
   LearningAreaFixture,
   LearningAreaInterface,
   TaskEduContentFixture,
   TaskFixture,
-  TaskInstanceFixture,
-  TaskInstanceInterface
+  TaskInstanceFixture
 } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { TasksViewModel } from './tasks.viewmodel';
 import {
   LearningAreasWithTaskInfoInterface,
@@ -25,10 +23,7 @@ type ViewModelInterface<T> = { [P in keyof T]: T[P] };
 // implements TasksResolver
 export class MockTasksViewModel implements ViewModelInterface<TasksViewModel> {
   learningAreasWithTaskInfo$: Observable<LearningAreasWithTaskInfoInterface>;
-  selectedLearningArea$: Observable<LearningAreaInterface>;
-  taskInstancesByLearningArea$: Observable<TasksWithInfoInterface>;
-  selectedTaskInstance$: Observable<TaskInstanceInterface>;
-  taskInstancesWithEduContents$: Observable<TaskWithInfoInterface[]>;
+
   listFormat$: Observable<ListFormat>;
   // routeParams$: TODO type?
 
@@ -40,30 +35,49 @@ export class MockTasksViewModel implements ViewModelInterface<TasksViewModel> {
   startExercise() {}
 
   getLearningAreaById(areaId: number): Observable<LearningAreaInterface> {
-    return of(new LearningAreaFixture({ id: areaId }));
+    return new BehaviorSubject(new LearningAreaFixture({ id: areaId }));
   }
 
   getTasksByLearningAreaId(
     learningAreaId: number
   ): Observable<TasksWithInfoInterface> {
-    return of({
+    return new BehaviorSubject({
       taskInfos: [
         {
           task: new TaskFixture({ id: 1, learningAreaId }),
-          taskInstance: new TaskInstanceFixture({ taskId: 1, id: 10 }),
+          taskInstance: new TaskInstanceFixture({ taskId: 1, id: 1 }),
+          taskEduContentsCount: 1,
+          taskEduContents: [
+            new TaskEduContentFixture({ id: 1, submitted: true })
+          ],
+          finished: true
+        },
+        {
+          task: new TaskFixture({ id: 2, learningAreaId }),
+          taskInstance: new TaskInstanceFixture({ taskId: 2, id: 2 }),
           taskEduContentsCount: 2,
           taskEduContents: [
-            new TaskEduContentFixture({ id: 1, submitted: true }),
-            new TaskEduContentFixture({ id: 2, submitted: false })
+            new TaskEduContentFixture({ id: 2, submitted: true }),
+            new TaskEduContentFixture({ id: 3, submitted: true })
+          ],
+          finished: true
+        },
+        {
+          task: new TaskFixture({ id: 3, learningAreaId }),
+          taskInstance: new TaskInstanceFixture({ taskId: 3, id: 3 }),
+          taskEduContentsCount: 1,
+          taskEduContents: [
+            new TaskEduContentFixture({ id: 4, submitted: false })
           ],
           finished: false
         },
         {
-          task: new TaskFixture({ id: 2, learningAreaId }),
-          taskInstance: new TaskInstanceFixture({ taskId: 2, id: 12 }),
-          taskEduContentsCount: 1,
+          task: new TaskFixture({ id: 4, learningAreaId }),
+          taskInstance: new TaskInstanceFixture({ taskId: 4, id: 4 }),
+          taskEduContentsCount: 2,
           taskEduContents: [
-            new TaskEduContentFixture({ id: 5, submitted: true })
+            new TaskEduContentFixture({ id: 5, submitted: false }),
+            new TaskEduContentFixture({ id: 6, submitted: true })
           ],
           finished: false
         }
@@ -72,7 +86,7 @@ export class MockTasksViewModel implements ViewModelInterface<TasksViewModel> {
   }
 
   public getTaskWithInfo(taskId: number): Observable<TaskWithInfoInterface> {
-    return of({
+    return new BehaviorSubject({
       task: new TaskFixture({ id: taskId }),
       taskInstance: new TaskInstanceFixture({ taskId: 1, id: 10 }),
       taskEduContentsCount: 2,
@@ -94,73 +108,41 @@ export class MockTasksViewModel implements ViewModelInterface<TasksViewModel> {
   private getMockLearningAreasWithTaskInstances(): Observable<
     LearningAreasWithTaskInfoInterface
   > {
-    const mock: LearningAreasWithTaskInfoInterface = {
+    return new BehaviorSubject({
       learningAreasWithInfo: [
         {
-          learningArea: new LearningAreaFixture({ id: 1 }),
+          learningArea: new LearningAreaFixture({
+            id: 1,
+            name: 'Wiskunde',
+            icon: 'wiskunde',
+            color: '#2c354f'
+          }),
           openTasks: 2,
           closedTasks: 3
         },
         {
-          learningArea: new LearningAreaFixture({ id: 2 }),
+          learningArea: new LearningAreaFixture({
+            id: 2,
+            name: 'Moderne Wetenschappen',
+            icon: 'natuurwetenschappen',
+            color: '#5e3b47'
+          }),
           openTasks: 0,
           closedTasks: 2
         },
         {
-          learningArea: new LearningAreaFixture({ id: 3 }),
+          learningArea: new LearningAreaFixture({
+            id: 3,
+            name: 'Engels',
+            icon: 'engels',
+            color: '#553030'
+          }),
           openTasks: 2,
           closedTasks: 0
         }
       ],
       totalTasks: 7
-    };
-
-    return of(mock);
-  }
-
-  getMockEduContentProductTypes(): EduContentProductTypeInterface[] {
-    let mockProductType1: EduContentProductTypeInterface;
-    mockProductType1 = {
-      name: 'Jaarplan',
-      icon: 'polpo-lesmateriaal',
-      pedagogic: true,
-      excludeFromFilter: false,
-      id: 2
-    };
-
-    let mockProductType2: EduContentProductTypeInterface;
-    mockProductType2 = {
-      name: 'Online oefeningen',
-      icon: 'polpo-tasks',
-      pedagogic: false,
-      excludeFromFilter: false,
-      id: 4
-    };
-
-    let mockProductType3: EduContentProductTypeInterface;
-    mockProductType3 = {
-      name: 'Lessuggesties',
-      icon: 'polpo-lesmateriaal',
-      pedagogic: true,
-      excludeFromFilter: false,
-      id: 6
-    };
-
-    let mockProductType4: EduContentProductTypeInterface;
-    mockProductType4 = {
-      name: 'Links',
-      icon: 'polpo-website',
-      pedagogic: false,
-      excludeFromFilter: false,
-      id: 18
-    };
-
-    return [
-      mockProductType1,
-      mockProductType2,
-      mockProductType3,
-      mockProductType4
-    ];
+    });
   }
 
   getMockListFormat(): Observable<ListFormat> {
