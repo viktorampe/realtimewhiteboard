@@ -88,6 +88,8 @@ export const environment = {
     // 'archive-box': 'assets/icons/archive-box.svg',
     // 'archive-box-lg': 'assets/icons/archive-box-lg.svg',
     lesmateriaal: 'assets/icons/lesmateriaal.svg',
+
+    'polpo-lesmateriaal': 'assets/icons/lesmateriaal.svg',
     // media: 'assets/icons/media.svg',
     // music: 'assets/icons/music.svg',
     // presentatie: 'assets/icons/presentatie.svg',
