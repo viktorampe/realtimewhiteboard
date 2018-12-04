@@ -14,7 +14,7 @@ import {
   EnvironmentAlertsFeatureInterface,
   EnvironmentMessagesFeatureInterface,
   ENVIRONMENT_ALERTS_FEATURE_TOKEN,
-  ENVIRONMENT_API_BASE,
+  ENVIRONMENT_API_BASE_TOKEN,
   ENVIRONMENT_ICON_MAPPING_TOKEN,
   ENVIRONMENT_MESSAGES_FEATURE_TOKEN
 } from './interfaces';
@@ -76,7 +76,7 @@ export class SharedModule {
           useValue: iconMapping
         },
         {
-          provide: ENVIRONMENT_API_BASE,
+          provide: ENVIRONMENT_API_BASE_TOKEN,
           useValue: apiBase
         }
       ]

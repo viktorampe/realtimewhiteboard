@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { WINDOW } from '@campus/browser';
-import { ENVIRONMENT_API_BASE } from '../interfaces';
+import { ENVIRONMENT_API_BASE_TOKEN } from '../interfaces';
 import { OpenStaticContentService } from './open-static-content.service';
 
 describe('OpenStaticContentServiceService', () => {
@@ -11,7 +11,7 @@ describe('OpenStaticContentServiceService', () => {
     TestBed.configureTestingModule({
       providers: [
         { provide: WINDOW, useValue: mockWindow },
-        { provide: ENVIRONMENT_API_BASE, useValue: 'http://foo.bar:5000' }
+        { provide: ENVIRONMENT_API_BASE_TOKEN, useValue: 'http://foo.bar:5000' }
       ]
     });
 

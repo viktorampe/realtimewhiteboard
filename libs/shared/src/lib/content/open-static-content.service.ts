@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { WINDOW } from '@campus/browser';
-import { ENVIRONMENT_API_BASE } from '../interfaces';
+import { ENVIRONMENT_API_BASE_TOKEN } from '../interfaces';
 import { OpenStaticContentServiceInterface } from './open-static-content.interface';
 
 @Injectable({
@@ -10,7 +10,7 @@ export class OpenStaticContentService
   implements OpenStaticContentServiceInterface {
   constructor(
     @Inject(WINDOW) private window: Window,
-    @Inject(ENVIRONMENT_API_BASE) private apiBase: string
+    @Inject(ENVIRONMENT_API_BASE_TOKEN) private apiBase: string
   ) {}
 
   open(contentId: number): void {
