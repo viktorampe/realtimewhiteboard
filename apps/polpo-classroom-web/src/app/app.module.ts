@@ -27,7 +27,8 @@ import { AppComponent } from './app.component';
     BrowserModule,
     SharedModule.forRoot(
       environment.features.alerts,
-      environment.features.messages
+      environment.features.messages,
+      environment.website.url
     ),
     BrowserAnimationsModule,
     NxModule.forRoot(),

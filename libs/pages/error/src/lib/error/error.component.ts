@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DalState, PersonInterface, UserQueries } from '@campus/dal';
+import { ENVIRONMENT_WEBSITE_URL_TOKEN } from '@campus/shared';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
@@ -13,11 +14,14 @@ import { map, shareReplay } from 'rxjs/operators';
 export class ErrorComponent implements OnInit {
   private routeParams$ = this.route.params.pipe(shareReplay(1));
 
-  polpoUrl = 'https://www.polpo.be';
   statusCode$: Observable<number>;
   currentUser$: Observable<PersonInterface>;
 
-  constructor(private route: ActivatedRoute, private store: Store<DalState>) {}
+  constructor(
+    private route: ActivatedRoute,
+    private store: Store<DalState>,
+    @Inject(ENVIRONMENT_WEBSITE_URL_TOKEN) public websiteUrl: string
+  ) {}
 
   ngOnInit() {
     this.statusCode$ = this.getStatusCode();

@@ -11,7 +11,8 @@ import {
   EnvironmentAlertsFeatureInterface,
   EnvironmentMessagesFeatureInterface,
   ENVIRONMENT_ALERTS_FEATURE_TOKEN,
-  ENVIRONMENT_MESSAGES_FEATURE_TOKEN
+  ENVIRONMENT_MESSAGES_FEATURE_TOKEN,
+  ENVIRONMENT_WEBSITE_URL_TOKEN
 } from './interfaces';
 import { FilterService } from './services/filter.service';
 import { FILTER_SERVICE_TOKEN } from './services/filter.service.interface';
@@ -37,7 +38,8 @@ import { FILTER_SERVICE_TOKEN } from './services/filter.service.interface';
 export class SharedModule {
   static forRoot(
     environmentAlertsFeature: EnvironmentAlertsFeatureInterface,
-    environmentMessagesFeature: EnvironmentMessagesFeatureInterface
+    environmentMessagesFeature: EnvironmentMessagesFeatureInterface,
+    environmentWebsiteUrl: string
   ): ModuleWithProviders {
     return {
       ngModule: SharedModule,
@@ -49,6 +51,10 @@ export class SharedModule {
         {
           provide: ENVIRONMENT_MESSAGES_FEATURE_TOKEN,
           useValue: environmentMessagesFeature
+        },
+        {
+          provide: ENVIRONMENT_WEBSITE_URL_TOKEN,
+          useValue: environmentWebsiteUrl
         }
       ]
     };

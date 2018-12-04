@@ -8,6 +8,7 @@ import {
   UserActions,
   UserReducer
 } from '@campus/dal';
+import { ENVIRONMENT_WEBSITE_URL_TOKEN } from '@campus/shared';
 import { MockActivatedRoute } from '@campus/testing';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
@@ -19,15 +20,17 @@ describe('ErrorComponent', () => {
   let activatedRoute: MockActivatedRoute;
   let store: Store<DalState>;
 
-  let usedUserState = {
-    currentUser: new PersonFixture({ displayName: 'Foo Bar' }),
+  const websiteUrl = 'http://www.foo.bar';
+  const displayName = 'Foo Bar';
+
+  const usedUserState = {
+    currentUser: new PersonFixture({ displayName: displayName }),
     loaded: true
   };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        // RouterTestingModule,
         StoreModule.forRoot({}),
         ...StateFeatureBuilder.getModuleWithForFeatureProviders([
           {
@@ -41,7 +44,11 @@ describe('ErrorComponent', () => {
       ],
       providers: [
         Store,
-        { provide: ActivatedRoute, useClass: MockActivatedRoute }
+        { provide: ActivatedRoute, useClass: MockActivatedRoute },
+        {
+          provide: ENVIRONMENT_WEBSITE_URL_TOKEN,
+          useValue: websiteUrl
+        }
       ],
       declarations: [ErrorComponent]
     }).compileComponents();
@@ -68,6 +75,8 @@ describe('ErrorComponent', () => {
       );
 
       expect(component.statusCode$).toBeObservable(hot('a', { a: 'foo' }));
+
+      expect(component.websiteUrl).toBe(websiteUrl);
     });
   });
 
@@ -75,7 +84,7 @@ describe('ErrorComponent', () => {
     it('should show the correct error message', () => {
       assertErrorMessage(
         401,
-        'Je hebt niet de juiste bevoegdheden om deze actie uit te voeren. Je ben aangemeld als Foo Bar.'
+        `Je hebt niet de juiste bevoegdheden om deze actie uit te voeren. Je ben aangemeld als ${displayName}.`
       );
     });
   });
