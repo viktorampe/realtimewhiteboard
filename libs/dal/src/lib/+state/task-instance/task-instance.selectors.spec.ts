@@ -134,9 +134,12 @@ describe('TaskInstance Selectors', () => {
         taskId: 12,
         end: new Date(new Date().getTime() - 500)
       });
-      const results = TaskInstanceQueries.getActiveTaskIds({
-        taskInstances: createState([fix1, fix2, fix3])
-      });
+      const results = TaskInstanceQueries.getActiveTaskIds(
+        {
+          taskInstances: createState([fix1, fix2, fix3])
+        },
+        { date: new Date() }
+      );
       expect(results).toEqual(new Set([11]));
     });
   });

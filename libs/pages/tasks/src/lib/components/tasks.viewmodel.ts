@@ -78,7 +78,7 @@ export class TasksViewModel {
     const props = { userId: this.authService.userId, learningAreaId: areaId };
     return combineLatest(
       this.select(TaskQueries.getSharedTaskIdsByLearningAreaId, props),
-      this.select(TaskInstanceQueries.getActiveTaskIds),
+      this.select(TaskInstanceQueries.getActiveTaskIds, { date: new Date() }),
       this.select(TaskQueries.getAllEntities),
       this.select(TaskInstanceQueries.getAllGroupedByTaskId),
       this.select(TaskEduContentQueries.getAllGroupedByTaskId)
@@ -137,7 +137,7 @@ export class TasksViewModel {
     this.learningAreasWithTaskInfo$ = combineLatest(
       this.select(LearningAreaQueries.getAllEntities),
       this.select(TaskEduContentQueries.getUnfinishedTaskIds),
-      this.select(TaskInstanceQueries.getActiveTaskIds),
+      this.select(TaskInstanceQueries.getActiveTaskIds, { date: new Date() }),
       this.select(TaskQueries.getShared, props),
       this.select(TaskQueries.getSharedLearningAreaIds, props)
     ).pipe(
