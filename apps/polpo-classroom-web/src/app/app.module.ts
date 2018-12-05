@@ -27,6 +27,7 @@ import { AppComponent } from './app.component';
     SharedModule.forRoot(
       environment.features.alerts,
       environment.features.messages,
+      environment.website,
       environment.iconMapping,
       environment.APIBase
     ),
@@ -64,6 +65,11 @@ import { AppComponent } from './app.component';
           path: 'alerts',
           loadChildren: '@campus/pages/alerts#PagesAlertsModule'
         },
+        {
+          path: 'error',
+          loadChildren: '@campus/pages/error#PagesErrorModule'
+        },
+
         {
           path: '',
           redirectTo: 'bundles',
