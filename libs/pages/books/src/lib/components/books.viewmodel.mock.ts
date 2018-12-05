@@ -26,6 +26,8 @@ export class MockBooksViewModel implements ViewModelInterface<BooksViewModel> {
     ListFormat.GRID
   );
 
+  openBook(contentId: number): void {}
+
   // source
   learningAreas$: Observable<
     Dictionary<LearningAreaInterface>

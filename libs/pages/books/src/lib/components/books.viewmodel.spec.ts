@@ -1,3 +1,4 @@
+// file.only
 import { ModuleWithProviders } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import {
@@ -23,12 +24,14 @@ import {
   UnlockedBoekeStudentInterface,
   UnlockedBoekeStudentReducer
 } from '@campus/dal';
+import { OPEN_STATIC_CONTENT_SERVICE_TOKEN } from '@campus/shared';
 import { ListFormat } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { BooksViewModel } from './books.viewmodel';
 
 describe('BooksViewModel', () => {
+  let openContentMock = jest.fn();
   let booksViewModel: BooksViewModel;
   let store: Store<DalState>;
   let uiState: UiReducer.UiState;
@@ -53,7 +56,11 @@ describe('BooksViewModel', () => {
       providers: [
         BooksViewModel,
         Store,
-        { provide: AUTH_SERVICE_TOKEN, useValue: { userId: 1 } }
+        { provide: AUTH_SERVICE_TOKEN, useValue: { userId: 1 } },
+        {
+          provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
+          useValue: { open: openContentMock }
+        }
       ]
     });
 
@@ -71,6 +78,13 @@ describe('BooksViewModel', () => {
     booksViewModel.changeListFormat(listFormat);
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith({ listFormat });
+  });
+
+  it('openBooks() should call openStaticContentService', () => {
+    booksViewModel.openBook(2);
+
+    expect(openContentMock).toHaveBeenCalledTimes(1);
+    expect(openContentMock).toHaveBeenCalledWith(2);
   });
 
   describe('sharedBooks$', () => {

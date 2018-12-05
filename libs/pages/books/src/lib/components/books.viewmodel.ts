@@ -11,6 +11,10 @@ import {
   UnlockedBoekeGroupQueries,
   UnlockedBoekeStudentQueries
 } from '@campus/dal';
+import {
+  OpenStaticContentServiceInterface,
+  OPEN_STATIC_CONTENT_SERVICE_TOKEN
+} from '@campus/shared';
 import { ListFormat } from '@campus/ui';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
@@ -25,7 +29,9 @@ export class BooksViewModel {
 
   constructor(
     private store: Store<DalState>,
-    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
+    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
+    @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
+    private openStaticContentService: OpenStaticContentServiceInterface
   ) {
     this.initialize();
   }
@@ -37,6 +43,10 @@ export class BooksViewModel {
 
   changeListFormat(listFormat: ListFormat): void {
     this.store.dispatch(new UiActions.SetListFormat({ listFormat }));
+  }
+
+  openBook(contentId: number): void {
+    this.openStaticContentService.open(contentId);
   }
 
   private getListFormat(): Observable<ListFormat> {
