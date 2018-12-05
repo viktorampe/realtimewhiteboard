@@ -33,7 +33,8 @@
 
       <ng-template #filter>
         {{ filteredBooks.length }} van
-        <u (click)="filterTextInput.clear()">{{books.length}}</u>
+        <u class="pages-books__container__books-count__total"
+           (click)="filterTextInput.clear()">{{books.length}}</u>
         weergegeven
       </ng-template>
 

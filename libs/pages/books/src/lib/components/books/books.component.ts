@@ -29,7 +29,7 @@ export class BooksComponent implements OnInit {
   }
 
   openBook(bookId: number) {
-    this.viewModel.openBook(bookId);
+    //this.viewModel.openBook(bookId);
   }
 
   setListFormat(format: ListFormat) {
@@ -37,7 +37,6 @@ export class BooksComponent implements OnInit {
   }
 
   filterFn(source: EduContent[], searchText: string): EduContent[] {
-    const books = this.filterService.filter(source, { name: searchText });
-    return books;
+    return this.filterService.filter(source, { name: searchText });
   }
 }
