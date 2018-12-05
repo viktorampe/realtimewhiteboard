@@ -2,6 +2,7 @@ import {
   AlertReducer,
   BundleReducer,
   ContentStatusReducer,
+  CurrentExerciseReducer,
   EduContentReducer,
   LearningAreaReducer,
   StudentContentStatusReducer,
@@ -30,6 +31,7 @@ export interface DalState {
   user: UserReducer.State;
   studentContentStatuses: StudentContentStatusReducer.State;
   tasks: TaskReducer.State;
+  currentExercise: CurrentExerciseReducer.State;
   taskInstances: TaskInstanceReducer.State;
   taskEduContents: TaskEduContentReducer.State;
 }

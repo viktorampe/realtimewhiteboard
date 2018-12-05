@@ -21,3 +21,7 @@ export interface EnvironmentMessagesFeatureInterface {
 export const ENVIRONMENT_ICON_MAPPING_TOKEN = new InjectionToken(
   'environmentIconMapping'
 );
+
+export const ENVIRONMENT_API_BASE_TOKEN = new InjectionToken<string>(
+  'environmentApiBase'
+);

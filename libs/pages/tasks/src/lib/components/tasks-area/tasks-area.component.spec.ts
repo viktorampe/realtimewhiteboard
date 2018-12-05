@@ -1,16 +1,17 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { ListFormat, UiModule } from '@campus/ui';
 import {
   FilterService,
   FilterServiceInterface,
   FILTER_SERVICE_TOKEN
-} from '@campus/shared';
-import { ListFormat, UiModule } from '@campus/ui';
+} from '@campus/utils';
 import { hot } from '@nrwl/nx/testing';
 import { BehaviorSubject } from 'rxjs';
-import { LearningAreasWithTaskInstanceInfoInterface } from '../tasks.viewmodel.interfaces';
-import { MockTasksViewModel as TasksViewModel } from '../tasks.viewmodel.mock';
+import { TasksViewModel } from '../tasks.viewmodel';
+import { LearningAreasWithTaskInfoInterface } from '../tasks.viewmodel.interfaces';
+import { MockTasksViewModel } from '../tasks.viewmodel.mock';
 import { TasksAreaComponent } from './tasks-area.component';
 
 describe('TasksAreaComponent', () => {
@@ -19,10 +20,8 @@ describe('TasksAreaComponent', () => {
   let tasksViewModel: TasksViewModel;
   let filterService: FilterServiceInterface;
 
-  let learningAreas$: BehaviorSubject<
-    LearningAreasWithTaskInstanceInfoInterface
-  >;
-  let learningAreasValue: LearningAreasWithTaskInstanceInfoInterface;
+  let learningAreas$: BehaviorSubject<LearningAreasWithTaskInfoInterface>;
+  let learningAreasValue: LearningAreasWithTaskInfoInterface;
   let listFormat$: BehaviorSubject<ListFormat>;
   let listFormatValue: ListFormat;
 
@@ -40,8 +39,8 @@ describe('TasksAreaComponent', () => {
     tasksViewModel = TestBed.get(TasksViewModel);
     filterService = TestBed.get(FILTER_SERVICE_TOKEN);
 
-    learningAreas$ = tasksViewModel.learningAreasWithTaskInstances$ as BehaviorSubject<
-      LearningAreasWithTaskInstanceInfoInterface
+    learningAreas$ = tasksViewModel.learningAreasWithTaskInfo$ as BehaviorSubject<
+      LearningAreasWithTaskInfoInterface
     >;
     learningAreasValue = learningAreas$.value;
 
@@ -60,6 +59,9 @@ describe('TasksAreaComponent', () => {
   });
 
   it('should call the filter service when filterTextInput.filterFn is called, and display the correct count/learning areas', () => {
+    const filterSource = {
+      learningAreasWithInfo: []
+    } as LearningAreasWithTaskInfoInterface;
     const filterText = '';
     component.filterTextInput.setFilterableItem(component);
 
@@ -89,20 +91,10 @@ describe('TasksAreaComponent', () => {
     const filterSource = learningAreasValue;
 
     // Enkel wiskunde
-    const expectedOnlyWiskunde = [
-      {
-        learningArea: {
-          name: 'Wiskunde',
-          icon: 'wiskunde',
-          color: '#2c354f'
-        },
-        openTasks: 2,
-        closedTasks: 3
-      }
-    ];
-
+    const expectedOnlyWiskunde = learningAreasValue.learningAreasWithInfo.filter(
+      t => t.learningArea.id === 1
+    );
     let filterText = '';
-
     component.filterTextInput.setFilterableItem(component);
 
     let filteredResult = component.filterFn(filterSource, filterText);
