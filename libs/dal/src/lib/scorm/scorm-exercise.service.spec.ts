@@ -110,7 +110,6 @@ describe('ScormExerciseService', () => {
   it(
     'currentURL$',
     marbles(m => {
-      console.log('test');
       const currentURL$ = m.hot('--a--b|', {
         a: '',
         b: 'lolcow'
