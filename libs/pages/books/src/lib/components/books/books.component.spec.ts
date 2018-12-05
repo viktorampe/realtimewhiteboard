@@ -85,4 +85,15 @@ describe('BooksComponent', () => {
     const componentEl = fixture.nativeElement;
     expect(componentEl.textContent).toContain(errorMessage);
   });
+
+  it('should ask the viewmodel to open a book', () => {
+    bookViewModel.openBook = jest.fn();
+
+    const mockId = 1;
+
+    component.openBook(mockId);
+
+    expect(bookViewModel.openBook).toHaveBeenCalled();
+    expect(bookViewModel.openBook).toHaveBeenCalledWith(mockId);
+  });
 });

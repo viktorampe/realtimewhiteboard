@@ -29,8 +29,7 @@ export class BooksComponent implements OnInit {
   }
 
   openBook(bookId: number) {
-    //TODO: actually open a book
-    console.log('open book:', bookId);
+    this.viewModel.openBook(bookId);
   }
 
   setListFormat(format: ListFormat) {
