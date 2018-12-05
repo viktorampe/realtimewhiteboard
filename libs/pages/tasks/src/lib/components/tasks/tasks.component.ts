@@ -5,12 +5,11 @@ import { FilterTextInputComponent, ListFormat } from '@campus/ui';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { Observable } from 'rxjs';
 import { map, shareReplay, switchMap } from 'rxjs/operators';
+import { TasksViewModel } from '../tasks.viewmodel';
 import {
   TasksWithInfoInterface,
   TaskWithInfoInterface
 } from '../tasks.viewmodel.interfaces';
-import { MockTasksViewModel } from '../tasks.viewmodel.mock';
-
 @Component({
   selector: 'campus-tasks',
   templateUrl: './tasks.component.html',
@@ -33,7 +32,7 @@ export class TasksComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private viewModel: MockTasksViewModel,
+    private viewModel: TasksViewModel,
     @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface
   ) {}
 

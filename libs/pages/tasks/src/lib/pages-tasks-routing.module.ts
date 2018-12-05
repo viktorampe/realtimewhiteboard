@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TaskDetailComponent } from './components/task-detail/task-detail.component';
 import { TasksAreaComponent } from './components/tasks-area/tasks-area.component';
+import { TasksResolver } from './components/tasks.resolver';
 import { TasksComponent } from './components/tasks/tasks.component';
-import { TasksResolver } from './pages-tasks.resolver';
 
 const routes: Routes = [
   {

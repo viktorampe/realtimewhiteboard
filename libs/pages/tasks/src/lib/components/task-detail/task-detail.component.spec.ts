@@ -8,15 +8,19 @@ import {
   LearningAreaInterface,
   TaskInstanceInterface
 } from '@campus/dal';
-import { FilterService, FILTER_SERVICE_TOKEN } from '@campus/shared';
 import { ListFormat, ListViewItemDirective, UiModule } from '@campus/ui';
+import { FilterService, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { hot } from '@nrwl/nx/testing';
-import { BehaviorSubject, of } from 'rxjs';
-import {
-  MockActivatedRoute,
-  MockTasksViewModel as TasksViewModel
-} from '../tasks.viewmodel.mock';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { MockTasksViewModel as TasksViewModel } from '../tasks.viewmodel.mock';
 import { TaskDetailComponent } from './task-detail.component';
+
+// TODO replace with @campus/testing  moch route
+export class MockActivatedRoute {
+  params: Observable<any> = new BehaviorSubject<any>({
+    params: { bundle: 1, area: 1 }
+  });
+}
 
 describe('TaskDetailComponent', () => {
   let component: TaskDetailComponent;
@@ -63,7 +67,7 @@ describe('TaskDetailComponent', () => {
   });
 
   it('should show an error message if a task is no longer available', () => {
-    component.taskInstance$ = of(null);
+    component.taskInfo$ = of(null);
     fixture.detectChanges();
 
     expect(fixture.debugElement.query(By.css('campus-side-sheet'))).toBeFalsy();
@@ -113,7 +117,7 @@ describe('TaskDetailComponent', () => {
     expect(component.learningArea$).toBeObservable(
       hot('a', { a: learningArea$.value })
     );
-    expect(component.taskInstance$).toBeObservable(
+    expect(component.taskInfo$).toBeObservable(
       hot('a', { a: taskInstance$.value })
     );
     expect(component.contents$).toBeObservable(

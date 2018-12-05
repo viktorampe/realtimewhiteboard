@@ -7,23 +7,19 @@ import {
   ViewChild
 } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import {
-  EduContent,
-  LearningAreaInterface,
-  TaskInstanceInterface
-} from '@campus/dal';
-import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/shared';
+import { EduContent, LearningAreaInterface } from '@campus/dal';
 import {
   FilterTextInputComponent,
   ListFormat,
   ListViewComponent,
   SideSheetComponent
 } from '@campus/ui';
+import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
+import { TaskEduContent } from '@diekeure/polpo-api-angular-sdk';
 import { Observable, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-// TODO replace import
-// import { TasksViewModel } from '../tasks.viewmodel';
-import { MockTasksViewModel as TasksViewModel } from '../tasks.viewmodel.mock';
+import { TasksViewModel } from '../tasks.viewmodel';
+import { TaskWithInfoInterface } from '../tasks.viewmodel.interfaces';
 
 @Component({
   selector: 'campus-task-detail',
@@ -40,14 +36,11 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
   //output streams
   listFormat$: Observable<ListFormat>;
   learningArea$: Observable<LearningAreaInterface>;
-  taskInstance$: Observable<TaskInstanceInterface>;
-  //TODO convert to TaskEduContent once the backend has been changed to implement the submitted prop
-  //see https://github.com/diekeure/campus/pull/291#discussion-diff-235280582R74
-  contents$: Observable<EduContent[]>;
+  taskInfo$: Observable<TaskWithInfoInterface>;
 
   //viewChildren
   @ViewChild(FilterTextInputComponent)
-  filterTextInput: FilterTextInputComponent<EduContent[], EduContent>;
+  filterTextInput: FilterTextInputComponent<TaskEduContent[], TaskEduContent>;
 
   list: ListViewComponent<EduContent>;
   @ViewChild('taskInstanceListview')
@@ -92,12 +85,12 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
   private loadOutputStreams(): void {
     this.listFormat$ = this.taskViewModel.listFormat$;
     this.learningArea$ = this.getLearningArea();
-    this.taskInstance$ = this.getTaskInstance();
-    this.contents$ = this.getContents();
+    this.taskInfo$ = this.getTaskInfo();
     this.filterTextInput.setFilterableItem(this);
   }
 
   private setupListSubscription(): void {
+    if (!this.list) return;
     this.subscriptions.add(
       this.list.selectedItems$.subscribe((selectedItems: EduContent[]) => {
         if (selectedItems.length > 0) {
@@ -114,24 +107,16 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
   private getLearningArea(): Observable<LearningAreaInterface> {
     return this.routerParams$.pipe(
       switchMap(params => {
-        return this.taskViewModel.getLearningAreaById(params.area);
+        return this.taskViewModel.getLearningAreaById(+params.area);
       })
     );
   }
 
-  private getTaskInstance(): Observable<TaskInstanceInterface> {
+  private getTaskInfo(): Observable<TaskWithInfoInterface> {
     return this.routerParams$.pipe(
       switchMap(params => {
-        return this.taskViewModel.getTaskById(params.task);
+        return this.taskViewModel.getTaskWithInfo(+params.task);
       })
-    );
-  }
-
-  private getContents(): Observable<EduContent[]> {
-    return this.routerParams$.pipe(
-      switchMap(params =>
-        this.taskViewModel.getEduContentsWithSubmittedByTaskId(params.task)
-      )
     );
   }
 
@@ -147,12 +132,12 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
   }
 
   //filterFunction
-  filterFn(info: EduContent[], searchText: string): EduContent[] {
+  filterFn(info: TaskEduContent[], searchText: string): TaskEduContent[] {
     if (this.list) {
       this.list.deselectAllItems();
     }
     return this.filterService.filter(info, {
-      name: searchText
+      eduContent: { publishedEduContentMetadata: { title: searchText } }
     });
   }
 }

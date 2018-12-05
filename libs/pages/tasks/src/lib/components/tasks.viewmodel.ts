@@ -4,6 +4,7 @@ import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   DalState,
+  EduContentQueries,
   LearningAreaInterface,
   LearningAreaQueries,
   PersonFixture,
@@ -108,15 +109,23 @@ export class TasksViewModel {
     return combineLatest(
       this.select(TaskInstanceQueries.getAllByTaskId, { taskId }),
       this.select(TaskEduContentQueries.getAllByTaskId, { taskId }),
+      this.select(EduContentQueries.getAllEntities),
       this.select(TaskQueries.getById, { id: taskId }),
       this.getMockTeachers() //todo select teacher entities here
     ).pipe(
-      map(([taskInstances, taskEduContents, task, teachers]) => {
+      map(([taskInstances, taskEduContents, eduContents, task, teachers]) => {
+        console.log({ taskEduContents });
+        if (!task) return null;
         return {
           //todo place teacher here on task
           task: task,
           taskInstance: taskInstances[0],
-          taskEduContents: taskEduContents,
+          taskEduContents: taskEduContents.map(taskEduContent => {
+            return {
+              ...taskEduContent,
+              eduContent: eduContents[taskEduContent.eduContentId]
+            };
+          }),
           finished: taskEduContents.every(te => te.submitted),
           taskEduContentsCount: taskEduContents.length
         };
