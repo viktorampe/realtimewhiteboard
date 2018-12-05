@@ -11,7 +11,7 @@
   $ui-content-thumbnail_header_icon-font-size: 20px !default;
   $ui-content-thumbnail_header_icon-line-height: $ui-content-thumbnail_header_icon-font-size +
     4 !default;
-  $ui-content-thumbnail_image-background-color: #ccc !default;
+  $ui-content-thumbnail_image-background-color: $ui-primary-bg-color !default;
   $ui-content-thumbnail_title-text-color: $ui-primary-font-color-2 !default;
   /* * Grid */
   $ui-content-thumbnail--grid-height: 235px !default;

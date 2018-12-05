@@ -2,7 +2,7 @@
   $file-extension-scale: $file-extension-width / 84; //84 is the standard width of the icon
 
   $ui-file-extension-font-family: $ui-primary-font-family-3 !default;
-  $ui-file-extension-bg-color: #fff !default;
+  $ui-file-extension-bg-color: $ui-tertiary-bg-color !default;
 
   .ui-file-extension {
     display: inline-block;

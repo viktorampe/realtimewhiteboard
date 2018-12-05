@@ -1,7 +1,7 @@
 @mixin ui_editable-inline-tag-list_theme() {
-  $ui-editable-inline-font-color: $ui-formitem-font-color !default;
-  $ui-editable-inline-bg-color: $ui-formitem-bg-color !default;
-  $ui-editable-inline-border-color: $ui-formitem-border-color !default;
+  $ui-editable-inline-font-color: $ui-form-item-font-color !default;
+  $ui-editable-inline-bg-color: $ui-form-item-bg-color !default;
+  $ui-editable-inline-border-color: $ui-form-item-border-color !default;
   $ui-editable-title-color: $ui-primary-font-color-2 !default;
   $ui-editable-button-bg-color: $ui-tertiary-bg-color-2 !default;
   $ui-editable-button-font-color: $ui-tertiary-font-color-2 !default;
