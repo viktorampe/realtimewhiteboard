@@ -39,7 +39,9 @@ export class UiEffects {
       // or loadUI which would save an empty state
       return excludes.indexOf(<UiActionTypes>action.type) === -1;
     }),
-    ofType(...Object.values(UiActionTypes)),
+    ofType(
+      ...Object.keys(UiActionTypes).map(actionType => UiActionTypes[actionType])
+    ),
     map(() => new SaveUi())
   );
 

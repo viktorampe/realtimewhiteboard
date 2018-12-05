@@ -1,20 +1,4 @@
-import {
-  AlertReducer,
-  BundleReducer,
-  ContentStatusReducer,
-  EduContentReducer,
-  LearningAreaReducer,
-  StudentContentStatusReducer,
-  TaskEduContentReducer,
-  TaskInstanceReducer,
-  TaskReducer,
-  UiReducer,
-  UnlockedBoekeGroupReducer,
-  UnlockedBoekeStudentReducer,
-  UnlockedContentReducer,
-  UserContentReducer,
-  UserReducer
-} from '../..';
+import { AlertReducer, BundleReducer, ContentStatusReducer, CurrentExerciseReducer, EduContentReducer, LearningAreaReducer, StudentContentStatusReducer, TaskEduContentReducer, TaskInstanceReducer, TaskReducer, UiReducer, UnlockedBoekeGroupReducer, UnlockedBoekeStudentReducer, UnlockedContentReducer, UserContentReducer, UserReducer } from '../..';
 
 export interface DalState {
   ui: UiReducer.UiState;
@@ -30,6 +14,7 @@ export interface DalState {
   user: UserReducer.State;
   studentContentStatuses: StudentContentStatusReducer.State;
   tasks: TaskReducer.State;
+  currentExercise: CurrentExerciseReducer.State;
   taskInstances: TaskInstanceReducer.State;
   taskEduContents: TaskEduContentReducer.State;
 }

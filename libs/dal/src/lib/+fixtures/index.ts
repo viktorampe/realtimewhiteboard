@@ -13,6 +13,6 @@ export * from './Result.fixture';
 export * from './Task.fixture';
 export * from './TaskEduContent.fixture';
 export * from './TaskInstance.fixture';
-export * from './unlockedBoekeGroup.fixture';
-export * from './unlockedBoekeStudent.fixture';
+export * from './UnlockedBoekeGroup.fixture';
+export * from './UnlockedBoekeStudent.fixture';
 export * from './UnlockedContent.fixture';

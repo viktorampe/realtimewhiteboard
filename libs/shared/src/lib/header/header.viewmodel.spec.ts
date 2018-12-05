@@ -1,53 +1,19 @@
 import { Injectable } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-<<<<<<< HEAD
-import { MatIconModule } from '@angular/material';
-import { RouterTestingModule } from '@angular/router/testing';
-import {
-  PersonInterface,
-  StateFeatureBuilder,
-  UserActions,
-  UserReducer
-} from '@campus/dal';
-import { Store, StoreModule } from '@ngrx/store';
-import { hot } from '@nrwl/nx/testing';
-import {
-  EnvironmentAlertsFeatureInterface,
-  EnvironmentMessagesFeatureInterface,
-  ENVIRONMENT_ALERTS_FEATURE_TOKEN,
-  ENVIRONMENT_MESSAGES_FEATURE_TOKEN
-=======
-import {
-  Alert,
-  AlertActions,
-  AlertFixture,
-  AlertReducer,
-  AUTH_SERVICE_TOKEN,
-  PersonInterface,
-  StateFeatureBuilder,
-  UiActions,
-  UserActions,
-  UserReducer
-} from '@campus/dal';
+import { Alert, AlertActions, AlertFixture, AlertReducer, AUTH_SERVICE_TOKEN, PersonInterface, StateFeatureBuilder, UiActions, UserActions, UserReducer } from '@campus/dal';
 import { BreadcrumbLinkInterface, NotificationItemInterface } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { BehaviorSubject } from 'rxjs';
-import {
-  EnvironmentAlertsFeatureInterface,
-  ENVIRONMENT_ALERTS_FEATURE_TOKEN
->>>>>>> develop
-} from '../interfaces/environment.features.interfaces';
+import { EnvironmentAlertsFeatureInterface, EnvironmentMessagesFeatureInterface, ENVIRONMENT_ALERTS_FEATURE_TOKEN } from '../interfaces/environment.features.interfaces';
 import { HeaderResolver } from './header.resolver';
 import { HeaderViewModel } from './header.viewmodel';
 
-<<<<<<< HEAD
-let environmentMessagesFeature: EnvironmentMessagesFeatureInterface = {
+const environmentMessagesFeature: EnvironmentMessagesFeatureInterface = {
   enabled: false,
   hasAppBarDropDown: false
 };
-=======
->>>>>>> develop
+
 let environmentAlertsFeature: EnvironmentAlertsFeatureInterface = {
   enabled: false,
   hasAppBarDropDown: false
@@ -201,7 +167,7 @@ describe('headerViewModel', () => {
         // when the breadcrumbs are added, use the setInitialState() method to manipulate the UI state
         headerViewModel.breadCrumbs$ = new BehaviorSubject<
           BreadcrumbLinkInterface[]
-        >([]);
+          >([]);
         headerViewModel['loadDisplayStream'](); // need to trigger this, otherwise breadcrumbs$ won't be reset
         const expected = undefined;
         expect(headerViewModel.backLink$).toBeObservable(
