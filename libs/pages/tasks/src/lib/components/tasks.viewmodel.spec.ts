@@ -1,5 +1,35 @@
+//file.only
+
 import { TestBed } from '@angular/core/testing';
-import { AlertActions, AlertService, AUTH_SERVICE_TOKEN, DalState, EduContentActions, EduContentFixture, EduContentInterface, EduContentReducer, getStoreModuleForFeatures, LearningAreaActions, LearningAreaFixture, LearningAreaInterface, LearningAreaReducer, TaskActions, TaskEduContentActions, TaskEduContentFixture, TaskEduContentInterface, TaskEduContentReducer, TaskFixture, TaskInstanceActions, TaskInstanceFixture, TaskInstanceInterface, TaskInstanceReducer, TaskInterface, TaskReducer, UiActions, UiReducer } from '@campus/dal';
+import {
+  AlertActions,
+  AlertService,
+  AUTH_SERVICE_TOKEN,
+  DalState,
+  EduContentActions,
+  EduContentFixture,
+  EduContentInterface,
+  EduContentReducer,
+  getStoreModuleForFeatures,
+  LearningAreaActions,
+  LearningAreaFixture,
+  LearningAreaInterface,
+  LearningAreaReducer,
+  TaskActions,
+  TaskEduContentActions,
+  TaskEduContentFixture,
+  TaskEduContentInterface,
+  TaskEduContentReducer,
+  TaskFixture,
+  TaskInstanceActions,
+  TaskInstanceFixture,
+  TaskInstanceInterface,
+  TaskInstanceReducer,
+  TaskInterface,
+  TaskReducer,
+  UiActions,
+  UiReducer
+} from '@campus/dal';
 import { ListFormat } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
@@ -271,8 +301,12 @@ describe('TasksViewModel met State', () => {
     });
 
     it('should get the taskInfo from the state', () => {
+      const expected = defaultExpected;
+      expected.taskEduContents.forEach(te => {
+        te.eduContent = new EduContentFixture({ id: te.eduContentId });
+      });
       expect(tasksViewModel.getTaskWithInfo(1)).toBeObservable(
-        hot('a', { a: defaultExpected })
+        hot('a', { a: expected })
       );
     });
 
@@ -290,6 +324,11 @@ describe('TasksViewModel met State', () => {
       const expected = { ...defaultExpected };
       expected.taskEduContents.filter(t => t.id === 3)[0].submitted = true;
       expected.finished = true;
+      expected.taskEduContents
+        .filter(t => t.id === 1 || t.id === 3)
+        .forEach(te => {
+          te.eduContent = new EduContentFixture({ id: te.eduContentId });
+        });
       expect(tasksViewModel.getTaskWithInfo(1)).toBeObservable(
         hot('a', { a: expected })
       );
@@ -360,7 +399,8 @@ describe('TasksViewModel met State', () => {
   function setEduContentsState() {
     eduContents = [
       new EduContentFixture({ id: 1 }),
-      new EduContentFixture({ id: 2 })
+      new EduContentFixture({ id: 2 }),
+      new EduContentFixture({ id: 3 })
     ];
     store.dispatch(
       new EduContentActions.EduContentsLoaded({ eduContents: eduContents })

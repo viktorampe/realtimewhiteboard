@@ -89,8 +89,6 @@ export const getAllByTaskId = createSelector(
 export const getActiveTaskIds = createSelector(
   selectTaskInstanceState,
   (state: State, props: { date: Date }) => {
-    console.log(new Date(state.entities[20].end));
-
     return new Set(
       (<number[]>state.ids).reduce(
         (acc, id) =>

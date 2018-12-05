@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Params } from '@angular/router';
 import {
+  EduContentFixture,
   LearningAreaFixture,
   LearningAreaInterface,
   TaskEduContentFixture,
@@ -26,9 +26,6 @@ export class MockTasksViewModel implements ViewModelInterface<TasksViewModel> {
   learningAreasWithTaskInfo$: Observable<LearningAreasWithTaskInfoInterface>;
 
   listFormat$: Observable<ListFormat>;
-
-  getLearningAreaById = this.getMockSelectedLearningArea;
-  getTaskById = this.getMockSelectedTaskInstance;
 
   constructor() {
     this.loadMockData();
@@ -94,8 +91,18 @@ export class MockTasksViewModel implements ViewModelInterface<TasksViewModel> {
       taskInstance: new TaskInstanceFixture({ taskId: 1, id: 10 }),
       taskEduContentsCount: 2,
       taskEduContents: [
-        new TaskEduContentFixture({ id: 1, submitted: true }),
-        new TaskEduContentFixture({ id: 2, submitted: false })
+        new TaskEduContentFixture({
+          id: 1,
+          submitted: true,
+          eduContentId: 1,
+          eduContent: new EduContentFixture({ id: 1 })
+        }),
+        new TaskEduContentFixture({
+          id: 2,
+          submitted: false,
+          eduContentId: 2,
+          eduContent: new EduContentFixture({ id: 2 })
+        })
       ],
       finished: false
     });

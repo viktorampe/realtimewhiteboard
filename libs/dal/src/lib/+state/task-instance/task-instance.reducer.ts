@@ -63,8 +63,14 @@ export function reducer(
       const instances = action.payload.taskInstances.map(instance => {
         return {
           ...instance,
-          end: new Date(instance.end),
-          start: new Date(instance.start)
+          end:
+            typeof instance.end === 'string'
+              ? new Date(instance.end)
+              : instance.end,
+          start:
+            typeof instance.start === 'string'
+              ? new Date(instance.start)
+              : instance.start
         };
       });
       return adapter.addAll(instances, {
