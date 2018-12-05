@@ -175,7 +175,6 @@ export class ScormExerciseService implements ScormExerciseServiceInterface {
 
   private initializeApi(mode: ScormCmiMode) {
     this.scormApi.init({} as ScormCmiInterface, mode);
-    console.log(this.scormApi.cmi$);
     this.currentResult$ = this.scormApi.cmi$;
     this.commit$ = this.scormApi.commit$;
   }
