@@ -6,6 +6,7 @@ import { MatIconModule, MatIconRegistry } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { UiModule } from '@campus/ui';
+import { FilterService, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { PageBarContainerComponent } from './components/page-bar-container/page-bar-container.component';
 import { OPEN_STATIC_CONTENT_SERVICE_TOKEN } from './content/open-static-content.interface';
 import { OpenStaticContentService } from './content/open-static-content.service';
@@ -18,8 +19,6 @@ import {
   ENVIRONMENT_ICON_MAPPING_TOKEN,
   ENVIRONMENT_MESSAGES_FEATURE_TOKEN
 } from './interfaces';
-import { FilterService } from './services/filter.service';
-import { FILTER_SERVICE_TOKEN } from './services/filter.service.interface';
 
 @NgModule({
   imports: [

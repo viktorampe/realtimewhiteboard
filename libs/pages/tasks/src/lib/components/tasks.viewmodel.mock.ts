@@ -1,39 +1,29 @@
 import { Injectable } from '@angular/core';
 import {
-  EduContentInterface,
-  EduContentProductTypeInterface,
+  LearningAreaFixture,
   LearningAreaInterface,
-  MethodInterface,
-  PersonInterface,
-  TaskEduContentInterface,
-  TaskInstanceFixture,
-  TaskInstanceInterface,
-  TaskInterface
+  TaskEduContentFixture,
+  TaskFixture,
+  TaskInstanceFixture
 } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { TasksViewModel } from './tasks.viewmodel';
 import {
-  LearningAreasWithTaskInstanceInfoInterface,
-  TaskInstancesWithEduContentInfoInterface,
-  TaskInstanceWithEduContentsInfoInterface
+  LearningAreasWithTaskInfoInterface,
+  TasksWithInfoInterface,
+  TaskWithInfoInterface
 } from './tasks.viewmodel.interfaces';
+
+type ViewModelInterface<T> = { [P in keyof T]: T[P] };
 
 @Injectable({
   providedIn: 'root'
 })
 // implements TasksResolver
-export class MockTasksViewModel {
-  learningAreasWithTaskInstances$: Observable<
-    LearningAreasWithTaskInstanceInfoInterface
-  >;
-  selectedLearningArea$: Observable<LearningAreaInterface>;
-  taskInstancesByLearningArea$: Observable<
-    TaskInstancesWithEduContentInfoInterface
-  >;
-  selectedTaskInstance$: Observable<TaskInstanceInterface>;
-  taskInstanceWithEduContents$: Observable<
-    TaskInstanceWithEduContentsInfoInterface
-  >;
+export class MockTasksViewModel implements ViewModelInterface<TasksViewModel> {
+  learningAreasWithTaskInfo$: Observable<LearningAreasWithTaskInfoInterface>;
+
   listFormat$: Observable<ListFormat>;
   // routeParams$: TODO type?
 
@@ -41,534 +31,118 @@ export class MockTasksViewModel {
     this.loadMockData();
   }
 
+  setTaskAlertRead(taskId: number) {}
+  startExercise() {}
+
   getLearningAreaById(areaId: number): Observable<LearningAreaInterface> {
-    return of(this.getMockLearningAreas()[0]);
+    return new BehaviorSubject(new LearningAreaFixture({ id: areaId }));
   }
 
-  taskInstancesByLearningArea(
+  getTasksByLearningAreaId(
     learningAreaId: number
-  ): Observable<TaskInstancesWithEduContentInfoInterface> {
-    return this.getMockTaskInstancesByLearningArea();
+  ): Observable<TasksWithInfoInterface> {
+    return new BehaviorSubject({
+      taskInfos: [
+        {
+          task: new TaskFixture({ id: 1, learningAreaId }),
+          taskInstance: new TaskInstanceFixture({ taskId: 1, id: 1 }),
+          taskEduContentsCount: 1,
+          taskEduContents: [
+            new TaskEduContentFixture({ id: 1, submitted: true })
+          ],
+          finished: true
+        },
+        {
+          task: new TaskFixture({ id: 2, learningAreaId }),
+          taskInstance: new TaskInstanceFixture({ taskId: 2, id: 2 }),
+          taskEduContentsCount: 2,
+          taskEduContents: [
+            new TaskEduContentFixture({ id: 2, submitted: true }),
+            new TaskEduContentFixture({ id: 3, submitted: true })
+          ],
+          finished: true
+        },
+        {
+          task: new TaskFixture({ id: 3, learningAreaId }),
+          taskInstance: new TaskInstanceFixture({ taskId: 3, id: 3 }),
+          taskEduContentsCount: 1,
+          taskEduContents: [
+            new TaskEduContentFixture({ id: 4, submitted: false })
+          ],
+          finished: false
+        },
+        {
+          task: new TaskFixture({ id: 4, learningAreaId }),
+          taskInstance: new TaskInstanceFixture({ taskId: 4, id: 4 }),
+          taskEduContentsCount: 2,
+          taskEduContents: [
+            new TaskEduContentFixture({ id: 5, submitted: false }),
+            new TaskEduContentFixture({ id: 6, submitted: true })
+          ],
+          finished: false
+        }
+      ]
+    });
+  }
+
+  public getTaskWithInfo(taskId: number): Observable<TaskWithInfoInterface> {
+    return new BehaviorSubject({
+      task: new TaskFixture({ id: taskId }),
+      taskInstance: new TaskInstanceFixture({ taskId: 1, id: 10 }),
+      taskEduContentsCount: 2,
+      taskEduContents: [
+        new TaskEduContentFixture({ id: 1, submitted: true }),
+        new TaskEduContentFixture({ id: 2, submitted: false })
+      ],
+      finished: false
+    });
   }
 
   changeListFormat() {}
 
   private loadMockData() {
-    this.learningAreasWithTaskInstances$ = this.getMockLearningAreasWithTaskInstances();
-    this.selectedLearningArea$ = this.getMockSelectedLearningArea();
-    this.taskInstancesByLearningArea$ = this.getMockTaskInstancesByLearningArea();
-    this.selectedTaskInstance$ = this.getMockSelectedTaskInstance();
-    this.taskInstanceWithEduContents$ = this.getMockTaskInstanceWithEduContents();
+    this.learningAreasWithTaskInfo$ = this.getMockLearningAreasWithTaskInstances();
     this.listFormat$ = this.getMockListFormat();
   }
 
   private getMockLearningAreasWithTaskInstances(): Observable<
-    LearningAreasWithTaskInstanceInfoInterface
+    LearningAreasWithTaskInfoInterface
   > {
-    const mockLearningAreas = this.getMockLearningAreas();
-
-    let mock: LearningAreasWithTaskInstanceInfoInterface;
-    mock = {
+    return new BehaviorSubject({
       learningAreasWithInfo: [
         {
-          learningArea: mockLearningAreas[0],
+          learningArea: new LearningAreaFixture({
+            id: 1,
+            name: 'Wiskunde',
+            icon: 'wiskunde',
+            color: '#2c354f'
+          }),
           openTasks: 2,
           closedTasks: 3
         },
         {
-          learningArea: mockLearningAreas[1],
+          learningArea: new LearningAreaFixture({
+            id: 2,
+            name: 'Moderne Wetenschappen',
+            icon: 'natuurwetenschappen',
+            color: '#5e3b47'
+          }),
           openTasks: 0,
           closedTasks: 2
         },
         {
-          learningArea: mockLearningAreas[2],
+          learningArea: new LearningAreaFixture({
+            id: 3,
+            name: 'Engels',
+            icon: 'engels',
+            color: '#553030'
+          }),
           openTasks: 2,
           closedTasks: 0
         }
       ],
-      totalTasks: 0
-    };
-    mock.totalTasks = mock.learningAreasWithInfo.reduce(
-      (total, area) => total + area.openTasks + area.closedTasks,
-      0
-    );
-
-    return new BehaviorSubject(mock);
-  }
-
-  private getMockSelectedLearningArea(
-    id: 0 | 1 | 2 = 0
-  ): Observable<LearningAreaInterface> {
-    const mockLearningAreas = this.getMockLearningAreas();
-    return new BehaviorSubject(mockLearningAreas[id]);
-  }
-
-  private getMockTaskInstancesByLearningArea(): Observable<
-    TaskInstancesWithEduContentInfoInterface
-  > {
-    const mockTaskInstancesAll = this.getMockTaskInstances();
-
-    let mockTaskInstances: TaskInstancesWithEduContentInfoInterface;
-    mockTaskInstances = {
-      instances: [
-        {
-          taskInstance: mockTaskInstancesAll[0],
-          taskEduContentsCount: 1,
-          finished: true
-        },
-        {
-          taskInstance: mockTaskInstancesAll[1],
-          taskEduContentsCount: 2,
-          finished: true
-        },
-        {
-          taskInstance: mockTaskInstancesAll[2],
-          taskEduContentsCount: 1,
-          finished: false
-        },
-        {
-          taskInstance: mockTaskInstancesAll[3],
-          taskEduContentsCount: 2,
-          finished: false
-        }
-      ]
-    };
-
-    return new BehaviorSubject(mockTaskInstances);
-  }
-
-  private getMockSelectedTaskInstance(
-    id: 0 | 1 | 2 | 3 = 0
-  ): Observable<TaskInstanceInterface> {
-    return new BehaviorSubject(this.getMockTaskInstances()[id]);
-  }
-
-  private getMockTaskInstanceWithEduContents(
-    id: 0 | 1 | 2 | 3 = 0,
-    finished = false
-  ): Observable<TaskInstanceWithEduContentsInfoInterface> {
-    const mockTaskInstance = this.getMockTaskInstances()[id];
-    const mockTaskEducontents = this.getMockTaskEducontents();
-
-    let mockTaskInstanceWithEducontent: TaskInstanceWithEduContentsInfoInterface;
-    mockTaskInstanceWithEducontent = {
-      taskInstance: mockTaskInstance,
-      taskEduContents: mockTaskEducontents,
-      finished: finished
-    };
-
-    return new BehaviorSubject(mockTaskInstanceWithEducontent);
-  }
-
-  private getMockLearningAreas(): LearningAreaInterface[] {
-    let mockLearningArea1: LearningAreaInterface;
-    mockLearningArea1 = {
-      name: 'Wiskunde',
-      icon: 'wiskunde',
-      color: '#2c354f'
-    };
-
-    let mockLearningArea2: LearningAreaInterface;
-    mockLearningArea2 = {
-      name: 'Moderne Wetenschappen',
-      icon: 'natuurwetenschappen',
-      color: '#5e3b47'
-    };
-
-    let mockLearningArea3: LearningAreaInterface;
-    mockLearningArea3 = {
-      name: 'Engels',
-      icon: 'engels',
-      color: '#553030'
-    };
-
-    return [mockLearningArea1, mockLearningArea2, mockLearningArea3];
-  }
-
-  private getMockTaskInstances(): TaskInstanceInterface[] {
-    const mockTasks = this.getMockTasks();
-    const mockStudent = this.getMockStudent();
-
-    const mockTaskInstance1: TaskInstanceFixture = new TaskInstanceFixture({
-      start: new Date(2018, 11 - 1, 5, 0 + 2),
-      end: new Date(2018, 11 - 1, 15, 0 + 2),
-      alerted: true,
-      id: 1,
-      taskId: mockTasks[0].id,
-      task: mockTasks[0],
-      personId: mockStudent.id,
-      student: mockStudent
+      totalTasks: 7
     });
-
-    const mockTaskInstance2: TaskInstanceFixture = new TaskInstanceFixture({
-      start: new Date(2018, 11 - 1, 5, 0 + 2),
-      end: new Date(2018, 11 - 1, 6, 0 + 2),
-      alerted: true,
-      id: 2,
-      taskId: mockTasks[1].id,
-      task: mockTasks[1],
-      personId: mockStudent.id,
-      student: mockStudent
-    });
-
-    const mockTaskInstance3: TaskInstanceFixture = new TaskInstanceFixture({
-      start: new Date(2018, 11 - 1, 15, 0 + 2),
-      end: new Date(2018, 11 - 1, 30, 0 + 2),
-      alerted: false,
-      id: 3,
-      taskId: mockTasks[2].id,
-      task: mockTasks[2],
-      personId: mockStudent.id,
-      student: mockStudent
-    });
-
-    const mockTaskInstance4: TaskInstanceFixture = new TaskInstanceFixture({
-      start: new Date(2018, 11 - 1, 15, 0 + 2),
-      end: new Date(2018, 11 - 1, 30, 0 + 2),
-      alerted: true,
-      id: 4,
-      taskId: mockTasks[0].id,
-      task: mockTasks[0],
-      personId: mockStudent.id,
-      student: mockStudent
-    });
-
-    return [
-      mockTaskInstance1,
-      mockTaskInstance2,
-      mockTaskInstance3,
-      mockTaskInstance4
-    ];
-  }
-
-  private getMockTaskEducontents(): TaskEduContentInterface[] {
-    const mockTeacher = this.getMockTeacher();
-    const mockTasks = this.getMockTasks();
-    const mockEducontents = this.getMockEducontents();
-
-    let mockTaskEducontents1: TaskEduContentInterface;
-    mockTaskEducontents1 = {
-      index: 10000,
-      id: 1,
-      teacherId: mockTeacher.id,
-      teacher: mockTeacher,
-      eduContentId: mockEducontents[0].id,
-      eduContent: mockEducontents[0],
-      taskId: mockTasks[0].id,
-      task: mockTasks[0]
-    };
-
-    let mockTaskEducontents2: TaskEduContentInterface;
-    mockTaskEducontents2 = {
-      index: 10000,
-      id: 2,
-      teacherId: mockTeacher.id,
-      teacher: mockTeacher,
-      eduContentId: mockEducontents[1].id,
-      eduContent: mockEducontents[1],
-      taskId: mockTasks[1].id,
-      task: mockTasks[1]
-    };
-
-    let mockTaskEducontents3: TaskEduContentInterface;
-    mockTaskEducontents3 = {
-      index: 10000,
-      id: 3,
-      teacherId: mockTeacher.id,
-      teacher: mockTeacher,
-      eduContentId: mockEducontents[2].id,
-      eduContent: mockEducontents[2],
-      taskId: mockTasks[2].id,
-      task: mockTasks[2]
-    };
-
-    let mockTaskEducontents4: TaskEduContentInterface;
-    mockTaskEducontents4 = {
-      index: 10000,
-      id: 4,
-      teacherId: mockTeacher.id,
-      teacher: mockTeacher,
-      eduContentId: mockEducontents[0].id,
-      eduContent: mockEducontents[0],
-      taskId: mockTasks[0].id,
-      task: mockTasks[0]
-    };
-
-    return [
-      mockTaskEducontents1,
-      mockTaskEducontents2,
-      mockTaskEducontents3,
-      mockTaskEducontents4
-    ];
-  }
-
-  private getMockTeacher(): PersonInterface {
-    let mockTeacher: PersonInterface;
-    mockTeacher = {
-      name: 'Mertens',
-      firstName: 'Tom',
-      created: new Date('2018-09-04 14:21:15'),
-      email: 'teacher1@mailinator.com',
-      currentSchoolYear: 2018,
-      id: 187,
-      displayName: 'Tom Mertens'
-      // Avatar:
-    };
-
-    return mockTeacher;
-  }
-
-  private getMockTasks(): TaskInterface[] {
-    const mockTeacher = this.getMockTeacher();
-    const mockLearningAreas = this.getMockLearningAreas();
-
-    let mockTask1: TaskInterface;
-    mockTask1 = {
-      name: 'Overhoring 1',
-      description:
-        'Maak deze taak als voorbereiding op de overhoring van volgende week.',
-      id: 1,
-      personId: mockTeacher.id,
-      teacher: mockTeacher,
-      learningAreaId: mockLearningAreas[0].id,
-      learningArea: mockLearningAreas[0]
-    };
-
-    let mockTask2: TaskInterface;
-    mockTask2 = {
-      name: 'Herhaling 1',
-      description:
-        'Maak deze taak als extra herhaling op de leerstof van vorige week.',
-      id: 2,
-      personId: mockTeacher.id,
-      teacher: mockTeacher,
-      learningAreaId: mockLearningAreas[1].id,
-      learningArea: mockLearningAreas[1]
-    };
-
-    let mockTask3: TaskInterface;
-    mockTask3 = {
-      name: 'Archief groepstaak 1',
-      description:
-        'Maak deze taak als voorbereiding op de overhoring van volgende week.',
-      id: 3,
-      personId: mockTeacher.id,
-      teacher: mockTeacher,
-      learningAreaId: mockLearningAreas[2].id,
-      learningArea: mockLearningAreas[2]
-    };
-
-    return [mockTask1, mockTask2, mockTask3];
-  }
-
-  private getMockEducontents(): EduContentInterface[] {
-    const mockLearningAreas = this.getMockLearningAreas();
-    const mockEducontentProductTypes = this.getMockEduContentProductTypes();
-    const mockMethods = this.getMockMethods();
-
-    let mockEducontent1: EduContentInterface;
-    mockEducontent1 = {
-      type: 'boek-e',
-      id: 1,
-      publishedEduContentMetadata: {
-        version: 1,
-        metaVersion: '0.1',
-        language: 'be',
-        title: 'De wereld van de getallen',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
-        created: new Date('2018-09-04 14:21:19'),
-        quotable: false,
-        taskAllowed: true,
-        link: '908500016',
-        commitMessage: 'Initial publish',
-        id: 1,
-        learningAreaId: mockLearningAreas[0].id,
-        learningArea: mockLearningAreas[0],
-        eduContentProductTypeId: mockEducontentProductTypes[0].id,
-        eduContentProductType: mockEducontentProductTypes[0],
-        methods: mockMethods.filter(method => method.id === 1)
-      }
-    };
-
-    let mockEducontent2: EduContentInterface;
-    mockEducontent2 = {
-      type: 'link',
-      id: 2,
-      publishedEduContentMetadata: {
-        version: 1,
-        metaVersion: '0.1',
-        language: 'be',
-        title: 'Uit het leven gegrepen',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
-        created: new Date('2018-09-04 14:21:19'),
-        quotable: false,
-        taskAllowed: true,
-        link: 'https://drive.google.com/',
-        commitMessage: 'Initial publish',
-        id: 2,
-        learningAreaId: mockLearningAreas[1].id,
-        learningArea: mockLearningAreas[1],
-        eduContentProductTypeId: mockEducontentProductTypes[1].id,
-        eduContentProductType: mockEducontentProductTypes[1],
-        methods: mockMethods.filter(method => method.id !== 3)
-      }
-    };
-
-    let mockEducontent3: EduContentInterface;
-    mockEducontent3 = {
-      type: 'exercise',
-      id: 3,
-      publishedEduContentMetadata: {
-        version: 1,
-        metaVersion: '0.1',
-        language: 'be',
-        title: 'Het gemiddelde',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
-        created: new Date('2018-09-04 14:21:19'),
-        quotable: true,
-        taskAllowed: true,
-        fileName: '19462.ludo.zip',
-        file: '9-f0ffb8dbde05931dfb9baeee5c86b27.ludo.zip',
-        checksum: 'f0ffb8dbde05931dfb9baeee5c86b27',
-        commitMessage: 'Initial publish',
-        id: 3,
-        learningAreaId: mockLearningAreas[2].id,
-        learningArea: mockLearningAreas[2],
-        eduContentProductTypeId: mockEducontentProductTypes[2].id,
-        eduContentProductType: mockEducontentProductTypes[2],
-        methods: mockMethods
-      }
-    };
-
-    let mockEducontent4: EduContentInterface;
-    mockEducontent4 = {
-      type: 'file',
-      id: 4,
-      publishedEduContentMetadata: {
-        version: 1,
-        metaVersion: '0.1',
-        language: 'be',
-        title: 'Percentrekenen',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
-        created: new Date('2018-09-04 14:21:19'),
-        quotable: false,
-        taskAllowed: true,
-        fileName: 'HAN_meetkunde_tso_geogebra_p23_stelling_van_Thales.ggb',
-        file: '13-f0ffb8dbde05931dfb9baeee5c86b211.ggb',
-        checksum: 'f0ffb8dbde05931dfb9baeee5c86b211',
-        commitMessage: 'Initial publish',
-        id: 4,
-        learningAreaId: mockLearningAreas[0].id,
-        learningArea: mockLearningAreas[0],
-        eduContentProductTypeId: mockEducontentProductTypes[0].id,
-        eduContentProductType: mockEducontentProductTypes[0],
-        methods: mockMethods
-      }
-    };
-
-    return [mockEducontent1, mockEducontent2, mockEducontent3, mockEducontent4];
-  }
-
-  getMockStudent(): PersonInterface {
-    let mockStudent: PersonInterface;
-    mockStudent = {
-      name: 'Bakker',
-      firstName: 'Manon',
-      created: new Date('2018-09-04 14:21:14'),
-      email: 'student0@mailinator.com',
-      currentSchoolYear: 2018,
-      terms: true,
-      username: 'student1',
-      emailVerified: true,
-      id: 6,
-      displayName: 'Manon Bakker'
-    };
-
-    return mockStudent;
-  }
-
-  getMockEduContentProductTypes(): EduContentProductTypeInterface[] {
-    let mockProductType1: EduContentProductTypeInterface;
-    mockProductType1 = {
-      name: 'Jaarplan',
-      icon: 'polpo-lesmateriaal',
-      pedagogic: true,
-      excludeFromFilter: false,
-      id: 2
-    };
-
-    let mockProductType2: EduContentProductTypeInterface;
-    mockProductType2 = {
-      name: 'Online oefeningen',
-      icon: 'polpo-tasks',
-      pedagogic: false,
-      excludeFromFilter: false,
-      id: 4
-    };
-
-    let mockProductType3: EduContentProductTypeInterface;
-    mockProductType3 = {
-      name: 'Lessuggesties',
-      icon: 'polpo-lesmateriaal',
-      pedagogic: true,
-      excludeFromFilter: false,
-      id: 6
-    };
-
-    let mockProductType4: EduContentProductTypeInterface;
-    mockProductType4 = {
-      name: 'Links',
-      icon: 'polpo-website',
-      pedagogic: false,
-      excludeFromFilter: false,
-      id: 18
-    };
-
-    return [
-      mockProductType1,
-      mockProductType2,
-      mockProductType3,
-      mockProductType4
-    ];
-  }
-
-  getMockMethods(): MethodInterface[] {
-    const mockLearningAreas = this.getMockLearningAreas();
-
-    let mockMethod1: MethodInterface;
-    mockMethod1 = {
-      name: 'Beautemps',
-      icon: 'beautemps',
-      logoUrl: 'beautemps.svg',
-      experimental: false,
-      id: 1,
-      learningAreaId: mockLearningAreas[0].id,
-      learningArea: mockLearningAreas[0]
-    };
-
-    let mockMethod2: MethodInterface;
-    mockMethod2 = {
-      name: 'Kapitaal',
-      icon: 'kapitaal',
-      logoUrl: 'kapitaal.svg',
-      experimental: false,
-      id: 2,
-      learningAreaId: mockLearningAreas[1].id,
-      learningArea: mockLearningAreas[1]
-    };
-
-    let mockMethod3: MethodInterface;
-    mockMethod3 = {
-      name: 'Beaufort',
-      icon: 'beaufort',
-      logoUrl: 'beaufort.svg',
-      experimental: false,
-      id: 3,
-      learningAreaId: mockLearningAreas[2].id,
-      learningArea: mockLearningAreas[2]
-    };
-
-    return [mockMethod1, mockMethod2, mockMethod3];
   }
 
   getMockListFormat(): Observable<ListFormat> {
