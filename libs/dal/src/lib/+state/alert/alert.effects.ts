@@ -4,7 +4,6 @@ import { select } from '@ngrx/store';
 import { DataPersistence } from '@nrwl/nx';
 import { interval, Observable, Subject } from 'rxjs';
 import { map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
-import { AlertQueries } from '.';
 import { DalActions } from '..';
 import {
   AlertServiceInterface,
@@ -23,6 +22,7 @@ import {
   SetReadAlert,
   StartPollAlerts
 } from './alert.actions';
+import * as AlertQueries from './alert.selectors';
 
 const MINIMUM_POLLING_INTERVAL = 3000;
 

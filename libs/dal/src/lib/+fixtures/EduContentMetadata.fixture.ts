@@ -1,6 +1,6 @@
-import { LearningAreaFixture } from '.';
 import { EduContentMetadataInterface } from '../+models';
 import { EduContentProductTypeFixture } from './EduContentProductType.fixture';
+import { LearningAreaFixture } from './LearningArea.fixture';
 import { MethodFixture } from './Method.fixture';
 
 export class EduContentMetadataFixture implements EduContentMetadataInterface {
