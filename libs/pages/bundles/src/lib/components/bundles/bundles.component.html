@@ -15,7 +15,7 @@
 
     <campus-page-header [title]="learningArea.name"
                         [subtitle]="'Bundels'"
-                        [iconClass]="learningArea.icon">
+                        [iconClass]="'learning-area:' + learningArea.icon">
     </campus-page-header>
 
     <ng-template #noSharedInfo>Er zijn momenteel geen bundels voor jou klaargezet.</ng-template>
@@ -37,7 +37,7 @@
                            [itemCount]="bundleInfo.contentsCount"
                            [title]="bundleInfo.bundle.name"
                            [backgroundColor]="learningArea.color"
-                           [icon]="'learning-area:' + learningArea.icon.name">
+                           [icon]="'learning-area:' + learningArea.icon">
               <campus-folder-details>
                 {{bundleInfo.contentsCount}} {{bundleInfo.contentsCount === 1 ? 'item' : 'items'}}
               </campus-folder-details>
@@ -51,7 +51,7 @@
       <div>&nbsp;</div>
       <campus-page-header [title]="learningArea.name"
                           [subtitle]="'Boeken'"
-                          [iconClass]="learningArea.icon"></campus-page-header>
+                          [iconClass]="'learning-area:' + learningArea.icon"></campus-page-header>
       <div class="pages-bundles__container__books-count">
         Je hebt {{sharedInfo.books.length}} boek(en) voor {{ learningArea.name }}
       </div>
@@ -60,7 +60,7 @@
           <campus-content-thumbnail *ngFor="let book of sharedInfo.books"
                                     campusListItem
                                     [title]="book.name"
-                                    [contentTypeClass]="'icon-boek'"
+                                    [contentTypeClass]="'book'"
                                     [imagePath]="book.previewImage"
                                     [fileExtensionClass]="book.fileExtension">
           </campus-content-thumbnail>

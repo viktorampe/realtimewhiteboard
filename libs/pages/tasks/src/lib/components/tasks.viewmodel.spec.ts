@@ -332,7 +332,6 @@ describe('TasksViewModel met State', () => {
         personId: 1,
         read: true
       });
-      console.log(expectedAction);
       tasksViewModel.setTaskAlertRead(1);
       expect(store.dispatch).toHaveBeenCalledWith(expectedAction);
     });

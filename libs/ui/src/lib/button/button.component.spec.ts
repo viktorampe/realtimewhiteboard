@@ -62,7 +62,7 @@ describe('ButtonComponent', () => {
   });
 
   it('should show the icon, if provided', () => {
-    const mockIconClass = 'icon-tasks';
+    const mockIconClass = 'tasks';
 
     component.iconClass = mockIconClass;
     testContainerFixture.detectChanges();
