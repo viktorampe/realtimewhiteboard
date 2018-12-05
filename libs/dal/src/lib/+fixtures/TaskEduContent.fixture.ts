@@ -1,24 +1,11 @@
-import {
-  EduContentInterface,
-  PersonInterface,
-  StudentContentStatusInterface,
-  TaskEduContentInterface,
-  TaskInterface
-} from '../+models';
-import { PersonFixture } from './Person.fixture';
+import { TaskEduContentInterface } from '../+models';
 
 export class TaskEduContentFixture implements TaskEduContentInterface {
-  index: number;
-  id?: number;
-  teacherId?: number;
-  eduContentId?: number;
-  taskId?: number;
-  teacher?: PersonInterface = new PersonFixture();
-  eduContent?: EduContentInterface;
-  task?: TaskInterface;
-  studentContentStatuses?: StudentContentStatusInterface[];
+  // defaults
+  index = 1000;
+  id = 1;
 
-  constructor(props: Partial<TaskEduContentFixture> = {}) {
+  constructor(props: Partial<TaskEduContentInterface> = {}) {
     // overwrite defaults
     Object.assign(this, props);
   }

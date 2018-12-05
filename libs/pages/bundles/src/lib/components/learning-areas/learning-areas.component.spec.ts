@@ -1,12 +1,12 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { ListFormat, ListViewItemDirective, UiModule } from '@campus/ui';
 import {
   FilterService,
   FilterServiceInterface,
   FILTER_SERVICE_TOKEN
-} from '@campus/shared';
-import { ListFormat, ListViewItemDirective, UiModule } from '@campus/ui';
+} from '@campus/utils';
 import { BundlesViewModel } from '../bundles.viewmodel';
 import { MockViewModel } from '../bundles.viewmodel.mocks';
 import { LearningAreasComponent } from './learning-areas.component';

@@ -28,7 +28,8 @@ import { AppResolver } from './app.resolver';
     SharedModule.forRoot(
       environment.features.alerts,
       environment.features.messages,
-      environment.iconMapping
+      environment.iconMapping,
+      environment.APIBase
     ),
     BrowserAnimationsModule,
     NxModule.forRoot(),
