@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import {
-  FilterServiceInterface,
-  NestedPartial
-} from './filter.service.interface';
+import { NestedPartial } from '../types/nestedpartial';
+import { FilterServiceInterface } from './filter.service.interface';
 @Injectable({
   providedIn: 'root'
 })

@@ -1,13 +1,16 @@
+import { ResultInterface } from '@campus/dal';
 import { ScormStatus } from '@campus/scorm';
-import { ResultInterface } from '../+models';
 
 export class ResultFixture implements ResultInterface {
   // defaults
+  score = 75;
+  time = 10000;
+  status = ScormStatus.STATUS_COMPLETED;
+  created = new Date(2018, 11 - 1, 20);
   id = 1;
   eduContentId = 1;
   personId = 6;
   taskId = 1;
-  status = ScormStatus.STATUS_NOT_ATTEMPTED;
 
   constructor(props: Partial<ResultInterface> = {}) {
     // overwrite defaults
