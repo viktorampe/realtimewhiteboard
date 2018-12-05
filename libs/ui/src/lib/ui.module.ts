@@ -58,6 +58,7 @@ import { HideDesktopDirective } from './utils/directives/hide-desktop.directive'
 import { HideMobileDirective } from './utils/directives/hide-mobile.directive';
 import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness/adjust-color-brightness.pipe';
 import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time.pipe';
+import { RemovePrefixStringPipe } from './utils/pipes/remove-prefix-string/remove-prefix-string.pipe';
 import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-string.pipe';
 
 @NgModule({
@@ -124,7 +125,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     DropdownMenuItemComponent,
     HideDesktopDirective,
     HideMobileDirective,
-    HumanDateTimePipe
+    HumanDateTimePipe,
+    RemovePrefixStringPipe
   ],
   exports: [
     FilterTextInputComponent,
@@ -166,7 +168,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     DropdownMenuItemComponent,
     HideDesktopDirective,
     HideMobileDirective,
-    HumanDateTimePipe
+    HumanDateTimePipe,
+    RemovePrefixStringPipe
   ]
 })
 export class UiModule {}
