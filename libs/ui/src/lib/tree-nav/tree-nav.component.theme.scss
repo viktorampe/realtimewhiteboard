@@ -49,17 +49,6 @@
   $ui-tree-nav-color-active: $ui-font-color-active-secundary !default;
   $ui-tree-nav-color-separator: darken($ui-tree-nav-color, 40%) !default;
 
-  // icons
-  $ui-tree-nav-toggle: FontAwesome '\f107' !default;
-  $ui-tree-nav-toggle-closed: FontAwesome '\f104' !default;
-
-  @include icon('ui-tree-nav__node__arrow', $ui-tree-nav-toggle);
-  @include icon(
-    'ui-tree-nav__node--closed .ui-tree-nav__node__arrow',
-    $ui-tree-nav-toggle-closed
-  );
-
-  //
   .ui-tree-nav__node {
     > a {
       color: $ui-tree-nav-color;
@@ -72,7 +61,7 @@
         border-left: 3px solid $ui-tree-nav-color-active;
       }
 
-      > i:first-child {
+      > mat-icon:first-child {
         margin-right: 5px;
       }
     }

@@ -1,6 +1,8 @@
 import { CdkTreeModule } from '@angular/cdk/tree';
+//file.only
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { UiModule } from '@campus/ui';
 import { NavItem, TreeNavComponent } from './tree-nav.component';
 
 describe('TreeNavComponent', () => {
@@ -32,8 +34,7 @@ describe('TreeNavComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule, CdkTreeModule],
-      declarations: [TreeNavComponent]
+      imports: [RouterTestingModule, UiModule, CdkTreeModule]
     }).compileComponents();
   }));
 
@@ -64,17 +65,19 @@ describe('TreeNavComponent', () => {
 
   it('should show icon on first node', () => {
     const node = treeNodes[0];
-    expect(node.querySelector('i:first-child')).toBeTruthy();
+    expect(node.querySelector('mat-icon')).toBeTruthy();
   });
 
   it('should set classname for icon', () => {
     const node = treeNodes[0];
-    expect(node.querySelector('i:first-child').className).toBe('iconClass');
+    expect(
+      node.querySelector('mat-icon').getAttribute('ng-reflect-svg-icon')
+    ).toBe('iconClass');
   });
 
   it('should not show icon on third node', () => {
     const node = treeNodes[2];
-    expect(node.querySelector('i:first-child')).toBeFalsy();
+    expect(node.querySelector('mat-icon')).toBeFalsy();
   });
 
   it('should have three children on second node', () => {
@@ -96,12 +99,14 @@ describe('TreeNavComponent', () => {
 
   it('should show arrow icon when node has children', () => {
     const node = treeNodes[1];
-    expect(node.querySelector('i.ui-tree-nav__node__arrow')).toBeTruthy();
+    expect(
+      node.querySelector('mat-icon.ui-tree-nav__node__arrow')
+    ).toBeTruthy();
   });
 
   it('should not show arrow icon when node has no children', () => {
     const node = treeNodes[0];
-    expect(node.querySelector('i.ui-tree-nav__node__arrow')).toBeFalsy();
+    expect(node.querySelector('mat-icon.ui-tree-nav__node__arrow')).toBeFalsy();
   });
 
   it('should add link property as href', () => {
@@ -117,7 +122,9 @@ describe('TreeNavComponent', () => {
   it('should open the second node', () => {
     // check if default state is closed
     const node = treeNodes[1].children[0];
-    expect(node.className).toContain('ui-tree-nav__node--closed');
+    expect(
+      node.querySelector('mat-icon.ui-tree-nav__node__arrow')
+    ).toBeTruthy();
 
     // expand node
     const newNav = mockData.nav.slice();
@@ -125,7 +132,9 @@ describe('TreeNavComponent', () => {
     // apply updated nav
     component.treeNav = newNav;
     fixture.detectChanges();
-    expect(node.className).not.toContain('ui-tree-nav__node--closed');
+    expect(
+      node.querySelector('mat-icon.ui-tree-nav__node__closed')
+    ).toBeTruthy();
   });
 
   // no tests for click handler because that is triggered through the "cdkTreeNodeToggle" Angular Material directive
