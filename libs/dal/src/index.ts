@@ -22,6 +22,8 @@ export * from './lib/+state/user';
 export * from './lib/+state/user-content';
 export * from './lib/alert';
 export * from './lib/dal.module';
-export { EduContentServiceInterface, EDUCONTENT_SERVICE_TOKEN } from './lib/edu-content/edu-content.service.interface';
+export {
+  EduContentServiceInterface,
+  EDUCONTENT_SERVICE_TOKEN
+} from './lib/edu-content/edu-content.service.interface';
 export * from './lib/persons';
-
