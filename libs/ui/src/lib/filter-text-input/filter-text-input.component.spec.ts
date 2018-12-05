@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
+import { UiModule } from '@campus/ui';
 import { FilterTextInputComponent } from './filter-text-input.component';
 
 describe('FilterTextInputComponent', () => {
@@ -18,8 +19,8 @@ describe('FilterTextInputComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [FilterTextInputComponent],
-      imports: [FormsModule, ReactiveFormsModule]
+      imports: [FormsModule, ReactiveFormsModule, UiModule]
+      //providers:[{provide: MatIconRegistry, useClass: MockMatIconRegistry}] //TODO after merge
     }).compileComponents();
   }));
 
