@@ -16,8 +16,7 @@ export class TaskInstance implements TaskInstanceInterface {
   task?: TaskInterface;
   student?: PersonInterface;
   group?: GroupInterface;
-
-  getProgress(): number {
+  get progress() {
     if (this.start && this.end) {
       const full: number = this.end.getTime() - this.start.getTime();
       if (full < 0) {

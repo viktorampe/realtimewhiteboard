@@ -3,12 +3,12 @@ import {
   ScormExerciseServiceInterface,
   SCORM_EXERCISE_SERVICE_TOKEN
 } from '@campus/dal';
-import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/shared';
 import { FilterTextInputComponent, ListFormat } from '@campus/ui';
+import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { Observable } from 'rxjs';
 import { TasksViewModel } from './../tasks.viewmodel';
 import {
-  LearningAreasWithTaskInstanceInfoInterface,
+  LearningAreasWithTaskInfoInterface,
   LearningAreaWithTaskInfoInterface
 } from './../tasks.viewmodel.interfaces';
 
@@ -20,13 +20,11 @@ import {
 export class TasksAreaComponent implements OnInit {
   protected listFormat = ListFormat;
   listFormat$: Observable<ListFormat>;
-  learningAreasWithInfo$: Observable<
-    LearningAreasWithTaskInstanceInfoInterface
-  >;
+  learningAreasWithInfo$: Observable<LearningAreasWithTaskInfoInterface>;
 
   @ViewChild('filterInput')
   filterTextInput: FilterTextInputComponent<
-    LearningAreasWithTaskInstanceInfoInterface,
+    LearningAreasWithTaskInfoInterface,
     LearningAreaWithTaskInfoInterface
   >;
 
@@ -37,13 +35,9 @@ export class TasksAreaComponent implements OnInit {
     @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface
   ) {}
 
-  startEx() {
-    this.exerciseService.startExerciseAsPreviewWithAnswers();
-  }
-
   ngOnInit() {
     this.listFormat$ = this.tasksViewModel.listFormat$;
-    this.learningAreasWithInfo$ = this.tasksViewModel.learningAreasWithTaskInstances$;
+    this.learningAreasWithInfo$ = this.tasksViewModel.learningAreasWithTaskInfo$;
     this.filterTextInput.setFilterableItem(this);
   }
 
@@ -52,7 +46,7 @@ export class TasksAreaComponent implements OnInit {
   }
 
   filterFn(
-    info: LearningAreasWithTaskInstanceInfoInterface,
+    info: LearningAreasWithTaskInfoInterface,
     searchText: string
   ): LearningAreaWithTaskInfoInterface[] {
     return this.filterService.filter(info.learningAreasWithInfo, {

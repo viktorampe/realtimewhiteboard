@@ -6,6 +6,7 @@ import { MatIconModule, MatIconRegistry } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { UiModule } from '@campus/ui';
+import { FilterService, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { PageBarContainerComponent } from './components/page-bar-container/page-bar-container.component';
 import { OPEN_STATIC_CONTENT_SERVICE_TOKEN } from './content/open-static-content.interface';
 import { OpenStaticContentService } from './content/open-static-content.service';
@@ -13,13 +14,13 @@ import { HeaderComponent } from './header/header.component';
 import {
   EnvironmentAlertsFeatureInterface,
   EnvironmentMessagesFeatureInterface,
+  EnvironmentWebsiteInterface,
   ENVIRONMENT_ALERTS_FEATURE_TOKEN,
   ENVIRONMENT_API_BASE_TOKEN,
   ENVIRONMENT_ICON_MAPPING_TOKEN,
-  ENVIRONMENT_MESSAGES_FEATURE_TOKEN
+  ENVIRONMENT_MESSAGES_FEATURE_TOKEN,
+  ENVIRONMENT_WEBSITE_TOKEN
 } from './interfaces';
-import { FilterService } from './services/filter.service';
-import { FILTER_SERVICE_TOKEN } from './services/filter.service.interface';
 
 @NgModule({
   imports: [
@@ -57,6 +58,7 @@ export class SharedModule {
   static forRoot(
     environmentAlertsFeature: EnvironmentAlertsFeatureInterface,
     environmentMessagesFeature: EnvironmentMessagesFeatureInterface,
+    environmentWebsite: EnvironmentWebsiteInterface,
     iconMapping: { [key: string]: string },
     apiBase: string
   ): ModuleWithProviders {
@@ -70,6 +72,10 @@ export class SharedModule {
         {
           provide: ENVIRONMENT_MESSAGES_FEATURE_TOKEN,
           useValue: environmentMessagesFeature
+        },
+        {
+          provide: ENVIRONMENT_WEBSITE_TOKEN,
+          useValue: environmentWebsite
         },
         {
           provide: ENVIRONMENT_ICON_MAPPING_TOKEN,
