@@ -18,6 +18,10 @@ export interface EnvironmentMessagesFeatureInterface {
   hasAppBarDropDown: boolean;
 }
 
-export const ENVIRONMENT_WEBSITE_URL_TOKEN = new InjectionToken<string>(
-  'environmentWebsiteUrl'
-);
+export const ENVIRONMENT_WEBSITE_TOKEN = new InjectionToken<
+  EnvironmentWebsiteInterface
+>('environmentWebsiteUrl');
+
+export interface EnvironmentWebsiteInterface {
+  url: string;
+}

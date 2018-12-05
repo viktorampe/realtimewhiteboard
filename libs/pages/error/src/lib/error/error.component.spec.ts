@@ -8,7 +8,7 @@ import {
   UserActions,
   UserReducer
 } from '@campus/dal';
-import { ENVIRONMENT_WEBSITE_URL_TOKEN } from '@campus/shared';
+import { ENVIRONMENT_WEBSITE_TOKEN } from '@campus/shared';
 import { MockActivatedRoute } from '@campus/testing';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
@@ -20,7 +20,9 @@ describe('ErrorComponent', () => {
   let activatedRoute: MockActivatedRoute;
   let store: Store<DalState>;
 
-  const websiteUrl = 'http://www.foo.bar';
+  const mockWebsite = {
+    url: 'http://www.foo.bar'
+  };
   const displayName = 'Foo Bar';
 
   const usedUserState = {
@@ -46,8 +48,8 @@ describe('ErrorComponent', () => {
         Store,
         { provide: ActivatedRoute, useClass: MockActivatedRoute },
         {
-          provide: ENVIRONMENT_WEBSITE_URL_TOKEN,
-          useValue: websiteUrl
+          provide: ENVIRONMENT_WEBSITE_TOKEN,
+          useValue: mockWebsite
         }
       ],
       declarations: [ErrorComponent]
@@ -76,7 +78,7 @@ describe('ErrorComponent', () => {
 
       expect(component.statusCode$).toBeObservable(hot('a', { a: 'foo' }));
 
-      expect(component.websiteUrl).toBe(websiteUrl);
+      expect(component.website.url).toBe(mockWebsite.url);
     });
   });
 

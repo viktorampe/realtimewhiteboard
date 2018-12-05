@@ -1,7 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DalState, PersonInterface, UserQueries } from '@campus/dal';
-import { ENVIRONMENT_WEBSITE_URL_TOKEN } from '@campus/shared';
+import {
+  EnvironmentWebsiteInterface,
+  ENVIRONMENT_WEBSITE_TOKEN
+} from '@campus/shared';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
@@ -20,7 +23,8 @@ export class ErrorComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private store: Store<DalState>,
-    @Inject(ENVIRONMENT_WEBSITE_URL_TOKEN) public websiteUrl: string
+    @Inject(ENVIRONMENT_WEBSITE_TOKEN)
+    public website: EnvironmentWebsiteInterface
   ) {}
 
   ngOnInit() {
