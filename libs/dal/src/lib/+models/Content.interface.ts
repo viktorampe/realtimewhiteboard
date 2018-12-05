@@ -1,7 +1,7 @@
 export interface ContentInterface {
   name: string;
   id?: number;
-  productType: string;
+  productType?: string;
   fileExtension: string;
   previewImage?: string;
   description: string;

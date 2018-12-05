@@ -10,10 +10,9 @@ export class UserContent implements UserContentInterface, ContentInterface {
   id?: number;
   teacherId?: number;
   teacher?: PersonInterface;
-  get productType(): string {
-    return '';
-  }
+  fileExt: string;
+
   get fileExtension(): string {
-    return 'link'; // TODO should be derived from URL
+    return this.fileExt;
   }
 }
