@@ -10,8 +10,8 @@ export class EduContentMetadataFixture implements EduContentMetadataInterface {
   language = 'nl';
   title = 'foo';
   description = 'foo';
-  created = new Date();
-  published = new Date();
+  created = new Date('2018-12-05T13:48:00.719Z');
+  published = new Date('2018-12-05T13:48:00.719Z');
   quotable = true;
   taskAllowed = true;
   standalone = false;

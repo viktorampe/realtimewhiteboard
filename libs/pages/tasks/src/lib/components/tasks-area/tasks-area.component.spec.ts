@@ -31,7 +31,7 @@ describe('TasksAreaComponent', () => {
       declarations: [TasksAreaComponent],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
-        TasksViewModel,
+        { provide: TasksViewModel, useClass: MockTasksViewModel },
         { provide: FILTER_SERVICE_TOKEN, useClass: FilterService }
       ]
     }).compileComponents();

@@ -114,7 +114,6 @@ export class TasksViewModel {
       this.getMockTeachers() //todo select teacher entities here
     ).pipe(
       map(([taskInstances, taskEduContents, eduContents, task, teachers]) => {
-        console.log({ taskEduContents });
         if (!task) return null;
         return {
           //todo place teacher here on task

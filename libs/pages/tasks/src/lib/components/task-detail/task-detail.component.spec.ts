@@ -3,32 +3,30 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute } from '@angular/router';
-import {
-  EduContent,
-  LearningAreaInterface,
-  TaskInstanceInterface
-} from '@campus/dal';
+import { LearningAreaInterface } from '@campus/dal';
 import { ListFormat, ListViewItemDirective, UiModule } from '@campus/ui';
 import { FilterService, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { hot } from '@nrwl/nx/testing';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { MockTasksViewModel as TasksViewModel } from '../tasks.viewmodel.mock';
+import { TasksViewModel } from '../tasks.viewmodel';
+import { TaskWithInfoInterface } from '../tasks.viewmodel.interfaces';
+import { MockTasksViewModel } from '../tasks.viewmodel.mock';
 import { TaskDetailComponent } from './task-detail.component';
 
 // TODO replace with @campus/testing  moch route
 export class MockActivatedRoute {
   params: Observable<any> = new BehaviorSubject<any>({
-    params: { bundle: 1, area: 1 }
+    task: 1,
+    area: 1
   });
 }
 
 describe('TaskDetailComponent', () => {
   let component: TaskDetailComponent;
   let fixture: ComponentFixture<TaskDetailComponent>;
-  let tasksViewModel: TasksViewModel;
-  let contents$: BehaviorSubject<EduContent[]>;
+  let tasksViewModel: MockTasksViewModel;
   let learningArea$: BehaviorSubject<LearningAreaInterface>;
-  let taskInstance$: BehaviorSubject<TaskInstanceInterface>;
+  let taskInfo$: BehaviorSubject<TaskWithInfoInterface>;
   let listFormat$: BehaviorSubject<ListFormat>;
 
   beforeEach(async(() => {
@@ -39,7 +37,7 @@ describe('TaskDetailComponent', () => {
       providers: [
         { provide: ActivatedRoute, useClass: MockActivatedRoute },
         { provide: FILTER_SERVICE_TOKEN, useClass: FilterService },
-        TasksViewModel
+        { provide: TasksViewModel, useClass: MockTasksViewModel }
       ]
     }).compileComponents();
   }));
@@ -53,12 +51,9 @@ describe('TaskDetailComponent', () => {
     learningArea$ = tasksViewModel.getLearningAreaById(1) as BehaviorSubject<
       LearningAreaInterface
     >;
-    taskInstance$ = tasksViewModel.getTaskById(1) as BehaviorSubject<
-      TaskInstanceInterface
+    taskInfo$ = tasksViewModel.getTaskWithInfo(1) as BehaviorSubject<
+      TaskWithInfoInterface
     >;
-    contents$ = tasksViewModel.getEduContentsWithSubmittedByTaskId(
-      1
-    ) as BehaviorSubject<EduContent[]>;
     listFormat$ = tasksViewModel.listFormat$ as BehaviorSubject<ListFormat>;
   });
 
@@ -84,7 +79,6 @@ describe('TaskDetailComponent', () => {
     component.filterTextInput.setValue(filterText);
 
     expect(spyFilterService).toHaveBeenCalledTimes(1);
-    expect(spyFilterService).toHaveBeenCalledWith(contents$.value, filterText);
 
     fixture.detectChanges();
     const componentDE = fixture.debugElement.query(By.css('.itemsAmount'));
@@ -110,7 +104,7 @@ describe('TaskDetailComponent', () => {
     expect(spy).toHaveBeenCalledWith(ListFormat.GRID);
   });
 
-  it('should get the listFormat$, learningArea$, taskInstance$ and contents$ from the tasksViewModel', () => {
+  it('should get the listFormat$, learningArea$, taskInfo$ and from the tasksViewModel', () => {
     expect(component.listFormat$).toBeObservable(
       hot('a', { a: listFormat$.value })
     );
@@ -118,10 +112,7 @@ describe('TaskDetailComponent', () => {
       hot('a', { a: learningArea$.value })
     );
     expect(component.taskInfo$).toBeObservable(
-      hot('a', { a: taskInstance$.value })
-    );
-    expect(component.contents$).toBeObservable(
-      hot('a', { a: contents$.value })
+      hot('a', { a: taskInfo$.value })
     );
   });
 

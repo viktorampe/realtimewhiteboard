@@ -87,15 +87,9 @@ export const getAllGroupedByTaskId = createSelector(
 export const getAllByTaskId = createSelector(
   selectTaskEduContentState,
   (state: State, props: { taskId: number }) => {
-    console.log(props.taskId);
     const test = (<number[]>state.ids)
-      .filter(id => {
-        const ding = state.entities[id].taskId === props.taskId;
-
-        return ding;
-      })
+      .filter(id => state.entities[id].taskId === props.taskId)
       .map(t => state.entities[t]);
-    console.log({ test });
     return test;
   }
 );

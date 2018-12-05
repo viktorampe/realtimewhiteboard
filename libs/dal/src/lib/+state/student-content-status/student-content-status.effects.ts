@@ -67,7 +67,6 @@ export class StudentContentStatusesEffects {
       },
       undoAction: (action: UpdateStudentContentStatus, error: any) => {
         //TODO handle the undo
-        console.log({ error, action });
         return null;
       }
     }
@@ -93,7 +92,6 @@ export class StudentContentStatusesEffects {
       },
       undoAction: (action: AddStudentContentStatus, error: any) => {
         //TODO handle the undo
-        console.log({ error, action });
         return null;
       }
     }

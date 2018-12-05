@@ -1,5 +1,3 @@
-//file.only
-
 import { TestBed } from '@angular/core/testing';
 import {
   AlertActions,
@@ -75,6 +73,7 @@ describe('TasksViewModel met State', () => {
   let taskInstances: TaskInstanceInterface[];
   let taskEduContents: TaskEduContentInterface[];
   let listFormat: ListFormat;
+  const now = new Date();
 
   function setInitialState() {
     setLearningAreaState();
@@ -371,7 +370,6 @@ describe('TasksViewModel met State', () => {
         personId: 1,
         read: true
       });
-      console.log(expectedAction);
       tasksViewModel.setTaskAlertRead(1);
       expect(store.dispatch).toHaveBeenCalledWith(expectedAction);
     });

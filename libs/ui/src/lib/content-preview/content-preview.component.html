@@ -7,13 +7,9 @@
   <div class="ui_content-preview__product">
     <ng-content select="[type]"></ng-content>
     <div class="ui_content-preview__product__details">
-      <div class="ui_content-preview__product__details__title">
-        {{ titleText }}
-      </div>
+      <div class="ui_content-preview__product__details__title">{{ titleText }}</div>
       <ng-content select="[icon]"></ng-content>
-      <div class="ui_content-preview__product__details__description">
-        {{ description }}
-      </div>
+      <div class="ui_content-preview__product__details__description">{{ description }}</div>
     </div>
   </div>
   <div class="ui_content-preview__badges">
