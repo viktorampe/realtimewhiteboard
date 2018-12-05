@@ -4,7 +4,6 @@ import {
   EduContentFixture,
   LearningAreaFixture,
   LearningAreaInterface,
-  MethodFixture,
   UnlockedBoekeGroup,
   UnlockedBoekeGroupFixture,
   UnlockedBoekeStudent,
@@ -61,22 +60,7 @@ export class MockBooksViewModel {
   sharedBooks$: Observable<EduContent[]> = new BehaviorSubject([
     new EduContentFixture(
       { id: 1, publishedEduContentMetadataId: 1 },
-      {
-        learningAreaId: 1,
-        learningArea: new LearningAreaFixture({
-          id: 1,
-          icon: 'learning-area:wiskunde'
-        }),
-        fileName: 'blah.boek',
-        title: 'bar',
-        methods: [
-          new MethodFixture({
-            name: 'VBTL',
-            icon: '/assets/images/vbtl.jpg'
-          })
-        ],
-        link: '908500016'
-      }
+      { learningAreaId: 1, learningArea: new LearningAreaFixture({ id: 1 }) }
     ),
     new EduContentFixture(
       { id: 2, publishedEduContentMetadataId: 2 },
