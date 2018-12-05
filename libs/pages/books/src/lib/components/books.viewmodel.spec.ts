@@ -30,7 +30,7 @@ import { hot } from '@nrwl/nx/testing';
 import { BooksViewModel } from './books.viewmodel';
 
 describe('BooksViewModel', () => {
-  let openContentMock = jest.fn();
+  const openContentMock = jest.fn();
   let booksViewModel: BooksViewModel;
   let store: Store<DalState>;
   let uiState: UiReducer.UiState;

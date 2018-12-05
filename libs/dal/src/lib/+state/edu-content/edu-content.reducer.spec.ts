@@ -1,4 +1,3 @@
-// file.only
 import { Update } from '@ngrx/entity';
 import { EduContentActions } from '.';
 import { EduContentFixture } from '../../+fixtures';
@@ -114,18 +113,18 @@ describe('EduContents Reducer', () => {
 
   describe('sortEduContent', () => {
     it('should sort by name', () => {
-      const eduContents = [
+      const unsortedEduContents = [
         new EduContentFixture({ id: 1 }, { title: 'c' }),
         new EduContentFixture({ id: 2 }, { title: 'b' }),
         new EduContentFixture({ id: 3 }, { title: 'a' })
       ];
 
-      const sortedIds = eduContents.sort(sortEduContent).map(e => e.id);
+      const sortedIds = unsortedEduContents.sort(sortEduContent).map(e => e.id);
       expect(sortedIds).toEqual([3, 2, 1]);
     });
 
     it('should sort by name, then by year', () => {
-      const eduContents = [
+      const unsortedEduContents = [
         new EduContentFixture(
           { id: 1 },
           { title: 'b', years: [{ name: '3' }] }
@@ -137,12 +136,12 @@ describe('EduContents Reducer', () => {
         new EduContentFixture({ id: 3 }, { title: 'b', years: [{ name: '2' }] })
       ];
 
-      const sortedIds = eduContents.sort(sortEduContent).map(e => e.id);
+      const sortedIds = unsortedEduContents.sort(sortEduContent).map(e => e.id);
       expect(sortedIds).toEqual([2, 3, 1]);
     });
 
     it('should sort by name, then by year, then by id', () => {
-      const eduContents = [
+      const unsortedEduContents = [
         new EduContentFixture(
           { id: 1 },
           { title: 'b', years: [{ name: '1' }] }
@@ -154,7 +153,7 @@ describe('EduContents Reducer', () => {
         new EduContentFixture({ id: 3 }, { title: 'b', years: [{ name: '1' }] })
       ];
 
-      const sortedIds = eduContents.sort(sortEduContent).map(e => e.id);
+      const sortedIds = unsortedEduContents.sort(sortEduContent).map(e => e.id);
       expect(sortedIds).toEqual([2, 1, 3]);
     });
   });

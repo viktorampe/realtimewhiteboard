@@ -1,3 +1,4 @@
+import { ObjectPathService, ObjectPathServiceInterface } from '@campus/utils';
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { EduContentInterface } from '../../+models';
 import {
@@ -11,8 +12,10 @@ export function sortEduContent(
   a: EduContentInterface,
   b: EduContentInterface
 ): number {
-  const titleA = getTitle(a);
-  const titleB = getTitle(b);
+  const objectPathService: ObjectPathServiceInterface = new ObjectPathService();
+
+  const titleA: string = getTitle(a);
+  const titleB: string = getTitle(b);
 
   // sort by title
   if (titleA < titleB) {
@@ -23,8 +26,8 @@ export function sortEduContent(
   }
 
   // then sort by year
-  const yearA = getYear(a);
-  const yearB = getYear(b);
+  const yearA: number = getYear(a);
+  const yearB: number = getYear(b);
 
   if (yearA < yearB) {
     return -1;
@@ -36,31 +39,20 @@ export function sortEduContent(
   // finally sort by id
   return a.id - b.id;
 
-  function getProp(obj: any, prop: string, notFound: number): number; // number overload
-  function getProp(obj: any, prop: string, notFound: string): string; // string overload
-  function getProp(
-    obj: any,
-    prop: string,
-    notFound: string | number = ''
-  ): string | number {
-    const p = prop.split('.');
-    const val = p.reduce((o, p) => o[p] || notFound, obj);
-    if (typeof notFound === 'number') {
-      return Number(val);
-    }
-    return val.toString();
-  }
-
   function getTitle(eduContent: EduContentInterface): string {
-    return getProp(
-      eduContent,
-      'publishedEduContentMetadata.title',
-      ''
-    ).toLowerCase();
+    const defaultValue = '' as string;
+    return objectPathService
+      .get(eduContent, p => p.publishedEduContentMetadata.title, defaultValue)
+      .toLowerCase();
   }
 
   function getYear(eduContent: EduContentInterface): number {
-    return getProp(eduContent, 'publishedEduContentMetadata.years.0.name', 0);
+    const defaultValue = '0' as string;
+    return +objectPathService.get(
+      eduContent,
+      p => p.publishedEduContentMetadata.years[0].name,
+      defaultValue
+    );
   }
 }
 

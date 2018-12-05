@@ -20,13 +20,9 @@ type ViewModelInterface<T> = { [P in keyof T]: T[P] };
   providedIn: 'root'
 })
 export class MockBooksViewModel implements ViewModelInterface<BooksViewModel> {
-  initialize(): void {}
-
   listFormat$: Observable<ListFormat> = new BehaviorSubject<ListFormat>(
     ListFormat.GRID
   );
-
-  openBook(contentId: number): void {}
 
   // source
   learningAreas$: Observable<
@@ -100,6 +96,10 @@ export class MockBooksViewModel implements ViewModelInterface<BooksViewModel> {
       { learningAreaId: 4, learningArea: new LearningAreaFixture({ id: 4 }) }
     )
   ]);
+
+  initialize(): void {}
+
+  openBook(contentId: number): void {}
 
   changeListFormat(listFormat: ListFormat): void {}
 }
