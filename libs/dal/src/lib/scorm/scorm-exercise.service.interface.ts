@@ -5,9 +5,30 @@ export const SCORM_EXERCISE_SERVICE_TOKEN = new InjectionToken(
 );
 
 export interface ScormExerciseServiceInterface {
-  startExerciseAsPreviewWithAnswers(): void;
-  startExerciseAsPreviewWithoutAnswers(): void;
-  startExerciseAsTask(): void;
-  startExerciseAsTraining(): void;
-  startExerciseAsReview(): void;
+  startExerciseAsPreviewWithAnswers(
+    userId: number,
+    educontentId: number,
+    unlockedContentId: number
+  ): void;
+  startExerciseAsPreviewWithoutAnswers(
+    userId: number,
+    educontentId: number,
+    unlockedContentId: number
+  ): void;
+  startExerciseAsTask(
+    userId: number,
+    educontentId: number,
+    taskId: number
+  ): void;
+  startExerciseAsTraining(
+    userId: number,
+    educontentId: number,
+    unlockedContentId: number
+  ): void;
+  startExerciseAsReview(
+    userId: number,
+    educontentId: number,
+    unlockedContentId: number
+  ): void;
+  closeExercise(): void;
 }

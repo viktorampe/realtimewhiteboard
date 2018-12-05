@@ -1,11 +1,14 @@
 import { Inject, Injectable } from '@angular/core';
+import { WindowServiceInterface, WINDOW_SERVICE_TOKEN } from '@campus/browser';
 import {
   ScormApiServiceInterface,
   ScormCmiInterface,
+  ScormCmiMode,
   SCORM_API_SERVICE_TOKEN
 } from '@campus/scorm';
 import { select, Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import {
   CurrentExerciseActions,
   CurrentExerciseQueries,
@@ -18,57 +21,141 @@ import { ScormExerciseServiceInterface } from './scorm-exercise.service.interfac
   providedIn: 'root'
 })
 export class ScormExerciseService implements ScormExerciseServiceInterface {
-  currentURL: Observable<String>;
+  currentURL$: Observable<string>;
   private currentExercise$: Observable<CurrentExerciseInterface>;
   private currentResult$: Observable<ScormCmiInterface>;
   private commit$: Observable<any>;
-  private scormWindow: Window;
 
   constructor(
+    @Inject(WINDOW_SERVICE_TOKEN) private windowService: WindowServiceInterface,
     @Inject(SCORM_API_SERVICE_TOKEN) private scormApi: ScormApiServiceInterface,
     private store: Store<CurrentExerciseReducer.State>
   ) {
     this.currentExercise$ = this.store.pipe(
       select(CurrentExerciseQueries.getCurrentExercise)
     );
-  }
 
-  startExerciseAsPreviewWithAnswers(): void {
-    this.saveExerciseToStore(17, 19, false, null, 2);
+    this.currentURL$ = this.currentExercise$.pipe(
+      map(data => {
+        return data.url;
+      })
+    );
 
-    // this.scormApi.init(, ScormCmiMode.CMI_MODE_PREVIEW);
-
-    //this.currentResult$ = this.scormApi.cmi$;
-    //this.commit$ = this.scormApi.commit$;
-    /*this.currentResult$.subscribe(sub => {
-      //dispatch update
+    this.currentURL$.subscribe(url => {
+      this.openNewwUrl(url);
     });
-    this.commit$.subscribe(sub => {
-      //commit
-    });*/
   }
 
-  startExerciseAsPreviewWithoutAnswers(): void {
-    //this.scormApi.init(, ScormCmiMode.CMI_MODE_NORMAL);
-    this.saveExerciseToStore(12, 12, false, null, 12);
+  startExerciseAsPreviewWithAnswers(
+    userId: number,
+    educontentId: number,
+    unlockedContentId: number
+  ): void {
+    this.initializeApi(ScormCmiMode.CMI_MODE_PREVIEW);
+    this.saveNewExerciseToStore(
+      userId,
+      educontentId,
+      false,
+      null,
+      unlockedContentId
+    );
   }
 
-  startExerciseAsTask(): void {
-    //this.scormApi.init(, ScormCmiMode.CMI_MODE_BROWSE);
-    this.saveExerciseToStore(12, 12, true, 12, null);
+  startExerciseAsPreviewWithoutAnswers(
+    userId: number,
+    educontentId: number,
+    unlockedContentId: number
+  ): void {
+    this.initializeApi(ScormCmiMode.CMI_MODE_NORMAL);
+    this.saveNewExerciseToStore(
+      userId,
+      educontentId,
+      false,
+      null,
+      unlockedContentId
+    );
   }
 
-  startExerciseAsTraining(): void {
-    //this.scormApi.init(, ScormCmiMode.CMI_MODE_NORMAL);
-    this.saveExerciseToStore(12, 12, true, null, 12);
+  startExerciseAsTask(
+    userId: number,
+    educontentId: number,
+    taskId: number
+  ): void {
+    this.initializeApi(ScormCmiMode.CMI_MODE_BROWSE);
+    this.saveNewExerciseToStore(userId, educontentId, true, taskId, null);
   }
 
-  startExerciseAsReview(): void {
-    //this.scormApi.init(, ScormCmiMode.CMI_MODE_REVIEW);
-    this.saveExerciseToStore(12, 12, false, null, 12);
+  startExerciseAsTraining(
+    userId: number,
+    educontentId: number,
+    unlockedContentId: number
+  ): void {
+    this.initializeApi(ScormCmiMode.CMI_MODE_NORMAL);
+    this.saveNewExerciseToStore(
+      userId,
+      educontentId,
+      true,
+      null,
+      unlockedContentId
+    );
   }
 
-  private saveExerciseToStore(
+  startExerciseAsReview(
+    userId: number,
+    educontentId: number,
+    unlockedContentId: number
+  ): void {
+    this.initializeApi(ScormCmiMode.CMI_MODE_REVIEW);
+    this.saveNewExerciseToStore(
+      userId,
+      educontentId,
+      false,
+      null,
+      unlockedContentId
+    );
+  }
+
+  private openNewwUrl(url: string) {
+    if (url) {
+      this.openWindow(url);
+
+      this.commit$.subscribe(() => {
+        this.closeExercise();
+      });
+
+      combineLatest(this.currentExercise$, this.currentResult$)
+        .pipe(
+          map(data => {
+            const state = data[0];
+            const result = data[1];
+            //update values in state and return
+            state.result.cmi.mode = result.mode;
+            state.result.score = result.core.score.raw;
+            return state;
+          })
+        )
+        .subscribe(currentExercise => {
+          this.updateExerciseToStore(
+            currentExercise.result.personId,
+            currentExercise
+          );
+        });
+    }
+  }
+
+  private updateExerciseToStore(
+    userId: number,
+    currentExercise: CurrentExerciseInterface
+  ) {
+    this.store.dispatch(
+      new CurrentExerciseActions.SaveCurrentExercise({
+        userId: userId,
+        exercise: currentExercise
+      })
+    );
+  }
+
+  private saveNewExerciseToStore(
     userId: number,
     educontentId: number,
     saveToApi: boolean,
@@ -86,15 +173,22 @@ export class ScormExerciseService implements ScormExerciseServiceInterface {
     );
   }
 
-  private openWindow() {
-    this.scormWindow = window.open('/popup.html', 'polpo-scorm');
+  private initializeApi(mode: ScormCmiMode) {
+    this.scormApi.init({} as ScormCmiInterface, mode);
+    console.log(this.scormApi.cmi$);
+    this.currentResult$ = this.scormApi.cmi$;
+    this.commit$ = this.scormApi.commit$;
+  }
+
+  private openWindow(url: any) {
+    this.windowService.openWindow('polpo-scorm', url.url);
   }
 
   private closeWindow() {
-    this.scormWindow.close();
+    this.windowService.closeWindow('polpo-scorm');
   }
 
-  private closeExercise() {
+  closeExercise() {
     this.closeWindow();
     this.store.dispatch(new CurrentExerciseActions.ClearCurrentExercise());
   }
