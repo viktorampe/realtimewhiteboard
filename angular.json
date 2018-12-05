@@ -29,8 +29,10 @@
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "apps/polpo-classroom-web/src/environments/environment.ts",
-                  "with": "apps/polpo-classroom-web/src/environments/environment.prod.ts"
+                  "replace":
+                    "apps/polpo-classroom-web/src/environments/environment.ts",
+                  "with":
+                    "apps/polpo-classroom-web/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -90,7 +92,8 @@
         "e2e": {
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
-            "protractorConfig": "apps/polpo-classroom-web-e2e/protractor.conf.js",
+            "protractorConfig":
+              "apps/polpo-classroom-web-e2e/protractor.conf.js",
             "devServerTarget": "polpo-classroom-web:serve"
           },
           "configurations": {
@@ -564,6 +567,32 @@
             "jestConfig": "libs/testing/jest.config.js",
             "tsConfig": "libs/testing/tsconfig.spec.json",
             "setupFile": "libs/testing/src/test-setup.ts"
+          }
+        }
+      }
+    },
+    "utils": {
+      "root": "libs/utils",
+      "sourceRoot": "libs/utils/src",
+      "projectType": "library",
+      "prefix": "campus",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/utils/tsconfig.lib.json",
+              "libs/utils/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/utils/jest.config.js",
+            "tsConfig": "libs/utils/tsconfig.spec.json",
+            "setupFile": "libs/utils/src/test-setup.ts"
           }
         }
       }
