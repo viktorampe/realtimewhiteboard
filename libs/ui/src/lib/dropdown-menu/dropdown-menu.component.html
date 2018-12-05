@@ -4,8 +4,9 @@
   <div *ngIf="showHeader"
        class="ui-dropdown-menu__header">
     <h3>
-      <i *ngIf="headerIcon"
-         [className]="headerIcon"></i>
+      <mat-icon *ngIf="headerIcon"
+                class="icon"
+                [svgIcon]="headerIcon"></mat-icon>
       <strong>{{newItemCount}} nieuwe</strong> {{itemType}}
     </h3>
     <span *ngIf="linkText && linkUrl">-> <a [routerLink]="linkUrl">{{linkText}}</a></span>
