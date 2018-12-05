@@ -29,7 +29,7 @@ export class BooksComponent implements OnInit {
   }
 
   openBook(bookId: number) {
-    //this.viewModel.openBook(bookId);
+    this.viewModel.openBook(bookId);
   }
 
   setListFormat(format: ListFormat) {
