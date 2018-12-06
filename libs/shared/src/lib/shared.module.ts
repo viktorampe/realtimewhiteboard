@@ -1,6 +1,7 @@
 import { LayoutModule } from '@angular/cdk/layout';
 import { PortalModule } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Inject, ModuleWithProviders, NgModule } from '@angular/core';
 import { MatIconModule, MatIconRegistry } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -8,6 +9,7 @@ import { RouterModule } from '@angular/router';
 import { UiModule } from '@campus/ui';
 import { PageBarContainerComponent } from './components/page-bar-container/page-bar-container.component';
 import { HeaderComponent } from './header/header.component';
+import { CampusHttpInterceptor } from './interceptors/campus-http.interceptor';
 import {
   EnvironmentAlertsFeatureInterface,
   EnvironmentErrorManagementFeatureInterface,
@@ -36,7 +38,10 @@ import { FILTER_SERVICE_TOKEN } from './services/filter.service.interface';
     LayoutModule,
     PageBarContainerComponent
   ],
-  providers: [{ provide: FILTER_SERVICE_TOKEN, useClass: FilterService }]
+  providers: [
+    { provide: FILTER_SERVICE_TOKEN, useClass: FilterService },
+    { provide: HTTP_INTERCEPTORS, useClass: CampusHttpInterceptor, multi: true }
+  ]
 })
 export class SharedModule {
   constructor(

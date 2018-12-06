@@ -1,10 +1,9 @@
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { DalModule } from '@campus/dal';
-import { CampusHttpInterceptor, SharedModule } from '@campus/shared';
+import { SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
@@ -14,10 +13,7 @@ import { NxModule } from '@nrwl/nx';
 import { storeFreeze } from 'ngrx-store-freeze';
 import { environment } from '../environments/environment';
 import { AppEffects } from './+state/app.effects';
-import {
-  appReducer,
-  initialState as appInitialState
-} from './+state/app.reducer';
+import { appReducer, initialState as appInitialState } from './+state/app.reducer';
 import { AppComponent } from './app.component';
 
 @NgModule({
@@ -88,9 +84,7 @@ import { AppComponent } from './app.component';
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     StoreRouterConnectingModule
   ],
-  providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: CampusHttpInterceptor, multi: true }
-  ],
+  providers: [],
   bootstrap: [AppComponent],
   exports: [RouterModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

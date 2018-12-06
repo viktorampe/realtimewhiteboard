@@ -30,8 +30,8 @@ export class CampusHttpInterceptor implements HttpInterceptor {
       retry(1),
       catchError((error: HttpErrorResponse) => {
         if (
-          this.environmentErrorManagementFeature.managedStatusCodes.some(
-            managedStatusCode => managedStatusCode === error.status
+          this.environmentErrorManagementFeature.managedStatusCodes.includes(
+            error.status
           )
         ) {
           this.router.navigate(['/error', error.status]);
