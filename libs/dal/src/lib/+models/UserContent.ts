@@ -20,5 +20,4 @@ export class UserContent implements UserContentInterface, ContentInterface {
   get fileTypeLabel(): string {
     return this.fileExt;
   }
-  getFile;
 }
