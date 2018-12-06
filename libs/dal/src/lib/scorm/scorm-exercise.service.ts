@@ -21,7 +21,7 @@ import { ScormExerciseServiceInterface } from './scorm-exercise.service.interfac
   providedIn: 'root'
 })
 export class ScormExerciseService implements ScormExerciseServiceInterface {
-  currentURL$: Observable<string>;
+  private currentURL$: Observable<string>;
   private currentExercise$: Observable<CurrentExerciseInterface>;
   private currentResult$: Observable<ScormCmiInterface>;
   private commit$: Observable<any>;
