@@ -84,9 +84,12 @@ body {
 @include ui-theme();
 // alternative: include individual component mixins
 
-// include pages lib scss file
+// include pages lib scss files
 @import 'libs/pages/shared/src/pages-theme';
 @include pages-theme();
+
+@import 'libs/pages/tasks/src/lib/pages-tasks.theme';
+@include pages-tasks-theme();
 
 // include shared lib scss
 @import 'libs/shared/src/lib/shared-theme';

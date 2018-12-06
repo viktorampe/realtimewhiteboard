@@ -25,7 +25,10 @@
       "@campus/pages/shared": ["libs/pages/shared/src/index.ts"],
       "@campus/browser": ["libs/browser/src/index.ts"],
       "@campus/shared": ["libs/shared/src/index.ts"],
-      "@campus/scorm": ["libs/scorm/src/index.ts"]
+      "@campus/scorm": ["libs/scorm/src/index.ts"],
+      "@campus/pages/error": ["libs/pages/error/src/index.ts"],
+      "@campus/testing": ["libs/testing/src/index.ts"],
+      "@campus/utils": ["libs/utils/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

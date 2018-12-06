@@ -111,7 +111,6 @@ describe('HumanDateTimePipe', () => {
     const date: Date = new Date(baseDateTime);
     date.setMilliseconds(date.getMilliseconds() - 1000 * 60 * 60 * hours);
     const pipe = new HumanDateTimePipe();
-    console.log(pipe.transform(date));
     jest.spyOn(pipe, 'getDate').mockReturnValue(baseDate);
     expect(pipe.transform(date)).toBe(HumanDateTimePipe.weekdays[6]);
   });
@@ -122,7 +121,6 @@ describe('HumanDateTimePipe', () => {
     const date: Date = new Date(baseDateTime);
     date.setMilliseconds(date.getMilliseconds() - 1000 * 60 * 60 * hours);
     const pipe = new HumanDateTimePipe();
-    console.log(pipe.transform(date));
     jest.spyOn(pipe, 'getDate').mockReturnValue(baseDate);
     expect(pipe.transform(date)).toBe(HumanDateTimePipe.weekdays[5]);
   });
@@ -133,7 +131,6 @@ describe('HumanDateTimePipe', () => {
     const date: Date = new Date(baseDateTime);
     date.setMilliseconds(date.getMilliseconds() - 1000 * 60 * 60 * hours);
     const pipe = new HumanDateTimePipe();
-    console.log(pipe.transform(date));
     jest.spyOn(pipe, 'getDate').mockReturnValue(baseDate);
     expect(pipe.transform(date)).toBe(HumanDateTimePipe.weekdays[4]);
   });

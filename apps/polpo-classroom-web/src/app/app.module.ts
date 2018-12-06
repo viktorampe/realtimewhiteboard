@@ -13,7 +13,10 @@ import { NxModule } from '@nrwl/nx';
 import { storeFreeze } from 'ngrx-store-freeze';
 import { environment } from '../environments/environment';
 import { AppEffects } from './+state/app.effects';
-import { appReducer, initialState as appInitialState } from './+state/app.reducer';
+import {
+  appReducer,
+  initialState as appInitialState
+} from './+state/app.reducer';
 import { AppComponent } from './app.component';
 
 @NgModule({
@@ -25,7 +28,9 @@ import { AppComponent } from './app.component';
       environment.features.alerts,
       environment.features.messages,
       environment.features.errorManagement,
-      environment.iconMapping
+      environment.iconMapping,
+      environment.website,
+      environment.APIBase
     ),
     BrowserAnimationsModule,
     NxModule.forRoot(),
@@ -61,6 +66,11 @@ import { AppComponent } from './app.component';
           path: 'alerts',
           loadChildren: '@campus/pages/alerts#PagesAlertsModule'
         },
+        {
+          path: 'error',
+          loadChildren: '@campus/pages/error#PagesErrorModule'
+        },
+
         {
           path: '',
           redirectTo: 'bundles',

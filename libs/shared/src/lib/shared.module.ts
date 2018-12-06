@@ -7,20 +7,24 @@ import { MatIconModule, MatIconRegistry } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { UiModule } from '@campus/ui';
+import { FilterService, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { PageBarContainerComponent } from './components/page-bar-container/page-bar-container.component';
+import { OPEN_STATIC_CONTENT_SERVICE_TOKEN } from './content/open-static-content.interface';
+import { OpenStaticContentService } from './content/open-static-content.service';
 import { HeaderComponent } from './header/header.component';
 import { CampusHttpInterceptor } from './interceptors/campus-http.interceptor';
 import {
   EnvironmentAlertsFeatureInterface,
   EnvironmentErrorManagementFeatureInterface,
   EnvironmentMessagesFeatureInterface,
+  EnvironmentWebsiteInterface,
   ENVIRONMENT_ALERTS_FEATURE_TOKEN,
+  ENVIRONMENT_API_BASE_TOKEN,
   ENVIRONMENT_ERROR_MANAGEMENT_FEATURE_TOKEN,
   ENVIRONMENT_ICON_MAPPING_TOKEN,
-  ENVIRONMENT_MESSAGES_FEATURE_TOKEN
+  ENVIRONMENT_MESSAGES_FEATURE_TOKEN,
+  ENVIRONMENT_WEBSITE_TOKEN
 } from './interfaces';
-import { FilterService } from './services/filter.service';
-import { FILTER_SERVICE_TOKEN } from './services/filter.service.interface';
 
 @NgModule({
   imports: [
@@ -40,7 +44,15 @@ import { FILTER_SERVICE_TOKEN } from './services/filter.service.interface';
   ],
   providers: [
     { provide: FILTER_SERVICE_TOKEN, useClass: FilterService },
-    { provide: HTTP_INTERCEPTORS, useClass: CampusHttpInterceptor, multi: true }
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: CampusHttpInterceptor,
+      multi: true
+    },
+    {
+      provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
+      useClass: OpenStaticContentService
+    }
   ]
 })
 export class SharedModule {
@@ -56,7 +68,9 @@ export class SharedModule {
     environmentAlertsFeature: EnvironmentAlertsFeatureInterface,
     environmentMessagesFeature: EnvironmentMessagesFeatureInterface,
     environmentErrorManagementFeature: EnvironmentErrorManagementFeatureInterface,
-    iconMapping: { [key: string]: string }
+    environmentIconMapping: { [key: string]: string },
+    environmentWebsite: EnvironmentWebsiteInterface,
+    environmentApiBase: string
   ): ModuleWithProviders {
     return {
       ngModule: SharedModule,
@@ -74,8 +88,16 @@ export class SharedModule {
           useValue: environmentErrorManagementFeature
         },
         {
+          provide: ENVIRONMENT_WEBSITE_TOKEN,
+          useValue: environmentWebsite
+        },
+        {
           provide: ENVIRONMENT_ICON_MAPPING_TOKEN,
-          useValue: iconMapping
+          useValue: environmentIconMapping
+        },
+        {
+          provide: ENVIRONMENT_API_BASE_TOKEN,
+          useValue: environmentApiBase
         }
       ]
     };
