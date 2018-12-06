@@ -2,7 +2,9 @@
                         [titleText]="content.name"
                         [description]="content.description">
   <campus-file-extension *ngIf="content.fileExtension"
-                         [extensionClass]="content.fileExtension"></campus-file-extension>
+                         type
+                         [extensionClass]="content.fileExtension"
+                         [title]="content.fileTypeLabel"></campus-file-extension>
   <div *ngIf="content.productType"
        class="{{content.productType}}"></div>
   <div *ngFor="let badge of content.methodLogos">
