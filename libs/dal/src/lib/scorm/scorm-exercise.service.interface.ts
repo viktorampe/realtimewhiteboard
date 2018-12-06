@@ -30,5 +30,6 @@ export interface ScormExerciseServiceInterface {
     educontentId: number,
     unlockedContentId: number
   ): void;
+  startTaskAsReview(userId: number, educontentId: number, taskId: number): void;
   closeExercise(): void;
 }

@@ -117,6 +117,15 @@ export class ScormExerciseService implements ScormExerciseServiceInterface {
     );
   }
 
+  startTaskAsReview(
+    userId: number,
+    educontentId: number,
+    taskId: number
+  ): void {
+    this.initializeApi(ScormCmiMode.CMI_MODE_REVIEW);
+    this.saveNewExerciseToStore(userId, educontentId, false, taskId, null);
+  }
+
   private openNewUrl(url: string) {
     if (url) {
       this.openWindow(url);
