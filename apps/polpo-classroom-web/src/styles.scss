@@ -67,17 +67,17 @@ body {
 }
 
 /*
+ * POLPO theme
+ */
+// load all variables for your app theme and ui components
+@import 'scss/theme-variables';
+
+/*
  * Angular Material theme
  */
 @import 'scss/theme-angular-material';
 @include angular-material-theme($polpo-theme);
 // alternative: include individual component mixins
-
-/*
- * POLPO theme
- */
-// load all variables for your app theme and ui components
-@import 'scss/theme-variables';
 
 // include ui lib scss file
 @import 'libs/ui/src/lib/ui-theme';
@@ -122,7 +122,7 @@ body {
 
   .ui-filter-text-input {
     &__input {
-      border: solid 2px $color-active;
+      border: solid 2px $secondary-bg-color-accent;
     }
     &__icon,
     &__cancel {

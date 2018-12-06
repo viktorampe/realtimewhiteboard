@@ -6,9 +6,7 @@ import {
   AUTH_SERVICE_TOKEN,
   DalState,
   StateResolver,
-  UiActions,
-  UiQuery,
-  UserActions
+  UiActions
 } from '@campus/dal';
 import { Action, Selector, Store } from '@ngrx/store';
 
@@ -25,7 +23,6 @@ export class HeaderResolver extends StateResolver {
 
   protected getLoadableActions(): Action[] {
     return [
-      new UserActions.LoadUser({ force: false }),
       new AlertActions.LoadAlerts({ userId: this.authService.userId }),
       new UiActions.LoadUi()
       //TODO:
@@ -34,8 +31,7 @@ export class HeaderResolver extends StateResolver {
   }
   protected getResolvedQueries(): Selector<object, boolean>[] {
     return [
-      AlertQueries.getLoaded,
-      UiQuery.getLoaded
+      AlertQueries.getLoaded
       // TODO: BreadcrumbQueries.getLoaded
     ];
   }

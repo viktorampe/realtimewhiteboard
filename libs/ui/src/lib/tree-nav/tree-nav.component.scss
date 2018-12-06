@@ -16,6 +16,16 @@
   a {
     display: block;
     text-decoration: none;
+
+    > i:first-child {
+      margin-right: 5px;
+    }
+  }
+
+  mat-icon {
+    font-style: normal;
+    vertical-align: middle;
+    margin-right: 10px;
   }
 
   &--closed {

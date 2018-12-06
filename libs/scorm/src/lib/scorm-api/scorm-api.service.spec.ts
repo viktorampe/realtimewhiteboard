@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { WINDOW } from '@campus/browser';
+import { ScormCmiFixture } from './+fixtures/ScormCmi.fixture';
 import { ScormApi } from './scorm-api';
 import { ScormCmiInterface, ScormCmiMode } from './scorm-api.interface';
 import { ScormApiService } from './scorm-api.service';
@@ -21,17 +22,21 @@ describe('ScormApiService', () => {
   });
 
   describe('when the scorm API is present on the window', () => {
-    const fakeScormApi = { someKey: 'someValue' };
-
     beforeEach(() => {
-      window.API = fakeScormApi;
+      // initialize the first result
+      scormApiService.init(new ScormCmiFixture(), ScormCmiMode.CMI_MODE_NORMAL);
     });
-    it('should not do anything', () => {
-      scormApiService.init(
-        {} as ScormCmiInterface,
-        ScormCmiMode.CMI_MODE_NORMAL
+    it('should update the current result and mode', () => {
+      const expectedResult = new ScormCmiFixture({ objectives: 'foo' });
+      const expectedMode = ScormCmiMode.CMI_MODE_PREVIEW;
+
+      // initialize a new result
+      scormApiService.init(expectedResult, expectedMode);
+
+      expect(window.API.currentResult).toEqual(
+        new ScormCmiFixture(expectedResult)
       );
-      expect(window.API).toBe(fakeScormApi);
+      expect(window.API.mode).toEqual(expectedMode);
     });
   });
 

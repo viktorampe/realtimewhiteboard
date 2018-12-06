@@ -8,6 +8,7 @@ import {
   TaskFixture,
   TaskInstanceFixture
 } from '@campus/dal';
+import { ViewModelInterface } from '@campus/testing';
 import { ListFormat } from '@campus/ui';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { TasksViewModel } from './tasks.viewmodel';
@@ -16,8 +17,6 @@ import {
   TasksWithInfoInterface,
   TaskWithInfoInterface
 } from './tasks.viewmodel.interfaces';
-
-type ViewModelInterface<T> = { [P in keyof T]: T[P] };
 
 @Injectable({
   providedIn: 'root'
