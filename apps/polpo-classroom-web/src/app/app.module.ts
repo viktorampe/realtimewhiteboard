@@ -11,6 +11,7 @@ import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { NxModule } from '@nrwl/nx';
 import { storeFreeze } from 'ngrx-store-freeze';
+import { configureBufferSize, handleUndo } from 'ngrx-undo';
 import { environment } from '../environments/environment';
 import { AppEffects } from './+state/app.effects';
 import {
@@ -18,6 +19,9 @@ import {
   initialState as appInitialState
 } from './+state/app.reducer';
 import { AppComponent } from './app.component';
+
+// if you want to update the buffer (which defaults to 100)
+configureBufferSize(150);
 
 @NgModule({
   declarations: [AppComponent],
@@ -86,7 +90,9 @@ import { AppComponent } from './app.component';
       { app: appReducer },
       {
         initialState: { app: appInitialState },
-        metaReducers: !environment.production ? [storeFreeze] : []
+        metaReducers: !environment.production
+          ? [storeFreeze, handleUndo]
+          : [handleUndo]
       }
     ),
     EffectsModule.forRoot([AppEffects]),

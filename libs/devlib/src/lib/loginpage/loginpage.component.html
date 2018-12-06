@@ -1,20 +1,14 @@
-<campus-dropdown-menu-item
-  header="test description"
-  image="assets/images/icon-smartschool.png"
-  internalLink="test"
-  title="text title"
-></campus-dropdown-menu-item>
+<campus-dropdown-menu-item header="test description"
+                           image="assets/images/icon-smartschool.png"
+                           internalLink="test"
+                           title="text title"></campus-dropdown-menu-item>
 
 <campus-page-bar>
   <div class="divider"></div>
-  <campus-button
-    [iconClass]="'icon-timeline'"
-    (click)="setListFormat(listFormat.LINE)"
-  ></campus-button>
-  <campus-button
-    [iconClass]="'icon-checklist'"
-    (click)="setListFormat(listFormat.GRID)"
-  ></campus-button>
+  <campus-button [iconClass]="'icon-timeline'"
+                 (click)="setListFormat(listFormat.LINE)"></campus-button>
+  <campus-button [iconClass]="'icon-checklist'"
+                 (click)="setListFormat(listFormat.GRID)"></campus-button>
 </campus-page-bar>
 
 <div class="login_page_component">
@@ -29,24 +23,18 @@
     </div>
 
     <div class="login_form">
-      <input
-        placeholder="username"
-        [(ngModel)]="loginPageviewModel.name"
-        type="text"
-      />
-      <input
-        placeholder="password"
-        [(ngModel)]="loginPageviewModel.password"
-        type="password"
-      />
-      <button
-        (click)="
+      <input placeholder="username"
+             [(ngModel)]="loginPageviewModel.name"
+             type="text" />
+      <input placeholder="password"
+             [(ngModel)]="loginPageviewModel.password"
+             type="password" />
+      <button (click)="
           loginPageviewModel.login(
             loginPageviewModel.name,
             loginPageviewModel.password
           )
-        "
-      >
+        ">
         login
       </button>
     </div>
@@ -63,3 +51,10 @@
 
 <button (click)="getCurrentUser()">fetch current user</button>
 <div>{{ currentUser | async | json }}</div>
+
+
+<div><button (click)="updateStudentContentStatus()">update student content status</button></div>
+<div><a [routerLink]="['/bundles']"
+     routerLinkActive="router-link-active">go to bundle page</a></div>
+<div><a [routerLink]="['/tasks']"
+     routerLinkActive="router-link-active">go to tasks page</a></div>
