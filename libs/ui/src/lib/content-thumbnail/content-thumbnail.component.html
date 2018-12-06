@@ -1,7 +1,9 @@
 <div class="ui-content-thumbnail ui-content-thumbnail--{{listFormat}}">
   <div class="ui-content-thumbnail__header {{listFormat == listFormatEnum.LINE ? 'ui-content-thumbnail__header--reverse' : ''}}">
-    <div class="ui-content-thumbnail__icon {{contentTypeClass}}">
-    </div>
+
+    <mat-icon class="ui-content-thumbnail__icon" [svgIcon]="contentTypeClass"
+    *ngIf="contentTypeClass"></mat-icon>
+
     <div class="flex-filler"></div>
     <campus-file-extension extensionClass={{fileExtensionClass}}
                            [showIcon]=false></campus-file-extension>
