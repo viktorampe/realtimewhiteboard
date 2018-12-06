@@ -162,7 +162,7 @@ describe('NavItemServiceService', () => {
     });
   });
 
-  describe('getProfileMenuItes', () => {
+  describe('getProfileMenuItems', () => {
     let mockUser: PersonInterface;
     let mockCredential: PassportUserCredentialInterface;
 
@@ -241,7 +241,7 @@ describe('NavItemServiceService', () => {
     });
 
     it('should return the standard profileMenuItems for a teacher, with credentials', () => {
-      mockUser.roles.push(studentRole);
+      mockUser.roles.push(teacherRole);
 
       const result = navService.getProfileMenuItems(mockUser, [
         mockCredential,
@@ -264,6 +264,32 @@ describe('NavItemServiceService', () => {
           externalLink: 'foo.smartschool.be',
           header: 'Ga naar Smartschool',
           image: '/assets/images/icon-smartschool.png'
+        },
+        {
+          description: 'Afmelden',
+          icon: 'lock',
+          internalLink: '/logout'
+        }
+      ];
+
+      expect(result).toEqual(expected);
+    });
+
+    it('should exclude non-smartschool credentials', () => {
+      mockUser.roles.push(teacherRole);
+      const mockNonSmartschoolCredential = {
+        profile: { platform: 'foo.zeker-niet-smartschool.be' },
+        provider: 'zeker-niet-smartschool'
+      };
+
+      const result = navService.getProfileMenuItems(mockUser, [
+        mockNonSmartschoolCredential
+      ]);
+      const expected = [
+        {
+          description: 'Profiel',
+          icon: 'account',
+          internalLink: '/profile'
         },
         {
           description: 'Afmelden',

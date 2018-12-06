@@ -111,14 +111,11 @@ export class NavItemService {
     user: PersonInterface,
     credentials: PassportUserCredentialInterface[]
   ): DropdownMenuItemInterface[] {
-    let menuItems: DropdownMenuItemInterface[] = [];
-    menuItems.push({ ...this.standardProfileMenuItems.profiel });
-    menuItems = menuItems.concat(
-      this.getSmartschoolProfileMenuItems(credentials)
-    );
-    menuItems.push({ ...this.standardProfileMenuItems.afmelden });
-
-    return menuItems;
+    return [
+      this.standardProfileMenuItems.profiel,
+      ...this.getSmartschoolProfileMenuItems(credentials),
+      this.standardProfileMenuItems.afmelden
+    ];
   }
 
   private withFavorites(navItem: NavItem, favorites: NavItem[]): NavItem {
