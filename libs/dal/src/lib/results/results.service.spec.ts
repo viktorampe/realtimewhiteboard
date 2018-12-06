@@ -1,9 +1,8 @@
 import { inject, TestBed } from '@angular/core/testing';
+import { ScormCmiMode, ScormStatus } from '@campus/scorm';
 import { PersonApi, ResultInterface } from '@diekeure/polpo-api-angular-sdk';
 import { hot } from '@nrwl/nx/testing';
 import { Observable } from 'rxjs';
-import { ScormCMIMode } from './enums/cmi-mode.enum';
-import { ScormStatus } from './enums/scorm-status.enum';
 import { ResultsService } from './results.service';
 import { ResultsServiceInterface } from './results.service.interface';
 
@@ -88,7 +87,7 @@ describe('ResultsService', () => {
     );
 
     const cmi = {
-      mode: ScormCMIMode.CMI_MODE_NORMAL,
+      mode: ScormCmiMode.CMI_MODE_NORMAL,
       core: {
         score: { raw: 100 },
         lesson_location: '',

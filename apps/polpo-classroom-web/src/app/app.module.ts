@@ -28,7 +28,10 @@ import { AppComponent } from './app.component';
     SharedModule.forRoot(
       environment.features.alerts,
       environment.features.messages,
-      environment.iconMapping
+      environment.features.errorManagement,
+      environment.iconMapping,
+      environment.website,
+      environment.APIBase
     ),
     BrowserAnimationsModule,
     NxModule.forRoot(),
@@ -67,6 +70,11 @@ import { AppComponent } from './app.component';
           path: 'alerts',
           loadChildren: '@campus/pages/alerts#PagesAlertsModule'
         },
+        {
+          path: 'error',
+          loadChildren: '@campus/pages/error#PagesErrorModule'
+        },
+
         {
           path: '',
           redirectTo: 'bundles',

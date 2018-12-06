@@ -1,4 +1,6 @@
+import { groupArrayByKey } from '@campus/utils';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { TaskEduContentInterface } from '../../+models';
 import {
   NAME,
   selectAll,
@@ -55,4 +57,38 @@ export const getByIds = createSelector(
 export const getById = createSelector(
   selectTaskEduContentState,
   (state: State, props: { id: number }) => state.entities[props.id]
+);
+
+/**
+ * returns a set of task Ids for tasks where not all task-educontents is finished
+ */
+export const getUnfinishedTaskIds = createSelector(
+  selectTaskEduContentState,
+  (state: State) => {
+    return new Set(
+      Object.values(state.entities).reduce(
+        (acc, curr) => (curr.submitted ? acc : [...acc, curr.taskId]),
+        []
+      )
+    );
+  }
+);
+
+export const getAllGroupedByTaskId = createSelector(
+  selectTaskEduContentState,
+  (state: State) => {
+    return groupArrayByKey<TaskEduContentInterface>(
+      Object.values(state.entities),
+      { taskId: 0 }
+    );
+  }
+);
+
+export const getAllByTaskId = createSelector(
+  selectTaskEduContentState,
+  (state: State, props: { taskId: number }) => {
+    return (<number[]>state.ids)
+      .filter(id => state.entities[id].taskId === props.taskId)
+      .map(t => state.entities[t]);
+  }
 );
