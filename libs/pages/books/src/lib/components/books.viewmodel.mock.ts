@@ -9,12 +9,11 @@ import {
   UnlockedBoekeStudent,
   UnlockedBoekeStudentFixture
 } from '@campus/dal';
+import { ViewModelInterface } from '@campus/testing';
 import { ListFormat } from '@campus/ui';
 import { Dictionary } from '@ngrx/entity';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { BooksViewModel } from './books.viewmodel';
-
-type ViewModelInterface<T> = { [P in keyof T]: T[P] };
 
 @Injectable({
   providedIn: 'root'
