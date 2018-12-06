@@ -23,7 +23,8 @@
                                 [teacher]="bundleOwner$|async">
       </campus-info-panel-bundle>
       <campus-info-panel-content *ngSwitchCase="1"
-                                 [content]="selectedItems[0]">
+                                 [content]="selectedItems[0]"
+                                 [status]="selectedItems[0].status">
       </campus-info-panel-content>
       <campus-info-panel-contents *ngSwitchDefault
                                   [contents]="selectedItems">
