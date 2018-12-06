@@ -139,7 +139,7 @@ export const environment = {
     // groups: 'assets/icons/groups.svg',
     unfinished: 'assets/icons/hourglass.svg',
     // 'increase-lg': 'assets/icons/increase-lg.svg',
-    // increase: 'assets/icons/increase.svg',
+    increase: 'assets/icons/increase.svg',
     // klok: 'assets/icons/klok.svg',
     // 'laptop-content': 'assets/icons/laptop-content.svg',
     // 'laptop-images': 'assets/icons/laptop-images.svg',
@@ -149,7 +149,7 @@ export const environment = {
     // phone: 'assets/icons/phone.svg',
     // pinterest: 'assets/icons/pinterest.svg',
     // 'polpo-small': 'assets/icons/polpo-small.svg',
-    polpo: 'assets/icons/polpo.svg'
+    polpo: 'assets/icons/polpo.svg',
     // 'power-on': 'assets/icons/power-on.svg',
     // 'smartschool:orange':
     //   'assets/icons/smartschool/s_logo_sso_button_orange_22x36.svg',
@@ -166,6 +166,8 @@ export const environment = {
     // timeline: 'assets/icons/timeline.svg',
     // twitter: 'assets/icons/twitter.svg',
     // 'user-exception': 'assets/icons/user-exception.svg',
+    'expand-more': 'assets/icons/expand-more.svg',
+    'expand-less': 'assets/icons/expand-less.svg'
   },
   // promo website settings
   website: {

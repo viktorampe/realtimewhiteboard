@@ -33,7 +33,7 @@
         }
       }
       @if map-has-key($level, icon-size) {
-        a > i:first-child {
+        a > mat-icon:first-child {
           font-size: map-get($level, icon-size);
         }
       }

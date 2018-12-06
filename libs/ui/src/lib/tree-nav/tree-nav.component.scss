@@ -16,15 +16,6 @@
   a {
     display: block;
     text-decoration: none;
-
-    > i:first-child {
-      margin-right: 5px;
-    }
-  }
-
-  i {
-    font-style: normal;
-    vertical-align: middle;
   }
 
   &--closed {

@@ -14,19 +14,17 @@
   </cdk-tree-node>
 
   <cdk-nested-tree-node *cdkTreeNodeDef="let node; when: hasChildren">
-    <li class="ui-tree-nav__node">
+    <li class="ui-tree-nav__node"
+        [class.ui-tree-nav__node--closed]="!nestedTreeControl.isExpanded(node)">
       <a [routerLink]="node.link"
          routerLinkActive="ui-tree-nav__node--active"
          cdkTreeNodeToggle>
         <mat-icon *ngIf="node.icon"
                   [svgIcon]="node.icon"></mat-icon>
         {{node.title}}
-        <mat-icon *ngIf="hasChildren(0, node) && !nestedTreeControl.isExpanded(node)"
+        <mat-icon *ngIf="hasChildren(0, node)"
                   class="ui-tree-nav__node__arrow"
-                  [svgIcon]="'toggle'"></mat-icon>
-        <mat-icon *ngIf="hasChildren(0, node) && nestedTreeControl.isExpanded(node)"
-                  class="ui-tree-nav__node__closed"
-                  [svgIcon]="'toggle-closed'"></mat-icon>
+                  [svgIcon]="nestedTreeControl.isExpanded(node) ? 'expand-less' : 'expand-more'"></mat-icon>
       </a>
       <ul>
         <ng-container cdkTreeNodeOutlet></ng-container>
