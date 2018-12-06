@@ -60,7 +60,11 @@ export class MockBooksViewModel {
   sharedBooks$: Observable<EduContent[]> = new BehaviorSubject([
     new EduContentFixture(
       { id: 1, publishedEduContentMetadataId: 1 },
-      { learningAreaId: 1, learningArea: new LearningAreaFixture({ id: 1 }) }
+      {
+        learningAreaId: 1,
+        learningArea: new LearningAreaFixture({ id: 1 }),
+        title: 'bar'
+      }
     ),
     new EduContentFixture(
       { id: 2, publishedEduContentMetadataId: 2 },
@@ -93,4 +97,6 @@ export class MockBooksViewModel {
   ]);
 
   changeListFormat(listFormat: ListFormat): void {}
+
+  openBook(): void {}
 }
