@@ -19,6 +19,7 @@ import {
   initialState as appInitialState
 } from './+state/app.reducer';
 import { AppComponent } from './app.component';
+import { AppResolver } from './app.resolver';
 
 @NgModule({
   declarations: [AppComponent],
@@ -40,50 +41,51 @@ import { AppComponent } from './app.component';
     RouterModule.forRoot(
       [
         {
-          path: 'books',
-          loadChildren: '@campus/pages/books#PagesBooksModule',
-          canLoad: [CoupledTeacherGuard]
-        },
-        { path: 'dev', loadChildren: '@campus/devlib#DevlibModule' },
-        {
-          path: 'tasks',
-          loadChildren: '@campus/pages/tasks#PagesTasksModule',
-          canLoad: [CoupledTeacherGuard]
-        },
-        {
-          path: 'reports',
-          loadChildren: '@campus/pages/reports#PagesReportsModule'
-        },
-        {
-          path: 'profile',
-          loadChildren: '@campus/pages/profile#PagesProfileModule'
-        },
-        {
-          path: 'messages',
-          loadChildren: '@campus/pages/messages#PagesMessagesModule'
-        },
-        {
-          path: 'logout',
-          loadChildren: '@campus/pages/logout#PagesLogoutModule'
-        },
-        {
-          path: 'alerts',
-          loadChildren: '@campus/pages/alerts#PagesAlertsModule'
-        },
-        {
-          path: 'error',
-          loadChildren: '@campus/pages/error#PagesErrorModule'
-        },
-
-        {
           path: '',
-          redirectTo: 'bundles',
-          pathMatch: 'full'
-        },
-        {
-          path: 'bundles',
-          loadChildren: '@campus/pages/bundles#PagesBundlesModule',
-          canLoad: [CoupledTeacherGuard]
+          resolve: { AppResolver },
+          children: [
+            {
+              path: 'books',
+              loadChildren: '@campus/pages/books#PagesBooksModule',
+              canLoad: [CoupledTeacherGuard]
+            },
+            { path: 'dev', loadChildren: '@campus/devlib#DevlibModule' },
+            {
+              path: 'tasks',
+              loadChildren: '@campus/pages/tasks#PagesTasksModule',
+              canLoad: [CoupledTeacherGuard]
+            },
+            {
+              path: 'reports',
+              loadChildren: '@campus/pages/reports#PagesReportsModule'
+            },
+            {
+              path: 'profile',
+              loadChildren: '@campus/pages/profile#PagesProfileModule'
+            },
+            {
+              path: 'messages',
+              loadChildren: '@campus/pages/messages#PagesMessagesModule'
+            },
+            {
+              path: 'logout',
+              loadChildren: '@campus/pages/logout#PagesLogoutModule'
+            },
+            {
+              path: 'alerts',
+              loadChildren: '@campus/pages/alerts#PagesAlertsModule'
+            },
+            {
+              path: '',
+              redirectTo: 'bundles',
+              pathMatch: 'full'
+            },
+            {
+              path: 'bundles',
+              loadChildren: '@campus/pages/bundles#PagesBundlesModule',
+              canLoad: [CoupledTeacherGuard]
+            }
+          ]
         }
       ],
       { initialNavigation: 'enabled', enableTracing: false }

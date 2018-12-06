@@ -8,6 +8,7 @@ import {
   DalState,
   PersonInterface,
   UiActions,
+  UiQuery,
   UserQueries
 } from '@campus/dal';
 import {
@@ -72,13 +73,15 @@ export class HeaderViewModel {
     this.currentUser$ = this.store.pipe(select(UserQueries.getCurrentUser));
     // this.breadCrumbs$ = this.store.pipe(select(BreadCrumbsQueries.getAllLinks)); // TODO: uncomment when breadcrumbs state is available
     this.breadCrumbs$ = this.mockViewModel.breadCrumbs$; //TODO: remove when breadcrumbs state is available
+    this.profileMenuItems$ = this.store.pipe(
+      select(UiQuery.getProfileMenuItems)
+    );
   }
 
   private loadDisplayStream(): void {
     this.backLink$ = this.getBackLink();
     this.alertNotifications$ = this.getAlertNotifications();
     this.unreadAlertCount$ = this.getUnreadAlertCount();
-    this.profileMenuItems$ = this.mockViewModel.profileMenuItems$;
   }
 
   private loadFeatureToggles(): void {
