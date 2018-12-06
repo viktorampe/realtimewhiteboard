@@ -45,8 +45,8 @@
 
 @mixin ui-tree-nav() {
   // colors
-  $ui-tree-nav-color: $ui-font-color-1 !default;
-  $ui-tree-nav-color-active: $ui-font-color-active-secundary !default;
+  $ui-tree-nav-color: $ui-secondary-font-color !default;
+  $ui-tree-nav-color-active: $ui-secondary-font-color-accent !default;
   $ui-tree-nav-color-separator: darken($ui-tree-nav-color, 40%) !default;
 
   // icons
