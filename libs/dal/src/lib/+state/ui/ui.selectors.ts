@@ -16,8 +16,20 @@ const getSideNavOpen = createSelector(
   (state: UiState) => state.sideNavOpen
 );
 
+const getSideNavItems = createSelector(
+  getUiState,
+  (state: UiState) => state.sideNavItems
+);
+
+const getProfileMenuItems = createSelector(
+  getUiState,
+  (state: UiState) => state.profileMenuItems
+);
+
 export const UiQuery = {
   getLoaded,
   getListFormat,
-  getSideNavOpen
+  getSideNavOpen,
+  getSideNavItems,
+  getProfileMenuItems
 };

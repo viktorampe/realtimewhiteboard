@@ -1,6 +1,7 @@
 import { CdkTreeModule } from '@angular/cdk/tree';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { UiModule } from '@campus/ui';
 import { NavItem, TreeNavComponent } from './tree-nav.component';
 
 describe('TreeNavComponent', () => {
@@ -32,8 +33,8 @@ describe('TreeNavComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule, CdkTreeModule],
-      declarations: [TreeNavComponent]
+      imports: [RouterTestingModule, CdkTreeModule, UiModule],
+      declarations: []
     }).compileComponents();
   }));
 
@@ -64,17 +65,12 @@ describe('TreeNavComponent', () => {
 
   it('should show icon on first node', () => {
     const node = treeNodes[0];
-    expect(node.querySelector('i:first-child')).toBeTruthy();
-  });
-
-  it('should set classname for icon', () => {
-    const node = treeNodes[0];
-    expect(node.querySelector('i:first-child').className).toBe('iconClass');
+    expect(node.querySelector('mat-icon')).toBeTruthy();
   });
 
   it('should not show icon on third node', () => {
     const node = treeNodes[2];
-    expect(node.querySelector('i:first-child')).toBeFalsy();
+    expect(node.querySelector('mat-icon')).toBeFalsy();
   });
 
   it('should have three children on second node', () => {

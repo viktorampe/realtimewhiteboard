@@ -18,6 +18,14 @@ export interface EnvironmentMessagesFeatureInterface {
   hasAppBarDropDown: boolean;
 }
 
+export const ENVIRONMENT_ERROR_MANAGEMENT_FEATURE_TOKEN = new InjectionToken(
+  'environmentErrorManagementFeature'
+);
+
+export interface EnvironmentErrorManagementFeatureInterface {
+  managedStatusCodes: number[];
+}
+
 export const ENVIRONMENT_WEBSITE_TOKEN = new InjectionToken<
   EnvironmentWebsiteInterface
 >('environmentWebsiteUrl');

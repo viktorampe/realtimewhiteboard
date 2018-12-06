@@ -1,6 +1,7 @@
 import { LayoutModule } from '@angular/cdk/layout';
 import { PortalModule } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Inject, ModuleWithProviders, NgModule } from '@angular/core';
 import { MatIconModule, MatIconRegistry } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -11,12 +12,15 @@ import { PageBarContainerComponent } from './components/page-bar-container/page-
 import { OPEN_STATIC_CONTENT_SERVICE_TOKEN } from './content/open-static-content.interface';
 import { OpenStaticContentService } from './content/open-static-content.service';
 import { HeaderComponent } from './header/header.component';
+import { CampusHttpInterceptor } from './interceptors/campus-http.interceptor';
 import {
   EnvironmentAlertsFeatureInterface,
+  EnvironmentErrorManagementFeatureInterface,
   EnvironmentMessagesFeatureInterface,
   EnvironmentWebsiteInterface,
   ENVIRONMENT_ALERTS_FEATURE_TOKEN,
   ENVIRONMENT_API_BASE_TOKEN,
+  ENVIRONMENT_ERROR_MANAGEMENT_FEATURE_TOKEN,
   ENVIRONMENT_ICON_MAPPING_TOKEN,
   ENVIRONMENT_MESSAGES_FEATURE_TOKEN,
   ENVIRONMENT_WEBSITE_TOKEN
@@ -44,6 +48,11 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     { provide: FILTER_SERVICE_TOKEN, useClass: FilterService },
     { provide: SCORM_EXERCISE_SERVICE_TOKEN, useClass: ScormExerciseService },
     {
+      provide: HTTP_INTERCEPTORS,
+      useClass: CampusHttpInterceptor,
+      multi: true
+    },
+    {
       provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
       useClass: OpenStaticContentService
     }
@@ -61,9 +70,10 @@ export class SharedModule {
   static forRoot(
     environmentAlertsFeature: EnvironmentAlertsFeatureInterface,
     environmentMessagesFeature: EnvironmentMessagesFeatureInterface,
+    environmentErrorManagementFeature: EnvironmentErrorManagementFeatureInterface,
+    environmentIconMapping: { [key: string]: string },
     environmentWebsite: EnvironmentWebsiteInterface,
-    iconMapping: { [key: string]: string },
-    apiBase: string
+    environmentApiBase: string
   ): ModuleWithProviders {
     return {
       ngModule: SharedModule,
@@ -77,16 +87,20 @@ export class SharedModule {
           useValue: environmentMessagesFeature
         },
         {
+          provide: ENVIRONMENT_ERROR_MANAGEMENT_FEATURE_TOKEN,
+          useValue: environmentErrorManagementFeature
+        },
+        {
           provide: ENVIRONMENT_WEBSITE_TOKEN,
           useValue: environmentWebsite
         },
         {
           provide: ENVIRONMENT_ICON_MAPPING_TOKEN,
-          useValue: iconMapping
+          useValue: environmentIconMapping
         },
         {
           provide: ENVIRONMENT_API_BASE_TOKEN,
-          useValue: apiBase
+          useValue: environmentApiBase
         }
       ]
     };
