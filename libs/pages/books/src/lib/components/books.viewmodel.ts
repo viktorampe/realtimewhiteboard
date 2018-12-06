@@ -89,4 +89,6 @@ export class BooksViewModel {
   changeListFormat(listFormat: ListFormat): void {
     this.store.dispatch(new UiActions.SetListFormat({ listFormat }));
   }
+
+  openBook(bookId: number) {}
 }
