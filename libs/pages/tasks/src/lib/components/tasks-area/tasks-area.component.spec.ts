@@ -1,13 +1,15 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
+import { MockMatIconRegistry } from '@campus/testing';
 import { ListFormat, UiModule } from '@campus/ui';
 import {
   FilterService,
   FilterServiceInterface,
   FILTER_SERVICE_TOKEN
 } from '@campus/utils';
-import { hot } from 'jasmine-marbles';
+import { hot } from '@nrwl/nx/testing';
 import { BehaviorSubject } from 'rxjs';
 import { TasksViewModel } from '../tasks.viewmodel';
 import { LearningAreasWithTaskInfoInterface } from '../tasks.viewmodel.interfaces';
@@ -32,7 +34,8 @@ describe('TasksAreaComponent', () => {
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         { provide: TasksViewModel, useClass: MockTasksViewModel },
-        { provide: FILTER_SERVICE_TOKEN, useClass: FilterService }
+        { provide: FILTER_SERVICE_TOKEN, useClass: FilterService },
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ]
     }).compileComponents();
 

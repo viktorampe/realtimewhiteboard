@@ -2,11 +2,13 @@ import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FilterTextInputComponent, ListFormat } from '@campus/ui';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { Observable } from 'rxjs';
-import { TasksViewModel } from './../tasks.viewmodel';
+import { TasksViewModel } from '../tasks.viewmodel';
 import {
   LearningAreasWithTaskInfoInterface,
   LearningAreaWithTaskInfoInterface
-} from './../tasks.viewmodel.interfaces';
+} from '../tasks.viewmodel.interfaces';
+// TODO replace import
+// import { TasksViewModel } from '../tasks.viewmodel';
 
 @Component({
   selector: 'campus-tasks-area',

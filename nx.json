@@ -59,6 +59,15 @@
     "scorm": {
       "tags": []
     },
+    "guards": {
+      "tags": []
+    },
+    "pages-error": {
+      "tags": []
+    },
+    "testing": {
+      "tags": []
+    },
     "utils": {
       "tags": []
     }

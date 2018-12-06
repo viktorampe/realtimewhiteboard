@@ -10,7 +10,6 @@
     }
   }
   &__product {
-    padding: 30px 20px 0 20px;
     min-height: 107px;
     [type] {
       width: 84px;
@@ -27,8 +26,6 @@
         font-weight: 500;
       }
       [icon] {
-        display: inline-block;
-        display: block;
         font-size: 25px;
         margin: 6px 5px 5px;
       }
@@ -42,13 +39,15 @@
     }
   }
   &__badges {
-    padding: 20px;
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
+
     [badge] {
       margin-right: 10px;
-      width: 76px;
-      height: 37px;
+      margin-bottom: 10px;
+      min-width: 50px;
+      max-height: 37px;
     }
   }
 }

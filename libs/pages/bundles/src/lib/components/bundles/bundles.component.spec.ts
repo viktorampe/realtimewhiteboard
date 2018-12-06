@@ -6,8 +6,10 @@ import {
   TestBed,
   tick
 } from '@angular/core/testing';
+import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute, Params } from '@angular/router';
+import { MockMatIconRegistry } from '@campus/testing';
 import { ListFormat, ListViewItemDirective, UiModule } from '@campus/ui';
 import { FilterService, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { BehaviorSubject, Subject } from 'rxjs';
@@ -30,7 +32,8 @@ describe('BundlesComponent', () => {
       providers: [
         { provide: ActivatedRoute, useValue: { params: params } },
         { provide: BundlesViewModel, useClass: MockViewModel },
-        { provide: FILTER_SERVICE_TOKEN, useClass: FilterService }
+        { provide: FILTER_SERVICE_TOKEN, useClass: FilterService },
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ]
     }).compileComponents();
     bundlesViewModel = TestBed.get(BundlesViewModel);

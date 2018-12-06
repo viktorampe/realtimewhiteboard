@@ -92,16 +92,20 @@ export const environment = {
     // 'archive-box': 'assets/icons/archive-box.svg',
     // 'archive-box-lg': 'assets/icons/archive-box-lg.svg',
     lesmateriaal: 'assets/icons/lesmateriaal.svg',
-    // media: 'assets/icons/media.svg',
-    // music: 'assets/icons/music.svg',
-    // presentatie: 'assets/icons/presentatie.svg',
+
+    presentatie: 'assets/icons/presentatie.svg',
     // presentation: 'assets/icons/presentation.svg',
-    tasks: 'assets/icons/tasks.svg',
-    // 'tasks-complete': 'assets/icons/tasks-complete.svg',
-    // video: 'assets/icons/video.svg',
-    // website: 'assets/icons/website.svg',
-    // youtube: 'assets/icons/youtube.svg',
+    // polpo-prefixed svg names come from database, do not remove the polpo- prefix
+    'polpo-lesmateriaal': 'assets/icons/lesmateriaal.svg',
+    'polpo-presentatie': 'assets/icons/presentatie.svg',
+    'polpo-tasks-complete': 'assets/icons/tasks-complete.svg',
+    'polpo-media': 'assets/icons/media.svg',
+    'polpo-music': 'assets/icons/music.svg',
+    'polpo-tasks': 'assets/icons/tasks.svg',
+    'polpo-video': 'assets/icons/video.svg',
+    'polpo-website': 'assets/icons/website.svg',
     educontent: 'assets/icons/lesmateriaal.svg',
+    // youtube: 'assets/icons/youtube.svg',
 
     // -> other
     home: 'assets/icons/material/home.svg',
@@ -116,12 +120,12 @@ export const environment = {
     // balance: 'assets/icons/balance.svg',
     // 'book-not': 'assets/icons/book-not.svg',
     book: 'assets/icons/book.svg',
-    // bundle: 'assets/icons/bundle.svg',
+    bundle: 'assets/icons/bundle.svg',
     // bundles: 'assets/icons/bundles.svg',
     // call: 'assets/icons/call.svg',
     // caret: 'assets/icons/caret.svg',
     // 'check-off': 'assets/icons/check-off.svg',
-    // 'check-on': 'assets/icons/check-on.svg',
+    'check-on': 'assets/icons/check-on.svg',
     // checklist: 'assets/icons/checklist.svg',
     finished: 'assets/icons/checkmark.svg',
     // clock: 'assets/icons/clock.svg',
@@ -129,7 +133,8 @@ export const environment = {
     // code: 'assets/icons/code.svg',
     // creditcard: 'assets/icons/creditcard.svg',
     // 'die-keure': 'assets/icons/die-keure.svg',
-    // eye: 'assets/icons/eye.svg',
+    'view-content': 'assets/icons/eye.svg',
+    eye: 'assets/icons/eye.svg',
     // eye2: 'assets/icons/eye2.svg',
     // facebook: 'assets/icons/facebook.svg',
     // favorite: 'assets/icons/favorite.svg',
@@ -166,7 +171,36 @@ export const environment = {
     // timeline: 'assets/icons/timeline.svg',
     // twitter: 'assets/icons/twitter.svg',
     // 'user-exception': 'assets/icons/user-exception.svg',
-    account: 'assets/icons/account-circle.svg'
+    account: 'assets/icons/account-circle.svg',
+    'method:101spelen': 'assets/icons/method/101spelen.svg',
+    'method:allesimgrif': 'assets/icons/method/allesimgrif.svg',
+    'method:allesimgriffupdate': 'assets/icons/method/allesimgriffupdate.svg',
+    'method:beaufort': 'assets/icons/method/beaufort.svg',
+    'method:beautemps': 'assets/icons/method/beautemps.svg',
+    'method:boon': 'assets/icons/method/boon.svg',
+    'method:chipsandcookies': 'assets/icons/method/chipsandcookies.svg',
+    'method:cyborg': 'assets/icons/method/cyborg.svg',
+    'method:integraleopdrachten': 'assets/icons/method/integraleopdrachten.svg',
+    'method:interactie': 'assets/icons/method/interactie.svg',
+    'method:isee': 'assets/icons/method/isee.svg',
+    'method:janus': 'assets/icons/method/janus.svg',
+    'method:kapitaal': 'assets/icons/method/kapitaal.svg',
+    'method:leesleerenleef': 'assets/icons/method/leesleerenleef.svg',
+    'method:nando': 'assets/icons/method/nando.svg',
+    'method:opmijkunjerekenen': 'assets/icons/method/opmijkunjerekenen.svg',
+    'method:pleinfeu': 'assets/icons/method/pleinfeu.svg',
+    'method:plugin': 'assets/icons/method/plugin.svg',
+    'method:punktde': 'assets/icons/method/punktde.svg',
+    'method:sherpa': 'assets/icons/method/sherpa.svg',
+    'method:shuffle': 'assets/icons/method/shuffle.svg',
+    'method:shufflethis': 'assets/icons/method/shufflethis.svg',
+    'method:solanum': 'assets/icons/method/solanum.svg',
+    'method:speakup': 'assets/icons/method/speakup.svg',
+    'method:spectrum': 'assets/icons/method/spectrum.svg',
+    'method:surfen': 'assets/icons/method/surfen.svg',
+    'method:topos': 'assets/icons/method/topos.svg',
+    'method:vbtl': 'assets/icons/method/vbtl.svg',
+    'method:viainformatica': 'assets/icons/method/viainformatica.svg'
   },
   // promo website settings
   website: {
@@ -182,6 +216,9 @@ export const environment = {
     messages: {
       enabled: false,
       hasAppBarDropDown: false
+    },
+    errorManagement: {
+      managedStatusCodes: [500, 401, 404]
     }
   }
 };
