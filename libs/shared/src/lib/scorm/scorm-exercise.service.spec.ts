@@ -1,10 +1,10 @@
 import { fakeAsync, TestBed } from '@angular/core/testing';
 import { WindowService, WINDOW_SERVICE_TOKEN } from '@campus/browser';
+import { CurrentExerciseReducer } from '@campus/dal';
 import { ScormApiService, SCORM_API_SERVICE_TOKEN } from '@campus/scorm';
 import { Store, StoreModule } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { marbles } from 'rxjs-marbles';
-import { CurrentExerciseReducer } from '../+state/current-exercise';
 import { ScormExerciseService } from './scorm-exercise.service';
 
 describe('ScormExerciseService', () => {

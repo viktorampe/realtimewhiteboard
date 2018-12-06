@@ -87,8 +87,6 @@ import {
 import { PersonService, PERSON_SERVICE_TOKEN } from './persons/persons.service';
 import { ResultsService } from './results/results.service';
 import { RESULTS_SERVICE_TOKEN } from './results/results.service.interface';
-import { ScormExerciseService } from './scorm/scorm-exercise.service';
-import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.interface';
 import { StudentContentStatusService } from './student-content-status/student-content-status.service';
 import { STUDENT_CONTENT_STATUS_SERVICE_TOKEN } from './student-content-status/student-content-status.service.interface';
 import { TaskEduContentService } from './tasks/task-edu-content.service';
@@ -148,7 +146,6 @@ interface DalOptions {
   ],
   providers: [
     { provide: EXERCISE_SERVICE_TOKEN, useClass: ExerciseService },
-    { provide: SCORM_EXERCISE_SERVICE_TOKEN, useClass: ScormExerciseService },
     { provide: EDUCONTENT_SERVICE_TOKEN, useClass: EduContentService },
     { provide: USER_CONTENT_SERVICE_TOKEN, useClass: UserContentService },
     {

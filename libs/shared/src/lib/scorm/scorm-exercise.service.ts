@@ -1,6 +1,12 @@
 import { Inject, Injectable } from '@angular/core';
 import { WindowServiceInterface, WINDOW_SERVICE_TOKEN } from '@campus/browser';
 import {
+  CurrentExerciseActions,
+  CurrentExerciseInterface,
+  CurrentExerciseQueries,
+  CurrentExerciseReducer
+} from '@campus/dal';
+import {
   ScormApiServiceInterface,
   ScormCmiInterface,
   ScormCmiMode,
@@ -9,12 +15,6 @@ import {
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import {
-  CurrentExerciseActions,
-  CurrentExerciseQueries,
-  CurrentExerciseReducer
-} from '../+state/current-exercise';
-import { CurrentExerciseInterface } from '../+state/current-exercise/current-exercise.reducer';
 import { ScormExerciseServiceInterface } from './scorm-exercise.service.interface';
 
 @Injectable({

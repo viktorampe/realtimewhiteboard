@@ -21,6 +21,8 @@ import {
   ENVIRONMENT_MESSAGES_FEATURE_TOKEN,
   ENVIRONMENT_WEBSITE_TOKEN
 } from './interfaces';
+import { ScormExerciseService } from './scorm/scorm-exercise.service';
+import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.interface';
 
 @NgModule({
   imports: [
@@ -40,6 +42,7 @@ import {
   ],
   providers: [
     { provide: FILTER_SERVICE_TOKEN, useClass: FilterService },
+    { provide: SCORM_EXERCISE_SERVICE_TOKEN, useClass: ScormExerciseService },
     {
       provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
       useClass: OpenStaticContentService
