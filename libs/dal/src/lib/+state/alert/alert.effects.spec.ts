@@ -6,6 +6,7 @@ import { DataPersistence, NxModule } from '@nrwl/nx';
 import { getTestScheduler, hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { AlertFixture } from '../../+fixtures';
 import { ALERT_SERVICE_TOKEN } from '../../alert/alert.service.interface';
 import { ActionSuccessful } from './../dal.actions';
 import {
@@ -14,17 +15,18 @@ import {
   LoadAlerts,
   LoadNewAlerts,
   NewAlertsLoaded,
+  SetAlertReadByFilter,
   SetReadAlert,
   StartPollAlerts,
   StopPollAlerts
 } from './alert.actions';
 import { AlertsEffects } from './alert.effects';
-import { initialState, reducer } from './alert.reducer';
+import { initialState, reducer, State as AlertState } from './alert.reducer';
 
 describe('AlertEffects', () => {
   let actions: Observable<any>;
   let effects: AlertsEffects;
-  let usedState: any;
+  let usedState: AlertState;
 
   const mockData = {
     userId: 1,
@@ -57,8 +59,10 @@ describe('AlertEffects', () => {
     method: string,
     returnValue: any,
     service: any = ALERT_SERVICE_TOKEN
-  ) => {
-    jest.spyOn(TestBed.get(service), method).mockReturnValue(of(returnValue));
+  ): jest.SpyInstance => {
+    return jest
+      .spyOn(TestBed.get(service), method)
+      .mockReturnValue(of(returnValue));
   };
 
   const mockServiceMethodError = (
@@ -182,7 +186,8 @@ describe('AlertEffects', () => {
         usedState = {
           ...initialState,
           loaded: true,
-          list: []
+          ids: [],
+          entities: {}
         };
       });
       beforeEach(() => {
@@ -269,7 +274,8 @@ describe('AlertEffects', () => {
           ...initialState,
           loaded: true,
           lastUpdateTimeStamp: mockData.updateTime,
-          list: []
+          ids: [],
+          entities: {}
         };
       });
       beforeEach(() => {
@@ -431,7 +437,8 @@ describe('AlertEffects', () => {
         usedState = {
           ...initialState,
           loaded: true,
-          list: []
+          ids: [],
+          entities: {}
         };
       });
       beforeEach(() => {
@@ -451,6 +458,43 @@ describe('AlertEffects', () => {
           loadErrorAction
         );
       });
+    });
+  });
+
+  describe('setAlertsReadByFilter', () => {
+    const setAlertByFilterAction = new SetAlertReadByFilter({
+      personId: mockData.userId,
+      read: true,
+      filter: {
+        taskId: 3
+      },
+      intended: false
+    });
+
+    const setAlertReadAction = new SetReadAlert({
+      personId: mockData.userId,
+      read: true,
+      alertIds: [4],
+      intended: false
+    });
+
+    beforeAll(() => {
+      usedState = {
+        ...initialState,
+        loaded: true,
+        ids: [4],
+        entities: {
+          4: new AlertFixture({ id: 4, read: false, taskId: 3 })
+        }
+      };
+    });
+
+    it('should trigger an api call to set the alerts read', () => {
+      expectInAndOut(
+        effects.setAlertsReadByFilter$,
+        setAlertByFilterAction,
+        setAlertReadAction
+      );
     });
   });
 });

@@ -1,0 +1,161 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ActivatedRoute } from '@angular/router';
+import { LearningAreaInterface } from '@campus/dal';
+import { ListFormat, ListViewItemDirective, UiModule } from '@campus/ui';
+import { FilterService, FILTER_SERVICE_TOKEN } from '@campus/utils';
+import { hot } from '@nrwl/nx/testing';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { TasksViewModel } from '../tasks.viewmodel';
+import { TaskWithInfoInterface } from '../tasks.viewmodel.interfaces';
+import { MockTasksViewModel } from '../tasks.viewmodel.mock';
+import { TaskDetailComponent } from './task-detail.component';
+
+// TODO replace with @campus/testing  moch route
+export class MockActivatedRoute {
+  params: Observable<any> = new BehaviorSubject<any>({
+    task: 1,
+    area: 1
+  });
+}
+
+describe('TaskDetailComponent', () => {
+  let component: TaskDetailComponent;
+  let fixture: ComponentFixture<TaskDetailComponent>;
+  let tasksViewModel: MockTasksViewModel;
+  let learningArea$: BehaviorSubject<LearningAreaInterface>;
+  let taskInfo$: BehaviorSubject<TaskWithInfoInterface>;
+  let listFormat$: BehaviorSubject<ListFormat>;
+
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      imports: [UiModule, BrowserAnimationsModule],
+      declarations: [TaskDetailComponent],
+      schemas: [NO_ERRORS_SCHEMA],
+      providers: [
+        { provide: ActivatedRoute, useClass: MockActivatedRoute },
+        { provide: FILTER_SERVICE_TOKEN, useClass: FilterService },
+        { provide: TasksViewModel, useClass: MockTasksViewModel }
+      ]
+    }).compileComponents();
+  }));
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(TaskDetailComponent);
+    tasksViewModel = TestBed.get(TasksViewModel);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    learningArea$ = tasksViewModel.getLearningAreaById(1) as BehaviorSubject<
+      LearningAreaInterface
+    >;
+    taskInfo$ = tasksViewModel.getTaskWithInfo(1) as BehaviorSubject<
+      TaskWithInfoInterface
+    >;
+    listFormat$ = tasksViewModel.listFormat$ as BehaviorSubject<ListFormat>;
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should show an error message if a task is no longer available', () => {
+    component.taskInfo$ = of(null);
+    fixture.detectChanges();
+
+    expect(fixture.debugElement.query(By.css('campus-side-sheet'))).toBeFalsy();
+    expect(fixture.debugElement.nativeElement.textContent).toContain(
+      'Deze taak is niet langer beschikbaar'
+    );
+  });
+
+  it('should call the filter service when filterTextInput.filterFn is called, and display the correct content', () => {
+    const filterText = '';
+    component.filterTextInput.setFilterableItem(component);
+
+    const spyFilterService = jest.spyOn(component, 'filterFn');
+    component.filterTextInput.setValue(filterText);
+
+    expect(spyFilterService).toHaveBeenCalledTimes(1);
+
+    fixture.detectChanges();
+    const componentDE = fixture.debugElement.query(By.css('.itemsAmount'));
+    expect(componentDE.nativeElement.textContent).toContain('4 van 4');
+    const listview = fixture.debugElement.query(By.css('campus-list-view'));
+    expect(listview.childNodes.length).toBe(4);
+
+    component.filterTextInput.setValue('a');
+    fixture.detectChanges();
+    expect(componentDE.nativeElement.textContent).toContain('1 van 4');
+    expect(listview.children.length).toBe(1);
+  });
+
+  it('should call the viewModel changeListFormat method when calling clickChangeListFormat', () => {
+    const spy = jest.spyOn(tasksViewModel, 'changeListFormat');
+
+    component.clickChangeListFormat(ListFormat.LINE);
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith(ListFormat.LINE);
+
+    component.clickChangeListFormat(ListFormat.GRID);
+    expect(spy).toHaveBeenCalledTimes(2);
+    expect(spy).toHaveBeenCalledWith(ListFormat.GRID);
+  });
+
+  it('should get the listFormat$, learningArea$, taskInfo$ and from the tasksViewModel', () => {
+    expect(component.listFormat$).toBeObservable(
+      hot('a', { a: listFormat$.value })
+    );
+    expect(component.learningArea$).toBeObservable(
+      hot('a', { a: learningArea$.value })
+    );
+    expect(component.taskInfo$).toBeObservable(
+      hot('a', { a: taskInfo$.value })
+    );
+  });
+
+  it('should show the teacher info in the infopanel if no item is selected', () => {
+    component.list.deselectAllItems();
+    fixture.detectChanges();
+
+    expect(component.list.selectedItems$.value.length).toBe(0);
+
+    const infoPanelDE = fixture.debugElement.query(
+      By.css('campus-side-sheet-body')
+    );
+    const infoPanelBundle = infoPanelDE.query(By.css('campus-info-panel-task'));
+    const infoPanelContent = infoPanelDE.query(
+      By.css('campus-info-panel-content')
+    );
+    expect(infoPanelBundle).toBeTruthy();
+    expect(infoPanelContent).toBeFalsy();
+  });
+
+  it('should show the item info in the infopanel if an item is selected', () => {
+    component.list.deselectAllItems();
+    const listDE = fixture.debugElement.query(By.css('campus-list-view'));
+    const listItems = listDE.queryAll(By.directive(ListViewItemDirective));
+    listItems[0].nativeElement.click();
+    fixture.detectChanges();
+
+    expect(component.list.selectedItems$.value.length).toBe(1);
+
+    const infoPanelDE = fixture.debugElement.query(
+      By.css('campus-side-sheet-body')
+    );
+    const infoPanelBundle = infoPanelDE.query(
+      By.css('campus-info-panel-bundle')
+    );
+    const infoPanelContent = infoPanelDE.query(
+      By.css('campus-info-panel-content')
+    );
+    const infoPanelContents = infoPanelDE.query(
+      By.css('campus-info-panel-contents')
+    );
+    expect(infoPanelBundle).toBeFalsy();
+    expect(infoPanelContent).toBeTruthy();
+    expect(infoPanelContents).toBeFalsy();
+  });
+});

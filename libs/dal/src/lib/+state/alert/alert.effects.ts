@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
+import { select } from '@ngrx/store';
 import { DataPersistence } from '@nrwl/nx';
 import { interval, Observable, Subject } from 'rxjs';
 import { map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
@@ -17,9 +18,11 @@ import {
   LoadAlerts,
   LoadNewAlerts,
   NewAlertsLoaded,
+  SetAlertReadByFilter,
   SetReadAlert,
   StartPollAlerts
 } from './alert.actions';
+import { getAlertIdsByFilter } from './alert.selectors';
 
 const MINIMUM_POLLING_INTERVAL = 3000;
 
@@ -45,6 +48,29 @@ export class AlertsEffects {
         new DalActions.ActionSuccessful({
           successfulAction: 'polling stopped'
         })
+    )
+  );
+
+  @Effect()
+  setAlertsReadByFilter$ = this.dataPersistence.actions.pipe(
+    ofType(AlertsActionTypes.SetAlertReadByFilter),
+    switchMap(
+      (action: SetAlertReadByFilter): Observable<SetReadAlert> => {
+        return this.dataPersistence.store.pipe(
+          select(getAlertIdsByFilter, {
+            filter: action.payload.filter
+          }),
+          map(ids => {
+            return new SetReadAlert({
+              personId: action.payload.personId,
+              alertIds: ids,
+              intended: action.payload.intended,
+              read: action.payload.read
+            });
+          }),
+          take(1)
+        );
+      }
     )
   );
 

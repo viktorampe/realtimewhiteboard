@@ -6,64 +6,68 @@ export const environment = {
   production: false,
   iconMapping: {
     // -> learning areas
-    'learning-area:aardrijkskunde':
+    'learning-area:polpo-aardrijkskunde':
       'assets/icons/learning-area/aardrijkskunde.svg',
-    'learning-area:biologie': 'assets/icons/learning-area/biologie.svg',
-    'learning-area:duits': 'assets/icons/learning-area/duits.svg',
-    'learning-area:engels': 'assets/icons/learning-area/engels.svg',
-    'learning-area:frans': 'assets/icons/learning-area/frans.svg',
-    'learning-area:fysica': 'assets/icons/learning-area/fysica.svg',
-    'learning-area:geschiedenis': 'assets/icons/learning-area/geschiedenis.svg',
-    'learning-area:godsdienst': 'assets/icons/learning-area/godsdienst.svg',
-    'learning-area:informatica': 'assets/icons/learning-area/informatica.svg',
-    'learning-area:integraleopdrachten':
+    'learning-area:polpo-biologie': 'assets/icons/learning-area/biologie.svg',
+    'learning-area:polpo-duits': 'assets/icons/learning-area/duits.svg',
+    'learning-area:polpo-engels': 'assets/icons/learning-area/engels.svg',
+    'learning-area:polpo-frans': 'assets/icons/learning-area/frans.svg',
+    'learning-area:polpo-fysica': 'assets/icons/learning-area/fysica.svg',
+    'learning-area:polpo-geschiedenis':
+      'assets/icons/learning-area/geschiedenis.svg',
+    'learning-area:polpo-godsdienst':
+      'assets/icons/learning-area/godsdienst.svg',
+    'learning-area:polpo-informatica':
+      'assets/icons/learning-area/informatica.svg',
+    'learning-area:polpo-integraleopdrachten':
       'assets/icons/learning-area/integraleopdrachten.svg',
-    'learning-area:lichamelijkeopvoeding':
+    'learning-area:polpo-lichamelijkeopvoeding':
       'assets/icons/learning-area/lichamelijkeopvoeding.svg',
-    'learning-area:maatschappelijkevorming':
+    'learning-area:polpo-maatschappelijkevorming':
       'assets/icons/learning-area/maatschappelijkevorming.svg',
-    'learning-area:muzikaleopvoeding':
+    'learning-area:polpo-muzikaleopvoeding':
       'assets/icons/learning-area/muzikaleopvoeding.svg',
-    'learning-area:natuurwetenschappen':
+    'learning-area:polpo-natuurwetenschappen':
       'assets/icons/learning-area/natuurwetenschappen.svg',
-    'learning-area:nederlands': 'assets/icons/learning-area/nederlands.svg',
-    'learning-area:sociaaleconomischeinitiatie':
+    'learning-area:polpo-nederlands':
+      'assets/icons/learning-area/nederlands.svg',
+    'learning-area:polpo-sociaaleconomischeinitiatie':
       'assets/icons/learning-area/sociaaleconomischeinitiatie.svg',
-    'learning-area:spaans': 'assets/icons/learning-area/spaans.svg',
-    'learning-area:techniek': 'assets/icons/learning-area/techniek.svg',
-    'learning-area:wiskunde': 'assets/icons/learning-area/wiskunde.svg',
-    'learning-area:ww': 'assets/icons/learning-area/ww.svg',
-    // 'learning-area:aardrijkskunde-lg':
+    'learning-area:polpo-spaans': 'assets/icons/learning-area/spaans.svg',
+    'learning-area:polpo-techniek': 'assets/icons/learning-area/techniek.svg',
+    'learning-area:polpo-wiskunde': 'assets/icons/learning-area/wiskunde.svg',
+    'learning-area:polpo-ww': 'assets/icons/learning-area/ww.svg',
+    // 'learning-area:polpo-aardrijkskunde-lg':
     //   'assets/icons/learning-area/aardrijkskunde-lg.svg',
-    // 'learning-area:biologie-lg': 'assets/icons/learning-area/biologie-lg.svg',
-    // 'learning-area:duits-lg': 'assets/icons/learning-area/duits-lg.svg',
-    // 'learning-area:engels-lg': 'assets/icons/learning-area/engels-lg.svg',
-    // 'learning-area:frans-lg': 'assets/icons/learning-area/frans-lg.svg',
-    // 'learning-area:fysica-lg': 'assets/icons/learning-area/fysica-lg.svg',
-    // 'learning-area:geschiedenis-lg':
+    // 'learning-area:polpo-biologie-lg': 'assets/icons/learning-area/biologie-lg.svg',
+    // 'learning-area:polpo-duits-lg': 'assets/icons/learning-area/duits-lg.svg',
+    // 'learning-area:polpo-engels-lg': 'assets/icons/learning-area/engels-lg.svg',
+    // 'learning-area:polpo-frans-lg': 'assets/icons/learning-area/frans-lg.svg',
+    // 'learning-area:polpo-fysica-lg': 'assets/icons/learning-area/fysica-lg.svg',
+    // 'learning-area:polpo-geschiedenis-lg':
     //   'assets/icons/learning-area/geschiedenis-lg.svg',
-    // 'learning-area:godsdienst-lg':
+    // 'learning-area:polpo-godsdienst-lg':
     //   'assets/icons/learning-area/godsdienst-lg.svg',
-    // 'learning-area:informatica-lg':
+    // 'learning-area:polpo-informatica-lg':
     //   'assets/icons/learning-area/informatica-lg.svg',
-    // 'learning-area:integraleopdrachten-lg':
+    // 'learning-area:polpo-integraleopdrachten-lg':
     //   'assets/icons/learning-area/integraleopdrachten-lg.svg',
-    // 'learning-area:lichamelijkeopvoeding-lg':
+    // 'learning-area:polpo-lichamelijkeopvoeding-lg':
     //   'assets/icons/learning-area/lichamelijkeopvoeding-lg.svg',
-    // 'learning-area:maatschappelijkevorming-lg':
+    // 'learning-area:polpo-maatschappelijkevorming-lg':
     //   'assets/icons/learning-area/maatschappelijkevorming-lg.svg',
-    // 'learning-area:muzikaleopvoeding-lg':
+    // 'learning-area:polpo-muzikaleopvoeding-lg':
     //   'assets/icons/learning-area/muzikaleopvoeding-lg.svg',
-    // 'learning-area:natuurwetenschappen-lg':
+    // 'learning-area:polpo-natuurwetenschappen-lg':
     //   'assets/icons/learning-area/natuurwetenschappen-lg.svg',
-    // 'learning-area:nederlands-lg':
+    // 'learning-area:polpo-nederlands-lg':
     //   'assets/icons/learning-area/nederlands-lg.svg',
-    // 'learning-area:sociaaleconomischeinitiatie-lg':
+    // 'learning-area:polpo-sociaaleconomischeinitiatie-lg':
     //   'assets/icons/learning-area/sociaaleconomischeinitiatie-lg.svg',
-    // 'learning-area:spaans-lg': 'assets/icons/learning-area/spaans-lg.svg',
-    // 'learning-area:techniek-lg': 'assets/icons/learning-area/techniek-lg.svg',
-    // 'learning-area:wiskunde-lg': 'assets/icons/learning-area/wiskunde-lg.svg',
-    // 'learning-area:ww-lg': 'assets/icons/learning-area/ww-lg.svg',
+    // 'learning-area:polpo-spaans-lg': 'assets/icons/learning-area/spaans-lg.svg',
+    // 'learning-area:polpo-techniek-lg': 'assets/icons/learning-area/techniek-lg.svg',
+    // 'learning-area:polpo-wiskunde-lg': 'assets/icons/learning-area/wiskunde-lg.svg',
+    // 'learning-area:polpo-ww-lg': 'assets/icons/learning-area/ww-lg.svg',
 
     // -> actions
     // 'add-user': 'assets/icons/add-user.svg',
@@ -88,16 +92,20 @@ export const environment = {
     // 'archive-box': 'assets/icons/archive-box.svg',
     // 'archive-box-lg': 'assets/icons/archive-box-lg.svg',
     lesmateriaal: 'assets/icons/lesmateriaal.svg',
-    // media: 'assets/icons/media.svg',
-    // music: 'assets/icons/music.svg',
-    // presentatie: 'assets/icons/presentatie.svg',
+
+    presentatie: 'assets/icons/presentatie.svg',
     // presentation: 'assets/icons/presentation.svg',
-    tasks: 'assets/icons/tasks.svg',
-    // 'tasks-complete': 'assets/icons/tasks-complete.svg',
-    // video: 'assets/icons/video.svg',
-    // website: 'assets/icons/website.svg',
-    // youtube: 'assets/icons/youtube.svg',
+    // polpo-prefixed svg names come from database, do not remove the polpo- prefix
+    'polpo-lesmateriaal': 'assets/icons/lesmateriaal.svg',
+    'polpo-presentatie': 'assets/icons/presentatie.svg',
+    'polpo-tasks-complete': 'assets/icons/tasks-complete.svg',
+    'polpo-media': 'assets/icons/media.svg',
+    'polpo-music': 'assets/icons/music.svg',
+    'polpo-tasks': 'assets/icons/tasks.svg',
+    'polpo-video': 'assets/icons/video.svg',
+    'polpo-website': 'assets/icons/website.svg',
     educontent: 'assets/icons/lesmateriaal.svg',
+    // youtube: 'assets/icons/youtube.svg',
 
     // -> other
     home: 'assets/icons/material/home.svg',
@@ -112,20 +120,21 @@ export const environment = {
     // balance: 'assets/icons/balance.svg',
     // 'book-not': 'assets/icons/book-not.svg',
     book: 'assets/icons/book.svg',
-    // bundle: 'assets/icons/bundle.svg',
+    bundle: 'assets/icons/bundle.svg',
     // bundles: 'assets/icons/bundles.svg',
     // call: 'assets/icons/call.svg',
     // caret: 'assets/icons/caret.svg',
     // 'check-off': 'assets/icons/check-off.svg',
-    // 'check-on': 'assets/icons/check-on.svg',
+    'check-on': 'assets/icons/check-on.svg',
     // checklist: 'assets/icons/checklist.svg',
-    // checkmark: 'assets/icons/checkmark.svg',
+    finished: 'assets/icons/checkmark.svg',
     // clock: 'assets/icons/clock.svg',
     // clock2: 'assets/icons/clock2.svg',
     // code: 'assets/icons/code.svg',
     // creditcard: 'assets/icons/creditcard.svg',
     // 'die-keure': 'assets/icons/die-keure.svg',
     'view-content': 'assets/icons/eye.svg',
+    eye: 'assets/icons/eye.svg',
     // eye2: 'assets/icons/eye2.svg',
     // facebook: 'assets/icons/facebook.svg',
     // favorite: 'assets/icons/favorite.svg',
@@ -133,7 +142,7 @@ export const environment = {
     // favorites2: 'assets/icons/favorites2.svg',
     // game: 'assets/icons/game.svg',
     // groups: 'assets/icons/groups.svg',
-    // hourglass: 'assets/icons/hourglass.svg',
+    unfinished: 'assets/icons/hourglass.svg',
     // 'increase-lg': 'assets/icons/increase-lg.svg',
     // increase: 'assets/icons/increase.svg',
     // klok: 'assets/icons/klok.svg',
@@ -145,7 +154,7 @@ export const environment = {
     // phone: 'assets/icons/phone.svg',
     // pinterest: 'assets/icons/pinterest.svg',
     // 'polpo-small': 'assets/icons/polpo-small.svg',
-    polpo: 'assets/icons/polpo.svg'
+    polpo: 'assets/icons/polpo.svg',
     // 'power-on': 'assets/icons/power-on.svg',
     // 'smartschool:orange':
     //   'assets/icons/smartschool/s_logo_sso_button_orange_22x36.svg',
@@ -162,6 +171,35 @@ export const environment = {
     // timeline: 'assets/icons/timeline.svg',
     // twitter: 'assets/icons/twitter.svg',
     // 'user-exception': 'assets/icons/user-exception.svg',
+    'method:101spelen': 'assets/icons/method/101spelen.svg',
+    'method:allesimgrif': 'assets/icons/method/allesimgrif.svg',
+    'method:allesimgriffupdate': 'assets/icons/method/allesimgriffupdate.svg',
+    'method:beaufort': 'assets/icons/method/beaufort.svg',
+    'method:beautemps': 'assets/icons/method/beautemps.svg',
+    'method:boon': 'assets/icons/method/boon.svg',
+    'method:chipsandcookies': 'assets/icons/method/chipsandcookies.svg',
+    'method:cyborg': 'assets/icons/method/cyborg.svg',
+    'method:integraleopdrachten': 'assets/icons/method/integraleopdrachten.svg',
+    'method:interactie': 'assets/icons/method/interactie.svg',
+    'method:isee': 'assets/icons/method/isee.svg',
+    'method:janus': 'assets/icons/method/janus.svg',
+    'method:kapitaal': 'assets/icons/method/kapitaal.svg',
+    'method:leesleerenleef': 'assets/icons/method/leesleerenleef.svg',
+    'method:nando': 'assets/icons/method/nando.svg',
+    'method:opmijkunjerekenen': 'assets/icons/method/opmijkunjerekenen.svg',
+    'method:pleinfeu': 'assets/icons/method/pleinfeu.svg',
+    'method:plugin': 'assets/icons/method/plugin.svg',
+    'method:punktde': 'assets/icons/method/punktde.svg',
+    'method:sherpa': 'assets/icons/method/sherpa.svg',
+    'method:shuffle': 'assets/icons/method/shuffle.svg',
+    'method:shufflethis': 'assets/icons/method/shufflethis.svg',
+    'method:solanum': 'assets/icons/method/solanum.svg',
+    'method:speakup': 'assets/icons/method/speakup.svg',
+    'method:spectrum': 'assets/icons/method/spectrum.svg',
+    'method:surfen': 'assets/icons/method/surfen.svg',
+    'method:topos': 'assets/icons/method/topos.svg',
+    'method:vbtl': 'assets/icons/method/vbtl.svg',
+    'method:viainformatica': 'assets/icons/method/viainformatica.svg'
   },
   // promo website settings
   website: {
