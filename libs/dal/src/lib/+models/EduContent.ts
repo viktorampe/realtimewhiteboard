@@ -42,6 +42,12 @@ export class EduContent implements EduContentInterface, ContentInterface {
       this.publishedEduContentMetadata.fileExt
     );
   }
+  get fileTypeLabel(): string {
+    return (
+      this.publishedEduContentMetadata &&
+      this.publishedEduContentMetadata.fileLabel
+    );
+  }
   get previewImage(): string {
     return this.publishedEduContentMetadata
       ? this.publishedEduContentMetadata.thumbSmall
