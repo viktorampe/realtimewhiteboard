@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { DalModule } from '@campus/dal';
+import { CoupledTeacherGuard, GuardsModule } from '@campus/guards';
 import { SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
 import { EffectsModule } from '@ngrx/effects';
@@ -27,23 +28,27 @@ import { AppComponent } from './app.component';
     SharedModule.forRoot(
       environment.features.alerts,
       environment.features.messages,
-      environment.website,
+      environment.features.errorManagement,
       environment.iconMapping,
+      environment.website,
       environment.APIBase
     ),
     BrowserAnimationsModule,
     NxModule.forRoot(),
     DalModule.forRoot({ apiBaseUrl: environment.APIBase }),
+    GuardsModule,
     RouterModule.forRoot(
       [
         {
           path: 'books',
-          loadChildren: '@campus/pages/books#PagesBooksModule'
+          loadChildren: '@campus/pages/books#PagesBooksModule',
+          canLoad: [CoupledTeacherGuard]
         },
         { path: 'dev', loadChildren: '@campus/devlib#DevlibModule' },
         {
           path: 'tasks',
-          loadChildren: '@campus/pages/tasks#PagesTasksModule'
+          loadChildren: '@campus/pages/tasks#PagesTasksModule',
+          canLoad: [CoupledTeacherGuard]
         },
         {
           path: 'reports',
@@ -77,7 +82,8 @@ import { AppComponent } from './app.component';
         },
         {
           path: 'bundles',
-          loadChildren: '@campus/pages/bundles#PagesBundlesModule'
+          loadChildren: '@campus/pages/bundles#PagesBundlesModule',
+          canLoad: [CoupledTeacherGuard]
         }
       ],
       { initialNavigation: 'enabled', enableTracing: false }

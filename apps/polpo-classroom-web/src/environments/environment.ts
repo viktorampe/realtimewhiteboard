@@ -133,6 +133,7 @@ export const environment = {
     // code: 'assets/icons/code.svg',
     // creditcard: 'assets/icons/creditcard.svg',
     // 'die-keure': 'assets/icons/die-keure.svg',
+    'view-content': 'assets/icons/eye.svg',
     eye: 'assets/icons/eye.svg',
     // eye2: 'assets/icons/eye2.svg',
     // facebook: 'assets/icons/facebook.svg',
@@ -214,6 +215,9 @@ export const environment = {
     messages: {
       enabled: false,
       hasAppBarDropDown: false
+    },
+    errorManagement: {
+      managedStatusCodes: [500, 401, 404]
     }
   }
 };

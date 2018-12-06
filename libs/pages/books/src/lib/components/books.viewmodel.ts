@@ -85,4 +85,8 @@ export class BooksViewModel {
       shareReplay(1)
     );
   }
+
+  changeListFormat(listFormat: ListFormat): void {
+    this.store.dispatch(new UiActions.SetListFormat({ listFormat }));
+  }
 }
