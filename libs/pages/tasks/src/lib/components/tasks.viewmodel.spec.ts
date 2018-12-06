@@ -73,6 +73,7 @@ describe('TasksViewModel met State', () => {
   let taskInstances: TaskInstanceInterface[];
   let taskEduContents: TaskEduContentInterface[];
   let listFormat: ListFormat;
+  const now = new Date();
 
   function setInitialState() {
     setLearningAreaState();
@@ -299,8 +300,12 @@ describe('TasksViewModel met State', () => {
     });
 
     it('should get the taskInfo from the state', () => {
+      const expected = defaultExpected;
+      expected.taskEduContents.forEach(te => {
+        te.eduContent = new EduContentFixture({ id: te.eduContentId });
+      });
       expect(tasksViewModel.getTaskWithInfo(1)).toBeObservable(
-        hot('a', { a: defaultExpected })
+        hot('a', { a: expected })
       );
     });
 
@@ -318,6 +323,11 @@ describe('TasksViewModel met State', () => {
       const expected = { ...defaultExpected };
       expected.taskEduContents.filter(t => t.id === 3)[0].submitted = true;
       expected.finished = true;
+      expected.taskEduContents
+        .filter(t => t.id === 1 || t.id === 3)
+        .forEach(te => {
+          te.eduContent = new EduContentFixture({ id: te.eduContentId });
+        });
       expect(tasksViewModel.getTaskWithInfo(1)).toBeObservable(
         hot('a', { a: expected })
       );
@@ -387,7 +397,8 @@ describe('TasksViewModel met State', () => {
   function setEduContentsState() {
     eduContents = [
       new EduContentFixture({ id: 1 }),
-      new EduContentFixture({ id: 2 })
+      new EduContentFixture({ id: 2 }),
+      new EduContentFixture({ id: 3 })
     ];
     store.dispatch(
       new EduContentActions.EduContentsLoaded({ eduContents: eduContents })
