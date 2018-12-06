@@ -22,7 +22,7 @@ import {
   SetReadAlert,
   StartPollAlerts
 } from './alert.actions';
-import * as AlertQueries from './alert.selectors';
+import { getAlertIdsByFilter } from './alert.selectors';
 
 const MINIMUM_POLLING_INTERVAL = 3000;
 
@@ -57,7 +57,7 @@ export class AlertsEffects {
     switchMap(
       (action: SetAlertReadByFilter): Observable<SetReadAlert> => {
         return this.dataPersistence.store.pipe(
-          select(AlertQueries.getAlertIdsByFilter, {
+          select(getAlertIdsByFilter, {
             filter: action.payload.filter
           }),
           map(ids => {

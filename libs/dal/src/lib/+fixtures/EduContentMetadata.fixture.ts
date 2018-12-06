@@ -1,4 +1,4 @@
-import { EduContentMetadataInterface } from '../+models';
+import { EduContentMetadataInterface } from '../+models/EduContentMetadata.interface';
 import { EduContentProductTypeFixture } from './EduContentProductType.fixture';
 import { LearningAreaFixture } from './LearningArea.fixture';
 import { MethodFixture } from './Method.fixture';
@@ -10,8 +10,8 @@ export class EduContentMetadataFixture implements EduContentMetadataInterface {
   language = 'nl';
   title = 'foo';
   description = 'foo';
-  created = new Date();
-  published = new Date();
+  created = new Date('2018-12-05T13:48:00.719Z');
+  published = new Date('2018-12-05T13:48:00.719Z');
   quotable = true;
   taskAllowed = true;
   standalone = false;
