@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatIconModule } from '@angular/material';
+import { MatIconModule, MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
+import { MockMatIconRegistry } from '@campus/testing';
 import { DropdownMenuItemComponent } from './dropdown-menu-item.component';
 
 const mockData = {
@@ -19,7 +20,8 @@ describe('DropdownMenuItemComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [DropdownMenuItemComponent],
-      imports: [MatIconModule]
+      imports: [MatIconModule],
+      providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
     }).compileComponents();
   }));
 

@@ -116,7 +116,7 @@ export const environment = {
     // balance: 'assets/icons/balance.svg',
     // 'book-not': 'assets/icons/book-not.svg',
     book: 'assets/icons/book.svg',
-    // bundle: 'assets/icons/bundle.svg',
+    bundle: 'assets/icons/bundle.svg',
     // bundles: 'assets/icons/bundles.svg',
     // call: 'assets/icons/call.svg',
     // caret: 'assets/icons/caret.svg',

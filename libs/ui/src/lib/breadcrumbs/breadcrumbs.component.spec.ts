@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
+import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '../ui.module';
 import { BreadcrumbsComponent } from './breadcrumbs.component';
 
@@ -69,7 +71,8 @@ describe('BreadcrumbComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [UiModule, RouterTestingModule]
+      imports: [UiModule, RouterTestingModule],
+      providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
     }).compileComponents();
   }));
 

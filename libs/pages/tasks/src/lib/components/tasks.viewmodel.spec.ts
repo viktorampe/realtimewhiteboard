@@ -1,5 +1,33 @@
 import { TestBed } from '@angular/core/testing';
-import { AlertActions, AlertService, AUTH_SERVICE_TOKEN, DalState, EduContentActions, EduContentFixture, EduContentInterface, EduContentReducer, getStoreModuleForFeatures, LearningAreaActions, LearningAreaFixture, LearningAreaInterface, LearningAreaReducer, TaskActions, TaskEduContentActions, TaskEduContentFixture, TaskEduContentInterface, TaskEduContentReducer, TaskFixture, TaskInstanceActions, TaskInstanceFixture, TaskInstanceInterface, TaskInstanceReducer, TaskInterface, TaskReducer, UiActions, UiReducer } from '@campus/dal';
+import {
+  AlertActions,
+  AlertService,
+  AUTH_SERVICE_TOKEN,
+  DalState,
+  EduContentActions,
+  EduContentFixture,
+  EduContentInterface,
+  EduContentReducer,
+  getStoreModuleForFeatures,
+  LearningAreaActions,
+  LearningAreaFixture,
+  LearningAreaInterface,
+  LearningAreaReducer,
+  TaskActions,
+  TaskEduContentActions,
+  TaskEduContentFixture,
+  TaskEduContentInterface,
+  TaskEduContentReducer,
+  TaskFixture,
+  TaskInstanceActions,
+  TaskInstanceFixture,
+  TaskInstanceInterface,
+  TaskInstanceReducer,
+  TaskInterface,
+  TaskReducer,
+  UiActions,
+  UiReducer
+} from '@campus/dal';
 import { ListFormat } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
@@ -332,7 +360,6 @@ describe('TasksViewModel met State', () => {
         personId: 1,
         read: true
       });
-      console.log(expectedAction);
       tasksViewModel.setTaskAlertRead(1);
       expect(store.dispatch).toHaveBeenCalledWith(expectedAction);
     });
