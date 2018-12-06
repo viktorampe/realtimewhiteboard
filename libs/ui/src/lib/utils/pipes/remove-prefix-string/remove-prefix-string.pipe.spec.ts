@@ -6,19 +6,19 @@ describe('RemovePrefixString', () => {
     expect(pipe).toBeTruthy();
   });
 
-  it('adds white', () => {
+  it("doesn't change the string", () => {
     const pipe = new RemovePrefixStringPipe();
     const color: string = pipe.transform('no-prefix-present', 'polpo-');
     expect(color).toBe('no-prefix-present');
   });
 
-  it('adds black', () => {
+  it("doesn't change the string when prefix in the middle", () => {
     const pipe = new RemovePrefixStringPipe();
-    const color: string = pipe.transform('no-prefix-at-start', 'polpo-');
-    expect(color).toBe('no-prefix-at-start');
+    const color: string = pipe.transform('no-polpo-prefix-at-start', 'polpo-');
+    expect(color).toBe('no-polpo-prefix-at-start');
   });
 
-  it('returns with pound', () => {
+  it('replaces prefix', () => {
     const pipe = new RemovePrefixStringPipe();
     const color: string = pipe.transform('polpo-yes-prefix', 'polpo-');
     expect(color).toBe('yes-prefix');
