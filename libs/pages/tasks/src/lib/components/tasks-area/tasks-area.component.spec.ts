@@ -3,10 +3,6 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ListFormat, UiModule } from '@campus/ui';
 import {
-  ScormExerciseServiceInterface,
-  SCORM_EXERCISE_SERVICE_TOKEN
-} from '@campus/dal';
-import {
   FilterService,
   FilterServiceInterface,
   FILTER_SERVICE_TOKEN
@@ -17,14 +13,6 @@ import { TasksViewModel } from '../tasks.viewmodel';
 import { LearningAreasWithTaskInfoInterface } from '../tasks.viewmodel.interfaces';
 import { MockTasksViewModel } from '../tasks.viewmodel.mock';
 import { TasksAreaComponent } from './tasks-area.component';
-
-class MockExcerciseServcie implements ScormExerciseServiceInterface {
-  startExerciseAsPreviewWithAnswers(): void {}
-  startExerciseAsPreviewWithoutAnswers(): void {}
-  startExerciseAsTask(): void {}
-  startExerciseAsTraining(): void {}
-  startExerciseAsReview(): void {}
-}
 
 describe('TasksAreaComponent', () => {
   let component: TasksAreaComponent;
@@ -44,11 +32,7 @@ describe('TasksAreaComponent', () => {
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         { provide: TasksViewModel, useClass: MockTasksViewModel },
-        { provide: FILTER_SERVICE_TOKEN, useClass: FilterService },
-        {
-          provide: SCORM_EXERCISE_SERVICE_TOKEN,
-          useValue: new MockExcerciseServcie()
-        }
+        { provide: FILTER_SERVICE_TOKEN, useClass: FilterService }
       ]
     }).compileComponents();
 

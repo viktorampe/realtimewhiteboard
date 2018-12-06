@@ -8,7 +8,7 @@ import {
 } from '@campus/scorm';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import {
   CurrentExerciseActions,
   CurrentExerciseQueries,
@@ -32,17 +32,19 @@ export class ScormExerciseService implements ScormExerciseServiceInterface {
     private store: Store<CurrentExerciseReducer.State>
   ) {
     this.currentExercise$ = this.store.pipe(
+      filter(data => !!data),
       select(CurrentExerciseQueries.getCurrentExercise)
     );
 
     this.currentURL$ = this.currentExercise$.pipe(
+      filter(data => !!data.url),
       map(data => {
         return data.url;
       })
     );
 
     this.currentURL$.subscribe(url => {
-      this.openNewwUrl(url);
+      this.openNewUrl(url);
     });
   }
 
@@ -115,7 +117,7 @@ export class ScormExerciseService implements ScormExerciseServiceInterface {
     );
   }
 
-  private openNewwUrl(url: string) {
+  private openNewUrl(url: string) {
     if (url) {
       this.openWindow(url);
 
@@ -125,9 +127,7 @@ export class ScormExerciseService implements ScormExerciseServiceInterface {
 
       combineLatest(this.currentExercise$, this.currentResult$)
         .pipe(
-          map(data => {
-            const state = data[0];
-            const result = data[1];
+          map(([state, result]) => {
             //update values in state and return
             state.result.cmi.mode = result.mode;
             state.result.score = result.core.score.raw;
@@ -179,8 +179,8 @@ export class ScormExerciseService implements ScormExerciseServiceInterface {
     this.commit$ = this.scormApi.commit$;
   }
 
-  private openWindow(url: any) {
-    this.windowService.openWindow('polpo-scorm', url.url);
+  private openWindow(url: string) {
+    this.windowService.openWindow('polpo-scorm', url);
   }
 
   private closeWindow() {

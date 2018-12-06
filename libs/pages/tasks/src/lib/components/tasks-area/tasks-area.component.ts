@@ -1,8 +1,4 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import {
-  ScormExerciseServiceInterface,
-  SCORM_EXERCISE_SERVICE_TOKEN
-} from '@campus/dal';
 import { FilterTextInputComponent, ListFormat } from '@campus/ui';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { Observable } from 'rxjs';
@@ -11,7 +7,6 @@ import {
   LearningAreasWithTaskInfoInterface,
   LearningAreaWithTaskInfoInterface
 } from './../tasks.viewmodel.interfaces';
-
 @Component({
   selector: 'campus-tasks-area',
   templateUrl: './tasks-area.component.html',
@@ -30,8 +25,6 @@ export class TasksAreaComponent implements OnInit {
 
   constructor(
     private tasksViewModel: TasksViewModel,
-    @Inject(SCORM_EXERCISE_SERVICE_TOKEN)
-    private exerciseService: ScormExerciseServiceInterface,
     @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface
   ) {}
 
