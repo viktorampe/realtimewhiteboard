@@ -33,7 +33,6 @@ export class CurrentExerciseEffects {
           .pipe(map(ex => new CurrentExerciseLoaded(ex)));
       },
       onError: (action: StartExercise, error) => {
-        console.log(error);
         return new CurrentExerciseError(error);
       }
     }
