@@ -5,10 +5,6 @@
 
 <campus-page-bar>
   <div class="divider"></div>
-  <campus-button [iconClass]="'list-view'"
-                 (click)="setListFormat(listFormat.LINE)"></campus-button>
-  <campus-button [iconClass]="'grid-view'"
-                 (click)="setListFormat(listFormat.GRID)"></campus-button>
 </campus-page-bar>
 
 <div class="login_page_component">
@@ -40,9 +36,8 @@
     </div>
   </div>
 
-  <div [hidden]="!loginPageviewModel.isLoggedIn()">
-    <button (click)="loginPageviewModel.logout()">logout</button>
-  </div>
+
+  <button (click)="loginPageviewModel.logout()">logout</button>
 
   <div>
     <p>{{ loginPageviewModel.response }}</p>
