@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { StudentContentStatusInterface } from '@campus/dal';
 import { Actions, Effect } from '@ngrx/effects';
-import { Store } from '@ngrx/store';
+import { Action, Store } from '@ngrx/store';
 import { DataPersistence } from '@nrwl/nx';
 import { undo } from 'ngrx-undo';
 import { map } from 'rxjs/operators';
@@ -20,9 +20,10 @@ import {
   UpdateStudentContentStatus
 } from './student-content-status.actions';
 
-let undoAction: any;
 @Injectable()
 export class StudentContentStatusesEffects {
+  undoAction: Action;
+
   @Effect()
   loadStudentContentStatuses$ = this.dataPersistence.fetch(
     StudentContentStatusesActionTypes.LoadStudentContentStatuses,
@@ -51,7 +52,7 @@ export class StudentContentStatusesEffects {
     StudentContentStatusesActionTypes.UpdateStudentContentStatus,
     {
       run: (action: UpdateStudentContentStatus, state: DalState) => {
-        undoAction = action;
+        this.undoAction = action;
         const statusId = <number>action.payload.studentContentStatus.id;
 
         const newValue: StudentContentStatusInterface = {
@@ -71,10 +72,8 @@ export class StudentContentStatusesEffects {
           );
       },
       undoAction: (action: UpdateStudentContentStatus, error: any) => {
-        //TODO handle the undo
-        this.store.dispatch(undo(undoAction));
-        console.log({ error, action });
-        return null;
+        return undo(this.undoAction);
+        // TODO: show notification to user
       }
     }
   );
@@ -84,6 +83,7 @@ export class StudentContentStatusesEffects {
     StudentContentStatusesActionTypes.AddStudentContentStatus,
     {
       run: (action: AddStudentContentStatus, state: DalState) => {
+        this.undoAction = action;
         const newValue = action.payload.studentContentStatus;
 
         return this.studentContentStatusesService
@@ -98,9 +98,8 @@ export class StudentContentStatusesEffects {
           );
       },
       undoAction: (action: AddStudentContentStatus, error: any) => {
-        //TODO handle the undo
-        console.log({ error, action });
-        return null;
+        return undo(this.undoAction);
+        //TODO: show notification to user
       }
     }
   );
