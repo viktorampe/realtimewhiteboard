@@ -232,7 +232,7 @@ describe('StudentContentStatusEffects', () => {
         );
       });
 
-      describe('fail', () => {
+      describe('failed update', () => {
         beforeEach(() => {
           mockServiceMethodError('updateStudentContentStatus', 'update failed');
         });
