@@ -89,7 +89,7 @@ describe('NotificationDropdownItemComponent', () => {
       By.css('.ui-notification-dropdown-item__title')
     );
     expect(textNode).toBeTruthy();
-    expect(textNode.nativeElement.textContent).toBe('foo');
+    expect(textNode.nativeElement.textContent).toContain('foo');
   });
 
   it('should not show a description', () => {
@@ -99,7 +99,7 @@ describe('NotificationDropdownItemComponent', () => {
     const textNode = fixture.debugElement.query(
       By.css('.ui-notification-dropdown-item__text')
     );
-    expect(textNode.nativeElement.textContent).toBe('');
+    expect(textNode.nativeElement.textContent.trim()).toBe('');
   });
 
   it('should show a description', () => {
@@ -110,7 +110,7 @@ describe('NotificationDropdownItemComponent', () => {
       By.css('.ui-notification-dropdown-item__text')
     );
     expect(textNode).toBeTruthy();
-    expect(textNode.nativeElement.textContent).toBe('foo');
+    expect(textNode.nativeElement.textContent).toContain('foo');
   });
 
   it('should show a link if `accented=true`', () => {
@@ -142,7 +142,7 @@ describe('NotificationDropdownItemComponent', () => {
       By.css('.ui-notification-dropdown-item__date')
     );
     expect(dateNode).toBeTruthy();
-    expect(dateNode.nativeElement.textContent).toBe('zonet');
+    expect(dateNode.nativeElement.textContent).toContain('zonet');
   });
 
   it('should not show the notification date', () => {
