@@ -51,6 +51,13 @@ describe('BundleDetailComponent', () => {
     expect(spy).toHaveBeenCalledWith(ListFormat.GRID);
   });
 
+  it('should call the viewmodel openContent method', () => {
+    const spy = jest.spyOn(bundlesViewModel, 'openContent');
+    component.clickOpenContent(5);
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith(5);
+  });
+
   it('should get the listFormat$ from the vm', () => {
     expect(component.listFormat$).toBe(bundlesViewModel.listFormat$);
   });

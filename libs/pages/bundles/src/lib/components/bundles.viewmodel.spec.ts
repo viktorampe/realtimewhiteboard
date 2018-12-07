@@ -31,6 +31,10 @@ import {
   UnlockedContentInterface,
   UnlockedContentReducer
 } from '@campus/dal';
+import {
+  OpenStaticContentServiceInterface,
+  OPEN_STATIC_CONTENT_SERVICE_TOKEN
+} from '@campus/shared';
 import { ListFormat } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
@@ -40,6 +44,7 @@ import { LearningAreasWithBundlesInfoInterface } from './bundles.viewmodel.inter
 
 describe('BundlesViewModel', () => {
   let bundlesViewModel: BundlesViewModel;
+  let openStaticContentService: OpenStaticContentServiceInterface;
   let uiState: UiReducer.UiState;
   let learningAreaState: LearningAreaReducer.State;
   let bundleState: BundleReducer.State;
@@ -67,11 +72,16 @@ describe('BundlesViewModel', () => {
       providers: [
         BundlesViewModel,
         Store,
-        { provide: AUTH_SERVICE_TOKEN, useValue: { userId: 1 } }
+        { provide: AUTH_SERVICE_TOKEN, useValue: { userId: 1 } },
+        {
+          provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
+          useValue: { open: jest.fn() }
+        }
       ]
     });
 
     bundlesViewModel = TestBed.get(BundlesViewModel);
+    openStaticContentService = TestBed.get(OPEN_STATIC_CONTENT_SERVICE_TOKEN);
   });
 
   it('should be defined', () => {
@@ -84,6 +94,13 @@ describe('BundlesViewModel', () => {
     bundlesViewModel.changeListFormat(listFormat);
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith({ listFormat });
+  });
+
+  it('openContent() should call the open static content service', () => {
+    const contentId = 5;
+    bundlesViewModel.openContent(contentId);
+    expect(openStaticContentService.open).toHaveBeenCalledTimes(1);
+    expect(openStaticContentService.open).toHaveBeenCalledWith(contentId);
   });
 
   it('sharedLearningAreas$', () => {
