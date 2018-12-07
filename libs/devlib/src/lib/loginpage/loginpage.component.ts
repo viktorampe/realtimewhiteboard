@@ -39,4 +39,8 @@ export class LoginpageComponent implements OnInit {
   updateStudentContentStatus() {
     this.loginPageviewModel.updateStudentContentStatus();
   }
+
+  updateAlert() {
+    this.loginPageviewModel.updateAlert();
+  }
 }

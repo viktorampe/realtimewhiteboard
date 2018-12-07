@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import {
+  AlertActions,
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   StudentContentStatusActions,
@@ -72,6 +73,12 @@ export class LoginPageViewModel {
           changes: { contentStatusId: 3, unlockedContentId: 5 }
         }
       })
+    );
+  }
+
+  updateAlert() {
+    this.store.dispatch(
+      new AlertActions.SetReadAlert({ personId: 1, alertIds: 58, read: true })
     );
   }
 
