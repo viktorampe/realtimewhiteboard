@@ -21,10 +21,6 @@ export class FileExtensionComponent {
   @Input() showIcon = true;
 
   get titleContent(): string {
-    return this.showTitle
-      ? this.title === ''
-        ? this.extensionClass
-        : this.title
-      : '';
+    return this.showTitle ? this.title || this.extensionClass : '';
   }
 }
