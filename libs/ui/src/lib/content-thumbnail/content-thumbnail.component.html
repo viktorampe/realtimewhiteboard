@@ -14,7 +14,7 @@
     <img [src]=imagePath
          *ngIf="imagePath">
     <campus-file-extension *ngIf="!imagePath"
-                           extensionClass={{fileExtensionClass}}
+                           [extensionClass]="fileExtensionClass"
                            title="{{fileTypeLabel}}"
                            [showTitle]="false"></campus-file-extension>
   </figure>
