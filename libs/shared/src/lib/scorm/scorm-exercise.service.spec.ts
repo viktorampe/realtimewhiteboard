@@ -53,7 +53,15 @@ describe('ScormExerciseService', () => {
   it('should start an preview exercise with answers run init and saved to the store', () => {
     const spyScormApiService = jest.spyOn(ScormApiService.prototype, 'init');
     const spyStore = jest.spyOn(Store.prototype, 'dispatch');
-    scormExerciseService.startExerciseAsPreviewWithAnswers(13, 13, 13);
+    scormExerciseService.previewExerciseFromUnlockedContent(13, 13, 13, true);
+    expect(spyStore).toHaveBeenCalled();
+    expect(spyScormApiService).toHaveBeenCalled();
+  });
+
+  it('should start an preview task with answers run init and saved to the store', () => {
+    const spyScormApiService = jest.spyOn(ScormApiService.prototype, 'init');
+    const spyStore = jest.spyOn(Store.prototype, 'dispatch');
+    scormExerciseService.previewExerciseFromTask(13, 13, 13, true);
     expect(spyStore).toHaveBeenCalled();
     expect(spyScormApiService).toHaveBeenCalled();
   });
@@ -61,15 +69,15 @@ describe('ScormExerciseService', () => {
   it('should start a preview exercise without answers run init and saved to the store', () => {
     const spyScormApiService = jest.spyOn(ScormApiService.prototype, 'init');
     const spyStore = jest.spyOn(Store.prototype, 'dispatch');
-    scormExerciseService.startExerciseAsPreviewWithoutAnswers(13, 13, 13);
+    scormExerciseService.previewExerciseFromUnlockedContent(13, 13, 13, false);
     expect(spyStore).toHaveBeenCalled();
     expect(spyScormApiService).toHaveBeenCalled();
   });
 
-  it('should start a preview exercise without answers run init and saved to the store', () => {
+  it('should start an preview task without answers run init and saved to the store', () => {
     const spyScormApiService = jest.spyOn(ScormApiService.prototype, 'init');
     const spyStore = jest.spyOn(Store.prototype, 'dispatch');
-    scormExerciseService.startExerciseAsPreviewWithoutAnswers(13, 13, 13);
+    scormExerciseService.previewExerciseFromTask(13, 13, 13, false);
     expect(spyStore).toHaveBeenCalled();
     expect(spyScormApiService).toHaveBeenCalled();
   });
@@ -77,7 +85,15 @@ describe('ScormExerciseService', () => {
   it('should start a exercise as review run init and saved to the store', () => {
     const spyScormApiService = jest.spyOn(ScormApiService.prototype, 'init');
     const spyStore = jest.spyOn(Store.prototype, 'dispatch');
-    scormExerciseService.startExerciseAsReview(13, 13, 13);
+    scormExerciseService.reviewExerciseFromUnlockedContent(13, 13, 13);
+    expect(spyStore).toHaveBeenCalled();
+    expect(spyScormApiService).toHaveBeenCalled();
+  });
+
+  it('should start a task as review run init and saved to the store', () => {
+    const spyScormApiService = jest.spyOn(ScormApiService.prototype, 'init');
+    const spyStore = jest.spyOn(Store.prototype, 'dispatch');
+    scormExerciseService.reviewExerciseFromTaskUnlockedContent(13, 13, 13);
     expect(spyStore).toHaveBeenCalled();
     expect(spyScormApiService).toHaveBeenCalled();
   });
@@ -85,15 +101,15 @@ describe('ScormExerciseService', () => {
   it('should start a exercise as task run init and saved to the store', () => {
     const spyScormApiService = jest.spyOn(ScormApiService.prototype, 'init');
     const spyStore = jest.spyOn(Store.prototype, 'dispatch');
-    scormExerciseService.startExerciseAsTask(13, 13, 13);
+    scormExerciseService.startExerciseFromTask(13, 13, 13);
     expect(spyStore).toHaveBeenCalled();
     expect(spyScormApiService).toHaveBeenCalled();
   });
 
-  it('should start a exercise as training run init and saved to the store', () => {
+  it('should start a exercise run init and saved to the store', () => {
     const spyScormApiService = jest.spyOn(ScormApiService.prototype, 'init');
     const spyStore = jest.spyOn(Store.prototype, 'dispatch');
-    scormExerciseService.startExerciseAsTraining(13, 13, 13);
+    scormExerciseService.startExerciseFromUnlockedContent(13, 13, 13);
     expect(spyStore).toHaveBeenCalled();
     expect(spyScormApiService).toHaveBeenCalled();
   });

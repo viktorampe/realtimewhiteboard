@@ -48,46 +48,37 @@ export class ScormExerciseService implements ScormExerciseServiceInterface {
     });
   }
 
-  startExerciseAsPreviewWithAnswers(
+  previewExerciseFromUnlockedContent(
     userId: number,
     educontentId: number,
-    unlockedContentId: number
+    unlockedContentId: number,
+    showAnswers: boolean
   ): void {
     this.initializeApi(ScormCmiMode.CMI_MODE_PREVIEW);
     this.saveNewExerciseToStore(
       userId,
       educontentId,
-      false,
+      showAnswers,
       null,
       unlockedContentId
     );
   }
-
-  startExerciseAsPreviewWithoutAnswers(
+  previewExerciseFromTask(
     userId: number,
     educontentId: number,
-    unlockedContentId: number
+    taskId: number,
+    showAnswers: boolean
   ): void {
-    this.initializeApi(ScormCmiMode.CMI_MODE_NORMAL);
+    this.initializeApi(ScormCmiMode.CMI_MODE_PREVIEW);
     this.saveNewExerciseToStore(
       userId,
       educontentId,
-      false,
-      null,
-      unlockedContentId
+      showAnswers,
+      taskId,
+      null
     );
   }
-
-  startExerciseAsTask(
-    userId: number,
-    educontentId: number,
-    taskId: number
-  ): void {
-    this.initializeApi(ScormCmiMode.CMI_MODE_BROWSE);
-    this.saveNewExerciseToStore(userId, educontentId, true, taskId, null);
-  }
-
-  startExerciseAsTraining(
+  startExerciseFromUnlockedContent(
     userId: number,
     educontentId: number,
     unlockedContentId: number
@@ -101,8 +92,15 @@ export class ScormExerciseService implements ScormExerciseServiceInterface {
       unlockedContentId
     );
   }
-
-  startExerciseAsReview(
+  startExerciseFromTask(
+    userId: number,
+    educontentId: number,
+    taskId: number
+  ): void {
+    this.initializeApi(ScormCmiMode.CMI_MODE_BROWSE);
+    this.saveNewExerciseToStore(userId, educontentId, true, taskId, null);
+  }
+  reviewExerciseFromUnlockedContent(
     userId: number,
     educontentId: number,
     unlockedContentId: number
@@ -116,8 +114,7 @@ export class ScormExerciseService implements ScormExerciseServiceInterface {
       unlockedContentId
     );
   }
-
-  startTaskAsReview(
+  reviewExerciseFromTaskUnlockedContent(
     userId: number,
     educontentId: number,
     taskId: number
