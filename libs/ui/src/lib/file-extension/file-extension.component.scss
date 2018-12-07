@@ -242,7 +242,8 @@
       }
     }
 
-    &.oefening {
+    &.oefening,
+    &[class*='ludo'] {
       &:after {
         background-color: #21a49d;
         border-color: #146663;
