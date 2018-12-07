@@ -4,6 +4,7 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { getTestScheduler, hot } from '@nrwl/nx/testing';
+import { undo } from 'ngrx-undo';
 import { Observable, of } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { AlertFixture } from '../../+fixtures';
@@ -388,6 +389,10 @@ describe('AlertEffects', () => {
     const loadErrorAction = new AlertsLoadError(
       new Error('Unable to update alert')
     );
+
+    const setReadSingleUndoAction = undo(setReadSingleAction);
+    const setReadMultipleUndoAction = undo(setReadMultipleAction);
+
     describe('with initialState', () => {
       beforeAll(() => {
         usedState = initialState;
@@ -448,14 +453,14 @@ describe('AlertEffects', () => {
         expectInAndOut(
           effects.setReadAlert$,
           setReadSingleAction,
-          loadErrorAction
+          setReadSingleUndoAction
         );
       });
       it('should return a error action when calling with multiple ids', () => {
         expectInAndOut(
           effects.setReadAlert$,
           setReadMultipleAction,
-          loadErrorAction
+          setReadMultipleUndoAction
         );
       });
     });
