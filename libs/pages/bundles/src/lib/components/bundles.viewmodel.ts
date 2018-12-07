@@ -20,6 +20,10 @@ import {
   UnlockedContentQueries,
   UserContentQueries
 } from '@campus/dal';
+import {
+  OpenStaticContentServiceInterface,
+  OPEN_STATIC_CONTENT_SERVICE_TOKEN
+} from '@campus/shared';
 import { ListFormat } from '@campus/ui';
 import { Dictionary } from '@ngrx/entity';
 import { select, Store } from '@ngrx/store';
@@ -61,7 +65,9 @@ export class BundlesViewModel {
 
   constructor(
     private store: Store<DalState>,
-    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
+    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
+    @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
+    private openStaticContentService: OpenStaticContentServiceInterface
   ) {
     this.initialize();
   }
@@ -97,6 +103,10 @@ export class BundlesViewModel {
 
   changeListFormat(listFormat: ListFormat): void {
     this.store.dispatch(new UiActions.SetListFormat({ listFormat }));
+  }
+
+  openContent(contentId: number): void {
+    this.openStaticContentService.open(contentId);
   }
 
   getLearningAreaById(areaId: number): Observable<LearningAreaInterface> {

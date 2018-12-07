@@ -59,7 +59,7 @@
                                       [fileTypeLabel]="content.fileTypeLabel"
                                       [contentTypeClass]="content.productType">
               <!-- TODO Hier moeten de mogelijke actieknoppen met hun (Click) nog toegevoegd worden -->
-              <campus-button [iconClass]="'bundle'"
+              <campus-button (click)="clickOpenContent(content.id)" [iconClass]="'eye'"
                              circle>
               </campus-button>
               <campus-button [iconClass]="'tasks'"
