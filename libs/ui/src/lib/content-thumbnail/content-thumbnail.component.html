@@ -6,7 +6,7 @@
               *ngIf="contentTypeClass"></mat-icon>
 
     <div class="flex-filler"></div>
-    <campus-file-extension extensionClass={{fileExtensionClass}}
+    <campus-file-extension [extensionClass]="fileExtensionClass"
                            [title]="fileTypeLabel"
                            [showIcon]=false></campus-file-extension>
   </div>
