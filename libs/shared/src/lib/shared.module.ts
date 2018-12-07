@@ -1,20 +1,30 @@
 import { LayoutModule } from '@angular/cdk/layout';
 import { PortalModule } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
-import { ModuleWithProviders, NgModule } from '@angular/core';
-import { MatIconModule } from '@angular/material';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { Inject, ModuleWithProviders, NgModule } from '@angular/core';
+import { MatIconModule, MatIconRegistry } from '@angular/material';
+import { DomSanitizer } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { UiModule } from '@campus/ui';
+import { FilterService, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { PageBarContainerComponent } from './components/page-bar-container/page-bar-container.component';
+import { OPEN_STATIC_CONTENT_SERVICE_TOKEN } from './content/open-static-content.interface';
+import { OpenStaticContentService } from './content/open-static-content.service';
 import { HeaderComponent } from './header/header.component';
+import { CampusHttpInterceptor } from './interceptors/campus-http.interceptor';
 import {
   EnvironmentAlertsFeatureInterface,
+  EnvironmentErrorManagementFeatureInterface,
   EnvironmentMessagesFeatureInterface,
+  EnvironmentWebsiteInterface,
   ENVIRONMENT_ALERTS_FEATURE_TOKEN,
-  ENVIRONMENT_MESSAGES_FEATURE_TOKEN
+  ENVIRONMENT_API_BASE_TOKEN,
+  ENVIRONMENT_ERROR_MANAGEMENT_FEATURE_TOKEN,
+  ENVIRONMENT_ICON_MAPPING_TOKEN,
+  ENVIRONMENT_MESSAGES_FEATURE_TOKEN,
+  ENVIRONMENT_WEBSITE_TOKEN
 } from './interfaces';
-import { FilterService } from './services/filter.service';
-import { FILTER_SERVICE_TOKEN } from './services/filter.service.interface';
 
 @NgModule({
   imports: [
@@ -32,12 +42,35 @@ import { FILTER_SERVICE_TOKEN } from './services/filter.service.interface';
     LayoutModule,
     PageBarContainerComponent
   ],
-  providers: [{ provide: FILTER_SERVICE_TOKEN, useClass: FilterService }]
+  providers: [
+    { provide: FILTER_SERVICE_TOKEN, useClass: FilterService },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: CampusHttpInterceptor,
+      multi: true
+    },
+    {
+      provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
+      useClass: OpenStaticContentService
+    }
+  ]
 })
 export class SharedModule {
+  constructor(
+    private iconRegistry: MatIconRegistry,
+    private sanitizer: DomSanitizer,
+    @Inject(ENVIRONMENT_ICON_MAPPING_TOKEN)
+    private iconMapping: { [icon: string]: string }
+  ) {
+    this.setupIconRegistry();
+  }
   static forRoot(
     environmentAlertsFeature: EnvironmentAlertsFeatureInterface,
-    environmentMessagesFeature: EnvironmentMessagesFeatureInterface
+    environmentMessagesFeature: EnvironmentMessagesFeatureInterface,
+    environmentErrorManagementFeature: EnvironmentErrorManagementFeatureInterface,
+    environmentIconMapping: { [key: string]: string },
+    environmentWebsite: EnvironmentWebsiteInterface,
+    environmentApiBase: string
   ): ModuleWithProviders {
     return {
       ngModule: SharedModule,
@@ -49,8 +82,41 @@ export class SharedModule {
         {
           provide: ENVIRONMENT_MESSAGES_FEATURE_TOKEN,
           useValue: environmentMessagesFeature
+        },
+        {
+          provide: ENVIRONMENT_ERROR_MANAGEMENT_FEATURE_TOKEN,
+          useValue: environmentErrorManagementFeature
+        },
+        {
+          provide: ENVIRONMENT_WEBSITE_TOKEN,
+          useValue: environmentWebsite
+        },
+        {
+          provide: ENVIRONMENT_ICON_MAPPING_TOKEN,
+          useValue: environmentIconMapping
+        },
+        {
+          provide: ENVIRONMENT_API_BASE_TOKEN,
+          useValue: environmentApiBase
         }
       ]
     };
+  }
+
+  setupIconRegistry() {
+    for (const key in this.iconMapping) {
+      if (key.indexOf(':') > 0) {
+        this.iconRegistry.addSvgIconInNamespace(
+          key.split(':')[0],
+          key.split(':')[1],
+          this.sanitizer.bypassSecurityTrustResourceUrl(this.iconMapping[key])
+        );
+      } else {
+        this.iconRegistry.addSvgIcon(
+          key,
+          this.sanitizer.bypassSecurityTrustResourceUrl(this.iconMapping[key])
+        );
+      }
+    }
   }
 }

@@ -60,7 +60,20 @@ export function reducer(
     }
 
     case TaskInstancesActionTypes.TaskInstancesLoaded: {
-      return adapter.addAll(action.payload.taskInstances, {
+      const instances = action.payload.taskInstances.map(instance => {
+        return {
+          ...instance,
+          end:
+            typeof instance.end === 'string'
+              ? new Date(instance.end)
+              : instance.end,
+          start:
+            typeof instance.start === 'string'
+              ? new Date(instance.start)
+              : instance.start
+        };
+      });
+      return adapter.addAll(instances, {
         ...state,
         loaded: true
       });

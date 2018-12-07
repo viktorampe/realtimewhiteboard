@@ -1,17 +1,19 @@
-<campus-content-preview [preview]="content.preview"
+<campus-content-preview [preview]="content.previewImage"
                         [titleText]="content.name"
                         [description]="content.description">
-  <campus-file-extension *ngIf="content.extension"
-                         [extensionClass]="content.extension"></campus-file-extension>
+  <campus-file-extension *ngIf="content.fileExtension"
+                         type
+                         [extensionClass]="content.fileExtension"
+                         [title]="content.fileTypeLabel"></campus-file-extension>
   <div *ngIf="content.productType"
        class="{{content.productType}}"></div>
-  <div *ngFor="let badge of content.methods">
+  <div *ngFor="let badge of content.methodLogos">
     {{badge}}
   </div>
 </campus-content-preview>
 <campus-confirmable-select [label]="'status'"
                            [options]="statusOptions"
-                           [selectedOption]="content.status"
+                           [selectedOption]="status"
                            [text]="'Verander de status van dit lesmateriaal. Enkel jij kan deze status zien.'"
-                           [confirmIcon]="'icon-confirm'"
+                           [confirmIcon]="'finished'"
                            (clickConfirm)="onSaveStatus($event)"></campus-confirmable-select>

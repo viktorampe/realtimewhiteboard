@@ -23,7 +23,8 @@
                                 [teacher]="bundleOwner$|async">
       </campus-info-panel-bundle>
       <campus-info-panel-content *ngSwitchCase="1"
-                                 [content]="selectedItems[0]">
+                                 [content]="selectedItems[0]"
+                                 [status]="selectedItems[0].status">
       </campus-info-panel-content>
       <campus-info-panel-contents *ngSwitchDefault
                                   [contents]="selectedItems">
@@ -55,12 +56,13 @@
                                       [dataObject]="content"
                                       [title]="content.name"
                                       [fileExtensionClass]="content.fileExtension"
+                                      [fileTypeLabel]="content.fileTypeLabel"
                                       [contentTypeClass]="content.productType">
               <!-- TODO Hier moeten de mogelijke actieknoppen met hun (Click) nog toegevoegd worden -->
-              <campus-button [iconClass]="'icon-bundle'"
+              <campus-button [iconClass]="'bundle'"
                              circle>
               </campus-button>
-              <campus-button [iconClass]="'icon-tasks'"
+              <campus-button [iconClass]="'tasks'"
                              circle>
               </campus-button>
             </campus-content-thumbnail>

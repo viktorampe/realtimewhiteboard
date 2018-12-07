@@ -1,0 +1,10 @@
+.pages-books {
+  &__container {
+    padding: 20px;
+    &__books-count {
+      &__total {
+        cursor: pointer;
+      }
+    }
+  }
+}

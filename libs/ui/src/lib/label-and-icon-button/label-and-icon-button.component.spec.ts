@@ -1,5 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatIconModule, MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
+import { MockMatIconRegistry } from '@campus/testing';
 import { LabelAndIconButtonComponent } from '../label-and-icon-button/label-and-icon-button.component';
 
 describe('LabelAndIconButtonComponent', () => {
@@ -13,7 +15,9 @@ describe('LabelAndIconButtonComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [LabelAndIconButtonComponent]
+      declarations: [LabelAndIconButtonComponent],
+      imports: [MatIconModule],
+      providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
     }).compileComponents();
   }));
 

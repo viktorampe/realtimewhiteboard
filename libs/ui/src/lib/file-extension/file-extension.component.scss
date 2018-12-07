@@ -1,6 +1,9 @@
 @mixin ui-file-extension($file-extension-width: 84) {
   $file-extension-scale: $file-extension-width / 84; //84 is the standard width of the icon
 
+  $ui-file-extension-font-family: $ui-primary-font-family-3 !default;
+  $ui-file-extension-bg-color: $ui-tertiary-bg-color !default;
+
   .ui-file-extension {
     display: inline-block;
     position: relative;
@@ -8,35 +11,30 @@
     z-index: 0;
 
     &--title {
-      font-family: 'Oswald', 'Arial Narrow', Sans-Serif;
+      font-family: $ui-file-extension-font-family;
       font-weight: normal;
       line-height: 20px * $file-extension-scale;
       font-size: 15px * $file-extension-scale;
       text-align: center;
       text-transform: uppercase;
-      color: #fff;
+      color: $ui-file-extension-bg-color;
       height: 24px * $file-extension-scale;
       box-sizing: border-box;
       width: 68px * $file-extension-scale !important;
       font-style: normal;
       position: relative;
-      padding-top: 2px * $file-extension-scale;
 
       &:after {
-        width: inherit;
-        height: inherit;
-        border: inherit;
-        background: inherit;
         display: block;
         position: absolute;
-        top: 0;
-        left: 0;
+        top: -1px;
+        right: -1px;
         z-index: -1;
         box-sizing: border-box;
         content: ' ';
         border-style: solid;
         border-width: 2px * $file-extension-scale;
-        height: 24px * $file-extension-scale;
+        height: 1px + 24px * $file-extension-scale;
         width: 68px * $file-extension-scale !important;
       }
     }
@@ -44,7 +42,6 @@
     &--icon {
       height: 107px * $file-extension-scale;
       width: 84px * $file-extension-scale;
-      position: absolute;
       left: 0;
       right: 0;
       bottom: 0;
@@ -245,7 +242,8 @@
       }
     }
 
-    &.oefening {
+    &.oefening,
+    &[class*='ludo'] {
       &:after {
         background-color: #21a49d;
         border-color: #146663;

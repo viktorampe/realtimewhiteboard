@@ -6,6 +6,7 @@
   cursor: pointer;
   font-size: 13px;
   line-height: 16.4px;
+  box-sizing: content-box;
 
   &__header {
     position: relative;

@@ -14,7 +14,6 @@ import {
   LearningAreaInterface,
   PersonInterface
 } from '@campus/dal';
-import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/shared';
 import {
   FilterableItem,
   FilterTextInputComponent,
@@ -22,6 +21,7 @@ import {
   ListViewComponent,
   SideSheetComponent
 } from '@campus/ui';
+import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { Observable, Subscription } from 'rxjs';
 import { shareReplay, switchMap } from 'rxjs/operators';
 import { BundlesViewModel } from '../bundles.viewmodel';

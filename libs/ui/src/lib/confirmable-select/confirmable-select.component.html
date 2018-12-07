@@ -11,8 +11,9 @@
                     [value]="option.value">{{option.viewValue}}</mat-option>
       </mat-select>
     </mat-form-field>
-    <div *ngIf="selectControl.dirty"
-         class="ui-confirmable-select__dropdown__icon {{confirmIcon}}"
-         (click)="onClickConfirm()"></div>
+    <mat-icon *ngIf="selectControl.dirty"
+              class="ui-confirmable-select__dropdown__icon"
+              [svgIcon]="confirmIcon"
+              (click)="onClickConfirm()"></mat-icon>
   </div>
 </div>
