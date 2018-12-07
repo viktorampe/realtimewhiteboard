@@ -19,7 +19,7 @@
     <ng-container *ngIf="list && (list.selectedItems$ | async) as selectedItems"
                   [ngSwitch]="selectedItems.length">
       <campus-info-panel-task *ngSwitchCase="0"
-                              [taskInstance]="taskInfo.taskInstance"
+                              [taskInfo]="taskInfo"
                               [person]="taskInfo.task.teacher">
       </campus-info-panel-task>
       <campus-info-panel-content *ngSwitchCase="1"
