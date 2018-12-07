@@ -4,22 +4,15 @@ import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute } from '@angular/router';
 import { LearningAreaInterface } from '@campus/dal';
+import { MockActivatedRoute } from '@campus/testing';
 import { ListFormat, ListViewItemDirective, UiModule } from '@campus/ui';
 import { FilterService, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { hot } from '@nrwl/nx/testing';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { TasksViewModel } from '../tasks.viewmodel';
 import { TaskWithInfoInterface } from '../tasks.viewmodel.interfaces';
 import { MockTasksViewModel } from '../tasks.viewmodel.mock';
 import { TaskDetailComponent } from './task-detail.component';
-
-// TODO replace with @campus/testing  moch route
-export class MockActivatedRoute {
-  params: Observable<any> = new BehaviorSubject<any>({
-    task: 1,
-    area: 1
-  });
-}
 
 describe('TaskDetailComponent', () => {
   let component: TaskDetailComponent;
@@ -28,6 +21,7 @@ describe('TaskDetailComponent', () => {
   let learningArea$: BehaviorSubject<LearningAreaInterface>;
   let taskInfo$: BehaviorSubject<TaskWithInfoInterface>;
   let listFormat$: BehaviorSubject<ListFormat>;
+  let activatedRoute: MockActivatedRoute;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -44,8 +38,10 @@ describe('TaskDetailComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TaskDetailComponent);
-    tasksViewModel = TestBed.get(TasksViewModel);
     component = fixture.componentInstance;
+    tasksViewModel = TestBed.get(TasksViewModel);
+    activatedRoute = TestBed.get(ActivatedRoute);
+    activatedRoute.params.next({ area: 1, task: 1 });
     fixture.detectChanges();
 
     learningArea$ = tasksViewModel.getLearningAreaById(1) as BehaviorSubject<
