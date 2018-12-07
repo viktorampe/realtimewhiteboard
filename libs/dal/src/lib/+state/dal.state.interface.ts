@@ -5,6 +5,7 @@ import {
   CurrentExerciseReducer,
   EduContentReducer,
   LearningAreaReducer,
+  LinkedPersonReducer,
   StudentContentStatusReducer,
   TaskEduContentReducer,
   TaskInstanceReducer,
@@ -34,4 +35,6 @@ export interface DalState {
   currentExercise: CurrentExerciseReducer.State;
   taskInstances: TaskInstanceReducer.State;
   taskEduContents: TaskEduContentReducer.State;
+  linkedPersons: LinkedPersonReducer.State;
+  persons: LinkedPersonReducer.State;
 }
