@@ -7,8 +7,6 @@ import {
   EduContentQueries,
   LearningAreaInterface,
   LearningAreaQueries,
-  PersonFixture,
-  PersonInterface,
   PersonQueries,
   TaskEduContentQueries,
   TaskInstanceQueries,
@@ -19,7 +17,7 @@ import {
 import { ListFormat } from '@campus/ui';
 import { select, Store } from '@ngrx/store';
 import { MemoizedSelectorWithProps } from '@ngrx/store/src/selector';
-import { combineLatest, Observable, of } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import {
   LearningAreasWithTaskInfoInterface,
@@ -168,10 +166,6 @@ export class TasksViewModel {
         };
       })
     );
-  }
-
-  private getMockTeachers(): Observable<PersonInterface[]> {
-    return of([new PersonFixture({ id: 186 }), new PersonFixture({ id: 187 })]);
   }
 
   private select<T, Props>(
