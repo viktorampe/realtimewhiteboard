@@ -6,14 +6,10 @@ import { TasksViewModel } from '../tasks.viewmodel';
 import {
   LearningAreasWithTaskInfoInterface,
   LearningAreaWithTaskInfoInterface
-<<<<<<< HEAD
-} from './../tasks.viewmodel.interfaces';
-=======
 } from '../tasks.viewmodel.interfaces';
 // TODO replace import
 // import { TasksViewModel } from '../tasks.viewmodel';
 
->>>>>>> develop
 @Component({
   selector: 'campus-tasks-area',
   templateUrl: './tasks-area.component.html',
