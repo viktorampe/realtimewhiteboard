@@ -1,9 +1,11 @@
 @mixin ui-page-header_theme() {
+  $ui-page-header-color: $ui-primary-font-color;
+  $ui-page-header-subcolor: $ui-primary-font-color-2;
   .ui-page-header {
-    color: $ui-font-color-1;
+    color: $ui-page-header-color;
 
     small {
-      color: $ui-font-color-3;
+      color: $ui-page-header-subcolor;
     }
   }
 }
