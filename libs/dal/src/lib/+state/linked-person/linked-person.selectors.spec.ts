@@ -1,21 +1,23 @@
 import { LinkedPersonQueries } from '.';
-import { LinkedPersonInterface } from '../../+models';
+import { TeacherStudentInterface } from '../../+models';
 import { State } from './linked-person.reducer';
 
 describe('LinkedPerson Selectors', () => {
-  function createLinkedPerson(id: number): LinkedPersonInterface | any {
+  function createLinkedPerson(id: number): TeacherStudentInterface | any {
     return {
       id: id
     };
   }
 
   function createState(
-    linkedPersons: LinkedPersonInterface[],
+    linkedPersons: TeacherStudentInterface[],
     loaded: boolean = false,
     error?: any
   ): State {
     return {
-      ids: linkedPersons ? linkedPersons.map(linkedPerson => linkedPerson.id) : [],
+      ids: linkedPersons
+        ? linkedPersons.map(linkedPerson => linkedPerson.id)
+        : [],
       entities: linkedPersons
         ? linkedPersons.reduce(
             (entityMap, linkedPerson) => ({

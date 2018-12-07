@@ -9,6 +9,7 @@ import {
   LearningAreaQueries,
   PersonFixture,
   PersonInterface,
+  PersonQueries,
   TaskEduContentQueries,
   TaskInstanceQueries,
   TaskQueries,
@@ -111,13 +112,15 @@ export class TasksViewModel {
       this.select(TaskEduContentQueries.getAllByTaskId, { taskId }),
       this.select(EduContentQueries.getAllEntities),
       this.select(TaskQueries.getById, { id: taskId }),
-      this.getMockTeachers() //todo select teacher entities here
+      this.select(PersonQueries.getAllEntities)
     ).pipe(
       map(([taskInstances, taskEduContents, eduContents, task, teachers]) => {
         if (!task) return null;
         return {
-          //todo place teacher here on task
-          task: task,
+          task: {
+            ...task,
+            teacher: teachers[task.personId]
+          },
           taskInstance: taskInstances[0],
           taskEduContents: taskEduContents.map(taskEduContent => {
             return {

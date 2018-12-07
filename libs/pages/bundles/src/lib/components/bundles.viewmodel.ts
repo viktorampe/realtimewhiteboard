@@ -10,8 +10,8 @@ import {
   EduContentQueries,
   LearningAreaInterface,
   LearningAreaQueries,
-  PersonFixture,
   PersonInterface,
+  PersonQueries,
   UiActions,
   UiQuery,
   UnlockedBoekeGroupQueries,
@@ -23,7 +23,7 @@ import {
 import { ListFormat } from '@campus/ui';
 import { Dictionary } from '@ngrx/entity';
 import { select, Store } from '@ngrx/store';
-import { combineLatest, Observable, of } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { filter, map, shareReplay, switchMap } from 'rxjs/operators';
 import {
   BundlesWithContentInfoInterface,
@@ -113,9 +113,9 @@ export class BundlesViewModel {
     return bundle$.pipe(
       switchMap(
         (bundle): Observable<PersonInterface> =>
-          // TODO implement personqueries and enable test
-          // this.store.pipe(select(PersonQueries.getById, { id: bundle.teacherId }))
-          of(new PersonFixture({ id: bundle.teacherId }))
+          this.store.pipe(
+            select(PersonQueries.getById, { id: bundle.teacherId })
+          )
       )
     );
   }

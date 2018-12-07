@@ -1,44 +1,49 @@
 import { Update } from '@ngrx/entity';
-import {LinkedPersonActions } from '.';
+import { LinkedPersonActions } from '.';
+import { TeacherStudentInterface } from '../../+models';
 import { initialState, reducer, State } from './linked-person.reducer';
-import { LinkedPersonInterface } from '../../+models';
 
-/** 
+/**
  * This file is scaffolded, but needs some special attention:
- * - find and replace '__EXTRA__PROPERTY_NAME' and replace this with a property name of the LinkedPerson entity.
- * - set the initial property value via '[__EXTRA__PROPERTY_NAME]InitialValue'.
- * - set the updated property value via '[__EXTRA__PROPERTY_NAME]UpdatedValue'.
-*/
-const __EXTRA__PROPERTY_NAMEInitialValue = ;
-const __EXTRA__PROPERTY_NAMEUpdatedValue = ;
+ * - find and replace 'teacherId' and replace this with a property name of the LinkedPerson entity.
+ * - set the initial property value via '[teacherId]InitialValue'.
+ * - set the updated property value via '[teacherId]UpdatedValue'.
+ */
+const teacherIdInitialValue = 1;
+const teacherIdUpdatedValue = 2;
 
 /**
  * Creates a LinkedPerson.
  * @param {number} id
- * @returns {LinkedPersonInterface}
+ * @returns {TeacherStudentInterface}
  */
-function createLinkedPerson(id: number, __EXTRA__PROPERTY_NAME:any = __EXTRA__PROPERTY_NAMEInitialValue): LinkedPersonInterface | any {
+function createLinkedPerson(
+  id: number,
+  teacherId: any = teacherIdInitialValue
+): TeacherStudentInterface | any {
   return {
     id: id,
-    __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAME
+    teacherId: teacherId
   };
 }
 
 /**
  * Utility to create the linked-person state.
  *
- * @param {LinkedPersonInterface[]} linkedPersons
+ * @param {TeacherStudentInterface[]} linkedPersons
  * @param {boolean} [loaded]
  * @param {*} [error]
  * @returns {State}
  */
 function createState(
-  linkedPersons: LinkedPersonInterface[],
+  linkedPersons: TeacherStudentInterface[],
   loaded: boolean = false,
   error?: any
 ): State {
   const state: any = {
-    ids: linkedPersons ? linkedPersons.map(linkedPerson => linkedPerson.id) : [],
+    ids: linkedPersons
+      ? linkedPersons.map(linkedPerson => linkedPerson.id)
+      : [],
     entities: linkedPersons
       ? linkedPersons.reduce(
           (entityMap, linkedPerson) => ({
@@ -54,9 +59,8 @@ function createState(
   return state;
 }
 
-
 describe('LinkedPersons Reducer', () => {
-  let linkedPersons: LinkedPersonInterface[];
+  let linkedPersons: TeacherStudentInterface[];
   beforeEach(() => {
     linkedPersons = [
       createLinkedPerson(1),
@@ -77,7 +81,9 @@ describe('LinkedPersons Reducer', () => {
 
   describe('loaded action', () => {
     it('should load all linkedPersons', () => {
-      const action = new LinkedPersonActions.LinkedPersonsLoaded({ linkedPersons });
+      const action = new LinkedPersonActions.LinkedPersonsLoaded({
+        linkedPersons
+      });
       const result = reducer(initialState, action);
       expect(result).toEqual(createState(linkedPersons, true));
     });
@@ -102,7 +108,9 @@ describe('LinkedPersons Reducer', () => {
     });
 
     it('should add multiple linkedPersons', () => {
-      const action = new LinkedPersonActions.AddLinkedPersons({ linkedPersons });
+      const action = new LinkedPersonActions.AddLinkedPersons({
+        linkedPersons
+      });
       const result = reducer(initialState, action);
 
       expect(result).toEqual(createState(linkedPersons, false));
@@ -111,7 +119,7 @@ describe('LinkedPersons Reducer', () => {
   describe('upsert actions', () => {
     it('should upsert one linkedPerson', () => {
       const originalLinkedPerson = linkedPersons[0];
-      
+
       const startState = reducer(
         initialState,
         new LinkedPersonActions.AddLinkedPerson({
@@ -119,16 +127,20 @@ describe('LinkedPersons Reducer', () => {
         })
       );
 
-    
-      const updatedLinkedPerson = createLinkedPerson(linkedPersons[0].id, 'test');
-     
+      const updatedLinkedPerson = createLinkedPerson(
+        linkedPersons[0].id,
+        'test'
+      );
+
       const action = new LinkedPersonActions.UpsertLinkedPerson({
         linkedPerson: updatedLinkedPerson
       });
 
       const result = reducer(startState, action);
 
-      expect(result.entities[updatedLinkedPerson.id]).toEqual(updatedLinkedPerson);
+      expect(result.entities[updatedLinkedPerson.id]).toEqual(
+        updatedLinkedPerson
+      );
     });
 
     it('should upsert many linkedPersons', () => {
@@ -146,9 +158,7 @@ describe('LinkedPersons Reducer', () => {
 
       const result = reducer(startState, action);
 
-      expect(result).toEqual(
-        createState(linkedPersonsToInsert)
-      );
+      expect(result).toEqual(createState(linkedPersonsToInsert));
     });
   });
 
@@ -156,34 +166,35 @@ describe('LinkedPersons Reducer', () => {
     it('should update an linkedPerson', () => {
       const linkedPerson = linkedPersons[0];
       const startState = createState([linkedPerson]);
-      const update: Update<LinkedPersonInterface> = {
+      const update: Update<TeacherStudentInterface> = {
         id: 1,
         changes: {
-          __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-        } 
+          teacherId: teacherIdUpdatedValue
+        }
       };
       const action = new LinkedPersonActions.UpdateLinkedPerson({
         linkedPerson: update
       });
       const result = reducer(startState, action);
-      expect(result).toEqual(createState([createLinkedPerson(1, __EXTRA__PROPERTY_NAMEUpdatedValue)]));
+      expect(result).toEqual(
+        createState([createLinkedPerson(1, teacherIdUpdatedValue)])
+      );
     });
 
     it('should update multiple linkedPersons', () => {
       const startState = createState(linkedPersons);
-      const updates: Update<LinkedPersonInterface>[] = [
-        
+      const updates: Update<TeacherStudentInterface>[] = [
         {
           id: 1,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          } 
+            teacherId: teacherIdUpdatedValue
+          }
         },
         {
           id: 2,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          }  
+            teacherId: teacherIdUpdatedValue
+          }
         }
       ];
       const action = new LinkedPersonActions.UpdateLinkedPersons({
@@ -192,7 +203,11 @@ describe('LinkedPersons Reducer', () => {
       const result = reducer(startState, action);
 
       expect(result).toEqual(
-        createState([createLinkedPerson(1, __EXTRA__PROPERTY_NAMEUpdatedValue), createLinkedPerson(2, __EXTRA__PROPERTY_NAMEUpdatedValue), linkedPersons[2]])
+        createState([
+          createLinkedPerson(1, teacherIdUpdatedValue),
+          createLinkedPerson(2, teacherIdUpdatedValue),
+          linkedPersons[2]
+        ])
       );
     });
   });
@@ -220,7 +235,11 @@ describe('LinkedPersons Reducer', () => {
 
   describe('clear action', () => {
     it('should clear the linkedPersons collection', () => {
-      const startState = createState(linkedPersons, true, 'something went wrong');
+      const startState = createState(
+        linkedPersons,
+        true,
+        'something went wrong'
+      );
       const action = new LinkedPersonActions.ClearLinkedPersons();
       const result = reducer(startState, action);
       expect(result).toEqual(createState([], true, 'something went wrong'));

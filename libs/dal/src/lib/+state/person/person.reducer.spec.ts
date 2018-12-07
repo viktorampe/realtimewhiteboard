@@ -1,26 +1,29 @@
 import { Update } from '@ngrx/entity';
-import {PersonActions } from '.';
-import { initialState, reducer, State } from './person.reducer';
+import { PersonActions } from '.';
 import { PersonInterface } from '../../+models';
+import { initialState, reducer, State } from './person.reducer';
 
-/** 
+/**
  * This file is scaffolded, but needs some special attention:
- * - find and replace '__EXTRA__PROPERTY_NAME' and replace this with a property name of the Person entity.
- * - set the initial property value via '[__EXTRA__PROPERTY_NAME]InitialValue'.
- * - set the updated property value via '[__EXTRA__PROPERTY_NAME]UpdatedValue'.
-*/
-const __EXTRA__PROPERTY_NAMEInitialValue = ;
-const __EXTRA__PROPERTY_NAMEUpdatedValue = ;
+ * - find and replace 'email' and replace this with a property name of the Person entity.
+ * - set the initial property value via '[email]InitialValue'.
+ * - set the updated property value via '[email]UpdatedValue'.
+ */
+const emailInitialValue = 'foo@foo.bar';
+const emailUpdatedValue = 'bar@foo.bar';
 
 /**
  * Creates a Person.
  * @param {number} id
  * @returns {PersonInterface}
  */
-function createPerson(id: number, __EXTRA__PROPERTY_NAME:any = __EXTRA__PROPERTY_NAMEInitialValue): PersonInterface | any {
+function createPerson(
+  id: number,
+  email: any = emailInitialValue
+): PersonInterface | any {
   return {
     id: id,
-    __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAME
+    email: email
   };
 }
 
@@ -54,15 +57,10 @@ function createState(
   return state;
 }
 
-
 describe('Persons Reducer', () => {
   let persons: PersonInterface[];
   beforeEach(() => {
-    persons = [
-      createPerson(1),
-      createPerson(2),
-      createPerson(3)
-    ];
+    persons = [createPerson(1), createPerson(2), createPerson(3)];
   });
 
   describe('unknown action', () => {
@@ -111,7 +109,7 @@ describe('Persons Reducer', () => {
   describe('upsert actions', () => {
     it('should upsert one person', () => {
       const originalPerson = persons[0];
-      
+
       const startState = reducer(
         initialState,
         new PersonActions.AddPerson({
@@ -119,9 +117,8 @@ describe('Persons Reducer', () => {
         })
       );
 
-    
       const updatedPerson = createPerson(persons[0].id, 'test');
-     
+
       const action = new PersonActions.UpsertPerson({
         person: updatedPerson
       });
@@ -146,9 +143,7 @@ describe('Persons Reducer', () => {
 
       const result = reducer(startState, action);
 
-      expect(result).toEqual(
-        createState(personsToInsert)
-      );
+      expect(result).toEqual(createState(personsToInsert));
     });
   });
 
@@ -159,31 +154,30 @@ describe('Persons Reducer', () => {
       const update: Update<PersonInterface> = {
         id: 1,
         changes: {
-          __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-        } 
+          email: emailUpdatedValue
+        }
       };
       const action = new PersonActions.UpdatePerson({
         person: update
       });
       const result = reducer(startState, action);
-      expect(result).toEqual(createState([createPerson(1, __EXTRA__PROPERTY_NAMEUpdatedValue)]));
+      expect(result).toEqual(createState([createPerson(1, emailUpdatedValue)]));
     });
 
     it('should update multiple persons', () => {
       const startState = createState(persons);
       const updates: Update<PersonInterface>[] = [
-        
         {
           id: 1,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          } 
+            email: emailUpdatedValue
+          }
         },
         {
           id: 2,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          }  
+            email: emailUpdatedValue
+          }
         }
       ];
       const action = new PersonActions.UpdatePersons({
@@ -192,7 +186,11 @@ describe('Persons Reducer', () => {
       const result = reducer(startState, action);
 
       expect(result).toEqual(
-        createState([createPerson(1, __EXTRA__PROPERTY_NAMEUpdatedValue), createPerson(2, __EXTRA__PROPERTY_NAMEUpdatedValue), persons[2]])
+        createState([
+          createPerson(1, emailUpdatedValue),
+          createPerson(2, emailUpdatedValue),
+          persons[2]
+        ])
       );
     });
   });

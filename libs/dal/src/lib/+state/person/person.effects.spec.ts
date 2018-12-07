@@ -5,20 +5,15 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
-import { PERSON_SERVICE_TOKEN } from '../../person/person.service.interface';
 import { PersonReducer } from '.';
-import {
-  PersonsLoaded,
-  PersonsLoadError,
-  LoadPersons
-} from './person.actions';
+import { PERSON_SERVICE_TOKEN } from '../../persons/persons.service';
+import { LoadPersons, PersonsLoaded, PersonsLoadError } from './person.actions';
 import { PersonEffects } from './person.effects';
 
 describe('PersonEffects', () => {
   let actions: Observable<any>;
   let effects: PersonEffects;
   let usedState: any;
-
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -61,7 +56,7 @@ describe('PersonEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature(PersonReducer.NAME , PersonReducer.reducer, {
+        StoreModule.forFeature(PersonReducer.NAME, PersonReducer.reducer, {
           initialState: usedState
         }),
         EffectsModule.forRoot([]),
@@ -143,11 +138,7 @@ describe('PersonEffects', () => {
         );
       });
       it('should return a error action if force is true', () => {
-        expectInAndOut(
-          effects.loadPersons$,
-          forcedLoadAction,
-          loadErrorAction
-        );
+        expectInAndOut(effects.loadPersons$, forcedLoadAction, loadErrorAction);
       });
     });
     describe('with loaded and failing api call', () => {
@@ -165,11 +156,7 @@ describe('PersonEffects', () => {
         expectInNoOut(effects.loadPersons$, unforcedLoadAction);
       });
       it('should return a error action if force is true', () => {
-        expectInAndOut(
-          effects.loadPersons$,
-          forcedLoadAction,
-          loadErrorAction
-        );
+        expectInAndOut(effects.loadPersons$, forcedLoadAction, loadErrorAction);
       });
     });
   });

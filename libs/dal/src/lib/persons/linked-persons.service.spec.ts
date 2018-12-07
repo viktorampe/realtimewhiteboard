@@ -1,11 +1,27 @@
 import { inject, TestBed } from '@angular/core/testing';
-import { LinkedPersonService } from './linked-persons.service';
+import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
+import { hot } from '@nrwl/nx/testing';
+import {
+  LinkedPersonService,
+  LinkedPersonServiceInterface
+} from './linked-persons.service';
 
 describe('LinkedPersonsService', () => {
+  let service: LinkedPersonServiceInterface;
+  let mockData$: any;
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [LinkedPersonService]
+      providers: [
+        LinkedPersonService,
+        {
+          provide: PersonApi,
+          useValue: {
+            getData: () => mockData$
+          }
+        }
+      ]
     });
+    service = TestBed.get(LinkedPersonService);
   });
 
   it('should be created', inject(
@@ -14,4 +30,15 @@ describe('LinkedPersonsService', () => {
       expect(service).toBeTruthy();
     }
   ));
+
+  it('should return persons', async () => {
+    mockData$ = hot('-a-|', {
+      a: { teacherStudents: [{ id: 1, teacherId: 1, studentId: 2 }] }
+    });
+    expect(service.getAllForUser(1)).toBeObservable(
+      hot('-a-|', {
+        a: [{ id: 1, teacherId: 1, studentId: 2 }]
+      })
+    );
+  });
 });

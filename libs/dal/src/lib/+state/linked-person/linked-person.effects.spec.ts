@@ -5,8 +5,8 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
-import { LINKED_PERSON_SERVICE_TOKEN } from '../../linked-person/linked-person.service.interface';
 import { LinkedPersonReducer } from '.';
+import { LINKED_PERSON_SERVICE_TOKEN } from '../../persons/linked-persons.service';
 import {
   LinkedPersonsLoaded,
   LinkedPersonsLoadError,
@@ -18,7 +18,6 @@ describe('LinkedPersonEffects', () => {
   let actions: Observable<any>;
   let effects: LinkedPersonEffects;
   let usedState: any;
-
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -61,9 +60,13 @@ describe('LinkedPersonEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature(LinkedPersonReducer.NAME , LinkedPersonReducer.reducer, {
-          initialState: usedState
-        }),
+        StoreModule.forFeature(
+          LinkedPersonReducer.NAME,
+          LinkedPersonReducer.reducer,
+          {
+            initialState: usedState
+          }
+        ),
         EffectsModule.forRoot([]),
         EffectsModule.forFeature([LinkedPersonEffects])
       ],
