@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import { Action, select } from '@ngrx/store';
+import { select } from '@ngrx/store';
 import { DataPersistence } from '@nrwl/nx';
 import { undo } from 'ngrx-undo';
 import { interval, Observable, Subject } from 'rxjs';
@@ -29,8 +29,6 @@ const MINIMUM_POLLING_INTERVAL = 3000;
 
 @Injectable()
 export class AlertsEffects {
-  undoAction: Action;
-
   // Timer singleton
   private pollingTimer$: Observable<LoadNewAlerts>;
   // finishes the Timer
@@ -122,8 +120,6 @@ export class AlertsEffects {
         if (!state.alerts.loaded)
           return new LoadAlerts({ userId: action.payload.personId });
 
-        this.undoAction = action;
-
         return this.alertService
           .setAlertAsRead(
             action.payload.personId,
@@ -142,7 +138,7 @@ export class AlertsEffects {
       },
       undoAction: (action: SetReadAlert, state: any) => {
         // TODO: show error message to user
-        return undo(this.undoAction);
+        return undo(action);
       }
     }
   );
