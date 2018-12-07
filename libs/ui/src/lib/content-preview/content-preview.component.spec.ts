@@ -8,14 +8,11 @@ import { ContentPreviewComponent } from './content-preview.component';
 @Component({
   selector: 'campus-test-container',
   template: `
-  <campus-content-preview preview>
-    <campus-file-extension type></campus-file-extension>
-    <div icon class="polpo-presentatie"></div>
-    <div badge
-         *ngFor="let badge of ['badge1', 'badge2']">
-      {{badge}}
-    </div>
-  </campus-content-preview>
+    <campus-content-preview preview>
+      <campus-file-extension type></campus-file-extension>
+      <div icon class="polpo-presentatie"></div>
+      <div badge *ngFor="let badge of ['badge1', 'badge2']"> {{ badge }} </div>
+    </campus-content-preview>
   `
 })
 export class TestContainerComponent {}

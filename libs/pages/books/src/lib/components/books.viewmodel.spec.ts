@@ -88,15 +88,17 @@ describe('BooksViewModel', () => {
 
   describe('sharedBooks$', () => {
     it('should return only shared books', () => {
-      const expected = eduContents.filter(book => book.id <= 3).map(book => {
-        return new EduContentFixture(book, {
-          learningArea: learningAreas.find(
-            learningArea =>
-              learningArea.id ===
-              book.publishedEduContentMetadata.learningAreaId
-          )
+      const expected = eduContents
+        .filter(book => book.id <= 3)
+        .map(book => {
+          return new EduContentFixture(book, {
+            learningArea: learningAreas.find(
+              learningArea =>
+                learningArea.id ===
+                book.publishedEduContentMetadata.learningAreaId
+            )
+          });
         });
-      });
       expect(booksViewModel.sharedBooks$).toBeObservable(
         hot('a', { a: expected })
       );
@@ -113,15 +115,17 @@ describe('BooksViewModel', () => {
         })
       );
 
-      const expected = eduContents.filter(book => book.id <= 4).map(book => {
-        return new EduContentFixture(book, {
-          learningArea: learningAreas.find(
-            learningArea =>
-              learningArea.id ===
-              book.publishedEduContentMetadata.learningAreaId
-          )
+      const expected = eduContents
+        .filter(book => book.id <= 4)
+        .map(book => {
+          return new EduContentFixture(book, {
+            learningArea: learningAreas.find(
+              learningArea =>
+                learningArea.id ===
+                book.publishedEduContentMetadata.learningAreaId
+            )
+          });
         });
-      });
       expect(booksViewModel.sharedBooks$).toBeObservable(
         hot('a', { a: expected })
       );
