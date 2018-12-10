@@ -30,7 +30,7 @@
     >
       <campus-info-panel-task
         *ngSwitchCase="0"
-        [taskInstance]="taskInfo.taskInstance"
+        [taskInfo]="taskInfo"
         [person]="taskInfo.task.teacher"
       >
       </campus-info-panel-task>
@@ -71,6 +71,7 @@
                 [dataObject]="taskEduContent.eduContent"
                 [title]="taskEduContent.eduContent.title"
                 [fileExtensionClass]="taskEduContent.eduContent.fileExtension"
+                [fileTypeLabel]="taskEduContent.eduContent.fileTypeLabel"
                 [contentTypeClass]="taskEduContent.eduContent.productType"
               >
                 <campus-button

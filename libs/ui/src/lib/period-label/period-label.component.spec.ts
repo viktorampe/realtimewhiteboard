@@ -54,8 +54,8 @@ describe('PeriodLabelComponent', () => {
     );
     const start = dates[0].nativeElement.textContent;
     const end = dates[1].nativeElement.textContent;
-    expect(start).toBe('Van01/01/2018');
-    expect(end).toBe('Tot01/06/2019');
+    expect(start).toContain('Van 01/01/2018');
+    expect(end).toContain('Tot 01/06/2019');
   });
   it('should emit an event when an icon is clicked', () => {
     let startEvent: boolean;
