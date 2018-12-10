@@ -6,6 +6,7 @@ import {
   BROWSER_STORAGE_SERVICE_TOKEN,
   StorageService
 } from '@campus/browser';
+import { ScormModule } from '@campus/scorm';
 import {
   LoopBackConfig,
   SDKBrowserModule
@@ -15,6 +16,10 @@ import { AlertReducer, AlertsEffects } from './+state/alert';
 import { BundleReducer, BundlesEffects } from './+state/bundle';
 import { ContentStatusReducer } from './+state/content-status';
 import { ContentStatusesEffects } from './+state/content-status/content-status.effects';
+import {
+  CurrentExerciseEffects,
+  CurrentExerciseReducer
+} from './+state/current-exercise';
 import { getStoreModuleForFeatures } from './+state/dal.state.feature.builder';
 import { EduContentReducer, EduContentsEffects } from './+state/edu-content';
 import {
@@ -69,6 +74,8 @@ import { ContentRequestService } from './content-request/content-request.service
 import { CONTENT_REQUEST_SERVICE_TOKEN } from './content-request/content-request.service.interface';
 import { EduContentService } from './edu-content/edu-content.service';
 import { EDUCONTENT_SERVICE_TOKEN } from './edu-content/edu-content.service.interface';
+import { ExerciseService } from './exercise/exercise.service';
+import { EXERCISE_SERVICE_TOKEN } from './exercise/exercise.service.interface';
 import { LearningAreaService } from './learning-area/learning-area.service';
 import { LEARNINGAREA_SERVICE_TOKEN } from './learning-area/learning-area.service.interface';
 import { AuthService } from './persons/auth-service';
@@ -99,6 +106,7 @@ interface DalOptions {
     CommonModule,
     SDKBrowserModule.forRoot(),
     HttpClientModule,
+    ScormModule,
     ...getStoreModuleForFeatures([
       LearningAreaReducer,
       UserContentReducer,
@@ -114,7 +122,8 @@ interface DalOptions {
       TaskReducer,
       AlertReducer,
       TaskInstanceReducer,
-      TaskEduContentReducer
+      TaskEduContentReducer,
+      CurrentExerciseReducer
     ]),
     EffectsModule.forFeature([
       BundlesEffects,
@@ -131,10 +140,12 @@ interface DalOptions {
       TaskEffects,
       TaskInstanceEffects,
       AlertsEffects,
-      TaskEduContentEffects
+      TaskEduContentEffects,
+      CurrentExerciseEffects
     ])
   ],
   providers: [
+    { provide: EXERCISE_SERVICE_TOKEN, useClass: ExerciseService },
     { provide: EDUCONTENT_SERVICE_TOKEN, useClass: EduContentService },
     { provide: USER_CONTENT_SERVICE_TOKEN, useClass: UserContentService },
     {

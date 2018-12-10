@@ -17,7 +17,11 @@ module.exports = function() {
       '!libs/**/*.spec.ts'
     ],
 
-    tests: ['apps/**/*.spec.ts', 'libs/**/*.spec.ts'],
+    tests: [
+      'apps/**/*.spec.ts',
+      'libs/**/*.spec.ts',
+      '!apps/polpo-classroom-web-e2e/**/*.spec.ts'
+    ],
 
     env: {
       type: 'node',
