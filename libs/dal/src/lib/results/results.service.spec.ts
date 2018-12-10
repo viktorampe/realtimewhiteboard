@@ -1,9 +1,10 @@
+//file.only
 import { inject, TestBed } from '@angular/core/testing';
 import { ScormCmiMode, ScormStatus } from '@campus/scorm';
 import { PersonApi, ResultInterface } from '@diekeure/polpo-api-angular-sdk';
 import { hot } from '@nrwl/nx/testing';
 import { Observable } from 'rxjs';
-import { PersonFixture, TaskFixture } from '../+fixtures';
+import { ResultFixture } from '../+fixtures';
 import { ResultsService } from './results.service';
 import { ResultsServiceInterface } from './results.service.interface';
 
@@ -110,38 +111,12 @@ describe('ResultsService', () => {
   it('should return results and map those when calling getAllForUser', async () => {
     mockData$ = hot('-a-|', {
       a: {
-        results: [
-          {
-            score: 100,
-            id: 1,
-            person: new PersonFixture(),
-            taskn: new TaskFixture()
-          },
-          {
-            score: 0,
-            id: 2,
-            person: new PersonFixture(),
-            taskn: new TaskFixture()
-          }
-        ]
+        results: [new ResultFixture({ id: 1 }), new ResultFixture({ id: 2 })]
       }
     });
     expect(service.getAllForUser(1)).toBeObservable(
       hot('-a-|', {
-        a: [
-          {
-            score: 100,
-            id: 1,
-            person: new PersonFixture(),
-            taskn: new TaskFixture()
-          },
-          {
-            score: 0,
-            id: 2,
-            person: new PersonFixture(),
-            taskn: new TaskFixture()
-          }
-        ]
+        a: [new ResultFixture({ id: 1 }), new ResultFixture({ id: 2 })]
       })
     );
   });
