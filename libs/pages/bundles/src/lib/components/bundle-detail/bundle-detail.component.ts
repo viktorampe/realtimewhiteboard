@@ -105,8 +105,8 @@ export class BundleDetailComponent
     this.bundlesViewModel.changeListFormat(value);
   }
 
-  clickOpenContent(id: number): void {
-    this.bundlesViewModel.openContent(id);
+  clickOpenContent(content: ContentInterface): void {
+    this.bundlesViewModel.openContent(content);
   }
 
   private getLearningArea(): Observable<LearningAreaInterface> {

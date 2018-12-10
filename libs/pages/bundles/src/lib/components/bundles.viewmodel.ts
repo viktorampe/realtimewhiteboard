@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
+import { WINDOW } from '@campus/browser';
 import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
@@ -18,6 +19,7 @@ import {
   UnlockedBoekeStudentQueries,
   UnlockedContentInterface,
   UnlockedContentQueries,
+  UserContent,
   UserContentQueries
 } from '@campus/dal';
 import {
@@ -67,7 +69,8 @@ export class BundlesViewModel {
     private store: Store<DalState>,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
-    private openStaticContentService: OpenStaticContentServiceInterface
+    private openStaticContentService: OpenStaticContentServiceInterface,
+    @Inject(WINDOW) private nativeWindow: Window
   ) {
     this.initialize();
   }
@@ -105,8 +108,12 @@ export class BundlesViewModel {
     this.store.dispatch(new UiActions.SetListFormat({ listFormat }));
   }
 
-  openContent(contentId: number): void {
-    this.openStaticContentService.open(contentId);
+  openContent(content: ContentInterface): void {
+    if (content instanceof EduContent) {
+      this.openStaticContentService.open(content.id);
+    } else if (content instanceof UserContent) {
+      this.nativeWindow.open(content.link);
+    }
   }
 
   getLearningAreaById(areaId: number): Observable<LearningAreaInterface> {

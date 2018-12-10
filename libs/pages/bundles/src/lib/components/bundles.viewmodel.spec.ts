@@ -1,5 +1,6 @@
 import { ModuleWithProviders } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { WINDOW } from '@campus/browser';
 import {
   AUTH_SERVICE_TOKEN,
   BundleActions,
@@ -29,12 +30,14 @@ import {
   UnlockedContentActions,
   UnlockedContentFixture,
   UnlockedContentInterface,
-  UnlockedContentReducer
+  UnlockedContentReducer,
+  UserContentFixture
 } from '@campus/dal';
 import {
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN
 } from '@campus/shared';
+import { MockWindow } from '@campus/testing';
 import { ListFormat } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
@@ -45,6 +48,7 @@ import { LearningAreasWithBundlesInfoInterface } from './bundles.viewmodel.inter
 describe('BundlesViewModel', () => {
   let bundlesViewModel: BundlesViewModel;
   let openStaticContentService: OpenStaticContentServiceInterface;
+  let mockWindow: MockWindow;
   let uiState: UiReducer.UiState;
   let learningAreaState: LearningAreaReducer.State;
   let bundleState: BundleReducer.State;
@@ -76,12 +80,17 @@ describe('BundlesViewModel', () => {
         {
           provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
           useValue: { open: jest.fn() }
+        },
+        {
+          provide: WINDOW,
+          useClass: MockWindow
         }
       ]
     });
 
     bundlesViewModel = TestBed.get(BundlesViewModel);
     openStaticContentService = TestBed.get(OPEN_STATIC_CONTENT_SERVICE_TOKEN);
+    mockWindow = TestBed.get(WINDOW);
   });
 
   it('should be defined', () => {
@@ -95,12 +104,21 @@ describe('BundlesViewModel', () => {
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith({ listFormat });
   });
+  describe('#openContent', () => {
+    it('should call the open static content service for EduContent', () => {
+      const eduContent = new EduContentFixture({ id: 5 });
+      bundlesViewModel.openContent(eduContent);
+      expect(openStaticContentService.open).toHaveBeenCalledTimes(1);
+      expect(openStaticContentService.open).toHaveBeenCalledWith(eduContent.id);
+    });
 
-  it('openContent() should call the open static content service', () => {
-    const contentId = 5;
-    bundlesViewModel.openContent(contentId);
-    expect(openStaticContentService.open).toHaveBeenCalledTimes(1);
-    expect(openStaticContentService.open).toHaveBeenCalledWith(contentId);
+    it('should open a new window for UserContent', () => {
+      const userContent = new UserContentFixture({ id: 5 });
+      bundlesViewModel.openContent(userContent);
+      expect(mockWindow.open).toHaveBeenCalledTimes(1);
+
+      expect(mockWindow.open).toHaveBeenCalledWith(userContent.link);
+    });
   });
 
   it('sharedLearningAreas$', () => {

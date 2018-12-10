@@ -4,6 +4,7 @@ import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Params } from '@angular/router';
+import { EduContentFixture } from '@campus/dal';
 import { MockMatIconRegistry } from '@campus/testing';
 import { ListFormat, ListViewItemDirective, UiModule } from '@campus/ui';
 import { FilterService, FILTER_SERVICE_TOKEN } from '@campus/utils';
@@ -53,9 +54,10 @@ describe('BundleDetailComponent', () => {
 
   it('should call the viewmodel openContent method', () => {
     const spy = jest.spyOn(bundlesViewModel, 'openContent');
-    component.clickOpenContent(5);
+    const content = new EduContentFixture();
+    component.clickOpenContent(content);
     expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy).toHaveBeenCalledWith(5);
+    expect(spy).toHaveBeenCalledWith(content);
   });
 
   it('should get the listFormat$ from the vm', () => {

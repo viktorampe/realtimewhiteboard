@@ -80,7 +80,12 @@
               <!--
                 TODO Hier moeten de mogelijke actieknoppen met hun (Click) nog toegevoegd worden
               -->
-              <campus-button (click)="clickOpenContent(content.id)" [iconClass]="'view-content'" circle> </campus-button>
+              <campus-button
+                (click)="clickOpenContent(content)"
+                [iconClass]="'view-content'"
+                circle
+              >
+              </campus-button>
               <campus-button [iconClass]="'tasks'" circle> </campus-button>
             </campus-content-thumbnail>
           </campus-list-view>
