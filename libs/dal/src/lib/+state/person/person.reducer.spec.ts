@@ -3,12 +3,6 @@ import { PersonActions } from '.';
 import { PersonInterface } from '../../+models';
 import { initialState, reducer, State } from './person.reducer';
 
-/**
- * This file is scaffolded, but needs some special attention:
- * - find and replace 'email' and replace this with a property name of the Person entity.
- * - set the initial property value via '[email]InitialValue'.
- * - set the updated property value via '[email]UpdatedValue'.
- */
 const emailInitialValue = 'foo@foo.bar';
 const emailUpdatedValue = 'bar@foo.bar';
 
