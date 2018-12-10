@@ -105,6 +105,10 @@ export class BundleDetailComponent
     this.bundlesViewModel.changeListFormat(value);
   }
 
+  clickOpenContent(content: ContentInterface): void {
+    this.bundlesViewModel.openContent(content);
+  }
+
   private getLearningArea(): Observable<LearningAreaInterface> {
     return this.routeParams$.pipe(
       switchMap(params => {

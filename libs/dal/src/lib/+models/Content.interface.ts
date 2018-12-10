@@ -7,4 +7,5 @@ export interface ContentInterface {
   previewImage?: string;
   description: string;
   methodLogos?: string[];
+  link?: string;
 }
