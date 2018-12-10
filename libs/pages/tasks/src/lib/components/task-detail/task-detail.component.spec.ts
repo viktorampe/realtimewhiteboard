@@ -5,6 +5,7 @@ import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute } from '@angular/router';
 import { LearningAreaInterface } from '@campus/dal';
+import { MockMatIconRegistry } from '@campus/testing';
 import { ListFormat, ListViewItemDirective, UiModule } from '@campus/ui';
 import { FilterService, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { hot } from '@nrwl/nx/testing';
@@ -12,7 +13,6 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { TasksViewModel } from '../tasks.viewmodel';
 import { TaskWithInfoInterface } from '../tasks.viewmodel.interfaces';
 import { MockTasksViewModel } from '../tasks.viewmodel.mock';
-import { MockMatIconRegistry } from './../../../../../../testing/src/lib/MockMatIconRegistry';
 import { TaskDetailComponent } from './task-detail.component';
 
 // TODO replace with @campus/testing  moch route
