@@ -17,7 +17,7 @@ import {
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { TaskEduContent } from '@diekeure/polpo-api-angular-sdk';
 import { Observable, Subscription } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, take } from 'rxjs/operators';
 import { TasksViewModel } from '../tasks.viewmodel';
 import { TaskWithInfoInterface } from '../tasks.viewmodel.interfaces';
 
@@ -66,6 +66,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
     this.initializeProperties();
     this.loadInputParams();
     this.loadOutputStreams();
+    this.markAlertsAsRead();
   }
 
   ngAfterViewInit(): void {
@@ -87,6 +88,14 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
     this.learningArea$ = this.getLearningArea();
     this.taskInfo$ = this.getTaskInfo();
     this.filterTextInput.setFilterableItem(this);
+  }
+
+  private markAlertsAsRead(): void {
+    this.taskInfo$
+      .pipe(take(1))
+      .subscribe(taskInfo =>
+        this.taskViewModel.setTaskAlertRead(taskInfo.task.id)
+      );
   }
 
   private setupListSubscription(): void {
