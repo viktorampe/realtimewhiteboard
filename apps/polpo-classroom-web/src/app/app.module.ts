@@ -46,26 +46,31 @@ import { AppResolver } from './app.resolver';
           children: [
             {
               path: 'books',
-              loadChildren: '@campus/pages/books#PagesBooksModule'
-              //canLoad: [CoupledTeacherGuard]
+              loadChildren: '@campus/pages/books#PagesBooksModule',
+              //canLoad: [CoupledTeacherGuard],
+              data: { breadcrumb: 'books' }
             },
             { path: 'dev', loadChildren: '@campus/devlib#DevlibModule' },
             {
               path: 'tasks',
-              loadChildren: '@campus/pages/tasks#PagesTasksModule'
+              loadChildren: '@campus/pages/tasks#PagesTasksModule',
               //canLoad: [CoupledTeacherGuard]
+              data: { breadcrumb: 'tasks' }
             },
             {
               path: 'reports',
-              loadChildren: '@campus/pages/reports#PagesReportsModule'
+              loadChildren: '@campus/pages/reports#PagesReportsModule',
+              data: { breadcrumb: 'reports' }
             },
             {
               path: 'profile',
-              loadChildren: '@campus/pages/profile#PagesProfileModule'
+              loadChildren: '@campus/pages/profile#PagesProfileModule',
+              data: { breadcrumb: 'books' }
             },
             {
               path: 'messages',
-              loadChildren: '@campus/pages/messages#PagesMessagesModule'
+              loadChildren: '@campus/pages/messages#PagesMessagesModule',
+              data: { breadcrumb: 'messages' }
             },
             {
               path: 'logout',
@@ -73,7 +78,8 @@ import { AppResolver } from './app.resolver';
             },
             {
               path: 'alerts',
-              loadChildren: '@campus/pages/alerts#PagesAlertsModule'
+              loadChildren: '@campus/pages/alerts#PagesAlertsModule',
+              data: { breadcrumb: 'alerts' }
             },
             {
               path: '',
@@ -82,8 +88,9 @@ import { AppResolver } from './app.resolver';
             },
             {
               path: 'bundles',
-              loadChildren: '@campus/pages/bundles#PagesBundlesModule'
+              loadChildren: '@campus/pages/bundles#PagesBundlesModule',
               //canLoad: [CoupledTeacherGuard]
+              data: { breadcrumb: 'bundles' }
             }
           ]
         }

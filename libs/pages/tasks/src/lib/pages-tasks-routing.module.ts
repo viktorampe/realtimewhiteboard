@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { LearningAreaQueries, TaskQueries } from '@campus/dal';
 import { TaskDetailComponent } from './components/task-detail/task-detail.component';
 import { TasksAreaComponent } from './components/tasks-area/tasks-area.component';
 import { TasksResolver } from './components/tasks.resolver';
@@ -16,6 +17,7 @@ const routes: Routes = [
       },
       {
         path: ':area',
+        data: { selector: LearningAreaQueries.getById, property: 'name' },
         children: [
           {
             path: '',
@@ -23,7 +25,8 @@ const routes: Routes = [
           },
           {
             path: ':task',
-            component: TaskDetailComponent
+            component: TaskDetailComponent,
+            data: { selector: TaskQueries.getById, property: 'name' }
           }
         ]
       }

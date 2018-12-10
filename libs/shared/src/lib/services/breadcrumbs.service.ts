@@ -8,61 +8,65 @@ import {
 import { DalState } from '@campus/dal';
 import { BreadcrumbLinkInterface } from '@campus/ui';
 import { select, Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { filter, map, startWith } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BreadcrumbsService {
   private currentRoute$: Observable<ActivatedRouteSnapshot>;
-  breadcrumbs$: Observable<BreadcrumbLinkInterface[]>;
+  breadcrumbs$: Observable<BreadcrumbLinkInterface[]> = of([]);
 
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private store: Store<DalState>
-  ) {}
+  ) {
+    this.setCurrentRoute();
+  }
 
   public setCurrentRoute() {
     this.currentRoute$ = this.router.events.pipe(
       filter(event => event instanceof NavigationEnd),
+      startWith({}),
       map(_ => this.activatedRoute.snapshot)
     );
 
-    this.currentRoute$.subscribe(route => this.getCurrentRoute(route));
+    this.breadcrumbs$ = this.currentRoute$.pipe(
+      map(route => this.getBreadcrumbs(route))
+    );
   }
 
-  private getCurrentRoute(route: ActivatedRouteSnapshot) {
+  private getBreadcrumbs(route: ActivatedRouteSnapshot) {
     const breadcrumbs: BreadcrumbLinkInterface[] = [];
+    let url = [];
 
-    console.log('------------------------------');
     do {
       if (route.url && route.url.length) {
-        // console.log('raw', route);
-        console.log('urlsegment', route.url[0]);
-        console.log('route', route.data['breadcrumb']);
-        console.log('selector', route.data['selector']);
-        console.log('routeconfig', route.routeConfig.path);
-        console.log('id', route.params[route.routeConfig.path.substr(1)]);
-        console.log('------------------------------');
+        url = [...url, route.url[0].path];
+
+        const routeParam = route.params[route.routeConfig.path.substr(1)];
+        const displayedProp = route.data['property'];
+        const selector = route.data['selector'];
+        const breadcrumbText = route.data['breadcrumb'];
 
         breadcrumbs.push({
-          displayText: route.data['selector']
+          displayText: selector
             ? this.store.pipe(
-                select(
-                  route.data['selector'],
-                  route.params[route.routeConfig.path.substr(1)]
-                )
+                select(selector, {
+                  id: routeParam
+                }),
+                map(data => data[displayedProp])
               )
-            : route.data['breadcrumb'],
-          link: route.url
+            : of(breadcrumbText),
+          link: url
         });
       }
 
       route = route.firstChild;
     } while (route);
 
-    console.log(breadcrumbs);
+    return breadcrumbs;
   }
 }

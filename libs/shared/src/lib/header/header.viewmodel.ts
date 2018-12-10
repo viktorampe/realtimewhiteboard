@@ -74,7 +74,7 @@ export class HeaderViewModel {
     //presentation state streams
     this.currentUser$ = this.store.pipe(select(UserQueries.getCurrentUser));
     // this.breadCrumbs$ = this.store.pipe(select(BreadCrumbsQueries.getAllLinks)); // TODO: uncomment when breadcrumbs state is available
-    this.breadCrumbs$ = this.mockViewModel.breadCrumbs$; //TODO: remove when breadcrumbs state is available
+    this.breadCrumbs$ = this.breadcrumbService.breadcrumbs$;
     this.profileMenuItems$ = this.store.pipe(
       select(UiQuery.getProfileMenuItems)
     );
