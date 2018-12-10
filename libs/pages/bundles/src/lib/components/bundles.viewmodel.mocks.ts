@@ -55,7 +55,7 @@ export class MockViewModel {
 
   changeListFormat() {}
 
-  openContent(id: number) {}
+  openContent(o:ContentInterface) {}
 
   getLearningAreaById(areaId: number): Observable<LearningAreaInterface> {
     return of(new LearningAreaFixture());
