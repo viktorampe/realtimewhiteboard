@@ -1,30 +1,25 @@
 @mixin ui_input-label_theme() {
-  $ui-input-label-title-color: $ui-primary-font-color-2 !default;
-  $ui-input-label-color: $ui-primary-font-color !default;
-  $ui-input-label-button-bg-color: $ui-tertiary-bg-color-2 !default;
-  $ui-input-label-button-font-color: $ui-tertiary-font-color-2 !default;
-
   .ui_input-label {
     &__title {
-      color: $ui-input-label-title-color;
+      color: $ui-bg-color-gray-2;
     }
     &__text {
       &__label-holder {
         &__label {
-          color: $ui-input-label-color;
+          color: $ui-font-color-gray-3;
         }
         &__edit-icon {
-          color: $ui-input-label-button-font-color;
-          background-color: $ui-input-label-button-bg-color;
+          background-color: $ui-bg-color-gray-3;
         }
       }
     }
     &__input-holder {
       &__icons-holder {
-        &__confirm-icon,
+        &__confirm-icon {
+          background-color: $ui-bg-color-gray-3;
+        }
         &__cancel-icon {
-          color: $ui-input-label-button-font-color;
-          background-color: $ui-input-label-button-bg-color;
+          background-color: $ui-bg-color-gray-3;
         }
       }
     }

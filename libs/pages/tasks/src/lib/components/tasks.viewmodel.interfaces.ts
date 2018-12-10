@@ -1,11 +1,10 @@
 import {
   LearningAreaInterface,
   TaskEduContentInterface,
-  TaskInstanceInterface,
-  TaskInterface
+  TaskInstanceInterface
 } from '@campus/dal';
 
-export interface LearningAreasWithTaskInfoInterface {
+export interface LearningAreasWithTaskInstanceInfoInterface {
   learningAreasWithInfo: LearningAreaWithTaskInfoInterface[];
   totalTasks: number;
 }
@@ -16,14 +15,18 @@ export interface LearningAreaWithTaskInfoInterface {
   closedTasks: number;
 }
 
-export interface TasksWithInfoInterface {
-  taskInfos: TaskWithInfoInterface[];
+export interface TaskInstancesWithEduContentInfoInterface {
+  instances: TaskInstanceWithEduContentInfoInterface[];
 }
 
-export interface TaskWithInfoInterface {
-  task: TaskInterface;
+export interface TaskInstanceWithEduContentInfoInterface {
   taskInstance: TaskInstanceInterface;
   taskEduContentsCount: number;
+  finished: boolean;
+}
+
+export interface TaskInstanceWithEduContentsInfoInterface {
+  taskInstance: TaskInstanceInterface;
   taskEduContents: TaskEduContentInterface[];
   finished: boolean;
 }

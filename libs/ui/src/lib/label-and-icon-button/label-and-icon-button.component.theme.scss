@@ -1,14 +1,15 @@
 @mixin ui_label-and-icon-button_theme() {
-  $ui-label-icon-button-bg-warning: $ui-warning-bg-color !default;
-  $ui-label-icon-button-bg: $ui-tertiary-bg-color-2 !default;
-
   .ui_label-and-icon-button {
+    background-color: $ui-bg-color-white;
+    &__label {
+      color: $ui-font-color-gray-3;
+    }
     &__icon {
       &.warning {
-        background-color: $ui-label-icon-button-bg-warning;
+        background-color: $ui-bg-color-red-1;
       }
       &.default {
-        background-color: $ui-label-icon-button-bg;
+        background-color: $ui-bg-color-gray-3;
       }
     }
   }

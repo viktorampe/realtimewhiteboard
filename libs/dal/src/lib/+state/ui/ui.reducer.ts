@@ -1,4 +1,4 @@
-import { DropdownMenuItemInterface, ListFormat, NavItem } from '@campus/ui';
+import { ListFormat } from '@campus/ui';
 import { UiAction, UiActionTypes } from './ui.actions';
 
 /**
@@ -13,16 +13,12 @@ export interface UiState {
   listFormat?: ListFormat;
   sideSheetOpen?: boolean;
   sideNavOpen?: boolean;
-  sideNavItems?: NavItem[];
-  profileMenuItems?: DropdownMenuItemInterface[];
 }
 
 export const initialState: UiState = {
   listFormat: ListFormat.GRID,
   sideSheetOpen: true,
   sideNavOpen: true,
-  sideNavItems: [],
-  profileMenuItems: [],
   loaded: false
 };
 
@@ -54,18 +50,6 @@ export function reducer(
       state = {
         ...state,
         sideNavOpen: !state.sideNavOpen
-      };
-      break;
-    case UiActionTypes.SetSideNavItems:
-      state = {
-        ...state,
-        sideNavItems: action.payload.navItems
-      };
-      break;
-    case UiActionTypes.SetProfileMenuItems:
-      state = {
-        ...state,
-        profileMenuItems: action.payload.menuItems
       };
       break;
   }

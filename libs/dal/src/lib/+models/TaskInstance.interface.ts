@@ -14,5 +14,5 @@ export interface TaskInstanceInterface {
   student?: PersonInterface;
   group?: GroupInterface;
 
-  progress?: number;
+  getProgress(): number;
 }

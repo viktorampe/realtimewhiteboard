@@ -1,11 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatIconModule, MatIconRegistry } from '@angular/material';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { By } from '@angular/platform-browser';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MockMatIconRegistry } from '@campus/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   ConfirmableSelectComponent,
   SelectOption
@@ -25,10 +23,8 @@ describe('ConfirmableSelectComponent', () => {
         FormsModule,
         MatSelectModule,
         MatFormFieldModule,
-        NoopAnimationsModule,
-        MatIconModule
-      ],
-      providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
+        BrowserAnimationsModule
+      ]
     }).compileComponents();
   }));
 

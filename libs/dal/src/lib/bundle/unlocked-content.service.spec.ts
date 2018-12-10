@@ -1,6 +1,6 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from 'jasmine-marbles';
 import { Observable } from 'rxjs';
 import { UnlockedContentService } from './unlocked-content.service';
 import { UnlockedContentServiceInterface } from './unlocked-content.service.interface';

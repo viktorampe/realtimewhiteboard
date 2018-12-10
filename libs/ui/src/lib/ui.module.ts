@@ -58,7 +58,6 @@ import { HideDesktopDirective } from './utils/directives/hide-desktop.directive'
 import { HideMobileDirective } from './utils/directives/hide-mobile.directive';
 import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness/adjust-color-brightness.pipe';
 import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time.pipe';
-import { RemovePrefixStringPipe } from './utils/pipes/remove-prefix-string/remove-prefix-string.pipe';
 import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-string.pipe';
 
 @NgModule({
@@ -105,10 +104,15 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     ContentPreviewComponent,
     ConfirmableSelectComponent,
     EditableInlineTagListComponent,
+    FileExtensionComponent,
+    TreeNavComponent,
     ContentThumbnailComponent,
     ButtonComponent,
     ListViewComponent,
     ListViewItemDirective,
+    TreeNavComponent,
+    PersonBadgeComponent,
+    PersonInitialsPipe,
     FolderDetailsDirective,
     FolderComponent,
     AdjustColorBrightnessPipe,
@@ -118,15 +122,16 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     DangerDirective,
     WarningDirective,
     DisabledDirective,
+    TreeNavComponent,
     BreadcrumbsComponent,
+    DropdownMenuComponent,
     NotificationDropdownItemComponent,
     DropdownMenuComponent,
     TruncateStringPipe,
     DropdownMenuItemComponent,
     HideDesktopDirective,
     HideMobileDirective,
-    HumanDateTimePipe,
-    RemovePrefixStringPipe
+    HumanDateTimePipe
   ],
   exports: [
     FilterTextInputComponent,
@@ -141,15 +146,20 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     ShellBodyDirective,
     AppBarComponent,
     PageHeaderComponent,
+    FileExtensionComponent,
+    TreeNavComponent,
     InfoPanelComponent,
+    PersonBadgeComponent,
     ContentPreviewComponent,
     ConfirmableSelectComponent,
     EditableInlineTagListComponent,
     FileExtensionComponent,
+    TreeNavComponent,
     ContentThumbnailComponent,
     ButtonComponent,
     ListViewComponent,
     ListViewItemDirective,
+    TreeNavComponent,
     PersonBadgeComponent,
     FolderDetailsDirective,
     FolderComponent,
@@ -162,14 +172,14 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     DisabledDirective,
     TreeNavComponent,
     BreadcrumbsComponent,
+    DropdownMenuComponent,
     NotificationDropdownItemComponent,
     DropdownMenuComponent,
     TruncateStringPipe,
     DropdownMenuItemComponent,
     HideDesktopDirective,
     HideMobileDirective,
-    HumanDateTimePipe,
-    RemovePrefixStringPipe
+    HumanDateTimePipe
   ]
 })
 export class UiModule {}

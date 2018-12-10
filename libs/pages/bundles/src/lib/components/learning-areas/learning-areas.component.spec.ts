@@ -1,14 +1,12 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
-import { MockMatIconRegistry } from '@campus/testing';
-import { ListFormat, ListViewItemDirective, UiModule } from '@campus/ui';
 import {
   FilterService,
   FilterServiceInterface,
   FILTER_SERVICE_TOKEN
-} from '@campus/utils';
+} from '@campus/shared';
+import { ListFormat, ListViewItemDirective, UiModule } from '@campus/ui';
 import { BundlesViewModel } from '../bundles.viewmodel';
 import { MockViewModel } from '../bundles.viewmodel.mocks';
 import { LearningAreasComponent } from './learning-areas.component';
@@ -26,8 +24,7 @@ describe('LearningAreasComponent', () => {
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         { provide: BundlesViewModel, useClass: MockViewModel },
-        { provide: FILTER_SERVICE_TOKEN, useClass: FilterService },
-        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
+        { provide: FILTER_SERVICE_TOKEN, useClass: FilterService }
       ]
     }).compileComponents();
     bundlesViewModel = TestBed.get(BundlesViewModel);

@@ -1,4 +1,3 @@
-import { FilterService, NestedPartial } from '@campus/utils';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { Alert, AlertQueueInterface } from '../../+models';
 import {
@@ -21,25 +20,13 @@ export const getLoaded = createSelector(
   (state: State) => state.loaded
 );
 
-export const getAll = createSelector(
-  selectAlertState,
-  selectAll
-);
+export const getAll = createSelector(selectAlertState, selectAll);
 
-export const getCount = createSelector(
-  selectAlertState,
-  selectTotal
-);
+export const getCount = createSelector(selectAlertState, selectTotal);
 
-export const getIds = createSelector(
-  selectAlertState,
-  selectIds
-);
+export const getIds = createSelector(selectAlertState, selectIds);
 
-export const getAllEntities = createSelector(
-  selectAlertState,
-  selectEntities
-);
+export const getAllEntities = createSelector(selectAlertState, selectEntities);
 
 /**
  * returns array of objects in the order of the given ids
@@ -72,12 +59,10 @@ export const getById = createSelector(
  * @example
  * alert$: AlertQueueInterface = this.store.pipe(select(AlertQueries.getUnread));
  */
-export const getUnread = createSelector(
-  selectAlertState,
-  (state: State) =>
-    Object.entries(state.entities)
-      .filter(([key, value]) => !value.read)
-      .map(([key, value]) => asAlert(state.entities[key]))
+export const getUnread = createSelector(selectAlertState, (state: State) =>
+  Object.entries(state.entities)
+    .filter(([key, value]) => !value.read)
+    .map(([key, value]) => asAlert(state.entities[key]))
 );
 
 /**
@@ -95,18 +80,6 @@ export const getRecentByDate = createSelector(
           new Date(value.validFrom).getTime() >= props.timeThreshold
       )
       .map(([key, value]) => state.entities[key])
-);
-
-export const getAlertIdsByFilter = createSelector(
-  selectAlertState,
-  (
-    state: State,
-    props: { filter: NestedPartial<AlertQueueInterface> }
-  ): number[] => {
-    return new FilterService()
-      .filter(Object.values(state.entities), props.filter)
-      .map(i => i.id);
-  }
 );
 
 function asAlert(item: AlertQueueInterface): Alert {

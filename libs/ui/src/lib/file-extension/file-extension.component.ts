@@ -16,11 +16,10 @@ import { Component, Input } from '@angular/core';
 })
 export class FileExtensionComponent {
   @Input() extensionClass = '';
-  @Input() title = '';
   @Input() showTitle = true;
   @Input() showIcon = true;
 
   get titleContent(): string {
-    return this.showTitle ? this.title || this.extensionClass : '';
+    return this.showTitle ? this.extensionClass : '';
   }
 }

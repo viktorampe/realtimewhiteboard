@@ -7,11 +7,6 @@ import {
 
 export const NAME = 'unlockedContents';
 
-const sortByIndex = (
-  a: UnlockedContentInterface,
-  b: UnlockedContentInterface
-) => a.index - b.index || a.id - b.id; // if index is equal, sort by id asc
-
 /**
  * @ngrx/entity provides a predefined interface for handling
  * a structured dictionary of records. This interface
@@ -35,9 +30,7 @@ export interface State extends EntityState<UnlockedContentInterface> {
  */
 export const adapter: EntityAdapter<
   UnlockedContentInterface
-> = createEntityAdapter<UnlockedContentInterface>({
-  sortComparer: sortByIndex
-});
+> = createEntityAdapter<UnlockedContentInterface>();
 
 /**
  * getInitialState returns the default initial state

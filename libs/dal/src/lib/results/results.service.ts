@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { ResultInterface } from '@campus/dal';
-import { ScormCmiInterface } from '@campus/scorm';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { CmiInterface } from './interfaces/cmi.interface';
 import { ResultsServiceInterface } from './results.service.interface';
 
 @Injectable({
@@ -58,14 +58,14 @@ export class ResultsService implements ResultsServiceInterface {
    *
    * @param {number} userId
    * @param {number} resultId
-   * @param {ScormCmiInterface} cmi
+   * @param {CmiInterface} cmi
    * @returns {Observable<ResultInterface>}
    * @memberof ScormResultsService
    */
   public saveResult(
     userId: number,
     resultId: number,
-    cmi: ScormCmiInterface
+    cmi: CmiInterface
   ): Observable<ResultInterface> {
     const score = cmi.core.score.raw;
     const time = this.convertCmiTimeStringToNumber(cmi.core.total_time);

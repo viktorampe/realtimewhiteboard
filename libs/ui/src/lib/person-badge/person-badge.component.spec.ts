@@ -70,7 +70,7 @@ describe('PersonBadgeComponent', () => {
   it('should show no initials if there is an avatar', () => {
     const badge = fixture.debugElement.query(By.css('.ui_person-badge__badge'))
       .nativeElement.textContent;
-    expect(badge).toBe('');
+    expect(badge).toContain(' ');
   });
   it('should show initials if there is no avatar', () => {
     component.person = {
@@ -90,6 +90,6 @@ describe('PersonBadgeComponent', () => {
     fixture.detectChanges();
     const badge = fixture.debugElement.query(By.css('.ui_person-badge__badge'))
       .nativeElement.textContent;
-    expect(badge.trim()).toBe('T');
+    expect(badge).toContain('T');
   });
 });

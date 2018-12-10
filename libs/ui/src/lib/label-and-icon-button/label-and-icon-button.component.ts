@@ -3,9 +3,9 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 /**
  *   <campus-label-and-icon-button
                       [label]="'Titel'"
-                      [icon]="'presentatie'"
+                      [icon]="'polpo-presentatie'"
                       [iconBackgroudColor]="'red'"></campus-label-and-icon-button>
- *
+ * 
  * @export
  * @class LabelAndIconButtonComponent
  */

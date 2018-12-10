@@ -13,5 +13,4 @@ export interface TaskEduContentInterface {
   eduContent?: EduContentInterface;
   task?: TaskInterface;
   studentContentStatuses?: StudentContentStatusInterface[];
-  submitted?: boolean;
 }

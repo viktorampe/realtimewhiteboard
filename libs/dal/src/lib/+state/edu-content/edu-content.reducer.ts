@@ -1,4 +1,3 @@
-import { ObjectPathService, ObjectPathServiceInterface } from '@campus/utils';
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { EduContentInterface } from '../../+models';
 import {
@@ -7,54 +6,6 @@ import {
 } from './edu-content.actions';
 
 export const NAME = 'eduContents';
-
-export function sortEduContent(
-  a: EduContentInterface,
-  b: EduContentInterface
-): number {
-  const objectPathService: ObjectPathServiceInterface = new ObjectPathService();
-
-  const titleA: string = getTitle(a);
-  const titleB: string = getTitle(b);
-
-  // sort by title
-  if (titleA < titleB) {
-    return -1;
-  }
-  if (titleA > titleB) {
-    return 1;
-  }
-
-  // then sort by year
-  const yearA: number = getYear(a);
-  const yearB: number = getYear(b);
-
-  if (yearA < yearB) {
-    return -1;
-  }
-  if (yearA > yearB) {
-    return 1;
-  }
-
-  // finally sort by id
-  return a.id - b.id;
-
-  function getTitle(eduContent: EduContentInterface): string {
-    const defaultValue = '' as string;
-    return objectPathService
-      .get(eduContent, p => p.publishedEduContentMetadata.title, defaultValue)
-      .toLowerCase();
-  }
-
-  function getYear(eduContent: EduContentInterface): number {
-    const defaultValue = '0' as string;
-    return +objectPathService.get(
-      eduContent,
-      p => p.publishedEduContentMetadata.years[0].name,
-      defaultValue
-    );
-  }
-}
 
 /**
  * @ngrx/entity provides a predefined interface for handling
@@ -79,9 +30,7 @@ export interface State extends EntityState<EduContentInterface> {
  */
 export const adapter: EntityAdapter<EduContentInterface> = createEntityAdapter<
   EduContentInterface
->({
-  sortComparer: sortEduContent
-});
+>();
 
 /**
  * getInitialState returns the default initial state

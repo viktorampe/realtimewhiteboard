@@ -33,7 +33,7 @@ import {
 } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from 'jasmine-marbles';
 import { of } from 'rxjs';
 import { BundlesViewModel } from './bundles.viewmodel';
 import { LearningAreasWithBundlesInfoInterface } from './bundles.viewmodel.interfaces';

@@ -1,8 +1,8 @@
 @mixin ui-notification-dropdown-item() {
-  $ui-notification-dropdown-item_icon-color: $ui-tertiary-font-color-2 !default;
-  $ui-notification-dropdown-item_icon-bg-color: $ui-tertiary-bg-color-2 !default;
-  $ui-notification-dropdown-item-color: $ui-primary-font-color !default;
-  $ui-notification-dropdown-item_title-color: $ui-tertiary-font-color-2 !default;
+  $ui-notification-dropdown-item_icon-color: $ui-font-color-inverse !default;
+  $ui-notification-dropdown-item_icon-bg-color: $ui-bg-color-5 !default;
+  $ui-notification-dropdown-item-color: $ui-font-color-primary !default;
+  $ui-notification-dropdown-item_title-color: $ui-font-color-active-secundary !default;
 
   .ui-notification-dropdown-item {
     border-left: solid 3px transparent;

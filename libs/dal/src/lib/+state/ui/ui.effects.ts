@@ -39,9 +39,7 @@ export class UiEffects {
       // or loadUI which would save an empty state
       return excludes.indexOf(<UiActionTypes>action.type) === -1;
     }),
-    ofType(
-      ...Object.keys(UiActionTypes).map(actionType => UiActionTypes[actionType])
-    ),
+    ofType(...Object.values(UiActionTypes)),
     map(() => new SaveUi())
   );
 
@@ -49,7 +47,7 @@ export class UiEffects {
   saveUi$ = this.dataPersistence.fetch(UiActionTypes.SaveUi, {
     run: (action: SaveUi, state: DalState) => {
       try {
-        this.storageService.set('ui', JSON.stringify(state.ui));
+        this.storageService.set('ui', JSON.stringify(state));
       } catch (error) {
         // we don't want errors on failing localstorage, because it's not breaking
       }

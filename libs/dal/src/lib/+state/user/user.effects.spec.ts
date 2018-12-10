@@ -3,7 +3,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
-import { hot } from '@nrwl/nx/testing';
+import { hot } from 'jasmine-marbles';
 import { Observable, of } from 'rxjs';
 import { UserReducer } from '.';
 import { DalModule } from '../../dal.module';

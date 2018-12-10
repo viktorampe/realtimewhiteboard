@@ -9,29 +9,25 @@ import {
   UnlockedBoekeStudent,
   UnlockedBoekeStudentFixture
 } from '@campus/dal';
-import { ViewModelInterface } from '@campus/testing';
 import { ListFormat } from '@campus/ui';
-import { Dictionary } from '@ngrx/entity';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { BooksViewModel } from './books.viewmodel';
 
 @Injectable({
   providedIn: 'root'
 })
-export class MockBooksViewModel implements ViewModelInterface<BooksViewModel> {
+// TODO add: implements BooksViewModel
+export class MockBooksViewModel {
   listFormat$: Observable<ListFormat> = new BehaviorSubject<ListFormat>(
     ListFormat.GRID
   );
 
   // source
-  learningAreas$: Observable<
-    Dictionary<LearningAreaInterface>
-  > = new BehaviorSubject({
-    1: new LearningAreaFixture({ id: 1, name: 'foo' }),
-    2: new LearningAreaFixture({ id: 2, name: 'foo' }),
-    3: new LearningAreaFixture({ id: 3, name: 'foo' }),
-    4: new LearningAreaFixture({ id: 4, name: 'foo' })
-  });
+  learningAreas$: Observable<LearningAreaInterface[]> = new BehaviorSubject([
+    new LearningAreaFixture({ id: 1, name: 'foo' }),
+    new LearningAreaFixture({ id: 2, name: 'foo' }),
+    new LearningAreaFixture({ id: 3, name: 'foo' }),
+    new LearningAreaFixture({ id: 4, name: 'foo' })
+  ]);
 
   eduContents$: Observable<EduContent[]> = new BehaviorSubject([
     new EduContentFixture({ id: 1, publishedEduContentMetadataId: 1 }),
@@ -64,11 +60,7 @@ export class MockBooksViewModel implements ViewModelInterface<BooksViewModel> {
   sharedBooks$: Observable<EduContent[]> = new BehaviorSubject([
     new EduContentFixture(
       { id: 1, publishedEduContentMetadataId: 1 },
-      {
-        learningAreaId: 1,
-        learningArea: new LearningAreaFixture({ id: 1 }),
-        title: 'bar'
-      }
+      { learningAreaId: 1, learningArea: new LearningAreaFixture({ id: 1 }) }
     ),
     new EduContentFixture(
       { id: 2, publishedEduContentMetadataId: 2 },
@@ -99,10 +91,4 @@ export class MockBooksViewModel implements ViewModelInterface<BooksViewModel> {
       { learningAreaId: 4, learningArea: new LearningAreaFixture({ id: 4 }) }
     )
   ]);
-
-  initialize(): void {}
-
-  openBook(contentId: number): void {}
-
-  changeListFormat(listFormat: ListFormat): void {}
 }

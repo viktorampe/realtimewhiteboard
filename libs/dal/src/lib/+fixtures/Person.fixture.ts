@@ -7,7 +7,6 @@ export class PersonFixture implements PersonInterface {
   displayName = 'foo bar';
   email = 'foo@bar.bar';
   id = 1;
-  roles = [];
 
   constructor(props: Partial<PersonInterface> = {}) {
     // overwrite defaults

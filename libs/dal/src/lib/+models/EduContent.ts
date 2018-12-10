@@ -37,16 +37,12 @@ export class EduContent implements EduContentInterface, ContentInterface {
       : '';
   }
   get fileExtension(): string {
-    return (
-      this.publishedEduContentMetadata &&
-      this.publishedEduContentMetadata.fileExt
-    );
-  }
-  get fileTypeLabel(): string {
-    return (
-      this.publishedEduContentMetadata &&
-      this.publishedEduContentMetadata.fileLabel
-    );
+    return this.publishedEduContentMetadata &&
+      this.publishedEduContentMetadata.fileName
+      ? this.publishedEduContentMetadata.fileName.substring(
+          this.publishedEduContentMetadata.fileName.lastIndexOf('.') + 1
+        )
+      : '';
   }
   get previewImage(): string {
     return this.publishedEduContentMetadata

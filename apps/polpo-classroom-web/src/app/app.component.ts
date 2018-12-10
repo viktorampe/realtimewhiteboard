@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
+import { MatIconRegistry } from '@angular/material';
+import { DomSanitizer } from '@angular/platform-browser';
 import { environment } from '../environments/environment';
-import { AppViewModel } from './app.viewmodel';
 
 @Component({
   selector: 'campus-root',
@@ -9,12 +10,38 @@ import { AppViewModel } from './app.viewmodel';
 })
 export class AppComponent {
   title = 'polpo-classroom-web';
-  navItems$ = this.appViewModel.navigationItems$;
 
   /**
    * the link to the promo website, used on the logo
    */
   protected websiteUrl: string = environment.website.url;
 
-  constructor(private appViewModel: AppViewModel) {}
+  constructor(
+    private iconRegistry: MatIconRegistry,
+    private sanitizer: DomSanitizer
+  ) {
+    this.setupIconRegistry();
+  }
+
+  // TODO move to bootstrap files later
+  private setupIconRegistry() {
+    for (const key in environment.iconMapping) {
+      if (key.indexOf(':') > 0) {
+        this.iconRegistry.addSvgIconInNamespace(
+          key.split(':')[0],
+          key.split(':')[1],
+          this.sanitizer.bypassSecurityTrustResourceUrl(
+            environment.iconMapping[key]
+          )
+        );
+      } else {
+        this.iconRegistry.addSvgIcon(
+          key,
+          this.sanitizer.bypassSecurityTrustResourceUrl(
+            environment.iconMapping[key]
+          )
+        );
+      }
+    }
+  }
 }

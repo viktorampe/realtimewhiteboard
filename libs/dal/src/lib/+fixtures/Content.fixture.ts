@@ -6,7 +6,6 @@ export class ContentFixture implements ContentInterface {
   id = 1;
   productType = 'ludo.zip';
   fileExtension = 'zip';
-  fileTypeLabel = 'zip';
   description = 'foo bar';
 
   constructor(props: Partial<ContentInterface> = {}) {

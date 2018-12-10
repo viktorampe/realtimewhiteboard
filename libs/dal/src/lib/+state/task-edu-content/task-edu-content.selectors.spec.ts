@@ -1,5 +1,4 @@
 import { TaskEduContentQueries } from '.';
-import { TaskEduContentFixture } from '../../+fixtures';
 import { TaskEduContentInterface } from '../../+models';
 import { State } from './task-edu-content.reducer';
 
@@ -97,51 +96,6 @@ describe('TaskEduContent Selectors', () => {
     it('getById() should return undefined if the entity is not present', () => {
       const results = TaskEduContentQueries.getById(storeState, { id: 9 });
       expect(results).toBe(undefined);
-    });
-
-    it('getUnfinishedTaskIds should return ', () => {
-      const results = TaskEduContentQueries.getUnfinishedTaskIds({
-        taskEduContents: createState([
-          new TaskEduContentFixture({ id: 1, taskId: 11, submitted: false }),
-          new TaskEduContentFixture({ id: 2, taskId: 12, submitted: true }),
-          new TaskEduContentFixture({ id: 3, taskId: 13, submitted: false })
-        ])
-      });
-      expect(results).toEqual(new Set([11, 13]));
-    });
-
-    it('getAllGroupedByTaskId should return ', () => {
-      const results = TaskEduContentQueries.getAllGroupedByTaskId({
-        taskEduContents: createState([
-          new TaskEduContentFixture({ id: 1, taskId: 11, submitted: false }),
-          new TaskEduContentFixture({ id: 2, taskId: 11, submitted: true }),
-          new TaskEduContentFixture({ id: 3, taskId: 12, submitted: false })
-        ])
-      });
-      expect(results).toEqual({
-        11: [
-          new TaskEduContentFixture({ id: 1, taskId: 11, submitted: false }),
-          new TaskEduContentFixture({ id: 2, taskId: 11, submitted: true })
-        ],
-        12: [new TaskEduContentFixture({ id: 3, taskId: 12, submitted: false })]
-      });
-    });
-
-    it('getAllByTaskId should return ', () => {
-      const results = TaskEduContentQueries.getAllByTaskId(
-        {
-          taskEduContents: createState([
-            new TaskEduContentFixture({ id: 1, taskId: 11, submitted: false }),
-            new TaskEduContentFixture({ id: 2, taskId: 11, submitted: true }),
-            new TaskEduContentFixture({ id: 3, taskId: 12, submitted: false })
-          ])
-        },
-        { taskId: 11 }
-      );
-      expect(results).toEqual([
-        new TaskEduContentFixture({ id: 1, taskId: 11, submitted: false }),
-        new TaskEduContentFixture({ id: 2, taskId: 11, submitted: true })
-      ]);
     });
   });
 });

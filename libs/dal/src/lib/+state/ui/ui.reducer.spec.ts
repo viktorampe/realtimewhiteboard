@@ -1,8 +1,6 @@
-import { DropdownMenuItemInterface, ListFormat, NavItem } from '@campus/ui';
+import { ListFormat } from '@campus/ui';
 import {
   SetListFormat,
-  SetProfileMenuItems,
-  SetSideNavItems,
   ToggleSideNav,
   ToggleSideSheet,
   UiLoaded
@@ -12,21 +10,11 @@ import { initialState, reducer, UiState } from './ui.reducer';
 describe('Ui Reducer', () => {
   let state: UiState;
 
-  let mockNavItem: NavItem;
-  let mockProfileMenuItem: DropdownMenuItemInterface;
-
-  beforeAll(() => {
-    mockNavItem = { title: 'mockNavItem' };
-    mockProfileMenuItem = { description: 'mock' };
-  });
-
   beforeEach(() => {
     state = {
       listFormat: ListFormat.GRID,
       sideSheetOpen: true,
       sideNavOpen: true,
-      sideNavItems: [],
-      profileMenuItems: [],
       loaded: true
     };
   });
@@ -66,20 +54,6 @@ describe('Ui Reducer', () => {
       const action = new ToggleSideNav();
       const result: UiState = reducer(initialState, action);
       expect(result.sideNavOpen).toBe(!initialState.sideNavOpen);
-    });
-
-    it('should set the sideNavItems', () => {
-      const action = new SetSideNavItems({ navItems: [mockNavItem] });
-      const result: UiState = reducer(initialState, action);
-      expect(result.sideNavItems).toEqual([mockNavItem]);
-    });
-
-    it('should set the profileMenuItems', () => {
-      const action = new SetProfileMenuItems({
-        menuItems: [mockProfileMenuItem]
-      });
-      const result: UiState = reducer(initialState, action);
-      expect(result.profileMenuItems).toEqual([mockProfileMenuItem]);
     });
   });
 

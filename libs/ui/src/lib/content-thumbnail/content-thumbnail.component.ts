@@ -21,5 +21,4 @@ export class ContentThumbnailComponent implements ListViewItemInterface {
   @Input() contentTypeClass: string;
   @Input() imagePath: string;
   @Input() fileExtensionClass: string;
-  @Input() fileTypeLabel: string;
 }

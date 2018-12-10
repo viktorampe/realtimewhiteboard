@@ -1,19 +1,29 @@
-import { TaskInstance } from '../+models';
+import {
+  GroupInterface,
+  PersonInterface,
+  TaskInstanceInterface,
+  TaskInterface
+} from '../+models';
+import { PersonFixture } from './Person.fixture';
 
-export class TaskInstanceFixture extends TaskInstance {
-  start: Date;
-  end: Date;
+export class TaskInstanceFixture implements TaskInstanceInterface {
+  start: Date = new Date();
+  end: Date = new Date(new Date().getTime() + 3600 * 24 * 7 * 1000);
   alerted = true;
-  id = 1;
+  id? = 1;
+  taskId?: number;
+  personId? = new PersonFixture().id;
+  groupId?: number;
+  task?: TaskInterface;
+  student?: PersonInterface = new PersonFixture();
+  group?: GroupInterface;
 
-  constructor(props: Partial<TaskInstance> = {}) {
-    super();
-    this.start = new Date(new Date().getTime() - 1000);
-    this.start.setHours(0, 0, 0, 0);
-
-    this.end = new Date(new Date().getTime() + 3600 * 24 * 7 * 1000);
-    this.end.setHours(0, 0, 0, 0);
-
+  constructor(props: Partial<TaskInstanceInterface> = {}) {
+    // overwrite defaults
     Object.assign(this, props);
+  }
+
+  getProgress(): number {
+    return 0;
   }
 }

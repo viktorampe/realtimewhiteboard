@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ContentInterface } from '@campus/dal';
 import { SelectOption } from '@campus/ui';
 
 @Component({
@@ -8,8 +7,16 @@ import { SelectOption } from '@campus/ui';
   styleUrls: ['./info-panel-content.component.scss']
 })
 export class InfoPanelContentComponent {
-  @Input() content: ContentInterface;
-  @Input() status: any;
+  @Input()
+  content: {
+    preview?: string;
+    name: string;
+    description: string;
+    extension: string;
+    productType: string;
+    methods: string[];
+    status: any;
+  };
   @Input() statusOptions: SelectOption[];
   @Output() saveStatus = new EventEmitter<string>();
 

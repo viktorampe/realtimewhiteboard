@@ -5,14 +5,18 @@ import { AppBarComponent } from './app-bar.component';
 
 @Component({
   template: `
-    <campus-app-bar>
-      <h2 bar__left>|links1|</h2> <p bar__left>|links2|</p>
-      <div bar__center>|midden1|</div> <div bar__center>|midden2|</div>
-      <div bar__center>|midden3|</div> <div bar__right>|rechts1|</div>
-      <div bar__right>|rechts2|</div> <div bar__right>|rechts3|</div>
-      <div bar__right>|rechts4|</div> <div>|geen attribute|</div>
-    </campus-app-bar>
-  `
+  <campus-app-bar>
+    <h2 bar__left>|links1|</h2>
+    <p bar__left>|links2|</p>
+    <div bar__center>|midden1|</div>
+    <div bar__center>|midden2|</div>
+    <div bar__center>|midden3|</div>
+    <div bar__right>|rechts1|</div>
+    <div bar__right>|rechts2|</div>
+    <div bar__right>|rechts3|</div>
+    <div bar__right>|rechts4|</div>
+    <div>|geen attribute|</div>
+  </campus-app-bar>`
 })
 class AppBarHostComponent {}
 

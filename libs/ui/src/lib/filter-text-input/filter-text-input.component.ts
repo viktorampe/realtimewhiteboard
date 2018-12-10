@@ -27,7 +27,7 @@ export interface FilterableItem<I, O> {
 })
 export class FilterTextInputComponent<I, O> {
   public result$: Observable<O[]>;
-  public input = new FormControl('');
+  private input = new FormControl('');
   private filterableItem: FilterableItem<I, O>;
 
   @Input() theme: FilterTextInputTheme;

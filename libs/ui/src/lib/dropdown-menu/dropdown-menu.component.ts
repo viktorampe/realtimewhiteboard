@@ -9,7 +9,7 @@ import { MatMenuTrigger } from '@angular/material';
  * @example
  *  <campus-dropdown-menu #dropDown
  *              [showHeader]="true"
-                headerIcon="timeline"
+                headerIcon="icon-timeline"
                 linkText="alle meldingen"
                 linkUrl="/notifications"
                 newItemCount="16"

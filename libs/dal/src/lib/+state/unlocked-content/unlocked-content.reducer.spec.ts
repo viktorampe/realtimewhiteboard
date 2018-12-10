@@ -36,9 +36,7 @@ function createState(
 ): State {
   const state: any = {
     ids: unlockedContents
-      ? unlockedContents
-          .sort((a, b) => a.index - b.index)
-          .map(unlockedContent => unlockedContent.id)
+      ? unlockedContents.map(unlockedContent => unlockedContent.id)
       : [],
     entities: unlockedContents
       ? unlockedContents.reduce(

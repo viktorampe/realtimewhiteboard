@@ -5,8 +5,6 @@ export { DalState } from './lib/+state';
 export * from './lib/+state/alert';
 export * from './lib/+state/bundle';
 export * from './lib/+state/content-status';
-export * from './lib/+state/current-exercise';
-export * from './lib/+state/dal.state.feature.builder';
 export * from './lib/+state/edu-content';
 export * from './lib/+state/learning-area';
 export * from './lib/+state/resolver';
@@ -20,7 +18,6 @@ export * from './lib/+state/unlocked-boeke-student';
 export * from './lib/+state/unlocked-content';
 export * from './lib/+state/user';
 export * from './lib/+state/user-content';
-export * from './lib/alert';
 export * from './lib/dal.module';
 export {
   EduContentServiceInterface,

@@ -1,9 +1,9 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { MatIconModule } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { DalModule } from '@campus/dal';
-import { GuardsModule } from '@campus/guards';
 import { SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
 import { EffectsModule } from '@ngrx/effects';
@@ -19,7 +19,6 @@ import {
   initialState as appInitialState
 } from './+state/app.reducer';
 import { AppComponent } from './app.component';
-import { AppResolver } from './app.resolver';
 
 @NgModule({
   declarations: [AppComponent],
@@ -28,64 +27,50 @@ import { AppResolver } from './app.resolver';
     BrowserModule,
     SharedModule.forRoot(
       environment.features.alerts,
-      environment.features.messages,
-      environment.features.errorManagement,
-      environment.iconMapping,
-      environment.website,
-      environment.APIBase
+      environment.features.messages
     ),
     BrowserAnimationsModule,
     NxModule.forRoot(),
     DalModule.forRoot({ apiBaseUrl: environment.APIBase }),
-    GuardsModule,
     RouterModule.forRoot(
       [
         {
+          path: 'books',
+          loadChildren: '@campus/pages/books#PagesBooksModule'
+        },
+        { path: 'dev', loadChildren: '@campus/devlib#DevlibModule' },
+        {
+          path: 'tasks',
+          loadChildren: '@campus/pages/tasks#PagesTasksModule'
+        },
+        {
+          path: 'reports',
+          loadChildren: '@campus/pages/reports#PagesReportsModule'
+        },
+        {
+          path: 'profile',
+          loadChildren: '@campus/pages/profile#PagesProfileModule'
+        },
+        {
+          path: 'messages',
+          loadChildren: '@campus/pages/messages#PagesMessagesModule'
+        },
+        {
+          path: 'logout',
+          loadChildren: '@campus/pages/logout#PagesLogoutModule'
+        },
+        {
+          path: 'alerts',
+          loadChildren: '@campus/pages/alerts#PagesAlertsModule'
+        },
+        {
           path: '',
-          resolve: { AppResolver },
-          children: [
-            {
-              path: 'books',
-              loadChildren: '@campus/pages/books#PagesBooksModule'
-              //canLoad: [CoupledTeacherGuard]
-            },
-            { path: 'dev', loadChildren: '@campus/devlib#DevlibModule' },
-            {
-              path: 'tasks',
-              loadChildren: '@campus/pages/tasks#PagesTasksModule'
-              //canLoad: [CoupledTeacherGuard]
-            },
-            {
-              path: 'reports',
-              loadChildren: '@campus/pages/reports#PagesReportsModule'
-            },
-            {
-              path: 'profile',
-              loadChildren: '@campus/pages/profile#PagesProfileModule'
-            },
-            {
-              path: 'messages',
-              loadChildren: '@campus/pages/messages#PagesMessagesModule'
-            },
-            {
-              path: 'logout',
-              loadChildren: '@campus/pages/logout#PagesLogoutModule'
-            },
-            {
-              path: 'alerts',
-              loadChildren: '@campus/pages/alerts#PagesAlertsModule'
-            },
-            {
-              path: '',
-              redirectTo: 'bundles',
-              pathMatch: 'full'
-            },
-            {
-              path: 'bundles',
-              loadChildren: '@campus/pages/bundles#PagesBundlesModule'
-              //canLoad: [CoupledTeacherGuard]
-            }
-          ]
+          redirectTo: 'bundles',
+          pathMatch: 'full'
+        },
+        {
+          path: 'bundles',
+          loadChildren: '@campus/pages/bundles#PagesBundlesModule'
         }
       ],
       { initialNavigation: 'enabled', enableTracing: false }
@@ -99,7 +84,8 @@ import { AppResolver } from './app.resolver';
     ),
     EffectsModule.forRoot([AppEffects]),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
-    StoreRouterConnectingModule
+    StoreRouterConnectingModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent],

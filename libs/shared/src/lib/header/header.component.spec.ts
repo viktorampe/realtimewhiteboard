@@ -1,9 +1,8 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatIconModule, MatIconRegistry } from '@angular/material';
+import { MatIconModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
-import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { Subject } from 'rxjs';
 import { HeaderComponent } from './header.component';
@@ -25,8 +24,7 @@ describe('HeaderComponent', () => {
           provide: HeaderViewModel,
           useClass: MockHeaderViewModel
         },
-        BreakpointObserver,
-        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
+        BreakpointObserver
       ]
     }).compileComponents();
     headerViewModel = TestBed.get(HeaderViewModel);

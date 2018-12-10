@@ -33,7 +33,7 @@
         }
       }
       @if map-has-key($level, icon-size) {
-        a > mat-icon:first-child {
+        a > i:first-child {
           font-size: map-get($level, icon-size);
         }
       }
@@ -45,10 +45,21 @@
 
 @mixin ui-tree-nav() {
   // colors
-  $ui-tree-nav-color: $ui-secondary-font-color !default;
-  $ui-tree-nav-color-active: $ui-secondary-font-color-accent !default;
+  $ui-tree-nav-color: $ui-font-color-1 !default;
+  $ui-tree-nav-color-active: $ui-font-color-active-secundary !default;
   $ui-tree-nav-color-separator: darken($ui-tree-nav-color, 40%) !default;
 
+  // icons
+  $ui-tree-nav-toggle: FontAwesome '\f107' !default;
+  $ui-tree-nav-toggle-closed: FontAwesome '\f104' !default;
+
+  @include icon('ui-tree-nav__node__arrow', $ui-tree-nav-toggle);
+  @include icon(
+    'ui-tree-nav__node--closed .ui-tree-nav__node__arrow',
+    $ui-tree-nav-toggle-closed
+  );
+
+  //
   .ui-tree-nav__node {
     > a {
       color: $ui-tree-nav-color;
@@ -61,7 +72,7 @@
         border-left: 3px solid $ui-tree-nav-color-active;
       }
 
-      > mat-icon:first-child {
+      > i:first-child {
         margin-right: 5px;
       }
     }

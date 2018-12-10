@@ -1,4 +1,4 @@
-import { DropdownMenuItemInterface, ListFormat, NavItem } from '@campus/ui';
+import { ListFormat } from '@campus/ui';
 import { Action } from '@ngrx/store';
 import { UiState } from './ui.reducer';
 
@@ -8,9 +8,7 @@ export enum UiActionTypes {
   SaveUi = '[Ui] Ui Save To Storage',
   SetListFormat = '[Ui] Ui Set List Format',
   ToggleSideSheet = '[Ui] Ui Toggle Side Sheet',
-  ToggleSideNav = '[Ui] Ui Toggle Side Nav',
-  SetSideNavItems = '[Ui] Ui Set Side Nav Items',
-  SetProfileMenuItems = '[Ui] Ui Set Profile Menu Items'
+  ToggleSideNav = '[Ui] Ui Toggle Side Nav'
 }
 
 export class LoadUi implements Action {
@@ -39,25 +37,13 @@ export class ToggleSideNav implements Action {
   readonly type = UiActionTypes.ToggleSideNav;
 }
 
-export class SetSideNavItems implements Action {
-  readonly type = UiActionTypes.SetSideNavItems;
-  constructor(public payload: { navItems: NavItem[] }) {}
-}
-
-export class SetProfileMenuItems implements Action {
-  readonly type = UiActionTypes.SetProfileMenuItems;
-  constructor(public payload: { menuItems: DropdownMenuItemInterface[] }) {}
-}
-
 export type UiAction =
   | LoadUi
   | UiLoaded
   | SaveUi
   | SetListFormat
   | ToggleSideSheet
-  | ToggleSideNav
-  | SetSideNavItems
-  | SetProfileMenuItems;
+  | ToggleSideNav;
 
 export const fromUiActions = {
   LoadUi,
@@ -65,7 +51,5 @@ export const fromUiActions = {
   SaveUi,
   SetListFormat,
   ToggleSideSheet,
-  ToggleSideNav,
-  SetSideNavItems,
-  SetProfileMenuItems
+  ToggleSideNav
 };

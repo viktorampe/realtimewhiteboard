@@ -1,7 +1,5 @@
-import { TaskInstanceFixture } from '@campus/dal';
 import { TaskInstanceQueries } from '.';
 import { TaskInstanceInterface } from '../../+models';
-import { TaskInstance } from '../../+models/TaskInstance';
 import { State } from './task-instance.reducer';
 
 describe('TaskInstance Selectors', () => {
@@ -98,49 +96,6 @@ describe('TaskInstance Selectors', () => {
     it('getById() should return undefined if the entity is not present', () => {
       const results = TaskInstanceQueries.getById(storeState, { id: 9 });
       expect(results).toBe(undefined);
-    });
-
-    it('getAllGroupedByTaskId', () => {
-      const fix1 = <TaskInstance>new TaskInstanceFixture({ id: 1, taskId: 11 });
-      const fix2 = <TaskInstance>new TaskInstanceFixture({ id: 2, taskId: 11 });
-      const fix3 = <TaskInstance>new TaskInstanceFixture({ id: 3, taskId: 12 });
-      const results = TaskInstanceQueries.getAllGroupedByTaskId({
-        taskInstances: createState([fix1, fix2, fix3])
-      });
-      expect(results).toEqual({
-        11: [fix1, fix2],
-        12: [fix3]
-      });
-    });
-
-    it('getAllByTaskId', () => {
-      const fix1 = <TaskInstance>new TaskInstanceFixture({ id: 1, taskId: 11 });
-      const fix2 = <TaskInstance>new TaskInstanceFixture({ id: 2, taskId: 11 });
-      const fix3 = <TaskInstance>new TaskInstanceFixture({ id: 3, taskId: 12 });
-      const results = TaskInstanceQueries.getAllByTaskId(
-        {
-          taskInstances: createState([fix1, fix2, fix3])
-        },
-        { taskId: 11 }
-      );
-      expect(results).toEqual([fix1, fix2]);
-    });
-
-    it('getActiveTaskIds', () => {
-      const fix1 = <TaskInstance>new TaskInstanceFixture({ id: 1, taskId: 11 });
-      const fix2 = <TaskInstance>new TaskInstanceFixture({ id: 2, taskId: 11 });
-      const fix3 = <TaskInstance>new TaskInstanceFixture({
-        id: 3,
-        taskId: 12,
-        end: new Date(new Date().getTime() - 500)
-      });
-      const results = TaskInstanceQueries.getActiveTaskIds(
-        {
-          taskInstances: createState([fix1, fix2, fix3])
-        },
-        { date: new Date() }
-      );
-      expect(results).toEqual(new Set([11]));
     });
   });
 });

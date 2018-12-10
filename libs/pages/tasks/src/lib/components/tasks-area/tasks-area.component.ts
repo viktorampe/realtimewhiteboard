@@ -1,14 +1,12 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/shared';
 import { FilterTextInputComponent, ListFormat } from '@campus/ui';
-import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { Observable } from 'rxjs';
-import { TasksViewModel } from '../tasks.viewmodel';
+import { TasksViewModel } from './../tasks.viewmodel';
 import {
-  LearningAreasWithTaskInfoInterface,
+  LearningAreasWithTaskInstanceInfoInterface,
   LearningAreaWithTaskInfoInterface
-} from '../tasks.viewmodel.interfaces';
-// TODO replace import
-// import { TasksViewModel } from '../tasks.viewmodel';
+} from './../tasks.viewmodel.interfaces';
 
 @Component({
   selector: 'campus-tasks-area',
@@ -18,11 +16,13 @@ import {
 export class TasksAreaComponent implements OnInit {
   protected listFormat = ListFormat;
   listFormat$: Observable<ListFormat>;
-  learningAreasWithInfo$: Observable<LearningAreasWithTaskInfoInterface>;
+  learningAreasWithInfo$: Observable<
+    LearningAreasWithTaskInstanceInfoInterface
+  >;
 
   @ViewChild('filterInput')
   filterTextInput: FilterTextInputComponent<
-    LearningAreasWithTaskInfoInterface,
+    LearningAreasWithTaskInstanceInfoInterface,
     LearningAreaWithTaskInfoInterface
   >;
 
@@ -33,7 +33,7 @@ export class TasksAreaComponent implements OnInit {
 
   ngOnInit() {
     this.listFormat$ = this.tasksViewModel.listFormat$;
-    this.learningAreasWithInfo$ = this.tasksViewModel.learningAreasWithTaskInfo$;
+    this.learningAreasWithInfo$ = this.tasksViewModel.learningAreasWithTaskInstances$;
     this.filterTextInput.setFilterableItem(this);
   }
 
@@ -42,7 +42,7 @@ export class TasksAreaComponent implements OnInit {
   }
 
   filterFn(
-    info: LearningAreasWithTaskInfoInterface,
+    info: LearningAreasWithTaskInstanceInfoInterface,
     searchText: string
   ): LearningAreaWithTaskInfoInterface[] {
     return this.filterService.filter(info.learningAreasWithInfo, {

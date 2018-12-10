@@ -65,7 +65,7 @@ describe('FileExtensionComponent', () => {
     expect(componentEL.className).not.toContain('ui-file-extension--icon');
   });
 
-  it('should show the extension as title', () => {
+  it('should show the title', () => {
     component.showTitle = true;
     component.extensionClass = 'extClass';
     fixture.detectChanges();
@@ -73,17 +73,6 @@ describe('FileExtensionComponent', () => {
     const componentDE = fixture.debugElement.query(By.css('i'));
     const componentEL = componentDE.nativeElement;
     expect(componentEL.textContent).toContain('extClass');
-  });
-
-  it('should show the title', () => {
-    component.showTitle = true;
-    component.title = `I'm special`;
-    component.extensionClass = 'extClass';
-    fixture.detectChanges();
-
-    const componentDE = fixture.debugElement.query(By.css('i'));
-    const componentEL = componentDE.nativeElement;
-    expect(componentEL.textContent).toContain(`I'm special`);
   });
 
   it('shouldnt show the title', () => {

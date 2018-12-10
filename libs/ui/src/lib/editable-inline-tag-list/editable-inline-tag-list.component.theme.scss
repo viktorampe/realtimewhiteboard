@@ -1,33 +1,24 @@
 @mixin ui_editable-inline-tag-list_theme() {
-  $ui-editable-inline-font-color: $ui-form-item-font-color !default;
-  $ui-editable-inline-bg-color: $ui-form-item-bg-color !default;
-  $ui-editable-inline-border-color: $ui-form-item-border-color !default;
-  $ui-editable-title-color: $ui-primary-font-color-2 !default;
-  $ui-editable-button-bg-color: $ui-tertiary-bg-color-2 !default;
-  $ui-editable-button-font-color: $ui-tertiary-font-color-2 !default;
-
   .ui_editable-inline-tag-list {
-    color: $ui-editable-inline-font-color;
-    background-color: $ui-editable-inline-bg-color;
-    border-top: solid 1px $ui-editable-inline-border-color;
-    border-bottom: solid 1px $ui-editable-inline-border-color;
+    background-color: $ui-bg-color-gray-1;
+    border-top: solid 1px $ui-border-color-gray-1;
+    border-bottom: solid 1px $ui-border-color-gray-1;
     &__title {
-      color: $ui-editable-title-color;
+      color: $ui-bg-color-gray-2;
     }
     &__items {
       &__item {
-        color: $ui-secondary-font-color-accent;
-        background-color: $ui-secondary-bg-color-accent;
+        color: $ui-font-color-gray-1;
+        background-color: $ui-bg-color-green-1;
         &__icon {
-          background-color: $ui-secondary-font-color-accent;
-          color: $ui-secondary-bg-color-accent;
+          background-color: $ui-font-color-gray-1;
+          color: $ui-bg-color-green-1;
         }
       }
     }
     &__icons {
       &__icon {
-        color: $ui-editable-button-bg-color;
-        background-color: $ui-editable-button-bg-color;
+        background-color: $ui-bg-color-gray-3;
       }
     }
   }

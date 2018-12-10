@@ -1,8 +1,8 @@
 @mixin ui-button() {
   $ui-button-font-size: 20px !default;
   $ui-button-padding: $ui-button-font-size/5 !default;
-  $ui-button-color: $ui-button-font-color !default;
-  $ui-button-background-color: $ui-button-bg-color !default;
+  $ui-button-color: $ui-bg-color-2 !default;
+  $ui-button-background-color: $ui-font-color-active !default;
   $ui-button-border-color: darken($ui-button-background-color, 10%) !default;
   $ui-button-margin-top: 2px !default;
   $ui-button-margin-left: 2px !default;
@@ -17,16 +17,16 @@
     20%
   ) !default;
   // --hover
-  $ui-button--hover-background-color: $ui-button-background-color !default;
-  $ui-button--hover-color: $ui-button-color !default;
+  $ui-button--hover-color: $ui-button-background-color !default;
+  $ui-button--hover-background-color: $ui-button-color !default;
   // --active
-  $ui-button--active-background-color: $ui-button-background-color !default;
-  $ui-button--active-color: $ui-button-color !default;
+  $ui-button--active-color: $ui-button-background-color !default;
+  $ui-button--active-background-color: $ui-button-color !default;
   // --rounded-corner
   $ui-button--rounded-corner-border-radius: $ui-button-font-size / 4 !default;
   // --danger
   $ui-button--danger-color: $ui-button-color !default;
-  $ui-button--danger-background-color: $ui-danger-bg-color !default;
+  $ui-button--danger-background-color: $color-danger-1 !default;
   $ui-button--danger-border-color: darken(
     $ui-button--danger-background-color,
     10%
@@ -48,7 +48,7 @@
   $ui-button--danger--active-background-color: $ui-button--danger-color !default;
   // --warning
   $ui-button--warning-color: $ui-button-color !default;
-  $ui-button--warning-background-color: $ui-warning-bg-color !default;
+  $ui-button--warning-background-color: $color-warning-1 !default;
   $ui-button--warning-border-color: darken(
     $ui-button--warning-background-color,
     10%

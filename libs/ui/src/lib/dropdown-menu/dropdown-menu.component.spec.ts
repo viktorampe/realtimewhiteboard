@@ -6,11 +6,9 @@ import {
   ViewChild
 } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
-import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '../ui.module';
 import { DropdownMenuComponent } from './dropdown-menu.component';
 
@@ -26,11 +24,9 @@ const mockData = {
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'host-component',
-  template: `
-    <campus-dropdown-menu>
-      <button id="projectedButton">menu</button>
-    </campus-dropdown-menu>
-  `
+  template: `<campus-dropdown-menu>
+                <button id="projectedButton">menu</button>
+              </campus-dropdown-menu>`
 })
 export class HostComponent implements OnInit {
   @ViewChild(DropdownMenuComponent) dropdown: DropdownMenuComponent;
@@ -43,7 +39,7 @@ export class HostComponent implements OnInit {
   imports: [RouterTestingModule, NoopAnimationsModule, UiModule],
   exports: [],
   schemas: [NO_ERRORS_SCHEMA],
-  providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
+  providers: []
 })
 export class TestModule {}
 describe('DropdownMenuComponent', () => {

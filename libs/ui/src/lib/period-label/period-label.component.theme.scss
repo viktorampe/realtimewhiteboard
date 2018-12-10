@@ -1,23 +1,19 @@
 @mixin ui_period-label_theme() {
-  $ui-period-label-title-color: $ui-primary-font-color-2 !default;
-  $ui-period-label-color: $ui-primary-font-color !default;
-  $ui-period-label-button-bg-color: $ui-tertiary-bg-color-2 !default;
-
   .ui_period-label {
     &__title {
-      color: $ui-period-label-title-color;
+      color: $ui-bg-color-gray-2;
     }
     &__date-holder {
       &__text {
         &__label {
-          color: $ui-period-label-color;
+          color: $ui-font-color-gray-3;
         }
         &__value {
-          color: $ui-period-label-color;
+          color: $ui-font-color-gray-3;
         }
       }
       &__icon {
-        background-color: $ui-period-label-button-bg-color;
+        background-color: $ui-bg-color-gray-3;
       }
     }
   }

@@ -127,7 +127,7 @@ export class BundlesViewModel {
       switchMap(
         (unlockedContents): Observable<ContentInterface[]> =>
           combineLatest(
-            ...unlockedContents.map(
+            ...unlockedContents.sort((a, b) => a.index - b.index).map(
               (unlockedContent): Observable<ContentInterface> => {
                 if (unlockedContent.eduContentId) {
                   return this.store.pipe(
@@ -185,6 +185,21 @@ export class BundlesViewModel {
               )
             })
           )
+      ),
+      map(
+        (eduContents): EduContent[] => {
+          return eduContents.sort((a, b) => {
+            const nameA = a.name && a.name.toLowerCase();
+            const nameB = b.name && b.name.toLowerCase();
+            if (nameA < nameB) {
+              return -1;
+            }
+            if (nameA > nameB) {
+              return 1;
+            }
+            return 0;
+          });
+        }
       ),
       shareReplay(1)
     );

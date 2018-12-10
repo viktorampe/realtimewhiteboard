@@ -20,25 +20,13 @@ export const getLoaded = createSelector(
   (state: State) => state.loaded
 );
 
-export const getAll = createSelector(
-  selectTaskState,
-  selectAll
-);
+export const getAll = createSelector(selectTaskState, selectAll);
 
-export const getCount = createSelector(
-  selectTaskState,
-  selectTotal
-);
+export const getCount = createSelector(selectTaskState, selectTotal);
 
-export const getIds = createSelector(
-  selectTaskState,
-  selectIds
-);
+export const getIds = createSelector(selectTaskState, selectIds);
 
-export const getAllEntities = createSelector(
-  selectTaskState,
-  selectEntities
-);
+export const getAllEntities = createSelector(selectTaskState, selectEntities);
 
 /**
  * returns array of objects in the order of the given ids
@@ -64,47 +52,4 @@ export const getByIds = createSelector(
 export const getById = createSelector(
   selectTaskState,
   (state: State, props: { id: number }) => state.entities[props.id]
-);
-
-export const getShared = createSelector(
-  selectTaskState,
-  (state: State, props: { userId: number }) => {
-    const ids: number[] = <number[]>state.ids;
-    return ids
-      .filter(id => state.entities[id].personId !== props.userId) //personId is the teacherId
-      .map(id => state.entities[id]);
-  }
-);
-
-export const getOwn = createSelector(
-  selectTaskState,
-  (state: State, props: { userId: number }) => {
-    const ids: number[] = <number[]>state.ids;
-    return ids
-      .filter(id => state.entities[id].personId === props.userId) //personId is the teacherId
-      .map(id => state.entities[id]);
-  }
-);
-
-export const getSharedLearningAreaIds = createSelector(
-  selectTaskState,
-  (state: State, props: { userId: number }) => {
-    return new Set(
-      Object.values(state.entities)
-        .filter(task => task.personId !== props.userId)
-        .map(task => task.learningAreaId)
-    );
-  }
-);
-
-export const getSharedTaskIdsByLearningAreaId = createSelector(
-  selectTaskState,
-  (state: State, props: { userId: number; learningAreaId: number }) => {
-    const ids: number[] = <number[]>state.ids;
-    return ids.filter(
-      id =>
-        state.entities[id].personId !== props.userId &&
-        state.entities[id].learningAreaId === props.learningAreaId
-    );
-  }
 );
