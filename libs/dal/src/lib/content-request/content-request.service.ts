@@ -13,6 +13,7 @@ export class ContentRequestService implements ContentRequestServiceInterface {
   requestUrl(contentId: number): Observable<string> {
     return this.educontentApi.requestURLRemote(contentId).pipe(
       map(url => {
+        console.log(url);
         return (url as any).url;
       })
     );
