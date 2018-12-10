@@ -5,20 +5,15 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
-import { RESULT_SERVICE_TOKEN } from '../../result/result.service.interface';
 import { ResultReducer } from '.';
-import {
-  ResultsLoaded,
-  ResultsLoadError,
-  LoadResults
-} from './result.actions';
+import { RESULTS_SERVICE_TOKEN } from '../../results/results.service.interface';
+import { LoadResults, ResultsLoaded, ResultsLoadError } from './result.actions';
 import { ResultEffects } from './result.effects';
 
 describe('ResultEffects', () => {
   let actions: Observable<any>;
   let effects: ResultEffects;
   let usedState: any;
-
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -41,7 +36,7 @@ describe('ResultEffects', () => {
   const mockServiceMethodReturnValue = (
     method: string,
     returnValue: any,
-    service: any = RESULT_SERVICE_TOKEN
+    service: any = RESULTS_SERVICE_TOKEN
   ) => {
     jest.spyOn(TestBed.get(service), method).mockReturnValue(of(returnValue));
   };
@@ -49,7 +44,7 @@ describe('ResultEffects', () => {
   const mockServiceMethodError = (
     method: string,
     errorMessage: string,
-    service: any = RESULT_SERVICE_TOKEN
+    service: any = RESULTS_SERVICE_TOKEN
   ) => {
     jest.spyOn(TestBed.get(service), method).mockImplementation(() => {
       throw new Error(errorMessage);
@@ -61,7 +56,7 @@ describe('ResultEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature(ResultReducer.NAME , ResultReducer.reducer, {
+        StoreModule.forFeature(ResultReducer.NAME, ResultReducer.reducer, {
           initialState: usedState
         }),
         EffectsModule.forRoot([]),
@@ -69,7 +64,7 @@ describe('ResultEffects', () => {
       ],
       providers: [
         {
-          provide: RESULT_SERVICE_TOKEN,
+          provide: RESULTS_SERVICE_TOKEN,
           useValue: {
             getAllForUser: () => {}
           }
@@ -143,11 +138,7 @@ describe('ResultEffects', () => {
         );
       });
       it('should return a error action if force is true', () => {
-        expectInAndOut(
-          effects.loadResults$,
-          forcedLoadAction,
-          loadErrorAction
-        );
+        expectInAndOut(effects.loadResults$, forcedLoadAction, loadErrorAction);
       });
     });
     describe('with loaded and failing api call', () => {
@@ -165,11 +156,7 @@ describe('ResultEffects', () => {
         expectInNoOut(effects.loadResults$, unforcedLoadAction);
       });
       it('should return a error action if force is true', () => {
-        expectInAndOut(
-          effects.loadResults$,
-          forcedLoadAction,
-          loadErrorAction
-        );
+        expectInAndOut(effects.loadResults$, forcedLoadAction, loadErrorAction);
       });
     });
   });

@@ -25,4 +25,6 @@ export interface ResultsServiceInterface {
     resultId: number,
     cmi: ScormCmiInterface
   ): Observable<ResultInterface>;
+
+  getAllForUser(userId: number): Observable<ResultInterface[]>;
 }

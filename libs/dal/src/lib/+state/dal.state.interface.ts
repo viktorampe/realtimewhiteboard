@@ -16,6 +16,7 @@ import {
   UserContentReducer,
   UserReducer
 } from '../..';
+import { ResultReducer } from './result';
 
 export interface DalState {
   ui: UiReducer.UiState;
@@ -34,4 +35,5 @@ export interface DalState {
   currentExercise: CurrentExerciseReducer.State;
   taskInstances: TaskInstanceReducer.State;
   taskEduContents: TaskEduContentReducer.State;
+  results: ResultReducer.State;
 }

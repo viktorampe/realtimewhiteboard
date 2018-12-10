@@ -1,26 +1,23 @@
 import { Update } from '@ngrx/entity';
-import {ResultActions } from '.';
-import { initialState, reducer, State } from './result.reducer';
+import { ResultActions } from '.';
 import { ResultInterface } from '../../+models';
+import { initialState, reducer, State } from './result.reducer';
 
-/** 
- * This file is scaffolded, but needs some special attention:
- * - find and replace '__EXTRA__PROPERTY_NAME' and replace this with a property name of the Result entity.
- * - set the initial property value via '[__EXTRA__PROPERTY_NAME]InitialValue'.
- * - set the updated property value via '[__EXTRA__PROPERTY_NAME]UpdatedValue'.
-*/
-const __EXTRA__PROPERTY_NAMEInitialValue = ;
-const __EXTRA__PROPERTY_NAMEUpdatedValue = ;
+const scoreInitialValue = 0;
+const scoreUpdatedValue = 100;
 
 /**
  * Creates a Result.
  * @param {number} id
  * @returns {ResultInterface}
  */
-function createResult(id: number, __EXTRA__PROPERTY_NAME:any = __EXTRA__PROPERTY_NAMEInitialValue): ResultInterface | any {
+function createResult(
+  id: number,
+  score: number = scoreInitialValue
+): ResultInterface | any {
   return {
     id: id,
-    __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAME
+    score: score
   };
 }
 
@@ -54,39 +51,34 @@ function createState(
   return state;
 }
 
-
 describe('Results Reducer', () => {
   let results: ResultInterface[];
   beforeEach(() => {
-    results = [
-      createResult(1),
-      createResult(2),
-      createResult(3)
-    ];
+    results = [createResult(1), createResult(2), createResult(3)];
   });
 
   describe('unknown action', () => {
     it('should return the initial state', () => {
       const action = {} as any;
 
-      const result = reducer(initialState, action);
+      const resultState = reducer(initialState, action);
 
-      expect(result).toBe(initialState);
+      expect(resultState).toBe(initialState);
     });
   });
 
   describe('loaded action', () => {
     it('should load all results', () => {
       const action = new ResultActions.ResultsLoaded({ results });
-      const result = reducer(initialState, action);
-      expect(result).toEqual(createState(results, true));
+      const resultState = reducer(initialState, action);
+      expect(resultState).toEqual(createState(results, true));
     });
 
     it('should error', () => {
       const error = 'Something went wrong';
       const action = new ResultActions.ResultsLoadError(error);
-      const result = reducer(initialState, action);
-      expect(result).toEqual(createState([], false, error));
+      const resultState = reducer(initialState, action);
+      expect(resultState).toEqual(createState([], false, error));
     });
   });
 
@@ -97,21 +89,21 @@ describe('Results Reducer', () => {
         result
       });
 
-      const result = reducer(initialState, action);
-      expect(result).toEqual(createState([result], false));
+      const resultState = reducer(initialState, action);
+      expect(resultState).toEqual(createState([result], false));
     });
 
     it('should add multiple results', () => {
       const action = new ResultActions.AddResults({ results });
-      const result = reducer(initialState, action);
+      const resultState = reducer(initialState, action);
 
-      expect(result).toEqual(createState(results, false));
+      expect(resultState).toEqual(createState(results, false));
     });
   });
   describe('upsert actions', () => {
     it('should upsert one result', () => {
       const originalResult = results[0];
-      
+
       const startState = reducer(
         initialState,
         new ResultActions.AddResult({
@@ -119,16 +111,15 @@ describe('Results Reducer', () => {
         })
       );
 
-    
-      const updatedResult = createResult(results[0].id, 'test');
-     
+      const updatedResult = createResult(results[0].id, scoreUpdatedValue);
+
       const action = new ResultActions.UpsertResult({
         result: updatedResult
       });
 
-      const result = reducer(startState, action);
+      const resultState = reducer(startState, action);
 
-      expect(result.entities[updatedResult.id]).toEqual(updatedResult);
+      expect(resultState.entities[updatedResult.id]).toEqual(updatedResult);
     });
 
     it('should upsert many results', () => {
@@ -144,11 +135,9 @@ describe('Results Reducer', () => {
         results: resultsToInsert
       });
 
-      const result = reducer(startState, action);
+      const resultState = reducer(startState, action);
 
-      expect(result).toEqual(
-        createState(resultsToInsert)
-      );
+      expect(resultState).toEqual(createState(resultsToInsert));
     });
   });
 
@@ -159,40 +148,45 @@ describe('Results Reducer', () => {
       const update: Update<ResultInterface> = {
         id: 1,
         changes: {
-          __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-        } 
+          score: scoreUpdatedValue
+        }
       };
       const action = new ResultActions.UpdateResult({
         result: update
       });
-      const result = reducer(startState, action);
-      expect(result).toEqual(createState([createResult(1, __EXTRA__PROPERTY_NAMEUpdatedValue)]));
+      const resultState = reducer(startState, action);
+      expect(resultState).toEqual(
+        createState([createResult(1, scoreUpdatedValue)])
+      );
     });
 
     it('should update multiple results', () => {
       const startState = createState(results);
       const updates: Update<ResultInterface>[] = [
-        
         {
           id: 1,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          } 
+            score: scoreUpdatedValue
+          }
         },
         {
           id: 2,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          }  
+            score: scoreUpdatedValue
+          }
         }
       ];
       const action = new ResultActions.UpdateResults({
         results: updates
       });
-      const result = reducer(startState, action);
+      const resultState = reducer(startState, action);
 
-      expect(result).toEqual(
-        createState([createResult(1, __EXTRA__PROPERTY_NAMEUpdatedValue), createResult(2, __EXTRA__PROPERTY_NAMEUpdatedValue), results[2]])
+      expect(resultState).toEqual(
+        createState([
+          createResult(1, scoreUpdatedValue),
+          createResult(2, scoreUpdatedValue),
+          results[2]
+        ])
       );
     });
   });
@@ -204,8 +198,8 @@ describe('Results Reducer', () => {
       const action = new ResultActions.DeleteResult({
         id: result.id
       });
-      const result = reducer(startState, action);
-      expect(result).toEqual(createState([]));
+      const resultState = reducer(startState, action);
+      expect(resultState).toEqual(createState([]));
     });
 
     it('should delete multiple results', () => {
@@ -213,8 +207,8 @@ describe('Results Reducer', () => {
       const action = new ResultActions.DeleteResults({
         ids: [results[0].id, results[1].id]
       });
-      const result = reducer(startState, action);
-      expect(result).toEqual(createState([results[2]]));
+      const resultState = reducer(startState, action);
+      expect(resultState).toEqual(createState([results[2]]));
     });
   });
 
@@ -222,8 +216,10 @@ describe('Results Reducer', () => {
     it('should clear the results collection', () => {
       const startState = createState(results, true, 'something went wrong');
       const action = new ResultActions.ClearResults();
-      const result = reducer(startState, action);
-      expect(result).toEqual(createState([], true, 'something went wrong'));
+      const resultState = reducer(startState, action);
+      expect(resultState).toEqual(
+        createState([], true, 'something went wrong')
+      );
     });
   });
 });
