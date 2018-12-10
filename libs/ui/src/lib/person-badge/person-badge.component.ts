@@ -16,10 +16,11 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./person-badge.component.scss']
 })
 export class PersonBadgeComponent {
-  @Input() align = 'left';
+  @Input() align: 'left' | 'right' | 'bottom' | 'top' = 'left';
   @Input() size: 'small' | 'medium' | 'large' = 'medium';
   @Input() person: BadgePersonInterface;
   @Input() subText: string;
+  @Input() showBorder = true;
 }
 
 export interface BadgePersonInterface {
