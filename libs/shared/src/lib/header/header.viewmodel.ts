@@ -23,6 +23,7 @@ import {
   EnvironmentAlertsFeatureInterface,
   ENVIRONMENT_ALERTS_FEATURE_TOKEN
 } from '../interfaces/environment.features.interfaces';
+import { BreadcrumbsService } from './../services/breadcrumbs.service';
 import { HeaderResolver } from './header.resolver';
 import { MockHeaderViewModel } from './header.viewmodel.mock';
 
@@ -53,7 +54,8 @@ export class HeaderViewModel {
     private environmentAlertsFeature: EnvironmentAlertsFeatureInterface,
     private store: Store<DalState>,
     private headerResolver: HeaderResolver,
-    private mockViewModel: MockHeaderViewModel // TODO: remove when all data is available
+    private mockViewModel: MockHeaderViewModel, // TODO: remove when all data is available
+    private breadcrumbService: BreadcrumbsService
   ) {
     this.loadResolver();
     this.loadFeatureToggles();
