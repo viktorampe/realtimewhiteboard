@@ -1,5 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute } from '@angular/router';
@@ -11,6 +12,7 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { TasksViewModel } from '../tasks.viewmodel';
 import { TaskWithInfoInterface } from '../tasks.viewmodel.interfaces';
 import { MockTasksViewModel } from '../tasks.viewmodel.mock';
+import { MockMatIconRegistry } from './../../../../../../testing/src/lib/MockMatIconRegistry';
 import { TaskDetailComponent } from './task-detail.component';
 
 // TODO replace with @campus/testing  moch route
@@ -37,7 +39,8 @@ describe('TaskDetailComponent', () => {
       providers: [
         { provide: ActivatedRoute, useClass: MockActivatedRoute },
         { provide: FILTER_SERVICE_TOKEN, useClass: FilterService },
-        { provide: TasksViewModel, useClass: MockTasksViewModel }
+        { provide: TasksViewModel, useClass: MockTasksViewModel },
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ]
     }).compileComponents();
   }));
