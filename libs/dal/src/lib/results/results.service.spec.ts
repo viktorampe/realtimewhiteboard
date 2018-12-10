@@ -1,4 +1,3 @@
-//file.only
 import { inject, TestBed } from '@angular/core/testing';
 import { ScormCmiMode, ScormStatus } from '@campus/scorm';
 import { PersonApi, ResultInterface } from '@diekeure/polpo-api-angular-sdk';
