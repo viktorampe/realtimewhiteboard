@@ -1,11 +1,13 @@
 import { ModuleWithProviders } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import {
+  AlertActions,
   AUTH_SERVICE_TOKEN,
   BundleActions,
   BundleFixture,
   BundleInterface,
   BundleReducer,
+  DalState,
   EduContentActions,
   EduContentFixture,
   EduContentInterface,
@@ -56,6 +58,7 @@ describe('BundlesViewModel', () => {
   let unlockedContents: UnlockedContentInterface[];
   let eduContents: EduContentInterface[];
   let coupledPersons: PersonInterface[];
+  let store: Store<DalState>;
 
   beforeAll(() => {
     loadState();
@@ -72,6 +75,7 @@ describe('BundlesViewModel', () => {
     });
 
     bundlesViewModel = TestBed.get(BundlesViewModel);
+    store = TestBed.get(Store);
   });
 
   it('should be defined', () => {
@@ -84,6 +88,18 @@ describe('BundlesViewModel', () => {
     bundlesViewModel.changeListFormat(listFormat);
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith({ listFormat });
+  });
+
+  it('set alerts read by a filter', () => {
+    spyOn(store, 'dispatch');
+    const expectedAction = new AlertActions.SetAlertReadByFilter({
+      filter: { bundleId: 1 },
+      intended: false,
+      personId: 1,
+      read: true
+    });
+    bundlesViewModel.setBundleAlertRead(1);
+    expect(store.dispatch).toHaveBeenCalledWith(expectedAction);
   });
 
   it('sharedLearningAreas$', () => {

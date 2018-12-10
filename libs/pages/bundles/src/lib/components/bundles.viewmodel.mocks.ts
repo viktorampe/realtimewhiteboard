@@ -55,6 +55,8 @@ export class MockViewModel {
 
   changeListFormat() {}
 
+  setBundleAlertRead() {}
+
   getLearningAreaById(areaId: number): Observable<LearningAreaInterface> {
     return of(new LearningAreaFixture());
   }
