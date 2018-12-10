@@ -1,13 +1,21 @@
-<campus-content-preview [titleText]="content.name"
-                        [description]="content.description">
-  <campus-file-extension type
-                         *ngIf="content.fileExtension"
-                         [extensionClass]="content.fileExtension"
-                         [title]="content.fileTypeLabel"></campus-file-extension>
-  <mat-icon icon
-            [svgIcon]="content.productType"
-            *ngIf="content.productType"></mat-icon>
-  <mat-icon badge
-            *ngFor="let badge of content.methodLogos"
-            [svgIcon]="'method:' + badge"></mat-icon>
+<campus-content-preview
+  [titleText]="content.name"
+  [description]="content.description"
+>
+  <campus-file-extension
+    type
+    *ngIf="content.fileExtension"
+    [extensionClass]="content.fileExtension"
+    [title]="content.fileTypeLabel"
+  ></campus-file-extension>
+  <mat-icon
+    icon
+    [svgIcon]="content.productType"
+    *ngIf="content.productType"
+  ></mat-icon>
+  <mat-icon
+    badge
+    *ngFor="let badge of content.methodLogos"
+    [svgIcon]="'method:' + badge"
+  ></mat-icon>
 </campus-content-preview>

@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { TaskInstanceInterface } from '@campus/dal';
 import { BadgePersonInterface } from '@campus/ui';
+import { TaskWithInfoInterface } from '../../tasks.viewmodel.interfaces';
 
 @Component({
   selector: 'campus-info-panel-task',
@@ -9,5 +9,5 @@ import { BadgePersonInterface } from '@campus/ui';
 })
 export class InfoPanelTaskComponent {
   @Input() person: BadgePersonInterface;
-  @Input() taskInstance: TaskInstanceInterface;
+  @Input() taskInfo: TaskWithInfoInterface;
 }

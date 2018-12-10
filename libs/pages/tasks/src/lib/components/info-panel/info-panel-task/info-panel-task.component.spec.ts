@@ -22,15 +22,17 @@ describe('InfoPanelTaskComponent', () => {
 
     mockData = {
       person: { displayName: 'display name' },
-      taskInstance: {
+      taskInfo: {
+        taskInstance: {
+          start: new Date()
+        },
         task: {
           name: 'name',
           description: 'description'
-        },
-        start: new Date()
+        }
       }
     };
-    component.taskInstance = mockData.taskInstance;
+    component.taskInfo = mockData.taskInfo;
     component.person = mockData.person;
 
     fixture.detectChanges();
@@ -43,11 +45,11 @@ describe('InfoPanelTaskComponent', () => {
     const text = fixture.debugElement
       .query(By.css('.info-panel-task__text'))
       .query(By.css('strong')).nativeElement.textContent;
-    expect(text).toBe(mockData.taskInstance.task.name);
+    expect(text).toBe(mockData.taskInfo.task.name);
   });
   it('should show the description of the task', () => {
     const text = fixture.debugElement.query(By.css('.info-panel-task__text'))
       .nativeElement.textContent;
-    expect(text).toContain(mockData.taskInstance.task.description);
+    expect(text).toContain(mockData.taskInfo.task.description);
   });
 });

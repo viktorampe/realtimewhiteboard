@@ -21,14 +21,20 @@ export const getLoaded = createSelector(
   (state: State) => state.loaded
 );
 
-export const getAll = createSelector(selectUnlockedBoekeGroupState, selectAll);
+export const getAll = createSelector(
+  selectUnlockedBoekeGroupState,
+  selectAll
+);
 
 export const getCount = createSelector(
   selectUnlockedBoekeGroupState,
   selectTotal
 );
 
-export const getIds = createSelector(selectUnlockedBoekeGroupState, selectIds);
+export const getIds = createSelector(
+  selectUnlockedBoekeGroupState,
+  selectIds
+);
 
 export const getAllEntities = createSelector(
   selectUnlockedBoekeGroupState,
