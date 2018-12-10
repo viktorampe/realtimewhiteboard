@@ -30,8 +30,7 @@ import {
   UnlockedContentActions,
   UnlockedContentFixture,
   UnlockedContentInterface,
-  UnlockedContentReducer,
-  UserContentFixture
+  UnlockedContentReducer
 } from '@campus/dal';
 import {
   OpenStaticContentServiceInterface,
@@ -109,15 +108,7 @@ describe('BundlesViewModel', () => {
       const eduContent = new EduContentFixture({ id: 5 });
       bundlesViewModel.openContent(eduContent);
       expect(openStaticContentService.open).toHaveBeenCalledTimes(1);
-      expect(openStaticContentService.open).toHaveBeenCalledWith(eduContent.id);
-    });
-
-    it('should open a new window for UserContent', () => {
-      const userContent = new UserContentFixture({ id: 5 });
-      bundlesViewModel.openContent(userContent);
-      expect(mockWindow.open).toHaveBeenCalledTimes(1);
-
-      expect(mockWindow.open).toHaveBeenCalledWith(userContent.link);
+      expect(openStaticContentService.open).toHaveBeenCalledWith(eduContent);
     });
   });
 
