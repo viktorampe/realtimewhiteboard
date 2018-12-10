@@ -23,7 +23,7 @@ import {
 } from '@campus/ui';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { Observable, Subscription } from 'rxjs';
-import { shareReplay, switchMap } from 'rxjs/operators';
+import { shareReplay, switchMap, take } from 'rxjs/operators';
 import { BundlesViewModel } from '../bundles.viewmodel';
 
 @Component({
@@ -78,6 +78,7 @@ export class BundleDetailComponent
     this.bundle$ = this.getBundle();
     this.bundleOwner$ = this.bundlesViewModel.getBundleOwner(this.bundle$);
     this.contents$ = this.getBundleContents();
+    this.markAlertsAsRead();
 
     this.filterTextInput.setFilterableItem(this);
   }
@@ -103,6 +104,14 @@ export class BundleDetailComponent
 
   clickChangeListFormat(value: ListFormat): void {
     this.bundlesViewModel.changeListFormat(value);
+  }
+
+  private markAlertsAsRead(): void {
+    this.bundle$
+      .pipe(take(1))
+      .subscribe(bundleInfo =>
+        this.bundlesViewModel.setBundleAlertRead(bundleInfo.id)
+      );
   }
 
   private getLearningArea(): Observable<LearningAreaInterface> {

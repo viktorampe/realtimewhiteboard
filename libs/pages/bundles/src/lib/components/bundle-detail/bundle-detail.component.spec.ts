@@ -153,4 +153,13 @@ describe('BundleDetailComponent', () => {
       'Deze bundel is niet beschikbaar'
     );
   });
+
+  it('should mark the alerts about the bundle as read', () => {
+    bundlesViewModel.setBundleAlertRead = jest.fn();
+
+    component.ngOnInit();
+
+    expect(bundlesViewModel.setBundleAlertRead).toHaveBeenCalled();
+    expect(bundlesViewModel.setBundleAlertRead).toHaveBeenCalledWith(1);
+  });
 });
