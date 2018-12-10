@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'campus-breadcrumbs',
@@ -16,6 +15,6 @@ export class BreadcrumbsComponent {
 }
 
 export interface BreadcrumbLinkInterface {
-  displayText: Observable<string>;
+  displayText: string;
   link: any[]; // see routerlink docs
 }

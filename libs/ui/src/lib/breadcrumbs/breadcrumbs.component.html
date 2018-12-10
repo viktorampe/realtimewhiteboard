@@ -11,9 +11,7 @@
         *ngFor="let breadCrumb of (breadCrumbs | slice: -maxLength)"
       >
         <mat-icon [svgIcon]="seperator"></mat-icon>
-        <a [routerLink]="breadCrumb.link"
-          >{{ breadCrumb.displayText | async }}
-        </a>
+        <a [routerLink]="breadCrumb.link">{{ breadCrumb.displayText }} </a>
       </div>
     </div>
   </div>

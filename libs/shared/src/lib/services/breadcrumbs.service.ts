@@ -7,15 +7,21 @@ import {
 } from '@angular/router';
 import { DalState } from '@campus/dal';
 import { BreadcrumbLinkInterface } from '@campus/ui';
-import { select, Store } from '@ngrx/store';
-import { Observable, of } from 'rxjs';
-import { filter, map, startWith } from 'rxjs/operators';
+import { MemoizedSelector, select, Store } from '@ngrx/store';
+import { combineLatest, Observable, of } from 'rxjs';
+import {
+  distinctUntilChanged,
+  filter,
+  flatMap,
+  map,
+  startWith
+} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BreadcrumbsService {
-  private currentRoute$: Observable<ActivatedRouteSnapshot>;
+  private currentRoute$: Observable<ActivatedRoute>;
   breadcrumbs$: Observable<BreadcrumbLinkInterface[]> = of([]);
 
   constructor(
@@ -29,44 +35,69 @@ export class BreadcrumbsService {
   public setCurrentRoute() {
     this.currentRoute$ = this.router.events.pipe(
       filter(event => event instanceof NavigationEnd),
+      distinctUntilChanged(),
       startWith({}),
-      map(_ => this.activatedRoute.snapshot)
+      map(_ => this.activatedRoute)
     );
 
     this.breadcrumbs$ = this.currentRoute$.pipe(
-      map(route => this.getBreadcrumbs(route))
+      flatMap(route => this.getBreadcrumbs(route.snapshot.root))
     );
   }
 
-  private getBreadcrumbs(route: ActivatedRouteSnapshot) {
-    const breadcrumbs: BreadcrumbLinkInterface[] = [];
-    let url = [];
+  private getBreadcrumbs(
+    route: ActivatedRouteSnapshot
+  ): Observable<BreadcrumbLinkInterface[]> {
+    const routes: ActivatedRouteSnapshot[] = [];
+    let currentRoute = route;
 
     do {
-      if (route.url && route.url.length) {
-        url = [...url, route.url[0].path];
+      routes.push(currentRoute);
+      currentRoute = currentRoute.firstChild;
+    } while (currentRoute);
 
-        const routeParam = route.params[route.routeConfig.path.substr(1)];
-        const displayedProp = route.data['property'];
-        const selector = route.data['selector'];
-        const breadcrumbText = route.data['breadcrumb'];
+    let breadcrumbs: Observable<BreadcrumbLinkInterface[]>;
+    const url = [];
 
-        breadcrumbs.push({
-          displayText: selector
-            ? this.store.pipe(
-                select(selector, {
-                  id: routeParam
-                }),
-                map(data => data[displayedProp])
-              )
-            : of(breadcrumbText),
-          link: url
-        });
-      }
+    breadcrumbs = combineLatest(
+      routes
+        .filter(routePart => routePart.url && routePart.url.length)
+        .map(routePart => {
+          url.push(routePart.url[0].path);
 
-      route = route.firstChild;
-    } while (route);
+          const data = routePart.data as BreadcrumbRouteDataInterface;
+
+          const paramProperty = routePart.routeConfig.path.substr(1);
+          const routeParam = routePart.params[paramProperty];
+          const selector = data.selector;
+          const displayedProp = data.property;
+          const breadcrumbText = data.breadcrumb;
+
+          return combineLatest(
+            selector
+              ? this.store.pipe(
+                  select(selector, {
+                    id: routeParam
+                  }),
+                  map(entity => entity[displayedProp])
+                )
+              : of(breadcrumbText),
+            of(url)
+          ).pipe(
+            map(([displayText, urlArray]) => ({
+              displayText: displayText,
+              link: urlArray
+            }))
+          );
+        })
+    );
 
     return breadcrumbs;
   }
+}
+
+export interface BreadcrumbRouteDataInterface {
+  breadcrumb?: string;
+  selector?: MemoizedSelector<DalState, any>;
+  property?: string;
 }
