@@ -17,7 +17,7 @@ import { Component, Input } from '@angular/core';
 })
 export class PersonBadgeComponent {
   @Input() align = 'left';
-  @Input() size = 'medium';
+  @Input() size: 'small' | 'medium' | 'large' = 'medium';
   @Input() person: BadgePersonInterface;
   @Input() subText: string;
 }
