@@ -3,7 +3,11 @@ import { PortalModule } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Inject, ModuleWithProviders, NgModule } from '@angular/core';
-import { MatIconModule, MatIconRegistry } from '@angular/material';
+import {
+  MatBadgeModule,
+  MatIconModule,
+  MatIconRegistry
+} from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { UiModule } from '@campus/ui';
@@ -33,6 +37,7 @@ import {
     PortalModule,
     LayoutModule,
     MatIconModule,
+    MatBadgeModule,
     RouterModule
   ],
   declarations: [HeaderComponent, PageBarContainerComponent],
