@@ -3,6 +3,7 @@ import { ScormCmiMode, ScormStatus } from '@campus/scorm';
 import { PersonApi, ResultInterface } from '@diekeure/polpo-api-angular-sdk';
 import { hot } from '@nrwl/nx/testing';
 import { Observable } from 'rxjs';
+import { PersonFixture, TaskFixture } from '../+fixtures';
 import { ResultsService } from './results.service';
 import { ResultsServiceInterface } from './results.service.interface';
 
@@ -103,6 +104,44 @@ describe('ResultsService', () => {
     expect(service.saveResult(6, 3, cmi)).toBeObservable(
       hot('-a-|', {
         a: response as ResultInterface
+      })
+    );
+  });
+  it('should return results and map those when calling getAllForUser', async () => {
+    mockData$ = hot('-a-|', {
+      a: {
+        results: [
+          {
+            score: 100,
+            id: 1,
+            person: new PersonFixture(),
+            taskn: new TaskFixture()
+          },
+          {
+            score: 0,
+            id: 2,
+            person: new PersonFixture(),
+            taskn: new TaskFixture()
+          }
+        ]
+      }
+    });
+    expect(service.getAllForUser(1)).toBeObservable(
+      hot('-a-|', {
+        a: [
+          {
+            score: 100,
+            id: 1,
+            person: new PersonFixture(),
+            taskn: new TaskFixture()
+          },
+          {
+            score: 0,
+            id: 2,
+            person: new PersonFixture(),
+            taskn: new TaskFixture()
+          }
+        ]
       })
     );
   });
