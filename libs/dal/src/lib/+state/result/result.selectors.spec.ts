@@ -36,12 +36,7 @@ describe('Result Selectors', () => {
   describe('Result Selectors', () => {
     beforeEach(() => {
       resultState = createState(
-        [
-          createResult(4),
-          createResult(1),
-          createResult(2),
-          createResult(3)
-        ],
+        [createResult(4), createResult(1), createResult(2), createResult(3)],
         true,
         'no error'
       );

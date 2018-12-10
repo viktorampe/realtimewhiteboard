@@ -1,9 +1,6 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { ResultInterface } from '../../+models';
-import {
-  ResultsActions,
-  ResultsActionTypes
-} from './result.actions';
+import { ResultsActions, ResultsActionTypes } from './result.actions';
 
 export const NAME = 'results';
 
@@ -22,10 +19,7 @@ export const initialState: State = adapter.getInitialState({
   loaded: false
 });
 
-export function reducer(
-  state = initialState,
-  action: ResultsActions
-): State {
+export function reducer(state = initialState, action: ResultsActions): State {
   switch (action.type) {
     case ResultsActionTypes.AddResult: {
       return adapter.addOne(action.payload.result, state);

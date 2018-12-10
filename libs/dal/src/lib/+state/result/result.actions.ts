@@ -21,7 +21,7 @@ export class LoadResults implements Action {
   readonly type = ResultsActionTypes.LoadResults;
 
   constructor(
-    public payload: { force?: boolean, userId: number } = { userId: null }
+    public payload: { force?: boolean; userId: number } = { userId: null }
   ) {}
 }
 
