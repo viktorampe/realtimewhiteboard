@@ -17,3 +17,26 @@ export interface EnvironmentMessagesFeatureInterface {
   enabled: boolean;
   hasAppBarDropDown: boolean;
 }
+
+export const ENVIRONMENT_ERROR_MANAGEMENT_FEATURE_TOKEN = new InjectionToken(
+  'environmentErrorManagementFeature'
+);
+
+export interface EnvironmentErrorManagementFeatureInterface {
+  managedStatusCodes: number[];
+}
+
+export const ENVIRONMENT_WEBSITE_TOKEN = new InjectionToken<
+  EnvironmentWebsiteInterface
+>('environmentWebsiteUrl');
+
+export interface EnvironmentWebsiteInterface {
+  url: string;
+}
+export const ENVIRONMENT_ICON_MAPPING_TOKEN = new InjectionToken(
+  'environmentIconMapping'
+);
+
+export const ENVIRONMENT_API_BASE_TOKEN = new InjectionToken<string>(
+  'environmentApiBase'
+);

@@ -1,7 +1,13 @@
 import { Update } from '@ngrx/entity';
 import { EduContentActions } from '.';
+import { EduContentFixture } from '../../+fixtures';
 import { EduContentInterface } from '../../+models';
-import { initialState, reducer, State } from './edu-content.reducer';
+import {
+  initialState,
+  reducer,
+  sortEduContent,
+  State
+} from './edu-content.reducer';
 
 const typeInitialValue = 'boeke';
 const typeUpdatedValue = 'file';
@@ -104,6 +110,54 @@ describe('EduContents Reducer', () => {
       expect(result).toEqual(createState(eduContents, false));
     });
   });
+
+  describe('sortEduContent', () => {
+    it('should sort by name', () => {
+      const unsortedEduContents = [
+        new EduContentFixture({ id: 1 }, { title: 'c' }),
+        new EduContentFixture({ id: 2 }, { title: 'b' }),
+        new EduContentFixture({ id: 3 }, { title: 'a' })
+      ];
+
+      const sortedIds = unsortedEduContents.sort(sortEduContent).map(e => e.id);
+      expect(sortedIds).toEqual([3, 2, 1]);
+    });
+
+    it('should sort by name, then by year', () => {
+      const unsortedEduContents = [
+        new EduContentFixture(
+          { id: 1 },
+          { title: 'b', years: [{ name: '3' }] }
+        ),
+        new EduContentFixture(
+          { id: 2 },
+          { title: 'a', years: [{ name: '1' }] }
+        ),
+        new EduContentFixture({ id: 3 }, { title: 'b', years: [{ name: '2' }] })
+      ];
+
+      const sortedIds = unsortedEduContents.sort(sortEduContent).map(e => e.id);
+      expect(sortedIds).toEqual([2, 3, 1]);
+    });
+
+    it('should sort by name, then by year, then by id', () => {
+      const unsortedEduContents = [
+        new EduContentFixture(
+          { id: 1 },
+          { title: 'b', years: [{ name: '1' }] }
+        ),
+        new EduContentFixture(
+          { id: 2 },
+          { title: 'a', years: [{ name: '1' }] }
+        ),
+        new EduContentFixture({ id: 3 }, { title: 'b', years: [{ name: '1' }] })
+      ];
+
+      const sortedIds = unsortedEduContents.sort(sortEduContent).map(e => e.id);
+      expect(sortedIds).toEqual([2, 1, 3]);
+    });
+  });
+
   describe('upsert actions', () => {
     it('should upsert one eduContent', () => {
       const originalEduContent = eduContents[0];

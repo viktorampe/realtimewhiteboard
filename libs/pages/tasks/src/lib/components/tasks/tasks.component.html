@@ -7,11 +7,11 @@
 
   <div class="divider"></div>
   <campus-button
-    [iconClass]="'icon-timeline'"
+    [iconClass]="'list-view'"
     (click)="setListFormat(listFormat.LINE)"
   ></campus-button>
   <campus-button
-    [iconClass]="'icon-checklist'"
+    [iconClass]="'grid-view'"
     (click)="setListFormat(listFormat.GRID)"
   ></campus-button>
 </campus-page-bar>
@@ -20,7 +20,7 @@
   *ngIf="(learningArea$ | async) as learningArea"
   [title]="learningArea.name"
   [subtitle]="'Taken'"
-  [iconClass]="learningArea.icon"
+  [iconClass]="'learning-area:' + learningArea.icon"
 >
 </campus-page-header>
 
@@ -31,7 +31,7 @@
     <div class="pages-tasks__container__tasks-count">
       {{ filteredTaskInstances.length }} van
       <u (click)="filterTextInput.clear()">{{
-        (taskInstances$ | async)?.instances.length
+        (taskInstances$ | async)?.taskInfos.length
       }}</u>
       weergegeven
     </div>
@@ -41,15 +41,15 @@
         *ngFor="let instance of filteredTaskInstances"
         [routerLink]="[instance.taskInstance.taskId]"
         campusListItem
-        progress="{{instance.taskInstance.getProgress()}}"
+        progress="{{instance.taskInstance.progress}}"
         [itemCount]="instance.taskEduContentsCount"
-        [title]="instance.taskInstance.name"
+        [title]="instance.task.name"
         [backgroundColor]="(learningArea$ | async).color"
         [icon]="getIcon(instance.finished)"
       >
         <campus-folder-details>
           {{ instance.taskEduContentsCount + ' item(s)' }}<br />
-          {{ instance.taskInstance.end | date: 'short' }}
+          {{ instance.taskInstance.end | date: 'dd/MM HH:mm' }}
         </campus-folder-details>
       </campus-folder>
     </campus-list-view>

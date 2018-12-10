@@ -5,20 +5,9 @@
   title="text title"
 ></campus-dropdown-menu-item>
 
-<campus-page-bar>
-  <div class="divider"></div>
-  <campus-button
-    [iconClass]="'icon-timeline'"
-    (click)="setListFormat(listFormat.LINE)"
-  ></campus-button>
-  <campus-button
-    [iconClass]="'icon-checklist'"
-    (click)="setListFormat(listFormat.GRID)"
-  ></campus-button>
-</campus-page-bar>
+<campus-page-bar> <div class="divider"></div> </campus-page-bar>
 
 <div class="login_page_component">
-  <h1>Welcome to the dev side</h1>
   <div [hidden]="loginPageviewModel.isLoggedIn()">
     <div>
       <button (click)="loginPageviewModel.login('student1', 'testje')">
@@ -53,9 +42,7 @@
     </div>
   </div>
 
-  <div [hidden]="!loginPageviewModel.isLoggedIn()">
-    <button (click)="loginPageviewModel.logout()">logout</button>
-  </div>
+  <button (click)="loginPageviewModel.logout()">logout</button>
 
   <div>
     <p>{{ loginPageviewModel.response }}</p>
@@ -63,4 +50,7 @@
 </div>
 
 <button (click)="getCurrentUser()">fetch current user</button>
+<div>{{ currentUser | async | json }}</div>
+
+<a [routerLink]="['/tasks']">go to tasks</a>
 <div>{{ currentUser | async | json }}</div>

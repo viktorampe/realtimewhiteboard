@@ -1,3 +1,6 @@
+// override angular material theme
+$drawer-container-background-color: $ui-primary-bg-color;
+
 @import '~@angular/material/_theming';
 @include mat-core(); // be sure to include this mixin only once
 // created theme with http://mcg.mbitson.com/ (find main palette color next to '500 :')

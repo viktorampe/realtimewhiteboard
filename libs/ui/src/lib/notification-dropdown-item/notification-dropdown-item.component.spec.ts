@@ -1,7 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatIconModule } from '@angular/material';
+import { MatIconModule, MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
+import { MockMatIconRegistry } from '@campus/testing';
 import { PersonBadgeComponent } from '../person-badge/person-badge.component';
 import { PersonInitialsPipe } from '../person-badge/pipes/person-initials.pipe';
 import { HumanDateTimePipe } from '../utils/pipes/human-date-time/human-date-time.pipe';
@@ -19,7 +20,8 @@ describe('NotificationDropdownItemComponent', () => {
         PersonBadgeComponent,
         PersonInitialsPipe,
         HumanDateTimePipe
-      ]
+      ],
+      providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
     }).compileComponents();
   }));
 
@@ -97,7 +99,7 @@ describe('NotificationDropdownItemComponent', () => {
     const textNode = fixture.debugElement.query(
       By.css('.ui-notification-dropdown-item__text')
     );
-    expect(textNode.nativeElement.textContent).toContain('');
+    expect(textNode.nativeElement.textContent.trim()).toBe('');
   });
 
   it('should show a description', () => {

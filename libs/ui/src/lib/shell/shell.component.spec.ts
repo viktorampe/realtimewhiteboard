@@ -15,12 +15,12 @@ import { ShellComponent } from './shell.component';
   // tslint:disable-next-line:component-selector
   selector: 'test-container',
   template: `
-  <campus-shell>
-    <campus-shell-top>test-top</campus-shell-top>
-    <campus-shell-logo>test-logo</campus-shell-logo>
-    <campus-shell-left>test-left</campus-shell-left>
-    <campus-shell-body><p>Hi there handsome</p></campus-shell-body>
-  </campus-shell>
+    <campus-shell>
+      <campus-shell-top>test-top</campus-shell-top>
+      <campus-shell-logo>test-logo</campus-shell-logo>
+      <campus-shell-left>test-left</campus-shell-left>
+      <campus-shell-body><p>Hi there handsome</p></campus-shell-body>
+    </campus-shell>
   `
 })
 export class TestContainerComponent {}

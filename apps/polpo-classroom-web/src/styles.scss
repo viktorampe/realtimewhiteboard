@@ -67,26 +67,29 @@ body {
 }
 
 /*
+ * POLPO theme
+ */
+// load all variables for your app theme and ui components
+@import 'scss/theme-variables';
+
+/*
  * Angular Material theme
  */
 @import 'scss/theme-angular-material';
 @include angular-material-theme($polpo-theme);
 // alternative: include individual component mixins
 
-/*
- * POLPO theme
- */
-// load all variables for your app theme and ui components
-@import 'scss/theme-variables';
-
 // include ui lib scss file
 @import 'libs/ui/src/lib/ui-theme';
 @include ui-theme();
 // alternative: include individual component mixins
 
-// include pages lib scss file
+// include pages lib scss files
 @import 'libs/pages/shared/src/pages-theme';
 @include pages-theme();
+
+@import 'libs/pages/tasks/src/lib/pages-tasks.theme';
+@include pages-tasks-theme();
 
 // include shared lib scss
 @import 'libs/shared/src/lib/shared-theme';
@@ -119,7 +122,7 @@ body {
 
   .ui-filter-text-input {
     &__input {
-      border: solid 2px $color-active;
+      border: solid 2px $secondary-bg-color-accent;
     }
     &__icon,
     &__cancel {

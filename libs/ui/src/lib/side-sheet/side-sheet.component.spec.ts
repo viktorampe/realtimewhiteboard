@@ -11,15 +11,18 @@ import { SideSheetComponent } from './side-sheet.component';
 @Component({
   selector: 'campus-test-host',
   template: `
-  <campus-side-sheet [isOpenOnInit]="true">
-    <campus-side-sheet-header *ngIf="showHeader">Test header</campus-side-sheet-header>
-    <campus-side-sheet-body>
-      <div><p>Test body</p></div>
-    </campus-side-sheet-body>
-    <campus-side-sheet-page>
-    <div>This is a test page.</div>
-    </campus-side-sheet-page>
-  </campus-side-sheet>`
+    <campus-side-sheet [isOpenOnInit]="true">
+      <campus-side-sheet-header *ngIf="showHeader"
+        >Test header</campus-side-sheet-header
+      >
+      <campus-side-sheet-body>
+        <div><p>Test body</p></div>
+      </campus-side-sheet-body>
+      <campus-side-sheet-page>
+        <div>This is a test page.</div>
+      </campus-side-sheet-page>
+    </campus-side-sheet>
+  `
 })
 export class TestHostComponent {
   isOpen: boolean;

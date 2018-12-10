@@ -11,46 +11,48 @@ $color-blue-3: #6ed3c2;
 $color-orange-1: #ffa500;
 $color-red-1: #ff0000;
 
-// app theme
-$color-bg-primary-1: $color-black-1;
-$color-bg-secondary-1: $color-black-2;
-$color-bg-primary-contrast-1: $color-white-1;
-$color-text-primary: $color-black-1;
-$color-text-1: $color-gray-1;
-$color-text-2: $color-gray-2;
-$color-text-3: $color-white-1;
-$color-active: $color-blue-1;
-$color-active-secundary: $color-blue-3;
-$color-warning-1: $color-orange-1;
-$color-danger-1: $color-red-1;
+// app > main body
+$primary-bg-color: $color-gray-3;
+$primary-font-color: $color-black-1;
+$primary-color-accent: $color-blue-1; // link, button (borders)
+$primary-font-color-2: $color-gray-1; // subtitle
+$primary-font-family: 'Helvetica', 'Arial', 'Open Sans', sans-serif;
+$primary-font-family-2: 'Lato', sans-serif; // title
+// app > nav + site header (shell)
+$secondary-bg-color: $color-black-1;
+$secondary-font-color: $color-gray-1;
+$secondary-bg-color-accent: darken($color-blue-3, 40%); // active buttos, badge
+$secondary-font-color-accent: $color-blue-3; // link, button (borders)
+// app > panel headers
+$tertiary-bg-color: $color-white-1;
+$tertiary-font-color: $color-black-1;
+$tertiary-bg-color-2: $color-gray-1;
+$tertiary-font-color-2: $color-white-1;
 
-// ui lib theme
-$ui-bg-color-1: $color-bg-primary-1;
-$ui-bg-color-2: $color-bg-primary-contrast-1;
-$ui-font-color-primary: $color-text-primary;
-$ui-font-color-1: $color-text-1;
-$ui-font-color-2: $color-text-2;
-$ui-font-color-active: $color-active;
-$ui-font-color-3: $color-text-3;
-$ui-font-color-active-secundary: $color-active-secundary;
+// ui > main body
+$ui-primary-bg-color: $primary-bg-color;
+$ui-primary-font-color: $primary-font-color;
+$ui-primary-color-accent: $primary-color-accent;
+$ui-primary-font-color-2: $primary-font-color-2;
+$ui-primary-font-family: $primary-font-family;
+$ui-primary-font-family-2: $primary-font-family-2;
+// ui > nav + site header (shell)
+$ui-secondary-bg-color: $secondary-bg-color;
+$ui-secondary-font-color: $secondary-font-color;
+$ui-secondary-bg-color-accent: $secondary-bg-color-accent;
+$ui-secondary-font-color-accent: $secondary-font-color-accent;
+// ui > panel headers
+$ui-tertiary-bg-color: $tertiary-bg-color;
+$ui-tertiary-font-color: $tertiary-font-color;
+$ui-tertiary-bg-color-2: $tertiary-bg-color-2;
+$ui-tertiary-font-color-2: $tertiary-font-color-2;
 
-// lib icon overrides
-// $ui-icon-filter: polpo \e000;
-
-// pages lib theme
-$pages-bg-color-1: $color-bg-primary-1;
-$pages-bg-color-2: $color-bg-primary-contrast-1;
-$pages-font-color-1: $color-text-1;
-$pages-font-color-active: $color-active;
-
-// app shell variables
+// ui > app bar
+$ui-app-bar-background-color: $color-black-2;
+// ui > app shell variables
 $ui-shell__left-width: 235px;
-$ui-shell__left-background-color: $color-black-1;
 $ui-shell__top-height: auto;
-$ui-shell__top-background-color: $color-black-2;
 $ui-shell__logo-height: 105px;
 $ui-shell__logo-background-color: $color-blue-2;
-$ui-shell__body-background-color: $color-gray-3;
 
 @import '_logos';
-@import '_icons';

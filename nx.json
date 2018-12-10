@@ -14,6 +14,9 @@
     "polpo-classroom-web": {
       "tags": []
     },
+    "polpo-classroom-web-e2e": {
+      "tags": []
+    },
     "pages-bundles": {
       "tags": []
     },
@@ -56,7 +59,16 @@
     "scorm": {
       "tags": []
     },
-    "polpo-classroom-web-e2e": {
+    "guards": {
+      "tags": []
+    },
+    "pages-error": {
+      "tags": []
+    },
+    "testing": {
+      "tags": []
+    },
+    "utils": {
       "tags": []
     }
   }

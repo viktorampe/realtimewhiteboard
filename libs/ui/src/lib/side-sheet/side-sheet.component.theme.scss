@@ -1,28 +1,25 @@
 @mixin ui-side-sheet() {
-  $ui-sheet-background-color: $ui-bg-color-2;
-  $ui-header-background-color: $ui-bg-color-3;
-  $ui-body-background-color: $ui-bg-color-1;
-  $ui-title-font-family: $ui-font-family-1;
-  $ui-body-font-family: $ui-font-family-2;
-  $ui-font-color: $ui-font-color-3;
-  .ui-side-sheet {
-    background-color: unset;
+  $ui-side-sheet-sheet-background-color: $ui-tertiary-bg-color;
+  $ui-side-sheet-header-background-color: $ui-tertiary-bg-color-2;
+  $ui-side-sheet-header-font-color: $ui-tertiary-font-color-2;
 
+  $ui-side-sheet-title-font-family: $primary-font-family-2;
+  $ui-side-sheet-font-color: $ui-tertiary-font-color;
+
+  .ui-side-sheet {
     &__drawer {
-      color: $ui-font-color;
-      background-color: $ui-sheet-background-color;
+      color: $ui-side-sheet-font-color;
+      background-color: $ui-side-sheet-sheet-background-color;
     }
 
     &__header {
-      background-color: $ui-header-background-color;
-      font-family: $ui-title-font-family;
+      background-color: $ui-side-sheet-header-background-color;
+      color: $ui-side-sheet-header-font-color;
+      font-family: $ui-side-sheet-title-font-family;
 
       &__title {
-        font-family: $ui-title-font-family;
+        font-family: $ui-side-sheet-title-font-family;
       }
-    }
-    &__body {
-      font-family: $ui-body-font-family;
     }
   }
 }

@@ -29,8 +29,10 @@
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "apps/polpo-classroom-web/src/environments/environment.ts",
-                  "with": "apps/polpo-classroom-web/src/environments/environment.prod.ts"
+                  "replace":
+                    "apps/polpo-classroom-web/src/environments/environment.ts",
+                  "with":
+                    "apps/polpo-classroom-web/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -77,8 +79,39 @@
           "options": {
             "jestConfig": "apps/polpo-classroom-web/jest.config.js",
             "tsConfig": "apps/polpo-classroom-web/tsconfig.spec.json",
-            "setupFile": "apps/polpo-classroom-web/src/test-setup.ts",
-            "maxWorkers": 2
+            "setupFile": "apps/polpo-classroom-web/src/test-setup.ts"
+          },
+          "configurations": {
+            "travis": {
+              "maxWorkers": 2,
+              "runInBand": true
+            }
+          }
+        }
+      }
+    },
+    "polpo-classroom-web-e2e": {
+      "root": "apps/polpo-classroom-web-e2e/",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig":
+              "apps/polpo-classroom-web-e2e/protractor.conf.js",
+            "devServerTarget": "polpo-classroom-web:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "polpo-classroom-web:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": "apps/polpo-classroom-web-e2e/tsconfig.e2e.json",
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -124,8 +157,13 @@
           "options": {
             "jestConfig": "libs/pages/bundles/jest.config.js",
             "tsConfig": "libs/pages/bundles/tsconfig.spec.json",
-            "setupFile": "libs/pages/bundles/src/test-setup.ts",
-            "maxWorkers": 2
+            "setupFile": "libs/pages/bundles/src/test-setup.ts"
+          },
+          "configurations": {
+            "travis": {
+              "maxWorkers": 2,
+              "runInBand": true
+            }
           }
         }
       }
@@ -152,8 +190,13 @@
           "options": {
             "jestConfig": "libs/pages/alerts/jest.config.js",
             "tsConfig": "libs/pages/alerts/tsconfig.spec.json",
-            "setupFile": "libs/pages/alerts/src/test-setup.ts",
-            "maxWorkers": 2
+            "setupFile": "libs/pages/alerts/src/test-setup.ts"
+          },
+          "configurations": {
+            "travis": {
+              "maxWorkers": 2,
+              "runInBand": true
+            }
           }
         }
       }
@@ -180,8 +223,13 @@
           "options": {
             "jestConfig": "libs/pages/logout/jest.config.js",
             "tsConfig": "libs/pages/logout/tsconfig.spec.json",
-            "setupFile": "libs/pages/logout/src/test-setup.ts",
-            "maxWorkers": 2
+            "setupFile": "libs/pages/logout/src/test-setup.ts"
+          },
+          "configurations": {
+            "travis": {
+              "maxWorkers": 2,
+              "runInBand": true
+            }
           }
         }
       }
@@ -208,8 +256,13 @@
           "options": {
             "jestConfig": "libs/pages/messages/jest.config.js",
             "tsConfig": "libs/pages/messages/tsconfig.spec.json",
-            "setupFile": "libs/pages/messages/src/test-setup.ts",
-            "maxWorkers": 2
+            "setupFile": "libs/pages/messages/src/test-setup.ts"
+          },
+          "configurations": {
+            "travis": {
+              "maxWorkers": 2,
+              "runInBand": true
+            }
           }
         }
       }
@@ -236,8 +289,13 @@
           "options": {
             "jestConfig": "libs/pages/profile/jest.config.js",
             "tsConfig": "libs/pages/profile/tsconfig.spec.json",
-            "setupFile": "libs/pages/profile/src/test-setup.ts",
-            "maxWorkers": 2
+            "setupFile": "libs/pages/profile/src/test-setup.ts"
+          },
+          "configurations": {
+            "travis": {
+              "maxWorkers": 2,
+              "runInBand": true
+            }
           }
         }
       }
@@ -264,8 +322,13 @@
           "options": {
             "jestConfig": "libs/pages/reports/jest.config.js",
             "tsConfig": "libs/pages/reports/tsconfig.spec.json",
-            "setupFile": "libs/pages/reports/src/test-setup.ts",
-            "maxWorkers": 2
+            "setupFile": "libs/pages/reports/src/test-setup.ts"
+          },
+          "configurations": {
+            "travis": {
+              "maxWorkers": 2,
+              "runInBand": true
+            }
           }
         }
       }
@@ -292,8 +355,13 @@
           "options": {
             "jestConfig": "libs/pages/tasks/jest.config.js",
             "tsConfig": "libs/pages/tasks/tsconfig.spec.json",
-            "setupFile": "libs/pages/tasks/src/test-setup.ts",
-            "maxWorkers": 2
+            "setupFile": "libs/pages/tasks/src/test-setup.ts"
+          },
+          "configurations": {
+            "travis": {
+              "maxWorkers": 2,
+              "runInBand": true
+            }
           }
         }
       }
@@ -320,8 +388,13 @@
           "options": {
             "jestConfig": "libs/pages/books/jest.config.js",
             "tsConfig": "libs/pages/books/tsconfig.spec.json",
-            "setupFile": "libs/pages/books/src/test-setup.ts",
-            "maxWorkers": 2
+            "setupFile": "libs/pages/books/src/test-setup.ts"
+          },
+          "configurations": {
+            "travis": {
+              "maxWorkers": 2,
+              "runInBand": true
+            }
           }
         }
       }
@@ -348,8 +421,13 @@
           "options": {
             "jestConfig": "libs/ui/jest.config.js",
             "tsConfig": "libs/ui/tsconfig.spec.json",
-            "setupFile": "libs/ui/src/test-setup.ts",
-            "maxWorkers": 2
+            "setupFile": "libs/ui/src/test-setup.ts"
+          },
+          "configurations": {
+            "travis": {
+              "maxWorkers": 2,
+              "runInBand": true
+            }
           }
         }
       }
@@ -376,8 +454,13 @@
           "options": {
             "jestConfig": "libs/dal/jest.config.js",
             "tsConfig": "libs/dal/tsconfig.spec.json",
-            "setupFile": "libs/dal/src/test-setup.ts",
-            "maxWorkers": 2
+            "setupFile": "libs/dal/src/test-setup.ts"
+          },
+          "configurations": {
+            "travis": {
+              "maxWorkers": 2,
+              "runInBand": true
+            }
           }
         }
       }
@@ -403,8 +486,13 @@
           "options": {
             "jestConfig": "libs/pages/shared/jest.config.js",
             "tsConfig": "libs/pages/shared/tsconfig.spec.json",
-            "setupFile": "libs/pages/shared/src/test-setup.ts",
-            "maxWorkers": 2
+            "setupFile": "libs/pages/shared/src/test-setup.ts"
+          },
+          "configurations": {
+            "travis": {
+              "maxWorkers": 2,
+              "runInBand": true
+            }
           }
         }
       }
@@ -430,8 +518,13 @@
           "options": {
             "jestConfig": "libs/browser/jest.config.js",
             "tsConfig": "libs/browser/tsconfig.spec.json",
-            "setupFile": "libs/browser/src/test-setup.ts",
-            "maxWorkers": 2
+            "setupFile": "libs/browser/src/test-setup.ts"
+          },
+          "configurations": {
+            "travis": {
+              "maxWorkers": 2,
+              "runInBand": true
+            }
           }
         }
       }
@@ -457,8 +550,13 @@
           "options": {
             "jestConfig": "libs/shared/jest.config.js",
             "tsConfig": "libs/shared/tsconfig.spec.json",
-            "setupFile": "libs/shared/src/test-setup.ts",
-            "maxWorkers": 2
+            "setupFile": "libs/shared/src/test-setup.ts"
+          },
+          "configurations": {
+            "travis": {
+              "maxWorkers": 2,
+              "runInBand": true
+            }
           }
         }
       }
@@ -484,35 +582,130 @@
           "options": {
             "jestConfig": "libs/scorm/jest.config.js",
             "tsConfig": "libs/scorm/tsconfig.spec.json",
-            "setupFile": "libs/scorm/src/test-setup.ts",
-            "maxWorkers": 2
+            "setupFile": "libs/scorm/src/test-setup.ts"
+          },
+          "configurations": {
+            "travis": {
+              "maxWorkers": 2,
+              "runInBand": true
+            }
           }
         }
       }
     },
-    "polpo-classroom-web-e2e": {
-      "root": "apps/polpo-classroom-web-e2e",
-      "projectType": "application",
-      "prefix": "",
+    "pages-error": {
+      "root": "libs/pages/error",
+      "sourceRoot": "libs/pages/error/src",
+      "projectType": "library",
+      "prefix": "campus",
       "architect": {
-        "e2e": {
-          "builder": "@nrwl/builders:cypress",
-          "options": {
-            "cypressConfig": "apps/polpo-classroom-web-e2e/cypress.json",
-            "tsConfig": "apps/polpo-classroom-web-e2e/tsconfig.e2e.json",
-            "devServerTarget": "polpo-classroom-web:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "polpo-classroom-web:serve:production"
-            }
-          }
-        },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": "apps/polpo-classroom-web-e2e/tsconfig.e2e.json",
+            "tsConfig": [
+              "libs/pages/error/tsconfig.lib.json",
+              "libs/pages/error/tsconfig.spec.json"
+            ],
             "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/pages/error/jest.config.js",
+            "tsConfig": "libs/pages/error/tsconfig.spec.json",
+            "setupFile": "libs/pages/error/src/test-setup.ts"
+          },
+          "configurations": {
+            "travis": {
+              "maxWorkers": 2,
+              "runInBand": true
+            }
+          }
+        }
+      }
+    },
+    "testing": {
+      "root": "libs/testing",
+      "sourceRoot": "libs/testing/src",
+      "projectType": "library",
+      "prefix": "campus",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/testing/tsconfig.lib.json",
+              "libs/testing/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/testing/jest.config.js",
+            "tsConfig": "libs/testing/tsconfig.spec.json",
+            "setupFile": "libs/testing/src/test-setup.ts"
+          }
+        }
+      }
+    },
+    "utils": {
+      "root": "libs/utils",
+      "sourceRoot": "libs/utils/src",
+      "projectType": "library",
+      "prefix": "campus",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/utils/tsconfig.lib.json",
+              "libs/utils/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/utils/jest.config.js",
+            "tsConfig": "libs/utils/tsconfig.spec.json",
+            "setupFile": "libs/utils/src/test-setup.ts"
+          },
+          "configurations": {
+            "travis": {
+              "maxWorkers": 2,
+              "runInBand": true
+            }
+          }
+        }
+      }
+    },
+    "guards": {
+      "root": "libs/guards",
+      "sourceRoot": "libs/guards/src",
+      "projectType": "library",
+      "prefix": "campus",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/guards/tsconfig.lib.json",
+              "libs/guards/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/guards/jest.config.js",
+            "tsConfig": "libs/guards/tsconfig.spec.json",
+            "setupFile": "libs/guards/src/test-setup.ts",
+            "maxWorkers": 2
           }
         }
       }

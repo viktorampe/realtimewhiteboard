@@ -1,14 +1,18 @@
 import { CdkTreeModule } from '@angular/cdk/tree';
+import { DebugElement } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatIconModule, MatIconRegistry } from '@angular/material';
+import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
+import { MockMatIconRegistry } from '@campus/testing';
 import { NavItem, TreeNavComponent } from './tree-nav.component';
 
 describe('TreeNavComponent', () => {
   let component: TreeNavComponent;
   let fixture: ComponentFixture<TreeNavComponent>;
 
-  let tree: HTMLElement;
-  let treeNodes: HTMLCollection;
+  let treeDE: DebugElement;
+  let treeNodesDE: DebugElement[];
 
   let mockData: {
     nav: NavItem[];
@@ -32,8 +36,9 @@ describe('TreeNavComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule, CdkTreeModule],
-      declarations: [TreeNavComponent]
+      imports: [RouterTestingModule, CdkTreeModule, MatIconModule],
+      declarations: [TreeNavComponent],
+      providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
     }).compileComponents();
   }));
 
@@ -41,14 +46,11 @@ describe('TreeNavComponent', () => {
     fixture = TestBed.createComponent(TreeNavComponent);
     component = fixture.componentInstance;
 
-    tree = fixture.nativeElement.querySelector('cdk-tree');
-    treeNodes = tree.children;
-
     mockData = {
       nav: [
         createNode(),
         createNode([createNode([createNode()]), createNode(), createNode()]),
-        createNode(null, false),
+        createNode(null, false, false),
         createNode(null, true, false)
       ]
     };
@@ -56,6 +58,9 @@ describe('TreeNavComponent', () => {
     component.treeNav = mockData.nav;
 
     fixture.detectChanges();
+
+    treeDE = fixture.debugElement.query(By.css('cdk-tree'));
+    treeNodesDE = treeDE.children;
   });
 
   it('should create', () => {
@@ -63,61 +68,75 @@ describe('TreeNavComponent', () => {
   });
 
   it('should show icon on first node', () => {
-    const node = treeNodes[0];
-    expect(node.querySelector('i:first-child')).toBeTruthy();
+    const node = treeNodesDE[0];
+
+    expect(node.query(By.css('mat-icon'))).toBeTruthy();
   });
 
   it('should set classname for icon', () => {
-    const node = treeNodes[0];
-    expect(node.querySelector('i:first-child').className).toBe('iconClass');
+    const node = treeNodesDE[0];
+    expect(
+      node.query(By.css('mat-icon')).attributes['ng-reflect-svg-icon']
+    ).toBe('iconClass');
   });
 
   it('should not show icon on third node', () => {
-    const node = treeNodes[2];
-    expect(node.querySelector('i:first-child')).toBeFalsy();
+    const node = treeNodesDE[2];
+    expect(node.query(By.css('mat-icon'))).toBeFalsy();
   });
 
   it('should have three children on second node', () => {
-    const node = treeNodes[1];
-    expect(node.tagName.toLowerCase()).toBe('cdk-nested-tree-node');
+    const node = treeNodesDE[1];
 
-    const childNodes = node.querySelector('ul').children;
+    const childNodes = node.query(By.css('ul')).children;
     expect(childNodes.length).toBe(3);
   });
 
-  it('should have nested children on second node', () => {
-    const node = treeNodes[1];
-    expect(node.tagName.toLowerCase()).toBe('cdk-nested-tree-node');
+  it('should have a nested child on second node', () => {
+    const node = treeNodesDE[1];
 
-    const childNode = node.querySelector('ul').children[0];
-    const childNodes = childNode.querySelector('ul').children;
+    const childNode = node.query(By.css('ul')).children[0];
+    const childNodes = childNode.query(By.css('ul')).children;
     expect(childNodes.length).toBe(1);
   });
 
   it('should show arrow icon when node has children', () => {
-    const node = treeNodes[1];
-    expect(node.querySelector('i.ui-tree-nav__node__arrow')).toBeTruthy();
+    const node = treeNodesDE[1];
+    expect(
+      node.query(By.css('mat-icon.ui-tree-nav__node__arrow'))
+    ).toBeTruthy();
   });
 
   it('should not show arrow icon when node has no children', () => {
-    const node = treeNodes[0];
-    expect(node.querySelector('i.ui-tree-nav__node__arrow')).toBeFalsy();
+    const node = treeNodesDE[0];
+    expect(node.query(By.css('mat-icon.ui-tree-nav__node__arrow'))).toBeFalsy();
   });
 
   it('should add link property as href', () => {
-    const node = treeNodes[0];
-    expect(node.querySelector('a').getAttribute('href')).toBe('/route');
+    const node = treeNodesDE[0];
+    expect(node.query(By.css('a')).nativeElement.getAttribute('href')).toBe(
+      '/route'
+    );
   });
 
   it('should set href property to current url when no link is set', () => {
-    const node = treeNodes[3];
-    expect(node.querySelector('a').getAttribute('href')).toBe('/');
+    const node = treeNodesDE[3];
+    expect(node.query(By.css('a')).nativeElement.getAttribute('href')).toBe(
+      '/'
+    );
   });
 
   it('should open the second node', () => {
+    const node = treeNodesDE[1];
+    const nodeIcon = node.children[0].query(
+      By.css('mat-icon.ui-tree-nav__node__arrow')
+    );
+
     // check if default state is closed
-    const node = treeNodes[1].children[0];
-    expect(node.className).toContain('ui-tree-nav__node--closed');
+    expect(nodeIcon.attributes['ng-reflect-svg-icon']).toBe('expand-more');
+    expect(
+      node.query(By.css('li')).classes['ui-tree-nav__node--closed']
+    ).toBeTruthy();
 
     // expand node
     const newNav = mockData.nav.slice();
@@ -125,7 +144,11 @@ describe('TreeNavComponent', () => {
     // apply updated nav
     component.treeNav = newNav;
     fixture.detectChanges();
-    expect(node.className).not.toContain('ui-tree-nav__node--closed');
+
+    expect(nodeIcon.attributes['ng-reflect-svg-icon']).toBe('expand-less');
+    expect(
+      node.query(By.css('li')).classes['ui-tree-nav__node--closed']
+    ).toBeFalsy();
   });
 
   // no tests for click handler because that is triggered through the "cdkTreeNodeToggle" Angular Material directive

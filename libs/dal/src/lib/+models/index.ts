@@ -81,6 +81,7 @@ export * from './StudentContentStatus.interface';
 export * from './Task.interface';
 export * from './TaskEduContent.interface';
 export * from './TaskGroup.interface';
+export * from './TaskInstance';
 export * from './TaskInstance.interface';
 export * from './TaskStudent.interface';
 export * from './Teacher.interface';
