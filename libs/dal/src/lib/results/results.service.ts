@@ -4,13 +4,28 @@ import { ScormCmiInterface } from '@campus/scorm';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ResultsServiceInterface } from './results.service.interface';
+// TODO AssignmentResultInterface should eventually be in the +models folder so this import will need to change
+import {
+  AssignmentResultInterface,
+  ResultsServiceInterface
+} from './results.service.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ResultsService implements ResultsServiceInterface {
   constructor(private personApi: PersonApi) {}
+
+  getAllForUser(userId: number): Observable<AssignmentResultInterface[]> {
+    return this.personApi
+      .getData(userId, 'assignmentResults')
+      .pipe(
+        map(
+          (res: { assignmentResults: AssignmentResultInterface[] }) =>
+            res.assignmentResults
+        )
+      );
+  }
 
   /**
    * Checks the polpo-api if a result exists and returns it if it is in progress.
