@@ -1,5 +1,5 @@
 import { InjectionToken } from '@angular/core';
-import { EduContent, ResultInterface } from '@campus/dal';
+import { ResultInterface } from '@campus/dal';
 import { ScormCmiInterface } from '@campus/scorm';
 import { Observable } from 'rxjs';
 
@@ -7,21 +7,9 @@ export const RESULTS_SERVICE_TOKEN = new InjectionToken(
   'ResultsServiceInterface'
 );
 
-// TODO to be imported form +models once interface is build by sdk
-export interface AssignmentResultInterface {
-  title: string;
-  type: string; //(Task/Bundle)
-  totalScore: number;
-  exerciseResults: {
-    eduContent: EduContent;
-    // results: Result[] // if needed
-    // bestResult: Result
-    averageScore: number; // if needed
-  }[];
-}
-
 export interface ResultsServiceInterface {
-  getAllForUser(userId: number): Observable<AssignmentResultInterface[]>;
+  //TODO the model of the resultsInterface might need to be updated once the api call changes have been done, see issue https://github.com/diekeure/polpo-api/issues/670
+  getAllForUser(userId: number): Observable<ResultInterface[]>;
 
   getResultForTask(
     userId: number,
