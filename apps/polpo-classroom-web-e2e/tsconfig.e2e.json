@@ -6,6 +6,6 @@
     "lib": ["es2015", "dom"],
     "types": ["cypress", "node"]
   },
-  "excludes": [],
+  "exclude": [],
   "include": ["src/**/*.ts", "../../node_modules/cypress"]
 }
