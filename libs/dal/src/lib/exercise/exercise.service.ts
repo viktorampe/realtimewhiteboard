@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ResultInterface } from '@campus/dal';
+import { ScormCmiMode } from '@campus/scorm';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ResultsService } from '../results/results.service';
@@ -43,6 +44,12 @@ export class ExerciseService implements ExerciseServiceInterface {
 
     const exercise$ = combineLatest(result$, tempUrl$).pipe(
       map(([result, url]) => {
+        if (result.cmi === null) {
+          result.cmi = {
+            mode: ScormCmiMode.CMI_MODE_NORMAL
+          };
+        }
+
         return {
           eduContent: result.eduContent,
           cmiMode: result.cmi.mode,
