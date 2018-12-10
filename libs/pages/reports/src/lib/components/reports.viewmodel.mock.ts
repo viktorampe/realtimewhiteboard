@@ -24,12 +24,12 @@ export class MockReportsViewModel
   > = new BehaviorSubject<LearningAreasWithResultsInterface>({
     learningAreas: [
       {
-        learningArea: new LearningAreaFixture({ id: 1 }),
+        learningArea: new LearningAreaFixture({ id: 1, name: 'wiskunde' }),
         tasksWithResultsCount: 1,
         bundlesWithResultsCount: 1
       },
       {
-        learningArea: new LearningAreaFixture({ id: 2 }),
+        learningArea: new LearningAreaFixture({ id: 2, name: 'frans' }),
         tasksWithResultsCount: 2,
         bundlesWithResultsCount: 3
       }
@@ -48,7 +48,7 @@ export class MockReportsViewModel
     {
       title: 'foo',
       type: 'bundle',
-      totalScore: 1,
+      totalScore: 71,
       exerciseResults: {
         eduContent: new EduContentFixture(),
         results: [new ResultFixture({ id: 1 }), new ResultFixture({ id: 2 })],
@@ -59,7 +59,7 @@ export class MockReportsViewModel
     {
       title: 'foo',
       type: 'bundle',
-      totalScore: 1,
+      totalScore: 78,
       exerciseResults: {
         eduContent: new EduContentFixture(),
         results: [new ResultFixture({ id: 1 }), new ResultFixture({ id: 2 })],
