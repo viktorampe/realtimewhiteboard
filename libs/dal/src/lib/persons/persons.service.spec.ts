@@ -28,8 +28,8 @@ describe('PersonsService', () => {
 
   it('should be created', inject(
     [PERSON_SERVICE_TOKEN],
-    (service: PersonServiceInterface) => {
-      expect(service).toBeTruthy();
+    (srv: PersonServiceInterface) => {
+      expect(srv).toBeTruthy();
     }
   ));
 

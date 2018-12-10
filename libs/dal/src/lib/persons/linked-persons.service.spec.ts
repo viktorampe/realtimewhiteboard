@@ -1,10 +1,7 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { hot } from '@nrwl/nx/testing';
-import {
-  LinkedPersonService,
-  LinkedPersonServiceInterface
-} from './linked-persons.service';
+import { LinkedPersonService, LinkedPersonServiceInterface } from './linked-persons.service';
 
 describe('LinkedPersonsService', () => {
   let service: LinkedPersonServiceInterface;
@@ -26,8 +23,8 @@ describe('LinkedPersonsService', () => {
 
   it('should be created', inject(
     [LinkedPersonService],
-    (service: LinkedPersonService) => {
-      expect(service).toBeTruthy();
+    (srv: LinkedPersonService) => {
+      expect(srv).toBeTruthy();
     }
   ));
 
