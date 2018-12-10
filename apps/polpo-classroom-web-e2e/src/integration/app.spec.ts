@@ -1,8 +1,8 @@
 /// <reference types="cypress" />
 import { getGreeting } from '../support/app.po';
-describe('Hello Nx', () => {
+xdescribe('Hello Nx', () => {
   beforeEach(() => cy.visit('dev'));
-  it('should display welcome message', () => {
+  xit('should display welcome message', () => {
     getGreeting().contains('Welcome to the dev side');
   });
 });
