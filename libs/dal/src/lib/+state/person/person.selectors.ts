@@ -20,11 +20,20 @@ export const getLoaded = createSelector(
   (state: State) => state.loaded
 );
 
-export const getAll = createSelector(selectPersonState, selectAll);
+export const getAll = createSelector(
+  selectPersonState,
+  selectAll
+);
 
-export const getCount = createSelector(selectPersonState, selectTotal);
+export const getCount = createSelector(
+  selectPersonState,
+  selectTotal
+);
 
-export const getIds = createSelector(selectPersonState, selectIds);
+export const getIds = createSelector(
+  selectPersonState,
+  selectIds
+);
 
 export const getAllEntities = createSelector(
   selectPersonState,
@@ -44,7 +53,6 @@ export const getByIds = createSelector(
     return props.ids.map(id => state.entities[id]);
   }
 );
-
 
 /**
  * returns array of objects in the order of the given ids

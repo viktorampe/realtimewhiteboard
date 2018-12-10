@@ -1,9 +1,6 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { PersonInterface } from '../../+models';
-import {
-  PersonsActions,
-  PersonsActionTypes
-} from './person.actions';
+import { PersonsActions, PersonsActionTypes } from './person.actions';
 
 export const NAME = 'persons';
 
@@ -22,10 +19,7 @@ export const initialState: State = adapter.getInitialState({
   loaded: false
 });
 
-export function reducer(
-  state = initialState,
-  action: PersonsActions
-): State {
+export function reducer(state = initialState, action: PersonsActions): State {
   switch (action.type) {
     case PersonsActionTypes.AddPerson: {
       return adapter.addOne(action.payload.person, state);

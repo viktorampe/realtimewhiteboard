@@ -36,12 +36,7 @@ describe('Person Selectors', () => {
   describe('Person Selectors', () => {
     beforeEach(() => {
       personState = createState(
-        [
-          createPerson(4),
-          createPerson(1),
-          createPerson(2),
-          createPerson(3)
-        ],
+        [createPerson(4), createPerson(1), createPerson(2), createPerson(3)],
         true,
         'no error'
       );
