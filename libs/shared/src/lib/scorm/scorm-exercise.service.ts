@@ -114,7 +114,7 @@ export class ScormExerciseService implements ScormExerciseServiceInterface {
       unlockedContentId
     );
   }
-  reviewExerciseFromTaskUnlockedContent(
+  reviewExerciseFromTask(
     userId: number,
     educontentId: number,
     taskId: number
