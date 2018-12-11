@@ -68,16 +68,30 @@ export const getById = createSelector(
   (state: State, props: { id: number }) => state.entities[props.id]
 );
 
-export const getByTaskIdGroupedByEduContentId = createSelector(
+export const getByLearningAreaIdGroupedByTaskId = createSelector(
   selectResultState,
-  (state: State, props: { taskId: number }) => {
+  (state: State, props: { learningAreaId: number }) => {
     const ids: number[] = <number[]>state.ids;
     const filteredEntities = ids
-      .filter(id => state.entities[id].taskId === props.taskId)
+      .filter(id => state.entities[id].learningAreaId === props.learningAreaId)
       .map(id => state.entities[id]);
 
     return groupArrayByKey<ResultInterface>(Object.values(filteredEntities), {
-      eduContentId: 0
+      taskId: 0
+    });
+  }
+);
+
+export const getByLearningAreaIdGroupedByUnlockedContentId = createSelector(
+  selectResultState,
+  (state: State, props: { learningAreaId: number }) => {
+    const ids: number[] = <number[]>state.ids;
+    const filteredEntities = ids
+      .filter(id => state.entities[id].learningAreaId === props.learningAreaId)
+      .map(id => state.entities[id]);
+
+    return groupArrayByKey<ResultInterface>(Object.values(filteredEntities), {
+      unlockedContentId: 0
     });
   }
 );

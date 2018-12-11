@@ -93,27 +93,57 @@ describe('Result Selectors', () => {
     });
 
     it('getByTaskIdGroupedByEduContentId() should return grouped results', () => {
-      const mockData = [
-        new ResultFixture({ id: 1, taskId: 1, eduContentId: 1 }),
-        new ResultFixture({ id: 2, taskId: 1, eduContentId: 1 }),
-        new ResultFixture({ id: 3, taskId: 1, eduContentId: 2 }),
-        new ResultFixture({ id: 4, taskId: 2, eduContentId: 1 })
+      const mockData: ResultInterface[] = [
+        new ResultFixture({ id: 1, learningAreaId: 1, taskId: 1 }),
+        new ResultFixture({ id: 2, learningAreaId: 1, taskId: 1 }),
+        new ResultFixture({ id: 3, learningAreaId: 1, taskId: 2 }),
+        new ResultFixture({ id: 4, learningAreaId: 2, taskId: 1 })
       ];
 
       resultState = createState(mockData, true, 'no error');
       storeState = { results: resultState };
 
-      const results = ResultQueries.getByTaskIdGroupedByEduContentId(
+      const results = ResultQueries.getByLearningAreaIdGroupedByTaskId(
         storeState,
-        { taskId: 1 }
+        { learningAreaId: 1 }
       );
 
       const expected = {
         1: mockData.filter(
-          result => result.taskId === 1 && result.eduContentId === 1
+          result => result.learningAreaId === 1 && result.taskId === 1
         ),
         2: mockData.filter(
-          result => result.taskId === 1 && result.eduContentId === 2
+          result => result.learningAreaId === 1 && result.taskId === 2
+        )
+      };
+
+      expect(results).toEqual(expected);
+    });
+
+    it('getByLearningAreaIdGroupedByUnlockedContentId() should return grouped results', () => {
+      const mockData: ResultInterface[] = [
+        new ResultFixture({ id: 1, learningAreaId: 1, unlockedContentId: 1 }),
+        new ResultFixture({ id: 2, learningAreaId: 1, unlockedContentId: 1 }),
+        new ResultFixture({ id: 3, learningAreaId: 1, unlockedContentId: 2 }),
+        new ResultFixture({ id: 4, learningAreaId: 2, unlockedContentId: 1 })
+      ];
+
+      resultState = createState(mockData, true, 'no error');
+      storeState = { results: resultState };
+
+      const results = ResultQueries.getByLearningAreaIdGroupedByUnlockedContentId(
+        storeState,
+        { learningAreaId: 1 }
+      );
+
+      const expected = {
+        1: mockData.filter(
+          result =>
+            result.learningAreaId === 1 && result.unlockedContentId === 1
+        ),
+        2: mockData.filter(
+          result =>
+            result.learningAreaId === 1 && result.unlockedContentId === 2
         )
       };
 
