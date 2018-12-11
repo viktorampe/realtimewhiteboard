@@ -83,8 +83,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 2,
-              "runInBand": true
+              "maxWorkers": 2
             }
           }
         }
@@ -161,8 +160,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 2,
-              "runInBand": true
+              "maxWorkers": 2
             }
           }
         }
@@ -194,8 +192,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 2,
-              "runInBand": true
+              "maxWorkers": 2
             }
           }
         }
@@ -227,8 +224,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 2,
-              "runInBand": true
+              "maxWorkers": 2
             }
           }
         }
@@ -260,8 +256,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 2,
-              "runInBand": true
+              "maxWorkers": 2
             }
           }
         }
@@ -293,8 +288,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 2,
-              "runInBand": true
+              "maxWorkers": 2
             }
           }
         }
@@ -326,8 +320,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 2,
-              "runInBand": true
+              "maxWorkers": 2
             }
           }
         }
@@ -359,8 +352,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 2,
-              "runInBand": true
+              "maxWorkers": 2
             }
           }
         }
@@ -392,8 +384,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 2,
-              "runInBand": true
+              "maxWorkers": 2
             }
           }
         }
@@ -425,8 +416,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 2,
-              "runInBand": true
+              "maxWorkers": 2
             }
           }
         }
@@ -458,8 +448,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 2,
-              "runInBand": true
+              "maxWorkers": 2
             }
           }
         }
@@ -490,8 +479,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 2,
-              "runInBand": true
+              "maxWorkers": 2
             }
           }
         }
@@ -522,8 +510,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 2,
-              "runInBand": true
+              "maxWorkers": 2
             }
           }
         }
@@ -554,8 +541,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 2,
-              "runInBand": true
+              "maxWorkers": 2
             }
           }
         }
@@ -586,8 +572,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 2,
-              "runInBand": true
+              "maxWorkers": 2
             }
           }
         }
@@ -618,8 +603,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 2,
-              "runInBand": true
+              "maxWorkers": 2
             }
           }
         }
@@ -650,8 +634,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 2,
-              "runInBand": true
+              "maxWorkers": 2
             }
           }
         }
@@ -682,8 +665,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 2,
-              "runInBand": true
+              "maxWorkers": 2
             }
           }
         }
@@ -714,8 +696,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 2,
-              "runInBand": true
+              "maxWorkers": 2
             }
           }
         }
