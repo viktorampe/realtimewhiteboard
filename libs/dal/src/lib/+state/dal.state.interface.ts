@@ -5,6 +5,7 @@ import {
   CurrentExerciseReducer,
   EduContentReducer,
   LearningAreaReducer,
+  ResultReducer,
   StudentContentStatusReducer,
   TaskEduContentReducer,
   TaskInstanceReducer,
@@ -16,7 +17,6 @@ import {
   UserContentReducer,
   UserReducer
 } from '../..';
-import { ResultReducer } from './result';
 
 export interface DalState {
   ui: UiReducer.UiState;
