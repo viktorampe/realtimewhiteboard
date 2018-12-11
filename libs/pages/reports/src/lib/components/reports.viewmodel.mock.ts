@@ -9,7 +9,7 @@ import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ReportsViewModel } from './reports.viewmodel';
 import {
-  AssignmentResult,
+  AssignmentResultInterface,
   LearningAreasWithResultsInterface
 } from './reports.viewmodel.interfaces';
 
@@ -43,8 +43,8 @@ export class MockReportsViewModel
   );
 
   resultsForSelectedLearningArea: Observable<
-    AssignmentResult[]
-  > = new BehaviorSubject<AssignmentResult[]>([
+    AssignmentResultInterface[]
+  > = new BehaviorSubject<AssignmentResultInterface[]>([
     {
       title: 'foo',
       type: 'bundle',

@@ -12,7 +12,7 @@ export interface LearningAreasWithResultsInterface {
   }[];
 }
 
-export interface AssignmentResult {
+export interface AssignmentResultInterface {
   title: string;
   type: string; //(Task/Bundle)
   totalScore: number;
