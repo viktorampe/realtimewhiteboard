@@ -93,7 +93,7 @@ describe('ScormExerciseService', () => {
   it('should start a task as review run init and saved to the store', () => {
     const spyScormApiService = jest.spyOn(ScormApiService.prototype, 'init');
     const spyStore = jest.spyOn(Store.prototype, 'dispatch');
-    scormExerciseService.reviewExerciseFromTaskUnlockedContent(13, 13, 13);
+    scormExerciseService.reviewExerciseFromTask(13, 13, 13);
     expect(spyStore).toHaveBeenCalled();
     expect(spyScormApiService).toHaveBeenCalled();
   });

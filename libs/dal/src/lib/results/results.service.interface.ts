@@ -8,6 +8,8 @@ export const RESULTS_SERVICE_TOKEN = new InjectionToken(
 );
 
 export interface ResultsServiceInterface {
+  getAllForUser(userId: number): Observable<ResultInterface[]>;
+
   getResultForTask(
     userId: number,
     taskId: number,
