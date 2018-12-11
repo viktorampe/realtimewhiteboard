@@ -1,16 +1,37 @@
-import { Resolve } from '@angular/router';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { take } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
+import {
+  DalState,
+  LearningAreaInterface,
+  LearningAreaQueries
+} from '@campus/dal';
+import { MemoizedSelectorWithProps, select, Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { LearningAreasWithResultsInterface } from './reports.viewmodel.interfaces';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ReportsViewModel implements Resolve<boolean> {
-  constructor() {}
+export class ReportsViewModel {
+  // source streams
+  learningAreas$: Observable<LearningAreaInterface[]>;
 
-  resolve(): Observable<boolean> {
-    // TODO update
-    return new BehaviorSubject<boolean>(true).pipe(take(1));
+  // presentation streams
+  learningAreasWithResults$: Observable<LearningAreasWithResultsInterface>;
+  constructor(private store: Store<DalState>) {
+    this.setSourceStreams();
+    this.setPresentationStreams();
+  }
+
+  private setSourceStreams() {
+    this.learningAreas$ = this.select(LearningAreaQueries.getAll);
+  }
+
+  private setPresentationStreams() {}
+
+  private select<T, Props>(
+    selector: MemoizedSelectorWithProps<DalState, Props, T>,
+    payload?: Props
+  ): Observable<T> {
+    return this.store.pipe(select(selector, payload));
   }
 }
