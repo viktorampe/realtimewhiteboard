@@ -21,5 +21,5 @@ export interface AssignmentResult {
     results: ResultInterface[]; // if needed
     bestResult: ResultInterface;
     averageScore: number; // if needed
-  };
+  }[];
 }
