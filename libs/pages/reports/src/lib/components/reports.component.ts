@@ -1,7 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FilterTextInputComponent } from '@campus/ui';
-import { FilterServiceInterface } from '@campus/utils';
-import { Observable, of } from 'rxjs';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { FilterableItem, FilterTextInputComponent } from '@campus/ui';
+import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
+import { Observable } from 'rxjs';
+import {
+  LearningAreaInterface,
+  LearningAreasWithResultsInterface
+} from './reports.viewmodel.interfaces';
+import { MockReportsViewModel } from './reports.viewmodel.mock';
 
 @Component({
   selector: 'campus-reports',
@@ -11,22 +16,34 @@ import { Observable, of } from 'rxjs';
 export class ReportsComponent
   implements
     OnInit,
-    FilterServiceInterface<
-      LearningAreasWithResultsInterface[],
-      LearningAreasWithResultsInterface
-    > {
-  learningArea$: Observable<LearningAreasWithResultsInterface[]> = of([]);
+    FilterableItem<LearningAreaInterface[], LearningAreaInterface> {
+  learningArea$: Observable<LearningAreasWithResultsInterface> = this.viewModel
+    .learningAreasWithResults$;
   listFormat$ = this.viewModel.listFormat$;
 
   @ViewChild(FilterTextInputComponent)
   filterTextInput: FilterTextInputComponent<
-    LearningAreasWithResultsInterface[],
-    LearningAreasWithResultsInterface
+    LearningAreaInterface[],
+    LearningAreaInterface
   >;
 
-  constructor(private viewModel: MockReportsViewModel) {}
+  constructor(
+    @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface,
+    private viewModel: MockReportsViewModel
+  ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.filterTextInput.setFilterableItem(this);
+  }
 
-  filter(a, b): LearningAreasWithResultsInterface[] {}
+  filterFn(
+    source: LearningAreaInterface[],
+    filterText: string
+  ): LearningAreaInterface[] {
+    return this.filterService.filter(source, {
+      learningArea: {
+        name: filterText
+      }
+    });
+  }
 }

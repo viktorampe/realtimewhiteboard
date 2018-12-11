@@ -5,11 +5,13 @@ import {
 } from '@campus/dal';
 
 export interface LearningAreasWithResultsInterface {
-  learningAreas: {
-    learningArea: LearningAreaInterface;
-    tasksWithResultsCount: number;
-    bundlesWithResultsCount: number;
-  }[];
+  learningAreas: LearningAreaInterface[];
+}
+
+export interface LearningAreaInterface {
+  learningArea: LearningAreaInterface;
+  tasksWithResultsCount: number;
+  bundlesWithResultsCount: number;
 }
 
 export interface AssignmentResultInterface {

@@ -19,6 +19,10 @@ import {
 export class MockReportsViewModel
   implements ViewModelInterface<ReportsViewModel> {
   // presentation streams
+  listFormat$: Observable<ListFormat> = new BehaviorSubject<ListFormat>(
+    ListFormat.GRID
+  );
+
   learningAreasWithResults$: Observable<
     LearningAreasWithResultsInterface
   > = new BehaviorSubject<LearningAreasWithResultsInterface>({
