@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FilterTextInputComponent } from '@campus/ui';
+import { FilterServiceInterface } from '@campus/utils';
 import { Observable, of } from 'rxjs';
 
 @Component({
@@ -6,14 +8,25 @@ import { Observable, of } from 'rxjs';
   templateUrl: './reports.component.html',
   styleUrls: ['./reports.component.scss']
 })
-export class ReportsComponent implements OnInit {
-  learningArea$: Observable<string> = of('lol');
-  filterTextInput = {
-    result$: of('lol')
-  };
-  listFormat$: Observable<string> = of('lol');
+export class ReportsComponent
+  implements
+    OnInit,
+    FilterServiceInterface<
+      LearningAreasWithResultsInterface[],
+      LearningAreasWithResultsInterface
+    > {
+  learningArea$: Observable<LearningAreasWithResultsInterface[]> = of([]);
+  listFormat$ = this.viewModel.listFormat$;
 
-  constructor() {}
+  @ViewChild(FilterTextInputComponent)
+  filterTextInput: FilterTextInputComponent<
+    LearningAreasWithResultsInterface[],
+    LearningAreasWithResultsInterface
+  >;
+
+  constructor(private viewModel: MockReportsViewModel) {}
 
   ngOnInit() {}
+
+  filter(a, b): LearningAreasWithResultsInterface[] {}
 }

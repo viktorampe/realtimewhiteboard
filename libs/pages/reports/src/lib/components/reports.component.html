@@ -42,9 +42,9 @@
 
   <campus-page-header
     *ngIf="(learningArea$ | async) as learningArea"
-    [title]="learningArea.name"
-    [subtitle]="'Taken'"
-    [iconClass]="'learning-area:' + learningArea.icon"
+    [title]="'Resultaten'"
+    [subtitle]="'Kies een vakgebied'"
+    [iconClass]="'increase'"
   >
   </campus-page-header>
 
@@ -62,7 +62,7 @@
 
       <campus-list-view
         [listFormat]="listFormat$ | async"
-        [placeHolderText]="''"
+        [placeHolderText]="'Er zijn nog geen resultaten beschikbaar.'"
       >
         <campus-folder
           *ngFor="let instance of filteredTaskInstances"
