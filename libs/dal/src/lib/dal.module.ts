@@ -26,6 +26,8 @@ import {
   LearningAreaReducer,
   LearningAreasEffects
 } from './+state/learning-area';
+import { ResultReducer } from './+state/result';
+import { ResultEffects } from './+state/result/result.effects';
 import {
   StudentContentStatusesEffects,
   StudentContentStatusReducer
@@ -123,6 +125,7 @@ interface DalOptions {
       AlertReducer,
       TaskInstanceReducer,
       TaskEduContentReducer,
+      ResultReducer,
       CurrentExerciseReducer
     ]),
     EffectsModule.forFeature([
@@ -141,6 +144,7 @@ interface DalOptions {
       TaskInstanceEffects,
       AlertsEffects,
       TaskEduContentEffects,
+      ResultEffects,
       CurrentExerciseEffects
     ])
   ],
