@@ -12,6 +12,12 @@ import { ResultsServiceInterface } from './results.service.interface';
 export class ResultsService implements ResultsServiceInterface {
   constructor(private personApi: PersonApi) {}
 
+  getAllForUser(userId: number): Observable<ResultInterface[]> {
+    return this.personApi
+      .getData(userId, 'results')
+      .pipe(map((res: { results: ResultInterface[] }) => res.results));
+  }
+
   /**
    * Checks the polpo-api if a result exists and returns it if it is in progress.
    * Creates a new result if it doesn't exist and returns it.
