@@ -15,8 +15,10 @@ import {
   LearningAreaFixture,
   LearningAreaInterface,
   LearningAreaReducer,
+  PersonActions,
   PersonFixture,
   PersonInterface,
+  PersonReducer,
   StateFeatureBuilder,
   UiActions,
   UiReducer,
@@ -55,6 +57,7 @@ describe('BundlesViewModel', () => {
   let unlockedBoekeStudentState: UnlockedBoekeStudentReducer.State;
   let unlockedContentState: UnlockedContentReducer.State;
   let eduContentState: EduContentReducer.State;
+  let coupledPersonState: PersonReducer.State;
 
   let ui: UiReducer.UiState;
   let learningAreas: LearningAreaInterface[];
@@ -154,8 +157,7 @@ describe('BundlesViewModel', () => {
     );
   });
 
-  // TODO enable when coupledPerson state is added
-  xit('getBundleOwner()', () => {
+  it('getBundleOwner()', () => {
     expect(bundlesViewModel.getBundleOwner(of(bundles[0]))).toBeObservable(
       hot('a', {
         a: coupledPersons[0]
@@ -274,8 +276,13 @@ describe('BundlesViewModel', () => {
       })
     );
 
-    // TODO when coupledPerson state is added
     coupledPersons = [new PersonFixture({ id: 2 })];
+    coupledPersonState = PersonReducer.reducer(
+      PersonReducer.initialState,
+      new PersonActions.PersonsLoaded({
+        persons: coupledPersons
+      })
+    );
   }
 
   function getModuleWithForFeatureProviders(): ModuleWithProviders[] {
@@ -328,8 +335,14 @@ describe('BundlesViewModel', () => {
         initialState: {
           initialState: eduContentState
         }
+      },
+      {
+        NAME: PersonReducer.NAME,
+        reducer: PersonReducer.reducer,
+        initialState: {
+          initialState: coupledPersonState
+        }
       }
-      // TODO when coupledPersonState is added
     ]);
   }
 });

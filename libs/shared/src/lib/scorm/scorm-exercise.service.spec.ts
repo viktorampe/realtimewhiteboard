@@ -93,7 +93,7 @@ describe('ScormExerciseService', () => {
   it('should start a task as review run init and saved to the store', () => {
     const spyScormApiService = jest.spyOn(ScormApiService.prototype, 'init');
     const spyStore = jest.spyOn(Store.prototype, 'dispatch');
-    scormExerciseService.reviewExerciseFromTaskUnlockedContent(13, 13, 13);
+    scormExerciseService.reviewExerciseFromTask(13, 13, 13);
     expect(spyStore).toHaveBeenCalled();
     expect(spyScormApiService).toHaveBeenCalled();
   });
@@ -114,14 +114,11 @@ describe('ScormExerciseService', () => {
     expect(spyScormApiService).toHaveBeenCalled();
   });
 
-  it(
-    'should close the window and dispatch clear',
-    fakeAsync(() => {
-      const spyStore = jest.spyOn(Store.prototype, 'dispatch');
-      scormExerciseService.closeExercise();
-      expect(spyStore).toHaveBeenCalled();
-    })
-  );
+  it('should close the window and dispatch clear', fakeAsync(() => {
+    const spyStore = jest.spyOn(Store.prototype, 'dispatch');
+    scormExerciseService.closeExercise();
+    expect(spyStore).toHaveBeenCalled();
+  }));
 
   it(
     'currentURL$',

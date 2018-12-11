@@ -21,7 +21,6 @@ import {
 @Injectable({
   providedIn: 'root'
 })
-// implements TasksResolver
 export class MockTasksViewModel implements ViewModelInterface<TasksViewModel> {
   learningAreasWithTaskInfo$: Observable<LearningAreasWithTaskInfoInterface>;
   listFormat$: Observable<ListFormat>;

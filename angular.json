@@ -29,8 +29,10 @@
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "apps/polpo-classroom-web/src/environments/environment.ts",
-                  "with": "apps/polpo-classroom-web/src/environments/environment.prod.ts"
+                  "replace":
+                    "apps/polpo-classroom-web/src/environments/environment.ts",
+                  "with":
+                    "apps/polpo-classroom-web/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -645,6 +647,12 @@
             "jestConfig": "libs/testing/jest.config.js",
             "tsConfig": "libs/testing/tsconfig.spec.json",
             "setupFile": "libs/testing/src/test-setup.ts"
+          },
+          "configurations": {
+            "travis": {
+              "maxWorkers": 2,
+              "runInBand": true
+            }
           }
         }
       }
@@ -702,8 +710,13 @@
           "options": {
             "jestConfig": "libs/guards/jest.config.js",
             "tsConfig": "libs/guards/tsconfig.spec.json",
-            "setupFile": "libs/guards/src/test-setup.ts",
-            "maxWorkers": 2
+            "setupFile": "libs/guards/src/test-setup.ts"
+          },
+          "configurations": {
+            "travis": {
+              "maxWorkers": 2,
+              "runInBand": true
+            }
           }
         }
       }
