@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { EduContent } from '@campus/dal';
+import { ContentInterface, EduContent } from '@campus/dal';
 import { FilterTextInputComponent, ListFormat } from '@campus/ui';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { Observable } from 'rxjs';
@@ -28,8 +28,8 @@ export class BooksComponent implements OnInit {
     this.filterTextInput.setFilterableItem(this);
   }
 
-  openBook(bookId: number) {
-    this.viewModel.openBook(bookId);
+  openBook(book: ContentInterface) {
+    this.viewModel.openBook(book);
   }
 
   setListFormat(format: ListFormat) {
