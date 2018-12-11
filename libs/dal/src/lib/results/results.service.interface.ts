@@ -8,7 +8,6 @@ export const RESULTS_SERVICE_TOKEN = new InjectionToken(
 );
 
 export interface ResultsServiceInterface {
-  //TODO the model of the resultsInterface might need to be updated once the api call changes have been done, see issue https://github.com/diekeure/polpo-api/issues/670
   getAllForUser(userId: number): Observable<ResultInterface[]>;
 
   getResultForTask(
