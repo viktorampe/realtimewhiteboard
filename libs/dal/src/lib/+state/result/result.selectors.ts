@@ -1,3 +1,5 @@
+import { ResultInterface } from '@campus/dal';
+import { groupArrayByKey } from '@campus/utils';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import {
   NAME,
@@ -64,4 +66,18 @@ export const getByIds = createSelector(
 export const getById = createSelector(
   selectResultState,
   (state: State, props: { id: number }) => state.entities[props.id]
+);
+
+export const getByTaskIdGroupedByEduContentId = createSelector(
+  selectResultState,
+  (state: State, props: { taskId: number }) => {
+    const ids: number[] = <number[]>state.ids;
+    const filteredEntities = ids
+      .filter(id => state.entities[id].taskId === props.taskId)
+      .map(id => state.entities[id]);
+
+    return groupArrayByKey<ResultInterface>(Object.values(filteredEntities), {
+      eduContentId: 0
+    });
+  }
 );

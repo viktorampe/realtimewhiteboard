@@ -1,4 +1,5 @@
 import { ResultQueries } from '.';
+import { ResultFixture } from '../../+fixtures';
 import { ResultInterface } from '../../+models';
 import { State } from './result.reducer';
 
@@ -89,6 +90,34 @@ describe('Result Selectors', () => {
     it('getById() should return undefined if the entity is not present', () => {
       const results = ResultQueries.getById(storeState, { id: 9 });
       expect(results).toBe(undefined);
+    });
+
+    it('getByTaskIdGroupedByEduContentId() should return grouped results', () => {
+      const mockData = [
+        new ResultFixture({ id: 1, taskId: 1, eduContentId: 1 }),
+        new ResultFixture({ id: 2, taskId: 1, eduContentId: 1 }),
+        new ResultFixture({ id: 3, taskId: 1, eduContentId: 2 }),
+        new ResultFixture({ id: 4, taskId: 2, eduContentId: 1 })
+      ];
+
+      resultState = createState(mockData, true, 'no error');
+      storeState = { results: resultState };
+
+      const results = ResultQueries.getByTaskIdGroupedByEduContentId(
+        storeState,
+        { taskId: 1 }
+      );
+
+      const expected = {
+        1: mockData.filter(
+          result => result.taskId === 1 && result.eduContentId === 1
+        ),
+        2: mockData.filter(
+          result => result.taskId === 1 && result.eduContentId === 2
+        )
+      };
+
+      expect(results).toEqual(expected);
     });
   });
 });
