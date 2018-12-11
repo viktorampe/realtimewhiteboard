@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   CanActivate,
@@ -8,61 +8,44 @@ import {
   Router,
   RouterStateSnapshot
 } from '@angular/router';
-import { DalState, UserQueries } from '@campus/dal';
-import { select, Store } from '@ngrx/store';
+import { AuthServiceInterface, AUTH_SERVICE_TOKEN } from '@campus/dal';
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
 
 @Injectable()
 export class AuthenticationGuard
   implements CanLoad, CanActivate, CanActivateChild {
-  constructor(private store: Store<DalState>, private router: Router) {}
+  constructor(
+    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
+    private router: Router
+  ) {}
 
   canLoad(route: Route): Observable<boolean> | Promise<boolean> | boolean {
-    return this.store.pipe(
-      select(UserQueries.getCurrentUser),
-      tap(currentUser => {
-        console.log('%ctesting the canLoad', 'color: red; font-weight: bold;');
-        console.log({ currentUser });
-        if (!currentUser) this.router.navigate(['/login']);
-      }),
-      map(currentUser => (currentUser ? true : false))
-    );
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['/login']);
+      return false;
+    }
+    return true;
   }
 
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
-    return this.store.pipe(
-      select(UserQueries.getCurrentUser),
-      tap(currentUser => {
-        console.log(
-          '%ctesting the canActivate',
-          'color: orange; font-weight: bold;'
-        );
-        console.log({ currentUser });
-        if (!currentUser) this.router.navigate(['/login']);
-      }),
-      map(currentUser => (currentUser ? true : false))
-    );
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['/login']);
+      return false;
+    }
+    return true;
   }
 
   canActivateChild(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
-    return this.store.pipe(
-      select(UserQueries.getCurrentUser),
-      tap(currentUser => {
-        console.log(
-          '%ctesting the canActivateChild',
-          'color: blue; font-weight: bold;'
-        );
-        console.log({ currentUser });
-        if (!currentUser) this.router.navigate(['/login']);
-      }),
-      map(currentUser => (currentUser ? true : false))
-    );
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['/login']);
+      return false;
+    }
+    return true;
   }
 }
