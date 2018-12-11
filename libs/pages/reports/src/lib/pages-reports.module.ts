@@ -1,13 +1,20 @@
-import { ReportsViewModel } from './components/reports.viewmodel';
-
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-import { PagesReportsRoutingModule } from './pages-reports-routing.module';
+import { NgModule } from '@angular/core';
+import { MatIconModule } from '@angular/material';
+import { SharedModule } from '@campus/shared';
+import { UiModule } from '@campus/ui';
 import { ReportsComponent } from './components/reports.component';
+import { ReportsViewModel } from './components/reports.viewmodel';
+import { PagesReportsRoutingModule } from './pages-reports-routing.module';
 
 @NgModule({
-  imports: [CommonModule, PagesReportsRoutingModule],
+  imports: [
+    CommonModule,
+    PagesReportsRoutingModule,
+    UiModule,
+    MatIconModule,
+    SharedModule
+  ],
   declarations: [ReportsComponent],
 
   providers: [ReportsViewModel]
