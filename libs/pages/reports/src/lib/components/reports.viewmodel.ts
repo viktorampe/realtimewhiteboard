@@ -71,7 +71,7 @@ export class ReportsViewModel {
           contentId =>
             ({
               title: resultsByUnlockedContentId[contentId][0].title,
-              type: 'task',
+              type: 'bundle',
               ...this.getExerciseResults(
                 resultsByUnlockedContentId[contentId],
                 eduContents
