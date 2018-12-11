@@ -18,7 +18,7 @@ export class ScormApiService implements ScormApiServiceInterface {
   constructor(@Inject(WINDOW) private window: Window) {}
 
   init(cmi: ScormCmiInterface, mode: ScormCmiMode) {
-    if (!this.window['API']) {
+    if (!this.window['API'] || !this.API) {
       this.API = new ScormApi(cmi, mode);
 
       this.commit$ = this.API.commit$;

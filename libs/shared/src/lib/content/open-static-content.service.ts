@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { WINDOW } from '@campus/browser';
+import { ContentInterface, EduContent, UserContent } from '@campus/dal';
 import { ENVIRONMENT_API_BASE_TOKEN } from '../interfaces';
 import { OpenStaticContentServiceInterface } from './open-static-content.interface';
 
@@ -13,8 +14,12 @@ export class OpenStaticContentService
     @Inject(ENVIRONMENT_API_BASE_TOKEN) private apiBase: string
   ) {}
 
-  open(contentId: number): void {
-    const url = `${this.apiBase}/api/eduContents/${contentId}/redirectURL`;
-    this.window.open(url);
+  open(content: ContentInterface): void {
+    if (content instanceof EduContent) {
+      const url = `${this.apiBase}/api/eduContents/${content.id}/redirectURL`;
+      this.window.open(url);
+    } else if (content instanceof UserContent) {
+      this.window.open(content.link);
+    }
   }
 }

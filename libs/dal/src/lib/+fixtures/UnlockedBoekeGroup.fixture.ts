@@ -1,7 +1,6 @@
 import { UnlockedBoekeGroup, UnlockedBoekeGroupInterface } from '../+models';
 
 export class UnlockedBoekeGroupFixture extends UnlockedBoekeGroup {
-  // defaults
   id = 1;
   eduContentId = 1;
   groupId = 1;

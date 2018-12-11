@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { WINDOW } from '@campus/browser';
+import { EduContentFixture, UserContentFixture } from '@campus/dal';
 import { ENVIRONMENT_API_BASE_TOKEN } from '../interfaces';
 import { OpenStaticContentService } from './open-static-content.service';
 
@@ -17,6 +18,7 @@ describe('OpenStaticContentServiceService', () => {
 
     service = TestBed.get(OpenStaticContentService);
     mockWindow = TestBed.get(WINDOW);
+    mockWindow.open.mockReset();
   });
 
   it('should be created', () => {
@@ -24,10 +26,20 @@ describe('OpenStaticContentServiceService', () => {
   });
 
   it('should open a window for the provided content', () => {
-    service.open(1);
+    service.open(new EduContentFixture({ id: 1 }));
     expect(mockWindow.open).toHaveBeenCalledTimes(1);
     expect(mockWindow.open).toHaveBeenCalledWith(
       'http://foo.bar:5000/api/eduContents/1/redirectURL'
+    );
+  });
+
+  it('should open a window with the correct link', () => {
+    service.open(
+      new UserContentFixture({ id: 2, link: 'http://www.frankdeboosere.be' })
+    );
+    expect(mockWindow.open).toHaveBeenCalledTimes(1);
+    expect(mockWindow.open).toHaveBeenCalledWith(
+      'http://www.frankdeboosere.be'
     );
   });
 });

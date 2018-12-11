@@ -18,3 +18,4 @@ export * from './TaskInstance.fixture';
 export * from './UnlockedBoekeGroup.fixture';
 export * from './UnlockedBoekeStudent.fixture';
 export * from './UnlockedContent.fixture';
+export * from './UserContent.fixture';
