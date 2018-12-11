@@ -41,8 +41,73 @@ export class BreadcrumbsService {
     );
 
     this.breadcrumbs$ = this.currentRoute$.pipe(
-      flatMap(route => this.getBreadcrumbs(route.snapshot.root))
+      // flatMap(route => this.getBreadcrumbs(route.snapshot.root))
+      flatMap(route => this.getBreadcrumbsObservable(route.root))
     );
+  }
+
+  private getBreadcrumbsObservable(
+    route: ActivatedRoute
+  ): Observable<BreadcrumbLinkInterface[]> {
+    const routes: ActivatedRoute[] = [];
+    let currentRoute = route;
+
+    do {
+      routes.push(currentRoute);
+      currentRoute = currentRoute.firstChild;
+    } while (currentRoute);
+
+    let breadcrumbs: Observable<BreadcrumbLinkInterface[]>;
+    const url = [];
+
+    breadcrumbs = combineLatest(
+      routes.map(activatedRoute =>
+        combineLatest(
+          activatedRoute.url,
+          activatedRoute.data,
+          activatedRoute.params
+        ).pipe(
+          flatMap(([routeUrl, routeData, routeParams]) => {
+            if (routeUrl && routeUrl.length) {
+              url.push(routeUrl[0].path);
+
+              const data = routeData as BreadcrumbRouteDataInterface;
+
+              let paramProperty;
+              let routeParam;
+
+              if (activatedRoute.routeConfig) {
+                paramProperty = activatedRoute.routeConfig.path.substr(1);
+                routeParam = routeParams[paramProperty];
+              }
+
+              const selector = data.selector;
+              const displayedProp = data.property;
+              const breadcrumbText = data.breadcrumb;
+
+              if (selector) {
+                return this.store.pipe(
+                  select(selector, {
+                    id: routeParam
+                  }),
+                  map(entity => ({
+                    displayText: entity[displayedProp],
+                    link: url
+                  }))
+                );
+              } else {
+                return of({
+                  displayText: breadcrumbText,
+                  link: url
+                });
+              }
+            } else return of({ displayText: 'leeg', link: [] });
+          })
+        )
+      )
+    );
+
+    return breadcrumbs;
   }
 
   private getBreadcrumbs(
@@ -73,22 +138,22 @@ export class BreadcrumbsService {
           const displayedProp = data.property;
           const breadcrumbText = data.breadcrumb;
 
-          return combineLatest(
-            selector
-              ? this.store.pipe(
-                  select(selector, {
-                    id: routeParam
-                  }),
-                  map(entity => entity[displayedProp])
-                )
-              : of(breadcrumbText),
-            of(url)
-          ).pipe(
-            map(([displayText, urlArray]) => ({
-              displayText: displayText,
-              link: urlArray
-            }))
-          );
+          if (selector) {
+            return this.store.pipe(
+              select(selector, {
+                id: routeParam
+              }),
+              map(entity => ({
+                displayText: entity[displayedProp],
+                link: url
+              }))
+            );
+          } else {
+            return of({
+              displayText: breadcrumbText,
+              link: url
+            });
+          }
         })
     );
 
