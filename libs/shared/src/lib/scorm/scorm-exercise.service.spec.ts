@@ -114,14 +114,11 @@ describe('ScormExerciseService', () => {
     expect(spyScormApiService).toHaveBeenCalled();
   });
 
-  it(
-    'should close the window and dispatch clear',
-    fakeAsync(() => {
-      const spyStore = jest.spyOn(Store.prototype, 'dispatch');
-      scormExerciseService.closeExercise();
-      expect(spyStore).toHaveBeenCalled();
-    })
-  );
+  it('should close the window and dispatch clear', fakeAsync(() => {
+    const spyStore = jest.spyOn(Store.prototype, 'dispatch');
+    scormExerciseService.closeExercise();
+    expect(spyStore).toHaveBeenCalled();
+  }));
 
   it(
     'currentURL$',
