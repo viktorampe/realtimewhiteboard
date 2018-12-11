@@ -8,6 +8,8 @@ export const RESULTS_SERVICE_TOKEN = new InjectionToken(
 );
 
 export interface ResultsServiceInterface {
+  getAllForUser(userId: number): Observable<ResultInterface[]>;
+
   getResultForTask(
     userId: number,
     taskId: number,
@@ -25,4 +27,6 @@ export interface ResultsServiceInterface {
     resultId: number,
     cmi: ScormCmiInterface
   ): Observable<ResultInterface>;
+
+  getAllForUser(userId: number): Observable<ResultInterface[]>;
 }

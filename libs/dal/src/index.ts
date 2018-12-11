@@ -12,6 +12,7 @@ export * from './lib/+state/learning-area';
 export * from './lib/+state/linked-person';
 export * from './lib/+state/person';
 export * from './lib/+state/resolver';
+export * from './lib/+state/result';
 export * from './lib/+state/student-content-status';
 export * from './lib/+state/task';
 export * from './lib/+state/task-edu-content';
