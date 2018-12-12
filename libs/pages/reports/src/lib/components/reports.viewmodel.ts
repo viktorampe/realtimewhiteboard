@@ -60,11 +60,13 @@ export class ReportsViewModel {
 
         // eduContents vasthaken
         assignments.forEach(assignment =>
-          assignment.exerciseResults.forEach(
-            exResult =>
-              (exResult.eduContent = eduContents[exResult.educContentId])
-          )
+          assignment.exerciseResults.forEach(exResult => {
+            console.log(exResult.educContentId);
+            exResult.eduContent = eduContents[exResult.educContentId];
+          })
         );
+
+        console.log(assignments);
 
         return assignments;
       })
