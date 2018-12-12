@@ -1,6 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
 import {
-  AlertActions,
   AlertQueries,
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
@@ -23,7 +22,7 @@ export class HeaderResolver extends StateResolver {
 
   protected getLoadableActions(): Action[] {
     return [
-      new AlertActions.LoadAlerts({ userId: this.authService.userId }),
+      // new AlertActions.LoadAlerts({ userId: this.authService.userId }),
       new UiActions.LoadUi()
       //TODO:
       // new BreadcrumbActions.LoadBreadcrumbs()

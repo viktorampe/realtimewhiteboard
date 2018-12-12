@@ -1,23 +1,29 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthenticationGuard } from '@campus/guards';
+import { AuthenticationGuard, CoupledTeacherGuard } from '@campus/guards';
 import { AppResolver } from './app.resolver';
 
 const routes: Routes = [
   {
     path: '',
-    resolve: { AppResolver },
-    canActivateChild: [AuthenticationGuard],
+    resolve: { isResolved: AppResolver },
+    canActivate: [AuthenticationGuard],
+    // canActivateChild: [AuthenticationGuard],
+    // canLoad: [AuthenticationGuard],
     children: [
       {
         path: 'books',
-        loadChildren: '@campus/pages/books#PagesBooksModule'
-        //canLoad: [CoupledTeacherGuard]
+        loadChildren: '@campus/pages/books#PagesBooksModule',
+        canActivate: [CoupledTeacherGuard]
+        // canLoad: [CoupledTeacherGuard]
       },
       {
         path: 'tasks',
-        loadChildren: '@campus/pages/tasks#PagesTasksModule'
-        //canLoad: [CoupledTeacherGuard]
+        loadChildren: '@campus/pages/tasks#PagesTasksModule',
+        canActivate: [CoupledTeacherGuard]
+        // canLoad: [CoupledTeacherGuard]
+        // canActivate: [CoupledTeacherGuard]
+        // canLoad: [AuthenticationGuard]
       },
       {
         path: 'reports',
@@ -46,8 +52,11 @@ const routes: Routes = [
       },
       {
         path: 'bundles',
-        loadChildren: '@campus/pages/bundles#PagesBundlesModule'
-        //canLoad: [CoupledTeacherGuard]
+        loadChildren: '@campus/pages/bundles#PagesBundlesModule',
+        canActivate: [CoupledTeacherGuard]
+        // canLoad: [CoupledTeacherGuard]
+        // canActivate: [CoupledTeacherGuard]
+        // canLoad: [AuthenticationGuard]
       }
     ]
   },
@@ -56,7 +65,11 @@ const routes: Routes = [
     redirectTo: 'dev'
   },
   {
-    path: 'error/401',
+    path: 'settings',
+    redirectTo: 'dev'
+  },
+  {
+    path: 'error',
     redirectTo: 'dev'
   },
   { path: 'dev', loadChildren: '@campus/devlib#DevlibModule' }

@@ -11,6 +11,7 @@ export class AppResolver extends StateResolver {
   }
 
   protected getLoadableActions(): Action[] {
+    console.log('%cloading actions for app', 'color: red; font-weight: bold;');
     return [
       new UserActions.LoadUser({ force: false })
       // credentials
