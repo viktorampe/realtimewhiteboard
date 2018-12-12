@@ -5,9 +5,7 @@ import {
   LearningAreaInterface,
   ResultFixture
 } from '@campus/dal';
-import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { ReportsViewModel } from './reports.viewmodel';
 import {
   AssignmentResultInterface,
   LearningAreasWithResultsInterface
@@ -16,8 +14,8 @@ import {
 @Injectable({
   providedIn: 'root'
 })
-export class MockReportsViewModel
-  implements ViewModelInterface<ReportsViewModel> {
+// TODO when viewmodel is done: implements ViewModelInterface<ReportsViewModel>
+export class MockReportsViewModel {
   // presentation streams
   learningAreasWithResults$: Observable<
     LearningAreasWithResultsInterface
@@ -42,30 +40,44 @@ export class MockReportsViewModel
     new LearningAreaFixture({ id: 1 })
   );
 
-  resultsForSelectedLearningArea: Observable<
+  resultsForSelectedLearningArea$: Observable<
     AssignmentResultInterface[]
   > = new BehaviorSubject<AssignmentResultInterface[]>([
     {
       title: 'foo',
       type: 'bundle',
       totalScore: 71,
-      exerciseResults: {
-        eduContent: new EduContentFixture(),
-        results: [new ResultFixture({ id: 1 }), new ResultFixture({ id: 2 })],
-        bestResult: new ResultFixture({ id: 2 }),
-        averageScore: 60
-      }
+      exerciseResults: [
+        {
+          eduContent: new EduContentFixture(),
+          results: [new ResultFixture({ id: 1 }), new ResultFixture({ id: 2 })],
+          bestResult: new ResultFixture({ id: 2 }),
+          averageScore: 60
+        }
+      ]
     },
     {
       title: 'foo',
       type: 'bundle',
       totalScore: 78,
-      exerciseResults: {
-        eduContent: new EduContentFixture(),
-        results: [new ResultFixture({ id: 1 }), new ResultFixture({ id: 2 })],
-        bestResult: new ResultFixture({ id: 1 }),
-        averageScore: 80
-      }
+      exerciseResults: [
+        {
+          eduContent: new EduContentFixture(),
+          results: [new ResultFixture({ id: 1 }), new ResultFixture({ id: 2 })],
+          bestResult: new ResultFixture({ id: 1 }),
+          averageScore: 80
+        }
+      ]
     }
   ]);
+
+  getLearningAreaById(): Observable<LearningAreaInterface> {
+    return this.selectedLearningArea$;
+  }
+
+  getAssignmentResultsByLearningArea(): Observable<
+    AssignmentResultInterface[]
+  > {
+    return this.resultsForSelectedLearningArea$;
+  }
 }
