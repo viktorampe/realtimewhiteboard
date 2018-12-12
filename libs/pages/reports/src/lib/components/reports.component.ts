@@ -17,8 +17,9 @@ export class ReportsComponent
   implements
     OnInit,
     FilterableItem<LearningAreaInterface[], LearningAreaInterface> {
-  learningArea$: Observable<LearningAreasWithResultsInterface> = this.viewModel
-    .learningAreasWithResults$;
+  learningAreasWithResults$: Observable<
+    LearningAreasWithResultsInterface
+  > = this.viewModel.learningAreasWithResults$;
   listFormat$ = this.viewModel.listFormat$;
 
   @ViewChild(FilterTextInputComponent)

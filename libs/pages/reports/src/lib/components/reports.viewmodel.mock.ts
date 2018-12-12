@@ -6,6 +6,7 @@ import {
   ResultFixture
 } from '@campus/dal';
 import { ViewModelInterface } from '@campus/testing';
+import { ListFormat } from '@campus/ui';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ReportsViewModel } from './reports.viewmodel';
 import {

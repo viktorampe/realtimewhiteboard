@@ -41,7 +41,7 @@
   </campus-page-bar>
 
   <campus-page-header
-    *ngIf="(learningArea$ | async) as learningArea"
+    *ngIf="(learningArea$ | async) as learningAreas"
     [title]="'Resultaten'"
     [subtitle]="'Kies een vakgebied'"
     [iconClass]="'increase'"
@@ -49,13 +49,13 @@
   </campus-page-header>
 
   <ng-container
-    *ngIf="(filterTextInput.result$ | async) as filteredTaskInstances"
+    *ngIf="(filterTextInput.result$ | async) as filteredLearningAreaInstances"
   >
     <div class="pages-reports__container">
       <div class="pages-reports__container__tasks-count">
-        {{ filteredTaskInstances.length }} van
+        {{ filteredLearningAreaInstances.length }} van
         <u (click)="filterTextInput.clear()">{{
-          (taskInstances$ | async)?.taskInfos.length
+          (learningArea$ | async)?.learningAreas.length
         }}</u>
         weergegeven
       </div>
@@ -65,7 +65,7 @@
         [placeHolderText]="'Er zijn nog geen resultaten beschikbaar.'"
       >
         <campus-folder
-          *ngFor="let instance of filteredTaskInstances"
+          *ngFor="let instance of filteredLearningAreaInstances"
           [routerLink]="[instance.taskInstance.taskId]"
           campusListItem
           progress="{{instance.taskInstance.progress}}"
