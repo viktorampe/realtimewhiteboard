@@ -8,6 +8,7 @@ import {
   LearningAreaQueries,
   ResultQueries
 } from '@campus/dal';
+import { Dictionary } from '@ngrx/entity';
 import { MemoizedSelectorWithProps, select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -44,7 +45,9 @@ export class ReportsViewModel {
     learningAreaId: number
   ): Observable<AssignmentResult[]> {
     return combineLatest(
-      this.select(EduContentQueries.getAllEntities) as Observable<EduContent[]>,
+      this.select(EduContentQueries.getAllEntities) as Observable<
+        Dictionary<EduContent>
+      >,
       this.select(ResultQueries.getTaskAssigmentsByLearningAreId, {
         learningAreaId
       }) as Observable<AssignmentResult[]>,
