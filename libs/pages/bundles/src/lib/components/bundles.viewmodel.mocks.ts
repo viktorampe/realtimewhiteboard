@@ -8,8 +8,10 @@ import {
   PersonFixture,
   PersonInterface
 } from '@campus/dal';
+import { ViewModelInterface } from '@campus/testing';
 import { ListFormat } from '@campus/ui';
 import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BundlesViewModel } from './bundles.viewmodel';
 import {
   BundlesWithContentInfoInterface,
   LearningAreasWithBundlesInfoInterface
@@ -21,7 +23,7 @@ export class MockActivatedRoute {
   });
 }
 
-export class MockViewModel {
+export class MockViewModel implements ViewModelInterface<BundlesViewModel> {
   listFormat$: Observable<ListFormat> = new BehaviorSubject<ListFormat>(
     ListFormat.GRID
   );

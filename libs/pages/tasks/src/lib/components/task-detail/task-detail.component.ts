@@ -17,7 +17,7 @@ import {
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { TaskEduContent } from '@diekeure/polpo-api-angular-sdk';
 import { Observable, Subscription } from 'rxjs';
-import { switchMap, take } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import { TasksViewModel } from '../tasks.viewmodel';
 import { TaskWithInfoInterface } from '../tasks.viewmodel.interfaces';
 
@@ -26,7 +26,7 @@ import { TaskWithInfoInterface } from '../tasks.viewmodel.interfaces';
   templateUrl: './task-detail.component.html',
   styleUrls: ['./task-detail.component.scss']
 })
-export class TaskDetailComponent implements OnInit, AfterViewInit {
+export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   subscriptions: Subscription;
   listFormat: typeof ListFormat;
 
@@ -66,11 +66,15 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
     this.initializeProperties();
     this.loadInputParams();
     this.loadOutputStreams();
-    this.markAlertsAsRead();
+    this.setupAlertsSubscription();
   }
 
   ngAfterViewInit(): void {
     this.setupListSubscription();
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 
   //initializer methods
@@ -90,12 +94,12 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
     this.filterTextInput.setFilterableItem(this);
   }
 
-  private markAlertsAsRead(): void {
-    this.taskInfo$
-      .pipe(take(1))
-      .subscribe(taskInfo =>
-        this.taskViewModel.setTaskAlertRead(taskInfo.task.id)
-      );
+  private setupAlertsSubscription(): void {
+    this.subscriptions.add(
+      this.routerParams$.subscribe(params =>
+        this.taskViewModel.setTaskAlertRead(+params.task)
+      )
+    );
   }
 
   private setupListSubscription(): void {

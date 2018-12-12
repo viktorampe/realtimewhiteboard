@@ -1,35 +1,11 @@
 import { Inject, Injectable } from '@angular/core';
-import {
-  AlertActions,
-  AuthServiceInterface,
-  AUTH_SERVICE_TOKEN,
-  BundleInterface,
-  BundleQueries,
-  ContentInterface,
-  DalState,
-  EduContent,
-  EduContentQueries,
-  LearningAreaInterface,
-  LearningAreaQueries,
-  PersonFixture,
-  PersonInterface,
-  UiActions,
-  UiQuery,
-  UnlockedBoekeGroupQueries,
-  UnlockedBoekeStudentQueries,
-  UnlockedContentInterface,
-  UnlockedContentQueries,
-  UserContentQueries
-} from '@campus/dal';
+import { AlertActions, AuthServiceInterface, AUTH_SERVICE_TOKEN, BundleInterface, BundleQueries, ContentInterface, DalState, EduContent, EduContentQueries, LearningAreaInterface, LearningAreaQueries, PersonFixture, PersonInterface, UiActions, UiQuery, UnlockedBoekeGroupQueries, UnlockedBoekeStudentQueries, UnlockedContentInterface, UnlockedContentQueries, UserContentQueries } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
 import { Dictionary } from '@ngrx/entity';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable, of } from 'rxjs';
 import { filter, map, shareReplay, switchMap } from 'rxjs/operators';
-import {
-  BundlesWithContentInfoInterface,
-  LearningAreasWithBundlesInfoInterface
-} from './bundles.viewmodel.interfaces';
+import { BundlesWithContentInfoInterface, LearningAreasWithBundlesInfoInterface } from './bundles.viewmodel.interfaces';
 
 export type NestedPartial<T> = { [P in keyof T]?: NestedPartial<T[P]> };
 
@@ -67,7 +43,7 @@ export class BundlesViewModel {
     this.initialize();
   }
 
-  initialize(): void {
+  private initialize(): void {
     // source streams
     this.listFormat$ = this.store.pipe(select(UiQuery.getListFormat));
     this.learningAreas$ = this.store.pipe(select(LearningAreaQueries.getAll));
