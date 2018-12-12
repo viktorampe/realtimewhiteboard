@@ -52,24 +52,18 @@ export class ReportsViewModel {
         learningAreaId
       }) as Observable<AssignmentResult[]>
     ).pipe(
-      map(([eduContents, resultsByTaskId, resultsBybundleId]) => {
+      map(([eduContents, assignmentsByTaskId, assignmentsBybundleId]) => {
+        const assignments = [...assignmentsByTaskId, ...assignmentsBybundleId];
+
         // eduContents vasthaken
-        resultsByTaskId.forEach(assignment =>
+        assignments.forEach(assignment =>
           assignment.exerciseResults.forEach(
             exResult =>
               (exResult.eduContent = eduContents[exResult.educContentId])
           )
         );
 
-        // eduContents vasthaken
-        resultsBybundleId.forEach(assignment =>
-          assignment.exerciseResults.forEach(
-            exResult =>
-              (exResult.eduContent = eduContents[exResult.educContentId])
-          )
-        );
-
-        return [...resultsByTaskId, ...resultsBybundleId];
+        return assignments;
       })
     );
   }
