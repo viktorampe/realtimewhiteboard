@@ -281,7 +281,7 @@ describe('Result Selectors', () => {
         }
       ];
 
-      expect(expected).toEqual(results);
+      expect(results).toEqual(expected);
     });
   });
 
