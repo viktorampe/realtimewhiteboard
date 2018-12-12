@@ -21,6 +21,10 @@ const routes: Routes = [
   {
     path: 'settings',
     component: LoginpageComponent
+  },
+  {
+    path: 'login',
+    component: LoginpageComponent
   }
 ];
 

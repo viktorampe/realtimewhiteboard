@@ -8,22 +8,16 @@ const routes: Routes = [
     path: '',
     resolve: { isResolved: AppResolver },
     canActivate: [AuthenticationGuard],
-    // canActivateChild: [AuthenticationGuard],
-    // canLoad: [AuthenticationGuard],
     children: [
       {
         path: 'books',
         loadChildren: '@campus/pages/books#PagesBooksModule',
         canActivate: [CoupledTeacherGuard]
-        // canLoad: [CoupledTeacherGuard]
       },
       {
         path: 'tasks',
         loadChildren: '@campus/pages/tasks#PagesTasksModule',
         canActivate: [CoupledTeacherGuard]
-        // canLoad: [CoupledTeacherGuard]
-        // canActivate: [CoupledTeacherGuard]
-        // canLoad: [AuthenticationGuard]
       },
       {
         path: 'reports',
@@ -54,19 +48,16 @@ const routes: Routes = [
         path: 'bundles',
         loadChildren: '@campus/pages/bundles#PagesBundlesModule',
         canActivate: [CoupledTeacherGuard]
-        // canLoad: [CoupledTeacherGuard]
-        // canActivate: [CoupledTeacherGuard]
-        // canLoad: [AuthenticationGuard]
       }
     ]
   },
   {
     path: 'login',
-    redirectTo: 'dev'
+    redirectTo: 'dev/login'
   },
   {
     path: 'settings',
-    redirectTo: 'dev'
+    redirectTo: 'dev/settings'
   },
   {
     path: 'error',

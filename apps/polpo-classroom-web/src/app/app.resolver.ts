@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DalState, StateResolver, UserActions, UserQueries } from '@campus/dal';
+import { DalState, StateResolver } from '@campus/dal';
 import { Action, Selector, Store } from '@ngrx/store';
 
 @Injectable({
@@ -11,16 +11,9 @@ export class AppResolver extends StateResolver {
   }
 
   protected getLoadableActions(): Action[] {
-    console.log('%cloading actions for app', 'color: red; font-weight: bold;');
-    return [
-      new UserActions.LoadUser({ force: false })
-      // credentials
-    ];
+    return [];
   }
   protected getResolvedQueries(): Selector<object, boolean>[] {
-    return [
-      UserQueries.getLoaded
-      // credentials
-    ];
+    return [];
   }
 }

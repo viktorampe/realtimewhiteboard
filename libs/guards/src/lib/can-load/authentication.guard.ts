@@ -8,10 +8,13 @@ import {
 import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
-  DalState
+  DalState,
+  UserActions,
+  UserQueries
 } from '@campus/dal';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
@@ -24,19 +27,14 @@ export class AuthenticationGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
-    console.log(
-      '%centering authg canActivate',
-      'color: orange; font-weight: bold;'
-    );
     if (!this.authService.isLoggedIn()) {
-      console.log(
-        '%cauthguard redirect to login',
-        'color: red; font-weight: bold;'
-      );
       this.router.navigate(['/login']);
       return false;
     }
-    console.log('%cauthguard true', 'color: green; font-weight: bold;');
-    return true;
+    this.store.dispatch(new UserActions.LoadUser({ force: false }));
+    return this.store.pipe(
+      select(UserQueries.getLoaded),
+      filter(loaded => !!loaded)
+    );
   }
 }

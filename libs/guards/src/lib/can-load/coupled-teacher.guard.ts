@@ -2,7 +2,6 @@ import { Inject, Injectable } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   CanActivate,
-  Route,
   Router,
   RouterStateSnapshot
 } from '@angular/router';
@@ -45,10 +44,6 @@ export class CoupledTeacherGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
-    console.log(
-      '%centering coupled guard canActivate',
-      'color: blue; font-weight: bold;'
-    );
     return combineLatest(
       this.currentUser$,
       this.isStudent$,
@@ -60,39 +55,7 @@ export class CoupledTeacherGuard implements CanActivate {
           currentUser === null
       ),
       map(([currentUser, isStudent, isTeacher, hasTeachers]) => {
-        console.log({ isStudent });
-        console.log({ isTeacher });
-        console.log({ hasTeachers });
         if (isStudent && !isTeacher && hasTeachers) return true;
-        console.log(
-          '%credirect settings from coupled guard',
-          'color: red; font-weight: bold;'
-        );
-        this.router.navigate(['/settings']);
-        return false;
-      })
-    );
-  }
-
-  canLoad(route: Route): Observable<boolean> | Promise<boolean> | boolean {
-    console.log(
-      '%centering coupled guard canLoad',
-      'color: purple; font-weight: bold;'
-    );
-    return combineLatest(
-      this.isStudent$,
-      this.isTeacher$,
-      this.hasTeachers$
-    ).pipe(
-      map(([isStudent, isTeacher, hasTeachers]) => {
-        console.log({ isStudent });
-        console.log({ isTeacher });
-        console.log({ hasTeachers });
-        if (isStudent && !isTeacher && hasTeachers) return true;
-        console.log(
-          '%credirect settings from coupled guard',
-          'color: red; font-weight: bold;'
-        );
         this.router.navigate(['/settings']);
         return false;
       })
