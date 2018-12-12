@@ -1,11 +1,14 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {
+  AuthServiceInterface,
+  AUTH_SERVICE_TOKEN,
   DalState,
-  LearningAreaInterface,
-  LearningAreaQueries
+  LearningAreaQueries,
+  ResultQueries
 } from '@campus/dal';
 import { MemoizedSelectorWithProps, select, Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { LearningAreasWithResultsInterface } from './reports.viewmodel.interfaces';
 
 @Injectable({
@@ -13,20 +16,54 @@ import { LearningAreasWithResultsInterface } from './reports.viewmodel.interface
 })
 export class ReportsViewModel {
   // source streams
-  learningAreas$: Observable<LearningAreaInterface[]>;
+
+  // intermediate streams
 
   // presentation streams
   learningAreasWithResults$: Observable<LearningAreasWithResultsInterface>;
-  constructor(private store: Store<DalState>) {
-    this.setSourceStreams();
+
+  constructor(
+    private store: Store<DalState>,
+    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
+  ) {
     this.setPresentationStreams();
   }
 
-  private setSourceStreams() {
-    this.learningAreas$ = this.select(LearningAreaQueries.getAll);
+  private setPresentationStreams() {
+    this.learningAreasWithResults$ = this.getLearningAreasWithResult();
   }
 
-  private setPresentationStreams() {}
+  private getLearningAreasWithResult(): Observable<
+    LearningAreasWithResultsInterface
+  > {
+    return combineLatest(
+      this.select(LearningAreaQueries.getAllEntities),
+      this.select(ResultQueries.getLearningAreaIds),
+      this.select(ResultQueries.getResultsForTasks),
+      this.select(ResultQueries.getResultsForBundles)
+    ).pipe(
+      map(([areaEntities, areaIds, resultsForTasks, resultsForBundles]) => {
+        const learningAreasWithResult = {
+          learningAreas: areaIds.map(learningAreaId => {
+            const tasks = resultsForTasks.filter(
+              result => result.learningAreaId === learningAreaId
+            );
+            const bundles = resultsForBundles.filter(
+              result => result.learningAreaId === learningAreaId
+            );
+
+            return {
+              learningArea: areaEntities[learningAreaId],
+              tasksWithResultsCount: tasks.length,
+              bundlesWithResultsCount: bundles.length
+            };
+          })
+        };
+
+        return learningAreasWithResult;
+      })
+    );
+  }
 
   private select<T, Props>(
     selector: MemoizedSelectorWithProps<DalState, Props, T>,

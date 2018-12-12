@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ReportsViewModel } from './reports.viewmodel';
 
 @Component({
   selector: 'campus-reports',
@@ -6,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./reports.component.scss']
 })
 export class ReportsComponent implements OnInit {
-  constructor() {}
+  constructor(public viewModel: ReportsViewModel) {}
 
   ngOnInit() {}
 }

@@ -65,3 +65,28 @@ export const getById = createSelector(
   selectResultState,
   (state: State, props: { id: number }) => state.entities[props.id]
 );
+
+export const getLearningAreaIds = createSelector(
+  selectResultState,
+  (state: State) => {
+    return Array.from(
+      new Set(
+        Object.values(state.entities).map(result => result.learningAreaId)
+      )
+    );
+  }
+);
+
+export const getResultsForTasks = createSelector(
+  selectResultState,
+  (state: State) => {
+    return Object.values(state.entities).filter(result => result.taskId);
+  }
+);
+
+export const getResultsForBundles = createSelector(
+  selectResultState,
+  (state: State) => {
+    return Object.values(state.entities).filter(result => !result.taskId);
+  }
+);

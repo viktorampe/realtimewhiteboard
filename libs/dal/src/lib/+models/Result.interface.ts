@@ -18,4 +18,5 @@ export interface ResultInterface {
   person?: PersonInterface;
   task?: TaskInterface;
   unlockedContent?: UnlockedContentInterface;
+  learningAreaId?: number;
 }
