@@ -35,80 +35,83 @@ export class BreadcrumbsService {
   public setCurrentRoute() {
     this.currentRoute$ = this.router.events.pipe(
       filter(event => event instanceof NavigationEnd),
-      distinctUntilChanged(),
       startWith({}),
+      distinctUntilChanged(), // we are not interested if the route doesn't change
       map(_ => this.activatedRoute)
     );
 
     this.breadcrumbs$ = this.currentRoute$.pipe(
-      // flatMap(route => this.getBreadcrumbs(route.snapshot.root))
-      flatMap(route => this.getBreadcrumbsObservable(route.root))
+      flatMap(route => this.getBreadcrumbs(route.snapshot.root))
+      //flatMap(route => this.getBreadcrumbsObservable(route.root))
     );
   }
 
-  private getBreadcrumbsObservable(
-    route: ActivatedRoute
-  ): Observable<BreadcrumbLinkInterface[]> {
-    const routes: ActivatedRoute[] = [];
-    let currentRoute = route;
+  // private getBreadcrumbsObservable(
+  //   route: ActivatedRoute
+  // ): Observable<BreadcrumbLinkInterface[]> {
+  //   const routes: ActivatedRoute[] = [];
+  //   let currentRoute = route;
 
-    do {
-      routes.push(currentRoute);
-      currentRoute = currentRoute.firstChild;
-    } while (currentRoute);
+  //   do {
+  //     if (currentRoute.snapshot.url && currentRoute.snapshot.url.length) {
+  //       routes.push(currentRoute);
+  //     }
+  //     currentRoute = currentRoute.firstChild;
+  //   } while (currentRoute);
 
-    let breadcrumbs: Observable<BreadcrumbLinkInterface[]>;
-    const url = [];
+  //   console.log(routes);
 
-    breadcrumbs = combineLatest(
-      routes.map(activatedRoute =>
-        combineLatest(
-          activatedRoute.url,
-          activatedRoute.data,
-          activatedRoute.params
-        ).pipe(
-          flatMap(([routeUrl, routeData, routeParams]) => {
-            if (routeUrl && routeUrl.length) {
-              url.push(routeUrl[0].path);
+  //   let breadcrumbs: Observable<BreadcrumbLinkInterface[]>;
 
-              const data = routeData as BreadcrumbRouteDataInterface;
+  //   breadcrumbs = combineLatest(
+  //     routes.map(activatedRoute => {
+  //       const url = [];
 
-              let paramProperty;
-              let routeParam;
+  //       return combineLatest(
+  //         activatedRoute.url,
+  //         activatedRoute.data,
+  //         activatedRoute.params
+  //       ).pipe(
+  //         flatMap(([routeUrl, routeData, routeParams]) => {
+  //           url.push(routeUrl[0].path);
 
-              if (activatedRoute.routeConfig) {
-                paramProperty = activatedRoute.routeConfig.path.substr(1);
-                routeParam = routeParams[paramProperty];
-              }
+  //           const data = routeData as BreadcrumbRouteDataInterface;
 
-              const selector = data.selector;
-              const displayedProp = data.property;
-              const breadcrumbText = data.breadcrumb;
+  //           let paramProperty;
+  //           let routeParam;
 
-              if (selector) {
-                return this.store.pipe(
-                  select(selector, {
-                    id: routeParam
-                  }),
-                  map(entity => ({
-                    displayText: entity[displayedProp],
-                    link: url
-                  }))
-                );
-              } else {
-                return of({
-                  displayText: breadcrumbText,
-                  link: url
-                });
-              }
-            } else return of({ displayText: 'leeg', link: [] });
-          })
-        )
-      )
-    );
+  //           if (activatedRoute.routeConfig) {
+  //             paramProperty = activatedRoute.routeConfig.path.substr(1);
+  //             routeParam = routeParams[paramProperty];
+  //           }
 
-    return breadcrumbs;
-  }
+  //           const selector = data.selector;
+  //           const displayedProp = data.property;
+  //           const breadcrumbText = data.breadcrumb;
+
+  //           if (selector) {
+  //             return this.store.pipe(
+  //               select(selector, {
+  //                 id: routeParam
+  //               }),
+  //               map(entity => ({
+  //                 displayText: entity[displayedProp],
+  //                 link: url
+  //               }))
+  //             );
+  //           } else {
+  //             return of({
+  //               displayText: breadcrumbText,
+  //               link: url
+  //             });
+  //           }
+  //         })
+  //       );
+  //     })
+  //   );
+
+  //   return breadcrumbs;
+  // }
 
   private getBreadcrumbs(
     route: ActivatedRouteSnapshot
@@ -117,7 +120,9 @@ export class BreadcrumbsService {
     let currentRoute = route;
 
     do {
-      routes.push(currentRoute);
+      if (currentRoute.url && currentRoute.url.length) {
+        routes.push(currentRoute);
+      }
       currentRoute = currentRoute.firstChild;
     } while (currentRoute);
 
@@ -125,36 +130,34 @@ export class BreadcrumbsService {
     const url = [];
 
     breadcrumbs = combineLatest(
-      routes
-        .filter(routePart => routePart.url && routePart.url.length)
-        .map(routePart => {
-          url.push(routePart.url[0].path);
+      routes.map(routePart => {
+        url.push(routePart.url[0].path);
 
-          const data = routePart.data as BreadcrumbRouteDataInterface;
+        const data = routePart.data as BreadcrumbRouteDataInterface;
 
-          const paramProperty = routePart.routeConfig.path.substr(1);
-          const routeParam = routePart.params[paramProperty];
-          const selector = data.selector;
-          const displayedProp = data.property;
-          const breadcrumbText = data.breadcrumb;
+        const paramProperty = routePart.routeConfig.path.substr(1);
+        const routeParam = routePart.params[paramProperty];
+        const selector = data.selector;
+        const displayedProp = data.property;
+        const breadcrumbText = data.breadcrumb;
 
-          if (selector) {
-            return this.store.pipe(
-              select(selector, {
-                id: routeParam
-              }),
-              map(entity => ({
-                displayText: entity[displayedProp],
-                link: url
-              }))
-            );
-          } else {
-            return of({
-              displayText: breadcrumbText,
+        if (selector) {
+          return this.store.pipe(
+            select(selector, {
+              id: routeParam
+            }),
+            map(entity => ({
+              displayText: entity[displayedProp],
               link: url
-            });
-          }
-        })
+            }))
+          );
+        } else {
+          return of({
+            displayText: breadcrumbText,
+            link: url
+          });
+        }
+      })
     );
 
     return breadcrumbs;
