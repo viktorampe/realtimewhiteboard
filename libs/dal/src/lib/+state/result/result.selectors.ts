@@ -80,13 +80,28 @@ export const getLearningAreaIds = createSelector(
 export const getResultsForTasks = createSelector(
   selectResultState,
   (state: State) => {
-    return Object.values(state.entities).filter(result => result.taskId);
+    const resultIds = Array.from(
+      new Set(
+        Object.values(state.entities)
+          .filter(result => result.taskId)
+          .map(result => result.id)
+      )
+    );
+    return resultIds.map(resultId => state.entities[resultId]);
   }
 );
 
 export const getResultsForBundles = createSelector(
   selectResultState,
   (state: State) => {
-    return Object.values(state.entities).filter(result => !result.taskId);
+    const resultIds = Array.from(
+      new Set(
+        Object.values(state.entities)
+          .filter(result => !result.taskId)
+          .map(result => result.id)
+      )
+    );
+
+    return resultIds.map(resultId => state.entities[resultId]);
   }
 );
