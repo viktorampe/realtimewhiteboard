@@ -6,6 +6,7 @@ describe('TaskInstance', () => {
   const RealDate = Date;
 
   function mockDate(timestamp: number) {
+    // @ts-ignore
     global.Date = class extends RealDate {
       constructor(...args) {
         super();

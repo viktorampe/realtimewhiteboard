@@ -62,7 +62,6 @@
             <u (click)="filterTextInput.clear()">{{ contents.length }}</u>
             weergegeven
           </div>
-
           <campus-list-view
             #bundleListview
             [listFormat]="listFormat$ | async"
@@ -78,10 +77,12 @@
               [fileTypeLabel]="content.fileTypeLabel"
               [contentTypeClass]="content.productType"
             >
-              <!--
-                TODO Hier moeten de mogelijke actieknoppen met hun (Click) nog toegevoegd worden
-              -->
-              <campus-button [iconClass]="'bundle'" circle> </campus-button>
+              <campus-button
+                (click)="clickOpenContent(content)"
+                [iconClass]="'view-content'"
+                circle
+              >
+              </campus-button>
               <campus-button [iconClass]="'tasks'" circle> </campus-button>
             </campus-content-thumbnail>
           </campus-list-view>

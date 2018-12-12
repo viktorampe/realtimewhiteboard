@@ -6,9 +6,6 @@ import {
 } from '@campus/dal';
 import { select, Store } from '@ngrx/store';
 
-// TODO replace state object with actual DalState import
-export class DalState {}
-
 @Injectable()
 export class EduContentViewModel {
   educontents$: any;

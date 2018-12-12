@@ -1,11 +1,39 @@
 import { Inject, Injectable } from '@angular/core';
-import { AlertActions, AuthServiceInterface, AUTH_SERVICE_TOKEN, BundleInterface, BundleQueries, ContentInterface, DalState, EduContent, EduContentQueries, LearningAreaInterface, LearningAreaQueries, PersonFixture, PersonInterface, UiActions, UiQuery, UnlockedBoekeGroupQueries, UnlockedBoekeStudentQueries, UnlockedContentInterface, UnlockedContentQueries, UserContentQueries } from '@campus/dal';
+import {
+  AlertActions,
+  AuthServiceInterface,
+  AUTH_SERVICE_TOKEN,
+  BundleInterface,
+  BundleQueries,
+  ContentInterface,
+  DalState,
+  EduContent,
+  EduContentQueries,
+  LearningAreaInterface,
+  LearningAreaQueries,
+  PersonInterface,
+  PersonQueries,
+  UiActions,
+  UiQuery,
+  UnlockedBoekeGroupQueries,
+  UnlockedBoekeStudentQueries,
+  UnlockedContentInterface,
+  UnlockedContentQueries,
+  UserContentQueries
+} from '@campus/dal';
+import {
+  OpenStaticContentServiceInterface,
+  OPEN_STATIC_CONTENT_SERVICE_TOKEN
+} from '@campus/shared';
 import { ListFormat } from '@campus/ui';
 import { Dictionary } from '@ngrx/entity';
 import { select, Store } from '@ngrx/store';
-import { combineLatest, Observable, of } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { filter, map, shareReplay, switchMap } from 'rxjs/operators';
-import { BundlesWithContentInfoInterface, LearningAreasWithBundlesInfoInterface } from './bundles.viewmodel.interfaces';
+import {
+  BundlesWithContentInfoInterface,
+  LearningAreasWithBundlesInfoInterface
+} from './bundles.viewmodel.interfaces';
 
 export type NestedPartial<T> = { [P in keyof T]?: NestedPartial<T[P]> };
 
@@ -38,7 +66,9 @@ export class BundlesViewModel {
 
   constructor(
     private store: Store<DalState>,
-    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
+    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
+    @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
+    private openStaticContentService: OpenStaticContentServiceInterface
   ) {
     this.initialize();
   }
@@ -89,6 +119,10 @@ export class BundlesViewModel {
     this.store.dispatch(new UiActions.SetListFormat({ listFormat }));
   }
 
+  openContent(content: ContentInterface): void {
+    this.openStaticContentService.open(content);
+  }
+
   getLearningAreaById(areaId: number): Observable<LearningAreaInterface> {
     return this.store.pipe(select(LearningAreaQueries.getById, { id: areaId }));
   }
@@ -103,9 +137,9 @@ export class BundlesViewModel {
     return bundle$.pipe(
       switchMap(
         (bundle): Observable<PersonInterface> =>
-          // TODO implement personqueries and enable test
-          // this.store.pipe(select(PersonQueries.getById, { id: bundle.teacherId }))
-          of(new PersonFixture({ id: bundle.teacherId }))
+          this.store.pipe(
+            select(PersonQueries.getById, { id: bundle.teacherId })
+          )
       )
     );
   }

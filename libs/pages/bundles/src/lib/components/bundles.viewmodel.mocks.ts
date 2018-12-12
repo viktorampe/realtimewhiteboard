@@ -59,6 +59,8 @@ export class MockViewModel implements ViewModelInterface<BundlesViewModel> {
 
   setBundleAlertRead() {}
 
+  openContent(o: ContentInterface) {}
+
   getLearningAreaById(areaId: number): Observable<LearningAreaInterface> {
     return of(new LearningAreaFixture());
   }

@@ -106,6 +106,10 @@ export class BundleDetailComponent
     this.bundlesViewModel.changeListFormat(value);
   }
 
+  clickOpenContent(content: ContentInterface): void {
+    this.bundlesViewModel.openContent(content);
+  }
+
   private setupAlertsSubscription(): void {
     this.subscriptions.add(
       this.routeParams$.subscribe(params =>
