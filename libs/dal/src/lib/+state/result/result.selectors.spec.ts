@@ -93,7 +93,7 @@ describe('Result Selectors', () => {
       expect(results).toBe(undefined);
     });
 
-    it('getTaskAssigmentsByLearningAreId() should return Assignments', () => {
+    it('getTaskAssignmentsForLearningAreaId() should return Assignments', () => {
       const mockData: ResultInterface[] = [
         new ResultFixture({
           id: 1,
@@ -141,7 +141,7 @@ describe('Result Selectors', () => {
       resultState = createState(mockData, true, 'no error');
       storeState = { results: resultState };
 
-      const results = ResultQueries.getTaskAssigmentsByLearningAreId(
+      const results = ResultQueries.getTaskAssignmentsForLearningAreaId(
         storeState,
         { learningAreaId: 1 }
       );
@@ -184,7 +184,7 @@ describe('Result Selectors', () => {
       expect(results).toEqual(expected);
     });
 
-    it('getBundleAssigmentsByLearningAreId() should return Assignments', () => {
+    it('getBundleAssignmentsForLearningAreaId() should return Assignments', () => {
       const mockData: ResultInterface[] = [
         new ResultFixture({
           id: 1,
@@ -241,7 +241,7 @@ describe('Result Selectors', () => {
       resultState = createState(mockData, true, 'no error');
       storeState = { results: resultState };
 
-      const results = ResultQueries.getBundleAssigmentsByLearningAreId(
+      const results = ResultQueries.getBundleAssignmentsForLearningAreaId(
         storeState,
         { learningAreaId: 1 }
       );
@@ -281,7 +281,7 @@ describe('Result Selectors', () => {
         }
       ];
 
-      expect(results).toEqual(expected);
+      expect(expected).toEqual(results);
     });
   });
 
@@ -312,6 +312,7 @@ describe('Result Selectors', () => {
           }
         ]
       };
+
       expect(returnedValue).toEqual(expectedValue);
     });
   });

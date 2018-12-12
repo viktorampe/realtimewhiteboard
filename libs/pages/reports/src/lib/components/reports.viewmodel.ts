@@ -48,10 +48,10 @@ export class ReportsViewModel {
       this.select(EduContentQueries.getAllEntities) as Observable<
         Dictionary<EduContent>
       >,
-      this.select(ResultQueries.getTaskAssigmentsByLearningAreId, {
+      this.select(ResultQueries.getTaskAssignmentsForLearningAreaId, {
         learningAreaId
       }) as Observable<AssignmentResult[]>,
-      this.select(ResultQueries.getBundleAssigmentsByLearningAreId, {
+      this.select(ResultQueries.getBundleAssignmentsForLearningAreaId, {
         learningAreaId
       }) as Observable<AssignmentResult[]>
     ).pipe(

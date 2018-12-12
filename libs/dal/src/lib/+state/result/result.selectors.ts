@@ -69,23 +69,26 @@ export const getById = createSelector(
   (state: State, props: { id: number }) => state.entities[props.id]
 );
 
-export const getTaskAssigmentsByLearningAreId = createSelector(
+export const getTaskAssignmentsForLearningAreaId = createSelector(
   selectResultState,
   (state: State, props: { learningAreaId: number }) => {
     const ids: number[] = <number[]>state.ids;
-    const filteredEntities = ids
-      .filter(
-        id =>
-          state.entities[id].taskId &&
-          state.entities[id].learningAreaId === props.learningAreaId
-      )
-      .map(id => state.entities[id]);
 
-    const resultsByTaskId = groupArrayByKey<ResultInterface>(
-      Object.values(filteredEntities),
-      {
-        taskId: 0
-      }
+    const resultsByTaskId: Dictionary<ResultInterface[]> = ids.reduce(
+      (acc, id) => {
+        // mapping
+        const result = state.entities[id];
+        // filtering
+        if (result.taskId && result.learningAreaId === props.learningAreaId) {
+          // grouping
+          if (!acc[result.taskId]) {
+            acc[result.taskId] = [];
+          }
+          acc[result.taskId].push(result);
+        }
+        return acc;
+      },
+      {}
     );
 
     const taskAssigmentResults = Object.keys(resultsByTaskId).map(taskId => ({
@@ -98,23 +101,26 @@ export const getTaskAssigmentsByLearningAreId = createSelector(
   }
 );
 
-export const getBundleAssigmentsByLearningAreId = createSelector(
+export const getBundleAssignmentsForLearningAreaId = createSelector(
   selectResultState,
   (state: State, props: { learningAreaId: number }) => {
     const ids: number[] = <number[]>state.ids;
-    const filteredEntities = ids
-      .filter(
-        id =>
-          state.entities[id].bundleId &&
-          state.entities[id].learningAreaId === props.learningAreaId
-      )
-      .map(id => state.entities[id]);
 
-    const resultsByBundleId = groupArrayByKey<ResultInterface>(
-      Object.values(filteredEntities),
-      {
-        bundleId: 0
-      }
+    const resultsByBundleId: Dictionary<ResultInterface[]> = ids.reduce(
+      (acc, id) => {
+        // mapping
+        const result = state.entities[id];
+        // filtering
+        if (result.bundleId && result.learningAreaId === props.learningAreaId) {
+          // grouping
+          if (!acc[result.bundleId]) {
+            acc[result.bundleId] = [];
+          }
+          acc[result.bundleId].push(result);
+        }
+        return acc;
+      },
+      {}
     );
 
     const bundleAssigmentResults = Object.keys(resultsByBundleId).map(
@@ -130,61 +136,50 @@ export const getBundleAssigmentsByLearningAreId = createSelector(
 );
 
 export function getExerciseResults(results: ResultInterface[]): {} {
-  const resultsPerEduContentId = Object.values(
-    results.reduce(
-      (acc, result) => {
-        let group = acc[result.eduContentId];
+  const resultsByEduContentId = groupArrayByKey<ResultInterface>(results, {
+    eduContentId: 0
+  });
 
-        if (!group) {
-          group = {
-            eduContentId: result.eduContentId,
-            results: [],
-            resultCount: 0,
-            resultMaxScore: 0,
-            resultMax: undefined,
-            resultTotalScore: 0
-          };
-          acc[result.eduContentId] = group;
+  const exerciseResults = Object.keys(resultsByEduContentId).map(
+    eduContentId => {
+      const eduContentResults = resultsByEduContentId[eduContentId];
+
+      let bestResult = eduContentResults[0],
+        totalScore = 0;
+
+      eduContentResults.forEach(result => {
+        if (result.score > bestResult.score) {
+          bestResult = result;
         }
+        totalScore += result.score;
+      });
 
-        group.results.push(result);
-        group.resultCount++;
-        if (result.score > group.resultMaxScore) {
-          group.resultMaxScore = result.score;
-          group.resultMax = result;
-        }
-        group.resultTotalScore += result.score;
+      return {
+        eduContentId: +eduContentId,
+        results: eduContentResults,
+        bestResult: bestResult,
+        averageScore: totalScore / eduContentResults.length
+      } as ExerciseResultsInterface;
+    }
+  );
 
-        return acc;
-      },
-      {} as Dictionary<ExerciseResultsReducerInterface>
-    )
-  ).map(reducedEducontent => ({
-    eduContentId: reducedEducontent.eduContentId,
-    results: reducedEducontent.results,
-    bestResult: reducedEducontent.resultMax,
-    averageScore:
-      reducedEducontent.resultTotalScore / reducedEducontent.resultCount
-  }));
-
-  const totalScoreAllEduContents = resultsPerEduContentId.reduce(
-    (sum, eduC) => (sum += eduC.bestResult.score),
+  const totalScoreAllEduContents = exerciseResults.reduce(
+    (sum, value) => (sum += value.bestResult.score),
     0
   );
+
   const averageScoreAllEduContents =
-    totalScoreAllEduContents / resultsPerEduContentId.length;
+    totalScoreAllEduContents / exerciseResults.length;
 
   return {
     totalScore: averageScoreAllEduContents,
-    exerciseResults: resultsPerEduContentId
+    exerciseResults: exerciseResults
   };
 }
 
-interface ExerciseResultsReducerInterface {
+interface ExerciseResultsInterface {
   eduContentId: number;
   results: ResultInterface[];
-  resultCount: number;
-  resultMaxScore: number;
-  resultMax: ResultInterface;
-  resultTotalScore: number;
+  bestResult: ResultInterface;
+  averageScore: number;
 }
