@@ -17,7 +17,8 @@ export interface AssignmentResult {
   type: string; //(Task/Bundle)
   totalScore: number;
   exerciseResults: {
-    eduContent: EduContent;
+    educContentId: number;
+    eduContent?: EduContent;
     results: ResultInterface[]; // if needed
     bestResult: ResultInterface;
     averageScore: number; // if needed

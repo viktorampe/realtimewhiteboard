@@ -2,6 +2,7 @@ import { ResultQueries } from '.';
 import { ResultFixture } from '../../+fixtures';
 import { ResultInterface } from '../../+models';
 import { State } from './result.reducer';
+import { getExerciseResults } from './result.selectors';
 
 describe('Result Selectors', () => {
   function createResult(id: number): ResultInterface | any {
@@ -92,62 +93,226 @@ describe('Result Selectors', () => {
       expect(results).toBe(undefined);
     });
 
-    it('getByTaskIdGroupedByEduContentId() should return grouped results', () => {
+    it('getTaskAssigmentsByLearningAreId() should return Assignments', () => {
       const mockData: ResultInterface[] = [
-        new ResultFixture({ id: 1, learningAreaId: 1, taskId: 1 }),
-        new ResultFixture({ id: 2, learningAreaId: 1, taskId: 1 }),
-        new ResultFixture({ id: 3, learningAreaId: 1, taskId: 2 }),
-        new ResultFixture({ id: 4, learningAreaId: 2, taskId: 1 })
+        new ResultFixture({
+          id: 1,
+          learningAreaId: 1,
+          taskId: 1,
+          score: 10,
+          eduContentId: 1,
+          assignment: 'foo'
+        }),
+        new ResultFixture({
+          id: 2,
+          learningAreaId: 1,
+          taskId: 1,
+          score: 50,
+          eduContentId: 2,
+          assignment: 'foo'
+        }),
+        new ResultFixture({
+          id: 3,
+          learningAreaId: 1,
+          taskId: 2,
+          score: 100,
+          eduContentId: 1,
+          assignment: 'bar'
+        }),
+        new ResultFixture({
+          id: 4,
+          learningAreaId: 2,
+          taskId: 1,
+          score: 75,
+          eduContentId: 1,
+          assignment: 'foo'
+        }),
+        new ResultFixture({
+          id: 5,
+          learningAreaId: 1,
+          unlockedContentId: 1,
+          taskId: null,
+          score: 0,
+          eduContentId: 1,
+          assignment: 'foo bar'
+        })
       ];
 
       resultState = createState(mockData, true, 'no error');
       storeState = { results: resultState };
 
-      const results = ResultQueries.getByLearningAreaIdGroupedByTaskId(
+      const results = ResultQueries.getTaskAssigmentsByLearningAreId(
         storeState,
         { learningAreaId: 1 }
       );
 
-      const expected = {
-        1: mockData.filter(
-          result => result.learningAreaId === 1 && result.taskId === 1
-        ),
-        2: mockData.filter(
-          result => result.learningAreaId === 1 && result.taskId === 2
-        )
-      };
+      const expected = [
+        {
+          title: mockData[0].assignment,
+          type: 'task',
+          totalScore: 30,
+          exerciseResults: [
+            {
+              eduContentId: 1,
+              results: [mockData[0]],
+              bestResult: mockData[0],
+              averageScore: mockData[0].score
+            },
+            {
+              eduContentId: 2,
+              results: [mockData[1]],
+              bestResult: mockData[1],
+              averageScore: mockData[1].score
+            }
+          ]
+        },
+        {
+          title: mockData[2].assignment,
+          type: 'task',
+          totalScore: mockData[2].score,
+          exerciseResults: [
+            {
+              eduContentId: 1,
+              results: [mockData[2]],
+              bestResult: mockData[2],
+              averageScore: mockData[2].score
+            }
+          ]
+        }
+      ];
 
       expect(results).toEqual(expected);
     });
 
-    it('getByLearningAreaIdGroupedByUnlockedContentId() should return grouped results', () => {
+    it('getBundleAssigmentsByLearningAreId() should return Assignments', () => {
       const mockData: ResultInterface[] = [
-        new ResultFixture({ id: 1, learningAreaId: 1, unlockedContentId: 1 }),
-        new ResultFixture({ id: 2, learningAreaId: 1, unlockedContentId: 1 }),
-        new ResultFixture({ id: 3, learningAreaId: 1, unlockedContentId: 2 }),
-        new ResultFixture({ id: 4, learningAreaId: 2, unlockedContentId: 1 })
+        new ResultFixture({
+          id: 1,
+          learningAreaId: 1,
+          bundleId: 1,
+          score: 10,
+          eduContentId: 1,
+          assignment: 'foo'
+        }),
+        new ResultFixture({
+          id: 2,
+          learningAreaId: 1,
+          bundleId: 1,
+          score: 50,
+          eduContentId: 2,
+          assignment: 'foo'
+        }),
+        new ResultFixture({
+          id: 3,
+          learningAreaId: 1,
+          bundleId: 2,
+          score: 100,
+          eduContentId: 1,
+          assignment: 'bar'
+        }),
+        new ResultFixture({
+          id: 4,
+          learningAreaId: 2,
+          bundleId: 1,
+          score: 75,
+          eduContentId: 1,
+          assignment: 'foo'
+        }),
+        new ResultFixture({
+          id: 5,
+          learningAreaId: 1,
+          unlockedContentId: 1,
+          taskId: 1,
+          bundleId: null,
+          score: 0,
+          eduContentId: 1,
+          assignment: 'foo bar'
+        }),
+        new ResultFixture({
+          id: 6,
+          learningAreaId: 1,
+          bundleId: 1,
+          score: 90,
+          eduContentId: 1,
+          assignment: 'foo'
+        })
       ];
 
       resultState = createState(mockData, true, 'no error');
       storeState = { results: resultState };
 
-      const results = ResultQueries.getByLearningAreaIdGroupedByUnlockedContentId(
+      const results = ResultQueries.getBundleAssigmentsByLearningAreId(
         storeState,
         { learningAreaId: 1 }
       );
 
-      const expected = {
-        1: mockData.filter(
-          result =>
-            result.learningAreaId === 1 && result.unlockedContentId === 1
-        ),
-        2: mockData.filter(
-          result =>
-            result.learningAreaId === 1 && result.unlockedContentId === 2
-        )
-      };
+      const expected = [
+        {
+          title: mockData[0].assignment,
+          type: 'bundle',
+          totalScore: 70,
+          exerciseResults: [
+            {
+              eduContentId: 1,
+              results: [mockData[0], mockData[5]],
+              bestResult: mockData[5],
+              averageScore: (mockData[0].score + mockData[5].score) / 2
+            },
+            {
+              eduContentId: 2,
+              results: [mockData[1]],
+              bestResult: mockData[1],
+              averageScore: mockData[1].score
+            }
+          ]
+        },
+        {
+          title: mockData[2].assignment,
+          type: 'bundle',
+          totalScore: mockData[2].score,
+          exerciseResults: [
+            {
+              eduContentId: 1,
+              results: [mockData[2]],
+              bestResult: mockData[2],
+              averageScore: mockData[2].score
+            }
+          ]
+        }
+      ];
 
       expect(results).toEqual(expected);
+    });
+  });
+
+  describe('internal methods', () => {
+    it('getExerciseResults should return correct values', () => {
+      const mockResults = [
+        new ResultFixture({ id: 1, eduContentId: 1, score: 10 }),
+        new ResultFixture({ id: 2, eduContentId: 1, score: 50 }),
+        new ResultFixture({ id: 3, eduContentId: 20, score: 80 })
+      ];
+
+      const returnedValue = getExerciseResults(mockResults);
+
+      const expectedValue = {
+        totalScore: 65,
+        exerciseResults: [
+          {
+            eduContentId: mockResults[0].eduContentId,
+            results: [mockResults[0], mockResults[1]],
+            bestResult: mockResults[1],
+            averageScore: 30
+          },
+          {
+            eduContentId: mockResults[2].eduContentId,
+            results: [mockResults[2]],
+            bestResult: mockResults[2],
+            averageScore: 80
+          }
+        ]
+      };
+      expect(returnedValue).toEqual(expectedValue);
     });
   });
 });

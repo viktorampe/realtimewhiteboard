@@ -19,5 +19,8 @@ export interface ResultInterface {
   task?: TaskInterface;
   unlockedContent?: UnlockedContentInterface;
   learningAreaId?: number;
-  title?: string;
+  assignment?: string;
+  taskInstanceId?: number;
+  username?: string;
+  bundleId?: number;
 }

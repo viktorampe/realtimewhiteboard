@@ -6,7 +6,6 @@ import {
   EduContentQueries,
   LearningAreaInterface,
   LearningAreaQueries,
-  ResultInterface,
   ResultQueries
 } from '@campus/dal';
 import { MemoizedSelectorWithProps, select, Store } from '@ngrx/store';
@@ -44,101 +43,35 @@ export class ReportsViewModel {
   public getAssignmentResultsByLearningArea(
     learningAreaId: number
   ): Observable<AssignmentResult[]> {
-    const userId = this.authService.userId;
-
-    const output = combineLatest(
+    return combineLatest(
       this.select(EduContentQueries.getAllEntities) as Observable<EduContent[]>,
-      this.select(ResultQueries.getByLearningAreaIdGroupedByTaskId, {
+      this.select(ResultQueries.getTaskAssigmentsByLearningAreId, {
         learningAreaId
-      }),
-      this.select(ResultQueries.getByLearningAreaIdGroupedByTaskId, {
+      }) as Observable<AssignmentResult[]>,
+      this.select(ResultQueries.getBundleAssigmentsByLearningAreId, {
         learningAreaId
-      })
+      }) as Observable<AssignmentResult[]>
     ).pipe(
-      map(([eduContents, resultsByTaskId, resultsByUnlockedContentId]) => {
-        const taskAssigmentResults = Object.keys(resultsByTaskId).map(
-          taskId =>
-            ({
-              title: resultsByTaskId[taskId][0].title,
-              type: 'task',
-              ...this.getExerciseResults(resultsByTaskId[taskId], eduContents)
-            } as AssignmentResult)
+      map(([eduContents, resultsByTaskId, resultsBybundleId]) => {
+        // eduContents vasthaken
+        resultsByTaskId.forEach(assignment =>
+          assignment.exerciseResults.forEach(
+            exResult =>
+              (exResult.eduContent = eduContents[exResult.educContentId])
+          )
         );
 
-        const unlockedContentAssigmentResults = Object.keys(
-          resultsByUnlockedContentId
-        ).map(
-          contentId =>
-            ({
-              title: resultsByUnlockedContentId[contentId][0].title,
-              type: 'bundle',
-              ...this.getExerciseResults(
-                resultsByUnlockedContentId[contentId],
-                eduContents
-              )
-            } as AssignmentResult)
+        // eduContents vasthaken
+        resultsBybundleId.forEach(assignment =>
+          assignment.exerciseResults.forEach(
+            exResult =>
+              (exResult.eduContent = eduContents[exResult.educContentId])
+          )
         );
 
-        return [...taskAssigmentResults, ...unlockedContentAssigmentResults];
+        return [...resultsByTaskId, ...resultsBybundleId];
       })
     );
-
-    return output;
-  }
-
-  private getExerciseResults(
-    results: ResultInterface[],
-    eduContents: EduContent[]
-  ): {} {
-    const resultsPerEduContentId = results
-      .reduce(
-        (acc, result) => {
-          const group = acc[result.eduContentId];
-          if (group) {
-            group.results.push(result);
-            group.resultCount++;
-            if (result.score > group.resultMaxScore) {
-              group.resultMaxScore = result.score;
-              group.resultMax = result;
-            }
-            group.resultTotalScore += result.score;
-          } else {
-            acc[result.eduContentId] = {
-              eduContentId: result.eduContentId,
-              results: [result],
-              resultCount: 1,
-              resultMaxScore: result.score,
-              resultMax: result,
-              resultTotalScore: result.score
-            };
-          }
-
-          return acc;
-        },
-        [] as ExerciseResultsReducerInterface[]
-      )
-      .filter(arrayValue => arrayValue) // indexen met lege waardes verwijderen
-      .map(reducedEducontent => ({
-        eduContent: eduContents.find(
-          eduC => eduC.id === reducedEducontent.eduContentId
-        ),
-        results: reducedEducontent.results,
-        bestResult: reducedEducontent.resultMax,
-        averageScore:
-          reducedEducontent.resultTotalScore / reducedEducontent.resultCount
-      }));
-
-    const totalScoreAllEduContents = resultsPerEduContentId.reduce(
-      (sum, eduC) => (sum += eduC.bestResult.score),
-      0
-    );
-    const averageScoreAllEduContents =
-      totalScoreAllEduContents / resultsPerEduContentId.length;
-
-    return {
-      totalScore: averageScoreAllEduContents,
-      exerciseResults: resultsPerEduContentId
-    };
   }
 
   private setSourceStreams() {
@@ -153,13 +86,4 @@ export class ReportsViewModel {
   ): Observable<T> {
     return this.store.pipe(select(selector, payload));
   }
-}
-
-interface ExerciseResultsReducerInterface {
-  eduContentId: number;
-  results: ResultInterface[];
-  resultCount: number;
-  resultMaxScore: number;
-  resultMax: ResultInterface;
-  resultTotalScore: number;
 }
