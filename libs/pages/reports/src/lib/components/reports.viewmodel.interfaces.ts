@@ -5,10 +5,10 @@ import {
 } from '@campus/dal';
 
 export interface LearningAreasWithResultsInterface {
-  learningAreas: LearningAreaInterface[];
+  learningAreas: LearningAreaWithResultsInterface[];
 }
 
-export interface LearningAreaInterface {
+export interface LearningAreaWithResultsInterface {
   learningArea: LearningAreaInterface;
   tasksWithResultsCount: number;
   bundlesWithResultsCount: number;

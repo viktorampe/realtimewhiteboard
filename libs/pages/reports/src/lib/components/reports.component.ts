@@ -1,10 +1,14 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { FilterableItem, FilterTextInputComponent } from '@campus/ui';
+import {
+  FilterableItem,
+  FilterTextInputComponent,
+  ListFormat
+} from '@campus/ui';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { Observable } from 'rxjs';
 import {
-  LearningAreaInterface,
-  LearningAreasWithResultsInterface
+  LearningAreasWithResultsInterface,
+  LearningAreaWithResultsInterface
 } from './reports.viewmodel.interfaces';
 import { MockReportsViewModel } from './reports.viewmodel.mock';
 
@@ -16,7 +20,10 @@ import { MockReportsViewModel } from './reports.viewmodel.mock';
 export class ReportsComponent
   implements
     OnInit,
-    FilterableItem<LearningAreaInterface[], LearningAreaInterface> {
+    FilterableItem<
+      LearningAreaWithResultsInterface[],
+      LearningAreaWithResultsInterface
+    > {
   learningAreasWithResults$: Observable<
     LearningAreasWithResultsInterface
   > = this.viewModel.learningAreasWithResults$;
@@ -24,8 +31,8 @@ export class ReportsComponent
 
   @ViewChild(FilterTextInputComponent)
   filterTextInput: FilterTextInputComponent<
-    LearningAreaInterface[],
-    LearningAreaInterface
+    LearningAreaWithResultsInterface[],
+    LearningAreaWithResultsInterface
   >;
 
   constructor(
@@ -37,14 +44,20 @@ export class ReportsComponent
     this.filterTextInput.setFilterableItem(this);
   }
 
+  setListFormat(format: ListFormat) {
+    this.viewModel.changeListFormat(format);
+  }
+
   filterFn(
-    source: LearningAreaInterface[],
+    source: LearningAreaWithResultsInterface[],
     filterText: string
-  ): LearningAreaInterface[] {
-    return this.filterService.filter(source, {
-      learningArea: {
-        name: filterText
-      }
-    });
+  ): LearningAreaWithResultsInterface[] {
+    if (source) {
+      return this.filterService.filter(source, {
+        learningArea: {
+          name: filterText
+        }
+      });
+    }
   }
 }

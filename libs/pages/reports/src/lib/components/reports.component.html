@@ -26,7 +26,7 @@
     <campus-filter-text-input
       theme="dark"
       class="pages__toolbar__filter"
-      [source]="taskInstances$ | async"
+      [source]="(learningAreasWithResults$ | async).learningAreas"
     ></campus-filter-text-input>
 
     <div class="divider"></div>
@@ -41,7 +41,7 @@
   </campus-page-bar>
 
   <campus-page-header
-    *ngIf="(learningArea$ | async) as learningAreas"
+    *ngIf="(learningAreasWithResults$ | async) as learningAreas"
     [title]="'Resultaten'"
     [subtitle]="'Kies een vakgebied'"
     [iconClass]="'increase'"
@@ -55,7 +55,7 @@
       <div class="pages-reports__container__tasks-count">
         {{ filteredLearningAreaInstances.length }} van
         <u (click)="filterTextInput.clear()">{{
-          (learningArea$ | async)?.learningAreas.length
+          (learningAreasWithResults$ | async)?.learningAreas.length
         }}</u>
         weergegeven
       </div>
@@ -66,18 +66,15 @@
       >
         <campus-folder
           *ngFor="let instance of filteredLearningAreaInstances"
-          [routerLink]="[instance.taskInstance.taskId]"
+          [routerLink]="[instance.learningArea.id]"
           campusListItem
-          progress="{{instance.taskInstance.progress}}"
-          [itemCount]="instance.taskEduContentsCount"
-          [title]="instance.task.name"
-          [backgroundColor]="(learningArea$ | async).color"
-          [icon]="getIcon(instance.finished)"
+          progress="100"
+          [itemCount]="instance.tasksWithResultsCount"
+          [title]="instance.learningArea.name"
+          [backgroundColor]="instance.learningArea.color"
+          [icon]="instance.learningArea.icon"
         >
-          <campus-folder-details>
-            {{ instance.taskEduContentsCount + ' item(s)' }}<br />
-            {{ instance.taskInstance.end | date: 'dd/MM HH:mm' }}
-          </campus-folder-details>
+          <campus-folder-details> </campus-folder-details>
         </campus-folder>
       </campus-list-view>
     </div>

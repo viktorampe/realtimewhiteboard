@@ -5,10 +5,8 @@ import {
   LearningAreaInterface,
   ResultFixture
 } from '@campus/dal';
-import { ViewModelInterface } from '@campus/testing';
 import { ListFormat } from '@campus/ui';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { ReportsViewModel } from './reports.viewmodel';
 import {
   AssignmentResultInterface,
   LearningAreasWithResultsInterface
@@ -17,8 +15,7 @@ import {
 @Injectable({
   providedIn: 'root'
 })
-export class MockReportsViewModel
-  implements ViewModelInterface<ReportsViewModel> {
+export class MockReportsViewModel {
   // presentation streams
   listFormat$: Observable<ListFormat> = new BehaviorSubject<ListFormat>(
     ListFormat.GRID
