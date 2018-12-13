@@ -1,0 +1,100 @@
+@mixin pages-reports-by-person-and-area-theme() {
+  $pages-reports-by-person__header-font-color: $ui-tertiary-font-color-2 !default;
+  $pages-reports-by-person__header-bg-color: $ui-secondary-bg-color !default;
+  $pages-reports-by-person__header--odd-bg-color: $ui-tertiary-font-color-2 !default;
+  $pages-reports-by-person__header--even-bg-color: $ui-secondary-bg-color !default;
+
+  $pages-reports-by-person__header-font-color--accent: $ui-secondary-font-color-accent !default;
+  $pages-reports-by-person__button-font-color: $ui-button-font-color !default;
+  $pages-reports-by-person__button-bg-color: $ui-button-bg-color !default;
+
+  $pages-reports-by-person__header-row--odd-bg-color: $ui-list-row-bg-title-odd !default;
+  $pages-reports-by-person__header-row--even-bg-color: $ui-list-row-bg-title-even !default;
+  $pages-reports-by-person__row--odd-bg-color: $ui-list-row-bg-odd !default;
+  $pages-reports-by-person__row--even-bg-color: $ui-list-row-bg-even !default;
+
+  .page-results {
+    em {
+      color: $pages-reports-by-person__header-font-color--accent;
+    }
+
+    td,
+    th {
+      &.number {
+        width: 110px;
+      }
+
+      &.title {
+        width: 200px;
+      }
+
+      a {
+        border-bottom: 1px dotted $pages-reports-by-person__button-bg-color;
+
+        &:hover {
+          color: $pages-reports-by-person__button-font-color;
+          background-color: $pages-reports-by-person__button-bg-color;
+          padding: 0 10px;
+          border-radius: 17px;
+        }
+      }
+    }
+
+    th {
+      background-color: #3c4552;
+      color: $pages-reports-by-person__header-font-color;
+
+      &.score {
+        width: 85px;
+        color: $pages-reports-by-person__header-font-color--accent;
+        font-weight: normal;
+        text-align: center;
+      }
+    }
+
+    thead {
+      th,
+      td {
+        color: $pages-reports-by-person__header-font-color;
+        padding: 20px;
+        line-height: 14px;
+      }
+
+      th {
+        background-color: $pages-reports-by-person__header-bg-color;
+      }
+
+      td {
+        background-color: $pages-reports-by-person__header-row--odd-bg-color;
+
+        &:nth-child(even) {
+          background-color: $pages-reports-by-person__header-row--even-bg-color;
+        }
+      }
+    }
+
+    tbody {
+      background-color: $pages-reports-by-person__row--odd-bg-color;
+
+      th {
+        min-height: 43px;
+      }
+
+      &:nth-child(odd) {
+        th {
+          background-color: $pages-reports-by-person__header-row--odd-bg-color;
+        }
+      }
+
+      td,
+      th {
+        padding: 10px 20px;
+        line-height: 22px;
+      }
+
+      tr:nth-child(even) {
+        background-color: $pages-reports-by-person__row--even-bg-color;
+      }
+    }
+  }
+}

@@ -1,13 +1,27 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ReportsComponent } from './components/reports.component';
-import { ReportsViewModel } from './components/reports.viewmodel';
+import { ResultsByPersonAndAreaComponent } from './components/results-by-person-and-area/results-by-person-and-area.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: ReportsComponent,
-    resolve: { isResolved: ReportsViewModel }
+    // resolve: { isResolved: ReportsResolver },
+    children: [
+      {
+        path: '',
+        component: ReportsComponent
+      },
+      {
+        path: ':area',
+        children: [
+          {
+            path: '',
+            component: ResultsByPersonAndAreaComponent
+          }
+        ]
+      }
+    ]
   }
 ];
 

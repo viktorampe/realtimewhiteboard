@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { EduContent, LearningAreaInterface } from '@campus/dal';
+import {
+  EduContent,
+  LearningAreaInterface,
+  ResultInterface
+} from '@campus/dal';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { ReportsViewModel } from '../reports.viewmodel';
@@ -9,7 +13,7 @@ import { AssignmentResultInterface } from '../reports.viewmodel.interfaces';
 @Component({
   selector: 'campus-results-by-person-and-area',
   templateUrl: './results-by-person-and-area.component.html',
-  styleUrls: ['./results-by-person-and-area.component.css']
+  styleUrls: ['./results-by-person-and-area.component.scss']
 })
 export class ResultsByPersonAndAreaComponent implements OnInit {
   //input streams
@@ -59,9 +63,15 @@ export class ResultsByPersonAndAreaComponent implements OnInit {
   }
 
   //event handlers
-  clickOpenContent(content: EduContent): void {
+  clickOpenContentForReview(
+    content: EduContent,
+    result: ResultInterface
+  ): void {
     //TODO contact viewmodel to open new window
-    console.log('%cclickOpenContent:', 'color: orange; font-weight: bold;');
-    console.log({ content });
+    console.log(
+      '%cclickOpenContentForReview:',
+      'color: orange; font-weight: bold;'
+    );
+    console.log({ content, result });
   }
 }
