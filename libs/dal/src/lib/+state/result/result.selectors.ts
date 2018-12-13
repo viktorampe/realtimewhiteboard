@@ -1,5 +1,4 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { ResultInterface } from '../../+models';
 import {
   NAME,
   selectAll,
@@ -105,10 +104,15 @@ export const getResultsGroupedByArea = createSelector(
         const result = state.entities[id];
         // group by learning area
         if (!acc[resultLearningAreaId]) {
-          acc[resultLearningAreaId] = [];
+          acc[resultLearningAreaId] = {
+            tasks: new Set<number>(),
+            bundles: new Set<number>()
+          };
         }
 
-        acc[resultLearningAreaId].push(result);
+        if (result.taskId) acc[resultLearningAreaId].tasks.add(result.taskId);
+        if (result.unlockedContentId)
+          acc[resultLearningAreaId].bundles.add(result.unlockedContentId);
 
         return acc;
       },
@@ -120,5 +124,8 @@ export const getResultsGroupedByArea = createSelector(
 );
 
 interface ResultsGroupedByArea {
-  [key: number]: ResultInterface[];
+  [key: number]: {
+    tasks: Set<number>;
+    bundles: Set<number>;
+  };
 }
