@@ -8,14 +8,11 @@ import { ContentPreviewComponent } from './content-preview.component';
 @Component({
   selector: 'campus-test-container',
   template: `
-  <campus-content-preview preview>
-    <campus-file-extension type></campus-file-extension>
-    <div icon class="polpo-presentatie"></div>
-    <div badge
-         *ngFor="let badge of ['badge1', 'badge2']">
-      {{badge}}
-    </div>
-  </campus-content-preview>
+    <campus-content-preview preview>
+      <campus-file-extension type></campus-file-extension>
+      <div icon class="polpo-presentatie"></div>
+      <div badge *ngFor="let badge of ['badge1', 'badge2']"> {{ badge }} </div>
+    </campus-content-preview>
   `
 })
 export class TestContainerComponent {}
@@ -79,13 +76,13 @@ describe('ContentPreviewComponent', () => {
     const title = fixture.debugElement.query(
       By.css('.ui_content-preview__product__details__title')
     ).nativeElement.textContent;
-    expect(title).toBe(mockData.titleText);
+    expect(title).toContain(mockData.titleText);
   });
   it('should show the description', () => {
     const title = fixture.debugElement.query(
       By.css('.ui_content-preview__product__details__description')
     ).nativeElement.textContent;
-    expect(title).toBe(mockData.description);
+    expect(title).toContain(mockData.description);
   });
   it('should show the productTypeIcon', () => {
     const productTypeIcon = testContainerFixture.debugElement.query(

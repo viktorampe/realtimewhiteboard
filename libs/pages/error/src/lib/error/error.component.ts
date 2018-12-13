@@ -5,7 +5,7 @@ import {
   EnvironmentWebsiteInterface,
   ENVIRONMENT_WEBSITE_TOKEN
 } from '@campus/shared';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 
@@ -41,6 +41,6 @@ export class ErrorComponent implements OnInit {
   }
 
   private getUser(): Observable<PersonInterface> {
-    return this.store.select(UserQueries.getCurrentUser);
+    return this.store.pipe(select(UserQueries.getCurrentUser));
   }
 }

@@ -7,6 +7,11 @@ import {
 
 export const NAME = 'taskEduContents';
 
+const sortByIndex = (
+  a: TaskEduContentInterface,
+  b: TaskEduContentInterface
+): number => a.index - b.index || a.id - b.id; // if index is equal, sort by id asc
+
 export interface State extends EntityState<TaskEduContentInterface> {
   // additional entities state properties
   loaded: boolean;
@@ -15,7 +20,9 @@ export interface State extends EntityState<TaskEduContentInterface> {
 
 export const adapter: EntityAdapter<
   TaskEduContentInterface
-> = createEntityAdapter<TaskEduContentInterface>();
+> = createEntityAdapter<TaskEduContentInterface>({
+  sortComparer: sortByIndex
+});
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties

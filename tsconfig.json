@@ -1,6 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "importHelpers": true,
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
@@ -20,16 +21,18 @@
       "@campus/pages/reports": ["libs/pages/reports/src/index.ts"],
       "@campus/pages/tasks": ["libs/pages/tasks/src/index.ts"],
       "@campus/pages/books": ["libs/pages/books/src/index.ts"],
+      "@campus/pages/error": ["libs/pages/error/src/index.ts"],
       "@campus/ui": ["libs/ui/src/index.ts"],
       "@campus/dal": ["libs/dal/src/index.ts"],
       "@campus/pages/shared": ["libs/pages/shared/src/index.ts"],
       "@campus/browser": ["libs/browser/src/index.ts"],
       "@campus/shared": ["libs/shared/src/index.ts"],
       "@campus/scorm": ["libs/scorm/src/index.ts"],
-      "@campus/pages/error": ["libs/pages/error/src/index.ts"],
+      "@campus/guards": ["libs/guards/src/index.ts"],
       "@campus/testing": ["libs/testing/src/index.ts"],
       "@campus/utils": ["libs/utils/src/index.ts"]
     }
   },
-  "exclude": ["node_modules", "tmp"]
+  "exclude": ["node_modules", "tmp", "apps/*e2e*"],
+  "include": ["**/*.ts"]
 }

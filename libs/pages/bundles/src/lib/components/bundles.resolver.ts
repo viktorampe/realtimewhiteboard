@@ -16,10 +16,8 @@ import {
   UnlockedBoekeStudentQueries,
   UnlockedContentActions,
   UnlockedContentQueries,
-  UserActions,
   UserContentActions,
-  UserContentQueries,
-  UserQueries
+  UserContentQueries
 } from '@campus/dal';
 import { Action, Selector, Store } from '@ngrx/store';
 
@@ -35,7 +33,6 @@ export class BundlesResolver extends StateResolver {
   }
   protected getLoadableActions(): Action[] {
     return [
-      new UserActions.LoadUser({ force: false }),
       new LearningAreaActions.LoadLearningAreas(),
       new BundleActions.LoadBundles({ userId: this.authService.userId }),
       new EduContentActions.LoadEduContents({
@@ -64,8 +61,7 @@ export class BundlesResolver extends StateResolver {
       UserContentQueries.getLoaded,
       UnlockedContentQueries.getLoaded,
       UnlockedBoekeGroupQueries.getLoaded,
-      UnlockedBoekeStudentQueries.getLoaded,
-      UserQueries.getLoaded //todo move to guard
+      UnlockedBoekeStudentQueries.getLoaded
     ];
   }
 }

@@ -3,7 +3,6 @@ import { EduContent, EduContentInterface } from '../../+models';
 import {
   NAME,
   selectAll,
-  selectEntities,
   selectIds,
   selectTotal,
   State
@@ -21,15 +20,29 @@ export const getLoaded = createSelector(
   (state: State) => state.loaded
 );
 
-export const getAll = createSelector(selectEduContentState, selectAll);
+export const getAll = createSelector(
+  selectEduContentState,
+  selectAll
+);
 
-export const getCount = createSelector(selectEduContentState, selectTotal);
+export const getCount = createSelector(
+  selectEduContentState,
+  selectTotal
+);
 
-export const getIds = createSelector(selectEduContentState, selectIds);
+export const getIds = createSelector(
+  selectEduContentState,
+  selectIds
+);
 
 export const getAllEntities = createSelector(
   selectEduContentState,
-  selectEntities
+  (state: State) => {
+    return (<number[]>state.ids).reduce((acc, id) => {
+      acc[id] = asEduContent(state.entities[id]);
+      return acc;
+    }, {});
+  }
 );
 
 /**

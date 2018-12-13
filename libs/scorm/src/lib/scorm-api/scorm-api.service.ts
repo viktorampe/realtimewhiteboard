@@ -9,6 +9,8 @@ import { ScormApiServiceInterface } from './scorm-api.service.interface';
   providedIn: 'root'
 })
 export class ScormApiService implements ScormApiServiceInterface {
+  private API: ScormApi;
+
   commit$: Subject<ScormCmiInterface>;
 
   cmi$: Subject<ScormCmiInterface>;
@@ -16,13 +18,17 @@ export class ScormApiService implements ScormApiServiceInterface {
   constructor(@Inject(WINDOW) private window: Window) {}
 
   init(cmi: ScormCmiInterface, mode: ScormCmiMode) {
-    if (!this.window['API']) {
-      const API = new ScormApi(cmi, mode);
+    if (!this.window['API'] || !this.API) {
+      this.API = new ScormApi(cmi, mode);
 
-      this.commit$ = API.commit$;
-      this.cmi$ = API.cmi$;
+      this.commit$ = this.API.commit$;
+      this.cmi$ = this.API.cmi$;
 
-      this.window['API'] = API;
+      this.window['API'] = this.API;
+    } else {
+      // set cmi and mode on current API
+      this.API.currentResult = cmi;
+      this.API.mode = mode;
     }
   }
 }

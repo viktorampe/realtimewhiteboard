@@ -12,5 +12,5 @@
     "source.organizeImports": true
   },
   "html.format.wrapAttributes": "force-aligned",
-  "prettier.disableLanguages": ["vue", "html"]
+  "eslint.enable": false
 }

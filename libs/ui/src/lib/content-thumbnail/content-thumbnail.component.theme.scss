@@ -1,18 +1,18 @@
 @mixin ui-content-thumbnail {
-  $ui-content-thumbnail-background-color: $ui-bg-color-2 !default;
+  $ui-content-thumbnail-background-color: $ui-tertiary-bg-color !default;
   $ui-content-thumbnail-border-width: 1px !default;
-  $ui-content-thumbnail-border-color: $ui-bg-color-3 !default;
+  $ui-content-thumbnail-border-color: $ui-tertiary-bg-color-2 !default;
 
   $ui-content-thumbnail_header-background-opacity: 0.4 !default;
   $ui-content-thumbnail_header-background-color: rgba(
-    $ui-font-color-gray-2,
+    $ui-content-thumbnail-background-color,
     $ui-content-thumbnail_header-background-opacity
   ) !default;
   $ui-content-thumbnail_header_icon-font-size: 20px !default;
   $ui-content-thumbnail_header_icon-line-height: $ui-content-thumbnail_header_icon-font-size +
     4 !default;
-  $ui-content-thumbnail_image-background-color: $ui-bg-color-gray-5 !default;
-  $ui-content-thumbnail_title-text-color: $ui-font-color-active !default;
+  $ui-content-thumbnail_image-background-color: $ui-primary-bg-color !default;
+  $ui-content-thumbnail_title-text-color: $ui-primary-font-color-2 !default;
   /* * Grid */
   $ui-content-thumbnail--grid-height: 235px !default;
   $ui-content-thumbnail--grid-width: 170px !default;
@@ -41,7 +41,7 @@
         $ui-content-thumbnail_title--line-line-height
     )/2;
   .ui-content-thumbnail {
-    border-color: $ui-content-thumbnail-border-width solid
+    border: $ui-content-thumbnail-border-width solid
       $ui-content-thumbnail_border-color;
     background-color: $ui-content-thumbnail_background-color;
     &__header {

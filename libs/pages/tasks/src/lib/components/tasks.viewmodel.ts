@@ -4,10 +4,10 @@ import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   DalState,
+  EduContentQueries,
   LearningAreaInterface,
   LearningAreaQueries,
-  PersonFixture,
-  PersonInterface,
+  PersonQueries,
   TaskEduContentQueries,
   TaskInstanceQueries,
   TaskQueries,
@@ -17,7 +17,7 @@ import {
 import { ListFormat } from '@campus/ui';
 import { select, Store } from '@ngrx/store';
 import { MemoizedSelectorWithProps } from '@ngrx/store/src/selector';
-import { combineLatest, Observable, of } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import {
   LearningAreasWithTaskInfoInterface,
@@ -108,15 +108,24 @@ export class TasksViewModel {
     return combineLatest(
       this.select(TaskInstanceQueries.getAllByTaskId, { taskId }),
       this.select(TaskEduContentQueries.getAllByTaskId, { taskId }),
+      this.select(EduContentQueries.getAllEntities),
       this.select(TaskQueries.getById, { id: taskId }),
-      this.getMockTeachers() //todo select teacher entities here
+      this.select(PersonQueries.getAllEntities)
     ).pipe(
-      map(([taskInstances, taskEduContents, task, teachers]) => {
+      map(([taskInstances, taskEduContents, eduContents, task, teachers]) => {
+        if (!task) return null;
         return {
-          //todo place teacher here on task
-          task: task,
+          task: {
+            ...task,
+            teacher: teachers[task.personId]
+          },
           taskInstance: taskInstances[0],
-          taskEduContents: taskEduContents,
+          taskEduContents: taskEduContents.map(taskEduContent => {
+            return {
+              ...taskEduContent,
+              eduContent: eduContents[taskEduContent.eduContentId]
+            };
+          }),
           finished: taskEduContents.every(te => te.submitted),
           taskEduContentsCount: taskEduContents.length
         };
@@ -157,10 +166,6 @@ export class TasksViewModel {
         };
       })
     );
-  }
-
-  private getMockTeachers(): Observable<PersonInterface[]> {
-    return of([new PersonFixture({ id: 186 }), new PersonFixture({ id: 187 })]);
   }
 
   private select<T, Props>(

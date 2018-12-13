@@ -10,7 +10,6 @@ import {
   TasksWithInfoInterface,
   TaskWithInfoInterface
 } from '../tasks.viewmodel.interfaces';
-
 @Component({
   selector: 'campus-tasks',
   templateUrl: './tasks.component.html',

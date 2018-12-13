@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, DebugElement, NgModule } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
+import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { ButtonComponent } from './button.component';
 
@@ -9,9 +11,7 @@ import { ButtonComponent } from './button.component';
   // tslint:disable-next-line:component-selector
   selector: 'test-container',
   template: `
-  <div (click)="this.onClick()">
-    <campus-button>tekst</campus-button>
-  </div>
+    <div (click)="this.onClick()"> <campus-button>tekst</campus-button> </div>
   `
 })
 export class TestContainerComponent {
@@ -33,7 +33,8 @@ describe('ButtonComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [TestModule]
+      imports: [TestModule],
+      providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
     }).compileComponents();
   }));
 
@@ -62,7 +63,7 @@ describe('ButtonComponent', () => {
   });
 
   it('should show the icon, if provided', () => {
-    const mockIconClass = 'icon-tasks';
+    const mockIconClass = 'tasks';
 
     component.iconClass = mockIconClass;
     testContainerFixture.detectChanges();

@@ -1,11 +1,14 @@
 import { ModuleWithProviders } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { WINDOW } from '@campus/browser';
 import {
+  AlertActions,
   AUTH_SERVICE_TOKEN,
   BundleActions,
   BundleFixture,
   BundleInterface,
   BundleReducer,
+  DalState,
   EduContentActions,
   EduContentFixture,
   EduContentInterface,
@@ -14,8 +17,10 @@ import {
   LearningAreaFixture,
   LearningAreaInterface,
   LearningAreaReducer,
+  PersonActions,
   PersonFixture,
   PersonInterface,
+  PersonReducer,
   StateFeatureBuilder,
   UiActions,
   UiReducer,
@@ -31,15 +36,22 @@ import {
   UnlockedContentInterface,
   UnlockedContentReducer
 } from '@campus/dal';
+import {
+  OpenStaticContentServiceInterface,
+  OPEN_STATIC_CONTENT_SERVICE_TOKEN
+} from '@campus/shared';
+import { MockWindow } from '@campus/testing';
 import { ListFormat } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
-import { hot } from 'jasmine-marbles';
+import { hot } from '@nrwl/nx/testing';
 import { of } from 'rxjs';
 import { BundlesViewModel } from './bundles.viewmodel';
 import { LearningAreasWithBundlesInfoInterface } from './bundles.viewmodel.interfaces';
 
 describe('BundlesViewModel', () => {
   let bundlesViewModel: BundlesViewModel;
+  let openStaticContentService: OpenStaticContentServiceInterface;
+  let mockWindow: MockWindow;
   let uiState: UiReducer.UiState;
   let learningAreaState: LearningAreaReducer.State;
   let bundleState: BundleReducer.State;
@@ -47,6 +59,7 @@ describe('BundlesViewModel', () => {
   let unlockedBoekeStudentState: UnlockedBoekeStudentReducer.State;
   let unlockedContentState: UnlockedContentReducer.State;
   let eduContentState: EduContentReducer.State;
+  let coupledPersonState: PersonReducer.State;
 
   let ui: UiReducer.UiState;
   let learningAreas: LearningAreaInterface[];
@@ -56,6 +69,7 @@ describe('BundlesViewModel', () => {
   let unlockedContents: UnlockedContentInterface[];
   let eduContents: EduContentInterface[];
   let coupledPersons: PersonInterface[];
+  let store: Store<DalState>;
 
   beforeAll(() => {
     loadState();
@@ -67,11 +81,22 @@ describe('BundlesViewModel', () => {
       providers: [
         BundlesViewModel,
         Store,
-        { provide: AUTH_SERVICE_TOKEN, useValue: { userId: 1 } }
+        { provide: AUTH_SERVICE_TOKEN, useValue: { userId: 1 } },
+        {
+          provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
+          useValue: { open: jest.fn() }
+        },
+        {
+          provide: WINDOW,
+          useClass: MockWindow
+        }
       ]
     });
 
     bundlesViewModel = TestBed.get(BundlesViewModel);
+    store = TestBed.get(Store);
+    openStaticContentService = TestBed.get(OPEN_STATIC_CONTENT_SERVICE_TOKEN);
+    mockWindow = TestBed.get(WINDOW);
   });
 
   it('should be defined', () => {
@@ -84,6 +109,26 @@ describe('BundlesViewModel', () => {
     bundlesViewModel.changeListFormat(listFormat);
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith({ listFormat });
+  });
+  describe('#openContent', () => {
+    it('should call the open static content service for EduContent', () => {
+      const eduContent = new EduContentFixture({ id: 5 });
+      bundlesViewModel.openContent(eduContent);
+      expect(openStaticContentService.open).toHaveBeenCalledTimes(1);
+      expect(openStaticContentService.open).toHaveBeenCalledWith(eduContent);
+    });
+  });
+
+  it('set alerts read by a filter', () => {
+    spyOn(store, 'dispatch');
+    const expectedAction = new AlertActions.SetAlertReadByFilter({
+      filter: { bundleId: 1 },
+      intended: false,
+      personId: 1,
+      read: true
+    });
+    bundlesViewModel.setBundleAlertRead(1);
+    expect(store.dispatch).toHaveBeenCalledWith(expectedAction);
   });
 
   it('sharedLearningAreas$', () => {
@@ -128,8 +173,7 @@ describe('BundlesViewModel', () => {
     );
   });
 
-  // TODO enable when coupledPerson state is added
-  xit('getBundleOwner()', () => {
+  it('getBundleOwner()', () => {
     expect(bundlesViewModel.getBundleOwner(of(bundles[0]))).toBeObservable(
       hot('a', {
         a: coupledPersons[0]
@@ -248,8 +292,13 @@ describe('BundlesViewModel', () => {
       })
     );
 
-    // TODO when coupledPerson state is added
     coupledPersons = [new PersonFixture({ id: 2 })];
+    coupledPersonState = PersonReducer.reducer(
+      PersonReducer.initialState,
+      new PersonActions.PersonsLoaded({
+        persons: coupledPersons
+      })
+    );
   }
 
   function getModuleWithForFeatureProviders(): ModuleWithProviders[] {
@@ -302,8 +351,14 @@ describe('BundlesViewModel', () => {
         initialState: {
           initialState: eduContentState
         }
+      },
+      {
+        NAME: PersonReducer.NAME,
+        reducer: PersonReducer.reducer,
+        initialState: {
+          initialState: coupledPersonState
+        }
       }
-      // TODO when coupledPersonState is added
     ]);
   }
 });

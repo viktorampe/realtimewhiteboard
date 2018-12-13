@@ -3,7 +3,9 @@ export interface ContentInterface {
   id?: number;
   productType: string;
   fileExtension: string;
+  fileTypeLabel: string;
   previewImage?: string;
   description: string;
   methodLogos?: string[];
+  link?: string;
 }

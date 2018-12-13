@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import {
+  EduContentFixture,
+  EduContentMetadataFixture,
   LearningAreaFixture,
   LearningAreaInterface,
   TaskEduContentFixture,
   TaskFixture,
   TaskInstanceFixture
 } from '@campus/dal';
+import { ViewModelInterface } from '@campus/testing';
 import { ListFormat } from '@campus/ui';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { TasksViewModel } from './tasks.viewmodel';
@@ -15,17 +18,12 @@ import {
   TaskWithInfoInterface
 } from './tasks.viewmodel.interfaces';
 
-type ViewModelInterface<T> = { [P in keyof T]: T[P] };
-
 @Injectable({
   providedIn: 'root'
 })
-// implements TasksResolver
 export class MockTasksViewModel implements ViewModelInterface<TasksViewModel> {
   learningAreasWithTaskInfo$: Observable<LearningAreasWithTaskInfoInterface>;
-
   listFormat$: Observable<ListFormat>;
-  // routeParams$: TODO type?
 
   constructor() {
     this.loadMockData();
@@ -91,8 +89,35 @@ export class MockTasksViewModel implements ViewModelInterface<TasksViewModel> {
       taskInstance: new TaskInstanceFixture({ taskId: 1, id: 10 }),
       taskEduContentsCount: 2,
       taskEduContents: [
-        new TaskEduContentFixture({ id: 1, submitted: true }),
-        new TaskEduContentFixture({ id: 2, submitted: false })
+        new TaskEduContentFixture({
+          id: 1,
+          submitted: true,
+          eduContentId: 1,
+          eduContent: {
+            ...new EduContentFixture({ id: 1 }),
+            publishedEduContentMetadata: {
+              ...new EduContentMetadataFixture({ title: `I'm special` })
+            }
+          }
+        }),
+        new TaskEduContentFixture({
+          id: 2,
+          submitted: false,
+          eduContentId: 2,
+          eduContent: new EduContentFixture({ id: 2 })
+        }),
+        new TaskEduContentFixture({
+          id: 3,
+          submitted: true,
+          eduContentId: 3,
+          eduContent: new EduContentFixture({ id: 1 })
+        }),
+        new TaskEduContentFixture({
+          id: 4,
+          submitted: false,
+          eduContentId: 4,
+          eduContent: new EduContentFixture({ id: 2 })
+        })
       ],
       finished: false
     });

@@ -1,8 +1,11 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Params } from '@angular/router';
+import { EduContentFixture } from '@campus/dal';
+import { MockMatIconRegistry } from '@campus/testing';
 import { ListFormat, ListViewItemDirective, UiModule } from '@campus/ui';
 import { FilterService, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { BehaviorSubject, of } from 'rxjs';
@@ -25,7 +28,8 @@ describe('BundleDetailComponent', () => {
       providers: [
         { provide: ActivatedRoute, useValue: { params: params } },
         { provide: BundlesViewModel, useClass: MockViewModel },
-        { provide: FILTER_SERVICE_TOKEN, useClass: FilterService }
+        { provide: FILTER_SERVICE_TOKEN, useClass: FilterService },
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ]
     }).compileComponents();
     bundlesViewModel = TestBed.get(BundlesViewModel);
@@ -46,6 +50,14 @@ describe('BundleDetailComponent', () => {
     component.clickChangeListFormat(ListFormat.GRID);
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith(ListFormat.GRID);
+  });
+
+  it('should call the viewmodel openContent method', () => {
+    const spy = jest.spyOn(bundlesViewModel, 'openContent');
+    const content = new EduContentFixture();
+    component.clickOpenContent(content);
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith(content);
   });
 
   it('should get the listFormat$ from the vm', () => {
@@ -149,5 +161,14 @@ describe('BundleDetailComponent', () => {
     expect(fixture.debugElement.nativeElement.textContent).toContain(
       'Deze bundel is niet beschikbaar'
     );
+  });
+
+  it('should mark the alerts about the bundle as read', () => {
+    bundlesViewModel.setBundleAlertRead = jest.fn();
+
+    component.ngOnInit();
+
+    expect(bundlesViewModel.setBundleAlertRead).toHaveBeenCalled();
+    expect(bundlesViewModel.setBundleAlertRead).toHaveBeenCalledWith(1);
   });
 });

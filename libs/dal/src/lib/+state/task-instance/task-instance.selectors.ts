@@ -2,7 +2,14 @@ import { TaskInstanceInterface } from '@campus/dal';
 import { groupArrayByKey } from '@campus/utils';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { TaskInstance } from '../../+models/TaskInstance';
-import { NAME, selectAll, selectEntities, selectIds, selectTotal, State } from './task-instance.reducer';
+import {
+  NAME,
+  selectAll,
+  selectEntities,
+  selectIds,
+  selectTotal,
+  State
+} from './task-instance.reducer';
 
 export const selectTaskInstanceState = createFeatureSelector<State>(NAME);
 
@@ -16,11 +23,20 @@ export const getLoaded = createSelector(
   (state: State) => state.loaded
 );
 
-export const getAll = createSelector(selectTaskInstanceState, selectAll);
+export const getAll = createSelector(
+  selectTaskInstanceState,
+  selectAll
+);
 
-export const getCount = createSelector(selectTaskInstanceState, selectTotal);
+export const getCount = createSelector(
+  selectTaskInstanceState,
+  selectTotal
+);
 
-export const getIds = createSelector(selectTaskInstanceState, selectIds);
+export const getIds = createSelector(
+  selectTaskInstanceState,
+  selectIds
+);
 
 export const getAllEntities = createSelector(
   selectTaskInstanceState,
@@ -81,11 +97,12 @@ export const getAllByTaskId = createSelector(
 
 export const getActiveTaskIds = createSelector(
   selectTaskInstanceState,
-  (state: State, props: {date: Date}) => {
+  (state: State, props: { date: Date }) => {
     return new Set(
       (<number[]>state.ids).reduce(
         (acc, id) =>
-          state.entities[id].end > props.date && props.date > state.entities[id].start
+          state.entities[id].end > props.date &&
+          props.date > state.entities[id].start
             ? [...acc, state.entities[id].taskId]
             : acc,
         []
