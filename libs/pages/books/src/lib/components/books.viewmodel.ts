@@ -1,6 +1,21 @@
 import { Inject, Injectable } from '@angular/core';
-import { AuthServiceInterface, AUTH_SERVICE_TOKEN, DalState, EduContent, EduContentQueries, LearningAreaQueries, UiActions, UiQuery, UnlockedBoekeGroupQueries, UnlockedBoekeStudentQueries } from '@campus/dal';
-import { OpenStaticContentServiceInterface, OPEN_STATIC_CONTENT_SERVICE_TOKEN } from '@campus/shared';
+import {
+  AuthServiceInterface,
+  AUTH_SERVICE_TOKEN,
+  ContentInterface,
+  DalState,
+  EduContent,
+  EduContentQueries,
+  LearningAreaQueries,
+  UiActions,
+  UiQuery,
+  UnlockedBoekeGroupQueries,
+  UnlockedBoekeStudentQueries
+} from '@campus/dal';
+import {
+  OpenStaticContentServiceInterface,
+  OPEN_STATIC_CONTENT_SERVICE_TOKEN
+} from '@campus/shared';
 import { ListFormat } from '@campus/ui';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
@@ -31,8 +46,9 @@ export class BooksViewModel {
     this.store.dispatch(new UiActions.SetListFormat({ listFormat }));
   }
 
-  openBook(contentId: number): void {
-    // this.openStaticContentService.open(contentId);
+
+  openBook(content: ContentInterface): void {
+    this.openStaticContentService.open(content);
   }
 
   private getListFormat(): Observable<ListFormat> {

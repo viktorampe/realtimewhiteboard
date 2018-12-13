@@ -156,4 +156,13 @@ describe('TaskDetailComponent', () => {
     expect(infoPanelContent).toBeTruthy();
     expect(infoPanelContents).toBeFalsy();
   });
+
+  it('should mark the alerts about the task as read', () => {
+    tasksViewModel.setTaskAlertRead = jest.fn();
+
+    component.ngOnInit();
+
+    expect(tasksViewModel.setTaskAlertRead).toHaveBeenCalled();
+    expect(tasksViewModel.setTaskAlertRead).toHaveBeenCalledWith(1);
+  });
 });

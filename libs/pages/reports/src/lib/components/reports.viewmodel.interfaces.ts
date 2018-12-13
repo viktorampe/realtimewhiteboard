@@ -12,7 +12,8 @@ export interface LearningAreasWithResultsInterface {
   }[];
 }
 
-export interface AssignmentResult {
+
+export interface AssignmentResultInterface {
   title: string;
   type: string; //(Task/Bundle)
   totalScore: number;
@@ -21,5 +22,5 @@ export interface AssignmentResult {
     results: ResultInterface[]; // if needed
     bestResult: ResultInterface;
     averageScore: number; // if needed
-  };
+  }[];
 }
