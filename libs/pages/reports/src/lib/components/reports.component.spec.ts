@@ -42,7 +42,7 @@ describe('ReportsComponent', () => {
 
   it('should call the viewModel changeListFormat method when calling clickChangeListFormat', () => {
     const spy = jest.spyOn(ReportsViewModel, 'changeListFormat');
-    component.clickChangeListFormat(ListFormat.GRID);
+    component.setListFormat(ListFormat.GRID);
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith(ListFormat.GRID);
   });
