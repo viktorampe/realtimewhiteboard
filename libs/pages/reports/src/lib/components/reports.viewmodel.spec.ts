@@ -20,7 +20,7 @@ import { Store, StoreModule } from '@ngrx/store';
 import { hot } from 'jasmine-marbles';
 import { ReportService } from './../services/report.service';
 import { ReportsViewModel } from './reports.viewmodel';
-import { AssignmentResult } from './reports.viewmodel.interfaces';
+import { AssignmentResultInterface } from './reports.viewmodel.interfaces';
 
 let reportsViewModel: ReportsViewModel;
 let store: Store<DalState>;
@@ -125,13 +125,12 @@ describe('ReportsViewModel', () => {
       });
 
       it('should return the array of assignmentResults of the service', () => {
-        const mockReturn: AssignmentResult = {
+        const mockReturn: AssignmentResultInterface = {
           title: 'foo',
           type: 'foo',
           totalScore: 42,
           exerciseResults: [
             {
-              eduContentId: 1,
               eduContent: mockEduContents[0],
               results: mockResults,
               bestResult: mockResults[0],

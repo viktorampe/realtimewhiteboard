@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { ReportsComponent } from './reports.component';
+import { ReportsViewModel } from './reports.viewmodel';
+import { MockReportsViewModel } from './reports.viewmodel.mock';
 
 describe('ReportsComponent', () => {
   let component: ReportsComponent;
@@ -8,7 +9,8 @@ describe('ReportsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ReportsComponent]
+      declarations: [ReportsComponent],
+      providers: [{ provide: ReportsViewModel, useclass: MockReportsViewModel }]
     }).compileComponents();
   }));
 

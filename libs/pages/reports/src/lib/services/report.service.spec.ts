@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { EduContentFixture, ResultFixture, ResultInterface } from '@campus/dal';
 import { Dictionary } from '@ngrx/entity';
-import { AssignmentResult } from '../components/reports.viewmodel.interfaces';
+import { AssignmentResultInterface } from '../components/reports.viewmodel.interfaces';
 import { ReportService } from './report.service';
 
 describe('ReportService', () => {
@@ -103,7 +103,6 @@ describe('ReportService', () => {
           totalScore: mockResults[0].score,
           exerciseResults: [
             {
-              eduContentId: 1,
               results: [mockResults[0]],
               bestResult: mockResults[0],
               averageScore: mockResults[0].score,
@@ -133,7 +132,6 @@ describe('ReportService', () => {
           totalScore: mockResults[2].score,
           exerciseResults: [
             {
-              eduContentId: 1,
               results: [mockResults[0], mockResults[2]],
               bestResult: mockResults[2],
               averageScore: (mockResults[0].score + mockResults[2].score) / 2,
@@ -164,7 +162,6 @@ describe('ReportService', () => {
           totalScore: mockResults[2].score,
           exerciseResults: [
             {
-              eduContentId: 1,
               eduContent: mockEduContents[1],
               results: [mockResults[0], mockResults[2]],
               bestResult: mockResults[2],
@@ -178,7 +175,6 @@ describe('ReportService', () => {
           totalScore: mockResults[1].score,
           exerciseResults: [
             {
-              eduContentId: 2,
               eduContent: mockEduContents[2],
               results: [mockResults[1]],
               bestResult: mockResults[1],
@@ -208,14 +204,12 @@ describe('ReportService', () => {
           totalScore: (mockResults[2].score + mockResults[1].score) / 2,
           exerciseResults: [
             {
-              eduContentId: 1,
               eduContent: mockEduContents[1],
               results: [mockResults[0], mockResults[2]],
               bestResult: mockResults[2],
               averageScore: (mockResults[0].score + mockResults[2].score) / 2
             },
             {
-              eduContentId: 2,
               eduContent: mockEduContents[2],
               results: [mockResults[1]],
               bestResult: mockResults[1],
@@ -230,7 +224,7 @@ describe('ReportService', () => {
   });
 });
 
-function countResults(assignments: AssignmentResult[]): number {
+function countResults(assignments: AssignmentResultInterface[]): number {
   return assignments.reduce(
     (total, ass) =>
       (total += ass.exerciseResults.reduce(

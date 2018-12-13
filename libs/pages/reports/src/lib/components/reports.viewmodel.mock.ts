@@ -3,6 +3,7 @@ import {
   EduContentFixture,
   LearningAreaFixture,
   LearningAreaInterface,
+  PersonFixture,
   PersonInterface,
   ResultFixture
 } from '@campus/dal';
@@ -21,8 +22,12 @@ import {
 export class MockReportsViewModel
   implements ViewModelInterface<ReportsViewModel> {
   // presentation streams
-  listFormat$: Observable<ListFormat>;
-  user$: Observable<PersonInterface>;
+  listFormat$: Observable<ListFormat> = new BehaviorSubject<ListFormat>(
+    ListFormat.GRID
+  );
+  user$: Observable<PersonInterface> = new BehaviorSubject<PersonInterface>(
+    new PersonFixture()
+  );
 
   learningAreasWithResults$: Observable<
     LearningAreasWithResultsInterface
