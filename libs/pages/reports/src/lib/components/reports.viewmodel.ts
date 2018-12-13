@@ -5,14 +5,18 @@ import {
   EduContentQueries,
   LearningAreaInterface,
   LearningAreaQueries,
-  ResultQueries
+  PersonInterface,
+  ResultQueries,
+  UiQuery,
+  UserQueries
 } from '@campus/dal';
+import { ListFormat } from '@campus/ui';
 import { MemoizedSelectorWithProps, select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ReportService } from '../services/report.service';
 import {
-  AssignmentResult,
+  AssignmentResultInterface,
   LearningAreasWithResultsInterface
 } from './reports.viewmodel.interfaces';
 
@@ -21,7 +25,10 @@ import {
 })
 export class ReportsViewModel {
   // source streams
-  learningAreas$: Observable<LearningAreaInterface[]>;
+  listFormat$: Observable<ListFormat>;
+  user$: Observable<PersonInterface>;
+
+  // intermediate streams
 
   // presentation streams
   learningAreasWithResults$: Observable<LearningAreasWithResultsInterface>;
@@ -43,7 +50,7 @@ export class ReportsViewModel {
 
   public getAssignmentResultsByLearningArea(
     learningAreaId: number
-  ): Observable<AssignmentResult[]> {
+  ): Observable<AssignmentResultInterface[]> {
     return combineLatest(
       this.select(EduContentQueries.getAllEntities),
       this.select(ResultQueries.getResultsForLearningAreaIdGrouped, {
@@ -73,10 +80,43 @@ export class ReportsViewModel {
   }
 
   private setSourceStreams() {
-    this.learningAreas$ = this.select(LearningAreaQueries.getAll);
+    this.listFormat$ = this.select(UiQuery.getListFormat);
+    this.user$ = this.select(UserQueries.getCurrentUser);
   }
 
-  private setPresentationStreams() {}
+  private setPresentationStreams() {
+    this.learningAreasWithResults$ = this.getLearningAreasWithResult();
+  }
+
+  private getLearningAreasWithResult(): Observable<
+    LearningAreasWithResultsInterface
+  > {
+    return combineLatest(
+      this.select(LearningAreaQueries.getAllEntities),
+      this.select(ResultQueries.getResultsGroupedByArea)
+    ).pipe(
+      map(([areaEntities, resultsByArea]) => {
+        const learningAreasWithResult = {
+          learningAreas: Object.keys(resultsByArea).map(learningAreaId => {
+            const results = resultsByArea[learningAreaId];
+            return {
+              learningArea: areaEntities[learningAreaId],
+              tasksWithResultsCount: new Set(
+                results.filter(result => result.taskId).map(result => result.id)
+              ).size,
+              bundlesWithResultsCount: new Set(
+                results
+                  .filter(result => result.bundleId)
+                  .map(result => result.id)
+              ).size
+            };
+          })
+        };
+
+        return learningAreasWithResult;
+      })
+    );
+  }
 
   private select<T, Props>(
     selector: MemoizedSelectorWithProps<DalState, Props, T>,

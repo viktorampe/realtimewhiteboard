@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
+  ContentInterface,
   DalState,
   EduContent,
   EduContentQueries,
@@ -45,8 +46,9 @@ export class BooksViewModel {
     this.store.dispatch(new UiActions.SetListFormat({ listFormat }));
   }
 
-  openBook(contentId: number): void {
-    this.openStaticContentService.open(contentId);
+
+  openBook(content: ContentInterface): void {
+    this.openStaticContentService.open(content);
   }
 
   private getListFormat(): Observable<ListFormat> {

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { EduContent, ResultInterface } from '@campus/dal';
 import { groupArrayByKey } from '@campus/utils';
 import { Dictionary } from '@ngrx/entity';
-import { AssignmentResult } from '../components/reports.viewmodel.interfaces';
+import { AssignmentResultInterface } from './../components/reports.viewmodel.interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +12,7 @@ export class ReportService {
     resultsById: Dictionary<ResultInterface[]>,
     type: string,
     eduContents: Dictionary<EduContent>
-  ): AssignmentResult[] {
+  ): AssignmentResultInterface[] {
     return Object.values(resultsById).map(groupedResults =>
       this.getAssignmentResultForGroup(groupedResults, type, eduContents)
     );
@@ -22,7 +22,7 @@ export class ReportService {
     results: ResultInterface[],
     type: string,
     eduContents: Dictionary<EduContent>
-  ): AssignmentResult {
+  ): AssignmentResultInterface {
     const exerciseResults = this.getExerciseResults(results, eduContents);
 
     const totalScoreAllEduContents = exerciseResults.reduce(
@@ -63,7 +63,6 @@ export class ReportService {
       });
 
       return {
-        eduContentId: +eduContentId,
         eduContent: eduContents[eduContentId],
         results: eduContentResults,
         bestResult: bestResult,
