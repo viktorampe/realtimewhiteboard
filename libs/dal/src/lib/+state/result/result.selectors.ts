@@ -1,4 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { ResultInterface } from '../../+models';
 import {
   NAME,
   selectAll,
@@ -20,25 +21,13 @@ export const getLoaded = createSelector(
   (state: State) => state.loaded
 );
 
-export const getAll = createSelector(
-  selectResultState,
-  selectAll
-);
+export const getAll = createSelector(selectResultState, selectAll);
 
-export const getCount = createSelector(
-  selectResultState,
-  selectTotal
-);
+export const getCount = createSelector(selectResultState, selectTotal);
 
-export const getIds = createSelector(
-  selectResultState,
-  selectIds
-);
+export const getIds = createSelector(selectResultState, selectIds);
 
-export const getAllEntities = createSelector(
-  selectResultState,
-  selectEntities
-);
+export const getAllEntities = createSelector(selectResultState, selectEntities);
 
 /**
  * returns array of objects in the order of the given ids
@@ -105,3 +94,30 @@ export const getResultsForBundles = createSelector(
     return resultIds.map(resultId => state.entities[resultId]);
   }
 );
+
+export const getResultsGroupedByArea = createSelector(
+  selectResultState,
+  (state: State) => {
+    const ids: number[] = <number[]>state.ids;
+    const map: ResultsGroupedByArea = ids.reduce(
+      (acc, id) => {
+        // group by learning area
+        if (acc[state.entities[id].learningAreaId]) {
+          acc[state.entities[id].learningAreaId].push(state.entities[id]);
+        } else {
+          acc[state.entities[id].learningAreaId] = [];
+          acc[state.entities[id].learningAreaId].push(state.entities[id]);
+        }
+
+        return acc;
+      },
+      {} as ResultsGroupedByArea
+    );
+
+    return map;
+  }
+);
+
+interface ResultsGroupedByArea {
+  [key: number]: ResultInterface[];
+}

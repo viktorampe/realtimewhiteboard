@@ -8,7 +8,8 @@ import {
   UserQueries
 } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
-import { MemoizedSelectorWithProps, select, Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
+import { MemoizedSelectorWithProps } from '@ngrx/store/src/selector';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { LearningAreasWithResultsInterface } from './reports.viewmodel.interfaces';
@@ -45,24 +46,18 @@ export class ReportsViewModel {
   > {
     return combineLatest(
       this.select(LearningAreaQueries.getAllEntities),
-      this.select(ResultQueries.getLearningAreaIds),
-      this.select(ResultQueries.getResultsForTasks),
-      this.select(ResultQueries.getResultsForBundles)
+      this.select(ResultQueries.getResultsGroupedByArea)
     ).pipe(
-      map(([areaEntities, areaIds, resultsForTasks, resultsForBundles]) => {
+      map(([areaEntities, resultsByArea]) => {
         const learningAreasWithResult = {
-          learningAreas: areaIds.map(learningAreaId => {
-            const tasks = resultsForTasks.filter(
-              result => result.learningAreaId === learningAreaId
-            );
-            const bundles = resultsForBundles.filter(
-              result => result.learningAreaId === learningAreaId
-            );
-
+          learningAreas: Object.keys(resultsByArea).map(learningAreaId => {
+            const results = resultsByArea[learningAreaId];
             return {
               learningArea: areaEntities[learningAreaId],
-              tasksWithResultsCount: tasks.length,
-              bundlesWithResultsCount: bundles.length
+              tasksWithResultsCount: results.filter(result => result.taskId)
+                .length,
+              bundlesWithResultsCount: results.filter(result => result.bundleId)
+                .length
             };
           })
         };
