@@ -59,23 +59,27 @@ export class MockReportsViewModel
       title: 'foo',
       type: 'bundle',
       totalScore: 71,
-      exerciseResults: {
-        eduContent: new EduContentFixture(),
-        results: [new ResultFixture({ id: 1 }), new ResultFixture({ id: 2 })],
-        bestResult: new ResultFixture({ id: 2 }),
-        averageScore: 60
-      }
+      exerciseResults: [
+        {
+          eduContent: new EduContentFixture(),
+          results: [new ResultFixture({ id: 1 }), new ResultFixture({ id: 2 })],
+          bestResult: new ResultFixture({ id: 2 }),
+          averageScore: 60
+        }
+      ]
     },
     {
       title: 'foo',
       type: 'bundle',
       totalScore: 78,
-      exerciseResults: {
-        eduContent: new EduContentFixture(),
-        results: [new ResultFixture({ id: 1 }), new ResultFixture({ id: 2 })],
-        bestResult: new ResultFixture({ id: 1 }),
-        averageScore: 80
-      }
+      exerciseResults: [
+        {
+          eduContent: new EduContentFixture(),
+          results: [new ResultFixture({ id: 1 }), new ResultFixture({ id: 2 })],
+          bestResult: new ResultFixture({ id: 1 }),
+          averageScore: 80
+        }
+      ]
     }
   ]);
 
