@@ -24,7 +24,7 @@ before_script:
   - npm run format:check
   - ng test --configuration=travis
   - npm run e2e:ci
-script: (echo "$TRAVIS_BRANCH" | grep -q deploy) && npm run build
+script: ((echo "$TRAVIS_BRANCH" | grep -q deploy) && npm run build) || 1
 deploy:
   - provider: s3
     bucket: site.student-staging-polpo-be
