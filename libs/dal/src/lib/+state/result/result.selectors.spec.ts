@@ -100,7 +100,7 @@ describe('Result Selectors', () => {
         resultState = createState(mockData, true, 'no error');
         storeState = { results: resultState };
 
-        const results = ResultQueries.getAssignmentsForLearningAreaId(
+        const results = ResultQueries.getResultsForLearningAreaIdGrouped(
           storeState,
           { learningAreaId: 1, groupProp: { taskId: 0 } }
         );
@@ -124,7 +124,7 @@ describe('Result Selectors', () => {
         resultState = createState(mockData, true, 'no error');
         storeState = { results: resultState };
 
-        const results = ResultQueries.getAssignmentsForLearningAreaId(
+        const results = ResultQueries.getResultsForLearningAreaIdGrouped(
           storeState,
           { learningAreaId: 1, groupProp: { bundleId: 0 } }
         );

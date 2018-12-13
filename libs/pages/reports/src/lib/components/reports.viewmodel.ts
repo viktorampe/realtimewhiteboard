@@ -50,11 +50,11 @@ export class ReportsViewModel {
       this.select(EduContentQueries.getAllEntities) as Observable<
         Dictionary<EduContent>
       >,
-      this.select(ResultQueries.getAssignmentsForLearningAreaId, {
+      this.select(ResultQueries.getResultsForLearningAreaIdGrouped, {
         learningAreaId,
         groupProp: { taskId: 0 }
       }),
-      this.select(ResultQueries.getAssignmentsForLearningAreaId, {
+      this.select(ResultQueries.getResultsForLearningAreaIdGrouped, {
         learningAreaId,
         groupProp: { bundleId: 0 }
       })

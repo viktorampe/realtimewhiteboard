@@ -68,17 +68,17 @@ export const getById = createSelector(
 );
 
 /**
- * returns array of assignmentResults grouped by a property
+ * returns dictionary of resuilts grouped by a property
  * @example
- * assignment$: AssignmentResult[] = this.store.pipe(
-    select(ResultQueries.getAssignmentsForLearningAreaId,
-      { learningAreaId: 1, groupProp: { bundleId: 0 }, groupType: 'bundle' })
+ * results$: ResultInterface[] = this.store.pipe(
+    select(ResultQueries.getResultsForLearningAreaIdGrouped,
+      { learningAreaId: 1, groupProp: { bundleId: 0 } })
     -or-
-    select(ResultQueries.getAssignmentsForLearningAreaId,
-      { learningAreaId: 1, groupProp: { taskId: 0 }, groupType: 'task' })
+    select(ResultQueries.getResultsForLearningAreaIdGrouped,
+      { learningAreaId: 1, groupProp: { taskId: 0 } })
   );
  */
-export const getAssignmentsForLearningAreaId = createSelector(
+export const getResultsForLearningAreaIdGrouped = createSelector(
   selectResultState,
   (
     state: State,
