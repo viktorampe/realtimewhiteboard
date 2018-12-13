@@ -449,14 +449,14 @@ describe('AlertEffects', () => {
       beforeEach(() => {
         mockServiceMethodError('setAlertAsRead', 'failed');
       });
-      it('should return a error action when calling with a single id', () => {
+      it('should return an undo action when calling with a single id', () => {
         expectInAndOut(
           effects.setReadAlert$,
           setReadSingleAction,
           setReadSingleUndoAction
         );
       });
-      it('should return a error action when calling with multiple ids', () => {
+      it('should return a undo action when calling with multiple ids', () => {
         expectInAndOut(
           effects.setReadAlert$,
           setReadMultipleAction,

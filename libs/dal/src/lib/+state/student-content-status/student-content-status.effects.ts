@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { StudentContentStatusInterface } from '@campus/dal';
 import { Actions, Effect } from '@ngrx/effects';
-import { Store } from '@ngrx/store';
 import { DataPersistence } from '@nrwl/nx';
 import { undo } from 'ngrx-undo';
 import { map } from 'rxjs/operators';
@@ -104,7 +103,6 @@ export class StudentContentStatusesEffects {
     private actions: Actions,
     private dataPersistence: DataPersistence<DalState>,
     @Inject(STUDENT_CONTENT_STATUS_SERVICE_TOKEN)
-    private studentContentStatusesService: StudentContentStatusServiceInterface,
-    private store: Store<DalState>
+    private studentContentStatusesService: StudentContentStatusServiceInterface
   ) {}
 }

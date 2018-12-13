@@ -237,7 +237,7 @@ describe('StudentContentStatusEffects', () => {
           mockServiceMethodError('updateStudentContentStatus', 'update failed');
         });
 
-        it('should undo the action', () => {
+        it('should dispatch an undo action', () => {
           const effectOutput = undo(updateAction);
           expectInAndOut(
             effects.updateStudentContentStatus$,
