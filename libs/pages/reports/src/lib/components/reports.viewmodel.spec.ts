@@ -3,6 +3,7 @@ import {
   AUTH_SERVICE_TOKEN,
   DalState,
   EduContentActions,
+  EduContentFixture,
   EduContentReducer,
   getStoreModuleForFeatures,
   LearningAreaActions,
@@ -17,7 +18,6 @@ import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from 'jasmine-marbles';
 import { map } from 'rxjs/operators';
-import { EduContentFixture } from './../../../../../dal/src/lib/+fixtures/EduContent.fixture';
 import { ReportsViewModel } from './reports.viewmodel';
 
 let reportsViewModel: ReportsViewModel;
@@ -75,104 +75,14 @@ describe('ReportsViewModel', () => {
     });
 
     describe('getAssignmentResultsByLearningArea', () => {
-      const mockResults: ResultInterface[] = [
-        new ResultFixture({
-          id: 1,
-          learningAreaId: 1,
-          bundleId: 1,
-          taskId: null,
-          score: 10,
-          eduContentId: 1,
-          assignment: 'foo bundle'
-        }),
-        new ResultFixture({
-          id: 2,
-          learningAreaId: 1,
-          bundleId: 1,
-          taskId: null,
-          score: 50,
-          eduContentId: 2,
-          assignment: 'foo bundle'
-        }),
-        new ResultFixture({
-          id: 3,
-          learningAreaId: 1,
-          bundleId: 2,
-          taskId: null,
-          score: 100,
-          eduContentId: 1,
-          assignment: 'bar bundle'
-        }),
-        new ResultFixture({
-          id: 4,
-          learningAreaId: 2,
-          bundleId: 1,
-          taskId: null,
-          score: 75,
-          eduContentId: 1,
-          assignment: 'foo bundle'
-        }),
-        new ResultFixture({
-          id: 5,
-          learningAreaId: 1,
-          bundleId: 1,
-          taskId: null,
-          score: 90,
-          eduContentId: 1,
-          assignment: 'foo bundle'
-        }),
-        new ResultFixture({
-          id: 6,
-          learningAreaId: 1,
-          taskId: 1,
-          bundleId: null,
-          score: 10,
-          eduContentId: 1,
-          assignment: 'foo task'
-        }),
-        new ResultFixture({
-          id: 7,
-          learningAreaId: 1,
-          taskId: 1,
-          bundleId: null,
-          score: 50,
-          eduContentId: 2,
-          assignment: 'foo task'
-        }),
-        new ResultFixture({
-          id: 8,
-          learningAreaId: 1,
-          taskId: 2,
-          bundleId: null,
-          score: 100,
-          eduContentId: 1,
-          assignment: 'bar task'
-        }),
-        new ResultFixture({
-          id: 9,
-          learningAreaId: 2,
-          taskId: 1,
-          bundleId: null,
-          score: 75,
-          eduContentId: 1,
-          assignment: 'foo task'
-        }),
-        new ResultFixture({
-          id: 10,
-          learningAreaId: 1,
-          unlockedContentId: 1,
-          taskId: 1,
-          bundleId: null,
-          score: 0,
-          eduContentId: 1,
-          assignment: 'foo bar task'
-        })
-      ];
+      // moved to bottom of file for readability
+      const mockResults = getMockResults();
 
       const mockEduContents = [
         new EduContentFixture({ id: 1 }),
         new EduContentFixture({ id: 2 })
       ];
+
       beforeEach(() => {
         store.dispatch(
           new ResultActions.ResultsLoaded({
@@ -187,31 +97,86 @@ describe('ReportsViewModel', () => {
       });
 
       it('should return the correct amount of assignments', () => {
-        let returnedValue = reportsViewModel.getAssignmentResultsByLearningArea(
-          1
-        );
-
-        let returnedAmount = returnedValue.pipe(
-          map(assignments => assignments.length)
-        );
+        let returnedAmount = reportsViewModel
+          .getAssignmentResultsByLearningArea(1)
+          .pipe(map(assignments => assignments.length));
 
         expect(returnedAmount).toBeObservable(hot('a', { a: 4 }));
 
-        returnedValue = reportsViewModel.getAssignmentResultsByLearningArea(2);
-
-        returnedAmount = returnedValue.pipe(
-          map(assignments => assignments.length)
-        );
+        returnedAmount = reportsViewModel
+          .getAssignmentResultsByLearningArea(2)
+          .pipe(map(assignments => assignments.length));
 
         expect(returnedAmount).toBeObservable(hot('a', { a: 2 }));
 
-        returnedValue = reportsViewModel.getAssignmentResultsByLearningArea(3);
-
-        returnedAmount = returnedValue.pipe(
-          map(assignments => assignments.length)
-        );
+        returnedAmount = reportsViewModel
+          .getAssignmentResultsByLearningArea(3)
+          .pipe(map(assignments => assignments.length));
 
         expect(returnedAmount).toBeObservable(hot('a', { a: 0 }));
+      });
+
+      it('should return the correct amount of results', () => {
+        let returnedAmount = reportsViewModel
+          .getAssignmentResultsByLearningArea(1)
+          // count all results in tree
+          .pipe(
+            map(assignments =>
+              assignments.reduce(
+                (total, ass) =>
+                  (total += ass.exerciseResults.reduce(
+                    (subTotal, exResult) =>
+                      (subTotal += exResult.results.length),
+                    0
+                  )),
+                0
+              )
+            )
+          );
+
+        let expectedAmount = mockResults.filter(res => res.learningAreaId === 1)
+          .length;
+        expect(returnedAmount).toBeObservable(hot('a', { a: expectedAmount }));
+
+        returnedAmount = reportsViewModel
+          .getAssignmentResultsByLearningArea(2)
+          .pipe(
+            map(assignments =>
+              assignments.reduce(
+                (total, ass) =>
+                  (total += ass.exerciseResults.reduce(
+                    (subTotal, exResult) =>
+                      (subTotal += exResult.results.length),
+                    0
+                  )),
+                0
+              )
+            )
+          );
+
+        expectedAmount = mockResults.filter(res => res.learningAreaId === 2)
+          .length;
+        expect(returnedAmount).toBeObservable(hot('a', { a: expectedAmount }));
+
+        returnedAmount = reportsViewModel
+          .getAssignmentResultsByLearningArea(3)
+          .pipe(
+            map(assignments =>
+              assignments.reduce(
+                (total, ass) =>
+                  (total += ass.exerciseResults.reduce(
+                    (subTotal, exResult) =>
+                      (subTotal += exResult.results.length),
+                    0
+                  )),
+                0
+              )
+            )
+          );
+
+        expectedAmount = mockResults.filter(res => res.learningAreaId === 3)
+          .length;
+        expect(returnedAmount).toBeObservable(hot('a', { a: expectedAmount }));
       });
 
       it('should return the requested Assignments', () => {
@@ -297,3 +262,99 @@ describe('ReportsViewModel', () => {
     });
   });
 });
+
+function getMockResults(): ResultInterface[] {
+  return [
+    new ResultFixture({
+      id: 1,
+      learningAreaId: 1,
+      bundleId: 1,
+      taskId: null,
+      score: 10,
+      eduContentId: 1,
+      assignment: 'foo bundle'
+    }),
+    new ResultFixture({
+      id: 2,
+      learningAreaId: 1,
+      bundleId: 1,
+      taskId: null,
+      score: 50,
+      eduContentId: 2,
+      assignment: 'foo bundle'
+    }),
+    new ResultFixture({
+      id: 3,
+      learningAreaId: 1,
+      bundleId: 2,
+      taskId: null,
+      score: 100,
+      eduContentId: 1,
+      assignment: 'bar bundle'
+    }),
+    new ResultFixture({
+      id: 4,
+      learningAreaId: 2,
+      bundleId: 1,
+      taskId: null,
+      score: 75,
+      eduContentId: 1,
+      assignment: 'foo bundle'
+    }),
+    new ResultFixture({
+      id: 5,
+      learningAreaId: 1,
+      bundleId: 1,
+      taskId: null,
+      score: 90,
+      eduContentId: 1,
+      assignment: 'foo bundle'
+    }),
+    new ResultFixture({
+      id: 6,
+      learningAreaId: 1,
+      taskId: 1,
+      bundleId: null,
+      score: 10,
+      eduContentId: 1,
+      assignment: 'foo task'
+    }),
+    new ResultFixture({
+      id: 7,
+      learningAreaId: 1,
+      taskId: 1,
+      bundleId: null,
+      score: 50,
+      eduContentId: 2,
+      assignment: 'foo task'
+    }),
+    new ResultFixture({
+      id: 8,
+      learningAreaId: 1,
+      taskId: 2,
+      bundleId: null,
+      score: 100,
+      eduContentId: 1,
+      assignment: 'bar task'
+    }),
+    new ResultFixture({
+      id: 9,
+      learningAreaId: 2,
+      taskId: 1,
+      bundleId: null,
+      score: 75,
+      eduContentId: 1,
+      assignment: 'foo task'
+    }),
+    new ResultFixture({
+      id: 10,
+      learningAreaId: 1,
+      unlockedContentId: 1,
+      taskId: 1,
+      bundleId: null,
+      score: 0,
+      eduContentId: 1,
+      assignment: 'foo bar task'
+    })
+  ];
+}

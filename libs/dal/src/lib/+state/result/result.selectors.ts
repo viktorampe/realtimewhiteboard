@@ -69,69 +69,51 @@ export const getById = createSelector(
   (state: State, props: { id: number }) => state.entities[props.id]
 );
 
-export const getTaskAssignmentsForLearningAreaId = createSelector(
+/**
+ * returns array of assignmentResults grouped by a property
+ * @example
+ * assignment$: AssignmentResult[] = this.store.pipe(
+    select(ResultQueries.getAssignmentsForLearningAreaId,
+      { learningAreaId: 1, groupProp: { bundleId: 0 }, groupType: 'bundle' })
+    -or-
+    select(ResultQueries.getAssignmentsForLearningAreaId,
+      { learningAreaId: 1, groupProp: { taskId: 0 }, groupType: 'task' })
+  );
+ */
+export const getAssignmentsForLearningAreaId = createSelector(
   selectResultState,
-  (state: State, props: { learningAreaId: number }) => {
+  (
+    state: State,
+    props: {
+      learningAreaId: number;
+      groupProp: Partial<ResultInterface>;
+      groupType: string;
+    }
+  ) => {
     const ids: number[] = <number[]>state.ids;
+    const groupKey = Object.keys(props.groupProp)[0];
 
-    const resultsByTaskId: Dictionary<ResultInterface[]> = ids.reduce(
-      (acc, id) => {
-        // mapping
-        const result = state.entities[id];
-        // filtering
-        if (result.taskId && result.learningAreaId === props.learningAreaId) {
-          // grouping
-          if (!acc[result.taskId]) {
-            acc[result.taskId] = [];
-          }
-          acc[result.taskId].push(result);
+    const resultsById: Dictionary<ResultInterface[]> = ids.reduce((acc, id) => {
+      // mapping
+      const result = state.entities[id];
+      // filtering
+      if (result[groupKey] && result.learningAreaId === props.learningAreaId) {
+        // grouping
+        if (!acc[result[groupKey]]) {
+          acc[result[groupKey]] = [];
         }
-        return acc;
-      },
-      {}
-    );
+        acc[result[groupKey]].push(result);
+      }
+      return acc;
+    }, {});
 
-    const taskAssigmentResults = Object.keys(resultsByTaskId).map(taskId => ({
-      title: resultsByTaskId[taskId][0].assignment,
-      type: 'task',
-      ...getExerciseResults(resultsByTaskId[taskId])
+    const assigmentResults = Object.keys(resultsById).map(gId => ({
+      title: resultsById[gId][0].assignment,
+      type: props.groupType,
+      ...getExerciseResults(resultsById[gId])
     }));
 
-    return taskAssigmentResults;
-  }
-);
-
-export const getBundleAssignmentsForLearningAreaId = createSelector(
-  selectResultState,
-  (state: State, props: { learningAreaId: number }) => {
-    const ids: number[] = <number[]>state.ids;
-
-    const resultsByBundleId: Dictionary<ResultInterface[]> = ids.reduce(
-      (acc, id) => {
-        // mapping
-        const result = state.entities[id];
-        // filtering
-        if (result.bundleId && result.learningAreaId === props.learningAreaId) {
-          // grouping
-          if (!acc[result.bundleId]) {
-            acc[result.bundleId] = [];
-          }
-          acc[result.bundleId].push(result);
-        }
-        return acc;
-      },
-      {}
-    );
-
-    const bundleAssigmentResults = Object.keys(resultsByBundleId).map(
-      bundleId => ({
-        title: resultsByBundleId[bundleId][0].assignment,
-        type: 'bundle',
-        ...getExerciseResults(resultsByBundleId[bundleId])
-      })
-    );
-
-    return bundleAssigmentResults;
+    return assigmentResults;
   }
 );
 

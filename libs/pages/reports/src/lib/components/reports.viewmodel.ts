@@ -48,11 +48,15 @@ export class ReportsViewModel {
       this.select(EduContentQueries.getAllEntities) as Observable<
         Dictionary<EduContent>
       >,
-      this.select(ResultQueries.getTaskAssignmentsForLearningAreaId, {
-        learningAreaId
+      this.select(ResultQueries.getAssignmentsForLearningAreaId, {
+        learningAreaId,
+        groupProp: { taskId: 0 },
+        groupType: 'task'
       }) as Observable<AssignmentResult[]>,
-      this.select(ResultQueries.getBundleAssignmentsForLearningAreaId, {
-        learningAreaId
+      this.select(ResultQueries.getAssignmentsForLearningAreaId, {
+        learningAreaId,
+        groupProp: { bundleId: 0 },
+        groupType: 'bundle'
       }) as Observable<AssignmentResult[]>
     ).pipe(
       map(([eduContents, assignmentsByTaskId, assignmentsBybundleId]) => {
@@ -61,12 +65,9 @@ export class ReportsViewModel {
         // eduContents vasthaken
         assignments.forEach(assignment =>
           assignment.exerciseResults.forEach(exResult => {
-            console.log(exResult.educContentId);
-            exResult.eduContent = eduContents[exResult.educContentId];
+            exResult.eduContent = eduContents[exResult.eduContentId];
           })
         );
-
-        console.log(assignments);
 
         return assignments;
       })
