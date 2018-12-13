@@ -6,14 +6,13 @@ import {
   EduContentQueries,
   LearningAreaInterface,
   LearningAreaQueries,
-  ResultInterface,
   ResultQueries
 } from '@campus/dal';
-import { groupArrayByKey } from '@campus/utils';
 import { Dictionary } from '@ngrx/entity';
 import { MemoizedSelectorWithProps, select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { ReportService } from '../services/report.service';
 import {
   AssignmentResult,
   LearningAreasWithResultsInterface
@@ -31,7 +30,8 @@ export class ReportsViewModel {
 
   constructor(
     private store: Store<DalState>,
-    private authService: AuthService
+    private authService: AuthService,
+    private reportService: ReportService
   ) {
     this.setSourceStreams();
     this.setPresentationStreams();
@@ -61,8 +61,16 @@ export class ReportsViewModel {
     ).pipe(
       map(([eduContents, resultsByTaskId, resultsByBundleId]) => {
         return [
-          ...this.getAssignmentResults(resultsByTaskId, 'task', eduContents),
-          ...this.getAssignmentResults(resultsByBundleId, 'bundle', eduContents)
+          ...this.reportService.getAssignmentResults(
+            resultsByTaskId,
+            'task',
+            eduContents
+          ),
+          ...this.reportService.getAssignmentResults(
+            resultsByBundleId,
+            'bundle',
+            eduContents
+          )
         ];
       })
     );
@@ -79,63 +87,5 @@ export class ReportsViewModel {
     payload?: Props
   ): Observable<T> {
     return this.store.pipe(select(selector, payload));
-  }
-
-  private getAssignmentResults(
-    resultsById: Dictionary<ResultInterface[]>,
-    type: string,
-    eduContents: Dictionary<EduContent>
-  ): AssignmentResult[] {
-    return Object.keys(resultsById).map(gId => ({
-      title: resultsById[gId][0].assignment,
-      type: type,
-      ...this.getExerciseResults(resultsById[gId], eduContents)
-    }));
-  }
-
-  private getExerciseResults(
-    results: ResultInterface[],
-    eduContents: Dictionary<EduContent>
-  ) {
-    const resultsByEduContentId = groupArrayByKey<ResultInterface>(results, {
-      eduContentId: 0
-    });
-
-    const exerciseResults = Object.keys(resultsByEduContentId).map(
-      eduContentId => {
-        const eduContentResults = resultsByEduContentId[eduContentId];
-
-        let bestResult = eduContentResults[0],
-          totalScore = 0;
-
-        eduContentResults.forEach(result => {
-          if (result.score > bestResult.score) {
-            bestResult = result;
-          }
-          totalScore += result.score;
-        });
-
-        return {
-          eduContentId: +eduContentId,
-          eduContent: eduContents[eduContentId],
-          results: eduContentResults,
-          bestResult: bestResult,
-          averageScore: totalScore / eduContentResults.length
-        };
-      }
-    );
-
-    const totalScoreAllEduContents = exerciseResults.reduce(
-      (sum, value) => (sum += value.bestResult.score),
-      0
-    );
-
-    const averageScoreAllEduContents =
-      totalScoreAllEduContents / exerciseResults.length;
-
-    return {
-      totalScore: averageScoreAllEduContents,
-      exerciseResults: exerciseResults
-    };
   }
 }
