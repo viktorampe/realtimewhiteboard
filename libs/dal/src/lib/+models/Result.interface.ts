@@ -18,9 +18,9 @@ export interface ResultInterface {
   person?: PersonInterface;
   task?: TaskInterface;
   unlockedContent?: UnlockedContentInterface;
-  learningAreaId?: number;
-  assignment?: string;
-  taskInstanceId?: number;
-  username?: string;
-  bundleId?: number;
+  learningAreaId: number;
+  assignment: string;
+  taskInstanceId: number;
+  personDisplayName: string;
+  bundleId: number;
 }

@@ -13,44 +13,17 @@ export class ReportService {
     type: string,
     eduContents: Dictionary<EduContent>
   ): AssignmentResult[] {
-    return Object.keys(resultsById).map(gId => ({
-      title: resultsById[gId][0].assignment,
-      type: type,
-      ...this.getExerciseResults(resultsById[gId], eduContents)
-    }));
+    return Object.values(resultsById).map(groupedResults =>
+      this.getAssignmentResultForGroup(groupedResults, type, eduContents)
+    );
   }
 
-  private getExerciseResults(
+  private getAssignmentResultForGroup(
     results: ResultInterface[],
+    type: string,
     eduContents: Dictionary<EduContent>
-  ) {
-    const resultsByEduContentId = groupArrayByKey<ResultInterface>(results, {
-      eduContentId: 0
-    });
-
-    const exerciseResults = Object.keys(resultsByEduContentId).map(
-      eduContentId => {
-        const eduContentResults = resultsByEduContentId[eduContentId];
-
-        let bestResult = eduContentResults[0],
-          totalScore = 0;
-
-        eduContentResults.forEach(result => {
-          if (result.score > bestResult.score) {
-            bestResult = result;
-          }
-          totalScore += result.score;
-        });
-
-        return {
-          eduContentId: +eduContentId,
-          eduContent: eduContents[eduContentId],
-          results: eduContentResults,
-          bestResult: bestResult,
-          averageScore: totalScore / eduContentResults.length
-        };
-      }
-    );
+  ): AssignmentResult {
+    const exerciseResults = this.getExerciseResults(results, eduContents);
 
     const totalScoreAllEduContents = exerciseResults.reduce(
       (sum, value) => (sum += value.bestResult.score),
@@ -61,8 +34,41 @@ export class ReportService {
       totalScoreAllEduContents / exerciseResults.length;
 
     return {
+      title: results[0].assignment,
+      type: type,
       totalScore: averageScoreAllEduContents,
       exerciseResults: exerciseResults
     };
+  }
+
+  private getExerciseResults(
+    results: ResultInterface[],
+    eduContents: Dictionary<EduContent>
+  ) {
+    const resultsByEduContentId = groupArrayByKey<ResultInterface>(results, {
+      eduContentId: 0
+    });
+
+    return Object.keys(resultsByEduContentId).map(eduContentId => {
+      const eduContentResults = resultsByEduContentId[eduContentId];
+
+      let bestResult = eduContentResults[0],
+        totalScore = 0;
+
+      eduContentResults.forEach(result => {
+        if (result.score > bestResult.score) {
+          bestResult = result;
+        }
+        totalScore += result.score;
+      });
+
+      return {
+        eduContentId: +eduContentId,
+        eduContent: eduContents[eduContentId],
+        results: eduContentResults,
+        bestResult: bestResult,
+        averageScore: totalScore / eduContentResults.length
+      };
+    });
   }
 }

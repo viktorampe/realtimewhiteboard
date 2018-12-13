@@ -2,13 +2,11 @@ import { Injectable } from '@angular/core';
 import {
   AuthService,
   DalState,
-  EduContent,
   EduContentQueries,
   LearningAreaInterface,
   LearningAreaQueries,
   ResultQueries
 } from '@campus/dal';
-import { Dictionary } from '@ngrx/entity';
 import { MemoizedSelectorWithProps, select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -47,9 +45,7 @@ export class ReportsViewModel {
     learningAreaId: number
   ): Observable<AssignmentResult[]> {
     return combineLatest(
-      this.select(EduContentQueries.getAllEntities) as Observable<
-        Dictionary<EduContent>
-      >,
+      this.select(EduContentQueries.getAllEntities),
       this.select(ResultQueries.getResultsForLearningAreaIdGrouped, {
         learningAreaId,
         groupProp: { taskId: 0 }
