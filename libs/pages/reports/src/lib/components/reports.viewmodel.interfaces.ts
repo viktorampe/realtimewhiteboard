@@ -12,7 +12,6 @@ export interface LearningAreasWithResultsInterface {
   }[];
 }
 
-
 export interface AssignmentResultInterface {
   title: string;
   type: string; //(Task/Bundle)

@@ -1,5 +1,6 @@
+import { ResultInterface } from '@campus/dal';
 import { ResultQueries } from '.';
-import { ResultInterface } from '../../+models';
+import { ResultFixture } from '../../+fixtures';
 import { State } from './result.reducer';
 
 describe('Result Selectors', () => {
@@ -90,5 +91,156 @@ describe('Result Selectors', () => {
       const results = ResultQueries.getById(storeState, { id: 9 });
       expect(results).toBe(undefined);
     });
+
+    describe('getAssignmentsForLearningAreaId()', () => {
+      it('should return a dictionary of results grouped by taskId', () => {
+        // moved to bottom of file for readability
+        const mockData: ResultInterface[] = getMockTaskResults();
+
+        resultState = createState(mockData, true, 'no error');
+        storeState = { results: resultState };
+
+        const results = ResultQueries.getResultsForLearningAreaIdGrouped(
+          storeState,
+          { learningAreaId: 1, groupProp: { taskId: 0 } }
+        );
+
+        const expected = {
+          1: mockData.filter(
+            result => result.learningAreaId === 1 && result.taskId === 1
+          ),
+          2: mockData.filter(
+            result => result.learningAreaId === 1 && result.taskId === 2
+          )
+        };
+
+        expect(results).toEqual(expected);
+      });
+
+      it('should return a dictionary of results grouped by bundleId', () => {
+        // moved to bottom of file for readability
+        const mockData: ResultInterface[] = getMockBundleResults();
+
+        resultState = createState(mockData, true, 'no error');
+        storeState = { results: resultState };
+
+        const results = ResultQueries.getResultsForLearningAreaIdGrouped(
+          storeState,
+          { learningAreaId: 1, groupProp: { bundleId: 0 } }
+        );
+
+        const expected = {
+          1: mockData.filter(
+            result => result.learningAreaId === 1 && result.bundleId === 1
+          ),
+          2: mockData.filter(
+            result => result.learningAreaId === 1 && result.bundleId === 2
+          )
+        };
+
+        expect(results).toEqual(expected);
+      });
+    });
   });
 });
+
+function getMockTaskResults(): ResultInterface[] {
+  return [
+    new ResultFixture({
+      id: 1,
+      learningAreaId: 1,
+      taskId: 1,
+      score: 10,
+      eduContentId: 1,
+      assignment: 'foo'
+    }),
+    new ResultFixture({
+      id: 2,
+      learningAreaId: 1,
+      taskId: 1,
+      score: 50,
+      eduContentId: 2,
+      assignment: 'foo'
+    }),
+    new ResultFixture({
+      id: 3,
+      learningAreaId: 1,
+      taskId: 2,
+      score: 100,
+      eduContentId: 1,
+      assignment: 'bar'
+    }),
+    new ResultFixture({
+      id: 4,
+      learningAreaId: 2,
+      taskId: 1,
+      score: 75,
+      eduContentId: 1,
+      assignment: 'foo'
+    }),
+    new ResultFixture({
+      id: 5,
+      learningAreaId: 1,
+      unlockedContentId: 1,
+      taskId: null,
+      score: 0,
+      eduContentId: 1,
+      assignment: 'foo bar'
+    })
+  ];
+}
+
+function getMockBundleResults(): ResultInterface[] {
+  return [
+    new ResultFixture({
+      id: 1,
+      learningAreaId: 1,
+      bundleId: 1,
+      score: 10,
+      eduContentId: 1,
+      assignment: 'foo'
+    }),
+    new ResultFixture({
+      id: 2,
+      learningAreaId: 1,
+      bundleId: 1,
+      score: 50,
+      eduContentId: 2,
+      assignment: 'foo'
+    }),
+    new ResultFixture({
+      id: 3,
+      learningAreaId: 1,
+      bundleId: 2,
+      score: 100,
+      eduContentId: 1,
+      assignment: 'bar'
+    }),
+    new ResultFixture({
+      id: 4,
+      learningAreaId: 2,
+      bundleId: 1,
+      score: 75,
+      eduContentId: 1,
+      assignment: 'foo'
+    }),
+    new ResultFixture({
+      id: 5,
+      learningAreaId: 1,
+      unlockedContentId: 1,
+      taskId: 1,
+      bundleId: null,
+      score: 0,
+      eduContentId: 1,
+      assignment: 'foo bar'
+    }),
+    new ResultFixture({
+      id: 6,
+      learningAreaId: 1,
+      bundleId: 1,
+      score: 90,
+      eduContentId: 1,
+      assignment: 'foo'
+    })
+  ];
+}

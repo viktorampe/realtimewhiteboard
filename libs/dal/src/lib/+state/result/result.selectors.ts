@@ -21,13 +21,25 @@ export const getLoaded = createSelector(
   (state: State) => state.loaded
 );
 
-export const getAll = createSelector(selectResultState, selectAll);
+export const getAll = createSelector(
+  selectResultState,
+  selectAll
+);
 
-export const getCount = createSelector(selectResultState, selectTotal);
+export const getCount = createSelector(
+  selectResultState,
+  selectTotal
+);
 
-export const getIds = createSelector(selectResultState, selectIds);
+export const getIds = createSelector(
+  selectResultState,
+  selectIds
+);
 
-export const getAllEntities = createSelector(selectResultState, selectEntities);
+export const getAllEntities = createSelector(
+  selectResultState,
+  selectEntities
+);
 
 /**
  * returns array of objects in the order of the given ids
@@ -55,6 +67,44 @@ export const getById = createSelector(
   (state: State, props: { id: number }) => state.entities[props.id]
 );
 
+/**
+ * returns dictionary of resuilts grouped by a property
+ * @example
+ * results$: ResultInterface[] = this.store.pipe(
+    select(ResultQueries.getResultsForLearningAreaIdGrouped,
+      { learningAreaId: 1, groupProp: { bundleId: 0 } })
+    -or-
+    select(ResultQueries.getResultsForLearningAreaIdGrouped,
+      { learningAreaId: 1, groupProp: { taskId: 0 } })
+  );
+ */
+export const getResultsForLearningAreaIdGrouped = createSelector(
+  selectResultState,
+  (
+    state: State,
+    props: {
+      learningAreaId: number;
+      groupProp: Partial<ResultInterface>;
+    }
+  ) => {
+    const ids: number[] = <number[]>state.ids;
+    const groupKey = Object.keys(props.groupProp)[0];
+
+    return ids.reduce((acc, id) => {
+      // mapping
+      const result = state.entities[id];
+      // filtering
+      if (result[groupKey] && result.learningAreaId === props.learningAreaId) {
+        // grouping
+        if (!acc[result[groupKey]]) {
+          acc[result[groupKey]] = [];
+        }
+        acc[result[groupKey]].push(result);
+      }
+      return acc;
+    }, {});
+  }
+);
 export const getLearningAreaIds = createSelector(
   selectResultState,
   (state: State) => {

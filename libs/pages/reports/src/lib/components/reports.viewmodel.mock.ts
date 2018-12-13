@@ -3,9 +3,11 @@ import {
   EduContentFixture,
   LearningAreaFixture,
   LearningAreaInterface,
+  PersonInterface,
   ResultFixture
 } from '@campus/dal';
 import { ViewModelInterface } from '@campus/testing';
+import { ListFormat } from '@campus/ui';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ReportsViewModel } from './reports.viewmodel';
 import {
@@ -19,6 +21,9 @@ import {
 export class MockReportsViewModel
   implements ViewModelInterface<ReportsViewModel> {
   // presentation streams
+  listFormat$: Observable<ListFormat>;
+  user$: Observable<PersonInterface>;
+
   learningAreasWithResults$: Observable<
     LearningAreasWithResultsInterface
   > = new BehaviorSubject<LearningAreasWithResultsInterface>({
@@ -68,4 +73,13 @@ export class MockReportsViewModel
       }
     }
   ]);
+
+  getLearningAreaById(): Observable<LearningAreaInterface> {
+    return;
+  }
+  getAssignmentResultsByLearningArea(): Observable<
+    AssignmentResultInterface[]
+  > {
+    return;
+  }
 }

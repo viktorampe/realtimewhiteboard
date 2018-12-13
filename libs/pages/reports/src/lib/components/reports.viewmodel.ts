@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import {
+  AuthService,
   DalState,
+  EduContentQueries,
+  LearningAreaInterface,
   LearningAreaQueries,
   PersonInterface,
   ResultQueries,
@@ -8,11 +11,14 @@ import {
   UserQueries
 } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
-import { select, Store } from '@ngrx/store';
-import { MemoizedSelectorWithProps } from '@ngrx/store/src/selector';
+import { MemoizedSelectorWithProps, select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { LearningAreasWithResultsInterface } from './reports.viewmodel.interfaces';
+import { ReportService } from '../services/report.service';
+import {
+  AssignmentResultInterface,
+  LearningAreasWithResultsInterface
+} from './reports.viewmodel.interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -27,9 +33,50 @@ export class ReportsViewModel {
   // presentation streams
   learningAreasWithResults$: Observable<LearningAreasWithResultsInterface>;
 
-  constructor(private store: Store<DalState>) {
+  constructor(
+    private store: Store<DalState>,
+    private authService: AuthService,
+    private reportService: ReportService
+  ) {
     this.setSourceStreams();
     this.setPresentationStreams();
+  }
+
+  public getLearningAreaById(
+    areaId: number
+  ): Observable<LearningAreaInterface> {
+    return this.select(LearningAreaQueries.getById, { id: areaId });
+  }
+
+  public getAssignmentResultsByLearningArea(
+    learningAreaId: number
+  ): Observable<AssignmentResultInterface[]> {
+    return combineLatest(
+      this.select(EduContentQueries.getAllEntities),
+      this.select(ResultQueries.getResultsForLearningAreaIdGrouped, {
+        learningAreaId,
+        groupProp: { taskId: 0 }
+      }),
+      this.select(ResultQueries.getResultsForLearningAreaIdGrouped, {
+        learningAreaId,
+        groupProp: { bundleId: 0 }
+      })
+    ).pipe(
+      map(([eduContents, resultsByTaskId, resultsByBundleId]) => {
+        return [
+          ...this.reportService.getAssignmentResults(
+            resultsByTaskId,
+            'task',
+            eduContents
+          ),
+          ...this.reportService.getAssignmentResults(
+            resultsByBundleId,
+            'bundle',
+            eduContents
+          )
+        ];
+      })
+    );
   }
 
   private setSourceStreams() {

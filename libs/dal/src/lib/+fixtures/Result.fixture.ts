@@ -11,6 +11,11 @@ export class ResultFixture implements ResultInterface {
   eduContentId = 1;
   personId = 6;
   taskId = 1;
+  learningAreaId = 1;
+  assignment = 'foo';
+  taskInstanceId = 1;
+  personDisplayName = 'bar';
+  bundleId = 1;
 
   constructor(props: Partial<ResultInterface> = {}) {
     // overwrite defaults
