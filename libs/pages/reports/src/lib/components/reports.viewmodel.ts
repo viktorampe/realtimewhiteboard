@@ -6,8 +6,10 @@ import {
   EduContentQueries,
   LearningAreaInterface,
   LearningAreaQueries,
+  ResultInterface,
   ResultQueries
 } from '@campus/dal';
+import { groupArrayByKey } from '@campus/utils';
 import { Dictionary } from '@ngrx/entity';
 import { MemoizedSelectorWithProps, select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
@@ -50,26 +52,18 @@ export class ReportsViewModel {
       >,
       this.select(ResultQueries.getAssignmentsForLearningAreaId, {
         learningAreaId,
-        groupProp: { taskId: 0 },
-        groupType: 'task'
-      }) as Observable<AssignmentResult[]>,
+        groupProp: { taskId: 0 }
+      }),
       this.select(ResultQueries.getAssignmentsForLearningAreaId, {
         learningAreaId,
-        groupProp: { bundleId: 0 },
-        groupType: 'bundle'
-      }) as Observable<AssignmentResult[]>
+        groupProp: { bundleId: 0 }
+      })
     ).pipe(
-      map(([eduContents, assignmentsByTaskId, assignmentsBybundleId]) => {
-        const assignments = [...assignmentsByTaskId, ...assignmentsBybundleId];
-
-        // eduContents vasthaken
-        assignments.forEach(assignment =>
-          assignment.exerciseResults.forEach(exResult => {
-            exResult.eduContent = eduContents[exResult.eduContentId];
-          })
-        );
-
-        return assignments;
+      map(([eduContents, resultsByTaskId, resultsByBundleId]) => {
+        return [
+          ...this.getAssignmentResults(resultsByTaskId, 'task', eduContents),
+          ...this.getAssignmentResults(resultsByBundleId, 'bundle', eduContents)
+        ];
       })
     );
   }
@@ -85,5 +79,63 @@ export class ReportsViewModel {
     payload?: Props
   ): Observable<T> {
     return this.store.pipe(select(selector, payload));
+  }
+
+  private getAssignmentResults(
+    resultsById: Dictionary<ResultInterface[]>,
+    type: string,
+    eduContents: Dictionary<EduContent>
+  ): AssignmentResult[] {
+    return Object.keys(resultsById).map(gId => ({
+      title: resultsById[gId][0].assignment,
+      type: type,
+      ...this.getExerciseResults(resultsById[gId], eduContents)
+    }));
+  }
+
+  private getExerciseResults(
+    results: ResultInterface[],
+    eduContents: Dictionary<EduContent>
+  ) {
+    const resultsByEduContentId = groupArrayByKey<ResultInterface>(results, {
+      eduContentId: 0
+    });
+
+    const exerciseResults = Object.keys(resultsByEduContentId).map(
+      eduContentId => {
+        const eduContentResults = resultsByEduContentId[eduContentId];
+
+        let bestResult = eduContentResults[0],
+          totalScore = 0;
+
+        eduContentResults.forEach(result => {
+          if (result.score > bestResult.score) {
+            bestResult = result;
+          }
+          totalScore += result.score;
+        });
+
+        return {
+          eduContentId: +eduContentId,
+          eduContent: eduContents[eduContentId],
+          results: eduContentResults,
+          bestResult: bestResult,
+          averageScore: totalScore / eduContentResults.length
+        };
+      }
+    );
+
+    const totalScoreAllEduContents = exerciseResults.reduce(
+      (sum, value) => (sum += value.bestResult.score),
+      0
+    );
+
+    const averageScoreAllEduContents =
+      totalScoreAllEduContents / exerciseResults.length;
+
+    return {
+      totalScore: averageScoreAllEduContents,
+      exerciseResults: exerciseResults
+    };
   }
 }

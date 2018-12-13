@@ -1,5 +1,3 @@
-import { groupArrayByKey } from '@campus/utils';
-import { Dictionary } from '@ngrx/entity';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { ResultInterface } from '../../+models';
 import {
@@ -87,13 +85,12 @@ export const getAssignmentsForLearningAreaId = createSelector(
     props: {
       learningAreaId: number;
       groupProp: Partial<ResultInterface>;
-      groupType: string;
     }
   ) => {
     const ids: number[] = <number[]>state.ids;
     const groupKey = Object.keys(props.groupProp)[0];
 
-    const resultsById: Dictionary<ResultInterface[]> = ids.reduce((acc, id) => {
+    return ids.reduce((acc, id) => {
       // mapping
       const result = state.entities[id];
       // filtering
@@ -106,62 +103,5 @@ export const getAssignmentsForLearningAreaId = createSelector(
       }
       return acc;
     }, {});
-
-    const assigmentResults = Object.keys(resultsById).map(gId => ({
-      title: resultsById[gId][0].assignment,
-      type: props.groupType,
-      ...getExerciseResults(resultsById[gId])
-    }));
-
-    return assigmentResults;
   }
 );
-
-export function getExerciseResults(results: ResultInterface[]): {} {
-  const resultsByEduContentId = groupArrayByKey<ResultInterface>(results, {
-    eduContentId: 0
-  });
-
-  const exerciseResults = Object.keys(resultsByEduContentId).map(
-    eduContentId => {
-      const eduContentResults = resultsByEduContentId[eduContentId];
-
-      let bestResult = eduContentResults[0],
-        totalScore = 0;
-
-      eduContentResults.forEach(result => {
-        if (result.score > bestResult.score) {
-          bestResult = result;
-        }
-        totalScore += result.score;
-      });
-
-      return {
-        eduContentId: +eduContentId,
-        results: eduContentResults,
-        bestResult: bestResult,
-        averageScore: totalScore / eduContentResults.length
-      } as ExerciseResultsInterface;
-    }
-  );
-
-  const totalScoreAllEduContents = exerciseResults.reduce(
-    (sum, value) => (sum += value.bestResult.score),
-    0
-  );
-
-  const averageScoreAllEduContents =
-    totalScoreAllEduContents / exerciseResults.length;
-
-  return {
-    totalScore: averageScoreAllEduContents,
-    exerciseResults: exerciseResults
-  };
-}
-
-interface ExerciseResultsInterface {
-  eduContentId: number;
-  results: ResultInterface[];
-  bestResult: ResultInterface;
-  averageScore: number;
-}

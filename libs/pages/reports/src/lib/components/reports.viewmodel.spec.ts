@@ -19,6 +19,7 @@ import { Store, StoreModule } from '@ngrx/store';
 import { hot } from 'jasmine-marbles';
 import { map } from 'rxjs/operators';
 import { ReportsViewModel } from './reports.viewmodel';
+import { AssignmentResult } from './reports.viewmodel.interfaces';
 
 let reportsViewModel: ReportsViewModel;
 let store: Store<DalState>;
@@ -119,20 +120,7 @@ describe('ReportsViewModel', () => {
       it('should return the correct amount of results', () => {
         let returnedAmount = reportsViewModel
           .getAssignmentResultsByLearningArea(1)
-          // count all results in tree
-          .pipe(
-            map(assignments =>
-              assignments.reduce(
-                (total, ass) =>
-                  (total += ass.exerciseResults.reduce(
-                    (subTotal, exResult) =>
-                      (subTotal += exResult.results.length),
-                    0
-                  )),
-                0
-              )
-            )
-          );
+          .pipe(map(assignments => countResults(assignments)));
 
         let expectedAmount = mockResults.filter(res => res.learningAreaId === 1)
           .length;
@@ -140,19 +128,7 @@ describe('ReportsViewModel', () => {
 
         returnedAmount = reportsViewModel
           .getAssignmentResultsByLearningArea(2)
-          .pipe(
-            map(assignments =>
-              assignments.reduce(
-                (total, ass) =>
-                  (total += ass.exerciseResults.reduce(
-                    (subTotal, exResult) =>
-                      (subTotal += exResult.results.length),
-                    0
-                  )),
-                0
-              )
-            )
-          );
+          .pipe(map(assignments => countResults(assignments)));
 
         expectedAmount = mockResults.filter(res => res.learningAreaId === 2)
           .length;
@@ -160,19 +136,7 @@ describe('ReportsViewModel', () => {
 
         returnedAmount = reportsViewModel
           .getAssignmentResultsByLearningArea(3)
-          .pipe(
-            map(assignments =>
-              assignments.reduce(
-                (total, ass) =>
-                  (total += ass.exerciseResults.reduce(
-                    (subTotal, exResult) =>
-                      (subTotal += exResult.results.length),
-                    0
-                  )),
-                0
-              )
-            )
-          );
+          .pipe(map(assignments => countResults(assignments)));
 
         expectedAmount = mockResults.filter(res => res.learningAreaId === 3)
           .length;
@@ -262,6 +226,17 @@ describe('ReportsViewModel', () => {
     });
   });
 });
+
+function countResults(assignments: AssignmentResult[]): number {
+  return assignments.reduce(
+    (total, ass) =>
+      (total += ass.exerciseResults.reduce(
+        (subTotal, exResult) => (subTotal += exResult.results.length),
+        0
+      )),
+    0
+  );
+}
 
 function getMockResults(): ResultInterface[] {
   return [
