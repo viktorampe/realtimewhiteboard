@@ -101,13 +101,14 @@ export const getResultsGroupedByArea = createSelector(
     const ids: number[] = <number[]>state.ids;
     const map: ResultsGroupedByArea = ids.reduce(
       (acc, id) => {
+        const resultLearningAreaId = state.entities[id].learningAreaId;
+        const result = state.entities[id];
         // group by learning area
-        if (acc[state.entities[id].learningAreaId]) {
-          acc[state.entities[id].learningAreaId].push(state.entities[id]);
-        } else {
-          acc[state.entities[id].learningAreaId] = [];
-          acc[state.entities[id].learningAreaId].push(state.entities[id]);
+        if (!acc[resultLearningAreaId]) {
+          acc[resultLearningAreaId] = [];
         }
+
+        acc[resultLearningAreaId].push(result);
 
         return acc;
       },
