@@ -1,13 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { ResultInterface } from '../../+models';
-import {
-  NAME,
-  selectAll,
-  selectEntities,
-  selectIds,
-  selectTotal,
-  State
-} from './result.reducer';
+import { NAME, selectAll, selectEntities, selectIds, selectTotal, State } from './result.reducer';
 
 export const selectResultState = createFeatureSelector<State>(NAME);
 
@@ -113,35 +106,6 @@ export const getLearningAreaIds = createSelector(
         Object.values(state.entities).map(result => result.learningAreaId)
       )
     );
-  }
-);
-
-export const getResultsForTasks = createSelector(
-  selectResultState,
-  (state: State) => {
-    const resultIds = Array.from(
-      new Set(
-        Object.values(state.entities)
-          .filter(result => result.taskId)
-          .map(result => result.id)
-      )
-    );
-    return resultIds.map(resultId => state.entities[resultId]);
-  }
-);
-
-export const getResultsForBundles = createSelector(
-  selectResultState,
-  (state: State) => {
-    const resultIds = Array.from(
-      new Set(
-        Object.values(state.entities)
-          .filter(result => !result.taskId)
-          .map(result => result.id)
-      )
-    );
-
-    return resultIds.map(resultId => state.entities[resultId]);
   }
 );
 

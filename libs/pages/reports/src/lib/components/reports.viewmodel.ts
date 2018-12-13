@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import {
-  AuthService,
   DalState,
   EduContentQueries,
   LearningAreaInterface,
@@ -35,7 +34,6 @@ export class ReportsViewModel {
 
   constructor(
     private store: Store<DalState>,
-    private authService: AuthService,
     private reportService: ReportService
   ) {
     this.setSourceStreams();
