@@ -54,13 +54,15 @@ export class ReportsViewModel {
             const results = resultsByArea[learningAreaId];
             return {
               learningArea: areaEntities[learningAreaId],
-              tasksWithResultsCount: new Set(
-                results.filter(result => result.taskId).map(result => result.id)
+              tasksWithResultsCount: new Set<number>(
+                results
+                  .filter(result => result.taskId)
+                  .map(result => result.taskId)
               ).size,
-              bundlesWithResultsCount: new Set(
+              bundlesWithResultsCount: new Set<number>(
                 results
                   .filter(result => result.bundleId)
-                  .map(result => result.id)
+                  .map(result => result.bundleId)
               ).size
             };
           })
