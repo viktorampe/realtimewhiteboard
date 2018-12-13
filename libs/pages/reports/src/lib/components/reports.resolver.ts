@@ -7,7 +7,11 @@ import {
   LearningAreaQueries,
   ResultActions,
   ResultQueries,
-  StateResolver
+  StateResolver,
+  UiActions,
+  UiQuery,
+  UserActions,
+  UserQueries
 } from '@campus/dal';
 import { Action, Selector, Store } from '@ngrx/store';
 
@@ -22,10 +26,17 @@ export class ReportsResolver extends StateResolver {
   protected getLoadableActions(): Action[] {
     return [
       new LearningAreaActions.LoadLearningAreas(),
-      new ResultActions.LoadResults({ userId: this.authService.userId })
+      new ResultActions.LoadResults({ userId: this.authService.userId }),
+      new UiActions.LoadUi(),
+      new UserActions.LoadUser({ force: false })
     ];
   }
   protected getResolvedQueries(): Selector<object, boolean>[] {
-    return [LearningAreaQueries.getLoaded, ResultQueries.getLoaded];
+    return [
+      LearningAreaQueries.getLoaded,
+      ResultQueries.getLoaded,
+      UiQuery.getLoaded,
+      UserQueries.getLoaded
+    ];
   }
 }

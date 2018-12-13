@@ -1,11 +1,13 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import {
-  AuthServiceInterface,
-  AUTH_SERVICE_TOKEN,
   DalState,
   LearningAreaQueries,
-  ResultQueries
+  PersonInterface,
+  ResultQueries,
+  UiQuery,
+  UserQueries
 } from '@campus/dal';
+import { ListFormat } from '@campus/ui';
 import { MemoizedSelectorWithProps, select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -16,17 +18,22 @@ import { LearningAreasWithResultsInterface } from './reports.viewmodel.interface
 })
 export class ReportsViewModel {
   // source streams
+  listFormat$: Observable<ListFormat>;
+  user$: Observable<PersonInterface>;
 
   // intermediate streams
 
   // presentation streams
   learningAreasWithResults$: Observable<LearningAreasWithResultsInterface>;
 
-  constructor(
-    private store: Store<DalState>,
-    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
-  ) {
+  constructor(private store: Store<DalState>) {
+    this.setSourceStreams();
     this.setPresentationStreams();
+  }
+
+  private setSourceStreams() {
+    this.listFormat$ = this.select(UiQuery.getListFormat);
+    this.user$ = this.select(UserQueries.getCurrentUser);
   }
 
   private setPresentationStreams() {
