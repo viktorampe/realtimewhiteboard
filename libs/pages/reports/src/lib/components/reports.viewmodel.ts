@@ -103,23 +103,19 @@ export class ReportsViewModel {
       map(([areaEntities, resultsByArea]) => {
         const learningAreasWithResult = {
           learningAreas: Object.keys(resultsByArea).map(learningAreaId => {
-            const results = resultsByArea[learningAreaId];
+            const taskIds = new Set(),
+              bundleIds = new Set();
+            resultsByArea[learningAreaId].forEach(result => {
+              if (result.taskId) taskIds.add(result.taskId);
+              if (result.bundleId) bundleIds.add(result.bundleId);
+            });
             return {
               learningArea: areaEntities[learningAreaId],
-              tasksWithResultsCount: new Set<number>(
-                results
-                  .filter(result => result.taskId)
-                  .map(result => result.taskId)
-              ).size,
-              bundlesWithResultsCount: new Set<number>(
-                results
-                  .filter(result => result.bundleId)
-                  .map(result => result.bundleId)
-              ).size
+              tasksWithResultsCount: taskIds.size,
+              bundlesWithResultsCount: bundleIds.size
             };
           })
         };
-
         return learningAreasWithResult;
       })
     );
