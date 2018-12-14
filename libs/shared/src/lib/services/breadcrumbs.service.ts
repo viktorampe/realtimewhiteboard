@@ -1,10 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  ActivatedRoute,
-  ActivatedRouteSnapshot,
-  NavigationEnd,
-  Router
-} from '@angular/router';
+import { ActivatedRouteSnapshot, NavigationEnd, Router } from '@angular/router';
 import { DalState } from '@campus/dal';
 import { BreadcrumbLinkInterface } from '@campus/ui';
 import { MemoizedSelector, select, Store } from '@ngrx/store';
@@ -24,11 +19,7 @@ export class BreadcrumbsService {
   private currentRoute$: Observable<ActivatedRouteSnapshot>;
   breadcrumbs$: Observable<BreadcrumbLinkInterface[]>;
 
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private store: Store<DalState>
-  ) {
+  constructor(private router: Router, private store: Store<DalState>) {
     this.setCurrentRoute();
   }
 
@@ -60,6 +51,7 @@ export class BreadcrumbsService {
       currentRoute = currentRoute.firstChild;
     } while (currentRoute);
 
+    // routes contains every 'hop' of the routermodule
     const filteredRoutes = routes.filter(routePart => routePart.url.length);
 
     let breadcrumbs: Observable<BreadcrumbLinkInterface[]>;
