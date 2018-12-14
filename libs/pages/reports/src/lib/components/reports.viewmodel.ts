@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {
+  ContentInterface,
   DalState,
   EduContentQueries,
   LearningAreaInterface,
@@ -9,6 +10,10 @@ import {
   UiQuery,
   UserQueries
 } from '@campus/dal';
+import {
+  OpenStaticContentServiceInterface,
+  OPEN_STATIC_CONTENT_SERVICE_TOKEN
+} from '@campus/shared';
 import { ListFormat } from '@campus/ui';
 import { MemoizedSelectorWithProps, select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
@@ -34,7 +39,9 @@ export class ReportsViewModel {
 
   constructor(
     private store: Store<DalState>,
-    private reportService: ReportService
+    private reportService: ReportService,
+    @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
+    private openStaticContentService: OpenStaticContentServiceInterface
   ) {
     this.setSourceStreams();
     this.setPresentationStreams();
@@ -116,6 +123,10 @@ export class ReportsViewModel {
         return learningAreasWithResult;
       })
     );
+  }
+
+  openBook(content: ContentInterface): void {
+    this.openStaticContentService.open(content);
   }
 
   private select<T, Props>(
