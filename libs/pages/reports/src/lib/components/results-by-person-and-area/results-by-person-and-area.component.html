@@ -53,9 +53,14 @@
               <td class="score">niet ingediend</td>
             </ng-template>
 
-            <td class="number">{{exerciseResult.results.length}}</td>
-
-            <td class="number">{{exerciseResult.averageScore | number:'1.0-2'}}</td>
+            <ng-container *ngIf="assignment.type !== 'task'; else hideInfoForTasks">
+              <td class="number">{{exerciseResult.results.length}}</td>
+              <td class="number">{{exerciseResult.averageScore | number:'1.0-2'}}</td>
+            </ng-container>
+            <ng-template #hideInfoForTasks>
+              <td></td>
+              <td></td>
+            </ng-template>
             <td></td>
           </tr>
         </tbody>
