@@ -2,7 +2,7 @@ import { ResultInterface } from '@campus/dal';
 import { ResultQueries } from '.';
 import { ResultFixture } from '../../+fixtures';
 import { State } from './result.reducer';
-// file.only
+
 describe('Result Selectors', () => {
   function createResult(id: number): ResultInterface | any {
     return {
