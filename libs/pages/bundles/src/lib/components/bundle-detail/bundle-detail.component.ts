@@ -144,6 +144,7 @@ export class BundleDetailComponent
     if (this.list) {
       this.list.deselectAllItems();
     }
+
     return this.filterService.filter(source, {
       content: { name: filterText }
     });

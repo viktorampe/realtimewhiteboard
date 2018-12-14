@@ -71,7 +71,6 @@ export class ExerciseService implements ExerciseServiceInterface {
     const userId = exercise.result.personId;
     const resultId = exercise.result.id;
     const cmi = exercise.result.cmi;
-
     const result$ = this.resultsService.saveResult(userId, resultId, cmi).pipe(
       map(result => {
         return {

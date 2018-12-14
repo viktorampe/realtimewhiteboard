@@ -127,7 +127,7 @@ export class ScormExerciseService implements ScormExerciseServiceInterface {
     this.store
       .pipe(
         select(CurrentExerciseQueries.getCurrentExercise),
-        filter(ex => ex.eduContent !== undefined),
+        filter(ex => !!ex.eduContent),
         distinctUntilChanged((x, y) => x.eduContent.id === y.eduContent.id),
         tap(newCurrentExercise => {
           this.scormApi.init(
@@ -143,14 +143,20 @@ export class ScormExerciseService implements ScormExerciseServiceInterface {
   private listenToScormForUpdates() {
     this.scormApi.cmi$
       .pipe(
+        filter(cmi => !!cmi),
         withLatestFrom(
           this.store.pipe(select(CurrentExerciseQueries.getCurrentExercise))
         ),
         tap(([cmi, state]) => {
           //update values in state and return
-          state.result.cmi.mode = cmi.mode;
-          state.result.score = cmi.core.score.raw;
-          this.updateExerciseToStore(state.result.personId, state);
+          this.updateExerciseToStore(state.result.personId, {
+            ...state,
+            result: {
+              ...state.result,
+              score: state.result.score,
+              cmi: cmi
+            }
+          });
         })
       )
       .subscribe();

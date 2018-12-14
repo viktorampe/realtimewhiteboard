@@ -130,6 +130,7 @@ export class ScormApi implements ScormApiInterface {
    * @memberof ScormApi
    */
   LMSSetValue(parameter: string, value: string): 'true' | 'false' {
+    console.log(parameter, value);
     //check exerciseId and exercise info availability
     if (
       this.mode === ScormCmiMode.CMI_MODE_PREVIEW ||
@@ -142,7 +143,7 @@ export class ScormApi implements ScormApiInterface {
       return 'false';
     }
 
-    this.setReferenceFromDotString(parameter, value, this.currentCMI);
+    this.setReferenceFromDotString(parameter, value, { ...this.currentCMI });
 
     this.cmi$.next(this.currentCMI);
 
@@ -233,7 +234,7 @@ export class ScormApi implements ScormApiInterface {
           max: undefined
         },
         lesson_location: '',
-        lesson_status: ScormStatus.STATUS_NOT_ATTEMPTED,
+        lesson_status: ScormStatus.STATUS_INCOMPLETE,
         total_time: '0000:00:00',
         session_time: '0000:00:00'
       },
@@ -245,7 +246,7 @@ export class ScormApi implements ScormApiInterface {
             max: undefined,
             scale: undefined
           },
-          status: ScormStatus.STATUS_NOT_ATTEMPTED,
+          status: ScormStatus.STATUS_INCOMPLETE,
           id: 'points'
         }
       ],
@@ -277,7 +278,10 @@ export class ScormApi implements ScormApiInterface {
       }
       return obj[i];
     }
-    return parameter.split('.').reduce(index, exercise);
+    return parameter
+      .split('.')
+      .slice(1)
+      .reduce(index, exercise);
   }
 
   private setReferenceFromDotString(
@@ -298,7 +302,10 @@ export class ScormApi implements ScormApiInterface {
       return obj[i];
     }
 
-    return parameter.split('.').reduce(index, exercise);
+    return parameter
+      .split('.')
+      .slice(1)
+      .reduce(index, exercise);
   }
 
   private reset() {

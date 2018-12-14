@@ -42,14 +42,17 @@ export function reducer(
       };
     }
 
+    case CurrentExerciseActionTypes.SaveCurrentExercise: {
+      return {
+        ...state,
+        ...action.payload.exercise
+      };
+    }
+
     case CurrentExerciseActionTypes.CurrentExerciseLoaded: {
       return {
         ...state,
-        eduContent: action.payload.eduContent,
-        cmiMode: action.payload.cmiMode,
-        result: action.payload.result,
-        saveToApi: action.payload.saveToApi,
-        url: action.payload.url
+        ...action.payload
       };
     }
 
