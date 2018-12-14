@@ -7,10 +7,14 @@ import { GuardsModule } from '@campus/guards';
 import { SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
 import { EffectsModule } from '@ngrx/effects';
-import { StoreRouterConnectingModule } from '@ngrx/router-store';
+import {
+  NavigationActionTiming,
+  StoreRouterConnectingModule
+} from '@ngrx/router-store';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { NxModule } from '@nrwl/nx';
+import { CustomSerializer } from 'libs/shared/src/lib/services/route-serializer';
 import { storeFreeze } from 'ngrx-store-freeze';
 import { environment } from '../environments/environment';
 import { AppEffects } from './+state/app.effects';
@@ -106,7 +110,10 @@ import { AppResolver } from './app.resolver';
     ),
     EffectsModule.forRoot([AppEffects]),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
-    StoreRouterConnectingModule
+    StoreRouterConnectingModule.forRoot({
+      navigationActionTiming: NavigationActionTiming.PostActivation,
+      serializer: CustomSerializer
+    })
   ],
   providers: [],
   bootstrap: [AppComponent],

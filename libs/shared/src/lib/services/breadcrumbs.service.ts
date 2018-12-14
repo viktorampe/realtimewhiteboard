@@ -21,8 +21,8 @@ import {
   providedIn: 'root'
 })
 export class BreadcrumbsService {
-  private currentRoute$: Observable<ActivatedRoute>;
-  breadcrumbs$: Observable<BreadcrumbLinkInterface[]> = of([]);
+  private currentRoute$: Observable<ActivatedRouteSnapshot>;
+  breadcrumbs$: Observable<BreadcrumbLinkInterface[]>;
 
   constructor(
     private router: Router,
@@ -34,109 +34,42 @@ export class BreadcrumbsService {
 
   public setCurrentRoute() {
     this.currentRoute$ = this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd),
-      startWith({}),
+      filter(event => event instanceof NavigationEnd), // still triggers twice for some reason
       distinctUntilChanged(), // we are not interested if the route doesn't change
-      map(_ => this.activatedRoute)
+      startWith({}),
+      map(_ => this.router.routerState.snapshot.root)
     );
 
     this.breadcrumbs$ = this.currentRoute$.pipe(
-      flatMap(route => this.getBreadcrumbs(route.snapshot.root))
-      //flatMap(route => this.getBreadcrumbsObservable(route.root))
+      flatMap(route => this.getBreadcrumbs(route))
     );
   }
-
-  // private getBreadcrumbsObservable(
-  //   route: ActivatedRoute
-  // ): Observable<BreadcrumbLinkInterface[]> {
-  //   const routes: ActivatedRoute[] = [];
-  //   let currentRoute = route;
-
-  //   do {
-  //     if (currentRoute.snapshot.url && currentRoute.snapshot.url.length) {
-  //       routes.push(currentRoute);
-  //     }
-  //     currentRoute = currentRoute.firstChild;
-  //   } while (currentRoute);
-
-  //   console.log(routes);
-
-  //   let breadcrumbs: Observable<BreadcrumbLinkInterface[]>;
-
-  //   breadcrumbs = combineLatest(
-  //     routes.map(activatedRoute => {
-  //       const url = [];
-
-  //       return combineLatest(
-  //         activatedRoute.url,
-  //         activatedRoute.data,
-  //         activatedRoute.params
-  //       ).pipe(
-  //         flatMap(([routeUrl, routeData, routeParams]) => {
-  //           url.push(routeUrl[0].path);
-
-  //           const data = routeData as BreadcrumbRouteDataInterface;
-
-  //           let paramProperty;
-  //           let routeParam;
-
-  //           if (activatedRoute.routeConfig) {
-  //             paramProperty = activatedRoute.routeConfig.path.substr(1);
-  //             routeParam = routeParams[paramProperty];
-  //           }
-
-  //           const selector = data.selector;
-  //           const displayedProp = data.property;
-  //           const breadcrumbText = data.breadcrumb;
-
-  //           if (selector) {
-  //             return this.store.pipe(
-  //               select(selector, {
-  //                 id: routeParam
-  //               }),
-  //               map(entity => ({
-  //                 displayText: entity[displayedProp],
-  //                 link: url
-  //               }))
-  //             );
-  //           } else {
-  //             return of({
-  //               displayText: breadcrumbText,
-  //               link: url
-  //             });
-  //           }
-  //         })
-  //       );
-  //     })
-  //   );
-
-  //   return breadcrumbs;
-  // }
 
   private getBreadcrumbs(
     route: ActivatedRouteSnapshot
   ): Observable<BreadcrumbLinkInterface[]> {
-    const routes: ActivatedRouteSnapshot[] = [];
     let currentRoute = route;
+    const routes = [];
 
     do {
-      if (currentRoute.url && currentRoute.url.length) {
-        routes.push(currentRoute);
-      }
+      routes.push({
+        url: currentRoute.url[0] ? currentRoute.url[0].path : '',
+        params: currentRoute.params,
+        data: currentRoute.data
+      });
       currentRoute = currentRoute.firstChild;
     } while (currentRoute);
 
+    const filteredRoutes = routes.filter(routePart => routePart.url.length);
+
     let breadcrumbs: Observable<BreadcrumbLinkInterface[]>;
-    const url = [];
+    const urlParts = [];
 
     breadcrumbs = combineLatest(
-      routes.map(routePart => {
-        url.push(routePart.url[0].path);
+      filteredRoutes.map(routePart => {
+        urlParts.push(routePart.url);
 
         const data = routePart.data as BreadcrumbRouteDataInterface;
-
-        const paramProperty = routePart.routeConfig.path.substr(1);
-        const routeParam = routePart.params[paramProperty];
         const selector = data.selector;
         const displayedProp = data.property;
         const breadcrumbText = data.breadcrumb;
@@ -144,22 +77,23 @@ export class BreadcrumbsService {
         if (selector) {
           return this.store.pipe(
             select(selector, {
-              id: routeParam
+              id: routePart.url
             }),
             map(entity => ({
               displayText: entity[displayedProp],
-              link: url
+              link: urlParts
             }))
           );
         } else {
           return of({
             displayText: breadcrumbText,
-            link: url
+            link: urlParts
           });
         }
       })
     );
 
+    console.log(urlParts);
     return breadcrumbs;
   }
 }
