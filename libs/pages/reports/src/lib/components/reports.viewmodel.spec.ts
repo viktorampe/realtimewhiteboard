@@ -29,7 +29,7 @@ import {
   AssignmentResultInterface,
   LearningAreasWithResultsInterface
 } from './reports.viewmodel.interfaces';
-// file.only
+
 let reportsViewModel: ReportsViewModel;
 let store: Store<DalState>;
 let openStaticContentService: OpenStaticContentServiceInterface;
