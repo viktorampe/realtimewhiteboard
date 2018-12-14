@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
-import { ResultInterface } from '@campus/dal';
 import { ScormCmiMode } from '@campus/scorm';
+import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { ResultInterface } from '../+models';
+import { DalState } from '../+state';
+import { EduContentQueries } from '../+state/edu-content';
 import { ResultsService } from '../results/results.service';
 import { CurrentExerciseInterface } from './../+state/current-exercise/current-exercise.reducer';
 import { ContentRequestService } from './../content-request/content-request.service';
@@ -16,6 +19,7 @@ export class ExerciseService implements ExerciseServiceInterface {
     userId: number,
     educontentId: number,
     saveToApi: boolean,
+    mode: ScormCmiMode,
     taskId?: number,
     unlockedContentId?: number
   ): Observable<CurrentExerciseInterface> {
@@ -42,17 +46,15 @@ export class ExerciseService implements ExerciseServiceInterface {
     let tempUrl$: Observable<string>;
     tempUrl$ = this.contentRequestService.requestUrl(educontentId);
 
-    const exercise$ = combineLatest(result$, tempUrl$).pipe(
-      map(([result, url]) => {
-        if (result.cmi === null) {
-          result.cmi = {
-            mode: ScormCmiMode.CMI_MODE_NORMAL
-          };
-        }
-
+    const exercise$ = combineLatest(
+      this.store.pipe(select(EduContentQueries.getAllEntities)),
+      result$,
+      tempUrl$
+    ).pipe(
+      map(([eduContentEnts, result, url]) => {
         return {
-          eduContent: result.eduContent,
-          cmiMode: result.cmi.mode,
+          eduContent: eduContentEnts[result.eduContentId],
+          cmiMode: mode,
           result: result,
           saveToApi: saveToApi,
           url: url
@@ -86,6 +88,7 @@ export class ExerciseService implements ExerciseServiceInterface {
 
   constructor(
     private resultsService: ResultsService,
-    private contentRequestService: ContentRequestService
+    private contentRequestService: ContentRequestService,
+    private store: Store<DalState>
   ) {}
 }

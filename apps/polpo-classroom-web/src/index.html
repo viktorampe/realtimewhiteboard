@@ -21,6 +21,12 @@
       rel="stylesheet"
       type="text/css"
     />
+    <script>
+      //discard subdomain for window.opener to work on cross-domain subdomains
+      document.domain = location.host
+        .replace(/^.*?([^.]+\.[^.]+)$/g, '$1')
+        .replace(/\:(\d)+/, '');
+    </script>
   </head>
 
   <body>

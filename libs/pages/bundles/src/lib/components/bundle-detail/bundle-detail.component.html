@@ -1,7 +1,7 @@
 <campus-page-bar>
   <campus-filter-text-input
     theme="dark"
-    [source]="contents$ | async"
+    [source]="unlockedContents$ | async"
     class="pages__toolbar__filter"
   ></campus-filter-text-input>
   <div class="divider"></div>
@@ -53,13 +53,15 @@
       >
       </campus-page-header>
 
-      <ng-container *ngIf="(contents$ | async) as contents">
+      <ng-container *ngIf="(unlockedContents$ | async) as unlockedContents">
         <ng-container
-          *ngIf="(filterTextInput.result$ | async) as filteredContents"
+          *ngIf="(filterTextInput.result$ | async) as filteredUnlockedContents"
         >
           <div class="itemsAmount">
-            {{ filteredContents.length }} van
-            <u (click)="filterTextInput.clear()">{{ contents.length }}</u>
+            {{ filteredUnlockedContents.length }} van
+            <u (click)="filterTextInput.clear()">{{
+              unlockedContents.length
+            }}</u>
             weergegeven
           </div>
           <campus-list-view
@@ -69,21 +71,20 @@
             [multiSelect]="true"
           >
             <campus-content-thumbnail
-              *ngFor="let content of filteredContents"
+              *ngFor="let unlockedcontent of filteredUnlockedContents"
               campusListItem
-              [dataObject]="content"
-              [title]="content.name"
-              [fileExtensionClass]="content.fileExtension"
-              [fileTypeLabel]="content.fileTypeLabel"
-              [contentTypeClass]="content.productType"
+              [dataObject]="unlockedcontent.content"
+              [title]="unlockedcontent.content.name"
+              [fileExtensionClass]="unlockedcontent.content.fileExtension"
+              [fileTypeLabel]="unlockedcontent.content.fileTypeLabel"
+              [contentTypeClass]="unlockedcontent.content.productType"
             >
               <campus-button
-                (click)="clickOpenContent(content)"
+                (click)="clickOpenContent(unlockedcontent)"
                 [iconClass]="'view-content'"
                 circle
               >
               </campus-button>
-              <campus-button [iconClass]="'tasks'" circle> </campus-button>
             </campus-content-thumbnail>
           </campus-list-view>
         </ng-container>

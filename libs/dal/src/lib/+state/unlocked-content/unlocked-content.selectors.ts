@@ -1,4 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { UnlockedContentInterface } from '../../+models';
+import { UnlockedContent } from '../../+models/UnlockedContent';
 import {
   NAME,
   selectAll,
@@ -50,7 +52,7 @@ export const getAllEntities = createSelector(
 export const getByIds = createSelector(
   selectUnlockedContentState,
   (state: State, props: { ids: number[] }) => {
-    return props.ids.map(id => state.entities[id]);
+    return props.ids.map(id => asUnlockedContent(state.entities[id]));
   }
 );
 
@@ -63,7 +65,8 @@ export const getByIds = createSelector(
  */
 export const getById = createSelector(
   selectUnlockedContentState,
-  (state: State, props: { id: number }) => state.entities[props.id]
+  (state: State, props: { id: number }) =>
+    asUnlockedContent(state.entities[props.id])
 );
 
 export const getByBundleIds = createSelector(
@@ -76,8 +79,27 @@ export const getByBundleIds = createSelector(
       if (!byKey[item.bundleId]) {
         byKey[item.bundleId] = [];
       }
-      byKey[item.bundleId].push(item);
+      byKey[item.bundleId].push(asUnlockedContent(item));
     });
     return byKey;
   }
 );
+
+export const getByBundleId = createSelector(
+  selectUnlockedContentState,
+  (state: State, props: { bundleId: number }) => {
+    const ids = <number[]>state.ids;
+    return ids
+      .filter(id => state.entities[id].bundleId === +props.bundleId)
+      .map(id => asUnlockedContent(state.entities[id]));
+  }
+);
+
+function asUnlockedContent(item: UnlockedContentInterface): UnlockedContent {
+  if (item) {
+    return Object.assign<UnlockedContent, UnlockedContentInterface>(
+      new UnlockedContent(),
+      item
+    );
+  }
+}

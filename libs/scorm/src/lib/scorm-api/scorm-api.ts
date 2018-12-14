@@ -11,6 +11,8 @@ export class ScormApi implements ScormApiInterface {
   lastErrorCode: ScormErrorCodes = ScormErrorCodes.NO_ERROR;
   lastDiagnosticMessage = '';
   connectedStatus = true;
+  currentCMI: ScormCmiInterface | any;
+  mode: ScormCmiMode;
 
   /**
    * Stream that emits when the CMI data model needs to be saved to the server.
@@ -27,10 +29,7 @@ export class ScormApi implements ScormApiInterface {
    */
   cmi$ = new Subject<ScormCmiInterface>();
 
-  constructor(
-    public currentResult: ScormCmiInterface | any,
-    public mode: ScormCmiMode
-  ) {}
+  constructor() {}
 
   /**
    * Initialize the API and exercise.
@@ -45,12 +44,12 @@ export class ScormApi implements ScormApiInterface {
     this.reset();
     //check exerciseId and exercise info availability
     if (this.mode === ScormCmiMode.CMI_MODE_PREVIEW) {
-      this.currentResult = this.getNewCmi();
+      this.currentCMI = this.getNewCmi();
     } else {
-      if (this.currentResult) {
-        if (typeof this.currentResult === 'string') {
+      if (this.currentCMI) {
+        if (typeof this.currentCMI === 'string') {
           try {
-            this.currentResult = JSON.parse(this.currentResult);
+            this.currentCMI = JSON.parse(this.currentCMI);
           } catch (error) {
             this.lastErrorCode = ScormErrorCodes.NOT_INITIALIZED_ERROR;
             this.lastDiagnosticMessage = this.LMSGetErrorString(
@@ -61,14 +60,14 @@ export class ScormApi implements ScormApiInterface {
           }
         }
       } else {
-        this.currentResult = this.getNewCmi();
+        this.currentCMI = this.getNewCmi();
       }
     }
 
-    this.currentResult.mode = this.mode;
+    this.currentCMI.mode = this.mode;
     this.lastErrorCode = ScormErrorCodes.NO_ERROR;
     this.lastDiagnosticMessage = this.LMSGetErrorString(this.lastErrorCode);
-
+    this.cmi$.next(this.currentCMI);
     return 'true';
   }
 
@@ -91,9 +90,7 @@ export class ScormApi implements ScormApiInterface {
 
     this.LMSCommit();
 
-    if (
-      this.currentResult.core.lesson_status !== ScormStatus.STATUS_COMPLETED
-    ) {
+    if (this.currentCMI.core.lesson_status !== ScormStatus.STATUS_COMPLETED) {
       return 'false';
     }
 
@@ -111,7 +108,7 @@ export class ScormApi implements ScormApiInterface {
       return 'false';
     }
 
-    const value = this.getReferenceFromDotString(parameter, this.currentResult);
+    const value = this.getReferenceFromDotString(parameter, this.currentCMI);
 
     if (value !== undefined) {
       this.lastErrorCode = ScormErrorCodes.NO_ERROR;
@@ -145,9 +142,9 @@ export class ScormApi implements ScormApiInterface {
       return 'false';
     }
 
-    this.setReferenceFromDotString(parameter, value, this.currentResult);
+    this.setReferenceFromDotString(parameter, value, this.currentCMI);
 
-    this.cmi$.next(this.currentResult);
+    this.cmi$.next(this.currentCMI);
 
     return 'true';
   }
@@ -170,7 +167,7 @@ export class ScormApi implements ScormApiInterface {
       return 'false';
     }
 
-    this.commit$.next(this.currentResult);
+    this.commit$.next(this.currentCMI);
     return 'true';
   }
   /**
@@ -261,7 +258,7 @@ export class ScormApi implements ScormApiInterface {
       return true;
     }
 
-    const cool = this.currentResult !== null;
+    const cool = this.currentCMI !== null;
 
     if (!cool) {
       this.lastErrorCode = ScormErrorCodes.NOT_INITIALIZED_ERROR;

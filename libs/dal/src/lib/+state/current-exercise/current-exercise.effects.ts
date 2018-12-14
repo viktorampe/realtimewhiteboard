@@ -27,6 +27,7 @@ export class CurrentExerciseEffects {
             action.payload.userId,
             action.payload.educontentId,
             action.payload.saveToApi,
+            action.payload.cmiMode,
             action.payload.taskId,
             action.payload.unlockedContentId
           )

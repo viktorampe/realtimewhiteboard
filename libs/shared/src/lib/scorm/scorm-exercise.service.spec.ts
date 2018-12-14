@@ -1,15 +1,20 @@
 import { fakeAsync, TestBed } from '@angular/core/testing';
-import { WindowService, WINDOW_SERVICE_TOKEN } from '@campus/browser';
-import { CurrentExerciseReducer } from '@campus/dal';
-import { ScormApiService, SCORM_API_SERVICE_TOKEN } from '@campus/scorm';
+import { WINDOW, WindowService, WINDOW_SERVICE_TOKEN } from '@campus/browser';
+import { CurrentExerciseActions, CurrentExerciseReducer } from '@campus/dal';
+import {
+  ScormApiService,
+  ScormCmiMode,
+  SCORM_API_SERVICE_TOKEN
+} from '@campus/scorm';
+import { MockWindow } from '@campus/testing';
 import { Store, StoreModule } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { marbles } from 'rxjs-marbles';
 import { ScormExerciseService } from './scorm-exercise.service';
+import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm-exercise.service.interface';
 
 describe('ScormExerciseService', () => {
   let scormExerciseService: ScormExerciseService;
   let scormApiService: ScormApiService;
+  let windowService: WindowService;
   let store: Store<CurrentExerciseReducer.State>;
   let usedState;
 
@@ -33,14 +38,20 @@ describe('ScormExerciseService', () => {
         )
       ],
       providers: [
-        ScormExerciseService,
+        {
+          provide: SCORM_EXERCISE_SERVICE_TOKEN,
+          useClass: ScormExerciseService
+        },
         { provide: SCORM_API_SERVICE_TOKEN, useClass: ScormApiService },
         { provide: WINDOW_SERVICE_TOKEN, useClass: WindowService },
+        { provide: WINDOW, useClass: MockWindow },
         Store
       ]
     });
     scormExerciseService = TestBed.get(ScormExerciseService);
     scormApiService = TestBed.get(ScormApiService);
+    windowService = TestBed.get(WindowService);
+
     store = TestBed.get(Store);
   });
 
@@ -120,21 +131,15 @@ describe('ScormExerciseService', () => {
     expect(spyStore).toHaveBeenCalled();
   }));
 
-  it(
-    'currentURL$',
-    marbles(m => {
-      const currentURL$ = m.hot('--a--b|', {
-        a: '',
-        b: 'lolcow'
-      });
-
-      const result = '--a--b|';
-      const result$: Observable<string> = currentURL$;
-
-      m.expect(result$).toBeObservable(result, {
-        a: '',
-        b: 'lolcow'
-      });
-    })
-  );
+  it('should get the current URL', () => {
+    store.dispatch(
+      new CurrentExerciseActions.CurrentExerciseLoaded({
+        cmiMode: ScormCmiMode.CMI_MODE_BROWSE,
+        url: 'lalalala',
+        saveToApi: false
+      })
+    );
+    const spyWindowService = jest.spyOn(WindowService.prototype, 'openWindow');
+    expect(spyWindowService).toHaveBeenCalledWith('scorm', 'lalalala');
+  });
 });
