@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ReportsComponent } from './components/reports.component';
+import { OverViewAreaWithResultsComponent } from './components/overview-areas-with-results/overview-area-with-results.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: ReportsComponent
+    component: OverViewAreaWithResultsComponent
   }
 ];
 

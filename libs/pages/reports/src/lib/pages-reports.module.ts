@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { MatIconModule } from '@angular/material';
+import { PagesSharedModule } from '@campus/pages/shared';
 import { SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
-import { ReportsComponent } from './components/reports.component';
+import { OverViewAreaWithResultsComponent } from './components/overview-areas-with-results/overview-area-with-results.component';
 import { ReportsViewModel } from './components/reports.viewmodel';
 import { PagesReportsRoutingModule } from './pages-reports-routing.module';
 
@@ -13,9 +14,10 @@ import { PagesReportsRoutingModule } from './pages-reports-routing.module';
     PagesReportsRoutingModule,
     UiModule,
     MatIconModule,
+    PagesSharedModule,
     SharedModule
   ],
-  declarations: [ReportsComponent],
+  declarations: [OverViewAreaWithResultsComponent],
 
   providers: [ReportsViewModel]
 })

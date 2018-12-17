@@ -6,18 +6,18 @@ import {
 } from '@campus/ui';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { Observable } from 'rxjs';
+import { ReportsViewModel } from '../reports.viewmodel';
 import {
   LearningAreasWithResultsInterface,
   LearningAreaWithResultsInterface
-} from './reports.viewmodel.interfaces';
-import { MockReportsViewModel } from './reports.viewmodel.mock';
+} from '../reports.viewmodel.interfaces';
 
 @Component({
   selector: 'campus-reports',
-  templateUrl: './reports.component.html',
-  styleUrls: ['./reports.component.scss']
+  templateUrl: './overview-area-with-results.component.html',
+  styleUrls: ['./overview-area-with-results.component.scss']
 })
-export class ReportsComponent
+export class OverViewAreaWithResultsComponent
   implements
     OnInit,
     FilterableItem<
@@ -37,7 +37,7 @@ export class ReportsComponent
 
   constructor(
     @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface,
-    private viewModel: MockReportsViewModel
+    private viewModel: ReportsViewModel
   ) {}
 
   ngOnInit() {

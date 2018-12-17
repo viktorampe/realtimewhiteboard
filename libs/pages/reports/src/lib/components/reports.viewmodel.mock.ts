@@ -6,7 +6,7 @@ import {
   ResultFixture
 } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import {
   AssignmentResultInterface,
   LearningAreasWithResultsInterface
@@ -15,11 +15,10 @@ import {
 @Injectable({
   providedIn: 'root'
 })
+// TODO when viewmodel is done: implements ViewModelInterface<ReportsViewModel>
 export class MockReportsViewModel {
   // presentation streams
-  listFormat$: Observable<ListFormat> = new BehaviorSubject<ListFormat>(
-    ListFormat.GRID
-  );
+  listFormat$: Observable<ListFormat> = of(ListFormat.GRID);
 
   learningAreasWithResults$: Observable<
     LearningAreasWithResultsInterface
@@ -44,30 +43,63 @@ export class MockReportsViewModel {
     new LearningAreaFixture({ id: 1 })
   );
 
-  resultsForSelectedLearningArea: Observable<
+  resultsForSelectedLearningArea$: Observable<
     AssignmentResultInterface[]
   > = new BehaviorSubject<AssignmentResultInterface[]>([
     {
-      title: 'foo',
-      type: 'bundle',
-      totalScore: 71,
-      exerciseResults: {
-        eduContent: new EduContentFixture(),
-        results: [new ResultFixture({ id: 1 }), new ResultFixture({ id: 2 })],
-        bestResult: new ResultFixture({ id: 2 }),
-        averageScore: 60
-      }
+      title: 'foo 1',
+      type: 'task',
+      totalScore: 87.5,
+      exerciseResults: [
+        {
+          eduContent: new EduContentFixture(),
+          results: [
+            new ResultFixture({ id: 1, score: 45 }),
+            new ResultFixture({ id: 2 })
+          ],
+          bestResult: new ResultFixture({ id: 2 }),
+          averageScore: 60
+        },
+        {
+          eduContent: new EduContentFixture(
+            {},
+            {
+              title:
+                'really long title to check proper wrapping in the template'
+            }
+          ),
+          results: [new ResultFixture({ id: 3, score: 100 })],
+          bestResult: new ResultFixture({ id: 3, score: 100 }),
+          averageScore: 100
+        }
+      ]
     },
     {
-      title: 'foo',
+      title: 'foo 2',
       type: 'bundle',
-      totalScore: 78,
-      exerciseResults: {
-        eduContent: new EduContentFixture(),
-        results: [new ResultFixture({ id: 1 }), new ResultFixture({ id: 2 })],
-        bestResult: new ResultFixture({ id: 1 }),
-        averageScore: 80
-      }
+      totalScore: 75,
+      exerciseResults: [
+        {
+          eduContent: new EduContentFixture(),
+          results: [new ResultFixture({ id: 1 }), new ResultFixture({ id: 2 })],
+          bestResult: new ResultFixture({ id: 1 }),
+          averageScore: 75
+        }
+      ]
     }
   ]);
+
+  changeListFormat(listFormat: ListFormat): void {
+    //do nothing
+  }
+
+  getLearningAreaById(): Observable<LearningAreaInterface> {
+    return this.selectedLearningArea$;
+  }
+
+  getAssignmentResultsByLearningArea(): Observable<
+    AssignmentResultInterface[]
+  > {
+    return this.resultsForSelectedLearningArea$;
+  }
 }
