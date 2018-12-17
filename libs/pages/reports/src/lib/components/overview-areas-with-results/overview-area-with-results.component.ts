@@ -1,9 +1,16 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { FilterableItem, FilterTextInputComponent, ListFormat } from '@campus/ui';
+import {
+  FilterableItem,
+  FilterTextInputComponent,
+  ListFormat
+} from '@campus/ui';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { Observable } from 'rxjs';
 import { ReportsViewModel } from '../reports.viewmodel';
-import { LearningAreasWithResultsInterface, LearningAreaWithResultsInterface } from '../reports.viewmodel.interfaces';
+import {
+  LearningAreasWithResultsInterface,
+  LearningAreaWithResultsInterface
+} from '../reports.viewmodel.interfaces';
 
 @Component({
   selector: 'campus-reports',
@@ -14,7 +21,7 @@ export class OverviewAreaWithResultsComponent
   implements
     OnInit,
     FilterableItem<
-      LearningAreaWithResultsInterface[],
+      LearningAreasWithResultsInterface,
       LearningAreaWithResultsInterface
     > {
   learningAreasWithResults$: Observable<
@@ -24,7 +31,7 @@ export class OverviewAreaWithResultsComponent
 
   @ViewChild(FilterTextInputComponent)
   filterTextInput: FilterTextInputComponent<
-    LearningAreaWithResultsInterface[],
+    LearningAreasWithResultsInterface,
     LearningAreaWithResultsInterface
   >;
 
@@ -42,11 +49,12 @@ export class OverviewAreaWithResultsComponent
   }
 
   filterFn(
-    source: LearningAreaWithResultsInterface[],
+    source: LearningAreasWithResultsInterface,
     filterText: string
   ): LearningAreaWithResultsInterface[] {
+    console.log(source);
     if (source) {
-      return this.filterService.filter(source, {
+      return this.filterService.filter(source.learningAreas, {
         learningArea: {
           name: filterText
         }

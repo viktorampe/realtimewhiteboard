@@ -4,7 +4,7 @@
     <campus-filter-text-input
       theme="dark"
       class="pages__toolbar__filter"
-      [source]="(learningAreasWithResults$ | async).learningAreas"
+      [source]="learningAreasWithResults$ | async"
     ></campus-filter-text-input>
 
     <div class="divider"></div>
