@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ScormCmiMode } from '@campus/scorm';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { ResultInterface } from '../+models';
 import { DalState } from '../+state';
 import { EduContentQueries } from '../+state/edu-content';
@@ -51,6 +51,7 @@ export class ExerciseService implements ExerciseServiceInterface {
       result$,
       tempUrl$
     ).pipe(
+      take(1),
       map(([eduContentEnts, result, url]) => {
         return {
           eduContent: eduContentEnts[result.eduContentId],

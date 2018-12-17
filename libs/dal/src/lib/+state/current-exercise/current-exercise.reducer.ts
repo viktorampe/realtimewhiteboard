@@ -31,6 +31,14 @@ export function reducer(
   action: CurrentExerciseActions
 ): State {
   switch (action.type) {
+    case CurrentExerciseActionTypes.StartExercise: {
+      // reset state, effect will do the rest
+      console.log('here');
+      return {
+        ...initialState
+      };
+    }
+
     case CurrentExerciseActionTypes.ClearCurrentExercise: {
       return {
         ...state,

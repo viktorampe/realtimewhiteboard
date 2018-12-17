@@ -127,8 +127,8 @@ export class ScormExerciseService implements ScormExerciseServiceInterface {
     this.store
       .pipe(
         select(CurrentExerciseQueries.getCurrentExercise),
+        distinctUntilChanged((x, y) => x.eduContent === y.eduContent),
         filter(ex => !!ex.eduContent),
-        distinctUntilChanged((x, y) => x.eduContent.id === y.eduContent.id),
         tap(newCurrentExercise => {
           this.scormApi.init(
             newCurrentExercise.result.cmi,
