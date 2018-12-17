@@ -37,7 +37,7 @@ export class MockReportsViewModel {
   selectedLearningArea$: Observable<
     LearningAreaInterface
   > = new BehaviorSubject<LearningAreaInterface>(
-    new LearningAreaFixture({ id: 1 })
+    new LearningAreaFixture({ id: 1, name: 'Wiskunde', icon: 'polpo-wiskunde' })
   );
 
   resultsForSelectedLearningArea$: Observable<

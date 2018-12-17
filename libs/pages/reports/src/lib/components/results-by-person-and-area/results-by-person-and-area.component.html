@@ -4,7 +4,7 @@
   <campus-page-header *ngIf="(learningArea$ | async) as learningArea"
                       [title]="learningArea.name"
                       [subtitle]="'Taken &amp; oefeningen in bundels'"
-                      [iconClass]="learningArea.icon">
+                      [iconClass]="'learning-area:' + learningArea.icon">
   </campus-page-header>
 
   <ng-template #noOwnResults>Er zijn nog geen resultaten beschikbaar.</ng-template>
