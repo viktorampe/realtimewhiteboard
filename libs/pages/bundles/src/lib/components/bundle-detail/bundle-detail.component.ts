@@ -78,6 +78,7 @@ export class BundleDetailComponent
     this.bundle$ = this.getBundle();
     this.bundleOwner$ = this.bundlesViewModel.getBundleOwner(this.bundle$);
     this.contents$ = this.getBundleContents();
+    this.setupAlertsSubscription();
 
     this.filterTextInput.setFilterableItem(this);
   }
@@ -107,6 +108,14 @@ export class BundleDetailComponent
 
   clickOpenContent(content: ContentInterface): void {
     this.bundlesViewModel.openContent(content);
+  }
+
+  private setupAlertsSubscription(): void {
+    this.subscriptions.add(
+      this.routeParams$.subscribe(params =>
+        this.bundlesViewModel.setBundleAlertRead(+params.bundle)
+      )
+    );
   }
 
   private getLearningArea(): Observable<LearningAreaInterface> {

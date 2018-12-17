@@ -2,11 +2,13 @@ import { ModuleWithProviders } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { WINDOW } from '@campus/browser';
 import {
+  AlertActions,
   AUTH_SERVICE_TOKEN,
   BundleActions,
   BundleFixture,
   BundleInterface,
   BundleReducer,
+  DalState,
   EduContentActions,
   EduContentFixture,
   EduContentInterface,
@@ -67,6 +69,7 @@ describe('BundlesViewModel', () => {
   let unlockedContents: UnlockedContentInterface[];
   let eduContents: EduContentInterface[];
   let coupledPersons: PersonInterface[];
+  let store: Store<DalState>;
 
   beforeAll(() => {
     loadState();
@@ -91,6 +94,7 @@ describe('BundlesViewModel', () => {
     });
 
     bundlesViewModel = TestBed.get(BundlesViewModel);
+    store = TestBed.get(Store);
     openStaticContentService = TestBed.get(OPEN_STATIC_CONTENT_SERVICE_TOKEN);
     mockWindow = TestBed.get(WINDOW);
   });
@@ -113,6 +117,18 @@ describe('BundlesViewModel', () => {
       expect(openStaticContentService.open).toHaveBeenCalledTimes(1);
       expect(openStaticContentService.open).toHaveBeenCalledWith(eduContent);
     });
+  });
+
+  it('set alerts read by a filter', () => {
+    spyOn(store, 'dispatch');
+    const expectedAction = new AlertActions.SetAlertReadByFilter({
+      filter: { bundleId: 1 },
+      intended: false,
+      personId: 1,
+      read: true
+    });
+    bundlesViewModel.setBundleAlertRead(1);
+    expect(store.dispatch).toHaveBeenCalledWith(expectedAction);
   });
 
   it('sharedLearningAreas$', () => {

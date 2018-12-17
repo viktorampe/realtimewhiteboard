@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import {
+  AlertActions,
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   BundleInterface,
@@ -72,7 +73,7 @@ export class BundlesViewModel {
     this.initialize();
   }
 
-  initialize(): void {
+  private initialize(): void {
     // source streams
     this.listFormat$ = this.store.pipe(select(UiQuery.getListFormat));
     this.learningAreas$ = this.store.pipe(select(LearningAreaQueries.getAll));
@@ -98,6 +99,19 @@ export class BundlesViewModel {
     this.sharedLearningAreas$ = this.getLearningAreasWithBundleInfo(
       this.sharedBundlesByLearningArea$,
       this.sharedBooksByLearningArea$
+    );
+  }
+
+  public setBundleAlertRead(bundleId: number): void {
+    this.store.dispatch(
+      new AlertActions.SetAlertReadByFilter({
+        personId: this.authService.userId,
+        intended: false,
+        filter: {
+          bundleId: bundleId
+        },
+        read: true
+      })
     );
   }
 
