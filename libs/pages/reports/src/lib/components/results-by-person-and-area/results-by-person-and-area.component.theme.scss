@@ -41,7 +41,7 @@
     }
 
     th {
-      background-color: #3c4552;
+      background-color: $pages-reports-by-person__header-row--even-bg-color;
       color: $pages-reports-by-person__header-font-color;
 
       &.score {
