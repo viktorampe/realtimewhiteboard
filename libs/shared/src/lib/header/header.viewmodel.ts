@@ -23,9 +23,6 @@ import {
   EnvironmentAlertsFeatureInterface,
   ENVIRONMENT_ALERTS_FEATURE_TOKEN
 } from '../interfaces/environment.features.interfaces';
-import { BreadcrumbsService } from './../services/breadcrumbs.service';
-import { HeaderResolver } from './header.resolver';
-import { MockHeaderViewModel } from './header.viewmodel.mock';
 
 @Injectable({
   providedIn: 'root'
@@ -38,33 +35,25 @@ export class HeaderViewModel {
   enableAlerts: boolean;
 
   // source streams
-  breadCrumbs$: Observable<BreadcrumbLinkInterface[]>; // TODO select breadcrumbs from store
+  breadCrumbs$: Observable<BreadcrumbLinkInterface[]>;
   currentUser$: Observable<PersonInterface>;
   unreadAlerts$: Observable<Alert[]>;
 
   // presentation stream
   alertNotifications$: Observable<NotificationItemInterface[]>;
   unreadAlertCount$: Observable<number>;
-  backLink$: Observable<string | undefined>;
+  backLink$: Observable<string[] | undefined>; //TODO: undefined nog nodig?
   profileMenuItems$: Observable<DropdownMenuItemInterface[]>;
 
   constructor(
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     @Inject(ENVIRONMENT_ALERTS_FEATURE_TOKEN)
     private environmentAlertsFeature: EnvironmentAlertsFeatureInterface,
-    private store: Store<DalState>,
-    private headerResolver: HeaderResolver,
-    private mockViewModel: MockHeaderViewModel, // TODO: remove when all data is available
-    private breadcrumbService: BreadcrumbsService
+    private store: Store<DalState>
   ) {
-    this.loadResolver();
     this.loadFeatureToggles();
     this.loadStateStreams();
     this.loadDisplayStream();
-  }
-
-  private loadResolver() {
-    this.isResolved$ = this.headerResolver.resolve();
   }
 
   private loadStateStreams(): void {
@@ -119,13 +108,13 @@ export class HeaderViewModel {
     );
   }
 
-  private getBackLink(): Observable<string | undefined> {
+  private getBackLink(): Observable<string[] | undefined> {
     return this.breadCrumbs$.pipe(
       map((breadCrumbs: BreadcrumbLinkInterface[]) => {
         const check =
           breadCrumbs.length < 2
             ? undefined
-            : breadCrumbs[breadCrumbs.length - 2].link.toString();
+            : breadCrumbs[breadCrumbs.length - 2].link;
         return check;
       })
     );

@@ -1,6 +1,7 @@
 import { Params, RouterStateSnapshot } from '@angular/router';
+import { DalState } from '@campus/dal';
 import { RouterStateSerializer } from '@ngrx/router-store';
-import { BreadcrumbRouteDataInterface } from './breadcrumbs.service';
+import { MemoizedSelectorWithProps } from '@ngrx/store';
 
 export interface RouterStateUrl {
   url: string;
@@ -8,6 +9,7 @@ export interface RouterStateUrl {
   queryParams?: Params;
   data?: BreadcrumbRouteDataInterface;
   routeParts?: RouterStateUrl[];
+  urlParts?: string[];
 }
 
 export class CustomSerializer implements RouterStateSerializer<RouterStateUrl> {
@@ -35,4 +37,10 @@ export class CustomSerializer implements RouterStateSerializer<RouterStateUrl> {
       routeParts: routes
     };
   }
+}
+
+export interface BreadcrumbRouteDataInterface {
+  breadcrumb?: string;
+  selector?: MemoizedSelectorWithProps<DalState, any, any>;
+  property?: string;
 }

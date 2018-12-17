@@ -4,14 +4,18 @@ import {
   StorageServiceInterface
 } from '@campus/browser';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import { ROUTER_NAVIGATION } from '@ngrx/router-store';
-import { MemoizedSelectorWithProps } from '@ngrx/store/src/selector';
+import { RouterNavigationAction, ROUTER_NAVIGATION } from '@ngrx/router-store';
 import { DataPersistence } from '@nrwl/nx';
-import { RouterStateUrl } from 'libs/shared/src/lib/services/route-serializer';
 import { filter, map } from 'rxjs/operators';
-import { UiActions } from '.';
 import { DalState } from '..';
-import { LoadUi, SaveUi, UiActionTypes, UiLoaded } from './ui.actions';
+import { RouterStateUrl } from '../../routings/route-serializer';
+import {
+  LoadUi,
+  SaveUi,
+  SetBreadcrumbs,
+  UiActionTypes,
+  UiLoaded
+} from './ui.actions';
 
 @Injectable()
 export class UiEffects {
@@ -62,17 +66,19 @@ export class UiEffects {
 
   @Effect()
   breadcrumbs$ = this.dataPersistence.fetch(ROUTER_NAVIGATION, {
-    run: (action, state: DalState) => {
-      const routerState = action.payload.routerState;
+    run: (action: RouterNavigationAction, state: DalState) => {
+      const routerState = <RouterStateUrl>(<unknown>action.payload.routerState);
 
       // routerState contains every 'hop' of the routermodule
       // filtering empty hops
       // building url substrings per hop
-      const filteredRoutes: RouterStateUrl[] = routerState.routeParts.reduce(
+      const filteredRoutes = routerState.routeParts.reduce(
         (acc, routePart) => {
+          // filter
           if (routePart.url) {
             acc.push({
               ...routePart,
+              // build url path
               urlParts: [
                 ...(acc[acc.length - 1] ? acc[acc.length - 1].urlParts : []),
                 routePart.url
@@ -84,7 +90,6 @@ export class UiEffects {
         [] as RouterStateUrl[]
       );
 
-      // turns array with observables into observable of array
       const breadcrumbs = filteredRoutes.map(routePart => {
         const {
           selector,
@@ -92,21 +97,15 @@ export class UiEffects {
           breadcrumb: breadcrumbText
         } = routePart.data;
 
-        let displayText: string;
-        if (selector) {
-          const syncSelector = <MemoizedSelectorWithProps<DalState, any, any>>(
-            selector
-          );
-          const entity = syncSelector(state, { id: routePart.url });
+        // in an effect, so selectors are synchronous
+        const displayText = selector
+          ? selector(state, { id: routePart.url })[displayedProp]
+          : breadcrumbText;
 
-          displayText = entity[displayedProp];
-        } else {
-          displayText = breadcrumbText;
-        }
         return { displayText, link: routePart.urlParts };
       });
 
-      return new UiActions.SetBreadcrumbs({ breadcrumbs });
+      return new SetBreadcrumbs({ breadcrumbs });
     }
   });
 
