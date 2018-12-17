@@ -4,7 +4,6 @@ import {
 } from '../+models';
 
 export class UnlockedBoekeStudentFixture extends UnlockedBoekeStudent {
-  // defaults
   index = 1;
   exception = false;
   id = 1;

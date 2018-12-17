@@ -8,14 +8,16 @@
         [seperator]="'breadcrumb-separator'"
       >
       </campus-breadcrumbs>
+
       <div
         class="shared-header__app-bar__alerts"
         bar__right
         *ngIf="enableAlerts"
       >
-        <campus-button (click)="dropDownAlerts.toggle()"
-          >Meldingen</campus-button
-        >
+        <campus-button (click)="dropDownAlerts.toggle()">
+          Meldingen
+        </campus-button>
+
         <campus-dropdown-menu
           #dropDownAlerts
           [showHeader]="true"

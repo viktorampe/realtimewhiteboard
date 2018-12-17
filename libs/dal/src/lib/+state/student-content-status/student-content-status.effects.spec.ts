@@ -5,6 +5,7 @@ import { Update } from '@ngrx/entity';
 import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
+import { undo } from 'ngrx-undo';
 import { Observable, of } from 'rxjs';
 import { StudentContentStatusReducer } from '.';
 import { StudentContentStatusInterface } from '../../+models';
@@ -229,6 +230,21 @@ describe('StudentContentStatusEffects', () => {
           updateAction,
           successAction
         );
+      });
+
+      describe('failed update', () => {
+        beforeEach(() => {
+          mockServiceMethodError('updateStudentContentStatus', 'update failed');
+        });
+
+        it('should dispatch an undo action', () => {
+          const effectOutput = undo(updateAction);
+          expectInAndOut(
+            effects.updateStudentContentStatus$,
+            updateAction,
+            effectOutput
+          );
+        });
       });
     });
   });

@@ -3,6 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   Inject,
+  OnDestroy,
   OnInit,
   ViewChild
 } from '@angular/core';
@@ -26,7 +27,7 @@ import { TaskWithInfoInterface } from '../tasks.viewmodel.interfaces';
   templateUrl: './task-detail.component.html',
   styleUrls: ['./task-detail.component.scss']
 })
-export class TaskDetailComponent implements OnInit, AfterViewInit {
+export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   subscriptions: Subscription;
   listFormat: typeof ListFormat;
 
@@ -66,10 +67,15 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
     this.initializeProperties();
     this.loadInputParams();
     this.loadOutputStreams();
+    this.setupAlertsSubscription();
   }
 
   ngAfterViewInit(): void {
     this.setupListSubscription();
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 
   //initializer methods
@@ -87,6 +93,14 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
     this.learningArea$ = this.getLearningArea();
     this.taskInfo$ = this.getTaskInfo();
     this.filterTextInput.setFilterableItem(this);
+  }
+
+  private setupAlertsSubscription(): void {
+    this.subscriptions.add(
+      this.routerParams$.subscribe(params =>
+        this.taskViewModel.setTaskAlertRead(+params.task)
+      )
+    );
   }
 
   private setupListSubscription(): void {

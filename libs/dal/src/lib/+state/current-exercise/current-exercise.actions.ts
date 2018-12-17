@@ -6,13 +6,11 @@ export enum CurrentExerciseActionTypes {
   CurrentExerciseLoaded = '[Current Exercise] Current Exercise Loaded',
   CurrentExerciseError = '[Current Exercise] Current Exercise Error',
   SaveCurrentExercise = '[Current Exercise] Save Current Exercise',
-  UpdateCurrentExercise = '[Current Exercise] Update Current Exercise',
   ClearCurrentExercise = '[Current Exercise] Clear Current Exercise'
 }
 
 export class StartExercise implements Action {
   readonly type = CurrentExerciseActionTypes.StartExercise;
-
   constructor(
     public payload: {
       userId: number;

@@ -1,9 +1,11 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../dist/out-tsc/apps/polpo-classroom-web-e2e",
-    "module": "commonjs",
-    "target": "es5",
-    "types": ["jest", "node"]
-  }
+    "sourceMap": false,
+    "outDir": "../../dist/out-tsc/apps/polpo-classroom-web-e2e/src",
+    "lib": ["es2015", "dom"],
+    "types": ["cypress", "node"]
+  },
+  "exclude": [],
+  "include": ["src/**/*.ts", "../../node_modules/cypress"]
 }

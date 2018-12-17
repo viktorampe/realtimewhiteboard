@@ -30,7 +30,7 @@ describe('ContentRequestService', () => {
   ));
 
   it('should return a temp url', async () => {
-    mockData$ = hot('-a-|', { a: 'tempUrl' });
+    mockData$ = hot('-a-|', { a: { url: 'tempUrl' } });
     expect(service.requestUrl(1)).toBeObservable(
       hot('-a-|', {
         a: 'tempUrl'

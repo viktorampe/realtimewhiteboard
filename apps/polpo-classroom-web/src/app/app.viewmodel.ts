@@ -12,7 +12,7 @@ import {
 import { DropdownMenuItemInterface, NavItem } from '@campus/ui';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, skipWhile } from 'rxjs/operators';
 import { NavItemService } from './services/nav-item-service';
 
 @Injectable({
@@ -74,7 +74,10 @@ export class AppViewModel {
   }
 
   private getCurrentUser(): Observable<PersonInterface> {
-    return this.store.pipe(select(UserQueries.getCurrentUser));
+    return this.store.pipe(
+      select(UserQueries.getCurrentUser),
+      skipWhile(currentUser => currentUser === null)
+    );
   }
 
   // TODO Service/State needed

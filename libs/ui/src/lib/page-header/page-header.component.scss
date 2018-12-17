@@ -6,6 +6,22 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   margin-bottom: 25px;
+  display: flex;
+  &--default {
+    justify-content: left;
+  }
+  &--section {
+    font-size: 32px;
+    justify-content: center;
+    align-items: center;
+    .ui-page-header__icon-wrapper {
+      margin-right: 15px;
+    }
+    .mat-icon {
+      height: 48px;
+      width: 48px;
+    }
+  }
 
   small {
     font-size: 16px;
@@ -17,4 +33,12 @@
     font-size: 32px;
     margin-right: 5px;
   }
+}
+.ui-page-header-section-subtitle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 400;
+  margin: 0;
+  padding: 10px 0;
 }

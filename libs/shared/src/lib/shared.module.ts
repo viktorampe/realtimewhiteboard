@@ -3,7 +3,11 @@ import { PortalModule } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Inject, ModuleWithProviders, NgModule } from '@angular/core';
-import { MatIconModule, MatIconRegistry } from '@angular/material';
+import {
+  MatBadgeModule,
+  MatIconModule,
+  MatIconRegistry
+} from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { UiModule } from '@campus/ui';
@@ -25,6 +29,8 @@ import {
   ENVIRONMENT_MESSAGES_FEATURE_TOKEN,
   ENVIRONMENT_WEBSITE_TOKEN
 } from './interfaces';
+import { ScormExerciseService } from './scorm/scorm-exercise.service';
+import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.interface';
 
 @NgModule({
   imports: [
@@ -33,6 +39,7 @@ import {
     PortalModule,
     LayoutModule,
     MatIconModule,
+    MatBadgeModule,
     RouterModule
   ],
   declarations: [HeaderComponent, PageBarContainerComponent],
@@ -44,6 +51,7 @@ import {
   ],
   providers: [
     { provide: FILTER_SERVICE_TOKEN, useClass: FilterService },
+    { provide: SCORM_EXERCISE_SERVICE_TOKEN, useClass: ScormExerciseService },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: CampusHttpInterceptor,

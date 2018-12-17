@@ -1,11 +1,17 @@
 @mixin ui-page-header_theme() {
-  $ui-page-header-color: $ui-primary-font-color;
-  $ui-page-header-subcolor: $ui-primary-font-color-2;
+  $ui-page-header-color: $ui-primary-font-color !default;
+  $ui-page-header-subcolor: $ui-primary-font-color-2 !default;
+  $ui-page-header-section-subtitle-font-color: $ui-tertiary-font-color-2 !default;
+  $ui-page-header_section-subtitle-bg-color: $ui-tertiary-bg-color !default;
   .ui-page-header {
     color: $ui-page-header-color;
 
     small {
       color: $ui-page-header-subcolor;
     }
+  }
+  .ui-page-header-section-subtitle {
+    color: $ui-page-header-section-subtitle-font-color;
+    background-color: $ui-page-header-section-subtitle-bg-color;
   }
 }

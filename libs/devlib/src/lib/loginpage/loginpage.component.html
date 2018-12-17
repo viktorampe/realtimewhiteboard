@@ -1,3 +1,5 @@
+<h1>Welcome to the dev side</h1>
+
 <campus-dropdown-menu-item
   header="test description"
   image="assets/images/icon-smartschool.png"
@@ -52,5 +54,19 @@
 <button (click)="getCurrentUser()">fetch current user</button>
 <div>{{ currentUser | async | json }}</div>
 
-<a [routerLink]="['/tasks']">go to tasks</a>
-<div>{{ currentUser | async | json }}</div>
+<div
+  ><button (click)="updateStudentContentStatus()"
+    >update student content status</button
+  ></div
+>
+<div><button (click)="updateAlert()">update alert</button></div>
+<div
+  ><a [routerLink]="['/bundles']" routerLinkActive="router-link-active"
+    >go to bundle page</a
+  ></div
+>
+<div
+  ><a [routerLink]="['/tasks']" routerLinkActive="router-link-active"
+    >go to tasks page</a
+  ></div
+>
