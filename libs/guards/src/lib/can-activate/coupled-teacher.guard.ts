@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   CanActivate,
@@ -6,8 +6,6 @@ import {
   RouterStateSnapshot
 } from '@angular/router';
 import {
-  AuthServiceInterface,
-  AUTH_SERVICE_TOKEN,
   DalState,
   PersonInterface,
   RoleInterface,
@@ -31,11 +29,7 @@ export class CoupledTeacherGuard implements CanActivate {
   private isStudent$: Observable<boolean>;
   private hasTeachers$: Observable<boolean>;
 
-  constructor(
-    private store: Store<DalState>,
-    private router: Router,
-    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
-  ) {
+  constructor(private store: Store<DalState>, private router: Router) {
     this.initialiseInputStreams();
     this.loadIntermediateStream();
   }
