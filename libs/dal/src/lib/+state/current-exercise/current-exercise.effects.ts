@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { DalActions, DalState } from '..';
 import {
   ExerciseServiceInterface,
@@ -22,8 +22,6 @@ export class CurrentExerciseEffects {
     CurrentExerciseActionTypes.StartExercise,
     {
       run: (action: StartExercise, state: DalState) => {
-        console.log('test');
-
         return this.exerciseService
           .startExercise(
             action.payload.userId,
@@ -33,7 +31,10 @@ export class CurrentExerciseEffects {
             action.payload.taskId,
             action.payload.unlockedContentId
           )
-          .pipe(map(ex => new CurrentExerciseLoaded(ex)));
+          .pipe(
+            take(1),
+            map(ex => new CurrentExerciseLoaded(ex))
+          );
       },
       onError: (action: StartExercise, error) => {
         return new CurrentExerciseError(error);
