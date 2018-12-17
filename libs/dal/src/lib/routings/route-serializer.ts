@@ -40,7 +40,7 @@ export class CustomSerializer implements RouterStateSerializer<RouterStateUrl> {
 }
 
 export interface BreadcrumbRouteDataInterface {
-  breadcrumb?: string;
+  breadcrumbText?: string;
   selector?: MemoizedSelectorWithProps<DalState, any, any>;
-  property?: string;
+  displayProperty?: string;
 }

@@ -17,7 +17,10 @@ const routes: Routes = [
       },
       {
         path: ':area',
-        data: { selector: LearningAreaQueries.getById, property: 'name' },
+        data: {
+          selector: LearningAreaQueries.getById,
+          displayProperty: 'name'
+        },
         children: [
           {
             path: '',
@@ -26,7 +29,7 @@ const routes: Routes = [
           {
             path: ':task',
             component: TaskDetailComponent,
-            data: { selector: TaskQueries.getById, property: 'name' }
+            data: { selector: TaskQueries.getById, displayProperty: 'name' }
           }
         ]
       }

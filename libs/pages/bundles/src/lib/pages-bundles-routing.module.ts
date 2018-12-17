@@ -15,7 +15,7 @@ const routes: Routes = [
   {
     path: ':area',
     resolve: { isResolved: BundlesResolver },
-    data: { selector: LearningAreaQueries.getById, property: 'name' },
+    data: { selector: LearningAreaQueries.getById, displayProperty: 'name' },
     children: [
       {
         path: '',
@@ -23,7 +23,7 @@ const routes: Routes = [
       },
       {
         path: ':bundle',
-        data: { selector: BundleQueries.getById, property: 'name' },
+        data: { selector: BundleQueries.getById, displayProperty: 'name' },
         children: [
           {
             path: '',

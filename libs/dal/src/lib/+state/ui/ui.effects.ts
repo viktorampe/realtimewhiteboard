@@ -91,15 +91,11 @@ export class UiEffects {
       );
 
       const breadcrumbs = filteredRoutes.map(routePart => {
-        const {
-          selector,
-          property: displayedProp,
-          breadcrumb: breadcrumbText
-        } = routePart.data;
+        const { selector, displayProperty, breadcrumbText } = routePart.data;
 
         // in an effect, so selectors are synchronous
         const displayText = selector
-          ? selector(state, { id: routePart.url })[displayedProp]
+          ? selector(state, { id: routePart.url })[displayProperty]
           : breadcrumbText;
 
         return { displayText, link: routePart.urlParts };
