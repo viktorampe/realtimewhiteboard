@@ -25,35 +25,34 @@
   >
   </campus-page-header>
 
-  <ng-container
+  <div
+    class="pages-reports__container"
     *ngIf="(filterTextInput.result$ | async) as filteredLearningAreaInstances"
   >
-    <div class="pages-reports__container">
-      <div class="pages-reports__container__tasks-count">
-        {{ filteredLearningAreaInstances.length }} van
-        <u (click)="filterTextInput.clear()">{{
-          (learningAreasWithResults$ | async)?.learningAreas.length
-        }}</u>
-        weergegeven
-      </div>
-
-      <campus-list-view
-        [listFormat]="listFormat$ | async"
-        [placeHolderText]="'Er zijn nog geen resultaten beschikbaar.'"
-      >
-        <campus-folder
-          *ngFor="let instance of filteredLearningAreaInstances"
-          [routerLink]="[instance.learningArea.id]"
-          campusListItem
-          progress="100"
-          [itemCount]="instance.tasksWithResultsCount"
-          [title]="instance.learningArea.name"
-          [backgroundColor]="instance.learningArea.color"
-          [icon]="instance.learningArea.icon"
-        >
-          <campus-folder-details> </campus-folder-details>
-        </campus-folder>
-      </campus-list-view>
+    <div class="pages-reports__container__tasks-count">
+      {{ filteredLearningAreaInstances.length }} van
+      <u (click)="filterTextInput.clear()">{{
+        (learningAreasWithResults$ | async)?.learningAreas.length
+      }}</u>
+      weergegeven
     </div>
-  </ng-container>
+
+    <campus-list-view
+      [listFormat]="listFormat$ | async"
+      [placeHolderText]="'Er zijn nog geen resultaten beschikbaar.'"
+    >
+      <campus-folder
+        *ngFor="let instance of filteredLearningAreaInstances"
+        [routerLink]="[instance.learningArea.id]"
+        campusListItem
+        progress="100"
+        [itemCount]="instance.tasksWithResultsCount"
+        [title]="instance.learningArea.name"
+        [backgroundColor]="instance.learningArea.color"
+        [icon]="instance.learningArea.icon"
+      >
+        <campus-folder-details> </campus-folder-details>
+      </campus-folder>
+    </campus-list-view>
+  </div>
 </div>
