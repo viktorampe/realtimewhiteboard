@@ -28,7 +28,7 @@ export class AuthenticationGuard implements CanActivate {
     state: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
     if (!this.authService.isLoggedIn()) {
-      this.router.navigate(['/login']);
+      this.router.navigate(['/login']); //TODO needs to be updated when actual link is known
       return false;
     }
     this.store.dispatch(new UserActions.LoadUser({ force: false }));
