@@ -2,6 +2,13 @@ sudo: false
 language: node_js
 node_js:
   - 10.3
+cache:
+  # cache both npm modules and Cypress binary
+  npm: true
+  directories:
+    - ~/.cache
+  override:
+    - npm ci
 addons:
   hosts:
     - teacher.polpo.localhost
@@ -15,8 +22,8 @@ before_install:
 before_script:
   - npm run lint
   - npm run format:check
-  - npm run test -- --configuration=travis
-  #- npm run e2e
+  - ng test --configuration=travis
+  - npm run e2e:ci
 script: if [[ echo "$TRAVIS_BRANCH" | grep 'deploy' ]]; then npm run build fi
 deploy:
   - provider: s3
