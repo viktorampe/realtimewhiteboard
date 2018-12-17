@@ -1,70 +1,55 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, NavigationEnd, Router } from '@angular/router';
+import { Params } from '@angular/router';
 import { DalState } from '@campus/dal';
 import { BreadcrumbLinkInterface } from '@campus/ui';
 import { MemoizedSelector, select, Store } from '@ngrx/store';
-import { combineLatest, Observable, of } from 'rxjs';
-import {
-  distinctUntilChanged,
-  filter,
-  flatMap,
-  map,
-  startWith
-} from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
+import { flatMap, map } from 'rxjs/operators';
+import { RouterStateUrl } from './breadcrumbs.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BreadcrumbsService {
-  private currentRoute$: Observable<ActivatedRouteSnapshot>;
+  currentRoute$ = new BehaviorSubject<RouterStateUrl>(null);
   breadcrumbs$: Observable<BreadcrumbLinkInterface[]>;
 
-  constructor(private router: Router, private store: Store<DalState>) {
-    this.setCurrentRoute();
-  }
-
-  public setCurrentRoute() {
-    this.currentRoute$ = this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd), // still triggers twice for some reason
-      distinctUntilChanged(), // we are not interested if the route doesn't change
-      startWith({}),
-      map(_ => this.router.routerState.snapshot.root)
-    );
-
+  constructor(private store: Store<DalState>) {
     this.breadcrumbs$ = this.currentRoute$.pipe(
-      flatMap(route => this.getBreadcrumbs(route))
+      flatMap(routerState => this.getBreadcrumbs(routerState))
     );
   }
 
   private getBreadcrumbs(
-    route: ActivatedRouteSnapshot
+    routerState: RouterStateUrl
   ): Observable<BreadcrumbLinkInterface[]> {
-    let currentRoute = route;
-    const routes = [];
+    // routerState contains every 'hop' of the routermodule
+    // filtering empty hops
+    // building url substrings per hop
+    const filteredRoutes = routerState.routeParts.reduce(
+      (acc, routePart) => {
+        if (routePart.url) {
+          acc.push({
+            ...routePart,
+            urlParts: [
+              ...(acc[acc.length - 1] ? acc[acc.length - 1].urlParts : []),
+              routePart.url
+            ]
+          });
+        }
+        return acc;
+      },
+      [] as RouterStateUrl[]
+    );
 
-    do {
-      routes.push({
-        url: currentRoute.url[0] ? currentRoute.url[0].path : '',
-        params: currentRoute.params,
-        data: currentRoute.data
-      });
-      currentRoute = currentRoute.firstChild;
-    } while (currentRoute);
-
-    // routes contains every 'hop' of the routermodule
-    const filteredRoutes = routes.filter(routePart => routePart.url.length);
-
-    let breadcrumbs: Observable<BreadcrumbLinkInterface[]>;
-    const urlParts = [];
-
-    breadcrumbs = combineLatest(
+    // turns array with observables into observable of array
+    return combineLatest(
       filteredRoutes.map(routePart => {
-        urlParts.push(routePart.url);
-
-        const data = routePart.data as BreadcrumbRouteDataInterface;
-        const selector = data.selector;
-        const displayedProp = data.property;
-        const breadcrumbText = data.breadcrumb;
+        const {
+          selector,
+          property: displayedProp,
+          breadcrumb: breadcrumbText
+        } = routePart.data as BreadcrumbRouteDataInterface;
 
         if (selector) {
           return this.store.pipe(
@@ -73,20 +58,17 @@ export class BreadcrumbsService {
             }),
             map(entity => ({
               displayText: entity[displayedProp],
-              link: urlParts
+              link: routePart.urlParts
             }))
           );
         } else {
           return of({
             displayText: breadcrumbText,
-            link: urlParts
+            link: routePart.urlParts
           });
         }
       })
     );
-
-    console.log(urlParts);
-    return breadcrumbs;
   }
 }
 
@@ -94,4 +76,13 @@ export interface BreadcrumbRouteDataInterface {
   breadcrumb?: string;
   selector?: MemoizedSelector<DalState, any>;
   property?: string;
+}
+
+export interface RouterStateUrl {
+  url: string;
+  params: Params;
+  queryParams?: Params;
+  data?: BreadcrumbRouteDataInterface;
+  routeParts?: RouterStateUrl[];
+  urlParts?: string[];
 }

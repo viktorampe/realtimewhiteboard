@@ -69,7 +69,7 @@ import { AppResolver } from './app.resolver';
             {
               path: 'profile',
               loadChildren: '@campus/pages/profile#PagesProfileModule',
-              data: { breadcrumb: 'books' }
+              data: { breadcrumb: 'profile' }
             },
             {
               path: 'messages',

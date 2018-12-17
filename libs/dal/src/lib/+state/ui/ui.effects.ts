@@ -4,8 +4,10 @@ import {
   StorageServiceInterface
 } from '@campus/browser';
 import { Actions, Effect, ofType } from '@ngrx/effects';
+import { ROUTER_NAVIGATION } from '@ngrx/router-store';
 import { DataPersistence } from '@nrwl/nx';
-import { filter, map } from 'rxjs/operators';
+import { BreadcrumbsService } from 'libs/shared/src/lib/services/breadcrumbs.service';
+import { filter, map, tap } from 'rxjs/operators';
 import { DalState } from '..';
 import { LoadUi, SaveUi, UiActionTypes, UiLoaded } from './ui.actions';
 
@@ -56,10 +58,19 @@ export class UiEffects {
     }
   });
 
+  @Effect({ dispatch: false })
+  breadcrumbs$ = this.actions$.pipe(
+    ofType(ROUTER_NAVIGATION),
+    tap(action =>
+      this.breadcrumbService.currentRoute$.next(action.payload.routerState)
+    )
+  );
+
   constructor(
     private actions$: Actions,
     private dataPersistence: DataPersistence<DalState>,
     @Inject(BROWSER_STORAGE_SERVICE_TOKEN)
-    private storageService: StorageServiceInterface
+    private storageService: StorageServiceInterface,
+    private breadcrumbService: BreadcrumbsService
   ) {}
 }
