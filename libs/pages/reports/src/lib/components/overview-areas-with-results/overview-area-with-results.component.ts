@@ -44,7 +44,7 @@ export class OverViewAreaWithResultsComponent
     this.filterTextInput.setFilterableItem(this);
   }
 
-  setListFormat(format: ListFormat) {
+  clickChangeListFormat(format: ListFormat) {
     this.viewModel.changeListFormat(format);
   }
 

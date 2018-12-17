@@ -47,7 +47,7 @@ describe('OverViewAreaWithResultsComponent', () => {
 
   it('should call the viewModel changeListFormat method when calling clickChangeListFormat', () => {
     const spy = jest.spyOn(MockReportsViewModel.prototype, 'changeListFormat');
-    component.setListFormat(ListFormat.GRID);
+    component.clickChangeListFormat(ListFormat.GRID);
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith(ListFormat.GRID);
   });
