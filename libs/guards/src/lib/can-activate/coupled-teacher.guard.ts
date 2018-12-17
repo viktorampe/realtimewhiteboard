@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
-import { CanLoad, Route, Router } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  CanActivate,
+  Router,
+  RouterStateSnapshot
+} from '@angular/router';
 import {
   DalState,
   PersonInterface,
@@ -8,7 +13,7 @@ import {
 } from '@campus/dal';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
+import { map, skipWhile } from 'rxjs/operators';
 
 export enum RolesEnum {
   Teacher = 'teacher',
@@ -16,7 +21,7 @@ export enum RolesEnum {
 }
 
 @Injectable()
-export class CoupledTeacherGuard implements CanLoad {
+export class CoupledTeacherGuard implements CanActivate {
   //input streams
   private currentUser$: Observable<PersonInterface>;
   //intermediate streams
@@ -29,18 +34,21 @@ export class CoupledTeacherGuard implements CanLoad {
     this.loadIntermediateStream();
   }
 
-  canLoad(route: Route): Observable<boolean> | Promise<boolean> | boolean {
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): Observable<boolean> | Promise<boolean> | boolean {
     return combineLatest(
       this.currentUser$,
       this.isStudent$,
       this.isTeacher$,
       this.hasTeachers$
     ).pipe(
+      skipWhile(
+        ([currentUser, isStudent, isTeacher, hasTeachers]) =>
+          currentUser === null
+      ),
       map(([currentUser, isStudent, isTeacher, hasTeachers]) => {
-        if (!currentUser) {
-          this.router.navigate(['/login']);
-          return false;
-        }
         if (isStudent && !isTeacher && hasTeachers) return true;
         this.router.navigate(['/settings']);
         return false;
@@ -49,10 +57,7 @@ export class CoupledTeacherGuard implements CanLoad {
   }
 
   private initialiseInputStreams(): void {
-    this.currentUser$ = this.store.pipe(
-      select(UserQueries.getCurrentUser),
-      shareReplay(1)
-    );
+    this.currentUser$ = this.store.pipe(select(UserQueries.getCurrentUser));
   }
 
   private loadIntermediateStream(): void {

@@ -14,7 +14,12 @@
           bar__right
           *ngIf="enableAlerts"
         >
-          <campus-button (click)="dropDownAlerts.toggle()"
+          <campus-button
+            [matBadge]="unreadAlertCount$ | async"
+            [matBadgeHidden]="!((unreadAlertCount$ | async) > 0)"
+            matBadgePosition="above before"
+            matBadgeColor="warn"
+            (click)="dropDownAlerts.toggle()"
             >Meldingen</campus-button
           >
           <campus-dropdown-menu

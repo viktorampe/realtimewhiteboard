@@ -1,2 +1,2 @@
-export * from './lib/can-load';
+export * from './lib/can-activate';
 export * from './lib/guards.module';
