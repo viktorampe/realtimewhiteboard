@@ -1,8 +1,10 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { EduContent } from '@campus/dal';
+import { MockMatIconRegistry } from '@campus/testing';
 import { ListFormat, ListViewItemDirective, UiModule } from '@campus/ui';
 import { FilterService, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { BehaviorSubject } from 'rxjs';
@@ -21,7 +23,8 @@ describe('BooksComponent', () => {
       declarations: [BooksComponent],
       providers: [
         { provide: BooksViewModel, useClass: MockBooksViewModel },
-        { provide: FILTER_SERVICE_TOKEN, useClass: FilterService }
+        { provide: FILTER_SERVICE_TOKEN, useClass: FilterService },
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();

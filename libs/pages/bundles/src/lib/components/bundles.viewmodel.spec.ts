@@ -2,11 +2,13 @@ import { ModuleWithProviders } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { WINDOW } from '@campus/browser';
 import {
+  AlertActions,
   AUTH_SERVICE_TOKEN,
   BundleActions,
   BundleFixture,
   BundleInterface,
   BundleReducer,
+  DalState,
   EduContentActions,
   EduContentFixture,
   EduContentInterface,
@@ -15,8 +17,10 @@ import {
   LearningAreaFixture,
   LearningAreaInterface,
   LearningAreaReducer,
+  PersonActions,
   PersonFixture,
   PersonInterface,
+  PersonReducer,
   StateFeatureBuilder,
   UiActions,
   UiReducer,
@@ -55,6 +59,7 @@ describe('BundlesViewModel', () => {
   let unlockedBoekeStudentState: UnlockedBoekeStudentReducer.State;
   let unlockedContentState: UnlockedContentReducer.State;
   let eduContentState: EduContentReducer.State;
+  let coupledPersonState: PersonReducer.State;
 
   let ui: UiReducer.UiState;
   let learningAreas: LearningAreaInterface[];
@@ -64,6 +69,7 @@ describe('BundlesViewModel', () => {
   let unlockedContents: UnlockedContentInterface[];
   let eduContents: EduContentInterface[];
   let coupledPersons: PersonInterface[];
+  let store: Store<DalState>;
 
   beforeAll(() => {
     loadState();
@@ -88,6 +94,7 @@ describe('BundlesViewModel', () => {
     });
 
     bundlesViewModel = TestBed.get(BundlesViewModel);
+    store = TestBed.get(Store);
     openStaticContentService = TestBed.get(OPEN_STATIC_CONTENT_SERVICE_TOKEN);
     mockWindow = TestBed.get(WINDOW);
   });
@@ -110,6 +117,18 @@ describe('BundlesViewModel', () => {
       expect(openStaticContentService.open).toHaveBeenCalledTimes(1);
       expect(openStaticContentService.open).toHaveBeenCalledWith(eduContent);
     });
+  });
+
+  it('set alerts read by a filter', () => {
+    spyOn(store, 'dispatch');
+    const expectedAction = new AlertActions.SetAlertReadByFilter({
+      filter: { bundleId: 1 },
+      intended: false,
+      personId: 1,
+      read: true
+    });
+    bundlesViewModel.setBundleAlertRead(1);
+    expect(store.dispatch).toHaveBeenCalledWith(expectedAction);
   });
 
   it('sharedLearningAreas$', () => {
@@ -154,8 +173,7 @@ describe('BundlesViewModel', () => {
     );
   });
 
-  // TODO enable when coupledPerson state is added
-  xit('getBundleOwner()', () => {
+  it('getBundleOwner()', () => {
     expect(bundlesViewModel.getBundleOwner(of(bundles[0]))).toBeObservable(
       hot('a', {
         a: coupledPersons[0]
@@ -274,8 +292,13 @@ describe('BundlesViewModel', () => {
       })
     );
 
-    // TODO when coupledPerson state is added
     coupledPersons = [new PersonFixture({ id: 2 })];
+    coupledPersonState = PersonReducer.reducer(
+      PersonReducer.initialState,
+      new PersonActions.PersonsLoaded({
+        persons: coupledPersons
+      })
+    );
   }
 
   function getModuleWithForFeatureProviders(): ModuleWithProviders[] {
@@ -328,8 +351,14 @@ describe('BundlesViewModel', () => {
         initialState: {
           initialState: eduContentState
         }
+      },
+      {
+        NAME: PersonReducer.NAME,
+        reducer: PersonReducer.reducer,
+        initialState: {
+          initialState: coupledPersonState
+        }
       }
-      // TODO when coupledPersonState is added
     ]);
   }
 });

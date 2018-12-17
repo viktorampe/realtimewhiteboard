@@ -13,6 +13,10 @@ import {
   LearningAreaFixture,
   LearningAreaInterface,
   LearningAreaReducer,
+  PersonActions,
+  PersonFixture,
+  PersonInterface,
+  PersonReducer,
   TaskActions,
   TaskEduContentActions,
   TaskEduContentFixture,
@@ -52,7 +56,8 @@ describe('TasksViewModel met State', () => {
           UiReducer,
           TaskReducer,
           TaskInstanceReducer,
-          TaskEduContentReducer
+          TaskEduContentReducer,
+          PersonReducer
         ])
       ],
       providers: [
@@ -72,6 +77,7 @@ describe('TasksViewModel met State', () => {
   let eduContents: EduContentInterface[];
   let taskInstances: TaskInstanceInterface[];
   let taskEduContents: TaskEduContentInterface[];
+  let teachers: PersonInterface[];
   let listFormat: ListFormat;
   const now = new Date();
 
@@ -81,6 +87,7 @@ describe('TasksViewModel met State', () => {
     setEduContentsState();
     setTaskInstances();
     setTaskEduContents();
+    setTeacherState();
     listFormat = ListFormat.GRID;
   }
 
@@ -290,8 +297,14 @@ describe('TasksViewModel met State', () => {
 
     beforeEach(() => {
       setInitialState();
+      let task = tasks.find(t => t.id === 1);
+      task = {
+        ...task,
+        teacher: teachers.find(teacher => teacher.id === task.personId)
+      };
+
       defaultExpected = {
-        task: tasks.filter(t => t.id === 1)[0],
+        task: task,
         taskInstance: taskInstances.filter(t => t.taskId === 1)[0],
         taskEduContents: taskEduContents.filter(t => t.taskId === 1),
         finished: true,
@@ -450,5 +463,13 @@ describe('TasksViewModel met State', () => {
     store.dispatch(
       new TaskEduContentActions.TaskEduContentsLoaded({ taskEduContents })
     );
+  }
+
+  function setTeacherState() {
+    teachers = [
+      new PersonFixture({ id: 186, email: 'foo@bar.bar' }),
+      new PersonFixture({ id: 187, email: 'foo@bar.bar' })
+    ];
+    store.dispatch(new PersonActions.PersonsLoaded({ persons: teachers }));
   }
 });

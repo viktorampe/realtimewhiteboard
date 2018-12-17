@@ -1,25 +1,19 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute } from '@angular/router';
 import { LearningAreaInterface } from '@campus/dal';
+import { MockActivatedRoute, MockMatIconRegistry } from '@campus/testing';
 import { ListFormat, ListViewItemDirective, UiModule } from '@campus/ui';
 import { FilterService, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { hot } from '@nrwl/nx/testing';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { TasksViewModel } from '../tasks.viewmodel';
 import { TaskWithInfoInterface } from '../tasks.viewmodel.interfaces';
 import { MockTasksViewModel } from '../tasks.viewmodel.mock';
 import { TaskDetailComponent } from './task-detail.component';
-
-// TODO replace with @campus/testing  moch route
-export class MockActivatedRoute {
-  params: Observable<any> = new BehaviorSubject<any>({
-    task: 1,
-    area: 1
-  });
-}
 
 describe('TaskDetailComponent', () => {
   let component: TaskDetailComponent;
@@ -28,6 +22,7 @@ describe('TaskDetailComponent', () => {
   let learningArea$: BehaviorSubject<LearningAreaInterface>;
   let taskInfo$: BehaviorSubject<TaskWithInfoInterface>;
   let listFormat$: BehaviorSubject<ListFormat>;
+  let activatedRoute: MockActivatedRoute;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -37,15 +32,18 @@ describe('TaskDetailComponent', () => {
       providers: [
         { provide: ActivatedRoute, useClass: MockActivatedRoute },
         { provide: FILTER_SERVICE_TOKEN, useClass: FilterService },
-        { provide: TasksViewModel, useClass: MockTasksViewModel }
+        { provide: TasksViewModel, useClass: MockTasksViewModel },
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ]
     }).compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TaskDetailComponent);
-    tasksViewModel = TestBed.get(TasksViewModel);
     component = fixture.componentInstance;
+    tasksViewModel = TestBed.get(TasksViewModel);
+    activatedRoute = TestBed.get(ActivatedRoute);
+    activatedRoute.params.next({ area: 1, task: 1 });
     fixture.detectChanges();
 
     learningArea$ = tasksViewModel.getLearningAreaById(1) as BehaviorSubject<
@@ -157,5 +155,14 @@ describe('TaskDetailComponent', () => {
     expect(infoPanelBundle).toBeFalsy();
     expect(infoPanelContent).toBeTruthy();
     expect(infoPanelContents).toBeFalsy();
+  });
+
+  it('should mark the alerts about the task as read', () => {
+    tasksViewModel.setTaskAlertRead = jest.fn();
+
+    component.ngOnInit();
+
+    expect(tasksViewModel.setTaskAlertRead).toHaveBeenCalled();
+    expect(tasksViewModel.setTaskAlertRead).toHaveBeenCalledWith(1);
   });
 });
