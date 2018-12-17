@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { CoupledTeacherGuard } from './can-load/coupled-teacher.guard';
+import { AuthenticationGuard } from './can-activate/authentication.guard';
+import { CoupledTeacherGuard } from './can-activate/coupled-teacher.guard';
 
 @NgModule({
   imports: [CommonModule],
-  providers: [CoupledTeacherGuard]
+  providers: [CoupledTeacherGuard, AuthenticationGuard]
 })
 export class GuardsModule {}
