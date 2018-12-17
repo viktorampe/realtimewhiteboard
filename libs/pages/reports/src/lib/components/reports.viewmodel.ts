@@ -1,18 +1,18 @@
 import { Inject, Injectable } from '@angular/core';
 import {
-  ContentInterface,
+  AuthServiceInterface,
+  AUTH_SERVICE_TOKEN,
   DalState,
   EduContentQueries,
   LearningAreaInterface,
   LearningAreaQueries,
-  PersonInterface,
+  ResultInterface,
   ResultQueries,
-  UiQuery,
-  UserQueries
+  UiQuery
 } from '@campus/dal';
 import {
-  OpenStaticContentServiceInterface,
-  OPEN_STATIC_CONTENT_SERVICE_TOKEN
+  ScormExerciseServiceInterface,
+  SCORM_EXERCISE_SERVICE_TOKEN
 } from '@campus/shared';
 import { ListFormat } from '@campus/ui';
 import { MemoizedSelectorWithProps, select, Store } from '@ngrx/store';
@@ -30,9 +30,6 @@ import {
 export class ReportsViewModel {
   // source streams
   listFormat$: Observable<ListFormat>;
-  user$: Observable<PersonInterface>;
-
-  // intermediate streams
 
   // presentation streams
   learningAreasWithResults$: Observable<LearningAreasWithResultsInterface>;
@@ -40,8 +37,10 @@ export class ReportsViewModel {
   constructor(
     private store: Store<DalState>,
     private reportService: ReportService,
-    @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
-    private openStaticContentService: OpenStaticContentServiceInterface
+    @Inject(SCORM_EXERCISE_SERVICE_TOKEN)
+    private scormExerciseService: ScormExerciseServiceInterface,
+    @Inject(AUTH_SERVICE_TOKEN)
+    private authService: AuthServiceInterface
   ) {
     this.setSourceStreams();
     this.setPresentationStreams();
@@ -86,7 +85,6 @@ export class ReportsViewModel {
 
   private setSourceStreams() {
     this.listFormat$ = this.select(UiQuery.getListFormat);
-    this.user$ = this.select(UserQueries.getCurrentUser);
   }
 
   private setPresentationStreams() {
@@ -121,8 +119,20 @@ export class ReportsViewModel {
     );
   }
 
-  openBook(content: ContentInterface): void {
-    this.openStaticContentService.open(content);
+  openContentForReview(result: ResultInterface): void {
+    if (result.taskId) {
+      this.scormExerciseService.reviewExerciseFromTask(
+        this.authService.userId,
+        result.eduContentId,
+        result.taskId
+      );
+    } else if (result.unlockedContentId) {
+      this.scormExerciseService.reviewExerciseFromUnlockedContent(
+        this.authService.userId,
+        result.eduContentId,
+        result.unlockedContentId
+      );
+    }
   }
 
   private select<T, Props>(

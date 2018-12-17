@@ -16,6 +16,7 @@ export class ResultFixture implements ResultInterface {
   taskInstanceId = 1;
   personDisplayName = 'bar';
   bundleId = 1;
+  unlockedContentId = 2;
 
   constructor(props: Partial<ResultInterface> = {}) {
     // overwrite defaults

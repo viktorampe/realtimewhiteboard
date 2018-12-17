@@ -3,8 +3,6 @@ import {
   EduContentFixture,
   LearningAreaFixture,
   LearningAreaInterface,
-  PersonFixture,
-  PersonInterface,
   ResultFixture
 } from '@campus/dal';
 import { ViewModelInterface } from '@campus/testing';
@@ -24,9 +22,6 @@ export class MockReportsViewModel
   // presentation streams
   listFormat$: Observable<ListFormat> = new BehaviorSubject<ListFormat>(
     ListFormat.GRID
-  );
-  user$: Observable<PersonInterface> = new BehaviorSubject<PersonInterface>(
-    new PersonFixture()
   );
 
   learningAreasWithResults$: Observable<
@@ -92,7 +87,7 @@ export class MockReportsViewModel
     return;
   }
 
-  openBook() {
+  openContentForReview() {
     return;
   }
 }

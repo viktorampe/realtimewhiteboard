@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import {
+  AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
-  ContentFixture,
   DalState,
   EduContent,
   EduContentActions,
@@ -17,12 +17,11 @@ import {
   ResultReducer
 } from '@campus/dal';
 import {
-  OpenStaticContentServiceInterface,
-  OPEN_STATIC_CONTENT_SERVICE_TOKEN
+  ScormExerciseServiceInterface,
+  SCORM_EXERCISE_SERVICE_TOKEN
 } from '@campus/shared';
-import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Store, StoreModule } from '@ngrx/store';
-import { hot } from 'jasmine-marbles';
+import { hot } from '@nrwl/nx/testing';
 import { ReportService } from './../services/report.service';
 import { ReportsViewModel } from './reports.viewmodel';
 import {
@@ -32,7 +31,8 @@ import {
 
 let reportsViewModel: ReportsViewModel;
 let store: Store<DalState>;
-let openStaticContentService: OpenStaticContentServiceInterface;
+let scormExerciseService: ScormExerciseServiceInterface;
+let authService: AuthServiceInterface;
 describe('ReportsViewModel', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -45,13 +45,17 @@ describe('ReportsViewModel', () => {
         ])
       ],
       providers: [
-        ReportsViewModel,
-        { provide: AUTH_SERVICE_TOKEN, useValue: { userId: 1 } },
         {
-          provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
-          useValue: { open: jest.fn() }
+          provide: AUTH_SERVICE_TOKEN,
+          useValue: { userId: 1 }
         },
-        { provide: PersonApi, useValue: {} },
+        {
+          provide: SCORM_EXERCISE_SERVICE_TOKEN,
+          useValue: {
+            reviewExerciseFromTask: jest.fn(),
+            reviewExerciseFromUnlockedContent: jest.fn()
+          }
+        },
         {
           provide: ReportService,
           useValue: { getAssignmentResults: () => {} }
@@ -61,7 +65,8 @@ describe('ReportsViewModel', () => {
     });
     reportsViewModel = TestBed.get(ReportsViewModel);
     store = TestBed.get(Store);
-    openStaticContentService = TestBed.get(OPEN_STATIC_CONTENT_SERVICE_TOKEN);
+    scormExerciseService = TestBed.get(SCORM_EXERCISE_SERVICE_TOKEN);
+    authService = TestBed.get(AUTH_SERVICE_TOKEN);
   });
 
   describe('creation', () => {
@@ -69,7 +74,6 @@ describe('ReportsViewModel', () => {
       expect(reportsViewModel).toBeDefined();
     });
     it('should set the streams', () => {
-      expect(reportsViewModel.user$).toBeDefined();
       expect(reportsViewModel.listFormat$).toBeDefined();
       expect(reportsViewModel.learningAreasWithResults$).toBeDefined();
     });
@@ -252,11 +256,42 @@ describe('ReportsViewModel', () => {
     });
   });
 
-  it('openBook() should call openStaticContentService', () => {
-    const contentFixture = new ContentFixture();
-    reportsViewModel.openBook(contentFixture);
+  describe('openContentForReview()', () => {
+    it('should open a task', () => {
+      const mockTaskResult = new ResultFixture({
+        taskId: 2,
+        unlockedContentId: 1,
+        bundleId: null
+      });
+      reportsViewModel.openContentForReview(mockTaskResult);
 
-    expect(openStaticContentService.open).toHaveBeenCalledTimes(1);
-    expect(openStaticContentService.open).toHaveBeenCalledWith(contentFixture);
+      expect(scormExerciseService.reviewExerciseFromTask).toHaveBeenCalledTimes(
+        1
+      );
+      expect(scormExerciseService.reviewExerciseFromTask).toHaveBeenCalledWith(
+        authService.userId,
+        mockTaskResult.eduContentId,
+        mockTaskResult.taskId
+      );
+    });
+    it('should open a bundle', () => {
+      const mockBundleResult = new ResultFixture({
+        taskId: null,
+        unlockedContentId: 4,
+        bundleId: 4
+      });
+      reportsViewModel.openContentForReview(mockBundleResult);
+
+      expect(
+        scormExerciseService.reviewExerciseFromUnlockedContent
+      ).toHaveBeenCalledTimes(1);
+      expect(
+        scormExerciseService.reviewExerciseFromUnlockedContent
+      ).toHaveBeenCalledWith(
+        authService.userId,
+        mockBundleResult.eduContentId,
+        mockBundleResult.unlockedContentId
+      );
+    });
   });
 });
