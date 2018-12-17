@@ -43,9 +43,16 @@ export function reducer(
     }
 
     case CurrentExerciseActionTypes.SaveCurrentExercise: {
+      const cmi = JSON.parse(action.payload.exercise.result.cmi);
       return {
         ...state,
-        ...action.payload.exercise
+        ...action.payload.exercise,
+        result: {
+          ...action.payload.exercise.result,
+          score: cmi ? cmi.core.score.raw : 0,
+          time: cmi ? convertCmiTimeStringToNumber(cmi.core.total_time) : 0,
+          status: cmi ? cmi.core.lesson_status : 'incomplete'
+        }
       };
     }
 
@@ -72,4 +79,14 @@ export function reducer(
       return state;
     }
   }
+}
+
+function convertCmiTimeStringToNumber(cmiTimeString: string): number {
+  const timepieces = cmiTimeString.split(':');
+  const timespan =
+    parseInt(timepieces[0], 10) * 3600000 +
+    parseInt(timepieces[1], 10) * 60000 +
+    parseFloat(timepieces[2]) * 1000;
+
+  return timespan;
 }

@@ -7,7 +7,7 @@ export interface ResultInterface {
   score?: number;
   time?: number;
   status: any;
-  cmi?: any;
+  cmi?: string;
   created?: Date;
   id?: number;
   eduContentId?: number;

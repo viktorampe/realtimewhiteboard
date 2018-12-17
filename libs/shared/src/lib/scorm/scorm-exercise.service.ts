@@ -153,7 +153,6 @@ export class ScormExerciseService implements ScormExerciseServiceInterface {
             ...state,
             result: {
               ...state.result,
-              score: state.result.score,
               cmi: cmi
             }
           });

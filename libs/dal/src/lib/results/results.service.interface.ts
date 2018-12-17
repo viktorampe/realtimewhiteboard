@@ -1,6 +1,5 @@
 import { InjectionToken } from '@angular/core';
 import { ResultInterface } from '@campus/dal';
-import { ScormCmiInterface } from '@campus/scorm';
 import { Observable } from 'rxjs';
 
 export const RESULTS_SERVICE_TOKEN = new InjectionToken(
@@ -24,8 +23,7 @@ export interface ResultsServiceInterface {
 
   saveResult(
     userId: number,
-    resultId: number,
-    cmi: ScormCmiInterface
+    result: ResultInterface
   ): Observable<ResultInterface>;
 
   getAllForUser(userId: number): Observable<ResultInterface[]>;

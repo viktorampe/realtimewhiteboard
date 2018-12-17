@@ -22,6 +22,8 @@ export class CurrentExerciseEffects {
     CurrentExerciseActionTypes.StartExercise,
     {
       run: (action: StartExercise, state: DalState) => {
+        console.log('test');
+
         return this.exerciseService
           .startExercise(
             action.payload.userId,
@@ -48,7 +50,7 @@ export class CurrentExerciseEffects {
 
         if (!exercise.saveToApi) return;
 
-        return this.exerciseService.saveExercise(exercise).pipe(
+        return this.exerciseService.saveExercise(state.currentExercise).pipe(
           map(
             ex =>
               new DalActions.ActionSuccessful({
