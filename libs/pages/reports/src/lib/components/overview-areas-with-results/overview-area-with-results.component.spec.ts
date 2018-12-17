@@ -11,18 +11,18 @@ import {
 } from '@campus/utils';
 import { ReportsViewModel } from '../reports.viewmodel';
 import { MockReportsViewModel } from '../reports.viewmodel.mock';
-import { OverViewAreaWithResultsComponent } from './overview-area-with-results.component';
+import { OverviewAreaWithResultsComponent } from './overview-area-with-results.component';
 
-describe('OverViewAreaWithResultsComponent', () => {
-  let component: OverViewAreaWithResultsComponent;
+describe('OverviewAreaWithResultsComponent', () => {
+  let component: OverviewAreaWithResultsComponent;
   let reportsViewModel: ReportsViewModel;
-  let fixture: ComponentFixture<OverViewAreaWithResultsComponent>;
+  let fixture: ComponentFixture<OverviewAreaWithResultsComponent>;
   let filterService: FilterServiceInterface;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [UiModule, MatIconModule],
-      declarations: [OverViewAreaWithResultsComponent],
+      declarations: [OverviewAreaWithResultsComponent],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         { provide: FILTER_SERVICE_TOKEN, useClass: FilterService },
@@ -36,7 +36,7 @@ describe('OverViewAreaWithResultsComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(OverViewAreaWithResultsComponent);
+    fixture = TestBed.createComponent(OverviewAreaWithResultsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

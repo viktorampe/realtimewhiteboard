@@ -1,23 +1,16 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import {
-  FilterableItem,
-  FilterTextInputComponent,
-  ListFormat
-} from '@campus/ui';
+import { FilterableItem, FilterTextInputComponent, ListFormat } from '@campus/ui';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { Observable } from 'rxjs';
 import { ReportsViewModel } from '../reports.viewmodel';
-import {
-  LearningAreasWithResultsInterface,
-  LearningAreaWithResultsInterface
-} from '../reports.viewmodel.interfaces';
+import { LearningAreasWithResultsInterface, LearningAreaWithResultsInterface } from '../reports.viewmodel.interfaces';
 
 @Component({
   selector: 'campus-reports',
   templateUrl: './overview-area-with-results.component.html',
   styleUrls: ['./overview-area-with-results.component.scss']
 })
-export class OverViewAreaWithResultsComponent
+export class OverviewAreaWithResultsComponent
   implements
     OnInit,
     FilterableItem<
