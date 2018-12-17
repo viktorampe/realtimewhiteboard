@@ -90,13 +90,13 @@ describe('OverViewAreaWithResultsComponent', () => {
     );
     fixture.detectChanges();
     const text =
-      fixture.debugElement.children[0].children[3].children[1].nativeElement
+      fixture.debugElement.children[0].children[2].children[1].nativeElement
         .textContent;
     expect(text).toContain('Er zijn nog geen resultaten beschikbaar.');
   });
 
   it('should show correct number of items', () => {
-    const container = fixture.debugElement.children[0].children[3].children[1];
+    const container = fixture.debugElement.children[0].children[2].children[1];
     component.filterTextInput.setValue('');
     fixture.detectChanges();
     expect(container.children[0].children.length).toBe(2);
