@@ -3,6 +3,7 @@
   $ui-page-header-subcolor: $ui-primary-font-color-2 !default;
   $ui-page-header-section-subtitle-font-color: $ui-tertiary-font-color-2 !default;
   $ui-page-header_section-subtitle-bg-color: $ui-tertiary-bg-color !default;
+
   .ui-page-header {
     color: $ui-page-header-color;
 
@@ -10,6 +11,7 @@
       color: $ui-page-header-subcolor;
     }
   }
+
   .ui-page-header-section-subtitle {
     color: $ui-page-header-section-subtitle-font-color;
     background-color: $ui-page-header-section-subtitle-bg-color;
