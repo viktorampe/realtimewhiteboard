@@ -1,10 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import {
-  EduContent,
-  LearningAreaInterface,
-  ResultInterface
-} from '@campus/dal';
+import { LearningAreaInterface, ResultInterface } from '@campus/dal';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { ReportsViewModel } from '../reports.viewmodel';
@@ -63,15 +59,7 @@ export class ResultsByPersonAndAreaComponent implements OnInit {
   }
 
   //event handlers
-  clickOpenContentForReview(
-    content: EduContent,
-    result: ResultInterface
-  ): void {
-    //TODO contact viewmodel to open new window
-    console.log(
-      '%cclickOpenContentForReview:',
-      'color: orange; font-weight: bold;'
-    );
-    console.log({ content, result });
+  clickOpenContentForReview(result: ResultInterface): void {
+    this.reportsViewModel.openContentForReview(result);
   }
 }

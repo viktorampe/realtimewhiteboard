@@ -47,7 +47,7 @@
 
             <td *ngIf="exerciseResult.results.length > 0; else noAttempts"
                 class="number">
-              <a (click)="clickOpenContentForReview(exerciseResult.eduContent, exerciseResult.bestResult)">{{exerciseResult.bestResult.score}}</a>
+              <a (click)="clickOpenContentForReview(exerciseResult.bestResult)">{{exerciseResult.bestResult.score}}</a>
             </td>
             <ng-template #noAttempts>
               <td class="score">niet ingediend</td>

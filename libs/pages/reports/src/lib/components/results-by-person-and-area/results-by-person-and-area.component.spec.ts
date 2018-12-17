@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute } from '@angular/router';
-import { LearningAreaInterface } from '@campus/dal';
+import { LearningAreaInterface, ResultFixture } from '@campus/dal';
 import { MockActivatedRoute } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { hot } from '@nrwl/nx/testing';
@@ -58,6 +58,15 @@ describe('ResultsByPersonAndAreaComponent', () => {
     expect(component.ownResults$).toBeObservable(
       hot('a', { a: ownResults$.value })
     );
+  });
+
+  it('should call reportsViewModel.openContentForReview from clickOpenContentForReview', () => {
+    const result = new ResultFixture();
+    spyOn(reportsViewModel, 'openContentForReview');
+    component.clickOpenContentForReview(result);
+
+    expect(reportsViewModel.openContentForReview).toHaveBeenCalledTimes(1);
+    expect(reportsViewModel.openContentForReview).toHaveBeenCalledWith(result);
   });
 
   it('should show both task and bundle titles', () => {

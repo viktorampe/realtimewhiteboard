@@ -95,4 +95,6 @@ export class MockReportsViewModel {
   > {
     return this.resultsForSelectedLearningArea$;
   }
+
+  openContentForReview(): void {}
 }

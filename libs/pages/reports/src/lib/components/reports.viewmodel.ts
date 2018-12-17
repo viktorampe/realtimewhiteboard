@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ResultInterface } from '@campus/dal';
 import { MockReportsViewModel } from './reports.viewmodel.mock';
 
 @Injectable({
@@ -14,4 +15,6 @@ export class ReportsViewModel {
   getAssignmentResultsByLearningArea(areaId: number) {
     return this.mockViewModel.getAssignmentResultsByLearningArea();
   }
+
+  openContentForReview(result: ResultInterface) {}
 }
