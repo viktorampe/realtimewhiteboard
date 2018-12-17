@@ -55,4 +55,8 @@ $ui-shell__top-height: auto;
 $ui-shell__logo-height: 105px;
 $ui-shell__logo-background-color: $color-blue-2;
 
+// ui > person badge > polpo override
+$ui-person-badge-size-large: 72px;
+$ui-person-badge-size-large-font-size: 24px;
+
 @import '_logos';

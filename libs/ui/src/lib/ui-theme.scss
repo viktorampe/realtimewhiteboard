@@ -31,12 +31,12 @@ $ui-button-bg-color: $ui-primary-color-accent !default;
 $ui-button-font-color: #fff !default;
 
 // sizes
-$ui-person-badge-size-large: 150px !default;
-$ui-person-badge-size-large-font-size: 50px !default;
-$ui-person-badge-size-medium: 45px !default;
-$ui-person-badge-size-medium-font-size: 21px !default;
-$ui-person-badge-size-small: 30px !default;
-$ui-person-badge-size-small-font-size: 16px !default;
+$ui-person-badge-size-large: 96px !default;
+$ui-person-badge-size-large-font-size: $ui-person-badge-size-large / 2 !default;
+$ui-person-badge-size-medium: 48px !default;
+$ui-person-badge-size-medium-font-size: $ui-person-badge-size-medium / 2 !default;
+$ui-person-badge-size-small: 24px !default;
+$ui-person-badge-size-small-font-size: $ui-person-badge-size-small / 2 !default;
 
 // helper classes
 .ui-no-link {
