@@ -4,7 +4,7 @@ import { DalState } from '@campus/dal';
 import { BreadcrumbLinkInterface } from '@campus/ui';
 import { MemoizedSelector, select, Store } from '@ngrx/store';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
-import { flatMap, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { RouterStateUrl } from './breadcrumbs.service';
 
 @Injectable({
@@ -12,15 +12,15 @@ import { RouterStateUrl } from './breadcrumbs.service';
 })
 export class BreadcrumbsService {
   currentRoute$ = new BehaviorSubject<RouterStateUrl>(null);
-  breadcrumbs$: Observable<BreadcrumbLinkInterface[]>;
+  breadcrumbs$: Observable<BreadcrumbLinkInterface[]> = of([]);
 
   constructor(private store: Store<DalState>) {
-    this.breadcrumbs$ = this.currentRoute$.pipe(
-      flatMap(routerState => this.getBreadcrumbs(routerState))
-    );
+    // this.breadcrumbs$ = this.currentRoute$.pipe(
+    //   flatMap(routerState => this.getBreadcrumbs(routerState))
+    // );
   }
 
-  private getBreadcrumbs(
+  public getBreadcrumbs(
     routerState: RouterStateUrl
   ): Observable<BreadcrumbLinkInterface[]> {
     // routerState contains every 'hop' of the routermodule
