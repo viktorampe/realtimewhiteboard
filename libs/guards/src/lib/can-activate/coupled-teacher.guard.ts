@@ -15,12 +15,16 @@ import {
   PersonInterface,
   PersonQueries,
   RoleInterface,
-  RolesEnum,
   UserQueries
 } from '@campus/dal';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
-import { map, skipWhile, switchMapTo, tap } from 'rxjs/operators';
+import { map, skipWhile, switchMap, switchMapTo, tap } from 'rxjs/operators';
+
+export enum RolesEnum {
+  Teacher = 'teacher',
+  Student = 'student'
+}
 
 @Injectable()
 export class CoupledTeacherGuard implements CanActivate {
@@ -28,6 +32,7 @@ export class CoupledTeacherGuard implements CanActivate {
   private currentUser$: Observable<PersonInterface>;
   private personQueriesLoaded$: Observable<boolean>;
   private linkedPersonsLoaded$: Observable<boolean>;
+  private linkedPersonsIds$: Observable<number[]>;
   //intermediate streams
   private isTeacher$: Observable<boolean>;
   private isStudent$: Observable<boolean>;
@@ -89,6 +94,9 @@ export class CoupledTeacherGuard implements CanActivate {
     this.personQueriesLoaded$ = this.store.pipe(
       select(PersonQueries.getLoaded)
     );
+    this.linkedPersonsIds$ = this.store.pipe(
+      select(LinkedPersonQueries.getLinkedPersonIds)
+    );
   }
 
   private loadIntermediateStream(): void {
@@ -104,11 +112,18 @@ export class CoupledTeacherGuard implements CanActivate {
         return this.containsRole(currentUser.roles, RolesEnum.Teacher);
       })
     );
-    this.hasTeachers$ = this.currentUser$.pipe(
-      map(currentUser => {
-        if (!currentUser) return false;
-        return currentUser.teachers ? currentUser.teachers.length > 0 : false;
-      })
+    this.hasTeachers$ = this.linkedPersonsIds$.pipe(
+      //this will need to be changed once the role setup will be changed
+      switchMap(linkedPersonIds =>
+        this.store.pipe(
+          select(PersonQueries.getByIds, { ids: linkedPersonIds })
+        )
+      ),
+      map(linkedPersons =>
+        linkedPersons.some(
+          linkedPerson => linkedPerson.type === RolesEnum.Teacher
+        )
+      )
     );
   }
 
