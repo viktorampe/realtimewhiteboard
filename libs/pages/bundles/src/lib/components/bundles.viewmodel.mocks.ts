@@ -2,7 +2,6 @@ import {
   BundleFixture,
   BundleInterface,
   ContentFixture,
-  ContentInterface,
   EduContentFixture,
   LearningAreaFixture,
   LearningAreaInterface,
@@ -62,7 +61,7 @@ export class MockViewModel implements ViewModelInterface<BundlesViewModel> {
 
   setBundleAlertRead() {}
 
-  openContent(o: ContentInterface) {}
+  openContent(o: UnlockedContent) {}
 
   getLearningAreaById(areaId: number): Observable<LearningAreaInterface> {
     return of(new LearningAreaFixture());
