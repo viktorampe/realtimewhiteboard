@@ -6,11 +6,25 @@ import { LoginpageComponent } from './loginpage/loginpage.component';
 const routes: Routes = [
   {
     path: '',
-    component: LoginpageComponent
+    component: LoginpageComponent,
+    children: [
+      {
+        path: ':errorCode',
+        component: LoginpageComponent
+      }
+    ]
   },
   {
     path: 'educontent',
     component: EduContentComponent
+  },
+  {
+    path: 'settings',
+    component: LoginpageComponent
+  },
+  {
+    path: 'login',
+    component: LoginpageComponent
   }
 ];
 

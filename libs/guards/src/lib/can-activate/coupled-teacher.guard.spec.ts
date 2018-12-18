@@ -1,5 +1,9 @@
 import { TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  Router,
+  RouterStateSnapshot
+} from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
   DalState,
@@ -13,7 +17,6 @@ import { hot } from '@nrwl/nx/testing';
 import { CoupledTeacherGuard } from '.';
 
 describe('coupledTeacherGuard', () => {
-  let usedUserState: UserReducer.State;
   let coupledTeacherGuard: CoupledTeacherGuard;
   const spy = jest.fn();
   let store: Store<DalState>;
@@ -23,7 +26,6 @@ describe('coupledTeacherGuard', () => {
   }
 
   afterEach(() => {
-    usedUserState = <UserReducer.State>{};
     jest.resetAllMocks();
   });
   beforeEach(() => {
@@ -42,12 +44,14 @@ describe('coupledTeacherGuard', () => {
     coupledTeacherGuard = TestBed.get(CoupledTeacherGuard);
     store = TestBed.get(Store);
   });
-  it('should return false with an initialState', () => {
-    expect(coupledTeacherGuard.canLoad({})).toBeObservable(
-      hot('a', { a: false })
-    );
-    expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy).toHaveBeenCalledWith(['/login']);
+  it('should not return anything with an initialState', () => {
+    expect(
+      coupledTeacherGuard.canActivate(
+        <ActivatedRouteSnapshot>{},
+        <RouterStateSnapshot>{}
+      )
+    ).toBeObservable(hot(''));
+    expect(spy).toHaveBeenCalledTimes(0);
   });
   it('should return false if the user has undefined teachers', () => {
     store.dispatch(
@@ -55,9 +59,12 @@ describe('coupledTeacherGuard', () => {
         new PersonFixture({ roles: [], teachers: undefined })
       )
     );
-    expect(coupledTeacherGuard.canLoad({})).toBeObservable(
-      hot('a', { a: false })
-    );
+    expect(
+      coupledTeacherGuard.canActivate(
+        <ActivatedRouteSnapshot>{},
+        <RouterStateSnapshot>{}
+      )
+    ).toBeObservable(hot('a', { a: false }));
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith(['/settings']);
   });
@@ -67,9 +74,12 @@ describe('coupledTeacherGuard', () => {
         new PersonFixture({ roles: undefined, teachers: [new PersonFixture()] })
       )
     );
-    expect(coupledTeacherGuard.canLoad({})).toBeObservable(
-      hot('a', { a: false })
-    );
+    expect(
+      coupledTeacherGuard.canActivate(
+        <ActivatedRouteSnapshot>{},
+        <RouterStateSnapshot>{}
+      )
+    ).toBeObservable(hot('a', { a: false }));
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith(['/settings']);
   });
@@ -77,9 +87,12 @@ describe('coupledTeacherGuard', () => {
     store.dispatch(
       new UserActions.UserLoaded(new PersonFixture({ roles: [], teachers: [] }))
     );
-    expect(coupledTeacherGuard.canLoad({})).toBeObservable(
-      hot('a', { a: false })
-    );
+    expect(
+      coupledTeacherGuard.canActivate(
+        <ActivatedRouteSnapshot>{},
+        <RouterStateSnapshot>{}
+      )
+    ).toBeObservable(hot('a', { a: false }));
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith(['/settings']);
   });
@@ -92,9 +105,12 @@ describe('coupledTeacherGuard', () => {
         })
       )
     );
-    expect(coupledTeacherGuard.canLoad({})).toBeObservable(
-      hot('a', { a: false })
-    );
+    expect(
+      coupledTeacherGuard.canActivate(
+        <ActivatedRouteSnapshot>{},
+        <RouterStateSnapshot>{}
+      )
+    ).toBeObservable(hot('a', { a: false }));
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith(['/settings']);
   });
@@ -107,9 +123,12 @@ describe('coupledTeacherGuard', () => {
         })
       )
     );
-    expect(coupledTeacherGuard.canLoad({})).toBeObservable(
-      hot('a', { a: false })
-    );
+    expect(
+      coupledTeacherGuard.canActivate(
+        <ActivatedRouteSnapshot>{},
+        <RouterStateSnapshot>{}
+      )
+    ).toBeObservable(hot('a', { a: false }));
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith(['/settings']);
   });
@@ -122,9 +141,12 @@ describe('coupledTeacherGuard', () => {
         })
       )
     );
-    expect(coupledTeacherGuard.canLoad({})).toBeObservable(
-      hot('a', { a: true })
-    );
+    expect(
+      coupledTeacherGuard.canActivate(
+        <ActivatedRouteSnapshot>{},
+        <RouterStateSnapshot>{}
+      )
+    ).toBeObservable(hot('a', { a: true }));
     expect(spy).toHaveBeenCalledTimes(0);
   });
 });
