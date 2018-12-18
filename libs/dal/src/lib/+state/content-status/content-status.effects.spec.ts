@@ -14,8 +14,6 @@ import {
 } from './content-status.actions';
 import { ContentStatusesEffects } from './content-status.effects';
 
-// TODO: the injected service will have to be replaced by the 'student content status service'-token
-
 describe('ContentStatusEffects', () => {
   let actions: Observable<any>;
   let effects: ContentStatusesEffects;
