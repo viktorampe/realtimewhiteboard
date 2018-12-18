@@ -65,3 +65,12 @@ export const getById = createSelector(
   selectLinkedPersonState,
   (state: State, props: { id: number }) => state.entities[props.id]
 );
+
+/**
+ * returns array of ids (number[]) of the linked persons
+ */
+export const getLinkedPersonIds = createSelector(
+  selectLinkedPersonState,
+  (state: State) =>
+    Object.values(state.entities).map(linkedPerson => linkedPerson.teacherId)
+);
