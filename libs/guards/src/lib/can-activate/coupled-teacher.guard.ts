@@ -62,6 +62,7 @@ export class CoupledTeacherGuard implements CanActivate {
       skipWhile(([personQueriesLoaded, linkedPersonsLoaded]) => {
         return !linkedPersonsLoaded || !personQueriesLoaded;
       }),
+      switchMapTo(this.isStudent$),
       switchMapTo(
         combineLatest(this.isStudent$, this.isTeacher$, this.hasTeachers$)
       ),
