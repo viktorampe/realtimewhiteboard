@@ -1,3 +1,5 @@
+//file.only
+
 import { LinkedPersonQueries } from '.';
 import { TeacherStudentInterface } from '../../+models';
 import { State } from './linked-person.reducer';
@@ -5,7 +7,9 @@ import { State } from './linked-person.reducer';
 describe('LinkedPerson Selectors', () => {
   function createLinkedPerson(id: number): TeacherStudentInterface | any {
     return {
-      id: id
+      id: id,
+      teacherId: id + 1,
+      studentId: id + 2
     };
   }
 
@@ -96,6 +100,10 @@ describe('LinkedPerson Selectors', () => {
     it('getById() should return undefined if the entity is not present', () => {
       const results = LinkedPersonQueries.getById(storeState, { id: 9 });
       expect(results).toBe(undefined);
+    });
+    it('getLinkedPersonIds() should return number[] of the persons that are linked', () => {
+      const results = LinkedPersonQueries.getLinkedPersonIds(storeState);
+      expect(results).toEqual([2, 3, 4, 5]);
     });
   });
 });
