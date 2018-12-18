@@ -162,9 +162,6 @@ export class ScormExerciseService implements ScormExerciseServiceInterface {
   }
 
   private openNewUrl(url: string) {
-    console.log('test');
-    console.log(url);
-
     if (url) {
       this.openWindow(url);
     }

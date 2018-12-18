@@ -50,7 +50,6 @@ export class ScormApi implements ScormApiInterface {
       try {
         //todo check if string
         this.currentCMI = JSON.parse(this.initialCMIValue);
-        console.log(this.currentCMI);
       } catch (error) {
         this.lastErrorCode = ScormErrorCodes.NOT_INITIALIZED_ERROR;
         this.lastDiagnosticMessage = this.LMSGetErrorString(this.lastErrorCode);
@@ -280,7 +279,6 @@ export class ScormApi implements ScormApiInterface {
     exercise: ScormCmiInterface
   ): string {
     function index(obj, i) {
-      console.log(obj, i);
       if (obj === undefined) {
         return;
       }
@@ -312,11 +310,7 @@ export class ScormApi implements ScormApiInterface {
         i = parseInt(i, 10);
       }
       if (currentIndex === arr.length - 1) {
-        try {
-          obj[i] = value;
-        } catch (error) {
-          console.log(error);
-        }
+        obj[i] = value;
       }
       return obj[i];
     }

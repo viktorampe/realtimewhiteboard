@@ -26,9 +26,7 @@ describe('Exercise Selectors', () => {
       const mockExercise = new CurrentExerciseFixture();
 
       exerciseState = createState(mockExercise, true, 'no error');
-      console.log(exerciseState);
       storeState = { [NAME]: exerciseState };
-      console.log(storeState);
     });
     it('getError() should return the error', () => {
       const results = CurrentExerciseQueries.getError(storeState);
