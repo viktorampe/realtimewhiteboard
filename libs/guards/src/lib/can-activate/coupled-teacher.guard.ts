@@ -15,16 +15,12 @@ import {
   PersonInterface,
   PersonQueries,
   RoleInterface,
+  RolesEnum,
   UserQueries
 } from '@campus/dal';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { map, skipWhile, switchMapTo, tap } from 'rxjs/operators';
-
-export enum RolesEnum {
-  Teacher = 'teacher',
-  Student = 'student'
-}
 
 @Injectable()
 export class CoupledTeacherGuard implements CanActivate {

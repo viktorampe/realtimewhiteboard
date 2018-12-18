@@ -93,3 +93,8 @@ export interface PersonInterface {
   userContents?: UserContentInterface[];
   personToggleFeatures?: PersonToggleFeatureInterface[];
 }
+
+export enum RolesEnum {
+  Teacher = 'teacher',
+  Student = 'student'
+}
