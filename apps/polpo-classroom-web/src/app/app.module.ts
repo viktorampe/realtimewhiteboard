@@ -40,7 +40,6 @@ import { AppResolver } from './app.resolver';
     GuardsModule,
     RouterModule.forRoot(
       [
-        { path: 'dev', loadChildren: '@campus/devlib#DevlibModule' },
         {
           path: '',
           resolve: { AppResolver },
@@ -50,6 +49,7 @@ import { AppResolver } from './app.resolver';
               loadChildren: '@campus/pages/books#PagesBooksModule'
               //canLoad: [CoupledTeacherGuard]
             },
+            { path: 'dev', loadChildren: '@campus/devlib#DevlibModule' },
             {
               path: 'tasks',
               loadChildren: '@campus/pages/tasks#PagesTasksModule'

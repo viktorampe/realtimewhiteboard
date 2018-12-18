@@ -42,10 +42,10 @@ export class ScormExerciseService implements ScormExerciseServiceInterface {
     this.saveNewExerciseToStore(
       userId,
       educontentId,
-      showAnswers,
+      false,
       null,
       unlockedContentId,
-      ScormCmiMode.CMI_MODE_PREVIEW
+      showAnswers ? ScormCmiMode.CMI_MODE_PREVIEW : ScormCmiMode.CMI_MODE_NORMAL
     );
   }
   previewExerciseFromTask(
@@ -57,10 +57,10 @@ export class ScormExerciseService implements ScormExerciseServiceInterface {
     this.saveNewExerciseToStore(
       userId,
       educontentId,
-      showAnswers,
+      false,
       taskId,
       null,
-      ScormCmiMode.CMI_MODE_PREVIEW
+      showAnswers ? ScormCmiMode.CMI_MODE_PREVIEW : ScormCmiMode.CMI_MODE_NORMAL
     );
   }
   startExerciseFromUnlockedContent(
@@ -162,6 +162,9 @@ export class ScormExerciseService implements ScormExerciseServiceInterface {
   }
 
   private openNewUrl(url: string) {
+    console.log('test');
+    console.log(url);
+
     if (url) {
       this.openWindow(url);
     }

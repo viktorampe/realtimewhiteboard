@@ -63,9 +63,6 @@ export class NavItemService {
     favorites: FavoriteInterface[]
   ): NavItem[] {
     const navItems: NavItem[] = [];
-    if (!user) {
-      return navItems;
-    }
 
     /*
       Het is op dit moment nog niet helemaal duidelijk op welke basis

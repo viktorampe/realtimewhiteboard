@@ -13,40 +13,19 @@ let LMSCommitSpy: jest.SpyInstance;
 describe('The scorm API', () => {
   describe('#LMSInitialize - should initialize the API and exercise', () => {
     describe('when not in preview mode', () => {
-      describe('and a current exercise is provided as object', () => {
-        beforeEach(() => {
-          setupTest(
-            new ScormCmiFixture({ mode: ScormCmiMode.CMI_MODE_NORMAL })
-          );
-        });
-        it('should reset the API', () => {
-          expect(scormApi.lastErrorCode).toBe(ScormErrorCodes.NO_ERROR);
-          expect(scormApi.lastDiagnosticMessage).toBe(
-            'Geen vuiltje aan de lucht...'
-          );
-
-          scormApi.LMSCommit();
-          expect(commit$Spy).toHaveBeenCalledWith(
-            new ScormCmiFixture({ mode: ScormCmiMode.CMI_MODE_NORMAL })
-          );
-        });
-      });
-      describe('and a current exercise is provided as string ', () => {
+      describe('and a current exercise is provided ', () => {
         describe('and is valid', () => {
           beforeEach(() => {
-            scormApi = new ScormApi(
-              JSON.stringify(
-                new ScormCmiFixture({ mode: ScormCmiMode.CMI_MODE_NORMAL })
-              ),
-              ScormCmiMode.CMI_MODE_NORMAL
+            setupTest(
+              new ScormCmiFixture({ mode: ScormCmiMode.CMI_MODE_NORMAL })
             );
-            scormApi.LMSInitialize();
           });
           it('should reset the API', () => {
             expect(scormApi.lastErrorCode).toBe(ScormErrorCodes.NO_ERROR);
             expect(scormApi.lastDiagnosticMessage).toBe(
               'Geen vuiltje aan de lucht...'
             );
+            scormApi.LMSCommit();
 
             checkOutput(commit$Spy, {
               mode: ScormCmiMode.CMI_MODE_NORMAL
@@ -56,7 +35,8 @@ describe('The scorm API', () => {
 
         describe('and is not valid', () => {
           beforeEach(() => {
-            scormApi = new ScormApi('lalala', ScormCmiMode.CMI_MODE_NORMAL);
+            scormApi = new ScormApi();
+            scormApi.setCurrentCMI('lalalala');
           });
           it('should return false', () => {
             expect(scormApi.LMSInitialize()).toBe('false');
@@ -78,26 +58,12 @@ describe('The scorm API', () => {
           expect(scormApi.lastDiagnosticMessage).toBe(
             'Geen vuiltje aan de lucht...'
           );
+          scormApi.LMSCommit();
+          const arg = JSON.parse(commit$Spy.mock.calls[0][0]);
 
-          // this is the result from the private getNewCmi() function
-          const expectedValue = new ScormCmiFixture({
-            mode: ScormCmiMode.CMI_MODE_BROWSE,
-            objectives: [
-              {
-                score: {
-                  raw: 0,
-                  min: undefined,
-                  max: undefined,
-                  scale: undefined
-                },
-                status: ScormStatus.STATUS_NOT_ATTEMPTED,
-                id: 'points'
-              }
-            ],
-            suspend_data: []
-          });
-
-          checkOutput(commit$Spy, expectedValue);
+          expect(arg.mode).toBe(ScormCmiMode.CMI_MODE_NORMAL);
+          expect(arg.core.score.raw).toBe(0);
+          expect(arg.core.lesson_status).toBe(ScormStatus.STATUS_INCOMPLETE);
         });
       });
     });
@@ -178,8 +144,8 @@ describe('The scorm API', () => {
           suspend_data: paramValue
         })
       );
-      const expectedParamValue = scormApi.LMSGetValue('suspend_data');
-      expect(expectedParamValue).toEqual(paramValue);
+      const expectedParamValue = scormApi.LMSGetValue('cmi.suspend_data');
+      expect(expectedParamValue).toEqual(JSON.stringify(paramValue));
     });
 
     it('should return false when the parameter does not exist', () => {
@@ -280,7 +246,7 @@ describe('The scorm API', () => {
 
       expect(scormApi.LMSCommit()).toBe('true');
       expect(commit$Spy).toHaveBeenCalledTimes(1);
-      expect(commit$Spy).toHaveBeenCalledWith(result);
+      expect(commit$Spy).toHaveBeenCalledWith(JSON.stringify(result));
     });
   });
 
@@ -319,10 +285,11 @@ function setupTest(
   scormCmiFixture: ScormCmiFixture | any,
   skipInitialize = false
 ) {
-  if (!scormCmiFixture) {
-    scormApi = new ScormApi(null, ScormCmiMode.CMI_MODE_BROWSE);
-  } else {
-    scormApi = new ScormApi(scormCmiFixture, scormCmiFixture.mode);
+  scormApi = new ScormApi();
+
+  if (scormCmiFixture) {
+    scormApi.setCurrentCMI(JSON.stringify(scormCmiFixture));
+    scormApi.mode = scormCmiFixture.mode;
   }
   commit$Spy = jest.spyOn(scormApi.commit$, 'next');
   cmi$Spy = jest.spyOn(scormApi.cmi$, 'next');
@@ -333,5 +300,7 @@ function setupTest(
 
 function checkOutput(spy: jest.SpyInstance, expectedValue: any) {
   scormApi.LMSCommit();
-  expect(spy).toHaveBeenCalledWith(new ScormCmiFixture(expectedValue));
+  expect(spy).toHaveBeenCalledWith(
+    JSON.stringify(new ScormCmiFixture(expectedValue))
+  );
 }

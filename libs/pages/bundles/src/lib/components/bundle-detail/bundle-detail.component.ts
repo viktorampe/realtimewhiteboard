@@ -135,6 +135,7 @@ export class BundleDetailComponent
   private getBundleContents(): Observable<UnlockedContent[]> {
     return this.routeParams$.pipe(
       switchMap(params => {
+        console.log(params);
         return this.bundlesViewModel.getBundleContents(params.bundle);
       })
     );
@@ -144,6 +145,8 @@ export class BundleDetailComponent
     if (this.list) {
       this.list.deselectAllItems();
     }
+
+    console.log(source);
 
     return this.filterService.filter(source, {
       content: { name: filterText }

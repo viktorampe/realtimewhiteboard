@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { AuthService } from '@campus/dal';
 import { environment } from '../environments/environment';
 import { AppViewModel } from './app.viewmodel';
 
@@ -17,8 +16,5 @@ export class AppComponent {
    */
   protected websiteUrl: string = environment.website.url;
 
-  constructor(
-    private appViewModel: AppViewModel,
-    protected authService: AuthService
-  ) {}
+  constructor(private appViewModel: AppViewModel) {}
 }

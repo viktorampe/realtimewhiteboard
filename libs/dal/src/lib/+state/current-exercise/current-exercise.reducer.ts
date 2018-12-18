@@ -33,7 +33,6 @@ export function reducer(
   switch (action.type) {
     case CurrentExerciseActionTypes.StartExercise: {
       // reset state, effect will do the rest
-      console.log('here');
       return {
         ...initialState
       };

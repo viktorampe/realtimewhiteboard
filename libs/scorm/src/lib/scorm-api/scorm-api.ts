@@ -1,4 +1,4 @@
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import {
   ScormApiInterface,
   ScormCmiInterface,
@@ -11,6 +11,7 @@ export class ScormApi implements ScormApiInterface {
   lastErrorCode: ScormErrorCodes = ScormErrorCodes.NO_ERROR;
   lastDiagnosticMessage = '';
   private currentCMI: ScormCmiInterface;
+  private initialCMIValue: string;
   mode: ScormCmiMode;
 
   /**
@@ -18,7 +19,7 @@ export class ScormApi implements ScormApiInterface {
    *
    * @memberof ScormApi
    */
-  commit$ = new Subject<string>();
+  commit$ = new BehaviorSubject<string>(null);
 
   /**
    * Stream that emits when the CMI data model has changed.
@@ -26,23 +27,12 @@ export class ScormApi implements ScormApiInterface {
    *
    * @memberof ScormApi
    */
-  cmi$ = new Subject<string>();
+  cmi$ = new BehaviorSubject<string>(null);
 
   constructor() {}
 
-  setCurrentCMI(str?: string) {
-    if (str) {
-      try {
-        //todo check if string
-        this.currentCMI = JSON.parse(str);
-      } catch (error) {
-        this.lastErrorCode = ScormErrorCodes.NOT_INITIALIZED_ERROR;
-        this.lastDiagnosticMessage = this.LMSGetErrorString(this.lastErrorCode);
-        throw error;
-      }
-    } else {
-      this.currentCMI = this.getNewCmi();
-    }
+  setCurrentCMI(str: string) {
+    this.initialCMIValue = str;
   }
   /**
    * Initialize the API and exercise.
@@ -56,11 +46,22 @@ export class ScormApi implements ScormApiInterface {
   LMSInitialize(): 'true' | 'false' {
     this.reset();
     //check exerciseId and exercise info availability
-    if (!this.currentCMI) {
-      this.setCurrentCMI();
+    if (this.initialCMIValue) {
+      try {
+        //todo check if string
+        this.currentCMI = JSON.parse(this.initialCMIValue);
+        console.log(this.currentCMI);
+      } catch (error) {
+        this.lastErrorCode = ScormErrorCodes.NOT_INITIALIZED_ERROR;
+        this.lastDiagnosticMessage = this.LMSGetErrorString(this.lastErrorCode);
+        return 'false';
+      }
+      this.initialCMIValue = null;
+    } else {
+      this.currentCMI = this.getNewCmi();
     }
 
-    this.currentCMI.mode = this.mode;
+    this.currentCMI.mode = this.mode || ScormCmiMode.CMI_MODE_NORMAL;
     this.lastErrorCode = ScormErrorCodes.NO_ERROR;
     this.lastDiagnosticMessage = this.LMSGetErrorString(this.lastErrorCode);
     this.cmi$.next(JSON.stringify(this.currentCMI));
@@ -103,7 +104,6 @@ export class ScormApi implements ScormApiInterface {
     if (this.checkInitialized() === false) {
       return 'false';
     }
-
     const value = this.getReferenceFromDotString(parameter, this.currentCMI);
 
     if (value !== undefined) {
@@ -256,8 +256,7 @@ export class ScormApi implements ScormApiInterface {
           max: undefined,
           scale: undefined
         },
-        status: ScormStatus.STATUS_INCOMPLETE,
-        id: 'points'
+        status: ScormStatus.STATUS_INCOMPLETE
       };
     }
   }
@@ -267,7 +266,7 @@ export class ScormApi implements ScormApiInterface {
       return true;
     }
 
-    const cool = this.currentCMI !== null;
+    const cool = !!this.currentCMI;
 
     if (!cool) {
       this.lastErrorCode = ScormErrorCodes.NOT_INITIALIZED_ERROR;
@@ -279,17 +278,25 @@ export class ScormApi implements ScormApiInterface {
   private getReferenceFromDotString(
     parameter: string,
     exercise: ScormCmiInterface
-  ) {
+  ): string {
     function index(obj, i) {
+      console.log(obj, i);
       if (obj === undefined) {
         return;
       }
-      return obj[i];
+      const ret = obj[i];
+      if (ret === undefined) {
+        return;
+      } else if (typeof ret === 'object') {
+        return JSON.stringify(ret);
+      } else {
+        return ret.toString();
+      }
     }
-    return parameter
-      .split('.')
-      .slice(1)
-      .reduce(index, exercise);
+    if (parameter.substring(0, 4) === 'cmi.') {
+      parameter = parameter.substring(4);
+    }
+    return parameter.split('.').reduce(index, exercise);
   }
 
   private setReferenceFromDotString(
@@ -313,11 +320,10 @@ export class ScormApi implements ScormApiInterface {
       }
       return obj[i];
     }
-
-    parameter
-      .split('.')
-      .slice(1)
-      .reduce(index, exercise);
+    if (parameter.substring(0, 4) === 'cmi.') {
+      parameter = parameter.substring(4);
+    }
+    parameter.split('.').reduce(index, exercise);
   }
 
   private reset() {

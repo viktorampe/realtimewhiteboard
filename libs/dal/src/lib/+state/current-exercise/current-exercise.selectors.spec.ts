@@ -26,7 +26,9 @@ describe('Exercise Selectors', () => {
       const mockExercise = new CurrentExerciseFixture();
 
       exerciseState = createState(mockExercise, true, 'no error');
+      console.log(exerciseState);
       storeState = { [NAME]: exerciseState };
+      console.log(storeState);
     });
     it('getError() should return the error', () => {
       const results = CurrentExerciseQueries.getError(storeState);
@@ -34,7 +36,7 @@ describe('Exercise Selectors', () => {
     });
     it('getCurrentExercise() should return the current exercise', () => {
       const results = CurrentExerciseQueries.getCurrentExercise(storeState);
-      expect(results).toBe(exerciseState as CurrentExerciseInterface);
+      expect(results).toEqual(exerciseState as CurrentExerciseInterface);
     });
   });
 });

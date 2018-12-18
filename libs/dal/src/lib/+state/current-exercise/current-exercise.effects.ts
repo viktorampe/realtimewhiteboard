@@ -22,7 +22,6 @@ export class CurrentExerciseEffects {
     CurrentExerciseActionTypes.StartExercise,
     {
       run: (action: StartExercise, state: DalState) => {
-        console.log('daar');
         return this.exerciseService
           .startExercise(
             action.payload.userId,
