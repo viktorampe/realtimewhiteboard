@@ -1,6 +1,6 @@
-import { ResultInterface } from '@campus/dal';
 import { ResultQueries } from '.';
 import { ResultFixture } from '../../+fixtures';
+import { ResultInterface } from '../../+models';
 import { State } from './result.reducer';
 
 describe('Result Selectors', () => {
@@ -142,7 +142,7 @@ describe('Result Selectors', () => {
       });
     });
 
-    describe('getResultsGroupedByArea()', () => {
+    describe('getResultsForLearningAreaIdGrouped()', () => {
       it('should return the results grouped by learning area', () => {
         const mockData: ResultInterface[] = [
           ...getMockTaskResults(),

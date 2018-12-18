@@ -69,7 +69,7 @@ export const getById = createSelector(
 );
 
 /**
- * returns dictionary of resuilts grouped by a property
+ * returns dictionary of results grouped by a property
  * @example
  * results$: ResultInterface[] = this.store.pipe(
     select(ResultQueries.getResultsForLearningAreaIdGrouped,
