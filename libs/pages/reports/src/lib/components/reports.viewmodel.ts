@@ -1,14 +1,11 @@
 import { Injectable } from '@angular/core';
 import {
-  AuthService,
   DalState,
   EduContentQueries,
   LearningAreaInterface,
   LearningAreaQueries,
-  PersonInterface,
   ResultQueries,
-  UiQuery,
-  UserQueries
+  UiQuery
 } from '@campus/dal';
 import { ListFormat } from '@campus/ui';
 import { MemoizedSelectorWithProps, select, Store } from '@ngrx/store';
@@ -26,7 +23,6 @@ import {
 export class ReportsViewModel {
   // source streams
   listFormat$: Observable<ListFormat>;
-  user$: Observable<PersonInterface>;
 
   // intermediate streams
 
@@ -35,7 +31,6 @@ export class ReportsViewModel {
 
   constructor(
     private store: Store<DalState>,
-    private authService: AuthService,
     private reportService: ReportService
   ) {
     this.setSourceStreams();
@@ -81,7 +76,6 @@ export class ReportsViewModel {
 
   private setSourceStreams() {
     this.listFormat$ = this.select(UiQuery.getListFormat);
-    this.user$ = this.select(UserQueries.getCurrentUser);
   }
 
   private setPresentationStreams() {
