@@ -257,7 +257,7 @@ describe('ReportsViewModel', () => {
   });
 
   describe('openContentForReview()', () => {
-    it('should open a task', () => {
+    it('should call the scormExerciseService to open a task', () => {
       const mockTaskResult = new ResultFixture({
         taskId: 2,
         unlockedContentId: 1,
@@ -274,7 +274,7 @@ describe('ReportsViewModel', () => {
         mockTaskResult.taskId
       );
     });
-    it('should open a bundle', () => {
+    it('should call the scormExerciseService to open a bundle', () => {
       const mockBundleResult = new ResultFixture({
         taskId: null,
         unlockedContentId: 4,

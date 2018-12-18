@@ -1,4 +1,4 @@
-import { Dictionary } from '@ngrx/entity';
+import { groupArrayByKey } from '@campus/utils';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { ResultInterface } from '../../+models';
 import {
@@ -121,19 +121,8 @@ export const getResultsGroupedByArea = createSelector(
   selectResultState,
   (state: State) => {
     const ids: number[] = <number[]>state.ids;
-    const map: Dictionary<ResultInterface[]> = ids.reduce((acc, id) => {
-      const result = state.entities[id];
-      const resultLearningAreaId = state.entities[id].learningAreaId;
-      // group by learning area
-      if (!acc[resultLearningAreaId]) {
-        acc[resultLearningAreaId] = [];
-      }
-
-      acc[resultLearningAreaId].push(result);
-
-      return acc;
-    }, {});
-
-    return map;
+    return groupArrayByKey<ResultInterface>(Object.values(state.entities), {
+      learningAreaId: 0
+    });
   }
 );
