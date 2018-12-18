@@ -1,6 +1,22 @@
 import { Inject, Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
-import { AuthServiceInterface, AUTH_SERVICE_TOKEN, DalState, LinkedPersonActions, LinkedPersonQueries, PersonActions, PersonInterface, PersonQueries, RoleInterface, UserQueries } from '@campus/dal';
+import {
+  ActivatedRouteSnapshot,
+  CanActivate,
+  Router,
+  RouterStateSnapshot
+} from '@angular/router';
+import {
+  AuthServiceInterface,
+  AUTH_SERVICE_TOKEN,
+  DalState,
+  LinkedPersonActions,
+  LinkedPersonQueries,
+  PersonActions,
+  PersonInterface,
+  PersonQueries,
+  RoleInterface,
+  UserQueries
+} from '@campus/dal';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { map, skipWhile, switchMapTo, tap } from 'rxjs/operators';
@@ -37,16 +53,7 @@ export class CoupledTeacherGuard implements CanActivate {
     return this.currentUser$.pipe(
       skipWhile(currentUser => currentUser === null),
       tap(() => {
-        this.store.dispatch(
-          new LinkedPersonActions.LoadLinkedPersons({
-            userId: this.authService.userId
-          })
-        );
-        this.store.dispatch(
-          new PersonActions.LoadPersons({
-            userId: this.authService.userId
-          })
-        );
+        this.dispatchLoadActions();
       }),
       switchMapTo(
         combineLatest(this.personQueriesLoaded$, this.linkedPersonsLoaded$)
@@ -61,6 +68,19 @@ export class CoupledTeacherGuard implements CanActivate {
         if (isStudent && !isTeacher && hasTeachers) return true;
         this.router.navigate(['/settings']);
         return false;
+      })
+    );
+  }
+
+  private dispatchLoadActions(): void {
+    this.store.dispatch(
+      new LinkedPersonActions.LoadLinkedPersons({
+        userId: this.authService.userId
+      })
+    );
+    this.store.dispatch(
+      new PersonActions.LoadPersons({
+        userId: this.authService.userId
       })
     );
   }
