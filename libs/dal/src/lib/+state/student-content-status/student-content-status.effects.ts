@@ -5,9 +5,19 @@ import { DataPersistence } from '@nrwl/nx';
 import { undo } from 'ngrx-undo';
 import { map } from 'rxjs/operators';
 import { DalActions } from '..';
-import { StudentContentStatusServiceInterface, STUDENT_CONTENT_STATUS_SERVICE_TOKEN } from '../../student-content-status/student-content-status.service.interface';
+import {
+  StudentContentStatusServiceInterface,
+  STUDENT_CONTENT_STATUS_SERVICE_TOKEN
+} from '../../student-content-status/student-content-status.service.interface';
 import { DalState } from '../dal.state.interface';
-import { AddStudentContentStatus, LoadStudentContentStatuses, StudentContentStatusesActionTypes, StudentContentStatusesLoaded, StudentContentStatusesLoadError, UpdateStudentContentStatus } from './student-content-status.actions';
+import {
+  AddStudentContentStatus,
+  LoadStudentContentStatuses,
+  StudentContentStatusesActionTypes,
+  StudentContentStatusesLoaded,
+  StudentContentStatusesLoadError,
+  UpdateStudentContentStatus
+} from './student-content-status.actions';
 
 @Injectable()
 export class StudentContentStatusesEffects {

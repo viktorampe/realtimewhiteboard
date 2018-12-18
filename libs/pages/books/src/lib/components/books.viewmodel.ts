@@ -46,7 +46,6 @@ export class BooksViewModel {
     this.store.dispatch(new UiActions.SetListFormat({ listFormat }));
   }
 
-
   openBook(content: ContentInterface): void {
     this.openStaticContentService.open(content);
   }
