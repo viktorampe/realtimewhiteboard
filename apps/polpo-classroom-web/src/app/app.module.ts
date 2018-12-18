@@ -12,20 +12,25 @@ import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { NxModule } from '@nrwl/nx';
 import { storeFreeze } from 'ngrx-store-freeze';
+import { configureBufferSize, handleUndo } from 'ngrx-undo';
 import { environment } from '../environments/environment';
 import { AppEffects } from './+state/app.effects';
 import {
   appReducer,
   initialState as appInitialState
 } from './+state/app.reducer';
+import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AppResolver } from './app.resolver';
+
+// if you want to update the buffer (which defaults to 100)
+configureBufferSize(150);
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
     UiModule,
     BrowserModule,
+    AppRoutingModule,
     SharedModule.forRoot(
       environment.features.alerts,
       environment.features.messages,
@@ -38,63 +43,13 @@ import { AppResolver } from './app.resolver';
     NxModule.forRoot(),
     DalModule.forRoot({ apiBaseUrl: environment.APIBase }),
     GuardsModule,
-    RouterModule.forRoot(
-      [
-        {
-          path: '',
-          resolve: { AppResolver },
-          children: [
-            {
-              path: 'books',
-              loadChildren: '@campus/pages/books#PagesBooksModule'
-              //canLoad: [CoupledTeacherGuard]
-            },
-            { path: 'dev', loadChildren: '@campus/devlib#DevlibModule' },
-            {
-              path: 'tasks',
-              loadChildren: '@campus/pages/tasks#PagesTasksModule'
-              //canLoad: [CoupledTeacherGuard]
-            },
-            {
-              path: 'reports',
-              loadChildren: '@campus/pages/reports#PagesReportsModule'
-            },
-            {
-              path: 'profile',
-              loadChildren: '@campus/pages/profile#PagesProfileModule'
-            },
-            {
-              path: 'messages',
-              loadChildren: '@campus/pages/messages#PagesMessagesModule'
-            },
-            {
-              path: 'logout',
-              loadChildren: '@campus/pages/logout#PagesLogoutModule'
-            },
-            {
-              path: 'alerts',
-              loadChildren: '@campus/pages/alerts#PagesAlertsModule'
-            },
-            {
-              path: '',
-              redirectTo: 'bundles',
-              pathMatch: 'full'
-            },
-            {
-              path: 'bundles',
-              loadChildren: '@campus/pages/bundles#PagesBundlesModule'
-              //canLoad: [CoupledTeacherGuard]
-            }
-          ]
-        }
-      ],
-      { initialNavigation: 'enabled', enableTracing: false }
-    ),
     StoreModule.forRoot(
       { app: appReducer },
       {
         initialState: { app: appInitialState },
-        metaReducers: !environment.production ? [storeFreeze] : []
+        metaReducers: !environment.production
+          ? [storeFreeze, handleUndo]
+          : [handleUndo]
       }
     ),
     EffectsModule.forRoot([AppEffects]),

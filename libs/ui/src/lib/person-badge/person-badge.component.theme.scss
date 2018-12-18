@@ -1,12 +1,22 @@
 @mixin ui_person-badge_theme() {
   $ui-person-badge-subtext-color: $ui-primary-font-color-2 !default;
-
+  $ui-person-badge-color: $ui-primary-font-color !default;
+  $ui-person-badge-bg-color: $ui-primary-color-accent !default;
+  $ui-person-badge-border-color: $ui-tertiary-bg-color-2 !default;
+  $ui-person-badge-border-size: 2px !default;
   .ui_person-badge {
+    &__badge,
+    img {
+      background-color: $ui-person-badge-bg-color;
+      color: $ui-person-badge-color;
+    }
     &__badge {
       display: flex;
       justify-content: center;
       align-items: center;
-
+      &--show-border {
+        border: $ui-person-badge-border-size solid $ui-person-badge-border-color;
+      }
       &--medium,
       img {
         font-size: $ui-person-badge-size-medium-font-size;

@@ -35,4 +35,12 @@ export class LoginpageComponent implements OnInit {
   loadCurrentUserinState() {
     this.store.dispatch(new UserActions.LoadUser({ force: true }));
   }
+
+  updateStudentContentStatus() {
+    this.loginPageviewModel.updateStudentContentStatus();
+  }
+
+  updateAlert() {
+    this.loginPageviewModel.updateAlert();
+  }
 }
