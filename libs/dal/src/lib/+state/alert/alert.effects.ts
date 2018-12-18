@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { select } from '@ngrx/store';
 import { DataPersistence } from '@nrwl/nx';
+import { undo } from 'ngrx-undo';
 import { interval, Observable, Subject } from 'rxjs';
 import { map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { DalActions } from '..';
@@ -136,7 +137,8 @@ export class AlertsEffects {
           );
       },
       undoAction: (action: SetReadAlert, state: any) => {
-        return new AlertsLoadError(new Error('Unable to update alert'));
+        // TODO: show error message to user
+        return undo(action);
       }
     }
   );
