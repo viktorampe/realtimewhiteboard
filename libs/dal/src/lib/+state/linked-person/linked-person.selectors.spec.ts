@@ -1,5 +1,3 @@
-//file.only
-
 import { LinkedPersonQueries } from '.';
 import { TeacherStudentInterface } from '../../+models';
 import { State } from './linked-person.reducer';
