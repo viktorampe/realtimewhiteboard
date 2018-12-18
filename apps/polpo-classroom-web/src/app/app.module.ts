@@ -24,7 +24,6 @@ import {
 } from './+state/app.reducer';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AppResolver } from './app.resolver';
 
 // if you want to update the buffer (which defaults to 100)
 configureBufferSize(150);
@@ -47,65 +46,6 @@ configureBufferSize(150);
     NxModule.forRoot(),
     DalModule.forRoot({ apiBaseUrl: environment.APIBase }),
     GuardsModule,
-    RouterModule.forRoot(
-      [
-        {
-          path: '',
-          resolve: { AppResolver },
-          children: [
-            {
-              path: 'books',
-              loadChildren: '@campus/pages/books#PagesBooksModule',
-              //canLoad: [CoupledTeacherGuard],
-              data: { breadcrumbText: 'books' }
-            },
-            { path: 'dev', loadChildren: '@campus/devlib#DevlibModule' },
-            {
-              path: 'tasks',
-              loadChildren: '@campus/pages/tasks#PagesTasksModule',
-              //canLoad: [CoupledTeacherGuard]
-              data: { breadcrumbText: 'tasks' }
-            },
-            {
-              path: 'reports',
-              loadChildren: '@campus/pages/reports#PagesReportsModule',
-              data: { breadcrumbText: 'reports' }
-            },
-            {
-              path: 'profile',
-              loadChildren: '@campus/pages/profile#PagesProfileModule',
-              data: { breadcrumbText: 'profile' }
-            },
-            {
-              path: 'messages',
-              loadChildren: '@campus/pages/messages#PagesMessagesModule',
-              data: { breadcrumbText: 'messages' }
-            },
-            {
-              path: 'logout',
-              loadChildren: '@campus/pages/logout#PagesLogoutModule'
-            },
-            {
-              path: 'alerts',
-              loadChildren: '@campus/pages/alerts#PagesAlertsModule',
-              data: { breadcrumbText: 'alerts' }
-            },
-            {
-              path: '',
-              redirectTo: 'bundles',
-              pathMatch: 'full'
-            },
-            {
-              path: 'bundles',
-              loadChildren: '@campus/pages/bundles#PagesBundlesModule',
-              //canLoad: [CoupledTeacherGuard]
-              data: { breadcrumbText: 'bundles' }
-            }
-          ]
-        }
-      ],
-      { initialNavigation: 'enabled', enableTracing: false }
-    ),
     StoreModule.forRoot(
       { app: appReducer },
       {

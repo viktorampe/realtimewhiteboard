@@ -9,6 +9,7 @@ import { DataPersistence } from '@nrwl/nx';
 import { filter, map } from 'rxjs/operators';
 import { DalState } from '..';
 import { RouterStateUrl } from '../../routings/route-serializer';
+import { ActionSuccessful } from '../dal.actions';
 import {
   LoadUi,
   SaveUi,
@@ -102,6 +103,12 @@ export class UiEffects {
       });
 
       return new SetBreadcrumbs({ breadcrumbs });
+    },
+    onError: () => {
+      console.error('loading breadcrumbs failed');
+      return new ActionSuccessful({
+        successfulAction: 'breadcrumbs failed successfully'
+      });
     }
   });
 
