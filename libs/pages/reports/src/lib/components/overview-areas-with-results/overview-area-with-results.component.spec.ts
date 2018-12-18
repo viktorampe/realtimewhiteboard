@@ -1,16 +1,20 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule, MatIconRegistry } from '@angular/material';
-import { ActivatedRoute } from '@angular/router';
-import { MockActivatedRoute, MockMatIconRegistry } from '@campus/testing';
+import { By } from '@angular/platform-browser';
+import { RouterTestingModule } from '@angular/router/testing';
+import { LearningAreaFixture } from '@campus/dal';
+import { MockMatIconRegistry } from '@campus/testing';
 import { ListFormat, UiModule } from '@campus/ui';
 import {
   FilterService,
   FilterServiceInterface,
   FILTER_SERVICE_TOKEN
 } from '@campus/utils';
+import { BehaviorSubject } from 'rxjs';
 import { ReportsViewModel } from '../reports.viewmodel';
 import { MockReportsViewModel } from '../reports.viewmodel.mock';
+import { LearningAreasWithResultsInterface } from './../reports.viewmodel.interfaces';
 import { OverviewAreaWithResultsComponent } from './overview-area-with-results.component';
 
 describe('OverviewAreaWithResultsComponent', () => {
@@ -21,13 +25,12 @@ describe('OverviewAreaWithResultsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [UiModule, MatIconModule],
+      imports: [UiModule, MatIconModule, RouterTestingModule],
       declarations: [OverviewAreaWithResultsComponent],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         { provide: FILTER_SERVICE_TOKEN, useClass: FilterService },
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
-        { provide: ActivatedRoute, useClass: MockActivatedRoute },
         { provide: ReportsViewModel, useClass: MockReportsViewModel }
       ]
     }).compileComponents();
@@ -63,7 +66,7 @@ describe('OverviewAreaWithResultsComponent', () => {
     });
   });
 
-  it('should show correct text for no results', () => {
+  it('should show the correct text for no results', () => {
     component.filterTextInput.setValue(
       'a random string that will not return any results'
     );
@@ -74,7 +77,7 @@ describe('OverviewAreaWithResultsComponent', () => {
     expect(componentEl.textContent).toContain(errorMessage);
   });
 
-  it('should not show text for no results when results are present', () => {
+  it('should not show the text for no results when results are present', () => {
     component.filterTextInput.setValue('');
     fixture.detectChanges();
     const errorMessage = 'Er zijn nog geen resultaten beschikbaar.';
@@ -84,24 +87,78 @@ describe('OverviewAreaWithResultsComponent', () => {
     expect(contains).toBeFalsy();
   });
 
-  it('should show correct text for 1 results', () => {
-    component.filterTextInput.setValue(
-      'a random string that will not return any results'
-    );
-    fixture.detectChanges();
-    const text =
-      fixture.debugElement.children[0].children[2].children[1].nativeElement
-        .textContent;
-    expect(text).toContain('Er zijn nog geen resultaten beschikbaar.');
-  });
-
-  it('should show correct number of items', () => {
-    const container = fixture.debugElement.children[0].children[2].children[1];
+  it('should show the correct number of items', () => {
+    let folders = fixture.debugElement.queryAll(By.css('campus-folder'));
     component.filterTextInput.setValue('');
     fixture.detectChanges();
-    expect(container.children[0].children.length).toBe(2);
+    expect(folders.length).toBe(2);
     component.filterTextInput.setValue('a');
     fixture.detectChanges();
-    expect(container.children[0].children.length).toBe(1);
+    folders = fixture.debugElement.queryAll(By.css('campus-folder'));
+    expect(folders.length).toBe(1);
+  });
+
+  it('should show the correct data in the foldercomponent', () => {
+    const mockLearningArea = {
+      learningArea: new LearningAreaFixture({ id: 1, name: 'wiskunde' }),
+      tasksWithResultsCount: 42,
+      bundlesWithResultsCount: 12
+    };
+
+    const mockLearningAreasWithResults = {
+      learningAreas: [mockLearningArea]
+    };
+
+    const vmStream = reportsViewModel.learningAreasWithResults$ as BehaviorSubject<
+      LearningAreasWithResultsInterface
+    >;
+    vmStream.next(mockLearningAreasWithResults);
+
+    fixture.detectChanges();
+
+    const folderDE = fixture.debugElement.query(By.css('campus-folder'));
+    const folder = folderDE.componentInstance;
+
+    expect(folder.backgroundColor).toEqual(mockLearningArea.learningArea.color);
+    expect(folder.icon).toEqual(mockLearningArea.learningArea.icon);
+    expect(folder.title).toEqual(mockLearningArea.learningArea.name);
+    expect(folder.itemCount).toEqual(
+      mockLearningArea.tasksWithResultsCount +
+        mockLearningArea.bundlesWithResultsCount
+    );
+    expect(
+      folderDE.nativeElement.getAttribute('ng-reflect-router-link')
+    ).toEqual(mockLearningArea.learningArea.id.toString());
+  });
+
+  it('should show the correct number of tasks/bundles in the folder detail', () => {
+    const mockLearningArea = {
+      learningArea: new LearningAreaFixture({ id: 1, name: 'wiskunde' }),
+      tasksWithResultsCount: 42,
+      bundlesWithResultsCount: 12
+    };
+
+    const mockLearningAreasWithResults = {
+      learningAreas: [mockLearningArea]
+    };
+
+    const vmStream = reportsViewModel.learningAreasWithResults$ as BehaviorSubject<
+      LearningAreasWithResultsInterface
+    >;
+    vmStream.next(mockLearningAreasWithResults);
+
+    fixture.detectChanges();
+
+    const folderDetails = fixture.debugElement.query(
+      By.css('campus-folder-details')
+    );
+    expect(folderDetails.children[0].nativeElement.textContent).toContain(
+      'Taken: ' +
+        mockLearningAreasWithResults.learningAreas[0].tasksWithResultsCount
+    );
+    expect(folderDetails.children[1].nativeElement.textContent).toContain(
+      'Bundels: ' +
+        mockLearningAreasWithResults.learningAreas[0].bundlesWithResultsCount
+    );
   });
 });

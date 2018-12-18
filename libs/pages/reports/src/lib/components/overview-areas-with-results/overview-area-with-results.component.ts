@@ -28,6 +28,7 @@ export class OverviewAreaWithResultsComponent
     LearningAreasWithResultsInterface
   > = this.viewModel.learningAreasWithResults$;
   listFormat$ = this.viewModel.listFormat$;
+  protected listFormat = ListFormat;
 
   @ViewChild(FilterTextInputComponent)
   filterTextInput: FilterTextInputComponent<
@@ -52,7 +53,6 @@ export class OverviewAreaWithResultsComponent
     source: LearningAreasWithResultsInterface,
     filterText: string
   ): LearningAreaWithResultsInterface[] {
-    console.log(source);
     if (source) {
       return this.filterService.filter(source.learningAreas, {
         learningArea: {
