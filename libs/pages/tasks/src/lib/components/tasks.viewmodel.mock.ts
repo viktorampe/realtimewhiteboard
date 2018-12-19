@@ -4,6 +4,7 @@ import {
   EduContentMetadataFixture,
   LearningAreaFixture,
   LearningAreaInterface,
+  PersonFixture,
   TaskEduContentFixture,
   TaskFixture,
   TaskInstanceFixture
@@ -42,7 +43,10 @@ export class MockTasksViewModel implements ViewModelInterface<TasksViewModel> {
     return new BehaviorSubject({
       taskInfos: [
         {
-          task: new TaskFixture({ id: 1, learningAreaId }),
+          task: {
+            ...new TaskFixture({ id: 1, learningAreaId }),
+            teacher: new PersonFixture()
+          },
           taskInstance: new TaskInstanceFixture({ taskId: 1, id: 1 }),
           taskEduContentsCount: 1,
           taskEduContents: [
@@ -51,7 +55,10 @@ export class MockTasksViewModel implements ViewModelInterface<TasksViewModel> {
           finished: true
         },
         {
-          task: new TaskFixture({ id: 2, learningAreaId }),
+          task: {
+            ...new TaskFixture({ id: 2, learningAreaId }),
+            teacher: new PersonFixture()
+          },
           taskInstance: new TaskInstanceFixture({ taskId: 2, id: 2 }),
           taskEduContentsCount: 2,
           taskEduContents: [
@@ -61,7 +68,10 @@ export class MockTasksViewModel implements ViewModelInterface<TasksViewModel> {
           finished: true
         },
         {
-          task: new TaskFixture({ id: 3, learningAreaId }),
+          task: {
+            ...new TaskFixture({ id: 3, learningAreaId }),
+            teacher: new PersonFixture()
+          },
           taskInstance: new TaskInstanceFixture({ taskId: 3, id: 3 }),
           taskEduContentsCount: 1,
           taskEduContents: [
@@ -70,7 +80,10 @@ export class MockTasksViewModel implements ViewModelInterface<TasksViewModel> {
           finished: false
         },
         {
-          task: new TaskFixture({ id: 4, learningAreaId }),
+          task: {
+            ...new TaskFixture({ id: 4, learningAreaId }),
+            teacher: new PersonFixture()
+          },
           taskInstance: new TaskInstanceFixture({ taskId: 4, id: 4 }),
           taskEduContentsCount: 2,
           taskEduContents: [
@@ -85,7 +98,10 @@ export class MockTasksViewModel implements ViewModelInterface<TasksViewModel> {
 
   public getTaskWithInfo(taskId: number): Observable<TaskWithInfoInterface> {
     return new BehaviorSubject({
-      task: new TaskFixture({ id: taskId }),
+      task: {
+        ...new TaskFixture({ id: taskId }),
+        teacher: new PersonFixture()
+      },
       taskInstance: new TaskInstanceFixture({ taskId: 1, id: 10 }),
       taskEduContentsCount: 2,
       taskEduContents: [
