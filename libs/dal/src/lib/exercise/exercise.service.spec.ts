@@ -1,6 +1,6 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { EduContentApi, PersonApi } from '@diekeure/polpo-api-angular-sdk';
-import { hot } from 'jasmine-marbles';
+import { hot } from '@nrwl/nx/testing';
 import { Observable } from 'rxjs';
 import { CurrentExerciseFixture } from '../+fixtures';
 import { CurrentExerciseInterface } from '../+state/current-exercise/current-exercise.reducer';
