@@ -120,14 +120,19 @@ describe('BundlesViewModel', () => {
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith({ listFormat });
   });
-  // describe('#openContent', () => {
-  //   it('should call the open static content service for EduContent', () => {
-  //     const eduContent = new EduContentFixture({ id: 5 });
-  //     bundlesViewModel.openContent(eduContent);
-  //     expect(openStaticContentService.open).toHaveBeenCalledTimes(1);
-  //     expect(openStaticContentService.open).toHaveBeenCalledWith(eduContent);
-  //   });
-  // });
+  describe('#openContent', () => {
+    it('should call the open static content service for EduContent', () => {
+      const unlockedContent = new UnlockedContentFixture({
+        id: 1,
+        eduContent: new EduContentFixture({ type: 'file' })
+      });
+      bundlesViewModel.openContent(unlockedContent);
+      expect(openStaticContentService.open).toHaveBeenCalledTimes(1);
+      expect(openStaticContentService.open).toHaveBeenCalledWith(
+        unlockedContent.content
+      );
+    });
+  });
 
   it('set alerts read by a filter', () => {
     spyOn(store, 'dispatch');

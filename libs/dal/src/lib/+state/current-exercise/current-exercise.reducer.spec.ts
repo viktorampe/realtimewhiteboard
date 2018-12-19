@@ -1,6 +1,6 @@
 import { ScormCmiMode } from '@campus/scorm';
 import { CurrentExerciseActions } from '.';
-import { CurrentExerciseFixture, EduContentFixture } from '../../+fixtures';
+import { CurrentExerciseFixture } from '../../+fixtures';
 import {
   CurrentExerciseInterface,
   initialState,
@@ -24,7 +24,7 @@ let emptyExercise: CurrentExerciseInterface;
 describe('Exercises Reducer', () => {
   beforeEach(() => {
     mockExercise = new CurrentExerciseFixture({
-      eduContent: new EduContentFixture({ id: 1 }),
+      eduContentId: 1,
       cmiMode: ScormCmiMode.CMI_MODE_PREVIEW,
       result: null,
       saveToApi: true,
@@ -32,7 +32,7 @@ describe('Exercises Reducer', () => {
     });
 
     emptyExercise = {
-      eduContent: null,
+      eduContentId: null,
       cmiMode: null,
       result: null,
       saveToApi: null,

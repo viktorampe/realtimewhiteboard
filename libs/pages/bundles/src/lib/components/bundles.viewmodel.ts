@@ -127,17 +127,18 @@ export class BundlesViewModel {
       if (unlockedContent.eduContent.type === 'exercise') {
         if (this.authService.userId === unlockedContent.teacherId) {
           //own bundle -> teacher -> dialog with or without answers
+          return;
         } else {
           this.scormExerciseService.startExerciseFromUnlockedContent(
             this.authService.userId,
             unlockedContent.eduContentId,
             unlockedContent.id
           );
+          return;
         }
       }
-    } else {
-      this.openStaticContentService.open(unlockedContent.content);
     }
+    this.openStaticContentService.open(unlockedContent.content);
   }
 
   getLearningAreaById(areaId: number): Observable<LearningAreaInterface> {

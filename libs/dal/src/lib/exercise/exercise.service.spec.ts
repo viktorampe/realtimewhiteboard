@@ -85,7 +85,7 @@ describe('ExerciseService', () => {
     };
 
     mockExercise = new CurrentExerciseFixture({
-      eduContent: new EduContentFixture({ id: 1 }),
+      eduContentId: 1,
       result: new ResultFixture({ cmi: "{ mode: 'normal' }" })
     });
   }),

@@ -3,7 +3,6 @@ import { WINDOW_SERVICE_TOKEN } from '@campus/browser';
 import {
   CurrentExerciseActions,
   CurrentExerciseReducer,
-  EduContentFixture,
   ResultFixture
 } from '@campus/dal';
 import {
@@ -199,7 +198,7 @@ describe('ScormExerciseService', () => {
         cmiMode: ScormCmiMode.CMI_MODE_BROWSE,
         url: 'lalalala',
         saveToApi: false,
-        eduContent: new EduContentFixture({ id: 1 }),
+        eduContentId: 1,
         result: new ResultFixture()
       })
     );

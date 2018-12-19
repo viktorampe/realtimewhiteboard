@@ -61,7 +61,7 @@ export class CurrentExerciseEffects {
         // TODO: show error message to user
         // resetting the state won't help, because ludo won't update
         // todo examine further
-        return new CurrentExerciseError({});
+        return new CurrentExerciseError(new Error('failed'));
       }
     }
   );
