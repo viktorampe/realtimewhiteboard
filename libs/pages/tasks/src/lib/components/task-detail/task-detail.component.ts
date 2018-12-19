@@ -8,7 +8,11 @@ import {
   ViewChild
 } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { EduContent, LearningAreaInterface } from '@campus/dal';
+import {
+  EduContent,
+  LearningAreaInterface,
+  TaskEduContentInterface
+} from '@campus/dal';
 import {
   FilterTextInputComponent,
   ListFormat,
@@ -16,7 +20,6 @@ import {
   SideSheetComponent
 } from '@campus/ui';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
-import { TaskEduContent } from '@diekeure/polpo-api-angular-sdk';
 import { Observable, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { TasksViewModel } from '../tasks.viewmodel';
@@ -41,7 +44,10 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
 
   //viewChildren
   @ViewChild(FilterTextInputComponent)
-  filterTextInput: FilterTextInputComponent<TaskEduContent[], TaskEduContent>;
+  filterTextInput: FilterTextInputComponent<
+    TaskWithInfoInterface,
+    TaskEduContentInterface
+  >;
 
   list: ListViewComponent<EduContent>;
   @ViewChild('taskInstanceListview')
@@ -140,17 +146,18 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   clickOpenContent(content: EduContent): void {
-    //TODO contact viewmodel to open new window
-    console.log('%cclickOpenContent:', 'color: orange; font-weight: bold;');
-    console.log({ content });
+    this.taskViewModel.startExercise(content.id);
   }
 
   //filterFunction
-  filterFn(info: TaskEduContent[], searchText: string): TaskEduContent[] {
+  filterFn(
+    info: TaskWithInfoInterface,
+    searchText: string
+  ): TaskEduContentInterface[] {
     if (this.list) {
       this.list.deselectAllItems();
     }
-    return this.filterService.filter(info, {
+    return this.filterService.filter(info.taskEduContents, {
       eduContent: { publishedEduContentMetadata: { title: searchText } }
     });
   }

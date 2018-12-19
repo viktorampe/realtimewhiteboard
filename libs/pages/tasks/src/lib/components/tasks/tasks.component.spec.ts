@@ -51,11 +51,8 @@ describe('TasksComponent', () => {
   });
 
   it('should display all tasks', () => {
-    const tasksContainer = fixture.debugElement.query(
-      By.css('.pages-tasks__container')
-    );
-    expect(tasksContainer).toBeTruthy();
-    expect(tasksContainer.children[1].nativeElement.children.length).toBe(4);
+    const folders = fixture.debugElement.queryAll(By.css('campus-folder'));
+    expect(folders.length).toBe(4);
   });
 
   it('should display correct tasks count text', () => {
