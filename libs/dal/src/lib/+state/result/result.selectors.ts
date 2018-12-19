@@ -1,4 +1,6 @@
+import { groupArrayByKey } from '@campus/utils';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { ResultInterface } from '../../+models';
 import {
   NAME,
   selectAll,
@@ -64,4 +66,63 @@ export const getByIds = createSelector(
 export const getById = createSelector(
   selectResultState,
   (state: State, props: { id: number }) => state.entities[props.id]
+);
+
+/**
+ * returns dictionary of results grouped by a property
+ * @example
+ * results$: ResultInterface[] = this.store.pipe(
+    select(ResultQueries.getResultsForLearningAreaIdGrouped,
+      { learningAreaId: 1, groupProp: { bundleId: 0 } })
+    -or-
+    select(ResultQueries.getResultsForLearningAreaIdGrouped,
+      { learningAreaId: 1, groupProp: { taskId: 0 } })
+  );
+ */
+export const getResultsForLearningAreaIdGrouped = createSelector(
+  selectResultState,
+  (
+    state: State,
+    props: {
+      learningAreaId: number;
+      groupProp: Partial<ResultInterface>;
+    }
+  ) => {
+    const ids: number[] = <number[]>state.ids;
+    const groupKey = Object.keys(props.groupProp)[0];
+
+    return ids.reduce((acc, id) => {
+      // mapping
+      const result = state.entities[id];
+      // filtering
+      if (result[groupKey] && result.learningAreaId === props.learningAreaId) {
+        // grouping
+        if (!acc[result[groupKey]]) {
+          acc[result[groupKey]] = [];
+        }
+        acc[result[groupKey]].push(result);
+      }
+      return acc;
+    }, {});
+  }
+);
+export const getLearningAreaIds = createSelector(
+  selectResultState,
+  (state: State) => {
+    return Array.from(
+      new Set(
+        Object.values(state.entities).map(result => result.learningAreaId)
+      )
+    );
+  }
+);
+
+export const getResultsGroupedByArea = createSelector(
+  selectResultState,
+  (state: State) => {
+    const ids: number[] = <number[]>state.ids;
+    return groupArrayByKey<ResultInterface>(Object.values(state.entities), {
+      learningAreaId: 0
+    });
+  }
 );
