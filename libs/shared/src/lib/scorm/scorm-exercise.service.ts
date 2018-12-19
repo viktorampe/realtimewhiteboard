@@ -12,12 +12,7 @@ import {
   SCORM_API_SERVICE_TOKEN
 } from '@campus/scorm';
 import { select, Store } from '@ngrx/store';
-import {
-  distinctUntilChanged,
-  filter,
-  tap,
-  withLatestFrom
-} from 'rxjs/operators';
+import { distinctUntilChanged, filter, withLatestFrom } from 'rxjs/operators';
 import { ScormExerciseServiceInterface } from './scorm-exercise.service.interface';
 
 @Injectable({
@@ -127,17 +122,16 @@ export class ScormExerciseService implements ScormExerciseServiceInterface {
     this.store
       .pipe(
         select(CurrentExerciseQueries.getCurrentExercise),
-        distinctUntilChanged((x, y) => x.eduContent === y.eduContent),
-        filter(ex => !!ex.eduContent),
-        tap(newCurrentExercise => {
-          this.scormApi.init(
-            newCurrentExercise.result.cmi,
-            newCurrentExercise.cmiMode
-          );
-          this.openNewUrl(newCurrentExercise.url);
-        })
+        distinctUntilChanged((x, y) => x.eduContentId === y.eduContentId),
+        filter(ex => !!ex.eduContentId)
       )
-      .subscribe();
+      .subscribe(newCurrentExercise => {
+        this.scormApi.init(
+          newCurrentExercise.result.cmi,
+          newCurrentExercise.cmiMode
+        );
+        this.openNewUrl(newCurrentExercise.url);
+      });
   }
 
   private listenToScormForUpdates() {
@@ -146,19 +140,18 @@ export class ScormExerciseService implements ScormExerciseServiceInterface {
         filter(cmi => !!cmi),
         withLatestFrom(
           this.store.pipe(select(CurrentExerciseQueries.getCurrentExercise))
-        ),
-        tap(([cmi, state]) => {
-          //update values in state and return
-          this.updateExerciseToStore(state.result.personId, {
-            ...state,
-            result: {
-              ...state.result,
-              cmi: cmi
-            }
-          });
-        })
+        )
       )
-      .subscribe();
+      .subscribe(([cmi, state]) => {
+        //update values in state and return
+        this.updateExerciseToStore(state.result.personId, {
+          ...state,
+          result: {
+            ...state.result,
+            cmi: cmi
+          }
+        });
+      });
   }
 
   private openNewUrl(url: string) {

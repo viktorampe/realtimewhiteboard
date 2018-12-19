@@ -1,11 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ScormCmiMode } from '@campus/scorm';
-import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { ResultInterface } from '../+models';
-import { DalState } from '../+state';
-import { EduContentQueries } from '../+state/edu-content';
 import { ResultsService } from '../results/results.service';
 import { CurrentExerciseInterface } from './../+state/current-exercise/current-exercise.reducer';
 import { ContentRequestService } from './../content-request/content-request.service';
@@ -46,15 +43,11 @@ export class ExerciseService implements ExerciseServiceInterface {
     let tempUrl$: Observable<string>;
     tempUrl$ = this.contentRequestService.requestUrl(educontentId);
 
-    const exercise$ = combineLatest(
-      this.store.pipe(select(EduContentQueries.getAllEntities)),
-      result$,
-      tempUrl$
-    ).pipe(
+    const exercise$ = combineLatest(result$, tempUrl$).pipe(
       take(1),
-      map(([eduContentEnts, result, url]) => {
+      map(([result, url]) => {
         return {
-          eduContent: eduContentEnts[result.eduContentId],
+          eduContentId: result.eduContentId,
           cmiMode: mode,
           result: result,
           saveToApi: saveToApi,
@@ -86,7 +79,6 @@ export class ExerciseService implements ExerciseServiceInterface {
 
   constructor(
     private resultsService: ResultsService,
-    private contentRequestService: ContentRequestService,
-    private store: Store<DalState>
+    private contentRequestService: ContentRequestService
   ) {}
 }

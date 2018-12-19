@@ -40,11 +40,10 @@ export class CurrentExerciseEffects {
   );
 
   @Effect()
-  saveExercise$ = this.dataPersistence.pessimisticUpdate(
+  saveExercise$ = this.dataPersistence.optimisticUpdate(
     CurrentExerciseActionTypes.SaveCurrentExercise,
     {
       run: (action: SaveCurrentExercise, state: DalState) => {
-        console.log('inside saveExercise effect');
         const exercise = action.payload.exercise;
 
         if (!exercise.saveToApi) return;
@@ -58,8 +57,11 @@ export class CurrentExerciseEffects {
           )
         );
       },
-      onError: (action: SaveCurrentExercise, error) => {
-        return new CurrentExerciseError(error);
+      undoAction: (action: SaveCurrentExercise, state: any) => {
+        // TODO: show error message to user
+        // resetting the state won't help, because ludo won't update
+        // todo examine further
+        return new CurrentExerciseError({});
       }
     }
   );

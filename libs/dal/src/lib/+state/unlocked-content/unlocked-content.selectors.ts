@@ -89,9 +89,12 @@ export const getByBundleId = createSelector(
   selectUnlockedContentState,
   (state: State, props: { bundleId: number }) => {
     const ids = <number[]>state.ids;
-    return ids
-      .filter(id => state.entities[id].bundleId === +props.bundleId)
-      .map(id => asUnlockedContent(state.entities[id]));
+
+    return ids.reduce((acc, id, idx, arr) => {
+      return state.entities[id].bundleId === +props.bundleId
+        ? [...acc, state.entities[id]]
+        : acc;
+    }, []);
   }
 );
 

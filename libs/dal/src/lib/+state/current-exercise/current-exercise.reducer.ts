@@ -1,4 +1,4 @@
-import { EduContentInterface, ResultInterface } from '@campus/dal';
+import { ResultInterface } from '@campus/dal';
 import { ScormCmiMode } from '@campus/scorm';
 import {
   CurrentExerciseActions,
@@ -8,7 +8,7 @@ import {
 export const NAME = 'currentExercise';
 
 export interface CurrentExerciseInterface {
-  eduContent?: EduContentInterface;
+  eduContentId?: number;
   cmiMode: ScormCmiMode;
   result?: ResultInterface;
   saveToApi: boolean;
@@ -19,7 +19,7 @@ export interface State extends CurrentExerciseInterface {
 }
 
 export const initialState: State = {
-  eduContent: null,
+  eduContentId: null,
   cmiMode: null,
   result: null,
   saveToApi: null,
@@ -41,7 +41,7 @@ export function reducer(
     case CurrentExerciseActionTypes.ClearCurrentExercise: {
       return {
         ...state,
-        eduContent: null,
+        eduContentId: null,
         cmiMode: null,
         result: null,
         saveToApi: null,
@@ -50,7 +50,6 @@ export function reducer(
     }
 
     case CurrentExerciseActionTypes.SaveCurrentExercise: {
-      console.log('in exercise reducer');
       const cmi = JSON.parse(action.payload.exercise.result.cmi);
       return {
         ...state,
@@ -74,7 +73,7 @@ export function reducer(
     case CurrentExerciseActionTypes.CurrentExerciseError: {
       return {
         ...state,
-        eduContent: null,
+        eduContentId: null,
         cmiMode: null,
         result: null,
         saveToApi: null,
