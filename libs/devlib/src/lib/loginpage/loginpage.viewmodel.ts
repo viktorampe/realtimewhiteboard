@@ -1,7 +1,9 @@
 import { Inject, Injectable } from '@angular/core';
 import {
+  AlertActions,
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
+  StudentContentStatusActions,
   UserActions,
   UserReducer
 } from '@campus/dal';
@@ -25,11 +27,7 @@ export class LoginPageViewModel {
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     @Inject(SCORM_API_SERVICE_TOKEN)
     private scormApiService: ScormApiServiceInterface
-  ) {
-    if (this.isLoggedIn()) {
-      store.dispatch(new UserActions.LoadUser({ force: false }));
-    }
-  }
+  ) {}
 
   /**
    * checks whether the user is logged in, returns a boolean
@@ -49,10 +47,7 @@ export class LoginPageViewModel {
    * @memberof LoginPageViewModel
    */
   login(name: string, password: string) {
-    if (this.isLoggedIn()) {
-      console.error('login failed since we are already logged in');
-      this.store.dispatch(new UserActions.LoadUser({ force: false }));
-    } else {
+    if (!this.isLoggedIn()) {
       this.store.dispatch(
         new UserActions.LogInUser({
           username: name,
@@ -61,6 +56,23 @@ export class LoginPageViewModel {
       );
     }
     return;
+  }
+
+  updateStudentContentStatus() {
+    this.store.dispatch(
+      new StudentContentStatusActions.UpdateStudentContentStatus({
+        studentContentStatus: {
+          id: 1,
+          changes: { contentStatusId: 3, unlockedContentId: 5 }
+        }
+      })
+    );
+  }
+
+  updateAlert() {
+    this.store.dispatch(
+      new AlertActions.SetReadAlert({ personId: 1, alertIds: 58, read: true })
+    );
   }
 
   /**

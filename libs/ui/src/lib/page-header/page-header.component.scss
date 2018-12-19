@@ -16,8 +16,7 @@
       width: 32px;
     }
   }
-
-  &--section {
+  &--centered {
     font-size: 32px;
     justify-content: center;
     align-items: center;
@@ -43,13 +42,12 @@
     font-size: 32px;
     margin-right: 5px;
   }
-
-  &-section-subtitle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 400;
-    margin: 0;
-    padding: 10px 0;
-  }
+}
+.ui-page-header-centered-subtitle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 400;
+  margin: 0;
+  padding: 10px 0;
 }
