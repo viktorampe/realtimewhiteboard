@@ -24,8 +24,4 @@ export class PageHeaderComponent {
   @Input() title: string;
   @Input() subtitle: string;
   @Input() layout: 'default' | 'section' = 'default';
-
-  constructor() {
-    console.log(this.iconClass);
-  }
 }
