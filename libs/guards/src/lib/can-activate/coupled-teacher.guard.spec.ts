@@ -141,7 +141,7 @@ describe('coupledTeacherGuard', () => {
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith(['/settings']);
   });
-  it('should return false if the user is not a student', () => {
+  it('should return true if the user is a teacher with no linkedPersons', () => {
     store.dispatch(
       new UserActions.UserLoaded(
         new PersonFixture({ id: 1, roles: [{ name: 'teacher' }] })
@@ -156,11 +156,10 @@ describe('coupledTeacherGuard', () => {
         <ActivatedRouteSnapshot>{},
         <RouterStateSnapshot>{}
       )
-    ).toBeObservable(hot('a', { a: false }));
-    expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy).toHaveBeenCalledWith(['/settings']);
+    ).toBeObservable(hot('a', { a: true }));
+    expect(spy).toHaveBeenCalledTimes(0);
   });
-  it('should return false if the user is both a teacher and a student but has not coupled teachers', () => {
+  it('should return true if the user is both a teacher and a student but has not coupled teachers', () => {
     store.dispatch(
       new UserActions.UserLoaded(
         new PersonFixture({
@@ -178,9 +177,8 @@ describe('coupledTeacherGuard', () => {
         <ActivatedRouteSnapshot>{},
         <RouterStateSnapshot>{}
       )
-    ).toBeObservable(hot('a', { a: false }));
-    expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy).toHaveBeenCalledWith(['/settings']);
+    ).toBeObservable(hot('a', { a: true }));
+    expect(spy).toHaveBeenCalledTimes(0);
   });
   it('should return true if the user is both a teacher and a student and has coupled teachers', () => {
     store.dispatch(
