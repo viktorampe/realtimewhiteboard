@@ -160,7 +160,7 @@ describe('coupledTeacherGuard', () => {
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith(['/settings']);
   });
-  it('should return false if the user is both a teacher and a student', () => {
+  it('should return false if the user is both a teacher and a student but has not coupled teachers', () => {
     store.dispatch(
       new UserActions.UserLoaded(
         new PersonFixture({
@@ -182,6 +182,39 @@ describe('coupledTeacherGuard', () => {
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith(['/settings']);
   });
+  it('should return true if the user is both a teacher and a student and has coupled teachers', () => {
+    store.dispatch(
+      new UserActions.UserLoaded(
+        new PersonFixture({
+          id: 1,
+          roles: [{ name: 'teacher' }, { name: 'student' }]
+        })
+      )
+    );
+    store.dispatch(
+      new LinkedPersonActions.LinkedPersonsLoaded({
+        linkedPersons: [
+          new LinkedPersonFixture({ id: 1, teacherId: 100, studentId: 1 }),
+          new LinkedPersonFixture({ id: 2, teacherId: 101, studentId: 1 })
+        ]
+      })
+    );
+    store.dispatch(
+      new PersonActions.PersonsLoaded({
+        persons: [
+          new PersonFixture({ id: 100, type: 'teacher' }),
+          new PersonFixture({ id: 101, type: 'teacher' })
+        ]
+      })
+    );
+    expect(
+      coupledTeacherGuard.canActivate(
+        <ActivatedRouteSnapshot>{},
+        <RouterStateSnapshot>{}
+      )
+    ).toBeObservable(hot('a', { a: true }));
+    expect(spy).toHaveBeenCalledTimes(0);
+  });
   it('should return false if the user is a student but has no linkedPersons', () => {
     store.dispatch(
       new UserActions.UserLoaded(
@@ -189,9 +222,15 @@ describe('coupledTeacherGuard', () => {
       )
     );
     store.dispatch(
-      new LinkedPersonActions.LinkedPersonsLoaded({ linkedPersons: [] })
+      new LinkedPersonActions.LinkedPersonsLoaded({
+        linkedPersons: []
+      })
     );
-    store.dispatch(new PersonActions.PersonsLoaded({ persons: [] }));
+    store.dispatch(
+      new PersonActions.PersonsLoaded({
+        persons: []
+      })
+    );
     expect(
       coupledTeacherGuard.canActivate(
         <ActivatedRouteSnapshot>{},

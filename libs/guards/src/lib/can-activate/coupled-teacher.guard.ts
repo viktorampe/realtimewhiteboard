@@ -32,7 +32,6 @@ export class CoupledTeacherGuard implements CanActivate {
   private linkedPersonsLoaded$: Observable<boolean>;
   private linkedPersonsIds$: Observable<number[]>;
   //intermediate streams
-  private isTeacher$: Observable<boolean>;
   private isStudent$: Observable<boolean>;
   private hasTeachers$: Observable<boolean>;
 
@@ -54,11 +53,9 @@ export class CoupledTeacherGuard implements CanActivate {
         combineLatest(this.personsLoaded$, this.linkedPersonsLoaded$)
       ),
       skipWhile(arr => !arr.every(Boolean)),
-      switchMapTo(
-        combineLatest(this.isStudent$, this.isTeacher$, this.hasTeachers$)
-      ),
-      map(([isStudent, isTeacher, hasTeachers]) => {
-        if (isStudent && !isTeacher && hasTeachers) return true;
+      switchMapTo(combineLatest(this.isStudent$, this.hasTeachers$)),
+      map(([isStudent, hasTeachers]) => {
+        if (isStudent && hasTeachers) return true;
         this.router.navigate(['/settings']);
         return false;
       })
@@ -94,12 +91,6 @@ export class CoupledTeacherGuard implements CanActivate {
       map(currentUser => {
         if (!currentUser) return false;
         return this.containsRole(currentUser.roles, RolesEnum.Student);
-      })
-    );
-    this.isTeacher$ = this.currentUser$.pipe(
-      map(currentUser => {
-        if (!currentUser) return false;
-        return this.containsRole(currentUser.roles, RolesEnum.Teacher);
       })
     );
     this.hasTeachers$ = this.linkedPersonsIds$.pipe(
