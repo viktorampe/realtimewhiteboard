@@ -6,7 +6,6 @@ import {
 } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
-  AUTH_SERVICE_TOKEN,
   DalState,
   LinkedPersonActions,
   LinkedPersonFixture,
@@ -47,8 +46,7 @@ describe('coupledTeacherGuard', () => {
       providers: [
         CoupledTeacherGuard,
         Store,
-        { provide: Router, useClass: MockRouter },
-        { provide: AUTH_SERVICE_TOKEN, useValue: { userId: 1 } }
+        { provide: Router, useClass: MockRouter }
       ]
     });
     coupledTeacherGuard = TestBed.get(CoupledTeacherGuard);

@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   CanActivate,
@@ -6,8 +6,6 @@ import {
   RouterStateSnapshot
 } from '@angular/router';
 import {
-  AuthServiceInterface,
-  AUTH_SERVICE_TOKEN,
   DalState,
   LinkedPersonActions,
   LinkedPersonQueries,
@@ -30,7 +28,7 @@ export enum RolesEnum {
 export class CoupledTeacherGuard implements CanActivate {
   //input streams
   private currentUser$: Observable<PersonInterface>;
-  private personQueriesLoaded$: Observable<boolean>;
+  private personsLoaded$: Observable<boolean>;
   private linkedPersonsLoaded$: Observable<boolean>;
   private linkedPersonsIds$: Observable<number[]>;
   //intermediate streams
@@ -38,11 +36,7 @@ export class CoupledTeacherGuard implements CanActivate {
   private isStudent$: Observable<boolean>;
   private hasTeachers$: Observable<boolean>;
 
-  constructor(
-    private store: Store<DalState>,
-    private router: Router,
-    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
-  ) {
+  constructor(private store: Store<DalState>, private router: Router) {
     this.initialiseInputStreams();
     this.loadIntermediateStream();
   }
@@ -53,16 +47,13 @@ export class CoupledTeacherGuard implements CanActivate {
   ): Observable<boolean> | Promise<boolean> | boolean {
     return this.currentUser$.pipe(
       skipWhile(currentUser => currentUser === null),
-      tap(() => {
-        this.dispatchLoadActions();
+      tap(currentUser => {
+        this.dispatchLoadActions(currentUser.id);
       }),
       switchMapTo(
-        combineLatest(this.personQueriesLoaded$, this.linkedPersonsLoaded$)
+        combineLatest(this.personsLoaded$, this.linkedPersonsLoaded$)
       ),
-      skipWhile(([personQueriesLoaded, linkedPersonsLoaded]) => {
-        return !linkedPersonsLoaded || !personQueriesLoaded;
-      }),
-      switchMapTo(this.isStudent$),
+      skipWhile(arr => !arr.every(Boolean)),
       switchMapTo(
         combineLatest(this.isStudent$, this.isTeacher$, this.hasTeachers$)
       ),
@@ -74,15 +65,15 @@ export class CoupledTeacherGuard implements CanActivate {
     );
   }
 
-  private dispatchLoadActions(): void {
+  private dispatchLoadActions(currentUserId: number): void {
     this.store.dispatch(
       new LinkedPersonActions.LoadLinkedPersons({
-        userId: this.authService.userId
+        userId: currentUserId
       })
     );
     this.store.dispatch(
       new PersonActions.LoadPersons({
-        userId: this.authService.userId
+        userId: currentUserId
       })
     );
   }
@@ -92,9 +83,7 @@ export class CoupledTeacherGuard implements CanActivate {
     this.linkedPersonsLoaded$ = this.store.pipe(
       select(LinkedPersonQueries.getLoaded)
     );
-    this.personQueriesLoaded$ = this.store.pipe(
-      select(PersonQueries.getLoaded)
-    );
+    this.personsLoaded$ = this.store.pipe(select(PersonQueries.getLoaded));
     this.linkedPersonsIds$ = this.store.pipe(
       select(LinkedPersonQueries.getLinkedPersonIds)
     );
