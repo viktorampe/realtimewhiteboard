@@ -4,8 +4,10 @@ import { TeacherStudentInterface } from '../../+models';
 import { State } from './linked-person.reducer';
 
 describe('LinkedPerson Selectors', () => {
+  const date = new Date();
   function createLinkedPerson(id: number): TeacherStudentInterface | any {
     return new LinkedPersonFixture({
+      created: date,
       id: id,
       teacherId: id + 1,
       studentId: id + 2
