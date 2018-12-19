@@ -2,7 +2,11 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { PortalModule } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
 import { Inject, ModuleWithProviders, NgModule } from '@angular/core';
-import { MatIconModule, MatIconRegistry } from '@angular/material';
+import {
+  MatBadgeModule,
+  MatIconModule,
+  MatIconRegistry
+} from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { UiModule } from '@campus/ui';
@@ -33,6 +37,7 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     PortalModule,
     LayoutModule,
     MatIconModule,
+    MatBadgeModule,
     RouterModule
   ],
   declarations: [HeaderComponent, PageBarContainerComponent],

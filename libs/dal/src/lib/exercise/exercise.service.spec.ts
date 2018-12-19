@@ -2,7 +2,7 @@ import { inject, TestBed } from '@angular/core/testing';
 import { ScormCmiMode } from '@campus/scorm';
 import { EduContentApi, PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Store, StoreModule } from '@ngrx/store';
-import { hot } from 'jasmine-marbles';
+import { hot } from '@nrwl/nx/testing';
 import { Observable } from 'rxjs';
 import { CurrentExerciseFixture, EduContentFixture } from '../+fixtures';
 import { EduContent } from '../+models';

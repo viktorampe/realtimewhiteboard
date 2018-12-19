@@ -13,9 +13,7 @@ import {
   TaskEduContentQueries,
   TaskInstanceActions,
   TaskInstanceQueries,
-  TaskQueries,
-  UserActions,
-  UserQueries
+  TaskQueries
 } from '@campus/dal';
 import { Action, Selector, Store } from '@ngrx/store';
 
@@ -31,7 +29,6 @@ export class TasksResolver extends StateResolver {
   }
   protected getLoadableActions(): Action[] {
     return [
-      new UserActions.LoadUser({ force: false }),
       new LearningAreaActions.LoadLearningAreas(),
       new EduContentActions.LoadEduContents({
         userId: this.authService.userId
@@ -48,7 +45,6 @@ export class TasksResolver extends StateResolver {
 
   protected getResolvedQueries(): Selector<object, boolean>[] {
     return [
-      UserQueries.getLoaded, //todo move to guard
       LearningAreaQueries.getLoaded,
       EduContentQueries.getLoaded,
       TaskQueries.getLoaded,

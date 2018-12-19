@@ -69,4 +69,17 @@ describe('PageHeaderComponent', () => {
 
     expect(subTitleDE.nativeElement.textContent).toBe(mockData.subTitle);
   });
+  it('should not display the subtitle span if the layout is set to centered', () => {
+    component.layout = 'centered';
+    fixture.detectChanges();
+    const subTitleDE = fixture.debugElement.query(By.css('small'));
+    expect(subTitleDE).toBeFalsy();
+  });
+  it('should display the h2 subtitle if the layout is set to centered', () => {
+    component.layout = 'centered';
+    fixture.detectChanges();
+    const subTitleDE = fixture.debugElement.query(By.css('h2'));
+    expect(subTitleDE).toBeTruthy();
+    expect(subTitleDE.nativeElement.textContent).toBe(mockData.subTitle);
+  });
 });

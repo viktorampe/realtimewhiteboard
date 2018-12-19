@@ -1,36 +1,82 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { ModuleWithProviders, NgModule } from '@angular/core';
-import { BrowserModule as CampusBrowserModule, BROWSER_STORAGE_SERVICE_TOKEN, StorageService } from '@campus/browser';
+import {
+  BrowserModule as CampusBrowserModule,
+  BROWSER_STORAGE_SERVICE_TOKEN,
+  StorageService
+} from '@campus/browser';
 import { ScormModule } from '@campus/scorm';
-import { LoopBackConfig, SDKBrowserModule } from '@diekeure/polpo-api-angular-sdk';
+import {
+  LoopBackConfig,
+  SDKBrowserModule
+} from '@diekeure/polpo-api-angular-sdk';
 import { EffectsModule } from '@ngrx/effects';
 import { AlertReducer, AlertsEffects } from './+state/alert';
 import { BundleReducer, BundlesEffects } from './+state/bundle';
 import { ContentStatusReducer } from './+state/content-status';
 import { ContentStatusesEffects } from './+state/content-status/content-status.effects';
-import { CurrentExerciseEffects, CurrentExerciseReducer } from './+state/current-exercise';
+import {
+  CurrentExerciseEffects,
+  CurrentExerciseReducer
+} from './+state/current-exercise';
 import { getStoreModuleForFeatures } from './+state/dal.state.feature.builder';
 import { EduContentReducer, EduContentsEffects } from './+state/edu-content';
-import { LearningAreaReducer, LearningAreasEffects } from './+state/learning-area';
-import { LinkedPersonEffects, LinkedPersonReducer } from './+state/linked-person';
+import {
+  LearningAreaReducer,
+  LearningAreasEffects
+} from './+state/learning-area';
+import {
+  LinkedPersonEffects,
+  LinkedPersonReducer
+} from './+state/linked-person';
 import { PersonEffects, PersonReducer } from './+state/person';
 import { ResultReducer } from './+state/result';
 import { ResultEffects } from './+state/result/result.effects';
-import { StudentContentStatusesEffects, StudentContentStatusReducer } from './+state/student-content-status';
+import {
+  StudentContentStatusesEffects,
+  StudentContentStatusReducer
+} from './+state/student-content-status';
 import { TaskEffects, TaskReducer } from './+state/task';
-import { TaskEduContentEffects, TaskEduContentReducer } from './+state/task-edu-content';
-import { TaskInstanceEffects, TaskInstanceReducer } from './+state/task-instance';
+import {
+  TaskEduContentEffects,
+  TaskEduContentReducer
+} from './+state/task-edu-content';
+import {
+  TaskInstanceEffects,
+  TaskInstanceReducer
+} from './+state/task-instance';
 import { UiEffects, UiReducer } from './+state/ui';
-import { UnlockedBoekeGroupReducer, UnlockedBoekeGroupsEffects } from './+state/unlocked-boeke-group';
-import { UnlockedBoekeStudentReducer, UnlockedBoekeStudentsEffects } from './+state/unlocked-boeke-student';
-import { UnlockedContentReducer, UnlockedContentsEffects } from './+state/unlocked-content';
+import {
+  UnlockedBoekeGroupReducer,
+  UnlockedBoekeGroupsEffects
+} from './+state/unlocked-boeke-group';
+import {
+  UnlockedBoekeStudentReducer,
+  UnlockedBoekeStudentsEffects
+} from './+state/unlocked-boeke-student';
+import {
+  UnlockedContentReducer,
+  UnlockedContentsEffects
+} from './+state/unlocked-content';
 import { UserEffects, UserReducer } from './+state/user';
 import { UserContentReducer, UserContentsEffects } from './+state/user-content';
 import { AlertService } from './alert/alert.service';
 import { ALERT_SERVICE_TOKEN } from './alert/alert.service.interface';
-import { UnlockedBoekeGroupService, UnlockedBoekeStudentService, UNLOCKED_BOEKE_GROUP_SERVICE_TOKEN, UNLOCKED_BOEKE_STUDENT_SERVICE_TOKEN } from './boeke';
-import { BundleService, BUNDLE_SERVICE_TOKEN, UnlockedContentService, UNLOCKED_CONTENT_SERVICE_TOKEN, UserContentService, USER_CONTENT_SERVICE_TOKEN } from './bundle';
+import {
+  UnlockedBoekeGroupService,
+  UnlockedBoekeStudentService,
+  UNLOCKED_BOEKE_GROUP_SERVICE_TOKEN,
+  UNLOCKED_BOEKE_STUDENT_SERVICE_TOKEN
+} from './boeke';
+import {
+  BundleService,
+  BUNDLE_SERVICE_TOKEN,
+  UnlockedContentService,
+  UNLOCKED_CONTENT_SERVICE_TOKEN,
+  UserContentService,
+  USER_CONTENT_SERVICE_TOKEN
+} from './bundle';
 import { ContentRequestService } from './content-request/content-request.service';
 import { CONTENT_REQUEST_SERVICE_TOKEN } from './content-request/content-request.service.interface';
 import { EduContentService } from './edu-content/edu-content.service';
@@ -41,7 +87,10 @@ import { LearningAreaService } from './learning-area/learning-area.service';
 import { LEARNINGAREA_SERVICE_TOKEN } from './learning-area/learning-area.service.interface';
 import { AuthService } from './persons/auth-service';
 import { AUTH_SERVICE_TOKEN } from './persons/auth-service.interface';
-import { LinkedPersonService, LINKED_PERSON_SERVICE_TOKEN } from './persons/linked-persons.service';
+import {
+  LinkedPersonService,
+  LINKED_PERSON_SERVICE_TOKEN
+} from './persons/linked-persons.service';
 import { PersonService, PERSON_SERVICE_TOKEN } from './persons/persons.service';
 import { ResultsService } from './results/results.service';
 import { RESULTS_SERVICE_TOKEN } from './results/results.service.interface';

@@ -1,11 +1,16 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatIconModule, MatIconRegistry } from '@angular/material';
+import {
+  MatBadgeModule,
+  MatIconModule,
+  MatIconRegistry
+} from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
-import { Subject } from 'rxjs';
+import { hot } from '@nrwl/nx/testing';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { HeaderComponent } from './header.component';
 import { HeaderViewModel } from './header.viewmodel';
 import { MockHeaderViewModel } from './header.viewmodel.mock';
@@ -18,7 +23,7 @@ describe('HeaderComponent', () => {
   let pageBarNavIcon: HTMLElement;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [UiModule, RouterTestingModule, MatIconModule],
+      imports: [UiModule, RouterTestingModule, MatIconModule, MatBadgeModule],
       declarations: [HeaderComponent],
       providers: [
         {
@@ -71,6 +76,35 @@ describe('HeaderComponent', () => {
     expect(
       fixture.debugElement.query(By.css('#page-bar-container'))
     ).toBeTruthy();
+  });
+
+  describe('unread badge counter', () => {
+    beforeEach(() => {
+      headerViewModel.isResolved$.next(true);
+      fixture.detectChanges();
+    });
+    it('should show the badge if the unreadAlertCount$ is bigger than 0', () => {
+      component.unreadAlertCount$ = new BehaviorSubject<number>(11);
+      fixture.detectChanges();
+      expect(component.unreadAlertCount$).toBeObservable(hot('a', { a: 11 }));
+      const badge = fixture.nativeElement.querySelector('.mat-badge-content');
+      expect(badge.textContent).toBe('11');
+      expect(badge.parentElement.className).not.toContain('mat-badge-hidden');
+    });
+    it('should show the badge if the unreadAlertCount$ is 0', () => {
+      component.unreadAlertCount$ = new BehaviorSubject<number>(0);
+      fixture.detectChanges();
+      expect(component.unreadAlertCount$).toBeObservable(hot('a', { a: 0 }));
+      const badge = fixture.nativeElement.querySelector('.mat-badge-content');
+      expect(badge.parentElement.className).toContain('mat-badge-hidden');
+    });
+    it('should show the badge if the unreadAlertCount$ is negative', () => {
+      component.unreadAlertCount$ = new BehaviorSubject<number>(-29);
+      fixture.detectChanges();
+      expect(component.unreadAlertCount$).toBeObservable(hot('a', { a: -29 }));
+      const badge = fixture.nativeElement.querySelector('.mat-badge-content');
+      expect(badge.parentElement.className).toContain('mat-badge-hidden');
+    });
   });
 
   describe('should be mobile friendly', () => {

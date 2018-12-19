@@ -69,7 +69,7 @@ describe('NavItemServiceService', () => {
         },
         {
           icon: 'increase',
-          link: '/results',
+          link: '/reports',
           title: 'Resultaten'
         }
       ];
@@ -103,7 +103,7 @@ describe('NavItemServiceService', () => {
         {
           title: 'Resultaten',
           icon: 'increase',
-          link: '/results'
+          link: '/reports'
         }
       ];
 
@@ -154,7 +154,7 @@ describe('NavItemServiceService', () => {
         {
           title: 'Resultaten',
           icon: 'increase',
-          link: '/results'
+          link: '/reports'
         }
       ];
 
