@@ -55,7 +55,8 @@ export class CoupledTeacherGuard implements CanActivate {
       skipWhile(arr => !arr.every(Boolean)),
       switchMapTo(combineLatest(this.isStudent$, this.hasTeachers$)),
       map(([isStudent, hasTeachers]) => {
-        if (isStudent && hasTeachers) return true;
+        if (!isStudent) return true;
+        if (hasTeachers) return true;
         this.router.navigate(['/settings']);
         return false;
       })
