@@ -76,6 +76,10 @@ export class MockReportsViewModel {
     }
   ]);
 
+  changeListFormat() {
+    return;
+  }
+
   getLearningAreaById(): Observable<LearningAreaInterface> {
     return;
   }
