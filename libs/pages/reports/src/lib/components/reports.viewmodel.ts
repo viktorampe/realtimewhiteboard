@@ -1,21 +1,12 @@
-import { Injectable } from '@angular/core';
-import {
-  DalState,
-  EduContentQueries,
-  LearningAreaInterface,
-  LearningAreaQueries,
-  ResultQueries,
-  UiQuery
-} from '@campus/dal';
+import { Inject, Injectable } from '@angular/core';
+import { AuthServiceInterface, AUTH_SERVICE_TOKEN, DalState, EduContentQueries, LearningAreaInterface, LearningAreaQueries, ResultInterface, ResultQueries, UiQuery } from '@campus/dal';
+import { ScormExerciseServiceInterface, SCORM_EXERCISE_SERVICE_TOKEN } from '@campus/shared';
 import { ListFormat } from '@campus/ui';
 import { MemoizedSelectorWithProps, select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ReportService } from '../services/report.service';
-import {
-  AssignmentResultInterface,
-  LearningAreasWithResultsInterface
-} from './reports.viewmodel.interfaces';
+import { AssignmentResultInterface, LearningAreasWithResultsInterface } from './reports.viewmodel.interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +22,11 @@ export class ReportsViewModel {
 
   constructor(
     private store: Store<DalState>,
-    private reportService: ReportService
+    private reportService: ReportService,
+    @Inject(SCORM_EXERCISE_SERVICE_TOKEN)
+    private scormExerciseService: ScormExerciseServiceInterface,
+    @Inject(AUTH_SERVICE_TOKEN)
+    private authService: AuthServiceInterface
   ) {
     this.setSourceStreams();
     this.setPresentationStreams();
@@ -92,24 +87,38 @@ export class ReportsViewModel {
       map(([areaEntities, resultsByArea]) => {
         const learningAreasWithResult = {
           learningAreas: Object.keys(resultsByArea).map(learningAreaId => {
-            const results = resultsByArea[learningAreaId];
+            const taskIds = new Set(),
+              bundleIds = new Set();
+            resultsByArea[learningAreaId].forEach(result => {
+              if (result.taskId) taskIds.add(result.taskId);
+              if (result.bundleId) bundleIds.add(result.bundleId);
+            });
             return {
               learningArea: areaEntities[learningAreaId],
-              tasksWithResultsCount: new Set(
-                results.filter(result => result.taskId).map(result => result.id)
-              ).size,
-              bundlesWithResultsCount: new Set(
-                results
-                  .filter(result => result.bundleId)
-                  .map(result => result.id)
-              ).size
+              tasksWithResultsCount: taskIds.size,
+              bundlesWithResultsCount: bundleIds.size
             };
           })
         };
-
         return learningAreasWithResult;
       })
     );
+  }
+
+  openContentForReview(result: ResultInterface): void {
+    if (result.taskId) {
+      this.scormExerciseService.reviewExerciseFromTask(
+        this.authService.userId,
+        result.eduContentId,
+        result.taskId
+      );
+    } else if (result.unlockedContentId) {
+      this.scormExerciseService.reviewExerciseFromUnlockedContent(
+        this.authService.userId,
+        result.eduContentId,
+        result.unlockedContentId
+      );
+    }
   }
 
   private select<T, Props>(

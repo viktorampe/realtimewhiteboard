@@ -1,6 +1,6 @@
-import { ResultInterface } from '@campus/dal';
 import { ResultQueries } from '.';
 import { ResultFixture } from '../../+fixtures';
+import { ResultInterface } from '../../+models';
 import { State } from './result.reducer';
 
 describe('Result Selectors', () => {
@@ -141,6 +141,39 @@ describe('Result Selectors', () => {
         expect(results).toEqual(expected);
       });
     });
+
+    describe('getResultsForLearningAreaIdGrouped()', () => {
+      it('should return the results grouped by learning area', () => {
+        const mockData: ResultInterface[] = [
+          ...getMockTaskResults(),
+          ...getMockBundleResults()
+        ];
+        resultState = createState(mockData, true, 'no error');
+        storeState = { results: resultState };
+
+        const results = ResultQueries.getResultsGroupedByArea(storeState);
+        const expected = {
+          1: [
+            ...getMockTaskResults().filter(
+              result => result.learningAreaId === 1
+            ),
+            ...getMockBundleResults().filter(
+              result => result.learningAreaId === 1
+            )
+          ],
+          2: [
+            ...getMockTaskResults().filter(
+              result => result.learningAreaId === 2
+            ),
+            ...getMockBundleResults().filter(
+              result => result.learningAreaId === 2
+            )
+          ]
+        };
+
+        expect(results).toEqual(expected);
+      });
+    });
   });
 });
 
@@ -193,7 +226,7 @@ function getMockTaskResults(): ResultInterface[] {
 function getMockBundleResults(): ResultInterface[] {
   return [
     new ResultFixture({
-      id: 1,
+      id: 6,
       learningAreaId: 1,
       bundleId: 1,
       score: 10,
@@ -201,7 +234,7 @@ function getMockBundleResults(): ResultInterface[] {
       assignment: 'foo'
     }),
     new ResultFixture({
-      id: 2,
+      id: 7,
       learningAreaId: 1,
       bundleId: 1,
       score: 50,
@@ -209,7 +242,7 @@ function getMockBundleResults(): ResultInterface[] {
       assignment: 'foo'
     }),
     new ResultFixture({
-      id: 3,
+      id: 8,
       learningAreaId: 1,
       bundleId: 2,
       score: 100,
@@ -217,7 +250,7 @@ function getMockBundleResults(): ResultInterface[] {
       assignment: 'bar'
     }),
     new ResultFixture({
-      id: 4,
+      id: 9,
       learningAreaId: 2,
       bundleId: 1,
       score: 75,
@@ -225,7 +258,7 @@ function getMockBundleResults(): ResultInterface[] {
       assignment: 'foo'
     }),
     new ResultFixture({
-      id: 5,
+      id: 10,
       learningAreaId: 1,
       unlockedContentId: 1,
       taskId: 1,
@@ -235,7 +268,7 @@ function getMockBundleResults(): ResultInterface[] {
       assignment: 'foo bar'
     }),
     new ResultFixture({
-      id: 6,
+      id: 11,
       learningAreaId: 1,
       bundleId: 1,
       score: 90,

@@ -1,3 +1,4 @@
+import { groupArrayByKey } from '@campus/utils';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { ResultInterface } from '../../+models';
 import {
@@ -68,7 +69,7 @@ export const getById = createSelector(
 );
 
 /**
- * returns dictionary of resuilts grouped by a property
+ * returns dictionary of results grouped by a property
  * @example
  * results$: ResultInterface[] = this.store.pipe(
     select(ResultQueries.getResultsForLearningAreaIdGrouped,
@@ -116,59 +117,12 @@ export const getLearningAreaIds = createSelector(
   }
 );
 
-export const getResultsForTasks = createSelector(
-  selectResultState,
-  (state: State) => {
-    const resultIds = Array.from(
-      new Set(
-        Object.values(state.entities)
-          .filter(result => result.taskId)
-          .map(result => result.id)
-      )
-    );
-    return resultIds.map(resultId => state.entities[resultId]);
-  }
-);
-
-export const getResultsForBundles = createSelector(
-  selectResultState,
-  (state: State) => {
-    const resultIds = Array.from(
-      new Set(
-        Object.values(state.entities)
-          .filter(result => !result.taskId)
-          .map(result => result.id)
-      )
-    );
-
-    return resultIds.map(resultId => state.entities[resultId]);
-  }
-);
-
 export const getResultsGroupedByArea = createSelector(
   selectResultState,
   (state: State) => {
     const ids: number[] = <number[]>state.ids;
-    const map: ResultsGroupedByArea = ids.reduce(
-      (acc, id) => {
-        const resultLearningAreaId = state.entities[id].learningAreaId;
-        const result = state.entities[id];
-        // group by learning area
-        if (!acc[resultLearningAreaId]) {
-          acc[resultLearningAreaId] = [];
-        }
-
-        acc[resultLearningAreaId].push(result);
-
-        return acc;
-      },
-      {} as ResultsGroupedByArea
-    );
-
-    return map;
+    return groupArrayByKey<ResultInterface>(Object.values(state.entities), {
+      learningAreaId: 0
+    });
   }
 );
-
-interface ResultsGroupedByArea {
-  [key: number]: ResultInterface[];
-}

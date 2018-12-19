@@ -1,5 +1,10 @@
 import { TestBed } from '@angular/core/testing';
-import { EduContentFixture, ResultFixture, ResultInterface } from '@campus/dal';
+import {
+  EduContent,
+  EduContentFixture,
+  ResultFixture,
+  ResultInterface
+} from '@campus/dal';
 import { Dictionary } from '@ngrx/entity';
 import { AssignmentResultInterface } from '../components/reports.viewmodel.interfaces';
 import { ReportService } from './report.service';
@@ -18,7 +23,7 @@ describe('ReportService', () => {
 
   describe('getAssignmentResultsByLearningArea', () => {
     let mockResults: ResultInterface[];
-    let mockEduContents;
+    let mockEduContents: Dictionary<EduContent>;
     beforeEach(() => {
       // moved to bottom of file for readability
       mockResults = getMockResults();
