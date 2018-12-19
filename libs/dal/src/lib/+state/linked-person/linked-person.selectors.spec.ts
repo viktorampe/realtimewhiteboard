@@ -1,14 +1,15 @@
 import { LinkedPersonQueries } from '.';
+import { LinkedPersonFixture } from '../../+fixtures';
 import { TeacherStudentInterface } from '../../+models';
 import { State } from './linked-person.reducer';
 
 describe('LinkedPerson Selectors', () => {
   function createLinkedPerson(id: number): TeacherStudentInterface | any {
-    return {
+    return new LinkedPersonFixture({
       id: id,
       teacherId: id + 1,
       studentId: id + 2
-    };
+    });
   }
 
   function createState(
