@@ -30,7 +30,6 @@ import {
 export class ReportsViewModel {
   // source streams
   listFormat$: Observable<ListFormat>;
-
   // presentation streams
   learningAreasWithResults$: Observable<LearningAreasWithResultsInterface>;
 
@@ -39,8 +38,7 @@ export class ReportsViewModel {
     private reportService: ReportService,
     @Inject(SCORM_EXERCISE_SERVICE_TOKEN)
     private scormExerciseService: ScormExerciseServiceInterface,
-    @Inject(AUTH_SERVICE_TOKEN)
-    private authService: AuthServiceInterface
+    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
   ) {
     this.setSourceStreams();
     this.setPresentationStreams();
