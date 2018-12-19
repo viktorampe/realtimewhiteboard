@@ -44,6 +44,7 @@ export class CurrentExerciseEffects {
     CurrentExerciseActionTypes.SaveCurrentExercise,
     {
       run: (action: SaveCurrentExercise, state: DalState) => {
+        console.log('inside saveExercise effect');
         const exercise = action.payload.exercise;
 
         if (!exercise.saveToApi) return;

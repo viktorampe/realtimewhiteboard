@@ -50,6 +50,7 @@ export function reducer(
     }
 
     case CurrentExerciseActionTypes.SaveCurrentExercise: {
+      console.log('in exercise reducer');
       const cmi = JSON.parse(action.payload.exercise.result.cmi);
       return {
         ...state,
