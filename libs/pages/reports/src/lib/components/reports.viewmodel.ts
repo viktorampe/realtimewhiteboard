@@ -1,12 +1,28 @@
 import { Inject, Injectable } from '@angular/core';
-import { AuthServiceInterface, AUTH_SERVICE_TOKEN, DalState, EduContentQueries, LearningAreaInterface, LearningAreaQueries, ResultInterface, ResultQueries, UiQuery } from '@campus/dal';
-import { ScormExerciseServiceInterface, SCORM_EXERCISE_SERVICE_TOKEN } from '@campus/shared';
+import {
+  AuthServiceInterface,
+  AUTH_SERVICE_TOKEN,
+  DalState,
+  EduContentQueries,
+  LearningAreaInterface,
+  LearningAreaQueries,
+  ResultInterface,
+  ResultQueries,
+  UiQuery
+} from '@campus/dal';
+import {
+  ScormExerciseServiceInterface,
+  SCORM_EXERCISE_SERVICE_TOKEN
+} from '@campus/shared';
 import { ListFormat } from '@campus/ui';
 import { MemoizedSelectorWithProps, select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ReportService } from '../services/report.service';
-import { AssignmentResultInterface, LearningAreasWithResultsInterface } from './reports.viewmodel.interfaces';
+import {
+  AssignmentResultInterface,
+  LearningAreasWithResultsInterface
+} from './reports.viewmodel.interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -14,9 +30,6 @@ import { AssignmentResultInterface, LearningAreasWithResultsInterface } from './
 export class ReportsViewModel {
   // source streams
   listFormat$: Observable<ListFormat>;
-
-  // intermediate streams
-
   // presentation streams
   learningAreasWithResults$: Observable<LearningAreasWithResultsInterface>;
 
@@ -25,8 +38,7 @@ export class ReportsViewModel {
     private reportService: ReportService,
     @Inject(SCORM_EXERCISE_SERVICE_TOKEN)
     private scormExerciseService: ScormExerciseServiceInterface,
-    @Inject(AUTH_SERVICE_TOKEN)
-    private authService: AuthServiceInterface
+    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
   ) {
     this.setSourceStreams();
     this.setPresentationStreams();
