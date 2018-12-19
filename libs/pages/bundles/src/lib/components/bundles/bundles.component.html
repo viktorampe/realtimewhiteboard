@@ -1,63 +1,42 @@
 <campus-page-bar>
-  <campus-filter-text-input
-    theme="dark"
-    [source]="sharedInfo$ | async"
-    class="pages__toolbar__filter"
-  ></campus-filter-text-input>
+  <campus-filter-text-input theme="dark"
+                            [source]="sharedInfo$ | async"
+                            class="pages__toolbar__filter"></campus-filter-text-input>
   <div class="divider"></div>
-  <campus-button
-    iconClass="list-view"
-    (click)="clickChangeListFormat(listFormat.LINE)"
-  ></campus-button>
-  <campus-button
-    iconClass="grid-view"
-    (click)="clickChangeListFormat(listFormat.GRID)"
-  ></campus-button>
+  <campus-button iconClass="list-view"
+                 (click)="clickChangeListFormat(listFormat.LINE)"></campus-button>
+  <campus-button iconClass="grid-view"
+                 (click)="clickChangeListFormat(listFormat.GRID)"></campus-button>
 </campus-page-bar>
 
 <ng-container *ngIf="(learningArea$ | async) as learningArea">
-  <div
-    class="pages-bundles__container"
-    *ngIf="(sharedInfo$ | async) as sharedInfo"
-  >
-    <campus-page-header
-      [title]="learningArea.name"
-      [subtitle]="'Bundels'"
-      [iconClass]="'learning-area:' + learningArea.icon"
-    >
+  <div class="campus-page pages-bundles__container"
+       *ngIf="(sharedInfo$ | async) as sharedInfo">
+    <campus-page-header [title]="learningArea.name"
+                        [subtitle]="'Bundels'"
+                        [iconClass]="'learning-area:' + learningArea.icon">
     </campus-page-header>
 
-    <ng-template #noSharedInfo
-      >Er zijn momenteel geen bundels voor jou klaargezet.</ng-template
-    >
+    <ng-template #noSharedInfo>Er zijn momenteel geen bundels voor jou klaargezet.</ng-template>
     <ng-container *ngIf="sharedInfo.bundles.length > 0; else: noSharedInfo">
-      <ng-container
-        *ngIf="(filterTextInput.result$ | async) as filteredBundlesInfo"
-      >
+      <ng-container *ngIf="(filterTextInput.result$ | async) as filteredBundlesInfo">
         <div class="pages-bundles__container__bundles-count">
           {{ filteredBundlesInfo.length }} van
-          <u
-            class="pages-bundles__container__bundles-count__total"
-            (click)="filterTextInput.clear()"
-            >{{ sharedInfo.bundles.length }}</u
-          >
+          <u class="pages-bundles__container__bundles-count__total"
+             (click)="filterTextInput.clear()">{{ sharedInfo.bundles.length }}</u>
           weergegeven
         </div>
 
         <div class="pages-bundles__container__bundles">
-          <campus-list-view
-            [listFormat]="listFormat$ | async"
-            [placeHolderText]="'De toegepaste filter bevat geen resultaten'"
-          >
-            <campus-folder
-              *ngFor="let bundleInfo of filteredBundlesInfo"
-              campusListItem
-              [routerLink]="[bundleInfo.bundle.id]"
-              [itemCount]="bundleInfo.contentsCount"
-              [title]="bundleInfo.bundle.name"
-              [backgroundColor]="learningArea.color"
-              [icon]="'learning-area:' + learningArea.icon"
-            >
+          <campus-list-view [listFormat]="listFormat$ | async"
+                            [placeHolderText]="'De toegepaste filter bevat geen resultaten'">
+            <campus-folder *ngFor="let bundleInfo of filteredBundlesInfo"
+                           campusListItem
+                           [routerLink]="[bundleInfo.bundle.id]"
+                           [itemCount]="bundleInfo.contentsCount"
+                           [title]="bundleInfo.bundle.name"
+                           [backgroundColor]="learningArea.color"
+                           [icon]="'learning-area:' + learningArea.icon">
               <campus-folder-details>
                 {{ bundleInfo.contentsCount }}
                 {{ bundleInfo.contentsCount === 1 ? 'item' : 'items' }}
@@ -70,25 +49,21 @@
 
     <div *ngIf="sharedInfo.books.length">
       <div>&nbsp;</div>
-      <campus-page-header
-        [title]="learningArea.name"
-        [subtitle]="'Boeken'"
-        [iconClass]="'learning-area:' + learningArea.icon"
-      ></campus-page-header>
+      <campus-page-header [title]="learningArea.name"
+                          [subtitle]="'Boeken'"
+                          [iconClass]="'learning-area:' + learningArea.icon"></campus-page-header>
       <div class="pages-bundles__container__books-count">
         Je hebt {{ sharedInfo.books.length }} boek(en) voor
         {{ learningArea.name }}
       </div>
       <div class="pages-bundles__container__books">
         <campus-list-view [listFormat]="listFormat$ | async">
-          <campus-content-thumbnail
-            *ngFor="let book of sharedInfo.books"
-            campusListItem
-            [title]="book.name"
-            [contentTypeClass]="'book'"
-            [imagePath]="book.previewImage"
-            [fileExtensionClass]="book.fileExtension"
-          >
+          <campus-content-thumbnail *ngFor="let book of sharedInfo.books"
+                                    campusListItem
+                                    [title]="book.name"
+                                    [contentTypeClass]="'book'"
+                                    [imagePath]="book.previewImage"
+                                    [fileExtensionClass]="book.fileExtension">
           </campus-content-thumbnail>
         </campus-list-view>
       </div>
