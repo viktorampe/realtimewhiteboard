@@ -18,7 +18,7 @@ export class NavItemService {
     resultaten: {
       title: 'Resultaten',
       icon: 'increase',
-      link: '/results'
+      link: '/reports'
     },
     dashboard: { title: 'Dashboard', icon: 'home', link: '/dashboard' },
     bordboeken: { title: 'Bordboeken', icon: 'book', link: '/books' },

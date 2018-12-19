@@ -1,30 +1,142 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
+import {
+  AuthServiceInterface,
+  AUTH_SERVICE_TOKEN,
+  DalState,
+  EduContentQueries,
+  LearningAreaInterface,
+  LearningAreaQueries,
+  ResultInterface,
+  ResultQueries,
+  UiQuery
+} from '@campus/dal';
+import {
+  ScormExerciseServiceInterface,
+  SCORM_EXERCISE_SERVICE_TOKEN
+} from '@campus/shared';
 import { ListFormat } from '@campus/ui';
-import { Observable } from 'rxjs';
-import { LearningAreasWithResultsInterface } from './reports.viewmodel.interfaces';
-import { MockReportsViewModel } from './reports.viewmodel.mock';
+import { MemoizedSelectorWithProps, select, Store } from '@ngrx/store';
+import { combineLatest, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { ReportService } from '../services/report.service';
+import {
+  AssignmentResultInterface,
+  LearningAreasWithResultsInterface
+} from './reports.viewmodel.interfaces';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReportsViewModel {
-  learningAreasWithResults$: Observable<LearningAreasWithResultsInterface>;
+  // source streams
   listFormat$: Observable<ListFormat>;
+  // presentation streams
+  learningAreasWithResults$: Observable<LearningAreasWithResultsInterface>;
 
-  constructor(private mockViewModel: MockReportsViewModel) {
-    this.learningAreasWithResults$ = this.mockViewModel.learningAreasWithResults$;
-    this.listFormat$ = this.mockViewModel.listFormat$;
+  constructor(
+    private store: Store<DalState>,
+    private reportService: ReportService,
+    @Inject(SCORM_EXERCISE_SERVICE_TOKEN)
+    private scormExerciseService: ScormExerciseServiceInterface,
+    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
+  ) {
+    this.setSourceStreams();
+    this.setPresentationStreams();
   }
 
-  getLearningAreaById(areaId: number) {
-    return this.mockViewModel.getLearningAreaById();
+  public getLearningAreaById(
+    areaId: number
+  ): Observable<LearningAreaInterface> {
+    return this.select(LearningAreaQueries.getById, { id: areaId });
   }
 
-  getAssignmentResultsByLearningArea(areaId: number) {
-    return this.mockViewModel.getAssignmentResultsByLearningArea();
+  public getAssignmentResultsByLearningArea(
+    learningAreaId: number
+  ): Observable<AssignmentResultInterface[]> {
+    return combineLatest(
+      this.select(EduContentQueries.getAllEntities),
+      this.select(ResultQueries.getResultsForLearningAreaIdGrouped, {
+        learningAreaId,
+        groupProp: { taskId: 0 }
+      }),
+      this.select(ResultQueries.getResultsForLearningAreaIdGrouped, {
+        learningAreaId,
+        groupProp: { bundleId: 0 }
+      })
+    ).pipe(
+      map(([eduContents, resultsByTaskId, resultsByBundleId]) => {
+        return [
+          ...this.reportService.getAssignmentResults(
+            resultsByTaskId,
+            'task',
+            eduContents
+          ),
+          ...this.reportService.getAssignmentResults(
+            resultsByBundleId,
+            'bundle',
+            eduContents
+          )
+        ];
+      })
+    );
   }
 
-  changeListFormat(listFormat: ListFormat): void {
-    this.mockViewModel.changeListFormat(listFormat);
+  private setSourceStreams() {
+    this.listFormat$ = this.select(UiQuery.getListFormat);
+  }
+
+  private setPresentationStreams() {
+    this.learningAreasWithResults$ = this.getLearningAreasWithResult();
+  }
+
+  private getLearningAreasWithResult(): Observable<
+    LearningAreasWithResultsInterface
+  > {
+    return combineLatest(
+      this.select(LearningAreaQueries.getAllEntities),
+      this.select(ResultQueries.getResultsGroupedByArea)
+    ).pipe(
+      map(([areaEntities, resultsByArea]) => {
+        const learningAreasWithResult = {
+          learningAreas: Object.keys(resultsByArea).map(learningAreaId => {
+            const taskIds = new Set(),
+              bundleIds = new Set();
+            resultsByArea[learningAreaId].forEach(result => {
+              if (result.taskId) taskIds.add(result.taskId);
+              if (result.bundleId) bundleIds.add(result.bundleId);
+            });
+            return {
+              learningArea: areaEntities[learningAreaId],
+              tasksWithResultsCount: taskIds.size,
+              bundlesWithResultsCount: bundleIds.size
+            };
+          })
+        };
+        return learningAreasWithResult;
+      })
+    );
+  }
+
+  openContentForReview(result: ResultInterface): void {
+    if (result.taskId) {
+      this.scormExerciseService.reviewExerciseFromTask(
+        this.authService.userId,
+        result.eduContentId,
+        result.taskId
+      );
+    } else if (result.unlockedContentId) {
+      this.scormExerciseService.reviewExerciseFromUnlockedContent(
+        this.authService.userId,
+        result.eduContentId,
+        result.unlockedContentId
+      );
+    }
+  }
+
+  private select<T, Props>(
+    selector: MemoizedSelectorWithProps<DalState, Props, T>,
+    payload?: Props
+  ): Observable<T> {
+    return this.store.pipe(select(selector, payload));
   }
 }

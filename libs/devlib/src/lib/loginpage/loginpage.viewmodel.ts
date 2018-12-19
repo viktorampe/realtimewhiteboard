@@ -27,11 +27,7 @@ export class LoginPageViewModel {
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     @Inject(SCORM_API_SERVICE_TOKEN)
     private scormApiService: ScormApiServiceInterface
-  ) {
-    if (this.isLoggedIn()) {
-      store.dispatch(new UserActions.LoadUser({ force: false }));
-    }
-  }
+  ) {}
 
   /**
    * checks whether the user is logged in, returns a boolean
@@ -51,10 +47,7 @@ export class LoginPageViewModel {
    * @memberof LoginPageViewModel
    */
   login(name: string, password: string) {
-    if (this.isLoggedIn()) {
-      console.error('login failed since we are already logged in');
-      this.store.dispatch(new UserActions.LoadUser({ force: false }));
-    } else {
+    if (!this.isLoggedIn()) {
       this.store.dispatch(
         new UserActions.LogInUser({
           username: name,
