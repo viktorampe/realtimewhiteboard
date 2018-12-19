@@ -26,8 +26,8 @@ export class OverviewAreaWithResultsComponent
     > {
   learningAreasWithResults$: Observable<
     LearningAreasWithResultsInterface
-  > = this.viewModel.learningAreasWithResults$;
-  listFormat$ = this.viewModel.listFormat$;
+  > = this.reportsViewmodel.learningAreasWithResults$;
+  listFormat$ = this.reportsViewmodel.listFormat$;
   protected listFormat = ListFormat;
 
   @ViewChild(FilterTextInputComponent)
@@ -38,7 +38,7 @@ export class OverviewAreaWithResultsComponent
 
   constructor(
     @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface,
-    private viewModel: ReportsViewModel
+    private reportsViewmodel: ReportsViewModel
   ) {}
 
   ngOnInit() {
@@ -46,7 +46,7 @@ export class OverviewAreaWithResultsComponent
   }
 
   clickChangeListFormat(format: ListFormat) {
-    this.viewModel.changeListFormat(format);
+    this.reportsViewmodel.changeListFormat(format);
   }
 
   filterFn(
