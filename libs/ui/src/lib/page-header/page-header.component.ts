@@ -23,5 +23,5 @@ export class PageHeaderComponent {
   @Input() iconClass: string;
   @Input() title: string;
   @Input() subtitle: string;
-  @Input() layout: 'default' | 'section' = 'default';
+  @Input() layout: 'default' | 'centered' = 'default';
 }
