@@ -10,7 +10,7 @@
   &--default {
     justify-content: left;
   }
-  &--section {
+  &--centered {
     font-size: 32px;
     justify-content: center;
     align-items: center;
@@ -34,7 +34,7 @@
     margin-right: 5px;
   }
 }
-.ui-page-header-section-subtitle {
+.ui-page-header-centered-subtitle {
   display: flex;
   align-items: center;
   justify-content: center;
