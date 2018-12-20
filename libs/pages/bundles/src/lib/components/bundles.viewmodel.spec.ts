@@ -42,6 +42,7 @@ import {
 import {
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN,
+  ScormExerciseServiceInterface,
   SCORM_EXERCISE_SERVICE_TOKEN
 } from '@campus/shared';
 import { MockWindow } from '@campus/testing';
@@ -56,6 +57,7 @@ import { LearningAreasWithBundlesInfoInterface } from './bundles.viewmodel.inter
 describe('BundlesViewModel', () => {
   let bundlesViewModel: BundlesViewModel;
   let openStaticContentService: OpenStaticContentServiceInterface;
+  let scormExerciseService: ScormExerciseServiceInterface;
   let mockWindow: MockWindow;
   let uiState: UiReducer.UiState;
   let learningAreaState: LearningAreaReducer.State;
@@ -94,7 +96,7 @@ describe('BundlesViewModel', () => {
         },
         {
           provide: SCORM_EXERCISE_SERVICE_TOKEN,
-          useValue: {}
+          useValue: { startExerciseFromUnlockedContent: jest.fn() }
         },
         {
           provide: WINDOW,
@@ -106,6 +108,7 @@ describe('BundlesViewModel', () => {
     bundlesViewModel = TestBed.get(BundlesViewModel);
     store = TestBed.get(Store);
     openStaticContentService = TestBed.get(OPEN_STATIC_CONTENT_SERVICE_TOKEN);
+    scormExerciseService = TestBed.get(SCORM_EXERCISE_SERVICE_TOKEN);
     mockWindow = TestBed.get(WINDOW);
   });
 
@@ -130,6 +133,25 @@ describe('BundlesViewModel', () => {
       expect(openStaticContentService.open).toHaveBeenCalledTimes(1);
       expect(openStaticContentService.open).toHaveBeenCalledWith(
         unlockedContent.content
+      );
+    });
+
+    it('should call the scormExerciseService for eduContent', () => {
+      const mockUnlockedContent = new UnlockedContentFixture({
+        id: 5,
+        eduContent: new EduContentFixture({ type: 'exercise' }),
+        teacherId: 123 //can't be 1, since that is the userId
+      });
+      bundlesViewModel.openContent(mockUnlockedContent);
+      expect(
+        scormExerciseService.startExerciseFromUnlockedContent
+      ).toHaveBeenCalledTimes(1);
+      expect(
+        scormExerciseService.startExerciseFromUnlockedContent
+      ).toHaveBeenCalledWith(
+        1,
+        mockUnlockedContent.eduContentId,
+        mockUnlockedContent.id
       );
     });
   });
