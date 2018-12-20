@@ -105,39 +105,38 @@ describe('BreadcrumbComponent', () => {
     ).toBe(mockData.homeIcon);
   });
 
-  it('should have 4 children breadcrumbs (overflow button and 3 children links', () => {
+  it('should have 5 children breadcrumbs (home, overflow button and 3 children links', () => {
     expect(
-      breadcrumbs.query(By.css('.ui-breadcrumbs__holder__breadcrumbs')).children
+      breadcrumbs.queryAll(By.css('.ui-breadcrumbs__holder__breadcrumbs'))
         .length
-    ).toBe(4);
+    ).toBe(5);
   });
 
-  it('should have 3 children breadcrumbs (overflow button, and 2 children links', () => {
+  it('should have 4 children breadcrumbs (home, overflow button, and 2 children links', () => {
     component.maxLength = 2;
     fixture.detectChanges();
     expect(
-      breadcrumbs.query(By.css('.ui-breadcrumbs__holder__breadcrumbs')).children
+      breadcrumbs.queryAll(By.css('.ui-breadcrumbs__holder__breadcrumbs'))
         .length
-    ).toBe(3);
+    ).toBe(4);
   });
 
   it('should display the last item from the array', () => {
     component.maxLength = 1;
     fixture.detectChanges();
-    const childBreadcrumbs = breadcrumbs.query(
+    const breadcrumbsArray = breadcrumbs.queryAll(
       By.css('.ui-breadcrumbs__holder__breadcrumbs')
-    ).children;
+    );
+    const lastBreadCrumb = breadcrumbsArray[breadcrumbsArray.length - 1];
 
     const concatLink = mockData.breadCrumbs[11].link.reduce(
       (acc, url) => (acc += '/' + url),
       ''
     );
 
-    // seperator and link
-    expect(childBreadcrumbs.length).toBe(2);
+    expect(lastBreadCrumb.children.length).toBe(2); // seperator and link
 
-    // <a> is second child of element
-    expect(childBreadcrumbs[1].query(By.css('a')).nativeElement.href).toContain(
+    expect(lastBreadCrumb.query(By.css('a')).nativeElement.href).toContain(
       concatLink
     );
   });
