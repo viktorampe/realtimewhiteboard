@@ -14,5 +14,7 @@ export const getError = createSelector(
 
 export const getCurrentExercise = createSelector(
   selectExerciseState,
-  (state: State) => state as CurrentExerciseInterface
+  (state: State) => {
+    return { ...state } as CurrentExerciseInterface;
+  }
 );
