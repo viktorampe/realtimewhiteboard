@@ -42,7 +42,8 @@ const routes: Routes = [
       },
       {
         path: 'alerts',
-        loadChildren: '@campus/pages/alerts#PagesAlertsModule'
+        loadChildren: '@campus/pages/alerts#PagesAlertsModule',
+        data: { breadcrumbText: 'Meldingen' }
       },
       {
         path: '',

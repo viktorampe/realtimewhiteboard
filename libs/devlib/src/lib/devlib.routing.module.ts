@@ -10,7 +10,8 @@ const routes: Routes = [
     children: [
       {
         path: ':errorCode',
-        component: LoginpageComponent
+        component: LoginpageComponent,
+        data: { breadcrumbText: 'Error' }
       }
     ]
   },
