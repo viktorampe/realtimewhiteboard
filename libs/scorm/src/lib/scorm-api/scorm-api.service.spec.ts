@@ -1,8 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { WINDOW } from '@campus/browser';
+import { hot } from '@nrwl/nx/testing';
 import { ScormCmiFixture } from './+fixtures/ScormCmi.fixture';
 import { ScormApi } from './scorm-api';
-import { ScormCmiInterface, ScormCmiMode } from './scorm-api.interface';
+import { ScormCmiMode } from './scorm-api.interface';
 import { ScormApiService } from './scorm-api.service';
 
 describe('ScormApiService', () => {
@@ -24,31 +25,34 @@ describe('ScormApiService', () => {
   describe('when the scorm API is present on the window', () => {
     beforeEach(() => {
       // initialize the first result
-      scormApiService.init(new ScormCmiFixture(), ScormCmiMode.CMI_MODE_NORMAL);
+      scormApiService.init(
+        JSON.stringify(new ScormCmiFixture()),
+        ScormCmiMode.CMI_MODE_NORMAL
+      );
     });
     it('should update the current result and mode', () => {
-      const expectedResult = new ScormCmiFixture({ objectives: 'foo' });
+      const expectedResult = JSON.stringify(
+        new ScormCmiFixture({
+          objectives: 'foo',
+          mode: ScormCmiMode.CMI_MODE_PREVIEW
+        })
+      );
       const expectedMode = ScormCmiMode.CMI_MODE_PREVIEW;
 
       // initialize a new result
       scormApiService.init(expectedResult, expectedMode);
-
-      expect(window.API.currentResult).toEqual(
-        new ScormCmiFixture(expectedResult)
-      );
+      window.API.LMSInitialize(); // in real life done by ludo
+      expect(window.API.cmi$).toBeObservable(hot('a', { a: expectedResult }));
       expect(window.API.mode).toEqual(expectedMode);
     });
   });
 
   describe('when the API is not present on the window', () => {
-    beforeEach(() => {
+    beforeAll(() => {
       window.API = undefined;
     });
     it('should be added to the window', () => {
-      scormApiService.init(
-        {} as ScormCmiInterface,
-        ScormCmiMode.CMI_MODE_NORMAL
-      );
+      scormApiService.init('', ScormCmiMode.CMI_MODE_NORMAL);
       expect(window.API).toBeDefined();
       expect(window.API.constructor.name).toBe(ScormApi.name);
     });
@@ -58,12 +62,7 @@ describe('ScormApiService', () => {
     let cmiSpy: jest.SpyInstance;
     beforeEach(() => {
       jest.clearAllMocks();
-      window.API = undefined;
-      // initialize the API  (it wil be placed on the window.API)
-      scormApiService.init(
-        {} as ScormCmiInterface,
-        ScormCmiMode.CMI_MODE_NORMAL
-      );
+      scormApiService.init('', ScormCmiMode.CMI_MODE_NORMAL);
 
       commitSpy = jest.spyOn(scormApiService.commit$, 'next');
       cmiSpy = jest.spyOn(scormApiService.cmi$, 'next');

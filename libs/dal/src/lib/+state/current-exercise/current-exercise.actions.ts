@@ -1,3 +1,4 @@
+import { ScormCmiMode } from '@campus/scorm';
 import { Action } from '@ngrx/store';
 import { CurrentExerciseInterface } from './current-exercise.reducer';
 
@@ -16,6 +17,7 @@ export class StartExercise implements Action {
       userId: number;
       educontentId: number;
       saveToApi: boolean;
+      cmiMode: ScormCmiMode;
       taskId?: number;
       unlockedContentId?: number;
     }

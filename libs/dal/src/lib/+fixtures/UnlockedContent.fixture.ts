@@ -1,6 +1,6 @@
-import { UnlockedContentInterface } from '../+models';
+import { UnlockedContent } from '../+models';
 
-export class UnlockedContentFixture implements UnlockedContentInterface {
+export class UnlockedContentFixture extends UnlockedContent {
   // defaults
   index = 1;
   exception = false;
@@ -10,7 +10,8 @@ export class UnlockedContentFixture implements UnlockedContentInterface {
   bundleId = 1;
   userContentId = 1;
 
-  constructor(props: Partial<UnlockedContentInterface> = {}) {
+  constructor(props: Partial<UnlockedContent> = {}) {
+    super();
     // overwrite defaults
     Object.assign(this, props);
   }

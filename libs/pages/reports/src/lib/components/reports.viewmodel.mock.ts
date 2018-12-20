@@ -5,6 +5,7 @@ import {
   LearningAreaInterface,
   ResultFixture
 } from '@campus/dal';
+import { ListFormat } from '@campus/ui';
 import { BehaviorSubject, Observable } from 'rxjs';
 import {
   AssignmentResultInterface,
@@ -17,6 +18,10 @@ import {
 // TODO when viewmodel is done: implements ViewModelInterface<ReportsViewModel>
 export class MockReportsViewModel {
   // presentation streams
+  listFormat$: Observable<ListFormat> = new BehaviorSubject<ListFormat>(
+    ListFormat.GRID
+  );
+
   learningAreasWithResults$: Observable<
     LearningAreasWithResultsInterface
   > = new BehaviorSubject<LearningAreasWithResultsInterface>({

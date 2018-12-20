@@ -12,7 +12,7 @@ import {
 } from '@campus/dal';
 import { DropdownMenuItemInterface, NavItem } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
-import { hot } from 'jasmine-marbles';
+import { hot } from '@nrwl/nx/testing';
 import { AppResolver } from './app.resolver';
 import { AppViewModel } from './app.viewmodel';
 import { NavItemService } from './services/nav-item-service';

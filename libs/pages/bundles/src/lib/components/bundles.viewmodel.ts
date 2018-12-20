@@ -5,7 +5,6 @@ import {
   AUTH_SERVICE_TOKEN,
   BundleInterface,
   BundleQueries,
-  ContentInterface,
   DalState,
   EduContent,
   EduContentQueries,
@@ -17,24 +16,26 @@ import {
   UiQuery,
   UnlockedBoekeGroupQueries,
   UnlockedBoekeStudentQueries,
+  UnlockedContent,
   UnlockedContentInterface,
   UnlockedContentQueries,
   UserContentQueries
 } from '@campus/dal';
 import {
   OpenStaticContentServiceInterface,
-  OPEN_STATIC_CONTENT_SERVICE_TOKEN
+  OPEN_STATIC_CONTENT_SERVICE_TOKEN,
+  ScormExerciseServiceInterface,
+  SCORM_EXERCISE_SERVICE_TOKEN
 } from '@campus/shared';
 import { ListFormat } from '@campus/ui';
 import { Dictionary } from '@ngrx/entity';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
-import { filter, map, shareReplay, switchMap } from 'rxjs/operators';
+import { map, shareReplay, switchMap } from 'rxjs/operators';
 import {
   BundlesWithContentInfoInterface,
   LearningAreasWithBundlesInfoInterface
 } from './bundles.viewmodel.interfaces';
-
 export type NestedPartial<T> = { [P in keyof T]?: NestedPartial<T[P]> };
 
 @Injectable({
@@ -68,7 +69,9 @@ export class BundlesViewModel {
     private store: Store<DalState>,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
-    private openStaticContentService: OpenStaticContentServiceInterface
+    private openStaticContentService: OpenStaticContentServiceInterface,
+    @Inject(SCORM_EXERCISE_SERVICE_TOKEN)
+    private scormExerciseService: ScormExerciseServiceInterface
   ) {
     this.initialize();
   }
@@ -119,8 +122,23 @@ export class BundlesViewModel {
     this.store.dispatch(new UiActions.SetListFormat({ listFormat }));
   }
 
-  openContent(content: ContentInterface): void {
-    this.openStaticContentService.open(content);
+  openContent(unlockedContent: UnlockedContent): void {
+    if (unlockedContent.eduContentId) {
+      if (unlockedContent.eduContent.type === 'exercise') {
+        if (this.authService.userId === unlockedContent.teacherId) {
+          //own bundle -> teacher -> dialog with or without answers
+          return;
+        } else {
+          this.scormExerciseService.startExerciseFromUnlockedContent(
+            this.authService.userId,
+            unlockedContent.eduContentId,
+            unlockedContent.id
+          );
+          return;
+        }
+      }
+    }
+    this.openStaticContentService.open(unlockedContent.content);
   }
 
   getLearningAreaById(areaId: number): Observable<LearningAreaInterface> {
@@ -144,34 +162,29 @@ export class BundlesViewModel {
     );
   }
 
-  getBundleContents(bundleId: number): Observable<ContentInterface[]> {
-    return this.unlockedContentsByBundle$.pipe(
-      map(unlockedContentsMap => unlockedContentsMap[bundleId]),
-      filter(unlockedContents => !!unlockedContents), // check if bundle exists
-      switchMap(
-        (unlockedContents): Observable<ContentInterface[]> =>
-          combineLatest(
-            ...unlockedContents.map(
-              (unlockedContent): Observable<ContentInterface> => {
-                if (unlockedContent.eduContentId) {
-                  return this.store.pipe(
-                    select(EduContentQueries.getById, {
-                      id: unlockedContent.eduContentId
-                    })
-                  );
-                }
-                if (unlockedContent.userContentId) {
-                  return this.store.pipe(
-                    select(UserContentQueries.getById, {
-                      id: unlockedContent.userContentId
-                    })
-                  );
-                }
-              }
-            )
-          )
+  getBundleContents(bundleId: number): Observable<UnlockedContent[]> {
+    return combineLatest(
+      this.store.pipe(
+        select(UnlockedContentQueries.getByBundleId, { bundleId })
       ),
-      shareReplay(1)
+      this.store.pipe(select(EduContentQueries.getAllEntities)),
+      this.store.pipe(select(UserContentQueries.getAllEntities))
+    ).pipe(
+      map(([unlockedContents, eduContentEnts, userContentEnts]) => {
+        return unlockedContents.map(
+          (unlockedContent): UnlockedContent => {
+            return Object.assign(new UnlockedContent(), {
+              ...unlockedContent,
+              eduContent: unlockedContent.eduContentId
+                ? eduContentEnts[unlockedContent.eduContentId]
+                : undefined,
+              userContent: unlockedContent.userContentId
+                ? userContentEnts[unlockedContent.userContentId]
+                : undefined
+            });
+          }
+        );
+      })
     );
   }
 

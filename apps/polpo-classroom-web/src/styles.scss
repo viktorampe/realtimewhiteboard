@@ -102,6 +102,11 @@ body {
 /*
  * App styles
  */
+.ui-shell__logo {
+  text-align: center;
+  padding-top: 25px;
+}
+
 .ui-tree-nav__node--active {
   position: relative;
 
