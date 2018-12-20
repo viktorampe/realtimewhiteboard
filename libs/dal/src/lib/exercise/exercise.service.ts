@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { ResultInterface } from '@campus/dal';
 import { ScormCmiMode } from '@campus/scorm';
 import { combineLatest, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
+import { ResultInterface } from '../+models';
 import { ResultsService } from '../results/results.service';
 import { CurrentExerciseInterface } from './../+state/current-exercise/current-exercise.reducer';
 import { ContentRequestService } from './../content-request/content-request.service';
@@ -16,6 +16,7 @@ export class ExerciseService implements ExerciseServiceInterface {
     userId: number,
     educontentId: number,
     saveToApi: boolean,
+    mode: ScormCmiMode,
     taskId?: number,
     unlockedContentId?: number
   ): Observable<CurrentExerciseInterface> {
@@ -43,16 +44,11 @@ export class ExerciseService implements ExerciseServiceInterface {
     tempUrl$ = this.contentRequestService.requestUrl(educontentId);
 
     const exercise$ = combineLatest(result$, tempUrl$).pipe(
+      take(1),
       map(([result, url]) => {
-        if (result.cmi === null) {
-          result.cmi = {
-            mode: ScormCmiMode.CMI_MODE_NORMAL
-          };
-        }
-
         return {
-          eduContent: result.eduContent,
-          cmiMode: result.cmi.mode,
+          eduContentId: result.eduContentId,
+          cmiMode: mode,
           result: result,
           saveToApi: saveToApi,
           url: url
@@ -67,19 +63,16 @@ export class ExerciseService implements ExerciseServiceInterface {
     exercise: CurrentExerciseInterface
   ): Observable<CurrentExerciseInterface> {
     const userId = exercise.result.personId;
-    const resultId = exercise.result.id;
-    const cmi = exercise.result.cmi;
-
-    const result$ = this.resultsService.saveResult(userId, resultId, cmi).pipe(
-      map(result => {
-        return {
-          ...exercise,
-          eduContent: result.eduContent,
-          cmiMode: result.cmi.mode,
-          result: result
-        } as CurrentExerciseInterface;
-      })
-    );
+    const result$ = this.resultsService
+      .saveResult(userId, exercise.result)
+      .pipe(
+        map(result => {
+          return {
+            ...exercise,
+            result: result
+          } as CurrentExerciseInterface;
+        })
+      );
 
     return result$;
   }

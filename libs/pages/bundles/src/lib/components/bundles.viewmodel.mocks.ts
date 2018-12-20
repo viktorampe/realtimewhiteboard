@@ -2,11 +2,13 @@ import {
   BundleFixture,
   BundleInterface,
   ContentFixture,
-  ContentInterface,
+  EduContentFixture,
   LearningAreaFixture,
   LearningAreaInterface,
   PersonFixture,
-  PersonInterface
+  PersonInterface,
+  UnlockedContent,
+  UnlockedContentFixture
 } from '@campus/dal';
 import { ViewModelInterface } from '@campus/testing';
 import { ListFormat } from '@campus/ui';
@@ -59,7 +61,7 @@ export class MockViewModel implements ViewModelInterface<BundlesViewModel> {
 
   setBundleAlertRead() {}
 
-  openContent(o: ContentInterface) {}
+  openContent(o: UnlockedContent) {}
 
   getLearningAreaById(areaId: number): Observable<LearningAreaInterface> {
     return of(new LearningAreaFixture());
@@ -101,12 +103,24 @@ export class MockViewModel implements ViewModelInterface<BundlesViewModel> {
     return of(new PersonFixture());
   }
 
-  getBundleContents(bundleId: number): Observable<ContentInterface[]> {
+  getBundleContents(bundleId: number): Observable<UnlockedContent[]> {
     return of([
-      new ContentFixture({ name: 'Foo' }),
-      new ContentFixture({ name: 'Foo bar' }),
-      new ContentFixture({ name: 'Bar' }),
-      new ContentFixture({ name: 'Bar foo' })
+      new UnlockedContentFixture({
+        eduContent: new EduContentFixture({ id: 1 }, { title: 'Foo' }),
+        eduContentId: 1
+      }),
+      new UnlockedContentFixture({
+        eduContent: new EduContentFixture({ id: 1 }, { title: 'Foo bar' }),
+        eduContentId: 1
+      }),
+      new UnlockedContentFixture({
+        eduContent: new EduContentFixture({ id: 1 }, { title: 'Bar' }),
+        eduContentId: 1
+      }),
+      new UnlockedContentFixture({
+        eduContent: new EduContentFixture({ id: 1 }, { title: 'Bar foo' }),
+        eduContentId: 1
+      })
     ]);
   }
 }

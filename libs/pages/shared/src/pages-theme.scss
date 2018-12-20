@@ -1,8 +1,10 @@
 // thematic variables
 @mixin pages-shared() {
-  $pages-padding: 10px !default;
+  $pages-padding: 20px !default;
 
+  campus-side-sheet-page,
   .campus-page {
+    display: block;
     padding: $pages-padding;
   }
 }

@@ -3,7 +3,6 @@ import { UserContent, UserContentInterface } from '../../+models';
 import {
   NAME,
   selectAll,
-  selectEntities,
   selectIds,
   selectTotal,
   State
@@ -38,7 +37,12 @@ export const getIds = createSelector(
 
 export const getAllEntities = createSelector(
   selectUserContentState,
-  selectEntities
+  (state: State) => {
+    return (<number[]>state.ids).reduce((acc, id) => {
+      acc[id] = asUserContent(state.entities[id]);
+      return acc;
+    }, {});
+  }
 );
 
 /**

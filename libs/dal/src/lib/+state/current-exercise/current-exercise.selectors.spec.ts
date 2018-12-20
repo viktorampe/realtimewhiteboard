@@ -34,7 +34,7 @@ describe('Exercise Selectors', () => {
     });
     it('getCurrentExercise() should return the current exercise', () => {
       const results = CurrentExerciseQueries.getCurrentExercise(storeState);
-      expect(results).toBe(exerciseState as CurrentExerciseInterface);
+      expect(results).toEqual(exerciseState as CurrentExerciseInterface);
     });
   });
 });
