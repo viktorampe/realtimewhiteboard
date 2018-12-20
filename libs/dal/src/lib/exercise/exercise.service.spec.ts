@@ -1,9 +1,15 @@
 import { inject, TestBed } from '@angular/core/testing';
+import { ScormCmiMode } from '@campus/scorm';
 import { EduContentApi, PersonApi } from '@diekeure/polpo-api-angular-sdk';
+import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { Observable } from 'rxjs';
-import { CurrentExerciseFixture } from '../+fixtures';
+import { CurrentExerciseFixture, EduContentFixture } from '../+fixtures';
+import { EduContent } from '../+models';
+import { DalState } from '../+state';
 import { CurrentExerciseInterface } from '../+state/current-exercise/current-exercise.reducer';
+import { getStoreModuleForFeatures } from '../+state/dal.state.feature.builder';
+import { EduContentActions, EduContentReducer } from '../+state/edu-content';
 import { ContentRequestService } from '../content-request/content-request.service';
 import { ResultsService } from '../results/results.service';
 import { ResultsServiceInterface } from '../results/results.service.interface';
@@ -24,14 +30,22 @@ describe('ExerciseService', () => {
     taskId?: number;
     unlockedContentId?: number;
     url?: string;
+    cmiMode: ScormCmiMode.CMI_MODE_NORMAL;
   };
 
   let mockExercise: CurrentExerciseInterface;
+  let eduContents: EduContent[];
+  let store: Store<DalState>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [
+        StoreModule.forRoot({}),
+        ...getStoreModuleForFeatures([EduContentReducer])
+      ],
       providers: [
         ExerciseService,
+        Store,
         {
           provide: ResultsService,
           useValue: {
@@ -59,16 +73,20 @@ describe('ExerciseService', () => {
 
     exerciseService = TestBed.get(ExerciseService);
     resultsService = TestBed.get(ResultsService);
+    store = TestBed.get(Store);
+    setEduContentsState();
 
     mockData = {
       eduContentId: 1,
       taskId: 1,
       saveToApi: true,
-      url: 'tempurl'
+      url: 'tempurl',
+      cmiMode: ScormCmiMode.CMI_MODE_NORMAL
     };
 
     mockExercise = new CurrentExerciseFixture({
-      result: new ResultFixture({ cmi: { mode: 'normal' } })
+      eduContentId: 1,
+      result: new ResultFixture({ cmi: "{ mode: 'normal' }" })
     });
   }),
     it('should be created and available via DI', inject(
@@ -81,7 +99,7 @@ describe('ExerciseService', () => {
   describe('startExercise', () => {
     it('should return an exercise for a task', () => {
       mockResult$ = hot('-a-|', {
-        a: new ResultFixture({ cmi: { mode: 'normal' } })
+        a: new ResultFixture({ cmi: "{ mode: 'normal' }" })
       });
 
       mockUrl$ = hot('-a-|', {
@@ -93,11 +111,12 @@ describe('ExerciseService', () => {
           mockData.userId,
           mockData.eduContentId,
           mockData.saveToApi,
+          mockData.cmiMode,
           mockData.taskId,
           null
         )
       ).toBeObservable(
-        hot('-a-|', {
+        hot('-(a|)', {
           a: mockExercise
         })
       );
@@ -108,12 +127,13 @@ describe('ExerciseService', () => {
         userId: 6,
         eduContentId: 1,
         saveToApi: true,
+        cmiMode: ScormCmiMode.CMI_MODE_NORMAL,
         unlockedContentId: 1,
         url: 'tempurl'
       };
 
       mockResult$ = hot('-a-|', {
-        a: new ResultFixture({ cmi: { mode: 'normal' } })
+        a: new ResultFixture({ cmi: "{ mode: 'normal' }" })
       });
 
       mockUrl$ = hot('-a-|', {
@@ -125,11 +145,12 @@ describe('ExerciseService', () => {
           mockData.userId,
           mockData.eduContentId,
           mockData.saveToApi,
+          mockData.cmiMode,
           null,
           mockData.unlockedContentId
         )
       ).toBeObservable(
-        hot('-a-|', {
+        hot('-(a|)', {
           a: mockExercise
         })
       );
@@ -140,13 +161,14 @@ describe('ExerciseService', () => {
         userId: 6,
         eduContentId: 1,
         saveToApi: true,
+        cmiMode: ScormCmiMode.CMI_MODE_NORMAL,
         taskId: 1,
         unlockedContentId: 1,
         url: 'tempurl'
       };
 
       mockResult$ = hot('-a-|', {
-        a: new ResultFixture({ cmi: { mode: 'normal' } })
+        a: new ResultFixture({ cmi: "{ mode: 'normal' }" })
       });
 
       mockUrl$ = hot('-a-|', {
@@ -170,6 +192,7 @@ describe('ExerciseService', () => {
           mockData.userId,
           mockData.eduContentId,
           mockData.saveToApi,
+          mockData.cmiMode,
           mockData.taskId,
           mockData.unlockedContentId
         )
@@ -182,15 +205,14 @@ describe('ExerciseService', () => {
       jest.spyOn(resultsService, 'saveResult');
 
       mockResult$ = hot('-a-|', {
-        a: new ResultFixture({ cmi: { mode: 'normal' } })
+        a: new ResultFixture({ cmi: "{ mode: 'normal' }" })
       });
 
       const response = exerciseService.saveExercise(mockExercise);
 
       expect(resultsService.saveResult).toHaveBeenCalledWith(
         mockExercise.result.personId,
-        mockExercise.result.id,
-        mockExercise.result.cmi
+        mockExercise.result
       );
 
       expect(response).toBeObservable(
@@ -200,4 +222,15 @@ describe('ExerciseService', () => {
       );
     });
   });
+
+  function setEduContentsState() {
+    eduContents = [
+      new EduContentFixture({ id: 1 }),
+      new EduContentFixture({ id: 2 }),
+      new EduContentFixture({ id: 3 })
+    ];
+    store.dispatch(
+      new EduContentActions.EduContentsLoaded({ eduContents: eduContents })
+    );
+  }
 });

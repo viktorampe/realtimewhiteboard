@@ -96,7 +96,7 @@ describe('ExerciseEffects', () => {
 
   describe('startExercise$', () => {
     mockExercise = {
-      eduContent: undefined,
+      eduContentId: undefined,
       cmiMode: ScormCmiMode.CMI_MODE_NORMAL,
       result: undefined,
       saveToApi: true,
@@ -107,13 +107,15 @@ describe('ExerciseEffects', () => {
       userId: 6,
       educontentId: 1,
       saveToApi: true,
-      taskId: 1
+      taskId: 1,
+      cmiMode: ScormCmiMode.CMI_MODE_BROWSE
     });
     const startUnlockedContentExerciseAction = new StartExercise({
       userId: 6,
       educontentId: 1,
       saveToApi: true,
-      unlockedContentId: 1
+      unlockedContentId: 1,
+      cmiMode: ScormCmiMode.CMI_MODE_NORMAL
     });
     const filledLoadedAction = new CurrentExerciseLoaded(mockExercise);
     const loadErrorAction = new CurrentExerciseError(new Error('failed'));
@@ -158,7 +160,7 @@ describe('ExerciseEffects', () => {
 
   describe('saveExercise$', () => {
     mockExercise = {
-      eduContent: undefined,
+      eduContentId: undefined,
       cmiMode: ScormCmiMode.CMI_MODE_NORMAL,
       result: undefined,
       saveToApi: true,

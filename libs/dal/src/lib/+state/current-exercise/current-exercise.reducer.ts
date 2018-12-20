@@ -1,4 +1,4 @@
-import { EduContentInterface, ResultInterface } from '@campus/dal';
+import { ResultInterface } from '@campus/dal';
 import { ScormCmiMode } from '@campus/scorm';
 import {
   CurrentExerciseActions,
@@ -8,7 +8,7 @@ import {
 export const NAME = 'currentExercise';
 
 export interface CurrentExerciseInterface {
-  eduContent?: EduContentInterface;
+  eduContentId?: number;
   cmiMode: ScormCmiMode;
   result?: ResultInterface;
   saveToApi: boolean;
@@ -19,7 +19,7 @@ export interface State extends CurrentExerciseInterface {
 }
 
 export const initialState: State = {
-  eduContent: null,
+  eduContentId: null,
   cmiMode: null,
   result: null,
   saveToApi: null,
@@ -31,10 +31,17 @@ export function reducer(
   action: CurrentExerciseActions
 ): State {
   switch (action.type) {
+    case CurrentExerciseActionTypes.StartExercise: {
+      // reset state, effect will do the rest
+      return {
+        ...initialState
+      };
+    }
+
     case CurrentExerciseActionTypes.ClearCurrentExercise: {
       return {
         ...state,
-        eduContent: null,
+        eduContentId: null,
         cmiMode: null,
         result: null,
         saveToApi: null,
@@ -42,21 +49,31 @@ export function reducer(
       };
     }
 
+    case CurrentExerciseActionTypes.SaveCurrentExercise: {
+      const cmi = JSON.parse(action.payload.exercise.result.cmi);
+      return {
+        ...state,
+        ...action.payload.exercise,
+        result: {
+          ...action.payload.exercise.result,
+          score: cmi ? cmi.core.score.raw : 0,
+          time: cmi ? convertCmiTimeStringToNumber(cmi.core.total_time) : 0,
+          status: cmi ? cmi.core.lesson_status : 'incomplete'
+        }
+      };
+    }
+
     case CurrentExerciseActionTypes.CurrentExerciseLoaded: {
       return {
         ...state,
-        eduContent: action.payload.eduContent,
-        cmiMode: action.payload.cmiMode,
-        result: action.payload.result,
-        saveToApi: action.payload.saveToApi,
-        url: action.payload.url
+        ...action.payload
       };
     }
 
     case CurrentExerciseActionTypes.CurrentExerciseError: {
       return {
         ...state,
-        eduContent: null,
+        eduContentId: null,
         cmiMode: null,
         result: null,
         saveToApi: null,
@@ -69,4 +86,14 @@ export function reducer(
       return state;
     }
   }
+}
+
+function convertCmiTimeStringToNumber(cmiTimeString: string): number {
+  const timepieces = cmiTimeString.split(':');
+  const timespan =
+    parseInt(timepieces[0], 10) * 3600000 +
+    parseInt(timepieces[1], 10) * 60000 +
+    parseFloat(timepieces[2]) * 1000;
+
+  return timespan;
 }

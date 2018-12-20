@@ -27,6 +27,7 @@ export class CurrentExerciseEffects {
             action.payload.userId,
             action.payload.educontentId,
             action.payload.saveToApi,
+            action.payload.cmiMode,
             action.payload.taskId,
             action.payload.unlockedContentId
           )
@@ -39,7 +40,7 @@ export class CurrentExerciseEffects {
   );
 
   @Effect()
-  saveExercise$ = this.dataPersistence.pessimisticUpdate(
+  saveExercise$ = this.dataPersistence.optimisticUpdate(
     CurrentExerciseActionTypes.SaveCurrentExercise,
     {
       run: (action: SaveCurrentExercise, state: DalState) => {
@@ -47,7 +48,7 @@ export class CurrentExerciseEffects {
 
         if (!exercise.saveToApi) return;
 
-        return this.exerciseService.saveExercise(exercise).pipe(
+        return this.exerciseService.saveExercise(state.currentExercise).pipe(
           map(
             ex =>
               new DalActions.ActionSuccessful({
@@ -56,8 +57,11 @@ export class CurrentExerciseEffects {
           )
         );
       },
-      onError: (action: SaveCurrentExercise, error) => {
-        return new CurrentExerciseError(error);
+      undoAction: (action: SaveCurrentExercise, state: any) => {
+        // TODO: show error message to user
+        // resetting the state won't help, because ludo won't update
+        // todo examine further
+        return new CurrentExerciseError(new Error('failed'));
       }
     }
   );

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { ResultInterface } from '@campus/dal';
-import { ScormCmiInterface } from '@campus/scorm';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -61,34 +60,20 @@ export class ResultsService implements ResultsServiceInterface {
 
   /**
    * Saves a result to the Api, returns the saved result
-   *
-   * @param {number} userId
-   * @param {number} resultId
-   * @param {ScormCmiInterface} cmi
-   * @returns {Observable<ResultInterface>}
-   * @memberof ScormResultsService
    */
   public saveResult(
     userId: number,
-    resultId: number,
-    cmi: ScormCmiInterface
+    result: ResultInterface
   ): Observable<ResultInterface> {
-    const score = cmi.core.score.raw;
-    const time = this.convertCmiTimeStringToNumber(cmi.core.total_time);
-    const status = cmi.core.lesson_status;
-
     return this.personApi
-      .saveResult(userId, resultId, score, time, status, cmi)
+      .saveResult(
+        userId,
+        result.id,
+        result.score,
+        result.time,
+        result.status,
+        result.cmi
+      )
       .pipe(map(res => res as ResultInterface));
-  }
-
-  private convertCmiTimeStringToNumber(cmiTimeString: string): number {
-    const timepieces = cmiTimeString.split(':');
-    const timespan =
-      parseInt(timepieces[0], 10) * 3600000 +
-      parseInt(timepieces[1], 10) * 60000 +
-      parseFloat(timepieces[2]) * 1000;
-
-    return timespan;
   }
 }

@@ -1,3 +1,4 @@
+import { ScormCmiMode } from '@campus/scorm';
 import { CurrentExerciseActions } from '.';
 import { CurrentExerciseFixture } from '../../+fixtures';
 import {
@@ -22,10 +23,16 @@ let emptyExercise: CurrentExerciseInterface;
 
 describe('Exercises Reducer', () => {
   beforeEach(() => {
-    mockExercise = new CurrentExerciseFixture();
+    mockExercise = new CurrentExerciseFixture({
+      eduContentId: 1,
+      cmiMode: ScormCmiMode.CMI_MODE_PREVIEW,
+      result: null,
+      saveToApi: true,
+      url: 'lalalalala'
+    });
 
     emptyExercise = {
-      eduContent: null,
+      eduContentId: null,
       cmiMode: null,
       result: null,
       saveToApi: null,
@@ -49,7 +56,7 @@ describe('Exercises Reducer', () => {
         mockExercise
       );
       const result = reducer(initialState, action);
-      expect(result).toEqual(createState(mockExercise, true));
+      expect(result).toEqual(mockExercise);
     });
 
     it('should error', () => {
