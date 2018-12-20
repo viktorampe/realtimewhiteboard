@@ -4,7 +4,11 @@ import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute } from '@angular/router';
-import { LearningAreaInterface } from '@campus/dal';
+import {
+  LearningAreaInterface,
+  TaskEduContentFixture,
+  TaskEduContentInterface
+} from '@campus/dal';
 import { MockActivatedRoute, MockMatIconRegistry } from '@campus/testing';
 import { ListFormat, ListViewItemDirective, UiModule } from '@campus/ui';
 import { FilterService, FILTER_SERVICE_TOKEN } from '@campus/utils';
@@ -164,5 +168,20 @@ describe('TaskDetailComponent', () => {
 
     expect(tasksViewModel.setTaskAlertRead).toHaveBeenCalled();
     expect(tasksViewModel.setTaskAlertRead).toHaveBeenCalledWith(1);
+  });
+
+  it('should open an exercise', () => {
+    tasksViewModel.startExercise = jest.fn();
+    const mockTaskEduContent: TaskEduContentInterface = new TaskEduContentFixture(
+      { eduContentId: 123, taskId: 456 }
+    );
+
+    component.clickOpenContent(mockTaskEduContent);
+
+    expect(tasksViewModel.startExercise).toHaveBeenCalled();
+    expect(tasksViewModel.startExercise).toHaveBeenCalledWith(
+      mockTaskEduContent.eduContentId,
+      mockTaskEduContent.taskId
+    );
   });
 });
