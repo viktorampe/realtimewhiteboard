@@ -2,6 +2,7 @@
      class="page-results">
   <!-- TODO set alternative layout for header when available -->
   <campus-page-header *ngIf="(learningArea$ | async) as learningArea"
+                      [layout]="'centered'"
                       [title]="learningArea.name"
                       [subtitle]="'Taken &amp; oefeningen in bundels'"
                       [iconClass]="'learning-area:' + learningArea.icon">
@@ -45,13 +46,9 @@
 
             <td class="title">{{exerciseResult.eduContent.name}}</td>
 
-            <td *ngIf="exerciseResult.results.length > 0; else noAttempts"
-                class="number">
+            <td class="number">
               <a (click)="clickOpenContentForReview(exerciseResult.bestResult)">{{exerciseResult.bestResult.score}}</a>
             </td>
-            <ng-template #noAttempts>
-              <td class="score">niet ingediend</td>
-            </ng-template>
 
             <ng-container *ngIf="assignment.type !== 'task'; else hideInfoForTasks">
               <td class="number">{{exerciseResult.results.length}}</td>
