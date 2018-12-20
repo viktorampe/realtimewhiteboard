@@ -9,6 +9,8 @@ import {
   EduContentQueries,
   LearningAreaActions,
   LearningAreaQueries,
+  PersonActions,
+  PersonQueries,
   StateResolver,
   UnlockedBoekeGroupActions,
   UnlockedBoekeGroupQueries,
@@ -49,6 +51,9 @@ export class BundlesResolver extends StateResolver {
       }),
       new UnlockedBoekeStudentActions.LoadUnlockedBoekeStudents({
         userId: this.authService.userId
+      }),
+      new PersonActions.LoadPersons({
+        userId: this.authService.userId
       })
     ];
   }
@@ -61,7 +66,8 @@ export class BundlesResolver extends StateResolver {
       UserContentQueries.getLoaded,
       UnlockedContentQueries.getLoaded,
       UnlockedBoekeGroupQueries.getLoaded,
-      UnlockedBoekeStudentQueries.getLoaded
+      UnlockedBoekeStudentQueries.getLoaded,
+      PersonQueries.getLoaded
     ];
   }
 }

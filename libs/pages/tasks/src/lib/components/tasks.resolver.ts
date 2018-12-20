@@ -7,6 +7,8 @@ import {
   EduContentQueries,
   LearningAreaActions,
   LearningAreaQueries,
+  PersonActions,
+  PersonQueries,
   StateResolver,
   TaskActions,
   TaskEduContentActions,
@@ -39,6 +41,9 @@ export class TasksResolver extends StateResolver {
       }),
       new TaskInstanceActions.LoadTaskInstances({
         userId: this.authService.userId
+      }),
+      new PersonActions.LoadPersons({
+        userId: this.authService.userId
       })
     ];
   }
@@ -49,7 +54,8 @@ export class TasksResolver extends StateResolver {
       EduContentQueries.getLoaded,
       TaskQueries.getLoaded,
       TaskInstanceQueries.getLoaded,
-      TaskEduContentQueries.getLoaded
+      TaskEduContentQueries.getLoaded,
+      PersonQueries.getLoaded
     ];
   }
 }
