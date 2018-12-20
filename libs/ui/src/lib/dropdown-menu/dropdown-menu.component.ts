@@ -37,6 +37,7 @@ export class DropdownMenuComponent {
   @Input() newItemCount: string;
   @Input() linkText: string;
   @Input() linkUrl: string;
+  @Input() smallWidth: boolean;
 
   @ViewChild(MatMenuTrigger) private trigger: MatMenuTrigger;
 

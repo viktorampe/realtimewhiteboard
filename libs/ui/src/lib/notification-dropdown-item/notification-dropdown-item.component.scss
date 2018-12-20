@@ -14,9 +14,12 @@
     left: 8px;
     top: 10px;
   }
+
   &__icon {
     padding: 5px;
-    width: 20px;
+    width: 34px;
+    height: 34px;
+    border-radius: 4px;
   }
 
   &__date {
@@ -30,7 +33,7 @@
   &--accent &__text {
     font-style: italic;
 
-    > span {
+    >span {
       padding-left: 10px;
       white-space: nowrap;
 
