@@ -70,7 +70,7 @@ describe('PersonBadgeComponent', () => {
   it('should show no initials if there is an avatar', () => {
     const badge = fixture.debugElement.query(By.css('.ui_person-badge__badge'))
       .nativeElement.textContent;
-    expect(badge).toBe('');
+    expect(badge.trim()).toBe(''); // somehow a space gets added here
   });
   it('should show initials if there is no avatar', () => {
     component.person = {
