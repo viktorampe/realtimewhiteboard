@@ -1,26 +1,27 @@
-<div *ngIf="(ownResults$|async) as ownResults"
-     class="page-results">
-  <!-- TODO set alternative layout for header when available -->
-  <campus-page-header *ngIf="(learningArea$ | async) as learningArea"
-                      [layout]="'centered'"
-                      [title]="learningArea.name"
-                      [subtitle]="'Taken &amp; oefeningen in bundels'"
-                      [iconClass]="'learning-area:' + learningArea.icon">
+<div *ngIf="(ownResults$ | async) as ownResults" class="page-results">
+  <campus-page-header
+    *ngIf="(learningArea$ | async) as learningArea"
+    [layout]="'centered'"
+    [title]="learningArea.name"
+    [subtitle]="'Taken &amp; oefeningen in bundels'"
+    [iconClass]="'learning-area:' + learningArea.icon"
+  >
   </campus-page-header>
 
-  <ng-template #noOwnResults>Er zijn nog geen resultaten beschikbaar.</ng-template>
+  <ng-template #noOwnResults
+    >Er zijn nog geen resultaten beschikbaar.</ng-template
+  >
 
-  <div *ngIf="ownResults.length > 0; else noOwnResults"
-       class="page-results__table">
+  <div
+    *ngIf="ownResults.length > 0; else: noOwnResults"
+    class="page-results__table"
+  >
     <table>
       <thead>
         <tr>
-          <th class="title"></th>
-          <th class="score">Score</th>
-          <td class="title">Oefening</td>
-          <td class="number">Resultaat</td>
-          <td class="number">Pogingen</td>
-          <td class="number">Gemiddelde</td>
+          <th class="title"></th> <th class="score">Score</th>
+          <td class="title">Oefening</td> <td class="number">Resultaat</td>
+          <td class="number">Pogingen</td> <td class="number">Gemiddelde</td>
           <td></td>
         </tr>
       </thead>
@@ -28,36 +29,49 @@
     <div class="page-results__table__main">
       <table>
         <tbody *ngFor="let assignment of ownResults">
-          <tr *ngFor="let exerciseResult of assignment.exerciseResults; let firstResult = first">
+          <tr
+            *ngFor="
+              let exerciseResult of assignment.exerciseResults;
+              let firstResult = first
+            "
+          >
             <ng-container *ngIf="firstResult">
-              <th [attr.rowspan]="assignment.exerciseResults.length"
-                  class="title">
+              <th
+                [attr.rowspan]="assignment.exerciseResults.length"
+                class="title"
+              >
                 <ng-container [ngSwitch]="assignment.type">
                   <em *ngSwitchCase="'task'">Taak</em>
                   <em *ngSwitchCase="'bundle'">Bundel</em>
                 </ng-container>
-                <br />{{assignment.title}}
+                <br />{{ assignment.title }}
               </th>
-              <th [attr.rowspan]="assignment.exerciseResults.length"
-                  class="score">
-                <br>{{assignment.totalScore | number:'1.0-2'}}%
+              <th
+                [attr.rowspan]="assignment.exerciseResults.length"
+                class="score"
+              >
+                <br />{{ assignment.totalScore | number: '1.0-2' }}%
               </th>
             </ng-container>
 
-            <td class="title">{{exerciseResult.eduContent.name}}</td>
+            <td class="title">{{ exerciseResult.eduContent.name }}</td>
 
             <td class="number">
-              <a (click)="clickOpenContentForReview(exerciseResult.bestResult)">{{exerciseResult.bestResult.score}}</a>
+              <a
+                (click)="clickOpenContentForReview(exerciseResult.bestResult)"
+                >{{ exerciseResult.bestResult.score }}</a
+              >
             </td>
 
-            <ng-container *ngIf="assignment.type !== 'task'; else hideInfoForTasks">
-              <td class="number">{{exerciseResult.results.length}}</td>
-              <td class="number">{{exerciseResult.averageScore | number:'1.0-2'}}</td>
+            <ng-container
+              *ngIf="assignment.type !== 'task'; else: hideInfoForTasks"
+            >
+              <td class="number">{{ exerciseResult.results.length }}</td>
+              <td class="number">{{
+                exerciseResult.averageScore | number: '1.0-2'
+              }}</td>
             </ng-container>
-            <ng-template #hideInfoForTasks>
-              <td></td>
-              <td></td>
-            </ng-template>
+            <ng-template #hideInfoForTasks> <td></td> <td></td> </ng-template>
             <td></td>
           </tr>
         </tbody>
