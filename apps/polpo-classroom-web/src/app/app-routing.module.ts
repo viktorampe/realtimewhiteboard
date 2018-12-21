@@ -34,7 +34,7 @@ const routes: Routes = [
       {
         path: 'messages',
         loadChildren: '@campus/pages/messages#PagesMessagesModule',
-        data: { breadcrumbText: 'Meldingen' }
+        data: { breadcrumbText: 'Berichten' }
       },
       {
         path: 'logout',
