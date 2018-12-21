@@ -1,4 +1,5 @@
 import { InjectionToken } from '@angular/core';
+import { ResultInterface } from '@campus/dal';
 
 export const SCORM_EXERCISE_SERVICE_TOKEN = new InjectionToken(
   'ScormExerciseService'
@@ -27,11 +28,6 @@ export interface ScormExerciseServiceInterface {
     educontentId: number,
     taskId: number
   ): void;
-  reviewExerciseFromUnlockedContent(
-    userId: number,
-    educontentId: number,
-    unlockedContentId: number
-  ): void;
-  reviewExerciseFromTask(userId: number, educontentId: number, taskId: number);
+  reviewExerciseFromResult(result: ResultInterface);
   closeExercise(): void;
 }

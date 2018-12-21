@@ -12,7 +12,96 @@ import { ExerciseServiceInterface } from './exercise.service.interface';
   providedIn: 'root'
 })
 export class ExerciseService implements ExerciseServiceInterface {
-  public startExercise(
+  public loadExercise(
+    userId: number,
+    educontentId: number,
+    saveToApi: boolean,
+    mode: ScormCmiMode,
+    taskId?: number,
+    unlockedContentId?: number,
+    result?: ResultInterface
+  ): Observable<CurrentExerciseInterface> {
+    if (result) {
+      return this.reviewExercise(result);
+    }
+
+    if (!saveToApi) {
+      // if no saves to api + not review => preview!
+      return this.previewExercise(educontentId, mode);
+    }
+
+    return this.startExercise(
+      userId,
+      educontentId,
+      saveToApi,
+      mode,
+      taskId,
+      unlockedContentId
+    );
+  }
+
+  public saveExercise(
+    exercise: CurrentExerciseInterface
+  ): Observable<CurrentExerciseInterface> {
+    const userId = exercise.result.personId;
+    const result$ = this.resultsService
+      .saveResult(userId, exercise.result)
+      .pipe(
+        map(result => {
+          return {
+            ...exercise,
+            result: result
+          } as CurrentExerciseInterface;
+        })
+      );
+
+    return result$;
+  }
+
+  private reviewExercise(
+    result: ResultInterface
+  ): Observable<CurrentExerciseInterface> {
+    let tempUrl$: Observable<string>;
+    tempUrl$ = this.contentRequestService.requestUrl(result.eduContentId);
+
+    const exercise$ = tempUrl$.pipe(
+      map(url => {
+        return {
+          eduContentId: result.eduContentId,
+          cmiMode: ScormCmiMode.CMI_MODE_REVIEW,
+          result: result,
+          saveToApi: false,
+          url: url
+        } as CurrentExerciseInterface;
+      })
+    );
+
+    return exercise$;
+  }
+
+  private previewExercise(
+    eduContentId: number,
+    mode: ScormCmiMode
+  ): Observable<CurrentExerciseInterface> {
+    let tempUrl$: Observable<string>;
+    tempUrl$ = this.contentRequestService.requestUrl(eduContentId);
+
+    const exercise$ = tempUrl$.pipe(
+      take(1),
+      map(url => {
+        return {
+          eduContentId: eduContentId,
+          cmiMode: mode,
+          saveToApi: false,
+          url: url
+        } as CurrentExerciseInterface;
+      })
+    );
+
+    return exercise$;
+  }
+
+  private startExercise(
     userId: number,
     educontentId: number,
     saveToApi: boolean,
@@ -45,11 +134,11 @@ export class ExerciseService implements ExerciseServiceInterface {
 
     const exercise$ = combineLatest(result$, tempUrl$).pipe(
       take(1),
-      map(([result, url]) => {
+      map(([resultFromApi, url]) => {
         return {
-          eduContentId: result.eduContentId,
+          eduContentId: resultFromApi.eduContentId,
           cmiMode: mode,
-          result: result,
+          result: resultFromApi,
           saveToApi: saveToApi,
           url: url
         } as CurrentExerciseInterface;
@@ -57,24 +146,6 @@ export class ExerciseService implements ExerciseServiceInterface {
     );
 
     return exercise$;
-  }
-
-  public saveExercise(
-    exercise: CurrentExerciseInterface
-  ): Observable<CurrentExerciseInterface> {
-    const userId = exercise.result.personId;
-    const result$ = this.resultsService
-      .saveResult(userId, exercise.result)
-      .pipe(
-        map(result => {
-          return {
-            ...exercise,
-            result: result
-          } as CurrentExerciseInterface;
-        })
-      );
-
-    return result$;
   }
 
   constructor(

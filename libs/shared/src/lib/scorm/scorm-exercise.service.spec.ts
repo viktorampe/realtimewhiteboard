@@ -78,7 +78,7 @@ describe('ScormExerciseService', () => {
   it('should start a preview from unlockedcontent with answers', () => {
     scormExerciseService.previewExerciseFromUnlockedContent(1, 2, 3, true);
     expect(spyStore).toHaveBeenCalledWith(
-      new CurrentExerciseActions.StartExercise({
+      new CurrentExerciseActions.LoadExercise({
         userId: 1,
         educontentId: 2,
         unlockedContentId: 3,
@@ -92,7 +92,7 @@ describe('ScormExerciseService', () => {
   it('should start a preview from task with answers', () => {
     scormExerciseService.previewExerciseFromTask(1, 2, 3, true);
     expect(spyStore).toHaveBeenCalledWith(
-      new CurrentExerciseActions.StartExercise({
+      new CurrentExerciseActions.LoadExercise({
         userId: 1,
         educontentId: 2,
         unlockedContentId: null,
@@ -106,7 +106,7 @@ describe('ScormExerciseService', () => {
   it('should start a preview from unlockedcontent without answers', () => {
     scormExerciseService.previewExerciseFromUnlockedContent(1, 2, 3, false);
     expect(spyStore).toHaveBeenCalledWith(
-      new CurrentExerciseActions.StartExercise({
+      new CurrentExerciseActions.LoadExercise({
         userId: 1,
         educontentId: 2,
         unlockedContentId: 3,
@@ -120,7 +120,7 @@ describe('ScormExerciseService', () => {
   it('should start an preview task without answers ', () => {
     scormExerciseService.previewExerciseFromTask(1, 2, 3, false);
     expect(spyStore).toHaveBeenCalledWith(
-      new CurrentExerciseActions.StartExercise({
+      new CurrentExerciseActions.LoadExercise({
         userId: 1,
         educontentId: 2,
         unlockedContentId: null,
@@ -132,29 +132,24 @@ describe('ScormExerciseService', () => {
   });
 
   it('should start a exercise as review ', () => {
-    scormExerciseService.reviewExerciseFromUnlockedContent(1, 2, 3);
+    const res = new ResultFixture({
+      id: 10,
+      personId: 1,
+      eduContentId: 2,
+      taskId: 3,
+      bundleId: null,
+      unlockedContentId: null
+    });
+    scormExerciseService.reviewExerciseFromResult(res);
     expect(spyStore).toHaveBeenCalledWith(
-      new CurrentExerciseActions.StartExercise({
-        userId: 1,
-        educontentId: 2,
-        unlockedContentId: 3,
-        saveToApi: false,
-        cmiMode: ScormCmiMode.CMI_MODE_REVIEW,
-        taskId: null
-      })
-    );
-  });
-
-  it('should start a task as review ', () => {
-    scormExerciseService.reviewExerciseFromTask(1, 2, 3);
-    expect(spyStore).toHaveBeenCalledWith(
-      new CurrentExerciseActions.StartExercise({
+      new CurrentExerciseActions.LoadExercise({
         userId: 1,
         educontentId: 2,
         unlockedContentId: null,
         saveToApi: false,
         cmiMode: ScormCmiMode.CMI_MODE_REVIEW,
-        taskId: 3
+        taskId: 3,
+        result: res
       })
     );
   });
@@ -162,7 +157,7 @@ describe('ScormExerciseService', () => {
   it('should start a exercise as task', () => {
     scormExerciseService.startExerciseFromTask(1, 2, 3);
     expect(spyStore).toHaveBeenCalledWith(
-      new CurrentExerciseActions.StartExercise({
+      new CurrentExerciseActions.LoadExercise({
         userId: 1,
         educontentId: 2,
         unlockedContentId: null,
@@ -176,7 +171,7 @@ describe('ScormExerciseService', () => {
   it('should start a exercise', () => {
     scormExerciseService.startExerciseFromUnlockedContent(1, 2, 3);
     expect(spyStore).toHaveBeenCalledWith(
-      new CurrentExerciseActions.StartExercise({
+      new CurrentExerciseActions.LoadExercise({
         userId: 1,
         educontentId: 2,
         unlockedContentId: 3,
