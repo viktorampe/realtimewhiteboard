@@ -44,50 +44,64 @@ export class MockReportsViewModel
   selectedLearningArea$: Observable<
     LearningAreaInterface
   > = new BehaviorSubject<LearningAreaInterface>(
-    new LearningAreaFixture({ id: 1 })
+    new LearningAreaFixture({ id: 1, name: 'Wiskunde', icon: 'polpo-wiskunde' })
   );
 
-  resultsForSelectedLearningArea: Observable<
+  resultsForSelectedLearningArea$: Observable<
     AssignmentResultInterface[]
   > = new BehaviorSubject<AssignmentResultInterface[]>([
     {
-      title: 'foo',
-      type: 'bundle',
-      totalScore: 71,
+      title: 'foo 1',
+      type: 'task',
+      totalScore: 87.5,
       exerciseResults: [
         {
           eduContent: new EduContentFixture(),
-          results: [new ResultFixture({ id: 1 }), new ResultFixture({ id: 2 })],
+          results: [
+            new ResultFixture({ id: 1, score: 45 }),
+            new ResultFixture({ id: 2 })
+          ],
           bestResult: new ResultFixture({ id: 2 }),
           averageScore: 60
+        },
+        {
+          eduContent: new EduContentFixture(
+            {},
+            {
+              title:
+                'really long title to check proper wrapping in the template'
+            }
+          ),
+          results: [new ResultFixture({ id: 3, score: 100 })],
+          bestResult: new ResultFixture({ id: 3, score: 100 }),
+          averageScore: 100
         }
       ]
     },
     {
-      title: 'foo',
+      title: 'foo 2',
       type: 'bundle',
-      totalScore: 78,
+      totalScore: 75,
       exerciseResults: [
         {
           eduContent: new EduContentFixture(),
           results: [new ResultFixture({ id: 1 }), new ResultFixture({ id: 2 })],
           bestResult: new ResultFixture({ id: 1 }),
-          averageScore: 80
+          averageScore: 75
         }
       ]
     }
   ]);
 
   getLearningAreaById(): Observable<LearningAreaInterface> {
-    return;
+    return this.selectedLearningArea$;
   }
+
   getAssignmentResultsByLearningArea(): Observable<
     AssignmentResultInterface[]
   > {
-    return;
+    return this.resultsForSelectedLearningArea$;
   }
 
-  openContentForReview() {
-    return;
-  }
+  openContentForReview(): void {}
 }
