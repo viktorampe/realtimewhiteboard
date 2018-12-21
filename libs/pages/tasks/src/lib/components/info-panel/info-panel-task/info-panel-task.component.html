@@ -1,11 +1,10 @@
-<campus-person-badge
-  [person]="person"
-  [align]="'right'"
-  [size]="'medium'"
-  [subText]="taskInfo.taskInstance.start | date: 'dd-MM-yyyy HH:mm:ss'"
-></campus-person-badge>
+<campus-person-badge *ngIf="person"
+                     [person]="person"
+                     [align]="'right'"
+                     [size]="'medium'"
+                     [subText]="taskInfo.taskInstance.start | date: 'dd-MM-yyyy HH:mm:ss'"></campus-person-badge>
 <p class="info-panel-task__text">
   <strong>{{ taskInfo.task.name }}</strong> <br />{{
-    taskInfo.task.description
+  taskInfo.task.description
   }}
 </p>
