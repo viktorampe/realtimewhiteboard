@@ -15,15 +15,15 @@
         color: $ui-dropdown-menu-color;
       }
     }
-
-    &__body {
-      height: $ui-dropdown-menu-body-height;
-    }
   }
 
   .mat-menu-panel.ui-dropdown-menu--large {
     width: $ui-dropdown-menu-width--large;
     max-width: $ui-dropdown-menu-width--large;
+
+    .ui-dropdown-menu__body {
+      height: $ui-dropdown-menu-body-height;
+    }
   }
 
   .mat-menu-panel.ui-dropdown-menu--small {

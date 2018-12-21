@@ -43,10 +43,14 @@
           <campus-dropdown-menu #dropDownProfile
                                 [showHeader]="false"
                                 [smallWidth]="true">
-            <campus-dropdown-menu-item *ngFor="let menuItem of (profileMenuItems$ | async)"
+            <campus-dropdown-menu-item *ngFor="let menuItem of (profileMenuItems$ | async);let i=index"
                                        [icon]="menuItem.icon"
                                        [description]="menuItem.description"
-                                       [internalLink]="menuItem.internalLink"></campus-dropdown-menu-item>
+                                       [internalLink]="menuItem.internalLink"
+                                       [header]="menuItem.header"
+                                       [image]="menuItem.image"
+                                       [externalLink]="menuItem.externalLink"
+                                       class="{{i!=0 ? 'ui-dropdown-menu-item__separator' : ''}}"></campus-dropdown-menu-item>
           </campus-dropdown-menu>
         </div>
       </campus-app-bar>
