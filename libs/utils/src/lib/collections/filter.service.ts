@@ -40,7 +40,7 @@ export class FilterService implements FilterServiceInterface {
       return item === filters;
     }
     // check for partial match on string
-    let itemStr = item.toString();
+    let itemStr = item ? item.toString() : '';
     let filterStr = filters.toString();
     if (ignoreCase) {
       itemStr = itemStr.toLowerCase();
