@@ -46,6 +46,18 @@ const routes: Routes = [
         data: { breadcrumbText: 'Meldingen' }
       },
       {
+        path: 'settings',
+        data: { breadcrumbText: 'Instellingen' },
+        children: [
+          {
+            path: 'dashboard',
+            loadChildren:
+              '@campus/pages/settings/dashboard#PagesSettingsDashboardModule',
+            data: { breadcrumbText: 'Dashboard' }
+          }
+        ]
+      },
+      {
         path: '',
         redirectTo: 'bundles',
         pathMatch: 'full'
