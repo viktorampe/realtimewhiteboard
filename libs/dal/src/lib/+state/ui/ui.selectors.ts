@@ -29,10 +29,16 @@ const getProfileMenuItems = createSelector(
   (state: UiState) => state.profileMenuItems
 );
 
+const getBreadcrumbs = createSelector(
+  getUiState,
+  (state: UiState) => state.breadcrumbs
+);
+
 export const UiQuery = {
   getLoaded,
   getListFormat,
   getSideNavOpen,
   getSideNavItems,
-  getProfileMenuItems
+  getProfileMenuItems,
+  getBreadcrumbs
 };

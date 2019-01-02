@@ -1,3 +1,4 @@
+import { DebugElement } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
@@ -9,7 +10,7 @@ import { BreadcrumbsComponent } from './breadcrumbs.component';
 describe('BreadcrumbComponent', () => {
   let component: BreadcrumbsComponent;
   let fixture: ComponentFixture<BreadcrumbsComponent>;
-  let breadcrumbs;
+  let breadcrumbs: DebugElement;
 
   const mockData = {
     overflowedLinkString: '???',
@@ -84,6 +85,8 @@ describe('BreadcrumbComponent', () => {
     component.overflowedLinkString = mockData.overflowedLinkString;
     component.maxLength = mockData.maxLen;
     component.seperator = mockData.seperator;
+    component.baseUrl = mockData.homeUrl;
+    component.baseIcon = mockData.homeIcon;
     fixture.detectChanges();
   });
 
@@ -91,21 +94,50 @@ describe('BreadcrumbComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have 5 children breadcrumbs (home button, overflow button, and 3 children links', () => {
-    expect(breadcrumbs.children.length).toBe(5);
+  it('should show the home button', () => {
+    const homeIconDE = breadcrumbs.query(By.css('[href]'));
+
+    expect(homeIconDE.nativeElement.href).toContain(mockData.homeUrl);
+    expect(
+      homeIconDE
+        .query(By.css('mat-icon'))
+        .nativeElement.getAttribute('ng-reflect-svg-icon')
+    ).toBe(mockData.homeIcon);
   });
 
-  it('should have 4 children breadcrumbs (home button, overflow button, and 2 children links', () => {
+  it('should have 5 children breadcrumbs (home, overflow button and 3 children links', () => {
+    expect(
+      breadcrumbs.queryAll(By.css('.ui-breadcrumbs__holder__breadcrumbs'))
+        .length
+    ).toBe(5);
+  });
+
+  it('should have 4 children breadcrumbs (home, overflow button, and 2 children links', () => {
     component.maxLength = 2;
     fixture.detectChanges();
-    expect(breadcrumbs.children.length).toBe(4);
+    expect(
+      breadcrumbs.queryAll(By.css('.ui-breadcrumbs__holder__breadcrumbs'))
+        .length
+    ).toBe(4);
   });
 
   it('should display the last item from the array', () => {
     component.maxLength = 1;
     fixture.detectChanges();
-    expect(breadcrumbs.children[2].children[1].nativeElement.href).toContain(
-      mockData.breadCrumbs[11].link
+    const breadcrumbsArray = breadcrumbs.queryAll(
+      By.css('.ui-breadcrumbs__holder__breadcrumbs')
+    );
+    const lastBreadCrumb = breadcrumbsArray[breadcrumbsArray.length - 1];
+
+    const concatLink = mockData.breadCrumbs[11].link.reduce(
+      (acc, url) => (acc += '/' + url),
+      ''
+    );
+
+    expect(lastBreadCrumb.children.length).toBe(2); // seperator and link
+
+    expect(lastBreadCrumb.query(By.css('a')).nativeElement.href).toContain(
+      concatLink
     );
   });
 
@@ -118,9 +150,8 @@ describe('BreadcrumbComponent', () => {
       }
     ];
     fixture.detectChanges();
-    expect(breadcrumbs.children.length).toBe(2);
-    expect(breadcrumbs.children[1].children[1].nativeElement.href).toContain(
-      'crumb1'
+    expect(breadcrumbs.nativeElement.textContent).not.toContain(
+      mockData.overflowedLinkString
     );
   });
 
@@ -150,8 +181,10 @@ describe('BreadcrumbComponent', () => {
     ];
     fixture.detectChanges();
 
-    expect(breadcrumbs.children[1].children[1].nativeElement.innerHTML).toBe(
-      mockData.overflowedLinkString
-    );
+    expect(
+      // first child is home-icon, skipping that one
+      // the next <a> should be the overflow-indicator
+      breadcrumbs.children[1].query(By.css('a')).nativeElement.textContent
+    ).toBe(mockData.overflowedLinkString);
   });
 });

@@ -4,10 +4,19 @@ import {
   StorageServiceInterface
 } from '@campus/browser';
 import { Actions, Effect, ofType } from '@ngrx/effects';
+import { RouterNavigationAction, ROUTER_NAVIGATION } from '@ngrx/router-store';
 import { DataPersistence } from '@nrwl/nx';
 import { filter, map } from 'rxjs/operators';
 import { DalState } from '..';
-import { LoadUi, SaveUi, UiActionTypes, UiLoaded } from './ui.actions';
+import { RouterStateUrl } from '../../routings/route-serializer';
+import { ActionSuccessful } from '../dal.actions';
+import {
+  LoadUi,
+  SaveUi,
+  SetBreadcrumbs,
+  UiActionTypes,
+  UiLoaded
+} from './ui.actions';
 
 @Injectable()
 export class UiEffects {
@@ -53,6 +62,53 @@ export class UiEffects {
       } catch (error) {
         // we don't want errors on failing localstorage, because it's not breaking
       }
+    }
+  });
+
+  @Effect()
+  breadcrumbs$ = this.dataPersistence.fetch(ROUTER_NAVIGATION, {
+    run: (action: RouterNavigationAction, state: DalState) => {
+      const routerState = <RouterStateUrl>(<unknown>action.payload.routerState);
+
+      // routerState contains every 'hop' of the routermodule
+      // filtering empty hops
+      // building url substrings per hop
+      const filteredRoutes = routerState.routeParts.reduce(
+        (acc, routePart) => {
+          // filter
+          if (routePart.url) {
+            acc.push({
+              ...routePart,
+              // build url path
+              urlParts: [
+                ...(acc[acc.length - 1] ? acc[acc.length - 1].urlParts : []),
+                routePart.url
+              ]
+            });
+          }
+          return acc;
+        },
+        [] as RouterStateUrl[]
+      );
+
+      const breadcrumbs = filteredRoutes.map(routePart => {
+        const { selector, displayProperty, breadcrumbText } = routePart.data;
+
+        // in an effect, so selectors are synchronous
+        const displayText = selector
+          ? selector(state, { id: routePart.url })[displayProperty]
+          : breadcrumbText;
+
+        return { displayText, link: routePart.urlParts };
+      });
+
+      return new SetBreadcrumbs({ breadcrumbs });
+    },
+    onError: () => {
+      console.error('loading breadcrumbs failed');
+      return new ActionSuccessful({
+        successfulAction: 'breadcrumbs failed successfully'
+      });
     }
   });
 

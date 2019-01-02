@@ -11,9 +11,15 @@ export class AppResolver extends StateResolver {
   }
 
   protected getLoadableActions(): Action[] {
-    return [];
+    return [
+      //new UserActions.LoadUser({ force: false })
+      // credentials
+    ];
   }
   protected getResolvedQueries(): Selector<object, boolean>[] {
-    return [];
+    return [
+      //UserQueries.getLoaded
+      // credentials
+    ];
   }
 }
