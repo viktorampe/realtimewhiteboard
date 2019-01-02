@@ -20,5 +20,7 @@
     "../../libs/dal/src/index.ts",
     "../../libs/ui/src/index.ts",
     "../../libs/shared/src/index.ts"
-  ]
+  
+    , "../../libs/pages/settings/dashboard/src/index.ts"
+]
 }
