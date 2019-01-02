@@ -12,8 +12,8 @@
       ></mat-icon>
       <strong>{{ newItemCount }} nieuwe</strong> {{ itemType }}
     </h3>
-    <span *ngIf="linkText && linkUrl"
-      >-> <a [routerLink]="linkUrl">{{ linkText }}</a></span
+    <span *ngIf="linkText && linkUrl">
+      <a [routerLink]="linkUrl">{{ linkText }}</a></span
     >
   </div>
   <div class="ui-dropdown-menu__body"> <ng-content></ng-content> </div>
