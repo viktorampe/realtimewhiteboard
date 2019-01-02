@@ -1,4 +1,4 @@
-import { hot } from 'jasmine-marbles';
+import { hot } from '@nrwl/nx/testing';
 
 export class MockMatIconRegistry {
   public addSvgIcon() {}

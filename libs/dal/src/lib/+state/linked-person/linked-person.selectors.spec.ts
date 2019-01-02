@@ -1,12 +1,17 @@
 import { LinkedPersonQueries } from '.';
+import { LinkedPersonFixture } from '../../+fixtures';
 import { TeacherStudentInterface } from '../../+models';
 import { State } from './linked-person.reducer';
 
 describe('LinkedPerson Selectors', () => {
+  const date = new Date();
   function createLinkedPerson(id: number): TeacherStudentInterface | any {
-    return {
-      id: id
-    };
+    return new LinkedPersonFixture({
+      created: date,
+      id: id,
+      teacherId: id + 1,
+      studentId: id + 2
+    });
   }
 
   function createState(
@@ -96,6 +101,10 @@ describe('LinkedPerson Selectors', () => {
     it('getById() should return undefined if the entity is not present', () => {
       const results = LinkedPersonQueries.getById(storeState, { id: 9 });
       expect(results).toBe(undefined);
+    });
+    it('getLinkedPersonIds() should return number[] of the persons that are linked', () => {
+      const results = LinkedPersonQueries.getLinkedPersonIds(storeState);
+      expect(results).toEqual([2, 3, 4, 5]);
     });
   });
 });

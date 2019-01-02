@@ -16,18 +16,18 @@
   ></campus-button>
 </campus-page-bar>
 
-<campus-page-header
-  *ngIf="(learningArea$ | async) as learningArea"
-  [title]="learningArea.name"
-  [subtitle]="'Taken'"
-  [iconClass]="'learning-area:' + learningArea.icon"
->
-</campus-page-header>
-
 <ng-container
   *ngIf="(filterTextInput.result$ | async) as filteredTaskInstances"
 >
-  <div class="pages-tasks__container">
+  <div class="campus-page pages-tasks__container">
+    <campus-page-header
+      *ngIf="(learningArea$ | async) as learningArea"
+      [title]="learningArea.name"
+      [subtitle]="'Taken'"
+      [iconClass]="'learning-area:' + learningArea.icon"
+    >
+    </campus-page-header>
+
     <div class="pages-tasks__container__tasks-count">
       {{ filteredTaskInstances.length }} van
       <u (click)="filterTextInput.clear()">{{

@@ -12,7 +12,8 @@ import {
   BundleInterface,
   ContentInterface,
   LearningAreaInterface,
-  PersonInterface
+  PersonInterface,
+  UnlockedContent
 } from '@campus/dal';
 import {
   FilterableItem,
@@ -36,7 +37,7 @@ export class BundleDetailComponent
     OnInit,
     OnDestroy,
     AfterViewInit,
-    FilterableItem<ContentInterface[], ContentInterface> {
+    FilterableItem<UnlockedContent[], UnlockedContent> {
   protected listFormat = ListFormat; //enum beschikbaar maken in template
 
   listFormat$: Observable<ListFormat> = this.bundlesViewModel.listFormat$;
@@ -44,13 +45,10 @@ export class BundleDetailComponent
   learningArea$: Observable<LearningAreaInterface>;
   bundle$: Observable<BundleInterface>;
   bundleOwner$: Observable<PersonInterface>;
-  contents$: Observable<ContentInterface[]>;
+  unlockedContents$: Observable<UnlockedContent[]>;
 
   @ViewChild(FilterTextInputComponent)
-  filterTextInput: FilterTextInputComponent<
-    ContentInterface[],
-    ContentInterface
-  >;
+  filterTextInput: FilterTextInputComponent<UnlockedContent[], UnlockedContent>;
 
   list: ListViewComponent<ContentInterface>;
   @ViewChild('bundleListview')
@@ -77,7 +75,8 @@ export class BundleDetailComponent
     this.learningArea$ = this.getLearningArea();
     this.bundle$ = this.getBundle();
     this.bundleOwner$ = this.bundlesViewModel.getBundleOwner(this.bundle$);
-    this.contents$ = this.getBundleContents();
+    this.setupAlertsSubscription();
+    this.unlockedContents$ = this.getBundleContents();
 
     this.filterTextInput.setFilterableItem(this);
   }
@@ -105,8 +104,16 @@ export class BundleDetailComponent
     this.bundlesViewModel.changeListFormat(value);
   }
 
-  clickOpenContent(content: ContentInterface): void {
-    this.bundlesViewModel.openContent(content);
+  clickOpenContent(unlockedcontent: UnlockedContent): void {
+    this.bundlesViewModel.openContent(unlockedcontent);
+  }
+
+  private setupAlertsSubscription(): void {
+    this.subscriptions.add(
+      this.routeParams$.subscribe(params =>
+        this.bundlesViewModel.setBundleAlertRead(+params.bundle)
+      )
+    );
   }
 
   private getLearningArea(): Observable<LearningAreaInterface> {
@@ -125,7 +132,7 @@ export class BundleDetailComponent
     );
   }
 
-  private getBundleContents(): Observable<ContentInterface[]> {
+  private getBundleContents(): Observable<UnlockedContent[]> {
     return this.routeParams$.pipe(
       switchMap(params => {
         return this.bundlesViewModel.getBundleContents(params.bundle);
@@ -133,12 +140,13 @@ export class BundleDetailComponent
     );
   }
 
-  filterFn(source: ContentInterface[], filterText: string): ContentInterface[] {
+  filterFn(source: UnlockedContent[], filterText: string): UnlockedContent[] {
     if (this.list) {
       this.list.deselectAllItems();
     }
+
     return this.filterService.filter(source, {
-      name: filterText
+      content: { name: filterText }
     });
   }
 }

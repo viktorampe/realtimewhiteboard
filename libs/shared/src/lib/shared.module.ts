@@ -1,9 +1,12 @@
 import { LayoutModule } from '@angular/cdk/layout';
 import { PortalModule } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Inject, ModuleWithProviders, NgModule } from '@angular/core';
-import { MatIconModule, MatIconRegistry } from '@angular/material';
+import {
+  MatBadgeModule,
+  MatIconModule,
+  MatIconRegistry
+} from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { UiModule } from '@campus/ui';
@@ -12,7 +15,6 @@ import { PageBarContainerComponent } from './components/page-bar-container/page-
 import { OPEN_STATIC_CONTENT_SERVICE_TOKEN } from './content/open-static-content.interface';
 import { OpenStaticContentService } from './content/open-static-content.service';
 import { HeaderComponent } from './header/header.component';
-import { CampusHttpInterceptor } from './interceptors/campus-http.interceptor';
 import {
   EnvironmentAlertsFeatureInterface,
   EnvironmentErrorManagementFeatureInterface,
@@ -35,6 +37,7 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     PortalModule,
     LayoutModule,
     MatIconModule,
+    MatBadgeModule,
     RouterModule
   ],
   declarations: [HeaderComponent, PageBarContainerComponent],
@@ -47,11 +50,11 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
   providers: [
     { provide: FILTER_SERVICE_TOKEN, useClass: FilterService },
     { provide: SCORM_EXERCISE_SERVICE_TOKEN, useClass: ScormExerciseService },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: CampusHttpInterceptor,
-      multi: true
-    },
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: CampusHttpInterceptor,
+    //   multi: true
+    // },
     {
       provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
       useClass: OpenStaticContentService

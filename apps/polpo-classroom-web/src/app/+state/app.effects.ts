@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Effect, Actions } from '@ngrx/effects';
+import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
-
-import { AppState } from './app.reducer';
 import {
-  LoadApp,
+  AppActionTypes,
   AppLoaded,
   AppLoadError,
-  AppActionTypes
+  LoadApp
 } from './app.actions';
+import { AppState } from './app.reducer';
 
 @Injectable()
 export class AppEffects {
@@ -20,7 +19,6 @@ export class AppEffects {
     },
 
     onError: (action: LoadApp, error) => {
-      console.error('Error', error);
       return new AppLoadError(error);
     }
   });

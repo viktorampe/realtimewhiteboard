@@ -8,6 +8,7 @@ body {
   height: 100%;
 
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 13px;
 }
 
 * {
@@ -91,6 +92,9 @@ body {
 @import 'libs/pages/tasks/src/lib/pages-tasks.theme';
 @include pages-tasks-theme();
 
+@import 'libs/pages/reports/src/lib/pages-reports.theme';
+@include pages-reports-theme();
+
 // include shared lib scss
 @import 'libs/shared/src/lib/shared-theme';
 @include shared-theme();
@@ -98,6 +102,11 @@ body {
 /*
  * App styles
  */
+.ui-shell__logo {
+  text-align: center;
+  padding-top: 25px;
+}
+
 .ui-tree-nav__node--active {
   position: relative;
 

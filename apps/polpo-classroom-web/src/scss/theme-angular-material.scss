@@ -1,6 +1,3 @@
-// override angular material theme
-$drawer-container-background-color: $ui-primary-bg-color;
-
 @import '~@angular/material/_theming';
 @include mat-core(); // be sure to include this mixin only once
 // created theme with http://mcg.mbitson.com/ (find main palette color next to '500 :')
@@ -74,3 +71,7 @@ $polpo-primary: mat-palette($mat-polpo-primary);
 $polpo-accent: mat-palette($mat-polpo-accent, 500, 900, A100);
 $polpo-warn: mat-palette($mat-deep-orange);
 $polpo-theme: mat-light-theme($polpo-primary, $polpo-accent, $polpo-warn);
+// theme overrides
+mat-drawer {
+  border-right: none !important;
+}

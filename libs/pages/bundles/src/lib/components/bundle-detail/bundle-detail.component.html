@@ -1,7 +1,7 @@
 <campus-page-bar>
   <campus-filter-text-input
     theme="dark"
-    [source]="contents$ | async"
+    [source]="unlockedContents$ | async"
     class="pages__toolbar__filter"
   ></campus-filter-text-input>
   <div class="divider"></div>
@@ -45,49 +45,47 @@
   </campus-side-sheet-body>
 
   <campus-side-sheet-page>
-    <div class="campus-page">
-      <campus-page-header
-        [title]="bundle.name"
-        [subtitle]="bundle.description"
-        [iconClass]="(learningArea$ | async)?.icon"
-      >
-      </campus-page-header>
+    <campus-page-header
+      *ngIf="(learningArea$ | async) as learningArea"
+      [title]="bundle.name"
+      [subtitle]="bundle.description"
+      [iconClass]="'learning-area:' + learningArea.icon"
+    >
+    </campus-page-header>
 
-      <ng-container *ngIf="(contents$ | async) as contents">
-        <ng-container
-          *ngIf="(filterTextInput.result$ | async) as filteredContents"
+    <ng-container *ngIf="(unlockedContents$ | async) as unlockedContents">
+      <ng-container
+        *ngIf="(filterTextInput.result$ | async) as filteredUnlockedContents"
+      >
+        <div class="itemsAmount">
+          {{ filteredUnlockedContents.length }} van
+          <u (click)="filterTextInput.clear()">{{ unlockedContents.length }}</u>
+          weergegeven
+        </div>
+        <campus-list-view
+          #bundleListview
+          [listFormat]="listFormat$ | async"
+          [placeHolderText]="'De toegepaste filter bevat geen resultaten.'"
+          [multiSelect]="true"
         >
-          <div class="itemsAmount">
-            {{ filteredContents.length }} van
-            <u (click)="filterTextInput.clear()">{{ contents.length }}</u>
-            weergegeven
-          </div>
-          <campus-list-view
-            #bundleListview
-            [listFormat]="listFormat$ | async"
-            [placeHolderText]="'De toegepaste filter bevat geen resultaten.'"
-            [multiSelect]="true"
+          <campus-content-thumbnail
+            *ngFor="let unlockedcontent of filteredUnlockedContents"
+            campusListItem
+            [dataObject]="unlockedcontent.content"
+            [title]="unlockedcontent.content.name"
+            [fileExtensionClass]="unlockedcontent.content.fileExtension"
+            [fileTypeLabel]="unlockedcontent.content.fileTypeLabel"
+            [contentTypeClass]="unlockedcontent.content.productType"
           >
-            <campus-content-thumbnail
-              *ngFor="let content of filteredContents"
-              campusListItem
-              [dataObject]="content"
-              [title]="content.name"
-              [fileExtensionClass]="content.fileExtension"
-              [fileTypeLabel]="content.fileTypeLabel"
-              [contentTypeClass]="content.productType"
+            <campus-button
+              (click)="clickOpenContent(unlockedcontent)"
+              [iconClass]="'view-content'"
+              circle
             >
-              <campus-button
-                (click)="clickOpenContent(content)"
-                [iconClass]="'view-content'"
-                circle
-              >
-              </campus-button>
-              <campus-button [iconClass]="'tasks'" circle> </campus-button>
-            </campus-content-thumbnail>
-          </campus-list-view>
-        </ng-container>
+            </campus-button>
+          </campus-content-thumbnail>
+        </campus-list-view>
       </ng-container>
-    </div>
+    </ng-container>
   </campus-side-sheet-page>
 </campus-side-sheet>

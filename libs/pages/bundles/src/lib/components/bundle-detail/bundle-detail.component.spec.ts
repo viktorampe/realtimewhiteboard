@@ -4,7 +4,7 @@ import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Params } from '@angular/router';
-import { EduContentFixture } from '@campus/dal';
+import { UnlockedContentFixture } from '@campus/dal';
 import { MockMatIconRegistry } from '@campus/testing';
 import { ListFormat, ListViewItemDirective, UiModule } from '@campus/ui';
 import { FilterService, FILTER_SERVICE_TOKEN } from '@campus/utils';
@@ -54,10 +54,10 @@ describe('BundleDetailComponent', () => {
 
   it('should call the viewmodel openContent method', () => {
     const spy = jest.spyOn(bundlesViewModel, 'openContent');
-    const content = new EduContentFixture();
-    component.clickOpenContent(content);
+    const unlockedContent = new UnlockedContentFixture();
+    component.clickOpenContent(unlockedContent);
     expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy).toHaveBeenCalledWith(content);
+    expect(spy).toHaveBeenCalledWith(unlockedContent);
   });
 
   it('should get the listFormat$ from the vm', () => {
@@ -161,5 +161,14 @@ describe('BundleDetailComponent', () => {
     expect(fixture.debugElement.nativeElement.textContent).toContain(
       'Deze bundel is niet beschikbaar'
     );
+  });
+
+  it('should mark the alerts about the bundle as read', () => {
+    bundlesViewModel.setBundleAlertRead = jest.fn();
+
+    component.ngOnInit();
+
+    expect(bundlesViewModel.setBundleAlertRead).toHaveBeenCalled();
+    expect(bundlesViewModel.setBundleAlertRead).toHaveBeenCalledWith(1);
   });
 });

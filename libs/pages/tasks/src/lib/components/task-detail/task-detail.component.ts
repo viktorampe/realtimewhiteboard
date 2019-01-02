@@ -3,11 +3,16 @@ import {
   ChangeDetectorRef,
   Component,
   Inject,
+  OnDestroy,
   OnInit,
   ViewChild
 } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { EduContent, LearningAreaInterface } from '@campus/dal';
+import {
+  EduContent,
+  LearningAreaInterface,
+  TaskEduContentInterface
+} from '@campus/dal';
 import {
   FilterTextInputComponent,
   ListFormat,
@@ -15,7 +20,6 @@ import {
   SideSheetComponent
 } from '@campus/ui';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
-import { TaskEduContent } from '@diekeure/polpo-api-angular-sdk';
 import { Observable, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { TasksViewModel } from '../tasks.viewmodel';
@@ -26,7 +30,7 @@ import { TaskWithInfoInterface } from '../tasks.viewmodel.interfaces';
   templateUrl: './task-detail.component.html',
   styleUrls: ['./task-detail.component.scss']
 })
-export class TaskDetailComponent implements OnInit, AfterViewInit {
+export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   subscriptions: Subscription;
   listFormat: typeof ListFormat;
 
@@ -40,7 +44,10 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
 
   //viewChildren
   @ViewChild(FilterTextInputComponent)
-  filterTextInput: FilterTextInputComponent<TaskEduContent[], TaskEduContent>;
+  filterTextInput: FilterTextInputComponent<
+    TaskWithInfoInterface,
+    TaskEduContentInterface
+  >;
 
   list: ListViewComponent<EduContent>;
   @ViewChild('taskInstanceListview')
@@ -66,10 +73,15 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
     this.initializeProperties();
     this.loadInputParams();
     this.loadOutputStreams();
+    this.setupAlertsSubscription();
   }
 
   ngAfterViewInit(): void {
     this.setupListSubscription();
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 
   //initializer methods
@@ -87,6 +99,14 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
     this.learningArea$ = this.getLearningArea();
     this.taskInfo$ = this.getTaskInfo();
     this.filterTextInput.setFilterableItem(this);
+  }
+
+  private setupAlertsSubscription(): void {
+    this.subscriptions.add(
+      this.routerParams$.subscribe(params =>
+        this.taskViewModel.setTaskAlertRead(+params.task)
+      )
+    );
   }
 
   private setupListSubscription(): void {
@@ -126,17 +146,18 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
   }
 
   clickOpenContent(content: EduContent): void {
-    //TODO contact viewmodel to open new window
-    console.log('%cclickOpenContent:', 'color: orange; font-weight: bold;');
-    console.log({ content });
+    this.taskViewModel.startExercise(content.id);
   }
 
   //filterFunction
-  filterFn(info: TaskEduContent[], searchText: string): TaskEduContent[] {
+  filterFn(
+    info: TaskWithInfoInterface,
+    searchText: string
+  ): TaskEduContentInterface[] {
     if (this.list) {
       this.list.deselectAllItems();
     }
-    return this.filterService.filter(info, {
+    return this.filterService.filter(info.taskEduContents, {
       eduContent: { publishedEduContentMetadata: { title: searchText } }
     });
   }

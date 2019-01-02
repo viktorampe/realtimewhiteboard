@@ -2,11 +2,14 @@ import { ModuleWithProviders } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { WINDOW } from '@campus/browser';
 import {
+  AlertActions,
   AUTH_SERVICE_TOKEN,
   BundleActions,
   BundleFixture,
   BundleInterface,
   BundleReducer,
+  DalState,
+  EduContent,
   EduContentActions,
   EduContentFixture,
   EduContentInterface,
@@ -32,14 +35,19 @@ import {
   UnlockedContentActions,
   UnlockedContentFixture,
   UnlockedContentInterface,
-  UnlockedContentReducer
+  UnlockedContentReducer,
+  UserContentActions,
+  UserContentReducer
 } from '@campus/dal';
 import {
   OpenStaticContentServiceInterface,
-  OPEN_STATIC_CONTENT_SERVICE_TOKEN
+  OPEN_STATIC_CONTENT_SERVICE_TOKEN,
+  ScormExerciseServiceInterface,
+  SCORM_EXERCISE_SERVICE_TOKEN
 } from '@campus/shared';
 import { MockWindow } from '@campus/testing';
 import { ListFormat } from '@campus/ui';
+import { UnlockedContent } from '@diekeure/polpo-api-angular-sdk';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { of } from 'rxjs';
@@ -49,6 +57,7 @@ import { LearningAreasWithBundlesInfoInterface } from './bundles.viewmodel.inter
 describe('BundlesViewModel', () => {
   let bundlesViewModel: BundlesViewModel;
   let openStaticContentService: OpenStaticContentServiceInterface;
+  let scormExerciseService: ScormExerciseServiceInterface;
   let mockWindow: MockWindow;
   let uiState: UiReducer.UiState;
   let learningAreaState: LearningAreaReducer.State;
@@ -57,6 +66,7 @@ describe('BundlesViewModel', () => {
   let unlockedBoekeStudentState: UnlockedBoekeStudentReducer.State;
   let unlockedContentState: UnlockedContentReducer.State;
   let eduContentState: EduContentReducer.State;
+  let userContentState: UserContentReducer.State;
   let coupledPersonState: PersonReducer.State;
 
   let ui: UiReducer.UiState;
@@ -67,6 +77,7 @@ describe('BundlesViewModel', () => {
   let unlockedContents: UnlockedContentInterface[];
   let eduContents: EduContentInterface[];
   let coupledPersons: PersonInterface[];
+  let store: Store<DalState>;
 
   beforeAll(() => {
     loadState();
@@ -84,6 +95,10 @@ describe('BundlesViewModel', () => {
           useValue: { open: jest.fn() }
         },
         {
+          provide: SCORM_EXERCISE_SERVICE_TOKEN,
+          useValue: { startExerciseFromUnlockedContent: jest.fn() }
+        },
+        {
           provide: WINDOW,
           useClass: MockWindow
         }
@@ -91,7 +106,9 @@ describe('BundlesViewModel', () => {
     });
 
     bundlesViewModel = TestBed.get(BundlesViewModel);
+    store = TestBed.get(Store);
     openStaticContentService = TestBed.get(OPEN_STATIC_CONTENT_SERVICE_TOKEN);
+    scormExerciseService = TestBed.get(SCORM_EXERCISE_SERVICE_TOKEN);
     mockWindow = TestBed.get(WINDOW);
   });
 
@@ -108,11 +125,47 @@ describe('BundlesViewModel', () => {
   });
   describe('#openContent', () => {
     it('should call the open static content service for EduContent', () => {
-      const eduContent = new EduContentFixture({ id: 5 });
-      bundlesViewModel.openContent(eduContent);
+      const unlockedContent = new UnlockedContentFixture({
+        id: 1,
+        eduContent: new EduContentFixture({ type: 'file' })
+      });
+      bundlesViewModel.openContent(unlockedContent);
       expect(openStaticContentService.open).toHaveBeenCalledTimes(1);
-      expect(openStaticContentService.open).toHaveBeenCalledWith(eduContent);
+      expect(openStaticContentService.open).toHaveBeenCalledWith(
+        unlockedContent.content
+      );
     });
+
+    it('should call the scormExerciseService for eduContent', () => {
+      const mockUnlockedContent = new UnlockedContentFixture({
+        id: 5,
+        eduContent: new EduContentFixture({ type: 'exercise' }),
+        teacherId: 123 //can't be 1, since that is the userId
+      });
+      bundlesViewModel.openContent(mockUnlockedContent);
+      expect(
+        scormExerciseService.startExerciseFromUnlockedContent
+      ).toHaveBeenCalledTimes(1);
+      expect(
+        scormExerciseService.startExerciseFromUnlockedContent
+      ).toHaveBeenCalledWith(
+        1,
+        mockUnlockedContent.eduContentId,
+        mockUnlockedContent.id
+      );
+    });
+  });
+
+  it('set alerts read by a filter', () => {
+    spyOn(store, 'dispatch');
+    const expectedAction = new AlertActions.SetAlertReadByFilter({
+      filter: { bundleId: 1 },
+      intended: false,
+      personId: 1,
+      read: true
+    });
+    bundlesViewModel.setBundleAlertRead(1);
+    expect(store.dispatch).toHaveBeenCalledWith(expectedAction);
   });
 
   it('sharedLearningAreas$', () => {
@@ -168,7 +221,12 @@ describe('BundlesViewModel', () => {
   it('getBundleContents()', () => {
     expect(bundlesViewModel.getBundleContents(1)).toBeObservable(
       hot('a', {
-        a: [eduContents[0]]
+        a: [
+          Object.assign(new UnlockedContent(), {
+            ...unlockedContents[0],
+            eduContent: Object.assign(new EduContent(), eduContents[0])
+          })
+        ]
       })
     );
   });
@@ -276,6 +334,13 @@ describe('BundlesViewModel', () => {
       })
     );
 
+    userContentState = UserContentReducer.reducer(
+      UserContentReducer.initialState,
+      new UserContentActions.UserContentsLoaded({
+        userContents: []
+      })
+    );
+
     coupledPersons = [new PersonFixture({ id: 2 })];
     coupledPersonState = PersonReducer.reducer(
       PersonReducer.initialState,
@@ -334,6 +399,13 @@ describe('BundlesViewModel', () => {
         reducer: EduContentReducer.reducer,
         initialState: {
           initialState: eduContentState
+        }
+      },
+      {
+        NAME: UserContentReducer.NAME,
+        reducer: UserContentReducer.reducer,
+        initialState: {
+          initialState: userContentState
         }
       },
       {

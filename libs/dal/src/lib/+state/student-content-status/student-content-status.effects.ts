@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { StudentContentStatusInterface } from '@campus/dal';
 import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
+import { undo } from 'ngrx-undo';
 import { map } from 'rxjs/operators';
 import { DalActions } from '..';
 import {
@@ -27,6 +28,7 @@ export class StudentContentStatusesEffects {
       run: (action: LoadStudentContentStatuses, state: DalState) => {
         if (!action.payload.force && state.studentContentStatuses.loaded)
           return;
+
         return this.studentContentStatusesService
           .getAllByStudentId(action.payload.studentId)
           .pipe(
@@ -66,8 +68,8 @@ export class StudentContentStatusesEffects {
           );
       },
       undoAction: (action: UpdateStudentContentStatus, error: any) => {
-        //TODO handle the undo
-        return null;
+        return undo(action);
+        // TODO: show notification to user
       }
     }
   );
@@ -91,8 +93,8 @@ export class StudentContentStatusesEffects {
           );
       },
       undoAction: (action: AddStudentContentStatus, error: any) => {
-        //TODO handle the undo
-        return null;
+        return undo(action);
+        //TODO: show notification to user
       }
     }
   );

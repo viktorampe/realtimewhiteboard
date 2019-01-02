@@ -35,7 +35,8 @@ export const environment = {
       'assets/icons/learning-area/sociaaleconomischeinitiatie.svg',
     'learning-area:polpo-spaans': 'assets/icons/learning-area/spaans.svg',
     'learning-area:polpo-techniek': 'assets/icons/learning-area/techniek.svg',
-    'learning-area:polpo-wiskunde': 'assets/icons/learning-area/wiskunde.svg',
+    'learning-area:polpo-wiskunde':
+      'assets/icons/learning-area/wiskunde-lg.svg',
     'learning-area:polpo-ww': 'assets/icons/learning-area/ww.svg',
     // 'learning-area:polpo-aardrijkskunde-lg':
     //   'assets/icons/learning-area/aardrijkskunde-lg.svg',
@@ -222,7 +223,7 @@ export const environment = {
       hasAppBarDropDown: false
     },
     errorManagement: {
-      managedStatusCodes: [500, 401, 404]
+      managedStatusCodes: [500, 401, 404, 0]
     }
   }
 };

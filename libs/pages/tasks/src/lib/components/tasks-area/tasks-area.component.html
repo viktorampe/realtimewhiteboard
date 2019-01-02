@@ -17,7 +17,7 @@
 </campus-page-bar>
 
 <div
-  class="pages-tasks__container"
+  class="campus-page pages-tasks__container"
   *ngIf="
     (learningAreasWithInfo$ | async)?.learningAreasWithInfo as learningAreas
   "
@@ -25,7 +25,7 @@
   <campus-page-header
     [title]="'Mijn taken'"
     [subtitle]="'Leergebieden'"
-    [iconClass]="'tasks'"
+    [iconClass]="'polpo-tasks'"
   ></campus-page-header>
 
   <ng-template #noLearningAreas

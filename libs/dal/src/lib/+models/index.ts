@@ -92,6 +92,7 @@ export * from './UnlockedBoekeGroup';
 export * from './UnlockedBoekeGroup.interface';
 export * from './UnlockedBoekeStudent';
 export * from './UnlockedBoekeStudent.interface';
+export * from './UnlockedContent';
 export * from './UnlockedContent.interface';
 export * from './UnlockedContentGroup.interface';
 export * from './UnlockedContentStudent.interface';
