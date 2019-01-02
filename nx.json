@@ -73,6 +73,9 @@
     },
     "pages-settings-dashboard": {
       "tags": []
+    },
+    "pages-settings-profile": {
+      "tags": []
     }
   }
 }

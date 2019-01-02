@@ -54,6 +54,12 @@ const routes: Routes = [
             loadChildren:
               '@campus/pages/settings/dashboard#PagesSettingsDashboardModule',
             data: { breadcrumbText: 'Dashboard' }
+          },
+          {
+            path: 'profile',
+            loadChildren:
+              '@campus/pages/settings/profile#PagesSettingsProfileModule',
+            data: { breadcrumbText: 'Profiel' }
           }
         ]
       },

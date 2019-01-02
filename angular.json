@@ -773,6 +773,34 @@
           }
         }
       }
+    },
+    "pages-settings-profile": {
+      "root": "libs/pages/settings/profile",
+      "sourceRoot": "libs/pages/settings/profile/src",
+      "projectType": "library",
+      "prefix": "campus",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/pages/settings/profile/tsconfig.lib.json",
+              "libs/pages/settings/profile/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/pages/settings/profile/jest.config.js",
+            "tsConfig": "libs/pages/settings/profile/tsconfig.spec.json",
+            "setupFile": "libs/pages/settings/profile/src/test-setup.ts"
+          }
+        }
+      }
     }
   },
   "cli": {

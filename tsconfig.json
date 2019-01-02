@@ -76,6 +76,9 @@
       ],
       "@campus/pages/settings/dashboard": [
         "libs/pages/settings/dashboard/src/index.ts"
+      ],
+      "@campus/pages/settings/profile": [
+        "libs/pages/settings/profile/src/index.ts"
       ]
     }
   },

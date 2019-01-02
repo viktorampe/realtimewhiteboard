@@ -21,5 +21,7 @@
     "../../libs/ui/src/index.ts",
     "../../libs/shared/src/index.ts",
     "../../libs/pages/settings/dashboard/src/index.ts"
-  ]
+  
+    , "../../libs/pages/settings/profile/src/index.ts"
+]
 }
