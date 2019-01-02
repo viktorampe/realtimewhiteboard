@@ -23,5 +23,7 @@
     "../../libs/pages/settings/dashboard/src/index.ts"
   
     , "../../libs/pages/settings/profile/src/index.ts"
+
+    , "../../libs/pages/settings/avatar/src/index.ts"
 ]
 }
