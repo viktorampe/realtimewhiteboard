@@ -1,5 +1,4 @@
 <div *ngIf="(ownResults$ | async) as ownResults" class="page-results">
-  <!-- TODO set alternative layout for header when available -->
   <campus-page-header
     *ngIf="(learningArea$ | async) as learningArea"
     [layout]="'centered'"

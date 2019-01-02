@@ -52,8 +52,7 @@ describe('ReportsViewModel', () => {
         {
           provide: SCORM_EXERCISE_SERVICE_TOKEN,
           useValue: {
-            reviewExerciseFromTask: jest.fn(),
-            reviewExerciseFromUnlockedContent: jest.fn()
+            reviewExerciseFromResult: jest.fn()
           }
         },
         {
@@ -265,14 +264,12 @@ describe('ReportsViewModel', () => {
       });
       reportsViewModel.openContentForReview(mockTaskResult);
 
-      expect(scormExerciseService.reviewExerciseFromTask).toHaveBeenCalledTimes(
-        1
-      );
-      expect(scormExerciseService.reviewExerciseFromTask).toHaveBeenCalledWith(
-        authService.userId,
-        mockTaskResult.eduContentId,
-        mockTaskResult.taskId
-      );
+      expect(
+        scormExerciseService.reviewExerciseFromResult
+      ).toHaveBeenCalledTimes(1);
+      expect(
+        scormExerciseService.reviewExerciseFromResult
+      ).toHaveBeenCalledWith(mockTaskResult);
     });
     it('should call the scormExerciseService to open a bundle', () => {
       const mockBundleResult = new ResultFixture({
@@ -283,15 +280,11 @@ describe('ReportsViewModel', () => {
       reportsViewModel.openContentForReview(mockBundleResult);
 
       expect(
-        scormExerciseService.reviewExerciseFromUnlockedContent
+        scormExerciseService.reviewExerciseFromResult
       ).toHaveBeenCalledTimes(1);
       expect(
-        scormExerciseService.reviewExerciseFromUnlockedContent
-      ).toHaveBeenCalledWith(
-        authService.userId,
-        mockBundleResult.eduContentId,
-        mockBundleResult.unlockedContentId
-      );
+        scormExerciseService.reviewExerciseFromResult
+      ).toHaveBeenCalledWith(mockBundleResult);
     });
   });
 });
