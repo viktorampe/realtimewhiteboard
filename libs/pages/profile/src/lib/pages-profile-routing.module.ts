@@ -1,15 +1,17 @@
-import { ProfileViewModel } from './components/profile.viewmodel';
-
-import { ProfileComponent } from './components/profile.component';
-
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
+import { ProfileComponent } from './components/profile.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: ProfileComponent,
-    resolve: { isResolved: ProfileViewModel }
+    // resolve: { isResolved: ProfileResolver }, //TODO
+    children: [
+      {
+        path: '',
+        component: ProfileComponent
+      }
+    ]
   }
 ];
 
