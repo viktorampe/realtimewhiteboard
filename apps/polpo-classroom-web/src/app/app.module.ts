@@ -2,12 +2,15 @@ import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
-import { DalModule } from '@campus/dal';
+import { CustomSerializer, DalModule } from '@campus/dal';
 import { GuardsModule } from '@campus/guards';
 import { SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
 import { EffectsModule } from '@ngrx/effects';
-import { StoreRouterConnectingModule } from '@ngrx/router-store';
+import {
+  NavigationActionTiming,
+  StoreRouterConnectingModule
+} from '@ngrx/router-store';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { NxModule } from '@nrwl/nx';
@@ -54,7 +57,10 @@ configureBufferSize(150);
     ),
     EffectsModule.forRoot([AppEffects]),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
-    StoreRouterConnectingModule
+    StoreRouterConnectingModule.forRoot({
+      navigationActionTiming: NavigationActionTiming.PostActivation,
+      serializer: CustomSerializer
+    })
   ],
   providers: [],
   bootstrap: [AppComponent],

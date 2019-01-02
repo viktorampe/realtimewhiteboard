@@ -16,5 +16,5 @@ export class BreadcrumbsComponent {
 
 export interface BreadcrumbLinkInterface {
   displayText: string;
-  link: any[]; // see routerlink docs
+  link: string[]; // see routerlink docs
 }

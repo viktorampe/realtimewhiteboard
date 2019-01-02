@@ -1,4 +1,9 @@
-import { DropdownMenuItemInterface, ListFormat, NavItem } from '@campus/ui';
+import {
+  BreadcrumbLinkInterface,
+  DropdownMenuItemInterface,
+  ListFormat,
+  NavItem
+} from '@campus/ui';
 import { UiQuery } from './ui.selectors';
 
 describe('Ui Selectors', () => {
@@ -7,10 +12,12 @@ describe('Ui Selectors', () => {
   let storeState;
   let mockNavItem: NavItem;
   let mockProfileMenuItem: DropdownMenuItemInterface;
+  let mockBreadcrumb: BreadcrumbLinkInterface;
 
   beforeAll(() => {
     mockNavItem = { title: 'mockNavItem' };
     mockProfileMenuItem = { description: 'mock' };
+    mockBreadcrumb = { displayText: 'foo', link: ['url'] };
   });
 
   beforeEach(() => {
@@ -20,7 +27,8 @@ describe('Ui Selectors', () => {
         loaded: true,
         listFormat: ListFormat.GRID,
         sideNavItems: [mockNavItem],
-        profileMenuItems: [mockProfileMenuItem]
+        profileMenuItems: [mockProfileMenuItem],
+        breadcrumbs: [mockBreadcrumb]
       }
     };
   });
@@ -44,6 +52,11 @@ describe('Ui Selectors', () => {
     it("getProfileMenuItems() should return the current 'profileMenuItems' setting", () => {
       const result = UiQuery.getProfileMenuItems(storeState);
       expect(result).toEqual([mockProfileMenuItem]);
+    });
+
+    it("getBreadcrumbs() should return the current 'breadcrumbs' setting", () => {
+      const result = UiQuery.getBreadcrumbs(storeState);
+      expect(result).toEqual([mockBreadcrumb]);
     });
   });
 });

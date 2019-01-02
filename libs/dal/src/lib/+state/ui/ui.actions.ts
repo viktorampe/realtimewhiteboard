@@ -1,4 +1,9 @@
-import { DropdownMenuItemInterface, ListFormat, NavItem } from '@campus/ui';
+import {
+  BreadcrumbLinkInterface,
+  DropdownMenuItemInterface,
+  ListFormat,
+  NavItem
+} from '@campus/ui';
 import { Action } from '@ngrx/store';
 import { UiState } from './ui.reducer';
 
@@ -10,7 +15,8 @@ export enum UiActionTypes {
   ToggleSideSheet = '[Ui] Ui Toggle Side Sheet',
   ToggleSideNav = '[Ui] Ui Toggle Side Nav',
   SetSideNavItems = '[Ui] Ui Set Side Nav Items',
-  SetProfileMenuItems = '[Ui] Ui Set Profile Menu Items'
+  SetProfileMenuItems = '[Ui] Ui Set Profile Menu Items',
+  SetBreadcrumbs = '[Ui] Ui Set Breadcrumbs'
 }
 
 export class LoadUi implements Action {
@@ -49,6 +55,11 @@ export class SetProfileMenuItems implements Action {
   constructor(public payload: { menuItems: DropdownMenuItemInterface[] }) {}
 }
 
+export class SetBreadcrumbs implements Action {
+  readonly type = UiActionTypes.SetBreadcrumbs;
+  constructor(public payload: { breadcrumbs: BreadcrumbLinkInterface[] }) {}
+}
+
 export type UiAction =
   | LoadUi
   | UiLoaded
@@ -57,7 +68,8 @@ export type UiAction =
   | ToggleSideSheet
   | ToggleSideNav
   | SetSideNavItems
-  | SetProfileMenuItems;
+  | SetProfileMenuItems
+  | SetBreadcrumbs;
 
 export const fromUiActions = {
   LoadUi,
@@ -67,5 +79,6 @@ export const fromUiActions = {
   ToggleSideSheet,
   ToggleSideNav,
   SetSideNavItems,
-  SetProfileMenuItems
+  SetProfileMenuItems,
+  SetBreadcrumbs
 };
