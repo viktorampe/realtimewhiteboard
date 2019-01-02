@@ -8,6 +8,7 @@ import {
   LearningAreaQueries,
   ResultInterface,
   ResultQueries,
+  UiActions,
   UiQuery
 } from '@campus/dal';
 import {
@@ -42,6 +43,10 @@ export class ReportsViewModel {
   ) {
     this.setSourceStreams();
     this.setPresentationStreams();
+  }
+
+  public changeListFormat(listFormat: ListFormat): void {
+    this.store.dispatch(new UiActions.SetListFormat({ listFormat }));
   }
 
   public getLearningAreaById(

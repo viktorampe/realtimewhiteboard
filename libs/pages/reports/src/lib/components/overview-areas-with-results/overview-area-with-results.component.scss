@@ -1,0 +1,11 @@
+// Dit is een kopie van \pages\bundles\...\learning-areas.component.scss
+.pages-reports {
+  &__container {
+    padding: 20px;
+    &__learning-areas-count {
+      &__total {
+        cursor: pointer;
+      }
+    }
+  }
+}

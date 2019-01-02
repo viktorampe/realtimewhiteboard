@@ -1,0 +1,64 @@
+<campus-page-bar>
+  <campus-filter-text-input
+    theme="dark"
+    class="pages__toolbar__filter"
+    [source]="learningAreasWithResults$ | async"
+  ></campus-filter-text-input>
+
+  <div class="divider"></div>
+  <campus-button
+    [iconClass]="'list-view'"
+    (click)="clickChangeListFormat(listFormat.LINE)"
+  ></campus-button>
+  <campus-button
+    [iconClass]="'grid-view'"
+    (click)="clickChangeListFormat(listFormat.GRID)"
+  ></campus-button>
+</campus-page-bar>
+
+<div class="pages-reports__container">
+  <campus-page-header
+    [title]="'Resultaten'"
+    [subtitle]="'Kies een vakgebied'"
+    [iconClass]="'increase'"
+    [layout]="'centered'"
+  >
+  </campus-page-header>
+
+  <div
+    *ngIf="(filterTextInput.result$ | async) as filteredLearningAreaInstances"
+  >
+    <div class="pages-reports__container__learning-areas-count">
+      {{ filteredLearningAreaInstances.length }} van
+      <u
+        class="pages-reports__container__learning-areas-count__total"
+        (click)="filterTextInput.clear()"
+        >{{ (learningAreasWithResults$ | async)?.learningAreas.length }}</u
+      >
+      weergegeven
+    </div>
+    <div class="pages-reports__container__learning-areas">
+      <campus-list-view
+        [listFormat]="listFormat$ | async"
+        [placeHolderText]="'Er zijn nog geen resultaten beschikbaar.'"
+      >
+        <campus-folder
+          *ngFor="let instance of filteredLearningAreaInstances"
+          [routerLink]="[instance.learningArea.id]"
+          campusListItem
+          [itemCount]="
+            instance.tasksWithResultsCount + instance.bundlesWithResultsCount
+          "
+          [title]="instance.learningArea.name"
+          [backgroundColor]="instance.learningArea.color"
+          [icon]="'learning-area:' + instance.learningArea.icon"
+        >
+          <campus-folder-details>
+            <div>Taken: {{ instance.tasksWithResultsCount }} </div>
+            <div>Bundels: {{ instance.bundlesWithResultsCount }} </div>
+          </campus-folder-details>
+        </campus-folder>
+      </campus-list-view>
+    </div>
+  </div>
+</div>
