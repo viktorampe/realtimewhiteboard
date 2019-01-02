@@ -21,7 +21,6 @@
       height: $ui-dropdown-menu-image-size;
     }
 
-
     &__header {
       color: $ui-dropdown-menu-item-header-color;
     }
@@ -32,7 +31,8 @@
 
     &__divider::before {
       content: ' ';
-      margin: $ui-dropdown-menu-item__divider-margin-top-bottom $ui-dropdown-menu-item__divider-margin-left-right;
+      margin: $ui-dropdown-menu-item__divider-margin-top-bottom
+        $ui-dropdown-menu-item__divider-margin-left-right;
       height: $ui-dropdown-menu-item__divider-height;
       background-color: $ui-dropdown-menu-item__divider-background-color;
       display: block;
