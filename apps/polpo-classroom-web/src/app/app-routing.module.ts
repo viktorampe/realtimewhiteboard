@@ -60,12 +60,6 @@ const routes: Routes = [
             loadChildren:
               '@campus/pages/settings/profile#PagesSettingsProfileModule',
             data: { breadcrumbText: 'Profiel' }
-          },
-          {
-            path: 'avatar',
-            loadChildren:
-              '@campus/pages/settings/profile#PagesSettingsAvatarModule',
-            data: { breadcrumbText: 'Avatar' }
           }
         ]
       },

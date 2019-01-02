@@ -79,9 +79,6 @@
       ],
       "@campus/pages/settings/profile": [
         "libs/pages/settings/profile/src/index.ts"
-      ],
-      "@campus/pages/settings/avatar": [
-        "libs/pages/settings/avatar/src/index.ts"
       ]
     }
   },
