@@ -18,7 +18,10 @@ import { PagesReportsRoutingModule } from './pages-reports-routing.module';
     PagesSharedModule,
     SharedModule
   ],
-  declarations: [OverviewAreaWithResultsComponent, ResultsByPersonAndAreaComponent],
+  declarations: [
+    OverviewAreaWithResultsComponent,
+    ResultsByPersonAndAreaComponent
+  ],
   providers: [ReportsViewModel],
   exports: [ResultsByPersonAndAreaComponent]
 })
