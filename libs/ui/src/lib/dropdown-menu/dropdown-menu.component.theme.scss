@@ -2,8 +2,8 @@
   $ui-dropdown-menu-width--large: 350px !default;
   $ui-dropdown-menu-width--small: 175px !default;
   $ui-dropdown-menu-body-height: 275px !default;
-  $ui-dropdown-menu-background: #95a0aa !default;
-  $ui-dropdown-menu-color: #32323a !default;
+  $ui-dropdown-menu-background: $secondary-font-color !default;
+  $ui-dropdown-menu-color: $secondary-bg-color !default;
 
   .ui-dropdown-menu {
     color: $ui-dropdown-menu-color;
