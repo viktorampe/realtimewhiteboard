@@ -12,8 +12,8 @@ import { EXERCISE_SERVICE_TOKEN } from '../../exercise/exercise.service.interfac
 import {
   CurrentExerciseError,
   CurrentExerciseLoaded,
-  SaveCurrentExercise,
-  StartExercise
+  LoadExercise,
+  SaveCurrentExercise
 } from './current-exercise.actions';
 import { CurrentExerciseEffects } from './current-exercise.effects';
 import { CurrentExerciseInterface } from './current-exercise.reducer';
@@ -81,7 +81,7 @@ describe('ExerciseEffects', () => {
           provide: EXERCISE_SERVICE_TOKEN,
           useValue: {
             getAllForUser: () => {},
-            startExercise: () => mockExercise,
+            loadExercise: () => mockExercise,
             saveExercise: () => mockExercise
           }
         },
@@ -103,14 +103,14 @@ describe('ExerciseEffects', () => {
       url: 'dit is een url'
     };
 
-    const startTaskExerciseAction = new StartExercise({
+    const startTaskExerciseAction = new LoadExercise({
       userId: 6,
       educontentId: 1,
       saveToApi: true,
       taskId: 1,
       cmiMode: ScormCmiMode.CMI_MODE_BROWSE
     });
-    const startUnlockedContentExerciseAction = new StartExercise({
+    const startUnlockedContentExerciseAction = new LoadExercise({
       userId: 6,
       educontentId: 1,
       saveToApi: true,
@@ -124,18 +124,18 @@ describe('ExerciseEffects', () => {
         usedState = CurrentExerciseReducer.initialState;
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('startExercise', mockExercise);
+        mockServiceMethodReturnValue('loadExercise', mockExercise);
       });
       it('should trigger an api call for a task', () => {
         expectInAndOut(
-          effects.startExercise$,
+          effects.loadExercise$,
           startTaskExerciseAction,
           filledLoadedAction
         );
       });
       it('should trigger an api call for an unlockedContent', () => {
         expectInAndOut(
-          effects.startExercise$,
+          effects.loadExercise$,
           startUnlockedContentExerciseAction,
           filledLoadedAction
         );
@@ -146,11 +146,11 @@ describe('ExerciseEffects', () => {
         usedState = CurrentExerciseReducer.initialState;
       });
       beforeEach(() => {
-        mockServiceMethodError('startExercise', 'failed');
+        mockServiceMethodError('loadExercise', 'failed');
       });
       it('should return a error action ', () => {
         expectInAndOut(
-          effects.startExercise$,
+          effects.loadExercise$,
           startTaskExerciseAction,
           loadErrorAction
         );

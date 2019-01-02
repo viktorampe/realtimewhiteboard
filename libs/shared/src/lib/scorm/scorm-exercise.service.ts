@@ -4,7 +4,8 @@ import {
   CurrentExerciseActions,
   CurrentExerciseInterface,
   CurrentExerciseQueries,
-  DalState
+  DalState,
+  ResultInterface
 } from '@campus/dal';
 import {
   ScormApiServiceInterface,
@@ -34,7 +35,7 @@ export class ScormExerciseService implements ScormExerciseServiceInterface {
     unlockedContentId: number,
     showAnswers: boolean
   ): void {
-    this.saveNewExerciseToStore(
+    this.loadNewExerciseToStore(
       userId,
       educontentId,
       false,
@@ -49,7 +50,7 @@ export class ScormExerciseService implements ScormExerciseServiceInterface {
     taskId: number,
     showAnswers: boolean
   ): void {
-    this.saveNewExerciseToStore(
+    this.loadNewExerciseToStore(
       userId,
       educontentId,
       false,
@@ -63,7 +64,7 @@ export class ScormExerciseService implements ScormExerciseServiceInterface {
     educontentId: number,
     unlockedContentId: number
   ): void {
-    this.saveNewExerciseToStore(
+    this.loadNewExerciseToStore(
       userId,
       educontentId,
       true,
@@ -77,7 +78,7 @@ export class ScormExerciseService implements ScormExerciseServiceInterface {
     educontentId: number,
     taskId: number
   ): void {
-    this.saveNewExerciseToStore(
+    this.loadNewExerciseToStore(
       userId,
       educontentId,
       true,
@@ -86,32 +87,15 @@ export class ScormExerciseService implements ScormExerciseServiceInterface {
       ScormCmiMode.CMI_MODE_BROWSE
     );
   }
-  reviewExerciseFromUnlockedContent(
-    userId: number,
-    educontentId: number,
-    unlockedContentId: number
-  ): void {
-    this.saveNewExerciseToStore(
-      userId,
-      educontentId,
+  reviewExerciseFromResult(result: ResultInterface): void {
+    this.loadNewExerciseToStore(
+      result.personId,
+      result.eduContentId,
       false,
-      null,
-      unlockedContentId,
-      ScormCmiMode.CMI_MODE_REVIEW
-    );
-  }
-  reviewExerciseFromTask(
-    userId: number,
-    educontentId: number,
-    taskId: number
-  ): void {
-    this.saveNewExerciseToStore(
-      userId,
-      educontentId,
-      false,
-      taskId,
-      null,
-      ScormCmiMode.CMI_MODE_REVIEW
+      result.taskId,
+      result.unlockedContentId,
+      ScormCmiMode.CMI_MODE_REVIEW,
+      result
     );
   }
 
@@ -172,22 +156,24 @@ export class ScormExerciseService implements ScormExerciseServiceInterface {
     );
   }
 
-  private saveNewExerciseToStore(
+  private loadNewExerciseToStore(
     userId: number,
     educontentId: number,
     saveToApi: boolean,
     taskId: number = null,
     unlockedContentId: number = null,
-    mode: ScormCmiMode
+    mode: ScormCmiMode,
+    result?: ResultInterface
   ) {
     this.store.dispatch(
-      new CurrentExerciseActions.StartExercise({
+      new CurrentExerciseActions.LoadExercise({
         userId: userId,
         educontentId: educontentId,
         saveToApi: saveToApi,
         taskId: taskId,
         unlockedContentId: unlockedContentId,
-        cmiMode: mode
+        cmiMode: mode,
+        result: result
       })
     );
   }

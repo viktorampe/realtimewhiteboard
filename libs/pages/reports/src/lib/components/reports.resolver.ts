@@ -3,6 +3,8 @@ import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   DalState,
+  EduContentActions,
+  EduContentQueries,
   LearningAreaActions,
   LearningAreaQueries,
   ResultActions,
@@ -25,13 +27,15 @@ export class ReportsResolver extends StateResolver {
     return [
       new LearningAreaActions.LoadLearningAreas(),
       new ResultActions.LoadResults({ userId: this.authService.userId }),
-      new UiActions.LoadUi()
+      new UiActions.LoadUi(),
+      new EduContentActions.LoadEduContents({ userId: this.authService.userId })
     ];
   }
   protected getResolvedQueries(): Selector<object, boolean>[] {
     return [
       LearningAreaQueries.getLoaded,
       ResultQueries.getLoaded,
+      EduContentQueries.getLoaded,
       UiQuery.getLoaded
     ];
   }

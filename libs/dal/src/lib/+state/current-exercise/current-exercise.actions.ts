@@ -1,17 +1,18 @@
 import { ScormCmiMode } from '@campus/scorm';
 import { Action } from '@ngrx/store';
+import { ResultInterface } from '../../+models';
 import { CurrentExerciseInterface } from './current-exercise.reducer';
 
 export enum CurrentExerciseActionTypes {
-  StartExercise = '[Current Exercise] Start Exercise',
+  LoadExercise = '[Current Exercise] Load Exercise',
   CurrentExerciseLoaded = '[Current Exercise] Current Exercise Loaded',
   CurrentExerciseError = '[Current Exercise] Current Exercise Error',
   SaveCurrentExercise = '[Current Exercise] Save Current Exercise',
   ClearCurrentExercise = '[Current Exercise] Clear Current Exercise'
 }
 
-export class StartExercise implements Action {
-  readonly type = CurrentExerciseActionTypes.StartExercise;
+export class LoadExercise implements Action {
+  readonly type = CurrentExerciseActionTypes.LoadExercise;
   constructor(
     public payload: {
       userId: number;
@@ -20,6 +21,7 @@ export class StartExercise implements Action {
       cmiMode: ScormCmiMode;
       taskId?: number;
       unlockedContentId?: number;
+      result?: ResultInterface;
     }
   ) {}
 }
@@ -52,7 +54,7 @@ export class ClearCurrentExercise implements Action {
 }
 
 export type CurrentExerciseActions =
-  | StartExercise
+  | LoadExercise
   | CurrentExerciseLoaded
   | CurrentExerciseError
   | SaveCurrentExercise

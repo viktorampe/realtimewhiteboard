@@ -31,7 +31,7 @@ export function reducer(
   action: CurrentExerciseActions
 ): State {
   switch (action.type) {
-    case CurrentExerciseActionTypes.StartExercise: {
+    case CurrentExerciseActionTypes.LoadExercise: {
       // reset state, effect will do the rest
       return {
         ...initialState
