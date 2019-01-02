@@ -19,7 +19,7 @@ import {
 import { ListFormat } from '@campus/ui';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
+import { map, shareReplay, switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -55,34 +55,48 @@ export class BooksViewModel {
   }
 
   private getSharedBooks(): Observable<EduContent[]> {
-    const props = { userId: this.authService.userId };
-
     return combineLatest(
-      this.store.pipe(select(UnlockedBoekeGroupQueries.getShared, props)),
-      this.store.pipe(select(UnlockedBoekeStudentQueries.getShared, props)),
-      this.store.pipe(select(LearningAreaQueries.getAllEntities)),
-      this.store.pipe(select(EduContentQueries.getAll))
+      this.store.pipe(
+        select(UnlockedBoekeGroupQueries.getShared, {
+          userId: this.authService.userId
+        })
+      ),
+      this.store.pipe(
+        select(UnlockedBoekeStudentQueries.getShared, {
+          userId: this.authService.userId
+        })
+      ),
+      this.store.pipe(select(LearningAreaQueries.getAllEntities))
     ).pipe(
-      map(([ubGroups, ubStudents, areaEntities, eduContents]) => {
-        // get and filter all eduContent to make use of the default sorting
-        const ids = new Set([
-          ...ubGroups.map(g => g.eduContentId),
-          ...ubStudents.map(s => s.eduContentId)
-        ]);
-        return eduContents
-          .filter(eduContent => ids.has(eduContent.id))
-          .map(book => {
-            const metadata = book.publishedEduContentMetadata;
-            // return copy, don't update original book by reference
-            return <EduContent>{
-              ...book,
-              publishedEduContentMetadata: {
-                ...metadata,
-                learningArea: areaEntities[metadata.learningAreaId]
-              }
-            };
-          });
-      }),
+      switchMap(
+        ([unlockedBookGroups, unlockedBookStudents, areaEntities]): Observable<
+          EduContent[]
+        > =>
+          this.store.pipe(
+            select(EduContentQueries.getByIds, {
+              // extract all IDs from unlockedBook arrays (remove duplicates)
+              ids: Array.from(
+                new Set([
+                  ...unlockedBookGroups.map(g => g.eduContentId),
+                  ...unlockedBookStudents.map(s => s.eduContentId)
+                ])
+              )
+            }),
+            map(eduContents =>
+              eduContents.map(book => {
+                const metadata = book.publishedEduContentMetadata;
+                // return copy, don't update original book by reference
+                // needs Object.assign to preserve getter-functions
+                return Object.assign(book, {
+                  publishedEduContentMetadata: {
+                    ...metadata,
+                    learningArea: areaEntities[metadata.learningAreaId]
+                  }
+                });
+              })
+            )
+          )
+      ),
       shareReplay(1)
     );
   }
