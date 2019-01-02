@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthenticationGuard } from '@campus/guards';
+import { AuthenticationGuard, CoupledTeacherGuard } from '@campus/guards';
 import { AppResolver } from './app.resolver';
 
 const routes: Routes = [
@@ -12,14 +12,14 @@ const routes: Routes = [
       {
         path: 'books',
         loadChildren: '@campus/pages/books#PagesBooksModule',
-        data: { breadcrumbText: 'Boeken' }
-        //canActivate: [CoupledTeacherGuard]
+        data: { breadcrumbText: 'Boeken' },
+        canActivate: [CoupledTeacherGuard]
       },
       {
         path: 'tasks',
         loadChildren: '@campus/pages/tasks#PagesTasksModule',
-        data: { breadcrumbText: 'Taken' }
-        //canActivate: [CoupledTeacherGuard]
+        data: { breadcrumbText: 'Taken' },
+        canActivate: [CoupledTeacherGuard]
       },
       {
         path: 'reports',
@@ -53,8 +53,8 @@ const routes: Routes = [
       {
         path: 'bundles',
         loadChildren: '@campus/pages/bundles#PagesBundlesModule',
-        data: { breadcrumbText: 'Bundels' }
-        //canActivate: [CoupledTeacherGuard]
+        data: { breadcrumbText: 'Bundels' },
+        canActivate: [CoupledTeacherGuard]
       }
     ]
   },
