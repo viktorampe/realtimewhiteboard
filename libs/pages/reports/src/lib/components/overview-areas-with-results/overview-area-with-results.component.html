@@ -51,7 +51,7 @@
           "
           [title]="instance.learningArea.name"
           [backgroundColor]="instance.learningArea.color"
-          [icon]="instance.learningArea.icon"
+          [icon]="'learning-area:' + instance.learningArea.icon"
         >
           <campus-folder-details>
             <div>Taken: {{ instance.tasksWithResultsCount }} </div>
