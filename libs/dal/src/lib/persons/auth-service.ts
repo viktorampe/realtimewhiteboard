@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { PersonApi, PersonInterface } from '@diekeure/polpo-api-angular-sdk';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import {
   AuthServiceInterface,
   LoginCredentials
@@ -57,5 +58,17 @@ export class AuthService implements AuthServiceInterface {
    */
   login(credentials: Partial<LoginCredentials>): Observable<any> {
     return this.personApi.login(credentials);
+  }
+
+  /**
+   * Get permissions from API for current user
+   *
+   * @returns {Observable<string[]>}
+   * @memberof AuthService
+   */
+  getPermissions(): Observable<string[]> {
+    return this.personApi
+      .getData(this.userId, 'permissions')
+      .pipe(map((res: { permissions: string[] }) => res.permissions));
   }
 }

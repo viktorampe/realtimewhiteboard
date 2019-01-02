@@ -15,4 +15,5 @@ export interface AuthServiceInterface {
   logout(): Observable<any>;
   login(credentials: Partial<LoginCredentials>): Observable<any>;
   isLoggedIn(): boolean;
+  getPermissions(): Observable<string[]>;
 }
