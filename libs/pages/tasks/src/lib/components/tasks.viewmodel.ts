@@ -14,6 +14,10 @@ import {
   UiActions,
   UiQuery
 } from '@campus/dal';
+import {
+  ScormExerciseServiceInterface,
+  SCORM_EXERCISE_SERVICE_TOKEN
+} from '@campus/shared';
 import { ListFormat } from '@campus/ui';
 import { select, Store } from '@ngrx/store';
 import { MemoizedSelectorWithProps } from '@ngrx/store/src/selector';
@@ -39,7 +43,9 @@ export class TasksViewModel {
 
   constructor(
     private store: Store<DalState>,
-    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
+    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
+    @Inject(SCORM_EXERCISE_SERVICE_TOKEN)
+    private scormExerciseService: ScormExerciseServiceInterface
   ) {
     this.setSourceStreams();
     this.setPresentationStreams();
@@ -68,8 +74,12 @@ export class TasksViewModel {
     );
   }
 
-  public startExercise(eduContentId: number): void {
-    //waiting for Service
+  public startExercise(eduContentId: number, taskId: number): void {
+    this.scormExerciseService.startExerciseFromTask(
+      this.authService.userId,
+      eduContentId,
+      taskId
+    );
   }
 
   public getTasksByLearningAreaId(

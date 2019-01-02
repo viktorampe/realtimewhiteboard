@@ -32,6 +32,7 @@ import {
   UiActions,
   UiReducer
 } from '@campus/dal';
+import { SCORM_EXERCISE_SERVICE_TOKEN } from '@campus/shared';
 import { ListFormat } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
@@ -65,6 +66,10 @@ describe('TasksViewModel met State', () => {
         { provide: AUTH_SERVICE_TOKEN, useValue: { userId: 1 } },
         { provide: TasksResolver, useValue: { resolve: jest.fn() } },
         { provide: AlertService, useValue: {} },
+        {
+          provide: SCORM_EXERCISE_SERVICE_TOKEN,
+          useValue: { startExerciseFromTask: jest.fn() }
+        },
         Store
       ]
     });
@@ -385,6 +390,26 @@ describe('TasksViewModel met State', () => {
       });
       tasksViewModel.setTaskAlertRead(1);
       expect(store.dispatch).toHaveBeenCalledWith(expectedAction);
+    });
+  });
+
+  describe('startExercise', () => {
+    it('should call the scormExerciseService', () => {
+      const scormExerciseService = TestBed.get(SCORM_EXERCISE_SERVICE_TOKEN);
+      const mockTaskEduContent: TaskEduContentInterface = new TaskEduContentFixture(
+        { eduContentId: 123, taskId: 456 }
+      );
+      tasksViewModel.startExercise(
+        mockTaskEduContent.eduContentId,
+        mockTaskEduContent.taskId
+      );
+
+      expect(scormExerciseService.startExerciseFromTask).toHaveBeenCalled();
+      expect(scormExerciseService.startExerciseFromTask).toHaveBeenCalledWith(
+        1, //userId
+        mockTaskEduContent.eduContentId,
+        mockTaskEduContent.taskId
+      );
     });
   });
 

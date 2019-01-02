@@ -145,8 +145,11 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     this.taskViewModel.changeListFormat(format);
   }
 
-  clickOpenContent(content: EduContent): void {
-    this.taskViewModel.startExercise(content.id);
+  clickOpenContent(taskEduContent: TaskEduContentInterface): void {
+    this.taskViewModel.startExercise(
+      taskEduContent.eduContentId,
+      taskEduContent.taskId
+    );
   }
 
   //filterFunction
