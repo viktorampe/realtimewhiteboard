@@ -3,11 +3,18 @@ import { BROWSER_STORAGE_SERVICE_TOKEN, StorageService } from '@campus/browser';
 import { ListFormat } from '@campus/ui';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
+import { ROUTER_NAVIGATION } from '@ngrx/router-store';
 import { StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
-import { Observable } from 'rxjs';
-import { LoadUi, SaveUi, SetListFormat, UiLoaded } from './ui.actions';
+import { Observable, of } from 'rxjs';
+import {
+  LoadUi,
+  SaveUi,
+  SetBreadcrumbs,
+  SetListFormat,
+  UiLoaded
+} from './ui.actions';
 import { UiEffects } from './ui.effects';
 import { initialState, reducer } from './ui.reducer';
 
@@ -143,4 +150,112 @@ describe('UiEffects', () => {
       });
     });
   });
+
+  describe('breadcrumbs$', () => {
+    it('should trigger on a Router Navigation action', () => {
+      const mockRouterState = {
+        url: 'foo',
+        params: {},
+        queryParams: {},
+        routeParts: []
+      };
+
+      actions = of({
+        type: ROUTER_NAVIGATION,
+        payload: { routerState: mockRouterState }
+      });
+
+      expect(effects.breadcrumbs$).toBeObservable(
+        hot('(a|)', { a: new SetBreadcrumbs({ breadcrumbs: [] }) })
+      );
+    });
+
+    it('should dispatch a SetBreadCrumbs action with the breadcrumb data', () => {
+      // moved to bottom of file for readability
+      const mockRouterState = getMockRouterState();
+
+      const expected = [
+        { displayText: 'bundles', link: ['bundles'] },
+        { displayText: 'learningAreaName', link: ['bundles', '19'] },
+        { displayText: 'bundleName', link: ['bundles', '19', '1'] }
+      ];
+
+      actions = of({
+        type: ROUTER_NAVIGATION,
+        payload: { routerState: mockRouterState }
+      });
+
+      expect(effects.breadcrumbs$).toBeObservable(
+        hot('(a|)', { a: new SetBreadcrumbs({ breadcrumbs: expected }) })
+      );
+    });
+  });
 });
+
+function getMockRouterState() {
+  // copy-paste of actual data
+  return {
+    url: '/bundles/19/1',
+    params: {
+      area: '19',
+      bundle: '1'
+    },
+    queryParams: {},
+    routeParts: [
+      {
+        url: '',
+        params: {},
+        data: {}
+      },
+      {
+        url: '',
+        params: {},
+        data: {}
+      },
+      {
+        url: 'bundles',
+        params: {},
+        data: {
+          breadcrumbText: 'bundles'
+        }
+      },
+      {
+        url: '19',
+        params: {
+          area: '19'
+        },
+        data: {
+          breadcrumbText: 'bundles',
+          selector: () => ({ name: 'learningAreaName' }),
+          displayProperty: 'name',
+          isResolved: true
+        }
+      },
+      {
+        url: '1',
+        params: {
+          area: '19',
+          bundle: '1'
+        },
+        data: {
+          breadcrumbText: 'bundles',
+          selector: () => ({ name: 'bundleName' }),
+          displayProperty: 'name',
+          isResolved: true
+        }
+      },
+      {
+        url: '',
+        params: {
+          area: '19',
+          bundle: '1'
+        },
+        data: {
+          breadcrumbText: 'bundles',
+          displayProperty: 'name',
+          isResolved: true
+        }
+      }
+    ]
+  };
+}

@@ -1,4 +1,9 @@
-import { DropdownMenuItemInterface, ListFormat, NavItem } from '@campus/ui';
+import {
+  BreadcrumbLinkInterface,
+  DropdownMenuItemInterface,
+  ListFormat,
+  NavItem
+} from '@campus/ui';
 import { UiAction, UiActionTypes } from './ui.actions';
 
 /**
@@ -15,6 +20,7 @@ export interface UiState {
   sideNavOpen?: boolean;
   sideNavItems?: NavItem[];
   profileMenuItems?: DropdownMenuItemInterface[];
+  breadcrumbs?: BreadcrumbLinkInterface[];
 }
 
 export const initialState: UiState = {
@@ -23,6 +29,7 @@ export const initialState: UiState = {
   sideNavOpen: true,
   sideNavItems: [],
   profileMenuItems: [],
+  breadcrumbs: [],
   loaded: false
 };
 
@@ -66,6 +73,12 @@ export function reducer(
       state = {
         ...state,
         profileMenuItems: action.payload.menuItems
+      };
+      break;
+    case UiActionTypes.SetBreadcrumbs:
+      state = {
+        ...state,
+        breadcrumbs: action.payload.breadcrumbs
       };
       break;
   }
