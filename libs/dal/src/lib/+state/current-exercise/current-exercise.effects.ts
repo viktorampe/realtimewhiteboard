@@ -11,29 +11,30 @@ import {
   CurrentExerciseActionTypes,
   CurrentExerciseError,
   CurrentExerciseLoaded,
-  SaveCurrentExercise,
-  StartExercise
+  LoadExercise,
+  SaveCurrentExercise
 } from './current-exercise.actions';
 
 @Injectable()
 export class CurrentExerciseEffects {
   @Effect()
-  startExercise$ = this.dataPersistence.pessimisticUpdate(
-    CurrentExerciseActionTypes.StartExercise,
+  loadExercise$ = this.dataPersistence.pessimisticUpdate(
+    CurrentExerciseActionTypes.LoadExercise,
     {
-      run: (action: StartExercise, state: DalState) => {
+      run: (action: LoadExercise, state: DalState) => {
         return this.exerciseService
-          .startExercise(
+          .loadExercise(
             action.payload.userId,
             action.payload.educontentId,
             action.payload.saveToApi,
             action.payload.cmiMode,
             action.payload.taskId,
-            action.payload.unlockedContentId
+            action.payload.unlockedContentId,
+            action.payload.result
           )
           .pipe(map(ex => new CurrentExerciseLoaded(ex)));
       },
-      onError: (action: StartExercise, error) => {
+      onError: (action: LoadExercise, error) => {
         return new CurrentExerciseError(error);
       }
     }

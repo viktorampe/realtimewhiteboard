@@ -123,19 +123,7 @@ export class ReportsViewModel {
   }
 
   openContentForReview(result: ResultInterface): void {
-    if (result.taskId) {
-      this.scormExerciseService.reviewExerciseFromTask(
-        this.authService.userId,
-        result.eduContentId,
-        result.taskId
-      );
-    } else if (result.unlockedContentId) {
-      this.scormExerciseService.reviewExerciseFromUnlockedContent(
-        this.authService.userId,
-        result.eduContentId,
-        result.unlockedContentId
-      );
-    }
+    this.scormExerciseService.reviewExerciseFromResult(result);
   }
 
   private select<T, Props>(

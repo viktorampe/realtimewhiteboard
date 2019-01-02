@@ -107,7 +107,7 @@ describe('ExerciseService', () => {
       });
 
       expect(
-        exerciseService.startExercise(
+        exerciseService.loadExercise(
           mockData.userId,
           mockData.eduContentId,
           mockData.saveToApi,
@@ -141,7 +141,7 @@ describe('ExerciseService', () => {
       });
 
       expect(
-        exerciseService.startExercise(
+        exerciseService.loadExercise(
           mockData.userId,
           mockData.eduContentId,
           mockData.saveToApi,
@@ -177,7 +177,7 @@ describe('ExerciseService', () => {
 
       // no parameters
       expect(() =>
-        exerciseService.startExercise(
+        exerciseService.loadExercise(
           mockData.userId,
           mockData.eduContentId,
           mockData.saveToApi,
@@ -188,7 +188,7 @@ describe('ExerciseService', () => {
 
       // both parameters
       expect(() =>
-        exerciseService.startExercise(
+        exerciseService.loadExercise(
           mockData.userId,
           mockData.eduContentId,
           mockData.saveToApi,
@@ -197,6 +197,32 @@ describe('ExerciseService', () => {
           mockData.unlockedContentId
         )
       ).toThrowError('Provide either a taskId or an unlockedContentId');
+    });
+
+    it('should load a new exercice as review from result', () => {
+      mockUrl$ = hot('-a-|', {
+        a: mockData.url
+      });
+
+      expect(
+        exerciseService.loadExercise(
+          mockData.userId,
+          mockData.eduContentId,
+          false,
+          ScormCmiMode.CMI_MODE_REVIEW,
+          mockData.taskId,
+          mockData.unlockedContentId,
+          mockExercise.result
+        )
+      ).toBeObservable(
+        hot('-a-|', {
+          a: {
+            ...mockExercise,
+            cmiMode: ScormCmiMode.CMI_MODE_REVIEW,
+            saveToApi: false
+          }
+        })
+      );
     });
   });
 

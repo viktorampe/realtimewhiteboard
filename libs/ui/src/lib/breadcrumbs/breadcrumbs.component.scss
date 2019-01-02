@@ -2,13 +2,13 @@
   &__holder {
     display: flex;
     flex-direction: row;
-    padding: 8px;
-    margin: 0;
+    align-items: center;
 
     &__breadcrumbs {
       display: flex;
       flex-direction: row;
-      padding: 8px;
+      align-items: center;
+      padding: 8px 0px;
       margin: 0;
 
       a,
