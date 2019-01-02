@@ -49,7 +49,7 @@
                                      [header]="menuItem.header"
                                      [image]="menuItem.image"
                                      [externalLink]="menuItem.externalLink"
-                                     class="{{i!=0 ? 'ui-dropdown-menu-item__separator' : ''}}"></campus-dropdown-menu-item>
+                                     class="{{menuItem.dividerBefore ? 'ui-dropdown-menu-item__separator' : ''}}"></campus-dropdown-menu-item>
         </campus-dropdown-menu>
       </div>
     </campus-app-bar>
