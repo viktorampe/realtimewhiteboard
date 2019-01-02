@@ -1,0 +1,48 @@
+.page-results {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  &__table {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+
+    &__main {
+      flex: 1 1 auto;
+      overflow: auto;
+    }
+  }
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+td,
+th {
+  text-align: center;
+  vertical-align: middle;
+
+  em {
+    font-style: normal;
+  }
+
+  a,
+  a:hover {
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  &.title {
+    text-align: left;
+  }
+}
+
+tbody {
+  th {
+    vertical-align: top;
+  }
+}

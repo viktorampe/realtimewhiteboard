@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthenticationGuard } from '@campus/guards';
+import { AuthenticationGuard, CoupledTeacherGuard } from '@campus/guards';
 import { AppResolver } from './app.resolver';
 
 const routes: Routes = [
@@ -11,25 +11,30 @@ const routes: Routes = [
     children: [
       {
         path: 'books',
-        loadChildren: '@campus/pages/books#PagesBooksModule'
-        // canActivate: [CoupledTeacherGuard]
+        loadChildren: '@campus/pages/books#PagesBooksModule',
+        data: { breadcrumbText: 'Boeken' },
+        canActivate: [CoupledTeacherGuard]
       },
       {
         path: 'tasks',
-        loadChildren: '@campus/pages/tasks#PagesTasksModule'
-        // canActivate: [CoupledTeacherGuard]
+        loadChildren: '@campus/pages/tasks#PagesTasksModule',
+        data: { breadcrumbText: 'Taken' },
+        canActivate: [CoupledTeacherGuard]
       },
       {
         path: 'reports',
-        loadChildren: '@campus/pages/reports#PagesReportsModule'
+        loadChildren: '@campus/pages/reports#PagesReportsModule',
+        data: { breadcrumbText: 'Resultaten' }
       },
       {
         path: 'profile',
-        loadChildren: '@campus/pages/profile#PagesProfileModule'
+        loadChildren: '@campus/pages/profile#PagesProfileModule',
+        data: { breadcrumbText: 'Profiel' }
       },
       {
         path: 'messages',
-        loadChildren: '@campus/pages/messages#PagesMessagesModule'
+        loadChildren: '@campus/pages/messages#PagesMessagesModule',
+        data: { breadcrumbText: 'Berichten' }
       },
       {
         path: 'logout',
@@ -37,7 +42,8 @@ const routes: Routes = [
       },
       {
         path: 'alerts',
-        loadChildren: '@campus/pages/alerts#PagesAlertsModule'
+        loadChildren: '@campus/pages/alerts#PagesAlertsModule',
+        data: { breadcrumbText: 'Meldingen' }
       },
       {
         path: '',
@@ -46,8 +52,9 @@ const routes: Routes = [
       },
       {
         path: 'bundles',
-        loadChildren: '@campus/pages/bundles#PagesBundlesModule'
-        // canActivate: [CoupledTeacherGuard]
+        loadChildren: '@campus/pages/bundles#PagesBundlesModule',
+        data: { breadcrumbText: 'Bundels' },
+        canActivate: [CoupledTeacherGuard]
       }
     ]
   },
@@ -63,7 +70,11 @@ const routes: Routes = [
     path: 'error',
     redirectTo: 'dev'
   },
-  { path: 'dev', loadChildren: '@campus/devlib#DevlibModule' }
+  {
+    path: 'dev',
+    loadChildren: '@campus/devlib#DevlibModule',
+    data: { breadcrumbText: 'Full retard' }
+  }
 ];
 
 @NgModule({

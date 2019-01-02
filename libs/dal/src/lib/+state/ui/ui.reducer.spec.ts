@@ -1,5 +1,11 @@
-import { DropdownMenuItemInterface, ListFormat, NavItem } from '@campus/ui';
 import {
+  BreadcrumbLinkInterface,
+  DropdownMenuItemInterface,
+  ListFormat,
+  NavItem
+} from '@campus/ui';
+import {
+  SetBreadcrumbs,
   SetListFormat,
   SetProfileMenuItems,
   SetSideNavItems,
@@ -14,10 +20,12 @@ describe('Ui Reducer', () => {
 
   let mockNavItem: NavItem;
   let mockProfileMenuItem: DropdownMenuItemInterface;
+  let mockBreadcrumb: BreadcrumbLinkInterface;
 
   beforeAll(() => {
     mockNavItem = { title: 'mockNavItem' };
     mockProfileMenuItem = { description: 'mock' };
+    mockBreadcrumb = { displayText: 'foo', link: ['url'] };
   });
 
   beforeEach(() => {
@@ -27,6 +35,7 @@ describe('Ui Reducer', () => {
       sideNavOpen: true,
       sideNavItems: [],
       profileMenuItems: [],
+      breadcrumbs: [],
       loaded: true
     };
   });
@@ -80,6 +89,14 @@ describe('Ui Reducer', () => {
       });
       const result: UiState = reducer(initialState, action);
       expect(result.profileMenuItems).toEqual([mockProfileMenuItem]);
+    });
+
+    it('should set the breadcrumbs', () => {
+      const action = new SetBreadcrumbs({
+        breadcrumbs: [mockBreadcrumb]
+      });
+      const result: UiState = reducer(initialState, action);
+      expect(result.breadcrumbs).toEqual([mockBreadcrumb]);
     });
   });
 

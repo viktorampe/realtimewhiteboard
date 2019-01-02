@@ -6,16 +6,17 @@ import {
   AlertFixture,
   AlertReducer,
   AUTH_SERVICE_TOKEN,
+  DalState,
   PersonInterface,
   StateFeatureBuilder,
   UiActions,
+  UiReducer,
   UserActions,
   UserReducer
 } from '@campus/dal';
-import { BreadcrumbLinkInterface, NotificationItemInterface } from '@campus/ui';
+import { NotificationItemInterface } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
-import { BehaviorSubject } from 'rxjs';
 import {
   EnvironmentAlertsFeatureInterface,
   ENVIRONMENT_ALERTS_FEATURE_TOKEN
@@ -35,6 +36,7 @@ let usedUserState: any;
 let usedUnreadAlertsState: any;
 let spy: jest.SpyInstance;
 let dispatchSpy: jest.SpyInstance;
+let store: Store<DalState>;
 
 @Injectable({
   providedIn: 'root'
@@ -66,6 +68,11 @@ describe('headerViewModel', () => {
             initialState: {
               initialState: usedUnreadAlertsState
             }
+          },
+          {
+            NAME: UiReducer.NAME,
+            reducer: UiReducer.reducer,
+            initialState: UiReducer.initialState
           }
         ])
       ],
@@ -85,17 +92,16 @@ describe('headerViewModel', () => {
       ]
     });
     headerViewModel = TestBed.get(HeaderViewModel);
-    dispatchSpy = jest.spyOn(TestBed.get(Store), 'dispatch');
+    store = TestBed.get(Store);
+    dispatchSpy = jest.spyOn(store, 'dispatch');
   });
+
   describe('creation', () => {
     beforeAll(() => {
       spy = jest.fn();
     });
     it('should be defined', () => {
       expect(headerViewModel).toBeDefined();
-    });
-    it('should call the headerResolver.resolve', () => {
-      expect(spy).toHaveBeenCalledTimes(1);
     });
   });
   describe('feature toggles', () => {
@@ -164,21 +170,34 @@ describe('headerViewModel', () => {
     });
 
     describe('should setup the back link stream', () => {
+      const mockBreadcrumbs = [
+        { displayText: 'foo', link: ['foo'] },
+        { displayText: 'foo', link: ['foo bar'] }
+      ];
+
       it('should return a link when one is available', () => {
-        const expected = '/link';
+        store.dispatch(
+          new UiActions.SetBreadcrumbs({ breadcrumbs: mockBreadcrumbs })
+        );
+
+        const expected = mockBreadcrumbs[mockBreadcrumbs.length - 2].link;
         expect(headerViewModel.backLink$).toBeObservable(
           hot('a', { a: expected })
         );
       });
 
-      xit('should not return a link when none is available', () => {
-        // this test is skipped because the UI state still needs to add the breadcrumbs property
-        // when the breadcrumbs are added, use the setInitialState() method to manipulate the UI state
-        headerViewModel.breadCrumbs$ = new BehaviorSubject<
-          BreadcrumbLinkInterface[]
-        >([]);
-        headerViewModel['loadDisplayStream'](); // need to trigger this, otherwise breadcrumbs$ won't be reset
+      it('should not return a link when none is available', () => {
+        // no breadcrumbs -> not actually possible
+        store.dispatch(new UiActions.SetBreadcrumbs({ breadcrumbs: [] }));
         const expected = undefined;
+        expect(headerViewModel.backLink$).toBeObservable(
+          hot('a', { a: expected })
+        );
+
+        // 1 breadcrumb
+        store.dispatch(
+          new UiActions.SetBreadcrumbs({ breadcrumbs: [mockBreadcrumbs[0]] })
+        );
         expect(headerViewModel.backLink$).toBeObservable(
           hot('a', { a: expected })
         );
@@ -225,6 +244,4 @@ function setInitialState() {
       timeStamp: Date.now()
     })
   );
-
-  // TODO: add UI state for breadcrumbs
 }

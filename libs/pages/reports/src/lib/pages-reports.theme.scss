@@ -1,0 +1,5 @@
+@import './components/results-by-person-and-area/results-by-person-and-area.component.theme';
+
+@mixin pages-reports-theme() {
+  @include pages-reports-by-person-and-area-theme();
+}

@@ -1,17 +1,10 @@
 <campus-page-bar>
-  <<<<<<< HEAD
   <campus-filter-text-input
     theme="dark"
     [source]="unlockedContents$ | async"
     class="pages__toolbar__filter"
   ></campus-filter-text-input>
-  =======
-  <campus-filter-text-input
-    theme="dark"
-    [source]="contents$ | async"
-    class="pages__toolbar__filter"
-  ></campus-filter-text-input>
-  >>>>>>> develop <div class="divider"></div>
+  <div class="divider"></div>
   <campus-button
     iconClass="list-view"
     (click)="clickChangeListFormat(listFormat.LINE)"
