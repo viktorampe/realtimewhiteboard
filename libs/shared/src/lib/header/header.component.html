@@ -63,7 +63,7 @@
             [header]="menuItem.header"
             [image]="menuItem.image"
             [externalLink]="menuItem.externalLink"
-            class="{{menuItem.dividerBefore ? 'ui-dropdown-menu-item__divider' : ''}}"
+            [class.ui-dropdown-menu-item__divider]="menuItem.dividerBefore"
           ></campus-dropdown-menu-item>
         </campus-dropdown-menu>
       </div>

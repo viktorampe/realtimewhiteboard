@@ -23,5 +23,4 @@ export class DropdownMenuItemComponent implements DropdownMenuItemInterface {
   @Input() internalLink: string;
   @Input() externalLink: string;
   @Input() imageAltText: string;
-  @Input() dividerBefore?: boolean;
 }

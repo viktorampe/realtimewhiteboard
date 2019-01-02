@@ -139,7 +139,7 @@ export class NavItemService {
       cred => cred.provider === 'smartschool'
     );
 
-    if (!smartschoolCredentials || !smartschoolCredentials.length) return [];
+    if (smartschoolCredentials.length === 0) return [];
 
     const smartschoolLinks = smartschoolCredentials.map(
       smartschoolCredential => ({
