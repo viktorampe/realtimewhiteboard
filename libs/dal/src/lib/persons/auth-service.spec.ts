@@ -36,7 +36,7 @@ class MockPersonApi {
 }
 
 describe('AuthService', () => {
-  let service: AuthService;
+  let authService: AuthService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -47,7 +47,7 @@ describe('AuthService', () => {
       ]
     });
 
-    service = TestBed.get(AuthService);
+    authService = TestBed.get(AuthService);
   });
 
   it('should be created', inject([AuthService], (service: AuthService) => {
@@ -87,7 +87,7 @@ describe('AuthService', () => {
     mockData$ = hot('-a-|', {
       a: { permissions: ['permission-1', 'permission-2'] }
     });
-    expect(service.getPermissions()).toBeObservable(
+    expect(authService.getPermissions()).toBeObservable(
       hot('-a-|', {
         a: ['permission-1', 'permission-2']
       })
