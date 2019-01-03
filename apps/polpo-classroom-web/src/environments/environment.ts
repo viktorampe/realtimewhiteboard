@@ -134,7 +134,7 @@ export const environment = {
     // clock: 'assets/icons/clock.svg',
     // clock2: 'assets/icons/clock2.svg',
     // code: 'assets/icons/code.svg',
-    // creditcard: 'assets/icons/creditcard.svg',
+    creditcard: 'assets/icons/creditcard.svg',
     // 'die-keure': 'assets/icons/die-keure.svg',
     'view-content': 'assets/icons/eye.svg',
     eye: 'assets/icons/eye.svg',

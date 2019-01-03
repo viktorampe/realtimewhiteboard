@@ -23,6 +23,7 @@ import { BorderDirective } from './button/directives/button-border.directive';
 import { CircleDirective } from './button/directives/button-circle.directive';
 import { DangerDirective } from './button/directives/button-danger.directive';
 import { DisabledDirective } from './button/directives/button-disabled.directive';
+import { LargeDirective } from './button/directives/button-large.directive';
 import { RoundedCornersDirective } from './button/directives/button-rounded-corners.directive';
 import { WarningDirective } from './button/directives/button-warning.directive';
 import { ConfirmableSelectComponent } from './confirmable-select/confirmable-select.component';
@@ -126,7 +127,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     HideDesktopDirective,
     HideMobileDirective,
     HumanDateTimePipe,
-    RemovePrefixStringPipe
+    RemovePrefixStringPipe,
+    LargeDirective
   ],
   exports: [
     FilterTextInputComponent,
@@ -169,7 +171,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     HideDesktopDirective,
     HideMobileDirective,
     HumanDateTimePipe,
-    RemovePrefixStringPipe
+    RemovePrefixStringPipe,
+    LargeDirective
   ]
 })
 export class UiModule {}
