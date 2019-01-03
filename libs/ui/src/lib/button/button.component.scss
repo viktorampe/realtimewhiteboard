@@ -1,8 +1,14 @@
 .ui-button {
-  display: inline-block;
+  display: inline-flex;
   line-height: 1;
   vertical-align: middle;
   cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+
+:host {
+  display: inline-block;
 }
 
 :host.ui-button--circle {
@@ -17,5 +23,16 @@
 
   .ui-button {
     pointer-events: none;
+
+  }
+}
+
+:host.ui-button--large {
+  .ui-button {
+    width: 400px;
+
+    mat-icon {
+      flex: 0 0 auto;
+    }
   }
 }
