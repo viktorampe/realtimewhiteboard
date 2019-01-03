@@ -18,7 +18,8 @@ describe('PersonsService', () => {
         {
           provide: PersonApi,
           useValue: {
-            getData: () => mockData$
+            getData: () => mockData$,
+            checkUnique: () => mockData$
           }
         }
       ]
@@ -41,6 +42,23 @@ describe('PersonsService', () => {
       hot('-a-|', {
         a: [new PersonFixture()]
       })
+    );
+  });
+
+  it('should check for unique username', () => {
+    mockData$ = hot('-a|', {
+      a: true
+    });
+    expect(service.checkUniqueUsername(1, 'foo')).toBeObservable(
+      hot('-a|', { a: true })
+    );
+  });
+  it('should check for unique email', () => {
+    mockData$ = hot('-a|', {
+      a: true
+    });
+    expect(service.checkUniqueEmail(1, 'foo')).toBeObservable(
+      hot('-a|', { a: true })
     );
   });
 });
