@@ -10,7 +10,7 @@ export interface PersonServiceInterface {
   getAllForUser(userId: number): Observable<PersonInterface[]>;
   updateProfile(
     userId: number,
-    updatedProfile: Partial<PersonInterface>
+    profileChanges: Partial<PersonInterface>
   ): Observable<boolean>;
 }
 
