@@ -13,6 +13,10 @@ export class ProfileViewModel {
     this.setPresentationStreams();
   }
 
+  public updateProfile(person: Partial<PersonInterface>): void {}
+
+  public saveAvatar(file: File): void {}
+
   private setPresentationStreams(): void {
     this.currentUser$ = this.mockProfileViewModel.currentUser$;
   }
