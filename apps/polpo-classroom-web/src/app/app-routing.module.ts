@@ -30,7 +30,7 @@ const routes: Routes = [
       {
         path: 'profile',
         loadChildren: '@campus/pages/profile#PagesProfileModule',
-        data: { breadcrumbText: 'Profiel' }
+        data: { breadcrumbText: 'Mijn profiel' }
       },
       {
         path: 'messages',
