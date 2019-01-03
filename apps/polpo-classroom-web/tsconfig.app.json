@@ -29,5 +29,7 @@
     , "../../libs/pages/settings/coupled-teachers/src/index.ts"
 
     , "../../libs/pages/settings/alerts/src/index.ts"
+
+    , "../../libs/pages/settings/avatar/src/index.ts"
 ]
 }

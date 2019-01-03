@@ -78,6 +78,12 @@ const routes: Routes = [
             loadChildren:
               '@campus/pages/settings/alerts#PagesSettingsAlertsModule',
             data: { breadcrumbText: 'Meldingen' }
+          },
+          {
+            path: 'avatar',
+            loadChildren:
+              '@campus/pages/settings/avatar#PagesSettingsAvatarModule',
+            data: { breadcrumbText: 'Avatar' }
           }
         ]
       },

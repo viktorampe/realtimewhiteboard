@@ -85,6 +85,9 @@
     },
     "pages-settings-alerts": {
       "tags": []
+    },
+    "pages-settings-avatar": {
+      "tags": []
     }
   }
 }

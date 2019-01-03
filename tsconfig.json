@@ -88,6 +88,9 @@
       ],
       "@campus/pages/settings/alerts": [
         "libs/pages/settings/alerts/src/index.ts"
+      ],
+      "@campus/pages/settings/avatar": [
+        "libs/pages/settings/avatar/src/index.ts"
       ]
     }
   },
