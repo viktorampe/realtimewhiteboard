@@ -20,3 +20,11 @@ export const getCurrentUser = createSelector(
     return isLoaded ? state.currentUser : null;
   }
 );
+
+export const getPermissions = createSelector(
+  getUserState,
+  getLoaded,
+  (state: State, isLoaded) => {
+    return isLoaded ? state.permissions : [];
+  }
+);

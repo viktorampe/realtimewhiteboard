@@ -32,14 +32,6 @@ describe('User Reducer', () => {
   }
 
   /**
-   * creates a null User.
-   * @returns {PersonInterface}
-   */
-  function createNullUser(): PersonInterface {
-    return null;
-  }
-
-  /**
    * Utility to create the bundle state.
    *
    * @param {PersonInterface} [user]

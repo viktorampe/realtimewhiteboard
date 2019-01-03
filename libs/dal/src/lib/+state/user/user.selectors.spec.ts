@@ -1,10 +1,11 @@
 import { UserQueries } from '.';
+import { DalState } from '..';
 
 describe('User Selectors', () => {
   const ERROR_MSG = 'No Error Available';
   const getUserId = it => it['id'];
 
-  let storeState;
+  let storeState: Partial<DalState>;
 
   const mockUser = {
     name: 'Mertens',
@@ -43,6 +44,8 @@ describe('User Selectors', () => {
     coaccount: null
   };
 
+  const mockPermissions = ['permission-a', 'permission-b', 'permission-c'];
+
   beforeEach(() => {
     const createUser = (id: string, name = ''): any => ({
       id,
@@ -51,6 +54,7 @@ describe('User Selectors', () => {
     storeState = {
       user: {
         currentUser: mockUser,
+        permissions: mockPermissions,
         error: ERROR_MSG,
         loaded: true
       }
@@ -77,6 +81,11 @@ describe('User Selectors', () => {
     it("getError() should return the current 'error' storeState", () => {
       const result = UserQueries.getError(storeState);
       expect(result).toBe(ERROR_MSG);
+    });
+
+    it("getPermissions() should return the current 'permissions' storeState", () => {
+      const result = UserQueries.getPermissions(storeState);
+      expect(result).toBe(mockPermissions);
     });
   });
 });
