@@ -85,6 +85,9 @@
       ],
       "@campus/pages/settings/coupled-teachers": [
         "libs/pages/settings/coupled-teachers/src/index.ts"
+      ],
+      "@campus/pages/settings/alerts": [
+        "libs/pages/settings/alerts/src/index.ts"
       ]
     }
   },
