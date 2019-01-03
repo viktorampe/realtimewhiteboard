@@ -158,8 +158,7 @@
     &.ui-button--bordered {
       .ui-button {
         border-color: $ui-button--danger-border-color;
-      }
-      // --danger--bordered--disabled
+      } // --danger--bordered--disabled
       &.ui-button--disabled {
         .ui-button {
           border-color: $ui-button--danger--disabled-border-color;
@@ -190,8 +189,7 @@
     &.ui-button--bordered {
       .ui-button {
         border-color: $ui-button--warning-border-color;
-      }
-      // --warning--bordered--disabled
+      } // --warning--bordered--disabled
       &.ui-button--disabled {
         .ui-button {
           border-color: $ui-button--warning--disabled-border-color;
