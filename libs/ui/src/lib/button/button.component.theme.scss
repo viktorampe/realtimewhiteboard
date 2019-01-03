@@ -30,6 +30,7 @@
   $ui-button--large-padding: $ui-button--large-font-size / 2 !default;
   $ui-button--large-icon-size: $ui-button--large-font-size * 3 !default;
   $ui-button--large-height: $ui-button--large-font-size * 5 !default;
+  $ui-button--large-width: 400px !default;
   // --danger
   $ui-button--danger-color: $ui-button-color !default;
   $ui-button--danger-background-color: $ui-danger-bg-color !default;
@@ -126,6 +127,7 @@
       padding: $ui-button--large-padding;
       font-size: $ui-button--large-font-size;
       min-height: $ui-button--large-height;
+      width: $ui-button--large-width;
       mat-icon {
         height: $ui-button--large-icon-size;
         width: $ui-button--large-icon-size;
