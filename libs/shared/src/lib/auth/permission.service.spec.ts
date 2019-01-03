@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { UserReducer } from '@campus/dal';
-import { Store, StoreModule } from '@ngrx/store';
+import { StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { PermissionService } from './permission.service';
 
@@ -23,8 +23,7 @@ describe('AuthService', () => {
         StoreModule.forFeature(UserReducer.NAME, UserReducer.reducer, {
           initialState: userState
         })
-      ],
-      providers: [Store]
+      ]
     });
     service = TestBed.get(PermissionService);
   });
@@ -35,17 +34,13 @@ describe('AuthService', () => {
 
   it('should return true if permission is found', () => {
     expect(service.hasPermission('permission-a')).toBeObservable(
-      hot('a', {
-        a: true
-      })
+      hot('a', { a: true })
     );
   });
 
   it('should return false if permission is not found', () => {
     expect(service.hasPermission('permission-x')).toBeObservable(
-      hot('a', {
-        a: false
-      })
+      hot('a', { a: false })
     );
   });
 });
