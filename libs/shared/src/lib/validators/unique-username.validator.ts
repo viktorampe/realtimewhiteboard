@@ -23,7 +23,7 @@ export class UniqueUsernameValidator implements AsyncValidator {
     return this.personService
       .checkUniqueUsername(this.authService.userId, ctrl.value)
       .pipe(
-        map(isTaken => (isTaken ? { uniqueUsername: true } : null)),
+        map(isUnique => (isUnique ? null : { uniqueUsername: true })),
         catchError(() => null)
       );
   }
