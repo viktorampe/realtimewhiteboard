@@ -801,6 +801,34 @@
           }
         }
       }
+    },
+    "pages-settings-credentials": {
+      "root": "libs/pages/settings/credentials",
+      "sourceRoot": "libs/pages/settings/credentials/src",
+      "projectType": "library",
+      "prefix": "campus",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/pages/settings/credentials/tsconfig.lib.json",
+              "libs/pages/settings/credentials/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/pages/settings/credentials/jest.config.js",
+            "tsConfig": "libs/pages/settings/credentials/tsconfig.spec.json",
+            "setupFile": "libs/pages/settings/credentials/src/test-setup.ts"
+          }
+        }
+      }
     }
   },
   "cli": {

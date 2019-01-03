@@ -60,6 +60,11 @@ const routes: Routes = [
             loadChildren:
               '@campus/pages/settings/profile#PagesSettingsProfileModule',
             data: { breadcrumbText: 'Profiel' }
+          },
+          {
+            path: 'credentials',
+            loadChildren:
+              '@campus/pages/settings/credentials#PagesSettingsCredentialsModule'
           }
         ]
       },
