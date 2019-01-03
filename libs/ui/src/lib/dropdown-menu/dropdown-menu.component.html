@@ -1,5 +1,8 @@
 <div [matMenuTriggerFor]="toolBarItemDropdown"></div>
-<mat-menu #toolBarItemDropdown="matMenu" class="ui-dropdown-menu">
+<mat-menu
+  #toolBarItemDropdown="matMenu"
+  class="ui-dropdown-menu  {{smallWidth ? 'ui-dropdown-menu--small' : 'ui-dropdown-menu--large' }}"
+>
   <div *ngIf="showHeader" class="ui-dropdown-menu__header">
     <h3>
       <mat-icon
@@ -9,8 +12,8 @@
       ></mat-icon>
       <strong>{{ newItemCount }} nieuwe</strong> {{ itemType }}
     </h3>
-    <span *ngIf="linkText && linkUrl"
-      >-> <a [routerLink]="linkUrl">{{ linkText }}</a></span
+    <span *ngIf="linkText && linkUrl">
+      <a [routerLink]="linkUrl">{{ linkText }}</a></span
     >
   </div>
   <div class="ui-dropdown-menu__body"> <ng-content></ng-content> </div>

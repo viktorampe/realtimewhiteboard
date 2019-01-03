@@ -8,6 +8,7 @@ export interface DropdownMenuItemInterface {
   internalLink?: string;
   externalLink?: string;
   imageAltText?: string;
+  dividerBefore?: boolean;
 }
 @Component({
   selector: 'campus-dropdown-menu-item',

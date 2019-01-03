@@ -43,18 +43,21 @@ export class NavItemService {
     profiel: {
       description: 'Profiel',
       icon: 'account',
-      internalLink: '/profile'
+      internalLink: '/profile',
+      dividerBefore: false
     }, // icon-user in current site
     afmelden: {
       description: 'Afmelden',
       icon: 'lock',
-      internalLink: '/logout'
+      internalLink: '/logout',
+      dividerBefore: true
     }, // icon-key in current site
     smartschool: {
       header: 'Ga naar Smartschool',
       // description will be added later
-      image: '/assets/images/icon-smartschool.png'
+      image: '/assets/images/icon-smartschool.png',
       // link will be added later
+      dividerBefore: false
     }
   };
 
@@ -132,15 +135,26 @@ export class NavItemService {
   private getSmartschoolProfileMenuItems(
     credentials: PassportUserCredentialInterface[]
   ): DropdownMenuItemInterface[] {
-    return credentials
-      .filter(cred => cred.provider === 'smartschool')
-      .map(smartschoolCredential => ({
+    const smartschoolCredentials = credentials.filter(
+      cred => cred.provider === 'smartschool'
+    );
+
+    if (smartschoolCredentials.length === 0) return [];
+
+    const smartschoolLinks = smartschoolCredentials.map(
+      smartschoolCredential => ({
         ...this.standardProfileMenuItems.smartschool,
         description: this.extractPlatformName(
           smartschoolCredential.profile.platform
         ),
         externalLink: smartschoolCredential.profile.platform
-      }));
+      })
+    );
+
+    //only add divider on first smartschool-link
+    smartschoolLinks[0].dividerBefore = true;
+
+    return smartschoolLinks;
   }
 
   private extractPlatformName(platformUrl: string) {

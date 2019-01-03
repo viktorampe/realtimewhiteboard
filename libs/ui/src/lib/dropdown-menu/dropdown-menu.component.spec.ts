@@ -127,7 +127,7 @@ describe('DropdownMenuComponent', () => {
         By.css('.ui-dropdown-menu__header')
       ).nativeElement.textContent;
       expect(header).toContain(
-        `${mockData.newItemCount} nieuwe ${mockData.itemType} -> ${
+        `${mockData.newItemCount} nieuwe ${mockData.itemType} ${
           mockData.linkText
         }`
       );
