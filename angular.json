@@ -724,6 +724,11 @@
             "jestConfig": "libs/pages/settings/dashboard/jest.config.js",
             "tsConfig": "libs/pages/settings/dashboard/tsconfig.spec.json",
             "setupFile": "libs/pages/settings/dashboard/src/test-setup.ts"
+          },
+          "configurations": {
+            "travis": {
+              "maxWorkers": 2
+            }
           }
         }
       }
@@ -750,6 +755,11 @@
             "jestConfig": "libs/pages/settings/profile/jest.config.js",
             "tsConfig": "libs/pages/settings/profile/tsconfig.spec.json",
             "setupFile": "libs/pages/settings/profile/src/test-setup.ts"
+          },
+          "configurations": {
+            "travis": {
+              "maxWorkers": 2
+            }
           }
         }
       }
@@ -776,6 +786,11 @@
             "jestConfig": "libs/pages/settings/credentials/jest.config.js",
             "tsConfig": "libs/pages/settings/credentials/tsconfig.spec.json",
             "setupFile": "libs/pages/settings/credentials/src/test-setup.ts"
+          },
+          "configurations": {
+            "travis": {
+              "maxWorkers": 2
+            }
           }
         }
       }
@@ -802,6 +817,11 @@
             "jestConfig": "libs/pages/settings/coupled-teachers/jest.config.js",
             "tsConfig": "libs/pages/settings/coupled-teachers/tsconfig.spec.json",
             "setupFile": "libs/pages/settings/coupled-teachers/src/test-setup.ts"
+          },
+          "configurations": {
+            "travis": {
+              "maxWorkers": 2
+            }
           }
         }
       }
@@ -828,6 +848,11 @@
             "jestConfig": "libs/pages/settings/avatar/jest.config.js",
             "tsConfig": "libs/pages/settings/avatar/tsconfig.spec.json",
             "setupFile": "libs/pages/settings/avatar/src/test-setup.ts"
+          },
+          "configurations": {
+            "travis": {
+              "maxWorkers": 2
+            }
           }
         }
       }
