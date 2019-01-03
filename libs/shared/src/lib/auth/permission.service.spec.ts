@@ -4,7 +4,7 @@ import { StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { PermissionService } from './permission.service';
 
-describe('AuthService', () => {
+describe('PermissionService', () => {
   let service: PermissionService;
   let userState: UserReducer.State;
 

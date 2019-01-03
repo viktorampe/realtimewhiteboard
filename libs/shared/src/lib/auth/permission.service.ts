@@ -14,7 +14,7 @@ export class PermissionService implements PermissionServiceInterface {
   hasPermission(permission: string): Observable<boolean> {
     return this.store.pipe(
       select(UserQueries.getPermissions),
-      map(permissions => new Set(permissions).has(permission))
+      map(permissions => permissions.some(p => p === permission))
     );
   }
 }
