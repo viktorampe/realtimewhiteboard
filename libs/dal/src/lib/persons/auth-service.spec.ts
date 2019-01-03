@@ -83,7 +83,7 @@ describe('AuthService', () => {
     }
   ));
 
-   it('should return a permissions array', () => {
+  it('should return a permissions array', () => {
     mockData$ = hot('-a-|', {
       a: { permissions: ['permission-1', 'permission-2'] }
     });
