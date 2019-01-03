@@ -64,7 +64,14 @@ const routes: Routes = [
           {
             path: 'credentials',
             loadChildren:
-              '@campus/pages/settings/credentials#PagesSettingsCredentialsModule'
+              '@campus/pages/settings/credentials#PagesSettingsCredentialsModule',
+            data: { breadcrumbText: 'Inloggegevens' }
+          },
+          {
+            path: 'coupled-teachers',
+            loadChildren:
+              '@campus/pages/settings/coupled-teachers#PagesSettingsCoupledTeachersModule',
+            data: { breadcrumbText: 'Gekoppelde leerkrachten' }
           }
         ]
       },

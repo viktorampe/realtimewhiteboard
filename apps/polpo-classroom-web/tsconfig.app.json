@@ -25,5 +25,7 @@
     , "../../libs/pages/settings/profile/src/index.ts"
 
     , "../../libs/pages/settings/credentials/src/index.ts"
+
+    , "../../libs/pages/settings/coupled-teachers/src/index.ts"
 ]
 }

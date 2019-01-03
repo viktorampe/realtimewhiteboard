@@ -829,6 +829,34 @@
           }
         }
       }
+    },
+    "pages-settings-coupled-teachers": {
+      "root": "libs/pages/settings/coupled-teachers",
+      "sourceRoot": "libs/pages/settings/coupled-teachers/src",
+      "projectType": "library",
+      "prefix": "campus",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/pages/settings/coupled-teachers/tsconfig.lib.json",
+              "libs/pages/settings/coupled-teachers/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/pages/settings/coupled-teachers/jest.config.js",
+            "tsConfig": "libs/pages/settings/coupled-teachers/tsconfig.spec.json",
+            "setupFile": "libs/pages/settings/coupled-teachers/src/test-setup.ts"
+          }
+        }
+      }
     }
   },
   "cli": {

@@ -79,6 +79,9 @@
     },
     "pages-settings-credentials": {
       "tags": []
+    },
+    "pages-settings-coupled-teachers": {
+      "tags": []
     }
   }
 }

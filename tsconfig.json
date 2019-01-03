@@ -82,6 +82,9 @@
       ],
       "@campus/pages/settings/credentials": [
         "libs/pages/settings/credentials/src/index.ts"
+      ],
+      "@campus/pages/settings/coupled-teachers": [
+        "libs/pages/settings/coupled-teachers/src/index.ts"
       ]
     }
   },
