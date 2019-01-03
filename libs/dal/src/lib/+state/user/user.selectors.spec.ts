@@ -47,10 +47,6 @@ describe('User Selectors', () => {
   const mockPermissions = ['permission-a', 'permission-b', 'permission-c'];
 
   beforeEach(() => {
-    const createUser = (id: string, name = ''): any => ({
-      id,
-      name: name || `name-${id}`
-    });
     storeState = {
       user: {
         currentUser: mockUser,

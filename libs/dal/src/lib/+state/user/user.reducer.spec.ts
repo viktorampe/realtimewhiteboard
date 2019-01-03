@@ -101,7 +101,7 @@ describe('User Reducer', () => {
 
     describe('permissions loaded action', () => {
       it('should load permissions', () => {
-        let permissions = [
+        const permissions = [
           'permission-a',
           'permission-b',
           'permission-c',
