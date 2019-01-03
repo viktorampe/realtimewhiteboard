@@ -47,6 +47,42 @@ const routes: Routes = [
         data: { breadcrumbText: 'Meldingen' }
       },
       {
+        path: 'settings',
+        data: { breadcrumbText: 'Instellingen' },
+        children: [
+          {
+            path: 'dashboard',
+            loadChildren:
+              '@campus/pages/settings/dashboard#PagesSettingsDashboardModule',
+            data: { breadcrumbText: 'Dashboard' }
+          },
+          {
+            path: 'profile',
+            loadChildren:
+              '@campus/pages/settings/profile#PagesSettingsProfileModule',
+            data: { breadcrumbText: 'Profiel' }
+          },
+          {
+            path: 'credentials',
+            loadChildren:
+              '@campus/pages/settings/credentials#PagesSettingsCredentialsModule',
+            data: { breadcrumbText: 'Inloggegevens' }
+          },
+          {
+            path: 'coupled-teachers',
+            loadChildren:
+              '@campus/pages/settings/coupled-teachers#PagesSettingsCoupledTeachersModule',
+            data: { breadcrumbText: 'Gekoppelde leerkrachten' }
+          },
+          {
+            path: 'avatar',
+            loadChildren:
+              '@campus/pages/settings/avatar#PagesSettingsAvatarModule',
+            data: { breadcrumbText: 'Avatar' }
+          }
+        ]
+      },
+      {
         path: '',
         redirectTo: 'bundles',
         pathMatch: 'full'
