@@ -9,4 +9,8 @@ describe('SettingsDashboardViewModel', () => {
       providers: []
     });
   });
+
+  it('should do something', () => {
+    return;
+  });
 });
