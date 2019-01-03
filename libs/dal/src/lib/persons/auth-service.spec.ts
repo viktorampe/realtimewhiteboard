@@ -1,6 +1,7 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { LoginCredentials, PersonInterface } from '@campus/dal';
 import { LoopBackAuth, PersonApi } from '@diekeure/polpo-api-angular-sdk';
+import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
 import { AuthService } from './auth-service';
 
@@ -8,7 +9,13 @@ const mockPerson = {
   email: 'brol'
 };
 
+let mockData$: any;
+
 class MockPersonApi {
+  getCurrentId(): number {
+    return 1;
+  }
+
   getCurrent(): Observable<PersonInterface> {
     return of(mockPerson);
   }
@@ -22,9 +29,15 @@ class MockPersonApi {
       user: mockPerson
     });
   }
+
+  getData(): Observable<string[]> {
+    return mockData$;
+  }
 }
 
 describe('AuthService', () => {
+  let authService: AuthService;
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
@@ -33,6 +46,8 @@ describe('AuthService', () => {
         { provide: LoopBackAuth, useValue: {} }
       ]
     });
+
+    authService = TestBed.get(AuthService);
   });
 
   it('should be created', inject([AuthService], (service: AuthService) => {
@@ -67,4 +82,15 @@ describe('AuthService', () => {
       });
     }
   ));
+
+  it('should return a permissions array', () => {
+    mockData$ = hot('-a-|', {
+      a: { permissions: ['permission-1', 'permission-2'] }
+    });
+    expect(authService.getPermissions()).toBeObservable(
+      hot('-a-|', {
+        a: ['permission-1', 'permission-2']
+      })
+    );
+  });
 });
