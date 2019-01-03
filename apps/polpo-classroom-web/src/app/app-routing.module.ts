@@ -74,12 +74,6 @@ const routes: Routes = [
             data: { breadcrumbText: 'Gekoppelde leerkrachten' }
           },
           {
-            path: 'alerts',
-            loadChildren:
-              '@campus/pages/settings/alerts#PagesSettingsAlertsModule',
-            data: { breadcrumbText: 'Meldingen' }
-          },
-          {
             path: 'avatar',
             loadChildren:
               '@campus/pages/settings/avatar#PagesSettingsAvatarModule',
