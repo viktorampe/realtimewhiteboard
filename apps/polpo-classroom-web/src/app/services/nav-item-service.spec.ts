@@ -182,12 +182,14 @@ describe('NavItemServiceService', () => {
         {
           description: 'Profiel',
           icon: 'account',
-          internalLink: '/profile'
+          internalLink: '/profile',
+          dividerBefore: false
         },
         {
           description: 'Afmelden',
           icon: 'lock',
-          internalLink: '/logout'
+          internalLink: '/logout',
+          dividerBefore: true
         }
       ];
 
@@ -202,18 +204,21 @@ describe('NavItemServiceService', () => {
         {
           description: 'Profiel',
           icon: 'account',
-          internalLink: '/profile'
+          internalLink: '/profile',
+          dividerBefore: false
         },
         {
           description: 'foo',
           externalLink: 'foo.smartschool.be',
           header: 'Ga naar Smartschool',
-          image: '/assets/images/icon-smartschool.png'
+          image: '/assets/images/icon-smartschool.png',
+          dividerBefore: true
         },
         {
           description: 'Afmelden',
           icon: 'lock',
-          internalLink: '/logout'
+          internalLink: '/logout',
+          dividerBefore: true
         }
       ];
 
@@ -228,12 +233,14 @@ describe('NavItemServiceService', () => {
         {
           description: 'Profiel',
           icon: 'account',
-          internalLink: '/profile'
+          internalLink: '/profile',
+          dividerBefore: false
         },
         {
           description: 'Afmelden',
           icon: 'lock',
-          internalLink: '/logout'
+          internalLink: '/logout',
+          dividerBefore: true
         }
       ];
 
@@ -251,24 +258,28 @@ describe('NavItemServiceService', () => {
         {
           description: 'Profiel',
           icon: 'account',
-          internalLink: '/profile'
+          internalLink: '/profile',
+          dividerBefore: false
         },
         {
           description: 'foo',
           externalLink: 'foo.smartschool.be',
           header: 'Ga naar Smartschool',
-          image: '/assets/images/icon-smartschool.png'
+          image: '/assets/images/icon-smartschool.png',
+          dividerBefore: true
         },
         {
           description: 'foo',
           externalLink: 'foo.smartschool.be',
           header: 'Ga naar Smartschool',
-          image: '/assets/images/icon-smartschool.png'
+          image: '/assets/images/icon-smartschool.png',
+          dividerBefore: false
         },
         {
           description: 'Afmelden',
           icon: 'lock',
-          internalLink: '/logout'
+          internalLink: '/logout',
+          dividerBefore: true
         }
       ];
 
@@ -289,16 +300,40 @@ describe('NavItemServiceService', () => {
         {
           description: 'Profiel',
           icon: 'account',
-          internalLink: '/profile'
+          internalLink: '/profile',
+          dividerBefore: false
         },
         {
           description: 'Afmelden',
           icon: 'lock',
-          internalLink: '/logout'
+          internalLink: '/logout',
+          dividerBefore: true
         }
       ];
 
       expect(result).toEqual(expected);
+    });
+
+    it('should only place a divider before the first smartschool link', () => {
+      mockUser.roles.push(studentRole);
+
+      const result = navService.getProfileMenuItems(mockUser, [
+        mockCredential,
+        mockCredential,
+        mockCredential,
+        mockCredential
+      ]);
+
+      const resultSmartschoolLinks = result.filter(
+        link => link.externalLink && link.externalLink.includes('smartschool')
+      );
+
+      expect(resultSmartschoolLinks[0].dividerBefore).toBe(true);
+      expect(
+        resultSmartschoolLinks
+          .slice(1)
+          .every(link => link.dividerBefore === false)
+      ).toBe(true);
     });
   });
 });

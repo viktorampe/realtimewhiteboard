@@ -70,6 +70,7 @@ $ui-person-badge-size-small-font-size: $ui-person-badge-size-small / 2 !default;
 @import './button/button.component.theme.scss';
 @import './notification-dropdown-item/notification-dropdown-item.component.theme';
 @import './dropdown-menu/dropdown-menu.component.theme.scss';
+@import './dropdown-menu-item/dropdown-menu-item.component.theme.scss';
 
 // create theme-mixin with each mixin from our library components
 @mixin ui-theme() {
@@ -95,4 +96,5 @@ $ui-person-badge-size-small-font-size: $ui-person-badge-size-small / 2 !default;
   @include ui-button();
   @include ui-notification-dropdown-item();
   @include ui-dropdown-menu();
+  @include ui-dropdown-menu-item();
 }
