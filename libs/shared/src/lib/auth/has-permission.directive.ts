@@ -16,7 +16,7 @@ import { PERMISSION_SERVICE_TOKEN } from './permission.service.interface';
 })
 export class HasPermissionDirective implements OnInit, OnDestroy {
   private permission$: Subscription;
-  @Input('hasPermission') hasPermission: string | string[];
+  @Input() hasPermission: string | string[];
 
   constructor(
     private templateRef: TemplateRef<any>,
