@@ -1,0 +1,134 @@
+import { CommonModule } from '@angular/common';
+import { Component, DebugElement, NgModule } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { PersonFixture, UserReducer } from '@campus/dal';
+import { StoreModule } from '@ngrx/store';
+import { HasPermissionDirective } from './has-permission.directive';
+import { PermissionService } from './permission.service';
+import { PERMISSION_SERVICE_TOKEN } from './permission.service.interface';
+
+@Component({
+  // tslint:disable-next-line:component-selector
+  selector: 'test-container',
+  template: `
+    <div *hasPermission="'permission-a'">string A</div>
+    <div *hasPermission="'permission-b'">string B</div>
+    <div *hasPermission="['permission-a', 'permission-x']">array A + X</div>
+    <div *hasPermission="['permission-b', 'permission-x']">array B + X</div>
+    <div *hasPermission="['permission-x']">array X</div>
+  `
+})
+export class TestContainerComponent {}
+
+@NgModule({
+  declarations: [TestContainerComponent, HasPermissionDirective],
+  imports: [CommonModule],
+  exports: [TestContainerComponent, HasPermissionDirective]
+})
+export class TestModule {}
+
+describe('HasPermissionDirective', () => {
+  let component: Component;
+  let fixture: ComponentFixture<TestContainerComponent>;
+  let testPermissions: string[];
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        TestModule,
+        StoreModule.forRoot({}),
+        StoreModule.forFeature('user', UserReducer.reducer, {
+          initialState: {
+            currentUser: new PersonFixture(),
+            permissions: testPermissions,
+            loaded: true
+          }
+        })
+      ],
+      providers: [
+        { provide: PERMISSION_SERVICE_TOKEN, useClass: PermissionService }
+      ]
+    }).compileComponents();
+  });
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(TestContainerComponent);
+    component = fixture.componentInstance;
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  describe('without permissions', () => {
+    beforeAll(() => {
+      testPermissions = [];
+    });
+
+    it('should have no elements', async(() => {
+      selectVisibleElements().then(listDE => {
+        expect(listDE.length).toBe(0);
+      });
+    }));
+  });
+
+  describe('with single permission', () => {
+    beforeAll(() => {
+      testPermissions = ['permission-a'];
+    });
+
+    it('should show elements with permission', async(() => {
+      selectVisibleElements().then(listDE => {
+        expect(listDE.length).toBe(2);
+        expect(listDE[0].nativeElement.textContent).toBe('string A');
+        expect(listDE[1].nativeElement.textContent).toBe('array A + X');
+      });
+    }));
+  });
+
+  describe('with multiple permissions', () => {
+    beforeAll(() => {
+      testPermissions = ['permission-a', 'permission-b'];
+    });
+
+    it('should show elements with permission', async(() => {
+      selectVisibleElements().then(listDE => {
+        expect(listDE.length).toBe(4);
+        expect(listDE[0].nativeElement.textContent).toBe('string A');
+        expect(listDE[1].nativeElement.textContent).toBe('string B');
+        expect(listDE[2].nativeElement.textContent).toBe('array A + X');
+        expect(listDE[3].nativeElement.textContent).toBe('array B + X');
+      });
+    }));
+  });
+
+  describe('with partially matching permissions', () => {
+    beforeAll(() => {
+      testPermissions = ['permission-a', 'permission-x'];
+    });
+
+    it('should show elements with permission', async(() => {
+      selectVisibleElements().then(listDE => {
+        expect(listDE.length).toBe(4);
+        expect(listDE[0].nativeElement.textContent).toBe('string A');
+        expect(listDE[1].nativeElement.textContent).toBe('array A + X');
+        expect(listDE[2].nativeElement.textContent).toBe('array B + X');
+        expect(listDE[3].nativeElement.textContent).toBe('array X');
+      });
+    }));
+  });
+
+  /**
+   * Select the visible nodes
+   *
+   * @returns {Promise<DebugElement[]>}
+   */
+  function selectVisibleElements(): Promise<DebugElement[]> {
+    fixture.detectChanges();
+    return fixture.whenStable().then(() => {
+      const listDE = fixture.debugElement.queryAll(By.css('div'));
+      return listDE;
+    });
+  }
+});
