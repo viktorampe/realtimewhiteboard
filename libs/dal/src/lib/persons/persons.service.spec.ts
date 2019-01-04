@@ -45,7 +45,7 @@ describe('PersonsService', () => {
     );
   });
 
-  describe('updateProfile', () => {
+  describe('updateUser', () => {
     let personApi: PersonApi;
     let mockData;
 
@@ -61,7 +61,7 @@ describe('PersonsService', () => {
       const mockResponse = hot('a', { a: true });
       personApi.patchAttributes = jest.fn().mockReturnValue(mockResponse);
 
-      const response = service.updateProfile(
+      const response = service.updateUser(
         mockData.userId,
         mockData.changedUserData
       );
@@ -80,7 +80,7 @@ describe('PersonsService', () => {
         .mockRejectedValue(new Error('this is an error'));
 
       expect(() =>
-        service.updateProfile(mockData.userId, mockData.changedUserData)
+        service.updateUser(mockData.userId, mockData.changedUserData)
       ).toThrow();
     });
   });

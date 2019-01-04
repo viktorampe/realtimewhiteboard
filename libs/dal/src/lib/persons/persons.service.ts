@@ -8,9 +8,9 @@ export const PERSON_SERVICE_TOKEN = new InjectionToken('PersonService');
 
 export interface PersonServiceInterface {
   getAllForUser(userId: number): Observable<PersonInterface[]>;
-  updateProfile(
+  updateUser(
     userId: number,
-    profileChanges: Partial<PersonInterface>
+    changedProps: Partial<PersonInterface>
   ): Observable<boolean>;
 }
 
@@ -26,11 +26,11 @@ export class PersonService implements PersonServiceInterface {
       .pipe(map((res: { persons: PersonInterface[] }) => res.persons));
   }
 
-  updateProfile(
+  updateUser(
     userId: number,
-    profileChanges: Partial<PersonInterface>
+    changedProps: Partial<PersonInterface>
   ): Observable<boolean> {
-    return this.personApi.patchAttributes(userId, profileChanges).pipe(
+    return this.personApi.patchAttributes(userId, changedProps).pipe(
       map(_ => true),
       catchError(error => throwError(error))
     );
