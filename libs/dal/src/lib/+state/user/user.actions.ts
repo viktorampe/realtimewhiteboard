@@ -8,7 +8,10 @@ export enum UserActionTypes {
   RemoveUser = '[User] Remove User',
   UserRemoved = '[User] User Removed',
   UserRemoveError = '[User] User Remove Error',
-  LogInUser = '[User] Log In User'
+  LogInUser = '[User] Log In User',
+  LoadPermissions = '[User] Load Permissions',
+  PermissionsLoaded = '[User] Permissions Loaded',
+  PermissionsLoadError = '[User] Permissions Load error'
 }
 
 export class LogInUser implements Action {
@@ -46,6 +49,21 @@ export class UserRemoveError implements Action {
   constructor(public payload: { error: any }) {}
 }
 
+export class LoadPermissions implements Action {
+  readonly type = UserActionTypes.LoadPermissions;
+  constructor(public payload: { force?: boolean }) {}
+}
+
+export class PermissionsLoaded implements Action {
+  readonly type = UserActionTypes.PermissionsLoaded;
+  constructor(public payload: string[]) {}
+}
+
+export class PermissionsLoadError implements Action {
+  readonly type = UserActionTypes.PermissionsLoadError;
+  constructor(public payload: { error: any }) {}
+}
+
 export type UserAction =
   | LoadUser
   | UserLoaded
@@ -53,7 +71,10 @@ export type UserAction =
   | RemoveUser
   | UserRemoved
   | UserRemoveError
-  | LogInUser;
+  | LogInUser
+  | LoadPermissions
+  | PermissionsLoaded
+  | PermissionsLoadError;
 
 export const fromUserActions = {
   LoadUser,
@@ -62,5 +83,8 @@ export const fromUserActions = {
   RemoveUser,
   UserRemoved,
   UserRemoveError,
-  LogInUser
+  LogInUser,
+  LoadPermissions,
+  PermissionsLoaded,
+  PermissionsLoadError
 };
