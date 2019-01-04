@@ -56,6 +56,17 @@ export function reducer(
         ...state,
         error: action.payload
       };
+      break;
+    }
+    case UserActionTypes.UpdateUser: {
+      state = {
+        ...state,
+        currentUser: {
+          ...state.currentUser,
+          ...action.payload.changedProps,
+          ...{ password: null }
+        }
+      };
     }
   }
   return state;

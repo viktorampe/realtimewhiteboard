@@ -1,17 +1,21 @@
 import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
+import { undo } from 'ngrx-undo';
 import { map } from 'rxjs/operators';
 import { DalState } from '..';
 import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN
 } from '../../persons/auth-service.interface';
+import { ActionSuccessful } from '../dal.actions';
+import { PersonService } from './../../persons/persons.service';
 import {
   fromUserActions,
   LoadUser,
   LogInUser,
   RemoveUser,
+  UpdateUser,
   UserActionTypes,
   UserLoadError,
   UserRemoveError
@@ -83,9 +87,29 @@ export class UserEffects {
     }
   );
 
+  @Effect()
+  updateUser$ = this.dataPersistence.optimisticUpdate(
+    UserActionTypes.UpdateUser,
+    {
+      run: (action: UpdateUser, state: DalState) => {
+        return this.personService
+          .updateUser(action.payload.userId, action.payload.changedProps)
+          .pipe(
+            map(_ => {
+              return new ActionSuccessful({ successfulAction: 'User updated' });
+            })
+          );
+      },
+      undoAction: (action: UpdateUser, state: DalState) => {
+        return undo(action);
+      }
+    }
+  );
+
   constructor(
     private actions$: Actions,
     private dataPersistence: DataPersistence<DalState>,
+    private personService: PersonService,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
   ) {}
 }
