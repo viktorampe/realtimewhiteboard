@@ -7,6 +7,10 @@
       formControlName="lastName"
       required
     />
+    <!-- <mat-error *ngIf="!getControl('lastName').valid"></mat-error> -->
+    <mat-error *ngIf="lastName.getError('required')"
+      >Naam is verplicht.</mat-error
+    >
   </mat-form-field>
   <mat-form-field>
     <input
@@ -16,6 +20,9 @@
       formControlName="firstName"
       required
     />
+    <mat-error *ngIf="firstName.getError('required')"
+      >Voornaam is verplicht.</mat-error
+    >
   </mat-form-field>
   <mat-form-field>
     <input
@@ -25,6 +32,9 @@
       formControlName="username"
       required
     />
+    <mat-error *ngIf="username.getError('required')"
+      >Gebruikersnaam is verplicht.</mat-error
+    >
   </mat-form-field>
   <mat-form-field>
     <input
@@ -34,6 +44,12 @@
       formControlName="email"
       required
     />
+    <mat-error *ngIf="email.getError('required')"
+      >E-mail is verplicht.</mat-error
+    >
+    <mat-error *ngIf="email.getError('email')"
+      >Gelieve een geldig e-mailadres in te vullen.</mat-error
+    >
   </mat-form-field>
   <mat-form-field>
     <input
@@ -42,20 +58,28 @@
       placeholder="Wachtwoord"
       formControlName="password"
     />
+    <mat-hint
+      >Laat dit veld leeg om uw wachtwoord ongewijzigd te laten.</mat-hint
+    >
   </mat-form-field>
-  <p>Laat dit veld leeg om uw wachtwoord ongewijzigd te laten.</p>
 
-  <mat-form-field *ngIf="password.value">
+  <mat-form-field>
     <input
       matInput
       type="password"
       placeholder="Herhaal wachtwoord"
-      formControlName="repeatPassword"
+      formControlName="verifyPassword"
+      [errorStateMatcher]="errorMatcher"
     />
+    <mat-error *ngIf="profileForm.getError('noPasswordMatch')"
+      >De wachtwoorden komen niet overeen.</mat-error
+    >
   </mat-form-field>
+
   <button type="submit" [disabled]="!profileForm.valid">Opslaan</button>
   <button (click)="onReset()">Annuleren</button>
 </form>
 
 <p> Form Status: {{ profileForm.status }} </p>
-<p> Form Status: {{ profileForm.value | json }} </p>
+<p> Form values: {{ profileForm.value | json }} </p>
+<p> Form errors: {{ profileForm.errors | json }} </p>
