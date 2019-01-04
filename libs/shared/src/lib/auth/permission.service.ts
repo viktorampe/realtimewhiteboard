@@ -11,10 +11,13 @@ import { PermissionServiceInterface } from './permission.service.interface';
 export class PermissionService implements PermissionServiceInterface {
   constructor(private store: Store<DalState>) {}
 
-  hasPermission(permission: string): Observable<boolean> {
+  hasPermission(permission: string | string[]): Observable<boolean> {
+    if (typeof permission === 'string') {
+      permission = [permission];
+    }
     return this.store.pipe(
       select(UserQueries.getPermissions),
-      map(permissions => permissions.some(p => p === permission))
+      map(permissions => permissions.some(p => permission.includes(p)))
     );
   }
 }

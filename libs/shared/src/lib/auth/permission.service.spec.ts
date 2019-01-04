@@ -43,4 +43,16 @@ describe('PermissionService', () => {
       hot('a', { a: false })
     );
   });
+
+  it('should return true if permission is found in array', () => {
+    expect(
+      service.hasPermission(['permission-x', 'permission-a'])
+    ).toBeObservable(hot('a', { a: true }));
+  });
+
+  it('should return false if permission is not found in array', () => {
+    expect(
+      service.hasPermission(['permission-x', 'permission-y'])
+    ).toBeObservable(hot('a', { a: false }));
+  });
 });
