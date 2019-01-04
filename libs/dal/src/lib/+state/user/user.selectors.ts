@@ -21,9 +21,14 @@ export const getCurrentUser = createSelector(
   }
 );
 
+export const getPermissionsLoaded = createSelector(
+  getUserState,
+  (state: State) => state.permissionsLoaded
+);
+
 export const getPermissions = createSelector(
   getUserState,
-  getLoaded,
+  getPermissionsLoaded,
   (state: State, isLoaded) => {
     return isLoaded ? state.permissions : [];
   }

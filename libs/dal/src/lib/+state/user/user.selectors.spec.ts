@@ -50,9 +50,11 @@ describe('User Selectors', () => {
     storeState = {
       user: {
         currentUser: mockUser,
-        permissions: mockPermissions,
         error: ERROR_MSG,
-        loaded: true
+        loaded: true,
+        permissions: mockPermissions,
+        permissionsLoaded: true,
+        permissionsError: null
       }
     };
   });
@@ -82,6 +84,11 @@ describe('User Selectors', () => {
     it("getPermissions() should return the current 'permissions' storeState", () => {
       const result = UserQueries.getPermissions(storeState);
       expect(result).toBe(mockPermissions);
+    });
+
+    it("getPermissionsLoaded() should return the current 'permissionsLoaded' status", () => {
+      const result = UserQueries.getPermissionsLoaded(storeState);
+      expect(result).toBe(true);
     });
   });
 });
