@@ -7,7 +7,6 @@
       formControlName="lastName"
       required
     />
-    <!-- <mat-error *ngIf="!getControl('lastName').valid"></mat-error> -->
     <mat-error *ngIf="lastName.getError('required')"
       >Naam is verplicht.</mat-error
     >
@@ -79,7 +78,3 @@
   <button type="submit" [disabled]="!profileForm.valid">Opslaan</button>
   <button (click)="onReset()">Annuleren</button>
 </form>
-
-<p> Form Status: {{ profileForm.status }} </p>
-<p> Form values: {{ profileForm.value | json }} </p>
-<p> Form errors: {{ profileForm.errors | json }} </p>

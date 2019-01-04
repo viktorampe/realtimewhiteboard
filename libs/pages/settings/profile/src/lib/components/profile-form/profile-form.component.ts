@@ -3,14 +3,12 @@ import {
   FormBuilder,
   FormControl,
   FormGroup,
-  FormGroupDirective,
-  NgForm,
   ValidationErrors,
   ValidatorFn,
   Validators
 } from '@angular/forms';
-import { ErrorStateMatcher } from '@angular/material';
 import { PersonFixture, PersonInterface } from '@campus/dal';
+import { CrossFieldErrorMatcher } from '@campus/utils';
 
 const passwordMatchValidator: ValidatorFn = (
   form: FormGroup
@@ -22,15 +20,6 @@ const passwordMatchValidator: ValidatorFn = (
     ? { noPasswordMatch: true }
     : null;
 };
-
-class CrossFieldErrorMatcher implements ErrorStateMatcher {
-  isErrorState(
-    control: FormControl | null,
-    form: FormGroupDirective | NgForm | null
-  ): boolean {
-    return control.dirty && form.invalid;
-  }
-}
 
 @Component({
   selector: 'campus-profile-form',
@@ -60,6 +49,7 @@ export class ProfileFormComponent implements OnInit {
   get verifyPassword(): FormControl {
     return this.profileForm.get('verifyPassword') as FormControl;
   }
+
   @Input() user: PersonInterface;
   @Output() saveProfile = new EventEmitter<PersonInterface>();
 
@@ -89,7 +79,12 @@ export class ProfileFormComponent implements OnInit {
     return this.profileForm.get(name) as FormControl;
   }
 
-  onSubmit() {}
+  onSubmit() {
+    const updatedProfile: PersonInterface = { ...this.profileForm.value };
+    this.saveProfile.next(updatedProfile);
+  }
 
-  onReset() {}
+  onReset() {
+    this.profileForm.reset();
+  }
 }
