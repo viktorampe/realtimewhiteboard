@@ -1,3 +1,61 @@
-<p>
-  profile-form works!
-</p>
+<form [formGroup]="profileForm" class="form-container" (ngSubmit)="onSubmit()">
+  <mat-form-field>
+    <input
+      matInput
+      type="text"
+      placeholder="Naam"
+      formControlName="lastName"
+      required
+    />
+  </mat-form-field>
+  <mat-form-field>
+    <input
+      matInput
+      type="text"
+      placeholder="Voornaam"
+      formControlName="firstName"
+      required
+    />
+  </mat-form-field>
+  <mat-form-field>
+    <input
+      matInput
+      type="text"
+      placeholder="Gebruikersnaam"
+      formControlName="username"
+      required
+    />
+  </mat-form-field>
+  <mat-form-field>
+    <input
+      matInput
+      type="text"
+      placeholder="E-mail"
+      formControlName="email"
+      required
+    />
+  </mat-form-field>
+  <mat-form-field>
+    <input
+      matInput
+      type="password"
+      placeholder="Wachtwoord"
+      formControlName="password"
+    />
+  </mat-form-field>
+  <p>Laat dit veld leeg om uw wachtwoord ongewijzigd te laten.</p>
+
+  <mat-form-field *ngIf="password.value">
+    <input
+      matInput
+      type="password"
+      placeholder="Herhaal wachtwoord"
+      formControlName="repeatPassword"
+    />
+  </mat-form-field>
+  <button type="submit" [disabled]="!profileForm.valid">Opslaan</button>
+  <button (click)="onReset()">Annuleren</button>
+</form>
+
+<p> Form Status: {{ profileForm.status }} </p>
+<p> Form Status: {{ profileForm.value | json }} </p>
