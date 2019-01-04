@@ -5,7 +5,7 @@ import {
   ValidationErrors
 } from '@angular/forms';
 import { AuthServiceInterface, PersonServiceInterface } from '@campus/dal';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
@@ -23,8 +23,8 @@ export class UniqueUsernameValidator implements AsyncValidator {
     return this.personService
       .checkUniqueUsername(this.authService.userId, ctrl.value)
       .pipe(
-        map(isUnique => (isUnique ? null : { uniqueUsername: true })),
-        catchError(() => null)
+        map(isUnique => (isUnique ? null : { notUniqueUsername: true })),
+        catchError(() => of({ serverError: true }))
       );
   }
 }

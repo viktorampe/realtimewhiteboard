@@ -5,7 +5,7 @@ import {
   ValidationErrors
 } from '@angular/forms';
 import { AuthServiceInterface, PersonServiceInterface } from '@campus/dal';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
@@ -22,9 +22,9 @@ export class UniqueEmailValidator implements AsyncValidator {
       .checkUniqueEmail(this.authService.userId, ctrl.value)
       .pipe(
         map(isUnique => {
-          return isUnique ? null : { uniqueEmail: true };
+          return isUnique ? null : { notUniqueEmail: true };
         }),
-        catchError(() => null)
+        catchError(() => of({ serverError: true }))
       );
   }
 }

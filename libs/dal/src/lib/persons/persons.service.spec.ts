@@ -49,16 +49,12 @@ describe('PersonsService', () => {
     mockData$ = hot('-a|', {
       a: true
     });
-    expect(service.checkUniqueUsername(1, 'foo')).toBeObservable(
-      hot('-a|', { a: true })
-    );
+    expect(service.checkUniqueUsername(1, 'foo')).toBeObservable(mockData$);
   });
   it('should check for unique email', () => {
     mockData$ = hot('-a|', {
       a: true
     });
-    expect(service.checkUniqueEmail(1, 'foo')).toBeObservable(
-      hot('-a|', { a: true })
-    );
+    expect(service.checkUniqueEmail(1, 'foo')).toBeObservable(mockData$);
   });
 });
