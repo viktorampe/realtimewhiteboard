@@ -1,6 +1,13 @@
 import { PersonInterface, UserActions } from '@campus/dal';
 import { UserReducer } from '.';
-import { UserLoadError, UserRemoved, UserRemoveError } from './user.actions';
+import { PersonFixture } from '../../+fixtures';
+import {
+  UpdateUser,
+  UserLoaded,
+  UserLoadError,
+  UserRemoved,
+  UserRemoveError
+} from './user.actions';
 
 describe('User Reducer', () => {
   beforeEach(() => {});
@@ -95,6 +102,39 @@ describe('User Reducer', () => {
             { error }
           )
         );
+      });
+
+      describe('update action', () => {
+        const mockUser = new PersonFixture();
+        const changedProps: Partial<PersonInterface> = {
+          firstName: 'new value',
+          name: 'new value'
+        };
+        const updateAction = new UpdateUser({
+          userId: mockUser.id,
+          changedProps
+        });
+        let usedState: UserReducer.State;
+
+        beforeEach(() => {
+          usedState = UserReducer.reducer(
+            UserReducer.initialState,
+            new UserLoaded(mockUser)
+          );
+        });
+
+        it('should update the currentUser', () => {
+          const result = UserReducer.reducer(usedState, updateAction);
+          expect(result.currentUser).toEqual(
+            jasmine.objectContaining(changedProps)
+          );
+        });
+
+        it('should not store the user password in the state', () => {
+          updateAction.payload.changedProps.password = 'sUp3r_s3cUr3_P@ssW0rd!';
+          const result = UserReducer.reducer(usedState, updateAction);
+          expect(result.currentUser.password).toBeNull();
+        });
       });
     });
   });
