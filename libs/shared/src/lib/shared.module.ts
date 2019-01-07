@@ -12,6 +12,8 @@ import { RouterModule } from '@angular/router';
 import { UiModule } from '@campus/ui';
 import { FilterService, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { HasPermissionDirective } from './auth/has-permission.directive';
+import { PermissionService } from './auth/permission.service';
+import { PERMISSION_SERVICE_TOKEN } from './auth/permission.service.interface';
 import { PageBarContainerComponent } from './components/page-bar-container/page-bar-container.component';
 import { OPEN_STATIC_CONTENT_SERVICE_TOKEN } from './content/open-static-content.interface';
 import { OpenStaticContentService } from './content/open-static-content.service';
@@ -64,7 +66,8 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     {
       provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
       useClass: OpenStaticContentService
-    }
+    },
+    { provide: PERMISSION_SERVICE_TOKEN, useClass: PermissionService }
   ]
 })
 export class SharedModule {
