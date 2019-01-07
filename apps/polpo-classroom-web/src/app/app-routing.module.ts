@@ -1,6 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthenticationGuard, CoupledTeacherGuard } from '@campus/guards';
+import {
+  AuthenticationGuard,
+  CoupledTeacherGuard,
+  PermissionGuard
+} from '@campus/guards';
 import { AppResolver } from './app.resolver';
 
 const routes: Routes = [
@@ -13,7 +17,7 @@ const routes: Routes = [
         path: 'books',
         loadChildren: '@campus/pages/books#PagesBooksModule',
         data: { breadcrumbText: 'Boeken' },
-        canActivate: [CoupledTeacherGuard]
+        canActivate: [CoupledTeacherGuard, PermissionGuard]
       },
       {
         path: 'tasks',
