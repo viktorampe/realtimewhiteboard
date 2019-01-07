@@ -73,12 +73,6 @@ const routes: Routes = [
             loadChildren:
               '@campus/pages/settings/coupled-teachers#PagesSettingsCoupledTeachersModule',
             data: { breadcrumbText: 'Gekoppelde leerkrachten' }
-          },
-          {
-            path: 'avatar',
-            loadChildren:
-              '@campus/pages/settings/avatar#PagesSettingsAvatarModule',
-            data: { breadcrumbText: 'Avatar' }
           }
         ]
       },
