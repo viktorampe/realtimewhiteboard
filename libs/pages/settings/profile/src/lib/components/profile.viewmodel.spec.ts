@@ -54,6 +54,22 @@ describe('ProfileViewModel', () => {
         );
       });
     });
+
+    describe('message', () => {
+      const mockMessage = {
+        message: "Look at me! I'm an update message.",
+        timeStamp: 1
+      };
+      beforeEach(() => {
+        store.dispatch(new UserActions.UserUpdateMessage(mockMessage));
+      });
+
+      it('should return the currentUser', () => {
+        expect(profileViewModel.messages$).toBeObservable(
+          hot('a', { a: mockMessage })
+        );
+      });
+    });
   });
 
   describe('update profile', () => {

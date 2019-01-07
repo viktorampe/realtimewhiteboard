@@ -19,6 +19,11 @@ export class MockProfileViewModel
     })
   );
 
+  public messages$ = new BehaviorSubject<{
+    message: string;
+    timeStamp: number;
+  }>({ message: "Look at me! I'm an update message.", timeStamp: 1 });
+
   public updateProfile(
     userId: number,
     changedProps: Partial<PersonInterface>

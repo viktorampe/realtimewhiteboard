@@ -13,6 +13,10 @@ import { Observable } from 'rxjs';
 })
 export class ProfileViewModel {
   public currentUser$: Observable<PersonInterface>;
+  public messages$: Observable<{
+    message: string;
+    timeStamp: number;
+  }>;
 
   constructor(private store: Store<DalState>) {
     this.setPresentationStreams();
