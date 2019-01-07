@@ -14,7 +14,7 @@ import {
 } from '@campus/dal';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { filter, switchMapTo, tap } from 'rxjs/operators';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
@@ -34,6 +34,11 @@ export class AuthenticationGuard implements CanActivate {
     this.store.dispatch(new UserActions.LoadUser({ force: false }));
     return this.store.pipe(
       select(UserQueries.getLoaded),
+      filter(loaded => !!loaded),
+      tap(() =>
+        this.store.dispatch(new UserActions.LoadPermissions({ force: false }))
+      ),
+      switchMapTo(this.store.pipe(select(UserQueries.getPermissionsLoaded))),
       filter(loaded => !!loaded)
     );
   }
