@@ -1,1 +1,9 @@
 <p> avatar works! </p>
+<div *ngIf="currentUser$ | async as user">
+  <img-cropper [image]="imgData"
+               [settings]="cropperSettings"></img-cropper><br>
+  <img *ngIf="imgData.image"
+       [src]="imgData.image"
+       [width]="cropperSettings.croppedWidth"
+       [height]="cropperSettings.croppedHeight">
+</div>

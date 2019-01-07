@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { ImageCropperComponent } from 'ngx-img-cropper';
 import { AvatarComponent } from './components/avatar/avatar.component';
 
 @NgModule({
@@ -15,6 +16,6 @@ import { AvatarComponent } from './components/avatar/avatar.component';
       }
     ])
   ],
-  declarations: [AvatarComponent]
+  declarations: [AvatarComponent, ImageCropperComponent]
 })
 export class PagesSettingsProfileModule {}
