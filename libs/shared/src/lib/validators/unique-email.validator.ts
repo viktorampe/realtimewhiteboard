@@ -1,23 +1,26 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {
   AbstractControl,
   AsyncValidator,
   ValidationErrors
 } from '@angular/forms';
-import { AuthServiceInterface, PersonServiceInterface } from '@campus/dal';
+import {
+  AuthServiceInterface,
+  AUTH_SERVICE_TOKEN,
+  PersonServiceInterface,
+  PERSON_SERVICE_TOKEN
+} from '@campus/dal';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class UniqueEmailValidator implements AsyncValidator {
   constructor(
-    private personService: PersonServiceInterface,
-    private authService: AuthServiceInterface
+    @Inject(PERSON_SERVICE_TOKEN) private personService: PersonServiceInterface,
+    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
   ) {}
 
-  validate(
-    ctrl: AbstractControl
-  ): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
+  validate(ctrl: AbstractControl): Observable<ValidationErrors | null> {
     return this.personService
       .checkUniqueEmail(this.authService.userId, ctrl.value)
       .pipe(

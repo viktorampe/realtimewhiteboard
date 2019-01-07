@@ -4,4 +4,7 @@ export {
   AUTH_SERVICE_TOKEN,
   LoginCredentials
 } from './auth-service.interface';
-export { PersonServiceInterface } from './persons.service';
+export {
+  PersonServiceInterface,
+  PERSON_SERVICE_TOKEN
+} from './persons.service';

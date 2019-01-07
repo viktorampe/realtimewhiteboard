@@ -1,46 +1,50 @@
+import { TestBed } from '@angular/core/testing';
 import { AbstractControl } from '@angular/forms';
-import { AuthServiceInterface, PersonServiceInterface } from '@campus/dal';
-import { of, throwError } from 'rxjs';
+import { AUTH_SERVICE_TOKEN, PERSON_SERVICE_TOKEN } from '@campus/dal';
+import { hot } from '@nrwl/nx/testing';
+import { Observable } from 'rxjs';
 import { UniqueEmailValidator } from './unique-email.validator';
 
 describe('Unique email async validator', () => {
   let uniqueEmailValidator: UniqueEmailValidator;
+  let mockResponse$: Observable<boolean>;
   const control: AbstractControl = { value: 'foo' } as AbstractControl;
-
-  it('should return null of the email is unique', (done: DoneFn) => {
-    setupValidator(true);
-    uniqueEmailValidator.validate(control).subscribe(value => {
-      expect(value).toBe(null);
-      done();
-    });
-  });
-
-  it('should return a validation error if the email is not unique', (done: DoneFn) => {
-    setupValidator(false);
-    uniqueEmailValidator.validate(control).subscribe(value => {
-      expect(value).toEqual({ notUniqueEmail: true });
-      done();
-    });
-  });
-
-  it('should return a validation error if the API call went wrong', (done: DoneFn) => {
-    setupValidator(false, true);
-    uniqueEmailValidator.validate(control).subscribe(value => {
-      expect(value).toEqual({ serverError: true });
-      done();
-    });
-  });
-
-  function setupValidator(isUnique: boolean, error?: boolean) {
-    uniqueEmailValidator = new UniqueEmailValidator(
-      {
-        checkUniqueEmail: () => {
-          return error ? throwError('something went wrong') : of(isUnique);
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        UniqueEmailValidator,
+        {
+          provide: PERSON_SERVICE_TOKEN,
+          useValue: { checkUniqueEmail: () => mockResponse$ }
         },
-        getAllForUser: null,
-        checkUniqueUsername: null
-      } as PersonServiceInterface,
-      { userId: 1 } as AuthServiceInterface
+        { provide: AUTH_SERVICE_TOKEN, useValue: { userId: 1 } }
+      ]
+    });
+
+    uniqueEmailValidator = TestBed.get(UniqueEmailValidator);
+  });
+
+  it('should return null of the email is unique', () => {
+    mockResponse$ = hot('-a-|', { a: true });
+
+    expect(uniqueEmailValidator.validate(control)).toBeObservable(
+      hot('-a-|', { a: null })
     );
-  }
+  });
+
+  it('should return a validation error if the email is not unique', () => {
+    mockResponse$ = hot('-a-|', { a: false });
+
+    expect(uniqueEmailValidator.validate(control)).toBeObservable(
+      hot('-a-|', { a: { notUniqueEmail: true } })
+    );
+  });
+
+  it('should return a validation error if the API call went wrong', () => {
+    mockResponse$ = hot('-#|', 'something went wrong');
+
+    expect(uniqueEmailValidator.validate(control)).toBeObservable(
+      hot('-(x|)', { x: { serverError: true } })
+    );
+  });
 });
