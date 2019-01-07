@@ -9,7 +9,7 @@ import { ProfileViewModel } from './profile.viewmodel';
 })
 export class MockProfileViewModel
   implements ViewModelInterface<ProfileViewModel> {
-  public currentUser$ = new BehaviorSubject<Partial<PersonInterface>>(
+  public currentUser$ = new BehaviorSubject<PersonInterface>(
     new PersonFixture({
       firstName: 'Manon',
       name: 'Bakker',
@@ -23,7 +23,7 @@ export class MockProfileViewModel
     userId: number,
     changedProps: Partial<PersonInterface>
   ): void {}
-  public saveAvatar(file: File): void {}
+  public saveAvatar(file: string): void {}
 }
 
 // image encoded with https://www.base64encode.org/

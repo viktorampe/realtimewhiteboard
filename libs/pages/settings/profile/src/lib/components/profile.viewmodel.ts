@@ -12,8 +12,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ProfileViewModel {
-  public currentUser$: Observable<Partial<PersonInterface>>;
-  public messages$: Observable<string>;
+  public currentUser$: Observable<PersonInterface>;
 
   constructor(private store: Store<DalState>) {
     this.setPresentationStreams();
@@ -26,7 +25,7 @@ export class ProfileViewModel {
     this.store.dispatch(new UserActions.UpdateUser({ userId, changedProps }));
   }
 
-  public saveAvatar(file: File): void {}
+  public saveAvatar(file: string): void {}
 
   private setPresentationStreams(): void {
     this.currentUser$ = this.store.pipe(select(UserQueries.getCurrentUser));
