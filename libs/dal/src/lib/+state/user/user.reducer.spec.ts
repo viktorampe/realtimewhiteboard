@@ -1,6 +1,11 @@
 import { PersonInterface, UserActions } from '@campus/dal';
 import { UserReducer } from '.';
-import { UserLoadError, UserRemoved, UserRemoveError } from './user.actions';
+import {
+  PermissionsLoadError,
+  UserLoadError,
+  UserRemoved,
+  UserRemoveError
+} from './user.actions';
 
 describe('User Reducer', () => {
   beforeEach(() => {});
@@ -10,6 +15,7 @@ describe('User Reducer', () => {
       currentUser: {
         email: 'test'
       },
+      permissions: ['permission-a', 'permission-b', 'permission-c'],
       error: null,
       loaded: true
     };
@@ -26,14 +32,6 @@ describe('User Reducer', () => {
   }
 
   /**
-   * creates a null User.
-   * @returns {PersonInterface}
-   */
-  function createNullUser(): PersonInterface {
-    return null;
-  }
-
-  /**
    * Utility to create the bundle state.
    *
    * @param {PersonInterface} [user]
@@ -44,10 +42,12 @@ describe('User Reducer', () => {
   function createState(
     user: PersonInterface,
     loaded: boolean = false,
-    error?: any
+    error?: any,
+    permissions?: string[]
   ): UserReducer.State {
     const state: UserReducer.State = {
       currentUser: user,
+      permissions: permissions || [],
       loaded: loaded,
       error: error
     };
@@ -92,9 +92,31 @@ describe('User Reducer', () => {
           createState(
             createFilledUserState().currentUser,
             createFilledUserState().loaded,
-            { error }
+            { error },
+            createFilledUserState().permissions
           )
         );
+      });
+    });
+
+    describe('permissions loaded action', () => {
+      it('should load permissions', () => {
+        const permissions = [
+          'permission-a',
+          'permission-b',
+          'permission-c',
+          'permission-d'
+        ];
+        const action = new UserActions.PermissionsLoaded(permissions);
+        const result = UserReducer.reducer(UserReducer.initialState, action);
+        expect(result).toEqual(createState(null, false, null, permissions));
+      });
+
+      it('should error', () => {
+        const error = 'Something went wrong';
+        const action = new PermissionsLoadError({ error });
+        const result = UserReducer.reducer(UserReducer.initialState, action);
+        expect(result).toEqual(createState(null, false, { error }, []));
       });
     });
   });
