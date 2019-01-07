@@ -12,7 +12,7 @@ import { PermissionService } from './permission.service';
 import { PERMISSION_SERVICE_TOKEN } from './permission.service.interface';
 
 @Directive({
-  selector: '[hasPermission]'
+  selector: '[campusHasPermission], [hasPermission]'
 })
 export class HasPermissionDirective implements OnInit, OnDestroy {
   private permission$: Subscription;
