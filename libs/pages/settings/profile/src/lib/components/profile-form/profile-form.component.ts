@@ -30,26 +30,6 @@ export class ProfileFormComponent implements OnInit {
   profileForm: FormGroup;
   errorMatcher = new CrossFieldErrorMatcher();
 
-  get lastName(): FormControl {
-    return this.profileForm.get('lastName') as FormControl;
-  }
-  get firstName(): FormControl {
-    return this.profileForm.get('firstName') as FormControl;
-  }
-  get username(): FormControl {
-    return this.profileForm.get('username') as FormControl;
-  }
-  get email(): FormControl {
-    return this.profileForm.get('email') as FormControl;
-  }
-
-  get password(): FormControl {
-    return this.profileForm.get('password') as FormControl;
-  }
-  get verifyPassword(): FormControl {
-    return this.profileForm.get('verifyPassword') as FormControl;
-  }
-
   @Input() user: PersonInterface;
   @Output() saveProfile = new EventEmitter<PersonInterface>();
 

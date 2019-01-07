@@ -7,7 +7,7 @@
       formControlName="lastName"
       required
     />
-    <mat-error *ngIf="lastName.getError('required')"
+    <mat-error *ngIf="getControl('lastName').getError('required')"
       >Naam is verplicht.</mat-error
     >
   </mat-form-field>
@@ -19,7 +19,7 @@
       formControlName="firstName"
       required
     />
-    <mat-error *ngIf="firstName.getError('required')"
+    <mat-error *ngIf="getControl('firstName').getError('required')"
       >Voornaam is verplicht.</mat-error
     >
   </mat-form-field>
@@ -31,7 +31,7 @@
       formControlName="username"
       required
     />
-    <mat-error *ngIf="username.getError('required')"
+    <mat-error *ngIf="getControl('username').getError('required')"
       >Gebruikersnaam is verplicht.</mat-error
     >
   </mat-form-field>
@@ -43,10 +43,10 @@
       formControlName="email"
       required
     />
-    <mat-error *ngIf="email.getError('required')"
+    <mat-error *ngIf="getControl('email').getError('required')"
       >E-mail is verplicht.</mat-error
     >
-    <mat-error *ngIf="email.getError('email')"
+    <mat-error *ngIf="getControl('email').getError('email')"
       >Gelieve een geldig e-mailadres in te vullen.</mat-error
     >
   </mat-form-field>
@@ -62,7 +62,7 @@
     >
   </mat-form-field>
 
-  <mat-form-field>
+  <mat-form-field *ngIf="getControl('password').value">
     <input
       matInput
       type="password"
