@@ -1,1 +1,20 @@
-<p> settings-dashboard works! </p>
+<div class="pages-profile__container">
+  <div class="page-profile__container__header"> <p>Mijn profiel</p> </div>
+  <div class="page-profile__container__content">
+    <div>
+      <p class="page-profile__container__content__name">name</p>
+      <p class="page-profile__container__content__type">type</p>
+    </div>
+    <div>
+      <mat-nav-list>
+        <div
+          class="page-profile__container__content__navitem"
+          *ngFor="let link of links"
+        >
+          <mat-icon [svgIcon]="confirmIcon"></mat-icon>
+          <a mat-list-item href="link"> {{ link }} </a>
+        </div>
+      </mat-nav-list>
+    </div>
+  </div>
+</div>

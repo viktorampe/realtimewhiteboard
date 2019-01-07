@@ -1,0 +1,34 @@
+.pages-profile {
+  &__container {
+    margin-top: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
+    background-color: white;
+
+    &__header {
+      padding: 20px;
+      background-color: gray;
+      color: white;
+    }
+
+    &__content {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+
+      &__name {
+        font-size: 18px;
+        color: lightgray;
+      }
+
+      &__type {
+        font-size: 18px;
+        color: black;
+      }
+
+      &__navitem {
+        color: black;
+      }
+    }
+  }
+}
