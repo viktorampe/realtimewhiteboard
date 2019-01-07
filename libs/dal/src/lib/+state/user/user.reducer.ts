@@ -13,12 +13,14 @@ export const NAME = 'user';
 
 export interface State {
   currentUser: PersonInterface; // user object
+  lastUpdate?: { message: string; timeStamp: number };
   loaded: boolean; // has the User list been loaded
-  error?: any; // last none error (if any)
+  error?: any; // last known error (if any)
 }
 
 export const initialState: State = {
   currentUser: null,
+  lastUpdate: null,
   loaded: false,
   error: null
 };
@@ -59,14 +61,22 @@ export function reducer(
       break;
     }
     case UserActionTypes.UpdateUser: {
+      const { password, ...props } = action.payload.changedProps;
       state = {
         ...state,
         currentUser: {
           ...state.currentUser,
-          ...action.payload.changedProps,
-          ...{ password: null }
+          ...props
         }
       };
+      break;
+    }
+    case UserActionTypes.UserUpdateMessage: {
+      state = {
+        ...state,
+        lastUpdate: action.payload
+      };
+      break;
     }
   }
   return state;

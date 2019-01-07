@@ -9,7 +9,8 @@ export enum UserActionTypes {
   UserRemoved = '[User] User Removed',
   UserRemoveError = '[User] User Remove Error',
   LogInUser = '[User] Log In User',
-  UpdateUser = '[User] Update User'
+  UpdateUser = '[User] Update User',
+  UserUpdateMessage = '[User] User Update Message'
 }
 
 export class LogInUser implements Action {
@@ -54,6 +55,11 @@ export class UpdateUser implements Action {
   ) {}
 }
 
+export class UserUpdateMessage implements Action {
+  readonly type = UserActionTypes.UpdateUser;
+  constructor(public payload: { message: string; timeStamp: number }) {}
+}
+
 export type UserAction =
   | LoadUser
   | UserLoaded
@@ -62,7 +68,8 @@ export type UserAction =
   | UserRemoved
   | UserRemoveError
   | LogInUser
-  | UpdateUser;
+  | UpdateUser
+  | UserUpdateMessage;
 
 export const fromUserActions = {
   LoadUser,
@@ -72,5 +79,6 @@ export const fromUserActions = {
   UserRemoved,
   UserRemoveError,
   LogInUser,
-  UpdateUser
+  UpdateUser,
+  UserUpdateMessage
 };

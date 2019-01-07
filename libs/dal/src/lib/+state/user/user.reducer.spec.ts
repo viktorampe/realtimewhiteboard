@@ -133,7 +133,7 @@ describe('User Reducer', () => {
         it('should not store the user password in the state', () => {
           updateAction.payload.changedProps.password = 'sUp3r_s3cUr3_P@ssW0rd!';
           const result = UserReducer.reducer(usedState, updateAction);
-          expect(result.currentUser.password).toBeNull();
+          expect(result.currentUser.password).toBeFalsy();
         });
       });
     });

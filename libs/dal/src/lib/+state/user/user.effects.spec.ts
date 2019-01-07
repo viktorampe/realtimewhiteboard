@@ -14,13 +14,13 @@ import {
   PersonService,
   PersonServiceInterface
 } from '../../persons/persons.service';
-import { ActionSuccessful } from '../dal.actions';
 import {
   LoadUser,
   RemoveUser,
   UpdateUser,
   UserLoaded,
-  UserRemoved
+  UserRemoved,
+  UserUpdateMessage
 } from './user.actions';
 import { UserEffects } from './user.effects';
 
@@ -148,8 +148,13 @@ describe('UserEffects', () => {
       name: 'new value'
     };
     const updateAction = new UpdateUser({ userId: mockUser.id, changedProps });
-    const successAction = new ActionSuccessful({
-      successfulAction: 'User updated'
+    const successMessageAction = new UserUpdateMessage({
+      message: 'User updated',
+      timeStamp: new Date().getTime()
+    });
+    const errorMessageAction = new UserUpdateMessage({
+      message: 'User update failed',
+      timeStamp: new Date().getTime()
     });
 
     beforeEach(() => {
@@ -170,7 +175,7 @@ describe('UserEffects', () => {
       );
       expect(effects.updateUser$).toBeObservable(
         hot('a|', {
-          a: successAction
+          a: successMessageAction
         })
       );
     });
@@ -185,8 +190,9 @@ describe('UserEffects', () => {
       actions = hot('a|', { a: updateAction });
 
       expect(effects.updateUser$).toBeObservable(
-        hot('a|', {
-          a: undo(updateAction)
+        hot('(a b)|', {
+          a: undo(updateAction),
+          b: errorMessageAction
         })
       );
     });
