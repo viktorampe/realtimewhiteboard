@@ -9,18 +9,21 @@ import {
   PERMISSION_SERVICE_TOKEN
 } from '@campus/shared';
 import { Observable } from 'rxjs';
-
-@Injectable()
 export class PermissionGuard implements CanActivate {
   constructor(
     @Inject(PERMISSION_SERVICE_TOKEN)
-    private permissionService: PermissionServiceInterface
+    private permissionService: PermissionServiceInterface,
+    private router: Router
   ) {}
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
-    console.log('youyoy');
-    return true;
+    if (!route.data.requiredPermissions) return true;
+    const permitted = this.permissionService.hasPermission(
+      route.data.requiredPermissions
+    );
+    if (!permitted) this.router.navigate(['/error/401']);
+    return permitted;
   }
 }
