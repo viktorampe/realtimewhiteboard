@@ -41,8 +41,9 @@ describe('HasPermissionDirective', () => {
         StoreModule.forFeature('user', UserReducer.reducer, {
           initialState: {
             currentUser: new PersonFixture(),
+            loaded: true,
             permissions: testPermissions,
-            loaded: true
+            permissionsLoaded: true
           }
         })
       ],

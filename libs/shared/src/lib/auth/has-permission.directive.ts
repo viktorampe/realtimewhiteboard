@@ -16,7 +16,7 @@ import { PERMISSION_SERVICE_TOKEN } from './permission.service.interface';
 })
 export class HasPermissionDirective implements OnInit, OnDestroy {
   private permission$: Subscription;
-  @Input() hasPermission: string | string[];
+  @Input('hasPermission') permissions: string | string[];
 
   constructor(
     private templateRef: TemplateRef<any>,
@@ -35,7 +35,7 @@ export class HasPermissionDirective implements OnInit, OnDestroy {
 
   private applyPermission(): void {
     this.permission$ = this.permissionService
-      .hasPermission(this.hasPermission)
+      .hasPermission(this.permissions)
       .subscribe(hasPermission => {
         if (hasPermission) {
           this.viewContainer.createEmbeddedView(this.templateRef);
