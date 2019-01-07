@@ -25,10 +25,22 @@ export class PersonService implements PersonServiceInterface {
   }
 
   checkUniqueUsername(userId: number, username: string): Observable<boolean> {
-    return this.personApi.checkUnique(userId, 'username', username);
+    // watch out for the intellisense: checkUnique does not return an Observable<boolean>.
+    // It returns Observable<{[key:string]:boolean}>
+    return this.personApi.checkUnique(userId, 'username', username).pipe(
+      map((response: any) => {
+        return response.unique;
+      })
+    );
   }
 
   checkUniqueEmail(userId: number, email: string): Observable<boolean> {
-    return this.personApi.checkUnique(userId, 'email', email);
+    // watch out for the intellisense: checkUnique does not return an Observable boolean.
+    // It returns Observable<{[key:string]:boolean}>
+    return this.personApi.checkUnique(userId, 'email', email).pipe(
+      map((response: any) => {
+        return response.unique;
+      })
+    );
   }
 }

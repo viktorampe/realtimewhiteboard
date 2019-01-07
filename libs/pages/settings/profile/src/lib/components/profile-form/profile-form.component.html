@@ -34,6 +34,9 @@
     <mat-error *ngIf="getControl('username').getError('required')"
       >Gebruikersnaam is verplicht.</mat-error
     >
+    <mat-error *ngIf="getControl('username').getError('notUniqueUsername')"
+      >Deze gebruikersnaam is niet uniek.</mat-error
+    >
   </mat-form-field>
   <mat-form-field>
     <input
@@ -48,6 +51,9 @@
     >
     <mat-error *ngIf="getControl('email').getError('email')"
       >Gelieve een geldig e-mailadres in te vullen.</mat-error
+    >
+    <mat-error *ngIf="getControl('email').getError('notUniqueEmail')"
+      >Dit e-mailadres is niet uniek.</mat-error
     >
   </mat-form-field>
   <mat-form-field>

@@ -8,6 +8,7 @@ import {
   Validators
 } from '@angular/forms';
 import { PersonFixture, PersonInterface } from '@campus/dal';
+import { UniqueEmailValidator, UniqueUsernameValidator } from '@campus/shared';
 import { CrossFieldErrorMatcher } from '@campus/utils';
 
 const passwordMatchValidator: ValidatorFn = (
@@ -33,7 +34,11 @@ export class ProfileFormComponent implements OnInit {
   @Input() user: PersonInterface;
   @Output() saveProfile = new EventEmitter<PersonInterface>();
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private uniqueUsernameValidator: UniqueUsernameValidator,
+    private uniqueEmailValidator: UniqueEmailValidator
+  ) {}
 
   ngOnInit() {
     this.user = new PersonFixture({ username: 'FooBar' }); //TODO: remove
@@ -46,8 +51,22 @@ export class ProfileFormComponent implements OnInit {
       {
         lastName: [this.user.name, Validators.required],
         firstName: [this.user.firstName, Validators.required],
-        username: [this.user.username, Validators.required],
-        email: [this.user.email, [Validators.required, Validators.email]],
+        username: [
+          this.user.username,
+          {
+            validators: [Validators.required],
+            asyncValidators: [this.uniqueUsernameValidator],
+            updateOn: 'blur'
+          }
+        ],
+        email: [
+          this.user.email,
+          {
+            validators: [Validators.required, Validators.email],
+            asyncValidators: [this.uniqueEmailValidator],
+            updateOn: 'blur'
+          }
+        ],
         password: [''],
         verifyPassword: ['']
       },
