@@ -1,4 +1,3 @@
-//file.only
 import { TestBed } from '@angular/core/testing';
 import {
   ActivatedRouteSnapshot,
