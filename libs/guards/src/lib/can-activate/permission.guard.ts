@@ -1,7 +1,8 @@
-import { Inject, Injectable } from '@angular/core';
+import { Inject } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   CanActivate,
+  Router,
   RouterStateSnapshot
 } from '@angular/router';
 import {
@@ -9,6 +10,7 @@ import {
   PERMISSION_SERVICE_TOKEN
 } from '@campus/shared';
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 export class PermissionGuard implements CanActivate {
   constructor(
     @Inject(PERMISSION_SERVICE_TOKEN)
@@ -20,10 +22,8 @@ export class PermissionGuard implements CanActivate {
     state: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
     if (!route.data.requiredPermissions) return true;
-    const permitted = this.permissionService.hasPermission(
-      route.data.requiredPermissions
-    );
-    if (!permitted) this.router.navigate(['/error/401']);
-    return permitted;
+    return this.permissionService
+      .hasPermission(route.data.requiredPermissions)
+      .pipe(tap(() => this.router.navigate(['/error/401'])));
   }
 }
