@@ -20,3 +20,8 @@ export const getCurrentUser = createSelector(
     return isLoaded ? state.currentUser : null;
   }
 );
+
+export const getUpdateMessage = createSelector(
+  getUserState,
+  (state: State) => state.lastUpdate
+);
