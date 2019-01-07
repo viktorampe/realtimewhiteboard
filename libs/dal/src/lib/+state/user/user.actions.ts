@@ -56,7 +56,7 @@ export class UpdateUser implements Action {
 }
 
 export class UserUpdateMessage implements Action {
-  readonly type = UserActionTypes.UpdateUser;
+  readonly type = UserActionTypes.UserUpdateMessage;
   constructor(public payload: { message: string; timeStamp: number }) {}
 }
 

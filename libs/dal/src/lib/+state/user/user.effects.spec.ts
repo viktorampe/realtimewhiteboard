@@ -3,7 +3,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
-import { hot } from '@nrwl/nx/testing';
+import { cold, hot } from '@nrwl/nx/testing';
 import { undo } from 'ngrx-undo';
 import { Observable, of } from 'rxjs';
 import { UserReducer } from '.';
@@ -147,50 +147,72 @@ describe('UserEffects', () => {
       firstName: 'new value',
       name: 'new value'
     };
+    const mockDate = Date.now();
     const updateAction = new UpdateUser({ userId: mockUser.id, changedProps });
     const successMessageAction = new UserUpdateMessage({
       message: 'User updated',
-      timeStamp: new Date().getTime()
+      timeStamp: mockDate
     });
     const errorMessageAction = new UserUpdateMessage({
       message: 'User update failed',
-      timeStamp: new Date().getTime()
+      timeStamp: mockDate
+    });
+
+    let realDateImplementation;
+
+    beforeAll(() => {
+      // override date implementation
+      realDateImplementation = Date.now.bind(global.Date);
+      global.Date.now = jest.fn(() => mockDate);
+    });
+
+    afterAll(() => {
+      // put original date implementation back
+      global.Date.now = realDateImplementation;
     });
 
     beforeEach(() => {
       baseState = { currentUser: mockUser, loaded: true };
       personService = TestBed.get(PersonService);
     });
-    it('should call the personService and dispatch an success action', () => {
+
+    it('should call the personService', () => {
+      personService.updateUser = jest.fn();
+
+      actions = hot('a', { a: updateAction });
+
+      effects.updateUser$.subscribe(_ => {
+        expect(personService.updateUser).toHaveBeenCalledTimes(1);
+        expect(personService.updateUser).toHaveBeenCalledWith(
+          updateAction.payload.userId,
+          updateAction.payload.changedProps
+        );
+      });
+    });
+
+    it('should dispatch a message action on an update success', () => {
       personService.updateUser = jest
         .fn()
-        .mockReturnValue(hot('a', { a: true }));
+        .mockReturnValue(cold('a', { a: true }));
 
-      actions = hot('a|', { a: updateAction });
+      actions = hot('a', { a: updateAction });
 
-      expect(personService.updateUser).toHaveBeenCalledTimes(1);
-      expect(personService.updateUser).toHaveBeenCalledWith(
-        updateAction.payload.userId,
-        updateAction.payload.changedProps
-      );
       expect(effects.updateUser$).toBeObservable(
-        hot('a|', {
+        hot('a', {
           a: successMessageAction
         })
       );
     });
 
-    it('should dispatch an undo action when the update fails', () => {
+    it('should dispatch an undo action and a message action when the update fails', () => {
       personService.updateUser = jest
         .fn()
-        .mockReturnValue(
-          hot('a', { a: new Error('this has failed spectacularly') })
-        );
+        .mockReturnValue(hot('#', new Error('this has failed spectacularly')));
 
-      actions = hot('a|', { a: updateAction });
+      actions = hot('a', { a: updateAction });
 
       expect(effects.updateUser$).toBeObservable(
-        hot('(a b)|', {
+        hot('(ab)', {
           a: undo(updateAction),
           b: errorMessageAction
         })

@@ -99,7 +99,7 @@ export class UserEffects {
             mapTo(
               new UserUpdateMessage({
                 message: 'User updated',
-                timeStamp: new Date().getTime()
+                timeStamp: Date.now()
               })
             )
           );
@@ -109,7 +109,7 @@ export class UserEffects {
           undo(action),
           new UserUpdateMessage({
             message: 'User update failed',
-            timeStamp: new Date().getTime()
+            timeStamp: Date.now()
           })
         ]);
       }
