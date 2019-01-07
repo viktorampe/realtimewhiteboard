@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { Permissions } from '@campus/dal';
 import {
   AuthenticationGuard,
   CoupledTeacherGuard,
@@ -76,7 +77,14 @@ const routes: Routes = [
             path: 'coupled-teachers',
             loadChildren:
               '@campus/pages/settings/coupled-teachers#PagesSettingsCoupledTeachersModule',
-            data: { breadcrumbText: 'Gekoppelde leerkrachten' }
+            data: {
+              breadcrumbText: 'Gekoppelde leerkrachten',
+              requiredPermissions: [
+                Permissions.settings.LINK_TEACHERS,
+                Permissions.settings.UNLINK_TEACHERS
+              ]
+            },
+            canActivate: [PermissionGuard]
           },
           {
             path: 'avatar',
@@ -102,10 +110,6 @@ const routes: Routes = [
   {
     path: 'login',
     redirectTo: 'dev/login'
-  },
-  {
-    path: 'settings',
-    redirectTo: 'dev/settings'
   },
   {
     path: 'error',
