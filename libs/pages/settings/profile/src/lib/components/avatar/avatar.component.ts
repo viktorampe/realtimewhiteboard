@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { PersonFixture, PersonInterface } from '@campus/dal';
-import { CropperSettings } from 'ngx-img-cropper';
+import { CropperSettings, ImageCropperComponent } from 'ngx-img-cropper';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 
@@ -12,6 +12,8 @@ import { take } from 'rxjs/operators';
 export class AvatarComponent implements OnInit {
   cropperSettings: CropperSettings;
   imgData: any;
+
+  @ViewChild('cropper') cropper: ImageCropperComponent;
 
   currentUser$: Observable<PersonInterface> = new BehaviorSubject(
     new PersonFixture()
@@ -27,7 +29,8 @@ export class AvatarComponent implements OnInit {
       croppedHeight: 170,
       canvasWidth: 200,
       canvasHeight: 200,
-      rounded: true
+      rounded: true,
+      noFileInput: true
     });
     this.imgData = {};
 
@@ -36,5 +39,18 @@ export class AvatarComponent implements OnInit {
         this.imgData.image = user.avatar;
       }
     });
+  }
+
+  fileChangeListener($event) {
+    var image: any = new Image();
+    var file: File = $event.target.files[0];
+    var myReader: FileReader = new FileReader();
+    var that = this;
+    myReader.onloadend = function(loadEvent: any) {
+      image.src = loadEvent.target.result;
+      that.cropper.setImage(image);
+    };
+
+    myReader.readAsDataURL(file);
   }
 }

@@ -1,0 +1,8 @@
+@mixin pages-settings-profile-avatar-theme() {
+  .ng2-imgcrop {
+    input,
+    canvas {
+      display: block;
+    }
+  }
+}

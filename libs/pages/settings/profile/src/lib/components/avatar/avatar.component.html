@@ -1,9 +1,29 @@
-<p> avatar works! </p>
-<div *ngIf="currentUser$ | async as user">
+<div class="pages-settings-profile-avatar"
+     *ngIf="currentUser$ | async as user">
+  <!--
   <img-cropper [image]="imgData"
                [settings]="cropperSettings"></img-cropper><br>
   <img *ngIf="imgData.image"
        [src]="imgData.image"
        [width]="cropperSettings.croppedWidth"
        [height]="cropperSettings.croppedHeight">
+  -->
+  <div>
+    <div class="file-upload">
+      <span class="text">upload</span>
+      <input id="custom-input"
+             type="file"
+             (change)="fileChangeListener($event)">
+    </div>
+    <img-cropper #cropper
+                 [image]="imgData"
+                 [settings]="cropperSettings"></img-cropper>
+    <br>
+    <span class="result rounded"
+          *ngIf="imgData.image">
+      <img [src]="imgData.image"
+           [width]="cropperSettings.croppedWidth"
+           [height]="cropperSettings.croppedHeight">
+    </span>
+  </div>
 </div>
