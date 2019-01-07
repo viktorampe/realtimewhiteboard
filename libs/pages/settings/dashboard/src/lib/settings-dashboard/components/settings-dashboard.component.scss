@@ -1,4 +1,4 @@
-.pages-profile {
+.page-settings_dashboard {
   &__container {
     margin-top: 20px;
     margin-left: 10px;
@@ -16,17 +16,11 @@
       display: flex;
       flex-direction: column;
 
-      &__name {
-        font-size: 18px;
-        color: lightgray;
-      }
-
-      &__type {
-        font-size: 18px;
-        color: black;
-      }
-
       &__navitem {
+        display: flex;
+        flex-direction: column;
+        margin: 0px;
+        padding: 0px;
         color: black;
       }
     }

@@ -1,18 +1,17 @@
-<div class="pages-profile__container">
-  <div class="page-profile__container__header"> <p>Mijn profiel</p> </div>
-  <div class="page-profile__container__content">
-    <div>
-      <p class="page-profile__container__content__name">name</p>
-      <p class="page-profile__container__content__type">type</p>
-    </div>
+<div class="page-settings_dashboard__container">
+  <div class="page-settings_dashboard__container__header">
+    <p>Mijn profiel</p>
+  </div>
+  <div class="page-settings_dashboard__container__content">
     <div>
       <mat-nav-list>
         <div
-          class="page-profile__container__content__navitem"
-          *ngFor="let link of links"
+          class="page-settings_dashboard__container__content__navitem"
+          *ngFor="let link of (links | async)"
         >
-          <mat-icon [svgIcon]="confirmIcon"></mat-icon>
-          <a mat-list-item href="link"> {{ link }} </a>
+          <a mat-list-item href="{{link.url}}">
+            <mat-icon [svgIcon]="link.icon"></mat-icon> {{ link.name }}
+          </a>
         </div>
       </mat-nav-list>
     </div>
