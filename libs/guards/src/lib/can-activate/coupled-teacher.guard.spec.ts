@@ -122,7 +122,7 @@ describe('coupledTeacherGuard', () => {
       )
     ).toBeObservable(hot('a', { a: false }));
     expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy).toHaveBeenCalledWith(['/settings']);
+    expect(spy).toHaveBeenCalledWith(['/settings/coupled-teachers']);
   });
   it('should return false if the user has no roles', () => {
     store.dispatch(
@@ -139,7 +139,7 @@ describe('coupledTeacherGuard', () => {
       )
     ).toBeObservable(hot('a', { a: false }));
     expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy).toHaveBeenCalledWith(['/settings']);
+    expect(spy).toHaveBeenCalledWith(['/settings/coupled-teachers']);
   });
   it('should return true if the user is a teacher with no linkedPersons', () => {
     store.dispatch(
@@ -236,7 +236,7 @@ describe('coupledTeacherGuard', () => {
       )
     ).toBeObservable(hot('a', { a: false }));
     expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy).toHaveBeenCalledWith(['/settings']);
+    expect(spy).toHaveBeenCalledWith(['/settings/coupled-teachers']);
   });
   it('should return false if the user is a student has linkedPersons, but those are not teachers', () => {
     store.dispatch(
@@ -267,7 +267,7 @@ describe('coupledTeacherGuard', () => {
       )
     ).toBeObservable(hot('a', { a: false }));
     expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy).toHaveBeenCalledWith(['/settings']);
+    expect(spy).toHaveBeenCalledWith(['/settings/coupled-teachers']);
   });
   it('should return true if the user is a student has linkedPersons, of which at least one is a teacher', () => {
     store.dispatch(
