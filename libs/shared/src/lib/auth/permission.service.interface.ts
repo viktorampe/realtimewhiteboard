@@ -5,6 +5,6 @@ export const PERMISSION_SERVICE_TOKEN = new InjectionToken('PermissionService');
 
 export interface PermissionServiceInterface {
   hasPermission(
-    requiredPermissions: string | [string | string[]]
+    requiredPermissions: string | (string | string[])[]
   ): Observable<boolean>;
 }

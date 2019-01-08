@@ -3,16 +3,20 @@ import { UserReducer } from '@campus/dal';
 import { StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { PermissionService } from './permission.service';
+import {
+  PermissionServiceInterface,
+  PERMISSION_SERVICE_TOKEN
+} from './permission.service.interface';
 
 describe('PermissionService', () => {
-  let service: PermissionService;
+  let service: PermissionServiceInterface;
   let userState: UserReducer.State;
 
   beforeAll(() => {
     userState = {
       ...UserReducer.initialState,
       permissions: ['permission-a', 'permission-b', 'permission-c'],
-      loaded: true
+      permissionsLoaded: true
     };
   });
 
@@ -23,9 +27,12 @@ describe('PermissionService', () => {
         StoreModule.forFeature(UserReducer.NAME, UserReducer.reducer, {
           initialState: userState
         })
+      ],
+      providers: [
+        { provide: PERMISSION_SERVICE_TOKEN, useClass: PermissionService }
       ]
     });
-    service = TestBed.get(PermissionService);
+    service = TestBed.get(PERMISSION_SERVICE_TOKEN);
   });
 
   it('should be created', () => {
