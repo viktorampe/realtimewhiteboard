@@ -28,7 +28,6 @@ export class MockProfileViewModel
     userId: number,
     changedProps: Partial<PersonInterface>
   ): void {}
-  public saveAvatar(file: string): void {}
 }
 
 // image encoded with https://www.base64encode.org/

@@ -29,10 +29,8 @@ export class ProfileViewModel {
     this.store.dispatch(new UserActions.UpdateUser({ userId, changedProps }));
   }
 
-  public saveAvatar(file: string): void {}
-
   private setPresentationStreams(): void {
     this.currentUser$ = this.store.pipe(select(UserQueries.getCurrentUser));
-    this.messages$ = this.store.pipe(select(UserQueries.getUpdateMessage));
+    this.messages$ = this.store.pipe(select(UserQueries.getLastUpdateMessage));
   }
 }
