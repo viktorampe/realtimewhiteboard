@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule, MatInputModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
+import { UiModule } from '@campus/ui';
 import { ProfileFormComponent } from './components/profile-form/profile-form.component';
 
 @NgModule({
@@ -13,7 +14,8 @@ import { ProfileFormComponent } from './components/profile-form/profile-form.com
       { path: '', pathMatch: 'full', component: ProfileFormComponent }
     ]),
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    UiModule
   ],
   declarations: [ProfileFormComponent]
 })

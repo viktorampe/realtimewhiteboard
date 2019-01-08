@@ -1,4 +1,10 @@
-.form-container {
+.profile-form {
   display: flex;
   flex-direction: column;
+  background-color: #ffffff;
+  .profile-form__actions {
+  }
+  mat-form-field {
+    margin-bottom: 15px;
+  }
 }

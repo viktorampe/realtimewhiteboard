@@ -1,4 +1,4 @@
-<form [formGroup]="profileForm" class="form-container" (ngSubmit)="onSubmit()">
+<form [formGroup]="profileForm" class="profile-form" (ngSubmit)="onSubmit()">
   <mat-form-field>
     <input
       matInput
@@ -80,7 +80,20 @@
       >De wachtwoorden komen niet overeen.</mat-error
     >
   </mat-form-field>
-
-  <button type="submit" [disabled]="!profileForm.valid">Opslaan</button>
-  <button (click)="onReset()">Annuleren</button>
+  <div class="profile-form__actions">
+    <campus-button
+      *ngIf="!profileForm.valid; else: enabled"
+      type="submit"
+      disabled
+      >Opslaan</campus-button
+    >
+    <ng-template #enabled>
+      <campus-button type="submit">Opslaan</campus-button>
+    </ng-template>
+    <campus-button
+      class="profile-form__actions-cancel-background-color"
+      (click)="onReset()"
+      >Annuleren</campus-button
+    >
+  </div>
 </form>
