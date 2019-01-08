@@ -1,10 +1,7 @@
-.profile-form {
+.pages-settings-profile-form {
   display: flex;
   flex-direction: column;
-  background-color: #ffffff;
-  .profile-form__actions {
-  }
-  mat-form-field {
+  mat-form-field.mat-form-field {
     margin-bottom: 15px;
   }
 }

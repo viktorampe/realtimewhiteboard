@@ -1,2 +1,46 @@
 @mixin pages-settings-profile-form-theme() {
+  $pages-profile-form-background-color: $ui-tertiary-bg-color !default;
+  $pages-profile-form-font-family: $ui-primary-font-family-2 !default;
+  $pages-profile-form-font-size: 14px !default;
+
+  $pages-profile-button-background-color-1: $color-blue-2 !default;
+  $pages-profile-button-background-color-2: $color-gray-3 !default;
+
+  $pages-profile-button-color-1: $color-black-1 !default;
+  $pages-profile-button-color-2: $tertiary-font-color-2 !default;
+
+  $pages-profile-button-color-hover-2: darken(
+    $pages-profile-button-background-color-1,
+    5%
+  ) !default;
+  $pages-profile-button-color-hover-1: darken(
+    $pages-profile-button-background-color-2,
+    5%
+  ) !default;
+  .pages-settings-profile-form {
+    background-color: $pages-profile-form-background-color;
+    font-family: $pages-profile-form-font-family;
+    mat-form-field.mat-form-field {
+      font-family: $pages-profile-form-font-family;
+      font-size: $pages-profile-form-font-size;
+    }
+    &__actions {
+      .ui-button {
+        color: $pages-profile-button-color-2;
+        background-color: $pages-profile-button-background-color-1;
+        &:hover {
+          background-color: $pages-profile-button-color-hover-2;
+        }
+      }
+      .cancel {
+        .ui-button {
+          color: $pages-profile-button-color-1;
+          background-color: $pages-profile-button-background-color-2;
+          &:hover {
+            background-color: $pages-profile-button-color-hover-1;
+          }
+        }
+      }
+    }
+  }
 }

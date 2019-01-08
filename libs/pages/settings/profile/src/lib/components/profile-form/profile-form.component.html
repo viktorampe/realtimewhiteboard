@@ -1,4 +1,8 @@
-<form [formGroup]="profileForm" class="profile-form" (ngSubmit)="onSubmit()">
+<form
+  [formGroup]="profileForm"
+  class="pages-settings-profile-form"
+  (ngSubmit)="onSubmit()"
+>
   <mat-form-field>
     <input
       matInput
@@ -80,7 +84,8 @@
       >De wachtwoorden komen niet overeen.</mat-error
     >
   </mat-form-field>
-  <div class="profile-form__actions">
+
+  <div class="pages-settings-profile-form__actions">
     <campus-button
       *ngIf="!profileForm.valid; else: enabled"
       type="submit"
@@ -90,10 +95,6 @@
     <ng-template #enabled>
       <campus-button type="submit">Opslaan</campus-button>
     </ng-template>
-    <campus-button
-      class="profile-form__actions-cancel-background-color"
-      (click)="onReset()"
-      >Annuleren</campus-button
-    >
+    <campus-button class="cancel" (click)="onReset()">Annuleren</campus-button>
   </div>
 </form>
