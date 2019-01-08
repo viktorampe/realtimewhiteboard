@@ -25,3 +25,16 @@ export const getLastUpdateMessage = createSelector(
   getUserState,
   (state: State) => state.lastUpdateMessage
 );
+
+export const getPermissionsLoaded = createSelector(
+  getUserState,
+  (state: State) => state.permissionsLoaded
+);
+
+export const getPermissions = createSelector(
+  getUserState,
+  getPermissionsLoaded,
+  (state: State, isLoaded) => {
+    return isLoaded ? state.permissions : [];
+  }
+);

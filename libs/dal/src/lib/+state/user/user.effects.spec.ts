@@ -15,7 +15,9 @@ import {
   PERSON_SERVICE_TOKEN
 } from '../../persons/persons.service';
 import {
+  LoadPermissions,
   LoadUser,
+  PermissionsLoaded,
   RemoveUser,
   UpdateUser,
   UserLoaded,
@@ -61,13 +63,15 @@ const mockUser = {
   coaccount: null
 };
 
+const mockPermissions = ['permission-a', 'permission-b', 'permission-c'];
+
 describe('UserEffects', () => {
   let actions: Observable<any>;
   let effects: UserEffects;
-  let baseState: UserReducer.State;
 
   const loadUserAction = new LoadUser({ force: true });
   const removeUserAction = new RemoveUser();
+  const loadPermissionsAction = new LoadPermissions({ force: true });
 
   const jestMockTokenGetUserReturnValue = () => {
     jest
@@ -79,6 +83,12 @@ describe('UserEffects', () => {
     jest
       .spyOn(TestBed.get(AUTH_SERVICE_TOKEN), 'logout')
       .mockReturnValue(of(true));
+  };
+
+  const jestMockTokenGetPermissionsReturnValue = () => {
+    jest
+      .spyOn(TestBed.get(AUTH_SERVICE_TOKEN), 'getPermissions')
+      .mockReturnValue(of(mockPermissions));
   };
 
   beforeEach(() => {
@@ -117,10 +127,19 @@ describe('UserEffects', () => {
     );
   };
 
+  const expectInAndOutPermissions = (
+    triggerAction: Action,
+    effectOutput: any
+  ) => {
+    actions = hot('-a-|', { a: triggerAction });
+    expect(effects.loadPermissions$).toBeObservable(
+      hot('-a-|', {
+        a: effectOutput
+      })
+    );
+  };
+
   describe('loadUser$', () => {
-    beforeAll(() => {
-      baseState = UserReducer.initialState;
-    });
     beforeEach(() => {
       jestMockTokenGetUserReturnValue();
     });
@@ -130,9 +149,6 @@ describe('UserEffects', () => {
   });
 
   describe('removeUser$', () => {
-    beforeAll(() => {
-      baseState = { currentUser: mockUser, loaded: true };
-    });
     beforeEach(() => {
       jestMockTokenRemoveUserReturnValue();
     });
@@ -161,6 +177,7 @@ describe('UserEffects', () => {
     });
 
     let realDateImplementation;
+    let baseState: UserReducer.State;
 
     beforeAll(() => {
       // override date implementation
@@ -174,7 +191,12 @@ describe('UserEffects', () => {
     });
 
     beforeEach(() => {
-      baseState = { currentUser: mockUser, loaded: true };
+      baseState = {
+        currentUser: mockUser,
+        loaded: true,
+        permissions: null,
+        permissionsLoaded: null
+      };
       personService = TestBed.get(PERSON_SERVICE_TOKEN);
     });
 
@@ -218,6 +240,18 @@ describe('UserEffects', () => {
           a: undo(updateAction),
           b: errorMessageAction
         })
+      );
+    });
+  });
+
+  describe('loadPermissions$', () => {
+    beforeEach(() => {
+      jestMockTokenGetPermissionsReturnValue();
+    });
+    it('should trigger getPermissions api call', () => {
+      expectInAndOutPermissions(
+        loadPermissionsAction,
+        new PermissionsLoaded(mockPermissions)
       );
     });
   });

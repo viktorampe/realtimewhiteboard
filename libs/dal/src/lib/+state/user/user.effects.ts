@@ -15,8 +15,10 @@ import {
 } from './../../persons/persons.service';
 import {
   fromUserActions,
+  LoadPermissions,
   LoadUser,
   LogInUser,
+  PermissionsLoadError,
   RemoveUser,
   UpdateUser,
   UserActionTypes,
@@ -117,6 +119,29 @@ export class UserEffects {
             type: 'error'
           })
         ]);
+      }
+    }
+  );
+
+  /**
+   * get permissions from api. errors when call fails.
+   *
+   * @memberof UserEffects
+   */
+  @Effect()
+  loadPermissions$ = this.dataPersistence.fetch(
+    UserActionTypes.LoadPermissions,
+    {
+      run: (action: LoadPermissions, state: DalState) => {
+        if (!action.payload.force && state.user.permissionsLoaded) return;
+        return this.authService.getPermissions().pipe(
+          map(r => {
+            return new fromUserActions.PermissionsLoaded(r);
+          })
+        );
+      },
+      onError: (action: LoadPermissions, error) => {
+        return new PermissionsLoadError(error);
       }
     }
   );

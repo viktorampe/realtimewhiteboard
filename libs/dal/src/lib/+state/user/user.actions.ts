@@ -11,7 +11,10 @@ export enum UserActionTypes {
   UserRemoveError = '[User] User Remove Error',
   LogInUser = '[User] Log In User',
   UpdateUser = '[User] Update User',
-  UserUpdateMessage = '[User] User Update Message'
+  UserUpdateMessage = '[User] User Update Message',
+  LoadPermissions = '[User] Load Permissions',
+  PermissionsLoaded = '[User] Permissions Loaded',
+  PermissionsLoadError = '[User] Permissions Load error'
 }
 
 export class LogInUser implements Action {
@@ -58,7 +61,22 @@ export class UpdateUser implements Action {
 
 export class UserUpdateMessage implements Action {
   readonly type = UserActionTypes.UserUpdateMessage;
-  constructor(public payload: State['lastUpdate']) {}
+  constructor(public payload: State['lastUpdateMessage']) {}
+}
+
+export class LoadPermissions implements Action {
+  readonly type = UserActionTypes.LoadPermissions;
+  constructor(public payload: { force?: boolean }) {}
+}
+
+export class PermissionsLoaded implements Action {
+  readonly type = UserActionTypes.PermissionsLoaded;
+  constructor(public payload: string[]) {}
+}
+
+export class PermissionsLoadError implements Action {
+  readonly type = UserActionTypes.PermissionsLoadError;
+  constructor(public payload: { error: any }) {}
 }
 
 export type UserAction =
@@ -70,7 +88,10 @@ export type UserAction =
   | UserRemoveError
   | LogInUser
   | UpdateUser
-  | UserUpdateMessage;
+  | UserUpdateMessage
+  | LoadPermissions
+  | PermissionsLoaded
+  | PermissionsLoadError;
 
 export const fromUserActions = {
   LoadUser,
@@ -81,5 +102,8 @@ export const fromUserActions = {
   UserRemoveError,
   LogInUser,
   UpdateUser,
-  UserUpdateMessage
+  UserUpdateMessage,
+  LoadPermissions,
+  PermissionsLoaded,
+  PermissionsLoadError
 };
