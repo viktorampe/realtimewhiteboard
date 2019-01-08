@@ -10,7 +10,7 @@ import { PersonFixture, PersonInterface } from '@campus/dal';
 import { UniqueEmailValidator, UniqueUsernameValidator } from '@campus/shared';
 import { of } from 'rxjs';
 import { ProfileFormComponent } from './profile-form.component';
-// file.only
+
 describe('ProfileFormComponent', () => {
   let component: ProfileFormComponent;
   let fixture: ComponentFixture<ProfileFormComponent>;
