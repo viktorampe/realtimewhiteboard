@@ -1,5 +1,6 @@
 import { PersonInterface } from '@campus/dal';
 import { Action } from '@ngrx/store';
+import { State } from './user.reducer';
 
 export enum UserActionTypes {
   LoadUser = '[User] Load User',
@@ -9,6 +10,8 @@ export enum UserActionTypes {
   UserRemoved = '[User] User Removed',
   UserRemoveError = '[User] User Remove Error',
   LogInUser = '[User] Log In User',
+  UpdateUser = '[User] Update User',
+  UserUpdateMessage = '[User] User Update Message',
   LoadPermissions = '[User] Load Permissions',
   PermissionsLoaded = '[User] Permissions Loaded',
   PermissionsLoadError = '[User] Permissions Load error'
@@ -49,6 +52,18 @@ export class UserRemoveError implements Action {
   constructor(public payload: { error: any }) {}
 }
 
+export class UpdateUser implements Action {
+  readonly type = UserActionTypes.UpdateUser;
+  constructor(
+    public payload: { userId: number; changedProps: Partial<PersonInterface> }
+  ) {}
+}
+
+export class UserUpdateMessage implements Action {
+  readonly type = UserActionTypes.UserUpdateMessage;
+  constructor(public payload: State['lastUpdateMessage']) {}
+}
+
 export class LoadPermissions implements Action {
   readonly type = UserActionTypes.LoadPermissions;
   constructor(public payload: { force?: boolean }) {}
@@ -72,6 +87,8 @@ export type UserAction =
   | UserRemoved
   | UserRemoveError
   | LogInUser
+  | UpdateUser
+  | UserUpdateMessage
   | LoadPermissions
   | PermissionsLoaded
   | PermissionsLoadError;
@@ -84,6 +101,8 @@ export const fromUserActions = {
   UserRemoved,
   UserRemoveError,
   LogInUser,
+  UpdateUser,
+  UserUpdateMessage,
   LoadPermissions,
   PermissionsLoaded,
   PermissionsLoadError

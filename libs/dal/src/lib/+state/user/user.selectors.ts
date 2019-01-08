@@ -15,10 +15,12 @@ export const getError = createSelector(
 
 export const getCurrentUser = createSelector(
   getUserState,
-  getLoaded,
-  (state: State, isLoaded) => {
-    return isLoaded ? state.currentUser : null;
-  }
+  (state: State) => state.currentUser
+);
+
+export const getLastUpdateMessage = createSelector(
+  getUserState,
+  (state: State) => state.lastUpdateMessage
 );
 
 export const getPermissionsLoaded = createSelector(
@@ -28,8 +30,5 @@ export const getPermissionsLoaded = createSelector(
 
 export const getPermissions = createSelector(
   getUserState,
-  getPermissionsLoaded,
-  (state: State, isLoaded) => {
-    return isLoaded ? state.permissions : [];
-  }
+  (state: State) => state.permissions
 );

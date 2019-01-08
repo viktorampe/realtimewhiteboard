@@ -1,6 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthenticationGuard, CoupledTeacherGuard } from '@campus/guards';
+import { Permissions } from '@campus/dal';
+import {
+  AuthenticationGuard,
+  CoupledTeacherGuard,
+  PermissionGuard
+} from '@campus/guards';
 import { AppResolver } from './app.resolver';
 
 const routes: Routes = [
@@ -13,7 +18,7 @@ const routes: Routes = [
         path: 'books',
         loadChildren: '@campus/pages/books#PagesBooksModule',
         data: { breadcrumbText: 'Boeken' },
-        canActivate: [CoupledTeacherGuard]
+        canActivate: [CoupledTeacherGuard, PermissionGuard]
       },
       {
         path: 'tasks',
@@ -72,7 +77,14 @@ const routes: Routes = [
             path: 'coupled-teachers',
             loadChildren:
               '@campus/pages/settings/coupled-teachers#PagesSettingsCoupledTeachersModule',
-            data: { breadcrumbText: 'Gekoppelde leerkrachten' }
+            data: {
+              breadcrumbText: 'Gekoppelde leerkrachten',
+              requiredPermissions: [
+                Permissions.settings.LINK_TEACHERS,
+                Permissions.settings.UNLINK_TEACHERS
+              ]
+            },
+            canActivate: [PermissionGuard]
           },
           {
             path: 'avatar',
@@ -98,10 +110,6 @@ const routes: Routes = [
   {
     path: 'login',
     redirectTo: 'dev/login'
-  },
-  {
-    path: 'settings',
-    redirectTo: 'dev/settings'
   },
   {
     path: 'error',
