@@ -1,11 +1,13 @@
 import { UserQueries } from '.';
+import { State } from './user.reducer';
 
 describe('User Selectors', () => {
   const ERROR_MSG = 'No Error Available';
   const lastUpdateMessage = {
     message: 'update succeeded',
-    timeStamp: 1
-  };
+    timeStamp: 1,
+    type: 'success'
+  } as State['lastUpdate'];
   const getUserId = it => it['id'];
 
   let storeState;

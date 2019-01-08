@@ -13,7 +13,11 @@ export const NAME = 'user';
 
 export interface State {
   currentUser: PersonInterface; // user object
-  lastUpdate?: { message: string; timeStamp: number };
+  lastUpdate?: {
+    message: string;
+    timeStamp: number;
+    type: 'success' | 'error';
+  };
   loaded: boolean; // has the User list been loaded
   error?: any; // last known error (if any)
 }
@@ -61,6 +65,7 @@ export function reducer(
       break;
     }
     case UserActionTypes.UpdateUser: {
+      //remove password from the properties
       const { password, ...props } = action.payload.changedProps;
       state = {
         ...state,

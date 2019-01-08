@@ -151,11 +151,13 @@ describe('UserEffects', () => {
     const updateAction = new UpdateUser({ userId: mockUser.id, changedProps });
     const successMessageAction = new UserUpdateMessage({
       message: 'User updated',
-      timeStamp: mockDate
+      timeStamp: mockDate,
+      type: 'success'
     });
     const errorMessageAction = new UserUpdateMessage({
       message: 'User update failed',
-      timeStamp: mockDate
+      timeStamp: mockDate,
+      type: 'error'
     });
 
     let realDateImplementation;

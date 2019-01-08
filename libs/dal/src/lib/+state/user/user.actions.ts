@@ -1,5 +1,6 @@
 import { PersonInterface } from '@campus/dal';
 import { Action } from '@ngrx/store';
+import { State } from './user.reducer';
 
 export enum UserActionTypes {
   LoadUser = '[User] Load User',
@@ -57,7 +58,7 @@ export class UpdateUser implements Action {
 
 export class UserUpdateMessage implements Action {
   readonly type = UserActionTypes.UserUpdateMessage;
-  constructor(public payload: { message: string; timeStamp: number }) {}
+  constructor(public payload: State['lastUpdate']) {}
 }
 
 export type UserAction =
