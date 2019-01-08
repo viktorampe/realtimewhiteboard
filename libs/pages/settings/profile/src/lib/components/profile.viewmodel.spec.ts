@@ -65,7 +65,7 @@ describe('ProfileViewModel', () => {
         store.dispatch(new UserActions.UserUpdateMessage(mockMessage));
       });
 
-      it('should return the currentUser', () => {
+      it('should return the messages', () => {
         expect(profileViewModel.messages$).toBeObservable(
           hot('a', { a: mockMessage })
         );
