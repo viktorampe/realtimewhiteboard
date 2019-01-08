@@ -16,7 +16,7 @@ export class ProfileViewModel {
   public messages$: Observable<{
     message: string;
     timeStamp: number;
-  }>;
+  }>; //TODO UserReducer.State['lastUpdateMessage']
 
   constructor(private store: Store<DalState>) {
     this.setPresentationStreams();
