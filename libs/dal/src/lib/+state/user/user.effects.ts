@@ -95,7 +95,7 @@ export class UserEffects {
     UserActionTypes.LoadPermissions,
     {
       run: (action: LoadPermissions, state: DalState) => {
-        if (!action.payload.force && state.user.permissions.length > 0) return;
+        if (!action.payload.force && state.user.permissionsLoaded) return;
         return this.authService.getPermissions().pipe(
           map(r => {
             return new fromUserActions.PermissionsLoaded(r);
