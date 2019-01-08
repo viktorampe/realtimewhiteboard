@@ -3,7 +3,8 @@ import {
   DalState,
   PersonInterface,
   UserActions,
-  UserQueries
+  UserQueries,
+  UserReducer
 } from '@campus/dal';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -13,10 +14,7 @@ import { Observable } from 'rxjs';
 })
 export class ProfileViewModel {
   public currentUser$: Observable<PersonInterface>;
-  public messages$: Observable<{
-    message: string;
-    timeStamp: number;
-  }>; //TODO UserReducer.State['lastUpdateMessage']
+  public messages$: Observable<UserReducer.State['lastUpdateMessage']>;
 
   constructor(private store: Store<DalState>) {
     this.setPresentationStreams();
