@@ -11,13 +11,38 @@ import { PermissionServiceInterface } from './permission.service.interface';
 export class PermissionService implements PermissionServiceInterface {
   constructor(private store: Store<DalState>) {}
 
-  hasPermission(permission: string | string[]): Observable<boolean> {
-    if (typeof permission === 'string') {
-      permission = [permission];
+  /**
+   * Checks if all provided permissions are met for the current user
+   * To match one permission from multiple permissions, group the list in an array
+   *
+   * @param requiredPermissions
+   * @returns boolean
+   *
+   * @example
+   * <div *hasPermission="[Licenses.VIEW, [Licenses.ADD, Licenses.REVOKE]]">
+   * @example
+   */
+  hasPermission(
+    requiredPermissions: string | (string | string[])[]
+  ): Observable<boolean> {
+    let permissions: (string | string[])[];
+    if (typeof requiredPermissions === 'string') {
+      permissions = [requiredPermissions];
+    } else {
+      permissions = requiredPermissions;
     }
     return this.store.pipe(
       select(UserQueries.getPermissions),
-      map(permissions => permissions.some(p => permission.includes(p)))
+      map(userPermissions => {
+        // every permission in the list must match
+        return permissions.every(permission => {
+          if (typeof permission === 'string') {
+            return userPermissions.includes(permission);
+          }
+          // if permission is an array, at least one must match
+          return permission.some(p => userPermissions.includes(p));
+        });
+      })
     );
   }
 }
