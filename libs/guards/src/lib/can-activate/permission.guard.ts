@@ -21,9 +21,18 @@ export class PermissionGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
-    if (!route.data.requiredPermissions) return true;
+    if (
+      !route.data.requiredPermissions ||
+      route.data.requiredPermissions.length === 0
+    )
+      return true;
+
     return this.permissionService
       .hasPermission(route.data.requiredPermissions)
-      .pipe(tap(() => this.router.navigate(['/error/401'])));
+      .pipe(
+        tap(permitted => {
+          if (!permitted) this.router.navigate(['/error/401']);
+        })
+      );
   }
 }
