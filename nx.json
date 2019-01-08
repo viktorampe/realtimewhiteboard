@@ -70,6 +70,22 @@
     },
     "utils": {
       "tags": []
+    },
+    "pages-settings-dashboard": {
+      "tags": []
+    },
+    "pages-settings-profile": {
+      "tags": []
+    },
+    "pages-settings-credentials": {
+      "tags": []
+    },
+    "pages-settings-coupled-teachers": {
+      "tags": []
+    },
+
+    "pages-settings-avatar": {
+      "tags": []
     }
   }
 }
