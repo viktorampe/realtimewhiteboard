@@ -29,10 +29,8 @@
             "production": {
               "fileReplacements": [
                 {
-                  "replace":
-                    "apps/polpo-classroom-web/src/environments/environment.ts",
-                  "with":
-                    "apps/polpo-classroom-web/src/environments/environment.prod.ts"
+                  "replace": "apps/polpo-classroom-web/src/environments/environment.ts",
+                  "with": "apps/polpo-classroom-web/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -695,6 +693,161 @@
             "jestConfig": "libs/guards/jest.config.js",
             "tsConfig": "libs/guards/tsconfig.spec.json",
             "setupFile": "libs/guards/src/test-setup.ts"
+          },
+          "configurations": {
+            "travis": {
+              "maxWorkers": 2
+            }
+          }
+        }
+      }
+    },
+    "pages-settings-dashboard": {
+      "root": "libs/pages/settings/dashboard",
+      "sourceRoot": "libs/pages/settings/dashboard/src",
+      "projectType": "library",
+      "prefix": "campus",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/pages/settings/dashboard/tsconfig.lib.json",
+              "libs/pages/settings/dashboard/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/pages/settings/dashboard/jest.config.js",
+            "tsConfig": "libs/pages/settings/dashboard/tsconfig.spec.json",
+            "setupFile": "libs/pages/settings/dashboard/src/test-setup.ts"
+          },
+          "configurations": {
+            "travis": {
+              "maxWorkers": 2
+            }
+          }
+        }
+      }
+    },
+    "pages-settings-profile": {
+      "root": "libs/pages/settings/profile",
+      "sourceRoot": "libs/pages/settings/profile/src",
+      "projectType": "library",
+      "prefix": "campus",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/pages/settings/profile/tsconfig.lib.json",
+              "libs/pages/settings/profile/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/pages/settings/profile/jest.config.js",
+            "tsConfig": "libs/pages/settings/profile/tsconfig.spec.json",
+            "setupFile": "libs/pages/settings/profile/src/test-setup.ts"
+          },
+          "configurations": {
+            "travis": {
+              "maxWorkers": 2
+            }
+          }
+        }
+      }
+    },
+    "pages-settings-credentials": {
+      "root": "libs/pages/settings/credentials",
+      "sourceRoot": "libs/pages/settings/credentials/src",
+      "projectType": "library",
+      "prefix": "campus",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/pages/settings/credentials/tsconfig.lib.json",
+              "libs/pages/settings/credentials/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/pages/settings/credentials/jest.config.js",
+            "tsConfig": "libs/pages/settings/credentials/tsconfig.spec.json",
+            "setupFile": "libs/pages/settings/credentials/src/test-setup.ts"
+          },
+          "configurations": {
+            "travis": {
+              "maxWorkers": 2
+            }
+          }
+        }
+      }
+    },
+    "pages-settings-coupled-teachers": {
+      "root": "libs/pages/settings/coupled-teachers",
+      "sourceRoot": "libs/pages/settings/coupled-teachers/src",
+      "projectType": "library",
+      "prefix": "campus",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/pages/settings/coupled-teachers/tsconfig.lib.json",
+              "libs/pages/settings/coupled-teachers/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/pages/settings/coupled-teachers/jest.config.js",
+            "tsConfig": "libs/pages/settings/coupled-teachers/tsconfig.spec.json",
+            "setupFile": "libs/pages/settings/coupled-teachers/src/test-setup.ts"
+          },
+          "configurations": {
+            "travis": {
+              "maxWorkers": 2
+            }
+          }
+        }
+      }
+    },
+    "pages-settings-avatar": {
+      "root": "libs/pages/settings/avatar",
+      "sourceRoot": "libs/pages/settings/avatar/src",
+      "projectType": "library",
+      "prefix": "campus",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/pages/settings/avatar/tsconfig.lib.json",
+              "libs/pages/settings/avatar/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/pages/settings/avatar/jest.config.js",
+            "tsConfig": "libs/pages/settings/avatar/tsconfig.spec.json",
+            "setupFile": "libs/pages/settings/avatar/src/test-setup.ts"
           },
           "configurations": {
             "travis": {

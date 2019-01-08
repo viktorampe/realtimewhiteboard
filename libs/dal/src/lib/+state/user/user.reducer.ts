@@ -15,12 +15,18 @@ export interface State {
   currentUser: PersonInterface; // user object
   loaded: boolean; // has the User list been loaded
   error?: any; // last none error (if any)
+  permissions: string[];
+  permissionsLoaded: boolean; // have the permissions been load for the user
+  permissionsError?: any; // last none error (if any)
 }
 
 export const initialState: State = {
   currentUser: null,
   loaded: false,
-  error: null
+  error: null,
+  permissions: [],
+  permissionsLoaded: false,
+  permissionsError: null
 };
 
 export function reducer(
@@ -47,7 +53,9 @@ export function reducer(
       state = {
         ...state,
         currentUser: null,
-        loaded: false
+        loaded: false,
+        permissions: [],
+        permissionsLoaded: false
       };
       break;
     }
@@ -56,6 +64,22 @@ export function reducer(
         ...state,
         error: action.payload
       };
+      break;
+    }
+    case UserActionTypes.PermissionsLoaded: {
+      state = {
+        ...state,
+        permissions: action.payload,
+        permissionsLoaded: true
+      };
+      break;
+    }
+    case UserActionTypes.PermissionsLoadError: {
+      state = {
+        ...state,
+        permissionsError: action.payload
+      };
+      break;
     }
   }
   return state;

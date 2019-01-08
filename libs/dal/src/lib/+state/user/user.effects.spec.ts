@@ -5,10 +5,16 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
-import { UserReducer } from '.';
 import { DalModule } from '../../dal.module';
 import { AUTH_SERVICE_TOKEN } from '../../persons/auth-service.interface';
-import { LoadUser, RemoveUser, UserLoaded, UserRemoved } from './user.actions';
+import {
+  LoadPermissions,
+  LoadUser,
+  PermissionsLoaded,
+  RemoveUser,
+  UserLoaded,
+  UserRemoved
+} from './user.actions';
 import { UserEffects } from './user.effects';
 
 const mockUser = {
@@ -48,13 +54,15 @@ const mockUser = {
   coaccount: null
 };
 
+const mockPermissions = ['permission-a', 'permission-b', 'permission-c'];
+
 describe('UserEffects', () => {
   let actions: Observable<any>;
   let effects: UserEffects;
-  let baseState: UserReducer.State;
 
   const loadUserAction = new LoadUser({ force: true });
   const removeUserAction = new RemoveUser();
+  const loadPermissionsAction = new LoadPermissions({ force: true });
 
   const jestMockTokenGetUserReturnValue = () => {
     jest
@@ -66,6 +74,12 @@ describe('UserEffects', () => {
     jest
       .spyOn(TestBed.get(AUTH_SERVICE_TOKEN), 'logout')
       .mockReturnValue(of(true));
+  };
+
+  const jestMockTokenGetPermissionsReturnValue = () => {
+    jest
+      .spyOn(TestBed.get(AUTH_SERVICE_TOKEN), 'getPermissions')
+      .mockReturnValue(of(mockPermissions));
   };
 
   beforeEach(() => {
@@ -103,10 +117,19 @@ describe('UserEffects', () => {
     );
   };
 
+  const expectInAndOutPermissions = (
+    triggerAction: Action,
+    effectOutput: any
+  ) => {
+    actions = hot('-a-|', { a: triggerAction });
+    expect(effects.loadPermissions$).toBeObservable(
+      hot('-a-|', {
+        a: effectOutput
+      })
+    );
+  };
+
   describe('loadUser$', () => {
-    beforeAll(() => {
-      baseState = UserReducer.initialState;
-    });
     beforeEach(() => {
       jestMockTokenGetUserReturnValue();
     });
@@ -116,14 +139,23 @@ describe('UserEffects', () => {
   });
 
   describe('removeUser$', () => {
-    beforeAll(() => {
-      baseState = { currentUser: mockUser, loaded: true };
-    });
     beforeEach(() => {
       jestMockTokenRemoveUserReturnValue();
     });
     it('should trigger logout', () => {
       expectInAndOutRemove(removeUserAction, new UserRemoved());
+    });
+  });
+
+  describe('loadPermissions$', () => {
+    beforeEach(() => {
+      jestMockTokenGetPermissionsReturnValue();
+    });
+    it('should trigger getPermissions api call', () => {
+      expectInAndOutPermissions(
+        loadPermissionsAction,
+        new PermissionsLoaded(mockPermissions)
+      );
     });
   });
 });
