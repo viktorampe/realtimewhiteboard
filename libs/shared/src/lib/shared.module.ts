@@ -12,6 +12,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { UiModule } from '@campus/ui';
 import { FilterService, FILTER_SERVICE_TOKEN } from '@campus/utils';
+import { HasPermissionDirective } from './auth/has-permission.directive';
 import { PermissionService } from './auth/permission.service';
 import { PERMISSION_SERVICE_TOKEN } from './auth/permission.service.interface';
 import { PageBarContainerComponent } from './components/page-bar-container/page-bar-container.component';
@@ -44,12 +45,17 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     MatBadgeModule,
     RouterModule
   ],
-  declarations: [HeaderComponent, PageBarContainerComponent],
+  declarations: [
+    HeaderComponent,
+    PageBarContainerComponent,
+    HasPermissionDirective
+  ],
   exports: [
     HeaderComponent,
     PortalModule,
     LayoutModule,
-    PageBarContainerComponent
+    PageBarContainerComponent,
+    HasPermissionDirective
   ],
   providers: [
     { provide: FILTER_SERVICE_TOKEN, useClass: FilterService },

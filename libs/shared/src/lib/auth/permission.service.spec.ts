@@ -15,6 +15,7 @@ describe('PermissionService', () => {
   beforeAll(() => {
     userState = {
       ...UserReducer.initialState,
+      loaded: true,
       permissions: ['permission-a', 'permission-b', 'permission-c'],
       permissionsLoaded: true
     };
