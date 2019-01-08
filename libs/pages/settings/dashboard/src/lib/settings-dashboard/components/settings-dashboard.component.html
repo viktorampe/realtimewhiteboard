@@ -9,9 +9,15 @@
           class="page-settings_dashboard__container__content__navitem"
           *ngFor="let link of (links | async)"
         >
-          <a mat-list-item href="{{link.url}}">
-            <mat-icon [svgIcon]="link.icon"></mat-icon> {{ link.name }}
-          </a>
+          <campus-button
+            large
+            *ngIf="(hasPermission(link.permission) | async)"
+            class="page-settings_dashboard__container__content__navitem__button"
+            [iconClass]="link.icon"
+            (click)="navigateTo(link.url)"
+          >
+            {{ link.name }}
+          </campus-button>
         </div>
       </mat-nav-list>
     </div>

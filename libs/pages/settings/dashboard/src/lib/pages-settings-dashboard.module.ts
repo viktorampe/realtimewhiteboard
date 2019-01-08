@@ -1,13 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { MatIconModule, MatListModule } from '@angular/material';
+import { MatListModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
+import { UiModule } from '@campus/ui';
 import { SettingsDashboardComponent } from './settings-dashboard/components/settings-dashboard.component';
 
 @NgModule({
   imports: [
     MatListModule,
-    MatIconModule,
+    UiModule,
     CommonModule,
     RouterModule.forChild([
       {

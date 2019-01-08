@@ -1,15 +1,52 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatIconModule, MatListModule } from '@angular/material';
+import { MatListModule } from '@angular/material';
+import { Router } from '@angular/router';
+import { AuthServiceInterface, AUTH_SERVICE_TOKEN } from '@campus/dal';
+import { UiModule } from '@campus/ui';
+import { Observable, of } from 'rxjs';
 import { SettingsDashboardComponent } from './settings-dashboard.component';
 
 describe('SettingsDashboardComponent', () => {
   let component: SettingsDashboardComponent;
   let fixture: ComponentFixture<SettingsDashboardComponent>;
+  const spy = jest.fn();
+
+  class MockRouter {
+    navigate = spy;
+  }
+
+  class MockAuth implements AuthServiceInterface {
+    userId: number;
+    getCurrent(): Observable<any> {
+      throw new Error('Method not implemented.');
+    }
+    logout(): Observable<any> {
+      throw new Error('Method not implemented.');
+    }
+    login(
+      credentials: Partial<
+        import('/Users/melvin.kellner/Desktop/projects/campus/libs/dal/src/index').LoginCredentials
+      >
+    ): Observable<any> {
+      throw new Error('Method not implemented.');
+    }
+    isLoggedIn(): boolean {
+      return true;
+    }
+
+    getPermissions(): Observable<string[]> {
+      return of(['permission1']);
+    }
+  }
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [SettingsDashboardComponent],
-      imports: [MatIconModule, MatListModule]
+      imports: [UiModule, MatListModule],
+      providers: [
+        { provide: Router, useClass: MockRouter },
+        { provide: AUTH_SERVICE_TOKEN, useClass: MockAuth }
+      ]
     }).compileComponents();
   }));
 
@@ -36,18 +73,29 @@ describe('SettingsDashboardComponent', () => {
     expect(navItem.nativeElement.textContent).toContain('link1');
   });
 
-  it('navitem should be populated with the correct link', () => {
-    const navlist =
-      fixture.debugElement.children[0].children[1].children[0].children[0];
-    const navItem = navlist.children[0];
-    console.log(
-      navItem.children[0].children[0].nativeElement.attributes.length
-    );
+  it('it should navigate correctly', () => {
+    component.navigateTo('/test');
+    expect(spy).toHaveBeenCalled();
+    expect(spy).toHaveBeenCalledWith(['/test']);
   });
 
-  it('navitem should be populated with the correct icon', () => {
-    const navlist =
-      fixture.debugElement.children[0].children[1].children[0].children[0];
-    const navItem = navlist.children[0];
+  it('should return true if no permissions', () => {
+    component.hasPermission(null).subscribe(bool => {
+      expect(bool).toBeTruthy();
+    });
+  });
+
+  it('should return false if no user does not have permissions required', () => {
+    const sub = component.hasPermission(['some permission']).subscribe(bool => {
+      expect(bool).toBeFalsy();
+      sub.unsubscribe();
+    });
+  });
+
+  it('should return true if no user has permissions required', () => {
+    const sub = component.hasPermission(['permission1']).subscribe(bool => {
+      expect(bool).toBeTruthy();
+      sub.unsubscribe();
+    });
   });
 });

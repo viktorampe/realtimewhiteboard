@@ -1,4 +1,6 @@
 .page-settings_dashboard {
+  $ui-button--large-width: 100px;
+
   &__container {
     margin-top: 20px;
     margin-left: 10px;
@@ -17,8 +19,6 @@
       flex-direction: column;
 
       &__navitem {
-        display: flex;
-        flex-direction: column;
         margin: 0px;
         padding: 0px;
         color: black;
