@@ -1,5 +1,10 @@
 <div class="pages-settings-profile-avatar"
      *ngIf="currentUser$ | async as user">
+
+  <!-- <campus-page-header [title]="Profielfoto aanpassen"
+                      [iconClass]="'account'">
+  </campus-page-header> -->
+
   <!--
   <img-cropper [image]="imgData"
                [settings]="cropperSettings"></img-cropper><br>
@@ -13,17 +18,18 @@
       <span class="text">upload</span>
       <input id="custom-input"
              type="file"
+             accept="image/*"
              (change)="fileChangeListener($event)">
     </div>
     <img-cropper #cropper
                  [image]="imgData"
                  [settings]="cropperSettings"></img-cropper>
     <br>
-    <span class="result rounded"
-          *ngIf="imgData.image">
-      <img [src]="imgData.image"
+    <div *ngIf="imgData.image">
+      <img class="pages-settings-profile-avatar__result"
+           [src]="imgData.image"
            [width]="cropperSettings.croppedWidth"
            [height]="cropperSettings.croppedHeight">
-    </span>
+    </div>
   </div>
 </div>

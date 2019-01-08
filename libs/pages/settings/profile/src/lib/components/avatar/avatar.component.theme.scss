@@ -1,8 +1,14 @@
 @mixin pages-settings-profile-avatar-theme() {
-  .ng2-imgcrop {
-    input,
-    canvas {
-      display: block;
+  .pages-settings-profile-avatar {
+    .ng2-imgcrop {
+      input,
+      canvas {
+        display: block;
+      }
+    }
+
+    &__result {
+      border-radius: 50%;
     }
   }
 }

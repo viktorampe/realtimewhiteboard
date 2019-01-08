@@ -1,6 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { PersonFixture, PersonInterface } from '@campus/dal';
-import { CropperSettings, ImageCropperComponent } from 'ngx-img-cropper';
+import {
+  CropperDrawSettings,
+  CropperSettings,
+  ImageCropperComponent
+} from 'ngx-img-cropper';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 
@@ -23,14 +27,23 @@ export class AvatarComponent implements OnInit {
 
   ngOnInit() {
     this.cropperSettings = new CropperSettings({
+      canvasWidth: 200,
+      canvasHeight: 200,
       width: 200,
       height: 200,
       croppedWidth: 170,
       croppedHeight: 170,
-      canvasWidth: 200,
-      canvasHeight: 200,
-      rounded: true,
-      noFileInput: true
+      touchRadius: 15,
+      centerTouchRadius: 20,
+      noFileInput: true,
+      cropperDrawSettings: <CropperDrawSettings>{
+        strokeWidth: 1
+      },
+      // allowedFilesRegex: /.(jpe?g|png|gif)$/i,
+      fileType: 'image/jpeg',
+      compressRatio: 0.7,
+      markerSizeMultiplier: 0.6,
+      rounded: true
     });
     this.imgData = {};
 
