@@ -3,17 +3,26 @@ import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
-import { hot } from '@nrwl/nx/testing';
+import { cold, hot } from '@nrwl/nx/testing';
+import { undo } from 'ngrx-undo';
 import { Observable, of } from 'rxjs';
+import { UserReducer } from '.';
+import { PersonInterface } from '../../+models';
 import { DalModule } from '../../dal.module';
 import { AUTH_SERVICE_TOKEN } from '../../persons/auth-service.interface';
+import {
+  PersonServiceInterface,
+  PERSON_SERVICE_TOKEN
+} from '../../persons/persons.service';
 import {
   LoadPermissions,
   LoadUser,
   PermissionsLoaded,
   RemoveUser,
+  UpdateUser,
   UserLoaded,
-  UserRemoved
+  UserRemoved,
+  UserUpdateMessage
 } from './user.actions';
 import { UserEffects } from './user.effects';
 
@@ -93,7 +102,8 @@ describe('UserEffects', () => {
       providers: [
         UserEffects,
         DataPersistence,
-        provideMockActions(() => actions)
+        provideMockActions(() => actions),
+        { provide: PERSON_SERVICE_TOKEN, useValue: {} }
       ]
     });
     effects = TestBed.get(UserEffects);
@@ -144,6 +154,93 @@ describe('UserEffects', () => {
     });
     it('should trigger logout', () => {
       expectInAndOutRemove(removeUserAction, new UserRemoved());
+    });
+  });
+
+  describe('updateUser$', () => {
+    let personService: PersonServiceInterface;
+    const changedProps: Partial<PersonInterface> = {
+      firstName: 'new value',
+      name: 'new value'
+    };
+    const mockDate = Date.now();
+    const updateAction = new UpdateUser({ userId: mockUser.id, changedProps });
+    const successMessageAction = new UserUpdateMessage({
+      message: 'User updated',
+      timeStamp: mockDate,
+      type: 'success'
+    });
+    const errorMessageAction = new UserUpdateMessage({
+      message: 'User update failed',
+      timeStamp: mockDate,
+      type: 'error'
+    });
+
+    let realDateImplementation;
+    let baseState: UserReducer.State;
+
+    beforeAll(() => {
+      // override date implementation
+      realDateImplementation = Date.now.bind(global.Date);
+      global.Date.now = jest.fn(() => mockDate);
+    });
+
+    afterAll(() => {
+      // put original date implementation back
+      global.Date.now = realDateImplementation;
+    });
+
+    beforeEach(() => {
+      baseState = {
+        currentUser: mockUser,
+        loaded: true,
+        permissions: null,
+        permissionsLoaded: null
+      };
+      personService = TestBed.get(PERSON_SERVICE_TOKEN);
+    });
+
+    it('should call the personService', () => {
+      personService.updateUser = jest.fn();
+
+      actions = hot('a', { a: updateAction });
+
+      effects.updateUser$.subscribe(_ => {
+        expect(personService.updateUser).toHaveBeenCalledTimes(1);
+        expect(personService.updateUser).toHaveBeenCalledWith(
+          updateAction.payload.userId,
+          updateAction.payload.changedProps
+        );
+      });
+    });
+
+    it('should dispatch a message action on an update success', () => {
+      personService.updateUser = jest
+        .fn()
+        .mockReturnValue(cold('a', { a: true }));
+
+      actions = hot('a', { a: updateAction });
+
+      expect(effects.updateUser$).toBeObservable(
+        hot('a', {
+          a: successMessageAction
+        })
+      );
+    });
+
+    it('should dispatch an undo action and a message action when the update fails', () => {
+      personService.updateUser = jest
+        .fn()
+        .mockReturnValue(hot('#', new Error('this has failed spectacularly')));
+
+      actions = hot('a', { a: updateAction });
+
+      expect(effects.updateUser$).toBeObservable(
+        hot('(ab)', {
+          a: undo(updateAction),
+          b: errorMessageAction
+        })
+      );
     });
   });
 
