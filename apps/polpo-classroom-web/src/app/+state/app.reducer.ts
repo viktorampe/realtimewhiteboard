@@ -15,7 +15,7 @@ export interface AppState {
   list: Entity[]; // list of App; analogous to a sql normalized table
   selectedId?: string | number; // which App record has been selected
   loaded: boolean; // has the App list been loaded
-  error?: any; // last none error (if any)
+  error?: any; // last known error (if any)
 }
 
 export const initialState: AppState = {
