@@ -9,6 +9,7 @@ export const PERSON_SERVICE_TOKEN = new InjectionToken('PersonService');
 export interface PersonServiceInterface {
   getAllForUser(userId: number): Observable<PersonInterface[]>;
   checkUniqueUsername(userId: number, username: string): Observable<boolean>;
+  checkUniqueEmail(userId: number, email: string): Observable<boolean>;
   updateUser(
     userId: number,
     changedProps: Partial<PersonInterface>
