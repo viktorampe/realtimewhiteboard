@@ -19,10 +19,10 @@ export interface State {
     type: 'success' | 'error';
   };
   loaded: boolean; // has the User list been loaded
-  error?: any; // last none error (if any)
+  error?: any; // last known error (if any)
   permissions: string[];
   permissionsLoaded: boolean; // have the permissions been load for the user
-  permissionsError?: any; // last none error (if any)
+  permissionsError?: any; // last known error (if any)
 }
 
 export const initialState: State = {
