@@ -35,7 +35,7 @@ export class PersonService implements PersonServiceInterface {
   checkUniqueEmail(userId: number, email: string): Observable<boolean> {
     return this.personApi.checkUnique(userId, 'email', email);
   }
-  
+
   updateUser(
     userId: number,
     changedProps: Partial<PersonInterface>

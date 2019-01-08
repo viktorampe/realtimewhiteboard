@@ -58,7 +58,7 @@ describe('PersonsService', () => {
     });
     expect(service.checkUniqueEmail(1, 'foo')).toBeObservable(mockData$);
   });
-  
+
   describe('updateUser', () => {
     let personApi: PersonApi;
     let mockData;
