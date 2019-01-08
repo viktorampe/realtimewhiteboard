@@ -7,7 +7,7 @@ describe('User Selectors', () => {
     message: 'update succeeded',
     timeStamp: 1,
     type: 'success'
-  } as State['lastUpdate'];
+  } as State['lastUpdateMessage'];
   const getUserId = it => it['id'];
 
   let storeState;
@@ -57,7 +57,7 @@ describe('User Selectors', () => {
     storeState = {
       user: {
         currentUser: mockUser,
-        lastUpdate: lastUpdateMessage,
+        lastUpdateMessage: lastUpdateMessage,
         error: ERROR_MSG,
         loaded: true
       }
@@ -86,8 +86,8 @@ describe('User Selectors', () => {
       expect(result).toBe(ERROR_MSG);
     });
 
-    it("getUpdateMessage() should return the current 'lastUpdate' storeState", () => {
-      const result = UserQueries.getUpdateMessage(storeState);
+    it("getLastUpdateMessage() should return the current 'lastUpdate' storeState", () => {
+      const result = UserQueries.getLastUpdateMessage(storeState);
       expect(result).toBe(lastUpdateMessage);
     });
   });

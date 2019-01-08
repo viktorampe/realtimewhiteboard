@@ -13,7 +13,7 @@ export const NAME = 'user';
 
 export interface State {
   currentUser: PersonInterface; // user object
-  lastUpdate?: {
+  lastUpdateMessage?: {
     message: string;
     timeStamp: number;
     type: 'success' | 'error';
@@ -24,7 +24,7 @@ export interface State {
 
 export const initialState: State = {
   currentUser: null,
-  lastUpdate: null,
+  lastUpdateMessage: null,
   loaded: false,
   error: null
 };
@@ -79,7 +79,7 @@ export function reducer(
     case UserActionTypes.UserUpdateMessage: {
       state = {
         ...state,
-        lastUpdate: action.payload
+        lastUpdateMessage: action.payload
       };
       break;
     }

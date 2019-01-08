@@ -11,8 +11,8 @@ import { PersonInterface } from '../../+models';
 import { DalModule } from '../../dal.module';
 import { AUTH_SERVICE_TOKEN } from '../../persons/auth-service.interface';
 import {
-  PersonService,
-  PersonServiceInterface
+  PersonServiceInterface,
+  PERSON_SERVICE_TOKEN
 } from '../../persons/persons.service';
 import {
   LoadUser,
@@ -93,7 +93,7 @@ describe('UserEffects', () => {
         UserEffects,
         DataPersistence,
         provideMockActions(() => actions),
-        { provide: PersonService, useValue: {} }
+        { provide: PERSON_SERVICE_TOKEN, useValue: {} }
       ]
     });
     effects = TestBed.get(UserEffects);
@@ -175,7 +175,7 @@ describe('UserEffects', () => {
 
     beforeEach(() => {
       baseState = { currentUser: mockUser, loaded: true };
-      personService = TestBed.get(PersonService);
+      personService = TestBed.get(PERSON_SERVICE_TOKEN);
     });
 
     it('should call the personService', () => {

@@ -17,7 +17,7 @@ describe('User Reducer', () => {
       currentUser: {
         email: 'test'
       },
-      lastUpdate: null,
+      lastUpdateMessage: null,
       error: null,
       loaded: true
     };
@@ -57,7 +57,7 @@ describe('User Reducer', () => {
     const state: UserReducer.State = {
       currentUser: user,
       loaded: loaded,
-      lastUpdate: null,
+      lastUpdateMessage: null,
       error: error
     };
     if (error !== undefined) state.error = error;

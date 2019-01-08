@@ -9,7 +9,10 @@ import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN
 } from '../../persons/auth-service.interface';
-import { PersonService } from './../../persons/persons.service';
+import {
+  PersonServiceInterface,
+  PERSON_SERVICE_TOKEN
+} from './../../persons/persons.service';
 import {
   fromUserActions,
   LoadUser,
@@ -121,7 +124,7 @@ export class UserEffects {
   constructor(
     private actions$: Actions,
     private dataPersistence: DataPersistence<DalState>,
-    private personService: PersonService,
+    @Inject(PERSON_SERVICE_TOKEN) private personService: PersonServiceInterface,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
   ) {}
 }

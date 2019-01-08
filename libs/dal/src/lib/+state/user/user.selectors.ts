@@ -21,7 +21,7 @@ export const getCurrentUser = createSelector(
   }
 );
 
-export const getUpdateMessage = createSelector(
+export const getLastUpdateMessage = createSelector(
   getUserState,
-  (state: State) => state.lastUpdate
+  (state: State) => state.lastUpdateMessage
 );
