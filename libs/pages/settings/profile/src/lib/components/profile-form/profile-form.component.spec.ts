@@ -6,7 +6,7 @@ import {
 } from '@angular/forms';
 import { MatFormFieldModule, MatInputModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { PersonFixture } from '@campus/dal';
+import { PersonFixture, PersonInterface } from '@campus/dal';
 import { UniqueEmailValidator, UniqueUsernameValidator } from '@campus/shared';
 import { of } from 'rxjs';
 import { ProfileFormComponent } from './profile-form.component';
@@ -15,6 +15,14 @@ describe('ProfileFormComponent', () => {
   let component: ProfileFormComponent;
   let fixture: ComponentFixture<ProfileFormComponent>;
   let mockData$: ValidationErrors | null;
+  const mockFormData = {
+    lastName: 'Bar',
+    firstName: 'Foo',
+    username: 'FooBar',
+    email: 'foo.bar@test.com',
+    password: 'newPassword',
+    verifyPassword: 'newPassword'
+  };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -73,6 +81,33 @@ describe('ProfileFormComponent', () => {
       });
     });
 
+    it('should emit a user when submitting the form', () => {
+      component.profileForm.setValue(mockFormData);
+      let updatedPerson: PersonInterface;
+      component.saveProfile.subscribe(value => (updatedPerson = value));
+      component.onSubmit();
+      expect(updatedPerson).toEqual({
+        name: mockFormData.lastName,
+        firstName: mockFormData.firstName,
+        username: mockFormData.username,
+        email: mockFormData.email,
+        password: mockFormData.password
+      });
+    });
+
+    it('should reset the form', () => {
+      component.profileForm.setValue(mockFormData);
+      component.onReset();
+      expect(component.profileForm.value).toEqual({
+        lastName: component.user.name,
+        firstName: component.user.firstName,
+        username: component.user.username,
+        email: component.user.email,
+        password: '',
+        verifyPassword: ''
+      });
+    });
+
     describe('form validation', () => {
       it('should be valid by default', () => {
         expect(component.profileForm.valid).toBe(true);
@@ -101,16 +136,13 @@ describe('ProfileFormComponent', () => {
       });
 
       it('should check if passwords match', () => {
-        const password = getControl('password');
-        password.setValue('newPassword');
-        const verifyPassword = getControl('verifyPassword');
-        verifyPassword.setValue('typo');
+        setControlValue('password', 'newPassword');
+        setControlValue('verifyPassword', 'typo');
         expect(component.profileForm.errors['noPasswordMatch']).toBeTruthy();
       });
 
       it('should skip checks if no password is filled in', () => {
-        const password = getControl('password');
-        password.setValue('');
+        setControlValue('password', '');
         expect(component.profileForm.errors).toBeFalsy();
       });
     });
@@ -119,6 +151,7 @@ describe('ProfileFormComponent', () => {
   function setControlValue(control: string, value: string) {
     getControl(control).setValue(value);
   }
+
   function checkControlValidity(control: string, validator: string) {
     const formControl = component.profileForm.controls[control];
     const errors = formControl.errors;

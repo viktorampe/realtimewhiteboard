@@ -79,11 +79,32 @@ export class ProfileFormComponent implements OnInit {
   }
 
   onSubmit() {
-    const updatedProfile: PersonInterface = { ...this.profileForm.value };
-    this.saveProfile.next(updatedProfile);
+    this.saveProfile.next(this.mapFormData());
   }
 
   onReset() {
-    this.profileForm.reset();
+    this.profileForm.reset({
+      lastName: this.user.name,
+      firstName: this.user.firstName,
+      username: this.user.username,
+      email: this.user.email,
+      password: '',
+      verifyPassword: ''
+    });
+  }
+
+  private mapFormData(): PersonInterface {
+    const updatedPerson: PersonInterface = {
+      name: this.profileForm.value['lastName'],
+      firstName: this.profileForm.value['firstName'],
+      username: this.profileForm.value['username'],
+      email: this.profileForm.value['email']
+    };
+
+    if (this.profileForm.value['password']) {
+      updatedPerson.password = this.profileForm.value['password'];
+    }
+
+    return updatedPerson;
   }
 }
