@@ -16,6 +16,10 @@ import { PERMISSION_SERVICE_TOKEN } from './permission.service.interface';
     <div *hasPermission="'permission-b'">string B</div>
     <div *hasPermission="['permission-a', 'permission-x']">array A + X</div>
     <div *hasPermission="['permission-b', 'permission-x']">array B + X</div>
+    <div *hasPermission="[['permission-a', 'permission-b'], 'permission-x']">
+      array A or B + X
+    </div>
+    <div *hasPermission="[['permission-a', 'permission-b']]">array A or B</div>
     <div *hasPermission="['permission-x']">array X</div>
   `
 })
@@ -79,11 +83,11 @@ describe('HasPermissionDirective', () => {
       testPermissions = ['permission-a'];
     });
 
-    it('should show elements with permission', async(() => {
+    it('should show elements with single permission', async(() => {
       selectVisibleElements().then(listDE => {
         expect(listDE.length).toBe(2);
         expect(listDE[0].nativeElement.textContent).toBe('string A');
-        expect(listDE[1].nativeElement.textContent).toBe('array A + X');
+        expect(listDE[1].nativeElement.textContent).toBe('array A or B');
       });
     }));
   });
@@ -95,11 +99,10 @@ describe('HasPermissionDirective', () => {
 
     it('should show elements with permission', async(() => {
       selectVisibleElements().then(listDE => {
-        expect(listDE.length).toBe(4);
+        expect(listDE.length).toBe(3);
         expect(listDE[0].nativeElement.textContent).toBe('string A');
         expect(listDE[1].nativeElement.textContent).toBe('string B');
-        expect(listDE[2].nativeElement.textContent).toBe('array A + X');
-        expect(listDE[3].nativeElement.textContent).toBe('array B + X');
+        expect(listDE[2].nativeElement.textContent).toBe('array A or B');
       });
     }));
   });
@@ -111,11 +114,12 @@ describe('HasPermissionDirective', () => {
 
     it('should show elements with permission', async(() => {
       selectVisibleElements().then(listDE => {
-        expect(listDE.length).toBe(4);
+        expect(listDE.length).toBe(5);
         expect(listDE[0].nativeElement.textContent).toBe('string A');
         expect(listDE[1].nativeElement.textContent).toBe('array A + X');
-        expect(listDE[2].nativeElement.textContent).toBe('array B + X');
-        expect(listDE[3].nativeElement.textContent).toBe('array X');
+        expect(listDE[2].nativeElement.textContent).toBe(' array A or B + X ');
+        expect(listDE[3].nativeElement.textContent).toBe('array A or B');
+        expect(listDE[4].nativeElement.textContent).toBe('array X');
       });
     }));
   });
