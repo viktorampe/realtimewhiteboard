@@ -1,10 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { Component, DebugElement, NgModule } from '@angular/core';
+import {
+  Component,
+  CUSTOM_ELEMENTS_SCHEMA,
+  DebugElement,
+  NgModule,
+  NO_ERRORS_SCHEMA
+} from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { PersonFixture, UserReducer } from '@campus/dal';
 import { StoreModule } from '@ngrx/store';
-import { HasPermissionDirective } from './has-permission.directive';
+import { ENVIRONMENT_ICON_MAPPING_TOKEN } from '../interfaces';
+import { SharedModule } from '../shared.module';
 import { PermissionService } from './permission.service';
 import { PERMISSION_SERVICE_TOKEN } from './permission.service.interface';
 
@@ -26,9 +33,10 @@ import { PERMISSION_SERVICE_TOKEN } from './permission.service.interface';
 export class TestContainerComponent {}
 
 @NgModule({
-  declarations: [TestContainerComponent, HasPermissionDirective],
-  imports: [CommonModule],
-  exports: [TestContainerComponent, HasPermissionDirective]
+  declarations: [TestContainerComponent],
+  imports: [CommonModule, SharedModule],
+  exports: [TestContainerComponent],
+  schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA]
 })
 export class TestModule {}
 
@@ -52,7 +60,11 @@ describe('HasPermissionDirective', () => {
         })
       ],
       providers: [
-        { provide: PERMISSION_SERVICE_TOKEN, useClass: PermissionService }
+        { provide: PERMISSION_SERVICE_TOKEN, useClass: PermissionService },
+        {
+          provide: ENVIRONMENT_ICON_MAPPING_TOKEN,
+          useValue: {}
+        }
       ]
     }).compileComponents();
   });
