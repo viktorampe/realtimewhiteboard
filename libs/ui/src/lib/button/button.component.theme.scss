@@ -3,6 +3,8 @@
   $ui-button-padding: $ui-button-font-size/5 !default;
   $ui-button-color: $ui-button-font-color !default;
   $ui-button-background-color: $ui-button-bg-color !default;
+  $ui-button-background-color-1: $ui-button-bg-color-1 !default;
+  $ui-button-background-color-2: $ui-button-bg-color-2 !default;
   $ui-button-border-color: darken($ui-button-background-color, 10%) !default;
   $ui-button-margin-top: 2px !default;
   $ui-button-margin-bottom: $ui-button-margin-top !default;
@@ -194,6 +196,30 @@
         .ui-button {
           border-color: $ui-button--warning--disabled-border-color;
         }
+      }
+    }
+  }
+  // primary
+  .ui-button--primary {
+    .ui-button {
+      background-color: $ui-button-background-color-1;
+      &:hover {
+        color: $ui-button-color;
+        background-color: darken($ui-button-background-color-1, 5%);
+      }
+    }
+  }
+  .ui-button--primary.ui-button--disabled {
+    .ui-button {
+      background-color: darken($ui-button-background-color-2, 50%);
+    }
+  }
+  .ui-button--secondary {
+    .ui-button {
+      color: $ui-form-item-font-color;
+      background-color: $ui-button-background-color-2;
+      &:hover {
+        background-color: darken($ui-button-background-color-2, 5%);
       }
     }
   }

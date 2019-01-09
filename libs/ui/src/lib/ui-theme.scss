@@ -1,5 +1,6 @@
 // main body
 $ui-primary-bg-color: #fff !default;
+$ui-primary-bg-color-1: #fff !default;
 $ui-primary-font-color: #000 !default;
 $ui-primary-color-accent: #fff !default; // link, button (borders)
 $ui-primary-font-color-2: #aaa !default; // subtitle
@@ -34,15 +35,24 @@ $ui-form-item-bg-color: $ui-primary-bg-color !default;
 $ui-form-item-font-color: $ui-primary-font-color !default;
 $ui-form-item-border-color: $ui-primary-font-color !default;
 $ui-button-bg-color: $ui-primary-color-accent !default;
+$ui-button-bg-color-1: $ui-form-button-primary-bg-color !default;
+$ui-button-bg-color-2: $ui-form-button-secondary-bg-color !default;
 $ui-button-font-color: #fff !default;
 
 // sizes
+$ui-font-size-normal: 14px !default;
 $ui-person-badge-size-large: 96px !default;
 $ui-person-badge-size-large-font-size: $ui-person-badge-size-large / 2 !default;
 $ui-person-badge-size-medium: 48px !default;
 $ui-person-badge-size-medium-font-size: $ui-person-badge-size-medium / 2 !default;
 $ui-person-badge-size-small: 24px !default;
 $ui-person-badge-size-small-font-size: $ui-person-badge-size-small / 2 !default;
+
+// buttons
+$ui-button-padding-left: $ui-font-size-normal !default;
+$ui-button-padding-right: $ui-font-size-normal !default;
+$ui-button-padding-top: $ui-font-size-normal/2 !default;
+$ui-button-padding-bottom: $ui-font-size-normal/2 !default;
 
 // helper classes
 .ui-no-link {

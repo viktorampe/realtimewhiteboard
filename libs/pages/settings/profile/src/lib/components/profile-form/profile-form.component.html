@@ -87,10 +87,11 @@
 
   <div class="pages-settings-profile-form__actions">
     <campus-button
+      primary
       type="submit"
       [ngClass]="{ 'ui-button--disabled': !profileForm.valid }"
       >Opslaan</campus-button
     >
-    <campus-button class="cancel" (click)="onReset()">Annuleren</campus-button>
+    <campus-button secondary (click)="onReset()">Annuleren</campus-button>
   </div>
 </form>

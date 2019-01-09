@@ -24,6 +24,7 @@ import { CircleDirective } from './button/directives/button-circle.directive';
 import { DangerDirective } from './button/directives/button-danger.directive';
 import { DisabledDirective } from './button/directives/button-disabled.directive';
 import { LargeDirective } from './button/directives/button-large.directive';
+import { PrimaryDirective } from './button/directives/button-primary.directive';
 import { RoundedCornersDirective } from './button/directives/button-rounded-corners.directive';
 import { WarningDirective } from './button/directives/button-warning.directive';
 import { ConfirmableSelectComponent } from './confirmable-select/confirmable-select.component';
@@ -61,6 +62,7 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
 import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time.pipe';
 import { RemovePrefixStringPipe } from './utils/pipes/remove-prefix-string/remove-prefix-string.pipe';
 import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-string.pipe';
+import { SecondaryDirective } from './button/directives/secondary.directive';
 
 @NgModule({
   imports: [
@@ -128,7 +130,9 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     HideMobileDirective,
     HumanDateTimePipe,
     RemovePrefixStringPipe,
-    LargeDirective
+    LargeDirective,
+    PrimaryDirective,
+    SecondaryDirective
   ],
   exports: [
     FilterTextInputComponent,
@@ -172,7 +176,9 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     HideMobileDirective,
     HumanDateTimePipe,
     RemovePrefixStringPipe,
-    LargeDirective
+    LargeDirective,
+    PrimaryDirective,
+    SecondaryDirective
   ]
 })
 export class UiModule {}
