@@ -54,6 +54,7 @@ import { SideSheetBodyDirective } from './side-sheet/directives/side-sheet-body.
 import { SideSheetHeaderDirective } from './side-sheet/directives/side-sheet-header.directive';
 import { SideSheetPageDirective } from './side-sheet/directives/side-sheet-page.directive';
 import { SideSheetComponent } from './side-sheet/side-sheet.component';
+import { TeacherSummaryComponent } from './teacher-summary-component/teacher-summary.component';
 import { TreeNavComponent } from './tree-nav/tree-nav.component';
 import { HideDesktopDirective } from './utils/directives/hide-desktop.directive';
 import { HideMobileDirective } from './utils/directives/hide-mobile.directive';
@@ -61,7 +62,6 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
 import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time.pipe';
 import { RemovePrefixStringPipe } from './utils/pipes/remove-prefix-string/remove-prefix-string.pipe';
 import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-string.pipe';
-import { TeacherSummaryComponentComponent } from './teacher-summary-component/teacher-summary-component.component';
 
 @NgModule({
   imports: [
@@ -130,7 +130,7 @@ import { TeacherSummaryComponentComponent } from './teacher-summary-component/te
     HumanDateTimePipe,
     RemovePrefixStringPipe,
     LargeDirective,
-    TeacherSummaryComponentComponent
+    TeacherSummaryComponent
   ],
   exports: [
     FilterTextInputComponent,
@@ -175,7 +175,7 @@ import { TeacherSummaryComponentComponent } from './teacher-summary-component/te
     HumanDateTimePipe,
     RemovePrefixStringPipe,
     LargeDirective,
-    TeacherSummaryComponentComponent
+    TeacherSummaryComponent
   ]
 })
 export class UiModule {}
