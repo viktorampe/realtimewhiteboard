@@ -3,12 +3,27 @@ import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
-import { hot } from '@nrwl/nx/testing';
+import { cold, hot } from '@nrwl/nx/testing';
+import { undo } from 'ngrx-undo';
 import { Observable, of } from 'rxjs';
 import { UserReducer } from '.';
+import { PersonInterface } from '../../+models';
 import { DalModule } from '../../dal.module';
 import { AUTH_SERVICE_TOKEN } from '../../persons/auth-service.interface';
-import { LoadUser, RemoveUser, UserLoaded, UserRemoved } from './user.actions';
+import {
+  PersonServiceInterface,
+  PERSON_SERVICE_TOKEN
+} from '../../persons/persons.service';
+import {
+  LoadPermissions,
+  LoadUser,
+  PermissionsLoaded,
+  RemoveUser,
+  UpdateUser,
+  UserLoaded,
+  UserRemoved,
+  UserUpdateMessage
+} from './user.actions';
 import { UserEffects } from './user.effects';
 
 const mockUser = {
@@ -48,13 +63,15 @@ const mockUser = {
   coaccount: null
 };
 
+const mockPermissions = ['permission-a', 'permission-b', 'permission-c'];
+
 describe('UserEffects', () => {
   let actions: Observable<any>;
   let effects: UserEffects;
-  let baseState: UserReducer.State;
 
   const loadUserAction = new LoadUser({ force: true });
   const removeUserAction = new RemoveUser();
+  const loadPermissionsAction = new LoadPermissions({ force: true });
 
   const jestMockTokenGetUserReturnValue = () => {
     jest
@@ -68,6 +85,12 @@ describe('UserEffects', () => {
       .mockReturnValue(of(true));
   };
 
+  const jestMockTokenGetPermissionsReturnValue = () => {
+    jest
+      .spyOn(TestBed.get(AUTH_SERVICE_TOKEN), 'getPermissions')
+      .mockReturnValue(of(mockPermissions));
+  };
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -79,7 +102,8 @@ describe('UserEffects', () => {
       providers: [
         UserEffects,
         DataPersistence,
-        provideMockActions(() => actions)
+        provideMockActions(() => actions),
+        { provide: PERSON_SERVICE_TOKEN, useValue: {} }
       ]
     });
     effects = TestBed.get(UserEffects);
@@ -103,10 +127,19 @@ describe('UserEffects', () => {
     );
   };
 
+  const expectInAndOutPermissions = (
+    triggerAction: Action,
+    effectOutput: any
+  ) => {
+    actions = hot('-a-|', { a: triggerAction });
+    expect(effects.loadPermissions$).toBeObservable(
+      hot('-a-|', {
+        a: effectOutput
+      })
+    );
+  };
+
   describe('loadUser$', () => {
-    beforeAll(() => {
-      baseState = UserReducer.initialState;
-    });
     beforeEach(() => {
       jestMockTokenGetUserReturnValue();
     });
@@ -116,14 +149,110 @@ describe('UserEffects', () => {
   });
 
   describe('removeUser$', () => {
-    beforeAll(() => {
-      baseState = { currentUser: mockUser, loaded: true };
-    });
     beforeEach(() => {
       jestMockTokenRemoveUserReturnValue();
     });
     it('should trigger logout', () => {
       expectInAndOutRemove(removeUserAction, new UserRemoved());
+    });
+  });
+
+  describe('updateUser$', () => {
+    let personService: PersonServiceInterface;
+    const changedProps: Partial<PersonInterface> = {
+      firstName: 'new value',
+      name: 'new value'
+    };
+    const mockDate = Date.now();
+    const updateAction = new UpdateUser({ userId: mockUser.id, changedProps });
+    const successMessageAction = new UserUpdateMessage({
+      message: 'User updated',
+      timeStamp: mockDate,
+      type: 'success'
+    });
+    const errorMessageAction = new UserUpdateMessage({
+      message: 'User update failed',
+      timeStamp: mockDate,
+      type: 'error'
+    });
+
+    let realDateImplementation;
+    let baseState: UserReducer.State;
+
+    beforeAll(() => {
+      // override date implementation
+      realDateImplementation = Date.now.bind(global.Date);
+      global.Date.now = jest.fn(() => mockDate);
+    });
+
+    afterAll(() => {
+      // put original date implementation back
+      global.Date.now = realDateImplementation;
+    });
+
+    beforeEach(() => {
+      baseState = {
+        currentUser: mockUser,
+        loaded: true,
+        permissions: null,
+        permissionsLoaded: null
+      };
+      personService = TestBed.get(PERSON_SERVICE_TOKEN);
+    });
+
+    it('should call the personService', () => {
+      personService.updateUser = jest.fn();
+
+      actions = hot('a', { a: updateAction });
+
+      effects.updateUser$.subscribe(_ => {
+        expect(personService.updateUser).toHaveBeenCalledTimes(1);
+        expect(personService.updateUser).toHaveBeenCalledWith(
+          updateAction.payload.userId,
+          updateAction.payload.changedProps
+        );
+      });
+    });
+
+    it('should dispatch a message action on an update success', () => {
+      personService.updateUser = jest
+        .fn()
+        .mockReturnValue(cold('a', { a: true }));
+
+      actions = hot('a', { a: updateAction });
+
+      expect(effects.updateUser$).toBeObservable(
+        hot('a', {
+          a: successMessageAction
+        })
+      );
+    });
+
+    it('should dispatch an undo action and a message action when the update fails', () => {
+      personService.updateUser = jest
+        .fn()
+        .mockReturnValue(hot('#', new Error('this has failed spectacularly')));
+
+      actions = hot('a', { a: updateAction });
+
+      expect(effects.updateUser$).toBeObservable(
+        hot('(ab)', {
+          a: undo(updateAction),
+          b: errorMessageAction
+        })
+      );
+    });
+  });
+
+  describe('loadPermissions$', () => {
+    beforeEach(() => {
+      jestMockTokenGetPermissionsReturnValue();
+    });
+    it('should trigger getPermissions api call', () => {
+      expectInAndOutPermissions(
+        loadPermissionsAction,
+        new PermissionsLoaded(mockPermissions)
+      );
     });
   });
 });

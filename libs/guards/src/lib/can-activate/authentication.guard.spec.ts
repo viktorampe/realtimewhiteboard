@@ -74,9 +74,21 @@ describe('AuthenticationGuard', () => {
     ).toBeObservable(hot(''));
     expect(navigateSpy).toHaveBeenCalledTimes(0);
   });
-  it('should return true if credentials are present while UserQueries.getLoaded is true', () => {
+  it('should return nothing if credentials are present while UserQueries.getLoaded is true but permissionsLoaded is false', () => {
     isLoggedInMock = true;
     store.dispatch(new UserActions.UserLoaded(new PersonFixture()));
+    expect(
+      authenticationGuard.canActivate(
+        <ActivatedRouteSnapshot>{},
+        <RouterStateSnapshot>{}
+      )
+    ).toBeObservable(hot(''));
+    expect(navigateSpy).toHaveBeenCalledTimes(0);
+  });
+  it('should return true if credentials are present while UserQueries.getLoaded is true and permissionsLoaded is true', () => {
+    isLoggedInMock = true;
+    store.dispatch(new UserActions.UserLoaded(new PersonFixture()));
+    store.dispatch(new UserActions.PermissionsLoaded([]));
     expect(
       authenticationGuard.canActivate(
         <ActivatedRouteSnapshot>{},

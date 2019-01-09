@@ -1,3 +1,4 @@
+export * from './lib/auth';
 export {
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN
