@@ -5,6 +5,10 @@ export {
   LoginCredentials
 } from './auth-service.interface';
 export {
+  CredentialServiceInterface,
+  CREDENTIAL_SERVICE_TOKEN
+} from './credentials.service';
+export {
   PersonServiceInterface,
   PERSON_SERVICE_TOKEN
 } from './persons.service';

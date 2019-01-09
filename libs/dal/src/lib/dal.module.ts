@@ -88,6 +88,10 @@ import { LEARNINGAREA_SERVICE_TOKEN } from './learning-area/learning-area.servic
 import { AuthService } from './persons/auth-service';
 import { AUTH_SERVICE_TOKEN } from './persons/auth-service.interface';
 import {
+  CredentialService,
+  CREDENTIAL_SERVICE_TOKEN
+} from './persons/credentials.service';
+import {
   LinkedPersonService,
   LINKED_PERSON_SERVICE_TOKEN
 } from './persons/linked-persons.service';
@@ -194,7 +198,8 @@ interface DalOptions {
       useClass: TaskEduContentService
     },
     { provide: CONTENT_REQUEST_SERVICE_TOKEN, useClass: ContentRequestService },
-    { provide: RESULTS_SERVICE_TOKEN, useClass: ResultsService }
+    { provide: RESULTS_SERVICE_TOKEN, useClass: ResultsService },
+    { provide: CREDENTIAL_SERVICE_TOKEN, useClass: CredentialService }
   ]
 })
 export class DalModule {
