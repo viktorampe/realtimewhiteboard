@@ -1,10 +1,17 @@
 import { UserQueries } from '.';
+import { DalState } from '..';
+import { State } from './user.reducer';
 
 describe('User Selectors', () => {
   const ERROR_MSG = 'No Error Available';
+  const lastUpdateMessage = {
+    message: 'update succeeded',
+    timeStamp: 1,
+    type: 'success'
+  } as State['lastUpdateMessage'];
   const getUserId = it => it['id'];
 
-  let storeState;
+  let storeState: Partial<DalState>;
 
   const mockUser = {
     name: 'Mertens',
@@ -43,16 +50,18 @@ describe('User Selectors', () => {
     coaccount: null
   };
 
+  const mockPermissions = ['permission-a', 'permission-b', 'permission-c'];
+
   beforeEach(() => {
-    const createUser = (id: string, name = ''): any => ({
-      id,
-      name: name || `name-${id}`
-    });
     storeState = {
       user: {
         currentUser: mockUser,
+        lastUpdateMessage: lastUpdateMessage,
         error: ERROR_MSG,
-        loaded: true
+        loaded: true,
+        permissions: mockPermissions,
+        permissionsLoaded: true,
+        permissionsError: null
       }
     };
   });
@@ -77,6 +86,21 @@ describe('User Selectors', () => {
     it("getError() should return the current 'error' storeState", () => {
       const result = UserQueries.getError(storeState);
       expect(result).toBe(ERROR_MSG);
+    });
+
+    it("getLastUpdateMessage() should return the current 'lastUpdate' storeState", () => {
+      const result = UserQueries.getLastUpdateMessage(storeState);
+      expect(result).toBe(lastUpdateMessage);
+    });
+
+    it("getPermissions() should return the current 'permissions' storeState", () => {
+      const result = UserQueries.getPermissions(storeState);
+      expect(result).toBe(mockPermissions);
+    });
+
+    it("getPermissionsLoaded() should return the current 'permissionsLoaded' status", () => {
+      const result = UserQueries.getPermissionsLoaded(storeState);
+      expect(result).toBe(true);
     });
   });
 });

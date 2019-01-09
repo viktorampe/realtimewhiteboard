@@ -1,20 +1,30 @@
 import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
-import { map } from 'rxjs/operators';
+import { undo } from 'ngrx-undo';
+import { from } from 'rxjs';
+import { map, mapTo } from 'rxjs/operators';
 import { DalState } from '..';
 import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN
 } from '../../persons/auth-service.interface';
 import {
+  PersonServiceInterface,
+  PERSON_SERVICE_TOKEN
+} from './../../persons/persons.service';
+import {
   fromUserActions,
+  LoadPermissions,
   LoadUser,
   LogInUser,
+  PermissionsLoadError,
   RemoveUser,
+  UpdateUser,
   UserActionTypes,
   UserLoadError,
-  UserRemoveError
+  UserRemoveError,
+  UserUpdateMessage
 } from './user.actions';
 
 @Injectable()
@@ -83,9 +93,63 @@ export class UserEffects {
     }
   );
 
+  @Effect()
+  updateUser$ = this.dataPersistence.optimisticUpdate(
+    UserActionTypes.UpdateUser,
+    {
+      run: (action: UpdateUser, state: DalState) => {
+        return this.personService
+          .updateUser(action.payload.userId, action.payload.changedProps)
+          .pipe(
+            mapTo(
+              new UserUpdateMessage({
+                message: 'User updated',
+                timeStamp: Date.now(),
+                type: 'success'
+              })
+            )
+          );
+      },
+      undoAction: (action: UpdateUser, state: DalState) => {
+        return from([
+          undo(action),
+          new UserUpdateMessage({
+            message: 'User update failed',
+            timeStamp: Date.now(),
+            type: 'error'
+          })
+        ]);
+      }
+    }
+  );
+
+  /**
+   * get permissions from api. errors when call fails.
+   *
+   * @memberof UserEffects
+   */
+  @Effect()
+  loadPermissions$ = this.dataPersistence.fetch(
+    UserActionTypes.LoadPermissions,
+    {
+      run: (action: LoadPermissions, state: DalState) => {
+        if (!action.payload.force && state.user.permissionsLoaded) return;
+        return this.authService.getPermissions().pipe(
+          map(r => {
+            return new fromUserActions.PermissionsLoaded(r);
+          })
+        );
+      },
+      onError: (action: LoadPermissions, error) => {
+        return new PermissionsLoadError(error);
+      }
+    }
+  );
+
   constructor(
     private actions$: Actions,
     private dataPersistence: DataPersistence<DalState>,
+    @Inject(PERSON_SERVICE_TOKEN) private personService: PersonServiceInterface,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
   ) {}
 }

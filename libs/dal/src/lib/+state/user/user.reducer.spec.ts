@@ -1,6 +1,14 @@
 import { PersonInterface, UserActions } from '@campus/dal';
 import { UserReducer } from '.';
-import { UserLoadError, UserRemoved, UserRemoveError } from './user.actions';
+import { PersonFixture } from '../../+fixtures';
+import {
+  PermissionsLoadError,
+  UpdateUser,
+  UserLoaded,
+  UserLoadError,
+  UserRemoved,
+  UserRemoveError
+} from './user.actions';
 
 describe('User Reducer', () => {
   beforeEach(() => {});
@@ -10,8 +18,12 @@ describe('User Reducer', () => {
       currentUser: {
         email: 'test'
       },
+      lastUpdateMessage: null,
+      loaded: true,
       error: null,
-      loaded: true
+      permissions: ['permission-a', 'permission-b', 'permission-c'],
+      permissionsLoaded: true,
+      permissionsError: null
     };
   }
 
@@ -26,14 +38,6 @@ describe('User Reducer', () => {
   }
 
   /**
-   * creates a null User.
-   * @returns {PersonInterface}
-   */
-  function createNullUser(): PersonInterface {
-    return null;
-  }
-
-  /**
    * Utility to create the bundle state.
    *
    * @param {PersonInterface} [user]
@@ -44,12 +48,19 @@ describe('User Reducer', () => {
   function createState(
     user: PersonInterface,
     loaded: boolean = false,
-    error?: any
+    error?: any,
+    permissions: string[] = [],
+    permissionsLoaded: boolean = false,
+    permissionsError: any = null
   ): UserReducer.State {
     const state: UserReducer.State = {
       currentUser: user,
       loaded: loaded,
-      error: error
+      lastUpdateMessage: null,
+      error: error,
+      permissions: permissions,
+      permissionsLoaded: permissionsLoaded,
+      permissionsError: permissionsError
     };
     if (error !== undefined) state.error = error;
     return state;
@@ -88,13 +99,68 @@ describe('User Reducer', () => {
         const error = 'Something went wrong';
         const action = new UserRemoveError({ error });
         const result = UserReducer.reducer(createFilledUserState(), action);
+        expect(result).toEqual({
+          ...createFilledUserState(),
+          error: { error }
+        });
+      });
+    });
+
+    describe('permissions loaded action', () => {
+      it('should load permissions', () => {
+        const permissions = [
+          'permission-a',
+          'permission-b',
+          'permission-c',
+          'permission-d'
+        ];
+        const action = new UserActions.PermissionsLoaded(permissions);
+        const result = UserReducer.reducer(UserReducer.initialState, action);
         expect(result).toEqual(
-          createState(
-            createFilledUserState().currentUser,
-            createFilledUserState().loaded,
-            { error }
-          )
+          createState(null, false, null, permissions, true)
         );
+      });
+
+      it('should error', () => {
+        const error = 'Something went wrong';
+        const action = new PermissionsLoadError({ error });
+        const result = UserReducer.reducer(UserReducer.initialState, action);
+        expect(result).toEqual(
+          createState(null, false, null, [], false, { error })
+        );
+      });
+
+      describe('update action', () => {
+        const mockUser = new PersonFixture();
+        const changedProps: Partial<PersonInterface> = {
+          firstName: 'new value',
+          name: 'new value'
+        };
+        const updateAction = new UpdateUser({
+          userId: mockUser.id,
+          changedProps
+        });
+        let usedState: UserReducer.State;
+
+        beforeEach(() => {
+          usedState = UserReducer.reducer(
+            UserReducer.initialState,
+            new UserLoaded(mockUser)
+          );
+        });
+
+        it('should update the currentUser', () => {
+          const result = UserReducer.reducer(usedState, updateAction);
+          expect(result.currentUser).toEqual(
+            jasmine.objectContaining(changedProps)
+          );
+        });
+
+        it('should not store the user password in the state', () => {
+          updateAction.payload.changedProps.password = 'sUp3r_s3cUr3_P@ssW0rd!';
+          const result = UserReducer.reducer(usedState, updateAction);
+          expect(result.currentUser.password).toBeFalsy();
+        });
       });
     });
   });
