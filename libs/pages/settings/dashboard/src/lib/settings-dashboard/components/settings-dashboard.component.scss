@@ -1,6 +1,4 @@
 .page-settings_dashboard {
-  $ui-button--large-width: 100px;
-
   &__container {
     margin-top: 20px;
     margin-left: 10px;
@@ -23,9 +21,6 @@
         margin: 0px;
         padding: 0px;
         color: black;
-
-        &__button {
-        }
       }
     }
   }
