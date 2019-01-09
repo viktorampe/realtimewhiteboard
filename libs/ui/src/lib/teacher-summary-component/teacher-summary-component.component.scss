@@ -1,0 +1,31 @@
+.ui-teacher-summary {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+
+  &__picture {
+    width: 50px;
+  }
+
+  &__text {
+    margin-left: 10px;
+    width: 350px;
+
+    &__teacher-name {
+      color: black;
+      font-size: 15px;
+    }
+
+    &__teacher-data {
+      display: flex;
+      flex-direction: row;
+      color: darkgrey;
+      font-size: 12px;
+    }
+  }
+
+  &__button {
+    margin-top: 5px;
+    margin-left: 10px;
+  }
+}

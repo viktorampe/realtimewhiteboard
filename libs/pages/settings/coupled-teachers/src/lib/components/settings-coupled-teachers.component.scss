@@ -1,2 +1,15 @@
-.page-settings_dashboard {
+.page-settings-coupled-teachers {
+  &__container {
+    margin: 20px;
+
+    &__add-teacher-container {
+      &__title {
+      }
+    }
+
+    &__coupled-teachers-container {
+      &__title {
+      }
+    }
+  }
 }

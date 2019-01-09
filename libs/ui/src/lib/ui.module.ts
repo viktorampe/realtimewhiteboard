@@ -61,6 +61,7 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
 import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time.pipe';
 import { RemovePrefixStringPipe } from './utils/pipes/remove-prefix-string/remove-prefix-string.pipe';
 import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-string.pipe';
+import { TeacherSummaryComponentComponent } from './teacher-summary-component/teacher-summary-component.component';
 
 @NgModule({
   imports: [
@@ -128,7 +129,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     HideMobileDirective,
     HumanDateTimePipe,
     RemovePrefixStringPipe,
-    LargeDirective
+    LargeDirective,
+    TeacherSummaryComponentComponent
   ],
   exports: [
     FilterTextInputComponent,
@@ -172,7 +174,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     HideMobileDirective,
     HumanDateTimePipe,
     RemovePrefixStringPipe,
-    LargeDirective
+    LargeDirective,
+    TeacherSummaryComponentComponent
   ]
 })
 export class UiModule {}

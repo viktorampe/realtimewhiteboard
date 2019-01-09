@@ -1,0 +1,17 @@
+<div class="ui-teacher-summary">
+  <img class="ui-teacher-summary__picture" src="{{ imageUrl }}" />
+  <div class="ui-teacher-summary__text">
+    <div class="ui-teacher-summary__text__teacher-name">Tom Mertens</div>
+    <div class="ui-teacher-summary__text__teacher-data">
+      Code: {{ code }} | Toegevoegd op: {{ dateString }} |
+      {{ learningAreasString }}
+    </div>
+  </div>
+  <campus-button
+    class="ui-teacher-summary__button"
+    campusRoundedCorners
+    campusBorder
+    (click)="clickDelete()"
+    >Leerkracht verwijderen</campus-button
+  >
+</div>

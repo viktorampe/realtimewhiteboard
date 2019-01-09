@@ -27,17 +27,6 @@ const routes: Routes = [
         canActivate: [CoupledTeacherGuard]
       },
       {
-        path: 'reports',
-        loadChildren: '@campus/pages/reports#PagesReportsModule',
-        data: { breadcrumbText: 'Resultaten' },
-        canActivate: [CoupledTeacherGuard]
-      },
-      {
-        path: 'profile',
-        loadChildren: '@campus/pages/profile#PagesProfileModule',
-        data: { breadcrumbText: 'Mijn profiel' }
-      },
-      {
         path: 'messages',
         loadChildren: '@campus/pages/messages#PagesMessagesModule',
         data: { breadcrumbText: 'Berichten' }
@@ -60,12 +49,6 @@ const routes: Routes = [
             loadChildren:
               '@campus/pages/settings/dashboard#PagesSettingsDashboardModule',
             data: { breadcrumbText: 'Dashboard' }
-          },
-          {
-            path: 'profile',
-            loadChildren:
-              '@campus/pages/settings/profile#PagesSettingsProfileModule',
-            data: { breadcrumbText: 'Profiel' }
           },
           {
             path: 'credentials',

@@ -1,1 +1,21 @@
-<div>coupled teachers works!!!!!</div>
+<div class="page-settings-coupled-teachers__container">
+  <div class="page-settings-coupled-teachers__add-teacher-container">
+    <div class="page-settings-coupled-teachers__add-teacher-container__title">
+      <mat-icon class="icon" [svgIcon]="headerIcon"></mat-icon>
+      LEERKRACHT TOEVOEGEN
+    </div>
+    <div> line </div> <div> <!-- todo alert thingy --> </div> Vraag je
+    leerkracht naar de juiste code om jullie accounts te koppelen
+    <input type="text" placeholder="Leerkracht code invullen" />
+    <campus-button (click)=""> Opslaan </campus-button>
+  </div>
+  <div class="page-settings-coupled-teachers__coupled-teachers-container">
+    <div
+      class="page-settings-coupled-teachers__coupled-teachers-container__title"
+    >
+      <mat-icon class="icon" [svgIcon]="headerIcon"></mat-icon>
+      MIJN GEKOPPELDE LEERKRACHTEN
+    </div>
+    <div>line</div> <div *ngFor="let teacher of (teachers | async)"> </div>
+  </div>
+</div>
