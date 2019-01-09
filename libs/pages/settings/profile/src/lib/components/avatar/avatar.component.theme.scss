@@ -1,9 +1,12 @@
 @mixin pages-settings-profile-avatar-theme() {
   .pages-settings-profile-avatar {
-    .ng2-imgcrop {
-      input,
-      canvas {
-        display: block;
+    .file-upload {
+      padding: 50px;
+      border: 2px dashed #ccc;
+
+      img {
+        height: 100%;
+        border-radius: 50%;
       }
     }
 

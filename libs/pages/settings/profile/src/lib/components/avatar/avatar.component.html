@@ -1,35 +1,31 @@
 <div class="pages-settings-profile-avatar"
      *ngIf="currentUser$ | async as user">
 
-  <!-- <campus-page-header [title]="Profielfoto aanpassen"
+  <campus-page-header [title]="'Profielfoto aanpassen'"
+                      [subtitle]="user.displayName"
                       [iconClass]="'account'">
-  </campus-page-header> -->
+  </campus-page-header>
 
-  <!--
-  <img-cropper [image]="imgData"
-               [settings]="cropperSettings"></img-cropper><br>
-  <img *ngIf="imgData.image"
-       [src]="imgData.image"
-       [width]="cropperSettings.croppedWidth"
-       [height]="cropperSettings.croppedHeight">
-  -->
   <div>
-    <div class="file-upload">
-      <span class="text">upload</span>
+    <form class="file-upload"
+          [class.hide]="imgData.image"
+          (drop)="fileDropListener($event)"
+          (dragover)="dragOver($event)">
+      <img *ngIf="user.avatar"
+           [src]="user.avatar" />
+      <div class="text">Selecteer een bestand of sleep het hierheen</div>
       <input id="custom-input"
              type="file"
              accept="image/*"
              (change)="fileChangeListener($event)">
-    </div>
-    <img-cropper #cropper
-                 [image]="imgData"
-                 [settings]="cropperSettings"></img-cropper>
-    <br>
-    <div *ngIf="imgData.image">
+    </form>
+    <div [class.hide]="!imgData.image">
       <img class="pages-settings-profile-avatar__result"
            [src]="imgData.image"
            [width]="cropperSettings.croppedWidth"
-           [height]="cropperSettings.croppedHeight">
+           [height]="cropperSettings.croppedHeight" />
+      <img-cropper #cropper
+                   [image]="imgData"
+                   [settings]="cropperSettings"></img-cropper>
     </div>
   </div>
-</div>

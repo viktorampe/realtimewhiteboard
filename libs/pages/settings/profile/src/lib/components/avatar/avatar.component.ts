@@ -6,7 +6,6 @@ import {
   ImageCropperComponent
 } from 'ngx-img-cropper';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'campus-avatar',
@@ -19,8 +18,9 @@ export class AvatarComponent implements OnInit {
 
   @ViewChild('cropper') cropper: ImageCropperComponent;
 
+  avatar: string = '';
   currentUser$: Observable<PersonInterface> = new BehaviorSubject(
-    new PersonFixture()
+    new PersonFixture({ avatar: this.avatar })
   );
 
   constructor() {}
@@ -31,8 +31,8 @@ export class AvatarComponent implements OnInit {
       canvasHeight: 200,
       width: 200,
       height: 200,
-      croppedWidth: 170,
-      croppedHeight: 170,
+      croppedWidth: 200,
+      croppedHeight: 200,
       touchRadius: 15,
       centerTouchRadius: 20,
       noFileInput: true,
@@ -42,26 +42,42 @@ export class AvatarComponent implements OnInit {
       // allowedFilesRegex: /.(jpe?g|png|gif)$/i,
       fileType: 'image/jpeg',
       compressRatio: 0.7,
-      markerSizeMultiplier: 0.6,
+      markerSizeMultiplier: 0.4,
       rounded: true
     });
     this.imgData = {};
-
-    this.currentUser$.pipe(take(1)).subscribe(user => {
-      if (user.avatar) {
-        this.imgData.image = user.avatar;
-      }
-    });
   }
 
-  fileChangeListener($event) {
-    var image: any = new Image();
-    var file: File = $event.target.files[0];
-    var myReader: FileReader = new FileReader();
-    var that = this;
-    myReader.onloadend = function(loadEvent: any) {
+  fileChangeListener(event: Event) {
+    const file: File = (event.target as HTMLInputElement).files[0];
+    this.loadImage(file);
+  }
+
+  fileDropListener(event: DragEvent) {
+    event.stopPropagation();
+    event.preventDefault();
+
+    const file: File = event.dataTransfer.files[0];
+    this.loadImage(file);
+  }
+
+  dragOver(event: DragEvent) {
+    event.stopPropagation();
+    event.preventDefault();
+  }
+
+  private loadImage(file: File) {
+    if (!file) return;
+
+    if (!this.cropperSettings.allowedFilesRegex.test(file.name)) {
+      return console.log('not an image');
+    }
+
+    const image: HTMLImageElement = new Image();
+    const myReader: FileReader = new FileReader();
+    myReader.onloadend = (loadEvent: any) => {
       image.src = loadEvent.target.result;
-      that.cropper.setImage(image);
+      this.cropper.setImage(image);
     };
 
     myReader.readAsDataURL(file);
