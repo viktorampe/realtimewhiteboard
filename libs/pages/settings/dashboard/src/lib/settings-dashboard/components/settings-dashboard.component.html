@@ -10,9 +10,10 @@
           *ngFor="let link of (links | async)"
         >
           <campus-button
+            *ngIf="
+              hasPermission(link.permissions, currentUserPermissions | async)
+            "
             large
-            *ngIf="(hasPermission(link.permission) | async)"
-            class="page-settings_dashboard__container__content__navitem__button"
             [iconClass]="link.icon"
             (click)="navigateTo(link.url)"
           >

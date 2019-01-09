@@ -15,6 +15,8 @@ describe('SettingsDashboardComponent', () => {
     navigate = spy;
   }
 
+  const userPermissions: string[] = ['permissions1', 'permissions2'];
+
   class MockAuth implements AuthServiceInterface {
     userId: number;
     getCurrent(): Observable<any> {
@@ -63,14 +65,14 @@ describe('SettingsDashboardComponent', () => {
   it('should display correct number of links', () => {
     const navlist =
       fixture.debugElement.children[0].children[1].children[0].children[0];
-    expect(navlist.children.length).toBe(7);
+    expect(navlist.children.length).toBe(5);
   });
 
   it('navitem should be populated with the correct name', () => {
     const navlist =
       fixture.debugElement.children[0].children[1].children[0].children[0];
     const navItem = navlist.children[0];
-    expect(navItem.nativeElement.textContent).toContain('link1');
+    expect(navItem.nativeElement.textContent).toContain('Mijn gegevens');
   });
 
   it('it should navigate correctly', () => {
@@ -79,23 +81,28 @@ describe('SettingsDashboardComponent', () => {
     expect(spy).toHaveBeenCalledWith(['/test']);
   });
 
-  it('should return true if no permissions', () => {
-    component.hasPermission(null).subscribe(bool => {
-      expect(bool).toBeTruthy();
-    });
+  it('should return true if no special permissions required', () => {
+    expect(component.hasPermission(null, userPermissions)).toBeTruthy();
   });
 
-  it('should return false if no user does not have permissions required', () => {
-    const sub = component.hasPermission(['some permission']).subscribe(bool => {
-      expect(bool).toBeFalsy();
-      sub.unsubscribe();
-    });
+  it('should return false if userpermissions does not include given permissions', () => {
+    expect(
+      component.hasPermission(['permission3'], userPermissions)
+    ).toBeFalsy();
   });
 
-  it('should return true if no user has permissions required', () => {
-    const sub = component.hasPermission(['permission1']).subscribe(bool => {
-      expect(bool).toBeTruthy();
-      sub.unsubscribe();
-    });
+  it('should return true if userpermissions does include given permissions', () => {
+    expect(
+      component.hasPermission([userPermissions[0]], userPermissions)
+    ).toBeTruthy();
+  });
+
+  it('should return true if userpermissions does not include given permissions when others are', () => {
+    expect(
+      component.hasPermission(
+        [userPermissions[0], userPermissions[1], 'not included'],
+        userPermissions
+      )
+    ).toBeFalsy();
   });
 });

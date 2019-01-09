@@ -9,6 +9,7 @@
 
     &__header {
       padding: 20px;
+      font-size: 18px;
       background-color: gray;
       color: white;
     }
@@ -22,6 +23,9 @@
         margin: 0px;
         padding: 0px;
         color: black;
+
+        &__button {
+        }
       }
     }
   }
