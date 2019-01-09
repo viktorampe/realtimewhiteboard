@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { UiModule } from '../ui.module';
 import { TeacherSummaryComponentComponent } from './teacher-summary-component.component';
 
 describe('TeacherSummaryComponentComponent', () => {
@@ -8,9 +8,9 @@ describe('TeacherSummaryComponentComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TeacherSummaryComponentComponent ]
-    })
-    .compileComponents();
+      declarations: [TeacherSummaryComponentComponent],
+      imports: [UiModule]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
