@@ -85,6 +85,18 @@
     >
   </mat-form-field>
 
+  <div
+    *ngIf="message"
+    class="pages-settings-profile-form__message"
+    [ngClass]="{
+      error: message.type === 'error',
+      success: message.type === 'success'
+    }"
+  >
+    <span>{{ message.message }}</span>
+    <button class="close" (click)="clearMessage()">x</button>
+  </div>
+
   <div class="pages-settings-profile-form__actions">
     <campus-button
       *ngIf="!profileForm.valid; else: enabled"

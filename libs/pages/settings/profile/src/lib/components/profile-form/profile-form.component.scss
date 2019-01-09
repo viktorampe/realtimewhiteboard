@@ -1,6 +1,13 @@
 .pages-settings-profile-form {
   display: flex;
   flex-direction: column;
+  &__message {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px 0 15px;
+  }
   mat-form-field.mat-form-field {
     margin-bottom: 15px;
   }

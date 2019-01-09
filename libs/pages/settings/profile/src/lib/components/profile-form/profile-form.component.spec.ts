@@ -118,7 +118,7 @@ describe('ProfileFormComponent', () => {
         checkControlValidity('lastName', 'required');
       });
 
-      it('should check lastName field validity', () => {
+      it('should check firstName field validity', () => {
         setControlValue('firstName', '');
         checkControlValidity('firstName', 'required');
       });

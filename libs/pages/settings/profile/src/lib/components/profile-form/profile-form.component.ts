@@ -32,17 +32,20 @@ export class ProfileFormComponent implements OnInit {
   errorMatcher = new CrossFieldErrorMatcher();
 
   @Input() user: PersonInterface;
+  @Input() message: { type: string; message: string };
+
   @Output() saveProfile = new EventEmitter<PersonInterface>();
 
   constructor(
     private fb: FormBuilder,
     private uniqueUsernameValidator: UniqueUsernameValidator,
     private uniqueEmailValidator: UniqueEmailValidator
-  ) {}
+  ) {
+    this.user = new PersonFixture({ username: 'FooBar' }); //TODO: remove
+    this.message = { type: 'success', message: 'Top! Wijzigingen opgeslagen.' }; //TODO: remove
+  }
 
   ngOnInit() {
-    this.user = new PersonFixture({ username: 'FooBar' }); //TODO: remove
-
     this.buildForm();
   }
 
@@ -91,6 +94,10 @@ export class ProfileFormComponent implements OnInit {
       password: '',
       verifyPassword: ''
     });
+  }
+
+  clearMessage() {
+    this.message = null;
   }
 
   private mapFormData(): PersonInterface {

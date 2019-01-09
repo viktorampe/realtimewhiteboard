@@ -24,6 +24,20 @@
       font-family: $pages-profile-form-font-family;
       font-size: $pages-profile-form-font-size;
     }
+    &__message {
+      height: 50px;
+      border-width: 1px;
+    }
+    &__message.success {
+      background-color: #dff0d8;
+      border-color: #d6e9c6;
+      color: #3c763d;
+    }
+    &__message.error {
+      background-color: #f2dede;
+      border-color: #ebccd1;
+      color: #a94442;
+    }
     &__actions {
       .ui-button {
         color: $pages-profile-button-color-2;
