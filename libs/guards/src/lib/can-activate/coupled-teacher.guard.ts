@@ -60,7 +60,7 @@ export class CoupledTeacherGuard implements CanActivate {
       map(([isTeacher, isStudent, hasTeachers]) => {
         if (isTeacher) return true;
         if (isStudent && hasTeachers) return true;
-        this.router.navigate(['/settings']);
+        this.router.navigate(['/settings/coupled-teachers']);
         return false;
       })
     );

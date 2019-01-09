@@ -13,14 +13,26 @@ export const NAME = 'user';
 
 export interface State {
   currentUser: PersonInterface; // user object
+  lastUpdateMessage?: {
+    message: string;
+    timeStamp: number;
+    type: 'success' | 'error';
+  };
   loaded: boolean; // has the User list been loaded
-  error?: any; // last none error (if any)
+  error?: any; // last known error (if any)
+  permissions: string[];
+  permissionsLoaded: boolean; // have the permissions been load for the user
+  permissionsError?: any; // last known error (if any)
 }
 
 export const initialState: State = {
   currentUser: null,
+  lastUpdateMessage: null,
   loaded: false,
-  error: null
+  error: null,
+  permissions: [],
+  permissionsLoaded: false,
+  permissionsError: null
 };
 
 export function reducer(
@@ -47,7 +59,9 @@ export function reducer(
       state = {
         ...state,
         currentUser: null,
-        loaded: false
+        loaded: false,
+        permissions: [],
+        permissionsLoaded: false
       };
       break;
     }
@@ -56,6 +70,42 @@ export function reducer(
         ...state,
         error: action.payload
       };
+      break;
+    }
+    case UserActionTypes.UpdateUser: {
+      //remove password from the properties
+      const { password, ...props } = action.payload.changedProps;
+      state = {
+        ...state,
+        currentUser: {
+          ...state.currentUser,
+          ...props
+        }
+      };
+      break;
+    }
+    case UserActionTypes.UserUpdateMessage: {
+      state = {
+        ...state,
+        lastUpdateMessage: action.payload
+      };
+      break;
+    }
+
+    case UserActionTypes.PermissionsLoaded: {
+      state = {
+        ...state,
+        permissions: action.payload,
+        permissionsLoaded: true
+      };
+      break;
+    }
+    case UserActionTypes.PermissionsLoadError: {
+      state = {
+        ...state,
+        permissionsError: action.payload
+      };
+      break;
     }
   }
   return state;

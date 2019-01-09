@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PersonFixture, PersonInterface } from '@campus/dal';
+import { PersonFixture, PersonInterface, UserReducer } from '@campus/dal';
 import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject } from 'rxjs';
 import { ProfileViewModel } from './profile.viewmodel';
@@ -9,7 +9,7 @@ import { ProfileViewModel } from './profile.viewmodel';
 })
 export class MockProfileViewModel
   implements ViewModelInterface<ProfileViewModel> {
-  public currentUser$ = new BehaviorSubject<Partial<PersonInterface>>(
+  public currentUser$ = new BehaviorSubject<PersonInterface>(
     new PersonFixture({
       firstName: 'Manon',
       name: 'Bakker',
@@ -19,8 +19,18 @@ export class MockProfileViewModel
     })
   );
 
-  public updateProfile(person: Partial<PersonInterface>): void {}
-  public saveAvatar(file: File): void {}
+  public messages$ = new BehaviorSubject<
+    UserReducer.State['lastUpdateMessage']
+  >({
+    message: "Look at me! I'm an update message.",
+    timeStamp: 1,
+    type: 'success'
+  });
+
+  public updateProfile(
+    userId: number,
+    changedProps: Partial<PersonInterface>
+  ): void {}
 }
 
 // image encoded with https://www.base64encode.org/

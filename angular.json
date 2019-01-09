@@ -27,12 +27,10 @@
           },
           "configurations": {
             "production": {
-              "fileReplacements": [
-                {
-                  "replace": "apps/polpo-classroom-web/src/environments/environment.ts",
-                  "with": "apps/polpo-classroom-web/src/environments/environment.prod.ts"
-                }
-              ],
+              "fileReplacements": [{
+                "replace": "apps/polpo-classroom-web/src/environments/environment.ts",
+                "with": "apps/polpo-classroom-web/src/environments/environment.prod.ts"
+              }],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -253,38 +251,6 @@
             "jestConfig": "libs/pages/messages/jest.config.js",
             "tsConfig": "libs/pages/messages/tsconfig.spec.json",
             "setupFile": "libs/pages/messages/src/test-setup.ts"
-          },
-          "configurations": {
-            "travis": {
-              "maxWorkers": 2
-            }
-          }
-        }
-      }
-    },
-    "pages-profile": {
-      "root": "libs/pages/profile",
-      "sourceRoot": "libs/pages/profile/src",
-      "projectType": "library",
-      "prefix": "campus",
-      "architect": {
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "libs/pages/profile/tsconfig.lib.json",
-              "libs/pages/profile/tsconfig.spec.json",
-              "libs/pages/profile/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/builders:jest",
-          "options": {
-            "jestConfig": "libs/pages/profile/jest.config.js",
-            "tsConfig": "libs/pages/profile/tsconfig.spec.json",
-            "setupFile": "libs/pages/profile/src/test-setup.ts"
           },
           "configurations": {
             "travis": {

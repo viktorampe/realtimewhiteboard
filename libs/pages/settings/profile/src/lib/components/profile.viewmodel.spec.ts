@@ -1,0 +1,98 @@
+import { TestBed } from '@angular/core/testing';
+import {
+  DalState,
+  getStoreModuleForFeatures,
+  PersonFixture,
+  PersonInterface,
+  UserActions,
+  UserReducer
+} from '@campus/dal';
+import { Store, StoreModule } from '@ngrx/store';
+import { hot } from 'jasmine-marbles';
+import { ProfileViewModel } from './profile.viewmodel';
+
+let profileViewModel: ProfileViewModel;
+let store: Store<DalState>;
+
+describe('ProfileViewModel', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        StoreModule.forRoot({}),
+        ...getStoreModuleForFeatures([UserReducer])
+      ],
+      providers: [Store]
+    });
+
+    profileViewModel = TestBed.get(ProfileViewModel);
+    store = TestBed.get(Store);
+  });
+
+  describe('creation', () => {
+    it('should be defined', () => {
+      expect(profileViewModel).toBeDefined();
+    });
+    it('should set the streams', () => {
+      expect(profileViewModel.currentUser$).toBeDefined();
+    });
+  });
+
+  describe('presentation streams', () => {
+    describe('currentUser', () => {
+      const mockUser = new PersonFixture();
+      beforeEach(() => {
+        store.dispatch(new UserActions.UserLoaded(mockUser));
+      });
+
+      it('should return the currentUser', () => {
+        expect(profileViewModel.currentUser$).toBeObservable(
+          hot('a', { a: mockUser })
+        );
+      });
+    });
+
+    describe('message', () => {
+      const mockMessage = {
+        message: "Look at me! I'm an update message.",
+        timeStamp: 1,
+        type: 'success'
+      } as UserReducer.State['lastUpdateMessage'];
+      beforeEach(() => {
+        store.dispatch(new UserActions.UserUpdateMessage(mockMessage));
+      });
+
+      it('should return the messages', () => {
+        expect(profileViewModel.messages$).toBeObservable(
+          hot('a', { a: mockMessage })
+        );
+      });
+    });
+  });
+
+  describe('update profile', () => {
+    const mockUser = new PersonFixture();
+    beforeEach(() => {
+      store.dispatch(new UserActions.UserLoaded(mockUser));
+    });
+
+    it('should dispatch a UpdateUser action', () => {
+      const mockChangesToProfile: Partial<PersonInterface> = {
+        firstName: 'a new value'
+      };
+      store.dispatch = jest.fn();
+
+      profileViewModel.updateProfile(mockUser.id, mockChangesToProfile);
+
+      expect(store.dispatch).toHaveBeenCalledWith(
+        new UserActions.UpdateUser({
+          userId: mockUser.id,
+          changedProps: mockChangesToProfile
+        })
+      );
+    });
+  });
+});

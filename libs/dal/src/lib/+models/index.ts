@@ -46,6 +46,7 @@ export * from './Method.interface';
 export * from './Notification.interface';
 export * from './PassportUserCredential.interface';
 export * from './PassportUserIdentity.interface';
+export * from './Permissions';
 export * from './Person.interface';
 export * from './PersonPreference.interface';
 export * from './PersonToggleFeature.interface';
