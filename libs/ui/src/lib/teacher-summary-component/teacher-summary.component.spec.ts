@@ -29,7 +29,8 @@ describe('TeacherSummaryComponent', () => {
     component.name = name;
     fixture.detectChanges();
     const text =
-      fixture.debugElement.children[0].children[1].nativeElement.textContent;
+      fixture.debugElement.children[0].children[1].children[0].nativeElement
+        .textContent;
     expect(text).toContain(name);
   });
 
@@ -38,7 +39,8 @@ describe('TeacherSummaryComponent', () => {
     component.code = code;
     fixture.detectChanges();
     const text =
-      fixture.debugElement.children[0].children[1].nativeElement.textContent;
+      fixture.debugElement.children[0].children[1].children[1].nativeElement
+        .textContent;
     expect(text).toContain(code);
   });
 
@@ -47,7 +49,8 @@ describe('TeacherSummaryComponent', () => {
     component.dateString = dateString;
     fixture.detectChanges();
     const text =
-      fixture.debugElement.children[0].children[1].nativeElement.textContent;
+      fixture.debugElement.children[0].children[1].children[1].nativeElement
+        .textContent;
     expect(text).toContain(dateString);
   });
 
@@ -56,7 +59,8 @@ describe('TeacherSummaryComponent', () => {
     component.learningAreasString = learningAreasString;
     fixture.detectChanges();
     const text =
-      fixture.debugElement.children[0].children[1].nativeElement.textContent;
+      fixture.debugElement.children[0].children[1].children[1].nativeElement
+        .textContent;
     expect(text).toContain(learningAreasString);
   });
 
