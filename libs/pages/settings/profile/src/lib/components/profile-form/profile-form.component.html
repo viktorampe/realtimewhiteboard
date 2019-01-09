@@ -87,14 +87,10 @@
 
   <div class="pages-settings-profile-form__actions">
     <campus-button
-      *ngIf="!profileForm.valid; else: enabled"
       type="submit"
-      disabled
+      [ngClass]="{ 'ui-button--disabled': !profileForm.valid }"
       >Opslaan</campus-button
     >
-    <ng-template #enabled>
-      <campus-button type="submit">Opslaan</campus-button>
-    </ng-template>
     <campus-button class="cancel" (click)="onReset()">Annuleren</campus-button>
   </div>
 </form>

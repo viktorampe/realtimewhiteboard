@@ -7,7 +7,7 @@ import {
   ValidatorFn,
   Validators
 } from '@angular/forms';
-import { PersonFixture, PersonInterface } from '@campus/dal';
+import { PersonInterface } from '@campus/dal';
 import { UniqueEmailValidator, UniqueUsernameValidator } from '@campus/shared';
 import { CrossFieldErrorMatcher } from '@campus/utils';
 
@@ -32,18 +32,14 @@ export class ProfileFormComponent implements OnInit {
   errorMatcher = new CrossFieldErrorMatcher();
 
   @Input() user: PersonInterface;
-  @Input() message: { type: string; message: string };
 
-  @Output() saveProfile = new EventEmitter<PersonInterface>();
+  @Output() saveProfile = new EventEmitter<Partial<PersonInterface>>();
 
   constructor(
     private fb: FormBuilder,
     private uniqueUsernameValidator: UniqueUsernameValidator,
     private uniqueEmailValidator: UniqueEmailValidator
-  ) {
-    this.user = new PersonFixture({ username: 'FooBar' }); //TODO: remove
-    this.message = { type: 'success', message: 'Top! Wijzigingen opgeslagen.' }; //TODO: remove
-  }
+  ) {}
 
   ngOnInit() {
     this.buildForm();
@@ -96,12 +92,8 @@ export class ProfileFormComponent implements OnInit {
     });
   }
 
-  clearMessage() {
-    this.message = null;
-  }
-
-  private mapFormData(): PersonInterface {
-    const updatedPerson: PersonInterface = {
+  private mapFormData(): Partial<PersonInterface> {
+    const updatedPerson: Partial<PersonInterface> = {
       name: this.profileForm.value['lastName'],
       firstName: this.profileForm.value['firstName'],
       username: this.profileForm.value['username'],

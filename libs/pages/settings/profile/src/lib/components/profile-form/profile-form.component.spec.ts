@@ -8,6 +8,7 @@ import { MatFormFieldModule, MatInputModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PersonFixture, PersonInterface } from '@campus/dal';
 import { UniqueEmailValidator, UniqueUsernameValidator } from '@campus/shared';
+import { UiModule } from '@campus/ui';
 import { of } from 'rxjs';
 import { ProfileFormComponent } from './profile-form.component';
 
@@ -30,7 +31,8 @@ describe('ProfileFormComponent', () => {
         ReactiveFormsModule,
         BrowserAnimationsModule,
         MatFormFieldModule,
-        MatInputModule
+        MatInputModule,
+        UiModule
       ],
       providers: [
         {
@@ -80,39 +82,65 @@ describe('ProfileFormComponent', () => {
         verifyPassword: ''
       });
     });
+    describe('form submission', () => {
+      it('should emit a partial user', () => {
+        // fill in the form
+        component.profileForm.setValue(mockFormData);
 
-    it('should emit a user when submitting the form', () => {
-      component.profileForm.setValue(mockFormData);
-      let updatedPerson: PersonInterface;
-      component.saveProfile.subscribe(value => (updatedPerson = value));
-      component.onSubmit();
-      expect(updatedPerson).toEqual({
-        name: mockFormData.lastName,
-        firstName: mockFormData.firstName,
-        username: mockFormData.username,
-        email: mockFormData.email,
-        password: mockFormData.password
+        // listen for the form output
+        let updatedPerson: PersonInterface;
+        component.saveProfile.subscribe(value => (updatedPerson = value));
+
+        // submit the form
+        component.onSubmit();
+
+        expect(updatedPerson).toEqual({
+          name: mockFormData.lastName,
+          firstName: mockFormData.firstName,
+          username: mockFormData.username,
+          email: mockFormData.email,
+          password: mockFormData.password
+        });
       });
-    });
 
-    it('should reset the form', () => {
-      component.profileForm.setValue(mockFormData);
-      component.onReset();
-      expect(component.profileForm.value).toEqual({
-        lastName: component.user.name,
-        firstName: component.user.firstName,
-        username: component.user.username,
-        email: component.user.email,
-        password: '',
-        verifyPassword: ''
+      it('should not include a password property when not filled in', () => {
+        const mockFormDataWithoutPassword = {
+          ...mockFormData,
+          ...{ password: '' }
+        };
+        // fill in the form
+        component.profileForm.setValue(mockFormDataWithoutPassword);
+
+        // listen for the form output
+        let updatedPerson: PersonInterface;
+        component.saveProfile.subscribe(value => (updatedPerson = value));
+
+        // submit the form
+        component.onSubmit();
+
+        expect(updatedPerson).toEqual({
+          name: mockFormDataWithoutPassword.lastName,
+          firstName: mockFormDataWithoutPassword.firstName,
+          username: mockFormDataWithoutPassword.username,
+          email: mockFormDataWithoutPassword.email
+        });
+      });
+
+      it('should reset the form', () => {
+        component.profileForm.setValue(mockFormData);
+        component.onReset();
+        expect(component.profileForm.value).toEqual({
+          lastName: component.user.name,
+          firstName: component.user.firstName,
+          username: component.user.username,
+          email: component.user.email,
+          password: '',
+          verifyPassword: ''
+        });
       });
     });
 
     describe('form validation', () => {
-      it('should be valid by default', () => {
-        expect(component.profileForm.valid).toBe(true);
-      });
-
       it('should check lastName field validity', () => {
         setControlValue('lastName', '');
         checkControlValidity('lastName', 'required');
