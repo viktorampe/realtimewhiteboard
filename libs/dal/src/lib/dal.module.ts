@@ -16,6 +16,8 @@ import { AlertReducer, AlertsEffects } from './+state/alert';
 import { BundleReducer, BundlesEffects } from './+state/bundle';
 import { ContentStatusReducer } from './+state/content-status';
 import { ContentStatusesEffects } from './+state/content-status/content-status.effects';
+import { CredentialReducer } from './+state/credential';
+import { CredentialEffects } from './+state/credential/credential.effects';
 import {
   CurrentExerciseEffects,
   CurrentExerciseReducer
@@ -88,6 +90,10 @@ import { LEARNINGAREA_SERVICE_TOKEN } from './learning-area/learning-area.servic
 import { AuthService } from './persons/auth-service';
 import { AUTH_SERVICE_TOKEN } from './persons/auth-service.interface';
 import {
+  CredentialService,
+  CREDENTIAL_SERVICE_TOKEN
+} from './persons/credentials.service';
+import {
   LinkedPersonService,
   LINKED_PERSON_SERVICE_TOKEN
 } from './persons/linked-persons.service';
@@ -133,7 +139,8 @@ interface DalOptions {
       ResultReducer,
       CurrentExerciseReducer,
       LinkedPersonReducer,
-      PersonReducer
+      PersonReducer,
+      CredentialReducer
     ]),
     EffectsModule.forFeature([
       BundlesEffects,
@@ -154,7 +161,8 @@ interface DalOptions {
       ResultEffects,
       CurrentExerciseEffects,
       LinkedPersonEffects,
-      PersonEffects
+      PersonEffects,
+      CredentialEffects
     ])
   ],
   providers: [
@@ -194,7 +202,8 @@ interface DalOptions {
       useClass: TaskEduContentService
     },
     { provide: CONTENT_REQUEST_SERVICE_TOKEN, useClass: ContentRequestService },
-    { provide: RESULTS_SERVICE_TOKEN, useClass: ResultsService }
+    { provide: RESULTS_SERVICE_TOKEN, useClass: ResultsService },
+    { provide: CREDENTIAL_SERVICE_TOKEN, useClass: CredentialService }
   ]
 })
 export class DalModule {
