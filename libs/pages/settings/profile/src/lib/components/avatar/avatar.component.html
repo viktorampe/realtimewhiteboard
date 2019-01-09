@@ -19,6 +19,7 @@
              accept="image/*"
              (change)="fileChangeListener($event)">
     </form>
+
     <div [class.hide]="!imgData.image">
       <img class="pages-settings-profile-avatar__result"
            [src]="imgData.image"
@@ -27,5 +28,11 @@
       <img-cropper #cropper
                    [image]="imgData"
                    [settings]="cropperSettings"></img-cropper>
+
+      <div>
+        <campus-button (click)="saveAvatar()">Opslaan</campus-button>
+        <campus-button class="cancel"
+                       (click)="resetAvatar()">Annuleren</campus-button>
+      </div>
     </div>
   </div>

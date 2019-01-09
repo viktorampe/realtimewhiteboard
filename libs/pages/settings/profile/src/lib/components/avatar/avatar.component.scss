@@ -12,8 +12,12 @@
       top: 20px;
     }
   }
-}
 
-.hide {
-  display: none;
+  img-cropper {
+    margin-left: 20px;
+  }
+
+  .hide {
+    display: none !important;
+  }
 }

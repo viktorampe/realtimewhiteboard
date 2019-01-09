@@ -1,11 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { PersonFixture, PersonInterface } from '@campus/dal';
+import { PersonInterface } from '@campus/dal';
 import {
   CropperDrawSettings,
   CropperSettings,
   ImageCropperComponent
 } from 'ngx-img-cropper';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
+import { ProfileViewModel } from '../profile.viewmodel';
 
 @Component({
   selector: 'campus-avatar',
@@ -13,39 +15,16 @@ import { BehaviorSubject, Observable } from 'rxjs';
   styleUrls: ['./avatar.component.scss']
 })
 export class AvatarComponent implements OnInit {
+  currentUser$: Observable<PersonInterface>;
   cropperSettings: CropperSettings;
   imgData: any;
-
   @ViewChild('cropper') cropper: ImageCropperComponent;
 
-  avatar: string = '';
-  currentUser$: Observable<PersonInterface> = new BehaviorSubject(
-    new PersonFixture({ avatar: this.avatar })
-  );
-
-  constructor() {}
+  constructor(private profileViewModel: ProfileViewModel) {}
 
   ngOnInit() {
-    this.cropperSettings = new CropperSettings({
-      canvasWidth: 200,
-      canvasHeight: 200,
-      width: 200,
-      height: 200,
-      croppedWidth: 200,
-      croppedHeight: 200,
-      touchRadius: 15,
-      centerTouchRadius: 20,
-      noFileInput: true,
-      cropperDrawSettings: <CropperDrawSettings>{
-        strokeWidth: 1
-      },
-      // allowedFilesRegex: /.(jpe?g|png|gif)$/i,
-      fileType: 'image/jpeg',
-      compressRatio: 0.7,
-      markerSizeMultiplier: 0.4,
-      rounded: true
-    });
-    this.imgData = {};
+    this.loadOutputStreams();
+    this.initCropper();
   }
 
   fileChangeListener(event: Event) {
@@ -66,20 +45,55 @@ export class AvatarComponent implements OnInit {
     event.preventDefault();
   }
 
+  saveAvatar(): void {
+    this.currentUser$.pipe(take(1)).subscribe(user => {
+      this.profileViewModel.updateProfile(user.id, {
+        avatar: this.imgData.image
+      });
+    });
+  }
+
+  resetAvatar(): void {
+    delete this.imgData.image;
+  }
+
+  private loadOutputStreams(): void {
+    this.currentUser$ = this.profileViewModel.currentUser$;
+  }
+
+  private initCropper() {
+    this.imgData = {};
+    this.cropperSettings = new CropperSettings({
+      canvasWidth: 300,
+      canvasHeight: 200,
+      width: 200,
+      height: 200,
+      croppedWidth: 200,
+      croppedHeight: 200,
+      touchRadius: 15,
+      centerTouchRadius: 20,
+      noFileInput: true,
+      cropperDrawSettings: <CropperDrawSettings>{
+        strokeWidth: 1
+      },
+      // allowedFilesRegex: /\.(jpe?g|png|gif)$/i,
+      fileType: 'image/jpeg',
+      compressRatio: 0.7,
+      markerSizeMultiplier: 0.4,
+      rounded: true
+    });
+  }
+
   private loadImage(file: File) {
     if (!file) return;
-
-    if (!this.cropperSettings.allowedFilesRegex.test(file.name)) {
-      return console.log('not an image');
-    }
+    if (!this.cropperSettings.allowedFilesRegex.test(file.name)) return;
 
     const image: HTMLImageElement = new Image();
     const myReader: FileReader = new FileReader();
-    myReader.onloadend = (loadEvent: any) => {
-      image.src = loadEvent.target.result;
+    myReader.onloadend = (loadEvent: ProgressEvent) => {
+      image.src = (loadEvent.target as FileReader).result as string;
       this.cropper.setImage(image);
     };
-
     myReader.readAsDataURL(file);
   }
 }
