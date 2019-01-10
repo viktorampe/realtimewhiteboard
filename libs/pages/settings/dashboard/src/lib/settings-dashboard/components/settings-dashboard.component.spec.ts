@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatListModule } from '@angular/material';
-import { RouterModule } from '@angular/router';
+import { By } from '@angular/platform-browser';
+import { RouterTestingModule } from '@angular/router/testing';
 import {
   ENVIRONMENT_ICON_MAPPING_TOKEN,
   PermissionServiceInterface,
@@ -26,7 +27,7 @@ describe('SettingsDashboardComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [SettingsDashboardComponent],
-      imports: [UiModule, MatListModule, RouterModule, SharedModule],
+      imports: [UiModule, MatListModule, RouterTestingModule, SharedModule],
       providers: [
         {
           provide: ENVIRONMENT_ICON_MAPPING_TOKEN,
@@ -34,7 +35,7 @@ describe('SettingsDashboardComponent', () => {
         },
         {
           provide: PERMISSION_SERVICE_TOKEN,
-          useValue: MockPermissionService
+          useClass: MockPermissionService
         }
       ]
     }).compileComponents();
@@ -51,15 +52,12 @@ describe('SettingsDashboardComponent', () => {
   });
 
   it('should display correct number of links', () => {
-    const navlist =
-      fixture.debugElement.children[0].children[1].children[0].children[0];
-    expect(navlist.children.length).toBe(5);
+    const buttons = fixture.debugElement.queryAll(By.css('campus-button'));
+    expect(buttons.length).toBe(5);
   });
 
   it('navitem should be populated with the correct name', () => {
-    const navlist =
-      fixture.debugElement.children[0].children[1].children[0].children[0];
-    const navItem = navlist.children[0];
-    expect(navItem.nativeElement.textContent).toContain('Mijn gegevens');
+    const buttons = fixture.debugElement.queryAll(By.css('campus-button'));
+    expect(buttons[0].nativeElement.textContent).toContain('Mijn gegevens');
   });
 });
