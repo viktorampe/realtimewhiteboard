@@ -1,16 +1,23 @@
 import { TestBed } from '@angular/core/testing';
+import { PassportUserCredentialInterface } from '@campus/dal';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
-import { hot } from '@nrwl/nx/testing';
+import { cold, hot } from '@nrwl/nx/testing';
+import { undo } from 'ngrx-undo';
 import { Observable, of } from 'rxjs';
 import { CredentialReducer } from '.';
-import { CREDENTIAL_SERVICE_TOKEN } from '../../persons';
+import { DalActions } from '..';
+import {
+  CredentialServiceInterface,
+  CREDENTIAL_SERVICE_TOKEN
+} from '../../persons';
 import {
   CredentialsLoaded,
   CredentialsLoadError,
-  LoadCredentials
+  LoadCredentials,
+  UnlinkCredential
 } from './credential.actions';
 import { CredentialEffects } from './credential.effects';
 
@@ -174,6 +181,61 @@ describe('CredentialEffects', () => {
           loadErrorAction
         );
       });
+    });
+  });
+
+  describe('unlinkCredential$', () => {
+    const mockCredential = { id: 1 } as PassportUserCredentialInterface;
+    const unlinkAction = new UnlinkCredential({ id: mockCredential.id });
+    let credentialService: CredentialServiceInterface;
+
+    beforeEach(() => {
+      usedState = CredentialReducer.initialState;
+
+      credentialService = TestBed.get(CREDENTIAL_SERVICE_TOKEN);
+    });
+
+    it('should call the credentialService', () => {
+      credentialService.unlinkCredential = jest.fn();
+
+      actions = hot('-a-|', { a: unlinkAction });
+
+      expect(credentialService.unlinkCredential).toHaveBeenCalled();
+      expect(credentialService.unlinkCredential).toHaveBeenCalledWith(
+        mockCredential
+      );
+    });
+
+    it('should dispatch an ActionSuccessful', () => {
+      const mockResponse$ = cold('-a-|', { a: true });
+      credentialService.unlinkCredential = jest
+        .fn()
+        .mockReturnValue(mockResponse$);
+
+      actions = hot('-a-|', { a: unlinkAction });
+
+      const expected = new DalActions.ActionSuccessful({
+        successfulAction: 'Credential unlinked.'
+      });
+
+      expect(effects.unlinkCredential$).toBeObservable(
+        cold('--a-|', { a: expected })
+      );
+    });
+
+    it('should dispatch an undo action on a Api failure', () => {
+      const mockResponse$ = hot('-#|', 'something went wrong');
+      credentialService.unlinkCredential = jest
+        .fn()
+        .mockReturnValue(mockResponse$);
+
+      actions = hot('-a-|', { a: unlinkAction });
+
+      const expected = undo(unlinkAction);
+
+      expect(effects.unlinkCredential$).toBeObservable(
+        cold('-a-|', { a: expected })
+      );
     });
   });
 });

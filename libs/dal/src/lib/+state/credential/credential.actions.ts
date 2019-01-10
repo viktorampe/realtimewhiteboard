@@ -14,7 +14,8 @@ export enum CredentialsActionTypes {
   UpdateCredentials = '[Credentials] Update Credentials',
   DeleteCredential = '[Credentials] Delete Credential',
   DeleteCredentials = '[Credentials] Delete Credentials',
-  ClearCredentials = '[Credentials] Clear Credentials'
+  ClearCredentials = '[Credentials] Clear Credentials',
+  UnlinkCredential = '[Credentials] Unlink Credential'
 }
 
 export class LoadCredentials implements Action {
@@ -102,6 +103,12 @@ export class ClearCredentials implements Action {
   readonly type = CredentialsActionTypes.ClearCredentials;
 }
 
+export class UnlinkCredential implements Action {
+  readonly type = CredentialsActionTypes.UnlinkCredential;
+
+  constructor(public payload: { id: number }) {}
+}
+
 export type CredentialsActions =
   | LoadCredentials
   | CredentialsLoaded
@@ -114,4 +121,5 @@ export type CredentialsActions =
   | UpdateCredentials
   | DeleteCredential
   | DeleteCredentials
-  | ClearCredentials;
+  | ClearCredentials
+  | UnlinkCredential;

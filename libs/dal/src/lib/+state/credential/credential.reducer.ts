@@ -74,6 +74,11 @@ export function reducer(
       return adapter.removeAll(state);
     }
 
+    // same as CredentialsActionTypes.DeleteCredential
+    case CredentialsActionTypes.UnlinkCredential: {
+      return adapter.removeOne(action.payload.id, state);
+    }
+
     default: {
       return state;
     }

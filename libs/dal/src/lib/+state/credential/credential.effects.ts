@@ -1,8 +1,9 @@
 import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
-import { map } from 'rxjs/operators';
-import { DalState } from '..';
+import { undo } from 'ngrx-undo';
+import { map, mapTo } from 'rxjs/operators';
+import { DalActions, DalState } from '..';
 import {
   CredentialServiceInterface,
   CREDENTIAL_SERVICE_TOKEN
@@ -11,7 +12,8 @@ import {
   CredentialsActionTypes,
   CredentialsLoaded,
   CredentialsLoadError,
-  LoadCredentials
+  LoadCredentials,
+  UnlinkCredential
 } from './credential.actions';
 
 @Injectable()
@@ -28,6 +30,25 @@ export class CredentialEffects {
       },
       onError: (action: LoadCredentials, error) => {
         return new CredentialsLoadError(error);
+      }
+    }
+  );
+
+  @Effect()
+  unlinkCredential$ = this.dataPersistence.optimisticUpdate(
+    CredentialsActionTypes.UnlinkCredential,
+    {
+      run: (action: UnlinkCredential, state: DalState) => {
+        return this.credentialService.unlinkCredential(action.payload.id).pipe(
+          mapTo(
+            new DalActions.ActionSuccessful({
+              successfulAction: 'Credential unlinked.'
+            })
+          )
+        );
+      },
+      undoAction: (action: UnlinkCredential, error) => {
+        return undo(action);
       }
     }
   );
