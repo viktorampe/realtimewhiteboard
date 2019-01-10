@@ -1,5 +1,7 @@
 import { async, TestBed } from '@angular/core/testing';
 import {
+  CredentialActions,
+  CredentialReducer,
   DalState,
   LearningAreaFixture,
   PersonFixture,
@@ -41,6 +43,11 @@ describe('AppViewModel', () => {
             NAME: UiReducer.NAME,
             reducer: UiReducer.reducer,
             initialState: UiReducer.initialState
+          },
+          {
+            NAME: CredentialReducer.NAME,
+            reducer: CredentialReducer.reducer,
+            initialState: CredentialReducer.initialState
           }
         ])
       ],
@@ -83,6 +90,20 @@ describe('AppViewModel', () => {
 
   describe('intermediate streams', () => {
     it('should call the NavItemService', () => {
+      const mockCredentials = [
+        {
+          id: 1,
+          profile: { platform: 'foo.smartschool.be' },
+          provider: 'smartschool'
+        }
+      ]; //TODO use fixture, created in credential service branch
+
+      store.dispatch(
+        new CredentialActions.CredentialsLoaded({
+          credentials: mockCredentials
+        })
+      );
+
       const navItemService = TestBed.get(NavItemService);
 
       // current value hardcoded in viewmodel
@@ -92,14 +113,6 @@ describe('AppViewModel', () => {
           learningAreaId: 1,
           learningArea: new LearningAreaFixture({ icon: 'wiskunde' }),
           created: new Date(2018, 11 - 1, 30)
-        }
-      ];
-
-      // current value hardcoded in viewmodel
-      const mockCredentials = [
-        {
-          profile: { platform: 'foo.smartschool.be' },
-          provider: 'smartschool'
         }
       ];
 
