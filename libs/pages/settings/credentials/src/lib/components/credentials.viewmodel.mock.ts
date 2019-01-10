@@ -1,7 +1,12 @@
 import { Injectable } from '@angular/core';
-import { PersonFixture, PersonInterface } from '@campus/dal';
+import {
+  PassportUserCredentialInterface,
+  PersonFixture,
+  PersonInterface
+} from '@campus/dal';
 import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject } from 'rxjs';
+import { Url } from 'url';
 import { CredentialsViewModel } from './credentials.viewmodel';
 
 @Injectable({
@@ -17,4 +22,21 @@ export class MockCredentialsViewModel
       email: 'manon.bakker@diekeure.be'
     })
   );
+
+  public credentials$ = new BehaviorSubject<PassportUserCredentialInterface[]>([
+    {
+      id: 1,
+      profile: { platform: 'foo.smartschool.be' },
+      provider: 'smartschool'
+    }
+  ]); //TODO use fixture, created in credential service branch
+
+  public singleSignOnLinks$ = new BehaviorSubject<Url[]>([]);
+
+  public updateProfile(
+    userId: number,
+    changedProps: Partial<PersonInterface>
+  ): void {}
+
+  public unlinkCredential(userId: number, credentialId: number): void {}
 }
