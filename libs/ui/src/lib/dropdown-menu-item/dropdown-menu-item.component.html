@@ -1,39 +1,29 @@
 <div class="ui-dropdown-menu-item">
-  <div *ngIf="header" class="ui-dropdown-menu-item__header">{{ header }}</div>
-  <a
-    *ngIf="internalLink"
-    routerLink="internalLink"
-    class="ui-dropdown-menu-item__body"
-  >
-    <mat-icon
-      *ngIf="icon && !image"
-      [svgIcon]="icon"
-      class="ui-dropdown-menu-item__icon"
-    ></mat-icon>
-    <img
-      *ngIf="image && !icon"
-      src="{{image}}"
-      alt="{{imageAltText}}"
-      class="ui-dropdown-menu-item__image"
-    />
-    <div
-      class="
-           ui-dropdown-menu-item__description"
-      >{{ description }}
+  <div *ngIf="header"
+       class="ui-dropdown-menu-item__header">{{ header }}</div>
+  <a *ngIf="internalLink"
+     [routerLink]="internalLink"
+     class="ui-dropdown-menu-item__body">
+    <mat-icon *ngIf="icon && !image"
+              [svgIcon]="icon"
+              class="ui-dropdown-menu-item__icon"></mat-icon>
+    <img *ngIf="image && !icon"
+         src="{{image}}"
+         alt="{{imageAltText}}"
+         class="ui-dropdown-menu-item__image" />
+    <div class="
+           ui-dropdown-menu-item__description">{{ description }}
     </div>
   </a>
-  <a
-    *ngIf="externalLink"
-    href="{{externalLink}}"
-    class="ui-dropdown-menu-item__body"
-  >
-    <mat-icon *ngIf="icon && !image" [svgIcon]="icon"></mat-icon>
-    <img
-      *ngIf="image && !icon"
-      src="{{image}}"
-      alt="{{imageAltText}}"
-      class="ui-dropdown-menu-item__image"
-    />
+  <a *ngIf="externalLink"
+     href="{{externalLink}}"
+     class="ui-dropdown-menu-item__body">
+    <mat-icon *ngIf="icon && !image"
+              [svgIcon]="icon"></mat-icon>
+    <img *ngIf="image && !icon"
+         src="{{image}}"
+         alt="{{imageAltText}}"
+         class="ui-dropdown-menu-item__image" />
     <div class="ui-dropdown-menu-item__description">{{ description }}</div>
   </a>
 </div>
