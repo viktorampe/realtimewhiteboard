@@ -28,9 +28,10 @@ describe('CredentialsService', () => {
     const mockFixture = new CredentialFixture();
 
     const credentialService = TestBed.get(CREDENTIAL_SERVICE_TOKEN);
-    const mockresponse$ = cold('-a-|', { a: [mockFixture, mockFixture] });
 
-    credentialService.getAllForUser = jest.fn().mockReturnValue(mockresponse$);
+    const mockresponse$ = cold('-a-|', { a: [mockFixture, mockFixture] });
+    const personApi = TestBed.get(PersonApi);
+    personApi.getCredentials = jest.fn().mockReturnValue(mockresponse$);
 
     expect(credentialService.getAllForUser(1)).toBeObservable(
       cold('-a-|', {
