@@ -1,0 +1,39 @@
+.ui-person-summary {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+
+  &__images {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    &__picture {
+      width: 50px;
+      height: 50px;
+    }
+
+    &__connection-type-icon {
+      width: 20px;
+      height: 25;
+      margin-left: 5px;
+    }
+  }
+
+  &__text {
+    margin-left: 10px;
+    width: 350px;
+
+    &__person-name {
+      color: black;
+      font-size: 15px;
+      font-family: 'Lato', sans-serif;
+    }
+
+    &__person-data {
+      color: darkgray;
+      font-size: 12px;
+      font-family: 'Helvetica', 'Arial', 'Open Sans', sans-serif;
+    }
+  }
+}

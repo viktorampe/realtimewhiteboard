@@ -1,0 +1,18 @@
+<div class="ui-person-summary">
+  <div class="ui-person-summary__images">
+    <img class="ui-person-summary__images__picture" src="{{ imageUrl }}" />
+    <mat-icon
+      class="ui-person-summary__images__connection-type-icon"
+      *ngIf="connectionTypeIcon"
+      [svgIcon]="connectionTypeIcon"
+    >
+    </mat-icon>
+  </div>
+  <div class="ui-person-summary__text">
+    <div class="ui-person-summary__text__person-name">{{ name }}</div>
+    <div class="ui-person-summary__text__person-data">
+      <ng-content select="[description]"></ng-content>
+    </div>
+  </div>
+  <ng-content select="[buttons]"></ng-content>
+</div>

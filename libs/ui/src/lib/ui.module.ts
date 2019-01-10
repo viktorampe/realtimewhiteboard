@@ -45,6 +45,7 @@ import { NotificationDropdownItemComponent } from './notification-dropdown-item/
 import { PageHeaderComponent } from './page-header/page-header.component';
 import { PersonBadgeComponent } from './person-badge/person-badge.component';
 import { PersonInitialsPipe } from './person-badge/pipes/person-initials.pipe';
+import { PersonSummaryComponent } from './person-summary-component/person-summary.component';
 import { ShellBodyDirective } from './shell/directives/shell-body.directive';
 import { ShellLeftDirective } from './shell/directives/shell-left.directive';
 import { ShellLogoDirective } from './shell/directives/shell-logo.directive';
@@ -54,7 +55,6 @@ import { SideSheetBodyDirective } from './side-sheet/directives/side-sheet-body.
 import { SideSheetHeaderDirective } from './side-sheet/directives/side-sheet-header.directive';
 import { SideSheetPageDirective } from './side-sheet/directives/side-sheet-page.directive';
 import { SideSheetComponent } from './side-sheet/side-sheet.component';
-import { TeacherSummaryComponent } from './teacher-summary-component/teacher-summary.component';
 import { TreeNavComponent } from './tree-nav/tree-nav.component';
 import { HideDesktopDirective } from './utils/directives/hide-desktop.directive';
 import { HideMobileDirective } from './utils/directives/hide-mobile.directive';
@@ -130,7 +130,7 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     HumanDateTimePipe,
     RemovePrefixStringPipe,
     LargeDirective,
-    TeacherSummaryComponent
+    PersonSummaryComponent
   ],
   exports: [
     FilterTextInputComponent,
@@ -175,7 +175,7 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     HumanDateTimePipe,
     RemovePrefixStringPipe,
     LargeDirective,
-    TeacherSummaryComponent
+    PersonSummaryComponent
   ]
 })
 export class UiModule {}
