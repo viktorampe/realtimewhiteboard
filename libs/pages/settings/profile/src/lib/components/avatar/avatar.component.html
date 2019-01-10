@@ -1,38 +1,54 @@
-<div class="pages-settings-profile-avatar"
-     *ngIf="currentUser$ | async as user">
-
-  <campus-page-header [title]="'Profielfoto aanpassen'"
-                      [subtitle]="user.displayName"
-                      [iconClass]="'account'">
+<div
+  class="pages-settings-profile-avatar"
+  *ngIf="(currentUser$ | async) as user"
+>
+  <campus-page-header
+    [title]="'Profielfoto aanpassen'"
+    [subtitle]="user.displayName"
+    [iconClass]="'account'"
+  >
   </campus-page-header>
 
   <div>
-    <form class="file-upload"
-          [class.hide]="imgData.image"
-          (drop)="fileDropListener($event)"
-          (dragover)="dragOver($event)">
-      <img *ngIf="user.avatar"
-           [src]="user.avatar" />
-      <div class="text">Selecteer een bestand of sleep het hierheen</div>
-      <input id="custom-input"
-             type="file"
-             accept="image/*"
-             (change)="fileChangeListener($event)">
+    <form
+      class="file-upload"
+      [class.hide]="imgData.image"
+      [class.hover]="uploadHoverState"
+      (click)="fileInput.click()"
+      (drop)="dropFileListener($event)"
+      (dragover)="dragOver($event)"
+      (dragleave)="dragOver($event, false)"
+    >
+      <img *ngIf="user.avatar" [src]="user.avatar" />
+      <div class="text">Selecteer een afbeelding of sleep het hierheen</div>
+      <input
+        #fileInput
+        type="file"
+        accept="image/*"
+        (click)="$event.stopPropagation()"
+        (change)="selectFileListener($event)"
+      />
     </form>
 
     <div [class.hide]="!imgData.image">
-      <img class="pages-settings-profile-avatar__result"
-           [src]="imgData.image"
-           [width]="cropperSettings.croppedWidth"
-           [height]="cropperSettings.croppedHeight" />
-      <img-cropper #cropper
-                   [image]="imgData"
-                   [settings]="cropperSettings"></img-cropper>
+      <img
+        class="pages-settings-profile-avatar__result"
+        [src]="imgData.image"
+        [width]="cropperSettings.croppedWidth"
+        [height]="cropperSettings.croppedHeight"
+      />
+      <img-cropper
+        #cropper
+        [image]="imgData"
+        [settings]="cropperSettings"
+      ></img-cropper>
 
       <div>
-        <campus-button (click)="saveAvatar()">Opslaan</campus-button>
-        <campus-button class="cancel"
-                       (click)="resetAvatar()">Annuleren</campus-button>
+        <campus-button primary (click)="saveAvatar()">Opslaan</campus-button>
+        <campus-button (click)="resetAvatar()"
+          >Andere afbeelding kiezen</campus-button
+        >
       </div>
     </div>
   </div>
+</div>

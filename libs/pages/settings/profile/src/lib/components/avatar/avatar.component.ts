@@ -6,7 +6,6 @@ import {
   ImageCropperComponent
 } from 'ngx-img-cropper';
 import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
 import { ProfileViewModel } from '../profile.viewmodel';
 
 @Component({
@@ -18,6 +17,7 @@ export class AvatarComponent implements OnInit {
   currentUser$: Observable<PersonInterface>;
   cropperSettings: CropperSettings;
   imgData: any;
+  uploadHoverState: boolean;
   @ViewChild('cropper') cropper: ImageCropperComponent;
 
   constructor(private profileViewModel: ProfileViewModel) {}
@@ -27,30 +27,29 @@ export class AvatarComponent implements OnInit {
     this.initCropper();
   }
 
-  fileChangeListener(event: Event) {
-    const file: File = (event.target as HTMLInputElement).files[0];
+  selectFileListener(event: Event) {
+    const el = event.target as HTMLInputElement;
+    const file: File = el.files[0];
     this.loadImage(file);
+
+    el.value = ''; // clear selected file from input
   }
 
-  fileDropListener(event: DragEvent) {
-    event.stopPropagation();
-    event.preventDefault();
+  dropFileListener(event: DragEvent) {
+    this.dragOver(event, false);
 
     const file: File = event.dataTransfer.files[0];
     this.loadImage(file);
   }
 
-  dragOver(event: DragEvent) {
+  dragOver(event: DragEvent, hover: boolean = true) {
     event.stopPropagation();
     event.preventDefault();
+    this.uploadHoverState = hover;
   }
 
   saveAvatar(): void {
-    this.currentUser$.pipe(take(1)).subscribe(user => {
-      this.profileViewModel.updateProfile(user.id, {
-        avatar: this.imgData.image
-      });
-    });
+    this.profileViewModel.updateProfile({ avatar: this.imgData.image });
   }
 
   resetAvatar(): void {

@@ -1,18 +1,28 @@
 @mixin pages-settings-profile-avatar-theme() {
+  $pages-settings-profile-avatar__upload-bordercolor: $ui-primary-font-color-2;
+  $pages-settings-profile-avatar__upload-bordercolor--hover: $ui-primary-font-color;
+  $pages-settings-profile-avatar__avatar-borderradius: 50%;
+
   .pages-settings-profile-avatar {
     .file-upload {
       height: 200px;
       padding: 60px;
-      border: 2px dashed #ccc;
+      border: 2px dashed $pages-settings-profile-avatar__upload-bordercolor;
+
+      &:hover,
+      &.hover {
+        border-color: $pages-settings-profile-avatar__upload-bordercolor--hover;
+      }
 
       img {
         height: 160px;
-        border-radius: 50%;
+        border: 2px solid $pages-settings-profile-avatar__upload-bordercolor;
+        border-radius: $pages-settings-profile-avatar__avatar-borderradius;
       }
     }
 
     &__result {
-      border-radius: 50%;
+      border-radius: $pages-settings-profile-avatar__avatar-borderradius;
     }
   }
 }

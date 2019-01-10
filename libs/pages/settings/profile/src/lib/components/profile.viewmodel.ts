@@ -1,5 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {
+  AuthServiceInterface,
+  AUTH_SERVICE_TOKEN,
   DalState,
   PersonInterface,
   UserActions,
@@ -16,15 +18,20 @@ export class ProfileViewModel {
   public currentUser$: Observable<PersonInterface>;
   public messages$: Observable<UserReducer.State['lastUpdateMessage']>;
 
-  constructor(private store: Store<DalState>) {
+  constructor(
+    private store: Store<DalState>,
+    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
+  ) {
     this.setPresentationStreams();
   }
 
-  public updateProfile(
-    userId: number,
-    changedProps: Partial<PersonInterface>
-  ): void {
-    this.store.dispatch(new UserActions.UpdateUser({ userId, changedProps }));
+  public updateProfile(changedProps: Partial<PersonInterface>): void {
+    this.store.dispatch(
+      new UserActions.UpdateUser({
+        userId: this.authService.userId,
+        changedProps
+      })
+    );
   }
 
   private setPresentationStreams(): void {

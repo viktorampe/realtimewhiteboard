@@ -6,6 +6,12 @@
     text-align: center;
     position: relative;
 
+    // disable pointer events on child elements to prevent flicker
+    // because of triggering dragleave when hovering children
+    &.hover * {
+      pointer-events: none;
+    }
+
     img {
       position: absolute;
       left: 20px;
