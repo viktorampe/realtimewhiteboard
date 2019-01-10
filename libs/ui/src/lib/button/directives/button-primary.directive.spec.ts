@@ -22,7 +22,7 @@ export class TestContainerComponent {}
 })
 export class TestModule {}
 
-describe('SecondaryDirective', () => {
+describe('PrimaryDirective', () => {
   let directive: PrimaryDirective;
   let component: ButtonComponent;
   let testContainerFixture: ComponentFixture<TestContainerComponent>;
