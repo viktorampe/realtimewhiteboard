@@ -1,4 +1,7 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { AUTH_SERVICE_TOKEN } from '@campus/dal';
+import { StoreModule } from '@ngrx/store';
 import { AvatarComponent } from './avatar.component';
 
 describe('AvatarComponent', () => {
@@ -7,7 +10,15 @@ describe('AvatarComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [AvatarComponent]
+      imports: [StoreModule.forRoot({})],
+      declarations: [AvatarComponent],
+      schemas: [NO_ERRORS_SCHEMA],
+      providers: [
+        {
+          provide: AUTH_SERVICE_TOKEN,
+          useValue: { userId: 1 }
+        }
+      ]
     }).compileComponents();
   }));
 

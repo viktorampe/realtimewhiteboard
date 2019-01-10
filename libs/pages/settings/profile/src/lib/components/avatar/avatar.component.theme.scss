@@ -22,7 +22,35 @@
     }
 
     &__result {
+      float: left;
+      overflow: hidden;
       border-radius: $pages-settings-profile-avatar__avatar-borderradius;
+    }
+
+    // override default styles from image-cropper to make image fit height instead of width
+    image-cropper {
+      display: block;
+      margin-left: 220px;
+      height: 200px;
+      width: auto;
+      padding: 0;
+
+      > div {
+        height: 100%;
+
+        img.source-image {
+          height: 100%;
+        }
+      }
+    }
+
+    .warning {
+      display: inline-block;
+      clear: both;
+      padding: 2px 5px;
+      margin-top: 5px;
+      color: $ui-warning-font-color;
+      background-color: $ui-warning-bg-color;
     }
   }
 }

@@ -2,14 +2,14 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { UiModule } from '@campus/ui';
-import { ImageCropperComponent } from 'ngx-img-cropper';
+import { ImageCropperModule } from 'ngx-image-cropper';
 import { AvatarComponent } from './components/avatar/avatar.component';
 
 @NgModule({
   imports: [
     CommonModule,
     UiModule,
-
+    ImageCropperModule,
     RouterModule.forChild([
       /* {path: '', pathMatch: 'full', component: InsertYourComponentHere} */
       {
@@ -21,6 +21,6 @@ import { AvatarComponent } from './components/avatar/avatar.component';
       }
     ])
   ],
-  declarations: [AvatarComponent, ImageCropperComponent]
+  declarations: [AvatarComponent]
 })
 export class PagesSettingsProfileModule {}

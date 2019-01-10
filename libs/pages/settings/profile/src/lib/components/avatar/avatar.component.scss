@@ -19,8 +19,10 @@
     }
   }
 
-  img-cropper {
-    margin-left: 20px;
+  &__result {
+    img {
+      display: block;
+    }
   }
 
   .hide {

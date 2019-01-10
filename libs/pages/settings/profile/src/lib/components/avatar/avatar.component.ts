@@ -1,10 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { PersonInterface } from '@campus/dal';
-import {
-  CropperDrawSettings,
-  CropperSettings,
-  ImageCropperComponent
-} from 'ngx-img-cropper';
+import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { Observable } from 'rxjs';
 import { ProfileViewModel } from '../profile.viewmodel';
 
@@ -15,16 +11,16 @@ import { ProfileViewModel } from '../profile.viewmodel';
 })
 export class AvatarComponent implements OnInit {
   currentUser$: Observable<PersonInterface>;
-  cropperSettings: CropperSettings;
-  imgData: any;
+
+  imgData: { image?: string; cropped?: string } = {};
   uploadHoverState: boolean;
-  @ViewChild('cropper') cropper: ImageCropperComponent;
+  fileError: string;
+  private allowedImgRegex = /\.(jpe?g|png|gif)$/i;
 
   constructor(private profileViewModel: ProfileViewModel) {}
 
   ngOnInit() {
     this.loadOutputStreams();
-    this.initCropper();
   }
 
   selectFileListener(event: Event) {
@@ -48,8 +44,12 @@ export class AvatarComponent implements OnInit {
     this.uploadHoverState = hover;
   }
 
+  previewAvatar(event: ImageCroppedEvent): void {
+    this.imgData.cropped = event.base64;
+  }
+
   saveAvatar(): void {
-    this.profileViewModel.updateProfile({ avatar: this.imgData.image });
+    this.profileViewModel.updateProfile({ avatar: this.imgData.cropped });
   }
 
   resetAvatar(): void {
@@ -60,38 +60,19 @@ export class AvatarComponent implements OnInit {
     this.currentUser$ = this.profileViewModel.currentUser$;
   }
 
-  private initCropper() {
-    this.imgData = {};
-    this.cropperSettings = new CropperSettings({
-      canvasWidth: 300,
-      canvasHeight: 200,
-      width: 200,
-      height: 200,
-      croppedWidth: 200,
-      croppedHeight: 200,
-      touchRadius: 15,
-      centerTouchRadius: 20,
-      noFileInput: true,
-      cropperDrawSettings: <CropperDrawSettings>{
-        strokeWidth: 1
-      },
-      // allowedFilesRegex: /\.(jpe?g|png|gif)$/i,
-      fileType: 'image/jpeg',
-      compressRatio: 0.7,
-      markerSizeMultiplier: 0.4,
-      rounded: true
-    });
-  }
-
   private loadImage(file: File) {
-    if (!file) return;
-    if (!this.cropperSettings.allowedFilesRegex.test(file.name)) return;
+    this.fileError = null;
 
-    const image: HTMLImageElement = new Image();
+    if (!file) return;
+    if (!this.allowedImgRegex.test(file.name)) {
+      this.fileError =
+        'Dit bestandstype wordt niet ondersteund. Selecteer een andere afbeelding.';
+      return;
+    }
+
     const myReader: FileReader = new FileReader();
     myReader.onloadend = (loadEvent: ProgressEvent) => {
-      image.src = (loadEvent.target as FileReader).result as string;
-      this.cropper.setImage(image);
+      this.imgData.image = (loadEvent.target as FileReader).result as string;
     };
     myReader.readAsDataURL(file);
   }
