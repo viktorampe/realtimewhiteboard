@@ -199,27 +199,61 @@
       }
     }
   }
-  // primary
+  // --primary
   .ui-button--primary {
     .ui-button {
       background-color: $ui-button-background-color-1;
-      &:hover {
+      &:hover,
+      &:active {
         color: $ui-button-color;
         background-color: darken($ui-button-background-color-1, 5%);
       }
     }
-  }
-  .ui-button--primary.ui-button--disabled {
-    .ui-button {
-      background-color: darken($ui-button-background-color-2, 50%);
+    // --primary--disabled
+    &.ui-button--disabled {
+      .ui-button {
+        background-color: darken($ui-button-background-color-2, 50%);
+      }
+    }
+    // --primary--bordered
+    &.ui-button--bordered {
+      .ui-button {
+        border-color: darken($ui-button-background-color-1, 10%);
+      }
+      // --primary--bordered--disabled
+      &.ui-button--disabled {
+        .ui-button {
+          border-color: darken($ui-button-background-color-2, 10%);
+        }
+      }
     }
   }
+  // --secondary
   .ui-button--secondary {
     .ui-button {
       color: $ui-form-item-font-color;
       background-color: $ui-button-background-color-2;
-      &:hover {
+      &:hover,
+      &:active {
         background-color: darken($ui-button-background-color-2, 5%);
+      }
+    }
+    // --secondary--disabled
+    &.ui-button--disabled {
+      .ui-button {
+        background-color: darken($ui-button-background-color-2, 50%);
+      }
+    }
+    // --secondary--bordered
+    &.ui-button--bordered {
+      .ui-button {
+        border-color: darken($ui-button-background-color-2, 10%);
+      }
+      // --secondary--bordered--disabled
+      &.ui-button--disabled {
+        .ui-button {
+          border-color: darken($ui-button-background-color-2, 10%);
+        }
       }
     }
   }
