@@ -6,8 +6,10 @@ import {
 } from '@campus/dal';
 import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject } from 'rxjs';
-import { Url } from 'url';
-import { CredentialsViewModel } from './credentials.viewmodel';
+import {
+  CredentialsViewModel,
+  SingleSignOnProviderInterface
+} from './credentials.viewmodel';
 
 @Injectable({
   providedIn: 'root'
@@ -31,12 +33,15 @@ export class MockCredentialsViewModel
     }
   ]); //TODO use fixture, created in credential service branch
 
-  public singleSignOnLinks$ = new BehaviorSubject<Url[]>([]);
+  public singleSignOnProviders$ = new BehaviorSubject<
+    SingleSignOnProviderInterface[]
+  >([
+    { providerId: 1, description: 'Hoehel' },
+    { providerId: 2, description: 'Smoelboek' },
+    { providerId: 3, description: 'SmaaaaaartSchool' }
+  ]);
 
-  public updateProfile(
-    userId: number,
-    changedProps: Partial<PersonInterface>
-  ): void {}
-
-  public unlinkCredential(userId: number, credentialId: number): void {}
+  public useProfilePicture(credential: PassportUserCredentialInterface): void {}
+  public linkCredential(userId: number, providerId: number): void {}
+  public unlinkCredential(credential: PassportUserCredentialInterface): void {}
 }

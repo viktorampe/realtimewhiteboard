@@ -3,12 +3,10 @@ import {
   DalState,
   PassportUserCredentialInterface,
   PersonInterface,
-  UserActions,
   UserQueries
 } from '@campus/dal';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { Url } from 'url';
 import { MockCredentialsViewModel } from './credentials.viewmodel.mock';
 
 @Injectable({
@@ -16,8 +14,13 @@ import { MockCredentialsViewModel } from './credentials.viewmodel.mock';
 })
 export class CredentialsViewModel {
   public currentUser$: Observable<PersonInterface>;
+
+  // code uit huidige site voor profile picture
+  // img ng-if="::credential.provider === 'google' || credential.provider === 'facebook'" dk-src="{{::credential.profile.photos[0].value}}" src="/img/avatar.png" width="45" height="45">
+  // <img ng-if="::credential.provider === 'smartschool'" dk-src="{{::credential.profile.avatar}}" src="/img/avatar.png" width="45" height="45">
+  // TODO: write getter? add photolocation to environment file? map in stream?
   public credentials$: Observable<PassportUserCredentialInterface[]>;
-  public singleSignOnLinks$: Observable<Url[]>; //TODO is this the correct type?
+  public singleSignOnProviders$: Observable<SingleSignOnProviderInterface[]>;
 
   constructor(
     private store: Store<DalState>,
@@ -26,18 +29,22 @@ export class CredentialsViewModel {
     this.setPresentationStreams();
   }
 
-  public updateProfile(
-    userId: number,
-    changedProps: Partial<PersonInterface>
-  ): void {
-    this.store.dispatch(new UserActions.UpdateUser({ userId, changedProps }));
-  }
+  public useProfilePicture(credential: PassportUserCredentialInterface): void {}
 
-  public unlinkCredential(userId: number, credentialId: number): void {}
+  public linkCredential(userId: number, providerId: number): void {}
+
+  public unlinkCredential(credential: PassportUserCredentialInterface): void {}
 
   private setPresentationStreams(): void {
     this.currentUser$ = this.store.pipe(select(UserQueries.getCurrentUser));
     this.credentials$ = this.mockViewModel.credentials$;
-    this.singleSignOnLinks$ = this.mockViewModel.singleSignOnLinks$;
+    this.singleSignOnProviders$ = this.mockViewModel.singleSignOnProviders$;
   }
+}
+
+export interface SingleSignOnProviderInterface {
+  providerId: number;
+  description: string;
+  logoSrc?: string; // beter als css-class? om dan met mat-icon te gebruiken?
+  layoutClass?: string; //css style toe te voegen aan styles.css ? //beter met inline style?
 }
