@@ -11,7 +11,7 @@ import {
   styleUrls: ['./settings-dashboard.component.scss']
 })
 export class SettingsDashboardComponent {
-  links: Observable<Link[]> = this.viewModel.links;
+  links$: Observable<Link[]> = this.viewModel.links$;
 
   constructor(private viewModel: SettingsDashboardViewModel) {}
 }

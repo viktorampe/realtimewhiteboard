@@ -11,6 +11,8 @@ import {
 import { UiModule } from '@campus/ui';
 import { Observable, of } from 'rxjs';
 import { SettingsDashboardComponent } from './settings-dashboard.component';
+import { SettingsDashboardViewModel } from './settings-dashboard.viewmodel';
+import { MockSettingsDashboardViewModel } from './settings-dashboard.viewmodel.mock';
 
 class MockPermissionService implements PermissionServiceInterface {
   hasPermission(
@@ -36,6 +38,10 @@ describe('SettingsDashboardComponent', () => {
         {
           provide: PERMISSION_SERVICE_TOKEN,
           useClass: MockPermissionService
+        },
+        {
+          provide: SettingsDashboardViewModel,
+          useClass: MockSettingsDashboardViewModel
         }
       ]
     }).compileComponents();
