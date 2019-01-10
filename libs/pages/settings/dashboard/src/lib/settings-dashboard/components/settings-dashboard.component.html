@@ -1,26 +1,14 @@
-<div class="page-settings_dashboard__container">
-  <div class="page-settings_dashboard__container__header">
-    <p>Mijn profiel</p>
-  </div>
-  <div class="page-settings_dashboard__container__content">
-    <div>
-      <mat-nav-list>
-        <div
-          class="page-settings_dashboard__container__content__navitem"
-          *ngFor="let link of (links | async)"
-        >
-          <campus-button
-            *ngIf="
-              hasPermission(link.permissions, currentUserPermissions | async)
-            "
-            large
-            [iconClass]="link.icon"
-            (click)="navigateTo(link.url)"
-          >
-            {{ link.name }}
-          </campus-button>
-        </div>
-      </mat-nav-list>
+<div>
+  <campus-page-header [title]="'Mijn profiel'"></campus-page-header>
+  <mat-nav-list>
+    <div *ngFor="let link of (links | async)">
+      <campus-button
+        *hasPermission="link.permissions"
+        [routerLink]="[link.url]"
+        [iconClass]="link.icon"
+      >
+        <div> {{ link.name }} </div>
+      </campus-button>
     </div>
-  </div>
+  </mat-nav-list>
 </div>
