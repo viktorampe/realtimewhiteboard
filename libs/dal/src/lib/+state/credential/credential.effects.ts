@@ -1,19 +1,23 @@
 import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
+import { Action } from '@ngrx/store';
 import { DataPersistence } from '@nrwl/nx';
 import { undo } from 'ngrx-undo';
-import { map, mapTo } from 'rxjs/operators';
+import { from } from 'rxjs';
+import { map, mapTo, mergeMapTo } from 'rxjs/operators';
 import { DalActions, DalState } from '..';
 import {
   CredentialServiceInterface,
   CREDENTIAL_SERVICE_TOKEN
 } from '../../persons';
+import { LoadUser, UserUpdateMessage } from './../user/user.actions';
 import {
   CredentialsActionTypes,
   CredentialsLoaded,
   CredentialsLoadError,
   LoadCredentials,
-  UnlinkCredential
+  UnlinkCredential,
+  UseCredentialProfilePicture
 } from './credential.actions';
 
 @Injectable()
@@ -49,6 +53,36 @@ export class CredentialEffects {
       },
       undoAction: (action: UnlinkCredential, error) => {
         return undo(action);
+      }
+    }
+  );
+
+  @Effect()
+  useCredentialProfilePicture$ = this.dataPersistence.pessimisticUpdate(
+    CredentialsActionTypes.UseCredentialProfilePicture,
+    {
+      run: (action: UseCredentialProfilePicture, state: DalState) => {
+        return this.credentialService
+          .useCredentialProfilePicture(action.payload.credential)
+          .pipe(
+            mergeMapTo(
+              from<Action>([
+                new LoadUser({ force: true }),
+                new UserUpdateMessage({
+                  message: 'Profile picture updated',
+                  timeStamp: Date.now(),
+                  type: 'success'
+                })
+              ])
+            )
+          );
+      },
+      onError: (action: UseCredentialProfilePicture, error) => {
+        return new UserUpdateMessage({
+          message: 'Profile picture update failed',
+          timeStamp: Date.now(),
+          type: 'error'
+        });
       }
     }
   );

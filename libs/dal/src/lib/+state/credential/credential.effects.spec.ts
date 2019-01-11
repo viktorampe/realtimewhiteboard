@@ -1,3 +1,5 @@
+//file.only
+
 import { TestBed } from '@angular/core/testing';
 import { PassportUserCredentialInterface } from '@campus/dal';
 import { EffectsModule } from '@ngrx/effects';
@@ -13,11 +15,13 @@ import {
   CredentialServiceInterface,
   CREDENTIAL_SERVICE_TOKEN
 } from '../../persons';
+import { LoadUser, UserUpdateMessage } from '../user/user.actions';
 import {
   CredentialsLoaded,
   CredentialsLoadError,
   LoadCredentials,
-  UnlinkCredential
+  UnlinkCredential,
+  UseCredentialProfilePicture
 } from './credential.actions';
 import { CredentialEffects } from './credential.effects';
 
@@ -239,6 +243,93 @@ describe('CredentialEffects', () => {
 
       expect(effects.unlinkCredential$).toBeObservable(
         cold('-a-|', { a: expected })
+      );
+    });
+  });
+
+  describe('useCredentialProfilePicture$', () => {
+    const mockCredential = { id: 1 } as PassportUserCredentialInterface;
+    const useCredentialProfilePictureAction = new UseCredentialProfilePicture({
+      credential: mockCredential
+    });
+    let credentialService: CredentialServiceInterface;
+
+    const mockDate = Date.now();
+    let realDateImplementation;
+
+    beforeAll(() => {
+      // override date implementation
+      realDateImplementation = Date.now.bind(global.Date);
+      global.Date.now = jest.fn(() => mockDate);
+    });
+
+    afterAll(() => {
+      // put original date implementation back
+      global.Date.now = realDateImplementation;
+    });
+
+    beforeEach(() => {
+      usedState = CredentialReducer.initialState;
+      credentialService = TestBed.get(CREDENTIAL_SERVICE_TOKEN);
+    });
+
+    it('should call the credentialService', () => {
+      const mockResponse$ = cold('-a---|', { a: true });
+      credentialService.useCredentialProfilePicture = jest
+        .fn()
+        .mockReturnValue(mockResponse$);
+
+      actions = hot('-a-|', { a: useCredentialProfilePictureAction });
+
+      effects.useCredentialProfilePicture$.subscribe(_ => {
+        expect(
+          credentialService.useCredentialProfilePicture
+        ).toHaveBeenCalled();
+        expect(
+          credentialService.useCredentialProfilePicture
+        ).toHaveBeenCalledWith(mockCredential);
+      });
+    });
+
+    it('should dispatch an Load User action and a User Update Message action', () => {
+      // extra -'s because of the way the marbles are parsed
+      const mockResponse$ = cold('-a---|', { a: true });
+      credentialService.useCredentialProfilePicture = jest
+        .fn()
+        .mockReturnValue(mockResponse$);
+
+      actions = hot('-a-|', { a: useCredentialProfilePictureAction });
+
+      const expected = [
+        new LoadUser({ force: true }),
+        new UserUpdateMessage({
+          message: 'Profile picture updated',
+          timeStamp: Date.now(),
+          type: 'success'
+        })
+      ];
+
+      expect(effects.useCredentialProfilePicture$).toBeObservable(
+        hot('--(ab)|', { a: expected[0], b: expected[1] })
+      );
+    });
+
+    it('should dispatch an undo action on a Api failure', () => {
+      const mockResponse$ = cold('-#|', 'something went wrong');
+      credentialService.useCredentialProfilePicture = jest
+        .fn()
+        .mockReturnValue(mockResponse$);
+
+      actions = hot('-a-|', { a: useCredentialProfilePictureAction });
+
+      const expected = new UserUpdateMessage({
+        message: 'Profile picture update failed',
+        timeStamp: Date.now(),
+        type: 'error'
+      });
+
+      expect(effects.useCredentialProfilePicture$).toBeObservable(
+        hot('--a|', { a: expected })
       );
     });
   });

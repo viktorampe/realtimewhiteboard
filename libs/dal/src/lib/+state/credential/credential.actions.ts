@@ -15,7 +15,8 @@ export enum CredentialsActionTypes {
   DeleteCredential = '[Credentials] Delete Credential',
   DeleteCredentials = '[Credentials] Delete Credentials',
   ClearCredentials = '[Credentials] Clear Credentials',
-  UnlinkCredential = '[Credentials] Unlink Credential'
+  UnlinkCredential = '[Credentials] Unlink Credential',
+  UseCredentialProfilePicture = '[Credentials] Use Credential ProfilePicture'
 }
 
 export class LoadCredentials implements Action {
@@ -109,6 +110,14 @@ export class UnlinkCredential implements Action {
   constructor(public payload: { id: number }) {}
 }
 
+export class UseCredentialProfilePicture implements Action {
+  readonly type = CredentialsActionTypes.UseCredentialProfilePicture;
+
+  constructor(
+    public payload: { credential: PassportUserCredentialInterface }
+  ) {}
+}
+
 export type CredentialsActions =
   | LoadCredentials
   | CredentialsLoaded
@@ -122,4 +131,5 @@ export type CredentialsActions =
   | DeleteCredential
   | DeleteCredentials
   | ClearCredentials
-  | UnlinkCredential;
+  | UnlinkCredential
+  | UseCredentialProfilePicture;
