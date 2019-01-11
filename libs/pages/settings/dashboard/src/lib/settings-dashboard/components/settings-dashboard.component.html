@@ -3,6 +3,7 @@
   <mat-nav-list>
     <div *ngFor="let link of (links$ | async)">
       <campus-button
+        large
         *hasPermission="link.permissions"
         [routerLink]="[link.url]"
         [iconClass]="link.icon"
