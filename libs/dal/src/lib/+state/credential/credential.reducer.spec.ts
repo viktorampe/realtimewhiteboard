@@ -1,4 +1,3 @@
-import { Update } from '@ngrx/entity';
 import { CredentialActions } from '.';
 import { PassportUserCredentialInterface } from '../../+models';
 import { initialState, reducer, State } from './credential.reducer';
@@ -86,142 +85,15 @@ describe('Credentials Reducer', () => {
     });
   });
 
-  describe('add actions', () => {
-    it('should add one credential', () => {
-      const credential = credentials[0];
-      const action = new CredentialActions.AddCredential({
-        credential
-      });
-
-      const result = reducer(initialState, action);
-      expect(result).toEqual(createState([credential], false));
-    });
-
-    it('should add multiple credentials', () => {
-      const action = new CredentialActions.AddCredentials({ credentials });
-      const result = reducer(initialState, action);
-
-      expect(result).toEqual(createState(credentials, false));
-    });
-  });
-  describe('upsert actions', () => {
-    it('should upsert one credential', () => {
-      const originalCredential = credentials[0];
-
-      const startState = reducer(
-        initialState,
-        new CredentialActions.AddCredential({
-          credential: originalCredential
-        })
-      );
-
-      const updatedCredential = createCredential(credentials[0].id, 'test');
-
-      const action = new CredentialActions.UpsertCredential({
-        credential: updatedCredential
-      });
-
-      const result = reducer(startState, action);
-
-      expect(result.entities[updatedCredential.id]).toEqual(updatedCredential);
-    });
-
-    it('should upsert many credentials', () => {
-      const startState = createState(credentials);
-
-      const credentialsToInsert = [
-        createCredential(1),
-        createCredential(2),
-        createCredential(3),
-        createCredential(4)
-      ];
-      const action = new CredentialActions.UpsertCredentials({
-        credentials: credentialsToInsert
-      });
-
-      const result = reducer(startState, action);
-
-      expect(result).toEqual(createState(credentialsToInsert));
-    });
-  });
-
-  describe('update actions', () => {
-    it('should update an credential', () => {
-      const credential = credentials[0];
-      const startState = createState([credential]);
-      const update: Update<PassportUserCredentialInterface> = {
-        id: 1,
-        changes: {
-          provider: providerUpdatedValue
-        }
-      };
-      const action = new CredentialActions.UpdateCredential({
-        credential: update
-      });
-      const result = reducer(startState, action);
-      expect(result).toEqual(
-        createState([createCredential(1, providerUpdatedValue)])
-      );
-    });
-
-    it('should update multiple credentials', () => {
-      const startState = createState(credentials);
-      const updates: Update<PassportUserCredentialInterface>[] = [
-        {
-          id: 1,
-          changes: {
-            provider: providerUpdatedValue
-          }
-        },
-        {
-          id: 2,
-          changes: {
-            provider: providerUpdatedValue
-          }
-        }
-      ];
-      const action = new CredentialActions.UpdateCredentials({
-        credentials: updates
-      });
-      const result = reducer(startState, action);
-
-      expect(result).toEqual(
-        createState([
-          createCredential(1, providerUpdatedValue),
-          createCredential(2, providerUpdatedValue),
-          credentials[2]
-        ])
-      );
-    });
-  });
-
-  describe('delete actions', () => {
+  describe('unlink actions', () => {
     it('should delete one credential ', () => {
       const credential = credentials[0];
       const startState = createState([credential]);
-      const action = new CredentialActions.DeleteCredential({
+      const action = new CredentialActions.UnlinkCredential({
         id: credential.id
       });
       const result = reducer(startState, action);
       expect(result).toEqual(createState([]));
-    });
-
-    it('should delete multiple credentials', () => {
-      const startState = createState(credentials);
-      const action = new CredentialActions.DeleteCredentials({
-        ids: [credentials[0].id, credentials[1].id]
-      });
-      const result = reducer(startState, action);
-      expect(result).toEqual(createState([credentials[2]]));
-    });
-  });
-
-  describe('clear action', () => {
-    it('should clear the credentials collection', () => {
-      const startState = createState(credentials, true, 'something went wrong');
-      const action = new CredentialActions.ClearCredentials();
-      const result = reducer(startState, action);
-      expect(result).toEqual(createState([], true, 'something went wrong'));
     });
   });
 });

@@ -1,5 +1,3 @@
-//file.only
-
 import { TestBed } from '@angular/core/testing';
 import { PassportUserCredentialInterface } from '@campus/dal';
 import { EffectsModule } from '@ngrx/effects';

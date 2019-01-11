@@ -27,38 +27,6 @@ export function reducer(
   action: CredentialsActions
 ): State {
   switch (action.type) {
-    case CredentialsActionTypes.AddCredential: {
-      return adapter.addOne(action.payload.credential, state);
-    }
-
-    case CredentialsActionTypes.UpsertCredential: {
-      return adapter.upsertOne(action.payload.credential, state);
-    }
-
-    case CredentialsActionTypes.AddCredentials: {
-      return adapter.addMany(action.payload.credentials, state);
-    }
-
-    case CredentialsActionTypes.UpsertCredentials: {
-      return adapter.upsertMany(action.payload.credentials, state);
-    }
-
-    case CredentialsActionTypes.UpdateCredential: {
-      return adapter.updateOne(action.payload.credential, state);
-    }
-
-    case CredentialsActionTypes.UpdateCredentials: {
-      return adapter.updateMany(action.payload.credentials, state);
-    }
-
-    case CredentialsActionTypes.DeleteCredential: {
-      return adapter.removeOne(action.payload.id, state);
-    }
-
-    case CredentialsActionTypes.DeleteCredentials: {
-      return adapter.removeMany(action.payload.ids, state);
-    }
-
     case CredentialsActionTypes.CredentialsLoaded: {
       return adapter.addAll(action.payload.credentials, {
         ...state,
@@ -70,11 +38,6 @@ export function reducer(
       return { ...state, error: action.payload, loaded: false };
     }
 
-    case CredentialsActionTypes.ClearCredentials: {
-      return adapter.removeAll(state);
-    }
-
-    // same as CredentialsActionTypes.DeleteCredential
     case CredentialsActionTypes.UnlinkCredential: {
       return adapter.removeOne(action.payload.id, state);
     }
