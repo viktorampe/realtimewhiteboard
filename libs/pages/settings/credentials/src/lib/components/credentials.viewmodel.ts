@@ -35,7 +35,7 @@ export class CredentialsViewModel {
     // );
   }
 
-  public linkCredential(userId: number, providerId: number): void {
+  public linkCredential(providerId: number): void {
     // code in current site
     /*
       function addCredential(provider){
