@@ -35,9 +35,6 @@ export class PermissionService implements PermissionServiceInterface {
       select(UserQueries.getPermissions),
       map(userPermissions => {
         // every permission in the list must match
-        if (!userPermissions) {
-          return true;
-        }
         return permissions.every(permission => {
           if (typeof permission === 'string') {
             return userPermissions.includes(permission);

@@ -13,28 +13,28 @@ export interface Link {
   providedIn: 'root'
 })
 export class SettingsDashboardViewModel {
-  links: Observable<Link[]> = of([
+  links$: Observable<Link[]> = of([
     {
       name: 'Mijn gegevens',
-      url: 'gegevens',
+      url: '../../profile',
       icon: 'settings',
       permissions: [SettingsPermissions.UPDATE_PROFILE]
     },
     {
       name: 'Verander profielfoto',
-      url: 'profile',
+      url: '../../avatar',
       icon: 'user',
       permissions: [SettingsPermissions.UPDATE_AVATAR]
     },
     {
       name: 'Mijn koppelingen',
-      url: 'koppelingen',
+      url: '../../credentials',
       icon: 'link',
       permissions: [SettingsPermissions.UPDATE_AVATAR]
     },
     {
       name: 'Mijn leerkrachten',
-      url: 'leerkrachten',
+      url: '../../coupled-teachers',
       icon: 'student2',
       permissions: [
         SettingsPermissions.LINK_TEACHERS,
@@ -43,7 +43,7 @@ export class SettingsDashboardViewModel {
     },
     {
       name: 'Meldingen',
-      url: 'Meldingen',
+      url: '../../alerts',
       icon: 'bell',
       permissions: [SettingsPermissions.UPDATE_AVATAR]
     }

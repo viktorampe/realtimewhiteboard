@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatListModule } from '@angular/material';
+import { MatIconRegistry, MatListModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
@@ -8,6 +8,7 @@ import {
   PERMISSION_SERVICE_TOKEN,
   SharedModule
 } from '@campus/shared';
+import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { Observable, of } from 'rxjs';
 import { SettingsDashboardComponent } from './settings-dashboard.component';
@@ -42,7 +43,8 @@ describe('SettingsDashboardComponent', () => {
         {
           provide: SettingsDashboardViewModel,
           useClass: MockSettingsDashboardViewModel
-        }
+        },
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ]
     }).compileComponents();
   }));
