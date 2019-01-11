@@ -96,6 +96,7 @@ export class AppViewModel {
   private getCredentials(): Observable<PassportUserCredentialInterface[]> {
     return this.store.pipe(
       select(CredentialQueries.getLoaded),
+      skipWhile(loaded => !loaded),
       switchMapTo(this.store.pipe(select(CredentialQueries.getAll)))
     );
   }

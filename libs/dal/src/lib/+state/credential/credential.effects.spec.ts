@@ -26,7 +26,7 @@ import { CredentialEffects } from './credential.effects';
 describe('CredentialEffects', () => {
   let actions: Observable<any>;
   let effects: CredentialEffects;
-  let usedState: any;
+  let usedState: CredentialReducer.State;
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -166,8 +166,7 @@ describe('CredentialEffects', () => {
       beforeAll(() => {
         usedState = {
           ...CredentialReducer.initialState,
-          loaded: true,
-          list: []
+          loaded: true
         };
       });
       beforeEach(() => {
