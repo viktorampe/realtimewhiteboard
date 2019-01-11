@@ -30,6 +30,11 @@ export class MockCredentialsViewModel
       id: 1,
       profile: { platform: 'foo.smartschool.be' },
       provider: 'smartschool'
+    },
+    {
+      id: 1,
+      profile: { platform: 'foo.smartschool.be' },
+      provider: 'smartschool'
     }
   ]); //TODO use fixture, created in credential service branch
 

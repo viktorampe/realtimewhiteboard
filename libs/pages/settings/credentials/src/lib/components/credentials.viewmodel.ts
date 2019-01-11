@@ -18,7 +18,7 @@ export class CredentialsViewModel {
   // code uit huidige site voor profile picture
   // img ng-if="::credential.provider === 'google' || credential.provider === 'facebook'" dk-src="{{::credential.profile.photos[0].value}}" src="/img/avatar.png" width="45" height="45">
   // <img ng-if="::credential.provider === 'smartschool'" dk-src="{{::credential.profile.avatar}}" src="/img/avatar.png" width="45" height="45">
-  // TODO: write getter? add photolocation to environment file? map in stream?
+  // TODO: add photolocation to environment file?
   public credentials$: Observable<PassportUserCredentialInterface[]>;
   public singleSignOnProviders$: Observable<SingleSignOnProviderInterface[]>;
 
@@ -29,14 +29,30 @@ export class CredentialsViewModel {
     this.setPresentationStreams();
   }
 
-  public useProfilePicture(credential: PassportUserCredentialInterface): void {}
+  public useProfilePicture(credential: PassportUserCredentialInterface): void {
+    // this.store.dispatch(
+    //   UserActions.UseCredentialProfilePicture({ credential })
+    // );
+  }
 
-  public linkCredential(userId: number, providerId: number): void {}
+  public linkCredential(userId: number, providerId: number): void {
+    // code in current site
+    /*
+      function addCredential(provider){
+          window.location.href = polpo.AuthBase+'/'+provider+'-link/'+
+              encodeURIComponent(polpo.StudentBase + '/#/profile/sso') +
+              '?type=student&access_token=' + LoopBackAuth.accessTokenId;
+      }
+    */
+  }
 
-  public unlinkCredential(credential: PassportUserCredentialInterface): void {}
+  public unlinkCredential(credential: PassportUserCredentialInterface): void {
+    // this.store.dispatch(UserActions.UnlinkCredential({ id: credential.id }));
+  }
 
   private setPresentationStreams(): void {
     this.currentUser$ = this.store.pipe(select(UserQueries.getCurrentUser));
+    // this.credentials$ = this.store.pipe(select(CredentialQueries.getAll));
     this.credentials$ = this.mockViewModel.credentials$;
     this.singleSignOnProviders$ = this.mockViewModel.singleSignOnProviders$;
   }

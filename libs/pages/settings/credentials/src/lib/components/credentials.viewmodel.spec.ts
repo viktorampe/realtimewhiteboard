@@ -22,7 +22,10 @@ describe('ProfileViewModel', () => {
     TestBed.configureTestingModule({
       imports: [
         StoreModule.forRoot({}),
-        ...getStoreModuleForFeatures([UserReducer])
+        ...getStoreModuleForFeatures([
+          UserReducer
+          // CredentialReducer
+        ])
       ],
       providers: [Store]
     });
@@ -41,7 +44,7 @@ describe('ProfileViewModel', () => {
   });
 
   describe('presentation streams', () => {
-    describe('currentUser', () => {
+    describe('currentUser$', () => {
       const mockUser = new PersonFixture();
       beforeEach(() => {
         store.dispatch(new UserActions.UserLoaded(mockUser));
@@ -50,6 +53,44 @@ describe('ProfileViewModel', () => {
       it('should return the currentUser', () => {
         expect(credentialsViewModel.currentUser$).toBeObservable(
           hot('a', { a: mockUser })
+        );
+      });
+    });
+
+    describe('credentials$', () => {
+      const mockCredential = {
+        id: 1,
+        profile: { platform: 'foo.smartschool.be' },
+        provider: 'smartschool'
+      }; //TODO use fixture, created in credential service branch
+
+      // beforeEach(() => {
+      //   store.dispatch(
+      //     new CredentialActions.CredentialsLoaded({
+      //       credentials: [mockCredential, mockCredential]
+      //     })
+      //   );
+      // });
+
+      it('should return the credentials', () => {
+        expect(credentialsViewModel.credentials$).toBeObservable(
+          hot('a', { a: [mockCredential, mockCredential] })
+        );
+      });
+    });
+
+    describe('singleSignOnProviders$', () => {
+      const mockProviders = [
+        { providerId: 1, description: 'Hoehel' },
+        { providerId: 2, description: 'Smoelboek' },
+        { providerId: 3, description: 'SmaaaaaartSchool' }
+      ];
+
+      beforeEach(() => {});
+
+      it('should return the SingleSignOn-providers', () => {
+        expect(credentialsViewModel.singleSignOnProviders$).toBeObservable(
+          hot('a', { a: mockProviders })
         );
       });
     });
