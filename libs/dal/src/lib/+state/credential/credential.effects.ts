@@ -57,6 +57,9 @@ export class CredentialEffects {
     }
   );
 
+  // TODO:
+  // if the profile picture property is stored in the environment file,
+  // then this can change to optimistic update
   @Effect()
   useCredentialProfilePicture$ = this.dataPersistence.pessimisticUpdate(
     CredentialsActionTypes.UseCredentialProfilePicture,
