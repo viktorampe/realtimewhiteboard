@@ -191,19 +191,23 @@ describe('CredentialEffects', () => {
 
     beforeEach(() => {
       usedState = CredentialReducer.initialState;
-
       credentialService = TestBed.get(CREDENTIAL_SERVICE_TOKEN);
     });
 
     it('should call the credentialService', () => {
-      credentialService.unlinkCredential = jest.fn();
+      const mockResponse$ = cold('-a-|', { a: true });
+      credentialService.unlinkCredential = jest
+        .fn()
+        .mockReturnValue(mockResponse$);
 
       actions = hot('-a-|', { a: unlinkAction });
 
-      expect(credentialService.unlinkCredential).toHaveBeenCalled();
-      expect(credentialService.unlinkCredential).toHaveBeenCalledWith(
-        mockCredential
-      );
+      effects.unlinkCredential$.subscribe(_ => {
+        expect(credentialService.unlinkCredential).toHaveBeenCalled();
+        expect(credentialService.unlinkCredential).toHaveBeenCalledWith(
+          mockCredential
+        );
+      });
     });
 
     it('should dispatch an ActionSuccessful', () => {
