@@ -1,7 +1,7 @@
 <div>
   <campus-page-header [title]="'Mijn profiel'"></campus-page-header>
   <mat-nav-list>
-    <div *ngFor="let link of (links | async)">
+    <div *ngFor="let link of (links$ | async)">
       <campus-button
         *hasPermission="link.permissions"
         [routerLink]="[link.url]"
