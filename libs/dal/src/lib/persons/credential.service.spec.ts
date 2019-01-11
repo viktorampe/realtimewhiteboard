@@ -5,7 +5,7 @@ import { CredentialFixture } from './../+fixtures/Credential.fixture';
 import {
   CredentialService,
   CREDENTIAL_SERVICE_TOKEN
-} from './credentials.service';
+} from './credential.service';
 
 describe('CredentialsService', () => {
   beforeEach(() =>

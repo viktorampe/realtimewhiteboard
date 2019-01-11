@@ -90,7 +90,7 @@ import { AUTH_SERVICE_TOKEN } from './persons/auth-service.interface';
 import {
   CredentialService,
   CREDENTIAL_SERVICE_TOKEN
-} from './persons/credentials.service';
+} from './persons/credential.service';
 import {
   LinkedPersonService,
   LINKED_PERSON_SERVICE_TOKEN
