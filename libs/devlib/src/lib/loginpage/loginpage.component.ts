@@ -7,7 +7,7 @@ import {
   EduContentInterface,
   UserActions
 } from '@campus/dal';
-import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
+import { AlertQueueApi, PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
@@ -22,9 +22,11 @@ export class LoginpageComponent implements OnInit {
   educontents: Observable<EduContentInterface[]>;
   currentUser: Observable<any>;
   route$: Observable<string[]>;
+  response: Observable<any>;
   constructor(
     public loginPageviewModel: LoginPageViewModel,
     private personApi: PersonApi,
+    private alertApi: AlertQueueApi,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     private store: Store<AlertReducer.State>,
     private router: Router
@@ -57,5 +59,9 @@ export class LoginpageComponent implements OnInit {
 
   updateAlert() {
     this.loginPageviewModel.updateAlert();
+  }
+
+  deleteAlert() {
+    this.currentUser = this.personApi.destroyByIdAlertQueues(34, 48);
   }
 }

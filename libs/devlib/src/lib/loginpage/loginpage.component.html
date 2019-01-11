@@ -3,20 +3,21 @@
 <ng-container *ngIf="(route$ | async) as route">
   <h2 style="color:#E75480">PARAMS IN THIS ROUTE:</h2>
   <ul>
-    <li style="color:#E75480" *ngFor="let routeParam of route">{{
+    <li style="color:#E75480"
+        *ngFor="let routeParam of route">{{
       routeParam
-    }}</li>
+      }}</li>
   </ul>
 </ng-container>
 
-<campus-dropdown-menu-item
-  header="test description"
-  image="assets/images/icon-smartschool.png"
-  internalLink="test"
-  title="text title"
-></campus-dropdown-menu-item>
+<campus-dropdown-menu-item header="test description"
+                           image="assets/images/icon-smartschool.png"
+                           internalLink="test"
+                           title="text title"></campus-dropdown-menu-item>
 
-<campus-page-bar> <div class="divider"></div> </campus-page-bar>
+<campus-page-bar>
+  <div class="divider"></div>
+</campus-page-bar>
 
 <div class="login_page_component">
   <div [hidden]="loginPageviewModel.isLoggedIn()">
@@ -30,24 +31,18 @@
     </div>
 
     <div class="login_form">
-      <input
-        placeholder="username"
-        [(ngModel)]="loginPageviewModel.name"
-        type="text"
-      />
-      <input
-        placeholder="password"
-        [(ngModel)]="loginPageviewModel.password"
-        type="password"
-      />
-      <button
-        (click)="
+      <input placeholder="username"
+             [(ngModel)]="loginPageviewModel.name"
+             type="text" />
+      <input placeholder="password"
+             [(ngModel)]="loginPageviewModel.password"
+             type="password" />
+      <button (click)="
           loginPageviewModel.login(
             loginPageviewModel.name,
             loginPageviewModel.password
           )
-        "
-      >
+        ">
         login
       </button>
     </div>
@@ -63,19 +58,16 @@
 <button (click)="getCurrentUser()">fetch current user</button>
 <div>{{ currentUser | async | json }}</div>
 
-<div
-  ><button (click)="updateStudentContentStatus()"
-    >update student content status</button
-  ></div
->
+<div><button (click)="updateStudentContentStatus()">update student content status</button></div>
 <div><button (click)="updateAlert()">update alert</button></div>
-<div
-  ><a [routerLink]="['/bundles']" routerLinkActive="router-link-active"
-    >go to bundle page</a
-  ></div
->
-<div
-  ><a [routerLink]="['/tasks']" routerLinkActive="router-link-active"
-    >go to tasks page</a
-  ></div
->
+<div><a [routerLink]="['/bundles']"
+     routerLinkActive="router-link-active">go to bundle page</a></div>
+<div><a [routerLink]="['/tasks']"
+     routerLinkActive="router-link-active">go to tasks page</a></div>
+
+<br>
+
+<div>
+  <button (click)="deleteAlert()">delete alert</button>
+  <div>{{ reponse |async |json}}</div>
+</div>
