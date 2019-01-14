@@ -47,7 +47,7 @@ export class CredentialsViewModel {
   }
 
   public unlinkCredential(credential: PassportUserCredentialInterface): void {
-    // this.store.dispatch(UserActions.UnlinkCredential({ id: credential.id }));
+    // this.store.dispatch(UserActions.UnlinkCredential({ credential }));
   }
 
   private setPresentationStreams(): void {
