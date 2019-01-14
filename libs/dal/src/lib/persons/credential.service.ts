@@ -1,4 +1,5 @@
 import { Injectable, InjectionToken } from '@angular/core';
+import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Observable } from 'rxjs';
 import { PassportUserCredentialInterface } from '../+models';
 
@@ -12,9 +13,11 @@ export interface CredentialServiceInterface {
   providedIn: 'root'
 })
 export class CredentialService implements CredentialServiceInterface {
+  constructor(private personApi: PersonApi) {}
+
   public getAllForUser(
     userId: number
   ): Observable<PassportUserCredentialInterface[]> {
-    return;
+    return this.personApi.getCredentials(userId);
   }
 }

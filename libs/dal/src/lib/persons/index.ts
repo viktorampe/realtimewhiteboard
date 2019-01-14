@@ -7,7 +7,7 @@ export {
 export {
   CredentialServiceInterface,
   CREDENTIAL_SERVICE_TOKEN
-} from './credentials.service';
+} from './credential.service';
 export {
   PersonServiceInterface,
   PERSON_SERVICE_TOKEN
