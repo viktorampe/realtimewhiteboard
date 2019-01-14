@@ -1,5 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { WINDOW } from '@campus/browser';
 import { Observable, of } from 'rxjs';
+
+export enum CredentialErrors {
+  ForbiddenMixedRoles = 'ForbiddenError: mixed_roles',
+  ForbiddenInvalidRoles = 'ForbiddenError: invalid_roles',
+  AlreadyLinked = 'Error: Credentials already linked'
+}
+
+export enum ConnectionType {
+  Facebook = 'facebook',
+  Smartschool = 'smartschool',
+  Google = 'google'
+}
 
 @Component({
   selector: 'campus-credentials-component',
@@ -7,7 +20,9 @@ import { Observable, of } from 'rxjs';
   styleUrls: ['./credentials.component.scss']
 })
 export class CredentialsComponent implements OnInit {
-  credentials$: Observable<string[]> = of([
+  connectionTypes = ConnectionType;
+
+  crednetials$: Observable<string[]> = of([
     'test',
     'test2',
     'test3',
@@ -16,29 +31,51 @@ export class CredentialsComponent implements OnInit {
     'test6',
     'test7'
   ]);
+  ssoLinks$: Observable<string[]> = of(['smartschool', 'facebook', 'google']);
 
-  features$: Observable<Map<string, boolean>>;
+  message = '';
 
-  constructor() {
-    const map = new Map();
-    map.set('facebook', true);
-    map.set('google', true);
-    map.set('smartschool', true);
-    this.features$ = of(map);
-  }
+  constructor(@Inject(WINDOW) private window: Window) {}
 
   ngOnInit() {
-    /*
-    var error = getParameterByName('error');
-        if(error){
-            if(error === 'ForbiddenError: mixed_roles' || error === 'ForbiddenError: invalid_roles'){
-                vm.message = 'Je kan enkel een Smartschool-LEERLING profiel koppelen aan dit POLPO-profiel.';
-            }
-            if(error === 'Error: Credentials already linked'){
-                vm.message = 'Dit account werd al aan een ander profiel gekoppeld.';
-            }
-            vm.messageStatus = 'alert-danger';
-        }
-    */
+    const error = this.getParameterByName('error');
+    this.message = this.getErrorMessage(error);
+    const messageStatus = 'alert-danger';
+  }
+
+  connect(connectionType: ConnectionType) {
+    //todo
+  }
+
+  getErrorMessage(error: string): string {
+    if (error) {
+      if (
+        error === CredentialErrors.ForbiddenMixedRoles ||
+        error === CredentialErrors.ForbiddenInvalidRoles
+      ) {
+        return 'Je kan enkel een Smartschool-LEERLING profiel koppelen aan dit POLPO-profiel.';
+      }
+      if (error === CredentialErrors.AlreadyLinked) {
+        return 'Dit account werd al aan een ander profiel gekoppeld.';
+      }
+    }
+    return '';
+  }
+
+  getParameterByName(name: string, url?: string): string {
+    if (!url) {
+      url = window.location.href;
+    }
+    name = name.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
+    const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
+    const results = regex.exec(url);
+    if (!results) {
+      return null;
+    }
+    if (!results[2]) {
+      return '';
+    }
+    console.log(results[0]);
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
   }
 }
