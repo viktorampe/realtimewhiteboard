@@ -33,7 +33,9 @@ export class CredentialsLoadError implements Action {
 export class UnlinkCredential implements Action {
   readonly type = CredentialsActionTypes.UnlinkCredential;
 
-  constructor(public payload: { id: number }) {}
+  constructor(
+    public payload: { credential: PassportUserCredentialInterface }
+  ) {}
 }
 
 export class UseCredentialProfilePicture implements Action {

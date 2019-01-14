@@ -91,7 +91,7 @@ describe('Credentials Reducer', () => {
       const credential = credentials[0];
       const startState = createState([credential]);
       const action = new CredentialActions.UnlinkCredential({
-        id: credential.id
+        credential
       });
       const result = reducer(startState, action);
       expect(result).toEqual(createState([]));

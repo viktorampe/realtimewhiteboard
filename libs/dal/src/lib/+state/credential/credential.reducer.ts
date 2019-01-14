@@ -39,7 +39,7 @@ export function reducer(
     }
 
     case CredentialsActionTypes.UnlinkCredential: {
-      return adapter.removeOne(action.payload.id, state);
+      return adapter.removeOne(action.payload.credential.id, state);
     }
 
     default: {

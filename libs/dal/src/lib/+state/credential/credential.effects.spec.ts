@@ -187,7 +187,7 @@ describe('CredentialEffects', () => {
 
   describe('unlinkCredential$', () => {
     const mockCredential = { id: 1 } as PassportUserCredentialInterface;
-    const unlinkAction = new UnlinkCredential({ id: mockCredential.id });
+    const unlinkAction = new UnlinkCredential({ credential: mockCredential });
     let credentialService: CredentialServiceInterface;
 
     beforeEach(() => {

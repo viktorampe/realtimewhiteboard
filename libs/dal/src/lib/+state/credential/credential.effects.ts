@@ -43,13 +43,15 @@ export class CredentialEffects {
     CredentialsActionTypes.UnlinkCredential,
     {
       run: (action: UnlinkCredential, state: DalState) => {
-        return this.credentialService.unlinkCredential(action.payload.id).pipe(
-          mapTo(
-            new DalActions.ActionSuccessful({
-              successfulAction: 'Credential unlinked.'
-            })
-          )
-        );
+        return this.credentialService
+          .unlinkCredential(action.payload.credential)
+          .pipe(
+            mapTo(
+              new DalActions.ActionSuccessful({
+                successfulAction: 'Credential unlinked.'
+              })
+            )
+          );
       },
       undoAction: (action: UnlinkCredential, error) => {
         return undo(action);
