@@ -22,7 +22,7 @@ function createPerson(
 }
 
 /**
- * Utility to create the person state.
+ * Utility to create the linked-person state.
  *
  * @param {PersonInterface[]} persons
  * @param {boolean} [loaded]
@@ -51,7 +51,7 @@ function createState(
   return state;
 }
 
-describe('Persons Reducer', () => {
+describe('LinkedPersons Reducer', () => {
   let persons: PersonInterface[];
   beforeEach(() => {
     persons = [createPerson(1), createPerson(2), createPerson(3)];
@@ -68,7 +68,7 @@ describe('Persons Reducer', () => {
   });
 
   describe('loaded action', () => {
-    it('should load all persons', () => {
+    it('should load all linked persons', () => {
       const action = new LinkedPersonActions.LinkedPersonsLoaded({ persons });
       const result = reducer(initialState, action);
       expect(result).toEqual(createState(persons, true));

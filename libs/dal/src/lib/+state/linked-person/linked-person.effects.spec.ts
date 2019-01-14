@@ -14,7 +14,7 @@ import {
 } from './linked-person.actions';
 import { LinkedPersonEffects } from './linked-person.effects';
 
-describe('PersonEffects', () => {
+describe('LinkedPersonEffects', () => {
   let actions: Observable<any>;
   let effects: LinkedPersonEffects;
   let usedState: any;
@@ -86,7 +86,7 @@ describe('PersonEffects', () => {
     effects = TestBed.get(LinkedPersonEffects);
   });
 
-  describe('loadPerson$', () => {
+  describe('loadLinkedPerson$', () => {
     const unforcedLoadAction = new LoadLinkedPersons({ userId: 1 });
     const forcedLoadAction = new LoadLinkedPersons({ force: true, userId: 1 });
     const filledLoadedAction = new LinkedPersonsLoaded({ persons: [] });
