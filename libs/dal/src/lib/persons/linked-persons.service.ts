@@ -39,13 +39,18 @@ export class LinkedPersonService implements LinkedPersonServiceInterface {
   getAllLinkedPersonsForUser(
     userId: number
   ): Observable<TeacherStudentInterface[]> {
-    return this.personApi
-      .getData(userId, 'linkedPersons')
-      .pipe(
-        map(
-          (res: { linkedPersons: TeacherStudentInterface[] }) =>
-            res.linkedPersons
-        )
-      );
+    return this.getAllTeacherStudentsForUser(userId);
+
+    // TODO create separate linked-user and teacher-student state
+    // TODO add linkedPersons to getData()
+
+    // return this.personApi
+    //   .getData(userId, 'linkedPersons')
+    //   .pipe(
+    //     map(
+    //       (res: { linkedPersons: TeacherStudentInterface[] }) =>
+    //         res.linkedPersons
+    //     )
+    //   );
   }
 }
