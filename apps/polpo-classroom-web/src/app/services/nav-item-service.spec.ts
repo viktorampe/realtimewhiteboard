@@ -73,7 +73,7 @@ describe('NavItemServiceService', () => {
           title: 'Resultaten'
         },
         {
-          icon: 'account',
+          icon: 'settings',
           link: '/settings',
           title: 'Instellingen'
         }
