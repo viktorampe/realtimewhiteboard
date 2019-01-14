@@ -14,6 +14,12 @@ export enum ConnectionType {
   Google = 'google'
 }
 
+export interface SsoLink {
+  name: string;
+  connectionType: ConnectionType;
+  icon: string;
+}
+
 @Component({
   selector: 'campus-credentials-component',
   templateUrl: './credentials.component.html',
@@ -31,7 +37,23 @@ export class CredentialsComponent implements OnInit {
     'test6',
     'test7'
   ]);
-  ssoLinks$: Observable<string[]> = of(['smartschool', 'facebook', 'google']);
+  ssoLinks$: Observable<SsoLink[]> = of([
+    {
+      name: 'Smartschool',
+      connectionType: ConnectionType.Smartschool,
+      icon: ''
+    },
+    {
+      name: 'Facebook',
+      connectionType: ConnectionType.Facebook,
+      icon: ''
+    },
+    {
+      name: 'Google',
+      connectionType: ConnectionType.Google,
+      icon: ''
+    }
+  ]);
 
   message = '';
 
