@@ -31,10 +31,9 @@ export class CredentialService implements CredentialServiceInterface {
   unlinkCredential(
     credential: PassportUserCredentialInterface
   ): Observable<boolean> {
-    return this.personApi.destroyByIdCredentials(
-      credential.userId,
-      credential.id
-    );
+    return this.personApi
+      .destroyByIdCredentials(credential.userId, credential.id)
+      .pipe(mapTo(true));
   }
   useCredentialProfilePicture(
     credential: PassportUserCredentialInterface
