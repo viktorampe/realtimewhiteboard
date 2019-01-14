@@ -62,7 +62,6 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
 import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time.pipe';
 import { RemovePrefixStringPipe } from './utils/pipes/remove-prefix-string/remove-prefix-string.pipe';
 import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-string.pipe';
-import { SecondaryDirective } from './button/directives/secondary.directive';
 
 @NgModule({
   imports: [
@@ -131,8 +130,7 @@ import { SecondaryDirective } from './button/directives/secondary.directive';
     HumanDateTimePipe,
     RemovePrefixStringPipe,
     LargeDirective,
-    PrimaryDirective,
-    SecondaryDirective
+    PrimaryDirective
   ],
   exports: [
     FilterTextInputComponent,
@@ -177,8 +175,7 @@ import { SecondaryDirective } from './button/directives/secondary.directive';
     HumanDateTimePipe,
     RemovePrefixStringPipe,
     LargeDirective,
-    PrimaryDirective,
-    SecondaryDirective
+    PrimaryDirective
   ]
 })
 export class UiModule {}
