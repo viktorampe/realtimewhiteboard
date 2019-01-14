@@ -4,6 +4,7 @@ import {
   CredentialReducer,
   DalState,
   LearningAreaFixture,
+  PassportUserCredentialInterface,
   PersonFixture,
   PersonInterface,
   StateFeatureBuilder,
@@ -20,12 +21,12 @@ import { AppViewModel } from './app.viewmodel';
 import { NavItemService } from './services/nav-item-service';
 
 describe('AppViewModel', () => {
-  let usedUserState;
   let user: PersonInterface;
   let viewModel: AppViewModel;
   let mockNavItem: NavItem;
   let mockProfileMenuItem: DropdownMenuItemInterface;
   let store: Store<DalState>;
+  let mockCredentials: PassportUserCredentialInterface[];
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -35,9 +36,7 @@ describe('AppViewModel', () => {
           {
             NAME: UserReducer.NAME,
             reducer: UserReducer.reducer,
-            initialState: {
-              initialState: usedUserState
-            }
+            initialState: UserReducer.initialState
           },
           {
             NAME: UiReducer.NAME,
@@ -75,10 +74,21 @@ describe('AppViewModel', () => {
     user = new PersonFixture();
     mockNavItem = { title: 'mock' };
     mockProfileMenuItem = { description: 'mock' };
+    mockCredentials = [
+      {
+        id: 1,
+        profile: { platform: 'foo.smartschool.be' },
+        provider: 'smartschool'
+      }
+    ]; //TODO use fixture, created in credential service branch
+  });
 
-    usedUserState = UserReducer.reducer(
-      UserReducer.initialState,
-      new UserActions.UserLoaded(user)
+  beforeEach(() => {
+    store.dispatch(new UserActions.UserLoaded(user));
+    store.dispatch(
+      new CredentialActions.CredentialsLoaded({
+        credentials: mockCredentials
+      })
     );
   });
 
@@ -90,20 +100,6 @@ describe('AppViewModel', () => {
 
   describe('intermediate streams', () => {
     it('should call the NavItemService', () => {
-      const mockCredentials = [
-        {
-          id: 1,
-          profile: { platform: 'foo.smartschool.be' },
-          provider: 'smartschool'
-        }
-      ]; //TODO use fixture, created in credential service branch
-
-      store.dispatch(
-        new CredentialActions.CredentialsLoaded({
-          credentials: mockCredentials
-        })
-      );
-
       const navItemService = TestBed.get(NavItemService);
 
       // current value hardcoded in viewmodel
