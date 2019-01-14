@@ -7,7 +7,6 @@ import { PersonInterface } from '../+models';
 export const PERSON_SERVICE_TOKEN = new InjectionToken('PersonService');
 
 export interface PersonServiceInterface {
-  getAllForUser(userId: number): Observable<PersonInterface[]>;
   checkUniqueUsername(userId: number, username: string): Observable<boolean>;
   checkUniqueEmail(userId: number, email: string): Observable<boolean>;
   updateUser(
@@ -21,12 +20,6 @@ export interface PersonServiceInterface {
 })
 export class PersonService implements PersonServiceInterface {
   constructor(private personApi: PersonApi) {}
-
-  getAllForUser(userId: number): Observable<PersonInterface[]> {
-    return this.personApi
-      .getData(userId, 'persons')
-      .pipe(map((res: { persons: PersonInterface[] }) => res.persons));
-  }
 
   checkUniqueUsername(userId: number, username: string): Observable<boolean> {
     return this.personApi.checkUnique(userId, 'username', username);

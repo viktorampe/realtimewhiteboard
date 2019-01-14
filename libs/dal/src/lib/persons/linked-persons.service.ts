@@ -2,17 +2,16 @@ import { Injectable, InjectionToken } from '@angular/core';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { TeacherStudentInterface } from '../+models';
+import { PersonInterface, TeacherStudentInterface } from '../+models';
 
 export const LINKED_PERSON_SERVICE_TOKEN = new InjectionToken(
   'LinkedPersonService'
 );
 
 export interface LinkedPersonServiceInterface {
-  getAllTeacherStudentsForUser(
-    userId: number
-  ): Observable<TeacherStudentInterface[]>;
-  getAllLinkedPersonsForUser(
+  getAllForUser(userId: number): Observable<PersonInterface[]>;
+
+  getTeacherStudentsForUser(
     userId: number
   ): Observable<TeacherStudentInterface[]>;
 }
@@ -23,7 +22,13 @@ export interface LinkedPersonServiceInterface {
 export class LinkedPersonService implements LinkedPersonServiceInterface {
   constructor(private personApi: PersonApi) {}
 
-  getAllTeacherStudentsForUser(
+  getAllForUser(userId: number): Observable<PersonInterface[]> {
+    return this.personApi
+      .getData(userId, 'persons')
+      .pipe(map((res: { persons: PersonInterface[] }) => res.persons));
+  }
+
+  getTeacherStudentsForUser(
     userId: number
   ): Observable<TeacherStudentInterface[]> {
     return this.personApi
@@ -34,23 +39,5 @@ export class LinkedPersonService implements LinkedPersonServiceInterface {
             res.teacherStudents
         )
       );
-  }
-
-  getAllLinkedPersonsForUser(
-    userId: number
-  ): Observable<TeacherStudentInterface[]> {
-    return this.getAllTeacherStudentsForUser(userId);
-
-    // TODO create separate linked-user and teacher-student state
-    // TODO add linkedPersons to getData()
-
-    // return this.personApi
-    //   .getData(userId, 'linkedPersons')
-    //   .pipe(
-    //     map(
-    //       (res: { linkedPersons: TeacherStudentInterface[] }) =>
-    //         res.linkedPersons
-    //     )
-    //   );
   }
 }
