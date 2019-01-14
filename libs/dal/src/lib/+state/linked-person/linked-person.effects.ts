@@ -23,7 +23,7 @@ export class LinkedPersonEffects {
       run: (action: LoadLinkedPersons, state: DalState) => {
         if (!action.payload.force && state.linkedPersons.loaded) return;
         return this.linkedPersonService
-          .getAllForUser(action.payload.userId)
+          .getAllLinkedPersonsForUser(action.payload.userId)
           .pipe(
             map(linkedPersons => new LinkedPersonsLoaded({ linkedPersons }))
           );

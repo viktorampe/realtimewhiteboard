@@ -74,7 +74,8 @@ describe('LinkedPersonEffects', () => {
         {
           provide: LINKED_PERSON_SERVICE_TOKEN,
           useValue: {
-            getAllForUser: () => {}
+            getAllLinkedPersonsForUser: () => {},
+            getAllStudentTeachersForUser: () => {}
           }
         },
         LinkedPersonEffects,
@@ -96,7 +97,7 @@ describe('LinkedPersonEffects', () => {
         usedState = LinkedPersonReducer.initialState;
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAllForUser', []);
+        mockServiceMethodReturnValue('getAllLinkedPersonsForUser', []);
       });
       it('should trigger an api call with the initialState if force is not true', () => {
         expectInAndOut(
@@ -118,7 +119,7 @@ describe('LinkedPersonEffects', () => {
         usedState = { ...LinkedPersonReducer.initialState, loaded: true };
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAllForUser', []);
+        mockServiceMethodReturnValue('getAllLinkedPersonsForUser', []);
       });
       it('should not trigger an api call with the loaded state if force is not true', () => {
         expectInNoOut(effects.loadLinkedPersons$, unforcedLoadAction);
@@ -136,7 +137,7 @@ describe('LinkedPersonEffects', () => {
         usedState = LinkedPersonReducer.initialState;
       });
       beforeEach(() => {
-        mockServiceMethodError('getAllForUser', 'failed');
+        mockServiceMethodError('getAllLinkedPersonsForUser', 'failed');
       });
       it('should return a error action if force is not true', () => {
         expectInAndOut(
@@ -162,7 +163,7 @@ describe('LinkedPersonEffects', () => {
         };
       });
       beforeEach(() => {
-        mockServiceMethodError('getAllForUser', 'failed');
+        mockServiceMethodError('getAllLinkedPersonsForUser', 'failed');
       });
       it('should return nothing action if force is not true', () => {
         expectInNoOut(effects.loadLinkedPersons$, unforcedLoadAction);

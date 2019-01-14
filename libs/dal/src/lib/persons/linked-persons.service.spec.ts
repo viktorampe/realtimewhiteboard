@@ -31,14 +31,29 @@ describe('LinkedPersonsService', () => {
     }
   ));
 
-  it('should return persons', async () => {
-    mockData$ = hot('-a-|', {
-      a: { teacherStudents: [{ id: 1, teacherId: 1, studentId: 2 }] }
+  describe('getAllTeacherStudentsForUser', () => {
+    it('should return persons', async () => {
+      mockData$ = hot('-a-|', {
+        a: { teacherStudents: [{ id: 1, teacherId: 1, studentId: 2 }] }
+      });
+      expect(service.getAllTeacherStudentsForUser(1)).toBeObservable(
+        hot('-a-|', {
+          a: [{ id: 1, teacherId: 1, studentId: 2 }]
+        })
+      );
     });
-    expect(service.getAllForUser(1)).toBeObservable(
-      hot('-a-|', {
-        a: [{ id: 1, teacherId: 1, studentId: 2 }]
-      })
-    );
+  });
+
+  describe('getAllLinkedPersonsForUser', () => {
+    it('should return persons', async () => {
+      mockData$ = hot('-a-|', {
+        a: { linkedPersons: [{ id: 1, teacherId: 1, studentId: 2 }] }
+      });
+      expect(service.getAllLinkedPersonsForUser(1)).toBeObservable(
+        hot('-a-|', {
+          a: [{ id: 1, teacherId: 1, studentId: 2 }]
+        })
+      );
+    });
   });
 });

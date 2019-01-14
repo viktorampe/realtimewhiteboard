@@ -9,7 +9,12 @@ export const LINKED_PERSON_SERVICE_TOKEN = new InjectionToken(
 );
 
 export interface LinkedPersonServiceInterface {
-  getAllForUser(userId: number): Observable<TeacherStudentInterface[]>;
+  getAllTeacherStudentsForUser(
+    userId: number
+  ): Observable<TeacherStudentInterface[]>;
+  getAllLinkedPersonsForUser(
+    userId: number
+  ): Observable<TeacherStudentInterface[]>;
 }
 
 @Injectable({
@@ -18,13 +23,28 @@ export interface LinkedPersonServiceInterface {
 export class LinkedPersonService implements LinkedPersonServiceInterface {
   constructor(private personApi: PersonApi) {}
 
-  getAllForUser(userId: number): Observable<TeacherStudentInterface[]> {
+  getAllTeacherStudentsForUser(
+    userId: number
+  ): Observable<TeacherStudentInterface[]> {
     return this.personApi
       .getData(userId, 'teacherStudents')
       .pipe(
         map(
           (res: { teacherStudents: TeacherStudentInterface[] }) =>
             res.teacherStudents
+        )
+      );
+  }
+
+  getAllLinkedPersonsForUser(
+    userId: number
+  ): Observable<TeacherStudentInterface[]> {
+    return this.personApi
+      .getData(userId, 'linkedPersons')
+      .pipe(
+        map(
+          (res: { linkedPersons: TeacherStudentInterface[] }) =>
+            res.linkedPersons
         )
       );
   }
