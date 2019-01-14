@@ -1,8 +1,10 @@
+import { EnvironmentInterface } from './environment.type';
+
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build ---prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-export const environment = {
+export const environment: EnvironmentInterface = {
   production: false,
   iconMapping: {
     // -> learning areas
@@ -224,6 +226,13 @@ export const environment = {
     },
     errorManagement: {
       managedStatusCodes: [500, 401, 404, 0]
+    }
+  },
+  sso: {
+    facebook: {
+      enabled: true,
+      linkUrl: 'http://api.polpo.localhost/auth/......', //TODO -- needs to be corrected to actual link
+      avatarLocation: 'credential.profile.photos[0].value' //REMARK -- it is not clear if this is the way to go with this setting
     }
   }
 };
