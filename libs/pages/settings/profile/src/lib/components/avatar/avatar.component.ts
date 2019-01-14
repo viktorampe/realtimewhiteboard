@@ -1,7 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import {
+  FilereaderServiceInterface,
+  FILEREADER_SERVICE_TOKEN
+} from '@campus/browser';
 import { PersonInterface } from '@campus/dal';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { take, tap } from 'rxjs/operators';
 import { ProfileViewModel } from '../profile.viewmodel';
 
 @Component({
@@ -12,11 +17,16 @@ import { ProfileViewModel } from '../profile.viewmodel';
 export class AvatarComponent implements OnInit {
   currentUser$: Observable<PersonInterface>;
 
-  imgData: { image?: string; cropped?: string; error?: string } = {};
+  selectedImg$: Observable<string>;
+  croppedImg$: BehaviorSubject<string>;
+  loadError$: Observable<string>;
   uploadHoverState: boolean;
-  private allowedImgRegex = /\.(jpe?g|png|gif)$/i;
 
-  constructor(private profileViewModel: ProfileViewModel) {}
+  constructor(
+    private profileViewModel: ProfileViewModel,
+    @Inject(FILEREADER_SERVICE_TOKEN)
+    private filereaderService: FilereaderServiceInterface
+  ) {}
 
   ngOnInit() {
     this.loadOutputStreams();
@@ -44,43 +54,38 @@ export class AvatarComponent implements OnInit {
   }
 
   previewAvatar(event: ImageCroppedEvent): void {
-    this.imgData.cropped = event.base64;
+    this.croppedImg$.next(event.base64);
   }
 
   saveAvatar(): void {
-    this.profileViewModel.updateProfile({ avatar: this.imgData.cropped });
+    this.croppedImg$
+      .pipe(
+        tap(() => console.log('subscribed')),
+        take(1)
+      )
+      .subscribe(avatar => {
+        this.profileViewModel.updateProfile({ avatar });
+      });
   }
 
   resetAvatar(): void {
-    this.imgData = {};
+    this.filereaderService.reset();
   }
 
   private loadOutputStreams(): void {
     this.currentUser$ = this.profileViewModel.currentUser$;
+    this.selectedImg$ = this.filereaderService.loaded$;
+    this.loadError$ = this.filereaderService.error$;
+    this.croppedImg$ = new BehaviorSubject(null);
   }
 
-  private loadImage(file: File) {
-    this.imgData.error = null;
+  loadImage(file: File) {
+    this.filereaderService.reset();
 
-    if (!file) return;
-    if (!this.allowedImgRegex.test(file.name)) {
-      this.imgData.error =
-        'Dit bestandstype wordt niet ondersteund. Selecteer een andere afbeelding.';
+    if (!this.filereaderService.isFileTypeAllowed(file)) {
       return;
     }
 
-    const myReader: FileReader = new FileReader();
-    console.log(myReader);
-    myReader.onloadend = (loadEvent: ProgressEvent) => {
-      this.imgData.image = (loadEvent.target as FileReader).result as string;
-    };
-    myReader.onerror = () => {
-      myReader.abort();
-    };
-    myReader.onabort = () => {
-      this.imgData.error =
-        'Er was een probleem bij het lezen van het bestand. Probeer het opnieuw of selecteer een andere afbeelding.';
-    };
-    myReader.readAsDataURL(file);
+    this.filereaderService.readAsDataURL(file);
   }
 }
