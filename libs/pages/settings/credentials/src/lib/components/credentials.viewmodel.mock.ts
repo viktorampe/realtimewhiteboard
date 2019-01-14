@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
+  CredentialFixture,
   PassportUserCredentialInterface,
   PersonFixture,
   PersonInterface
@@ -26,17 +27,17 @@ export class MockCredentialsViewModel
   );
 
   public credentials$ = new BehaviorSubject<PassportUserCredentialInterface[]>([
-    {
+    new CredentialFixture({
       id: 1,
       profile: { platform: 'foo.smartschool.be' },
       provider: 'smartschool'
-    },
-    {
-      id: 1,
+    }),
+    new CredentialFixture({
+      id: 2,
       profile: { platform: 'foo.smartschool.be' },
       provider: 'smartschool'
-    }
-  ]); //TODO use fixture, created in credential service branch
+    })
+  ]);
 
   public singleSignOnProviders$ = new BehaviorSubject<
     SingleSignOnProviderInterface[]
@@ -47,6 +48,6 @@ export class MockCredentialsViewModel
   ]);
 
   public useProfilePicture(credential: PassportUserCredentialInterface): void {}
-  public linkCredential(userId: number, providerId: number): void {}
+  public linkCredential(providerId: number): void {}
   public unlinkCredential(credential: PassportUserCredentialInterface): void {}
 }

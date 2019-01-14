@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import {
+  CredentialFixture,
   DalState,
   getStoreModuleForFeatures,
   PersonFixture,
@@ -58,11 +59,11 @@ describe('ProfileViewModel', () => {
     });
 
     describe('credentials$', () => {
-      const mockCredential = {
+      const mockCredential = new CredentialFixture({
         id: 1,
         profile: { platform: 'foo.smartschool.be' },
         provider: 'smartschool'
-      }; //TODO use fixture, created in credential service branch
+      });
 
       // beforeEach(() => {
       //   store.dispatch(
