@@ -211,7 +211,8 @@
     // --primary--disabled
     &.ui-button--disabled {
       .ui-button {
-        background-color: darken($ui-button-background-color, 50%);
+        background-color: lighten($ui-button-background-color-1, 30%);
+        color: $ui-button-color;
       }
     }
     // --primary--bordered
