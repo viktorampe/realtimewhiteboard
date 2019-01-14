@@ -1,16 +1,12 @@
 import { InjectionToken } from '@angular/core';
 import { Observable } from 'rxjs';
 
-export type FilereaderHandler =
-  | ((this: FileReader, ev: ProgressEvent) => any)
-  | null;
-
 export const FILEREADER_SERVICE_TOKEN = new InjectionToken(
   'browser filereader service'
 );
 
 export interface FilereaderServiceInterface {
-  loaded$: Observable<string>;
+  loaded$: Observable<string | ArrayBuffer>;
   error$: Observable<string>;
 
   // service methods

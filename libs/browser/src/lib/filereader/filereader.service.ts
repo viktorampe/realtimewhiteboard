@@ -2,7 +2,7 @@ import { Inject, Injectable, InjectionToken } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { FilereaderServiceInterface } from './filereader.service.interface';
 
-const FILE_READER = new InjectionToken<FileReader>('FileReaderToken', {
+export const FILE_READER = new InjectionToken<FileReader>('FileReaderToken', {
   providedIn: 'root',
   factory: () => new FileReader()
 });
@@ -11,8 +11,8 @@ const FILE_READER = new InjectionToken<FileReader>('FileReaderToken', {
   providedIn: 'root'
 })
 export class FilereaderService implements FilereaderServiceInterface {
-  loaded$: BehaviorSubject<string> = new BehaviorSubject<string>(null);
-  error$: BehaviorSubject<string> = new BehaviorSubject<string>(null);
+  loaded$ = new BehaviorSubject<string | ArrayBuffer>(null);
+  error$ = new BehaviorSubject<string>(null);
 
   constructor(@Inject(FILE_READER) private fileReader: FileReader) {
     this.setEventHandlers();
@@ -74,12 +74,12 @@ export class FilereaderService implements FilereaderServiceInterface {
     this.fileReader.abort();
   };
   private onload = (ev: ProgressEvent): void => {
-    // this.loaded$.next((ev.target as FileReader).result as string);
-    // console.log(this.fileReader);
-    // console.log(ev.target);
-    this.loaded$.next(this.fileReader.result as string);
+    console.log('loaded');
+    this.loaded$.next((ev.target as FileReader).result);
+    // this.loaded$.next(this.fileReader.result);
   };
   private onloadstart = (ev: ProgressEvent): void => {
+    console.log('loadstart');
     this.loaded$.next(null);
   };
 }

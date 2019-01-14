@@ -4,19 +4,24 @@ import { By } from '@angular/platform-browser';
 import {
   FilereaderService,
   FilereaderServiceInterface,
-  FILEREADER_SERVICE_TOKEN
+  FILEREADER_SERVICE_TOKEN,
+  FILE_READER
 } from '@campus/browser';
 import { AUTH_SERVICE_TOKEN } from '@campus/dal';
-import { hot } from 'jasmine-marbles';
+import { hot } from '@nrwl/nx/testing';
+import { BehaviorSubject } from 'rxjs';
 import { ProfileViewModel } from '../profile.viewmodel';
 import { MockProfileViewModel } from '../profile.viewmodel.mock';
 import { AvatarComponent } from './avatar.component';
 
-xdescribe('AvatarComponent', () => {
+describe('AvatarComponent', () => {
   let component: AvatarComponent;
   let fixture: ComponentFixture<AvatarComponent>;
-  let spy: jest.SpyInstance;
   let filereaderService: FilereaderServiceInterface;
+  let filereader: FileReader;
+  let mockFile = new File([''], 'filename.png', {
+    type: 'image/png'
+  });
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -24,10 +29,7 @@ xdescribe('AvatarComponent', () => {
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         { provide: ProfileViewModel, useClass: MockProfileViewModel },
-        {
-          provide: AUTH_SERVICE_TOKEN,
-          useValue: { userId: 1 }
-        },
+        { provide: AUTH_SERVICE_TOKEN, useValue: { userId: 1 } },
         { provide: FILEREADER_SERVICE_TOKEN, useClass: FilereaderService }
       ]
     }).compileComponents();
@@ -43,28 +45,93 @@ xdescribe('AvatarComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('selectFileListener', () => {
-    const mockFile: File = new File([''], 'filename.png', {
-      type: 'image/png'
-    });
-
-    beforeAll(() => {
+  describe('loadImage', () => {
+    beforeEach(() => {
       filereaderService = TestBed.get(FILEREADER_SERVICE_TOKEN);
+      filereader = TestBed.get(FILE_READER);
     });
 
-    it('should load the image', async(() => {
-      component.loadImage(mockFile);
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+
+    it('should load the image', () => {
+      const mockProgressEvent = {
+        target: { result: 'base64encoded-image' }
+      } as unknown;
+      filereader.onload(mockProgressEvent as ProgressEvent);
 
       expect(filereaderService.loaded$).toBeObservable(
         hot('a', {
-          a: ''
+          a: 'base64encoded-image'
         })
       );
-    }));
+    });
 
-    it('should update imgData.error for invalid file type', () => {});
+    it('should not try to load image when filetype is invalid', () => {
+      const spyService = jest.spyOn(filereaderService, 'readAsDataURL');
+      jest.spyOn(filereaderService, 'isFileTypeAllowed').mockReturnValue(false);
+      component.loadImage(mockFile);
 
-    it('should update imgData.error when read fails', () => {});
+      expect(spyService).not.toHaveBeenCalled();
+    });
+
+    it('should try to load image when filetype is valid', () => {
+      const spyRead = jest.spyOn(filereaderService, 'readAsDataURL');
+      jest.spyOn(filereaderService, 'isFileTypeAllowed').mockReturnValue(true);
+      component.loadImage(mockFile);
+
+      expect(spyRead).toHaveBeenCalledWith(mockFile);
+    });
+
+    it('should call reset when selecting new image', () => {
+      const spyReset = jest.spyOn(filereaderService, 'reset');
+      component.loadImage(mockFile);
+
+      expect(spyReset).toHaveBeenCalled();
+    });
+
+    // it('should update error$ when read fails', () => {
+    //   filereader.onerror({} as ProgressEvent);
+
+    //   expect(filereaderService.error$).toBeObservable(
+    //     hot('a', {
+    //       a:
+    //         'Er was een probleem bij het lezen van het bestand. ' +
+    //         'Probeer het opnieuw of selecteer een andere afbeelding.'
+    //     })
+    //   );
+    // });
+  });
+
+  describe('fileListeners', () => {
+    it('selectFileListener should call loadImage and reset inputfield', () => {
+      const ev = {
+        target: {
+          files: [mockFile],
+          value: 'filename.png'
+        }
+      } as unknown;
+      const spyLoad = jest.spyOn(component, 'loadImage');
+      component.selectFileListener(ev as Event);
+
+      expect(spyLoad).toHaveBeenCalledWith(mockFile);
+      expect(((ev as Event).target as HTMLInputElement).value).toBe('');
+    });
+
+    it('dropFileListener should call loadImage', () => {
+      const ev = {
+        dataTransfer: {
+          files: [mockFile]
+        },
+        stopPropagation: jest.fn(),
+        preventDefault: jest.fn()
+      } as unknown;
+      const spyLoad = jest.spyOn(component, 'loadImage');
+      component.dropFileListener(ev as DragEvent);
+
+      expect(spyLoad).toHaveBeenCalledWith(mockFile);
+    });
   });
 
   describe('ui', () => {
@@ -77,7 +144,7 @@ xdescribe('AvatarComponent', () => {
     });
 
     it('should show the cropper element, but not select form', async(() => {
-      component.imgData.image = 'some_base64_encoded_image';
+      component.selectedImg$ = new BehaviorSubject('base64encoded-image');
 
       fixture.detectChanges();
       fixture.whenStable().then(() => {
@@ -89,3 +156,4 @@ xdescribe('AvatarComponent', () => {
     }));
   });
 });
+// file.only

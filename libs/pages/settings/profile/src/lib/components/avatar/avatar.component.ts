@@ -6,7 +6,7 @@ import {
 import { PersonInterface } from '@campus/dal';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { take, tap } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 import { ProfileViewModel } from '../profile.viewmodel';
 
 @Component({
@@ -17,7 +17,7 @@ import { ProfileViewModel } from '../profile.viewmodel';
 export class AvatarComponent implements OnInit {
   currentUser$: Observable<PersonInterface>;
 
-  selectedImg$: Observable<string>;
+  selectedImg$: Observable<string | ArrayBuffer>;
   croppedImg$: BehaviorSubject<string>;
   loadError$: Observable<string>;
   uploadHoverState: boolean;
@@ -32,7 +32,7 @@ export class AvatarComponent implements OnInit {
     this.loadOutputStreams();
   }
 
-  selectFileListener(event: Event) {
+  selectFileListener(event: Event): void {
     const el = event.target as HTMLInputElement;
     const file: File = el.files[0];
     this.loadImage(file);
@@ -40,17 +40,26 @@ export class AvatarComponent implements OnInit {
     el.value = ''; // clear selected file from input
   }
 
-  dropFileListener(event: DragEvent) {
+  dropFileListener(event: DragEvent): void {
     this.dragOver(event, false);
 
     const file: File = event.dataTransfer.files[0];
     this.loadImage(file);
   }
 
-  dragOver(event: DragEvent, hover: boolean = true) {
+  dragOver(event: DragEvent, hover: boolean = true): void {
     event.stopPropagation();
     event.preventDefault();
     this.uploadHoverState = hover;
+  }
+
+  loadImage(file: File): void {
+    this.filereaderService.reset();
+    if (!this.filereaderService.isFileTypeAllowed(file)) {
+      return;
+    }
+
+    this.filereaderService.readAsDataURL(file);
   }
 
   previewAvatar(event: ImageCroppedEvent): void {
@@ -58,14 +67,9 @@ export class AvatarComponent implements OnInit {
   }
 
   saveAvatar(): void {
-    this.croppedImg$
-      .pipe(
-        tap(() => console.log('subscribed')),
-        take(1)
-      )
-      .subscribe(avatar => {
-        this.profileViewModel.updateProfile({ avatar });
-      });
+    this.croppedImg$.pipe(take(1)).subscribe(avatar => {
+      this.profileViewModel.updateProfile({ avatar });
+    });
   }
 
   resetAvatar(): void {
@@ -77,15 +81,5 @@ export class AvatarComponent implements OnInit {
     this.selectedImg$ = this.filereaderService.loaded$;
     this.loadError$ = this.filereaderService.error$;
     this.croppedImg$ = new BehaviorSubject(null);
-  }
-
-  loadImage(file: File) {
-    this.filereaderService.reset();
-
-    if (!this.filereaderService.isFileTypeAllowed(file)) {
-      return;
-    }
-
-    this.filereaderService.readAsDataURL(file);
   }
 }
