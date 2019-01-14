@@ -121,8 +121,6 @@ export const getResultsGroupedByArea = createSelector(
   selectResultState,
   (state: State) => {
     const ids: number[] = <number[]>state.ids;
-    return groupArrayByKey<ResultInterface>(Object.values(state.entities), {
-      learningAreaId: 0
-    });
+    return groupArrayByKey(Object.values(state.entities), 'learningAreaId');
   }
 );

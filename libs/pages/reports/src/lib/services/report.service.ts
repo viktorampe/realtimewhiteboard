@@ -47,9 +47,7 @@ export class ReportService {
   ) {
     const resultsByEduContentId: Dictionary<
       ResultInterface[]
-    > = groupArrayByKey<ResultInterface>(results, {
-      eduContentId: 0
-    });
+    > = groupArrayByKey(results, 'eduContentId');
 
     return Object.keys(resultsByEduContentId).map(eduContentId => {
       const eduContentResults = resultsByEduContentId[eduContentId];
