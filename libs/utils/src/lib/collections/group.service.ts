@@ -1,6 +1,7 @@
 import { Dictionary } from '@ngrx/entity';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
+import { PrimitivePropertiesKeys } from '../types/generic.types';
 
 export function groupStreamByKey<T, K extends PrimitivePropertiesKeys<T>>(
   stream$: Observable<T[]>,
@@ -30,7 +31,3 @@ export function groupArrayByKey<T, K extends PrimitivePropertiesKeys<T>>(
   });
   return byKey;
 }
-
-type PrimitivePropertiesKeys<T> = {
-  [K in keyof T]: T[K] extends string | number ? K : never
-}[keyof T];
