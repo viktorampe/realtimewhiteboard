@@ -39,7 +39,7 @@ export class CredentialService implements CredentialServiceInterface {
     credential: PassportUserCredentialInterface
   ): Observable<boolean> {
     return this.personApi
-      .useAvatarFromCredential(credential.userId, credential)
+      .useAvatarFromCredential(credential.userId, credential.id)
       .pipe(mapTo(true));
   }
 }
