@@ -1,11 +1,10 @@
 import { Dictionary } from '@ngrx/entity';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
-import { NestedPartial } from '../types/nestedpartial';
 
-export function groupStreamByKey<T>(
+export function groupStreamByKey<T, K extends PrimitivePropertiesKeys<T>>(
   stream$: Observable<T[]>,
-  key: NestedPartial<T>
+  key: K
 ): Observable<Dictionary<T[]>> {
   return stream$.pipe(
     map(
@@ -17,13 +16,13 @@ export function groupStreamByKey<T>(
   );
 }
 
-export function groupArrayByKey<T>(
+export function groupArrayByKey<T, K extends PrimitivePropertiesKeys<T>>(
   arr: T[],
-  key: NestedPartial<T>
+  key: K
 ): Dictionary<T[]> {
-  const byKey = {};
+  const byKey = {} as any;
   arr.forEach(item => {
-    const prop = getPropertyByKey(item, key);
+    const prop = item[key];
     if (!byKey[prop]) {
       byKey[prop] = [];
     }
@@ -32,10 +31,6 @@ export function groupArrayByKey<T>(
   return byKey;
 }
 
-function getPropertyByKey<T>(item: T, keys: NestedPartial<T>): number | string {
-  if (typeof item === 'string' || typeof item === 'number') {
-    return item;
-  }
-  const key = Object.keys(keys)[0];
-  return getPropertyByKey(item[key], keys[key]);
-}
+type PrimitivePropertiesKeys<T> = {
+  [K in keyof T]: T[K] extends string | number ? K : never
+}[keyof T];
