@@ -41,6 +41,12 @@ const routes: Routes = [
         data: { breadcrumbText: 'Meldingen' }
       },
       {
+        path: 'reports',
+        loadChildren: '@campus/pages/reports#PagesReportsModule',
+        data: { breadcrumbText: 'Resultaten' },
+        canActivate: [CoupledTeacherGuard]
+      },
+      {
         path: 'settings',
         data: { breadcrumbText: 'Instellingen' },
         children: [

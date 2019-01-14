@@ -3,10 +3,9 @@
   $ui-person-summary-picture-height: 50px !default;
 
   $ui-person-summary-connection-type-icon-height: 25px !default;
-  $ui-person-summary-connection-type-icon-width: 20px !default;
+  $ui-person-summary-connection-type-icon-width: 25px !default;
   $ui-person-summary-connection-type-icon-left-margin: 5px !default;
 
-  $ui-person-summary-person-text-width: 350px !default;
   $ui-person-summary-person-text-left-margin: 10px !default;
 
   $ui-person-summary-person-text-name-color: $ui-primary-font-color !default;
@@ -36,10 +35,9 @@
 
     &__text {
       margin-left: $ui-person-summary-person-text-left-margin;
-      width: $ui-person-summary-person-text-width;
 
       &__person-name {
-        color: $ui-person-summary-person-name-color;
+        color: $ui-person-summary-person-text-name-color;
         font-size: $ui-person-summary-person-text-name-font-size;
         font-family: $ui-person-summary-person-text-name-font-family;
       }

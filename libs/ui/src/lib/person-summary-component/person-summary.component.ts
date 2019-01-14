@@ -6,7 +6,7 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./person-summary.component.scss']
 })
 export class PersonSummaryComponent {
-  @Input() name: string;
-  @Input() imageUrl: string;
-  @Input() connectionTypeIcon: string;
+  @Input() name = '';
+  @Input() imageUrl = 'assets/images/avatar.png';
+  @Input() connectionTypeIcon = '';
 }
