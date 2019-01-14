@@ -1,5 +1,6 @@
 import { CredentialActions } from '.';
 import { PassportUserCredentialInterface } from '../../+models';
+import { CredentialFixture } from './../../+fixtures/Credential.fixture';
 import { initialState, reducer, State } from './credential.reducer';
 
 const providerInitialValue = 'facebook';
@@ -14,10 +15,10 @@ function createCredential(
   id: number,
   provider: any = providerInitialValue
 ): PassportUserCredentialInterface | any {
-  return {
+  return new CredentialFixture({
     id: id,
     provider: provider
-  };
+  });
 }
 
 /**

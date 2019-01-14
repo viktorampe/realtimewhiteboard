@@ -1,12 +1,13 @@
 import { CredentialQueries } from '.';
+import { CredentialFixture } from '../../+fixtures';
 import { PassportUserCredentialInterface } from '../../+models';
 import { State } from './credential.reducer';
 
 describe('Credential Selectors', () => {
   function createCredential(id: number): PassportUserCredentialInterface | any {
-    return {
+    return new CredentialFixture({
       id: id
-    };
+    });
   }
 
   function createState(

@@ -1,6 +1,7 @@
 import { async, TestBed } from '@angular/core/testing';
 import {
   CredentialActions,
+  CredentialFixture,
   CredentialReducer,
   DalState,
   LearningAreaFixture,
@@ -75,12 +76,17 @@ describe('AppViewModel', () => {
     mockNavItem = { title: 'mock' };
     mockProfileMenuItem = { description: 'mock' };
     mockCredentials = [
-      {
+      new CredentialFixture({
         id: 1,
         profile: { platform: 'foo.smartschool.be' },
         provider: 'smartschool'
-      }
-    ]; //TODO use fixture, created in credential service branch
+      }),
+      new CredentialFixture({
+        id: 2,
+        profile: { platform: 'foo.facebook.com' },
+        provider: 'facebook'
+      })
+    ];
   });
 
   beforeEach(() => {
