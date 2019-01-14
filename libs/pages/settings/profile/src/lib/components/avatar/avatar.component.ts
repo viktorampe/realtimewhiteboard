@@ -12,9 +12,8 @@ import { ProfileViewModel } from '../profile.viewmodel';
 export class AvatarComponent implements OnInit {
   currentUser$: Observable<PersonInterface>;
 
-  imgData: { image?: string; cropped?: string } = {};
+  imgData: { image?: string; cropped?: string; error?: string } = {};
   uploadHoverState: boolean;
-  fileError: string;
   private allowedImgRegex = /\.(jpe?g|png|gif)$/i;
 
   constructor(private profileViewModel: ProfileViewModel) {}
@@ -53,7 +52,7 @@ export class AvatarComponent implements OnInit {
   }
 
   resetAvatar(): void {
-    delete this.imgData.image;
+    this.imgData = {};
   }
 
   private loadOutputStreams(): void {
@@ -61,18 +60,26 @@ export class AvatarComponent implements OnInit {
   }
 
   private loadImage(file: File) {
-    this.fileError = null;
+    this.imgData.error = null;
 
     if (!file) return;
     if (!this.allowedImgRegex.test(file.name)) {
-      this.fileError =
+      this.imgData.error =
         'Dit bestandstype wordt niet ondersteund. Selecteer een andere afbeelding.';
       return;
     }
 
     const myReader: FileReader = new FileReader();
+    console.log(myReader);
     myReader.onloadend = (loadEvent: ProgressEvent) => {
       this.imgData.image = (loadEvent.target as FileReader).result as string;
+    };
+    myReader.onerror = () => {
+      myReader.abort();
+    };
+    myReader.onabort = () => {
+      this.imgData.error =
+        'Er was een probleem bij het lezen van het bestand. Probeer het opnieuw of selecteer een andere afbeelding.';
     };
     myReader.readAsDataURL(file);
   }

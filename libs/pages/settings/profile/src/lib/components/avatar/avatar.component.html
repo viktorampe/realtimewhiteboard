@@ -1,46 +1,58 @@
-<div class="pages-settings-profile-avatar"
-     *ngIf="(currentUser$ | async) as user">
-  <campus-page-header [title]="'Profielfoto aanpassen'"
-                      [subtitle]="user.displayName"
-                      [iconClass]="'account'">
+<div
+  class="pages-settings-profile-avatar"
+  *ngIf="(currentUser$ | async) as user"
+>
+  <campus-page-header
+    [title]="'Profielfoto aanpassen'"
+    [subtitle]="user.displayName"
+    [iconClass]="'account'"
+  >
   </campus-page-header>
 
   <div>
-    <form *ngIf="!imgData.image; else: cropImage"
-          class="file-upload"
-          [class.hide]="imgData.image"
-          [class.hover]="uploadHoverState"
-          (click)="fileInput.click()"
-          (drop)="dropFileListener($event)"
-          (dragover)="dragOver($event)"
-          (dragleave)="dragOver($event, false)">
-      <img *ngIf="user.avatar"
-           [src]="user.avatar" />
+    <form
+      *ngIf="!imgData.image; else: cropImage"
+      class="file-upload"
+      [class.hover]="uploadHoverState"
+      (click)="fileInput.click()"
+      (drop)="dropFileListener($event)"
+      (dragover)="dragOver($event)"
+      (dragleave)="dragOver($event, false)"
+    >
+      <img *ngIf="user.avatar" [src]="user.avatar" />
       <div>Selecteer een afbeelding of sleep het hierheen</div>
-      <input #fileInput
-             type="file"
-             accept="image/*"
-             (click)="$event.stopPropagation()"
-             (change)="selectFileListener($event)" />
-      <div *ngIf="fileError"><span class="warning">{{fileError}}</span></div>
+      <input
+        #fileInput
+        type="file"
+        accept="image/*"
+        (click)="$event.stopPropagation()"
+        (change)="selectFileListener($event)"
+      />
+      <div *ngIf="imgData.error"
+        ><span class="warning">{{ imgData.error }}</span></div
+      >
     </form>
 
     <ng-template #cropImage>
-      <div class="pages-settings-profile-avatar__result"><img *ngIf="imgData.cropped"
-             [src]="imgData.cropped" /></div>
-      <image-cropper #cropper
-                     [imageBase64]="imgData.image"
-                     [resizeToWidth]="200"
-                     [cropperMinWidth]="100"
-                     [format]="'jpeg'"
-                     [imageQuality]="70"
-                     [outputType]="'base64'"
-                     [roundCropper]="true"
-                     (imageCropped)="previewAvatar($event)"></image-cropper>
+      <div class="pages-settings-profile-avatar__result"
+        ><img *ngIf="imgData.cropped" [src]="imgData.cropped"
+      /></div>
+      <image-cropper
+        #cropper
+        [imageBase64]="imgData.image"
+        [resizeToWidth]="200"
+        [cropperMinWidth]="100"
+        [format]="'jpeg'"
+        [imageQuality]="70"
+        [outputType]="'base64'"
+        [roundCropper]="true"
+        (imageCropped)="previewAvatar($event)"
+      ></image-cropper>
       <div>
-        <campus-button primary
-                       (click)="saveAvatar()">Opslaan</campus-button>
-        <campus-button (click)="resetAvatar()">Andere afbeelding kiezen</campus-button>
+        <campus-button primary (click)="saveAvatar()">Opslaan</campus-button>
+        <campus-button (click)="resetAvatar()"
+          >Andere afbeelding kiezen</campus-button
+        >
       </div>
     </ng-template>
   </div>
