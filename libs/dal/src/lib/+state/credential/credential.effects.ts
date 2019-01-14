@@ -75,7 +75,6 @@ export class CredentialEffects {
                 new LoadUser({ force: true }),
                 new UserUpdateMessage({
                   message: 'Profile picture updated',
-                  timeStamp: Date.now(),
                   type: 'success'
                 })
               ])
@@ -85,7 +84,6 @@ export class CredentialEffects {
       onError: (action: UseCredentialProfilePicture, error) => {
         return new UserUpdateMessage({
           message: 'Profile picture update failed',
-          timeStamp: Date.now(),
           type: 'error'
         });
       }

@@ -251,20 +251,6 @@ describe('CredentialEffects', () => {
     });
     let credentialService: CredentialServiceInterface;
 
-    const mockDate = Date.now();
-    let realDateImplementation;
-
-    beforeAll(() => {
-      // override date implementation
-      realDateImplementation = Date.now.bind(global.Date);
-      global.Date.now = jest.fn(() => mockDate);
-    });
-
-    afterAll(() => {
-      // put original date implementation back
-      global.Date.now = realDateImplementation;
-    });
-
     beforeEach(() => {
       usedState = CredentialReducer.initialState;
       credentialService = TestBed.get(CREDENTIAL_SERVICE_TOKEN);
@@ -301,7 +287,6 @@ describe('CredentialEffects', () => {
         new LoadUser({ force: true }),
         new UserUpdateMessage({
           message: 'Profile picture updated',
-          timeStamp: Date.now(),
           type: 'success'
         })
       ];
@@ -321,7 +306,6 @@ describe('CredentialEffects', () => {
 
       const expected = new UserUpdateMessage({
         message: 'Profile picture update failed',
-        timeStamp: Date.now(),
         type: 'error'
       });
 
