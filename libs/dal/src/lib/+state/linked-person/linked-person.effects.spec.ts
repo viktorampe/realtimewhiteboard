@@ -75,7 +75,7 @@ describe('LinkedPersonEffects', () => {
           provide: LINKED_PERSON_SERVICE_TOKEN,
           useValue: {
             getAllLinkedPersonsForUser: () => {},
-            getAllStudentTeachersForUser: () => {}
+            getAllTeacherStudentsForUser: () => {}
           }
         },
         LinkedPersonEffects,
