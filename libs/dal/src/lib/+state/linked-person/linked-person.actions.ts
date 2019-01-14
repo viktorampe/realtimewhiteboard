@@ -1,6 +1,6 @@
 import { Update } from '@ngrx/entity';
 import { Action } from '@ngrx/store';
-import { TeacherStudentInterface } from '../../+models';
+import { PersonInterface } from '../../+models';
 
 export enum LinkedPersonsActionTypes {
   LinkedPersonsLoaded = '[LinkedPersons] LinkedPersons Loaded',
@@ -28,7 +28,7 @@ export class LoadLinkedPersons implements Action {
 export class LinkedPersonsLoaded implements Action {
   readonly type = LinkedPersonsActionTypes.LinkedPersonsLoaded;
 
-  constructor(public payload: { linkedPersons: TeacherStudentInterface[] }) {}
+  constructor(public payload: { persons: PersonInterface[] }) {}
 }
 
 export class LinkedPersonsLoadError implements Action {
@@ -39,41 +39,37 @@ export class LinkedPersonsLoadError implements Action {
 export class AddLinkedPerson implements Action {
   readonly type = LinkedPersonsActionTypes.AddLinkedPerson;
 
-  constructor(public payload: { linkedPerson: TeacherStudentInterface }) {}
+  constructor(public payload: { person: PersonInterface }) {}
 }
 
 export class UpsertLinkedPerson implements Action {
   readonly type = LinkedPersonsActionTypes.UpsertLinkedPerson;
 
-  constructor(public payload: { linkedPerson: TeacherStudentInterface }) {}
+  constructor(public payload: { person: PersonInterface }) {}
 }
 
 export class AddLinkedPersons implements Action {
   readonly type = LinkedPersonsActionTypes.AddLinkedPersons;
 
-  constructor(public payload: { linkedPersons: TeacherStudentInterface[] }) {}
+  constructor(public payload: { persons: PersonInterface[] }) {}
 }
 
 export class UpsertLinkedPersons implements Action {
   readonly type = LinkedPersonsActionTypes.UpsertLinkedPersons;
 
-  constructor(public payload: { linkedPersons: TeacherStudentInterface[] }) {}
+  constructor(public payload: { persons: PersonInterface[] }) {}
 }
 
 export class UpdateLinkedPerson implements Action {
   readonly type = LinkedPersonsActionTypes.UpdateLinkedPerson;
 
-  constructor(
-    public payload: { linkedPerson: Update<TeacherStudentInterface> }
-  ) {}
+  constructor(public payload: { person: Update<PersonInterface> }) {}
 }
 
 export class UpdateLinkedPersons implements Action {
   readonly type = LinkedPersonsActionTypes.UpdateLinkedPersons;
 
-  constructor(
-    public payload: { linkedPersons: Update<TeacherStudentInterface>[] }
-  ) {}
+  constructor(public payload: { persons: Update<PersonInterface>[] }) {}
 }
 
 export class DeleteLinkedPerson implements Action {

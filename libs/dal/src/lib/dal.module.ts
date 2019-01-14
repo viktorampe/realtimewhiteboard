@@ -26,7 +26,10 @@ import {
   LearningAreaReducer,
   LearningAreasEffects
 } from './+state/learning-area';
-import { PersonEffects, PersonReducer } from './+state/linked-person';
+import {
+  LinkedPersonEffects,
+  LinkedPersonReducer
+} from './+state/linked-person';
 import { ResultReducer } from './+state/result';
 import { ResultEffects } from './+state/result/result.effects';
 import {
@@ -137,7 +140,7 @@ interface DalOptions {
       ResultReducer,
       CurrentExerciseReducer,
       TeacherStudentReducer,
-      PersonReducer
+      LinkedPersonReducer
     ]),
     EffectsModule.forFeature([
       BundlesEffects,
@@ -158,7 +161,7 @@ interface DalOptions {
       ResultEffects,
       CurrentExerciseEffects,
       TeacherStudentEffects,
-      PersonEffects
+      LinkedPersonEffects
     ])
   ],
   providers: [

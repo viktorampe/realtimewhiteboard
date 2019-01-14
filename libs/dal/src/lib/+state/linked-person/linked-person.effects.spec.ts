@@ -14,7 +14,7 @@ import {
 } from './linked-person.actions';
 import { LinkedPersonEffects } from './linked-person.effects';
 
-describe('LinkedPersonEffects', () => {
+describe('PersonEffects', () => {
   let actions: Observable<any>;
   let effects: LinkedPersonEffects;
   let usedState: any;
@@ -74,8 +74,7 @@ describe('LinkedPersonEffects', () => {
         {
           provide: LINKED_PERSON_SERVICE_TOKEN,
           useValue: {
-            getAllLinkedPersonsForUser: () => {},
-            getAllTeacherStudentsForUser: () => {}
+            getAllForUser: () => {}
           }
         },
         LinkedPersonEffects,
@@ -87,17 +86,17 @@ describe('LinkedPersonEffects', () => {
     effects = TestBed.get(LinkedPersonEffects);
   });
 
-  describe('loadLinkedPerson$', () => {
+  describe('loadPerson$', () => {
     const unforcedLoadAction = new LoadLinkedPersons({ userId: 1 });
     const forcedLoadAction = new LoadLinkedPersons({ force: true, userId: 1 });
-    const filledLoadedAction = new LinkedPersonsLoaded({ linkedPersons: [] });
+    const filledLoadedAction = new LinkedPersonsLoaded({ persons: [] });
     const loadErrorAction = new LinkedPersonsLoadError(new Error('failed'));
     describe('with initialState', () => {
       beforeAll(() => {
         usedState = LinkedPersonReducer.initialState;
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAllLinkedPersonsForUser', []);
+        mockServiceMethodReturnValue('getAllForUser', []);
       });
       it('should trigger an api call with the initialState if force is not true', () => {
         expectInAndOut(
@@ -119,7 +118,7 @@ describe('LinkedPersonEffects', () => {
         usedState = { ...LinkedPersonReducer.initialState, loaded: true };
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAllLinkedPersonsForUser', []);
+        mockServiceMethodReturnValue('getAllForUser', []);
       });
       it('should not trigger an api call with the loaded state if force is not true', () => {
         expectInNoOut(effects.loadLinkedPersons$, unforcedLoadAction);
@@ -137,7 +136,7 @@ describe('LinkedPersonEffects', () => {
         usedState = LinkedPersonReducer.initialState;
       });
       beforeEach(() => {
-        mockServiceMethodError('getAllLinkedPersonsForUser', 'failed');
+        mockServiceMethodError('getAllForUser', 'failed');
       });
       it('should return a error action if force is not true', () => {
         expectInAndOut(
@@ -163,7 +162,7 @@ describe('LinkedPersonEffects', () => {
         };
       });
       beforeEach(() => {
-        mockServiceMethodError('getAllLinkedPersonsForUser', 'failed');
+        mockServiceMethodError('getAllForUser', 'failed');
       });
       it('should return nothing action if force is not true', () => {
         expectInNoOut(effects.loadLinkedPersons$, unforcedLoadAction);

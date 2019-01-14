@@ -1,54 +1,46 @@
 import { Update } from '@ngrx/entity';
 import { LinkedPersonActions } from '.';
-import { TeacherStudentInterface } from '../../+models';
+import { PersonInterface } from '../../+models';
 import { initialState, reducer, State } from './linked-person.reducer';
 
-/**
- * This file is scaffolded, but needs some special attention:
- * - find and replace 'teacherId' and replace this with a property name of the LinkedPerson entity.
- * - set the initial property value via '[teacherId]InitialValue'.
- * - set the updated property value via '[teacherId]UpdatedValue'.
- */
-const teacherIdInitialValue = 1;
-const teacherIdUpdatedValue = 2;
+const emailInitialValue = 'foo@foo.bar';
+const emailUpdatedValue = 'bar@foo.bar';
 
 /**
- * Creates a LinkedPerson.
+ * Creates a Person.
  * @param {number} id
- * @returns {TeacherStudentInterface}
+ * @returns {PersonInterface}
  */
-function createLinkedPerson(
+function createPerson(
   id: number,
-  teacherId: any = teacherIdInitialValue
-): TeacherStudentInterface | any {
+  email: any = emailInitialValue
+): PersonInterface | any {
   return {
     id: id,
-    teacherId: teacherId
+    email: email
   };
 }
 
 /**
- * Utility to create the linked-person state.
+ * Utility to create the person state.
  *
- * @param {TeacherStudentInterface[]} linkedPersons
+ * @param {PersonInterface[]} persons
  * @param {boolean} [loaded]
  * @param {*} [error]
  * @returns {State}
  */
 function createState(
-  linkedPersons: TeacherStudentInterface[],
+  persons: PersonInterface[],
   loaded: boolean = false,
   error?: any
 ): State {
   const state: any = {
-    ids: linkedPersons
-      ? linkedPersons.map(linkedPerson => linkedPerson.id)
-      : [],
-    entities: linkedPersons
-      ? linkedPersons.reduce(
-          (entityMap, linkedPerson) => ({
+    ids: persons ? persons.map(person => person.id) : [],
+    entities: persons
+      ? persons.reduce(
+          (entityMap, person) => ({
             ...entityMap,
-            [linkedPerson.id]: linkedPerson
+            [person.id]: person
           }),
           {}
         )
@@ -59,14 +51,10 @@ function createState(
   return state;
 }
 
-describe('LinkedPersons Reducer', () => {
-  let linkedPersons: TeacherStudentInterface[];
+describe('Persons Reducer', () => {
+  let persons: PersonInterface[];
   beforeEach(() => {
-    linkedPersons = [
-      createLinkedPerson(1),
-      createLinkedPerson(2),
-      createLinkedPerson(3)
-    ];
+    persons = [createPerson(1), createPerson(2), createPerson(3)];
   });
 
   describe('unknown action', () => {
@@ -80,12 +68,10 @@ describe('LinkedPersons Reducer', () => {
   });
 
   describe('loaded action', () => {
-    it('should load all linkedPersons', () => {
-      const action = new LinkedPersonActions.LinkedPersonsLoaded({
-        linkedPersons
-      });
+    it('should load all persons', () => {
+      const action = new LinkedPersonActions.LinkedPersonsLoaded({ persons });
       const result = reducer(initialState, action);
-      expect(result).toEqual(createState(linkedPersons, true));
+      expect(result).toEqual(createState(persons, true));
     });
 
     it('should error', () => {
@@ -97,149 +83,136 @@ describe('LinkedPersons Reducer', () => {
   });
 
   describe('add actions', () => {
-    it('should add one linkedPerson', () => {
-      const linkedPerson = linkedPersons[0];
+    it('should add one person', () => {
+      const person = persons[0];
       const action = new LinkedPersonActions.AddLinkedPerson({
-        linkedPerson
+        person
       });
 
       const result = reducer(initialState, action);
-      expect(result).toEqual(createState([linkedPerson], false));
+      expect(result).toEqual(createState([person], false));
     });
 
-    it('should add multiple linkedPersons', () => {
-      const action = new LinkedPersonActions.AddLinkedPersons({
-        linkedPersons
-      });
+    it('should add multiple persons', () => {
+      const action = new LinkedPersonActions.AddLinkedPersons({ persons });
       const result = reducer(initialState, action);
 
-      expect(result).toEqual(createState(linkedPersons, false));
+      expect(result).toEqual(createState(persons, false));
     });
   });
   describe('upsert actions', () => {
-    it('should upsert one linkedPerson', () => {
-      const originalLinkedPerson = linkedPersons[0];
+    it('should upsert one person', () => {
+      const originalPerson = persons[0];
 
       const startState = reducer(
         initialState,
         new LinkedPersonActions.AddLinkedPerson({
-          linkedPerson: originalLinkedPerson
+          person: originalPerson
         })
       );
 
-      const updatedLinkedPerson = createLinkedPerson(
-        linkedPersons[0].id,
-        'test'
-      );
+      const updatedPerson = createPerson(persons[0].id, 'test');
 
       const action = new LinkedPersonActions.UpsertLinkedPerson({
-        linkedPerson: updatedLinkedPerson
+        person: updatedPerson
       });
 
       const result = reducer(startState, action);
 
-      expect(result.entities[updatedLinkedPerson.id]).toEqual(
-        updatedLinkedPerson
-      );
+      expect(result.entities[updatedPerson.id]).toEqual(updatedPerson);
     });
 
-    it('should upsert many linkedPersons', () => {
-      const startState = createState(linkedPersons);
+    it('should upsert many persons', () => {
+      const startState = createState(persons);
 
-      const linkedPersonsToInsert = [
-        createLinkedPerson(1),
-        createLinkedPerson(2),
-        createLinkedPerson(3),
-        createLinkedPerson(4)
+      const personsToInsert = [
+        createPerson(1),
+        createPerson(2),
+        createPerson(3),
+        createPerson(4)
       ];
       const action = new LinkedPersonActions.UpsertLinkedPersons({
-        linkedPersons: linkedPersonsToInsert
+        persons: personsToInsert
       });
 
       const result = reducer(startState, action);
 
-      expect(result).toEqual(createState(linkedPersonsToInsert));
+      expect(result).toEqual(createState(personsToInsert));
     });
   });
 
   describe('update actions', () => {
-    it('should update an linkedPerson', () => {
-      const linkedPerson = linkedPersons[0];
-      const startState = createState([linkedPerson]);
-      const update: Update<TeacherStudentInterface> = {
+    it('should update an person', () => {
+      const person = persons[0];
+      const startState = createState([person]);
+      const update: Update<PersonInterface> = {
         id: 1,
         changes: {
-          teacherId: teacherIdUpdatedValue
+          email: emailUpdatedValue
         }
       };
       const action = new LinkedPersonActions.UpdateLinkedPerson({
-        linkedPerson: update
+        person: update
       });
       const result = reducer(startState, action);
-      expect(result).toEqual(
-        createState([createLinkedPerson(1, teacherIdUpdatedValue)])
-      );
+      expect(result).toEqual(createState([createPerson(1, emailUpdatedValue)]));
     });
 
-    it('should update multiple linkedPersons', () => {
-      const startState = createState(linkedPersons);
-      const updates: Update<TeacherStudentInterface>[] = [
+    it('should update multiple persons', () => {
+      const startState = createState(persons);
+      const updates: Update<PersonInterface>[] = [
         {
           id: 1,
           changes: {
-            teacherId: teacherIdUpdatedValue
+            email: emailUpdatedValue
           }
         },
         {
           id: 2,
           changes: {
-            teacherId: teacherIdUpdatedValue
+            email: emailUpdatedValue
           }
         }
       ];
       const action = new LinkedPersonActions.UpdateLinkedPersons({
-        linkedPersons: updates
+        persons: updates
       });
       const result = reducer(startState, action);
 
       expect(result).toEqual(
         createState([
-          createLinkedPerson(1, teacherIdUpdatedValue),
-          createLinkedPerson(2, teacherIdUpdatedValue),
-          linkedPersons[2]
+          createPerson(1, emailUpdatedValue),
+          createPerson(2, emailUpdatedValue),
+          persons[2]
         ])
       );
     });
   });
 
   describe('delete actions', () => {
-    it('should delete one linkedPerson ', () => {
-      const linkedPerson = linkedPersons[0];
-      const startState = createState([linkedPerson]);
+    it('should delete one person ', () => {
+      const person = persons[0];
+      const startState = createState([person]);
       const action = new LinkedPersonActions.DeleteLinkedPerson({
-        id: linkedPerson.id
+        id: person.id
       });
       const result = reducer(startState, action);
       expect(result).toEqual(createState([]));
     });
 
-    it('should delete multiple linkedPersons', () => {
-      const startState = createState(linkedPersons);
+    it('should delete multiple persons', () => {
+      const startState = createState(persons);
       const action = new LinkedPersonActions.DeleteLinkedPersons({
-        ids: [linkedPersons[0].id, linkedPersons[1].id]
+        ids: [persons[0].id, persons[1].id]
       });
       const result = reducer(startState, action);
-      expect(result).toEqual(createState([linkedPersons[2]]));
+      expect(result).toEqual(createState([persons[2]]));
     });
   });
 
   describe('clear action', () => {
-    it('should clear the linkedPersons collection', () => {
-      const startState = createState(
-        linkedPersons,
-        true,
-        'something went wrong'
-      );
+    it('should clear the persons collection', () => {
+      const startState = createState(persons, true, 'something went wrong');
       const action = new LinkedPersonActions.ClearLinkedPersons();
       const result = reducer(startState, action);
       expect(result).toEqual(createState([], true, 'something went wrong'));

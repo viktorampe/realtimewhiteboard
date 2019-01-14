@@ -23,10 +23,8 @@ export class LinkedPersonEffects {
       run: (action: LoadLinkedPersons, state: DalState) => {
         if (!action.payload.force && state.linkedPersons.loaded) return;
         return this.linkedPersonService
-          .getAllLinkedPersonsForUser(action.payload.userId)
-          .pipe(
-            map(linkedPersons => new LinkedPersonsLoaded({ linkedPersons }))
-          );
+          .getAllForUser(action.payload.userId)
+          .pipe(map(persons => new LinkedPersonsLoaded({ persons })));
       },
       onError: (action: LoadLinkedPersons, error) => {
         return new LinkedPersonsLoadError(error);

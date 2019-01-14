@@ -1,5 +1,5 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
-import { TeacherStudentInterface } from '../../+models';
+import { PersonInterface } from '../../+models';
 import {
   LinkedPersonsActions,
   LinkedPersonsActionTypes
@@ -7,15 +7,15 @@ import {
 
 export const NAME = 'linkedPersons';
 
-export interface State extends EntityState<TeacherStudentInterface> {
+export interface State extends EntityState<PersonInterface> {
   // additional entities state properties
   loaded: boolean;
   error?: any;
 }
 
-export const adapter: EntityAdapter<
-  TeacherStudentInterface
-> = createEntityAdapter<TeacherStudentInterface>();
+export const adapter: EntityAdapter<PersonInterface> = createEntityAdapter<
+  PersonInterface
+>();
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties
@@ -28,27 +28,27 @@ export function reducer(
 ): State {
   switch (action.type) {
     case LinkedPersonsActionTypes.AddLinkedPerson: {
-      return adapter.addOne(action.payload.linkedPerson, state);
+      return adapter.addOne(action.payload.person, state);
     }
 
     case LinkedPersonsActionTypes.UpsertLinkedPerson: {
-      return adapter.upsertOne(action.payload.linkedPerson, state);
+      return adapter.upsertOne(action.payload.person, state);
     }
 
     case LinkedPersonsActionTypes.AddLinkedPersons: {
-      return adapter.addMany(action.payload.linkedPersons, state);
+      return adapter.addMany(action.payload.persons, state);
     }
 
     case LinkedPersonsActionTypes.UpsertLinkedPersons: {
-      return adapter.upsertMany(action.payload.linkedPersons, state);
+      return adapter.upsertMany(action.payload.persons, state);
     }
 
     case LinkedPersonsActionTypes.UpdateLinkedPerson: {
-      return adapter.updateOne(action.payload.linkedPerson, state);
+      return adapter.updateOne(action.payload.person, state);
     }
 
     case LinkedPersonsActionTypes.UpdateLinkedPersons: {
-      return adapter.updateMany(action.payload.linkedPersons, state);
+      return adapter.updateMany(action.payload.persons, state);
     }
 
     case LinkedPersonsActionTypes.DeleteLinkedPerson: {
@@ -60,10 +60,7 @@ export function reducer(
     }
 
     case LinkedPersonsActionTypes.LinkedPersonsLoaded: {
-      return adapter.addAll(action.payload.linkedPersons, {
-        ...state,
-        loaded: true
-      });
+      return adapter.addAll(action.payload.persons, { ...state, loaded: true });
     }
 
     case LinkedPersonsActionTypes.LinkedPersonsLoadError: {
