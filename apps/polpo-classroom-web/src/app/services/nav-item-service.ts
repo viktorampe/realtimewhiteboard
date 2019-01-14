@@ -20,7 +20,7 @@ export class NavItemService {
       icon: 'increase',
       link: '/reports'
     },
-    settings: { title: 'Instellingen', icon: 'account', link: '/settings' },
+    settings: { title: 'Instellingen', icon: 'settings', link: '/settings' },
     bordboeken: { title: 'Bordboeken', icon: 'book', link: '/books' },
     lesmateriaal: {
       title: 'Lesmateriaal',

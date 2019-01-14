@@ -177,6 +177,7 @@ export const environment = {
     'expand-more': 'assets/icons/expand-more.svg',
     'expand-less': 'assets/icons/expand-less.svg',
     account: 'assets/icons/account-circle.svg',
+    settings: 'account',
     'method:101spelen': 'assets/icons/method/101spelen.svg',
     'method:allesimgrif': 'assets/icons/method/allesimgrif.svg',
     'method:allesimgriffupdate': 'assets/icons/method/allesimgriffupdate.svg',
