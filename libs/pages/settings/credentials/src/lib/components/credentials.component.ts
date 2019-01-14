@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { WINDOW } from '@campus/browser';
-import { Observable, of } from 'rxjs';
+import { PassportUserCredentialInterface } from '@campus/dal';
+import { Observable } from 'rxjs';
 
 export enum CredentialErrors {
   ForbiddenMixedRoles = 'ForbiddenError: mixed_roles',
@@ -28,32 +29,8 @@ export interface SsoLink {
 export class CredentialsComponent implements OnInit {
   connectionTypes = ConnectionType;
 
-  crednetials$: Observable<string[]> = of([
-    'test',
-    'test2',
-    'test3',
-    'test4',
-    'test5',
-    'test6',
-    'test7'
-  ]);
-  ssoLinks$: Observable<SsoLink[]> = of([
-    {
-      name: 'Smartschool',
-      connectionType: ConnectionType.Smartschool,
-      icon: ''
-    },
-    {
-      name: 'Facebook',
-      connectionType: ConnectionType.Facebook,
-      icon: ''
-    },
-    {
-      name: 'Google',
-      connectionType: ConnectionType.Google,
-      icon: ''
-    }
-  ]);
+  crednetials$: Observable<PassportUserCredentialInterface[]>;
+  ssoLinks$: Observable<SingleSignOnProviderInterface[]>;
 
   message = '';
 
