@@ -14,7 +14,7 @@ import { CredentialsViewModel } from './credentials.viewmodel';
 let credentialsViewModel: CredentialsViewModel;
 let store: Store<DalState>;
 
-describe('ProfileViewModel', () => {
+describe('CredentialsViewModel', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -59,11 +59,18 @@ describe('ProfileViewModel', () => {
     });
 
     describe('credentials$', () => {
-      const mockCredential = new CredentialFixture({
-        id: 1,
-        profile: { platform: 'foo.smartschool.be' },
-        provider: 'smartschool'
-      });
+      const mockCredentials = [
+        new CredentialFixture({
+          id: 1,
+          profile: { platform: 'foo.smartschool.be' },
+          provider: 'smartschool'
+        }),
+        new CredentialFixture({
+          id: 2,
+          profile: { platform: 'foo.smartschool.be' },
+          provider: 'smartschool'
+        })
+      ];
 
       // beforeEach(() => {
       //   store.dispatch(
@@ -75,7 +82,7 @@ describe('ProfileViewModel', () => {
 
       it('should return the credentials', () => {
         expect(credentialsViewModel.credentials$).toBeObservable(
-          hot('a', { a: [mockCredential, mockCredential] })
+          hot('a', { a: mockCredentials })
         );
       });
     });
