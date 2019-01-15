@@ -8,7 +8,7 @@ import { DalState, LinkedPersonQueries, PersonQueries } from '@campus/dal';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/internal/operators/switchMap';
-import { map, tap } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class TeacherAlreadyCoupledValidator implements AsyncValidator {
@@ -29,13 +29,7 @@ export class TeacherAlreadyCoupledValidator implements AsyncValidator {
           ? { teacherAlreadyCoupled: true }
           : null;
       }),
-      tap(teacherAlreadyCoupledError => {
-        console.log(
-          '%cteacherAlreadyCoupledError',
-          'color: orange; font-weight: bold;'
-        );
-        console.log({ teacherAlreadyCoupledError });
-      })
+      take(1)
     );
   }
 }

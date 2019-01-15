@@ -26,9 +26,7 @@ export class CoupledTeachersComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.apiErrors$ = new BehaviorSubject<ApiValidationErrors>({
-      nonExistingTeacherCode: 'some error'
-    });
+    this.apiErrors$ = new BehaviorSubject<ApiValidationErrors>(null);
     this.buildForm();
   }
 
@@ -38,7 +36,7 @@ export class CoupledTeachersComponent implements OnInit {
         this.teacherCode,
         {
           validators: [Validators.required],
-          // asyncValidators: [this.teacherAlreadyCoupledValidator],
+          asyncValidators: [this.teacherAlreadyCoupledValidator],
           updateOn: 'change'
         }
       ]
@@ -54,22 +52,6 @@ export class CoupledTeachersComponent implements OnInit {
     this.coupledTeachersForm.reset({
       teacherCode: this.teacherCode
     });
-  }
-
-  check() {
-    //TODO -- remove when done
-    console.log('%cteacherAlreadyCoupled', 'color: red; font-weight: bold;');
-    console.log(
-      this.coupledTeachersForm
-        .get('teacherCode')
-        .getError('teacherAlreadyCoupled')
-    );
-    console.log('%crequired', 'color: blue; font-weight: bold;');
-    console.log(
-      this.coupledTeachersForm.get('teacherCode').getError('required')
-    );
-    console.log('%cform is valid', 'color: green; font-weight: bold;');
-    console.log(this.coupledTeachersForm.valid); //REMARK -- for some reason, this is always false, thought there are no errors
   }
 }
 
