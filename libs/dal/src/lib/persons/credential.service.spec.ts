@@ -24,19 +24,65 @@ describe('CredentialsService', () => {
     }
   ));
 
-  it('should return credentials', async () => {
-    const mockFixture = new CredentialFixture();
+  describe('getAllForUser', () => {
+    it('should return credentials', async () => {
+      const mockCredential = new CredentialFixture();
 
-    const credentialService = TestBed.get(CREDENTIAL_SERVICE_TOKEN);
+      const credentialService = TestBed.get(CREDENTIAL_SERVICE_TOKEN);
 
-    const mockresponse$ = cold('-a-|', { a: [mockFixture, mockFixture] });
-    const personApi = TestBed.get(PersonApi);
-    personApi.getCredentials = jest.fn().mockReturnValue(mockresponse$);
+      const mockresponse$ = cold('-a-|', {
+        a: [mockCredential, mockCredential]
+      });
+      const personApi = TestBed.get(PersonApi);
+      personApi.getCredentials = jest.fn().mockReturnValue(mockresponse$);
 
-    expect(credentialService.getAllForUser(1)).toBeObservable(
-      cold('-a-|', {
-        a: [mockFixture, mockFixture]
-      })
-    );
+      expect(credentialService.getAllForUser(1)).toBeObservable(
+        cold('-a-|', {
+          a: [mockCredential, mockCredential]
+        })
+      );
+    });
+  });
+
+  describe('unlinkCredential', () => {
+    it('should call the api', async () => {
+      const mockCredential = new CredentialFixture();
+      const credentialService = TestBed.get(CREDENTIAL_SERVICE_TOKEN);
+
+      const mockresponse$ = cold('-a-|', { a: true });
+      const personApi = TestBed.get(PersonApi);
+      personApi.destroyByIdCredentials = jest
+        .fn()
+        .mockReturnValue(mockresponse$);
+
+      credentialService.unlinkCredential(mockCredential);
+
+      expect(personApi.destroyByIdCredentials).toHaveBeenCalled();
+      expect(personApi.destroyByIdCredentials).toHaveBeenCalledWith(
+        mockCredential.userId,
+        mockCredential.id
+      );
+    });
+  });
+
+  describe('useCredentialProfilePicture', () => {
+    it('should call the api', async () => {
+      const mockCredential = new CredentialFixture();
+      const credentialService = TestBed.get(CREDENTIAL_SERVICE_TOKEN);
+
+      const mockresponse$ = cold('-a-|', { a: true });
+      const personApi = TestBed.get(PersonApi);
+      personApi.useAvatarFromCredential = jest
+        .fn()
+        .mockReturnValue(mockresponse$);
+
+      credentialService.useCredentialProfilePicture(mockCredential);
+
+      expect(personApi.useAvatarFromCredential).toHaveBeenCalled();
+      expect(personApi.useAvatarFromCredential).toHaveBeenCalledWith(
+        mockCredential.userId,
+        mockCredential.id
+      );
+    });
   });
 });

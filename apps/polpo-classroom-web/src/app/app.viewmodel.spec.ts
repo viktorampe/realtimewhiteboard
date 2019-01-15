@@ -1,7 +1,11 @@
 import { async, TestBed } from '@angular/core/testing';
 import {
+  CredentialActions,
+  CredentialFixture,
+  CredentialReducer,
   DalState,
   LearningAreaFixture,
+  PassportUserCredentialInterface,
   PersonFixture,
   PersonInterface,
   StateFeatureBuilder,
@@ -18,12 +22,12 @@ import { AppViewModel } from './app.viewmodel';
 import { NavItemService } from './services/nav-item-service';
 
 describe('AppViewModel', () => {
-  let usedUserState;
   let user: PersonInterface;
   let viewModel: AppViewModel;
   let mockNavItem: NavItem;
   let mockProfileMenuItem: DropdownMenuItemInterface;
   let store: Store<DalState>;
+  let mockCredentials: PassportUserCredentialInterface[];
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -33,14 +37,17 @@ describe('AppViewModel', () => {
           {
             NAME: UserReducer.NAME,
             reducer: UserReducer.reducer,
-            initialState: {
-              initialState: usedUserState
-            }
+            initialState: UserReducer.initialState
           },
           {
             NAME: UiReducer.NAME,
             reducer: UiReducer.reducer,
             initialState: UiReducer.initialState
+          },
+          {
+            NAME: CredentialReducer.NAME,
+            reducer: CredentialReducer.reducer,
+            initialState: CredentialReducer.initialState
           }
         ])
       ],
@@ -68,10 +75,26 @@ describe('AppViewModel', () => {
     user = new PersonFixture();
     mockNavItem = { title: 'mock' };
     mockProfileMenuItem = { description: 'mock' };
+    mockCredentials = [
+      new CredentialFixture({
+        id: 1,
+        profile: { platform: 'foo.smartschool.be' },
+        provider: 'smartschool'
+      }),
+      new CredentialFixture({
+        id: 2,
+        profile: { platform: 'foo.facebook.com' },
+        provider: 'facebook'
+      })
+    ];
+  });
 
-    usedUserState = UserReducer.reducer(
-      UserReducer.initialState,
-      new UserActions.UserLoaded(user)
+  beforeEach(() => {
+    store.dispatch(new UserActions.UserLoaded(user));
+    store.dispatch(
+      new CredentialActions.CredentialsLoaded({
+        credentials: mockCredentials
+      })
     );
   });
 
@@ -92,14 +115,6 @@ describe('AppViewModel', () => {
           learningAreaId: 1,
           learningArea: new LearningAreaFixture({ icon: 'wiskunde' }),
           created: new Date(2018, 11 - 1, 30)
-        }
-      ];
-
-      // current value hardcoded in viewmodel
-      const mockCredentials = [
-        {
-          profile: { platform: 'foo.smartschool.be' },
-          provider: 'smartschool'
         }
       ];
 

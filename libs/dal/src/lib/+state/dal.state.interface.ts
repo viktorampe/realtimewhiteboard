@@ -2,6 +2,7 @@ import {
   AlertReducer,
   BundleReducer,
   ContentStatusReducer,
+  CredentialReducer,
   CurrentExerciseReducer,
   EduContentReducer,
   LearningAreaReducer,
@@ -40,4 +41,5 @@ export interface DalState {
   results: ResultReducer.State;
   linkedPersons: LinkedPersonReducer.State;
   teacherStudents: TeacherStudentReducer.State;
+  credentials: CredentialReducer.State;
 }

@@ -104,7 +104,6 @@ export class UserEffects {
             mapTo(
               new UserUpdateMessage({
                 message: 'User updated',
-                timeStamp: Date.now(),
                 type: 'success'
               })
             )
@@ -115,7 +114,6 @@ export class UserEffects {
           undo(action),
           new UserUpdateMessage({
             message: 'User update failed',
-            timeStamp: Date.now(),
             type: 'error'
           })
         ]);
