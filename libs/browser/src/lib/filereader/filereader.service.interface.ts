@@ -1,13 +1,14 @@
 import { InjectionToken } from '@angular/core';
 import { Observable } from 'rxjs';
+import { FileReaderError } from './filereader.service';
 
 export const FILEREADER_SERVICE_TOKEN = new InjectionToken(
   'browser filereader service'
 );
 
-export interface FilereaderServiceInterface {
+export interface FileReaderServiceInterface {
   loaded$: Observable<string | ArrayBuffer>;
-  error$: Observable<string>;
+  error$: Observable<FileReaderError>;
 
   // service methods
   isFileTypeAllowed(file: File, regex?: RegExp): boolean;

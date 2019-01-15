@@ -1,12 +1,13 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import {
-  FilereaderServiceInterface,
+  FileReaderError,
+  FileReaderServiceInterface,
   FILEREADER_SERVICE_TOKEN
 } from '@campus/browser';
 import { PersonInterface } from '@campus/dal';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { ProfileViewModel } from '../profile.viewmodel';
 
 @Component({
@@ -25,7 +26,7 @@ export class AvatarComponent implements OnInit {
   constructor(
     private profileViewModel: ProfileViewModel,
     @Inject(FILEREADER_SERVICE_TOKEN)
-    private filereaderService: FilereaderServiceInterface
+    private fileReaderService: FileReaderServiceInterface
   ) {}
 
   ngOnInit() {
@@ -54,12 +55,12 @@ export class AvatarComponent implements OnInit {
   }
 
   loadImage(file: File): void {
-    this.filereaderService.reset();
-    if (!this.filereaderService.isFileTypeAllowed(file)) {
+    this.fileReaderService.reset();
+    if (!this.fileReaderService.isFileTypeAllowed(file)) {
       return;
     }
 
-    this.filereaderService.readAsDataURL(file);
+    this.fileReaderService.readAsDataURL(file);
   }
 
   previewAvatar(event: ImageCroppedEvent): void {
@@ -73,13 +74,25 @@ export class AvatarComponent implements OnInit {
   }
 
   resetAvatar(): void {
-    this.filereaderService.reset();
+    this.fileReaderService.reset();
   }
 
   private loadOutputStreams(): void {
     this.currentUser$ = this.profileViewModel.currentUser$;
-    this.selectedImg$ = this.filereaderService.loaded$;
-    this.loadError$ = this.filereaderService.error$;
+    this.selectedImg$ = this.fileReaderService.loaded$;
+    this.loadError$ = this.fileReaderService.error$.pipe(
+      map(this.setErrorMessage)
+    );
     this.croppedImg$ = new BehaviorSubject(null);
+  }
+
+  private setErrorMessage(err: FileReaderError): string {
+    switch (err) {
+      case FileReaderError.INVALID_FILETYPE:
+        return 'Dit bestandstype wordt niet ondersteund. Selecteer een andere afbeelding.';
+      case FileReaderError.READ_ERROR:
+        return 'Er was een probleem bij het lezen van het bestand. Probeer het opnieuw of selecteer een andere afbeelding.';
+    }
+    return err;
   }
 }

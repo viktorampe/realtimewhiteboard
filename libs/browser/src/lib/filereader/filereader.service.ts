@@ -1,18 +1,23 @@
 import { Inject, Injectable, InjectionToken } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { FilereaderServiceInterface } from './filereader.service.interface';
+import { FileReaderServiceInterface } from './filereader.service.interface';
 
 export const FILE_READER = new InjectionToken<FileReader>('FileReaderToken', {
   providedIn: 'root',
   factory: () => new FileReader()
 });
 
+export enum FileReaderError {
+  INVALID_FILETYPE = 'invalid filetype',
+  READ_ERROR = 'invalid file'
+}
+
 @Injectable({
   providedIn: 'root'
 })
-export class FilereaderService implements FilereaderServiceInterface {
+export class FileReaderService implements FileReaderServiceInterface {
   loaded$ = new BehaviorSubject<string | ArrayBuffer>(null);
-  error$ = new BehaviorSubject<string>(null);
+  error$ = new BehaviorSubject<FileReaderError>(null);
 
   constructor(@Inject(FILE_READER) private fileReader: FileReader) {
     this.setEventHandlers();
@@ -24,9 +29,7 @@ export class FilereaderService implements FilereaderServiceInterface {
     regex: RegExp = /\.(jpe?g|png|gif)$/i
   ): boolean {
     if (!file || !regex.test(file.name)) {
-      this.error$.next(
-        'Dit bestandstype wordt niet ondersteund. Selecteer een andere afbeelding.'
-      );
+      this.error$.next(FileReaderError.INVALID_FILETYPE);
       return false;
     }
     return true;
@@ -65,17 +68,13 @@ export class FilereaderService implements FilereaderServiceInterface {
   // event handlers
   // use arrow functions to maintain 'this' scope, because FileReader applies his own scope
   private onabort = (ev: ProgressEvent): void => {
-    this.error$.next(
-      'Er was een probleem bij het lezen van het bestand. ' +
-        'Probeer het opnieuw of selecteer een andere afbeelding.'
-    );
+    this.error$.next(FileReaderError.READ_ERROR);
   };
   private onerror = (ev: ProgressEvent): void => {
     this.fileReader.abort();
   };
   private onload = (ev: ProgressEvent): void => {
     this.loaded$.next((ev.target as FileReader).result);
-    // this.loaded$.next(this.fileReader.result);
   };
   private onloadstart = (ev: ProgressEvent): void => {
     this.loaded$.next(null);

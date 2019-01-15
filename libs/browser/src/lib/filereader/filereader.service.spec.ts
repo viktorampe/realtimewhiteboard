@@ -1,20 +1,24 @@
 import { fakeAsync, TestBed } from '@angular/core/testing';
 import { hot } from '@nrwl/nx/testing';
-import { FilereaderService, FILE_READER } from './filereader.service';
+import {
+  FileReaderError,
+  FileReaderService,
+  FILE_READER
+} from './filereader.service';
 
 describe('FilereaderService', () => {
   const mockFile = new File([''], 'filename.png', { type: 'image/png' });
-  let service: FilereaderService;
+  let service: FileReaderService;
   let fileReader: FileReader;
 
   beforeEach(() =>
     TestBed.configureTestingModule({
-      providers: [FilereaderService]
+      providers: [FileReaderService]
     })
   );
 
   beforeEach(() => {
-    service = TestBed.get(FilereaderService);
+    service = TestBed.get(FileReaderService);
     fileReader = TestBed.get(FILE_READER);
   });
 
@@ -41,8 +45,7 @@ describe('FilereaderService', () => {
       service.isFileTypeAllowed(null);
       expect(service.error$).toBeObservable(
         hot('a', {
-          a:
-            'Dit bestandstype wordt niet ondersteund. Selecteer een andere afbeelding.'
+          a: FileReaderError.INVALID_FILETYPE
         })
       );
     });
@@ -102,9 +105,7 @@ describe('FilereaderService', () => {
       fileReader.onabort({} as ProgressEvent);
       expect(service.error$).toBeObservable(
         hot('a', {
-          a:
-            'Er was een probleem bij het lezen van het bestand. ' +
-            'Probeer het opnieuw of selecteer een andere afbeelding.'
+          a: FileReaderError.READ_ERROR
         })
       );
     });

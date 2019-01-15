@@ -1,7 +1,7 @@
 @mixin pages-settings-profile-avatar-theme() {
-  $pages-settings-profile-avatar__upload-bordercolor: $ui-primary-font-color-2;
-  $pages-settings-profile-avatar__upload-bordercolor--hover: $ui-primary-font-color;
-  $pages-settings-profile-avatar__avatar-borderradius: 50%;
+  $pages-settings-profile-avatar__upload-bordercolor: $ui-primary-font-color-2 !default;
+  $pages-settings-profile-avatar__upload-bordercolor--hover: $ui-primary-font-color !default;
+  $pages-settings-profile-avatar__avatar-borderradius: 50% !default;
 
   .pages-settings-profile-avatar {
     .file-upload {

@@ -2,8 +2,9 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import {
-  FilereaderService,
-  FilereaderServiceInterface,
+  FileReaderError,
+  FileReaderService,
+  FileReaderServiceInterface,
   FILEREADER_SERVICE_TOKEN,
   FILE_READER
 } from '@campus/browser';
@@ -20,8 +21,8 @@ describe('AvatarComponent', () => {
   let component: AvatarComponent;
   let fixture: ComponentFixture<AvatarComponent>;
   let profileVM: ProfileViewModel;
-  let filereaderService: FilereaderServiceInterface;
-  let filereader: FileReader;
+  let fileReaderService: FileReaderServiceInterface;
+  let fileReader: FileReader;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -30,7 +31,7 @@ describe('AvatarComponent', () => {
       providers: [
         { provide: ProfileViewModel, useClass: MockProfileViewModel },
         { provide: AUTH_SERVICE_TOKEN, useValue: { userId: 1 } },
-        { provide: FILEREADER_SERVICE_TOKEN, useClass: FilereaderService }
+        { provide: FILEREADER_SERVICE_TOKEN, useClass: FileReaderService }
       ]
     }).compileComponents();
   }));
@@ -39,8 +40,8 @@ describe('AvatarComponent', () => {
     fixture = TestBed.createComponent(AvatarComponent);
     component = fixture.componentInstance;
     profileVM = TestBed.get(ProfileViewModel);
-    filereaderService = TestBed.get(FILEREADER_SERVICE_TOKEN);
-    filereader = TestBed.get(FILE_READER);
+    fileReaderService = TestBed.get(FILEREADER_SERVICE_TOKEN);
+    fileReader = TestBed.get(FILE_READER);
     fixture.detectChanges();
   });
 
@@ -53,8 +54,28 @@ describe('AvatarComponent', () => {
   });
 
   it('should map streams from filereaderService', () => {
-    expect(component.selectedImg$).toBe(filereaderService.loaded$);
-    expect(component.loadError$).toBe(filereaderService.error$);
+    expect(component.selectedImg$).toBe(fileReaderService.loaded$);
+
+    const error$ = fileReaderService.error$ as BehaviorSubject<FileReaderError>;
+    error$.next(null);
+    expect(component.loadError$).toBeObservable(hot('a', { a: null }));
+
+    error$.next(FileReaderError.INVALID_FILETYPE);
+    expect(component.loadError$).toBeObservable(
+      hot('a', {
+        a:
+          'Dit bestandstype wordt niet ondersteund. Selecteer een andere afbeelding.'
+      })
+    );
+
+    error$.next(FileReaderError.READ_ERROR);
+    expect(component.loadError$).toBeObservable(
+      hot('a', {
+        a:
+          'Er was een probleem bij het lezen van het bestand. ' +
+          'Probeer het opnieuw of selecteer een andere afbeelding.'
+      })
+    );
   });
 
   describe('loadImage', () => {
@@ -66,9 +87,9 @@ describe('AvatarComponent', () => {
       const mockProgressEvent = {
         target: { result: 'base64encoded-image' }
       } as unknown;
-      filereader.onload(mockProgressEvent as ProgressEvent);
+      fileReader.onload(mockProgressEvent as ProgressEvent);
 
-      expect(filereaderService.loaded$).toBeObservable(
+      expect(fileReaderService.loaded$).toBeObservable(
         hot('a', {
           a: 'base64encoded-image'
         })
@@ -76,23 +97,23 @@ describe('AvatarComponent', () => {
     });
 
     it('should not try to load image when filetype is invalid', () => {
-      const spyService = jest.spyOn(filereaderService, 'readAsDataURL');
-      jest.spyOn(filereaderService, 'isFileTypeAllowed').mockReturnValue(false);
+      const spyService = jest.spyOn(fileReaderService, 'readAsDataURL');
+      jest.spyOn(fileReaderService, 'isFileTypeAllowed').mockReturnValue(false);
       component.loadImage(mockFile);
 
       expect(spyService).not.toHaveBeenCalled();
     });
 
     it('should try to load image when filetype is valid', () => {
-      const spyRead = jest.spyOn(filereaderService, 'readAsDataURL');
-      jest.spyOn(filereaderService, 'isFileTypeAllowed').mockReturnValue(true);
+      const spyRead = jest.spyOn(fileReaderService, 'readAsDataURL');
+      jest.spyOn(fileReaderService, 'isFileTypeAllowed').mockReturnValue(true);
       component.loadImage(mockFile);
 
       expect(spyRead).toHaveBeenCalledWith(mockFile);
     });
 
     it('should call reset when selecting new image', () => {
-      const spyReset = jest.spyOn(filereaderService, 'reset');
+      const spyReset = jest.spyOn(fileReaderService, 'reset');
       component.loadImage(mockFile);
 
       expect(spyReset).toHaveBeenCalled();
@@ -177,7 +198,7 @@ describe('AvatarComponent', () => {
 
   describe('resetAvatar', () => {
     it('should call filereaderService.reset', () => {
-      const spyReset = jest.spyOn(filereaderService, 'reset');
+      const spyReset = jest.spyOn(fileReaderService, 'reset');
       component.resetAvatar();
 
       expect(spyReset).toHaveBeenCalled();
