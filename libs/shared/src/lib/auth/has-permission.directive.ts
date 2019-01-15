@@ -15,7 +15,7 @@ import { PERMISSION_SERVICE_TOKEN } from './permission.service.interface';
   selector: '[campusHasPermission], [hasPermission]'
 })
 export class HasPermissionDirective implements OnInit, OnDestroy {
-  private permission$: Subscription;
+  private subscriptions = new Subscription();
   @Input('hasPermission') permissions: string | string[];
 
   constructor(
@@ -30,18 +30,20 @@ export class HasPermissionDirective implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.permission$.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 
   private applyPermission(): void {
-    this.permission$ = this.permissionService
-      .hasPermission(this.permissions)
-      .subscribe(hasPermission => {
-        if (hasPermission) {
-          this.viewContainer.createEmbeddedView(this.templateRef);
-        } else {
-          this.viewContainer.clear();
-        }
-      });
+    this.subscriptions.add(
+      this.permissionService
+        .hasPermission(this.permissions)
+        .subscribe(hasPermission => {
+          if (hasPermission) {
+            this.viewContainer.createEmbeddedView(this.templateRef);
+          } else {
+            this.viewContainer.clear();
+          }
+        })
+    );
   }
 }
