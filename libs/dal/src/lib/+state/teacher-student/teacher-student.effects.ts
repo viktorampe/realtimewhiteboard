@@ -1,13 +1,21 @@
 import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
+import { Action } from '@ngrx/store';
 import { DataPersistence } from '@nrwl/nx';
-import { map } from 'rxjs/operators';
+import { from } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 import { DalState } from '..';
 import {
   LinkedPersonServiceInterface,
   LINKED_PERSON_SERVICE_TOKEN
 } from '../../persons/linked-persons.service';
+import { LoadBundles } from '../bundle/bundle.actions';
+import { ActionSuccessful } from '../dal.actions';
+import { AddLinkedPerson } from './../linked-person/linked-person.actions';
+import { LoadTasks } from './../task/task.actions';
 import {
+  AddTeacherStudent,
+  LinkTeacherStudents,
   LoadTeacherStudents,
   TeacherStudentActionTypes,
   TeacherStudentsLoaded,
@@ -22,7 +30,7 @@ export class TeacherStudentEffects {
     {
       run: (action: LoadTeacherStudents, state: DalState) => {
         if (!action.payload.force && state.teacherStudents.loaded) return;
-        return this.linkedPersonServiceInterface
+        return this.linkedPersonService
           .getTeacherStudentsForUser(action.payload.userId)
           .pipe(
             map(
@@ -36,10 +44,47 @@ export class TeacherStudentEffects {
     }
   );
 
+  @Effect()
+  linkTeacher$ = this.dataPersistence.pessimisticUpdate(
+    TeacherStudentActionTypes.LinkTeacherStudents,
+    {
+      run: (action: LinkTeacherStudents, state: DalState) => {
+        const userId = state.user.currentUser.id;
+
+        return this.linkedPersonService
+          .linkStudentToTeacher(action.payload.publicKey)
+          .pipe(
+            map(teachers => ({
+              ...teachers.reduce(
+                (acc, teacher) => ({
+                  ...acc,
+                  ...new AddLinkedPerson({ person: teacher }),
+                  ...new AddTeacherStudent({
+                    teacherStudent: {
+                      created: new Date(),
+                      teacherId: teacher.id,
+                      studentId: userId
+                    }
+                  })
+                }),
+                [] as Action[]
+              ),
+              ...new LoadBundles({ userId }),
+              ...new LoadTasks({ userId })
+            })),
+            switchMap((actions: Action[]) => from<Action>(actions))
+          );
+      },
+      onError: (action: LinkTeacherStudents, error) => {
+        return new ActionSuccessful({ successfulAction: 'failed' });
+      }
+    }
+  );
+
   constructor(
     private actions: Actions,
     private dataPersistence: DataPersistence<DalState>,
     @Inject(LINKED_PERSON_SERVICE_TOKEN)
-    private linkedPersonServiceInterface: LinkedPersonServiceInterface
+    private linkedPersonService: LinkedPersonServiceInterface
   ) {}
 }
