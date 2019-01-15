@@ -32,7 +32,6 @@ const routes: Routes = [
         data: { breadcrumbText: 'Resultaten' },
         canActivate: [CoupledTeacherGuard]
       },
-
       {
         path: 'messages',
         loadChildren: '@campus/pages/messages#PagesMessagesModule',

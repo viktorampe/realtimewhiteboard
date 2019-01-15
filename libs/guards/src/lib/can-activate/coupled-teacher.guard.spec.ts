@@ -8,12 +8,12 @@ import { RouterTestingModule } from '@angular/router/testing';
 import {
   DalState,
   LinkedPersonActions,
-  LinkedPersonFixture,
   LinkedPersonReducer,
-  PersonActions,
   PersonFixture,
-  PersonReducer,
   StateFeatureBuilder,
+  TeacherStudentActions,
+  TeacherStudentFixture,
+  TeacherStudentReducer,
   UserActions,
   UserReducer
 } from '@campus/dal';
@@ -38,8 +38,8 @@ describe('coupledTeacherGuard', () => {
         StoreModule.forRoot({}),
         ...StateFeatureBuilder.getStoreModuleForFeatures([
           UserReducer,
-          LinkedPersonReducer,
-          PersonReducer
+          TeacherStudentReducer,
+          LinkedPersonReducer
         ]),
         RouterTestingModule
       ],
@@ -61,7 +61,7 @@ describe('coupledTeacherGuard', () => {
     ).toBeObservable(hot(''));
     expect(spy).toHaveBeenCalledTimes(0);
   });
-  it('should not return anything if the user is loaded but the linkedPersonsLoaded and personQueriesLoaded are false', () => {
+  it('should not return anything if the user is loaded but the teacherStudentLoaded and personQueriesLoaded are false', () => {
     store.dispatch(
       new UserActions.UserLoaded(
         new PersonFixture({ id: 1, roles: [{ name: 'student' }] })
@@ -75,13 +75,15 @@ describe('coupledTeacherGuard', () => {
     ).toBeObservable(hot(''));
     expect(spy).toHaveBeenCalledTimes(0);
   });
-  it('should not return anything while linkedPersonsLoaded stays false', () => {
+  it('should not return anything while teacherStudentsLoaded stays false', () => {
     store.dispatch(
       new UserActions.UserLoaded(
         new PersonFixture({ id: 1, roles: [{ name: 'student' }] })
       )
     );
-    store.dispatch(new PersonActions.PersonsLoaded({ persons: [] }));
+    store.dispatch(
+      new TeacherStudentActions.TeacherStudentsLoaded({ teacherStudents: [] })
+    );
     expect(
       coupledTeacherGuard.canActivate(
         <ActivatedRouteSnapshot>{},
@@ -90,14 +92,14 @@ describe('coupledTeacherGuard', () => {
     ).toBeObservable(hot(''));
     expect(spy).toHaveBeenCalledTimes(0);
   });
-  it('should not return anything while personQueriesLoaded stays false', () => {
+  it('should not return anything while linkedPersonQueriesLoaded stays false', () => {
     store.dispatch(
       new UserActions.UserLoaded(
         new PersonFixture({ id: 1, roles: [{ name: 'student' }] })
       )
     );
     store.dispatch(
-      new LinkedPersonActions.LinkedPersonsLoaded({ linkedPersons: [] })
+      new LinkedPersonActions.LinkedPersonsLoaded({ persons: [] })
     );
     expect(
       coupledTeacherGuard.canActivate(
@@ -112,9 +114,11 @@ describe('coupledTeacherGuard', () => {
       new UserActions.UserLoaded(new PersonFixture({ id: 1, roles: undefined }))
     );
     store.dispatch(
-      new LinkedPersonActions.LinkedPersonsLoaded({ linkedPersons: [] })
+      new TeacherStudentActions.TeacherStudentsLoaded({ teacherStudents: [] })
     );
-    store.dispatch(new PersonActions.PersonsLoaded({ persons: [] }));
+    store.dispatch(
+      new LinkedPersonActions.LinkedPersonsLoaded({ persons: [] })
+    );
     expect(
       coupledTeacherGuard.canActivate(
         <ActivatedRouteSnapshot>{},
@@ -129,9 +133,11 @@ describe('coupledTeacherGuard', () => {
       new UserActions.UserLoaded(new PersonFixture({ id: 1, roles: [] }))
     );
     store.dispatch(
-      new LinkedPersonActions.LinkedPersonsLoaded({ linkedPersons: [] })
+      new TeacherStudentActions.TeacherStudentsLoaded({ teacherStudents: [] })
     );
-    store.dispatch(new PersonActions.PersonsLoaded({ persons: [] }));
+    store.dispatch(
+      new LinkedPersonActions.LinkedPersonsLoaded({ persons: [] })
+    );
     expect(
       coupledTeacherGuard.canActivate(
         <ActivatedRouteSnapshot>{},
@@ -141,16 +147,18 @@ describe('coupledTeacherGuard', () => {
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith(['/settings/coupled-teachers']);
   });
-  it('should return true if the user is a teacher with no linkedPersons', () => {
+  it('should return true if the user is a teacher with no teacherStudent', () => {
     store.dispatch(
       new UserActions.UserLoaded(
         new PersonFixture({ id: 1, roles: [{ name: 'teacher' }] })
       )
     );
     store.dispatch(
-      new LinkedPersonActions.LinkedPersonsLoaded({ linkedPersons: [] })
+      new TeacherStudentActions.TeacherStudentsLoaded({ teacherStudents: [] })
     );
-    store.dispatch(new PersonActions.PersonsLoaded({ persons: [] }));
+    store.dispatch(
+      new LinkedPersonActions.LinkedPersonsLoaded({ persons: [] })
+    );
     expect(
       coupledTeacherGuard.canActivate(
         <ActivatedRouteSnapshot>{},
@@ -169,9 +177,11 @@ describe('coupledTeacherGuard', () => {
       )
     );
     store.dispatch(
-      new LinkedPersonActions.LinkedPersonsLoaded({ linkedPersons: [] })
+      new TeacherStudentActions.TeacherStudentsLoaded({ teacherStudents: [] })
     );
-    store.dispatch(new PersonActions.PersonsLoaded({ persons: [] }));
+    store.dispatch(
+      new LinkedPersonActions.LinkedPersonsLoaded({ persons: [] })
+    );
     expect(
       coupledTeacherGuard.canActivate(
         <ActivatedRouteSnapshot>{},
@@ -190,15 +200,15 @@ describe('coupledTeacherGuard', () => {
       )
     );
     store.dispatch(
-      new LinkedPersonActions.LinkedPersonsLoaded({
-        linkedPersons: [
-          new LinkedPersonFixture({ id: 1, teacherId: 100, studentId: 1 }),
-          new LinkedPersonFixture({ id: 2, teacherId: 101, studentId: 1 })
+      new TeacherStudentActions.TeacherStudentsLoaded({
+        teacherStudents: [
+          new TeacherStudentFixture({ id: 1, teacherId: 100, studentId: 1 }),
+          new TeacherStudentFixture({ id: 2, teacherId: 101, studentId: 1 })
         ]
       })
     );
     store.dispatch(
-      new PersonActions.PersonsLoaded({
+      new LinkedPersonActions.LinkedPersonsLoaded({
         persons: [
           new PersonFixture({ id: 100, type: 'teacher' }),
           new PersonFixture({ id: 101, type: 'teacher' })
@@ -213,19 +223,19 @@ describe('coupledTeacherGuard', () => {
     ).toBeObservable(hot('a', { a: true }));
     expect(spy).toHaveBeenCalledTimes(0);
   });
-  it('should return false if the user is a student but has no linkedPersons', () => {
+  it('should return false if the user is a student but has no teacherStudent', () => {
     store.dispatch(
       new UserActions.UserLoaded(
         new PersonFixture({ id: 1, roles: [{ name: 'student' }] })
       )
     );
     store.dispatch(
-      new LinkedPersonActions.LinkedPersonsLoaded({
-        linkedPersons: []
+      new TeacherStudentActions.TeacherStudentsLoaded({
+        teacherStudents: []
       })
     );
     store.dispatch(
-      new PersonActions.PersonsLoaded({
+      new LinkedPersonActions.LinkedPersonsLoaded({
         persons: []
       })
     );
@@ -238,22 +248,22 @@ describe('coupledTeacherGuard', () => {
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith(['/settings/coupled-teachers']);
   });
-  it('should return false if the user is a student has linkedPersons, but those are not teachers', () => {
+  it('should return false if the user is a student has teacherStudent, but those are not teachers', () => {
     store.dispatch(
       new UserActions.UserLoaded(
         new PersonFixture({ id: 1, roles: [{ name: 'student' }] })
       )
     );
     store.dispatch(
-      new LinkedPersonActions.LinkedPersonsLoaded({
-        linkedPersons: [
-          new LinkedPersonFixture({ id: 1, teacherId: 100, studentId: 1 }),
-          new LinkedPersonFixture({ id: 2, teacherId: 101, studentId: 1 })
+      new TeacherStudentActions.TeacherStudentsLoaded({
+        teacherStudents: [
+          new TeacherStudentFixture({ id: 1, teacherId: 100, studentId: 1 }),
+          new TeacherStudentFixture({ id: 2, teacherId: 101, studentId: 1 })
         ]
       })
     );
     store.dispatch(
-      new PersonActions.PersonsLoaded({
+      new LinkedPersonActions.LinkedPersonsLoaded({
         persons: [
           new PersonFixture({ id: 100, type: 'student' }),
           new PersonFixture({ id: 101, type: 'student' })
@@ -269,22 +279,22 @@ describe('coupledTeacherGuard', () => {
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith(['/settings/coupled-teachers']);
   });
-  it('should return true if the user is a student has linkedPersons, of which at least one is a teacher', () => {
+  it('should return true if the user is a student has teacherStudent, of which at least one is a teacher', () => {
     store.dispatch(
       new UserActions.UserLoaded(
         new PersonFixture({ id: 1, roles: [{ name: 'student' }] })
       )
     );
     store.dispatch(
-      new LinkedPersonActions.LinkedPersonsLoaded({
-        linkedPersons: [
-          new LinkedPersonFixture({ id: 1, teacherId: 100, studentId: 1 }),
-          new LinkedPersonFixture({ id: 2, teacherId: 101, studentId: 1 })
+      new TeacherStudentActions.TeacherStudentsLoaded({
+        teacherStudents: [
+          new TeacherStudentFixture({ id: 1, teacherId: 100, studentId: 1 }),
+          new TeacherStudentFixture({ id: 2, teacherId: 101, studentId: 1 })
         ]
       })
     );
     store.dispatch(
-      new PersonActions.PersonsLoaded({
+      new LinkedPersonActions.LinkedPersonsLoaded({
         persons: [
           new PersonFixture({ id: 100, type: 'student' }),
           new PersonFixture({ id: 101, type: 'teacher' })
@@ -299,22 +309,22 @@ describe('coupledTeacherGuard', () => {
     ).toBeObservable(hot('a', { a: true }));
     expect(spy).toHaveBeenCalledTimes(0);
   });
-  it('should return true if the user is a student has linkedPersons, of which all are teachers', () => {
+  it('should return true if the user is a student has teacherStudent, of which all are teachers', () => {
     store.dispatch(
       new UserActions.UserLoaded(
         new PersonFixture({ id: 1, roles: [{ name: 'student' }] })
       )
     );
     store.dispatch(
-      new LinkedPersonActions.LinkedPersonsLoaded({
-        linkedPersons: [
-          new LinkedPersonFixture({ id: 1, teacherId: 100, studentId: 1 }),
-          new LinkedPersonFixture({ id: 2, teacherId: 101, studentId: 1 })
+      new TeacherStudentActions.TeacherStudentsLoaded({
+        teacherStudents: [
+          new TeacherStudentFixture({ id: 1, teacherId: 100, studentId: 1 }),
+          new TeacherStudentFixture({ id: 2, teacherId: 101, studentId: 1 })
         ]
       })
     );
     store.dispatch(
-      new PersonActions.PersonsLoaded({
+      new LinkedPersonActions.LinkedPersonsLoaded({
         persons: [
           new PersonFixture({ id: 100, type: 'teacher' }),
           new PersonFixture({ id: 101, type: 'teacher' })
