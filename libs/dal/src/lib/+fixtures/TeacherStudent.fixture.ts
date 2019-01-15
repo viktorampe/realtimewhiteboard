@@ -1,6 +1,6 @@
 import { TeacherStudentInterface } from '../+models';
 
-export class LinkedPersonFixture implements TeacherStudentInterface {
+export class TeacherStudentFixture implements TeacherStudentInterface {
   // defaults
   created = new Date();
 

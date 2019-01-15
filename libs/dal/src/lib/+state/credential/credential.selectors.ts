@@ -6,49 +6,49 @@ import {
   selectIds,
   selectTotal,
   State
-} from './linked-person.reducer';
+} from './credential.reducer';
 
-export const selectLinkedPersonState = createFeatureSelector<State>(NAME);
+export const selectCredentialState = createFeatureSelector<State>(NAME);
 
 export const getError = createSelector(
-  selectLinkedPersonState,
+  selectCredentialState,
   (state: State) => state.error
 );
 
 export const getLoaded = createSelector(
-  selectLinkedPersonState,
+  selectCredentialState,
   (state: State) => state.loaded
 );
 
 export const getAll = createSelector(
-  selectLinkedPersonState,
+  selectCredentialState,
   selectAll
 );
 
 export const getCount = createSelector(
-  selectLinkedPersonState,
+  selectCredentialState,
   selectTotal
 );
 
 export const getIds = createSelector(
-  selectLinkedPersonState,
+  selectCredentialState,
   selectIds
 );
 
 export const getAllEntities = createSelector(
-  selectLinkedPersonState,
+  selectCredentialState,
   selectEntities
 );
 
 /**
  * returns array of objects in the order of the given ids
  * @example
- * person$: PersonInterface[] = this.store.pipe(
-    select(PersonQueries.getByIds, { ids: [2, 1, 3] })
+ * credential$: PassportUserCredentialInterface[] = this.store.pipe(
+    select(CredentialQueries.getByIds, { ids: [2, 1, 3] })
   );
  */
 export const getByIds = createSelector(
-  selectLinkedPersonState,
+  selectCredentialState,
   (state: State, props: { ids: number[] }) => {
     return props.ids.map(id => state.entities[id]);
   }
@@ -57,11 +57,11 @@ export const getByIds = createSelector(
 /**
  * returns array of objects in the order of the given ids
  * @example
- * person$: PersonInterface = this.store.pipe(
-    select(PersonQueries.getById, { id: 3 })
+ * credential$: PassportUserCredentialInterface = this.store.pipe(
+    select(CredentialQueries.getById, { id: 3 })
   );
  */
 export const getById = createSelector(
-  selectLinkedPersonState,
+  selectCredentialState,
   (state: State, props: { id: number }) => state.entities[props.id]
 );
