@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, Injectable, OnInit } from '@angular/core';
 import { WINDOW } from '@campus/browser';
 import { PassportUserCredentialInterface } from '@campus/dal';
 import { Observable } from 'rxjs';
@@ -22,6 +22,9 @@ export interface SingleSignOnProviderInterface {
   layoutClass?: string;
 }
 
+@Injectable({
+  providedIn: 'root'
+})
 export class MockCredentialsViewModel {
   ssoLinks$: Observable<SingleSignOnProviderInterface[]>;
   credentials$: Observable<PassportUserCredentialInterface[]>;
