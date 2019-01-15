@@ -2,7 +2,6 @@ import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 import { DataPersistence } from '@nrwl/nx';
-import { undo } from 'ngrx-undo';
 import { from } from 'rxjs';
 import { map, mapTo, switchMap } from 'rxjs/operators';
 import { DalState } from '..';
@@ -96,7 +95,7 @@ export class TeacherStudentEffects {
   );
 
   @Effect()
-  unlinkTeacher$ = this.dataPersistence.optimisticUpdate(
+  unlinkTeacher$ = this.dataPersistence.pessimisticUpdate(
     TeacherStudentActionTypes.UnlinkTeacherStudents,
     {
       run: (action: UnlinkTeacherStudents, state: DalState) => {
@@ -131,11 +130,10 @@ export class TeacherStudentEffects {
             switchMap((actions: Action[]) => from<Action>(actions))
           );
       },
-      undoAction: (action: UnlinkTeacherStudents, error) => {
-        return from([
-          undo(action),
-          new ActionSuccessful({ successfulAction: 'unlink teacher failed' })
-        ]);
+      onError: (action: UnlinkTeacherStudents, error) => {
+        return new ActionSuccessful({
+          successfulAction: 'unlink teacher failed'
+        });
       }
     }
   );
