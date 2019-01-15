@@ -9,19 +9,19 @@ import {
 } from '@campus/browser';
 import { AUTH_SERVICE_TOKEN } from '@campus/dal';
 import { hot } from '@nrwl/nx/testing';
+import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { BehaviorSubject } from 'rxjs';
 import { ProfileViewModel } from '../profile.viewmodel';
 import { MockProfileViewModel } from '../profile.viewmodel.mock';
 import { AvatarComponent } from './avatar.component';
 
 describe('AvatarComponent', () => {
+  const mockFile = new File([''], 'filename.png', { type: 'image/png' });
   let component: AvatarComponent;
   let fixture: ComponentFixture<AvatarComponent>;
+  let profileVM: ProfileViewModel;
   let filereaderService: FilereaderServiceInterface;
   let filereader: FileReader;
-  let mockFile = new File([''], 'filename.png', {
-    type: 'image/png'
-  });
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -38,6 +38,9 @@ describe('AvatarComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(AvatarComponent);
     component = fixture.componentInstance;
+    profileVM = TestBed.get(ProfileViewModel);
+    filereaderService = TestBed.get(FILEREADER_SERVICE_TOKEN);
+    filereader = TestBed.get(FILE_READER);
     fixture.detectChanges();
   });
 
@@ -45,12 +48,16 @@ describe('AvatarComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('loadImage', () => {
-    beforeEach(() => {
-      filereaderService = TestBed.get(FILEREADER_SERVICE_TOKEN);
-      filereader = TestBed.get(FILE_READER);
-    });
+  it('should map streams from viewmodel', () => {
+    expect(component.currentUser$).toBe(profileVM.currentUser$);
+  });
 
+  it('should map streams from filereaderService', () => {
+    expect(component.selectedImg$).toBe(filereaderService.loaded$);
+    expect(component.loadError$).toBe(filereaderService.error$);
+  });
+
+  describe('loadImage', () => {
     afterEach(() => {
       jest.restoreAllMocks();
     });
@@ -90,18 +97,6 @@ describe('AvatarComponent', () => {
 
       expect(spyReset).toHaveBeenCalled();
     });
-
-    // it('should update error$ when read fails', () => {
-    //   filereader.onerror({} as ProgressEvent);
-
-    //   expect(filereaderService.error$).toBeObservable(
-    //     hot('a', {
-    //       a:
-    //         'Er was een probleem bij het lezen van het bestand. ' +
-    //         'Probeer het opnieuw of selecteer een andere afbeelding.'
-    //     })
-    //   );
-    // });
   });
 
   describe('fileListeners', () => {
@@ -132,6 +127,61 @@ describe('AvatarComponent', () => {
 
       expect(spyLoad).toHaveBeenCalledWith(mockFile);
     });
+
+    it('dragover should update uploadHoverState', () => {
+      const ev = {
+        stopPropagation: jest.fn(),
+        preventDefault: jest.fn()
+      } as unknown;
+
+      component.dragOver(ev as DragEvent);
+      expect(component.uploadHoverState).toBe(true);
+
+      component.dragOver(ev as DragEvent, false);
+      expect(component.uploadHoverState).toBe(false);
+    });
+  });
+
+  describe('previewAvatar', () => {
+    it('should update croppedImg$', () => {
+      const mockCroppedEvent = {
+        base64: 'base64encoded-image'
+      } as ImageCroppedEvent;
+      component.previewAvatar(mockCroppedEvent);
+
+      expect(component.croppedImg$).toBeObservable(
+        hot('a', {
+          a: 'base64encoded-image'
+        })
+      );
+    });
+  });
+
+  describe('saveAvatar', () => {
+    it('should call profileViewModel.updateProfile', () => {
+      const spyUpdate = jest.spyOn(profileVM, 'updateProfile');
+      component.croppedImg$ = new BehaviorSubject('base64encoded-image');
+      component.saveAvatar();
+
+      expect(spyUpdate).toHaveBeenCalledWith({ avatar: 'base64encoded-image' });
+
+      spyUpdate.mockReset();
+      component.croppedImg$.next('other-base64encoded-image');
+      component.saveAvatar();
+
+      expect(spyUpdate).toHaveBeenCalledWith({
+        avatar: 'other-base64encoded-image'
+      });
+    });
+  });
+
+  describe('resetAvatar', () => {
+    it('should call filereaderService.reset', () => {
+      const spyReset = jest.spyOn(filereaderService, 'reset');
+      component.resetAvatar();
+
+      expect(spyReset).toHaveBeenCalled();
+    });
   });
 
   describe('ui', () => {
@@ -156,4 +206,3 @@ describe('AvatarComponent', () => {
     }));
   });
 });
-// file.only

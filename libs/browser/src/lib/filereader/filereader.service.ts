@@ -74,12 +74,10 @@ export class FilereaderService implements FilereaderServiceInterface {
     this.fileReader.abort();
   };
   private onload = (ev: ProgressEvent): void => {
-    console.log('loaded');
     this.loaded$.next((ev.target as FileReader).result);
     // this.loaded$.next(this.fileReader.result);
   };
   private onloadstart = (ev: ProgressEvent): void => {
-    console.log('loadstart');
     this.loaded$.next(null);
   };
 }
