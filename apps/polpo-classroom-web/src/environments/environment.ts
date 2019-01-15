@@ -1,4 +1,4 @@
-import { EnvironmentInterface } from './environment.type';
+import { EnvironmentInterface } from '@campus/shared';
 
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build ---prod` replaces `environment.ts` with `environment.prod.ts`.
@@ -213,7 +213,9 @@ export const environment: EnvironmentInterface = {
   website: {
     url: 'http://www.polpo.localhost'
   },
-  APIBase: 'http://api.polpo.localhost:3000',
+  api: {
+    APIBase: 'http://api.polpo.localhost:3000'
+  },
   features: {
     alerts: {
       enabled: true,
@@ -232,7 +234,8 @@ export const environment: EnvironmentInterface = {
     facebook: {
       enabled: true,
       linkUrl: 'http://api.polpo.localhost/auth/......', //TODO -- needs to be corrected to actual link
-      avatarLocation: 'credential.profile.photos[0].value' //REMARK -- it is not clear if this is the way to go with this setting
+      avatarLocation: 'credential.profile.photos[0].value', //REMARK -- it is not clear if this is the way to go with this setting
+      maxNumberAllowed: 1
     }
   }
 };
