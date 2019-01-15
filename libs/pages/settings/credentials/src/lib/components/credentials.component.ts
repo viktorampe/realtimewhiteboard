@@ -42,10 +42,6 @@ export class CredentialsComponent implements OnInit {
     const messageStatus = 'alert-danger';
   }
 
-  connect(connectionType: ConnectionType) {
-    //todo
-  }
-
   getErrorMessage(error: string): string {
     if (error) {
       if (
@@ -74,7 +70,66 @@ export class CredentialsComponent implements OnInit {
     if (!results[2]) {
       return '';
     }
-    console.log(results[0]);
     return decodeURIComponent(results[2].replace(/\+/g, ' '));
+  }
+
+  connect(connectionType: ConnectionType) {}
+  addCredential(provider) {
+    /*window.location.href =
+      polpo.AuthBase +
+      '/' +
+      provider +
+      '-link/' +
+      encodeURIComponent(polpo.StudentBase + '/#/profile/sso') +
+      '?type=student&access_token=' +
+      LoopBackAuth.accessTokenId;*/
+  }
+
+  decoupleCredential(credential) {
+    /*Person.credentials
+      .destroyById({ id: vm.user.id, fk: credential.id })
+      .$promise.then(function() {
+        var i = vm.credentials.indexOf(credential);
+        if (i !== -1) {
+          vm.credentials.splice(i, 1);
+        }
+      })
+      .catch(function(err) {
+        console.error(err);
+      });*/
+  }
+
+  getClass(provider: string) {
+    return 'fa fa-' + provider.replace('-link', '');
+  }
+
+  getDate(timestamp: string) {
+    const d = Date.parse(timestamp);
+    const options = {
+      weekday: 'short',
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    };
+    return new Date(d).toLocaleDateString('nl-BE', options);
+  }
+
+  getTime(timestamp: string) {
+    const d = Date.parse(timestamp);
+    return new Date(d).toLocaleTimeString('nl-BE');
+  }
+
+  changeAvatar(credential) {
+    /*Person.useAvatarFromCredential({id:vm.user.id, credential: credential.id}).$promise.then(function(result){
+      if(result.message === 'succeeded'){
+          Person.getCurrentUser(true).then(function(result){
+              vm.user = result;
+          });
+      } else {
+          console.error(result);
+      }
+  }).catch(function(err){
+      console.error(err);
+  });*/
   }
 }
