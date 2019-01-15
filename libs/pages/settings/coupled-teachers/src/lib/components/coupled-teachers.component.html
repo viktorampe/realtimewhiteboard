@@ -1,0 +1,38 @@
+<form
+  [formGroup]="coupledTeachersForm"
+  class="pages-settings-coupled-teachers-form"
+>
+  <mat-form-field>
+    <input
+      matInput
+      type="text"
+      placeholder="Leerkrachtencode"
+      formControlName="teacherCode"
+      #teacherCode
+      required
+    />
+    <mat-error
+      *ngIf="coupledTeachersForm.get('teacherCode').hasError('required')"
+      >Leerkrachtencode is verplicht.</mat-error
+    >
+    <mat-error
+      *ngIf="
+        coupledTeachersForm.get('teacherCode').hasError('teacherAlreadyCoupled')
+      "
+      >Deze code is reeds gekoppeld.</mat-error
+    >
+    <mat-error *ngIf="(apiErrors$ | async).nonExistingTeacherCode"
+      >De opgegeven leerkrachtencode bestaat niet</mat-error
+    >
+  </mat-form-field>
+  <div class="pages-settings-coupled-teachers-form__actions">
+    <campus-button
+      primary
+      type="submit"
+      [ngClass]="{ 'ui-button--disabled': !coupledTeachersForm.valid }"
+      >Opslaan</campus-button
+    >
+    <campus-button (click)="onReset()">Annuleren</campus-button>
+  </div>
+</form>
+<campus-button (click)="check()">check</campus-button>
