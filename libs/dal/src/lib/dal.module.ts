@@ -32,7 +32,6 @@ import {
   LinkedPersonEffects,
   LinkedPersonReducer
 } from './+state/linked-person';
-import { PersonEffects, PersonReducer } from './+state/person';
 import { ResultReducer } from './+state/result';
 import { ResultEffects } from './+state/result/result.effects';
 import {
@@ -48,6 +47,10 @@ import {
   TaskInstanceEffects,
   TaskInstanceReducer
 } from './+state/task-instance';
+import {
+  TeacherStudentEffects,
+  TeacherStudentReducer
+} from './+state/teacher-student';
 import { UiEffects, UiReducer } from './+state/ui';
 import {
   UnlockedBoekeGroupReducer,
@@ -138,8 +141,8 @@ interface DalOptions {
       TaskEduContentReducer,
       ResultReducer,
       CurrentExerciseReducer,
+      TeacherStudentReducer,
       LinkedPersonReducer,
-      PersonReducer,
       CredentialReducer
     ]),
     EffectsModule.forFeature([
@@ -160,8 +163,8 @@ interface DalOptions {
       TaskEduContentEffects,
       ResultEffects,
       CurrentExerciseEffects,
+      TeacherStudentEffects,
       LinkedPersonEffects,
-      PersonEffects,
       CredentialEffects
     ])
   ],

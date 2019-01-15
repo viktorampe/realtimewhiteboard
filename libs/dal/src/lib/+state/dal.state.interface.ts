@@ -12,6 +12,7 @@ import {
   TaskEduContentReducer,
   TaskInstanceReducer,
   TaskReducer,
+  TeacherStudentReducer,
   UiReducer,
   UnlockedBoekeGroupReducer,
   UnlockedBoekeStudentReducer,
@@ -39,6 +40,6 @@ export interface DalState {
   taskEduContents: TaskEduContentReducer.State;
   results: ResultReducer.State;
   linkedPersons: LinkedPersonReducer.State;
-  persons: LinkedPersonReducer.State;
+  teacherStudents: TeacherStudentReducer.State;
   credentials: CredentialReducer.State;
 }

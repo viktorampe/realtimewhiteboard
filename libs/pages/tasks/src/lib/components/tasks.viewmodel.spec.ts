@@ -13,10 +13,10 @@ import {
   LearningAreaFixture,
   LearningAreaInterface,
   LearningAreaReducer,
-  PersonActions,
+  LinkedPersonActions,
+  LinkedPersonReducer,
   PersonFixture,
   PersonInterface,
-  PersonReducer,
   TaskActions,
   TaskEduContentActions,
   TaskEduContentFixture,
@@ -58,7 +58,7 @@ describe('TasksViewModel met State', () => {
           TaskReducer,
           TaskInstanceReducer,
           TaskEduContentReducer,
-          PersonReducer
+          LinkedPersonReducer
         ])
       ],
       providers: [
@@ -495,6 +495,8 @@ describe('TasksViewModel met State', () => {
       new PersonFixture({ id: 186, email: 'foo@bar.bar' }),
       new PersonFixture({ id: 187, email: 'foo@bar.bar' })
     ];
-    store.dispatch(new PersonActions.PersonsLoaded({ persons: teachers }));
+    store.dispatch(
+      new LinkedPersonActions.LinkedPersonsLoaded({ persons: teachers })
+    );
   }
 });

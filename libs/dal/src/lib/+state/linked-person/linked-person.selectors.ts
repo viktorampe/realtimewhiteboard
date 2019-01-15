@@ -43,8 +43,8 @@ export const getAllEntities = createSelector(
 /**
  * returns array of objects in the order of the given ids
  * @example
- * linkedPerson$: LinkedPersonInterface[] = this.store.pipe(
-    select(LinkedPersonQueries.getByIds, { ids: [2, 1, 3] })
+ * person$: PersonInterface[] = this.store.pipe(
+    select(PersonQueries.getByIds, { ids: [2, 1, 3] })
   );
  */
 export const getByIds = createSelector(
@@ -57,20 +57,11 @@ export const getByIds = createSelector(
 /**
  * returns array of objects in the order of the given ids
  * @example
- * linkedPerson$: LinkedPersonInterface = this.store.pipe(
-    select(LinkedPersonQueries.getById, { id: 3 })
+ * person$: PersonInterface = this.store.pipe(
+    select(PersonQueries.getById, { id: 3 })
   );
  */
 export const getById = createSelector(
   selectLinkedPersonState,
   (state: State, props: { id: number }) => state.entities[props.id]
-);
-
-/**
- * returns array of ids (number[]) of the linked persons
- */
-export const getLinkedPersonIds = createSelector(
-  selectLinkedPersonState,
-  (state: State) =>
-    Object.values(state.entities).map(linkedPerson => linkedPerson.teacherId)
 );
