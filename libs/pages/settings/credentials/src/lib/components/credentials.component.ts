@@ -15,10 +15,16 @@ export enum ConnectionType {
   Google = 'google'
 }
 
-export interface SsoLink {
-  name: string;
-  connectionType: ConnectionType;
-  icon: string;
+export interface SingleSignOnProviderInterface {
+  providerId: number;
+  description: string;
+  logoSrc?: string;
+  layoutClass?: string;
+}
+
+export class MockCredentialsViewModel {
+  ssoLinks$: Observable<SingleSignOnProviderInterface[]>;
+  credentials$: Observable<PassportUserCredentialInterface[]>;
 }
 
 @Component({
@@ -29,12 +35,15 @@ export interface SsoLink {
 export class CredentialsComponent implements OnInit {
   connectionTypes = ConnectionType;
 
-  crednetials$: Observable<PassportUserCredentialInterface[]>;
-  ssoLinks$: Observable<SingleSignOnProviderInterface[]>;
+  credentials$: Observable<PassportUserCredentialInterface[]>;
+  ssoLinks$ = this.viewModel.ssoLinks$;
 
   message = '';
 
-  constructor(@Inject(WINDOW) private window: Window) {}
+  constructor(
+    @Inject(WINDOW) private window: Window,
+    private viewModel: MockCredentialsViewModel
+  ) {}
 
   ngOnInit() {
     const error = this.getParameterByName('error');

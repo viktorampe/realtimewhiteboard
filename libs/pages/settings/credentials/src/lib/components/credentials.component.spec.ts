@@ -3,7 +3,8 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { WINDOW } from '@campus/browser';
 import {
   CredentialErrors,
-  CredentialsComponent
+  CredentialsComponent,
+  MockCredentialsViewModel
 } from './credentials.component';
 
 @NgModule({
@@ -18,7 +19,13 @@ describe('CredentialsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [CredentialsComponent],
-      providers: [{ provide: WINDOW, useValue: Window }],
+      providers: [
+        { provide: WINDOW, useValue: Window },
+        {
+          provide: MockCredentialsViewModel,
+          useClass: MockCredentialsViewModel
+        }
+      ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
   }));
