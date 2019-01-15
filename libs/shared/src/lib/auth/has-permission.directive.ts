@@ -15,7 +15,7 @@ import { PERMISSION_SERVICE_TOKEN } from './permission.service.interface';
   selector: '[campusHasPermission], [hasPermission]'
 })
 export class HasPermissionDirective implements OnInit, OnDestroy {
-  private subscriptions: Subscription;
+  private subscriptions = new Subscription();
   @Input('hasPermission') permissions: string | string[];
 
   constructor(
@@ -26,7 +26,6 @@ export class HasPermissionDirective implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.subscriptions = new Subscription();
     this.applyPermission();
   }
 
