@@ -15,26 +15,26 @@ export class MockSettingsDashboardViewModel
   links$: Observable<Link[]> = of([
     {
       name: 'Mijn gegevens',
-      url: 'gegevens',
-      icon: 'settings',
+      url: ['/settings', 'profile'],
+      icon: 'profile',
       permissions: [SettingsPermissions.UPDATE_PROFILE]
     },
     {
       name: 'Verander profielfoto',
-      url: 'profile',
-      icon: 'user',
+      url: ['/settings', 'avatar'],
+      icon: 'avatar',
       permissions: [SettingsPermissions.UPDATE_AVATAR]
     },
     {
       name: 'Mijn koppelingen',
-      url: 'koppelingen',
-      icon: 'link',
+      url: ['/settings', 'credentials'],
+      icon: 'credentials',
       permissions: [SettingsPermissions.UPDATE_AVATAR]
     },
     {
       name: 'Mijn leerkrachten',
-      url: 'leerkrachten',
-      icon: 'student2',
+      url: ['/settings', 'coupled-teachers'],
+      icon: 'coupled-teachers',
       permissions: [
         SettingsPermissions.LINK_TEACHERS,
         SettingsPermissions.UNLINK_TEACHERS
@@ -42,7 +42,7 @@ export class MockSettingsDashboardViewModel
     },
     {
       name: 'Meldingen',
-      url: 'Meldingen',
+      url: ['/settings', 'alerts'],
       icon: 'bell',
       permissions: [SettingsPermissions.UPDATE_AVATAR]
     }

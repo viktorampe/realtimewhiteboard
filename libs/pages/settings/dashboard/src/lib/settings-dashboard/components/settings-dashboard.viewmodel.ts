@@ -16,25 +16,25 @@ export class SettingsDashboardViewModel {
   links$: Observable<Link[]> = of([
     {
       name: 'Mijn gegevens',
-      url: ['settings', 'profile'],
+      url: ['/settings', 'profile'],
       icon: 'profile',
       permissions: [SettingsPermissions.UPDATE_PROFILE]
     },
     {
       name: 'Verander profielfoto',
-      url: ['settings', 'avatar'],
+      url: ['/settings', 'avatar'],
       icon: 'avatar',
       permissions: [SettingsPermissions.UPDATE_AVATAR]
     },
     {
       name: 'Mijn koppelingen',
-      url: ['settings', 'credentials'],
+      url: ['/settings', 'credentials'],
       icon: 'credentials',
       permissions: [SettingsPermissions.UPDATE_AVATAR]
     },
     {
       name: 'Mijn leerkrachten',
-      url: ['settings', 'coupled-teachers'],
+      url: ['/settings', 'coupled-teachers'],
       icon: 'coupled-teachers',
       permissions: [
         SettingsPermissions.LINK_TEACHERS,
@@ -43,7 +43,7 @@ export class SettingsDashboardViewModel {
     },
     {
       name: 'Meldingen',
-      url: ['settings', 'alerts'],
+      url: ['/settings', 'alerts'],
       icon: 'bell',
       permissions: [SettingsPermissions.UPDATE_AVATAR]
     }
