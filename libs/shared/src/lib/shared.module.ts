@@ -22,11 +22,13 @@ import { HeaderComponent } from './header/header.component';
 import { CampusHttpInterceptor } from './interceptors/campus-http.interceptor';
 import {
   EnvironmentAlertsFeatureInterface,
+  EnvironmentApiInterface,
   EnvironmentErrorManagementFeatureInterface,
+  EnvironmentIconMappingInterface,
   EnvironmentMessagesFeatureInterface,
   EnvironmentWebsiteInterface,
   ENVIRONMENT_ALERTS_FEATURE_TOKEN,
-  ENVIRONMENT_API_BASE_TOKEN,
+  ENVIRONMENT_API_TOKEN,
   ENVIRONMENT_ERROR_MANAGEMENT_FEATURE_TOKEN,
   ENVIRONMENT_ICON_MAPPING_TOKEN,
   ENVIRONMENT_MESSAGES_FEATURE_TOKEN,
@@ -85,9 +87,9 @@ export class SharedModule {
     environmentAlertsFeature: EnvironmentAlertsFeatureInterface,
     environmentMessagesFeature: EnvironmentMessagesFeatureInterface,
     environmentErrorManagementFeature: EnvironmentErrorManagementFeatureInterface,
-    environmentIconMapping: { [key: string]: string },
+    environmentIconMapping: EnvironmentIconMappingInterface,
     environmentWebsite: EnvironmentWebsiteInterface,
-    environmentApiBase: string
+    environmentApi: EnvironmentApiInterface
   ): ModuleWithProviders {
     return {
       ngModule: SharedModule,
@@ -113,8 +115,8 @@ export class SharedModule {
           useValue: environmentIconMapping
         },
         {
-          provide: ENVIRONMENT_API_BASE_TOKEN,
-          useValue: environmentApiBase
+          provide: ENVIRONMENT_API_TOKEN,
+          useValue: environmentApi
         }
       ]
     };

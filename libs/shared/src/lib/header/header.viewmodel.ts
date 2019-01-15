@@ -19,10 +19,8 @@ import {
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
-import {
-  EnvironmentAlertsFeatureInterface,
-  ENVIRONMENT_ALERTS_FEATURE_TOKEN
-} from '../interfaces/environment.features.interfaces';
+import { ENVIRONMENT_ALERTS_FEATURE_TOKEN } from '../interfaces/environment.injectiontokens';
+import { EnvironmentAlertsFeatureInterface } from '../interfaces/environment.interfaces';
 
 @Injectable({
   providedIn: 'root'
