@@ -55,6 +55,8 @@ export class TeacherStudentEffects {
           .linkStudentToTeacher(action.payload.publicKey)
           .pipe(
             map(teachers => ({
+              // add all returned teachers to the linked persons
+              // add a temporary TeacherStudent per teacher
               ...teachers.reduce(
                 (acc, teacher) => ({
                   ...acc,
@@ -69,9 +71,12 @@ export class TeacherStudentEffects {
                 }),
                 [] as Action[]
               ),
-              ...new LoadBundles({ userId }),
-              ...new LoadTasks({ userId })
+              // load all bundles, including those by the new teachers
+              ...new LoadBundles({ userId, force: true }),
+              // load all tasks, including those by the new teachers
+              ...new LoadTasks({ userId, force: true })
             })),
+            // emit actions serially
             switchMap((actions: Action[]) => from<Action>(actions))
           );
       },
