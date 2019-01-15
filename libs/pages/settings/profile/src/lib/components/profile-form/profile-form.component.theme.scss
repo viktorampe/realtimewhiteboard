@@ -1,21 +1,11 @@
 @mixin pages-settings-profile-form-theme() {
   $pages-profile-form-background-color: $ui-tertiary-bg-color !default;
-  $pages-profile-form-font-family: $ui-primary-font-family-2 !default;
-  $pages-profile-form-font-size: $ui-font-size-normal !default;
 
   .pages-settings-profile-form {
     background-color: $pages-profile-form-background-color;
-    font-family: $pages-profile-form-font-family;
-    font-size: $pages-profile-form-font-size;
-    mat-form-field.mat-form-field {
-      font-family: $pages-profile-form-font-family;
-      font-size: $pages-profile-form-font-size;
-    }
-
     .ui-button {
       padding: $ui-button-padding-top $ui-button-padding-right
         $ui-button-padding-bottom $ui-button-padding-left;
-      font-size: $pages-profile-form-font-size;
     }
   }
 }

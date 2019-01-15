@@ -7,7 +7,7 @@ import {
   ValidatorFn,
   Validators
 } from '@angular/forms';
-import { PersonFixture, PersonInterface } from '@campus/dal';
+import { PersonInterface } from '@campus/dal';
 import { UniqueEmailValidator, UniqueUsernameValidator } from '@campus/shared';
 import { CrossFieldErrorMatcher } from '@campus/utils';
 
@@ -16,6 +16,10 @@ const passwordMatchValidator: ValidatorFn = (
 ): ValidationErrors | null => {
   const password = form.get('password');
   const verifyPassword = form.get('verifyPassword');
+
+  if (!password) {
+    return null;
+  }
 
   return password && verifyPassword && password.value !== verifyPassword.value
     ? { noPasswordMatch: true }
@@ -39,9 +43,7 @@ export class ProfileFormComponent implements OnInit {
     private fb: FormBuilder,
     private uniqueUsernameValidator: UniqueUsernameValidator,
     private uniqueEmailValidator: UniqueEmailValidator
-  ) {
-    this.user = new PersonFixture({ username: 'Foobar' });
-  }
+  ) {}
 
   ngOnInit() {
     this.buildForm();
