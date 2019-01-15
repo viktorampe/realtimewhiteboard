@@ -109,6 +109,12 @@ export const environment = {
     'polpo-website': 'assets/icons/website.svg',
     educontent: 'assets/icons/lesmateriaal.svg',
     // youtube: 'assets/icons/youtube.svg',
+    // -> settings dashboard
+    profile: 'assets/icons/settings.svg',
+    avatar: 'assets/icons/user.svg',
+    credentials: 'assets/icons/link.svg',
+    'coupled-teachers': 'assets/icons/student2.svg',
+    alerts: 'assets/icons/bell.svg',
 
     // -> other
     home: 'assets/icons/material/home.svg',

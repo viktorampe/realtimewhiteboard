@@ -3,7 +3,7 @@ import { SettingsPermissions } from '@campus/dal';
 import { Observable, of } from 'rxjs';
 
 export interface Link {
-  url: string;
+  url: string[];
   name: string;
   icon: string;
   permissions?: SettingsPermissions[];
@@ -16,26 +16,26 @@ export class SettingsDashboardViewModel {
   links$: Observable<Link[]> = of([
     {
       name: 'Mijn gegevens',
-      url: '../../profile',
-      icon: 'settings',
+      url: ['settings', 'profile'],
+      icon: 'profile',
       permissions: [SettingsPermissions.UPDATE_PROFILE]
     },
     {
       name: 'Verander profielfoto',
-      url: '../../avatar',
-      icon: 'user',
+      url: ['settings', 'avatar'],
+      icon: 'avatar',
       permissions: [SettingsPermissions.UPDATE_AVATAR]
     },
     {
       name: 'Mijn koppelingen',
-      url: '../../credentials',
-      icon: 'link',
+      url: ['settings', 'credentials'],
+      icon: 'credentials',
       permissions: [SettingsPermissions.UPDATE_AVATAR]
     },
     {
       name: 'Mijn leerkrachten',
-      url: '../../coupled-teachers',
-      icon: 'student2',
+      url: ['settings', 'coupled-teachers'],
+      icon: 'coupled-teachers',
       permissions: [
         SettingsPermissions.LINK_TEACHERS,
         SettingsPermissions.UNLINK_TEACHERS
@@ -43,7 +43,7 @@ export class SettingsDashboardViewModel {
     },
     {
       name: 'Meldingen',
-      url: '../../alerts',
+      url: ['settings', 'alerts'],
       icon: 'bell',
       permissions: [SettingsPermissions.UPDATE_AVATAR]
     }
