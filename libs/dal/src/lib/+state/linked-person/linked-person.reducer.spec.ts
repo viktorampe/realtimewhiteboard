@@ -1,4 +1,3 @@
-import { Update } from '@ngrx/entity';
 import { LinkedPersonActions } from '.';
 import { PersonInterface } from '../../+models';
 import { initialState, reducer, State } from './linked-person.reducer';
@@ -98,94 +97,6 @@ describe('LinkedPersons Reducer', () => {
       const result = reducer(initialState, action);
 
       expect(result).toEqual(createState(persons, false));
-    });
-  });
-  describe('upsert actions', () => {
-    it('should upsert one person', () => {
-      const originalPerson = persons[0];
-
-      const startState = reducer(
-        initialState,
-        new LinkedPersonActions.AddLinkedPerson({
-          person: originalPerson
-        })
-      );
-
-      const updatedPerson = createPerson(persons[0].id, 'test');
-
-      const action = new LinkedPersonActions.UpsertLinkedPerson({
-        person: updatedPerson
-      });
-
-      const result = reducer(startState, action);
-
-      expect(result.entities[updatedPerson.id]).toEqual(updatedPerson);
-    });
-
-    it('should upsert many persons', () => {
-      const startState = createState(persons);
-
-      const personsToInsert = [
-        createPerson(1),
-        createPerson(2),
-        createPerson(3),
-        createPerson(4)
-      ];
-      const action = new LinkedPersonActions.UpsertLinkedPersons({
-        persons: personsToInsert
-      });
-
-      const result = reducer(startState, action);
-
-      expect(result).toEqual(createState(personsToInsert));
-    });
-  });
-
-  describe('update actions', () => {
-    it('should update an person', () => {
-      const person = persons[0];
-      const startState = createState([person]);
-      const update: Update<PersonInterface> = {
-        id: 1,
-        changes: {
-          email: emailUpdatedValue
-        }
-      };
-      const action = new LinkedPersonActions.UpdateLinkedPerson({
-        person: update
-      });
-      const result = reducer(startState, action);
-      expect(result).toEqual(createState([createPerson(1, emailUpdatedValue)]));
-    });
-
-    it('should update multiple persons', () => {
-      const startState = createState(persons);
-      const updates: Update<PersonInterface>[] = [
-        {
-          id: 1,
-          changes: {
-            email: emailUpdatedValue
-          }
-        },
-        {
-          id: 2,
-          changes: {
-            email: emailUpdatedValue
-          }
-        }
-      ];
-      const action = new LinkedPersonActions.UpdateLinkedPersons({
-        persons: updates
-      });
-      const result = reducer(startState, action);
-
-      expect(result).toEqual(
-        createState([
-          createPerson(1, emailUpdatedValue),
-          createPerson(2, emailUpdatedValue),
-          persons[2]
-        ])
-      );
     });
   });
 

@@ -103,7 +103,9 @@ describe('TeacherStudent Selectors', () => {
       expect(results).toBe(undefined);
     });
     it('getTeacherStudentIds() should return number[] of the persons that are linked', () => {
-      const results = TeacherStudentQueries.getTeacherStudentIds(storeState);
+      const results = TeacherStudentQueries.getTeacherIdsFromTeacherStudents(
+        storeState
+      );
       expect(results).toEqual([2, 3, 4, 5]);
     });
   });

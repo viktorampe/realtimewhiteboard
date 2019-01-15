@@ -31,24 +31,8 @@ export function reducer(
       return adapter.addOne(action.payload.person, state);
     }
 
-    case LinkedPersonsActionTypes.UpsertLinkedPerson: {
-      return adapter.upsertOne(action.payload.person, state);
-    }
-
     case LinkedPersonsActionTypes.AddLinkedPersons: {
       return adapter.addMany(action.payload.persons, state);
-    }
-
-    case LinkedPersonsActionTypes.UpsertLinkedPersons: {
-      return adapter.upsertMany(action.payload.persons, state);
-    }
-
-    case LinkedPersonsActionTypes.UpdateLinkedPerson: {
-      return adapter.updateOne(action.payload.person, state);
-    }
-
-    case LinkedPersonsActionTypes.UpdateLinkedPersons: {
-      return adapter.updateMany(action.payload.persons, state);
     }
 
     case LinkedPersonsActionTypes.DeleteLinkedPerson: {

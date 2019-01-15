@@ -69,7 +69,7 @@ export const getById = createSelector(
 /**
  * returns array of ids (number[]) of the linked persons
  */
-export const getTeacherStudentIds = createSelector(
+export const getTeacherIdsFromTeacherStudents = createSelector(
   selectTeacherStudentState,
   (state: State) =>
     Object.values(state.entities).map(
