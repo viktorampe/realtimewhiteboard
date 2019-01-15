@@ -38,7 +38,7 @@ export class MockCredentialsViewModel {
 export class CredentialsComponent implements OnInit {
   connectionTypes = ConnectionType;
 
-  credentials$: Observable<PassportUserCredentialInterface[]>;
+  credentials$ = this.viewModel.credentials$;
   ssoLinks$ = this.viewModel.ssoLinks$;
 
   message = '';
