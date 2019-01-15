@@ -31,6 +31,7 @@ export class PersonService implements PersonServiceInterface {
   checkUniqueUsername(userId: number, username: string): Observable<boolean> {
     // watch out for the intellisense: checkUnique does not return an Observable<boolean>.
     // It returns Observable<{[key:string]:boolean}>
+    // TODO: type the response after SDK update
     return this.personApi.checkUnique(userId, 'username', username).pipe(
       map((response: any) => {
         return response.unique;
@@ -41,6 +42,7 @@ export class PersonService implements PersonServiceInterface {
   checkUniqueEmail(userId: number, email: string): Observable<boolean> {
     // watch out for the intellisense: checkUnique does not return an Observable boolean.
     // It returns Observable<{[key:string]:boolean}>
+    // TODO: type the response after SDK update
     return this.personApi.checkUnique(userId, 'email', email).pipe(
       map((response: any) => {
         return response.unique;
