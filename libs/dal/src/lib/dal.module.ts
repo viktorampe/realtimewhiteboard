@@ -16,6 +16,8 @@ import { AlertReducer, AlertsEffects } from './+state/alert';
 import { BundleReducer, BundlesEffects } from './+state/bundle';
 import { ContentStatusReducer } from './+state/content-status';
 import { ContentStatusesEffects } from './+state/content-status/content-status.effects';
+import { CredentialReducer } from './+state/credential';
+import { CredentialEffects } from './+state/credential/credential.effects';
 import {
   CurrentExerciseEffects,
   CurrentExerciseReducer
@@ -137,7 +139,8 @@ interface DalOptions {
       ResultReducer,
       CurrentExerciseReducer,
       LinkedPersonReducer,
-      PersonReducer
+      PersonReducer,
+      CredentialReducer
     ]),
     EffectsModule.forFeature([
       BundlesEffects,
@@ -158,7 +161,8 @@ interface DalOptions {
       ResultEffects,
       CurrentExerciseEffects,
       LinkedPersonEffects,
-      PersonEffects
+      PersonEffects,
+      CredentialEffects
     ])
   ],
   providers: [

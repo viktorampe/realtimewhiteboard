@@ -33,11 +33,6 @@ const routes: Routes = [
         canActivate: [CoupledTeacherGuard]
       },
       {
-        path: 'profile',
-        loadChildren: '@campus/pages/profile#PagesProfileModule',
-        data: { breadcrumbText: 'Mijn profiel' }
-      },
-      {
         path: 'messages',
         loadChildren: '@campus/pages/messages#PagesMessagesModule',
         data: { breadcrumbText: 'Berichten' }
