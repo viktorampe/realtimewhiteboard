@@ -9,9 +9,8 @@ import {
   LinkedPersonServiceInterface,
   LINKED_PERSON_SERVICE_TOKEN
 } from '../../persons/linked-persons.service';
-import { LoadBundles } from '../bundle/bundle.actions';
 import { ActionSuccessful } from '../dal.actions';
-import { DeleteBundles } from './../bundle/bundle.actions';
+import { DeleteBundles, LoadBundles } from './../bundle/bundle.actions';
 import {
   AddLinkedPerson,
   DeleteLinkedPerson
@@ -88,7 +87,7 @@ export class TeacherStudentEffects {
       },
       onError: (action: LinkTeacherStudents, error) => {
         return new ActionSuccessful({
-          successfulAction: 'link teacher failed'
+          successfulAction: 'link teacher failed:' + error
         });
       }
     }

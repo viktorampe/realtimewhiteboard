@@ -1,16 +1,27 @@
+//file.only
 import { TestBed } from '@angular/core/testing';
+import { DalState, PersonFixture } from '@campus/dal';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
-import { Action, StoreModule } from '@ngrx/store';
+import { Action, Store, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
 import { TeacherStudentReducer } from '.';
 import { LINKED_PERSON_SERVICE_TOKEN } from '../../persons/linked-persons.service';
+import { LoadBundles } from '../bundle/bundle.actions';
+import { AddLinkedPerson } from '../linked-person/linked-person.actions';
+import { LoadTasks } from '../task/task.actions';
+import { UserReducer } from '../user';
+import { UserLoaded } from '../user/user.actions';
+import { LinkedPersonServiceInterface } from './../../persons/linked-persons.service';
 import {
+  AddTeacherStudent,
+  LinkTeacherStudents,
   LoadTeacherStudents,
   TeacherStudentsLoaded,
-  TeacherStudentsLoadError
+  TeacherStudentsLoadError,
+  UnlinkTeacherStudents
 } from './teacher-student.actions';
 import { TeacherStudentEffects } from './teacher-student.effects';
 
@@ -67,6 +78,7 @@ describe('TeacherStudentsEffects', () => {
             initialState: usedState
           }
         ),
+        StoreModule.forFeature(UserReducer.NAME, UserReducer.reducer),
         EffectsModule.forRoot([]),
         EffectsModule.forFeature([TeacherStudentEffects])
       ],
@@ -74,7 +86,9 @@ describe('TeacherStudentsEffects', () => {
         {
           provide: LINKED_PERSON_SERVICE_TOKEN,
           useValue: {
-            getTeacherStudentsForUser: () => {}
+            getTeacherStudentsForUser: () => {},
+            linkStudentToTeacher: () => {},
+            unlinkStudentFromTeacher: () => {}
           }
         },
         TeacherStudentEffects,
@@ -178,6 +192,93 @@ describe('TeacherStudentsEffects', () => {
           forcedLoadAction,
           loadErrorAction
         );
+      });
+    });
+  });
+
+  describe('link / unlink actions', () => {
+    let linkedPersonService: LinkedPersonServiceInterface;
+    let store: Store<DalState>;
+    const mockPublicKey = 'SoylentGreenIsPeople!';
+    const mockTeacher = new PersonFixture({
+      id: 123,
+      teacherInfo: { publicKey: mockPublicKey }
+    });
+    const mockCurrentUser = new PersonFixture();
+
+    beforeEach(() => {
+      linkedPersonService = TestBed.get(LINKED_PERSON_SERVICE_TOKEN);
+      store = TestBed.get(Store);
+      store.dispatch(new UserLoaded(mockCurrentUser));
+    });
+
+    describe('linkTeacher$', () => {
+      const linkTeacherAction = new LinkTeacherStudents({
+        publicKey: mockPublicKey
+      });
+
+      it('should call the linkedPersonService', () => {
+        linkedPersonService.linkStudentToTeacher = jest.fn();
+
+        actions = hot('-a-', { a: linkTeacherAction });
+
+        effects.linkTeacher$.subscribe(_ => {
+          expect(linkedPersonService.linkStudentToTeacher).toHaveBeenCalled();
+          expect(linkedPersonService.linkStudentToTeacher).toHaveBeenCalledWith(
+            mockPublicKey
+          );
+        });
+      });
+
+      it('should dispatch actions', () => {
+        linkedPersonService = TestBed.get(LINKED_PERSON_SERVICE_TOKEN);
+        linkedPersonService.linkStudentToTeacher = jest
+          .fn()
+          .mockReturnValue(of([mockTeacher]));
+
+        actions = hot('-a-', { a: linkTeacherAction });
+
+        const expectedActions$ = hot('-(abcd)', {
+          a: new AddLinkedPerson({ person: mockTeacher }),
+          b: new AddTeacherStudent({
+            teacherStudent: {
+              created: (jasmine.anything() as unknown) as Date, //partial matcher, effect uses new Date()
+              teacherId: mockTeacher.id,
+              studentId: mockCurrentUser.id
+            }
+          }),
+          c: new LoadBundles({ userId: mockCurrentUser.id, force: true }),
+          d: new LoadTasks({ userId: mockCurrentUser.id, force: true })
+        });
+
+        expect(effects.linkTeacher$).toBeObservable(expectedActions$);
+      });
+    });
+
+    describe('unlinkTeacher$', () => {
+      const unlinkTeacherAction = new UnlinkTeacherStudents({
+        teacherId: mockTeacher.id
+      });
+
+      beforeEach(() => {
+        linkedPersonService = TestBed.get(LINKED_PERSON_SERVICE_TOKEN);
+        store = TestBed.get(Store);
+        store.dispatch(new UserLoaded(mockCurrentUser));
+      });
+
+      it('should call the linkedPersonService', () => {
+        linkedPersonService.unlinkStudentFromTeacher = jest.fn();
+
+        actions = hot('-a-', { a: unlinkTeacherAction });
+
+        effects.unlinkTeacher$.subscribe(_ => {
+          expect(
+            linkedPersonService.unlinkStudentFromTeacher
+          ).toHaveBeenCalled();
+          expect(
+            linkedPersonService.unlinkStudentFromTeacher
+          ).toHaveBeenCalledWith(mockCurrentUser.id, mockTeacher.id);
+        });
       });
     });
   });
