@@ -31,24 +31,8 @@ export function reducer(
       return adapter.addOne(action.payload.teacherStudent, state);
     }
 
-    case TeacherStudentActionTypes.UpsertTeacherStudent: {
-      return adapter.upsertOne(action.payload.teacherStudent, state);
-    }
-
     case TeacherStudentActionTypes.AddTeacherStudents: {
       return adapter.addMany(action.payload.teacherStudents, state);
-    }
-
-    case TeacherStudentActionTypes.UpsertTeacherStudents: {
-      return adapter.upsertMany(action.payload.teacherStudents, state);
-    }
-
-    case TeacherStudentActionTypes.UpdateTeacherStudent: {
-      return adapter.updateOne(action.payload.teacherStudent, state);
-    }
-
-    case TeacherStudentActionTypes.UpdateTeacherStudents: {
-      return adapter.updateMany(action.payload.teacherStudents, state);
     }
 
     case TeacherStudentActionTypes.DeleteTeacherStudent: {

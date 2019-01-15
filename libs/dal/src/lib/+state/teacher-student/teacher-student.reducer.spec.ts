@@ -1,4 +1,3 @@
-import { Update } from '@ngrx/entity';
 import { TeacherStudentActions } from '.';
 import { TeacherStudentInterface } from '../../+models';
 import { initialState, reducer, State } from './teacher-student.reducer';
@@ -114,101 +113,6 @@ describe('teacherStudents Reducer', () => {
       const result = reducer(initialState, action);
 
       expect(result).toEqual(createState(teacherStudents, false));
-    });
-  });
-  describe('upsert actions', () => {
-    it('should upsert one teacherStudent', () => {
-      const originalteacherStudent = teacherStudents[0];
-
-      const startState = reducer(
-        initialState,
-        new TeacherStudentActions.AddTeacherStudent({
-          teacherStudent: originalteacherStudent
-        })
-      );
-
-      const updatedteacherStudent = createteacherStudent(
-        teacherStudents[0].id,
-        'test'
-      );
-
-      const action = new TeacherStudentActions.UpsertTeacherStudent({
-        teacherStudent: updatedteacherStudent
-      });
-
-      const result = reducer(startState, action);
-
-      expect(result.entities[updatedteacherStudent.id]).toEqual(
-        updatedteacherStudent
-      );
-    });
-
-    it('should upsert many teacherStudents', () => {
-      const startState = createState(teacherStudents);
-
-      const teacherStudentsToInsert = [
-        createteacherStudent(1),
-        createteacherStudent(2),
-        createteacherStudent(3),
-        createteacherStudent(4)
-      ];
-      const action = new TeacherStudentActions.UpsertTeacherStudents({
-        teacherStudents: teacherStudentsToInsert
-      });
-
-      const result = reducer(startState, action);
-
-      expect(result).toEqual(createState(teacherStudentsToInsert));
-    });
-  });
-
-  describe('update actions', () => {
-    it('should update an teacherStudent', () => {
-      const teacherStudent = teacherStudents[0];
-      const startState = createState([teacherStudent]);
-      const update: Update<TeacherStudentInterface> = {
-        id: 1,
-        changes: {
-          teacherId: teacherIdUpdatedValue
-        }
-      };
-      const action = new TeacherStudentActions.UpdateTeacherStudent({
-        teacherStudent: update
-      });
-      const result = reducer(startState, action);
-      expect(result).toEqual(
-        createState([createteacherStudent(1, teacherIdUpdatedValue)])
-      );
-    });
-
-    it('should update multiple teacherStudents', () => {
-      const startState = createState(teacherStudents);
-      const updates: Update<TeacherStudentInterface>[] = [
-        {
-          id: 1,
-          changes: {
-            teacherId: teacherIdUpdatedValue
-          }
-        },
-        {
-          id: 2,
-          changes: {
-            teacherId: teacherIdUpdatedValue
-          }
-        }
-      ];
-      const action = new TeacherStudentActions.UpdateTeacherStudents({
-        teacherStudents: updates
-      });
-      const result = reducer(startState, action);
-
-      expect(result).toEqual(
-        createState([
-          createteacherStudent(1, teacherIdUpdatedValue),
-          createteacherStudent(2, teacherIdUpdatedValue),
-          teacherStudents[2]
-        ])
-      );
     });
   });
 

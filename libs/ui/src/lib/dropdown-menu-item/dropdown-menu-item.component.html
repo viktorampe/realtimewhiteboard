@@ -2,7 +2,7 @@
   <div *ngIf="header" class="ui-dropdown-menu-item__header">{{ header }}</div>
   <a
     *ngIf="internalLink"
-    routerLink="internalLink"
+    [routerLink]="internalLink"
     class="ui-dropdown-menu-item__body"
   >
     <mat-icon

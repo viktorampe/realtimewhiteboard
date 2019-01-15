@@ -88,7 +88,7 @@ export class CoupledTeacherGuard implements CanActivate {
       select(LinkedPersonQueries.getLoaded)
     );
     this.linkedPersonsIds$ = this.store.pipe(
-      select(TeacherStudentQueries.getTeacherStudentIds)
+      select(TeacherStudentQueries.getTeacherIdsFromTeacherStudents)
     );
   }
 

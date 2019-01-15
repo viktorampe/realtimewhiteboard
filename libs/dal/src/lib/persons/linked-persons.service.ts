@@ -17,7 +17,7 @@ export interface LinkedPersonServiceInterface {
 
   linkStudentToTeacher(key: string): Observable<PersonInterface[]>;
 
-  unlinkStudentsFromTeacher(
+  unlinkStudentFromTeacher(
     studentId: number,
     teacherStudentId: number
   ): Observable<boolean>;
@@ -54,7 +54,7 @@ export class LinkedPersonService implements LinkedPersonServiceInterface {
     return this.personApi.linkStudentToTeacherRemote(publicKey);
   }
 
-  unlinkStudentsFromTeacher(
+  unlinkStudentFromTeacher(
     studentId: number,
     teacherStudentId: number
   ): Observable<boolean> {
