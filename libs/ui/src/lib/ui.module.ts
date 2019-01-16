@@ -24,6 +24,7 @@ import { CircleDirective } from './button/directives/button-circle.directive';
 import { DangerDirective } from './button/directives/button-danger.directive';
 import { DisabledDirective } from './button/directives/button-disabled.directive';
 import { LargeDirective } from './button/directives/button-large.directive';
+import { PrimaryDirective } from './button/directives/button-primary.directive';
 import { RoundedCornersDirective } from './button/directives/button-rounded-corners.directive';
 import { WarningDirective } from './button/directives/button-warning.directive';
 import { ConfirmableSelectComponent } from './confirmable-select/confirmable-select.component';
@@ -130,6 +131,7 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     HumanDateTimePipe,
     RemovePrefixStringPipe,
     LargeDirective,
+    PrimaryDirective,
     PersonSummaryComponent
   ],
   exports: [
@@ -175,6 +177,7 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     HumanDateTimePipe,
     RemovePrefixStringPipe,
     LargeDirective,
+    PrimaryDirective,
     PersonSummaryComponent
   ]
 })
