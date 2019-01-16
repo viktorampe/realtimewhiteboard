@@ -9,17 +9,14 @@ export enum CredentialErrors {
   AlreadyLinked = 'Error: Credentials already linked'
 }
 
-export enum ConnectionType {
-  Facebook = 'facebook',
-  Smartschool = 'smartschool',
-  Google = 'google'
-}
-
 export interface SingleSignOnProviderInterface {
   providerId: number;
+  name: string;
   description: string;
   logoSrc?: string;
   layoutClass?: string;
+  url: string;
+  maxNumberAllowed?: number;
 }
 
 @Injectable({
@@ -28,6 +25,9 @@ export interface SingleSignOnProviderInterface {
 export class MockCredentialsViewModel {
   ssoLinks$: Observable<SingleSignOnProviderInterface[]>;
   credentials$: Observable<PassportUserCredentialInterface[]>;
+  linkCredential(credential: SingleSignOnProviderInterface): void {}
+  unlinkCredential(credential: PassportUserCredentialInterface): void {}
+  useProfilePicture(credential: PassportUserCredentialInterface): void {}
 }
 
 @Component({
@@ -36,8 +36,6 @@ export class MockCredentialsViewModel {
   styleUrls: ['./credentials.component.scss']
 })
 export class CredentialsComponent implements OnInit {
-  connectionTypes = ConnectionType;
-
   credentials$ = this.viewModel.credentials$;
   ssoLinks$ = this.viewModel.ssoLinks$;
 
@@ -85,30 +83,34 @@ export class CredentialsComponent implements OnInit {
     return decodeURIComponent(results[2].replace(/\+/g, ' '));
   }
 
-  connect(connectionType: ConnectionType) {}
-  addCredential(provider) {
-    /*window.location.href =
-      polpo.AuthBase +
-      '/' +
-      provider +
-      '-link/' +
-      encodeURIComponent(polpo.StudentBase + '/#/profile/sso') +
-      '?type=student&access_token=' +
-      LoopBackAuth.accessTokenId;*/
+  decoupleCredential(credential: PassportUserCredentialInterface) {
+    this.viewModel.unlinkCredential(credential);
   }
 
-  decoupleCredential(credential) {
-    /*Person.credentials
-      .destroyById({ id: vm.user.id, fk: credential.id })
-      .$promise.then(function() {
-        var i = vm.credentials.indexOf(credential);
-        if (i !== -1) {
-          vm.credentials.splice(i, 1);
-        }
-      })
-      .catch(function(err) {
-        console.error(err);
-      });*/
+  changeAvatar(credential: PassportUserCredentialInterface) {
+    this.viewModel.useProfilePicture(credential);
+  }
+
+  addCredential(credential: SingleSignOnProviderInterface) {
+    this.viewModel.linkCredential(credential);
+  }
+
+  getUserNameToDisplayByCredential(
+    credential: PassportUserCredentialInterface
+  ): string {
+    if (
+      credential.provider === 'facebook' ||
+      credential.provider === 'smartschool'
+    ) {
+      return (
+        credential.profile.name.givenName +
+        ' ' +
+        credential.profile.name.familyName
+      );
+    } else if (credential.provider === 'google') {
+      return credential.profile.displayName;
+    }
+    return '';
   }
 
   getClass(provider: string) {
@@ -131,17 +133,26 @@ export class CredentialsComponent implements OnInit {
     return new Date(d).toLocaleTimeString('nl-BE');
   }
 
-  changeAvatar(credential) {
-    /*Person.useAvatarFromCredential({id:vm.user.id, credential: credential.id}).$promise.then(function(result){
-      if(result.message === 'succeeded'){
-          Person.getCurrentUser(true).then(function(result){
-              vm.user = result;
-          });
-      } else {
-          console.error(result);
-      }
-  }).catch(function(err){
-      console.error(err);
-  });*/
+  getPlatformLink(credential: PassportUserCredentialInterface): string {
+    if (credential.provider === 'facebook') {
+      return credential.profile.profileUrl;
+    } else if (credential.provider === 'google') {
+      return credential.profile._json.url;
+    } else if (credential.provider === 'smartschool') {
+      return credential.profile.platform;
+    }
+    return '';
+  }
+
+  getPlatformText(credential: PassportUserCredentialInterface): string {
+    if (
+      credential.provider === 'facebook' ||
+      credential.provider === 'google'
+    ) {
+      return 'Profiel-pagina';
+    } else if (credential.provider === 'smartschool') {
+      return credential.profile.platform;
+    }
+    return '';
   }
 }

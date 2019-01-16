@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { MatIconModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { UiModule } from '@campus/ui';
 import { CredentialsComponent } from './components/credentials.component';
@@ -8,6 +9,7 @@ import { CredentialsComponent } from './components/credentials.component';
   imports: [
     CommonModule,
     UiModule,
+    MatIconModule,
     RouterModule.forChild([
       { path: '', pathMatch: 'full', component: CredentialsComponent }
     ])
