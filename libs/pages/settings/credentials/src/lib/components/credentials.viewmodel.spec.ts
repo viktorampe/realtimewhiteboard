@@ -190,7 +190,7 @@ describe('CredentialsViewModel', () => {
 
         expect(window.open).toHaveBeenCalled();
         expect(window.open).toHaveBeenCalledTimes(1);
-        expect(window.open).toHaveBeenCalledWith(mockProvider.url, '_blank');
+        expect(window.open).toHaveBeenCalledWith(mockProvider.url, '_self');
       });
     });
 

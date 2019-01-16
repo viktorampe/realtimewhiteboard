@@ -49,7 +49,7 @@ export class CredentialsViewModel {
               '?type=student&access_token=' + LoopBackAuth.accessTokenId;
       }
     */
-    window.open(provider.url, '_blank');
+    window.open(provider.url, '_self');
     // Dit lijkt me een ietwat omslachtige manier om een link te openen
     // Had de constructie in de huidige site een reden? En is die reden nu nog van toepassing?
   }
