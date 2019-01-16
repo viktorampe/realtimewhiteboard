@@ -2,15 +2,15 @@ import { Injectable } from '@angular/core';
 import { ValidationErrors } from '@angular/forms';
 import {
   DalState,
-  LinkedPersonActions,
   LinkedPersonQueries,
   PersonInterface,
+  TeacherStudentActions,
   UserQueries
 } from '@campus/dal';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map, merge } from 'rxjs/operators';
-import { ResponseQueries } from './coupled-teachers.viewmodel.mock';
+import { MockCoupledTeachersViewModel } from './coupled-teachers.viewmodel.mock';
 
 // TODO: update interface + put somewhere else
 export interface ActionResponse {
@@ -44,7 +44,11 @@ export class CoupledTeachersViewModel {
   public successMessages$: Observable<ActionResponse>;
 
   // TODO: inject toaster service for showing success message
-  constructor(private store: Store<DalState>) {
+  // TODO: remove mockViewModel when selectors are available
+  constructor(
+    private store: Store<DalState>,
+    private mockViewModel: MockCoupledTeachersViewModel
+  ) {
     this.setSourceStreams();
     this.setIntermediateStreams();
     this.setPresentationStreams();
@@ -57,54 +61,60 @@ export class CoupledTeachersViewModel {
   }
 
   private setIntermediateStreams(): void {
-    // TODO: replace pseudo code with real selectors
-    this.linkPersonError$ = this.store.pipe(
-      select(
-        ResponseQueries.get({
-          action: LinkedPersonActions.LinkedPersonsActionTypes.AddLinkedPerson,
-          type: 'error'
-        })
-      )
-    );
+    // TODO: the mockViewModel should be replaced by selectors from the ResponseState (see below for a possible implementation)
+    this.linkPersonSuccess$ = this.mockViewModel.linkPersonSuccess$;
+    this.linkPersonError$ = this.mockViewModel.linkPersonError$;
+    this.unlinkPersonSuccess$ = this.mockViewModel.unlinkPersonSuccess$;
+    this.unlinkPersonError$ = this.mockViewModel.unlinkPersonError$;
 
-    // TODO: replace pseudo code with real selectors
-    this.linkPersonSuccess$ = this.store.pipe(
-      select(
-        ResponseQueries.get({
-          action: LinkedPersonActions.LinkedPersonsActionTypes.AddLinkedPerson,
-          type: 'success'
-        })
-      )
-    );
-
-    // TODO: replace pseudo code with real selectors
-    this.unlinkPersonSuccess$ = this.store.pipe(
-      select(
-        ResponseQueries.get({
-          action:
-            LinkedPersonActions.LinkedPersonsActionTypes.DeleteLinkedPerson,
-          type: 'success'
-        })
-      )
-    );
-
-    // TODO: replace pseudo code with real selectors
-    this.unlinkPersonError$ = this.store.pipe(
-      select(
-        ResponseQueries.get({
-          action:
-            LinkedPersonActions.LinkedPersonsActionTypes.DeleteLinkedPerson,
-          type: 'error'
-        })
-      )
-    );
+    // TODO: replace pseudo selector code with real selectors
+    // this.linkPersonError$ = this.store.pipe(
+    //   select(
+    //     ResponseQueries.get({
+    //       action:
+    //         TeacherStudentActions.TeacherStudentActionTypes.LinkTeacherStudent,
+    //       type: 'error'
+    //     })
+    //   )
+    // );
+    // TODO: replace pseudo selector code with real selectors
+    // this.linkPersonSuccess$ = this.store.pipe(
+    //   select(
+    //     ResponseQueries.get({
+    //       action:
+    //         TeacherStudentActions.TeacherStudentActionTypes.LinkTeacherStudent,
+    //       type: 'success'
+    //     })
+    //   )
+    // );
+    // TODO: replace pseudo selector code with real selectors
+    // this.unlinkPersonSuccess$ = this.store.pipe(
+    //   select(
+    //     ResponseQueries.get({
+    //       action:
+    //         TeacherStudentActions.TeacherStudentActionTypes
+    //           .UnlinkTeacherStudent,
+    //       type: 'success'
+    //     })
+    //   )
+    // );
+    // TODO: replace pseudo selector code with real selectors
+    // this.unlinkPersonError$ = this.store.pipe(
+    //   select(
+    //     ResponseQueries.get({
+    //       action:
+    //         TeacherStudentActions.TeacherStudentActionTypes
+    //           .UnlinkTeacherStudent,
+    //       type: 'error'
+    //     })
+    //   )
+    // );
   }
 
   private setPresentationStreams(): void {
     this.apiErrors$ = this.linkPersonError$.pipe(
       map(response => {
         // TODO: switch based on response.message
-
         switch (response.message) {
           case 'nonExistingTeacherCode':
             return { nonExistingTeacherCode: 'Deze code is niet geldig ...' };
@@ -130,19 +140,19 @@ export class CoupledTeachersViewModel {
   }
 
   public linkPerson(publicKey: string): void {
-    // TODO: update code when linked person state is finished
     this.store.dispatch(
-      new LinkedPersonActions.LinkStudentTeacher({ publicKey })
+      new TeacherStudentActions.LinkTeacherStudent({ publicKey })
     );
   }
 
-  public unlinkPerson(id: number): void {
-    // TODO: update code when linked person state is finished
-    this.store.dispatch(new LinkedPersonActions.UnlinkTeacherStudent({ id }));
+  public unlinkPerson(teacherId: number): void {
+    this.store.dispatch(
+      new TeacherStudentActions.UnlinkTeacherStudent({ teacherId })
+    );
   }
 
   private showSuccessToast(message: ActionResponse) {
     // TODO: call the toast service with the message
-    window.alert('implement success message');
+    window.alert(message.message);
   }
 }

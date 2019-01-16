@@ -2,25 +2,17 @@ import { Injectable } from '@angular/core';
 import {
   LinkedPersonActions,
   PersonFixture,
-  PersonInterface
+  PersonInterface,
+  TeacherStudentActions
 } from '@campus/dal';
 import { ViewModelInterface } from '@campus/testing';
-import { BehaviorSubject, of } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import {
   ActionResponse,
   ApiValidationErrors,
   CoupledTeachersViewModel
 } from './coupled-teachers.viewmodel';
 
-export const ResponseQueries = {
-  get: ({  }: any) => {
-    return of(<ActionResponse>{
-      action: 'mockAction',
-      message: 'mockMessage',
-      type: 'success'
-    });
-  }
-};
 @Injectable({
   providedIn: 'root'
 })
@@ -50,7 +42,48 @@ export class MockCoupledTeachersViewModel
     type: 'success'
   });
 
+  public linkPersonSuccess$ = new BehaviorSubject<ActionResponse>(
+    this.makeActionResponse(
+      TeacherStudentActions.TeacherStudentActionTypes.LinkTeacherStudent,
+      'Person successfully linked',
+      'success'
+    )
+  );
+  public linkPersonError$ = new BehaviorSubject<ActionResponse>(
+    this.makeActionResponse(
+      TeacherStudentActions.TeacherStudentActionTypes.LinkTeacherStudent,
+      'Person failed to link',
+      'error'
+    )
+  );
+  public unlinkPersonSuccess$ = new BehaviorSubject<ActionResponse>(
+    this.makeActionResponse(
+      TeacherStudentActions.TeacherStudentActionTypes.UnlinkTeacherStudent,
+      'Person successfully unlinked',
+      'success'
+    )
+  );
+  public unlinkPersonError$ = new BehaviorSubject<ActionResponse>(
+    this.makeActionResponse(
+      TeacherStudentActions.TeacherStudentActionTypes.UnlinkTeacherStudent,
+      'Person failed to unlink',
+      'error'
+    )
+  );
+
   linkPerson(publicKey: string): void {}
 
   unlinkPerson(id: number): void {}
+
+  private makeActionResponse(
+    action: string,
+    message: string,
+    type: 'error' | 'success'
+  ): ActionResponse {
+    return {
+      action: action,
+      message: message,
+      type: type
+    };
+  }
 }

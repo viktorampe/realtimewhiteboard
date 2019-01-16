@@ -18,7 +18,7 @@ describe('CoupledTeacherViewModel', () => {
     });
 
     coupledTeacherViewModel = TestBed.get(CoupledTeachersViewModel);
-    store = TestBed.get(store);
+    store = TestBed.get(Store);
   });
 
   describe('creation', () => {
