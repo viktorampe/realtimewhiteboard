@@ -110,7 +110,14 @@ export class CredentialsComponent implements OnInit {
   }
 
   getClass(provider: string) {
-    return 'fa fa-' + provider.replace('-link', '');
+    if (provider === 'facebook') {
+      return 'facebook';
+    } else if (provider === 'google') {
+      return 'google';
+    } else if (provider === 'smartschool') {
+      return 'smartschool:orange;';
+    }
+    return '';
   }
 
   getDate(timestamp: string) {
