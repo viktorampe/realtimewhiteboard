@@ -21,27 +21,25 @@
       }
     }
 
-    &__result {
-      float: left;
-      overflow: hidden;
-      border-radius: $pages-settings-profile-avatar__avatar-borderradius;
+    image-cropper {
+      padding: 0;
     }
 
-    // override default styles from image-cropper to make image fit height instead of width
-    image-cropper {
-      display: block;
-      margin-left: 220px;
-      height: 200px;
-      width: auto;
-      padding: 0;
+    &__result {
+      float: left;
+      text-align: center;
 
-      > div {
-        height: 100%;
-
-        img.source-image {
-          height: 100%;
-        }
+      img {
+        display: block;
+        margin: 0 auto;
+        overflow: hidden;
+        border-radius: $pages-settings-profile-avatar__avatar-borderradius;
       }
+    }
+
+    &__cropper {
+      margin-left: 220px;
+      max-width: 600px;
     }
 
     .warning {
@@ -51,6 +49,15 @@
       margin-top: 5px;
       color: $ui-warning-font-color;
       background-color: $ui-warning-bg-color;
+    }
+
+    &.compact {
+      .pages-settings-profile-avatar {
+        &__cropper {
+          margin: 0;
+          max-width: auto;
+        }
+      }
     }
   }
 }

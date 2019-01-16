@@ -1,3 +1,4 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, Inject, OnInit } from '@angular/core';
 import {
   FileReaderError,
@@ -17,6 +18,7 @@ import { ProfileViewModel } from '../profile.viewmodel';
 })
 export class AvatarComponent implements OnInit {
   currentUser$: Observable<PersonInterface>;
+  isSmallScreen$: Observable<boolean>;
 
   selectedImg$: Observable<string | ArrayBuffer>;
   croppedImg$: BehaviorSubject<string>;
@@ -24,6 +26,7 @@ export class AvatarComponent implements OnInit {
   uploadHoverState: boolean;
 
   constructor(
+    private breakPointObserver: BreakpointObserver,
     private profileViewModel: ProfileViewModel,
     @Inject(FILEREADER_SERVICE_TOKEN)
     private fileReaderService: FileReaderServiceInterface
@@ -79,6 +82,9 @@ export class AvatarComponent implements OnInit {
 
   private loadOutputStreams(): void {
     this.currentUser$ = this.profileViewModel.currentUser$;
+    this.isSmallScreen$ = this.breakPointObserver
+      .observe([Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
+      .pipe(map(result => !result.matches));
     this.selectedImg$ = this.fileReaderService.loaded$;
     this.loadError$ = this.fileReaderService.error$.pipe(
       map(this.setErrorMessage)

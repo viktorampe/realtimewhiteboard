@@ -1,5 +1,6 @@
 <div
   class="pages-settings-profile-avatar"
+  [class.compact]="isSmallScreen$ | async"
   *ngIf="(currentUser$ | async) as user"
 >
   <campus-page-header
@@ -40,21 +41,22 @@
       <div
         *ngIf="(croppedImg$ | async) as croppedImg"
         class="pages-settings-profile-avatar__result"
-        ><img [src]="croppedImg"
-      /></div>
-      <image-cropper
-        #cropper
-        [imageBase64]="selectedImg"
-        [resizeToWidth]="200"
-        [cropperMinWidth]="100"
-        [format]="'jpeg'"
-        [imageQuality]="70"
-        [outputType]="'base64'"
-        [roundCropper]="true"
-        (imageCropped)="previewAvatar($event)"
-      ></image-cropper>
-      <div>
+      >
+        <img [src]="croppedImg" />
         <campus-button primary (click)="saveAvatar()">Opslaan</campus-button>
+      </div>
+      <div class="pages-settings-profile-avatar__cropper">
+        <image-cropper
+          #cropper
+          [imageBase64]="selectedImg"
+          [resizeToWidth]="200"
+          [cropperMinWidth]="100"
+          [format]="'jpeg'"
+          [imageQuality]="70"
+          [outputType]="'base64'"
+          [roundCropper]="true"
+          (imageCropped)="previewAvatar($event)"
+        ></image-cropper>
         <campus-button (click)="resetAvatar()"
           >Andere afbeelding kiezen</campus-button
         >
