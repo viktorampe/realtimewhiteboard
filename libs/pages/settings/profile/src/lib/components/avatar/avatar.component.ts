@@ -7,8 +7,8 @@ import {
 } from '@campus/browser';
 import { PersonInterface } from '@campus/dal';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ProfileViewModel } from '../profile.viewmodel';
 
 @Component({
@@ -21,8 +21,8 @@ export class AvatarComponent implements OnInit {
   isSmallScreen$: Observable<boolean>;
 
   selectedImg$: Observable<string | ArrayBuffer>;
-  croppedImg$: BehaviorSubject<string>;
   loadError$: Observable<string>;
+  croppedImg: string;
   uploadHoverState: boolean;
 
   constructor(
@@ -67,13 +67,11 @@ export class AvatarComponent implements OnInit {
   }
 
   previewAvatar(event: ImageCroppedEvent): void {
-    this.croppedImg$.next(event.base64);
+    this.croppedImg = event.base64;
   }
 
   saveAvatar(): void {
-    this.croppedImg$.pipe(take(1)).subscribe(avatar => {
-      this.profileViewModel.updateProfile({ avatar });
-    });
+    this.profileViewModel.updateProfile({ avatar: this.croppedImg });
   }
 
   resetAvatar(): void {
@@ -89,7 +87,6 @@ export class AvatarComponent implements OnInit {
     this.loadError$ = this.fileReaderService.error$.pipe(
       map(this.setErrorMessage)
     );
-    this.croppedImg$ = new BehaviorSubject(null);
   }
 
   private setErrorMessage(err: FileReaderError): string {

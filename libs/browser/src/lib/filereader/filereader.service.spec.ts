@@ -53,9 +53,10 @@ describe('FilereaderService', () => {
 
   describe('reset', () => {
     it('should call filereader.abort and empty streams', () => {
-      jest.spyOn(fileReader, 'abort');
+      const spyAbort: jest.SpyInstance = jest.spyOn(fileReader, 'abort');
       service.reset();
 
+      expect(spyAbort).toHaveBeenCalled();
       expect(service.loaded$).toBeObservable(hot('a', { a: null }));
       expect(service.error$).toBeObservable(hot('a', { a: null }));
     });

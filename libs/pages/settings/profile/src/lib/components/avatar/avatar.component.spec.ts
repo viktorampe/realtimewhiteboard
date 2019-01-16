@@ -164,30 +164,26 @@ describe('AvatarComponent', () => {
   });
 
   describe('previewAvatar', () => {
-    it('should update croppedImg$', () => {
+    it('should update croppedImg', () => {
       const mockCroppedEvent = {
         base64: 'base64encoded-image'
       } as ImageCroppedEvent;
       component.previewAvatar(mockCroppedEvent);
 
-      expect(component.croppedImg$).toBeObservable(
-        hot('a', {
-          a: 'base64encoded-image'
-        })
-      );
+      expect(component.croppedImg).toBe('base64encoded-image');
     });
   });
 
   describe('saveAvatar', () => {
     it('should call profileViewModel.updateProfile', () => {
       const spyUpdate = jest.spyOn(profileVM, 'updateProfile');
-      component.croppedImg$ = new BehaviorSubject('base64encoded-image');
+      component.croppedImg = 'base64encoded-image';
       component.saveAvatar();
 
       expect(spyUpdate).toHaveBeenCalledWith({ avatar: 'base64encoded-image' });
 
       spyUpdate.mockReset();
-      component.croppedImg$.next('other-base64encoded-image');
+      component.croppedImg = 'other-base64encoded-image';
       component.saveAvatar();
 
       expect(spyUpdate).toHaveBeenCalledWith({
