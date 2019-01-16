@@ -1,6 +1,11 @@
 //file.only
 import { TestBed } from '@angular/core/testing';
-import { DalState, PersonFixture } from '@campus/dal';
+import {
+  BundleReducer,
+  DalState,
+  PersonFixture,
+  TaskReducer
+} from '@campus/dal';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, Store, StoreModule } from '@ngrx/store';
@@ -8,15 +13,23 @@ import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
 import { TeacherStudentReducer } from '.';
+import { TaskFixture, TeacherStudentFixture } from '../../+fixtures';
 import { LINKED_PERSON_SERVICE_TOKEN } from '../../persons/linked-persons.service';
-import { LoadBundles } from '../bundle/bundle.actions';
-import { AddLinkedPerson } from '../linked-person/linked-person.actions';
-import { LoadTasks } from '../task/task.actions';
+import { DeleteBundles, LoadBundles } from '../bundle/bundle.actions';
+import { ActionSuccessful } from '../dal.actions';
+import {
+  AddLinkedPerson,
+  DeleteLinkedPerson
+} from '../linked-person/linked-person.actions';
+import { DeleteTasks, LoadTasks, TasksLoaded } from '../task/task.actions';
 import { UserReducer } from '../user';
 import { UserLoaded } from '../user/user.actions';
+import { BundleFixture } from './../../+fixtures/Bundle.fixture';
 import { LinkedPersonServiceInterface } from './../../persons/linked-persons.service';
+import { BundlesLoaded } from './../bundle/bundle.actions';
 import {
   AddTeacherStudent,
+  DeleteTeacherStudent,
   LinkTeacherStudents,
   LoadTeacherStudents,
   TeacherStudentsLoaded,
@@ -79,6 +92,8 @@ describe('TeacherStudentsEffects', () => {
           }
         ),
         StoreModule.forFeature(UserReducer.NAME, UserReducer.reducer),
+        StoreModule.forFeature(BundleReducer.NAME, BundleReducer.reducer),
+        StoreModule.forFeature(TaskReducer.NAME, TaskReducer.reducer),
         EffectsModule.forRoot([]),
         EffectsModule.forFeature([TeacherStudentEffects])
       ],
@@ -205,6 +220,11 @@ describe('TeacherStudentsEffects', () => {
       teacherInfo: { publicKey: mockPublicKey }
     });
     const mockCurrentUser = new PersonFixture();
+    const mockTeacherStudent = new TeacherStudentFixture({
+      id: 12345,
+      teacherId: mockTeacher.id,
+      studentId: mockCurrentUser.id
+    });
 
     beforeEach(() => {
       linkedPersonService = TestBed.get(LINKED_PERSON_SERVICE_TOKEN);
@@ -231,7 +251,6 @@ describe('TeacherStudentsEffects', () => {
       });
 
       it('should dispatch actions', () => {
-        linkedPersonService = TestBed.get(LINKED_PERSON_SERVICE_TOKEN);
         linkedPersonService.linkStudentToTeacher = jest
           .fn()
           .mockReturnValue(of([mockTeacher]));
@@ -253,17 +272,43 @@ describe('TeacherStudentsEffects', () => {
 
         expect(effects.linkTeacher$).toBeObservable(expectedActions$);
       });
+
+      it('should dispatch a message action on an api error', () => {
+        const errorMessage = 'This error is your fault, not mine';
+        linkedPersonService.linkStudentToTeacher = jest
+          .fn()
+          .mockImplementation(() => {
+            throw new Error(errorMessage);
+          });
+
+        actions = hot('-a-', { a: linkTeacherAction });
+
+        const expectedAction$ = hot('-a', {
+          a: new ActionSuccessful({
+            successfulAction: 'link teacher failed:' + errorMessage
+          })
+        });
+
+        expect(effects.linkTeacher$).toBeObservable(expectedAction$);
+      });
     });
 
     describe('unlinkTeacher$', () => {
       const unlinkTeacherAction = new UnlinkTeacherStudents({
         teacherId: mockTeacher.id
       });
+      const mockBundle = new BundleFixture({
+        id: 1234,
+        teacherId: mockTeacher.id
+      });
+      const mockTask = new TaskFixture({ id: 5678, personId: mockTeacher.id });
 
       beforeEach(() => {
-        linkedPersonService = TestBed.get(LINKED_PERSON_SERVICE_TOKEN);
-        store = TestBed.get(Store);
-        store.dispatch(new UserLoaded(mockCurrentUser));
+        store.dispatch(
+          new TeacherStudentsLoaded({ teacherStudents: [mockTeacherStudent] })
+        );
+        store.dispatch(new BundlesLoaded({ bundles: [mockBundle] }));
+        store.dispatch(new TasksLoaded({ tasks: [mockTask] }));
       });
 
       it('should call the linkedPersonService', () => {
@@ -279,6 +324,46 @@ describe('TeacherStudentsEffects', () => {
             linkedPersonService.unlinkStudentFromTeacher
           ).toHaveBeenCalledWith(mockCurrentUser.id, mockTeacher.id);
         });
+      });
+
+      it('should dispatch actions', () => {
+        linkedPersonService.unlinkStudentFromTeacher = jest
+          .fn()
+          .mockReturnValue(of(true));
+
+        actions = hot('-a-', { a: unlinkTeacherAction });
+
+        const expectedActions$ = hot('-(abcd)', {
+          a: new DeleteLinkedPerson({ id: mockTeacher.id }),
+          b: new DeleteTeacherStudent({ id: mockTeacherStudent.id }),
+          c: new DeleteBundles({
+            ids: [mockBundle.id]
+          }),
+          d: new DeleteTasks({
+            ids: [mockTask.id]
+          })
+        });
+
+        expect(effects.unlinkTeacher$).toBeObservable(expectedActions$);
+      });
+
+      it('should dispatch a message action on an api error', () => {
+        const errorMessage = 'This error is your fault, not mine';
+        linkedPersonService.unlinkStudentFromTeacher = jest
+          .fn()
+          .mockImplementation(() => {
+            throw new Error(errorMessage);
+          });
+
+        actions = hot('-a-', { a: unlinkTeacherAction });
+
+        const expectedAction$ = hot('-a', {
+          a: new ActionSuccessful({
+            successfulAction: 'unlink teacher failed:' + errorMessage
+          })
+        });
+
+        expect(effects.unlinkTeacher$).toBeObservable(expectedAction$);
       });
     });
   });

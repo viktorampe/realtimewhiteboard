@@ -87,7 +87,7 @@ export class TeacherStudentEffects {
       },
       onError: (action: LinkTeacherStudents, error) => {
         return new ActionSuccessful({
-          successfulAction: 'link teacher failed:' + error
+          successfulAction: 'link teacher failed:' + error.message
         });
       }
     }
@@ -131,7 +131,7 @@ export class TeacherStudentEffects {
       },
       onError: (action: UnlinkTeacherStudents, error) => {
         return new ActionSuccessful({
-          successfulAction: 'unlink teacher failed'
+          successfulAction: 'unlink teacher failed:' + error.message
         });
       }
     }
