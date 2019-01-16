@@ -109,13 +109,13 @@ export class CredentialsComponent implements OnInit {
     return '';
   }
 
-  getClass(provider: string) {
+  getIconForProvider(provider: string) {
     if (provider === 'facebook') {
       return 'facebook';
     } else if (provider === 'google') {
       return 'google';
     } else if (provider === 'smartschool') {
-      return 'smartschool:orange;';
+      return 'smartschool:orange';
     }
     return '';
   }

@@ -159,4 +159,13 @@ describe('CredentialsComponent', () => {
     fixture.detectChanges();
     expect(viewmodel.useProfilePicture).toHaveBeenCalledWith(cred1);
   });
+
+  it('should return correct icon class', () => {
+    expect(component.getIconForProvider('facebook')).toBe('facebook');
+    expect(component.getIconForProvider('google')).toBe('google');
+    expect(component.getIconForProvider('smartschool')).toBe(
+      'smartschool:orange'
+    );
+    expect(component.getIconForProvider('')).toBe('');
+  });
 });
