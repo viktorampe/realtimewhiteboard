@@ -5,8 +5,9 @@ import {
   ValidationErrors,
   Validators
 } from '@angular/forms';
+import { PersonInterface } from '@campus/dal';
 import { TeacherAlreadyCoupledValidator } from '@campus/shared';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'campus-coupled-teachers',
@@ -19,6 +20,9 @@ export class CoupledTeachersComponent implements OnInit {
   coupledTeachersForm: FormGroup;
 
   apiErrors$: Observable<ApiValidationErrors>;
+  linkedPersons$: Observable<PersonInterface[]>;
+
+  coupledTeacherViewModel: any; //TODO -- to be replaced by actual vm with DI
 
   constructor(
     private formBuilder: FormBuilder,
@@ -26,8 +30,13 @@ export class CoupledTeachersComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.apiErrors$ = new BehaviorSubject<ApiValidationErrors>(null);
     this.buildForm();
+    this.loadStreams();
+  }
+
+  loadStreams(): void {
+    this.linkedPersons$ = this.coupledTeacherViewModel.linkedPersons$;
+    this.apiErrors$ = this.coupledTeacherViewModel.apiErrors$;
   }
 
   private buildForm() {
@@ -44,8 +53,14 @@ export class CoupledTeachersComponent implements OnInit {
   }
 
   onSubmit() {
-    //TODO -- port action to the vm
-    console.log(this.coupledTeachersForm.value['teacherCode']);
+    this.coupledTeacherViewModel.linkPerson(
+      this.coupledTeachersForm.value['teacherCode']
+    );
+  }
+
+  onUnlink(coupledTeacher: PersonInterface) {
+    console.log(coupledTeacher);
+    this.coupledTeacherViewModel.unlinkPerson(coupledTeacher.id);
   }
 
   onReset() {
