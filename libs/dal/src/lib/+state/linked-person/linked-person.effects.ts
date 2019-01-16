@@ -24,9 +24,7 @@ export class LinkedPersonEffects {
         if (!action.payload.force && state.linkedPersons.loaded) return;
         return this.linkedPersonService
           .getAllForUser(action.payload.userId)
-          .pipe(
-            map(linkedPersons => new LinkedPersonsLoaded({ linkedPersons }))
-          );
+          .pipe(map(persons => new LinkedPersonsLoaded({ persons })));
       },
       onError: (action: LoadLinkedPersons, error) => {
         return new LinkedPersonsLoadError(error);

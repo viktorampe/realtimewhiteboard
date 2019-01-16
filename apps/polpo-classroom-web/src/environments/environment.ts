@@ -109,6 +109,12 @@ export const environment = {
     'polpo-website': 'assets/icons/website.svg',
     educontent: 'assets/icons/lesmateriaal.svg',
     // youtube: 'assets/icons/youtube.svg',
+    // -> settings dashboard
+    profile: 'assets/icons/settings.svg',
+    avatar: 'assets/icons/user.svg',
+    credentials: 'assets/icons/link.svg',
+    'coupled-teachers': 'assets/icons/student2.svg',
+    alerts: 'assets/icons/bell.svg',
 
     // -> other
     home: 'assets/icons/material/home.svg',
@@ -177,6 +183,7 @@ export const environment = {
     'expand-more': 'assets/icons/expand-more.svg',
     'expand-less': 'assets/icons/expand-less.svg',
     account: 'assets/icons/account-circle.svg',
+    settings: 'assets/icons/account-circle.svg',
     'method:101spelen': 'assets/icons/method/101spelen.svg',
     'method:allesimgrif': 'assets/icons/method/allesimgrif.svg',
     'method:allesimgriffupdate': 'assets/icons/method/allesimgriffupdate.svg',

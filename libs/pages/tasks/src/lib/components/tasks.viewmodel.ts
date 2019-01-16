@@ -7,7 +7,7 @@ import {
   EduContentQueries,
   LearningAreaInterface,
   LearningAreaQueries,
-  PersonQueries,
+  LinkedPersonQueries,
   TaskEduContentQueries,
   TaskInstanceQueries,
   TaskQueries,
@@ -120,7 +120,7 @@ export class TasksViewModel {
       this.select(TaskEduContentQueries.getAllByTaskId, { taskId }),
       this.select(EduContentQueries.getAllEntities),
       this.select(TaskQueries.getById, { id: taskId }),
-      this.select(PersonQueries.getAllEntities)
+      this.select(LinkedPersonQueries.getAllEntities)
     ).pipe(
       map(([taskInstances, taskEduContents, eduContents, task, teachers]) => {
         if (!task) return null;

@@ -1,33 +1,26 @@
 import { LinkedPersonQueries } from '.';
-import { LinkedPersonFixture } from '../../+fixtures';
-import { TeacherStudentInterface } from '../../+models';
+import { PersonInterface } from '../../+models';
 import { State } from './linked-person.reducer';
 
-describe('LinkedPerson Selectors', () => {
-  const date = new Date();
-  function createLinkedPerson(id: number): TeacherStudentInterface | any {
-    return new LinkedPersonFixture({
-      created: date,
-      id: id,
-      teacherId: id + 1,
-      studentId: id + 2
-    });
+describe('Person Selectors', () => {
+  function createPerson(id: number): PersonInterface | any {
+    return {
+      id: id
+    };
   }
 
   function createState(
-    linkedPersons: TeacherStudentInterface[],
+    persons: PersonInterface[],
     loaded: boolean = false,
     error?: any
   ): State {
     return {
-      ids: linkedPersons
-        ? linkedPersons.map(linkedPerson => linkedPerson.id)
-        : [],
-      entities: linkedPersons
-        ? linkedPersons.reduce(
-            (entityMap, linkedPerson) => ({
+      ids: persons ? persons.map(person => person.id) : [],
+      entities: persons
+        ? persons.reduce(
+            (entityMap, person) => ({
               ...entityMap,
-              [linkedPerson.id]: linkedPerson
+              [person.id]: person
             }),
             {}
           )
@@ -37,38 +30,33 @@ describe('LinkedPerson Selectors', () => {
     };
   }
 
-  let linkedPersonState: State;
+  let personState: State;
   let storeState: any;
 
-  describe('LinkedPerson Selectors', () => {
+  describe('Person Selectors', () => {
     beforeEach(() => {
-      linkedPersonState = createState(
-        [
-          createLinkedPerson(4),
-          createLinkedPerson(1),
-          createLinkedPerson(2),
-          createLinkedPerson(3)
-        ],
+      personState = createState(
+        [createPerson(4), createPerson(1), createPerson(2), createPerson(3)],
         true,
         'no error'
       );
-      storeState = { linkedPersons: linkedPersonState };
+      storeState = { linkedPersons: personState };
     });
     it('getError() should return the error', () => {
       const results = LinkedPersonQueries.getError(storeState);
-      expect(results).toBe(linkedPersonState.error);
+      expect(results).toBe(personState.error);
     });
     it('getLoaded() should return the loaded boolean', () => {
       const results = LinkedPersonQueries.getLoaded(storeState);
-      expect(results).toBe(linkedPersonState.loaded);
+      expect(results).toBe(personState.loaded);
     });
     it('getAll() should return an array of the entities in the order from the ids', () => {
       const results = LinkedPersonQueries.getAll(storeState);
       expect(results).toEqual([
-        createLinkedPerson(4),
-        createLinkedPerson(1),
-        createLinkedPerson(2),
-        createLinkedPerson(3)
+        createPerson(4),
+        createPerson(1),
+        createPerson(2),
+        createPerson(3)
       ]);
     });
     it('getCount() should return number of entities', () => {
@@ -81,30 +69,26 @@ describe('LinkedPerson Selectors', () => {
     });
     it('getAllEntities() should return a key value object with all the entities', () => {
       const results = LinkedPersonQueries.getAllEntities(storeState);
-      expect(results).toEqual(linkedPersonState.entities);
+      expect(results).toEqual(personState.entities);
     });
     it('getByIds() should return an array of the requested entities in order and undefined if the id is not present', () => {
       const results = LinkedPersonQueries.getByIds(storeState, {
         ids: [3, 1, 90, 2]
       });
       expect(results).toEqual([
-        createLinkedPerson(3),
-        createLinkedPerson(1),
+        createPerson(3),
+        createPerson(1),
         undefined,
-        createLinkedPerson(2)
+        createPerson(2)
       ]);
     });
     it('getById() should return the desired entity', () => {
       const results = LinkedPersonQueries.getById(storeState, { id: 2 });
-      expect(results).toEqual(createLinkedPerson(2));
+      expect(results).toEqual(createPerson(2));
     });
     it('getById() should return undefined if the entity is not present', () => {
       const results = LinkedPersonQueries.getById(storeState, { id: 9 });
       expect(results).toBe(undefined);
-    });
-    it('getLinkedPersonIds() should return number[] of the persons that are linked', () => {
-      const results = LinkedPersonQueries.getLinkedPersonIds(storeState);
-      expect(results).toEqual([2, 3, 4, 5]);
     });
   });
 });

@@ -1,6 +1,7 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { hot } from '@nrwl/nx/testing';
+import { PersonFixture } from '../+fixtures';
 import {
   LinkedPersonService,
   LinkedPersonServiceInterface
@@ -31,14 +32,29 @@ describe('LinkedPersonsService', () => {
     }
   ));
 
-  it('should return persons', async () => {
-    mockData$ = hot('-a-|', {
-      a: { teacherStudents: [{ id: 1, teacherId: 1, studentId: 2 }] }
+  describe('getAllForUser', () => {
+    it('should return persons', async () => {
+      mockData$ = hot('-a-|', {
+        a: { persons: [new PersonFixture()] }
+      });
+      expect(service.getAllForUser(1)).toBeObservable(
+        hot('-a-|', {
+          a: [new PersonFixture()]
+        })
+      );
     });
-    expect(service.getAllForUser(1)).toBeObservable(
-      hot('-a-|', {
-        a: [{ id: 1, teacherId: 1, studentId: 2 }]
-      })
-    );
+  });
+
+  describe('getTeacherStudentsForUser', () => {
+    it('should return relation info', async () => {
+      mockData$ = hot('-a-|', {
+        a: { teacherStudents: [{ id: 1, teacherId: 1, studentId: 2 }] }
+      });
+      expect(service.getTeacherStudentsForUser(1)).toBeObservable(
+        hot('-a-|', {
+          a: [{ id: 1, teacherId: 1, studentId: 2 }]
+        })
+      );
+    });
   });
 });

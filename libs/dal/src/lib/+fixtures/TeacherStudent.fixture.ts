@@ -1,8 +1,9 @@
 import { TeacherStudentInterface } from '../+models';
 
-export class LinkedPersonFixture implements TeacherStudentInterface {
+export class TeacherStudentFixture implements TeacherStudentInterface {
   // defaults
   created = new Date();
+  id = 456;
 
   constructor(props: Partial<TeacherStudentInterface> = {}) {
     // overwrite defaults

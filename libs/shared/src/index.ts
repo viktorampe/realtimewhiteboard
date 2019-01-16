@@ -10,3 +10,4 @@ export {
   SCORM_EXERCISE_SERVICE_TOKEN
 } from './lib/scorm/scorm-exercise.service.interface';
 export * from './lib/shared.module';
+export * from './lib/validators';

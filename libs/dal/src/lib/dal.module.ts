@@ -16,6 +16,8 @@ import { AlertReducer, AlertsEffects } from './+state/alert';
 import { BundleReducer, BundlesEffects } from './+state/bundle';
 import { ContentStatusReducer } from './+state/content-status';
 import { ContentStatusesEffects } from './+state/content-status/content-status.effects';
+import { CredentialReducer } from './+state/credential';
+import { CredentialEffects } from './+state/credential/credential.effects';
 import {
   CurrentExerciseEffects,
   CurrentExerciseReducer
@@ -30,7 +32,6 @@ import {
   LinkedPersonEffects,
   LinkedPersonReducer
 } from './+state/linked-person';
-import { PersonEffects, PersonReducer } from './+state/person';
 import { ResultReducer } from './+state/result';
 import { ResultEffects } from './+state/result/result.effects';
 import {
@@ -46,6 +47,10 @@ import {
   TaskInstanceEffects,
   TaskInstanceReducer
 } from './+state/task-instance';
+import {
+  TeacherStudentEffects,
+  TeacherStudentReducer
+} from './+state/teacher-student';
 import { UiEffects, UiReducer } from './+state/ui';
 import {
   UnlockedBoekeGroupReducer,
@@ -87,6 +92,10 @@ import { LearningAreaService } from './learning-area/learning-area.service';
 import { LEARNINGAREA_SERVICE_TOKEN } from './learning-area/learning-area.service.interface';
 import { AuthService } from './persons/auth-service';
 import { AUTH_SERVICE_TOKEN } from './persons/auth-service.interface';
+import {
+  CredentialService,
+  CREDENTIAL_SERVICE_TOKEN
+} from './persons/credential.service';
 import {
   LinkedPersonService,
   LINKED_PERSON_SERVICE_TOKEN
@@ -132,8 +141,9 @@ interface DalOptions {
       TaskEduContentReducer,
       ResultReducer,
       CurrentExerciseReducer,
+      TeacherStudentReducer,
       LinkedPersonReducer,
-      PersonReducer
+      CredentialReducer
     ]),
     EffectsModule.forFeature([
       BundlesEffects,
@@ -153,8 +163,9 @@ interface DalOptions {
       TaskEduContentEffects,
       ResultEffects,
       CurrentExerciseEffects,
+      TeacherStudentEffects,
       LinkedPersonEffects,
-      PersonEffects
+      CredentialEffects
     ])
   ],
   providers: [
@@ -194,7 +205,8 @@ interface DalOptions {
       useClass: TaskEduContentService
     },
     { provide: CONTENT_REQUEST_SERVICE_TOKEN, useClass: ContentRequestService },
-    { provide: RESULTS_SERVICE_TOKEN, useClass: ResultsService }
+    { provide: RESULTS_SERVICE_TOKEN, useClass: ResultsService },
+    { provide: CREDENTIAL_SERVICE_TOKEN, useClass: CredentialService }
   ]
 })
 export class DalModule {

@@ -1,6 +1,5 @@
 import { groupArrayByKey } from '@campus/utils';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { TaskEduContentInterface } from '../../+models';
 import {
   NAME,
   selectAll,
@@ -86,10 +85,7 @@ export const getUnfinishedTaskIds = createSelector(
 export const getAllGroupedByTaskId = createSelector(
   selectTaskEduContentState,
   (state: State) => {
-    return groupArrayByKey<TaskEduContentInterface>(
-      Object.values(state.entities),
-      { taskId: 0 }
-    );
+    return groupArrayByKey(Object.values(state.entities), 'taskId');
   }
 );
 
