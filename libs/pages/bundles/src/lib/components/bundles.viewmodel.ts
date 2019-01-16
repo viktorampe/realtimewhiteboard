@@ -10,8 +10,8 @@ import {
   EduContentQueries,
   LearningAreaInterface,
   LearningAreaQueries,
+  LinkedPersonQueries,
   PersonInterface,
-  PersonQueries,
   UiActions,
   UiQuery,
   UnlockedBoekeGroupQueries,
@@ -156,7 +156,7 @@ export class BundlesViewModel {
       switchMap(
         (bundle): Observable<PersonInterface> =>
           this.store.pipe(
-            select(PersonQueries.getById, { id: bundle.teacherId })
+            select(LinkedPersonQueries.getById, { id: bundle.teacherId })
           )
       )
     );

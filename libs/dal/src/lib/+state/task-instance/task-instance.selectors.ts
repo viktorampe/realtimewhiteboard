@@ -76,9 +76,9 @@ export const getById = createSelector(
 export const getAllGroupedByTaskId = createSelector(
   selectTaskInstanceState,
   (state: State) => {
-    return groupArrayByKey<TaskInstance>(
+    return groupArrayByKey(
       Object.values(state.entities).map(asTaskInstance),
-      { taskId: 0 }
+      'taskId'
     );
   }
 );

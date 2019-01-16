@@ -9,6 +9,10 @@ export {
   CREDENTIAL_SERVICE_TOKEN
 } from './credential.service';
 export {
+  LinkedPersonServiceInterface,
+  LINKED_PERSON_SERVICE_TOKEN
+} from './linked-persons.service';
+export {
   PersonServiceInterface,
   PERSON_SERVICE_TOKEN
 } from './persons.service';

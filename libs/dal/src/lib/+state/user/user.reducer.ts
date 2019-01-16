@@ -15,7 +15,6 @@ export interface State {
   currentUser: PersonInterface; // user object
   lastUpdateMessage?: {
     message: string;
-    timeStamp: number;
     type: 'success' | 'error';
   };
   loaded: boolean; // has the User list been loaded
