@@ -32,20 +32,11 @@ export class MockCoupledTeachersViewModel
     nonExistingTeacherCode: 'Deze code is niet geldig ...'
   });
 
-  public successMessages$ = new BehaviorSubject<
-    ActionResponse<LinkedPersonsActionTypes>[]
-  >([
-    {
-      action: LinkedPersonsActionTypes.AddLinkedPerson,
-      message: 'Person was successfully linked',
-      type: 'success'
-    },
-    {
-      action: LinkedPersonsActionTypes.DeleteLinkedPerson,
-      message: 'Person was successfully unlinked',
-      type: 'success'
-    }
-  ]);
+  public successMessages$ = new BehaviorSubject<ActionResponse>({
+    action: LinkedPersonsActionTypes.AddLinkedPerson,
+    message: 'Person was successfully linked',
+    type: 'success'
+  });
 
   linkPerson() {}
 
