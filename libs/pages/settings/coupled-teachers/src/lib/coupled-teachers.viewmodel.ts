@@ -7,23 +7,31 @@ import {
   PersonInterface,
   UserQueries
 } from '@campus/dal';
-import { Action, select, Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
+import { LinkedPersonsActionTypes } from 'libs/dal/src/lib/+state/linked-person/linked-person.actions';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, merge } from 'rxjs/operators';
 
-interface ActionResponse {
-  action: Action;
+// TODO: update interface + put somewhere else
+export interface ActionResponse {
+  action: string;
   message: string;
   type: 'success' | 'error';
+}
+
+// TODO: put somewhere else
+export interface ApiValidationErrors extends ValidationErrors {
+  nonExistingTeacherCode?: string;
+  apiError?: string;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProfileViewModel {
-  // source streams
-  private currentUser$: Observable<PersonInterface>;
-  private linkedPersons$: Observable<PersonInterface[]>;
+  // source and presentation streams
+  public currentUser$: Observable<PersonInterface>;
+  public linkedPersons$: Observable<PersonInterface[]>;
 
   // intermediate streams
   private linkPersonSuccess$: Observable<ActionResponse>;
@@ -33,7 +41,8 @@ export class ProfileViewModel {
   private unlinkPersonError$: Observable<ActionResponse>;
 
   // presentation streams
-  apiErrors$: Observable<ValidationErrors>;
+  public apiErrors$: Observable<ApiValidationErrors>;
+  public successMessages$: Observable<ActionResponse>;
 
   // TODO: inject toaster service for showing success message
   constructor(private store: Store<DalState>) {
@@ -48,32 +57,41 @@ export class ProfileViewModel {
   }
 
   private setIntermediateStreams(): void {
+    // TODO: replace pseudo code with real selectors
     this.linkPersonError$ = this.store.pipe(
       select(
-        ResponseQueries.getForAction(LinkedPersonActions.AddLinkedPerson, {
+        ResponseQueries.get({
+          action: LinkedPersonsActionTypes.AddLinkedPerson,
           type: 'error'
         })
       )
     );
 
+    // TODO: replace pseudo code with real selectors
     this.linkPersonSuccess$ = this.store.pipe(
       select(
-        ResponseQueries.getForAction(LinkedPersonActions.AddLinkedPerson, {
+        ResponseQueries.get({
+          action: LinkedPersonsActionTypes.AddLinkedPerson,
           type: 'success'
         })
       )
     );
 
+    // TODO: replace pseudo code with real selectors
     this.unlinkPersonSuccess$ = this.store.pipe(
       select(
-        ResponseQueries.getForAction(LinkedPersonActions.DeleteLinkedPerson, {
+        ResponseQueries.get({
+          action: LinkedPersonsActionTypes.DeleteLinkedPerson,
           type: 'success'
         })
       )
     );
+
+    // TODO: replace pseudo code with real selectors
     this.unlinkPersonError$ = this.store.pipe(
       select(
-        ResponseQueries.getForAction(LinkedPersonActions.DeleteLinkedPerson, {
+        ResponseQueries.get({
+          action: LinkedPersonsActionTypes.DeleteLinkedPerson,
           type: 'error'
         })
       )
@@ -84,22 +102,42 @@ export class ProfileViewModel {
     this.apiErrors$ = this.linkPersonError$.pipe(
       map(response => {
         // TODO: switch based on response.message
+
+        switch (response.message) {
+          case 'nonExistingTeacherCode':
+            return { nonExistingTeacherCode: 'Deze code is niet geldig ...' };
+
+          default:
+            break;
+        }
         return {
           apiError: response.message
         };
       })
     );
+
+    this.successMessages$ = this.linkPersonSuccess$.pipe(
+      merge(this.unlinkPersonSuccess$)
+    );
+    this.successMessages$.subscribe(message => {
+      this.showSuccessToast(message);
+    });
   }
 
-  public linkPerson(person: PersonInterface): void {
-    this.store.dispatch(new LinkedPersonActions.AddLinkedPerson({ person }));
+  public linkPerson(publicKey: string): void {
+    // TODO: update code when linked person state is finished
+    this.store.dispatch(
+      new LinkedPersonActions.LinkStudentTeacher({ publicKey })
+    );
   }
 
   public unlinkPerson(id: number): void {
-    this.store.dispatch(new LinkedPersonActions.DeleteLinkedPerson({ id }));
+    // TODO: update code when linked person state is finished
+    this.store.dispatch(new LinkedPersonActions.UnlinkTeacherStudent({ id }));
   }
 
-  public showSuccessToast() {
-    throw new Error('Method not implemented.');
+  public showSuccessToast(message: ActionResponse) {
+    // TODO: call the toast service with the message
+    window.alert('implement success message');
   }
 }
