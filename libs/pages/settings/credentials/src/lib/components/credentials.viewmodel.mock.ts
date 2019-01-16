@@ -42,12 +42,18 @@ export class MockCredentialsViewModel
   public singleSignOnProviders$ = new BehaviorSubject<
     SingleSignOnProviderInterface[]
   >([
-    { providerId: 1, description: 'Hoehel' },
-    { providerId: 2, description: 'Smoelboek' },
-    { providerId: 3, description: 'SmaaaaaartSchool' }
+    { providerId: 1, name: 'google', description: 'Hoehel', url: '' },
+    { providerId: 2, name: 'facebook', description: 'Smoelboek', url: '' },
+    {
+      providerId: 3,
+      name: 'smartschool',
+      description: 'SmaaaaaartSchool',
+      url: '',
+      maxNumberAllowed: 3
+    }
   ]);
 
   public useProfilePicture(credential: PassportUserCredentialInterface): void {}
-  public linkCredential(providerId: number): void {}
+  public linkCredential(provider: SingleSignOnProviderInterface): void {}
   public unlinkCredential(credential: PassportUserCredentialInterface): void {}
 }
