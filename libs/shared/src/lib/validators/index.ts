@@ -1,1 +1,1 @@
-export * from './teacher-already-coupled.validator';
+export * from './person-already-linked.validator';
