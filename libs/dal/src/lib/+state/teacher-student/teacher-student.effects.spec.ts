@@ -6,6 +6,7 @@ import {
   PersonFixture,
   TaskReducer
 } from '@campus/dal';
+import { MockDate } from '@campus/testing';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, Store, StoreModule } from '@ngrx/store';
@@ -251,6 +252,8 @@ describe('TeacherStudentsEffects', () => {
       });
 
       it('should dispatch actions', () => {
+        const DateMock = new MockDate();
+
         linkedPersonService.linkStudentToTeacher = jest
           .fn()
           .mockReturnValue(of([mockTeacher]));
@@ -261,7 +264,7 @@ describe('TeacherStudentsEffects', () => {
           a: new AddLinkedPerson({ person: mockTeacher }),
           b: new AddTeacherStudent({
             teacherStudent: {
-              created: (jasmine.anything() as unknown) as Date, //partial matcher, effect uses new Date()
+              created: DateMock.mockDate,
               teacherId: mockTeacher.id,
               studentId: mockCurrentUser.id
             }
@@ -271,6 +274,8 @@ describe('TeacherStudentsEffects', () => {
         });
 
         expect(effects.linkTeacher$).toBeObservable(expectedActions$);
+
+        DateMock.returnRealDate();
       });
 
       it('should dispatch a message action on an api error', () => {
