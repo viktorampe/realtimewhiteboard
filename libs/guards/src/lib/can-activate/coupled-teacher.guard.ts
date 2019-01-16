@@ -9,10 +9,10 @@ import {
   DalState,
   LinkedPersonActions,
   LinkedPersonQueries,
-  PersonActions,
   PersonInterface,
-  PersonQueries,
   RoleInterface,
+  TeacherStudentActions,
+  TeacherStudentQueries,
   UserQueries
 } from '@campus/dal';
 import { select, Store } from '@ngrx/store';
@@ -29,7 +29,7 @@ export class CoupledTeacherGuard implements CanActivate {
   //input streams
   private currentUser$: Observable<PersonInterface>;
   private personsLoaded$: Observable<boolean>;
-  private linkedPersonsLoaded$: Observable<boolean>;
+  private teacherStudentLoaded$: Observable<boolean>;
   private linkedPersonsIds$: Observable<number[]>;
   //intermediate streams
   private isTeacher$: Observable<boolean>;
@@ -51,7 +51,7 @@ export class CoupledTeacherGuard implements CanActivate {
         this.dispatchLoadActions(currentUser.id);
       }),
       switchMapTo(
-        combineLatest(this.personsLoaded$, this.linkedPersonsLoaded$)
+        combineLatest(this.personsLoaded$, this.teacherStudentLoaded$)
       ),
       skipWhile(arr => !arr.every(Boolean)),
       switchMapTo(
@@ -73,7 +73,7 @@ export class CoupledTeacherGuard implements CanActivate {
       })
     );
     this.store.dispatch(
-      new PersonActions.LoadPersons({
+      new TeacherStudentActions.LoadTeacherStudents({
         userId: currentUserId
       })
     );
@@ -81,12 +81,14 @@ export class CoupledTeacherGuard implements CanActivate {
 
   private initialiseInputStreams(): void {
     this.currentUser$ = this.store.pipe(select(UserQueries.getCurrentUser));
-    this.linkedPersonsLoaded$ = this.store.pipe(
+    this.teacherStudentLoaded$ = this.store.pipe(
+      select(TeacherStudentQueries.getLoaded)
+    );
+    this.personsLoaded$ = this.store.pipe(
       select(LinkedPersonQueries.getLoaded)
     );
-    this.personsLoaded$ = this.store.pipe(select(PersonQueries.getLoaded));
     this.linkedPersonsIds$ = this.store.pipe(
-      select(LinkedPersonQueries.getLinkedPersonIds)
+      select(TeacherStudentQueries.getTeacherIdsFromTeacherStudents)
     );
   }
 
@@ -107,7 +109,7 @@ export class CoupledTeacherGuard implements CanActivate {
       //this will need to be changed once the role setup will be changed
       switchMap(linkedPersonIds =>
         this.store.pipe(
-          select(PersonQueries.getByIds, { ids: linkedPersonIds })
+          select(LinkedPersonQueries.getByIds, { ids: linkedPersonIds })
         )
       ),
       map(linkedPersons =>

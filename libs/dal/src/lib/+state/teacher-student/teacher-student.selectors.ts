@@ -6,49 +6,49 @@ import {
   selectIds,
   selectTotal,
   State
-} from './person.reducer';
+} from './teacher-student.reducer';
 
-export const selectPersonState = createFeatureSelector<State>(NAME);
+export const selectTeacherStudentState = createFeatureSelector<State>(NAME);
 
 export const getError = createSelector(
-  selectPersonState,
+  selectTeacherStudentState,
   (state: State) => state.error
 );
 
 export const getLoaded = createSelector(
-  selectPersonState,
+  selectTeacherStudentState,
   (state: State) => state.loaded
 );
 
 export const getAll = createSelector(
-  selectPersonState,
+  selectTeacherStudentState,
   selectAll
 );
 
 export const getCount = createSelector(
-  selectPersonState,
+  selectTeacherStudentState,
   selectTotal
 );
 
 export const getIds = createSelector(
-  selectPersonState,
+  selectTeacherStudentState,
   selectIds
 );
 
 export const getAllEntities = createSelector(
-  selectPersonState,
+  selectTeacherStudentState,
   selectEntities
 );
 
 /**
  * returns array of objects in the order of the given ids
  * @example
- * person$: PersonInterface[] = this.store.pipe(
-    select(PersonQueries.getByIds, { ids: [2, 1, 3] })
+ * teacherStudent$: TeacherStudentInterface[] = this.store.pipe(
+    select(TeacherStudentQueries.getByIds, { ids: [2, 1, 3] })
   );
  */
 export const getByIds = createSelector(
-  selectPersonState,
+  selectTeacherStudentState,
   (state: State, props: { ids: number[] }) => {
     return props.ids.map(id => state.entities[id]);
   }
@@ -57,11 +57,22 @@ export const getByIds = createSelector(
 /**
  * returns array of objects in the order of the given ids
  * @example
- * person$: PersonInterface = this.store.pipe(
-    select(PersonQueries.getById, { id: 3 })
+ * teacherStudent$: TeacherStudentInterface[] = this.store.pipe(
+    select(TeacherStudentQueries.getById, { id: 3 })
   );
  */
 export const getById = createSelector(
-  selectPersonState,
+  selectTeacherStudentState,
   (state: State, props: { id: number }) => state.entities[props.id]
+);
+
+/**
+ * returns array of ids (number[]) of the linked persons
+ */
+export const getTeacherIdsFromTeacherStudents = createSelector(
+  selectTeacherStudentState,
+  (state: State) =>
+    Object.values(state.entities).map(
+      teacherStudent => teacherStudent.teacherId
+    )
 );
