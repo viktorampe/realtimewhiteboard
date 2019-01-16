@@ -131,7 +131,7 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     HumanDateTimePipe,
     RemovePrefixStringPipe,
     LargeDirective,
-    PrimaryDirective
+    PrimaryDirective,
     PersonSummaryComponent
   ],
   exports: [
@@ -177,7 +177,7 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     HumanDateTimePipe,
     RemovePrefixStringPipe,
     LargeDirective,
-    PrimaryDirective
+    PrimaryDirective,
     PersonSummaryComponent
   ]
 })
