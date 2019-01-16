@@ -6,7 +6,7 @@ import {
   Validators
 } from '@angular/forms';
 import { PersonInterface } from '@campus/dal';
-import { TeacherAlreadyCoupledValidator } from '@campus/shared';
+import { PersonAlreadyLinkedValidator } from '@campus/shared';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -26,17 +26,12 @@ export class CoupledTeachersComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private teacherAlreadyCoupledValidator: TeacherAlreadyCoupledValidator
+    private personAlreadyLinkedValidator: PersonAlreadyLinkedValidator
   ) {}
 
   ngOnInit(): void {
     this.buildForm();
     this.loadStreams();
-  }
-
-  loadStreams(): void {
-    this.linkedPersons$ = this.coupledTeacherViewModel.linkedPersons$;
-    this.apiErrors$ = this.coupledTeacherViewModel.apiErrors$;
   }
 
   private buildForm() {
@@ -45,11 +40,16 @@ export class CoupledTeachersComponent implements OnInit {
         this.teacherCode,
         {
           validators: [Validators.required],
-          asyncValidators: [this.teacherAlreadyCoupledValidator],
+          asyncValidators: [this.personAlreadyLinkedValidator],
           updateOn: 'change'
         }
       ]
     });
+  }
+
+  loadStreams(): void {
+    this.linkedPersons$ = this.coupledTeacherViewModel.linkedPersons$;
+    this.apiErrors$ = this.coupledTeacherViewModel.apiErrors$;
   }
 
   onSubmit() {

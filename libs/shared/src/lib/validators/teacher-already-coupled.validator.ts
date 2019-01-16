@@ -4,27 +4,23 @@ import {
   AsyncValidator,
   ValidationErrors
 } from '@angular/forms';
-import { DalState, LinkedPersonQueries, PersonQueries } from '@campus/dal';
+import { DalState, LinkedPersonQueries } from '@campus/dal';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { switchMap } from 'rxjs/internal/operators/switchMap';
 import { map, take } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
-export class TeacherAlreadyCoupledValidator implements AsyncValidator {
+export class PersonAlreadyLinkedValidator implements AsyncValidator {
   constructor(private store: Store<DalState>) {}
 
   validate(ctrl: AbstractControl): Observable<ValidationErrors | null> {
     return this.store.pipe(
-      select(LinkedPersonQueries.getLinkedPersonIds),
-      switchMap(linkedPersonIds =>
-        this.store.pipe(
-          select(PersonQueries.getByIds, { ids: linkedPersonIds })
-        )
-      ),
+      select(LinkedPersonQueries.getAll),
       map(linkedPersons => {
         return linkedPersons.some(
-          linkedPerson => linkedPerson.teacherInfo.publicKey === ctrl.value
+          linkedPerson =>
+            linkedPerson.teacherInfo &&
+            linkedPerson.teacherInfo.publicKey === ctrl.value
         )
           ? { teacherAlreadyCoupled: true }
           : null;
