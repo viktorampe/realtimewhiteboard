@@ -104,7 +104,6 @@ describe('CredentialsComponent', () => {
   });
 
   it('should return the correct time string', () => {
-    console.log(component.getTime(''));
     expect(component.getTime('')).toBe('Invalid Date');
     expect(component.getTime('01 Jan 1970 00:00:00 GMT')).toBe('01:00:00');
   });
