@@ -136,7 +136,7 @@ export class ProfileViewModel {
     this.store.dispatch(new LinkedPersonActions.UnlinkTeacherStudent({ id }));
   }
 
-  public showSuccessToast(message: ActionResponse) {
+  private showSuccessToast(message: ActionResponse) {
     // TODO: call the toast service with the message
     window.alert('implement success message');
   }

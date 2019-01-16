@@ -38,9 +38,7 @@ export class MockCoupledTeachersViewModel
     type: 'success'
   });
 
-  linkPerson() {}
+  linkPerson(publicKey: string): void {}
 
-  unlinkPerson() {}
-
-  showSuccessToast() {}
+  unlinkPerson(id: number): void {}
 }
