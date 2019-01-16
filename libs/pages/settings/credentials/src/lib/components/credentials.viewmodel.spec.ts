@@ -117,7 +117,7 @@ describe('CredentialsViewModel', () => {
         }
       ];
 
-      it('should return the SingleSignOn-providers', () => {
+      it('should return the SingleSignOn-providers unfiltered', () => {
         store.dispatch(
           new CredentialActions.CredentialsLoaded({
             credentials: []
@@ -129,7 +129,7 @@ describe('CredentialsViewModel', () => {
         );
       });
 
-      it('shouldnt return SingleSignOn-providers (no maxNumberAllowed) that match a credential ', () => {
+      it('shouldn\'t return SingleSignOn-providers (no maxNumberAllowed) that already have a linked credential', () => {
         store.dispatch(
           new CredentialActions.CredentialsLoaded({
             credentials: mockCredentials.filter(
