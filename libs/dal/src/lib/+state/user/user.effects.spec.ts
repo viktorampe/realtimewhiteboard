@@ -167,28 +167,14 @@ describe('UserEffects', () => {
     const updateAction = new UpdateUser({ userId: mockUser.id, changedProps });
     const successMessageAction = new UserUpdateMessage({
       message: 'User updated',
-      timeStamp: mockDate,
       type: 'success'
     });
     const errorMessageAction = new UserUpdateMessage({
       message: 'User update failed',
-      timeStamp: mockDate,
       type: 'error'
     });
 
-    let realDateImplementation;
     let baseState: UserReducer.State;
-
-    beforeAll(() => {
-      // override date implementation
-      realDateImplementation = Date.now.bind(global.Date);
-      global.Date.now = jest.fn(() => mockDate);
-    });
-
-    afterAll(() => {
-      // put original date implementation back
-      global.Date.now = realDateImplementation;
-    });
 
     beforeEach(() => {
       baseState = {

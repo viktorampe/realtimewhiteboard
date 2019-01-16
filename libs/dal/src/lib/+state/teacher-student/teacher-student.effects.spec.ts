@@ -5,14 +5,18 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
-import { PersonReducer } from '.';
-import { PERSON_SERVICE_TOKEN } from '../../persons/persons.service';
-import { LoadPersons, PersonsLoaded, PersonsLoadError } from './person.actions';
-import { PersonEffects } from './person.effects';
+import { TeacherStudentReducer } from '.';
+import { LINKED_PERSON_SERVICE_TOKEN } from '../../persons/linked-persons.service';
+import {
+  LoadTeacherStudents,
+  TeacherStudentsLoaded,
+  TeacherStudentsLoadError
+} from './teacher-student.actions';
+import { TeacherStudentEffects } from './teacher-student.effects';
 
-describe('PersonEffects', () => {
+describe('TeacherStudentsEffects', () => {
   let actions: Observable<any>;
-  let effects: PersonEffects;
+  let effects: TeacherStudentEffects;
   let usedState: any;
 
   const expectInAndOut = (
@@ -36,7 +40,7 @@ describe('PersonEffects', () => {
   const mockServiceMethodReturnValue = (
     method: string,
     returnValue: any,
-    service: any = PERSON_SERVICE_TOKEN
+    service: any = LINKED_PERSON_SERVICE_TOKEN
   ) => {
     jest.spyOn(TestBed.get(service), method).mockReturnValue(of(returnValue));
   };
@@ -44,7 +48,7 @@ describe('PersonEffects', () => {
   const mockServiceMethodError = (
     method: string,
     errorMessage: string,
-    service: any = PERSON_SERVICE_TOKEN
+    service: any = LINKED_PERSON_SERVICE_TOKEN
   ) => {
     jest.spyOn(TestBed.get(service), method).mockImplementation(() => {
       throw new Error(errorMessage);
@@ -56,50 +60,59 @@ describe('PersonEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature(PersonReducer.NAME, PersonReducer.reducer, {
-          initialState: usedState
-        }),
+        StoreModule.forFeature(
+          TeacherStudentReducer.NAME,
+          TeacherStudentReducer.reducer,
+          {
+            initialState: usedState
+          }
+        ),
         EffectsModule.forRoot([]),
-        EffectsModule.forFeature([PersonEffects])
+        EffectsModule.forFeature([TeacherStudentEffects])
       ],
       providers: [
         {
-          provide: PERSON_SERVICE_TOKEN,
+          provide: LINKED_PERSON_SERVICE_TOKEN,
           useValue: {
-            getAllForUser: () => {}
+            getTeacherStudentsForUser: () => {}
           }
         },
-        PersonEffects,
+        TeacherStudentEffects,
         DataPersistence,
         provideMockActions(() => actions)
       ]
     });
 
-    effects = TestBed.get(PersonEffects);
+    effects = TestBed.get(TeacherStudentEffects);
   });
 
-  describe('loadPerson$', () => {
-    const unforcedLoadAction = new LoadPersons({ userId: 1 });
-    const forcedLoadAction = new LoadPersons({ force: true, userId: 1 });
-    const filledLoadedAction = new PersonsLoaded({ persons: [] });
-    const loadErrorAction = new PersonsLoadError(new Error('failed'));
+  describe('loadTeacherStudents$', () => {
+    const unforcedLoadAction = new LoadTeacherStudents({ userId: 1 });
+    const forcedLoadAction = new LoadTeacherStudents({
+      force: true,
+      userId: 1
+    });
+    const filledLoadedAction = new TeacherStudentsLoaded({
+      teacherStudents: []
+    });
+    const loadErrorAction = new TeacherStudentsLoadError(new Error('failed'));
     describe('with initialState', () => {
       beforeAll(() => {
-        usedState = PersonReducer.initialState;
+        usedState = TeacherStudentReducer.initialState;
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAllForUser', []);
+        mockServiceMethodReturnValue('getTeacherStudentsForUser', []);
       });
       it('should trigger an api call with the initialState if force is not true', () => {
         expectInAndOut(
-          effects.loadPersons$,
+          effects.loadTeacherStudents$,
           unforcedLoadAction,
           filledLoadedAction
         );
       });
       it('should trigger an api call with the initialState if force is true', () => {
         expectInAndOut(
-          effects.loadPersons$,
+          effects.loadTeacherStudents$,
           forcedLoadAction,
           filledLoadedAction
         );
@@ -107,17 +120,17 @@ describe('PersonEffects', () => {
     });
     describe('with loaded state', () => {
       beforeAll(() => {
-        usedState = { ...PersonReducer.initialState, loaded: true };
+        usedState = { ...TeacherStudentReducer.initialState, loaded: true };
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAllForUser', []);
+        mockServiceMethodReturnValue('getTeacherStudentsForUser', []);
       });
       it('should not trigger an api call with the loaded state if force is not true', () => {
-        expectInNoOut(effects.loadPersons$, unforcedLoadAction);
+        expectInNoOut(effects.loadTeacherStudents$, unforcedLoadAction);
       });
       it('should trigger an api call with the loaded state if force is true', () => {
         expectInAndOut(
-          effects.loadPersons$,
+          effects.loadTeacherStudents$,
           forcedLoadAction,
           filledLoadedAction
         );
@@ -125,38 +138,46 @@ describe('PersonEffects', () => {
     });
     describe('with initialState and failing api call', () => {
       beforeAll(() => {
-        usedState = PersonReducer.initialState;
+        usedState = TeacherStudentReducer.initialState;
       });
       beforeEach(() => {
-        mockServiceMethodError('getAllForUser', 'failed');
+        mockServiceMethodError('getTeacherStudentsForUser', 'failed');
       });
       it('should return a error action if force is not true', () => {
         expectInAndOut(
-          effects.loadPersons$,
+          effects.loadTeacherStudents$,
           unforcedLoadAction,
           loadErrorAction
         );
       });
       it('should return a error action if force is true', () => {
-        expectInAndOut(effects.loadPersons$, forcedLoadAction, loadErrorAction);
+        expectInAndOut(
+          effects.loadTeacherStudents$,
+          forcedLoadAction,
+          loadErrorAction
+        );
       });
     });
     describe('with loaded and failing api call', () => {
       beforeAll(() => {
         usedState = {
-          ...PersonReducer.initialState,
+          ...TeacherStudentReducer.initialState,
           loaded: true,
           list: []
         };
       });
       beforeEach(() => {
-        mockServiceMethodError('getAllForUser', 'failed');
+        mockServiceMethodError('getTeacherStudentsForUser', 'failed');
       });
       it('should return nothing action if force is not true', () => {
-        expectInNoOut(effects.loadPersons$, unforcedLoadAction);
+        expectInNoOut(effects.loadTeacherStudents$, unforcedLoadAction);
       });
       it('should return a error action if force is true', () => {
-        expectInAndOut(effects.loadPersons$, forcedLoadAction, loadErrorAction);
+        expectInAndOut(
+          effects.loadTeacherStudents$,
+          forcedLoadAction,
+          loadErrorAction
+        );
       });
     });
   });

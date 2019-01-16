@@ -18,10 +18,10 @@ import {
   LearningAreaFixture,
   LearningAreaInterface,
   LearningAreaReducer,
-  PersonActions,
+  LinkedPersonActions,
+  LinkedPersonReducer,
   PersonFixture,
   PersonInterface,
-  PersonReducer,
   StateFeatureBuilder,
   UiActions,
   UiReducer,
@@ -67,7 +67,7 @@ describe('BundlesViewModel', () => {
   let unlockedContentState: UnlockedContentReducer.State;
   let eduContentState: EduContentReducer.State;
   let userContentState: UserContentReducer.State;
-  let coupledPersonState: PersonReducer.State;
+  let coupledPersonState: LinkedPersonReducer.State;
 
   let ui: UiReducer.UiState;
   let learningAreas: LearningAreaInterface[];
@@ -342,9 +342,9 @@ describe('BundlesViewModel', () => {
     );
 
     coupledPersons = [new PersonFixture({ id: 2 })];
-    coupledPersonState = PersonReducer.reducer(
-      PersonReducer.initialState,
-      new PersonActions.PersonsLoaded({
+    coupledPersonState = LinkedPersonReducer.reducer(
+      LinkedPersonReducer.initialState,
+      new LinkedPersonActions.LinkedPersonsLoaded({
         persons: coupledPersons
       })
     );
@@ -409,8 +409,8 @@ describe('BundlesViewModel', () => {
         }
       },
       {
-        NAME: PersonReducer.NAME,
-        reducer: PersonReducer.reducer,
+        NAME: LinkedPersonReducer.NAME,
+        reducer: LinkedPersonReducer.reducer,
         initialState: {
           initialState: coupledPersonState
         }

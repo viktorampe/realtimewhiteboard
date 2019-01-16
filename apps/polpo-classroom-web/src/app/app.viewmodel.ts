@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
+  CredentialQueries,
   DalState,
   FavoriteInterface,
   LearningAreaFixture,
@@ -12,7 +13,7 @@ import {
 import { DropdownMenuItemInterface, NavItem } from '@campus/ui';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable, of } from 'rxjs';
-import { map, skipWhile } from 'rxjs/operators';
+import { map, skipWhile, switchMapTo } from 'rxjs/operators';
 import { NavItemService } from './services/nav-item-service';
 
 @Injectable({
@@ -92,13 +93,11 @@ export class AppViewModel {
     ]);
   }
 
-  // TODO Service/State needed
   private getCredentials(): Observable<PassportUserCredentialInterface[]> {
-    return of([
-      {
-        profile: { platform: 'foo.smartschool.be' },
-        provider: 'smartschool'
-      }
-    ]);
+    return this.store.pipe(
+      select(CredentialQueries.getLoaded),
+      skipWhile(loaded => !loaded),
+      switchMapTo(this.store.pipe(select(CredentialQueries.getAll)))
+    );
   }
 }
