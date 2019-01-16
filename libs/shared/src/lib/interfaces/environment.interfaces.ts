@@ -41,9 +41,10 @@ export interface EnvironmentSsoInterface {
 export interface EnvironmentSsoProviderInterface {
   enabled: boolean;
   linkUrl: string;
-  maxNumberAllowed: number;
-  avatarLocation?: string;
+  maxNumberAllowed?: number;
   className?: string;
+  description?: string;
+  logoIcon?: string;
 }
 
 export interface EnvironmentWebsiteInterface {
