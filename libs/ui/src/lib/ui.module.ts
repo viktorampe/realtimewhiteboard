@@ -24,6 +24,7 @@ import { CircleDirective } from './button/directives/button-circle.directive';
 import { DangerDirective } from './button/directives/button-danger.directive';
 import { DisabledDirective } from './button/directives/button-disabled.directive';
 import { LargeDirective } from './button/directives/button-large.directive';
+import { PrimaryDirective } from './button/directives/button-primary.directive';
 import { RoundedCornersDirective } from './button/directives/button-rounded-corners.directive';
 import { WarningDirective } from './button/directives/button-warning.directive';
 import { ConfirmableSelectComponent } from './confirmable-select/confirmable-select.component';
@@ -45,6 +46,7 @@ import { NotificationDropdownItemComponent } from './notification-dropdown-item/
 import { PageHeaderComponent } from './page-header/page-header.component';
 import { PersonBadgeComponent } from './person-badge/person-badge.component';
 import { PersonInitialsPipe } from './person-badge/pipes/person-initials.pipe';
+import { PersonSummaryComponent } from './person-summary-component/person-summary.component';
 import { ShellBodyDirective } from './shell/directives/shell-body.directive';
 import { ShellLeftDirective } from './shell/directives/shell-left.directive';
 import { ShellLogoDirective } from './shell/directives/shell-logo.directive';
@@ -128,7 +130,9 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     HideMobileDirective,
     HumanDateTimePipe,
     RemovePrefixStringPipe,
-    LargeDirective
+    LargeDirective,
+    PrimaryDirective,
+    PersonSummaryComponent
   ],
   exports: [
     FilterTextInputComponent,
@@ -172,7 +176,9 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     HideMobileDirective,
     HumanDateTimePipe,
     RemovePrefixStringPipe,
-    LargeDirective
+    LargeDirective,
+    PrimaryDirective,
+    PersonSummaryComponent
   ]
 })
 export class UiModule {}

@@ -1,16 +1,40 @@
 import { TestBed } from '@angular/core/testing';
+import {
+  BundleReducer,
+  DalState,
+  PersonFixture,
+  TaskReducer
+} from '@campus/dal';
+import { MockDate } from '@campus/testing';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
-import { Action, StoreModule } from '@ngrx/store';
+import { Action, Store, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
 import { TeacherStudentReducer } from '.';
+import { TaskFixture, TeacherStudentFixture } from '../../+fixtures';
 import { LINKED_PERSON_SERVICE_TOKEN } from '../../persons/linked-persons.service';
+import { DeleteBundles, LoadBundles } from '../bundle/bundle.actions';
+import { ActionSuccessful } from '../dal.actions';
 import {
+  AddLinkedPerson,
+  DeleteLinkedPerson
+} from '../linked-person/linked-person.actions';
+import { DeleteTasks, LoadTasks, TasksLoaded } from '../task/task.actions';
+import { UserReducer } from '../user';
+import { UserLoaded } from '../user/user.actions';
+import { BundleFixture } from './../../+fixtures/Bundle.fixture';
+import { LinkedPersonServiceInterface } from './../../persons/linked-persons.service';
+import { BundlesLoaded } from './../bundle/bundle.actions';
+import {
+  AddTeacherStudent,
+  DeleteTeacherStudent,
+  LinkTeacherStudent,
   LoadTeacherStudents,
   TeacherStudentsLoaded,
-  TeacherStudentsLoadError
+  TeacherStudentsLoadError,
+  UnlinkTeacherStudent
 } from './teacher-student.actions';
 import { TeacherStudentEffects } from './teacher-student.effects';
 
@@ -67,6 +91,9 @@ describe('TeacherStudentsEffects', () => {
             initialState: usedState
           }
         ),
+        StoreModule.forFeature(UserReducer.NAME, UserReducer.reducer),
+        StoreModule.forFeature(BundleReducer.NAME, BundleReducer.reducer),
+        StoreModule.forFeature(TaskReducer.NAME, TaskReducer.reducer),
         EffectsModule.forRoot([]),
         EffectsModule.forFeature([TeacherStudentEffects])
       ],
@@ -74,7 +101,9 @@ describe('TeacherStudentsEffects', () => {
         {
           provide: LINKED_PERSON_SERVICE_TOKEN,
           useValue: {
-            getTeacherStudentsForUser: () => {}
+            getTeacherStudentsForUser: () => {},
+            linkStudentToTeacher: () => {},
+            unlinkStudentFromTeacher: () => {}
           }
         },
         TeacherStudentEffects,
@@ -178,6 +207,167 @@ describe('TeacherStudentsEffects', () => {
           forcedLoadAction,
           loadErrorAction
         );
+      });
+    });
+  });
+
+  describe('link / unlink actions', () => {
+    let linkedPersonService: LinkedPersonServiceInterface;
+    let store: Store<DalState>;
+    const mockPublicKey = 'SoylentGreenIsPeople!';
+    const mockTeacher = new PersonFixture({
+      id: 123,
+      teacherInfo: { publicKey: mockPublicKey }
+    });
+    const mockCurrentUser = new PersonFixture();
+    const mockTeacherStudent = new TeacherStudentFixture({
+      id: 12345,
+      teacherId: mockTeacher.id,
+      studentId: mockCurrentUser.id
+    });
+
+    beforeEach(() => {
+      linkedPersonService = TestBed.get(LINKED_PERSON_SERVICE_TOKEN);
+      store = TestBed.get(Store);
+      store.dispatch(new UserLoaded(mockCurrentUser));
+    });
+
+    describe('linkTeacher$', () => {
+      const linkTeacherAction = new LinkTeacherStudent({
+        publicKey: mockPublicKey
+      });
+
+      it('should call the linkedPersonService', () => {
+        linkedPersonService.linkStudentToTeacher = jest.fn();
+
+        actions = hot('-a-', { a: linkTeacherAction });
+
+        effects.linkTeacher$.subscribe(_ => {
+          expect(linkedPersonService.linkStudentToTeacher).toHaveBeenCalled();
+          expect(linkedPersonService.linkStudentToTeacher).toHaveBeenCalledWith(
+            mockPublicKey
+          );
+        });
+      });
+
+      it('should dispatch actions', () => {
+        const DateMock = new MockDate();
+
+        linkedPersonService.linkStudentToTeacher = jest
+          .fn()
+          .mockReturnValue(of([mockTeacher]));
+
+        actions = hot('-a-', { a: linkTeacherAction });
+
+        const expectedActions$ = hot('-(abcd)', {
+          a: new AddLinkedPerson({ person: mockTeacher }),
+          b: new AddTeacherStudent({
+            teacherStudent: {
+              created: DateMock.mockDate,
+              teacherId: mockTeacher.id,
+              studentId: mockCurrentUser.id
+            }
+          }),
+          c: new LoadBundles({ userId: mockCurrentUser.id, force: true }),
+          d: new LoadTasks({ userId: mockCurrentUser.id, force: true })
+        });
+
+        expect(effects.linkTeacher$).toBeObservable(expectedActions$);
+
+        DateMock.returnRealDate();
+      });
+
+      it('should dispatch a message action on an api error', () => {
+        const errorMessage = 'This error is your fault, not mine';
+        linkedPersonService.linkStudentToTeacher = jest
+          .fn()
+          .mockImplementation(() => {
+            throw new Error(errorMessage);
+          });
+
+        actions = hot('-a-', { a: linkTeacherAction });
+
+        const expectedAction$ = hot('-a', {
+          a: new ActionSuccessful({
+            successfulAction: 'link teacher failed:' + errorMessage
+          })
+        });
+
+        expect(effects.linkTeacher$).toBeObservable(expectedAction$);
+      });
+    });
+
+    describe('unlinkTeacher$', () => {
+      const unlinkTeacherAction = new UnlinkTeacherStudent({
+        teacherId: mockTeacher.id
+      });
+      const mockBundle = new BundleFixture({
+        id: 1234,
+        teacherId: mockTeacher.id
+      });
+      const mockTask = new TaskFixture({ id: 5678, personId: mockTeacher.id });
+
+      beforeEach(() => {
+        store.dispatch(
+          new TeacherStudentsLoaded({ teacherStudents: [mockTeacherStudent] })
+        );
+        store.dispatch(new BundlesLoaded({ bundles: [mockBundle] }));
+        store.dispatch(new TasksLoaded({ tasks: [mockTask] }));
+      });
+
+      it('should call the linkedPersonService', () => {
+        linkedPersonService.unlinkStudentFromTeacher = jest.fn();
+
+        actions = hot('-a-', { a: unlinkTeacherAction });
+
+        effects.unlinkTeacher$.subscribe(_ => {
+          expect(
+            linkedPersonService.unlinkStudentFromTeacher
+          ).toHaveBeenCalled();
+          expect(
+            linkedPersonService.unlinkStudentFromTeacher
+          ).toHaveBeenCalledWith(mockCurrentUser.id, mockTeacher.id);
+        });
+      });
+
+      it('should dispatch actions', () => {
+        linkedPersonService.unlinkStudentFromTeacher = jest
+          .fn()
+          .mockReturnValue(of(true));
+
+        actions = hot('-a-', { a: unlinkTeacherAction });
+
+        const expectedActions$ = hot('-(abcd)', {
+          a: new DeleteLinkedPerson({ id: mockTeacher.id }),
+          b: new DeleteTeacherStudent({ id: mockTeacherStudent.id }),
+          c: new DeleteBundles({
+            ids: [mockBundle.id]
+          }),
+          d: new DeleteTasks({
+            ids: [mockTask.id]
+          })
+        });
+
+        expect(effects.unlinkTeacher$).toBeObservable(expectedActions$);
+      });
+
+      it('should dispatch a message action on an api error', () => {
+        const errorMessage = 'This error is your fault, not mine';
+        linkedPersonService.unlinkStudentFromTeacher = jest
+          .fn()
+          .mockImplementation(() => {
+            throw new Error(errorMessage);
+          });
+
+        actions = hot('-a-', { a: unlinkTeacherAction });
+
+        const expectedAction$ = hot('-a', {
+          a: new ActionSuccessful({
+            successfulAction: 'unlink teacher failed:' + errorMessage
+          })
+        });
+
+        expect(effects.unlinkTeacher$).toBeObservable(expectedAction$);
       });
     });
   });

@@ -10,6 +10,8 @@ $ui-danger-bg-color: #f00 !default;
 $ui-danger-font-color: #fff !default;
 $ui-warning-bg-color: #f80 !default;
 $ui-warning-font-color: #fff !default;
+$ui-form-button-default-bg-color: #e1e5e7 !default;
+$ui-form-button-primary-bg-color: #44b0aa !default;
 
 // nav + site header (shell)
 $ui-secondary-bg-color: #fff !default;
@@ -33,16 +35,24 @@ $ui-list-row-bg-even: #f3f3f3 !default;
 $ui-form-item-bg-color: $ui-primary-bg-color !default;
 $ui-form-item-font-color: $ui-primary-font-color !default;
 $ui-form-item-border-color: $ui-primary-font-color !default;
-$ui-button-bg-color: $ui-primary-color-accent !default;
+$ui-button-bg-color: $ui-form-button-default-bg-color !default;
+$ui-button-bg-color-1: $ui-form-button-primary-bg-color !default;
 $ui-button-font-color: #fff !default;
 
 // sizes
+$ui-font-size-normal: 14px !default;
 $ui-person-badge-size-large: 96px !default;
 $ui-person-badge-size-large-font-size: $ui-person-badge-size-large / 2 !default;
 $ui-person-badge-size-medium: 48px !default;
 $ui-person-badge-size-medium-font-size: $ui-person-badge-size-medium / 2 !default;
 $ui-person-badge-size-small: 24px !default;
 $ui-person-badge-size-small-font-size: $ui-person-badge-size-small / 2 !default;
+
+// buttons
+$ui-button-padding-left: $ui-font-size-normal !default;
+$ui-button-padding-right: $ui-font-size-normal !default;
+$ui-button-padding-top: $ui-font-size-normal/2 !default;
+$ui-button-padding-bottom: $ui-font-size-normal/2 !default;
 
 // helper classes
 .ui-no-link {
@@ -60,6 +70,7 @@ $ui-person-badge-size-small-font-size: $ui-person-badge-size-small / 2 !default;
 @import './label-and-icon-button/label-and-icon-button.component.theme.scss';
 @import './period-label/period-label.component.theme.scss';
 @import './person-badge/person-badge.component.theme.scss';
+@import './person-summary-component/person-summary-component.theme.scss';
 @import './page-header/page-header.component.theme.scss';
 @import './app-bar/app-bar.component.theme.scss';
 @import './side-sheet/side-sheet.component.theme';
@@ -85,6 +96,7 @@ $ui-person-badge-size-small-font-size: $ui-person-badge-size-small / 2 !default;
   @include ui_label-and-icon-button_theme();
   @include ui_period-label_theme();
   @include ui_person-badge_theme();
+  @include ui-person-summary();
   @include ui-page-header_theme();
   @include ui-app-bar();
   @include ui-app-shell();

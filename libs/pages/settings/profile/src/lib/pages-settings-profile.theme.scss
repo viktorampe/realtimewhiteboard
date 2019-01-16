@@ -1,0 +1,5 @@
+@import './components/profile-form/profile-form.component.theme';
+
+@mixin pages-settings-profile-theme() {
+  @include pages-settings-profile-form-theme();
+}
