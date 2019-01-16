@@ -46,6 +46,7 @@ import { NotificationDropdownItemComponent } from './notification-dropdown-item/
 import { PageHeaderComponent } from './page-header/page-header.component';
 import { PersonBadgeComponent } from './person-badge/person-badge.component';
 import { PersonInitialsPipe } from './person-badge/pipes/person-initials.pipe';
+import { PersonSummaryComponent } from './person-summary-component/person-summary.component';
 import { ShellBodyDirective } from './shell/directives/shell-body.directive';
 import { ShellLeftDirective } from './shell/directives/shell-left.directive';
 import { ShellLogoDirective } from './shell/directives/shell-logo.directive';
@@ -131,6 +132,7 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     RemovePrefixStringPipe,
     LargeDirective,
     PrimaryDirective
+    PersonSummaryComponent
   ],
   exports: [
     FilterTextInputComponent,
@@ -176,6 +178,7 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     RemovePrefixStringPipe,
     LargeDirective,
     PrimaryDirective
+    PersonSummaryComponent
   ]
 })
 export class UiModule {}
