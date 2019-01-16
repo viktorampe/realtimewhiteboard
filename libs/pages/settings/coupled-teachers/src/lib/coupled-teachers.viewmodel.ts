@@ -49,6 +49,7 @@ export class ProfileViewModel {
     this.setSourceStreams();
     this.setIntermediateStreams();
     this.setPresentationStreams();
+    this.setSubscriptions();
   }
 
   private setSourceStreams(): void {
@@ -119,6 +120,9 @@ export class ProfileViewModel {
     this.successMessages$ = this.linkPersonSuccess$.pipe(
       merge(this.unlinkPersonSuccess$)
     );
+  }
+
+  private setSubscriptions() {
     this.successMessages$.subscribe(message => {
       this.showSuccessToast(message);
     });
