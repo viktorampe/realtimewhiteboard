@@ -1,19 +1,31 @@
 import { Injectable } from '@angular/core';
-import { PersonFixture, PersonInterface } from '@campus/dal';
+import {
+  LinkedPersonActions,
+  PersonFixture,
+  PersonInterface
+} from '@campus/dal';
 import { ViewModelInterface } from '@campus/testing';
-import { LinkedPersonsActionTypes } from 'libs/dal/src/lib/+state/linked-person/linked-person.actions';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import {
   ActionResponse,
   ApiValidationErrors,
-  ProfileViewModel
+  CoupledTeachersViewModel
 } from './coupled-teachers.viewmodel';
 
+export const ResponseQueries = {
+  get: ({  }: any) => {
+    return of(<ActionResponse>{
+      action: 'mockAction',
+      message: 'mockMessage',
+      type: 'success'
+    });
+  }
+};
 @Injectable({
   providedIn: 'root'
 })
 export class MockCoupledTeachersViewModel
-  implements ViewModelInterface<ProfileViewModel> {
+  implements ViewModelInterface<CoupledTeachersViewModel> {
   public currentUser$ = new BehaviorSubject<PersonInterface>(
     new PersonFixture({
       firstName: 'Foo',
@@ -33,7 +45,7 @@ export class MockCoupledTeachersViewModel
   });
 
   public successMessages$ = new BehaviorSubject<ActionResponse>({
-    action: LinkedPersonsActionTypes.AddLinkedPerson,
+    action: LinkedPersonActions.LinkedPersonsActionTypes.AddLinkedPerson,
     message: 'Person was successfully linked',
     type: 'success'
   });

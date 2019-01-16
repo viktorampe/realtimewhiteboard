@@ -8,9 +8,9 @@ import {
   UserQueries
 } from '@campus/dal';
 import { select, Store } from '@ngrx/store';
-import { LinkedPersonsActionTypes } from 'libs/dal/src/lib/+state/linked-person/linked-person.actions';
 import { Observable } from 'rxjs';
 import { map, merge } from 'rxjs/operators';
+import { ResponseQueries } from './coupled-teachers.viewmodel.mock';
 
 // TODO: update interface + put somewhere else
 export interface ActionResponse {
@@ -28,7 +28,7 @@ export interface ApiValidationErrors extends ValidationErrors {
 @Injectable({
   providedIn: 'root'
 })
-export class ProfileViewModel {
+export class CoupledTeachersViewModel {
   // source and presentation streams
   public currentUser$: Observable<PersonInterface>;
   public linkedPersons$: Observable<PersonInterface[]>;
@@ -36,7 +36,6 @@ export class ProfileViewModel {
   // intermediate streams
   private linkPersonSuccess$: Observable<ActionResponse>;
   private linkPersonError$: Observable<ActionResponse>;
-
   private unlinkPersonSuccess$: Observable<ActionResponse>;
   private unlinkPersonError$: Observable<ActionResponse>;
 
@@ -62,7 +61,7 @@ export class ProfileViewModel {
     this.linkPersonError$ = this.store.pipe(
       select(
         ResponseQueries.get({
-          action: LinkedPersonsActionTypes.AddLinkedPerson,
+          action: LinkedPersonActions.LinkedPersonsActionTypes.AddLinkedPerson,
           type: 'error'
         })
       )
@@ -72,7 +71,7 @@ export class ProfileViewModel {
     this.linkPersonSuccess$ = this.store.pipe(
       select(
         ResponseQueries.get({
-          action: LinkedPersonsActionTypes.AddLinkedPerson,
+          action: LinkedPersonActions.LinkedPersonsActionTypes.AddLinkedPerson,
           type: 'success'
         })
       )
@@ -82,7 +81,8 @@ export class ProfileViewModel {
     this.unlinkPersonSuccess$ = this.store.pipe(
       select(
         ResponseQueries.get({
-          action: LinkedPersonsActionTypes.DeleteLinkedPerson,
+          action:
+            LinkedPersonActions.LinkedPersonsActionTypes.DeleteLinkedPerson,
           type: 'success'
         })
       )
@@ -92,7 +92,8 @@ export class ProfileViewModel {
     this.unlinkPersonError$ = this.store.pipe(
       select(
         ResponseQueries.get({
-          action: LinkedPersonsActionTypes.DeleteLinkedPerson,
+          action:
+            LinkedPersonActions.LinkedPersonsActionTypes.DeleteLinkedPerson,
           type: 'error'
         })
       )
