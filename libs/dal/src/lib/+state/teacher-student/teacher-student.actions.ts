@@ -10,8 +10,8 @@ export enum TeacherStudentActionTypes {
   DeleteTeacherStudent = '[TeacherStudents] Delete TeacherStudent',
   DeleteTeacherStudents = '[TeacherStudents] Delete TeacherStudents',
   ClearTeacherStudents = '[TeacherStudents] Clear TeacherStudents',
-  LinkTeacherStudents = '[TeacherStudents] Link Teacher to Student',
-  UnlinkTeacherStudents = '[TeacherStudents] Unlink Teacher from Student'
+  LinkTeacherStudent = '[TeacherStudents] Link Teacher to Student',
+  UnlinkTeacherStudent = '[TeacherStudents] Unlink Teacher from Student'
 }
 
 export class LoadTeacherStudents implements Action {
@@ -61,14 +61,14 @@ export class ClearTeacherStudents implements Action {
   readonly type = TeacherStudentActionTypes.ClearTeacherStudents;
 }
 
-export class LinkTeacherStudents implements Action {
-  readonly type = TeacherStudentActionTypes.LinkTeacherStudents;
+export class LinkTeacherStudent implements Action {
+  readonly type = TeacherStudentActionTypes.LinkTeacherStudent;
 
   constructor(public payload: { publicKey: string }) {}
 }
 
-export class UnlinkTeacherStudents implements Action {
-  readonly type = TeacherStudentActionTypes.UnlinkTeacherStudents;
+export class UnlinkTeacherStudent implements Action {
+  readonly type = TeacherStudentActionTypes.UnlinkTeacherStudent;
 
   constructor(public payload: { teacherId: number }) {}
 }
@@ -82,5 +82,5 @@ export type TeacherStudentActions =
   | DeleteTeacherStudent
   | DeleteTeacherStudents
   | ClearTeacherStudents
-  | LinkTeacherStudents
-  | UnlinkTeacherStudents;
+  | LinkTeacherStudent
+  | UnlinkTeacherStudent;

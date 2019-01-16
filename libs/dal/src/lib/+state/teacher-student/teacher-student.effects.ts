@@ -19,12 +19,12 @@ import { DeleteTasks, LoadTasks } from './../task/task.actions';
 import {
   AddTeacherStudent,
   DeleteTeacherStudent,
-  LinkTeacherStudents,
+  LinkTeacherStudent,
   LoadTeacherStudents,
   TeacherStudentActionTypes,
   TeacherStudentsLoaded,
   TeacherStudentsLoadError,
-  UnlinkTeacherStudents
+  UnlinkTeacherStudent
 } from './teacher-student.actions';
 
 @Injectable()
@@ -51,9 +51,9 @@ export class TeacherStudentEffects {
 
   @Effect()
   linkTeacher$ = this.dataPersistence.pessimisticUpdate(
-    TeacherStudentActionTypes.LinkTeacherStudents,
+    TeacherStudentActionTypes.LinkTeacherStudent,
     {
-      run: (action: LinkTeacherStudents, state: DalState) => {
+      run: (action: LinkTeacherStudent, state: DalState) => {
         const userId = state.user.currentUser.id;
 
         return this.linkedPersonService
@@ -85,7 +85,7 @@ export class TeacherStudentEffects {
             switchMap((actions: Action[]) => from<Action>(actions))
           );
       },
-      onError: (action: LinkTeacherStudents, error) => {
+      onError: (action: LinkTeacherStudent, error) => {
         return new ActionSuccessful({
           successfulAction: 'link teacher failed:' + error.message
         });
@@ -95,9 +95,9 @@ export class TeacherStudentEffects {
 
   @Effect()
   unlinkTeacher$ = this.dataPersistence.pessimisticUpdate(
-    TeacherStudentActionTypes.UnlinkTeacherStudents,
+    TeacherStudentActionTypes.UnlinkTeacherStudent,
     {
-      run: (action: UnlinkTeacherStudents, state: DalState) => {
+      run: (action: UnlinkTeacherStudent, state: DalState) => {
         const userId = state.user.currentUser.id;
         const teacherId = action.payload.teacherId;
         const teacherStudentId = Object.values(
@@ -129,7 +129,7 @@ export class TeacherStudentEffects {
             switchMap((actions: Action[]) => from<Action>(actions))
           );
       },
-      onError: (action: UnlinkTeacherStudents, error) => {
+      onError: (action: UnlinkTeacherStudent, error) => {
         return new ActionSuccessful({
           successfulAction: 'unlink teacher failed:' + error.message
         });

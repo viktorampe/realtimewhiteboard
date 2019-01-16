@@ -30,11 +30,11 @@ import { BundlesLoaded } from './../bundle/bundle.actions';
 import {
   AddTeacherStudent,
   DeleteTeacherStudent,
-  LinkTeacherStudents,
+  LinkTeacherStudent,
   LoadTeacherStudents,
   TeacherStudentsLoaded,
   TeacherStudentsLoadError,
-  UnlinkTeacherStudents
+  UnlinkTeacherStudent
 } from './teacher-student.actions';
 import { TeacherStudentEffects } from './teacher-student.effects';
 
@@ -233,7 +233,7 @@ describe('TeacherStudentsEffects', () => {
     });
 
     describe('linkTeacher$', () => {
-      const linkTeacherAction = new LinkTeacherStudents({
+      const linkTeacherAction = new LinkTeacherStudent({
         publicKey: mockPublicKey
       });
 
@@ -294,7 +294,7 @@ describe('TeacherStudentsEffects', () => {
     });
 
     describe('unlinkTeacher$', () => {
-      const unlinkTeacherAction = new UnlinkTeacherStudents({
+      const unlinkTeacherAction = new UnlinkTeacherStudent({
         teacherId: mockTeacher.id
       });
       const mockBundle = new BundleFixture({
