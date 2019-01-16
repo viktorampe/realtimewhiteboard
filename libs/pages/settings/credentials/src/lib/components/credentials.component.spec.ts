@@ -1,7 +1,6 @@
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule } from '@angular/material';
-import { WINDOW } from '@campus/browser';
 import {
   CredentialErrors,
   CredentialsComponent,
@@ -25,7 +24,6 @@ describe('CredentialsComponent', () => {
       imports: [MatIconModule],
       declarations: [CredentialsComponent],
       providers: [
-        { provide: WINDOW, useValue: Window },
         {
           provide: MockCredentialsViewModel,
           useValue: viewmodel

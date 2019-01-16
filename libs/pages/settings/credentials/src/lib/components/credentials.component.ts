@@ -1,5 +1,4 @@
-import { Component, Inject, Injectable, OnInit } from '@angular/core';
-import { WINDOW } from '@campus/browser';
+import { Component, Injectable, OnInit } from '@angular/core';
 import { PassportUserCredentialInterface } from '@campus/dal';
 import { Observable } from 'rxjs';
 
@@ -41,10 +40,7 @@ export class CredentialsComponent implements OnInit {
 
   message = '';
 
-  constructor(
-    @Inject(WINDOW) private window: Window,
-    private viewModel: MockCredentialsViewModel
-  ) {}
+  constructor(private viewModel: MockCredentialsViewModel) {}
 
   ngOnInit() {
     const error = this.getParameterByName('error');
