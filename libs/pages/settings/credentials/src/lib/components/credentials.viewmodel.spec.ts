@@ -9,6 +9,7 @@ import {
   UserActions,
   UserReducer
 } from '@campus/dal';
+import { EnvironmentSsoInterface, ENVIRONMENT_SSO_TOKEN } from '@campus/shared';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from 'jasmine-marbles';
 import {
@@ -18,6 +19,17 @@ import {
 
 let credentialsViewModel: CredentialsViewModel;
 let store: Store<DalState>;
+
+const environmentSsoSettings: EnvironmentSsoInterface = {
+  google: { description: 'Hoehel', linkUrl: '', enabled: true },
+  facebook: { description: 'Smoelboek', linkUrl: '', enabled: true },
+  smartschool: {
+    description: 'SmaaaaaartSchool',
+    linkUrl: '',
+    maxNumberAllowed: 3,
+    enabled: true
+  }
+};
 
 describe('CredentialsViewModel', () => {
   afterEach(() => {
@@ -30,7 +42,13 @@ describe('CredentialsViewModel', () => {
         StoreModule.forRoot({}),
         ...getStoreModuleForFeatures([UserReducer, CredentialReducer])
       ],
-      providers: [Store]
+      providers: [
+        Store,
+        {
+          provide: ENVIRONMENT_SSO_TOKEN,
+          useValue: environmentSsoSettings
+        }
+      ]
     });
 
     credentialsViewModel = TestBed.get(CredentialsViewModel);

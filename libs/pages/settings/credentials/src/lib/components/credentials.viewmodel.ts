@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {
   CredentialActions,
   CredentialQueries,
@@ -7,28 +7,24 @@ import {
   PersonInterface,
   UserQueries
 } from '@campus/dal';
+import { EnvironmentSsoInterface, ENVIRONMENT_SSO_TOKEN } from '@campus/shared';
 import { select, Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { map, withLatestFrom } from 'rxjs/operators';
-import { MockCredentialsViewModel } from './credentials.viewmodel.mock';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CredentialsViewModel {
   public currentUser$: Observable<PersonInterface>;
-
-  // code uit huidige site voor profile picture
-  // img ng-if="::credential.provider === 'google' || credential.provider === 'facebook'" dk-src="{{::credential.profile.photos[0].value}}" src="/img/avatar.png" width="45" height="45">
-  // <img ng-if="::credential.provider === 'smartschool'" dk-src="{{::credential.profile.avatar}}" src="/img/avatar.png" width="45" height="45">
   public credentials$: Observable<PassportUserCredentialInterface[]>;
   public singleSignOnProviders$: Observable<SingleSignOnProviderInterface[]>;
-  private ssoFromEnvironment$: Observable<SingleSignOnProviderInterface[]>;
+  private ssoFromEnvironment$: Observable<EnvironmentSsoInterface>;
 
   constructor(
     private store: Store<DalState>,
-    // private environment: EnvironmentInterface,
-    private mockViewModel: MockCredentialsViewModel
+    @Inject(ENVIRONMENT_SSO_TOKEN)
+    private environmentSso: EnvironmentSsoInterface
   ) {
     this.setSourceStreams();
     this.setPresentationStreams();
