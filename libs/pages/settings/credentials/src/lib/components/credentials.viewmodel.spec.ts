@@ -129,7 +129,7 @@ describe('CredentialsViewModel', () => {
         );
       });
 
-      it('shouldn\'t return SingleSignOn-providers (no maxNumberAllowed) that already have a linked credential', () => {
+      it("shouldn't return SingleSignOn-providers (no maxNumberAllowed) that already have a linked credential", () => {
         store.dispatch(
           new CredentialActions.CredentialsLoaded({
             credentials: mockCredentials.filter(
