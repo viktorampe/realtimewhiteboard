@@ -135,27 +135,4 @@ export class CredentialsComponent implements OnInit {
     const d = Date.parse(timestamp);
     return new Date(d).toLocaleTimeString('nl-BE');
   }
-
-  getPlatformLink(credential: PassportUserCredentialInterface): string {
-    if (credential.provider === 'facebook') {
-      return credential.profile.profileUrl;
-    } else if (credential.provider === 'google') {
-      return credential.profile._json.url;
-    } else if (credential.provider === 'smartschool') {
-      return credential.profile.platform;
-    }
-    return '';
-  }
-
-  getPlatformText(credential: PassportUserCredentialInterface): string {
-    if (
-      credential.provider === 'facebook' ||
-      credential.provider === 'google'
-    ) {
-      return 'Profiel-pagina';
-    } else if (credential.provider === 'smartschool') {
-      return credential.profile.platform;
-    }
-    return '';
-  }
 }

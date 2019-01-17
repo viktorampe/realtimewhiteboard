@@ -108,28 +108,6 @@ describe('CredentialsComponent', () => {
     expect(component.getTime('01 Jan 1970 00:00:00 GMT')).toBe('01:00:00');
   });
 
-  it('should return correct profile link', () => {
-    cred1.provider = 'facebook';
-    expect(component.getPlatformLink(cred1)).toBe('facebook');
-    cred1.provider = 'google';
-    expect(component.getPlatformLink(cred1)).toBe('google');
-    cred1.provider = 'smartschool';
-    expect(component.getPlatformLink(cred1)).toBe('smartschool');
-    cred1.provider = '';
-    expect(component.getPlatformLink(cred1)).toBe('');
-  });
-
-  it('should return correct profile text', () => {
-    cred1.provider = 'facebook';
-    expect(component.getPlatformText(cred1)).toBe('Profiel-pagina');
-    cred1.provider = 'google';
-    expect(component.getPlatformText(cred1)).toBe('Profiel-pagina');
-    cred1.provider = 'smartschool';
-    expect(component.getPlatformText(cred1)).toBe(cred1.profile.platform);
-    cred1.provider = '';
-    expect(component.getPlatformText(cred1)).toBe('');
-  });
-
   it('should call viewmodel when adding credential', () => {
     const sso: SingleSignOnProviderInterface = {
       providerId: 0,
