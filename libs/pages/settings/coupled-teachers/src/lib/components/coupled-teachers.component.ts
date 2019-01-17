@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, InjectionToken, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -8,6 +8,8 @@ import {
 import { PersonInterface } from '@campus/dal';
 import { PersonAlreadyLinkedValidator } from '@campus/shared';
 import { Observable } from 'rxjs';
+
+export const TEMP_TEACHER_TOKEN = new InjectionToken('browser storage service');
 
 @Component({
   selector: 'campus-coupled-teachers',
@@ -22,9 +24,8 @@ export class CoupledTeachersComponent implements OnInit {
   apiErrors$: Observable<ApiValidationErrors>;
   linkedPersons$: Observable<PersonInterface[]>;
 
-  coupledTeacherViewModel: any; //TODO -- to be replaced by actual vm with DI
-
   constructor(
+    @Inject(TEMP_TEACHER_TOKEN) private coupledTeacherViewModel: any,
     private formBuilder: FormBuilder,
     private personAlreadyLinkedValidator: PersonAlreadyLinkedValidator
   ) {}
@@ -53,6 +54,7 @@ export class CoupledTeachersComponent implements OnInit {
   }
 
   onSubmit() {
+    console.log('submitting');
     this.coupledTeacherViewModel.linkPerson(
       this.coupledTeachersForm.value['teacherCode']
     );
@@ -67,6 +69,39 @@ export class CoupledTeachersComponent implements OnInit {
     this.coupledTeachersForm.reset({
       teacherCode: this.teacherCode
     });
+  }
+
+  getFavoriteAreasString(person: PersonInterface): string {
+    if (person.favoriteAreas) {
+      let returnString = '';
+      for (let i = 0; i < person.favoriteAreas.length; i++) {
+        returnString += person.favoriteAreas[i].name;
+        if (i < person.favoriteAreas.length - 1) {
+          returnString += ', ';
+        }
+      }
+      return returnString;
+    }
+    return '';
+  }
+
+  getDateString(person: PersonInterface): string {
+    if (person.linkedAt) {
+      return (
+        person.linkedAt.getDate() +
+        '-' +
+        ('0' + (person.linkedAt.getMonth() + 1)).slice(-2) +
+        '-' +
+        ('0' + person.linkedAt.getFullYear()).slice(-2) +
+        ' ' +
+        ('0' + person.linkedAt.getHours()).slice(-2) +
+        ':' +
+        ('0' + person.linkedAt.getMinutes()).slice(-2) +
+        ':' +
+        ('0' + person.linkedAt.getSeconds()).slice(-2)
+      );
+    }
+    return '';
   }
 }
 
