@@ -28,6 +28,11 @@ const environmentSsoSettings: EnvironmentSsoInterface = {
     linkUrl: '',
     maxNumberAllowed: 3,
     enabled: true
+  },
+  myspace: {
+    description: 'The90sWantTheirSocialMediaBack',
+    linkUrl: '',
+    enabled: false
   }
 };
 
@@ -124,18 +129,31 @@ describe('CredentialsViewModel', () => {
       ];
 
       const mockProviders = [
-        { providerId: 1, name: 'google', description: 'Hoehel', url: '' },
-        { providerId: 2, name: 'facebook', description: 'Smoelboek', url: '' },
         {
-          providerId: 3,
+          name: 'google',
+          description: 'Hoehel',
+          linkUrl: '',
+          enabled: true,
+          maxNumberAllowed: 1
+        },
+        {
+          name: 'facebook',
+          description: 'Smoelboek',
+          linkUrl: '',
+          enabled: true,
+          maxNumberAllowed: 1
+        },
+        {
           name: 'smartschool',
           description: 'SmaaaaaartSchool',
-          url: '',
-          maxNumberAllowed: 3
+          linkUrl: '',
+          maxNumberAllowed: 3,
+          enabled: true
         }
+        // no myspace-provider, because it isn't enabled
       ];
 
-      it('should return the SingleSignOn-providers unfiltered', () => {
+      it('should return the enabled SingleSignOn-providers', () => {
         store.dispatch(
           new CredentialActions.CredentialsLoaded({
             credentials: []
@@ -167,7 +185,7 @@ describe('CredentialsViewModel', () => {
         );
       });
 
-      it('shouldnt return SingleSignOn-providers that have exceeded maxNumberAllowed', () => {
+      it("shouldn't return SingleSignOn-providers that have exceeded maxNumberAllowed", () => {
         const smartschoolCredential = mockCredentials[0];
 
         store.dispatch(
@@ -197,10 +215,9 @@ describe('CredentialsViewModel', () => {
     describe('linkCredential', () => {
       it('should open a new windows with the provider url', () => {
         const mockProvider = {
-          providerId: 1,
           name: 'google',
           description: 'Hoehel',
-          url: 'link.toApi.be'
+          linkUrl: 'link.toApi.be'
         } as SingleSignOnProviderInterface;
 
         window.open = jest.fn();
@@ -208,7 +225,7 @@ describe('CredentialsViewModel', () => {
 
         expect(window.open).toHaveBeenCalled();
         expect(window.open).toHaveBeenCalledTimes(1);
-        expect(window.open).toHaveBeenCalledWith(mockProvider.url, '_self');
+        expect(window.open).toHaveBeenCalledWith(mockProvider.linkUrl, '_self');
       });
     });
 

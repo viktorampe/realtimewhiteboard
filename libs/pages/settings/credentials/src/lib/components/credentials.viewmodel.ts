@@ -45,7 +45,7 @@ export class CredentialsViewModel {
               '?type=student&access_token=' + LoopBackAuth.accessTokenId;
       }
     */
-    window.open(provider.url, '_self');
+    window.open(provider.linkUrl, '_self');
     // Dit lijkt me een ietwat omslachtige manier om een link te openen
     // Had de constructie in de huidige site een reden? En is die reden nu nog van toepassing?
   }
@@ -55,10 +55,9 @@ export class CredentialsViewModel {
   }
 
   private setSourceStreams(): void {
-    // this.ssoFromEnvironment$ = new BehaviorSubject<
-    //   SingleSignOnProviderInterface[]
-    // >(this.environment.sso);
-    this.ssoFromEnvironment$ = this.mockViewModel.singleSignOnProviders$;
+    this.ssoFromEnvironment$ = new BehaviorSubject<EnvironmentSsoInterface>(
+      this.environmentSso
+    );
   }
 
   private setPresentationStreams(): void {
@@ -66,25 +65,43 @@ export class CredentialsViewModel {
     this.credentials$ = this.store.pipe(select(CredentialQueries.getAll));
     this.singleSignOnProviders$ = this.ssoFromEnvironment$.pipe(
       withLatestFrom(this.credentials$),
-      map(([sso, credentials]) =>
-        sso.filter(
+      map(([ssoEnv, credentials]) =>
+        this.convertToSingleSignOnProviders(ssoEnv).filter(
           provider =>
             credentials.filter(
               credential => credential.provider === provider.name
-            ).length <
-            (provider.maxNumberAllowed ? provider.maxNumberAllowed : 1)
+            ).length < provider.maxNumberAllowed
         )
       )
+    );
+  }
+
+  private convertToSingleSignOnProviders(
+    environment: EnvironmentSsoInterface
+  ): SingleSignOnProviderInterface[] {
+    return Object.keys(environment).reduce(
+      (acc, key) => {
+        const provider = environment[key];
+        if (provider.enabled) {
+          acc.push({
+            name: key,
+            ...provider,
+            description: provider.description || 'Single Sign-On',
+            maxNumberAllowed: provider.maxNumberAllowed || 1
+          });
+        }
+        return acc;
+      },
+      [] as SingleSignOnProviderInterface[]
     );
   }
 }
 
 export interface SingleSignOnProviderInterface {
-  providerId: number;
   name: string;
   description: string;
-  logoSrc?: string; // beter als css-class? om dan met mat-icon te gebruiken?
-  layoutClass?: string; //css style toe te voegen aan styles.css ? //beter met inline style?
-  url: string;
+  logoIcon?: string;
+  className?: string;
+  linkUrl: string;
   maxNumberAllowed?: number;
 }
