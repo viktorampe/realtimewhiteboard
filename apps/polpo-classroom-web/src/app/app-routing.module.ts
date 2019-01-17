@@ -51,7 +51,7 @@ const routes: Routes = [
         data: { breadcrumbText: 'Instellingen' },
         children: [
           {
-            path: 'dashboard',
+            path: '',
             loadChildren:
               '@campus/pages/settings/dashboard#PagesSettingsDashboardModule',
             data: { breadcrumbText: 'Dashboard' }
