@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import {
   ApiValidationErrors,
   CoupledTeachersViewModel
-} from './coupled-teachers.viewmodel';
+} from '../coupled-teachers.viewmodel';
 
 @Component({
   selector: 'campus-coupled-teachers',
