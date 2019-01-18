@@ -54,14 +54,12 @@ export class CoupledTeachersComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log('submitting');
     this.coupledTeacherViewModel.linkPerson(
       this.coupledTeachersForm.value['teacherCode']
     );
   }
 
   onUnlink(coupledTeacher: PersonInterface) {
-    console.log(coupledTeacher);
     this.coupledTeacherViewModel.unlinkPerson(coupledTeacher.id);
   }
 
