@@ -45,7 +45,6 @@ export class CredentialsComponent implements OnInit {
   ngOnInit() {
     const error = this.getParameterByName('error');
     this.message = this.getErrorMessage(error);
-    const messageStatus = 'alert-danger';
   }
 
   getErrorMessage(error: string): string {
