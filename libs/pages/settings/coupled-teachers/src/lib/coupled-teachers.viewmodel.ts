@@ -9,8 +9,6 @@ import {
 } from '@campus/dal';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { map, merge } from 'rxjs/operators';
-import { MockCoupledTeachersViewModel } from './coupled-teachers.viewmodel.mock';
 
 // TODO: update interface + put somewhere else
 export interface ActionResponse {
@@ -34,25 +32,18 @@ export class CoupledTeachersViewModel {
   public linkedPersons$: Observable<PersonInterface[]>;
 
   // intermediate streams
-  private linkPersonSuccess$: Observable<ActionResponse>;
-  private linkPersonError$: Observable<ActionResponse>;
-  private unlinkPersonSuccess$: Observable<ActionResponse>;
-  private unlinkPersonError$: Observable<ActionResponse>;
+  // private linkPersonError$: Observable<ActionResponse>;
+  // private unlinkPersonError$: Observable<ActionResponse>;
 
   // presentation streams
   public apiErrors$: Observable<ApiValidationErrors>;
-  public successMessages$: Observable<ActionResponse>;
 
   // TODO: inject toaster service for showing success message
   // TODO: remove mockViewModel when selectors are available
-  constructor(
-    private store: Store<DalState>,
-    private mockViewModel: MockCoupledTeachersViewModel
-  ) {
+  constructor(private store: Store<DalState>) {
     this.setSourceStreams();
     this.setIntermediateStreams();
     this.setPresentationStreams();
-    this.setSubscriptions();
   }
 
   private setSourceStreams(): void {
@@ -61,12 +52,6 @@ export class CoupledTeachersViewModel {
   }
 
   private setIntermediateStreams(): void {
-    // TODO: the mockViewModel should be replaced by selectors from the ResponseState (see below for a possible implementation)
-    this.linkPersonSuccess$ = this.mockViewModel.linkPersonSuccess$;
-    this.linkPersonError$ = this.mockViewModel.linkPersonError$;
-    this.unlinkPersonSuccess$ = this.mockViewModel.unlinkPersonSuccess$;
-    this.unlinkPersonError$ = this.mockViewModel.unlinkPersonError$;
-
     // TODO: replace pseudo selector code with real selectors
     // this.linkPersonError$ = this.store.pipe(
     //   select(
@@ -74,27 +59,6 @@ export class CoupledTeachersViewModel {
     //       action:
     //         TeacherStudentActions.TeacherStudentActionTypes.LinkTeacherStudent,
     //       type: 'error'
-    //     })
-    //   )
-    // );
-    // TODO: replace pseudo selector code with real selectors
-    // this.linkPersonSuccess$ = this.store.pipe(
-    //   select(
-    //     ResponseQueries.get({
-    //       action:
-    //         TeacherStudentActions.TeacherStudentActionTypes.LinkTeacherStudent,
-    //       type: 'success'
-    //     })
-    //   )
-    // );
-    // TODO: replace pseudo selector code with real selectors
-    // this.unlinkPersonSuccess$ = this.store.pipe(
-    //   select(
-    //     ResponseQueries.get({
-    //       action:
-    //         TeacherStudentActions.TeacherStudentActionTypes
-    //           .UnlinkTeacherStudent,
-    //       type: 'success'
     //     })
     //   )
     // );
@@ -112,31 +76,20 @@ export class CoupledTeachersViewModel {
   }
 
   private setPresentationStreams(): void {
-    this.apiErrors$ = this.linkPersonError$.pipe(
-      map(response => {
-        // TODO: switch based on response.message
-        switch (response.message) {
-          case 'nonExistingTeacherCode':
-            return { nonExistingTeacherCode: 'Deze code is niet geldig ...' };
-
-          default:
-            break;
-        }
-        return {
-          apiError: response.message
-        };
-      })
-    );
-
-    this.successMessages$ = this.linkPersonSuccess$.pipe(
-      merge(this.unlinkPersonSuccess$)
-    );
-  }
-
-  private setSubscriptions() {
-    this.successMessages$.subscribe(message => {
-      this.showSuccessToast(message);
-    });
+    // this.apiErrors$ = this.linkPersonError$.pipe(
+    //   map(response => {
+    //     // TODO: switch based on response.message
+    //     switch (response.message) {
+    //       case 'nonExistingTeacherCode':
+    //         return { nonExistingTeacherCode: 'Deze code is niet geldig ...' };
+    //       default:
+    //         break;
+    //     }
+    //     return {
+    //       apiError: response.message
+    //     };
+    //   })
+    // );
   }
 
   public linkPerson(publicKey: string): void {
@@ -149,10 +102,5 @@ export class CoupledTeachersViewModel {
     this.store.dispatch(
       new TeacherStudentActions.UnlinkTeacherStudent({ teacherId })
     );
-  }
-
-  private showSuccessToast(message: ActionResponse) {
-    // TODO: call the toast service with the message
-    window.alert(message.message);
   }
 }

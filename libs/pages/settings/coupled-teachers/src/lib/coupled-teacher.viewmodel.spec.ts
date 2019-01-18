@@ -7,7 +7,6 @@ import {
 } from '@campus/dal';
 import { Store, StoreModule } from '@ngrx/store';
 import { CoupledTeachersViewModel } from './coupled-teachers.viewmodel';
-// file.only
 
 let coupledTeacherViewModel: CoupledTeachersViewModel;
 let store: Store<DalState>;

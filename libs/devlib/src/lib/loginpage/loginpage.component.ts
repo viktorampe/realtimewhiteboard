@@ -7,7 +7,6 @@ import {
   EduContentInterface,
   UserActions
 } from '@campus/dal';
-import { CoupledTeachersViewModel } from '@campus/pages/settings/coupled-teachers';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -28,8 +27,7 @@ export class LoginpageComponent implements OnInit {
     private personApi: PersonApi,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     private store: Store<AlertReducer.State>,
-    private router: Router,
-    private coupledTeachersViewModel: CoupledTeachersViewModel
+    private router: Router
   ) {}
 
   ngOnInit() {
