@@ -243,25 +243,25 @@ export const environment: EnvironmentInterface = {
   sso: {
     facebook: {
       enabled: true,
-      linkUrl: 'http://api.polpo.localhost/auth/......', //TODO -- needs to be corrected to actual link
+      linkUrl: 'http://api.polpo.localhost:3000/link/facebook/callback',
       description: 'Facebook',
       logoIcon: 'facebook',
       className: 'button-facebook'
     },
     google: {
       enabled: true,
-      linkUrl: 'http://api.polpo.localhost/auth/......', //TODO -- needs to be corrected to actual link
+      linkUrl: 'http://api.polpo.localhost:3000/link/google/callback',
       description: 'Google',
       logoIcon: 'google',
       className: 'button-google'
     },
     smartschool: {
       enabled: true,
-      linkUrl: 'http://api.polpo.localhost/auth/......', //TODO -- needs to be corrected to actual link
+      linkUrl: 'http://api.polpo.localhost:3000/link/smartschool/callback',
       description: 'Smartschool',
       logoIcon: 'smartschool:orange',
       className: 'button-smartschool',
-      maxNumberAllowed: 3 //TODO What is a realistic limit here?
+      maxNumberAllowed: 10
     }
   }
 };
