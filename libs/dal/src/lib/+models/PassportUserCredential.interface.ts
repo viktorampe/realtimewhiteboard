@@ -11,4 +11,5 @@ export interface PassportUserCredentialInterface {
   id?: number;
   userId?: number;
   user?: PersonInterface;
+  providerLogo?: string;
 }

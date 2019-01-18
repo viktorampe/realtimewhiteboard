@@ -9,7 +9,7 @@ import {
 } from '@campus/dal';
 import { EnvironmentSsoInterface, ENVIRONMENT_SSO_TOKEN } from '@campus/shared';
 import { select, Store } from '@ngrx/store';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { map, withLatestFrom } from 'rxjs/operators';
 
 @Injectable({
@@ -73,6 +73,20 @@ export class CredentialsViewModel {
             ).length < provider.maxNumberAllowed
         )
       )
+    );
+
+    const combo = combineLatest(this.singleSignOnProviders$, this.credentials$);
+    this.credentials$ = combo.pipe(
+      map(([sso, creds]) => {
+        creds.forEach(cred => {
+          sso.map(ssoItem => {
+            if (ssoItem.name === cred.provider) {
+              cred.providerLogo = ssoItem.logoIcon;
+            }
+          });
+        });
+        return creds;
+      })
     );
   }
 

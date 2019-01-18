@@ -2,15 +2,16 @@ import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule } from '@angular/material';
 import { CredentialFixture } from '@campus/dal';
+import { UiModule } from '@campus/ui';
 import {
   CredentialErrors,
-  CredentialsComponent,
-  MockCredentialsViewModel
+  CredentialsComponent
 } from './credentials.component';
 import {
   CredentialsViewModel,
   SingleSignOnProviderInterface
 } from './credentials.viewmodel';
+import { MockCredentialsViewModel } from './credentials.viewmodel.mock';
 
 @NgModule({
   exports: [CredentialsComponent]
@@ -21,11 +22,11 @@ describe('CredentialsComponent', () => {
   let component: CredentialsComponent;
   let fixture: ComponentFixture<CredentialsComponent>;
   let cred1: CredentialFixture;
-  let viewmodel;
+  let viewmodel: CredentialsViewModel;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [MatIconModule],
+      imports: [MatIconModule, UiModule],
       declarations: [CredentialsComponent],
       providers: [
         {
@@ -39,21 +40,7 @@ describe('CredentialsComponent', () => {
   }));
 
   beforeEach(() => {
-    cred1 = new CredentialFixture({
-      provider: 'facebook',
-      profile: {
-        platform: 'smartschool',
-        profileUrl: 'facebook',
-        _json: {
-          url: 'google'
-        },
-        displayName: 'google',
-        name: {
-          givenName: 'given',
-          familyName: 'family'
-        }
-      }
-    });
+    cred1 = new CredentialFixture();
     fixture = TestBed.createComponent(CredentialsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -111,9 +98,5 @@ describe('CredentialsComponent', () => {
     component.changeAvatar(cred1);
     fixture.detectChanges();
     expect(viewmodel.useProfilePicture).toHaveBeenCalledWith(cred1);
-  });
-
-  it('should return correct icon class', () => {
-    expect(component.getIconForProvider(cred1)).toBeObservable();
   });
 });

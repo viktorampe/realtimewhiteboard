@@ -1,4 +1,4 @@
-import { Component, Injectable, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { PassportUserCredentialInterface } from '@campus/dal';
 import { Observable } from 'rxjs';
 import {
@@ -10,17 +10,6 @@ export enum CredentialErrors {
   ForbiddenMixedRoles = 'ForbiddenError: mixed_roles',
   ForbiddenInvalidRoles = 'ForbiddenError: invalid_roles',
   AlreadyLinked = 'Error: Credentials already linked'
-}
-
-@Injectable({
-  providedIn: 'root'
-})
-export class MockCredentialsViewModel {
-  ssoLinks$: Observable<SingleSignOnProviderInterface[]>;
-  credentials$: Observable<PassportUserCredentialInterface[]>;
-  linkCredential(credential: SingleSignOnProviderInterface): void {}
-  unlinkCredential(credential: PassportUserCredentialInterface): void {}
-  useProfilePicture(credential: PassportUserCredentialInterface): void {}
 }
 
 @Component({
