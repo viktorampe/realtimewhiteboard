@@ -8,20 +8,14 @@ import { LearningAreaFixture, PersonFixture } from '@campus/dal';
 import { PersonAlreadyLinkedValidator } from '@campus/shared';
 import { UiModule } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
+import { CoupledTeachersViewModel } from '../coupled-teachers.viewmodel';
+import { MockCoupledTeachersViewModel } from '../coupled-teachers.viewmodel.mock';
 import { PagesSettingsCoupledTeachersRoutingModule } from '../pages-settings-coupled-teachers-routing.module';
-import {
-  CoupledTeachersComponent,
-  TEMP_TEACHER_TOKEN
-} from './coupled-teachers.component';
+import { CoupledTeachersComponent } from './coupled-teachers.component';
 
 describe('CoupledTeachersComponent', () => {
   let component: CoupledTeachersComponent;
   let fixture: ComponentFixture<CoupledTeachersComponent>;
-
-  const viewmodel: any = {
-    linkedPersons$: '',
-    apiErrors$: ''
-  };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -37,7 +31,10 @@ describe('CoupledTeachersComponent', () => {
       ],
       declarations: [CoupledTeachersComponent],
       providers: [
-        { provide: TEMP_TEACHER_TOKEN, useValue: viewmodel },
+        {
+          provide: CoupledTeachersViewModel,
+          useValue: MockCoupledTeachersViewModel
+        },
         {
           provide: PersonAlreadyLinkedValidator,
           useClass: PersonAlreadyLinkedValidator

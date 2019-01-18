@@ -1,15 +1,12 @@
-import { Component, Inject, InjectionToken, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  ValidationErrors,
-  Validators
-} from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PersonInterface } from '@campus/dal';
 import { PersonAlreadyLinkedValidator } from '@campus/shared';
 import { Observable } from 'rxjs';
-
-export const TEMP_TEACHER_TOKEN = new InjectionToken('browser storage service');
+import {
+  ApiValidationErrors,
+  CoupledTeachersViewModel
+} from '../coupled-teachers.viewmodel';
 
 @Component({
   selector: 'campus-coupled-teachers',
@@ -25,7 +22,7 @@ export class CoupledTeachersComponent implements OnInit {
   linkedPersons$: Observable<PersonInterface[]>;
 
   constructor(
-    @Inject(TEMP_TEACHER_TOKEN) private coupledTeacherViewModel: any,
+    private coupledTeacherViewModel: CoupledTeachersViewModel,
     private formBuilder: FormBuilder,
     private personAlreadyLinkedValidator: PersonAlreadyLinkedValidator
   ) {}
@@ -101,8 +98,4 @@ export class CoupledTeachersComponent implements OnInit {
     }
     return '';
   }
-}
-
-interface ApiValidationErrors extends ValidationErrors {
-  nonExistingTeacherCode: string;
 }
