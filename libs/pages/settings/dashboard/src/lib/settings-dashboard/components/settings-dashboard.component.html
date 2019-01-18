@@ -1,1 +1,15 @@
-<p> settings-dashboard works! </p>
+<div>
+  <campus-page-header [title]="'Mijn profiel'"></campus-page-header>
+  <mat-nav-list>
+    <div *ngFor="let link of (links$ | async)">
+      <campus-button
+        large
+        *hasPermission="link.permissions"
+        [routerLink]="link.url"
+        [iconClass]="link.icon"
+      >
+        <div> {{ link.name }} </div>
+      </campus-button>
+    </div>
+  </mat-nav-list>
+</div>

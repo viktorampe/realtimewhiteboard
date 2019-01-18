@@ -62,6 +62,6 @@ export class LoginpageComponent implements OnInit {
   }
 
   deleteAlert() {
-    this.currentUser = this.personApi.destroyByIdAlertQueues(34, 48);
+    this.response = this.personApi.deleteAlertQueues({ id: 34, fk: 48 });
   }
 }

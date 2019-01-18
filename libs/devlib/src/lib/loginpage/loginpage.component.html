@@ -59,15 +59,15 @@
 <div>{{ currentUser | async | json }}</div>
 
 <div><button (click)="updateStudentContentStatus()">update student content status</button></div>
+
 <div><button (click)="updateAlert()">update alert</button></div>
+
+<div>
+  <button (click)="deleteAlert()">remove alert</button>
+  <div>{{ response | async | json }}</div>
+</div>
+
 <div><a [routerLink]="['/bundles']"
      routerLinkActive="router-link-active">go to bundle page</a></div>
 <div><a [routerLink]="['/tasks']"
      routerLinkActive="router-link-active">go to tasks page</a></div>
-
-<br>
-
-<div>
-  <button (click)="deleteAlert()">delete alert</button>
-  <div>{{ reponse |async |json}}</div>
-</div>

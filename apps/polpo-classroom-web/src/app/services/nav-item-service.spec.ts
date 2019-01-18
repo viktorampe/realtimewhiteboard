@@ -71,6 +71,11 @@ describe('NavItemServiceService', () => {
           icon: 'increase',
           link: '/reports',
           title: 'Resultaten'
+        },
+        {
+          icon: 'settings',
+          link: '/settings',
+          title: 'Instellingen'
         }
       ];
 
@@ -182,7 +187,7 @@ describe('NavItemServiceService', () => {
         {
           description: 'Profiel',
           icon: 'account',
-          internalLink: '/profile',
+          internalLink: '/settings/profile',
           dividerBefore: false
         },
         {
@@ -204,7 +209,7 @@ describe('NavItemServiceService', () => {
         {
           description: 'Profiel',
           icon: 'account',
-          internalLink: '/profile',
+          internalLink: '/settings/profile',
           dividerBefore: false
         },
         {
@@ -233,7 +238,7 @@ describe('NavItemServiceService', () => {
         {
           description: 'Profiel',
           icon: 'account',
-          internalLink: '/profile',
+          internalLink: '/settings/profile',
           dividerBefore: false
         },
         {
@@ -258,7 +263,7 @@ describe('NavItemServiceService', () => {
         {
           description: 'Profiel',
           icon: 'account',
-          internalLink: '/profile',
+          internalLink: '/settings/profile',
           dividerBefore: false
         },
         {
@@ -300,7 +305,7 @@ describe('NavItemServiceService', () => {
         {
           description: 'Profiel',
           icon: 'account',
-          internalLink: '/profile',
+          internalLink: '/settings/profile',
           dividerBefore: false
         },
         {

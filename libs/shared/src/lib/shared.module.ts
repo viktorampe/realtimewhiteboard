@@ -1,7 +1,6 @@
 import { LayoutModule } from '@angular/cdk/layout';
 import { PortalModule } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Inject, ModuleWithProviders, NgModule } from '@angular/core';
 import {
   MatBadgeModule,
@@ -19,14 +18,15 @@ import { PageBarContainerComponent } from './components/page-bar-container/page-
 import { OPEN_STATIC_CONTENT_SERVICE_TOKEN } from './content/open-static-content.interface';
 import { OpenStaticContentService } from './content/open-static-content.service';
 import { HeaderComponent } from './header/header.component';
-import { CampusHttpInterceptor } from './interceptors/campus-http.interceptor';
 import {
   EnvironmentAlertsFeatureInterface,
+  EnvironmentApiInterface,
   EnvironmentErrorManagementFeatureInterface,
+  EnvironmentIconMappingInterface,
   EnvironmentMessagesFeatureInterface,
   EnvironmentWebsiteInterface,
   ENVIRONMENT_ALERTS_FEATURE_TOKEN,
-  ENVIRONMENT_API_BASE_TOKEN,
+  ENVIRONMENT_API_TOKEN,
   ENVIRONMENT_ERROR_MANAGEMENT_FEATURE_TOKEN,
   ENVIRONMENT_ICON_MAPPING_TOKEN,
   ENVIRONMENT_MESSAGES_FEATURE_TOKEN,
@@ -60,16 +60,16 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
   providers: [
     { provide: FILTER_SERVICE_TOKEN, useClass: FilterService },
     { provide: SCORM_EXERCISE_SERVICE_TOKEN, useClass: ScormExerciseService },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: CampusHttpInterceptor,
-      multi: true
-    },
+    { provide: PERMISSION_SERVICE_TOKEN, useClass: PermissionService },
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: CampusHttpInterceptor,
+    //   multi: true
+    // },
     {
       provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
       useClass: OpenStaticContentService
-    },
-    { provide: PERMISSION_SERVICE_TOKEN, useClass: PermissionService }
+    }
   ]
 })
 export class SharedModule {
@@ -85,9 +85,9 @@ export class SharedModule {
     environmentAlertsFeature: EnvironmentAlertsFeatureInterface,
     environmentMessagesFeature: EnvironmentMessagesFeatureInterface,
     environmentErrorManagementFeature: EnvironmentErrorManagementFeatureInterface,
-    environmentIconMapping: { [key: string]: string },
+    environmentIconMapping: EnvironmentIconMappingInterface,
     environmentWebsite: EnvironmentWebsiteInterface,
-    environmentApiBase: string
+    environmentApi: EnvironmentApiInterface
   ): ModuleWithProviders {
     return {
       ngModule: SharedModule,
@@ -113,8 +113,8 @@ export class SharedModule {
           useValue: environmentIconMapping
         },
         {
-          provide: ENVIRONMENT_API_BASE_TOKEN,
-          useValue: environmentApiBase
+          provide: ENVIRONMENT_API_TOKEN,
+          useValue: environmentApi
         }
       ]
     };

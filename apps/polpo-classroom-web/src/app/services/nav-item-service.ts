@@ -20,7 +20,7 @@ export class NavItemService {
       icon: 'increase',
       link: '/reports'
     },
-    dashboard: { title: 'Dashboard', icon: 'home', link: '/dashboard' },
+    settings: { title: 'Instellingen', icon: 'settings', link: '/settings' },
     bordboeken: { title: 'Bordboeken', icon: 'book', link: '/books' },
     lesmateriaal: {
       title: 'Lesmateriaal',
@@ -43,7 +43,7 @@ export class NavItemService {
     profiel: {
       description: 'Profiel',
       icon: 'account',
-      internalLink: '/profile',
+      internalLink: '/settings/profile',
       dividerBefore: false
     }, // icon-user in current site
     afmelden: {
@@ -77,7 +77,8 @@ export class NavItemService {
         { ...this.standardNavItems.bundels },
         { ...this.standardNavItems.taken },
         { ...this.standardNavItems.boeken },
-        { ...this.standardNavItems.resultaten }
+        { ...this.standardNavItems.resultaten },
+        { ...this.standardNavItems.settings }
       );
     }
 
@@ -158,6 +159,6 @@ export class NavItemService {
   }
 
   private extractPlatformName(platformUrl: string) {
-    return platformUrl.replace('.smartschool.be', '');
+    return platformUrl ? platformUrl.replace('.smartschool.be', '') : '';
   }
 }

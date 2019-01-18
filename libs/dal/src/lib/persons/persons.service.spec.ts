@@ -1,7 +1,6 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { hot } from '@nrwl/nx/testing';
-import { PersonFixture } from '../+fixtures';
 import { PersonInterface } from '../+models';
 import {
   PersonService,
@@ -35,28 +34,21 @@ describe('PersonsService', () => {
     }
   ));
 
-  it('should return persons', async () => {
-    mockData$ = hot('-a-|', {
-      a: { persons: [new PersonFixture()] }
-    });
-    expect(service.getAllForUser(1)).toBeObservable(
-      hot('-a-|', {
-        a: [new PersonFixture()]
-      })
-    );
-  });
-
   it('should check for unique username', () => {
     mockData$ = hot('-a|', {
-      a: true
+      a: { unique: true }
     });
-    expect(service.checkUniqueUsername(1, 'foo')).toBeObservable(mockData$);
+    expect(service.checkUniqueUsername(1, 'foo')).toBeObservable(
+      hot('-a|', { a: true })
+    );
   });
   it('should check for unique email', () => {
     mockData$ = hot('-a|', {
-      a: true
+      a: { unique: true }
     });
-    expect(service.checkUniqueEmail(1, 'foo')).toBeObservable(mockData$);
+    expect(service.checkUniqueEmail(1, 'foo')).toBeObservable(
+      hot('-a|', { a: true })
+    );
   });
 
   describe('updateUser', () => {
