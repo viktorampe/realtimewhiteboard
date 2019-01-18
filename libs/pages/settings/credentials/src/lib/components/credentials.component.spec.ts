@@ -23,6 +23,7 @@ describe('CredentialsComponent', () => {
   let fixture: ComponentFixture<CredentialsComponent>;
   let cred1: CredentialFixture;
   let viewmodel: CredentialsViewModel;
+  //file.only
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -31,7 +32,7 @@ describe('CredentialsComponent', () => {
       providers: [
         {
           provide: CredentialsViewModel,
-          useValue: MockCredentialsViewModel
+          useClass: MockCredentialsViewModel
         }
       ],
       schemas: [NO_ERRORS_SCHEMA]
@@ -41,6 +42,10 @@ describe('CredentialsComponent', () => {
 
   beforeEach(() => {
     cred1 = new CredentialFixture();
+    console.log(viewmodel.credentials$);
+    viewmodel.credentials$.subscribe(t => {
+      console.log(t[0]);
+    });
     fixture = TestBed.createComponent(CredentialsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

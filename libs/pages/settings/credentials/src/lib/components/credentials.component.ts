@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { PassportUserCredentialInterface } from '@campus/dal';
-import { Observable } from 'rxjs';
 import {
   CredentialsViewModel,
   SingleSignOnProviderInterface
@@ -23,7 +22,11 @@ export class CredentialsComponent implements OnInit {
 
   message = '';
 
-  constructor(private viewModel: CredentialsViewModel) {}
+  constructor(private viewModel: CredentialsViewModel) {
+    console.log(this.viewModel);
+    this.credentials$ = this.viewModel.credentials$;
+    this.ssoLinks$ = this.viewModel.singleSignOnProviders$;
+  }
 
   ngOnInit() {
     const error = this.getParameterByName('error');
@@ -67,11 +70,5 @@ export class CredentialsComponent implements OnInit {
 
   addCredential(credential: SingleSignOnProviderInterface) {
     this.viewModel.linkCredential(credential);
-  }
-
-  getIconForProvider(
-    credential: PassportUserCredentialInterface
-  ): Observable<string> {
-    return this.viewModel.getProviderLogoFromCredential(credential);
   }
 }

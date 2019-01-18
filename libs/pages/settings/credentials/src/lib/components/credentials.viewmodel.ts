@@ -74,7 +74,6 @@ export class CredentialsViewModel {
         )
       )
     );
-
     const combo = combineLatest(this.singleSignOnProviders$, this.credentials$);
     this.credentials$ = combo.pipe(
       map(([sso, creds]) => {

@@ -29,12 +29,10 @@ export class MockCredentialsViewModel
   public credentials$ = new BehaviorSubject<PassportUserCredentialInterface[]>([
     new CredentialFixture({
       id: 1,
-      profile: { platform: 'foo.smartschool.be' },
       provider: 'smartschool'
     }),
     new CredentialFixture({
       id: 2,
-      profile: { platform: 'foo.smartschool.be' },
       provider: 'smartschool'
     })
   ]);
