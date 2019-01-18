@@ -7,7 +7,10 @@ import {
   CredentialsComponent,
   MockCredentialsViewModel
 } from './credentials.component';
-import { SingleSignOnProviderInterface } from './credentials.viewmodel';
+import {
+  CredentialsViewModel,
+  SingleSignOnProviderInterface
+} from './credentials.viewmodel';
 
 @NgModule({
   exports: [CredentialsComponent]
@@ -18,7 +21,7 @@ describe('CredentialsComponent', () => {
   let component: CredentialsComponent;
   let fixture: ComponentFixture<CredentialsComponent>;
   let cred1: CredentialFixture;
-  const viewmodel = new MockCredentialsViewModel();
+  let viewmodel;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -26,12 +29,13 @@ describe('CredentialsComponent', () => {
       declarations: [CredentialsComponent],
       providers: [
         {
-          provide: MockCredentialsViewModel,
-          useValue: viewmodel
+          provide: CredentialsViewModel,
+          useValue: MockCredentialsViewModel
         }
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
+    viewmodel = TestBed.get(CredentialsViewModel);
   }));
 
   beforeEach(() => {
