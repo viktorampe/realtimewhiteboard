@@ -2,13 +2,12 @@ import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule } from '@angular/material';
 import { CredentialFixture } from '@campus/dal';
-import { HumanDateTimePipe } from 'human-date-time/human-date-time.pipe';
 import {
   CredentialErrors,
   CredentialsComponent,
-  MockCredentialsViewModel,
-  SingleSignOnProviderInterface
+  MockCredentialsViewModel
 } from './credentials.component';
+import { SingleSignOnProviderInterface } from './credentials.viewmodel';
 
 @NgModule({
   exports: [CredentialsComponent]
@@ -24,7 +23,7 @@ describe('CredentialsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [MatIconModule],
-      declarations: [CredentialsComponent, HumanDateTimePipe],
+      declarations: [CredentialsComponent],
       providers: [
         {
           provide: MockCredentialsViewModel,
@@ -85,12 +84,10 @@ describe('CredentialsComponent', () => {
 
   it('should call viewmodel when adding credential', () => {
     const sso: SingleSignOnProviderInterface = {
-      providerId: 0,
       name: '',
       description: '',
-      logoSrc: '',
-      layoutClass: '',
-      url: '',
+      logoIcon: '',
+      linkUrl: '',
       maxNumberAllowed: 0
     };
     jest.spyOn(viewmodel, 'linkCredential');
@@ -113,11 +110,6 @@ describe('CredentialsComponent', () => {
   });
 
   it('should return correct icon class', () => {
-    expect(component.getIconForProvider('facebook')).toBe('facebook');
-    expect(component.getIconForProvider('google')).toBe('google');
-    expect(component.getIconForProvider('smartschool')).toBe(
-      'smartschool:orange'
-    );
-    expect(component.getIconForProvider('')).toBe('');
+    expect(component.getIconForProvider(cred1)).toBeObservable();
   });
 });

@@ -6,7 +6,7 @@ import {
   PersonInterface
 } from '@campus/dal';
 import { ViewModelInterface } from '@campus/testing';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import {
   CredentialsViewModel,
   SingleSignOnProviderInterface
@@ -42,13 +42,12 @@ export class MockCredentialsViewModel
   public singleSignOnProviders$ = new BehaviorSubject<
     SingleSignOnProviderInterface[]
   >([
-    { providerId: 1, name: 'google', description: 'Hoehel', url: '' },
-    { providerId: 2, name: 'facebook', description: 'Smoelboek', url: '' },
+    { name: 'google', description: 'Hoehel', linkUrl: '' },
+    { name: 'facebook', description: 'Smoelboek', linkUrl: '' },
     {
-      providerId: 3,
       name: 'smartschool',
       description: 'SmaaaaaartSchool',
-      url: '',
+      linkUrl: '',
       maxNumberAllowed: 3
     }
   ]);
@@ -56,4 +55,10 @@ export class MockCredentialsViewModel
   public useProfilePicture(credential: PassportUserCredentialInterface): void {}
   public linkCredential(provider: SingleSignOnProviderInterface): void {}
   public unlinkCredential(credential: PassportUserCredentialInterface): void {}
+
+  public getProviderLogoFromCredential(
+    credential: PassportUserCredentialInterface
+  ): Observable<string> {
+    return of('');
+  }
 }

@@ -9,7 +9,7 @@ import {
 } from '@campus/dal';
 import { EnvironmentSsoInterface, ENVIRONMENT_SSO_TOKEN } from '@campus/shared';
 import { select, Store } from '@ngrx/store';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map, withLatestFrom } from 'rxjs/operators';
 
 @Injectable({
@@ -94,6 +94,24 @@ export class CredentialsViewModel {
       },
       [] as SingleSignOnProviderInterface[]
     );
+  }
+
+  public getProviderLogoFromCredential(
+    credential: PassportUserCredentialInterface
+  ): Observable<string> {
+    if (credential.provider) {
+      return this.singleSignOnProviders$.pipe(
+        map(sso => {
+          sso.map(ssoItem => {
+            if (ssoItem.name === credential.provider) {
+              return ssoItem.logoIcon;
+            }
+          });
+          return '';
+        })
+      );
+    }
+    return of('');
   }
 }
 

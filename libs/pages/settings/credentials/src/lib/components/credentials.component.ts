@@ -1,21 +1,15 @@
 import { Component, Injectable, OnInit } from '@angular/core';
 import { PassportUserCredentialInterface } from '@campus/dal';
 import { Observable } from 'rxjs';
+import {
+  CredentialsViewModel,
+  SingleSignOnProviderInterface
+} from './credentials.viewmodel';
 
 export enum CredentialErrors {
   ForbiddenMixedRoles = 'ForbiddenError: mixed_roles',
   ForbiddenInvalidRoles = 'ForbiddenError: invalid_roles',
   AlreadyLinked = 'Error: Credentials already linked'
-}
-
-export interface SingleSignOnProviderInterface {
-  providerId: number;
-  name: string;
-  description: string;
-  logoSrc?: string;
-  layoutClass?: string;
-  url: string;
-  maxNumberAllowed?: number;
 }
 
 @Injectable({
@@ -36,11 +30,11 @@ export class MockCredentialsViewModel {
 })
 export class CredentialsComponent implements OnInit {
   credentials$ = this.viewModel.credentials$;
-  ssoLinks$ = this.viewModel.ssoLinks$;
+  ssoLinks$ = this.viewModel.singleSignOnProviders$;
 
   message = '';
 
-  constructor(private viewModel: MockCredentialsViewModel) {}
+  constructor(private viewModel: CredentialsViewModel) {}
 
   ngOnInit() {
     const error = this.getParameterByName('error');
@@ -86,14 +80,9 @@ export class CredentialsComponent implements OnInit {
     this.viewModel.linkCredential(credential);
   }
 
-  getIconForProvider(provider: string) {
-    if (provider === 'facebook') {
-      return 'facebook';
-    } else if (provider === 'google') {
-      return 'google';
-    } else if (provider === 'smartschool') {
-      return 'smartschool:orange';
-    }
-    return '';
+  getIconForProvider(
+    credential: PassportUserCredentialInterface
+  ): Observable<string> {
+    return this.viewModel.getProviderLogoFromCredential(credential);
   }
 }
