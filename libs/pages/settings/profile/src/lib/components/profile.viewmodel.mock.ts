@@ -27,10 +27,7 @@ export class MockProfileViewModel
     type: 'success'
   });
 
-  public updateProfile(
-    userId: number,
-    changedProps: Partial<PersonInterface>
-  ): void {}
+  public updateProfile(changedProps: Partial<PersonInterface>): void {}
 }
 
 // image encoded with https://www.base64encode.org/

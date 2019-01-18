@@ -22,7 +22,7 @@ export class SettingsDashboardViewModel {
     },
     {
       name: 'Verander profielfoto',
-      url: ['/settings', 'avatar'],
+      url: ['/settings', 'profile', 'avatar'],
       icon: 'avatar',
       permissions: [SettingsPermissions.UPDATE_AVATAR]
     },
