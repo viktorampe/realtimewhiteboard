@@ -62,6 +62,14 @@ export class LoginpageComponent implements OnInit {
   }
 
   deleteAlert() {
-    this.response = this.personApi.deleteAlertQueues({ id: 34, fk: 48 });
+    // soft-deletes all recieved alerts of the user -> works
+    // this.response = this.personApi.deleteAlertQueues(34);
+
+    // soft-deletes all sent alerts of the user -> works
+    // this.response = this.personApi.deleteOwnsAlerts(34);
+
+    // soft-deletes a single alert of the user -> works
+    // return unauthorised if the alert is already deleted
+    this.response = this.personApi.destroyByIdAlertQueues(34, 48);
   }
 }
