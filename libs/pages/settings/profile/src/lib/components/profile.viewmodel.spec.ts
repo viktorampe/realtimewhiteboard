@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import {
+  AUTH_SERVICE_TOKEN,
   DalState,
   getStoreModuleForFeatures,
   PersonFixture,
@@ -8,14 +9,14 @@ import {
   UserReducer
 } from '@campus/dal';
 import { Store, StoreModule } from '@ngrx/store';
-import { hot } from 'jasmine-marbles';
+import { hot } from '@nrwl/nx/testing';
 import { ProfileViewModel } from './profile.viewmodel';
 // file.only
 
-let profileViewModel: ProfileViewModel;
-let store: Store<DalState>;
-
 describe('ProfileViewModel', () => {
+  let profileViewModel: ProfileViewModel;
+  let store: Store<DalState>;
+
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -26,7 +27,10 @@ describe('ProfileViewModel', () => {
         StoreModule.forRoot({}),
         ...getStoreModuleForFeatures([UserReducer])
       ],
-      providers: [Store]
+      providers: [
+        Store,
+        { provide: AUTH_SERVICE_TOKEN, useValue: { userId: 1 } }
+      ]
     });
 
     profileViewModel = TestBed.get(ProfileViewModel);
@@ -75,7 +79,7 @@ describe('ProfileViewModel', () => {
   });
 
   describe('update profile', () => {
-    const mockUser = new PersonFixture();
+    const mockUser = new PersonFixture({ id: 1 });
     beforeEach(() => {
       store.dispatch(new UserActions.UserLoaded(mockUser));
     });
@@ -86,7 +90,7 @@ describe('ProfileViewModel', () => {
       };
       store.dispatch = jest.fn();
 
-      profileViewModel.updateProfile(mockUser.id, mockChangesToProfile);
+      profileViewModel.updateProfile(mockChangesToProfile);
 
       expect(store.dispatch).toHaveBeenCalledWith(
         new UserActions.UpdateUser({
