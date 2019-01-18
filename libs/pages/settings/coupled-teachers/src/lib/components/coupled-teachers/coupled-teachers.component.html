@@ -50,8 +50,7 @@
     ></ng-container>
     <campus-person-summary
       *ngFor="let coupledTeacher of coupledTeachers"
-      [name]="coupledTeacher.displayName"
-      [imageUrl]="coupledTeacher.avatar"
+      [person]="coupledTeacher"
     >
       <div description
         >{{ coupledTeacher.teacherInfo.publicKey }} | Toegevoegd op:
