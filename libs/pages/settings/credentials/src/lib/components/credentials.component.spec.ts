@@ -1,6 +1,8 @@
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule } from '@angular/material';
+import { CredentialFixture } from '@campus/dal';
+import { HumanDateTimePipe } from 'human-date-time/human-date-time.pipe';
 import {
   CredentialErrors,
   CredentialsComponent,
@@ -16,13 +18,13 @@ export class TestModule {}
 describe('CredentialsComponent', () => {
   let component: CredentialsComponent;
   let fixture: ComponentFixture<CredentialsComponent>;
-  let cred1;
+  let cred1: CredentialFixture;
   const viewmodel = new MockCredentialsViewModel();
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [MatIconModule],
-      declarations: [CredentialsComponent],
+      declarations: [CredentialsComponent, HumanDateTimePipe],
       providers: [
         {
           provide: MockCredentialsViewModel,
@@ -34,7 +36,7 @@ describe('CredentialsComponent', () => {
   }));
 
   beforeEach(() => {
-    cred1 = {
+    cred1 = new CredentialFixture({
       provider: 'facebook',
       profile: {
         platform: 'smartschool',
@@ -48,7 +50,7 @@ describe('CredentialsComponent', () => {
           familyName: 'family'
         }
       }
-    };
+    });
     fixture = TestBed.createComponent(CredentialsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -79,33 +81,6 @@ describe('CredentialsComponent', () => {
     ).toBe(
       'Je kan enkel een Smartschool-LEERLING profiel koppelen aan dit POLPO-profiel.'
     );
-  });
-
-  it('should return correct displaynames', () => {
-    cred1.provider = 'facebook';
-    expect(component.getUserNameToDisplayByCredential(cred1)).toBe(
-      'given family'
-    );
-    cred1.provider = 'google';
-    expect(component.getUserNameToDisplayByCredential(cred1)).toBe('google');
-    cred1.provider = 'smartschool';
-    expect(component.getUserNameToDisplayByCredential(cred1)).toBe(
-      'given family'
-    );
-    cred1.provider = '';
-    expect(component.getUserNameToDisplayByCredential(cred1)).toBe('');
-  });
-
-  it('should return correct date string', () => {
-    expect(component.getDate('any non valid timestamp')).toBe('Invalid Date');
-    expect(component.getDate('01 Jan 1970 00:00:00 GMT')).toBe(
-      '1970 M01 1, Thu'
-    );
-  });
-
-  it('should return the correct time string', () => {
-    expect(component.getTime('')).toBe('Invalid Date');
-    expect(component.getTime('01 Jan 1970 00:00:00 GMT')).toBe('01:00:00');
   });
 
   it('should call viewmodel when adding credential', () => {

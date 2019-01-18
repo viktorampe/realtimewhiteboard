@@ -56,17 +56,6 @@ export class CredentialsComponent implements OnInit {
         return 'Dit account werd al aan een ander profiel gekoppeld.';
     }
     return '';
-      if (
-        error === CredentialErrors.ForbiddenMixedRoles ||
-        error === CredentialErrors.ForbiddenInvalidRoles
-      ) {
-        return 'Je kan enkel een Smartschool-LEERLING profiel koppelen aan dit POLPO-profiel.';
-      }
-      if (error === CredentialErrors.AlreadyLinked) {
-        return 'Dit account werd al aan een ander profiel gekoppeld.';
-      }
-    }
-    return '';
   }
 
   getParameterByName(name: string, url?: string): string {
@@ -97,24 +86,6 @@ export class CredentialsComponent implements OnInit {
     this.viewModel.linkCredential(credential);
   }
 
-  getUserNameToDisplayByCredential(
-    credential: PassportUserCredentialInterface
-  ): string {
-    if (
-      credential.provider === 'facebook' ||
-      credential.provider === 'smartschool'
-    ) {
-      return (
-        credential.profile.name.givenName +
-        ' ' +
-        credential.profile.name.familyName
-      );
-    } else if (credential.provider === 'google') {
-      return credential.profile.displayName;
-    }
-    return '';
-  }
-
   getIconForProvider(provider: string) {
     if (provider === 'facebook') {
       return 'facebook';
@@ -124,21 +95,5 @@ export class CredentialsComponent implements OnInit {
       return 'smartschool:orange';
     }
     return '';
-  }
-
-  getDate(timestamp: string) {
-    const d = Date.parse(timestamp);
-    const options = {
-      weekday: 'short',
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    };
-    return new Date(d).toLocaleDateString('nl-BE', options);
-  }
-
-  getTime(timestamp: string) {
-    const d = Date.parse(timestamp);
-    return new Date(d).toLocaleTimeString('nl-BE');
   }
 }
