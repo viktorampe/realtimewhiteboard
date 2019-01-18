@@ -49,7 +49,14 @@ export class CredentialsComponent implements OnInit {
   }
 
   getErrorMessage(error: string): string {
-    if (error) {
+    switch (error) {
+      case CredentialErrors.ForbiddenMixedRoles:
+      case CredentialErrors.ForbiddenInvalidRoles:
+        return 'Je kan enkel een Smartschool-LEERLING profiel koppelen aan dit POLPO-profiel.';
+      case CredentialErrors.AlreadyLinked:
+        return 'Dit account werd al aan een ander profiel gekoppeld.';
+    }
+    return '';
       if (
         error === CredentialErrors.ForbiddenMixedRoles ||
         error === CredentialErrors.ForbiddenInvalidRoles
