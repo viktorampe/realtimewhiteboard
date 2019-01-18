@@ -1,0 +1,27 @@
+import { InjectionToken } from '@angular/core';
+
+export const ENVIRONMENT_ICON_MAPPING_TOKEN = new InjectionToken(
+  'environmentIconMapping'
+);
+
+export const ENVIRONMENT_API_TOKEN = new InjectionToken('environmentApiBase');
+
+export const ENVIRONMENT_WEBSITE_TOKEN = new InjectionToken(
+  'environmentWebsiteUrl'
+);
+
+export const ENVIRONMENT_ERROR_MANAGEMENT_FEATURE_TOKEN = new InjectionToken(
+  'environmentErrorManagementFeature'
+);
+
+export const ENVIRONMENT_MESSAGES_FEATURE_TOKEN = new InjectionToken(
+  'environmentMessagesFeature'
+);
+
+export const ENVIRONMENT_ALERTS_FEATURE_TOKEN = new InjectionToken(
+  'environmentAlertsFeature'
+);
+
+export const ENVIRONMENT_SSO_TOKEN = new InjectionToken(
+  'environmentSsoSettings'
+);

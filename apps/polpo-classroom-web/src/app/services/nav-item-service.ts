@@ -159,6 +159,6 @@ export class NavItemService {
   }
 
   private extractPlatformName(platformUrl: string) {
-    return platformUrl.replace('.smartschool.be', '');
+    return platformUrl ? platformUrl.replace('.smartschool.be', '') : '';
   }
 }
