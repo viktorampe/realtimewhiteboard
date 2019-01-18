@@ -9,5 +9,6 @@ export {
   ObjectPathServiceInterface,
   OBJECT_PATH_SERVICE_TOKEN
 } from './lib/collections/object-path.service.interface';
+export * from './lib/forms';
 export { NestedPartial } from './lib/types/nestedpartial';
 export * from './lib/utils.module';
