@@ -17,7 +17,6 @@ import {
 } from './../linked-person/linked-person.actions';
 import { DeleteTasks, LoadTasks } from './../task/task.actions';
 import {
-  AddTeacherStudent,
   DeleteTeacherStudent,
   LinkTeacherStudent,
   LoadTeacherStudents,
@@ -65,21 +64,15 @@ export class TeacherStudentEffects {
               ...teachers.reduce(
                 (acc, teacher) => [
                   ...acc,
-                  new AddLinkedPerson({ person: teacher }),
-                  new AddTeacherStudent({
-                    teacherStudent: {
-                      created: new Date(),
-                      teacherId: teacher.id,
-                      studentId: userId
-                    }
-                  })
+                  new AddLinkedPerson({ person: teacher })
                 ],
                 [] as Action[]
               ),
               // reload all bundles, including those by the new teachers
               new LoadBundles({ userId, force: true }),
               // reload all tasks, including those by the new teachers
-              new LoadTasks({ userId, force: true })
+              new LoadTasks({ userId, force: true }),
+              new LoadTeacherStudents({ userId, force: true })
             ]),
             // emit actions serially
             switchMap((actions: Action[]) => from<Action>(actions))
