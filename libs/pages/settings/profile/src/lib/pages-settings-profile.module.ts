@@ -8,6 +8,7 @@ import { UiModule } from '@campus/ui';
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { AvatarComponent } from './components/avatar/avatar.component';
 import { ProfileFormComponent } from './components/profile-form/profile-form.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 @NgModule({
   imports: [
@@ -19,7 +20,7 @@ import { ProfileFormComponent } from './components/profile-form/profile-form.com
     MatFormFieldModule,
     MatInputModule,
     RouterModule.forChild([
-      { path: '', pathMatch: 'full', component: ProfileFormComponent },
+      { path: '', pathMatch: 'full', component: ProfileComponent },
       {
         path: 'avatar',
         children: [{ path: '', pathMatch: 'full', component: AvatarComponent }],
@@ -32,6 +33,6 @@ import { ProfileFormComponent } from './components/profile-form/profile-form.com
   providers: [
     { provide: FILEREADER_SERVICE_TOKEN, useClass: FileReaderService }
   ],
-  declarations: [AvatarComponent, ProfileFormComponent]
+  declarations: [AvatarComponent, ProfileFormComponent, ProfileComponent]
 })
 export class PagesSettingsProfileModule {}
