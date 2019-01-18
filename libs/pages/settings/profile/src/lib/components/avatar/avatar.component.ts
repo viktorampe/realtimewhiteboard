@@ -72,6 +72,7 @@ export class AvatarComponent implements OnInit {
 
   saveAvatar(): void {
     this.profileViewModel.updateProfile({ avatar: this.croppedImg });
+    this.resetAvatar();
   }
 
   resetAvatar(): void {
