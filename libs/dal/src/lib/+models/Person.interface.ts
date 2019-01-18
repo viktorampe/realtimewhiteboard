@@ -92,4 +92,6 @@ export interface PersonInterface {
   alertQueues?: AlertQueueInterface[];
   userContents?: UserContentInterface[];
   personToggleFeatures?: PersonToggleFeatureInterface[];
+  //add on the api... currently done as teacher.linkedAt = teacherStudent.created;
+  linkedAt?: Date;
 }

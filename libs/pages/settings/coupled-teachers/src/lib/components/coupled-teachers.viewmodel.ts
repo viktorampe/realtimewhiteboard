@@ -99,6 +99,7 @@ export class CoupledTeachersViewModel {
   }
 
   public unlinkPerson(teacherId: number): void {
+    console.log('here');
     this.store.dispatch(
       new TeacherStudentActions.UnlinkTeacherStudent({ teacherId })
     );

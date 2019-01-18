@@ -28,7 +28,6 @@ import { BundleFixture } from './../../+fixtures/Bundle.fixture';
 import { LinkedPersonServiceInterface } from './../../persons/linked-persons.service';
 import { BundlesLoaded } from './../bundle/bundle.actions';
 import {
-  AddTeacherStudent,
   DeleteTeacherStudent,
   LinkTeacherStudent,
   LoadTeacherStudents,
@@ -261,15 +260,12 @@ describe('TeacherStudentsEffects', () => {
 
         const expectedActions$ = hot('-(abcd)', {
           a: new AddLinkedPerson({ person: mockTeacher }),
-          b: new AddTeacherStudent({
-            teacherStudent: {
-              created: DateMock.mockDate,
-              teacherId: mockTeacher.id,
-              studentId: mockCurrentUser.id
-            }
-          }),
-          c: new LoadBundles({ userId: mockCurrentUser.id, force: true }),
-          d: new LoadTasks({ userId: mockCurrentUser.id, force: true })
+          b: new LoadBundles({ userId: mockCurrentUser.id, force: true }),
+          c: new LoadTasks({ userId: mockCurrentUser.id, force: true }),
+          d: new LoadTeacherStudents({
+            userId: mockCurrentUser.id,
+            force: true
+          })
         });
 
         expect(effects.linkTeacher$).toBeObservable(expectedActions$);

@@ -11,7 +11,6 @@ import {
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { ProfileViewModel } from './profile.viewmodel';
-// file.only
 
 describe('ProfileViewModel', () => {
   let profileViewModel: ProfileViewModel;
