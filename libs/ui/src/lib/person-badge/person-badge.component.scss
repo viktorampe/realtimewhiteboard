@@ -1,8 +1,11 @@
 .ui_person-badge {
   display: flex;
+  flex: 1 1 auto;
+
   &--right {
     flex-direction: row-reverse;
     justify-content: flex-start;
+
     .ui_person-badge__display {
       &__name,
       &__subtext {
@@ -11,9 +14,11 @@
       }
     }
   }
+
   &--left {
     flex-direction: row;
     justify-content: flex-start;
+
     .ui_person-badge__display {
       &__name,
       &__subtext {
@@ -22,10 +27,12 @@
       }
     }
   }
+
   &--top {
     justify-content: center;
     align-items: center;
     flex-direction: column-reverse;
+
     .ui_person-badge__display {
       &__name,
       &__subtext {
@@ -35,10 +42,12 @@
       }
     }
   }
+
   &--bottom {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+
     .ui_person-badge__display {
       &__name,
       &__subtext {
@@ -48,10 +57,13 @@
       }
     }
   }
+
   &__badge,
   img {
     border-radius: 50%;
+    flex: 1 0 auto;
   }
+
   &__display {
     &__name {
       display: flex;
@@ -59,6 +71,7 @@
       font-weight: 700;
       padding: 3px 10px;
     }
+
     &__subtext {
       display: flex;
       font-size: 14px;

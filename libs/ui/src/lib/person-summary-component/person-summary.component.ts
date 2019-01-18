@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { BadgePersonInterface } from '../person-badge/person-badge.component';
 
 @Component({
   selector: 'campus-person-summary',
@@ -6,7 +7,6 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./person-summary.component.scss']
 })
 export class PersonSummaryComponent {
-  @Input() name = '';
-  @Input() imageUrl = 'assets/images/avatar.png';
+  @Input() person: BadgePersonInterface;
   @Input() connectionTypeIcon = '';
 }
