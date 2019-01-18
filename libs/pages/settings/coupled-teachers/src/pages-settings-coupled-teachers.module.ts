@@ -4,9 +4,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule, MatInputModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { UiModule } from '@campus/ui';
-import { CoupledTeachersComponent } from './coupled-teachers/components/coupled-teachers.component';
-import { CoupledTeachersResolver } from './coupled-teachers/components/coupled-teachers.resolver';
-import { PagesSettingsCoupledTeachersRoutingModule } from './coupled-teachers/pages-settings-coupled-teachers-routing.module';
+import { CoupledTeachersComponent } from './lib/coupled-teachers/components/coupled-teachers.component';
+import { CoupledTeachersResolver } from './coupled-teachers.resolver';
+import { PagesSettingsCoupledTeachersRoutingModule } from './lib/coupled-teachers/pages-settings-coupled-teachers-routing.module';
+
 @NgModule({
   declarations: [CoupledTeachersComponent],
   imports: [

@@ -7,10 +7,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PersonAlreadyLinkedValidator } from '@campus/shared';
 import { UiModule } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
-import { CoupledTeachersViewModel } from '../coupled-teachers.viewmodel';
-import { MockCoupledTeachersViewModel } from '../coupled-teachers.viewmodel.mock';
 import { PagesSettingsCoupledTeachersRoutingModule } from '../pages-settings-coupled-teachers-routing.module';
 import { CoupledTeachersComponent } from './coupled-teachers.component';
+import { CoupledTeachersViewModel } from './coupled-teachers.viewmodel';
+import { MockCoupledTeachersViewModel } from './coupled-teachers.viewmodel.mock';
 
 describe('CoupledTeachersComponent', () => {
   let component: CoupledTeachersComponent;
@@ -60,4 +60,6 @@ describe('CoupledTeachersComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  //todo add tests
 });

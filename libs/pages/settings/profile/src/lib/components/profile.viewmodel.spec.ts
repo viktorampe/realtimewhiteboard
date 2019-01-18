@@ -10,7 +10,6 @@ import {
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from 'jasmine-marbles';
 import { ProfileViewModel } from './profile.viewmodel';
-// file.only
 
 let profileViewModel: ProfileViewModel;
 let store: Store<DalState>;
