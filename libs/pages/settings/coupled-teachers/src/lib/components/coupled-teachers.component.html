@@ -54,10 +54,7 @@
     >
       <div description
         >{{ coupledTeacher.teacherInfo.publicKey }} | Toegevoegd op:
-        {{ getDateString(coupledTeacher) }}
-        <span *ngIf="teacher.favoriteAreas.length">
-          {{ getFavoriteAreasString(coupledTeacher) }}</span
-        ></div
+        {{ coupledTeacher.linkedAt | HumanDateTime }}
       >
       <campus-button campusRoundedCorners (click)="onUnlink(coupledTeacher)"
         >Leerkracht ontkoppelen</campus-button

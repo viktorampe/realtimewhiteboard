@@ -65,37 +65,4 @@ export class CoupledTeachersComponent implements OnInit {
       teacherCode: this.teacherCode
     });
   }
-
-  getFavoriteAreasString(person: PersonInterface): string {
-    if (person.favoriteAreas) {
-      let returnString = '';
-      for (let i = 0; i < person.favoriteAreas.length; i++) {
-        returnString += person.favoriteAreas[i].name;
-        if (i < person.favoriteAreas.length - 1) {
-          returnString += ', ';
-        }
-      }
-      return returnString;
-    }
-    return '';
-  }
-
-  getDateString(person: PersonInterface): string {
-    if (person.linkedAt) {
-      return (
-        person.linkedAt.getDate() +
-        '-' +
-        ('0' + (person.linkedAt.getMonth() + 1)).slice(-2) +
-        '-' +
-        ('0' + person.linkedAt.getFullYear()).slice(-2) +
-        ' ' +
-        ('0' + person.linkedAt.getHours()).slice(-2) +
-        ':' +
-        ('0' + person.linkedAt.getMinutes()).slice(-2) +
-        ':' +
-        ('0' + person.linkedAt.getSeconds()).slice(-2)
-      );
-    }
-    return '';
-  }
 }
