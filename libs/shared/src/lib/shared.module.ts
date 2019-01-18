@@ -24,12 +24,14 @@ import {
   EnvironmentErrorManagementFeatureInterface,
   EnvironmentIconMappingInterface,
   EnvironmentMessagesFeatureInterface,
+  EnvironmentSsoInterface,
   EnvironmentWebsiteInterface,
   ENVIRONMENT_ALERTS_FEATURE_TOKEN,
   ENVIRONMENT_API_TOKEN,
   ENVIRONMENT_ERROR_MANAGEMENT_FEATURE_TOKEN,
   ENVIRONMENT_ICON_MAPPING_TOKEN,
   ENVIRONMENT_MESSAGES_FEATURE_TOKEN,
+  ENVIRONMENT_SSO_TOKEN,
   ENVIRONMENT_WEBSITE_TOKEN
 } from './interfaces';
 import { ScormExerciseService } from './scorm/scorm-exercise.service';
@@ -87,7 +89,8 @@ export class SharedModule {
     environmentErrorManagementFeature: EnvironmentErrorManagementFeatureInterface,
     environmentIconMapping: EnvironmentIconMappingInterface,
     environmentWebsite: EnvironmentWebsiteInterface,
-    environmentApi: EnvironmentApiInterface
+    environmentApi: EnvironmentApiInterface,
+    environmentSsoSettings: EnvironmentSsoInterface
   ): ModuleWithProviders {
     return {
       ngModule: SharedModule,
@@ -115,6 +118,10 @@ export class SharedModule {
         {
           provide: ENVIRONMENT_API_TOKEN,
           useValue: environmentApi
+        },
+        {
+          provide: ENVIRONMENT_SSO_TOKEN,
+          useValue: environmentSsoSettings
         }
       ]
     };
