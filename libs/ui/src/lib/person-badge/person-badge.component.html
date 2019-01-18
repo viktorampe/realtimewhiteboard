@@ -5,7 +5,7 @@
     >{{ person | personInitials }}
     <img *ngIf="person.avatar" [src]="person.avatar" alt="avatar" />
   </div>
-  <div class="ui_person-badge__display">
+  <div class="ui_person-badge__display" *ngIf="showText">
     <div class="ui_person-badge__display__name">{{ person.displayName }}</div>
     <div class="ui_person-badge__display__subtext">{{ subText }}</div>
   </div>

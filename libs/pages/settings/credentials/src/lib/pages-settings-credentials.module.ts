@@ -10,7 +10,7 @@ import { CredentialsResolver } from './components/credentials.resolver';
       {
         path: '',
         pathMatch: 'full',
-        component: null, //TODO CredentialsComponent
+        component: null, //CredentialsComponent
         resolve: { isResolved: CredentialsResolver }
       }
     ])
