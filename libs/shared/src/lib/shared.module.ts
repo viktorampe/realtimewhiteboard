@@ -20,14 +20,18 @@ import { OpenStaticContentService } from './content/open-static-content.service'
 import { HeaderComponent } from './header/header.component';
 import {
   EnvironmentAlertsFeatureInterface,
+  EnvironmentApiInterface,
   EnvironmentErrorManagementFeatureInterface,
+  EnvironmentIconMappingInterface,
   EnvironmentMessagesFeatureInterface,
+  EnvironmentSsoInterface,
   EnvironmentWebsiteInterface,
   ENVIRONMENT_ALERTS_FEATURE_TOKEN,
-  ENVIRONMENT_API_BASE_TOKEN,
+  ENVIRONMENT_API_TOKEN,
   ENVIRONMENT_ERROR_MANAGEMENT_FEATURE_TOKEN,
   ENVIRONMENT_ICON_MAPPING_TOKEN,
   ENVIRONMENT_MESSAGES_FEATURE_TOKEN,
+  ENVIRONMENT_SSO_TOKEN,
   ENVIRONMENT_WEBSITE_TOKEN
 } from './interfaces';
 import { ScormExerciseService } from './scorm/scorm-exercise.service';
@@ -83,9 +87,10 @@ export class SharedModule {
     environmentAlertsFeature: EnvironmentAlertsFeatureInterface,
     environmentMessagesFeature: EnvironmentMessagesFeatureInterface,
     environmentErrorManagementFeature: EnvironmentErrorManagementFeatureInterface,
-    environmentIconMapping: { [key: string]: string },
+    environmentIconMapping: EnvironmentIconMappingInterface,
     environmentWebsite: EnvironmentWebsiteInterface,
-    environmentApiBase: string
+    environmentApi: EnvironmentApiInterface,
+    environmentSsoSettings: EnvironmentSsoInterface
   ): ModuleWithProviders {
     return {
       ngModule: SharedModule,
@@ -111,8 +116,12 @@ export class SharedModule {
           useValue: environmentIconMapping
         },
         {
-          provide: ENVIRONMENT_API_BASE_TOKEN,
-          useValue: environmentApiBase
+          provide: ENVIRONMENT_API_TOKEN,
+          useValue: environmentApi
+        },
+        {
+          provide: ENVIRONMENT_SSO_TOKEN,
+          useValue: environmentSsoSettings
         }
       ]
     };

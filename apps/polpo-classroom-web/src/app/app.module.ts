@@ -40,11 +40,12 @@ configureBufferSize(150);
       environment.features.errorManagement,
       environment.iconMapping,
       environment.website,
-      environment.APIBase
+      environment.api,
+      environment.sso
     ),
     BrowserAnimationsModule,
     NxModule.forRoot(),
-    DalModule.forRoot({ apiBaseUrl: environment.APIBase }),
+    DalModule.forRoot({ apiBaseUrl: environment.api.APIBase }),
     GuardsModule,
     StoreModule.forRoot(
       { app: appReducer },

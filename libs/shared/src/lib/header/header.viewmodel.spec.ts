@@ -17,16 +17,15 @@ import {
 import { NotificationItemInterface } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
-import {
-  EnvironmentAlertsFeatureInterface,
-  ENVIRONMENT_ALERTS_FEATURE_TOKEN
-} from '../interfaces/environment.features.interfaces';
+import { ENVIRONMENT_ALERTS_FEATURE_TOKEN } from '../interfaces/environment.injectiontokens';
+import { EnvironmentAlertsFeatureInterface } from '../interfaces/environment.interfaces';
 import { HeaderResolver } from './header.resolver';
 import { HeaderViewModel } from './header.viewmodel';
 
 let environmentAlertsFeature: EnvironmentAlertsFeatureInterface = {
   enabled: false,
-  hasAppBarDropDown: false
+  hasAppBarDropDown: false,
+  appBarPollingInterval: 3000
 };
 let headerViewModel: HeaderViewModel;
 
@@ -114,7 +113,8 @@ describe('headerViewModel', () => {
         beforeAll(() => {
           environmentAlertsFeature = {
             enabled: enabled,
-            hasAppBarDropDown: hasAppBarDropDown
+            hasAppBarDropDown: hasAppBarDropDown,
+            appBarPollingInterval: 3000
           };
         });
         it(`should be ${expectedResult}`, () => {

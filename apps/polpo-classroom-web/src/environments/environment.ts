@@ -1,8 +1,10 @@
+import { EnvironmentInterface } from '@campus/shared';
+
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build ---prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-export const environment = {
+export const environment: EnvironmentInterface = {
   production: false,
   iconMapping: {
     // -> learning areas
@@ -221,7 +223,9 @@ export const environment = {
   website: {
     url: 'http://www.polpo.localhost'
   },
-  APIBase: 'http://api.polpo.localhost:3000',
+  api: {
+    APIBase: 'http://api.polpo.localhost:3000'
+  },
   features: {
     alerts: {
       enabled: true,
@@ -234,6 +238,30 @@ export const environment = {
     },
     errorManagement: {
       managedStatusCodes: [500, 401, 404, 0]
+    }
+  },
+  sso: {
+    facebook: {
+      enabled: true,
+      linkUrl: 'http://api.polpo.localhost/auth/......', //TODO -- needs to be corrected to actual link
+      description: 'Facebook',
+      logoIcon: 'facebook',
+      className: 'button-facebook'
+    },
+    google: {
+      enabled: true,
+      linkUrl: 'http://api.polpo.localhost/auth/......', //TODO -- needs to be corrected to actual link
+      description: 'Google',
+      logoIcon: 'google',
+      className: 'button-google'
+    },
+    smartschool: {
+      enabled: true,
+      linkUrl: 'http://api.polpo.localhost/auth/......', //TODO -- needs to be corrected to actual link
+      description: 'Smartschool',
+      logoIcon: 'smartschool:orange',
+      className: 'button-smartschool',
+      maxNumberAllowed: 3 //TODO What is a realistic limit here?
     }
   }
 };
