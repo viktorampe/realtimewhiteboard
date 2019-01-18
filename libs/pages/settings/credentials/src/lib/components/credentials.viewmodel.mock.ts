@@ -6,7 +6,7 @@ import {
   PersonInterface
 } from '@campus/dal';
 import { ViewModelInterface } from '@campus/testing';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import {
   CredentialsViewModel,
   SingleSignOnProviderInterface
@@ -53,10 +53,4 @@ export class MockCredentialsViewModel
   public useProfilePicture(credential: PassportUserCredentialInterface): void {}
   public linkCredential(provider: SingleSignOnProviderInterface): void {}
   public unlinkCredential(credential: PassportUserCredentialInterface): void {}
-
-  public getProviderLogoFromCredential(
-    credential: PassportUserCredentialInterface
-  ): Observable<string> {
-    return of('');
-  }
 }
