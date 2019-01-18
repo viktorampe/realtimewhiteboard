@@ -3,12 +3,12 @@ import { AbstractControl } from '@angular/forms';
 import {
   DalState,
   getStoreModuleForFeatures,
+  LinkedPersonActions,
   LinkedPersonReducer,
   PersonFixture
 } from '@campus/dal';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
-import { LinkedPersonsLoaded } from '../../../../dal/src/lib/+state/linked-person/linked-person.actions';
 import { PersonAlreadyLinkedValidator } from './person-already-linked.validator';
 
 describe('PersonAlreadyLinkedValidator', () => {
@@ -35,7 +35,7 @@ describe('PersonAlreadyLinkedValidator', () => {
 
   it('should return null if linked person has no teacherInfo', () => {
     store.dispatch(
-      new LinkedPersonsLoaded({
+      new LinkedPersonActions.LinkedPersonsLoaded({
         persons: [new PersonFixture()]
       })
     );
@@ -46,7 +46,7 @@ describe('PersonAlreadyLinkedValidator', () => {
 
   it('should return null if the provided value is not in one of the linked person publicKeys', () => {
     store.dispatch(
-      new LinkedPersonsLoaded({
+      new LinkedPersonActions.LinkedPersonsLoaded({
         persons: [new PersonFixture({ teacherInfo: { publicKey: 'not-foo' } })]
       })
     );
@@ -57,7 +57,7 @@ describe('PersonAlreadyLinkedValidator', () => {
 
   it('should return a validation error if the there is a person with a corresponding publicKey', () => {
     store.dispatch(
-      new LinkedPersonsLoaded({
+      new LinkedPersonActions.LinkedPersonsLoaded({
         persons: [new PersonFixture({ teacherInfo: { publicKey: 'foo' } })]
       })
     );
