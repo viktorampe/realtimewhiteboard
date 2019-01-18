@@ -7,10 +7,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PersonAlreadyLinkedValidator } from '@campus/shared';
 import { UiModule } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
-import { PagesSettingsCoupledTeachersRoutingModule } from '../pages-settings-coupled-teachers-routing.module';
+import { CoupledTeachersViewModel } from '../coupled-teachers.viewmodel';
+import { MockCoupledTeachersViewModel } from '../coupled-teachers.viewmodel.mock';
 import { CoupledTeachersComponent } from './coupled-teachers.component';
-import { CoupledTeachersViewModel } from './coupled-teachers.viewmodel';
-import { MockCoupledTeachersViewModel } from './coupled-teachers.viewmodel.mock';
 
 describe('CoupledTeachersComponent', () => {
   let component: CoupledTeachersComponent;
@@ -25,8 +24,7 @@ describe('CoupledTeachersComponent', () => {
         UiModule,
         MatFormFieldModule,
         BrowserAnimationsModule,
-        MatInputModule,
-        PagesSettingsCoupledTeachersRoutingModule
+        MatInputModule
       ],
       declarations: [CoupledTeachersComponent],
       providers: [
