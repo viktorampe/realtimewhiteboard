@@ -524,7 +524,6 @@ describe('AlertEffects', () => {
 
     describe('when an delete alert actions is dispatched', () => {
       it('should trigger an api call', () => {
-        // TODO: update when response actions are available
         expectInAndOut(
           effects.deleteAlert$,
           deleteAlertAction,
