@@ -40,7 +40,8 @@ configureBufferSize(150);
       environment.features.errorManagement,
       environment.iconMapping,
       environment.website,
-      environment.api
+      environment.api,
+      environment.sso
     ),
     BrowserAnimationsModule,
     NxModule.forRoot(),

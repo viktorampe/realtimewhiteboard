@@ -48,4 +48,5 @@ import { Component, Input } from '@angular/core';
 })
 export class InfoPanelComponent {
   @Input() titleText: string;
+  @Input() icon?: string;
 }

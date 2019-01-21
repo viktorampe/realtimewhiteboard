@@ -1,0 +1,63 @@
+@mixin pages-settings-profile-avatar-theme() {
+  $pages-settings-profile-avatar__upload-bordercolor: $ui-primary-font-color-2 !default;
+  $pages-settings-profile-avatar__upload-bordercolor--hover: $ui-primary-font-color !default;
+  $pages-settings-profile-avatar__avatar-borderradius: 50% !default;
+
+  .pages-settings-profile-avatar {
+    .file-upload {
+      height: 200px;
+      padding: 60px;
+      border: 2px dashed $pages-settings-profile-avatar__upload-bordercolor;
+
+      &:hover,
+      &.hover {
+        border-color: $pages-settings-profile-avatar__upload-bordercolor--hover;
+      }
+
+      img {
+        height: 160px;
+        border: 2px solid $pages-settings-profile-avatar__upload-bordercolor;
+        border-radius: $pages-settings-profile-avatar__avatar-borderradius;
+      }
+    }
+
+    image-cropper {
+      padding: 0;
+    }
+
+    &__result {
+      float: left;
+      text-align: center;
+
+      img {
+        display: block;
+        margin: 0 auto;
+        overflow: hidden;
+        border-radius: $pages-settings-profile-avatar__avatar-borderradius;
+      }
+    }
+
+    &__cropper {
+      margin-left: 220px;
+      max-width: 600px;
+    }
+
+    .warning {
+      display: inline-block;
+      clear: both;
+      padding: 2px 5px;
+      margin-top: 5px;
+      color: $ui-warning-font-color;
+      background-color: $ui-warning-bg-color;
+    }
+
+    &.compact {
+      .pages-settings-profile-avatar {
+        &__cropper {
+          margin: 0;
+          max-width: auto;
+        }
+      }
+    }
+  }
+}

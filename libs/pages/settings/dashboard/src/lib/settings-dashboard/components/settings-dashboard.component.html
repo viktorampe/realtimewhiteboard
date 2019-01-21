@@ -1,5 +1,10 @@
-<div>
-  <campus-page-header [title]="'Mijn profiel'"></campus-page-header>
+<div class="campus-page">
+  <campus-page-header
+    [title]="'Mijn profiel'"
+    [subtitle]="'dashboard'"
+    [iconClass]="'account'"
+  >
+  </campus-page-header>
   <mat-nav-list>
     <div *ngFor="let link of (links$ | async)">
       <campus-button

@@ -1,0 +1,70 @@
+<campus-info-panel [titleText]="'Leerkracht koppelen'" [icon]="'polpo'">
+  <form
+    [formGroup]="coupledTeachersForm"
+    class="pages-settings-coupled-teachers-form"
+    (submit)="onSubmit()"
+  >
+    <mat-form-field>
+      <input
+        matInput
+        type="text"
+        placeholder="Leerkrachtencode"
+        formControlName="teacherCode"
+        #teacherCode
+        required
+      />
+      <mat-error
+        *ngIf="coupledTeachersForm.get('teacherCode').hasError('required')"
+        >Leerkrachtencode is verplicht.</mat-error
+      >
+      <mat-error
+        *ngIf="
+          coupledTeachersForm
+            .get('teacherCode')
+            .hasError('teacherAlreadyCoupled')
+        "
+        >De leerkracht met deze code is reeds gekoppeld.</mat-error
+      >
+      <mat-error *ngIf="(apiErrors$ | async)?.nonExistingTeacherCode"
+        >De opgegeven leerkrachtencode is niet geldig.</mat-error
+      >
+    </mat-form-field>
+    <div class="pages-settings-coupled-teachers-form__actions">
+      <campus-button
+        primary
+        type="submit"
+        [ngClass]="{ 'ui-button--disabled': !coupledTeachersForm.valid }"
+        >Opslaan</campus-button
+      >
+      <campus-button (click)="onReset()">Annuleren</campus-button>
+    </div>
+  </form>
+</campus-info-panel>
+
+<campus-info-panel [titleText]="'Gekoppelde leerkrachten'" [icon]="'polpo'">
+  <ng-container
+    *ngIf="(linkedPersons$ | async) as coupledTeachers; else: noCoupledTeachers"
+  >
+    <ng-container
+      *ngIf="coupledTeachers.length > 0; else: noCoupledTeachers"
+    ></ng-container>
+    <campus-person-summary
+      *ngFor="let coupledTeacher of coupledTeachers"
+      [person]="coupledTeacher"
+    >
+      <div description
+        >{{ coupledTeacher.teacherInfo.publicKey }} | Toegevoegd op:
+        {{ coupledTeacher.linkedAt | humanDateTime }}</div
+      >
+      <campus-button campusRoundedCorners (click)="onUnlink(coupledTeacher)"
+        >Leerkracht ontkoppelen</campus-button
+      >
+    </campus-person-summary>
+  </ng-container>
+  <ng-template #noCoupledTeachers>
+    <p>
+      Om POLPO te gebruiken moet je minstens één leerkracht koppelen aan je
+      profiel.
+    </p>
+  </ng-template>
+</campus-info-panel>

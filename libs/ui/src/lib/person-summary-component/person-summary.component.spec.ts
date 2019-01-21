@@ -2,22 +2,40 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { ButtonComponent } from '../button/button.component';
+import {
+  BadgePersonInterface,
+  PersonBadgeComponent
+} from '../person-badge/person-badge.component';
+import { PersonInitialsPipe } from '../person-badge/pipes/person-initials.pipe';
 import { PersonSummaryComponent } from './person-summary.component';
 
 describe('PersonSummaryComponent', () => {
   let component: PersonSummaryComponent;
   let fixture: ComponentFixture<PersonSummaryComponent>;
+  let mockPerson: BadgePersonInterface;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [PersonSummaryComponent, ButtonComponent],
+      declarations: [
+        PersonSummaryComponent,
+        ButtonComponent,
+        PersonBadgeComponent,
+        PersonInitialsPipe
+      ],
       imports: [MatIconModule]
     }).compileComponents();
   }));
 
   beforeEach(() => {
+    mockPerson = {
+      name: 'mockLastName',
+      displayName: 'mockFirstName mockLastName',
+      firstName: 'mockFirstName'
+    };
+
     fixture = TestBed.createComponent(PersonSummaryComponent);
     component = fixture.componentInstance;
+    component.person = mockPerson;
     fixture.detectChanges();
   });
 
@@ -26,34 +44,33 @@ describe('PersonSummaryComponent', () => {
   });
 
   it('should display correct name', () => {
-    const name = 'testname';
-    component.name = name;
-    fixture.detectChanges();
     const text = fixture.debugElement.query(
       By.css('.ui-person-summary__text__person-name')
     ).nativeElement.textContent;
-    expect(text).toContain(name);
+    expect(text).toContain(mockPerson.name);
   });
 
   it('should display correct image url', () => {
-    const imageUrl = 'https://127.0.0.1/testje.jpg';
-    component.imageUrl = imageUrl;
+    const mockAvatar = 'base64-encode-image';
+    component.person.avatar = mockAvatar;
     fixture.detectChanges();
-    const image = fixture.debugElement.query(
-      By.css('.ui-person-summary__images__picture')
+    const image = fixture.debugElement
+      .query(By.css('.ui-person-summary__images__picture'))
+      .query(By.css('img'));
+    expect(image.nativeElement.attributes.src.textContent).toContain(
+      mockAvatar
     );
-    expect(image.nativeElement.attributes.src.textContent).toContain(imageUrl);
   });
 
   it('should display correct icon url', () => {
-    const imageUrl = 'https://127.0.0.1/testje.jpg';
-    component.connectionTypeIcon = imageUrl;
+    const icon = 'mockIcon';
+    component.connectionTypeIcon = icon;
     fixture.detectChanges();
     const image = fixture.debugElement.query(
       By.css('.ui-person-summary__images__connection-type-icon')
     );
     expect(
       image.nativeElement.attributes['ng-reflect-svg-icon'].textContent
-    ).toContain(imageUrl);
+    ).toContain(icon);
   });
 });

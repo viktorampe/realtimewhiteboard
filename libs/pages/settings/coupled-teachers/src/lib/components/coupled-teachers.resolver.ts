@@ -5,7 +5,9 @@ import {
   DalState,
   LinkedPersonActions,
   LinkedPersonQueries,
-  StateResolver
+  StateResolver,
+  TeacherStudentActions,
+  TeacherStudentQueries
 } from '@campus/dal';
 import { Action, Selector, Store } from '@ngrx/store';
 
@@ -23,11 +25,14 @@ export class CoupledTeachersResolver extends StateResolver {
     return [
       new LinkedPersonActions.LoadLinkedPersons({
         userId: this.authService.userId
+      }),
+      new TeacherStudentActions.LoadTeacherStudents({
+        userId: this.authService.userId
       })
     ];
   }
 
   protected getResolvedQueries(): Selector<object, boolean>[] {
-    return [LinkedPersonQueries.getLoaded];
+    return [LinkedPersonQueries.getLoaded, TeacherStudentQueries.getLoaded];
   }
 }
