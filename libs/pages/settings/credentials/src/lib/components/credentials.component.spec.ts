@@ -79,4 +79,14 @@ describe('CredentialsComponent', () => {
     fixture.detectChanges();
     expect(viewmodel.useProfilePicture).toHaveBeenCalledWith(cred1);
   });
+
+  it('should get the correct person object from credential', () => {
+    const expected = {
+      avatar: 'lol3',
+      displayName: 'lol1',
+      firstName: 'lol',
+      name: 'loller'
+    };
+    expect(component.getPersonForBadge(cred1)).toEqual(expected);
+  });
 });

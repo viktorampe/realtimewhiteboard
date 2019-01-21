@@ -90,14 +90,12 @@ export class CredentialsComponent implements OnInit {
   getPersonForBadge(
     credential: PassportUserCredentialInterface
   ): BadgePersonInterface {
-    console.log(credential.profile);
     const ob = {
       displayName: credential.profile.name.displayName,
       name: credential.profile.name.familyName,
       firstName: credential.profile.name.givenName,
       avatar: credential.profile.avatar
     };
-    console.log(ob);
     return ob;
   }
 }
