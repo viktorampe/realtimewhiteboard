@@ -7,7 +7,7 @@ import {
   CredentialsViewModel,
   SingleSignOnProviderInterface
 } from './credentials.viewmodel';
-
+//file.only
 export enum CredentialErrors {
   ForbiddenMixedRoles = 'ForbiddenError: mixed_roles',
   ForbiddenInvalidRoles = 'ForbiddenError: invalid_roles',
@@ -90,12 +90,14 @@ export class CredentialsComponent implements OnInit {
   getPersonForBadge(
     credential: PassportUserCredentialInterface
   ): BadgePersonInterface {
-    console.log(credential);
-    return {
-      displayName: credential.profile.displayName,
+    console.log(credential.profile);
+    const ob = {
+      displayName: credential.profile.name.displayName,
       name: credential.profile.name.familyName,
-      firstName: credential.profile.givenName,
+      firstName: credential.profile.name.givenName,
       avatar: credential.profile.avatar
     };
+    console.log(ob);
+    return ob;
   }
 }

@@ -4,9 +4,9 @@ export class CredentialFixture implements PassportUserCredentialInterface {
   // defaults
   profile = {
     basisrol: 'Leerling',
+    avatar: 'lol3',
     name: {
-      avatar: '',
-      displayName: '',
+      displayName: 'lol1',
       givenName: 'lol',
       familyName: 'loller'
     }
