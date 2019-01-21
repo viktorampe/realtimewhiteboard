@@ -10,7 +10,7 @@ import {
 import { EnvironmentSsoInterface, ENVIRONMENT_SSO_TOKEN } from '@campus/shared';
 import { select, Store } from '@ngrx/store';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { map, withLatestFrom } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -62,29 +62,42 @@ export class CredentialsViewModel {
 
   private setPresentationStreams(): void {
     this.currentUser$ = this.store.pipe(select(UserQueries.getCurrentUser));
-    this.credentials$ = this.store.pipe(select(CredentialQueries.getAll));
-    this.singleSignOnProviders$ = this.ssoFromEnvironment$.pipe(
-      withLatestFrom(this.credentials$),
-      map(([ssoEnv, credentials]) =>
-        this.convertToSingleSignOnProviders(ssoEnv).filter(
+    this.credentials$ = combineLatest(
+      this.ssoFromEnvironment$,
+      this.store.pipe(select(CredentialQueries.getAll))
+    ).pipe(
+      map(([ssoEnv, credentials]) => {
+        const editedCredentials: PassportUserCredentialInterface[] = [];
+        for (let i = 0; i < credentials.length; i++) {
+          editedCredentials.push({
+            useAvatar: credentials[i].useAvatar,
+            profile: credentials[i].profile,
+            provider: credentials[i].provider,
+            authScheme: credentials[i].authScheme,
+            externalId: credentials[i].externalId,
+            created: credentials[i].created,
+            modified: credentials[i].modified,
+            id: credentials[i].id,
+            userId: credentials[i].userId,
+            user: credentials[i].user,
+            providerLogo: ssoEnv[credentials[i].provider].logoIcon
+          });
+        }
+        return editedCredentials;
+      })
+    );
+
+    this.singleSignOnProviders$ = combineLatest(
+      this.ssoFromEnvironment$,
+      this.credentials$
+    ).pipe(
+      map(([ssoEnv, credentials]) => {
+        return this.convertToSingleSignOnProviders(ssoEnv).filter(
           provider =>
             credentials.filter(
               credential => credential.provider === provider.name
             ).length < provider.maxNumberAllowed
-        )
-      )
-    );
-    const combo = combineLatest(this.singleSignOnProviders$, this.credentials$);
-    this.credentials$ = combo.pipe(
-      map(([sso, creds]) => {
-        creds.forEach(cred => {
-          sso.map(ssoItem => {
-            if (ssoItem.name === cred.provider) {
-              cred.providerLogo = ssoItem.logoIcon;
-            }
-          });
-        });
-        return creds;
+        );
       })
     );
   }
@@ -108,6 +121,11 @@ export class CredentialsViewModel {
       [] as SingleSignOnProviderInterface[]
     );
   }
+}
+
+interface MappedObservables {
+  credentials$: Observable<PassportUserCredentialInterface[]>;
+  singleSignOnProviders$: Observable<SingleSignOnProviderInterface[]>;
 }
 
 export interface SingleSignOnProviderInterface {

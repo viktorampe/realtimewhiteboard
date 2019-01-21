@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { PassportUserCredentialInterface } from '@campus/dal';
 import { BadgePersonInterface } from '@campus/ui';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import {
   CredentialsViewModel,
   SingleSignOnProviderInterface
@@ -20,8 +22,9 @@ export enum CredentialErrors {
 export class CredentialsComponent implements OnInit {
   credentials$ = this.viewModel.credentials$;
   ssoLinks$ = this.viewModel.singleSignOnProviders$;
+  currentUser$ = this.viewModel.currentUser$;
 
-  message = '';
+  message$: Observable<string>;
 
   constructor(private viewModel: CredentialsViewModel) {
     this.credentials$ = this.viewModel.credentials$;
@@ -30,18 +33,30 @@ export class CredentialsComponent implements OnInit {
 
   ngOnInit() {
     const error = this.getParameterByName('error');
-    this.message = this.getErrorMessage(error);
+    this.message$ = this.getErrorMessage(error);
   }
 
-  getErrorMessage(error: string): string {
-    switch (error) {
-      case CredentialErrors.ForbiddenMixedRoles:
-      case CredentialErrors.ForbiddenInvalidRoles:
-        return 'Je kan enkel een Smartschool-LEERLING profiel koppelen aan dit POLPO-profiel.';
-      case CredentialErrors.AlreadyLinked:
-        return 'Dit account werd al aan een ander profiel gekoppeld.';
-    }
-    return '';
+  getErrorMessage(error: string): Observable<string> {
+    return this.currentUser$.pipe(
+      map(user => {
+        let userTypeString = 'Smartschool-LEERKRACHT';
+        if (user.type && user.type === 'student') {
+          userTypeString = 'Smartschool-LEERLING';
+        }
+        switch (error) {
+          case CredentialErrors.ForbiddenMixedRoles:
+          case CredentialErrors.ForbiddenInvalidRoles:
+            return (
+              'Je kan enkel een ' +
+              userTypeString +
+              ' profiel koppelen aan dit POLPO-profiel.'
+            );
+          case CredentialErrors.AlreadyLinked:
+            return 'Dit account werd al aan een ander profiel gekoppeld.';
+        }
+        return '';
+      })
+    );
   }
 
   getParameterByName(name: string, url?: string): string {
@@ -75,6 +90,7 @@ export class CredentialsComponent implements OnInit {
   getPersonForBadge(
     credential: PassportUserCredentialInterface
   ): BadgePersonInterface {
+    console.log(credential);
     return {
       displayName: credential.profile.displayName,
       name: credential.profile.name.familyName,
