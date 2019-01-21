@@ -6,7 +6,7 @@ import { Component, Input } from '@angular/core';
                        [person]="'Tom Mertens'"
                        [align]="'left'"
                        [size]="'medium'"></campus-person-badge>
- * 
+ *
  * @export
  * @class PersonBadgeComponent
  */
@@ -21,6 +21,7 @@ export class PersonBadgeComponent {
   @Input() person: BadgePersonInterface;
   @Input() subText: string;
   @Input() showBorder = true;
+  @Input() showText = true;
 }
 
 export interface BadgePersonInterface {

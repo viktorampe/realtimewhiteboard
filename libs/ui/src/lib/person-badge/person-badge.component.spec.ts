@@ -92,4 +92,16 @@ describe('PersonBadgeComponent', () => {
       .nativeElement.textContent;
     expect(badge.trim()).toBe('T');
   });
+
+  it('should hide the text', () => {
+    component.person = {
+      displayName: 'Tom Mertens'
+    };
+    component.showText = false;
+    fixture.detectChanges();
+    const badge = fixture.debugElement.query(
+      By.css('.ui_person-badge__display')
+    );
+    expect(badge).toBeNull();
+  });
 });
