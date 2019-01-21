@@ -3,7 +3,7 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import { select } from '@ngrx/store';
 import { DataPersistence } from '@nrwl/nx';
 import { undo } from 'ngrx-undo';
-import { interval, Observable, Subject } from 'rxjs';
+import { interval, Observable, Subject, throwError } from 'rxjs';
 import { map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { AlertActions } from '.';
 import { DalActions } from '..';
@@ -149,13 +149,17 @@ export class AlertsEffects {
     AlertsActionTypes.DeleteAlert,
     {
       run: (action: AlertActions.DeleteAlert, state: DalState) => {
-        return this.alertService.delete(action.payload.id).pipe(
-          map(res => {
-            return '';
-          })
-        );
+        return this.alertService
+          .deleteAlert(action.payload.personId, action.payload.id)
+          .pipe(
+            map(res => {
+              // TODO: dispatch succesful response action
+              return throwError('Not implemented yet!');
+            })
+          );
       },
       onError: (action: AlertActions.DeleteAlert, error) => {
+        // TODO: dispatch error response action
         console.error('Error deleting alert: ', error);
       }
     }
