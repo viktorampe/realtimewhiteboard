@@ -166,38 +166,7 @@
         }
       }
     },
-    "pages-alerts": {
-      "root": "libs/pages/alerts",
-      "sourceRoot": "libs/pages/alerts/src",
-      "projectType": "library",
-      "prefix": "campus",
-      "architect": {
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "libs/pages/alerts/tsconfig.lib.json",
-              "libs/pages/alerts/tsconfig.spec.json",
-              "libs/pages/alerts/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/builders:jest",
-          "options": {
-            "jestConfig": "libs/pages/alerts/jest.config.js",
-            "tsConfig": "libs/pages/alerts/tsconfig.spec.json",
-            "setupFile": "libs/pages/alerts/src/test-setup.ts"
-          },
-          "configurations": {
-            "travis": {
-              "maxWorkers": 2
-            }
-          }
-        }
-      }
-    },
+
     "pages-logout": {
       "root": "libs/pages/logout",
       "sourceRoot": "libs/pages/logout/src",
