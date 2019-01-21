@@ -53,23 +53,6 @@ describe('CredentialsComponent', () => {
     expect(component.getParameterByName('error', '?error')).toBe('');
   });
 
-  /*it('should return correct error message', () => {
-    expect(component.getErrorMessage('error')).toBe('');
-    expect(component.getErrorMessage(CredentialErrors.AlreadyLinked)).toBe(
-      'Dit account werd al aan een ander profiel gekoppeld.'
-    );
-    expect(
-      component.getErrorMessage(CredentialErrors.ForbiddenMixedRoles)
-    ).toBe(
-      'Je kan enkel een Smartschool-LEERLING profiel koppelen aan dit POLPO-profiel.'
-    );
-    expect(
-      component.getErrorMessage(CredentialErrors.ForbiddenInvalidRoles)
-    ).toBe(
-      'Je kan enkel een Smartschool-LEERLING profiel koppelen aan dit POLPO-profiel.'
-    );
-  });*/
-
   it('should call viewmodel when adding credential', () => {
     const sso: SingleSignOnProviderInterface = {
       name: '',
