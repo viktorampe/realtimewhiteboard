@@ -69,6 +69,11 @@ const routes: Routes = [
             data: { breadcrumbText: 'Inloggegevens' }
           },
           {
+            path: 'alerts',
+            loadChildren:
+              '@campus/pages/settings/alerts#PagesSettingsAlertsModule'
+          },
+          {
             path: 'coupled-teachers',
             loadChildren:
               '@campus/pages/settings/coupled-teachers#PagesSettingsCoupledTeachersModule',
