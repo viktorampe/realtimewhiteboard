@@ -13,6 +13,7 @@ import { ActionSuccessful } from './../dal.actions';
 import {
   AlertsLoaded,
   AlertsLoadError,
+  DeleteAlert,
   LoadAlerts,
   LoadNewAlerts,
   NewAlertsLoaded,
@@ -97,7 +98,8 @@ describe('AlertEffects', () => {
               alertId: number | number[],
               read?: boolean,
               intended?: boolean
-            ) => {}
+            ) => {},
+            deleteAlert: (alertId: number) => {}
           }
         },
         AlertsEffects,
@@ -500,6 +502,62 @@ describe('AlertEffects', () => {
         setAlertByFilterAction,
         setAlertReadAction
       );
+    });
+  });
+
+  describe('deleteAlert$', () => {
+    const deleteAlertAction = new DeleteAlert({
+      personId: mockData.userId,
+      alertId: mockData.alertId
+    });
+    // TODO: update when response actions are available
+    const deleteAlertSuccessAction = null;
+    const deleteAlertFailureAction = null;
+    const apiErrorAction = null;
+
+    beforeAll(() => {
+      usedState = initialState;
+    });
+    beforeEach(() => {
+      mockServiceMethodReturnValue('deleteAlert', {});
+    });
+
+    describe('when an delete alert actions is dispatched', () => {
+      it('should trigger an api call', () => {
+        // TODO: update when response actions are available
+        expectInAndOut(
+          effects.deleteAlert$,
+          deleteAlertAction,
+          deleteAlertSuccessAction
+        );
+      });
+
+      it('should dispatch a success action when succesful', () => {
+        expectInAndOut(
+          effects.deleteAlert$,
+          deleteAlertAction,
+          deleteAlertSuccessAction
+        );
+      });
+
+      it('should dispatch an error action when failed', () => {
+        mockServiceMethodReturnValue('deleteAlert', { error: {} });
+        expectInAndOut(
+          effects.deleteAlert$,
+          deleteAlertAction,
+          deleteAlertFailureAction
+        );
+      });
+    });
+
+    describe('when the api fails', () => {
+      beforeEach(() => {
+        mockServiceMethodError('deleteAlert', 'Oops, something went wrong!');
+      });
+    });
+
+    it('should dispatch an action', () => {
+      expectInAndOut(effects.deleteAlert$, deleteAlertAction, apiErrorAction);
     });
   });
 });

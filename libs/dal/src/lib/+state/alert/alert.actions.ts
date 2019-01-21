@@ -154,7 +154,7 @@ export class UpdateAlerts implements Action {
 export class DeleteAlert implements Action {
   readonly type = AlertsActionTypes.DeleteAlert;
 
-  constructor(public payload: { personId: number; id: number }) {}
+  constructor(public payload: { personId: number; alertId: number }) {}
 }
 
 export class DeleteAlerts implements Action {

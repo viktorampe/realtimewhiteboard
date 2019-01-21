@@ -27,7 +27,14 @@ import {
 import { getAlertIdsByFilter } from './alert.selectors';
 
 const MINIMUM_POLLING_INTERVAL = 3000;
-
+interface ErrorResponse {
+  error: {
+    code: string;
+    statusCode: number;
+    name: string;
+    message: string;
+  };
+}
 @Injectable()
 export class AlertsEffects {
   // Timer singleton
@@ -150,17 +157,24 @@ export class AlertsEffects {
     {
       run: (action: AlertActions.DeleteAlert, state: DalState) => {
         return this.alertService
-          .deleteAlert(action.payload.personId, action.payload.id)
+          .deleteAlert(action.payload.personId, action.payload.alertId)
           .pipe(
-            map(res => {
-              // TODO: dispatch succesful response action
-              return throwError('Not implemented yet!');
+            map((res: ErrorResponse | any) => {
+              // check if the alert is successfully deleted
+              if (res.error) {
+                // TODO: dispatch error response action
+                throwError('Not implemented yet');
+              } else {
+                // TODO: dispatch succesful response action
+                throwError('Not implemented yet');
+              }
             })
           );
       },
       onError: (action: AlertActions.DeleteAlert, error) => {
+        // Something else went wrong
         // TODO: dispatch error response action
-        console.error('Error deleting alert: ', error);
+        throwError('Not implemented yet');
       }
     }
   );
