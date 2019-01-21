@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PassportUserCredentialInterface } from '@campus/dal';
+import { BadgePersonInterface } from '@campus/ui';
 import {
   CredentialsViewModel,
   SingleSignOnProviderInterface
@@ -23,7 +24,6 @@ export class CredentialsComponent implements OnInit {
   message = '';
 
   constructor(private viewModel: CredentialsViewModel) {
-    console.log(this.viewModel);
     this.credentials$ = this.viewModel.credentials$;
     this.ssoLinks$ = this.viewModel.singleSignOnProviders$;
   }
@@ -70,5 +70,16 @@ export class CredentialsComponent implements OnInit {
 
   addCredential(credential: SingleSignOnProviderInterface) {
     this.viewModel.linkCredential(credential);
+  }
+
+  getPersonForBadge(
+    credential: PassportUserCredentialInterface
+  ): BadgePersonInterface {
+    return {
+      displayName: credential.profile.displayName,
+      name: credential.profile.name.familyName,
+      firstName: credential.profile.givenName,
+      avatar: credential.profile.avatar
+    };
   }
 }
