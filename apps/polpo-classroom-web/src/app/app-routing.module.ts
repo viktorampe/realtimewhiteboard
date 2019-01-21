@@ -71,7 +71,8 @@ const routes: Routes = [
           {
             path: 'alerts',
             loadChildren:
-              '@campus/pages/settings/alerts#PagesSettingsAlertsModule'
+              '@campus/pages/settings/alerts#PagesSettingsAlertsModule',
+            data: { breadcrumbText: 'Meldingen' }
           },
           {
             path: 'coupled-teachers',

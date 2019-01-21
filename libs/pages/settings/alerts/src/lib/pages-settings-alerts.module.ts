@@ -7,7 +7,9 @@ import { AlertsComponent } from './components/alerts/alerts.component';
   imports: [
     CommonModule,
 
-    RouterModule.forChild([{ path: '', pathMatch: 'full', component: null }])
+    RouterModule.forChild([
+      { path: '', pathMatch: 'full', component: AlertsComponent }
+    ])
   ],
   declarations: [AlertsComponent]
 })
