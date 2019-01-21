@@ -21,6 +21,10 @@ export class MockPersonApi {
   ): Observable<object> {
     return of({});
   }
+
+  destroyByIdAlertQueues(userId: number, alertId: number): Observable<any> {
+    return of({});
+  }
 }
 
 describe('AlertsService', () => {
@@ -117,6 +121,19 @@ describe('AlertsService', () => {
       mockAlertIdArray,
       true,
       true
+    );
+  });
+
+  it('should call the api to delete an alert', () => {
+    personApi.destroyByIdAlertQueues = jest.fn();
+    const mockUserId = 123;
+    const mockAlertId = 456;
+
+    alertService.deleteAlert(mockUserId, mockAlertId);
+
+    expect(personApi.destroyByIdAlertQueues).toHaveBeenCalledWith(
+      mockUserId,
+      mockAlertId
     );
   });
 });
