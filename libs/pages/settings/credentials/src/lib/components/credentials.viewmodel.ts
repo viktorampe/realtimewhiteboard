@@ -67,23 +67,10 @@ export class CredentialsViewModel {
       this.store.pipe(select(CredentialQueries.getAll))
     ).pipe(
       map(([ssoEnv, credentials]) => {
-        const editedCredentials: PassportUserCredentialInterface[] = [];
-        for (let i = 0; i < credentials.length; i++) {
-          editedCredentials.push({
-            useAvatar: credentials[i].useAvatar,
-            profile: credentials[i].profile,
-            provider: credentials[i].provider,
-            authScheme: credentials[i].authScheme,
-            externalId: credentials[i].externalId,
-            created: credentials[i].created,
-            modified: credentials[i].modified,
-            id: credentials[i].id,
-            userId: credentials[i].userId,
-            user: credentials[i].user,
-            providerLogo: ssoEnv[credentials[i].provider].logoIcon
-          });
-        }
-        return editedCredentials;
+        return credentials.map(cred => ({
+          ...cred,
+          providerLogo: ssoEnv[cred.provider].logoIcon
+        }));
       })
     );
 
