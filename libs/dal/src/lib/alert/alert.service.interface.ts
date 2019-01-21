@@ -15,4 +15,6 @@ export interface AlertServiceInterface {
     read?: boolean,
     intended?: boolean
   );
+
+  deleteAlert(userId: number, alertId: number): Observable<any>;
 }

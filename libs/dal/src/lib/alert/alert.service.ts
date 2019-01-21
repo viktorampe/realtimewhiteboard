@@ -49,4 +49,8 @@ export class AlertService implements AlertServiceInterface {
   ): Observable<object> {
     return this.personApi.setAlertRead(userId, alertId, read, intended);
   }
+
+  deleteAlert(userId: number, alertId: number): Observable<any> {
+    return this.personApi.destroyByIdAlertQueues(userId, alertId);
+  }
 }
