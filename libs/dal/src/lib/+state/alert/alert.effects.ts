@@ -5,6 +5,7 @@ import { DataPersistence } from '@nrwl/nx';
 import { undo } from 'ngrx-undo';
 import { interval, Observable, Subject } from 'rxjs';
 import { map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
+import { AlertActions } from '.';
 import { DalActions } from '..';
 import {
   AlertServiceInterface,
@@ -139,6 +140,23 @@ export class AlertsEffects {
       undoAction: (action: SetReadAlert, state: any) => {
         // TODO: show error message to user
         return undo(action);
+      }
+    }
+  );
+
+  @Effect()
+  deleteAlert$ = this.dataPersistence.pessimisticUpdate(
+    AlertsActionTypes.DeleteAlert,
+    {
+      run: (action: AlertActions.DeleteAlert, state: DalState) => {
+        return this.alertService.delete(action.payload.id).pipe(
+          map(res => {
+            return '';
+          })
+        );
+      },
+      onError: (action: AlertActions.DeleteAlert, error) => {
+        console.error('Error deleting alert: ', error);
       }
     }
   );
