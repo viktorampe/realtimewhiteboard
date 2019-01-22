@@ -25,4 +25,5 @@ export class NotificationDropdownItemComponent {
   @Input() notificationText: string;
   @Input() notificationDate: Date;
   @Input() accented: boolean;
+  @Input() notification = true;
 }

@@ -8,10 +8,19 @@
   text-decoration: none;
   display: flex;
   flex-direction: row;
+  justify-items: center;
 
   &__body {
     display: flex;
+    flex-direction: row-reverse;
+    flex: 1 1 auto;
+    align-content: flex-start;
+  }
+
+  &__message {
+    display: flex;
     flex-direction: row;
+    flex: 1 1 auto;
   }
 
   &__icon,
@@ -30,17 +39,106 @@
 
   &__date {
     font-size: 80%;
-    float: right;
-    display: block;
-    padding: 1px 5px;
+    margin: 5px;
     white-space: nowrap;
+    align-self: center;
+  }
+
+  &__title {
+    margin: 5px;
+    align-self: center;
+  }
+
+  &__text {
+    margin: 5px;
+    align-self: center;
   }
 
   &__buttons {
     align-self: flex-end;
   }
 
+
+
   &--accent &__text {
+    font-style: italic;
+
+    >span {
+      padding-left: 10px;
+      white-space: nowrap;
+
+      span {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.ui-notification-dropdown-item.ui-notification-dropdown-item--notification {
+  padding: 10px;
+  position: relative;
+  text-decoration: none;
+  display: flex;
+  flex-direction: row;
+  justify-items: center;
+
+  .ui-notification-dropdown-item__body {
+    display: flex;
+    flex-direction: row;
+    flex: 1 1 auto;
+    align-content: flex-start;
+  }
+
+  .ui-notification-dropdown-item__message {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+
+  .ui-notification-dropdown-item__icon,
+  .ui-notification-dropdown-item__badge {
+    // position: absolute;
+    // left: 8px;
+    // top: 10px;
+  }
+
+  .ui-notification-dropdown-item__icon {
+    padding: 5px;
+    width: 34px;
+    height: 34px;
+    border-radius: 4px;
+  }
+
+  .ui-notification-dropdown-item__date {
+    font-size: 80%;
+    margin: 5px;
+    white-space: nowrap;
+    align-self: center;
+  }
+
+  .ui-notification-dropdown-item__title {
+    margin: 5px;
+    align-self: center;
+    justify-self: flex-start;
+    width: 100%;
+  }
+
+  .ui-notification-dropdown-item__text {
+    margin: 5px;
+    align-self: center;
+    justify-self: flex-start;
+    width: 100%;
+  }
+
+  .ui-notification-dropdown-item__buttons {
+    display: none;
+  }
+
+
+
+  .ui-notification-dropdown-item--accent .ui-notification-dropdown-item__text {
     font-style: italic;
 
     >span {

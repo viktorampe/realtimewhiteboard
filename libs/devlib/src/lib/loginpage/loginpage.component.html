@@ -72,16 +72,34 @@
 <div><a [routerLink]="['/tasks']"
      routerLinkActive="router-link-active">go to tasks page</a></div>
 
-
-<campus-notification-dropdown-item [person]="{
-                                   name: 'person name',
-                                   displayName: 'string',
-                                   firstName: 'string'
-                                   }"
+<br />
+<campus-notification-dropdown-item style="border: 1px black solid; margin: 5px;"
+                                   [notification]="false"
+                                   [person]="{
+                                              name: 'person name',
+                                              displayName: 'string',
+                                              firstName: 'string'
+                                              }"
                                    [titleText]="'Dit is een titel'"
                                    [notificationText]="'blah'"
-                                   [notificationDate]="'2019-01-20' | date:'yyyy-MM-dd'">
+                                   [notificationDate]="'2019-01-02 14:09:01' | date:'yyyy-MM-dd'">
 
   <campus-button campusRoundedCorners>button1</campus-button>
   <campus-button campusRoundedCorners>button2</campus-button>
 </campus-notification-dropdown-item>
+<br />
+
+<div style="width:350px; border: 1px black solid; margin: 5px;">
+  <campus-notification-dropdown-item [person]="{
+                                                name: 'person name',
+                                                displayName: 'string',
+                                                firstName: 'string'
+                                                }"
+                                     [titleText]="'Dit is een titel'"
+                                     [notificationText]="'blah'"
+                                     [notificationDate]="'2019-01-20' | date:'yyyy-MM-dd'">
+
+    <campus-button campusRoundedCorners>button1</campus-button>
+    <campus-button campusRoundedCorners>button2</campus-button>
+  </campus-notification-dropdown-item>
+</div>
