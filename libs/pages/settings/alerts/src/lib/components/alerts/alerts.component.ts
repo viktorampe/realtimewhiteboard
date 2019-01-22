@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertQueueInterface } from '@campus/dal';
 import { Observable } from 'rxjs';
+import { MockAlertsViewModel } from './alerts.viewmodel.mock';
 
 @Component({
   selector: 'campus-alerts',
@@ -11,13 +12,17 @@ export class AlertsComponent implements OnInit {
   pageTitle = 'Meldingen';
   pageIcon = 'notifications';
 
-  alerts$: Observable<AlertQueueInterface[]>;
+  alerts$: Observable<AlertQueueInterface[]> = this.viewModel.alerts$;
 
-  constructor() {}
+  constructor(private viewModel: MockAlertsViewModel) {}
 
   ngOnInit() {}
 
-  markAsRead(alertId: number) {}
+  setAlertAsRead(alertId: number) {
+    this.viewModel.setAlertAsRead(alertId);
+  }
 
-  deleteAlert(alertId: number) {}
+  removeAlert(alertId: number) {
+    this.viewModel.removeAlert(alertId);
+  }
 }
