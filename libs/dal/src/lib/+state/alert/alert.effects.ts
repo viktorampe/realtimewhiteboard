@@ -7,7 +7,6 @@ import { interval, Observable, Subject, throwError } from 'rxjs';
 import { map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { AlertActions } from '.';
 import { DalActions } from '..';
-import { ErrorResponse } from '../../alert';
 import {
   AlertServiceInterface,
   ALERT_SERVICE_TOKEN
@@ -153,20 +152,14 @@ export class AlertsEffects {
         return this.alertService
           .deleteAlert(action.payload.personId, action.payload.id)
           .pipe(
-            map((res: ErrorResponse | any) => {
-              // check if the alert is successfully deleted
-              if (res.error) {
-                // TODO: dispatch error response action
-                throwError('Not implemented yet');
-              } else {
-                // TODO: dispatch succesful response action
-                throwError('Not implemented yet');
-              }
+            map(res => {
+              // TODO: dispatch succesful response action
+              throwError('Not implemented yet');
             })
           );
       },
       onError: (action: AlertActions.DeleteAlert, error) => {
-        // Something else went wrong
+        // Something else went wrong: could be a 401 or 404 ...
         // TODO: dispatch error response action
         throwError('Not implemented yet');
       }
