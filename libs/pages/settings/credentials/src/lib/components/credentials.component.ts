@@ -33,8 +33,10 @@ export class CredentialsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const error = this.route.snapshot.queryParamMap.get('error');
-    this.message$ = this.getErrorTypeMessage(error);
+    if (this.route.snapshot) {
+      const error = this.route.snapshot.queryParamMap.get('error');
+      this.message$ = this.getErrorTypeMessage(error);
+    }
   }
 
   getErrorTypeMessage(error: string): Observable<string> {
