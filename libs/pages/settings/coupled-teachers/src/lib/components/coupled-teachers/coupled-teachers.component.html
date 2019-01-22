@@ -4,7 +4,7 @@
 >
   <form
     [formGroup]="coupledTeachersForm"
-    class="pages-settings-coupled-teachers-form"
+    class="pages-settings-coupled-teachers__form"
     (submit)="onSubmit()"
   >
     <mat-form-field>
@@ -32,7 +32,7 @@
         >De opgegeven leerkrachtencode is niet geldig.</mat-error
       >
     </mat-form-field>
-    <div class="pages-settings-coupled-teachers-form__actions">
+    <div class="pages-settings-coupled-teachers__form__actions">
       <campus-button
         primary
         type="submit"
@@ -57,7 +57,7 @@
     <campus-person-summary
       *ngFor="let coupledTeacher of coupledTeachers"
       [person]="coupledTeacher"
-      class="info-panel__coupled-teachers__person-summary"
+      class="pages-settings-coupled-teachers__person-summary"
     >
       <div description
         >{{ coupledTeacher.teacherInfo.publicKey }} | Toegevoegd op:

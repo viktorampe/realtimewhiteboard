@@ -1,7 +1,9 @@
-.info-panel {
-  &__coupled-teachers {
-    &__person-summary {
-      margin: 20px;
-    }
+.pages-settings-coupled-teachers {
+  &__form {
+    display: flex;
+    flex-direction: column;
+  }
+  &__person-summary {
+    margin: 20px;
   }
 }

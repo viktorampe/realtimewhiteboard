@@ -95,6 +95,9 @@ body {
 @import 'libs/pages/reports/src/lib/pages-reports.theme';
 @include pages-reports-theme();
 
+@import 'libs/pages/settings/coupled-teachers/src/lib/pages-settings-coupled-teachers.theme.scss';
+@include pages-settings-coupled-teachers-theme();
+
 @import 'libs/pages/settings/profile/src/lib/pages-settings-profile.theme';
 @include pages-settings-profile-theme();
 
