@@ -1,15 +1,13 @@
-import { AlertsViewModel } from './components/alerts.viewmodel';
-
-import { AlertsComponent } from './components/alerts.component';
-
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
+import { AlertsComponent } from './components/alerts.component';
+import { AlertsResolver } from './components/alerts.resolver';
 
 const routes: Routes = [
   {
     path: '',
     component: AlertsComponent,
-    resolve: { isResolved: AlertsViewModel }
+    resolve: { isResolved: AlertsResolver }
   }
 ];
 
