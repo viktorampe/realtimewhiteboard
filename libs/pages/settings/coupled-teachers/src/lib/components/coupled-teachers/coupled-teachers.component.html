@@ -1,4 +1,7 @@
-<campus-info-panel [titleText]="'Leerkracht koppelen'" [icon]="'polpo'">
+<campus-info-panel
+  [titleText]="'Leerkracht koppelen'"
+  [icon]="'coupled-teachers'"
+>
   <form
     [formGroup]="coupledTeachersForm"
     class="pages-settings-coupled-teachers-form"
@@ -41,7 +44,10 @@
   </form>
 </campus-info-panel>
 
-<campus-info-panel [titleText]="'Gekoppelde leerkrachten'" [icon]="'polpo'">
+<campus-info-panel
+  [titleText]="'Gekoppelde leerkrachten'"
+  [icon]="'coupled-teachers'"
+>
   <ng-container
     *ngIf="(linkedPersons$ | async) as coupledTeachers; else: noCoupledTeachers"
   >
@@ -51,6 +57,7 @@
     <campus-person-summary
       *ngFor="let coupledTeacher of coupledTeachers"
       [person]="coupledTeacher"
+      class="info-panel__coupled-teachers__person-summary"
     >
       <div description
         >{{ coupledTeacher.teacherInfo.publicKey }} | Toegevoegd op:
