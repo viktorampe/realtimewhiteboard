@@ -1,16 +1,59 @@
-import { Resolve } from '@angular/router';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { take } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
+import {
+  AlertActions,
+  AlertQueries,
+  AlertQueueInterface,
+  AuthServiceInterface,
+  AUTH_SERVICE_TOKEN,
+  DalState
+} from '@campus/dal';
+import { select, Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AlertsViewModel implements Resolve<boolean> {
-  constructor() {}
+export class AlertsViewModel {
+  public alerts$: Observable<AlertQueueInterface[]>;
 
-  resolve(): Observable<boolean> {
-    // TODO update
-    return new BehaviorSubject<boolean>(true).pipe(take(1));
+  constructor(
+    private store: Store<DalState>,
+    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
+  ) {
+    this.setPresentationStreams();
+  }
+
+  public setAlertAsRead(alertId: number): void {
+    this.store.dispatch(
+      new AlertActions.SetReadAlert({
+        alertIds: alertId,
+        personId: this.authService.userId,
+        read: true,
+        intended: true
+      })
+    );
+  }
+
+  public setAlertAsUnread(alertId: number): void {
+    this.store.dispatch(
+      new AlertActions.SetReadAlert({
+        alertIds: alertId,
+        personId: this.authService.userId,
+        read: false,
+        intended: true
+      })
+    );
+  }
+
+  public removeAlert(alertId: number): void {
+    this.store.dispatch(
+      new AlertActions.DeleteAlert({
+        id: alertId
+      })
+    );
+  }
+
+  private setPresentationStreams(): void {
+    this.alerts$ = this.store.pipe(select(AlertQueries.getAll));
   }
 }
