@@ -2,6 +2,7 @@
   $pages-profile-form-background-color: $ui-tertiary-bg-color !default;
   $pages-profile-profile-form-mat-form-field-margin-bottom: $pages-settings-form-button-padding-bottom !default;
   $pages-profile-profile-form-padding: $pages-settings-form-padding !default;
+  $pages-profile-profile-form-actions-padding: $pages-settings-form-actions-padding !default;
 
   .pages-settings-profile-form {
     background-color: $pages-profile-form-background-color;
@@ -9,9 +10,12 @@
       margin-bottom: $pages-profile-profile-form-mat-form-field-margin-bottom;
     }
     padding: $pages-profile-profile-form-padding;
-    .ui-button {
-      padding: $ui-button-padding-top $ui-button-padding-right
-        $ui-button-padding-bottom $ui-button-padding-left;
+    &__actions {
+      padding: $pages-profile-profile-form-actions-padding;
+      .ui-button {
+        padding: $ui-button-padding-top $ui-button-padding-right
+          $ui-button-padding-bottom $ui-button-padding-left;
+      }
     }
   }
 }

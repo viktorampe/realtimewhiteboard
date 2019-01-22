@@ -1,14 +1,18 @@
 @mixin pages-settings-coupled-teachers-form-theme() {
   $pages-profile-form-background-color: $ui-tertiary-bg-color !default;
   $pages-profile-form-padding: $pages-settings-form-padding !default;
+  $pages-profile-form-actions-padding: $pages-settings-form-actions-padding !default;
 
   .pages-settings-coupled-teachers {
     &__form {
       padding: $pages-profile-form-padding;
       background-color: $pages-profile-form-background-color;
-      .ui-button {
-        padding: $ui-button-padding-top $ui-button-padding-right
-          $ui-button-padding-bottom $ui-button-padding-left;
+      &__actions {
+        padding: $pages-profile-form-actions-padding;
+        .ui-button {
+          padding: $ui-button-padding-top $ui-button-padding-right
+            $ui-button-padding-bottom $ui-button-padding-left;
+        }
       }
     }
   }
