@@ -60,7 +60,7 @@
       class="pages-settings-coupled-teachers__person-summary"
     >
       <div description
-        >{{ coupledTeacher.teacherInfo.publicKey }} | Toegevoegd op:
+        >Code: {{ coupledTeacher.teacherInfo.publicKey }} | Toegevoegd op:
         {{ coupledTeacher.linkedAt | humanDateTime }}</div
       >
       <campus-button campusRoundedCorners (click)="onUnlink(coupledTeacher)"
