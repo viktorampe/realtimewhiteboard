@@ -1,1 +1,11 @@
-<p> alerts works! </p>
+<campus-info-panel [titleText]="pageTitle" [icon]="pageIcon">
+  <ng-template #noAlerts>Geen meldingen.</ng-template>
+
+  <ng-container *ngIf="(alerts$ | async) as alerts">
+    <ng-container *ngIf="alerts.length > 0; else: noAlerts">
+      <campus-notification-dropdown-item
+        *ngFor="let alert of alerts"
+      ></campus-notification-dropdown-item>
+    </ng-container>
+  </ng-container>
+</campus-info-panel>
