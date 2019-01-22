@@ -3,16 +3,22 @@
 }
 
 .ui-notification-dropdown-item {
-  display: block;
-  padding: 10px 10px 10px 60px;
+  padding: 10px;
   position: relative;
   text-decoration: none;
+  display: flex;
+  flex-direction: row;
+
+  &__body {
+    display: flex;
+    flex-direction: row;
+  }
 
   &__icon,
   &__badge {
-    position: absolute;
-    left: 8px;
-    top: 10px;
+    // position: absolute;
+    // left: 8px;
+    // top: 10px;
   }
 
   &__icon {
@@ -30,10 +36,14 @@
     white-space: nowrap;
   }
 
+  &__buttons {
+    align-self: flex-end;
+  }
+
   &--accent &__text {
     font-style: italic;
 
-    > span {
+    >span {
       padding-left: 10px;
       white-space: nowrap;
 
