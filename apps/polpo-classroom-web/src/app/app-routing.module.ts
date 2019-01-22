@@ -42,11 +42,6 @@ const routes: Routes = [
         loadChildren: '@campus/pages/logout#PagesLogoutModule'
       },
       {
-        path: 'alerts',
-        loadChildren: '@campus/pages/alerts#PagesAlertsModule',
-        data: { breadcrumbText: 'Meldingen' }
-      },
-      {
         path: 'settings',
         data: { breadcrumbText: 'Instellingen' },
         children: [
@@ -67,6 +62,12 @@ const routes: Routes = [
             loadChildren:
               '@campus/pages/settings/credentials#PagesSettingsCredentialsModule',
             data: { breadcrumbText: 'Inloggegevens' }
+          },
+          {
+            path: 'alerts',
+            loadChildren:
+              '@campus/pages/settings/alerts#PagesSettingsAlertsModule',
+            data: { breadcrumbText: 'Meldingen' }
           },
           {
             path: 'coupled-teachers',
