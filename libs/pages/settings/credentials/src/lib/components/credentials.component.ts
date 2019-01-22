@@ -7,7 +7,7 @@ import {
   CredentialsViewModel,
   SingleSignOnProviderInterface
 } from './credentials.viewmodel';
-//file.only
+
 export enum CredentialErrors {
   ForbiddenMixedRoles = 'ForbiddenError: mixed_roles',
   ForbiddenInvalidRoles = 'ForbiddenError: invalid_roles',
@@ -26,10 +26,7 @@ export class CredentialsComponent implements OnInit {
 
   message$: Observable<string>;
 
-  constructor(private viewModel: CredentialsViewModel) {
-    this.credentials$ = this.viewModel.credentials$;
-    this.ssoLinks$ = this.viewModel.singleSignOnProviders$;
-  }
+  constructor(private viewModel: CredentialsViewModel) {}
 
   ngOnInit() {
     const error = this.getParameterByName('error');
