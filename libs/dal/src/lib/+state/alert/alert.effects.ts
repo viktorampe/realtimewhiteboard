@@ -7,6 +7,7 @@ import { interval, Observable, Subject, throwError } from 'rxjs';
 import { map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { AlertActions } from '.';
 import { DalActions } from '..';
+import { ErrorResponse } from '../../alert';
 import {
   AlertServiceInterface,
   ALERT_SERVICE_TOKEN
@@ -27,14 +28,7 @@ import {
 import { getAlertIdsByFilter } from './alert.selectors';
 
 const MINIMUM_POLLING_INTERVAL = 3000;
-interface ErrorResponse {
-  error: {
-    code: string;
-    statusCode: number;
-    name: string;
-    message: string;
-  };
-}
+
 @Injectable()
 export class AlertsEffects {
   // Timer singleton
@@ -157,7 +151,7 @@ export class AlertsEffects {
     {
       run: (action: AlertActions.DeleteAlert, state: DalState) => {
         return this.alertService
-          .deleteAlert(action.payload.personId, action.payload.alertId)
+          .deleteAlert(action.payload.personId, action.payload.id)
           .pipe(
             map((res: ErrorResponse | any) => {
               // check if the alert is successfully deleted

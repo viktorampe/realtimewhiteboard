@@ -3,6 +3,20 @@ import { AlertQueueInterface } from '@campus/dal';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Observable } from 'rxjs';
 import { AlertServiceInterface } from './alert.service.interface';
+/**
+ * Response from the API when the requested action failed.
+ *
+ * @export
+ * @interface ErrorResponse
+ */
+export interface ErrorResponse {
+  error: {
+    code: string;
+    statusCode: number;
+    name: string;
+    message: string;
+  };
+}
 
 @Injectable({
   providedIn: 'root'

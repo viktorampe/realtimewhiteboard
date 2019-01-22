@@ -99,7 +99,7 @@ describe('AlertEffects', () => {
               read?: boolean,
               intended?: boolean
             ) => {},
-            deleteAlert: (alertId: number) => {}
+            deleteAlert: (userId: number, alertId: number) => {}
           }
         },
         AlertsEffects,
@@ -507,8 +507,8 @@ describe('AlertEffects', () => {
 
   describe('deleteAlert$', () => {
     const deleteAlertAction = new DeleteAlert({
-      personId: mockData.userId,
-      alertId: mockData.alertId
+      id: mockData.alertId,
+      personId: mockData.userId
     });
     // TODO: update when response actions are available
     const deleteAlertSuccessAction = null;
