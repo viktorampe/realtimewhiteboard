@@ -110,11 +110,6 @@ export class CredentialsViewModel {
   }
 }
 
-interface MappedObservables {
-  credentials$: Observable<PassportUserCredentialInterface[]>;
-  singleSignOnProviders$: Observable<SingleSignOnProviderInterface[]>;
-}
-
 export interface SingleSignOnProviderInterface {
   name: string;
   description: string;

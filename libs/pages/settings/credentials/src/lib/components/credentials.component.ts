@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { PassportUserCredentialInterface } from '@campus/dal';
 import { BadgePersonInterface } from '@campus/ui';
 import { Observable } from 'rxjs';
@@ -26,14 +27,17 @@ export class CredentialsComponent implements OnInit {
 
   message$: Observable<string>;
 
-  constructor(private viewModel: CredentialsViewModel) {}
+  constructor(
+    private viewModel: CredentialsViewModel,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
-    const error = this.getParameterByName('error');
-    this.message$ = this.getErrorMessage(error);
+    const error = this.route.snapshot.queryParamMap.get('error');
+    this.message$ = this.getErrorTypeMessage(error);
   }
 
-  getErrorMessage(error: string): Observable<string> {
+  getErrorTypeMessage(error: string): Observable<string> {
     return this.currentUser$.pipe(
       map(user => {
         let userTypeString = 'Smartschool-LEERKRACHT';
@@ -56,22 +60,6 @@ export class CredentialsComponent implements OnInit {
     );
   }
 
-  getParameterByName(name: string, url?: string): string {
-    if (!url) {
-      url = window.location.href;
-    }
-    name = name.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
-    const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
-    const results = regex.exec(url);
-    if (!results) {
-      return null;
-    }
-    if (!results[2]) {
-      return '';
-    }
-    return decodeURIComponent(results[2].replace(/\+/g, ' '));
-  }
-
   decoupleCredential(credential: PassportUserCredentialInterface) {
     this.viewModel.unlinkCredential(credential);
   }
@@ -88,11 +76,17 @@ export class CredentialsComponent implements OnInit {
     credential: PassportUserCredentialInterface
   ): BadgePersonInterface {
     const ob = {
-      displayName: credential.profile.name.displayName,
-      name: credential.profile.name.familyName,
-      firstName: credential.profile.name.givenName,
-      avatar: credential.profile.avatar
+      displayName: '',
+      name: '',
+      firstName: '',
+      avatar: ''
     };
+    if (credential.profile && credential.profile.name) {
+      ob.displayName = credential.profile.name.displayName;
+      ob.name = credential.profile.name.familyName;
+      ob.firstName = credential.profile.name.givenName;
+      ob.avatar = credential.profile.avatar;
+    }
     return ob;
   }
 }

@@ -13,4 +13,9 @@
   &__text {
     flex: 1 1 auto;
   }
+
+  &__buttons {
+    display: flex;
+    flex-wrap: wrap;
+  }
 }
