@@ -7,6 +7,10 @@
     class="pages-settings-coupled-teachers__form"
     (submit)="onSubmit()"
   >
+    <label for="teacherCode"
+      >Vraag je leerkracht naar de juist code om jullie accounts te
+      koppelen</label
+    >
     <mat-form-field>
       <input
         matInput
@@ -35,7 +39,7 @@
     <div class="pages-settings-coupled-teachers__form__actions">
       <campus-button
         primary
-        type="submit"
+        (click)="onSubmit()"
         [ngClass]="{ 'ui-button--disabled': !coupledTeachersForm.valid }"
         >Opslaan</campus-button
       >
