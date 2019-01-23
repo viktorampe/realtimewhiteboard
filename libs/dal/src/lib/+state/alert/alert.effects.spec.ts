@@ -24,7 +24,7 @@ import {
 } from './alert.actions';
 import { AlertsEffects } from './alert.effects';
 import { initialState, reducer, State as AlertState } from './alert.reducer';
-
+// file.only
 describe('AlertEffects', () => {
   let actions: Observable<any>;
   let effects: AlertsEffects;
@@ -515,48 +515,43 @@ describe('AlertEffects', () => {
     const deleteAlertFailureAction = null;
     const apiErrorAction = null;
 
+    const deleteAlertUndoAction = undo(deleteAlertAction);
+
     beforeAll(() => {
-      usedState = initialState;
+      usedState = usedState = {
+        ...initialState,
+        loaded: true,
+        ids: [42],
+        entities: {
+          42: new AlertFixture({ id: 42 })
+        }
+      };
     });
     beforeEach(() => {
       mockServiceMethodReturnValue('deleteAlert', {});
     });
 
-    describe('when an delete alert actions is dispatched', () => {
-      it('should trigger an api call', () => {
+    describe('when deletion is successful', () => {
+      it('should dispatch a success action', () => {
         expectInAndOut(
           effects.deleteAlert$,
           deleteAlertAction,
           deleteAlertSuccessAction
-        );
-      });
-
-      it('should dispatch a success action when succesful', () => {
-        expectInAndOut(
-          effects.deleteAlert$,
-          deleteAlertAction,
-          deleteAlertSuccessAction
-        );
-      });
-
-      it('should dispatch an error action when failed', () => {
-        mockServiceMethodReturnValue('deleteAlert', { error: {} });
-        expectInAndOut(
-          effects.deleteAlert$,
-          deleteAlertAction,
-          deleteAlertFailureAction
         );
       });
     });
 
-    describe('when the api fails', () => {
+    describe('when there is an error', () => {
       beforeEach(() => {
         mockServiceMethodError('deleteAlert', 'Oops, something went wrong!');
       });
-    });
-
-    it('should dispatch an action', () => {
-      expectInAndOut(effects.deleteAlert$, deleteAlertAction, apiErrorAction);
+      it('should dispatch an undo action', () => {
+        expectInAndOut(
+          effects.deleteAlert$,
+          deleteAlertAction,
+          deleteAlertUndoAction
+        );
+      });
     });
   });
 });
