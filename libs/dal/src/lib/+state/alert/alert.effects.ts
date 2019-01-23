@@ -145,7 +145,7 @@ export class AlertsEffects {
   );
 
   @Effect()
-  deleteAlert$ = this.dataPersistence.pessimisticUpdate(
+  deleteAlert$ = this.dataPersistence.optimisticUpdate(
     AlertsActionTypes.DeleteAlert,
     {
       run: (action: AlertActions.DeleteAlert, state: DalState) => {
@@ -158,10 +158,11 @@ export class AlertsEffects {
             })
           );
       },
-      onError: (action: AlertActions.DeleteAlert, error) => {
-        // Something else went wrong: could be a 401 or 404 ...
+      undoAction: (action: AlertActions.DeleteAlert, error: any) => {
+        // Something went wrong: could be a 401 or 404 ...
         // TODO: dispatch error response action
         throwError('Not implemented yet');
+        return undo(action);
       }
     }
   );
