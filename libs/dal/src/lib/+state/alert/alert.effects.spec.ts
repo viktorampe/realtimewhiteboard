@@ -513,7 +513,6 @@ describe('AlertEffects', () => {
     // TODO: update when response actions are available
     const deleteAlertSuccessAction = null;
     const deleteAlertFailureAction = null;
-    const apiErrorAction = null;
 
     const deleteAlertUndoAction = undo(deleteAlertAction);
 
