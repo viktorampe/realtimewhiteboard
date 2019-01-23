@@ -24,7 +24,7 @@ import {
 } from './alert.actions';
 import { AlertsEffects } from './alert.effects';
 import { initialState, reducer, State as AlertState } from './alert.reducer';
-// file.only
+
 describe('AlertEffects', () => {
   let actions: Observable<any>;
   let effects: AlertsEffects;
