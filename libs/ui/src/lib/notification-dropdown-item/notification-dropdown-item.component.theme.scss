@@ -1,23 +1,34 @@
 @mixin ui-notification-dropdown-item() {
-  $ui-notification-dropdown-item_icon-color: $ui-tertiary-font-color-2 !default;
-  $ui-notification-dropdown-item_icon-bg-color: $ui-tertiary-bg-color-2 !default;
+  // color palette
+  $ui-notification-dropdown-item_main-color: $ui-tertiary-font-color-2 !default;
+  $ui-notification-dropdown-item_accent-color: $ui-tertiary-bg-color-2 !default;
   $ui-notification-dropdown-item-color: $ui-primary-font-color !default;
-  $ui-notification-dropdown-item_title-color: $ui-tertiary-font-color-2 !default;
+
+  // regular
+  $ui-notification-dropdown-item_bg-color: unset;
+  $ui-notification-dropdown-item_icon-color: $ui-notification-dropdown-item_main-color;
+  $ui-notification-dropdown-item_icon-bg-color: $ui-notification-dropdown-item_accent-color;
+  $ui-notification-dropdown-item_title-color: $ui-notification-dropdown-item_main-color;
+  $ui-notification-dropdown-item_date-color: $ui-notification-dropdown-item_main-color;
+  $ui-notification-dropdown-item_date-bg-color: $ui-notification-dropdown-item_accent-color;
+  $ui-notification-dropdown-item--unread_border-color: $ui-notification-dropdown-item_accent-color;
+
+  // accented
+  $ui-notification-dropdown-item--accented_bg-color: $ui-notification-dropdown-item_main-color;
+  $ui-notification-dropdown-item--accented_icon-color: $ui-notification-dropdown-item_accent-color;
+  $ui-notification-dropdown-item--accented_icon-bg-color: $ui-notification-dropdown-item_main-color;
+  $ui-notification-dropdown-item--accented_title-color: $ui-notification-dropdown-item_accent-color;
+  $ui-notification-dropdown-item--accented_date-color: $ui-notification-dropdown-item_accent-color;
+  $ui-notification-dropdown-item--accented_date-bg-color: $ui-notification-dropdown-item_main-color;
+  $ui-notification-dropdown-item--accented--unread_border-color: $ui-notification-dropdown-item_accent-color;
 
   .ui-notification-dropdown-item {
-    border-left: solid 3px transparent;
+    border-left: solid 5px transparent;
     color: $ui-notification-dropdown-item-color;
-
-    &--accent {
-      background-color: $ui-notification-dropdown-item_icon-color;
-    }
-
-    &--accent &__icon {
-      background-color: $ui-notification-dropdown-item_title-color;
-    }
+    background-color: $ui-notification-dropdown-item_bg-color;
 
     &--unread {
-      border-left: solid 3px $ui-notification-dropdown_item-title-color;
+      border-left: solid 5px $ui-notification-dropdown-item--unread_border-color
     }
 
     &__icon {
@@ -26,13 +37,27 @@
     }
 
     &__date {
-      color: $ui-notification-dropdown-item_icon-color;
-      background-color: $ui-notification-dropdown-item_icon-bg-color;
+      color: $ui-notification-dropdown-item_date-color;
+      background-color: $ui-notification-dropdown-item_date-bg-color
     }
 
     &__title {
       font-weight: bold;
       color: $ui-notification-dropdown-item_title-color;
+    }
+
+    //accented
+    &--accent {
+      background-color: $ui-notification-dropdown-item--accented_bg-color;
+
+      .ui-notification-dropdown-item__title {
+        color: $ui-notification-dropdown-item--accented_title-color;
+      }
+
+      &.ui-notification-dropdown-item--unread {
+        border-left: solid 5px $ui-notification-dropdown-item--accented--unread_border-color;
+      }
+
     }
   }
 }
