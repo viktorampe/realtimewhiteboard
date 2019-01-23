@@ -3,21 +3,20 @@
 <ng-container *ngIf="(route$ | async) as route">
   <h2 style="color:#E75480">PARAMS IN THIS ROUTE:</h2>
   <ul>
-    <li style="color:#E75480"
-        *ngFor="let routeParam of route">{{
+    <li style="color:#E75480" *ngFor="let routeParam of route">{{
       routeParam
-      }}</li>
+    }}</li>
   </ul>
 </ng-container>
 
-<campus-dropdown-menu-item header="test description"
-                           image="assets/images/icon-smartschool.png"
-                           internalLink="test"
-                           title="text title"></campus-dropdown-menu-item>
+<campus-dropdown-menu-item
+  header="test description"
+  image="assets/images/icon-smartschool.png"
+  internalLink="test"
+  title="text title"
+></campus-dropdown-menu-item>
 
-<campus-page-bar>
-  <div class="divider"></div>
-</campus-page-bar>
+<campus-page-bar> <div class="divider"></div> </campus-page-bar>
 
 <div class="login_page_component">
   <div [hidden]="loginPageviewModel.isLoggedIn()">
@@ -31,18 +30,24 @@
     </div>
 
     <div class="login_form">
-      <input placeholder="username"
-             [(ngModel)]="loginPageviewModel.name"
-             type="text" />
-      <input placeholder="password"
-             [(ngModel)]="loginPageviewModel.password"
-             type="password" />
-      <button (click)="
+      <input
+        placeholder="username"
+        [(ngModel)]="loginPageviewModel.name"
+        type="text"
+      />
+      <input
+        placeholder="password"
+        [(ngModel)]="loginPageviewModel.password"
+        type="password"
+      />
+      <button
+        (click)="
           loginPageviewModel.login(
             loginPageviewModel.name,
             loginPageviewModel.password
           )
-        ">
+        "
+      >
         login
       </button>
     </div>
@@ -58,7 +63,11 @@
 <button (click)="getCurrentUser()">fetch current user</button>
 <div>{{ currentUser | async | json }}</div>
 
-<div><button (click)="updateStudentContentStatus()">update student content status</button></div>
+<div
+  ><button (click)="updateStudentContentStatus()"
+    >update student content status</button
+  ></div
+>
 
 <div><button (click)="updateAlert()">update alert</button></div>
 
@@ -67,113 +76,118 @@
   <div>{{ response | async | json }}</div>
 </div>
 
-<div><a [routerLink]="['/bundles']"
-     routerLinkActive="router-link-active">go to bundle page</a></div>
-<div><a [routerLink]="['/tasks']"
-     routerLinkActive="router-link-active">go to tasks page</a></div>
+<div
+  ><a [routerLink]="['/bundles']" routerLinkActive="router-link-active"
+    >go to bundle page</a
+  ></div
+>
+<div
+  ><a [routerLink]="['/tasks']" routerLinkActive="router-link-active"
+    >go to tasks page</a
+  ></div
+>
 
+<br />
+<div>variant for alerts page</div>
+<div style="border: 1px black solid; margin: 5px;">
+  <campus-notification-dropdown-item
+    [accented]="false"
+    [read]="false"
+    [notification]="false"
+    [icon]="'educontent'"
+    [titleText]="'Dit is een titel'"
+    [notificationText]="'blah blah blah blah blah blah blah blah  '"
+    [notificationDate]="date"
+  >
+    <campus-button circle primary [iconClass]="'eye'"></campus-button>
+    <campus-button circle primary [iconClass]="'delete'"></campus-button>
+  </campus-notification-dropdown-item>
+</div>
 <br />
 <div style="border: 1px black solid; margin: 5px;">
-  <campus-notification-dropdown-item [accented]="false"
-                                     [read]="false"
-                                     [notification]="false"
-                                     [icon]="'educontent'"
-                                     [titleText]="'Dit is een titel'"
-                                     [notificationText]="'blah blah blah blah blah blah blah blah  '"
-                                     [notificationDate]="date">
-
-    <campus-button circle
-                   primary
-                   [iconClass]="'eye'"></campus-button>
-    <campus-button circle
-                   primary
-                   [iconClass]="'delete'"></campus-button>
+  <campus-notification-dropdown-item
+    [accented]="true"
+    [read]="false"
+    [notification]="false"
+    [icon]="'educontent'"
+    [titleText]="'Dit is een titel'"
+    [notificationText]="'blah blah blah blah blah blah blah blah  '"
+    [notificationDate]="date"
+  >
+    <campus-button circle primary [iconClass]="'eye'"></campus-button>
+    <campus-button circle primary [iconClass]="'delete'"></campus-button>
   </campus-notification-dropdown-item>
 </div>
 <br />
-<div style="border: 1px black solid; margin: 5px;">
-  <campus-notification-dropdown-item [accented]="true"
-                                     [read]="false"
-                                     [notification]="false"
-                                     [icon]="'educontent'"
-                                     [titleText]="'Dit is een titel'"
-                                     [notificationText]="'blah blah blah blah blah blah blah blah  '"
-                                     [notificationDate]="date">
-
-    <campus-button circle
-                   primary
-                   [iconClass]="'eye'"></campus-button>
-    <campus-button circle
-                   primary
-                   [iconClass]="'delete'"></campus-button>
+<div>variant for dropdown menu</div>
+<div style="width:350px; border: 1px black solid; margin: 5px;">
+  <campus-notification-dropdown-item
+    [accented]="false"
+    [read]="false"
+    [icon]="'educontent'"
+    [titleText]="'Dit is een titel'"
+    [notificationText]="
+      'blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah'
+    "
+    [notificationDate]="date"
+  >
+    <campus-button rounded-corners primary>button1</campus-button>
+    <campus-button rounded-corners primary>button2</campus-button>
   </campus-notification-dropdown-item>
 </div>
 <br />
-
 <div style="width:350px; border: 1px black solid; margin: 5px;">
-  <campus-notification-dropdown-item [accented]="false"
-                                     [read]="false"
-                                     [icon]="'educontent'"
-                                     [titleText]="'Dit is een titel'"
-                                     [notificationText]="'blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah'"
-                                     [notificationDate]="date">
-
-    <campus-button rounded-corners
-                   primary>button1</campus-button>
-    <campus-button rounded-corners
-                   primary>button2</campus-button>
+  <campus-notification-dropdown-item
+    [accented]="true"
+    [read]="false"
+    [icon]="'educontent'"
+    [titleText]="'Dit is een titel'"
+    [notificationText]="
+      'blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah'
+    "
+    [notificationDate]="date"
+  >
+    <campus-button rounded-corners primary>button1</campus-button>
+    <campus-button rounded-corners primary>button2</campus-button>
   </campus-notification-dropdown-item>
 </div>
-<br>
+<br />
 <div style="width:350px; border: 1px black solid; margin: 5px;">
-  <campus-notification-dropdown-item [accented]="true"
-                                     [read]="false"
-                                     [icon]="'educontent'"
-                                     [titleText]="'Dit is een titel'"
-                                     [notificationText]="'blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah'"
-                                     [notificationDate]="date">
-
-    <campus-button rounded-corners
-                   primary>button1</campus-button>
-    <campus-button rounded-corners
-                   primary>button2</campus-button>
+  <campus-notification-dropdown-item
+    [accented]="false"
+    [read]="false"
+    [person]="{
+      name: 'person name',
+      displayName: 'string',
+      firstName: 'string'
+    }"
+    [titleText]="'Dit is een titel'"
+    [notificationText]="
+      'blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah'
+    "
+    [notificationDate]="date"
+  >
+    <campus-button rounded-corners primary>button1</campus-button>
+    <campus-button rounded-corners primary>button2</campus-button>
   </campus-notification-dropdown-item>
 </div>
-<br>
+<br />
 <div style="width:350px; border: 1px black solid; margin: 5px;">
-  <campus-notification-dropdown-item [accented]="false"
-                                     [read]="false"
-                                     [person]="{
-                                                name: 'person name',
-                                                displayName: 'string',
-                                                firstName: 'string'
-                                                }"
-                                     [titleText]="'Dit is een titel'"
-                                     [notificationText]="'blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah'"
-                                     [notificationDate]="date">
-
-    <campus-button rounded-corners
-                   primary>button1</campus-button>
-    <campus-button rounded-corners
-                   primary>button2</campus-button>
-  </campus-notification-dropdown-item>
-</div>
-<br>
-<div style="width:350px; border: 1px black solid; margin: 5px;">
-  <campus-notification-dropdown-item [accented]="true"
-                                     [read]="false"
-                                     [person]="{
-                                                name: 'person name',
-                                                displayName: 'string',
-                                                firstName: 'string'
-                                                }"
-                                     [titleText]="'Dit is een titel'"
-                                     [notificationText]="'blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah'"
-                                     [notificationDate]="date">
-
-    <campus-button rounded-corners
-                   primary>button1</campus-button>
-    <campus-button rounded-corners
-                   primary>button2</campus-button>
+  <campus-notification-dropdown-item
+    [accented]="true"
+    [read]="false"
+    [person]="{
+      name: 'person name',
+      displayName: 'string',
+      firstName: 'string'
+    }"
+    [titleText]="'Dit is een titel'"
+    [notificationText]="
+      'blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah'
+    "
+    [notificationDate]="date"
+  >
+    <campus-button rounded-corners primary>button1</campus-button>
+    <campus-button rounded-corners primary>button2</campus-button>
   </campus-notification-dropdown-item>
 </div>

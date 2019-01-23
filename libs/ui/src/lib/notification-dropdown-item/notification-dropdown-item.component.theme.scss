@@ -28,7 +28,7 @@
     background-color: $ui-notification-dropdown-item_bg-color;
 
     &--unread {
-      border-left: solid 5px $ui-notification-dropdown-item--unread_border-color
+      border-left: solid 5px $ui-notification-dropdown-item--unread_border-color;
     }
 
     &__icon {
@@ -38,7 +38,7 @@
 
     &__date {
       color: $ui-notification-dropdown-item_date-color;
-      background-color: $ui-notification-dropdown-item_date-bg-color
+      background-color: $ui-notification-dropdown-item_date-bg-color;
     }
 
     &__title {
@@ -55,9 +55,9 @@
       }
 
       &.ui-notification-dropdown-item--unread {
-        border-left: solid 5px $ui-notification-dropdown-item--accented--unread_border-color;
+        border-left: solid 5px
+          $ui-notification-dropdown-item--accented--unread_border-color;
       }
-
     }
   }
 }

@@ -16,7 +16,6 @@
     flex-direction: row;
     flex: 1 1 auto;
     align-content: flex-start;
-
   }
 
   &__badge {
@@ -29,7 +28,6 @@
     flex: 0 1 auto;
     align-self: stretch;
   }
-
 
   &__icon {
     padding: 5px;
@@ -64,11 +62,10 @@
     display: flex;
   }
 
-
   &--accent &__text {
     font-style: italic;
 
-    >span {
+    > span {
       padding-left: 10px;
       white-space: nowrap;
 
@@ -98,7 +95,7 @@
       }
 
       &__date {
-        align-self: flex-end
+        align-self: flex-end;
       }
 
       &__buttons {
@@ -112,11 +109,9 @@
 
 .ui-notification-dropdown-item--notification.ui-notification-dropdown-item {
   .ui-notification-dropdown-item {
-
     &__body {
       flex-direction: column;
     }
-
 
     &__icon {
       width: 34px;
