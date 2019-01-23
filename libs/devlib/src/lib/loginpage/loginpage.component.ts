@@ -23,7 +23,7 @@ export class LoginpageComponent implements OnInit {
   currentUser: Observable<any>;
   route$: Observable<string[]>;
   response: Observable<any>;
-  date: Date = new Date('2019-01-23');
+  date: Date = new Date('2019-01-22');
   constructor(
     public loginPageviewModel: LoginPageViewModel,
     private personApi: PersonApi,

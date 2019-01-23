@@ -73,43 +73,96 @@
      routerLinkActive="router-link-active">go to tasks page</a></div>
 
 <br />
-<campus-notification-dropdown-item style="border: 1px black solid; margin: 5px;"
-                                   [notification]="false"
-                                   [person]="{
-                                              name: 'person name',
-                                              displayName: 'string',
-                                              firstName: 'string'
-                                              }"
-                                   [titleText]="'Dit is een titel'"
-                                   [notificationText]="'blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah'"
-                                   [notificationDate]="date">
+<div style="border: 1px black solid; margin: 5px;">
+  <campus-notification-dropdown-item [accented]="false"
+                                     [read]="false"
+                                     [notification]="false"
+                                     [icon]="'educontent'"
+                                     [titleText]="'Dit is een titel'"
+                                     [notificationText]="'blah blah blah blah blah blah blah blah  '"
+                                     [notificationDate]="date">
 
-  <campus-button circle
-                 primary
-                 [iconClass]="'eye'"></campus-button>
-  <campus-button circle
-                 primary
-                 [iconClass]="'delete'"></campus-button>
-</campus-notification-dropdown-item>
+    <campus-button circle
+                   primary
+                   [iconClass]="'eye'"></campus-button>
+    <campus-button circle
+                   primary
+                   [iconClass]="'delete'"></campus-button>
+  </campus-notification-dropdown-item>
+</div>
 <br />
-<campus-notification-dropdown-item style="border: 1px black solid; margin: 5px;"
-                                   [notification]="false"
-                                   [icon]="'educontent'"
-                                   [titleText]="'Dit is een titel'"
-                                   [notificationText]="'blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah'"
-                                   [notificationDate]="date">
+<div style="border: 1px black solid; margin: 5px;">
+  <campus-notification-dropdown-item [accented]="true"
+                                     [read]="false"
+                                     [notification]="false"
+                                     [icon]="'educontent'"
+                                     [titleText]="'Dit is een titel'"
+                                     [notificationText]="'blah blah blah blah blah blah blah blah  '"
+                                     [notificationDate]="date">
 
-  <campus-button circle
-                 primary
-                 [iconClass]="'eye'"></campus-button>
-  <campus-button circle
-                 primary
-                 [iconClass]="'delete'"></campus-button>
-</campus-notification-dropdown-item>
+    <campus-button circle
+                   primary
+                   [iconClass]="'eye'"></campus-button>
+    <campus-button circle
+                   primary
+                   [iconClass]="'delete'"></campus-button>
+  </campus-notification-dropdown-item>
+</div>
 <br />
 
 <div style="width:350px; border: 1px black solid; margin: 5px;">
-  <campus-notification-dropdown-item [person]="{
+  <campus-notification-dropdown-item [accented]="false"
+                                     [read]="false"
+                                     [icon]="'educontent'"
+                                     [titleText]="'Dit is een titel'"
+                                     [notificationText]="'blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah'"
+                                     [notificationDate]="date">
+
+    <campus-button rounded-corners
+                   primary>button1</campus-button>
+    <campus-button rounded-corners
+                   primary>button2</campus-button>
+  </campus-notification-dropdown-item>
+</div>
+<br>
+<div style="width:350px; border: 1px black solid; margin: 5px;">
+  <campus-notification-dropdown-item [accented]="true"
+                                     [read]="false"
+                                     [icon]="'educontent'"
+                                     [titleText]="'Dit is een titel'"
+                                     [notificationText]="'blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah'"
+                                     [notificationDate]="date">
+
+    <campus-button rounded-corners
+                   primary>button1</campus-button>
+    <campus-button rounded-corners
+                   primary>button2</campus-button>
+  </campus-notification-dropdown-item>
+</div>
+<br>
+<div style="width:350px; border: 1px black solid; margin: 5px;">
+  <campus-notification-dropdown-item [accented]="false"
+                                     [read]="false"
+                                     [person]="{
+                                                name: 'person name',
+                                                displayName: 'string',
+                                                firstName: 'string'
+                                                }"
+                                     [titleText]="'Dit is een titel'"
+                                     [notificationText]="'blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah'"
+                                     [notificationDate]="date">
+
+    <campus-button rounded-corners
+                   primary>button1</campus-button>
+    <campus-button rounded-corners
+                   primary>button2</campus-button>
+  </campus-notification-dropdown-item>
+</div>
+<br>
+<div style="width:350px; border: 1px black solid; margin: 5px;">
+  <campus-notification-dropdown-item [accented]="true"
+                                     [read]="false"
+                                     [person]="{
                                                 name: 'person name',
                                                 displayName: 'string',
                                                 firstName: 'string'
