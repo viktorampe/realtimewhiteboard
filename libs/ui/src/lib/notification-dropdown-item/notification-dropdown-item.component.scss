@@ -4,44 +4,59 @@
 
 .ui-notification-dropdown-item {
   padding: 10px;
+  padding-left: 7px; //compensate for border-left -> theme
   position: relative;
   text-decoration: none;
   display: flex;
   flex-direction: row;
   justify-items: center;
 
-  &__body {
-    display: flex;
-    flex-direction: row-reverse;
-    flex: 1 1 auto;
-    align-content: flex-start;
+  // order of children in line-view
+  &__icon,
+  &__badge {
+    order: 1;
   }
 
-  &__message {
+  &__date {
+    order: 2;
+  }
+
+  &__body {
+    order: 3;
+  }
+
+  &__buttons {
+    order: 4;
+  }
+
+  &__body {
     display: flex;
     flex-direction: row;
     flex: 1 1 auto;
+    align-content: flex-start;
+
   }
 
-  &__icon,
   &__badge {
-    // position: absolute;
-    // left: 8px;
-    // top: 10px;
+    margin-right: 10px;
   }
+
 
   &__icon {
     padding: 5px;
     width: 34px;
     height: 34px;
     border-radius: 4px;
+    margin-right: 10px;
   }
 
   &__date {
     font-size: 80%;
     margin: 5px;
+    padding: 5px;
     white-space: nowrap;
     align-self: center;
+    border-radius: 10px;
   }
 
   &__title {
@@ -55,7 +70,7 @@
   }
 
   &__buttons {
-    align-self: flex-end;
+    align-self: center;
   }
 
 
@@ -74,79 +89,85 @@
   }
 }
 
-.ui-notification-dropdown-item.ui-notification-dropdown-item--notification {
-  padding: 10px;
-  position: relative;
-  text-decoration: none;
-  display: flex;
-  flex-direction: row;
-  justify-items: center;
-
-  .ui-notification-dropdown-item__body {
+.ui-notification-dropdown-item--notification.ui-notification-dropdown-item {
+  .ui-notification-dropdown-item {
+    padding: 10px;
+    position: relative;
+    text-decoration: none;
     display: flex;
     flex-direction: row;
-    flex: 1 1 auto;
-    align-content: flex-start;
-  }
+    justify-items: center;
 
-  .ui-notification-dropdown-item__message {
-    display: flex;
-    flex-direction: column;
-    flex: 1 1 auto;
-    margin-left: 5px;
-    margin-right: 5px;
-  }
+    // order of children in notification-view
+    &__icon,
+    &__badge {
+      order: 1;
+    }
 
-  .ui-notification-dropdown-item__icon,
-  .ui-notification-dropdown-item__badge {
-    // position: absolute;
-    // left: 8px;
-    // top: 10px;
-  }
+    &__body {
+      order: 2;
+    }
 
-  .ui-notification-dropdown-item__icon {
-    padding: 5px;
-    width: 34px;
-    height: 34px;
-    border-radius: 4px;
-  }
+    &__date {
+      order: 3;
+    }
 
-  .ui-notification-dropdown-item__date {
-    font-size: 80%;
-    margin: 5px;
-    white-space: nowrap;
-    align-self: center;
-  }
 
-  .ui-notification-dropdown-item__title {
-    margin: 5px;
-    align-self: center;
-    justify-self: flex-start;
-    width: 100%;
-  }
-
-  .ui-notification-dropdown-item__text {
-    margin: 5px;
-    align-self: center;
-    justify-self: flex-start;
-    width: 100%;
-  }
-
-  .ui-notification-dropdown-item__buttons {
-    display: none;
-  }
+    &__buttons {
+      order: 4;
+    }
 
 
 
-  .ui-notification-dropdown-item--accent .ui-notification-dropdown-item__text {
-    font-style: italic;
+    &__body {
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 auto;
+    }
 
-    >span {
-      padding-left: 10px;
+
+    &__icon {
+      padding: 5px;
+      width: 34px;
+      height: 34px;
+      border-radius: 4px;
+    }
+
+    &__date {
+      font-size: 80%;
+      margin: 5px;
       white-space: nowrap;
+      align-self: flex-start;
+    }
 
-      span {
-        text-decoration: underline;
+    &__title {
+      margin: 5px;
+      align-self: flex-start;
+      justify-self: flex-start;
+    }
+
+    &__text {
+      margin: 5px;
+      align-self: flex-start;
+      justify-self: flex-start;
+    }
+
+    &__buttons {
+      display: none;
+    }
+
+
+
+    &--accent &__text {
+      font-style: italic;
+
+      >span {
+        padding-left: 10px;
+        white-space: nowrap;
+
+        span {
+          text-decoration: underline;
+        }
       }
     }
   }

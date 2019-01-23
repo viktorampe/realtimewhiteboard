@@ -13,24 +13,23 @@
                        size="medium"
                        [showText]="false"></campus-person-badge>
   <div class="ui-notification-dropdown-item__body">
-
-    <div class="ui-notification-dropdown-item__message">
-      <div *ngIf="
+    <div *ngIf="
          titleText"
-           class="ui-notification-dropdown-item__title">{{
-        titleText
-        }}</div>
-      <div class="ui-notification-dropdown-item__text">{{ notificationText
-        }}<span *ngIf="accented && link">-> <span>Lees meer...</span></span>
-      </div>
-    </div>
-
-    <div *ngIf="notificationDate"
-         class="ui-notification-dropdown-item__date">{{
-      notificationDate | humanDateTime
+         class="ui-notification-dropdown-item__title">{{
+      titleText
       }}</div>
+    <div class="ui-notification-dropdown-item__text">{{ notificationText
+      }}<span *ngIf="accented && link">-> <span>Lees meer...</span></span>
+    </div>
   </div>
+
+  <div *ngIf="notificationDate"
+       class="ui-notification-dropdown-item__date">{{
+    notificationDate | humanDateTime
+    }}</div>
+
   <div class="ui-notification-dropdown-item__buttons">
     <ng-content select="campus-button"></ng-content>
   </div>
+
 </a>
