@@ -24,6 +24,7 @@ import {
 } from './+state/current-exercise';
 import { getStoreModuleForFeatures } from './+state/dal.state.feature.builder';
 import { EduContentReducer, EduContentsEffects } from './+state/edu-content';
+import { EffectFeedbackReducer } from './+state/effect-feedback';
 import {
   LearningAreaReducer,
   LearningAreasEffects
@@ -143,7 +144,8 @@ interface DalOptions {
       CurrentExerciseReducer,
       TeacherStudentReducer,
       LinkedPersonReducer,
-      CredentialReducer
+      CredentialReducer,
+      EffectFeedbackReducer
     ]),
     EffectsModule.forFeature([
       BundlesEffects,
