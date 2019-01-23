@@ -5,7 +5,7 @@ export enum Priority {
   NORM = 'normal',
   HIGH = 'high'
 }
-export interface EffectFeedback {
+export interface EffectFeedbackInterface {
   id: string;
   triggerAction: Action;
   icon?: string;

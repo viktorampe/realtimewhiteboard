@@ -1,6 +1,6 @@
-import { Action } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
-import { EffectFeedback } from './effect-feedback.model';
+import { Action } from '@ngrx/store';
+import { EffectFeedbackInterface } from './effect-feedback.model';
 
 export enum EffectFeedbackActionTypes {
   LoadEffectFeedbacks = '[EffectFeedback] Load EffectFeedbacks',
@@ -18,43 +18,47 @@ export enum EffectFeedbackActionTypes {
 export class LoadEffectFeedbacks implements Action {
   readonly type = EffectFeedbackActionTypes.LoadEffectFeedbacks;
 
-  constructor(public payload: { effectFeedbacks: EffectFeedback[] }) {}
+  constructor(public payload: { effectFeedbacks: EffectFeedbackInterface[] }) {}
 }
 
 export class AddEffectFeedback implements Action {
   readonly type = EffectFeedbackActionTypes.AddEffectFeedback;
 
-  constructor(public payload: { effectFeedback: EffectFeedback }) {}
+  constructor(public payload: { effectFeedback: EffectFeedbackInterface }) {}
 }
 
 export class UpsertEffectFeedback implements Action {
   readonly type = EffectFeedbackActionTypes.UpsertEffectFeedback;
 
-  constructor(public payload: { effectFeedback: EffectFeedback }) {}
+  constructor(public payload: { effectFeedback: EffectFeedbackInterface }) {}
 }
 
 export class AddEffectFeedbacks implements Action {
   readonly type = EffectFeedbackActionTypes.AddEffectFeedbacks;
 
-  constructor(public payload: { effectFeedbacks: EffectFeedback[] }) {}
+  constructor(public payload: { effectFeedbacks: EffectFeedbackInterface[] }) {}
 }
 
 export class UpsertEffectFeedbacks implements Action {
   readonly type = EffectFeedbackActionTypes.UpsertEffectFeedbacks;
 
-  constructor(public payload: { effectFeedbacks: EffectFeedback[] }) {}
+  constructor(public payload: { effectFeedbacks: EffectFeedbackInterface[] }) {}
 }
 
 export class UpdateEffectFeedback implements Action {
   readonly type = EffectFeedbackActionTypes.UpdateEffectFeedback;
 
-  constructor(public payload: { effectFeedback: Update<EffectFeedback> }) {}
+  constructor(
+    public payload: { effectFeedback: Update<EffectFeedbackInterface> }
+  ) {}
 }
 
 export class UpdateEffectFeedbacks implements Action {
   readonly type = EffectFeedbackActionTypes.UpdateEffectFeedbacks;
 
-  constructor(public payload: { effectFeedbacks: Update<EffectFeedback>[] }) {}
+  constructor(
+    public payload: { effectFeedbacks: Update<EffectFeedbackInterface>[] }
+  ) {}
 }
 
 export class DeleteEffectFeedback implements Action {
@@ -74,13 +78,13 @@ export class ClearEffectFeedbacks implements Action {
 }
 
 export type EffectFeedbackActions =
- LoadEffectFeedbacks
- | AddEffectFeedback
- | UpsertEffectFeedback
- | AddEffectFeedbacks
- | UpsertEffectFeedbacks
- | UpdateEffectFeedback
- | UpdateEffectFeedbacks
- | DeleteEffectFeedback
- | DeleteEffectFeedbacks
- | ClearEffectFeedbacks;
+  | LoadEffectFeedbacks
+  | AddEffectFeedback
+  | UpsertEffectFeedback
+  | AddEffectFeedbacks
+  | UpsertEffectFeedbacks
+  | UpdateEffectFeedback
+  | UpdateEffectFeedbacks
+  | DeleteEffectFeedback
+  | DeleteEffectFeedbacks
+  | ClearEffectFeedbacks;
