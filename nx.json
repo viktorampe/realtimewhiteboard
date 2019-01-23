@@ -20,9 +20,7 @@
     "pages-bundles": {
       "tags": []
     },
-    "pages-alerts": {
-      "tags": []
-    },
+
     "pages-logout": {
       "tags": []
     },
@@ -78,6 +76,9 @@
       "tags": []
     },
     "pages-settings-coupled-teachers": {
+      "tags": []
+    },
+    "pages-settings-alerts": {
       "tags": []
     }
   }
