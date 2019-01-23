@@ -25,7 +25,7 @@ export function sortByPriority(
   if (priorityA === Priority.LOW) return 1;
 
   if (priorityA === Priority.NORM) {
-    if (b.priority === Priority.LOW) {
+    if (priorityB === Priority.LOW) {
       // a comes first
       return -1;
     } else {
