@@ -10,6 +10,8 @@ export interface NotificationItemInterface {
   notificationText?: string;
   notificationDate: Date;
   accented?: boolean;
+  notification?: boolean;
+  read?: boolean;
 }
 @Component({
   selector: 'campus-notification-dropdown-item',
@@ -26,4 +28,5 @@ export class NotificationDropdownItemComponent {
   @Input() notificationDate: Date;
   @Input() accented: boolean;
   @Input() notification = true;
+  @Input() read = true;
 }
