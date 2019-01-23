@@ -61,6 +61,8 @@ import { HideDesktopDirective } from './utils/directives/hide-desktop.directive'
 import { HideMobileDirective } from './utils/directives/hide-mobile.directive';
 import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness/adjust-color-brightness.pipe';
 import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time.pipe';
+import { MailToByCredentialPipe } from './utils/pipes/mail-to/mail-to-credential-pipe';
+import { PersonBadgeFromCredentialPipe } from './utils/pipes/person-badge-from-credential/person-badge-from-credential-pipe';
 import { RemovePrefixStringPipe } from './utils/pipes/remove-prefix-string/remove-prefix-string.pipe';
 import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-string.pipe';
 
@@ -129,10 +131,12 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     HideDesktopDirective,
     HideMobileDirective,
     HumanDateTimePipe,
+    PersonBadgeFromCredentialPipe,
     RemovePrefixStringPipe,
     LargeDirective,
     PrimaryDirective,
-    PersonSummaryComponent
+    PersonSummaryComponent,
+    MailToByCredentialPipe
   ],
   exports: [
     FilterTextInputComponent,
@@ -178,7 +182,9 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     RemovePrefixStringPipe,
     LargeDirective,
     PrimaryDirective,
-    PersonSummaryComponent
+    PersonSummaryComponent,
+    PersonBadgeFromCredentialPipe,
+    MailToByCredentialPipe
   ]
 })
 export class UiModule {}

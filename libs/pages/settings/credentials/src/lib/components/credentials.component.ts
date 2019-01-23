@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PassportUserCredentialInterface } from '@campus/dal';
-import { BadgePersonInterface } from '@campus/ui';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import {
@@ -72,23 +71,5 @@ export class CredentialsComponent implements OnInit {
 
   addCredential(credential: SingleSignOnProviderInterface) {
     this.viewModel.linkCredential(credential);
-  }
-
-  getPersonForBadge(
-    credential: PassportUserCredentialInterface
-  ): BadgePersonInterface {
-    const ob = {
-      displayName: '',
-      name: '',
-      firstName: '',
-      avatar: ''
-    };
-    if (credential.profile && credential.profile.name) {
-      ob.displayName = credential.profile.name.displayName;
-      ob.name = credential.profile.name.familyName;
-      ob.firstName = credential.profile.name.givenName;
-      ob.avatar = credential.profile.avatar;
-    }
-    return ob;
   }
 }
