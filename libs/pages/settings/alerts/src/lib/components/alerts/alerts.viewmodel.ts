@@ -48,7 +48,8 @@ export class AlertsViewModel {
   public removeAlert(alertId: number): void {
     this.store.dispatch(
       new AlertActions.DeleteAlert({
-        id: alertId
+        id: alertId,
+        personId: this.authService.userId
       })
     );
   }

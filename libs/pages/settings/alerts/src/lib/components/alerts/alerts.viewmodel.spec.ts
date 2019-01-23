@@ -98,7 +98,8 @@ describe('alertViewmodel', () => {
       expect(store.dispatch).toHaveBeenCalledTimes(1);
       expect(store.dispatch).toHaveBeenCalledWith(
         new AlertActions.DeleteAlert({
-          id: 1
+          id: 1,
+          personId: 1
         })
       );
     });
