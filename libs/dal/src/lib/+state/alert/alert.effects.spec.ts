@@ -517,14 +517,7 @@ describe('AlertEffects', () => {
     const deleteAlertUndoAction = undo(deleteAlertAction);
 
     beforeAll(() => {
-      usedState = usedState = {
-        ...initialState,
-        loaded: true,
-        ids: [42],
-        entities: {
-          42: new AlertFixture({ id: 42 })
-        }
-      };
+      usedState = initialState;
     });
     beforeEach(() => {
       mockServiceMethodReturnValue('deleteAlert', {});
