@@ -84,10 +84,27 @@
                                    [notificationText]="'blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah'"
                                    [notificationDate]="date">
 
-  <campus-button rounded-corners
-                 primary>button1</campus-button>
-  <campus-button rounded-corners
-                 primary>button2</campus-button>
+  <campus-button circle
+                 primary
+                 [iconClass]="'eye'"></campus-button>
+  <campus-button circle
+                 primary
+                 [iconClass]="'delete'"></campus-button>
+</campus-notification-dropdown-item>
+<br />
+<campus-notification-dropdown-item style="border: 1px black solid; margin: 5px;"
+                                   [notification]="false"
+                                   [icon]="'educontent'"
+                                   [titleText]="'Dit is een titel'"
+                                   [notificationText]="'blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah'"
+                                   [notificationDate]="date">
+
+  <campus-button circle
+                 primary
+                 [iconClass]="'eye'"></campus-button>
+  <campus-button circle
+                 primary
+                 [iconClass]="'delete'"></campus-button>
 </campus-notification-dropdown-item>
 <br />
 

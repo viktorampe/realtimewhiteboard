@@ -26,17 +26,13 @@
     }
 
     &__date {
-      background-color: $ui-notification-dropdown-item_icon-color;
+      color: $ui-notification-dropdown-item_icon-color;
+      background-color: $ui-notification-dropdown-item_icon-bg-color;
     }
 
     &__title {
       font-weight: bold;
       color: $ui-notification-dropdown-item_title-color;
-    }
-
-    // must add this style in theme, or it will not project to person-badge child component
-    .ui_person-badge__displayName {
-      display: none;
     }
   }
 }
