@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Action } from '@ngrx/store';
 
 @Component({
   selector: 'campus-banner',
@@ -9,20 +10,20 @@ export class BannerComponent {
   @Input() message: string;
   @Input() icon: string;
   @Input() actions: BannerAction[];
-  @Output() afterDismiss = new EventEmitter<void>();
+  @Output() afterDismiss = new EventEmitter<Action>();
 
   constructor() {}
 
-  onAction(action: string) {
-    this.onDismiss();
+  onAction(action: BannerAction) {
+    this.onDismiss(action);
   }
 
-  onDismiss() {
-    this.afterDismiss.next();
+  onDismiss(bannerAction: BannerAction) {
+    this.afterDismiss.next(bannerAction.userAction);
   }
 }
 
-interface BannerAction {
+export interface BannerAction {
   title: string;
-  userAction: string;
+  userAction: Action;
 }
