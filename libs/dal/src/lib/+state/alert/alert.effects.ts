@@ -15,7 +15,6 @@ import {
   EffectFeedback,
   Priority
 } from '../effect-feedback/effect-feedback.model';
-import { ActionSuccessful } from './../dal.actions';
 import { DalState } from './../dal.state.interface';
 import {
   AlertsActionTypes,
@@ -133,12 +132,21 @@ export class AlertsEffects {
             action.payload.intended
           )
           .pipe(
-            map(
-              affectedRows =>
-                new ActionSuccessful({
-                  successfulAction: 'alert updated'
-                })
-            )
+            map(affectedRows => {
+              const effectFeedback = new EffectFeedback(
+                action,
+                null,
+                'Melding als gelezen gemarkeerd',
+                'success',
+                null,
+                true,
+                Priority.NORM
+              );
+
+              return new EffectFeedbackActions.AddEffectFeedback({
+                effectFeedback
+              });
+            })
           );
       },
       undoAction: (action: SetReadAlert, state: any) => {
