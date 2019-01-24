@@ -1,15 +1,20 @@
 import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import { select } from '@ngrx/store';
+import { Action, select } from '@ngrx/store';
 import { DataPersistence } from '@nrwl/nx';
 import { undo } from 'ngrx-undo';
-import { interval, Observable, Subject } from 'rxjs';
+import { from, interval, Observable, Subject } from 'rxjs';
 import { map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { DalActions } from '..';
 import {
   AlertServiceInterface,
   ALERT_SERVICE_TOKEN
 } from '../../alert/alert.service.interface';
+import { EffectFeedbackActions } from '../effect-feedback';
+import {
+  EffectFeedback,
+  Priority
+} from '../effect-feedback/effect-feedback.model';
 import { ActionSuccessful } from './../dal.actions';
 import { DalState } from './../dal.state.interface';
 import {
@@ -137,8 +142,24 @@ export class AlertsEffects {
           );
       },
       undoAction: (action: SetReadAlert, state: any) => {
-        // TODO: show error message to user
-        return undo(action);
+        const undoAction = undo(action);
+
+        const effectFeedback = new EffectFeedback(
+          action,
+          null,
+          'Het is niet gelukt om de melding als gelezen te markeren',
+          'error',
+          [{ title: 'Opnieuw', userAction: action }],
+          true,
+          Priority.HIGH
+        );
+
+        const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
+          effectFeedback
+        });
+
+        // undo the failed action and trigger feedback for user
+        return from<Action>([undoAction, feedbackAction]);
       }
     }
   );
