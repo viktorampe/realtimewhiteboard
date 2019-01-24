@@ -155,6 +155,7 @@ export class AlertsEffects {
             map(res => {
               // TODO: dispatch succesful response action
               throwError('Not implemented yet');
+              return null;
             })
           );
       },
