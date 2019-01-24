@@ -5,7 +5,7 @@ import {
 } from '@angular/cdk/layout';
 import { Component, Input } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { BadgePersonInterface } from '../person-badge/person-badge.component';
 import { HumanDateTimePipe } from '../utils/pipes/human-date-time/human-date-time.pipe';
 
@@ -39,9 +39,8 @@ export class NotificationDropdownItemComponent {
   @Input() read = true;
 
   constructor(private breakpointObserver: BreakpointObserver) {
-    this.isSmall$ = this.breakpointObserver.observe(Breakpoints.Small).pipe(
-      map((state: BreakpointState) => state.matches),
-      tap(small => console.log(small))
-    );
+    this.isSmall$ = this.breakpointObserver
+      .observe(Breakpoints.Small)
+      .pipe(map((state: BreakpointState) => state.matches));
   }
 }
