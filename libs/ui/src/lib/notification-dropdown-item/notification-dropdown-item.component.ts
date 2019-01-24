@@ -1,4 +1,11 @@
+import {
+  BreakpointObserver,
+  Breakpoints,
+  BreakpointState
+} from '@angular/cdk/layout';
 import { Component, Input } from '@angular/core';
+import { Observable } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import { BadgePersonInterface } from '../person-badge/person-badge.component';
 import { HumanDateTimePipe } from '../utils/pipes/human-date-time/human-date-time.pipe';
 
@@ -10,8 +17,8 @@ export interface NotificationItemInterface {
   notificationText?: string;
   notificationDate: Date;
   accented?: boolean;
-  notification?: boolean;
   read?: boolean;
+  mobile?: boolean;
 }
 @Component({
   selector: 'campus-notification-dropdown-item',
@@ -20,6 +27,8 @@ export interface NotificationItemInterface {
   providers: [HumanDateTimePipe]
 })
 export class NotificationDropdownItemComponent {
+  public isSmall$: Observable<boolean>;
+
   @Input() icon: string;
   @Input() person: BadgePersonInterface;
   @Input() titleText: string;
@@ -27,6 +36,12 @@ export class NotificationDropdownItemComponent {
   @Input() notificationText: string;
   @Input() notificationDate: Date;
   @Input() accented: boolean;
-  @Input() notification = true;
   @Input() read = true;
+
+  constructor(private breakpointObserver: BreakpointObserver) {
+    this.isSmall$ = this.breakpointObserver.observe(Breakpoints.Small).pipe(
+      map((state: BreakpointState) => state.matches),
+      tap(small => console.log(small))
+    );
+  }
 }

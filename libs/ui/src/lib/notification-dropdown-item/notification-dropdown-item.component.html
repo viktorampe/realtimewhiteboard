@@ -1,7 +1,7 @@
 <a
   class="ui-notification-dropdown-item"
   [class.ui-notification-dropdown-item--accent]="accented"
-  [class.ui-notification-dropdown-item--notification]="notification"
+  [class.ui-notification-dropdown-item--mobile]="isSmall$ | async"
   [class.ui-notification-dropdown-item--unread]="!read"
   [class.ui-no-link]="!link"
   [routerLink]="link"
