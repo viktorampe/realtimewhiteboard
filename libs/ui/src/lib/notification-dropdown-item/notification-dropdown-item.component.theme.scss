@@ -2,13 +2,13 @@
   // color palette
   $ui-notification-dropdown-item_main-color: $ui-tertiary-font-color-2 !default;
   $ui-notification-dropdown-item_accent-color: $ui-tertiary-bg-color-2 !default;
-  $ui-notification-dropdown-item-color: $ui-primary-font-color !default;
+  $ui-notification-dropdown-item-font-color: $ui-primary-font-color !default;
 
   // regular
   $ui-notification-dropdown-item_bg-color: unset;
   $ui-notification-dropdown-item_icon-color: $ui-notification-dropdown-item_main-color;
   $ui-notification-dropdown-item_icon-bg-color: $ui-notification-dropdown-item_accent-color;
-  $ui-notification-dropdown-item_title-color: $ui-notification-dropdown-item_main-color;
+  $ui-notification-dropdown-item_title-color: $ui-notification-dropdown-item-font-color;
   $ui-notification-dropdown-item_date-color: $ui-notification-dropdown-item_main-color;
   $ui-notification-dropdown-item_date-bg-color: $ui-notification-dropdown-item_accent-color;
   $ui-notification-dropdown-item--unread_border-color: $ui-notification-dropdown-item_accent-color;
@@ -24,7 +24,7 @@
 
   .ui-notification-dropdown-item {
     border-left: solid 5px transparent;
-    color: $ui-notification-dropdown-item-color;
+    color: $ui-notification-dropdown-item-font-color;
     background-color: $ui-notification-dropdown-item_bg-color;
 
     &--unread {
