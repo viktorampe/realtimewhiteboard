@@ -1,15 +1,14 @@
-import { MessagesViewModel } from './components/messages.viewmodel';
-
-import { MessagesComponent } from './components/messages.component';
-
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
+import { MessagesComponent } from './components/messages.component';
+import { MessagesViewModel } from './components/messages.viewmodel';
 
 const routes: Routes = [
   {
     path: '',
     component: MessagesComponent,
-    resolve: { isResolved: MessagesViewModel }
+    resolve: { isResolved: MessagesViewModel },
+    runGuardsAndResolvers: 'always'
   }
 ];
 
