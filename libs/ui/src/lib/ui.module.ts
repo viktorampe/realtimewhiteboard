@@ -42,6 +42,7 @@ import {
   ListViewComponent,
   ListViewItemDirective
 } from './list-view/list-view.component';
+import { DropdownDirective } from './notification-dropdown-item/directives/notification-dropdown.directive';
 import { NotificationDropdownItemComponent } from './notification-dropdown-item/notification-dropdown-item.component';
 import { PageHeaderComponent } from './page-header/page-header.component';
 import { PersonBadgeComponent } from './person-badge/person-badge.component';
@@ -132,7 +133,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     RemovePrefixStringPipe,
     LargeDirective,
     PrimaryDirective,
-    PersonSummaryComponent
+    PersonSummaryComponent,
+    DropdownDirective
   ],
   exports: [
     FilterTextInputComponent,
@@ -178,7 +180,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     RemovePrefixStringPipe,
     LargeDirective,
     PrimaryDirective,
-    PersonSummaryComponent
+    PersonSummaryComponent,
+    DropdownDirective
   ]
 })
 export class UiModule {}

@@ -107,7 +107,7 @@
   }
 }
 
-.ui-notification-dropdown-item--notification.ui-notification-dropdown-item {
+:host.ui-notification-dropdown-item--dropdown {
   .ui-notification-dropdown-item {
     &__body {
       flex-direction: column;
