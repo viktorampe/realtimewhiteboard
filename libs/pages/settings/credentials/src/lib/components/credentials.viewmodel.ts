@@ -10,7 +10,7 @@ import {
 import { EnvironmentSsoInterface, ENVIRONMENT_SSO_TOKEN } from '@campus/shared';
 import { select, Store } from '@ngrx/store';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { map, withLatestFrom } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -62,29 +62,29 @@ export class CredentialsViewModel {
 
   private setPresentationStreams(): void {
     this.currentUser$ = this.store.pipe(select(UserQueries.getCurrentUser));
-    this.credentials$ = this.store.pipe(select(CredentialQueries.getAll));
-    this.singleSignOnProviders$ = this.ssoFromEnvironment$.pipe(
-      withLatestFrom(this.credentials$),
-      map(([ssoEnv, credentials]) =>
-        this.convertToSingleSignOnProviders(ssoEnv).filter(
+    this.credentials$ = combineLatest(
+      this.ssoFromEnvironment$,
+      this.store.pipe(select(CredentialQueries.getAll))
+    ).pipe(
+      map(([ssoEnv, credentials]) => {
+        return credentials.map(cred => ({
+          ...cred,
+          providerLogo: ssoEnv[cred.provider].logoIcon
+        }));
+      })
+    );
+
+    this.singleSignOnProviders$ = combineLatest(
+      this.ssoFromEnvironment$,
+      this.credentials$
+    ).pipe(
+      map(([ssoEnv, credentials]) => {
+        return this.convertToSingleSignOnProviders(ssoEnv).filter(
           provider =>
             credentials.filter(
               credential => credential.provider === provider.name
             ).length < provider.maxNumberAllowed
-        )
-      )
-    );
-    const combo = combineLatest(this.singleSignOnProviders$, this.credentials$);
-    this.credentials$ = combo.pipe(
-      map(([sso, creds]) => {
-        creds.forEach(cred => {
-          sso.map(ssoItem => {
-            if (ssoItem.name === cred.provider) {
-              cred.providerLogo = ssoItem.logoIcon;
-            }
-          });
-        });
-        return creds;
+        );
       })
     );
   }

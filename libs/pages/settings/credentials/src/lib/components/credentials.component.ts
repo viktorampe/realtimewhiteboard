@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { PassportUserCredentialInterface } from '@campus/dal';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import {
   CredentialsViewModel,
   SingleSignOnProviderInterface
@@ -19,45 +22,43 @@ export enum CredentialErrors {
 export class CredentialsComponent implements OnInit {
   credentials$ = this.viewModel.credentials$;
   ssoLinks$ = this.viewModel.singleSignOnProviders$;
+  currentUser$ = this.viewModel.currentUser$;
 
-  message = '';
+  message$: Observable<string>;
 
-  constructor(private viewModel: CredentialsViewModel) {
-    console.log(this.viewModel);
-    this.credentials$ = this.viewModel.credentials$;
-    this.ssoLinks$ = this.viewModel.singleSignOnProviders$;
-  }
+  constructor(
+    private viewModel: CredentialsViewModel,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
-    const error = this.getParameterByName('error');
-    this.message = this.getErrorMessage(error);
+    if (this.route.snapshot) {
+      const error = this.route.snapshot.queryParamMap.get('error');
+      this.message$ = this.getErrorTypeMessage(error);
+    }
   }
 
-  getErrorMessage(error: string): string {
-    switch (error) {
-      case CredentialErrors.ForbiddenMixedRoles:
-      case CredentialErrors.ForbiddenInvalidRoles:
-        return 'Je kan enkel een Smartschool-LEERLING profiel koppelen aan dit POLPO-profiel.';
-      case CredentialErrors.AlreadyLinked:
-        return 'Dit account werd al aan een ander profiel gekoppeld.';
-    }
-    return '';
-  }
-
-  getParameterByName(name: string, url?: string): string {
-    if (!url) {
-      url = window.location.href;
-    }
-    name = name.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
-    const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
-    const results = regex.exec(url);
-    if (!results) {
-      return null;
-    }
-    if (!results[2]) {
-      return '';
-    }
-    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+  getErrorTypeMessage(error: string): Observable<string> {
+    return this.currentUser$.pipe(
+      map(user => {
+        let userTypeString = 'Smartschool-LEERKRACHT';
+        if (user.type && user.type === 'student') {
+          userTypeString = 'Smartschool-LEERLING';
+        }
+        switch (error) {
+          case CredentialErrors.ForbiddenMixedRoles:
+          case CredentialErrors.ForbiddenInvalidRoles:
+            return (
+              'Je kan enkel een ' +
+              userTypeString +
+              ' profiel koppelen aan dit POLPO-profiel.'
+            );
+          case CredentialErrors.AlreadyLinked:
+            return 'Dit account werd al aan een ander profiel gekoppeld.';
+        }
+        return '';
+      })
+    );
   }
 
   decoupleCredential(credential: PassportUserCredentialInterface) {

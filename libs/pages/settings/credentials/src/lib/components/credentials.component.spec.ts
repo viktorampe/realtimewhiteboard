@@ -1,12 +1,11 @@
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule } from '@angular/material';
+import { ActivatedRoute } from '@angular/router';
 import { CredentialFixture } from '@campus/dal';
+import { MockActivatedRoute } from '@campus/testing';
 import { UiModule } from '@campus/ui';
-import {
-  CredentialErrors,
-  CredentialsComponent
-} from './credentials.component';
+import { CredentialsComponent } from './credentials.component';
 import {
   CredentialsViewModel,
   SingleSignOnProviderInterface
@@ -32,6 +31,10 @@ describe('CredentialsComponent', () => {
         {
           provide: CredentialsViewModel,
           useClass: MockCredentialsViewModel
+        },
+        {
+          provide: ActivatedRoute,
+          useClass: MockActivatedRoute
         }
       ],
       schemas: [NO_ERRORS_SCHEMA]
@@ -48,29 +51,6 @@ describe('CredentialsComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should return correct url paramter', () => {
-    expect(component.getParameterByName('error', '')).toBe(null);
-    expect(component.getParameterByName('error', '?error=test')).toBe('test');
-    expect(component.getParameterByName('error', '?error')).toBe('');
-  });
-
-  it('should return correct error message', () => {
-    expect(component.getErrorMessage('error')).toBe('');
-    expect(component.getErrorMessage(CredentialErrors.AlreadyLinked)).toBe(
-      'Dit account werd al aan een ander profiel gekoppeld.'
-    );
-    expect(
-      component.getErrorMessage(CredentialErrors.ForbiddenMixedRoles)
-    ).toBe(
-      'Je kan enkel een Smartschool-LEERLING profiel koppelen aan dit POLPO-profiel.'
-    );
-    expect(
-      component.getErrorMessage(CredentialErrors.ForbiddenInvalidRoles)
-    ).toBe(
-      'Je kan enkel een Smartschool-LEERLING profiel koppelen aan dit POLPO-profiel.'
-    );
   });
 
   it('should call viewmodel when adding credential', () => {

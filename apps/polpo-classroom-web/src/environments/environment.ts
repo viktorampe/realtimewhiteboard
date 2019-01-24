@@ -132,6 +132,7 @@ export const environment: EnvironmentInterface = {
     // 'book-not': 'assets/icons/book-not.svg',
     book: 'assets/icons/book.svg',
     bundle: 'assets/icons/bundle.svg',
+    'settings-cog': 'assets/icons/settings.svg',
     // bundles: 'assets/icons/bundles.svg',
     // call: 'assets/icons/call.svg',
     // caret: 'assets/icons/caret.svg',

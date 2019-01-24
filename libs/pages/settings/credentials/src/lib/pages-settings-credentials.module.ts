@@ -11,7 +11,6 @@ import { CredentialsResolver } from './components/credentials.resolver';
     CommonModule,
     UiModule,
     MatIconModule,
-
     RouterModule.forChild([
       {
         path: '',

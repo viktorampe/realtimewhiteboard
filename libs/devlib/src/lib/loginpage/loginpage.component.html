@@ -68,7 +68,14 @@
     >update student content status</button
   ></div
 >
+
 <div><button (click)="updateAlert()">update alert</button></div>
+
+<div>
+  <button (click)="deleteAlert()">remove alert</button>
+  <div>{{ response | async | json }}</div>
+</div>
+
 <div
   ><a [routerLink]="['/bundles']" routerLinkActive="router-link-active"
     >go to bundle page</a
@@ -79,16 +86,6 @@
     >go to tasks page</a
   ></div
 >
-
-<br />
-<br />
-
-<br />
-<br />
-
-<br />
-<br />
-
 <campus-person-summary
   [person]="{
     name: 'person name',
