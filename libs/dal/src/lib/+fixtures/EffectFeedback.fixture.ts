@@ -1,4 +1,4 @@
-import { SetReadAlert } from '../+state/alert/alert.actions';
+import { Action } from '@ngrx/store';
 import {
   EffectFeedbackInterface,
   Priority
@@ -6,7 +6,7 @@ import {
 
 export class EffectFeedbackFixture implements EffectFeedbackInterface {
   id = 'thisisaguid';
-  triggerAction = new SetReadAlert({ personId: 1, alertIds: 2 });
+  triggerAction = {} as Action;
   message = '';
   type: 'success' | 'error' = 'success';
   userActions = [];

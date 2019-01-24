@@ -7,7 +7,6 @@ import {
   sortByPriority,
   State
 } from './effect-feedback.reducer';
-// file.only
 
 /**
  * Utility to create the task-edu-content state.
@@ -17,7 +16,7 @@ import {
  * @param {*} [error]
  * @returns {State}
  */
-function createState(
+function createEffectFeedbackState(
   effectFeedback: EffectFeedbackInterface[],
   error?: any
 ): State {
@@ -52,6 +51,27 @@ describe('EffectFeedback Reducer', () => {
       runCompareTest(Priority.LOW, Priority.NORM, 1);
       runCompareTest(Priority.LOW, Priority.LOW, 0);
     });
+
+    it('should sort the ids by priority level', () => {
+      const unsortedEffectFeedbacks = [
+        new EffectFeedbackFixture({ id: 'guidLOW1', priority: Priority.LOW }),
+        new EffectFeedbackFixture({ id: 'guidLOW2', priority: Priority.LOW }),
+        new EffectFeedbackFixture({ id: 'guidNORM', priority: Priority.NORM }),
+        new EffectFeedbackFixture({ id: 'guidHIGH1', priority: Priority.HIGH }),
+        new EffectFeedbackFixture({ id: 'guidHIGH2', priority: Priority.HIGH })
+      ];
+
+      const sortedIds = unsortedEffectFeedbacks
+        .sort(sortByPriority)
+        .map(e => e.id);
+      expect(sortedIds).toEqual([
+        'guidHIGH1',
+        'guidHIGH2',
+        'guidNORM',
+        'guidLOW1',
+        'guidLOW2'
+      ]);
+    });
   });
   describe('unknown action', () => {
     it('should return the initial state', () => {
@@ -71,20 +91,20 @@ describe('EffectFeedback Reducer', () => {
       });
 
       const result = reducer(initialState, action);
-      expect(result).toEqual(createState([effectFeedback]));
+      expect(result).toEqual(createEffectFeedbackState([effectFeedback]));
     });
   });
 
   describe('delete action', () => {
     it('should delete one effectFeedback', () => {
       const effectFeedback = new EffectFeedbackFixture({ id: 'guid' });
-      const startState = createState([effectFeedback]);
+      const startState = createEffectFeedbackState([effectFeedback]);
       const action = new EffectFeedbackActions.DeleteEffectFeedback({
         id: effectFeedback.id
       });
 
       const result = reducer(startState, action);
-      expect(result).toEqual(createState([]));
+      expect(result).toEqual(createEffectFeedbackState([]));
     });
   });
 
