@@ -64,7 +64,7 @@ describe('BorderDirective', () => {
     );
     component = componentDE.componentInstance;
     testContainerFixture.detectChanges();
-    directive = componentDE.injector.get(typeof directive);
+    directive = componentDE.injector.get(DropdownDirective);
   });
 
   it('should create the host with the directive attached', () => {
