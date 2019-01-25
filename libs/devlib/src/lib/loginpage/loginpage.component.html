@@ -69,8 +69,6 @@
   ></div
 >
 
-<div><button (click)="updateAlert()">update alert</button></div>
-
 <div>
   <button (click)="deleteAlert()">remove alert</button>
   <div>{{ response | async | json }}</div>
@@ -100,3 +98,18 @@
   <campus-button campusRoundedCorners>button1</campus-button>
   <campus-button campusRoundedCorners>button2</campus-button>
 </campus-person-summary>
+
+<ng-container *ngIf="(effectFeedback$ | async) as feedback">
+  <p>Feedback:{{ feedback.message }}</p>
+  <ng-container *ngFor="let action of feedback.userActions">
+    <button (click)="dispatchAction(action.userAction)">{{
+      action.title
+    }}</button>
+  </ng-container>
+</ng-container>
+
+<div *ngFor="let alert of (alerts$ | async)"
+  ><button (click)="setAlertAsRead(alert.id)"
+    >Markeer melding met id {{ alert.id }} als gelezen</button
+  ></div
+>
