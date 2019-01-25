@@ -3,9 +3,7 @@ import {
   Breakpoints,
   BreakpointState
 } from '@angular/cdk/layout';
-import { Component, Input } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Component, HostBinding, Input } from '@angular/core';
 import { BadgePersonInterface } from '../person-badge/person-badge.component';
 import { HumanDateTimePipe } from '../utils/pipes/human-date-time/human-date-time.pipe';
 
@@ -20,13 +18,13 @@ export interface NotificationItemInterface {
   read?: boolean;
 }
 @Component({
-  selector: 'campus-notification-dropdown-item',
-  templateUrl: './notification-dropdown-item.component.html',
-  styleUrls: ['./notification-dropdown-item.component.scss'],
+  selector: 'campus-notification',
+  templateUrl: './notification.component.html',
+  styleUrls: ['./notification.component.scss'],
   providers: [HumanDateTimePipe]
 })
-export class NotificationDropdownItemComponent {
-  public isSmall$: Observable<boolean>;
+export class NotificationComponent {
+  private mobile: boolean;
 
   @Input() icon: string;
   @Input() person: BadgePersonInterface;
@@ -37,9 +35,24 @@ export class NotificationDropdownItemComponent {
   @Input() accented: boolean;
   @Input() read = true;
 
+  @HostBinding('class.ui-notification')
+  private isNotification = true;
+  @HostBinding('class.ui-notification--accent')
+  get isAccented() {
+    return this.accented;
+  }
+  @HostBinding('class.ui-notification--mobile')
+  get isMobile() {
+    return this.mobile;
+  }
+  @HostBinding('class.ui-notification--unread')
+  get isUnread() {
+    return !this.read;
+  }
+
   constructor(private breakpointObserver: BreakpointObserver) {
-    this.isSmall$ = this.breakpointObserver
-      .observe(Breakpoints.Small)
-      .pipe(map((state: BreakpointState) => state.matches));
+    this.breakpointObserver
+      .observe([Breakpoints.XSmall, Breakpoints.Small])
+      .subscribe((state: BreakpointState) => (this.mobile = state.matches));
   }
 }

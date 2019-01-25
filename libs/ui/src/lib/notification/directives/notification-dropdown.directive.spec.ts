@@ -7,16 +7,14 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { PersonBadgeComponent } from '../../person-badge/person-badge.component';
 import { PersonInitialsPipe } from '../../person-badge/pipes/person-initials.pipe';
 import { HumanDateTimePipe } from '../../utils/pipes/human-date-time/human-date-time.pipe';
-import { NotificationDropdownItemComponent } from './../notification-dropdown-item.component';
+import { NotificationComponent } from './../notification.component';
 import { DropdownDirective } from './notification-dropdown.directive';
 
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'test-container',
   template: `
-    <campus-notification-dropdown-item dropdown
-      >tekst</campus-notification-dropdown-item
-    >
+    <campus-notification dropdown>tekst</campus-notification>
   `
 })
 export class TestContainerComponent {}
@@ -24,7 +22,7 @@ export class TestContainerComponent {}
 @NgModule({
   declarations: [
     TestContainerComponent,
-    NotificationDropdownItemComponent,
+    NotificationComponent,
     PersonBadgeComponent,
     HumanDateTimePipe,
     PersonInitialsPipe,
@@ -33,7 +31,7 @@ export class TestContainerComponent {}
   imports: [CommonModule, RouterTestingModule, MatIconModule],
   exports: [
     TestContainerComponent,
-    NotificationDropdownItemComponent,
+    NotificationComponent,
     RouterTestingModule,
     PersonBadgeComponent,
     HumanDateTimePipe,
@@ -43,9 +41,9 @@ export class TestContainerComponent {}
 })
 export class TestModule {}
 
-describe('BorderDirective', () => {
+describe('DropdownDirective', () => {
   let directive: DropdownDirective;
-  let component: NotificationDropdownItemComponent;
+  let component: NotificationComponent;
   let testContainerFixture: ComponentFixture<TestContainerComponent>;
   let testContainerComponent: TestContainerComponent;
   let componentDE: DebugElement;
@@ -60,7 +58,7 @@ describe('BorderDirective', () => {
     testContainerFixture = TestBed.createComponent(TestContainerComponent);
     testContainerComponent = testContainerFixture.componentInstance;
     componentDE = testContainerFixture.debugElement.query(
-      By.css('campus-notification-dropdown-item')
+      By.css('campus-notification')
     );
     component = componentDE.componentInstance;
     testContainerFixture.detectChanges();
@@ -74,7 +72,7 @@ describe('BorderDirective', () => {
 
   it('should apply the correct class', () => {
     expect(componentDE.nativeElement.classList).toContain(
-      'ui-notification-dropdown-item--dropdown'
+      'ui-notification--dropdown'
     );
   });
 });

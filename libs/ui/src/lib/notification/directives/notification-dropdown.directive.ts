@@ -4,7 +4,7 @@ import { Directive, HostBinding } from '@angular/core';
   selector: '[campusDropdown],[dropdown]'
 })
 export class DropdownDirective {
-  @HostBinding('class.ui-notification-dropdown-item--dropdown')
+  @HostBinding('class.ui-notification--dropdown')
   get isDropdownClass() {
     return true;
   }

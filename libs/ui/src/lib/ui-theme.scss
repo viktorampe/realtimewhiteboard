@@ -3,9 +3,15 @@ $ui-primary-bg-color: #fff !default;
 $ui-primary-font-color: #000 !default;
 $ui-primary-color-accent: #fff !default; // link, button (borders)
 $ui-primary-font-color-2: #aaa !default; // subtitle
-$ui-primary-font-family: 'Helvetica', 'Arial', 'Open Sans', sans-serif !default;
-$ui-primary-font-family-2: 'Lato', sans-serif !default; // title
-$ui-primary-font-family-3: 'Oswald', 'Arial Narrow', Sans-Serif !default; // list item label
+$ui-primary-font-family: 'Helvetica',
+'Arial',
+'Open Sans',
+sans-serif !default;
+$ui-primary-font-family-2: 'Lato',
+sans-serif !default; // title
+$ui-primary-font-family-3: 'Oswald',
+'Arial Narrow',
+Sans-Serif !default; // list item label
 $ui-danger-bg-color: #f00 !default;
 $ui-danger-font-color: #fff !default;
 $ui-warning-bg-color: #f80 !default;
@@ -24,6 +30,7 @@ $ui-tertiary-bg-color: $ui-primary-bg-color !default;
 $ui-tertiary-font-color: $ui-primary-font-color !default;
 $ui-tertiary-bg-color-2: #999 !default; // header
 $ui-tertiary-font-color-2: #fff !default; // header
+$ui-tertiary-color-accent: $ui-primary-color-accent !default;
 
 // list
 $ui-list-row-bg-title-odd: #3b3c46 !default;
@@ -79,7 +86,7 @@ $ui-button-padding-bottom: $ui-font-size-normal/2 !default;
 @import './content-thumbnail/content-thumbnail.component.theme.scss';
 @import './filter-text-input/filter-text-input.component.themes.scss';
 @import './button/button.component.theme.scss';
-@import './notification-dropdown-item/notification-dropdown-item.component.theme';
+@import './notification/notification.component.theme';
 @import './dropdown-menu/dropdown-menu.component.theme.scss';
 @import './dropdown-menu-item/dropdown-menu-item.component.theme.scss';
 
@@ -106,7 +113,7 @@ $ui-button-padding-bottom: $ui-font-size-normal/2 !default;
   @include ui-content-thumbnail();
   @include ui-filter-text-input();
   @include ui-button();
-  @include ui-notification-dropdown-item();
+  @include ui-notification();
   @include ui-dropdown-menu();
   @include ui-dropdown-menu-item();
 }

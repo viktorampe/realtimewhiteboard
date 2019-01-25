@@ -6,17 +6,17 @@ import { MockMatIconRegistry } from '@campus/testing';
 import { PersonBadgeComponent } from '../person-badge/person-badge.component';
 import { PersonInitialsPipe } from '../person-badge/pipes/person-initials.pipe';
 import { HumanDateTimePipe } from '../utils/pipes/human-date-time/human-date-time.pipe';
-import { NotificationDropdownItemComponent } from './notification-dropdown-item.component';
+import { NotificationComponent } from './notification.component';
 
-describe('NotificationDropdownItemComponent', () => {
-  let component: NotificationDropdownItemComponent;
-  let fixture: ComponentFixture<NotificationDropdownItemComponent>;
+describe('NotificationComponent', () => {
+  let component: NotificationComponent;
+  let fixture: ComponentFixture<NotificationComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule, MatIconModule],
       declarations: [
-        NotificationDropdownItemComponent,
+        NotificationComponent,
         PersonBadgeComponent,
         PersonInitialsPipe,
         HumanDateTimePipe
@@ -26,7 +26,7 @@ describe('NotificationDropdownItemComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(NotificationDropdownItemComponent);
+    fixture = TestBed.createComponent(NotificationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -40,7 +40,7 @@ describe('NotificationDropdownItemComponent', () => {
     fixture.detectChanges();
 
     const iconNode = fixture.debugElement.query(
-      By.css('.ui-notification-dropdown-item__icon')
+      By.css('.ui-notification__icon')
     );
     expect(iconNode).toBeNull();
   });
@@ -50,7 +50,7 @@ describe('NotificationDropdownItemComponent', () => {
     fixture.detectChanges();
 
     const iconNode = fixture.debugElement.query(
-      By.css('mat-icon.ui-notification-dropdown-item__icon')
+      By.css('mat-icon.ui-notification__icon')
     );
     expect(iconNode.nativeElement.getAttribute(['ng-reflect-svg-icon'])).toBe(
       'foo'
@@ -76,7 +76,7 @@ describe('NotificationDropdownItemComponent', () => {
     fixture.detectChanges();
 
     const textNode = fixture.debugElement.query(
-      By.css('.ui-notification-dropdown-item__title')
+      By.css('.ui-notification__title')
     );
     expect(textNode).toBeNull();
   });
@@ -86,7 +86,7 @@ describe('NotificationDropdownItemComponent', () => {
     fixture.detectChanges();
 
     const textNode = fixture.debugElement.query(
-      By.css('.ui-notification-dropdown-item__title')
+      By.css('.ui-notification__title')
     );
     expect(textNode).toBeTruthy();
     expect(textNode.nativeElement.textContent).toContain('foo');
@@ -97,7 +97,7 @@ describe('NotificationDropdownItemComponent', () => {
     fixture.detectChanges();
 
     const textNode = fixture.debugElement.query(
-      By.css('.ui-notification-dropdown-item__text')
+      By.css('.ui-notification__text')
     );
     expect(textNode.nativeElement.textContent.trim()).toBe('');
   });
@@ -107,7 +107,7 @@ describe('NotificationDropdownItemComponent', () => {
     fixture.detectChanges();
 
     const textNode = fixture.debugElement.query(
-      By.css('.ui-notification-dropdown-item__text')
+      By.css('.ui-notification__text')
     );
     expect(textNode).toBeTruthy();
     expect(textNode.nativeElement.textContent).toContain('foo');
@@ -118,7 +118,7 @@ describe('NotificationDropdownItemComponent', () => {
     fixture.detectChanges();
 
     const textNode = fixture.debugElement.query(
-      By.css('.ui-notification-dropdown-item__text > span')
+      By.css('.ui-notification__text > span')
     );
     expect(textNode).toBeNull();
   });
@@ -128,7 +128,7 @@ describe('NotificationDropdownItemComponent', () => {
     fixture.detectChanges();
 
     const textNode = fixture.debugElement.query(
-      By.css('.ui-notification-dropdown-item__text > span')
+      By.css('.ui-notification__text > span')
     );
     expect(textNode).toBeNull();
   });
@@ -139,7 +139,7 @@ describe('NotificationDropdownItemComponent', () => {
     fixture.detectChanges();
 
     const dateNode = fixture.debugElement.query(
-      By.css('.ui-notification-dropdown-item__date')
+      By.css('.ui-notification__date')
     );
     expect(dateNode).toBeTruthy();
     expect(dateNode.nativeElement.textContent).toContain('zonet');
@@ -150,7 +150,7 @@ describe('NotificationDropdownItemComponent', () => {
     fixture.detectChanges();
 
     const dateNode = fixture.debugElement.query(
-      By.css('.ui-notification-dropdown-item__date')
+      By.css('.ui-notification__date')
     );
     expect(dateNode).toBeNull();
   });
