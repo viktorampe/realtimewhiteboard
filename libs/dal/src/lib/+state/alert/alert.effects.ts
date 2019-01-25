@@ -136,7 +136,9 @@ export class AlertsEffects {
             map(affectedRows => {
               const effectFeedback = new EffectFeedback(
                 action,
-                'Melding als gelezen gemarkeerd',
+                action.payload.read
+                  ? 'Melding als gelezen gemarkeerd.'
+                  : 'Melding als ongelezen gemarkeerd.',
                 'success',
                 null,
                 action.payload.displayResponse
