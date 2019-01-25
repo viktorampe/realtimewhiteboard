@@ -24,9 +24,7 @@ function createAlert(
 ): AlertQueueInterface | any {
   return {
     id: id,
-    read: read,
-    senderId: 1,
-    recipientId: 1
+    read: read
   };
 }
 
@@ -64,7 +62,7 @@ function createState(
   return state;
 }
 
-fdescribe('Alerts Reducer', () => {
+describe('Alerts Reducer', () => {
   let alerts: AlertQueueInterface[];
   let updateTime: number;
   let newUpdateTime: number;
