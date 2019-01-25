@@ -78,6 +78,7 @@ export class SetReadAlert implements Action {
       alertIds: number | number[];
       read?: boolean;
       intended?: boolean;
+      displayResponse?: boolean;
     }
   ) {
     // alertIds altijd in een array

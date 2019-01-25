@@ -139,7 +139,7 @@ export class AlertsEffects {
                 'Melding als gelezen gemarkeerd',
                 'success',
                 null,
-                true
+                action.payload.displayResponse
               );
 
               return new EffectFeedbackActions.AddEffectFeedback({

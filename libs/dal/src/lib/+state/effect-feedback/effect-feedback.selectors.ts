@@ -6,6 +6,16 @@ export const selectEffectFeedbackState = createFeatureSelector<State>(NAME);
 export const getNext = createSelector(
   selectEffectFeedbackState,
   (state: State) => {
-    return state.entities[state.ids[0]];
+    // only return the feedback with display true
+    const reducer = (
+      acc: number[] | string[],
+      currentValue: number | string
+    ) => {
+      if (state.entities[currentValue].display) return [...acc, currentValue];
+      return acc;
+    };
+
+    const filteredIds = (state.ids as string[]).reduce(reducer, []);
+    return state.entities[filteredIds[0]];
   }
 );
