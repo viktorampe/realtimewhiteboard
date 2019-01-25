@@ -1,6 +1,5 @@
 import { Update } from '@ngrx/entity';
 import { AlertActions } from '.';
-import { AlertFixture } from '../../+fixtures';
 import { AlertQueueInterface } from './../../+models/AlertQueue.interface';
 import { initialState, reducer, State } from './alert.reducer';
 
@@ -22,12 +21,12 @@ function createAlert(
   id: number,
   read: any = readInitialValue
 ): AlertQueueInterface | any {
-  return new AlertFixture({
+  return {
     id: id,
     read: read,
     senderId: 1,
     recipientId: 1
-  });
+  };
 }
 
 /**
@@ -64,7 +63,7 @@ function createState(
   return state;
 }
 
-describe('Alerts Reducer', () => {
+fdescribe('Alerts Reducer', () => {
   let alerts: AlertQueueInterface[];
   let updateTime: number;
   let newUpdateTime: number;
