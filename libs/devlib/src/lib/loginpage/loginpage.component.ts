@@ -7,6 +7,7 @@ import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   EduContentInterface,
+  EffectFeedbackActions,
   EffectFeedbackInterface,
   EffectFeedbackQueries,
   UserActions
@@ -28,9 +29,9 @@ export class LoginpageComponent implements OnInit {
   route$: Observable<string[]>;
   response: Observable<any>;
 
-  alerts$ = this.store.pipe(
+  alert$ = this.store.pipe(
     select(AlertQueries.getAll),
-    map(alerts => alerts.filter(alert => !alert.read))
+    map(alerts => alerts[0])
   );
 
   effectFeedback$: Observable<EffectFeedbackInterface> = this.store.pipe(
@@ -75,13 +76,31 @@ export class LoginpageComponent implements OnInit {
     this.loginPageviewModel.updateStudentContentStatus();
   }
 
-  setAlertAsRead(alertId: number) {
+  setAlertAsRead(alertId: number, displayResponse: boolean) {
     this.store.dispatch(
       new AlertActions.SetReadAlert({
         personId: this.authService.userId,
         alertIds: alertId,
-        read: true
+        read: true,
+        displayResponse: displayResponse
       })
+    );
+  }
+
+  setAlertAsUnread(alertId: number, displayResponse: boolean) {
+    this.store.dispatch(
+      new AlertActions.SetReadAlert({
+        personId: this.authService.userId,
+        alertIds: alertId,
+        read: false,
+        displayResponse: displayResponse
+      })
+    );
+  }
+
+  removeFeedback(feedbackId: string) {
+    this.store.dispatch(
+      new EffectFeedbackActions.DeleteEffectFeedback({ id: feedbackId })
     );
   }
 

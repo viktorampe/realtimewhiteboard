@@ -100,16 +100,44 @@
 </campus-person-summary>
 
 <ng-container *ngIf="(effectFeedback$ | async) as feedback">
-  <p>Feedback:{{ feedback.message }}</p>
+  <p
+    >Feedback:{{ feedback.message }} (id:
+    {{ feedback.triggerAction.payload.alertIds }})</p
+  >
   <ng-container *ngFor="let action of feedback.userActions">
     <button (click)="dispatchAction(action.userAction)">{{
       action.title
     }}</button>
   </ng-container>
+  <p
+    ><button (click)="removeFeedback(feedback.id)"
+      >Feedback verwijderen</button
+    ></p
+  >
 </ng-container>
 
-<div *ngFor="let alert of (alerts$ | async)"
-  ><button (click)="setAlertAsRead(alert.id)"
-    >Markeer melding met id {{ alert.id }} als gelezen</button
-  ></div
->
+<div *ngIf="(alert$ | async) as alert"
+  ><p
+    ><button (click)="setAlertAsRead(alert.id, true)"
+      >Markeer melding met id {{ alert.id }} als gelezen EN toon feedback
+    </button></p
+  >
+  <p
+    ><button (click)="setAlertAsRead(alert.id, false)"
+      >Markeer melding met id {{ alert.id }} als gelezen EN toon geen feedback
+    </button></p
+  >
+  <p
+    ><button (click)="setAlertAsUnread(alert.id, true)"
+      >Markeer melding met id {{ alert.id }} als ongelezen EN toon
+      feedback</button
+    ></p
+  >
+
+  <p
+    ><button (click)="setAlertAsUnread(alert.id, false)"
+      >Markeer melding met id {{ alert.id }} als ongelezen EN toon geen
+      feedback</button
+    ></p
+  >
+</div>
