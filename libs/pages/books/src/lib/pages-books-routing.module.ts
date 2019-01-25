@@ -7,7 +7,8 @@ const routes: Routes = [
   {
     path: '',
     component: BooksComponent,
-    resolve: { isResolved: BooksResolver }
+    resolve: { isResolved: BooksResolver },
+    runGuardsAndResolvers: 'always'
   }
 ];
 

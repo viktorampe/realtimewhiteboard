@@ -3,8 +3,9 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import { select } from '@ngrx/store';
 import { DataPersistence } from '@nrwl/nx';
 import { undo } from 'ngrx-undo';
-import { interval, Observable, Subject } from 'rxjs';
+import { interval, Observable, Subject, throwError } from 'rxjs';
 import { map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
+import { AlertActions } from '.';
 import { DalActions } from '..';
 import {
   AlertServiceInterface,
@@ -138,6 +139,30 @@ export class AlertsEffects {
       },
       undoAction: (action: SetReadAlert, state: any) => {
         // TODO: show error message to user
+        return undo(action);
+      }
+    }
+  );
+
+  @Effect()
+  deleteAlert$ = this.dataPersistence.optimisticUpdate(
+    AlertsActionTypes.DeleteAlert,
+    {
+      run: (action: AlertActions.DeleteAlert, state: DalState) => {
+        return this.alertService
+          .deleteAlert(action.payload.personId, action.payload.id)
+          .pipe(
+            map(res => {
+              // TODO: dispatch succesful response action
+              throwError('Not implemented yet');
+              return null;
+            })
+          );
+      },
+      undoAction: (action: AlertActions.DeleteAlert, error: any) => {
+        // Something went wrong: could be a 401 or 404 ...
+        // TODO: dispatch error response action
+        throwError('Not implemented yet');
         return undo(action);
       }
     }

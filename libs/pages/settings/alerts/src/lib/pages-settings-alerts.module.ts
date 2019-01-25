@@ -13,7 +13,8 @@ import { AlertsResolver } from './components/alerts/alerts.resolver';
         path: '',
         pathMatch: 'full',
         component: AlertsComponent,
-        resolve: { isResolved: AlertsResolver }
+        resolve: { isResolved: AlertsResolver },
+        runGuardsAndResolvers: 'always'
       }
     ])
   ],
