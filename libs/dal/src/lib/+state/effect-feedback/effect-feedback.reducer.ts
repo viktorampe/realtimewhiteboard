@@ -7,7 +7,6 @@ import { EffectFeedbackInterface } from './effect-feedback.model';
 
 export const NAME = 'effectFeedback';
 
-// TODO: add sorting based on priority levels
 export function sortByPriority(
   a: EffectFeedbackInterface,
   b: EffectFeedbackInterface
