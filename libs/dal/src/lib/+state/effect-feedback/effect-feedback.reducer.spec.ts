@@ -42,12 +42,12 @@ describe('EffectFeedback Reducer', () => {
   describe('compareFunction', () => {
     it('should sort by priority level', () => {
       runCompareTest(Priority.HIGH, Priority.NORM, -1);
-      runCompareTest(Priority.HIGH, Priority.LOW, -1);
+      runCompareTest(Priority.HIGH, Priority.LOW, -2);
       runCompareTest(Priority.HIGH, Priority.HIGH, 0);
       runCompareTest(Priority.NORM, Priority.HIGH, 1);
       runCompareTest(Priority.NORM, Priority.LOW, -1);
       runCompareTest(Priority.NORM, Priority.NORM, 0);
-      runCompareTest(Priority.LOW, Priority.HIGH, 1);
+      runCompareTest(Priority.LOW, Priority.HIGH, 2);
       runCompareTest(Priority.LOW, Priority.NORM, 1);
       runCompareTest(Priority.LOW, Priority.LOW, 0);
     });

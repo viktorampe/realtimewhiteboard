@@ -2,9 +2,9 @@ import { Action } from '@ngrx/store';
 import { v4 as uuid } from 'uuid';
 
 export enum Priority {
-  LOW = 'low',
-  NORM = 'normal',
-  HIGH = 'high'
+  LOW = 1,
+  NORM = 2,
+  HIGH = 3
 }
 export interface EffectFeedbackInterface {
   id: string;

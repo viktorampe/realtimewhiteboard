@@ -3,7 +3,7 @@ import {
   EffectFeedbackActions,
   EffectFeedbackActionTypes
 } from './effect-feedback.actions';
-import { EffectFeedbackInterface, Priority } from './effect-feedback.model';
+import { EffectFeedbackInterface } from './effect-feedback.model';
 
 export const NAME = 'effectFeedback';
 
@@ -12,27 +12,7 @@ export function sortByPriority(
   a: EffectFeedbackInterface,
   b: EffectFeedbackInterface
 ): number {
-  const priorityA = a.priority;
-  const priorityB = b.priority;
-
-  // leave a and b unchanged, but sorted with respect to all different elements
-  if (priorityA === priorityB) return 0;
-
-  //  a comes first
-  if (priorityA === Priority.HIGH) return -1;
-
-  // b comes first
-  if (priorityA === Priority.LOW) return 1;
-
-  if (priorityA === Priority.NORM) {
-    if (priorityB === Priority.LOW) {
-      // a comes first
-      return -1;
-    } else {
-      // b comes first
-      return 1;
-    }
-  }
+  return b.priority - a.priority;
 }
 export interface State extends EntityState<EffectFeedbackInterface> {
   // additional entities state properties
