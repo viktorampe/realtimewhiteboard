@@ -9,6 +9,7 @@ const routes: Routes = [
   {
     path: '',
     resolve: { isResolved: ReportsResolver },
+    runGuardsAndResolvers: 'always',
     children: [
       {
         path: '',

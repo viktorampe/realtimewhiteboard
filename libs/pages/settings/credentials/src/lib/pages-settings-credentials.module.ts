@@ -16,7 +16,8 @@ import { CredentialsResolver } from './components/credentials.resolver';
         path: '',
         pathMatch: 'full',
         component: CredentialsComponent,
-        resolve: { isResolved: CredentialsResolver }
+        resolve: { isResolved: CredentialsResolver },
+        runGuardsAndResolvers: 'always'
       }
     ])
   ],
