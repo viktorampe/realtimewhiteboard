@@ -1,14 +1,14 @@
 @mixin ui_banner_theme() {
-  $ui-banner-backgound-color: white !default;
+  $ui-banner-background-color: $ui-primary-bg-color !default;
   $ui-banner-padding: 20px !default;
 
   $ui-banner-icon-right-margin: 10px !default;
-  $ui-banner-text-color: black !default;
+  $ui-banner-text-color: $ui-primary-font-color !default;
 
   $ui-banner-icon-size: 40px !default;
 
   .ui-banner {
-    background-color: $ui-banner-backgound-color;
+    background-color: $ui-banner-background-color;
     padding: $ui-banner-padding;
 
     &__content {
