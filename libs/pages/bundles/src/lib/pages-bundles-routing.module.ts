@@ -9,25 +9,28 @@ import { LearningAreasComponent } from './components/learning-areas/learning-are
 const routes: Routes = [
   {
     path: '',
-    component: LearningAreasComponent,
-    resolve: { isResolved: BundlesResolver }
-  },
-  {
-    path: ':area',
     resolve: { isResolved: BundlesResolver },
-    data: { selector: LearningAreaQueries.getById, displayProperty: 'name' },
+    runGuardsAndResolvers: 'always',
     children: [
       {
         path: '',
-        component: BundlesComponent
+        component: LearningAreasComponent
       },
       {
-        path: ':bundle',
-        data: { selector: BundleQueries.getById, displayProperty: 'name' },
+        path: ':area',
+        data: {
+          selector: LearningAreaQueries.getById,
+          displayProperty: 'name'
+        },
         children: [
           {
             path: '',
-            component: BundleDetailComponent
+            component: BundlesComponent
+          },
+          {
+            path: ':bundle',
+            component: BundleDetailComponent,
+            data: { selector: BundleQueries.getById, displayProperty: 'name' }
           }
         ]
       }

@@ -1,4 +1,4 @@
-.ui-button {
+:host {
   display: inline-flex;
   line-height: 1;
   vertical-align: middle;
@@ -7,29 +7,18 @@
   justify-content: center;
 }
 
-:host {
-  display: inline-block;
-}
-
 :host.ui-button--circle {
-  .ui-button {
-    border-radius: 50%;
-  }
+  border-radius: 50%;
 }
 
 :host.ui-button--disabled {
   pointer-events: visible;
   cursor: not-allowed;
-
-  .ui-button {
-    pointer-events: none;
-  }
+  pointer-events: none;
 }
 
 :host.ui-button--large {
-  .ui-button {
-    mat-icon {
-      flex: 0 0 auto;
-    }
+  mat-icon {
+    flex: 0 0 auto;
   }
 }
