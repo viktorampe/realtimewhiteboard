@@ -98,13 +98,12 @@ body {
 @import 'libs/pages/settings/profile/src/lib/pages-settings-profile.theme';
 @include pages-settings-profile-theme();
 
-@import 'libs/pages/settings/credentials/src/lib/pages-settings-credentials.theme';
-@include pages-settings-credentials-theme();
-
 // include shared lib scss
 @import 'libs/shared/src/lib/shared-theme';
 @include shared-theme();
 
+// include app specific css
+@import 'scss/social-media';
 /*
  * App styles
  */
