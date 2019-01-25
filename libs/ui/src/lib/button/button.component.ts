@@ -1,4 +1,4 @@
-import { Component, HostListener, Input } from '@angular/core';
+import { Component, HostBinding, HostListener, Input } from '@angular/core';
 
 /**
  * Generic button
@@ -10,12 +10,14 @@ import { Component, HostListener, Input } from '@angular/core';
  * @class ButtonComponent
  */
 @Component({
-  selector: 'campus-button',
+  selector: 'campus-button, [campus-button]',
   templateUrl: './button.component.html',
   styleUrls: ['./button.component.scss']
 })
 export class ButtonComponent {
   @Input() iconClass: string;
+
+  @HostBinding('class.ui-button') uiButtonClass = true;
 
   // Stops click event propagation inside component
   @HostListener('click', ['$event'])
