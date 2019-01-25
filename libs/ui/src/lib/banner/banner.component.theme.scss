@@ -5,11 +5,12 @@
   $ui-banner-icon-right-margin: 10px !default;
   $ui-banner-text-color: $ui-primary-font-color !default;
 
-  $ui-banner-icon-size: 40px !default;
+  $ui-banner-icon-size: $ui-icon-size-medium !default;
 
   .ui-banner {
     background-color: $ui-banner-background-color;
     padding: $ui-banner-padding;
+    color: $ui-banner-text-color;
 
     &__content {
       mat-icon {
@@ -20,10 +21,6 @@
       &__icon {
         color: $ui-banner-text-color;
         margin-right: $ui-banner-icon-right-margin;
-      }
-
-      &__text {
-        color: $ui-banner-text-color;
       }
     }
   }
