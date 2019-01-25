@@ -9,10 +9,9 @@ import {
 } from './effect-feedback.reducer';
 
 /**
- * Utility to create the task-edu-content state.
+ * Utility to create the EffectFeedback state.
  *
- * @param {TaskEduContentInterface[]} effectFeedback
- * @param {boolean} [loaded]
+ * @param {EffectFeedbackInterface[]} effectFeedback
  * @param {*} [error]
  * @returns {State}
  */
@@ -21,14 +20,12 @@ function createEffectFeedbackState(
   error?: any
 ): State {
   const state: any = {
-    ids: effectFeedback
-      ? effectFeedback.map(taskEduContent => taskEduContent.id)
-      : [],
+    ids: effectFeedback ? effectFeedback.map(feedback => feedback.id) : [],
     entities: effectFeedback
       ? effectFeedback.reduce(
-          (entityMap, taskEduContent) => ({
+          (entityMap, feedback) => ({
             ...entityMap,
-            [taskEduContent.id]: taskEduContent
+            [feedback.id]: feedback
           }),
           {}
         )

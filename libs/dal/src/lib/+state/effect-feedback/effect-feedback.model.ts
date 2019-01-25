@@ -39,11 +39,11 @@ export class EffectFeedback implements EffectFeedbackInterface {
 
   constructor(
     triggerAction: Action,
-    icon: string = null,
     message: string,
     type: 'success' | 'error',
     userActions: { title: string; userAction: Action }[],
     display: boolean,
+    icon: string = null,
     priority: Priority = Priority.NORM
   ) {
     return {

@@ -135,12 +135,10 @@ export class AlertsEffects {
             map(affectedRows => {
               const effectFeedback = new EffectFeedback(
                 action,
-                null,
                 'Melding als gelezen gemarkeerd',
                 'success',
                 null,
-                true,
-                Priority.NORM
+                true
               );
 
               return new EffectFeedbackActions.AddEffectFeedback({
@@ -154,11 +152,11 @@ export class AlertsEffects {
 
         const effectFeedback = new EffectFeedback(
           action,
-          null,
           'Het is niet gelukt om de melding als gelezen te markeren',
           'error',
           [{ title: 'Opnieuw', userAction: action }],
           true,
+          null,
           Priority.HIGH
         );
 
