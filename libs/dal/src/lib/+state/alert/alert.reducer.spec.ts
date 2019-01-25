@@ -1,5 +1,6 @@
 import { Update } from '@ngrx/entity';
 import { AlertActions } from '.';
+import { TeacherStudentActions } from '../teacher-student';
 import { AlertQueueInterface } from './../../+models/AlertQueue.interface';
 import { initialState, reducer, State } from './alert.reducer';
 
@@ -346,6 +347,26 @@ fdescribe('Alerts Reducer', () => {
       expect(result).toEqual(
         createState([], true, undefined, 'something went wrong')
       );
+    });
+  });
+
+  describe('invalidate action', () => {
+    it('should trigger from LinkTeacherStudent', () => {
+      const startState = createState(alerts, true);
+      const action = new TeacherStudentActions.LinkTeacherStudent({
+        publicKey: 'foo'
+      });
+      const result = reducer(startState, action);
+      expect(result).toEqual(createState(alerts, false));
+    });
+
+    it('should trigger from UnlinkTeacherStudent', () => {
+      const startState = createState(alerts, true);
+      const action = new TeacherStudentActions.UnlinkTeacherStudent({
+        teacherId: 1
+      });
+      const result = reducer(startState, action);
+      expect(result).toEqual(createState(alerts, false));
     });
   });
 });
