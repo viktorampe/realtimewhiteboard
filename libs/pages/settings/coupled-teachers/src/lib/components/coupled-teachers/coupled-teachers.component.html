@@ -1,9 +1,16 @@
-<campus-info-panel [titleText]="'Leerkracht koppelen'" [icon]="'polpo'">
+<campus-info-panel
+  [titleText]="'Leerkracht koppelen'"
+  [icon]="'coupled-teachers'"
+>
   <form
     [formGroup]="coupledTeachersForm"
-    class="pages-settings-coupled-teachers-form"
+    class="pages-settings-coupled-teachers__form"
     (submit)="onSubmit()"
   >
+    <label for="teacherCode"
+      >Vraag je leerkracht naar de juiste code om jullie accounts te
+      koppelen.</label
+    >
     <mat-form-field>
       <input
         matInput
@@ -29,10 +36,10 @@
         >De opgegeven leerkrachtencode is niet geldig.</mat-error
       >
     </mat-form-field>
-    <div class="pages-settings-coupled-teachers-form__actions">
+    <div class="pages-settings-coupled-teachers__form__actions">
       <campus-button
         primary
-        type="submit"
+        (click)="onSubmit()"
         [ngClass]="{ 'ui-button--disabled': !coupledTeachersForm.valid }"
         >Opslaan</campus-button
       >
@@ -41,7 +48,10 @@
   </form>
 </campus-info-panel>
 
-<campus-info-panel [titleText]="'Gekoppelde leerkrachten'" [icon]="'polpo'">
+<campus-info-panel
+  [titleText]="'Gekoppelde leerkrachten'"
+  [icon]="'coupled-teachers'"
+>
   <ng-container
     *ngIf="(linkedPersons$ | async) as coupledTeachers; else: noCoupledTeachers"
   >
@@ -51,9 +61,10 @@
     <campus-person-summary
       *ngFor="let coupledTeacher of coupledTeachers"
       [person]="coupledTeacher"
+      class="pages-settings-coupled-teachers__person-summary"
     >
       <div description
-        >{{ coupledTeacher.teacherInfo.publicKey }} | Toegevoegd op:
+        >Code: {{ coupledTeacher.teacherInfo.publicKey }} | Toegevoegd op:
         {{ coupledTeacher.linkedAt | humanDateTime }}</div
       >
       <campus-button campusRoundedCorners (click)="onUnlink(coupledTeacher)"

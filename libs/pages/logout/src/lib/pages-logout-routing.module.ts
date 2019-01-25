@@ -1,15 +1,14 @@
-import { LogoutViewModel } from './components/logout.viewmodel';
-
-import { LogoutComponent } from './components/logout.component';
-
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
+import { LogoutComponent } from './components/logout.component';
+import { LogoutViewModel } from './components/logout.viewmodel';
 
 const routes: Routes = [
   {
     path: '',
     component: LogoutComponent,
-    resolve: { isResolved: LogoutViewModel }
+    resolve: { isResolved: LogoutViewModel },
+    runGuardsAndResolvers: 'always'
   }
 ];
 
