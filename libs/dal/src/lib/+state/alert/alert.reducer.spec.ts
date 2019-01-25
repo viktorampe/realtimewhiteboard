@@ -1,5 +1,6 @@
 import { Update } from '@ngrx/entity';
 import { AlertActions } from '.';
+import { AlertFixture } from '../../+fixtures';
 import { AlertQueueInterface } from './../../+models/AlertQueue.interface';
 import { initialState, reducer, State } from './alert.reducer';
 
@@ -21,10 +22,12 @@ function createAlert(
   id: number,
   read: any = readInitialValue
 ): AlertQueueInterface | any {
-  return {
+  return new AlertFixture({
     id: id,
-    read: read
-  };
+    read: read,
+    senderId: 1,
+    recipientId: 1
+  });
 }
 
 /**
@@ -314,7 +317,8 @@ describe('Alerts Reducer', () => {
       const alert = alerts[0];
       const startState = createState([alert]);
       const action = new AlertActions.DeleteAlert({
-        id: alert.id
+        id: alert.id,
+        personId: 1
       });
       const result = reducer(startState, action);
       expect(result).toEqual(createState([]));
