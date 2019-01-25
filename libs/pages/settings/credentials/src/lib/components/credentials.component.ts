@@ -2,17 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PassportUserCredentialInterface } from '@campus/dal';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import {
   CredentialsViewModel,
   SingleSignOnProviderInterface
 } from './credentials.viewmodel';
-
-export enum CredentialErrors {
-  ForbiddenMixedRoles = 'ForbiddenError: mixed_roles',
-  ForbiddenInvalidRoles = 'ForbiddenError: invalid_roles',
-  AlreadyLinked = 'Error: Credentials already linked'
-}
 
 @Component({
   selector: 'campus-credentials-component',
@@ -32,33 +25,15 @@ export class CredentialsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    if (this.route.snapshot) {
-      const error = this.route.snapshot.queryParamMap.get('error');
-      this.message$ = this.getErrorTypeMessage(error);
-    }
+    this.getError();
   }
 
-  getErrorTypeMessage(error: string): Observable<string> {
-    return this.currentUser$.pipe(
-      map(user => {
-        let userTypeString = 'Smartschool-LEERKRACHT';
-        if (user.type && user.type === 'student') {
-          userTypeString = 'Smartschool-LEERLING';
-        }
-        switch (error) {
-          case CredentialErrors.ForbiddenMixedRoles:
-          case CredentialErrors.ForbiddenInvalidRoles:
-            return (
-              'Je kan enkel een ' +
-              userTypeString +
-              ' profiel koppelen aan dit POLPO-profiel.'
-            );
-          case CredentialErrors.AlreadyLinked:
-            return 'Dit account werd al aan een ander profiel gekoppeld.';
-        }
-        return '';
-      })
-    );
+  getError() {
+    if (this.route.snapshot) {
+      this.message$ = this.viewModel.getErrorMessageFromCode(
+        this.route.snapshot.queryParamMap.get('error')
+      );
+    }
   }
 
   decoupleCredential(credential: PassportUserCredentialInterface) {

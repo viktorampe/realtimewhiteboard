@@ -6,7 +6,7 @@ import {
   PersonInterface
 } from '@campus/dal';
 import { ViewModelInterface } from '@campus/testing';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import {
   CredentialsViewModel,
   SingleSignOnProviderInterface
@@ -49,6 +49,10 @@ export class MockCredentialsViewModel
       maxNumberAllowed: 3
     }
   ]);
+
+  public getErrorMessageFromCode(code): Observable<string> {
+    return of('whatever');
+  }
 
   public useProfilePicture(credential: PassportUserCredentialInterface): void {}
   public linkCredential(provider: SingleSignOnProviderInterface): void {}

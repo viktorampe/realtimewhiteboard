@@ -12,7 +12,9 @@ import {
 import { EnvironmentSsoInterface, ENVIRONMENT_SSO_TOKEN } from '@campus/shared';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from 'jasmine-marbles';
+import { merge } from 'rxjs';
 import {
+  CredentialErrors,
   CredentialsViewModel,
   SingleSignOnProviderInterface
 } from './credentials.viewmodel';
@@ -257,6 +259,58 @@ describe('CredentialsViewModel', () => {
           })
         );
       });
+    });
+
+    it('should return the correct error message for teacher', () => {
+      const mockUser = new PersonFixture();
+      store.dispatch(new UserActions.UserLoaded(mockUser));
+
+      let message$ = merge(
+        credentialsViewModel.getErrorMessageFromCode(
+          CredentialErrors.AlreadyLinked
+        ),
+        credentialsViewModel.getErrorMessageFromCode(
+          CredentialErrors.ForbiddenInvalidRoles
+        ),
+        credentialsViewModel.getErrorMessageFromCode(
+          CredentialErrors.ForbiddenMixedRoles
+        )
+      );
+      expect(message$).toBeObservable(
+        hot('(abc)', {
+          a: 'Dit account werd al aan een ander profiel gekoppeld.',
+          b:
+            'Je kan enkel een Smartschool-LEERKRACHT profiel koppelen aan dit POLPO-profiel.',
+          c:
+            'Je kan enkel een Smartschool-LEERKRACHT profiel koppelen aan dit POLPO-profiel.'
+        })
+      );
+    });
+
+    it('should return the correct error message for student', () => {
+      const mockUser = new PersonFixture({ type: 'student' });
+      store.dispatch(new UserActions.UserLoaded(mockUser));
+
+      let message$ = merge(
+        credentialsViewModel.getErrorMessageFromCode(
+          CredentialErrors.AlreadyLinked
+        ),
+        credentialsViewModel.getErrorMessageFromCode(
+          CredentialErrors.ForbiddenInvalidRoles
+        ),
+        credentialsViewModel.getErrorMessageFromCode(
+          CredentialErrors.ForbiddenMixedRoles
+        )
+      );
+      expect(message$).toBeObservable(
+        hot('(abc)', {
+          a: 'Dit account werd al aan een ander profiel gekoppeld.',
+          b:
+            'Je kan enkel een Smartschool-LEERLING profiel koppelen aan dit POLPO-profiel.',
+          c:
+            'Je kan enkel een Smartschool-LEERLING profiel koppelen aan dit POLPO-profiel.'
+        })
+      );
     });
   });
 });

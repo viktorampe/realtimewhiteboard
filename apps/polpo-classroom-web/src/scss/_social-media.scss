@@ -3,14 +3,30 @@
 .facebook-btn {
   background-color: $facebook-button-background-color;
   color: $facebook-button-font-color;
+  border: 1px solid $facebook-button-background-color;
+
+  &:hover {
+    color: $facebook-button-background-color;
+    background-color: $facebook-button-font-color;
+  }
 }
 
 .google-btn {
   background-color: $google-button-background-color;
+  border: 1px solid $google-button-background-color;
   color: $google-button-font-color;
+  &:hover {
+    color: $google-button-background-color;
+    background-color: $google-button-font-color;
+  }
 }
 
 .smartschool-btn {
   background-color: $smartschool-button-background-color;
+  border: 1px solid $smartschool-button-background-color;
   color: $smartschool-button-font-color;
+  &:hover {
+    color: $smartschool-button-background-color;
+    background-color: $smartschool-button-font-color;
+  }
 }

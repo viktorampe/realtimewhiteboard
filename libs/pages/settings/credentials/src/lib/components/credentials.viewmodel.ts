@@ -12,6 +12,12 @@ import { select, Store } from '@ngrx/store';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+export enum CredentialErrors {
+  ForbiddenMixedRoles = 'ForbiddenError: mixed_roles',
+  ForbiddenInvalidRoles = 'ForbiddenError: invalid_roles',
+  AlreadyLinked = 'Error: Credentials already linked'
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -28,6 +34,29 @@ export class CredentialsViewModel {
   ) {
     this.setSourceStreams();
     this.setPresentationStreams();
+  }
+
+  public getErrorMessageFromCode(code: string): Observable<string> {
+    return this.currentUser$.pipe(
+      map(user => {
+        let userTypeString = 'Smartschool-LEERKRACHT';
+        if (user.type && user.type === 'student') {
+          userTypeString = 'Smartschool-LEERLING';
+        }
+        switch (code) {
+          case CredentialErrors.ForbiddenMixedRoles:
+          case CredentialErrors.ForbiddenInvalidRoles:
+            return (
+              'Je kan enkel een ' +
+              userTypeString +
+              ' profiel koppelen aan dit POLPO-profiel.'
+            );
+          case CredentialErrors.AlreadyLinked:
+            return 'Dit account werd al aan een ander profiel gekoppeld.';
+        }
+        return '';
+      })
+    );
   }
 
   public useProfilePicture(credential: PassportUserCredentialInterface): void {
