@@ -26,7 +26,7 @@ export interface NotificationItemInterface {
 })
 export class NotificationComponent implements OnDestroy {
   private mobile: boolean;
-  private subscriptions: Subscription;
+  private subscriptions: Subscription = new Subscription();
 
   @Input() icon: string;
   @Input() person: BadgePersonInterface;
