@@ -4,9 +4,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
-import { PersonBadgeComponent } from '../../person-badge/person-badge.component';
-import { PersonInitialsPipe } from '../../person-badge/pipes/person-initials.pipe';
-import { HumanDateTimePipe } from '../../utils/pipes/human-date-time/human-date-time.pipe';
+import { UiModule } from '../../ui.module';
 import { NotificationComponent } from './../notification.component';
 import { DropdownDirective } from './notification-dropdown.directive';
 
@@ -20,24 +18,9 @@ import { DropdownDirective } from './notification-dropdown.directive';
 export class TestContainerComponent {}
 
 @NgModule({
-  declarations: [
-    TestContainerComponent,
-    NotificationComponent,
-    PersonBadgeComponent,
-    HumanDateTimePipe,
-    PersonInitialsPipe,
-    DropdownDirective
-  ],
-  imports: [CommonModule, RouterTestingModule, MatIconModule],
-  exports: [
-    TestContainerComponent,
-    NotificationComponent,
-    RouterTestingModule,
-    PersonBadgeComponent,
-    HumanDateTimePipe,
-    PersonInitialsPipe,
-    DropdownDirective
-  ]
+  declarations: [TestContainerComponent],
+  imports: [CommonModule, RouterTestingModule, MatIconModule, UiModule],
+  exports: [TestContainerComponent]
 })
 export class TestModule {}
 
@@ -45,7 +28,6 @@ describe('DropdownDirective', () => {
   let directive: DropdownDirective;
   let component: NotificationComponent;
   let testContainerFixture: ComponentFixture<TestContainerComponent>;
-  let testContainerComponent: TestContainerComponent;
   let componentDE: DebugElement;
 
   beforeEach(async(() => {
@@ -56,7 +38,6 @@ describe('DropdownDirective', () => {
 
   beforeEach(() => {
     testContainerFixture = TestBed.createComponent(TestContainerComponent);
-    testContainerComponent = testContainerFixture.componentInstance;
     componentDE = testContainerFixture.debugElement.query(
       By.css('campus-notification')
     );
