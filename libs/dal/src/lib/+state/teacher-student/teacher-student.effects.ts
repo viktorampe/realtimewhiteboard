@@ -63,7 +63,7 @@ export class TeacherStudentEffects {
     TeacherStudentActionTypes.UnlinkTeacherStudent,
     {
       run: (action: UnlinkTeacherStudent, state: DalState) => {
-        const userId = state.user.currentUser.id;
+        const userId = action.payload.userId;
         const teacherId = action.payload.teacherId;
         const teacherStudentId = (state.teacherStudents.ids as number[]).find(
           id => state.teacherStudents.entities[id].teacherId === teacherId
