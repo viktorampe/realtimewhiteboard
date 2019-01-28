@@ -15,7 +15,6 @@ import {
 export class CredentialsComponent implements OnInit {
   credentials$ = this.viewModel.credentials$;
   ssoLinks$ = this.viewModel.singleSignOnProviders$;
-  currentUser$ = this.viewModel.currentUser$;
 
   message$: Observable<string>;
 
@@ -29,6 +28,7 @@ export class CredentialsComponent implements OnInit {
   }
 
   getError() {
+    //todo straighten errors with effectFeedback PR
     if (this.route.snapshot) {
       this.message$ = this.viewModel.getErrorMessageFromCode(
         this.route.snapshot.queryParamMap.get('error')

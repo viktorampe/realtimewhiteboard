@@ -10,8 +10,8 @@ export class MailToByCredentialPipe implements PipeTransform {
    * returns a BadgePerson object
    *
    * @param {PassportUserCredentialInterface} credential
-   * @returns {string}``
-   * @memberof PersonBadgeFromCredentialPipe
+   * @returns {string}
+   * @memberof MailToByCredentialPipe
    */
   transform(credential: PassportUserCredentialInterface): string {
     if (

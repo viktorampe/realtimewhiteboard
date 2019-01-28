@@ -155,6 +155,10 @@ describe('CredentialsViewModel', () => {
         // no myspace-provider, because it isn't enabled
       ];
 
+      const expectedProviders = mockProviders.map(pr => {
+        return { ...pr, className: pr.name + '-btn' };
+      });
+
       it('should return the enabled SingleSignOn-providers', () => {
         store.dispatch(
           new CredentialActions.CredentialsLoaded({
@@ -163,7 +167,7 @@ describe('CredentialsViewModel', () => {
         );
 
         expect(credentialsViewModel.singleSignOnProviders$).toBeObservable(
-          hot('a', { a: mockProviders })
+          hot('a', { a: expectedProviders })
         );
       });
 
@@ -176,13 +180,9 @@ describe('CredentialsViewModel', () => {
           })
         );
 
-        const expectedProviders = mockProviders.filter(
-          provider => provider.name !== 'google'
-        );
-
         expect(credentialsViewModel.singleSignOnProviders$).toBeObservable(
           hot('a', {
-            a: expectedProviders
+            a: expectedProviders.filter(provider => provider.name !== 'google')
           })
         );
       });
@@ -200,13 +200,11 @@ describe('CredentialsViewModel', () => {
           })
         );
 
-        const expectedProviders = mockProviders.filter(
-          provider => provider.name !== 'smartschool'
-        );
-
         expect(credentialsViewModel.singleSignOnProviders$).toBeObservable(
           hot('a', {
-            a: expectedProviders
+            a: expectedProviders.filter(
+              provider => provider.name !== 'smartschool'
+            )
           })
         );
       });

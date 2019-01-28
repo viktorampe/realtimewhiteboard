@@ -23,7 +23,7 @@ export enum CredentialErrors {
 })
 export class CredentialsViewModel {
   public currentUser$: Observable<PersonInterface>;
-  public credentials$: Observable<PassportUserCredentialInterface[]>;
+  public credentials$: Observable<CredentialWithProviderLogoInterface[]>;
   public singleSignOnProviders$: Observable<SingleSignOnProviderInterface[]>;
   private ssoFromEnvironment$: Observable<EnvironmentSsoInterface>;
 
@@ -128,6 +128,7 @@ export class CredentialsViewModel {
           acc.push({
             name: key,
             ...provider,
+            className: key + '-btn',
             description: provider.description || 'Single Sign-On',
             maxNumberAllowed: provider.maxNumberAllowed || 1
           });
@@ -146,4 +147,9 @@ export interface SingleSignOnProviderInterface {
   className?: string;
   linkUrl: string;
   maxNumberAllowed?: number;
+}
+
+export interface CredentialWithProviderLogoInterface
+  extends PassportUserCredentialInterface {
+  providerLogo?: string;
 }
