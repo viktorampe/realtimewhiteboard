@@ -1,5 +1,13 @@
 // social media
 
+.facebook-btn,
+.google-btn,
+.smartschool-btn {
+  .mat-icon {
+    margin-right: 5px;
+  }
+}
+
 .facebook-btn {
   background-color: $facebook-button-background-color;
   color: $facebook-button-font-color;
@@ -28,5 +36,11 @@
   &:hover {
     color: $smartschool-button-background-color;
     background-color: $smartschool-button-font-color;
+  }
+
+  .mat-icon {
+    background-color: $smartschool-button-font-color;
+    padding: 2px;
+    border-radius: 5px;
   }
 }
