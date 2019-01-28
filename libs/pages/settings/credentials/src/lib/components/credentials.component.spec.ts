@@ -1,9 +1,10 @@
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatIconModule } from '@angular/material';
+import { MatIconModule, MatIconRegistry } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 import { CredentialFixture } from '@campus/dal';
-import { MockActivatedRoute } from '@campus/testing';
+import { ENVIRONMENT_ICON_MAPPING_TOKEN, SharedModule } from '@campus/shared';
+import { MockActivatedRoute, MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { CredentialsComponent } from './credentials.component';
 import {
@@ -25,7 +26,7 @@ describe('CredentialsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [MatIconModule, UiModule],
+      imports: [MatIconModule, UiModule, SharedModule],
       declarations: [CredentialsComponent],
       providers: [
         {
@@ -35,7 +36,12 @@ describe('CredentialsComponent', () => {
         {
           provide: ActivatedRoute,
           useClass: MockActivatedRoute
-        }
+        },
+        {
+          provide: ENVIRONMENT_ICON_MAPPING_TOKEN,
+          useValue: {}
+        },
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();

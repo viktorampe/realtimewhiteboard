@@ -16,10 +16,10 @@ describe('MailToByCredentialPipe', () => {
             value: 'lol@lol.lol'
           },
           {
-            value: 'lol@lol.lol'
+            value: 'roflol@lol.lol'
           },
           {
-            value: 'lol@lol.lol'
+            value: 'rofl@lol.lol'
           }
         ]
       }
