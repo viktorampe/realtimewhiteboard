@@ -37,16 +37,16 @@ let storeState: any;
 describe('EffectFeedback selectors', () => {
   beforeEach(() => {
     effectFeedbackState = createEffectFeedbackState([
-      new EffectFeedbackFixture({ id: 'guid6' }),
-      new EffectFeedbackFixture({ id: 'guid8' }),
-      new EffectFeedbackFixture({ id: 'guid10' }),
-      new EffectFeedbackFixture({ id: 'guid11' })
+      new EffectFeedbackFixture({ id: 'guid6', display: false }),
+      new EffectFeedbackFixture({ id: 'guid8', display: true }),
+      new EffectFeedbackFixture({ id: 'guid10', display: false }),
+      new EffectFeedbackFixture({ id: 'guid11', display: true })
     ]);
     storeState = { effectFeedback: effectFeedbackState };
   });
 
-  it('getNext() should return the first effect feedback', () => {
+  it('getNext() should return the first effect feedback with display = true', () => {
     const results = EffectFeedbackQueries.getNext(storeState);
-    expect(results).toBe(effectFeedbackState.entities['guid6']);
+    expect(results).toBe(effectFeedbackState.entities['guid8']);
   });
 });
