@@ -40,7 +40,7 @@ describe('BannerComponent', () => {
   });
 
   it('should dispatch clicks', () => {
-    let bannerAction = {
+    const bannerAction = {
       title: 'klik hier',
       userAction: {
         type: 'test'
@@ -51,7 +51,6 @@ describe('BannerComponent', () => {
     let action;
     const button = fixture.debugElement.query(By.css('campus-button'));
     component.afterDismiss.subscribe(a => {
-      console.log(a);
       action = a;
     });
     button.triggerEventHandler('click', null);

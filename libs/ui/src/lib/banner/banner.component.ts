@@ -14,10 +14,6 @@ export class BannerComponent<T> {
   constructor() {}
 
   onAction(action: T) {
-    this.onDismiss(action);
-  }
-
-  onDismiss(action: T) {
     this.afterDismiss.next(action);
   }
 }
