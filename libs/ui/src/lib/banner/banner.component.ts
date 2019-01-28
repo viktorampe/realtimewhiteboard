@@ -1,29 +1,28 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Action } from '@ngrx/store';
 
 @Component({
   selector: 'campus-banner',
   templateUrl: './banner.component.html',
   styleUrls: ['./banner.component.scss']
 })
-export class BannerComponent {
+export class BannerComponent<T> {
   @Input() message: string;
   @Input() icon: string;
-  @Input() actions: BannerAction[];
-  @Output() afterDismiss = new EventEmitter<Action>();
+  @Input() actions: BannerAction<T>[];
+  @Output() afterDismiss = new EventEmitter<T>();
 
   constructor() {}
 
-  onAction(action: BannerAction) {
+  onAction(action: T) {
     this.onDismiss(action);
   }
 
-  onDismiss(bannerAction: BannerAction) {
-    this.afterDismiss.next(bannerAction.userAction);
+  onDismiss(action: T) {
+    this.afterDismiss.next(action);
   }
 }
 
-export interface BannerAction {
+export interface BannerAction<T> {
   title: string;
-  userAction: Action;
+  userAction: T;
 }

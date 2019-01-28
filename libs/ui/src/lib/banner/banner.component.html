@@ -9,9 +9,9 @@
   </div>
   <div class="ui-banner__buttons">
     <campus-button
-      *ngFor="let button of actions"
-      (click)="onAction(button.userAction)"
-      >{{ button.title }}</campus-button
+      *ngFor="let action of actions"
+      (click)="onAction(action.userAction)"
+      >{{ action.title }}</campus-button
     >
   </div>
 </div>
