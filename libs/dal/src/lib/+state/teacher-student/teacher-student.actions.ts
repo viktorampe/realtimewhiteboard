@@ -70,7 +70,7 @@ export class LinkTeacherStudent implements Action {
 export class UnlinkTeacherStudent implements Action {
   readonly type = TeacherStudentActionTypes.UnlinkTeacherStudent;
 
-  constructor(public payload: { teacherId: number }) {}
+  constructor(public payload: { teacherId: number; userId: number }) {}
 }
 
 export type TeacherStudentActions =

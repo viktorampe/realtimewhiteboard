@@ -77,7 +77,7 @@ export const environment: EnvironmentInterface = {
     // add: 'assets/icons/add.svg',
     // archive: 'assets/icons/archive.svg',
     cancel: 'assets/icons/cancel.svg',
-    // delete: 'assets/icons/delete.svg',
+    delete: 'assets/icons/delete.svg',
     // edit: 'assets/icons/edit.svg',
     filter: 'assets/icons/filter.svg',
     // lock: 'assets/icons/lock.svg',
@@ -132,6 +132,7 @@ export const environment: EnvironmentInterface = {
     // 'book-not': 'assets/icons/book-not.svg',
     book: 'assets/icons/book.svg',
     bundle: 'assets/icons/bundle.svg',
+    'settings-cog': 'assets/icons/settings.svg',
     // bundles: 'assets/icons/bundles.svg',
     // call: 'assets/icons/call.svg',
     // caret: 'assets/icons/caret.svg',
@@ -143,11 +144,14 @@ export const environment: EnvironmentInterface = {
     // clock2: 'assets/icons/clock2.svg',
     // code: 'assets/icons/code.svg',
     creditcard: 'assets/icons/creditcard.svg',
+    google: 'assets/icons/google.svg',
+    mail: 'assets/icons/mail.svg',
+    link: 'assets/icons/link.svg',
     // 'die-keure': 'assets/icons/die-keure.svg',
     'view-content': 'assets/icons/eye.svg',
     eye: 'assets/icons/eye.svg',
     // eye2: 'assets/icons/eye2.svg',
-    // facebook: 'assets/icons/facebook.svg',
+    facebook: 'assets/icons/facebook.svg',
     // favorite: 'assets/icons/favorite.svg',
     // favorites: 'assets/icons/favorites.svg',
     // favorites2: 'assets/icons/favorites2.svg',
@@ -240,25 +244,25 @@ export const environment: EnvironmentInterface = {
   sso: {
     facebook: {
       enabled: true,
-      linkUrl: 'http://api.polpo.localhost/auth/......', //TODO -- needs to be corrected to actual link
+      linkUrl: 'http://api.polpo.localhost:3000/link/facebook/callback',
       description: 'Facebook',
       logoIcon: 'facebook',
       className: 'button-facebook'
     },
     google: {
       enabled: true,
-      linkUrl: 'http://api.polpo.localhost/auth/......', //TODO -- needs to be corrected to actual link
+      linkUrl: 'http://api.polpo.localhost:3000/link/google/callback',
       description: 'Google',
       logoIcon: 'google',
       className: 'button-google'
     },
     smartschool: {
       enabled: true,
-      linkUrl: 'http://api.polpo.localhost/auth/......', //TODO -- needs to be corrected to actual link
+      linkUrl: 'http://api.polpo.localhost:3000/link/smartschool/callback',
       description: 'Smartschool',
       logoIcon: 'smartschool:orange',
       className: 'button-smartschool',
-      maxNumberAllowed: 3 //TODO What is a realistic limit here?
+      maxNumberAllowed: 10
     }
   }
 };
