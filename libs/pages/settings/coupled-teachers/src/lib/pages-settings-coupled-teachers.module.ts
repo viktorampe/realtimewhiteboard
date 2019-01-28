@@ -20,7 +20,8 @@ import { CoupledTeachersComponent } from './components/coupled-teachers/coupled-
         path: '',
         pathMatch: 'full',
         component: CoupledTeachersComponent,
-        resolve: { isResolved: CoupledTeachersResolver }
+        resolve: { isResolved: CoupledTeachersResolver },
+        runGuardsAndResolvers: 'always'
       }
     ])
   ]
