@@ -23,7 +23,6 @@ import { CredentialsResolver } from './components/credentials.resolver';
       }
     ])
   ],
-  declarations: [CredentialsComponent],
-  exports: [CredentialsComponent]
+  declarations: [CredentialsComponent]
 })
 export class PagesSettingsCredentialsModule {}

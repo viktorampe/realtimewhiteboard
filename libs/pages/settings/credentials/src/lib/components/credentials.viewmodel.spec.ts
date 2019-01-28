@@ -265,7 +265,7 @@ describe('CredentialsViewModel', () => {
       const mockUser = new PersonFixture();
       store.dispatch(new UserActions.UserLoaded(mockUser));
 
-      let message$ = merge(
+      const message$ = merge(
         credentialsViewModel.getErrorMessageFromCode(
           CredentialErrors.AlreadyLinked
         ),
@@ -291,7 +291,7 @@ describe('CredentialsViewModel', () => {
       const mockUser = new PersonFixture({ type: 'student' });
       store.dispatch(new UserActions.UserLoaded(mockUser));
 
-      let message$ = merge(
+      const message$ = merge(
         credentialsViewModel.getErrorMessageFromCode(
           CredentialErrors.AlreadyLinked
         ),
