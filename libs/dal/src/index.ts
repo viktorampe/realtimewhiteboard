@@ -30,6 +30,7 @@ export {
   EduContentServiceInterface,
   EDUCONTENT_SERVICE_TOKEN
 } from './lib/edu-content/edu-content.service.interface';
+export * from './lib/feedback';
 export * from './lib/persons';
 export {
   CustomSerializer,

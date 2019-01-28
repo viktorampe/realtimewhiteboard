@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { ModuleWithProviders, NgModule } from '@angular/core';
+import { MatSnackBarModule } from '@angular/material';
 import {
   BrowserModule as CampusBrowserModule,
   BROWSER_STORAGE_SERVICE_TOKEN,
@@ -88,6 +89,7 @@ import { EduContentService } from './edu-content/edu-content.service';
 import { EDUCONTENT_SERVICE_TOKEN } from './edu-content/edu-content.service.interface';
 import { ExerciseService } from './exercise/exercise.service';
 import { EXERCISE_SERVICE_TOKEN } from './exercise/exercise.service.interface';
+import { FeedbackService, FEEDBACK_SERVICE_TOKEN } from './feedback';
 import { LearningAreaService } from './learning-area/learning-area.service';
 import { LEARNINGAREA_SERVICE_TOKEN } from './learning-area/learning-area.service.interface';
 import { AuthService } from './persons/auth-service';
@@ -123,6 +125,7 @@ interface DalOptions {
     SDKBrowserModule.forRoot(),
     HttpClientModule,
     ScormModule,
+    MatSnackBarModule,
     ...getStoreModuleForFeatures([
       LearningAreaReducer,
       UserContentReducer,
@@ -206,7 +209,8 @@ interface DalOptions {
     },
     { provide: CONTENT_REQUEST_SERVICE_TOKEN, useClass: ContentRequestService },
     { provide: RESULTS_SERVICE_TOKEN, useClass: ResultsService },
-    { provide: CREDENTIAL_SERVICE_TOKEN, useClass: CredentialService }
+    { provide: CREDENTIAL_SERVICE_TOKEN, useClass: CredentialService },
+    { provide: FEEDBACK_SERVICE_TOKEN, useClass: FeedbackService }
   ]
 })
 export class DalModule {

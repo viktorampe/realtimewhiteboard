@@ -1,38 +1,70 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable, InjectionToken } from '@angular/core';
 import {
   MatSnackBar,
+  MatSnackBarConfig,
+  MatSnackBarDismiss,
   MatSnackBarRef,
-  MAT_SNACK_BAR_DEFAULT_OPTIONS,
   SimpleSnackBar
 } from '@angular/material/snack-bar';
 import { Action, Store } from '@ngrx/store';
-import { Observable, of } from 'rxjs';
+import { Observable, of, timer } from 'rxjs';
 import { filter, map, mapTo, switchMap } from 'rxjs/operators';
 import { DalState } from '../+state';
+import { ActionSuccessful } from '../+state/dal.actions';
+
+export const FEEDBACK_SERVICE_TOKEN = new InjectionToken('FeedbackService');
+export interface FeedbackServiceInterface {
+  bannerFeedback$: Observable<EffectFeedbackInterface>;
+}
 
 @Injectable({
   providedIn: 'root'
 })
-export class FeedbackService {
+export class FeedbackService implements FeedbackServiceInterface {
+  // source
   private nextFeedback$: Observable<EffectFeedbackInterface>;
 
+  // intermediate
   private errorFeedback$: Observable<EffectFeedbackInterface>;
   private successFeedback$: Observable<EffectFeedbackInterface>;
 
+  // presentation
   private snackbarFeedback$: Observable<EffectFeedbackInterface>;
   public bannerFeedback$: Observable<EffectFeedbackInterface>;
 
-  constructor(
-    private store: Store<DalState>,
-    @Inject(MAT_SNACK_BAR_DEFAULT_OPTIONS) private snackBar: MatSnackBar
-  ) {
+  // default snackbar config
+  private snackbarConfig = {
+    duration: 3000
+  } as MatSnackBarConfig;
+
+  constructor(private store: Store<DalState>, private snackBar: MatSnackBar) {
     this.getSourceStreams();
     this.setIntermediateStreams();
     this.setPresentationStreams();
   }
 
   getSourceStreams(): void {
-    this.nextFeedback$ = of(null); //TODO use code below
+    // TODO delete
+    const mockAction = {
+      title: 'klik',
+      userAction: new ActionSuccessful({
+        successfulAction: 'dismiss with action'
+      })
+    };
+
+    // TODO delete
+    const mockFeedBack: EffectFeedbackInterface = {
+      id: '1',
+      triggerAction: null,
+      message: 'This is a message',
+      type: 'success',
+      userActions: [mockAction],
+      timeStamp: 1,
+      display: true,
+      priority: Priority.HIGH
+    };
+
+    this.nextFeedback$ = timer(1000, 4000).pipe(mapTo(mockFeedBack)); //TODO use code below
     // this.nextFeedback$ = this.store.select(EffectFeedbackQueries.getNext);
   }
 
@@ -58,7 +90,8 @@ export class FeedbackService {
             feedback.message,
             feedback.userActions && feedback.userActions.length
               ? feedback.userActions[0].title
-              : null
+              : null,
+            this.snackbarConfig
           ),
           feedback
         ]),
@@ -66,11 +99,25 @@ export class FeedbackService {
           ([snackBarRef, feedback]: [
             MatSnackBarRef<SimpleSnackBar>,
             EffectFeedbackInterface
-          ]) => snackBarRef.onAction().pipe(mapTo(feedback))
+          ]) =>
+            snackBarRef
+              .afterDismissed()
+              .pipe(map(dismiss => [dismiss, feedback]))
         )
       )
-      .subscribe(feedback =>
-        this.store.dispatch(feedback.userActions[0].userAction)
+      .subscribe(
+        ([dismiss, feedback]: [
+          MatSnackBarDismiss,
+          EffectFeedbackInterface
+        ]) => {
+          if (dismiss.dismissedByAction) {
+            this.store.dispatch(feedback.userActions[0].userAction);
+            console.log('dismissed with action');
+          } else {
+            console.log('dismissed without action');
+          }
+          //this.store.dispatch( *Remove Feedback action*)
+        }
       );
   }
 }

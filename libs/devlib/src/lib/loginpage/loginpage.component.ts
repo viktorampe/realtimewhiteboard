@@ -5,6 +5,8 @@ import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   EduContentInterface,
+  FeedbackServiceInterface,
+  FEEDBACK_SERVICE_TOKEN,
   UserActions
 } from '@campus/dal';
 import { AlertQueueApi, PersonApi } from '@diekeure/polpo-api-angular-sdk';
@@ -29,7 +31,9 @@ export class LoginpageComponent implements OnInit {
     private alertApi: AlertQueueApi,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     private store: Store<AlertReducer.State>,
-    private router: Router
+    private router: Router,
+    @Inject(FEEDBACK_SERVICE_TOKEN)
+    private snackBarService: FeedbackServiceInterface
   ) {}
 
   ngOnInit() {
