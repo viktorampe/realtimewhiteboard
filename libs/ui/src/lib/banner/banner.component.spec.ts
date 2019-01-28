@@ -1,9 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
-import { Action } from '@ngrx/store';
 import { UiModule } from '../ui.module';
 import { BannerComponent } from './banner.component';
+
+interface Action {
+  type: string;
+}
 
 describe('BannerComponent', () => {
   let component: BannerComponent<Action>;
