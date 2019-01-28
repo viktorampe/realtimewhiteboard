@@ -60,7 +60,7 @@ describe('InfoPanelComponent', () => {
     component.titleRightRouterLink = ['/settings'];
     fixture.detectChanges();
     const right = fixture.debugElement.query(
-      By.css('.info-panel__title__right--linked')
+      By.css('.info-panel__title__right')
     );
     const rightLinked = fixture.debugElement.query(
       By.css('.info-panel__title__right--linked')
