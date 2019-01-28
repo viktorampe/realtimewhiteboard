@@ -13,6 +13,7 @@ import { ActionSuccessful } from './../dal.actions';
 import {
   AlertsLoaded,
   AlertsLoadError,
+  DeleteAlert,
   LoadAlerts,
   LoadNewAlerts,
   NewAlertsLoaded,
@@ -97,7 +98,8 @@ describe('AlertEffects', () => {
               alertId: number | number[],
               read?: boolean,
               intended?: boolean
-            ) => {}
+            ) => {},
+            deleteAlert: (userId: number, alertId: number) => {}
           }
         },
         AlertsEffects,
@@ -500,6 +502,48 @@ describe('AlertEffects', () => {
         setAlertByFilterAction,
         setAlertReadAction
       );
+    });
+  });
+
+  describe('deleteAlert$', () => {
+    const deleteAlertAction = new DeleteAlert({
+      id: mockData.alertId,
+      personId: mockData.userId
+    });
+    // TODO: update when response actions are available
+    const deleteAlertSuccessAction = null;
+    const deleteAlertFailureAction = null;
+
+    const deleteAlertUndoAction = undo(deleteAlertAction);
+
+    beforeAll(() => {
+      usedState = initialState;
+    });
+    beforeEach(() => {
+      mockServiceMethodReturnValue('deleteAlert', {});
+    });
+
+    describe('when deletion is successful', () => {
+      it('should dispatch a success action', () => {
+        expectInAndOut(
+          effects.deleteAlert$,
+          deleteAlertAction,
+          deleteAlertSuccessAction
+        );
+      });
+    });
+
+    describe('when there is an error', () => {
+      beforeEach(() => {
+        mockServiceMethodError('deleteAlert', 'Oops, something went wrong!');
+      });
+      it('should dispatch an undo action', () => {
+        expectInAndOut(
+          effects.deleteAlert$,
+          deleteAlertAction,
+          deleteAlertUndoAction
+        );
+      });
     });
   });
 });

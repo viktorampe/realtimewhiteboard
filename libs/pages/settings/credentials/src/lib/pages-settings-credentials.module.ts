@@ -1,19 +1,28 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { MatIconModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
+import { SharedModule } from '@campus/shared';
+import { UiModule } from '@campus/ui';
+import { CredentialsComponent } from './components/credentials.component';
 import { CredentialsResolver } from './components/credentials.resolver';
 
 @NgModule({
   imports: [
     CommonModule,
+    SharedModule,
+    UiModule,
+    MatIconModule,
     RouterModule.forChild([
       {
         path: '',
         pathMatch: 'full',
-        component: null, //CredentialsComponent
-        resolve: { isResolved: CredentialsResolver }
+        component: CredentialsComponent,
+        resolve: { isResolved: CredentialsResolver },
+        runGuardsAndResolvers: 'always'
       }
     ])
-  ]
+  ],
+  declarations: [CredentialsComponent]
 })
 export class PagesSettingsCredentialsModule {}

@@ -1,9 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import {
+  AUTH_SERVICE_TOKEN,
   DalState,
-  getStoreModuleForFeatures,
-  TeacherStudentActions,
-  UserReducer
+  TeacherStudentActions
 } from '@campus/dal';
 import { Store, StoreModule } from '@ngrx/store';
 import { CoupledTeachersViewModel } from './coupled-teachers.viewmodel';
@@ -14,11 +13,14 @@ let store: Store<DalState>;
 describe('CoupledTeacherViewModel', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        StoreModule.forRoot({}),
-        ...getStoreModuleForFeatures([UserReducer])
-      ],
-      providers: [Store]
+      imports: [StoreModule.forRoot({})],
+      providers: [
+        Store,
+        {
+          provide: AUTH_SERVICE_TOKEN,
+          useValue: { userId: 10 }
+        }
+      ]
     });
 
     coupledTeacherViewModel = TestBed.get(CoupledTeachersViewModel);
@@ -51,7 +53,8 @@ describe('CoupledTeacherViewModel', () => {
 
       expect(store.dispatch).toHaveBeenCalledWith(
         new TeacherStudentActions.UnlinkTeacherStudent({
-          teacherId: 1
+          teacherId: 1,
+          userId: 10
         })
       );
     });

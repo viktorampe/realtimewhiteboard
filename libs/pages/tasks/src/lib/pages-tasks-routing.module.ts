@@ -10,6 +10,7 @@ const routes: Routes = [
   {
     path: '',
     resolve: { isResolved: TasksResolver },
+    runGuardsAndResolvers: 'always',
     children: [
       {
         path: '',

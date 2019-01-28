@@ -6,6 +6,12 @@ export {
 export * from './lib/interceptors';
 export * from './lib/interfaces';
 export {
+  MailToByCredentialPipe
+} from './lib/pipes/mail-to/mail-to-credential-pipe';
+export {
+  PersonBadgeFromCredentialPipe
+} from './lib/pipes/person-badge-from-credential/person-badge-from-credential-pipe';
+export {
   ScormExerciseServiceInterface,
   SCORM_EXERCISE_SERVICE_TOKEN
 } from './lib/scorm/scorm-exercise.service.interface';

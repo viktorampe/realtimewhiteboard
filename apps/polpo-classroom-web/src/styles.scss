@@ -104,6 +104,8 @@ body {
 @import 'libs/shared/src/lib/shared-theme';
 @include shared-theme();
 
+// include app specific css
+@import 'scss/social-media';
 /*
  * App styles
  */
