@@ -34,7 +34,7 @@ export class CampusHttpInterceptor implements HttpInterceptor {
             error.status
           )
         ) {
-          this.router.navigate(['/error', error.status]);
+          // this.router.navigate(['/error', error.status]);
         }
         return throwError(error);
       })

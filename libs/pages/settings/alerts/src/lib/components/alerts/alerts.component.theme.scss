@@ -1,2 +1,14 @@
 @mixin pages-settings-alerts-theme() {
+  .pages-settings-alerts {
+    &__info-panel {
+      &__notification {
+        background-color: #ecf4f6;
+        margin-bottom: 5px;
+        border: 1px solid #cbced4;
+      }
+      &__notification:nth-child(2n) {
+        background-color: #e1edf2;
+      }
+    }
+  }
 }

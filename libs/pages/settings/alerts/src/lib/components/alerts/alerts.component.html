@@ -1,10 +1,27 @@
 <campus-info-panel [titleText]="pageTitle" [icon]="pageIcon">
-  <ng-template #noAlerts>Geen meldingen.</ng-template>
-
   <ng-container *ngIf="(alerts$ | async) as alerts">
     <ng-container *ngIf="alerts.length > 0; else: noAlerts">
-      <!-- TODO: use the refactored notification-item component -->
-      <div *ngFor="let alert of alerts">Alert</div>
+      <div
+        *ngFor="let alert of alerts"
+        class="pages-settings-alerts__info-panel__notification"
+      >
+        <campus-notification
+          [icon]="alert.icon"
+          [notificationText]="alert.titleText"
+          [routerLink]="alert.link"
+          [notificationDate]="alert.notificationDate"
+          [read]="alert.read"
+        ></campus-notification>
+        <div class="pages-settings-alerts__info-panel__notification__actions"
+          ><mat-icon [svgIcon]="false ? 'eye2' : 'eye'"></mat-icon>
+          <!--
+            TODO --
+            icon eye2 needs to be correct icon
+          -->
+          <mat-icon></mat-icon
+        ></div>
+      </div>
     </ng-container>
+    <ng-template #noAlerts>Geen meldingen.</ng-template>
   </ng-container>
 </campus-info-panel>

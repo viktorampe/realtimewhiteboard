@@ -1,0 +1,15 @@
+.pages-settings-alerts {
+  &__info-panel {
+    &__notification {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      &__actions {
+        display: flex;
+        flex-direction: row;
+        align-content: center;
+        justify-content: center;
+      }
+    }
+  }
+}

@@ -86,9 +86,12 @@ export class AlertsEffects {
       // If not provided, set update time to now
       const timeStamp = action.payload.timeStamp || Date.now();
 
-      return this.alertService
-        .getAllForUser(userId)
-        .pipe(map(alerts => new AlertsLoaded({ alerts, timeStamp })));
+      return this.alertService.getAllForUser(userId).pipe(
+        map(alerts => {
+          console.log({ alerts });
+          return new AlertsLoaded({ alerts, timeStamp });
+        })
+      );
     },
     onError: (action: LoadAlerts, error) => {
       return new AlertsLoadError(error);
@@ -106,7 +109,12 @@ export class AlertsEffects {
 
       return this.alertService
         .getAllForUser(action.payload.userId, timeStamp)
-        .pipe(map(alerts => new NewAlertsLoaded({ alerts, timeStamp })));
+        .pipe(
+          map(alerts => {
+            console.log({ alerts });
+            return new NewAlertsLoaded({ alerts, timeStamp });
+          })
+        );
     },
     onError: (action: LoadNewAlerts, error) => {
       return new AlertsLoadError(error);
