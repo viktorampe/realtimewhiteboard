@@ -77,7 +77,7 @@ export const environment: EnvironmentInterface = {
     // add: 'assets/icons/add.svg',
     // archive: 'assets/icons/archive.svg',
     cancel: 'assets/icons/cancel.svg',
-    // delete: 'assets/icons/delete.svg',
+    delete: 'assets/icons/delete.svg',
     // edit: 'assets/icons/edit.svg',
     filter: 'assets/icons/filter.svg',
     // lock: 'assets/icons/lock.svg',
