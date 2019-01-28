@@ -29,6 +29,7 @@ export class LoginpageComponent implements OnInit {
   route$: Observable<string[]>;
   response: Observable<any>;
 
+
   alert$ = this.store.pipe(
     select(AlertQueries.getAll),
     map(alerts => alerts[0])
@@ -37,6 +38,9 @@ export class LoginpageComponent implements OnInit {
   effectFeedback$: Observable<EffectFeedbackInterface> = this.store.pipe(
     select(EffectFeedbackQueries.getNext)
   );
+
+
+  date: Date = new Date('2019-01-22');
 
   constructor(
     public loginPageviewModel: LoginPageViewModel,

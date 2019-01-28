@@ -42,7 +42,8 @@ import {
   ListViewComponent,
   ListViewItemDirective
 } from './list-view/list-view.component';
-import { NotificationDropdownItemComponent } from './notification-dropdown-item/notification-dropdown-item.component';
+import { DropdownDirective } from './notification/directives/notification-dropdown.directive';
+import { NotificationComponent } from './notification/notification.component';
 import { PageHeaderComponent } from './page-header/page-header.component';
 import { PersonBadgeComponent } from './person-badge/person-badge.component';
 import { PersonInitialsPipe } from './person-badge/pipes/person-initials.pipe';
@@ -122,7 +123,7 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     WarningDirective,
     DisabledDirective,
     BreadcrumbsComponent,
-    NotificationDropdownItemComponent,
+    NotificationComponent,
     DropdownMenuComponent,
     TruncateStringPipe,
     DropdownMenuItemComponent,
@@ -132,7 +133,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     RemovePrefixStringPipe,
     LargeDirective,
     PrimaryDirective,
-    PersonSummaryComponent
+    PersonSummaryComponent,
+    DropdownDirective
   ],
   exports: [
     FilterTextInputComponent,
@@ -168,7 +170,7 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     DisabledDirective,
     TreeNavComponent,
     BreadcrumbsComponent,
-    NotificationDropdownItemComponent,
+    NotificationComponent,
     DropdownMenuComponent,
     TruncateStringPipe,
     DropdownMenuItemComponent,
@@ -178,7 +180,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     RemovePrefixStringPipe,
     LargeDirective,
     PrimaryDirective,
-    PersonSummaryComponent
+    PersonSummaryComponent,
+    DropdownDirective
   ]
 })
 export class UiModule {}

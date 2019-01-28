@@ -1,0 +1,125 @@
+:host {
+  padding: 10px;
+  padding-left: 5px; //compensate for border-left -> theme
+  position: relative;
+  text-decoration: none;
+  display: flex;
+}
+
+.ui-notification {
+  &__body {
+    display: flex;
+    flex-direction: row;
+    flex: 1 1 auto;
+  }
+
+  &__badge {
+    margin-right: 10px;
+  }
+
+  &__end {
+    display: flex;
+    flex-direction: row;
+    flex: 0 1 auto;
+    align-self: stretch;
+  }
+
+  &__icon {
+    padding: 5px;
+    width: 50px;
+    height: 50px;
+    border-radius: 4px;
+    margin-right: 10px;
+    flex: 0 0 auto;
+  }
+
+  &__date {
+    font-size: 80%;
+    margin: 5px;
+    padding: 5px;
+    white-space: nowrap;
+    align-self: center;
+    border-radius: 10px;
+  }
+
+  &__title {
+    margin: 5px;
+    align-self: center;
+    flex: 0 0 auto;
+  }
+
+  &__text {
+    margin: 5px;
+    align-self: center;
+  }
+
+  &__buttons {
+    align-self: center;
+    display: flex;
+  }
+
+  &--accent &__text {
+    font-style: italic;
+
+    > span {
+      padding-left: 10px;
+      white-space: nowrap;
+
+      span {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+:host.ui-notification--mobile {
+  .ui-notification {
+    &__body {
+      flex-direction: column;
+    }
+
+    &__title,
+    &__text {
+      align-self: flex-start;
+    }
+
+    &__end {
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    &__date {
+      align-self: flex-end;
+    }
+
+    &__buttons {
+      align-self: flex-end;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+  }
+}
+
+:host.ui-notification--dropdown {
+  .ui-notification {
+    &__body {
+      flex-direction: column;
+    }
+
+    &__icon {
+      width: 34px;
+      height: 34px;
+    }
+
+    &__date,
+    &__title,
+    &__text {
+      margin-top: 0px;
+      align-self: flex-start;
+    }
+
+    &__buttons {
+      display: none;
+    }
+  }
+}

@@ -1,6 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { ValidationErrors } from '@angular/forms';
 import {
+  AuthServiceInterface,
+  AUTH_SERVICE_TOKEN,
   DalState,
   LinkedPersonQueries,
   PersonInterface,
@@ -40,7 +42,10 @@ export class CoupledTeachersViewModel {
 
   // TODO: inject toaster service for showing success message
   // TODO: remove mockViewModel when selectors are available
-  constructor(private store: Store<DalState>) {
+  constructor(
+    private store: Store<DalState>,
+    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
+  ) {
     this.setSourceStreams();
     this.setIntermediateStreams();
     this.setPresentationStreams();
@@ -99,9 +104,11 @@ export class CoupledTeachersViewModel {
   }
 
   public unlinkPerson(teacherId: number): void {
-    console.log('here');
     this.store.dispatch(
-      new TeacherStudentActions.UnlinkTeacherStudent({ teacherId })
+      new TeacherStudentActions.UnlinkTeacherStudent({
+        teacherId,
+        userId: this.authService.userId
+      })
     );
   }
 }

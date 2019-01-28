@@ -1,5 +1,9 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { BundleInterface } from '../../+models';
+import {
+  TeacherStudentActions,
+  TeacherStudentActionTypes
+} from '../teacher-student/teacher-student.actions';
 import { BundlesActions, BundlesActionTypes } from './bundle.actions';
 
 export const NAME = 'bundles';
@@ -39,7 +43,10 @@ export const initialState: State = adapter.getInitialState({
   loaded: false
 });
 
-export function reducer(state = initialState, action: BundlesActions): State {
+export function reducer(
+  state = initialState,
+  action: BundlesActions | TeacherStudentActions
+): State {
   switch (action.type) {
     case BundlesActionTypes.AddBundle: {
       /**
@@ -98,6 +105,10 @@ export function reducer(state = initialState, action: BundlesActions): State {
     case BundlesActionTypes.ClearBundles: {
       return adapter.removeAll(state);
     }
+
+    case TeacherStudentActionTypes.LinkTeacherStudent:
+    case TeacherStudentActionTypes.UnlinkTeacherStudent:
+      return { ...state, loaded: false };
 
     default: {
       return state;

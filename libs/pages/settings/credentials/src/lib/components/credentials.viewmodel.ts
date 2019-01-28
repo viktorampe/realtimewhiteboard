@@ -9,15 +9,21 @@ import {
 } from '@campus/dal';
 import { EnvironmentSsoInterface, ENVIRONMENT_SSO_TOKEN } from '@campus/shared';
 import { select, Store } from '@ngrx/store';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map, withLatestFrom } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+export enum CredentialErrors {
+  ForbiddenMixedRoles = 'ForbiddenError: mixed_roles',
+  ForbiddenInvalidRoles = 'ForbiddenError: invalid_roles',
+  AlreadyLinked = 'Error: Credentials already linked'
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class CredentialsViewModel {
   public currentUser$: Observable<PersonInterface>;
-  public credentials$: Observable<PassportUserCredentialInterface[]>;
+  public credentials$: Observable<CredentialWithProviderLogoInterface[]>;
   public singleSignOnProviders$: Observable<SingleSignOnProviderInterface[]>;
   private ssoFromEnvironment$: Observable<EnvironmentSsoInterface>;
 
@@ -28,6 +34,29 @@ export class CredentialsViewModel {
   ) {
     this.setSourceStreams();
     this.setPresentationStreams();
+  }
+
+  public getErrorMessageFromCode(code: string): Observable<string> {
+    return this.currentUser$.pipe(
+      map(user => {
+        let userTypeString = 'Smartschool-LEERKRACHT';
+        if (user.type && user.type === 'student') {
+          userTypeString = 'Smartschool-LEERLING';
+        }
+        switch (code) {
+          case CredentialErrors.ForbiddenMixedRoles:
+          case CredentialErrors.ForbiddenInvalidRoles:
+            return (
+              'Je kan enkel een ' +
+              userTypeString +
+              ' profiel koppelen aan dit POLPO-profiel.'
+            );
+          case CredentialErrors.AlreadyLinked:
+            return 'Dit account werd al aan een ander profiel gekoppeld.';
+        }
+        return '';
+      })
+    );
   }
 
   public useProfilePicture(credential: PassportUserCredentialInterface): void {
@@ -62,17 +91,30 @@ export class CredentialsViewModel {
 
   private setPresentationStreams(): void {
     this.currentUser$ = this.store.pipe(select(UserQueries.getCurrentUser));
-    this.credentials$ = this.store.pipe(select(CredentialQueries.getAll));
-    this.singleSignOnProviders$ = this.ssoFromEnvironment$.pipe(
-      withLatestFrom(this.credentials$),
-      map(([ssoEnv, credentials]) =>
-        this.convertToSingleSignOnProviders(ssoEnv).filter(
+    this.credentials$ = combineLatest(
+      this.ssoFromEnvironment$,
+      this.store.pipe(select(CredentialQueries.getAll))
+    ).pipe(
+      map(([ssoEnv, credentials]) => {
+        return credentials.map(cred => ({
+          ...cred,
+          providerLogo: ssoEnv[cred.provider].logoIcon
+        }));
+      })
+    );
+
+    this.singleSignOnProviders$ = combineLatest(
+      this.ssoFromEnvironment$,
+      this.credentials$
+    ).pipe(
+      map(([ssoEnv, credentials]) => {
+        return this.convertToSingleSignOnProviders(ssoEnv).filter(
           provider =>
             credentials.filter(
               credential => credential.provider === provider.name
             ).length < provider.maxNumberAllowed
-        )
-      )
+        );
+      })
     );
   }
 
@@ -86,6 +128,7 @@ export class CredentialsViewModel {
           acc.push({
             name: key,
             ...provider,
+            className: key + '-btn',
             description: provider.description || 'Single Sign-On',
             maxNumberAllowed: provider.maxNumberAllowed || 1
           });
@@ -104,4 +147,9 @@ export interface SingleSignOnProviderInterface {
   className?: string;
   linkUrl: string;
   maxNumberAllowed?: number;
+}
+
+export interface CredentialWithProviderLogoInterface
+  extends PassportUserCredentialInterface {
+  providerLogo?: string;
 }

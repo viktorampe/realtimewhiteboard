@@ -1,6 +1,7 @@
 import { Update } from '@ngrx/entity';
 import { BundleActions } from '.';
 import { BundleInterface } from '../../+models';
+import { TeacherStudentActions } from '../teacher-student';
 import { initialState, reducer, State } from './bundle.reducer';
 
 const nameInitialValue = 'bert';
@@ -216,6 +217,26 @@ describe('Bundles Reducer', () => {
       const action = new BundleActions.ClearBundles();
       const result = reducer(startState, action);
       expect(result).toEqual(createState([], true, 'something went wrong'));
+    });
+  });
+
+  describe('invalidate action', () => {
+    it('should trigger from LinkTeacherStudent', () => {
+      const startState = createState(bundles, true);
+      const action = new TeacherStudentActions.LinkTeacherStudent({
+        publicKey: 'foo'
+      });
+      const result = reducer(startState, action);
+      expect(result).toEqual(createState(bundles, false));
+    });
+
+    it('should trigger from UnlinkTeacherStudent', () => {
+      const startState = createState(bundles, true);
+      const action = new TeacherStudentActions.UnlinkTeacherStudent({
+        teacherId: 1
+      });
+      const result = reducer(startState, action);
+      expect(result).toEqual(createState(bundles, false));
     });
   });
 });

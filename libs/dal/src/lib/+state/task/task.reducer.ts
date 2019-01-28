@@ -1,5 +1,9 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { TaskInterface } from '../../+models';
+import {
+  TeacherStudentActions,
+  TeacherStudentActionTypes
+} from '../teacher-student/teacher-student.actions';
 import { TasksActions, TasksActionTypes } from './task.actions';
 
 export const NAME = 'tasks';
@@ -19,7 +23,10 @@ export const initialState: State = adapter.getInitialState({
   loaded: false
 });
 
-export function reducer(state = initialState, action: TasksActions): State {
+export function reducer(
+  state = initialState,
+  action: TasksActions | TeacherStudentActions
+): State {
   switch (action.type) {
     case TasksActionTypes.AddTask: {
       return adapter.addOne(action.payload.task, state);
@@ -64,6 +71,10 @@ export function reducer(state = initialState, action: TasksActions): State {
     case TasksActionTypes.ClearTasks: {
       return adapter.removeAll(state);
     }
+
+    case TeacherStudentActionTypes.LinkTeacherStudent:
+    case TeacherStudentActionTypes.UnlinkTeacherStudent:
+      return { ...state, loaded: false };
 
     default: {
       return state;
