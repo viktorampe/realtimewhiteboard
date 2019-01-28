@@ -31,7 +31,6 @@ export class NotificationComponent implements OnDestroy {
   @Input() icon: string;
   @Input() person: BadgePersonInterface;
   @Input() titleText: string;
-  @Input() link: string;
   @Input() notificationText: string;
   @Input() notificationDate: Date;
   @Input() accented: boolean;

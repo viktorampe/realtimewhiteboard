@@ -77,7 +77,6 @@
   // --warning--active
   $ui-button--warning--active-color: $ui-button--warning-background-color !default;
   $ui-button--warning--active-background-color: $ui-button--warning-color !default;
-
   .ui-button {
     font-size: $ui-button-font-size;
     padding: $ui-button-padding;
@@ -87,17 +86,14 @@
     margin-right: $ui-button-margin-right;
     margin-top: $ui-button-margin-top;
     margin-bottom: $ui-button-margin-bottom;
-
     &:active {
       background-color: darken($ui-button-background-color, 5%);
       color: $ui-button--active-color;
     }
-
     &:hover {
       background-color: darken($ui-button-background-color, 5%);
     }
   }
-
   // --bordered
   .ui-button--bordered {
     border-color: $ui-button-border-color;
@@ -110,12 +106,10 @@
       }
     }
   }
-
   // --rounded-corners
   .ui-button--rounded-corners {
     border-radius: $ui-button--rounded-corner-border-radius;
   }
-
   // --disabled
   .ui-button--disabled {
     background-color: $ui-button--disabled-background-color;
@@ -123,12 +117,10 @@
       opacity: 0.5;
     }
   }
-
   // --large
   .ui-button--large {
     width: 100%;
     max-width: $ui-button--large-max-width;
-
     padding: $ui-button--large-padding;
     font-size: $ui-button--large-font-size;
     min-height: $ui-button--large-height;
@@ -138,7 +130,6 @@
       margin-right: $ui-button--large-padding;
     }
   }
-
   // --danger
   .ui-button--danger {
     background-color: $ui-button--danger-background-color;
@@ -150,12 +141,10 @@
       background-color: $ui-button--danger--hover-background-color;
       color: $ui-button--danger--hover-color;
     }
-
     // --danger--disabled
     &.ui-button--disabled {
       background-color: $ui-button--danger--disabled-background-color;
     }
-
     // --danger--bordered
     &.ui-button--bordered {
       border-color: $ui-button--danger-border-color;
@@ -165,7 +154,6 @@
       }
     }
   }
-
   // --warning
   .ui-button--warning {
     background-color: $ui-button--warning-background-color;
@@ -177,12 +165,10 @@
       background-color: $ui-button--warning--hover-background-color;
       color: $ui-button--warning--hover-color;
     }
-
     // --warning--disabled
     &.ui-button--disabled {
       background-color: $ui-button--warning--disabled-background-color;
     }
-
     // --warning--bordered
     &.ui-button--bordered {
       border-color: $ui-button--warning-border-color;
@@ -192,7 +178,6 @@
       }
     }
   }
-
   // --primary
   .ui-button--primary {
     color: $ui-button-color;
@@ -207,7 +192,6 @@
       background-color: lighten($ui-button-background-color-1, 30%);
       color: $ui-button-color;
     }
-
     // --primary--bordered
     &.ui-button--bordered {
       border-color: darken($ui-button-background-color-1, 10%);
