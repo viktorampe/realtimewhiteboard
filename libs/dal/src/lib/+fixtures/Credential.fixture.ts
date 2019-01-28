@@ -2,7 +2,15 @@ import { PassportUserCredentialInterface } from './../+models/PassportUserCreden
 
 export class CredentialFixture implements PassportUserCredentialInterface {
   // defaults
-  profile: { basisrol: 'Leerling' };
+  profile = {
+    basisrol: 'Leerling',
+    avatar: 'lol3',
+    name: {
+      displayName: 'lol1',
+      givenName: 'lol',
+      familyName: 'loller'
+    }
+  };
   provider = 'smartschool';
   id = 1;
   userId = 1;
