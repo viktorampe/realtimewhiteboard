@@ -1,5 +1,10 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Component, NgModule } from '@angular/core';
+import {
+  ActivatedRouteSnapshot,
+  RouterModule,
+  RouterStateSnapshot,
+  Routes
+} from '@angular/router';
 import { Permissions } from '@campus/dal';
 import {
   AuthenticationGuard,
@@ -7,6 +12,14 @@ import {
   PermissionGuard
 } from '@campus/guards';
 import { AppResolver } from './app.resolver';
+
+@Component({
+  selector: 'campus-not-found',
+  template: '<div></div>'
+})
+export class NotFoundComponent {
+  name = 'Angular';
+}
 
 const routes: Routes = [
   {
@@ -110,11 +123,45 @@ const routes: Routes = [
     path: 'dev',
     loadChildren: '@campus/devlib#DevlibModule',
     data: { breadcrumbText: 'Full retard' }
+  },
+  {
+    path: '**',
+    component: NotFoundComponent,
+    resolve: {
+      url: 'externalUrlRedirectResolver'
+    },
+    data: {
+      externalUrl: ''
+    }
   }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload' })],
-  exports: [RouterModule]
+  exports: [RouterModule, NotFoundComponent],
+  declarations: [NotFoundComponent],
+  providers: [
+    {
+      provide: 'externalUrlRedirectResolver',
+      useValue: (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
+        let externalLink = false;
+        let path = '';
+        route.url.map(item => {
+          if (!externalLink) {
+            if (item.path.toLowerCase().includes('http')) {
+              path = item.path + '//';
+              externalLink = true;
+            }
+          } else {
+            path += item.path + '/';
+          }
+        });
+        if (externalLink) {
+          console.log(path);
+          window.open(path, '_blank');
+        }
+      }
+    }
+  ]
 })
 export class AppRoutingModule {}
