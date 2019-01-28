@@ -29,8 +29,15 @@
       color: $ui-info-panel-title-color;
       padding: $ui-info-panel-title-padding;
       margin: $ui-info-panel-title-margin;
-      &__icon {
-        margin: $ui-info-panel-title-icon-margin;
+      &__left {
+        &__icon {
+          margin: $ui-info-panel-title-icon-margin;
+        }
+      }
+      &__right {
+        &__icon {
+          margin: $ui-info-panel-title-icon-margin;
+        }
       }
     }
     &__body {
