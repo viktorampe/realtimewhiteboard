@@ -1,11 +1,22 @@
 import { Action } from '@ngrx/store';
-import { v4 as uuid } from 'uuid';
+import uuid = require('uuid');
 
 export enum Priority {
   LOW = 1,
   NORM = 2,
   HIGH = 3
 }
+
+const uuidFactory = () => {
+  return uuid;
+};
+
+export let uuidProvider = {
+  provide: 'uuid',
+  useFactory: uuidFactory,
+  deps: []
+};
+
 export interface EffectFeedbackInterface {
   id: string;
   triggerAction: Action;
@@ -38,6 +49,7 @@ export class EffectFeedback implements EffectFeedbackInterface {
   priority: Priority;
 
   constructor(
+    id: string,
     triggerAction: Action,
     message: string,
     type: 'success' | 'error',
@@ -46,16 +58,14 @@ export class EffectFeedback implements EffectFeedbackInterface {
     icon: string = null,
     priority: Priority = Priority.NORM
   ) {
-    return {
-      id: uuid(),
-      triggerAction: triggerAction,
-      message: message,
-      type: type,
-      userActions: userActions,
-      timeStamp: Date.now(),
-      display: display,
-      priority: priority,
-      icon: icon
-    };
+    this.id = id;
+    this.triggerAction = triggerAction;
+    this.message = message;
+    this.type = type;
+    this.userActions = userActions;
+    this.timeStamp = Date.now();
+    this.display = display;
+    this.priority = priority;
+    this.icon = icon;
   }
 }

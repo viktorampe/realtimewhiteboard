@@ -3,7 +3,7 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action, select } from '@ngrx/store';
 import { DataPersistence } from '@nrwl/nx';
 import { undo } from 'ngrx-undo';
-import { from, interval, Observable, Subject, throwError } from 'rxjs';
+import { from, interval, Observable, Subject } from 'rxjs';
 import { map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { AlertActions } from '.';
 import { DalActions } from '..';
@@ -135,6 +135,7 @@ export class AlertsEffects {
           .pipe(
             map(affectedRows => {
               const effectFeedback = new EffectFeedback(
+                this.uuid(),
                 action,
                 action.payload.read
                   ? 'Melding als gelezen gemarkeerd.'
@@ -154,11 +155,14 @@ export class AlertsEffects {
         const undoAction = undo(action);
 
         const effectFeedback = new EffectFeedback(
+          this.uuid(),
           action,
-          'Het is niet gelukt om de melding als gelezen te markeren',
+          action.payload.read
+            ? 'Het is niet gelukt om de melding als gelezen te markeren.'
+            : 'Het is niet gelukt om de melding als ongelezen te markeren.',
           'error',
           [{ title: 'Opnieuw', userAction: action }],
-          true,
+          action.payload.displayResponse,
           null,
           Priority.HIGH
         );
@@ -182,17 +186,43 @@ export class AlertsEffects {
           .deleteAlert(action.payload.personId, action.payload.id)
           .pipe(
             map(res => {
-              // TODO: dispatch succesful response action
-              throwError('Not implemented yet');
-              return null;
+              const effectFeedback = new EffectFeedback(
+                this.uuid(),
+                action,
+                'Melding is verwijderd.',
+                'success',
+                null,
+                action.payload.displayResponse,
+                null,
+                Priority.NORM
+              );
+
+              return new EffectFeedbackActions.AddEffectFeedback({
+                effectFeedback
+              });
             })
           );
       },
       undoAction: (action: AlertActions.DeleteAlert, error: any) => {
         // Something went wrong: could be a 401 or 404 ...
-        // TODO: dispatch error response action
-        throwError('Not implemented yet');
-        return undo(action);
+        const undoAction = undo(action);
+        const effectFeedback = new EffectFeedback(
+          this.uuid(),
+          action,
+          'Het is niet gelukt om de melding te verwijderen.',
+          'error',
+          [{ title: 'Opnieuw', userAction: action }],
+          action.payload.displayResponse,
+          null,
+          Priority.HIGH
+        );
+
+        const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
+          effectFeedback
+        });
+
+        // undo the failed action and trigger feedback for user
+        return from<Action>([undoAction, feedbackAction]);
       }
     }
   );
@@ -200,7 +230,8 @@ export class AlertsEffects {
   constructor(
     private actions: Actions,
     private dataPersistence: DataPersistence<DalState>,
-    @Inject(ALERT_SERVICE_TOKEN) private alertService: AlertServiceInterface
+    @Inject(ALERT_SERVICE_TOKEN) private alertService: AlertServiceInterface,
+    @Inject('uuid') private uuid: Function
   ) {}
 
   private getNewTimer(startPollAction: StartPollAlerts) {

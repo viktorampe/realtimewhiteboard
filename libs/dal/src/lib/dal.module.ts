@@ -24,7 +24,7 @@ import {
 } from './+state/current-exercise';
 import { getStoreModuleForFeatures } from './+state/dal.state.feature.builder';
 import { EduContentReducer, EduContentsEffects } from './+state/edu-content';
-import { EffectFeedbackReducer } from './+state/effect-feedback';
+import { EffectFeedbackReducer, uuidProvider } from './+state/effect-feedback';
 import {
   LearningAreaReducer,
   LearningAreasEffects
@@ -171,6 +171,7 @@ interface DalOptions {
     ])
   ],
   providers: [
+    uuidProvider,
     { provide: EXERCISE_SERVICE_TOKEN, useClass: ExerciseService },
     { provide: EDUCONTENT_SERVICE_TOKEN, useClass: EduContentService },
     { provide: USER_CONTENT_SERVICE_TOKEN, useClass: UserContentService },
