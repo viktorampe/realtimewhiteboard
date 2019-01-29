@@ -88,7 +88,6 @@ export class AlertsEffects {
 
       return this.alertService.getAllForUser(userId).pipe(
         map(alerts => {
-          console.log({ alerts });
           return new AlertsLoaded({ alerts, timeStamp });
         })
       );
