@@ -112,6 +112,7 @@ export class SetAlertReadByFilter implements Action {
       filter: NestedPartial<AlertQueueInterface>;
       read?: boolean;
       intended?: boolean;
+      displayResponse?: boolean;
     }
   ) {}
 }
