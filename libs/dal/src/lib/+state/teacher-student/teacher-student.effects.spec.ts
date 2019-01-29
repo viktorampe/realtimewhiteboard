@@ -15,22 +15,17 @@ import { Observable, of } from 'rxjs';
 import { TeacherStudentReducer } from '.';
 import { TaskFixture, TeacherStudentFixture } from '../../+fixtures';
 import { LINKED_PERSON_SERVICE_TOKEN } from '../../persons/linked-persons.service';
-import { DeleteBundles, LoadBundles } from '../bundle/bundle.actions';
 import { ActionSuccessful } from '../dal.actions';
-import {
-  AddLinkedPerson,
-  DeleteLinkedPerson
-} from '../linked-person/linked-person.actions';
-import { DeleteTasks, LoadTasks, TasksLoaded } from '../task/task.actions';
+import { TasksLoaded } from '../task/task.actions';
 import { UserReducer } from '../user';
 import { UserLoaded } from '../user/user.actions';
 import { BundleFixture } from './../../+fixtures/Bundle.fixture';
 import { LinkedPersonServiceInterface } from './../../persons/linked-persons.service';
 import { BundlesLoaded } from './../bundle/bundle.actions';
 import {
-  DeleteTeacherStudent,
   LinkTeacherStudent,
   LoadTeacherStudents,
+  TeacherStudentActionTypes,
   TeacherStudentsLoaded,
   TeacherStudentsLoadError,
   UnlinkTeacherStudent
@@ -258,13 +253,9 @@ describe('TeacherStudentsEffects', () => {
 
         actions = hot('-a-', { a: linkTeacherAction });
 
-        const expectedActions$ = hot('-(abcd)', {
-          a: new AddLinkedPerson({ person: mockTeacher }),
-          b: new LoadBundles({ userId: mockCurrentUser.id, force: true }),
-          c: new LoadTasks({ userId: mockCurrentUser.id, force: true }),
-          d: new LoadTeacherStudents({
-            userId: mockCurrentUser.id,
-            force: true
+        const expectedActions$ = hot('-a', {
+          a: new ActionSuccessful({
+            successfulAction: TeacherStudentActionTypes.LinkTeacherStudent
           })
         });
 
@@ -333,14 +324,9 @@ describe('TeacherStudentsEffects', () => {
 
         actions = hot('-a-', { a: unlinkTeacherAction });
 
-        const expectedActions$ = hot('-(abcd)', {
-          a: new DeleteLinkedPerson({ id: mockTeacher.id }),
-          b: new DeleteTeacherStudent({ id: mockTeacherStudent.id }),
-          c: new DeleteBundles({
-            ids: [mockBundle.id]
-          }),
-          d: new DeleteTasks({
-            ids: [mockTask.id]
+        const expectedActions$ = hot('-a', {
+          a: new ActionSuccessful({
+            successfulAction: TeacherStudentActionTypes.UnlinkTeacherStudent
           })
         });
 

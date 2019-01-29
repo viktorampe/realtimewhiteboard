@@ -18,7 +18,7 @@ export {
 } from './lib/list-view/list-view.component';
 export {
   NotificationItemInterface
-} from './lib/notification-dropdown-item/notification-dropdown-item.component';
+} from './lib/notification/notification.component';
 export {
   BadgePersonInterface
 } from './lib/person-badge/person-badge.component';
