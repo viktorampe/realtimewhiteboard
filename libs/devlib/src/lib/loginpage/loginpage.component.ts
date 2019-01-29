@@ -1,14 +1,19 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import {
+  AlertActions,
+  AlertQueries,
   AlertReducer,
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   EduContentInterface,
+  EffectFeedbackActions,
+  EffectFeedbackInterface,
+  EffectFeedbackQueries,
   UserActions
 } from '@campus/dal';
 import { AlertQueueApi, PersonApi } from '@diekeure/polpo-api-angular-sdk';
-import { Store } from '@ngrx/store';
+import { Action, select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { LoginPageViewModel } from './loginpage.viewmodel';
@@ -23,7 +28,18 @@ export class LoginpageComponent implements OnInit {
   currentUser: Observable<any>;
   route$: Observable<string[]>;
   response: Observable<any>;
+
+  alert$ = this.store.pipe(
+    select(AlertQueries.getAll),
+    map(alerts => alerts[0])
+  );
+
+  effectFeedback$: Observable<EffectFeedbackInterface> = this.store.pipe(
+    select(EffectFeedbackQueries.getNext)
+  );
+
   date: Date = new Date('2019-01-22');
+
   constructor(
     public loginPageviewModel: LoginPageViewModel,
     private personApi: PersonApi,
@@ -31,7 +47,11 @@ export class LoginpageComponent implements OnInit {
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     private store: Store<AlertReducer.State>,
     private router: Router
-  ) {}
+  ) {
+    this.store.dispatch(
+      new AlertActions.LoadAlerts({ userId: this.authService.userId })
+    );
+  }
 
   ngOnInit() {
     this.route$ = this.router.events.pipe(
@@ -58,8 +78,36 @@ export class LoginpageComponent implements OnInit {
     this.loginPageviewModel.updateStudentContentStatus();
   }
 
-  updateAlert() {
-    this.loginPageviewModel.updateAlert();
+  setAlertAsRead(alertId: number, displayResponse: boolean) {
+    this.store.dispatch(
+      new AlertActions.SetReadAlert({
+        personId: this.authService.userId,
+        alertIds: alertId,
+        read: true,
+        displayResponse: displayResponse
+      })
+    );
+  }
+
+  setAlertAsUnread(alertId: number, displayResponse: boolean) {
+    this.store.dispatch(
+      new AlertActions.SetReadAlert({
+        personId: this.authService.userId,
+        alertIds: alertId,
+        read: false,
+        displayResponse: displayResponse
+      })
+    );
+  }
+
+  removeFeedback(feedbackId: string) {
+    this.store.dispatch(
+      new EffectFeedbackActions.DeleteEffectFeedback({ id: feedbackId })
+    );
+  }
+
+  dispatchAction(action: Action) {
+    this.store.dispatch(action);
   }
 
   deleteAlert() {

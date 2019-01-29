@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { MockDate } from '@campus/testing';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
@@ -7,8 +8,13 @@ import { getTestScheduler, hot } from '@nrwl/nx/testing';
 import { undo } from 'ngrx-undo';
 import { Observable, of } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { AlertFixture } from '../../+fixtures';
+import { AlertFixture, EffectFeedbackFixture } from '../../+fixtures';
 import { ALERT_SERVICE_TOKEN } from '../../alert/alert.service.interface';
+import {
+  EffectFeedback,
+  EffectFeedbackActions,
+  Priority
+} from '../effect-feedback';
 import { ActionSuccessful } from './../dal.actions';
 import {
   AlertsLoaded,
@@ -29,6 +35,10 @@ describe('AlertEffects', () => {
   let actions: Observable<any>;
   let effects: AlertsEffects;
   let usedState: AlertState;
+  let uuid: Function;
+  let dateMock: MockDate;
+
+  const effectFeedback = new EffectFeedbackFixture();
 
   const mockData = {
     userId: 1,
@@ -77,6 +87,15 @@ describe('AlertEffects', () => {
     });
   };
 
+  beforeAll(() => {
+    dateMock = new MockDate();
+    effectFeedback.timeStamp = dateMock.mockDate.getTime();
+  });
+
+  afterAll(() => {
+    dateMock.returnRealDate();
+  });
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -104,11 +123,18 @@ describe('AlertEffects', () => {
         },
         AlertsEffects,
         DataPersistence,
-        provideMockActions(() => actions)
+
+        provideMockActions(() => actions),
+        {
+          provide: 'uuid',
+          useValue: (): string => 'foo'
+        }
       ]
     });
 
     effects = TestBed.get(AlertsEffects);
+    uuid = TestBed.get('uuid');
+    effectFeedback.id = uuid();
   });
 
   describe('loadAlert$', () => {
@@ -375,22 +401,20 @@ describe('AlertEffects', () => {
   describe('setReadAlert$', () => {
     const setReadSingleAction = new SetReadAlert({
       personId: mockData.userId,
-      alertIds: mockData.alertId
+      alertIds: mockData.alertId,
+      read: true,
+      displayResponse: true
     });
     const setReadMultipleAction = new SetReadAlert({
       personId: mockData.userId,
-      alertIds: [mockData.alertId, mockData.alertId + 1]
+      alertIds: [mockData.alertId, mockData.alertId + 1],
+      read: true,
+      displayResponse: true
     });
-    const successAction = new ActionSuccessful({
-      successfulAction: 'alert updated'
-    });
+
     const loadAlertsAction = new LoadAlerts({
       userId: mockData.userId
     });
-
-    const loadErrorAction = new AlertsLoadError(
-      new Error('Unable to update alert')
-    );
 
     const setReadSingleUndoAction = undo(setReadSingleAction);
     const setReadMultipleUndoAction = undo(setReadMultipleAction);
@@ -424,18 +448,33 @@ describe('AlertEffects', () => {
       beforeEach(() => {
         mockServiceMethodReturnValue('setAlertAsRead', []);
       });
+
       it('should trigger an api call with the loaded state when calling with a single id', () => {
+        effectFeedback.message = 'Melding als gelezen gemarkeerd.';
+        effectFeedback.triggerAction = setReadSingleAction;
+        effectFeedback.userActions = null;
+        effectFeedback.priority = Priority.NORM;
+        const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
+          effectFeedback
+        });
+
         expectInAndOut(
           effects.setReadAlert$,
           setReadSingleAction,
-          successAction
+          feedbackAction
         );
       });
       it('should trigger an api call with the loaded state when calling with multiple ids', () => {
+        effectFeedback.triggerAction = setReadMultipleAction;
+
+        const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
+          effectFeedback
+        });
+
         expectInAndOut(
           effects.setReadAlert$,
           setReadMultipleAction,
-          successAction
+          feedbackAction
         );
       });
     });
@@ -451,18 +490,46 @@ describe('AlertEffects', () => {
       beforeEach(() => {
         mockServiceMethodError('setAlertAsRead', 'failed');
       });
-      it('should return an undo action when calling with a single id', () => {
-        expectInAndOut(
-          effects.setReadAlert$,
-          setReadSingleAction,
-          setReadSingleUndoAction
+
+      it('should return an undo and feedback action when calling with a single id', () => {
+        effectFeedback.type = 'error';
+        effectFeedback.message =
+          'Het is niet gelukt om de melding als gelezen te markeren.';
+        effectFeedback.triggerAction = setReadSingleAction;
+        effectFeedback.userActions = [
+          { title: 'Opnieuw', userAction: setReadSingleAction }
+        ];
+        effectFeedback.priority = Priority.HIGH;
+
+        const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
+          effectFeedback
+        });
+
+        actions = hot('a', { a: setReadSingleAction });
+        expect(effects.setReadAlert$).toBeObservable(
+          hot('(ab)', {
+            a: setReadSingleUndoAction,
+            b: feedbackAction
+          })
         );
       });
-      it('should return a undo action when calling with multiple ids', () => {
-        expectInAndOut(
-          effects.setReadAlert$,
-          setReadMultipleAction,
-          setReadMultipleUndoAction
+
+      it('should return a undo and feedback action when calling with multiple ids', () => {
+        effectFeedback.triggerAction = setReadMultipleAction;
+        effectFeedback.userActions = [
+          { title: 'Opnieuw', userAction: setReadMultipleAction }
+        ];
+
+        const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
+          effectFeedback
+        });
+
+        actions = hot('a', { a: setReadMultipleAction });
+        expect(effects.setReadAlert$).toBeObservable(
+          hot('(ab)', {
+            a: setReadMultipleUndoAction,
+            b: feedbackAction
+          })
         );
       });
     });
@@ -506,18 +573,45 @@ describe('AlertEffects', () => {
   });
 
   describe('deleteAlert$', () => {
+    let deleteAlertSuccessAction: EffectFeedbackActions.AddEffectFeedback;
+    let deleteAlertFailureAction: EffectFeedbackActions.AddEffectFeedback;
+    let effectFeedbackSuccess: EffectFeedback;
+    let effectFeedbackError: EffectFeedback;
+
     const deleteAlertAction = new DeleteAlert({
       id: mockData.alertId,
-      personId: mockData.userId
+      personId: mockData.userId,
+      displayResponse: true
     });
-    // TODO: update when response actions are available
-    const deleteAlertSuccessAction = null;
-    const deleteAlertFailureAction = null;
-
     const deleteAlertUndoAction = undo(deleteAlertAction);
 
     beforeAll(() => {
       usedState = initialState;
+
+      effectFeedbackSuccess = {
+        ...effectFeedback,
+        triggerAction: deleteAlertAction,
+        message: 'Melding is verwijderd.',
+        type: 'success',
+        display: true,
+        priority: Priority.NORM,
+        userActions: null
+      };
+
+      effectFeedbackError = {
+        ...effectFeedbackSuccess,
+        message: 'Het is niet gelukt om de melding te verwijderen.',
+        type: 'error',
+        userActions: [{ title: 'Opnieuw', userAction: deleteAlertAction }],
+        priority: Priority.HIGH
+      };
+
+      deleteAlertSuccessAction = new EffectFeedbackActions.AddEffectFeedback({
+        effectFeedback: effectFeedbackSuccess
+      });
+      deleteAlertFailureAction = new EffectFeedbackActions.AddEffectFeedback({
+        effectFeedback: effectFeedbackError
+      });
     });
     beforeEach(() => {
       mockServiceMethodReturnValue('deleteAlert', {});
@@ -538,10 +632,12 @@ describe('AlertEffects', () => {
         mockServiceMethodError('deleteAlert', 'Oops, something went wrong!');
       });
       it('should dispatch an undo action', () => {
-        expectInAndOut(
-          effects.deleteAlert$,
-          deleteAlertAction,
-          deleteAlertUndoAction
+        actions = hot('a', { a: deleteAlertAction });
+        expect(effects.deleteAlert$).toBeObservable(
+          hot('(ab)', {
+            a: deleteAlertUndoAction,
+            b: deleteAlertFailureAction
+          })
         );
       });
     });

@@ -98,7 +98,8 @@
   .ui-button--bordered {
     border-color: $ui-button-border-color;
     border-style: solid;
-    border-width: 1px; // --bordered--disabled
+    border-width: 1px;
+    // --bordered--disabled
     &.ui-button--disabled {
       .ui-button {
         border-color: $ui-button--disabled-border-color;
@@ -190,8 +191,10 @@
     }
     // --primary--bordered
     &.ui-button--bordered {
-      border-color: darken($ui-button-background-color-1, 10%);
-      // --primary--bordered--disabled
+      border-color: darken(
+        $ui-button-background-color-1,
+        10%
+      ); // --primary--bordered--disabled
       &.ui-button--disabled {
         border-color: darken($ui-button-background-color, 10%);
       }
