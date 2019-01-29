@@ -13,13 +13,17 @@
           [read]="alert.read"
         ></campus-notification>
         <div class="pages-settings-alerts__info-panel__notification__actions"
-          ><mat-icon [svgIcon]="false ? 'eye2' : 'eye'"></mat-icon>
-          <!--
-            TODO --
-            icon eye2 needs to be correct icon
-          -->
-          <mat-icon></mat-icon
-        ></div>
+          ><mat-icon
+            [svgIcon]="alert.read ? 'visibility-off' : 'visibility'"
+            (click)="
+              alert.read ? setAlertAsUnread(alert.id) : setAlertAsRead(alert.id)
+            "
+          ></mat-icon>
+          <mat-icon
+            [svgIcon]="'delete'"
+            (click)="removeAlert(alert.id)"
+          ></mat-icon>
+        </div>
       </div>
     </ng-container>
     <ng-template #noAlerts>Geen meldingen.</ng-template>
