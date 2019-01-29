@@ -5,6 +5,7 @@
 .smartschool-btn {
   .mat-icon {
     margin-right: 5px;
+    border-radius: 4px;
   }
 }
 
@@ -27,6 +28,10 @@
     color: $google-button-background-color;
     background-color: $google-button-font-color;
   }
+
+  .mat-icon {
+    background-color: $google-button-font-color;
+  }
 }
 
 .smartschool-btn {
@@ -40,7 +45,6 @@
 
   .mat-icon {
     background-color: $smartschool-button-font-color;
-    padding: 2px;
-    border-radius: 5px;
+    padding: 3px;
   }
 }
