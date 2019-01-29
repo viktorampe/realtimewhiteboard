@@ -1,7 +1,15 @@
-<!-- TODO: add pageIcon to info-panel -->
-<campus-info-panel [titleText]="pageTitle">
-  <campus-profile-form
-    (saveProfile)="onSaveProfile($event)"
-    [user]="user$ | async"
-  ></campus-profile-form>
-</campus-info-panel>
+<div class="campus-page">
+  <campus-page-header
+    [title]="'Instellingen'"
+    [subtitle]="'Profiel'"
+    [iconClass]="'account'"
+  >
+  </campus-page-header>
+  <!-- TODO: add pageIcon to info-panel -->
+  <campus-info-panel [titleText]="pageTitle">
+    <campus-profile-form
+      (saveProfile)="onSaveProfile($event)"
+      [user]="user$ | async"
+    ></campus-profile-form>
+  </campus-info-panel>
+</div>

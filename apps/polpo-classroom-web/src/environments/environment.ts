@@ -113,7 +113,7 @@ export const environment: EnvironmentInterface = {
     // youtube: 'assets/icons/youtube.svg',
     // -> settings dashboard
     profile: 'assets/icons/settings.svg',
-    avatar: 'assets/icons/user.svg',
+    avatar: 'assets/icons/avatar.svg',
     credentials: 'assets/icons/link.svg',
     'coupled-teachers': 'assets/icons/student2.svg',
     alerts: 'assets/icons/bell.svg',

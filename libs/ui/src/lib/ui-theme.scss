@@ -12,6 +12,7 @@ $ui-warning-bg-color: #f80 !default;
 $ui-warning-font-color: #fff !default;
 $ui-form-button-default-bg-color: #e1e5e7 !default;
 $ui-form-button-primary-bg-color: #44b0aa !default;
+$ui-font-size-normal: 14px !default;
 
 // nav + site header (shell)
 $ui-secondary-bg-color: #fff !default;
@@ -39,9 +40,11 @@ $ui-form-item-border-color: $ui-primary-font-color !default;
 $ui-button-bg-color: $ui-form-button-default-bg-color !default;
 $ui-button-bg-color-1: $ui-form-button-primary-bg-color !default;
 $ui-button-font-color: #fff !default;
+$ui-form-item-padding-bottom: $ui-font-size-normal !default;
+$ui-form-actions-padding: 20px 0 0 0 !default;
+$ui-form-spacing: 5px !default;
 
 // sizes
-$ui-font-size-normal: 14px !default;
 $ui-person-badge-size-large: 96px !default;
 $ui-person-badge-size-large-font-size: $ui-person-badge-size-large / 2 !default;
 $ui-person-badge-size-medium: 48px !default;
@@ -88,8 +91,36 @@ $ui-button-padding-bottom: $ui-font-size-normal/2 !default;
 @import './dropdown-menu/dropdown-menu.component.theme.scss';
 @import './dropdown-menu-item/dropdown-menu-item.component.theme.scss';
 
+@mixin ui-forms() {
+  form {
+    .mat-form-field {
+      display: block;
+
+      .mat-form-field-wrapper {
+        padding-bottom: $ui-form-item-padding-bottom;
+      }
+    }
+
+    .form-inline {
+      .mat-form-field {
+        display: inline-block;
+        margin-right: $ui-form-spacing;
+      }
+    }
+
+    .form-actions {
+      padding: $ui-form-actions-padding;
+    }
+
+    .ui-button {
+      margin-right: $ui-form-spacing;
+    }
+  }
+}
+
 // create theme-mixin with each mixin from our library components
 @mixin ui-theme() {
+  @include ui-forms();
   @include ui-tree-nav();
   @include ui-folder-theme();
   //place desired width as optional parameter, default 84;
