@@ -1,18 +1,15 @@
 import { Component, NgModule } from '@angular/core';
-import {
-  ActivatedRouteSnapshot,
-  RouterModule,
-  RouterStateSnapshot,
-  Routes
-} from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { Permissions } from '@campus/dal';
 import {
   AuthenticationGuard,
   CoupledTeacherGuard,
-  PermissionGuard
+  PermissionGuard,
+  RedirectionGuard
 } from '@campus/guards';
 import { AppResolver } from './app.resolver';
 
+//NEEDED FOR ROUTE, if null it won't load any routes
 @Component({
   selector: 'campus-not-found',
   template: '<div></div>'
@@ -20,6 +17,7 @@ import { AppResolver } from './app.resolver';
 export class NotFoundComponent {
   name = 'Angular';
 }
+//
 
 const routes: Routes = [
   {
@@ -126,42 +124,14 @@ const routes: Routes = [
   },
   {
     path: '**',
-    component: NotFoundComponent,
-    resolve: {
-      url: 'externalUrlRedirectResolver'
-    },
-    data: {
-      externalUrl: ''
-    }
+    component: NotFoundComponent, // component can't be null
+    canActivate: [RedirectionGuard]
   }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload' })],
   exports: [RouterModule, NotFoundComponent],
-  declarations: [NotFoundComponent],
-  providers: [
-    {
-      provide: 'externalUrlRedirectResolver',
-      useValue: (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
-        let externalLink = false;
-        let path = '';
-        route.url.map(item => {
-          if (!externalLink) {
-            if (item.path.toLowerCase().includes('http')) {
-              path = item.path + '//';
-              externalLink = true;
-            }
-          } else {
-            path += item.path + '/';
-          }
-        });
-        if (externalLink) {
-          console.log(path);
-          window.open(path, '_blank');
-        }
-      }
-    }
-  ]
+  declarations: [NotFoundComponent]
 })
 export class AppRoutingModule {}
