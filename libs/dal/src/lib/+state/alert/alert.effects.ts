@@ -71,7 +71,8 @@ export class AlertsEffects {
               personId: action.payload.personId,
               alertIds: ids,
               intended: action.payload.intended,
-              read: action.payload.read
+              read: action.payload.read,
+              displayResponse: action.payload.displayResponse
             });
           }),
           take(1)
