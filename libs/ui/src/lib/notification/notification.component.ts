@@ -9,6 +9,7 @@ import { BadgePersonInterface } from '../person-badge/person-badge.component';
 import { HumanDateTimePipe } from '../utils/pipes/human-date-time/human-date-time.pipe';
 
 export interface NotificationItemInterface {
+  id?: number;
   icon: string;
   person?: BadgePersonInterface;
   titleText: string;
