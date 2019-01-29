@@ -170,6 +170,8 @@ export const environment: EnvironmentInterface = {
     // pinterest: 'assets/icons/pinterest.svg',
     // 'polpo-small': 'assets/icons/polpo-small.svg',
     polpo: 'assets/icons/polpo.svg',
+    visibility: 'assets/icons/visibility.svg',
+    'visibility-off': 'assets/icons/visibility-off.svg',
     'power-on': 'assets/icons/power-on.svg',
     'smartschool:orange':
       'assets/icons/smartschool/s_logo_sso_button_orange_22x36.svg',
