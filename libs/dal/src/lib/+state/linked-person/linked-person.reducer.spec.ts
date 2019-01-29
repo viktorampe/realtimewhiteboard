@@ -1,5 +1,6 @@
 import { LinkedPersonActions } from '.';
 import { PersonInterface } from '../../+models';
+import { TeacherStudentActions } from '../teacher-student';
 import { initialState, reducer, State } from './linked-person.reducer';
 
 const emailInitialValue = 'foo@foo.bar';
@@ -127,6 +128,26 @@ describe('LinkedPersons Reducer', () => {
       const action = new LinkedPersonActions.ClearLinkedPersons();
       const result = reducer(startState, action);
       expect(result).toEqual(createState([], true, 'something went wrong'));
+    });
+  });
+
+  describe('invalidate action', () => {
+    it('should trigger from LinkTeacherStudent', () => {
+      const startState = createState(persons, true);
+      const action = new TeacherStudentActions.LinkTeacherStudent({
+        publicKey: 'foo'
+      });
+      const result = reducer(startState, action);
+      expect(result).toEqual(createState(persons, false));
+    });
+
+    it('should trigger from UnlinkTeacherStudent', () => {
+      const startState = createState(persons, true);
+      const action = new TeacherStudentActions.UnlinkTeacherStudent({
+        teacherId: 1
+      });
+      const result = reducer(startState, action);
+      expect(result).toEqual(createState(persons, false));
     });
   });
 });

@@ -1,6 +1,7 @@
 import { Update } from '@ngrx/entity';
 import { TaskActions } from '.';
 import { TaskInterface } from '../../+models';
+import { TeacherStudentActions } from '../teacher-student';
 import { initialState, reducer, State } from './task.reducer';
 
 /**
@@ -221,6 +222,26 @@ describe('Tasks Reducer', () => {
       const action = new TaskActions.ClearTasks();
       const result = reducer(startState, action);
       expect(result).toEqual(createState([], true, 'something went wrong'));
+    });
+  });
+
+  describe('invalidate action', () => {
+    it('should trigger from LinkTeacherStudent', () => {
+      const startState = createState(tasks, true);
+      const action = new TeacherStudentActions.LinkTeacherStudent({
+        publicKey: 'foo'
+      });
+      const result = reducer(startState, action);
+      expect(result).toEqual(createState(tasks, false));
+    });
+
+    it('should trigger from UnlinkTeacherStudent', () => {
+      const startState = createState(tasks, true);
+      const action = new TeacherStudentActions.UnlinkTeacherStudent({
+        teacherId: 1
+      });
+      const result = reducer(startState, action);
+      expect(result).toEqual(createState(tasks, false));
     });
   });
 });

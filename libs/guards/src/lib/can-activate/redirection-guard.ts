@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
-  Router,
+  CanActivate,
   RouterStateSnapshot
 } from '@angular/router';
-import { CanActivate } from '@angular/router/src/utils/preactivation';
 import { Observable } from 'rxjs';
 
 @Injectable()
 export class RedirectionGuard implements CanActivate {
-  constructor(private router: Router) {}
+  constructor() {}
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot

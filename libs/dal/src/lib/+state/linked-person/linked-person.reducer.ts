@@ -1,6 +1,10 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { PersonInterface } from '../../+models';
 import {
+  TeacherStudentActions,
+  TeacherStudentActionTypes
+} from '../teacher-student/teacher-student.actions';
+import {
   LinkedPersonsActions,
   LinkedPersonsActionTypes
 } from './linked-person.actions';
@@ -24,7 +28,7 @@ export const initialState: State = adapter.getInitialState({
 
 export function reducer(
   state = initialState,
-  action: LinkedPersonsActions
+  action: LinkedPersonsActions | TeacherStudentActions
 ): State {
   switch (action.type) {
     case LinkedPersonsActionTypes.AddLinkedPerson: {
@@ -54,6 +58,10 @@ export function reducer(
     case LinkedPersonsActionTypes.ClearLinkedPersons: {
       return adapter.removeAll(state);
     }
+
+    case TeacherStudentActionTypes.LinkTeacherStudent:
+    case TeacherStudentActionTypes.UnlinkTeacherStudent:
+      return { ...state, loaded: false };
 
     default: {
       return state;
