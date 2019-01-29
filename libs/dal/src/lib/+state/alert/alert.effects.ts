@@ -110,7 +110,6 @@ export class AlertsEffects {
         .getAllForUser(action.payload.userId, timeStamp)
         .pipe(
           map(alerts => {
-            console.log({ alerts });
             return new NewAlertsLoaded({ alerts, timeStamp });
           })
         );
