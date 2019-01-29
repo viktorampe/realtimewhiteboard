@@ -1,6 +1,7 @@
 // main body
 $ui-primary-bg-color: #fff !default;
 $ui-primary-font-color: #000 !default;
+$ui-primary-font-size: 16px !default;
 $ui-primary-color-accent: #fff !default; // link, button (borders)
 $ui-primary-font-color-2: #aaa !default; // subtitle
 $ui-primary-font-family: 'Helvetica', 'Arial', 'Open Sans', sans-serif !default;
@@ -12,7 +13,6 @@ $ui-warning-bg-color: #f80 !default;
 $ui-warning-font-color: #fff !default;
 $ui-form-button-default-bg-color: #e1e5e7 !default;
 $ui-form-button-primary-bg-color: #44b0aa !default;
-$ui-font-size-normal: 14px !default;
 
 // nav + site header (shell)
 $ui-secondary-bg-color: #fff !default;
@@ -40,7 +40,7 @@ $ui-form-item-border-color: $ui-primary-font-color !default;
 $ui-button-bg-color: $ui-form-button-default-bg-color !default;
 $ui-button-bg-color-1: $ui-form-button-primary-bg-color !default;
 $ui-button-font-color: #fff !default;
-$ui-form-item-padding-bottom: $ui-font-size-normal !default;
+$ui-form-item-padding-bottom: $ui-primary-font-size !default;
 $ui-form-actions-padding: 20px 0 0 0 !default;
 $ui-form-spacing: 5px !default;
 
@@ -56,10 +56,10 @@ $ui-icon-size-medium: 48px !default;
 $ui-icon-size-small: 24px !default;
 
 // buttons
-$ui-button-padding-left: $ui-font-size-normal !default;
-$ui-button-padding-right: $ui-font-size-normal !default;
-$ui-button-padding-top: $ui-font-size-normal/2 !default;
-$ui-button-padding-bottom: $ui-font-size-normal/2 !default;
+$ui-button-padding-left: $ui-primary-font-size !default;
+$ui-button-padding-right: $ui-primary-font-size !default;
+$ui-button-padding-top: $ui-primary-font-size/2 !default;
+$ui-button-padding-bottom: $ui-primary-font-size/2 !default;
 
 // helper classes
 .ui-no-link {

@@ -1,6 +1,7 @@
 @mixin ui-button() {
-  $ui-button-font-size: $ui-font-size-normal !default;
+  $ui-button-font-size: $ui-primary-font-size !default;
   $ui-button-padding: $ui-button-font-size/3 $ui-button-font-size/2 !default;
+
   $ui-button-color: $ui-button-font-color !default;
   $ui-button-background-color: $ui-button-bg-color !default;
   $ui-button-background-color-1: $ui-button-bg-color-1 !default;

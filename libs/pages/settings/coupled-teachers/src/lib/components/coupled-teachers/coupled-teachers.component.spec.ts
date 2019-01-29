@@ -4,6 +4,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule, MatInputModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterTestingModule } from '@angular/router/testing';
 import { PersonAlreadyLinkedValidator } from '@campus/shared';
 import { UiModule } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
@@ -24,7 +25,8 @@ describe('CoupledTeachersComponent', () => {
         UiModule,
         MatFormFieldModule,
         BrowserAnimationsModule,
-        MatInputModule
+        MatInputModule,
+        RouterTestingModule
       ],
       declarations: [CoupledTeachersComponent],
       providers: [
