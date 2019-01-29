@@ -7,16 +7,6 @@ export enum Priority {
   HIGH = 3
 }
 
-const uuidFactory = () => {
-  return uuid;
-};
-
-export let uuidProvider = {
-  provide: 'uuid',
-  useFactory: uuidFactory,
-  deps: []
-};
-
 export interface EffectFeedbackInterface {
   id: string;
   triggerAction: Action;
