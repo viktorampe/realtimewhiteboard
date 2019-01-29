@@ -134,16 +134,16 @@ export class AlertsEffects {
           )
           .pipe(
             map(affectedRows => {
-              const effectFeedback = new EffectFeedback(
-                this.uuid(),
-                action,
-                action.payload.read
+              const effectFeedback = new EffectFeedback({
+                id: this.uuid(),
+                triggerAction: action,
+                message: action.payload.read
                   ? 'Melding als gelezen gemarkeerd.'
                   : 'Melding als ongelezen gemarkeerd.',
-                'success',
-                null,
-                action.payload.displayResponse
-              );
+                display: action.payload.displayResponse,
+                userActions: null,
+                type: 'success'
+              });
 
               return new EffectFeedbackActions.AddEffectFeedback({
                 effectFeedback
@@ -154,18 +154,17 @@ export class AlertsEffects {
       undoAction: (action: SetReadAlert, state: any) => {
         const undoAction = undo(action);
 
-        const effectFeedback = new EffectFeedback(
-          this.uuid(),
-          action,
-          action.payload.read
+        const effectFeedback = new EffectFeedback({
+          id: this.uuid(),
+          triggerAction: action,
+          message: action.payload.read
             ? 'Het is niet gelukt om de melding als gelezen te markeren.'
             : 'Het is niet gelukt om de melding als ongelezen te markeren.',
-          'error',
-          [{ title: 'Opnieuw', userAction: action }],
-          action.payload.displayResponse,
-          null,
-          Priority.HIGH
-        );
+          display: action.payload.displayResponse,
+          userActions: [{ title: 'Opnieuw', userAction: action }],
+          type: 'error',
+          priority: Priority.HIGH
+        });
 
         const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
           effectFeedback
@@ -186,16 +185,15 @@ export class AlertsEffects {
           .deleteAlert(action.payload.personId, action.payload.id)
           .pipe(
             map(res => {
-              const effectFeedback = new EffectFeedback(
-                this.uuid(),
-                action,
-                'Melding is verwijderd.',
-                'success',
-                null,
-                action.payload.displayResponse,
-                null,
-                Priority.NORM
-              );
+              const effectFeedback = new EffectFeedback({
+                id: this.uuid(),
+                triggerAction: action,
+                message: 'Melding is verwijderd.',
+                display: action.payload.displayResponse,
+                userActions: null,
+                type: 'success',
+                priority: Priority.NORM
+              });
 
               return new EffectFeedbackActions.AddEffectFeedback({
                 effectFeedback
@@ -206,16 +204,16 @@ export class AlertsEffects {
       undoAction: (action: AlertActions.DeleteAlert, error: any) => {
         // Something went wrong: could be a 401 or 404 ...
         const undoAction = undo(action);
-        const effectFeedback = new EffectFeedback(
-          this.uuid(),
-          action,
-          'Het is niet gelukt om de melding te verwijderen.',
-          'error',
-          [{ title: 'Opnieuw', userAction: action }],
-          action.payload.displayResponse,
-          null,
-          Priority.HIGH
-        );
+
+        const effectFeedback = new EffectFeedback({
+          id: this.uuid(),
+          triggerAction: action,
+          message: 'Het is niet gelukt om de melding te verwijderen.',
+          display: action.payload.displayResponse,
+          userActions: [{ title: 'Opnieuw', userAction: action }],
+          type: 'error',
+          priority: Priority.HIGH
+        });
 
         const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
           effectFeedback

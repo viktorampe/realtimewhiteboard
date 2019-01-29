@@ -13,49 +13,32 @@ export interface EffectFeedbackInterface {
   icon?: string;
   message: string;
   type: 'success' | 'error';
-  userActions: {
+  userActions?: {
     // buttons: expected action is right aligned, first in array
     title: string;
     userAction: Action;
   }[];
-  timeStamp: number;
+  timeStamp?: number;
   display: boolean;
-  priority: Priority;
+  priority?: Priority;
 }
 
 export class EffectFeedback implements EffectFeedbackInterface {
   id: string;
   triggerAction: Action;
-  icon?: string;
+  icon: string = null;
   message: string;
   type: 'success' | 'error';
   userActions: {
     // buttons: expected action is right aligned, first in array
     title: string;
     userAction: Action;
-  }[];
-  timeStamp: number;
-  display: boolean;
-  priority: Priority;
+  }[] = [];
+  timeStamp: number = Date.now();
+  display = true;
+  priority?: Priority = Priority.NORM;
 
-  constructor(
-    id: string,
-    triggerAction: Action,
-    message: string,
-    type: 'success' | 'error',
-    userActions: { title: string; userAction: Action }[],
-    display: boolean,
-    icon: string = null,
-    priority: Priority = Priority.NORM
-  ) {
-    this.id = id;
-    this.triggerAction = triggerAction;
-    this.message = message;
-    this.type = type;
-    this.userActions = userActions;
-    this.timeStamp = Date.now();
-    this.display = display;
-    this.priority = priority;
-    this.icon = icon;
+  constructor(props: EffectFeedbackInterface) {
+    Object.assign(this, props);
   }
 }
