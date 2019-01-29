@@ -11,6 +11,7 @@ import { Observable, of, timer } from 'rxjs';
 import { filter, map, mapTo, switchMap } from 'rxjs/operators';
 import { DalState } from '../+state';
 import { ActionSuccessful } from '../+state/dal.actions';
+import { EffectFeedbackInterface } from './feedback.service';
 
 export const FEEDBACK_SERVICE_TOKEN = new InjectionToken('FeedbackService');
 export interface FeedbackServiceInterface {
@@ -29,7 +30,10 @@ export class FeedbackService implements FeedbackServiceInterface {
   private successFeedback$: Observable<EffectFeedbackInterface>;
 
   // presentation
-  private snackbarFeedback$: Observable<EffectFeedbackInterface>;
+  private snackbarAfterDismiss$: Observable<{
+    dismissInfo: MatSnackBarDismiss;
+    feedback: EffectFeedbackInterface;
+  }>;
   public bannerFeedback$: Observable<EffectFeedbackInterface>;
 
   // default snackbar config
@@ -80,48 +84,50 @@ export class FeedbackService implements FeedbackServiceInterface {
 
   private setPresentationStreams(): void {
     this.bannerFeedback$ = this.errorFeedback$.pipe(
-      switchMap(feedback => of(feedback)) //switchmap needed?
+      switchMap(feedback => of(feedback)) //TODO switchmap needed?
     );
 
-    this.successFeedback$
-      .pipe(
-        map(feedback => [
-          this.snackBar.open(
-            feedback.message,
-            feedback.userActions && feedback.userActions.length
-              ? feedback.userActions[0].title
-              : null,
-            this.snackbarConfig
-          ),
-          feedback
-        ]),
-        switchMap(
-          ([snackBarRef, feedback]: [
-            MatSnackBarRef<SimpleSnackBar>,
-            EffectFeedbackInterface
-          ]) =>
-            snackBarRef
-              .afterDismissed()
-              .pipe(map(dismiss => [dismiss, feedback]))
-        )
+    this.snackbarAfterDismiss$ = this.successFeedback$.pipe(
+      map(feedback => ({
+        snackbarRef: this.snackBar.open(
+          feedback.message,
+          feedback.userActions && feedback.userActions.length
+            ? feedback.userActions[0].title
+            : null,
+          this.snackbarConfig
+        ),
+        feedback: feedback
+      })),
+      switchMap(
+        (snackbar: {
+          snackbarRef: MatSnackBarRef<SimpleSnackBar>;
+          feedback: EffectFeedbackInterface;
+        }) =>
+          snackbar.snackbarRef
+            .afterDismissed()
+            .pipe(
+              map(dismissInfo => ({ dismissInfo, feedback: snackbar.feedback }))
+            )
       )
-      .subscribe(
-        ([dismiss, feedback]: [
-          MatSnackBarDismiss,
-          EffectFeedbackInterface
-        ]) => {
-          if (dismiss.dismissedByAction) {
-            this.store.dispatch(feedback.userActions[0].userAction); // a snackbar has max 1 action
-            console.log('dismissed with action');
-          } else {
-            console.log('dismissed without action');
-          }
-          //this.store.dispatch( *Remove Feedback action* )
-          this.store.dispatch(
-            new ActionSuccessful({ successfulAction: 'remove the feedback' })
-          );
+    );
+
+    this.snackbarAfterDismiss$.subscribe(
+      (event: {
+        dismissInfo: MatSnackBarDismiss;
+        feedback: EffectFeedbackInterface;
+      }) => {
+        if (event.dismissInfo.dismissedByAction) {
+          this.store.dispatch(event.feedback.userActions[0].userAction); // a snackbar has max 1 action
+          console.log('dismissed with action');
+        } else {
+          console.log('dismissed without action');
         }
-      );
+        //this.store.dispatch( *Remove Feedback action* )
+        this.store.dispatch(
+          new ActionSuccessful({ successfulAction: 'remove the feedback' })
+        );
+      }
+    );
   }
 }
 

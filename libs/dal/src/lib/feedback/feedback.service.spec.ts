@@ -1,7 +1,22 @@
-import { inject, TestBed } from '@angular/core/testing';
-import { MatSnackBarModule } from '@angular/material';
-import { MatSnackBar, MatSnackBarContainer } from '@angular/material/snack-bar';
-import { Store, StoreModule } from '@ngrx/store';
+//file.only
+import { CommonModule } from '@angular/common';
+import {
+  Component,
+  Directive,
+  NgModule,
+  ViewChild,
+  ViewContainerRef
+} from '@angular/core';
+import {
+  ComponentFixture,
+  fakeAsync,
+  flush,
+  inject,
+  TestBed
+} from '@angular/core/testing';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { Action, Store, StoreModule } from '@ngrx/store';
 import { hot } from 'jasmine-marbles';
 import { BehaviorSubject } from 'rxjs';
 import { DalState } from '../+state';
@@ -17,19 +32,32 @@ describe('FeedbackService', () => {
   let mockFeedBack: EffectFeedbackInterface;
   let service: FeedbackService;
 
+  let testViewContainerRef: ViewContainerRef;
+  let viewContainerFixture: ComponentFixture<ComponentWithChildViewContainer>;
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
         StoreModule.forRoot({}),
         // ...getStoreModuleForFeatures([EffectFeedbackReducer])
-        MatSnackBarModule
+        MatSnackBarModule,
+        SnackBarTestModule // -> see end of file for details
       ],
-      providers: [Store, MatSnackBar],
-      declarations: [MatSnackBarContainer]
-    });
+      providers: [Store, MatSnackBar]
+    }).compileComponents();
 
     store = TestBed.get(Store);
     service = TestBed.get(FeedbackService);
+  });
+
+  beforeEach(() => {
+    viewContainerFixture = TestBed.createComponent(
+      ComponentWithChildViewContainer
+    );
+
+    viewContainerFixture.detectChanges();
+    testViewContainerRef =
+      viewContainerFixture.componentInstance.childViewContainer;
   });
 
   beforeAll(() => {
@@ -61,12 +89,54 @@ describe('FeedbackService', () => {
 
   describe('success feedback', () => {
     let snackbar: MatSnackBar;
+    let removeFeedbackAction: Action;
 
     beforeEach(() => {
       snackbar = TestBed.get(MatSnackBar);
     });
 
-    it('should call the snackbarService', () => {
+    beforeAll(() => {
+      // TODO make this the actual removeFeedbackAction
+      removeFeedbackAction = new ActionSuccessful({
+        successfulAction: 'remove the feedback'
+      });
+    });
+
+    afterEach(() => {
+      jest.resetAllMocks();
+    });
+
+    it('should call the snackbarService, without a userAction', () => {
+      snackbar.open = jest.fn();
+
+      const mockFeedBackWithoutActions = { ...mockFeedBack, userActions: null };
+
+      // will be handled differently when state can be mocked
+      // TODO remove from here ...
+      service['nextFeedback$'] = new BehaviorSubject<EffectFeedbackInterface>(
+        mockFeedBackWithoutActions
+      );
+
+      // re-initialize streams
+      service['setIntermediateStreams']();
+      service['setPresentationStreams']();
+
+      expect(service['successFeedback$']).toBeObservable(
+        hot('a', { a: mockFeedBackWithoutActions })
+      );
+
+      // ... to here
+
+      expect(snackbar.open).toHaveBeenCalled();
+      expect(snackbar.open).toHaveBeenCalledTimes(1);
+      expect(snackbar.open).toHaveBeenCalledWith(
+        mockFeedBack.message,
+        null,
+        jasmine.anything()
+      );
+    });
+
+    it('should call the snackbarService, with a userAction', () => {
       snackbar.open = jest.fn();
 
       // will be handled differently when state can be mocked
@@ -118,26 +188,11 @@ describe('FeedbackService', () => {
       );
     });
 
-    it('should dispatch an action when the snackbar is dismissed without an action', () => {
+    it('should dispatch a removeFeedbackAction when the snackbar is dismissed without an action', fakeAsync(() => {
       store.dispatch = jest.fn();
-      const snackbarDismissTime = 1000;
-      service['snackbarConfig'] = { duration: snackbarDismissTime };
-
-      // mock the snackbar element
-      // const mockSnackbarRef = new MatSnackBarRef<SimpleSnackBar>(
-      //   new MatSnackBarContainer(null, null, null, service['snackbarConfig']),
-      //   new OverlayRef(
-      //     null,
-      //     null,
-      //     null,
-      //     new OverlayConfig(),
-      //     null,
-      //     null,
-      //     null,
-      //     null
-      //   )
-      // );
-      // snackbar.open = jest.fn().mockReturnValue(mockSnackbarRef);
+      service['snackbarConfig'] = {
+        viewContainerRef: testViewContainerRef // set reference to dummy component
+      };
 
       // will be handled differently when state can be mocked
       // TODO remove from here ...
@@ -151,11 +206,48 @@ describe('FeedbackService', () => {
 
       // ... to here
 
-      expect(snackbar._openedSnackBarRef).toBeTruthy();
       snackbar.dismiss();
+      viewContainerFixture.detectChanges(); // allow animations to pass
+      flush(); // allow async methods to complete
 
       expect(store.dispatch).toHaveBeenCalled();
-    });
+      expect(store.dispatch).toHaveBeenCalledTimes(1);
+      expect(store.dispatch).toHaveBeenCalledWith(removeFeedbackAction);
+    }));
+
+    it(
+      'should dispatch a removeFeedbackAction and the userActions ' +
+        'when the snackbar is dismissed with an action',
+      fakeAsync(() => {
+        store.dispatch = jest.fn();
+        service['snackbarConfig'] = {
+          viewContainerRef: testViewContainerRef // set reference to dummy component
+        };
+
+        // will be handled differently when state can be mocked
+        // TODO remove from here ...
+        service['nextFeedback$'] = new BehaviorSubject<EffectFeedbackInterface>(
+          mockFeedBack
+        );
+
+        // re-initialize streams
+        service['setIntermediateStreams']();
+        service['setPresentationStreams']();
+
+        // ... to here
+
+        snackbar._openedSnackBarRef.dismissWithAction();
+        viewContainerFixture.detectChanges(); // allow animations to pass
+        flush(); // allow async methods to complete
+
+        const expectedAction = mockFeedBack.userActions[0].userAction;
+
+        expect(store.dispatch).toHaveBeenCalled();
+        expect(store.dispatch).toHaveBeenCalledTimes(2);
+        expect(store.dispatch).toHaveBeenCalledWith(removeFeedbackAction);
+        expect(store.dispatch).toHaveBeenCalledWith(expectedAction);
+      })
+    );
   });
 
   describe('error feedback', () => {
@@ -186,3 +278,50 @@ describe('FeedbackService', () => {
     });
   });
 });
+
+/*
+ * Code to set up portal host for snackbar
+ * Copied from https://github.com/angular/material2/blob/master/src/lib/snack-bar/snack-bar.spec.ts
+ * Modified to be shorter
+ *
+ * In essense: a component is created and rendered as an entryComponent, which is needed for
+ * a componentFactory to exist at forRoot. This factory is needed to get a MatSnackbarContainer.
+ * This container serves as a PortalHost for the MatSnackbar component.
+ *
+ * Simple component to open snack bars from.
+ * Create a real (non-test) NgModule as a workaround forRoot
+ * https://github.com/angular/angular/issues/10760
+ */
+
+// tslint:disable
+@Directive({ selector: 'dir-with-view-container' })
+class DirectiveWithViewContainer {
+  constructor(public viewContainerRef: ViewContainerRef) {}
+}
+
+@Component({
+  selector: 'arbitrary-component',
+  template: `
+    <dir-with-view-container></dir-with-view-container>
+  `
+})
+class ComponentWithChildViewContainer {
+  @ViewChild(DirectiveWithViewContainer)
+  childWithViewContainer: DirectiveWithViewContainer;
+
+  get childViewContainer() {
+    return this.childWithViewContainer.viewContainerRef;
+  }
+}
+
+const TEST_DIRECTIVES = [
+  ComponentWithChildViewContainer,
+  DirectiveWithViewContainer
+];
+@NgModule({
+  imports: [CommonModule, MatSnackBarModule, NoopAnimationsModule],
+  exports: TEST_DIRECTIVES,
+  declarations: TEST_DIRECTIVES,
+  entryComponents: [ComponentWithChildViewContainer]
+})
+class SnackBarTestModule {}
