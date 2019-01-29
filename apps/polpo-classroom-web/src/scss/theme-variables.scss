@@ -58,8 +58,8 @@ $ui-shell__logo-background-color: $color-blue-2;
 // ui > person badge > polpo override
 $ui-person-badge-size-large: 72px;
 $ui-person-badge-size-large-font-size: 24px;
-$ui-person-badge-size-medium: 50px !default;
-$ui-person-badge-size-medium-font-size: 14px !default;
+$ui-person-badge-size-medium: 50px;
+$ui-person-badge-size-medium-font-size: 14px;
 
 $ui-page-header_section-subtitle-bg-color: $color-blue-2;
 
@@ -68,11 +68,23 @@ $ui-form-button-default-bg-color: $color-gray-3;
 $ui-form-button-primary-bg-color: $color-blue-2;
 
 // social media
-$facebook-button-background-color: #455897 !default;
-$facebook-button-font-color: white !default;
-$google-button-background-color: #dd4b39 !default;
-$google-button-font-color: white !default;
-$smartschool-button-background-color: #ff520e !default;
-$smartschool-button-font-color: white !default;
+$facebook-button-background-color: #455897;
+$facebook-button-font-color: white;
+$google-button-background-color: #dd4b39;
+$google-button-font-color: white;
+$smartschool-button-background-color: #ff520e;
+$smartschool-button-font-color: white;
+
+// alerts
+$pages-settings-alerts__info-panel__notification-bg-color-odd: #ecf4f6;
+$pages-settings-alerts__info-panel__notification-bg-color-even: #e1edf2;
+$pages-settings-alerts__info-panel__notification-margin-bottom: 5px;
+$pages-settings-alerts__info-panel__notification-border: 1px solid #cbced4;
+$pages-settings-alerts__info-panel__notification__actions-bg-color: #d1dfe6;
+$pages-settings-alerts__info-panel__notification__actions-padding: 10px;
+$pages-settings-alerts__info-panel__notification__actions__element-cursor: pointer;
+$pages-settings-alerts__info-panel__notification__actions__element-margin: 0 6px
+  0 0;
+$pages-settings-alerts__info-panel__notification__actions__element-margin-last: 0;
 
 @import '_logos';
