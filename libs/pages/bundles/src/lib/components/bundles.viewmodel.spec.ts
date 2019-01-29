@@ -162,7 +162,8 @@ describe('BundlesViewModel', () => {
       filter: { bundleId: 1 },
       intended: false,
       personId: 1,
-      read: true
+      read: true,
+      displayResponse: false
     });
     bundlesViewModel.setBundleAlertRead(1);
     expect(store.dispatch).toHaveBeenCalledWith(expectedAction);
