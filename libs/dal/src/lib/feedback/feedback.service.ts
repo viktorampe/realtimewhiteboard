@@ -43,7 +43,7 @@ export class FeedbackService implements FeedbackServiceInterface {
     this.setPresentationStreams();
   }
 
-  getSourceStreams(): void {
+  private getSourceStreams(): void {
     // TODO delete
     const mockAction = {
       title: 'klik',
@@ -65,10 +65,10 @@ export class FeedbackService implements FeedbackServiceInterface {
     };
 
     this.nextFeedback$ = timer(1000, 4000).pipe(mapTo(mockFeedBack)); //TODO use code below
-    // this.nextFeedback$ = this.store.select(EffectFeedbackQueries.getNext);
+    // this.nextFeedback$ = this.store.select(EffectFeedbackQueries.getNext).pipe(shareReplay(1)); // needed? -> share() ?
   }
 
-  setIntermediateStreams(): void {
+  private setIntermediateStreams(): void {
     this.errorFeedback$ = this.nextFeedback$.pipe(
       filter(feedback => feedback.type === 'error')
     );
@@ -78,9 +78,9 @@ export class FeedbackService implements FeedbackServiceInterface {
     );
   }
 
-  setPresentationStreams(): void {
+  private setPresentationStreams(): void {
     this.bannerFeedback$ = this.errorFeedback$.pipe(
-      switchMap(feedback => of(feedback))
+      switchMap(feedback => of(feedback)) //switchmap needed?
     );
 
     this.successFeedback$
@@ -111,12 +111,15 @@ export class FeedbackService implements FeedbackServiceInterface {
           EffectFeedbackInterface
         ]) => {
           if (dismiss.dismissedByAction) {
-            this.store.dispatch(feedback.userActions[0].userAction);
+            this.store.dispatch(feedback.userActions[0].userAction); // a snackbar has max 1 action
             console.log('dismissed with action');
           } else {
             console.log('dismissed without action');
           }
-          //this.store.dispatch( *Remove Feedback action*)
+          //this.store.dispatch( *Remove Feedback action* )
+          this.store.dispatch(
+            new ActionSuccessful({ successfulAction: 'remove the feedback' })
+          );
         }
       );
   }

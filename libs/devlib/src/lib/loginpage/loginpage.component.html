@@ -3,20 +3,21 @@
 <ng-container *ngIf="(route$ | async) as route">
   <h2 style="color:#E75480">PARAMS IN THIS ROUTE:</h2>
   <ul>
-    <li style="color:#E75480" *ngFor="let routeParam of route">{{
+    <li style="color:#E75480"
+        *ngFor="let routeParam of route">{{
       routeParam
-    }}</li>
+      }}</li>
   </ul>
 </ng-container>
 
-<campus-dropdown-menu-item
-  header="test description"
-  image="assets/images/icon-smartschool.png"
-  internalLink="test"
-  title="text title"
-></campus-dropdown-menu-item>
+<campus-dropdown-menu-item header="test description"
+                           image="assets/images/icon-smartschool.png"
+                           internalLink="test"
+                           title="text title"></campus-dropdown-menu-item>
 
-<campus-page-bar> <div class="divider"></div> </campus-page-bar>
+<campus-page-bar>
+  <div class="divider"></div>
+</campus-page-bar>
 
 <div class="login_page_component">
   <div [hidden]="loginPageviewModel.isLoggedIn()">
@@ -30,24 +31,18 @@
     </div>
 
     <div class="login_form">
-      <input
-        placeholder="username"
-        [(ngModel)]="loginPageviewModel.name"
-        type="text"
-      />
-      <input
-        placeholder="password"
-        [(ngModel)]="loginPageviewModel.password"
-        type="password"
-      />
-      <button
-        (click)="
+      <input placeholder="username"
+             [(ngModel)]="loginPageviewModel.name"
+             type="text" />
+      <input placeholder="password"
+             [(ngModel)]="loginPageviewModel.password"
+             type="password" />
+      <button (click)="
           loginPageviewModel.login(
             loginPageviewModel.name,
             loginPageviewModel.password
           )
-        "
-      >
+        ">
         login
       </button>
     </div>
@@ -63,39 +58,20 @@
 <button (click)="getCurrentUser()">fetch current user</button>
 <div>{{ currentUser | async | json }}</div>
 
-<div
-  ><button (click)="updateStudentContentStatus()"
-    >update student content status</button
-  ></div
->
+<div><button (click)="updateStudentContentStatus()">update student content status</button></div>
 
-<div><button (click)="updateAlert()">update alert</button></div>
-
-<div>
-  <button (click)="deleteAlert()">remove alert</button>
-  <div>{{ response | async | json }}</div>
-</div>
-
-<div
-  ><a [routerLink]="['/bundles']" routerLinkActive="router-link-active"
-    >go to bundle page</a
-  ></div
->
-<div
-  ><a [routerLink]="['/tasks']" routerLinkActive="router-link-active"
-    >go to tasks page</a
-  ></div
->
-<campus-person-summary
-  [person]="{
+<div><a [routerLink]="['/bundles']"
+     routerLinkActive="router-link-active">go to bundle page</a></div>
+<div><a [routerLink]="['/tasks']"
+     routerLinkActive="router-link-active">go to tasks page</a></div>
+<campus-person-summary [person]="{
     name: 'person name',
     displayName: 'string',
     firstName: 'string',
     avatar:
       'data:image/jpeg;base64,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'
   }"
-  [connectionTypeIcon]="'presentatie'"
->
+                       [connectionTypeIcon]="'presentatie'">
   <div description> person description </div>
   <campus-button campusRoundedCorners>button1</campus-button>
   <campus-button campusRoundedCorners>button2</campus-button>
