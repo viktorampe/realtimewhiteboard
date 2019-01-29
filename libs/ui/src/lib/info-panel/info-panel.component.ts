@@ -8,5 +8,5 @@ import { Component, Input } from '@angular/core';
 export class InfoPanelComponent {
   @Input() titleText: string;
   @Input() titleIcon?: string;
-  @Input() titleRightRouterLink: string | any[];
+  @Input() titleRightRouterLink?: string | any[];
 }
