@@ -1,7 +1,6 @@
 @mixin ui-button() {
   $ui-button-font-size: $ui-primary-font-size !default;
   $ui-button-padding: $ui-button-font-size/3 $ui-button-font-size/2 !default;
-
   $ui-button-color: $ui-button-font-color !default;
   $ui-button-background-color: $ui-button-bg-color !default;
   $ui-button-background-color-1: $ui-button-bg-color-1 !default;
@@ -27,8 +26,7 @@
   $ui-button--rounded-corner-border-radius: $ui-button-font-size / 4 !default;
   // --large
   $ui-button--large-font-size: $ui-button-font-size * 1.5 !default;
-  $ui-button--large-padding: $ui-button--large-font-size / 3
-    $ui-button--large-font-size / 2 !default;
+  $ui-button--large-padding: $ui-button--large-font-size / 3 !default;
   $ui-button--large-icon-size: $ui-button--large-font-size !default;
   $ui-button--large-max-width: 400px !default;
   $ui-button--large__icon-margin-right: $ui-button--large-font-size / 2 !default;
@@ -81,6 +79,10 @@
     padding: $ui-button-padding;
     color: $ui-form-item-font-color;
     background-color: $ui-button-background-color;
+    margin-right: $ui-form-spacing;
+    &:last-child {
+      margin-right: 0;
+    }
     &:active {
       background-color: darken($ui-button-background-color, 5%);
       color: $ui-button--active-color;
@@ -93,7 +95,8 @@
   .ui-button--bordered {
     border-color: $ui-button-border-color;
     border-style: solid;
-    border-width: 1px; // --bordered--disabled
+    border-width: 1px;
+    // --bordered--disabled
     &.ui-button--disabled {
       .ui-button {
         border-color: $ui-button--disabled-border-color;
