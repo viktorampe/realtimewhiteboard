@@ -1,5 +1,8 @@
 export * from './lib/auth';
 export {
+  RouteNotFoundComponent
+} from './lib/components/route-not-found/route-not-found-component';
+export {
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN
 } from './lib/content/open-static-content.interface';

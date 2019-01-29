@@ -1,4 +1,4 @@
-import { Component, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { Permissions } from '@campus/dal';
 import {
@@ -7,17 +7,8 @@ import {
   PermissionGuard,
   RedirectionGuard
 } from '@campus/guards';
+import { RouteNotFoundComponent } from '@campus/shared';
 import { AppResolver } from './app.resolver';
-
-//NEEDED FOR ROUTE, if null it won't load any routes
-@Component({
-  selector: 'campus-not-found',
-  template: '<div></div>'
-})
-export class NotFoundComponent {
-  name = 'Angular';
-}
-//
 
 const routes: Routes = [
   {
@@ -124,14 +115,13 @@ const routes: Routes = [
   },
   {
     path: '**',
-    component: NotFoundComponent, // component can't be null
+    component: RouteNotFoundComponent,
     canActivate: [RedirectionGuard]
   }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload' })],
-  exports: [RouterModule, NotFoundComponent],
-  declarations: [NotFoundComponent]
+  exports: [RouterModule]
 })
 export class AppRoutingModule {}

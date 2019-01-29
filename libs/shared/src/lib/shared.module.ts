@@ -16,6 +16,7 @@ import { HasPermissionDirective } from './auth/has-permission.directive';
 import { PermissionService } from './auth/permission.service';
 import { PERMISSION_SERVICE_TOKEN } from './auth/permission.service.interface';
 import { PageBarContainerComponent } from './components/page-bar-container/page-bar-container.component';
+import { RouteNotFoundComponent } from './components/route-not-found/route-not-found-component';
 import { OPEN_STATIC_CONTENT_SERVICE_TOKEN } from './content/open-static-content.interface';
 import { OpenStaticContentService } from './content/open-static-content.service';
 import { HeaderComponent } from './header/header.component';
@@ -56,7 +57,8 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     PageBarContainerComponent,
     HasPermissionDirective,
     PersonBadgeFromCredentialPipe,
-    MailToByCredentialPipe
+    MailToByCredentialPipe,
+    RouteNotFoundComponent
   ],
   exports: [
     HeaderComponent,
@@ -65,7 +67,8 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     PageBarContainerComponent,
     HasPermissionDirective,
     PersonBadgeFromCredentialPipe,
-    MailToByCredentialPipe
+    MailToByCredentialPipe,
+    RouteNotFoundComponent
   ],
   providers: [
     { provide: FILTER_SERVICE_TOKEN, useClass: FilterService },
