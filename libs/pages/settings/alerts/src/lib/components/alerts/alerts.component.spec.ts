@@ -44,7 +44,7 @@ describe('AlertsComponent', () => {
       expect(viewModel.setAlertAsRead).toHaveBeenCalledTimes(1);
       expect(viewModel.setAlertAsRead).toHaveBeenCalledWith(alertId);
     });
-    it('should call the viewmodel.setAlertAsRead', () => {
+    it('should call the viewmodel.setAlertAsUnRead', () => {
       const alertId = 6;
       viewModel.setAlertAsUnread = jest.fn();
       component.setAlertAsUnread(alertId);
@@ -88,7 +88,7 @@ describe('AlertsComponent', () => {
       expect(readSpy).toHaveBeenCalledWith(100);
       expect(unreadSpy).not.toHaveBeenCalled();
     });
-    it('should call setAlertAsRead if the alert.read is false', () => {
+    it('should call setAlertAsRead if the alert.read is true', () => {
       const readSpy = jest
         .spyOn(component, 'setAlertAsRead')
         .mockImplementation(() => {});
