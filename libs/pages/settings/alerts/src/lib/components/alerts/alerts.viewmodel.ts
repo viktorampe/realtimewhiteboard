@@ -63,13 +63,14 @@ export class AlertsViewModel {
           .filter(alert => alert.type !== 'message')
           .map(alert => {
             const notification: NotificationItemInterface = {
+              id: alert.id,
+              read: alert.read,
               icon: alert.type,
               titleText: alert.title,
               link: alert.link, // TODO: check the link format (external or internal)
               notificationText: alert.message,
               notificationDate: new Date(alert.sentAt)
             };
-            console.log({ notification });
             return notification;
           });
       }),
