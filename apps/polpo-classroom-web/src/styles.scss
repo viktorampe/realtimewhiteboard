@@ -6,9 +6,6 @@ body {
   padding: 0;
   margin: 0;
   height: 100%;
-
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 13px;
 }
 
 * {
@@ -104,9 +101,16 @@ body {
 
 // include app specific css
 @import 'scss/social-media';
+
 /*
  * App styles
  */
+body {
+  font-family: $primary-font-family;
+  font-size: $primary-font-size;
+  color: $primary-font-color;
+}
+
 .ui-shell__logo {
   text-align: center;
   padding-top: 25px;

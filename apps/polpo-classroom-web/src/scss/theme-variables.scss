@@ -18,6 +18,7 @@ $primary-color-accent: $color-blue-1; // link, button (borders)
 $primary-font-color-2: $color-gray-1; // subtitle
 $primary-font-family: 'Helvetica', 'Arial', 'Open Sans', sans-serif;
 $primary-font-family-2: 'Lato', sans-serif; // title
+$primary-font-size: 13px;
 // app > nav + site header (shell)
 $secondary-bg-color: $color-black-1;
 $secondary-font-color: $color-gray-1;
@@ -32,6 +33,7 @@ $tertiary-font-color-2: $color-white-1;
 // ui > main body
 $ui-primary-bg-color: $primary-bg-color;
 $ui-primary-font-color: $primary-font-color;
+$ui-primary-font-size: $primary-font-size;
 $ui-primary-color-accent: $primary-color-accent;
 $ui-primary-font-color-2: $primary-font-color-2;
 $ui-primary-font-family: $primary-font-family;
@@ -70,7 +72,7 @@ $ui-form-button-primary-bg-color: $color-blue-2;
 // social media
 $facebook-button-background-color: #455897 !default;
 $facebook-button-font-color: white !default;
-$google-button-background-color: #dd4b39 !default;
+$google-button-background-color: #4285f4 !default;
 $google-button-font-color: white !default;
 $smartschool-button-background-color: #ff520e !default;
 $smartschool-button-font-color: white !default;
