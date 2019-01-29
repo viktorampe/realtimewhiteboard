@@ -1,4 +1,4 @@
-<campus-info-panel [titleText]="pageTitle" [icon]="pageIcon">
+<campus-info-panel [titleText]="pageTitle" [titleIcon]="pageIcon">
   <ng-container *ngIf="(alerts$ | async) as alerts">
     <ng-container *ngIf="alerts.length > 0; else: noAlerts">
       <div
