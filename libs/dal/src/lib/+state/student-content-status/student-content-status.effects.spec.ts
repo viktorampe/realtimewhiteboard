@@ -26,7 +26,7 @@ import {
   UpdateStudentContentStatus
 } from './student-content-status.actions';
 import { StudentContentStatusesEffects } from './student-content-status.effects';
-// file.only
+
 function createStudentContentStatus(
   id: number,
   personId: number
