@@ -73,16 +73,7 @@ describe('ButtonComponent', () => {
     expect(iconEl).toBeTruthy();
   });
 
-  it('shouldnt project the content', () => {
+  it('should project the content', () => {
     expect(componentDE.nativeElement.textContent).toContain('tekst');
-  });
-
-  it('should stop click event bubbling from children', () => {
-    spyOn(testContainerComponent, 'onClick');
-
-    const compChilderen = componentDE.queryAll(By.all());
-    compChilderen.forEach(c => c.nativeElement.click());
-
-    expect(testContainerComponent.onClick).not.toHaveBeenCalled();
   });
 });
