@@ -88,6 +88,7 @@ $ui-button-padding-bottom: $ui-font-size-normal/2 !default;
 @import './notification/notification.component.theme';
 @import './dropdown-menu/dropdown-menu.component.theme.scss';
 @import './dropdown-menu-item/dropdown-menu-item.component.theme.scss';
+@import './banner/banner.component.theme.scss';
 
 // create theme-mixin with each mixin from our library components
 @mixin ui-theme() {
@@ -116,4 +117,5 @@ $ui-button-padding-bottom: $ui-font-size-normal/2 !default;
   @include ui-notification();
   @include ui-dropdown-menu();
   @include ui-dropdown-menu-item();
+  @include ui_banner_theme();
 }
