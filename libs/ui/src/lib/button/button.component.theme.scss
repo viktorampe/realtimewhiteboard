@@ -98,7 +98,8 @@
   .ui-button--bordered {
     border-color: $ui-button-border-color;
     border-style: solid;
-    border-width: 1px; // --bordered--disabled
+    border-width: 1px;
+    // --bordered--disabled
     &.ui-button--disabled {
       .ui-button {
         border-color: $ui-button--disabled-border-color;
@@ -139,7 +140,8 @@
     &:hover {
       background-color: $ui-button--danger--hover-background-color;
       color: $ui-button--danger--hover-color;
-    } // --danger--disabled
+    }
+    // --danger--disabled
     &.ui-button--disabled {
       background-color: $ui-button--danger--disabled-background-color;
     }
