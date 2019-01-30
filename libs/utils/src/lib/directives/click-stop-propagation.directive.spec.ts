@@ -43,7 +43,6 @@ describe('ClickStopPropagationDirective', () => {
   let directive: ClickStopPropagationDirective;
   let component: Component;
   let testContainerFixture: ComponentFixture<TestContainerComponent>;
-  let testContainerComponent: TestContainerComponent;
   let componentDE: DebugElement;
 
   beforeEach(async(() => {
@@ -54,7 +53,6 @@ describe('ClickStopPropagationDirective', () => {
 
   beforeEach(() => {
     testContainerFixture = TestBed.createComponent(TestContainerComponent);
-    testContainerComponent = testContainerFixture.componentInstance;
     componentDE = testContainerFixture.debugElement.query(By.css('span'));
     component = componentDE.componentInstance;
     testContainerFixture.detectChanges();
@@ -66,31 +64,26 @@ describe('ClickStopPropagationDirective', () => {
     expect(directive).toBeTruthy();
   });
 
-  it('should stop click event bubbling from children', () => {
+  it('should call stopPropagation() on the event', () => {
     const ev = new MouseEvent('click', { bubbles: true });
+    spyOn(ev, 'stopPropagation');
 
-    spyOn(testContainerComponent, 'onClick');
     componentDE.nativeElement.dispatchEvent(ev);
-
-    expect(testContainerComponent.onClick).not.toHaveBeenCalled();
+    expect(ev.stopPropagation).toHaveBeenCalled();
   });
 
-  // double check that the onClick has been called without the directive
-  it("shouldn't stop click event bubbling from children without the directive", () => {
+  it("shouldn't call stopPropagation() on the event without the directive", () => {
     const ev = new MouseEvent('click', { bubbles: true });
+    spyOn(ev, 'stopPropagation');
 
     const testContainerWithoutFixture = TestBed.createComponent(
       TestContainerWithoutDirectiveComponent
     );
-    const testContainerWithoutComponent =
-      testContainerWithoutFixture.componentInstance;
     const componentWithoutDE = testContainerWithoutFixture.debugElement.query(
       By.css('span')
     );
 
-    spyOn(testContainerWithoutComponent, 'onClick');
     componentWithoutDE.nativeElement.dispatchEvent(ev);
-
-    expect(testContainerWithoutComponent.onClick).toHaveBeenCalled();
+    expect(ev.stopPropagation).not.toHaveBeenCalled();
   });
 });

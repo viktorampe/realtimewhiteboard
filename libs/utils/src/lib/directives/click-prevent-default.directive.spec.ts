@@ -9,7 +9,7 @@ import { ClickPreventDefaultDirective } from './click-prevent-default.directive'
   // tslint:disable-next-line:component-selector
   selector: 'test-container',
   template: `
-    <input type="checkbox" (click)="this.onClick()" clickPreventDefault />
+    <div clickPreventDefault> </div>
   `
 })
 export class TestContainerComponent {
@@ -20,7 +20,7 @@ export class TestContainerComponent {
   // tslint:disable-next-line:component-selector
   selector: 'test-container-without',
   template: `
-    <input type="checkbox" (click)="this.onClick()" />
+    <div> </div>
   `
 })
 export class TestContainerWithoutDirectiveComponent {
@@ -41,7 +41,6 @@ describe('ClickPreventDefaultDirective', () => {
   let directive: ClickPreventDefaultDirective;
   let component: Component;
   let testContainerFixture: ComponentFixture<TestContainerComponent>;
-  let testContainerComponent: TestContainerComponent;
   let componentDE: DebugElement;
 
   beforeEach(async(() => {
@@ -52,8 +51,7 @@ describe('ClickPreventDefaultDirective', () => {
 
   beforeEach(() => {
     testContainerFixture = TestBed.createComponent(TestContainerComponent);
-    testContainerComponent = testContainerFixture.componentInstance;
-    componentDE = testContainerFixture.debugElement.query(By.css('input'));
+    componentDE = testContainerFixture.debugElement.query(By.css('div'));
     component = componentDE.componentInstance;
     testContainerFixture.detectChanges();
     directive = componentDE.injector.get(ClickPreventDefaultDirective);
@@ -64,7 +62,7 @@ describe('ClickPreventDefaultDirective', () => {
     expect(directive).toBeTruthy();
   });
 
-  it('should stop click event default handler', () => {
+  it('should call preventDefault() on the event', () => {
     const ev = new MouseEvent('click', { bubbles: true });
     spyOn(ev, 'preventDefault');
 
@@ -72,8 +70,7 @@ describe('ClickPreventDefaultDirective', () => {
     expect(ev.preventDefault).toHaveBeenCalled();
   });
 
-  // double check that the default isn't prevented without the directive
-  it("shouldn't stop click event stop click event default handler without the directive", () => {
+  it("shouldn't call preventDefault() on the event without the directive", () => {
     const ev = new MouseEvent('click', { bubbles: true });
     spyOn(ev, 'preventDefault');
 
@@ -81,7 +78,7 @@ describe('ClickPreventDefaultDirective', () => {
       TestContainerWithoutDirectiveComponent
     );
     const componentWithoutDE = testContainerWithoutFixture.debugElement.query(
-      By.css('input')
+      By.css('div')
     );
 
     componentWithoutDE.nativeElement.dispatchEvent(ev);
