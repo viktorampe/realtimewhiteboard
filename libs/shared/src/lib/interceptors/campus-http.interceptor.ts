@@ -29,9 +29,8 @@ export class CampusHttpInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       retry(1),
       catchError((error: HttpErrorResponse) => {
-        const errorNeedsRedirect = !this.isAllowedError(error);
-        const managedError = this.isManagedError(error);
-        if (managedError && errorNeedsRedirect) {
+        if (this.isManagedError(error) && !this.isAllowedError(error)) {
+          console.log(error.status);
           this.router.navigate(['/error', error.status]);
         }
         return throwError(error);
