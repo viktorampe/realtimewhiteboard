@@ -1,4 +1,3 @@
-//file.only
 import { CommonModule } from '@angular/common';
 import {
   Component,
@@ -33,6 +32,7 @@ import {
 } from '../+state/effect-feedback/effect-feedback.actions';
 import { EffectFeedbackFixture } from './../+fixtures/EffectFeedback.fixture';
 
+// tslint:disable:no-use-before-declare
 describe('FeedbackService', () => {
   let store: Store<DalState>;
   let mockFeedBack: EffectFeedbackInterface;
