@@ -8,6 +8,5 @@ export class ClickPreventDefaultDirective {
   @HostListener('click', ['$event'])
   public onClick(event: MouseEvent): void {
     event.preventDefault();
-    console.log('test');
   }
 }
