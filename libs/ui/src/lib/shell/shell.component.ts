@@ -114,6 +114,7 @@ export class ShellComponent implements OnInit, OnDestroy {
   }
 
   private setToggleSidebarSubscription() {
+    console.log(this.sidebar.openedChange);
     this.sidebar.openedChange.subscribe(open => {
       this.sidebarOpen = open;
     });

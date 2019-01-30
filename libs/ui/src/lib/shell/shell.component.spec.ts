@@ -1,4 +1,3 @@
-//file.only
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
 import { Component, NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
@@ -152,12 +151,12 @@ describe('ShellComponent', () => {
     sub.unsubscribe();
   });
 
-  fit('subscribes the sidebar opened events', fakeAsync(() => {
+  it('subscribes the sidebar opened events', fakeAsync(() => {
     let ev;
     const sub = component.sidebarToggled.subscribe(event => {
       ev = event;
     });
-    component.sidebar.open();
+    component.sidebar.toggle();
     fixture.detectChanges();
     flush();
     expect(ev).toBe(false);
