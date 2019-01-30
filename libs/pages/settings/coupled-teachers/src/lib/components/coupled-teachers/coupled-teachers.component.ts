@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PersonInterface } from '@campus/dal';
 import { PersonAlreadyLinkedValidator } from '@campus/shared';
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import {
   ApiValidationErrors,
   CoupledTeachersViewModel
@@ -47,7 +48,11 @@ export class CoupledTeachersComponent implements OnInit {
 
   loadStreams(): void {
     this.linkedPersons$ = this.coupledTeacherViewModel.linkedPersons$;
-    this.apiErrors$ = this.coupledTeacherViewModel.apiErrors$;
+    this.apiErrors$ = this.coupledTeacherViewModel.apiErrors$.pipe(
+      tap(errors => {
+        this.coupledTeachersForm.get('teacherCode').setErrors(errors);
+      })
+    );
   }
 
   onSubmit() {

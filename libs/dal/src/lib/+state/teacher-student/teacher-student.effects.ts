@@ -7,7 +7,7 @@ import {
   LinkedPersonServiceInterface,
   LINKED_PERSON_SERVICE_TOKEN
 } from '../../persons/linked-persons.service';
-import { ActionSuccessful } from '../dal.actions';
+import { EffectFeedback, EffectFeedbackActions } from '../effect-feedback';
 import {
   LinkTeacherStudent,
   LoadTeacherStudents,
@@ -47,12 +47,30 @@ export class TeacherStudentEffects {
         return this.linkedPersonService
           .linkStudentToTeacher(action.payload.publicKey)
           .pipe(
-            map(() => new ActionSuccessful({ successfulAction: action.type }))
+            map(() => {
+              const effectFeedback = new EffectFeedback({
+                id: this.uuid(),
+                triggerAction: action,
+                message: 'Leerkracht is gekoppeld.',
+                type: 'success'
+              });
+              return new EffectFeedbackActions.AddEffectFeedback({
+                effectFeedback
+              });
+            })
           );
       },
       onError: (action: LinkTeacherStudent, error) => {
-        return new ActionSuccessful({
-          successfulAction: 'link teacher failed:' + error.message
+        // display =  false, because the error should be handled by the form
+        const effectFeedback = new EffectFeedback({
+          id: this.uuid(),
+          triggerAction: action,
+          message: error.message,
+          type: 'error',
+          display: false
+        });
+        return new EffectFeedbackActions.AddEffectFeedback({
+          effectFeedback
         });
       }
     }
@@ -72,12 +90,30 @@ export class TeacherStudentEffects {
         return this.linkedPersonService
           .unlinkStudentFromTeacher(userId, teacherStudentId)
           .pipe(
-            map(() => new ActionSuccessful({ successfulAction: action.type }))
+            map(() => {
+              const effectFeedback = new EffectFeedback({
+                id: this.uuid(),
+                triggerAction: action,
+                message: 'Leerkracht is ontkoppeld.',
+                type: 'success'
+              });
+              return new EffectFeedbackActions.AddEffectFeedback({
+                effectFeedback
+              });
+            })
           );
       },
       onError: (action: UnlinkTeacherStudent, error) => {
-        return new ActionSuccessful({
-          successfulAction: 'unlink teacher failed:' + error.message
+        const effectFeedback = new EffectFeedback({
+          id: this.uuid(),
+          triggerAction: action,
+          message: 'Het is niet gelukt om de leerkracht te ontkoppelen.',
+          type: 'error',
+          userActions: [{ title: 'Probeer opnieuw', userAction: action }],
+          display: true
+        });
+        return new EffectFeedbackActions.AddEffectFeedback({
+          effectFeedback
         });
       }
     }
@@ -87,6 +123,7 @@ export class TeacherStudentEffects {
     private actions: Actions,
     private dataPersistence: DataPersistence<DalState>,
     @Inject(LINKED_PERSON_SERVICE_TOKEN)
-    private linkedPersonService: LinkedPersonServiceInterface
+    private linkedPersonService: LinkedPersonServiceInterface,
+    @Inject('uuid') private uuid: Function
   ) {}
 }

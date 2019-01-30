@@ -19,7 +19,7 @@ export interface EffectFeedbackInterface {
     userAction: Action;
   }[];
   timeStamp?: number;
-  display: boolean;
+  display?: boolean;
   priority?: Priority;
 }
 
@@ -36,7 +36,7 @@ export class EffectFeedback implements EffectFeedbackInterface {
   }[] = [];
   timeStamp: number = Date.now();
   display = true;
-  priority?: Priority = Priority.NORM;
+  priority: Priority = Priority.NORM;
 
   constructor(props: EffectFeedbackInterface) {
     Object.assign(this, props);

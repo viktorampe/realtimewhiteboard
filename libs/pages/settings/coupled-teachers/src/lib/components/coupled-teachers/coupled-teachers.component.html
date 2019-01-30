@@ -40,9 +40,15 @@
           "
           >De leerkracht met deze code is reeds gekoppeld.</mat-error
         >
-        <mat-error *ngIf="(apiErrors$ | async)?.nonExistingTeacherCode"
+        <mat-error
+          *ngIf="
+            coupledTeachersForm
+              .get('teacherCode')
+              .hasError('nonExistingTeacherCode')
+          "
           >De opgegeven leerkrachtencode is niet geldig.</mat-error
         >
+        <ng-container *ngIf="(apiErrors$ | async)"></ng-container>
       </mat-form-field>
       <div class="pages-settings-coupled-teachers__form__actions">
         <campus-button
