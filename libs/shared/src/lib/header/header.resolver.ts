@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, InjectionToken } from '@angular/core';
 import {
   AlertActions,
   AlertQueries,
@@ -10,6 +10,8 @@ import {
   UiQuery
 } from '@campus/dal';
 import { Action, Selector, Store } from '@ngrx/store';
+
+export const HEADER_RESOLVER_TOKEN = new InjectionToken('HeaderResolver');
 
 @Injectable({
   providedIn: 'root'

@@ -19,7 +19,7 @@ import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { ENVIRONMENT_ALERTS_FEATURE_TOKEN } from '../interfaces/environment.injectiontokens';
 import { EnvironmentAlertsFeatureInterface } from '../interfaces/environment.interfaces';
-import { HeaderResolver } from './header.resolver';
+import { HEADER_RESOLVER_TOKEN } from './header.resolver';
 import { HeaderViewModel } from './header.viewmodel';
 
 let environmentAlertsFeature: EnvironmentAlertsFeatureInterface = {
@@ -77,7 +77,6 @@ describe('headerViewModel', () => {
       ],
       providers: [
         HeaderViewModel,
-
         {
           provide: AUTH_SERVICE_TOKEN,
           useValue: { userId: 1 }
@@ -86,7 +85,7 @@ describe('headerViewModel', () => {
           provide: ENVIRONMENT_ALERTS_FEATURE_TOKEN,
           useValue: environmentAlertsFeature
         },
-        { provide: HeaderResolver, useClass: MockHeaderResolver },
+        { provide: HEADER_RESOLVER_TOKEN, useClass: MockHeaderResolver },
         Store
       ]
     });
