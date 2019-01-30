@@ -48,6 +48,10 @@
           "
           >De opgegeven leerkrachtencode is niet geldig.</mat-error
         >
+        <mat-error
+          *ngIf="coupledTeachersForm.get('teacherCode').hasError('apiError')"
+          >Er is iets fout gegaan.</mat-error
+        >
         <ng-container *ngIf="(apiErrors$ | async)"></ng-container>
       </mat-form-field>
       <div class="pages-settings-coupled-teachers__form__actions">

@@ -1,13 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ValidationErrors,
+  Validators
+} from '@angular/forms';
 import { PersonInterface } from '@campus/dal';
 import { PersonAlreadyLinkedValidator } from '@campus/shared';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import {
-  ApiValidationErrors,
-  CoupledTeachersViewModel
-} from '../coupled-teachers.viewmodel';
+import { CoupledTeachersViewModel } from '../coupled-teachers.viewmodel';
+
+export interface ApiValidationErrors extends ValidationErrors {
+  nonExistingTeacherCode?: boolean;
+  teacherAlreadyCoupled?: boolean;
+  noPublicKey?: boolean;
+  apiError?: boolean;
+}
 
 @Component({
   selector: 'campus-coupled-teachers',

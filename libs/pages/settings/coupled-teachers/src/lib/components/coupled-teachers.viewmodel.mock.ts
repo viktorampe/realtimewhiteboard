@@ -33,7 +33,7 @@ export class MockCoupledTeachersViewModel
   ]);
 
   public apiErrors$ = new BehaviorSubject<ApiValidationErrors>({
-    nonExistingTeacherCode: 'Deze code is niet geldig ...'
+    nonExistingTeacherCode: true
   });
 
   public successMessages$ = new BehaviorSubject<ActionResponse>({
