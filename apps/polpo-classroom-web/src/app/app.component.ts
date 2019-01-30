@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
 import { AppViewModel } from './app.viewmodel';
 
@@ -8,6 +9,8 @@ import { AppViewModel } from './app.viewmodel';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  sideNavOpen$: Observable<boolean>;
+
   title = 'polpo-classroom-web';
   navItems$ = this.appViewModel.navigationItems$;
 
@@ -16,5 +19,7 @@ export class AppComponent {
    */
   protected websiteUrl: string = environment.website.url;
 
-  constructor(private appViewModel: AppViewModel) {}
+  constructor(private appViewModel: AppViewModel) {
+    this.sideNavOpen$ = appViewModel.sideNavOpen$;
+  }
 }

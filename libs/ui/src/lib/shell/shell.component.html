@@ -1,5 +1,5 @@
 <mat-drawer-container>
-  <mat-drawer #sidebar [opened]="!(inXSmall$ | async)" position="start">
+  <mat-drawer #sidebar [opened]="sidebarOpen" position="start">
     <div class="ui-shell__left">
       <div class="ui-shell__logo">
         <ng-content select="[campusShellLogo],campus-shell-logo"></ng-content>
