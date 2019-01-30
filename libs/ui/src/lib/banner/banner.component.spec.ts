@@ -77,8 +77,6 @@ describe('BannerComponent', () => {
     breakpointStream.next({ matches: isMobileBreakpoint });
     fixture.detectChanges();
 
-    console.log(fixture.debugElement.nativeElement.classList.toString());
-
     expect(fixture.debugElement.nativeElement.classList).toContain(
       'ui-banner--mobile'
     );
