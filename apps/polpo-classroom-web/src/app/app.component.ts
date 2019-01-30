@@ -22,4 +22,8 @@ export class AppComponent {
   constructor(private appViewModel: AppViewModel) {
     this.sideNavOpen$ = appViewModel.sideNavOpen$;
   }
+
+  protected onSideBarToggle(open: boolean) {
+    this.appViewModel.toggleSidebar(open);
+  }
 }

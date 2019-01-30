@@ -1,5 +1,13 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import { MatDrawer } from '@angular/material';
 import { Observable } from 'rxjs';
 import { filter, map, shareReplay, takeWhile } from 'rxjs/operators';
@@ -48,8 +56,14 @@ export class ShellComponent implements OnInit, OnDestroy {
 
   @Input()
   set sidebarOpen(val: boolean) {
-    this.sidebar.toggle();
+    if (val !== this._open) {
+      this._open = val;
+      this.sidebar.toggle(val);
+      this.sidebarToggled.next(val);
+    }
   }
+
+  @Output() sidebarToggled = new EventEmitter<boolean>();
 
   /**
    * Reference to the material drawer component in the template
@@ -67,6 +81,7 @@ export class ShellComponent implements OnInit, OnDestroy {
   private setupSubscriptions(): void {
     this.subscribeEnterXSmallBreakpoint();
     this.subscribeLeaveXSmallBreakpoint();
+    this.setToggleSidebarSubscription();
   }
 
   private subscribeLeaveXSmallBreakpoint() {
@@ -94,6 +109,16 @@ export class ShellComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.sidebar.mode = 'over';
         this.sidebar.disableClose = false;
+      });
+  }
+
+  private setToggleSidebarSubscription() {
+    console.log('hier');
+    this.sidebar.openedChange
+      .pipe(takeWhile(() => this.isAlive))
+      .subscribe(open => {
+        console.log('hier');
+        this.sidebarOpen = open;
       });
   }
 

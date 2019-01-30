@@ -41,6 +41,10 @@ export class AppViewModel {
     this.subscribeToStreams();
   }
 
+  toggleSidebar(open: boolean) {
+    this.store.dispatch(new UiActions.ToggleSideNav({ open }));
+  }
+
   private setIntermediateStreams() {
     this.sideNavItems$ = combineLatest(
       this.getCurrentUser(),
