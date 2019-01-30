@@ -7,6 +7,7 @@ export * from './CurrentExercise.fixture';
 export * from './EduContent.fixture';
 export * from './EduContentMetadata.fixture';
 export * from './EduContentProductType.fixture';
+export * from './EffectFeedback.fixture';
 export * from './Favorite.fixture';
 export * from './LearningArea.fixture';
 export * from './Method.fixture';
