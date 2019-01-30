@@ -141,8 +141,7 @@
     &:hover {
       background-color: $ui-button--danger--hover-background-color;
       color: $ui-button--danger--hover-color;
-    }
-    // --danger--disabled
+    } // --danger--disabled
     &.ui-button--disabled {
       background-color: $ui-button--danger--disabled-background-color;
     }
