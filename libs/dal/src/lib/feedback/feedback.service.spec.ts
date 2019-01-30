@@ -18,14 +18,20 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Action, Store, StoreModule } from '@ngrx/store';
 import { hot } from 'jasmine-marbles';
-import { BehaviorSubject } from 'rxjs';
+import { FeedbackService } from '.';
 import { DalState } from '../+state';
 import { ActionSuccessful } from '../+state/dal.actions';
+import { getStoreModuleForFeatures } from '../+state/dal.state.feature.builder';
 import {
   EffectFeedbackInterface,
-  FeedbackService,
+  EffectFeedbackReducer,
   Priority
-} from './feedback.service';
+} from '../+state/effect-feedback';
+import {
+  AddEffectFeedback,
+  DeleteEffectFeedback
+} from '../+state/effect-feedback/effect-feedback.actions';
+import { EffectFeedbackFixture } from './../+fixtures/EffectFeedback.fixture';
 
 describe('FeedbackService', () => {
   let store: Store<DalState>;
@@ -35,38 +41,13 @@ describe('FeedbackService', () => {
   let testViewContainerRef: ViewContainerRef;
   let viewContainerFixture: ComponentFixture<ComponentWithChildViewContainer>;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        StoreModule.forRoot({}),
-        // ...getStoreModuleForFeatures([EffectFeedbackReducer])
-        MatSnackBarModule,
-        SnackBarTestModule // -> see end of file for details
-      ],
-      providers: [Store, MatSnackBar]
-    }).compileComponents();
-
-    store = TestBed.get(Store);
-    service = TestBed.get(FeedbackService);
-  });
-
-  beforeEach(() => {
-    viewContainerFixture = TestBed.createComponent(
-      ComponentWithChildViewContainer
-    );
-
-    viewContainerFixture.detectChanges();
-    testViewContainerRef =
-      viewContainerFixture.componentInstance.childViewContainer;
-  });
-
   beforeAll(() => {
     const mockAction = {
       title: 'klik',
       userAction: new ActionSuccessful({ successfulAction: 'test' })
     };
 
-    mockFeedBack = {
+    mockFeedBack = new EffectFeedbackFixture({
       id: '1',
       triggerAction: null,
       message: 'This is a message',
@@ -75,7 +56,30 @@ describe('FeedbackService', () => {
       timeStamp: 1,
       display: true,
       priority: Priority.HIGH
-    };
+    });
+  });
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        StoreModule.forRoot({}),
+        ...getStoreModuleForFeatures([EffectFeedbackReducer]),
+        MatSnackBarModule,
+        SnackBarTestModule // -> see end of file for details
+      ],
+      providers: [Store, MatSnackBar]
+    }).compileComponents();
+
+    store = TestBed.get(Store);
+    service = TestBed.get(FeedbackService);
+
+    viewContainerFixture = TestBed.createComponent(
+      ComponentWithChildViewContainer
+    );
+
+    viewContainerFixture.detectChanges();
+    testViewContainerRef =
+      viewContainerFixture.componentInstance.childViewContainer;
   });
 
   describe('creation', () => {
@@ -91,41 +95,20 @@ describe('FeedbackService', () => {
     let snackbar: MatSnackBar;
     let removeFeedbackAction: Action;
 
+    beforeAll(() => {
+      removeFeedbackAction = new DeleteEffectFeedback({ id: mockFeedBack.id });
+    });
+
     beforeEach(() => {
       snackbar = TestBed.get(MatSnackBar);
     });
 
-    beforeAll(() => {
-      // TODO make this the actual removeFeedbackAction
-      removeFeedbackAction = new ActionSuccessful({
-        successfulAction: 'remove the feedback'
-      });
-    });
-
-    afterEach(() => {
-      jest.resetAllMocks();
-    });
-
     it('should call the snackbarService, without a userAction', () => {
       snackbar.open = jest.fn();
-
       const mockFeedBackWithoutActions = { ...mockFeedBack, userActions: null };
-
-      // will be handled differently when state can be mocked
-      // TODO remove from here ...
-      service['nextFeedback$'] = new BehaviorSubject<EffectFeedbackInterface>(
-        mockFeedBackWithoutActions
+      store.dispatch(
+        new AddEffectFeedback({ effectFeedback: mockFeedBackWithoutActions })
       );
-
-      // re-initialize streams
-      service['setIntermediateStreams']();
-      service['setPresentationStreams']();
-
-      expect(service['successFeedback$']).toBeObservable(
-        hot('a', { a: mockFeedBackWithoutActions })
-      );
-
-      // ... to here
 
       expect(snackbar.open).toHaveBeenCalled();
       expect(snackbar.open).toHaveBeenCalledTimes(1);
@@ -138,22 +121,7 @@ describe('FeedbackService', () => {
 
     it('should call the snackbarService, with a userAction', () => {
       snackbar.open = jest.fn();
-
-      // will be handled differently when state can be mocked
-      // TODO remove from here ...
-      service['nextFeedback$'] = new BehaviorSubject<EffectFeedbackInterface>(
-        mockFeedBack
-      );
-
-      // re-initialize streams
-      service['setIntermediateStreams']();
-      service['setPresentationStreams']();
-
-      expect(service['successFeedback$']).toBeObservable(
-        hot('a', { a: mockFeedBack })
-      );
-
-      // ... to here
+      store.dispatch(new AddEffectFeedback({ effectFeedback: mockFeedBack }));
 
       expect(snackbar.open).toHaveBeenCalled();
       expect(snackbar.open).toHaveBeenCalledTimes(1);
@@ -166,20 +134,8 @@ describe('FeedbackService', () => {
 
     it('should use the default setings when calling the snackbar', () => {
       snackbar.open = jest.fn();
-
       const defaultSettings = service['snackbarConfig'];
-
-      // will be handled differently when state can be mocked
-      // TODO remove from here ...
-      service['nextFeedback$'] = new BehaviorSubject<EffectFeedbackInterface>(
-        mockFeedBack
-      );
-
-      // re-initialize streams
-      service['setIntermediateStreams']();
-      service['setPresentationStreams']();
-
-      // ... to here
+      store.dispatch(new AddEffectFeedback({ effectFeedback: mockFeedBack }));
 
       expect(snackbar.open).toHaveBeenCalledWith(
         jasmine.anything(),
@@ -189,22 +145,11 @@ describe('FeedbackService', () => {
     });
 
     it('should dispatch a removeFeedbackAction when the snackbar is dismissed without an action', fakeAsync(() => {
+      store.dispatch(new AddEffectFeedback({ effectFeedback: mockFeedBack }));
       store.dispatch = jest.fn();
       service['snackbarConfig'] = {
         viewContainerRef: testViewContainerRef // set reference to dummy component
       };
-
-      // will be handled differently when state can be mocked
-      // TODO remove from here ...
-      service['nextFeedback$'] = new BehaviorSubject<EffectFeedbackInterface>(
-        mockFeedBack
-      );
-
-      // re-initialize streams
-      service['setIntermediateStreams']();
-      service['setPresentationStreams']();
-
-      // ... to here
 
       snackbar.dismiss();
       viewContainerFixture.detectChanges(); // allow animations to pass
@@ -219,22 +164,11 @@ describe('FeedbackService', () => {
       'should dispatch a removeFeedbackAction and the userActions ' +
         'when the snackbar is dismissed with an action',
       fakeAsync(() => {
+        store.dispatch(new AddEffectFeedback({ effectFeedback: mockFeedBack }));
         store.dispatch = jest.fn();
         service['snackbarConfig'] = {
           viewContainerRef: testViewContainerRef // set reference to dummy component
         };
-
-        // will be handled differently when state can be mocked
-        // TODO remove from here ...
-        service['nextFeedback$'] = new BehaviorSubject<EffectFeedbackInterface>(
-          mockFeedBack
-        );
-
-        // re-initialize streams
-        service['setIntermediateStreams']();
-        service['setPresentationStreams']();
-
-        // ... to here
 
         snackbar._openedSnackBarRef.dismissWithAction();
         viewContainerFixture.detectChanges(); // allow animations to pass
@@ -256,21 +190,7 @@ describe('FeedbackService', () => {
     });
 
     it('should pass the error feedback to the banner-stream', () => {
-      // will be handled differently when state can be mocked
-      // TODO remove from here ...
-      service['nextFeedback$'] = new BehaviorSubject<EffectFeedbackInterface>(
-        mockFeedBack
-      );
-
-      // re-initialize streams
-      service['setIntermediateStreams']();
-      service['setPresentationStreams']();
-
-      expect(service['errorFeedback$']).toBeObservable(
-        hot('a', { a: mockFeedBack })
-      );
-
-      // ... to here
+      store.dispatch(new AddEffectFeedback({ effectFeedback: mockFeedBack }));
 
       expect(service.bannerFeedback$).toBeObservable(
         hot('a', { a: mockFeedBack })

@@ -6,12 +6,15 @@ import {
   MatSnackBarRef,
   SimpleSnackBar
 } from '@angular/material/snack-bar';
-import { Action, Store } from '@ngrx/store';
-import { Observable, of } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 import { filter, map, shareReplay, switchMap } from 'rxjs/operators';
 import { DalState } from '../+state';
-import { ActionSuccessful } from '../+state/dal.actions';
-import { EffectFeedbackInterface } from './feedback.service';
+import {
+  EffectFeedbackInterface,
+  EffectFeedbackQueries
+} from '../+state/effect-feedback';
+import { DeleteEffectFeedback } from './../+state/effect-feedback/effect-feedback.actions';
 
 export const FEEDBACK_SERVICE_TOKEN = new InjectionToken('FeedbackService');
 export interface FeedbackServiceInterface {
@@ -48,46 +51,23 @@ export class FeedbackService implements FeedbackServiceInterface {
   }
 
   private getSourceStreams(): void {
-    // TODO delete
-    const mockAction = {
-      title: 'klik',
-      userAction: new ActionSuccessful({
-        successfulAction: 'dismiss with action'
-      })
-    };
-
-    // TODO delete
-    const mockFeedBack: EffectFeedbackInterface = {
-      id: '1',
-      triggerAction: null,
-      message: 'This is a message',
-      type: 'success',
-      userActions: [mockAction],
-      timeStamp: 1,
-      display: true,
-      priority: Priority.HIGH
-    };
-
-    // this.nextFeedback$ = timer(1000, 4000).pipe(mapTo(mockFeedBack)); //TODO use code below
     this.nextFeedback$ = this.store
       .select(EffectFeedbackQueries.getNext)
-      .pipe(shareReplay(1)); // needed? -> share() ?
+      .pipe(shareReplay(1));
   }
 
   private setIntermediateStreams(): void {
     this.errorFeedback$ = this.nextFeedback$.pipe(
-      filter(feedback => feedback.type === 'error')
+      filter(feedback => feedback && feedback.type === 'error')
     );
 
     this.successFeedback$ = this.nextFeedback$.pipe(
-      filter(feedback => feedback.type === 'success')
+      filter(feedback => feedback && feedback.type === 'success')
     );
   }
 
   private setPresentationStreams(): void {
-    this.bannerFeedback$ = this.errorFeedback$.pipe(
-      switchMap(feedback => of(feedback)) //TODO switchmap needed?
-    );
+    this.bannerFeedback$ = this.errorFeedback$;
 
     this.snackbarAfterDismiss$ = this.successFeedback$.pipe(
       map(feedback => ({
@@ -124,35 +104,10 @@ export class FeedbackService implements FeedbackServiceInterface {
         } else {
           console.log('dismissed without action');
         }
-        //this.store.dispatch( *Remove Feedback action* )
         this.store.dispatch(
-          new ActionSuccessful({ successfulAction: 'remove the feedback' })
+          new DeleteEffectFeedback({ id: event.feedback.id })
         );
       }
     );
   }
-}
-
-// TODO delete and replace with import from ResponseState-branch
-export interface EffectFeedbackInterface {
-  id: string;
-  triggerAction: Action;
-  icon?: string;
-  message: string;
-  type: 'success' | 'error';
-  userActions: {
-    // buttons: expected action is right aligned, first in array
-    title: string;
-    userAction: Action;
-  }[];
-  timeStamp: number;
-  display: boolean;
-  priority: Priority;
-}
-
-// TODO delete and replace with import from ResponseState-branch
-export enum Priority {
-  LOW = 1,
-  NORM = 2,
-  HIGH = 3
 }
