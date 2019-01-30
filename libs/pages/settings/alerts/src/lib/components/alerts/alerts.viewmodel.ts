@@ -15,7 +15,7 @@ import { map, shareReplay } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class AlertsViewModel {
-  public alerts$: Observable<NotificationItemInterface[]>;
+  public alerts$: Observable<NotificationItemInterface[]>; //TODO -- needs to be changed back to AlertQueueInterface with https://github.com/diekeure/campus/issues/510
 
   constructor(
     private store: Store<DalState>,
