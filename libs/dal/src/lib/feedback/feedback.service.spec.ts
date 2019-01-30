@@ -13,7 +13,11 @@ import {
   inject,
   TestBed
 } from '@angular/core/testing';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import {
+  MatSnackBar,
+  MatSnackBarConfig,
+  MatSnackBarModule
+} from '@angular/material/snack-bar';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Action, Store, StoreModule } from '@ngrx/store';
 import { hot } from 'jasmine-marbles';
@@ -31,12 +35,17 @@ import {
   DeleteEffectFeedback
 } from '../+state/effect-feedback/effect-feedback.actions';
 import { EffectFeedbackFixture } from './../+fixtures/EffectFeedback.fixture';
+import {
+  SnackBarDefaultConfig,
+  SNACKBAR_DEFAULT_CONFIG_TOKEN
+} from './snackbar.config';
 
 // tslint:disable:no-use-before-declare
 describe('FeedbackService', () => {
   let store: Store<DalState>;
   let mockFeedBack: EffectFeedbackInterface;
   let service: FeedbackService;
+  let defaultSnackbarConfig: MatSnackBarConfig;
 
   let testViewContainerRef: ViewContainerRef;
   let viewContainerFixture: ComponentFixture<ComponentWithChildViewContainer>;
@@ -67,7 +76,14 @@ describe('FeedbackService', () => {
         MatSnackBarModule,
         SnackBarTestModule // -> see end of file for details
       ],
-      providers: [Store, MatSnackBar]
+      providers: [
+        Store,
+        MatSnackBar,
+        {
+          provide: SNACKBAR_DEFAULT_CONFIG_TOKEN,
+          useClass: SnackBarDefaultConfig
+        }
+      ]
     }).compileComponents();
 
     store = TestBed.get(Store);
@@ -80,6 +96,9 @@ describe('FeedbackService', () => {
     viewContainerFixture.detectChanges();
     testViewContainerRef =
       viewContainerFixture.componentInstance.childViewContainer;
+
+    defaultSnackbarConfig = TestBed.get(SNACKBAR_DEFAULT_CONFIG_TOKEN);
+    defaultSnackbarConfig.viewContainerRef = testViewContainerRef;
   });
 
   describe('creation', () => {
@@ -134,22 +153,18 @@ describe('FeedbackService', () => {
 
     it('should use the default setings when calling the snackbar', () => {
       snackbar.open = jest.fn();
-      const defaultSettings = service['snackbarConfig'];
       store.dispatch(new AddEffectFeedback({ effectFeedback: mockFeedBack }));
 
       expect(snackbar.open).toHaveBeenCalledWith(
         jasmine.anything(),
         jasmine.anything(),
-        defaultSettings
+        defaultSnackbarConfig
       );
     });
 
     it('should dispatch a removeFeedbackAction when the snackbar is dismissed without an action', fakeAsync(() => {
       store.dispatch(new AddEffectFeedback({ effectFeedback: mockFeedBack }));
       store.dispatch = jest.fn();
-      service['snackbarConfig'] = {
-        viewContainerRef: testViewContainerRef // set reference to dummy component
-      };
 
       snackbar.dismiss();
       viewContainerFixture.detectChanges(); // allow animations to pass
@@ -166,9 +181,6 @@ describe('FeedbackService', () => {
       fakeAsync(() => {
         store.dispatch(new AddEffectFeedback({ effectFeedback: mockFeedBack }));
         store.dispatch = jest.fn();
-        service['snackbarConfig'] = {
-          viewContainerRef: testViewContainerRef // set reference to dummy component
-        };
 
         snackbar._openedSnackBarRef.dismissWithAction();
         viewContainerFixture.detectChanges(); // allow animations to pass

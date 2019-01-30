@@ -91,6 +91,10 @@ import { EDUCONTENT_SERVICE_TOKEN } from './edu-content/edu-content.service.inte
 import { ExerciseService } from './exercise/exercise.service';
 import { EXERCISE_SERVICE_TOKEN } from './exercise/exercise.service.interface';
 import { FeedbackService, FEEDBACK_SERVICE_TOKEN } from './feedback';
+import {
+  SnackBarDefaultConfig,
+  SNACKBAR_DEFAULT_CONFIG_TOKEN
+} from './feedback/snackbar.config';
 import { LearningAreaService } from './learning-area/learning-area.service';
 import { LEARNINGAREA_SERVICE_TOKEN } from './learning-area/learning-area.service.interface';
 import { AuthService } from './persons/auth-service';
@@ -217,7 +221,8 @@ interface DalOptions {
     { provide: CONTENT_REQUEST_SERVICE_TOKEN, useClass: ContentRequestService },
     { provide: RESULTS_SERVICE_TOKEN, useClass: ResultsService },
     { provide: CREDENTIAL_SERVICE_TOKEN, useClass: CredentialService },
-    { provide: FEEDBACK_SERVICE_TOKEN, useClass: FeedbackService }
+    { provide: FEEDBACK_SERVICE_TOKEN, useClass: FeedbackService },
+    { provide: SNACKBAR_DEFAULT_CONFIG_TOKEN, useClass: SnackBarDefaultConfig }
   ]
 })
 export class DalModule {

@@ -1,4 +1,4 @@
-import { Injectable, InjectionToken } from '@angular/core';
+import { Inject, Injectable, InjectionToken } from '@angular/core';
 import {
   MatSnackBar,
   MatSnackBarConfig,
@@ -15,6 +15,7 @@ import {
   EffectFeedbackQueries
 } from '../+state/effect-feedback';
 import { DeleteEffectFeedback } from './../+state/effect-feedback/effect-feedback.actions';
+import { SNACKBAR_DEFAULT_CONFIG_TOKEN } from './snackbar.config';
 
 export const FEEDBACK_SERVICE_TOKEN = new InjectionToken('FeedbackService');
 export interface FeedbackServiceInterface {
@@ -33,18 +34,18 @@ export class FeedbackService implements FeedbackServiceInterface {
   private successFeedback$: Observable<EffectFeedbackInterface>;
 
   // presentation
+  public bannerFeedback$: Observable<EffectFeedbackInterface>;
   private snackbarAfterDismiss$: Observable<{
     dismissInfo: MatSnackBarDismiss;
     feedback: EffectFeedbackInterface;
   }>;
-  public bannerFeedback$: Observable<EffectFeedbackInterface>;
 
-  // default snackbar config
-  private snackbarConfig = {
-    duration: 3000
-  } as MatSnackBarConfig;
-
-  constructor(private store: Store<DalState>, private snackBar: MatSnackBar) {
+  constructor(
+    private store: Store<DalState>,
+    private snackBar: MatSnackBar,
+    @Inject(SNACKBAR_DEFAULT_CONFIG_TOKEN)
+    private snackbarConfig: MatSnackBarConfig
+  ) {
     this.getSourceStreams();
     this.setIntermediateStreams();
     this.setPresentationStreams();
@@ -100,9 +101,6 @@ export class FeedbackService implements FeedbackServiceInterface {
       }) => {
         if (event.dismissInfo.dismissedByAction) {
           this.store.dispatch(event.feedback.userActions[0].userAction); // a snackbar has max 1 action
-          console.log('dismissed with action');
-        } else {
-          console.log('dismissed without action');
         }
         this.store.dispatch(
           new DeleteEffectFeedback({ id: event.feedback.id })
