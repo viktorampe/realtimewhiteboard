@@ -40,6 +40,7 @@ $ui-form-item-border-color: $ui-primary-font-color !default;
 $ui-button-bg-color: $ui-form-button-default-bg-color !default;
 $ui-button-bg-color-1: $ui-form-button-primary-bg-color !default;
 $ui-button-font-color: #fff !default;
+$ui-button-font-size: $ui-primary-font-size !default;
 $ui-form-item-padding-bottom: $ui-primary-font-size !default;
 $ui-form-actions-padding: 20px 0 0 0 !default;
 $ui-form-spacing: 5px !default;
@@ -110,6 +111,10 @@ $ui-button-padding-bottom: $ui-primary-font-size/2 !default;
 
     .form-actions {
       padding: $ui-form-actions-padding;
+    }
+
+    .ui-button {
+      padding: $ui-button-font-size/2 $ui-button-font-size;
     }
   }
 }
