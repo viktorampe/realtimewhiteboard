@@ -1,88 +1,93 @@
-<campus-info-panel
-  [titleText]="'Leerkracht koppelen'"
-  [titleIcon]="'coupled-teachers'"
-  [titleRightRouterLink]="['/settings']"
->
-  <mat-icon
-    title__right
-    class="info-panel__title--left__icon"
-    [svgIcon]="'arrow-back'"
-  ></mat-icon>
-  <div title__right>Instellingen</div>
-  <form
-    [formGroup]="coupledTeachersForm"
-    class="pages-settings-coupled-teachers__form"
-    (submit)="onSubmit()"
+<div class="campus-page">
+  <campus-info-panel
+    [titleText]="'Leerkracht koppelen'"
+    [titleIcon]="'coupled-teachers'"
+    [titleRightRouterLink]="['/settings']"
   >
-    <label for="teacherCode"
-      >Vraag je leerkracht naar de juiste code om jullie accounts te
-      koppelen.</label
+    <mat-icon
+      title__right
+      class="info-panel__title--left__icon"
+      [svgIcon]="'arrow-back'"
+    ></mat-icon>
+    <div title__right>Instellingen</div>
+    <form
+      [formGroup]="coupledTeachersForm"
+      class="pages-settings-coupled-teachers__form"
+      (submit)="onSubmit()"
     >
-    <mat-form-field>
-      <input
-        matInput
-        type="text"
-        placeholder="Leerkrachtencode"
-        formControlName="teacherCode"
-        #teacherCode
-        required
-      />
-      <mat-error
-        *ngIf="coupledTeachersForm.get('teacherCode').hasError('required')"
-        >Leerkrachtencode is verplicht.</mat-error
+      <label for="teacherCode"
+        >Vraag je leerkracht naar de juiste code om jullie accounts te
+        koppelen.</label
       >
-      <mat-error
-        *ngIf="
-          coupledTeachersForm
-            .get('teacherCode')
-            .hasError('teacherAlreadyCoupled')
-        "
-        >De leerkracht met deze code is reeds gekoppeld.</mat-error
-      >
-      <mat-error *ngIf="(apiErrors$ | async)?.nonExistingTeacherCode"
-        >De opgegeven leerkrachtencode is niet geldig.</mat-error
-      >
-    </mat-form-field>
-    <div class="pages-settings-coupled-teachers__form__actions">
-      <campus-button
-        primary
-        (click)="onSubmit()"
-        [ngClass]="{ 'ui-button--disabled': !coupledTeachersForm.valid }"
-        >Opslaan</campus-button
-      >
-      <campus-button (click)="onReset()">Annuleren</campus-button>
-    </div>
-  </form>
-</campus-info-panel>
+      <mat-form-field>
+        <input
+          matInput
+          type="text"
+          placeholder="Leerkrachtencode"
+          formControlName="teacherCode"
+          #teacherCode
+          required
+        />
+        <mat-error
+          *ngIf="coupledTeachersForm.get('teacherCode').hasError('required')"
+          >Leerkrachtencode is verplicht.</mat-error
+        >
+        <mat-error
+          *ngIf="
+            coupledTeachersForm
+              .get('teacherCode')
+              .hasError('teacherAlreadyCoupled')
+          "
+          >De leerkracht met deze code is reeds gekoppeld.</mat-error
+        >
+        <mat-error *ngIf="(apiErrors$ | async)?.nonExistingTeacherCode"
+          >De opgegeven leerkrachtencode is niet geldig.</mat-error
+        >
+      </mat-form-field>
+      <div class="pages-settings-coupled-teachers__form__actions">
+        <campus-button
+          primary
+          (click)="onSubmit()"
+          [ngClass]="{ 'ui-button--disabled': !coupledTeachersForm.valid }"
+          >Opslaan</campus-button
+        >
+        <campus-button (click)="onReset()">Annuleren</campus-button>
+      </div>
+    </form>
+  </campus-info-panel>
 
-<campus-info-panel
-  [titleText]="'Gekoppelde leerkrachten'"
-  [titleIcon]="'coupled-teachers'"
->
-  <ng-container
-    *ngIf="(linkedPersons$ | async) as coupledTeachers; else: noCoupledTeachers"
+  <campus-info-panel
+    [titleText]="'Gekoppelde leerkrachten'"
+    [titleIcon]="'coupled-teachers'"
   >
     <ng-container
-      *ngIf="coupledTeachers.length > 0; else: noCoupledTeachers"
-    ></ng-container>
-    <campus-person-summary
-      *ngFor="let coupledTeacher of coupledTeachers"
-      [person]="coupledTeacher"
-      class="pages-settings-coupled-teachers__person-summary"
+      *ngIf="
+        (linkedPersons$ | async) as coupledTeachers;
+        else: noCoupledTeachers
+      "
     >
-      <div description
-        >Code: {{ coupledTeacher.teacherInfo.publicKey }} | Toegevoegd op:
-        {{ coupledTeacher.linkedAt | humanDateTime }}</div
+      <ng-container
+        *ngIf="coupledTeachers.length > 0; else: noCoupledTeachers"
+      ></ng-container>
+      <campus-person-summary
+        *ngFor="let coupledTeacher of coupledTeachers"
+        [person]="coupledTeacher"
+        class="pages-settings-coupled-teachers__person-summary"
       >
-      <campus-button campusRoundedCorners (click)="onUnlink(coupledTeacher)"
-        >Leerkracht ontkoppelen</campus-button
-      >
-    </campus-person-summary>
-  </ng-container>
-  <ng-template #noCoupledTeachers>
-    <p>
-      Om POLPO te gebruiken moet je minstens één leerkracht koppelen aan je
-      profiel.
-    </p>
-  </ng-template>
-</campus-info-panel>
+        <div description
+          >Code: {{ coupledTeacher.teacherInfo.publicKey }} | Toegevoegd op:
+          {{ coupledTeacher.linkedAt | humanDateTime }}</div
+        >
+        <campus-button campusRoundedCorners (click)="onUnlink(coupledTeacher)"
+          >Leerkracht ontkoppelen</campus-button
+        >
+      </campus-person-summary>
+    </ng-container>
+    <ng-template #noCoupledTeachers>
+      <p>
+        Om POLPO te gebruiken moet je minstens één leerkracht koppelen aan je
+        profiel.
+      </p>
+    </ng-template>
+  </campus-info-panel>
+</div>
