@@ -45,7 +45,7 @@ export class ShellComponent implements OnInit, OnDestroy {
    * Used for unsubscribing from subscriptions.
    */
   private isAlive = true;
-  private _open: boolean;
+  private _sidebarOpen: boolean;
 
   /**
    * Stream of @media queries matching 'XSmall' breakpoint preset.
@@ -56,8 +56,9 @@ export class ShellComponent implements OnInit, OnDestroy {
 
   @Input()
   set sidebarOpen(val: boolean) {
-    if (val !== this._open) {
-      this._open = val;
+    console.log('hier');
+    if (val !== this._sidebarOpen) {
+      this._sidebarOpen = val;
       this.sidebar.toggle(val);
       this.sidebarToggled.next(val);
     }
@@ -113,13 +114,9 @@ export class ShellComponent implements OnInit, OnDestroy {
   }
 
   private setToggleSidebarSubscription() {
-    console.log('hier');
-    this.sidebar.openedChange
-      .pipe(takeWhile(() => this.isAlive))
-      .subscribe(open => {
-        console.log('hier');
-        this.sidebarOpen = open;
-      });
+    this.sidebar.openedChange.subscribe(open => {
+      this.sidebarOpen = open;
+    });
   }
 
   ngOnDestroy(): void {

@@ -1,7 +1,14 @@
+//file.only
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
 import { Component, NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  async,
+  ComponentFixture,
+  fakeAsync,
+  flush,
+  TestBed
+} from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Subject } from 'rxjs';
@@ -117,4 +124,43 @@ describe('ShellComponent', () => {
     expect(fixture.componentInstance.sidebar.mode).toBe('side');
     expect(fixture.componentInstance.sidebar.disableClose).toBe(true);
   });
+
+  it('should set the sidebar open', () => {
+    component.sidebarOpen = true;
+    fixture.detectChanges();
+    expect(fixture.componentInstance.sidebar.opened).toBe(true);
+  });
+
+  it('should set the sidebar open', () => {
+    component.sidebarOpen = false;
+    fixture.detectChanges();
+    expect(fixture.componentInstance.sidebar.opened).toBe(false);
+  });
+
+  it('should trigger the toggled event', () => {
+    let ev;
+    const sub = component.sidebarToggled.subscribe(event => {
+      ev = event;
+    });
+    component.sidebarOpen = true;
+    expect(ev).toBe(true);
+    component.sidebarOpen = false;
+    expect(ev).toBe(false);
+    ev = null;
+    component.sidebarOpen = false;
+    expect(ev).toBe(null);
+    sub.unsubscribe();
+  });
+
+  fit('subscribes the sidebar opened events', fakeAsync(() => {
+    let ev;
+    const sub = component.sidebarToggled.subscribe(event => {
+      ev = event;
+    });
+    component.sidebar.open();
+    fixture.detectChanges();
+    flush();
+    expect(ev).toBe(false);
+    sub.unsubscribe();
+  }));
 });
