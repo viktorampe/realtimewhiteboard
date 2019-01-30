@@ -1,12 +1,22 @@
 <div class="campus-page">
   <campus-page-header
     [title]="'Instellingen'"
-    [subtitle]="'Profiel'"
-    [iconClass]="'account'"
+    [subtitle]="'Mijn gegevens'"
+    [iconClass]="'profile'"
   >
   </campus-page-header>
-  <!-- TODO: add pageIcon to info-panel -->
-  <campus-info-panel [titleText]="pageTitle">
+
+  <campus-info-panel
+    [titleText]="pageTitle"
+    [titleIcon]="'profile'"
+    [titleRightRouterLink]="['/settings']"
+  >
+    <mat-icon
+      title__right
+      class="info-panel__title--left__icon"
+      [svgIcon]="'arrow-back'"
+    ></mat-icon>
+    <div title__right>Instellingen</div>
     <campus-profile-form
       (saveProfile)="onSaveProfile($event)"
       [user]="user$ | async"

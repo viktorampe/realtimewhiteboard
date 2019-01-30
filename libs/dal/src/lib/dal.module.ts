@@ -24,6 +24,7 @@ import {
 } from './+state/current-exercise';
 import { getStoreModuleForFeatures } from './+state/dal.state.feature.builder';
 import { EduContentReducer, EduContentsEffects } from './+state/edu-content';
+import { EffectFeedbackReducer } from './+state/effect-feedback';
 import {
   LearningAreaReducer,
   LearningAreasEffects
@@ -111,6 +112,7 @@ import { TaskInstanceService } from './tasks/task-instance.service';
 import { TASK_INSTANCE_SERVICE_TOKEN } from './tasks/task-instance.service.interface';
 import { TASK_SERVICE_TOKEN } from './tasks/task.service.interface';
 import { TaskService } from './tasks/tasks.service';
+import uuid = require('uuid');
 
 interface DalOptions {
   apiBaseUrl: string;
@@ -143,7 +145,8 @@ interface DalOptions {
       CurrentExerciseReducer,
       TeacherStudentReducer,
       LinkedPersonReducer,
-      CredentialReducer
+      CredentialReducer,
+      EffectFeedbackReducer
     ]),
     EffectsModule.forFeature([
       BundlesEffects,
@@ -169,6 +172,10 @@ interface DalOptions {
     ])
   ],
   providers: [
+    {
+      provide: 'uuid',
+      useValue: uuid
+    },
     { provide: EXERCISE_SERVICE_TOKEN, useClass: ExerciseService },
     { provide: EDUCONTENT_SERVICE_TOKEN, useClass: EduContentService },
     { provide: USER_CONTENT_SERVICE_TOKEN, useClass: UserContentService },

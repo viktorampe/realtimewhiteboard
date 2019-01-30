@@ -48,7 +48,6 @@ export class ScormApi implements ScormApiInterface {
     //check exerciseId and exercise info availability
     if (this.initialCMIValue) {
       try {
-        //todo check if string
         this.currentCMI = JSON.parse(this.initialCMIValue);
       } catch (error) {
         this.lastErrorCode = ScormErrorCodes.NOT_INITIALIZED_ERROR;
