@@ -238,7 +238,15 @@ export const environment: EnvironmentInterface = {
       hasAppBarDropDown: false
     },
     errorManagement: {
-      managedStatusCodes: [500, 401, 404, 0]
+      managedStatusCodes: [500, 401, 404, 0],
+      allowedErrors: [
+        {
+          status: 404,
+          statusText: 'Not Found',
+          urlRegex: /http.*assets\/icons.*\.svg/gi,
+          messageRegex: /Http failure response for http.*assets\/icons.*\.svg: 404 Not Found/gi
+        }
+      ]
     }
   },
   sso: {
