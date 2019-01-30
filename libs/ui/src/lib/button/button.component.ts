@@ -1,4 +1,4 @@
-import { Component, HostBinding, HostListener, Input } from '@angular/core';
+import { Component, HostBinding, Input } from '@angular/core';
 
 /**
  * Generic button
@@ -18,12 +18,4 @@ export class ButtonComponent {
   @Input() iconClass: string;
 
   @HostBinding('class.ui-button') uiButtonClass = true;
-
-  // Stops click event propagation inside component
-  @HostListener('click', ['$event'])
-  public onClick(event: MouseEvent): void {
-    // todo place this inside directive
-    // event.stopPropagation();
-    // event.preventDefault();
-  }
 }

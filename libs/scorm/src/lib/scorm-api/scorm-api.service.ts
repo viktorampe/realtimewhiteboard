@@ -18,7 +18,6 @@ export class ScormApiService implements ScormApiServiceInterface {
   constructor(@Inject(WINDOW) private window: Window) {
     if (!this.window['API'] || !this.API) {
       this.API = new ScormApi();
-      //todo make sure we can't next from outside in this subject
       this.commit$ = this.API.commit$;
       this.cmi$ = this.API.cmi$;
       this.window['API'] = this.API;

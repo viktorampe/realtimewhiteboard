@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule, MatIconRegistry } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { CredentialFixture } from '@campus/dal';
 import { ENVIRONMENT_ICON_MAPPING_TOKEN, SharedModule } from '@campus/shared';
 import { MockActivatedRoute, MockMatIconRegistry } from '@campus/testing';
@@ -26,7 +27,7 @@ describe('CredentialsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [MatIconModule, UiModule, SharedModule],
+      imports: [MatIconModule, UiModule, SharedModule, RouterTestingModule],
       declarations: [CredentialsComponent],
       providers: [
         {
