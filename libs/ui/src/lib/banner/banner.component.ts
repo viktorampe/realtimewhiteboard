@@ -8,17 +8,17 @@ import {
   EventEmitter,
   HostBinding,
   Input,
+  OnDestroy,
   Output
 } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'campus-banner',
   templateUrl: './banner.component.html',
   styleUrls: ['./banner.component.scss']
 })
-export class BannerComponent<T> {
+export class BannerComponent<T> implements OnDestroy {
   @Input() message: string;
   @Input() icon: string;
   @Input() actions: BannerAction<T>[];
@@ -36,18 +36,16 @@ export class BannerComponent<T> {
     this.subscriptions.add(
       this.breakpointObserver
         .observe([Breakpoints.XSmall, Breakpoints.Small])
-        .pipe(
-          map(state => {
-            console.log(state);
-            return state;
-          })
-        )
         .subscribe((state: BreakpointState) => (this.mobile = state.matches))
     );
   }
 
   onAction(action: T) {
     this.afterDismiss.next(action);
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 }
 
