@@ -16,7 +16,7 @@
       [svgIcon]="'arrow-back'"
     ></mat-icon>
     <div title__right>Instellingen</div>
-    <div
+    <form
       class="pages-settings-profile-avatar"
       [class.compact]="isSmallScreen$ | async"
     >
@@ -50,9 +50,11 @@
         >
           <div class="pages-settings-profile-avatar__result">
             <img *ngIf="croppedImg" [src]="croppedImg" />
-            <campus-button primary (click)="saveAvatar()"
-              >Opslaan</campus-button
-            >
+            <div class="form-actions">
+              <campus-button primary (click)="saveAvatar()"
+                >Opslaan</campus-button
+              >
+            </div>
           </div>
           <div class="pages-settings-profile-avatar__cropper">
             <image-cropper
@@ -66,12 +68,14 @@
               [roundCropper]="true"
               (imageCropped)="previewAvatar($event)"
             ></image-cropper>
-            <campus-button bordered (click)="resetAvatar()"
-              >Andere afbeelding kiezen</campus-button
-            >
+            <div class="form-actions">
+              <campus-button bordered (click)="resetAvatar()"
+                >Andere afbeelding kiezen</campus-button
+              >
+            </div>
           </div>
         </ng-container>
       </div>
-    </div>
+    </form>
   </campus-info-panel>
 </div>
