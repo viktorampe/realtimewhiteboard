@@ -74,7 +74,6 @@ export class AppViewModel {
   private setPresentationStreams() {
     this.navigationItems$ = this.store.pipe(select(UiQuery.getSideNavItems));
     this.sideNavOpen$ = this.store.pipe(select(UiQuery.getSideNavOpen));
-    this.sideNavOpen$.subscribe(ev => console.log);
   }
 
   private getCurrentUser(): Observable<PersonInterface> {

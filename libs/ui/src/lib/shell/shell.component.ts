@@ -37,6 +37,7 @@ export class ShellComponent implements OnInit, OnDestroy {
    * Used for unsubscribing from subscriptions.
    */
   private isAlive = true;
+  private _open: boolean;
 
   /**
    * Stream of @media queries matching 'XSmall' breakpoint preset.
@@ -46,7 +47,10 @@ export class ShellComponent implements OnInit, OnDestroy {
     .pipe(shareReplay(1));
 
   @Input()
-  sidebarOpen: boolean;
+  set sidebarOpen(val: boolean) {
+    this.sidebar.toggle();
+  }
+
   /**
    * Reference to the material drawer component in the template
    *
