@@ -1,87 +1,66 @@
 <campus-page-bar>
-  <campus-filter-text-input
-    theme="dark"
-    [source]="unlockedContents$ | async"
-    class="pages__toolbar__filter"
-  ></campus-filter-text-input>
+  <campus-filter-text-input theme="dark"
+                            [source]="unlockedContents$ | async"
+                            class="pages__toolbar__filter"></campus-filter-text-input>
   <div class="divider"></div>
-  <campus-button
-    iconClass="list-view"
-    (click)="clickChangeListFormat(listFormat.LINE)"
-  ></campus-button>
-  <campus-button
-    iconClass="grid-view"
-    (click)="clickChangeListFormat(listFormat.GRID)"
-  ></campus-button>
+  <campus-button [iconClass]="'list-view'"
+                 (click)="clickChangeListFormat(listFormat.LINE)"
+                 [class.ui-button--active]="(listFormat$ | async) === listFormat.LINE"></campus-button>
+  <campus-button [iconClass]="'grid-view'"
+                 (click)="clickChangeListFormat(listFormat.GRID)"
+                 [class.ui-button--active]="(listFormat$ | async) === listFormat.GRID"></campus-button>
 </campus-page-bar>
 
 <ng-template #noBundle>Deze bundel is niet beschikbaar.</ng-template>
-<campus-side-sheet
-  #bundleSidesheet
-  [isOpenOnInit]="true"
-  *ngIf="(bundle$ | async) as bundle; else: noBundle"
->
+<campus-side-sheet #bundleSidesheet
+                   [isOpenOnInit]="true"
+                   *ngIf="(bundle$ | async) as bundle; else: noBundle">
   <campus-side-sheet-header></campus-side-sheet-header>
   <campus-side-sheet-body>
-    <ng-container
-      *ngIf="list && (list.selectedItems$ | async) as selectedItems"
-      [ngSwitch]="selectedItems.length"
-    >
-      <campus-info-panel-bundle
-        *ngSwitchCase="0"
-        [bundle]="bundle"
-        [teacher]="bundleOwner$ | async"
-      >
+    <ng-container *ngIf="list && (list.selectedItems$ | async) as selectedItems"
+                  [ngSwitch]="selectedItems.length">
+      <campus-info-panel-bundle *ngSwitchCase="0"
+                                [bundle]="bundle"
+                                [teacher]="bundleOwner$ | async">
       </campus-info-panel-bundle>
-      <campus-info-panel-content
-        *ngSwitchCase="1"
-        [content]="selectedItems[0]"
-        [status]="selectedItems[0].status"
-      >
+      <campus-info-panel-content *ngSwitchCase="1"
+                                 [content]="selectedItems[0]"
+                                 [status]="selectedItems[0].status">
       </campus-info-panel-content>
-      <campus-info-panel-contents *ngSwitchDefault [contents]="selectedItems">
+      <campus-info-panel-contents *ngSwitchDefault
+                                  [contents]="selectedItems">
       </campus-info-panel-contents>
     </ng-container>
   </campus-side-sheet-body>
 
   <campus-side-sheet-page>
-    <campus-page-header
-      *ngIf="(learningArea$ | async) as learningArea"
-      [title]="bundle.name"
-      [subtitle]="bundle.description"
-      [iconClass]="'learning-area:' + learningArea.icon"
-    >
+    <campus-page-header *ngIf="(learningArea$ | async) as learningArea"
+                        [title]="bundle.name"
+                        [subtitle]="bundle.description"
+                        [iconClass]="'learning-area:' + learningArea.icon">
     </campus-page-header>
 
     <ng-container *ngIf="(unlockedContents$ | async) as unlockedContents">
-      <ng-container
-        *ngIf="(filterTextInput.result$ | async) as filteredUnlockedContents"
-      >
+      <ng-container *ngIf="(filterTextInput.result$ | async) as filteredUnlockedContents">
         <div class="itemsAmount">
           {{ filteredUnlockedContents.length }} van
           <u (click)="filterTextInput.clear()">{{ unlockedContents.length }}</u>
           weergegeven
         </div>
-        <campus-list-view
-          #bundleListview
-          [listFormat]="listFormat$ | async"
-          [placeHolderText]="'De toegepaste filter bevat geen resultaten.'"
-          [multiSelect]="true"
-        >
-          <campus-content-thumbnail
-            *ngFor="let unlockedcontent of filteredUnlockedContents"
-            campusListItem
-            [dataObject]="unlockedcontent.content"
-            [title]="unlockedcontent.content.name"
-            [fileExtensionClass]="unlockedcontent.content.fileExtension"
-            [fileTypeLabel]="unlockedcontent.content.fileTypeLabel"
-            [contentTypeClass]="unlockedcontent.content.productType"
-          >
-            <campus-button
-              (click)="clickOpenContent(unlockedcontent)"
-              [iconClass]="'view-content'"
-              circle
-            >
+        <campus-list-view #bundleListview
+                          [listFormat]="listFormat$ | async"
+                          [placeHolderText]="'De toegepaste filter bevat geen resultaten.'"
+                          [multiSelect]="true">
+          <campus-content-thumbnail *ngFor="let unlockedcontent of filteredUnlockedContents"
+                                    campusListItem
+                                    [dataObject]="unlockedcontent.content"
+                                    [title]="unlockedcontent.content.name"
+                                    [fileExtensionClass]="unlockedcontent.content.fileExtension"
+                                    [fileTypeLabel]="unlockedcontent.content.fileTypeLabel"
+                                    [contentTypeClass]="unlockedcontent.content.productType">
+            <campus-button (click)="clickOpenContent(unlockedcontent)"
+                           [iconClass]="'view-content'"
+                           circle>
             </campus-button>
           </campus-content-thumbnail>
         </campus-list-view>
