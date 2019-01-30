@@ -7,8 +7,8 @@ import {
   SimpleSnackBar
 } from '@angular/material/snack-bar';
 import { Action, Store } from '@ngrx/store';
-import { Observable, of, timer } from 'rxjs';
-import { filter, map, mapTo, switchMap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { filter, map, shareReplay, switchMap } from 'rxjs/operators';
 import { DalState } from '../+state';
 import { ActionSuccessful } from '../+state/dal.actions';
 import { EffectFeedbackInterface } from './feedback.service';
@@ -68,8 +68,10 @@ export class FeedbackService implements FeedbackServiceInterface {
       priority: Priority.HIGH
     };
 
-    this.nextFeedback$ = timer(1000, 4000).pipe(mapTo(mockFeedBack)); //TODO use code below
-    // this.nextFeedback$ = this.store.select(EffectFeedbackQueries.getNext).pipe(shareReplay(1)); // needed? -> share() ?
+    // this.nextFeedback$ = timer(1000, 4000).pipe(mapTo(mockFeedBack)); //TODO use code below
+    this.nextFeedback$ = this.store
+      .select(EffectFeedbackQueries.getNext)
+      .pipe(shareReplay(1)); // needed? -> share() ?
   }
 
   private setIntermediateStreams(): void {

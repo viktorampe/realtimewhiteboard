@@ -7,8 +7,6 @@ import {
   LearningAreasWithTaskInfoInterface,
   LearningAreaWithTaskInfoInterface
 } from '../tasks.viewmodel.interfaces';
-// TODO replace import
-// import { TasksViewModel } from '../tasks.viewmodel';
 
 @Component({
   selector: 'campus-tasks-area',

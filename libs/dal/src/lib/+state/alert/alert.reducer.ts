@@ -1,5 +1,9 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { AlertQueueInterface } from '../../+models';
+import {
+  TeacherStudentActions,
+  TeacherStudentActionTypes
+} from '../teacher-student/teacher-student.actions';
 import { AlertsActions, AlertsActionTypes } from './alert.actions';
 
 export const NAME = 'alerts';
@@ -21,7 +25,10 @@ export const initialState: State = adapter.getInitialState({
   lastUpdateTimeStamp: null
 });
 
-export function reducer(state = initialState, action: AlertsActions): State {
+export function reducer(
+  state = initialState,
+  action: AlertsActions | TeacherStudentActions
+): State {
   switch (action.type) {
     case AlertsActionTypes.AlertsLoaded: {
       return adapter.addAll(action.payload.alerts, {
@@ -81,6 +88,10 @@ export function reducer(state = initialState, action: AlertsActions): State {
     case AlertsActionTypes.ClearAlerts: {
       return adapter.removeAll(state);
     }
+
+    case TeacherStudentActionTypes.LinkTeacherStudent:
+    case TeacherStudentActionTypes.UnlinkTeacherStudent:
+      return { ...state, loaded: false, lastUpdateTimeStamp: null };
 
     default: {
       return state;

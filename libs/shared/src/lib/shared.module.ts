@@ -1,7 +1,6 @@
 import { LayoutModule } from '@angular/cdk/layout';
 import { PortalModule } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Inject, ModuleWithProviders, NgModule } from '@angular/core';
 import {
   MatBadgeModule,
@@ -19,7 +18,6 @@ import { PageBarContainerComponent } from './components/page-bar-container/page-
 import { OPEN_STATIC_CONTENT_SERVICE_TOKEN } from './content/open-static-content.interface';
 import { OpenStaticContentService } from './content/open-static-content.service';
 import { HeaderComponent } from './header/header.component';
-import { CampusHttpInterceptor } from './interceptors';
 import {
   EnvironmentAlertsFeatureInterface,
   EnvironmentApiInterface,
@@ -36,6 +34,8 @@ import {
   ENVIRONMENT_SSO_TOKEN,
   ENVIRONMENT_WEBSITE_TOKEN
 } from './interfaces';
+import { MailToByCredentialPipe } from './pipes/mail-to/mail-to-credential-pipe';
+import { PersonBadgeFromCredentialPipe } from './pipes/person-badge-from-credential/person-badge-from-credential-pipe';
 import { ScormExerciseService } from './scorm/scorm-exercise.service';
 import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.interface';
 
@@ -52,24 +52,28 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
   declarations: [
     HeaderComponent,
     PageBarContainerComponent,
-    HasPermissionDirective
+    HasPermissionDirective,
+    PersonBadgeFromCredentialPipe,
+    MailToByCredentialPipe
   ],
   exports: [
     HeaderComponent,
     PortalModule,
     LayoutModule,
     PageBarContainerComponent,
-    HasPermissionDirective
+    HasPermissionDirective,
+    PersonBadgeFromCredentialPipe,
+    MailToByCredentialPipe
   ],
   providers: [
     { provide: FILTER_SERVICE_TOKEN, useClass: FilterService },
     { provide: SCORM_EXERCISE_SERVICE_TOKEN, useClass: ScormExerciseService },
     { provide: PERMISSION_SERVICE_TOKEN, useClass: PermissionService },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: CampusHttpInterceptor,
-      multi: true
-    },
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: CampusHttpInterceptor,
+    //   multi: true
+    // },
     {
       provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
       useClass: OpenStaticContentService

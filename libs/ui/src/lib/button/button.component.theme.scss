@@ -1,5 +1,5 @@
 @mixin ui-button() {
-  $ui-button-font-size: 20px !default;
+  $ui-button-font-size: $ui-primary-font-size !default;
   $ui-button-padding: $ui-button-font-size/5 !default;
   $ui-button-color: $ui-button-font-color !default;
   $ui-button-background-color: $ui-button-bg-color !default;
@@ -190,8 +190,10 @@
     }
     // --primary--bordered
     &.ui-button--bordered {
-      border-color: darken($ui-button-background-color-1, 10%);
-      // --primary--bordered--disabled
+      border-color: darken(
+        $ui-button-background-color-1,
+        10%
+      ); // --primary--bordered--disabled
       &.ui-button--disabled {
         border-color: darken($ui-button-background-color, 10%);
       }
