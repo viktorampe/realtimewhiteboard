@@ -117,6 +117,11 @@ $ui-button-padding-bottom: $ui-primary-font-size/2 !default;
       padding: $ui-button-font-size/2 $ui-button-font-size;
     }
   }
+
+  .ui-button.ui-button--large {
+    justify-content: left;
+    margin-bottom: $ui-form-item-padding-bottom;
+  }
 }
 
 // create theme-mixin with each mixin from our library components

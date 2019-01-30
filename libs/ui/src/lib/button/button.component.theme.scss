@@ -24,10 +24,13 @@
   $ui-button--rounded-corner-border-radius: $ui-button-font-size / 4 !default;
   // --large
   $ui-button--large-font-size: $ui-button-font-size * 1.5 !default;
-  $ui-button--large-padding: $ui-button--large-font-size / 3 !default;
+  $ui-button--large-padding: $ui-button--large-font-size !default;
   $ui-button--large-icon-size: $ui-button--large-font-size !default;
   $ui-button--large-max-width: 400px !default;
   $ui-button--large__icon-margin-right: $ui-button--large-font-size / 2 !default;
+  $ui-button--large-background-color: $ui-button-bg-color !default;
+  $ui-button--large-font-color: $ui-primary-font-color-2 !default;
+  $ui-button--large-border-color: $ui-button--large-font-color !default;
   // --danger
   $ui-button--danger-color: $ui-button-color !default;
   $ui-button--danger-background-color: $ui-danger-bg-color !default;
@@ -129,6 +132,16 @@
     max-width: $ui-button--large-max-width;
     padding: $ui-button--large-padding;
     font-size: $ui-button--large-font-size;
+    color: $ui-button--large-font-color;
+    background-color: $ui-button--large-background-color;
+    &.ui-button--bordered {
+      border-color: $ui-button--large-border-color;
+    }
+    &:hover,
+    &:active {
+      color: $ui-button-color;
+      background-color: $ui-button--primary-background-color;
+    }
     mat-icon {
       height: $ui-button--large-icon-size;
       width: $ui-button--large-icon-size;

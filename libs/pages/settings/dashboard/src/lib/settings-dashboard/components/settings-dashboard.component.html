@@ -9,6 +9,8 @@
     <div *ngFor="let link of (links$ | async)">
       <campus-button
         large
+        bordered
+        rounded-corners
         *hasPermission="link.permissions"
         [routerLink]="link.url"
         [iconClass]="link.icon"
