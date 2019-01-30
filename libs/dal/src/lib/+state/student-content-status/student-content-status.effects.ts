@@ -5,7 +5,6 @@ import { DataPersistence } from '@nrwl/nx';
 import { undo } from 'ngrx-undo';
 import { from } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { DalActions } from '..';
 import {
   StudentContentStatusServiceInterface,
   STUDENT_CONTENT_STATUS_SERVICE_TOKEN
@@ -110,17 +109,37 @@ export class StudentContentStatusesEffects {
         return this.studentContentStatusesService
           .addStudentContentStatus(newValue)
           .pipe(
-            map(
-              () =>
-                new DalActions.ActionSuccessful({
-                  successfulAction: action.type
-                })
-            )
+            map(() => {
+              const effectFeedback = new EffectFeedback({
+                id: this.uuid(),
+                triggerAction: action,
+                message: 'Status is toegevoegd.',
+                type: 'success',
+                display: true,
+                priority: Priority.NORM
+              });
+
+              return new EffectFeedbackActions.AddEffectFeedback({
+                effectFeedback
+              });
+            })
           );
       },
       undoAction: (action: AddStudentContentStatus, error: any) => {
-        return undo(action);
-        //TODO: show notification to user
+        const undoAction = undo(action);
+        const effectFeedback = new EffectFeedback({
+          id: this.uuid(),
+          triggerAction: action,
+          message: 'Status kon niet worden toegevoegd.',
+          type: 'error',
+          userActions: [{ title: 'Opnieuw proberen', userAction: action }],
+          display: true,
+          priority: Priority.HIGH
+        });
+        const effectFeedbackAction = new EffectFeedbackActions.AddEffectFeedback(
+          { effectFeedback }
+        );
+        return from([undoAction, effectFeedbackAction]);
       }
     }
   );

@@ -44,6 +44,11 @@ describe('StudentContentStatusEffects', () => {
   let uuid: Function;
   let dateMock: MockDate;
 
+  let feedbackErrorMessage: EffectFeedbackInterface;
+  let feedbackSuccessMessage: EffectFeedbackInterface;
+  let feedbackSuccessAction: EffectFeedbackActions.AddEffectFeedback;
+  let feedbackErrorAction: EffectFeedbackActions.AddEffectFeedback;
+
   const expectInAndOut = (
     effect: Observable<any>,
     triggerAction: Action,
@@ -219,11 +224,6 @@ describe('StudentContentStatusEffects', () => {
     });
   });
   describe('updateStudentContentStatus$', () => {
-    let feedbackErrorMessage: EffectFeedbackInterface;
-    let feedbackSuccessMessage: EffectFeedbackInterface;
-    let feedbackSuccessAction: EffectFeedbackActions.AddEffectFeedback;
-    let feedbackErrorAction: EffectFeedbackActions.AddEffectFeedback;
-
     const update: Update<StudentContentStatusInterface> = {
       id: 1,
       changes: {
@@ -293,7 +293,7 @@ describe('StudentContentStatusEffects', () => {
           mockServiceMethodError('updateStudentContentStatus', 'update failed');
         });
 
-        it('should dispatch an undo action', () => {
+        it('should dispatch an undo and feedback action', () => {
           const undoAction = undo(updateAction);
 
           actions = hot('-a-', { a: updateAction });
@@ -318,6 +318,42 @@ describe('StudentContentStatusEffects', () => {
     describe('with initialState', () => {
       beforeAll(() => {
         usedState = StudentContentStatusReducer.initialState;
+        dateMock = new MockDate(); // needed for effect feedback timestamp
+
+        feedbackErrorMessage = new EffectFeedback({
+          id: uuid(),
+          triggerAction: addAction,
+          icon: null,
+          message: 'Status kon niet worden toegevoegd.',
+          type: 'error',
+          userActions: [{ title: 'Opnieuw proberen', userAction: addAction }],
+          timeStamp: dateMock.mockDate.getTime(),
+          display: true,
+          priority: Priority.HIGH
+        });
+
+        feedbackSuccessMessage = new EffectFeedback({
+          id: uuid(),
+          triggerAction: addAction,
+          icon: null,
+          message: 'Status is toegevoegd.',
+          type: 'success',
+          userActions: [],
+          timeStamp: dateMock.mockDate.getTime(),
+          display: true,
+          priority: Priority.NORM
+        });
+
+        feedbackSuccessAction = new EffectFeedbackActions.AddEffectFeedback({
+          effectFeedback: feedbackSuccessMessage
+        });
+
+        feedbackErrorAction = new EffectFeedbackActions.AddEffectFeedback({
+          effectFeedback: feedbackErrorMessage
+        });
+      });
+      afterAll(() => {
+        dateMock.returnRealDate();
       });
       beforeEach(() => {
         mockServiceMethodReturnValue('addStudentContentStatus', []);
@@ -326,7 +362,23 @@ describe('StudentContentStatusEffects', () => {
         expectInAndOut(
           effects.addStudentContentStatuses$,
           addAction,
-          successAction
+          feedbackSuccessAction
+        );
+      });
+
+      it('should return an undo and feedback action when the api call errors', () => {
+        mockServiceMethodError(
+          'addStudentContentStatus',
+          'Something went wrong!'
+        );
+        const undoAction = undo(addAction);
+
+        actions = hot('-a-', { a: addAction });
+        expect(effects.addStudentContentStatuses$).toBeObservable(
+          hot('-(ab)', {
+            a: undoAction,
+            b: feedbackErrorAction
+          })
         );
       });
     });
