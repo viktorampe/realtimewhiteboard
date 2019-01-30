@@ -29,15 +29,40 @@ export class CampusHttpInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       retry(1),
       catchError((error: HttpErrorResponse) => {
-        if (
-          this.environmentErrorManagementFeature.managedStatusCodes.includes(
-            error.status
-          )
-        ) {
+        const errorNeedsRedirect = !this.isAllowedError(error);
+        const managedError = this.isManagedError(error);
+        if (managedError && errorNeedsRedirect) {
           this.router.navigate(['/error', error.status]);
         }
         return throwError(error);
       })
+    );
+  }
+  private isAllowedError(error: HttpErrorResponse): boolean {
+    return this.environmentErrorManagementFeature.allowedErrors.some(
+      allowedError => {
+        return (
+          (!!allowedError.status
+            ? error.status === allowedError.status
+            : true) &&
+          (!!allowedError.name ? error.name === allowedError.name : true) &&
+          (!!allowedError.statusText
+            ? error.statusText === allowedError.statusText
+            : true) &&
+          (!!allowedError.urlRegex
+            ? allowedError.urlRegex.test(error.url)
+            : true) &&
+          (!!allowedError.messageRegex
+            ? allowedError.messageRegex.test(error.message)
+            : true)
+        );
+      }
+    );
+  }
+
+  private isManagedError(error: HttpErrorResponse): boolean {
+    return this.environmentErrorManagementFeature.managedStatusCodes.includes(
+      error.status
     );
   }
 }
