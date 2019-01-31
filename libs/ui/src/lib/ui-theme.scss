@@ -40,9 +40,12 @@ $ui-form-item-border-color: $ui-primary-font-color !default;
 $ui-button-bg-color: $ui-form-button-default-bg-color !default;
 $ui-button-bg-color-1: $ui-form-button-primary-bg-color !default;
 $ui-button-font-color: #fff !default;
+$ui-button-font-size: $ui-primary-font-size !default;
+$ui-form-item-padding-bottom: $ui-primary-font-size !default;
+$ui-form-actions-padding: 20px 0 0 0 !default;
+$ui-form-spacing: 5px !default;
 
 // sizes
-$ui-font-size-normal: 14px !default;
 $ui-person-badge-size-large: 96px !default;
 $ui-person-badge-size-large-font-size: $ui-person-badge-size-large / 2 !default;
 $ui-person-badge-size-medium: 48px !default;
@@ -54,10 +57,10 @@ $ui-icon-size-medium: 48px !default;
 $ui-icon-size-small: 24px !default;
 
 // buttons
-$ui-button-padding-left: $ui-font-size-normal !default;
-$ui-button-padding-right: $ui-font-size-normal !default;
-$ui-button-padding-top: $ui-font-size-normal/2 !default;
-$ui-button-padding-bottom: $ui-font-size-normal/2 !default;
+$ui-button-padding-left: $ui-primary-font-size !default;
+$ui-button-padding-right: $ui-primary-font-size !default;
+$ui-button-padding-top: $ui-primary-font-size/2 !default;
+$ui-button-padding-bottom: $ui-primary-font-size/2 !default;
 
 // helper classes
 .ui-no-link {
@@ -88,9 +91,38 @@ $ui-button-padding-bottom: $ui-font-size-normal/2 !default;
 @import './notification/notification.component.theme';
 @import './dropdown-menu/dropdown-menu.component.theme.scss';
 @import './dropdown-menu-item/dropdown-menu-item.component.theme.scss';
+@import './banner/banner.component.theme.scss';
+
+@mixin ui-forms() {
+  form {
+    .mat-form-field {
+      display: block;
+
+      .mat-form-field-wrapper {
+        padding-bottom: $ui-form-item-padding-bottom;
+      }
+    }
+
+    .form-inline {
+      .mat-form-field {
+        display: inline-block;
+        margin-right: $ui-form-spacing;
+      }
+    }
+
+    .form-actions {
+      padding: $ui-form-actions-padding;
+    }
+
+    .ui-button {
+      padding: $ui-button-font-size/2 $ui-button-font-size;
+    }
+  }
+}
 
 // create theme-mixin with each mixin from our library components
 @mixin ui-theme() {
+  @include ui-forms();
   @include ui-tree-nav();
   @include ui-folder-theme();
   //place desired width as optional parameter, default 84;
@@ -116,4 +148,5 @@ $ui-button-padding-bottom: $ui-font-size-normal/2 !default;
   @include ui-notification();
   @include ui-dropdown-menu();
   @include ui-dropdown-menu-item();
+  @include ui_banner_theme();
 }

@@ -64,6 +64,7 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
 import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time.pipe';
 import { RemovePrefixStringPipe } from './utils/pipes/remove-prefix-string/remove-prefix-string.pipe';
 import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-string.pipe';
+import { BannerComponent } from './banner/banner.component';
 
 @NgModule({
   imports: [
@@ -134,6 +135,7 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     LargeDirective,
     PrimaryDirective,
     PersonSummaryComponent,
+    BannerComponent,
     DropdownDirective
   ],
   exports: [
@@ -181,6 +183,7 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     LargeDirective,
     PrimaryDirective,
     PersonSummaryComponent,
+    BannerComponent,
     DropdownDirective
   ]
 })

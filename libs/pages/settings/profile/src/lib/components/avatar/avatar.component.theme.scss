@@ -4,6 +4,8 @@
   $pages-settings-profile-avatar__avatar-borderradius: 50% !default;
 
   .pages-settings-profile-avatar {
+    overflow: hidden;
+
     .file-upload {
       height: 200px;
       padding: 60px;

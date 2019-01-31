@@ -44,7 +44,7 @@ export class SettingsDashboardViewModel {
     {
       name: 'Meldingen',
       url: ['/settings', 'alerts'],
-      icon: 'bell',
+      icon: 'notifications',
       permissions: [SettingsPermissions.UPDATE_AVATAR]
     }
   ]);

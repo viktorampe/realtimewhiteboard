@@ -1,5 +1,14 @@
 <h1>Welcome to the dev side</h1>
 
+<campus-banner
+  [message]="'this is a a message not to be confused by a massage'"
+  [icon]="'facebook'"
+  [actions]="[
+    { title: 'button 1', userAction: {} },
+    { title: 'button 2', userAction: {} }
+  ]"
+></campus-banner>
+
 <ng-container *ngIf="(route$ | async) as route">
   <h2 style="color:#E75480">PARAMS IN THIS ROUTE:</h2>
   <ul>
