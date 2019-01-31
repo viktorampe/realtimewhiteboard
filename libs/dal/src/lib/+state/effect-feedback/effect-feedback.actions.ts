@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { EffectFeedback } from './effect-feedback.model';
+import { EffectFeedbackInterface } from './effect-feedback.model';
 
 export enum EffectFeedbackActionTypes {
   AddEffectFeedback = '[EffectFeedback] Add EffectFeedback',
@@ -9,7 +9,7 @@ export enum EffectFeedbackActionTypes {
 export class AddEffectFeedback implements Action {
   readonly type = EffectFeedbackActionTypes.AddEffectFeedback;
 
-  constructor(public payload: { effectFeedback: EffectFeedback }) {}
+  constructor(public payload: { effectFeedback: EffectFeedbackInterface }) {}
 }
 
 export class DeleteEffectFeedback implements Action {
