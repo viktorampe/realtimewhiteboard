@@ -1,13 +1,18 @@
 import { CommonModule } from '@angular/common';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { MatFormFieldModule, MatInputModule } from '@angular/material';
+import {
+  MatFormFieldModule,
+  MatIconModule,
+  MatIconRegistry,
+  MatInputModule
+} from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { PersonFixture } from '@campus/dal';
 import { PersonAlreadyLinkedValidator } from '@campus/shared';
+import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
 import { CoupledTeachersViewModel } from '../coupled-teachers.viewmodel';
@@ -30,7 +35,8 @@ describe('CoupledTeachersComponent', () => {
         MatFormFieldModule,
         BrowserAnimationsModule,
         MatInputModule,
-        RouterTestingModule
+        RouterTestingModule,
+        MatIconModule
       ],
       declarations: [CoupledTeachersComponent],
       providers: [
@@ -49,9 +55,9 @@ describe('CoupledTeachersComponent', () => {
         {
           provide: Store,
           useClass: StoreModule
-        }
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
+        },
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
+      ]
     }).compileComponents();
   }));
 
