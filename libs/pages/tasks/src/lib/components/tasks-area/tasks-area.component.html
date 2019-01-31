@@ -7,12 +7,14 @@
   ></campus-filter-text-input>
   <div class="divider"></div>
   <campus-button
-    (click)="clickChangeListFormat(listFormat.GRID)"
-    iconClass="grid-view"
+    [iconClass]="'list-view'"
+    (click)="clickChangeListFormat(listFormat.LINE)"
+    [class.ui-button--active]="(listFormat$ | async) === listFormat.LINE"
   ></campus-button>
   <campus-button
-    (click)="clickChangeListFormat(listFormat.LINE)"
-    iconClass="list-view"
+    [iconClass]="'grid-view'"
+    (click)="clickChangeListFormat(listFormat.GRID)"
+    [class.ui-button--active]="(listFormat$ | async) === listFormat.GRID"
   ></campus-button>
 </campus-page-bar>
 

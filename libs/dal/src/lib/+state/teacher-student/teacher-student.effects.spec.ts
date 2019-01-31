@@ -16,6 +16,10 @@ import { TeacherStudentReducer } from '.';
 import { TaskFixture, TeacherStudentFixture } from '../../+fixtures';
 import { LINKED_PERSON_SERVICE_TOKEN } from '../../persons/linked-persons.service';
 import { ActionSuccessful } from '../dal.actions';
+import {
+  AddLinkedPerson,
+  DeleteLinkedPerson
+} from '../linked-person/linked-person.actions';
 import { TasksLoaded } from '../task/task.actions';
 import { UserReducer } from '../user';
 import { UserLoaded } from '../user/user.actions';
@@ -23,9 +27,9 @@ import { BundleFixture } from './../../+fixtures/Bundle.fixture';
 import { LinkedPersonServiceInterface } from './../../persons/linked-persons.service';
 import { BundlesLoaded } from './../bundle/bundle.actions';
 import {
+  DeleteTeacherStudent,
   LinkTeacherStudent,
   LoadTeacherStudents,
-  TeacherStudentActionTypes,
   TeacherStudentsLoaded,
   TeacherStudentsLoadError,
   UnlinkTeacherStudent
@@ -228,7 +232,8 @@ describe('TeacherStudentsEffects', () => {
 
     describe('linkTeacher$', () => {
       const linkTeacherAction = new LinkTeacherStudent({
-        publicKey: mockPublicKey
+        publicKey: mockPublicKey,
+        userId: mockCurrentUser.id
       });
 
       it('should call the linkedPersonService', () => {
@@ -253,9 +258,11 @@ describe('TeacherStudentsEffects', () => {
 
         actions = hot('-a-', { a: linkTeacherAction });
 
-        const expectedActions$ = hot('-a', {
-          a: new ActionSuccessful({
-            successfulAction: TeacherStudentActionTypes.LinkTeacherStudent
+        const expectedActions$ = hot('-(ab)', {
+          a: new AddLinkedPerson({ person: mockTeacher }),
+          b: new LoadTeacherStudents({
+            userId: mockCurrentUser.id,
+            force: true
           })
         });
 
@@ -286,7 +293,8 @@ describe('TeacherStudentsEffects', () => {
 
     describe('unlinkTeacher$', () => {
       const unlinkTeacherAction = new UnlinkTeacherStudent({
-        teacherId: mockTeacher.id
+        teacherId: mockTeacher.id,
+        userId: mockCurrentUser.id
       });
       const mockBundle = new BundleFixture({
         id: 1234,
@@ -324,10 +332,9 @@ describe('TeacherStudentsEffects', () => {
 
         actions = hot('-a-', { a: unlinkTeacherAction });
 
-        const expectedActions$ = hot('-a', {
-          a: new ActionSuccessful({
-            successfulAction: TeacherStudentActionTypes.UnlinkTeacherStudent
-          })
+        const expectedActions$ = hot('-(ab)', {
+          a: new DeleteLinkedPerson({ id: mockTeacher.id }),
+          b: new DeleteTeacherStudent({ id: mockTeacherStudent.id })
         });
 
         expect(effects.unlinkTeacher$).toBeObservable(expectedActions$);
