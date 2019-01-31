@@ -242,27 +242,18 @@ describe('StudentContentStatusEffects', () => {
         feedbackErrorMessage = new EffectFeedback({
           id: uuid(),
           triggerAction: updateAction,
-          icon: null,
           message: 'Status kon niet worden aangepast.',
           type: 'error',
           userActions: [
             { title: 'Opnieuw proberen', userAction: updateAction }
           ],
-          timeStamp: dateMock.mockDate.getTime(),
-          display: true,
           priority: Priority.HIGH
         });
 
         feedbackSuccessMessage = new EffectFeedback({
           id: uuid(),
           triggerAction: updateAction,
-          icon: null,
-          message: 'Status is aangepast.',
-          type: 'success',
-          userActions: [],
-          timeStamp: dateMock.mockDate.getTime(),
-          display: true,
-          priority: Priority.NORM
+          message: 'Status is aangepast.'
         });
 
         feedbackSuccessAction = new EffectFeedbackActions.AddEffectFeedback({
@@ -323,25 +314,16 @@ describe('StudentContentStatusEffects', () => {
         feedbackErrorMessage = new EffectFeedback({
           id: uuid(),
           triggerAction: addAction,
-          icon: null,
           message: 'Status kon niet worden toegevoegd.',
           type: 'error',
           userActions: [{ title: 'Opnieuw proberen', userAction: addAction }],
-          timeStamp: dateMock.mockDate.getTime(),
-          display: true,
           priority: Priority.HIGH
         });
 
         feedbackSuccessMessage = new EffectFeedback({
           id: uuid(),
           triggerAction: addAction,
-          icon: null,
-          message: 'Status is toegevoegd.',
-          type: 'success',
-          userActions: [],
-          timeStamp: dateMock.mockDate.getTime(),
-          display: true,
-          priority: Priority.NORM
+          message: 'Status is toegevoegd.'
         });
 
         feedbackSuccessAction = new EffectFeedbackActions.AddEffectFeedback({
