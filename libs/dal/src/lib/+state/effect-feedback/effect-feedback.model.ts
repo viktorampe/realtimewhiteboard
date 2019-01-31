@@ -12,7 +12,7 @@ export interface EffectFeedbackInterface {
   triggerAction: Action;
   icon?: string;
   message: string;
-  type: 'success' | 'error';
+  type?: 'success' | 'error';
   userActions?: {
     // buttons: expected action is right aligned, first in array
     title: string;
@@ -28,7 +28,7 @@ export class EffectFeedback implements EffectFeedbackInterface {
   triggerAction: Action;
   icon: string = null;
   message: string;
-  type: 'success' | 'error';
+  type: 'success' | 'error' = 'success';
   userActions: {
     // buttons: expected action is right aligned, first in array
     title: string;
