@@ -58,7 +58,9 @@ export class CoupledTeachersComponent implements OnInit {
   loadStreams(): void {
     this.linkedPersons$ = this.coupledTeacherViewModel.linkedPersons$;
     this.apiErrors$ = this.coupledTeacherViewModel.apiErrors$.pipe(
-      tap(errors => {
+      tap((errors: ApiValidationErrors) => {
+        // <mat-error> field will only trigger when the form status is INVALID
+        // so we need to manually set the form errors (which will also set the validity of the coupledTeachersForm to INVALID)
         this.coupledTeachersForm.get('teacherCode').setErrors(errors);
       })
     );
