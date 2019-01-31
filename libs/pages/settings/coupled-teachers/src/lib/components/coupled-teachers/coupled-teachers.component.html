@@ -1,4 +1,11 @@
 <div class="campus-page">
+  <campus-page-header
+    [title]="'Instellingen'"
+    [subtitle]="'Mijn leerkrachten'"
+    [iconClass]="'coupled-teachers'"
+  >
+  </campus-page-header>
+
   <campus-info-panel
     [titleText]="'Leerkracht koppelen'"
     [titleIcon]="'coupled-teachers'"
@@ -44,7 +51,8 @@
           >De opgegeven leerkrachtencode is niet geldig.</mat-error
         >
       </mat-form-field>
-      <div class="pages-settings-coupled-teachers__form__actions">
+
+      <div class="form-actions">
         <campus-button
           primary
           (click)="onSubmit()"
