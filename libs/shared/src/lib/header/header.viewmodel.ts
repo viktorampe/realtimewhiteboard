@@ -92,7 +92,8 @@ export class HeaderViewModel {
               titleText: alert.title,
               link: alert.link, // TODO: check the link format (external or internal)
               notificationText: alert.message,
-              notificationDate: new Date(alert.sentAt)
+              notificationDate: new Date(alert.sentAt),
+              accented: alert.type === 'marketing'
             };
             return notification;
           });
