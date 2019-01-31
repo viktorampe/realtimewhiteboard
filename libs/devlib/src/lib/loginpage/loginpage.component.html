@@ -197,12 +197,16 @@
   </campus-notification>
 </div>
 
-<a [routerLink]="['http://melvin-kellner.com']">EXTERNAL LINK</a><br />
-<a [routerLink]="['https://imgur.com/gallery/jlGc4']">EXTERNAL LINK</a><br />
-<a [routerLink]="['http://google.com']">EXTERNAL LINK</a><br />
+<a [campusExternalableRouterlink]="'/home'">INTERNAL LINK</a><br />
+<a [campusExternalableRouterlink]="'http://melvin-kellner.com'">EXTERNAL LINK</a
+><br />
+<a [campusExternalableRouterlink]="'https://imgur.com/gallery/jlGc4'"
+  >EXTERNAL LINK</a
+><br />
+<a [campusExternalableRouterlink]="'http://google.com'">EXTERNAL LINK</a><br />
 <a
-  [routerLink]="[
+  [campusExternalableRouterlink]="
     'https://www.google.com/search?q=recursion&spell=1&sa=X&ved=0ahUKEwjQ8NOh0ZLgAhUNmbQKHbKVC7IQBQgrKAA&biw=983&bih=743'
-  ]"
+  "
   >EXTERNAL LINK</a
 >

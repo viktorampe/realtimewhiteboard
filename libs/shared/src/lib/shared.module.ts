@@ -9,7 +9,7 @@ import {
   MatIconRegistry
 } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
-import { RouterModule } from '@angular/router';
+import { RouterLink, RouterModule } from '@angular/router';
 import { UiModule } from '@campus/ui';
 import { FilterService, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { HasPermissionDirective } from './auth/has-permission.directive';
@@ -19,6 +19,7 @@ import { PageBarContainerComponent } from './components/page-bar-container/page-
 import { RouteNotFoundComponent } from './components/route-not-found/route-not-found-component';
 import { OPEN_STATIC_CONTENT_SERVICE_TOKEN } from './content/open-static-content.interface';
 import { OpenStaticContentService } from './content/open-static-content.service';
+import { CampusExternalableRouterlinkDirective } from './directives/campus-externalable-routerlink.directive';
 import { HeaderComponent } from './header/header.component';
 import { CampusHttpInterceptor } from './interceptors';
 import {
@@ -58,7 +59,8 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     HasPermissionDirective,
     PersonBadgeFromCredentialPipe,
     MailToByCredentialPipe,
-    RouteNotFoundComponent
+    RouteNotFoundComponent,
+    CampusExternalableRouterlinkDirective
   ],
   exports: [
     HeaderComponent,
@@ -68,7 +70,8 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     HasPermissionDirective,
     PersonBadgeFromCredentialPipe,
     MailToByCredentialPipe,
-    RouteNotFoundComponent
+    RouteNotFoundComponent,
+    CampusExternalableRouterlinkDirective
   ],
   providers: [
     { provide: FILTER_SERVICE_TOKEN, useClass: FilterService },
@@ -82,7 +85,8 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     {
       provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
       useClass: OpenStaticContentService
-    }
+    },
+    { provide: RouterLink, useClass: RouterLink }
   ]
 })
 export class SharedModule {
