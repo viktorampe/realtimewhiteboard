@@ -8,7 +8,7 @@ import {
 } from '@angular/material/snack-bar';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { filter, map, shareReplay, switchMap } from 'rxjs/operators';
+import { filter, map, share, switchMap } from 'rxjs/operators';
 import { DalState } from '../+state';
 import {
   EffectFeedbackInterface,
@@ -54,7 +54,7 @@ export class FeedbackService implements FeedbackServiceInterface {
   private getSourceStreams(): void {
     this.nextFeedback$ = this.store
       .select(EffectFeedbackQueries.getNext)
-      .pipe(shareReplay(1));
+      .pipe(share());
   }
 
   private setIntermediateStreams(): void {
