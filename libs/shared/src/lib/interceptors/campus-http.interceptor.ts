@@ -42,19 +42,13 @@ export class CampusHttpInterceptor implements HttpInterceptor {
     return this.environmentErrorManagementFeature.allowedErrors.some(
       allowedError => {
         return (
-          (!!allowedError.status
-            ? error.status === allowedError.status
-            : true) &&
-          (!!allowedError.name ? error.name === allowedError.name : true) &&
-          (!!allowedError.statusText
-            ? error.statusText === allowedError.statusText
-            : true) &&
-          (!!allowedError.urlRegex
-            ? allowedError.urlRegex.test(error.url)
-            : true) &&
-          (!!allowedError.messageRegex
-            ? allowedError.messageRegex.test(error.message)
-            : true)
+          (!allowedError.status || allowedError.status === error.status) &&
+          (!allowedError.name || allowedError.name === error.name) &&
+          (!allowedError.statusText ||
+            allowedError.statusText === error.statusText) &&
+          (!allowedError.urlRegex || allowedError.urlRegex.test(error.url)) &&
+          (!allowedError.messageRegex ||
+            allowedError.messageRegex.test(error.message))
         );
       }
     );
