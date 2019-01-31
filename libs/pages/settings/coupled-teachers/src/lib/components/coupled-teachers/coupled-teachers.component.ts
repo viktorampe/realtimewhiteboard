@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -7,8 +7,7 @@ import {
 } from '@angular/forms';
 import { PersonInterface } from '@campus/dal';
 import { PersonAlreadyLinkedValidator } from '@campus/shared';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Observable, Subscription } from 'rxjs';
 import { CoupledTeachersViewModel } from '../coupled-teachers.viewmodel';
 
 export interface ApiValidationErrors extends ValidationErrors {
@@ -23,12 +22,12 @@ export interface ApiValidationErrors extends ValidationErrors {
   templateUrl: './coupled-teachers.component.html',
   styleUrls: ['./coupled-teachers.component.scss']
 })
-export class CoupledTeachersComponent implements OnInit {
+export class CoupledTeachersComponent implements OnInit, OnDestroy {
   private teacherCode: string;
+  private apiErrorsSubscription: Subscription;
 
   coupledTeachersForm: FormGroup;
 
-  apiErrors$: Observable<ApiValidationErrors>;
   linkedPersons$: Observable<PersonInterface[]>;
 
   constructor(
@@ -40,6 +39,7 @@ export class CoupledTeachersComponent implements OnInit {
   ngOnInit(): void {
     this.buildForm();
     this.loadStreams();
+    this.setupSubscriptions();
   }
 
   private buildForm() {
@@ -57,12 +57,15 @@ export class CoupledTeachersComponent implements OnInit {
 
   loadStreams(): void {
     this.linkedPersons$ = this.coupledTeacherViewModel.linkedPersons$;
-    this.apiErrors$ = this.coupledTeacherViewModel.apiErrors$.pipe(
-      tap((errors: ApiValidationErrors) => {
+  }
+
+  setupSubscriptions() {
+    this.apiErrorsSubscription = this.coupledTeacherViewModel.apiErrors$.subscribe(
+      (errors: ApiValidationErrors) => {
         // <mat-error> field will only trigger when the form status is INVALID
         // so we need to manually set the form errors (which will also set the validity of the coupledTeachersForm to INVALID)
         this.coupledTeachersForm.get('teacherCode').setErrors(errors);
-      })
+      }
     );
   }
 
@@ -82,5 +85,9 @@ export class CoupledTeachersComponent implements OnInit {
     this.coupledTeachersForm.reset({
       teacherCode: this.teacherCode
     });
+  }
+
+  ngOnDestroy(): void {
+    this.apiErrorsSubscription.unsubscribe();
   }
 }
