@@ -9,10 +9,12 @@
   <campus-button
     [iconClass]="'list-view'"
     (click)="setListFormat(listFormat.LINE)"
+    [class.ui-button--active]="(listFormat$ | async) === listFormat.LINE"
   ></campus-button>
   <campus-button
     [iconClass]="'grid-view'"
     (click)="setListFormat(listFormat.GRID)"
+    [class.ui-button--active]="(listFormat$ | async) === listFormat.GRID"
   ></campus-button>
 </campus-page-bar>
 
