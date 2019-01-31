@@ -56,7 +56,6 @@ export class ShellComponent implements OnInit, OnDestroy {
 
   @Input()
   set sidebarOpen(val: boolean) {
-    console.log('hier');
     if (val !== this._sidebarOpen) {
       this._sidebarOpen = val;
       this.sidebar.toggle(val);
@@ -114,7 +113,6 @@ export class ShellComponent implements OnInit, OnDestroy {
   }
 
   private setToggleSidebarSubscription() {
-    console.log(this.sidebar.openedChange);
     this.sidebar.openedChange.subscribe(open => {
       this.sidebarOpen = open;
     });
