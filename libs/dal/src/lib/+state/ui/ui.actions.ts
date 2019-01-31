@@ -43,6 +43,7 @@ export class ToggleSideSheet implements Action {
 
 export class ToggleSideNav implements Action {
   readonly type = UiActionTypes.ToggleSideNav;
+  constructor(public payload?: { open?: boolean }) {}
 }
 
 export class SetSideNavItems implements Action {

@@ -28,8 +28,14 @@ export class MockCoupledTeachersViewModel
   );
 
   public linkedPersons$ = new BehaviorSubject<PersonInterface[]>([
-    new PersonFixture({ displayName: 'Teacher One' }),
-    new PersonFixture({ displayName: 'Teacher Two' })
+    new PersonFixture({
+      displayName: 'Teacher One',
+      teacherInfo: { publicKey: 'foo' }
+    }),
+    new PersonFixture({
+      displayName: 'Teacher Two',
+      teacherInfo: { publicKey: 'bar' }
+    })
   ]);
 
   public apiErrors$ = new BehaviorSubject<ApiValidationErrors>({
