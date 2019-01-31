@@ -27,7 +27,8 @@
 
     &__icon,
     &__cancel {
-      top: ($ui-filter-text_input-line-height - $ui-filter-text_input-font-size)/2;
+      top: $ui-filter-text_input-padding +
+        ($ui-filter-text_input-line-height - $ui-filter-text_input-font-size)/2;
       bottom: $ui-filter-text_input-padding;
 
       &.mat-icon {
