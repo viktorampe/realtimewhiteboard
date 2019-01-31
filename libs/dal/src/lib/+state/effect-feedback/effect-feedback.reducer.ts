@@ -3,20 +3,23 @@ import {
   EffectFeedbackActions,
   EffectFeedbackActionTypes
 } from './effect-feedback.actions';
-import { EffectFeedback } from './effect-feedback.model';
+import { EffectFeedbackInterface } from './effect-feedback.model';
 
 export const NAME = 'effectFeedback';
 
-export function sortByPriority(a: EffectFeedback, b: EffectFeedback): number {
+export function sortByPriority(
+  a: EffectFeedbackInterface,
+  b: EffectFeedbackInterface
+): number {
   return b.priority - a.priority;
 }
-export interface State extends EntityState<EffectFeedback> {
+export interface State extends EntityState<EffectFeedbackInterface> {
   // additional entities state properties
 }
 
-export const adapter: EntityAdapter<EffectFeedback> = createEntityAdapter<
-  EffectFeedback
->({
+export const adapter: EntityAdapter<
+  EffectFeedbackInterface
+> = createEntityAdapter<EffectFeedbackInterface>({
   sortComparer: sortByPriority
 });
 

@@ -3,7 +3,7 @@ import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   DalState,
-  EffectFeedback,
+  EffectFeedbackInterface,
   EffectFeedbackQueries,
   LinkedPersonQueries,
   PersonInterface,
@@ -24,8 +24,8 @@ export class CoupledTeachersViewModel {
   public linkedPersons$: Observable<PersonInterface[]>;
 
   // intermediate streams
-  private linkPersonError$: Observable<EffectFeedback>;
-  private unlinkPersonError$: Observable<EffectFeedback>;
+  private linkPersonError$: Observable<EffectFeedbackInterface>;
+  private unlinkPersonError$: Observable<EffectFeedbackInterface>;
 
   // presentation streams
   public apiErrors$: Observable<ApiValidationErrors>;
@@ -65,11 +65,6 @@ export class CoupledTeachersViewModel {
       filter(feedback => !!feedback),
       map(feedback => {
         switch (feedback.message) {
-          // this case is already covered by the person-already-linked validator
-          // case 'teacher_already_linked':
-          //   return {
-          //     teacherAlreadyCoupled: true
-          //   };
           case 'no_teacher_found_for_given_key':
             return {
               nonExistingTeacherCode: true
