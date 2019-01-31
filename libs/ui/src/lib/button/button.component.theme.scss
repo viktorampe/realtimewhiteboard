@@ -162,8 +162,7 @@
     }
     // --danger--bordered
     &.ui-button--bordered {
-      border-color: $ui-button--danger-border-color;
-      // --danger--bordered--disabled
+      border-color: $ui-button--danger-border-color; // --danger--bordered--disabled
       &.ui-button--disabled {
         border-color: $ui-button--danger--disabled-border-color;
       }
@@ -186,8 +185,7 @@
     }
     // --warning--bordered
     &.ui-button--bordered {
-      border-color: $ui-button--warning-border-color;
-      // --warning--bordered--disabled
+      border-color: $ui-button--warning-border-color; // --warning--bordered--disabled
       &.ui-button--disabled {
         border-color: $ui-button--warning--disabled-border-color;
       }

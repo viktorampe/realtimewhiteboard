@@ -13,18 +13,21 @@ import {
   ContentInterface,
   LearningAreaInterface,
   PersonInterface,
-  UnlockedContent
+  StudentContentStatusInterface,
+  UnlockedContent,
+  UnlockedContentInterface
 } from '@campus/dal';
 import {
   FilterableItem,
   FilterTextInputComponent,
   ListFormat,
   ListViewComponent,
+  SelectOption,
   SideSheetComponent
 } from '@campus/ui';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
-import { Observable, Subscription } from 'rxjs';
-import { shareReplay, switchMap } from 'rxjs/operators';
+import { combineLatest, Observable, Subscription } from 'rxjs';
+import { filter, map, shareReplay, switchMap, take } from 'rxjs/operators';
 import { BundlesViewModel } from '../bundles.viewmodel';
 
 @Component({
@@ -46,6 +49,9 @@ export class BundleDetailComponent
   bundle$: Observable<BundleInterface>;
   bundleOwner$: Observable<PersonInterface>;
   unlockedContents$: Observable<UnlockedContent[]>;
+  contentStatusOptions$: Observable<SelectOption[]>;
+  selectedStudentContentStatus$: Observable<StudentContentStatusInterface>;
+  selectedUnlockedContent$: Observable<UnlockedContentInterface>;
 
   @ViewChild(FilterTextInputComponent)
   filterTextInput: FilterTextInputComponent<UnlockedContent[], UnlockedContent>;
@@ -73,6 +79,7 @@ export class BundleDetailComponent
 
   ngOnInit(): void {
     this.learningArea$ = this.getLearningArea();
+    this.contentStatusOptions$ = this.bundlesViewModel.contentStatusOptions$;
     this.bundle$ = this.getBundle();
     this.bundleOwner$ = this.bundlesViewModel.getBundleOwner(this.bundle$);
     this.setupAlertsSubscription();
@@ -92,6 +99,20 @@ export class BundleDetailComponent
       )
     );
 
+    this.selectedUnlockedContent$ = combineLatest(
+      this.list.selectedItems$,
+      this.unlockedContents$
+    ).pipe(
+      map(([selectedContent, unlockedContent]) => {
+        if (selectedContent.length !== 1) {
+          return null;
+        }
+        return unlockedContent.find(uc => uc.content === selectedContent[0]);
+      }),
+      filter(value => !!value)
+    );
+    this.selectedStudentContentStatus$ = this.getSelectedStudentContentStatus();
+
     // Needed to avoid ExpressionChangedAfterItHasBeenCheckedError
     this.cd.detectChanges();
   }
@@ -106,6 +127,36 @@ export class BundleDetailComponent
 
   clickOpenContent(unlockedcontent: UnlockedContent): void {
     this.bundlesViewModel.openContent(unlockedcontent);
+  }
+
+  onSaveStatus(value: SelectOption): void {
+    console.log(value);
+    combineLatest(
+      this.selectedUnlockedContent$,
+      this.selectedStudentContentStatus$
+    )
+      .pipe(take(1))
+      .subscribe(([unlockedContent, studentContentStatus]) => {
+        this.bundlesViewModel.saveContentStatus(
+          unlockedContent.id,
+          value.value,
+          studentContentStatus ? studentContentStatus.id : null
+        );
+      });
+  }
+
+  private getSelectedStudentContentStatus() {
+    return this.selectedUnlockedContent$.pipe(
+      switchMap(uc => {
+        return this.bundlesViewModel.getStudentContentStatus(uc.id);
+      }),
+      map(studentContentStatus => {
+        if (!studentContentStatus) {
+          return null;
+        }
+        return studentContentStatus;
+      })
+    );
   }
 
   private setupAlertsSubscription(): void {

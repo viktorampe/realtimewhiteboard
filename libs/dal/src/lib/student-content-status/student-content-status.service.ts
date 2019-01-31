@@ -33,8 +33,6 @@ export class StudentContentStatusService
   updateStudentContentStatus(
     studentContentStatus: StudentContentStatusInterface
   ): Observable<StudentContentStatusInterface> {
-    // throw new Error('fout');
-
     return this.studentContentStatusApi.patchAttributes(
       studentContentStatus.id,
       {
@@ -46,8 +44,10 @@ export class StudentContentStatusService
   addStudentContentStatus(
     studentContentStatus: StudentContentStatusInterface
   ): Observable<StudentContentStatusInterface> {
-    // throw new Error('fout');
-
+    return this.personApi.createStudentContentStatuses(
+      studentContentStatus.personId,
+      studentContentStatus
+    );
     return this.studentContentStatusApi.patchOrCreate(studentContentStatus);
   }
 

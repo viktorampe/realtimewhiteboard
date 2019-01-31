@@ -67,3 +67,14 @@ export const getById = createSelector(
   selectStudentContentStatusesState,
   (state: State, props: { id: number }) => state.entities[props.id]
 );
+
+export const getByUnlockedContent = createSelector(
+  selectStudentContentStatusesState,
+  (state: State, props: { unlockedContentId: number }) => {
+    return (
+      Object.values(state.entities).find(
+        entity => entity.unlockedContentId === props.unlockedContentId
+      ) || null
+    );
+  }
+);

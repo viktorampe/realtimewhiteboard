@@ -11,7 +11,7 @@ import {
   UnlockedContentFixture
 } from '@campus/dal';
 import { ViewModelInterface } from '@campus/testing';
-import { ListFormat } from '@campus/ui';
+import { ListFormat, SelectOption } from '@campus/ui';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { BundlesViewModel } from './bundles.viewmodel';
 import {
@@ -57,9 +57,15 @@ export class MockViewModel implements ViewModelInterface<BundlesViewModel> {
     ]
   });
 
+  contentStatusOptions$: Observable<SelectOption[]> = new BehaviorSubject<
+    SelectOption[]
+  >([{ value: 1, viewValue: 'foo' }, { value: 2, viewValue: 'bar' }]);
+
   changeListFormat() {}
 
   setBundleAlertRead() {}
+
+  saveContentStatus() {}
 
   openContent(o: UnlockedContent) {}
 

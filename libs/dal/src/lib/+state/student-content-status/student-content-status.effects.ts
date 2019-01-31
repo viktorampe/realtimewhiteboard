@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { StudentContentStatusInterface } from '@campus/dal';
 import { Actions, Effect } from '@ngrx/effects';
+import { Update } from '@ngrx/entity';
 import { DataPersistence } from '@nrwl/nx';
 import { undo } from 'ngrx-undo';
 import { map } from 'rxjs/operators';
@@ -16,7 +17,8 @@ import {
   StudentContentStatusesActionTypes,
   StudentContentStatusesLoaded,
   StudentContentStatusesLoadError,
-  UpdateStudentContentStatus
+  UpdateStudentContentStatus,
+  UpsertStudentContentStatus
 } from './student-content-status.actions';
 
 @Injectable()
@@ -75,7 +77,7 @@ export class StudentContentStatusesEffects {
   );
 
   @Effect()
-  addStudentContentStatuses$ = this.dataPersistence.optimisticUpdate(
+  addStudentContentStatuses$ = this.dataPersistence.pessimisticUpdate(
     StudentContentStatusesActionTypes.AddStudentContentStatus,
     {
       run: (action: AddStudentContentStatus, state: DalState) => {
@@ -92,7 +94,41 @@ export class StudentContentStatusesEffects {
             )
           );
       },
-      undoAction: (action: AddStudentContentStatus, error: any) => {
+      onError: (action: AddStudentContentStatus, error: any) => {
+        return undo(action);
+        //TODO: show notification to user
+      }
+    }
+  );
+
+  @Effect()
+  upsertStudentContentStatuses$ = this.dataPersistence.optimisticUpdate(
+    StudentContentStatusesActionTypes.UpsertStudentContentStatus,
+    {
+      run: (action: UpsertStudentContentStatus, state: DalState) => {
+        const value = action.payload.studentContentStatus;
+        const exists = (state.studentContentStatuses.ids as number[]).find(
+          id => {
+            const entity = state.studentContentStatuses.entities[id];
+            return (
+              entity.personId === value.personId &&
+              entity.unlockedContentId === value.unlockedContentId
+            );
+          }
+        );
+        console.log(exists);
+
+        if (exists) {
+          const studentContentStatus: Update<StudentContentStatusInterface> = {
+            id: exists,
+            changes: value
+          };
+          return new UpdateStudentContentStatus({ studentContentStatus });
+        }
+        console.log(action.payload);
+        return new AddStudentContentStatus(action.payload);
+      },
+      undoAction: (action: UpsertStudentContentStatus, error: any) => {
         return undo(action);
         //TODO: show notification to user
       }
