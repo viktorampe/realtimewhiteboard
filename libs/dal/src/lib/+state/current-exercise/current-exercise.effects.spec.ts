@@ -1,14 +1,21 @@
 import { TestBed } from '@angular/core/testing';
-import { DalActions } from '@campus/dal';
 import { ScormCmiMode } from '@campus/scorm';
+import { MockDate } from '@campus/testing';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
+import { undo } from 'ngrx-undo';
 import { Observable, of } from 'rxjs';
 import { CurrentExerciseReducer } from '.';
 import { EXERCISE_SERVICE_TOKEN } from '../../exercise/exercise.service.interface';
+import {
+  EffectFeedback,
+  EffectFeedbackActions,
+  Priority
+} from '../effect-feedback';
+import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
 import {
   CurrentExerciseError,
   CurrentExerciseLoaded,
@@ -18,12 +25,14 @@ import {
 import { CurrentExerciseEffects } from './current-exercise.effects';
 import { CurrentExerciseInterface } from './current-exercise.reducer';
 
+// file.only
 describe('ExerciseEffects', () => {
   let actions: Observable<any>;
   let effects: CurrentExerciseEffects;
   let usedState: any;
   let mockExercise: CurrentExerciseInterface;
   let mockExerciseNoSave: CurrentExerciseInterface;
+  let uuid: Function;
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -87,11 +96,16 @@ describe('ExerciseEffects', () => {
         },
         CurrentExerciseEffects,
         DataPersistence,
-        provideMockActions(() => actions)
+        provideMockActions(() => actions),
+        {
+          provide: 'uuid',
+          useValue: () => 'foo'
+        }
       ]
     });
 
     effects = TestBed.get(CurrentExerciseEffects);
+    uuid = TestBed.get('uuid');
   });
 
   describe('startExercise$', () => {
@@ -182,10 +196,8 @@ describe('ExerciseEffects', () => {
       exercise: mockExerciseNoSave
     });
 
-    const genericSuccessAction = new DalActions.ActionSuccessful({
-      successfulAction: 'Exercise saved'
-    });
     const loadErrorAction = new CurrentExerciseError(new Error('failed'));
+
     describe('with initialState', () => {
       beforeAll(() => {
         usedState = CurrentExerciseReducer.initialState;
@@ -194,11 +206,23 @@ describe('ExerciseEffects', () => {
         mockServiceMethodReturnValue('saveExercise', mockExercise);
       });
       it('should trigger an api call', () => {
+        const mockDate = new MockDate();
+
+        const effectFeedBackAction = new EffectFeedbackActions.AddEffectFeedback(
+          {
+            effectFeedback: new EffectFeedback({
+              id: uuid(),
+              triggerAction: saveExerciseAction,
+              message: 'Oefening is bewaard.'
+            })
+          }
+        );
         expectInAndOut(
           effects.saveExercise$,
           saveExerciseAction,
-          genericSuccessAction
+          effectFeedBackAction
         );
+        mockDate.returnRealDate();
       });
 
       it('should not trigger an api call if saveToApi is false', () => {
@@ -214,11 +238,26 @@ describe('ExerciseEffects', () => {
         mockServiceMethodError('saveExercise', 'failed');
       });
       it('should return a error action ', () => {
-        expectInAndOut(
-          effects.saveExercise$,
-          saveExerciseAction,
-          loadErrorAction
-        );
+        const mockDate = new MockDate();
+
+        actions = hot('-(a)', { a: saveExerciseAction });
+
+        const expectedActions$ = hot('-(abc)', {
+          a: undo(saveExerciseAction),
+          b: new AddEffectFeedback({
+            effectFeedback: new EffectFeedback({
+              id: uuid(),
+              triggerAction: saveExerciseAction,
+              message: 'Het is niet gelukt om de oefening te bewaren.',
+              type: 'error',
+              priority: Priority.HIGH
+            })
+          }),
+          c: loadErrorAction
+        });
+        expect(effects.saveExercise$).toBeObservable(expectedActions$);
+
+        mockDate.returnRealDate();
       });
     });
   });
