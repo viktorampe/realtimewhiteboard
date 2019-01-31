@@ -29,7 +29,7 @@ describe(`AuthHttpInterceptor`, () => {
     navigate = spy;
   }
 
-  let allowedError = {
+  const allowedError = {
     status: mockedManagedAllowedStatusCode
   };
 
@@ -129,7 +129,7 @@ describe(`AuthHttpInterceptor`, () => {
     });
 
     it('should allow the error', () => {
-      let interceptor = new CampusHttpInterceptor(<Router>{}, {
+      const interceptor = new CampusHttpInterceptor(<Router>{}, {
         managedStatusCodes: [404],
         allowedErrors: [
           {
@@ -142,7 +142,7 @@ describe(`AuthHttpInterceptor`, () => {
 
     it('should not allow the error', () => {
       error.status = 405;
-      let interceptor = new CampusHttpInterceptor(<Router>{}, {
+      const interceptor = new CampusHttpInterceptor(<Router>{}, {
         managedStatusCodes: [404],
         allowedErrors: [
           {
@@ -155,7 +155,7 @@ describe(`AuthHttpInterceptor`, () => {
 
     it('should allow the error on statusText match', () => {
       error.statusText = 'how now brown cow';
-      let interceptor = new CampusHttpInterceptor(<Router>{}, {
+      const interceptor = new CampusHttpInterceptor(<Router>{}, {
         managedStatusCodes: [404],
         allowedErrors: [
           {
@@ -168,7 +168,7 @@ describe(`AuthHttpInterceptor`, () => {
 
     it('should deny the error on statusText fail', () => {
       error.statusText = 'how now green bean';
-      let interceptor = new CampusHttpInterceptor(<Router>{}, {
+      const interceptor = new CampusHttpInterceptor(<Router>{}, {
         managedStatusCodes: [404],
         allowedErrors: [
           {
@@ -181,7 +181,7 @@ describe(`AuthHttpInterceptor`, () => {
 
     it('should allow the error on message regex match', () => {
       error.message = 'how now brown cow';
-      let interceptor = new CampusHttpInterceptor(<Router>{}, {
+      const interceptor = new CampusHttpInterceptor(<Router>{}, {
         managedStatusCodes: [404],
         allowedErrors: [
           {
@@ -194,7 +194,7 @@ describe(`AuthHttpInterceptor`, () => {
 
     it('should deny the error on message regex fail', () => {
       error.message = 'how now green bean';
-      let interceptor = new CampusHttpInterceptor(<Router>{}, {
+      const interceptor = new CampusHttpInterceptor(<Router>{}, {
         managedStatusCodes: [404],
         allowedErrors: [
           {
@@ -207,7 +207,7 @@ describe(`AuthHttpInterceptor`, () => {
 
     it('should allow the error on url regex match', () => {
       error.url = 'cow.svg';
-      let interceptor = new CampusHttpInterceptor(<Router>{}, {
+      const interceptor = new CampusHttpInterceptor(<Router>{}, {
         managedStatusCodes: [404],
         allowedErrors: [
           {
@@ -220,7 +220,7 @@ describe(`AuthHttpInterceptor`, () => {
 
     it('should deny the error on url regex fail', () => {
       error.url = 'cow.jpg';
-      let interceptor = new CampusHttpInterceptor(<Router>{}, {
+      const interceptor = new CampusHttpInterceptor(<Router>{}, {
         managedStatusCodes: [404],
         allowedErrors: [
           {
@@ -236,7 +236,7 @@ describe(`AuthHttpInterceptor`, () => {
       error.message = 'how now brown cow';
       error.status = 422;
       error.statusText = 'holy cow';
-      let interceptor = new CampusHttpInterceptor(<Router>{}, {
+      const interceptor = new CampusHttpInterceptor(<Router>{}, {
         managedStatusCodes: [422],
         allowedErrors: [
           {
@@ -255,7 +255,7 @@ describe(`AuthHttpInterceptor`, () => {
       error.message = 'how now brown cow';
       error.status = 422;
       error.statusText = 'holy crap';
-      let interceptor = new CampusHttpInterceptor(<Router>{}, {
+      const interceptor = new CampusHttpInterceptor(<Router>{}, {
         managedStatusCodes: [422],
         allowedErrors: [
           {
