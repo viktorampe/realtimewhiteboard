@@ -19,10 +19,6 @@ class MockRouter {
   navigateByUrl = navigateSpy;
 }
 
-class MockWindow {
-  open = windowSpy;
-}
-
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'test-container',
@@ -41,10 +37,6 @@ export class TestContainerComponent {}
     {
       provide: ENVIRONMENT_ICON_MAPPING_TOKEN,
       useClass: Mapping
-    },
-    {
-      provide: window,
-      useClass: MockWindow
     },
     { provide: Router, useClass: MockRouter }
   ],
