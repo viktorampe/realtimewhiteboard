@@ -1,6 +1,6 @@
 <div class="shared-header">
   <div hide-mobile class="shared-header__app-bar">
-    <campus-app-bar>
+    <campus-app-bar *ngIf="(isResolved$ | async)">
       <campus-breadcrumbs
         bar__left
         [breadCrumbs]="breadCrumbs$ | async"

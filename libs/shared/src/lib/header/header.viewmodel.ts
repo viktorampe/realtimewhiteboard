@@ -21,7 +21,7 @@ import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { ENVIRONMENT_ALERTS_FEATURE_TOKEN } from '../interfaces/environment.injectiontokens';
 import { EnvironmentAlertsFeatureInterface } from '../interfaces/environment.interfaces';
-import { HeaderResolver } from './header.resolver';
+import { HeaderResolver, HEADER_RESOLVER_TOKEN } from './header.resolver';
 
 @Injectable({
   providedIn: 'root'
@@ -48,9 +48,10 @@ export class HeaderViewModel {
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     @Inject(ENVIRONMENT_ALERTS_FEATURE_TOKEN)
     private environmentAlertsFeature: EnvironmentAlertsFeatureInterface,
-    private store: Store<DalState>
+    private store: Store<DalState>,
+    @Inject(HEADER_RESOLVER_TOKEN) private headerResolver: HeaderResolver
   ) {
-    this.isResolved$ = new HeaderResolver(store, authService).resolve();
+    this.isResolved$ = this.headerResolver.resolve();
     this.loadFeatureToggles();
     this.loadStateStreams();
     this.loadDisplayStream();
