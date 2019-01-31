@@ -108,6 +108,9 @@ export class HumanDateTimePipe implements PipeTransform {
    */
   transform(value: Date, args?: String): String {
     if (value) {
+      if (!(value instanceof Date)) {
+        value = new Date(value);
+      }
       const currentDate: Date = this.getDate();
       const valueInSeconds: number = Math.round(value.getTime() / 1000);
       const differenceInSeconds: number =

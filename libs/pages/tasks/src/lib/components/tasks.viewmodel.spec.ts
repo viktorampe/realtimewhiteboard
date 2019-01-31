@@ -386,7 +386,8 @@ describe('TasksViewModel met State', () => {
         filter: { taskId: 1 },
         intended: false,
         personId: 1,
-        read: true
+        read: true,
+        displayResponse: false
       });
       tasksViewModel.setTaskAlertRead(1);
       expect(store.dispatch).toHaveBeenCalledWith(expectedAction);

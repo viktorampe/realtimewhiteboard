@@ -24,7 +24,7 @@ export interface ApiValidationErrors extends ValidationErrors {
 })
 export class CoupledTeachersComponent implements OnInit, OnDestroy {
   private teacherCode: string;
-  private apiErrorsSubscription: Subscription;
+  private subscriptions = new Subscription();
 
   coupledTeachersForm: FormGroup;
 
@@ -40,6 +40,10 @@ export class CoupledTeachersComponent implements OnInit, OnDestroy {
     this.buildForm();
     this.loadStreams();
     this.setupSubscriptions();
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 
   private buildForm() {
@@ -60,12 +64,21 @@ export class CoupledTeachersComponent implements OnInit, OnDestroy {
   }
 
   setupSubscriptions() {
-    this.apiErrorsSubscription = this.coupledTeacherViewModel.apiErrors$.subscribe(
-      (errors: ApiValidationErrors) => {
-        // <mat-error> field will only trigger when the form status is INVALID
-        // so we need to manually set the form errors (which will also set the validity of the coupledTeachersForm to INVALID)
-        this.coupledTeachersForm.get('teacherCode').setErrors(errors);
-      }
+    this.subscriptions.add(
+      this.coupledTeacherViewModel.apiErrors$.subscribe(
+        (errors: ApiValidationErrors) => {
+          // <mat-error> field will only trigger when the form status is INVALID
+          // so we need to manually set the form errors (which will also set the validity of the coupledTeachersForm to INVALID)
+          this.coupledTeachersForm.get('teacherCode').setErrors(errors);
+        }
+      )
+    );
+
+    this.subscriptions.add(
+      this.linkedPersons$.subscribe(() => {
+        // assume link/unlink was successful when linkedPerson is updated
+        this.coupledTeachersForm.reset();
+      })
     );
   }
 
@@ -85,9 +98,5 @@ export class CoupledTeachersComponent implements OnInit, OnDestroy {
     this.coupledTeachersForm.reset({
       teacherCode: this.teacherCode
     });
-  }
-
-  ngOnDestroy(): void {
-    this.apiErrorsSubscription.unsubscribe();
   }
 }

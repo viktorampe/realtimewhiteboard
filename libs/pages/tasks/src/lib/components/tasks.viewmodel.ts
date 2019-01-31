@@ -69,7 +69,8 @@ export class TasksViewModel {
         filter: {
           taskId: taskId
         },
-        read: true
+        read: true,
+        displayResponse: false
       })
     );
   }

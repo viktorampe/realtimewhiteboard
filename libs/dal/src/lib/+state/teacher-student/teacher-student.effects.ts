@@ -1,7 +1,9 @@
 import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
+import { Action } from '@ngrx/store';
 import { DataPersistence } from '@nrwl/nx';
-import { map } from 'rxjs/operators';
+import { from } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 import { DalState } from '..';
 import {
   LinkedPersonServiceInterface,
@@ -9,6 +11,11 @@ import {
 } from '../../persons/linked-persons.service';
 import { EffectFeedback, EffectFeedbackActions } from '../effect-feedback';
 import {
+  AddLinkedPerson,
+  DeleteLinkedPerson
+} from '../linked-person/linked-person.actions';
+import {
+  DeleteTeacherStudent,
   LinkTeacherStudent,
   LoadTeacherStudents,
   TeacherStudentActionTypes,
@@ -44,19 +51,27 @@ export class TeacherStudentEffects {
     TeacherStudentActionTypes.LinkTeacherStudent,
     {
       run: (action: LinkTeacherStudent, state: DalState) => {
+        const userId = action.payload.userId;
+
         return this.linkedPersonService
           .linkStudentToTeacher(action.payload.publicKey)
           .pipe(
-            map(() => {
+            switchMap(teachers => {
               const effectFeedback = new EffectFeedback({
                 id: this.uuid(),
                 triggerAction: action,
                 message: 'Leerkracht is gekoppeld.',
                 type: 'success'
               });
-              return new EffectFeedbackActions.AddEffectFeedback({
-                effectFeedback
-              });
+              const actions = [].concat(
+                // update state for active page
+                teachers.map(person => new AddLinkedPerson({ person })),
+                new LoadTeacherStudents({ userId, force: true }),
+                new EffectFeedbackActions.AddEffectFeedback({
+                  effectFeedback
+                })
+              );
+              return from<Action>(actions);
             })
           );
       },
@@ -83,6 +98,7 @@ export class TeacherStudentEffects {
       run: (action: UnlinkTeacherStudent, state: DalState) => {
         const userId = action.payload.userId;
         const teacherId = action.payload.teacherId;
+        // add teacherStudentId to payload instead of searching state?
         const teacherStudentId = (state.teacherStudents.ids as number[]).find(
           id => state.teacherStudents.entities[id].teacherId === teacherId
         );
@@ -90,16 +106,22 @@ export class TeacherStudentEffects {
         return this.linkedPersonService
           .unlinkStudentFromTeacher(userId, teacherStudentId)
           .pipe(
-            map(() => {
+            switchMap(() => {
               const effectFeedback = new EffectFeedback({
                 id: this.uuid(),
                 triggerAction: action,
                 message: 'Leerkracht is ontkoppeld.',
                 type: 'success'
               });
-              return new EffectFeedbackActions.AddEffectFeedback({
-                effectFeedback
-              });
+              const actions = [].concat(
+                // update state for active page
+                new DeleteLinkedPerson({ id: teacherId }),
+                new DeleteTeacherStudent({ id: teacherStudentId }),
+                new EffectFeedbackActions.AddEffectFeedback({
+                  effectFeedback
+                })
+              );
+              return from<Action>(actions);
             })
           );
       },

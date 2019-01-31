@@ -25,6 +25,7 @@ export class AppViewModel {
   private profileMenuItems$: Observable<DropdownMenuItemInterface[]>;
 
   // presentation stream
+  public sideNavOpen$: Observable<boolean>;
   public navigationItems$: Observable<NavItem[]>;
 
   constructor(
@@ -36,8 +37,12 @@ export class AppViewModel {
 
   initialize() {
     this.setIntermediateStreams();
-    this.subscribeToStreams();
     this.setPresentationStreams();
+    this.subscribeToStreams();
+  }
+
+  toggleSidebar(open: boolean) {
+    this.store.dispatch(new UiActions.ToggleSideNav({ open }));
   }
 
   private setIntermediateStreams() {
@@ -72,6 +77,7 @@ export class AppViewModel {
 
   private setPresentationStreams() {
     this.navigationItems$ = this.store.pipe(select(UiQuery.getSideNavItems));
+    this.sideNavOpen$ = this.store.pipe(select(UiQuery.getSideNavOpen));
   }
 
   private getCurrentUser(): Observable<PersonInterface> {

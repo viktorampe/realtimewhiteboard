@@ -147,5 +147,20 @@ describe('AppViewModel', () => {
         })
       );
     });
+
+    it('should dispatch action on sidenav toggle', () => {
+      store.dispatch(new UserActions.UserLoaded(new PersonFixture()));
+      viewModel.toggleSidebar(true);
+      expect(store.dispatch).toHaveBeenCalledWith(
+        new UiActions.ToggleSideNav({ open: true })
+      );
+    });
+
+    it('should load the sidenav status from the store', () => {
+      store.dispatch(new UiActions.ToggleSideNav({ open: true }));
+      expect(viewModel.sideNavOpen$).toBeObservable(hot('a', { a: true }));
+      store.dispatch(new UiActions.ToggleSideNav({ open: false }));
+      expect(viewModel.sideNavOpen$).toBeObservable(hot('a', { a: false }));
+    });
   });
 });
