@@ -1,8 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { MatFormFieldModule, MatInputModule } from '@angular/material';
+import {
+  MatFormFieldModule,
+  MatIconModule,
+  MatInputModule
+} from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { PersonAlreadyLinkedValidator } from '@campus/shared';
@@ -26,13 +29,14 @@ describe('CoupledTeachersComponent', () => {
         MatFormFieldModule,
         BrowserAnimationsModule,
         MatInputModule,
+        MatIconModule,
         RouterTestingModule
       ],
       declarations: [CoupledTeachersComponent],
       providers: [
         {
           provide: CoupledTeachersViewModel,
-          useValue: MockCoupledTeachersViewModel
+          useClass: MockCoupledTeachersViewModel
         },
         {
           provide: PersonAlreadyLinkedValidator,
@@ -46,8 +50,7 @@ describe('CoupledTeachersComponent', () => {
           provide: Store,
           useClass: StoreModule
         }
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
+      ]
     }).compileComponents();
   }));
 

@@ -99,7 +99,10 @@ export class CoupledTeachersViewModel {
 
   public linkPerson(publicKey: string): void {
     this.store.dispatch(
-      new TeacherStudentActions.LinkTeacherStudent({ publicKey })
+      new TeacherStudentActions.LinkTeacherStudent({
+        publicKey,
+        userId: this.authService.userId
+      })
     );
   }
 
