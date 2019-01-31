@@ -99,11 +99,14 @@
     }
     &:active,
     &.ui-button--active {
-      background-color: darken($ui-button-background-color, 5%);
+      background-color: $ui-button--active-background-color;
       color: $ui-button--active-color;
     }
     &:hover {
       background-color: darken($ui-button-background-color, 5%);
+    }
+    &.ui-button--active:hover {
+      background-color: darken($ui-button--active-background-color, 5%);
     }
   }
   // --bordered
