@@ -33,6 +33,9 @@ export class FeedbackService implements FeedbackServiceInterface {
   // intermediate
   private errorFeedback$: Observable<EffectFeedbackInterface>;
   private successFeedback$: Observable<EffectFeedbackInterface>;
+  private bannerNeedsUpdate$: Observable<
+    [EffectFeedbackInterface, EffectFeedbackInterface]
+  >;
   private displayedBannerFeedback$ = new BehaviorSubject<
     EffectFeedbackInterface
   >(null);
@@ -80,29 +83,33 @@ export class FeedbackService implements FeedbackServiceInterface {
       filter(feedback => feedback && feedback.type === 'success')
     );
 
-    combineLatest(
+    this.bannerNeedsUpdate$ = combineLatest(
       this.displayedBannerFeedback$.pipe(filter(value => value === null)),
       this.errorFeedback$
-    ).subscribe(([displayedFeedback, latestFeedBack]) => {
-      if (!displayedFeedback || displayedFeedback.id !== latestFeedBack.id) {
-        const feedbackToDisplay = { ...latestFeedBack };
+    ).pipe(
+      filter(
+        ([displayedFeedback, latestFeedBack]) =>
+          !displayedFeedback || displayedFeedback.id !== latestFeedBack.id
+      )
+    );
 
-        // if needed, add cancel button
-        if (
-          !feedbackToDisplay.userActions ||
-          feedbackToDisplay.userActions.length < 2
-        ) {
-          feedbackToDisplay.userActions = [
-            ...feedbackToDisplay.userActions,
-            {
-              title: 'annuleren',
-              userAction: null
-            }
-          ];
-        }
-
-        this.displayedBannerFeedback$.next(feedbackToDisplay);
+    this.bannerNeedsUpdate$.subscribe(([displayedFeedback, latestFeedBack]) => {
+      const feedbackToDisplay = { ...latestFeedBack };
+      // if needed, add cancel button
+      if (
+        !feedbackToDisplay.userActions ||
+        feedbackToDisplay.userActions.length < 2
+      ) {
+        feedbackToDisplay.userActions = [
+          ...feedbackToDisplay.userActions,
+          {
+            title: 'annuleren',
+            userAction: null
+          }
+        ];
       }
+
+      this.displayedBannerFeedback$.next(feedbackToDisplay);
     });
   }
 
