@@ -106,7 +106,8 @@ describe('TeacherStudentsEffects', () => {
         },
         TeacherStudentEffects,
         DataPersistence,
-        provideMockActions(() => actions)
+        provideMockActions(() => actions),
+        { provide: 'uuid', useValue: () => 'foo' }
       ]
     });
 
@@ -332,9 +333,10 @@ describe('TeacherStudentsEffects', () => {
 
         actions = hot('-a-', { a: unlinkTeacherAction });
 
-        const expectedActions$ = hot('-(ab)', {
+        const expectedActions$ = hot('-(abc)', {
           a: new DeleteLinkedPerson({ id: mockTeacher.id }),
           b: new DeleteTeacherStudent({ id: mockTeacherStudent.id })
+          // c: new AddEffectFeedback({effectFeedback:new EffectFeedback());
         });
 
         expect(effects.unlinkTeacher$).toBeObservable(expectedActions$);
