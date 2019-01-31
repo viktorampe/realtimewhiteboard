@@ -61,7 +61,7 @@ describe('FeedbackService', () => {
       triggerAction: null,
       message: 'This is a message',
       type: 'success',
-      userActions: [mockAction],
+      userActions: [mockAction, mockAction],
       timeStamp: 1,
       display: true,
       priority: Priority.HIGH
@@ -206,6 +206,21 @@ describe('FeedbackService', () => {
 
       expect(service.bannerFeedback$).toBeObservable(
         hot('a', { a: mockFeedBack })
+      );
+    });
+
+    it('should pass add a cancel userAction when needed', () => {
+      mockFeedBack.userActions = [];
+      store.dispatch(new AddEffectFeedback({ effectFeedback: mockFeedBack }));
+
+      const cancelBannerAction = { title: 'annuleren', userAction: null };
+
+      // add the cancel button
+      const expectedFeedback = mockFeedBack;
+      expectedFeedback.userActions.push(cancelBannerAction);
+
+      expect(service.bannerFeedback$).toBeObservable(
+        hot('a', { a: expectedFeedback })
       );
     });
   });

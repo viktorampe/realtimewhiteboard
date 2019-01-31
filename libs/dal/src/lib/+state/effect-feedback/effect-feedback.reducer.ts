@@ -12,9 +12,9 @@ export function sortByPriority(
   b: EffectFeedbackInterface
 ): number {
   // sort by priority
-  if (a.priority > b.priority) {
+  if (a.priority < b.priority) {
     return 1;
-  } else if (a.priority < b.priority) {
+  } else if (a.priority > b.priority) {
     return -1;
   }
 
