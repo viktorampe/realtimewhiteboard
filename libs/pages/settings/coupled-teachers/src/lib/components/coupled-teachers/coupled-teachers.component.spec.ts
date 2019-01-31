@@ -21,7 +21,7 @@ import { of } from 'rxjs';
 import { CoupledTeachersViewModel } from '../coupled-teachers.viewmodel';
 import { MockCoupledTeachersViewModel } from '../coupled-teachers.viewmodel.mock';
 import { CoupledTeachersComponent } from './coupled-teachers.component';
-// file.only
+
 describe('CoupledTeachersComponent', () => {
   let component: CoupledTeachersComponent;
   let fixture: ComponentFixture<CoupledTeachersComponent>;
