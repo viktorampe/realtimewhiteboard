@@ -9,7 +9,11 @@ import {
   LinkedPersonServiceInterface,
   LINKED_PERSON_SERVICE_TOKEN
 } from '../../persons/linked-persons.service';
-import { EffectFeedback, EffectFeedbackActions } from '../effect-feedback';
+import {
+  EffectFeedback,
+  EffectFeedbackActions,
+  Priority
+} from '../effect-feedback';
 import {
   AddLinkedPerson,
   DeleteLinkedPerson
@@ -82,7 +86,8 @@ export class TeacherStudentEffects {
           triggerAction: action,
           message: error.message,
           type: 'error',
-          display: false
+          display: false,
+          priority: Priority.HIGH
         });
         return new EffectFeedbackActions.AddEffectFeedback({
           effectFeedback
@@ -110,8 +115,7 @@ export class TeacherStudentEffects {
               const effectFeedback = new EffectFeedback({
                 id: this.uuid(),
                 triggerAction: action,
-                message: 'Leerkracht is ontkoppeld.',
-                type: 'success'
+                message: 'Leerkracht is ontkoppeld.'
               });
               const actions = [].concat(
                 // update state for active page
@@ -132,7 +136,7 @@ export class TeacherStudentEffects {
           message: 'Het is niet gelukt om de leerkracht te ontkoppelen.',
           type: 'error',
           userActions: [{ title: 'Probeer opnieuw', userAction: action }],
-          display: true
+          priority: Priority.HIGH
         });
         return new EffectFeedbackActions.AddEffectFeedback({
           effectFeedback

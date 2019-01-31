@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import {
   BundleReducer,
   DalState,
+  EffectFeedback,
   PersonFixture,
   TaskReducer
 } from '@campus/dal';
@@ -15,7 +16,8 @@ import { Observable, of } from 'rxjs';
 import { TeacherStudentReducer } from '.';
 import { TaskFixture, TeacherStudentFixture } from '../../+fixtures';
 import { LINKED_PERSON_SERVICE_TOKEN } from '../../persons/linked-persons.service';
-import { ActionSuccessful } from '../dal.actions';
+import { Priority } from '../effect-feedback';
+import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
 import {
   AddLinkedPerson,
   DeleteLinkedPerson
@@ -40,6 +42,7 @@ describe('TeacherStudentsEffects', () => {
   let actions: Observable<any>;
   let effects: TeacherStudentEffects;
   let usedState: any;
+  let uuid: Function;
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -112,6 +115,7 @@ describe('TeacherStudentsEffects', () => {
     });
 
     effects = TestBed.get(TeacherStudentEffects);
+    uuid = TestBed.get('uuid');
   });
 
   describe('loadTeacherStudents$', () => {
@@ -251,7 +255,7 @@ describe('TeacherStudentsEffects', () => {
       });
 
       it('should dispatch actions', () => {
-        const DateMock = new MockDate();
+        const dateMock = new MockDate();
 
         linkedPersonService.linkStudentToTeacher = jest
           .fn()
@@ -259,21 +263,30 @@ describe('TeacherStudentsEffects', () => {
 
         actions = hot('-a-', { a: linkTeacherAction });
 
-        const expectedActions$ = hot('-(ab)', {
+        const expectedActions$ = hot('-(abc)', {
           a: new AddLinkedPerson({ person: mockTeacher }),
           b: new LoadTeacherStudents({
             userId: mockCurrentUser.id,
             force: true
+          }),
+          c: new AddEffectFeedback({
+            effectFeedback: new EffectFeedback({
+              id: uuid(),
+              triggerAction: linkTeacherAction,
+              message: 'Leerkracht is gekoppeld.'
+            })
           })
         });
 
         expect(effects.linkTeacher$).toBeObservable(expectedActions$);
 
-        DateMock.returnRealDate();
+        dateMock.returnRealDate();
       });
 
       it('should dispatch a message action on an api error', () => {
-        const errorMessage = 'This error is your fault, not mine';
+        const dateMock = new MockDate();
+        const errorMessage =
+          'Het is niet gelukt om de leerkracht te ontkoppelen.';
         linkedPersonService.linkStudentToTeacher = jest
           .fn()
           .mockImplementation(() => {
@@ -283,12 +296,20 @@ describe('TeacherStudentsEffects', () => {
         actions = hot('-a-', { a: linkTeacherAction });
 
         const expectedAction$ = hot('-a', {
-          a: new ActionSuccessful({
-            successfulAction: 'link teacher failed:' + errorMessage
+          a: new AddEffectFeedback({
+            effectFeedback: new EffectFeedback({
+              id: uuid(),
+              triggerAction: linkTeacherAction,
+              message: 'Het is niet gelukt om de leerkracht te ontkoppelen.',
+              type: 'error',
+              priority: Priority.HIGH,
+              display: false
+            })
           })
         });
 
         expect(effects.linkTeacher$).toBeObservable(expectedAction$);
+        dateMock.returnRealDate();
       });
     });
 
@@ -327,6 +348,7 @@ describe('TeacherStudentsEffects', () => {
       });
 
       it('should dispatch actions', () => {
+        const dateMock = new MockDate();
         linkedPersonService.unlinkStudentFromTeacher = jest
           .fn()
           .mockReturnValue(of(true));
@@ -335,14 +357,22 @@ describe('TeacherStudentsEffects', () => {
 
         const expectedActions$ = hot('-(abc)', {
           a: new DeleteLinkedPerson({ id: mockTeacher.id }),
-          b: new DeleteTeacherStudent({ id: mockTeacherStudent.id })
-          // c: new AddEffectFeedback({effectFeedback:new EffectFeedback());
+          b: new DeleteTeacherStudent({ id: mockTeacherStudent.id }),
+          c: new AddEffectFeedback({
+            effectFeedback: new EffectFeedback({
+              id: uuid(),
+              triggerAction: unlinkTeacherAction,
+              message: 'Leerkracht is ontkoppeld.'
+            })
+          })
         });
 
         expect(effects.unlinkTeacher$).toBeObservable(expectedActions$);
+        dateMock.returnRealDate();
       });
 
       it('should dispatch a message action on an api error', () => {
+        const dateMock = new MockDate();
         const errorMessage = 'This error is your fault, not mine';
         linkedPersonService.unlinkStudentFromTeacher = jest
           .fn()
@@ -353,12 +383,22 @@ describe('TeacherStudentsEffects', () => {
         actions = hot('-a-', { a: unlinkTeacherAction });
 
         const expectedAction$ = hot('-a', {
-          a: new ActionSuccessful({
-            successfulAction: 'unlink teacher failed:' + errorMessage
+          a: new AddEffectFeedback({
+            effectFeedback: new EffectFeedback({
+              id: uuid(),
+              triggerAction: unlinkTeacherAction,
+              message: 'Het is niet gelukt om de leerkracht te ontkoppelen.',
+              userActions: [
+                { title: 'Probeer opnieuw', userAction: unlinkTeacherAction }
+              ],
+              type: 'error',
+              priority: Priority.HIGH
+            })
           })
         });
 
         expect(effects.unlinkTeacher$).toBeObservable(expectedAction$);
+        dateMock.returnRealDate();
       });
     });
   });
