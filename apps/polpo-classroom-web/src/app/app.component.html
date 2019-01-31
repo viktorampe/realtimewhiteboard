@@ -11,7 +11,6 @@
   <campus-shell-top>
     <campus-header></campus-header>
     <campus-banner *ngIf="(bannerFeedback$ | async) as bannerFeedback"
-                   [show]="showBanner"
                    [id]="bannerFeedback.id"
                    [message]="bannerFeedback.message"
                    [icon]="bannerFeedback.icon"

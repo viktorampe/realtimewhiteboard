@@ -19,7 +19,6 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./banner.component.scss']
 })
 export class BannerComponent<T> implements OnDestroy {
-  @Input() show: boolean;
   @Input() id: string;
   @Input() message: string;
   @Input() icon: string;

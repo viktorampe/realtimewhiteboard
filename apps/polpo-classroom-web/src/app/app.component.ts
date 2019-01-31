@@ -1,5 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component } from '@angular/core';
 import { environment } from '../environments/environment';
 import { AppViewModel } from './app.viewmodel';
 
@@ -8,33 +7,19 @@ import { AppViewModel } from './app.viewmodel';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnDestroy {
-  title = 'polpo-classroom-web';
-  navItems$ = this.appViewModel.navigationItems$;
-  bannerFeedback$ = this.appViewModel.bannerFeedback$;
-  showBanner = false;
-  private subscriptions = new Subscription();
+export class AppComponent {
+  public title = 'polpo-classroom-web';
+  public navItems$ = this.appViewModel.navigationItems$;
+  public bannerFeedback$ = this.appViewModel.bannerFeedback$;
 
   /**
    * the link to the promo website, used on the logo
    */
   protected websiteUrl: string = environment.website.url;
 
-  constructor(private appViewModel: AppViewModel) {
-    this.subscriptions.add(
-      this.bannerFeedback$.subscribe(_ => {
-        this.showBanner = true;
-      })
-    );
-  }
+  constructor(private appViewModel: AppViewModel) {}
 
   protected onBannerDismiss(event) {
-    console.log(event);
     this.appViewModel.onBannerDismiss(event);
-    this.showBanner = false;
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
   }
 }
