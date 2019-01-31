@@ -1,5 +1,14 @@
 <h1>Welcome to the dev side</h1>
 
+<campus-banner
+  [message]="'this is a a message not to be confused by a massage'"
+  [icon]="'facebook'"
+  [actions]="[
+    { title: 'button 1', userAction: {} },
+    { title: 'button 2', userAction: {} }
+  ]"
+></campus-banner>
+
 <ng-container *ngIf="(route$ | async) as route">
   <h2 style="color:#E75480">PARAMS IN THIS ROUTE:</h2>
   <ul>
@@ -69,11 +78,6 @@
   ></div
 >
 
-<div>
-  <button (click)="deleteAlert()">remove alert</button>
-  <div>{{ response | async | json }}</div>
-</div>
-
 <div
   ><a [routerLink]="['/bundles']" routerLinkActive="router-link-active"
     >go to bundle page</a
@@ -84,7 +88,6 @@
     >go to tasks page</a
   ></div
 >
-
 <campus-person-summary
   [person]="{
     name: 'person name',
@@ -117,8 +120,8 @@
   >
 </ng-container>
 
-<div *ngIf="(alert$ | async) as alert"
-  ><p
+<div *ngIf="(alert$ | async) as alert">
+  <p
     ><button (click)="setAlertAsRead(alert.id, true)"
       >Markeer melding met id {{ alert.id }} als gelezen EN toon feedback
     </button></p

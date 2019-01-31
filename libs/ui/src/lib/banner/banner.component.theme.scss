@@ -1,0 +1,27 @@
+@mixin ui_banner_theme() {
+  $ui-banner-background-color: $ui-primary-bg-color !default;
+  $ui-banner-padding: 20px !default;
+
+  $ui-banner-icon-right-margin: 10px !default;
+  $ui-banner-text-color: $ui-primary-font-color !default;
+
+  $ui-banner-icon-size: $ui-icon-size-medium !default;
+
+  .ui-banner {
+    background-color: $ui-banner-background-color;
+    padding: $ui-banner-padding;
+    color: $ui-banner-text-color;
+
+    &__content {
+      mat-icon {
+        width: $ui-banner-icon-size;
+        height: $ui-banner-icon-size;
+      }
+
+      &__icon {
+        color: $ui-banner-text-color;
+        margin-right: $ui-banner-icon-right-margin;
+      }
+    }
+  }
+}

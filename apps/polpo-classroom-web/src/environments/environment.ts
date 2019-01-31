@@ -112,8 +112,8 @@ export const environment: EnvironmentInterface = {
     educontent: 'assets/icons/lesmateriaal.svg',
     // youtube: 'assets/icons/youtube.svg',
     // -> settings dashboard
-    profile: 'assets/icons/settings.svg',
-    avatar: 'assets/icons/user.svg',
+    profile: 'assets/icons/account-circle.svg',
+    avatar: 'assets/icons/avatar.svg',
     credentials: 'assets/icons/link.svg',
     'coupled-teachers': 'assets/icons/student2.svg',
     alerts: 'assets/icons/bell.svg',
@@ -182,7 +182,7 @@ export const environment: EnvironmentInterface = {
     // share: 'assets/icons/share.svg',
     // 'split-arrow': 'assets/icons/split-arrow.svg',
     // student: 'assets/icons/student.svg',
-    student2: 'assets/icons/student2.svg',
+    student: 'assets/icons/student2.svg',
     taak: 'assets/icons/taak.svg',
     // task: 'assets/icons/task.svg'
     // timeline: 'assets/icons/timeline.svg',
@@ -191,7 +191,7 @@ export const environment: EnvironmentInterface = {
     'expand-more': 'assets/icons/expand-more.svg',
     'expand-less': 'assets/icons/expand-less.svg',
     account: 'assets/icons/account-circle.svg',
-    settings: 'assets/icons/account-circle.svg',
+    settings: 'assets/icons/settings.svg',
     'method:101spelen': 'assets/icons/method/101spelen.svg',
     'method:allesimgrif': 'assets/icons/method/allesimgrif.svg',
     'method:allesimgriffupdate': 'assets/icons/method/allesimgriffupdate.svg',

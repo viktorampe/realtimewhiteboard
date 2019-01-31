@@ -1,7 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatFormFieldModule, MatInputModule } from '@angular/material';
+import {
+  MatFormFieldModule,
+  MatIconModule,
+  MatInputModule
+} from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { FileReaderService, FILEREADER_SERVICE_TOKEN } from '@campus/browser';
 import { UiModule } from '@campus/ui';
@@ -19,6 +23,7 @@ import { ProfileComponent } from './components/profile/profile.component';
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
+    MatIconModule,
     RouterModule.forChild([
       { path: '', pathMatch: 'full', component: ProfileComponent },
       {

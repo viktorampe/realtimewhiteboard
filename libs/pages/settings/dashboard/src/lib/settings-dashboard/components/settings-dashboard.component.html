@@ -1,14 +1,16 @@
 <div class="campus-page">
   <campus-page-header
-    [title]="'Mijn profiel'"
-    [subtitle]="'dashboard'"
-    [iconClass]="'account'"
+    [title]="'Instellingen'"
+    [subtitle]="'Dashboard'"
+    [iconClass]="'settings'"
   >
   </campus-page-header>
   <mat-nav-list>
     <div *ngFor="let link of (links$ | async)">
       <campus-button
         large
+        bordered
+        rounded-corners
         *hasPermission="link.permissions"
         [routerLink]="link.url"
         [iconClass]="link.icon"
