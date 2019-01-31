@@ -119,9 +119,7 @@ describe('CoupledTeachersComponent', () => {
         component.coupledTeachersForm.setValue(mockFormData);
 
         const submitButton = fixture.debugElement.query(
-          By.css(
-            '.pages-settings-coupled-teachers__form__actions > campus-button:nth-child(1)'
-          )
+          By.css('.form-actions > campus-button:nth-child(1)')
         );
 
         submitButton.nativeElement.click();
@@ -135,9 +133,7 @@ describe('CoupledTeachersComponent', () => {
         component.coupledTeachersForm.setValue(mockFormData);
 
         const resetButton = fixture.debugElement.query(
-          By.css(
-            '.pages-settings-coupled-teachers__form__actions > campus-button:nth-child(2)'
-          )
+          By.css('.form-actions > campus-button:nth-child(2)')
         );
 
         resetButton.nativeElement.click();
