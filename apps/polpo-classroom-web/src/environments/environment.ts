@@ -243,8 +243,8 @@ export const environment: EnvironmentInterface = {
         {
           status: 404,
           statusText: 'Not Found',
-          urlRegex: /http.*assets\/icons.*\.svg/gi,
-          messageRegex: /Http failure response for http.*assets\/icons.*\.svg: 404 Not Found/gi
+          urlRegex: /http.*assets\/icons.*\.svg/i,
+          messageRegex: /Http failure response for http.*assets\/icons.*\.svg: 404 Not Found/i
         }
       ]
     }
