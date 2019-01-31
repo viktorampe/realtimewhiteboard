@@ -113,9 +113,11 @@ export class ShellComponent implements OnInit, OnDestroy {
   }
 
   private setToggleSidebarSubscription() {
-    this.sidebar.openedChange.subscribe(open => {
-      this.sidebarOpen = open;
-    });
+    this.sidebar.openedChange
+      .pipe(takeWhile(() => this.isAlive))
+      .subscribe(open => {
+        this.sidebarOpen = open;
+      });
   }
 
   ngOnDestroy(): void {
