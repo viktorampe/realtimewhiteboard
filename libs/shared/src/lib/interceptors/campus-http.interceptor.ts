@@ -30,14 +30,13 @@ export class CampusHttpInterceptor implements HttpInterceptor {
       retry(1),
       catchError((error: HttpErrorResponse) => {
         if (this.isManagedError(error) && !this.isAllowedError(error)) {
-          console.log(error.status);
           this.router.navigate(['/error', error.status]);
         }
         return throwError(error);
       })
     );
   }
-  private isAllowedError(error: HttpErrorResponse): boolean {
+  public isAllowedError(error: HttpErrorResponse): boolean {
     return this.environmentErrorManagementFeature.allowedErrors.some(
       allowedError => {
         return (

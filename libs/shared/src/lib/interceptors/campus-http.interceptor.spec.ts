@@ -1,4 +1,8 @@
-import { HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HTTP_INTERCEPTORS
+} from '@angular/common/http';
 import {
   HttpClientTestingModule,
   HttpTestingController
@@ -11,15 +15,23 @@ import { ENVIRONMENT_ERROR_MANAGEMENT_FEATURE_TOKEN } from '../interfaces';
 describe(`AuthHttpInterceptor`, () => {
   let httpMock: HttpTestingController;
   let httpClient: HttpClient;
-  const mockedManagedStatusCode = 401;
+  const mockedManagedAllowedStatusCode = 401;
+  const mockedManagedUnAllowedStatusCode = 404;
   const mockedNonManagedStatusCode = 400;
-  const mockedManagedStatusCodes = [mockedManagedStatusCode];
+  const mockedManagedStatusCodes = [
+    mockedManagedAllowedStatusCode,
+    mockedManagedUnAllowedStatusCode
+  ];
   const mockRequestErrorUrl = '/fake-api-url';
   const spy = jest.fn();
 
   class MockRouter {
     navigate = spy;
   }
+
+  let allowedError = {
+    status: mockedManagedAllowedStatusCode
+  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -34,7 +46,8 @@ describe(`AuthHttpInterceptor`, () => {
         {
           provide: ENVIRONMENT_ERROR_MANAGEMENT_FEATURE_TOKEN,
           useValue: {
-            managedStatusCodes: mockedManagedStatusCodes
+            managedStatusCodes: mockedManagedStatusCodes,
+            allowedErrors: [allowedError]
           }
         }
       ]
@@ -52,7 +65,7 @@ describe(`AuthHttpInterceptor`, () => {
     expect(spy).toHaveBeenCalledTimes(0);
     httpMock.verify();
   });
-  it('should redirect with the router if an error with a managed statuscode is thrown', () => {
+  it('should not redirect with the router if an error with a managed statuscode is thrown', () => {
     httpClient.get(mockRequestErrorUrl).subscribe();
     const httpRequest = httpMock.expectOne(mockRequestErrorUrl);
     httpRequest.error(
@@ -75,16 +88,185 @@ describe(`AuthHttpInterceptor`, () => {
     httpRequest.error(
       new ErrorEvent('testing error for the first time before the retry'),
       {
-        status: mockedManagedStatusCode
+        status: mockedManagedUnAllowedStatusCode
       }
     );
     expect(spy).toHaveBeenCalledTimes(0);
     const httpRequestRetry = httpMock.expectOne(mockRequestErrorUrl);
     httpRequestRetry.error(new ErrorEvent('testing error for the retry'), {
-      status: mockedManagedStatusCode
+      status: mockedManagedUnAllowedStatusCode
     });
     expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy).toHaveBeenCalledWith(['/error', mockedManagedStatusCode]);
+    expect(spy).toHaveBeenCalledWith([
+      '/error',
+      mockedManagedUnAllowedStatusCode
+    ]);
     httpMock.verify();
+  });
+
+  it('should not redirect if an allowed error statuscode is thrown', () => {
+    httpClient.get(mockRequestErrorUrl).subscribe();
+    const httpRequest = httpMock.expectOne(mockRequestErrorUrl);
+    httpRequest.error(
+      new ErrorEvent('testing error for the first time before the retry'),
+      {
+        status: mockedManagedAllowedStatusCode
+      }
+    );
+    expect(spy).toHaveBeenCalledTimes(0);
+    const httpRequestRetry = httpMock.expectOne(mockRequestErrorUrl);
+    httpRequestRetry.error(new ErrorEvent('testing error for the retry'), {
+      status: mockedManagedAllowedStatusCode
+    });
+    expect(spy).toHaveBeenCalledTimes(0);
+    httpMock.verify();
+  });
+
+  describe('allowed errors', () => {
+    let error;
+    beforeEach(() => {
+      error = new HttpErrorResponse({ status: 404 });
+    });
+
+    it('should allow the error', () => {
+      let interceptor = new CampusHttpInterceptor(<Router>{}, {
+        managedStatusCodes: [404],
+        allowedErrors: [
+          {
+            status: 404
+          }
+        ]
+      });
+      expect(interceptor.isAllowedError(error)).toBe(true);
+    });
+
+    it('should not allow the error', () => {
+      error.status = 405;
+      let interceptor = new CampusHttpInterceptor(<Router>{}, {
+        managedStatusCodes: [404],
+        allowedErrors: [
+          {
+            status: 404
+          }
+        ]
+      });
+      expect(interceptor.isAllowedError(error)).toBe(false);
+    });
+
+    it('should allow the error on statusText match', () => {
+      error.statusText = 'how now brown cow';
+      let interceptor = new CampusHttpInterceptor(<Router>{}, {
+        managedStatusCodes: [404],
+        allowedErrors: [
+          {
+            statusText: 'how now brown cow'
+          }
+        ]
+      });
+      expect(interceptor.isAllowedError(error)).toBe(true);
+    });
+
+    it('should deny the error on statusText fail', () => {
+      error.statusText = 'how now green bean';
+      let interceptor = new CampusHttpInterceptor(<Router>{}, {
+        managedStatusCodes: [404],
+        allowedErrors: [
+          {
+            statusText: 'how now brown cow'
+          }
+        ]
+      });
+      expect(interceptor.isAllowedError(error)).toBe(false);
+    });
+
+    it('should allow the error on message regex match', () => {
+      error.message = 'how now brown cow';
+      let interceptor = new CampusHttpInterceptor(<Router>{}, {
+        managedStatusCodes: [404],
+        allowedErrors: [
+          {
+            messageRegex: /(.*)brown(.)*/i
+          }
+        ]
+      });
+      expect(interceptor.isAllowedError(error)).toBe(true);
+    });
+
+    it('should deny the error on message regex fail', () => {
+      error.message = 'how now green bean';
+      let interceptor = new CampusHttpInterceptor(<Router>{}, {
+        managedStatusCodes: [404],
+        allowedErrors: [
+          {
+            messageRegex: /(.*)brown(.)*/i
+          }
+        ]
+      });
+      expect(interceptor.isAllowedError(error)).toBe(false);
+    });
+
+    it('should allow the error on url regex match', () => {
+      error.url = 'cow.svg';
+      let interceptor = new CampusHttpInterceptor(<Router>{}, {
+        managedStatusCodes: [404],
+        allowedErrors: [
+          {
+            urlRegex: /(.*)\.svg/i
+          }
+        ]
+      });
+      expect(interceptor.isAllowedError(error)).toBe(true);
+    });
+
+    it('should deny the error on url regex fail', () => {
+      error.url = 'cow.jpg';
+      let interceptor = new CampusHttpInterceptor(<Router>{}, {
+        managedStatusCodes: [404],
+        allowedErrors: [
+          {
+            urlRegex: /(.*)\.svg/i
+          }
+        ]
+      });
+      expect(interceptor.isAllowedError(error)).toBe(false);
+    });
+
+    it('should match all combinations', () => {
+      error.url = 'cow.svg';
+      error.message = 'how now brown cow';
+      error.status = 422;
+      error.statusText = 'holy cow';
+      let interceptor = new CampusHttpInterceptor(<Router>{}, {
+        managedStatusCodes: [422],
+        allowedErrors: [
+          {
+            status: 422,
+            statusText: 'holy cow',
+            messageRegex: /.*brown.*/,
+            urlRegex: /(.*)\.svg/i
+          }
+        ]
+      });
+      expect(interceptor.isAllowedError(error)).toBe(true);
+    });
+
+    it('should fail if one of them fails', () => {
+      error.url = 'cow.svg';
+      error.message = 'how now brown cow';
+      error.status = 422;
+      error.statusText = 'holy crap';
+      let interceptor = new CampusHttpInterceptor(<Router>{}, {
+        managedStatusCodes: [422],
+        allowedErrors: [
+          {
+            status: 422,
+            statusText: 'holy cow',
+            messageRegex: /.*brown.*/,
+            urlRegex: /(.*)\.svg/i
+          }
+        ]
+      });
+      expect(interceptor.isAllowedError(error)).toBe(false);
+    });
   });
 });
