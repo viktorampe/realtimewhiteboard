@@ -4,6 +4,7 @@ import {
   CredentialFixture,
   CredentialReducer,
   DalState,
+  FEEDBACK_SERVICE_TOKEN,
   LearningAreaFixture,
   PassportUserCredentialInterface,
   PersonFixture,
@@ -62,7 +63,8 @@ describe('AppViewModel', () => {
               .fn()
               .mockReturnValue([mockProfileMenuItem])
           }
-        }
+        },
+        { provide: FEEDBACK_SERVICE_TOKEN, useValue: {} }
       ]
     }).compileComponents();
 

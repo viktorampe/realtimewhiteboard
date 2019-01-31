@@ -1,8 +1,12 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {
   CredentialQueries,
   DalState,
+  EffectFeedbackActions,
+  EffectFeedbackInterface,
   FavoriteInterface,
+  FeedbackService,
+  FEEDBACK_SERVICE_TOKEN,
   LearningAreaFixture,
   PassportUserCredentialInterface,
   PersonInterface,
@@ -26,15 +30,23 @@ export class AppViewModel {
 
   // presentation stream
   public navigationItems$: Observable<NavItem[]>;
+  public bannerFeedback$: Observable<EffectFeedbackInterface>;
 
   constructor(
     private store: Store<DalState>,
-    private navItemService: NavItemService
+    private navItemService: NavItemService,
+    @Inject(FEEDBACK_SERVICE_TOKEN) private feedbackService: FeedbackService
   ) {
     this.initialize();
   }
 
-  initialize() {
+  public onBannerDismiss(event: { action: any; feedbackId: string }): void {
+    this.store.dispatch(
+      new EffectFeedbackActions.DeleteEffectFeedback({ id: event.feedbackId })
+    );
+  }
+
+  private initialize() {
     this.setIntermediateStreams();
     this.subscribeToStreams();
     this.setPresentationStreams();
@@ -72,6 +84,7 @@ export class AppViewModel {
 
   private setPresentationStreams() {
     this.navigationItems$ = this.store.pipe(select(UiQuery.getSideNavItems));
+    this.bannerFeedback$ = this.feedbackService.bannerFeedback$;
   }
 
   private getCurrentUser(): Observable<PersonInterface> {

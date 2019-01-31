@@ -16,6 +16,7 @@ import {
   EffectFeedback,
   Priority
 } from '../effect-feedback/effect-feedback.model';
+import { ActionSuccessful } from './../dal.actions';
 import { DalState } from './../dal.state.interface';
 import {
   AlertsActionTypes,
@@ -142,8 +143,16 @@ export class AlertsEffects {
                   ? 'Melding als gelezen gemarkeerd.'
                   : 'Melding als ongelezen gemarkeerd.',
                 display: action.payload.displayResponse,
-                userActions: null,
-                type: 'success'
+                userActions: [
+                  //TODO: set to null
+                  {
+                    title: 'test',
+                    userAction: new ActionSuccessful({
+                      successfulAction: 'test'
+                    })
+                  }
+                ],
+                type: 'error' //TODO: set to 'success'
               });
 
               return new EffectFeedbackActions.AddEffectFeedback({
