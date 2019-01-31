@@ -2,7 +2,8 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
-import { NotificationItemInterface, UiModule } from '@campus/ui';
+import { AlertFixture, AlertQueueInterface } from '@campus/dal';
+import { UiModule } from '@campus/ui';
 import { BehaviorSubject } from 'rxjs';
 import { AlertsComponent } from './alerts.component';
 import { AlertsViewModel } from './alerts.viewmodel';
@@ -67,16 +68,16 @@ describe('AlertsComponent', () => {
       const unreadSpy = jest
         .spyOn(component, 'setAlertAsUnread')
         .mockImplementation(() => {});
-      component.alerts$ = new BehaviorSubject<NotificationItemInterface[]>([
-        {
+      component.alerts$ = new BehaviorSubject<AlertQueueInterface[]>([
+        new AlertFixture({
           id: 100,
-          icon: 'icon',
-          titleText: 'title',
+          type: 'icon',
+          title: 'title',
           link: 'some-link',
-          notificationText: 'notification text',
-          notificationDate: new Date(),
+          message: 'notification text',
+          sentAt: new Date(),
           read: false
-        }
+        })
       ]);
       fixture.detectChanges();
       const readIcon = fixture.debugElement.query(
@@ -95,16 +96,16 @@ describe('AlertsComponent', () => {
       const unreadSpy = jest
         .spyOn(component, 'setAlertAsUnread')
         .mockImplementation(() => {});
-      component.alerts$ = new BehaviorSubject<NotificationItemInterface[]>([
-        {
+      component.alerts$ = new BehaviorSubject<AlertQueueInterface[]>([
+        new AlertFixture({
           id: 100,
-          icon: 'icon',
-          titleText: 'title',
+          type: 'icon',
+          title: 'title',
           link: 'some-link',
-          notificationText: 'notification text',
-          notificationDate: new Date(),
+          message: 'notification text',
+          sentAt: new Date(),
           read: true
-        }
+        })
       ]);
       fixture.detectChanges();
       const readIcon = fixture.debugElement.query(

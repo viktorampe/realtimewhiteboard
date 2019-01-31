@@ -2,11 +2,11 @@ import { Inject, Injectable } from '@angular/core';
 import {
   AlertActions,
   AlertQueries,
+  AlertQueueInterface,
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   DalState
 } from '@campus/dal';
-import { NotificationItemInterface } from '@campus/ui';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
@@ -15,7 +15,7 @@ import { map, shareReplay } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class AlertsViewModel {
-  public alerts$: Observable<NotificationItemInterface[]>;
+  public alerts$: Observable<AlertQueueInterface[]>;
 
   constructor(
     private store: Store<DalState>,
@@ -59,20 +59,7 @@ export class AlertsViewModel {
     this.alerts$ = this.store.pipe(
       select(AlertQueries.getAll),
       map(alerts => {
-        return alerts //TODO -- this map is implemented twice and needs to be moved!!! see https://github.com/diekeure/campus/issues/510
-          .filter(alert => alert.type !== 'message')
-          .map(alert => {
-            const notification: NotificationItemInterface = {
-              id: alert.id,
-              read: alert.read,
-              icon: alert.type,
-              titleText: alert.title,
-              link: alert.link, // TODO: check the link format (external or internal)
-              notificationText: alert.message,
-              notificationDate: new Date(alert.sentAt)
-            };
-            return notification;
-          });
+        return alerts.filter(alert => alert.type !== 'message');
       }),
       shareReplay(1)
     );

@@ -6,10 +6,10 @@
         class="pages-settings-alerts__info-panel__notification"
       >
         <campus-notification
-          [icon]="alert.icon"
-          [notificationText]="alert.titleText"
+          [icon]="alert.type"
+          [notificationText]="alert.title"
           [routerLink]="alert.link"
-          [notificationDate]="alert.notificationDate"
+          [notificationDate]="alert.sentAt"
           [read]="alert.read"
         ></campus-notification>
         <div class="pages-settings-alerts__info-panel__notification__actions"

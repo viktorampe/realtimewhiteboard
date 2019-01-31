@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NotificationItemInterface } from '@campus/ui';
+import { AlertQueueInterface } from '@campus/dal';
 import { Observable } from 'rxjs';
 import { AlertsViewModel } from './alerts.viewmodel';
 
@@ -12,7 +12,7 @@ export class AlertsComponent implements OnInit {
   pageTitle = 'Meldingen';
   pageIcon = 'notifications';
 
-  alerts$: Observable<NotificationItemInterface[]> = this.viewModel.alerts$;
+  alerts$: Observable<AlertQueueInterface[]> = this.viewModel.alerts$;
 
   constructor(private viewModel: AlertsViewModel) {}
 
