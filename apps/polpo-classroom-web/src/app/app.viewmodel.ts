@@ -2,7 +2,6 @@ import { Inject, Injectable } from '@angular/core';
 import {
   CredentialQueries,
   DalState,
-  EffectFeedbackActions,
   EffectFeedbackInterface,
   FavoriteInterface,
   FeedbackService,
@@ -15,9 +14,9 @@ import {
   UserQueries
 } from '@campus/dal';
 import { DropdownMenuItemInterface, NavItem } from '@campus/ui';
-import { Action, select, Store } from '@ngrx/store';
-import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
-import { filter, map, skipWhile, switchMapTo } from 'rxjs/operators';
+import { select, Store } from '@ngrx/store';
+import { combineLatest, Observable, of } from 'rxjs';
+import { map, skipWhile, switchMapTo } from 'rxjs/operators';
 import { NavItemService } from './services/nav-item-service';
 
 @Injectable({
@@ -27,9 +26,6 @@ export class AppViewModel {
   // intermediate streams
   private sideNavItems$: Observable<NavItem[]>;
   private profileMenuItems$: Observable<DropdownMenuItemInterface[]>;
-  private displayedBannerFeedback$ = new BehaviorSubject<
-    EffectFeedbackInterface
-  >(null);
 
   // presentation stream
   public navigationItems$: Observable<NavItem[]>;
@@ -43,14 +39,8 @@ export class AppViewModel {
     this.initialize();
   }
 
-  public onBannerDismiss(event: { action: Action; feedbackId: string }): void {
-    this.displayedBannerFeedback$.next(null);
-
-    if (event.action) this.store.dispatch(event.action);
-
-    this.store.dispatch(
-      new EffectFeedbackActions.DeleteEffectFeedback({ id: event.feedbackId })
-    );
+  public onBannerDismiss(event): void {
+    this.feedbackService.onBannerDismiss(event);
   }
 
   private initialize() {
@@ -87,20 +77,11 @@ export class AppViewModel {
     this.profileMenuItems$.subscribe(menuItems =>
       this.store.dispatch(new UiActions.SetProfileMenuItems({ menuItems }))
     );
-
-    combineLatest(
-      this.displayedBannerFeedback$.pipe(filter(value => value === null)),
-      this.feedbackService.bannerFeedback$
-    ).subscribe(([displayedFeedback, latestFeedBack]) => {
-      if (displayedFeedback !== latestFeedBack) {
-        this.displayedBannerFeedback$.next(latestFeedBack);
-      }
-    });
   }
 
   private setPresentationStreams() {
     this.navigationItems$ = this.store.pipe(select(UiQuery.getSideNavItems));
-    this.bannerFeedback$ = this.displayedBannerFeedback$;
+    this.bannerFeedback$ = this.feedbackService.bannerFeedback$;
   }
 
   private getCurrentUser(): Observable<PersonInterface> {

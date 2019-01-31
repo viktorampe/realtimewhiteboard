@@ -6,11 +6,12 @@ import {
   MatSnackBarRef,
   SimpleSnackBar
 } from '@angular/material/snack-bar';
-import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Action, Store } from '@ngrx/store';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { filter, map, share, switchMap } from 'rxjs/operators';
 import { DalState } from '../+state';
 import {
+  EffectFeedbackActions,
   EffectFeedbackInterface,
   EffectFeedbackQueries
 } from '../+state/effect-feedback';
@@ -32,6 +33,9 @@ export class FeedbackService implements FeedbackServiceInterface {
   // intermediate
   private errorFeedback$: Observable<EffectFeedbackInterface>;
   private successFeedback$: Observable<EffectFeedbackInterface>;
+  private displayedBannerFeedback$ = new BehaviorSubject<
+    EffectFeedbackInterface
+  >(null);
 
   // presentation
   public bannerFeedback$: Observable<EffectFeedbackInterface>;
@@ -51,6 +55,16 @@ export class FeedbackService implements FeedbackServiceInterface {
     this.setPresentationStreams();
   }
 
+  public onBannerDismiss(event: { action: Action; feedbackId: string }): void {
+    this.displayedBannerFeedback$.next(null);
+
+    if (event.action) this.store.dispatch(event.action);
+
+    this.store.dispatch(
+      new EffectFeedbackActions.DeleteEffectFeedback({ id: event.feedbackId })
+    );
+  }
+
   private getSourceStreams(): void {
     this.nextFeedback$ = this.store
       .select(EffectFeedbackQueries.getNext)
@@ -65,10 +79,35 @@ export class FeedbackService implements FeedbackServiceInterface {
     this.successFeedback$ = this.nextFeedback$.pipe(
       filter(feedback => feedback && feedback.type === 'success')
     );
+
+    combineLatest(
+      this.displayedBannerFeedback$.pipe(filter(value => value === null)),
+      this.errorFeedback$
+    ).subscribe(([displayedFeedback, latestFeedBack]) => {
+      if (!displayedFeedback || displayedFeedback.id !== latestFeedBack.id) {
+        const feedbackToDisplay = { ...latestFeedBack };
+
+        // if needed, add cancel button
+        if (
+          !feedbackToDisplay.userActions ||
+          feedbackToDisplay.userActions.length < 2
+        ) {
+          feedbackToDisplay.userActions = [
+            ...feedbackToDisplay.userActions,
+            {
+              title: 'annuleren',
+              userAction: null
+            }
+          ];
+        }
+
+        this.displayedBannerFeedback$.next(feedbackToDisplay);
+      }
+    });
   }
 
   private setPresentationStreams(): void {
-    this.bannerFeedback$ = this.errorFeedback$;
+    this.bannerFeedback$ = this.displayedBannerFeedback$;
 
     this.snackbarAfterDismiss$ = this.successFeedback$.pipe(
       map(feedback => ({
