@@ -78,7 +78,8 @@
         [iconClass]="'learning-area:' + learningArea.icon"
       ></campus-page-header>
       <div class="pages-bundles__container__books-count">
-        Je hebt {{ sharedInfo.books.length }} boek(en) voor
+        Je hebt {{ sharedInfo.books.length }}
+        {{ sharedInfo.books.length > 1 ? 'boek(en)' : 'boek' }} voor
         {{ learningArea.name }}
       </div>
       <div class="pages-bundles__container__books">
