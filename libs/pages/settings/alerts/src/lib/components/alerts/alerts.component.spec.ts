@@ -2,8 +2,8 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
-import { AlertFixture, AlertQueueInterface } from '@campus/dal';
-import { UiModule } from '@campus/ui';
+import { AlertToNotificationItemPipe } from '@campus/shared';
+import { NotificationItemInterface, UiModule } from '@campus/ui';
 import { BehaviorSubject } from 'rxjs';
 import { AlertsComponent } from './alerts.component';
 import { AlertsViewModel } from './alerts.viewmodel';
@@ -17,7 +17,10 @@ describe('AlertsComponent', () => {
     TestBed.configureTestingModule({
       imports: [UiModule, RouterTestingModule, MatIconModule],
       declarations: [AlertsComponent],
-      providers: [{ provide: AlertsViewModel, useClass: MockAlertsViewModel }]
+      providers: [
+        { provide: AlertsViewModel, useClass: MockAlertsViewModel },
+        AlertToNotificationItemPipe
+      ]
     }).compileComponents();
   }));
 
@@ -33,7 +36,7 @@ describe('AlertsComponent', () => {
     });
 
     it('should initialise the streams', () => {
-      expect(component.alerts$).toBeDefined();
+      expect(component.notifications$).toBeDefined();
     });
   });
   describe('user actions', () => {
@@ -68,16 +71,18 @@ describe('AlertsComponent', () => {
       const unreadSpy = jest
         .spyOn(component, 'setAlertAsUnread')
         .mockImplementation(() => {});
-      component.alerts$ = new BehaviorSubject<AlertQueueInterface[]>([
-        new AlertFixture({
+      component.notifications$ = new BehaviorSubject<
+        NotificationItemInterface[]
+      >([
+        {
           id: 100,
-          type: 'icon',
-          title: 'title',
+          icon: 'icon',
+          titleText: 'title',
           link: 'some-link',
-          message: 'notification text',
-          sentAt: new Date(),
+          notificationText: 'notification text',
+          notificationDate: new Date(),
           read: false
-        })
+        }
       ]);
       fixture.detectChanges();
       const readIcon = fixture.debugElement.query(
@@ -96,16 +101,18 @@ describe('AlertsComponent', () => {
       const unreadSpy = jest
         .spyOn(component, 'setAlertAsUnread')
         .mockImplementation(() => {});
-      component.alerts$ = new BehaviorSubject<AlertQueueInterface[]>([
-        new AlertFixture({
+      component.notifications$ = new BehaviorSubject<
+        NotificationItemInterface[]
+      >([
+        {
           id: 100,
-          type: 'icon',
-          title: 'title',
+          icon: 'icon',
+          titleText: 'title',
           link: 'some-link',
-          message: 'notification text',
-          sentAt: new Date(),
+          notificationText: 'notification text',
+          notificationDate: new Date(),
           read: true
-        })
+        }
       ]);
       fixture.detectChanges();
       const readIcon = fixture.debugElement.query(

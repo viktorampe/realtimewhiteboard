@@ -9,7 +9,6 @@ import {
 } from '@campus/dal';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -56,12 +55,6 @@ export class AlertsViewModel {
   }
 
   private setPresentationStreams(): void {
-    this.alerts$ = this.store.pipe(
-      select(AlertQueries.getAll),
-      map(alerts => {
-        return alerts.filter(alert => alert.type !== 'message');
-      }),
-      shareReplay(1)
-    );
+    this.alerts$ = this.store.pipe(select(AlertQueries.getAll));
   }
 }

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertQueueInterface } from '@campus/dal';
+import { AlertToNotificationItemPipe } from '@campus/shared';
+import { NotificationItemInterface } from '@campus/ui';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { AlertsViewModel } from './alerts.viewmodel';
 
 @Component({
@@ -12,9 +14,16 @@ export class AlertsComponent implements OnInit {
   pageTitle = 'Meldingen';
   pageIcon = 'notifications';
 
-  alerts$: Observable<AlertQueueInterface[]> = this.viewModel.alerts$;
+  notifications$: Observable<NotificationItemInterface[]>;
 
-  constructor(private viewModel: AlertsViewModel) {}
+  constructor(
+    private viewModel: AlertsViewModel,
+    alertToNotif: AlertToNotificationItemPipe
+  ) {
+    this.notifications$ = this.viewModel.alerts$.pipe(
+      map(a => a.map(alertToNotif.transform))
+    );
+  }
 
   ngOnInit() {}
 

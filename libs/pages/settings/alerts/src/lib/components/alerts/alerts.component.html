@@ -1,39 +1,40 @@
 <div class="campus-page">
   <campus-page-header
     [title]="'Instellingen'"
-    [subtitle]="'Meldingen'"
+    [subtitle]="pageTitle"
     [iconClass]="pageIcon"
   >
   </campus-page-header>
 
   <campus-info-panel [titleText]="pageTitle" [titleIcon]="pageIcon">
-    <ng-container *ngIf="(alerts$ | async) as alerts">
-      <ng-container *ngIf="alerts.length > 0; else: noAlerts">
+    <ng-container *ngIf="(notifications$ | async) as notifications">
+      <ng-container *ngIf="notifications.length > 0; else: noAlerts">
         <div
-          *ngFor="let alert of alerts"
+          *ngFor="let notification of notifications"
           class="pages-settings-alerts__info-panel__notification"
         >
           <campus-notification
-            [icon]="alert.type"
-            [notificationText]="alert.title"
-            [routerLink]="alert.link"
-            [notificationDate]="alert.sentAt"
-            [read]="alert.read"
+            [icon]="notification.icon"
+            [notificationText]="notification.titleText"
+            [routerLink]="notification.link"
+            [notificationDate]="notification.notificationDate"
+            [read]="notification.read"
+            [accented]="notification.accented"
           ></campus-notification>
           <div class="pages-settings-alerts__info-panel__notification__actions"
             ><mat-icon
               class="pages-settings-alerts__info-panel__notification__actions__read"
-              [svgIcon]="alert.read ? 'visibility-off' : 'visibility'"
+              [svgIcon]="notification.read ? 'visibility-off' : 'visibility'"
               (click)="
-                alert.read
-                  ? setAlertAsUnread(alert.id)
-                  : setAlertAsRead(alert.id)
+                notification.read
+                  ? setAlertAsUnread(notification.id)
+                  : setAlertAsRead(notification.id)
               "
             ></mat-icon>
             <mat-icon
               class="pages-settings-alerts__info-panel__notification__actions__remove"
               [svgIcon]="'delete'"
-              (click)="removeAlert(alert.id)"
+              (click)="removeAlert(notification.id)"
             ></mat-icon>
           </div>
         </div>
