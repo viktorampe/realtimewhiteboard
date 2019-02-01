@@ -79,7 +79,7 @@ export class HeaderViewModel {
   }
 
   private getAlertNotifications(): Observable<AlertQueueInterface[]> {
-    return this.unreadAlerts$.pipe(shareReplay(1));
+    return this.unreadAlerts$;
   }
 
   private getUnreadAlertCount(): Observable<number> {
