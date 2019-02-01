@@ -113,7 +113,8 @@ export class BundlesViewModel {
         filter: {
           bundleId: bundleId
         },
-        read: true
+        read: true,
+        displayResponse: false
       })
     );
   }
