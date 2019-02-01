@@ -38,6 +38,7 @@ import {
   ENVIRONMENT_SSO_TOKEN,
   ENVIRONMENT_WEBSITE_TOKEN
 } from './interfaces';
+import { AlertToNotificationItemPipe } from './pipes/alert-to-notification/alert-to-notification-pipe';
 import { MailToByCredentialPipe } from './pipes/mail-to/mail-to-credential-pipe';
 import { PersonBadgeFromCredentialPipe } from './pipes/person-badge-from-credential/person-badge-from-credential-pipe';
 import { ScormExerciseService } from './scorm/scorm-exercise.service';
@@ -63,7 +64,8 @@ import {
     PageBarContainerComponent,
     HasPermissionDirective,
     PersonBadgeFromCredentialPipe,
-    MailToByCredentialPipe
+    MailToByCredentialPipe,
+    AlertToNotificationItemPipe
   ],
   exports: [
     HeaderComponent,
@@ -72,7 +74,8 @@ import {
     PageBarContainerComponent,
     HasPermissionDirective,
     PersonBadgeFromCredentialPipe,
-    MailToByCredentialPipe
+    MailToByCredentialPipe,
+    AlertToNotificationItemPipe
   ],
   providers: [
     { provide: FILTER_SERVICE_TOKEN, useClass: FilterService },
@@ -92,7 +95,8 @@ import {
     {
       provide: SNACKBAR_DEFAULT_CONFIG_TOKEN,
       useClass: SnackBarDefaultConfig
-    }
+    },
+    AlertToNotificationItemPipe
   ]
 })
 export class SharedModule {

@@ -14,11 +14,11 @@ import {
   UserActions,
   UserReducer
 } from '@campus/dal';
-import { NotificationItemInterface } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { ENVIRONMENT_ALERTS_FEATURE_TOKEN } from '../interfaces/environment.injectiontokens';
 import { EnvironmentAlertsFeatureInterface } from '../interfaces/environment.interfaces';
+import { AlertToNotificationItemPipe } from '../pipes/alert-to-notification/alert-to-notification-pipe';
 import { HEADER_RESOLVER_TOKEN } from './header.resolver';
 import { HeaderViewModel } from './header.viewmodel';
 
@@ -77,6 +77,7 @@ describe('headerViewModel', () => {
       ],
       providers: [
         HeaderViewModel,
+        AlertToNotificationItemPipe,
         {
           provide: AUTH_SERVICE_TOKEN,
           useValue: { userId: 1 }
@@ -151,20 +152,8 @@ describe('headerViewModel', () => {
       );
     });
     it('should setup the alert notifications stream', () => {
-      const expected: NotificationItemInterface[] = unreadAlerts.map(
-        (alert: Alert) => {
-          return {
-            icon: alert.icon,
-            titleText: alert.title,
-            link: alert.link,
-            notificationText: alert.message,
-            notificationDate: new Date(alert.sentAt)
-          };
-        }
-      );
-
       expect(headerViewModel.alertNotifications$).toBeObservable(
-        hot('a', { a: expected })
+        hot('a', { a: unreadAlerts })
       );
     });
 
