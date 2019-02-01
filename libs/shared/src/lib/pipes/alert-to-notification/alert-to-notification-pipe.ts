@@ -11,12 +11,17 @@ export class AlertToNotificationItemPipe implements PipeTransform {
    * returns a notification object
    */
   transform(alert: AlertQueueInterface): NotificationItemInterface {
+    let link = alert.link;
+    //todo clean up once API changed URLs
+    if (link.match(/.*\.polpo\.(localhost|be)\/#\//i)) {
+      link = link.replace('/#/', '/');
+    }
     return {
       titleText: alert.title,
       read: alert.read,
       accented: alert.type === 'marketing',
       icon: alert.type,
-      link: alert.link ? alert.link.replace('/#/', '/') : undefined, //todo remove when sanitized from API
+      link: link,
       notificationText: alert.message,
       notificationDate: new Date(alert.sentAt)
     };
