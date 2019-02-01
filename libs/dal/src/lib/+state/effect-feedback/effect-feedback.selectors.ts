@@ -16,9 +16,9 @@ export const getNext = createSelector(
 export const getFeedbackForAction = createSelector(
   selectEffectFeedbackState,
   (state: State, props: { actionType: string }) => {
-    const filteredIds = (state.ids as string[]).filter(
+    const filteredId = (state.ids as string[]).find(
       id => state.entities[id].triggerAction.type === props.actionType
     );
-    return state.entities[filteredIds[0]];
+    return state.entities[filteredId];
   }
 );
