@@ -14,7 +14,6 @@ export class AppComponent {
   public bannerFeedback$ = this.appViewModel.bannerFeedback$;
   sideNavOpen$: Observable<boolean>;
 
-
   /**
    * the link to the promo website, used on the logo
    */
@@ -30,6 +29,5 @@ export class AppComponent {
 
   protected onBannerDismiss(event) {
     this.appViewModel.onBannerDismiss(event);
-
-
+  }
 }
