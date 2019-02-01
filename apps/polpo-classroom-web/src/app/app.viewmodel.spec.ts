@@ -7,6 +7,7 @@ import {
   DalState,
   EffectFeedbackActions,
   EffectFeedbackFixture,
+  EffectFeedbackReducer,
   LearningAreaFixture,
   PassportUserCredentialInterface,
   PersonFixture,
@@ -22,6 +23,7 @@ import { SNACKBAR_SERVICE_TOKEN } from '@campus/shared';
 import { DropdownMenuItemInterface, NavItem } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
+import { of } from 'rxjs';
 import { AppResolver } from './app.resolver';
 import { AppViewModel } from './app.viewmodel';
 import { NavItemService } from './services/nav-item-service';
@@ -53,7 +55,8 @@ describe('AppViewModel', () => {
             NAME: CredentialReducer.NAME,
             reducer: CredentialReducer.reducer,
             initialState: CredentialReducer.initialState
-          }
+          },
+          EffectFeedbackReducer
         ])
       ],
       providers: [
@@ -68,7 +71,16 @@ describe('AppViewModel', () => {
               .mockReturnValue([mockProfileMenuItem])
           }
         },
-        { provide: SNACKBAR_SERVICE_TOKEN, useValue: {} }
+        {
+          provide: SNACKBAR_SERVICE_TOKEN,
+          useValue: {
+            setupStreams: () => {},
+            snackbarAfterDismiss$: of({
+              dismissedWithAction: false,
+              feedback: new EffectFeedbackFixture()
+            })
+          }
+        }
       ]
     }).compileComponents();
 
@@ -185,7 +197,7 @@ describe('AppViewModel', () => {
         triggerAction: null,
         message: 'This is a message',
         type: 'success',
-        userActions: [mockAction, mockAction],
+        userActions: [mockAction],
         timeStamp: 1,
         display: true,
         priority: Priority.HIGH,
@@ -262,8 +274,10 @@ describe('AppViewModel', () => {
         const cancelBannerAction = { title: 'annuleren', userAction: null };
 
         // add the cancel button
-        const expectedFeedback = mockFeedBack;
-        expectedFeedback.userActions.push(cancelBannerAction);
+        const expectedFeedback = {
+          ...mockFeedBack,
+          ...{ userActions: [...mockFeedBack.userActions, cancelBannerAction] }
+        };
 
         expect(viewModel.bannerFeedback$).toBeObservable(
           hot('a', { a: expectedFeedback })

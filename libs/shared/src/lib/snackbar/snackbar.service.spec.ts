@@ -21,7 +21,6 @@ import {
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
   DalActions,
-  DalState,
   EffectFeedbackActions,
   EffectFeedbackFixture,
   EffectFeedbackInterface,
@@ -30,6 +29,8 @@ import {
   Priority
 } from '@campus/dal';
 import { Action, Store, StoreModule } from '@ngrx/store';
+import { BehaviorSubject } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { SnackBarService } from '.';
 import {
   SnackBarDefaultConfig,
@@ -38,10 +39,10 @@ import {
 
 // tslint:disable:no-use-before-declare
 describe('SnackBarService', () => {
-  let store: Store<DalState>;
   let mockFeedBack: EffectFeedbackInterface;
   let service: SnackBarService;
   let defaultSnackbarConfig: MatSnackBarConfig;
+  let feedback$: BehaviorSubject<EffectFeedbackInterface>;
 
   let testViewContainerRef: ViewContainerRef;
   let viewContainerFixture: ComponentFixture<ComponentWithChildViewContainer>;
@@ -83,7 +84,6 @@ describe('SnackBarService', () => {
       ]
     }).compileComponents();
 
-    store = TestBed.get(Store);
     service = TestBed.get(SnackBarService);
 
     viewContainerFixture = TestBed.createComponent(
@@ -96,6 +96,9 @@ describe('SnackBarService', () => {
 
     defaultSnackbarConfig = TestBed.get(SNACKBAR_DEFAULT_CONFIG_TOKEN);
     defaultSnackbarConfig.viewContainerRef = testViewContainerRef;
+
+    feedback$ = new BehaviorSubject<EffectFeedbackInterface>(null);
+    service.setupStreams(feedback$);
   });
 
   describe('creation', () => {
@@ -124,11 +127,11 @@ describe('SnackBarService', () => {
     it('should call the snackbarService, without a userAction', () => {
       snackbar.open = jest.fn();
       const mockFeedBackWithoutActions = { ...mockFeedBack, userActions: null };
-      store.dispatch(
-        new EffectFeedbackActions.AddEffectFeedback({
-          effectFeedback: mockFeedBackWithoutActions
-        })
-      );
+
+      // subscriber needed
+      service.snackbarAfterDismiss$.pipe(take(1)).subscribe();
+
+      feedback$.next(mockFeedBackWithoutActions);
 
       expect(snackbar.open).toHaveBeenCalled();
       expect(snackbar.open).toHaveBeenCalledTimes(1);
@@ -141,11 +144,11 @@ describe('SnackBarService', () => {
 
     it('should call the snackbarService, with a userAction', () => {
       snackbar.open = jest.fn();
-      store.dispatch(
-        new EffectFeedbackActions.AddEffectFeedback({
-          effectFeedback: mockFeedBack
-        })
-      );
+
+      // subscriber needed
+      service.snackbarAfterDismiss$.pipe(take(1)).subscribe();
+
+      feedback$.next(mockFeedBack);
 
       expect(snackbar.open).toHaveBeenCalled();
       expect(snackbar.open).toHaveBeenCalledTimes(1);
@@ -158,11 +161,11 @@ describe('SnackBarService', () => {
 
     it('should use the default setings when calling the snackbar', () => {
       snackbar.open = jest.fn();
-      store.dispatch(
-        new EffectFeedbackActions.AddEffectFeedback({
-          effectFeedback: mockFeedBack
-        })
-      );
+
+      // subscriber needed
+      service.snackbarAfterDismiss$.pipe(take(1)).subscribe();
+
+      feedback$.next(mockFeedBack);
 
       expect(snackbar.open).toHaveBeenCalledWith(
         jasmine.anything(),
@@ -171,46 +174,23 @@ describe('SnackBarService', () => {
       );
     });
 
-    it('should dispatch a removeFeedbackAction when the snackbar is dismissed without an action', fakeAsync(() => {
-      store.dispatch(
-        new EffectFeedbackActions.AddEffectFeedback({
-          effectFeedback: mockFeedBack
-        })
-      );
-      store.dispatch = jest.fn();
+    it('should output the snackBar afterDismiss', fakeAsync(() => {
+      const expectedAction = {
+        dismissedWithAction: true,
+        feedback: mockFeedBack
+      };
 
-      snackbar.dismiss();
+      // subscriber needed
+      service.snackbarAfterDismiss$.pipe(take(1)).subscribe(fb => {
+        expect(fb).toEqual(expectedAction);
+      });
+
+      feedback$.next(mockFeedBack);
+
+      snackbar._openedSnackBarRef.dismissWithAction();
       viewContainerFixture.detectChanges(); // allow animations to pass
       flush(); // allow async methods to complete
-
-      expect(store.dispatch).toHaveBeenCalled();
-      expect(store.dispatch).toHaveBeenCalledTimes(1);
-      expect(store.dispatch).toHaveBeenCalledWith(removeFeedbackAction);
     }));
-
-    it(
-      'should dispatch a removeFeedbackAction and the userActions ' +
-        'when the snackbar is dismissed with an action',
-      fakeAsync(() => {
-        store.dispatch(
-          new EffectFeedbackActions.AddEffectFeedback({
-            effectFeedback: mockFeedBack
-          })
-        );
-        store.dispatch = jest.fn();
-
-        snackbar._openedSnackBarRef.dismissWithAction();
-        viewContainerFixture.detectChanges(); // allow animations to pass
-        flush(); // allow async methods to complete
-
-        const expectedAction = mockFeedBack.userActions[0].userAction;
-
-        expect(store.dispatch).toHaveBeenCalled();
-        expect(store.dispatch).toHaveBeenCalledTimes(2);
-        expect(store.dispatch).toHaveBeenCalledWith(removeFeedbackAction);
-        expect(store.dispatch).toHaveBeenCalledWith(expectedAction);
-      })
-    );
   });
 });
 
