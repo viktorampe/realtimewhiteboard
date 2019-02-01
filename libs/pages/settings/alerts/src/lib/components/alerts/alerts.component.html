@@ -1,35 +1,46 @@
-<campus-info-panel [titleText]="pageTitle" [titleIcon]="pageIcon">
-  <ng-container *ngIf="(alerts$ | async) as alerts">
-    <ng-container *ngIf="alerts.length > 0; else: noAlerts">
-      <div
-        *ngFor="let alert of alerts"
-        class="pages-settings-alerts__info-panel__notification"
-      >
-        <campus-notification
-          [icon]="alert.type"
-          [notificationText]="alert.title"
-          [routerLink]="alert.link"
-          [notificationDate]="alert.sentAt"
-          [read]="alert.read"
-        ></campus-notification>
-        <div class="pages-settings-alerts__info-panel__notification__actions"
-          ><mat-icon
-            class="pages-settings-alerts__info-panel__notification__actions__read"
-            [svgIcon]="alert.read ? 'visibility-off' : 'visibility'"
-            (click)="
-              alert.read ? setAlertAsUnread(alert.id) : setAlertAsRead(alert.id)
-            "
-          ></mat-icon>
-          <mat-icon
-            class="pages-settings-alerts__info-panel__notification__actions__remove"
-            [svgIcon]="'delete'"
-            (click)="removeAlert(alert.id)"
-          ></mat-icon>
+<div class="campus-page">
+  <campus-page-header
+    [title]="'Instellingen'"
+    [subtitle]="'Meldingen'"
+    [iconClass]="'account'"
+  >
+  </campus-page-header>
+
+  <campus-info-panel [titleText]="pageTitle" [titleIcon]="pageIcon">
+    <ng-container *ngIf="(alerts$ | async) as alerts">
+      <ng-container *ngIf="alerts.length > 0; else: noAlerts">
+        <div
+          *ngFor="let alert of alerts"
+          class="pages-settings-alerts__info-panel__notification"
+        >
+          <campus-notification
+            [icon]="alert.type"
+            [notificationText]="alert.title"
+            [routerLink]="alert.link"
+            [notificationDate]="alert.sentAt"
+            [read]="alert.read"
+          ></campus-notification>
+          <div class="pages-settings-alerts__info-panel__notification__actions"
+            ><mat-icon
+              class="pages-settings-alerts__info-panel__notification__actions__read"
+              [svgIcon]="alert.read ? 'visibility-off' : 'visibility'"
+              (click)="
+                alert.read
+                  ? setAlertAsUnread(alert.id)
+                  : setAlertAsRead(alert.id)
+              "
+            ></mat-icon>
+            <mat-icon
+              class="pages-settings-alerts__info-panel__notification__actions__remove"
+              [svgIcon]="'delete'"
+              (click)="removeAlert(alert.id)"
+            ></mat-icon>
+          </div>
         </div>
-      </div>
+      </ng-container>
+      <ng-template #noAlerts
+        ><p> Je hebt op dit moment geen meldingen. </p></ng-template
+      >
     </ng-container>
-    <ng-template #noAlerts
-      ><p> Je hebt op dit moment geen meldingen. </p></ng-template
-    >
-  </ng-container>
-</campus-info-panel>
+  </campus-info-panel>
+</div>
