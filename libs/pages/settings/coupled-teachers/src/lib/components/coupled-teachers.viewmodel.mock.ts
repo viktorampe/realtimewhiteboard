@@ -30,11 +30,11 @@ export class MockCoupledTeachersViewModel
   public linkedPersons$ = new BehaviorSubject<PersonInterface[]>([
     new PersonFixture({
       displayName: 'Teacher One',
-      teacherInfo: { publicKey: 'foo' }
+      teacherInfo: { publicKey: 'adsfss' }
     }),
     new PersonFixture({
       displayName: 'Teacher Two',
-      teacherInfo: { publicKey: 'bar' }
+      teacherInfo: { publicKey: 'adsf' }
     })
   ]);
 
