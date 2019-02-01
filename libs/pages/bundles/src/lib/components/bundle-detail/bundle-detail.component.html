@@ -68,7 +68,7 @@
           #bundleListview
           [listFormat]="listFormat$ | async"
           [placeHolderText]="'De toegepaste filter bevat geen resultaten.'"
-          [multiSelect]="true"
+          [multiSelect]="allowMultiSelect$ | async"
         >
           <campus-content-thumbnail
             *ngFor="let unlockedcontent of filteredUnlockedContents"

@@ -119,6 +119,14 @@ export class BundlesViewModel {
     );
   }
 
+  allowMultiSelect(): Observable<boolean> {
+    return this.authService.getCurrent().pipe(
+      map(user => {
+        return user.type === 'teacher';
+      })
+    );
+  }
+
   changeListFormat(listFormat: ListFormat): void {
     this.store.dispatch(new UiActions.SetListFormat({ listFormat }));
   }

@@ -47,6 +47,8 @@ export class BundleDetailComponent
   bundleOwner$: Observable<PersonInterface>;
   unlockedContents$: Observable<UnlockedContent[]>;
 
+  allowMultiSelect$: Observable<boolean>;
+
   @ViewChild(FilterTextInputComponent)
   filterTextInput: FilterTextInputComponent<UnlockedContent[], UnlockedContent>;
 
@@ -72,6 +74,7 @@ export class BundleDetailComponent
   ) {}
 
   ngOnInit(): void {
+    this.allowMultiSelect$ = this.bundlesViewModel.allowMultiSelect();
     this.learningArea$ = this.getLearningArea();
     this.bundle$ = this.getBundle();
     this.bundleOwner$ = this.bundlesViewModel.getBundleOwner(this.bundle$);
