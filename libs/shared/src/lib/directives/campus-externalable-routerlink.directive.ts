@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 })
 export class CampusExternalableRouterlinkDirective {
   @Input()
-  campusExternalableRouterlink: string;
+  campusRouterLink: string;
 
   constructor(private eltRef: ElementRef, private router: Router) {}
 
