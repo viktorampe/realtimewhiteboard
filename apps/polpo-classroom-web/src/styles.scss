@@ -104,6 +104,9 @@ body {
 // include app specific css
 @import 'scss/social-media';
 
+[ng-reflect-router-link] {
+  cursor: pointer;
+}
 /*
  * App styles
  */

@@ -12,7 +12,7 @@ export class EffectFeedbackFixture implements EffectFeedbackInterface {
   userActions = [];
   timeStamp = Date.now();
   display = true;
-  priority = Priority.HIGH;
+  priority = Priority.NORM;
   icon = null;
 
   constructor(props: Partial<EffectFeedbackInterface> = {}) {

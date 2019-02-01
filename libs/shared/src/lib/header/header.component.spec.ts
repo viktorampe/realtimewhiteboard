@@ -11,6 +11,7 @@ import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { hot } from '@nrwl/nx/testing';
 import { BehaviorSubject, Subject } from 'rxjs';
+import { AlertToNotificationItemPipe } from '../pipes/alert-to-notification/alert-to-notification-pipe';
 import { HeaderComponent } from './header.component';
 import { HeaderViewModel } from './header.viewmodel';
 import { MockHeaderViewModel } from './header.viewmodel.mock';
@@ -26,6 +27,7 @@ describe('HeaderComponent', () => {
       imports: [UiModule, RouterTestingModule, MatIconModule, MatBadgeModule],
       declarations: [HeaderComponent],
       providers: [
+        AlertToNotificationItemPipe,
         {
           provide: HeaderViewModel,
           useClass: MockHeaderViewModel

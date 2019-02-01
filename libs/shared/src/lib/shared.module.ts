@@ -21,6 +21,10 @@ import { OpenStaticContentService } from './content/open-static-content.service'
 import { HeaderComponent } from './header/header.component';
 import { CampusHttpInterceptor } from './interceptors/campus-http.interceptor';
 import {
+  HeaderResolver,
+  HEADER_RESOLVER_TOKEN
+} from './header/header.resolver';
+import {
   EnvironmentAlertsFeatureInterface,
   EnvironmentApiInterface,
   EnvironmentErrorManagementFeatureInterface,
@@ -36,6 +40,7 @@ import {
   ENVIRONMENT_SSO_TOKEN,
   ENVIRONMENT_WEBSITE_TOKEN
 } from './interfaces';
+import { AlertToNotificationItemPipe } from './pipes/alert-to-notification/alert-to-notification-pipe';
 import { MailToByCredentialPipe } from './pipes/mail-to/mail-to-credential-pipe';
 import { PersonBadgeFromCredentialPipe } from './pipes/person-badge-from-credential/person-badge-from-credential-pipe';
 import { ScormExerciseService } from './scorm/scorm-exercise.service';
@@ -56,7 +61,8 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     PageBarContainerComponent,
     HasPermissionDirective,
     PersonBadgeFromCredentialPipe,
-    MailToByCredentialPipe
+    MailToByCredentialPipe,
+    AlertToNotificationItemPipe
   ],
   exports: [
     HeaderComponent,
@@ -65,7 +71,8 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     PageBarContainerComponent,
     HasPermissionDirective,
     PersonBadgeFromCredentialPipe,
-    MailToByCredentialPipe
+    MailToByCredentialPipe,
+    AlertToNotificationItemPipe
   ],
   providers: [
     { provide: FILTER_SERVICE_TOKEN, useClass: FilterService },
@@ -79,7 +86,8 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     {
       provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
       useClass: OpenStaticContentService
-    }
+    },
+    { provide: HEADER_RESOLVER_TOKEN, useClass: HeaderResolver }
   ]
 })
 export class SharedModule {
