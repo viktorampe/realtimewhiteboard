@@ -24,7 +24,7 @@
             cursor: $pages-settings-alerts__info-panel__notification__actions__element-cursor;
             margin: $pages-settings-alerts__info-panel__notification__actions__element-margin;
           }
-          mat-icon:last-child {
+          *:last-child {
             margin: $pages-settings-alerts__info-panel__notification__actions__element-margin-last;
           }
         }
