@@ -15,21 +15,23 @@
                    *ngIf="(bundle$ | async) as bundle; else: noBundle">
   <campus-side-sheet-header></campus-side-sheet-header>
   <campus-side-sheet-body>
-    <ng-container *ngIf="list && (list.selectedItems$ | async) as selectedItems"
-                  [ngSwitch]="selectedItems.length">
-      <campus-info-panel-bundle *ngSwitchCase="0"
-                                [bundle]="bundle"
-                                [teacher]="bundleOwner$ | async">
-      </campus-info-panel-bundle>
-      <campus-info-panel-content *ngSwitchCase="1"
-                                 [content]="selectedItems[0]"
-                                 [status]="((selectedStudentContentStatus$ | async)?.contentStatusId) || 0"
-                                 [statusOptions]="contentStatusOptions$ | async"
-                                 (saveStatus)="onSaveStatus($event)">
-      </campus-info-panel-content>
-      <campus-info-panel-contents *ngSwitchDefault
-                                  [contents]="selectedItems">
-      </campus-info-panel-contents>
+    <ng-container *ngIf="list">
+      <ng-container *ngIf="(list.selectedItems$ | async) as selectedItems"
+                    [ngSwitch]="selectedItems.length">
+        <campus-info-panel-bundle *ngSwitchCase="0"
+                                  [bundle]="bundle"
+                                  [teacher]="bundleOwner$ | async">
+        </campus-info-panel-bundle>
+        <campus-info-panel-content *ngSwitchCase="1"
+                                   [content]="selectedItems[0]"
+                                   [status]="(selectedStudentContentStatus$ | async)?.contentStatusId || 0"
+                                   [statusOptions]="contentStatusOptions$ | async"
+                                   (saveStatus)="onSaveStatus($event)">
+        </campus-info-panel-content>
+        <campus-info-panel-contents *ngSwitchDefault
+                                    [contents]="selectedItems">
+        </campus-info-panel-contents>
+      </ng-container>
     </ng-container>
   </campus-side-sheet-body>
 

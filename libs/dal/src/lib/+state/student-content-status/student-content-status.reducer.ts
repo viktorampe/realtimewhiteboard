@@ -27,7 +27,7 @@ export function reducer(
   action: StudentContentStatusesActions
 ): State {
   switch (action.type) {
-    case StudentContentStatusesActionTypes.AddStudentContentStatus: {
+    case StudentContentStatusesActionTypes.StudentContentStatusAdded: {
       return adapter.addOne(action.payload.studentContentStatus, state);
     }
 

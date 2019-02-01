@@ -7,6 +7,7 @@ import {
   LearningAreaInterface,
   PersonFixture,
   PersonInterface,
+  StudentContentStatusInterface,
   UnlockedContent,
   UnlockedContentFixture
 } from '@campus/dal';
@@ -64,6 +65,15 @@ export class MockViewModel implements ViewModelInterface<BundlesViewModel> {
   changeListFormat() {}
 
   setBundleAlertRead() {}
+
+  getStudentContentStatus(): Observable<StudentContentStatusInterface> {
+    return of({
+      id: 1,
+      personId: 1,
+      unlockedContentId: 1,
+      contentStatusId: 1
+    });
+  }
 
   saveContentStatus() {}
 

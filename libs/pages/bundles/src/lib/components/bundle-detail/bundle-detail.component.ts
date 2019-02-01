@@ -99,18 +99,7 @@ export class BundleDetailComponent
       )
     );
 
-    this.selectedUnlockedContent$ = combineLatest(
-      this.list.selectedItems$,
-      this.unlockedContents$
-    ).pipe(
-      map(([selectedContent, unlockedContent]) => {
-        if (selectedContent.length !== 1) {
-          return null;
-        }
-        return unlockedContent.find(uc => uc.content === selectedContent[0]);
-      }),
-      filter(value => !!value)
-    );
+    this.selectedUnlockedContent$ = this.getSelectedUnlockedContent();
     this.selectedStudentContentStatus$ = this.getSelectedStudentContentStatus();
 
     // Needed to avoid ExpressionChangedAfterItHasBeenCheckedError
@@ -130,7 +119,6 @@ export class BundleDetailComponent
   }
 
   onSaveStatus(value: SelectOption): void {
-    console.log(value);
     combineLatest(
       this.selectedUnlockedContent$,
       this.selectedStudentContentStatus$
@@ -145,17 +133,30 @@ export class BundleDetailComponent
       });
   }
 
-  private getSelectedStudentContentStatus() {
-    return this.selectedUnlockedContent$.pipe(
-      switchMap(uc => {
-        return this.bundlesViewModel.getStudentContentStatus(uc.id);
+  private getSelectedUnlockedContent(): Observable<UnlockedContentInterface> {
+    return combineLatest(this.list.selectedItems$, this.unlockedContents$).pipe(
+      map(([selectedContent, unlockedContent]) => {
+        if (selectedContent.length !== 1) {
+          return null;
+        }
+        return unlockedContent.find(uc => uc.content === selectedContent[0]);
       }),
+      filter(value => !!value)
+    );
+  }
+
+  private getSelectedStudentContentStatus(): Observable<
+    StudentContentStatusInterface
+  > {
+    return this.selectedUnlockedContent$.pipe(
+      switchMap(uc => this.bundlesViewModel.getStudentContentStatus(uc.id)),
       map(studentContentStatus => {
         if (!studentContentStatus) {
           return null;
         }
         return studentContentStatus;
-      })
+      }),
+      shareReplay(1)
     );
   }
 

@@ -162,7 +162,6 @@ export class BundlesViewModel {
     contentStatusId: number,
     studentContentStatusId: number
   ): void {
-    console.log(contentStatusId);
     if (studentContentStatusId) {
       this.store.dispatch(
         new StudentContentStatusActions.UpdateStudentContentStatus({
@@ -228,7 +227,8 @@ export class BundlesViewModel {
             });
           }
         );
-      })
+      }),
+      shareReplay(1)
     );
   }
 
