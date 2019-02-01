@@ -16,7 +16,6 @@ import { HasPermissionDirective } from './auth/has-permission.directive';
 import { PermissionService } from './auth/permission.service';
 import { PERMISSION_SERVICE_TOKEN } from './auth/permission.service.interface';
 import { PageBarContainerComponent } from './components/page-bar-container/page-bar-container.component';
-import { RouteNotFoundComponent } from './components/route-not-found/route-not-found-component';
 import { OPEN_STATIC_CONTENT_SERVICE_TOKEN } from './content/open-static-content.interface';
 import { OpenStaticContentService } from './content/open-static-content.service';
 import { CampusExternalableRouterlinkDirective } from './directives/campus-externalable-routerlink.directive';
@@ -59,7 +58,6 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     HasPermissionDirective,
     PersonBadgeFromCredentialPipe,
     MailToByCredentialPipe,
-    RouteNotFoundComponent,
     CampusExternalableRouterlinkDirective
   ],
   exports: [
@@ -70,7 +68,6 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     HasPermissionDirective,
     PersonBadgeFromCredentialPipe,
     MailToByCredentialPipe,
-    RouteNotFoundComponent,
     CampusExternalableRouterlinkDirective
   ],
   providers: [
