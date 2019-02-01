@@ -4,10 +4,8 @@ import { Permissions } from '@campus/dal';
 import {
   AuthenticationGuard,
   CoupledTeacherGuard,
-  PermissionGuard,
-  RedirectionGuard
+  PermissionGuard
 } from '@campus/guards';
-import { RouteNotFoundComponent } from '@campus/shared';
 import { AppResolver } from './app.resolver';
 
 const routes: Routes = [
@@ -106,7 +104,7 @@ const routes: Routes = [
   },
   {
     path: 'error',
-    redirectTo: 'dev'
+    loadChildren: '@campus/pages/error#PagesErrorModule'
   },
   {
     path: 'dev',
@@ -115,8 +113,7 @@ const routes: Routes = [
   },
   {
     path: '**',
-    component: RouteNotFoundComponent,
-    canActivate: [RedirectionGuard]
+    redirectTo: 'error/404'
   }
 ];
 
