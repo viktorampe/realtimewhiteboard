@@ -12,13 +12,13 @@ import {
   PersonFixture,
   PersonInterface,
   Priority,
-  SNACKBAR_SERVICE_TOKEN,
   StateFeatureBuilder,
   UiActions,
   UiReducer,
   UserActions,
   UserReducer
 } from '@campus/dal';
+import { SNACKBAR_SERVICE_TOKEN } from '@campus/shared';
 import { DropdownMenuItemInterface, NavItem } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';

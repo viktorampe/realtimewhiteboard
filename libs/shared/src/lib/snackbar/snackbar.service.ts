@@ -16,6 +16,8 @@ export interface SnackBarServiceInterface {
     dismissedWithAction: boolean;
     feedback: EffectFeedbackInterface;
   }>;
+
+  setupStreams(feedback$: Observable<EffectFeedbackInterface>);
 }
 
 @Injectable({

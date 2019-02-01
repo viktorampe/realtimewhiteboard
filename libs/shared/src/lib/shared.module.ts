@@ -42,6 +42,11 @@ import { MailToByCredentialPipe } from './pipes/mail-to/mail-to-credential-pipe'
 import { PersonBadgeFromCredentialPipe } from './pipes/person-badge-from-credential/person-badge-from-credential-pipe';
 import { ScormExerciseService } from './scorm/scorm-exercise.service';
 import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.interface';
+import { SnackBarService, SNACKBAR_SERVICE_TOKEN } from './snackbar';
+import {
+  SnackBarDefaultConfig,
+  SNACKBAR_DEFAULT_CONFIG_TOKEN
+} from './snackbar/snackbar.config';
 
 @NgModule({
   imports: [
@@ -82,7 +87,12 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
       provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
       useClass: OpenStaticContentService
     },
-    { provide: HEADER_RESOLVER_TOKEN, useClass: HeaderResolver }
+    { provide: HEADER_RESOLVER_TOKEN, useClass: HeaderResolver },
+    { provide: SNACKBAR_SERVICE_TOKEN, useClass: SnackBarService },
+    {
+      provide: SNACKBAR_DEFAULT_CONFIG_TOKEN,
+      useClass: SnackBarDefaultConfig
+    }
   ]
 })
 export class SharedModule {

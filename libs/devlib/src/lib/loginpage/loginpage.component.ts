@@ -10,9 +10,7 @@ import {
   EffectFeedbackActions,
   EffectFeedbackInterface,
   EffectFeedbackQueries,
-  FeedbackServiceInterface,
   Priority,
-  SNACKBAR_SERVICE_TOKEN,
   UserActions
 } from '@campus/dal';
 import { AlertQueueApi, PersonApi } from '@diekeure/polpo-api-angular-sdk';
@@ -51,9 +49,7 @@ export class LoginpageComponent implements OnInit {
     private alertApi: AlertQueueApi,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     private store: Store<AlertReducer.State>,
-    private router: Router,
-    @Inject(SNACKBAR_SERVICE_TOKEN)
-    private snackBarService: FeedbackServiceInterface
+    private router: Router
   ) {}
 
   ngOnInit() {
