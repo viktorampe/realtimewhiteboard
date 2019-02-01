@@ -20,7 +20,7 @@
   $ui-button--hover-background-color: $ui-button-color !default;
   $ui-button--hover-color: $ui-button-background-color !default;
   // --active
-  $ui-button--active-background-color: $ui-button-background-color !default;
+  $ui-button--active-background-color: $ui-button-background-color-1 !default;
   $ui-button--active-color: $ui-button-color !default;
   // --rounded-corner
   $ui-button--rounded-corner-border-radius: $ui-button-font-size / 4 !default;
@@ -97,12 +97,16 @@
     &:last-child {
       margin-right: 0;
     }
-    &:active {
-      background-color: darken($ui-button-background-color, 5%);
+    &:active,
+    &.ui-button--active {
+      background-color: $ui-button--active-background-color;
       color: $ui-button--active-color;
     }
     &:hover {
       background-color: darken($ui-button-background-color, 5%);
+    }
+    &.ui-button--active:hover {
+      background-color: darken($ui-button--active-background-color, 5%);
     }
   }
   // --bordered
@@ -148,7 +152,8 @@
   // --danger
   .ui-button--danger {
     background-color: $ui-button--danger-background-color;
-    &:active {
+    &:active,
+    &.ui-button--active {
       background-color: $ui-button--danger--active-background-color;
       color: $ui-button--danger--active-color;
     }
@@ -171,7 +176,8 @@
   // --warning
   .ui-button--warning {
     background-color: $ui-button--warning-background-color;
-    &:active {
+    &:active,
+    &.ui-button--active {
       background-color: $ui-button--warning--active-background-color;
       color: $ui-button--warning--active-color;
     }
@@ -196,9 +202,11 @@
     color: $ui-button-color;
     background-color: $ui-button--primary-background-color;
     &:hover,
-    &:active {
+    &:active,
+    &.ui-button--active {
       background-color: darken($ui-button--primary-background-color, 5%);
-    } // --primary--disabled
+    }
+    // --primary--disabled
     &.ui-button--disabled {
       background-color: lighten($ui-button--primary-background-color, 30%);
       color: $ui-button-color;

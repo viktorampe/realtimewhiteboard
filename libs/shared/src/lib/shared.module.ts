@@ -19,6 +19,10 @@ import { OPEN_STATIC_CONTENT_SERVICE_TOKEN } from './content/open-static-content
 import { OpenStaticContentService } from './content/open-static-content.service';
 import { HeaderComponent } from './header/header.component';
 import {
+  HeaderResolver,
+  HEADER_RESOLVER_TOKEN
+} from './header/header.resolver';
+import {
   EnvironmentAlertsFeatureInterface,
   EnvironmentApiInterface,
   EnvironmentErrorManagementFeatureInterface,
@@ -77,7 +81,8 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     {
       provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
       useClass: OpenStaticContentService
-    }
+    },
+    { provide: HEADER_RESOLVER_TOKEN, useClass: HeaderResolver }
   ]
 })
 export class SharedModule {

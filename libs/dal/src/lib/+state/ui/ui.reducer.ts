@@ -58,9 +58,10 @@ export function reducer(
       };
       break;
     case UiActionTypes.ToggleSideNav:
+      const open = action.payload ? !!action.payload.open : !state.sideNavOpen;
       state = {
         ...state,
-        sideNavOpen: !state.sideNavOpen
+        sideNavOpen: open
       };
       break;
     case UiActionTypes.SetSideNavItems:

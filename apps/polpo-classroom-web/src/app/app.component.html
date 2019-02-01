@@ -1,4 +1,7 @@
-<campus-shell>
+<campus-shell
+  [sidebarOpen]="sideNavOpen$ | async"
+  (sidebarToggled)="onSideBarToggle($event)"
+>
   <campus-shell-logo>
     <a href="{{websiteUrl}}">
       <img src="/assets/images/polpo.png" alt="Polpo" />
