@@ -2,7 +2,7 @@ import { Directive, ElementRef, HostListener, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Directive({
-  selector: '[campusExternalableRouterlink]'
+  selector: '[campusExternalableRouterlink], [campusRouterLink]'
 })
 export class CampusExternalableRouterlinkDirective {
   @Input()
