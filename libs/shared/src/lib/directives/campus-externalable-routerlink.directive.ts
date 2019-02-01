@@ -12,7 +12,7 @@ export class CampusExternalableRouterlinkDirective {
 
   @HostListener('click')
   onClick() {
-    this.navigateToLink(this.campusExternalableRouterlink);
+    this.navigateToLink(this.campusRouterLink);
   }
 
   navigateToLink(linkPath: string) {
