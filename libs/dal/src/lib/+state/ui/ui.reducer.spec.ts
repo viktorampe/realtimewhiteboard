@@ -77,6 +77,18 @@ describe('Ui Reducer', () => {
       expect(result.sideNavOpen).toBe(!initialState.sideNavOpen);
     });
 
+    it('should toggle the side nav open', () => {
+      const action = new ToggleSideNav({ open: true });
+      const result: UiState = reducer(initialState, action);
+      expect(result.sideNavOpen).toBe(true);
+    });
+
+    it('should toggle the side nav closed', () => {
+      const action = new ToggleSideNav({ open: false });
+      const result: UiState = reducer(initialState, action);
+      expect(result.sideNavOpen).toBe(false);
+    });
+
     it('should set the sideNavItems', () => {
       const action = new SetSideNavItems({ navItems: [mockNavItem] });
       const result: UiState = reducer(initialState, action);

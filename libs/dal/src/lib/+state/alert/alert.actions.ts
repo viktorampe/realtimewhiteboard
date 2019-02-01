@@ -78,6 +78,7 @@ export class SetReadAlert implements Action {
       alertIds: number | number[];
       read?: boolean;
       intended?: boolean;
+      displayResponse?: boolean;
     }
   ) {
     // alertIds altijd in een array
@@ -111,6 +112,7 @@ export class SetAlertReadByFilter implements Action {
       filter: NestedPartial<AlertQueueInterface>;
       read?: boolean;
       intended?: boolean;
+      displayResponse?: boolean;
     }
   ) {}
 }
@@ -154,7 +156,9 @@ export class UpdateAlerts implements Action {
 export class DeleteAlert implements Action {
   readonly type = AlertsActionTypes.DeleteAlert;
 
-  constructor(public payload: { id: number; personId: number }) {}
+  constructor(
+    public payload: { id: number; personId: number; displayResponse?: boolean }
+  ) {}
 }
 
 export class DeleteAlerts implements Action {

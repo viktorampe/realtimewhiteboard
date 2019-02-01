@@ -9,6 +9,7 @@ export * from './lib/+state/credential';
 export * from './lib/+state/current-exercise';
 export * from './lib/+state/dal.state.feature.builder';
 export * from './lib/+state/edu-content';
+export * from './lib/+state/effect-feedback';
 export * from './lib/+state/learning-area';
 export * from './lib/+state/linked-person';
 export * from './lib/+state/resolver';
@@ -30,6 +31,7 @@ export {
   EduContentServiceInterface,
   EDUCONTENT_SERVICE_TOKEN
 } from './lib/edu-content/edu-content.service.interface';
+export * from './lib/feedback';
 export * from './lib/persons';
 export {
   CustomSerializer,

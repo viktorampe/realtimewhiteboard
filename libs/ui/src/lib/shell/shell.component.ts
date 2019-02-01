@@ -1,8 +1,16 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import { MatDrawer } from '@angular/material';
-import { filter, takeWhile, map, shareReplay } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { filter, map, shareReplay, takeWhile } from 'rxjs/operators';
 
 /**
  * Component that acts a a skeleton for the app.
@@ -37,13 +45,7 @@ export class ShellComponent implements OnInit, OnDestroy {
    * Used for unsubscribing from subscriptions.
    */
   private isAlive = true;
-
-  /**
-   * Reference to the material drawer component in the template
-   *
-   * @type {MatDrawer}
-   */
-  @ViewChild(MatDrawer) public readonly sidebar: MatDrawer;
+  private _sidebarOpen: boolean;
 
   /**
    * Stream of @media queries matching 'XSmall' breakpoint preset.
@@ -51,6 +53,24 @@ export class ShellComponent implements OnInit, OnDestroy {
   private xSmallMediaQuery$ = this.breakPointObserver
     .observe([Breakpoints.XSmall])
     .pipe(shareReplay(1));
+
+  @Input()
+  set sidebarOpen(val: boolean) {
+    if (val !== this._sidebarOpen) {
+      this._sidebarOpen = val;
+      this.sidebar.toggle(val);
+      this.sidebarToggled.next(val);
+    }
+  }
+
+  @Output() sidebarToggled = new EventEmitter<boolean>();
+
+  /**
+   * Reference to the material drawer component in the template
+   *
+   * @type {MatDrawer}
+   */
+  @ViewChild(MatDrawer) public readonly sidebar: MatDrawer;
 
   constructor(private breakPointObserver: BreakpointObserver) {}
 
@@ -61,6 +81,7 @@ export class ShellComponent implements OnInit, OnDestroy {
   private setupSubscriptions(): void {
     this.subscribeEnterXSmallBreakpoint();
     this.subscribeLeaveXSmallBreakpoint();
+    this.setToggleSidebarSubscription();
   }
 
   private subscribeLeaveXSmallBreakpoint() {
@@ -88,6 +109,14 @@ export class ShellComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.sidebar.mode = 'over';
         this.sidebar.disableClose = false;
+      });
+  }
+
+  private setToggleSidebarSubscription() {
+    this.sidebar.openedChange
+      .pipe(takeWhile(() => this.isAlive))
+      .subscribe(open => {
+        this.sidebarOpen = open;
       });
   }
 

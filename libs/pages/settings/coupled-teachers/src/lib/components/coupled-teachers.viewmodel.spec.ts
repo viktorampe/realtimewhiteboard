@@ -43,7 +43,8 @@ describe('CoupledTeacherViewModel', () => {
 
       expect(store.dispatch).toHaveBeenCalledWith(
         new TeacherStudentActions.LinkTeacherStudent({
-          publicKey: 'somePublicKey'
+          publicKey: 'somePublicKey',
+          userId: 10
         })
       );
     });

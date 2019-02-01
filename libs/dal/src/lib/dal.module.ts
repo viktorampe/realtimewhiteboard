@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { ModuleWithProviders, NgModule } from '@angular/core';
+import { MatSnackBarModule } from '@angular/material';
 import {
   BrowserModule as CampusBrowserModule,
   BROWSER_STORAGE_SERVICE_TOKEN,
@@ -24,6 +25,7 @@ import {
 } from './+state/current-exercise';
 import { getStoreModuleForFeatures } from './+state/dal.state.feature.builder';
 import { EduContentReducer, EduContentsEffects } from './+state/edu-content';
+import { EffectFeedbackReducer } from './+state/effect-feedback';
 import {
   LearningAreaReducer,
   LearningAreasEffects
@@ -88,6 +90,11 @@ import { EduContentService } from './edu-content/edu-content.service';
 import { EDUCONTENT_SERVICE_TOKEN } from './edu-content/edu-content.service.interface';
 import { ExerciseService } from './exercise/exercise.service';
 import { EXERCISE_SERVICE_TOKEN } from './exercise/exercise.service.interface';
+import { FeedbackService, FEEDBACK_SERVICE_TOKEN } from './feedback';
+import {
+  SnackBarDefaultConfig,
+  SNACKBAR_DEFAULT_CONFIG_TOKEN
+} from './feedback/snackbar.config';
 import { LearningAreaService } from './learning-area/learning-area.service';
 import { LEARNINGAREA_SERVICE_TOKEN } from './learning-area/learning-area.service.interface';
 import { AuthService } from './persons/auth-service';
@@ -111,6 +118,7 @@ import { TaskInstanceService } from './tasks/task-instance.service';
 import { TASK_INSTANCE_SERVICE_TOKEN } from './tasks/task-instance.service.interface';
 import { TASK_SERVICE_TOKEN } from './tasks/task.service.interface';
 import { TaskService } from './tasks/tasks.service';
+import uuid = require('uuid');
 
 interface DalOptions {
   apiBaseUrl: string;
@@ -123,6 +131,7 @@ interface DalOptions {
     SDKBrowserModule.forRoot(),
     HttpClientModule,
     ScormModule,
+    MatSnackBarModule,
     ...getStoreModuleForFeatures([
       LearningAreaReducer,
       UserContentReducer,
@@ -143,7 +152,8 @@ interface DalOptions {
       CurrentExerciseReducer,
       TeacherStudentReducer,
       LinkedPersonReducer,
-      CredentialReducer
+      CredentialReducer,
+      EffectFeedbackReducer
     ]),
     EffectsModule.forFeature([
       BundlesEffects,
@@ -169,6 +179,10 @@ interface DalOptions {
     ])
   ],
   providers: [
+    {
+      provide: 'uuid',
+      useValue: uuid
+    },
     { provide: EXERCISE_SERVICE_TOKEN, useClass: ExerciseService },
     { provide: EDUCONTENT_SERVICE_TOKEN, useClass: EduContentService },
     { provide: USER_CONTENT_SERVICE_TOKEN, useClass: UserContentService },
@@ -206,7 +220,9 @@ interface DalOptions {
     },
     { provide: CONTENT_REQUEST_SERVICE_TOKEN, useClass: ContentRequestService },
     { provide: RESULTS_SERVICE_TOKEN, useClass: ResultsService },
-    { provide: CREDENTIAL_SERVICE_TOKEN, useClass: CredentialService }
+    { provide: CREDENTIAL_SERVICE_TOKEN, useClass: CredentialService },
+    { provide: FEEDBACK_SERVICE_TOKEN, useClass: FeedbackService },
+    { provide: SNACKBAR_DEFAULT_CONFIG_TOKEN, useClass: SnackBarDefaultConfig }
   ]
 })
 export class DalModule {

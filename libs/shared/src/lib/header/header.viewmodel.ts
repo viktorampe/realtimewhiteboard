@@ -3,6 +3,7 @@ import {
   Alert,
   AlertActions,
   AlertQueries,
+  AlertQueueInterface,
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   DalState,
@@ -11,17 +12,13 @@ import {
   UiQuery,
   UserQueries
 } from '@campus/dal';
-import {
-  BreadcrumbLinkInterface,
-  DropdownMenuItemInterface,
-  NotificationItemInterface
-} from '@campus/ui';
+import { BreadcrumbLinkInterface, DropdownMenuItemInterface } from '@campus/ui';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { ENVIRONMENT_ALERTS_FEATURE_TOKEN } from '../interfaces/environment.injectiontokens';
 import { EnvironmentAlertsFeatureInterface } from '../interfaces/environment.interfaces';
-import { HeaderResolver } from './header.resolver';
+import { HeaderResolver, HEADER_RESOLVER_TOKEN } from './header.resolver';
 
 @Injectable({
   providedIn: 'root'
@@ -39,7 +36,7 @@ export class HeaderViewModel {
   unreadAlerts$: Observable<Alert[]>;
 
   // presentation stream
-  alertNotifications$: Observable<NotificationItemInterface[]>;
+  alertNotifications$: Observable<AlertQueueInterface[]>;
   unreadAlertCount$: Observable<number>;
   backLink$: Observable<string[] | undefined>; //TODO: undefined nog nodig?
   profileMenuItems$: Observable<DropdownMenuItemInterface[]>;
@@ -48,9 +45,10 @@ export class HeaderViewModel {
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     @Inject(ENVIRONMENT_ALERTS_FEATURE_TOKEN)
     private environmentAlertsFeature: EnvironmentAlertsFeatureInterface,
-    private store: Store<DalState>
+    private store: Store<DalState>,
+    @Inject(HEADER_RESOLVER_TOKEN) private headerResolver: HeaderResolver
   ) {
-    this.isResolved$ = new HeaderResolver(store, authService).resolve();
+    this.isResolved$ = this.headerResolver.resolve();
     this.loadFeatureToggles();
     this.loadStateStreams();
     this.loadDisplayStream();
@@ -80,24 +78,8 @@ export class HeaderViewModel {
       this.environmentAlertsFeature.hasAppBarDropDown;
   }
 
-  private getAlertNotifications(): Observable<NotificationItemInterface[]> {
-    return this.unreadAlerts$.pipe(
-      map(alerts => {
-        return alerts
-          .filter(alert => alert.type !== 'message')
-          .map(alert => {
-            const notification: NotificationItemInterface = {
-              icon: alert.icon,
-              titleText: alert.title,
-              link: alert.link, // TODO: check the link format (external or internal)
-              notificationText: alert.message,
-              notificationDate: new Date(alert.sentAt)
-            };
-            return notification;
-          });
-      }),
-      shareReplay(1)
-    );
+  private getAlertNotifications(): Observable<AlertQueueInterface[]> {
+    return this.unreadAlerts$;
   }
 
   private getUnreadAlertCount(): Observable<number> {

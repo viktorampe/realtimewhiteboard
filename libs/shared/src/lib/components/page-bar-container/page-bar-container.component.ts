@@ -21,10 +21,12 @@ import {
                                 [filterText]="filterInput$|async"
                                 class="pages__toolbar__filter"></campus-filter-text-input>
       <div class="divider"></div>
-      <campus-button [iconClass]="'timeline'"
-                    (click)="setListFormat(listFormat.LINE)"></campus-button>
-      <campus-button [iconClass]="'checklist'"
-                    (click)="setListFormat(listFormat.GRID)"></campus-button>
+        <campus-button [iconClass]="'list-view'"
+                 (click)="setListFormat(listFormat.LINE)"
+                 [class.ui-button--active]="(listFormat$ | async) === listFormat.LINE"></campus-button>
+        <campus-button [iconClass]="'grid-view'"
+                 (click)="setListFormat(listFormat.GRID)"
+                 [class.ui-button--active]="(listFormat$ | async) === listFormat.GRID"></campus-button>
     </campus-page-bar>
  *
  * @export

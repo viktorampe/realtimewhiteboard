@@ -1,7 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatFormFieldModule, MatInputModule } from '@angular/material';
+import {
+  MatFormFieldModule,
+  MatIconModule,
+  MatInputModule
+} from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { UiModule } from '@campus/ui';
 import { CoupledTeachersResolver } from './components/coupled-teachers.resolver';
@@ -15,6 +19,7 @@ import { CoupledTeachersComponent } from './components/coupled-teachers/coupled-
     UiModule,
     MatFormFieldModule,
     MatInputModule,
+    MatIconModule,
     RouterModule.forChild([
       {
         path: '',
