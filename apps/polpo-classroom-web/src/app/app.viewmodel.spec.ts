@@ -1,14 +1,18 @@
-import { async, TestBed } from '@angular/core/testing';
+import { async, fakeAsync, flush, TestBed } from '@angular/core/testing';
 import {
   CredentialActions,
   CredentialFixture,
   CredentialReducer,
+  DalActions,
   DalState,
-  FEEDBACK_SERVICE_TOKEN,
+  EffectFeedbackActions,
+  EffectFeedbackFixture,
   LearningAreaFixture,
   PassportUserCredentialInterface,
   PersonFixture,
   PersonInterface,
+  Priority,
+  SNACKBAR_SERVICE_TOKEN,
   StateFeatureBuilder,
   UiActions,
   UiReducer,
@@ -64,7 +68,7 @@ describe('AppViewModel', () => {
               .mockReturnValue([mockProfileMenuItem])
           }
         },
-        { provide: FEEDBACK_SERVICE_TOKEN, useValue: {} }
+        { provide: SNACKBAR_SERVICE_TOKEN, useValue: {} }
       ]
     }).compileComponents();
 
@@ -163,6 +167,108 @@ describe('AppViewModel', () => {
       expect(viewModel.sideNavOpen$).toBeObservable(hot('a', { a: true }));
       store.dispatch(new UiActions.ToggleSideNav({ open: false }));
       expect(viewModel.sideNavOpen$).toBeObservable(hot('a', { a: false }));
+    });
+  });
+
+  describe('feedback', () => {
+    let mockFeedBack;
+    beforeAll(() => {
+      const mockAction = {
+        title: 'klik',
+        userAction: new DalActions.ActionSuccessful({
+          successfulAction: 'test'
+        })
+      };
+
+      mockFeedBack = new EffectFeedbackFixture({
+        id: '1',
+        triggerAction: null,
+        message: 'This is a message',
+        type: 'success',
+        userActions: [mockAction, mockAction],
+        timeStamp: 1,
+        display: true,
+        priority: Priority.HIGH,
+        useDefaultCancel: false
+      });
+    });
+    describe('error feedback', () => {
+      beforeAll(() => {
+        mockFeedBack.type = 'error';
+      });
+
+      it('should pass the error feedback to the banner-stream', fakeAsync(() => {
+        store.dispatch(
+          new EffectFeedbackActions.AddEffectFeedback({
+            effectFeedback: mockFeedBack
+          })
+        );
+
+        expect(viewModel.bannerFeedback$).toBeObservable(
+          hot('a', { a: mockFeedBack })
+        );
+
+        // create a slightly newer mockFeedBack
+        const slightlyNewerFeedback = {
+          ...mockFeedBack,
+          ...{ id: '2', timeStamp: mockFeedBack.timeStamp + 10 }
+        };
+        store.dispatch(
+          new EffectFeedbackActions.AddEffectFeedback({
+            effectFeedback: slightlyNewerFeedback
+          })
+        );
+
+        // this should not change the output
+        expect(viewModel.bannerFeedback$).toBeObservable(
+          hot('a', { a: mockFeedBack })
+        );
+
+        // dismiss the banner
+        viewModel.onBannerDismiss({
+          action: mockFeedBack.userActions[0].userAction,
+          feedbackId: mockFeedBack.id
+        });
+
+        // allow subscriptions to complete
+        flush();
+
+        // this should change the output
+        expect(viewModel.bannerFeedback$).toBeObservable(
+          hot('a', { a: slightlyNewerFeedback })
+        );
+      }));
+
+      it('should pass the error feedback to the banner-stream', () => {
+        store.dispatch(
+          new EffectFeedbackActions.AddEffectFeedback({
+            effectFeedback: mockFeedBack
+          })
+        );
+
+        expect(viewModel.bannerFeedback$).toBeObservable(
+          hot('a', { a: mockFeedBack })
+        );
+      });
+
+      it('should pass add a cancel userAction when needed', () => {
+        mockFeedBack.useDefaultCancel = true;
+        store.dispatch(
+          new EffectFeedbackActions.AddEffectFeedback({
+            effectFeedback: mockFeedBack
+          })
+        );
+
+        const cancelBannerAction = { title: 'annuleren', userAction: null };
+
+        // add the cancel button
+        const expectedFeedback = mockFeedBack;
+        expectedFeedback.userActions.push(cancelBannerAction);
+
+        expect(viewModel.bannerFeedback$).toBeObservable(
+          hot('a', { a: expectedFeedback })
+        );
+      });
     });
   });
 });

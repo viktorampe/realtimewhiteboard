@@ -7,10 +7,10 @@ import {
   EffectFeedbackQueries,
   FavoriteInterface,
   FeedbackService,
-  FEEDBACK_SERVICE_TOKEN,
   LearningAreaFixture,
   PassportUserCredentialInterface,
   PersonInterface,
+  SNACKBAR_SERVICE_TOKEN,
   UiActions,
   UiQuery,
   UserQueries
@@ -39,7 +39,7 @@ export class AppViewModel {
   constructor(
     private store: Store<DalState>,
     private navItemService: NavItemService,
-    @Inject(FEEDBACK_SERVICE_TOKEN) private feedbackService: FeedbackService
+    @Inject(SNACKBAR_SERVICE_TOKEN) private feedbackService: FeedbackService
   ) {
     this.initialize();
   }

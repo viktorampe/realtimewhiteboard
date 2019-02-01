@@ -5,13 +5,13 @@ import {
   MatSnackBarRef,
   SimpleSnackBar
 } from '@angular/material/snack-bar';
+import { EffectFeedbackInterface } from '@campus/dal';
 import { Observable } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
-import { EffectFeedbackInterface } from '../+state/effect-feedback';
 import { SNACKBAR_DEFAULT_CONFIG_TOKEN } from './snackbar.config';
 
-export const SNACKBAR_SERVICE_TOKEN = new InjectionToken('FeedbackService');
-export interface FeedbackServiceInterface {
+export const SNACKBAR_SERVICE_TOKEN = new InjectionToken('SnackBarService');
+export interface SnackBarServiceInterface {
   snackbarAfterDismiss$: Observable<{
     dismissedWithAction: boolean;
     feedback: EffectFeedbackInterface;
@@ -21,7 +21,7 @@ export interface FeedbackServiceInterface {
 @Injectable({
   providedIn: 'root'
 })
-export class FeedbackService implements FeedbackServiceInterface {
+export class SnackBarService implements SnackBarServiceInterface {
   // source
   private feedback$: Observable<EffectFeedbackInterface>;
 
