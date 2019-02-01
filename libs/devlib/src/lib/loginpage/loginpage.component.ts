@@ -12,12 +12,15 @@ import {
   EffectFeedbackQueries,
   FeedbackServiceInterface,
   FEEDBACK_SERVICE_TOKEN,
+  Priority,
   UserActions
 } from '@campus/dal';
 import { AlertQueueApi, PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Action, select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
+// tslint:disable-next-line:nx-enforce-module-boundaries
+import { AddEffectFeedback } from './../../../../dal/src/lib/+state/effect-feedback/effect-feedback.actions';
 import { LoginPageViewModel } from './loginpage.viewmodel';
 
 @Component({
@@ -108,5 +111,28 @@ export class LoginpageComponent implements OnInit {
 
   dispatchAction(action: Action) {
     this.store.dispatch(action);
+  }
+
+  // tslint:disable-next-line:member-ordering
+  private count = 0;
+
+  dispatchFeedback(message: string, isError: boolean = true) {
+    this.count++;
+    this.store.dispatch(
+      new AddEffectFeedback({
+        effectFeedback: {
+          id: this.count.toString(),
+          triggerAction: null,
+          message,
+          type: isError ? 'error' : 'success',
+          timeStamp: Date.now(),
+          priority: Priority.NORM,
+          icon: null,
+          userActions: [],
+          display: true,
+          useDefaultCancel: true
+        }
+      })
+    );
   }
 }

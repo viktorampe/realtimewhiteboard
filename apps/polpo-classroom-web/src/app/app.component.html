@@ -1,10 +1,9 @@
-<campus-shell
-  [sidebarOpen]="sideNavOpen$ | async"
-  (sidebarToggled)="onSideBarToggle($event)"
->
+<campus-shell [sidebarOpen]="sideNavOpen$ | async"
+              (sidebarToggled)="onSideBarToggle($event)">
   <campus-shell-logo>
     <a href="{{websiteUrl}}">
-      <img src="/assets/images/polpo.png" alt="Polpo" />
+      <img src="/assets/images/polpo.png"
+           alt="Polpo" />
     </a>
   </campus-shell-logo>
   <campus-shell-left>
@@ -12,14 +11,14 @@
   </campus-shell-left>
   <campus-shell-top>
     <campus-header></campus-header>
-    <campus-banner
-      *ngIf="(bannerFeedback$ | async) as bannerFeedback"
-      [id]="bannerFeedback.id"
-      [message]="bannerFeedback.message"
-      [icon]="bannerFeedback.icon"
-      [actions]="bannerFeedback.userActions"
-      (afterDismiss)="onBannerDismiss($event)"
-    ></campus-banner>
+    <campus-banner *ngIf="(bannerFeedback$ | async) as bannerFeedback"
+                   [id]="bannerFeedback.id"
+                   [message]="bannerFeedback.message"
+                   [icon]="bannerFeedback.icon"
+                   [actions]="bannerFeedback.userActions"
+                   (afterDismiss)="onBannerDismiss($event)"></campus-banner>
   </campus-shell-top>
-  <campus-shell-body> <router-outlet></router-outlet> </campus-shell-body>
+  <campus-shell-body>
+    <router-outlet></router-outlet>
+  </campus-shell-body>
 </campus-shell>

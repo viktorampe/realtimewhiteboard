@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { EffectFeedbackInterface } from '@campus/dal';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
 import { AppViewModel } from './app.viewmodel';
@@ -11,7 +12,7 @@ import { AppViewModel } from './app.viewmodel';
 export class AppComponent {
   public title = 'polpo-classroom-web';
   public navItems$ = this.appViewModel.navigationItems$;
-  public bannerFeedback$ = this.appViewModel.bannerFeedback$;
+  public bannerFeedback$: Observable<EffectFeedbackInterface>;
   sideNavOpen$: Observable<boolean>;
 
   /**
@@ -21,6 +22,7 @@ export class AppComponent {
 
   constructor(private appViewModel: AppViewModel) {
     this.sideNavOpen$ = appViewModel.sideNavOpen$;
+    this.bannerFeedback$ = this.appViewModel.bannerFeedback$;
   }
 
   protected onSideBarToggle(open: boolean) {
