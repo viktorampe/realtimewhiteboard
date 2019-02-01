@@ -23,9 +23,7 @@ class MockRouter {
   // tslint:disable-next-line:component-selector
   selector: 'test-container',
   template: `
-    <a [campusExternalableRouterlink]="'http://melvin-kellner.com'"
-      >EXTERNAL LINK</a
-    >
+    <a [campusRouterLink]="'http://melvin-kellner.com'">EXTERNAL LINK</a>
   `
 })
 export class TestContainerComponent {}
