@@ -14,6 +14,7 @@ export class EffectFeedbackFixture implements EffectFeedbackInterface {
   display = true;
   priority = Priority.HIGH;
   icon = null;
+  useDefaultCancel: false;
 
   constructor(props: Partial<EffectFeedbackInterface> = {}) {
     return Object.assign(this, props);

@@ -96,10 +96,7 @@ export class FeedbackService implements FeedbackServiceInterface {
     this.bannerNeedsUpdate$.subscribe(([displayedFeedback, latestFeedBack]) => {
       const feedbackToDisplay = { ...latestFeedBack };
       // if needed, add cancel button
-      if (
-        !feedbackToDisplay.userActions ||
-        feedbackToDisplay.userActions.length < 2
-      ) {
+      if (feedbackToDisplay.useDefaultCancel) {
         feedbackToDisplay.userActions = [
           ...feedbackToDisplay.userActions,
           {

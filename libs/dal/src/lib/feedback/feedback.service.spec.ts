@@ -64,7 +64,8 @@ describe('FeedbackService', () => {
       userActions: [mockAction, mockAction],
       timeStamp: 1,
       display: true,
-      priority: Priority.HIGH
+      priority: Priority.HIGH,
+      useDefaultCancel: false
     });
   });
 
@@ -201,6 +202,42 @@ describe('FeedbackService', () => {
       mockFeedBack.type = 'error';
     });
 
+    it('should pass the error feedback to the banner-stream', fakeAsync(() => {
+      store.dispatch(new AddEffectFeedback({ effectFeedback: mockFeedBack }));
+
+      expect(service.bannerFeedback$).toBeObservable(
+        hot('a', { a: mockFeedBack })
+      );
+
+      // create a slightly newer mockFeedBack
+      const slightlyNewerFeedback = {
+        ...mockFeedBack,
+        ...{ id: '2', timeStamp: mockFeedBack.timeStamp + 10 }
+      };
+      store.dispatch(
+        new AddEffectFeedback({ effectFeedback: slightlyNewerFeedback })
+      );
+
+      // this should not change the output
+      expect(service.bannerFeedback$).toBeObservable(
+        hot('a', { a: mockFeedBack })
+      );
+
+      // dismiss the banner
+      service.onBannerDismiss({
+        action: mockFeedBack.userActions[0].userAction,
+        feedbackId: mockFeedBack.id
+      });
+
+      // allow subscriptions to complete
+      flush();
+
+      // this should change the output
+      expect(service.bannerFeedback$).toBeObservable(
+        hot('a', { a: slightlyNewerFeedback })
+      );
+    }));
+
     it('should pass the error feedback to the banner-stream', () => {
       store.dispatch(new AddEffectFeedback({ effectFeedback: mockFeedBack }));
 
@@ -210,7 +247,7 @@ describe('FeedbackService', () => {
     });
 
     it('should pass add a cancel userAction when needed', () => {
-      mockFeedBack.userActions = [];
+      mockFeedBack.useDefaultCancel = true;
       store.dispatch(new AddEffectFeedback({ effectFeedback: mockFeedBack }));
 
       const cancelBannerAction = { title: 'annuleren', userAction: null };

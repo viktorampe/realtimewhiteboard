@@ -21,6 +21,7 @@ export interface EffectFeedbackInterface {
   timeStamp?: number;
   display: boolean;
   priority?: Priority;
+  useDefaultCancel?: boolean;
 }
 
 export class EffectFeedback implements EffectFeedbackInterface {
@@ -37,6 +38,7 @@ export class EffectFeedback implements EffectFeedbackInterface {
   timeStamp: number = Date.now();
   display = true;
   priority?: Priority = Priority.NORM;
+  useDefaultCancel? = true;
 
   constructor(props: EffectFeedbackInterface) {
     Object.assign(this, props);
