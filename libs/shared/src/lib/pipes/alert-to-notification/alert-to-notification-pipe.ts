@@ -16,7 +16,7 @@ export class AlertToNotificationItemPipe implements PipeTransform {
       read: alert.read,
       accented: alert.type === 'marketing',
       icon: alert.type,
-      link: alert.link.replace('/#/', '/'), //todo remove when sanitized from API
+      link: alert.link ? alert.link.replace('/#/', '/') : undefined, //todo remove when sanitized from API
       notificationText: alert.message,
       notificationDate: new Date(alert.sentAt)
     };

@@ -8,7 +8,7 @@ describe('AlertToNotificationItemPipe', () => {
   });
 
   it('should get the correct badge', () => {
-    const alert = new AlertFixture({ sentAt: new Date() });
+    const alert = new AlertFixture({ sentAt: new Date(), message: 'bloe' });
     const pipe = new AlertToNotificationItemPipe();
     const expected = {
       titleText: 'Er is een bundel aangepast.',
@@ -16,7 +16,7 @@ describe('AlertToNotificationItemPipe', () => {
       accented: false,
       icon: 'bundle',
       link: '/linknaarbundle',
-      notificationText: undefined,
+      notificationText: 'bloe',
       notificationDate: new Date(alert.sentAt)
     };
 
@@ -26,7 +26,8 @@ describe('AlertToNotificationItemPipe', () => {
   it('should sanitize angular js link', () => {
     const alert = new AlertFixture({
       sentAt: new Date(),
-      link: '/#/linknaarbundle'
+      link: '/#/linknaarbundle',
+      message: 'wortel'
     });
     const pipe = new AlertToNotificationItemPipe();
     const expected = {
@@ -35,7 +36,7 @@ describe('AlertToNotificationItemPipe', () => {
       accented: false,
       icon: 'bundle',
       link: '/linknaarbundle',
-      notificationText: undefined,
+      notificationText: 'wortel',
       notificationDate: new Date(alert.sentAt)
     };
 
