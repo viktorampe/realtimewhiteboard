@@ -4,8 +4,8 @@ export {
   OPEN_STATIC_CONTENT_SERVICE_TOKEN
 } from './lib/content/open-static-content.interface';
 export {
-  CampusExternalableRouterlinkDirective
-} from './lib/directives/campus-externalable-routerlink.directive';
+  CampusRouterlinkDirective
+} from './lib/directives/campus-routerlink.directive';
 export * from './lib/interceptors';
 export * from './lib/interfaces';
 export {

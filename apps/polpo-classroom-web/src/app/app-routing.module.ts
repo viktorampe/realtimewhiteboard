@@ -104,7 +104,10 @@ const routes: Routes = [
   },
   {
     path: 'error',
-    loadChildren: '@campus/pages/error#PagesErrorModule'
+    loadChildren: '@campus/pages/error#PagesErrorModule',
+    data: {
+      breadcrumbText: 'Foutmelding'
+    }
   },
   {
     path: 'dev',

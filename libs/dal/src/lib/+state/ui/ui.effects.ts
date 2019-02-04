@@ -8,8 +8,8 @@ import { RouterNavigationAction, ROUTER_NAVIGATION } from '@ngrx/router-store';
 import { DataPersistence } from '@nrwl/nx';
 import { filter, map } from 'rxjs/operators';
 import { DalState } from '..';
-import { RouterStateUrl } from '../../routings/route-serializer';
 import { ActionSuccessful } from '../dal.actions';
+import { RouterStateUrl } from '../router/route-serializer';
 import {
   LoadUi,
   SaveUi,
@@ -69,7 +69,6 @@ export class UiEffects {
   breadcrumbs$ = this.dataPersistence.fetch(ROUTER_NAVIGATION, {
     run: (action: RouterNavigationAction, state: DalState) => {
       const routerState = <RouterStateUrl>(<unknown>action.payload.routerState);
-
       // routerState contains every 'hop' of the routermodule
       // filtering empty hops
       // building url substrings per hop

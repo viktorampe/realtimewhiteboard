@@ -4,7 +4,6 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import {
-  CampusExternalableRouterlinkDirective,
   EnvironmentIconMappingInterface,
   ENVIRONMENT_ICON_MAPPING_TOKEN,
   SharedModule
@@ -42,8 +41,8 @@ export class TestContainerComponent {}
 })
 export class TestModule {}
 
-describe('CampusExternalableRouterlinkDirective', () => {
-  let directive: CampusExternalableRouterlinkDirective;
+describe('CampusRouterlinkDirective', () => {
+  let directive: CampusRouterlinkDirective;
   let component: any;
   let testContainerFixture: ComponentFixture<TestContainerComponent>;
   let componentDE: DebugElement;
@@ -62,7 +61,7 @@ describe('CampusExternalableRouterlinkDirective', () => {
     componentDE = testContainerFixture.debugElement.query(By.css('a'));
     component = componentDE.componentInstance;
     testContainerFixture.detectChanges();
-    directive = componentDE.injector.get(CampusExternalableRouterlinkDirective);
+    directive = componentDE.injector.get(CampusRouterlinkDirective);
   });
 
   it('should create the host with the directive attached', () => {

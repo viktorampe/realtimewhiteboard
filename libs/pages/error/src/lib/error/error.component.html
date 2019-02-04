@@ -1,22 +1,33 @@
-<ng-container *ngIf="(statusCode$ | async) as statusCode">
-  <div [ngSwitch]="statusCode">
-    <ng-container *ngSwitchCase="401">
-      <ng-container *ngIf="(currentUser$ | async) as user; else: noUser">
-        <p
-          >Je hebt niet de juiste bevoegdheden om deze actie uit te voeren. Je
-          ben aangemeld als {{ user.displayName }}.</p
-        >
+<div class="campus-page">
+  <campus-page-header
+    [title]="'Oeps!'"
+    [subtitle]="'Hier loopt iets fout&hellip;'"
+    [iconClass]="'warning'"
+  >
+  </campus-page-header>
+  <ng-container *ngIf="(statusCode$ | async) as statusCode">
+    <div [ngSwitch]="statusCode">
+      <ng-container *ngSwitchCase="401">
+        <ng-container *ngIf="(currentUser$ | async) as user; else: noUser">
+          <p
+            >Je hebt niet de juiste bevoegdheden om deze actie uit te voeren. Je
+            ben aangemeld als {{ user.displayName }}.</p
+          >
+        </ng-container>
+
+        <ng-template #noUser>
+          <p
+            >Je bent niet aangemeld. Klik <a href="{{website.url}}">hier</a> om
+            in te loggen.</p
+          >
+        </ng-template>
       </ng-container>
 
-      <ng-template #noUser>
-        <p
-          >Je bent niet aangemeld. Klik <a href="{{website.url}}">hier</a> om in
-          te loggen.</p
-        >
-      </ng-template>
-    </ng-container>
-
-    <p *ngSwitchCase="500">Er is iets fout gegaan. Probeer opnieuw.</p>
-    <p *ngSwitchDefault>Er is iets fout gegaan. Probeer opnieuw.</p>
-  </div>
-</ng-container>
+      <p *ngSwitchCase="500">Er is iets fout gegaan. Probeer opnieuw.</p>
+      <p *ngSwitchCase="404"
+        >Het gevraagde bestand/URL werd niet gevonden&hellip; ¯\_(ツ)_/¯</p
+      >
+      <p *ngSwitchDefault>Er is iets fout gegaan. Probeer opnieuw.</p>
+    </div>
+  </ng-container>
+</div>

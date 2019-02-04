@@ -17,7 +17,7 @@ import { PERMISSION_SERVICE_TOKEN } from './auth/permission.service.interface';
 import { PageBarContainerComponent } from './components/page-bar-container/page-bar-container.component';
 import { OPEN_STATIC_CONTENT_SERVICE_TOKEN } from './content/open-static-content.interface';
 import { OpenStaticContentService } from './content/open-static-content.service';
-import { CampusExternalableRouterlinkDirective } from './directives/campus-externalable-routerlink.directive';
+import { CampusRouterlinkDirective } from './directives/campus-routerlink.directive';
 import { HeaderComponent } from './header/header.component';
 import {
   HeaderResolver,
@@ -61,7 +61,7 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     HasPermissionDirective,
     PersonBadgeFromCredentialPipe,
     MailToByCredentialPipe,
-    CampusExternalableRouterlinkDirective,
+    CampusRouterlinkDirective,
     AlertToNotificationItemPipe
   ],
   exports: [
@@ -72,7 +72,7 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     HasPermissionDirective,
     PersonBadgeFromCredentialPipe,
     MailToByCredentialPipe,
-    CampusExternalableRouterlinkDirective,
+    CampusRouterlinkDirective,
     AlertToNotificationItemPipe
   ],
   providers: [
