@@ -23,12 +23,15 @@ import {
   SaveCurrentExercise
 } from './current-exercise.actions';
 import { CurrentExerciseEffects } from './current-exercise.effects';
-import { CurrentExerciseInterface } from './current-exercise.reducer';
-
+import {
+  CurrentExerciseInterface,
+  initialState
+} from './current-exercise.reducer';
+// file.only
 describe('ExerciseEffects', () => {
   let actions: Observable<any>;
   let effects: CurrentExerciseEffects;
-  let usedState: any;
+  let usedState: CurrentExerciseReducer.State;
   let mockExercise: CurrentExerciseInterface;
   let mockExerciseNoSave: CurrentExerciseInterface;
   let uuid: Function;
@@ -175,7 +178,6 @@ describe('ExerciseEffects', () => {
     mockExercise = {
       eduContentId: undefined,
       cmiMode: ScormCmiMode.CMI_MODE_NORMAL,
-      result: undefined,
       saveToApi: true,
       url: 'dit is een url'
     };
@@ -187,7 +189,8 @@ describe('ExerciseEffects', () => {
 
     const saveExerciseAction = new SaveCurrentExercise({
       userId: 6,
-      exercise: mockExercise
+      exercise: mockExercise,
+      displayResponse: true
     });
 
     const noSaveExerciseAction = new SaveCurrentExercise({
@@ -199,7 +202,7 @@ describe('ExerciseEffects', () => {
 
     describe('with initialState', () => {
       beforeAll(() => {
-        usedState = CurrentExerciseReducer.initialState;
+        usedState = initialState;
       });
       beforeEach(() => {
         mockServiceMethodReturnValue('saveExercise', mockExercise);
@@ -212,7 +215,8 @@ describe('ExerciseEffects', () => {
             effectFeedback: new EffectFeedback({
               id: uuid(),
               triggerAction: saveExerciseAction,
-              message: 'Oefening is bewaard.'
+              message: 'Oefening is bewaard.',
+              display: true
             })
           }
         );
@@ -231,7 +235,7 @@ describe('ExerciseEffects', () => {
 
     describe('with failing api call', () => {
       beforeAll(() => {
-        usedState = CurrentExerciseReducer.initialState;
+        usedState = initialState;
       });
       beforeEach(() => {
         mockServiceMethodError('saveExercise', 'failed');
@@ -248,7 +252,14 @@ describe('ExerciseEffects', () => {
               id: uuid(),
               triggerAction: saveExerciseAction,
               message: 'Het is niet gelukt om de oefening te bewaren.',
+              userActions: [
+                {
+                  title: 'Opnieuw proberen.',
+                  userAction: saveExerciseAction
+                }
+              ],
               type: 'error',
+              display: true,
               priority: Priority.HIGH
             })
           }),

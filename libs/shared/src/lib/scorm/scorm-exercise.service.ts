@@ -10,6 +10,7 @@ import {
 import {
   ScormApiServiceInterface,
   ScormCmiMode,
+  ScormStatus,
   SCORM_API_SERVICE_TOKEN
 } from '@campus/scorm';
 import { select, Store } from '@ngrx/store';
@@ -148,10 +149,16 @@ export class ScormExerciseService implements ScormExerciseServiceInterface {
     userId: number,
     currentExercise: CurrentExerciseInterface
   ) {
+    const cmi = JSON.parse(currentExercise.result.cmi);
+    const displayResponse = cmi
+      ? cmi.core.lesson_status === ScormStatus.STATUS_COMPLETED
+      : false;
+
     this.store.dispatch(
       new CurrentExerciseActions.SaveCurrentExercise({
         userId: userId,
-        exercise: currentExercise
+        exercise: currentExercise,
+        displayResponse: displayResponse
       })
     );
   }

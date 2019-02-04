@@ -57,23 +57,33 @@ export class CurrentExerciseEffects {
         return this.exerciseService.saveExercise(state.currentExercise).pipe(
           map(
             ex =>
+              // since the exercise is constantly saved, we only want to display feedback when the exercise is completed
               new AddEffectFeedback({
                 effectFeedback: new EffectFeedback({
                   id: this.uuid(),
                   triggerAction: action,
-                  message: 'Oefening is bewaard.'
+                  message: 'Oefening is bewaard.',
+                  display: action.payload.displayResponse
                 })
               })
           )
         );
       },
-      undoAction: (action: SaveCurrentExercise, state: any) => {
+      undoAction: (action: SaveCurrentExercise, e: any) => {
         const undoAction = undo(action);
-        // TODO: show error message to user
+
+        // since the exercise is constantly saved, we only want to display feedback when the exercise is completed
         const effectFeedback = new EffectFeedback({
           id: this.uuid(),
           triggerAction: action,
           message: 'Het is niet gelukt om de oefening te bewaren.',
+          userActions: [
+            {
+              title: 'Opnieuw proberen.',
+              userAction: action
+            }
+          ],
+          display: action.payload.displayResponse,
           type: 'error',
           priority: Priority.HIGH
         });
