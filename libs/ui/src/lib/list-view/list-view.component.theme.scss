@@ -2,12 +2,13 @@ $ui-list-view-color: $ui-primary-font-color-2 !default;
 $ui-list-view-label-font-family: $ui-primary-font-family-3 !default;
 
 $ui-list-view_item-border-width: 4px !default;
-$ui-list-view_item-margin--list: 16px 16px -4px -4px !default;
+$ui-list-view_item-margin--list: 0 0 -1px 0 !default;
 $ui-list-view_item-margin--grid: 0px 20px 20px 0px !default;
+$ui-list-view_item-margin--grid--selected: -4px 16px 16px -4px;
 
 $ui-list-view-selected-item-border-color: $ui-primary-color-accent !default;
-$ui-list-view-selection-overlay-border-color: $ui-tertiary-bg-color !default;
 
+$ui-list-view-selection-overlay-border-color: $ui-tertiary-bg-color !default;
 $ui-list-view-selection-overlay-circle-fg-color: $ui-list-view-selection-overlay-border-color !default;
 $ui-list-view-selection-overlay-circle-bg-color: $ui-primary-color-accent !default;
 $ui-list-view-selection-overlay-circle--not-selected-opacity: 0.4 !default;
@@ -68,19 +69,18 @@ $ui-list-view-selection-overlay-circle-radius: 22px !default;
       /*Line*/
       &--line {
         & .ui-list-view__list__item {
+          transition: padding-left 0.15s ease-out;
           width: 100%;
           box-sizing: border-box;
           cursor: pointer;
           display: block;
-          margin-bottom: $ui-list-view_item-border-width +
-            $ui-list-view_item-margin--list;
+          margin: $ui-list-view_item-margin--list;
 
           &--selected {
-            &:not(.ui-list-view__list__item__selectoverlay) {
-              border: $ui-list-view-selected-item-border-color
-                $ui-list-view_item-border-width solid;
-              margin-top: -$ui-list-view_item-border-width;
-              margin-bottom: $ui-list-view_item-margin--list;
+            border: none;
+            transform: translate(-4px, -4px);
+            & > * {
+              box-shadow: 4px 4px 0px #359590aa;
             }
           }
 
@@ -90,7 +90,7 @@ $ui-list-view-selection-overlay-circle-radius: 22px !default;
               position: absolute;
               top: 0;
               bottom: 0;
-              left: 5px;
+              left: 0;
               margin: auto;
             }
           }
@@ -104,23 +104,22 @@ $ui-list-view-selection-overlay-circle-radius: 22px !default;
           box-sizing: border-box;
           cursor: pointer;
           display: block;
+          transition: transform 0.15s ease-out;
 
           &--selected {
-            &:not(.ui-list-view__list__item__selectoverlay) {
-              border: $ui-list-view-selected-item-border-color
-                $ui-list-view_item-border-width solid;
-              margin: $ui-list-view_item-margin--list;
-            }
+            border: none;
+            box-shadow: 4px 4px 0px #359590aa;
+            transform: scale(1.05);
           }
 
           &__selectoverlay {
-            border: $ui-list-view-selection-overlay-border-color
-              $ui-list-view_item-border-width solid;
-            margin: $ui-list-view_item-margin--list;
+            background-color: $ui-list-view-selection-overlay-background-color;
+            border: none;
+            margin: $ui-list-view_item-margin--grid;
 
             &::before {
               margin-left: 3px;
-              margin-top: 2px;
+              margin-top: 3px;
             }
           }
         }
