@@ -1,5 +1,5 @@
 import {
-  AfterViewInit,
+  AfterViewChecked,
   ChangeDetectorRef,
   Component,
   Inject,
@@ -39,7 +39,7 @@ export class BundleDetailComponent
   implements
     OnInit,
     OnDestroy,
-    AfterViewInit,
+    AfterViewChecked,
     FilterableItem<UnlockedContent[], UnlockedContent> {
   protected listFormat = ListFormat; //enum beschikbaar maken in template
 
@@ -88,7 +88,7 @@ export class BundleDetailComponent
     this.filterTextInput.setFilterableItem(this);
   }
 
-  ngAfterViewInit(): void {
+  ngAfterViewChecked(): void {
     this.subscriptions.add(
       this.list.selectedItems$.subscribe(
         (selectedItems: ContentInterface[]) => {
