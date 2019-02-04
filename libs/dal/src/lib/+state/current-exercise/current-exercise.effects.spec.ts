@@ -27,7 +27,7 @@ import {
   CurrentExerciseInterface,
   initialState
 } from './current-exercise.reducer';
-// file.only
+
 describe('ExerciseEffects', () => {
   let actions: Observable<any>;
   let effects: CurrentExerciseEffects;
