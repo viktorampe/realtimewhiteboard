@@ -8,8 +8,10 @@ import {
   ENVIRONMENT_ICON_MAPPING_TOKEN,
   SharedModule
 } from '@campus/shared';
+import { CampusRouterlinkDirective } from './campus-routerlink.directive';
 const navigateSpy = jest.fn();
 const windowSpy = jest.fn();
+
 class Mapping implements EnvironmentIconMappingInterface {
   [icon: string]: string;
 }
