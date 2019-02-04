@@ -17,6 +17,7 @@ import {
 } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { AppBarComponent } from './app-bar/app-bar.component';
+import { BannerComponent } from './banner/banner.component';
 import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
 import { ButtonComponent } from './button/button.component';
 import { BorderDirective } from './button/directives/button-border.directive';
@@ -60,11 +61,11 @@ import { SideSheetComponent } from './side-sheet/side-sheet.component';
 import { TreeNavComponent } from './tree-nav/tree-nav.component';
 import { HideDesktopDirective } from './utils/directives/hide-desktop.directive';
 import { HideMobileDirective } from './utils/directives/hide-mobile.directive';
+import { IsMobileDirective } from './utils/directives/is-mobile.directive';
 import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness/adjust-color-brightness.pipe';
 import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time.pipe';
 import { RemovePrefixStringPipe } from './utils/pipes/remove-prefix-string/remove-prefix-string.pipe';
 import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-string.pipe';
-import { BannerComponent } from './banner/banner.component';
 
 @NgModule({
   imports: [
@@ -130,6 +131,7 @@ import { BannerComponent } from './banner/banner.component';
     DropdownMenuItemComponent,
     HideDesktopDirective,
     HideMobileDirective,
+    IsMobileDirective,
     HumanDateTimePipe,
     RemovePrefixStringPipe,
     LargeDirective,
@@ -178,6 +180,7 @@ import { BannerComponent } from './banner/banner.component';
     DropdownMenuItemComponent,
     HideDesktopDirective,
     HideMobileDirective,
+    IsMobileDirective,
     HumanDateTimePipe,
     RemovePrefixStringPipe,
     LargeDirective,
