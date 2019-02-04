@@ -27,6 +27,7 @@ import {
   EnvironmentApiInterface,
   EnvironmentErrorManagementFeatureInterface,
   EnvironmentIconMappingInterface,
+  EnvironmentLogoutInterface,
   EnvironmentMessagesFeatureInterface,
   EnvironmentSsoInterface,
   EnvironmentWebsiteInterface,
@@ -34,6 +35,7 @@ import {
   ENVIRONMENT_API_TOKEN,
   ENVIRONMENT_ERROR_MANAGEMENT_FEATURE_TOKEN,
   ENVIRONMENT_ICON_MAPPING_TOKEN,
+  ENVIRONMENT_LOGOUT_TOKEN,
   ENVIRONMENT_MESSAGES_FEATURE_TOKEN,
   ENVIRONMENT_SSO_TOKEN,
   ENVIRONMENT_WEBSITE_TOKEN
@@ -104,6 +106,7 @@ export class SharedModule {
     environmentErrorManagementFeature: EnvironmentErrorManagementFeatureInterface,
     environmentIconMapping: EnvironmentIconMappingInterface,
     environmentWebsite: EnvironmentWebsiteInterface,
+    environmentLogout: EnvironmentLogoutInterface,
     environmentApi: EnvironmentApiInterface,
     environmentSsoSettings: EnvironmentSsoInterface
   ): ModuleWithProviders {
@@ -125,6 +128,10 @@ export class SharedModule {
         {
           provide: ENVIRONMENT_WEBSITE_TOKEN,
           useValue: environmentWebsite
+        },
+        {
+          provide: ENVIRONMENT_LOGOUT_TOKEN,
+          useValue: environmentLogout
         },
         {
           provide: ENVIRONMENT_ICON_MAPPING_TOKEN,
