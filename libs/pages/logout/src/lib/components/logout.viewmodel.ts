@@ -1,10 +1,11 @@
 import { Inject, Injectable } from '@angular/core';
-import { DalState, UserActions } from '@campus/dal';
+import { DalState, UserActions, UserQueries } from '@campus/dal';
 import {
   EnvironmentLogoutInterface,
   ENVIRONMENT_LOGOUT_TOKEN
 } from '@campus/shared';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
+import { filter, take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,12 @@ export class LogoutViewModel {
 
   logout(): void {
     this.store.dispatch(new UserActions.RemoveUser());
-    window.location.href = this.environmentLogout.url;
+    this.store
+      .pipe(
+        select(UserQueries.getCurrentUser),
+        filter(currentUser => !currentUser),
+        take(1)
+      )
+      .subscribe(() => (window.location.href = this.environmentLogout.url));
   }
 }
