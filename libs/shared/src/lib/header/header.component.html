@@ -33,12 +33,13 @@
         >
           <ng-container *ngIf="(alertNotifications$ | async) as notifications">
             <campus-notification
-              *ngFor="let alert of notifications"
+              *ngFor="let notification of notifications"
               dropdown
-              [icon]="alert.icon"
-              [notificationText]="alert.titleText"
-              [routerLink]="alert.link"
-              [notificationDate]="alert.notificationDate"
+              [icon]="notification.icon"
+              [notificationText]="notification.titleText"
+              [routerLink]="notification.link"
+              [notificationDate]="notification.notificationDate"
+              [accented]="notification.accented"
             ></campus-notification>
           </ng-container>
         </campus-dropdown-menu>

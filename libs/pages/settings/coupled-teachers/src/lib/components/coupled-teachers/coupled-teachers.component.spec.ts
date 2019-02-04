@@ -14,6 +14,7 @@ import {
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
+import { PersonFixture } from '@campus/dal';
 import { PersonAlreadyLinkedValidator } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
@@ -21,6 +22,8 @@ import { of } from 'rxjs';
 import { CoupledTeachersViewModel } from '../coupled-teachers.viewmodel';
 import { MockCoupledTeachersViewModel } from '../coupled-teachers.viewmodel.mock';
 import { CoupledTeachersComponent } from './coupled-teachers.component';
+
+const viewmodel = new MockCoupledTeachersViewModel();
 
 describe('CoupledTeachersComponent', () => {
   let component: CoupledTeachersComponent;
@@ -42,20 +45,21 @@ describe('CoupledTeachersComponent', () => {
         MatFormFieldModule,
         BrowserAnimationsModule,
         MatInputModule,
-        MatIconModule,
-        RouterTestingModule
+        RouterTestingModule,
+        MatIconModule
       ],
       declarations: [CoupledTeachersComponent],
       providers: [
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
         {
           provide: CoupledTeachersViewModel,
-          useClass: MockCoupledTeachersViewModel
+          useValue: viewmodel
         },
         {
           provide: PersonAlreadyLinkedValidator,
           useValue: { validate: () => of(mockData$) }
-        }
+        },
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ]
     }).compileComponents();
   }));
@@ -144,6 +148,13 @@ describe('CoupledTeachersComponent', () => {
   });
 
   describe('unlinking a teacher', () => {
+    it('should display 2 coupled teachers', () => {
+      const coupledTeachers = fixture.debugElement.queryAll(
+        By.css('campus-person-summary')
+      );
+      expect(coupledTeachers.length).toBe(2);
+    });
+
     it('should call the unlinkPerson method', () => {
       const onUnlinkSpy = jest.spyOn(component, 'onUnlink');
       const unlinkPersonSpy = jest.spyOn(viewModel, 'unlinkPerson');
@@ -161,6 +172,40 @@ describe('CoupledTeachersComponent', () => {
       expect(unlinkPersonSpy).toHaveBeenCalledWith(
         viewModel.mockLinkedPersons[0].id
       );
+    });
+
+    it('should call unlink', () => {
+      const spy = jest.spyOn(viewmodel, 'unlinkPerson');
+      component.onUnlink(new PersonFixture({ id: 7879 }));
+      expect(spy).toHaveBeenCalledWith(7879);
+    });
+
+    it('should call linkPerson when valid form', () => {
+      component.coupledTeachersForm.value['teacherCode'] = 'a';
+      component.coupledTeachersForm.controls['teacherCode'].setErrors(null);
+      fixture.detectChanges();
+      const spy = jest.spyOn(viewmodel, 'linkPerson');
+      component.onSubmit();
+      expect(spy).toHaveBeenCalledWith('a');
+    });
+
+    it('should not call linkPerson when invalid form', () => {
+      component.coupledTeachersForm.value['teacherCode'] = 'b';
+      component.coupledTeachersForm.controls['teacherCode'].setErrors({
+        error: true
+      });
+      fixture.detectChanges();
+      const spy = jest.spyOn(viewmodel, 'linkPerson');
+      spy.mockReset();
+      component.onSubmit();
+      expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('should reset form', () => {
+      component.coupledTeachersForm.value['teacherCode'] = 'b';
+      component.onReset();
+      fixture.detectChanges();
+      expect(component.coupledTeachersForm.value['teacherCode']).toBe(null);
     });
   });
 });
