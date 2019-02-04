@@ -1,5 +1,4 @@
 import {
-  AfterViewChecked,
   AfterViewInit,
   ChangeDetectorRef,
   Component,
@@ -40,7 +39,6 @@ export class BundleDetailComponent
   implements
     OnInit,
     OnDestroy,
-    AfterViewChecked,
     AfterViewInit,
     FilterableItem<UnlockedContent[], UnlockedContent> {
   protected listFormat = ListFormat; //enum beschikbaar maken in template
