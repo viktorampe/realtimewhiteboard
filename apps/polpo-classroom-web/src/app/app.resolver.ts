@@ -23,7 +23,6 @@ export class AppResolver extends StateResolver {
   }
 
   protected getLoadableActions(): Action[] {
-    console.log(this.authService.userId);
     return [
       new AlertActions.LoadAlerts({ userId: this.authService.userId }),
       new UiActions.LoadUi()
