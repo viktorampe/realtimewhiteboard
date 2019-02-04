@@ -65,7 +65,7 @@ describe(`AuthHttpInterceptor`, () => {
     expect(spy).toHaveBeenCalledTimes(0);
     httpMock.verify();
   });
-  it('should not redirect with the router if an error with a managed statuscode is thrown', () => {
+  it('should not redirect with the router if an error with a nonmanaged statuscode is thrown', () => {
     httpClient.get(mockRequestErrorUrl).subscribe();
     const httpRequest = httpMock.expectOne(mockRequestErrorUrl);
     httpRequest.error(
