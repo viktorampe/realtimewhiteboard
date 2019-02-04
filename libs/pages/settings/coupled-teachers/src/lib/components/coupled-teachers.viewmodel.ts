@@ -1,9 +1,10 @@
 import { Inject, Injectable } from '@angular/core';
-import { ValidationErrors } from '@angular/forms';
 import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   DalState,
+  EffectFeedbackInterface,
+  EffectFeedbackQueries,
   LinkedPersonQueries,
   PersonInterface,
   TeacherStudentActions,
@@ -11,19 +12,8 @@ import {
 } from '@campus/dal';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-
-// TODO: update interface + put somewhere else
-export interface ActionResponse {
-  action: string;
-  message: string;
-  type: 'success' | 'error';
-}
-
-// TODO: put somewhere else
-export interface ApiValidationErrors extends ValidationErrors {
-  nonExistingTeacherCode?: string;
-  apiError?: string;
-}
+import { filter, map } from 'rxjs/operators';
+import { ApiValidationErrors } from './coupled-teachers/coupled-teachers.component';
 
 @Injectable({
   providedIn: 'root'
@@ -34,14 +24,12 @@ export class CoupledTeachersViewModel {
   public linkedPersons$: Observable<PersonInterface[]>;
 
   // intermediate streams
-  // private linkPersonError$: Observable<ActionResponse>;
-  // private unlinkPersonError$: Observable<ActionResponse>;
+  private linkPersonError$: Observable<EffectFeedbackInterface>;
+  private unlinkPersonError$: Observable<EffectFeedbackInterface>;
 
   // presentation streams
   public apiErrors$: Observable<ApiValidationErrors>;
 
-  // TODO: inject toaster service for showing success message
-  // TODO: remove mockViewModel when selectors are available
   constructor(
     private store: Store<DalState>,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
@@ -57,44 +45,42 @@ export class CoupledTeachersViewModel {
   }
 
   private setIntermediateStreams(): void {
-    // TODO: replace pseudo selector code with real selectors
-    // this.linkPersonError$ = this.store.pipe(
-    //   select(
-    //     ResponseQueries.get({
-    //       action:
-    //         TeacherStudentActions.TeacherStudentActionTypes.LinkTeacherStudent,
-    //       type: 'error'
-    //     })
-    //   )
-    // );
-    // TODO: replace pseudo selector code with real selectors
-    // this.unlinkPersonError$ = this.store.pipe(
-    //   select(
-    //     ResponseQueries.get({
-    //       action:
-    //         TeacherStudentActions.TeacherStudentActionTypes
-    //           .UnlinkTeacherStudent,
-    //       type: 'error'
-    //     })
-    //   )
-    // );
+    this.linkPersonError$ = this.store.pipe(
+      select(EffectFeedbackQueries.getFeedbackForAction, {
+        actionType:
+          TeacherStudentActions.TeacherStudentActionTypes.LinkTeacherStudent
+      })
+    );
+
+    this.unlinkPersonError$ = this.store.pipe(
+      select(EffectFeedbackQueries.getFeedbackForAction, {
+        actionType:
+          TeacherStudentActions.TeacherStudentActionTypes.UnlinkTeacherStudent
+      })
+    );
   }
 
   private setPresentationStreams(): void {
-    // this.apiErrors$ = this.linkPersonError$.pipe(
-    //   map(response => {
-    //     // TODO: switch based on response.message
-    //     switch (response.message) {
-    //       case 'nonExistingTeacherCode':
-    //         return { nonExistingTeacherCode: 'Deze code is niet geldig ...' };
-    //       default:
-    //         break;
-    //     }
-    //     return {
-    //       apiError: response.message
-    //     };
-    //   })
-    // );
+    this.apiErrors$ = this.linkPersonError$.pipe(
+      filter(feedback => !!feedback),
+      map(feedback => {
+        switch (feedback.message) {
+          case 'no_teacher_found_for_given_key':
+            return {
+              nonExistingTeacherCode: true
+            };
+          case 'empty_key':
+            return {
+              noPublicKey: true
+            };
+          default:
+            break;
+        }
+        return {
+          apiError: true
+        };
+      })
+    );
   }
 
   public linkPerson(publicKey: string): void {
