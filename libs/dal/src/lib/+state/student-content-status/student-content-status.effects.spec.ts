@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { MockDate } from '@campus/testing';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Update } from '@ngrx/entity';
@@ -8,12 +9,19 @@ import { hot } from '@nrwl/nx/testing';
 import { undo } from 'ngrx-undo';
 import { Observable, of } from 'rxjs';
 import { StudentContentStatusReducer } from '.';
+import { StudentContentStatusFixture } from '../../+fixtures';
 import { StudentContentStatusInterface } from '../../+models';
 import { STUDENT_CONTENT_STATUS_SERVICE_TOKEN } from '../../student-content-status/student-content-status.service.interface';
-import { ActionSuccessful } from '../dal.actions';
+import {
+  EffectFeedback,
+  EffectFeedbackActions,
+  EffectFeedbackInterface,
+  Priority
+} from '../effect-feedback';
 import {
   AddStudentContentStatus,
   LoadStudentContentStatuses,
+  StudentContentStatusAdded,
   StudentContentStatusesLoaded,
   StudentContentStatusesLoadError,
   UpdateStudentContentStatus
@@ -34,6 +42,13 @@ describe('StudentContentStatusEffects', () => {
   let actions: Observable<any>;
   let effects: StudentContentStatusesEffects;
   let usedState: any;
+  let uuid: Function;
+  let dateMock: MockDate;
+
+  let feedbackErrorMessage: EffectFeedbackInterface;
+  let feedbackSuccessMessage: EffectFeedbackInterface;
+  let feedbackSuccessAction: EffectFeedbackActions.AddEffectFeedback;
+  let feedbackErrorAction: EffectFeedbackActions.AddEffectFeedback;
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -97,11 +112,16 @@ describe('StudentContentStatusEffects', () => {
         },
         StudentContentStatusesEffects,
         DataPersistence,
-        provideMockActions(() => actions)
+        provideMockActions(() => actions),
+        {
+          provide: 'uuid',
+          useValue: () => 'foo'
+        }
       ]
     });
 
     effects = TestBed.get(StudentContentStatusesEffects);
+    uuid = TestBed.get('uuid');
   });
 
   describe('loadStudentContentStatus$', () => {
@@ -214,13 +234,41 @@ describe('StudentContentStatusEffects', () => {
     const updateAction = new UpdateStudentContentStatus({
       studentContentStatus: update
     });
-    const successAction = new ActionSuccessful({
-      successfulAction: updateAction.type
-    });
+
     describe('with initialState', () => {
       beforeAll(() => {
         usedState = StudentContentStatusReducer.initialState;
+        dateMock = new MockDate(); // needed for effect feedback timestamp
+
+        feedbackErrorMessage = new EffectFeedback({
+          id: uuid(),
+          triggerAction: updateAction,
+          message: 'Status kon niet worden aangepast.',
+          type: 'error',
+          userActions: [
+            { title: 'Opnieuw proberen', userAction: updateAction }
+          ],
+          priority: Priority.HIGH
+        });
+
+        feedbackSuccessMessage = new EffectFeedback({
+          id: uuid(),
+          triggerAction: updateAction,
+          message: 'Status is aangepast.'
+        });
+
+        feedbackSuccessAction = new EffectFeedbackActions.AddEffectFeedback({
+          effectFeedback: feedbackSuccessMessage
+        });
+
+        feedbackErrorAction = new EffectFeedbackActions.AddEffectFeedback({
+          effectFeedback: feedbackErrorMessage
+        });
       });
+      afterAll(() => {
+        dateMock.returnRealDate();
+      });
+
       beforeEach(() => {
         mockServiceMethodReturnValue('updateStudentContentStatus', []);
       });
@@ -228,7 +276,7 @@ describe('StudentContentStatusEffects', () => {
         expectInAndOut(
           effects.updateStudentContentStatus$,
           updateAction,
-          successAction
+          feedbackSuccessAction
         );
       });
 
@@ -237,37 +285,86 @@ describe('StudentContentStatusEffects', () => {
           mockServiceMethodError('updateStudentContentStatus', 'update failed');
         });
 
-        it('should dispatch an undo action', () => {
-          const effectOutput = undo(updateAction);
-          expectInAndOut(
-            effects.updateStudentContentStatus$,
-            updateAction,
-            effectOutput
+        it('should dispatch an undo and feedback action', () => {
+          const undoAction = undo(updateAction);
+
+          actions = hot('-a-', { a: updateAction });
+          expect(effects.updateStudentContentStatus$).toBeObservable(
+            hot('-(ab)', {
+              a: undoAction,
+              b: feedbackErrorAction
+            })
           );
         });
       });
     });
   });
   describe('addStudentContentStatus$', () => {
-    const studentContentStatus = createStudentContentStatus(1, 1);
+    const studentContentStatus = new StudentContentStatusFixture();
     const addAction = new AddStudentContentStatus({
       studentContentStatus
     });
-    const successAction = new ActionSuccessful({
-      successfulAction: addAction.type
+    const addedAction = new StudentContentStatusAdded({
+      studentContentStatus
     });
     describe('with initialState', () => {
       beforeAll(() => {
         usedState = StudentContentStatusReducer.initialState;
+        dateMock = new MockDate(); // needed for effect feedback timestamp
+
+        feedbackErrorMessage = new EffectFeedback({
+          id: uuid(),
+          triggerAction: addAction,
+          message: 'Status kon niet worden aangepast.',
+          type: 'error',
+          userActions: [{ title: 'Opnieuw proberen', userAction: addAction }],
+          priority: Priority.HIGH
+        });
+
+        feedbackSuccessMessage = new EffectFeedback({
+          id: uuid(),
+          triggerAction: addAction,
+          message: 'Status is aangepast.'
+        });
+
+        feedbackSuccessAction = new EffectFeedbackActions.AddEffectFeedback({
+          effectFeedback: feedbackSuccessMessage
+        });
+
+        feedbackErrorAction = new EffectFeedbackActions.AddEffectFeedback({
+          effectFeedback: feedbackErrorMessage
+        });
+      });
+      afterAll(() => {
+        dateMock.returnRealDate();
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('addStudentContentStatus', []);
+        mockServiceMethodReturnValue(
+          'addStudentContentStatus',
+          studentContentStatus
+        );
       });
       it('should trigger an api call with the initialState if force is not true', () => {
-        expectInAndOut(
-          effects.addStudentContentStatuses$,
-          addAction,
-          successAction
+        actions = hot('-a', { a: addAction });
+        expect(effects.addStudentContentStatuses$).toBeObservable(
+          hot('-(ab)', {
+            a: addedAction,
+            b: feedbackSuccessAction
+          })
+        );
+      });
+
+      it('should return a feedback action when the api call errors', () => {
+        mockServiceMethodError(
+          'addStudentContentStatus',
+          'Something went wrong!'
+        );
+
+        actions = hot('-a-', { a: addAction });
+        expect(effects.addStudentContentStatuses$).toBeObservable(
+          hot('-a', {
+            a: feedbackErrorAction
+          })
         );
       });
     });

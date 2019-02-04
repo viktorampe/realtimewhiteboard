@@ -3,13 +3,18 @@ import { StudentContentStatusInterface } from '@campus/dal';
 import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { undo } from 'ngrx-undo';
-import { map } from 'rxjs/operators';
-import { DalActions } from '..';
+import { from } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 import {
   StudentContentStatusServiceInterface,
   STUDENT_CONTENT_STATUS_SERVICE_TOKEN
 } from '../../student-content-status/student-content-status.service.interface';
 import { DalState } from '../dal.state.interface';
+import {
+  EffectFeedback,
+  EffectFeedbackActions,
+  Priority
+} from '../effect-feedback';
 import {
   AddStudentContentStatus,
   LoadStudentContentStatuses,
@@ -60,17 +65,37 @@ export class StudentContentStatusesEffects {
         return this.studentContentStatusesService
           .updateStudentContentStatus(newValue)
           .pipe(
-            map(
-              () =>
-                new DalActions.ActionSuccessful({
-                  successfulAction: action.type
-                })
-            )
+            map(() => {
+              const effectFeedback = new EffectFeedback({
+                id: this.uuid(),
+                triggerAction: action,
+                message: 'Status is aangepast.',
+                type: 'success',
+                display: true,
+                priority: Priority.NORM
+              });
+
+              return new EffectFeedbackActions.AddEffectFeedback({
+                effectFeedback
+              });
+            })
           );
       },
       undoAction: (action: UpdateStudentContentStatus, error: any) => {
-        return undo(action);
-        // TODO: show notification to user
+        const undoAction = undo(action);
+        const effectFeedback = new EffectFeedback({
+          id: this.uuid(),
+          triggerAction: action,
+          message: 'Status kon niet worden aangepast.',
+          type: 'error',
+          userActions: [{ title: 'Opnieuw proberen', userAction: action }],
+          display: true,
+          priority: Priority.HIGH
+        });
+        const effectFeedbackAction = new EffectFeedbackActions.AddEffectFeedback(
+          { effectFeedback }
+        );
+        return from([undoAction, effectFeedbackAction]);
       }
     }
   );
@@ -85,13 +110,40 @@ export class StudentContentStatusesEffects {
         return this.studentContentStatusesService
           .addStudentContentStatus(newValue)
           .pipe(
-            map(studentContentStatus => {
-              return new StudentContentStatusAdded({ studentContentStatus });
+            switchMap(studentContentStatus => {
+              const effectFeedback = new EffectFeedback({
+                id: this.uuid(),
+                triggerAction: action,
+                message: 'Status is aangepast.',
+                type: 'success',
+                display: true,
+                priority: Priority.NORM
+              });
+              const effectFeedbackAction = new EffectFeedbackActions.AddEffectFeedback(
+                { effectFeedback }
+              );
+              const studentContentStatusAddedAction = new StudentContentStatusAdded(
+                { studentContentStatus }
+              );
+
+              return from([
+                studentContentStatusAddedAction,
+                effectFeedbackAction
+              ]);
             })
           );
       },
       onError: (action: AddStudentContentStatus, error: any) => {
-        //TODO: show notification to user
+        const effectFeedback = new EffectFeedback({
+          id: this.uuid(),
+          triggerAction: action,
+          message: 'Status kon niet worden aangepast.',
+          type: 'error',
+          userActions: [{ title: 'Opnieuw proberen', userAction: action }],
+          display: true,
+          priority: Priority.HIGH
+        });
+        return new EffectFeedbackActions.AddEffectFeedback({ effectFeedback });
       }
     }
   );
@@ -100,6 +152,7 @@ export class StudentContentStatusesEffects {
     private actions: Actions,
     private dataPersistence: DataPersistence<DalState>,
     @Inject(STUDENT_CONTENT_STATUS_SERVICE_TOKEN)
-    private studentContentStatusesService: StudentContentStatusServiceInterface
+    private studentContentStatusesService: StudentContentStatusServiceInterface,
+    @Inject('uuid') private uuid: Function
   ) {}
 }

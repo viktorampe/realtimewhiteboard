@@ -97,7 +97,7 @@ describe('StudentContentStatuses Reducer', () => {
   describe('add actions', () => {
     it('should add one studentContentStatus', () => {
       const studentContentStatus = studentContentStatuses[0];
-      const action = new StudentContentStatusActions.AddStudentContentStatus({
+      const action = new StudentContentStatusActions.StudentContentStatusAdded({
         studentContentStatus
       });
 

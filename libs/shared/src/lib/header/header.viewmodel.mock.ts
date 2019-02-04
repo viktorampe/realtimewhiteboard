@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   Alert,
   AlertFixture,
+  AlertQueueInterface,
   BreadcrumbLinkFixture,
   PersonFixture,
   PersonInterface
@@ -9,8 +10,7 @@ import {
 import {
   BreadcrumbLinkInterface,
   DropdownMenuItemInterface,
-  ListFormat,
-  NotificationItemInterface
+  ListFormat
 } from '@campus/ui';
 import { BehaviorSubject, Observable } from 'rxjs';
 
@@ -19,28 +19,28 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class MockHeaderViewModel {
   // recent alerts fixture
-  private alertNotifications: NotificationItemInterface[] = [
-    {
-      icon: 'lesmateriaal',
-      titleText: 'alert title',
+  private alertNotifications: AlertQueueInterface[] = [
+    new AlertFixture({
+      type: 'lesmateriaal',
+      title: 'alert title',
       link: '/linkToAlert',
-      notificationText: 'this is an alert',
-      notificationDate: new Date()
-    },
-    {
-      icon: 'lesmateriaal',
-      titleText: 'alert title',
+      message: 'this is an alert',
+      sentAt: new Date()
+    }),
+    new AlertFixture({
+      type: 'lesmateriaal',
+      title: 'alert title',
       link: '/linkToAlert',
-      notificationText: 'this is an alert',
-      notificationDate: new Date()
-    },
-    {
-      icon: 'lesmateriaal',
-      titleText: 'alert title',
+      message: 'this is an alert',
+      sentAt: new Date()
+    }),
+    new AlertFixture({
+      type: 'lesmateriaal',
+      title: 'alert title',
       link: '/linkToAlert',
-      notificationText: 'this is an alert',
-      notificationDate: new Date()
-    }
+      message: 'this is an alert',
+      sentAt: new Date()
+    })
   ];
 
   enableAlerts = true;
@@ -87,7 +87,7 @@ export class MockHeaderViewModel {
   // intermediate streams
 
   //presentation stream
-  alertNotifications$ = new BehaviorSubject<NotificationItemInterface[]>(
+  alertNotifications$ = new BehaviorSubject<AlertQueueInterface[]>(
     this.alertNotifications
   );
   unreadAlertCount$ = new BehaviorSubject<number>(0);

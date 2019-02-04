@@ -15,6 +15,7 @@ export * from './Method.fixture';
 export * from './Person.fixture';
 export * from './Result.fixture';
 export * from './Role.fixture';
+export * from './StudentContentStatus.fixture';
 export * from './Task.fixture';
 export * from './TaskEduContent.fixture';
 export * from './TaskInstance.fixture';

@@ -1,6 +1,6 @@
 <div class="shared-header">
   <div hide-mobile class="shared-header__app-bar">
-    <campus-app-bar>
+    <campus-app-bar *ngIf="(isResolved$ | async)">
       <campus-breadcrumbs
         bar__left
         [breadCrumbs]="breadCrumbs$ | async"
@@ -13,14 +13,15 @@
         bar__right
         *ngIf="enableAlerts"
       >
-        <campus-button
+        <mat-icon
+          [svgIcon]="'notifications'"
           [matBadge]="unreadAlertCount$ | async"
           [matBadgeHidden]="!((unreadAlertCount$ | async) > 0)"
           matBadgePosition="above before"
           matBadgeColor="warn"
           (click)="dropDownAlerts.toggle()"
-          >Meldingen</campus-button
-        >
+        ></mat-icon>
+
         <campus-dropdown-menu
           #dropDownAlerts
           [showHeader]="true"
@@ -32,12 +33,13 @@
         >
           <ng-container *ngIf="(alertNotifications$ | async) as notifications">
             <campus-notification
-              *ngFor="let alert of notifications"
+              *ngFor="let notification of notifications"
               dropdown
-              [icon]="alert.icon"
-              [notificationText]="alert.titleText"
-              [routerLink]="alert.link"
-              [notificationDate]="alert.notificationDate"
+              [icon]="notification.icon"
+              [notificationText]="notification.titleText"
+              [routerLink]="notification.link"
+              [notificationDate]="notification.notificationDate"
+              [accented]="notification.accented"
             ></campus-notification>
           </ng-container>
         </campus-dropdown-menu>
