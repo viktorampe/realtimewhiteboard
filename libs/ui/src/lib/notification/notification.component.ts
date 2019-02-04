@@ -36,6 +36,8 @@ export class NotificationComponent implements OnDestroy {
   @Input() notificationDate: Date;
   @Input() accented: boolean;
   @Input() read = true;
+  //tslint:disable-next-line:no-input-rename
+  @Input('routerLink') link: string[];
 
   @HostBinding('class.ui-notification')
   get isNotification() {

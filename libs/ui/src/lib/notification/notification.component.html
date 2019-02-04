@@ -15,7 +15,9 @@
   <div *ngIf="titleText" class="ui-notification__title">{{ titleText }}</div>
   <div class="ui-notification__text"
     >{{ notificationText
-    }}<span *ngIf="accented && link">-> <span>Lees meer...</span></span>
+    }}<span *ngIf="accented && link"
+      >&nbsp;&rarr; <span>Lees meer&hellip;</span></span
+    >
   </div>
 </div>
 <div class="ui-notification__end">
@@ -24,6 +26,6 @@
   }}</div>
 
   <div class="ui-notification__buttons">
-    <ng-content select="campus-button"></ng-content>
+    <ng-content select="campus-button mat-icon"></ng-content>
   </div>
 </div>

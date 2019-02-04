@@ -20,9 +20,8 @@
             [notificationDate]="notification.notificationDate"
             [read]="notification.read"
             [accented]="notification.accented"
-          ></campus-notification>
-          <div class="pages-settings-alerts__info-panel__notification__actions"
-            ><mat-icon
+          >
+            <mat-icon
               class="pages-settings-alerts__info-panel__notification__actions__read"
               [svgIcon]="notification.read ? 'visibility-off' : 'visibility'"
               (click)="
@@ -36,7 +35,7 @@
               [svgIcon]="'delete'"
               (click)="removeAlert(notification.id)"
             ></mat-icon>
-          </div>
+          </campus-notification>
         </div>
       </ng-container>
       <ng-template #noAlerts
