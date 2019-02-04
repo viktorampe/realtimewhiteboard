@@ -23,7 +23,7 @@ export class ContentStatusesEffects {
       run: (action: LoadContentStatuses, state: DalState) => {
         if (!action.payload.force && state.contentStatuses.loaded) return;
         return this.contentStatusService
-          .getAllConstentStatuses()
+          .getAllContentStatuses()
           .pipe(
             map(
               contentStatuses => new ContentStatusesLoaded({ contentStatuses })

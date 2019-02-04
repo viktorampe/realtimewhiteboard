@@ -35,9 +35,7 @@ export class StudentContentStatusService
   ): Observable<StudentContentStatusInterface> {
     return this.studentContentStatusApi.patchAttributes(
       studentContentStatus.id,
-      {
-        contentStatusId: studentContentStatus.contentStatusId
-      }
+      { contentStatusId: studentContentStatus.contentStatusId }
     );
   }
 
@@ -48,10 +46,9 @@ export class StudentContentStatusService
       studentContentStatus.personId,
       studentContentStatus
     );
-    return this.studentContentStatusApi.patchOrCreate(studentContentStatus);
   }
 
-  getAllConstentStatuses(): Observable<ContentStatusInterface[]> {
+  getAllContentStatuses(): Observable<ContentStatusInterface[]> {
     return this.contentStatusApi.find<ContentStatusInterface>();
   }
 }
