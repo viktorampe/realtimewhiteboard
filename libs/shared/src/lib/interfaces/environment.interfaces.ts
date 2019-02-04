@@ -29,6 +29,15 @@ export interface EnvironmentMessagesFeatureInterface {
 
 export interface EnvironmentErrorManagementFeatureInterface {
   managedStatusCodes: number[];
+  allowedErrors: EnvironmentErrorManagementFeatureAllowedErrorInterface[];
+}
+
+export interface EnvironmentErrorManagementFeatureAllowedErrorInterface {
+  status?: number;
+  name?: string;
+  statusText?: string;
+  urlRegex?: RegExp;
+  messageRegex?: RegExp;
 }
 
 export interface EnvironmentWebsiteInterface {
