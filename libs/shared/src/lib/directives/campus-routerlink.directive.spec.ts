@@ -12,11 +12,11 @@ import { CampusRouterlinkDirective } from './campus-routerlink.directive';
 const navigateSpy = jest.fn();
 const windowSpy = jest.fn();
 
-class Mapping implements EnvironmentIconMappingInterface {
+export class Mapping implements EnvironmentIconMappingInterface {
   [icon: string]: string;
 }
 
-class MockRouter {
+export class MockRouter {
   navigateByUrl = navigateSpy;
 }
 
