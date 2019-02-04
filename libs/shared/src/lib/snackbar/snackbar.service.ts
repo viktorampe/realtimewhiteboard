@@ -46,7 +46,7 @@ export class SnackBarService implements SnackBarServiceInterface {
   }
 
   private setPresentationStreams(): void {
-    this.snackbarAfterDismiss$ = this.feedback$.pipe(
+    const openedSnackbar$ = this.feedback$.pipe(
       filter(feedback => !!feedback),
       map(feedback => ({
         snackbarRef: this.snackBar.open(
@@ -57,7 +57,10 @@ export class SnackBarService implements SnackBarServiceInterface {
           this.snackbarConfig
         ),
         feedback: feedback
-      })),
+      }))
+    );
+
+    this.snackbarAfterDismiss$ = openedSnackbar$.pipe(
       switchMap(
         (snackbar: {
           snackbarRef: MatSnackBarRef<SimpleSnackBar>;
