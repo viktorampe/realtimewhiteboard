@@ -12,7 +12,7 @@ export class HeaderComponent implements OnInit {
   enableAlerts: boolean;
 
   profileMenuItems$ = this.headerViewModel.profileMenuItems$;
-  isResolved$ = this.headerViewModel.isResolved$;
+  alertsLoaded$ = this.headerViewModel.alertsLoaded$;
   breadCrumbs$ = this.headerViewModel.breadCrumbs$;
   alertNotifications$;
   unreadAlertCount$ = this.headerViewModel.unreadAlertCount$;
