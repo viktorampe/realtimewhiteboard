@@ -178,17 +178,17 @@ export class BundleDetailComponent
 
   private getBundle(): Observable<BundleInterface> {
     return this.routeParams$.pipe(
-      switchMap(params => {
-        return this.bundlesViewModel.getBundleById(params.bundle);
-      })
+      switchMap(params => this.bundlesViewModel.getBundleById(params.bundle)),
+      shareReplay(1)
     );
   }
 
   private getBundleContents(): Observable<UnlockedContent[]> {
     return this.routeParams$.pipe(
-      switchMap(params => {
-        return this.bundlesViewModel.getBundleContents(params.bundle);
-      })
+      switchMap(params =>
+        this.bundlesViewModel.getBundleContents(params.bundle)
+      ),
+      shareReplay(1)
     );
   }
 
