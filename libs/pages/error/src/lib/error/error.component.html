@@ -23,7 +23,7 @@
         </ng-template>
       </ng-container>
 
-      <p *ngSwitchCase="500">Er is iets fout gegaan. Probeer opnieuw.</p>
+      <p *ngSwitchCase="500">Er is iets fout gegaan. Ga terug naar <a onclick='history.go(-1)'>de vorige pagina</a> en probeer opnieuw.</p>
       <p *ngSwitchCase="404"
         >Het gevraagde bestand/URL werd niet gevonden&hellip; ¯\_(ツ)_/¯</p
       >
