@@ -30,8 +30,6 @@ export class AppViewModel {
   // intermediate streams
   private sideNavItems$: Observable<NavItem[]>;
   private profileMenuItems$: Observable<DropdownMenuItemInterface[]>;
-  private successFeedback$: Observable<EffectFeedbackInterface>;
-  private errorFeedback$: Observable<EffectFeedbackInterface>;
 
   // presentation stream
   public sideNavOpen$: Observable<boolean>;
@@ -56,7 +54,6 @@ export class AppViewModel {
   }
 
   private initialize() {
-    this.setSourceStreams();
     this.setIntermediateStreams();
     this.setPresentationStreams();
     this.subscribeToStreams();
@@ -64,14 +61,6 @@ export class AppViewModel {
 
   toggleSidebar(open: boolean) {
     this.store.dispatch(new UiActions.ToggleSideNav({ open }));
-  }
-
-  private setSourceStreams() {
-    this.successFeedback$ = this.store.select(
-      EffectFeedbackQueries.getNextSuccess
-    );
-
-    this.errorFeedback$ = this.store.select(EffectFeedbackQueries.getNextError);
   }
 
   private setIntermediateStreams() {
@@ -103,7 +92,9 @@ export class AppViewModel {
       this.store.dispatch(new UiActions.SetProfileMenuItems({ menuItems }))
     );
 
-    this.feedbackService.setupStreams(this.successFeedback$);
+    this.feedbackService.setupStreams(
+      this.store.select(EffectFeedbackQueries.getNextSuccess)
+    );
     this.feedbackService.snackbarAfterDismiss$.subscribe(
       (event: {
         dismissedWithAction: boolean;
@@ -123,24 +114,26 @@ export class AppViewModel {
     this.navigationItems$ = this.store.pipe(select(UiQuery.getSideNavItems));
     this.sideNavOpen$ = this.store.pipe(select(UiQuery.getSideNavOpen));
 
-    this.bannerFeedback$ = this.errorFeedback$.pipe(
-      // adds default cancel button, if needed
-      map(feedback => {
-        if (!feedback) return;
+    this.bannerFeedback$ = this.store
+      .select(EffectFeedbackQueries.getNextError)
+      .pipe(
+        // adds default cancel button, if needed
+        map(feedback => {
+          if (!feedback) return;
 
-        const feedbackToDisplay = { ...feedback };
-        if (feedbackToDisplay.useDefaultCancel) {
-          feedbackToDisplay.userActions = [
-            ...feedbackToDisplay.userActions,
-            {
-              title: 'annuleren',
-              userAction: null
-            }
-          ];
-        }
-        return feedbackToDisplay;
-      })
-    );
+          const feedbackToDisplay = { ...feedback };
+          if (feedbackToDisplay.useDefaultCancel) {
+            feedbackToDisplay.userActions = [
+              ...feedbackToDisplay.userActions,
+              {
+                title: 'annuleren',
+                userAction: null
+              }
+            ];
+          }
+          return feedbackToDisplay;
+        })
+      );
   }
 
   private getCurrentUser(): Observable<PersonInterface> {
