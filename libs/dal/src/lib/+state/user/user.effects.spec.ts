@@ -27,7 +27,7 @@ import {
   UserRemoved
 } from './user.actions';
 import { UserEffects } from './user.effects';
-// file.only
+
 const mockUser = {
   name: 'Mertens',
   firstName: 'Tom',
