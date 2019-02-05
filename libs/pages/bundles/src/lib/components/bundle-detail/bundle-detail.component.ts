@@ -74,12 +74,14 @@ export class BundleDetailComponent
   ) {}
 
   ngOnInit(): void {
-    this.allowMultiSelect$ = this.bundlesViewModel.allowMultiSelect();
     this.learningArea$ = this.getLearningArea();
     this.bundle$ = this.getBundle();
     this.bundleOwner$ = this.bundlesViewModel.getBundleOwner(this.bundle$);
     this.setupAlertsSubscription();
     this.unlockedContents$ = this.getBundleContents();
+    this.allowMultiSelect$ = this.bundlesViewModel.allowMultiSelect(
+      this.bundleOwner$
+    );
 
     this.filterTextInput.setFilterableItem(this);
   }

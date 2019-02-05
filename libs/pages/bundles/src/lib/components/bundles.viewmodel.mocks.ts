@@ -57,6 +57,10 @@ export class MockViewModel implements ViewModelInterface<BundlesViewModel> {
     ]
   });
 
+  allowMultiSelect(): Observable<boolean> {
+    return of(true);
+  }
+
   changeListFormat() {}
 
   setBundleAlertRead() {}

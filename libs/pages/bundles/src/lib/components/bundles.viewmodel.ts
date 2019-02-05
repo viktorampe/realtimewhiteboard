@@ -119,10 +119,12 @@ export class BundlesViewModel {
     );
   }
 
-  allowMultiSelect(): Observable<boolean> {
-    return this.authService.getCurrent().pipe(
-      map(user => {
-        return user.type === 'teacher';
+  allowMultiSelect(
+    bundleOwner$: Observable<PersonInterface>
+  ): Observable<boolean> {
+    return combineLatest(bundleOwner$, this.authService.getCurrent()).pipe(
+      map(([owner, user]) => {
+        return owner.id === user.id;
       })
     );
   }
