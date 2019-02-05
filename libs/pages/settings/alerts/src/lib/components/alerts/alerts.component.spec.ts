@@ -78,7 +78,7 @@ describe('AlertsComponent', () => {
           id: 100,
           icon: 'icon',
           titleText: 'title',
-          link: '',
+          link: 'some-link',
           notificationText: 'notification text',
           notificationDate: new Date(),
           read: false
@@ -108,7 +108,7 @@ describe('AlertsComponent', () => {
           id: 100,
           icon: 'icon',
           titleText: 'title',
-          link: '',
+          link: 'some-link',
           notificationText: 'notification text',
           notificationDate: new Date(),
           read: true
