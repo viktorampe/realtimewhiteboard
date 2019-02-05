@@ -150,7 +150,7 @@ export const environment: EnvironmentInterface = {
     // 'die-keure': 'assets/icons/die-keure.svg',
     'view-content': 'assets/icons/eye.svg',
     eye: 'assets/icons/eye.svg',
-    // eye2: 'assets/icons/eye2.svg',
+    eye2: 'assets/icons/eye2.svg',
     facebook: 'assets/icons/facebook.svg',
     // favorite: 'assets/icons/favorite.svg',
     // favorites: 'assets/icons/favorites.svg',
@@ -170,6 +170,8 @@ export const environment: EnvironmentInterface = {
     // pinterest: 'assets/icons/pinterest.svg',
     // 'polpo-small': 'assets/icons/polpo-small.svg',
     polpo: 'assets/icons/polpo.svg',
+    visibility: 'assets/icons/visibility.svg',
+    'visibility-off': 'assets/icons/visibility-off.svg',
     'power-on': 'assets/icons/power-on.svg',
     'smartschool:orange':
       'assets/icons/smartschool/s_logo_sso_button_orange_22x36.svg',
@@ -238,7 +240,15 @@ export const environment: EnvironmentInterface = {
       hasAppBarDropDown: false
     },
     errorManagement: {
-      managedStatusCodes: [500, 401, 404, 0]
+      managedStatusCodes: [500, 401, 404, 0],
+      allowedErrors: [
+        {
+          status: 404,
+          statusText: 'Not Found',
+          urlRegex: /http.*assets\/icons.*\.svg/i,
+          messageRegex: /Http failure response for http.*assets\/icons.*\.svg: 404 Not Found/i
+        }
+      ]
     }
   },
   sso: {

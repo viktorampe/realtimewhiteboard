@@ -45,9 +45,20 @@ describe('EffectFeedback selectors', () => {
         type: 'success'
       }),
       new EffectFeedbackFixture({
-        id: 'guid11',
-        display: true,
-        type: 'success'
+        id: 'guid6',
+        display: false,
+        triggerAction: { type: 'foo' }
+      }),
+      new EffectFeedbackFixture({
+        id: 'guid8',
+        display: true
+      }),
+      new EffectFeedbackFixture({ id: 'guid10', display: false }),
+      new EffectFeedbackFixture({ id: 'guid11', display: true }),
+      new EffectFeedbackFixture({
+        id: 'guid12',
+        display: false,
+        triggerAction: { type: 'bar' }
       })
     ]);
     storeState = { effectFeedback: effectFeedbackState };
@@ -92,5 +103,12 @@ describe('EffectFeedback selectors', () => {
 
     result = EffectFeedbackQueries.getNextSuccess(storeState);
     expect(result).toBeFalsy();
+  });
+
+  it('getFeedbackForAction() should return the first effect feedback with the specified trigger action', () => {
+    const results = EffectFeedbackQueries.getFeedbackForAction(storeState, {
+      actionType: 'bar'
+    });
+    expect(results).toBe(effectFeedbackState.entities['guid12']);
   });
 });

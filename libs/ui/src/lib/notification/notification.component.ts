@@ -9,6 +9,7 @@ import { BadgePersonInterface } from '../person-badge/person-badge.component';
 import { HumanDateTimePipe } from '../utils/pipes/human-date-time/human-date-time.pipe';
 
 export interface NotificationItemInterface {
+  id?: number;
   icon: string;
   person?: BadgePersonInterface;
   titleText: string;
@@ -35,6 +36,8 @@ export class NotificationComponent implements OnDestroy {
   @Input() notificationDate: Date;
   @Input() accented: boolean;
   @Input() read = true;
+  //tslint:disable-next-line:no-input-rename
+  @Input('routerLink') link: string[];
 
   @HostBinding('class.ui-notification')
   get isNotification() {

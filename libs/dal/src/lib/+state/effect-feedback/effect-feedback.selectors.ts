@@ -41,3 +41,12 @@ export const getNextError = createSelector(
     }
   }
 );
+export const getFeedbackForAction = createSelector(
+  selectEffectFeedbackState,
+  (state: State, props: { actionType: string }) => {
+    const filteredId = (state.ids as string[]).find(
+      id => state.entities[id].triggerAction.type === props.actionType
+    );
+    return state.entities[filteredId];
+  }
+);

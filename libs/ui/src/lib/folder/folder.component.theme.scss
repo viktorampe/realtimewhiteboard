@@ -5,6 +5,7 @@
   $ui-folder--grid-height: 119px !default;
   $ui-folder--grid-margin: 16px 0 0 0 !default;
   $ui-folder--line-height: 40px !default;
+  $ui-folder--line-margin: 0 0 5px 0 !default;
   $ui-folder--line-border-top-width: 3px !default;
   $ui-folder--line-border-bottom-width: 3px !default;
   $ui-folder_icon-wrapper--grid-width: 48px !default;
@@ -96,6 +97,7 @@
     }
     &--line {
       height: $ui-folder--line-height;
+      margin: $ui-folder--line-margin;
       border-top-width: $ui-folder--line-border-top-width;
       border-bottom-width: $ui-folder--line-border-top-width;
       .ui-folder {
