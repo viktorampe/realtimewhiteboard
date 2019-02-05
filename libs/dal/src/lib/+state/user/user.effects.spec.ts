@@ -15,7 +15,7 @@ import {
   PersonServiceInterface,
   PERSON_SERVICE_TOKEN
 } from '../../persons/persons.service';
-import { EffectFeedback } from '../effect-feedback';
+import { EffectFeedback, Priority } from '../effect-feedback';
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
 import {
   LoadPermissions,
@@ -27,8 +27,7 @@ import {
   UserRemoved
 } from './user.actions';
 import { UserEffects } from './user.effects';
-import uuid = require('uuid');
-
+// file.only
 const mockUser = {
   name: 'Mertens',
   firstName: 'Tom',
@@ -168,6 +167,7 @@ describe('UserEffects', () => {
 
   describe('updateUser$', () => {
     let successMessageAction: Action;
+    let errorMessageAction: Action;
     let personService: PersonServiceInterface;
     const changedProps: Partial<PersonInterface> = {
       firstName: 'new value',
@@ -176,7 +176,6 @@ describe('UserEffects', () => {
     const updateAction = new UpdateUser({ userId: mockUser.id, changedProps });
 
     let baseState: UserReducer.State;
-    const mockDate = Date.now();
 
     beforeAll(() => {
       const dateMock = new MockDate();
@@ -186,6 +185,22 @@ describe('UserEffects', () => {
           timeStamp: dateMock.mockDate.getTime(),
           triggerAction: updateAction,
           message: 'Je gegevens zijn opgeslagen.'
+        })
+      });
+      errorMessageAction = new AddEffectFeedback({
+        effectFeedback: new EffectFeedback({
+          id: uuid(),
+          timeStamp: dateMock.mockDate.getTime(),
+          triggerAction: updateAction,
+          message: 'Het is niet gelukt om je gegevens te bewaren.',
+          type: 'error',
+          userActions: [
+            {
+              title: 'Opnieuw proberen.',
+              userAction: updateAction
+            }
+          ],
+          priority: Priority.HIGH
         })
       });
     });
