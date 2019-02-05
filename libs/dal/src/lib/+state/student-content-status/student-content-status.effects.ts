@@ -1,10 +1,12 @@
 import { Inject, Injectable } from '@angular/core';
 import { StudentContentStatusInterface } from '@campus/dal';
 import { Actions, Effect } from '@ngrx/effects';
+import { select } from '@ngrx/store';
 import { DataPersistence } from '@nrwl/nx';
 import { undo } from 'ngrx-undo';
-import { from } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { from, Observable } from 'rxjs';
+import { concatMap, map, switchMap } from 'rxjs/operators';
+import { StudentContentStatusQueries } from '.';
 import {
   StudentContentStatusServiceInterface,
   STUDENT_CONTENT_STATUS_SERVICE_TOKEN
@@ -22,7 +24,8 @@ import {
   StudentContentStatusesActionTypes,
   StudentContentStatusesLoaded,
   StudentContentStatusesLoadError,
-  UpdateStudentContentStatus
+  UpdateStudentContentStatus,
+  UpsertStudentContentStatus
 } from './student-content-status.actions';
 
 @Injectable()
@@ -35,7 +38,7 @@ export class StudentContentStatusesEffects {
         if (!action.payload.force && state.studentContentStatuses.loaded)
           return;
 
-        return this.studentContentStatusesService
+        return this.studentContentStatusService
           .getAllByStudentId(action.payload.studentId)
           .pipe(
             map(
@@ -62,7 +65,7 @@ export class StudentContentStatusesEffects {
           ...action.payload.studentContentStatus.changes
         };
 
-        return this.studentContentStatusesService
+        return this.studentContentStatusService
           .updateStudentContentStatus(newValue)
           .pipe(
             map(() => {
@@ -107,17 +110,14 @@ export class StudentContentStatusesEffects {
       run: (action: AddStudentContentStatus, state: DalState) => {
         const newValue = action.payload.studentContentStatus;
 
-        return this.studentContentStatusesService
+        return this.studentContentStatusService
           .addStudentContentStatus(newValue)
           .pipe(
             switchMap(studentContentStatus => {
               const effectFeedback = new EffectFeedback({
                 id: this.uuid(),
                 triggerAction: action,
-                message: 'Status is aangepast.',
-                type: 'success',
-                display: true,
-                priority: Priority.NORM
+                message: 'Status is aangepast.'
               });
               const effectFeedbackAction = new EffectFeedbackActions.AddEffectFeedback(
                 { effectFeedback }
@@ -140,7 +140,77 @@ export class StudentContentStatusesEffects {
           message: 'Status kon niet worden aangepast.',
           type: 'error',
           userActions: [{ title: 'Opnieuw proberen', userAction: action }],
-          display: true,
+          priority: Priority.HIGH
+        });
+        return new EffectFeedbackActions.AddEffectFeedback({ effectFeedback });
+      }
+    }
+  );
+
+  @Effect()
+  upsertStudentContentStatus$ = this.dataPersistence.pessimisticUpdate(
+    StudentContentStatusesActionTypes.UpsertStudentContentStatus,
+    {
+      run: (action: UpsertStudentContentStatus, state: DalState) => {
+        return this.dataPersistence.store.pipe(
+          selectByBundleOrTask(action.payload.studentContentStatus),
+          concatMap(insertOrUpdate),
+          concatMap(studentContentStatus => {
+            const studentContentStatusAddedAction = new StudentContentStatusAdded(
+              { studentContentStatus }
+            );
+
+            const effectFeedback = new EffectFeedback({
+              id: this.uuid(),
+              triggerAction: action,
+              message: 'Status is aangepast.'
+            });
+            const effectFeedbackAction = new EffectFeedbackActions.AddEffectFeedback(
+              { effectFeedback }
+            );
+
+            return from([
+              studentContentStatusAddedAction,
+              effectFeedbackAction
+            ]);
+          })
+        );
+
+        function selectByBundleOrTask({
+          unlockedContentId,
+          taskEduContentId
+        }: StudentContentStatusInterface) {
+          if (unlockedContentId) {
+            return select(StudentContentStatusQueries.getByUnlockedContentId, {
+              unlockedContentId
+            });
+          }
+          return select(StudentContentStatusQueries.getByTaskEduContentId, {
+            taskEduContentId
+          });
+        }
+
+        function insertOrUpdate(
+          existing: StudentContentStatusInterface
+        ): Observable<StudentContentStatusInterface> {
+          if (existing) {
+            return this.studentContentStatusService.updateStudentContentStatus({
+              ...action.payload.studentContentStatus,
+              id: existing.id
+            });
+          }
+          return this.studentContentStatusService.addStudentContentStatus({
+            ...action.payload.studentContentStatus
+          });
+        }
+      },
+      onError: (action: UpsertStudentContentStatus, error: any) => {
+        const effectFeedback = new EffectFeedback({
+          id: this.uuid(),
+          triggerAction: action,
+          message: 'Status kon niet worden aangepast.',
+          type: 'error',
+          userActions: [{ title: 'Opnieuw proberen', userAction: action }],
           priority: Priority.HIGH
         });
         return new EffectFeedbackActions.AddEffectFeedback({ effectFeedback });
@@ -152,7 +222,7 @@ export class StudentContentStatusesEffects {
     private actions: Actions,
     private dataPersistence: DataPersistence<DalState>,
     @Inject(STUDENT_CONTENT_STATUS_SERVICE_TOKEN)
-    private studentContentStatusesService: StudentContentStatusServiceInterface,
+    private studentContentStatusService: StudentContentStatusServiceInterface,
     @Inject('uuid') private uuid: Function
   ) {}
 }

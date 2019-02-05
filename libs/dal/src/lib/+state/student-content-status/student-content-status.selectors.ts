@@ -1,4 +1,7 @@
+import { groupArrayByKey } from '@campus/utils';
+import { Dictionary } from '@ngrx/entity';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { StudentContentStatusInterface } from '../../+models';
 import {
   NAME,
   selectAll,
@@ -68,13 +71,36 @@ export const getById = createSelector(
   (state: State, props: { id: number }) => state.entities[props.id]
 );
 
-export const getByUnlockedContent = createSelector(
+export const getGroupedByUnlockedContentId = createSelector(
   selectStudentContentStatusesState,
-  (state: State, props: { unlockedContentId: number }) => {
-    return (
-      Object.values(state.entities).find(
-        entity => entity.unlockedContentId === props.unlockedContentId
-      ) || null
-    );
+  (state: State) => {
+    return groupArrayByKey(Object.values(state.entities), 'unlockedContentId');
+  }
+);
+export const getByUnlockedContentId = createSelector(
+  getGroupedByUnlockedContentId,
+  (
+    byUnlockedContentId: Dictionary<StudentContentStatusInterface[]>,
+    props: { unlockedContentId: number }
+  ) => {
+    const status = byUnlockedContentId[props.unlockedContentId];
+    return status ? status[0] : null;
+  }
+);
+
+export const getGroupedByTaskEduContentId = createSelector(
+  selectStudentContentStatusesState,
+  (state: State) => {
+    return groupArrayByKey(Object.values(state.entities), 'taskEduContentId');
+  }
+);
+export const getByTaskEduContentId = createSelector(
+  getGroupedByTaskEduContentId,
+  (
+    byTaskEduContentId: Dictionary<StudentContentStatusInterface[]>,
+    props: { taskEduContentId: number }
+  ) => {
+    const status = byTaskEduContentId[props.taskEduContentId];
+    return status ? status[0] : null;
   }
 );

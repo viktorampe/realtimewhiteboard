@@ -152,7 +152,7 @@ export class BundlesViewModel {
     unlockedContentId: number
   ): Observable<StudentContentStatusInterface> {
     return this.store.pipe(
-      select(StudentContentStatusQueries.getByUnlockedContent, {
+      select(StudentContentStatusQueries.getByUnlockedContentId, {
         unlockedContentId
       })
     );
@@ -160,29 +160,17 @@ export class BundlesViewModel {
 
   public saveContentStatus(
     unlockedContentId: number,
-    contentStatusId: number,
-    studentContentStatusId: number
+    contentStatusId: number
   ): void {
-    if (studentContentStatusId) {
-      this.store.dispatch(
-        new StudentContentStatusActions.UpdateStudentContentStatus({
-          studentContentStatus: {
-            id: studentContentStatusId,
-            changes: { contentStatusId }
-          }
-        })
-      );
-    } else {
-      this.store.dispatch(
-        new StudentContentStatusActions.AddStudentContentStatus({
-          studentContentStatus: {
-            personId: this.authService.userId,
-            unlockedContentId,
-            contentStatusId
-          }
-        })
-      );
-    }
+    this.store.dispatch(
+      new StudentContentStatusActions.UpsertStudentContentStatus({
+        studentContentStatus: {
+          personId: this.authService.userId,
+          unlockedContentId,
+          contentStatusId
+        }
+      })
+    );
   }
 
   getLearningAreaById(areaId: number): Observable<LearningAreaInterface> {
@@ -212,23 +200,35 @@ export class BundlesViewModel {
         select(UnlockedContentQueries.getByBundleId, { bundleId })
       ),
       this.store.pipe(select(EduContentQueries.getAllEntities)),
-      this.store.pipe(select(UserContentQueries.getAllEntities))
+      this.store.pipe(select(UserContentQueries.getAllEntities)),
+      this.store.pipe(
+        select(StudentContentStatusQueries.getGroupedByUnlockedContentId)
+      )
     ).pipe(
-      map(([unlockedContents, eduContentEnts, userContentEnts]) => {
-        return unlockedContents.map(
-          (unlockedContent): UnlockedContent => {
-            return Object.assign(new UnlockedContent(), {
-              ...unlockedContent,
-              eduContent: unlockedContent.eduContentId
-                ? eduContentEnts[unlockedContent.eduContentId]
-                : undefined,
-              userContent: unlockedContent.userContentId
-                ? userContentEnts[unlockedContent.userContentId]
-                : undefined
-            });
-          }
-        );
-      }),
+      map(
+        ([
+          unlockedContents,
+          eduContentEnts,
+          userContentEnts,
+          studentContentStatuses
+        ]) => {
+          return unlockedContents.map(
+            (unlockedContent): UnlockedContent => {
+              return Object.assign(new UnlockedContent(), {
+                ...unlockedContent,
+                eduContent: unlockedContent.eduContentId
+                  ? eduContentEnts[unlockedContent.eduContentId]
+                  : undefined,
+                userContent: unlockedContent.userContentId
+                  ? userContentEnts[unlockedContent.userContentId]
+                  : undefined,
+                studentContentStatuses:
+                  studentContentStatuses[unlockedContent.id] || []
+              });
+            }
+          );
+        }
+      ),
       shareReplay(1)
     );
   }
