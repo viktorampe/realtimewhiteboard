@@ -15,13 +15,7 @@ describe('AlertsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [
-        UiModule,
-        RouterTestingModule.withRoutes([
-          { path: 'some-link', redirectTo: 'localhost' }
-        ]),
-        MatIconModule
-      ],
+      imports: [UiModule, RouterTestingModule, MatIconModule],
       declarations: [AlertsComponent],
       providers: [
         { provide: AlertsViewModel, useClass: MockAlertsViewModel },
