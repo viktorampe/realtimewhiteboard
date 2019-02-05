@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { MockDate } from '@campus/testing';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
@@ -14,6 +15,8 @@ import {
   PersonServiceInterface,
   PERSON_SERVICE_TOKEN
 } from '../../persons/persons.service';
+import { EffectFeedback } from '../effect-feedback';
+import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
 import {
   LoadPermissions,
   LoadUser,
@@ -21,10 +24,10 @@ import {
   RemoveUser,
   UpdateUser,
   UserLoaded,
-  UserRemoved,
-  UserUpdateMessage
+  UserRemoved
 } from './user.actions';
 import { UserEffects } from './user.effects';
+import uuid = require('uuid');
 
 const mockUser = {
   name: 'Mertens',
@@ -68,6 +71,7 @@ const mockPermissions = ['permission-a', 'permission-b', 'permission-c'];
 describe('UserEffects', () => {
   let actions: Observable<any>;
   let effects: UserEffects;
+  let uuid: Function;
 
   const loadUserAction = new LoadUser({ force: true });
   const removeUserAction = new RemoveUser();
@@ -103,10 +107,15 @@ describe('UserEffects', () => {
         UserEffects,
         DataPersistence,
         provideMockActions(() => actions),
-        { provide: PERSON_SERVICE_TOKEN, useValue: {} }
+        { provide: PERSON_SERVICE_TOKEN, useValue: {} },
+        {
+          provide: 'uuid',
+          useValue: () => 'foo'
+        }
       ]
     });
     effects = TestBed.get(UserEffects);
+    uuid = TestBed.get('uuid');
   });
 
   const expectInAndOut = (triggerAction: Action, effectOutput: any) => {
@@ -158,23 +167,28 @@ describe('UserEffects', () => {
   });
 
   describe('updateUser$', () => {
+    let successMessageAction: Action;
     let personService: PersonServiceInterface;
     const changedProps: Partial<PersonInterface> = {
       firstName: 'new value',
       name: 'new value'
     };
-    const mockDate = Date.now();
     const updateAction = new UpdateUser({ userId: mockUser.id, changedProps });
-    const successMessageAction = new UserUpdateMessage({
-      message: 'User updated',
-      type: 'success'
-    });
-    const errorMessageAction = new UserUpdateMessage({
-      message: 'User update failed',
-      type: 'error'
-    });
 
     let baseState: UserReducer.State;
+    const mockDate = Date.now();
+
+    beforeAll(() => {
+      const dateMock = new MockDate();
+      successMessageAction = new AddEffectFeedback({
+        effectFeedback: new EffectFeedback({
+          id: uuid(),
+          timeStamp: dateMock.mockDate.getTime(),
+          triggerAction: updateAction,
+          message: 'Je gegevens zijn opgeslagen.'
+        })
+      });
+    });
 
     beforeEach(() => {
       baseState = {

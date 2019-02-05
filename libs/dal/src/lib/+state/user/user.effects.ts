@@ -10,6 +10,11 @@ import {
   AUTH_SERVICE_TOKEN
 } from '../../persons/auth-service.interface';
 import {
+  EffectFeedback,
+  EffectFeedbackActions,
+  Priority
+} from '../effect-feedback';
+import {
   PersonServiceInterface,
   PERSON_SERVICE_TOKEN
 } from './../../persons/persons.service';
@@ -23,8 +28,7 @@ import {
   UpdateUser,
   UserActionTypes,
   UserLoadError,
-  UserRemoveError,
-  UserUpdateMessage
+  UserRemoveError
 } from './user.actions';
 
 @Injectable()
@@ -102,19 +106,35 @@ export class UserEffects {
           .updateUser(action.payload.userId, action.payload.changedProps)
           .pipe(
             mapTo(
-              new UserUpdateMessage({
-                message: 'User updated',
-                type: 'success'
+              new EffectFeedbackActions.AddEffectFeedback({
+                effectFeedback: new EffectFeedback({
+                  id: this.uuid(),
+                  triggerAction: action,
+                  message: 'Je gegevens zijn opgeslagen.'
+                })
               })
             )
           );
       },
       undoAction: (action: UpdateUser, state: DalState) => {
+        // TODO: do we need to display the error,
+        // or will the profile form handle this?
         return from([
           undo(action),
-          new UserUpdateMessage({
-            message: 'User update failed',
-            type: 'error'
+          new EffectFeedbackActions.AddEffectFeedback({
+            effectFeedback: new EffectFeedback({
+              id: this.uuid(),
+              triggerAction: action,
+              message: 'Het is niet gelukt om je gegevens te bewaren.',
+              type: 'error',
+              userActions: [
+                {
+                  title: 'Opnieuw proberen.',
+                  userAction: action
+                }
+              ],
+              priority: Priority.HIGH
+            })
           })
         ]);
       }
@@ -148,6 +168,7 @@ export class UserEffects {
     private actions$: Actions,
     private dataPersistence: DataPersistence<DalState>,
     @Inject(PERSON_SERVICE_TOKEN) private personService: PersonServiceInterface,
-    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
+    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
+    @Inject('uuid') private uuid: Function
   ) {}
 }

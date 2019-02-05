@@ -1,8 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {
   CredentialQueries,
   DalState,
   FavoriteInterface,
+  FeedbackServiceInterface,
+  FEEDBACK_SERVICE_TOKEN,
   LearningAreaFixture,
   PassportUserCredentialInterface,
   PersonInterface,
@@ -30,7 +32,9 @@ export class AppViewModel {
 
   constructor(
     private store: Store<DalState>,
-    private navItemService: NavItemService
+    private navItemService: NavItemService,
+    @Inject(FEEDBACK_SERVICE_TOKEN)
+    private snackBarService: FeedbackServiceInterface
   ) {
     this.initialize();
   }
