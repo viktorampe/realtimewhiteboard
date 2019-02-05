@@ -2,7 +2,6 @@ import { Inject, Injectable } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   CanActivate,
-  Router,
   RouterStateSnapshot
 } from '@angular/router';
 import {
@@ -26,8 +25,7 @@ export class AuthenticationGuard implements CanActivate {
     private store: Store<DalState>,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     @Inject(ENVIRONMENT_LOGIN_TOKEN)
-    public environmentLogin: EnvironmentLoginInterface,
-    private router: Router
+    public environmentLogin: EnvironmentLoginInterface
   ) {}
   canActivate(
     route: ActivatedRouteSnapshot,
