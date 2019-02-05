@@ -33,6 +33,7 @@ import {
   ENVIRONMENT_API_TOKEN,
   ENVIRONMENT_ERROR_MANAGEMENT_FEATURE_TOKEN,
   ENVIRONMENT_ICON_MAPPING_TOKEN,
+  ENVIRONMENT_LOGIN_TOKEN,
   ENVIRONMENT_LOGOUT_TOKEN,
   ENVIRONMENT_MESSAGES_FEATURE_TOKEN,
   ENVIRONMENT_SSO_TOKEN,
@@ -128,6 +129,10 @@ export class SharedModule {
         },
         {
           provide: ENVIRONMENT_LOGOUT_TOKEN,
+          useValue: environmentLogout
+        },
+        {
+          provide: ENVIRONMENT_LOGIN_TOKEN,
           useValue: environmentLogout
         },
         {
