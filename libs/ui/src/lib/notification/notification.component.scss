@@ -35,7 +35,7 @@
 
   &__date {
     font-size: 80%;
-    margin: 5px;
+    margin: 5px 0 5px 5px;
     padding: 5px;
     white-space: nowrap;
     align-self: center;
@@ -94,7 +94,6 @@
 
     &__buttons {
       align-self: flex-end;
-      flex-wrap: wrap;
       justify-content: flex-end;
     }
   }

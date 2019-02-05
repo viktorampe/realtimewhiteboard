@@ -26,7 +26,7 @@ describe('AlertToNotificationItemPipe', () => {
   it('should sanitize angular js link', () => {
     const alert = new AlertFixture({
       sentAt: new Date(),
-      link: '/#/linknaarbundle',
+      link: 'http://www.polpo.be/#/linknaarbundle',
       message: 'wortel'
     });
     const pipe = new AlertToNotificationItemPipe();
@@ -35,7 +35,7 @@ describe('AlertToNotificationItemPipe', () => {
       read: false,
       accented: false,
       icon: 'bundle',
-      link: '/linknaarbundle',
+      link: 'http://www.polpo.be/linknaarbundle',
       notificationText: 'wortel',
       notificationDate: new Date(alert.sentAt)
     };
