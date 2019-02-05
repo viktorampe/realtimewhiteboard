@@ -18,7 +18,7 @@ describe('AlertsComponent', () => {
       imports: [
         UiModule,
         RouterTestingModule.withRoutes([
-          { path: 'some-link', redirectTo: 'localhost' }
+          { path: '', redirectTo: 'localhost' }
         ]),
         MatIconModule
       ],
@@ -84,7 +84,7 @@ describe('AlertsComponent', () => {
           id: 100,
           icon: 'icon',
           titleText: 'title',
-          link: 'some-link',
+          link: '',
           notificationText: 'notification text',
           notificationDate: new Date(),
           read: false
@@ -114,7 +114,7 @@ describe('AlertsComponent', () => {
           id: 100,
           icon: 'icon',
           titleText: 'title',
-          link: 'some-link',
+          link: '',
           notificationText: 'notification text',
           notificationDate: new Date(),
           read: true
