@@ -7,6 +7,9 @@ export const environment = {
   logout: {
     url: 'https://staging.polpo.be/identificatie/start'
   },
+  login: {
+    url: 'https://staging.polpo.be/identificatie/start'
+  },
   features: {
     alerts: {
       enabled: true,
