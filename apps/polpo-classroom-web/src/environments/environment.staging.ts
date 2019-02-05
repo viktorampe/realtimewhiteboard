@@ -4,6 +4,9 @@ export const environment = {
   website: {
     url: 'https://www.staging.polpo.be'
   },
+  logout: {
+    url: 'https://staging.polpo.be/identificatie/start'
+  },
   features: {
     alerts: {
       enabled: true,

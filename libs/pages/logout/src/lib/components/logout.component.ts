@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { LogoutViewModel } from './logout.viewmodel';
 
 @Component({
   selector: 'campus-logout',
@@ -6,7 +7,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./logout.component.scss']
 })
 export class LogoutComponent implements OnInit {
-  constructor() {}
+  constructor(private logoutViewModel: LogoutViewModel) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.logoutViewModel.logout();
+  }
 }

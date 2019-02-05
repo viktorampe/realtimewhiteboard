@@ -13,7 +13,7 @@ import {
 import { DropdownMenuItemInterface, NavItem } from '@campus/ui';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable, of } from 'rxjs';
-import { map, skipWhile, switchMapTo } from 'rxjs/operators';
+import { filter, map, skipWhile, switchMapTo } from 'rxjs/operators';
 import { NavItemService } from './services/nav-item-service';
 
 @Injectable({
@@ -50,6 +50,7 @@ export class AppViewModel {
       this.getCurrentUser(),
       this.getFavorites()
     ).pipe(
+      filter(([user, favorites]) => !!user),
       map(([user, favorites]) =>
         this.navItemService.getSideNavItems(user, favorites)
       )

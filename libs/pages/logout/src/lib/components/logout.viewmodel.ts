@@ -1,16 +1,30 @@
-import { Resolve } from '@angular/router';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { take } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
+import { DalState, UserActions, UserQueries } from '@campus/dal';
+import {
+  EnvironmentLogoutInterface,
+  ENVIRONMENT_LOGOUT_TOKEN
+} from '@campus/shared';
+import { select, Store } from '@ngrx/store';
+import { filter, take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
-export class LogoutViewModel implements Resolve<boolean> {
-  constructor() {}
+export class LogoutViewModel {
+  constructor(
+    private store: Store<DalState>,
+    @Inject(ENVIRONMENT_LOGOUT_TOKEN)
+    public environmentLogout: EnvironmentLogoutInterface
+  ) {}
 
-  resolve(): Observable<boolean> {
-    // TODO update
-    return new BehaviorSubject<boolean>(true).pipe(take(1));
+  logout(): void {
+    this.store.dispatch(new UserActions.RemoveUser());
+    this.store
+      .pipe(
+        select(UserQueries.getCurrentUser),
+        filter(currentUser => !currentUser),
+        take(1)
+      )
+      .subscribe(() => (window.location.href = this.environmentLogout.url));
   }
 }
