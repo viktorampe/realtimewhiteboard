@@ -3,6 +3,11 @@ export {
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN
 } from './lib/content/open-static-content.interface';
+export {
+  FeedBackServiceInterface,
+  FEEDBACK_SERVICE_TOKEN
+} from './lib/feedback/';
+export { SNACKBAR_DEFAULT_CONFIG_TOKEN } from './lib/feedback/snackbar.config';
 export * from './lib/interceptors';
 export * from './lib/interfaces';
 export {
@@ -19,9 +24,4 @@ export {
   SCORM_EXERCISE_SERVICE_TOKEN
 } from './lib/scorm/scorm-exercise.service.interface';
 export * from './lib/shared.module';
-export {
-  SnackBarServiceInterface,
-  SNACKBAR_SERVICE_TOKEN
-} from './lib/snackbar/';
-export { SNACKBAR_DEFAULT_CONFIG_TOKEN } from './lib/snackbar/snackbar.config';
 export * from './lib/validators';

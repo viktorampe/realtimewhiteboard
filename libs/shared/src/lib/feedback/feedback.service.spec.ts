@@ -31,16 +31,16 @@ import {
 import { Action, Store, StoreModule } from '@ngrx/store';
 import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { SnackBarService } from '.';
+import { FeedBackService } from '.';
 import {
   SnackBarDefaultConfig,
   SNACKBAR_DEFAULT_CONFIG_TOKEN
 } from './snackbar.config';
 
 // tslint:disable:no-use-before-declare
-describe('SnackBarService', () => {
+describe('FeedBackService', () => {
   let mockFeedBack: EffectFeedbackInterface;
-  let service: SnackBarService;
+  let service: FeedBackService;
   let defaultSnackbarConfig: MatSnackBarConfig;
   let feedback$: BehaviorSubject<EffectFeedbackInterface>;
 
@@ -84,7 +84,7 @@ describe('SnackBarService', () => {
       ]
     }).compileComponents();
 
-    service = TestBed.get(SnackBarService);
+    service = TestBed.get(FeedBackService);
 
     viewContainerFixture = TestBed.createComponent(
       ComponentWithChildViewContainer
@@ -103,8 +103,8 @@ describe('SnackBarService', () => {
 
   describe('creation', () => {
     it('should be created', inject(
-      [SnackBarService],
-      (srv: SnackBarService) => {
+      [FeedBackService],
+      (srv: FeedBackService) => {
         expect(srv).toBeTruthy();
       }
     ));
@@ -124,7 +124,7 @@ describe('SnackBarService', () => {
       snackbar = TestBed.get(MatSnackBar);
     });
 
-    it('should call the snackbarService, without a userAction', () => {
+    it('should call the feedbackService, without a userAction', () => {
       snackbar.open = jest.fn();
       const mockFeedBackWithoutActions = { ...mockFeedBack, userActions: null };
 

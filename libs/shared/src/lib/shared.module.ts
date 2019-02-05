@@ -18,12 +18,17 @@ import { PERMISSION_SERVICE_TOKEN } from './auth/permission.service.interface';
 import { PageBarContainerComponent } from './components/page-bar-container/page-bar-container.component';
 import { OPEN_STATIC_CONTENT_SERVICE_TOKEN } from './content/open-static-content.interface';
 import { OpenStaticContentService } from './content/open-static-content.service';
+import { FeedBackService, FEEDBACK_SERVICE_TOKEN } from './feedback';
+import {
+  SnackBarDefaultConfig,
+  SNACKBAR_DEFAULT_CONFIG_TOKEN
+} from './feedback/snackbar.config';
 import { HeaderComponent } from './header/header.component';
-import { CampusHttpInterceptor } from './interceptors/campus-http.interceptor';
 import {
   HeaderResolver,
   HEADER_RESOLVER_TOKEN
 } from './header/header.resolver';
+import { CampusHttpInterceptor } from './interceptors/campus-http.interceptor';
 import {
   EnvironmentAlertsFeatureInterface,
   EnvironmentApiInterface,
@@ -45,11 +50,6 @@ import { MailToByCredentialPipe } from './pipes/mail-to/mail-to-credential-pipe'
 import { PersonBadgeFromCredentialPipe } from './pipes/person-badge-from-credential/person-badge-from-credential-pipe';
 import { ScormExerciseService } from './scorm/scorm-exercise.service';
 import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.interface';
-import { SnackBarService, SNACKBAR_SERVICE_TOKEN } from './snackbar';
-import {
-  SnackBarDefaultConfig,
-  SNACKBAR_DEFAULT_CONFIG_TOKEN
-} from './snackbar/snackbar.config';
 
 @NgModule({
   imports: [
@@ -93,7 +93,7 @@ import {
       useClass: OpenStaticContentService
     },
     { provide: HEADER_RESOLVER_TOKEN, useClass: HeaderResolver },
-    { provide: SNACKBAR_SERVICE_TOKEN, useClass: SnackBarService },
+    { provide: FEEDBACK_SERVICE_TOKEN, useClass: FeedBackService },
     {
       provide: SNACKBAR_DEFAULT_CONFIG_TOKEN,
       useClass: SnackBarDefaultConfig

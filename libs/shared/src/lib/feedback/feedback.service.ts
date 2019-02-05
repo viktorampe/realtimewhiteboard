@@ -10,8 +10,8 @@ import { Observable } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
 import { SNACKBAR_DEFAULT_CONFIG_TOKEN } from './snackbar.config';
 
-export const SNACKBAR_SERVICE_TOKEN = new InjectionToken('SnackBarService');
-export interface SnackBarServiceInterface {
+export const FEEDBACK_SERVICE_TOKEN = new InjectionToken('FeedBackService');
+export interface FeedBackServiceInterface {
   snackbarAfterDismiss$: Observable<{
     dismissedWithAction: boolean;
     feedback: EffectFeedbackInterface;
@@ -23,7 +23,7 @@ export interface SnackBarServiceInterface {
 @Injectable({
   providedIn: 'root'
 })
-export class SnackBarService implements SnackBarServiceInterface {
+export class FeedBackService implements FeedBackServiceInterface {
   // source
   private feedback$: Observable<EffectFeedbackInterface>;
 

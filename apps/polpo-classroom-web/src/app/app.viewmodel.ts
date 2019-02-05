@@ -14,8 +14,8 @@ import {
   UserQueries
 } from '@campus/dal';
 import {
-  SnackBarServiceInterface,
-  SNACKBAR_SERVICE_TOKEN
+  FeedBackServiceInterface,
+  FEEDBACK_SERVICE_TOKEN
 } from '@campus/shared';
 import { DropdownMenuItemInterface, NavItem } from '@campus/ui';
 import { Action, select, Store } from '@ngrx/store';
@@ -41,8 +41,8 @@ export class AppViewModel {
   constructor(
     private store: Store<DalState>,
     private navItemService: NavItemService,
-    @Inject(SNACKBAR_SERVICE_TOKEN)
-    private feedbackService: SnackBarServiceInterface
+    @Inject(FEEDBACK_SERVICE_TOKEN)
+    private feedbackService: FeedBackServiceInterface
   ) {
     this.initialize();
   }

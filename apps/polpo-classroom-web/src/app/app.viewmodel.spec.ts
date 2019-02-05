@@ -1,25 +1,6 @@
 import { async, fakeAsync, flush, TestBed } from '@angular/core/testing';
-import {
-  CredentialActions,
-  CredentialFixture,
-  CredentialReducer,
-  DalActions,
-  DalState,
-  EffectFeedbackActions,
-  EffectFeedbackFixture,
-  EffectFeedbackReducer,
-  LearningAreaFixture,
-  PassportUserCredentialInterface,
-  PersonFixture,
-  PersonInterface,
-  Priority,
-  StateFeatureBuilder,
-  UiActions,
-  UiReducer,
-  UserActions,
-  UserReducer
-} from '@campus/dal';
-import { SNACKBAR_SERVICE_TOKEN } from '@campus/shared';
+import { CredentialActions, CredentialFixture, CredentialReducer, DalActions, DalState, EffectFeedbackActions, EffectFeedbackFixture, EffectFeedbackReducer, LearningAreaFixture, PassportUserCredentialInterface, PersonFixture, PersonInterface, Priority, StateFeatureBuilder, UiActions, UiReducer, UserActions, UserReducer } from '@campus/dal';
+import { FEEDBACK_SERVICE_TOKEN } from '@campus/shared';
 import { DropdownMenuItemInterface, NavItem } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
@@ -72,7 +53,7 @@ describe('AppViewModel', () => {
           }
         },
         {
-          provide: SNACKBAR_SERVICE_TOKEN,
+          provide: FEEDBACK_SERVICE_TOKEN,
           useValue: {
             setupStreams: () => {},
             snackbarAfterDismiss$: of({
