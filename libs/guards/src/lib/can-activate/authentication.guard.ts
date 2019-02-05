@@ -12,6 +12,10 @@ import {
   UserActions,
   UserQueries
 } from '@campus/dal';
+import {
+  EnvironmentLoginInterface,
+  ENVIRONMENT_LOGIN_TOKEN
+} from '@campus/shared';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { filter, switchMapTo, tap } from 'rxjs/operators';
@@ -21,6 +25,8 @@ export class AuthenticationGuard implements CanActivate {
   constructor(
     private store: Store<DalState>,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
+    @Inject(ENVIRONMENT_LOGIN_TOKEN)
+    public environmentLogin: EnvironmentLoginInterface,
     private router: Router
   ) {}
   canActivate(
@@ -28,7 +34,7 @@ export class AuthenticationGuard implements CanActivate {
     state: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
     if (!this.authService.isLoggedIn()) {
-      this.router.navigate(['/login']); //TODO needs to be updated when actual link is known
+      window.location.href = this.environmentLogin.url;
       return false;
     }
     this.store.dispatch(new UserActions.LoadUser({}));
