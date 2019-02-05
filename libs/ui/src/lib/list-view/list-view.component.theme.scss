@@ -8,6 +8,7 @@ $ui-list-view_item-margin--grid--selected: -4px 16px 16px -4px;
 
 $ui-list-view-selected-item-border-color: $ui-primary-color-accent !default;
 
+$ui-list-view-selection-overlay-background-color: $ui-primary-color-accent !default;
 $ui-list-view-selection-overlay-border-color: $ui-tertiary-bg-color !default;
 $ui-list-view-selection-overlay-circle-fg-color: $ui-list-view-selection-overlay-border-color !default;
 $ui-list-view-selection-overlay-circle-bg-color: $ui-primary-color-accent !default;
@@ -80,7 +81,7 @@ $ui-list-view-selection-overlay-circle-radius: 22px !default;
             border: none;
             transform: translate(-4px, -4px);
             & > * {
-              box-shadow: 4px 4px 0px #359590aa;
+              box-shadow: 4px 4px 0px $ui-list-view-selected-item-border-color;
             }
           }
 
@@ -108,7 +109,7 @@ $ui-list-view-selection-overlay-circle-radius: 22px !default;
 
           &--selected {
             border: none;
-            box-shadow: 4px 4px 0px #359590aa;
+            box-shadow: 4px 4px 0px $ui-list-view-selected-item-border-color;
             transform: scale(1.05);
           }
 
