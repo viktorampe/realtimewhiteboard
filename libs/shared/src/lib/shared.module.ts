@@ -9,7 +9,7 @@ import {
   MatIconRegistry
 } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
-import { RouterLink, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { UiModule } from '@campus/ui';
 import { FilterService, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { HasPermissionDirective } from './auth/has-permission.directive';
@@ -20,11 +20,11 @@ import { OPEN_STATIC_CONTENT_SERVICE_TOKEN } from './content/open-static-content
 import { OpenStaticContentService } from './content/open-static-content.service';
 import { CampusRouterlinkDirective } from './directives/campus-routerlink.directive';
 import { HeaderComponent } from './header/header.component';
-import { CampusHttpInterceptor } from './interceptors/campus-http.interceptor';
 import {
   HeaderResolver,
   HEADER_RESOLVER_TOKEN
 } from './header/header.resolver';
+import { CampusHttpInterceptor } from './interceptors/campus-http.interceptor';
 import {
   EnvironmentAlertsFeatureInterface,
   EnvironmentApiInterface,
@@ -90,7 +90,6 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
       provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
       useClass: OpenStaticContentService
     },
-    { provide: RouterLink, useClass: RouterLink },
     { provide: HEADER_RESOLVER_TOKEN, useClass: HeaderResolver },
     AlertToNotificationItemPipe
   ]
