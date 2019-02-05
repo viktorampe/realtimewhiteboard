@@ -1,7 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
-import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AlertToNotificationItemPipe } from '@campus/shared';
 import { NotificationItemInterface, UiModule } from '@campus/ui';
@@ -13,24 +12,16 @@ describe('AlertsComponent', () => {
   let component: AlertsComponent;
   let fixture: ComponentFixture<AlertsComponent>;
   let viewModel: AlertsViewModel;
-  let router: Router;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [
-        UiModule,
-        RouterTestingModule.withRoutes([
-          { path: 'some-link', redirectTo: 'localhost' }
-        ]),
-        MatIconModule
-      ],
+      imports: [UiModule, RouterTestingModule, MatIconModule],
       declarations: [AlertsComponent],
       providers: [
         { provide: AlertsViewModel, useClass: MockAlertsViewModel },
         AlertToNotificationItemPipe
       ]
     }).compileComponents();
-    router = TestBed.get(RouterTestingModule);
   }));
 
   beforeEach(() => {
@@ -87,7 +78,7 @@ describe('AlertsComponent', () => {
           id: 100,
           icon: 'icon',
           titleText: 'title',
-          link: 'some-link',
+          link: '',
           notificationText: 'notification text',
           notificationDate: new Date(),
           read: false
@@ -117,7 +108,7 @@ describe('AlertsComponent', () => {
           id: 100,
           icon: 'icon',
           titleText: 'title',
-          link: 'some-link',
+          link: '',
           notificationText: 'notification text',
           notificationDate: new Date(),
           read: true
