@@ -361,7 +361,8 @@ describe('Alerts Reducer', () => {
     it('should trigger from UnlinkTeacherStudent', () => {
       const startState = createState(alerts, true);
       const action = new TeacherStudentActions.UnlinkTeacherStudent({
-        teacherId: 1
+        teacherId: 1,
+        userId: 1
       });
       const result = reducer(startState, action);
       expect(result).toEqual(createState(alerts, false));

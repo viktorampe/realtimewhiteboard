@@ -37,10 +37,22 @@ let storeState: any;
 describe('EffectFeedback selectors', () => {
   beforeEach(() => {
     effectFeedbackState = createEffectFeedbackState([
-      new EffectFeedbackFixture({ id: 'guid6', display: false }),
-      new EffectFeedbackFixture({ id: 'guid8', display: true }),
+      new EffectFeedbackFixture({
+        id: 'guid6',
+        display: false,
+        triggerAction: { type: 'foo' }
+      }),
+      new EffectFeedbackFixture({
+        id: 'guid8',
+        display: true
+      }),
       new EffectFeedbackFixture({ id: 'guid10', display: false }),
-      new EffectFeedbackFixture({ id: 'guid11', display: true })
+      new EffectFeedbackFixture({ id: 'guid11', display: true }),
+      new EffectFeedbackFixture({
+        id: 'guid12',
+        display: false,
+        triggerAction: { type: 'bar' }
+      })
     ]);
     storeState = { effectFeedback: effectFeedbackState };
   });
@@ -48,5 +60,12 @@ describe('EffectFeedback selectors', () => {
   it('getNext() should return the first effect feedback with display = true', () => {
     const results = EffectFeedbackQueries.getNext(storeState);
     expect(results).toBe(effectFeedbackState.entities['guid8']);
+  });
+
+  it('getFeedbackForAction() should return the first effect feedback with the specified trigger action', () => {
+    const results = EffectFeedbackQueries.getFeedbackForAction(storeState, {
+      actionType: 'bar'
+    });
+    expect(results).toBe(effectFeedbackState.entities['guid12']);
   });
 });

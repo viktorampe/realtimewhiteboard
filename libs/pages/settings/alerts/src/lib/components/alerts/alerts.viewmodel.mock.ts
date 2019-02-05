@@ -9,7 +9,7 @@ import { AlertsViewModel } from './alerts.viewmodel';
 })
 export class MockAlertsViewModel
   implements ViewModelInterface<AlertsViewModel> {
-  public alerts$: Observable<AlertQueueInterface[]>;
+  public alerts$: Observable<AlertQueueInterface[]>; //TODO -- update this once the interface/pipe implementation is done for issue https://github.com/diekeure/campus/issues/510
 
   constructor() {
     this.setPresentationStreams();
