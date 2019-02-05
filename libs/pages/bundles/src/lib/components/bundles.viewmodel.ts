@@ -119,14 +119,9 @@ export class BundlesViewModel {
     );
   }
 
-  allowMultiSelect(
-    bundleOwner$: Observable<PersonInterface>
-  ): Observable<boolean> {
-    return combineLatest(bundleOwner$, this.authService.getCurrent()).pipe(
-      map(([owner, user]) => {
-        return owner.id === user.id;
-      })
-    );
+  public currentUserHasWriteAccessToBundle(bundle: BundleInterface): boolean {
+    // for now that's only when it's own bundle
+    return bundle.teacherId === this.authService.userId;
   }
 
   changeListFormat(listFormat: ListFormat): void {

@@ -57,8 +57,8 @@ export class MockViewModel implements ViewModelInterface<BundlesViewModel> {
     ]
   });
 
-  allowMultiSelect(): Observable<boolean> {
-    return of(true);
+  currentUserHasWriteAccessToBundle(): boolean {
+    return true;
   }
 
   changeListFormat() {}
