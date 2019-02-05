@@ -1,0 +1,12 @@
+.pages-settings-alerts {
+  &__info-panel {
+    &__notification {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      campus-notification {
+        width: 100%;
+      }
+    }
+  }
+}

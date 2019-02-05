@@ -6,6 +6,9 @@ export {
 export * from './lib/interceptors';
 export * from './lib/interfaces';
 export {
+  AlertToNotificationItemPipe
+} from './lib/pipes/alert-to-notification/alert-to-notification-pipe';
+export {
   MailToByCredentialPipe
 } from './lib/pipes/mail-to/mail-to-credential-pipe';
 export {

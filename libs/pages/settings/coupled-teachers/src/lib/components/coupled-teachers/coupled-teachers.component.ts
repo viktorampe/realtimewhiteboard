@@ -1,12 +1,21 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ValidationErrors,
+  Validators
+} from '@angular/forms';
 import { PersonInterface } from '@campus/dal';
 import { PersonAlreadyLinkedValidator } from '@campus/shared';
 import { Observable, Subscription } from 'rxjs';
-import {
-  ApiValidationErrors,
-  CoupledTeachersViewModel
-} from '../coupled-teachers.viewmodel';
+import { CoupledTeachersViewModel } from '../coupled-teachers.viewmodel';
+
+export interface ApiValidationErrors extends ValidationErrors {
+  nonExistingTeacherCode?: boolean;
+  teacherAlreadyCoupled?: boolean;
+  noPublicKey?: boolean;
+  apiError?: boolean;
+}
 
 @Component({
   selector: 'campus-coupled-teachers',
@@ -19,7 +28,6 @@ export class CoupledTeachersComponent implements OnInit, OnDestroy {
 
   coupledTeachersForm: FormGroup;
 
-  apiErrors$: Observable<ApiValidationErrors>;
   linkedPersons$: Observable<PersonInterface[]>;
 
   constructor(
@@ -31,6 +39,7 @@ export class CoupledTeachersComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.buildForm();
     this.loadStreams();
+    this.setupSubscriptions();
   }
 
   ngOnDestroy() {
@@ -52,7 +61,18 @@ export class CoupledTeachersComponent implements OnInit, OnDestroy {
 
   loadStreams(): void {
     this.linkedPersons$ = this.coupledTeacherViewModel.linkedPersons$;
-    this.apiErrors$ = this.coupledTeacherViewModel.apiErrors$;
+  }
+
+  setupSubscriptions() {
+    this.subscriptions.add(
+      this.coupledTeacherViewModel.apiErrors$.subscribe(
+        (errors: ApiValidationErrors) => {
+          // <mat-error> field will only trigger when the form status is INVALID
+          // so we need to manually set the form errors (which will also set the validity of the coupledTeachersForm to INVALID)
+          this.coupledTeachersForm.get('teacherCode').setErrors(errors);
+        }
+      )
+    );
 
     this.subscriptions.add(
       this.linkedPersons$.subscribe(() => {
