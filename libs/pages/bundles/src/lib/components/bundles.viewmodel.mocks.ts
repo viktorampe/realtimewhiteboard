@@ -57,6 +57,10 @@ export class MockViewModel implements ViewModelInterface<BundlesViewModel> {
     ]
   });
 
+  currentUserHasWriteAccessToBundle(): boolean {
+    return true;
+  }
+
   changeListFormat() {}
 
   setBundleAlertRead() {}
