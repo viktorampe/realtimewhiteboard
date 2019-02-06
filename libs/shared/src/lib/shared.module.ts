@@ -20,10 +20,6 @@ import { OPEN_STATIC_CONTENT_SERVICE_TOKEN } from './content/open-static-content
 import { OpenStaticContentService } from './content/open-static-content.service';
 import { CampusRouterlinkDirective } from './directives/campus-routerlink.directive';
 import { HeaderComponent } from './header/header.component';
-import {
-  HeaderResolver,
-  HEADER_RESOLVER_TOKEN
-} from './header/header.resolver';
 import { CampusHttpInterceptor } from './interceptors/campus-http.interceptor';
 import {
   EnvironmentAlertsFeatureInterface,
