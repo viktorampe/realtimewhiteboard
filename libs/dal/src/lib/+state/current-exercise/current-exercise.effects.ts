@@ -57,7 +57,6 @@ export class CurrentExerciseEffects {
         return this.exerciseService.saveExercise(state.currentExercise).pipe(
           map(
             ex =>
-              // since the exercise is constantly saved, we only want to display feedback when the exercise is completed
               new AddEffectFeedback({
                 effectFeedback: new EffectFeedback({
                   id: this.uuid(),
@@ -72,7 +71,6 @@ export class CurrentExerciseEffects {
       undoAction: (action: SaveCurrentExercise, e: any) => {
         const undoAction = undo(action);
 
-        // since the exercise is constantly saved, we only want to display feedback when the exercise is completed
         const effectFeedback = new EffectFeedback({
           id: this.uuid(),
           triggerAction: action,

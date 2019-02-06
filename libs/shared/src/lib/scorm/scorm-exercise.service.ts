@@ -150,6 +150,7 @@ export class ScormExerciseService implements ScormExerciseServiceInterface {
     currentExercise: CurrentExerciseInterface
   ) {
     const cmi = JSON.parse(currentExercise.result.cmi);
+    // since the exercise is constantly saved, we only want to display feedback when the exercise is completed
     const displayResponse = cmi
       ? cmi.core.lesson_status === ScormStatus.STATUS_COMPLETED
       : false;
