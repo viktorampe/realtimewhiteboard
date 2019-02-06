@@ -27,4 +27,8 @@ export class WindowService implements WindowServiceInterface {
   get openedWindows(): { [name: string]: Window } {
     return this._openedWindows;
   }
+
+  get window(): Window {
+    return this.nativeWindow;
+  }
 }
