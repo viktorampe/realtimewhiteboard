@@ -1,5 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { CustomSerializer, DalModule } from '@campus/dal';
@@ -24,6 +24,10 @@ import {
 } from './+state/app.reducer';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import {
+  BrowserFaviconService,
+  BrowserFaviconToken
+} from './services/favicons';
 
 // if you want to update the buffer (which defaults to 100)
 configureBufferSize(150);
@@ -63,7 +67,13 @@ configureBufferSize(150);
       serializer: CustomSerializer
     })
   ],
-  providers: [],
+  providers: [
+    Title,
+    {
+      provide: BrowserFaviconToken,
+      useClass: BrowserFaviconService
+    }
+  ],
   bootstrap: [AppComponent],
   exports: [RouterModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

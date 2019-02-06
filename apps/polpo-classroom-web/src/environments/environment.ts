@@ -224,7 +224,9 @@ export const environment: EnvironmentInterface = {
   },
   // promo website settings
   website: {
-    url: 'http://www.polpo.localhost'
+    url: 'http://www.polpo.localhost',
+    title: 'POLPO',
+    favicon: 'assets/icons/favicon.ico'
   },
   api: {
     APIBase: 'http://api.polpo.localhost:3000'
