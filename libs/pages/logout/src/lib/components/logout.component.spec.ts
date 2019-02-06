@@ -1,5 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { WINDOW_SERVICE_TOKEN } from '@campus/browser';
 import { StateFeatureBuilder, UserReducer } from '@campus/dal';
 import {
   EnvironmentLogoutInterface,
@@ -24,6 +25,10 @@ describe('LogoutComponent', () => {
         {
           provide: ENVIRONMENT_LOGOUT_TOKEN,
           useValue: <EnvironmentLogoutInterface>{ url: '' }
+        },
+        {
+          provide: WINDOW_SERVICE_TOKEN,
+          useValue: { window: { location: { assign: () => {} } } }
         }
       ],
       declarations: [LogoutComponent],
