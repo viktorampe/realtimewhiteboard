@@ -104,12 +104,19 @@ const routes: Routes = [
   },
   {
     path: 'error',
-    redirectTo: 'dev'
+    loadChildren: '@campus/pages/error#PagesErrorModule',
+    data: {
+      breadcrumbText: 'Foutmelding'
+    }
   },
   {
     path: 'dev',
     loadChildren: '@campus/devlib#DevlibModule',
     data: { breadcrumbText: 'Full retard' }
+  },
+  {
+    path: '**',
+    redirectTo: 'error/404'
   }
 ];
 

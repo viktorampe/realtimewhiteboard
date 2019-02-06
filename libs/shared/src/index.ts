@@ -4,6 +4,9 @@ export {
   OPEN_STATIC_CONTENT_SERVICE_TOKEN
 } from './lib/content/open-static-content.interface';
 export {
+  CampusRouterlinkDirective
+} from './lib/directives/campus-routerlink.directive';
+export {
   FeedBackServiceInterface,
   FEEDBACK_SERVICE_TOKEN
 } from './lib/feedback/';
