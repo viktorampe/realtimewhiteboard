@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@angular/core';
-import { EffectFeedback } from '@campus/dal';
 import { Actions, Effect } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 import { DataPersistence } from '@nrwl/nx';
@@ -11,7 +10,7 @@ import {
   CredentialServiceInterface,
   CREDENTIAL_SERVICE_TOKEN
 } from '../../persons';
-import { Priority } from '../effect-feedback';
+import { EffectFeedback, Priority } from '../effect-feedback';
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
 import { LoadUser } from './../user/user.actions';
 import {
