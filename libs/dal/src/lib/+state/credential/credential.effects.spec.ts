@@ -342,5 +342,9 @@ describe('CredentialEffects', () => {
         hot('--a|', { a: expected })
       );
     });
+
+    afterAll(() => {
+      dateMock.returnRealDate();
+    });
   });
 });
