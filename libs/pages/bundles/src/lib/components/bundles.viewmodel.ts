@@ -5,6 +5,7 @@ import {
   AUTH_SERVICE_TOKEN,
   BundleInterface,
   BundleQueries,
+  ContentStatusLabel,
   ContentStatusQueries,
   DalState,
   EduContent,
@@ -32,6 +33,7 @@ import {
   SCORM_EXERCISE_SERVICE_TOKEN
 } from '@campus/shared';
 import { ListFormat, SelectOption } from '@campus/ui';
+import { NestedPartial } from '@campus/utils';
 import { Dictionary } from '@ngrx/entity';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
@@ -40,7 +42,6 @@ import {
   BundlesWithContentInfoInterface,
   LearningAreasWithBundlesInfoInterface
 } from './bundles.viewmodel.interfaces';
-export type NestedPartial<T> = { [P in keyof T]?: NestedPartial<T[P]> };
 
 @Injectable({
   providedIn: 'root'
@@ -201,12 +202,8 @@ export class BundlesViewModel {
       ),
       this.store.pipe(select(EduContentQueries.getAllEntities)),
       this.store.pipe(select(UserContentQueries.getAllEntities))
-      // this.store.pipe(
-      //   select(StudentContentStatusQueries.getGroupedByUnlockedContentId)
-      // )
     ).pipe(
       map(([unlockedContents, eduContentEnts, userContentEnts]) => {
-        // studentContentStatuses
         return unlockedContents.map(
           (unlockedContent): UnlockedContent => {
             return Object.assign(new UnlockedContent(), {
@@ -217,8 +214,6 @@ export class BundlesViewModel {
               userContent: unlockedContent.userContentId
                 ? userContentEnts[unlockedContent.userContentId]
                 : undefined
-              // studentContentStatuses:
-              //   studentContentStatuses[unlockedContent.id] || []
             });
           }
         );
@@ -346,20 +341,15 @@ export class BundlesViewModel {
     );
   }
 
-  private getContentStatusOptions(): Observable<SelectOption[]> {
-    const optionLabels = {
-      NEW: 'Nieuw',
-      FINISHED: 'Klaar',
-      PENDING: 'Gestart'
-    };
+  getContentStatusOptions(): Observable<SelectOption[]> {
     return this.store.pipe(
       select(ContentStatusQueries.getAll),
       map(contentStatuses => [
-        { value: 0, viewValue: optionLabels.NEW }, // default status
+        { value: 0, viewValue: ContentStatusLabel.NEW }, // default status
         ...contentStatuses.map(
           (contentStatus): SelectOption => ({
             value: contentStatus.id,
-            viewValue: optionLabels[contentStatus.label]
+            viewValue: ContentStatusLabel[contentStatus.label]
           })
         )
       ])

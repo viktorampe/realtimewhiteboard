@@ -8,6 +8,11 @@ import {
   BundleFixture,
   BundleInterface,
   BundleReducer,
+  ContentStatusActions,
+  ContentStatusFixture,
+  ContentStatusInterface,
+  ContentStatusLabel,
+  ContentStatusReducer,
   DalState,
   EduContent,
   EduContentActions,
@@ -23,6 +28,10 @@ import {
   PersonFixture,
   PersonInterface,
   StateFeatureBuilder,
+  StudentContentStatusActions,
+  StudentContentStatusFixture,
+  StudentContentStatusInterface,
+  StudentContentStatusReducer,
   UiActions,
   UiReducer,
   UnlockedBoekeGroupActions,
@@ -68,6 +77,8 @@ describe('BundlesViewModel', () => {
   let eduContentState: EduContentReducer.State;
   let userContentState: UserContentReducer.State;
   let coupledPersonState: LinkedPersonReducer.State;
+  let studentContentStatusState: StudentContentStatusReducer.State;
+  let contentStatusState: ContentStatusReducer.State;
 
   let ui: UiReducer.UiState;
   let learningAreas: LearningAreaInterface[];
@@ -77,6 +88,8 @@ describe('BundlesViewModel', () => {
   let unlockedContents: UnlockedContentInterface[];
   let eduContents: EduContentInterface[];
   let coupledPersons: PersonInterface[];
+  let studentContentStatuses: StudentContentStatusInterface[];
+  let contentStatuses: ContentStatusInterface[];
   let store: Store<DalState>;
 
   beforeAll(() => {
@@ -248,6 +261,43 @@ describe('BundlesViewModel', () => {
     );
   });
 
+  it('getStudentContentStatusByUnlockedContentId()', () => {
+    expect(
+      bundlesViewModel.getStudentContentStatusByUnlockedContentId(2)
+    ).toBeObservable(
+      hot('a', {
+        a: studentContentStatuses[1]
+      })
+    );
+  });
+
+  it('saveContentStatus()', () => {
+    spyOn(store, 'dispatch');
+    const expectedAction = new StudentContentStatusActions.UpsertStudentContentStatus(
+      {
+        studentContentStatus: {
+          personId: 1,
+          unlockedContentId: 1,
+          contentStatusId: 2
+        }
+      }
+    );
+    bundlesViewModel.saveContentStatus(1, 2);
+    expect(store.dispatch).toHaveBeenCalledWith(expectedAction);
+  });
+
+  it('getContentStatusOptions()', () => {
+    expect(bundlesViewModel.getContentStatusOptions()).toBeObservable(
+      hot('a', {
+        a: [
+          { value: 0, viewValue: ContentStatusLabel.NEW },
+          { value: 1, viewValue: ContentStatusLabel.FINISHED },
+          { value: 2, viewValue: ContentStatusLabel.PENDING }
+        ]
+      })
+    );
+  });
+
   function loadState() {
     ui = {
       listFormat: ListFormat.LINE,
@@ -349,6 +399,34 @@ describe('BundlesViewModel', () => {
         persons: coupledPersons
       })
     );
+
+    studentContentStatuses = [
+      new StudentContentStatusFixture({ id: 1, unlockedContentId: 1 }),
+      new StudentContentStatusFixture({ id: 2, unlockedContentId: 2 })
+    ];
+    studentContentStatusState = StudentContentStatusReducer.reducer(
+      StudentContentStatusReducer.initialState,
+      new StudentContentStatusActions.StudentContentStatusesLoaded({
+        studentContentStatuses
+      })
+    );
+
+    contentStatuses = [
+      new ContentStatusFixture({
+        id: 1,
+        label: 'FINISHED' as ContentStatusLabel
+      }),
+      new ContentStatusFixture({
+        id: 2,
+        label: 'PENDING' as ContentStatusLabel
+      })
+    ];
+    contentStatusState = ContentStatusReducer.reducer(
+      ContentStatusReducer.initialState,
+      new ContentStatusActions.ContentStatusesLoaded({
+        contentStatuses
+      })
+    );
   }
 
   function getModuleWithForFeatureProviders(): ModuleWithProviders[] {
@@ -414,6 +492,20 @@ describe('BundlesViewModel', () => {
         reducer: LinkedPersonReducer.reducer,
         initialState: {
           initialState: coupledPersonState
+        }
+      },
+      {
+        NAME: StudentContentStatusReducer.NAME,
+        reducer: StudentContentStatusReducer.reducer,
+        initialState: {
+          initialState: studentContentStatusState
+        }
+      },
+      {
+        NAME: ContentStatusReducer.NAME,
+        reducer: ContentStatusReducer.reducer,
+        initialState: {
+          initialState: contentStatusState
         }
       }
     ]);

@@ -27,7 +27,9 @@ export class StudentContentStatusService
   getAllByStudentId(
     studentId: number
   ): Observable<StudentContentStatusInterface[]> {
-    return this.personApi.getStudentContentStatuses(studentId);
+    return this.personApi.getStudentContentStatuses(studentId) as Observable<
+      StudentContentStatusInterface[]
+    >;
   }
 
   updateStudentContentStatus(
@@ -36,7 +38,7 @@ export class StudentContentStatusService
     return this.studentContentStatusApi.patchAttributes(
       studentContentStatus.id,
       { contentStatusId: studentContentStatus.contentStatusId }
-    );
+    ) as Observable<StudentContentStatusInterface>;
   }
 
   addStudentContentStatus(
@@ -45,7 +47,7 @@ export class StudentContentStatusService
     return this.personApi.createStudentContentStatuses(
       studentContentStatus.personId,
       studentContentStatus
-    );
+    ) as Observable<StudentContentStatusInterface>;
   }
 
   getAllContentStatuses(): Observable<ContentStatusInterface[]> {

@@ -1,8 +1,8 @@
-import { ContentStatusInterface } from '../+models';
+import { ContentStatusInterface, ContentStatusLabel } from '../+models';
 
 export class ContentStatusFixture implements ContentStatusInterface {
   // defaults
-  label = 'foo';
+  label = ContentStatusLabel.NEW;
   id = 1;
 
   constructor(props: Partial<ContentStatusInterface> = {}) {

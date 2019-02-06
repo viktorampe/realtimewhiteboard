@@ -47,10 +47,6 @@ export function reducer(
       return adapter.upsertMany(action.payload.studentContentStatuses, state);
     }
 
-    case StudentContentStatusesActionTypes.UpdateStudentContentStatus: {
-      return adapter.updateOne(action.payload.studentContentStatus, state);
-    }
-
     case StudentContentStatusesActionTypes.UpdateStudentContentStatuses: {
       return adapter.updateMany(action.payload.studentContentStatuses, state);
     }

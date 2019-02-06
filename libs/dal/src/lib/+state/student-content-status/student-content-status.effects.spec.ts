@@ -24,7 +24,9 @@ import {
   StudentContentStatusAdded,
   StudentContentStatusesLoaded,
   StudentContentStatusesLoadError,
-  UpdateStudentContentStatus
+  StudentContentStatusUpserted,
+  UpdateStudentContentStatus,
+  UpsertStudentContentStatus
 } from './student-content-status.actions';
 import { StudentContentStatusesEffects } from './student-content-status.effects';
 
@@ -367,6 +369,75 @@ describe('StudentContentStatusEffects', () => {
           })
         );
       });
+    });
+  });
+  describe('upsertStudentContentStatus$', () => {
+    const studentContentStatus = new StudentContentStatusFixture();
+    const upsertAction = new UpsertStudentContentStatus({
+      studentContentStatus
+    });
+    const upsertedAction = new StudentContentStatusUpserted({
+      studentContentStatus
+    });
+
+    beforeAll(() => {
+      usedState = StudentContentStatusReducer.initialState;
+      dateMock = new MockDate(); // needed for effect feedback timestamp
+
+      feedbackErrorMessage = new EffectFeedback({
+        id: uuid(),
+        triggerAction: upsertAction,
+        message: 'Status kon niet worden aangepast.',
+        type: 'error',
+        userActions: [{ title: 'Opnieuw proberen', userAction: upsertAction }],
+        priority: Priority.HIGH
+      });
+
+      feedbackSuccessMessage = new EffectFeedback({
+        id: uuid(),
+        triggerAction: upsertAction,
+        message: 'Status is aangepast.'
+      });
+
+      feedbackSuccessAction = new EffectFeedbackActions.AddEffectFeedback({
+        effectFeedback: feedbackSuccessMessage
+      });
+
+      feedbackErrorAction = new EffectFeedbackActions.AddEffectFeedback({
+        effectFeedback: feedbackErrorMessage
+      });
+    });
+    afterAll(() => {
+      dateMock.returnRealDate();
+    });
+    beforeEach(() => {
+      mockServiceMethodReturnValue(
+        'addStudentContentStatus',
+        studentContentStatus
+      );
+    });
+    it('should return StudentContentStatusUpserted and AddEffectFeedback actions when successful', () => {
+      actions = hot('-a', { a: upsertAction });
+      expect(effects.upsertStudentContentStatus$).toBeObservable(
+        hot('-(ab)', {
+          a: upsertedAction,
+          b: feedbackSuccessAction
+        })
+      );
+    });
+
+    it('should return a AddEffectFeedback action with error when the api call fails', () => {
+      mockServiceMethodError(
+        'addStudentContentStatus',
+        'Something went wrong!'
+      );
+
+      actions = hot('-a-', { a: upsertAction });
+      expect(effects.upsertStudentContentStatus$).toBeObservable(
+        hot('-a', {
+          a: feedbackErrorAction
+        })
+      );
     });
   });
 });
