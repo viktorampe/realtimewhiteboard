@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { PassportUserCredentialInterface } from '@campus/dal';
+import { MockDate } from '@campus/testing';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
@@ -7,13 +8,15 @@ import { DataPersistence, NxModule } from '@nrwl/nx';
 import { cold, hot } from '@nrwl/nx/testing';
 import { undo } from 'ngrx-undo';
 import { Observable, of } from 'rxjs';
-import { CredentialReducer } from '.';
+import { CredentialEffects, CredentialReducer } from '.';
 import { DalActions } from '..';
 import {
   CredentialServiceInterface,
   CREDENTIAL_SERVICE_TOKEN
 } from '../../persons';
-import { LoadUser, UserUpdateMessage } from '../user/user.actions';
+import { EffectFeedback, Priority } from '../effect-feedback';
+import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
+import { LoadUser } from '../user/user.actions';
 import {
   CredentialsLoaded,
   CredentialsLoadError,
@@ -21,12 +24,13 @@ import {
   UnlinkCredential,
   UseCredentialProfilePicture
 } from './credential.actions';
-import { CredentialEffects } from './credential.effects';
 
 describe('CredentialEffects', () => {
   let actions: Observable<any>;
   let effects: CredentialEffects;
   let usedState: CredentialReducer.State;
+  let uuid: Function;
+  let dateMock: MockDate;
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -88,11 +92,13 @@ describe('CredentialEffects', () => {
         },
         CredentialEffects,
         DataPersistence,
-        provideMockActions(() => actions)
+        provideMockActions(() => actions),
+        { provide: 'uuid', useValue: () => 'foo' }
       ]
     });
 
     effects = TestBed.get(CredentialEffects);
+    uuid = TestBed.get('uuid');
   });
 
   describe('loadCredential$', () => {
@@ -251,6 +257,10 @@ describe('CredentialEffects', () => {
     });
     let credentialService: CredentialServiceInterface;
 
+    beforeAll(() => {
+      dateMock = new MockDate();
+    });
+
     beforeEach(() => {
       usedState = CredentialReducer.initialState;
       credentialService = TestBed.get(CREDENTIAL_SERVICE_TOKEN);
@@ -285,9 +295,13 @@ describe('CredentialEffects', () => {
 
       const expected = [
         new LoadUser({ force: true }),
-        new UserUpdateMessage({
-          message: 'Profile picture updated',
-          type: 'success'
+        new AddEffectFeedback({
+          effectFeedback: new EffectFeedback({
+            id: uuid(),
+            timeStamp: dateMock.mockDate.getTime(),
+            triggerAction: useCredentialProfilePictureAction,
+            message: 'Je profielfoto is gewijzigd.'
+          })
         })
       ];
 
@@ -304,9 +318,21 @@ describe('CredentialEffects', () => {
 
       actions = hot('-a-|', { a: useCredentialProfilePictureAction });
 
-      const expected = new UserUpdateMessage({
-        message: 'Profile picture update failed',
-        type: 'error'
+      const expected = new AddEffectFeedback({
+        effectFeedback: new EffectFeedback({
+          id: uuid(),
+          timeStamp: dateMock.mockDate.getTime(),
+          triggerAction: useCredentialProfilePictureAction,
+          message: 'Het is niet gelukt om je profielfoto te wijzigen.',
+          type: 'error',
+          userActions: [
+            {
+              title: 'Opnieuw proberen.',
+              userAction: useCredentialProfilePictureAction
+            }
+          ],
+          priority: Priority.HIGH
+        })
       });
 
       expect(effects.useCredentialProfilePicture$).toBeObservable(

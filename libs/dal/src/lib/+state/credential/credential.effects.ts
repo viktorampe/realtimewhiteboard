@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
+import { EffectFeedback } from '@campus/dal';
 import { Actions, Effect } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 import { DataPersistence } from '@nrwl/nx';
@@ -10,7 +11,9 @@ import {
   CredentialServiceInterface,
   CREDENTIAL_SERVICE_TOKEN
 } from '../../persons';
-import { LoadUser, UserUpdateMessage } from './../user/user.actions';
+import { Priority } from '../effect-feedback';
+import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
+import { LoadUser } from './../user/user.actions';
 import {
   CredentialsActionTypes,
   CredentialsLoaded,
@@ -70,18 +73,32 @@ export class CredentialEffects {
             mergeMapTo(
               from<Action>([
                 new LoadUser({ force: true }),
-                new UserUpdateMessage({
-                  message: 'Profile picture updated',
-                  type: 'success'
+                new AddEffectFeedback({
+                  effectFeedback: new EffectFeedback({
+                    id: this.uuid(),
+                    triggerAction: action,
+                    message: 'Je profielfoto is gewijzigd.'
+                  })
                 })
               ])
             )
           );
       },
       onError: (action: UseCredentialProfilePicture, error) => {
-        return new UserUpdateMessage({
-          message: 'Profile picture update failed',
-          type: 'error'
+        return new AddEffectFeedback({
+          effectFeedback: new EffectFeedback({
+            id: this.uuid(),
+            triggerAction: action,
+            message: 'Het is niet gelukt om je profielfoto te wijzigen.',
+            type: 'error',
+            userActions: [
+              {
+                title: 'Opnieuw proberen.',
+                userAction: action
+              }
+            ],
+            priority: Priority.HIGH
+          })
         });
       }
     }
@@ -91,6 +108,7 @@ export class CredentialEffects {
     private actions: Actions,
     private dataPersistence: DataPersistence<DalState>,
     @Inject(CREDENTIAL_SERVICE_TOKEN)
-    private credentialService: CredentialServiceInterface
+    private credentialService: CredentialServiceInterface,
+    @Inject('uuid') private uuid: Function
   ) {}
 }
