@@ -1,14 +1,9 @@
-import {
-  BreakpointObserver,
-  Breakpoints,
-  BreakpointState
-} from '@angular/cdk/layout';
-import { Component, HostBinding, Input, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, HostBinding, Input } from '@angular/core';
 import { BadgePersonInterface } from '../person-badge/person-badge.component';
 import { HumanDateTimePipe } from '../utils/pipes/human-date-time/human-date-time.pipe';
 
 export interface NotificationItemInterface {
+  id?: number;
   icon: string;
   person?: BadgePersonInterface;
   titleText: string;
@@ -24,10 +19,7 @@ export interface NotificationItemInterface {
   styleUrls: ['./notification.component.scss'],
   providers: [HumanDateTimePipe]
 })
-export class NotificationComponent implements OnDestroy {
-  private mobile: boolean;
-  private subscriptions: Subscription = new Subscription();
-
+export class NotificationComponent {
   @Input() icon: string;
   @Input() person: BadgePersonInterface;
   @Input() titleText: string;
@@ -35,6 +27,8 @@ export class NotificationComponent implements OnDestroy {
   @Input() notificationDate: Date;
   @Input() accented: boolean;
   @Input() read = true;
+  //tslint:disable-next-line:no-input-rename
+  @Input('routerLink') link: string[];
 
   @HostBinding('class.ui-notification')
   get isNotification() {
@@ -44,23 +38,8 @@ export class NotificationComponent implements OnDestroy {
   get isAccented() {
     return this.accented;
   }
-  @HostBinding('class.ui-notification--mobile')
-  get isMobile() {
-    return this.mobile;
-  }
   @HostBinding('class.ui-notification--unread')
   get isUnread() {
     return !this.read;
-  }
-
-  constructor(private breakpointObserver: BreakpointObserver) {
-    this.subscriptions.add(
-      this.breakpointObserver
-        .observe([Breakpoints.XSmall, Breakpoints.Small])
-        .subscribe((state: BreakpointState) => (this.mobile = state.matches))
-    );
-  }
-  ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
   }
 }

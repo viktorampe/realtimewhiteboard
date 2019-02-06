@@ -45,24 +45,25 @@ describe('AlertsService', () => {
   });
 
   it('should get alerts without a dateFilter', () => {
-    spyOn(personApi, 'getAlertQueues');
+    const spy = spyOn(personApi, 'getAlertQueues');
     const mockId = 1;
 
     alertService.getAllForUser(mockId);
-
-    expect(personApi.getAlertQueues).toHaveBeenCalledWith(mockId, {});
+    expect(personApi.getAlertQueues).toHaveBeenCalled();
+    expect(spy.calls.mostRecent().args[0]).toBe(mockId);
+    expect(spy.calls.mostRecent().args[1].where.validFrom).toBeUndefined();
   });
 
   it('should get alerts with a dateFilter', () => {
-    spyOn(personApi, 'getAlertQueues');
+    const spy = spyOn(personApi, 'getAlertQueues');
     const mockId = 1;
     const mockDate = new Date(Date.now());
 
     alertService.getAllForUser(mockId, mockDate);
 
-    expect(personApi.getAlertQueues).toHaveBeenCalledWith(mockId, {
-      where: { validFrom: { gt: mockDate.toISOString() } }
-    });
+    expect(personApi.getAlertQueues).toHaveBeenCalled();
+    expect(spy.calls.mostRecent().args[0]).toBe(mockId);
+    expect(spy.calls.mostRecent().args[1].where.validFrom).toBeDefined();
   });
 
   it('should set an alert as read', () => {

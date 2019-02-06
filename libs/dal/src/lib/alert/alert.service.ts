@@ -21,13 +21,19 @@ export class AlertService implements AlertServiceInterface {
     userId: number,
     lastUpdateTime?: number
   ): Observable<AlertQueueInterface[]> {
-    let dateFilter = {};
+    const filter = {
+      where: {
+        type: {
+          neq: 'message'
+        }
+      }
+    };
     if (lastUpdateTime) {
       const dateString = new Date(lastUpdateTime).toISOString();
-      dateFilter = { where: { validFrom: { gt: dateString } } };
+      filter.where['validFrom'] = { gt: dateString };
     }
 
-    return this.personApi.getAlertQueues(userId, dateFilter);
+    return this.personApi.getAlertQueues(userId, filter);
   }
 
   /**

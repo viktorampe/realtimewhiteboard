@@ -1,1 +1,46 @@
-<p> alerts works! </p>
+<div class="campus-page">
+  <campus-page-header
+    [title]="'Instellingen'"
+    [subtitle]="pageTitle"
+    [iconClass]="pageIcon"
+  >
+  </campus-page-header>
+
+  <campus-info-panel [titleText]="pageTitle" [titleIcon]="pageIcon">
+    <ng-container *ngIf="(notifications$ | async) as notifications">
+      <ng-container *ngIf="notifications.length > 0; else: noAlerts">
+        <div
+          *ngFor="let notification of notifications"
+          class="pages-settings-alerts__info-panel__notification"
+        >
+          <campus-notification
+            [icon]="notification.icon"
+            [notificationText]="notification.titleText"
+            [routerLink]="notification.link"
+            [notificationDate]="notification.notificationDate"
+            [read]="notification.read"
+            [accented]="notification.accented"
+          >
+            <mat-icon
+              class="pages-settings-alerts__info-panel__notification__actions__read"
+              [svgIcon]="notification.read ? 'visibility-off' : 'visibility'"
+              (click)="
+                notification.read
+                  ? setAlertAsUnread(notification.id)
+                  : setAlertAsRead(notification.id)
+              "
+            ></mat-icon>
+            <mat-icon
+              class="pages-settings-alerts__info-panel__notification__actions__remove"
+              [svgIcon]="'delete'"
+              (click)="removeAlert(notification.id)"
+            ></mat-icon>
+          </campus-notification>
+        </div>
+      </ng-container>
+      <ng-template #noAlerts
+        ><p> Je hebt op dit moment geen meldingen. </p></ng-template
+      >
+    </ng-container>
+  </campus-info-panel>
+</div>

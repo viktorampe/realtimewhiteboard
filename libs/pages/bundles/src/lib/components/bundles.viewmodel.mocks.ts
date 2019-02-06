@@ -62,6 +62,10 @@ export class MockViewModel implements ViewModelInterface<BundlesViewModel> {
     SelectOption[]
   >([{ value: 1, viewValue: 'foo' }, { value: 2, viewValue: 'bar' }]);
 
+  currentUserHasWriteAccessToBundle(): boolean {
+    return true;
+  }
+
   changeListFormat() {}
 
   setBundleAlertRead() {}
@@ -140,5 +144,9 @@ export class MockViewModel implements ViewModelInterface<BundlesViewModel> {
         eduContentId: 1
       })
     ]);
+  }
+
+  getContentStatusOptions(): Observable<SelectOption[]> {
+    return of([{ value: 1, viewValue: 'foo' }, { value: 2, viewValue: 'bar' }]);
   }
 }

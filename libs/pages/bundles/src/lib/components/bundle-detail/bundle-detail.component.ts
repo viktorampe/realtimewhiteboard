@@ -82,7 +82,6 @@ export class BundleDetailComponent
     this.bundleOwner$ = this.bundlesViewModel.getBundleOwner(this.bundle$);
     this.setupAlertsSubscription();
     this.unlockedContents$ = this.getBundleContents();
-
     this.filterTextInput.setFilterableItem(this);
   }
 
@@ -185,6 +184,10 @@ export class BundleDetailComponent
       ),
       shareReplay(1)
     );
+  }
+
+  protected allowMultiSelect(bundle): boolean {
+    return this.bundlesViewModel.currentUserHasWriteAccessToBundle(bundle);
   }
 
   filterFn(source: UnlockedContent[], filterText: string): UnlockedContent[] {

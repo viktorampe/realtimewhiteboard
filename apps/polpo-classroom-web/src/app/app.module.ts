@@ -9,6 +9,7 @@ import { UiModule } from '@campus/ui';
 import { EffectsModule } from '@ngrx/effects';
 import {
   NavigationActionTiming,
+  routerReducer,
   StoreRouterConnectingModule
 } from '@ngrx/router-store';
 import { StoreModule } from '@ngrx/store';
@@ -48,7 +49,7 @@ configureBufferSize(150);
     DalModule.forRoot({ apiBaseUrl: environment.api.APIBase }),
     GuardsModule,
     StoreModule.forRoot(
-      { app: appReducer },
+      { app: appReducer, router: routerReducer },
       {
         initialState: { app: appInitialState },
         metaReducers: !environment.production

@@ -1,0 +1,5 @@
+@import './components/alerts/alerts.component.theme.scss';
+
+@mixin page-settings-alerts-theme() {
+  @include pages-settings-alerts-theme;
+}

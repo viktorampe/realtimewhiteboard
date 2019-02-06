@@ -14,6 +14,11 @@ export * from './lib/+state/learning-area';
 export * from './lib/+state/linked-person';
 export * from './lib/+state/resolver';
 export * from './lib/+state/result';
+export {
+  CustomSerializer,
+  RouterStateUrl
+} from './lib/+state/router/route-serializer';
+export * from './lib/+state/router/router.selectors';
 export * from './lib/+state/student-content-status';
 export * from './lib/+state/task';
 export * from './lib/+state/task-edu-content';
@@ -33,7 +38,3 @@ export {
 } from './lib/edu-content/edu-content.service.interface';
 export * from './lib/feedback';
 export * from './lib/persons';
-export {
-  CustomSerializer,
-  RouterStateUrl
-} from './lib/routings/route-serializer';

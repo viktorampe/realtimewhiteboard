@@ -40,6 +40,8 @@
       $ui-content-thumbnail--line-height -
         $ui-content-thumbnail_title--line-line-height
     )/2;
+  $ui-content-thumbnail_footer--line-margin-right: 20px !default;
+
   .ui-content-thumbnail {
     border: $ui-content-thumbnail-border-width solid
       $ui-content-thumbnail_border-color;
@@ -97,6 +99,9 @@
         font-size: $ui-content-thumbnail_title--line-font-size;
         font-weight: $ui-content-thumbnail_title--line-font-weight;
         padding: $ui-content-thumbnail_title--line-padding;
+      }
+      .ui-content-thumbnail__footer {
+        margin-right: $ui-content-thumbnail_footer--line-margin-right;
       }
     }
   }
