@@ -15,8 +15,11 @@ import {
   PersonServiceInterface,
   PERSON_SERVICE_TOKEN
 } from '../../persons/persons.service';
-import { EffectFeedback, Priority } from '../effect-feedback';
-import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
+import {
+  EffectFeedback,
+  EffectFeedbackActions,
+  Priority
+} from '../effect-feedback';
 import {
   LoadPermissions,
   LoadUser,
@@ -179,7 +182,7 @@ describe('UserEffects', () => {
 
     beforeAll(() => {
       const dateMock = new MockDate();
-      successMessageAction = new AddEffectFeedback({
+      successMessageAction = new EffectFeedbackActions.AddEffectFeedback({
         effectFeedback: new EffectFeedback({
           id: uuid(),
           timeStamp: dateMock.mockDate.getTime(),
@@ -187,7 +190,7 @@ describe('UserEffects', () => {
           message: 'Je gegevens zijn opgeslagen.'
         })
       });
-      errorMessageAction = new AddEffectFeedback({
+      errorMessageAction = new EffectFeedbackActions.AddEffectFeedback({
         effectFeedback: new EffectFeedback({
           id: uuid(),
           timeStamp: dateMock.mockDate.getTime(),

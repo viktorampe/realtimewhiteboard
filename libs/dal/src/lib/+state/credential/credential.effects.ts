@@ -10,8 +10,11 @@ import {
   CredentialServiceInterface,
   CREDENTIAL_SERVICE_TOKEN
 } from '../../persons';
-import { EffectFeedback, Priority } from '../effect-feedback';
-import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
+import {
+  EffectFeedback,
+  EffectFeedbackActions,
+  Priority
+} from '../effect-feedback';
 import { LoadUser } from './../user/user.actions';
 import {
   CredentialsActionTypes,
@@ -72,7 +75,7 @@ export class CredentialEffects {
             mergeMapTo(
               from<Action>([
                 new LoadUser({ force: true }),
-                new AddEffectFeedback({
+                new EffectFeedbackActions.AddEffectFeedback({
                   effectFeedback: new EffectFeedback({
                     id: this.uuid(),
                     triggerAction: action,
@@ -84,7 +87,7 @@ export class CredentialEffects {
           );
       },
       onError: (action: UseCredentialProfilePicture, error) => {
-        return new AddEffectFeedback({
+        return new EffectFeedbackActions.AddEffectFeedback({
           effectFeedback: new EffectFeedback({
             id: this.uuid(),
             triggerAction: action,
