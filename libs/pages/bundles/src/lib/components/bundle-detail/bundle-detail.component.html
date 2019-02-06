@@ -39,9 +39,7 @@
         <campus-info-panel-content
           *ngSwitchCase="1"
           [content]="selectedItems[0]"
-          [status]="
-            (selectedStudentContentStatus$ | async)?.contentStatusId || 0
-          "
+          [status]="selectedUnlockedContentStatus$ | async"
           [statusOptions]="contentStatusOptions$ | async"
           (saveStatus)="onSaveStatus($event)"
         >

@@ -148,7 +148,7 @@ export class BundlesViewModel {
     this.openStaticContentService.open(unlockedContent.content);
   }
 
-  public getStudentContentStatus(
+  public getStudentContentStatusByUnlockedContentId(
     unlockedContentId: number
   ): Observable<StudentContentStatusInterface> {
     return this.store.pipe(
@@ -200,35 +200,29 @@ export class BundlesViewModel {
         select(UnlockedContentQueries.getByBundleId, { bundleId })
       ),
       this.store.pipe(select(EduContentQueries.getAllEntities)),
-      this.store.pipe(select(UserContentQueries.getAllEntities)),
-      this.store.pipe(
-        select(StudentContentStatusQueries.getGroupedByUnlockedContentId)
-      )
+      this.store.pipe(select(UserContentQueries.getAllEntities))
+      // this.store.pipe(
+      //   select(StudentContentStatusQueries.getGroupedByUnlockedContentId)
+      // )
     ).pipe(
-      map(
-        ([
-          unlockedContents,
-          eduContentEnts,
-          userContentEnts,
-          studentContentStatuses
-        ]) => {
-          return unlockedContents.map(
-            (unlockedContent): UnlockedContent => {
-              return Object.assign(new UnlockedContent(), {
-                ...unlockedContent,
-                eduContent: unlockedContent.eduContentId
-                  ? eduContentEnts[unlockedContent.eduContentId]
-                  : undefined,
-                userContent: unlockedContent.userContentId
-                  ? userContentEnts[unlockedContent.userContentId]
-                  : undefined,
-                studentContentStatuses:
-                  studentContentStatuses[unlockedContent.id] || []
-              });
-            }
-          );
-        }
-      ),
+      map(([unlockedContents, eduContentEnts, userContentEnts]) => {
+        // studentContentStatuses
+        return unlockedContents.map(
+          (unlockedContent): UnlockedContent => {
+            return Object.assign(new UnlockedContent(), {
+              ...unlockedContent,
+              eduContent: unlockedContent.eduContentId
+                ? eduContentEnts[unlockedContent.eduContentId]
+                : undefined,
+              userContent: unlockedContent.userContentId
+                ? userContentEnts[unlockedContent.userContentId]
+                : undefined
+              // studentContentStatuses:
+              //   studentContentStatuses[unlockedContent.id] || []
+            });
+          }
+        );
+      }),
       shareReplay(1)
     );
   }

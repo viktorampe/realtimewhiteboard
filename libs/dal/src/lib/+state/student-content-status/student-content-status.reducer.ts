@@ -31,7 +31,11 @@ export function reducer(
       return adapter.addOne(action.payload.studentContentStatus, state);
     }
 
-    case StudentContentStatusesActionTypes.UpsertStudentContentStatus: {
+    case StudentContentStatusesActionTypes.StudentContentStatusUpdated: {
+      return adapter.updateOne(action.payload.studentContentStatus, state);
+    }
+
+    case StudentContentStatusesActionTypes.StudentContentStatusUpserted: {
       return adapter.upsertOne(action.payload.studentContentStatus, state);
     }
 

@@ -13,9 +13,7 @@ import {
   ContentInterface,
   LearningAreaInterface,
   PersonInterface,
-  StudentContentStatusInterface,
-  UnlockedContent,
-  UnlockedContentInterface
+  UnlockedContent
 } from '@campus/dal';
 import {
   FilterableItem,
@@ -50,8 +48,8 @@ export class BundleDetailComponent
   bundleOwner$: Observable<PersonInterface>;
   unlockedContents$: Observable<UnlockedContent[]>;
   contentStatusOptions$: Observable<SelectOption[]>;
-  selectedStudentContentStatus$: Observable<StudentContentStatusInterface>;
-  selectedUnlockedContent$: Observable<UnlockedContentInterface>;
+  selectedUnlockedContent$: Observable<UnlockedContent>;
+  selectedUnlockedContentStatus$: Observable<number>;
 
   @ViewChild(FilterTextInputComponent)
   filterTextInput: FilterTextInputComponent<UnlockedContent[], UnlockedContent>;
@@ -100,7 +98,7 @@ export class BundleDetailComponent
     );
 
     this.selectedUnlockedContent$ = this.getSelectedUnlockedContent();
-    this.selectedStudentContentStatus$ = this.getSelectedStudentContentStatus();
+    this.selectedUnlockedContentStatus$ = this.getSelectedUnlockedContentStatus();
 
     // Needed to avoid ExpressionChangedAfterItHasBeenCheckedError
     this.cd.detectChanges();
@@ -119,44 +117,41 @@ export class BundleDetailComponent
   }
 
   onSaveStatus(value: SelectOption): void {
-    combineLatest(
-      this.selectedUnlockedContent$,
-      this.selectedStudentContentStatus$
-    )
-      .pipe(take(1))
-      .subscribe(([unlockedContent, studentContentStatus]) => {
-        this.bundlesViewModel.saveContentStatus(
-          unlockedContent.id,
-          value.value,
-          studentContentStatus ? studentContentStatus.id : null
-        );
-      });
+    this.selectedUnlockedContent$.pipe(take(1)).subscribe(unlockedContent => {
+      this.bundlesViewModel.saveContentStatus(unlockedContent.id, value.value);
+    });
   }
 
-  private getSelectedUnlockedContent(): Observable<UnlockedContentInterface> {
+  /**
+   * Get the UnlockedContent from the selected EduContent
+   * when there is only a single element selected
+   *
+   * @private
+   * @returns {Observable<UnlockedContent>}
+   */
+  private getSelectedUnlockedContent(): Observable<UnlockedContent> {
     return combineLatest(this.list.selectedItems$, this.unlockedContents$).pipe(
-      map(([selectedContent, unlockedContent]) => {
+      map(([selectedContent, unlockedContents]) => {
         if (selectedContent.length !== 1) {
           return null;
         }
-        return unlockedContent.find(uc => uc.content === selectedContent[0]);
+        return unlockedContents.find(uc => uc.content === selectedContent[0]);
       }),
-      filter(value => !!value)
+      filter(unlockedContent => !!unlockedContent),
+      shareReplay(1)
     );
   }
 
-  private getSelectedStudentContentStatus(): Observable<
-    StudentContentStatusInterface
-  > {
+  private getSelectedUnlockedContentStatus(): Observable<number> {
     return this.selectedUnlockedContent$.pipe(
-      switchMap(uc => this.bundlesViewModel.getStudentContentStatus(uc.id)),
-      map(studentContentStatus => {
-        if (!studentContentStatus) {
-          return null;
-        }
-        return studentContentStatus;
+      switchMap(unlockedContent => {
+        return this.bundlesViewModel.getStudentContentStatusByUnlockedContentId(
+          unlockedContent.id
+        );
       }),
-      shareReplay(1)
+      map(studentContentStatus => {
+        return studentContentStatus ? studentContentStatus.contentStatusId : 0;
+      })
     );
   }
 

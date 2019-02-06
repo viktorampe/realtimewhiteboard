@@ -5,8 +5,7 @@ import { select } from '@ngrx/store';
 import { DataPersistence } from '@nrwl/nx';
 import { undo } from 'ngrx-undo';
 import { from, Observable } from 'rxjs';
-import { concatMap, map, switchMap } from 'rxjs/operators';
-import { StudentContentStatusQueries } from '.';
+import { concatMap, map, switchMap, take } from 'rxjs/operators';
 import {
   StudentContentStatusServiceInterface,
   STUDENT_CONTENT_STATUS_SERVICE_TOKEN
@@ -24,9 +23,14 @@ import {
   StudentContentStatusesActionTypes,
   StudentContentStatusesLoaded,
   StudentContentStatusesLoadError,
+  StudentContentStatusUpserted,
   UpdateStudentContentStatus,
   UpsertStudentContentStatus
 } from './student-content-status.actions';
+import {
+  getByTaskEduContentId,
+  getByUnlockedContentId
+} from './student-content-status.selectors';
 
 @Injectable()
 export class StudentContentStatusesEffects {
@@ -152,13 +156,12 @@ export class StudentContentStatusesEffects {
     StudentContentStatusesActionTypes.UpsertStudentContentStatus,
     {
       run: (action: UpsertStudentContentStatus, state: DalState) => {
-        return this.dataPersistence.store.pipe(
-          selectByBundleOrTask(action.payload.studentContentStatus),
-          concatMap(insertOrUpdate),
-          concatMap(studentContentStatus => {
-            const studentContentStatusAddedAction = new StudentContentStatusAdded(
-              { studentContentStatus }
-            );
+        const payload = action.payload.studentContentStatus;
+        return this.upsertStudentContentStatus(payload).pipe(
+          switchMap(studentContentStatus => {
+            const upsertAction = new StudentContentStatusUpserted({
+              studentContentStatus
+            });
 
             const effectFeedback = new EffectFeedback({
               id: this.uuid(),
@@ -169,40 +172,9 @@ export class StudentContentStatusesEffects {
               { effectFeedback }
             );
 
-            return from([
-              studentContentStatusAddedAction,
-              effectFeedbackAction
-            ]);
+            return from([upsertAction, effectFeedbackAction]);
           })
         );
-
-        function selectByBundleOrTask({
-          unlockedContentId,
-          taskEduContentId
-        }: StudentContentStatusInterface) {
-          if (unlockedContentId) {
-            return select(StudentContentStatusQueries.getByUnlockedContentId, {
-              unlockedContentId
-            });
-          }
-          return select(StudentContentStatusQueries.getByTaskEduContentId, {
-            taskEduContentId
-          });
-        }
-
-        function insertOrUpdate(
-          existing: StudentContentStatusInterface
-        ): Observable<StudentContentStatusInterface> {
-          if (existing) {
-            return this.studentContentStatusService.updateStudentContentStatus({
-              ...action.payload.studentContentStatus,
-              id: existing.id
-            });
-          }
-          return this.studentContentStatusService.addStudentContentStatus({
-            ...action.payload.studentContentStatus
-          });
-        }
       },
       onError: (action: UpsertStudentContentStatus, error: any) => {
         const effectFeedback = new EffectFeedback({
@@ -225,4 +197,51 @@ export class StudentContentStatusesEffects {
     private studentContentStatusService: StudentContentStatusServiceInterface,
     @Inject('uuid') private uuid: Function
   ) {}
+
+  /**
+   * Perform correct api call for upsert
+   *
+   * @private
+   * @param {StudentContentStatusInterface} studentContentStatus values to update
+   * @returns {Observable<StudentContentStatusInterface>}
+   * @memberof StudentContentStatusesEffects
+   */
+  private upsertStudentContentStatus(
+    studentContentStatus: StudentContentStatusInterface
+  ): Observable<StudentContentStatusInterface> {
+    return this.getRelatedStudentContentStatus(studentContentStatus).pipe(
+      concatMap(existing => {
+        if (existing) {
+          return this.studentContentStatusService.updateStudentContentStatus({
+            ...studentContentStatus,
+            id: existing.id
+          });
+        }
+        return this.studentContentStatusService.addStudentContentStatus(
+          studentContentStatus
+        );
+      })
+    );
+  }
+
+  /**
+   * Search for studentContentStatus instance to update
+   *
+   * @private
+   * @param {StudentContentStatusInterface} ({ unlockedContentId,taskEduContentId })
+   * @returns {Observable<StudentContentStatusInterface>}
+   * @memberof StudentContentStatusesEffects
+   */
+  private getRelatedStudentContentStatus({
+    unlockedContentId,
+    taskEduContentId
+  }: StudentContentStatusInterface): Observable<StudentContentStatusInterface> {
+    const selector = unlockedContentId
+      ? select(getByUnlockedContentId, { unlockedContentId })
+      : select(getByTaskEduContentId, { taskEduContentId });
+    return this.dataPersistence.store.pipe(
+      selector,
+      take(1) // required to not trigger an endless loop after update in store
+    );
+  }
 }
