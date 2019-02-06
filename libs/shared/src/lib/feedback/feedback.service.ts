@@ -7,31 +7,36 @@ import {
 } from '@angular/material/snack-bar';
 import { EffectFeedbackInterface } from '@campus/dal';
 import { Observable } from 'rxjs';
-import { filter, map, switchMap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { SNACKBAR_DEFAULT_CONFIG_TOKEN } from './snackbar.config';
 
 export const FEEDBACK_SERVICE_TOKEN = new InjectionToken('FeedBackService');
 export interface FeedBackServiceInterface {
-  snackbarAfterDismiss$: Observable<{
-    dismissedWithAction: boolean;
+  addDefaultCancelButton(
+    feedback: EffectFeedbackInterface
+  ): EffectFeedbackInterface;
+
+  openSnackbar(
+    feedback: EffectFeedbackInterface
+  ): {
+    snackbarRef: MatSnackBarRef<SimpleSnackBar>;
+    feedback: EffectFeedbackInterface;
+  };
+
+  snackbarAfterDismiss$(snackbarInfo: {
+    snackbarRef: MatSnackBarRef<SimpleSnackBar>;
+    feedback: EffectFeedbackInterface;
+  }): Observable<{
+    actionToDispatch;
     feedback: EffectFeedbackInterface;
   }>;
-
-  setupStreams(feedback$: Observable<EffectFeedbackInterface>);
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class FeedBackService implements FeedBackServiceInterface {
-  // source
-  private feedback$: Observable<EffectFeedbackInterface>;
-
-  // presentation
-  public snackbarAfterDismiss$: Observable<{
-    dismissedWithAction: boolean;
-    feedback: EffectFeedbackInterface;
-  }>;
+  private snackbar;
 
   constructor(
     private snackBar: MatSnackBar,
@@ -39,40 +44,63 @@ export class FeedBackService implements FeedBackServiceInterface {
     private snackbarConfig: MatSnackBarConfig
   ) {}
 
-  public setupStreams(feedback$: Observable<EffectFeedbackInterface>) {
-    this.feedback$ = feedback$;
+  // adds default cancel button, if needed
+  public addDefaultCancelButton(
+    feedback: EffectFeedbackInterface
+  ): EffectFeedbackInterface {
+    if (!feedback) return;
 
-    this.setPresentationStreams();
+    const feedbackToDisplay = { ...feedback };
+
+    if (feedbackToDisplay.useDefaultCancel) {
+      feedbackToDisplay.userActions = [
+        ...feedbackToDisplay.userActions,
+        {
+          title: 'annuleren',
+          userAction: null
+        }
+      ];
+    }
+
+    return feedbackToDisplay;
   }
 
-  private setPresentationStreams(): void {
-    const openedSnackbar$ = this.feedback$.pipe(
-      filter(feedback => !!feedback),
-      map(feedback => ({
-        snackbarRef: this.snackBar.open(
-          feedback.message,
-          feedback.userActions && feedback.userActions.length
-            ? feedback.userActions[0].title
-            : null,
-          this.snackbarConfig
-        ),
-        feedback: feedback
-      }))
-    );
+  // opens snackbar and returns reference and  original feedback
+  public openSnackbar(
+    feedback: EffectFeedbackInterface
+  ): {
+    snackbarRef: MatSnackBarRef<SimpleSnackBar>;
+    feedback: EffectFeedbackInterface;
+  } {
+    if (!feedback) return;
 
-    this.snackbarAfterDismiss$ = openedSnackbar$.pipe(
-      switchMap(
-        (snackbar: {
-          snackbarRef: MatSnackBarRef<SimpleSnackBar>;
-          feedback: EffectFeedbackInterface;
-        }) =>
-          snackbar.snackbarRef.afterDismissed().pipe(
-            map(dismissInfo => ({
-              dismissedWithAction: dismissInfo.dismissedByAction,
-              feedback: snackbar.feedback
-            }))
-          )
-      )
+    return {
+      snackbarRef: this.snackBar.open(
+        feedback.message,
+        feedback.userActions && feedback.userActions.length
+          ? feedback.userActions[0].title
+          : null,
+        this.snackbarConfig
+      ),
+      feedback: feedback
+    };
+  }
+
+  //
+  public snackbarAfterDismiss$(snackbarInfo: {
+    snackbarRef: MatSnackBarRef<SimpleSnackBar>;
+    feedback: EffectFeedbackInterface;
+  }): Observable<{
+    actionToDispatch;
+    feedback: EffectFeedbackInterface;
+  }> {
+    return snackbarInfo.snackbarRef.afterDismissed().pipe(
+      map(dismissInfo => ({
+        actionToDispatch: dismissInfo.dismissedByAction
+          ? snackbarInfo.feedback.userActions[0].userAction
+          : null, // a snackbar has max 1 action
+        feedback: snackbarInfo.feedback
+      }))
     );
   }
 }

@@ -30,6 +30,6 @@ export class AppComponent {
   }
 
   protected onBannerDismiss(event) {
-    this.appViewModel.onBannerDismiss(event);
+    this.appViewModel.onFeedbackDismiss(event);
   }
 }

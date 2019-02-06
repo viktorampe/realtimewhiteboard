@@ -20,7 +20,7 @@ import {
 import { DropdownMenuItemInterface, NavItem } from '@campus/ui';
 import { Action, select, Store } from '@ngrx/store';
 import { combineLatest, Observable, of } from 'rxjs';
-import { map, skipWhile, switchMapTo } from 'rxjs/operators';
+import { filter, map, skipWhile, switchMap, switchMapTo } from 'rxjs/operators';
 import { NavItemService } from './services/nav-item-service';
 
 @Injectable({
@@ -45,7 +45,10 @@ export class AppViewModel {
     this.initialize();
   }
 
-  public onBannerDismiss(event: { action: Action; feedbackId: string }): void {
+  public onFeedbackDismiss(event: {
+    action: Action;
+    feedbackId: string;
+  }): void {
     if (event.action) this.store.dispatch(event.action);
 
     this.store.dispatch(
@@ -92,22 +95,18 @@ export class AppViewModel {
       this.store.dispatch(new UiActions.SetProfileMenuItems({ menuItems }))
     );
 
-    this.feedbackService.setupStreams(
-      this.store.select(EffectFeedbackQueries.getNextSuccess)
-    );
-    this.feedbackService.snackbarAfterDismiss$.subscribe(
-      (event: {
-        dismissedWithAction: boolean;
-        feedback: EffectFeedbackInterface;
-      }) => {
-        let action: Action;
-        if (event.dismissedWithAction) {
-          action = event.feedback.userActions[0].userAction; // a snackbar has max 1 action
-        }
-
-        this.onBannerDismiss({ action, feedbackId: event.feedback.id });
-      }
-    );
+    this.store
+      .select(EffectFeedbackQueries.getNextSuccess)
+      .pipe(
+        map(fb => this.feedbackService.openSnackbar(fb)),
+        filter(snackbar => !!snackbar),
+        switchMap(sbI => this.feedbackService.snackbarAfterDismiss$(sbI)),
+        map(event => ({
+          action: event.actionToDispatch,
+          feedbackId: event.feedback.id
+        }))
+      )
+      .subscribe(evt => this.onFeedbackDismiss(evt));
   }
 
   private setPresentationStreams() {
@@ -116,24 +115,7 @@ export class AppViewModel {
 
     this.bannerFeedback$ = this.store
       .select(EffectFeedbackQueries.getNextError)
-      .pipe(
-        // adds default cancel button, if needed
-        map(feedback => {
-          if (!feedback) return;
-
-          const feedbackToDisplay = { ...feedback };
-          if (feedbackToDisplay.useDefaultCancel) {
-            feedbackToDisplay.userActions = [
-              ...feedbackToDisplay.userActions,
-              {
-                title: 'annuleren',
-                userAction: null
-              }
-            ];
-          }
-          return feedbackToDisplay;
-        })
-      );
+      .pipe(map(this.feedbackService.addDefaultCancelButton));
   }
 
   private getCurrentUser(): Observable<PersonInterface> {

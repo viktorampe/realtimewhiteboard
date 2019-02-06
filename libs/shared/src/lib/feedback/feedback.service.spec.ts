@@ -29,8 +29,7 @@ import {
   Priority
 } from '@campus/dal';
 import { Action, Store, StoreModule } from '@ngrx/store';
-import { BehaviorSubject } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { hot } from 'jasmine-marbles';
 import { FeedBackService } from '.';
 import {
   SnackBarDefaultConfig,
@@ -42,7 +41,6 @@ describe('FeedBackService', () => {
   let mockFeedBack: EffectFeedbackInterface;
   let service: FeedBackService;
   let defaultSnackbarConfig: MatSnackBarConfig;
-  let feedback$: BehaviorSubject<EffectFeedbackInterface>;
 
   let testViewContainerRef: ViewContainerRef;
   let viewContainerFixture: ComponentFixture<ComponentWithChildViewContainer>;
@@ -96,9 +94,6 @@ describe('FeedBackService', () => {
 
     defaultSnackbarConfig = TestBed.get(SNACKBAR_DEFAULT_CONFIG_TOKEN);
     defaultSnackbarConfig.viewContainerRef = testViewContainerRef;
-
-    feedback$ = new BehaviorSubject<EffectFeedbackInterface>(null);
-    service.setupStreams(feedback$);
   });
 
   describe('creation', () => {
@@ -128,10 +123,7 @@ describe('FeedBackService', () => {
       snackbar.open = jest.fn();
       const mockFeedBackWithoutActions = { ...mockFeedBack, userActions: null };
 
-      // subscriber needed
-      service.snackbarAfterDismiss$.pipe(take(1)).subscribe();
-
-      feedback$.next(mockFeedBackWithoutActions);
+      service.openSnackbar(mockFeedBackWithoutActions);
 
       expect(snackbar.open).toHaveBeenCalled();
       expect(snackbar.open).toHaveBeenCalledTimes(1);
@@ -145,10 +137,7 @@ describe('FeedBackService', () => {
     it('should call the snackbarService, with a userAction', () => {
       snackbar.open = jest.fn();
 
-      // subscriber needed
-      service.snackbarAfterDismiss$.pipe(take(1)).subscribe();
-
-      feedback$.next(mockFeedBack);
+      service.openSnackbar(mockFeedBack);
 
       expect(snackbar.open).toHaveBeenCalled();
       expect(snackbar.open).toHaveBeenCalledTimes(1);
@@ -162,10 +151,7 @@ describe('FeedBackService', () => {
     it('should use the default setings when calling the snackbar', () => {
       snackbar.open = jest.fn();
 
-      // subscriber needed
-      service.snackbarAfterDismiss$.pipe(take(1)).subscribe();
-
-      feedback$.next(mockFeedBack);
+      service.openSnackbar(mockFeedBack);
 
       expect(snackbar.open).toHaveBeenCalledWith(
         jasmine.anything(),
@@ -175,22 +161,44 @@ describe('FeedBackService', () => {
     });
 
     it('should output the snackBar afterDismiss', fakeAsync(() => {
-      const expectedAction = {
-        dismissedWithAction: true,
+      const expected = {
+        actionToDispatch: mockFeedBack.userActions[0].userAction,
         feedback: mockFeedBack
       };
 
-      // subscriber needed
-      service.snackbarAfterDismiss$.pipe(take(1)).subscribe(fb => {
-        expect(fb).toEqual(expectedAction);
+      const mockSnackbarRef = snackbar.open('foo');
+
+      const result = service.snackbarAfterDismiss$({
+        snackbarRef: mockSnackbarRef,
+        feedback: mockFeedBack
       });
 
-      feedback$.next(mockFeedBack);
+      result.subscribe(res => expect(res).toEqual(expected));
 
-      snackbar._openedSnackBarRef.dismissWithAction();
-      viewContainerFixture.detectChanges(); // allow animations to pass
-      flush(); // allow async methods to complete
+      mockSnackbarRef.dismissWithAction();
+
+      viewContainerFixture.detectChanges();
+      flush();
+
+      // there is a stream, it has already completed -> check expect in sub
+      expect(result).toBeObservable(hot('|'));
     }));
+
+    it('should pass add a cancel userAction when needed', () => {
+      mockFeedBack.useDefaultCancel = true;
+
+      const cancelBannerAction = { title: 'annuleren', userAction: null };
+
+      // add the cancel button
+      const expectedFeedback = {
+        ...mockFeedBack,
+        ...{ userActions: [...mockFeedBack.userActions, cancelBannerAction] }
+      };
+
+      const result = service.addDefaultCancelButton(mockFeedBack);
+
+      expect(result).toEqual(expectedFeedback);
+    });
   });
 });
 

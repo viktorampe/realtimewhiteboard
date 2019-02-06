@@ -6,7 +6,8 @@ import { Inject, ModuleWithProviders, NgModule } from '@angular/core';
 import {
   MatBadgeModule,
   MatIconModule,
-  MatIconRegistry
+  MatIconRegistry,
+  MatSnackBarModule
 } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
@@ -59,7 +60,8 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     LayoutModule,
     MatIconModule,
     MatBadgeModule,
-    RouterModule
+    RouterModule,
+    MatSnackBarModule
   ],
   declarations: [
     HeaderComponent,

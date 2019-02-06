@@ -1,11 +1,30 @@
-import { async, fakeAsync, flush, TestBed } from '@angular/core/testing';
-import { CredentialActions, CredentialFixture, CredentialReducer, DalActions, DalState, EffectFeedbackActions, EffectFeedbackFixture, EffectFeedbackReducer, LearningAreaFixture, PassportUserCredentialInterface, PersonFixture, PersonInterface, Priority, StateFeatureBuilder, UiActions, UiReducer, UserActions, UserReducer } from '@campus/dal';
+import { async, TestBed } from '@angular/core/testing';
+import {
+  CredentialActions,
+  CredentialFixture,
+  CredentialReducer,
+  DalActions,
+  DalState,
+  EffectFeedbackActions,
+  EffectFeedbackFixture,
+  EffectFeedbackInterface,
+  EffectFeedbackReducer,
+  LearningAreaFixture,
+  PassportUserCredentialInterface,
+  PersonFixture,
+  PersonInterface,
+  Priority,
+  StateFeatureBuilder,
+  UiActions,
+  UiReducer,
+  UserActions,
+  UserReducer
+} from '@campus/dal';
 import { FEEDBACK_SERVICE_TOKEN } from '@campus/shared';
 import { DropdownMenuItemInterface, NavItem } from '@campus/ui';
-import { Store, StoreModule } from '@ngrx/store';
+import { Action, Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { of } from 'rxjs';
-import { AppResolver } from './app.resolver';
 import { AppViewModel } from './app.viewmodel';
 import { NavItemService } from './services/nav-item-service';
 
@@ -16,6 +35,8 @@ describe('AppViewModel', () => {
   let mockProfileMenuItem: DropdownMenuItemInterface;
   let store: Store<DalState>;
   let mockCredentials: PassportUserCredentialInterface[];
+  let mockFeedBack: EffectFeedbackInterface;
+  let mockAction: Action;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -42,7 +63,7 @@ describe('AppViewModel', () => {
       ],
       providers: [
         AppViewModel,
-        { provide: AppResolver, useValue: { resolve: jest.fn() } },
+        Store,
         {
           provide: NavItemService,
           useValue: {
@@ -55,11 +76,18 @@ describe('AppViewModel', () => {
         {
           provide: FEEDBACK_SERVICE_TOKEN,
           useValue: {
-            setupStreams: () => {},
-            snackbarAfterDismiss$: of({
-              dismissedWithAction: false,
-              feedback: new EffectFeedbackFixture()
-            })
+            addDefaultCancelButton: () => mockFeedBack,
+
+            openSnackbar: () => ({
+              snackbarRef: {},
+              feedback: mockFeedBack
+            }),
+
+            snackbarAfterDismiss$: () =>
+              of({
+                mockAction,
+                feedback: mockFeedBack
+              })
           }
         }
       ]
@@ -86,6 +114,27 @@ describe('AppViewModel', () => {
         provider: 'facebook'
       })
     ];
+
+    mockAction = new DalActions.ActionSuccessful({
+      successfulAction: 'test'
+    });
+
+    mockFeedBack = new EffectFeedbackFixture({
+      id: '1',
+      triggerAction: null,
+      message: 'This is a message',
+      type: 'success',
+      userActions: [
+        {
+          title: 'klik',
+          userAction: mockAction
+        }
+      ],
+      timeStamp: 1,
+      display: true,
+      priority: Priority.HIGH,
+      useDefaultCancel: false
+    });
   });
 
   beforeEach(() => {
@@ -164,73 +213,10 @@ describe('AppViewModel', () => {
   });
 
   describe('feedback', () => {
-    let mockFeedBack;
-    beforeAll(() => {
-      const mockAction = {
-        title: 'klik',
-        userAction: new DalActions.ActionSuccessful({
-          successfulAction: 'test'
-        })
-      };
-
-      mockFeedBack = new EffectFeedbackFixture({
-        id: '1',
-        triggerAction: null,
-        message: 'This is a message',
-        type: 'success',
-        userActions: [mockAction],
-        timeStamp: 1,
-        display: true,
-        priority: Priority.HIGH,
-        useDefaultCancel: false
-      });
-    });
     describe('error feedback', () => {
       beforeAll(() => {
         mockFeedBack.type = 'error';
       });
-
-      it('should pass the error feedback to the banner-stream', fakeAsync(() => {
-        store.dispatch(
-          new EffectFeedbackActions.AddEffectFeedback({
-            effectFeedback: mockFeedBack
-          })
-        );
-
-        expect(viewModel.bannerFeedback$).toBeObservable(
-          hot('a', { a: mockFeedBack })
-        );
-
-        // create a slightly newer mockFeedBack
-        const slightlyNewerFeedback = {
-          ...mockFeedBack,
-          ...{ id: '2', timeStamp: mockFeedBack.timeStamp + 10 }
-        };
-        store.dispatch(
-          new EffectFeedbackActions.AddEffectFeedback({
-            effectFeedback: slightlyNewerFeedback
-          })
-        );
-
-        // this should not change the output
-        expect(viewModel.bannerFeedback$).toBeObservable(
-          hot('a', { a: mockFeedBack })
-        );
-
-        // dismiss the banner
-        viewModel.onBannerDismiss({
-          action: mockFeedBack.userActions[0].userAction,
-          feedbackId: mockFeedBack.id
-        });
-
-        // allow subscriptions to complete
-        flush();
-
-        // this should change the output
-        expect(viewModel.bannerFeedback$).toBeObservable(
-          hot('a', { a: slightlyNewerFeedback })
-        );
-      }));
 
       it('should pass the error feedback to the banner-stream', () => {
         store.dispatch(
@@ -241,27 +227,6 @@ describe('AppViewModel', () => {
 
         expect(viewModel.bannerFeedback$).toBeObservable(
           hot('a', { a: mockFeedBack })
-        );
-      });
-
-      it('should pass add a cancel userAction when needed', () => {
-        mockFeedBack.useDefaultCancel = true;
-        store.dispatch(
-          new EffectFeedbackActions.AddEffectFeedback({
-            effectFeedback: mockFeedBack
-          })
-        );
-
-        const cancelBannerAction = { title: 'annuleren', userAction: null };
-
-        // add the cancel button
-        const expectedFeedback = {
-          ...mockFeedBack,
-          ...{ userActions: [...mockFeedBack.userActions, cancelBannerAction] }
-        };
-
-        expect(viewModel.bannerFeedback$).toBeObservable(
-          hot('a', { a: expectedFeedback })
         );
       });
     });
