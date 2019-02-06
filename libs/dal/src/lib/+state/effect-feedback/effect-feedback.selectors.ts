@@ -26,7 +26,7 @@ export const getNextSuccess = createSelector(
     if (feedback && feedback.type === 'success') {
       return feedback;
     } else {
-      return;
+      return; // I want undefined to return
     }
   }
 );
@@ -37,7 +37,7 @@ export const getNextError = createSelector(
     if (feedback && feedback.type === 'error') {
       return feedback;
     } else {
-      return;
+      return; // I want undefined to return
     }
   }
 );
