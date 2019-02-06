@@ -119,6 +119,11 @@ export class BundlesViewModel {
     );
   }
 
+  public currentUserHasWriteAccessToBundle(bundle: BundleInterface): boolean {
+    // for now that's only when it's own bundle
+    return bundle.teacherId === this.authService.userId;
+  }
+
   changeListFormat(listFormat: ListFormat): void {
     this.store.dispatch(new UiActions.SetListFormat({ listFormat }));
   }

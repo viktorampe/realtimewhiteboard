@@ -18,7 +18,7 @@
           [matBadge]="unreadAlertCount$ | async"
           [matBadgeHidden]="!((unreadAlertCount$ | async) > 0)"
           matBadgePosition="above before"
-          matBadgeColor="warn"
+          matBadgeColor="accent"
           (click)="dropDownAlerts.toggle()"
         ></mat-icon>
 

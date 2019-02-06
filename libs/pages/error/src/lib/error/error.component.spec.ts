@@ -10,6 +10,7 @@ import {
 } from '@campus/dal';
 import { ENVIRONMENT_WEBSITE_TOKEN } from '@campus/shared';
 import { MockActivatedRoute } from '@campus/testing';
+import { UiModule } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { ErrorComponent } from './error.component';
@@ -42,7 +43,8 @@ describe('ErrorComponent', () => {
               initialState: usedUserState
             }
           }
-        ])
+        ]),
+        UiModule
       ],
       providers: [
         Store,
