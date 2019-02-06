@@ -19,8 +19,6 @@ export class AppComponent {
    * the link to the promo website, used on the logo
    */
   protected websiteUrl: string = environment.website.url;
-  protected title: string = environment.website.title;
-  protected favicon: string = environment.website.favicon;
 
   constructor(
     private appViewModel: AppViewModel,
@@ -29,7 +27,7 @@ export class AppComponent {
   ) {
     this.sideNavOpen$ = appViewModel.sideNavOpen$;
     this.titleService.setTitle(environment.website.title);
-    faviconService.setFavicon('/assets/icons/favicon.ico', 'image/png');
+    this.faviconService.setFavicon(environment.website.favicon, 'image/png');
   }
 
   protected onSideBarToggle(open: boolean) {
