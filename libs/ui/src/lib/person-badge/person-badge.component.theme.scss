@@ -5,9 +5,8 @@
   $ui-person-badge-border-color: $ui-tertiary-bg-color-2 !default;
   $ui-person-badge-border-size: 2px !default;
 
-  //TODO small, large
-
   .ui_person-badge {
+
     &__badge,
     img {
       background-color: $ui-person-badge-bg-color;
