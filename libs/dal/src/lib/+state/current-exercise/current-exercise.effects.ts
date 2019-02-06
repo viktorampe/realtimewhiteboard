@@ -1,12 +1,17 @@
 import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
+import { Action } from '@ngrx/store';
 import { DataPersistence } from '@nrwl/nx';
+import { undo } from 'ngrx-undo';
+import { from } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { DalActions, DalState } from '..';
+import { DalState } from '..';
 import {
   ExerciseServiceInterface,
   EXERCISE_SERVICE_TOKEN
 } from '../../exercise/exercise.service.interface';
+import { EffectFeedback, Priority } from '../effect-feedback';
+import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
 import {
   CurrentExerciseActionTypes,
   CurrentExerciseError,
@@ -52,17 +57,41 @@ export class CurrentExerciseEffects {
         return this.exerciseService.saveExercise(state.currentExercise).pipe(
           map(
             ex =>
-              new DalActions.ActionSuccessful({
-                successfulAction: 'Exercise saved'
+              new AddEffectFeedback({
+                effectFeedback: new EffectFeedback({
+                  id: this.uuid(),
+                  triggerAction: action,
+                  message: 'Oefening is bewaard.',
+                  display: action.payload.displayResponse
+                })
               })
           )
         );
       },
-      undoAction: (action: SaveCurrentExercise, state: any) => {
-        // TODO: show error message to user
+      undoAction: (action: SaveCurrentExercise, e: any) => {
+        const undoAction = undo(action);
+
+        const effectFeedback = new EffectFeedback({
+          id: this.uuid(),
+          triggerAction: action,
+          message: 'Het is niet gelukt om de oefening te bewaren.',
+          userActions: [
+            {
+              title: 'Opnieuw proberen.',
+              userAction: action
+            }
+          ],
+          display: action.payload.displayResponse,
+          type: 'error',
+          priority: Priority.HIGH
+        });
         // resetting the state won't help, because ludo won't update
         // todo examine further
-        return new CurrentExerciseError(new Error('failed'));
+        return from<Action>([
+          undoAction,
+          new AddEffectFeedback({ effectFeedback }),
+          new CurrentExerciseError(new Error('failed'))
+        ]);
       }
     }
   );
@@ -71,6 +100,7 @@ export class CurrentExerciseEffects {
     private actions: Actions,
     private dataPersistence: DataPersistence<DalState>,
     @Inject(EXERCISE_SERVICE_TOKEN)
-    private exerciseService: ExerciseServiceInterface
+    private exerciseService: ExerciseServiceInterface,
+    @Inject('uuid') private uuid: Function
   ) {}
 }

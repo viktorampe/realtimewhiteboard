@@ -45,6 +45,7 @@ export class SaveCurrentExercise implements Action {
     public payload: {
       userId: number;
       exercise: CurrentExerciseInterface;
+      displayResponse?: boolean;
     }
   ) {}
 }
