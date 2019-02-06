@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { PassportUserCredentialInterface } from '@campus/dal';
 import { MockDate } from '@campus/testing';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
@@ -10,12 +9,16 @@ import { undo } from 'ngrx-undo';
 import { Observable, of } from 'rxjs';
 import { CredentialEffects, CredentialReducer } from '.';
 import { DalActions } from '..';
+import { PassportUserCredentialInterface } from '../../+models';
 import {
   CredentialServiceInterface,
   CREDENTIAL_SERVICE_TOKEN
 } from '../../persons';
-import { EffectFeedback, Priority } from '../effect-feedback';
-import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
+import {
+  EffectFeedback,
+  EffectFeedbackActions,
+  Priority
+} from '../effect-feedback';
 import { LoadUser } from '../user/user.actions';
 import {
   CredentialsLoaded,
@@ -295,7 +298,7 @@ describe('CredentialEffects', () => {
 
       const expected = [
         new LoadUser({ force: true }),
-        new AddEffectFeedback({
+        new EffectFeedbackActions.AddEffectFeedback({
           effectFeedback: new EffectFeedback({
             id: uuid(),
             timeStamp: dateMock.mockDate.getTime(),
@@ -318,7 +321,7 @@ describe('CredentialEffects', () => {
 
       actions = hot('-a-|', { a: useCredentialProfilePictureAction });
 
-      const expected = new AddEffectFeedback({
+      const expected = new EffectFeedbackActions.AddEffectFeedback({
         effectFeedback: new EffectFeedback({
           id: uuid(),
           timeStamp: dateMock.mockDate.getTime(),
