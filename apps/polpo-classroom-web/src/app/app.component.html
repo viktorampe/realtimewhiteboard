@@ -10,6 +10,16 @@
   <campus-shell-left>
     <campus-tree-nav [treeNav]="navItems$ | async"></campus-tree-nav>
   </campus-shell-left>
-  <campus-shell-top> <campus-header> </campus-header> </campus-shell-top>
+  <campus-shell-top>
+    <campus-header></campus-header>
+    <campus-banner
+      *ngIf="(bannerFeedback$ | async) as bannerFeedback"
+      [id]="bannerFeedback.id"
+      [message]="bannerFeedback.message"
+      [icon]="bannerFeedback.icon"
+      [actions]="bannerFeedback.userActions"
+      (afterDismiss)="onBannerDismiss($event)"
+    ></campus-banner>
+  </campus-shell-top>
   <campus-shell-body> <router-outlet></router-outlet> </campus-shell-body>
 </campus-shell>
