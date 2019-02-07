@@ -37,6 +37,7 @@ describe('AppViewModel', () => {
   let mockCredentials: PassportUserCredentialInterface[];
   let mockFeedBack: EffectFeedbackInterface;
   let mockAction: Action;
+  let storeSpy: jasmine.Spy;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -95,7 +96,7 @@ describe('AppViewModel', () => {
 
     viewModel = TestBed.get(AppViewModel);
     store = TestBed.get(Store);
-    spyOn(store, 'dispatch').and.callThrough();
+    storeSpy = spyOn(store, 'dispatch').and.callThrough();
   }));
 
   beforeAll(() => {
@@ -144,6 +145,7 @@ describe('AppViewModel', () => {
         credentials: mockCredentials
       })
     );
+    storeSpy.calls.reset();
   });
 
   describe('creation', () => {
@@ -213,6 +215,40 @@ describe('AppViewModel', () => {
   });
 
   describe('feedback', () => {
+    describe('success feedback', () => {
+      beforeAll(() => {
+        mockFeedBack.type = 'success';
+      });
+
+      it('should pass the success feedback to the feedbackService', () => {
+        const feedbackService = TestBed.get(FEEDBACK_SERVICE_TOKEN);
+        spyOn(feedbackService, 'openSnackbar');
+
+        store.dispatch(
+          new EffectFeedbackActions.AddEffectFeedback({
+            effectFeedback: mockFeedBack
+          })
+        );
+
+        expect(feedbackService.openSnackbar).toHaveBeenCalled();
+        expect(feedbackService.openSnackbar).toHaveBeenCalledWith(mockFeedBack);
+      });
+
+      it('should subscribe to snackbarAfterDismiss$', () => {
+        spyOn(viewModel, 'onFeedbackDismiss');
+
+        store.dispatch(
+          new EffectFeedbackActions.AddEffectFeedback({
+            effectFeedback: mockFeedBack
+          })
+        );
+
+        // feedbackService.snackbarAfterDismiss is mocked and always emits a value
+
+        expect(viewModel.onFeedbackDismiss).toHaveBeenCalled();
+      });
+    });
+
     describe('error feedback', () => {
       beforeAll(() => {
         mockFeedBack.type = 'error';
@@ -228,6 +264,45 @@ describe('AppViewModel', () => {
         expect(viewModel.bannerFeedback$).toBeObservable(
           hot('a', { a: mockFeedBack })
         );
+      });
+    });
+
+    describe('feedback event handling', () => {
+      let mockEvent: { action: Action; feedbackId: string };
+      let removeFeedbackAction: Action;
+
+      beforeAll(() => {
+        removeFeedbackAction = new EffectFeedbackActions.DeleteEffectFeedback({
+          id: mockFeedBack.id
+        });
+      });
+
+      beforeEach(() => {
+        mockEvent = { action: mockAction, feedbackId: mockFeedBack.id };
+      });
+
+      it('should dispatch a removeFeedback action', () => {
+        viewModel.onFeedbackDismiss(mockEvent);
+
+        expect(store.dispatch).toHaveBeenCalledWith(removeFeedbackAction);
+      });
+
+      it('should dispatch the event action, if available', () => {
+        // with action
+        viewModel.onFeedbackDismiss(mockEvent);
+        expect(store.dispatch).toHaveBeenCalledTimes(2);
+        expect(store.dispatch).toHaveBeenCalledWith(removeFeedbackAction);
+        expect(store.dispatch).toHaveBeenCalledWith(mockEvent.action);
+
+        // without action
+        storeSpy.calls.reset();
+        const mockEventWithoutAction = {
+          action: null,
+          feedbackId: mockFeedBack.id
+        };
+        viewModel.onFeedbackDismiss(mockEventWithoutAction);
+        expect(store.dispatch).toHaveBeenCalledTimes(1);
+        expect(store.dispatch).toHaveBeenCalledWith(removeFeedbackAction);
       });
     });
   });

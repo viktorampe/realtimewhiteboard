@@ -21,14 +21,10 @@ import {
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
   DalActions,
-  EffectFeedbackActions,
   EffectFeedbackFixture,
   EffectFeedbackInterface,
-  EffectFeedbackReducer,
-  getStoreModuleForFeatures,
   Priority
 } from '@campus/dal';
-import { Action, Store, StoreModule } from '@ngrx/store';
 import { hot } from 'jasmine-marbles';
 import { FeedBackService } from '.';
 import {
@@ -67,13 +63,10 @@ describe('FeedBackService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        StoreModule.forRoot({}),
-        ...getStoreModuleForFeatures([EffectFeedbackReducer]),
         MatSnackBarModule,
         SnackBarTestModule // -> see end of file for details
       ],
       providers: [
-        Store,
         MatSnackBar,
         {
           provide: SNACKBAR_DEFAULT_CONFIG_TOKEN,
@@ -107,19 +100,12 @@ describe('FeedBackService', () => {
 
   describe('success feedback', () => {
     let snackbar: MatSnackBar;
-    let removeFeedbackAction: Action;
-
-    beforeAll(() => {
-      removeFeedbackAction = new EffectFeedbackActions.DeleteEffectFeedback({
-        id: mockFeedBack.id
-      });
-    });
 
     beforeEach(() => {
       snackbar = TestBed.get(MatSnackBar);
     });
 
-    it('should call the feedbackService, without a userAction', () => {
+    it('should call the snackbarService, without a userAction', () => {
       snackbar.open = jest.fn();
       const mockFeedBackWithoutActions = { ...mockFeedBack, userActions: null };
 
@@ -177,8 +163,8 @@ describe('FeedBackService', () => {
 
       mockSnackbarRef.dismissWithAction();
 
-      viewContainerFixture.detectChanges();
-      flush();
+      viewContainerFixture.detectChanges(); // allow ui-element to close
+      flush(); // let subscriptions run and complete
 
       // there is a stream, it has already completed -> check expect in sub
       expect(result).toBeObservable(hot('|'));
