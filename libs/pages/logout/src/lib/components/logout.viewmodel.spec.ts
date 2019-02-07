@@ -72,6 +72,7 @@ describe('logoutViewModel', () => {
       });
       it('should wait for store update to navigate away', () => {
         logoutViewModel.logout();
+        //effects are not triggered automagically here, and that's our luck
         expect(assignSpy).not.toHaveBeenCalled();
         store.dispatch(new UserActions.UserRemoved());
         expect(assignSpy).toHaveBeenCalled();
