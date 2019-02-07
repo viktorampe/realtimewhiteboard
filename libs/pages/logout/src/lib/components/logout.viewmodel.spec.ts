@@ -13,7 +13,6 @@ import {
 } from '@campus/shared';
 import { MockWindow } from '@campus/testing';
 import { Store, StoreModule } from '@ngrx/store';
-import { hot } from '@nrwl/nx/testing';
 import { LogoutViewModel } from './logout.viewmodel';
 
 let logoutViewModel: LogoutViewModel;
@@ -26,16 +25,7 @@ beforeEach(() => {
   TestBed.configureTestingModule({
     imports: [
       StoreModule.forRoot({}),
-      ...StateFeatureBuilder.getModuleWithForFeatureProviders([
-        {
-          NAME: UserReducer.NAME,
-          reducer: UserReducer.reducer,
-          initialState: UserReducer.reducer(
-            UserReducer.initialState,
-            new UserActions.UserLoaded(new PersonFixture())
-          )
-        }
-      ])
+      ...StateFeatureBuilder.getModuleWithForFeatureProviders([UserReducer])
     ],
     providers: [
       LogoutViewModel,
@@ -50,10 +40,11 @@ beforeEach(() => {
       }
     ]
   });
-
   logoutViewModel = TestBed.get(LogoutViewModel);
   window = TestBed.get(WINDOW);
   store = TestBed.get(Store);
+
+  store.dispatch(new UserActions.UserLoaded(new PersonFixture()));
 });
 
 describe('logoutViewModel', () => {
@@ -66,11 +57,9 @@ describe('logoutViewModel', () => {
   describe('with currentUser in store', () => {
     describe('logout method', () => {
       let dispatchSpy: jest.SpyInstance;
-      let pipeSpy: jest.SpyInstance;
       let assignSpy: jest.SpyInstance;
       beforeEach(() => {
         dispatchSpy = jest.spyOn(store, 'dispatch');
-        pipeSpy = jest.spyOn(store, 'pipe');
         assignSpy = jest.spyOn(window.location, 'assign');
       });
       afterEach(() => {
@@ -81,18 +70,11 @@ describe('logoutViewModel', () => {
         expect(dispatchSpy).toHaveBeenCalled();
         expect(dispatchSpy).toHaveBeenCalledWith(new UserActions.RemoveUser());
       });
-      it('should return null and then close', () => {
-        expect(logoutViewModel['currentNullUser']).toBeFalsy();
+      it('should wait for store update to navigate away', () => {
         logoutViewModel.logout();
-        expect(pipeSpy).toHaveBeenCalled();
-        expect(logoutViewModel['currentNullUser']).toBeObservable(
-          hot('(a|)', { a: null })
-        );
-      });
-      it('should call window.location.assign', () => {
-        logoutViewModel.logout();
+        expect(assignSpy).not.toHaveBeenCalled();
+        store.dispatch(new UserActions.UserRemoved());
         expect(assignSpy).toHaveBeenCalled();
-        expect(assignSpy).toHaveBeenCalledWith(mockData.logoutUrl);
       });
     });
   });

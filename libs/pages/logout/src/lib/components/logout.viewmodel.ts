@@ -18,7 +18,7 @@ import { filter, take } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class LogoutViewModel {
-  private currentNullUser: Observable<PersonInterface>;
+  private currentNullUser$: Observable<PersonInterface>;
 
   constructor(
     private store: Store<DalState>,
@@ -29,13 +29,14 @@ export class LogoutViewModel {
 
   logout(): void {
     this.store.dispatch(new UserActions.RemoveUser());
-    this.currentNullUser = this.store.pipe(
-      select(UserQueries.getCurrentUser),
-      filter(currentUser => !currentUser),
-      take(1)
-    );
-    this.currentNullUser.subscribe(() =>
-      this.window.location.assign(this.environmentLogout.url)
-    );
+    this.store
+      .pipe(
+        select(UserQueries.getCurrentUser),
+        filter(currentUser => !currentUser),
+        take(1)
+      )
+      .subscribe(user => {
+        this.window.location.assign(this.environmentLogout.url);
+      });
   }
 }
