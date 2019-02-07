@@ -3,21 +3,28 @@ import {
   CredentialActions,
   CredentialFixture,
   CredentialReducer,
+  DalActions,
   DalState,
+  EffectFeedbackActions,
+  EffectFeedbackFixture,
+  EffectFeedbackInterface,
+  EffectFeedbackReducer,
   LearningAreaFixture,
   PassportUserCredentialInterface,
   PersonFixture,
   PersonInterface,
+  Priority,
   StateFeatureBuilder,
   UiActions,
   UiReducer,
   UserActions,
   UserReducer
 } from '@campus/dal';
+import { FEEDBACK_SERVICE_TOKEN } from '@campus/shared';
 import { DropdownMenuItemInterface, NavItem } from '@campus/ui';
-import { Store, StoreModule } from '@ngrx/store';
+import { Action, Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
-import { AppResolver } from './app.resolver';
+import { of } from 'rxjs';
 import { AppViewModel } from './app.viewmodel';
 import { NavItemService } from './services/nav-item-service';
 
@@ -28,6 +35,9 @@ describe('AppViewModel', () => {
   let mockProfileMenuItem: DropdownMenuItemInterface;
   let store: Store<DalState>;
   let mockCredentials: PassportUserCredentialInterface[];
+  let mockFeedBack: EffectFeedbackInterface;
+  let mockAction: Action;
+  let storeSpy: jasmine.Spy;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -48,12 +58,13 @@ describe('AppViewModel', () => {
             NAME: CredentialReducer.NAME,
             reducer: CredentialReducer.reducer,
             initialState: CredentialReducer.initialState
-          }
+          },
+          EffectFeedbackReducer
         ])
       ],
       providers: [
         AppViewModel,
-        { provide: AppResolver, useValue: { resolve: jest.fn() } },
+        Store,
         {
           provide: NavItemService,
           useValue: {
@@ -62,13 +73,30 @@ describe('AppViewModel', () => {
               .fn()
               .mockReturnValue([mockProfileMenuItem])
           }
+        },
+        {
+          provide: FEEDBACK_SERVICE_TOKEN,
+          useValue: {
+            addDefaultCancelButton: () => mockFeedBack,
+
+            openSnackbar: () => ({
+              snackbarRef: {},
+              feedback: mockFeedBack
+            }),
+
+            snackbarAfterDismiss: () =>
+              of({
+                mockAction,
+                feedback: mockFeedBack
+              })
+          }
         }
       ]
     }).compileComponents();
 
     viewModel = TestBed.get(AppViewModel);
     store = TestBed.get(Store);
-    spyOn(store, 'dispatch').and.callThrough();
+    storeSpy = spyOn(store, 'dispatch').and.callThrough();
   }));
 
   beforeAll(() => {
@@ -87,6 +115,27 @@ describe('AppViewModel', () => {
         provider: 'facebook'
       })
     ];
+
+    mockAction = new DalActions.ActionSuccessful({
+      successfulAction: 'test'
+    });
+
+    mockFeedBack = new EffectFeedbackFixture({
+      id: '1',
+      triggerAction: null,
+      message: 'This is a message',
+      type: 'success',
+      userActions: [
+        {
+          title: 'klik',
+          userAction: mockAction
+        }
+      ],
+      timeStamp: 1,
+      display: true,
+      priority: Priority.HIGH,
+      useDefaultCancel: false
+    });
   });
 
   beforeEach(() => {
@@ -96,6 +145,7 @@ describe('AppViewModel', () => {
         credentials: mockCredentials
       })
     );
+    storeSpy.calls.reset();
   });
 
   describe('creation', () => {
@@ -161,6 +211,99 @@ describe('AppViewModel', () => {
       expect(viewModel.sideNavOpen$).toBeObservable(hot('a', { a: true }));
       store.dispatch(new UiActions.ToggleSideNav({ open: false }));
       expect(viewModel.sideNavOpen$).toBeObservable(hot('a', { a: false }));
+    });
+  });
+
+  describe('feedback', () => {
+    describe('success feedback', () => {
+      beforeAll(() => {
+        mockFeedBack.type = 'success';
+      });
+
+      it('should pass the success feedback to the feedbackService', () => {
+        const feedbackService = TestBed.get(FEEDBACK_SERVICE_TOKEN);
+        spyOn(feedbackService, 'openSnackbar');
+
+        store.dispatch(
+          new EffectFeedbackActions.AddEffectFeedback({
+            effectFeedback: mockFeedBack
+          })
+        );
+
+        expect(feedbackService.openSnackbar).toHaveBeenCalled();
+        expect(feedbackService.openSnackbar).toHaveBeenCalledWith(mockFeedBack);
+      });
+
+      it('should subscribe to snackbarAfterDismiss', () => {
+        spyOn(viewModel, 'onFeedbackDismiss');
+
+        store.dispatch(
+          new EffectFeedbackActions.AddEffectFeedback({
+            effectFeedback: mockFeedBack
+          })
+        );
+
+        // feedbackService.snackbarAfterDismiss is mocked and always emits a value
+
+        expect(viewModel.onFeedbackDismiss).toHaveBeenCalled();
+      });
+    });
+
+    describe('error feedback', () => {
+      beforeAll(() => {
+        mockFeedBack.type = 'error';
+      });
+
+      it('should pass the error feedback to the banner-stream', () => {
+        store.dispatch(
+          new EffectFeedbackActions.AddEffectFeedback({
+            effectFeedback: mockFeedBack
+          })
+        );
+
+        expect(viewModel.bannerFeedback$).toBeObservable(
+          hot('a', { a: mockFeedBack })
+        );
+      });
+    });
+
+    describe('feedback event handling', () => {
+      let mockEvent: { action: Action; feedbackId: string };
+      let removeFeedbackAction: Action;
+
+      beforeAll(() => {
+        removeFeedbackAction = new EffectFeedbackActions.DeleteEffectFeedback({
+          id: mockFeedBack.id
+        });
+      });
+
+      beforeEach(() => {
+        mockEvent = { action: mockAction, feedbackId: mockFeedBack.id };
+      });
+
+      it('should dispatch a removeFeedback action', () => {
+        viewModel.onFeedbackDismiss(mockEvent);
+
+        expect(store.dispatch).toHaveBeenCalledWith(removeFeedbackAction);
+      });
+
+      it('should dispatch the event action, if available', () => {
+        // with action
+        viewModel.onFeedbackDismiss(mockEvent);
+        expect(store.dispatch).toHaveBeenCalledTimes(2);
+        expect(store.dispatch).toHaveBeenCalledWith(removeFeedbackAction);
+        expect(store.dispatch).toHaveBeenCalledWith(mockEvent.action);
+
+        // without action
+        storeSpy.calls.reset();
+        const mockEventWithoutAction = {
+          action: null,
+          feedbackId: mockFeedBack.id
+        };
+        viewModel.onFeedbackDismiss(mockEventWithoutAction);
+        expect(store.dispatch).toHaveBeenCalledTimes(1);
+        expect(store.dispatch).toHaveBeenCalledWith(removeFeedbackAction);
+      });
     });
   });
 });

@@ -58,16 +58,20 @@ describe('BannerComponent', () => {
         type: 'test'
       }
     };
+    component.id = 'id1';
     component.actions = [bannerAction];
     fixture.detectChanges();
-    let action;
+    let event;
     const button = fixture.debugElement.query(By.css('campus-button'));
     component.afterDismiss.subscribe(a => {
-      action = a;
+      event = a;
     });
     button.triggerEventHandler('click', null);
     expect(button.nativeElement.textContent).toContain('klik hier');
-    expect(action).toBe(bannerAction.userAction);
+    expect(event).toEqual({
+      action: bannerAction.userAction,
+      feedbackId: component.id
+    });
   });
 
   it('should add the --mobile class when the screen width is small', () => {

@@ -21,12 +21,13 @@ export interface EffectFeedbackInterface {
   timeStamp?: number;
   display?: boolean;
   priority?: Priority;
+  useDefaultCancel?: boolean;
 }
 
 export class EffectFeedback implements EffectFeedbackInterface {
   id: string;
   triggerAction: Action;
-  icon: string = null;
+  icon?: string;
   message: string;
   type: 'success' | 'error' = 'success';
   userActions: {
@@ -34,9 +35,10 @@ export class EffectFeedback implements EffectFeedbackInterface {
     title: string;
     userAction: Action;
   }[] = [];
-  timeStamp: number = Date.now();
+  timeStamp?: number = Date.now();
   display = true;
-  priority: Priority = Priority.NORM;
+  priority?: Priority = Priority.NORM;
+  useDefaultCancel? = true;
 
   constructor(props: EffectFeedbackInterface) {
     Object.assign(this, props);

@@ -19,11 +19,15 @@ export function groupStreamByKey<T, K extends PrimitivePropertiesKeys<T>>(
 
 export function groupArrayByKey<T, K extends PrimitivePropertiesKeys<T>>(
   arr: T[],
-  key: K
+  key: K,
+  ignoreEmpty = true
 ): Dictionary<T[]> {
   const byKey = {} as any;
   arr.forEach(item => {
     const prop = item[key];
+    if (ignoreEmpty && (prop === null || prop === undefined)) {
+      return;
+    }
     if (!byKey[prop]) {
       byKey[prop] = [];
     }

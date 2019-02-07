@@ -18,11 +18,6 @@ export const getCurrentUser = createSelector(
   (state: State) => state.currentUser
 );
 
-export const getLastUpdateMessage = createSelector(
-  getUserState,
-  (state: State) => state.lastUpdateMessage
-);
-
 export const getPermissionsLoaded = createSelector(
   getUserState,
   (state: State) => state.permissionsLoaded

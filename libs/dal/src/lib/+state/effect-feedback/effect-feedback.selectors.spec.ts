@@ -35,8 +35,15 @@ let effectFeedbackState: State;
 let storeState: any;
 
 describe('EffectFeedback selectors', () => {
-  beforeEach(() => {
+  it('getNext() should return the first effect feedback with display = true', () => {
     effectFeedbackState = createEffectFeedbackState([
+      new EffectFeedbackFixture({ id: 'guid6', display: false, type: 'error' }),
+      new EffectFeedbackFixture({ id: 'guid8', display: true, type: 'error' }),
+      new EffectFeedbackFixture({
+        id: 'guid10',
+        display: false,
+        type: 'success'
+      }),
       new EffectFeedbackFixture({
         id: 'guid6',
         display: false,
@@ -55,11 +62,47 @@ describe('EffectFeedback selectors', () => {
       })
     ]);
     storeState = { effectFeedback: effectFeedbackState };
+
+    const result = EffectFeedbackQueries.getNext(storeState);
+    expect(result).toBe(effectFeedbackState.entities['guid8']);
   });
 
-  it('getNext() should return the first effect feedback with display = true', () => {
-    const results = EffectFeedbackQueries.getNext(storeState);
-    expect(results).toBe(effectFeedbackState.entities['guid8']);
+  it('getNextError() should return getNext() with type ==== error', () => {
+    effectFeedbackState = createEffectFeedbackState([
+      new EffectFeedbackFixture({ id: 'guid8', display: true, type: 'error' })
+    ]);
+    storeState = { effectFeedback: effectFeedbackState };
+
+    let result = EffectFeedbackQueries.getNextError(storeState);
+    expect(result).toBe(effectFeedbackState.entities['guid8']);
+
+    // if the getNext() isn't an error
+    effectFeedbackState = createEffectFeedbackState([
+      new EffectFeedbackFixture({ id: 'guid8', display: true, type: 'success' })
+    ]);
+    storeState = { effectFeedback: effectFeedbackState };
+
+    result = EffectFeedbackQueries.getNextError(storeState);
+    expect(result).toBeFalsy();
+  });
+
+  it('getNextSuccess() should return getNext() with type ==== success', () => {
+    effectFeedbackState = createEffectFeedbackState([
+      new EffectFeedbackFixture({ id: 'guid8', display: true, type: 'success' })
+    ]);
+    storeState = { effectFeedback: effectFeedbackState };
+
+    let result = EffectFeedbackQueries.getNextSuccess(storeState);
+    expect(result).toBe(effectFeedbackState.entities['guid8']);
+
+    // if the getNext() isn't an success
+    effectFeedbackState = createEffectFeedbackState([
+      new EffectFeedbackFixture({ id: 'guid8', display: true, type: 'error' })
+    ]);
+    storeState = { effectFeedback: effectFeedbackState };
+
+    result = EffectFeedbackQueries.getNextSuccess(storeState);
+    expect(result).toBeFalsy();
   });
 
   it('getFeedbackForAction() should return the first effect feedback with the specified trigger action', () => {

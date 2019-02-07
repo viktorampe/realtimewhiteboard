@@ -91,9 +91,9 @@ describe('CampusRouterlinkDirective', () => {
   });
 
   it('should return empty url in case of internal link', () => {
-    expect(directive.getExternalLink('/google.com')).toBe('');
-    expect(directive.getExternalLink('/dev/com')).toBe('');
-    expect(directive.getExternalLink('/com')).toBe('');
+    expect(directive.getExternalLink('/google.com')).toBe(null);
+    expect(directive.getExternalLink('/dev/com')).toBe(null);
+    expect(directive.getExternalLink('/com')).toBe(null);
   });
 
   it('should navigate to internal link', () => {

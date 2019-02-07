@@ -58,23 +58,6 @@ describe('ProfileViewModel', () => {
         );
       });
     });
-
-    describe('message', () => {
-      const mockMessage = {
-        message: "Look at me! I'm an update message.",
-        timeStamp: 1,
-        type: 'success'
-      } as UserReducer.State['lastUpdateMessage'];
-      beforeEach(() => {
-        store.dispatch(new UserActions.UserUpdateMessage(mockMessage));
-      });
-
-      it('should return the messages', () => {
-        expect(profileViewModel.messages$).toBeObservable(
-          hot('a', { a: mockMessage })
-        );
-      });
-    });
   });
 
   describe('update profile', () => {

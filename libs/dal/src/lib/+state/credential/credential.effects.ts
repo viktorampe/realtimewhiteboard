@@ -10,7 +10,12 @@ import {
   CredentialServiceInterface,
   CREDENTIAL_SERVICE_TOKEN
 } from '../../persons';
-import { LoadUser, UserUpdateMessage } from './../user/user.actions';
+import {
+  EffectFeedback,
+  EffectFeedbackActions,
+  Priority
+} from '../effect-feedback';
+import { LoadUser } from './../user/user.actions';
 import {
   CredentialsActionTypes,
   CredentialsLoaded,
@@ -70,18 +75,32 @@ export class CredentialEffects {
             mergeMapTo(
               from<Action>([
                 new LoadUser({ force: true }),
-                new UserUpdateMessage({
-                  message: 'Profile picture updated',
-                  type: 'success'
+                new EffectFeedbackActions.AddEffectFeedback({
+                  effectFeedback: new EffectFeedback({
+                    id: this.uuid(),
+                    triggerAction: action,
+                    message: 'Je profielfoto is gewijzigd.'
+                  })
                 })
               ])
             )
           );
       },
       onError: (action: UseCredentialProfilePicture, error) => {
-        return new UserUpdateMessage({
-          message: 'Profile picture update failed',
-          type: 'error'
+        return new EffectFeedbackActions.AddEffectFeedback({
+          effectFeedback: new EffectFeedback({
+            id: this.uuid(),
+            triggerAction: action,
+            message: 'Het is niet gelukt om je profielfoto te wijzigen.',
+            type: 'error',
+            userActions: [
+              {
+                title: 'Opnieuw proberen.',
+                userAction: action
+              }
+            ],
+            priority: Priority.HIGH
+          })
         });
       }
     }
@@ -91,6 +110,7 @@ export class CredentialEffects {
     private actions: Actions,
     private dataPersistence: DataPersistence<DalState>,
     @Inject(CREDENTIAL_SERVICE_TOKEN)
-    private credentialService: CredentialServiceInterface
+    private credentialService: CredentialServiceInterface,
+    @Inject('uuid') private uuid: Function
   ) {}
 }
