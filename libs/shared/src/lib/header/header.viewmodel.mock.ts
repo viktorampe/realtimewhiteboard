@@ -60,7 +60,7 @@ export class MockHeaderViewModel {
   ]);
 
   // source streams
-  isResolved$ = new BehaviorSubject<boolean>(false);
+  alertsLoaded$ = new BehaviorSubject<boolean>(false);
 
   breadCrumbs$: Observable<BreadcrumbLinkInterface[]> = new BehaviorSubject<
     BreadcrumbLinkInterface[]

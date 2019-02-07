@@ -50,6 +50,17 @@ export class AppViewModel {
     this.store.dispatch(new UiActions.ToggleSideNav({ open }));
   }
 
+  private setIntermediateStreams() {
+    this.sideNavItems$ = combineLatest(
+      this.getCurrentUser(),
+      this.getFavorites()
+    ).pipe(
+      filter(([user, favorites]) => !!user),
+      map(([user, favorites]) =>
+        this.navItemService.getSideNavItems(user, favorites)
+      )
+    );
+  }
   // event handler for feedback dismiss
   // used by banner and snackbar
   public onFeedbackDismiss(event: {
