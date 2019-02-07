@@ -28,6 +28,7 @@ import {
       <div campusListItem
         ><img src="https://www.polpo.be/assets/images/home-laptop-books.jpg"
       /></div>
+      <div campusListItem [notSelectable]="true">test notselectable</div>
     </campus-list-view>
   `
 })
@@ -50,8 +51,8 @@ export class EmptyTestContainerComponent {}
 export class TestModule {}
 
 describe('ListViewComponent', () => {
-  let component: ListViewComponent;
-  let fixture: ComponentFixture<ListViewComponent>;
+  let component: ListViewComponent<any>;
+  let fixture: ComponentFixture<ListViewComponent<any>>;
   let testContainerFixture: ComponentFixture<TestContainerComponent>;
   let testContainerComponent: TestContainerComponent;
   let componentDE: DebugElement;
@@ -72,7 +73,7 @@ describe('ListViewComponent', () => {
     // templated component
     testContainerFixture = TestBed.createComponent(TestContainerComponent);
     testContainerComponent = testContainerFixture.componentInstance;
-    component = <ListViewComponent>(
+    component = <ListViewComponent<any>>(
       testContainerFixture.debugElement.query(By.css('campus-list-view'))
         .componentInstance
     );
@@ -92,7 +93,7 @@ describe('ListViewComponent', () => {
   });
 
   it('should find projected content as children', () => {
-    expect(component.items.length).toBe(6);
+    expect(component.items.length).toBe(7);
   });
 
   it('should show the text placeholder if without content', () => {
@@ -106,7 +107,7 @@ describe('ListViewComponent', () => {
     );
     emptyTestContainerComponent = emptyTestContainerFixture.componentInstance;
 
-    component = <ListViewComponent>(
+    component = <ListViewComponent<any>>(
       emptyTestContainerFixture.debugElement.query(By.css('campus-list-view'))
         .componentInstance
     );
@@ -166,6 +167,21 @@ describe('ListViewComponent', () => {
     const selectedItems = component.items.filter(i => i.isSelected);
 
     expect(selectedItems.length).toBe(1);
+  });
+
+  it('should not select item with notSelectable attribute', () => {
+    const itemListDE = componentDE.query(By.css('.ui-list-view__list'));
+    const itemDEList = itemListDE.queryAll(
+      By.css('[campusListItem][ng-reflect-not-selectable]')
+    );
+
+    const childComponentEL = itemDEList[0].nativeElement;
+
+    childComponentEL.click();
+
+    const selectedItems = component.items.filter(i => i.isSelected);
+
+    expect(selectedItems.length).toBe(0);
   });
 
   it('should select multiple items', () => {
@@ -299,7 +315,7 @@ describe('ListItemDirective', () => {
   let fixture: ComponentFixture<ContainerComponent>;
   let comp: ContainerComponent;
   let compDE: DebugElement;
-  let dir: ListViewItemDirective;
+  let dir: ListViewItemDirective<any>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -331,6 +347,15 @@ describe('ListItemDirective', () => {
 
     expect(compDE.nativeElement.classList).toContain(
       'ui-list-view__list__item--selected'
+    );
+  });
+
+  it('should apply the .item-notselectable', () => {
+    dir.notSelectable = true;
+    fixture.detectChanges();
+
+    expect(compDE.nativeElement.classList).toContain(
+      'ui-list-view__list__item__notselectable'
     );
   });
 
