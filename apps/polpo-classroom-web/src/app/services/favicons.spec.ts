@@ -1,14 +1,14 @@
 import { TestBed } from '@angular/core/testing';
-import { BrowserFaviconService } from './favicons';
+import { FavIconService } from './favicons';
 
-describe('NavItemServiceService', () => {
-  let browserFaviconService: BrowserFaviconService;
+describe('FavIconService', () => {
+  let browserFaviconService: FavIconService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [BrowserFaviconService]
+      providers: [FavIconService]
     });
-    browserFaviconService = TestBed.get(BrowserFaviconService);
+    browserFaviconService = TestBed.get(FavIconService);
   });
 
   it('should be created', () => {

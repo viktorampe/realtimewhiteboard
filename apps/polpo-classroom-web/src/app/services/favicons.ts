@@ -1,13 +1,13 @@
 import { InjectionToken } from '@angular/core';
 
-export interface FaviconsInterface {
+export interface FavIconServiceInterface {
   setFavicon(url: string, mimeType: string): void;
   resetFavicon(): void;
 }
 
-export const BrowserFaviconToken = new InjectionToken('BrowserFaviconService');
+export const FAVICON_SERVICE_TOKEN = new InjectionToken('FavIconService');
 
-export class BrowserFaviconService implements FaviconsInterface {
+export class FavIconService implements FavIconServiceInterface {
   private faviconId = 'favicons-injected-node';
 
   constructor() {
@@ -44,8 +44,8 @@ export class BrowserFaviconService implements FaviconsInterface {
   }
 
   removePresetFavicon(): void {
-    const favions = document.querySelectorAll("link[ rel ~= 'icon' i]");
-    for (const favicon of Array.from(favions)) {
+    const favicons = document.querySelectorAll("link[ rel ~= 'icon' i]");
+    for (const favicon of Array.from(favicons)) {
       favicon.parentNode.removeChild(favicon);
     }
   }

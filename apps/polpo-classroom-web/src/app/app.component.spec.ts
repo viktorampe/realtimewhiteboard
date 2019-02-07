@@ -3,10 +3,7 @@ import { async, TestBed } from '@angular/core/testing';
 import { Title } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { AppViewModel } from './app.viewmodel';
-import {
-  BrowserFaviconService,
-  BrowserFaviconToken
-} from './services/favicons';
+import { FavIconService, FAVICON_SERVICE_TOKEN } from './services/favicons';
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -19,8 +16,8 @@ describe('AppComponent', () => {
           useClass: Title
         },
         {
-          provide: BrowserFaviconToken,
-          useClass: BrowserFaviconService
+          provide: FAVICON_SERVICE_TOKEN,
+          useClass: FavIconService
         }
       ]
     }).compileComponents();
