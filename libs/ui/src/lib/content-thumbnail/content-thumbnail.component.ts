@@ -18,6 +18,7 @@ export class ContentThumbnailComponent implements ListViewItemInterface {
 
   @Input() listFormat: ListFormat;
   @Input() title: string;
+  @Input() learningArea: string;
   @Input() contentTypeClass: string;
   @Input() imagePath: string;
   @Input() fileExtensionClass: string;

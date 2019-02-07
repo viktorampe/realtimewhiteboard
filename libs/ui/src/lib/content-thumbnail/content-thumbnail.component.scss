@@ -3,9 +3,11 @@
   min-width: 0px;
   min-height: 0px;
 }
+
 .ui-content-thumbnail {
   display: flex;
   box-sizing: border-box;
+
   &__header {
     display: flex;
     align-items: center;
@@ -16,6 +18,7 @@
       flex-direction: row-reverse;
     }
   }
+
   &__image {
     z-index: 0;
     display: flex;
@@ -25,7 +28,7 @@
     justify-content: center;
     align-content: flex-end;
 
-    & > img {
+    &>img {
       max-width: 100%;
       max-height: 100%;
       object-fit: contain;
@@ -40,7 +43,9 @@
     font-family: 'Open Sans', sans-serif;
     overflow: hidden;
     display: flex;
+    flex-direction: column;
     align-items: flex-start;
+
   }
 
   &__footer {
@@ -66,6 +71,7 @@
       }
     }
   }
+
   /* Line*/
   &--line {
     flex-direction: row;
