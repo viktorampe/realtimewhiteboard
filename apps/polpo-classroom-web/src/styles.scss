@@ -171,3 +171,15 @@ body {
     display: none;
   }
 }
+
+campus-content-thumbnail {
+  .ui-content-thumbnail__footer {
+    padding: 3px;
+  }
+
+  .ui-button,
+  .ui-button:hover {
+    background-color: $color-gray-1;
+    color: $color-white-1;
+  }
+}
