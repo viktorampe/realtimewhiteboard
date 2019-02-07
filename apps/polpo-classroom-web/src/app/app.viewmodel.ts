@@ -100,7 +100,7 @@ export class AppViewModel {
       .pipe(
         map(fb => this.feedbackService.openSnackbar(fb)),
         filter(snackbar => !!snackbar),
-        switchMap(sbI => this.feedbackService.snackbarAfterDismiss$(sbI)),
+        switchMap(snackbarInfo => this.feedbackService.snackbarAfterDismiss$(snackbarInfo)),
         map(event => ({
           action: event.actionToDispatch,
           feedbackId: event.feedback.id
