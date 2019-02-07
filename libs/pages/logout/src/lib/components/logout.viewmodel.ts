@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { WindowServiceInterface, WINDOW_SERVICE_TOKEN } from '@campus/browser';
+import { WINDOW } from '@campus/browser';
 import {
   DalState,
   PersonInterface,
@@ -24,7 +24,7 @@ export class LogoutViewModel {
     private store: Store<DalState>,
     @Inject(ENVIRONMENT_LOGOUT_TOKEN)
     public environmentLogout: EnvironmentLogoutInterface,
-    @Inject(WINDOW_SERVICE_TOKEN) private windowService: WindowServiceInterface
+    @Inject(WINDOW) private window: Window
   ) {}
 
   logout(): void {
@@ -35,7 +35,7 @@ export class LogoutViewModel {
       take(1)
     );
     this.currentNullUser.subscribe(() =>
-      this.windowService.window.location.assign(this.environmentLogout.url)
+      this.window.location.assign(this.environmentLogout.url)
     );
   }
 }

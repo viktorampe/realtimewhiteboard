@@ -6,6 +6,10 @@ export const WINDOW = new InjectionToken('WindowToken', {
   factory: () => window
 });
 
+/**
+ * Class window service is used to add additional services to the native window.
+ * When you need native window functionality, inject WINDOW instead
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -26,9 +30,5 @@ export class WindowService implements WindowServiceInterface {
 
   get openedWindows(): { [name: string]: Window } {
     return this._openedWindows;
-  }
-
-  get window(): Window {
-    return this.nativeWindow;
   }
 }

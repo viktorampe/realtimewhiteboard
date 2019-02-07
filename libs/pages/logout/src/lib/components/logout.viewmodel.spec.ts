@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { WindowServiceInterface, WINDOW_SERVICE_TOKEN } from '@campus/browser';
+import { WINDOW } from '@campus/browser';
 import {
   DalState,
   PersonFixture,
@@ -11,13 +11,14 @@ import {
   EnvironmentLogoutInterface,
   ENVIRONMENT_LOGOUT_TOKEN
 } from '@campus/shared';
+import { MockWindow } from '@campus/testing';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { LogoutViewModel } from './logout.viewmodel';
 
 let logoutViewModel: LogoutViewModel;
 let store: Store<DalState>;
-let windowService: WindowServiceInterface;
+let window: Window;
 let mockData: any;
 
 beforeEach(() => {
@@ -44,14 +45,14 @@ beforeEach(() => {
         useValue: <EnvironmentLogoutInterface>{ url: mockData.logoutUrl }
       },
       {
-        provide: WINDOW_SERVICE_TOKEN,
-        useValue: { window: { location: { assign: () => {} } } }
+        provide: WINDOW,
+        useClass: MockWindow
       }
     ]
   });
 
   logoutViewModel = TestBed.get(LogoutViewModel);
-  windowService = TestBed.get(WINDOW_SERVICE_TOKEN);
+  window = TestBed.get(WINDOW);
   store = TestBed.get(Store);
 });
 
@@ -70,7 +71,7 @@ describe('logoutViewModel', () => {
       beforeEach(() => {
         dispatchSpy = jest.spyOn(store, 'dispatch');
         pipeSpy = jest.spyOn(store, 'pipe');
-        assignSpy = jest.spyOn(windowService.window.location, 'assign');
+        assignSpy = jest.spyOn(window.location, 'assign');
       });
       afterEach(() => {
         jest.resetAllMocks();
