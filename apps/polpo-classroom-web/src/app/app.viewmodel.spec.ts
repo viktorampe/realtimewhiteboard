@@ -84,7 +84,7 @@ describe('AppViewModel', () => {
               feedback: mockFeedBack
             }),
 
-            snackbarAfterDismiss$: () =>
+            snackbarAfterDismiss: () =>
               of({
                 mockAction,
                 feedback: mockFeedBack
@@ -234,7 +234,7 @@ describe('AppViewModel', () => {
         expect(feedbackService.openSnackbar).toHaveBeenCalledWith(mockFeedBack);
       });
 
-      it('should subscribe to snackbarAfterDismiss$', () => {
+      it('should subscribe to snackbarAfterDismiss', () => {
         spyOn(viewModel, 'onFeedbackDismiss');
 
         store.dispatch(
