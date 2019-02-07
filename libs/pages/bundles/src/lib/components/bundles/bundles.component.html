@@ -87,7 +87,7 @@
           <campus-content-thumbnail
             *ngFor="let book of sharedInfo.books"
             campusListItem
-            [notSelectable]="true"
+            [selectable]="false"
             [title]="book.name"
             [contentTypeClass]="'book'"
             [imagePath]="book.previewImage"

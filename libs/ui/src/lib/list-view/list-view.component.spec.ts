@@ -28,7 +28,7 @@ import {
       <div campusListItem
         ><img src="https://www.polpo.be/assets/images/home-laptop-books.jpg"
       /></div>
-      <div campusListItem [notSelectable]="true">test notselectable</div>
+      <div campusListItem [selectable]="false">test not selectable</div>
     </campus-list-view>
   `
 })
@@ -169,10 +169,10 @@ describe('ListViewComponent', () => {
     expect(selectedItems.length).toBe(1);
   });
 
-  it('should not select item with notSelectable attribute', () => {
+  it('should not select item with selectable=false attribute', () => {
     const itemListDE = componentDE.query(By.css('.ui-list-view__list'));
     const itemDEList = itemListDE.queryAll(
-      By.css('[campusListItem][ng-reflect-not-selectable]')
+      By.css('[campusListItem][ng-reflect-selectable]')
     );
 
     const childComponentEL = itemDEList[0].nativeElement;
@@ -351,7 +351,7 @@ describe('ListItemDirective', () => {
   });
 
   it('should apply the .item-notselectable', () => {
-    dir.notSelectable = true;
+    dir.selectable = false;
     fixture.detectChanges();
 
     expect(compDE.nativeElement.classList).toContain(
