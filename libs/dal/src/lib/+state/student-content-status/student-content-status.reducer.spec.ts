@@ -97,7 +97,7 @@ describe('StudentContentStatuses Reducer', () => {
   describe('add actions', () => {
     it('should add one studentContentStatus', () => {
       const studentContentStatus = studentContentStatuses[0];
-      const action = new StudentContentStatusActions.AddStudentContentStatus({
+      const action = new StudentContentStatusActions.StudentContentStatusAdded({
         studentContentStatus
       });
 
@@ -130,7 +130,7 @@ describe('StudentContentStatuses Reducer', () => {
         'test'
       );
 
-      const action = new StudentContentStatusActions.UpsertStudentContentStatus(
+      const action = new StudentContentStatusActions.StudentContentStatusUpserted(
         {
           studentContentStatus: updatedStudentContentStatus
         }
@@ -174,7 +174,7 @@ describe('StudentContentStatuses Reducer', () => {
           personId: personIdUpdatedValue
         }
       };
-      const action = new StudentContentStatusActions.UpdateStudentContentStatus(
+      const action = new StudentContentStatusActions.StudentContentStatusUpdated(
         {
           studentContentStatus: update
         }
