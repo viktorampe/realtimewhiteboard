@@ -10,9 +10,9 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import {
   BundleInterface,
-  ContentInterface,
   LearningAreaInterface,
   PersonInterface,
+  StudentContentStatusInterface,
   UnlockedContent
 } from '@campus/dal';
 import {
@@ -24,8 +24,9 @@ import {
   SideSheetComponent
 } from '@campus/ui';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
-import { combineLatest, Observable, Subscription } from 'rxjs';
-import { filter, map, shareReplay, switchMap, take } from 'rxjs/operators';
+import { Dictionary } from '@ngrx/entity';
+import { Observable, Subscription } from 'rxjs';
+import { map, shareReplay, switchMap } from 'rxjs/operators';
 import { BundlesViewModel } from '../bundles.viewmodel';
 
 @Component({
@@ -49,14 +50,16 @@ export class BundleDetailComponent
   unlockedContents$: Observable<UnlockedContent[]>;
   contentStatusOptions$: Observable<SelectOption[]>;
   selectedUnlockedContent$: Observable<UnlockedContent>;
-  selectedUnlockedContentStatus$: Observable<number>;
+  unlockedContentStatuses$: Observable<
+    Dictionary<StudentContentStatusInterface[]>
+  >;
 
   @ViewChild(FilterTextInputComponent)
   filterTextInput: FilterTextInputComponent<UnlockedContent[], UnlockedContent>;
 
-  list: ListViewComponent<ContentInterface>;
+  list: ListViewComponent<UnlockedContent>;
   @ViewChild('bundleListview')
-  set listViewComponent(list: ListViewComponent<ContentInterface>) {
+  set listViewComponent(list: ListViewComponent<UnlockedContent>) {
     this.list = list;
   }
   private sideSheet: SideSheetComponent;
@@ -87,17 +90,12 @@ export class BundleDetailComponent
 
   ngAfterViewInit(): void {
     this.subscriptions.add(
-      this.list.selectedItems$.subscribe(
-        (selectedItems: ContentInterface[]) => {
-          if (selectedItems.length > 0) {
-            this.sideSheet.toggle(true);
-          }
+      this.list.selectedItems$.subscribe((selectedItems: UnlockedContent[]) => {
+        if (selectedItems.length > 0) {
+          this.sideSheet.toggle(true);
         }
-      )
+      })
     );
-
-    this.selectedUnlockedContent$ = this.getSelectedUnlockedContent();
-    this.selectedUnlockedContentStatus$ = this.getSelectedUnlockedContentStatus();
 
     // Needed to avoid ExpressionChangedAfterItHasBeenCheckedError
     this.cd.detectChanges();
@@ -115,43 +113,23 @@ export class BundleDetailComponent
     this.bundlesViewModel.openContent(unlockedcontent);
   }
 
-  onSaveStatus(value: SelectOption): void {
-    this.selectedUnlockedContent$.pipe(take(1)).subscribe(unlockedContent => {
-      this.bundlesViewModel.saveContentStatus(unlockedContent.id, value.value);
-    });
+  onSaveStatus(value: SelectOption, unlockedContent: UnlockedContent): void {
+    console.log(unlockedContent, value);
+    this.bundlesViewModel.saveContentStatus(unlockedContent.id, value.value);
   }
 
-  /**
-   * Get the UnlockedContent from the selected EduContent
-   * when there is only a single element selected
-   *
-   * @private
-   * @returns {Observable<UnlockedContent>}
-   */
-  private getSelectedUnlockedContent(): Observable<UnlockedContent> {
-    return combineLatest(this.list.selectedItems$, this.unlockedContents$).pipe(
-      map(([selectedContent, unlockedContents]) => {
-        if (selectedContent.length !== 1) {
-          return null;
-        }
-        return unlockedContents.find(uc => uc.content === selectedContent[0]);
-      }),
-      filter(unlockedContent => !!unlockedContent),
-      shareReplay(1)
-    );
-  }
-
-  private getSelectedUnlockedContentStatus(): Observable<number> {
-    return this.selectedUnlockedContent$.pipe(
-      switchMap(unlockedContent => {
-        return this.bundlesViewModel.getStudentContentStatusByUnlockedContentId(
-          unlockedContent.id
-        );
-      }),
-      map(studentContentStatus => {
-        return studentContentStatus ? studentContentStatus.contentStatusId : 0;
-      })
-    );
+  protected getSelectedUnlockedContentStatus(
+    unlockedContent
+  ): Observable<number> {
+    return this.bundlesViewModel
+      .getStudentContentStatusByUnlockedContentId(unlockedContent.id)
+      .pipe(
+        map(studentContentStatus => {
+          return studentContentStatus
+            ? studentContentStatus.contentStatusId
+            : 0;
+        })
+      );
   }
 
   private setupAlertsSubscription(): void {

@@ -183,7 +183,10 @@ describe('BundleDetailComponent', () => {
       new UnlockedContentFixture({ id: 10 })
     );
 
-    component.onSaveStatus({ value: 3 } as SelectOption);
+    component.onSaveStatus(
+      { value: 3 } as SelectOption,
+      new UnlockedContentFixture({ id: 10 })
+    );
 
     expect(bundlesViewModel.saveContentStatus).toHaveBeenCalledWith(10, 3);
   });

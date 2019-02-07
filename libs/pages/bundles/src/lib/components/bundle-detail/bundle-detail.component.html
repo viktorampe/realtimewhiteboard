@@ -38,10 +38,10 @@
         </campus-info-panel-bundle>
         <campus-info-panel-content
           *ngSwitchCase="1"
-          [content]="selectedItems[0]"
-          [status]="selectedUnlockedContentStatus$ | async"
+          [content]="selectedItems[0].content"
+          [status]="getSelectedUnlockedContentStatus(selectedItems[0]) | async"
           [statusOptions]="contentStatusOptions$ | async"
-          (saveStatus)="onSaveStatus($event)"
+          (saveStatus)="onSaveStatus($event, selectedItems[0])"
         >
         </campus-info-panel-content>
         <campus-info-panel-contents *ngSwitchDefault [contents]="selectedItems">
@@ -77,7 +77,7 @@
           <campus-content-thumbnail
             *ngFor="let unlockedcontent of filteredUnlockedContents"
             campusListItem
-            [dataObject]="unlockedcontent.content"
+            [dataObject]="unlockedcontent"
             [title]="unlockedcontent.content.name"
             [fileExtensionClass]="unlockedcontent.content.fileExtension"
             [fileTypeLabel]="unlockedcontent.content.fileTypeLabel"

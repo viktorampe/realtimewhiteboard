@@ -261,16 +261,6 @@ describe('BundlesViewModel', () => {
     );
   });
 
-  it('getStudentContentStatusByUnlockedContentId()', () => {
-    expect(
-      bundlesViewModel.getStudentContentStatusByUnlockedContentId(2)
-    ).toBeObservable(
-      hot('a', {
-        a: studentContentStatuses[1]
-      })
-    );
-  });
-
   it('saveContentStatus()', () => {
     spyOn(store, 'dispatch');
     const expectedAction = new StudentContentStatusActions.UpsertStudentContentStatus(
