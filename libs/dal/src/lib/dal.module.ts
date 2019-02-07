@@ -17,8 +17,7 @@ import { AlertReducer, AlertsEffects } from './+state/alert';
 import { BundleReducer, BundlesEffects } from './+state/bundle';
 import { ContentStatusReducer } from './+state/content-status';
 import { ContentStatusesEffects } from './+state/content-status/content-status.effects';
-import { CredentialReducer } from './+state/credential';
-import { CredentialEffects } from './+state/credential/credential.effects';
+import { CredentialEffects, CredentialReducer } from './+state/credential';
 import {
   CurrentExerciseEffects,
   CurrentExerciseReducer
