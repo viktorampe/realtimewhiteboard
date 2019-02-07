@@ -4,6 +4,8 @@ import {
   AlertQueries,
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
+  CredentialActions,
+  CredentialQueries,
   DalState,
   StateResolver,
   UiActions,
@@ -26,11 +28,18 @@ export class HeaderResolver extends StateResolver {
 
   protected getLoadableActions(): Action[] {
     return [
+      new CredentialActions.LoadCredentials({
+        userId: this.authService.userId
+      }),
       new AlertActions.LoadAlerts({ userId: this.authService.userId }),
       new UiActions.LoadUi()
     ];
   }
   protected getResolvedQueries(): Selector<object, boolean>[] {
-    return [AlertQueries.getLoaded, UiQuery.getLoaded];
+    return [
+      CredentialQueries.getLoaded,
+      AlertQueries.getLoaded,
+      UiQuery.getLoaded
+    ];
   }
 }

@@ -25,6 +25,7 @@
   <a
     *ngIf="externalLink"
     href="{{externalLink}}"
+    target="_blank"
     class="ui-dropdown-menu-item__body"
   >
     <mat-icon *ngIf="icon && !image" [svgIcon]="icon"></mat-icon>
