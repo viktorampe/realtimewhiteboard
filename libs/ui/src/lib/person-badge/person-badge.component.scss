@@ -11,9 +11,7 @@
   &__display {
     display: flex;
     align-items: center;
-
   }
-
 
   &--right {
     flex-direction: row-reverse;
@@ -51,7 +49,6 @@
     flex-direction: column-reverse;
 
     .ui_person-badge__display {
-
       &__name,
       &__subtext {
         justify-content: center;
@@ -67,7 +64,6 @@
     flex-direction: column;
 
     .ui_person-badge__display {
-
       &__name,
       &__subtext {
         justify-content: center;

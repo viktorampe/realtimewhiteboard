@@ -1,76 +1,94 @@
 <div class="shared-header">
-  <div hide-mobile
-       class="shared-header__app-bar">
+  <div hide-mobile class="shared-header__app-bar">
     <campus-app-bar *ngIf="(isResolved$ | async)">
-      <campus-breadcrumbs bar__left
-                          [breadCrumbs]="breadCrumbs$ | async"
-                          [baseIcon]="'home'"
-                          [seperator]="'breadcrumb-separator'">
+      <campus-breadcrumbs
+        bar__left
+        [breadCrumbs]="breadCrumbs$ | async"
+        [baseIcon]="'home'"
+        [seperator]="'breadcrumb-separator'"
+      >
       </campus-breadcrumbs>
-      <div class="shared-header__app-bar__alerts"
-           bar__right
-           *ngIf="enableAlerts">
-        <mat-icon [svgIcon]="'notifications'"
-                  [matBadge]="unreadAlertCount$ | async"
-                  [matBadgeHidden]="!((unreadAlertCount$ | async) > 0)"
-                  matBadgePosition="above before"
-                  matBadgeColor="accent"
-                  (click)="dropDownAlerts.toggle()"></mat-icon>
+      <div
+        class="shared-header__app-bar__alerts"
+        bar__right
+        *ngIf="enableAlerts"
+      >
+        <mat-icon
+          [svgIcon]="'notifications'"
+          [matBadge]="unreadAlertCount$ | async"
+          [matBadgeHidden]="!((unreadAlertCount$ | async) > 0)"
+          matBadgePosition="above before"
+          matBadgeColor="accent"
+          (click)="dropDownAlerts.toggle()"
+        ></mat-icon>
 
-        <campus-dropdown-menu #dropDownAlerts
-                              [showHeader]="true"
-                              [newItemCount]="unreadAlertCount$ | async"
-                              [headerIcon]="'notifications'"
-                              itemType="meldingen"
-                              linkText="Alle meldingen"
-                              linkUrl="/notifications">
+        <campus-dropdown-menu
+          #dropDownAlerts
+          [showHeader]="true"
+          [newItemCount]="unreadAlertCount$ | async"
+          [headerIcon]="'notifications'"
+          itemType="meldingen"
+          linkText="Alle meldingen"
+          linkUrl="/notifications"
+        >
           <ng-container *ngIf="(alertNotifications$ | async) as notifications">
-            <campus-notification *ngFor="let notification of notifications"
-                                 dropdown
-                                 [icon]="notification.icon"
-                                 [notificationText]="notification.titleText"
-                                 [routerLink]="notification.link"
-                                 [notificationDate]="notification.notificationDate"
-                                 [accented]="notification.accented"></campus-notification>
+            <campus-notification
+              *ngFor="let notification of notifications"
+              dropdown
+              [icon]="notification.icon"
+              [notificationText]="notification.titleText"
+              [routerLink]="notification.link"
+              [notificationDate]="notification.notificationDate"
+              [accented]="notification.accented"
+            ></campus-notification>
           </ng-container>
         </campus-dropdown-menu>
       </div>
 
-      <div class="shared-header__app-bar__profile-menu"
-           bar__right>
+      <div class="shared-header__app-bar__profile-menu" bar__right>
         <ng-container *ngIf="(currentUser$ | async) as user">
-          <campus-person-badge (click)="dropDownProfile.toggle()"
-                               [person]="user"
-                               [subText]="'&#x25BE;'"
-                               [showBorder]="false"
-                               size="small"></campus-person-badge>
+          <campus-person-badge
+            (click)="dropDownProfile.toggle()"
+            [person]="user"
+            [subText]="'&#x25BE;'"
+            [showBorder]="false"
+            size="small"
+          ></campus-person-badge>
         </ng-container>
-        <campus-dropdown-menu #dropDownProfile
-                              [showHeader]="false"
-                              [smallWidth]="true">
-          <campus-dropdown-menu-item *ngFor="let menuItem of (profileMenuItems$ | async)"
-                                     [icon]="menuItem.icon"
-                                     [description]="menuItem.description"
-                                     [internalLink]="menuItem.internalLink"
-                                     [header]="menuItem.header"
-                                     [image]="menuItem.image"
-                                     [externalLink]="menuItem.externalLink"
-                                     [class.ui-dropdown-menu-item__divider]="menuItem.dividerBefore"></campus-dropdown-menu-item>
+        <campus-dropdown-menu
+          #dropDownProfile
+          [showHeader]="false"
+          [smallWidth]="true"
+        >
+          <campus-dropdown-menu-item
+            *ngFor="let menuItem of (profileMenuItems$ | async)"
+            [icon]="menuItem.icon"
+            [description]="menuItem.description"
+            [internalLink]="menuItem.internalLink"
+            [header]="menuItem.header"
+            [image]="menuItem.image"
+            [externalLink]="menuItem.externalLink"
+            [class.ui-dropdown-menu-item__divider]="menuItem.dividerBefore"
+          ></campus-dropdown-menu-item>
         </campus-dropdown-menu>
       </div>
     </campus-app-bar>
   </div>
   <div class="shared-header__page-bar">
-    <mat-icon *ngIf="(backLink$ | async) as link; else: hamburgerMenu"
-              [routerLink]="link"
-              class="shared-header__page-bar_nav-icon"
-              [svgIcon]="'arrow-back'"
-              hide-desktop></mat-icon>
+    <mat-icon
+      *ngIf="(backLink$ | async) as link; else: hamburgerMenu"
+      [routerLink]="link"
+      class="shared-header__page-bar_nav-icon"
+      [svgIcon]="'arrow-back'"
+      hide-desktop
+    ></mat-icon>
     <ng-template #hamburgerMenu>
-      <mat-icon (click)="onMenuClick()"
-                class="shared-header__page-bar_nav-icon"
-                [svgIcon]="'menu'"
-                hide-desktop></mat-icon>
+      <mat-icon
+        (click)="onMenuClick()"
+        class="shared-header__page-bar_nav-icon"
+        [svgIcon]="'menu'"
+        hide-desktop
+      ></mat-icon>
     </ng-template>
     <div id="page-bar-container"></div>
   </div>
