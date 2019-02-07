@@ -26,6 +26,7 @@
         z-index: 1;
         border-radius: 50%;
         box-sizing: border-box;
+        margin: 1px;
 
         mat-icon {
           display: block;
@@ -42,15 +43,18 @@
     font-size: 12px;
     box-sizing: border-box;
     background-color: rgba(0, 0, 0, 0.2); // depends on type
+
     span {
       display: block;
     }
   }
+
   &__badge {
     position: absolute;
     right: 0;
     background-color: inherit;
     min-width: 10px;
+
     &::before {
       content: '';
       width: 0;
@@ -60,6 +64,7 @@
       border-color: transparent;
       border-right-color: inherit;
     }
+
     span {
       line-height: 20px;
       border-radius: 10px !important;
@@ -71,6 +76,7 @@
       z-index: 3;
       font-weight: 700;
       font-size: 14px;
+
       &::before,
       &::after {
         width: 20px;
@@ -85,6 +91,7 @@
         top: 0;
         opacity: 0.75;
       }
+
       &::after {
         opacity: 0.5;
         right: -6px;
@@ -120,6 +127,7 @@
         height: 100%;
         background-color: rgba(0, 0, 0, 0.2);
       }
+
       &__header {
         margin: 0px;
         position: relative;
@@ -139,6 +147,7 @@
         justify-content: center;
         position: relative;
         overflow: visible;
+
         &::after {
           content: '';
           position: absolute;
@@ -148,11 +157,13 @@
           border-style: solid;
         }
       }
+
       &__badge {
         position: relative;
         top: 0;
         right: 0;
         justify-self: end;
+
         &::before {
           content: none;
         }
