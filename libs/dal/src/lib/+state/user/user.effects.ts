@@ -117,8 +117,6 @@ export class UserEffects {
           );
       },
       undoAction: (action: UpdateUser, state: DalState) => {
-        // TODO: do we need to display the error,
-        // or will the profile form handle this?
         return from([
           undo(action),
           new EffectFeedbackActions.AddEffectFeedback({
