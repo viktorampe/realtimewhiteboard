@@ -177,9 +177,14 @@ campus-content-thumbnail {
     padding: 3px;
   }
 
-  .ui-button,
-  .ui-button:hover {
-    background-color: $color-gray-1;
-    color: $color-white-1;
+  .ui-button {
+    color: $primary-font-color-2;
+    background-color: transparent;
+    padding: 5px;
+
+    .mat-icon {
+      width: 30px;
+      height: 30px;
+    }
   }
 }

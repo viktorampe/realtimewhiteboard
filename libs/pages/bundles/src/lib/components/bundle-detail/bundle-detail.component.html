@@ -85,7 +85,11 @@
           >
             <campus-button
               (click)="clickOpenContent(unlockedcontent)"
-              [iconClass]="'view-content'"
+              [iconClass]="
+                unlockedcontent.content.type === 'exercise'
+                  ? 'exercise:open'
+                  : 'eye'
+              "
               circle
             >
             </campus-button>

@@ -76,10 +76,12 @@
               [contentTypeClass]="taskEduContent.eduContent.productType"
             >
               <campus-button
-                [iconClass]="
-                  taskEduContent.eduContent.submitted ? 'check-on' : 'eye'
-                "
                 circle
+                [iconClass]="
+                  taskEduContent.eduContent.submitted
+                    ? 'exercise:finished'
+                    : 'exercise:open'
+                "
                 (click)="clickOpenContent(taskEduContent)"
               ></campus-button>
             </campus-content-thumbnail>
