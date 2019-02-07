@@ -119,7 +119,7 @@ export class AppViewModel {
         map(feedback => this.feedbackService.openSnackbar(feedback)),
         filter(snackbar => !!snackbar),
         switchMap(snackbarInfo =>
-          this.feedbackService.snackbarAfterDismiss$(snackbarInfo)
+          this.feedbackService.snackbarAfterDismiss(snackbarInfo)
         ),
         map(event => ({
           action: event.actionToDispatch,

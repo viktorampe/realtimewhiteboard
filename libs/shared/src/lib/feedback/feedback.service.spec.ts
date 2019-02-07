@@ -154,7 +154,7 @@ describe('FeedBackService', () => {
 
       const mockSnackbarRef = snackbar.open('foo');
 
-      const result = service.snackbarAfterDismiss$({
+      const result = service.snackbarAfterDismiss({
         snackbarRef: mockSnackbarRef,
         feedback: mockFeedBack
       });

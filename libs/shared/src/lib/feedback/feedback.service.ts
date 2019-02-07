@@ -23,7 +23,7 @@ export interface FeedBackServiceInterface {
     feedback: EffectFeedbackInterface;
   };
 
-  snackbarAfterDismiss$(snackbarInfo: {
+  snackbarAfterDismiss(snackbarInfo: {
     snackbarRef: MatSnackBarRef<SimpleSnackBar>;
     feedback: EffectFeedbackInterface;
   }): Observable<{
@@ -85,7 +85,7 @@ export class FeedBackService implements FeedBackServiceInterface {
   }
 
   // maps snackBar afterDismissed to the relevant feedback info
-  public snackbarAfterDismiss$(snackbarInfo: {
+  public snackbarAfterDismiss(snackbarInfo: {
     snackbarRef: MatSnackBarRef<SimpleSnackBar>;
     feedback: EffectFeedbackInterface;
   }): Observable<{
