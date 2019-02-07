@@ -1,4 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import {
@@ -9,7 +10,7 @@ import {
   UserReducer
 } from '@campus/dal';
 import { ENVIRONMENT_WEBSITE_TOKEN } from '@campus/shared';
-import { MockActivatedRoute } from '@campus/testing';
+import { MockActivatedRoute, MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
@@ -52,6 +53,10 @@ describe('ErrorComponent', () => {
         {
           provide: ENVIRONMENT_WEBSITE_TOKEN,
           useValue: mockWebsite
+        },
+        {
+          provide: MatIconRegistry,
+          useClass: MockMatIconRegistry
         }
       ],
       declarations: [ErrorComponent]

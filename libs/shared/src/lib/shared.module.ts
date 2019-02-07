@@ -26,16 +26,13 @@ import {
   SNACKBAR_DEFAULT_CONFIG_TOKEN
 } from './feedback/snackbar.config';
 import { HeaderComponent } from './header/header.component';
-import {
-  HeaderResolver,
-  HEADER_RESOLVER_TOKEN
-} from './header/header.resolver';
 import { CampusHttpInterceptor } from './interceptors/campus-http.interceptor';
 import {
   EnvironmentAlertsFeatureInterface,
   EnvironmentApiInterface,
   EnvironmentErrorManagementFeatureInterface,
   EnvironmentIconMappingInterface,
+  EnvironmentLogoutInterface,
   EnvironmentMessagesFeatureInterface,
   EnvironmentSsoInterface,
   EnvironmentWebsiteInterface,
@@ -43,6 +40,7 @@ import {
   ENVIRONMENT_API_TOKEN,
   ENVIRONMENT_ERROR_MANAGEMENT_FEATURE_TOKEN,
   ENVIRONMENT_ICON_MAPPING_TOKEN,
+  ENVIRONMENT_LOGOUT_TOKEN,
   ENVIRONMENT_MESSAGES_FEATURE_TOKEN,
   ENVIRONMENT_SSO_TOKEN,
   ENVIRONMENT_WEBSITE_TOKEN
@@ -97,7 +95,6 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
       provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
       useClass: OpenStaticContentService
     },
-    { provide: HEADER_RESOLVER_TOKEN, useClass: HeaderResolver },
     { provide: FEEDBACK_SERVICE_TOKEN, useClass: FeedBackService },
     {
       provide: SNACKBAR_DEFAULT_CONFIG_TOKEN,
@@ -121,6 +118,7 @@ export class SharedModule {
     environmentErrorManagementFeature: EnvironmentErrorManagementFeatureInterface,
     environmentIconMapping: EnvironmentIconMappingInterface,
     environmentWebsite: EnvironmentWebsiteInterface,
+    environmentLogout: EnvironmentLogoutInterface,
     environmentApi: EnvironmentApiInterface,
     environmentSsoSettings: EnvironmentSsoInterface
   ): ModuleWithProviders {
@@ -142,6 +140,10 @@ export class SharedModule {
         {
           provide: ENVIRONMENT_WEBSITE_TOKEN,
           useValue: environmentWebsite
+        },
+        {
+          provide: ENVIRONMENT_LOGOUT_TOKEN,
+          useValue: environmentLogout
         },
         {
           provide: ENVIRONMENT_ICON_MAPPING_TOKEN,
