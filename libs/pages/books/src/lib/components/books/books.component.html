@@ -1,21 +1,28 @@
 <campus-page-bar>
-  <campus-filter-text-input theme="dark"
-                            class="pages__toolbar__filter"
-                            [source]="books$ | async"></campus-filter-text-input>
+  <campus-filter-text-input
+    theme="dark"
+    class="pages__toolbar__filter"
+    [source]="books$ | async"
+  ></campus-filter-text-input>
 
   <div class="divider"></div>
-  <campus-button [iconClass]="'list-view'"
-                 (click)="setListFormat(listFormat.LINE)"
-                 [class.ui-button--active]="(listFormat$ | async) === listFormat.LINE"></campus-button>
-  <campus-button [iconClass]="'grid-view'"
-                 (click)="setListFormat(listFormat.GRID)"
-                 [class.ui-button--active]="(listFormat$ | async) === listFormat.GRID"></campus-button>
+  <campus-button
+    [iconClass]="'list-view'"
+    (click)="setListFormat(listFormat.LINE)"
+    [class.ui-button--active]="(listFormat$ | async) === listFormat.LINE"
+  ></campus-button>
+  <campus-button
+    [iconClass]="'grid-view'"
+    (click)="setListFormat(listFormat.GRID)"
+    [class.ui-button--active]="(listFormat$ | async) === listFormat.GRID"
+  ></campus-button>
 </campus-page-bar>
 
-<div class="pages-books__container"
-     *ngIf="(books$ | async) as books">
-  <campus-page-header [title]="'Boeken'"
-                      [iconClass]="'learning-area:godsdienst-lg'">
+<div class="pages-books__container" *ngIf="(books$ | async) as books">
+  <campus-page-header
+    [title]="'Boeken'"
+    [iconClass]="'learning-area:godsdienst-lg'"
+  >
   </campus-page-header>
 
   <ng-template #noBooks>
@@ -24,12 +31,14 @@
 
   <ng-container *ngIf="books.length; else: noBooks">
     <ng-container *ngIf="(filterTextInput.result$ | async) as filteredBooks">
-      <div class="pages-books__container__books-count"
-           *ngIf="
+      <div
+        class="pages-books__container__books-count"
+        *ngIf="
           filteredBooks.length === books.length;
           then: noFilter;
           else: filter
-        "></div>
+        "
+      ></div>
 
       <ng-template #noFilter>
         Je hebt <b>{{ filteredBooks.length }}</b> boeken
@@ -37,24 +46,32 @@
 
       <ng-template #filter>
         {{ filteredBooks.length }} van
-        <u class="pages-books__container__books-count__total"
-           (click)="filterTextInput.clear()">{{ books.length }}</u>
+        <u
+          class="pages-books__container__books-count__total"
+          (click)="filterTextInput.clear()"
+          >{{ books.length }}</u
+        >
         weergegeven
       </ng-template>
 
       <campus-list-view [listFormat]="listFormat$ | async">
-        <campus-content-thumbnail *ngFor="let book of filteredBooks"
-                                  campusListItem
-                                  [title]="book.name"
-                                  [learningArea]="book.publishedEduContentMetadata.learningArea.name"
-                                  [contentTypeClass]="'learning-area:' +
+        <campus-content-thumbnail
+          *ngFor="let book of filteredBooks"
+          campusListItem
+          [title]="book.name"
+          [learningArea]="book.publishedEduContentMetadata.learningArea.name"
+          [contentTypeClass]="
+            'learning-area:' +
             book.publishedEduContentMetadata.learningArea.icon
           "
-                                  [fileExtensionClass]="book.fileExtension"
-                                  [imagePath]="book.methodLogos[0]">
-          <campus-button circle
-                         [iconClass]="'view-content'"
-                         (click)="openBook(book)"></campus-button>
+          [fileExtensionClass]="book.fileExtension"
+          [imagePath]="book.methodLogos[0]"
+        >
+          <campus-button
+            circle
+            [iconClass]="'view-content'"
+            (click)="openBook(book)"
+          ></campus-button>
         </campus-content-thumbnail>
       </campus-list-view>
     </ng-container>
