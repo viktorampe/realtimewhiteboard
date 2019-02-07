@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 
 /**
@@ -20,22 +20,22 @@ import { FormControl, Validators } from '@angular/forms';
   templateUrl: './confirmable-select.component.html',
   styleUrls: ['./confirmable-select.component.scss']
 })
-export class ConfirmableSelectComponent implements OnInit {
+export class ConfirmableSelectComponent {
   @Input() label: string;
   @Input() text: string;
   @Input() confirmIcon: string;
-  @Input() selectedOption: any;
+  @Input()
+  set selectedOption(option) {
+    this.selectControl.setValue(option);
+    this.selectControl.markAsPristine();
+  }
   @Input() options: SelectOption[];
   @Output() clickConfirm = new EventEmitter<SelectOption>();
 
-  selectControl: FormControl;
-
-  ngOnInit(): void {
-    this.selectControl = new FormControl(
-      this.selectedOption,
-      Validators.required
-    );
-  }
+  selectControl: FormControl = new FormControl(
+    this.selectedOption,
+    Validators.required
+  );
 
   onClickConfirm(): void {
     this.selectControl.markAsPristine();

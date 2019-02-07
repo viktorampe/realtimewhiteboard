@@ -2,6 +2,7 @@ export interface EnvironmentInterface {
   production: boolean;
   iconMapping: EnvironmentIconMappingInterface;
   website: EnvironmentWebsiteInterface;
+  logout: EnvironmentLogoutInterface;
   api: EnvironmentApiInterface;
   features: {
     alerts: EnvironmentAlertsFeatureInterface;
@@ -43,6 +44,10 @@ export interface EnvironmentWebsiteInterface {
   url: string;
   title: string;
   favicon: string;
+}
+
+export interface EnvironmentLogoutInterface {
+  url: string;
 }
 
 export interface EnvironmentSsoInterface {

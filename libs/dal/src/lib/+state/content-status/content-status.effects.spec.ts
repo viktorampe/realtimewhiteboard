@@ -74,7 +74,7 @@ describe('ContentStatusEffects', () => {
         {
           provide: STUDENT_CONTENT_STATUS_SERVICE_TOKEN,
           useValue: {
-            getAllConstentStatuses: () => {}
+            getAllContentStatuses: () => {}
           }
         },
         ContentStatusesEffects,
@@ -98,7 +98,7 @@ describe('ContentStatusEffects', () => {
         usedState = ContentStatusReducer.initialState;
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAllConstentStatuses', []);
+        mockServiceMethodReturnValue('getAllContentStatuses', []);
       });
       it('should trigger an api call with the initialState if force is not true', () => {
         expectInAndOut(
@@ -120,7 +120,7 @@ describe('ContentStatusEffects', () => {
         usedState = { ...ContentStatusReducer.initialState, loaded: true };
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAllConstentStatuses', []);
+        mockServiceMethodReturnValue('getAllContentStatuses', []);
       });
       it('should not trigger an api call with the loaded state if force is not true', () => {
         expectInNoOut(effects.loadContentStatuses$, unforcedLoadAction);
@@ -138,7 +138,7 @@ describe('ContentStatusEffects', () => {
         usedState = ContentStatusReducer.initialState;
       });
       beforeEach(() => {
-        mockServiceMethodError('getAllConstentStatuses', 'failed');
+        mockServiceMethodError('getAllContentStatuses', 'failed');
       });
       it('should return a error action if force is not true', () => {
         expectInAndOut(
@@ -164,7 +164,7 @@ describe('ContentStatusEffects', () => {
         };
       });
       beforeEach(() => {
-        mockServiceMethodError('getAllConstentStatuses', 'failed');
+        mockServiceMethodError('getAllContentStatuses', 'failed');
       });
       it('should return nothing action if force is not true', () => {
         expectInNoOut(effects.loadContentStatuses$, unforcedLoadAction);

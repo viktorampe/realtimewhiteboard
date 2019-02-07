@@ -12,7 +12,7 @@ export class HeaderComponent implements OnInit {
   enableAlerts: boolean;
 
   profileMenuItems$ = this.headerViewModel.profileMenuItems$;
-  isResolved$ = this.headerViewModel.isResolved$;
+  alertsLoaded$ = this.headerViewModel.alertsLoaded$;
   breadCrumbs$ = this.headerViewModel.breadCrumbs$;
   alertNotifications$;
   unreadAlertCount$ = this.headerViewModel.unreadAlertCount$;
@@ -21,10 +21,10 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     private headerViewModel: HeaderViewModel,
-    alertToNotif: AlertToNotificationItemPipe
+    private alertToNotif: AlertToNotificationItemPipe
   ) {
     this.alertNotifications$ = this.headerViewModel.alertNotifications$.pipe(
-      map(a => a.map(alertToNotif.transform))
+      map(a => a.map(this.alertToNotif.transform))
     );
   }
 
