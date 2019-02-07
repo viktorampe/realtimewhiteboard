@@ -54,6 +54,10 @@ describe('CredentialsViewModel', () => {
         {
           provide: ENVIRONMENT_SSO_TOKEN,
           useValue: environmentSsoSettings
+        },
+        {
+          provide: 'uuid',
+          useValue: () => 'foo'
         }
       ]
     });

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PassportUserCredentialInterface } from '@campus/dal';
-import { Observable } from 'rxjs';
 import {
   CredentialsViewModel,
   SingleSignOnProviderInterface
@@ -16,8 +15,6 @@ export class CredentialsComponent implements OnInit {
   credentials$ = this.viewModel.credentials$;
   ssoLinks$ = this.viewModel.singleSignOnProviders$;
 
-  message$: Observable<string>;
-
   constructor(
     private viewModel: CredentialsViewModel,
     private route: ActivatedRoute
@@ -28,9 +25,8 @@ export class CredentialsComponent implements OnInit {
   }
 
   getError() {
-    //todo straighten errors with effectFeedback PR
     if (this.route.snapshot) {
-      this.message$ = this.viewModel.getErrorMessageFromCode(
+      this.viewModel.handleLinkError(
         this.route.snapshot.queryParamMap.get('error')
       );
     }
