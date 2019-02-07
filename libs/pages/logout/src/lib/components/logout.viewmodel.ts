@@ -1,25 +1,17 @@
 import { Inject, Injectable } from '@angular/core';
 import { WINDOW } from '@campus/browser';
-import {
-  DalState,
-  PersonInterface,
-  UserActions,
-  UserQueries
-} from '@campus/dal';
+import { DalState, UserActions, UserQueries } from '@campus/dal';
 import {
   EnvironmentLogoutInterface,
   ENVIRONMENT_LOGOUT_TOKEN
 } from '@campus/shared';
 import { select, Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LogoutViewModel {
-  private currentNullUser$: Observable<PersonInterface>;
-
   constructor(
     private store: Store<DalState>,
     @Inject(ENVIRONMENT_LOGOUT_TOKEN)
