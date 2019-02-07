@@ -1,9 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute } from '@angular/router';
 import { LearningAreaInterface, ResultFixture } from '@campus/dal';
-import { MockActivatedRoute } from '@campus/testing';
+import { MockActivatedRoute, MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { hot } from '@nrwl/nx/testing';
 import { BehaviorSubject } from 'rxjs';
@@ -26,7 +27,8 @@ describe('ResultsByPersonAndAreaComponent', () => {
       declarations: [ResultsByPersonAndAreaComponent],
       providers: [
         { provide: ActivatedRoute, useClass: MockActivatedRoute },
-        { provide: ReportsViewModel, useClass: MockReportsViewModel }
+        { provide: ReportsViewModel, useClass: MockReportsViewModel },
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ]
     }).compileComponents();
   }));

@@ -15,20 +15,18 @@ import {
 import { BreadcrumbLinkInterface, DropdownMenuItemInterface } from '@campus/ui';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { ENVIRONMENT_ALERTS_FEATURE_TOKEN } from '../interfaces/environment.injectiontokens';
 import { EnvironmentAlertsFeatureInterface } from '../interfaces/environment.interfaces';
-import { HeaderResolver, HEADER_RESOLVER_TOKEN } from './header.resolver';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HeaderViewModel {
-  // resolver check
-  isResolved$: Observable<boolean>;
-
   // publics
   enableAlerts: boolean;
+
+  alertsLoaded$: Observable<boolean>;
 
   // source streams
   breadCrumbs$: Observable<BreadcrumbLinkInterface[]>;
@@ -45,13 +43,16 @@ export class HeaderViewModel {
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     @Inject(ENVIRONMENT_ALERTS_FEATURE_TOKEN)
     private environmentAlertsFeature: EnvironmentAlertsFeatureInterface,
-    private store: Store<DalState>,
-    @Inject(HEADER_RESOLVER_TOKEN) private headerResolver: HeaderResolver
+    private store: Store<DalState>
   ) {
-    this.isResolved$ = this.headerResolver.resolve();
+    this.loadAlertsLoaded();
     this.loadFeatureToggles();
     this.loadStateStreams();
     this.loadDisplayStream();
+  }
+
+  private loadAlertsLoaded(): any {
+    this.alertsLoaded$ = this.store.pipe(select(AlertQueries.getLoaded));
   }
 
   private loadStateStreams(): void {

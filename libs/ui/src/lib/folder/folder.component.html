@@ -12,7 +12,9 @@
         <mat-progress-spinner
           mode="determinate"
           [value]="progress"
-          strokeWidth="2"
+          strokeWidth="3"
+          [color]="progressTheme"
+          [diameter]="progressDiameter"
           *ngIf="progress !== undefined"
         >
         </mat-progress-spinner>

@@ -41,6 +41,7 @@ configureBufferSize(150);
       environment.features.errorManagement,
       environment.iconMapping,
       environment.website,
+      environment.logout,
       environment.api,
       environment.sso
     ),

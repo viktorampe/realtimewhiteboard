@@ -55,7 +55,7 @@ describe('HeaderComponent', () => {
 
   describe('feature toggles', () => {
     beforeEach(() => {
-      headerViewModel.isResolved$.next(true);
+      headerViewModel.alertsLoaded$.next(true);
     });
     it('should show the feature components if true', () => {
       component.enableAlerts = true;
@@ -82,7 +82,7 @@ describe('HeaderComponent', () => {
 
   describe('unread badge counter', () => {
     beforeEach(() => {
-      headerViewModel.isResolved$.next(true);
+      headerViewModel.alertsLoaded$.next(true);
       fixture.detectChanges();
     });
     it('should show the badge if the unreadAlertCount$ is bigger than 0', () => {
@@ -111,7 +111,7 @@ describe('HeaderComponent', () => {
 
   describe('should be mobile friendly', () => {
     beforeEach(() => {
-      headerViewModel.isResolved$.next(true);
+      headerViewModel.alertsLoaded$.next(true);
 
       // mock that we're on small sreen size
       breakpointStream.next({ matches: true });
