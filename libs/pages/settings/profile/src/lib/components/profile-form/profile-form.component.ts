@@ -82,7 +82,9 @@ export class ProfileFormComponent implements OnInit {
   }
 
   onSubmit() {
-    this.saveProfile.next(this.mapFormData());
+    if (this.profileForm.valid) {
+      this.saveProfile.next(this.mapFormData());
+    }
   }
 
   onReset() {

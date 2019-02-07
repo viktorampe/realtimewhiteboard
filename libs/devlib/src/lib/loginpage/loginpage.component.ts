@@ -10,14 +10,15 @@ import {
   EffectFeedbackActions,
   EffectFeedbackInterface,
   EffectFeedbackQueries,
-  FeedbackServiceInterface,
-  FEEDBACK_SERVICE_TOKEN,
+  Priority,
   UserActions
 } from '@campus/dal';
 import { AlertQueueApi, PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Action, select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
+// tslint:disable-next-line:nx-enforce-module-boundaries
+import { AddEffectFeedback } from './../../../../dal/src/lib/+state/effect-feedback/effect-feedback.actions';
 import { LoginPageViewModel } from './loginpage.viewmodel';
 
 @Component({
@@ -48,9 +49,7 @@ export class LoginpageComponent implements OnInit {
     private alertApi: AlertQueueApi,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     private store: Store<AlertReducer.State>,
-    private router: Router,
-    @Inject(FEEDBACK_SERVICE_TOKEN)
-    private snackBarService: FeedbackServiceInterface
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -110,15 +109,26 @@ export class LoginpageComponent implements OnInit {
     this.store.dispatch(action);
   }
 
-  deleteAlert() {
-    // soft-deletes all recieved alerts of the user -> works
-    // this.response = this.personApi.deleteAlertQueues(34);
+  // tslint:disable-next-line:member-ordering
+  private count = 0;
 
-    // soft-deletes all sent alerts of the user -> works
-    // this.response = this.personApi.deleteOwnsAlerts(34);
-
-    // soft-deletes a single alert of the user -> works
-    // return unauthorised if the alert is already deleted
-    this.response = this.personApi.destroyByIdAlertQueues(34, 48);
+  dispatchFeedback(message: string, isError: boolean = true) {
+    this.count++;
+    this.store.dispatch(
+      new AddEffectFeedback({
+        effectFeedback: {
+          id: this.count.toString(),
+          triggerAction: null,
+          message,
+          type: isError ? 'error' : 'success',
+          timeStamp: Date.now(),
+          priority: Priority.NORM,
+          icon: null,
+          userActions: [],
+          display: true,
+          useDefaultCancel: true
+        }
+      })
+    );
   }
 }

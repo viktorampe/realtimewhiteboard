@@ -7,10 +7,13 @@ export enum StudentContentStatusesActionTypes {
   StudentContentStatusesLoadError = '[StudentContentStatuses] Load Error',
   LoadStudentContentStatuses = '[StudentContentStatuses] Load StudentContentStatuses',
   AddStudentContentStatus = '[StudentContentStatuses] Add StudentContentStatus',
+  StudentContentStatusAdded = '[StudentContentStatus] StudentContentStatus Added',
   UpsertStudentContentStatus = '[StudentContentStatuses] Upsert StudentContentStatus',
+  StudentContentStatusUpserted = '[StudentContentStatus] StudentContentStatus Upserted',
   AddStudentContentStatuses = '[StudentContentStatuses] Add StudentContentStatuses',
   UpsertStudentContentStatuses = '[StudentContentStatuses] Upsert StudentContentStatuses',
   UpdateStudentContentStatus = '[StudentContentStatuses] Update StudentContentStatus',
+  StudentContentStatusUpdated = '[StudentContentStatus] StudentContentStatus Updated',
   UpdateStudentContentStatuses = '[StudentContentStatuses] Update StudentContentStatuses',
   DeleteStudentContentStatus = '[StudentContentStatuses] Delete StudentContentStatus',
   DeleteStudentContentStatuses = '[StudentContentStatuses] Delete StudentContentStatuses',
@@ -46,8 +49,25 @@ export class AddStudentContentStatus implements Action {
   ) {}
 }
 
+export class StudentContentStatusAdded implements Action {
+  readonly type = StudentContentStatusesActionTypes.StudentContentStatusAdded;
+
+  constructor(
+    public payload: { studentContentStatus: StudentContentStatusInterface }
+  ) {}
+}
+
 export class UpsertStudentContentStatus implements Action {
   readonly type = StudentContentStatusesActionTypes.UpsertStudentContentStatus;
+
+  constructor(
+    public payload: { studentContentStatus: StudentContentStatusInterface }
+  ) {}
+}
+
+export class StudentContentStatusUpserted implements Action {
+  readonly type =
+    StudentContentStatusesActionTypes.StudentContentStatusUpserted;
 
   constructor(
     public payload: { studentContentStatus: StudentContentStatusInterface }
@@ -73,6 +93,16 @@ export class UpsertStudentContentStatuses implements Action {
 
 export class UpdateStudentContentStatus implements Action {
   readonly type = StudentContentStatusesActionTypes.UpdateStudentContentStatus;
+
+  constructor(
+    public payload: {
+      studentContentStatus: Update<StudentContentStatusInterface>;
+    }
+  ) {}
+}
+
+export class StudentContentStatusUpdated implements Action {
+  readonly type = StudentContentStatusesActionTypes.StudentContentStatusUpdated;
 
   constructor(
     public payload: {
@@ -114,10 +144,13 @@ export type StudentContentStatusesActions =
   | StudentContentStatusesLoaded
   | StudentContentStatusesLoadError
   | AddStudentContentStatus
+  | StudentContentStatusAdded
   | UpsertStudentContentStatus
+  | StudentContentStatusUpserted
   | AddStudentContentStatuses
   | UpsertStudentContentStatuses
   | UpdateStudentContentStatus
+  | StudentContentStatusUpdated
   | UpdateStudentContentStatuses
   | DeleteStudentContentStatus
   | DeleteStudentContentStatuses

@@ -11,7 +11,12 @@ export function sortByPriority(
   a: EffectFeedbackInterface,
   b: EffectFeedbackInterface
 ): number {
-  return b.priority - a.priority;
+  return (
+    // sort by priority -> descending
+    b.priority - a.priority ||
+    // then by timestamp -> ascending
+    a.timeStamp - b.timeStamp
+  );
 }
 export interface State extends EntityState<EffectFeedbackInterface> {
   // additional entities state properties

@@ -104,7 +104,10 @@ describe('ErrorComponent', () => {
         'Je bent niet aangemeld. Klik hier om in te loggen.'
       );
 
-      assertErrorMessage(500, 'Er is iets fout gegaan. Probeer opnieuw.');
+      assertErrorMessage(
+        500,
+        'Er is iets fout gegaan. Ga terug naar de vorige pagina en probeer opnieuw.'
+      );
 
       assertErrorMessage(700, 'Er is iets fout gegaan. Probeer opnieuw.');
     });
