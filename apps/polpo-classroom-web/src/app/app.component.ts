@@ -4,7 +4,10 @@ import { EffectFeedbackInterface } from '@campus/dal';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
 import { AppViewModel } from './app.viewmodel';
-import { FaviconsInterface, FAVICON_SERVICE_TOKEN } from './services/favicons';
+import {
+  FavIconServiceInterface,
+  FAVICON_SERVICE_TOKEN
+} from './services/favicons';
 
 @Component({
   selector: 'campus-root',
@@ -25,7 +28,8 @@ export class AppComponent {
   constructor(
     private appViewModel: AppViewModel,
     private titleService: Title,
-    @Inject(FAVICON_SERVICE_TOKEN) private faviconService: FaviconsInterface
+    @Inject(FAVICON_SERVICE_TOKEN)
+    private faviconService: FavIconServiceInterface
   ) {
     this.sideNavOpen$ = appViewModel.sideNavOpen$;
     this.titleService.setTitle(environment.website.title);

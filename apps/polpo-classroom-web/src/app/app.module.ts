@@ -25,10 +25,7 @@ import {
 } from './+state/app.reducer';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import {
-  BrowserFaviconService,
-  BrowserFaviconToken
-} from './services/favicons';
+import { FavIconService, FAVICON_SERVICE_TOKEN } from './services/favicons';
 
 // if you want to update the buffer (which defaults to 100)
 configureBufferSize(150);
@@ -72,8 +69,8 @@ configureBufferSize(150);
   providers: [
     Title,
     {
-      provide: BrowserFaviconToken,
-      useClass: BrowserFaviconService
+      provide: FAVICON_SERVICE_TOKEN,
+      useClass: FavIconService
     }
   ],
   bootstrap: [AppComponent],
