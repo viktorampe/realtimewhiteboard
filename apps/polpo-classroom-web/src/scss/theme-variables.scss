@@ -20,12 +20,8 @@ $primary-bg-color: $color-gray-3;
 $primary-font-color: $color-black-1;
 $primary-color-accent: $color-blue-1; // link, button (borders)
 $primary-font-color-2: $color-gray-1; // subtitle
-$primary-font-family: 'Helvetica',
-'Arial',
-'Open Sans',
-sans-serif;
-$primary-font-family-2: 'Lato',
-sans-serif; // title
+$primary-font-family: 'Helvetica', 'Arial', 'Open Sans', sans-serif;
+$primary-font-family-2: 'Lato', sans-serif; // title
 $primary-font-size: 14px;
 // app > nav + site header (shell)
 $secondary-bg-color: $color-black-1;
