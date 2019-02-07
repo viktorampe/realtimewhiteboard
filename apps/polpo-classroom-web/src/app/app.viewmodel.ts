@@ -31,7 +31,7 @@ export class AppViewModel {
   private sideNavItems$: Observable<NavItem[]>;
   private profileMenuItems$: Observable<DropdownMenuItemInterface[]>;
 
-  // presentation stream
+  // presentation streams
   public sideNavOpen$: Observable<boolean>;
   public navigationItems$: Observable<NavItem[]>;
   public bannerFeedback$: Observable<EffectFeedbackInterface>;
@@ -45,6 +45,13 @@ export class AppViewModel {
     this.initialize();
   }
 
+  // sets sideNav opened state
+  public toggleSidebar(open: boolean) {
+    this.store.dispatch(new UiActions.ToggleSideNav({ open }));
+  }
+
+  // event handler for feedback dismiss
+  // used by banner and snackbar
   public onFeedbackDismiss(event: {
     action: Action;
     feedbackId: string;
@@ -57,16 +64,31 @@ export class AppViewModel {
   }
 
   private initialize() {
-    this.setIntermediateStreams();
-    this.setPresentationStreams();
-    this.subscribeToStreams();
+    this.setProfileItems();
+    this.setNavItems();
+    this.setFeedbackFlow();
   }
 
-  toggleSidebar(open: boolean) {
-    this.store.dispatch(new UiActions.ToggleSideNav({ open }));
+  private setProfileItems() {
+    // send data to service -> get array of profileMenuItems
+    this.profileMenuItems$ = combineLatest(
+      this.getCurrentUser(),
+      this.getCredentials()
+    ).pipe(
+      map(([user, credentials]) =>
+        this.navItemService.getProfileMenuItems(user, credentials)
+      )
+    );
+
+    // send array of profileMenuItems to the store
+    // note: not directly used in appComponent
+    this.profileMenuItems$.subscribe(menuItems =>
+      this.store.dispatch(new UiActions.SetProfileMenuItems({ menuItems }))
+    );
   }
 
-  private setIntermediateStreams() {
+  private setNavItems() {
+    // send data to service -> get array of navItems
     this.sideNavItems$ = combineLatest(
       this.getCurrentUser(),
       this.getFavorites()
@@ -76,43 +98,37 @@ export class AppViewModel {
       )
     );
 
-    this.profileMenuItems$ = combineLatest(
-      this.getCurrentUser(),
-      this.getCredentials()
-    ).pipe(
-      map(([user, credentials]) =>
-        this.navItemService.getProfileMenuItems(user, credentials)
-      )
-    );
-  }
-
-  private subscribeToStreams() {
+    // send array of navItems to the store
     this.sideNavItems$.subscribe(navItems =>
       this.store.dispatch(new UiActions.SetSideNavItems({ navItems }))
     );
 
-    this.profileMenuItems$.subscribe(menuItems =>
-      this.store.dispatch(new UiActions.SetProfileMenuItems({ menuItems }))
-    );
+    // read array of navItems from the store
+    // note: navItems may be used in other components
+    this.navigationItems$ = this.store.pipe(select(UiQuery.getSideNavItems));
 
+    // get sideNav opened state
+    this.sideNavOpen$ = this.store.pipe(select(UiQuery.getSideNavOpen));
+  }
+
+  private setFeedbackFlow() {
+    // success feedback goes to the feedbackService -> snackbar
     this.store
       .select(EffectFeedbackQueries.getNextSuccess)
       .pipe(
-        map(fb => this.feedbackService.openSnackbar(fb)),
+        map(feedback => this.feedbackService.openSnackbar(feedback)),
         filter(snackbar => !!snackbar),
-        switchMap(snackbarInfo => this.feedbackService.snackbarAfterDismiss$(snackbarInfo)),
+        switchMap(snackbarInfo =>
+          this.feedbackService.snackbarAfterDismiss$(snackbarInfo)
+        ),
         map(event => ({
           action: event.actionToDispatch,
           feedbackId: event.feedback.id
         }))
       )
       .subscribe(evt => this.onFeedbackDismiss(evt));
-  }
 
-  private setPresentationStreams() {
-    this.navigationItems$ = this.store.pipe(select(UiQuery.getSideNavItems));
-    this.sideNavOpen$ = this.store.pipe(select(UiQuery.getSideNavOpen));
-
+    // error feedback goes into a stream -> bannerComponent
     this.bannerFeedback$ = this.store
       .select(EffectFeedbackQueries.getNextError)
       .pipe(map(this.feedbackService.addDefaultCancelButton));

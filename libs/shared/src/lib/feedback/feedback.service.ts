@@ -36,8 +36,6 @@ export interface FeedBackServiceInterface {
   providedIn: 'root'
 })
 export class FeedBackService implements FeedBackServiceInterface {
-  private snackbar;
-
   constructor(
     private snackBar: MatSnackBar,
     @Inject(SNACKBAR_DEFAULT_CONFIG_TOKEN)
@@ -65,7 +63,7 @@ export class FeedBackService implements FeedBackServiceInterface {
     return feedbackToDisplay;
   }
 
-  // opens snackbar and returns reference and  original feedback
+  // opens snackbar and returns reference and original feedback
   public openSnackbar(
     feedback: EffectFeedbackInterface
   ): {
@@ -86,7 +84,7 @@ export class FeedBackService implements FeedBackServiceInterface {
     };
   }
 
-  //
+  // maps snackBar afterDismissed to the relevant feedback info
   public snackbarAfterDismiss$(snackbarInfo: {
     snackbarRef: MatSnackBarRef<SimpleSnackBar>;
     feedback: EffectFeedbackInterface;
@@ -97,8 +95,8 @@ export class FeedBackService implements FeedBackServiceInterface {
     return snackbarInfo.snackbarRef.afterDismissed().pipe(
       map(dismissInfo => ({
         actionToDispatch: dismissInfo.dismissedByAction
-          ? snackbarInfo.feedback.userActions[0].userAction
-          : null, // a snackbar has max 1 action
+          ? snackbarInfo.feedback.userActions[0].userAction // a snackbar has max 1 action
+          : null,
         feedback: snackbarInfo.feedback
       }))
     );
