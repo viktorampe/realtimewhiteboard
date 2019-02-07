@@ -114,7 +114,6 @@ export class BundleDetailComponent
   }
 
   onSaveStatus(value: SelectOption, unlockedContent: UnlockedContent): void {
-    console.log(unlockedContent, value);
     this.bundlesViewModel.saveContentStatus(unlockedContent.id, value.value);
   }
 
