@@ -1,9 +1,24 @@
-import { BundleFixture, BundleInterface, ContentFixture, EduContentFixture, LearningAreaFixture, LearningAreaInterface, PersonFixture, PersonInterface, StudentContentStatusInterface, UnlockedContent, UnlockedContentFixture } from '@campus/dal';
+import {
+  BundleFixture,
+  BundleInterface,
+  ContentFixture,
+  EduContentFixture,
+  LearningAreaFixture,
+  LearningAreaInterface,
+  PersonFixture,
+  PersonInterface,
+  StudentContentStatusInterface,
+  UnlockedContent,
+  UnlockedContentFixture
+} from '@campus/dal';
 import { ViewModelInterface } from '@campus/testing';
 import { ListFormat, SelectOption } from '@campus/ui';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { BundlesViewModel } from './bundles.viewmodel';
-import { BundlesWithContentInfoInterface, LearningAreasWithBundlesInfoInterface } from './bundles.viewmodel.interfaces';
+import {
+  BundlesWithContentInfoInterface,
+  LearningAreasWithBundlesInfoInterface
+} from './bundles.viewmodel.interfaces';
 
 export class MockActivatedRoute {
   params: Observable<any> = new BehaviorSubject<any>({
