@@ -70,10 +70,12 @@
               *ngFor="let taskEduContent of filteredContents"
               campusListItem
               [dataObject]="taskEduContent.eduContent"
-              [title]="taskEduContent.eduContent.title"
+              [title]="
+                taskEduContent.eduContent.publishedEduContentMetadata.title
+              "
               [fileExtensionClass]="taskEduContent.eduContent.fileExtension"
               [fileTypeLabel]="taskEduContent.eduContent.fileTypeLabel"
-              [contentTypeClass]="taskEduContent.eduContent.productType"
+              [contentTypeClass]="'taak'"
             >
               <campus-button
                 [iconClass]="
