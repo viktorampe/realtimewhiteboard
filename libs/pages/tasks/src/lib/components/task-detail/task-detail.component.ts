@@ -146,6 +146,9 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   clickOpenContent(taskEduContent: TaskEduContentInterface): void {
+    if (taskEduContent.submitted) {
+      return;
+    }
     this.taskViewModel.startExercise(
       taskEduContent.eduContentId,
       taskEduContent.taskId
