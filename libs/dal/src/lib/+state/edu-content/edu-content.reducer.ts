@@ -44,6 +44,7 @@ export function sortEduContent(
 
   function getYear(eduContent: EduContentInterface): number {
     const defaultValue = '0' as string;
+    // tslint:disable-next-line
     return eduContent.eduContentMetadata.years[0].name;
   }
 }
