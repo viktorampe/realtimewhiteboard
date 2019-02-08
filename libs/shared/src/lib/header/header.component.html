@@ -1,6 +1,6 @@
 <div class="shared-header">
   <div hide-mobile class="shared-header__app-bar">
-    <campus-app-bar *ngIf="(isResolved$ | async)">
+    <campus-app-bar>
       <campus-breadcrumbs
         bar__left
         [breadCrumbs]="breadCrumbs$ | async"
@@ -11,7 +11,7 @@
       <div
         class="shared-header__app-bar__alerts"
         bar__right
-        *ngIf="enableAlerts"
+        *ngIf="enableAlerts && (alertsLoaded$ | async)"
       >
         <mat-icon
           [svgIcon]="'notifications'"
@@ -62,10 +62,9 @@
             *ngFor="let menuItem of (profileMenuItems$ | async)"
             [icon]="menuItem.icon"
             [description]="menuItem.description"
-            [internalLink]="menuItem.internalLink"
             [header]="menuItem.header"
             [image]="menuItem.image"
-            [externalLink]="menuItem.externalLink"
+            [campusRouterLink]="menuItem.internalLink || menuItem.externalLink"
             [class.ui-dropdown-menu-item__divider]="menuItem.dividerBefore"
           ></campus-dropdown-menu-item>
         </campus-dropdown-menu>

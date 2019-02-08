@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatIconModule } from '@angular/material';
+import { MatIconModule, MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
+import { MockMatIconRegistry } from '@campus/testing';
 import { ButtonComponent } from '../button/button.component';
 import {
   BadgePersonInterface,
@@ -22,7 +23,8 @@ describe('PersonSummaryComponent', () => {
         PersonBadgeComponent,
         PersonInitialsPipe
       ],
-      imports: [MatIconModule]
+      imports: [MatIconModule],
+      providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
     }).compileComponents();
   }));
 

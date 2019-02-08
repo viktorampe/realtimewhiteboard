@@ -147,9 +147,16 @@ $ui-button-padding-bottom: $ui-primary-font-size/2 !default;
   }
 }
 
+@mixin ui-icons {
+  mat-icon {
+    pointer-events: none; //remove native tooltip
+  }
+}
+
 // create theme-mixin with each mixin from our library components
 @mixin ui-theme() {
   @include ui-forms();
+  @include ui-icons();
   @include ui-tree-nav();
   @include ui-folder-theme();
   //place desired width as optional parameter, default 84;
