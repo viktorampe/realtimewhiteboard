@@ -9,10 +9,33 @@
   }
 }
 
+@mixin pages-content-thumbnail-button() {
+  $pages-content-thumbnail-button-color: $ui-primary-font-color-2 !default;
+  $pages-content-thumbnail-button-background-color: transparent !default;
+  $pages-content-thumbnail-button-size: 30px !default;
+  $pages-content-thumbnail-button-padding: 5px !default;
+  $pages-content-thumbnail-button-margin: 0 !default;
+
+  campus-content-thumbnail {
+    .ui-button {
+      color: $pages-content-thumbnail-button-color;
+      background-color: $pages-content-thumbnail-button-background-color;
+      padding: $pages-content-thumbnail-button-padding;
+      margin: $pages-content-thumbnail-button-margin;
+
+      .mat-icon {
+        width: $pages-content-thumbnail-button-size;
+        height: $pages-content-thumbnail-button-size;
+      }
+    }
+  }
+}
+
 // import all required sass files from our libs
 // @import './alerts/src/lib/components/alerts.components.theme'
 // @import './bundles/src/lib/components/bundles.component.theme.scss';
 // create theme-mixin with each mixin from our library components
 @mixin pages-theme() {
   @include pages-shared();
+  @include pages-content-thumbnail-button();
 }

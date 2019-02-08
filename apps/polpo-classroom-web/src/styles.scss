@@ -171,20 +171,3 @@ body {
     display: none;
   }
 }
-
-campus-content-thumbnail {
-  .ui-content-thumbnail__footer {
-    padding: 3px;
-  }
-
-  .ui-button {
-    color: $primary-font-color-2;
-    background-color: transparent;
-    padding: 5px;
-
-    .mat-icon {
-      width: 30px;
-      height: 30px;
-    }
-  }
-}

@@ -27,6 +27,7 @@
   $ui-content-thumbnail_title--grid-padding: 13px !default;
   $ui-content-thumbnail_actions--grid-height: 46px !default;
   $ui-content-thumbnail_actions--grid-background-color: $ui-content-thumbnail_image-background-color !default;
+  $ui-content-thumbnail_footer--grid-padding: 0 3px !default;
   /* * Line */
   $ui-content-thumbnail--line-height: 48px !default;
   $ui-content-thumbnail--line-width: 100% !default;
@@ -78,6 +79,7 @@
         padding: $ui-content-thumbnail_title--grid-padding;
       }
       .ui-content-thumbnail__footer {
+        padding: $ui-content-thumbnail_footer--grid-padding;
         background-color: $ui-content-thumbnail_actions--grid-background-color;
         height: $ui-content-thumbnail_actions--grid-height;
       }
