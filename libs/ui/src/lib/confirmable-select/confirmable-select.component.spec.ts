@@ -6,6 +6,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockMatIconRegistry } from '@campus/testing';
+import { ButtonComponent } from '../button/button.component';
 import {
   ConfirmableSelectComponent,
   SelectOption
@@ -19,7 +20,7 @@ describe('ConfirmableSelectComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ConfirmableSelectComponent],
+      declarations: [ConfirmableSelectComponent, ButtonComponent],
       imports: [
         ReactiveFormsModule,
         FormsModule,
