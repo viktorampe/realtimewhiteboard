@@ -12,8 +12,6 @@ export function sortEduContent(
   a: EduContentInterface,
   b: EduContentInterface
 ): number {
-  const objectPathService: ObjectPathServiceInterface = new ObjectPathService();
-
   const titleA: string = getTitle(a);
   const titleB: string = getTitle(b);
 
@@ -41,18 +39,12 @@ export function sortEduContent(
 
   function getTitle(eduContent: EduContentInterface): string {
     const defaultValue = '' as string;
-    return objectPathService
-      .get(eduContent, p => p.publishedEduContentMetadata.title, defaultValue)
-      .toLowerCase();
+    return eduContent.publishedEduContentMetadata.title;
   }
 
   function getYear(eduContent: EduContentInterface): number {
     const defaultValue = '0' as string;
-    return +objectPathService.get(
-      eduContent,
-      p => p.publishedEduContentMetadata.years[0].name,
-      defaultValue
-    );
+    return eduContent.eduContentMetadata.years[0].name;
   }
 }
 
