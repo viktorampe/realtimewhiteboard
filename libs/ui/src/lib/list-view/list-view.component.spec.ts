@@ -1,10 +1,5 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  DebugElement,
-  NgModule,
-  NO_ERRORS_SCHEMA
-} from '@angular/core';
+import { Component, DebugElement, NgModule } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { UiModule } from '../ui.module';
@@ -60,8 +55,7 @@ describe('ListViewComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [TestModule],
-      providers: [ListViewComponent, ListViewItemInterface],
-      schemas: [NO_ERRORS_SCHEMA]
+      providers: [ListViewComponent, ListViewItemInterface]
     }).compileComponents();
   }));
 
@@ -320,8 +314,7 @@ describe('ListItemDirective', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [TestModuleForDirective],
-      providers: [ListViewComponent, ListViewItemInterface],
-      schemas: [NO_ERRORS_SCHEMA]
+      providers: [ListViewComponent, ListViewItemInterface]
     });
   });
 
