@@ -23,7 +23,7 @@
               "apps/polpo-classroom-web/src/assets"
             ],
             "styles": ["apps/polpo-classroom-web/src/styles.scss"],
-            "scripts": []
+            "scripts": ["./node_modules/proxy-polyfill/proxy.min.js"]
           },
           "configurations": {
             "production": {

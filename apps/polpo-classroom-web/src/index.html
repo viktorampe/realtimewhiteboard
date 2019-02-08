@@ -21,12 +21,14 @@
       rel="stylesheet"
       type="text/css"
     />
-    <script>
-      //discard subdomain for window.opener to work on cross-domain subdomains
-      var parts = new URL(location.href).hostname.split('.');
-      document.domain =
-        parts.length > 2 ? parts.slice(1).join('.') : parts.join('.');
-    </script>
+    <!--
+      <script>
+        //discard subdomain for window.opener to work on cross-domain subdomains
+        var parts = new URL(location.href).hostname.split('.');
+        document.domain =
+          parts.length > 2 ? parts.slice(1).join('.') : parts.join('.');
+      </script>
+    -->
   </head>
 
   <body>
