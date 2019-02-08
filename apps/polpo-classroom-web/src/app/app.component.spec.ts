@@ -1,6 +1,5 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
-import { Title } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { AppViewModel } from './app.viewmodel';
 import { FavIconService, FAVICON_SERVICE_TOKEN } from './services/favicons';
@@ -11,10 +10,6 @@ describe('AppComponent', () => {
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         { provide: AppViewModel, useValue: {} },
-        {
-          provide: Title,
-          useClass: Title
-        },
         {
           provide: FAVICON_SERVICE_TOKEN,
           useClass: FavIconService

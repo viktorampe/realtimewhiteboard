@@ -44,7 +44,7 @@ export class FavIconService implements FavIconServiceInterface {
   }
 
   removePresetFavicon(): void {
-    const favicons = document.querySelectorAll("link[ rel ~= 'icon' i]");
+    const favicons = document.querySelectorAll("link[rel='icon']");
     for (const favicon of Array.from(favicons)) {
       favicon.parentNode.removeChild(favicon);
     }
