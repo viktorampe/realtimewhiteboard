@@ -36,9 +36,8 @@
         background-color: $shared-header__page-bar__divider-background-color;
       }
 
-      .ui-button {
-        border: $shared-header__page-bar__element-border-width solid
-          $shared-header__page-bar__element-border-color;
+      #page-bar-container .ui-button {
+        border: $shared-header__page-bar__element-border-width solid $shared-header__page-bar__element-border-color;
         padding-top: $shared-header__page-bar__element-padding-top;
         padding-bottom: $shared-header__page-bar__element-padding-bottom;
         height: $shared-header__page-bar__element-height;
@@ -47,8 +46,7 @@
 
       .pages__toolbar__filter {
         input {
-          border: $shared-header__page-bar__element-border-width solid
-            $shared-header__page-bar__element-border-color;
+          border: $shared-header__page-bar__element-border-width solid $shared-header__page-bar__element-border-color;
           height: $shared-header__page-bar__element-height;
           padding-top: $shared-header__page-bar__element-padding-top;
           padding-bottom: $shared-header__page-bar__element-padding-bottom;
