@@ -25,7 +25,7 @@ before_script:
   - ng test --configuration=travis
   - npm run e2e:ci
 script:
-  - if [ "$TRAVIS_PULL_REQUEST" = "false" && "$TRAVIS_BRANCH" = "deploy/staging-polpo-classroom-web" ]; then ng build -c staging; else echo 'no build needed'; fi
+  - if [ $TRAVIS_BRANCH == "deploy/staging-polpo-classroom-web" ]  && [ $TRAVIS_PULL_REQUEST == "false" ] ; then ng build -c staging ; fi
 deploy:
   - provider: s3
     bucket: site.student-staging-polpo-be
