@@ -73,7 +73,7 @@ describe('ResultsByPersonAndAreaComponent', () => {
 
   it('should show both task and bundle titles', () => {
     const titles = fixture.debugElement.queryAll(
-      By.css('.page-results__table__main th.title')
+      By.css('.page-results__table__main th')
     );
     expect(titles.length).toBe(2);
     expect(titles[0].nativeElement.textContent).toContain('foo 1');
@@ -82,7 +82,7 @@ describe('ResultsByPersonAndAreaComponent', () => {
 
   it('should show "bundel" or "taak" according to type', () => {
     const exerciseType = fixture.debugElement.queryAll(
-      By.css('.page-results__table__main th.title em')
+      By.css('.page-results__table__main th em')
     );
     expect(exerciseType.length).toBe(2);
     expect(exerciseType[0].nativeElement.textContent).toContain('Taak');
@@ -103,7 +103,7 @@ describe('ResultsByPersonAndAreaComponent', () => {
 
   it('should show the average score of the task or bundle', () => {
     const exerciseRows = fixture.debugElement.queryAll(
-      By.css('.page-results__table__main th.score')
+      By.css('.page-results__table__main th')
     );
     expect(exerciseRows.length).toBe(2);
 
