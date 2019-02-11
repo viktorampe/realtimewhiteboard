@@ -24,13 +24,7 @@
   *ngIf="(bundle$ | async) as bundle; else: noBundle"
 >
   <campus-side-sheet-header
-    *ngIf="
-      !(
-        list &&
-        (list.selectedItems$ | async) &&
-        (list.selectedItems$ | async).length
-      )
-    "
+    *ngIf="!(list && (list.selectedItems$ | async)?.length)"
     >Bundle eigenschappen</campus-side-sheet-header
   >
   <campus-side-sheet-body>
