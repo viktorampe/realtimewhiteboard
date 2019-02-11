@@ -10,9 +10,9 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import {
   BundleInterface,
-  ContentInterface,
   LearningAreaInterface,
   PersonInterface,
+  StudentContentStatusInterface,
   UnlockedContent
 } from '@campus/dal';
 import {
@@ -20,11 +20,13 @@ import {
   FilterTextInputComponent,
   ListFormat,
   ListViewComponent,
+  SelectOption,
   SideSheetComponent
 } from '@campus/ui';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
+import { Dictionary } from '@ngrx/entity';
 import { Observable, Subscription } from 'rxjs';
-import { shareReplay, switchMap } from 'rxjs/operators';
+import { map, shareReplay, switchMap } from 'rxjs/operators';
 import { BundlesViewModel } from '../bundles.viewmodel';
 
 @Component({
@@ -46,13 +48,18 @@ export class BundleDetailComponent
   bundle$: Observable<BundleInterface>;
   bundleOwner$: Observable<PersonInterface>;
   unlockedContents$: Observable<UnlockedContent[]>;
+  contentStatusOptions$: Observable<SelectOption[]>;
+  selectedUnlockedContent$: Observable<UnlockedContent>;
+  unlockedContentStatuses$: Observable<
+    Dictionary<StudentContentStatusInterface[]>
+  >;
 
   @ViewChild(FilterTextInputComponent)
   filterTextInput: FilterTextInputComponent<UnlockedContent[], UnlockedContent>;
 
-  list: ListViewComponent<ContentInterface>;
+  list: ListViewComponent<UnlockedContent>;
   @ViewChild('bundleListview')
-  set listViewComponent(list: ListViewComponent<ContentInterface>) {
+  set listViewComponent(list: ListViewComponent<UnlockedContent>) {
     this.list = list;
   }
   private sideSheet: SideSheetComponent;
@@ -73,23 +80,21 @@ export class BundleDetailComponent
 
   ngOnInit(): void {
     this.learningArea$ = this.getLearningArea();
+    this.contentStatusOptions$ = this.bundlesViewModel.contentStatusOptions$;
     this.bundle$ = this.getBundle();
     this.bundleOwner$ = this.bundlesViewModel.getBundleOwner(this.bundle$);
     this.setupAlertsSubscription();
     this.unlockedContents$ = this.getBundleContents();
-
     this.filterTextInput.setFilterableItem(this);
   }
 
   ngAfterViewInit(): void {
     this.subscriptions.add(
-      this.list.selectedItems$.subscribe(
-        (selectedItems: ContentInterface[]) => {
-          if (selectedItems.length > 0) {
-            this.sideSheet.toggle(true);
-          }
+      this.list.selectedItems$.subscribe((selectedItems: UnlockedContent[]) => {
+        if (selectedItems.length > 0) {
+          this.sideSheet.toggle(true);
         }
-      )
+      })
     );
 
     // Needed to avoid ExpressionChangedAfterItHasBeenCheckedError
@@ -106,6 +111,24 @@ export class BundleDetailComponent
 
   clickOpenContent(unlockedcontent: UnlockedContent): void {
     this.bundlesViewModel.openContent(unlockedcontent);
+  }
+
+  onSaveStatus(value: SelectOption, unlockedContent: UnlockedContent): void {
+    this.bundlesViewModel.saveContentStatus(unlockedContent.id, value.value);
+  }
+
+  protected getSelectedUnlockedContentStatus(
+    unlockedContent
+  ): Observable<number> {
+    return this.bundlesViewModel
+      .getStudentContentStatusByUnlockedContentId(unlockedContent.id)
+      .pipe(
+        map(studentContentStatus => {
+          return studentContentStatus
+            ? studentContentStatus.contentStatusId
+            : 0;
+        })
+      );
   }
 
   private setupAlertsSubscription(): void {
@@ -126,18 +149,22 @@ export class BundleDetailComponent
 
   private getBundle(): Observable<BundleInterface> {
     return this.routeParams$.pipe(
-      switchMap(params => {
-        return this.bundlesViewModel.getBundleById(params.bundle);
-      })
+      switchMap(params => this.bundlesViewModel.getBundleById(params.bundle)),
+      shareReplay(1)
     );
   }
 
   private getBundleContents(): Observable<UnlockedContent[]> {
     return this.routeParams$.pipe(
-      switchMap(params => {
-        return this.bundlesViewModel.getBundleContents(params.bundle);
-      })
+      switchMap(params =>
+        this.bundlesViewModel.getBundleContents(params.bundle)
+      ),
+      shareReplay(1)
     );
+  }
+
+  protected allowMultiSelect(bundle): boolean {
+    return this.bundlesViewModel.currentUserHasWriteAccessToBundle(bundle);
   }
 
   filterFn(source: UnlockedContent[], filterText: string): UnlockedContent[] {

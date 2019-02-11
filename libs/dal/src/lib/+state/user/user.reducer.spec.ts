@@ -18,7 +18,6 @@ describe('User Reducer', () => {
       currentUser: {
         email: 'test'
       },
-      lastUpdateMessage: null,
       loaded: true,
       error: null,
       permissions: ['permission-a', 'permission-b', 'permission-c'],
@@ -56,7 +55,6 @@ describe('User Reducer', () => {
     const state: UserReducer.State = {
       currentUser: user,
       loaded: loaded,
-      lastUpdateMessage: null,
       error: error,
       permissions: permissions,
       permissionsLoaded: permissionsLoaded,

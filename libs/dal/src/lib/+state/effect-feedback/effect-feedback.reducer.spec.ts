@@ -38,24 +38,98 @@ function createEffectFeedbackState(
 describe('EffectFeedback Reducer', () => {
   describe('compareFunction', () => {
     it('should sort by priority level', () => {
-      runCompareTest(Priority.HIGH, Priority.NORM, -1);
-      runCompareTest(Priority.HIGH, Priority.LOW, -2);
-      runCompareTest(Priority.HIGH, Priority.HIGH, 0);
-      runCompareTest(Priority.NORM, Priority.HIGH, 1);
-      runCompareTest(Priority.NORM, Priority.LOW, -1);
-      runCompareTest(Priority.NORM, Priority.NORM, 0);
-      runCompareTest(Priority.LOW, Priority.HIGH, 2);
-      runCompareTest(Priority.LOW, Priority.NORM, 1);
-      runCompareTest(Priority.LOW, Priority.LOW, 0);
+      runCompareTest(
+        { priority: Priority.HIGH, timeStamp: 1 },
+        { priority: Priority.NORM, timeStamp: 1 },
+        -1
+      );
+      runCompareTest(
+        { priority: Priority.HIGH, timeStamp: 1 },
+        { priority: Priority.LOW, timeStamp: 1 },
+        -2
+      );
+      runCompareTest(
+        { priority: Priority.HIGH, timeStamp: 1 },
+        { priority: Priority.HIGH, timeStamp: 1 },
+        0
+      );
+      runCompareTest(
+        { priority: Priority.NORM, timeStamp: 1 },
+        { priority: Priority.HIGH, timeStamp: 1 },
+        1
+      );
+      runCompareTest(
+        { priority: Priority.NORM, timeStamp: 1 },
+        { priority: Priority.LOW, timeStamp: 1 },
+        -1
+      );
+      runCompareTest(
+        { priority: Priority.NORM, timeStamp: 1 },
+        { priority: Priority.NORM, timeStamp: 1 },
+        0
+      );
+      runCompareTest(
+        { priority: Priority.LOW, timeStamp: 1 },
+        { priority: Priority.HIGH, timeStamp: 1 },
+        2
+      );
+      runCompareTest(
+        { priority: Priority.LOW, timeStamp: 1 },
+        { priority: Priority.NORM, timeStamp: 1 },
+        1
+      );
+      runCompareTest(
+        { priority: Priority.LOW, timeStamp: 1 },
+        { priority: Priority.LOW, timeStamp: 1 },
+        0
+      );
     });
 
-    it('should sort the ids by priority level', () => {
+    it('should sort by timestamp level (equal priorities)', () => {
+      runCompareTest(
+        { priority: Priority.HIGH, timeStamp: 1 },
+        { priority: Priority.HIGH, timeStamp: 2 },
+        -1
+      );
+      runCompareTest(
+        { priority: Priority.HIGH, timeStamp: 2 },
+        { priority: Priority.HIGH, timeStamp: 1 },
+        1
+      );
+      runCompareTest(
+        { priority: Priority.HIGH, timeStamp: 1 },
+        { priority: Priority.HIGH, timeStamp: 1 },
+        0
+      );
+    });
+
+    it('should sort the ids by priority level, then by timestamp (oldest first)', () => {
       const unsortedEffectFeedbacks = [
-        new EffectFeedbackFixture({ id: 'guidLOW1', priority: Priority.LOW }),
-        new EffectFeedbackFixture({ id: 'guidLOW2', priority: Priority.LOW }),
-        new EffectFeedbackFixture({ id: 'guidNORM', priority: Priority.NORM }),
-        new EffectFeedbackFixture({ id: 'guidHIGH1', priority: Priority.HIGH }),
-        new EffectFeedbackFixture({ id: 'guidHIGH2', priority: Priority.HIGH })
+        new EffectFeedbackFixture({
+          id: 'guidLOW1',
+          priority: Priority.LOW,
+          timeStamp: 0
+        }),
+        new EffectFeedbackFixture({
+          id: 'guidNORM',
+          priority: Priority.NORM,
+          timeStamp: 2
+        }),
+        new EffectFeedbackFixture({
+          id: 'guidHIGH2',
+          priority: Priority.HIGH,
+          timeStamp: 4
+        }),
+        new EffectFeedbackFixture({
+          id: 'guidHIGH1',
+          priority: Priority.HIGH,
+          timeStamp: 3
+        }),
+        new EffectFeedbackFixture({
+          id: 'guidLOW2',
+          priority: Priority.LOW,
+          timeStamp: 1
+        })
       ];
 
       const sortedIds = unsortedEffectFeedbacks
@@ -105,12 +179,13 @@ describe('EffectFeedback Reducer', () => {
     });
   });
 
-  function runCompareTest(a: Priority, b: Priority, result: number) {
+  function runCompareTest(
+    a: { priority: Priority; timeStamp: number },
+    b: { priority: Priority; timeStamp: number },
+    result: number
+  ) {
     expect(
-      sortByPriority(
-        { priority: a } as EffectFeedbackInterface,
-        { priority: b } as EffectFeedbackInterface
-      )
+      sortByPriority(a as EffectFeedbackInterface, b as EffectFeedbackInterface)
     ).toBe(result);
   }
 });

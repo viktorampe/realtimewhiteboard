@@ -17,5 +17,5 @@ export interface StudentContentStatusServiceInterface {
   addStudentContentStatus(
     studentContentStatus: StudentContentStatusInterface
   ): Observable<StudentContentStatusInterface>;
-  getAllConstentStatuses(): Observable<ContentStatusInterface[]>;
+  getAllContentStatuses(): Observable<ContentStatusInterface[]>;
 }

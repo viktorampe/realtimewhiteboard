@@ -6,7 +6,8 @@ import { Inject, ModuleWithProviders, NgModule } from '@angular/core';
 import {
   MatBadgeModule,
   MatIconModule,
-  MatIconRegistry
+  MatIconRegistry,
+  MatSnackBarModule
 } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
@@ -18,6 +19,12 @@ import { PERMISSION_SERVICE_TOKEN } from './auth/permission.service.interface';
 import { PageBarContainerComponent } from './components/page-bar-container/page-bar-container.component';
 import { OPEN_STATIC_CONTENT_SERVICE_TOKEN } from './content/open-static-content.interface';
 import { OpenStaticContentService } from './content/open-static-content.service';
+import { CampusRouterlinkDirective } from './directives/campus-routerlink.directive';
+import { FeedBackService, FEEDBACK_SERVICE_TOKEN } from './feedback';
+import {
+  SnackBarDefaultConfig,
+  SNACKBAR_DEFAULT_CONFIG_TOKEN
+} from './feedback/snackbar.config';
 import { HeaderComponent } from './header/header.component';
 import { CampusHttpInterceptor } from './interceptors/campus-http.interceptor';
 import {
@@ -53,7 +60,8 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     LayoutModule,
     MatIconModule,
     MatBadgeModule,
-    RouterModule
+    RouterModule,
+    MatSnackBarModule
   ],
   declarations: [
     HeaderComponent,
@@ -61,6 +69,7 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     HasPermissionDirective,
     PersonBadgeFromCredentialPipe,
     MailToByCredentialPipe,
+    CampusRouterlinkDirective,
     AlertToNotificationItemPipe
   ],
   exports: [
@@ -71,6 +80,7 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     HasPermissionDirective,
     PersonBadgeFromCredentialPipe,
     MailToByCredentialPipe,
+    CampusRouterlinkDirective,
     AlertToNotificationItemPipe
   ],
   providers: [
@@ -85,6 +95,11 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     {
       provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
       useClass: OpenStaticContentService
+    },
+    { provide: FEEDBACK_SERVICE_TOKEN, useClass: FeedBackService },
+    {
+      provide: SNACKBAR_DEFAULT_CONFIG_TOKEN,
+      useClass: SnackBarDefaultConfig
     },
     AlertToNotificationItemPipe
   ]

@@ -1,10 +1,8 @@
-import { BreakpointObserver } from '@angular/cdk/layout';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule, MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockMatIconRegistry } from '@campus/testing';
-import { Subject } from 'rxjs';
 import { PersonBadgeComponent } from '../person-badge/person-badge.component';
 import { PersonInitialsPipe } from '../person-badge/pipes/person-initials.pipe';
 import { HumanDateTimePipe } from '../utils/pipes/human-date-time/human-date-time.pipe';
@@ -13,7 +11,6 @@ import { NotificationComponent } from './notification.component';
 describe('NotificationComponent', () => {
   let component: NotificationComponent;
   let fixture: ComponentFixture<NotificationComponent>;
-  const breakpointStream: Subject<{ matches: boolean }> = new Subject();
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -24,13 +21,7 @@ describe('NotificationComponent', () => {
         PersonInitialsPipe,
         HumanDateTimePipe
       ],
-      providers: [
-        { provide: MatIconRegistry, useClass: MockMatIconRegistry },
-        {
-          provide: BreakpointObserver,
-          useValue: { observe: jest.fn().mockReturnValue(breakpointStream) }
-        }
-      ]
+      providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
     }).compileComponents();
   }));
 
@@ -162,25 +153,5 @@ describe('NotificationComponent', () => {
       By.css('.ui-notification__date')
     );
     expect(dateNode).toBeNull();
-  });
-
-  it('should add the --mobile class when the screen width is small', () => {
-    const isMobileBreakpoint = true;
-
-    // matches breakpoint
-    breakpointStream.next({ matches: isMobileBreakpoint });
-    fixture.detectChanges();
-
-    expect(fixture.debugElement.nativeElement.classList).toContain(
-      'ui-notification--mobile'
-    );
-
-    // doesn't match breakpoint
-    breakpointStream.next({ matches: !isMobileBreakpoint });
-    fixture.detectChanges();
-
-    expect(fixture.debugElement.nativeElement.classList).not.toContain(
-      'ui-notification--mobile'
-    );
   });
 });

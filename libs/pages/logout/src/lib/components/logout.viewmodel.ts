@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
+import { WINDOW } from '@campus/browser';
 import { DalState, UserActions, UserQueries } from '@campus/dal';
 import {
   EnvironmentLogoutInterface,
@@ -14,7 +15,8 @@ export class LogoutViewModel {
   constructor(
     private store: Store<DalState>,
     @Inject(ENVIRONMENT_LOGOUT_TOKEN)
-    public environmentLogout: EnvironmentLogoutInterface
+    public environmentLogout: EnvironmentLogoutInterface,
+    @Inject(WINDOW) private window: Window
   ) {}
 
   logout(): void {
@@ -25,6 +27,8 @@ export class LogoutViewModel {
         filter(currentUser => !currentUser),
         take(1)
       )
-      .subscribe(() => (window.location.href = this.environmentLogout.url));
+      .subscribe(user => {
+        this.window.location.assign(this.environmentLogout.url);
+      });
   }
 }

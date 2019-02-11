@@ -18,7 +18,7 @@
           [matBadge]="unreadAlertCount$ | async"
           [matBadgeHidden]="!((unreadAlertCount$ | async) > 0)"
           matBadgePosition="above before"
-          matBadgeColor="warn"
+          matBadgeColor="accent"
           (click)="dropDownAlerts.toggle()"
         ></mat-icon>
 
@@ -50,6 +50,8 @@
           <campus-person-badge
             (click)="dropDownProfile.toggle()"
             [person]="user"
+            [subText]="'&#x25BE;'"
+            [showBorder]="false"
             size="small"
           ></campus-person-badge>
         </ng-container>
@@ -62,10 +64,9 @@
             *ngFor="let menuItem of (profileMenuItems$ | async)"
             [icon]="menuItem.icon"
             [description]="menuItem.description"
-            [internalLink]="menuItem.internalLink"
             [header]="menuItem.header"
             [image]="menuItem.image"
-            [externalLink]="menuItem.externalLink"
+            [campusRouterLink]="menuItem.internalLink || menuItem.externalLink"
             [class.ui-dropdown-menu-item__divider]="menuItem.dividerBefore"
           ></campus-dropdown-menu-item>
         </campus-dropdown-menu>

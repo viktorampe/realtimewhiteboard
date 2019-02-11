@@ -5,7 +5,7 @@ export const environment = {
     url: 'https://www.staging.polpo.be'
   },
   logout: {
-    url: 'https://staging.polpo.be/identificatie/start'
+    url: 'https://www.staging.polpo.be/identificatie/start'
   },
   login: {
     url: 'https://staging.polpo.be/identificatie/start'

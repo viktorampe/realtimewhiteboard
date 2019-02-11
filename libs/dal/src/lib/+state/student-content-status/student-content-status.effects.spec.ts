@@ -9,9 +9,9 @@ import { hot } from '@nrwl/nx/testing';
 import { undo } from 'ngrx-undo';
 import { Observable, of } from 'rxjs';
 import { StudentContentStatusReducer } from '.';
+import { StudentContentStatusFixture } from '../../+fixtures';
 import { StudentContentStatusInterface } from '../../+models';
 import { STUDENT_CONTENT_STATUS_SERVICE_TOKEN } from '../../student-content-status/student-content-status.service.interface';
-import { ActionSuccessful } from '../dal.actions';
 import {
   EffectFeedback,
   EffectFeedbackActions,
@@ -21,9 +21,12 @@ import {
 import {
   AddStudentContentStatus,
   LoadStudentContentStatuses,
+  StudentContentStatusAdded,
   StudentContentStatusesLoaded,
   StudentContentStatusesLoadError,
-  UpdateStudentContentStatus
+  StudentContentStatusUpserted,
+  UpdateStudentContentStatus,
+  UpsertStudentContentStatus
 } from './student-content-status.actions';
 import { StudentContentStatusesEffects } from './student-content-status.effects';
 
@@ -299,12 +302,12 @@ describe('StudentContentStatusEffects', () => {
     });
   });
   describe('addStudentContentStatus$', () => {
-    const studentContentStatus = createStudentContentStatus(1, 1);
+    const studentContentStatus = new StudentContentStatusFixture();
     const addAction = new AddStudentContentStatus({
       studentContentStatus
     });
-    const successAction = new ActionSuccessful({
-      successfulAction: addAction.type
+    const addedAction = new StudentContentStatusAdded({
+      studentContentStatus
     });
     describe('with initialState', () => {
       beforeAll(() => {
@@ -314,7 +317,7 @@ describe('StudentContentStatusEffects', () => {
         feedbackErrorMessage = new EffectFeedback({
           id: uuid(),
           triggerAction: addAction,
-          message: 'Status kon niet worden toegevoegd.',
+          message: 'Status kon niet worden aangepast.',
           type: 'error',
           userActions: [{ title: 'Opnieuw proberen', userAction: addAction }],
           priority: Priority.HIGH
@@ -323,7 +326,7 @@ describe('StudentContentStatusEffects', () => {
         feedbackSuccessMessage = new EffectFeedback({
           id: uuid(),
           triggerAction: addAction,
-          message: 'Status is toegevoegd.'
+          message: 'Status is aangepast.'
         });
 
         feedbackSuccessAction = new EffectFeedbackActions.AddEffectFeedback({
@@ -338,31 +341,103 @@ describe('StudentContentStatusEffects', () => {
         dateMock.returnRealDate();
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('addStudentContentStatus', []);
+        mockServiceMethodReturnValue(
+          'addStudentContentStatus',
+          studentContentStatus
+        );
       });
       it('should trigger an api call with the initialState if force is not true', () => {
-        expectInAndOut(
-          effects.addStudentContentStatuses$,
-          addAction,
-          feedbackSuccessAction
+        actions = hot('-a', { a: addAction });
+        expect(effects.addStudentContentStatuses$).toBeObservable(
+          hot('-(ab)', {
+            a: addedAction,
+            b: feedbackSuccessAction
+          })
         );
       });
 
-      it('should return an undo and feedback action when the api call errors', () => {
+      it('should return a feedback action when the api call errors', () => {
         mockServiceMethodError(
           'addStudentContentStatus',
           'Something went wrong!'
         );
-        const undoAction = undo(addAction);
 
         actions = hot('-a-', { a: addAction });
         expect(effects.addStudentContentStatuses$).toBeObservable(
-          hot('-(ab)', {
-            a: undoAction,
-            b: feedbackErrorAction
+          hot('-a', {
+            a: feedbackErrorAction
           })
         );
       });
+    });
+  });
+  describe('upsertStudentContentStatus$', () => {
+    const studentContentStatus = new StudentContentStatusFixture();
+    const upsertAction = new UpsertStudentContentStatus({
+      studentContentStatus
+    });
+    const upsertedAction = new StudentContentStatusUpserted({
+      studentContentStatus
+    });
+
+    beforeAll(() => {
+      usedState = StudentContentStatusReducer.initialState;
+      dateMock = new MockDate(); // needed for effect feedback timestamp
+
+      feedbackErrorMessage = new EffectFeedback({
+        id: uuid(),
+        triggerAction: upsertAction,
+        message: 'Status kon niet worden aangepast.',
+        type: 'error',
+        userActions: [{ title: 'Opnieuw proberen', userAction: upsertAction }],
+        priority: Priority.HIGH
+      });
+
+      feedbackSuccessMessage = new EffectFeedback({
+        id: uuid(),
+        triggerAction: upsertAction,
+        message: 'Status is aangepast.'
+      });
+
+      feedbackSuccessAction = new EffectFeedbackActions.AddEffectFeedback({
+        effectFeedback: feedbackSuccessMessage
+      });
+
+      feedbackErrorAction = new EffectFeedbackActions.AddEffectFeedback({
+        effectFeedback: feedbackErrorMessage
+      });
+    });
+    afterAll(() => {
+      dateMock.returnRealDate();
+    });
+    beforeEach(() => {
+      mockServiceMethodReturnValue(
+        'addStudentContentStatus',
+        studentContentStatus
+      );
+    });
+    it('should return StudentContentStatusUpserted and AddEffectFeedback actions when successful', () => {
+      actions = hot('-a', { a: upsertAction });
+      expect(effects.upsertStudentContentStatus$).toBeObservable(
+        hot('-(ab)', {
+          a: upsertedAction,
+          b: feedbackSuccessAction
+        })
+      );
+    });
+
+    it('should return a AddEffectFeedback action with error when the api call fails', () => {
+      mockServiceMethodError(
+        'addStudentContentStatus',
+        'Something went wrong!'
+      );
+
+      actions = hot('-a-', { a: upsertAction });
+      expect(effects.upsertStudentContentStatus$).toBeObservable(
+        hot('-a', {
+          a: feedbackErrorAction
+        })
+      );
     });
   });
 });

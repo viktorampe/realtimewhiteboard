@@ -1,4 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import {
@@ -9,7 +10,8 @@ import {
   UserReducer
 } from '@campus/dal';
 import { ENVIRONMENT_WEBSITE_TOKEN } from '@campus/shared';
-import { MockActivatedRoute } from '@campus/testing';
+import { MockActivatedRoute, MockMatIconRegistry } from '@campus/testing';
+import { UiModule } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { ErrorComponent } from './error.component';
@@ -42,7 +44,8 @@ describe('ErrorComponent', () => {
               initialState: usedUserState
             }
           }
-        ])
+        ]),
+        UiModule
       ],
       providers: [
         Store,
@@ -50,6 +53,10 @@ describe('ErrorComponent', () => {
         {
           provide: ENVIRONMENT_WEBSITE_TOKEN,
           useValue: mockWebsite
+        },
+        {
+          provide: MatIconRegistry,
+          useClass: MockMatIconRegistry
         }
       ],
       declarations: [ErrorComponent]
@@ -102,7 +109,10 @@ describe('ErrorComponent', () => {
         'Je bent niet aangemeld. Klik hier om in te loggen.'
       );
 
-      assertErrorMessage(500, 'Er is iets fout gegaan. Probeer opnieuw.');
+      assertErrorMessage(
+        500,
+        'Er is iets fout gegaan. Ga terug naar de vorige pagina en probeer opnieuw.'
+      );
 
       assertErrorMessage(700, 'Er is iets fout gegaan. Probeer opnieuw.');
     });
