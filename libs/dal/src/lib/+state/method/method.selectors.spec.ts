@@ -36,12 +36,7 @@ describe('Method Selectors', () => {
   describe('Method Selectors', () => {
     beforeEach(() => {
       methodState = createState(
-        [
-          createMethod(4),
-          createMethod(1),
-          createMethod(2),
-          createMethod(3)
-        ],
+        [createMethod(4), createMethod(1), createMethod(2), createMethod(3)],
         true,
         'no error'
       );
