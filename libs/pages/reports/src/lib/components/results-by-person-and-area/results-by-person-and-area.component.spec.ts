@@ -93,6 +93,7 @@ describe('ResultsByPersonAndAreaComponent', () => {
     const exerciseTitle = fixture.debugElement.queryAll(
       By.css('.page-results__table__main td.title')
     );
+
     expect(exerciseTitle.length).toBe(3);
     expect(exerciseTitle[0].nativeElement.textContent).toContain('foo');
     expect(exerciseTitle[1].nativeElement.textContent).toContain(

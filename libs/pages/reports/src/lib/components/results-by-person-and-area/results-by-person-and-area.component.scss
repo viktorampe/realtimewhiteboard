@@ -24,9 +24,8 @@
       }
 
       // firefox
-      scrollbar-width: none
+      scrollbar-width: none;
     }
-
 
     &__main {
       overflow-y: auto;
@@ -53,10 +52,6 @@
 @media #{$ui-breakpoint-xsmall} {
   .page-results {
     &__table {
-
-
-
-
       &__row__header {
         width: 200px;
 
@@ -77,8 +72,6 @@
     }
   }
 }
-
-
 
 table {
   width: 100%;

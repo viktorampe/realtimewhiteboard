@@ -19,10 +19,7 @@
 </campus-page-bar>
 
 <div class="pages-books__container" *ngIf="(books$ | async) as books">
-  <campus-page-header
-    [title]="'Boeken'"
-    [iconClass]="'book'"
-  >
+  <campus-page-header [title]="'Boeken'" [iconClass]="'book'">
   </campus-page-header>
 
   <ng-template #noBooks>
