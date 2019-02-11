@@ -135,7 +135,6 @@
           padding-right: $ui-folder-padding;
           &::after {
             border-width: $ui-folder--line-height $ui-folder--line-height 0 0;
-
             border-color: rgba(0, 0, 0, 0.2) transparent transparent;
             right: -$ui-folder--line-height;
           }

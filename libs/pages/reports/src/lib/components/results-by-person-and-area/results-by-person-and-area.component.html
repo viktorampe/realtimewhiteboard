@@ -1,47 +1,51 @@
-<div *ngIf="(ownResults$ | async) as ownResults"
-     class="page-results">
-  <campus-page-header *ngIf="(learningArea$ | async) as learningArea"
-                      [layout]="'centered'"
-                      [title]="learningArea.name"
-                      [subtitle]="'Taken &amp; oefeningen in bundels'"
-                      [iconClass]="'learning-area:' + learningArea.icon">
+<div *ngIf="(ownResults$ | async) as ownResults" class="page-results">
+  <campus-page-header
+    *ngIf="(learningArea$ | async) as learningArea"
+    [layout]="'centered'"
+    [title]="learningArea.name"
+    [subtitle]="'Taken &amp; oefeningen in bundels'"
+    [iconClass]="'learning-area:' + learningArea.icon"
+  >
   </campus-page-header>
 
-  <ng-template #noOwnResults>Er zijn nog geen resultaten beschikbaar.</ng-template>
+  <ng-template #noOwnResults
+    >Er zijn nog geen resultaten beschikbaar.</ng-template
+  >
 
-  <div *ngIf="ownResults.length > 0; else: noOwnResults"
-       class="page-results__table">
-    <div class="page-results__table__header"
-         #header>
+  <div
+    *ngIf="ownResults.length > 0; else: noOwnResults"
+    class="page-results__table"
+  >
+    <div class="page-results__table__header" #header>
       <table>
         <thead>
           <tr>
             <th class="page-results__table__row__header">
               <div class="page-results__table__row__header__content">
-                <div class="title"></div>
-                <div class="score">Score</div>
+                <div class="title"></div> <div class="score">Score</div>
               </div>
             </th>
-            <td class="title">Oefening</td>
-            <td class="number">Resultaat</td>
-            <td class="number">Pogingen</td>
-            <td class="number">Gemiddelde</td>
+            <td class="title">Oefening</td> <td class="number">Resultaat</td>
+            <td class="number">Pogingen</td> <td class="number">Gemiddelde</td>
             <td></td>
           </tr>
         </thead>
       </table>
     </div>
-    <div class="page-results__table__main"
-         (scroll)="onScroll($event)">
+    <div class="page-results__table__main" (scroll)="onScroll($event)">
       <table>
         <tbody *ngFor="let assignment of ownResults">
-          <tr *ngFor="
+          <tr
+            *ngFor="
               let exerciseResult of assignment.exerciseResults;
               let firstResult = first
-            ">
+            "
+          >
             <ng-container *ngIf="firstResult">
-              <th [attr.rowspan]="assignment.exerciseResults.length"
-                  class="page-results__table__row__header">
+              <th
+                [attr.rowspan]="assignment.exerciseResults.length"
+                class="page-results__table__row__header"
+              >
                 <div class="page-results__table__row__header__content">
                   <div class="title">
                     <ng-container [ngSwitch]="assignment.type">
@@ -60,18 +64,22 @@
             <td class="title">{{ exerciseResult.eduContent.name }}</td>
 
             <td class="number">
-              <a (click)="clickOpenContentForReview(exerciseResult.bestResult)">{{ exerciseResult.bestResult.score }}</a>
+              <a
+                (click)="clickOpenContentForReview(exerciseResult.bestResult)"
+                >{{ exerciseResult.bestResult.score }}</a
+              >
             </td>
 
-            <ng-container *ngIf="assignment.type !== 'task'; else: hideInfoForTasks">
+            <ng-container
+              *ngIf="assignment.type !== 'task'; else: hideInfoForTasks"
+            >
               <td class="number">{{ exerciseResult.results.length }}</td>
               <td class="number">{{
                 exerciseResult.averageScore | number: '1.0-2'
-                }}</td>
+              }}</td>
             </ng-container>
             <ng-template #hideInfoForTasks>
-              <td class="number"></td>
-              <td class="number"></td>
+              <td class="number"></td> <td class="number"></td>
             </ng-template>
             <td></td>
           </tr>
