@@ -13,6 +13,18 @@
     &__header {
       flex-shrink: 0;
       overflow-y: auto;
+
+      // hiding the scrollbar
+      // ie, edge
+      -ms-overflow-style: none;
+
+      // chrome
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      // firefox
+      scrollbar-width: none
     }
 
 
@@ -38,16 +50,11 @@
   }
 }
 
-@media #{$ui-breakpoint-xsmall},
-#{$ui-breakpoint-small} {
+@media #{$ui-breakpoint-xsmall} {
   .page-results {
     &__table {
 
-      &__header {
-        &::-webkit-scrollbar {
-          display: none;
-        }
-      }
+
 
 
       &__row__header {
