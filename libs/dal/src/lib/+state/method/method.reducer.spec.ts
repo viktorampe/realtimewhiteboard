@@ -1,26 +1,29 @@
 import { Update } from '@ngrx/entity';
-import {MethodActions } from '.';
-import { initialState, reducer, State } from './method.reducer';
+import { MethodActions } from '.';
 import { MethodInterface } from '../../+models';
+import { initialState, reducer, State } from './method.reducer';
 
-/** 
+/**
  * This file is scaffolded, but needs some special attention:
- * - find and replace '__EXTRA__PROPERTY_NAME' and replace this with a property name of the Method entity.
- * - set the initial property value via '[__EXTRA__PROPERTY_NAME]InitialValue'.
- * - set the updated property value via '[__EXTRA__PROPERTY_NAME]UpdatedValue'.
-*/
-const __EXTRA__PROPERTY_NAMEInitialValue = ;
-const __EXTRA__PROPERTY_NAMEUpdatedValue = ;
+ * - find and replace 'name' and replace this with a property name of the Method entity.
+ * - set the initial property value via '[name]InitialValue'.
+ * - set the updated property value via '[name]UpdatedValue'.
+ */
+const nameInitialValue = 'foo';
+const nameUpdatedValue = 'bar';
 
 /**
  * Creates a Method.
  * @param {number} id
  * @returns {MethodInterface}
  */
-function createMethod(id: number, __EXTRA__PROPERTY_NAME:any = __EXTRA__PROPERTY_NAMEInitialValue): MethodInterface | any {
+function createMethod(
+  id: number,
+  name: any = nameInitialValue
+): MethodInterface | any {
   return {
     id: id,
-    __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAME
+    name: name
   };
 }
 
@@ -54,15 +57,10 @@ function createState(
   return state;
 }
 
-
 describe('Methods Reducer', () => {
   let methods: MethodInterface[];
   beforeEach(() => {
-    methods = [
-      createMethod(1),
-      createMethod(2),
-      createMethod(3)
-    ];
+    methods = [createMethod(1), createMethod(2), createMethod(3)];
   });
 
   describe('unknown action', () => {
@@ -111,7 +109,7 @@ describe('Methods Reducer', () => {
   describe('upsert actions', () => {
     it('should upsert one method', () => {
       const originalMethod = methods[0];
-      
+
       const startState = reducer(
         initialState,
         new MethodActions.AddMethod({
@@ -119,9 +117,8 @@ describe('Methods Reducer', () => {
         })
       );
 
-    
       const updatedMethod = createMethod(methods[0].id, 'test');
-     
+
       const action = new MethodActions.UpsertMethod({
         method: updatedMethod
       });
@@ -146,9 +143,7 @@ describe('Methods Reducer', () => {
 
       const result = reducer(startState, action);
 
-      expect(result).toEqual(
-        createState(methodsToInsert)
-      );
+      expect(result).toEqual(createState(methodsToInsert));
     });
   });
 
@@ -159,31 +154,30 @@ describe('Methods Reducer', () => {
       const update: Update<MethodInterface> = {
         id: 1,
         changes: {
-          __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-        } 
+          name: nameUpdatedValue
+        }
       };
       const action = new MethodActions.UpdateMethod({
         method: update
       });
       const result = reducer(startState, action);
-      expect(result).toEqual(createState([createMethod(1, __EXTRA__PROPERTY_NAMEUpdatedValue)]));
+      expect(result).toEqual(createState([createMethod(1, nameUpdatedValue)]));
     });
 
     it('should update multiple methods', () => {
       const startState = createState(methods);
       const updates: Update<MethodInterface>[] = [
-        
         {
           id: 1,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          } 
+            name: nameUpdatedValue
+          }
         },
         {
           id: 2,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          }  
+            name: nameUpdatedValue
+          }
         }
       ];
       const action = new MethodActions.UpdateMethods({
@@ -192,7 +186,11 @@ describe('Methods Reducer', () => {
       const result = reducer(startState, action);
 
       expect(result).toEqual(
-        createState([createMethod(1, __EXTRA__PROPERTY_NAMEUpdatedValue), createMethod(2, __EXTRA__PROPERTY_NAMEUpdatedValue), methods[2]])
+        createState([
+          createMethod(1, nameUpdatedValue),
+          createMethod(2, nameUpdatedValue),
+          methods[2]
+        ])
       );
     });
   });

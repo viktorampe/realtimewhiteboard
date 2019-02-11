@@ -66,7 +66,7 @@ describe('MethodEffects', () => {
         {
           provide: METHOD_SERVICE_TOKEN,
           useValue: {
-            getAllForUser: () => {}
+            getAll: () => {}
           }
         },
         MethodEffects,
@@ -79,8 +79,8 @@ describe('MethodEffects', () => {
   });
 
   describe('loadMethod$', () => {
-    const unforcedLoadAction = new LoadMethods({ userId: 1 });
-    const forcedLoadAction = new LoadMethods({ force: true, userId: 1 });
+    const unforcedLoadAction = new LoadMethods();
+    const forcedLoadAction = new LoadMethods({ force: true });
     const filledLoadedAction = new MethodsLoaded({ methods: [] });
     const loadErrorAction = new MethodsLoadError(new Error('failed'));
     describe('with initialState', () => {
@@ -88,7 +88,7 @@ describe('MethodEffects', () => {
         usedState = MethodReducer.initialState;
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAllForUser', []);
+        mockServiceMethodReturnValue('getAll', []);
       });
       it('should trigger an api call with the initialState if force is not true', () => {
         expectInAndOut(
@@ -110,7 +110,7 @@ describe('MethodEffects', () => {
         usedState = { ...MethodReducer.initialState, loaded: true };
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAllForUser', []);
+        mockServiceMethodReturnValue('getAll', []);
       });
       it('should not trigger an api call with the loaded state if force is not true', () => {
         expectInNoOut(effects.loadMethods$, unforcedLoadAction);
@@ -128,7 +128,7 @@ describe('MethodEffects', () => {
         usedState = MethodReducer.initialState;
       });
       beforeEach(() => {
-        mockServiceMethodError('getAllForUser', 'failed');
+        mockServiceMethodError('getAll', 'failed');
       });
       it('should return a error action if force is not true', () => {
         expectInAndOut(
@@ -150,7 +150,7 @@ describe('MethodEffects', () => {
         };
       });
       beforeEach(() => {
-        mockServiceMethodError('getAllForUser', 'failed');
+        mockServiceMethodError('getAll', 'failed');
       });
       it('should return nothing action if force is not true', () => {
         expectInNoOut(effects.loadMethods$, unforcedLoadAction);

@@ -7,6 +7,7 @@ import {
   EduContentReducer,
   LearningAreaReducer,
   LinkedPersonReducer,
+  MethodReducer,
   ResultReducer,
   StudentContentStatusReducer,
   TaskEduContentReducer,
@@ -20,7 +21,6 @@ import {
   UserContentReducer,
   UserReducer
 } from '../..';
-import { MethodReducer } from './method';
 
 export interface DalState {
   ui: UiReducer.UiState;
