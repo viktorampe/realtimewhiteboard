@@ -11,6 +11,7 @@ import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { hot } from '@nrwl/nx/testing';
 import { BehaviorSubject, Subject } from 'rxjs';
+import { CampusRouterlinkDirective } from '../directives/campus-routerlink.directive';
 import { AlertToNotificationItemPipe } from '../pipes/alert-to-notification/alert-to-notification-pipe';
 import { HeaderComponent } from './header.component';
 import { HeaderViewModel } from './header.viewmodel';
@@ -25,7 +26,7 @@ describe('HeaderComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [UiModule, RouterTestingModule, MatIconModule, MatBadgeModule],
-      declarations: [HeaderComponent],
+      declarations: [HeaderComponent, CampusRouterlinkDirective],
       providers: [
         AlertToNotificationItemPipe,
         {

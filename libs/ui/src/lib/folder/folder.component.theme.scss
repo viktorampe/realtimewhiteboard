@@ -36,12 +36,14 @@
     &__header {
       max-height: $ui-folder--grid-height - $ui-folder_info--grid-height;
       padding: $ui-folder-padding;
+
       &-icon {
         &-wrapper {
           width: $ui-folder_icon-wrapper--grid-width;
           height: $ui-folder_icon-wrapper--grid-height;
           border: $ui-folder_icon-wrapper-border-width solid
             $ui-folder_icon-wrapper-border-color;
+
           mat-icon {
             margin: (
                 $ui-folder_icon-wrapper--grid-width -
