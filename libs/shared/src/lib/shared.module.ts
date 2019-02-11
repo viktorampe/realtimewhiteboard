@@ -1,7 +1,6 @@
 import { LayoutModule } from '@angular/cdk/layout';
 import { PortalModule } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Inject, ModuleWithProviders, NgModule } from '@angular/core';
 import {
   MatBadgeModule,
@@ -24,7 +23,6 @@ import {
   HeaderResolver,
   HEADER_RESOLVER_TOKEN
 } from './header/header.resolver';
-import { CampusHttpInterceptor } from './interceptors/campus-http.interceptor';
 import {
   EnvironmentAlertsFeatureInterface,
   EnvironmentApiInterface,
@@ -81,11 +79,11 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     { provide: FILTER_SERVICE_TOKEN, useClass: FilterService },
     { provide: SCORM_EXERCISE_SERVICE_TOKEN, useClass: ScormExerciseService },
     { provide: PERMISSION_SERVICE_TOKEN, useClass: PermissionService },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: CampusHttpInterceptor,
-      multi: true
-    },
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: CampusHttpInterceptor,
+    //   multi: true
+    // },
     {
       provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
       useClass: OpenStaticContentService

@@ -25,7 +25,7 @@ export class CredentialsComponent implements OnInit {
   }
 
   getError() {
-    if (this.route.snapshot) {
+    if (this.route.snapshot.queryParamMap.get('error')) {
       this.viewModel.handleLinkError(
         this.route.snapshot.queryParamMap.get('error')
       );
