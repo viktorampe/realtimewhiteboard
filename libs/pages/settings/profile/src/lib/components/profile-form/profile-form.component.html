@@ -89,6 +89,7 @@
     <campus-button
       primary
       type="submit"
+      (click)="onSubmit()"
       [ngClass]="{ 'ui-button--disabled': !profileForm.valid }"
       >Opslaan</campus-button
     >

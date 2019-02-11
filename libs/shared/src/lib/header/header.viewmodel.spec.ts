@@ -19,7 +19,6 @@ import { hot } from '@nrwl/nx/testing';
 import { ENVIRONMENT_ALERTS_FEATURE_TOKEN } from '../interfaces/environment.injectiontokens';
 import { EnvironmentAlertsFeatureInterface } from '../interfaces/environment.interfaces';
 import { AlertToNotificationItemPipe } from '../pipes/alert-to-notification/alert-to-notification-pipe';
-import { HEADER_RESOLVER_TOKEN } from './header.resolver';
 import { HeaderViewModel } from './header.viewmodel';
 
 let environmentAlertsFeature: EnvironmentAlertsFeatureInterface = {
@@ -86,7 +85,6 @@ describe('headerViewModel', () => {
           provide: ENVIRONMENT_ALERTS_FEATURE_TOKEN,
           useValue: environmentAlertsFeature
         },
-        { provide: HEADER_RESOLVER_TOKEN, useClass: MockHeaderResolver },
         Store
       ]
     });

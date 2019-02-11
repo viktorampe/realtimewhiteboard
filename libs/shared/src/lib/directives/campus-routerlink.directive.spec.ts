@@ -3,11 +3,13 @@ import { Component, DebugElement, NgModule } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { WINDOW } from '@campus/browser';
 import {
   EnvironmentIconMappingInterface,
   ENVIRONMENT_ICON_MAPPING_TOKEN,
   SharedModule
 } from '@campus/shared';
+import { MockWindow } from '@campus/testing';
 import { CampusRouterlinkDirective } from './campus-routerlink.directive';
 const navigateSpy = jest.fn();
 const windowSpy = jest.fn();
@@ -37,7 +39,8 @@ export class TestContainerComponent {}
       provide: ENVIRONMENT_ICON_MAPPING_TOKEN,
       useClass: Mapping
     },
-    { provide: Router, useClass: MockRouter }
+    { provide: Router, useClass: MockRouter },
+    { provide: WINDOW, useClass: MockWindow }
   ],
   exports: [TestContainerComponent]
 })
@@ -91,9 +94,9 @@ describe('CampusRouterlinkDirective', () => {
   });
 
   it('should return empty url in case of internal link', () => {
-    expect(directive.getExternalLink('/google.com')).toBe('');
-    expect(directive.getExternalLink('/dev/com')).toBe('');
-    expect(directive.getExternalLink('/com')).toBe('');
+    expect(directive.getExternalLink('/google.com')).toBe(null);
+    expect(directive.getExternalLink('/dev/com')).toBe(null);
+    expect(directive.getExternalLink('/com')).toBe(null);
   });
 
   it('should navigate to internal link', () => {

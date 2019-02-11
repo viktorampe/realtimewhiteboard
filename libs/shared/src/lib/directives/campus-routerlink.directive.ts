@@ -1,5 +1,12 @@
-import { Directive, ElementRef, HostListener, Input } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  HostListener,
+  Inject,
+  Input
+} from '@angular/core';
 import { Router } from '@angular/router';
+import { WINDOW } from '@campus/browser';
 
 @Directive({
   selector: '[campusRouterLink]'
@@ -8,7 +15,11 @@ export class CampusRouterlinkDirective {
   @Input()
   campusRouterLink: string;
 
-  constructor(private eltRef: ElementRef, private router: Router) {}
+  constructor(
+    private eltRef: ElementRef,
+    private router: Router,
+    @Inject(WINDOW) private window: Window
+  ) {}
 
   @HostListener('click')
   onClick() {
@@ -18,7 +29,7 @@ export class CampusRouterlinkDirective {
   navigateToLink(linkPath: string) {
     const externalLink = this.getExternalLink(linkPath);
     if (externalLink) {
-      window.open(externalLink, '_blank');
+      this.window.open(externalLink, '_blank');
       return;
     }
     this.router.navigateByUrl(linkPath);

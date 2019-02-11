@@ -1,8 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatIconModule } from '@angular/material';
+import { MatIconModule, MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AlertToNotificationItemPipe } from '@campus/shared';
+import { MockMatIconRegistry } from '@campus/testing';
 import { NotificationItemInterface, UiModule } from '@campus/ui';
 import { BehaviorSubject } from 'rxjs';
 import { AlertsComponent } from './alerts.component';
@@ -19,7 +20,8 @@ describe('AlertsComponent', () => {
       declarations: [AlertsComponent],
       providers: [
         { provide: AlertsViewModel, useClass: MockAlertsViewModel },
-        AlertToNotificationItemPipe
+        AlertToNotificationItemPipe,
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ]
     }).compileComponents();
   }));

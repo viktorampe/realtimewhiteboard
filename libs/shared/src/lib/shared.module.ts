@@ -6,7 +6,8 @@ import { Inject, ModuleWithProviders, NgModule } from '@angular/core';
 import {
   MatBadgeModule,
   MatIconModule,
-  MatIconRegistry
+  MatIconRegistry,
+  MatSnackBarModule
 } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
@@ -19,17 +20,19 @@ import { PageBarContainerComponent } from './components/page-bar-container/page-
 import { OPEN_STATIC_CONTENT_SERVICE_TOKEN } from './content/open-static-content.interface';
 import { OpenStaticContentService } from './content/open-static-content.service';
 import { CampusRouterlinkDirective } from './directives/campus-routerlink.directive';
-import { HeaderComponent } from './header/header.component';
+import { FeedBackService, FEEDBACK_SERVICE_TOKEN } from './feedback';
 import {
-  HeaderResolver,
-  HEADER_RESOLVER_TOKEN
-} from './header/header.resolver';
+  SnackBarDefaultConfig,
+  SNACKBAR_DEFAULT_CONFIG_TOKEN
+} from './feedback/snackbar.config';
+import { HeaderComponent } from './header/header.component';
 import { CampusHttpInterceptor } from './interceptors/campus-http.interceptor';
 import {
   EnvironmentAlertsFeatureInterface,
   EnvironmentApiInterface,
   EnvironmentErrorManagementFeatureInterface,
   EnvironmentIconMappingInterface,
+  EnvironmentLogoutInterface,
   EnvironmentMessagesFeatureInterface,
   EnvironmentSsoInterface,
   EnvironmentWebsiteInterface,
@@ -37,6 +40,7 @@ import {
   ENVIRONMENT_API_TOKEN,
   ENVIRONMENT_ERROR_MANAGEMENT_FEATURE_TOKEN,
   ENVIRONMENT_ICON_MAPPING_TOKEN,
+  ENVIRONMENT_LOGOUT_TOKEN,
   ENVIRONMENT_MESSAGES_FEATURE_TOKEN,
   ENVIRONMENT_SSO_TOKEN,
   ENVIRONMENT_WEBSITE_TOKEN
@@ -55,7 +59,8 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     LayoutModule,
     MatIconModule,
     MatBadgeModule,
-    RouterModule
+    RouterModule,
+    MatSnackBarModule
   ],
   declarations: [
     HeaderComponent,
@@ -90,7 +95,11 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
       provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
       useClass: OpenStaticContentService
     },
-    { provide: HEADER_RESOLVER_TOKEN, useClass: HeaderResolver },
+    { provide: FEEDBACK_SERVICE_TOKEN, useClass: FeedBackService },
+    {
+      provide: SNACKBAR_DEFAULT_CONFIG_TOKEN,
+      useClass: SnackBarDefaultConfig
+    },
     AlertToNotificationItemPipe
   ]
 })
@@ -109,6 +118,7 @@ export class SharedModule {
     environmentErrorManagementFeature: EnvironmentErrorManagementFeatureInterface,
     environmentIconMapping: EnvironmentIconMappingInterface,
     environmentWebsite: EnvironmentWebsiteInterface,
+    environmentLogout: EnvironmentLogoutInterface,
     environmentApi: EnvironmentApiInterface,
     environmentSsoSettings: EnvironmentSsoInterface
   ): ModuleWithProviders {
@@ -130,6 +140,10 @@ export class SharedModule {
         {
           provide: ENVIRONMENT_WEBSITE_TOKEN,
           useValue: environmentWebsite
+        },
+        {
+          provide: ENVIRONMENT_LOGOUT_TOKEN,
+          useValue: environmentLogout
         },
         {
           provide: ENVIRONMENT_ICON_MAPPING_TOKEN,

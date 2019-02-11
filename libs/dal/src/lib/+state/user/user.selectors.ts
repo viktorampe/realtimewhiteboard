@@ -2,7 +2,7 @@ import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { NAME, State } from './user.reducer';
 
 // Lookup the 'User' feature state managed by NgRx
-const getUserState = createFeatureSelector<State>(NAME);
+export const getUserState = createFeatureSelector<State>(NAME);
 
 export const getLoaded = createSelector(
   getUserState,
@@ -16,11 +16,6 @@ export const getError = createSelector(
 export const getCurrentUser = createSelector(
   getUserState,
   (state: State) => state.currentUser
-);
-
-export const getLastUpdateMessage = createSelector(
-  getUserState,
-  (state: State) => state.lastUpdateMessage
 );
 
 export const getPermissionsLoaded = createSelector(

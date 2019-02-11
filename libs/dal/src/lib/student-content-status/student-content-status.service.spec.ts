@@ -4,13 +4,25 @@ import {
   PersonApi,
   StudentContentStatusApi
 } from '@diekeure/polpo-api-angular-sdk';
+import { StudentContentStatusFixture } from '../+fixtures';
 import { StudentContentStatusService } from './student-content-status.service';
 
-export class MockStudentContentStatusApi {}
-export class MockContentStatusApi {}
-export class MockPersonApi {}
+class MockStudentContentStatusApi {
+  patchAttributes() {}
+}
+class MockContentStatusApi {
+  find() {}
+}
+class MockPersonApi {
+  createStudentContentStatuses() {}
+}
 
 describe('StudentContentStatusService', () => {
+  let service: StudentContentStatusService;
+  let personApi: PersonApi;
+  let contentStatusApi: ContentStatusApi;
+  let studentContentStatusApi: StudentContentStatusApi;
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
@@ -21,20 +33,56 @@ describe('StudentContentStatusService', () => {
         },
         {
           provide: PersonApi,
-          useValue: MockPersonApi
+          useClass: MockPersonApi
         },
         {
           provide: ContentStatusApi,
-          useValue: MockContentStatusApi
+          useClass: MockContentStatusApi
         }
       ]
     });
+
+    service = TestBed.get(StudentContentStatusService);
+    studentContentStatusApi = TestBed.get(StudentContentStatusApi);
+    personApi = TestBed.get(PersonApi);
+    contentStatusApi = TestBed.get(ContentStatusApi);
   });
 
   it('should be created', inject(
     [StudentContentStatusService],
-    (service: StudentContentStatusService) => {
-      expect(service).toBeTruthy();
+    (studentContentStatusService: StudentContentStatusService) => {
+      expect(studentContentStatusService).toBeTruthy();
     }
   ));
+
+  it('updateStudentContentStatus should call studentContentStatusApi.patchAttributes', () => {
+    spyOn(studentContentStatusApi, 'patchAttributes');
+    const studentContentStatus = new StudentContentStatusFixture();
+
+    service.updateStudentContentStatus(studentContentStatus);
+
+    expect(studentContentStatusApi.patchAttributes).toHaveBeenCalledWith(
+      studentContentStatus.id,
+      { contentStatusId: studentContentStatus.contentStatusId }
+    );
+  });
+
+  it('addStudentContentStatus should call personApi.createStudentContentStatuses', () => {
+    spyOn(personApi, 'createStudentContentStatuses');
+    const studentContentStatus = new StudentContentStatusFixture();
+
+    service.addStudentContentStatus(studentContentStatus);
+
+    expect(personApi.createStudentContentStatuses).toHaveBeenCalledWith(
+      studentContentStatus.personId,
+      studentContentStatus
+    );
+  });
+
+  it('getAllContentStatuses should call contentStatusApi.find', () => {
+    spyOn(contentStatusApi, 'find');
+
+    service.getAllContentStatuses();
+    expect(contentStatusApi.find).toHaveBeenCalledTimes(1);
+  });
 });

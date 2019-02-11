@@ -20,7 +20,5 @@ export class DropdownMenuItemComponent implements DropdownMenuItemInterface {
   @Input() description: string;
   @Input() icon: string;
   @Input() image: string;
-  @Input() internalLink: string;
-  @Input() externalLink: string;
   @Input() imageAltText: string;
 }

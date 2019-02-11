@@ -27,31 +27,30 @@ export class StudentContentStatusService
   getAllByStudentId(
     studentId: number
   ): Observable<StudentContentStatusInterface[]> {
-    return this.personApi.getStudentContentStatuses(studentId);
+    return this.personApi.getStudentContentStatuses(studentId) as Observable<
+      StudentContentStatusInterface[]
+    >;
   }
 
   updateStudentContentStatus(
     studentContentStatus: StudentContentStatusInterface
   ): Observable<StudentContentStatusInterface> {
-    // throw new Error('fout');
-
     return this.studentContentStatusApi.patchAttributes(
       studentContentStatus.id,
-      {
-        contentStatusId: studentContentStatus.contentStatusId
-      }
-    );
+      { contentStatusId: studentContentStatus.contentStatusId }
+    ) as Observable<StudentContentStatusInterface>;
   }
 
   addStudentContentStatus(
     studentContentStatus: StudentContentStatusInterface
   ): Observable<StudentContentStatusInterface> {
-    // throw new Error('fout');
-
-    return this.studentContentStatusApi.patchOrCreate(studentContentStatus);
+    return this.personApi.createStudentContentStatuses(
+      studentContentStatus.personId,
+      studentContentStatus
+    ) as Observable<StudentContentStatusInterface>;
   }
 
-  getAllConstentStatuses(): Observable<ContentStatusInterface[]> {
+  getAllContentStatuses(): Observable<ContentStatusInterface[]> {
     return this.contentStatusApi.find<ContentStatusInterface>();
   }
 }

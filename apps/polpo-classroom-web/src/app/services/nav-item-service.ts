@@ -148,7 +148,8 @@ export class NavItemService {
         description: this.extractPlatformName(
           smartschoolCredential.profile.platform
         ),
-        externalLink: smartschoolCredential.profile.platform
+        externalLink:
+          smartschoolCredential.profile.platform || 'https://www.smartschool.be'
       })
     );
 
@@ -159,6 +160,8 @@ export class NavItemService {
   }
 
   private extractPlatformName(platformUrl: string) {
-    return platformUrl ? platformUrl.replace('.smartschool.be', '') : '';
+    return platformUrl
+      ? platformUrl.replace('.smartschool.be', '').replace('https://', '')
+      : 'smartschool';
   }
 }
