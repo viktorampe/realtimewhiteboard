@@ -20,6 +20,7 @@ import {
   UserContentReducer,
   UserReducer
 } from '../..';
+import { MethodReducer } from './method';
 
 export interface DalState {
   ui: UiReducer.UiState;
@@ -42,4 +43,5 @@ export interface DalState {
   linkedPersons: LinkedPersonReducer.State;
   teacherStudents: TeacherStudentReducer.State;
   credentials: CredentialReducer.State;
+  methods: MethodReducer.State;
 }

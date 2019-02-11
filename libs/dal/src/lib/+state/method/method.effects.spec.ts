@@ -5,20 +5,15 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
-import { METHOD_SERVICE_TOKEN } from '../../method/method.service.interface';
 import { MethodReducer } from '.';
-import {
-  MethodsLoaded,
-  MethodsLoadError,
-  LoadMethods
-} from './method.actions';
+import { METHOD_SERVICE_TOKEN } from '../../metadata/method.service.interface';
+import { LoadMethods, MethodsLoaded, MethodsLoadError } from './method.actions';
 import { MethodEffects } from './method.effects';
 
 describe('MethodEffects', () => {
   let actions: Observable<any>;
   let effects: MethodEffects;
   let usedState: any;
-
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -61,7 +56,7 @@ describe('MethodEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature(MethodReducer.NAME , MethodReducer.reducer, {
+        StoreModule.forFeature(MethodReducer.NAME, MethodReducer.reducer, {
           initialState: usedState
         }),
         EffectsModule.forRoot([]),
@@ -143,11 +138,7 @@ describe('MethodEffects', () => {
         );
       });
       it('should return a error action if force is true', () => {
-        expectInAndOut(
-          effects.loadMethods$,
-          forcedLoadAction,
-          loadErrorAction
-        );
+        expectInAndOut(effects.loadMethods$, forcedLoadAction, loadErrorAction);
       });
     });
     describe('with loaded and failing api call', () => {
@@ -165,11 +156,7 @@ describe('MethodEffects', () => {
         expectInNoOut(effects.loadMethods$, unforcedLoadAction);
       });
       it('should return a error action if force is true', () => {
-        expectInAndOut(
-          effects.loadMethods$,
-          forcedLoadAction,
-          loadErrorAction
-        );
+        expectInAndOut(effects.loadMethods$, forcedLoadAction, loadErrorAction);
       });
     });
   });
