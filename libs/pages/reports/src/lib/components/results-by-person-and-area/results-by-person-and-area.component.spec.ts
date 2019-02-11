@@ -130,13 +130,25 @@ describe('ResultsByPersonAndAreaComponent', () => {
     expect(exerciseRows.length).toBe(3);
 
     // tries
-    expect(exerciseRows[0].queryAll(By.css('td.number'))[1]).toBeUndefined();
-    expect(exerciseRows[1].queryAll(By.css('td.number'))[1]).toBeUndefined();
-    expect(exerciseRows[2].queryAll(By.css('td.number'))[1]).toBeTruthy();
+    expect(
+      exerciseRows[0].queryAll(By.css('td.number'))[1].nativeElement.textContent
+    ).toBeFalsy();
+    expect(
+      exerciseRows[1].queryAll(By.css('td.number'))[1].nativeElement.textContent
+    ).toBeFalsy();
+    expect(
+      exerciseRows[2].queryAll(By.css('td.number'))[1].nativeElement.textContent
+    ).toBeTruthy();
 
     // averages
-    expect(exerciseRows[0].queryAll(By.css('td.number'))[2]).toBeUndefined();
-    expect(exerciseRows[1].queryAll(By.css('td.number'))[2]).toBeUndefined();
-    expect(exerciseRows[2].queryAll(By.css('td.number'))[2]).toBeTruthy();
+    expect(
+      exerciseRows[0].queryAll(By.css('td.number'))[2].nativeElement.textContent
+    ).toBeFalsy();
+    expect(
+      exerciseRows[1].queryAll(By.css('td.number'))[2].nativeElement.textContent
+    ).toBeFalsy();
+    expect(
+      exerciseRows[2].queryAll(By.css('td.number'))[2].nativeElement.textContent
+    ).toBeTruthy();
   });
 });
