@@ -7,6 +7,8 @@ import {
   EduContentQueries,
   LearningAreaActions,
   LearningAreaQueries,
+  MethodActions,
+  MethodQueries,
   StateResolver,
   UnlockedBoekeGroupActions,
   UnlockedBoekeGroupQueries,
@@ -35,7 +37,10 @@ export class BooksResolver extends StateResolver {
       new UnlockedBoekeStudentActions.LoadUnlockedBoekeStudents({
         userId: this.authService.userId
       }),
-      new EduContentActions.LoadEduContents({ userId: this.authService.userId })
+      new EduContentActions.LoadEduContents({
+        userId: this.authService.userId
+      }),
+      new MethodActions.LoadMethods()
     ];
   }
   protected getResolvedQueries(): Selector<object, boolean>[] {
@@ -43,7 +48,8 @@ export class BooksResolver extends StateResolver {
       LearningAreaQueries.getLoaded,
       UnlockedBoekeGroupQueries.getLoaded,
       UnlockedBoekeStudentQueries.getLoaded,
-      EduContentQueries.getLoaded
+      EduContentQueries.getLoaded,
+      MethodQueries.getLoaded
     ];
   }
 }
