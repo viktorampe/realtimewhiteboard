@@ -49,14 +49,11 @@ export function sortEduContent(
     const defaultValue = '0' as string;
 
     const year =
-      eduContent.eduContentMetadata &&
-      // @ts-ignore: Property 'years' does not exist on type 'EduContentMetadataInterface[]'
-      eduContent.eduContentMetadata.years &&
-      // @ts-ignore: Property 'years' does not exist on type 'EduContentMetadataInterface[]'
-      eduContent.eduContentMetadata.years[0] &&
-      // @ts-ignore: Property 'years' does not exist on type 'EduContentMetadataInterface[]'
-      eduContent.eduContentMetadata.years[0].name;
-    return year || defaultValue;
+      eduContent.publishedEduContentMetadata &&
+      eduContent.publishedEduContentMetadata.years &&
+      eduContent.publishedEduContentMetadata.years[0] &&
+      eduContent.publishedEduContentMetadata.years[0].name;
+    return parseInt(year || defaultValue, 10);
   }
 }
 
