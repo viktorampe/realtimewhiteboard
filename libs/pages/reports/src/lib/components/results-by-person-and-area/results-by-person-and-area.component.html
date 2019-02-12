@@ -16,17 +16,23 @@
     *ngIf="ownResults.length > 0; else: noOwnResults"
     class="page-results__table"
   >
-    <table>
-      <thead>
-        <tr>
-          <th class="title"></th> <th class="score">Score</th>
-          <td class="title">Oefening</td> <td class="number">Resultaat</td>
-          <td class="number">Pogingen</td> <td class="number">Gemiddelde</td>
-          <td></td>
-        </tr>
-      </thead>
-    </table>
-    <div class="page-results__table__main">
+    <div class="page-results__table__header" #header>
+      <table>
+        <thead>
+          <tr>
+            <th class="page-results__table__row__header">
+              <div class="page-results__table__row__header__content">
+                <div class="title"></div> <div class="score">Score</div>
+              </div>
+            </th>
+            <td class="title">Oefening</td> <td class="number">Resultaat</td>
+            <td class="number">Pogingen</td> <td class="number">Gemiddelde</td>
+            <td></td>
+          </tr>
+        </thead>
+      </table>
+    </div>
+    <div class="page-results__table__main" (scroll)="onScroll($event)">
       <table>
         <tbody *ngFor="let assignment of ownResults">
           <tr
@@ -38,19 +44,20 @@
             <ng-container *ngIf="firstResult">
               <th
                 [attr.rowspan]="assignment.exerciseResults.length"
-                class="title"
+                class="page-results__table__row__header"
               >
-                <ng-container [ngSwitch]="assignment.type">
-                  <em *ngSwitchCase="'task'">Taak</em>
-                  <em *ngSwitchCase="'bundle'">Bundel</em>
-                </ng-container>
-                <br />{{ assignment.title }}
-              </th>
-              <th
-                [attr.rowspan]="assignment.exerciseResults.length"
-                class="score"
-              >
-                <br />{{ assignment.totalScore | number: '1.0-2' }}%
+                <div class="page-results__table__row__header__content">
+                  <div class="title">
+                    <ng-container [ngSwitch]="assignment.type">
+                      <em *ngSwitchCase="'task'">Taak</em>
+                      <em *ngSwitchCase="'bundle'">Bundel</em>
+                    </ng-container>
+                    <span>{{ assignment.title }}</span>
+                  </div>
+                  <div class="score">
+                    {{ assignment.totalScore | number: '1.0-2' }}%
+                  </div>
+                </div>
               </th>
             </ng-container>
 
@@ -71,7 +78,9 @@
                 exerciseResult.averageScore | number: '1.0-2'
               }}</td>
             </ng-container>
-            <ng-template #hideInfoForTasks> <td></td> <td></td> </ng-template>
+            <ng-template #hideInfoForTasks>
+              <td class="number"></td> <td class="number"></td>
+            </ng-template>
             <td></td>
           </tr>
         </tbody>

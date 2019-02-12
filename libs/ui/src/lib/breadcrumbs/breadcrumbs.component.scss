@@ -1,3 +1,8 @@
+:host.ui-breadcrumbs {
+  max-width: 100%;
+  flex: 1 1 auto;
+}
+
 .ui-breadcrumbs {
   &__holder {
     display: flex;
@@ -10,6 +15,7 @@
       align-items: center;
       padding: 8px 0px;
       margin: 0;
+      max-width: 30%;
 
       a,
       span {
@@ -17,6 +23,11 @@
         overflow: hidden;
         text-overflow: ellipsis;
         text-decoration: none;
+        white-space: nowrap;
+      }
+
+      mat-icon {
+        flex-shrink: 0;
       }
     }
   }

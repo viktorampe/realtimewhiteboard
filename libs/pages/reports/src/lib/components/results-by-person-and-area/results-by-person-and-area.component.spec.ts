@@ -73,7 +73,7 @@ describe('ResultsByPersonAndAreaComponent', () => {
 
   it('should show both task and bundle titles', () => {
     const titles = fixture.debugElement.queryAll(
-      By.css('.page-results__table__main th.title')
+      By.css('.page-results__table__main th')
     );
     expect(titles.length).toBe(2);
     expect(titles[0].nativeElement.textContent).toContain('foo 1');
@@ -82,7 +82,7 @@ describe('ResultsByPersonAndAreaComponent', () => {
 
   it('should show "bundel" or "taak" according to type', () => {
     const exerciseType = fixture.debugElement.queryAll(
-      By.css('.page-results__table__main th.title em')
+      By.css('.page-results__table__main th em')
     );
     expect(exerciseType.length).toBe(2);
     expect(exerciseType[0].nativeElement.textContent).toContain('Taak');
@@ -93,6 +93,7 @@ describe('ResultsByPersonAndAreaComponent', () => {
     const exerciseTitle = fixture.debugElement.queryAll(
       By.css('.page-results__table__main td.title')
     );
+
     expect(exerciseTitle.length).toBe(3);
     expect(exerciseTitle[0].nativeElement.textContent).toContain('foo');
     expect(exerciseTitle[1].nativeElement.textContent).toContain(
@@ -103,7 +104,7 @@ describe('ResultsByPersonAndAreaComponent', () => {
 
   it('should show the average score of the task or bundle', () => {
     const exerciseRows = fixture.debugElement.queryAll(
-      By.css('.page-results__table__main th.score')
+      By.css('.page-results__table__main th')
     );
     expect(exerciseRows.length).toBe(2);
 
@@ -129,13 +130,25 @@ describe('ResultsByPersonAndAreaComponent', () => {
     expect(exerciseRows.length).toBe(3);
 
     // tries
-    expect(exerciseRows[0].queryAll(By.css('td.number'))[1]).toBeUndefined();
-    expect(exerciseRows[1].queryAll(By.css('td.number'))[1]).toBeUndefined();
-    expect(exerciseRows[2].queryAll(By.css('td.number'))[1]).toBeTruthy();
+    expect(
+      exerciseRows[0].queryAll(By.css('td.number'))[1].nativeElement.textContent
+    ).toBeFalsy();
+    expect(
+      exerciseRows[1].queryAll(By.css('td.number'))[1].nativeElement.textContent
+    ).toBeFalsy();
+    expect(
+      exerciseRows[2].queryAll(By.css('td.number'))[1].nativeElement.textContent
+    ).toBeTruthy();
 
     // averages
-    expect(exerciseRows[0].queryAll(By.css('td.number'))[2]).toBeUndefined();
-    expect(exerciseRows[1].queryAll(By.css('td.number'))[2]).toBeUndefined();
-    expect(exerciseRows[2].queryAll(By.css('td.number'))[2]).toBeTruthy();
+    expect(
+      exerciseRows[0].queryAll(By.css('td.number'))[2].nativeElement.textContent
+    ).toBeFalsy();
+    expect(
+      exerciseRows[1].queryAll(By.css('td.number'))[2].nativeElement.textContent
+    ).toBeFalsy();
+    expect(
+      exerciseRows[2].queryAll(By.css('td.number'))[2].nativeElement.textContent
+    ).toBeTruthy();
   });
 });
