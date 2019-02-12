@@ -148,6 +148,7 @@ export class ListViewItemDirective<dataObjectType>
   private subscriptions = new Subscription();
 
   @Input() dataObject: dataObjectType;
+  @Input() selectable = true;
 
   @Output()
   itemSelectionChanged = new EventEmitter<
@@ -169,9 +170,16 @@ export class ListViewItemDirective<dataObjectType>
     return this.parentList.useItemSelectableOverlayStyle$.value;
   }
 
+  @HostBinding('class.ui-list-view__list__item--notselectable')
+  get isNotSelectableClass() {
+    return !this.selectable;
+  }
+
   @HostListener('click')
   clickEvent() {
-    this.isSelected = !this.isSelected;
+    if (this.selectable) {
+      this.isSelected = !this.isSelected;
+    }
   }
 
   constructor(

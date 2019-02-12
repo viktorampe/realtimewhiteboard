@@ -1,5 +1,6 @@
 @mixin shared-header {
   $shared-header__app-bar-height: 45px !default;
+  $shared-header__app-bar-color: $shared-color-1 !default;
   $shared-header__page-bar-height: 60px !default;
   $shared-header__page-bar-background-color: $shared-bg-color-1 !default;
   $shared-header__page-bar__divider-background-color: $shared-element-border-color-1 !default;
@@ -16,6 +17,8 @@
   $shared-header__page-bar__mat-badge-width: 20px !default;
   $shared-header__page-bar__mat-badge-height: 20px !default;
   $shared-header__page-bar__mat-badge-line-height: 20px !default;
+  $shared-header__page-bar__mat-badge__content-color: $secondary-font-color-badge !default;
+  $shared-header__page-bar__mat-badge__content-background-color: $secondary-bg-color-badge !default;
 
   .shared-header {
     &__app-bar {
@@ -26,6 +29,16 @@
       height: $shared-header__page-bar-height;
       background-color: $shared-header__page-bar-background-color;
 
+      &__nav-button {
+        background-color: $shared-header__page-bar-background-color;
+        color: $shared-color-1;
+
+        &:hover {
+          color: lighten($shared-color-1, 10%);
+          background-color: $shared-header__page-bar-background-color;
+        }
+      }
+
       div.divider {
         margin-left: $shared-header__page-bar__divider-margin-left-right;
         margin-right: $shared-header__page-bar__divider-margin-left-right;
@@ -34,7 +47,7 @@
         background-color: $shared-header__page-bar__divider-background-color;
       }
 
-      .ui-button {
+      #page-bar-container .ui-button {
         border: $shared-header__page-bar__element-border-width solid
           $shared-header__page-bar__element-border-color;
         padding-top: $shared-header__page-bar__element-padding-top;
@@ -55,25 +68,47 @@
     }
 
     .shared-header__app-bar__alerts {
+      display: flex;
       margin-right: $shared-header__page-bar__divider-margin-left-right;
-      mat-icon {
-        cursor: pointer;
+
+      &__button {
+        background-color: $ui-app-bar-background-color;
+        color: $shared-color-1;
+
+        &:hover {
+          color: lighten($shared-color-1, 10%);
+        }
       }
     }
 
     .shared-header__app-bar__profile-menu {
+      display: flex;
       cursor: pointer;
+
+      &:hover {
+        color: lighten($shared-color-1, 10%);
+      }
     }
-    .mat-badge-medium.mat-badge-above .mat-badge-content {
-      top: $shared-header__page-bar__mat-badge-top;
-    }
-    .mat-badge-medium .mat-badge-content {
-      width: $shared-header__page-bar__mat-badge-height;
-      height: $shared-header__page-bar__mat-badge-height;
-      line-height: $shared-header__page-bar__mat-badge-line-height;
-    }
-    .mat-badge-medium.mat-badge-overlap.mat-badge-before .mat-badge-content {
-      left: $shared-header__page-bar__mat-badge-left;
+
+    .mat-badge {
+      &-content {
+        color: $shared-header__page-bar__mat-badge__content-color;
+        background: $shared-header__page-bar__mat-badge__content-background-color;
+      }
+
+      &-medium.mat-badge-above .mat-badge-content {
+        top: $shared-header__page-bar__mat-badge-top;
+      }
+
+      &-medium .mat-badge-content {
+        width: $shared-header__page-bar__mat-badge-height;
+        height: $shared-header__page-bar__mat-badge-height;
+        line-height: $shared-header__page-bar__mat-badge-line-height;
+      }
+
+      &-medium.mat-badge-overlap.mat-badge-before .mat-badge-content {
+        left: $shared-header__page-bar__mat-badge-left;
+      }
     }
   }
 }

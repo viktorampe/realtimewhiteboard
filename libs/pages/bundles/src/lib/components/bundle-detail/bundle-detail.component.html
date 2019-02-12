@@ -23,7 +23,10 @@
   [isOpenOnInit]="true"
   *ngIf="(bundle$ | async) as bundle; else: noBundle"
 >
-  <campus-side-sheet-header></campus-side-sheet-header>
+  <campus-side-sheet-header
+    *ngIf="!(list && (list.selectedItems$ | async)?.length)"
+    >Bundel eigenschappen</campus-side-sheet-header
+  >
   <campus-side-sheet-body>
     <ng-container *ngIf="list">
       <ng-container
@@ -85,7 +88,11 @@
           >
             <campus-button
               (click)="clickOpenContent(unlockedcontent)"
-              [iconClass]="'view-content'"
+              [iconClass]="
+                unlockedcontent.content.type === 'exercise'
+                  ? 'exercise:open'
+                  : 'view-content'
+              "
               circle
             >
             </campus-button>

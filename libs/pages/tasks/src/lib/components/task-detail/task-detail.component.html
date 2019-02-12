@@ -70,16 +70,18 @@
               *ngFor="let taskEduContent of filteredContents"
               campusListItem
               [dataObject]="taskEduContent.eduContent"
-              [title]="taskEduContent.eduContent.title"
+              [title]="taskEduContent.eduContent.name"
               [fileExtensionClass]="taskEduContent.eduContent.fileExtension"
               [fileTypeLabel]="taskEduContent.eduContent.fileTypeLabel"
-              [contentTypeClass]="taskEduContent.eduContent.productType"
+              [contentTypeClass]="'taak'"
             >
               <campus-button
-                [iconClass]="
-                  taskEduContent.eduContent.submitted ? 'check-on' : 'eye'
-                "
                 circle
+                [iconClass]="
+                  taskEduContent.submitted
+                    ? 'exercise:finished'
+                    : 'exercise:open'
+                "
                 (click)="clickOpenContent(taskEduContent)"
               ></campus-button>
             </campus-content-thumbnail>

@@ -3,6 +3,7 @@ export interface EnvironmentInterface {
   iconMapping: EnvironmentIconMappingInterface;
   website: EnvironmentWebsiteInterface;
   logout: EnvironmentLogoutInterface;
+  login: EnvironmentLoginInterface;
   api: EnvironmentApiInterface;
   features: {
     alerts: EnvironmentAlertsFeatureInterface;
@@ -36,15 +37,21 @@ export interface EnvironmentErrorManagementFeatureAllowedErrorInterface {
   status?: number;
   name?: string;
   statusText?: string;
-  urlRegex?: RegExp;
-  messageRegex?: RegExp;
+  urlRegex?: string;
+  messageRegex?: string;
 }
 
 export interface EnvironmentWebsiteInterface {
   url: string;
+  title: string;
+  favicon: string;
 }
 
 export interface EnvironmentLogoutInterface {
+  url: string;
+}
+
+export interface EnvironmentLoginInterface {
   url: string;
 }
 

@@ -8,6 +8,7 @@ import {
   BundleFixture,
   BundleInterface,
   BundleReducer,
+  ContentFixture,
   ContentStatusActions,
   ContentStatusFixture,
   ContentStatusInterface,
@@ -286,6 +287,13 @@ describe('BundlesViewModel', () => {
         ]
       })
     );
+  });
+
+  it('openBooks() should call openStaticContentService', () => {
+    const spy = jest.spyOn(openStaticContentService, 'open');
+    const book = new ContentFixture();
+    bundlesViewModel.openBook(book);
+    expect(spy).toHaveBeenCalledWith(book);
   });
 
   function loadState() {

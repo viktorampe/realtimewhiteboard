@@ -13,7 +13,7 @@ export class AlertToNotificationItemPipe implements PipeTransform {
   transform(alert: AlertQueueInterface): NotificationItemInterface {
     let link = alert.link;
     //todo clean up once API changed URLs
-    if (link.match(/.*\.polpo\.(localhost|be)(.*)\/#\/(.*)/i)) {
+    if (link.match(new RegExp('.*.polpo.(localhost|be)(.*)/#/(.*)', 'i'))) {
       link = link.replace('/#/', '/');
     }
     return {

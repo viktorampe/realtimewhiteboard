@@ -1,24 +1,280 @@
-export const environment = {
+import { EnvironmentInterface } from '@campus/shared';
+
+export const environment: EnvironmentInterface = {
   production: true,
   // promo website settings
   website: {
     url: 'https://www.staging.polpo.be'
   },
+  login: {
+    url: 'https://www.staging.polpo.be/identificatie/start'
+  },
   logout: {
     url: 'https://www.staging.polpo.be/identificatie/start'
+  },
+  iconMapping: {
+    // -> learning areas
+    'learning-area:polpo-aardrijkskunde':
+      'assets/icons/learning-area/aardrijkskunde.svg',
+    'learning-area:polpo-biologie': 'assets/icons/learning-area/biologie.svg',
+    'learning-area:polpo-duits': 'assets/icons/learning-area/duits.svg',
+    'learning-area:polpo-engels': 'assets/icons/learning-area/engels.svg',
+    'learning-area:polpo-frans': 'assets/icons/learning-area/frans.svg',
+    'learning-area:polpo-fysica': 'assets/icons/learning-area/fysica.svg',
+    'learning-area:polpo-geschiedenis':
+      'assets/icons/learning-area/geschiedenis.svg',
+    'learning-area:polpo-godsdienst':
+      'assets/icons/learning-area/godsdienst.svg',
+    'learning-area:polpo-informatica':
+      'assets/icons/learning-area/informatica.svg',
+    'learning-area:polpo-integraleopdrachten':
+      'assets/icons/learning-area/integraleopdrachten.svg',
+    'learning-area:polpo-lichamelijkeopvoeding':
+      'assets/icons/learning-area/lichamelijkeopvoeding.svg',
+    'learning-area:polpo-maatschappelijkevorming':
+      'assets/icons/learning-area/maatschappelijkevorming.svg',
+    'learning-area:polpo-muzikaleopvoeding':
+      'assets/icons/learning-area/muzikaleopvoeding.svg',
+    'learning-area:polpo-natuurwetenschappen':
+      'assets/icons/learning-area/natuurwetenschappen.svg',
+    'learning-area:polpo-nederlands':
+      'assets/icons/learning-area/nederlands.svg',
+    'learning-area:polpo-sociaaleconomischeinitiatie':
+      'assets/icons/learning-area/sociaaleconomischeinitiatie.svg',
+    'learning-area:polpo-spaans': 'assets/icons/learning-area/spaans.svg',
+    'learning-area:polpo-techniek': 'assets/icons/learning-area/techniek.svg',
+    'learning-area:polpo-wiskunde':
+      'assets/icons/learning-area/wiskunde-lg.svg',
+    'learning-area:polpo-ww': 'assets/icons/learning-area/ww.svg',
+    // 'learning-area:polpo-aardrijkskunde-lg':
+    //   'assets/icons/learning-area/aardrijkskunde-lg.svg',
+    // 'learning-area:polpo-biologie-lg': 'assets/icons/learning-area/biologie-lg.svg',
+    // 'learning-area:polpo-duits-lg': 'assets/icons/learning-area/duits-lg.svg',
+    // 'learning-area:polpo-engels-lg': 'assets/icons/learning-area/engels-lg.svg',
+    // 'learning-area:polpo-frans-lg': 'assets/icons/learning-area/frans-lg.svg',
+    // 'learning-area:polpo-fysica-lg': 'assets/icons/learning-area/fysica-lg.svg',
+    // 'learning-area:polpo-geschiedenis-lg':
+    //   'assets/icons/learning-area/geschiedenis-lg.svg',
+    // 'learning-area:polpo-godsdienst-lg':
+    //   'assets/icons/learning-area/godsdienst-lg.svg',
+    // 'learning-area:polpo-informatica-lg':
+    //   'assets/icons/learning-area/informatica-lg.svg',
+    // 'learning-area:polpo-integraleopdrachten-lg':
+    //   'assets/icons/learning-area/integraleopdrachten-lg.svg',
+    // 'learning-area:polpo-lichamelijkeopvoeding-lg':
+    //   'assets/icons/learning-area/lichamelijkeopvoeding-lg.svg',
+    // 'learning-area:polpo-maatschappelijkevorming-lg':
+    //   'assets/icons/learning-area/maatschappelijkevorming-lg.svg',
+    // 'learning-area:polpo-muzikaleopvoeding-lg':
+    //   'assets/icons/learning-area/muzikaleopvoeding-lg.svg',
+    // 'learning-area:polpo-natuurwetenschappen-lg':
+    //   'assets/icons/learning-area/natuurwetenschappen-lg.svg',
+    // 'learning-area:polpo-nederlands-lg':
+    //   'assets/icons/learning-area/nederlands-lg.svg',
+    // 'learning-area:polpo-sociaaleconomischeinitiatie-lg':
+    //   'assets/icons/learning-area/sociaaleconomischeinitiatie-lg.svg',
+    // 'learning-area:polpo-spaans-lg': 'assets/icons/learning-area/spaans-lg.svg',
+    // 'learning-area:polpo-techniek-lg': 'assets/icons/learning-area/techniek-lg.svg',
+    // 'learning-area:polpo-wiskunde-lg': 'assets/icons/learning-area/wiskunde-lg.svg',
+    // 'learning-area:polpo-ww-lg': 'assets/icons/learning-area/ww-lg.svg',
+
+    // -> actions
+    // 'add-user': 'assets/icons/add-user.svg',
+    // add: 'assets/icons/add.svg',
+    // archive: 'assets/icons/archive.svg',
+    cancel: 'assets/icons/cancel.svg',
+    delete: 'assets/icons/delete.svg',
+    // edit: 'assets/icons/edit.svg',
+    filter: 'assets/icons/filter.svg',
+    // lock: 'assets/icons/lock.svg',
+    // filter: 'assets/icons/filter.svg',
+    lock: 'assets/icons/lock.svg',
+    // open: 'assets/icons/open.svg',
+    // play: 'assets/icons/play.svg',
+    // print: 'assets/icons/print.svg',
+    // 'user-add': 'assets/icons/user-add.svg',
+    // 'user-del': 'assets/icons/user-del.svg',
+    // verwijder: 'assets/icons/verwijder.svg',
+
+    // -> product types
+    'list-view': 'assets/icons/material/list-view.svg',
+    'grid-view': 'assets/icons/material/grid-view.svg',
+    // algebrakit: 'assets/icons/algebrakit.svg',
+    // 'archive-box': 'assets/icons/archive-box.svg',
+    // 'archive-box-lg': 'assets/icons/archive-box-lg.svg',
+    lesmateriaal: 'assets/icons/lesmateriaal.svg',
+
+    presentatie: 'assets/icons/presentatie.svg',
+    // presentation: 'assets/icons/presentation.svg',
+    // polpo-prefixed svg names come from database, do not remove the polpo- prefix
+    'polpo-lesmateriaal': 'assets/icons/lesmateriaal.svg',
+    'polpo-presentatie': 'assets/icons/presentatie.svg',
+    'polpo-tasks-complete': 'assets/icons/tasks-complete.svg',
+    'polpo-media': 'assets/icons/media.svg',
+    'polpo-music': 'assets/icons/music.svg',
+    'polpo-tasks': 'assets/icons/tasks.svg',
+    'polpo-video': 'assets/icons/video.svg',
+    'polpo-website': 'assets/icons/website.svg',
+    educontent: 'assets/icons/lesmateriaal.svg',
+    // youtube: 'assets/icons/youtube.svg',
+    // -> settings dashboard
+    profile: 'assets/icons/account-circle.svg',
+    avatar: 'assets/icons/avatar.svg',
+    credentials: 'assets/icons/link.svg',
+    'coupled-teachers': 'assets/icons/student2.svg',
+    alerts: 'assets/icons/bell.svg',
+
+    // -> other
+    home: 'assets/icons/material/home.svg',
+    'breadcrumb-separator': 'assets/icons/material/chevron-right.svg',
+    'arrow-back': 'assets/icons/material/arrow-back.svg',
+    menu: 'assets/icons/material/menu.svg',
+    // alert: 'assets/icons/alert.svg',
+    notifications: 'assets/icons/material/notifications.svg',
+    messages: 'assets/icons/material/envelope-open',
+    'marketing-message': 'assets/icons/polpo.svg',
+    // 'at-sign': 'assets/icons/at-sign.svg',
+    // balance: 'assets/icons/balance.svg',
+    // 'book-not': 'assets/icons/book-not.svg',
+    book: 'assets/icons/book.svg',
+    bundle: 'assets/icons/bundle.svg',
+    'settings-cog': 'assets/icons/settings.svg',
+    // bundles: 'assets/icons/bundles.svg',
+    // call: 'assets/icons/call.svg',
+    // caret: 'assets/icons/caret.svg',
+    // 'check-off': 'assets/icons/check-off.svg',
+    'check-on': 'assets/icons/check-on.svg',
+    // checklist: 'assets/icons/checklist.svg',
+    finished: 'assets/icons/checkmark.svg',
+    // clock: 'assets/icons/clock.svg',
+    // clock2: 'assets/icons/clock2.svg',
+    // code: 'assets/icons/code.svg',
+    creditcard: 'assets/icons/creditcard.svg',
+    google: 'assets/icons/google.svg',
+    mail: 'assets/icons/mail.svg',
+    link: 'assets/icons/link.svg',
+    // 'die-keure': 'assets/icons/die-keure.svg',
+    'view-content': 'assets/icons/eye.svg',
+    eye: 'assets/icons/eye.svg',
+    eye2: 'assets/icons/eye2.svg',
+    facebook: 'assets/icons/facebook.svg',
+    // favorite: 'assets/icons/favorite.svg',
+    // favorites: 'assets/icons/favorites.svg',
+    // favorites2: 'assets/icons/favorites2.svg',
+    // game: 'assets/icons/game.svg',
+    // groups: 'assets/icons/groups.svg',
+    unfinished: 'assets/icons/hourglass.svg',
+    // 'increase-lg': 'assets/icons/increase-lg.svg',
+    increase: 'assets/icons/increase.svg',
+    // klok: 'assets/icons/klok.svg',
+    // 'laptop-content': 'assets/icons/laptop-content.svg',
+    // 'laptop-images': 'assets/icons/laptop-images.svg',
+    // 'laptop-text': 'assets/icons/laptop-text.svg',
+    // magnifier: 'assets/icons/magnifier.svg',
+    // marker: 'assets/icons/marker.svg',
+    // phone: 'assets/icons/phone.svg',
+    // pinterest: 'assets/icons/pinterest.svg',
+    // 'polpo-small': 'assets/icons/polpo-small.svg',
+    polpo: 'assets/icons/polpo.svg',
+    visibility: 'assets/icons/visibility.svg',
+    'visibility-off': 'assets/icons/visibility-off.svg',
+    'power-on': 'assets/icons/power-on.svg',
+    'smartschool:orange':
+      'assets/icons/smartschool/s_logo_sso_button_orange_22x36.svg',
+    // 'smartschool:white':
+    //   'assets/icons/smartschool/s_logo_sso_button_orange_22x362.svg',
+    // school: 'assets/icons/school.svg',
+    // send: 'assets/icons/send.svg',
+    // share: 'assets/icons/share.svg',
+    // 'split-arrow': 'assets/icons/split-arrow.svg',
+    // student: 'assets/icons/student.svg',
+    student: 'assets/icons/student2.svg',
+    taak: 'assets/icons/taak.svg',
+    // task: 'assets/icons/task.svg'
+    // timeline: 'assets/icons/timeline.svg',
+    // twitter: 'assets/icons/twitter.svg',
+    // 'user-exception': 'assets/icons/user-exception.svg',
+    'expand-more': 'assets/icons/expand-more.svg',
+    'expand-less': 'assets/icons/expand-less.svg',
+    account: 'assets/icons/account-circle.svg',
+    settings: 'assets/icons/settings.svg',
+    warning: 'assets/icons/material/baseline-warning-24px.svg',
+    'method:101spelen': 'assets/icons/method/101spelen.svg',
+    'method:allesimgrif': 'assets/icons/method/allesimgrif.svg',
+    'method:allesimgriffupdate': 'assets/icons/method/allesimgriffupdate.svg',
+    'method:beaufort': 'assets/icons/method/beaufort.svg',
+    'method:beautemps': 'assets/icons/method/beautemps.svg',
+    'method:boon': 'assets/icons/method/boon.svg',
+    'method:chipsandcookies': 'assets/icons/method/chipsandcookies.svg',
+    'method:cyborg': 'assets/icons/method/cyborg.svg',
+    'method:integraleopdrachten': 'assets/icons/method/integraleopdrachten.svg',
+    'method:interactie': 'assets/icons/method/interactie.svg',
+    'method:isee': 'assets/icons/method/isee.svg',
+    'method:janus': 'assets/icons/method/janus.svg',
+    'method:kapitaal': 'assets/icons/method/kapitaal.svg',
+    'method:leesleerenleef': 'assets/icons/method/leesleerenleef.svg',
+    'method:nando': 'assets/icons/method/nando.svg',
+    'method:opmijkunjerekenen': 'assets/icons/method/opmijkunjerekenen.svg',
+    'method:pleinfeu': 'assets/icons/method/pleinfeu.svg',
+    'method:plugin': 'assets/icons/method/plugin.svg',
+    'method:punktde': 'assets/icons/method/punktde.svg',
+    'method:sherpa': 'assets/icons/method/sherpa.svg',
+    'method:shuffle': 'assets/icons/method/shuffle.svg',
+    'method:shufflethis': 'assets/icons/method/shufflethis.svg',
+    'method:solanum': 'assets/icons/method/solanum.svg',
+    'method:speakup': 'assets/icons/method/speakup.svg',
+    'method:spectrum': 'assets/icons/method/spectrum.svg',
+    'method:surfen': 'assets/icons/method/surfen.svg',
+    'method:topos': 'assets/icons/method/topos.svg',
+    'method:vbtl': 'assets/icons/method/vbtl.svg',
+    'method:viainformatica': 'assets/icons/method/viainformatica.svg'
+  },
+  api: {
+    APIBase: 'https://api.staging.polpo.be'
   },
   features: {
     alerts: {
       enabled: true,
       hasAppBarDropDown: true,
-      appBarPollingInterval: 30000
+      appBarPollingInterval: 3000
     },
     messages: {
-      enabled: true,
-      hasAppBarDropDown: true
+      enabled: false,
+      hasAppBarDropDown: false
     },
     errorManagement: {
-      managedStatusCodes: [500, 401, 404]
+      managedStatusCodes: [500, 401, 404, 0],
+      allowedErrors: [
+        {
+          status: 404,
+          statusText: 'Not Found',
+          urlRegex: 'http.*assets\\/icons.*.svg'
+        }
+      ]
+    }
+  },
+  sso: {
+    facebook: {
+      enabled: true,
+      linkUrl: 'https://api.staging.polpo.be/link/facebook/callback',
+      description: 'Facebook',
+      logoIcon: 'facebook',
+      className: 'button-facebook'
+    },
+    google: {
+      enabled: true,
+      linkUrl: 'https://api.staging.polpo.be/link/google/callback',
+      description: 'Google',
+      logoIcon: 'google',
+      className: 'button-google'
+    },
+    smartschool: {
+      enabled: true,
+      linkUrl: 'https://api.staging.polpo.be/link/smartschool/callback',
+      description: 'Smartschool',
+      logoIcon: 'smartschool:orange',
+      className: 'button-smartschool',
+      maxNumberAllowed: 10
     }
   }
 };

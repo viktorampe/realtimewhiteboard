@@ -44,9 +44,10 @@ export class CampusHttpInterceptor implements HttpInterceptor {
           (!allowedError.name || allowedError.name === error.name) &&
           (!allowedError.statusText ||
             allowedError.statusText === error.statusText) &&
-          (!allowedError.urlRegex || allowedError.urlRegex.test(error.url)) &&
+          (!allowedError.urlRegex ||
+            new RegExp(allowedError.urlRegex, 'i').test(error.url)) &&
           (!allowedError.messageRegex ||
-            allowedError.messageRegex.test(error.message))
+            new RegExp(allowedError.messageRegex, 'i').test(error.message))
         );
       }
     );

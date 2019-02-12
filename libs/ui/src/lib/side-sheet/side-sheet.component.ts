@@ -71,7 +71,7 @@ export class SideSheetComponent implements OnInit, OnDestroy {
    * @memberof SideSheetComponent
    */
   @ContentChild(SideSheetHeaderDirective)
-  private header: SideSheetHeaderDirective;
+  public header: SideSheetHeaderDirective;
 
   /**
    * Whether the component is still rendered.
@@ -87,7 +87,8 @@ export class SideSheetComponent implements OnInit, OnDestroy {
    * @memberof SideSheetComponent
    */
   private xSmallMediaQuery$ = this.breakPointObserver.observe([
-    Breakpoints.XSmall
+    Breakpoints.XSmall,
+    Breakpoints.Small
   ]);
   /**
    * Stream of @media queries matching all breakpoints presets except 'XSmall'.
