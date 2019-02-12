@@ -33,6 +33,7 @@ import {
   LinkedPersonEffects,
   LinkedPersonReducer
 } from './+state/linked-person';
+import { MethodEffects, MethodReducer } from './+state/method';
 import { ResultReducer } from './+state/result';
 import { ResultEffects } from './+state/result/result.effects';
 import {
@@ -91,6 +92,8 @@ import { ExerciseService } from './exercise/exercise.service';
 import { EXERCISE_SERVICE_TOKEN } from './exercise/exercise.service.interface';
 import { LearningAreaService } from './learning-area/learning-area.service';
 import { LEARNINGAREA_SERVICE_TOKEN } from './learning-area/learning-area.service.interface';
+import { MethodService } from './metadata/method.service';
+import { METHOD_SERVICE_TOKEN } from './metadata/method.service.interface';
 import { AuthService } from './persons/auth-service';
 import { AUTH_SERVICE_TOKEN } from './persons/auth-service.interface';
 import {
@@ -128,6 +131,7 @@ interface DalOptions {
     MatSnackBarModule,
     ...getStoreModuleForFeatures([
       LearningAreaReducer,
+      MethodReducer,
       UserContentReducer,
       UnlockedContentReducer,
       StudentContentStatusReducer,
@@ -155,6 +159,7 @@ interface DalOptions {
       EduContentsEffects,
       UiEffects,
       LearningAreasEffects,
+      MethodEffects,
       UserContentsEffects,
       StudentContentStatusesEffects,
       UnlockedBoekeGroupsEffects,
@@ -194,6 +199,7 @@ interface DalOptions {
     },
     { provide: BUNDLE_SERVICE_TOKEN, useClass: BundleService },
     { provide: LEARNINGAREA_SERVICE_TOKEN, useClass: LearningAreaService },
+    { provide: METHOD_SERVICE_TOKEN, useClass: MethodService },
     { provide: BROWSER_STORAGE_SERVICE_TOKEN, useClass: StorageService },
     {
       provide: STUDENT_CONTENT_STATUS_SERVICE_TOKEN,
