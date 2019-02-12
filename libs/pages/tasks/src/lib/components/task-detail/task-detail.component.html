@@ -76,16 +76,19 @@
               [contentTypeClass]="'taak'"
             >
               <campus-button
+                *ngIf="!taskEduContent.submitted; else: taskEduContentSubmitted"
                 circle
-                [iconClass]="
-                  taskEduContent.submitted
-                    ? 'exercise:finished'
-                    : 'exercise:open'
-                "
+                [iconClass]="'exercise:open'"
                 (click)="clickOpenContent(taskEduContent)"
-                [class.submitted]="taskEduContent.submitted"
               ></campus-button>
             </campus-content-thumbnail>
+            <ng-template #taskEduContentSubmitted>
+              <div
+                class="page-task-detail__content-thumbnail__button--disabled"
+              >
+                <mat-icon svgIcon="exercise:finished"></mat-icon>
+              </div>
+            </ng-template>
           </campus-list-view>
         </ng-container>
       </ng-container>

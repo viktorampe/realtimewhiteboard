@@ -134,6 +134,7 @@ $ui-button-padding-bottom: $ui-primary-font-size/2 !default;
   $ui-content-thumbnail-button-margin: 0 !default;
 
   campus-content-thumbnail {
+    .page-task-detail__content-thumbnail__button--disabled,
     .ui-button {
       color: $ui-content-thumbnail-button-color;
       background-color: $ui-content-thumbnail-button-background-color;
