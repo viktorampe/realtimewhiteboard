@@ -13,14 +13,18 @@
         bar__right
         *ngIf="enableAlerts && (alertsLoaded$ | async)"
       >
-        <mat-icon
-          [svgIcon]="'notifications'"
-          [matBadge]="unreadAlertCount$ | async"
-          [matBadgeHidden]="!((unreadAlertCount$ | async) > 0)"
-          matBadgePosition="above before"
-          matBadgeColor="accent"
+        <campus-button
           (click)="dropDownAlerts.toggle()"
-        ></mat-icon>
+          class="shared-header__app-bar__alerts__button"
+        >
+          <mat-icon
+            [svgIcon]="'notifications'"
+            [matBadge]="unreadAlertCount$ | async"
+            [matBadgeHidden]="!((unreadAlertCount$ | async) > 0)"
+            matBadgePosition="above before"
+            matBadgeColor="accent"
+          ></mat-icon>
+        </campus-button>
 
         <campus-dropdown-menu
           #dropDownAlerts
@@ -50,6 +54,8 @@
           <campus-person-badge
             (click)="dropDownProfile.toggle()"
             [person]="user"
+            [subText]="'&#x25BE;'"
+            [showBorder]="false"
             size="small"
           ></campus-person-badge>
         </ng-container>
@@ -72,20 +78,20 @@
     </campus-app-bar>
   </div>
   <div class="shared-header__page-bar">
-    <mat-icon
+    <campus-button
       *ngIf="(backLink$ | async) as link; else: hamburgerMenu"
       [routerLink]="link"
-      class="shared-header__page-bar_nav-icon"
-      [svgIcon]="'arrow-back'"
+      class="shared-header__page-bar__nav-button"
+      [iconClass]="'arrow-back'"
       hide-desktop
-    ></mat-icon>
+    ></campus-button>
     <ng-template #hamburgerMenu>
-      <mat-icon
+      <campus-button
         (click)="onMenuClick()"
-        class="shared-header__page-bar_nav-icon"
-        [svgIcon]="'menu'"
+        class="shared-header__page-bar__nav-button"
+        [iconClass]="'menu'"
         hide-desktop
-      ></mat-icon>
+      ></campus-button>
     </ng-template>
     <div id="page-bar-container"></div>
   </div>
