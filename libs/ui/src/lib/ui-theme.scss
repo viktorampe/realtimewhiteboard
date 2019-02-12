@@ -126,7 +126,7 @@ $ui-button-padding-bottom: $ui-primary-font-size/2 !default;
 }
 
 @mixin ui-icons {
-  mat-icon {
+  svg {
     pointer-events: none; //remove native tooltip
   }
 }

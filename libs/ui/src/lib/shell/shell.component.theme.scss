@@ -36,6 +36,7 @@
   .ui--mobile {
     .ui-shell__top {
       height: $ui-shell__top-height--mobile;
+      min-height: unset;
     }
   }
 }

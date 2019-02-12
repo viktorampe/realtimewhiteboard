@@ -127,7 +127,7 @@ describe('HeaderComponent', () => {
           fixture.detectChanges();
           // this is the menu or arrow-back button
           pageBarNavButton = fixture.debugElement.query(
-            By.css('.shared-header__page-bar_nav-button')
+            By.css('.shared-header__page-bar__nav-button')
           ).nativeElement;
         });
 
@@ -150,7 +150,7 @@ describe('HeaderComponent', () => {
         fixture.detectChanges();
         // this is the menu or arrow-back button
         pageBarNavButton = fixture.debugElement.query(
-          By.css('.shared-header__page-bar_nav-button')
+          By.css('.shared-header__page-bar__nav-button')
         ).nativeElement;
       });
 

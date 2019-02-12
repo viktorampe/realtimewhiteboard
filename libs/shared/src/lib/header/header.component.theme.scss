@@ -28,6 +28,11 @@
       height: $shared-header__page-bar-height;
       background-color: $shared-header__page-bar-background-color;
 
+      &__nav-button {
+        background-color: $shared-header__page-bar-background-color;
+        color: $shared-header__page-bar__element-border-color;
+      }
+
       div.divider {
         margin-left: $shared-header__page-bar__divider-margin-left-right;
         margin-right: $shared-header__page-bar__divider-margin-left-right;

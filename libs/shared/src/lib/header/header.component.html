@@ -77,14 +77,14 @@
     <campus-button
       *ngIf="(backLink$ | async) as link; else: hamburgerMenu"
       [routerLink]="link"
-      class="shared-header__page-bar_nav-button"
+      class="shared-header__page-bar__nav-button"
       [iconClass]="'arrow-back'"
       hide-desktop
     ></campus-button>
     <ng-template #hamburgerMenu>
       <campus-button
         (click)="onMenuClick()"
-        class="shared-header__page-bar_nav-button"
+        class="shared-header__page-bar__nav-button"
         [iconClass]="'menu'"
         hide-desktop
       ></campus-button>
