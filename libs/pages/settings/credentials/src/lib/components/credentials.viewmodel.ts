@@ -3,14 +3,17 @@ import {
   CredentialActions,
   CredentialQueries,
   DalState,
+  EffectFeedback,
+  EffectFeedbackActions,
   PassportUserCredentialInterface,
   PersonInterface,
+  Priority,
   UserQueries
 } from '@campus/dal';
 import { EnvironmentSsoInterface, ENVIRONMENT_SSO_TOKEN } from '@campus/shared';
 import { select, Store } from '@ngrx/store';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 
 export enum CredentialErrors {
   ForbiddenMixedRoles = 'ForbiddenError: mixed_roles',
@@ -30,13 +33,31 @@ export class CredentialsViewModel {
   constructor(
     private store: Store<DalState>,
     @Inject(ENVIRONMENT_SSO_TOKEN)
-    private environmentSso: EnvironmentSsoInterface
+    private environmentSso: EnvironmentSsoInterface,
+    @Inject('uuid') private uuid: Function
   ) {
     this.setSourceStreams();
     this.setPresentationStreams();
   }
 
-  public getErrorMessageFromCode(code: string): Observable<string> {
+  public handleLinkError(code: string): void {
+    const message$ = this.getErrorMessageFromCode(code);
+    message$.pipe(take(1)).subscribe(message =>
+      this.store.dispatch(
+        new EffectFeedbackActions.AddEffectFeedback({
+          effectFeedback: new EffectFeedback({
+            id: this.uuid(),
+            triggerAction: null,
+            message: message,
+            type: 'error',
+            priority: Priority.HIGH
+          })
+        })
+      )
+    );
+  }
+
+  private getErrorMessageFromCode(code: string): Observable<string> {
     return this.currentUser$.pipe(
       map(user => {
         let userTypeString = 'Smartschool-LEERKRACHT';

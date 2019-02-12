@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { CredentialFixture } from '@campus/dal';
 import { ENVIRONMENT_ICON_MAPPING_TOKEN, SharedModule } from '@campus/shared';
-import { MockActivatedRoute, MockMatIconRegistry } from '@campus/testing';
+import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { CredentialsComponent } from './credentials.component';
 import {
@@ -24,6 +24,8 @@ describe('CredentialsComponent', () => {
   let fixture: ComponentFixture<CredentialsComponent>;
   let cred1: CredentialFixture;
   let viewmodel: CredentialsViewModel;
+  let mockActivatedRoute: ActivatedRoute;
+  const error = 'Foo error message';
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -36,7 +38,13 @@ describe('CredentialsComponent', () => {
         },
         {
           provide: ActivatedRoute,
-          useClass: MockActivatedRoute
+          useValue: {
+            snapshot: {
+              queryParamMap: {
+                get: () => error
+              }
+            }
+          }
         },
         {
           provide: ENVIRONMENT_ICON_MAPPING_TOKEN,
@@ -46,6 +54,7 @@ describe('CredentialsComponent', () => {
       ]
     }).compileComponents();
     viewmodel = TestBed.get(CredentialsViewModel);
+    mockActivatedRoute = TestBed.get(ActivatedRoute);
   }));
 
   beforeEach(() => {
@@ -81,5 +90,34 @@ describe('CredentialsComponent', () => {
     jest.spyOn(viewmodel, 'useProfilePicture');
     component.changeAvatar(cred1);
     expect(viewmodel.useProfilePicture).toHaveBeenCalledWith(cred1);
+  });
+
+  describe('error handling', () => {
+    let handleLinkErrorSpy: jest.SpyInstance;
+
+    beforeEach(() => {
+      handleLinkErrorSpy = jest.spyOn(viewmodel, 'handleLinkError');
+    });
+
+    it('should call getError() onInit', () => {
+      const getErrorSpy = jest.spyOn(component, 'getError');
+
+      component.ngOnInit();
+
+      expect(getErrorSpy).toHaveBeenCalledTimes(1);
+    });
+    it('should not call viewmodel.handleLinkError when there is no error in the query string', () => {
+      mockActivatedRoute.snapshot.queryParamMap.get = () => null;
+
+      component.getError();
+
+      expect(handleLinkErrorSpy).not.toHaveBeenCalled();
+    });
+    it('should call viewmodel.handleLinkError when there is an error in the query string', () => {
+      component.getError();
+
+      expect(handleLinkErrorSpy).toHaveBeenCalledTimes(1);
+      expect(handleLinkErrorSpy).toHaveBeenCalledWith(error);
+    });
   });
 });
