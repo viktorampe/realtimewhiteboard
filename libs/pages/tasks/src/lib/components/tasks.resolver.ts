@@ -7,6 +7,8 @@ import {
   EduContentQueries,
   LearningAreaActions,
   LearningAreaQueries,
+  MethodActions,
+  MethodQueries,
   StateResolver,
   TaskActions,
   TaskEduContentActions,
@@ -30,6 +32,7 @@ export class TasksResolver extends StateResolver {
   protected getLoadableActions(): Action[] {
     return [
       new LearningAreaActions.LoadLearningAreas(),
+      new MethodActions.LoadMethods(),
       new EduContentActions.LoadEduContents({
         userId: this.authService.userId
       }),
@@ -46,6 +49,7 @@ export class TasksResolver extends StateResolver {
   protected getResolvedQueries(): Selector<object, boolean>[] {
     return [
       LearningAreaQueries.getLoaded,
+      MethodQueries.getLoaded,
       EduContentQueries.getLoaded,
       TaskQueries.getLoaded,
       TaskInstanceQueries.getLoaded,

@@ -25,7 +25,7 @@
     ></campus-file-extension>
   </figure>
   <div class="ui-content-thumbnail__title">
-    <div>{{ title }}</div>
+    <div>{{ title }}</div> <div *ngIf="learningArea">{{ learningArea }}</div>
   </div>
   <div class="ui-content-thumbnail__footer"> <ng-content></ng-content> </div>
 </div>

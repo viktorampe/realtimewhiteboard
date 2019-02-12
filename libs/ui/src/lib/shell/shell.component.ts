@@ -51,7 +51,7 @@ export class ShellComponent implements OnInit, OnDestroy {
    * Stream of @media queries matching 'XSmall' breakpoint preset.
    */
   private xSmallMediaQuery$ = this.breakPointObserver
-    .observe([Breakpoints.XSmall])
+    .observe([Breakpoints.XSmall, Breakpoints.Small])
     .pipe(shareReplay(1));
 
   @Input()
@@ -96,7 +96,7 @@ export class ShellComponent implements OnInit, OnDestroy {
       });
   }
 
-  protected get inXSmall$(): Observable<Boolean> {
+  public get inXSmall$(): Observable<Boolean> {
     return this.xSmallMediaQuery$.pipe(map(result => result.matches));
   }
 

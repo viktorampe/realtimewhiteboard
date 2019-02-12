@@ -24,7 +24,7 @@ import {
   styleUrls: ['./bundles.component.scss']
 })
 export class BundlesComponent implements OnInit {
-  protected listFormat = ListFormat;
+  listFormat = ListFormat;
 
   listFormat$: Observable<ListFormat>;
 

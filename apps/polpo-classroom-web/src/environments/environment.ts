@@ -232,6 +232,9 @@ export const environment: EnvironmentInterface = {
   logout: {
     url: 'http://student.polpo.localhost:3014/dev'
   },
+  login: {
+    url: 'http://student.polpo.localhost:3014/dev'
+  },
   api: {
     APIBase: 'http://api.polpo.localhost:3000'
   },
