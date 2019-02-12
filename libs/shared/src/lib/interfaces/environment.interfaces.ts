@@ -43,6 +43,8 @@ export interface EnvironmentErrorManagementFeatureAllowedErrorInterface {
 
 export interface EnvironmentWebsiteInterface {
   url: string;
+  title: string;
+  favicon: string;
 }
 
 export interface EnvironmentLogoutInterface {
