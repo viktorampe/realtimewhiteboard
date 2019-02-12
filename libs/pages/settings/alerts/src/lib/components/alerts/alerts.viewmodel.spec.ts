@@ -46,14 +46,14 @@ describe('alertViewmodel', () => {
       const mockAlert = new AlertFixture({
         message: "Look at me! I'm an alert."
       });
+
       beforeEach(() => {
         store.dispatch(
           new AlertActions.AlertsLoaded({ alerts: [mockAlert], timeStamp: 1 })
         );
       });
 
-      xit('should return the alerts', () => {
-        //TODO -- should be fixed and updated once the implementation of the NotificationIntrface is done  https://github.com/diekeure/campus/issues/510
+      it('should return the alerts', () => {
         expect(alertsViewModel.alerts$).toBeObservable(
           hot('a', { a: [mockAlert] })
         );
