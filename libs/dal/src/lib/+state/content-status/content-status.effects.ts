@@ -2,11 +2,11 @@ import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { map } from 'rxjs/operators';
-import { DalState } from '..';
 import {
   StudentContentStatusServiceInterface,
   STUDENT_CONTENT_STATUS_SERVICE_TOKEN
 } from '../../student-content-status/student-content-status.service.interface';
+import { DalState } from '../dal.state.interface';
 import {
   ContentStatusesActionTypes,
   ContentStatusesLoaded,

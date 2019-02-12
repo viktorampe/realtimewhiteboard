@@ -11,6 +11,8 @@ import {
   EduContentQueries,
   LearningAreaActions,
   LearningAreaQueries,
+  MethodActions,
+  MethodQueries,
   StateResolver,
   StudentContentStatusActions,
   StudentContentStatusQueries,
@@ -38,6 +40,7 @@ export class BundlesResolver extends StateResolver {
   protected getLoadableActions(): Action[] {
     return [
       new LearningAreaActions.LoadLearningAreas(),
+      new MethodActions.LoadMethods(),
       new ContentStatusActions.LoadContentStatuses(),
       new StudentContentStatusActions.LoadStudentContentStatuses({
         studentId: this.authService.userId
@@ -64,6 +67,7 @@ export class BundlesResolver extends StateResolver {
   protected getResolvedQueries(): Selector<object, boolean>[] {
     return [
       LearningAreaQueries.getLoaded,
+      MethodQueries.getLoaded,
       ContentStatusQueries.getLoaded,
       StudentContentStatusQueries.getLoaded,
       BundleQueries.getLoaded,
