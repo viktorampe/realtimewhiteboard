@@ -4,15 +4,18 @@ import {
   CredentialFixture,
   CredentialReducer,
   DalState,
+  EffectFeedback,
+  EffectFeedbackActions,
   getStoreModuleForFeatures,
   PersonFixture,
+  Priority,
   UserActions,
   UserReducer
 } from '@campus/dal';
 import { EnvironmentSsoInterface, ENVIRONMENT_SSO_TOKEN } from '@campus/shared';
-import { Store, StoreModule } from '@ngrx/store';
+import { MockDate } from '@campus/testing';
+import { Action, Store, StoreModule } from '@ngrx/store';
 import { hot } from 'jasmine-marbles';
-import { merge } from 'rxjs';
 import {
   CredentialErrors,
   CredentialsViewModel,
@@ -21,6 +24,7 @@ import {
 
 let credentialsViewModel: CredentialsViewModel;
 let store: Store<DalState>;
+let uuid: Function;
 
 const environmentSsoSettings: EnvironmentSsoInterface = {
   google: { description: 'Hoehel', linkUrl: '', enabled: true },
@@ -64,6 +68,7 @@ describe('CredentialsViewModel', () => {
 
     credentialsViewModel = TestBed.get(CredentialsViewModel);
     store = TestBed.get(Store);
+    uuid = TestBed.get('uuid');
   });
 
   describe('creation', () => {
@@ -263,56 +268,81 @@ describe('CredentialsViewModel', () => {
       });
     });
 
-    it('should return the correct error message for teacher', () => {
-      const mockUser = new PersonFixture();
-      store.dispatch(new UserActions.UserLoaded(mockUser));
+    describe('handleLinkError', () => {
+      let mockDate: MockDate;
+      let effectFeedback: EffectFeedback;
+      let addEffectFeedbackAction: Action;
 
-      const message$ = merge(
-        credentialsViewModel.getErrorMessageFromCode(
+      beforeEach(() => {
+        mockDate = new MockDate();
+        effectFeedback = new EffectFeedback({
+          id: uuid(),
+          timeStamp: mockDate.mockDate.getTime(),
+          triggerAction: null,
+          message: '',
+          type: 'error',
+          priority: Priority.HIGH
+        });
+
+        addEffectFeedbackAction = new EffectFeedbackActions.AddEffectFeedback({
+          effectFeedback
+        });
+      });
+
+      it('should add feedback to the store', () => {
+        checkFeedback(
+          'teacher',
+          'Dit account werd al aan een ander profiel gekoppeld.',
           CredentialErrors.AlreadyLinked
-        ),
-        credentialsViewModel.getErrorMessageFromCode(
+        );
+
+        checkFeedback(
+          'teacher',
+          'Je kan enkel een Smartschool-LEERKRACHT profiel koppelen aan dit POLPO-profiel.',
           CredentialErrors.ForbiddenInvalidRoles
-        ),
-        credentialsViewModel.getErrorMessageFromCode(
+        );
+        checkFeedback(
+          'teacher',
+          'Je kan enkel een Smartschool-LEERKRACHT profiel koppelen aan dit POLPO-profiel.',
           CredentialErrors.ForbiddenMixedRoles
-        )
-      );
-      expect(message$).toBeObservable(
-        hot('(abc)', {
-          a: 'Dit account werd al aan een ander profiel gekoppeld.',
-          b:
-            'Je kan enkel een Smartschool-LEERKRACHT profiel koppelen aan dit POLPO-profiel.',
-          c:
-            'Je kan enkel een Smartschool-LEERKRACHT profiel koppelen aan dit POLPO-profiel.'
-        })
-      );
-    });
-
-    it('should return the correct error message for student', () => {
-      const mockUser = new PersonFixture({ type: 'student' });
-      store.dispatch(new UserActions.UserLoaded(mockUser));
-
-      const message$ = merge(
-        credentialsViewModel.getErrorMessageFromCode(
+        );
+        checkFeedback(
+          'student',
+          'Dit account werd al aan een ander profiel gekoppeld.',
           CredentialErrors.AlreadyLinked
-        ),
-        credentialsViewModel.getErrorMessageFromCode(
-          CredentialErrors.ForbiddenInvalidRoles
-        ),
-        credentialsViewModel.getErrorMessageFromCode(
+        );
+        checkFeedback(
+          'student',
+          'Je kan enkel een Smartschool-LEERLING profiel koppelen aan dit POLPO-profiel.',
           CredentialErrors.ForbiddenMixedRoles
-        )
-      );
-      expect(message$).toBeObservable(
-        hot('(abc)', {
-          a: 'Dit account werd al aan een ander profiel gekoppeld.',
-          b:
-            'Je kan enkel een Smartschool-LEERLING profiel koppelen aan dit POLPO-profiel.',
-          c:
-            'Je kan enkel een Smartschool-LEERLING profiel koppelen aan dit POLPO-profiel.'
-        })
-      );
+        );
+        checkFeedback(
+          'student',
+          'Je kan enkel een Smartschool-LEERLING profiel koppelen aan dit POLPO-profiel.',
+          CredentialErrors.ForbiddenInvalidRoles
+        );
+      });
+
+      function checkFeedback(
+        userType: 'student' | 'teacher',
+        feedbackMessage: string,
+        queryParamError: CredentialErrors
+      ) {
+        const mockUser = new PersonFixture({ type: userType });
+        store.dispatch(new UserActions.UserLoaded(mockUser));
+
+        const dispatchSpy = jest.spyOn(store, 'dispatch');
+
+        effectFeedback.message = feedbackMessage;
+
+        credentialsViewModel.handleLinkError(queryParamError);
+
+        expect(dispatchSpy).toHaveBeenCalledTimes(1);
+        expect(dispatchSpy).toHaveBeenCalledWith(addEffectFeedbackAction);
+
+        dispatchSpy.mockReset();
+        dispatchSpy.mockRestore();
+      }
     });
   });
 });
