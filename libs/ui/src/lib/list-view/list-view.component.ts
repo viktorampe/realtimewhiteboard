@@ -170,7 +170,7 @@ export class ListViewItemDirective<dataObjectType>
     return this.parentList.useItemSelectableOverlayStyle$.value;
   }
 
-  @HostBinding('class.ui-list-view__list__item__notselectable')
+  @HostBinding('class.ui-list-view__list__item--notselectable')
   get isNotSelectableClass() {
     return !this.selectable;
   }
