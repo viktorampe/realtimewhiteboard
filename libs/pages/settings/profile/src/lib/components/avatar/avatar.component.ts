@@ -39,6 +39,9 @@ export class AvatarComponent implements OnInit {
   selectFileListener(event: Event): void {
     const el = event.target as HTMLInputElement;
     const file: File = el.files[0];
+    if (!file) {
+      return;
+    }
     this.loadImage(file);
 
     el.value = ''; // clear selected file from input
@@ -58,8 +61,8 @@ export class AvatarComponent implements OnInit {
   }
 
   loadImage(file: File): void {
-    this.fileReaderService.reset();
     if (!this.fileReaderService.isFileTypeAllowed(file)) {
+      this.fileReaderService.reset();
       return;
     }
 
