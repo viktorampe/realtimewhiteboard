@@ -61,8 +61,8 @@ export class AvatarComponent implements OnInit {
   }
 
   loadImage(file: File): void {
+    this.fileReaderService.reset();
     if (!this.fileReaderService.isFileTypeAllowed(file)) {
-      this.fileReaderService.reset();
       return;
     }
 
