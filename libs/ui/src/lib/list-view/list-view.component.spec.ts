@@ -348,7 +348,7 @@ describe('ListItemDirective', () => {
     fixture.detectChanges();
 
     expect(compDE.nativeElement.classList).toContain(
-      'ui-list-view__list__item__notselectable'
+      'ui-list-view__list__item--notselectable'
     );
   });
 
