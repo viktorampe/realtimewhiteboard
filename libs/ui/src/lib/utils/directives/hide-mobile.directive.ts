@@ -20,7 +20,7 @@ export class HideMobileDirective implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscriptions.add(
       this.breakPointObserver
-        .observe([Breakpoints.XSmall])
+        .observe([Breakpoints.XSmall, Breakpoints.Small])
         .pipe(map(result => result.matches))
         .subscribe(result => {
           this.isMobile = result;

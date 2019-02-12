@@ -40,7 +40,7 @@ export class BundleDetailComponent
     OnDestroy,
     AfterViewInit,
     FilterableItem<UnlockedContent[], UnlockedContent> {
-  protected listFormat = ListFormat; //enum beschikbaar maken in template
+  listFormat = ListFormat; //enum beschikbaar maken in template
 
   listFormat$: Observable<ListFormat> = this.bundlesViewModel.listFormat$;
 

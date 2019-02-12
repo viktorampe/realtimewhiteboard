@@ -22,7 +22,7 @@ describe('HeaderComponent', () => {
   let fixture: ComponentFixture<HeaderComponent>;
   let headerViewModel: MockHeaderViewModel;
   const breakpointStream: Subject<{ matches: boolean }> = new Subject();
-  let pageBarNavIcon: HTMLElement;
+  let pageBarNavButton: HTMLElement;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [UiModule, RouterTestingModule, MatIconModule, MatBadgeModule],
@@ -125,20 +125,20 @@ describe('HeaderComponent', () => {
           headerViewModel.backLink$.next(undefined);
 
           fixture.detectChanges();
-          // this is the menu or arrow-back icon
-          pageBarNavIcon = fixture.debugElement.query(
-            By.css('.shared-header__page-bar_nav-icon')
+          // this is the menu or arrow-back button
+          pageBarNavButton = fixture.debugElement.query(
+            By.css('.shared-header__page-bar__nav-button')
           ).nativeElement;
         });
 
         it('should show the menu button', () => {
-          expect(pageBarNavIcon.getAttribute('ng-reflect-svg-icon')).toBe(
+          expect(pageBarNavButton.getAttribute('ng-reflect-icon-class')).toBe(
             'menu'
           );
         });
         it('should toggle the side nav', () => {
           const toggleSideNavSpy = jest.spyOn(headerViewModel, 'toggleSideNav');
-          pageBarNavIcon.click();
+          pageBarNavButton.click();
           expect(toggleSideNavSpy).toHaveBeenCalledTimes(1);
         });
       });
@@ -148,19 +148,19 @@ describe('HeaderComponent', () => {
       beforeEach(() => {
         headerViewModel.backLink$.next(backLink);
         fixture.detectChanges();
-        // this is the menu or arrow-back icon
-        pageBarNavIcon = fixture.debugElement.query(
-          By.css('.shared-header__page-bar_nav-icon')
+        // this is the menu or arrow-back button
+        pageBarNavButton = fixture.debugElement.query(
+          By.css('.shared-header__page-bar__nav-button')
         ).nativeElement;
       });
 
       it('should show a back button', () => {
-        expect(pageBarNavIcon.getAttribute('ng-reflect-svg-icon')).toBe(
+        expect(pageBarNavButton.getAttribute('ng-reflect-icon-class')).toBe(
           'arrow-back'
         );
       });
       it('should have the correct back link', () => {
-        expect(pageBarNavIcon.getAttribute('ng-reflect-router-link')).toBe(
+        expect(pageBarNavButton.getAttribute('ng-reflect-router-link')).toBe(
           backLink
         );
       });

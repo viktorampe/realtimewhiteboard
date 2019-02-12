@@ -24,7 +24,7 @@ export class LearningAreasComponent
       LearningAreasWithBundlesInfoInterface,
       LearningAreaInfoInterface
     > {
-  protected listFormat = ListFormat;
+  listFormat = ListFormat;
 
   listFormat$: Observable<ListFormat>;
   sharedInfo$: Observable<LearningAreasWithBundlesInfoInterface>;
