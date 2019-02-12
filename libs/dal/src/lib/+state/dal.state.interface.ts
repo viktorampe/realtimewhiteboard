@@ -7,6 +7,7 @@ import {
   EduContentReducer,
   LearningAreaReducer,
   LinkedPersonReducer,
+  MethodReducer,
   ResultReducer,
   StudentContentStatusReducer,
   TaskEduContentReducer,
@@ -42,4 +43,5 @@ export interface DalState {
   linkedPersons: LinkedPersonReducer.State;
   teacherStudents: TeacherStudentReducer.State;
   credentials: CredentialReducer.State;
+  methods: MethodReducer.State;
 }
