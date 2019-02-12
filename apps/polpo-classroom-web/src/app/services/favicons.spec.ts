@@ -26,9 +26,7 @@ describe('FavIconService', () => {
   });
 
   it('should call relevant functions when resetFavicon Called', () => {
-    const setSpy = jest.spyOn(browserFaviconService, 'setNode');
     const removeSpy = jest.spyOn(browserFaviconService, 'removeNode');
-    const addSpy = jest.spyOn(browserFaviconService, 'addNode');
     browserFaviconService.resetFavicon();
     expect(removeSpy).toHaveBeenCalled();
   });
