@@ -1,5 +1,4 @@
 import { Action } from '@ngrx/store';
-import uuid = require('uuid');
 
 export enum Priority {
   LOW = 1,

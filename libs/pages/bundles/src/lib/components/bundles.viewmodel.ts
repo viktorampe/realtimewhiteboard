@@ -5,6 +5,7 @@ import {
   AUTH_SERVICE_TOKEN,
   BundleInterface,
   BundleQueries,
+  ContentInterface,
   ContentStatusLabel,
   ContentStatusQueries,
   DalState,
@@ -152,6 +153,10 @@ export class BundlesViewModel {
       }
     }
     this.openStaticContentService.open(unlockedContent.content);
+  }
+
+  openBook(content: ContentInterface): void {
+    this.openStaticContentService.open(content);
   }
 
   public getStudentContentStatusByUnlockedContentId(

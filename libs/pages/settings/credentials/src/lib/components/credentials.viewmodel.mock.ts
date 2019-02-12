@@ -54,6 +54,8 @@ export class MockCredentialsViewModel
     return of('whatever');
   }
 
+  public handleLinkError(error: string): void {}
+
   public useProfilePicture(credential: PassportUserCredentialInterface): void {}
   public linkCredential(provider: SingleSignOnProviderInterface): void {}
   public unlinkCredential(credential: PassportUserCredentialInterface): void {}

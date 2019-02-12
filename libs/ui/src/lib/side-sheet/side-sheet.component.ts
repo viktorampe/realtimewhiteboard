@@ -71,7 +71,7 @@ export class SideSheetComponent implements OnInit, OnDestroy {
    * @memberof SideSheetComponent
    */
   @ContentChild(SideSheetHeaderDirective)
-  private header: SideSheetHeaderDirective;
+  public header: SideSheetHeaderDirective;
 
   /**
    * Whether the component is still rendered.

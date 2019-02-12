@@ -11,7 +11,7 @@ import { BooksViewModel } from '../books.viewmodel';
   styleUrls: ['./books.component.scss']
 })
 export class BooksComponent implements OnInit {
-  protected listFormat = ListFormat;
+  listFormat = ListFormat;
   listFormat$: Observable<ListFormat> = this.viewModel.listFormat$;
   books$: Observable<EduContent[]>;
 

@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { LearningAreaInterface } from '@campus/dal';
+import { ContentInterface, LearningAreaInterface } from '@campus/dal';
 import { FilterTextInputComponent, ListFormat } from '@campus/ui';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { Observable } from 'rxjs';
@@ -24,7 +24,7 @@ import {
   styleUrls: ['./bundles.component.scss']
 })
 export class BundlesComponent implements OnInit {
-  protected listFormat = ListFormat;
+  listFormat = ListFormat;
 
   listFormat$: Observable<ListFormat>;
 
@@ -55,6 +55,10 @@ export class BundlesComponent implements OnInit {
 
   clickChangeListFormat(value: ListFormat): void {
     this.bundlesViewModel.changeListFormat(value);
+  }
+
+  openBook(book: ContentInterface) {
+    this.bundlesViewModel.openBook(book);
   }
 
   private getLearningArea(): Observable<LearningAreaInterface> {

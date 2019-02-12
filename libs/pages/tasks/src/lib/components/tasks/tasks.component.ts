@@ -16,7 +16,7 @@ import {
   styleUrls: ['./tasks.component.scss']
 })
 export class TasksComponent implements OnInit {
-  protected listFormat = ListFormat;
+  listFormat = ListFormat;
   listFormat$: Observable<ListFormat> = this.viewModel.listFormat$;
 
   taskInstances$: Observable<TasksWithInfoInterface>;
