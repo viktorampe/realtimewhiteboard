@@ -14,7 +14,7 @@ import {
   styleUrls: ['./tasks-area.component.scss']
 })
 export class TasksAreaComponent implements OnInit {
-  protected listFormat = ListFormat;
+  listFormat = ListFormat;
   listFormat$: Observable<ListFormat>;
   learningAreasWithInfo$: Observable<LearningAreasWithTaskInfoInterface>;
 
