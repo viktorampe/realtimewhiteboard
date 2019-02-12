@@ -1,4 +1,3 @@
-import { ObjectPathService, ObjectPathServiceInterface } from '@campus/utils';
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { EduContentInterface } from '../../+models';
 import {
@@ -39,13 +38,25 @@ export function sortEduContent(
 
   function getTitle(eduContent: EduContentInterface): string {
     const defaultValue = '' as string;
-    return eduContent.publishedEduContentMetadata.title;
+    return (
+      (eduContent.publishedEduContentMetadata &&
+        eduContent.publishedEduContentMetadata.title) ||
+      defaultValue
+    ).toLowerCase();
   }
 
   function getYear(eduContent: EduContentInterface): number {
     const defaultValue = '0' as string;
-    // tslint:disable-next-line
-    return eduContent.eduContentMetadata.years[0].name;
+
+    const year =
+      eduContent.eduContentMetadata &&
+      // @ts-ignore: Property 'years' does not exist on type 'EduContentMetadataInterface[]'
+      eduContent.eduContentMetadata.years &&
+      // @ts-ignore: Property 'years' does not exist on type 'EduContentMetadataInterface[]'
+      eduContent.eduContentMetadata.years[0] &&
+      // @ts-ignore: Property 'years' does not exist on type 'EduContentMetadataInterface[]'
+      eduContent.eduContentMetadata.years[0].name;
+    return year || defaultValue;
   }
 }
 
