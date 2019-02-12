@@ -4,6 +4,7 @@ import {
   CanActivate,
   RouterStateSnapshot
 } from '@angular/router';
+import { WINDOW } from '@campus/browser';
 import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
@@ -25,14 +26,15 @@ export class AuthenticationGuard implements CanActivate {
     private store: Store<DalState>,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     @Inject(ENVIRONMENT_LOGIN_TOKEN)
-    public environmentLogin: EnvironmentLoginInterface
+    public environmentLogin: EnvironmentLoginInterface,
+    @Inject(WINDOW) private window: Window
   ) {}
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
     if (!this.authService.isLoggedIn()) {
-      window.location.href = this.environmentLogin.url;
+      this.window.location.assign(this.environmentLogin.url);
       return false;
     }
     this.store.dispatch(new UserActions.LoadUser({}));
