@@ -5,10 +5,12 @@
     flex-wrap: nowrap;
     align-items: center;
     padding-left: 10px;
-    &_nav-icon {
+
+    &__nav-button {
       margin-right: 10px;
       cursor: pointer;
     }
+
     #page-bar-container {
       display: flex;
       align-items: center;
