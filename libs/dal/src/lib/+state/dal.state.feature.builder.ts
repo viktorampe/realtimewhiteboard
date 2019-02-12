@@ -45,7 +45,7 @@ export function getModuleWithForFeatureProviders(
   });
 }
 
-function getReducerNamespaceInterfaces(
+export function getReducerNamespaceInterfaces(
   reducerNamespaces: any[]
 ): ReducerNamespaceInterface[] {
   return reducerNamespaces.map((reducer, index) => {
@@ -61,7 +61,7 @@ function getReducerNamespaceInterfaces(
   });
 }
 
-function throwMissingReducerProperty(property: string, index: number) {
+export function throwMissingReducerProperty(property: string, index: number) {
   throw Error(
     `The reducer with index ${index} in the provided reducerNameSpaces array is missing property '${property}'`
   );
