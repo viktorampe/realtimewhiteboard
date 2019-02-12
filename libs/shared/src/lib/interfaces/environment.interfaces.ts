@@ -3,6 +3,7 @@ export interface EnvironmentInterface {
   iconMapping: EnvironmentIconMappingInterface;
   website: EnvironmentWebsiteInterface;
   logout: EnvironmentLogoutInterface;
+  login: EnvironmentLoginInterface;
   api: EnvironmentApiInterface;
   features: {
     alerts: EnvironmentAlertsFeatureInterface;
@@ -45,6 +46,10 @@ export interface EnvironmentWebsiteInterface {
 }
 
 export interface EnvironmentLogoutInterface {
+  url: string;
+}
+
+export interface EnvironmentLoginInterface {
   url: string;
 }
 
