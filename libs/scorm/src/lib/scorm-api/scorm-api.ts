@@ -305,7 +305,7 @@ export class ScormApi implements ScormApiInterface {
       if (obj === undefined) {
         throw new Error('cannot set value of property ' + i + ' on undefined');
       }
-      if (/^\d+$/.test(i)) {
+      if (new RegExp('^\\d+$').test(i)) {
         i = parseInt(i, 10);
       }
       if (currentIndex === arr.length - 1) {
