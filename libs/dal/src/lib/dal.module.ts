@@ -13,60 +13,51 @@ import {
   SDKBrowserModule
 } from '@diekeure/polpo-api-angular-sdk';
 import { EffectsModule } from '@ngrx/effects';
-import { AlertReducer, AlertsEffects } from './+state/alert';
-import { BundleReducer, BundlesEffects } from './+state/bundle';
-import { ContentStatusReducer } from './+state/content-status';
-import { ContentStatusesEffects } from './+state/content-status/content-status.effects';
-import { CredentialEffects, CredentialReducer } from './+state/credential';
+import { StoreModule } from '@ngrx/store';
+import { v4 as uuid } from 'uuid';
 import {
+  AlertReducer,
+  AlertsEffects,
+  BundleReducer,
+  BundlesEffects,
+  ContentStatusReducer,
+  CredentialEffects,
+  CredentialReducer,
   CurrentExerciseEffects,
-  CurrentExerciseReducer
-} from './+state/current-exercise';
-import { getStoreModuleForFeatures } from './+state/dal.state.feature.builder';
-import { EduContentReducer, EduContentsEffects } from './+state/edu-content';
-import { EffectFeedbackReducer } from './+state/effect-feedback';
-import {
+  CurrentExerciseReducer,
+  EduContentReducer,
+  EduContentsEffects,
+  EffectFeedbackReducer,
   LearningAreaReducer,
-  LearningAreasEffects
-} from './+state/learning-area';
-import {
+  LearningAreasEffects,
   LinkedPersonEffects,
-  LinkedPersonReducer
-} from './+state/linked-person';
-import { ResultReducer } from './+state/result';
-import { ResultEffects } from './+state/result/result.effects';
-import {
+  LinkedPersonReducer,
+  ResultEffects,
+  ResultReducer,
   StudentContentStatusesEffects,
-  StudentContentStatusReducer
-} from './+state/student-content-status';
-import { TaskEffects, TaskReducer } from './+state/task';
-import {
+  StudentContentStatusReducer,
   TaskEduContentEffects,
-  TaskEduContentReducer
-} from './+state/task-edu-content';
-import {
+  TaskEduContentReducer,
+  TaskEffects,
   TaskInstanceEffects,
-  TaskInstanceReducer
-} from './+state/task-instance';
-import {
+  TaskInstanceReducer,
+  TaskReducer,
   TeacherStudentEffects,
-  TeacherStudentReducer
-} from './+state/teacher-student';
-import { UiEffects, UiReducer } from './+state/ui';
-import {
+  TeacherStudentReducer,
+  UiEffects,
+  UiReducer,
   UnlockedBoekeGroupReducer,
-  UnlockedBoekeGroupsEffects
-} from './+state/unlocked-boeke-group';
-import {
+  UnlockedBoekeGroupsEffects,
   UnlockedBoekeStudentReducer,
-  UnlockedBoekeStudentsEffects
-} from './+state/unlocked-boeke-student';
-import {
+  UnlockedBoekeStudentsEffects,
   UnlockedContentReducer,
-  UnlockedContentsEffects
-} from './+state/unlocked-content';
-import { UserEffects, UserReducer } from './+state/user';
-import { UserContentReducer, UserContentsEffects } from './+state/user-content';
+  UnlockedContentsEffects,
+  UserContentReducer,
+  UserContentsEffects,
+  UserEffects,
+  UserReducer
+} from '..';
+import { ContentStatusesEffects } from './+state/content-status/content-status.effects';
 import { AlertService } from './alert/alert.service';
 import { ALERT_SERVICE_TOKEN } from './alert/alert.service.interface';
 import {
@@ -112,7 +103,6 @@ import { TaskInstanceService } from './tasks/task-instance.service';
 import { TASK_INSTANCE_SERVICE_TOKEN } from './tasks/task-instance.service.interface';
 import { TASK_SERVICE_TOKEN } from './tasks/task.service.interface';
 import { TaskService } from './tasks/tasks.service';
-import uuid = require('uuid');
 
 interface DalOptions {
   apiBaseUrl: string;
@@ -126,29 +116,98 @@ interface DalOptions {
     HttpClientModule,
     ScormModule,
     MatSnackBarModule,
-    ...getStoreModuleForFeatures([
-      LearningAreaReducer,
-      UserContentReducer,
-      UnlockedContentReducer,
-      StudentContentStatusReducer,
-      EduContentReducer,
-      BundleReducer,
-      UiReducer,
-      UnlockedBoekeGroupReducer,
-      UnlockedBoekeStudentReducer,
-      ContentStatusReducer,
-      UserReducer,
-      TaskReducer,
-      AlertReducer,
-      TaskInstanceReducer,
-      TaskEduContentReducer,
-      ResultReducer,
-      CurrentExerciseReducer,
-      TeacherStudentReducer,
-      LinkedPersonReducer,
-      CredentialReducer,
-      EffectFeedbackReducer
-    ]),
+    StoreModule.forFeature('ui', UiReducer.reducer, {
+      initialState: UiReducer.initialState
+    }),
+    StoreModule.forFeature(
+      LearningAreaReducer.NAME,
+      LearningAreaReducer.reducer,
+      { initialState: LearningAreaReducer.initialState }
+    ),
+    StoreModule.forFeature(
+      UserContentReducer.NAME,
+      UserContentReducer.reducer,
+      { initialState: UserContentReducer.initialState }
+    ),
+    StoreModule.forFeature(
+      UnlockedContentReducer.NAME,
+      UnlockedContentReducer.reducer,
+      { initialState: UnlockedContentReducer.initialState }
+    ),
+    StoreModule.forFeature(
+      StudentContentStatusReducer.NAME,
+      StudentContentStatusReducer.reducer,
+      { initialState: StudentContentStatusReducer.initialState }
+    ),
+    StoreModule.forFeature(EduContentReducer.NAME, EduContentReducer.reducer, {
+      initialState: EduContentReducer.initialState
+    }),
+    StoreModule.forFeature(BundleReducer.NAME, BundleReducer.reducer, {
+      initialState: BundleReducer.initialState
+    }),
+    StoreModule.forFeature(UiReducer.NAME, UiReducer.reducer, {
+      initialState: UiReducer.initialState
+    }),
+    StoreModule.forFeature(
+      UnlockedBoekeGroupReducer.NAME,
+      UnlockedBoekeGroupReducer.reducer,
+      { initialState: UnlockedBoekeGroupReducer.initialState }
+    ),
+    StoreModule.forFeature(
+      UnlockedBoekeStudentReducer.NAME,
+      UnlockedBoekeStudentReducer.reducer,
+      { initialState: UnlockedBoekeStudentReducer.initialState }
+    ),
+    StoreModule.forFeature(
+      ContentStatusReducer.NAME,
+      ContentStatusReducer.reducer,
+      { initialState: ContentStatusReducer.initialState }
+    ),
+    StoreModule.forFeature(UserReducer.NAME, UserReducer.reducer, {
+      initialState: UserReducer.initialState
+    }),
+    StoreModule.forFeature(TaskReducer.NAME, TaskReducer.reducer, {
+      initialState: TaskReducer.initialState
+    }),
+    StoreModule.forFeature(AlertReducer.NAME, AlertReducer.reducer, {
+      initialState: AlertReducer.initialState
+    }),
+    StoreModule.forFeature(
+      TaskInstanceReducer.NAME,
+      TaskInstanceReducer.reducer,
+      { initialState: TaskInstanceReducer.initialState }
+    ),
+    StoreModule.forFeature(
+      TaskEduContentReducer.NAME,
+      TaskEduContentReducer.reducer,
+      { initialState: TaskEduContentReducer.initialState }
+    ),
+    StoreModule.forFeature(ResultReducer.NAME, ResultReducer.reducer, {
+      initialState: ResultReducer.initialState
+    }),
+    StoreModule.forFeature(
+      CurrentExerciseReducer.NAME,
+      CurrentExerciseReducer.reducer,
+      { initialState: CurrentExerciseReducer.initialState }
+    ),
+    StoreModule.forFeature(
+      TeacherStudentReducer.NAME,
+      TeacherStudentReducer.reducer,
+      { initialState: TeacherStudentReducer.initialState }
+    ),
+    StoreModule.forFeature(
+      LinkedPersonReducer.NAME,
+      LinkedPersonReducer.reducer,
+      { initialState: LinkedPersonReducer.initialState }
+    ),
+    StoreModule.forFeature(CredentialReducer.NAME, CredentialReducer.reducer, {
+      initialState: CredentialReducer.initialState
+    }),
+    StoreModule.forFeature(
+      EffectFeedbackReducer.NAME,
+      EffectFeedbackReducer.reducer,
+      { initialState: EffectFeedbackReducer.initialState }
+    ),
     EffectsModule.forFeature([
       BundlesEffects,
       UserEffects,
@@ -220,10 +279,21 @@ interface DalOptions {
 export class DalModule {
   constructor() {}
   static forRoot(options: DalOptions): ModuleWithProviders {
-    LoopBackConfig.setBaseURL(options.apiBaseUrl);
-    LoopBackConfig.setRequestOptionsCredentials(true);
     return {
-      ngModule: DalModule
+      ngModule: DalModule,
+      providers: [
+        { provide: 'DAL_OPTIONS', useValue: options },
+        {
+          provide: 'LoopbackSettingsService',
+          useFactory: loopbackSettings,
+          deps: ['DAL_OPTIONS']
+        }
+      ]
     };
   }
+}
+
+export function loopbackSettings(DAL_OPTIONS) {
+  LoopBackConfig.setBaseURL(DAL_OPTIONS.apiBaseUrl);
+  LoopBackConfig.setRequestOptionsCredentials(true);
 }
