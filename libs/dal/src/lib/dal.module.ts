@@ -15,50 +15,59 @@ import {
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { v4 as uuid } from 'uuid';
-import {
-  AlertReducer,
-  AlertsEffects,
-  BundleReducer,
-  BundlesEffects,
-  ContentStatusReducer,
-  CredentialEffects,
-  CredentialReducer,
-  CurrentExerciseEffects,
-  CurrentExerciseReducer,
-  EduContentReducer,
-  EduContentsEffects,
-  EffectFeedbackReducer,
-  LearningAreaReducer,
-  LearningAreasEffects,
-  LinkedPersonEffects,
-  LinkedPersonReducer,
-  ResultEffects,
-  ResultReducer,
-  StudentContentStatusesEffects,
-  StudentContentStatusReducer,
-  TaskEduContentEffects,
-  TaskEduContentReducer,
-  TaskEffects,
-  TaskInstanceEffects,
-  TaskInstanceReducer,
-  TaskReducer,
-  TeacherStudentEffects,
-  TeacherStudentReducer,
-  UiEffects,
-  UiReducer,
-  UnlockedBoekeGroupReducer,
-  UnlockedBoekeGroupsEffects,
-  UnlockedBoekeStudentReducer,
-  UnlockedBoekeStudentsEffects,
-  UnlockedContentReducer,
-  UnlockedContentsEffects,
-  UserContentReducer,
-  UserContentsEffects,
-  UserEffects,
-  UserReducer
-} from '..';
+import { AlertReducer, AlertsEffects } from './+state/alert';
+import { BundleReducer, BundlesEffects } from './+state/bundle';
+import { ContentStatusReducer } from './+state/content-status';
 import { ContentStatusesEffects } from './+state/content-status/content-status.effects';
+import { CredentialEffects, CredentialReducer } from './+state/credential';
+import {
+  CurrentExerciseEffects,
+  CurrentExerciseReducer
+} from './+state/current-exercise';
+import { EduContentReducer, EduContentsEffects } from './+state/edu-content';
+import { EffectFeedbackReducer } from './+state/effect-feedback';
+import {
+  LearningAreaReducer,
+  LearningAreasEffects
+} from './+state/learning-area';
+import {
+  LinkedPersonEffects,
+  LinkedPersonReducer
+} from './+state/linked-person';
 import { MethodEffects, MethodReducer } from './+state/method';
+import { ResultEffects, ResultReducer } from './+state/result';
+import {
+  StudentContentStatusesEffects,
+  StudentContentStatusReducer
+} from './+state/student-content-status';
+import { TaskEffects, TaskReducer } from './+state/task';
+import {
+  TaskEduContentEffects,
+  TaskEduContentReducer
+} from './+state/task-edu-content';
+import {
+  TaskInstanceEffects,
+  TaskInstanceReducer
+} from './+state/task-instance';
+import {
+  TeacherStudentEffects,
+  TeacherStudentReducer
+} from './+state/teacher-student';
+import { UiEffects, UiReducer } from './+state/ui';
+import {
+  UnlockedBoekeGroupReducer,
+  UnlockedBoekeGroupsEffects
+} from './+state/unlocked-boeke-group';
+import {
+  UnlockedBoekeStudentReducer,
+  UnlockedBoekeStudentsEffects
+} from './+state/unlocked-boeke-student';
+import {
+  UnlockedContentReducer,
+  UnlockedContentsEffects
+} from './+state/unlocked-content';
+import { UserEffects, UserReducer } from './+state/user';
+import { UserContentReducer, UserContentsEffects } from './+state/user-content';
 import { AlertService } from './alert/alert.service';
 import { ALERT_SERVICE_TOKEN } from './alert/alert.service.interface';
 import {
