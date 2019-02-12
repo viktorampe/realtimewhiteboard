@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { LearningAreaInterface, ResultInterface } from '@campus/dal';
 import { Observable } from 'rxjs';
@@ -12,6 +12,8 @@ import { AssignmentResultInterface } from '../reports.viewmodel.interfaces';
   styleUrls: ['./results-by-person-and-area.component.scss']
 })
 export class ResultsByPersonAndAreaComponent implements OnInit {
+  @ViewChild('header') private header: ElementRef;
+
   //input streams
   private routerParams$: Observable<Params>;
 
@@ -61,5 +63,15 @@ export class ResultsByPersonAndAreaComponent implements OnInit {
   //event handlers
   clickOpenContentForReview(result: ResultInterface): void {
     this.reportsViewModel.openContentForReview(result);
+  }
+
+  public onScroll(event: Event) {
+    if (!this.header) return;
+
+    const scrollOptions = {
+      left: event.srcElement.scrollLeft
+    } as ScrollToOptions;
+
+    this.header.nativeElement.scrollTo(scrollOptions);
   }
 }
