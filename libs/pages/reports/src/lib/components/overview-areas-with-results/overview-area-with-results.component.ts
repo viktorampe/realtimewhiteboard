@@ -28,7 +28,7 @@ export class OverviewAreaWithResultsComponent
     LearningAreasWithResultsInterface
   > = this.reportsViewmodel.learningAreasWithResults$;
   listFormat$ = this.reportsViewmodel.listFormat$;
-  protected listFormat = ListFormat;
+  listFormat = ListFormat;
 
   @ViewChild(FilterTextInputComponent)
   filterTextInput: FilterTextInputComponent<

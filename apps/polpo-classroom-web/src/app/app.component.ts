@@ -18,18 +18,18 @@ export class AppComponent {
   /**
    * the link to the promo website, used on the logo
    */
-  protected websiteUrl: string = environment.website.url;
+  public websiteUrl: string = environment.website.url;
 
   constructor(private appViewModel: AppViewModel) {
     this.sideNavOpen$ = appViewModel.sideNavOpen$;
     this.bannerFeedback$ = this.appViewModel.bannerFeedback$;
   }
 
-  protected onSideBarToggle(open: boolean) {
+  public onSideBarToggle(open: boolean) {
     this.appViewModel.toggleSidebar(open);
   }
 
-  protected onBannerDismiss(event) {
+  public onBannerDismiss(event) {
     this.appViewModel.onFeedbackDismiss(event);
   }
 }

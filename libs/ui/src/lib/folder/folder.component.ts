@@ -29,7 +29,7 @@ export class FolderComponent implements ListViewItemInterface {
   @Input() progressDiameterLine? = 32 + 2; // default value of icon in theme + margin*2
   @Input() progressTheme?; // refers to theme-angular-material.css themes
 
-  protected listFormatEnum = ListFormat;
+  public listFormatEnum = ListFormat;
 
   // mat-spinner size is dependent on icon size, which is dependent on list format
   @Input()
