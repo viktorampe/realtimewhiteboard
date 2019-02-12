@@ -58,6 +58,7 @@ import {
   UserReducer
 } from '..';
 import { ContentStatusesEffects } from './+state/content-status/content-status.effects';
+import { MethodReducer } from './+state/method';
 import { AlertService } from './alert/alert.service';
 import { ALERT_SERVICE_TOKEN } from './alert/alert.service.interface';
 import {
@@ -82,6 +83,8 @@ import { ExerciseService } from './exercise/exercise.service';
 import { EXERCISE_SERVICE_TOKEN } from './exercise/exercise.service.interface';
 import { LearningAreaService } from './learning-area/learning-area.service';
 import { LEARNINGAREA_SERVICE_TOKEN } from './learning-area/learning-area.service.interface';
+import { MethodService } from './metadata/method.service';
+import { METHOD_SERVICE_TOKEN } from './metadata/method.service.interface';
 import { AuthService } from './persons/auth-service';
 import { AUTH_SERVICE_TOKEN } from './persons/auth-service.interface';
 import {
@@ -116,14 +119,14 @@ interface DalOptions {
     HttpClientModule,
     ScormModule,
     MatSnackBarModule,
-    StoreModule.forFeature('ui', UiReducer.reducer, {
-      initialState: UiReducer.initialState
-    }),
     StoreModule.forFeature(
       LearningAreaReducer.NAME,
       LearningAreaReducer.reducer,
       { initialState: LearningAreaReducer.initialState }
     ),
+    StoreModule.forFeature(MethodReducer.NAME, MethodReducer.reducer, {
+      initialState: MethodReducer.initialState
+    }),
     StoreModule.forFeature(
       UserContentReducer.NAME,
       UserContentReducer.reducer,
@@ -214,6 +217,7 @@ interface DalOptions {
       EduContentsEffects,
       UiEffects,
       LearningAreasEffects,
+      MethodEffects,
       UserContentsEffects,
       StudentContentStatusesEffects,
       UnlockedBoekeGroupsEffects,
@@ -253,6 +257,7 @@ interface DalOptions {
     },
     { provide: BUNDLE_SERVICE_TOKEN, useClass: BundleService },
     { provide: LEARNINGAREA_SERVICE_TOKEN, useClass: LearningAreaService },
+    { provide: METHOD_SERVICE_TOKEN, useClass: MethodService },
     { provide: BROWSER_STORAGE_SERVICE_TOKEN, useClass: StorageService },
     {
       provide: STUDENT_CONTENT_STATUS_SERVICE_TOKEN,

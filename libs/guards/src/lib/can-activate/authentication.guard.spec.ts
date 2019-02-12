@@ -5,6 +5,7 @@ import {
   RouterStateSnapshot
 } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { WINDOW } from '@campus/browser';
 import {
   AUTH_SERVICE_TOKEN,
   DalState,
@@ -13,6 +14,8 @@ import {
   UserActions,
   UserReducer
 } from '@campus/dal';
+import { ENVIRONMENT_LOGIN_TOKEN } from '@campus/shared';
+import { MockWindow } from '@campus/testing';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from 'jasmine-marbles';
 import { AuthenticationGuard } from '.';
@@ -20,10 +23,11 @@ import { AuthenticationGuard } from '.';
 describe('AuthenticationGuard', () => {
   let authenticationGuard: AuthenticationGuard;
   let isLoggedInMock: boolean;
-  const navigateSpy = jest.fn();
+  let assignSpy: jest.SpyInstance;
   let store: Store<DalState>;
+  let window: Window;
   class MockRouter {
-    navigate = navigateSpy;
+    navigate = assignSpy;
   }
 
   afterEach(() => {
@@ -47,11 +51,23 @@ describe('AuthenticationGuard', () => {
               return isLoggedInMock;
             }
           }
+        },
+        {
+          provide: ENVIRONMENT_LOGIN_TOKEN,
+          useValue: {
+            url: 'some-redirect-url'
+          }
+        },
+        {
+          provide: WINDOW,
+          useClass: MockWindow
         }
       ]
     });
     authenticationGuard = TestBed.get(AuthenticationGuard);
+    window = TestBed.get(WINDOW);
     store = TestBed.get(Store);
+    assignSpy = jest.spyOn(window.location, 'assign');
   });
   it('should redirect to login if there are no credentials present', () => {
     isLoggedInMock = false;
@@ -61,8 +77,8 @@ describe('AuthenticationGuard', () => {
         <RouterStateSnapshot>{}
       )
     ).toBe(false);
-    expect(navigateSpy).toHaveBeenCalledTimes(1);
-    expect(navigateSpy).toHaveBeenCalledWith(['/login']);
+    expect(assignSpy).toHaveBeenCalledTimes(1);
+    expect(assignSpy).toHaveBeenCalledWith('some-redirect-url');
   });
   it('should not return if credentials are present while UserQueries.getLoaded is false', () => {
     isLoggedInMock = true;
@@ -72,7 +88,7 @@ describe('AuthenticationGuard', () => {
         <RouterStateSnapshot>{}
       )
     ).toBeObservable(hot(''));
-    expect(navigateSpy).toHaveBeenCalledTimes(0);
+    expect(assignSpy).toHaveBeenCalledTimes(0);
   });
   it('should return nothing if credentials are present while UserQueries.getLoaded is true but permissionsLoaded is false', () => {
     isLoggedInMock = true;
@@ -83,7 +99,7 @@ describe('AuthenticationGuard', () => {
         <RouterStateSnapshot>{}
       )
     ).toBeObservable(hot(''));
-    expect(navigateSpy).toHaveBeenCalledTimes(0);
+    expect(assignSpy).toHaveBeenCalledTimes(0);
   });
   it('should return true if credentials are present while UserQueries.getLoaded is true and permissionsLoaded is true', () => {
     isLoggedInMock = true;
@@ -95,6 +111,6 @@ describe('AuthenticationGuard', () => {
         <RouterStateSnapshot>{}
       )
     ).toBeObservable(hot('a', { a: true }));
-    expect(navigateSpy).toHaveBeenCalledTimes(0);
+    expect(assignSpy).toHaveBeenCalledTimes(0);
   });
 });
