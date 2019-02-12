@@ -1,5 +1,6 @@
 @mixin shared-header {
   $shared-header__app-bar-height: 45px !default;
+  $shared-header__app-bar-color: $shared-color-1 !default;
   $shared-header__page-bar-height: 60px !default;
   $shared-header__page-bar-background-color: $shared-bg-color-1 !default;
   $shared-header__page-bar__divider-background-color: $shared-element-border-color-1 !default;
@@ -30,7 +31,12 @@
 
       &__nav-button {
         background-color: $shared-header__page-bar-background-color;
-        color: $shared-header__page-bar__element-border-color;
+        color: $shared-color-1;
+
+        &:hover {
+          color: lighten($shared-color-1, 10%);
+          background-color: $shared-header__page-bar-background-color;
+        }
       }
 
       div.divider {
@@ -65,14 +71,23 @@
       display: flex;
       margin-right: $shared-header__page-bar__divider-margin-left-right;
 
-      mat-icon {
-        cursor: pointer;
+      &__button {
+        background-color: $ui-app-bar-background-color;
+        color: $shared-color-1;
+
+        &:hover {
+          color: lighten($shared-color-1, 10%);
+        }
       }
     }
 
     .shared-header__app-bar__profile-menu {
       display: flex;
       cursor: pointer;
+
+      &:hover {
+        color: lighten($shared-color-1, 10%);
+      }
     }
 
     .mat-badge {

@@ -13,14 +13,18 @@
         bar__right
         *ngIf="enableAlerts && (alertsLoaded$ | async)"
       >
-        <mat-icon
-          [svgIcon]="'notifications'"
-          [matBadge]="unreadAlertCount$ | async"
-          [matBadgeHidden]="!((unreadAlertCount$ | async) > 0)"
-          matBadgePosition="above before"
-          matBadgeColor="accent"
+        <campus-button
           (click)="dropDownAlerts.toggle()"
-        ></mat-icon>
+          class="shared-header__app-bar__alerts__button"
+        >
+          <mat-icon
+            [svgIcon]="'notifications'"
+            [matBadge]="unreadAlertCount$ | async"
+            [matBadgeHidden]="!((unreadAlertCount$ | async) > 0)"
+            matBadgePosition="above before"
+            matBadgeColor="accent"
+          ></mat-icon>
+        </campus-button>
 
         <campus-dropdown-menu
           #dropDownAlerts

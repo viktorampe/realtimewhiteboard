@@ -93,6 +93,7 @@ $ui-button-padding-bottom: $ui-primary-font-size/2 !default;
 @import './dropdown-menu/dropdown-menu.component.theme.scss';
 @import './dropdown-menu-item/dropdown-menu-item.component.theme.scss';
 @import './banner/banner.component.theme.scss';
+@import './breadcrumbs/breadcrumbs.component.theme.scss';
 
 @mixin ui-forms() {
   form {
@@ -161,4 +162,5 @@ $ui-button-padding-bottom: $ui-primary-font-size/2 !default;
   @include ui-dropdown-menu();
   @include ui-dropdown-menu-item();
   @include ui_banner_theme();
+  @include ui-breadcrumbs_theme();
 }
