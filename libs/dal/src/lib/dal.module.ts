@@ -58,7 +58,7 @@ import {
   UserReducer
 } from '..';
 import { ContentStatusesEffects } from './+state/content-status/content-status.effects';
-import { MethodReducer } from './+state/method';
+import { MethodEffects, MethodReducer } from './+state/method';
 import { AlertService } from './alert/alert.service';
 import { ALERT_SERVICE_TOKEN } from './alert/alert.service.interface';
 import {
