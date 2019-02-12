@@ -89,6 +89,8 @@ export const environment: EnvironmentInterface = {
     // 'user-add': 'assets/icons/user-add.svg',
     // 'user-del': 'assets/icons/user-del.svg',
     // verwijder: 'assets/icons/verwijder.svg',
+    'exercise:open': 'assets/icons/exercise-open.svg',
+    'exercise:finished': 'assets/icons/exercise-finished.svg',
 
     // -> product types
     'list-view': 'assets/icons/material/list-view.svg',
