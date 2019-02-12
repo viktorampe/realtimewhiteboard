@@ -27,11 +27,15 @@ export function reducer(
   action: StudentContentStatusesActions
 ): State {
   switch (action.type) {
-    case StudentContentStatusesActionTypes.AddStudentContentStatus: {
+    case StudentContentStatusesActionTypes.StudentContentStatusAdded: {
       return adapter.addOne(action.payload.studentContentStatus, state);
     }
 
-    case StudentContentStatusesActionTypes.UpsertStudentContentStatus: {
+    case StudentContentStatusesActionTypes.StudentContentStatusUpdated: {
+      return adapter.updateOne(action.payload.studentContentStatus, state);
+    }
+
+    case StudentContentStatusesActionTypes.StudentContentStatusUpserted: {
       return adapter.upsertOne(action.payload.studentContentStatus, state);
     }
 
@@ -41,10 +45,6 @@ export function reducer(
 
     case StudentContentStatusesActionTypes.UpsertStudentContentStatuses: {
       return adapter.upsertMany(action.payload.studentContentStatuses, state);
-    }
-
-    case StudentContentStatusesActionTypes.UpdateStudentContentStatus: {
-      return adapter.updateOne(action.payload.studentContentStatus, state);
     }
 
     case StudentContentStatusesActionTypes.UpdateStudentContentStatuses: {

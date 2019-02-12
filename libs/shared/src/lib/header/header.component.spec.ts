@@ -11,6 +11,7 @@ import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { hot } from '@nrwl/nx/testing';
 import { BehaviorSubject, Subject } from 'rxjs';
+import { CampusRouterlinkDirective } from '../directives/campus-routerlink.directive';
 import { AlertToNotificationItemPipe } from '../pipes/alert-to-notification/alert-to-notification-pipe';
 import { HeaderComponent } from './header.component';
 import { HeaderViewModel } from './header.viewmodel';
@@ -21,11 +22,11 @@ describe('HeaderComponent', () => {
   let fixture: ComponentFixture<HeaderComponent>;
   let headerViewModel: MockHeaderViewModel;
   const breakpointStream: Subject<{ matches: boolean }> = new Subject();
-  let pageBarNavIcon: HTMLElement;
+  let pageBarNavButton: HTMLElement;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [UiModule, RouterTestingModule, MatIconModule, MatBadgeModule],
-      declarations: [HeaderComponent],
+      declarations: [HeaderComponent, CampusRouterlinkDirective],
       providers: [
         AlertToNotificationItemPipe,
         {
@@ -55,7 +56,7 @@ describe('HeaderComponent', () => {
 
   describe('feature toggles', () => {
     beforeEach(() => {
-      headerViewModel.isResolved$.next(true);
+      headerViewModel.alertsLoaded$.next(true);
     });
     it('should show the feature components if true', () => {
       component.enableAlerts = true;
@@ -82,7 +83,7 @@ describe('HeaderComponent', () => {
 
   describe('unread badge counter', () => {
     beforeEach(() => {
-      headerViewModel.isResolved$.next(true);
+      headerViewModel.alertsLoaded$.next(true);
       fixture.detectChanges();
     });
     it('should show the badge if the unreadAlertCount$ is bigger than 0', () => {
@@ -111,7 +112,7 @@ describe('HeaderComponent', () => {
 
   describe('should be mobile friendly', () => {
     beforeEach(() => {
-      headerViewModel.isResolved$.next(true);
+      headerViewModel.alertsLoaded$.next(true);
 
       // mock that we're on small sreen size
       breakpointStream.next({ matches: true });
@@ -124,20 +125,20 @@ describe('HeaderComponent', () => {
           headerViewModel.backLink$.next(undefined);
 
           fixture.detectChanges();
-          // this is the menu or arrow-back icon
-          pageBarNavIcon = fixture.debugElement.query(
-            By.css('.shared-header__page-bar_nav-icon')
+          // this is the menu or arrow-back button
+          pageBarNavButton = fixture.debugElement.query(
+            By.css('.shared-header__page-bar__nav-button')
           ).nativeElement;
         });
 
         it('should show the menu button', () => {
-          expect(pageBarNavIcon.getAttribute('ng-reflect-svg-icon')).toBe(
+          expect(pageBarNavButton.getAttribute('ng-reflect-icon-class')).toBe(
             'menu'
           );
         });
         it('should toggle the side nav', () => {
           const toggleSideNavSpy = jest.spyOn(headerViewModel, 'toggleSideNav');
-          pageBarNavIcon.click();
+          pageBarNavButton.click();
           expect(toggleSideNavSpy).toHaveBeenCalledTimes(1);
         });
       });
@@ -147,19 +148,19 @@ describe('HeaderComponent', () => {
       beforeEach(() => {
         headerViewModel.backLink$.next(backLink);
         fixture.detectChanges();
-        // this is the menu or arrow-back icon
-        pageBarNavIcon = fixture.debugElement.query(
-          By.css('.shared-header__page-bar_nav-icon')
+        // this is the menu or arrow-back button
+        pageBarNavButton = fixture.debugElement.query(
+          By.css('.shared-header__page-bar__nav-button')
         ).nativeElement;
       });
 
       it('should show a back button', () => {
-        expect(pageBarNavIcon.getAttribute('ng-reflect-svg-icon')).toBe(
+        expect(pageBarNavButton.getAttribute('ng-reflect-icon-class')).toBe(
           'arrow-back'
         );
       });
       it('should have the correct back link', () => {
-        expect(pageBarNavIcon.getAttribute('ng-reflect-router-link')).toBe(
+        expect(pageBarNavButton.getAttribute('ng-reflect-router-link')).toBe(
           backLink
         );
       });

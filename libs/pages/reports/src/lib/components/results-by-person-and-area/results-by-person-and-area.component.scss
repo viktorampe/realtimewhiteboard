@@ -1,3 +1,5 @@
+@import 'libs/ui/src/lib/breakpoints.scss';
+
 .page-results {
   display: flex;
   flex-direction: column;
@@ -7,10 +9,67 @@
     display: flex;
     flex-direction: column;
     flex: 1 1 auto;
+    overflow: auto;
+
+    &__header {
+      flex-shrink: 0;
+      overflow-y: auto;
+
+      // hiding the scrollbar
+      // ie, edge
+      -ms-overflow-style: none;
+
+      // chrome
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      // firefox
+      scrollbar-width: none;
+    }
 
     &__main {
-      flex: 1 1 auto;
-      overflow: auto;
+      overflow-y: auto;
+    }
+
+    &__row__header {
+      width: 300px;
+
+      &__content {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        .title {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+    }
+  }
+}
+
+@media #{$ui-breakpoint-xsmall} {
+  .page-results {
+    &__table {
+      &__row__header {
+        width: 200px;
+
+        &__content {
+          flex-direction: column;
+          align-items: flex-start;
+
+          .title {
+            flex-direction: column;
+            align-items: flex-start;
+
+            span {
+              text-align: left;
+            }
+          }
+        }
+      }
     }
   }
 }
@@ -19,6 +78,7 @@ table {
   width: 100%;
   border-collapse: collapse;
   border-spacing: 0;
+  table-layout: fixed;
 }
 
 td,

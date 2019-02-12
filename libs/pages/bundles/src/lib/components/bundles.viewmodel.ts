@@ -5,6 +5,8 @@ import {
   AUTH_SERVICE_TOKEN,
   BundleInterface,
   BundleQueries,
+  ContentStatusLabel,
+  ContentStatusQueries,
   DalState,
   EduContent,
   EduContentQueries,
@@ -12,6 +14,9 @@ import {
   LearningAreaQueries,
   LinkedPersonQueries,
   PersonInterface,
+  StudentContentStatusActions,
+  StudentContentStatusInterface,
+  StudentContentStatusQueries,
   UiActions,
   UiQuery,
   UnlockedBoekeGroupQueries,
@@ -27,7 +32,8 @@ import {
   ScormExerciseServiceInterface,
   SCORM_EXERCISE_SERVICE_TOKEN
 } from '@campus/shared';
-import { ListFormat } from '@campus/ui';
+import { ListFormat, SelectOption } from '@campus/ui';
+import { NestedPartial } from '@campus/utils';
 import { Dictionary } from '@ngrx/entity';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
@@ -36,7 +42,6 @@ import {
   BundlesWithContentInfoInterface,
   LearningAreasWithBundlesInfoInterface
 } from './bundles.viewmodel.interfaces';
-export type NestedPartial<T> = { [P in keyof T]?: NestedPartial<T[P]> };
 
 @Injectable({
   providedIn: 'root'
@@ -63,7 +68,8 @@ export class BundlesViewModel {
   // presentation streams
   // > learningareas page
   sharedLearningAreas$: Observable<LearningAreasWithBundlesInfoInterface>;
-  // TODO: contentstatus
+  // > bundle detail page
+  contentStatusOptions$: Observable<SelectOption[]>;
 
   constructor(
     private store: Store<DalState>,
@@ -80,6 +86,7 @@ export class BundlesViewModel {
     // source streams
     this.listFormat$ = this.store.pipe(select(UiQuery.getListFormat));
     this.learningAreas$ = this.store.pipe(select(LearningAreaQueries.getAll));
+    this.contentStatusOptions$ = this.getContentStatusOptions();
 
     // intermediate streams
     // > learningarea page
@@ -147,6 +154,31 @@ export class BundlesViewModel {
     this.openStaticContentService.open(unlockedContent.content);
   }
 
+  public getStudentContentStatusByUnlockedContentId(
+    unlockedContentId: number
+  ): Observable<StudentContentStatusInterface> {
+    return this.store.pipe(
+      select(StudentContentStatusQueries.getByUnlockedContentId, {
+        unlockedContentId
+      })
+    );
+  }
+
+  public saveContentStatus(
+    unlockedContentId: number,
+    contentStatusId: number
+  ): void {
+    this.store.dispatch(
+      new StudentContentStatusActions.UpsertStudentContentStatus({
+        studentContentStatus: {
+          personId: this.authService.userId,
+          unlockedContentId,
+          contentStatusId
+        }
+      })
+    );
+  }
+
   getLearningAreaById(areaId: number): Observable<LearningAreaInterface> {
     return this.store.pipe(select(LearningAreaQueries.getById, { id: areaId }));
   }
@@ -190,7 +222,8 @@ export class BundlesViewModel {
             });
           }
         );
-      })
+      }),
+      shareReplay(1)
     );
   }
 
@@ -310,6 +343,21 @@ export class BundlesViewModel {
         }
       ),
       shareReplay(1)
+    );
+  }
+
+  getContentStatusOptions(): Observable<SelectOption[]> {
+    return this.store.pipe(
+      select(ContentStatusQueries.getAll),
+      map(contentStatuses => [
+        { value: 0, viewValue: ContentStatusLabel.NEW }, // default status
+        ...contentStatuses.map(
+          (contentStatus): SelectOption => ({
+            value: contentStatus.id,
+            viewValue: ContentStatusLabel[contentStatus.label]
+          })
+        )
+      ])
     );
   }
 

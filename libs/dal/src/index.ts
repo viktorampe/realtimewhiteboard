@@ -12,6 +12,7 @@ export * from './lib/+state/edu-content';
 export * from './lib/+state/effect-feedback';
 export * from './lib/+state/learning-area';
 export * from './lib/+state/linked-person';
+export * from './lib/+state/method';
 export * from './lib/+state/resolver';
 export * from './lib/+state/result';
 export {
@@ -36,5 +37,4 @@ export {
   EduContentServiceInterface,
   EDUCONTENT_SERVICE_TOKEN
 } from './lib/edu-content/edu-content.service.interface';
-export * from './lib/feedback';
 export * from './lib/persons';

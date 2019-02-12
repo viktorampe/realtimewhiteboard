@@ -6,7 +6,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Params } from '@angular/router';
 import { UnlockedContentFixture } from '@campus/dal';
 import { MockMatIconRegistry } from '@campus/testing';
-import { ListFormat, ListViewItemDirective, UiModule } from '@campus/ui';
+import {
+  ListFormat,
+  ListViewItemDirective,
+  SelectOption,
+  UiModule
+} from '@campus/ui';
 import { FilterService, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { BehaviorSubject, of } from 'rxjs';
 import { BundlesViewModel } from '../bundles.viewmodel';
@@ -170,5 +175,19 @@ describe('BundleDetailComponent', () => {
 
     expect(bundlesViewModel.setBundleAlertRead).toHaveBeenCalled();
     expect(bundlesViewModel.setBundleAlertRead).toHaveBeenCalledWith(1);
+  });
+
+  it('should call the vm saveContentStatus when the onSaveStatus button is called', () => {
+    bundlesViewModel.saveContentStatus = jest.fn();
+    component.selectedUnlockedContent$ = new BehaviorSubject(
+      new UnlockedContentFixture({ id: 10 })
+    );
+
+    component.onSaveStatus(
+      { value: 3 } as SelectOption,
+      new UnlockedContentFixture({ id: 10 })
+    );
+
+    expect(bundlesViewModel.saveContentStatus).toHaveBeenCalledWith(10, 3);
   });
 });

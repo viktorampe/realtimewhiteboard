@@ -7,11 +7,12 @@ import {
   LearningAreaInterface,
   PersonFixture,
   PersonInterface,
+  StudentContentStatusInterface,
   UnlockedContent,
   UnlockedContentFixture
 } from '@campus/dal';
 import { ViewModelInterface } from '@campus/testing';
-import { ListFormat } from '@campus/ui';
+import { ListFormat, SelectOption } from '@campus/ui';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { BundlesViewModel } from './bundles.viewmodel';
 import {
@@ -57,6 +58,10 @@ export class MockViewModel implements ViewModelInterface<BundlesViewModel> {
     ]
   });
 
+  contentStatusOptions$: Observable<SelectOption[]> = new BehaviorSubject<
+    SelectOption[]
+  >([{ value: 1, viewValue: 'foo' }, { value: 2, viewValue: 'bar' }]);
+
   currentUserHasWriteAccessToBundle(): boolean {
     return true;
   }
@@ -64,6 +69,19 @@ export class MockViewModel implements ViewModelInterface<BundlesViewModel> {
   changeListFormat() {}
 
   setBundleAlertRead() {}
+
+  getStudentContentStatusByUnlockedContentId(): Observable<
+    StudentContentStatusInterface
+  > {
+    return of({
+      id: 1,
+      personId: 1,
+      unlockedContentId: 1,
+      contentStatusId: 1
+    });
+  }
+
+  saveContentStatus() {}
 
   openContent(o: UnlockedContent) {}
 
@@ -126,5 +144,9 @@ export class MockViewModel implements ViewModelInterface<BundlesViewModel> {
         eduContentId: 1
       })
     ]);
+  }
+
+  getContentStatusOptions(): Observable<SelectOption[]> {
+    return of([{ value: 1, viewValue: 'foo' }, { value: 2, viewValue: 'bar' }]);
   }
 }

@@ -2,6 +2,8 @@ export interface EnvironmentInterface {
   production: boolean;
   iconMapping: EnvironmentIconMappingInterface;
   website: EnvironmentWebsiteInterface;
+  logout: EnvironmentLogoutInterface;
+  login: EnvironmentLoginInterface;
   api: EnvironmentApiInterface;
   features: {
     alerts: EnvironmentAlertsFeatureInterface;
@@ -40,6 +42,14 @@ export interface EnvironmentErrorManagementFeatureAllowedErrorInterface {
 }
 
 export interface EnvironmentWebsiteInterface {
+  url: string;
+}
+
+export interface EnvironmentLogoutInterface {
+  url: string;
+}
+
+export interface EnvironmentLoginInterface {
   url: string;
 }
 

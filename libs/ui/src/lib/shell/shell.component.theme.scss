@@ -24,7 +24,7 @@
   }
 
   .ui-shell__top {
-    height: $ui-shell__top-height;
+    min-height: $ui-shell__top-height;
     background-color: $ui-shell__top-background-color;
     color: $ui-shell__top-font-color;
   }
@@ -36,6 +36,7 @@
   .ui--mobile {
     .ui-shell__top {
       height: $ui-shell__top-height--mobile;
+      min-height: unset;
     }
   }
 }

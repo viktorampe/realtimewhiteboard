@@ -16,6 +16,7 @@ import {
   Priority
 } from '../effect-feedback';
 import { ActionSuccessful } from './../dal.actions';
+import { EffectFeedbackInterface } from './../effect-feedback/effect-feedback.model';
 import {
   AlertsLoaded,
   AlertsLoadError,
@@ -38,7 +39,7 @@ describe('AlertEffects', () => {
   let uuid: Function;
   let dateMock: MockDate;
 
-  const effectFeedback = new EffectFeedbackFixture();
+  let effectFeedback: EffectFeedbackInterface;
 
   const mockData = {
     userId: 1,
@@ -89,7 +90,9 @@ describe('AlertEffects', () => {
 
   beforeAll(() => {
     dateMock = new MockDate();
-    effectFeedback.timeStamp = dateMock.mockDate.getTime();
+    effectFeedback = new EffectFeedbackFixture({
+      timeStamp: dateMock.mockDate.getTime()
+    });
   });
 
   afterAll(() => {

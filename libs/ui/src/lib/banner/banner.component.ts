@@ -19,10 +19,14 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./banner.component.scss']
 })
 export class BannerComponent<T> implements OnDestroy {
+  @Input() id: string;
   @Input() message: string;
   @Input() icon: string;
   @Input() actions: BannerAction<T>[];
-  @Output() afterDismiss = new EventEmitter<T>();
+  @Output() afterDismiss = new EventEmitter<{
+    action: T;
+    feedbackId: string;
+  }>();
 
   private mobile: boolean;
   private subscriptions: Subscription = new Subscription();
@@ -41,7 +45,7 @@ export class BannerComponent<T> implements OnDestroy {
   }
 
   onAction(action: T) {
-    this.afterDismiss.next(action);
+    this.afterDismiss.next({ action, feedbackId: this.id });
   }
 
   ngOnDestroy(): void {

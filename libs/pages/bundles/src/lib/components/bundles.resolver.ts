@@ -4,12 +4,18 @@ import {
   AUTH_SERVICE_TOKEN,
   BundleActions,
   BundleQueries,
+  ContentStatusActions,
+  ContentStatusQueries,
   DalState,
   EduContentActions,
   EduContentQueries,
   LearningAreaActions,
   LearningAreaQueries,
+  MethodActions,
+  MethodQueries,
   StateResolver,
+  StudentContentStatusActions,
+  StudentContentStatusQueries,
   UnlockedBoekeGroupActions,
   UnlockedBoekeGroupQueries,
   UnlockedBoekeStudentActions,
@@ -34,6 +40,11 @@ export class BundlesResolver extends StateResolver {
   protected getLoadableActions(): Action[] {
     return [
       new LearningAreaActions.LoadLearningAreas(),
+      new MethodActions.LoadMethods(),
+      new ContentStatusActions.LoadContentStatuses(),
+      new StudentContentStatusActions.LoadStudentContentStatuses({
+        studentId: this.authService.userId
+      }),
       new BundleActions.LoadBundles({ userId: this.authService.userId }),
       new EduContentActions.LoadEduContents({
         userId: this.authService.userId
@@ -56,6 +67,9 @@ export class BundlesResolver extends StateResolver {
   protected getResolvedQueries(): Selector<object, boolean>[] {
     return [
       LearningAreaQueries.getLoaded,
+      MethodQueries.getLoaded,
+      ContentStatusQueries.getLoaded,
+      StudentContentStatusQueries.getLoaded,
       BundleQueries.getLoaded,
       EduContentQueries.getLoaded,
       UserContentQueries.getLoaded,

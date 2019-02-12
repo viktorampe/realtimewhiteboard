@@ -12,11 +12,11 @@
         }}</mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-icon
+    <campus-button
       *ngIf="selectControl.dirty"
       class="ui-confirmable-select__dropdown__icon"
-      [svgIcon]="confirmIcon"
+      [iconClass]="confirmIcon"
       (click)="onClickConfirm()"
-    ></mat-icon>
+    ></campus-button>
   </div>
 </div>

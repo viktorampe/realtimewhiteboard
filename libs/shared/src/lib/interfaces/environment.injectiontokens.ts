@@ -7,8 +7,12 @@ export const ENVIRONMENT_ICON_MAPPING_TOKEN = new InjectionToken(
 export const ENVIRONMENT_API_TOKEN = new InjectionToken('environmentApiBase');
 
 export const ENVIRONMENT_WEBSITE_TOKEN = new InjectionToken(
-  'environmentWebsiteUrl'
+  'environmentWebsite'
 );
+
+export const ENVIRONMENT_LOGOUT_TOKEN = new InjectionToken('environmentLogout');
+
+export const ENVIRONMENT_LOGIN_TOKEN = new InjectionToken('environmentLogin');
 
 export const ENVIRONMENT_ERROR_MANAGEMENT_FEATURE_TOKEN = new InjectionToken(
   'environmentErrorManagementFeature'
