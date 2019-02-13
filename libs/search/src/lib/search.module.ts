@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { SelectFilterComponentComponent } from './components/select-filter-component/select-filter-component.component';
+import { SelectFilterComponent } from './components/select-filter-component/select-filter.component';
 
 @NgModule({
   imports: [CommonModule],
-  declarations: [SelectFilterComponentComponent],
-  exports: [SelectFilterComponentComponent]
+  declarations: [SelectFilterComponent],
+  exports: [SelectFilterComponent]
 })
 export class SearchModule {}
