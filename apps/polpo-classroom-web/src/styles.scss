@@ -12,6 +12,10 @@ body {
   box-sizing: border-box;
 }
 
+figure {
+  margin: 0;
+}
+
 /*
  * icon fonts
  */
@@ -107,6 +111,7 @@ body {
 [ng-reflect-router-link] {
   cursor: pointer;
 }
+
 /*
  * App styles
  */
@@ -147,6 +152,7 @@ body {
     &__input {
       border: solid 2px $secondary-bg-color-accent;
     }
+
     &__icon,
     &__cancel {
       margin: 2px 0; // to offset top position with input border
@@ -161,13 +167,11 @@ body {
 
   // .hidden-item--not-selected
   // only hide if container is not selected -> .ui-list-view__list__item--selected
-  &:not(.ui-list-view__list__item--selected)
-    .hidden-item--not-selected:not(.hidden-item--not-hover),
+  &:not(.ui-list-view__list__item--selected) .hidden-item--not-selected:not(.hidden-item--not-hover),
 
   // .hidden-item--not-hover AND .hidden-item--not-selected
   // only hide if container is not hover() AND not selected
-  &:not(:hover):not(.ui-list-view__list__item--selected)
-    .hidden-item--not-hover.hidden-item--not-selected {
+  &:not(:hover):not(.ui-list-view__list__item--selected) .hidden-item--not-hover.hidden-item--not-selected {
     display: none;
   }
 }
