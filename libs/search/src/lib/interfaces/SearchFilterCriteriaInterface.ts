@@ -1,8 +1,10 @@
+import { KeyWithPropertyType } from './keyWithPropertyType.type';
+
 export interface SearchFilterCriteriaInterface<T, K = {}> {
   name: string;
   label: string;
-  keyProperty: keyof T; //update use PrimitivePropertiesKeys here
-  displayProperty: keyof T; //update: use PrimitivePropertiesKeys here
+  keyProperty: KeyWithPropertyType<T, string>;
+  displayProperty: KeyWithPropertyType<T, string>;
   values: {
     data: T;
     selected?: boolean;
