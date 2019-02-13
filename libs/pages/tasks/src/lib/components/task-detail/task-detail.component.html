@@ -81,14 +81,14 @@
                 [iconClass]="'exercise:open'"
                 (click)="clickOpenContent(taskEduContent)"
               ></campus-button>
+              <ng-template #taskEduContentSubmitted>
+                <campus-button
+                  disabled
+                  circle
+                  [iconClass]="'exercise:finished'"
+                ></campus-button>
+              </ng-template>
             </campus-content-thumbnail>
-            <ng-template #taskEduContentSubmitted>
-              <div
-                class="page-task-detail__content-thumbnail__button--disabled"
-              >
-                <mat-icon svgIcon="exercise:finished"></mat-icon>
-              </div>
-            </ng-template>
           </campus-list-view>
         </ng-container>
       </ng-container>
