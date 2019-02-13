@@ -67,6 +67,15 @@ $ui-list-view-selection-overlay-circle-radius: 22px !default;
         }
       }
 
+      &--line,
+      &--grid {
+        & .ui-list-view__list__item {
+          &.ui-list-view__list__item--notselectable {
+            cursor: default;
+          }
+        }
+      }
+
       /*Line*/
       &--line {
         & .ui-list-view__list__item {

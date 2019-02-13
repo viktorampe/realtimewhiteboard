@@ -37,12 +37,14 @@ export interface EnvironmentErrorManagementFeatureAllowedErrorInterface {
   status?: number;
   name?: string;
   statusText?: string;
-  urlRegex?: RegExp;
-  messageRegex?: RegExp;
+  urlRegex?: string;
+  messageRegex?: string;
 }
 
 export interface EnvironmentWebsiteInterface {
   url: string;
+  title: string;
+  favicon: string;
 }
 
 export interface EnvironmentLogoutInterface {

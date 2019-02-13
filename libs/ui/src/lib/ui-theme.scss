@@ -126,6 +126,28 @@ $ui-button-padding-bottom: $ui-primary-font-size/2 !default;
   }
 }
 
+@mixin ui-content-thumbnail-button() {
+  $ui-content-thumbnail-button-color: $ui-primary-font-color-2 !default;
+  $ui-content-thumbnail-button-background-color: transparent !default;
+  $ui-content-thumbnail-button-size: 30px !default;
+  $ui-content-thumbnail-button-padding: 5px !default;
+  $ui-content-thumbnail-button-margin: 0 !default;
+
+  campus-content-thumbnail {
+    .ui-button {
+      color: $ui-content-thumbnail-button-color;
+      background-color: $ui-content-thumbnail-button-background-color;
+      padding: $ui-content-thumbnail-button-padding;
+      margin: $ui-content-thumbnail-button-margin;
+
+      .mat-icon {
+        width: $ui-content-thumbnail-button-size;
+        height: $ui-content-thumbnail-button-size;
+      }
+    }
+  }
+}
+
 @mixin ui-icons {
   svg {
     pointer-events: none; //remove native tooltip
@@ -163,4 +185,5 @@ $ui-button-padding-bottom: $ui-primary-font-size/2 !default;
   @include ui-dropdown-menu-item();
   @include ui_banner_theme();
   @include ui-breadcrumbs_theme();
+  @include ui-content-thumbnail-button();
 }

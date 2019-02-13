@@ -16,7 +16,7 @@
     ></campus-file-extension>
   </div>
   <figure class="ui-content-thumbnail__image">
-    <img [src]="imagePath" *ngIf="imagePath" />
+    <mat-icon [svgIcon]="imagePath" *ngIf="imagePath"></mat-icon>
     <campus-file-extension
       *ngIf="!imagePath"
       [extensionClass]="fileExtensionClass"

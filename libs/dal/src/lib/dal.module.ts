@@ -1,6 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import {
+  Inject,
+  InjectionToken,
+  ModuleWithProviders,
+  NgModule
+} from '@angular/core';
 import { MatSnackBarModule } from '@angular/material';
 import {
   BrowserModule as CampusBrowserModule,
@@ -119,6 +124,7 @@ import { TaskService } from './tasks/tasks.service';
 interface DalOptions {
   apiBaseUrl: string;
 }
+export const DAL_OPTIONS = new InjectionToken('dal-options');
 
 @NgModule({
   imports: [
@@ -291,23 +297,19 @@ interface DalOptions {
   ]
 })
 export class DalModule {
-  constructor() {}
+  constructor(@Inject(DAL_OPTIONS) options) {
+    LoopBackConfig.setBaseURL(options.apiBaseUrl);
+    LoopBackConfig.setRequestOptionsCredentials(true);
+  }
   static forRoot(options: DalOptions): ModuleWithProviders {
     return {
       ngModule: DalModule,
       providers: [
-        { provide: 'DAL_OPTIONS', useValue: options },
         {
-          provide: 'LoopbackSettingsService',
-          useFactory: loopbackSettings,
-          deps: ['DAL_OPTIONS']
+          provide: DAL_OPTIONS,
+          useValue: options
         }
       ]
     };
   }
-}
-
-export function loopbackSettings(DAL_OPTIONS) {
-  LoopBackConfig.setBaseURL(DAL_OPTIONS.apiBaseUrl);
-  LoopBackConfig.setRequestOptionsCredentials(true);
 }

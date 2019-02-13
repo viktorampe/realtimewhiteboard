@@ -7,6 +7,7 @@ import {
   EduContent,
   EduContentQueries,
   LearningAreaQueries,
+  MethodQueries,
   UiActions,
   UiQuery,
   UnlockedBoekeGroupQueries,
@@ -66,12 +67,16 @@ export class BooksViewModel {
           userId: this.authService.userId
         })
       ),
-      this.store.pipe(select(LearningAreaQueries.getAllEntities))
+      this.store.pipe(select(LearningAreaQueries.getAllEntities)),
+      this.store.pipe(select(MethodQueries.getAllEntities))
     ).pipe(
       switchMap(
-        ([unlockedBookGroups, unlockedBookStudents, areaEntities]): Observable<
-          EduContent[]
-        > =>
+        ([
+          unlockedBookGroups,
+          unlockedBookStudents,
+          areaEntities,
+          methodEntities
+        ]): Observable<EduContent[]> =>
           this.store.pipe(
             select(EduContentQueries.getByIds, {
               // extract all IDs from unlockedBook arrays (remove duplicates)
@@ -90,7 +95,10 @@ export class BooksViewModel {
                 return Object.assign(book, {
                   publishedEduContentMetadata: {
                     ...metadata,
-                    learningArea: areaEntities[metadata.learningAreaId]
+                    learningArea: areaEntities[metadata.learningAreaId],
+                    methods: metadata.methodIds.map(
+                      methodId => methodEntities[methodId]
+                    )
                   }
                 });
               })

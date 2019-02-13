@@ -87,11 +87,17 @@
           <campus-content-thumbnail
             *ngFor="let book of sharedInfo.books"
             campusListItem
+            [selectable]="false"
             [title]="book.name"
             [contentTypeClass]="'book'"
             [imagePath]="book.previewImage"
             [fileExtensionClass]="book.fileExtension"
           >
+            <campus-button
+              circle
+              [iconClass]="'view-content'"
+              (click)="openBook(book)"
+            ></campus-button>
           </campus-content-thumbnail>
         </campus-list-view>
       </div>

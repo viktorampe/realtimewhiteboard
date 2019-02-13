@@ -9,6 +9,7 @@ import {
 import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute, Params } from '@angular/router';
+import { ContentFixture } from '@campus/dal';
 import { MockMatIconRegistry } from '@campus/testing';
 import { ListFormat, ListViewItemDirective, UiModule } from '@campus/ui';
 import { FilterService, FILTER_SERVICE_TOKEN } from '@campus/utils';
@@ -90,4 +91,11 @@ describe('BundlesComponent', () => {
     expect(spyBundles).toHaveBeenCalledTimes(2); // subscribed 2 times to sharedInfo$ in the template
     expect(spyBundles).toHaveBeenCalledWith(2);
   }));
+
+  it('should call open content', () => {
+    const spy = jest.spyOn(bundlesViewModel, 'openBook');
+    const book = new ContentFixture();
+    component.openBook(book);
+    expect(spy).toHaveBeenCalledWith(book);
+  });
 });

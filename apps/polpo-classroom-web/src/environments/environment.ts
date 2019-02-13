@@ -89,6 +89,8 @@ export const environment: EnvironmentInterface = {
     // 'user-add': 'assets/icons/user-add.svg',
     // 'user-del': 'assets/icons/user-del.svg',
     // verwijder: 'assets/icons/verwijder.svg',
+    'exercise:open': 'assets/icons/exercise-open.svg',
+    'exercise:finished': 'assets/icons/exercise-finished.svg',
 
     // -> product types
     'list-view': 'assets/icons/material/list-view.svg',
@@ -225,7 +227,9 @@ export const environment: EnvironmentInterface = {
   },
   // promo website settings
   website: {
-    url: 'http://www.polpo.localhost'
+    url: 'http://www.polpo.localhost',
+    title: 'POLPO',
+    favicon: 'assets/icons/favicon.ico'
   },
   logout: {
     url: 'http://student.polpo.localhost:3014/dev'
@@ -252,8 +256,7 @@ export const environment: EnvironmentInterface = {
         {
           status: 404,
           statusText: 'Not Found',
-          urlRegex: /http.*assets\/icons.*\.svg/i,
-          messageRegex: /Http failure response for http.*assets\/icons.*\.svg: 404 Not Found/i
+          urlRegex: 'http.*assets\\/icons.*.svg'
         }
       ]
     }

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { EduContentComponent } from './edu-content/edu-content.component';
+import { FindingNemoComponent } from './finding-nemo/finding-nemo.component';
 import { LoginpageComponent } from './loginpage/loginpage.component';
 
 const routes: Routes = [
@@ -14,6 +15,10 @@ const routes: Routes = [
         data: { breadcrumbText: 'Error' }
       }
     ]
+  },
+  {
+    path: 'finding-nemo',
+    component: FindingNemoComponent
   },
   {
     path: 'educontent',
