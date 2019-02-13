@@ -20,7 +20,6 @@
     "pages-bundles": {
       "tags": []
     },
-
     "pages-logout": {
       "tags": []
     },
@@ -79,6 +78,9 @@
       "tags": []
     },
     "pages-settings-alerts": {
+      "tags": []
+    },
+    "search": {
       "tags": []
     }
   }
