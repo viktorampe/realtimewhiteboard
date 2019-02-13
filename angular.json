@@ -815,11 +815,11 @@
             "jestConfig": "libs/search/jest.config.js",
             "tsConfig": "libs/search/tsconfig.spec.json",
             "setupFile": "libs/search/src/test-setup.ts"
-          }
-        },
-        "configurations": {
-          "travis": {
-            "maxWorkers": 2
+          },
+          "configurations": {
+            "travis": {
+              "maxWorkers": 2
+            }
           }
         }
       }

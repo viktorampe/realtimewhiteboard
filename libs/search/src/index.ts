@@ -1,2 +1,2 @@
-export * from './lib/interfaces/search-result-interface';
+export * from './lib/interfaces';
 export * from './lib/search.module';
