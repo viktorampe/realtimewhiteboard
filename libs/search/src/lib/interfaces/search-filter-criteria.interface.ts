@@ -1,6 +1,6 @@
 import { KeyWithPropertyType } from './key-with-property-type.type';
 
-export interface SearchFilterCriteriaInterface<T, K = {}> {
+export interface SearchFilterCriteriaInterface<T, K> {
   name: string;
   label: string;
   keyProperty: KeyWithPropertyType<T, string>;
@@ -10,6 +10,6 @@ export interface SearchFilterCriteriaInterface<T, K = {}> {
     selected?: boolean;
     prediction?: number;
     visible?: boolean;
-    children?: SearchFilterCriteriaInterface<K>;
+    children?: SearchFilterCriteriaInterface<K, unknown>;
   }[];
 }
