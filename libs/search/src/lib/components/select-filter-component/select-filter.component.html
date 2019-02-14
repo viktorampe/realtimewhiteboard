@@ -1,3 +1,7 @@
-<p>
-  select-filter-component works!
-</p>
+<mat-select [placeholder]="criteria.label"
+            [multiple]="multiple">
+  <mat-option *ngFor="let option of options"
+              [value]="option.value">
+    {{option.viewValue}}
+  </mat-option>
+</mat-select>
