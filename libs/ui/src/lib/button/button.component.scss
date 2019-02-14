@@ -14,7 +14,6 @@
 :host.ui-button--disabled {
   pointer-events: visible;
   cursor: not-allowed;
-  pointer-events: none;
 }
 
 :host.ui-button--large {
