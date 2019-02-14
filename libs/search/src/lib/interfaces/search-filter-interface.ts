@@ -1,12 +1,12 @@
 export interface SearchFilter {
-  criteria:
-    | SearchFilterCriteriaInterface<unknown>
-    | SearchFilterCriteriaInterface<unknown>[];
-  component: SearchFilterComponentInterface;
-  domHost: string;
-  options?: any;
+  //   criteria:
+  //     | SearchFilterCriteriaInterface<unknown>
+  //     | SearchFilterCriteriaInterface<unknown>[];
+  //   component: SearchFilterComponentInterface;
+  //   domHost: string;
+  //   options?: any;
 }
 
 export interface SearchFilterFactory {
-  getFilters(SearchStateInterface: FilterCriteria[]): SearchFilter[];
+  // getFilters(SearchStateInterface: FilterCriteria[]): SearchFilter[];
 }

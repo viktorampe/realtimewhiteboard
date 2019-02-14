@@ -1,0 +1,8 @@
+<li class="checkbox-list-filter__title">
+  <mat-checkbox> {{value}} </mat-checkbox>
+</li>
+<li class="checkbox-list-filter__items">
+  <form [formGroup]="form">
+    <ng-content></ng-content>
+  </form>
+</li>
