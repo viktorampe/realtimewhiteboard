@@ -1,5 +1,7 @@
 <mat-select [placeholder]="criteria.label"
-            [multiple]="multiple">
+            [multiple]="multiple"
+            [formControl]="selectControl">
+  <mat-option *ngIf="resetLabel">{{resetLabel}}</mat-option>
   <mat-option *ngFor="let option of options"
               [value]="option.value">
     {{option.viewValue}}

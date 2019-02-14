@@ -1,65 +1,92 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Dictionary } from '@ngrx/entity';
+import { Subscription } from 'rxjs';
+import { distinctUntilChanged } from 'rxjs/operators';
+import { SearchFilterComponentInterface } from '../../interfaces/search-filter-component-interface';
 import { SearchFilterCriteriaInterface } from '../../interfaces/search-filter-criteria.interface';
+
+interface SelectOption {
+  value: any;
+  viewValue: string | number;
+}
 
 @Component({
   selector: 'campus-select-filter',
   templateUrl: './select-filter.component.html',
   styleUrls: ['./select-filter.component.css']
 })
-export class SelectFilterComponent<T, K> implements OnInit {
+export class SelectFilterComponent<
+  T,
+  K extends SearchFilterCriteriaInterface<any, any>
+> implements SearchFilterComponentInterface<T, K>, OnInit, OnDestroy {
   criteria: SearchFilterCriteriaInterface<T, K>;
   options: SelectOption[];
-  selected: SelectOption | SelectOption[];
-  selectControl: FormControl = new FormControl(this.selected);
+  selectControl: FormControl = new FormControl();
 
-  private optionsMap: Dictionary<T>;
+  private subscriptions: Subscription = new Subscription();
 
   @Input() multiple = false;
+  @Input() resetLabel: string;
   @Input()
   set filterCriteria(criteria: SearchFilterCriteriaInterface<T, K>) {
     this.criteria = criteria;
-    this.parseCriteria();
+    this.options = this.criteriaToOptions(criteria);
   }
 
-  @Output() selection: EventEmitter<
-    SearchFilterCriteriaInterface<T, K> | SearchFilterCriteriaInterface<T, K>[]
-  >;
+  @Output() filterSelectionChange: EventEmitter<
+    SearchFilterCriteriaInterface<T, K>
+  > = new EventEmitter();
 
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.subscriptions.add(
+      this.selectControl.valueChanges
+        .pipe(distinctUntilChanged())
+        .subscribe(values => {
+          if (!Array.isArray(values)) {
+            values = [values];
+          }
+          if (values.includes(undefined) || values.includes(null)) {
+            this.selectControl.setValue([]);
+            return;
+          }
 
-  private parseCriteria() {
-    this.options = this.valuesToOptions(this.criteria.values);
-    this.optionsMap = this.createValuesMap(this.criteria.values);
-  }
-
-  private valuesToOptions(values): SelectOption[] {
-    return values.map(
-      value =>
-        ({
-          value: value.data[this.criteria.keyProperty],
-          viewValue: value.data[this.criteria.displayProperty]
-        } as SelectOption)
+          this.updateSelected(this.criteria.values, values);
+          this.filterSelectionChange.emit(this.criteria);
+        })
     );
   }
 
-  private optionsToValues(options): SearchFilterCriteriaInterface<T, K> {
-    return options.map(option => this.optionsMap[option.value]);
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 
-  private createValuesMap(values): Dictionary<T> {
-    return values.reduce((acc, value) => {
-      const id = value.data[this.criteria.keyProperty] as unknown;
-      acc[id as number] = value;
-      return acc;
-    }, {});
+  private criteriaToOptions(
+    criteria: SearchFilterCriteriaInterface<T, K>
+  ): SelectOption[] {
+    return criteria.values.map(
+      (value): SelectOption => ({
+        value: value,
+        viewValue: value.data[criteria.displayProperty] as any
+      })
+    );
   }
-}
 
-export interface SelectOption {
-  value: any;
-  viewValue: string;
+  private updateSelected(values, selection): void {
+    if (!Array.isArray(selection)) {
+      selection = [selection];
+    }
+
+    values.forEach(value => {
+      value.selected = selection.includes(value);
+    });
+  }
 }
