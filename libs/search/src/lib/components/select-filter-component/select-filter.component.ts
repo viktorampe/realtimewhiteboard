@@ -1,22 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Dictionary } from '@ngrx/entity';
-import { KeyWithPropertyType } from '../../interfaces/keyWithPropertyType.type';
-
-// TODO import real interface
-interface SearchFilterCriteriaInterface<T, K> {
-  name: string;
-  label: string;
-  keyProperty: KeyWithPropertyType<T, string>;
-  displayProperty: KeyWithPropertyType<T, string>;
-  values: {
-    data: T;
-    selected?: boolean;
-    prediction?: number;
-    visible?: boolean;
-    children?: SearchFilterCriteriaInterface<K, unknown>;
-  }[];
-}
+import { SearchFilterCriteriaInterface } from '../../interfaces/search-filter-criteria.interface';
 
 @Component({
   selector: 'campus-select-filter',
