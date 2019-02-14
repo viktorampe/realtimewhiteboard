@@ -36,4 +36,4 @@ deploy:
     region: eu-west-1
     local_dir: dist/app/polpo-classroom-web
     on:
-      branch: disabledfornow
+      branch: deploy/staging-polpo-classroom-web
