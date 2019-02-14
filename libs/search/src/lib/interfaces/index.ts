@@ -1,4 +1,5 @@
 import * as KeyWithPropertyType from './key-with-property-type.type';
+import * as SearchFilterComponentInterface from './search-filter-component-interface';
 import * as SearchFilterCriteriaInterface from './search-filter-criteria.interface';
 import * as SearchFilterInterface from './search-filter-interface';
 import * as SearchModeInterface from './search-mode-interface';
@@ -10,5 +11,6 @@ export {
   SearchResultInterface,
   SearchModeInterface,
   SearchFilterInterface,
+  SearchFilterComponentInterface,
   SearchFilterCriteriaInterface
 };
