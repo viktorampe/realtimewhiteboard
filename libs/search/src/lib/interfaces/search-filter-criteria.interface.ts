@@ -13,6 +13,6 @@ export interface SearchFilterCriteriaInterface<
     selected?: boolean;
     prediction?: number;
     visible?: boolean;
-    children?: K | null;
+    children?: K;
   }[];
 }
