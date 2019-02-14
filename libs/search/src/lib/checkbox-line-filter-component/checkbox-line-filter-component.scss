@@ -1,15 +1,17 @@
-.checkbox-holder {
-  display: flex;
-  flex-direction: row;
-
-  &__item {
-    margin-left: 5px;
+.checkbox-line-filter-component {
+  &__checkbox-holder {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    &__value {
-      margin-top: -2px;
+    flex-direction: row;
+
+    &__item {
+      margin-left: 5px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      &__value {
+        margin-top: -2px;
+      }
     }
   }
 }

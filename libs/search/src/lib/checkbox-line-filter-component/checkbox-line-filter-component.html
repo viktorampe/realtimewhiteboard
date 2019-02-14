@@ -1,7 +1,12 @@
-<div>
-  <div class="checkbox-holder">
+<div class="checkbox-line-filter-component">
+  <p>{{ filterCriteria.name }}</p>
+
+  <div class="checkbox-line-filter-component__checkbox-holder">
     <ng-container *ngFor="let value of filterCriteria.values">
-      <div class="checkbox-holder__item" *ngIf="value.visible">
+      <div
+        class="checkbox-line-filter-component__checkbox-holder__item"
+        *ngIf="value.visible"
+      >
         <input
           [disabled]="value.prediction === 0"
           type="checkbox"
@@ -10,9 +15,10 @@
           value="{{ 
             value.data[filterCriteria.displayProperty] }}"
         />
-        <p class="checkbox-holder__item__value">{{
-          value.data[filterCriteria.displayProperty]
-        }}</p>
+        <p
+          class="checkbox-line-filter-component__checkbox-holder__item__value"
+          >{{ value.data[filterCriteria.displayProperty] }}</p
+        >
       </div>
     </ng-container>
   </div>
