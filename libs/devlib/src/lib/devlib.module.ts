@@ -10,6 +10,7 @@ import { EduContentComponent } from './edu-content/edu-content.component';
 import { EduContentViewModel } from './edu-content/edu-content.viewmodel';
 import { LoginpageComponent } from './loginpage/loginpage.component';
 import { LoginPageViewModel } from './loginpage/loginpage.viewmodel';
+import { FindingNemoComponent } from './finding-nemo/finding-nemo.component';
 
 @NgModule({
   imports: [
@@ -22,6 +23,6 @@ import { LoginPageViewModel } from './loginpage/loginpage.viewmodel';
     ScormModule
   ],
   providers: [LoginPageViewModel, EduContentViewModel],
-  declarations: [LoginpageComponent, EduContentComponent]
+  declarations: [LoginpageComponent, EduContentComponent, FindingNemoComponent]
 })
 export class DevlibModule {}

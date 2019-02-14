@@ -4,6 +4,8 @@ export const environment: EnvironmentInterface = {
   production: true,
   // promo website settings
   website: {
+    title: 'POLPO - staging',
+    favicon: 'assets/icons/favicon.ico',
     url: 'https://www.staging.polpo.be'
   },
   login: {

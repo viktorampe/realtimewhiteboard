@@ -1,4 +1,3 @@
-import { ObjectPathService, ObjectPathServiceInterface } from '@campus/utils';
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { EduContentInterface } from '../../+models';
 import {
@@ -12,8 +11,6 @@ export function sortEduContent(
   a: EduContentInterface,
   b: EduContentInterface
 ): number {
-  const objectPathService: ObjectPathServiceInterface = new ObjectPathService();
-
   const titleA: string = getTitle(a);
   const titleB: string = getTitle(b);
 
@@ -41,18 +38,22 @@ export function sortEduContent(
 
   function getTitle(eduContent: EduContentInterface): string {
     const defaultValue = '' as string;
-    return objectPathService
-      .get(eduContent, p => p.publishedEduContentMetadata.title, defaultValue)
-      .toLowerCase();
+    return (
+      (eduContent.publishedEduContentMetadata &&
+        eduContent.publishedEduContentMetadata.title) ||
+      defaultValue
+    ).toLowerCase();
   }
 
   function getYear(eduContent: EduContentInterface): number {
     const defaultValue = '0' as string;
-    return +objectPathService.get(
-      eduContent,
-      p => p.publishedEduContentMetadata.years[0].name,
-      defaultValue
-    );
+
+    const year =
+      eduContent.publishedEduContentMetadata &&
+      eduContent.publishedEduContentMetadata.years &&
+      eduContent.publishedEduContentMetadata.years[0] &&
+      eduContent.publishedEduContentMetadata.years[0].name;
+    return parseInt(year || defaultValue, 10);
   }
 }
 

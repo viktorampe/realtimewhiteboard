@@ -67,4 +67,5 @@ export interface EduContentMetadataInterface {
   eduContentSource?: EduContentSourceInterface;
   fileExt?: string;
   fileLabel?: string;
+  methodIds?: number[];
 }

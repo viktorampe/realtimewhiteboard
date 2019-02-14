@@ -11,6 +11,10 @@ import {
   LearningAreaFixture,
   LearningAreaInterface,
   LearningAreaReducer,
+  MethodActions,
+  MethodFixture,
+  MethodInterface,
+  MethodReducer,
   StateFeatureBuilder,
   UiActions,
   UiReducer,
@@ -38,12 +42,14 @@ describe('BooksViewModel', () => {
   let unlockedBoekeGroupState: UnlockedBoekeGroupReducer.State;
   let unlockedBoekeStudentState: UnlockedBoekeStudentReducer.State;
   let eduContentState: EduContentReducer.State;
+  let methodState: MethodReducer.State;
 
   let ui: UiReducer.UiState;
   let learningAreas: LearningAreaInterface[];
   let unlockedBoekeGroups: UnlockedBoekeGroupInterface[];
   let unlockedBoekeStudents: UnlockedBoekeStudentInterface[];
   let eduContents: EduContentInterface[];
+  let methods: MethodInterface[];
 
   beforeAll(() => {
     loadState();
@@ -80,10 +86,11 @@ describe('BooksViewModel', () => {
   });
 
   it('openBooks() should call openStaticContentService', () => {
-    booksViewModel.openBook(2);
+    const mockBook = new EduContentFixture();
+    booksViewModel.openBook(mockBook);
 
     expect(openContentMock).toHaveBeenCalledTimes(1);
-    expect(openContentMock).toHaveBeenCalledWith(2);
+    expect(openContentMock).toHaveBeenCalledWith(mockBook);
   });
 
   describe('sharedBooks$', () => {
@@ -96,7 +103,8 @@ describe('BooksViewModel', () => {
               learningArea =>
                 learningArea.id ===
                 book.publishedEduContentMetadata.learningAreaId
-            )
+            ),
+            methods: [new MethodFixture({ id: 1, icon: 'test' })]
           });
         });
       expect(booksViewModel.sharedBooks$).toBeObservable(
@@ -123,7 +131,8 @@ describe('BooksViewModel', () => {
               learningArea =>
                 learningArea.id ===
                 book.publishedEduContentMetadata.learningAreaId
-            )
+            ),
+            methods: [new MethodFixture({ id: 1, icon: 'test' })]
           });
         });
       expect(booksViewModel.sharedBooks$).toBeObservable(
@@ -178,17 +187,24 @@ describe('BooksViewModel', () => {
     );
 
     eduContents = [
-      new EduContentFixture({ id: 1 }, { learningAreaId: 1 }),
-      new EduContentFixture({ id: 2 }, { learningAreaId: 1 }),
-      new EduContentFixture({ id: 3 }, { learningAreaId: 2 }),
-      new EduContentFixture({ id: 4 }, { learningAreaId: 2 }),
-      new EduContentFixture({ id: 5 }, { learningAreaId: 2 })
+      new EduContentFixture({ id: 1 }, { learningAreaId: 1, methodIds: [1] }),
+      new EduContentFixture({ id: 2 }, { learningAreaId: 1, methodIds: [1] }),
+      new EduContentFixture({ id: 3 }, { learningAreaId: 2, methodIds: [1] }),
+      new EduContentFixture({ id: 4 }, { learningAreaId: 2, methodIds: [1] }),
+      new EduContentFixture({ id: 5 }, { learningAreaId: 2, methodIds: [1] })
     ];
     eduContentState = EduContentReducer.reducer(
       EduContentReducer.initialState,
       new EduContentActions.EduContentsLoaded({
         eduContents: eduContents
       })
+    );
+
+    methods = [new MethodFixture({ id: 1, icon: 'test' })];
+
+    methodState = MethodReducer.reducer(
+      MethodReducer.initialState,
+      new MethodActions.MethodsLoaded({ methods })
     );
   }
 
@@ -227,6 +243,13 @@ describe('BooksViewModel', () => {
         reducer: EduContentReducer.reducer,
         initialState: {
           initialState: eduContentState
+        }
+      },
+      {
+        NAME: MethodReducer.NAME,
+        reducer: MethodReducer.reducer,
+        initialState: {
+          initialState: methodState
         }
       }
     ]);

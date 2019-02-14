@@ -47,7 +47,8 @@
       ],
       "@campus/pages/settings/alerts": [
         "libs/pages/settings/alerts/src/index.ts"
-      ]
+      ],
+      "@campus/search": ["libs/search/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp", "apps/*e2e*"],

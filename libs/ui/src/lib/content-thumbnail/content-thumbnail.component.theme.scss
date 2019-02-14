@@ -20,8 +20,9 @@
   $ui-content-thumbnail_header--grid-width: 100% !default;
   $ui-content-thumbnail_header_icon--grid-text-color: $ui-content-thumbnail_title-text-color !default;
   $ui-content-thumbnail_header_icon--grid-margin-left: 4px !default;
-  $ui-content-thumbnail_image--grid-height: 120px !default;
+  $ui-content-thumbnail_image--grid-height: 96px !default;
   $ui-content-thumbnail_image--grid-width: 100% !default;
+  $ui-content-thumbnail_image--grid--padding: 6px !default;
   $ui-content-thumbnail_title--grid-font-size: 12px !default;
   $ui-content-thumbnail_title--grid-line-height: 16px !default;
   $ui-content-thumbnail_title--grid-padding: 13px !default;
@@ -52,17 +53,12 @@
         line-height: $ui-content-thumbnail_header_icon-line-height;
       }
     }
-    &__image {
-      background-color: $ui-content-thumbnail_image-background-color;
-      height: $ui-content-thumbnail_image--grid-height;
-      width: $ui-content-thumbnail_image--grid-width;
-      margin: -$ui-content-thumbnail_header--grid-height 0 0 0;
-    }
     &__title {
       color: $ui-content-thumbnail_title-text-color;
     }
     // Grid
     &--grid {
+      background-color: $ui-content-thumbnail_actions--grid-background-color;
       width: $ui-content-thumbnail--grid-width;
       height: $ui-content-thumbnail--grid-height;
       .ui-content-thumbnail__header {
@@ -73,10 +69,26 @@
           color: $ui-content-thumbnail_header_icon--grid-text-color;
         }
       }
+      .ui-content-thumbnail__image {
+        background-color: $ui-content-thumbnail_image-background-color;
+        height: $ui-content-thumbnail_image--grid-height;
+        width: $ui-content-thumbnail_image--grid-width;
+        & > * {
+          padding: $ui-content-thumbnail_image--grid--padding;
+        }
+        & > campus-file-extension {
+          margin-top: -$ui-content-thumbnail_header--grid-height; // show underneath header
+        }
+        & > mat-icon {
+          height: $ui-content-thumbnail_image--grid-height;
+          background-color: $ui-content-thumbnail-background-color;
+        }
+      }
       .ui-content-thumbnail__title {
         font-size: $ui-content-thumbnail_title--grid-font-size;
         line-height: $ui-content-thumbnail_title--grid-line-height;
         padding: $ui-content-thumbnail_title--grid-padding;
+        background-color: $ui-content-thumbnail_background-color;
       }
       .ui-content-thumbnail__footer {
         padding: $ui-content-thumbnail_footer--grid-padding;
