@@ -1,9 +1,19 @@
 <div>
-  <!-- checkbox holder -->
   <div class="checkbox-holder">
-    <div class="checkbox-holder__item" *ngFor="let item of items">
-      <input type="checkbox" (click)="itemSelected(item)" value="{{ item }}" />
-      <p class="checkbox-holder__item__value">{{ item }}</p>
-    </div>
+    <ng-container *ngFor="let value of filterCriteria.values">
+      <div class="checkbox-holder__item" *ngIf="value.visible">
+        <input
+          [disabled]="value.prediction === 0"
+          type="checkbox"
+          [checked]="value.selected"
+          (itemChanged)="itemSelected(value)"
+          value="{{ 
+            value.data[filterCriteria.displayProperty] }}"
+        />
+        <p class="checkbox-holder__item__value">{{
+          value.data[filterCriteria.displayProperty]
+        }}</p>
+      </div>
+    </ng-container>
   </div>
 </div>
