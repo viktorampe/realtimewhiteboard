@@ -1,0 +1,9 @@
+<div>
+  <!-- checkbox holder -->
+  <div class="checkbox-holder">
+    <div class="checkbox-holder__item" *ngFor="let item of items">
+      <input type="checkbox" (click)="itemSelected(item)" value="{{ item }}" />
+      <p class="checkbox-holder__item__value">{{ item }}</p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,16 @@
+.checkbox-holder {
+  display: flex;
+  flex-direction: row;
+}
+
+.checkbox-holder__item {
+  margin-left: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkbox-holder__item__value {
+  margin-top: -2px;
+}
