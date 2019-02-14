@@ -4,9 +4,9 @@ import { SearchStateInterface } from './search-state.interface';
 
 export interface SearchFilter {
   criteria:
-    | SearchFilterCriteriaInterface<unknown, unknown>
-    | SearchFilterCriteriaInterface<unknown, unknown>[];
-  component: SearchFilterComponentInterface<unknown, unknown>;
+    | SearchFilterCriteriaInterface<unknown, any>
+    | SearchFilterCriteriaInterface<unknown, any>[];
+  component: SearchFilterComponentInterface<unknown, any>;
   domHost: string;
   options?: any;
 }
