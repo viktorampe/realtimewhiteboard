@@ -2,7 +2,7 @@ import { KeyWithPropertyType } from './key-with-property-type.type';
 
 export interface SearchFilterCriteriaInterface<
   T,
-  K extends SearchFilterCriteriaInterface<any, any> | null
+  K extends SearchFilterCriteriaInterface<unknown, any> | null
 > {
   name: string;
   label: string;
@@ -13,6 +13,6 @@ export interface SearchFilterCriteriaInterface<
     selected?: boolean;
     prediction?: number;
     visible?: boolean;
-    children?: K | null;
+    children?: K;
   }[];
 }

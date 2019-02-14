@@ -3,9 +3,11 @@ import { SearchFilterCriteriaInterface } from './search-filter-criteria.interfac
 
 export interface SearchFilterComponentInterface<
   T,
-  K extends SearchFilterCriteriaInterface<any, any | undefined> | undefined
+  K extends SearchFilterCriteriaInterface<unknown, any> | null
 > {
-  filterCriteria: SearchFilterCriteriaInterface<T, K>;
+  filterCriteria:
+    | SearchFilterCriteriaInterface<T, K>
+    | SearchFilterCriteriaInterface<T, K>[];
   filterSelectionChange: EventEmitter<
     SearchFilterCriteriaInterface<T, K> | SearchFilterCriteriaInterface<T, K>[]
   >;
