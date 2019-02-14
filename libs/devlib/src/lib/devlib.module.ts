@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { MatIconModule } from '@angular/material';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatIconModule, MatListModule } from '@angular/material';
 import { ScormModule } from '@campus/scorm';
 import { SearchModule } from '@campus/search';
 import { SharedModule } from '@campus/shared';
@@ -22,7 +22,9 @@ import { LoginPageViewModel } from './loginpage/loginpage.viewmodel';
     SharedModule,
     MatIconModule,
     ScormModule,
-    SearchModule
+    SearchModule,
+    ReactiveFormsModule,
+    MatListModule
   ],
   providers: [LoginPageViewModel, EduContentViewModel],
   declarations: [LoginpageComponent, EduContentComponent, FindingNemoComponent]
