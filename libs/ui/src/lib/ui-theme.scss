@@ -145,6 +145,12 @@ $ui-button-padding-bottom: $ui-primary-font-size/2 !default;
         height: $ui-content-thumbnail-button-size;
       }
     }
+    .ui-button--disabled {
+      &,
+      &:hover {
+        background-color: $ui-content-thumbnail-button-background-color;
+      }
+    }
   }
 }
 

@@ -1,4 +1,4 @@
-import { KeyWithPropertyType } from './keyWithPropertyType.type';
+import { KeyWithPropertyType } from './key-with-property-type.type';
 
 export interface SearchStateInterface<T> {
   searchTerm: string;
