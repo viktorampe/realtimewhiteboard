@@ -1,4 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatCheckboxModule } from '@angular/material';
+import { By } from '@angular/platform-browser';
 import { CheckboxLineFilterComponent } from './checkbox-line-filter-component';
 
 describe('CheckboxLineFilterComponent', () => {
@@ -36,7 +38,8 @@ describe('CheckboxLineFilterComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [CheckboxLineFilterComponent]
+      declarations: [CheckboxLineFilterComponent],
+      imports: [MatCheckboxModule]
     }).compileComponents();
   }));
 
@@ -51,10 +54,9 @@ describe('CheckboxLineFilterComponent', () => {
   });
 
   it('should have 2 items', () => {
-    component.filterCriteria = this.filterCriteria;
+    component.filterCriteria = selectFilter;
     fixture.detectChanges();
-    console.log(component.filterCriteria);
-    console.log(fixture.debugElement.children);
-    expect(fixture.debugElement.children);
+    const checkboxes = fixture.debugElement.queryAll(By.css('mat-checkbox'));
+    expect(checkboxes.length).toBe(2);
   });
 });

@@ -57,6 +57,7 @@ export class CheckboxLineFilterComponent
   //todo change any with actual interface
   itemChanged(value: any) {
     value.selected = !value.selected;
+    console.log(value);
     this.filterSelectionChange.emit(this.filterCriteria);
   }
 }
