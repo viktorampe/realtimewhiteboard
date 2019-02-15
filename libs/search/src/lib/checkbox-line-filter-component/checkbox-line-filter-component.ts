@@ -15,11 +15,10 @@ class TestData {
   styleUrls: ['./checkbox-line-filter-component.scss']
 })
 export class CheckboxLineFilterComponent
-  implements OnInit, SearchFilterComponentInterface<any, any> {
-  @Input() filterCriteria: SearchFilterCriteriaInterface<any, any>;
+  implements OnInit, SearchFilterComponentInterface {
+  @Input() filterCriteria: SearchFilterCriteriaInterface;
   @Output() filterSelectionChange = new EventEmitter<
-    | SearchFilterCriteriaInterface<any, any>
-    | SearchFilterCriteriaInterface<any, any>[]
+    SearchFilterCriteriaInterface | SearchFilterCriteriaInterface[]
   >();
 
   constructor() {
@@ -37,7 +36,7 @@ export class CheckboxLineFilterComponent
           selected: false,
           prediction: 20,
           visible: true,
-          children: null
+          child: null
         },
         {
           data: {
@@ -47,7 +46,7 @@ export class CheckboxLineFilterComponent
           selected: false,
           prediction: 100,
           visible: true,
-          children: null
+          child: null
         }
       ]
     };
@@ -55,8 +54,9 @@ export class CheckboxLineFilterComponent
 
   ngOnInit() {}
 
-  itemChanged(value: SearchFilterCriteriaInterface<unknown, unknown>) {
-    console.log(value);
+  //todo change any with actual interface
+  itemChanged(value: any) {
+    value.selected = !value.selected;
     this.filterSelectionChange.emit(this.filterCriteria);
   }
 }

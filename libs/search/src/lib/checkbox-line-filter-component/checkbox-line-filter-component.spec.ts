@@ -19,7 +19,7 @@ describe('CheckboxLineFilterComponent', () => {
         selected: false,
         prediction: 0,
         visible: true,
-        children: null
+        child: null
       },
       {
         data: {
@@ -29,7 +29,7 @@ describe('CheckboxLineFilterComponent', () => {
         selected: false,
         prediction: 0,
         visible: true,
-        children: null
+        child: null
       }
     ]
   };
