@@ -1,10 +1,9 @@
 <campus-checkbox-list-filter [selectFilter]="selectFilter"
                              (selectedFilters)="onSelectionChange($event)">
-
 </campus-checkbox-list-filter>
 
 
-<div *ngIf="(filterCriteria) as filterCriteria">
+<div *ngIf="(filterCriteria && filterCriteria.length)">
   <p>Selected:</p>
   <p>{{filterCriteria}}</p>
 </div>

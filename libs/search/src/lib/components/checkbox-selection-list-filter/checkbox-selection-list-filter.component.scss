@@ -4,11 +4,15 @@
   flex-flow: column nowrap;
 
 
-  .checkbox-list-filter {
+  .checkbox-selection-list-filter {
+
+    // actual items
     &__title {
-      background-color: orange
+      background-color: orange;
+      height: 24px;
     }
 
+    // container for sub-items
     &__items {
       background-color: orangered;
       padding-left: 36px;

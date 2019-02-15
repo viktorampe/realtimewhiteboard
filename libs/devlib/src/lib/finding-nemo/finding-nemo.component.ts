@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { SearchFilterCriteriaInterface } from 'libs/search/src/lib/interfaces/search-filter-criteria.interface';
 
 @Component({
@@ -6,7 +6,7 @@ import { SearchFilterCriteriaInterface } from 'libs/search/src/lib/interfaces/se
   templateUrl: './finding-nemo.component.html',
   styleUrls: ['./finding-nemo.component.scss']
 })
-export class FindingNemoComponent implements OnInit, AfterContentInit {
+export class FindingNemoComponent implements OnInit {
   public filterCriteria: any[];
   public selectFilter: SearchFilterCriteriaInterface;
 
@@ -18,7 +18,7 @@ export class FindingNemoComponent implements OnInit, AfterContentInit {
   }
 
   ngOnInit() {
-    const children2: SearchFilterCriteriaInterface.SearchFilterCriteriaInterface = {
+    const children2: SearchFilterCriteriaInterface = {
       name: 'selectFilter',
       label: 'select filter',
       keyProperty: 'id',
@@ -78,7 +78,7 @@ export class FindingNemoComponent implements OnInit, AfterContentInit {
 
     this.selectFilter = {
       name: 'selectFilter',
-      label: 'select filter',
+      label: 'select filter label',
       keyProperty: 'id',
       displayProperty: 'name',
       values: [
