@@ -35,7 +35,7 @@ export class SelectFilterComponent
   @Input() resetLabel: string;
   @Input()
   set filterCriteria(criteria: SearchFilterCriteriaInterface) {
-    this.criteria = criteria;
+    this.criteria = { ...criteria };
     this.options = this.criteriaToOptions(criteria);
   }
 
