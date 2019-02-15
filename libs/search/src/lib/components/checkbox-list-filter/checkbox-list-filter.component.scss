@@ -3,21 +3,4 @@
   display: flex;
   flex-flow: column nowrap;
   width: max-content;
-
-  li {
-    display: inline;
-  }
-
-  .checkbox-list-filter {
-    &__title {
-      background-color: orange
-    }
-
-    &__items {
-      background-color: orangered;
-      padding-left: 36px;
-      display: flex;
-      flex-flow: column nowrap;
-    }
-  }
 }

@@ -1,6 +1,4 @@
-<li class="checkbox-list-filter__title">
-  <mat-checkbox [(ngModel)]="checked"> {{value}} </mat-checkbox>
-</li>
-<li class="checkbox-list-filter__items">
-  <ng-content></ng-content>
-</li>
+<mat-selection-list style="width:max-content;">
+  <campus-checkbox-selection-list-filter [criterium]="selectFilter">
+  </campus-checkbox-selection-list-filter>
+</mat-selection-list>

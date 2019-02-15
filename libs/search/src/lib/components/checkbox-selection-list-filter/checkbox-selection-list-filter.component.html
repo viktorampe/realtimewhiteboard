@@ -1,5 +1,11 @@
-<mat-list-option class="checkbox-list-filter__title"> {{value}} </mat-list-option>
+<ng-container *ngFor="let option of criterium.values">
+  <mat-list-option class="checkbox-list-filter__title"
+                   [value]="getValueObject(option)"> {{getDisplayValue(option)}}
+  </mat-list-option>
 
-<div class="checkbox-list-filter__items">
-  <ng-content></ng-content>
-</div>
+  <div class="checkbox-list-filter__items">
+    <campus-checkbox-selection-list-filter *ngIf="option.children as childCriterium"
+                                           [criterium]="childCriterium">
+    </campus-checkbox-selection-list-filter>
+  </div>
+</ng-container>

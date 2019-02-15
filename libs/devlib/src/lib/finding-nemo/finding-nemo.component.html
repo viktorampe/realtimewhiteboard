@@ -1,19 +1,10 @@
-<mat-selection-list style="width:max-content;">
-  <campus-checkbox-selection-list-filter [value]="'titel'">
-    <campus-checkbox-selection-list-filter [value]="'waarde a'">
-      <campus-checkbox-selection-list-filter [value]="'waarde a1'"> </campus-checkbox-selection-list-filter>
-      <campus-checkbox-selection-list-filter [value]="'waarde a2'"> </campus-checkbox-selection-list-filter>
-      <campus-checkbox-selection-list-filter [value]="'waarde a3'">
-        <campus-checkbox-selection-list-filter [value]="'waarde a3a'"> </campus-checkbox-selection-list-filter>
-        <campus-checkbox-selection-list-filter [value]="'waarde a3b'"> </campus-checkbox-selection-list-filter>
-      </campus-checkbox-selection-list-filter>
-      <campus-checkbox-selection-list-filter [value]="'waarde a4'"> </campus-checkbox-selection-list-filter>
-    </campus-checkbox-selection-list-filter>
-    <campus-checkbox-selection-list-filter [value]="'waarde b'">
-      <campus-checkbox-selection-list-filter [value]="'waarde b1'"> </campus-checkbox-selection-list-filter>
-      <campus-checkbox-selection-list-filter [value]="'waarde b2'"> </campus-checkbox-selection-list-filter>
-    </campus-checkbox-selection-list-filter>
-    <campus-checkbox-selection-list-filter [value]="'waarde c'"> </campus-checkbox-selection-list-filter>
-    <campus-checkbox-selection-list-filter [value]="'waarde d'"> </campus-checkbox-selection-list-filter>
-  </campus-checkbox-selection-list-filter>
-</mat-selection-list>
+<campus-checkbox-list-filter [selectFilter]="selectFilter"
+                             (selectedFilters)="onSelectionChange($event)">
+
+</campus-checkbox-list-filter>
+
+
+<div *ngIf="(filterCriteria) as filterCriteria">
+  <p>Selected:</p>
+  <p>{{filterCriteria}}</p>
+</div>
