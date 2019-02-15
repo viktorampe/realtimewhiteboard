@@ -1,18 +1,13 @@
-import { KeyWithPropertyType } from './key-with-property-type.type';
-
-export interface SearchFilterCriteriaInterface<
-  T,
-  K extends SearchFilterCriteriaInterface<unknown, any> | null
-> {
+export interface SearchFilterCriteriaInterface {
   name: string;
   label: string;
-  keyProperty: KeyWithPropertyType<T, string | number>;
-  displayProperty: KeyWithPropertyType<T, string>;
+  keyProperty: string;
+  displayProperty: string;
   values: {
-    data: T;
+    data: any;
     selected?: boolean;
     prediction?: number;
     visible?: boolean;
-    children?: K;
+    child?: SearchFilterCriteriaInterface;
   }[];
 }

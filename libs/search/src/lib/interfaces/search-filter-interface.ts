@@ -3,10 +3,8 @@ import { SearchFilterCriteriaInterface } from './search-filter-criteria.interfac
 import { SearchStateInterface } from './search-state.interface';
 
 export interface SearchFilter {
-  criteria:
-    | SearchFilterCriteriaInterface<unknown, any>
-    | SearchFilterCriteriaInterface<unknown, any>[];
-  component: SearchFilterComponentInterface<unknown, any>;
+  criteria: SearchFilterCriteriaInterface | SearchFilterCriteriaInterface[];
+  component: SearchFilterComponentInterface;
   domHost: string;
   options?: any;
 }

@@ -1,14 +1,11 @@
 import { EventEmitter } from '@angular/core';
 import { SearchFilterCriteriaInterface } from './search-filter-criteria.interface';
 
-export interface SearchFilterComponentInterface<
-  T,
-  K extends SearchFilterCriteriaInterface<unknown, any> | null
-> {
+export interface SearchFilterComponentInterface {
   filterCriteria:
-    | SearchFilterCriteriaInterface<T, K>
-    | SearchFilterCriteriaInterface<T, K>[];
+    | SearchFilterCriteriaInterface
+    | SearchFilterCriteriaInterface[];
   filterSelectionChange: EventEmitter<
-    SearchFilterCriteriaInterface<T, K> | SearchFilterCriteriaInterface<T, K>[]
+    SearchFilterCriteriaInterface | SearchFilterCriteriaInterface[]
   >;
 }

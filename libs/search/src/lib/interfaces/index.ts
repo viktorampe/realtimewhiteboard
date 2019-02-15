@@ -1,4 +1,3 @@
-export * from './key-with-property-type.type';
 export * from './search-filter-component-interface';
 export * from './search-filter-criteria.interface';
 export * from './search-filter-interface';
