@@ -1,2 +1,5 @@
 <p> you will never find nemo! </p>
-<campus-breadcrumb-filter></campus-breadcrumb-filter>
+<campus-breadcrumb-filter
+  [filterCriteria]="breadCrumbFilterCriteria"
+  (filterSelectionChange)="onFilterSelectionChange($event)"
+></campus-breadcrumb-filter>

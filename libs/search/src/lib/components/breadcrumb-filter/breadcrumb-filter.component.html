@@ -1,3 +1,5 @@
-<p>
-  breadcrumb-filter works!
-</p>
+<p> breadcrumb-filter works! </p>
+
+<ng-container *ngFor="let criterium of filterCriteria; index as i">
+  <a (click)="clickBreadcrumb(i)">{{ criterium.label }}</a> >
+</ng-container>

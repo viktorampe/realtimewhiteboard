@@ -8,16 +8,15 @@ import { SearchFilterCriteriaInterface } from '../../interfaces/search-filter-cr
   styleUrls: ['./breadcrumb-filter.component.scss']
 })
 export class BreadcrumbFilterComponent
-  implements SearchFilterComponentInterface<unknown, unknown> {
-  @Input() filterCriteria: SearchFilterCriteriaInterface<unknown, unknown>;
+  implements SearchFilterComponentInterface {
+  @Input() filterCriteria: SearchFilterCriteriaInterface[];
   @Output() filterSelectionChange = new EventEmitter<
-    | SearchFilterCriteriaInterface<unknown, unknown>
-    | SearchFilterCriteriaInterface<unknown, unknown>[]
+    SearchFilterCriteriaInterface[]
   >();
 
   constructor() {}
 
-  clickBreadcrumb() {
-    this.filterSelectionChange.emit();
+  clickBreadcrumb(index: number) {
+    this.filterSelectionChange.emit(this.filterCriteria.slice(0, index + 1));
   }
 }
