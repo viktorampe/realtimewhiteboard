@@ -27,6 +27,9 @@
       var parts = window.location.hostname.split('.');
       document.domain =
         parts.length > 2 ? parts.slice(1).join('.') : parts.join('.');
+      if (window.location.href.includes('/#/?')) {
+        window.location.href = window.location.href.replace('/#/?', '/?');
+      }
     </script>
   </head>
 
