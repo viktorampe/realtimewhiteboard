@@ -22,9 +22,7 @@ export class CheckboxLineFilterComponent
     | SearchFilterCriteriaInterface<any, any>[]
   >();
 
-  constructor() {}
-
-  ngOnInit() {
+  constructor() {
     this.filterCriteria = {
       name: 'selectFilter',
       label: 'select filter',
@@ -37,7 +35,7 @@ export class CheckboxLineFilterComponent
             name: 'foo'
           },
           selected: false,
-          prediction: 0,
+          prediction: 20,
           visible: true,
           children: null
         },
@@ -47,7 +45,7 @@ export class CheckboxLineFilterComponent
             name: 'bar'
           },
           selected: false,
-          prediction: 0,
+          prediction: 100,
           visible: true,
           children: null
         }
@@ -55,7 +53,10 @@ export class CheckboxLineFilterComponent
     };
   }
 
+  ngOnInit() {}
+
   itemChanged(value: SearchFilterCriteriaInterface<unknown, unknown>) {
-    this.filterSelectionChange.emit(value);
+    console.log(value);
+    this.filterSelectionChange.emit(this.filterCriteria);
   }
 }

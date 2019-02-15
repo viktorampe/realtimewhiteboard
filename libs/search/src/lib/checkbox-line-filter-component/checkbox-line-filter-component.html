@@ -7,14 +7,11 @@
         class="checkbox-line-filter-component__checkbox-holder__item"
         *ngIf="value.visible"
       >
-        <input
+        <mat-checkbox
           [disabled]="value.prediction === 0"
-          type="checkbox"
           [checked]="value.selected"
-          (itemChanged)="itemSelected(value)"
-          value="{{ 
-            value.data[filterCriteria.displayProperty] }}"
-        />
+          (change)="itemChanged(value)"
+        ></mat-checkbox>
         <p
           class="checkbox-line-filter-component__checkbox-holder__item__value"
           >{{ value.data[filterCriteria.displayProperty] }}</p
