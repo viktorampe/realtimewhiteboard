@@ -22,11 +22,9 @@ interface SelectOption {
   templateUrl: './select-filter.component.html',
   styleUrls: ['./select-filter.component.css']
 })
-export class SelectFilterComponent<
-  T,
-  K extends SearchFilterCriteriaInterface<any, any>
-> implements SearchFilterComponentInterface<T, K>, OnInit, OnDestroy {
-  criteria: SearchFilterCriteriaInterface<T, K>;
+export class SelectFilterComponent
+  implements SearchFilterComponentInterface, OnInit, OnDestroy {
+  criteria: SearchFilterCriteriaInterface;
   options: SelectOption[];
   selectControl: FormControl = new FormControl();
 
@@ -35,13 +33,13 @@ export class SelectFilterComponent<
   @Input() multiple = false;
   @Input() resetLabel: string;
   @Input()
-  set filterCriteria(criteria: SearchFilterCriteriaInterface<T, K>) {
+  set filterCriteria(criteria: SearchFilterCriteriaInterface) {
     this.criteria = criteria;
     this.options = this.criteriaToOptions(criteria);
   }
 
   @Output() filterSelectionChange: EventEmitter<
-    SearchFilterCriteriaInterface<T, K>
+    SearchFilterCriteriaInterface
   > = new EventEmitter();
 
   constructor() {}
@@ -70,7 +68,7 @@ export class SelectFilterComponent<
   }
 
   private criteriaToOptions(
-    criteria: SearchFilterCriteriaInterface<T, K>
+    criteria: SearchFilterCriteriaInterface
   ): SelectOption[] {
     return criteria.values.map(
       (value): SelectOption => ({
