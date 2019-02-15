@@ -27,7 +27,7 @@ export class FindingNemoComponent implements OnInit {
           selected: false,
           prediction: 0,
           visible: true,
-          children: {
+          child: {
             name: 'selectFilter',
             label: 'select filter',
             keyProperty: 'id',
@@ -50,7 +50,7 @@ export class FindingNemoComponent implements OnInit {
           selected: false,
           prediction: 0,
           visible: true,
-          children: null
+          child: null
         }
       ]
     };

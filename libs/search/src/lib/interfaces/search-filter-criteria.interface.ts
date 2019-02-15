@@ -8,6 +8,6 @@ export interface SearchFilterCriteriaInterface {
     selected?: boolean;
     prediction?: number;
     visible?: boolean;
-    children?: SearchFilterCriteriaInterface;
+    child?: SearchFilterCriteriaInterface;
   }[];
 }
