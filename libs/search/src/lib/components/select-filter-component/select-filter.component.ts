@@ -27,6 +27,7 @@ export class SelectFilterComponent
   criteria: SearchFilterCriteriaInterface;
   options: SelectOption[];
   selectControl: FormControl = new FormControl();
+  count = 0;
 
   private subscriptions: Subscription = new Subscription();
 
@@ -57,6 +58,7 @@ export class SelectFilterComponent
             return;
           }
 
+          this.count = values.length;
           this.updateSelected(this.criteria.values, values);
           this.filterSelectionChange.emit(this.criteria);
         })
@@ -70,12 +72,17 @@ export class SelectFilterComponent
   private criteriaToOptions(
     criteria: SearchFilterCriteriaInterface
   ): SelectOption[] {
-    return criteria.values.map(
-      (value): SelectOption => ({
-        value: value,
-        viewValue: value.data[criteria.displayProperty] as any
-      })
-    );
+    return criteria.values
+      .filter(value => value.visible)
+      .map(
+        (value): SelectOption => {
+          let viewValue = value.data[criteria.displayProperty];
+          if (value.prediction !== undefined) {
+            viewValue += ' (' + value.prediction + ')';
+          }
+          return { value, viewValue };
+        }
+      );
   }
 
   private updateSelected(values, selection): void {
