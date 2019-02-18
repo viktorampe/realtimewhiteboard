@@ -120,6 +120,47 @@ describe('SelectFilterComponentComponent', () => {
     expect(options[0].nativeElement.textContent).toContain('resetFoo');
   });
 
+  it('should reset the selected options when clicked', () => {
+    mockFilterCriteria.values[0].selected = true;
+    component.filterCriteria = mockFilterCriteria;
+    component.resetLabel = 'resetFoo';
+    fixture.detectChanges();
+
+    const expected = new SearchFilterCriteriaFixture({}, [
+      new SearchFilterCriteriaValuesFixture({
+        data: {
+          id: 1,
+          name: 'foo'
+        },
+        selected: false
+      }),
+      new SearchFilterCriteriaValuesFixture({
+        data: {
+          id: 2,
+          name: 'bar'
+        },
+        selected: false
+      }),
+      new SearchFilterCriteriaValuesFixture({
+        data: {
+          id: 3,
+          name: 'foobar'
+        },
+        selected: false
+      })
+    ]);
+
+    let updatedSelection: SearchFilterCriteriaInterface;
+    component.filterSelectionChange.subscribe(selection => {
+      updatedSelection = selection;
+    });
+
+    const options = getOptionsForCriteria();
+    options[0].nativeElement.click();
+
+    expect(updatedSelection).toEqual(expected);
+  });
+
   it('should have [multiple] option active for the select component', () => {
     // cannot change multiple after component initialization, but set as true at the start of the test
     expect(matSelectComponent.multiple).toBe(true);
