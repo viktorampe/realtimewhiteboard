@@ -6,10 +6,6 @@ import { LoginpageComponent } from './loginpage/loginpage.component';
 
 const routes: Routes = [
   {
-    path: '',
-    component: LoginpageComponent
-  },
-  {
     path: 'finding-nemo',
     component: FindingNemoComponent
   },
@@ -24,6 +20,17 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginpageComponent
+  },
+  {
+    path: '',
+    component: LoginpageComponent,
+    children: [
+      {
+        path: ':errorCode',
+        component: LoginpageComponent,
+        data: { breadcrumbText: 'Error' }
+      }
+    ]
   }
 ];
 
