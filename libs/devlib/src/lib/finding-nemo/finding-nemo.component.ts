@@ -48,5 +48,6 @@ export class FindingNemoComponent {
 
   catchEvent($event) {
     console.log($event);
+    this.filterCriteria$.next([$event]);
   }
 }
