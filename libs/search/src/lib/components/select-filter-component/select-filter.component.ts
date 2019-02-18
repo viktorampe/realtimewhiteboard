@@ -10,10 +10,13 @@ import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { SearchFilterComponentInterface } from '../../interfaces/search-filter-component-interface';
-import { SearchFilterCriteriaInterface } from '../../interfaces/search-filter-criteria.interface';
+import {
+  SearchFilterCriteriaInterface,
+  SearchFilterCriteriaValuesInterface
+} from '../../interfaces/search-filter-criteria.interface';
 
 interface SelectOption {
-  value: any;
+  value: SearchFilterCriteriaValuesInterface;
   viewValue: string | number;
 }
 
@@ -40,7 +43,7 @@ export class SelectFilterComponent
     const selection = this.options
       .filter(option => option.value.selected)
       .map(option => option.value);
-    this.setSelection(selection);
+    this.updateView(selection);
   }
 
   @Output() filterSelectionChange: EventEmitter<
@@ -51,17 +54,27 @@ export class SelectFilterComponent
 
   ngOnInit() {
     this.subscriptions.add(
-      this.selectControl.valueChanges
-        .pipe(distinctUntilChanged())
-        .subscribe(selection => {
-          if (!Array.isArray(selection)) {
-            selection = [selection];
+      this.selectControl.valueChanges.pipe(distinctUntilChanged()).subscribe(
+        (
+          selection:
+            | SearchFilterCriteriaValuesInterface
+            | SearchFilterCriteriaValuesInterface[]
+        ): void => {
+          if (Array.isArray(selection)) {
+            // multiple === true
+            if (selection.includes(null)) {
+              // resetLabel was clicked
+              this.selectControl.setValue([]);
+              return;
+            }
+          } else {
+            selection = selection === null ? [] : [selection];
           }
-
-          this.setSelection(selection);
+          this.updateView(selection);
           this.updateCriteriaWithSelected(this.criteria.values, selection);
           this.filterSelectionChange.emit(this.criteria);
-        })
+        }
+      )
     );
   }
 
@@ -75,7 +88,7 @@ export class SelectFilterComponent
     return criteria.values
       .filter(value => value.visible)
       .map(
-        (value): SelectOption => {
+        (value: SearchFilterCriteriaValuesInterface): SelectOption => {
           let viewValue = value.data[criteria.displayProperty];
           if (value.prediction !== undefined) {
             viewValue += ' (' + value.prediction + ')';
@@ -85,18 +98,22 @@ export class SelectFilterComponent
       );
   }
 
-  private setSelection(selection) {
-    if (selection.includes(undefined) || selection.includes(null)) {
-      this.selectControl.setValue(this.multiple ? [] : null);
-      return;
-    }
-    this.selectControl.setValue(this.multiple ? selection : selection[0]);
+  private updateView(selection: SearchFilterCriteriaValuesInterface[]): void {
     this.count = selection.length;
+    if (this.multiple) {
+      this.selectControl.setValue(selection);
+    } else {
+      this.selectControl.setValue(selection[0] || null);
+    }
   }
 
-  private updateCriteriaWithSelected(values, selection): void {
-    values.forEach(value => {
-      value.selected = selection.includes(value);
-    });
+  private updateCriteriaWithSelected(
+    values: SearchFilterCriteriaValuesInterface[],
+    selection: SearchFilterCriteriaValuesInterface[]
+  ): void {
+    // uncheck everything
+    values.forEach(value => (value.selected = false));
+    // then check selected
+    selection.forEach(selected => (selected.selected = true));
   }
 }
