@@ -95,7 +95,7 @@ export class FindingNemoComponent implements OnInit {
             id: 3,
             name: 'Wiskunde'
           }),
-          selected: false,
+          selected: true,
           prediction: 1,
           visible: true,
           child: {

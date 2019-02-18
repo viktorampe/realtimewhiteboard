@@ -68,9 +68,11 @@ export function getFilteredCriterium(
   return {
     ...criterium,
     ...{
-      values: criterium.values.filter(
-        value => value.visible && value.prediction
-      )
+      values: criterium.values
+        .filter(value => value.visible && value.prediction)
+        // order by selected status
+        // needed so selected values aren't hidden
+        .sort((a, b) => (a.selected === b.selected ? 0 : a.selected ? -1 : 1))
     }
   };
 }
