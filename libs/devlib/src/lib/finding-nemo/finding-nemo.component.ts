@@ -25,7 +25,7 @@ export class FindingNemoComponent {
               id: 1,
               name: 'foo jaar'
             },
-            selected: true
+            selected: false
           },
           {
             data: {
@@ -39,7 +39,36 @@ export class FindingNemoComponent {
               id: 3,
               name: 'baz jaar'
             },
-            selected: false
+            selected: false,
+            child: {
+              name: 'sub criteria name',
+              label: 'The sub label of the criteria',
+              keyProperty: 'id',
+              displayProperty: 'name',
+              values: [
+                {
+                  data: {
+                    id: 1,
+                    name: 'foo jaar'
+                  },
+                  selected: false
+                },
+                {
+                  data: {
+                    id: 2,
+                    name: 'bar jaar'
+                  },
+                  selected: false
+                },
+                {
+                  data: {
+                    id: 3,
+                    name: 'baz jaar'
+                  },
+                  selected: false
+                }
+              ]
+            }
           }
         ]
       }
@@ -47,7 +76,6 @@ export class FindingNemoComponent {
   }
 
   catchEvent($event: SearchFilterCriteriaInterface[]) {
-    console.log($event);
     this.filterCriteria$.next($event);
   }
 }
