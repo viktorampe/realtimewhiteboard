@@ -45,7 +45,7 @@ export class CheckboxLineFilterComponent
             id: 2,
             name: 'bar'
           },
-          selected: false,
+          selected: true,
           prediction: 100,
           visible: true,
           child: null
@@ -59,7 +59,7 @@ export class CheckboxLineFilterComponent
   //todo change any with actual interface
   itemChanged(value: any) {
     value.selected = !value.selected;
-    console.log(value);
     this.filterSelectionChange.emit(this.filterCriteria);
+    console.log(this.filterCriteria);
   }
 }
