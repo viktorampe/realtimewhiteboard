@@ -7,10 +7,21 @@ import { SearchFilterCriteriaInterface } from '../../../interfaces';
   styleUrls: ['./checkbox-selection-list-filter.component.scss']
 })
 export class CheckboxSelectionListFilterComponent {
-  @Input() criterium: SearchFilterCriteriaInterface;
+  @Input()
+  set criterium(filterCriterium: SearchFilterCriteriaInterface) {
+    this.filteredFilterCriterium = {
+      ...filterCriterium,
+      ...{
+        values: filterCriterium.values.filter(
+          value => value.visible && value.prediction
+        )
+      }
+    };
+  }
   @Input() maxVisibleItems: number; // aantal zichtbare titels
 
   public toonMeerItems: boolean; // expand aantal zichtbare titels
+  public filteredFilterCriterium: SearchFilterCriteriaInterface;
 
   // expand aantal zichtbare titels bij CHILD
   public toonMeer(value: boolean) {

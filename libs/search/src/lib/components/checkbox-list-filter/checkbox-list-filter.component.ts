@@ -7,9 +7,9 @@ import {
   Output,
   ViewChild
 } from '@angular/core';
-import { MatListOption, MatSelectionList } from '@angular/material';
+import { MatSelectionList } from '@angular/material';
 import { Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { distinctUntilChanged } from 'rxjs/operators';
 import { SearchFilterComponentInterface } from '../../interfaces';
 import { SearchFilterCriteriaInterface } from './../../interfaces/search-filter-criteria.interface';
 
@@ -20,33 +20,39 @@ import { SearchFilterCriteriaInterface } from './../../interfaces/search-filter-
 })
 export class CheckboxListFilterComponent
   implements AfterViewInit, OnDestroy, SearchFilterComponentInterface {
-  @Input()
-  filterCriteria: SearchFilterCriteriaInterface;
+  public toonMeerChildren = false;
+  public filteredFilterCriteria: SearchFilterCriteriaInterface;
+
+  private subscriptions = new Subscription();
+  private _filterCriteria: SearchFilterCriteriaInterface;
+
   @Input() maxVisibleItems = 0; // 0 == no limit
+  @Input()
+  get filterCriteria(): SearchFilterCriteriaInterface {
+    return this._filterCriteria;
+  }
+  set filterCriteria(value: SearchFilterCriteriaInterface) {
+    if (this._filterCriteria === value) return;
+
+    this._filterCriteria = value;
+    this.filteredFilterCriteria = this.getFilteredCriterium(value);
+  }
+
   @Output()
   filterSelectionChange = new EventEmitter<
     SearchFilterCriteriaInterface | SearchFilterCriteriaInterface[]
   >();
-
-  public toonMeerChildren = false;
-  private subscriptions = new Subscription();
 
   @ViewChild(MatSelectionList) private matList: MatSelectionList;
 
   ngAfterViewInit(): void {
     this.subscriptions.add(
       this.matList.selectionChange
-        .pipe(
-          debounceTime(500),
-          distinctUntilChanged()
-        )
+        .pipe(distinctUntilChanged())
         .subscribe(event => {
-          this.updateCriteria(
-            event.source.selectedOptions.selected,
-            this.filterCriteria
-          );
+          event.option.value.selected = event.option.selected;
 
-          this.filterSelectionChange.emit([this.filterCriteria]);
+          this.filterSelectionChange.emit([this._filterCriteria]);
         })
     );
   }
@@ -55,18 +61,16 @@ export class CheckboxListFilterComponent
     this.subscriptions.unsubscribe();
   }
 
-  private updateCriteria(
-    selectedOptions: MatListOption[],
+  private getFilteredCriterium(
     criterium: SearchFilterCriteriaInterface
-  ): void {
-    if (selectedOptions) {
-      const selectedValues = selectedOptions.map(option => option.value);
-      criterium.values.forEach(value => {
-        value.selected = selectedValues.includes(value);
-        if (value.child) {
-          this.updateCriteria(selectedOptions, value.child);
-        }
-      });
-    }
+  ): SearchFilterCriteriaInterface {
+    return {
+      ...criterium,
+      ...{
+        values: criterium.values.filter(
+          value => value.visible && value.prediction
+        )
+      }
+    };
   }
 }

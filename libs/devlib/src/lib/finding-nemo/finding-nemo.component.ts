@@ -26,7 +26,7 @@ export class FindingNemoComponent implements OnInit {
             name: 'Aardrijkskunde'
           }),
           selected: false,
-          prediction: 0,
+          prediction: 1,
           visible: true,
           child: {
             name: 'selectFilter',
@@ -37,19 +37,19 @@ export class FindingNemoComponent implements OnInit {
               {
                 data: new CredentialFixture({ id: 1, provider: 'smartschool' }),
                 selected: false,
-                prediction: 0,
+                prediction: 1,
                 visible: true
               },
               {
                 data: new CredentialFixture({ id: 2, provider: 'google' }),
                 selected: false,
-                prediction: 0,
+                prediction: 1,
                 visible: true
               },
               {
                 data: new CredentialFixture({ id: 3, provider: 'facebook' }),
                 selected: false,
-                prediction: 0,
+                prediction: 1,
                 visible: true
               }
             ]
@@ -61,7 +61,7 @@ export class FindingNemoComponent implements OnInit {
             name: 'Geschiedenis'
           }),
           selected: false,
-          prediction: 0,
+          prediction: 1,
           visible: true,
           child: {
             name: 'selectFilter',
@@ -72,13 +72,13 @@ export class FindingNemoComponent implements OnInit {
               {
                 data: new CredentialFixture({ id: 1, provider: 'smartschool' }),
                 selected: false,
-                prediction: 0,
+                prediction: 1,
                 visible: true
               },
               {
                 data: new CredentialFixture({ id: 2, provider: 'google' }),
                 selected: false,
-                prediction: 0,
+                prediction: 1,
                 visible: true
               },
               {
@@ -96,7 +96,7 @@ export class FindingNemoComponent implements OnInit {
             name: 'Wiskunde'
           }),
           selected: false,
-          prediction: 0,
+          prediction: 1,
           visible: true,
           child: {
             name: 'selectFilter',
@@ -131,8 +131,8 @@ export class FindingNemoComponent implements OnInit {
             name: 'Informatica'
           }),
           selected: false,
-          prediction: 0,
-          visible: true,
+          prediction: 1,
+          visible: false,
           child: null
         },
         {
