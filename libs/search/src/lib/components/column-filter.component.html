@@ -5,7 +5,7 @@
     <div *ngFor="let filterCriterion of filterCriteria">
       <div>{{ filterCriterion.name }}</div>
       <div>{{ filterCriterion.label }}</div>
-      <div *ngFor="let value of filterCriterion.values">
+      <div *ngFor="let value of filterCriterion.values" class="value">
         <div
           [ngClass]="{ selected: value.selected }"
           (click)="
@@ -16,6 +16,11 @@
           "
           >displayProperty:
           {{ value.data[filterCriterion.displayProperty] }}</div
+        >
+        <div
+          *ngIf="value.child"
+          (click)="onFilterSelectionChange(null, value.child)"
+          >-></div
         >
       </div>
     </div>

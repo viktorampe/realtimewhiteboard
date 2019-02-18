@@ -23,15 +23,16 @@ export class ColumnFilterComponent implements SearchFilterComponentInterface {
     keyProperty: string,
     filterCriterion: SearchFilterCriteriaInterface
   ) {
-    const returnFilterCriterion = { ...filterCriterion };
-    returnFilterCriterion.values = filterCriterion.values.map(value => {
-      const returnValue = { ...value };
-      if (value.data[filterCriterion.keyProperty] === keyProperty)
-        returnValue.selected = true;
-      else returnValue.selected = false;
-      return returnValue;
+    console.log(keyProperty);
+    console.log(filterCriterion);
+    // const returnFilterCriterion: SearchFilterCriteriaInterface;
+    filterCriterion.values = filterCriterion.values.map(value => {
+      value.data[filterCriterion.keyProperty] === keyProperty
+        ? (value.selected = true)
+        : (value.selected = false);
+      // if (value.selected && value.child) returnFilterCriterion = value.child;
+      return { ...value };
     });
-    console.log(returnFilterCriterion);
-    this.filterSelectionChange.emit([returnFilterCriterion]);
+    this.filterSelectionChange.emit([filterCriterion]);
   }
 }
