@@ -19,8 +19,19 @@ export class ColumnFilterComponent implements SearchFilterComponentInterface {
   >();
   constructor() {}
 
-  onFilterSelectionChange(keyProperty) {
-    console.log(keyProperty);
-    this.filterSelectionChange.emit(this.filterCriteria);
+  onFilterSelectionChange(
+    keyProperty: string,
+    filterCriterion: SearchFilterCriteriaInterface
+  ) {
+    const returnFilterCriterion = { ...filterCriterion };
+    returnFilterCriterion.values = filterCriterion.values.map(value => {
+      const returnValue = { ...value };
+      if (value.data[filterCriterion.keyProperty] === keyProperty)
+        returnValue.selected = true;
+      else returnValue.selected = false;
+      return returnValue;
+    });
+    console.log(returnFilterCriterion);
+    this.filterSelectionChange.emit(returnFilterCriterion);
   }
 }
