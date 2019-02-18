@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { SearchFilterCriteriaInterface } from '../../../interfaces';
+import { getFilteredCriterium } from '../checkbox-list-filter.component';
 
 @Component({
   selector: 'campus-checkbox-selection-list-filter',
@@ -7,21 +8,23 @@ import { SearchFilterCriteriaInterface } from '../../../interfaces';
   styleUrls: ['./checkbox-selection-list-filter.component.scss']
 })
 export class CheckboxSelectionListFilterComponent {
-  @Input()
-  set criterium(filterCriterium: SearchFilterCriteriaInterface) {
-    this.filteredFilterCriterium = {
-      ...filterCriterium,
-      ...{
-        values: filterCriterium.values.filter(
-          value => value.visible && value.prediction
-        )
-      }
-    };
-  }
-  @Input() maxVisibleItems: number; // aantal zichtbare titels
-
   public toonMeerItems: boolean; // expand aantal zichtbare titels
   public filteredFilterCriterium: SearchFilterCriteriaInterface;
+
+  private _criterium: SearchFilterCriteriaInterface;
+
+  @Input() maxVisibleItems: number; // aantal zichtbare titels
+
+  @Input()
+  get criterium(): SearchFilterCriteriaInterface {
+    return this._criterium;
+  }
+  set criterium(value: SearchFilterCriteriaInterface) {
+    if (this._criterium === value) return;
+
+    this._criterium = value;
+    this.filteredFilterCriterium = getFilteredCriterium(value);
+  }
 
   // expand aantal zichtbare titels bij CHILD
   public toonMeer(value: boolean) {

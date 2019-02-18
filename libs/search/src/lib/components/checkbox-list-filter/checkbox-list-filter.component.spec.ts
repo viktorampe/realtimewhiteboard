@@ -181,17 +181,14 @@ describe('CheckboxListFilterComponentComponent', () => {
 
       const selectedOption: MatListOption = new MatListOption(
         null,
-        null,
+        fixture.changeDetectorRef,
         matListComp
       );
       selectedOption.value = mockFilterCriteria.values[0];
 
-      const mockEvent = new MatSelectionListChange(
-        Object.assign(matListComp, {
-          selectedOptions: { selected: [selectedOption] }
-        }),
-        selectedOption
-      );
+      matListComp.selectedOptions.select(selectedOption);
+
+      const mockEvent = new MatSelectionListChange(matListComp, selectedOption);
 
       const expected = {
         ...mockFilterCriteria,
@@ -200,7 +197,7 @@ describe('CheckboxListFilterComponentComponent', () => {
       expected.values[0].selected = true;
 
       component.filterSelectionChange.subscribe(event => {
-        expect(event).toEqual(expected); // <- Actual test
+        expect(event).toEqual([expected]); // <- Actual test
       });
 
       matListComp.selectionChange.next(mockEvent);

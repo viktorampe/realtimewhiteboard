@@ -38,7 +38,7 @@ describe('CheckboxSelectionListFilterComponent', () => {
             name: 'Aardrijkskunde'
           },
           selected: false,
-          prediction: 0,
+          prediction: 1,
           visible: true,
           child: {
             name: 'selectFilter',
@@ -49,19 +49,19 @@ describe('CheckboxSelectionListFilterComponent', () => {
               {
                 data: { id: 1, provider: 'smartschool' },
                 selected: false,
-                prediction: 0,
+                prediction: 1,
                 visible: true
               },
               {
                 data: { id: 2, provider: 'google' },
                 selected: false,
-                prediction: 0,
+                prediction: 1,
                 visible: true
               },
               {
                 data: { id: 3, provider: 'facebook' },
                 selected: false,
-                prediction: 0,
+                prediction: 1,
                 visible: true
               }
             ]
@@ -73,7 +73,7 @@ describe('CheckboxSelectionListFilterComponent', () => {
             name: 'Geschiedenis'
           },
           selected: false,
-          prediction: 0,
+          prediction: 1,
           visible: true,
           child: {
             name: 'selectFilter',
@@ -84,13 +84,13 @@ describe('CheckboxSelectionListFilterComponent', () => {
               {
                 data: { id: 1, provider: 'smartschool' },
                 selected: false,
-                prediction: 0,
+                prediction: 1,
                 visible: true
               },
               {
                 data: { id: 2, provider: 'google' },
                 selected: false,
-                prediction: 0,
+                prediction: 1,
                 visible: true
               },
               {
@@ -108,7 +108,7 @@ describe('CheckboxSelectionListFilterComponent', () => {
             name: 'Wiskunde'
           },
           selected: false,
-          prediction: 0,
+          prediction: 1,
           visible: true,
           child: {
             name: 'selectFilter',
@@ -143,8 +143,8 @@ describe('CheckboxSelectionListFilterComponent', () => {
             name: 'Informatica'
           },
           selected: false,
-          prediction: 0,
-          visible: true,
+          prediction: 1,
+          visible: false,
           child: null
         },
         {

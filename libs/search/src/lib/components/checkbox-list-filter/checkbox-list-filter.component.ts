@@ -35,7 +35,7 @@ export class CheckboxListFilterComponent
     if (this._filterCriteria === value) return;
 
     this._filterCriteria = value;
-    this.filteredFilterCriteria = this.getFilteredCriterium(value);
+    this.filteredFilterCriteria = getFilteredCriterium(value);
   }
 
   @Output()
@@ -60,17 +60,17 @@ export class CheckboxListFilterComponent
   ngOnDestroy() {
     this.subscriptions.unsubscribe();
   }
+}
 
-  private getFilteredCriterium(
-    criterium: SearchFilterCriteriaInterface
-  ): SearchFilterCriteriaInterface {
-    return {
-      ...criterium,
-      ...{
-        values: criterium.values.filter(
-          value => value.visible && value.prediction
-        )
-      }
-    };
-  }
+export function getFilteredCriterium(
+  criterium: SearchFilterCriteriaInterface
+): SearchFilterCriteriaInterface {
+  return {
+    ...criterium,
+    ...{
+      values: criterium.values.filter(
+        value => value.visible && value.prediction
+      )
+    }
+  };
 }
