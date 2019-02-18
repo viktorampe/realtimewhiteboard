@@ -1,21 +1,35 @@
-<ng-container *ngFor="let option of (maxVisibleItems && !toonMeerItems ? (criterium.values | slice:0:maxVisibleItems) : criterium.values)">
+<ng-container
+  *ngFor="
+    let option of maxVisibleItems && !toonMeerItems
+      ? (criterium.values | slice: 0:maxVisibleItems)
+      : criterium.values
+  "
+>
   <!-- titles -->
-  <mat-list-option class="checkbox-selection-list-filter__title"
-                   [value]="option"> {{option.data[criterium.displayProperty]}}
+  <mat-list-option
+    class="checkbox-selection-list-filter__title"
+    [value]="option"
+  >
+    {{ option.data[criterium.displayProperty] }}
   </mat-list-option>
 
   <!-- children -->
-  <campus-checkbox-selection-list-filter class="checkbox-selection-list-filter__items"
-                                         *ngIf="option.child  && option.selected"
-                                         [criterium]="option.child"
-                                         [maxVisibleItems]="maxVisibleItems">
+  <campus-checkbox-selection-list-filter
+    class="checkbox-selection-list-filter__items"
+    *ngIf="option.child && option.selected"
+    [criterium]="option.child"
+    [maxVisibleItems]="maxVisibleItems"
+  >
   </campus-checkbox-selection-list-filter>
 </ng-container>
 
-<!-- show more titles ?-->
-<ng-container *ngIf="maxVisibleItems && maxVisibleItems < criterium.values.length">
-  <ng-container *ngIf="!toonMeerItems ;else toonMinder">
-    <a (click)="toonMeer(true)">toon meer...</a></ng-container>
+<!-- show more titles ? -->
+<ng-container
+  *ngIf="maxVisibleItems && maxVisibleItems < criterium.values.length"
+>
+  <ng-container *ngIf="!toonMeerItems; else: toonMinder">
+    <a (click)="toonMeer(true)">toon meer...</a></ng-container
+  >
 
   <ng-template #toonMinder>
     <a (click)="toonMeer(false)">toon minder...</a>
