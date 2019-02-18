@@ -10,29 +10,26 @@ import {
   styleUrls: ['./column-filter.component.scss']
 })
 export class ColumnFilterComponent implements SearchFilterComponentInterface {
-  @Input() filterCriteria:
-    | SearchFilterCriteriaInterface
-    | SearchFilterCriteriaInterface[];
+  preserveColumn = false;
+
+  @Input() filterCriteria: SearchFilterCriteriaInterface[];
   @Output()
-  filterSelectionChange = new EventEmitter<
-    SearchFilterCriteriaInterface | SearchFilterCriteriaInterface[]
-  >();
+  filterSelectionChange = new EventEmitter<SearchFilterCriteriaInterface[]>();
   constructor() {}
 
   onFilterSelectionChange(
     keyProperty: string,
-    filterCriterion: SearchFilterCriteriaInterface
+    preserveColumn: boolean = false
   ) {
-    console.log(keyProperty);
-    console.log(filterCriterion);
-    // const returnFilterCriterion: SearchFilterCriteriaInterface;
-    filterCriterion.values = filterCriterion.values.map(value => {
-      value.data[filterCriterion.keyProperty] === keyProperty
-        ? (value.selected = true)
-        : (value.selected = false);
-      // if (value.selected && value.child) returnFilterCriterion = value.child;
-      return { ...value };
+    this.preserveColumn = preserveColumn;
+    this.filterCriteria.forEach(filterCriterion => {
+      filterCriterion.values = filterCriterion.values.map(value => {
+        value.data[filterCriterion.keyProperty] === keyProperty
+          ? (value.selected = true)
+          : (value.selected = false);
+        return value;
+      });
     });
-    this.filterSelectionChange.emit([filterCriterion]);
+    this.filterSelectionChange.emit(this.filterCriteria);
   }
 }
