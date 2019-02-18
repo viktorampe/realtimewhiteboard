@@ -2,11 +2,20 @@
   <ng-container
     *ngIf="filterCriteria && filterCriteria.values; else: elseTemplate"
   >
-    <div *ngFor="let filter of filterCriteria">
-      <div>{{ filter.name }}</div> <div>{{ filter.label }}</div>
-      <div *ngFor="let value of filter.values">
-        <div (click)="onFilterSelectionChange(value.data[filter.keyProperty])"
-          >displayProperty: {{ value.data[filter.displayProperty] }}</div
+    <div *ngFor="let filterCriterion of filterCriteria">
+      <div>{{ filterCriterion.name }}</div>
+      <div>{{ filterCriterion.label }}</div>
+      <div *ngFor="let value of filterCriterion.values">
+        <div
+          [ngClass]="{ selected: value.selected }"
+          (click)="
+            onFilterSelectionChange(
+              value.data[filterCriterion.keyProperty],
+              filterCriterion
+            )
+          "
+          >displayProperty:
+          {{ value.data[filterCriterion.displayProperty] }}</div
         >
       </div>
     </div>
