@@ -1,1 +1,8 @@
-<campus-checkbox-line-filter></campus-checkbox-line-filter>
+<campus-checkbox-line-filter
+  [filterCriteria]="selectFilter"
+  (filterSelectionChange)="onFilterSelectionChange($event)"
+></campus-checkbox-line-filter>
+
+<div *ngIf="selectedFilterCriteria">
+  <p>Selected:</p> <p>{{ selectedFilterCriteria | json }}</p>
+</div>

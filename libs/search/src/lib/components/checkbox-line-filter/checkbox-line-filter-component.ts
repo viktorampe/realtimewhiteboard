@@ -1,15 +1,15 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  HostBinding,
+  Input,
+  OnInit,
+  Output
+} from '@angular/core';
 import {
   SearchFilterComponentInterface,
   SearchFilterCriteriaInterface
 } from '../../interfaces';
-
-class TestData {
-  data = 'test';
-  selected = true;
-  prediction = 1;
-  visible = true;
-}
 
 @Component({
   selector: 'campus-checkbox-line-filter',
@@ -18,41 +18,30 @@ class TestData {
 })
 export class CheckboxLineFilterComponent
   implements OnInit, SearchFilterComponentInterface {
-  @Input() filterCriteria: SearchFilterCriteriaInterface;
+  public filteredFilterCriteria: SearchFilterCriteriaInterface;
+  private _filterCriteria: SearchFilterCriteriaInterface;
+
   @Output() filterSelectionChange = new EventEmitter<
     SearchFilterCriteriaInterface | SearchFilterCriteriaInterface[]
   >();
 
-  constructor() {
-    this.filterCriteria = {
-      name: 'selectFilter',
-      label: 'select filter',
-      keyProperty: 'id',
-      displayProperty: 'name',
-      values: [
-        {
-          data: {
-            id: 1,
-            name: 'foo'
-          },
-          selected: false,
-          prediction: 20,
-          visible: true,
-          child: null
-        },
-        {
-          data: {
-            id: 2,
-            name: 'bar'
-          },
-          selected: true,
-          prediction: 100,
-          visible: true,
-          child: null
-        }
-      ]
-    };
+  @Input()
+  get filterCriteria(): SearchFilterCriteriaInterface {
+    return this._filterCriteria;
   }
+  set filterCriteria(value: SearchFilterCriteriaInterface) {
+    if (this._filterCriteria === value) return;
+
+    this._filterCriteria = value;
+    this.filteredFilterCriteria = getFilteredCriterium(value);
+  }
+
+  @HostBinding('class.checkbox-line-filter-component')
+  get isCheckboxLineFilterClass() {
+    return true;
+  }
+
+  constructor() {}
 
   ngOnInit() {}
 
@@ -60,6 +49,16 @@ export class CheckboxLineFilterComponent
   itemChanged(value: any) {
     value.selected = !value.selected;
     this.filterSelectionChange.emit(this.filterCriteria);
-    console.log(this.filterCriteria);
   }
+}
+
+export function getFilteredCriterium(
+  criterium: SearchFilterCriteriaInterface
+): SearchFilterCriteriaInterface {
+  return {
+    ...criterium,
+    ...{
+      values: criterium.values.filter(value => value.visible)
+    }
+  };
 }

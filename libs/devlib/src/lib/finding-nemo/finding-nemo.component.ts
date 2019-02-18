@@ -8,7 +8,8 @@ import { SearchFilterCriteriaInterface } from '@campus/search';
   styleUrls: ['./finding-nemo.component.scss']
 })
 export class FindingNemoComponent implements OnInit {
-  selectFilter: SearchFilterCriteriaInterface;
+  public selectFilter: SearchFilterCriteriaInterface;
+  public selectedFilterCriteria: SearchFilterCriteriaInterface;
 
   constructor() {}
 
@@ -22,7 +23,7 @@ export class FindingNemoComponent implements OnInit {
         {
           data: new LearningAreaFixture({
             id: 1,
-            name: 'foo'
+            name: 'Aardrijkskunde'
           }),
           selected: false,
           prediction: 0,
@@ -34,7 +35,54 @@ export class FindingNemoComponent implements OnInit {
             displayProperty: 'provider',
             values: [
               {
-                data: new CredentialFixture(),
+                data: new CredentialFixture({ id: 1, provider: 'smartschool' }),
+                selected: false,
+                prediction: 1,
+                visible: true
+              },
+              {
+                data: new CredentialFixture({ id: 2, provider: 'google' }),
+                selected: false,
+                prediction: 1,
+                visible: true
+              },
+              {
+                data: new CredentialFixture({ id: 3, provider: 'facebook' }),
+                selected: false,
+                prediction: 1,
+                visible: true
+              }
+            ]
+          }
+        },
+        {
+          data: new LearningAreaFixture({
+            id: 2,
+            name: 'Geschiedenis'
+          }),
+          selected: false,
+          prediction: 1,
+          visible: true,
+          child: {
+            name: 'selectFilter',
+            label: 'select filter',
+            keyProperty: 'id',
+            displayProperty: 'provider',
+            values: [
+              {
+                data: new CredentialFixture({ id: 1, provider: 'smartschool' }),
+                selected: false,
+                prediction: 1,
+                visible: true
+              },
+              {
+                data: new CredentialFixture({ id: 2, provider: 'google' }),
+                selected: false,
+                prediction: 1,
+                visible: true
+              },
+              {
+                data: new CredentialFixture({ id: 3, provider: 'facebook' }),
                 selected: false,
                 prediction: 0,
                 visible: true
@@ -44,8 +92,53 @@ export class FindingNemoComponent implements OnInit {
         },
         {
           data: new LearningAreaFixture({
-            id: 2,
-            name: 'bar'
+            id: 3,
+            name: 'Wiskunde'
+          }),
+          selected: true,
+          prediction: 1,
+          visible: true,
+          child: {
+            name: 'selectFilter',
+            label: 'select filter',
+            keyProperty: 'id',
+            displayProperty: 'provider',
+            values: [
+              {
+                data: new CredentialFixture({ id: 1, provider: 'smartschool' }),
+                selected: false,
+                prediction: 0,
+                visible: true
+              },
+              {
+                data: new CredentialFixture({ id: 2, provider: 'google' }),
+                selected: false,
+                prediction: 0,
+                visible: true
+              },
+              {
+                data: new CredentialFixture({ id: 3, provider: 'facebook' }),
+                selected: false,
+                prediction: 0,
+                visible: true
+              }
+            ]
+          }
+        },
+        {
+          data: new LearningAreaFixture({
+            id: 4,
+            name: 'Informatica'
+          }),
+          selected: false,
+          prediction: 1,
+          visible: false,
+          child: null
+        },
+        {
+          data: new LearningAreaFixture({
+            id: 5,
+            name: 'Engels'
           }),
           selected: false,
           prediction: 0,
@@ -57,6 +150,6 @@ export class FindingNemoComponent implements OnInit {
   }
 
   onFilterSelectionChange(searchFilter: SearchFilterCriteriaInterface) {
-    console.log(searchFilter);
+    this.selectedFilterCriteria = searchFilter;
   }
 }

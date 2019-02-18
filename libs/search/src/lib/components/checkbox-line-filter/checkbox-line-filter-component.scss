@@ -13,18 +13,5 @@
     display: flex;
     flex-direction: row;
     background-color: orange;
-
-    &__item {
-      margin-left: 5px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background-color: orangered;
-
-      &__caption {
-        background-color: darkred;
-      }
-    }
   }
 }
