@@ -1,11 +1,30 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatBadgeModule, MatSelectModule } from '@angular/material';
+import { By } from '@angular/platform-browser';
+import {
+  SearchFilterCriteriaFixture,
+  SearchFilterCriteriaValuesFixture
+} from '../../+fixtures/search-filter-criteria.fixture';
 import { SelectFilterComponent } from './select-filter.component';
 
 describe('SelectFilterComponentComponent', () => {
   let component: SelectFilterComponent;
   let fixture: ComponentFixture<SelectFilterComponent>;
+  const mockFilterCriteria = new SearchFilterCriteriaFixture({}, [
+    new SearchFilterCriteriaValuesFixture({
+      data: {
+        id: 1,
+        name: 'foo'
+      }
+    }),
+    new SearchFilterCriteriaValuesFixture({
+      data: {
+        id: 2,
+        name: 'bar'
+      }
+    })
+  ]);
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -20,16 +39,25 @@ describe('SelectFilterComponentComponent', () => {
     fixture.detectChanges();
   });
 
+  beforeEach(() => {
+    component.filterCriteria = mockFilterCriteria;
+    fixture.detectChanges();
+  });
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
   it('should add options to the select component', () => {
     // set filterCriteria, check MatOptions
+    const options = fixture.debugElement.queryAll(By.css('mat-option'));
+
+    expect(options.length).toBe(2);
   });
 
   it('should not display options where visible is falsy', () => {
-    //
+    mockFilterCriteria.values[0].visible = false;
+    fixture.detectChanges();
   });
 
   it('should display prediction numbers', () => {
@@ -52,3 +80,5 @@ describe('SelectFilterComponentComponent', () => {
     //
   });
 });
+
+// file.only
