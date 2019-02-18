@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { SearchFilterComponentInterface } from '../../interfaces/search-filter-component-interface';
 import { SearchFilterCriteriaInterface } from '../../interfaces/search-filter-criteria.interface';
 
@@ -8,7 +8,7 @@ import { SearchFilterCriteriaInterface } from '../../interfaces/search-filter-cr
   styleUrls: ['./breadcrumb-filter.component.scss']
 })
 export class BreadcrumbFilterComponent
-  implements OnInit, SearchFilterComponentInterface {
+  implements SearchFilterComponentInterface {
   protected showSeperator: boolean;
   protected _filterCriteria: SearchFilterCriteriaInterface[];
 
@@ -23,8 +23,6 @@ export class BreadcrumbFilterComponent
   >();
 
   constructor() {}
-
-  ngOnInit(): void {}
 
   checkSeparator() {
     this.showSeperator = !!this._filterCriteria[0].values.find(
