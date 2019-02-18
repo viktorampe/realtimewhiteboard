@@ -14,8 +14,13 @@ export class ColumnFilterComponent implements SearchFilterComponentInterface {
     | SearchFilterCriteriaInterface
     | SearchFilterCriteriaInterface[];
   @Output()
-  filterSelectionChange: EventEmitter<
+  filterSelectionChange = new EventEmitter<
     SearchFilterCriteriaInterface | SearchFilterCriteriaInterface[]
-  >;
+  >();
   constructor() {}
+
+  onFilterSelectionChange(keyProperty) {
+    console.log(keyProperty);
+    this.filterSelectionChange.emit(this.filterCriteria);
+  }
 }

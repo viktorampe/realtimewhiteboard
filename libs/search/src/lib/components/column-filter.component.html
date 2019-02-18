@@ -1,1 +1,17 @@
-<div> columnFilterComponent </div>
+<div>
+  <ng-container
+    *ngIf="filterCriteria && filterCriteria.values; else: elseTemplate"
+  >
+    <div *ngFor="let filter of filterCriteria">
+      <div>{{ filter.name }}</div> <div>{{ filter.label }}</div>
+      <div *ngFor="let value of filter.values">
+        <div (click)="onFilterSelectionChange(value.data[filter.keyProperty])"
+          >displayProperty: {{ value.data[filter.displayProperty] }}</div
+        >
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #elseTemplate>
+    <div>There is nog columData to display</div>
+  </ng-template>
+</div>
