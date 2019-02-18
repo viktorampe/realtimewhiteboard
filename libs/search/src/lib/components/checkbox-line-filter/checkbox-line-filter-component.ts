@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { SearchFilterComponentInterface } from '../interfaces/search-filter-component-interface';
-import { SearchFilterCriteriaInterface } from '../interfaces/search-filter-criteria.interface';
+import {
+  SearchFilterComponentInterface,
+  SearchFilterCriteriaInterface
+} from '../../interfaces';
 
 class TestData {
   data = 'test';
