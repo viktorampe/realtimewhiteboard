@@ -1,34 +1,30 @@
+import { DebugElement } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import {
-  MatListModule,
-  MatListOption,
-  MatSelectionList,
-  MatSelectionListChange
-} from '@angular/material';
+import { MatListModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { SearchFilterCriteriaInterface } from '../../interfaces';
-import { CheckboxListFilterComponent } from './checkbox-list-filter.component';
-import { CheckboxSelectionListFilterComponent } from './checkbox-selection-list-filter/checkbox-selection-list-filter.component';
+import { CheckboxListFilterComponent } from '../checkbox-list-filter.component';
+import { CheckboxSelectionListFilterComponent } from './checkbox-selection-list-filter.component';
 
-describe('CheckboxListFilterComponentComponent', () => {
-  let component: CheckboxListFilterComponent;
+describe('CheckboxSelectionListFilterComponent', () => {
+  let component: CheckboxSelectionListFilterComponent;
+  let componentDE: DebugElement;
   let fixture: ComponentFixture<CheckboxListFilterComponent>;
-  let mockFilterCriteria: SearchFilterCriteriaInterface;
+  let mockFilterCriteria;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [MatListModule, NoopAnimationsModule],
+      imports: [MatListModule],
       declarations: [
-        CheckboxListFilterComponent,
-        CheckboxSelectionListFilterComponent
-      ]
+        CheckboxSelectionListFilterComponent,
+        CheckboxListFilterComponent
+      ],
+      providers: [CheckboxListFilterComponent]
     }).compileComponents();
   }));
 
   beforeEach(() => {
+    // create parent element as fixture
     fixture = TestBed.createComponent(CheckboxListFilterComponent);
-    component = fixture.componentInstance;
 
     mockFilterCriteria = {
       name: 'selectFilter',
@@ -164,51 +160,123 @@ describe('CheckboxListFilterComponentComponent', () => {
       ]
     };
 
-    component.filterCriteria = mockFilterCriteria;
-
+    fixture.componentInstance.filterCriteria = mockFilterCriteria;
     fixture.detectChanges();
+
+    componentDE = fixture.debugElement.query(
+      By.css('campus-checkbox-selection-list-filter')
+    );
+    component = componentDE.componentInstance;
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('output', () => {
-    it('should emit the updated filtercriterium when the mat-selection-list selection changed', async(() => {
-      const matListComp: MatSelectionList = fixture.debugElement.query(
-        By.css('mat-selection-list')
-      ).componentInstance;
+  describe('maxVisibleItems', () => {
+    let matListOptionsDE: DebugElement[];
 
-      const selectedOption: MatListOption = new MatListOption(
-        null,
-        null,
-        matListComp
-      );
-      selectedOption.value = mockFilterCriteria.values[0];
+    describe('set', () => {
+      beforeEach(() => {
+        component.maxVisibleItems = 2;
+        fixture.detectChanges();
 
-      const mockEvent = new MatSelectionListChange(
-        Object.assign(matListComp, {
-          selectedOptions: { selected: [selectedOption] }
-        }),
-        selectedOption
-      );
-
-      const expected = {
-        ...mockFilterCriteria,
-        ...{ values: mockFilterCriteria.values.map(value => ({ ...value })) }
-      };
-      expected.values[0].selected = true;
-
-      component.filterSelectionChange.subscribe(event => {
-        expect(event).toEqual(expected); // <- Actual test
+        matListOptionsDE = componentDE.queryAll(By.css('mat-list-option'));
       });
 
-      matListComp.selectionChange.next(mockEvent);
+      it("should only show the first 'maxVisibleItems' items", () => {
+        expect(matListOptionsDE.length).toBe(component.maxVisibleItems);
+      });
 
-      // this doesn't work for some reason
-      // expect(component.filterSelectionChange).toBeObservable(
-      //   cold('a', { a: expected })
-      // );
-    }));
+      it("should show 'toon meer...' when items are hidden", () => {
+        component.toonMeer(false);
+        fixture.detectChanges();
+
+        expect(componentDE.nativeElement.textContent).toContain('toon meer...');
+      });
+
+      it("should show 'toon minder...' when items all items are visible", () => {
+        component.toonMeer(true);
+        fixture.detectChanges();
+
+        expect(componentDE.nativeElement.textContent).not.toContain(
+          'toon meer...'
+        );
+        expect(componentDE.nativeElement.textContent).toContain(
+          'toon minder...'
+        );
+      });
+
+      it("should not show 'toon meer/minder...' when no items are hidden", () => {
+        component.maxVisibleItems = component.criterium.values.length;
+        fixture.detectChanges();
+
+        expect(componentDE.nativeElement.textContent).not.toContain(
+          'toon meer...'
+        );
+        expect(componentDE.nativeElement.textContent).not.toContain(
+          'toon minder...'
+        );
+      });
+    });
+
+    describe('not set', () => {
+      beforeEach(() => {
+        component.maxVisibleItems = null;
+        fixture.detectChanges();
+
+        matListOptionsDE = fixture.debugElement.queryAll(
+          By.css('mat-list-option')
+        );
+      });
+
+      it('should show all items', () => {
+        expect(matListOptionsDE.length).toBe(component.criterium.values.length);
+      });
+
+      it("should not show 'toon meer/minder...'", () => {
+        expect(componentDE.nativeElement.textContent).not.toContain(
+          'toon meer...'
+        );
+        expect(componentDE.nativeElement.textContent).not.toContain(
+          'toon minder...'
+        );
+      });
+    });
+  });
+
+  describe('child', () => {
+    let childDE: DebugElement;
+
+    it('should not show the child', () => {
+      childDE = componentDE.query(
+        By.css('campus-checkbox-selection-list-filter')
+      );
+
+      expect(childDE).toBeFalsy();
+    });
+
+    it('should show the child when it is selected', () => {
+      component.criterium.values[0].selected = true;
+      fixture.detectChanges();
+
+      childDE = componentDE.query(
+        By.css('campus-checkbox-selection-list-filter')
+      );
+
+      expect(childDE).toBeTruthy();
+    });
+
+    it('should not show the child when it is selected, but there is no child', () => {
+      component.criterium.values[0].selected = true;
+      component.criterium.values[0].child = null;
+      fixture.detectChanges();
+
+      childDE = componentDE.query(
+        By.css('campus-checkbox-selection-list-filter')
+      );
+
+      expect(childDE).toBeFalsy();
+    });
   });
 });

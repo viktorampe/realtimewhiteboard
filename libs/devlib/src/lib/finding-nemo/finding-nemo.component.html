@@ -1,9 +1,10 @@
-<campus-checkbox-list-filter [selectFilter]="selectFilter"
-                             (selectedFilters)="onSelectionChange($event)">
+<campus-checkbox-list-filter [filterCriteria]="selectFilter"
+                             (filterSelectionChange)="onFilterSelectionChange($event)"
+                             [maxVisibleItems]="2">
 </campus-checkbox-list-filter>
 
 
-<div *ngIf="(filterCriteria && filterCriteria.length)">
+<div *ngIf="(selectedFilterCriteria)">
   <p>Selected:</p>
-  <p>{{filterCriteria}}</p>
+  <p>{{selectedFilterCriteria | json}}</p>
 </div>

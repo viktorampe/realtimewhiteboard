@@ -3,11 +3,14 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnDestroy,
   Output,
   ViewChild
 } from '@angular/core';
-import { MatSelectionList, MatSelectionListChange } from '@angular/material';
+import { MatListOption, MatSelectionList } from '@angular/material';
 import { Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { SearchFilterComponentInterface } from '../../interfaces';
 import { SearchFilterCriteriaInterface } from './../../interfaces/search-filter-criteria.interface';
 
 @Component({
@@ -15,24 +18,55 @@ import { SearchFilterCriteriaInterface } from './../../interfaces/search-filter-
   templateUrl: './checkbox-list-filter.component.html',
   styleUrls: ['./checkbox-list-filter.component.scss']
 })
-export class CheckboxListFilterComponent implements AfterViewInit {
+export class CheckboxListFilterComponent
+  implements AfterViewInit, OnDestroy, SearchFilterComponentInterface {
   @Input()
-  selectFilter: SearchFilterCriteriaInterface;
+  filterCriteria: SearchFilterCriteriaInterface;
+  @Input() maxVisibleItems = 0; // 0 == no limit
   @Output()
-  selectedFilters = new EventEmitter<SearchFilterCriteriaInterface[]>();
+  filterSelectionChange = new EventEmitter<
+    SearchFilterCriteriaInterface | SearchFilterCriteriaInterface[]
+  >();
 
+  public toonMeerChildren = false;
   private subscriptions = new Subscription();
-  constructor() {}
 
   @ViewChild(MatSelectionList) private matList: MatSelectionList;
 
   ngAfterViewInit(): void {
     this.subscriptions.add(
-      this.matList.selectionChange.subscribe(
-        (event: MatSelectionListChange) => {
-          this.selectedFilters.next(event.source.selectedOptions.selected);
-        }
-      )
+      this.matList.selectionChange
+        .pipe(
+          debounceTime(500),
+          distinctUntilChanged()
+        )
+        .subscribe(event => {
+          this.updateCriteria(
+            event.source.selectedOptions.selected,
+            this.filterCriteria
+          );
+
+          this.filterSelectionChange.emit([this.filterCriteria]);
+        })
     );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
+  }
+
+  private updateCriteria(
+    selectedOptions: MatListOption[],
+    criterium: SearchFilterCriteriaInterface
+  ): void {
+    if (selectedOptions) {
+      const selectedValues = selectedOptions.map(option => option.value);
+      criterium.values.forEach(value => {
+        value.selected = selectedValues.includes(value);
+        if (value.child) {
+          this.updateCriteria(selectedOptions, value.child);
+        }
+      });
+    }
   }
 }

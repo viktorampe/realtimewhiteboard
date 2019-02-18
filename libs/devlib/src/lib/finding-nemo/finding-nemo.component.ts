@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { SearchFilterCriteriaInterface } from 'libs/search/src/lib/interfaces/search-filter-criteria.interface';
+import { CredentialFixture, LearningAreaFixture } from '@campus/dal';
+import { SearchFilterCriteriaInterface } from '@campus/search';
 
 @Component({
   selector: 'campus-finding-nemo',
@@ -7,102 +8,148 @@ import { SearchFilterCriteriaInterface } from 'libs/search/src/lib/interfaces/se
   styleUrls: ['./finding-nemo.component.scss']
 })
 export class FindingNemoComponent implements OnInit {
-  public filterCriteria: any[];
   public selectFilter: SearchFilterCriteriaInterface;
+  public selectedFilterCriteria: SearchFilterCriteriaInterface;
 
   constructor() {}
 
-  public onSelectionChange(event) {
-    console.log(event);
-    this.filterCriteria = event.map(option => option.value.criterium.data.name);
-  }
-
   ngOnInit() {
-    const children2: SearchFilterCriteriaInterface = {
-      name: 'selectFilter',
-      label: 'select filter',
-      keyProperty: 'id',
-      displayProperty: 'name',
-      values: [
-        {
-          data: {
-            id: 1,
-            name: 'foo'
-          },
-          selected: false,
-          prediction: 0,
-          visible: true,
-          children: null
-        },
-        {
-          data: {
-            id: 2,
-            name: 'bar'
-          },
-          selected: false,
-          prediction: 0,
-          visible: true,
-          children: null
-        }
-      ]
-    };
-
-    const children: SearchFilterCriteriaInterface = {
-      name: 'selectFilter',
-      label: 'select filter',
-      keyProperty: 'id',
-      displayProperty: 'name',
-      values: [
-        {
-          data: {
-            id: 1,
-            name: 'foo'
-          },
-          selected: false,
-          prediction: 0,
-          visible: true,
-          children: null
-        },
-        {
-          data: {
-            id: 2,
-            name: 'bar'
-          },
-          selected: false,
-          prediction: 0,
-          visible: true,
-          children: children2
-        }
-      ]
-    };
-
     this.selectFilter = {
       name: 'selectFilter',
-      label: 'select filter label',
+      label: 'select filter',
       keyProperty: 'id',
       displayProperty: 'name',
       values: [
         {
-          data: {
+          data: new LearningAreaFixture({
             id: 1,
-            name: 'foo'
-          },
+            name: 'Aardrijkskunde'
+          }),
           selected: false,
           prediction: 0,
           visible: true,
-          children: children
+          child: {
+            name: 'selectFilter',
+            label: 'select filter',
+            keyProperty: 'id',
+            displayProperty: 'provider',
+            values: [
+              {
+                data: new CredentialFixture({ id: 1, provider: 'smartschool' }),
+                selected: false,
+                prediction: 0,
+                visible: true
+              },
+              {
+                data: new CredentialFixture({ id: 2, provider: 'google' }),
+                selected: false,
+                prediction: 0,
+                visible: true
+              },
+              {
+                data: new CredentialFixture({ id: 3, provider: 'facebook' }),
+                selected: false,
+                prediction: 0,
+                visible: true
+              }
+            ]
+          }
         },
         {
-          data: {
+          data: new LearningAreaFixture({
             id: 2,
-            name: 'bar'
-          },
+            name: 'Geschiedenis'
+          }),
           selected: false,
           prediction: 0,
           visible: true,
-          children: null
+          child: {
+            name: 'selectFilter',
+            label: 'select filter',
+            keyProperty: 'id',
+            displayProperty: 'provider',
+            values: [
+              {
+                data: new CredentialFixture({ id: 1, provider: 'smartschool' }),
+                selected: false,
+                prediction: 0,
+                visible: true
+              },
+              {
+                data: new CredentialFixture({ id: 2, provider: 'google' }),
+                selected: false,
+                prediction: 0,
+                visible: true
+              },
+              {
+                data: new CredentialFixture({ id: 3, provider: 'facebook' }),
+                selected: false,
+                prediction: 0,
+                visible: true
+              }
+            ]
+          }
+        },
+        {
+          data: new LearningAreaFixture({
+            id: 3,
+            name: 'Wiskunde'
+          }),
+          selected: false,
+          prediction: 0,
+          visible: true,
+          child: {
+            name: 'selectFilter',
+            label: 'select filter',
+            keyProperty: 'id',
+            displayProperty: 'provider',
+            values: [
+              {
+                data: new CredentialFixture({ id: 1, provider: 'smartschool' }),
+                selected: false,
+                prediction: 0,
+                visible: true
+              },
+              {
+                data: new CredentialFixture({ id: 2, provider: 'google' }),
+                selected: false,
+                prediction: 0,
+                visible: true
+              },
+              {
+                data: new CredentialFixture({ id: 3, provider: 'facebook' }),
+                selected: false,
+                prediction: 0,
+                visible: true
+              }
+            ]
+          }
+        },
+        {
+          data: new LearningAreaFixture({
+            id: 4,
+            name: 'Informatica'
+          }),
+          selected: false,
+          prediction: 0,
+          visible: true,
+          child: null
+        },
+        {
+          data: new LearningAreaFixture({
+            id: 5,
+            name: 'Engels'
+          }),
+          selected: false,
+          prediction: 0,
+          visible: true,
+          child: null
         }
       ]
     };
+  }
+
+  onFilterSelectionChange(searchFilter: SearchFilterCriteriaInterface) {
+    this.selectedFilterCriteria = searchFilter;
   }
 }
