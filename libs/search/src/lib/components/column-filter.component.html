@@ -1,8 +1,18 @@
 <div>
   <ng-container
-    *ngIf="filterCriteria && filterCriteria.values; else: elseTemplate"
+    *ngIf="
+      filterCriteria &&
+        filterCriteria[
+          this.filterCriteria.length - (preserveColumn ? 2 : 1)
+        ] as filterCriterion;
+      else: elseTemplate
+    "
   >
-    <div *ngFor="let filterCriterion of filterCriteria">
+    <div>
+      <div>length {{ filterCriteria.length }}</div>
+      <div
+        >current column: {{ preserveColumn ? 'second to last' : 'last' }}</div
+      >
       <div>{{ filterCriterion.name }}</div>
       <div>{{ filterCriterion.label }}</div>
       <div *ngFor="let value of filterCriterion.values" class="value">
@@ -11,16 +21,31 @@
           (click)="
             onFilterSelectionChange(
               value.data[filterCriterion.keyProperty],
-              filterCriterion
+              false
             )
           "
           >displayProperty:
           {{ value.data[filterCriterion.displayProperty] }}</div
         >
         <div
-          *ngIf="value.child"
-          (click)="onFilterSelectionChange(null, value.child)"
+          *ngIf="value.prediction"
+          (click)="
+            onFilterSelectionChange(
+              value.data[filterCriterion.keyProperty],
+              false
+            )
+          "
           >-></div
+        >
+        <div
+          *ngIf="value.prediction"
+          (click)="
+            onFilterSelectionChange(
+              value.data[filterCriterion.keyProperty],
+              true
+            )
+          "
+          >(-)</div
         >
       </div>
     </div>
