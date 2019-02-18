@@ -18,7 +18,7 @@ export class SearchFilterCriteriaFixture
   ) {
     // overwrite defaults
     Object.assign(this, props);
-    Object.assign(this.values, values);
+    this.values = values;
   }
 }
 
