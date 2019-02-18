@@ -35,8 +35,12 @@ export class SelectFilterComponent
   @Input() resetLabel: string;
   @Input()
   set filterCriteria(criteria: SearchFilterCriteriaInterface) {
-    this.criteria = { ...criteria };
+    this.criteria = criteria;
     this.options = this.criteriaToOptions(criteria);
+    const selection = this.options
+      .filter(option => option.value.selected)
+      .map(option => option.value);
+    this.setSelection(selection);
   }
 
   @Output() filterSelectionChange: EventEmitter<
@@ -49,17 +53,13 @@ export class SelectFilterComponent
     this.subscriptions.add(
       this.selectControl.valueChanges
         .pipe(distinctUntilChanged())
-        .subscribe(values => {
-          if (!Array.isArray(values)) {
-            values = [values];
-          }
-          if (values.includes(undefined) || values.includes(null)) {
-            this.selectControl.setValue([]);
-            return;
+        .subscribe(selection => {
+          if (!Array.isArray(selection)) {
+            selection = [selection];
           }
 
-          this.count = values.length;
-          this.updateSelected(this.criteria.values, values);
+          this.setSelection(selection);
+          this.updateCriteriaWithSelected(this.criteria.values, selection);
           this.filterSelectionChange.emit(this.criteria);
         })
     );
@@ -85,11 +85,16 @@ export class SelectFilterComponent
       );
   }
 
-  private updateSelected(values, selection): void {
-    if (!Array.isArray(selection)) {
-      selection = [selection];
+  private setSelection(selection) {
+    if (selection.includes(undefined) || selection.includes(null)) {
+      this.selectControl.setValue(this.multiple ? [] : null);
+      return;
     }
+    this.selectControl.setValue(this.multiple ? selection : selection[0]);
+    this.count = selection.length;
+  }
 
+  private updateCriteriaWithSelected(values, selection): void {
     values.forEach(value => {
       value.selected = selection.includes(value);
     });

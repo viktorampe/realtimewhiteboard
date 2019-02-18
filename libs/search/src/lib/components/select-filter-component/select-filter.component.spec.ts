@@ -1,42 +1,73 @@
+import { DebugElement } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatBadgeModule, MatSelectModule } from '@angular/material';
+import {
+  MatBadge,
+  MatBadgeModule,
+  MatSelect,
+  MatSelectModule
+} from '@angular/material';
 import { By } from '@angular/platform-browser';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
   SearchFilterCriteriaFixture,
   SearchFilterCriteriaValuesFixture
 } from '../../+fixtures/search-filter-criteria.fixture';
+import { SearchFilterCriteriaInterface } from '../../interfaces';
 import { SelectFilterComponent } from './select-filter.component';
 
 describe('SelectFilterComponentComponent', () => {
   let component: SelectFilterComponent;
   let fixture: ComponentFixture<SelectFilterComponent>;
-  const mockFilterCriteria = new SearchFilterCriteriaFixture({}, [
-    new SearchFilterCriteriaValuesFixture({
-      data: {
-        id: 1,
-        name: 'foo'
-      }
-    }),
-    new SearchFilterCriteriaValuesFixture({
-      data: {
-        id: 2,
-        name: 'bar'
-      }
-    })
-  ]);
+  let matSelect: DebugElement;
+  let matSelectComponent: MatSelect;
+  let matBadge: DebugElement;
+  let mockFilterCriteria: SearchFilterCriteriaInterface;
+  let multiSelect: boolean;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [MatSelectModule, ReactiveFormsModule, MatBadgeModule],
+      imports: [
+        MatSelectModule,
+        ReactiveFormsModule,
+        MatBadgeModule,
+        NoopAnimationsModule
+      ],
       declarations: [SelectFilterComponent]
     }).compileComponents();
   }));
 
   beforeEach(() => {
+    mockFilterCriteria = new SearchFilterCriteriaFixture({}, [
+      new SearchFilterCriteriaValuesFixture({
+        data: {
+          id: 1,
+          name: 'foo'
+        }
+      }),
+      new SearchFilterCriteriaValuesFixture({
+        data: {
+          id: 2,
+          name: 'bar'
+        }
+      }),
+      new SearchFilterCriteriaValuesFixture({
+        data: {
+          id: 3,
+          name: 'foobar'
+        }
+      })
+    ]);
+    // cannot change multiple after component initialization
+    multiSelect = true;
+
     fixture = TestBed.createComponent(SelectFilterComponent);
     component = fixture.componentInstance;
+    component.multiple = multiSelect;
     fixture.detectChanges();
+    matSelect = fixture.debugElement.query(By.directive(MatSelect));
+    matSelectComponent = matSelect.componentInstance as MatSelect;
+    matBadge = fixture.debugElement.query(By.directive(MatBadge));
   });
 
   beforeEach(() => {
@@ -48,37 +79,92 @@ describe('SelectFilterComponentComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should add options to the select component', () => {
-    // set filterCriteria, check MatOptions
-    const options = fixture.debugElement.queryAll(By.css('mat-option'));
+  it('should add options to the select component', async () => {
+    const options = getOptionsForCriteria();
+    expect(options.length).toBe(3);
+  });
 
+  it('should not display options where visible is falsy', async () => {
+    mockFilterCriteria.values[0].visible = false;
+    const options = getOptionsForCriteria();
     expect(options.length).toBe(2);
   });
 
-  it('should not display options where visible is falsy', () => {
-    mockFilterCriteria.values[0].visible = false;
-    fixture.detectChanges();
-  });
-
   it('should display prediction numbers', () => {
-    //
+    mockFilterCriteria.values[0].prediction = 2;
+    mockFilterCriteria.values[1].prediction = 4;
+    mockFilterCriteria.values[2].prediction = 6;
+    const options = getOptionsForCriteria();
+    expect(options[0].nativeElement.textContent).toContain('(2)');
+    expect(options[1].nativeElement.textContent).toContain('(4)');
+    expect(options[2].nativeElement.textContent).toContain('(6)');
   });
 
   it('should display count-badge when one or more items are selected', () => {
-    //
+    // empty selection > hidden
+    expect(matSelect.nativeElement.className).toContain('mat-badge-hidden');
+
+    // active selection > visible
+    mockFilterCriteria.values[0].selected = true;
+    mockFilterCriteria.values[1].selected = true;
+    component.filterCriteria = mockFilterCriteria;
+    fixture.detectChanges();
+    expect(matSelect.nativeElement.className).not.toContain('mat-badge-hidden');
+    expect(matBadge.nativeElement.textContent).toContain(2);
   });
 
   it('should add reset option to the select component', () => {
-    // set filterCriteria and resetlabel inputs, check MatOptions
+    component.resetLabel = 'resetFoo';
+    const options = getOptionsForCriteria();
+    expect(options.length).toBe(4);
+    expect(options[0].nativeElement.textContent).toContain('resetFoo');
   });
 
-  it('should add [multiple] option the select component', () => {
-    // set filterCriteria and multiple inputs, check MatSelect multiple attribute
+  it('should have [multiple] option active for the select component', () => {
+    // cannot change multiple after component initialization, but set as true at the start of the test
+    expect(matSelectComponent.multiple).toBe(true);
   });
 
   it('should output the updated searchFilterCriteria on change', () => {
-    //
-  });
-});
+    const expected = new SearchFilterCriteriaFixture({}, [
+      new SearchFilterCriteriaValuesFixture({
+        data: {
+          id: 1,
+          name: 'foo'
+        },
+        selected: true
+      }),
+      new SearchFilterCriteriaValuesFixture({
+        data: {
+          id: 2,
+          name: 'bar'
+        },
+        selected: true
+      }),
+      new SearchFilterCriteriaValuesFixture({
+        data: {
+          id: 3,
+          name: 'foobar'
+        }
+      })
+    ]);
 
-// file.only
+    let updatedSelection: SearchFilterCriteriaInterface;
+    component.filterSelectionChange.subscribe(selection => {
+      updatedSelection = selection;
+    });
+    // select first two elements
+    component.selectControl.setValue(mockFilterCriteria.values.slice(0, 2));
+
+    expect(updatedSelection).toEqual(expected);
+  });
+
+  function getOptionsForCriteria(
+    criteria: SearchFilterCriteriaInterface = mockFilterCriteria
+  ): DebugElement[] {
+    component.filterCriteria = criteria;
+    matSelectComponent.open();
+    fixture.detectChanges();
+    return fixture.debugElement.queryAll(By.css('mat-option'));
+  }
+});
