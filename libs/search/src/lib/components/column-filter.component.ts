@@ -1,4 +1,4 @@
-import { Component, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import {
   SearchFilterComponentInterface,
   SearchFilterCriteriaInterface
@@ -10,9 +10,10 @@ import {
   styleUrls: ['./column-filter.component.scss']
 })
 export class ColumnFilterComponent implements SearchFilterComponentInterface {
-  filterCriteria:
+  @Input() filterCriteria:
     | SearchFilterCriteriaInterface
     | SearchFilterCriteriaInterface[];
+  @Output()
   filterSelectionChange: EventEmitter<
     SearchFilterCriteriaInterface | SearchFilterCriteriaInterface[]
   >;
