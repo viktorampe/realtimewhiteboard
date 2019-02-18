@@ -9,6 +9,7 @@
   <mat-list-option
     class="checkbox-selection-list-filter__title"
     [value]="option"
+    [selected]="option.selected"
   >
     {{ option.data[criterium.displayProperty] }}
   </mat-list-option>
