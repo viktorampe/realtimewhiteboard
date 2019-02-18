@@ -32,6 +32,6 @@ export class ColumnFilterComponent implements SearchFilterComponentInterface {
       return returnValue;
     });
     console.log(returnFilterCriterion);
-    this.filterSelectionChange.emit(returnFilterCriterion);
+    this.filterSelectionChange.emit([returnFilterCriterion]);
   }
 }

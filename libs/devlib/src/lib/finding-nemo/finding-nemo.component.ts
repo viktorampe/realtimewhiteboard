@@ -46,8 +46,8 @@ export class FindingNemoComponent {
     ]);
   }
 
-  catchEvent($event) {
+  catchEvent($event: SearchFilterCriteriaInterface[]) {
     console.log($event);
-    this.filterCriteria$.next([$event]);
+    this.filterCriteria$.next($event);
   }
 }
