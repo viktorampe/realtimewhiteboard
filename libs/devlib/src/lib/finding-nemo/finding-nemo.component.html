@@ -1,1 +1,5 @@
-<p> you will never find nemo! </p>
+<campus-column-filter
+  [filterCriteria]="filterCriteria$ | async"
+  (filterSelectionChange)="catchEvent($event)"
+></campus-column-filter>
+<button (click)="setMockData()">setMockData</button>
