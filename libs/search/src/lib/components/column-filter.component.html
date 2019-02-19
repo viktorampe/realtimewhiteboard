@@ -15,7 +15,8 @@
       >
       <div>{{ filterCriterion.name }}</div>
       <div>{{ filterCriterion.label }}</div>
-      <div *ngFor="let value of filterCriterion.values" class="value">
+      <mat-action-list
+        ><div *ngFor="let value of filterCriterion.values" class="value">
         <div
           [ngClass]="{ selected: value.selected }"
           (click)="
@@ -47,7 +48,8 @@
           "
           >(-)</div
         >
-      </div>
+        </div></mat-action-list
+      >
     </div>
   </ng-container>
   <ng-template #elseTemplate>
