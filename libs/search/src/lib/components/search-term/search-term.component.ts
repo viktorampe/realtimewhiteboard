@@ -19,7 +19,7 @@ export class SearchTermComponent
   @Input() public placeholder = 'Zoeken';
 
   // boolean => internal reference, need array of values
-  // string => external reference TODO: figure this out
+  // string => external reference TODO: figure this out, when required
   @Input() public autoComplete: string | boolean;
   @Input() public autoCompleteValues: string[] = [];
 
