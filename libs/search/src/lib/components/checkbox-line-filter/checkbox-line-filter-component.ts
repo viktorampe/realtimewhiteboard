@@ -7,7 +7,8 @@ import {
 } from '@angular/core';
 import {
   SearchFilterComponentInterface,
-  SearchFilterCriteriaInterface
+  SearchFilterCriteriaInterface,
+  SearchFilterCriteriaValuesInterface
 } from '../../interfaces';
 
 @Component({
@@ -21,7 +22,7 @@ export class CheckboxLineFilterComponent
   private _filterCriteria: SearchFilterCriteriaInterface;
 
   @Output() filterSelectionChange = new EventEmitter<
-    SearchFilterCriteriaInterface | SearchFilterCriteriaInterface[]
+    SearchFilterCriteriaInterface[]
   >();
 
   @Input()
@@ -40,17 +41,16 @@ export class CheckboxLineFilterComponent
     return true;
   }
 
-  public getDisplayValue(value: any): string {
+  public getDisplayValue(value: SearchFilterCriteriaValuesInterface): string {
     return (
       value.data[this.filterCriteria.displayProperty] +
       (value.prediction ? '(' + value.prediction + ')' : '')
     );
   }
 
-  //todo change any with actual interface
-  itemChanged(value: any) {
+  itemChanged(value: SearchFilterCriteriaValuesInterface) {
     value.selected = !value.selected;
-    this.filterSelectionChange.emit(this.filterCriteria);
+    this.filterSelectionChange.emit([this.filterCriteria]);
   }
 
   private getFilteredCriterium(

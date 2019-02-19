@@ -2,7 +2,10 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatCheckbox, MatCheckboxModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { CredentialFixture, LearningAreaFixture } from '@campus/dal';
-import { SearchFilterCriteriaInterface } from '../../interfaces';
+import {
+  SearchFilterCriteriaInterface,
+  SearchFilterCriteriaValuesInterface
+} from '../../interfaces';
 import {
   SearchFilterCriteriaFixture,
   SearchFilterCriteriaValuesFixture
@@ -137,7 +140,10 @@ describe('CheckboxLineFilterComponent', () => {
     const checkbox: MatCheckbox = fixture.debugElement.query(
       By.css('mat-checkbox')
     ).componentInstance;
-    component.itemChanged(checkbox.value);
+    component.itemChanged(
+      // mat-checkbox value is typed as string, by default
+      (checkbox.value as unknown) as SearchFilterCriteriaValuesInterface
+    );
 
     const expected = {
       ...component.filterCriteria,
@@ -149,6 +155,8 @@ describe('CheckboxLineFilterComponent', () => {
 
     expect(component.filterSelectionChange.emit).toHaveBeenCalled();
     expect(component.filterSelectionChange.emit).toHaveBeenCalledTimes(1);
-    expect(component.filterSelectionChange.emit).toHaveBeenCalledWith(expected);
+    expect(component.filterSelectionChange.emit).toHaveBeenCalledWith([
+      expected
+    ]);
   });
 });
