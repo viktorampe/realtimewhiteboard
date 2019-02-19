@@ -1,6 +1,6 @@
 <ng-container
   *ngFor="
-    let option of maxVisibleItems && !toonMeerItems
+    let option of maxVisibleItems && !showMoreItems
       ? (filteredFilterCriterium.values | slice: 0:maxVisibleItems)
       : filteredFilterCriterium.values
   "

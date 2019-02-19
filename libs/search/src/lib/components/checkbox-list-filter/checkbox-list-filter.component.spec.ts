@@ -7,13 +7,12 @@ import {
 } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { CredentialFixture, LearningAreaFixture } from '@campus/dal';
 import { SearchFilterCriteriaInterface } from '../../interfaces';
 import {
   SearchFilterCriteriaFixture,
   SearchFilterCriteriaValuesFixture
 } from './../../+fixtures/search-filter-criteria.fixture';
-import { CredentialFixture } from './../../../../../dal/src/lib/+fixtures/Credential.fixture';
-import { LearningAreaFixture } from './../../../../../dal/src/lib/+fixtures/LearningArea.fixture';
 import { CheckboxListFilterComponent } from './checkbox-list-filter.component';
 import { CheckboxSelectionListFilterComponent } from './checkbox-selection-list-filter/checkbox-selection-list-filter.component';
 

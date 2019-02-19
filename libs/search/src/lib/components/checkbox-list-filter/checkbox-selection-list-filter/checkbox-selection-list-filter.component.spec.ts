@@ -2,13 +2,12 @@ import { DebugElement } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatListModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
+import { CredentialFixture, LearningAreaFixture } from '@campus/dal';
 import { CheckboxListFilterComponent } from '../checkbox-list-filter.component';
 import {
   SearchFilterCriteriaFixture,
   SearchFilterCriteriaValuesFixture
 } from './../../../+fixtures/search-filter-criteria.fixture';
-import { CredentialFixture } from './../../../../../../dal/src/lib/+fixtures/Credential.fixture';
-import { LearningAreaFixture } from './../../../../../../dal/src/lib/+fixtures/LearningArea.fixture';
 import { CheckboxSelectionListFilterComponent } from './checkbox-selection-list-filter.component';
 
 describe('CheckboxSelectionListFilterComponent', () => {
