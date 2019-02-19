@@ -9,13 +9,16 @@ import { SearchFilterCriteriaInterface } from '../../interfaces/search-filter-cr
 })
 export class BreadcrumbFilterComponent
   implements SearchFilterComponentInterface {
-  protected showSeperator: boolean;
-  protected _filterCriteria: SearchFilterCriteriaInterface[];
+  showSeperator: boolean;
+  criteria: SearchFilterCriteriaInterface[];
+  selectedLabels: string[];
 
   @Input() rootLabel: string;
   @Input()
   set filterCriteria(filterCriteria: SearchFilterCriteriaInterface[]) {
-    this._filterCriteria = filterCriteria;
+    this.criteria = filterCriteria;
+    this.selectedLabels = filterCriteria.map(this.getLabel);
+
     this.checkSeparator();
   }
   @Output() filterSelectionChange = new EventEmitter<
@@ -24,28 +27,25 @@ export class BreadcrumbFilterComponent
 
   constructor() {}
 
-  checkSeparator() {
-    this.showSeperator = !!this._filterCriteria[0].values.find(
-      value => value.selected
-    );
-  }
-
   reset() {
-    const filterCriteria = this._filterCriteria[0];
-    filterCriteria.values.map(criterium => (criterium.selected = false));
-    this.filterSelectionChange.emit(this._filterCriteria.slice(0, 1));
-  }
-
-  getLabel(filterCriterium: SearchFilterCriteriaInterface): string {
-    const selectedCriterium = filterCriterium.values.find(
-      criterium => criterium.selected
-    );
-    return selectedCriterium
-      ? selectedCriterium.data[filterCriterium.displayProperty]
-      : null;
+    const filterCriteria = this.criteria[0];
+    filterCriteria.values.forEach(criterium => (criterium.selected = false));
+    this.filterSelectionChange.emit(this.criteria.slice(0, 1));
   }
 
   clickBreadcrumb(index: number) {
-    this.filterSelectionChange.emit(this._filterCriteria.slice(0, index + 1));
+    this.filterSelectionChange.emit(this.criteria.slice(0, index + 1));
+  }
+
+  private checkSeparator() {
+    this.showSeperator = this.criteria[0].values.some(value => value.selected);
+  }
+
+  private getLabel(filterCriterium: SearchFilterCriteriaInterface): string {
+    const selectedCriterium = filterCriterium.values.find(
+      criterium => criterium.selected
+    );
+    if (selectedCriterium)
+      return selectedCriterium.data[filterCriterium.displayProperty];
   }
 }
