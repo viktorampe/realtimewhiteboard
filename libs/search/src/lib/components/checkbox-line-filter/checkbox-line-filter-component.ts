@@ -48,7 +48,7 @@ export class CheckboxLineFilterComponent
     );
   }
 
-  itemChanged(value: SearchFilterCriteriaValuesInterface) {
+  public itemChanged(value: SearchFilterCriteriaValuesInterface) {
     value.selected = !value.selected;
     this.filterSelectionChange.emit([this.filterCriteria]);
   }
