@@ -130,7 +130,9 @@ describe('CheckboxListFilterComponentComponent', () => {
   });
 
   describe('output', () => {
-    it('should emit the updated filtercriterium when the mat-selection-list selection changed', async(() => {
+    it('should emit the updated filtercriterium when the mat-selection-list selection changed', () => {
+      spyOn(component.filterSelectionChange, 'emit');
+
       const matListComp: MatSelectionList = fixture.debugElement.query(
         By.css('mat-selection-list')
       ).componentInstance;
@@ -152,16 +154,13 @@ describe('CheckboxListFilterComponentComponent', () => {
       };
       expected.values[0].selected = true;
 
-      component.filterSelectionChange.subscribe(event => {
-        expect(event).toEqual([expected]); // <- Actual test
-      });
-
       matListComp.selectionChange.next(mockEvent);
 
-      // this doesn't work for some reason
-      // expect(component.filterSelectionChange).toBeObservable(
-      //   cold('a', { a: expected })
-      // );
-    }));
+      expect(component.filterSelectionChange.emit).toHaveBeenCalled();
+      expect(component.filterSelectionChange.emit).toHaveBeenCalledTimes(1);
+      expect(component.filterSelectionChange.emit).toHaveBeenCalledWith([
+        expected
+      ]);
+    });
   });
 });
