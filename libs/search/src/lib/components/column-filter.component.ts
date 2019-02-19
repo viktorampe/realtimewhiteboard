@@ -1,3 +1,11 @@
+import {
+  animate,
+  animateChild,
+  query,
+  style,
+  transition,
+  trigger
+} from '@angular/animations';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import {
   SearchFilterComponentInterface,
@@ -7,7 +15,20 @@ import {
 @Component({
   selector: 'campus-column-filter',
   templateUrl: './column-filter.component.html',
-  styleUrls: ['./column-filter.component.scss']
+  styleUrls: ['./column-filter.component.scss'],
+  animations: [
+    trigger('slideInOut', [
+      transition(':enter', [
+        style({ transform: 'translateX(100%)' }),
+        animate('300ms ease-in-out', style({ transform: 'translateX(0%)' }))
+      ]),
+      transition(':leave', [
+        style({ position: 'absolute' }),
+        query('@slideInOut', [animateChild()], { optional: true }), // needed so the animation is not forcibly ended by the new enter animation
+        animate('300ms ease-in', style({ transform: 'translateX(-100%)' }))
+      ])
+    ])
+  ]
 })
 export class ColumnFilterComponent implements SearchFilterComponentInterface {
   preserveColumn = false;

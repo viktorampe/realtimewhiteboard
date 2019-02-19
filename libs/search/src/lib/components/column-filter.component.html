@@ -1,49 +1,51 @@
 <div>
-  <ng-container *ngFor="let filterCriterion of filterCriteria; let i = index">
-    <div *ngIf="showColumn(i)">
-      <div>length {{ filterCriteria.length }}</div>
-      <div
-        >current column: {{ preserveColumn ? 'second to last' : 'last' }}</div
-      >
-      <div>{{ filterCriterion.name }}</div>
-      <div>{{ filterCriterion.label }}</div>
-      <mat-action-list
-        ><div *ngFor="let value of filterCriterion.values" class="value">
-          <div
-            [ngClass]="{ selected: value.selected }"
-            (click)="
-              onFilterSelectionChange(
-                value.data[filterCriterion.keyProperty],
-                false
-              )
-            "
-            >displayProperty:
-            {{ value.data[filterCriterion.displayProperty] }}</div
-          >
-          <div
-            *ngIf="value.prediction"
-            (click)="
-              onFilterSelectionChange(
-                value.data[filterCriterion.keyProperty],
-                false
-              )
-            "
-            >-></div
-          >
-          <div
-            *ngIf="value.prediction"
-            (click)="
-              onFilterSelectionChange(
-                value.data[filterCriterion.keyProperty],
-                true
-              )
-            "
-            >(-)</div
-          >
-        </div></mat-action-list
-      >
-    </div>
-  </ng-container>
+  <div *ngFor="let filterCriterion of filterCriteria; let i = index">
+    <ng-container *ngIf="showColumn(i)">
+      <div [@slideInOut]>
+        <div>length {{ filterCriteria.length }}</div>
+        <div
+          >current column: {{ preserveColumn ? 'second to last' : 'last' }}</div
+        >
+        <div>{{ filterCriterion.name }}</div>
+        <div>{{ filterCriterion.label }}</div>
+        <mat-action-list>
+          <div *ngFor="let value of filterCriterion.values" class="value">
+            <div
+              [ngClass]="{ selected: value.selected }"
+              (click)="
+                onFilterSelectionChange(
+                  value.data[filterCriterion.keyProperty],
+                  false
+                )
+              "
+              >displayProperty:
+              {{ value.data[filterCriterion.displayProperty] }}</div
+            >
+            <div
+              *ngIf="value.prediction"
+              (click)="
+                onFilterSelectionChange(
+                  value.data[filterCriterion.keyProperty],
+                  false
+                )
+              "
+              >-></div
+            >
+            <div
+              *ngIf="value.prediction"
+              (click)="
+                onFilterSelectionChange(
+                  value.data[filterCriterion.keyProperty],
+                  true
+                )
+              "
+              >(-)</div
+            >
+          </div>
+        </mat-action-list>
+      </div>
+    </ng-container>
+  </div>
   <ng-container *ngIf="!filterCriteria || filterCriteria.length === 0">
     <div>There is nog columData to display</div>
   </ng-container>
