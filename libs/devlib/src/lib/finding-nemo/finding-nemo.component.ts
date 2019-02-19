@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CredentialFixture, LearningAreaFixture } from '@campus/dal';
-import { SearchFilterCriteriaInterface } from '@campus/search';
+import {
+  SearchFilterCriteriaFixture,
+  SearchFilterCriteriaInterface,
+  SearchFilterCriteriaValuesFixture
+} from '@campus/search';
 
 @Component({
   selector: 'campus-finding-nemo',
@@ -14,6 +18,27 @@ export class FindingNemoComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
+    const searchFilter = new SearchFilterCriteriaFixture(
+      {
+        name: 'selectFilter',
+        label: 'select filter'
+      },
+      [
+        new SearchFilterCriteriaValuesFixture({
+          data: new LearningAreaFixture({
+            id: 1,
+            name: 'foo'
+          })
+        }),
+        new SearchFilterCriteriaValuesFixture({
+          data: new LearningAreaFixture({
+            id: 2,
+            name: 'bar'
+          })
+        })
+      ]
+    );
+
     this.selectFilter = {
       name: 'selectFilter',
       label: 'select filter',
