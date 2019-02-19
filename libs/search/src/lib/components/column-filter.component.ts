@@ -17,6 +17,12 @@ export class ColumnFilterComponent implements SearchFilterComponentInterface {
   filterSelectionChange = new EventEmitter<SearchFilterCriteriaInterface[]>();
   constructor() {}
 
+  showColumn(columnIndex: number) {
+    return (
+      columnIndex === this.filterCriteria.length - (this.preserveColumn ? 2 : 1)
+    );
+  }
+
   onFilterSelectionChange(
     keyProperty: string,
     preserveColumn: boolean = false
