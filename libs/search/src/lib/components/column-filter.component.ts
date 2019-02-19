@@ -23,11 +23,9 @@ export class ColumnFilterComponent implements SearchFilterComponentInterface {
   ) {
     this.preserveColumn = preserveColumn;
     this.filterCriteria.forEach(filterCriterion => {
-      filterCriterion.values = filterCriterion.values.map(value => {
-        value.data[filterCriterion.keyProperty] === keyProperty
-          ? (value.selected = true)
-          : (value.selected = false);
-        return value;
+      filterCriterion.values.forEach(value => {
+        value.selected =
+          value.data[filterCriterion.keyProperty] === keyProperty;
       });
     });
     this.filterSelectionChange.emit(this.filterCriteria);
