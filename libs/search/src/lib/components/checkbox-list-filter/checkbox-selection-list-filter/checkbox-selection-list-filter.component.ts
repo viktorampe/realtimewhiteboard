@@ -8,7 +8,7 @@ import { getFilteredCriterium } from '../checkbox-list-filter.component';
   styleUrls: ['./checkbox-selection-list-filter.component.scss']
 })
 export class CheckboxSelectionListFilterComponent {
-  public toonMeerItems: boolean; // expand aantal zichtbare titels
+  public showMoreItems: boolean; // expand aantal zichtbare titels
   public filteredFilterCriterium: SearchFilterCriteriaInterface;
 
   private _criterium: SearchFilterCriteriaInterface;
@@ -27,7 +27,7 @@ export class CheckboxSelectionListFilterComponent {
   }
 
   // expand aantal zichtbare titels bij CHILD
-  public toonMeer(value: boolean) {
-    this.toonMeerItems = value;
+  public showMore(value: boolean) {
+    this.showMoreItems = value;
   }
 }

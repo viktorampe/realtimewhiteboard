@@ -8,6 +8,12 @@ import {
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { SearchFilterCriteriaInterface } from '../../interfaces';
+import {
+  SearchFilterCriteriaFixture,
+  SearchFilterCriteriaValuesFixture
+} from './../../+fixtures/search-filter-criteria.fixture';
+import { CredentialFixture } from './../../../../../dal/src/lib/+fixtures/Credential.fixture';
+import { LearningAreaFixture } from './../../../../../dal/src/lib/+fixtures/LearningArea.fixture';
 import { CheckboxListFilterComponent } from './checkbox-list-filter.component';
 import { CheckboxSelectionListFilterComponent } from './checkbox-selection-list-filter/checkbox-selection-list-filter.component';
 
@@ -30,139 +36,89 @@ describe('CheckboxListFilterComponentComponent', () => {
     fixture = TestBed.createComponent(CheckboxListFilterComponent);
     component = fixture.componentInstance;
 
-    mockFilterCriteria = {
-      name: 'selectFilter',
-      label: 'select filter',
-      keyProperty: 'id',
-      displayProperty: 'name',
-      values: [
-        {
-          data: {
-            id: 1,
-            name: 'Aardrijkskunde'
+    mockFilterCriteria = new SearchFilterCriteriaFixture(
+      { label: 'search filter' },
+      [
+        new SearchFilterCriteriaValuesFixture(
+          {
+            data: new LearningAreaFixture({
+              id: 1,
+              name: 'Aardrijkskunde'
+            })
           },
-          selected: false,
-          prediction: 0,
-          visible: true,
-          child: {
-            name: 'selectFilter',
-            label: 'select filter',
-            keyProperty: 'id',
-            displayProperty: 'provider',
-            values: [
-              {
-                data: { id: 1, provider: 'smartschool' },
-                selected: false,
-                prediction: 0,
-                visible: true
-              },
-              {
-                data: { id: 2, provider: 'google' },
-                selected: false,
-                prediction: 0,
-                visible: true
-              },
-              {
-                data: { id: 3, provider: 'facebook' },
-                selected: false,
-                prediction: 0,
-                visible: true
-              }
+          new SearchFilterCriteriaFixture(
+            { keyProperty: 'id', displayProperty: 'provider' },
+            [
+              new SearchFilterCriteriaValuesFixture({
+                data: new CredentialFixture({ id: 1, provider: 'smartschool' })
+              }),
+              new SearchFilterCriteriaValuesFixture({
+                data: new CredentialFixture({ id: 2, provider: 'google' })
+              }),
+              new SearchFilterCriteriaValuesFixture({
+                data: new CredentialFixture({ id: 3, provider: 'facebook' })
+              })
             ]
-          }
-        },
-        {
-          data: {
-            id: 2,
-            name: 'Geschiedenis'
+          )
+        ),
+        new SearchFilterCriteriaValuesFixture(
+          {
+            data: new LearningAreaFixture({
+              id: 2,
+              name: 'Geschiedenis'
+            })
           },
-          selected: false,
-          prediction: 0,
-          visible: true,
-          child: {
-            name: 'selectFilter',
-            label: 'select filter',
-            keyProperty: 'id',
-            displayProperty: 'provider',
-            values: [
-              {
-                data: { id: 1, provider: 'smartschool' },
-                selected: false,
-                prediction: 0,
-                visible: true
-              },
-              {
-                data: { id: 2, provider: 'google' },
-                selected: false,
-                prediction: 0,
-                visible: true
-              },
-              {
-                data: { id: 3, provider: 'facebook' },
-                selected: false,
-                prediction: 0,
-                visible: true
-              }
+          new SearchFilterCriteriaFixture(
+            { keyProperty: 'id', displayProperty: 'provider' },
+            [
+              new SearchFilterCriteriaValuesFixture({
+                data: new CredentialFixture({ id: 1, provider: 'smartschool' })
+              }),
+              new SearchFilterCriteriaValuesFixture({
+                data: new CredentialFixture({ id: 2, provider: 'google' })
+              }),
+              new SearchFilterCriteriaValuesFixture({
+                data: new CredentialFixture({ id: 3, provider: 'facebook' })
+              })
             ]
-          }
-        },
-        {
-          data: {
-            id: 3,
-            name: 'Wiskunde'
+          )
+        ),
+        new SearchFilterCriteriaValuesFixture(
+          {
+            data: new LearningAreaFixture({
+              id: 3,
+              name: 'Wiskunde'
+            })
           },
-          selected: false,
-          prediction: 0,
-          visible: true,
-          child: {
-            name: 'selectFilter',
-            label: 'select filter',
-            keyProperty: 'id',
-            displayProperty: 'provider',
-            values: [
-              {
-                data: { id: 1, provider: 'smartschool' },
-                selected: false,
-                prediction: 0,
-                visible: true
-              },
-              {
-                data: { id: 2, provider: 'google' },
-                selected: false,
-                prediction: 0,
-                visible: true
-              },
-              {
-                data: { id: 3, provider: 'facebook' },
-                selected: false,
-                prediction: 0,
-                visible: true
-              }
+          new SearchFilterCriteriaFixture(
+            { keyProperty: 'id', displayProperty: 'provider' },
+            [
+              new SearchFilterCriteriaValuesFixture({
+                data: new CredentialFixture({ id: 1, provider: 'smartschool' })
+              }),
+              new SearchFilterCriteriaValuesFixture({
+                data: new CredentialFixture({ id: 2, provider: 'google' })
+              }),
+              new SearchFilterCriteriaValuesFixture({
+                data: new CredentialFixture({ id: 3, provider: 'facebook' })
+              })
             ]
-          }
-        },
-        {
-          data: {
+          )
+        ),
+        new SearchFilterCriteriaValuesFixture({
+          data: new LearningAreaFixture({
             id: 4,
             name: 'Informatica'
-          },
-          selected: false,
-          prediction: 0,
-          visible: true,
-          child: null
-        },
-        {
-          data: {
+          })
+        }),
+        new SearchFilterCriteriaValuesFixture({
+          data: new LearningAreaFixture({
             id: 5,
             name: 'Engels'
-          },
-          selected: false,
-          prediction: 0,
-          visible: true,
-          child: null
-        }
+          })
+        })
       ]
-    };
+    );
 
     component.filterCriteria = mockFilterCriteria;
 

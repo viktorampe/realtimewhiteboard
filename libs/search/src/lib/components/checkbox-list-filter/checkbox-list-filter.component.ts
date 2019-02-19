@@ -20,7 +20,7 @@ import { SearchFilterCriteriaInterface } from './../../interfaces/search-filter-
 })
 export class CheckboxListFilterComponent
   implements AfterViewInit, OnDestroy, SearchFilterComponentInterface {
-  public toonMeerChildren = false;
+  public showMoreChildren = false;
   public filteredFilterCriteria: SearchFilterCriteriaInterface;
 
   private subscriptions = new Subscription();

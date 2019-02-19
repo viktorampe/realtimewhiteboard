@@ -30,11 +30,11 @@
     maxVisibleItems && maxVisibleItems < filteredFilterCriterium.values.length
   "
 >
-  <ng-container *ngIf="!toonMeerItems; else: toonMinder">
-    <a (click)="toonMeer(true)">toon meer...</a></ng-container
+  <ng-container *ngIf="!showMoreItems; else: showLess">
+    <a (click)="showMore(true)">toon meer...</a></ng-container
   >
 
-  <ng-template #toonMinder>
-    <a (click)="toonMeer(false)">toon minder...</a>
+  <ng-template #showLess>
+    <a (click)="showMore(false)">toon minder...</a>
   </ng-template>
 </ng-container>
