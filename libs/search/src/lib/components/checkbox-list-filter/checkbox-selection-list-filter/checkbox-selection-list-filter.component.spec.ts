@@ -15,6 +15,7 @@ describe('CheckboxSelectionListFilterComponent', () => {
   let componentDE: DebugElement;
   let fixture: ComponentFixture<CheckboxListFilterComponent>;
   let mockFilterCriteria;
+  let mockChildFilterCriteria;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -31,75 +32,43 @@ describe('CheckboxSelectionListFilterComponent', () => {
     // create parent element as fixture
     fixture = TestBed.createComponent(CheckboxListFilterComponent);
 
+    mockChildFilterCriteria = new SearchFilterCriteriaFixture(
+      { keyProperty: 'id', displayProperty: 'provider' },
+      [
+        new SearchFilterCriteriaValuesFixture({
+          data: new CredentialFixture({ id: 1, provider: 'smartschool' })
+        }),
+        new SearchFilterCriteriaValuesFixture({
+          data: new CredentialFixture({ id: 2, provider: 'google' })
+        }),
+        new SearchFilterCriteriaValuesFixture({
+          data: new CredentialFixture({ id: 3, provider: 'facebook' })
+        })
+      ]
+    );
+
+    // by default without children
     mockFilterCriteria = new SearchFilterCriteriaFixture(
       { label: 'search filter' },
       [
-        new SearchFilterCriteriaValuesFixture(
-          {
-            data: new LearningAreaFixture({
-              id: 1,
-              name: 'Aardrijkskunde'
-            })
-          },
-          new SearchFilterCriteriaFixture(
-            { keyProperty: 'id', displayProperty: 'provider' },
-            [
-              new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 1, provider: 'smartschool' })
-              }),
-              new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 2, provider: 'google' })
-              }),
-              new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 3, provider: 'facebook' })
-              })
-            ]
-          )
-        ),
-        new SearchFilterCriteriaValuesFixture(
-          {
-            data: new LearningAreaFixture({
-              id: 2,
-              name: 'Geschiedenis'
-            })
-          },
-          new SearchFilterCriteriaFixture(
-            { keyProperty: 'id', displayProperty: 'provider' },
-            [
-              new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 1, provider: 'smartschool' })
-              }),
-              new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 2, provider: 'google' })
-              }),
-              new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 3, provider: 'facebook' })
-              })
-            ]
-          )
-        ),
-        new SearchFilterCriteriaValuesFixture(
-          {
-            data: new LearningAreaFixture({
-              id: 3,
-              name: 'Wiskunde'
-            })
-          },
-          new SearchFilterCriteriaFixture(
-            { keyProperty: 'id', displayProperty: 'provider' },
-            [
-              new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 1, provider: 'smartschool' })
-              }),
-              new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 2, provider: 'google' })
-              }),
-              new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 3, provider: 'facebook' })
-              })
-            ]
-          )
-        ),
+        new SearchFilterCriteriaValuesFixture({
+          data: new LearningAreaFixture({
+            id: 1,
+            name: 'Aardrijkskunde'
+          })
+        }),
+        new SearchFilterCriteriaValuesFixture({
+          data: new LearningAreaFixture({
+            id: 2,
+            name: 'Geschiedenis'
+          })
+        }),
+        new SearchFilterCriteriaValuesFixture({
+          data: new LearningAreaFixture({
+            id: 3,
+            name: 'Wiskunde'
+          })
+        }),
         new SearchFilterCriteriaValuesFixture({
           data: new LearningAreaFixture({
             id: 4,
@@ -135,7 +104,7 @@ describe('CheckboxSelectionListFilterComponent', () => {
 
     describe('set', () => {
       beforeEach(() => {
-        component.maxVisibleItems = 2;
+        component.maxVisibleItems = 2; // there are 5 values in the mock
         fixture.detectChanges();
 
         matListOptionsDE = componentDE.queryAll(By.css('mat-list-option'));
@@ -205,16 +174,8 @@ describe('CheckboxSelectionListFilterComponent', () => {
   describe('child', () => {
     let childDE: DebugElement;
 
-    it('should not show the child', () => {
-      childDE = componentDE.query(
-        By.css('campus-checkbox-selection-list-filter')
-      );
-
-      expect(childDE).toBeFalsy();
-    });
-
-    it('should show the child when it is selected', () => {
-      component.criterium.values[0].selected = true;
+    it('should create a child component when there is a child', () => {
+      component.criterium.values[0].child = mockChildFilterCriteria;
       fixture.detectChanges();
 
       childDE = componentDE.query(
@@ -224,11 +185,7 @@ describe('CheckboxSelectionListFilterComponent', () => {
       expect(childDE).toBeTruthy();
     });
 
-    it('should not show the child when it is selected, but there is no child', () => {
-      component.criterium.values[0].selected = true;
-      component.criterium.values[0].child = null;
-      fixture.detectChanges();
-
+    it('should not create a child component when there is no child', () => {
       childDE = componentDE.query(
         By.css('campus-checkbox-selection-list-filter')
       );

@@ -39,9 +39,7 @@ export class CheckboxListFilterComponent
   }
 
   @Output()
-  filterSelectionChange = new EventEmitter<
-    SearchFilterCriteriaInterface | SearchFilterCriteriaInterface[]
-  >();
+  filterSelectionChange = new EventEmitter<SearchFilterCriteriaInterface[]>();
 
   @ViewChild(MatSelectionList) private matList: MatSelectionList;
 
