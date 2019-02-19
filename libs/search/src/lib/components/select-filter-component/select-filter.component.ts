@@ -47,7 +47,7 @@ export class SelectFilterComponent
   }
 
   @Output() filterSelectionChange: EventEmitter<
-    SearchFilterCriteriaInterface
+    SearchFilterCriteriaInterface[]
   > = new EventEmitter();
 
   constructor() {}
@@ -72,7 +72,7 @@ export class SelectFilterComponent
           }
           this.updateView(selection);
           this.updateCriteriaWithSelected(this.criteria.values, selection);
-          this.filterSelectionChange.emit(this.criteria);
+          this.filterSelectionChange.emit([this.criteria]);
         }
       )
     );
