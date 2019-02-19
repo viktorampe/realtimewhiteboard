@@ -3,7 +3,6 @@ import {
   EventEmitter,
   HostBinding,
   Input,
-  OnInit,
   Output
 } from '@angular/core';
 import {
@@ -17,7 +16,7 @@ import {
   styleUrls: ['./checkbox-line-filter-component.scss']
 })
 export class CheckboxLineFilterComponent
-  implements OnInit, SearchFilterComponentInterface {
+  implements SearchFilterComponentInterface {
   public filteredFilterCriteria: SearchFilterCriteriaInterface;
   private _filterCriteria: SearchFilterCriteriaInterface;
 
@@ -33,7 +32,7 @@ export class CheckboxLineFilterComponent
     if (this._filterCriteria === value) return;
 
     this._filterCriteria = value;
-    this.filteredFilterCriteria = getFilteredCriterium(value);
+    this.filteredFilterCriteria = this.getFilteredCriterium(value);
   }
 
   @HostBinding('class.checkbox-line-filter-component')
@@ -41,24 +40,27 @@ export class CheckboxLineFilterComponent
     return true;
   }
 
-  constructor() {}
-
-  ngOnInit() {}
+  public getDisplayValue(value: any): string {
+    return (
+      value.data[this.filterCriteria.displayProperty] +
+      (value.prediction ? '(' + value.prediction + ')' : '')
+    );
+  }
 
   //todo change any with actual interface
   itemChanged(value: any) {
     value.selected = !value.selected;
     this.filterSelectionChange.emit(this.filterCriteria);
   }
-}
 
-export function getFilteredCriterium(
-  criterium: SearchFilterCriteriaInterface
-): SearchFilterCriteriaInterface {
-  return {
-    ...criterium,
-    ...{
-      values: criterium.values.filter(value => value.visible)
-    }
-  };
+  private getFilteredCriterium(
+    criterium: SearchFilterCriteriaInterface
+  ): SearchFilterCriteriaInterface {
+    return {
+      ...criterium,
+      ...{
+        values: criterium.values.filter(value => value.visible)
+      }
+    };
+  }
 }

@@ -26,7 +26,7 @@ export class FindingNemoComponent implements OnInit {
             name: 'Aardrijkskunde'
           }),
           selected: false,
-          prediction: 0,
+          prediction: 1,
           visible: true,
           child: {
             name: 'selectFilter',
@@ -140,7 +140,7 @@ export class FindingNemoComponent implements OnInit {
             id: 5,
             name: 'Engels'
           }),
-          selected: false,
+          selected: true,
           prediction: 0,
           visible: true,
           child: null

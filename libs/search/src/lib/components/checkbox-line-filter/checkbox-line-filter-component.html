@@ -10,7 +10,7 @@
       [checked]="value.selected"
       [value]="value"
       (change)="itemChanged(value)"
-      >{{ value.data[filterCriteria.displayProperty] }}</mat-checkbox
+      >{{ getDisplayValue(value)}}</mat-checkbox
     >
   </ng-container>
 </div>
