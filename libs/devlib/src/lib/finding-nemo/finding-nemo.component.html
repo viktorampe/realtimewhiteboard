@@ -1,1 +1,8 @@
 <p> you will never find nemo! </p>
+
+<campus-search-term
+  [initialValue]="'123'"
+  [autoComplete]="true"
+  [autoCompleteValues]="['waarde 1', ' waarde 2', 'waarde 3', 'waarde 4']"
+  (valueChange)="onChange($event)"
+></campus-search-term>
