@@ -45,7 +45,7 @@ const mockFilterCriteria: SearchFilterCriteriaInterface[] = [
           id: 1,
           name: 'foo'
         }),
-        selected: false
+        selected: true
       },
       {
         data: new LearningAreaFixture({
@@ -104,9 +104,10 @@ describe('BreadcrumbFilterComponent', () => {
 
   it('should change the filter selection on clicking a breadcrumb', () => {
     const clickBreadcrumbSpy = jest.spyOn(component, 'clickBreadcrumb');
+
     const secondBreadcrumb: HTMLAnchorElement = fixture.debugElement.queryAll(
       By.css('a')
-    )[1].nativeElement;
+    )[2].nativeElement; // index 2 because there is an anchor tag outside of the for loop
 
     let emittedValue: SearchFilterCriteriaInterface[];
 
@@ -160,7 +161,7 @@ describe('BreadcrumbFilterComponent', () => {
               id: 1,
               name: 'foo'
             }),
-            selected: false
+            selected: true
           },
           {
             data: new LearningAreaFixture({
@@ -174,5 +175,168 @@ describe('BreadcrumbFilterComponent', () => {
     ];
 
     expect(emittedValue).toEqual(expectedValue);
+  });
+
+  it('should reset the filter criteria when clicking the root breadcrumb', () => {
+    const resetSpy = jest.spyOn(component, 'reset');
+
+    const rootBreadcrumb: HTMLAnchorElement = fixture.debugElement.queryAll(
+      By.css('a')
+    )[0].nativeElement;
+
+    let emittedValue: SearchFilterCriteriaInterface[];
+
+    component.filterSelectionChange.subscribe(newFilterCriteria => {
+      emittedValue = newFilterCriteria;
+    });
+    const expectedValue = [
+      {
+        name: 'breadCrumbFilter',
+        label: 'FooLabel',
+        keyProperty: 'id',
+        displayProperty: 'name',
+        values: [
+          {
+            data: {
+              id: 1,
+              name: 'foo jaar'
+            },
+            selected: false
+          },
+          {
+            data: {
+              id: 2,
+              name: 'bar jaar'
+            },
+            selected: false
+          },
+          {
+            data: {
+              id: 3,
+              name: 'baz jaar'
+            },
+            selected: false
+          }
+        ]
+      }
+    ];
+
+    rootBreadcrumb.click();
+
+    expect(resetSpy).toHaveBeenCalledTimes(1);
+    expect(emittedValue).toEqual(expectedValue);
+  });
+
+  it('should determine whether a seperator is visible', () => {
+    component.filterCriteria = [
+      {
+        name: 'breadCrumbFilter',
+        label: 'FooLabel',
+        keyProperty: 'id',
+        displayProperty: 'name',
+        values: [
+          {
+            data: {
+              id: 1,
+              name: 'foo jaar'
+            },
+            selected: false
+          },
+          {
+            data: {
+              id: 2,
+              name: 'bar jaar'
+            },
+            selected: false
+          },
+          {
+            data: {
+              id: 3,
+              name: 'baz jaar'
+            },
+            selected: false
+          }
+        ]
+      },
+      {
+        name: 'breadCrumbFilter',
+        label: 'foo jaar',
+        keyProperty: 'id',
+        displayProperty: 'name',
+        values: [
+          {
+            data: new LearningAreaFixture({
+              id: 1,
+              name: 'foo'
+            }),
+            selected: false
+          },
+          {
+            data: new LearningAreaFixture({
+              id: 2,
+              name: 'bar'
+            }),
+            selected: false
+          }
+        ]
+      }
+    ];
+    fixture.detectChanges();
+    expect(component.showSeperator).toBeFalsy();
+    component.filterCriteria = [
+      {
+        name: 'breadCrumbFilter',
+        label: 'FooLabel',
+        keyProperty: 'id',
+        displayProperty: 'name',
+        values: [
+          {
+            data: {
+              id: 1,
+              name: 'foo jaar'
+            },
+            selected: false
+          },
+          {
+            data: {
+              id: 2,
+              name: 'bar jaar'
+            },
+            selected: true
+          },
+          {
+            data: {
+              id: 3,
+              name: 'baz jaar'
+            },
+            selected: false
+          }
+        ]
+      },
+      {
+        name: 'breadCrumbFilter',
+        label: 'foo jaar',
+        keyProperty: 'id',
+        displayProperty: 'name',
+        values: [
+          {
+            data: new LearningAreaFixture({
+              id: 1,
+              name: 'foo'
+            }),
+            selected: false
+          },
+          {
+            data: new LearningAreaFixture({
+              id: 2,
+              name: 'bar'
+            }),
+            selected: false
+          }
+        ]
+      }
+    ];
+    fixture.detectChanges();
+    expect(component.showSeperator).toBeTruthy();
   });
 });
