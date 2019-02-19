@@ -52,7 +52,7 @@
       >
     </div>
   </ng-container>
-  <ng-template #noFilterCriteriaTemplate>
+  <ng-container *ngIf="!filterCriteria || filterCriteria.length === 0">
     <div>There is nog columData to display</div>
-  </ng-template>
+  </ng-container>
 </div>
