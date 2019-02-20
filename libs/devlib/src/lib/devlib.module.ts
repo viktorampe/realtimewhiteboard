@@ -32,7 +32,7 @@ import { PolpoResultItemComponent } from './polpo-result-item/polpo-result-item.
     FindingNemoComponent,
     PolpoResultItemComponent
   ],
-  exports: [PolpoResultItemComponent],
+  exports: [],
   entryComponents: [PolpoResultItemComponent]
 })
 export class DevlibModule {}

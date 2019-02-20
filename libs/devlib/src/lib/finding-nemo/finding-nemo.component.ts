@@ -6,9 +6,8 @@ import {
   LearningAreaFixture
 } from '@campus/dal';
 import {
-  SearchFilterCriteriaFixture,
   SearchFilterCriteriaInterface,
-  SearchFilterCriteriaValuesFixture,
+  SearchResultInterface,
   SearchResultItemInterface
 } from '@campus/search';
 import { PolpoResultItemComponent } from '../polpo-result-item/polpo-result-item.component';
@@ -21,39 +20,33 @@ import { PolpoResultItemComponent } from '../polpo-result-item/polpo-result-item
 export class FindingNemoComponent implements OnInit {
   selectFilter: SearchFilterCriteriaInterface;
   resultItemComponent: Type<SearchResultItemInterface>;
-  resultsPage: EduContentMetadataInterface[];
+  resultsPage: SearchResultInterface<EduContentMetadataInterface>;
 
   constructor() {}
 
   ngOnInit() {
     this.resultItemComponent = PolpoResultItemComponent;
-    this.resultsPage = [
-      new EduContentMetadataFixture(),
-      new EduContentMetadataFixture(),
-      new EduContentMetadataFixture()
-    ];
+    this.resetResults();
+    // this.loadMoreResults();
+  }
 
-    const searchFilter = new SearchFilterCriteriaFixture(
-      {
-        name: 'selectFilter',
-        label: 'select filter'
-      },
-      [
-        new SearchFilterCriteriaValuesFixture({
-          data: new LearningAreaFixture({
-            id: 1,
-            name: 'foo'
-          })
-        }),
-        new SearchFilterCriteriaValuesFixture({
-          data: new LearningAreaFixture({
-            id: 2,
-            name: 'bar'
-          })
-        })
-      ]
-    );
+  onFilterSelectionChange(searchFilter: SearchFilterCriteriaInterface) {
+    console.log(searchFilter);
+  }
 
+  loadMoreResults() {
+    this.resultsPage = {
+      count: 3,
+      results: [
+        new EduContentMetadataFixture(),
+        new EduContentMetadataFixture(),
+        new EduContentMetadataFixture()
+      ],
+      filterCriteriaPredictions: new Map()
+    };
+  }
+
+  resetResults() {
     this.selectFilter = {
       name: 'selectFilter',
       label: 'select filter',
@@ -95,9 +88,5 @@ export class FindingNemoComponent implements OnInit {
         }
       ]
     };
-  }
-
-  onFilterSelectionChange(searchFilter: SearchFilterCriteriaInterface) {
-    console.log(searchFilter);
   }
 }

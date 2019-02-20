@@ -1,4 +1,6 @@
 <p> you will never find nemo! </p>
 
+<span (click)="loadMoreResults()">load more</span> | <span (click)="resetResults()">reset</span>
 <campus-results-list [resultsPage]="resultsPage"
-                     [resultItem]="resultItemComponent"></campus-results-list>
+                     [resultItem]="resultItemComponent"
+                     [searchFilterCriteria]="selectFilter"></campus-results-list>

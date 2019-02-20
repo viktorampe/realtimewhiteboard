@@ -11,7 +11,12 @@ import {
   ViewChild,
   ViewContainerRef
 } from '@angular/core';
-import { SearchResultItemInterface, SortInterface } from '../../interfaces';
+import {
+  SearchFilterCriteriaInterface,
+  SearchResultInterface,
+  SearchResultItemInterface,
+  SortInterface
+} from '../../interfaces';
 
 // https://angular.io/guide/dynamic-component-loader
 
@@ -29,17 +34,25 @@ export class ResultListDirective {
 })
 export class ResultsListComponent implements OnInit {
   public selected: any;
+  public count = 0;
+  private clearResults = true;
+  private disableInfiniteScroll = true;
   private componentFactory: ComponentFactory<SearchResultItemInterface>;
 
+  @Input()
+  set searchFilterCriteria(criteria: SearchFilterCriteriaInterface) {
+    // when searchCriteria updates, the next results we receive are from a new search
+    this.clearResults = true;
+    this.disableInfiniteScroll = true;
+  }
   @Input() resultItem: Type<SearchResultItemInterface>;
   @Input()
-  set resultsPage(results: any[]) {
-    if (!this.componentFactory) {
-      this.componentFactory = this.componentFactoryResolver.resolveComponentFactory(
-        this.resultItem
-      );
+  set resultsPage(searchResult: SearchResultInterface<any>) {
+    if (!searchResult) {
+      return;
     }
-    this.loadComponent(results);
+    this.count = searchResult.count;
+    this.loadComponent(searchResult.results);
   }
 
   @Output() sort: EventEmitter<SortInterface[]> = new EventEmitter();
@@ -51,9 +64,21 @@ export class ResultsListComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  private loadComponent(results = [], clearResults = false) {
-    if (clearResults) {
+  private loadComponent(results: any[]) {
+    if (results.length === 0) {
+      this.disableInfiniteScroll = true;
+      return;
+    }
+
+    if (!this.componentFactory) {
+      this.componentFactory = this.componentFactoryResolver.resolveComponentFactory(
+        this.resultItem
+      );
+    }
+    if (this.clearResults) {
       this.resultListHost.viewContainerRef.clear();
+      this.clearResults = false;
+      this.disableInfiniteScroll = false;
     }
     results.forEach(result => this.addResultItemComponent(result));
   }
