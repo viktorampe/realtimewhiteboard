@@ -1,10 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { CredentialFixture, LearningAreaFixture } from '@campus/dal';
+import { Component, OnInit, Type } from '@angular/core';
+import {
+  CredentialFixture,
+  EduContentMetadataFixture,
+  EduContentMetadataInterface,
+  LearningAreaFixture
+} from '@campus/dal';
 import {
   SearchFilterCriteriaFixture,
   SearchFilterCriteriaInterface,
-  SearchFilterCriteriaValuesFixture
+  SearchFilterCriteriaValuesFixture,
+  SearchResultItemInterface
 } from '@campus/search';
+import { PolpoResultItemComponent } from '../polpo-result-item/polpo-result-item.component';
 
 @Component({
   selector: 'campus-finding-nemo',
@@ -13,10 +20,19 @@ import {
 })
 export class FindingNemoComponent implements OnInit {
   selectFilter: SearchFilterCriteriaInterface;
+  resultItemComponent: Type<SearchResultItemInterface>;
+  resultsPage: EduContentMetadataInterface[];
 
   constructor() {}
 
   ngOnInit() {
+    this.resultItemComponent = PolpoResultItemComponent;
+    this.resultsPage = [
+      new EduContentMetadataFixture(),
+      new EduContentMetadataFixture(),
+      new EduContentMetadataFixture()
+    ];
+
     const searchFilter = new SearchFilterCriteriaFixture(
       {
         name: 'selectFilter',
