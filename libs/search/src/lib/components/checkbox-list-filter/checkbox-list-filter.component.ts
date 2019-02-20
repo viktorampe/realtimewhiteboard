@@ -3,13 +3,15 @@ import {
   EventEmitter,
   Input,
   OnDestroy,
-  Output,
-  ViewChild
+  Output
 } from '@angular/core';
-import { MatList, MatSelectionList } from '@angular/material';
+import { MatCheckbox } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { SearchFilterComponentInterface } from '../../interfaces';
-import { SearchFilterCriteriaInterface } from './../../interfaces/search-filter-criteria.interface';
+import {
+  SearchFilterCriteriaInterface,
+  SearchFilterCriteriaValuesInterface
+} from './../../interfaces/search-filter-criteria.interface';
 
 @Component({
   selector: 'campus-checkbox-list-filter',
@@ -27,7 +29,9 @@ export class CheckboxListFilterComponent
   @Output()
   filterSelectionChange = new EventEmitter<SearchFilterCriteriaInterface[]>();
 
-  @ViewChild(MatSelectionList) private matList: MatList;
+  public onSelectionChange(event) {
+    this.filterSelectionChange.emit([this.filterCriteria]);
+  }
 
   // ngAfterViewInit(): void {
   //   this.subscriptions.add(
@@ -43,5 +47,13 @@ export class CheckboxListFilterComponent
 
   ngOnDestroy() {
     this.subscriptions.unsubscribe();
+  }
+
+  // helper function to convert MatCheckBox value (a string by default)
+  // to a SearchFilterCriteriaValuesInterface (which is what is actually set)
+  private convertCheckBoxValue(
+    checkBox: MatCheckbox
+  ): SearchFilterCriteriaValuesInterface {
+    return (checkBox.value as unknown) as SearchFilterCriteriaValuesInterface;
   }
 }

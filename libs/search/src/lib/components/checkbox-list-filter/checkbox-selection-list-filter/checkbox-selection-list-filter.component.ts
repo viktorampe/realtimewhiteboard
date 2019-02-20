@@ -86,14 +86,21 @@ export class CheckboxSelectionListFilterComponent
     this.showMoreItems = value;
   }
 
-  public onChange(event: MatCheckboxChange): void {
+  public onChange(
+    event: MatCheckboxChange,
+    tunnel: boolean = true,
+    bubble: boolean = true
+  ): void {
     if (!event) return;
 
+    // update criterium -> this is byRef
+    this.convertCheckBoxValue(event.source).selected = event.checked;
+
     // notify parent
-    this.selectionChanged.next(event);
+    if (bubble) this.selectionChanged.next(event);
 
     // notify children
-    this.notifyChildren$.next(event);
+    if (tunnel) this.notifyChildren$.next(event);
   }
 
   public onChildChange(event: MatCheckboxChange): void {
@@ -111,18 +118,22 @@ export class CheckboxSelectionListFilterComponent
     } else if (childrenStatus.allUnChecked) {
       parentAssociation.parent.checked = false;
       parentAssociation.parent.indeterminate = false;
-    } else parentAssociation.parent.indeterminate = true;
+    } else {
+      parentAssociation.parent.checked = false;
+      parentAssociation.parent.indeterminate = true;
+    }
 
     // notify parent
     const changedEvent = new MatCheckboxChange();
     changedEvent.source = parentAssociation.parent;
     changedEvent.checked = parentAssociation.parent.checked;
-    this.selectionChanged.next(changedEvent);
+    this.onChange(changedEvent, false, true);
   }
 
   private onParentChange(event: MatCheckboxChange) {
     if (!event) return;
 
+    // check if the emitting parent is my parent
     if (this.convertCheckBoxValue(event.source) === this.parentValueRef) {
       this.matCheckBoxes.forEach(checkbox => {
         checkbox.checked = event.checked;
@@ -132,7 +143,7 @@ export class CheckboxSelectionListFilterComponent
         const changedEvent = new MatCheckboxChange();
         changedEvent.source = checkbox;
         changedEvent.checked = checkbox.checked;
-        this.notifyChildren$.next(changedEvent);
+        this.onChange(changedEvent, true, false);
       });
     }
   }
