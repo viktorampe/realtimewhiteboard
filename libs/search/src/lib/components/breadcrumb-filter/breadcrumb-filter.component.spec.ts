@@ -22,7 +22,6 @@ const mockFilterCriteria: SearchFilterCriteriaInterface[] = [
   ])
 ];
 
-// file.only
 describe('BreadcrumbFilterComponent', () => {
   let component: BreadcrumbFilterComponent;
   let fixture: ComponentFixture<BreadcrumbFilterComponent>;
