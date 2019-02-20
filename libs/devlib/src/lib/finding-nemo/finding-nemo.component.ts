@@ -18,14 +18,14 @@ const mockBreadcrumbFilterCriteria: SearchFilterCriteriaInterface[] = [
           id: 1,
           name: 'Gemeenschapsonderwijs'
         },
-        selected: false
+        selected: true
       },
       {
         data: {
           id: 2,
           name: 'Officieel gesubsidieerd onderwijs'
         },
-        selected: true
+        selected: false
       },
       {
         data: {
@@ -112,7 +112,7 @@ const mockBreadcrumbFilterCriteria: SearchFilterCriteriaInterface[] = [
           id: 2,
           name: 'Grieks'
         },
-        selected: false
+        selected: true
       },
       {
         data: {

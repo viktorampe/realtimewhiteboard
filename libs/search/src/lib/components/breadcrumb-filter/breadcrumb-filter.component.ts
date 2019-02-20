@@ -42,6 +42,17 @@ export class BreadcrumbFilterComponent
   }
 
   clickBreadcrumb(index: number) {
-    this.filterSelectionChange.emit(this.criteria.slice(0, index + 1));
+    this.updateSelectedValues(index);
+    this.filterSelectionChange.emit([...this.criteria]);
+  }
+
+  private updateSelectedValues(startValue: number) {
+    for (
+      let index = startValue + 1;
+      index < this.selectedValues.length;
+      index++
+    ) {
+      this.selectedValues[index].selected = false;
+    }
   }
 }
