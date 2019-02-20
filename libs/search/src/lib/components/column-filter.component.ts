@@ -1,7 +1,6 @@
 import {
   animate,
-  animateChild,
-  query,
+  state,
   style,
   transition,
   trigger
@@ -18,30 +17,91 @@ import {
   styleUrls: ['./column-filter.component.scss'],
   animations: [
     trigger('slideInOut', [
-      transition(':enter', [
+      transition('* => forwardEnter', [
+        //enter from right to left
         style({ transform: 'translateX(100%)' }),
-        animate('300ms ease-in-out', style({ transform: 'translateX(0%)' }))
+        animate('200ms ease-in-out', style({ transform: 'translateX(0%)' }))
       ]),
-      transition(':leave', [
-        style({ position: 'absolute' }),
-        query('@slideInOut', [animateChild()], { optional: true }), // needed so the animation is not forcibly ended by the new enter animation
-        animate('300ms ease-in', style({ transform: 'translateX(-100%)' }))
-      ])
+      transition('* => backwardEnter', [
+        //enter from left to right, position absolute needs to be added so a redrew due a new array will work
+        style({ transform: 'translateX(-100%)', position: 'absolute' }),
+        animate('200ms ease-in-out', style({ transform: 'translateX(0%)' }))
+      ]),
+      transition(
+        'forwardEnter => forwardLeave, backwardEnter => forwardLeave',
+        [
+          // leave right to left (* can nog be used, only entered elements can animate leave)
+          style({ position: 'absolute' }),
+          animate(
+            '200ms ease-in-out',
+            style({ transform: 'translateX(-100%)' })
+          )
+        ]
+      ),
+      transition(
+        'forwardEnter => backwardLeave, backwardEnter => backwardLeave, forwardEnter => void, backwardEnter => void',
+        [
+          // leave left to right, (* can not be used, only entered elements can animate leave)
+          style({ position: 'absolute' }),
+          animate('200ms ease-in-out', style({ transform: 'translateX(100%)' }))
+        ]
+      ),
+      state('backwardEnter', style({ position: 'static' })), // set enter style absolute back to default static
+      state('forwardLeave', style({ display: 'none' })), // hide using display none
+      state('backwardLeave', style({ display: 'none' })) // hide using display none
     ])
   ]
 })
 export class ColumnFilterComponent implements SearchFilterComponentInterface {
+  private _filterCriteria: SearchFilterCriteriaInterface[];
   preserveColumn = false;
+  forwardAnimation = true;
+  previousFilterCriteriaCount: number;
 
-  @Input() filterCriteria: SearchFilterCriteriaInterface[];
+  @Input()
+  public set filterCriteria(value: SearchFilterCriteriaInterface[]) {
+    if (value) {
+      this.forwardAnimation = this.previousFilterCriteriaCount < value.length;
+      this.previousFilterCriteriaCount = value.length;
+    }
+    this._filterCriteria = value;
+  }
+  public get filterCriteria() {
+    return this._filterCriteria;
+  }
+
   @Output()
   filterSelectionChange = new EventEmitter<SearchFilterCriteriaInterface[]>();
-  constructor() {}
 
-  showColumn(columnIndex: number) {
+  /**
+   * determines if a column should be visible or not
+   *
+   * @param {number} columnIndex
+   * @returns {boolean}
+   * @memberof ColumnFilterComponent
+   */
+  columnVisible(columnIndex: number): boolean {
     return (
       columnIndex === this.filterCriteria.length - (this.preserveColumn ? 2 : 1)
     );
+  }
+
+  /**
+   * returns the animation state string that is used to provide specific animations of enter , leave , forward and backward
+   * the string wil always be a combination of these options, eg forwardEnter, forwardLeave, backwardEnter, backwardLeave
+   *
+   * forward means the animation will go from right to left, backward from left to right
+   *
+   * Enter meand the animation will make the element enter the page to stay, Leave means the animation will make the element disappear
+   *
+   * @param {number} columnIndex
+   * @returns {string}
+   * @memberof ColumnFilterComponent
+   */
+  animationState(columnIndex: number): string {
+    return `${this.forwardAnimation ? 'forward' : 'backward'}${
+      this.columnVisible(columnIndex) ? 'Enter' : 'Leave'
+    }`;
   }
 
   onFilterSelectionChange(
