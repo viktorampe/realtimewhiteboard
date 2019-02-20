@@ -8,12 +8,14 @@
 <ng-template #mobileBreadcrumbs>
   <a *ngIf="!selectedValues.length; else: values">{{ rootLabel }}</a>
   <ng-template #values>
-    <span (click)="clickBreadcrumb(selectedValues.length - 2)">&lt;</span>
-    {{
-      getLabel(
-        selectedValues[selectedValues.length - 1],
-        selectedValues.length - 1
-      )
-    }}
+    <a class="mobile" (click)="clickBreadcrumb(selectedValues.length - 2)">
+      &lt;
+      {{
+        getLabel(
+          selectedValues[selectedValues.length - 1],
+          selectedValues.length - 1
+        )
+      }}
+    </a>
   </ng-template>
 </ng-template>

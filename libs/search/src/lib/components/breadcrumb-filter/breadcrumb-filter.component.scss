@@ -30,4 +30,10 @@ a {
   &:last-child {
     max-width: none;
   }
+
+  &.mobile {
+    &:before {
+      content: none;
+    }
+  }
 }
