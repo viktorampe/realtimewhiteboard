@@ -1,83 +1,25 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { LearningAreaFixture } from '@campus/dal';
+import {
+  SearchFilterCriteriaFixture,
+  SearchFilterCriteriaValuesFixture
+} from '../../+fixtures/search-filter-criteria.fixture';
 import { SearchFilterCriteriaInterface } from '../../interfaces/search-filter-criteria.interface';
 import { BreadcrumbFilterComponent } from './breadcrumb-filter.component';
 
 const mockFilterCriteria: SearchFilterCriteriaInterface[] = [
-  {
-    name: 'breadCrumbFilter',
-    label: 'FooLabel',
-    keyProperty: 'id',
-    displayProperty: 'name',
-    values: [
-      {
-        data: {
-          id: 1,
-          name: 'foo jaar'
-        },
-        selected: true
-      },
-      {
-        data: {
-          id: 2,
-          name: 'bar jaar'
-        },
-        selected: false
-      },
-      {
-        data: {
-          id: 3,
-          name: 'baz jaar'
-        },
-        selected: false
-      }
-    ]
-  },
-  {
-    name: 'breadCrumbFilter',
-    label: 'foo jaar',
-    keyProperty: 'id',
-    displayProperty: 'name',
-    values: [
-      {
-        data: new LearningAreaFixture({
-          id: 1,
-          name: 'foo'
-        }),
-        selected: true
-      },
-      {
-        data: new LearningAreaFixture({
-          id: 2,
-          name: 'bar'
-        }),
-        selected: false
-      }
-    ]
-  },
-  {
-    name: 'breadCrumbFilter',
-    label: 'foo learning area',
-    keyProperty: 'id',
-    displayProperty: 'name',
-    values: [
-      {
-        data: {
-          id: 1,
-          name: 'foo'
-        },
-        selected: true
-      },
-      {
-        data: {
-          id: 2,
-          name: 'bar'
-        },
-        selected: false
-      }
-    ]
-  }
+  new SearchFilterCriteriaFixture({}, [
+    new SearchFilterCriteriaValuesFixture({ selected: true })
+  ]),
+  new SearchFilterCriteriaFixture({}, [
+    new SearchFilterCriteriaValuesFixture({ selected: true })
+  ]),
+  new SearchFilterCriteriaFixture({}, [
+    new SearchFilterCriteriaValuesFixture({ selected: true })
+  ]),
+  new SearchFilterCriteriaFixture({}, [
+    new SearchFilterCriteriaValuesFixture({ selected: true })
+  ])
 ];
 
 // file.only
@@ -121,79 +63,18 @@ describe('BreadcrumbFilterComponent', () => {
     expect(clickBreadcrumbSpy).toHaveBeenCalledWith(1);
 
     const expectedValue = [
-      {
-        name: 'breadCrumbFilter',
-        label: 'FooLabel',
-        keyProperty: 'id',
-        displayProperty: 'name',
-        values: [
-          {
-            data: {
-              id: 1,
-              name: 'foo jaar'
-            },
-            selected: true
-          },
-          {
-            data: {
-              id: 2,
-              name: 'bar jaar'
-            },
-            selected: false
-          },
-          {
-            data: {
-              id: 3,
-              name: 'baz jaar'
-            },
-            selected: false
-          }
-        ]
-      },
-      {
-        name: 'breadCrumbFilter',
-        label: 'foo jaar',
-        keyProperty: 'id',
-        displayProperty: 'name',
-        values: [
-          {
-            data: new LearningAreaFixture({
-              id: 1,
-              name: 'foo'
-            }),
-            selected: true
-          },
-          {
-            data: new LearningAreaFixture({
-              id: 2,
-              name: 'bar'
-            }),
-            selected: false
-          }
-        ]
-      },
-      {
-        name: 'breadCrumbFilter',
-        label: 'foo learning area',
-        keyProperty: 'id',
-        displayProperty: 'name',
-        values: [
-          {
-            data: {
-              id: 1,
-              name: 'foo'
-            },
-            selected: false
-          },
-          {
-            data: {
-              id: 2,
-              name: 'bar'
-            },
-            selected: false
-          }
-        ]
-      }
+      new SearchFilterCriteriaFixture({}, [
+        new SearchFilterCriteriaValuesFixture({ selected: true })
+      ]),
+      new SearchFilterCriteriaFixture({}, [
+        new SearchFilterCriteriaValuesFixture({ selected: true })
+      ]),
+      new SearchFilterCriteriaFixture({}, [
+        new SearchFilterCriteriaValuesFixture({ selected: false })
+      ]),
+      new SearchFilterCriteriaFixture({}, [
+        new SearchFilterCriteriaValuesFixture({ selected: false })
+      ])
     ];
 
     expect(emittedValue).toEqual(expectedValue);
@@ -212,79 +93,18 @@ describe('BreadcrumbFilterComponent', () => {
       emittedValue = newFilterCriteria;
     });
     const expectedValue = [
-      {
-        name: 'breadCrumbFilter',
-        label: 'FooLabel',
-        keyProperty: 'id',
-        displayProperty: 'name',
-        values: [
-          {
-            data: {
-              id: 1,
-              name: 'foo jaar'
-            },
-            selected: false
-          },
-          {
-            data: {
-              id: 2,
-              name: 'bar jaar'
-            },
-            selected: false
-          },
-          {
-            data: {
-              id: 3,
-              name: 'baz jaar'
-            },
-            selected: false
-          }
-        ]
-      },
-      {
-        name: 'breadCrumbFilter',
-        label: 'foo jaar',
-        keyProperty: 'id',
-        displayProperty: 'name',
-        values: [
-          {
-            data: new LearningAreaFixture({
-              id: 1,
-              name: 'foo'
-            }),
-            selected: false
-          },
-          {
-            data: new LearningAreaFixture({
-              id: 2,
-              name: 'bar'
-            }),
-            selected: false
-          }
-        ]
-      },
-      {
-        name: 'breadCrumbFilter',
-        label: 'foo learning area',
-        keyProperty: 'id',
-        displayProperty: 'name',
-        values: [
-          {
-            data: {
-              id: 1,
-              name: 'foo'
-            },
-            selected: false
-          },
-          {
-            data: {
-              id: 2,
-              name: 'bar'
-            },
-            selected: false
-          }
-        ]
-      }
+      new SearchFilterCriteriaFixture({}, [
+        new SearchFilterCriteriaValuesFixture({ selected: false })
+      ]),
+      new SearchFilterCriteriaFixture({}, [
+        new SearchFilterCriteriaValuesFixture({ selected: false })
+      ]),
+      new SearchFilterCriteriaFixture({}, [
+        new SearchFilterCriteriaValuesFixture({ selected: false })
+      ]),
+      new SearchFilterCriteriaFixture({}, [
+        new SearchFilterCriteriaValuesFixture({ selected: false })
+      ])
     ];
 
     rootBreadcrumb.click();
