@@ -9,23 +9,28 @@ import { SearchFilterCriteriaInterface } from '../../interfaces/search-filter-cr
 })
 export class BreadcrumbFilterComponent
   implements SearchFilterComponentInterface {
-  showSeperator: boolean;
   criteria: SearchFilterCriteriaInterface[];
-  selectedLabels: string[];
+  selectedValues: object[]; // TODO: use interface
 
   @Input() rootLabel: string;
   @Input()
   set filterCriteria(filterCriteria: SearchFilterCriteriaInterface[]) {
+    this.selectedValues = [];
+    filterCriteria.forEach(criteria => {
+      const selectedValue = criteria.values.find(value => value.selected);
+      if (selectedValue) {
+        this.selectedValues.push(selectedValue);
+      }
+    });
     this.criteria = filterCriteria;
-    this.selectedLabels = filterCriteria.map(this.getLabel);
-
-    this.checkSeparator();
   }
   @Output() filterSelectionChange = new EventEmitter<
     SearchFilterCriteriaInterface[]
   >();
 
   constructor() {}
+
+  getLabel(value: object) {}
 
   reset() {
     const filterCriteria = this.criteria[0];
@@ -35,17 +40,5 @@ export class BreadcrumbFilterComponent
 
   clickBreadcrumb(index: number) {
     this.filterSelectionChange.emit(this.criteria.slice(0, index + 1));
-  }
-
-  private checkSeparator() {
-    this.showSeperator = this.criteria[0].values.some(value => value.selected);
-  }
-
-  private getLabel(filterCriterium: SearchFilterCriteriaInterface): string {
-    const selectedCriterium = filterCriterium.values.find(
-      criterium => criterium.selected
-    );
-    if (selectedCriterium)
-      return selectedCriterium.data[filterCriterium.displayProperty];
   }
 }
