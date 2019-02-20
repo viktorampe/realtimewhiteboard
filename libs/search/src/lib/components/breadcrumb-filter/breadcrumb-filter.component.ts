@@ -12,6 +12,7 @@ import {
 })
 export class BreadcrumbFilterComponent
   implements SearchFilterComponentInterface {
+  isMobile = true;
   criteria: SearchFilterCriteriaInterface[];
   selectedValues: SearchFilterCriteriaValuesInterface[];
 
