@@ -162,36 +162,4 @@ describe('CheckboxListFilterComponentComponent', () => {
       ]);
     });
   });
-
-  describe('filtering and sorting', () => {
-    it('should filter out values that are not visible', () => {
-      // doublecheck no values are filtered out at the moment
-      expect(component.filteredFilterCriteria.values).toEqual(
-        mockFilterCriteria.values
-      );
-
-      const changedFilterCriterium = { ...mockFilterCriteria };
-      changedFilterCriterium.values[4].visible = false;
-      component.filterCriteria = changedFilterCriterium; // trigger setter
-
-      expect(component.filteredFilterCriteria.values).not.toContain(
-        component.filterCriteria.values[4]
-      );
-    });
-
-    it('should sort selected values to the front of the values-array', () => {
-      // doublecheck values[4] isn't first on init
-      expect(component.filteredFilterCriteria.values[0]).not.toBe(
-        component.filterCriteria.values[4]
-      );
-
-      const changedFilterCriterium = { ...mockFilterCriteria };
-      changedFilterCriterium.values[4].selected = true;
-      component.filterCriteria = changedFilterCriterium; // trigger setter
-
-      expect(component.filteredFilterCriteria.values[0]).toBe(
-        component.filterCriteria.values[4]
-      );
-    });
-  });
 });
