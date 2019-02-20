@@ -1,0 +1,33 @@
+:host() {
+  display: block;
+  height: 40px;
+  border-bottom: solid 1px #b2bbc4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+a {
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+  vertical-align: middle;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:nth-child(n + 2) {
+    &:before {
+      content: '>';
+      display: inline-block;
+      padding: 0 10px;
+    }
+  }
+
+  &:last-child {
+    max-width: none;
+  }
+}
