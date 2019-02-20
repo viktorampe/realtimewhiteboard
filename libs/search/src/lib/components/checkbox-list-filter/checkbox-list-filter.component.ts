@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   Component,
   EventEmitter,
   Input,
@@ -7,9 +6,8 @@ import {
   Output,
   ViewChild
 } from '@angular/core';
-import { MatSelectionList } from '@angular/material';
+import { MatList, MatSelectionList } from '@angular/material';
 import { Subscription } from 'rxjs';
-import { distinctUntilChanged } from 'rxjs/operators';
 import { SearchFilterComponentInterface } from '../../interfaces';
 import { SearchFilterCriteriaInterface } from './../../interfaces/search-filter-criteria.interface';
 
@@ -19,7 +17,7 @@ import { SearchFilterCriteriaInterface } from './../../interfaces/search-filter-
   styleUrls: ['./checkbox-list-filter.component.scss']
 })
 export class CheckboxListFilterComponent
-  implements AfterViewInit, OnDestroy, SearchFilterComponentInterface {
+  implements OnDestroy, SearchFilterComponentInterface {
   public showMoreChildren = false;
   private subscriptions = new Subscription();
 
@@ -29,19 +27,19 @@ export class CheckboxListFilterComponent
   @Output()
   filterSelectionChange = new EventEmitter<SearchFilterCriteriaInterface[]>();
 
-  @ViewChild(MatSelectionList) private matList: MatSelectionList;
+  @ViewChild(MatSelectionList) private matList: MatList;
 
-  ngAfterViewInit(): void {
-    this.subscriptions.add(
-      this.matList.selectionChange
-        .pipe(distinctUntilChanged())
-        .subscribe(event => {
-          event.option.value.selected = event.option.selected;
+  // ngAfterViewInit(): void {
+  //   this.subscriptions.add(
+  //     this.matList.selectionChanged
+  //       .pipe(distinctUntilChanged())
+  //       .subscribe(event => {
+  //         event.option.value.selected = event.option.selected;
 
-          this.filterSelectionChange.emit([this.filterCriteria]);
-        })
-    );
-  }
+  //         this.filterSelectionChange.emit([this.filterCriteria]);
+  //       })
+  //   );
+  // }
 
   ngOnDestroy() {
     this.subscriptions.unsubscribe();

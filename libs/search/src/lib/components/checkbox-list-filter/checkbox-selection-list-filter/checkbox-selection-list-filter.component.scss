@@ -7,7 +7,6 @@
     // actual items
     &__title {
       background-color: orange;
-      height: 24px;
     }
 
     // container for sub-items
@@ -17,6 +16,12 @@
       display: flex;
       flex-flow: column nowrap;
       width: 100%;
+    }
+
+    &__item {
+      &--hidden {
+        display: none;
+      }
     }
   }
 }
