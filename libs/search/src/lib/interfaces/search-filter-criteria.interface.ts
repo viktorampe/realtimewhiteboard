@@ -3,11 +3,13 @@ export interface SearchFilterCriteriaInterface {
   label: string;
   keyProperty: string;
   displayProperty: string;
-  values: {
-    data: any;
-    selected?: boolean;
-    prediction?: number;
-    visible?: boolean;
-    child?: SearchFilterCriteriaInterface;
-  }[];
+  values: SearchFilterCriteriaValuesInterface[];
+}
+
+export interface SearchFilterCriteriaValuesInterface {
+  data: any;
+  selected?: boolean;
+  prediction?: number;
+  visible?: boolean;
+  child?: SearchFilterCriteriaInterface;
 }
