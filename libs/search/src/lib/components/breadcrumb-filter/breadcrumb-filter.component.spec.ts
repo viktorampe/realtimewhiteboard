@@ -67,7 +67,7 @@ const mockFilterCriteria: SearchFilterCriteriaInterface[] = [
           id: 1,
           name: 'foo'
         },
-        selected: false
+        selected: true
       },
       {
         data: {
@@ -171,6 +171,28 @@ describe('BreadcrumbFilterComponent', () => {
             selected: false
           }
         ]
+      },
+      {
+        name: 'breadCrumbFilter',
+        label: 'foo learning area',
+        keyProperty: 'id',
+        displayProperty: 'name',
+        values: [
+          {
+            data: {
+              id: 1,
+              name: 'foo'
+            },
+            selected: false
+          },
+          {
+            data: {
+              id: 2,
+              name: 'bar'
+            },
+            selected: false
+          }
+        ]
       }
     ];
 
@@ -214,6 +236,50 @@ describe('BreadcrumbFilterComponent', () => {
             data: {
               id: 3,
               name: 'baz jaar'
+            },
+            selected: false
+          }
+        ]
+      },
+      {
+        name: 'breadCrumbFilter',
+        label: 'foo jaar',
+        keyProperty: 'id',
+        displayProperty: 'name',
+        values: [
+          {
+            data: new LearningAreaFixture({
+              id: 1,
+              name: 'foo'
+            }),
+            selected: false
+          },
+          {
+            data: new LearningAreaFixture({
+              id: 2,
+              name: 'bar'
+            }),
+            selected: false
+          }
+        ]
+      },
+      {
+        name: 'breadCrumbFilter',
+        label: 'foo learning area',
+        keyProperty: 'id',
+        displayProperty: 'name',
+        values: [
+          {
+            data: {
+              id: 1,
+              name: 'foo'
+            },
+            selected: false
+          },
+          {
+            data: {
+              id: 2,
+              name: 'bar'
             },
             selected: false
           }
