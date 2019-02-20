@@ -1,6 +1,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { SearchFilterComponentInterface } from '../../interfaces/search-filter-component-interface';
-import { SearchFilterCriteriaInterface } from '../../interfaces/search-filter-criteria.interface';
+import {
+  SearchFilterCriteriaInterface,
+  SearchFilterCriteriaValuesInterface
+} from '../../interfaces/search-filter-criteria.interface';
 
 @Component({
   selector: 'campus-breadcrumb-filter',
@@ -10,7 +13,7 @@ import { SearchFilterCriteriaInterface } from '../../interfaces/search-filter-cr
 export class BreadcrumbFilterComponent
   implements SearchFilterComponentInterface {
   criteria: SearchFilterCriteriaInterface[];
-  selectedValues: object[]; // TODO: use interface
+  selectedValues: SearchFilterCriteriaValuesInterface[];
 
   @Input() rootLabel: string;
   @Input()
@@ -30,12 +33,12 @@ export class BreadcrumbFilterComponent
 
   constructor() {}
 
-  getLabel(value: object) {}
+  getLabel(value: SearchFilterCriteriaValuesInterface, index: number): string {
+    return value.data[this.criteria[index].displayProperty];
+  }
 
   reset() {
-    const filterCriteria = this.criteria[0];
-    filterCriteria.values.forEach(criterium => (criterium.selected = false));
-    this.filterSelectionChange.emit(this.criteria.slice(0, 1));
+    this.clickBreadcrumb(-1);
   }
 
   clickBreadcrumb(index: number) {

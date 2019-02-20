@@ -1,4 +1,4 @@
 <a (click)="reset()">{{ rootLabel }}</a>
 <ng-container *ngFor="let value of selectedValues; index as i">
-  <span> &gt; </span> <a (click)="clickBreadcrumb(i)">{{ getLabel(value) }}</a>
+  &gt; <a (click)="clickBreadcrumb(i)">{{ getLabel(value, i) }}</a>
 </ng-container>
