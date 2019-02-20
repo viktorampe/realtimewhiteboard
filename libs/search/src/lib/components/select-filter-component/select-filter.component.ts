@@ -112,8 +112,12 @@ export class SelectFilterComponent
     selection: SearchFilterCriteriaValuesInterface[]
   ): void {
     // uncheck everything
-    values.forEach(value => (value.selected = false));
+    values.forEach(value => {
+      value.selected = false;
+    });
     // then check selected
-    selection.forEach(selected => (selected.selected = true));
+    selection.forEach(selected => {
+      selected.selected = true;
+    });
   }
 }

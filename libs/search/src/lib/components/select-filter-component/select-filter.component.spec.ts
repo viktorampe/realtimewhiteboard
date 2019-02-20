@@ -35,9 +35,7 @@ describe('SelectFilterComponentComponent', () => {
       ],
       declarations: [SelectFilterComponent]
     }).compileComponents();
-  });
 
-  beforeEach(() => {
     mockFilterCriteria = new SearchFilterCriteriaFixture({}, [
       new SearchFilterCriteriaValuesFixture({
         data: {
@@ -64,14 +62,12 @@ describe('SelectFilterComponentComponent', () => {
     fixture = TestBed.createComponent(SelectFilterComponent);
     component = fixture.componentInstance;
     component.multiple = multiSelect;
-    fixture.detectChanges();
+    component.filterCriteria = mockFilterCriteria;
+
     matSelect = fixture.debugElement.query(By.directive(MatSelect));
     matSelectComponent = matSelect.componentInstance as MatSelect;
     matBadge = fixture.debugElement.query(By.directive(MatBadge));
-  });
 
-  beforeEach(() => {
-    component.filterCriteria = mockFilterCriteria;
     fixture.detectChanges();
   });
 
@@ -81,13 +77,13 @@ describe('SelectFilterComponentComponent', () => {
 
   it('should add options to the select component', () => {
     const options = getOptionsForCriteria();
-    expect(options.length).toBe(3);
+    expect(options.length).toBe(mockFilterCriteria.values.length);
   });
 
   it('should not display options where visible is falsy', () => {
     mockFilterCriteria.values[0].visible = false;
     const options = getOptionsForCriteria();
-    expect(options.length).toBe(2);
+    expect(options.length).toBe(mockFilterCriteria.values.length - 1);
   });
 
   it('should display prediction numbers', () => {
@@ -120,7 +116,7 @@ describe('SelectFilterComponentComponent', () => {
     expect(options[0].nativeElement.textContent).toContain('resetFoo');
   });
 
-  it('should reset the selected options when clicked', () => {
+  it('should reset the selected options when clicked', done => {
     mockFilterCriteria.values[0].selected = true;
     component.filterCriteria = mockFilterCriteria;
     component.resetLabel = 'resetFoo';
@@ -151,16 +147,14 @@ describe('SelectFilterComponentComponent', () => {
         })
       ])
     ];
+    const options = getOptionsForCriteria();
 
-    let updatedSelection: SearchFilterCriteriaInterface[];
     component.filterSelectionChange.subscribe(selection => {
-      updatedSelection = selection;
+      expect(selection).toEqual(expected);
+      done();
     });
 
-    const options = getOptionsForCriteria();
     options[0].nativeElement.click();
-
-    expect(updatedSelection).toEqual(expected);
   });
 
   it('should have [multiple] option active for the select component', () => {
@@ -168,7 +162,7 @@ describe('SelectFilterComponentComponent', () => {
     expect(matSelectComponent.multiple).toBe(true);
   });
 
-  it('should output the updated searchFilterCriteria on change', () => {
+  it('should output the updated searchFilterCriteria on change', done => {
     const expected = [
       new SearchFilterCriteriaFixture({}, [
         new SearchFilterCriteriaValuesFixture({
@@ -194,14 +188,12 @@ describe('SelectFilterComponentComponent', () => {
       ])
     ];
 
-    let updatedSelection: SearchFilterCriteriaInterface[];
     component.filterSelectionChange.subscribe(selection => {
-      updatedSelection = selection;
+      expect(selection).toEqual(expected);
+      done();
     });
     // select first two elements
     component.selectControl.setValue(mockFilterCriteria.values.slice(0, 2));
-
-    expect(updatedSelection).toEqual(expected);
   });
 
   function getOptionsForCriteria(
