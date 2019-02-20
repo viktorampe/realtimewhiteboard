@@ -9,28 +9,64 @@ import {
 const mockBreadcrumbFilterCriteria: SearchFilterCriteriaInterface[] = [
   {
     name: 'breadCrumbFilter',
-    label: 'Jaren',
+    label: 'koepels',
     keyProperty: 'id',
     displayProperty: 'name',
     values: [
       {
         data: {
           id: 1,
-          name: 'foo jaar'
+          name: 'Gemeenschapsonderwijs'
+        },
+        selected: false
+      },
+      {
+        data: {
+          id: 2,
+          name: 'Officieel gesubsidieerd onderwijs'
+        },
+        selected: true
+      },
+      {
+        data: {
+          id: 3,
+          name: 'Vrij gesubsidieerd onderwijs'
+        },
+        selected: false
+      }
+    ]
+  },
+  {
+    name: 'breadCrumbFilter',
+    label: 'Stromen',
+    keyProperty: 'id',
+    displayProperty: 'name',
+    values: [
+      {
+        data: {
+          id: 1,
+          name: 'A-stroom'
         },
         selected: true
       },
       {
         data: {
           id: 2,
-          name: 'bar jaar'
+          name: 'ASO'
         },
         selected: false
       },
       {
         data: {
           id: 3,
-          name: 'baz jaar'
+          name: 'B-Stroom'
+        },
+        selected: false
+      },
+      {
+        data: {
+          id: 4,
+          name: 'BSO'
         },
         selected: false
       }
@@ -38,45 +74,52 @@ const mockBreadcrumbFilterCriteria: SearchFilterCriteriaInterface[] = [
   },
   {
     name: 'breadCrumbFilter',
-    label: 'foo jaar',
+    label: 'jaren',
     keyProperty: 'id',
     displayProperty: 'name',
     values: [
       {
-        data: new LearningAreaFixture({
+        data: {
           id: 1,
-          name: 'foo'
-        }),
+          name: '1e jaar'
+        },
         selected: true
       },
       {
-        data: new LearningAreaFixture({
+        data: {
           id: 2,
-          name: 'bar'
-        }),
+          name: '2de jaar'
+        },
         selected: false
       }
     ]
   },
   {
     name: 'breadCrumbFilter',
-    label: 'foo learning area',
+    label: 'richtingen',
     keyProperty: 'id',
     displayProperty: 'name',
     values: [
       {
         data: {
           id: 1,
-          name: 'foo'
+          name: 'Economie'
         },
         selected: false
       },
       {
         data: {
           id: 2,
-          name: 'bar'
+          name: 'Grieks'
         },
-        selected: true
+        selected: false
+      },
+      {
+        data: {
+          id: 2,
+          name: 'Grieks-Latijn'
+        },
+        selected: false
       }
     ]
   }
