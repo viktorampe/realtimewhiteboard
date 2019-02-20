@@ -1,5 +1,5 @@
 import { DebugElement } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import {
   MatBadge,
@@ -25,7 +25,7 @@ describe('SelectFilterComponentComponent', () => {
   let mockFilterCriteria: SearchFilterCriteriaInterface;
   let multiSelect: boolean;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
         MatSelectModule,
@@ -35,7 +35,7 @@ describe('SelectFilterComponentComponent', () => {
       ],
       declarations: [SelectFilterComponent]
     }).compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     mockFilterCriteria = new SearchFilterCriteriaFixture({}, [
@@ -79,12 +79,12 @@ describe('SelectFilterComponentComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should add options to the select component', async () => {
+  it('should add options to the select component', () => {
     const options = getOptionsForCriteria();
     expect(options.length).toBe(3);
   });
 
-  it('should not display options where visible is falsy', async () => {
+  it('should not display options where visible is falsy', () => {
     mockFilterCriteria.values[0].visible = false;
     const options = getOptionsForCriteria();
     expect(options.length).toBe(2);
@@ -126,31 +126,33 @@ describe('SelectFilterComponentComponent', () => {
     component.resetLabel = 'resetFoo';
     fixture.detectChanges();
 
-    const expected = new SearchFilterCriteriaFixture({}, [
-      new SearchFilterCriteriaValuesFixture({
-        data: {
-          id: 1,
-          name: 'foo'
-        },
-        selected: false
-      }),
-      new SearchFilterCriteriaValuesFixture({
-        data: {
-          id: 2,
-          name: 'bar'
-        },
-        selected: false
-      }),
-      new SearchFilterCriteriaValuesFixture({
-        data: {
-          id: 3,
-          name: 'foobar'
-        },
-        selected: false
-      })
-    ]);
+    const expected = [
+      new SearchFilterCriteriaFixture({}, [
+        new SearchFilterCriteriaValuesFixture({
+          data: {
+            id: 1,
+            name: 'foo'
+          },
+          selected: false
+        }),
+        new SearchFilterCriteriaValuesFixture({
+          data: {
+            id: 2,
+            name: 'bar'
+          },
+          selected: false
+        }),
+        new SearchFilterCriteriaValuesFixture({
+          data: {
+            id: 3,
+            name: 'foobar'
+          },
+          selected: false
+        })
+      ])
+    ];
 
-    let updatedSelection: SearchFilterCriteriaInterface;
+    let updatedSelection: SearchFilterCriteriaInterface[];
     component.filterSelectionChange.subscribe(selection => {
       updatedSelection = selection;
     });
@@ -167,30 +169,32 @@ describe('SelectFilterComponentComponent', () => {
   });
 
   it('should output the updated searchFilterCriteria on change', () => {
-    const expected = new SearchFilterCriteriaFixture({}, [
-      new SearchFilterCriteriaValuesFixture({
-        data: {
-          id: 1,
-          name: 'foo'
-        },
-        selected: true
-      }),
-      new SearchFilterCriteriaValuesFixture({
-        data: {
-          id: 2,
-          name: 'bar'
-        },
-        selected: true
-      }),
-      new SearchFilterCriteriaValuesFixture({
-        data: {
-          id: 3,
-          name: 'foobar'
-        }
-      })
-    ]);
+    const expected = [
+      new SearchFilterCriteriaFixture({}, [
+        new SearchFilterCriteriaValuesFixture({
+          data: {
+            id: 1,
+            name: 'foo'
+          },
+          selected: true
+        }),
+        new SearchFilterCriteriaValuesFixture({
+          data: {
+            id: 2,
+            name: 'bar'
+          },
+          selected: true
+        }),
+        new SearchFilterCriteriaValuesFixture({
+          data: {
+            id: 3,
+            name: 'foobar'
+          }
+        })
+      ])
+    ];
 
-    let updatedSelection: SearchFilterCriteriaInterface;
+    let updatedSelection: SearchFilterCriteriaInterface[];
     component.filterSelectionChange.subscribe(selection => {
       updatedSelection = selection;
     });
