@@ -1,0 +1,5 @@
+@import './components/breadcrumb-filter/breadcrumb-filter.component.theme.scss';
+
+@mixin search-theme() {
+  @include search-breadcrumb-filter();
+}
