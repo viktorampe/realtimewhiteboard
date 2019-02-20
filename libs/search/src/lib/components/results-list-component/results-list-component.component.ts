@@ -1,25 +1,37 @@
 import {
   Component,
+  ComponentFactoryResolver,
   Directive,
   EventEmitter,
   Input,
   OnInit,
   Output,
+  Type,
   ViewChild,
   ViewContainerRef
 } from '@angular/core';
 
-interface Sort {
+export class SearchResultItem {
+  constructor(public component: Type<any>, public data: any) {}
+}
+
+export interface SearchResultItemInterface {
+  data: any;
+}
+
+interface SortInterface {
   order: 'asc' | 'desc';
   name: string;
   priority: number;
 }
 
 @Directive({
-  selector: '[campusResultHost], [result-host]'
+  selector: '[campusResultListHost], [result-list-host]'
 })
-export class ResultDirective {
-  constructor(public viewContainerRef: ViewContainerRef) {}
+export class ResultListDirective {
+  constructor(public viewContainerRef: ViewContainerRef) {
+    console.log('ResultListDirective');
+  }
 }
 
 @Component({
@@ -29,27 +41,42 @@ export class ResultDirective {
 })
 export class ResultsListComponentComponent<T> implements OnInit {
   public selected: any;
+  private _host: ResultListDirective;
+  private results: any[] = [];
 
-  @Input() results: any[];
+  @Input()
+  set resultsPage(results: any[]) {
+    this.results.concat(results);
+  }
+  @Input() resultItem: SearchResultItem;
 
-  @Output() sort: EventEmitter<Sort[]> = new EventEmitter();
+  @Output() sort: EventEmitter<SortInterface[]> = new EventEmitter();
   @Output() scroll: EventEmitter<number> = new EventEmitter();
 
-  @ViewChild(ResultDirective) resultHost: ResultDirective;
+  @ViewChild(ResultListDirective) resultListHost: ResultListDirective;
 
-  constructor() {}
+  constructor(private componentFactoryResolver: ComponentFactoryResolver) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadComponent();
   }
 
   // https://angular.io/guide/dynamic-component-loader
 
   private loadComponent() {
-    let viewContainerRef = this.resultHost.viewContainerRef;
-    viewContainerRef.clear();
+    console.log(this.resultListHost);
 
-    let componentRef = viewContainerRef.createComponent(componentFactory);
-    (<AdComponent>componentRef.instance).data = results;
+    this.resultListHost.viewContainerRef.clear();
+    this.results.forEach(result => this.addResultItemComponent(result));
+  }
+
+  private addResultItemComponent(result) {
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(
+      this.resultItem.component
+    );
+    const componentRef = this.resultListHost.viewContainerRef.createComponent(
+      componentFactory
+    );
+    (componentRef.instance as SearchResultItemInterface).data = result;
   }
 }

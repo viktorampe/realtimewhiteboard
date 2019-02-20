@@ -1,10 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { ResultsListComponentComponent } from './components/results-list-component/results-list-component.component';
+import {
+  ResultListDirective,
+  ResultsListComponentComponent
+} from './components/results-list-component/results-list-component.component';
 
 @NgModule({
   imports: [CommonModule],
-  declarations: [ResultsListComponentComponent],
+  declarations: [ResultsListComponentComponent, ResultListDirective],
   exports: [ResultsListComponentComponent]
 })
 export class SearchModule {}
