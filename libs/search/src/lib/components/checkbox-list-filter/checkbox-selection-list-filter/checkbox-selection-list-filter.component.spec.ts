@@ -73,15 +73,13 @@ describe('CheckboxSelectionListFilterComponent', () => {
           data: new LearningAreaFixture({
             id: 4,
             name: 'Informatica'
-          }),
-          visible: false
+          })
         }),
         new SearchFilterCriteriaValuesFixture({
           data: new LearningAreaFixture({
             id: 5,
             name: 'Engels'
-          }),
-          prediction: 0
+          })
         })
       ]
     );
@@ -191,6 +189,38 @@ describe('CheckboxSelectionListFilterComponent', () => {
       );
 
       expect(childDE).toBeFalsy();
+    });
+  });
+
+  describe('filtering and sorting', () => {
+    it('should filter out values that are not visible', () => {
+      // doublecheck no values are filtered out at the moment
+      expect(component.filteredFilterCriterium.values).toEqual(
+        mockFilterCriteria.values
+      );
+
+      const changedFilterCriterium = { ...mockFilterCriteria };
+      changedFilterCriterium.values[4].visible = false;
+      component.criterium = changedFilterCriterium; // trigger setter
+
+      expect(component.filteredFilterCriterium.values).not.toContain(
+        component.criterium.values[4]
+      );
+    });
+
+    it('should sort selected values to the front of the values-array', () => {
+      // doublecheck values[4] isn't first on init
+      expect(component.filteredFilterCriterium.values[0]).not.toBe(
+        component.criterium.values[4]
+      );
+
+      const changedFilterCriterium = { ...mockFilterCriteria };
+      changedFilterCriterium.values[4].selected = true;
+      component.criterium = changedFilterCriterium; // trigger setter
+
+      expect(component.filteredFilterCriterium.values[0]).toBe(
+        component.criterium.values[4]
+      );
     });
   });
 });

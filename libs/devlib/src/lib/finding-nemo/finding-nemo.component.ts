@@ -59,7 +59,8 @@ export class FindingNemoComponent implements OnInit {
                 data: new CredentialFixture({ id: 2, provider: 'google' })
               }),
               new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 3, provider: 'facebook' })
+                data: new CredentialFixture({ id: 3, provider: 'facebook' }),
+                selected: true
               })
             ]
           )
@@ -112,13 +113,15 @@ export class FindingNemoComponent implements OnInit {
           data: new LearningAreaFixture({
             id: 4,
             name: 'Informatica'
-          })
+          }),
+          visible: false
         }),
         new SearchFilterCriteriaValuesFixture({
           data: new LearningAreaFixture({
             id: 5,
             name: 'Engels'
-          })
+          }),
+          prediction: 0
         })
       ]
     );

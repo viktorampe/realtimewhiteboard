@@ -21,22 +21,10 @@ import { SearchFilterCriteriaInterface } from './../../interfaces/search-filter-
 export class CheckboxListFilterComponent
   implements AfterViewInit, OnDestroy, SearchFilterComponentInterface {
   public showMoreChildren = false;
-  public filteredFilterCriteria: SearchFilterCriteriaInterface;
-
   private subscriptions = new Subscription();
-  private _filterCriteria: SearchFilterCriteriaInterface;
 
   @Input() maxVisibleItems = 0; // 0 == no limit
-  @Input()
-  get filterCriteria(): SearchFilterCriteriaInterface {
-    return this._filterCriteria;
-  }
-  set filterCriteria(value: SearchFilterCriteriaInterface) {
-    if (this._filterCriteria === value) return;
-
-    this._filterCriteria = value;
-    this.filteredFilterCriteria = getFilteredCriterium(value);
-  }
+  @Input() filterCriteria: SearchFilterCriteriaInterface;
 
   @Output()
   filterSelectionChange = new EventEmitter<SearchFilterCriteriaInterface[]>();
@@ -50,7 +38,7 @@ export class CheckboxListFilterComponent
         .subscribe(event => {
           event.option.value.selected = event.option.selected;
 
-          this.filterSelectionChange.emit([this._filterCriteria]);
+          this.filterSelectionChange.emit([this.filterCriteria]);
         })
     );
   }
@@ -58,19 +46,4 @@ export class CheckboxListFilterComponent
   ngOnDestroy() {
     this.subscriptions.unsubscribe();
   }
-}
-
-export function getFilteredCriterium(
-  criterium: SearchFilterCriteriaInterface
-): SearchFilterCriteriaInterface {
-  return {
-    ...criterium,
-    ...{
-      values: criterium.values
-        .filter(value => value.visible && value.prediction)
-        // order by selected status
-        // needed so selected values aren't hidden
-        .sort((a, b) => (a.selected === b.selected ? 0 : a.selected ? -1 : 1))
-    }
-  };
 }
