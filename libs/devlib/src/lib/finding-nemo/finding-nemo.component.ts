@@ -1,4 +1,4 @@
-import { Component, OnInit, Type } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, Type } from '@angular/core';
 import {
   EduContentMetadataFixture,
   EduContentMetadataInterface
@@ -10,6 +10,7 @@ import {
   SearchResultItemInterface,
   SearchStateInterface
 } from '@campus/search';
+import { Subject } from 'rxjs';
 import { PolpoResultItemComponent } from '../polpo-result-item/polpo-result-item.component';
 
 @Component({
@@ -20,11 +21,13 @@ import { PolpoResultItemComponent } from '../polpo-result-item/polpo-result-item
 export class FindingNemoComponent implements OnInit {
   selectFilter: SearchFilterCriteriaInterface;
   resultItemComponent: Type<SearchResultItemInterface>;
-  resultsPage: SearchResultInterface<EduContentMetadataInterface>;
+  resultsPage$: Subject<
+    SearchResultInterface<EduContentMetadataInterface>
+  > = new Subject();
   searchMode: SearchModeInterface;
-  searchState: SearchStateInterface;
+  searchState: Subject<SearchStateInterface> = new Subject();
 
-  constructor() {}
+  constructor(private cd: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.searchMode = {
@@ -50,19 +53,19 @@ export class FindingNemoComponent implements OnInit {
             icon: 'taak'
           }
         ],
-        pageSize: 5
+        pageSize: 3
       }
     };
-    this.searchState = {
+    this.searchState.next({
       searchTerm: '',
       filterCriteriaSelections: new Map()
       // from: 0,
       // sort: null,
-    };
+    });
 
     this.resultItemComponent = PolpoResultItemComponent;
     this.resetResults();
-    // this.loadMoreResults();
+    this.loadMoreResults();
   }
 
   onFilterSelectionChange(searchFilter: SearchFilterCriteriaInterface) {
@@ -70,8 +73,9 @@ export class FindingNemoComponent implements OnInit {
   }
 
   loadMoreResults() {
-    this.resultsPage = {
-      count: 3,
+    console.log('loadMoreResults');
+    const resultsPage = {
+      count: 30,
       results: [
         new EduContentMetadataFixture({ title: 'foo' }),
         new EduContentMetadataFixture({ title: 'bar' }),
@@ -79,14 +83,25 @@ export class FindingNemoComponent implements OnInit {
       ],
       filterCriteriaPredictions: new Map()
     };
+    this.resultsPage$.next({ ...resultsPage });
+    this.cd.detectChanges();
   }
 
   resetResults() {
-    this.searchState = {
+    this.searchState.next({
       searchTerm: '',
       filterCriteriaSelections: new Map(),
       from: 0,
       sort: 'bundle'
-    };
+    });
+  }
+
+  onGetNextPage(from) {
+    console.log('getNextPage from', from);
+
+    // simulate xhr call that takes 0.8sec
+    setTimeout(() => {
+      this.loadMoreResults();
+    }, 500);
   }
 }
