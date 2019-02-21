@@ -1,21 +1,11 @@
-<ng-container *ngIf="!isMobile; else: mobileBreadcrumbs">
+<div class="breadcrumb-filter__container">
   <a (click)="reset()">{{ rootLabel }}</a>
-  <ng-container *ngFor="let value of selectedValues; index as i">
+  <ng-container
+    *ngFor="let value of selectedValues; index as i; last as isLast"
+  >
+    <span *ngIf="isLast" (click)="clickBreadcrumb(i - 1)" class="mobile"
+      >&lt;</span
+    >
     <a (click)="clickBreadcrumb(i)">{{ getLabel(value, i) }}</a>
   </ng-container>
-</ng-container>
-
-<ng-template #mobileBreadcrumbs>
-  <a *ngIf="!selectedValues.length; else: values">{{ rootLabel }}</a>
-  <ng-template #values>
-    <a class="mobile" (click)="clickBreadcrumb(selectedValues.length - 2)">
-      &lt;
-      {{
-        getLabel(
-          selectedValues[selectedValues.length - 1],
-          selectedValues.length - 1
-        )
-      }}
-    </a>
-  </ng-template>
-</ng-template>
+</div>

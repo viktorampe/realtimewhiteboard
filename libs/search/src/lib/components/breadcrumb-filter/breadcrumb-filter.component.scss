@@ -1,3 +1,5 @@
+$breakpoint-small: 960px;
+
 :host() {
   display: block;
   height: 40px;
@@ -30,10 +32,27 @@ a {
   &:last-child {
     max-width: none;
   }
+}
+.mobile {
+  display: none;
+}
 
-  &.mobile {
-    &:before {
-      content: none;
+@media (max-width: $breakpoint-small) {
+  a {
+    display: none;
+    pointer-events: none;
+
+    &:last-child {
+      display: inline-block;
+      &:before {
+        content: none;
+      }
     }
+  }
+
+  .mobile {
+    display: inline-block;
+    padding: 0 10px;
+    vertical-align: middle;
   }
 }
