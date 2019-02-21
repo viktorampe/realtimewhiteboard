@@ -1,2 +1,10 @@
 @mixin search-breadcrumb-filter() {
+  $search-breadcrumb-filter-font-family: $ui-primary-font-family-2 !default;
+  $search-breadcrumb-filter-color: $ui-primary-font-color !default;
+  $search-breadcrumb-filter-font-size: 13px !default;
+  .breadcrumb-filter__container {
+    font-family: $search-breadcrumb-filter-font-family;
+    color: $search-breadcrumb-filter-color;
+    font-size: $search-breadcrumb-filter-font-size;
+  }
 }

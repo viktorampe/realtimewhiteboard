@@ -1,9 +1,8 @@
 $breakpoint-small: 960px;
 
-:host() {
+.breadcrumb-filter__container {
   display: block;
   height: 40px;
-  border-bottom: solid 1px #b2bbc4;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
