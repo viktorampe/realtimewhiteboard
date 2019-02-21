@@ -12,8 +12,8 @@ import {
 })
 export class BreadcrumbFilterComponent
   implements SearchFilterComponentInterface {
-  criteria: SearchFilterCriteriaInterface[];
   selectedValues: SearchFilterCriteriaValuesInterface[];
+  private criteria: SearchFilterCriteriaInterface[];
 
   @Input() rootLabel: string;
   @Input()
@@ -47,12 +47,8 @@ export class BreadcrumbFilterComponent
   }
 
   private updateSelectedValues(startValue: number) {
-    for (
-      let index = startValue + 1;
-      index < this.selectedValues.length;
-      index++
-    ) {
-      this.selectedValues[index].selected = false;
-    }
+    this.selectedValues
+      .slice(startValue + 1)
+      .forEach(value => (value.selected = false));
   }
 }

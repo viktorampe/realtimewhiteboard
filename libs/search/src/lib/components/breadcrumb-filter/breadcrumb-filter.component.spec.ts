@@ -43,24 +43,13 @@ describe('BreadcrumbFilterComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should change the filter selection on clicking a breadcrumb', () => {
+  it('should change the filter selection on clicking a breadcrumb', done => {
     const clickBreadcrumbSpy = jest.spyOn(component, 'clickBreadcrumb');
 
     const secondBreadcrumb: HTMLAnchorElement = fixture.debugElement.queryAll(
       By.css('a')
     )[2].nativeElement; // index 2 because there is an anchor tag outside of the for loop
 
-    let emittedValue: SearchFilterCriteriaInterface[];
-
-    component.filterSelectionChange.subscribe(newFilterCriteria => {
-      emittedValue = newFilterCriteria;
-    });
-
-    secondBreadcrumb.click();
-
-    expect(clickBreadcrumbSpy).toHaveBeenCalledTimes(1);
-    expect(clickBreadcrumbSpy).toHaveBeenCalledWith(1);
-
     const expectedValue = [
       new SearchFilterCriteriaFixture({}, [
         new SearchFilterCriteriaValuesFixture({ selected: true })
@@ -75,22 +64,23 @@ describe('BreadcrumbFilterComponent', () => {
         new SearchFilterCriteriaValuesFixture({ selected: false })
       ])
     ];
+    component.filterSelectionChange.subscribe(emittedValue => {
+      expect(clickBreadcrumbSpy).toHaveBeenCalledTimes(1);
+      expect(clickBreadcrumbSpy).toHaveBeenCalledWith(1);
+      expect(emittedValue).toEqual(expectedValue);
+      done();
+    });
 
-    expect(emittedValue).toEqual(expectedValue);
+    secondBreadcrumb.click();
   });
 
-  it('should reset the filter criteria when clicking the root breadcrumb', () => {
+  it('should reset the filter criteria when clicking the root breadcrumb', done => {
     const resetSpy = jest.spyOn(component, 'reset');
 
     const rootBreadcrumb: HTMLAnchorElement = fixture.debugElement.queryAll(
       By.css('a')
     )[0].nativeElement;
 
-    let emittedValue: SearchFilterCriteriaInterface[];
-
-    component.filterSelectionChange.subscribe(newFilterCriteria => {
-      emittedValue = newFilterCriteria;
-    });
     const expectedValue = [
       new SearchFilterCriteriaFixture({}, [
         new SearchFilterCriteriaValuesFixture({ selected: false })
@@ -106,9 +96,16 @@ describe('BreadcrumbFilterComponent', () => {
       ])
     ];
 
-    rootBreadcrumb.click();
+    component.filterSelectionChange.subscribe(emittedValue => {
+      expect(resetSpy).toHaveBeenCalledTimes(1);
+      expect(emittedValue).toEqual(expectedValue);
+      done();
+    });
 
-    expect(resetSpy).toHaveBeenCalledTimes(1);
-    expect(emittedValue).toEqual(expectedValue);
+    rootBreadcrumb.click();
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 });
