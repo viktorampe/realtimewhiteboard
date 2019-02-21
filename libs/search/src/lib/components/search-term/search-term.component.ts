@@ -1,18 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { SearchFilterCriteriaInterface } from '../../interfaces';
-import { SearchFilterComponentInterface } from './../../interfaces/search-filter-component-interface';
 
 @Component({
   selector: 'campus-search-term',
   templateUrl: './search-term.component.html',
   styleUrls: ['./search-term.component.scss']
 })
-export class SearchTermComponent
-  implements OnInit, SearchFilterComponentInterface {
-  filterCriteria:
-    | SearchFilterCriteriaInterface
-    | SearchFilterCriteriaInterface[];
-  filterSelectionChange: EventEmitter<SearchFilterCriteriaInterface[]>;
+export class SearchTermComponent implements OnInit {
   private _value: string;
 
   @Input() public initialValue = '';
