@@ -44,7 +44,10 @@ export class ListViewComponent<dataObjectType>
    */
   useItemSelectableOverlayStyle$ = new BehaviorSubject(false);
 
+  public items = new QueryList<ListViewItemDirective<dataObjectType>>();
+
   private itemsSubscription = new Subscription();
+  private _manuallyAddedItems: ListViewItemDirective<dataObjectType>[] = [];
 
   @Input() listFormat: ListFormat;
   @Input() multiSelect = false;
@@ -55,13 +58,17 @@ export class ListViewComponent<dataObjectType>
 
   // tslint:disable-next-line
   @ContentChildren(forwardRef(() => ListViewItemDirective))
-  items: QueryList<ListViewItemDirective<dataObjectType>>;
+  _items: QueryList<ListViewItemDirective<dataObjectType>>;
 
   ngAfterContentInit() {
+    // add the dynamically loaded items to the content projected ones
+    this.items.reset([...this._items.toArray(), ...this._manuallyAddedItems]);
+
     this.setupSelectionSubscriptionsForListItems();
 
     // nieuwe subscription als items veranderen
     this.items.changes.subscribe(() => {
+      console.log('changes');
       this.setupSelectionSubscriptionsForListItems();
     });
   }
@@ -74,6 +81,18 @@ export class ListViewComponent<dataObjectType>
 
   ngOnDestroy() {
     this.itemsSubscription.unsubscribe();
+  }
+
+  public addItem(item: ListViewItemDirective<dataObjectType>) {
+    this._manuallyAddedItems = [...this._manuallyAddedItems, item];
+    this.items.reset([...this._items.toArray(), ...this._manuallyAddedItems]);
+    this.setupSelectionSubscriptionsForListItems();
+  }
+
+  public resetItems() {
+    this._manuallyAddedItems = [];
+    this.items.reset(this._items ? this._items.toArray() : []);
+    this.setupSelectionSubscriptionsForListItems();
   }
 
   protected onItemSelectionChanged(
@@ -183,7 +202,7 @@ export class ListViewItemDirective<dataObjectType>
   }
 
   constructor(
-    private parentList: ListViewComponent<dataObjectType>,
+    protected parentList: ListViewComponent<any>,
     public host: ListViewItemInterface
   ) {}
 

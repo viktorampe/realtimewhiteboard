@@ -6,4 +6,5 @@ export interface SearchResultInterface<T> {
 
 export interface SearchResultItemInterface {
   data: any;
+  listRef: any;
 }

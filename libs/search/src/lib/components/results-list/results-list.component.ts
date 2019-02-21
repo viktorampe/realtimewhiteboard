@@ -11,6 +11,7 @@ import {
   ViewChild,
   ViewContainerRef
 } from '@angular/core';
+import { ListViewComponent } from '@campus/ui';
 import {
   SearchModeInterface,
   SearchResultInterface,
@@ -76,6 +77,7 @@ export class ResultsListComponent implements OnInit {
     if (!searchState.from) {
       this.clearResults = true;
       this.disableInfiniteScroll = true;
+      if (this.listview) this.listview.resetItems();
     }
     if (searchState.sort) {
       this.activeSortMode = searchState.sort;
@@ -96,12 +98,17 @@ export class ResultsListComponent implements OnInit {
   @Output() scroll: EventEmitter<number> = new EventEmitter();
 
   @ViewChild(ResultListDirective) resultListHost: ResultListDirective;
+  @ViewChild(ListViewComponent) listview: ListViewComponent<any>;
 
   constructor(private componentFactoryResolver: ComponentFactoryResolver) {}
 
   ngOnInit(): void {
     this.sortModes = this.searchMode.results.sortModes;
     this.pageSize = this.searchMode.results.pageSize;
+  }
+
+  onSelectionChanged(event: any[]) {
+    this.selected = event;
   }
 
   clickSortMode(sortMode: SortModeInterface) {
@@ -135,6 +142,8 @@ export class ResultsListComponent implements OnInit {
     const componentRef = this.resultListHost.viewContainerRef.createComponent(
       this.componentFactory
     );
-    (componentRef.instance as SearchResultItemInterface).data = result;
+    const resultItem = componentRef.instance as SearchResultItemInterface;
+    resultItem.data = result;
+    resultItem.listRef = this.listview;
   }
 }
