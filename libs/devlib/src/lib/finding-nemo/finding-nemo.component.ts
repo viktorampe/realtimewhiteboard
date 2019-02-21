@@ -209,4 +209,7 @@ export class FindingNemoComponent implements OnInit {
     this.breadCrumbFilterCriteria = searchFilter;
     console.log(searchFilter);
   }
+  onChange(value: string) {
+    console.log(value);
+  }
 }
