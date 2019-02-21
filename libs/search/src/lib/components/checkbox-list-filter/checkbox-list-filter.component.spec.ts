@@ -1,10 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import {
-  MatListModule,
-  MatListOption,
-  MatSelectionList,
-  MatSelectionListChange
-} from '@angular/material';
+import { FormsModule } from '@angular/forms';
+import { MatCheckboxModule, MatListModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { CredentialFixture, LearningAreaFixture } from '@campus/dal';
@@ -23,7 +19,12 @@ describe('CheckboxListFilterComponentComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [MatListModule, NoopAnimationsModule],
+      imports: [
+        MatListModule,
+        NoopAnimationsModule,
+        MatCheckboxModule,
+        FormsModule
+      ],
       declarations: [
         CheckboxListFilterComponent,
         CheckboxSelectionListFilterComponent
@@ -129,23 +130,12 @@ describe('CheckboxListFilterComponentComponent', () => {
   });
 
   describe('output', () => {
-    it('should emit the updated filtercriterium when the mat-selection-list selection changed', () => {
+    it('should emit the updated filtercriterium when the childcomponent emits', () => {
       spyOn(component.filterSelectionChange, 'emit');
 
-      const matListComp: MatSelectionList = fixture.debugElement.query(
-        By.css('mat-selection-list')
+      const child: CheckboxSelectionListFilterComponent = fixture.debugElement.query(
+        By.directive(CheckboxSelectionListFilterComponent)
       ).componentInstance;
-
-      const selectedOption: MatListOption = new MatListOption(
-        null,
-        fixture.changeDetectorRef,
-        matListComp
-      );
-      selectedOption.value = mockFilterCriteria.values[0];
-
-      matListComp.selectedOptions.select(selectedOption);
-
-      const mockEvent = new MatSelectionListChange(matListComp, selectedOption);
 
       const expected = {
         ...mockFilterCriteria,
@@ -153,7 +143,8 @@ describe('CheckboxListFilterComponentComponent', () => {
       };
       expected.values[0].selected = true;
 
-      matListComp.selectionChange.next(mockEvent);
+      child.criterium.values[0].selected = true;
+      child.selectionChanged.next();
 
       expect(component.filterSelectionChange.emit).toHaveBeenCalled();
       expect(component.filterSelectionChange.emit).toHaveBeenCalledTimes(1);

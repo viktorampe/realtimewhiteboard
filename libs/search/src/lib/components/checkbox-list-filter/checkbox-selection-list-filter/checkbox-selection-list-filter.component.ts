@@ -106,6 +106,7 @@ export class CheckboxSelectionListFilterComponent
   public onChildChange(event: MatCheckboxChange): void {
     if (!event) return;
 
+    // find parent of the child
     const parentAssociation = this.associatedCheckBoxes.find(association =>
       association.children.some(child => child === event.source)
     );

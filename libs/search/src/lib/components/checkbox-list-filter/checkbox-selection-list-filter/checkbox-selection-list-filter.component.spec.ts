@@ -1,8 +1,18 @@
 import { DebugElement } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatListModule } from '@angular/material';
+import { FormsModule } from '@angular/forms';
+import {
+  MatCheckbox,
+  MatCheckboxChange,
+  MatCheckboxModule,
+  MatListModule
+} from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { CredentialFixture, LearningAreaFixture } from '@campus/dal';
+import {
+  SearchFilterCriteriaInterface,
+  SearchFilterCriteriaValuesInterface
+} from '../../../interfaces';
 import { CheckboxListFilterComponent } from '../checkbox-list-filter.component';
 import {
   SearchFilterCriteriaFixture,
@@ -12,25 +22,23 @@ import { CheckboxSelectionListFilterComponent } from './checkbox-selection-list-
 
 describe('CheckboxSelectionListFilterComponent', () => {
   let component: CheckboxSelectionListFilterComponent;
-  let componentDE: DebugElement;
-  let fixture: ComponentFixture<CheckboxListFilterComponent>;
-  let mockFilterCriteria;
-  let mockChildFilterCriteria;
+  let fixture: ComponentFixture<CheckboxSelectionListFilterComponent>;
+  let mockFilterCriteria: SearchFilterCriteriaInterface;
+  let mockChildFilterCriteria: SearchFilterCriteriaInterface;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [MatListModule],
+      imports: [MatListModule, MatCheckboxModule, FormsModule],
       declarations: [
         CheckboxSelectionListFilterComponent,
         CheckboxListFilterComponent
-      ],
-      providers: [CheckboxListFilterComponent]
+      ]
     }).compileComponents();
   }));
 
   beforeEach(() => {
     // create parent element as fixture
-    fixture = TestBed.createComponent(CheckboxListFilterComponent);
+    fixture = TestBed.createComponent(CheckboxSelectionListFilterComponent);
 
     mockChildFilterCriteria = new SearchFilterCriteriaFixture(
       { keyProperty: 'id', displayProperty: 'provider' },
@@ -84,13 +92,9 @@ describe('CheckboxSelectionListFilterComponent', () => {
       ]
     );
 
-    fixture.componentInstance.filterCriteria = mockFilterCriteria;
+    component = fixture.componentInstance;
+    component.criterium = mockFilterCriteria;
     fixture.detectChanges();
-
-    componentDE = fixture.debugElement.query(
-      By.css('campus-checkbox-selection-list-filter')
-    );
-    component = componentDE.componentInstance;
   });
 
   it('should create', () => {
@@ -98,47 +102,47 @@ describe('CheckboxSelectionListFilterComponent', () => {
   });
 
   describe('maxVisibleItems', () => {
-    let matListOptionsDE: DebugElement[];
+    let matListItemsDE: DebugElement[];
 
     describe('set', () => {
       beforeEach(() => {
         component.maxVisibleItems = 2; // there are 5 values in the mock
         fixture.detectChanges();
 
-        matListOptionsDE = componentDE.queryAll(By.css('mat-list-option'));
+        matListItemsDE = fixture.debugElement.queryAll(
+          By.css('[mat-list-item]')
+        );
       });
 
       it("should only show the first 'maxVisibleItems' items", () => {
-        expect(matListOptionsDE.length).toBe(component.maxVisibleItems);
+        const visibleOptions = matListItemsDE.filter(
+          option =>
+            !option.classes['checkbox-selection-list-filter__item--hidden']
+        );
+        expect(visibleOptions.length).toBe(component.maxVisibleItems);
       });
 
       it("should show 'toon meer...' when items are hidden", () => {
         component.showMore(false);
         fixture.detectChanges();
 
-        expect(componentDE.nativeElement.textContent).toContain('toon meer...');
+        expect(fixture.nativeElement.textContent).toContain('toon meer...');
       });
 
       it("should show 'toon minder...' when items all items are visible", () => {
         component.showMore(true);
         fixture.detectChanges();
 
-        expect(componentDE.nativeElement.textContent).not.toContain(
-          'toon meer...'
-        );
-        expect(componentDE.nativeElement.textContent).toContain(
-          'toon minder...'
-        );
+        expect(fixture.nativeElement.textContent).not.toContain('toon meer...');
+        expect(fixture.nativeElement.textContent).toContain('toon minder...');
       });
 
       it("should not show 'toon meer/minder...' when no items are hidden", () => {
         component.maxVisibleItems = component.criterium.values.length;
         fixture.detectChanges();
 
-        expect(componentDE.nativeElement.textContent).not.toContain(
-          'toon meer...'
-        );
-        expect(componentDE.nativeElement.textContent).not.toContain(
+        expect(fixture.nativeElement.textContent).not.toContain('toon meer...');
+        expect(fixture.nativeElement.textContent).not.toContain(
           'toon minder...'
         );
       });
@@ -149,20 +153,18 @@ describe('CheckboxSelectionListFilterComponent', () => {
         component.maxVisibleItems = null;
         fixture.detectChanges();
 
-        matListOptionsDE = fixture.debugElement.queryAll(
-          By.css('mat-list-option')
+        matListItemsDE = fixture.debugElement.queryAll(
+          By.css('[mat-list-item]')
         );
       });
 
       it('should show all items', () => {
-        expect(matListOptionsDE.length).toBe(component.criterium.values.length);
+        expect(matListItemsDE.length).toBe(component.criterium.values.length);
       });
 
       it("should not show 'toon meer/minder...'", () => {
-        expect(componentDE.nativeElement.textContent).not.toContain(
-          'toon meer...'
-        );
-        expect(componentDE.nativeElement.textContent).not.toContain(
+        expect(fixture.nativeElement.textContent).not.toContain('toon meer...');
+        expect(fixture.nativeElement.textContent).not.toContain(
           'toon minder...'
         );
       });
@@ -176,7 +178,7 @@ describe('CheckboxSelectionListFilterComponent', () => {
       component.criterium.values[0].child = mockChildFilterCriteria;
       fixture.detectChanges();
 
-      childDE = componentDE.query(
+      childDE = fixture.debugElement.query(
         By.css('campus-checkbox-selection-list-filter')
       );
 
@@ -184,7 +186,7 @@ describe('CheckboxSelectionListFilterComponent', () => {
     });
 
     it('should not create a child component when there is no child', () => {
-      childDE = componentDE.query(
+      childDE = fixture.debugElement.query(
         By.css('campus-checkbox-selection-list-filter')
       );
 
@@ -221,6 +223,388 @@ describe('CheckboxSelectionListFilterComponent', () => {
       expect(component.filteredFilterCriterium.values[0]).toBe(
         component.criterium.values[4]
       );
+    });
+  });
+
+  describe('events', () => {
+    let titleCheckBoxes: MatCheckbox[];
+    let childComponents: CheckboxSelectionListFilterComponent[];
+
+    beforeEach(() => {
+      // hook up a child to every value
+      // spread operators to each criterium/value is another reference
+      mockFilterCriteria.values.forEach(
+        value =>
+          (value.child = {
+            ...mockChildFilterCriteria,
+            ...{
+              values: mockChildFilterCriteria.values.map(val => ({ ...val }))
+            }
+          })
+      );
+
+      component.criterium = mockFilterCriteria;
+      fixture.detectChanges();
+
+      titleCheckBoxes = fixture.debugElement
+        .queryAll(By.directive(MatCheckbox))
+        .map(checkbox => checkbox.componentInstance);
+
+      childComponents = fixture.debugElement
+        .queryAll(By.directive(CheckboxSelectionListFilterComponent))
+        .map(comp => comp.componentInstance);
+    });
+
+    describe('from self', () => {
+      it('should update the criterium', () => {
+        // doublecheck that the value is not selected by default
+        expect(component.criterium.values[0].selected).toBe(false);
+
+        titleCheckBoxes[0].checked = true;
+
+        // emit checkbox changed event
+        const changedEvent = new MatCheckboxChange();
+        changedEvent.source = titleCheckBoxes[0];
+        changedEvent.checked = titleCheckBoxes[0].checked;
+        titleCheckBoxes[0].change.emit(changedEvent);
+
+        expect(component.criterium.values[0].selected).toBe(true);
+      });
+
+      it('should notify the parent', () => {
+        spyOn(component.selectionChanged, 'next');
+
+        titleCheckBoxes[0].checked = true;
+
+        // emit checkbox changed event
+        const changedEvent = new MatCheckboxChange();
+        changedEvent.source = titleCheckBoxes[0];
+        changedEvent.checked = titleCheckBoxes[0].checked;
+        titleCheckBoxes[0].change.emit(changedEvent);
+
+        expect(component.selectionChanged.next).toHaveBeenCalled();
+        expect(component.selectionChanged.next).toHaveBeenCalledTimes(1);
+        expect(component.selectionChanged.next).toHaveBeenCalledWith(
+          changedEvent
+        );
+      });
+
+      it('should notify the children', () => {
+        spyOn(component.notifyChildren$, 'next');
+
+        titleCheckBoxes[0].checked = true;
+
+        // emit checkbox changed event
+        const changedEvent = new MatCheckboxChange();
+        changedEvent.source = titleCheckBoxes[0];
+        changedEvent.checked = titleCheckBoxes[0].checked;
+        titleCheckBoxes[0].change.emit(changedEvent);
+
+        expect(component.notifyChildren$.next).toHaveBeenCalled();
+        expect(component.notifyChildren$.next).toHaveBeenCalledTimes(1);
+        expect(component.notifyChildren$.next).toHaveBeenCalledWith(
+          changedEvent
+        );
+      });
+    });
+
+    describe('from parent', () => {
+      let firstChildComponent: CheckboxSelectionListFilterComponent;
+      let firstCheckbox: MatCheckbox;
+      let firstCheckboxChildren: MatCheckbox[];
+      let otherCheckboxChildren: MatCheckbox[];
+
+      beforeEach(() => {
+        firstChildComponent = childComponents[0];
+        firstCheckbox = titleCheckBoxes[0];
+        firstCheckboxChildren = childComponents[0].matCheckBoxes.toArray();
+        otherCheckboxChildren = [];
+        for (let index = 1; index < childComponents.length; index++) {
+          const child = childComponents[index];
+          otherCheckboxChildren = [
+            ...otherCheckboxChildren,
+            ...child.matCheckBoxes.toArray()
+          ];
+        }
+      });
+
+      it("should change it's value, but only when the source is the associated parent checkbox", () => {
+        // component's parent emits checkbox changed event
+        firstCheckbox.checked = true;
+        const changedEvent = new MatCheckboxChange();
+        changedEvent.source = firstCheckbox;
+        changedEvent.checked = firstCheckbox.checked;
+        firstCheckbox.change.emit(changedEvent);
+
+        // update component's value
+        firstCheckboxChildren.forEach(checkbox => {
+          expect(checkbox.checked).toBe(true);
+          expect(
+            ((checkbox.value as unknown) as SearchFilterCriteriaValuesInterface)
+              .selected
+          ).toBe(true);
+        });
+
+        // other children shouldn't update
+        otherCheckboxChildren.forEach(checkbox => {
+          expect(checkbox.checked).toBe(false);
+          expect(
+            ((checkbox.value as unknown) as SearchFilterCriteriaValuesInterface)
+              .selected
+          ).toBe(false);
+        });
+      });
+
+      it('should notify the children, but only when the source is the associated parent checkbox', () => {
+        spyOn(firstChildComponent.notifyChildren$, 'next');
+        spyOn(childComponents[1].notifyChildren$, 'next'); // only going to test 1 other childcomponent
+
+        // component's parent emits checkbox changed event
+        firstCheckbox.checked = true;
+        const changedEvent = new MatCheckboxChange();
+        changedEvent.source = firstCheckbox;
+        changedEvent.checked = firstCheckbox.checked;
+        firstCheckbox.change.emit(changedEvent);
+
+        // notify component's children
+        expect(firstChildComponent.notifyChildren$.next).toHaveBeenCalled();
+        expect(firstChildComponent.notifyChildren$.next).toHaveBeenCalledTimes(
+          firstChildComponent.matCheckBoxes.length // once per title checkbox
+        );
+
+        // other child components shouldn't notify their children
+        expect(childComponents[1].notifyChildren$.next).not.toHaveBeenCalled();
+      });
+
+      it('should not notify the parent', () => {
+        spyOn(firstChildComponent.selectionChanged, 'next');
+        spyOn(childComponents[1].selectionChanged, 'next'); // only going to test 1 other childcomponent
+
+        // component's parent emits checkbox changed event
+        firstCheckbox.checked = true;
+        const changedEvent = new MatCheckboxChange();
+        changedEvent.source = firstCheckbox;
+        changedEvent.checked = firstCheckbox.checked;
+        firstCheckbox.change.emit(changedEvent);
+
+        // don't notify component's parent
+        expect(
+          firstChildComponent.selectionChanged.next
+        ).not.toHaveBeenCalled();
+
+        // other child components shouldn't notify their parent
+        expect(childComponents[1].selectionChanged.next).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('from children', () => {
+      let firstChildComponent: CheckboxSelectionListFilterComponent;
+      let firstCheckbox: MatCheckbox;
+      let firstCheckboxChildren: MatCheckbox[];
+      let otherCheckboxChildren: MatCheckbox[];
+
+      beforeEach(() => {
+        firstChildComponent = childComponents[0];
+        firstCheckbox = titleCheckBoxes[0];
+        firstCheckboxChildren = childComponents[0].matCheckBoxes.toArray();
+        otherCheckboxChildren = [];
+        for (let index = 1; index < childComponents.length; index++) {
+          const child = childComponents[index];
+          otherCheckboxChildren = [
+            ...otherCheckboxChildren,
+            ...child.matCheckBoxes.toArray()
+          ];
+        }
+      });
+
+      it("should change it's value when the source is one of it's children", async(() => {
+        //allow all viewchildren to fully render
+        fixture.whenStable().then(() => {
+          // doublecheck that the value is not selected or indeterminate by default
+          expect(firstCheckbox.checked).toBe(false);
+          expect(firstCheckbox.indeterminate).toBe(false);
+
+          // component's child emits checkbox changed event
+          firstCheckboxChildren[0].checked = true;
+          firstCheckboxChildren[0].indeterminate = false;
+          const changedEvent = new MatCheckboxChange();
+          changedEvent.source = firstCheckboxChildren[0];
+          changedEvent.checked = firstCheckboxChildren[0].checked;
+          firstCheckboxChildren[0].change.emit(changedEvent);
+
+          // we've only checked one of the children
+          expect(firstCheckbox.checked).toBe(false);
+          expect(firstCheckbox.indeterminate).toBe(true);
+          expect(
+            ((firstCheckbox.value as unknown) as SearchFilterCriteriaValuesInterface)
+              .selected
+          ).toBe(false);
+        });
+      }));
+
+      it("shouldn't change it's value when the source is not one of it's children", async(() => {
+        //allow all viewchildren to fully render
+        fixture.whenStable().then(() => {
+          // doublecheck that the value is not selected or indeterminate by default
+          expect(firstCheckbox.checked).toBe(false);
+          expect(firstCheckbox.indeterminate).toBe(false);
+
+          // other child emits checkbox changed event
+          otherCheckboxChildren[0].checked = true;
+          otherCheckboxChildren[0].indeterminate = false;
+          const changedEvent = new MatCheckboxChange();
+          changedEvent.source = otherCheckboxChildren[0];
+          changedEvent.checked = otherCheckboxChildren[0].checked;
+          otherCheckboxChildren[0].change.emit(changedEvent);
+
+          // we haven't checked one of it's children
+          expect(firstCheckbox.checked).toBe(false);
+          expect(firstCheckbox.indeterminate).toBe(false);
+        });
+      }));
+
+      it("should become checked when all it's children are checked", async(() => {
+        //allow all viewchildren to fully render
+        fixture.whenStable().then(() => {
+          // doublecheck that the value is not selected or indeterminate by default
+          expect(firstCheckbox.checked).toBe(false);
+          expect(firstCheckbox.indeterminate).toBe(false);
+
+          // check all component's children
+          firstCheckboxChildren.forEach(child => {
+            child.checked = true;
+            child.indeterminate = false;
+            const evt = new MatCheckboxChange();
+            evt.source = child;
+            evt.checked = child.checked;
+            child.change.emit(evt);
+          });
+
+          // we've checked all of it's children
+          expect(firstCheckbox.checked).toBe(true);
+          expect(firstCheckbox.indeterminate).toBe(false);
+          expect(
+            ((firstCheckbox.value as unknown) as SearchFilterCriteriaValuesInterface)
+              .selected
+          ).toBe(true);
+        });
+      }));
+
+      it("should become indeterminate when some but not all of it's children are checked", async(() => {
+        //allow all viewchildren to fully render
+        fixture.whenStable().then(() => {
+          // doublecheck that the value is not selected or indeterminate by default
+          expect(firstCheckbox.checked).toBe(false);
+          expect(firstCheckbox.indeterminate).toBe(false);
+
+          // check all component's children, but not the first
+          firstCheckboxChildren.slice(1).forEach(child => {
+            child.checked = true;
+            child.indeterminate = false;
+            const evt = new MatCheckboxChange();
+            evt.source = child;
+            evt.checked = child.checked;
+            child.change.emit(evt);
+          });
+
+          // we've some, but not all of it's children
+          expect(firstCheckbox.checked).toBe(false);
+          expect(firstCheckbox.indeterminate).toBe(true);
+          expect(
+            ((firstCheckbox.value as unknown) as SearchFilterCriteriaValuesInterface)
+              .selected
+          ).toBe(false);
+        });
+      }));
+
+      it("should become unchecked when all it's children are unchecked", async(() => {
+        //allow all viewchildren to fully render
+        fixture.whenStable().then(() => {
+          // component's child emits checkbox changed event
+          firstCheckboxChildren[0].checked = true;
+          firstCheckboxChildren[0].indeterminate = false;
+          const changedEvent = new MatCheckboxChange();
+          changedEvent.source = firstCheckboxChildren[0];
+          changedEvent.checked = firstCheckboxChildren[0].checked;
+          firstCheckboxChildren[0].change.emit(changedEvent);
+
+          // doublecheck: we've only checked one of the children
+          expect(firstCheckbox.checked).toBe(false);
+          expect(firstCheckbox.indeterminate).toBe(true);
+
+          // uncheck all component's children
+          firstCheckboxChildren.forEach(child => {
+            child.checked = false;
+            child.indeterminate = false;
+            const evt = new MatCheckboxChange();
+            evt.source = child;
+            evt.checked = child.checked;
+            child.change.emit(evt);
+          });
+
+          expect(firstCheckbox.checked).toBe(false);
+          expect(firstCheckbox.indeterminate).toBe(false);
+          expect(
+            ((firstCheckbox.value as unknown) as SearchFilterCriteriaValuesInterface)
+              .selected
+          ).toBe(false);
+        });
+      }));
+
+      it("should become indeterminate when one of it's children is indeterminate", async(() => {
+        //allow all viewchildren to fully render
+        fixture.whenStable().then(() => {
+          // component's child emits checkbox changed event
+          firstCheckboxChildren[0].checked = false;
+          firstCheckboxChildren[0].indeterminate = true;
+          const changedEvent = new MatCheckboxChange();
+          changedEvent.source = firstCheckboxChildren[0];
+          changedEvent.checked = firstCheckboxChildren[0].checked;
+          firstCheckboxChildren[0].change.emit(changedEvent);
+
+          expect(firstCheckbox.checked).toBe(false);
+          expect(firstCheckbox.indeterminate).toBe(true);
+          expect(
+            ((firstCheckbox.value as unknown) as SearchFilterCriteriaValuesInterface)
+              .selected
+          ).toBe(false);
+        });
+      }));
+
+      it("should notify it's parent", async(() => {
+        //allow all viewchildren to fully render
+        fixture.whenStable().then(() => {
+          spyOn(component.selectionChanged, 'next');
+
+          // component's child emits checkbox changed event
+          firstCheckboxChildren[0].checked = false;
+          firstCheckboxChildren[0].indeterminate = true;
+          const changedEvent = new MatCheckboxChange();
+          changedEvent.source = firstCheckboxChildren[0];
+          changedEvent.checked = firstCheckboxChildren[0].checked;
+          firstCheckboxChildren[0].change.emit(changedEvent);
+
+          expect(component.selectionChanged.next).toHaveBeenCalled();
+          expect(component.selectionChanged.next).toHaveBeenCalledTimes(1);
+        });
+      }));
+
+      it("shouldn't notify it's children", async(() => {
+        //allow all viewchildren to fully render
+        fixture.whenStable().then(() => {
+          spyOn(component.notifyChildren$, 'next');
+
+          // component's child emits checkbox changed event
+          firstCheckboxChildren[0].checked = false;
+          firstCheckboxChildren[0].indeterminate = true;
+          const changedEvent = new MatCheckboxChange();
+          changedEvent.source = firstCheckboxChildren[0];
+          changedEvent.checked = firstCheckboxChildren[0].checked;
+          firstCheckboxChildren[0].change.emit(changedEvent);
+
+          expect(component.notifyChildren$.next).not.toHaveBeenCalled();
+        });
+      }));
     });
   });
 });
