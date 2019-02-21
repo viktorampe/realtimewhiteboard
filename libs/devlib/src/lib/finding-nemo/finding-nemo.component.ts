@@ -38,9 +38,9 @@ export class FindingNemoComponent implements OnInit {
     this.resultsPage = {
       count: 3,
       results: [
-        new EduContentMetadataFixture(),
-        new EduContentMetadataFixture(),
-        new EduContentMetadataFixture()
+        new EduContentMetadataFixture({ title: 'foo' }),
+        new EduContentMetadataFixture({ title: 'bar' }),
+        new EduContentMetadataFixture({ title: 'foobar' })
       ],
       filterCriteriaPredictions: new Map()
     };

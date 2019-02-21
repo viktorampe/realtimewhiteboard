@@ -27,6 +27,26 @@ export class ResultListDirective {
   constructor(public viewContainerRef: ViewContainerRef) {}
 }
 
+/**
+ * Usage:
+ * - Create a new component `MyResultItemComponent` in your app to display a result
+ * - Let the component implement `SearchResultItemInterface`:
+ *     requires an `@Input() data: MyResultInterface;`
+ * - Add the component to your NgModule with `entryComponents: [MyResultItemComponent]`
+ *
+ * @example
+ * component:
+ *   resultsPage: SearchResultInterface<MyResultInterface>;
+ *   myResultItemComponent: Type<SearchResultItemInterface> = MyResultItemComponent;
+ *
+ * template:
+ *   <campus-results-list
+ *     [resultsPage]="resultsPage"
+ *     [resultItem]="myResultItemComponent"
+ *     [searchFilterCriteria]="selectFilter">
+ *   </campus-results-list>
+ * @example
+ */
 @Component({
   selector: 'campus-results-list',
   templateUrl: './results-list.component.html',
