@@ -82,6 +82,10 @@ export class FindingNemoComponent implements OnInit {
     };
   }
 
+  onChange(value: string) {
+    console.log(value);
+  }
+
   onFilterSelectionChange(searchFilter: SearchFilterCriteriaInterface) {
     console.log(searchFilter);
   }
