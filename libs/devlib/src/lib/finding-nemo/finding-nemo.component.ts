@@ -17,7 +17,7 @@ export class FindingNemoComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    const searchFilter = new SearchFilterCriteriaFixture(
+    this.selectFilter = new SearchFilterCriteriaFixture(
       {
         name: 'selectFilter',
         label: 'select filter'
@@ -33,12 +33,13 @@ export class FindingNemoComponent implements OnInit {
           data: new LearningAreaFixture({
             id: 2,
             name: 'bar'
-          })
+          }),
+          selected: true
         })
       ]
     );
 
-    this.selectFilter = {
+    const selectFilter = {
       name: 'selectFilter',
       label: 'select filter',
       keyProperty: 'id',

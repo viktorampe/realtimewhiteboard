@@ -1,0 +1,13 @@
+<mat-select
+  [placeholder]="criteria?.label"
+  [multiple]="multiple"
+  [formControl]="selectControl"
+  [matBadge]="count"
+  [matBadgeHidden]="count === 0"
+  matBadgePosition="above after"
+>
+  <mat-option *ngIf="resetLabel" [value]="null">{{ resetLabel }}</mat-option>
+  <mat-option *ngFor="let option of options" [value]="option.value">
+    {{ option.viewValue }}
+  </mat-option>
+</mat-select>

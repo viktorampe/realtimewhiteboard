@@ -36,11 +36,14 @@ describe('SearchTermComponent', () => {
   });
 
   describe('initial value', () => {
-    it('should set the intitial value', async () => {
+    it('should set the intitial value', async(() => {
       spyOn(component.valueChange, 'emit');
       const mockInitialValue = 'Doe iets';
 
       component.initialValue = mockInitialValue;
+
+      // simulate component initialisation
+      component['ngOnInit']();
       fixture.detectChanges();
 
       fixture.whenStable().then(() => {
@@ -49,7 +52,7 @@ describe('SearchTermComponent', () => {
         ).toBe(mockInitialValue);
         expect(component.valueChange.emit).not.toHaveBeenCalled();
       });
-    });
+    }));
   });
 
   describe('output', () => {
