@@ -1,0 +1,6 @@
+@import './components/results-list/results-list.component.theme';
+
+// create theme-mixin with each mixin from our library components
+@mixin search-theme() {
+  @include search-results-list();
+}

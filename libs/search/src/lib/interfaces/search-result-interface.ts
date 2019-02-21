@@ -7,9 +7,3 @@ export interface SearchResultInterface<T> {
 export interface SearchResultItemInterface {
   data: any;
 }
-
-export interface SortInterface {
-  order: 'asc' | 'desc';
-  name: string;
-  priority: number;
-}

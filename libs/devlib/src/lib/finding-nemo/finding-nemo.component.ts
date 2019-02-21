@@ -1,14 +1,14 @@
 import { Component, OnInit, Type } from '@angular/core';
 import {
-  CredentialFixture,
   EduContentMetadataFixture,
-  EduContentMetadataInterface,
-  LearningAreaFixture
+  EduContentMetadataInterface
 } from '@campus/dal';
 import {
   SearchFilterCriteriaInterface,
+  SearchModeInterface,
   SearchResultInterface,
-  SearchResultItemInterface
+  SearchResultItemInterface,
+  SearchStateInterface
 } from '@campus/search';
 import { PolpoResultItemComponent } from '../polpo-result-item/polpo-result-item.component';
 
@@ -21,10 +21,45 @@ export class FindingNemoComponent implements OnInit {
   selectFilter: SearchFilterCriteriaInterface;
   resultItemComponent: Type<SearchResultItemInterface>;
   resultsPage: SearchResultInterface<EduContentMetadataInterface>;
+  searchMode: SearchModeInterface;
+  searchState: SearchStateInterface;
 
   constructor() {}
 
   ngOnInit() {
+    this.searchMode = {
+      name: 'demo',
+      label: 'demo',
+      dynamicFilters: false,
+      searchFilterFactory: [],
+      results: {
+        sortModes: [
+          {
+            description: 'book',
+            name: 'book',
+            icon: 'book'
+          },
+          {
+            description: 'bundle',
+            name: 'bundle',
+            icon: 'bundle'
+          },
+          {
+            description: 'taak',
+            name: 'taak',
+            icon: 'taak'
+          }
+        ],
+        pageSize: 5
+      }
+    };
+    this.searchState = {
+      searchTerm: '',
+      filterCriteriaSelections: new Map()
+      // from: 0,
+      // sort: null,
+    };
+
     this.resultItemComponent = PolpoResultItemComponent;
     this.resetResults();
     // this.loadMoreResults();
@@ -47,46 +82,11 @@ export class FindingNemoComponent implements OnInit {
   }
 
   resetResults() {
-    this.selectFilter = {
-      name: 'selectFilter',
-      label: 'select filter',
-      keyProperty: 'id',
-      displayProperty: 'name',
-      values: [
-        {
-          data: new LearningAreaFixture({
-            id: 1,
-            name: 'foo'
-          }),
-          selected: false,
-          prediction: 0,
-          visible: true,
-          child: {
-            name: 'selectFilter',
-            label: 'select filter',
-            keyProperty: 'id',
-            displayProperty: 'provider',
-            values: [
-              {
-                data: new CredentialFixture(),
-                selected: false,
-                prediction: 0,
-                visible: true
-              }
-            ]
-          }
-        },
-        {
-          data: new LearningAreaFixture({
-            id: 2,
-            name: 'bar'
-          }),
-          selected: false,
-          prediction: 0,
-          visible: true,
-          child: null
-        }
-      ]
+    this.searchState = {
+      searchTerm: '',
+      filterCriteriaSelections: new Map(),
+      from: 0,
+      sort: 'bundle'
     };
   }
 }

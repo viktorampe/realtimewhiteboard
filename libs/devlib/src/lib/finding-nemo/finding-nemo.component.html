@@ -3,4 +3,5 @@
 <span (click)="loadMoreResults()">load more</span> | <span (click)="resetResults()">reset</span>
 <campus-results-list [resultsPage]="resultsPage"
                      [resultItem]="resultItemComponent"
-                     [searchFilterCriteria]="selectFilter"></campus-results-list>
+                     [searchMode]="searchMode"
+                     [searchState]="searchState"></campus-results-list>

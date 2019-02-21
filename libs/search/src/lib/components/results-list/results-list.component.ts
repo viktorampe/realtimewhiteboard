@@ -12,10 +12,11 @@ import {
   ViewContainerRef
 } from '@angular/core';
 import {
-  SearchFilterCriteriaInterface,
+  SearchModeInterface,
   SearchResultInterface,
   SearchResultItemInterface,
-  SortInterface
+  SearchStateInterface,
+  SortModeInterface
 } from '../../interfaces';
 
 // https://angular.io/guide/dynamic-component-loader
@@ -55,17 +56,33 @@ export class ResultListDirective {
 export class ResultsListComponent implements OnInit {
   public selected: any;
   public count = 0;
+  public sortModes: SortModeInterface[];
+  public activeSortMode: string;
   private clearResults = true;
   private disableInfiniteScroll = true;
   private componentFactory: ComponentFactory<SearchResultItemInterface>;
+  private pageSize: number;
+  private _searchState: SearchStateInterface;
+
+  @Input() resultItem: Type<SearchResultItemInterface>;
+  @Input() searchMode: SearchModeInterface;
 
   @Input()
-  set searchFilterCriteria(criteria: SearchFilterCriteriaInterface) {
-    // when searchCriteria updates, the next results we receive are from a new search
-    this.clearResults = true;
-    this.disableInfiniteScroll = true;
+  get searchState() {
+    return this._searchState;
   }
-  @Input() resultItem: Type<SearchResultItemInterface>;
+  set searchState(searchState: SearchStateInterface) {
+    this._searchState = searchState;
+    if (!searchState.from) {
+      this.clearResults = true;
+      this.disableInfiniteScroll = true;
+    }
+    if (searchState.sort) {
+      this.activeSortMode = searchState.sort;
+    } else {
+      this.activeSortMode = this.searchMode.results.sortModes[0].name;
+    }
+  }
   @Input()
   set resultsPage(searchResult: SearchResultInterface<any>) {
     if (!searchResult) {
@@ -75,14 +92,25 @@ export class ResultsListComponent implements OnInit {
     this.loadComponent(searchResult.results);
   }
 
-  @Output() sort: EventEmitter<SortInterface[]> = new EventEmitter();
+  @Output() sort: EventEmitter<SortModeInterface> = new EventEmitter();
   @Output() scroll: EventEmitter<number> = new EventEmitter();
 
   @ViewChild(ResultListDirective) resultListHost: ResultListDirective;
 
   constructor(private componentFactoryResolver: ComponentFactoryResolver) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.sortModes = this.searchMode.results.sortModes;
+    this.pageSize = this.searchMode.results.pageSize;
+  }
+
+  clickSortMode(sortMode: SortModeInterface) {
+    if (this.activeSortMode !== sortMode.name) {
+      this.activeSortMode = sortMode.name;
+      this.searchState.sort = sortMode.name;
+      this.sort.next(sortMode);
+    }
+  }
 
   private loadComponent(results: any[]) {
     if (results.length === 0) {

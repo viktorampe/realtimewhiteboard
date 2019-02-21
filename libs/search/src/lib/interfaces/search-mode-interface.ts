@@ -8,11 +8,13 @@ export interface SearchModeInterface {
     domHost: string;
   };
   results: {
-    sortModes: {
-      name: string;
-      description: string;
-      icon: string;
-    }[];
+    sortModes: SortModeInterface[];
     pageSize: number;
   };
+}
+
+export interface SortModeInterface {
+  name: string;
+  description: string;
+  icon: string;
 }
