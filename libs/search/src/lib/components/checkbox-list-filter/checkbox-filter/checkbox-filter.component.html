@@ -5,8 +5,8 @@
   <mat-checkbox
     mat-list-item
     #title
-    class="checkbox-selection-list-filter__title"
-    [class.checkbox-selection-list-filter__item--hidden]="
+    class="checkbox-filter__title"
+    [class.checkbox-filter__item--hidden]="
       i >= maxVisibleItems && !showMoreItems
     "
     [value]="option"
@@ -18,9 +18,9 @@
   >
 
   <!-- children -->
-  <campus-checkbox-selection-list-filter
-    class="checkbox-selection-list-filter__items"
-    [class.checkbox-selection-list-filter__item--hidden]="
+  <campus-checkbox-filter
+    class="checkbox-filter__items"
+    [class.checkbox-filter__item--hidden]="
       i >= maxVisibleItems && !showMoreItems
     "
     *ngIf="option.child"
@@ -30,7 +30,7 @@
     [notificationFromParent$]="notifyChildren$"
     (selectionChanged)="onChildChange($event)"
   >
-  </campus-checkbox-selection-list-filter>
+  </campus-checkbox-filter>
 </ng-container>
 
 <!-- show more titles ? -->

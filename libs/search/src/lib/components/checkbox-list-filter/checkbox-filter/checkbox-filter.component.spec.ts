@@ -10,35 +10,32 @@ import {
 import { By } from '@angular/platform-browser';
 import { CredentialFixture, LearningAreaFixture } from '@campus/dal';
 import {
+  SearchFilterCriteriaFixture,
+  SearchFilterCriteriaValuesFixture
+} from '../../../+fixtures/search-filter-criteria.fixture';
+import {
   SearchFilterCriteriaInterface,
   SearchFilterCriteriaValuesInterface
 } from '../../../interfaces';
 import { CheckboxListFilterComponent } from '../checkbox-list-filter.component';
-import {
-  SearchFilterCriteriaFixture,
-  SearchFilterCriteriaValuesFixture
-} from './../../../+fixtures/search-filter-criteria.fixture';
-import { CheckboxSelectionListFilterComponent } from './checkbox-selection-list-filter.component';
+import { CheckboxFilterComponent } from './checkbox-filter.component';
 
-describe('CheckboxSelectionListFilterComponent', () => {
-  let component: CheckboxSelectionListFilterComponent;
-  let fixture: ComponentFixture<CheckboxSelectionListFilterComponent>;
+describe('CheckboxFilterComponent', () => {
+  let component: CheckboxFilterComponent;
+  let fixture: ComponentFixture<CheckboxFilterComponent>;
   let mockFilterCriteria: SearchFilterCriteriaInterface;
   let mockChildFilterCriteria: SearchFilterCriteriaInterface;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [MatListModule, MatCheckboxModule, FormsModule],
-      declarations: [
-        CheckboxSelectionListFilterComponent,
-        CheckboxListFilterComponent
-      ]
+      declarations: [CheckboxFilterComponent, CheckboxListFilterComponent]
     }).compileComponents();
   }));
 
   beforeEach(() => {
     // create parent element as fixture
-    fixture = TestBed.createComponent(CheckboxSelectionListFilterComponent);
+    fixture = TestBed.createComponent(CheckboxFilterComponent);
 
     mockChildFilterCriteria = new SearchFilterCriteriaFixture(
       { keyProperty: 'id', displayProperty: 'provider' },
@@ -116,8 +113,7 @@ describe('CheckboxSelectionListFilterComponent', () => {
 
       it("should only show the first 'maxVisibleItems' items", () => {
         const visibleOptions = matListItemsDE.filter(
-          option =>
-            !option.classes['checkbox-selection-list-filter__item--hidden']
+          option => !option.classes['checkbox-filter__item--hidden']
         );
         expect(visibleOptions.length).toBe(component.maxVisibleItems);
       });
@@ -178,9 +174,7 @@ describe('CheckboxSelectionListFilterComponent', () => {
       component.criterium.values[0].child = mockChildFilterCriteria;
       fixture.detectChanges();
 
-      childDE = fixture.debugElement.query(
-        By.css('campus-checkbox-selection-list-filter')
-      );
+      childDE = fixture.debugElement.query(By.css('campus-checkbox-filter'));
 
       expect(childDE).toBeTruthy();
     });
@@ -228,7 +222,7 @@ describe('CheckboxSelectionListFilterComponent', () => {
 
   describe('events', () => {
     let titleCheckBoxes: MatCheckbox[];
-    let childComponents: CheckboxSelectionListFilterComponent[];
+    let childComponents: CheckboxFilterComponent[];
 
     beforeEach(() => {
       // hook up a child to every value
@@ -251,7 +245,7 @@ describe('CheckboxSelectionListFilterComponent', () => {
         .map(checkbox => checkbox.componentInstance);
 
       childComponents = fixture.debugElement
-        .queryAll(By.directive(CheckboxSelectionListFilterComponent))
+        .queryAll(By.directive(CheckboxFilterComponent))
         .map(comp => comp.componentInstance);
     });
 
@@ -309,7 +303,7 @@ describe('CheckboxSelectionListFilterComponent', () => {
     });
 
     describe('from parent', () => {
-      let firstChildComponent: CheckboxSelectionListFilterComponent;
+      let firstChildComponent: CheckboxFilterComponent;
       let firstCheckbox: MatCheckbox;
       let firstCheckboxChildren: MatCheckbox[];
       let otherCheckboxChildren: MatCheckbox[];
@@ -398,7 +392,7 @@ describe('CheckboxSelectionListFilterComponent', () => {
     });
 
     describe('from children', () => {
-      let firstChildComponent: CheckboxSelectionListFilterComponent;
+      let firstChildComponent: CheckboxFilterComponent;
       let firstCheckbox: MatCheckbox;
       let firstCheckboxChildren: MatCheckbox[];
       let otherCheckboxChildren: MatCheckbox[];

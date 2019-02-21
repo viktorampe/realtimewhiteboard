@@ -6,8 +6,8 @@ import {
   MatFormFieldModule,
   MatListModule
 } from '@angular/material';
+import { CheckboxFilterComponent } from './components/checkbox-list-filter/checkbox-filter/checkbox-filter.component';
 import { CheckboxListFilterComponent } from './components/checkbox-list-filter/checkbox-list-filter.component';
-import { CheckboxSelectionListFilterComponent } from './components/checkbox-list-filter/checkbox-selection-list-filter/checkbox-selection-list-filter.component';
 
 @NgModule({
   imports: [
@@ -18,10 +18,7 @@ import { CheckboxSelectionListFilterComponent } from './components/checkbox-list
     MatCheckboxModule,
     MatFormFieldModule
   ],
-  declarations: [
-    CheckboxListFilterComponent,
-    CheckboxSelectionListFilterComponent
-  ],
-  exports: [CheckboxListFilterComponent, CheckboxSelectionListFilterComponent]
+  declarations: [CheckboxListFilterComponent, CheckboxFilterComponent],
+  exports: [CheckboxListFilterComponent, CheckboxFilterComponent]
 })
 export class SearchModule {}

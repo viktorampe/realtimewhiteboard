@@ -9,8 +9,8 @@ import {
   SearchFilterCriteriaFixture,
   SearchFilterCriteriaValuesFixture
 } from './../../+fixtures/search-filter-criteria.fixture';
+import { CheckboxFilterComponent } from './checkbox-filter/checkbox-filter.component';
 import { CheckboxListFilterComponent } from './checkbox-list-filter.component';
-import { CheckboxSelectionListFilterComponent } from './checkbox-selection-list-filter/checkbox-selection-list-filter.component';
 
 describe('CheckboxListFilterComponentComponent', () => {
   let component: CheckboxListFilterComponent;
@@ -25,10 +25,7 @@ describe('CheckboxListFilterComponentComponent', () => {
         MatCheckboxModule,
         FormsModule
       ],
-      declarations: [
-        CheckboxListFilterComponent,
-        CheckboxSelectionListFilterComponent
-      ]
+      declarations: [CheckboxListFilterComponent, CheckboxFilterComponent]
     }).compileComponents();
   }));
 
@@ -133,8 +130,8 @@ describe('CheckboxListFilterComponentComponent', () => {
     it('should emit the updated filtercriterium when the childcomponent emits', () => {
       spyOn(component.filterSelectionChange, 'emit');
 
-      const child: CheckboxSelectionListFilterComponent = fixture.debugElement.query(
-        By.directive(CheckboxSelectionListFilterComponent)
+      const child: CheckboxFilterComponent = fixture.debugElement.query(
+        By.directive(CheckboxFilterComponent)
       ).componentInstance;
 
       const expected = {

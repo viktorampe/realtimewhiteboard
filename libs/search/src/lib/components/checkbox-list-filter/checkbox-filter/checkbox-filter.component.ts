@@ -14,11 +14,11 @@ import { Observable, Subject, Subscription } from 'rxjs';
 import { SearchFilterCriteriaValuesInterface } from '../../../interfaces';
 
 @Component({
-  selector: 'campus-checkbox-selection-list-filter',
-  templateUrl: './checkbox-selection-list-filter.component.html',
-  styleUrls: ['./checkbox-selection-list-filter.component.scss']
+  selector: 'campus-checkbox-filter',
+  templateUrl: './checkbox-filter.component.html',
+  styleUrls: ['./checkbox-filter.component.scss']
 })
-export class CheckboxSelectionListFilterComponent
+export class CheckboxFilterComponent
   implements OnInit, AfterViewInit, OnDestroy {
   public showMoreItems: boolean; // expand aantal zichtbare titels
   public filteredFilterCriterium: SearchFilterCriteriaInterface;
@@ -52,8 +52,8 @@ export class CheckboxSelectionListFilterComponent
   public matCheckBoxes: QueryList<MatCheckbox>;
 
   // These are all the 'items'-childcomponents
-  @ViewChildren(CheckboxSelectionListFilterComponent)
-  private childComponents: QueryList<CheckboxSelectionListFilterComponent>;
+  @ViewChildren(CheckboxFilterComponent)
+  private childComponents: QueryList<CheckboxFilterComponent>;
 
   ngOnInit() {
     // listen for updates from the parent
@@ -177,7 +177,7 @@ export class CheckboxSelectionListFilterComponent
   // with their child checkboxes
   private getAssociateCheckboxes(
     parentCheckBoxes: QueryList<MatCheckbox>,
-    childComponents: QueryList<CheckboxSelectionListFilterComponent>
+    childComponents: QueryList<CheckboxFilterComponent>
   ): AssociatedCheckBoxesInterface[] {
     return parentCheckBoxes.map(parent => {
       // not all checkboxes have children
