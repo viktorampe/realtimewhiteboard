@@ -7,6 +7,7 @@ import {
   MatInputModule,
   MatSelectModule
 } from '@angular/material';
+import { BreadcrumbFilterComponent } from './components/breadcrumb-filter/breadcrumb-filter.component';
 import { SearchTermComponent } from './components/search-term/search-term.component';
 import { SelectFilterComponent } from './components/select-filter-component/select-filter.component';
 
@@ -16,11 +17,23 @@ import { SelectFilterComponent } from './components/select-filter-component/sele
     MatSelectModule,
     ReactiveFormsModule,
     MatBadgeModule,
+    CommonModule,
+    MatSelectModule,
+    ReactiveFormsModule,
+    MatBadgeModule,
     MatInputModule,
     MatAutocompleteModule,
     FormsModule
   ],
-  declarations: [SelectFilterComponent, SearchTermComponent],
-  exports: [SelectFilterComponent, SearchTermComponent]
+  declarations: [
+    BreadcrumbFilterComponent,
+    SelectFilterComponent,
+    SearchTermComponent
+  ],
+  exports: [
+    BreadcrumbFilterComponent,
+    SelectFilterComponent,
+    SearchTermComponent
+  ]
 })
 export class SearchModule {}

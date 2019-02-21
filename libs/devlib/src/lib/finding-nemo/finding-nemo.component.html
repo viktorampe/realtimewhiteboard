@@ -1,4 +1,9 @@
 <p> you will never find nemo! </p>
+<campus-breadcrumb-filter
+  [rootLabel]="'Alle'"
+  [filterCriteria]="breadCrumbFilterCriteria"
+  (filterSelectionChange)="onFilterSelectionChange($event)"
+></campus-breadcrumb-filter>
 
 <campus-search-term
   [initialValue]="'123'"
