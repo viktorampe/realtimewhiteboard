@@ -7,6 +7,7 @@ import {
   Directive,
   EventEmitter,
   Input,
+  NgZone,
   OnDestroy,
   OnInit,
   Output,
@@ -115,7 +116,10 @@ export class ResultsListComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(ResultListDirective) resultListHost: ResultListDirective;
   @ViewChild(CdkVirtualScrollViewport) viewPort: CdkVirtualScrollViewport;
 
-  constructor(private componentFactoryResolver: ComponentFactoryResolver) {}
+  constructor(
+    private ngZone: NgZone,
+    private componentFactoryResolver: ComponentFactoryResolver
+  ) {}
 
   ngOnInit(): void {
     this.sortModes = this.searchMode.results.sortModes;
@@ -136,12 +140,15 @@ export class ResultsListComponent implements OnInit, OnDestroy, AfterViewInit {
         .subscribe(() => {
           const fromBottom = this.viewPort.measureScrollOffset('bottom');
           console.log('scrolled', fromBottom, 'from bottom');
-          // if (fromBottom <= 4 * this.itemSize) {
-          //   // disable multiple event triggers for the same page
-          //   this.disableInfiniteScroll = true;
-          //   // ask to load next page of results
-          // }
-          this.getNextPage.next(this.loadedCount + 1);
+          if (fromBottom <= 4 * this.itemSize) {
+            // disable multiple event triggers for the same page
+            this.disableInfiniteScroll = true;
+            // ask to load next page of results
+            // ngZone is required to trigger change detection, it seems to be a similiar issue as this:
+            // https://github.com/angular/material2/issues/12869#issuecomment-416734670
+            // where the `elementScrolled` event is emitting outside the ngZone
+            this.ngZone.run(() => this.getNextPage.next(this.loadedCount + 1));
+          }
         })
     );
   }

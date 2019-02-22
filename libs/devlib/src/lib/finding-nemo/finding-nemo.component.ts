@@ -10,7 +10,9 @@ import {
   SearchResultItemInterface,
   SearchStateInterface
 } from '@campus/search';
+import { EduContentMetadataApi } from '@diekeure/polpo-api-angular-sdk';
 import { Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { PolpoResultItemComponent } from '../polpo-result-item/polpo-result-item.component';
 
 @Component({
@@ -27,7 +29,10 @@ export class FindingNemoComponent implements OnInit {
   searchMode: SearchModeInterface;
   searchState: Subject<SearchStateInterface> = new Subject();
 
-  constructor(private cd: ChangeDetectorRef) {}
+  constructor(
+    private cd: ChangeDetectorRef,
+    private eduContentMetadataApi: EduContentMetadataApi
+  ) {}
 
   ngOnInit() {
     this.searchMode = {
@@ -72,7 +77,7 @@ export class FindingNemoComponent implements OnInit {
     console.log(searchFilter);
   }
 
-  loadMoreResults() {
+  loadMoreResults(from = 0) {
     console.log('loadMoreResults');
     const resultsPage = {
       count: 30,
@@ -83,8 +88,37 @@ export class FindingNemoComponent implements OnInit {
       ],
       filterCriteriaPredictions: new Map()
     };
-    this.resultsPage$.next({ ...resultsPage });
-    this.cd.detectChanges();
+    this.eduContentMetadataApi
+      .search(
+        '',
+        {
+          eduContentProductType: [],
+          eduNets: [],
+          grades: [],
+          learningArea: [],
+          learningDomains: [],
+          methods: [],
+          schoolTypes: [],
+          years: []
+        } as any,
+        from,
+        null
+      )
+      .pipe(
+        map((results: any) => {
+          return {
+            count: results.count,
+            results: results.metadata,
+            filterCriteriaPredictions: results.filters
+          };
+        })
+      )
+      .subscribe(
+        (results: SearchResultInterface<EduContentMetadataInterface>) => {
+          this.resultsPage$.next(results);
+        }
+      );
+    // this.cd.detectChanges();
   }
 
   resetResults() {
@@ -100,8 +134,6 @@ export class FindingNemoComponent implements OnInit {
     console.log('getNextPage from', from);
 
     // simulate xhr call that takes 0.8sec
-    setTimeout(() => {
-      this.loadMoreResults();
-    }, 500);
+    this.loadMoreResults(from);
   }
 }
