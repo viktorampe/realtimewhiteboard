@@ -1,16 +1,14 @@
-<div class="checkbox-line-filter-component__title"
-  >{{ filterCriteria.label }}</div
->
+<div class="checkbox-line-filter-component__title">{{
+  filterCriteria.label
+}}</div>
 
 <div class="checkbox-line-filter-component__checkbox-holder">
-  <ng-container *ngFor="let value of filteredFilterCriteria.values">
-    <mat-checkbox
-      *ngIf="value.visible"
-      [disabled]="value.prediction ===0"
-      [checked]="value.selected"
-      [value]="value"
-      (change)="itemChanged(value)"
-      >{{ getDisplayValue(value)}}</mat-checkbox
-    >
-  </ng-container>
+  <mat-checkbox
+    *ngFor="let value of filteredFilterCriteria.values"
+    [disabled]="value.prediction === 0"
+    [checked]="value.selected"
+    [value]="value"
+    (change)="itemChanged(value)"
+    >{{ getDisplayValue(value) }}</mat-checkbox
+  >
 </div>
