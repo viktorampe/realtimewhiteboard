@@ -121,7 +121,7 @@ export class ResultsListComponent implements OnInit, OnDestroy, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    this.sortModes = this.searchMode.results.sortModes;
+    this.sortModes = this.searchMode ? this.searchMode.results.sortModes : null;
   }
 
   ngOnDestroy(): void {
