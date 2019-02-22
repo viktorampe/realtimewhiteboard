@@ -1,10 +1,35 @@
 <p> you will never find nemo! </p>
 
-<div>
-  <span (click)="loadMoreResults()">load more</span> | <span (click)="resetResults()">reset</span>
+<campus-breadcrumb-filter
+  [rootLabel]="'Alle'"
+  [filterCriteria]="breadCrumbFilterCriteria"
+  (filterSelectionChange)="onFilterSelectionChange($event)"
+></campus-breadcrumb-filter>
+
+<campus-search-term
+  [initialValue]="'123'"
+  [autoComplete]="true"
+  [autoCompleteValues]="['waarde 1', ' waarde 2', 'waarde 3', 'waarde 4']"
+  (valueChange)="onChange($event)"
+></campus-search-term>
+
+<div style="max-width: 300px; padding: 10px;">
+  <campus-select-filter
+    [filterCriteria]="selectFilter"
+    [multiple]="true"
+    resetLabel="None"
+    (filterSelectionChange)="onFilterSelectionChange($event)"
+  ></campus-select-filter>
 </div>
-<campus-results-list [resultsPage]="resultsPage$ | async"
-                     [resultItem]="resultItemComponent"
-                     [searchMode]="searchMode"
-                     [searchState]="searchState | async"
-                     (getNextPage)="onGetNextPage($event)"></campus-results-list>
+
+<div>
+  <span (click)="loadMoreResults()">load more</span> |
+  <span (click)="resetResults()">reset</span>
+</div>
+<campus-results-list
+  [resultsPage]="resultsPage$ | async"
+  [resultItem]="resultItemComponent"
+  [searchMode]="searchMode"
+  [searchState]="searchState | async"
+  (getNextPage)="onGetNextPage($event)"
+></campus-results-list>
