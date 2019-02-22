@@ -1,10 +1,13 @@
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import {
+  AfterViewInit,
   Component,
   ComponentFactory,
   ComponentFactoryResolver,
   Directive,
   EventEmitter,
   Input,
+  OnDestroy,
   OnInit,
   Output,
   Type,
@@ -12,6 +15,8 @@ import {
   ViewContainerRef
 } from '@angular/core';
 import { ListViewComponent } from '@campus/ui';
+import { Subscription } from 'rxjs';
+import { auditTime, filter } from 'rxjs/operators';
 import {
   SearchModeInterface,
   SearchResultInterface,
@@ -43,10 +48,13 @@ export class ResultListDirective {
  *
  * template:
  *   <campus-results-list
- *     [resultsPage]="resultsPage"
+ *     [resultsPage]="resultsPage$ | async"
  *     [resultItem]="myResultItemComponent"
- *     [searchFilterCriteria]="selectFilter">
- *   </campus-results-list>
+ *     [searchMode]="searchMode"
+ *     [searchState]="searchState$ | async"
+ *     (sortBy)="onSortChanged($event)"
+ *     (getNextPage)="onGetNextPage($event)"
+ *   ></campus-results-list>
  * @example
  */
 @Component({
@@ -54,26 +62,105 @@ export class ResultListDirective {
   templateUrl: './results-list.component.html',
   styleUrls: ['./results-list.component.scss']
 })
-export class ResultsListComponent implements OnInit {
+export class ResultsListComponent implements OnInit, OnDestroy, AfterViewInit {
   public selected: any;
   public count = 0;
   public sortModes: SortModeInterface[];
   public activeSortMode: string;
+
+  private subscriptions: Subscription = new Subscription();
+  private loadedCount = 0;
   private clearResults = true;
   private disableInfiniteScroll = true;
   private componentFactory: ComponentFactory<SearchResultItemInterface>;
-  private pageSize: number;
-  private _searchState: SearchStateInterface;
+  private _searchState: SearchStateInterface = {
+    searchTerm: null,
+    filterCriteriaSelections: new Map(),
+    from: 0
+  };
 
-  @Input() resultItem: Type<SearchResultItemInterface>;
   @Input() searchMode: SearchModeInterface;
+  @Input() itemSize = 100;
 
   @Input()
+  set resultItem(resultItem: Type<SearchResultItemInterface>) {
+    // prepare factory to create result item component
+    this.componentFactory = this.componentFactoryResolver.resolveComponentFactory(
+      resultItem
+    );
+  }
+
+  @Input()
+  set searchState(searchState: SearchStateInterface) {
+    if (searchState) {
+      this._searchState = searchState;
+      this.setSearchState(searchState);
+    }
+  }
   get searchState() {
     return this._searchState;
   }
-  set searchState(searchState: SearchStateInterface) {
-    this._searchState = searchState;
+
+  @Input()
+  set resultsPage(searchResult: SearchResultInterface<any>) {
+    console.log('new resultsPage', searchResult);
+    if (searchResult) {
+      this.count = searchResult.count;
+      this.loadComponent(searchResult.results);
+    }
+  }
+
+  @Output() sortBy: EventEmitter<SortModeInterface> = new EventEmitter();
+  @Output() getNextPage: EventEmitter<number> = new EventEmitter();
+
+  @ViewChild(ResultListDirective) resultListHost: ResultListDirective;
+  @ViewChild(ListViewComponent) listview: ListViewComponent<any>;
+  @ViewChild(CdkVirtualScrollViewport) viewPort: CdkVirtualScrollViewport;
+
+  constructor(private componentFactoryResolver: ComponentFactoryResolver) {}
+
+  ngOnInit(): void {
+    this.sortModes = this.searchMode.results.sortModes;
+  }
+
+  onSelectionChanged(event: any[]) {
+    this.selected = event;
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+
+  ngAfterViewInit(): void {
+    this.subscriptions.add(
+      this.viewPort
+        .elementScrolled()
+        .pipe(
+          filter(() => !this.disableInfiniteScroll),
+          auditTime(300) // limit events to once every 300ms
+        )
+        .subscribe(() => {
+          const fromBottom = this.viewPort.measureScrollOffset('bottom');
+          console.log('scrolled', fromBottom, 'from bottom');
+          // if (fromBottom <= 4 * this.itemSize) {
+          //   // disable multiple event triggers for the same page
+          //   this.disableInfiniteScroll = true;
+          //   // ask to load next page of results
+          // }
+          this.getNextPage.next(this.loadedCount + 1);
+        })
+    );
+  }
+
+  clickSortMode(sortMode: SortModeInterface): void {
+    if (this.activeSortMode !== sortMode.name) {
+      this.activeSortMode = sortMode.name;
+      this.searchState.sort = sortMode.name;
+      this.sortBy.next(sortMode);
+    }
+  }
+
+  private setSearchState(searchState: SearchStateInterface): void {
     if (!searchState.from) {
       this.clearResults = true;
       this.disableInfiniteScroll = true;
@@ -85,65 +172,36 @@ export class ResultsListComponent implements OnInit {
       this.activeSortMode = this.searchMode.results.sortModes[0].name;
     }
   }
-  @Input()
-  set resultsPage(searchResult: SearchResultInterface<any>) {
-    if (!searchResult) {
-      return;
-    }
-    this.count = searchResult.count;
-    this.loadComponent(searchResult.results);
-  }
 
-  @Output() sort: EventEmitter<SortModeInterface> = new EventEmitter();
-  @Output() scroll: EventEmitter<number> = new EventEmitter();
-
-  @ViewChild(ResultListDirective) resultListHost: ResultListDirective;
-  @ViewChild(ListViewComponent) listview: ListViewComponent<any>;
-
-  constructor(private componentFactoryResolver: ComponentFactoryResolver) {}
-
-  ngOnInit(): void {
-    this.sortModes = this.searchMode.results.sortModes;
-    this.pageSize = this.searchMode.results.pageSize;
-  }
-
-  onSelectionChanged(event: any[]) {
-    this.selected = event;
-  }
-
-  clickSortMode(sortMode: SortModeInterface) {
-    if (this.activeSortMode !== sortMode.name) {
-      this.activeSortMode = sortMode.name;
-      this.searchState.sort = sortMode.name;
-      this.sort.next(sortMode);
-    }
-  }
-
-  private loadComponent(results: any[]) {
+  private loadComponent(results: any[]): void {
     if (results.length === 0) {
+      // disable scroll event when there are no more results
       this.disableInfiniteScroll = true;
       return;
     }
 
-    if (!this.componentFactory) {
-      this.componentFactory = this.componentFactoryResolver.resolveComponentFactory(
-        this.resultItem
-      );
-    }
     if (this.clearResults) {
-      this.resultListHost.viewContainerRef.clear();
-      this.clearResults = false;
-      this.disableInfiniteScroll = false;
+      this.clearResultList();
     }
     results.forEach(result => this.addResultItemComponent(result));
+
+    this.loadedCount += results.length;
+    // re-enable scroll trigger
+    this.disableInfiniteScroll = false;
   }
 
-  private addResultItemComponent(result) {
+  private addResultItemComponent(result): void {
     const componentRef = this.resultListHost.viewContainerRef.createComponent(
       this.componentFactory
     );
     const resultItem = componentRef.instance as SearchResultItemInterface;
     resultItem.data = result;
     resultItem.listRef = this.listview;
+  }
+
+  private clearResultList() {
+    this.resultListHost.viewContainerRef.clear();
+    this.loadedCount = 0;
+    this.clearResults = false;
   }
 }

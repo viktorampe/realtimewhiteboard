@@ -1,3 +1,4 @@
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { MatTooltipModule } from '@angular/material';
@@ -8,7 +9,7 @@ import {
 } from './components/results-list/results-list.component';
 
 @NgModule({
-  imports: [CommonModule, UiModule, MatTooltipModule],
+  imports: [CommonModule, UiModule, MatTooltipModule, ScrollingModule],
   declarations: [ResultsListComponent, ResultListDirective],
   exports: [ResultsListComponent]
 })

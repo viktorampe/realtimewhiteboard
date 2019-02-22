@@ -1,30 +1,32 @@
-<div class="search-results-list__info"
-  >{{ count + (count === 1 ? ' resultaat' : ' resultaten') }}.</div
->
-<div *ngIf="sortModes" class="search-results-list__sorting"
-  >Sorteer op
-  <campus-button
-    *ngFor="let sortMode of sortModes"
-    bordered
-    [iconClass]="sortMode.icon"
-    [matTooltip]="sortMode.description"
-    matTooltipPosition="above"
-    [class.ui-button--primary]="sortMode.name === activeSortMode"
-    (click)="clickSortMode(sortMode)"
-  ></campus-button>
-</div>
-<campus-list-view
-  class="search-results-list__results"
-  (selectedItems$)="onSelectionChanged($event)"
-  [multiSelect]="true"
-  [listFormat]="'line'"
->
-  <ng-template result-list-host></ng-template>
-</campus-list-view>
-<div class="search-results-list__scroll">scroll</div>
-<div *ngIf="selected.length"
-  >Geselecteerde items:
-  <div *ngFor="let value of selected" style="padding:10px;">{{
-    value | json
-  }}</div>
+<div class="search-results-list">
+  <div>
+    <div class="search-results-list__info">{{count + (count === 1 ? ' resultaat' : ' resultaten')}}.</div>
+    <div *ngIf="sortModes"
+         class="search-results-list__sorting">Sorteer op
+      <campus-button *ngFor="let sortMode of sortModes"
+                     bordered
+                     [iconClass]="sortMode.icon"
+                     [matTooltip]="sortMode.description"
+                     matTooltipPosition="above"
+                     [class.ui-button--primary]="sortMode.name === activeSortMode"
+                     (click)="clickSortMode(sortMode)"></campus-button>
+    </div>
+  </div>
+  <campus-list-view class="search-results-list__results"
+                    (selectedItems$)="onSelectionChanged($event)"
+                    [multiSelect]="true"
+                    [listFormat]="'line'">
+    <cdk-virtual-scroll-viewport class="search-results-list__results__scroll"
+                                 [itemSize]="itemSize"
+                                 [minBufferPx]="itemSize"
+                                 [maxBufferPx]="itemSize">
+      <ng-template result-list-host></ng-template>
+
+    </cdk-virtual-scroll-viewport>
+  </campus-list-view>
+  <div *ngIf="selected.length">Geselecteerde items:
+    <div *ngFor="let value of selected"
+         style="padding:10px;">
+      {{value | json}}</div>
+  </div>
 </div>
