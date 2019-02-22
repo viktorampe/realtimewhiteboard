@@ -11,9 +11,7 @@
 
   &__results {
     flex: 1 0 auto;
-
-    &__scroll {
-      height: 100%;
-    }
+    height: 0;
+    overflow: auto;
   }
 }
