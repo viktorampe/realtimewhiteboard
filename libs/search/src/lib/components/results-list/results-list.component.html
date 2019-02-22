@@ -16,20 +16,15 @@
       ></campus-button>
     </div>
   </div>
+
   <campus-list-view
+    cdkScrollable
     class="search-results-list__results"
     (selectedItems$)="onSelectionChanged($event)"
     [multiSelect]="true"
     [listFormat]="'line'"
   >
-    <cdk-virtual-scroll-viewport
-      class="search-results-list__results__scroll"
-      [itemSize]="itemSize"
-      [minBufferPx]="itemSize"
-      [maxBufferPx]="itemSize"
-    >
-      <ng-template result-list-host></ng-template>
-    </cdk-virtual-scroll-viewport>
+    <ng-template result-list-host></ng-template>
   </campus-list-view>
   <div *ngIf="selected.length"
     >Geselecteerde items: ( {{ selected.length }})

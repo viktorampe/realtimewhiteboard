@@ -1,4 +1,4 @@
-import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { CdkScrollable } from '@angular/cdk/scrolling';
 import {
   AfterViewInit,
   Component,
@@ -72,7 +72,7 @@ export class ResultsListComponent implements OnInit, OnDestroy, AfterViewInit {
   private subscriptions: Subscription = new Subscription();
   private loadedCount = 0;
   private clearResults = true;
-  private disableInfiniteScroll = true;
+  private scrollEnabled = false;
   private componentFactory: ComponentFactory<SearchResultItemInterface>;
   private _searchState: SearchStateInterface = {
     searchTerm: null,
@@ -104,10 +104,9 @@ export class ResultsListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @Input()
   set resultsPage(searchResult: SearchResultInterface<any>) {
-    console.log('new resultsPage', searchResult);
     if (searchResult) {
       this.count = searchResult.count;
-      this.loadComponent(searchResult.results);
+      this.addResults(searchResult.results);
     }
   }
 
@@ -116,7 +115,7 @@ export class ResultsListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChild(ResultListDirective) resultListHost: ResultListDirective;
   @ViewChild(ListViewComponent) listview: ListViewComponent<any>;
-  @ViewChild(CdkVirtualScrollViewport) viewPort: CdkVirtualScrollViewport;
+  @ViewChild(CdkScrollable) viewPort: CdkScrollable;
 
   constructor(
     private ngZone: NgZone,
@@ -124,7 +123,7 @@ export class ResultsListComponent implements OnInit, OnDestroy, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    this.sortModes = this.searchMode.results.sortModes;
+    this.sortModes = this.searchMode ? this.searchMode.results.sortModes : null;
   }
 
   onSelectionChanged(event: any[]) {
@@ -140,21 +139,15 @@ export class ResultsListComponent implements OnInit, OnDestroy, AfterViewInit {
       this.viewPort
         .elementScrolled()
         .pipe(
-          filter(() => !this.disableInfiniteScroll),
+          filter(() => this.scrollEnabled),
           auditTime(300) // limit events to once every 300ms
         )
         .subscribe(() => {
-          const fromBottom = this.viewPort.measureScrollOffset('bottom');
-          console.log('scrolled', fromBottom, 'from bottom');
-          if (fromBottom <= 4 * this.itemSize) {
-            // disable multiple event triggers for the same page
-            this.disableInfiniteScroll = true;
-            // ask to load next page of results
-            // ngZone is required to trigger change detection, it seems to be a similiar issue as this:
-            // https://github.com/angular/material2/issues/12869#issuecomment-416734670
-            // where the `elementScrolled` event is emitting outside the ngZone
-            this.ngZone.run(() => this.getNextPage.next(this.loadedCount + 1));
-          }
+          // ngZone is required to trigger change detection, it seems to be a similiar issue as this:
+          // https://github.com/angular/material2/issues/12869#issuecomment-416734670
+          // where the `elementScrolled` event is emitting outside the ngZone
+          // this makes sense, because we don't want to trigger CD for each scroll event
+          this.ngZone.run(() => this.checkForMoreResults());
         })
     );
   }
@@ -169,8 +162,9 @@ export class ResultsListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private setSearchState(searchState: SearchStateInterface): void {
     if (!searchState.from) {
+      // new search
       this.clearResults = true;
-      this.disableInfiniteScroll = true;
+      this.scrollEnabled = false;
       if (this.listview) this.listview.resetItems();
     }
     if (searchState.sort) {
@@ -180,24 +174,29 @@ export class ResultsListComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  private loadComponent(results: any[]): void {
+  private addResults(results: any[]): void {
     if (results.length === 0) {
-      // disable scroll event when there are no more results
-      this.disableInfiniteScroll = true;
+      // disable scroll event when there are no new results
+      this.scrollEnabled = false;
       return;
     }
 
+    // update template
     if (this.clearResults) {
       this.clearResultList();
     }
-    results.forEach(result => this.addResultItemComponent(result));
+    results.forEach(result => this.createResultComponent(result));
 
+    // update private state variables
     this.loadedCount += results.length;
-    // re-enable scroll trigger
-    this.disableInfiniteScroll = false;
+    this.scrollEnabled = true;
+
+    // in case there's no scrollbar yet, we should manually trigger search
+    // until we can handle scroll events
+    this.checkForMoreResults();
   }
 
-  private addResultItemComponent(result): void {
+  private createResultComponent(result): void {
     const componentRef = this.resultListHost.viewContainerRef.createComponent(
       this.componentFactory
     );
@@ -210,5 +209,15 @@ export class ResultsListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.resultListHost.viewContainerRef.clear();
     this.loadedCount = 0;
     this.clearResults = false;
+  }
+
+  private checkForMoreResults() {
+    const fromBottom = this.viewPort.measureScrollOffset('bottom');
+    if (fromBottom <= 4 * this.itemSize) {
+      // disable multiple event triggers for the same page
+      this.scrollEnabled = false;
+      // ask to load next page of results
+      this.getNextPage.next(this.loadedCount + 1);
+    }
   }
 }

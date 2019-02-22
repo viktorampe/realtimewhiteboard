@@ -1,4 +1,7 @@
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatTooltipModule } from '@angular/material';
+import { UiModule } from '@campus/ui';
 import { ResultsListComponent } from './results-list.component';
 
 describe('ResultsListComponentComponent', () => {
@@ -7,7 +10,9 @@ describe('ResultsListComponentComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ResultsListComponent]
+      imports: [UiModule, MatTooltipModule, ScrollingModule],
+      declarations: [ResultsListComponent],
+      providers: []
     }).compileComponents();
   }));
 
