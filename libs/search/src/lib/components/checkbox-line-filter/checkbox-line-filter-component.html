@@ -6,7 +6,7 @@
   <ng-container *ngFor="let value of filteredFilterCriteria.values">
     <mat-checkbox
       *ngIf="value.visible"
-      [disabled]="!value.prediction"
+      [disabled]="value.prediction ===0"
       [checked]="value.selected"
       [value]="value"
       (change)="itemChanged(value)"

@@ -30,8 +30,6 @@ export class CheckboxLineFilterComponent
     return this._filterCriteria;
   }
   set filterCriteria(value: SearchFilterCriteriaInterface) {
-    if (this._filterCriteria === value) return;
-
     this._filterCriteria = value;
     this.filteredFilterCriteria = this.getFilteredCriterium(value);
   }
@@ -42,10 +40,7 @@ export class CheckboxLineFilterComponent
   }
 
   public getDisplayValue(value: SearchFilterCriteriaValuesInterface): string {
-    return (
-      value.data[this.filterCriteria.displayProperty] +
-      (value.prediction ? '(' + value.prediction + ')' : '')
-    );
+    return value.data[this.filterCriteria.displayProperty];
   }
 
   public itemChanged(value: SearchFilterCriteriaValuesInterface) {
