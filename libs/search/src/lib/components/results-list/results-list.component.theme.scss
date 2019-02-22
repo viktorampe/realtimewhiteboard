@@ -7,9 +7,17 @@
       .ui-button {
         padding: $search-results-list__sorting-padding;
       }
+
       .mat-icon {
         width: $search-results-list__sorting-size;
         height: $search-results-list__sorting-size;
+      }
+    }
+
+    &__results {
+      .ui-list-view__list {
+        height: 100%;
+        margin-top: 0 !important;
       }
     }
   }
