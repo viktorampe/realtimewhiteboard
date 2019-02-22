@@ -24,9 +24,6 @@
 
     </cdk-virtual-scroll-viewport>
   </campus-list-view>
-  <div *ngIf="selected.length">Geselecteerde items:
-    <div *ngFor="let value of selected"
-         style="padding:10px;">
-      {{value | json}}</div>
+  <div *ngIf="selected.length">Geselecteerde items: ( {{selected.length}})
   </div>
 </div>

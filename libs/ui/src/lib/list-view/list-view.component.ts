@@ -68,7 +68,6 @@ export class ListViewComponent<dataObjectType>
 
     // nieuwe subscription als items veranderen
     this.items.changes.subscribe(() => {
-      console.log('changes');
       this.setupSelectionSubscriptionsForListItems();
     });
   }
@@ -91,6 +90,7 @@ export class ListViewComponent<dataObjectType>
 
   public resetItems() {
     this._manuallyAddedItems = [];
+    this.deselectAllItems();
     this.items.reset(this._items ? this._items.toArray() : []);
     this.setupSelectionSubscriptionsForListItems();
   }
