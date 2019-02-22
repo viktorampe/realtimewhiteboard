@@ -21,7 +21,7 @@
     cdkScrollable
     class="search-results-list__results"
     (selectedItems$)="onSelectionChanged($event)"
-    [multiSelect]="true"
+    [multiSelect]="false"
     [listFormat]="'line'"
   >
     <ng-template result-list-host></ng-template>

@@ -73,7 +73,7 @@ export class CredentialEffects {
           .useCredentialProfilePicture(action.payload.credential)
           .pipe(
             mergeMapTo(
-              from<Action>([
+              from<Action[]>([
                 new LoadUser({ force: true }),
                 new EffectFeedbackActions.AddEffectFeedback({
                   effectFeedback: new EffectFeedback({
