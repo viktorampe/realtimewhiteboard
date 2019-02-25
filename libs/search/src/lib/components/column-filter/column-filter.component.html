@@ -1,40 +1,25 @@
-<div>
-  <div
-    *ngFor="let filterCriterion of filterCriteria; let i = index"
-    [@slideInOut]="animationState(i)"
-    class="column"
-  >
-    <div>
-      <div>{{ i }} of length {{ filterCriteria.length }}</div>
-      <div
-        >current column: {{ preserveColumn ? 'second to last' : 'last' }}</div
+<mat-action-list
+  *ngFor="let filterCriterion of filterCriteria; let i = index"
+  [@slideInOut]="animationState(i)"
+  class="column"
+>
+  <div *ngFor="let value of filterCriterion.values" class="value">
+    <div
+      [ngClass]="{ selected: value.selected }"
+      (click)="onFilterSelectionChange(value, false)"
+      class="displayProperty"
+      >displayProperty: {{ value.data[filterCriterion.displayProperty] }}</div
+    >
+    <ng-container *ngIf="value.prediction && value.prediction !== 0"
+      ><div (click)="onFilterSelectionChange(value, false)" class="arrow"
+        >-></div
       >
-      <div>{{ filterCriterion.name }}</div>
-      <div>{{ filterCriterion.label }}</div>
-      <mat-action-list>
-        <div *ngFor="let value of filterCriterion.values" class="value">
-          <div
-            [ngClass]="{ selected: value.selected }"
-            (click)="onFilterSelectionChange(value, false)"
-            class="displayProperty"
-            >displayProperty:
-            {{ value.data[filterCriterion.displayProperty] }}</div
-          >
-          <ng-container *ngIf="value.prediction && value.prediction !== 0"
-            ><div (click)="onFilterSelectionChange(value, false)" class="arrow"
-              >-></div
-            >
-            <div
-              (click)="onFilterSelectionChange(value, true)"
-              class="magnifier"
-              >(-)</div
-            ></ng-container
-          >
-        </div>
-      </mat-action-list>
-    </div>
+      <div (click)="onFilterSelectionChange(value, true)" class="magnifier"
+        >(-)</div
+      ></ng-container
+    >
   </div>
-  <ng-container *ngIf="!filterCriteria || filterCriteria.length === 0">
-    <div class="no-criteria">There is nog columData to display</div>
-  </ng-container>
-</div>
+</mat-action-list>
+<ng-container *ngIf="!filterCriteria || filterCriteria.length === 0">
+  <div class="no-criteria">There is nog columData to display</div>
+</ng-container>
