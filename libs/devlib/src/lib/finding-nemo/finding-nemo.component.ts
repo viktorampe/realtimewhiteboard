@@ -15,7 +15,7 @@ import {
   SearchStateInterface
 } from '@campus/search';
 import { EduContentMetadataApi } from '@diekeure/polpo-api-angular-sdk';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { PolpoResultItemComponent } from '../polpo-result-item/polpo-result-item.component';
 
@@ -144,15 +144,19 @@ const mockBreadcrumbFilterCriteria: SearchFilterCriteriaInterface[] = [
   styleUrls: ['./finding-nemo.component.scss']
 })
 export class FindingNemoComponent implements OnInit {
-  selectFilter: SearchFilterCriteriaInterface;
-  resultItemComponent: Type<SearchResultItemInterface>;
-  resultsPage$: Subject<
+  public selectFilter: SearchFilterCriteriaInterface;
+  public selectedFilterCriteria: SearchFilterCriteriaInterface;
+  public resultItemComponent: Type<SearchResultItemInterface>;
+  public resultsPage$: Subject<
     SearchResultInterface<EduContentMetadataInterface>
   > = new Subject();
-  searchMode: SearchModeInterface;
-  searchState: Subject<SearchStateInterface> = new Subject();
+  public searchMode: SearchModeInterface;
+  public searchState: BehaviorSubject<
+    SearchStateInterface
+  > = new BehaviorSubject(null);
+  public breadCrumbFilterCriteria: SearchFilterCriteriaInterface[];
 
-  breadCrumbFilterCriteria: SearchFilterCriteriaInterface[];
+  private loadTimer: number;
 
   constructor(
     private cd: ChangeDetectorRef,
@@ -182,37 +186,91 @@ export class FindingNemoComponent implements OnInit {
       ]
     );
 
-    const selectFilter = {
-      name: 'selectFilter',
-      label: 'select filter',
-      keyProperty: 'id',
-      displayProperty: 'name',
-      values: [
-        {
-          data: new LearningAreaFixture({
-            id: 1,
-            name: 'foo'
-          }),
-          selected: false,
-          prediction: 0,
-          visible: true,
-          child: {
-            name: 'selectFilter',
-            label: 'select filter',
-            keyProperty: 'id',
-            displayProperty: 'provider',
-            values: [
-              {
-                data: new CredentialFixture(),
-                selected: false,
-                prediction: 0,
-                visible: true
-              }
+    this.selectFilter = new SearchFilterCriteriaFixture(
+      { label: 'search filter' },
+      [
+        new SearchFilterCriteriaValuesFixture(
+          {
+            data: new LearningAreaFixture({
+              id: 1,
+              name: 'Aardrijkskunde'
+            })
+          },
+          new SearchFilterCriteriaFixture(
+            { keyProperty: 'id', displayProperty: 'provider' },
+            [
+              new SearchFilterCriteriaValuesFixture({
+                data: new CredentialFixture({ id: 1, provider: 'smartschool' })
+              }),
+              new SearchFilterCriteriaValuesFixture({
+                data: new CredentialFixture({ id: 2, provider: 'google' })
+              }),
+              new SearchFilterCriteriaValuesFixture({
+                data: new CredentialFixture({ id: 3, provider: 'facebook' })
+              })
             ]
-          }
-        }
+          )
+        ),
+        new SearchFilterCriteriaValuesFixture(
+          {
+            data: new LearningAreaFixture({
+              id: 2,
+              name: 'Geschiedenis'
+            })
+          },
+          new SearchFilterCriteriaFixture(
+            { keyProperty: 'id', displayProperty: 'provider' },
+            [
+              new SearchFilterCriteriaValuesFixture({
+                data: new CredentialFixture({ id: 1, provider: 'smartschool' })
+              }),
+              new SearchFilterCriteriaValuesFixture({
+                data: new CredentialFixture({ id: 2, provider: 'google' })
+              }),
+              new SearchFilterCriteriaValuesFixture({
+                data: new CredentialFixture({ id: 3, provider: 'facebook' })
+              })
+            ]
+          )
+        ),
+        new SearchFilterCriteriaValuesFixture(
+          {
+            data: new LearningAreaFixture({
+              id: 3,
+              name: 'Wiskunde'
+            })
+          },
+          new SearchFilterCriteriaFixture(
+            { keyProperty: 'id', displayProperty: 'provider' },
+            [
+              new SearchFilterCriteriaValuesFixture({
+                data: new CredentialFixture({ id: 1, provider: 'smartschool' })
+              }),
+              new SearchFilterCriteriaValuesFixture({
+                data: new CredentialFixture({ id: 2, provider: 'google' })
+              }),
+              new SearchFilterCriteriaValuesFixture({
+                data: new CredentialFixture({ id: 3, provider: 'facebook' })
+              })
+            ]
+          )
+        ),
+        new SearchFilterCriteriaValuesFixture({
+          data: new LearningAreaFixture({
+            id: 4,
+            name: 'Informatica'
+          }),
+          visible: false
+        }),
+        new SearchFilterCriteriaValuesFixture({
+          data: new LearningAreaFixture({
+            id: 5,
+            name: 'Engels'
+          }),
+          prediction: 0
+        })
       ]
-    };
+    );
 
     this.searchMode = {
       name: 'demo',
@@ -245,14 +303,14 @@ export class FindingNemoComponent implements OnInit {
 
     this.searchState.next({
       searchTerm: '',
-      filterCriteriaSelections: new Map()
-      // from: 0,
+      filterCriteriaSelections: new Map(),
+      from: 0
       // sort: null,
     });
 
     this.resultItemComponent = PolpoResultItemComponent;
-    this.resetResults();
-    this.loadMoreResults();
+    // this.resetResults();
+    // this.loadMoreResults();
   }
 
   onFilterSelectionChange(searchFilter: SearchFilterCriteriaInterface[]) {
@@ -271,10 +329,17 @@ export class FindingNemoComponent implements OnInit {
       ],
       filterCriteriaPredictions: new Map()
     };
-    setTimeout(() => {
+    if (this.loadTimer) {
+      // in case we resetted the list, we should cancel the running request
+      window.clearTimeout(this.loadTimer);
+      this.loadTimer = null;
+    }
+    this.loadTimer = window.setTimeout(() => {
       this.resultsPage$.next({ ...resultsPage });
-    }, 500);
-    return this.eduContentMetadataApi
+      this.loadTimer = null;
+    }, 2500);
+    return;
+    this.eduContentMetadataApi
       .search(
         '',
         {

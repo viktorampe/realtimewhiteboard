@@ -6,6 +6,7 @@ import {
   ComponentFactoryResolver,
   Directive,
   EventEmitter,
+  Inject,
   Input,
   NgZone,
   OnDestroy,
@@ -15,6 +16,7 @@ import {
   ViewChild,
   ViewContainerRef
 } from '@angular/core';
+import { WINDOW } from '@campus/browser';
 import { ListViewComponent } from '@campus/ui';
 import { Subscription } from 'rxjs';
 import { auditTime, filter } from 'rxjs/operators';
@@ -67,17 +69,14 @@ export class ResultsListComponent implements OnInit, OnDestroy, AfterViewInit {
   public count = 0;
   public sortModes: SortModeInterface[];
   public activeSortMode: string;
+  public loading = false;
 
   private subscriptions: Subscription = new Subscription();
   private loadedCount = 0;
-  private clearResults = true;
+  private clearResultsTimer: number;
   private scrollEnabled = false;
   private componentFactory: ComponentFactory<SearchResultItemInterface>;
-  private _searchState: SearchStateInterface = {
-    searchTerm: null,
-    filterCriteriaSelections: new Map(),
-    from: 0
-  };
+  private _searchState: SearchStateInterface;
 
   @Input() searchMode: SearchModeInterface;
   @Input() itemSize = 100;
@@ -97,7 +96,7 @@ export class ResultsListComponent implements OnInit, OnDestroy, AfterViewInit {
       this.setSearchState(searchState);
     }
   }
-  get searchState() {
+  get searchState(): SearchStateInterface {
     return this._searchState;
   }
 
@@ -118,11 +117,18 @@ export class ResultsListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
     private ngZone: NgZone,
-    private componentFactoryResolver: ComponentFactoryResolver
+    private componentFactoryResolver: ComponentFactoryResolver,
+    @Inject(WINDOW) private nativeWindow: Window
   ) {}
 
   ngOnInit(): void {
-    this.sortModes = this.searchMode ? this.searchMode.results.sortModes : null;
+    if (this.searchMode) {
+      this.sortModes = this.searchMode.results.sortModes;
+      if (!this.activeSortMode) {
+        // default sortMode if not set by searchState
+        this.activeSortMode = this.sortModes[0].name;
+      }
+    }
   }
 
   ngOnDestroy(): void {
@@ -138,47 +144,53 @@ export class ResultsListComponent implements OnInit, OnDestroy, AfterViewInit {
           auditTime(300) // limit events to once every 300ms
         )
         .subscribe(() => {
-          // ngZone is required to trigger change detection, it seems to be a similiar issue as this:
-          // https://github.com/angular/material2/issues/12869#issuecomment-416734670
-          // where the `elementScrolled` event is emitting outside the ngZone
+          // ngZone is required to trigger change detection, because the `elementScrolled`
+          // event is emitting outside the ngZone
           // this makes sense, because we don't want to trigger CD for each scroll event
           this.ngZone.run(() => this.checkForMoreResults());
         })
     );
   }
 
-  clickSortMode(sortMode: SortModeInterface): void {
+  sortModeClicked(sortMode: SortModeInterface): void {
     if (this.activeSortMode !== sortMode.name) {
       this.activeSortMode = sortMode.name;
       this.searchState.sort = sortMode.name;
-      this.sortBy.next(sortMode);
+      this.sortBy.emit(sortMode);
     }
   }
 
   private setSearchState(searchState: SearchStateInterface): void {
-    if (!searchState.from) {
-      // new search
-      this.clearResults = true;
+    if (searchState.from === undefined || searchState.from === null) {
+      // no search running
+      this.clearResults();
       this.scrollEnabled = false;
+    } else if (searchState.from === 0) {
+      this.loadedCount = 0;
+      this.checkForMoreResults();
+      // UX: don't clear results immediately to avoid flicker effects
+      this.clearResultsTimer = this.nativeWindow.setTimeout(() => {
+        this.clearResults();
+      }, 1000);
     }
+
     if (searchState.sort) {
       this.activeSortMode = searchState.sort;
-    } else {
-      this.activeSortMode = this.searchMode.results.sortModes[0].name;
     }
   }
 
   private addResults(results: any[]): void {
+    if (this.clearResultsTimer) {
+      this.clearResults();
+    }
     if (results.length === 0) {
       // disable scroll event when there are no new results
       this.scrollEnabled = false;
+      this.loading = false;
       return;
     }
 
     // update template
-    if (this.clearResults) {
-      this.clearResultList();
-    }
     results.forEach(result => this.createResultComponent(result));
 
     // update private state variables
@@ -187,7 +199,10 @@ export class ResultsListComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // in case there's no scrollbar yet, we should manually trigger search
     // until we can handle scroll events
-    this.checkForMoreResults();
+    setTimeout(() => {
+      // wrap in setTimeout to assure resultsHost is cleared when we measure the scroll offset
+      this.checkForMoreResults();
+    });
   }
 
   private createResultComponent(result): void {
@@ -199,20 +214,25 @@ export class ResultsListComponent implements OnInit, OnDestroy, AfterViewInit {
     resultItem.listRef = this.listview;
   }
 
-  private clearResultList() {
+  private clearResults() {
+    if (this.clearResultsTimer) {
+      // cancel timer when results loaded before timeout
+      this.nativeWindow.clearTimeout(this.clearResultsTimer);
+      this.clearResultsTimer = null;
+    }
     if (this.listview) this.listview.resetItems();
     this.resultListHost.viewContainerRef.clear();
     this.loadedCount = 0;
-    this.clearResults = false;
   }
 
-  private checkForMoreResults() {
+  private checkForMoreResults(): void {
     const fromBottom = this.viewPort.measureScrollOffset('bottom');
-    if (fromBottom <= 4 * this.itemSize) {
+    if (this.loadedCount === 0 || fromBottom <= 4 * this.itemSize) {
       // disable multiple event triggers for the same page
       this.scrollEnabled = false;
-      // ask to load next page of results
-      this.getNextPage.next(this.loadedCount + 1);
+      this.loading = true;
+      // ask to load next page of results (`from` is 0-based)
+      this.getNextPage.emit(this.loadedCount);
     }
   }
 }

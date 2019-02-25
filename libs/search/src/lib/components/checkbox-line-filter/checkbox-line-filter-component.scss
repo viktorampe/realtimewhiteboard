@@ -1,0 +1,17 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+}
+
+.checkbox-line-filter-component {
+  &__title {
+    background-color: yellow;
+  }
+
+  &__checkbox-holder {
+    display: flex;
+    flex-direction: row;
+    background-color: orange;
+  }
+}

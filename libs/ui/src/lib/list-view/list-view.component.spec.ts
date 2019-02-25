@@ -253,7 +253,7 @@ describe('ListViewComponent', () => {
     expect(selectedItems.length).toBe(0);
   });
 
-  fdescribe('dynamically created list items', () => {
+  describe('dynamically created list items', () => {
     // stubbed class for dynamically created items
     class DynamicItemClass extends ListViewItemDirective<any>
       implements ListViewItemInterface {
