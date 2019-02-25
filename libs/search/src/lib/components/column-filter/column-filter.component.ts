@@ -9,7 +9,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import {
   SearchFilterComponentInterface,
   SearchFilterCriteriaInterface
-} from '../interfaces';
+} from '../../interfaces';
 
 @Component({
   selector: 'campus-column-filter',
