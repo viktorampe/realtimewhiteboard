@@ -10,6 +10,7 @@
     "
     [value]="option"
     [checked]="option.selected"
+    [disabled]="!option.prediction"
     (change)="onChange($event)"
     >{{ getDisplayValue(option) }}</mat-checkbox
   >

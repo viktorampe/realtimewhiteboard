@@ -26,16 +26,9 @@ import { SelectFilterComponent } from './components/select-filter-component/sele
     MatCheckboxModule,
     MatFormFieldModule,
     MatSelectModule,
-    ReactiveFormsModule,
-    MatCheckboxModule,
-    MatBadgeModule,
-    CommonModule,
-    MatSelectModule,
-    ReactiveFormsModule,
     MatBadgeModule,
     MatInputModule,
-    MatAutocompleteModule,
-    FormsModule
+    MatAutocompleteModule
   ],
   declarations: [
     BreadcrumbFilterComponent,
