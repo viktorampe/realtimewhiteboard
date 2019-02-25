@@ -30,7 +30,7 @@ import {
       transition(
         'forwardEnter => forwardLeave, backwardEnter => forwardLeave',
         [
-          // leave right to left (* can nog be used, only entered elements can animate leave)
+          // leave right to left (* can not be used, only entered elements can animate leave)
           style({ position: 'absolute' }),
           animate(
             '200ms ease-in-out',
@@ -54,9 +54,9 @@ import {
 })
 export class ColumnFilterComponent implements SearchFilterComponentInterface {
   private _filterCriteria: SearchFilterCriteriaInterface[];
+  private previousFilterCriteriaCount: number;
   preserveColumn = false;
   forwardAnimation = true;
-  previousFilterCriteriaCount: number;
 
   @Input()
   public set filterCriteria(value: SearchFilterCriteriaInterface[]) {
