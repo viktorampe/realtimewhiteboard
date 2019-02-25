@@ -18,11 +18,11 @@ import { LoginPageViewModel } from './loginpage/loginpage.viewmodel';
     FormsModule,
     CommonModule,
     UiModule,
-    DevlibRoutingModule,
     SharedModule,
     MatIconModule,
     ScormModule,
-    SearchModule
+    SearchModule,
+    DevlibRoutingModule
   ],
   providers: [LoginPageViewModel, EduContentViewModel],
   declarations: [LoginpageComponent, EduContentComponent, FindingNemoComponent]

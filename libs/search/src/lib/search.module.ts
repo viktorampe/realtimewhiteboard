@@ -1,11 +1,40 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { MatListModule } from '@angular/material';
-import { ColumnFilterComponent } from './components/column-filter.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  MatAutocompleteModule,
+  MatBadgeModule,
+  MatCheckboxModule,
+  MatInputModule,
+  MatSelectModule
+} from '@angular/material';
+import { BreadcrumbFilterComponent } from './components/breadcrumb-filter/breadcrumb-filter.component';
+import { CheckboxLineFilterComponent } from './components/checkbox-line-filter/checkbox-line-filter-component';
+import { SearchTermComponent } from './components/search-term/search-term.component';
+import { SelectFilterComponent } from './components/select-filter-component/select-filter.component';
 
 @NgModule({
-  imports: [CommonModule, MatListModule],
-  declarations: [ColumnFilterComponent],
-  exports: [ColumnFilterComponent]
+  imports: [
+    MatCheckboxModule,
+    CommonModule,
+    MatSelectModule,
+    ReactiveFormsModule,
+    MatBadgeModule,
+    MatInputModule,
+    MatAutocompleteModule,
+    FormsModule
+  ],
+  declarations: [
+    BreadcrumbFilterComponent,
+    SelectFilterComponent,
+    SearchTermComponent,
+    CheckboxLineFilterComponent
+  ],
+  exports: [
+    BreadcrumbFilterComponent,
+    SelectFilterComponent,
+    SearchTermComponent,
+    CheckboxLineFilterComponent
+  ]
 })
 export class SearchModule {}
