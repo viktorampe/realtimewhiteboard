@@ -14,33 +14,18 @@
         <div *ngFor="let value of filterCriterion.values" class="value">
           <div
             [ngClass]="{ selected: value.selected }"
-            (click)="
-              onFilterSelectionChange(
-                value.data[filterCriterion.keyProperty],
-                false
-              )
-            "
+            (click)="onFilterSelectionChange(value, false)"
             >displayProperty:
             {{ value.data[filterCriterion.displayProperty] }}</div
           >
           <div
             *ngIf="value.prediction && value.prediction !== 0"
-            (click)="
-              onFilterSelectionChange(
-                value.data[filterCriterion.keyProperty],
-                false
-              )
-            "
+            (click)="onFilterSelectionChange(value, false)"
             >-></div
           >
           <div
             *ngIf="value.prediction && value.prediction !== 0"
-            (click)="
-              onFilterSelectionChange(
-                value.data[filterCriterion.keyProperty],
-                true
-              )
-            "
+            (click)="onFilterSelectionChange(value, true)"
             >(-)</div
           >
         </div>

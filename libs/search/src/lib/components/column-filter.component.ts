@@ -105,16 +105,18 @@ export class ColumnFilterComponent implements SearchFilterComponentInterface {
   }
 
   onFilterSelectionChange(
-    keyProperty: string,
+    filterCriterionValue,
     preserveColumn: boolean = false
   ) {
     this.preserveColumn = preserveColumn;
+    // first reset alle selected markers to false
     this.filterCriteria.forEach(filterCriterion => {
       filterCriterion.values.forEach(value => {
-        value.selected =
-          value.data[filterCriterion.keyProperty] === keyProperty;
+        value.selected = false;
       });
     });
+    // then set the passed value to selected true
+    filterCriterionValue.selected = true;
     this.filterSelectionChange.emit(this.filterCriteria);
   }
 }
