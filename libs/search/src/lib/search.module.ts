@@ -9,6 +9,7 @@ import {
   MatInputModule,
   MatSelectModule
 } from '@angular/material';
+import { UiModule } from '@campus/ui';
 import { BreadcrumbFilterComponent } from './components/breadcrumb-filter/breadcrumb-filter.component';
 import { CheckboxLineFilterComponent } from './components/checkbox-line-filter/checkbox-line-filter-component';
 import { SearchTermComponent } from './components/search-term/search-term.component';
@@ -17,6 +18,7 @@ import { SelectFilterComponent } from './components/select-filter-component/sele
 @NgModule({
   imports: [
     CommonModule,
+    UiModule,
     MatSelectModule,
     ReactiveFormsModule,
     MatCheckboxModule,

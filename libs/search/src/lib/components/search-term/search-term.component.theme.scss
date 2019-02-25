@@ -1,7 +1,28 @@
 @mixin search-term() {
   mat-form-field.input-no-underline {
-    .mat-form-field-wrapper .mat-form-field-underline {
-      display: none;
+    .mat-form-field-wrapper {
+      .mat-form-field-underline {
+        display: none;
+      }
+    }
+  }
+  .search-term {
+    font-size: 13px;
+    mat-form-field {
+      width: 100%;
+    }
+    campus-button {
+      background-color: #6ed2c1;
+      border: 1px solid #057a74;
+      box-shadow: inset 0 0 2px 1px rgba(0, 175, 145, 0.5);
+      width: 42px;
+      mat-icon {
+        width: 14px;
+        height: 14px;
+      }
+      &:hover {
+        background-color: #6ed2c1;
+      }
     }
   }
 }
