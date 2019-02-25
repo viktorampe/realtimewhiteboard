@@ -2,48 +2,48 @@ import {
   AfterViewInit,
   Component,
   Input,
-  OnDestroy,
-  OnInit,
   Output,
   QueryList,
   ViewChildren
 } from '@angular/core';
 import { MatCheckbox, MatCheckboxChange } from '@angular/material';
-import { SearchFilterCriteriaInterface } from '@campus/search';
-import { Observable, Subject, Subscription } from 'rxjs';
-import { SearchFilterCriteriaValuesInterface } from '../../../interfaces';
+import { Subject } from 'rxjs';
+import {
+  SearchFilterCriteriaInterface,
+  SearchFilterCriteriaValuesInterface
+} from '../../../interfaces';
 
 @Component({
   selector: 'campus-checkbox-filter',
   templateUrl: './checkbox-filter.component.html',
   styleUrls: ['./checkbox-filter.component.scss']
 })
-export class CheckboxFilterComponent
-  implements OnInit, AfterViewInit, OnDestroy {
+export class CheckboxFilterComponent implements AfterViewInit {
   public showMoreItems: boolean; // expand aantal zichtbare titels
   public filteredFilterCriterium: SearchFilterCriteriaInterface;
   public notifyChildren$ = new Subject<MatCheckboxChange>();
 
   private _criterium: SearchFilterCriteriaInterface;
-  private subscriptions = new Subscription();
   private associatedCheckBoxes: AssociatedCheckBoxesInterface[];
 
   @Input() maxVisibleItems: number; // aantal zichtbare titels
 
-  @Input()
   get criterium(): SearchFilterCriteriaInterface {
     return this._criterium;
   }
+  @Input()
   set criterium(value: SearchFilterCriteriaInterface) {
-    if (this._criterium === value) return;
-
     this._criterium = value;
     this.filteredFilterCriterium = this.getFilteredCriterium(value);
   }
 
   @Input() public parentValueRef: SearchFilterCriteriaValuesInterface;
 
-  @Input() notificationFromParent$: Observable<MatCheckboxChange>;
+  @Input()
+  public set notificationFromParent(event: MatCheckboxChange) {
+    // doesn't store the value, used as trigger
+    this.onParentChange(event);
+  }
 
   @Output() public selectionChanged = new Subject<MatCheckboxChange>();
 
@@ -54,16 +54,6 @@ export class CheckboxFilterComponent
   // These are all the 'items'-childcomponents
   @ViewChildren(CheckboxFilterComponent)
   private childComponents: QueryList<CheckboxFilterComponent>;
-
-  ngOnInit() {
-    // listen for updates from the parent
-    if (this.notificationFromParent$)
-      this.subscriptions.add(
-        this.notificationFromParent$.subscribe(event =>
-          this.onParentChange(event)
-        )
-      );
-  }
 
   ngAfterViewInit() {
     // since matCheckBoxes and childComponents are list of all elements
@@ -77,8 +67,11 @@ export class CheckboxFilterComponent
     });
   }
 
-  ngOnDestroy() {
-    this.subscriptions.unsubscribe();
+  public getDisplayValue(value: SearchFilterCriteriaValuesInterface): string {
+    return (
+      value.data[this.criterium.displayProperty] +
+      (!!value.prediction ? ' (' + value.prediction + ')' : '')
+    );
   }
 
   // expand aantal zichtbare titels bij CHILD

@@ -329,6 +329,7 @@ describe('CheckboxFilterComponent', () => {
         changedEvent.source = firstCheckbox;
         changedEvent.checked = firstCheckbox.checked;
         firstCheckbox.change.emit(changedEvent);
+        fixture.detectChanges();
 
         // update component's value
         firstCheckboxChildren.forEach(checkbox => {
@@ -359,6 +360,7 @@ describe('CheckboxFilterComponent', () => {
         changedEvent.source = firstCheckbox;
         changedEvent.checked = firstCheckbox.checked;
         firstCheckbox.change.emit(changedEvent);
+        fixture.detectChanges();
 
         // notify component's children
         expect(firstChildComponent.notifyChildren$.next).toHaveBeenCalled();
