@@ -8,7 +8,8 @@ import {
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import {
   SearchFilterComponentInterface,
-  SearchFilterCriteriaInterface
+  SearchFilterCriteriaInterface,
+  SearchFilterCriteriaValuesInterface
 } from '../../interfaces';
 
 @Component({
@@ -105,7 +106,7 @@ export class ColumnFilterComponent implements SearchFilterComponentInterface {
   }
 
   onFilterSelectionChange(
-    filterCriterionValue,
+    filterCriterionValue: SearchFilterCriteriaValuesInterface,
     preserveColumn: boolean = false
   ) {
     this.preserveColumn = preserveColumn;
