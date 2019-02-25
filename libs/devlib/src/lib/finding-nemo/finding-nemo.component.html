@@ -1,22 +1,30 @@
-<p> you will never find nemo! </p>
-<campus-breadcrumb-filter
-  [rootLabel]="'Alle'"
-  [filterCriteria]="breadCrumbFilterCriteria"
+<campus-checkbox-line-filter
+  [filterCriteria]="selectFilter"
   (filterSelectionChange)="onFilterSelectionChange($event)"
-></campus-breadcrumb-filter>
+></campus-checkbox-line-filter>
 
-<campus-search-term
-  [initialValue]="'123'"
-  [autoComplete]="true"
-  [autoCompleteValues]="['waarde 1', ' waarde 2', 'waarde 3', 'waarde 4']"
-  (valueChange)="onChange($event)"
-></campus-search-term>
-
-<div style="max-width: 300px; padding: 10px;">
-  <campus-select-filter
-    [filterCriteria]="selectFilter"
-    [multiple]="true"
-    resetLabel="None"
+<div *ngIf="selectedFilterCriteria">
+  <p>Selected:</p> <p>{{ selectedFilterCriteria | json }}</p>
+  <p> you will never find nemo! </p>
+  <campus-breadcrumb-filter
+    [rootLabel]="'Alle'"
+    [filterCriteria]="breadCrumbFilterCriteria"
     (filterSelectionChange)="onFilterSelectionChange($event)"
-  ></campus-select-filter>
+  ></campus-breadcrumb-filter>
+
+  <campus-search-term
+    [initialValue]="'123'"
+    [autoComplete]="true"
+    [autoCompleteValues]="['waarde 1', ' waarde 2', 'waarde 3', 'waarde 4']"
+    (valueChange)="onChange($event)"
+  ></campus-search-term>
+
+  <div style="max-width: 300px; padding: 10px;">
+    <campus-select-filter
+      [filterCriteria]="selectFilter"
+      [multiple]="true"
+      resetLabel="None"
+      (filterSelectionChange)="onFilterSelectionChange($event)"
+    ></campus-select-filter>
+  </div>
 </div>

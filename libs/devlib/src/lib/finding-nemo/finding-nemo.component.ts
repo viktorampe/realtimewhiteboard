@@ -131,7 +131,8 @@ const mockBreadcrumbFilterCriteria: SearchFilterCriteriaInterface[] = [
   styleUrls: ['./finding-nemo.component.scss']
 })
 export class FindingNemoComponent implements OnInit {
-  selectFilter: SearchFilterCriteriaInterface;
+  public selectFilter: SearchFilterCriteriaInterface;
+  public selectedFilterCriteria: SearchFilterCriteriaInterface;
 
   breadCrumbFilterCriteria: SearchFilterCriteriaInterface[];
 
@@ -160,47 +161,91 @@ export class FindingNemoComponent implements OnInit {
       ]
     );
 
-    const selectFilter = {
-      name: 'selectFilter',
-      label: 'select filter',
-      keyProperty: 'id',
-      displayProperty: 'name',
-      values: [
-        {
-          data: new LearningAreaFixture({
-            id: 1,
-            name: 'foo'
-          }),
-          selected: false,
-          prediction: 0,
-          visible: true,
-          child: {
-            name: 'selectFilter',
-            label: 'select filter',
-            keyProperty: 'id',
-            displayProperty: 'provider',
-            values: [
-              {
-                data: new CredentialFixture(),
-                selected: false,
-                prediction: 0,
-                visible: true
-              }
+    this.selectFilter = new SearchFilterCriteriaFixture(
+      { label: 'search filter' },
+      [
+        new SearchFilterCriteriaValuesFixture(
+          {
+            data: new LearningAreaFixture({
+              id: 1,
+              name: 'Aardrijkskunde'
+            })
+          },
+          new SearchFilterCriteriaFixture(
+            { keyProperty: 'id', displayProperty: 'provider' },
+            [
+              new SearchFilterCriteriaValuesFixture({
+                data: new CredentialFixture({ id: 1, provider: 'smartschool' })
+              }),
+              new SearchFilterCriteriaValuesFixture({
+                data: new CredentialFixture({ id: 2, provider: 'google' })
+              }),
+              new SearchFilterCriteriaValuesFixture({
+                data: new CredentialFixture({ id: 3, provider: 'facebook' })
+              })
             ]
-          }
-        },
-        {
+          )
+        ),
+        new SearchFilterCriteriaValuesFixture(
+          {
+            data: new LearningAreaFixture({
+              id: 2,
+              name: 'Geschiedenis'
+            })
+          },
+          new SearchFilterCriteriaFixture(
+            { keyProperty: 'id', displayProperty: 'provider' },
+            [
+              new SearchFilterCriteriaValuesFixture({
+                data: new CredentialFixture({ id: 1, provider: 'smartschool' })
+              }),
+              new SearchFilterCriteriaValuesFixture({
+                data: new CredentialFixture({ id: 2, provider: 'google' })
+              }),
+              new SearchFilterCriteriaValuesFixture({
+                data: new CredentialFixture({ id: 3, provider: 'facebook' })
+              })
+            ]
+          )
+        ),
+        new SearchFilterCriteriaValuesFixture(
+          {
+            data: new LearningAreaFixture({
+              id: 3,
+              name: 'Wiskunde'
+            })
+          },
+          new SearchFilterCriteriaFixture(
+            { keyProperty: 'id', displayProperty: 'provider' },
+            [
+              new SearchFilterCriteriaValuesFixture({
+                data: new CredentialFixture({ id: 1, provider: 'smartschool' })
+              }),
+              new SearchFilterCriteriaValuesFixture({
+                data: new CredentialFixture({ id: 2, provider: 'google' })
+              }),
+              new SearchFilterCriteriaValuesFixture({
+                data: new CredentialFixture({ id: 3, provider: 'facebook' })
+              })
+            ]
+          )
+        ),
+        new SearchFilterCriteriaValuesFixture({
           data: new LearningAreaFixture({
-            id: 2,
-            name: 'bar'
+            id: 4,
+            name: 'Informatica'
           }),
-          selected: false,
-          prediction: 0,
-          visible: true,
-          child: null
-        }
+          visible: false
+        }),
+        new SearchFilterCriteriaValuesFixture({
+          data: new LearningAreaFixture({
+            id: 5,
+            name: 'Engels'
+          }),
+          prediction: 0
+        })
       ]
-    };
+    );
 
     this.breadCrumbFilterCriteria = mockBreadcrumbFilterCriteria;
   }
