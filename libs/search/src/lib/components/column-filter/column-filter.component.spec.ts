@@ -1,5 +1,8 @@
+//file.only
+
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatListModule } from '@angular/material';
+import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
   SearchFilterCriteriaFixture,
@@ -16,6 +19,15 @@ const mockFilterCriteria: SearchFilterCriteriaInterface[] = [
     new SearchFilterCriteriaValuesFixture({ selected: false })
   ]),
   new SearchFilterCriteriaFixture({}, [
+    new SearchFilterCriteriaValuesFixture({
+      selected: false,
+      prediction: undefined
+    }),
+    new SearchFilterCriteriaValuesFixture({
+      selected: false,
+      prediction: null
+    }),
+    new SearchFilterCriteriaValuesFixture({ selected: false, prediction: 0 }),
     new SearchFilterCriteriaValuesFixture({ selected: false }),
     new SearchFilterCriteriaValuesFixture({ selected: false }),
     new SearchFilterCriteriaValuesFixture({ selected: false }),
@@ -191,6 +203,44 @@ describe('ColumnFilterComponent', () => {
       );
       expect(emitSpy).toHaveBeenCalled();
       expect(emitSpy).toHaveBeenCalledTimes(1);
+    });
+  });
+  describe('view', () => {
+    it('should show only one column', () => {
+      component.filterCriteria = mockFilterCriteria;
+      fixture.detectChanges();
+      const displayedColumns = fixture.debugElement
+        .queryAll(By.css('.column'))
+        .filter(column => column.nativeElement.style.display !== 'none');
+      expect(displayedColumns.length).toBe(1);
+    });
+    it('should show the correct amount of values', () => {
+      component.filterCriteria = mockFilterCriteria;
+      fixture.detectChanges();
+      const displayedColumns = fixture.debugElement
+        .queryAll(By.css('.column'))
+        .filter(column => column.nativeElement.style.display !== 'none');
+      const displayedValues = displayedColumns[0].queryAll(By.css('.value'));
+      expect(displayedValues.length).toBe(7);
+    });
+    it('should show the magnifier and the arrow only if value.prediction is set and not 0', () => {
+      component.filterCriteria = mockFilterCriteria;
+      fixture.detectChanges();
+      const displayedColumns = fixture.debugElement
+        .queryAll(By.css('.column'))
+        .filter(column => column.nativeElement.style.display !== 'none');
+      const displayedArrows = displayedColumns[0].queryAll(By.css('.arrow'));
+      const displayedMagnifiers = displayedColumns[0].queryAll(
+        By.css('.magnifier')
+      );
+      expect(displayedArrows.length).toBe(4);
+      expect(displayedMagnifiers.length).toBe(4);
+    });
+    it('should show or hide the no-criteria message if there are criteria or no criteria', () => {
+      expect(fixture.debugElement.query(By.css('.no-criteria'))).toBeTruthy();
+      component.filterCriteria = mockFilterCriteria;
+      fixture.detectChanges();
+      expect(fixture.debugElement.query(By.css('.no-criteria'))).toBeFalsy();
     });
   });
 });
