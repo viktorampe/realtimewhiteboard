@@ -274,9 +274,7 @@ export class FindingNemoComponent implements OnInit {
     setTimeout(() => {
       this.resultsPage$.next({ ...resultsPage });
     }, 500);
-    return;
-
-    this.eduContentMetadataApi
+    return this.eduContentMetadataApi
       .search(
         '',
         {

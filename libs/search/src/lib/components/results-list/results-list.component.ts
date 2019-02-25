@@ -64,7 +64,6 @@ export class ResultListDirective {
   styleUrls: ['./results-list.component.scss']
 })
 export class ResultsListComponent implements OnInit, OnDestroy, AfterViewInit {
-  public selected: any;
   public count = 0;
   public sortModes: SortModeInterface[];
   public activeSortMode: string;
@@ -124,10 +123,6 @@ export class ResultsListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit(): void {
     this.sortModes = this.searchMode ? this.searchMode.results.sortModes : null;
-  }
-
-  onSelectionChanged(event: any[]) {
-    this.selected = event;
   }
 
   ngOnDestroy(): void {
@@ -205,10 +200,10 @@ export class ResultsListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private clearResultList() {
+    if (this.listview) this.listview.resetItems();
     this.resultListHost.viewContainerRef.clear();
     this.loadedCount = 0;
     this.clearResults = false;
-    if (this.listview) this.listview.resetItems();
   }
 
   private checkForMoreResults() {

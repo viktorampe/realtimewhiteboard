@@ -20,13 +20,8 @@
   <campus-list-view
     cdkScrollable
     class="search-results-list__results"
-    (selectedItems$)="onSelectionChanged($event)"
-    [multiSelect]="false"
     [listFormat]="'line'"
   >
     <ng-template result-list-host></ng-template>
   </campus-list-view>
-  <div *ngIf="selected.length"
-    >Geselecteerde items: ( {{ selected.length }})
-  </div>
 </div>

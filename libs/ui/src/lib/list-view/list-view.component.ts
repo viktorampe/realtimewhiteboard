@@ -46,6 +46,7 @@ export class ListViewComponent<dataObjectType>
 
   public items = new QueryList<ListViewItemDirective<dataObjectType>>();
 
+  private queryListChangesSubscription = new Subscription();
   private itemsSubscription = new Subscription();
   private _manuallyAddedItems: ListViewItemDirective<dataObjectType>[] = [];
 
@@ -66,10 +67,14 @@ export class ListViewComponent<dataObjectType>
 
     this.setupSelectionSubscriptionsForListItems();
 
-    // nieuwe subscription als items veranderen
-    this.items.changes.subscribe(() => {
-      this.setupSelectionSubscriptionsForListItems();
-    });
+    this.queryListChangesSubscription.add(
+      // nieuwe subscription als items veranderen
+      // (triggert enkel op projected content) -> documented bug
+      // https://github.com/angular/angular/issues/9689
+      this.items.changes.subscribe(() => {
+        this.setupSelectionSubscriptionsForListItems();
+      })
+    );
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -80,6 +85,7 @@ export class ListViewComponent<dataObjectType>
 
   ngOnDestroy() {
     this.itemsSubscription.unsubscribe();
+    this.queryListChangesSubscription.unsubscribe();
   }
 
   public addItem(item: ListViewItemDirective<dataObjectType>) {
