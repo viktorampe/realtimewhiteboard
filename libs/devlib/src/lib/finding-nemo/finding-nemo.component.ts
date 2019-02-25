@@ -15,7 +15,7 @@ import {
   SearchStateInterface
 } from '@campus/search';
 import { EduContentMetadataApi } from '@diekeure/polpo-api-angular-sdk';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { PolpoResultItemComponent } from '../polpo-result-item/polpo-result-item.component';
 
@@ -150,7 +150,10 @@ export class FindingNemoComponent implements OnInit {
     SearchResultInterface<EduContentMetadataInterface>
   > = new Subject();
   searchMode: SearchModeInterface;
-  searchState: Subject<SearchStateInterface> = new Subject();
+  searchState: BehaviorSubject<SearchStateInterface> = new BehaviorSubject(
+    null
+  );
+  private loadTimer: number;
 
   breadCrumbFilterCriteria: SearchFilterCriteriaInterface[];
 
@@ -245,14 +248,14 @@ export class FindingNemoComponent implements OnInit {
 
     this.searchState.next({
       searchTerm: '',
-      filterCriteriaSelections: new Map()
-      // from: 0,
+      filterCriteriaSelections: new Map(),
+      from: 0
       // sort: null,
     });
 
     this.resultItemComponent = PolpoResultItemComponent;
-    this.resetResults();
-    this.loadMoreResults();
+    // this.resetResults();
+    // this.loadMoreResults();
   }
 
   onFilterSelectionChange(searchFilter: SearchFilterCriteriaInterface[]) {
@@ -271,8 +274,14 @@ export class FindingNemoComponent implements OnInit {
       ],
       filterCriteriaPredictions: new Map()
     };
-    setTimeout(() => {
+    if (this.loadTimer) {
+      // in case we resetted the list, we should cancel the running request
+      window.clearTimeout(this.loadTimer);
+      this.loadTimer = null;
+    }
+    this.loadTimer = window.setTimeout(() => {
       this.resultsPage$.next({ ...resultsPage });
+      this.loadTimer = null;
     }, 500);
     return;
 

@@ -12,11 +12,12 @@
         [matTooltip]="sortMode.description"
         matTooltipPosition="above"
         [class.ui-button--primary]="sortMode.name === activeSortMode"
-        (click)="clickSortMode(sortMode)"
+        (click)="sortModeClicked(sortMode)"
       ></campus-button>
     </div>
   </div>
   <div class="search-results-list__results" cdkScrollable>
     <ng-template result-list-host></ng-template>
+    <div *ngIf="this.loading">Even geduld, de resultaten worden geladen...</div>
   </div>
 </div>
