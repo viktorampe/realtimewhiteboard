@@ -191,12 +191,23 @@ describe('ColumnFilterComponent', () => {
         });
       });
     });
-    it('should call the emit on the filterSelectionChange output', () => {
+    it('should call the emit on the filterSelectionChange output if the selection changed', () => {
       const emitSpy = jest.spyOn(component.filterSelectionChange, 'emit');
       component.filterCriteria = mockFilterCriteria;
       fixture.detectChanges();
       component.onFilterSelectionChange(
-        new SearchFilterCriteriaValuesFixture(),
+        new SearchFilterCriteriaValuesFixture({ selected: false }),
+        false
+      );
+      expect(emitSpy).toHaveBeenCalled();
+      expect(emitSpy).toHaveBeenCalledTimes(1);
+    });
+    it('should not call the emit on the filterSelectionChange output if the selection is unchanged', () => {
+      const emitSpy = jest.spyOn(component.filterSelectionChange, 'emit');
+      component.filterCriteria = mockFilterCriteria;
+      fixture.detectChanges();
+      component.onFilterSelectionChange(
+        new SearchFilterCriteriaValuesFixture({ selected: true }),
         false
       );
       expect(emitSpy).toHaveBeenCalled();

@@ -109,7 +109,9 @@ export class ColumnFilterComponent implements SearchFilterComponentInterface {
     filterCriterionValue: SearchFilterCriteriaValuesInterface,
     preserveColumn: boolean = false
   ) {
+    const selectionChanged = !filterCriterionValue.selected;
     this.preserveColumn = preserveColumn;
+
     // first reset alle selected markers to false
     this.filterCriteria.forEach(filterCriterion => {
       filterCriterion.values.forEach(value => {
@@ -118,6 +120,8 @@ export class ColumnFilterComponent implements SearchFilterComponentInterface {
     });
     // then set the passed value to selected true
     filterCriterionValue.selected = true;
-    this.filterSelectionChange.emit(this.filterCriteria);
+    if (selectionChanged) {
+      this.filterSelectionChange.emit(this.filterCriteria);
+    }
   }
 }
