@@ -1,24 +1,32 @@
-<mat-form-field
-  [floatLabel]="'never'"
-  class="search-term__form-field"
-  *ngIf="!autoComplete; else: autoCompleteTemplate"
->
-  <input matInput [(ngModel)]="currentValue" [placeholder]="placeholder" />
-</mat-form-field>
-
-<ng-template #autoCompleteTemplate>
-  <mat-form-field [floatLabel]="'never'" class="search-term__form-field">
-    <input
-      matInput
-      [(ngModel)]="currentValue"
-      [placeholder]="placeholder"
-      [matAutocomplete]="auto"
-    />
-
-    <mat-autocomplete #auto="matAutocomplete">
-      <mat-option *ngFor="let option of autoCompleteValues" [value]="option">{{
-        option
-      }}</mat-option>
-    </mat-autocomplete>
+<div class="search-term">
+  <mat-form-field
+    [floatLabel]="'never'"
+    class="search-term__form-field input-no-underline"
+    *ngIf="!autoComplete; else: autoCompleteTemplate"
+  >
+    <input matInput [(ngModel)]="currentValue" [placeholder]="placeholder" />
   </mat-form-field>
-</ng-template>
+  <div class="search-term__icon">
+    <mat-icon [svgIcon]="'magnifier'"></mat-icon>
+  </div>
+  <ng-template #autoCompleteTemplate>
+    <!--
+      <mat-form-field [floatLabel]="'never'" class="search-term__form-field">
+        <input
+          matInput
+          [(ngModel)]="currentValue"
+          [placeholder]="placeholder"
+          [matAutocomplete]="auto"
+        />
+
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option
+            *ngFor="let option of autoCompleteValues"
+            [value]="option"
+            >{{ option }}</mat-option
+          >
+        </mat-autocomplete>
+      </mat-form-field>
+    -->
+  </ng-template>
+</div>

@@ -5,6 +5,7 @@ import {
   MatAutocompleteModule,
   MatBadgeModule,
   MatCheckboxModule,
+  MatIconModule,
   MatInputModule,
   MatSelectModule
 } from '@angular/material';
@@ -20,6 +21,7 @@ import { SelectFilterComponent } from './components/select-filter-component/sele
     ReactiveFormsModule,
     MatCheckboxModule,
     MatBadgeModule,
+    MatIconModule,
     CommonModule,
     MatSelectModule,
     ReactiveFormsModule,
