@@ -14,7 +14,7 @@ import {
  * @extends ListViewItemDirective
  * @implements SearchResultItemInterface
  */
-export abstract class PolpoResultItemBase extends ListViewItemDirective<any>
+export abstract class ResultItemBase extends ListViewItemDirective<any>
   implements OnInit, SearchResultItemInterface, ListViewItemInterface {
   listFormat: ListFormat;
   @Input() data: any;

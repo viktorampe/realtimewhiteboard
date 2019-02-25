@@ -165,7 +165,6 @@ export class ResultsListComponent implements OnInit, OnDestroy, AfterViewInit {
       // new search
       this.clearResults = true;
       this.scrollEnabled = false;
-      if (this.listview) this.listview.resetItems();
     }
     if (searchState.sort) {
       this.activeSortMode = searchState.sort;
@@ -209,6 +208,7 @@ export class ResultsListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.resultListHost.viewContainerRef.clear();
     this.loadedCount = 0;
     this.clearResults = false;
+    if (this.listview) this.listview.resetItems();
   }
 
   private checkForMoreResults() {
