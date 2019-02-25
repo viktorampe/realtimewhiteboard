@@ -40,8 +40,6 @@ export class SearchFilterCriteriaValuesFixture
   ) {
     // overwrite defaults
     Object.assign(this, props);
-    if (child) {
-      Object.assign(this.child, child);
-    }
+    this.child = child;
   }
 }
