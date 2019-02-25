@@ -48,7 +48,9 @@ export class ListViewComponent<dataObjectType>
 
   private queryListChangesSubscription = new Subscription();
   private itemsSubscription = new Subscription();
-  private _manuallyAddedItems: ListViewItemDirective<dataObjectType>[] = [];
+  private _manuallyAddedItems = new QueryList<
+    ListViewItemDirective<dataObjectType>
+  >();
 
   @Input() listFormat: ListFormat;
   @Input() multiSelect = false;
@@ -59,22 +61,32 @@ export class ListViewComponent<dataObjectType>
 
   // tslint:disable-next-line
   @ContentChildren(forwardRef(() => ListViewItemDirective))
-  _items: QueryList<ListViewItemDirective<dataObjectType>>;
+  private _items: QueryList<ListViewItemDirective<dataObjectType>>;
 
   ngAfterContentInit() {
-    // add the dynamically loaded items to the content projected ones
-    this.items.reset([...this._items.toArray(), ...this._manuallyAddedItems]);
-
-    this.setupSelectionSubscriptionsForListItems();
-
+    // update items list when projected content changes
     this.queryListChangesSubscription.add(
-      // nieuwe subscription als items veranderen
-      // (triggert enkel op projected content) -> documented bug
-      // https://github.com/angular/angular/issues/9689
+      this._items.changes.subscribe(() => {
+        this.onListUpdate();
+      })
+    );
+
+    // update items list when dynamic content changes
+    this.queryListChangesSubscription.add(
+      this._manuallyAddedItems.changes.subscribe(() => {
+        this.onListUpdate();
+      })
+    );
+
+    // update item subscriptions when items change
+    this.queryListChangesSubscription.add(
       this.items.changes.subscribe(() => {
         this.setupSelectionSubscriptionsForListItems();
       })
     );
+
+    // add the dynamically loaded items to the content projected ones
+    this.onListUpdate();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -89,16 +101,17 @@ export class ListViewComponent<dataObjectType>
   }
 
   public addItem(item: ListViewItemDirective<dataObjectType>) {
-    this._manuallyAddedItems = [...this._manuallyAddedItems, item];
-    this.items.reset([...this._items.toArray(), ...this._manuallyAddedItems]);
-    this.setupSelectionSubscriptionsForListItems();
+    this._manuallyAddedItems.reset([
+      ...this._manuallyAddedItems.toArray(),
+      item
+    ]);
+    this._manuallyAddedItems.notifyOnChanges();
   }
 
   public resetItems() {
-    this._manuallyAddedItems = [];
     this.deselectAllItems();
-    this.items.reset(this._items ? this._items.toArray() : []);
-    this.setupSelectionSubscriptionsForListItems();
+    this._manuallyAddedItems.reset([]);
+    this._manuallyAddedItems.notifyOnChanges();
   }
 
   protected onItemSelectionChanged(
@@ -121,13 +134,23 @@ export class ListViewComponent<dataObjectType>
     );
   }
 
-  selectAllItems() {
+  public selectAllItems() {
     if (this.multiSelect) {
       this.items.forEach(i => (i.isSelected = true));
     }
   }
-  deselectAllItems() {
+  public deselectAllItems() {
     this.items.forEach(i => (i.isSelected = false));
+  }
+
+  // merge both querylists
+  // + make parentList emit change event
+  private onListUpdate(): void {
+    this.items.reset([
+      ...(this._items ? this._items.toArray() : []), // can be undefined before content init
+      ...this._manuallyAddedItems.toArray()
+    ]);
+    this.items.notifyOnChanges();
   }
 
   private setupSelectionSubscriptionsForListItems() {
@@ -192,7 +215,8 @@ export class ListViewItemDirective<dataObjectType>
 
   @HostBinding('class.ui-list-view__list__item__selectoverlay')
   get useItemSelectableOverlayClass() {
-    return this.parentList.useItemSelectableOverlayStyle$.value;
+    if (this.parentList)
+      return this.parentList.useItemSelectableOverlayStyle$.value;
   }
 
   @HostBinding('class.ui-list-view__list__item--notselectable')
@@ -213,9 +237,10 @@ export class ListViewItemDirective<dataObjectType>
   ) {}
 
   ngAfterContentInit() {
-    this.subscriptions.add(
-      this.parentList.listFormat$.subscribe(lf => (this.host.listFormat = lf))
-    );
+    if (this.parentList)
+      this.subscriptions.add(
+        this.parentList.listFormat$.subscribe(lf => (this.host.listFormat = lf))
+      );
   }
 
   ngOnDestroy() {

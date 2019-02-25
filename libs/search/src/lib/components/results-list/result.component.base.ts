@@ -28,6 +28,6 @@ export abstract class ResultItemBase extends ListViewItemDirective<any>
     this.host = this;
     this.parentList = this.listRef;
     this.dataObject = this.data;
-    this.listRef.addItem(this);
+    if (this.listRef) this.listRef.addItem(this);
   }
 }
