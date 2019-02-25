@@ -75,8 +75,8 @@ export class CheckboxFilterComponent implements AfterViewInit {
   }
 
   // expand aantal zichtbare titels bij CHILD
-  public showMore(value: boolean) {
-    this.showMoreItems = value;
+  public toggleShowMore() {
+    this.showMoreItems = !this.showMoreItems;
   }
 
   public onChange(
@@ -150,7 +150,9 @@ export class CheckboxFilterComponent implements AfterViewInit {
       ...criterium,
       ...{
         values: criterium.values
-          .filter(value => value.visible && value.prediction !== 0)
+          .filter(
+            value => value.visible && (value.prediction !== 0 || value.selected)
+          )
           // order by selected status
           // needed so selected values aren't hidden
           .sort((a, b) => (a.selected === b.selected ? 0 : a.selected ? -1 : 1))

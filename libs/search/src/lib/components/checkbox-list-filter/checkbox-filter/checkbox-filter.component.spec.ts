@@ -119,14 +119,13 @@ describe('CheckboxFilterComponent', () => {
       });
 
       it("should show 'toon meer...' when items are hidden", () => {
-        component.showMore(false);
-        fixture.detectChanges();
-
+        // items are hidden by default
         expect(fixture.nativeElement.textContent).toContain('toon meer...');
       });
 
       it("should show 'toon minder...' when items all items are visible", () => {
-        component.showMore(true);
+        // items are hidden by default
+        component.toggleShowMore();
         fixture.detectChanges();
 
         expect(fixture.nativeElement.textContent).not.toContain('toon meer...');

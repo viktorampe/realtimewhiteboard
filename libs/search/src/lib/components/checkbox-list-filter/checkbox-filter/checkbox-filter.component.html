@@ -31,16 +31,10 @@
 </ng-container>
 
 <!-- show more titles ? -->
-<ng-container
+<a
   *ngIf="
     maxVisibleItems && maxVisibleItems < filteredFilterCriterium.values.length
   "
+  (click)="toggleShowMore()"
+  >{{ !showMoreItems ? 'toon meer...' : 'toon minder...' }}</a
 >
-  <ng-container *ngIf="!showMoreItems; else: showLess">
-    <a (click)="showMore(true)">toon meer...</a></ng-container
-  >
-
-  <ng-template #showLess>
-    <a (click)="showMore(false)">toon minder...</a>
-  </ng-template>
-</ng-container>
