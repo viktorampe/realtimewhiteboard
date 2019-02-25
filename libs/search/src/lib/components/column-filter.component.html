@@ -24,7 +24,7 @@
             {{ value.data[filterCriterion.displayProperty] }}</div
           >
           <div
-            *ngIf="value.prediction !== 0"
+            *ngIf="value.prediction && value.prediction !== 0"
             (click)="
               onFilterSelectionChange(
                 value.data[filterCriterion.keyProperty],
@@ -34,7 +34,7 @@
             >-></div
           >
           <div
-            *ngIf="value.prediction !== 0"
+            *ngIf="value.prediction && value.prediction !== 0"
             (click)="
               onFilterSelectionChange(
                 value.data[filterCriterion.keyProperty],
