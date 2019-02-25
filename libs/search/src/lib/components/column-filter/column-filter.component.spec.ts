@@ -210,8 +210,7 @@ describe('ColumnFilterComponent', () => {
         new SearchFilterCriteriaValuesFixture({ selected: true }),
         false
       );
-      expect(emitSpy).toHaveBeenCalled();
-      expect(emitSpy).toHaveBeenCalledTimes(1);
+      expect(emitSpy).not.toHaveBeenCalled();
     });
   });
   describe('view', () => {
