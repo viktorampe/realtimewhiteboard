@@ -56,7 +56,7 @@ export class CheckboxFilterComponent implements AfterViewInit {
   private childComponents: QueryList<CheckboxFilterComponent>;
 
   ngAfterViewInit() {
-    // since matCheckBoxes and childComponents are list of all elements
+    // since matCheckBoxes and childComponents are lists of all elements
     // these need to be linked
     // setTimeout to allow children's views to be initialised
     setTimeout(() => {

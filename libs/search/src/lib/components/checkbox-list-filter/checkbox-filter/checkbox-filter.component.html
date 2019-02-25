@@ -1,34 +1,44 @@
-<ng-container *ngFor="let option of filteredFilterCriterium.values; let i = index">
+<ng-container
+  *ngFor="let option of filteredFilterCriterium.values; let i = index"
+>
   <!-- titles -->
-  <mat-checkbox mat-list-item
-                class="checkbox-filter__title"
-                [class.checkbox-filter__item--hidden]="
+  <mat-checkbox
+    mat-list-item
+    class="checkbox-filter__title"
+    [class.checkbox-filter__item--hidden]="
       i >= maxVisibleItems && !showMoreItems
     "
-                [value]="option"
-                [checked]="option.selected"
-                (change)="onChange($event)">{{getDisplayValue(option)}}</mat-checkbox>
+    [value]="option"
+    [checked]="option.selected"
+    (change)="onChange($event)"
+    >{{ getDisplayValue(option) }}</mat-checkbox
+  >
 
   <!-- children -->
-  <campus-checkbox-filter class="checkbox-filter__items"
-                          [class.checkbox-filter__item--hidden]="
+  <campus-checkbox-filter
+    class="checkbox-filter__items"
+    [class.checkbox-filter__item--hidden]="
       i >= maxVisibleItems && !showMoreItems
     "
-                          *ngIf="option.child"
-                          [criterium]="option.child"
-                          [maxVisibleItems]="maxVisibleItems"
-                          [parentValueRef]="option"
-                          [notificationFromParent]="notifyChildren$ | async"
-                          (selectionChanged)="onChildChange($event)">
+    *ngIf="option.child"
+    [criterium]="option.child"
+    [maxVisibleItems]="maxVisibleItems"
+    [parentValueRef]="option"
+    [notificationFromParent]="notifyChildren$ | async"
+    (selectionChanged)="onChildChange($event)"
+  >
   </campus-checkbox-filter>
 </ng-container>
 
 <!-- show more titles ? -->
-<ng-container *ngIf="
+<ng-container
+  *ngIf="
     maxVisibleItems && maxVisibleItems < filteredFilterCriterium.values.length
-  ">
+  "
+>
   <ng-container *ngIf="!showMoreItems; else: showLess">
-    <a (click)="showMore(true)">toon meer...</a></ng-container>
+    <a (click)="showMore(true)">toon meer...</a></ng-container
+  >
 
   <ng-template #showLess>
     <a (click)="showMore(false)">toon minder...</a>
