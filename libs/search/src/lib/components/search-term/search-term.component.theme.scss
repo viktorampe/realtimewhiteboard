@@ -1,21 +1,30 @@
 @mixin search-term() {
-  mat-form-field.input-no-underline {
-    .mat-form-field-wrapper {
-      .mat-form-field-underline {
-        display: none;
-      }
-    }
-  }
   .search-term {
+    background-color: #fff;
+    border: 1px solid #e5e5e5;
     font-size: 13px;
     mat-form-field {
       width: 100%;
+      &.mat-form-field-appearance-outline {
+        .mat-form-field-outline-thick [class^='mat-form-field-outline-'],
+        .mat-form-field-outline [class^='mat-form-field-outline-'] {
+          border-width: 1px;
+          border-radius: 0px;
+          border-right: none;
+        }
+
+        .mat-form-field-wrapper {
+          margin: 0px;
+          padding-bottom: 0px;
+        }
+      }
     }
     campus-button {
       background-color: #6ed2c1;
       border: 1px solid #057a74;
       box-shadow: inset 0 0 2px 1px rgba(0, 175, 145, 0.5);
       width: 42px;
+
       mat-icon {
         width: 14px;
         height: 14px;

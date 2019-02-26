@@ -6,10 +6,13 @@
 
 .search-term {
   display: flex;
-  mat-form-field {
-    padding-right: 12px;
-    padding-left: 12px;
-    border: 1px solid grey;
-    border-right: 0px;
+  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+  box-shadow: none;
+
+  &:focus-within,
+  &:hover {
+    campus-button {
+      border-left: none;
+    }
   }
 }

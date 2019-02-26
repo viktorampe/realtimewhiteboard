@@ -1,7 +1,8 @@
 <div class="search-term">
   <mat-form-field
+    [appearance]="'outline'"
     [floatLabel]="'never'"
-    class="search-term__form-field input-no-underline"
+    class="search-term__form-field"
     *ngIf="!autoComplete; else: autoCompleteTemplate"
   >
     <input matInput [(ngModel)]="currentValue" [placeholder]="placeholder" />
