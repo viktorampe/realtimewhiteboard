@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CredentialFixture, LearningAreaFixture } from '@campus/dal';
+import { LearningAreaFixture } from '@campus/dal';
 import {
   SearchFilterCriteriaFixture,
   SearchFilterCriteriaInterface,
@@ -164,85 +164,55 @@ export class FindingNemoComponent implements OnInit {
     this.selectFilter = new SearchFilterCriteriaFixture(
       { label: 'search filter' },
       [
-        new SearchFilterCriteriaValuesFixture(
-          {
-            data: new LearningAreaFixture({
-              id: 1,
-              name: 'Aardrijkskunde'
-            })
-          },
-          new SearchFilterCriteriaFixture(
-            { keyProperty: 'id', displayProperty: 'provider' },
-            [
-              new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 1, provider: 'smartschool' })
-              }),
-              new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 2, provider: 'google' })
-              }),
-              new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 3, provider: 'facebook' })
-              })
-            ]
-          )
-        ),
-        new SearchFilterCriteriaValuesFixture(
-          {
-            data: new LearningAreaFixture({
-              id: 2,
-              name: 'Geschiedenis'
-            })
-          },
-          new SearchFilterCriteriaFixture(
-            { keyProperty: 'id', displayProperty: 'provider' },
-            [
-              new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 1, provider: 'smartschool' })
-              }),
-              new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 2, provider: 'google' })
-              }),
-              new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 3, provider: 'facebook' })
-              })
-            ]
-          )
-        ),
-        new SearchFilterCriteriaValuesFixture(
-          {
-            data: new LearningAreaFixture({
-              id: 3,
-              name: 'Wiskunde'
-            })
-          },
-          new SearchFilterCriteriaFixture(
-            { keyProperty: 'id', displayProperty: 'provider' },
-            [
-              new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 1, provider: 'smartschool' })
-              }),
-              new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 2, provider: 'google' })
-              }),
-              new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 3, provider: 'facebook' })
-              })
-            ]
-          )
-        ),
+        new SearchFilterCriteriaValuesFixture({
+          data: new LearningAreaFixture({
+            id: 1,
+            name: '1'
+          })
+        }),
+        new SearchFilterCriteriaValuesFixture({
+          data: new LearningAreaFixture({
+            id: 2,
+            name: '2'
+          })
+        }),
         new SearchFilterCriteriaValuesFixture({
           data: new LearningAreaFixture({
             id: 4,
-            name: 'Informatica'
-          }),
-          visible: false
+            name: '3'
+          })
         }),
         new SearchFilterCriteriaValuesFixture({
           data: new LearningAreaFixture({
             id: 5,
-            name: 'Engels'
+            name: '4'
           }),
-          prediction: 0
+          prediction: 0,
+          selected: true
+        }),
+        new SearchFilterCriteriaValuesFixture({
+          data: new LearningAreaFixture({
+            id: 5,
+            name: '5'
+          }),
+          prediction: 0,
+          selected: true
+        }),
+        new SearchFilterCriteriaValuesFixture({
+          data: new LearningAreaFixture({
+            id: 5,
+            name: '6'
+          }),
+          prediction: 0,
+          selected: true
+        }),
+        new SearchFilterCriteriaValuesFixture({
+          data: new LearningAreaFixture({
+            id: 5,
+            name: '7'
+          }),
+          prediction: 0,
+          selected: true
         })
       ]
     );
