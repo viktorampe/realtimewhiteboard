@@ -1,5 +1,8 @@
 <div class="collapsible-sheet"
-  ><div class="collapsible-sheet__content" [@collapseExpand]="collapsed">
+  ><div
+    class="collapsible-sheet__content"
+    [@collapseExpand]="collapseExpandState()"
+  >
     <ng-content></ng-content>
   </div>
   <mat-icon
