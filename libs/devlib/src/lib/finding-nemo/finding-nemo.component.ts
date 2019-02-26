@@ -133,7 +133,7 @@ const mockBreadcrumbFilterCriteria: SearchFilterCriteriaInterface[] = [
 export class FindingNemoComponent implements OnInit {
   public selectFilter: SearchFilterCriteriaInterface;
   public selectedFilterCriteria: SearchFilterCriteriaInterface;
-  public autoComplete = false;
+  public autoComplete = true;
 
   breadCrumbFilterCriteria: SearchFilterCriteriaInterface[];
 

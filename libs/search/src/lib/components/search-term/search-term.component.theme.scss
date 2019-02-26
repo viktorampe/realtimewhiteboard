@@ -3,6 +3,7 @@
   $search-search-term-border-color: #e5e5e5 !default;
   $search-search-term-button-background-color: #6ed2c1 !default;
   $search-search-term-button-border-color: #057a74 !default;
+  $search-search-term-autocomplete-background-color: $ui-primary-bg-color;
   .search-term {
     background-color: $search-search-term-background-color;
     border: 1px solid $search-search-term-border-color;
@@ -36,5 +37,8 @@
         background-color: $search-search-term-button-background-color;
       }
     }
+  }
+  .mat-autocomplete-panel.search-term__autocomplete {
+    background: $search-search-term-autocomplete-background-color;
   }
 }
