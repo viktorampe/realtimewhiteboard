@@ -14,6 +14,7 @@ import { BreadcrumbFilterComponent } from './components/breadcrumb-filter/breadc
 import { CheckboxLineFilterComponent } from './components/checkbox-line-filter/checkbox-line-filter-component';
 import { CheckboxFilterComponent } from './components/checkbox-list-filter/checkbox-filter/checkbox-filter.component';
 import { CheckboxListFilterComponent } from './components/checkbox-list-filter/checkbox-list-filter.component';
+import { ColumnFilterComponent } from './components/column-filter/column-filter.component';
 import { SearchTermComponent } from './components/search-term/search-term.component';
 import { SelectFilterComponent } from './components/select-filter-component/select-filter.component';
 
@@ -22,12 +23,14 @@ import { SelectFilterComponent } from './components/select-filter-component/sele
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    MatListModule,
-    MatCheckboxModule,
+
     MatFormFieldModule,
+    MatCheckboxModule,
     MatSelectModule,
     MatBadgeModule,
     MatInputModule,
+
+    MatListModule,
     MatAutocompleteModule
   ],
   declarations: [
@@ -36,7 +39,8 @@ import { SelectFilterComponent } from './components/select-filter-component/sele
     SearchTermComponent,
     CheckboxLineFilterComponent,
     CheckboxListFilterComponent,
-    CheckboxFilterComponent
+    CheckboxFilterComponent,
+    ColumnFilterComponent
   ],
   exports: [
     BreadcrumbFilterComponent,
@@ -44,7 +48,8 @@ import { SelectFilterComponent } from './components/select-filter-component/sele
     SearchTermComponent,
     CheckboxLineFilterComponent,
     CheckboxListFilterComponent,
-    CheckboxFilterComponent
+    CheckboxFilterComponent,
+    ColumnFilterComponent
   ]
 })
 export class SearchModule {}
