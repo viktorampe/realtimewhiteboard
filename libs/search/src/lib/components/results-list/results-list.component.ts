@@ -91,14 +91,6 @@ export class ResultsListComponent implements OnDestroy, AfterViewInit {
     return this._searchMode;
   }
 
-  // @Input()
-  // set resultItem(resultItem: Type<SearchResultItemComponentInterface>) {
-  //   // prepare factory to create result item component
-  //   this.componentFactory = this.componentFactoryResolver.resolveComponentFactory(
-  //     resultItem
-  //   );
-  // }
-
   @Input()
   set searchState(searchState: SearchStateInterface) {
     if (searchState) {
