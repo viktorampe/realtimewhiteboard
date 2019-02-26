@@ -1,10 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { CredentialFixture, LearningAreaFixture } from '@campus/dal';
-import {
-  SearchFilterCriteriaFixture,
-  SearchFilterCriteriaInterface,
-  SearchFilterCriteriaValuesFixture
-} from '@campus/search';
+import { Component } from '@angular/core';
+import { SearchFilterCriteriaInterface } from '@campus/search';
+import { BehaviorSubject } from 'rxjs';
 
 const mockBreadcrumbFilterCriteria: SearchFilterCriteriaInterface[] = [
   {
@@ -130,84 +126,53 @@ const mockBreadcrumbFilterCriteria: SearchFilterCriteriaInterface[] = [
   templateUrl: './finding-nemo.component.html',
   styleUrls: ['./finding-nemo.component.scss']
 })
-export class FindingNemoComponent implements OnInit {
-  selectFilter: SearchFilterCriteriaInterface;
+export class FindingNemoComponent {
+  filterCriteria$ = new BehaviorSubject<SearchFilterCriteriaInterface[]>(null);
 
   breadCrumbFilterCriteria: SearchFilterCriteriaInterface[];
 
   constructor() {}
 
-  ngOnInit() {
-    this.selectFilter = new SearchFilterCriteriaFixture(
-      {
-        name: 'selectFilter',
-        label: 'select filter'
-      },
-      [
-        new SearchFilterCriteriaValuesFixture({
-          data: new LearningAreaFixture({
-            id: 1,
-            name: 'foo'
-          })
-        }),
-        new SearchFilterCriteriaValuesFixture({
-          data: new LearningAreaFixture({
-            id: 2,
-            name: 'bar'
-          }),
-          selected: true
-        })
-      ]
-    );
-
-    const selectFilter = {
-      name: 'selectFilter',
-      label: 'select filter',
+  mockData: SearchFilterCriteriaInterface[] = [
+    {
+      name: 'criteria name',
+      label: 'The label of the criteria',
       keyProperty: 'id',
       displayProperty: 'name',
       values: [
         {
-          data: new LearningAreaFixture({
+          data: {
             id: 1,
-            name: 'foo'
-          }),
-          selected: false,
-          prediction: 0,
-          visible: true,
-          child: {
-            name: 'selectFilter',
-            label: 'select filter',
-            keyProperty: 'id',
-            displayProperty: 'provider',
-            values: [
-              {
-                data: new CredentialFixture(),
-                selected: false,
-                prediction: 0,
-                visible: true
-              }
-            ]
-          }
+            name: 'foo jaar'
+          },
+          selected: false
         },
         {
-          data: new LearningAreaFixture({
+          data: {
             id: 2,
-            name: 'bar'
-          }),
+            name: 'bar jaar'
+          },
+          selected: false
+        },
+        {
+          data: {
+            id: 3,
+            name: 'baz jaar'
+          },
           selected: false,
-          prediction: 0,
-          visible: true,
-          child: null
+          prediction: 3
         }
       ]
-    };
+    }
+  ];
 
-    this.breadCrumbFilterCriteria = mockBreadcrumbFilterCriteria;
+  setMockData() {
+    this.filterCriteria$.next(this.mockData);
   }
 
-  onFilterSelectionChange(searchFilter: SearchFilterCriteriaInterface[]) {
-    this.breadCrumbFilterCriteria = searchFilter;
-    console.log(searchFilter);
+  catchEvent($event: SearchFilterCriteriaInterface[]) {
+    console.log($event);
+    this.filterCriteria$.next([...this.mockData, ...$event]);
   }
   onChange(value: string) {
     console.log(value);
