@@ -1,0 +1,14 @@
+.collapsible-sheet {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  &__content {
+    height: 300px;
+    background-color: red;
+  }
+  &__toggle-button {
+    margin-left: -12px;
+    border-radius: 50%;
+    background-color: green;
+  }
+}
