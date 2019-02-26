@@ -2,12 +2,13 @@ import {
   AfterViewInit,
   Component,
   Input,
+  OnDestroy,
   Output,
   QueryList,
   ViewChildren
 } from '@angular/core';
 import { MatCheckbox, MatCheckboxChange } from '@angular/material';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import {
   SearchFilterCriteriaInterface,
   SearchFilterCriteriaValuesInterface
@@ -18,11 +19,12 @@ import {
   templateUrl: './checkbox-filter.component.html',
   styleUrls: ['./checkbox-filter.component.scss']
 })
-export class CheckboxFilterComponent implements AfterViewInit {
+export class CheckboxFilterComponent implements AfterViewInit, OnDestroy {
   public showMoreItems: boolean; // expand aantal zichtbare titels
   public filteredFilterCriterium: SearchFilterCriteriaInterface;
   public notifyChildren$ = new Subject<MatCheckboxChange>();
 
+  private subscriptions = new Subscription();
   private _criterium: SearchFilterCriteriaInterface;
   private associatedCheckBoxes: AssociatedCheckBoxesInterface[];
 
@@ -56,15 +58,29 @@ export class CheckboxFilterComponent implements AfterViewInit {
   private childComponents: QueryList<CheckboxFilterComponent>;
 
   ngAfterViewInit() {
-    // since matCheckBoxes and childComponents are lists of all elements
-    // these need to be linked
     // setTimeout to allow children's views to be initialised
     setTimeout(() => {
+      // since matCheckBoxes and childComponents are lists of all elements
+      // these need to be linked
       this.associatedCheckBoxes = this.getAssociateCheckboxes(
         this.matCheckBoxes,
         this.childComponents
       );
     });
+
+    // make children listen to parent
+    // setting up subscriptions in template with Async pipe not possible
+    this.childComponents.forEach(child => {
+      this.subscriptions.add(
+        this.notifyChildren$.subscribe(
+          event => (child.notificationFromParent = event)
+        )
+      );
+    });
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 
   public getDisplayValue(value: SearchFilterCriteriaValuesInterface): string {
@@ -100,8 +116,10 @@ export class CheckboxFilterComponent implements AfterViewInit {
     if (!event) return;
 
     // find parent of the child
-    const parentAssociation = this.associatedCheckBoxes.find(association =>
-      association.children.some(child => child === event.source)
+    const parentAssociation = this.associatedCheckBoxes.find(
+      association =>
+        association.children &&
+        association.children.some(child => child === event.source)
     );
 
     // check the checked status of children
@@ -126,7 +144,6 @@ export class CheckboxFilterComponent implements AfterViewInit {
 
   private onParentChange(event: MatCheckboxChange) {
     if (!event) return;
-
     // check if the emitting parent is my parent
     if (this.convertCheckBoxValue(event.source) === this.parentValueRef) {
       this.matCheckBoxes.forEach(checkbox => {

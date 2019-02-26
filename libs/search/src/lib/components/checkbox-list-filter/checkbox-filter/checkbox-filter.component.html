@@ -24,12 +24,10 @@
     [criterium]="option.child"
     [maxVisibleItems]="maxVisibleItems"
     [parentValueRef]="option"
-    [notificationFromParent]="notifyChildren$ | async"
     (selectionChanged)="onChildChange($event)"
   >
   </campus-checkbox-filter>
 </ng-container>
-
 <!-- show more titles ? -->
 <a
   *ngIf="

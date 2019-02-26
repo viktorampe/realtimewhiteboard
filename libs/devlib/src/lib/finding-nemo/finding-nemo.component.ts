@@ -184,91 +184,112 @@ export class FindingNemoComponent implements OnInit {
                 new SearchFilterCriteriaFixture(
                   { keyProperty: 'id', displayProperty: 'provider' },
                   [
+                    new SearchFilterCriteriaValuesFixture(
+                      {
+                        data: new CredentialFixture({
+                          id: 1,
+                          provider: 'x'
+                        })
+                      },
+
+                      new SearchFilterCriteriaFixture(
+                        { keyProperty: 'id', displayProperty: 'provider' },
+                        [
+                          new SearchFilterCriteriaValuesFixture({
+                            data: new CredentialFixture({
+                              id: 1,
+                              provider: 'xx'
+                            })
+                          }),
+                          new SearchFilterCriteriaValuesFixture({
+                            data: new CredentialFixture({
+                              id: 2,
+                              provider: 'xx'
+                            })
+                          }),
+                          new SearchFilterCriteriaValuesFixture({
+                            data: new CredentialFixture({
+                              id: 3,
+                              provider: 'xx'
+                            })
+                          })
+                        ]
+                      )
+                    ),
                     new SearchFilterCriteriaValuesFixture({
                       data: new CredentialFixture({
-                        id: 1,
-                        provider: 'smartschool'
+                        id: 2,
+                        provider: 'x'
                       })
                     }),
-                    new SearchFilterCriteriaValuesFixture({
-                      data: new CredentialFixture({ id: 2, provider: 'google' })
-                    }),
-                    new SearchFilterCriteriaValuesFixture({
-                      data: new CredentialFixture({
-                        id: 3,
-                        provider: 'facebook'
-                      })
-                    })
+                    new SearchFilterCriteriaValuesFixture(
+                      {
+                        data: new CredentialFixture({
+                          id: 3,
+                          provider: 'x'
+                        })
+                      },
+                      new SearchFilterCriteriaFixture(
+                        { keyProperty: 'id', displayProperty: 'provider' },
+                        [
+                          new SearchFilterCriteriaValuesFixture({
+                            data: new CredentialFixture({
+                              id: 1,
+                              provider: 'xy'
+                            })
+                          }),
+                          new SearchFilterCriteriaValuesFixture({
+                            data: new CredentialFixture({
+                              id: 2,
+                              provider: 'xy'
+                            })
+                          }),
+                          new SearchFilterCriteriaValuesFixture(
+                            {
+                              data: new CredentialFixture({
+                                id: 3,
+                                provider: 'xy'
+                              })
+                            },
+                            new SearchFilterCriteriaFixture(
+                              {
+                                keyProperty: 'id',
+                                displayProperty: 'provider'
+                              },
+                              [
+                                new SearchFilterCriteriaValuesFixture({
+                                  data: new CredentialFixture({
+                                    id: 1,
+                                    provider: 'xyz'
+                                  })
+                                }),
+                                new SearchFilterCriteriaValuesFixture({
+                                  data: new CredentialFixture({
+                                    id: 2,
+                                    provider: 'xyz'
+                                  })
+                                }),
+                                new SearchFilterCriteriaValuesFixture({
+                                  data: new CredentialFixture({
+                                    id: 3,
+                                    provider: 'xyz'
+                                  })
+                                })
+                              ]
+                            )
+                          )
+                        ]
+                      )
+                    )
                   ]
                 )
               ),
               new SearchFilterCriteriaValuesFixture({
                 data: new CredentialFixture({ id: 2, provider: 'google' })
-              }),
-              new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 3, provider: 'facebook' })
               })
             ]
           )
-        ),
-        new SearchFilterCriteriaValuesFixture(
-          {
-            data: new LearningAreaFixture({
-              id: 2,
-              name: 'Geschiedenis'
-            })
-          },
-          new SearchFilterCriteriaFixture(
-            { keyProperty: 'id', displayProperty: 'provider' },
-            [
-              new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 1, provider: 'smartschool' })
-              }),
-              new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 2, provider: 'google' })
-              }),
-              new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 3, provider: 'facebook' })
-              })
-            ]
-          )
-        ),
-        new SearchFilterCriteriaValuesFixture(
-          {
-            data: new LearningAreaFixture({
-              id: 3,
-              name: 'Wiskunde'
-            })
-          },
-          new SearchFilterCriteriaFixture(
-            { keyProperty: 'id', displayProperty: 'provider' },
-            [
-              new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 1, provider: 'smartschool' })
-              }),
-              new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 2, provider: 'google' })
-              }),
-              new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 3, provider: 'facebook' })
-              })
-            ]
-          )
-        ),
-        new SearchFilterCriteriaValuesFixture({
-          data: new LearningAreaFixture({
-            id: 4,
-            name: 'Informatica'
-          }),
-          visible: false
-        }),
-        new SearchFilterCriteriaValuesFixture({
-          data: new LearningAreaFixture({
-            id: 5,
-            name: 'Engels'
-          }),
-          prediction: 0
-        })
+        )
       ]
     );
   }
