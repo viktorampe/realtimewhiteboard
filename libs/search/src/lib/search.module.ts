@@ -6,25 +6,24 @@ import {
   MatBadgeModule,
   MatCheckboxModule,
   MatInputModule,
+  MatListModule,
   MatSelectModule
 } from '@angular/material';
 import { BreadcrumbFilterComponent } from './components/breadcrumb-filter/breadcrumb-filter.component';
 import { CheckboxLineFilterComponent } from './components/checkbox-line-filter/checkbox-line-filter-component';
+import { ColumnFilterComponent } from './components/column-filter/column-filter.component';
 import { SearchTermComponent } from './components/search-term/search-term.component';
 import { SelectFilterComponent } from './components/select-filter-component/select-filter.component';
 
 @NgModule({
   imports: [
-    CommonModule,
-    MatSelectModule,
-    ReactiveFormsModule,
     MatCheckboxModule,
-    MatBadgeModule,
     CommonModule,
     MatSelectModule,
     ReactiveFormsModule,
     MatBadgeModule,
     MatInputModule,
+    MatListModule,
     MatAutocompleteModule,
     FormsModule
   ],
@@ -32,13 +31,15 @@ import { SelectFilterComponent } from './components/select-filter-component/sele
     BreadcrumbFilterComponent,
     SelectFilterComponent,
     SearchTermComponent,
-    CheckboxLineFilterComponent
+    CheckboxLineFilterComponent,
+    ColumnFilterComponent
   ],
   exports: [
     BreadcrumbFilterComponent,
     SelectFilterComponent,
     SearchTermComponent,
-    CheckboxLineFilterComponent
+    CheckboxLineFilterComponent,
+    ColumnFilterComponent
   ]
 })
 export class SearchModule {}
