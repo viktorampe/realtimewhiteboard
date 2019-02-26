@@ -308,6 +308,7 @@ describe('CheckboxFilterComponent', () => {
       let otherCheckboxChildren: MatCheckbox[];
 
       beforeEach(() => {
+        component['ngAfterViewInit'](); // Needed to initialize subscriptions
         firstChildComponent = childComponents[0];
         firstCheckbox = titleCheckBoxes[0];
         firstCheckboxChildren = childComponents[0].matCheckBoxes.toArray();
@@ -321,7 +322,7 @@ describe('CheckboxFilterComponent', () => {
         }
       });
 
-      it("should change it's value, but only when the source is the associated parent checkbox", () => {
+      it("should change it's value, but only when the source is the associated parent checkbox", async(() => {
         // component's parent emits checkbox changed event
         firstCheckbox.checked = true;
         const changedEvent = new MatCheckboxChange();
@@ -347,7 +348,7 @@ describe('CheckboxFilterComponent', () => {
               .selected
           ).toBe(false);
         });
-      });
+      }));
 
       it('should notify the children, but only when the source is the associated parent checkbox', () => {
         spyOn(firstChildComponent.notifyChildren$, 'next');
