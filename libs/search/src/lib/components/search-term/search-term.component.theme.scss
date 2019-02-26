@@ -1,8 +1,12 @@
 @mixin search-term() {
+  $search-search-term-background-color: $ui-primary-bg-color;
+  $search-search-term-border-color: #e5e5e5 !default;
+  $search-search-term-button-background-color: #6ed2c1 !default;
+  $search-search-term-button-border-color: #057a74 !default;
   .search-term {
-    background-color: #fff;
-    border: 1px solid #e5e5e5;
-    font-size: 13px;
+    background-color: $search-search-term-background-color;
+    border: 1px solid $search-search-term-border-color;
+
     mat-form-field {
       width: 100%;
       &.mat-form-field-appearance-outline {
@@ -20,17 +24,16 @@
       }
     }
     campus-button {
-      background-color: #6ed2c1;
-      border: 1px solid #057a74;
+      background-color: $search-search-term-button-background-color;
+      border: 1px solid $search-search-term-button-border-color;
       box-shadow: inset 0 0 2px 1px rgba(0, 175, 145, 0.5);
       width: 42px;
-
       mat-icon {
         width: 14px;
         height: 14px;
       }
       &:hover {
-        background-color: #6ed2c1;
+        background-color: $search-search-term-button-background-color;
       }
     }
   }
