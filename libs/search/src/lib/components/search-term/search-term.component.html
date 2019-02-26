@@ -1,15 +1,16 @@
 <div class="search-term">
   <mat-form-field
     [appearance]="'outline'"
-    [floatLabel]="'never'"
     *ngIf="!autoComplete; else: autoCompleteTemplate"
   >
+    <mat-label>{{ placeholder }}</mat-label>
     <input matInput [(ngModel)]="currentValue" [placeholder]="placeholder" />
   </mat-form-field>
   <campus-button bordered [iconClass]="'magnifier'"></campus-button>
 
   <ng-template #autoCompleteTemplate>
-    <mat-form-field [appearance]="'outline'" [floatLabel]="'never'">
+    <mat-form-field [appearance]="'outline'">
+      <mat-label>{{ placeholder }}</mat-label>
       <input
         matInput
         [(ngModel)]="currentValue"
