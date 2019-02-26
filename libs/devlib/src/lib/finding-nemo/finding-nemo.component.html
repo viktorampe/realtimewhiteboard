@@ -35,7 +35,6 @@
 </div>
 <campus-results-list
   [resultsPage]="resultsPage$ | async"
-  [resultItem]="resultItemComponent"
   [searchMode]="searchMode"
   [searchState]="searchState | async"
   (getNextPage)="onGetNextPage($event)"

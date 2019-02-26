@@ -1,3 +1,6 @@
+import { Type } from '@angular/core';
+import { SearchResultItemComponentInterface } from './search-result-interface';
+
 export interface SearchModeInterface {
   name: string;
   label: string;
@@ -8,6 +11,7 @@ export interface SearchModeInterface {
     domHost: string;
   };
   results: {
+    component: Type<SearchResultItemComponentInterface>;
     sortModes: SortModeInterface[];
     pageSize: number;
   };

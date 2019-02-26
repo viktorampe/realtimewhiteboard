@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { EduContentMetadataInterface } from '@campus/dal';
-import { SearchResultItemInterface } from '@campus/search';
+import { SearchResultItemComponentInterface } from '@campus/search';
 
 @Component({
   selector: 'campus-polpo-result-item',
@@ -8,7 +8,7 @@ import { SearchResultItemInterface } from '@campus/search';
   styleUrls: ['./polpo-result-item.component.scss']
 })
 export class PolpoResultItemComponent
-  implements OnInit, SearchResultItemInterface {
+  implements OnInit, SearchResultItemComponentInterface {
   @Input() data: EduContentMetadataInterface;
 
   constructor() {}

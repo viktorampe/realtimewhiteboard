@@ -10,9 +10,7 @@ import {
   Input,
   NgZone,
   OnDestroy,
-  OnInit,
   Output,
-  Type,
   ViewChild,
   ViewContainerRef
 } from '@angular/core';
@@ -22,7 +20,7 @@ import { auditTime, filter } from 'rxjs/operators';
 import {
   SearchModeInterface,
   SearchResultInterface,
-  SearchResultItemInterface,
+  SearchResultItemComponentInterface,
   SearchStateInterface,
   SortModeInterface
 } from '../../interfaces';
@@ -64,7 +62,7 @@ export class ResultListDirective {
   templateUrl: './results-list.component.html',
   styleUrls: ['./results-list.component.scss']
 })
-export class ResultsListComponent implements OnInit, OnDestroy, AfterViewInit {
+export class ResultsListComponent implements OnDestroy, AfterViewInit {
   public selected: any;
   public count = 0;
   public sortModes: SortModeInterface[];
@@ -75,19 +73,31 @@ export class ResultsListComponent implements OnInit, OnDestroy, AfterViewInit {
   private loadedCount = 0;
   private clearResultsTimer: number;
   private scrollEnabled = false;
-  private componentFactory: ComponentFactory<SearchResultItemInterface>;
+  private componentFactory: ComponentFactory<
+    SearchResultItemComponentInterface
+  >;
   private _searchState: SearchStateInterface;
+  private _searchMode: SearchModeInterface;
 
-  @Input() searchMode: SearchModeInterface;
   @Input() itemSize = 100;
-
   @Input()
-  set resultItem(resultItem: Type<SearchResultItemInterface>) {
-    // prepare factory to create result item component
-    this.componentFactory = this.componentFactoryResolver.resolveComponentFactory(
-      resultItem
-    );
+  set searchMode(searchMode: SearchModeInterface) {
+    if (searchMode) {
+      this._searchMode = searchMode;
+      this.initialize();
+    }
   }
+  get searchMode() {
+    return this._searchMode;
+  }
+
+  // @Input()
+  // set resultItem(resultItem: Type<SearchResultItemComponentInterface>) {
+  //   // prepare factory to create result item component
+  //   this.componentFactory = this.componentFactoryResolver.resolveComponentFactory(
+  //     resultItem
+  //   );
+  // }
 
   @Input()
   set searchState(searchState: SearchStateInterface) {
@@ -109,7 +119,7 @@ export class ResultsListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   @Output() sortBy: EventEmitter<SortModeInterface> = new EventEmitter();
-  @Output() getNextPage: EventEmitter<number> = new EventEmitter();
+  @Output() getNextPage: EventEmitter<undefined> = new EventEmitter();
 
   @ViewChild(ResultListDirective) resultListHost: ResultListDirective;
   @ViewChild(CdkScrollable) viewPort: CdkScrollable;
@@ -119,16 +129,6 @@ export class ResultsListComponent implements OnInit, OnDestroy, AfterViewInit {
     private componentFactoryResolver: ComponentFactoryResolver,
     @Inject(WINDOW) private nativeWindow: Window
   ) {}
-
-  ngOnInit(): void {
-    if (this.searchMode) {
-      this.sortModes = this.searchMode.results.sortModes;
-      if (!this.activeSortMode) {
-        // default sortMode if not set by searchState
-        this.activeSortMode = this.sortModes[0].name;
-      }
-    }
-  }
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
@@ -156,6 +156,18 @@ export class ResultsListComponent implements OnInit, OnDestroy, AfterViewInit {
       this.activeSortMode = sortMode.name;
       this.searchState.sort = sortMode.name;
       this.sortBy.emit(sortMode);
+    }
+  }
+
+  private initialize(): void {
+    // prepare factory to create result item component
+    this.componentFactory = this.componentFactoryResolver.resolveComponentFactory(
+      this.searchMode.results.component
+    );
+    this.sortModes = this.searchMode.results.sortModes;
+    if (!this.activeSortMode) {
+      // default sortMode if not set by searchState
+      this.activeSortMode = this.sortModes[0].name;
     }
   }
 
@@ -198,8 +210,8 @@ export class ResultsListComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // in case there's no scrollbar yet, we should manually trigger search
     // until we can handle scroll events
-    setTimeout(() => {
-      // wrap in setTimeout to assure resultsHost is cleared when we measure the scroll offset
+    this.nativeWindow.setTimeout(() => {
+      // wrap in setTimeout to assure resultsHost size is updated when we measure the scroll offset
       this.checkForMoreResults();
     });
   }
@@ -208,7 +220,7 @@ export class ResultsListComponent implements OnInit, OnDestroy, AfterViewInit {
     const componentRef = this.resultListHost.viewContainerRef.createComponent(
       this.componentFactory
     );
-    (componentRef.instance as SearchResultItemInterface).data = result;
+    (componentRef.instance as SearchResultItemComponentInterface).data = result;
   }
 
   private clearResults(): void {
@@ -228,7 +240,7 @@ export class ResultsListComponent implements OnInit, OnDestroy, AfterViewInit {
       this.scrollEnabled = false;
       this.loading = true;
       // ask to load next page of results (`from` is 0-based)
-      this.getNextPage.emit(this.loadedCount);
+      this.getNextPage.emit();
     }
   }
 }
