@@ -24,10 +24,10 @@ import { Component } from '@angular/core';
     ]),
     trigger('rotate', [
       transition('false => true', [
-        animate('200ms ease-in-out', style({ transform: 'rotate(180deg)' }))
+        animate('200ms ease-in', style({ transform: 'rotate(180deg)' }))
       ]),
       transition('true => false', [
-        animate('200ms ease-in', style({ transform: 'rotate(-180deg)' }))
+        animate('200ms ease-in', style({ transform: 'rotate(0deg)' }))
       ]),
       state('true', style({ transform: 'rotate(180deg)' })),
       state('false', style({ transform: 'rotate(0deg)' }))
