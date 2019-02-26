@@ -1,6 +1,6 @@
-$breakpoint-small: 960px;
+@import 'libs/ui/src/lib/breakpoints.scss';
 
-.breadcrumb-filter__container {
+:host() {
   display: block;
   height: 40px;
   overflow: hidden;
@@ -32,11 +32,11 @@ a {
     max-width: none;
   }
 }
-.mobile {
+.breadcrumb-filter--mobile {
   display: none;
 }
 
-@media (max-width: $breakpoint-small) {
+@media #{$ui-breakpoint-xsmall}, #{$ui-breakpoint-small} {
   a {
     display: none;
     pointer-events: none;
@@ -49,7 +49,7 @@ a {
     }
   }
 
-  .mobile {
+  .breadcrumb-filter--mobile {
     display: inline-block;
     padding: 0 10px;
     vertical-align: middle;
