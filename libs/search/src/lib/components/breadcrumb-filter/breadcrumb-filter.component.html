@@ -1,4 +1,10 @@
 <a (click)="reset()">{{ rootLabel }}</a>
-<ng-container *ngFor="let value of selectedValues; index as i">
-  &gt; <a (click)="clickBreadcrumb(i)">{{ getLabel(value, i) }}</a>
+<ng-container *ngFor="let value of selectedValues; index as i; last as isLast">
+  <span
+    *ngIf="isLast"
+    (click)="clickBreadcrumb(i - 1)"
+    class="breadcrumb-filter--mobile"
+    >&lt;</span
+  >
+  <a (click)="clickBreadcrumb(i)">{{ getLabel(value, i) }}</a>
 </ng-container>
