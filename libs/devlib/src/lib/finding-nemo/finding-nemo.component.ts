@@ -334,9 +334,8 @@ export class FindingNemoComponent implements OnInit {
     this.loadTimer = window.setTimeout(() => {
       this.resultsPage$.next({ ...resultsPage });
       this.loadTimer = null;
-    }, 500);
+    }, 2500);
     return;
-
     this.eduContentMetadataApi
       .search(
         '',

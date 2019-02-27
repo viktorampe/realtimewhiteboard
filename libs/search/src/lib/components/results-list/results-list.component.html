@@ -16,8 +16,10 @@
       ></campus-button>
     </div>
   </div>
-  <div class="search-results-list__results" cdkScrollable>
-    <ng-template result-list-host></ng-template>
+  <div cdkScrollable class="search-results-list__results">
+    <campus-list-view [listFormat]="'line'" [placeHolderText]="''">
+      <ng-template result-list-host></ng-template>
+    </campus-list-view>
     <div *ngIf="this.loading">Even geduld, de resultaten worden geladen...</div>
   </div>
 </div>

@@ -8,4 +8,5 @@ export interface SearchResultInterface<T> {
 
 export interface SearchResultItemComponentInterface extends Component {
   data: any;
+  listRef: any;
 }

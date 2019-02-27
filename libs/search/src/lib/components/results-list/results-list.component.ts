@@ -15,8 +15,8 @@ import {
   ViewContainerRef
 } from '@angular/core';
 import { WINDOW } from '@campus/browser';
+import { ListViewComponent } from '@campus/ui';
 import { Subscription } from 'rxjs';
-import { auditTime, filter } from 'rxjs/operators';
 import {
   SearchModeInterface,
   SearchResultInterface,
@@ -37,7 +37,7 @@ export class ResultListDirective {
 /**
  * Usage:
  * - Create a new component `MyResultItemComponent` in your app to display a result
- * - Let the component implement `SearchResultItemInterface`:
+ * - Let the component extend `ResultItemBase`:
  *     requires an `@Input() data: MyResultInterface;`
  * - Add the component to your NgModule with `entryComponents: [MyResultItemComponent]`
  *
@@ -63,7 +63,6 @@ export class ResultListDirective {
   styleUrls: ['./results-list.component.scss']
 })
 export class ResultsListComponent implements OnDestroy, AfterViewInit {
-  public selected: any;
   public count = 0;
   public sortModes: SortModeInterface[];
   public activeSortMode: string;
@@ -111,9 +110,10 @@ export class ResultsListComponent implements OnDestroy, AfterViewInit {
   }
 
   @Output() sortBy: EventEmitter<SortModeInterface> = new EventEmitter();
-  @Output() getNextPage: EventEmitter<undefined> = new EventEmitter();
+  @Output() getNextPage: EventEmitter<any> = new EventEmitter();
 
   @ViewChild(ResultListDirective) resultListHost: ResultListDirective;
+  @ViewChild(ListViewComponent) listview: ListViewComponent<any>;
   @ViewChild(CdkScrollable) viewPort: CdkScrollable;
 
   constructor(
@@ -130,15 +130,16 @@ export class ResultsListComponent implements OnDestroy, AfterViewInit {
     this.subscriptions.add(
       this.viewPort
         .elementScrolled()
-        .pipe(
-          filter(() => this.scrollEnabled),
-          auditTime(300) // limit events to once every 300ms
-        )
+        // .pipe(
+        //   filter(() => this.scrollEnabled),
+        //   auditTime(300) // limit events to once every 300ms
+        // )
         .subscribe(() => {
           // ngZone is required to trigger change detection, because the `elementScrolled`
           // event is emitting outside the ngZone
           // this makes sense, because we don't want to trigger CD for each scroll event
-          this.ngZone.run(() => this.checkForMoreResults());
+          this.ngZone.run(() => {});
+          this.checkForMoreResults();
         })
     );
   }
@@ -152,14 +153,16 @@ export class ResultsListComponent implements OnDestroy, AfterViewInit {
   }
 
   private initialize(): void {
-    // prepare factory to create result item component
-    this.componentFactory = this.componentFactoryResolver.resolveComponentFactory(
-      this.searchMode.results.component
-    );
     this.sortModes = this.searchMode.results.sortModes;
     if (!this.activeSortMode) {
       // default sortMode if not set by searchState
       this.activeSortMode = this.sortModes[0].name;
+    }
+    if (!this.componentFactory) {
+      // prepare factory to create result item component
+      this.componentFactory = this.componentFactoryResolver.resolveComponentFactory(
+        this.searchMode.results.component
+      );
     }
   }
 
@@ -212,27 +215,31 @@ export class ResultsListComponent implements OnDestroy, AfterViewInit {
     const componentRef = this.resultListHost.viewContainerRef.createComponent(
       this.componentFactory
     );
-    (componentRef.instance as SearchResultItemComponentInterface).data = result;
+    const resultItem = componentRef.instance as SearchResultItemComponentInterface;
+    resultItem.data = result;
+    resultItem.listRef = this.listview;
   }
 
-  private clearResults(): void {
+  private clearResults() {
     if (this.clearResultsTimer) {
       // cancel timer when results loaded before timeout
       this.nativeWindow.clearTimeout(this.clearResultsTimer);
       this.clearResultsTimer = null;
     }
+    if (this.listview) this.listview.resetItems();
     this.resultListHost.viewContainerRef.clear();
     this.loadedCount = 0;
   }
 
   private checkForMoreResults(): void {
     const fromBottom = this.viewPort.measureScrollOffset('bottom');
+    console.log(fromBottom);
     if (this.loadedCount === 0 || fromBottom <= 4 * this.itemSize) {
       // disable multiple event triggers for the same page
       this.scrollEnabled = false;
       this.loading = true;
-      // ask to load next page of results (`from` is 0-based)
-      this.getNextPage.emit();
+      // ask to load next page of results
+      this.getNextPage.emit(null);
     }
   }
 }
