@@ -84,10 +84,7 @@ export class CheckboxFilterComponent implements AfterViewInit, OnDestroy {
   }
 
   public getDisplayValue(value: SearchFilterCriteriaValuesInterface): string {
-    return (
-      value.data[this.criterium.displayProperty] +
-      (!!value.prediction ? ' (' + value.prediction + ')' : '')
-    );
+    return value.data[this.criterium.displayProperty];
   }
 
   // expand aantal zichtbare titels bij CHILD

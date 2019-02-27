@@ -1,14 +1,14 @@
 :host {
-  background-color: yellow;
   display: flex;
   flex-flow: column nowrap;
-  width: max-content;
+  margin: 8px;
 }
 
 .checkbox__list__filter {
   &__title {
     font-size: 16px;
     padding: 4px;
+    margin-bottom: 10px;
   }
 
   &__list {

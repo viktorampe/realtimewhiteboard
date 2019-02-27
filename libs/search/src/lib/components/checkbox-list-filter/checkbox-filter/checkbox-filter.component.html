@@ -11,7 +11,10 @@
     [value]="option"
     [checked]="option.selected"
     (change)="onChange($event)"
-    >{{ getDisplayValue(option) }}</mat-checkbox
+    >{{ getDisplayValue(option)
+    }}<span *ngIf="option.prediction" class="checkbox-filter__item__prediction">
+      {{ ' (' + option.prediction + ')' }}</span
+    ></mat-checkbox
   >
 
   <!-- children -->
@@ -34,5 +37,12 @@
     maxVisibleItems && maxVisibleItems < filteredFilterCriterium.values.length
   "
   (click)="toggleShowMore()"
-  >{{ !showMoreItems ? 'toon meer...' : 'toon minder...' }}</a
+  class="checkbox-filter__footer"
 >
+  <mat-icon
+    [svgIcon]="'arrow-back'"
+    [class.rotate--up]="showMoreItems"
+    [class.rotate--down]="!showMoreItems"
+  ></mat-icon>
+  {{ !showMoreItems ? 'toon meer...' : 'toon minder...' }}
+</a>
