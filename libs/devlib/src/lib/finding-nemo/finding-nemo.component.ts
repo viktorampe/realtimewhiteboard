@@ -301,4 +301,8 @@ export class FindingNemoComponent {
   onChange(value: string) {
     console.log(value);
   }
+
+  onFilterSelectionChange(value: string) {
+    console.log(value);
+  }
 }
