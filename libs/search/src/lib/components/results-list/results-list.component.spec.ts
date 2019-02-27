@@ -8,9 +8,9 @@ import { UiModule } from '@campus/ui';
 import {
   SearchModeInterface,
   SearchResultInterface,
-  SearchResultItemComponentInterface,
   SearchStateInterface
 } from '../../interfaces';
+import { ResultItemBase } from './result.component.base';
 import {
   ResultListDirective,
   ResultsListComponent
@@ -20,7 +20,7 @@ import {
   selector: 'campus-result-item',
   template: '{{data}}'
 })
-class ResultItemComponent implements SearchResultItemComponentInterface {
+class ResultItemComponent extends ResultItemBase {
   data: any;
   listRef: null;
 }
@@ -112,13 +112,10 @@ describe('ResultsListComponentComponent', () => {
     });
 
     it('should render results', () => {
-      // const listview = fixture.debugElement.query(
-      //   By.directive(ListViewComponent)
-      // ).componentInstance as ListViewComponent<any>;
-      // listview['onListUpdate']();
       const resultItems = fixture.debugElement.queryAll(
         By.directive(ResultItemComponent)
       );
+
       expect(resultItems.length).toBe(3);
     });
 
@@ -165,6 +162,7 @@ describe('ResultsListComponentComponent', () => {
       const resultItems = fixture.debugElement.queryAll(
         By.directive(ResultItemComponent)
       );
+
       expect(resultItems.length).toBe(2);
     });
   });
@@ -217,21 +215,16 @@ describe('ResultsListComponentComponent', () => {
     });
   });
 
-  // can't find how to make this work
-  xdescribe('on scroll', () => {
-    it('should request new results', done => {
-      const spy = jest.spyOn(component as any, 'checkForMoreResults');
-      spy.mockReset();
-
-      component.getNextPage.subscribe(() => {
-        expect(spy).toHaveBeenCalledTimes(100);
-        spy.mockRestore();
-        done();
-      });
-
+  describe('on scroll', () => {
+    it('should request new results', async(() => {
       const scroller = fixture.debugElement.query(By.directive(CdkScrollable));
-      scroller.nativeElement.scrollTop = -50;
-      scroller.triggerEventHandler('scroll', null);
-    });
+
+      fixture.whenStable().then(() => {
+        component['checkForMoreResults'] = jest.fn();
+        scroller.nativeElement.dispatchEvent(new Event('scroll'));
+
+        expect(component['checkForMoreResults']).toHaveBeenCalledTimes(1);
+      });
+    }));
   });
 });

@@ -17,7 +17,6 @@ import {
 import { WINDOW } from '@campus/browser';
 import { ListViewComponent } from '@campus/ui';
 import { Subscription } from 'rxjs';
-import { auditTime, filter } from 'rxjs/operators';
 import {
   SearchModeInterface,
   SearchResultInterface,
@@ -38,7 +37,7 @@ export class ResultListDirective {
 /**
  * Usage:
  * - Create a new component `MyResultItemComponent` in your app to display a result
- * - Let the component implement `SearchResultItemInterface`:
+ * - Let the component extend `ResultItemBase`:
  *     requires an `@Input() data: MyResultInterface;`
  * - Add the component to your NgModule with `entryComponents: [MyResultItemComponent]`
  *
@@ -131,15 +130,16 @@ export class ResultsListComponent implements OnDestroy, AfterViewInit {
     this.subscriptions.add(
       this.viewPort
         .elementScrolled()
-        .pipe(
-          filter(() => this.scrollEnabled),
-          auditTime(300) // limit events to once every 300ms
-        )
+        // .pipe(
+        //   filter(() => this.scrollEnabled),
+        //   auditTime(300) // limit events to once every 300ms
+        // )
         .subscribe(() => {
           // ngZone is required to trigger change detection, because the `elementScrolled`
           // event is emitting outside the ngZone
           // this makes sense, because we don't want to trigger CD for each scroll event
-          this.ngZone.run(() => this.checkForMoreResults());
+          this.ngZone.run(() => {});
+          this.checkForMoreResults();
         })
     );
   }
@@ -233,6 +233,7 @@ export class ResultsListComponent implements OnDestroy, AfterViewInit {
 
   private checkForMoreResults(): void {
     const fromBottom = this.viewPort.measureScrollOffset('bottom');
+    console.log(fromBottom);
     if (this.loadedCount === 0 || fromBottom <= 4 * this.itemSize) {
       // disable multiple event triggers for the same page
       this.scrollEnabled = false;
