@@ -11,7 +11,7 @@ import {
   SearchFilterCriteriaValuesFixture,
   SearchModeInterface,
   SearchResultInterface,
-  SearchResultItemInterface,
+  SearchResultItemComponentInterface,
   SearchStateInterface
 } from '@campus/search';
 import { EduContentMetadataApi } from '@diekeure/polpo-api-angular-sdk';
@@ -146,7 +146,7 @@ const mockBreadcrumbFilterCriteria: SearchFilterCriteriaInterface[] = [
 export class FindingNemoComponent implements OnInit {
   public selectFilter: SearchFilterCriteriaInterface;
   public selectedFilterCriteria: SearchFilterCriteriaInterface;
-  public resultItemComponent: Type<SearchResultItemInterface>;
+  public resultItemComponent: Type<SearchResultItemComponentInterface>;
   public resultsPage$: Subject<
     SearchResultInterface<EduContentMetadataInterface>
   > = new Subject();
@@ -278,6 +278,7 @@ export class FindingNemoComponent implements OnInit {
       dynamicFilters: false,
       searchFilterFactory: [],
       results: {
+        component: PolpoResultItemComponent,
         sortModes: [
           {
             description: 'book',
@@ -307,10 +308,6 @@ export class FindingNemoComponent implements OnInit {
       from: 0
       // sort: null,
     });
-
-    this.resultItemComponent = PolpoResultItemComponent;
-    // this.resetResults();
-    // this.loadMoreResults();
   }
 
   onFilterSelectionChange(searchFilter: SearchFilterCriteriaInterface[]) {

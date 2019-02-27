@@ -263,7 +263,7 @@ describe('ListViewComponent', () => {
     let mockCreatedItem: DynamicItemClass;
     beforeEach(() => {
       mockCreatedItem = new DynamicItemClass(component, null);
-      mockCreatedItem.host = mockCreatedItem;
+      mockCreatedItem.itemHost = mockCreatedItem;
     });
 
     describe('addItems', () => {

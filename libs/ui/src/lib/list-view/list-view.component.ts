@@ -233,13 +233,15 @@ export class ListViewItemDirective<dataObjectType>
 
   constructor(
     protected parentList: ListViewComponent<any>,
-    public host: ListViewItemInterface
+    public itemHost: ListViewItemInterface
   ) {}
 
   ngAfterContentInit() {
     if (this.parentList)
       this.subscriptions.add(
-        this.parentList.listFormat$.subscribe(lf => (this.host.listFormat = lf))
+        this.parentList.listFormat$.subscribe(
+          lf => (this.itemHost.listFormat = lf)
+        )
       );
   }
 

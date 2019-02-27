@@ -1,11 +1,12 @@
 import { Input, OnInit } from '@angular/core';
-import { SearchResultItemInterface } from '@campus/search';
 import {
   ListFormat,
   ListViewComponent,
   ListViewItemDirective,
   ListViewItemInterface
 } from '@campus/ui';
+import { SearchResultItemComponentInterface } from '../../interfaces';
+
 /**
  * Base class for a dynamically loaded PolpoResultItem
  * @property listRef - the campus-list-view  to add the item to.
@@ -15,7 +16,7 @@ import {
  * @implements SearchResultItemInterface
  */
 export abstract class ResultItemBase extends ListViewItemDirective<any>
-  implements OnInit, SearchResultItemInterface, ListViewItemInterface {
+  implements OnInit, SearchResultItemComponentInterface, ListViewItemInterface {
   listFormat: ListFormat;
   @Input() data: any;
   @Input() listRef: ListViewComponent<any>;
@@ -25,7 +26,7 @@ export abstract class ResultItemBase extends ListViewItemDirective<any>
   }
 
   ngOnInit() {
-    this.host = this;
+    this.itemHost = this;
     this.parentList = this.listRef;
     this.dataObject = this.data;
     if (this.listRef) this.listRef.addItem(this);
