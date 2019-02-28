@@ -34,10 +34,11 @@
       }
 
       &-label {
-        overflow-x: hidden;
         width: 100%;
         text-overflow: ellipsis;
         text-align: center;
+        white-space: nowrap;
+        overflow-x: hidden;
       }
     }
 
