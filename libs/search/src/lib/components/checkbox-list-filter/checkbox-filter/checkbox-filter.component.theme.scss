@@ -29,10 +29,6 @@ $checkbox-filter-text-color--accent: $primary-font-color-2 !default;
       mat-icon {
         height: $primary-font-size;
         width: $primary-font-size;
-
-        -webkit-transition: 0.25s ease-in-out;
-        -moz-transition: 0.25s ease-in-out;
-        -o-transition: 0.25s ease-in-out;
         transition: 0.25s ease-in-out;
 
         &.rotate {
