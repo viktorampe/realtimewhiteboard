@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output } from '@angular/core';
+import { EventEmitter } from 'events';
+import { SearchModeInterface } from './../../interfaces/search-mode-interface';
+import { SearchResultInterface } from './../../interfaces/search-result-interface';
+import { SearchStateInterface } from './../../interfaces/search-state.interface';
 
 @Component({
   selector: 'campus-search',
@@ -6,10 +10,19 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./search.component.scss']
 })
 export class SearchComponent implements OnInit {
+  @Input() public searchMode: SearchModeInterface;
+  @Input() public autoComplete: string[];
+  @Input() public initialState: SearchStateInterface;
+  @Input() public searchResults: SearchResultInterface;
 
-  constructor() { }
+  @Output() public searchState = new EventEmitter();
+  constructor() {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
+  public reset(): void {}
+  public onSort(): void {}
+  public onFilterSelectionChange(): void {}
+  public onSearchTermChange(): void {}
+  public onScroll(): void {}
 }
