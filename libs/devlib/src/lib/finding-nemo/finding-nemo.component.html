@@ -12,6 +12,12 @@
   (valueChange)="onChange($event)"
 ></campus-search-term>
 
+<campus-column-filter
+  [filterCriteria]="filterCriteria$ | async"
+  (filterSelectionChange)="catchEvent($event)"
+></campus-column-filter>
+<button (click)="setMockData()">setMockData</button>
+
 <div *ngIf="selectedFilterCriteria">
   <p>Selected:</p> <p>{{ selectedFilterCriteria | json }}</p>
 

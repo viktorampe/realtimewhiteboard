@@ -7,6 +7,7 @@ import {
 } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { UiModule } from '@campus/ui';
 import { SearchTermComponent } from './search-term.component';
 
 describe('SearchTermComponent', () => {
@@ -19,7 +20,8 @@ describe('SearchTermComponent', () => {
         FormsModule,
         NoopAnimationsModule,
         MatAutocompleteModule,
-        MatInputModule
+        MatInputModule,
+        UiModule
       ],
       declarations: [SearchTermComponent]
     }).compileComponents();
