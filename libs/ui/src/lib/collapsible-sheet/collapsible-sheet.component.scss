@@ -1,14 +1,30 @@
+:host {
+  display: flex;
+}
+
 .collapsible-sheet {
   display: flex;
   flex-direction: row;
   align-items: center;
-  &__content {
-    height: 300px;
-    background-color: red;
+  flex: 1 1 auto;
+
+  > * {
+    height: 100%;
   }
+
+  &__aside {
+    min-width: 20px;
+    overflow: hidden;
+  }
+  &__main {
+    position: relative;
+  }
+
   &__toggle-button {
-    margin-left: -12px;
+    position: absolute;
+    top: 50%;
+    left: 0;
     border-radius: 50%;
-    background-color: green;
+    cursor: pointer;
   }
 }

@@ -1,12 +1,32 @@
 import {
   animate,
+  AnimationStateMetadata,
   state,
   style,
   transition,
   trigger
 } from '@angular/animations';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+
+const defaultBreakpoints = {
+  'xsmall-closed': '5%',
+  'xsmall-open': '95%',
+  'small-closed': '15%',
+  'small-open': '50%',
+  'medium-closed': '15%',
+  'medium-open': '40%',
+  'large-closed': '20%',
+  'large-open': '50%'
+};
+
+const animationState = (breakpointState: string): AnimationStateMetadata => {
+  return state(
+    breakpointState,
+    style({ width: '{{' + breakpointState + '}}' }),
+    { params: defaultBreakpoints }
+  );
+};
 
 @Component({
   selector: 'campus-collapsible-sheet',
@@ -14,58 +34,59 @@ import { Component } from '@angular/core';
   styleUrls: ['./collapsible-sheet.component.scss'],
   animations: [
     trigger('collapseExpand', [
-      transition('xsmall-false => xsmall-true', [
-        animate('200ms ease-in', style({ width: '5%' }))
-      ]),
-      state('xsmall-true', style({ width: '5%' })),
-      transition('xsmall-true => xsmall-false', [
-        animate('200ms ease-in', style({ width: '95%' }))
-      ]),
-      state('xsmall-false', style({ width: '95%' })),
-      transition('small-false => small-true', [
-        animate('200ms ease-in', style({ width: '15%' }))
-      ]),
-      state('small-true', style({ width: '15%' })),
-      transition('small-true => small-false', [
-        animate('200ms ease-in', style({ width: '50%' }))
-      ]),
-      state('small-false', style({ width: '50%' })),
-      transition('medium-false => medium-true', [
-        animate('200ms ease-in', style({ width: '15%' }))
-      ]),
-      state('medium-true', style({ width: '15%' })),
-      transition('medium-true => medium-false', [
-        animate('200ms ease-in', style({ width: '40%' }))
-      ]),
-      state('medium-false', style({ width: '40%' })),
-      transition('large-false => large-true', [
-        animate('200ms ease-in', style({ width: '20%' }))
-      ]),
-      state('large-true', style({ width: '20%' })),
-      transition('large-true => large-false', [
-        animate('200ms ease-in', style({ width: '50%' }))
-      ]),
-      state('large-false', style({ width: '50%' }))
+      // breakpoints (states)
+      animationState('xsmall-closed'),
+      animationState('xsmall-open'),
+      animationState('small-closed'),
+      animationState('small-open'),
+      animationState('medium-closed'),
+      animationState('medium-open'),
+      animationState('large-closed'),
+      animationState('large-open'),
+      // animation
+      transition('void => *', animate(0)), // start without animation
+      transition('* => *', animate('200ms ease-in'))
     ]),
     trigger('rotate', [
-      transition('false => true', [
-        animate('200ms ease-in', style({ transform: 'rotate(180deg)' }))
-      ]),
-      transition('true => false', [
-        animate('200ms ease-in', style({ transform: 'rotate(0deg)' }))
-      ]),
+      transition('void => *', animate(0)), // start without animation
+      transition('* => *', animate('200ms ease-in')),
       state('true', style({ transform: 'rotate(180deg)' })),
       state('false', style({ transform: 'rotate(0deg)' }))
     ])
   ]
 })
 export class CollapsibleSheetComponent {
-  collapsed = true;
+  private _breakpoints;
+
+  @Input() collapsed = true;
+  @Input()
+  set breakpoints(breakpoints: {
+    'xsmall-open'?: string;
+    'xsmall-closed'?: string;
+    'small-open'?: string;
+    'small-closed'?: string;
+    'medium-closed'?: string;
+    'medium-open'?: string;
+    'large-closed'?: string;
+    'large-open'?: string;
+  }) {
+    this._breakpoints = {
+      ...defaultBreakpoints,
+      ...(breakpoints || {})
+    };
+  }
+  get breakpoints() {
+    return this._breakpoints;
+  }
 
   constructor(public breakpointObserver: BreakpointObserver) {}
 
+  toggleCollapsed(): void {
+    this.collapsed = !this.collapsed;
+  }
+
   collapseExpandState(): string {
-    return `${this.breakPointSize()}-${this.collapsed}`;
+    return `${this.breakPointSize()}-${this.collapsed ? 'closed' : 'open'}`;
   }
 
   private breakPointSize(): string {
@@ -80,10 +101,6 @@ export class CollapsibleSheetComponent {
         )
       ? 'medium'
       : 'large';
-  }
-
-  toggleCollapsed(): void {
-    this.collapsed = !this.collapsed;
   }
 }
 

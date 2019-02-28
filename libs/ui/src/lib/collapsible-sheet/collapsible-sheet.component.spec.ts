@@ -25,8 +25,9 @@ describe('CollapsibleSheetComponent', () => {
       expect(component).toBeTruthy();
     });
   });
+
   describe('collapseExpandState', () => {
-    it('should return *-true or *-false if collapsed is respectively true or false', () => {
+    it('should return *-closed or *-open if collapsed is respectively true or false', () => {
       [true, false].forEach(value => {
         component.collapsed = value;
         fixture.detectChanges();
@@ -35,7 +36,23 @@ describe('CollapsibleSheetComponent', () => {
             .collapseExpandState()
             .split('-')
             .pop()
-        ).toBe(`${value}`);
+        ).toBe(value ? 'closed' : 'open');
+      });
+    });
+  });
+
+  describe('breakpoints', () => {
+    it('should extend defaults with provided values', () => {
+      component.breakpoints = { 'large-closed': 'foo', 'large-open': 'bar' };
+      expect(component.breakpoints).toEqual({
+        'xsmall-closed': '5%',
+        'xsmall-open': '95%',
+        'small-closed': '15%',
+        'small-open': '50%',
+        'medium-closed': '15%',
+        'medium-open': '40%',
+        'large-closed': 'foo',
+        'large-open': 'bar'
       });
     });
   });

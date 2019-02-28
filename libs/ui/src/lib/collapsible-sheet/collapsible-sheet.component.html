@@ -1,14 +1,17 @@
-<div class="collapsible-sheet"
-  ><div
-    class="collapsible-sheet__content"
-    [@collapseExpand]="collapseExpandState()"
+<div class="collapsible-sheet">
+  <div
+    class="collapsible-sheet__aside"
+    [@collapseExpand]="{ value: collapseExpandState(), params: breakpoints }"
   >
-    <ng-content></ng-content>
+    <ng-content select="[aside]"></ng-content>
   </div>
-  <mat-icon
-    class="collapsible-sheet__toggle-button"
-    [svgIcon]="'arrow-back'"
-    (click)="toggleCollapsed()"
-    [@rotate]="collapsed"
-  ></mat-icon
-></div>
+  <div class="collapsible-sheet__main">
+    <mat-icon
+      class="collapsible-sheet__toggle-button"
+      [svgIcon]="'arrow-back'"
+      (click)="toggleCollapsed()"
+      [@rotate]="collapsed"
+    ></mat-icon>
+    <ng-content select="[main]"></ng-content>
+  </div>
+</div>
