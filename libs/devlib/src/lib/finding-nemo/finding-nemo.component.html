@@ -1,31 +1,38 @@
 <div style="max-width: 300px; padding: 10px;">
-  <campus-checkbox-list-filter [filterCriteria]="
-     selectFilter"
-                               (filterSelectionChange)="onFilterSelectionChange($event)"
-                               [maxVisibleItems]="2">
+  <campus-checkbox-list-filter
+    [filterCriteria]="selectFilter"
+    (filterSelectionChange)="onFilterSelectionChange($event)"
+    [maxVisibleItems]="2"
+  >
   </campus-checkbox-list-filter>
 
-  <campus-column-filter [filterCriteria]="filterCriteria$ | async"
-                        (filterSelectionChange)="catchEvent($event)"></campus-column-filter>
+  <campus-column-filter
+    [filterCriteria]="filterCriteria$ | async"
+    (filterSelectionChange)="catchEvent($event)"
+  ></campus-column-filter>
   <button (click)="setMockData()">setMockData</button>
 
+  <campus-breadcrumb-filter
+    [rootLabel]="'Alle'"
+    [filterCriteria]="breadCrumbFilterCriteria"
+    (filterSelectionChange)="onFilterSelectionChange($event)"
+  ></campus-breadcrumb-filter>
 
-  <campus-breadcrumb-filter [rootLabel]="'Alle'"
-                            [filterCriteria]="breadCrumbFilterCriteria"
-                            (filterSelectionChange)="onFilterSelectionChange($event)"></campus-breadcrumb-filter>
+  <campus-select-filter
+    [filterCriteria]="selectFilter"
+    [multiple]="true"
+    resetLabel="None"
+    (filterSelectionChange)="onFilterSelectionChange($event)"
+  ></campus-select-filter>
 
-  <campus-select-filter [filterCriteria]="selectFilter"
-                        [multiple]="true"
-                        resetLabel="None"
-                        (filterSelectionChange)="onFilterSelectionChange($event)"></campus-select-filter>
-
-  <campus-search-term [initialValue]="'123'"
-                      [autoComplete]="true"
-                      [autoCompleteValues]="['waarde 1', ' waarde 2', 'waarde 3', 'waarde 4']"
-                      (valueChange)="onChange($event)"></campus-search-term>
+  <campus-search-term
+    [initialValue]="'123'"
+    [autoComplete]="true"
+    [autoCompleteValues]="['waarde 1', ' waarde 2', 'waarde 3', 'waarde 4']"
+    (valueChange)="onChange($event)"
+  ></campus-search-term>
 </div>
 
 <div *ngIf="selectedFilterCriteria">
-  <p>Selected:</p>
-  <p>{{ selectedFilterCriteria | json }}</p>
+  <p>Selected:</p> <p>{{ selectedFilterCriteria | json }}</p>
 </div>

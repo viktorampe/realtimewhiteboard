@@ -166,7 +166,7 @@ export const environment: EnvironmentInterface = {
     // 'laptop-content': 'assets/icons/laptop-content.svg',
     // 'laptop-images': 'assets/icons/laptop-images.svg',
     // 'laptop-text': 'assets/icons/laptop-text.svg',
-    magnifier: 'assets/icons/magnifier.svg',
+    // magnifier: 'assets/icons/magnifier.svg',
     // marker: 'assets/icons/marker.svg',
     // phone: 'assets/icons/phone.svg',
     // pinterest: 'assets/icons/pinterest.svg',
