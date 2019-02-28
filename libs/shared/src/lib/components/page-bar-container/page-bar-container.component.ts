@@ -69,7 +69,7 @@ export class PageBarContainerComponent implements AfterViewInit, OnDestroy {
     const element = document.querySelector(selector);
     if (element === null) return null;
     return new DomPortalHost(
-      document.querySelector(selector),
+      element,
       this.componentFactoryResolver,
       this.appRef,
       this.injector
