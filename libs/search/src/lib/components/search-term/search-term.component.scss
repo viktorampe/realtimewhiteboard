@@ -8,11 +8,4 @@
   display: flex;
   transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
   box-shadow: none;
-
-  &:focus-within,
-  &:hover {
-    campus-button {
-      border-left-color: rgba(0, 0, 0, 0);
-    }
-  }
 }

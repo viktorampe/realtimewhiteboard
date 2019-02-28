@@ -1,23 +1,26 @@
 @mixin search-term() {
   $search-search-term-background-color: $ui-primary-bg-color;
-  $search-search-term-border-color: #e5e5e5 !default;
-  $search-search-term-button-background-color: #6ed2c1 !default;
-  $search-search-term-button-border-color: #057a74 !default;
-  $search-search-term-autocomplete-background-color: $ui-primary-bg-color;
+  $search-search-term-border-color: $ui-primary-bg-color !default;
+  $search-search-term-button-background-color: $ui-button-bg-color-1 !default;
+  $search-search-term-button-border-color: darken(
+    $search-search-term-button-background-color,
+    10%
+  ) !default;
+  $search-search-term-autocomplete-background-color: $ui-primary-bg-color !default;
   .search-term {
     background-color: $search-search-term-background-color;
     border: 1px solid $search-search-term-border-color;
-
     mat-form-field {
       width: 100%;
       &.mat-form-field-appearance-outline {
-        .mat-form-field-outline-thick [class^='mat-form-field-outline-'],
-        .mat-form-field-outline [class^='mat-form-field-outline-'] {
-          border-width: 1px;
-          border-radius: 0px;
-          border-right: none;
+        .mat-form-field-outline-thick,
+        .mat-form-field-outline {
+          > div {
+            border-width: 1px;
+            border-radius: 0px;
+            border-right: none;
+          }
         }
-
         .mat-form-field-wrapper {
           margin: 0px;
           padding-bottom: 0px;
