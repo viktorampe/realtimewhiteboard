@@ -2,6 +2,7 @@
 @import './components/checkbox-line-filter/checkbox-line-filter-component.theme.scss';
 @import './components/checkbox-list-filter/checkbox-filter/checkbox-filter.component.theme.scss';
 @import './components/checkbox-list-filter/checkbox-list-filter.component.theme.scss';
+@import './components/column-filter/column-filter.component.theme.scss';
 @import './components/search-term/search-term.component.theme.scss';
 
 // create theme-mixin with each mixin from our library components
@@ -10,5 +11,6 @@
   @include search-checkbox-line-filter--deep();
   @include search-checkbox-filter-theme();
   @include search-checkbox-list-filter-theme();
+  @include column-filter-theme();
   @include search-term();
 }
