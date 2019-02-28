@@ -5,10 +5,12 @@ import {
   MatAutocompleteModule,
   MatBadgeModule,
   MatCheckboxModule,
+  MatIconModule,
   MatInputModule,
   MatListModule,
   MatSelectModule
 } from '@angular/material';
+import { UiModule } from '@campus/ui';
 import { BreadcrumbFilterComponent } from './components/breadcrumb-filter/breadcrumb-filter.component';
 import { CheckboxLineFilterComponent } from './components/checkbox-line-filter/checkbox-line-filter-component';
 import { ColumnFilterComponent } from './components/column-filter/column-filter.component';
@@ -17,10 +19,12 @@ import { SelectFilterComponent } from './components/select-filter-component/sele
 
 @NgModule({
   imports: [
-    MatCheckboxModule,
     CommonModule,
+    UiModule,
     MatSelectModule,
     ReactiveFormsModule,
+    MatCheckboxModule,
+    MatIconModule,
     MatBadgeModule,
     MatInputModule,
     MatListModule,

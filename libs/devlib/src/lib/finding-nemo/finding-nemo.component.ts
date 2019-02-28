@@ -127,6 +127,9 @@ const mockBreadcrumbFilterCriteria: SearchFilterCriteriaInterface[] = [
   styleUrls: ['./finding-nemo.component.scss']
 })
 export class FindingNemoComponent {
+  public selectFilter: SearchFilterCriteriaInterface;
+  public selectedFilterCriteria: SearchFilterCriteriaInterface;
+  public autoComplete = true;
   filterCriteria$ = new BehaviorSubject<SearchFilterCriteriaInterface[]>(null);
 
   breadCrumbFilterCriteria: SearchFilterCriteriaInterface[];
