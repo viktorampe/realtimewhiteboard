@@ -1,14 +1,10 @@
-import { ChangeDetectorRef, Component, OnInit, Type } from '@angular/core';
+import { Component, OnInit, Type } from '@angular/core';
 import {
-  CredentialFixture,
   EduContentMetadataFixture,
-  EduContentMetadataInterface,
-  LearningAreaFixture
+  EduContentMetadataInterface
 } from '@campus/dal';
 import {
-  SearchFilterCriteriaFixture,
   SearchFilterCriteriaInterface,
-  SearchFilterCriteriaValuesFixture,
   SearchModeInterface,
   SearchResultInterface,
   SearchResultItemComponentInterface,
@@ -155,123 +151,54 @@ export class FindingNemoComponent implements OnInit {
     SearchStateInterface
   > = new BehaviorSubject(null);
   public breadCrumbFilterCriteria: SearchFilterCriteriaInterface[];
+  public autoComplete = true;
+  public filterCriteria$ = new BehaviorSubject<SearchFilterCriteriaInterface[]>(
+    null
+  );
 
   private loadTimer: number;
-
-  constructor(
-    private cd: ChangeDetectorRef,
-    private eduContentMetadataApi: EduContentMetadataApi
-  ) {}
-
-  ngOnInit() {
-    this.selectFilter = new SearchFilterCriteriaFixture(
-      {
-        name: 'selectFilter',
-        label: 'select filter'
-      },
-      [
-        new SearchFilterCriteriaValuesFixture({
-          data: new LearningAreaFixture({
+  private mockData: SearchFilterCriteriaInterface[] = [
+    {
+      name: 'criteria name',
+      label: 'The label of the criteria',
+      keyProperty: 'id',
+      displayProperty: 'name',
+      values: [
+        {
+          data: {
             id: 1,
-            name: 'foo'
-          })
-        }),
-        new SearchFilterCriteriaValuesFixture({
-          data: new LearningAreaFixture({
+            name: 'foo jaar'
+          },
+          selected: false
+        },
+        {
+          data: {
             id: 2,
-            name: 'bar'
-          }),
-          selected: true
-        })
+            name: 'bar jaar'
+          },
+          selected: false
+        },
+        {
+          data: {
+            id: 3,
+            name: 'baz jaar'
+          },
+          selected: false,
+          prediction: 3
+        }
       ]
-    );
+    }
+  ];
 
-    this.selectFilter = new SearchFilterCriteriaFixture(
-      { label: 'search filter' },
-      [
-        new SearchFilterCriteriaValuesFixture(
-          {
-            data: new LearningAreaFixture({
-              id: 1,
-              name: 'Aardrijkskunde'
-            })
-          },
-          new SearchFilterCriteriaFixture(
-            { keyProperty: 'id', displayProperty: 'provider' },
-            [
-              new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 1, provider: 'smartschool' })
-              }),
-              new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 2, provider: 'google' })
-              }),
-              new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 3, provider: 'facebook' })
-              })
-            ]
-          )
-        ),
-        new SearchFilterCriteriaValuesFixture(
-          {
-            data: new LearningAreaFixture({
-              id: 2,
-              name: 'Geschiedenis'
-            })
-          },
-          new SearchFilterCriteriaFixture(
-            { keyProperty: 'id', displayProperty: 'provider' },
-            [
-              new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 1, provider: 'smartschool' })
-              }),
-              new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 2, provider: 'google' })
-              }),
-              new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 3, provider: 'facebook' })
-              })
-            ]
-          )
-        ),
-        new SearchFilterCriteriaValuesFixture(
-          {
-            data: new LearningAreaFixture({
-              id: 3,
-              name: 'Wiskunde'
-            })
-          },
-          new SearchFilterCriteriaFixture(
-            { keyProperty: 'id', displayProperty: 'provider' },
-            [
-              new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 1, provider: 'smartschool' })
-              }),
-              new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 2, provider: 'google' })
-              }),
-              new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 3, provider: 'facebook' })
-              })
-            ]
-          )
-        ),
-        new SearchFilterCriteriaValuesFixture({
-          data: new LearningAreaFixture({
-            id: 4,
-            name: 'Informatica'
-          }),
-          visible: false
-        }),
-        new SearchFilterCriteriaValuesFixture({
-          data: new LearningAreaFixture({
-            id: 5,
-            name: 'Engels'
-          }),
-          prediction: 0
-        })
-      ]
-    );
+  constructor(private eduContentMetadataApi: EduContentMetadataApi) {}
 
+  ngOnInit(): void {
+    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    //Add 'implements OnInit' to the class.
+    this.setMockData();
+  }
+
+  setMockData() {
     this.searchMode = {
       name: 'demo',
       label: 'demo',
@@ -308,11 +235,13 @@ export class FindingNemoComponent implements OnInit {
       from: 0
       // sort: null,
     });
+
+    this.filterCriteria$.next(this.mockData);
   }
 
-  onFilterSelectionChange(searchFilter: SearchFilterCriteriaInterface[]) {
-    this.breadCrumbFilterCriteria = searchFilter;
-    console.log(searchFilter);
+  catchEvent($event: SearchFilterCriteriaInterface[]) {
+    console.log($event);
+    this.filterCriteria$.next([...this.mockData, ...$event]);
   }
 
   loadMoreResults(from = 0) {
@@ -336,6 +265,7 @@ export class FindingNemoComponent implements OnInit {
       this.loadTimer = null;
     }, 2500);
     return;
+
     this.eduContentMetadataApi
       .search(
         '',
@@ -366,7 +296,6 @@ export class FindingNemoComponent implements OnInit {
           this.resultsPage$.next(results);
         }
       );
-    // this.cd.detectChanges();
   }
 
   resetResults() {

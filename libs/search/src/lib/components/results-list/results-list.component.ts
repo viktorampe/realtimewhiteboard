@@ -17,6 +17,7 @@ import {
 import { WINDOW } from '@campus/browser';
 import { ListViewComponent } from '@campus/ui';
 import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import {
   SearchModeInterface,
   SearchResultInterface,
@@ -49,7 +50,6 @@ export class ResultListDirective {
  * template:
  *   <campus-results-list
  *     [resultsPage]="resultsPage$ | async"
- *     [resultItem]="myResultItemComponent"
  *     [searchMode]="searchMode"
  *     [searchState]="searchState$ | async"
  *     (sortBy)="onSortChanged($event)"
@@ -130,16 +130,12 @@ export class ResultsListComponent implements OnDestroy, AfterViewInit {
     this.subscriptions.add(
       this.viewPort
         .elementScrolled()
-        // .pipe(
-        //   filter(() => this.scrollEnabled),
-        //   auditTime(300) // limit events to once every 300ms
-        // )
+        .pipe(filter(() => this.scrollEnabled))
         .subscribe(() => {
           // ngZone is required to trigger change detection, because the `elementScrolled`
           // event is emitting outside the ngZone
           // this makes sense, because we don't want to trigger CD for each scroll event
-          this.ngZone.run(() => {});
-          this.checkForMoreResults();
+          this.ngZone.run(() => this.checkForMoreResults());
         })
     );
   }
