@@ -30,18 +30,20 @@ import { SelectFilterComponent } from './components/select-filter-component/sele
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     MatFormFieldModule,
     UiModule,
     MatTooltipModule,
     ScrollingModule,
     MatSelectModule,
-    ReactiveFormsModule,
     MatCheckboxModule,
     MatIconModule,
     MatBadgeModule,
     MatInputModule,
     MatListModule,
-    MatAutocompleteModule
+    MatIconModule,
+    MatAutocompleteModule,
+    FormsModule
   ],
   declarations: [
     BreadcrumbFilterComponent,
