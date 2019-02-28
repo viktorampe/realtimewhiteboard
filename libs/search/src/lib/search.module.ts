@@ -1,3 +1,4 @@
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -8,12 +9,17 @@ import {
   MatIconModule,
   MatInputModule,
   MatListModule,
-  MatSelectModule
+  MatSelectModule,
+  MatTooltipModule
 } from '@angular/material';
 import { UiModule } from '@campus/ui';
 import { BreadcrumbFilterComponent } from './components/breadcrumb-filter/breadcrumb-filter.component';
 import { CheckboxLineFilterComponent } from './components/checkbox-line-filter/checkbox-line-filter-component';
 import { ColumnFilterComponent } from './components/column-filter/column-filter.component';
+import {
+  ResultListDirective,
+  ResultsListComponent
+} from './components/results-list/results-list.component';
 import { SearchTermComponent } from './components/search-term/search-term.component';
 import { SelectFilterComponent } from './components/select-filter-component/select-filter.component';
 
@@ -21,6 +27,8 @@ import { SelectFilterComponent } from './components/select-filter-component/sele
   imports: [
     CommonModule,
     UiModule,
+    MatTooltipModule,
+    ScrollingModule,
     MatSelectModule,
     ReactiveFormsModule,
     MatCheckboxModule,
@@ -35,6 +43,8 @@ import { SelectFilterComponent } from './components/select-filter-component/sele
     BreadcrumbFilterComponent,
     SelectFilterComponent,
     SearchTermComponent,
+    ResultsListComponent,
+    ResultListDirective,
     CheckboxLineFilterComponent,
     ColumnFilterComponent
   ],
@@ -42,6 +52,7 @@ import { SelectFilterComponent } from './components/select-filter-component/sele
     BreadcrumbFilterComponent,
     SelectFilterComponent,
     SearchTermComponent,
+    ResultsListComponent,
     CheckboxLineFilterComponent,
     ColumnFilterComponent
   ]

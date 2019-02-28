@@ -252,6 +252,56 @@ describe('ListViewComponent', () => {
 
     expect(selectedItems.length).toBe(0);
   });
+
+  describe('dynamically created list items', () => {
+    // stubbed class for dynamically created items
+    class DynamicItemClass extends ListViewItemDirective<any>
+      implements ListViewItemInterface {
+      listFormat: ListFormat;
+    }
+
+    let mockCreatedItem: DynamicItemClass;
+    beforeEach(() => {
+      mockCreatedItem = new DynamicItemClass(component, null);
+      mockCreatedItem.itemHost = mockCreatedItem;
+    });
+
+    describe('addItems', () => {
+      it("should add the items to the item's querylist", () => {
+        const origLength = component.items.length;
+
+        component.addItem(mockCreatedItem);
+        expect(component.items.length).toBe(origLength + 1);
+      });
+
+      it("should subscribe to the item's selection event", () => {
+        // double check that there are no subscribers by default
+        expect(mockCreatedItem.itemSelectionChanged.observers.length).toBe(0);
+
+        component.addItem(mockCreatedItem);
+        expect(mockCreatedItem.itemSelectionChanged.observers.length).toBe(1);
+      });
+    });
+
+    describe('resetItems', () => {
+      it("should remove the items from the item's querylist", () => {
+        // add an item first
+        component.addItem(mockCreatedItem);
+        const origLength = component.items.length;
+
+        component.resetItems();
+        expect(component.items.length).toBe(origLength - 1);
+      });
+
+      it("should unsubscribe from the item's selection event", () => {
+        // add an item first
+        component.addItem(mockCreatedItem);
+
+        component.resetItems();
+        expect(mockCreatedItem.itemSelectionChanged.observers.length).toBe(0);
+      });
+    });
+  });
 });
 
 /*

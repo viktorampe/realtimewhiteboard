@@ -1,6 +1,19 @@
-import { Component } from '@angular/core';
-import { SearchFilterCriteriaInterface } from '@campus/search';
-import { BehaviorSubject } from 'rxjs';
+import { Component, OnInit, Type } from '@angular/core';
+import {
+  EduContentMetadataFixture,
+  EduContentMetadataInterface
+} from '@campus/dal';
+import {
+  SearchFilterCriteriaInterface,
+  SearchModeInterface,
+  SearchResultInterface,
+  SearchResultItemComponentInterface,
+  SearchStateInterface
+} from '@campus/search';
+import { EduContentMetadataApi } from '@diekeure/polpo-api-angular-sdk';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { PolpoResultItemComponent } from '../polpo-result-item/polpo-result-item.component';
 
 const mockBreadcrumbFilterCriteria: SearchFilterCriteriaInterface[] = [
   {
@@ -126,17 +139,25 @@ const mockBreadcrumbFilterCriteria: SearchFilterCriteriaInterface[] = [
   templateUrl: './finding-nemo.component.html',
   styleUrls: ['./finding-nemo.component.scss']
 })
-export class FindingNemoComponent {
+export class FindingNemoComponent implements OnInit {
   public selectFilter: SearchFilterCriteriaInterface;
   public selectedFilterCriteria: SearchFilterCriteriaInterface;
+  public resultItemComponent: Type<SearchResultItemComponentInterface>;
+  public resultsPage$: Subject<
+    SearchResultInterface<EduContentMetadataInterface>
+  > = new Subject();
+  public searchMode: SearchModeInterface;
+  public searchState: BehaviorSubject<
+    SearchStateInterface
+  > = new BehaviorSubject(null);
+  public breadCrumbFilterCriteria: SearchFilterCriteriaInterface[];
   public autoComplete = true;
-  filterCriteria$ = new BehaviorSubject<SearchFilterCriteriaInterface[]>(null);
+  public filterCriteria$ = new BehaviorSubject<SearchFilterCriteriaInterface[]>(
+    null
+  );
 
-  breadCrumbFilterCriteria: SearchFilterCriteriaInterface[];
-
-  constructor() {}
-
-  mockData: SearchFilterCriteriaInterface[] = [
+  private loadTimer: number;
+  private mockData: SearchFilterCriteriaInterface[] = [
     {
       name: 'criteria name',
       label: 'The label of the criteria',
@@ -169,7 +190,52 @@ export class FindingNemoComponent {
     }
   ];
 
+  constructor(private eduContentMetadataApi: EduContentMetadataApi) {}
+
+  ngOnInit(): void {
+    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    //Add 'implements OnInit' to the class.
+    this.setMockData();
+  }
+
   setMockData() {
+    this.searchMode = {
+      name: 'demo',
+      label: 'demo',
+      dynamicFilters: false,
+      searchFilterFactory: [],
+      results: {
+        component: PolpoResultItemComponent,
+        sortModes: [
+          {
+            description: 'book',
+            name: 'book',
+            icon: 'book'
+          },
+          {
+            description: 'bundle',
+            name: 'bundle',
+            icon: 'bundle'
+          },
+          {
+            description: 'taak',
+            name: 'taak',
+            icon: 'taak'
+          }
+        ],
+        pageSize: 3
+      }
+    };
+
+    this.breadCrumbFilterCriteria = mockBreadcrumbFilterCriteria;
+
+    this.searchState.next({
+      searchTerm: '',
+      filterCriteriaSelections: new Map(),
+      from: 0
+      // sort: null,
+    });
+
     this.filterCriteria$.next(this.mockData);
   }
 
@@ -177,6 +243,75 @@ export class FindingNemoComponent {
     console.log($event);
     this.filterCriteria$.next([...this.mockData, ...$event]);
   }
+
+  loadMoreResults(from = 0) {
+    console.log('loadMoreResults');
+    const resultsPage = {
+      count: 30,
+      results: [
+        new EduContentMetadataFixture({ title: 'foo' }),
+        new EduContentMetadataFixture({ title: 'bar' }),
+        new EduContentMetadataFixture({ title: 'foobar' })
+      ],
+      filterCriteriaPredictions: new Map()
+    };
+    if (this.loadTimer) {
+      // in case we resetted the list, we should cancel the running request
+      window.clearTimeout(this.loadTimer);
+      this.loadTimer = null;
+    }
+    this.loadTimer = window.setTimeout(() => {
+      this.resultsPage$.next({ ...resultsPage });
+      this.loadTimer = null;
+    }, 2500);
+    return;
+
+    this.eduContentMetadataApi
+      .search(
+        '',
+        {
+          eduContentProductType: [],
+          eduNets: [],
+          grades: [],
+          learningArea: [],
+          learningDomains: [],
+          methods: [],
+          schoolTypes: [],
+          years: []
+        } as any,
+        from,
+        null
+      )
+      .pipe(
+        map((results: any) => {
+          return {
+            count: results.count,
+            results: results.metadata,
+            filterCriteriaPredictions: results.filters
+          };
+        })
+      )
+      .subscribe(
+        (results: SearchResultInterface<EduContentMetadataInterface>) => {
+          this.resultsPage$.next(results);
+        }
+      );
+  }
+
+  resetResults() {
+    this.searchState.next({
+      searchTerm: '',
+      filterCriteriaSelections: new Map(),
+      from: 0,
+      sort: 'bundle'
+    });
+  }
+
+  onGetNextPage(from) {
+    console.log('getNextPage from', from);
+    this.loadMoreResults(from);
+  }
+
   onChange(value: string) {
     console.log(value);
   }

@@ -37,3 +37,14 @@
     ></campus-select-filter>
   </div>
 </div>
+
+<div>
+  <span (click)="loadMoreResults()">load more</span> |
+  <span (click)="resetResults()">reset</span>
+</div>
+<campus-results-list
+  [resultsPage]="resultsPage$ | async"
+  [searchMode]="searchMode"
+  [searchState]="searchState | async"
+  (getNextPage)="onGetNextPage($event)"
+></campus-results-list>

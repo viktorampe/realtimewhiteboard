@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { EduContent } from '@campus/dal';
+import { EduContent, EduContentFixture } from '@campus/dal';
 import { MockMatIconRegistry } from '@campus/testing';
 import { ListFormat, ListViewItemDirective, UiModule } from '@campus/ui';
 import { FilterService, FILTER_SERVICE_TOKEN } from '@campus/utils';
@@ -92,11 +92,11 @@ describe('BooksComponent', () => {
   it('should ask the viewmodel to open a book', () => {
     bookViewModel.openBook = jest.fn();
 
-    const mockId = 1;
+    const mockBook = new EduContentFixture();
 
-    component.openBook(mockId);
+    component.openBook(mockBook);
 
     expect(bookViewModel.openBook).toHaveBeenCalled();
-    expect(bookViewModel.openBook).toHaveBeenCalledWith(mockId);
+    expect(bookViewModel.openBook).toHaveBeenCalledWith(mockBook);
   });
 });
