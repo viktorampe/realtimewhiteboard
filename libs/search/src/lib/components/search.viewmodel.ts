@@ -16,10 +16,12 @@ import { MockSearchViewModel } from './search.viewmodel.mock';
   providedIn: 'root'
 })
 export class SearchViewModel {
-  constructor(private mockViewmodel: MockSearchViewModel) {}
-
   public searchState$: Observable<SearchStateInterface>;
   public searchFilters$: Observable<SearchFilterInterface>;
+
+  constructor(private mockViewmodel: MockSearchViewModel) {
+    this.getMocks();
+  }
 
   public reset(state: SearchStateInterface, mode: SearchModeInterface): void {}
   public changeSort(sortMode: SortModeInterface): void {}
@@ -27,4 +29,9 @@ export class SearchViewModel {
   public changeFilters(criteria: SearchFilterCriteriaInterface): void {}
   public changeSearchTerm(searchTerm: string): void {}
   public updateResult(result: SearchResultInterface<any>): void {} //TODO: remove <any> when other scaffold branch is merged
+
+  private getMocks(): void {
+    this.searchState$ = this.mockViewmodel.searchState$;
+    this.searchFilters$ = this.mockViewmodel.searchFilters$;
+  }
 }
