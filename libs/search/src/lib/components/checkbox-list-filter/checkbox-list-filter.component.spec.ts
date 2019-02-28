@@ -1,6 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { MatCheckboxModule, MatListModule } from '@angular/material';
+import {
+  MatCheckboxModule,
+  MatIconModule,
+  MatListModule
+} from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { CredentialFixture, LearningAreaFixture } from '@campus/dal';
@@ -23,6 +27,7 @@ describe('CheckboxListFilterComponentComponent', () => {
         MatListModule,
         NoopAnimationsModule,
         MatCheckboxModule,
+        MatIconModule,
         FormsModule
       ],
       declarations: [CheckboxListFilterComponent, CheckboxFilterComponent]
