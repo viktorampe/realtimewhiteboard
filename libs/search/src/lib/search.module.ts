@@ -6,6 +6,7 @@ import {
   MatAutocompleteModule,
   MatBadgeModule,
   MatCheckboxModule,
+  MatFormFieldModule,
   MatIconModule,
   MatInputModule,
   MatListModule,
@@ -15,6 +16,8 @@ import {
 import { UiModule } from '@campus/ui';
 import { BreadcrumbFilterComponent } from './components/breadcrumb-filter/breadcrumb-filter.component';
 import { CheckboxLineFilterComponent } from './components/checkbox-line-filter/checkbox-line-filter-component';
+import { CheckboxFilterComponent } from './components/checkbox-list-filter/checkbox-filter/checkbox-filter.component';
+import { CheckboxListFilterComponent } from './components/checkbox-list-filter/checkbox-list-filter.component';
 import { ColumnFilterComponent } from './components/column-filter/column-filter.component';
 import {
   ResultListDirective,
@@ -26,6 +29,8 @@ import { SelectFilterComponent } from './components/select-filter-component/sele
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
+    MatFormFieldModule,
     UiModule,
     MatTooltipModule,
     ScrollingModule,
@@ -36,8 +41,7 @@ import { SelectFilterComponent } from './components/select-filter-component/sele
     MatBadgeModule,
     MatInputModule,
     MatListModule,
-    MatAutocompleteModule,
-    FormsModule
+    MatAutocompleteModule
   ],
   declarations: [
     BreadcrumbFilterComponent,
@@ -46,6 +50,8 @@ import { SelectFilterComponent } from './components/select-filter-component/sele
     ResultsListComponent,
     ResultListDirective,
     CheckboxLineFilterComponent,
+    CheckboxListFilterComponent,
+    CheckboxFilterComponent,
     ColumnFilterComponent
   ],
   exports: [
@@ -54,6 +60,8 @@ import { SelectFilterComponent } from './components/select-filter-component/sele
     SearchTermComponent,
     ResultsListComponent,
     CheckboxLineFilterComponent,
+    CheckboxListFilterComponent,
+    CheckboxFilterComponent,
     ColumnFilterComponent
   ]
 })

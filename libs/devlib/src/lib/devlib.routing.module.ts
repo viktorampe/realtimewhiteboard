@@ -7,7 +7,8 @@ import { LoginpageComponent } from './loginpage/loginpage.component';
 const routes: Routes = [
   {
     path: 'finding-nemo',
-    component: FindingNemoComponent
+    component: FindingNemoComponent,
+    data: { breadcrumbText: 'Nemo' }
   },
   {
     path: 'educontent',
@@ -19,7 +20,8 @@ const routes: Routes = [
   },
   {
     path: 'login',
-    component: LoginpageComponent
+    component: LoginpageComponent,
+    data: { breadcrumbText: 'Login' }
   },
   {
     path: '',
