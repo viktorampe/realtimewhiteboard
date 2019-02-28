@@ -229,7 +229,6 @@ export class ResultsListComponent implements OnDestroy, AfterViewInit {
 
   private checkForMoreResults(): void {
     const fromBottom = this.viewPort.measureScrollOffset('bottom');
-    console.log(fromBottom);
     if (this.loadedCount === 0 || fromBottom <= 4 * this.itemSize) {
       // disable multiple event triggers for the same page
       this.scrollEnabled = false;

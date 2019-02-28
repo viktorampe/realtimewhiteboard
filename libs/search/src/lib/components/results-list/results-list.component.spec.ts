@@ -1,9 +1,10 @@
 import { CdkScrollable, ScrollingModule } from '@angular/cdk/scrolling';
 import { Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatTooltipModule } from '@angular/material';
+import { MatIconRegistry, MatTooltipModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
+import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import {
   SearchModeInterface,
@@ -72,7 +73,10 @@ describe('ResultsListComponentComponent', () => {
         ResultItemComponent,
         ResultListDirective
       ],
-      providers: [ResultItemComponent]
+      providers: [
+        ResultItemComponent,
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
+      ]
     })
       .overrideModule(BrowserDynamicTestingModule, {
         set: { entryComponents: [ResultItemComponent] }
