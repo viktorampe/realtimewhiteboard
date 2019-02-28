@@ -1,8 +1,11 @@
+@import './components/results-list/results-list.component.theme';
 @import './components/checkbox-line-filter/checkbox-line-filter-component.theme.scss';
 @import './components/column-filter/column-filter.component.theme.scss';
 @import './components/search-term/search-term.component.theme.scss';
 
+// create theme-mixin with each mixin from our library components
 @mixin search-theme() {
+  @include search-results-list();
   @include search-checkbox-line-filter--deep();
   @include column-filter-theme();
   @include search-term();

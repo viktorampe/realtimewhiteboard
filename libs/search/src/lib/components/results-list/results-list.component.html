@@ -1,0 +1,25 @@
+<div class="search-results-list">
+  <div>
+    <div class="search-results-list__info"
+      >{{ count + (count === 1 ? ' resultaat' : ' resultaten') }}.</div
+    >
+    <div *ngIf="sortModes" class="search-results-list__sorting"
+      >Sorteer op
+      <campus-button
+        *ngFor="let sortMode of sortModes"
+        bordered
+        [iconClass]="sortMode.icon"
+        [matTooltip]="sortMode.description"
+        matTooltipPosition="above"
+        [class.ui-button--primary]="sortMode.name === activeSortMode"
+        (click)="sortModeClicked(sortMode)"
+      ></campus-button>
+    </div>
+  </div>
+  <div cdkScrollable class="search-results-list__results">
+    <campus-list-view [listFormat]="'line'" [placeHolderText]="''">
+      <ng-template result-list-host></ng-template>
+    </campus-list-view>
+    <div *ngIf="loading">Even geduld, de resultaten worden geladen...</div>
+  </div>
+</div>
