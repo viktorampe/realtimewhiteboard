@@ -251,8 +251,9 @@ const mockListCriteria = new SearchFilterCriteriaFixture(
   styleUrls: ['./finding-nemo.component.scss']
 })
 export class FindingNemoComponent {
-  selectFilter = mockListCriteria;
-
+  public selectFilter: SearchFilterCriteriaInterface;
+  public selectedFilterCriteria: SearchFilterCriteriaInterface;
+  public autoComplete = true;
   filterCriteria$ = new BehaviorSubject<SearchFilterCriteriaInterface[]>(null);
 
   breadCrumbFilterCriteria: SearchFilterCriteriaInterface[];
@@ -290,6 +291,9 @@ export class FindingNemoComponent {
     }
   ];
 
+  constructor() {
+    this.selectFilter = mockListCriteria;
+  }
   setMockData() {
     this.filterCriteria$.next(this.mockData);
   }

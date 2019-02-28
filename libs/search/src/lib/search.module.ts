@@ -11,6 +11,7 @@ import {
   MatListModule,
   MatSelectModule
 } from '@angular/material';
+import { UiModule } from '@campus/ui';
 import { BreadcrumbFilterComponent } from './components/breadcrumb-filter/breadcrumb-filter.component';
 import { CheckboxLineFilterComponent } from './components/checkbox-line-filter/checkbox-line-filter-component';
 import { CheckboxFilterComponent } from './components/checkbox-list-filter/checkbox-filter/checkbox-filter.component';
@@ -25,8 +26,9 @@ import { SelectFilterComponent } from './components/select-filter-component/sele
     FormsModule,
     ReactiveFormsModule,
     MatFormFieldModule,
-    MatCheckboxModule,
+    UiModule,
     MatSelectModule,
+    MatCheckboxModule,
     MatBadgeModule,
     MatInputModule,
     MatIconModule,
