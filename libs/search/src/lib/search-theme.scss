@@ -1,7 +1,9 @@
 @import './components/checkbox-line-filter/checkbox-line-filter-component.theme.scss';
 @import './components/column-filter/column-filter.component.theme.scss';
+@import './components/search-term/search-term.component.theme.scss';
 
 @mixin search-theme() {
   @include search-checkbox-line-filter--deep();
   @include column-filter-theme();
+  @include search-term();
 }
