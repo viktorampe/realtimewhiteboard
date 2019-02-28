@@ -1,0 +1,25 @@
+<mat-action-list
+  *ngFor="let filterCriterion of filterCriteria; let i = index"
+  [@slideInOut]="animationState(i)"
+  class="column"
+>
+  <div *ngFor="let value of filterCriterion.values" class="value">
+    <div
+      [ngClass]="{ selected: value.selected }"
+      (click)="onFilterSelectionChange(value, false)"
+      class="displayProperty"
+      >displayProperty: {{ value.data[filterCriterion.displayProperty] }}</div
+    >
+    <ng-container *ngIf="value.prediction && value.prediction !== 0"
+      ><div (click)="onFilterSelectionChange(value, false)" class="arrow"
+        >-></div
+      >
+      <div (click)="onFilterSelectionChange(value, true)" class="magnifier"
+        >(-)</div
+      ></ng-container
+    >
+  </div>
+</mat-action-list>
+<ng-container *ngIf="!filterCriteria || filterCriteria.length === 0">
+  <div class="no-criteria">Er is geen inhoudstafel om op te filteren</div>
+</ng-container>

@@ -1,10 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import { LearningAreaFixture } from '@campus/dal';
+import { Component, OnInit, Type } from '@angular/core';
 import {
-  SearchFilterCriteriaFixture,
+  EduContentMetadataFixture,
+  EduContentMetadataInterface
+} from '@campus/dal';
+import {
   SearchFilterCriteriaInterface,
-  SearchFilterCriteriaValuesFixture
+  SearchModeInterface,
+  SearchResultInterface,
+  SearchResultItemComponentInterface,
+  SearchStateInterface
 } from '@campus/search';
+import { EduContentMetadataApi } from '@diekeure/polpo-api-angular-sdk';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { PolpoResultItemComponent } from '../polpo-result-item/polpo-result-item.component';
 
 const mockBreadcrumbFilterCriteria: SearchFilterCriteriaInterface[] = [
   {
@@ -133,97 +142,176 @@ const mockBreadcrumbFilterCriteria: SearchFilterCriteriaInterface[] = [
 export class FindingNemoComponent implements OnInit {
   public selectFilter: SearchFilterCriteriaInterface;
   public selectedFilterCriteria: SearchFilterCriteriaInterface;
+  public resultItemComponent: Type<SearchResultItemComponentInterface>;
+  public resultsPage$: Subject<
+    SearchResultInterface<EduContentMetadataInterface>
+  > = new Subject();
+  public searchMode: SearchModeInterface;
+  public searchState: BehaviorSubject<
+    SearchStateInterface
+  > = new BehaviorSubject(null);
+  public breadCrumbFilterCriteria: SearchFilterCriteriaInterface[];
+  public autoComplete = true;
+  public filterCriteria$ = new BehaviorSubject<SearchFilterCriteriaInterface[]>(
+    null
+  );
 
-  breadCrumbFilterCriteria: SearchFilterCriteriaInterface[];
-
-  constructor() {}
-
-  ngOnInit() {
-    this.selectFilter = new SearchFilterCriteriaFixture(
-      {
-        name: 'selectFilter',
-        label: 'select filter'
-      },
-      [
-        new SearchFilterCriteriaValuesFixture({
-          data: new LearningAreaFixture({
+  private loadTimer: number;
+  private mockData: SearchFilterCriteriaInterface[] = [
+    {
+      name: 'criteria name',
+      label: 'The label of the criteria',
+      keyProperty: 'id',
+      displayProperty: 'name',
+      values: [
+        {
+          data: {
             id: 1,
-            name: 'foo'
-          })
-        }),
-        new SearchFilterCriteriaValuesFixture({
-          data: new LearningAreaFixture({
+            name: 'foo jaar'
+          },
+          selected: false
+        },
+        {
+          data: {
             id: 2,
-            name: 'bar'
-          }),
-          selected: true
-        })
+            name: 'bar jaar'
+          },
+          selected: false
+        },
+        {
+          data: {
+            id: 3,
+            name: 'baz jaar'
+          },
+          selected: false,
+          prediction: 3
+        }
       ]
-    );
+    }
+  ];
 
-    this.selectFilter = new SearchFilterCriteriaFixture(
-      { label: 'search filter' },
-      [
-        new SearchFilterCriteriaValuesFixture({
-          data: new LearningAreaFixture({
-            id: 1,
-            name: '1'
-          })
-        }),
-        new SearchFilterCriteriaValuesFixture({
-          data: new LearningAreaFixture({
-            id: 2,
-            name: '2'
-          })
-        }),
-        new SearchFilterCriteriaValuesFixture({
-          data: new LearningAreaFixture({
-            id: 4,
-            name: '3'
-          })
-        }),
-        new SearchFilterCriteriaValuesFixture({
-          data: new LearningAreaFixture({
-            id: 5,
-            name: '4'
-          }),
-          prediction: 0,
-          selected: true
-        }),
-        new SearchFilterCriteriaValuesFixture({
-          data: new LearningAreaFixture({
-            id: 5,
-            name: '5'
-          }),
-          prediction: 0,
-          selected: true
-        }),
-        new SearchFilterCriteriaValuesFixture({
-          data: new LearningAreaFixture({
-            id: 5,
-            name: '6'
-          }),
-          prediction: 0,
-          selected: true
-        }),
-        new SearchFilterCriteriaValuesFixture({
-          data: new LearningAreaFixture({
-            id: 5,
-            name: '7'
-          }),
-          prediction: 0,
-          selected: true
-        })
-      ]
-    );
+  constructor(private eduContentMetadataApi: EduContentMetadataApi) {}
+
+  ngOnInit(): void {
+    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    //Add 'implements OnInit' to the class.
+    this.setMockData();
+  }
+
+  setMockData() {
+    this.searchMode = {
+      name: 'demo',
+      label: 'demo',
+      dynamicFilters: false,
+      searchFilterFactory: [],
+      results: {
+        component: PolpoResultItemComponent,
+        sortModes: [
+          {
+            description: 'book',
+            name: 'book',
+            icon: 'book'
+          },
+          {
+            description: 'bundle',
+            name: 'bundle',
+            icon: 'bundle'
+          },
+          {
+            description: 'taak',
+            name: 'taak',
+            icon: 'taak'
+          }
+        ],
+        pageSize: 3
+      }
+    };
 
     this.breadCrumbFilterCriteria = mockBreadcrumbFilterCriteria;
+
+    this.searchState.next({
+      searchTerm: '',
+      filterCriteriaSelections: new Map(),
+      from: 0
+      // sort: null,
+    });
+
+    this.filterCriteria$.next(this.mockData);
   }
 
-  onFilterSelectionChange(searchFilter: SearchFilterCriteriaInterface[]) {
-    this.breadCrumbFilterCriteria = searchFilter;
-    console.log(searchFilter);
+  catchEvent($event: SearchFilterCriteriaInterface[]) {
+    console.log($event);
+    this.filterCriteria$.next([...this.mockData, ...$event]);
   }
+
+  loadMoreResults(from = 0) {
+    console.log('loadMoreResults');
+    const resultsPage = {
+      count: 30,
+      results: [
+        new EduContentMetadataFixture({ title: 'foo' }),
+        new EduContentMetadataFixture({ title: 'bar' }),
+        new EduContentMetadataFixture({ title: 'foobar' })
+      ],
+      filterCriteriaPredictions: new Map()
+    };
+    if (this.loadTimer) {
+      // in case we resetted the list, we should cancel the running request
+      window.clearTimeout(this.loadTimer);
+      this.loadTimer = null;
+    }
+    this.loadTimer = window.setTimeout(() => {
+      this.resultsPage$.next({ ...resultsPage });
+      this.loadTimer = null;
+    }, 2500);
+    return;
+
+    this.eduContentMetadataApi
+      .search(
+        '',
+        {
+          eduContentProductType: [],
+          eduNets: [],
+          grades: [],
+          learningArea: [],
+          learningDomains: [],
+          methods: [],
+          schoolTypes: [],
+          years: []
+        } as any,
+        from,
+        null
+      )
+      .pipe(
+        map((results: any) => {
+          return {
+            count: results.count,
+            results: results.metadata,
+            filterCriteriaPredictions: results.filters
+          };
+        })
+      )
+      .subscribe(
+        (results: SearchResultInterface<EduContentMetadataInterface>) => {
+          this.resultsPage$.next(results);
+        }
+      );
+  }
+
+  resetResults() {
+    this.searchState.next({
+      searchTerm: '',
+      filterCriteriaSelections: new Map(),
+      from: 0,
+      sort: 'bundle'
+    });
+  }
+
+  onGetNextPage(from) {
+    console.log('getNextPage from', from);
+    this.loadMoreResults(from);
+  }
+
   onChange(value: string) {
     console.log(value);
   }

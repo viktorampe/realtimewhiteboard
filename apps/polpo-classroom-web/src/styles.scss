@@ -101,12 +101,14 @@ figure {
 
 @import 'libs/pages/settings/alerts/src/lib/pages-settings-alerts.theme';
 @include pages-settings-alerts-theme();
+
 // include shared lib scss
 @import 'libs/shared/src/lib/shared-theme';
 @include shared-theme();
 
+// include search lib scss
 @import 'libs/search/src/lib/search-theme';
-@include search-checkbox-line-filter--deep();
+@include search-theme();
 
 // include app specific css
 @import 'scss/social-media';

@@ -1,0 +1,57 @@
+@import 'libs/ui/src/lib/breakpoints.scss';
+
+:host() {
+  display: block;
+  height: 40px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+a {
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+  vertical-align: middle;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:nth-child(n + 2) {
+    &:before {
+      content: '>';
+      display: inline-block;
+      padding: 0 10px;
+    }
+  }
+
+  &:last-child {
+    max-width: none;
+  }
+}
+.breadcrumb-filter--mobile {
+  display: none;
+}
+
+@media #{$ui-breakpoint-xsmall}, #{$ui-breakpoint-small} {
+  a {
+    display: none;
+    pointer-events: none;
+
+    &:last-child {
+      display: inline-block;
+      &:before {
+        content: none;
+      }
+    }
+  }
+
+  .breadcrumb-filter--mobile {
+    display: inline-block;
+    padding: 0 10px;
+    vertical-align: middle;
+  }
+}
