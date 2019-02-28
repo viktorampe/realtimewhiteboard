@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { SearchFilterCriteriaInterface } from '@campus/search';
 import { BehaviorSubject } from 'rxjs';
 
@@ -126,12 +126,16 @@ const mockBreadcrumbFilterCriteria: SearchFilterCriteriaInterface[] = [
   templateUrl: './finding-nemo.component.html',
   styleUrls: ['./finding-nemo.component.scss']
 })
-export class FindingNemoComponent {
+export class FindingNemoComponent implements OnInit {
   filterCriteria$ = new BehaviorSubject<SearchFilterCriteriaInterface[]>(null);
 
   breadCrumbFilterCriteria: SearchFilterCriteriaInterface[];
 
   constructor() {}
+
+  ngOnInit() {
+    // this.setMockData();
+  }
 
   mockData: SearchFilterCriteriaInterface[] = [
     {

@@ -5,6 +5,7 @@ import {
   MatAutocompleteModule,
   MatBadgeModule,
   MatCheckboxModule,
+  MatIconModule,
   MatInputModule,
   MatListModule,
   MatSelectModule
@@ -24,6 +25,7 @@ import { SelectFilterComponent } from './components/select-filter-component/sele
     MatBadgeModule,
     MatInputModule,
     MatListModule,
+    MatIconModule,
     MatAutocompleteModule,
     FormsModule
   ],

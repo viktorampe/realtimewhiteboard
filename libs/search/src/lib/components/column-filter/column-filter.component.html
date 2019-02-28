@@ -1,25 +1,34 @@
-<mat-action-list
-  *ngFor="let filterCriterion of filterCriteria; let i = index"
-  [@slideInOut]="animationState(i)"
-  class="column"
+<ng-container
+  *ngIf="filterCriteria && filterCriteria.length !== 0; else: noCriteria"
 >
-  <div *ngFor="let value of filterCriterion.values" class="value">
-    <div
-      [ngClass]="{ selected: value.selected }"
-      (click)="onFilterSelectionChange(value, false)"
-      class="displayProperty"
-      >displayProperty: {{ value.data[filterCriterion.displayProperty] }}</div
+  <mat-action-list
+    *ngFor="let filterCriterion of filterCriteria; let i = index"
+    [@slideInOut]="animationState(i)"
+    class="column__filter"
+  >
+    <button
+      mat-list-item
+      *ngFor="let value of filterCriterion.values"
+      class="column__filter__value"
+      [class.column__filter__value--selected]="value.selected"
     >
-    <ng-container *ngIf="value.prediction && value.prediction !== 0"
-      ><div (click)="onFilterSelectionChange(value, false)" class="arrow"
-        >-></div
+      <div
+        (click)="onFilterSelectionChange(value, false)"
+        class="column__filter__value__label"
+        >displayProperty: {{ value.data[filterCriterion.displayProperty] }}</div
       >
-      <div (click)="onFilterSelectionChange(value, true)" class="magnifier"
-        >(-)</div
-      ></ng-container
-    >
-  </div>
-</mat-action-list>
-<ng-container *ngIf="!filterCriteria || filterCriteria.length === 0">
-  <div class="no-criteria">Er is geen inhoudstafel om op te filteren</div>
+      <mat-icon
+        *ngIf="value.prediction && value.prediction !== 0"
+        class="column__filter__value__magnifier"
+        (click)="onFilterSelectionChange(value, true)"
+        [svgIcon]="'magnifier'"
+      ></mat-icon>
+    </button>
+  </mat-action-list>
 </ng-container>
+
+<ng-template #noCriteria>
+  <div class="column__filter--no-criteria"
+    >Er is geen inhoudstafel om op te filteren</div
+  >
+</ng-template>
