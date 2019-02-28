@@ -1,8 +1,5 @@
 import { Component, OnInit, Type } from '@angular/core';
-import {
-  EduContentMetadataFixture,
-  EduContentMetadataInterface
-} from '@campus/dal';
+import { EduContentMetadataFixture } from '@campus/dal';
 import {
   SearchFilterCriteriaInterface,
   SearchModeInterface,
@@ -143,9 +140,7 @@ export class FindingNemoComponent implements OnInit {
   public selectFilter: SearchFilterCriteriaInterface;
   public selectedFilterCriteria: SearchFilterCriteriaInterface;
   public resultItemComponent: Type<SearchResultItemComponentInterface>;
-  public resultsPage$: Subject<
-    SearchResultInterface<EduContentMetadataInterface>
-  > = new Subject();
+  public resultsPage$: Subject<SearchResultInterface> = new Subject();
   public searchMode: SearchModeInterface;
   public searchState: BehaviorSubject<
     SearchStateInterface
@@ -291,11 +286,9 @@ export class FindingNemoComponent implements OnInit {
           };
         })
       )
-      .subscribe(
-        (results: SearchResultInterface<EduContentMetadataInterface>) => {
-          this.resultsPage$.next(results);
-        }
-      );
+      .subscribe((results: SearchResultInterface) => {
+        this.resultsPage$.next(results);
+      });
   }
 
   resetResults() {
