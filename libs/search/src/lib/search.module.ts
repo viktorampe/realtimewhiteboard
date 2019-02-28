@@ -41,7 +41,9 @@ import { SelectFilterComponent } from './components/select-filter-component/sele
     MatBadgeModule,
     MatInputModule,
     MatListModule,
-    MatAutocompleteModule
+    MatIconModule,
+    MatAutocompleteModule,
+    FormsModule
   ],
   declarations: [
     BreadcrumbFilterComponent,
