@@ -5,6 +5,7 @@ import {
   MatCheckbox,
   MatCheckboxChange,
   MatCheckboxModule,
+  MatIconModule,
   MatListModule
 } from '@angular/material';
 import { By } from '@angular/platform-browser';
@@ -28,7 +29,7 @@ describe('CheckboxFilterComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [MatListModule, MatCheckboxModule, FormsModule],
+      imports: [MatListModule, MatCheckboxModule, FormsModule, MatIconModule],
       declarations: [CheckboxFilterComponent, CheckboxListFilterComponent]
     }).compileComponents();
   }));
