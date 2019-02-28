@@ -1,0 +1,10 @@
+@mixin search-checkbox-list-filter-theme {
+  // color pallette
+  $checkbox-title-border-color: $tertiary-bg-color-2;
+
+  .checkbox__list__filter {
+    &__title {
+      border-bottom: solid 1px $checkbox-title-border-color;
+    }
+  }
+}

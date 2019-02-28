@@ -1,50 +1,38 @@
-<!--
-  <campus-checkbox-line-filter
+<div style="max-width: 300px; padding: 10px;">
+  <campus-checkbox-list-filter
     [filterCriteria]="selectFilter"
     (filterSelectionChange)="onFilterSelectionChange($event)"
-  ></campus-checkbox-line-filter>
--->
+    [maxVisibleItems]="2"
+  >
+  </campus-checkbox-list-filter>
 
-<campus-search-term
-  [placeholder]="'Zoeken in Geschiedenis'"
-  [autoComplete]="autoComplete"
-  [autoCompleteValues]="['waarde 1', ' waarde 2', 'waarde 3', 'waarde 4']"
-  (valueChange)="onChange($event)"
-></campus-search-term>
+  <campus-column-filter
+    [filterCriteria]="filterCriteria$ | async"
+    (filterSelectionChange)="catchEvent($event)"
+  ></campus-column-filter>
+  <button (click)="setMockData()">setMockData</button>
 
-<campus-column-filter
-  [filterCriteria]="filterCriteria$ | async"
-  (filterSelectionChange)="catchEvent($event)"
-></campus-column-filter>
-<button (click)="setMockData()">setMockData</button>
-
-<div *ngIf="selectedFilterCriteria">
-  <p>Selected:</p> <p>{{ selectedFilterCriteria | json }}</p>
-
-  <p> you will never find nemo! </p>
   <campus-breadcrumb-filter
     [rootLabel]="'Alle'"
     [filterCriteria]="breadCrumbFilterCriteria"
     (filterSelectionChange)="onFilterSelectionChange($event)"
   ></campus-breadcrumb-filter>
 
-  <div style="max-width: 300px; padding: 10px;">
-    <campus-select-filter
-      [filterCriteria]="selectFilter"
-      [multiple]="true"
-      resetLabel="None"
-      (filterSelectionChange)="onFilterSelectionChange($event)"
-    ></campus-select-filter>
-  </div>
+  <campus-select-filter
+    [filterCriteria]="selectFilter"
+    [multiple]="true"
+    resetLabel="None"
+    (filterSelectionChange)="onFilterSelectionChange($event)"
+  ></campus-select-filter>
+
+  <campus-search-term
+    [initialValue]="'123'"
+    [autoComplete]="true"
+    [autoCompleteValues]="['waarde 1', ' waarde 2', 'waarde 3', 'waarde 4']"
+    (valueChange)="onChange($event)"
+  ></campus-search-term>
 </div>
 
-<div>
-  <span (click)="loadMoreResults()">load more</span> |
-  <span (click)="resetResults()">reset</span>
+<div *ngIf="selectedFilterCriteria">
+  <p>Selected:</p> <p>{{ selectedFilterCriteria | json }}</p>
 </div>
-<campus-results-list
-  [resultsPage]="resultsPage$ | async"
-  [searchMode]="searchMode"
-  [searchState]="searchState | async"
-  (getNextPage)="onGetNextPage($event)"
-></campus-results-list>
