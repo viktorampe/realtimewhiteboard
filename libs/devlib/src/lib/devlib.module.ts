@@ -12,19 +12,27 @@ import { EduContentViewModel } from './edu-content/edu-content.viewmodel';
 import { FindingNemoComponent } from './finding-nemo/finding-nemo.component';
 import { LoginpageComponent } from './loginpage/loginpage.component';
 import { LoginPageViewModel } from './loginpage/loginpage.viewmodel';
+import { PolpoResultItemComponent } from './polpo-result-item/polpo-result-item.component';
 
 @NgModule({
   imports: [
     FormsModule,
     CommonModule,
     UiModule,
+    DevlibRoutingModule,
     SharedModule,
     MatIconModule,
     ScormModule,
-    SearchModule,
-    DevlibRoutingModule
+    SearchModule
   ],
   providers: [LoginPageViewModel, EduContentViewModel],
-  declarations: [LoginpageComponent, EduContentComponent, FindingNemoComponent]
+  declarations: [
+    LoginpageComponent,
+    EduContentComponent,
+    FindingNemoComponent,
+    PolpoResultItemComponent
+  ],
+  exports: [],
+  entryComponents: [PolpoResultItemComponent]
 })
 export class DevlibModule {}

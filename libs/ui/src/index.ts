@@ -13,6 +13,9 @@ export {
 } from './lib/filter-text-input/filter-text-input.component';
 export { ListFormat } from './lib/list-view/enums/list-format.enum';
 export {
+  ListViewItemInterface
+} from './lib/list-view/interfaces/list-view-item';
+export {
   ListViewComponent,
   ListViewItemDirective
 } from './lib/list-view/list-view.component';

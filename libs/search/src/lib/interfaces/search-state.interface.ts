@@ -1,4 +1,4 @@
-export interface SearchStateInterface<T> {
+export interface SearchStateInterface {
   searchTerm: string;
   filterCriteriaSelections: Map<string, number[] | string[]>;
   from?: number;

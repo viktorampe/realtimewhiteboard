@@ -10,5 +10,5 @@ export interface SearchFilter {
 }
 
 export interface SearchFilterFactory {
-  getFilters(searchState: SearchStateInterface<unknown>[]): SearchFilter[];
+  getFilters(searchState: SearchStateInterface[]): SearchFilter[];
 }
