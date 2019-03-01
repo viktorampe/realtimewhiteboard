@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Subject } from 'rxjs';
 import {
   SearchFilterInterface,
   SearchResultInterface,
@@ -16,21 +16,32 @@ import { MockSearchViewModel } from './search.viewmodel.mock';
   providedIn: 'root'
 })
 export class SearchViewModel {
-  public searchState$: Observable<SearchStateInterface>;
-  public searchFilters$: Observable<SearchFilterInterface[]>;
+  private searchMode: SearchModeInterface;
+  private searchState: SearchStateInterface;
+
+  public searchState$: Subject<SearchStateInterface>;
+  public searchFilters$: Subject<SearchFilterInterface[]>;
 
   constructor(private mockViewmodel: MockSearchViewModel) {
     this.getMocks();
   }
 
   public reset(state: SearchStateInterface, mode: SearchModeInterface): void {}
-  public changeSort(sortMode: SortModeInterface): void {}
+  public changeSort(sortMode: SortModeInterface): void {
+    this.searchState = {
+      ...this.searchState,
+      ...{ sort: sortMode.name },
+      ...{ from: null }
+    };
+    this.searchState$.next(this.searchState);
+  }
   public getNextPage(): void {}
   public changeFilters(criteria: SearchFilterCriteriaInterface): void {}
   public changeSearchTerm(searchTerm: string): void {}
   public updateResult(result: SearchResultInterface): void {}
 
   private getMocks(): void {
+    this.searchState = this.mockViewmodel.searchState;
     this.searchState$ = this.mockViewmodel.searchState$;
     this.searchFilters$ = this.mockViewmodel.searchFilters$;
   }

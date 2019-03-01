@@ -25,10 +25,15 @@ import { SelectFilterComponent } from './select-filter-component/select-filter.c
 })
 export class MockSearchViewModel
   implements ViewModelInterface<SearchViewModel> {
+  public searchMode: SearchModeInterface;
+  public searchState: SearchStateInterface;
+
   public searchState$ = new Subject<SearchStateInterface>();
   public searchFilters$ = new Subject<SearchFilterInterface[]>();
 
   constructor() {
+    this.searchState = this.getMockSearchState();
+
     this.searchState$.next(this.getMockSearchState());
     this.searchFilters$.next(this.getMockSearchFilter());
   }
