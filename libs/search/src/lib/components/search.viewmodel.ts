@@ -20,7 +20,7 @@ export class SearchViewModel {
   private searchState: SearchStateInterface;
 
   public searchState$: Subject<SearchStateInterface>;
-  public searchFilters$: Subject<SearchFilterInterface[]>;
+  public searchFilters$ = new Subject<SearchFilterInterface[]>();
 
   constructor(private mockViewmodel: MockSearchViewModel) {
     this.getMocks();
@@ -29,11 +29,9 @@ export class SearchViewModel {
   public reset(state: SearchStateInterface, mode: SearchModeInterface): void {}
   public changeSort(sortMode: SortModeInterface): void {}
   public getNextPage(): void {
-    this.searchState.from = this.searchState.from++;
-    this.searchState.filterCriteriaSelections.set('pageSize', [
-      this.searchMode.results.pageSize
-    ]);
-    this.searchState$.next(this.searchState);
+    this.searchState.from =
+      (this.searchState.from || 0) + this.searchMode.results.pageSize;
+    this.searchState$.next({ ...this.searchState });
   }
   public changeFilters(criteria: SearchFilterCriteriaInterface): void {}
   public changeSearchTerm(searchTerm: string): void {}
