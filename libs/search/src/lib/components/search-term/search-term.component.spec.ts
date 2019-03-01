@@ -3,10 +3,13 @@ import { FormsModule } from '@angular/forms';
 import {
   MatAutocomplete,
   MatAutocompleteModule,
+  MatIconRegistry,
   MatInputModule
 } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MockMatIconRegistry } from '@campus/testing';
+import { UiModule } from '@campus/ui';
 import { SearchTermComponent } from './search-term.component';
 
 describe('SearchTermComponent', () => {
@@ -19,9 +22,11 @@ describe('SearchTermComponent', () => {
         FormsModule,
         NoopAnimationsModule,
         MatAutocompleteModule,
-        MatInputModule
+        MatInputModule,
+        UiModule
       ],
-      declarations: [SearchTermComponent]
+      declarations: [SearchTermComponent],
+      providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
     }).compileComponents();
   }));
 

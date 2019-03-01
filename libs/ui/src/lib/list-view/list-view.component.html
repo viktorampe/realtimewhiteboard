@@ -10,5 +10,5 @@
 </ng-template>
 
 <ng-template #emptyTemplate>
-  <p> {{ placeHolderText }} </p>
+  <p *ngIf="placeHolderText"> {{ placeHolderText }} </p>
 </ng-template>

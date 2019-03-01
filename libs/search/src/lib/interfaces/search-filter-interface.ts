@@ -2,7 +2,7 @@ import { SearchFilterComponentInterface } from './search-filter-component-interf
 import { SearchFilterCriteriaInterface } from './search-filter-criteria.interface';
 import { SearchStateInterface } from './search-state.interface';
 
-export interface SearchFilter {
+export interface SearchFilterInterface {
   criteria: SearchFilterCriteriaInterface | SearchFilterCriteriaInterface[];
   component: SearchFilterComponentInterface;
   domHost: string;
@@ -10,5 +10,5 @@ export interface SearchFilter {
 }
 
 export interface SearchFilterFactory {
-  getFilters(searchState: SearchStateInterface<unknown>[]): SearchFilter[];
+  getFilters(searchState: SearchStateInterface[]): SearchFilterInterface[];
 }

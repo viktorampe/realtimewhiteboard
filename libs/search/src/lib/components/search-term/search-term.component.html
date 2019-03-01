@@ -1,23 +1,33 @@
-<mat-form-field
-  class="search-term__form-field"
-  *ngIf="!autoComplete; else: autoCompleteTemplate"
->
-  <input matInput [(ngModel)]="currentValue" [placeholder]="placeholder" />
-</mat-form-field>
-
-<ng-template #autoCompleteTemplate>
-  <mat-form-field class="search-term__form-field">
-    <input
-      matInput
-      [(ngModel)]="currentValue"
-      [placeholder]="placeholder"
-      [matAutocomplete]="auto"
-    />
-
-    <mat-autocomplete #auto="matAutocomplete">
-      <mat-option *ngFor="let option of autoCompleteValues" [value]="option">{{
-        option
-      }}</mat-option>
-    </mat-autocomplete>
+<div class="search-term">
+  <mat-form-field
+    [appearance]="'outline'"
+    *ngIf="!autoComplete; else: autoCompleteTemplate"
+  >
+    <mat-label>{{ placeholder }}</mat-label>
+    <input matInput [(ngModel)]="currentValue" [placeholder]="placeholder" />
   </mat-form-field>
-</ng-template>
+  <campus-button bordered [iconClass]="'magnifier'"></campus-button>
+
+  <ng-template #autoCompleteTemplate>
+    <mat-form-field [appearance]="'outline'">
+      <mat-label>{{ placeholder }}</mat-label>
+      <input
+        matInput
+        [(ngModel)]="currentValue"
+        [placeholder]="placeholder"
+        [matAutocomplete]="auto"
+      />
+
+      <mat-autocomplete
+        #auto="matAutocomplete"
+        class="search-term__autocomplete"
+      >
+        <mat-option
+          *ngFor="let option of autoCompleteValues"
+          [value]="option"
+          >{{ option }}</mat-option
+        >
+      </mat-autocomplete>
+    </mat-form-field>
+  </ng-template>
+</div>

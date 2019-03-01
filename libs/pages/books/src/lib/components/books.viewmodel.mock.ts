@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
+  ContentInterface,
   EduContent,
   EduContentFixture,
   LearningAreaFixture,
@@ -102,7 +103,7 @@ export class MockBooksViewModel implements ViewModelInterface<BooksViewModel> {
 
   initialize(): void {}
 
-  openBook(contentId: number): void {}
+  openBook(content: ContentInterface): void {}
 
   changeListFormat(listFormat: ListFormat): void {}
 }

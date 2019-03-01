@@ -1,7 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatCheckbox, MatCheckboxModule } from '@angular/material';
+import {
+  MatCheckbox,
+  MatCheckboxModule,
+  MatIconRegistry
+} from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { CredentialFixture, LearningAreaFixture } from '@campus/dal';
+import { MockMatIconRegistry } from '@campus/testing';
 import {
   SearchFilterCriteriaInterface,
   SearchFilterCriteriaValuesInterface
@@ -20,7 +25,8 @@ describe('CheckboxLineFilterComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [CheckboxLineFilterComponent],
-      imports: [MatCheckboxModule]
+      imports: [MatCheckboxModule],
+      providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
     }).compileComponents();
   }));
 

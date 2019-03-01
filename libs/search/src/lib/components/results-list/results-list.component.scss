@@ -1,0 +1,17 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+}
+
+.search-results-list {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+
+  &__results {
+    flex: 1 0 auto;
+    height: 0;
+    overflow: auto;
+  }
+}

@@ -4,4 +4,10 @@ export class MockWindow {
   location = {
     assign: jest.fn()
   };
+
+  clearTimeout = jest.fn();
+  setTimeout = (handler: Function, timeout: number): number => {
+    handler();
+    return timeout;
+  };
 }

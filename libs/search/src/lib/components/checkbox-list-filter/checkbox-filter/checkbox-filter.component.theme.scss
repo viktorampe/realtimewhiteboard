@@ -1,0 +1,49 @@
+@mixin search-checkbox-filter-theme() {
+  // color pallette
+  $checkbox-filter-text-color--accent: $ui-primary-font-color-2 !default;
+
+  $checkbox-filter-font-size: $ui-primary-font-size !default;
+
+  .checkbox-filter {
+    .mat-checkbox {
+      &-inner-container {
+        width: $checkbox-filter-font-size;
+        height: $checkbox-filter-font-size;
+      }
+
+      &-label {
+        line-height: $checkbox-filter-font-size + 2;
+      }
+    }
+
+    &__items {
+      padding-left: $checkbox-filter-font-size + 8; // 8 is margin on checkbox
+    }
+
+    &__item {
+      &__prediction {
+        color: $checkbox-filter-text-color--accent;
+      }
+    }
+
+    &__footer {
+      color: $checkbox-filter-text-color--accent;
+
+      mat-icon {
+        height: $checkbox-filter-font-size;
+        width: $checkbox-filter-font-size;
+        transition: 0.25s ease-in-out;
+
+        &.rotate {
+          &--up {
+            transform: rotate(90deg);
+          }
+
+          &--down {
+            transform: rotate(-90deg);
+          }
+        }
+      }
+    }
+  }
+}
