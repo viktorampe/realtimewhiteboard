@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ViewModelInterface } from '@campus/testing';
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import {
   SearchFilterCriteriaInterface,
   SearchFilterInterface,
@@ -25,12 +25,16 @@ import { SelectFilterComponent } from './select-filter-component/select-filter.c
 })
 export class MockSearchViewModel
   implements ViewModelInterface<SearchViewModel> {
-  public searchState$ = new Subject<SearchStateInterface>();
-  public searchFilters$ = new Subject<SearchFilterInterface[]>();
+  public searchState$ = new BehaviorSubject<SearchStateInterface>(
+    this.getMockSearchState()
+  );
+  public searchFilters$ = new BehaviorSubject<SearchFilterInterface[]>(
+    this.getMockSearchFilter()
+  );
 
   constructor() {
-    this.searchState$.next(this.getMockSearchState());
-    this.searchFilters$.next(this.getMockSearchFilter());
+    // this.searchState$.next(this.getMockSearchState());
+    // this.searchFilters$.next(this.getMockSearchFilter());
   }
 
   public reset(state: SearchStateInterface, mode: SearchModeInterface): void {}
