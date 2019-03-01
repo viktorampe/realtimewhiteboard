@@ -15,7 +15,7 @@ import { SearchResultItemComponentInterface } from '../../interfaces';
  * @extends ListViewItemDirective
  * @implements SearchResultItemInterface
  */
-export abstract class ResultItemBase extends ListViewItemDirective<any>
+export class ResultItemBase extends ListViewItemDirective<any>
   implements OnInit, SearchResultItemComponentInterface, ListViewItemInterface {
   listFormat: ListFormat;
   @Input() data: any;
