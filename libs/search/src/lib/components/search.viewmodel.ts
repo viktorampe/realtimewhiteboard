@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Subject } from 'rxjs';
 import {
+  SearchFilterFactory,
   SearchFilterInterface,
   SearchResultInterface,
   SearchStateInterface
@@ -16,14 +17,39 @@ import { MockSearchViewModel } from './search.viewmodel.mock';
   providedIn: 'root'
 })
 export class SearchViewModel {
-  public searchState$: Observable<SearchStateInterface>;
-  public searchFilters$: Observable<SearchFilterInterface[]>;
+  public searchState$: Subject<SearchStateInterface>;
+  public searchFilters$: Subject<SearchFilterInterface[]>;
+
+  private searchState: SearchStateInterface;
+  private searchMode: SearchModeInterface;
+  private filterFactory: SearchFilterFactory;
 
   constructor(private mockViewmodel: MockSearchViewModel) {
     this.getMocks();
   }
 
-  public reset(state: SearchStateInterface, mode: SearchModeInterface): void {}
+  public reset(
+    mode: SearchModeInterface,
+    state: SearchStateInterface = null
+  ): void {
+    this.searchMode = mode;
+    this.filterFactory = new this.searchMode.searchFilterFactory();
+
+    if (state) {
+      // we want to update the state
+      this.searchState = state;
+    } else {
+      // we want to reset the state
+      this.searchState.searchTerm = '';
+      this.searchState.filterCriteriaSelections.clear();
+      this.searchState.from = 0;
+      this.searchState.sort = '';
+    }
+    this.searchFilters$.next([
+      ...this.filterFactory.getFilters([this.searchState])
+    ]);
+    this.searchState$.next({ ...this.searchState });
+  }
   public changeSort(sortMode: SortModeInterface): void {}
   public getNextPage(): void {}
   public changeFilters(criteria: SearchFilterCriteriaInterface): void {}

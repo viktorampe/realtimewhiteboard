@@ -33,7 +33,7 @@ export class MockSearchViewModel
     this.searchFilters$.next(this.getMockSearchFilter());
   }
 
-  public reset(state: SearchStateInterface, mode: SearchModeInterface): void {}
+  public reset(mode: SearchModeInterface, state: SearchStateInterface): void {}
   public changeSort(sortMode: SortModeInterface): void {}
   public getNextPage(): void {}
   public changeFilters(criteria: SearchFilterCriteriaInterface): void {}
