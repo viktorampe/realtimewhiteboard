@@ -90,9 +90,7 @@ describe('ResultsListComponentComponent', () => {
 
     component.searchMode = searchMode;
     component.searchState = searchState;
-    component.resultsPage = { results: pageResults } as SearchResultInterface<
-      any
-    >;
+    component.resultsPage = { results: pageResults } as SearchResultInterface;
     fixture.detectChanges();
   });
 
@@ -106,7 +104,7 @@ describe('ResultsListComponentComponent', () => {
       component.resultsPage = {
         count: resultCount,
         results: []
-      } as SearchResultInterface<any>;
+      } as SearchResultInterface;
       fixture.detectChanges();
 
       const count = fixture.debugElement.query(
@@ -136,7 +134,7 @@ describe('ResultsListComponentComponent', () => {
 
     it('should append results', () => {
       const results = [{ id: 1, title: 'foo' }, { id: 2, title: 'bar' }];
-      component.resultsPage = { results } as SearchResultInterface<any>;
+      component.resultsPage = { results } as SearchResultInterface;
       fixture.detectChanges();
 
       const resultItems = fixture.debugElement.queryAll(
@@ -160,7 +158,7 @@ describe('ResultsListComponentComponent', () => {
     it('should replace results', () => {
       component.searchState = { from: 0 } as SearchStateInterface;
       const results = [{ id: 1, title: 'foo' }, { id: 2, title: 'bar' }];
-      component.resultsPage = { results } as SearchResultInterface<any>;
+      component.resultsPage = { results } as SearchResultInterface;
       fixture.detectChanges();
 
       const resultItems = fixture.debugElement.queryAll(

@@ -1,12 +1,10 @@
 :host {
   display: flex;
   flex-flow: column nowrap;
-  height: fit-content;
 }
 
 .checkbox__list__filter {
   &__title {
-    font-size: 16px;
     padding: 4px;
     margin-bottom: 10px;
   }

@@ -1,20 +1,23 @@
-$checkbox-filter-text-color--accent: $primary-font-color-2 !default;
-
 @mixin search-checkbox-filter-theme() {
+  // color pallette
+  $checkbox-filter-text-color--accent: $ui-primary-font-color-2 !default;
+
+  $checkbox-filter-font-size: $ui-primary-font-size !default;
+
   .checkbox-filter {
     .mat-checkbox {
       &-inner-container {
-        width: $primary-font-size;
-        height: $primary-font-size;
+        width: $checkbox-filter-font-size;
+        height: $checkbox-filter-font-size;
       }
 
       &-label {
-        line-height: $primary-font-size + 2;
+        line-height: $checkbox-filter-font-size + 2;
       }
     }
 
     &__items {
-      padding-left: $primary-font-size + 8; // 8 is margin on checkbox
+      padding-left: $checkbox-filter-font-size + 8; // 8 is margin on checkbox
     }
 
     &__item {
@@ -27,8 +30,8 @@ $checkbox-filter-text-color--accent: $primary-font-color-2 !default;
       color: $checkbox-filter-text-color--accent;
 
       mat-icon {
-        height: $primary-font-size;
-        width: $primary-font-size;
+        height: $checkbox-filter-font-size;
+        width: $checkbox-filter-font-size;
         transition: 0.25s ease-in-out;
 
         &.rotate {
