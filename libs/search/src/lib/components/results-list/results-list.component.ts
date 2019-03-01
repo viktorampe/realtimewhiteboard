@@ -44,7 +44,7 @@ export class ResultListDirective {
  *
  * @example
  * component:
- *   resultsPage: SearchResultInterface<MyResultInterface>;
+ *   resultsPage: SearchResultInterface;
  *   myResultItemComponent: Type<SearchResultItemInterface> = MyResultItemComponent;
  *
  * template:
@@ -102,7 +102,7 @@ export class ResultsListComponent implements OnDestroy, AfterViewInit {
   }
 
   @Input()
-  set resultsPage(searchResult: SearchResultInterface<any>) {
+  set resultsPage(searchResult: SearchResultInterface) {
     if (searchResult) {
       this.count = searchResult.count;
       this.addResults(searchResult.results);
