@@ -51,25 +51,26 @@ describe('AppComponent', () => {
   }));
 
   it('should not have a shell when useShell is 0', async(() => {
-    const window = TestBed.get(WINDOW);
-    window.location.search = '?useShell=0';
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    expect(fixture.debugElement.query(By.css('campus-shell'))).toBeFalsy();
+    testForShell('?useShell=0', false);
   }));
 
   it('should have a shell when useShell is 1', async(() => {
-    const window = TestBed.get(WINDOW);
-    window.location.search = '?useShell=1';
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    expect(fixture.debugElement.query(By.css('campus-shell'))).toBeTruthy();
+    testForShell('?useShell=1', true);
   }));
   it('should default have shell', async(() => {
-    const window = TestBed.get(WINDOW);
-    window.location.search = '?whatever';
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    expect(fixture.debugElement.query(By.css('campus-shell'))).toBeTruthy();
+    testForShell('?whatever', true);
   }));
 });
+
+function testForShell(search, expected) {
+  const window = TestBed.get(WINDOW);
+  window.location.search = search;
+  const fixture = TestBed.createComponent(AppComponent);
+  fixture.detectChanges();
+  const elem = fixture.debugElement.query(By.css('campus-shell'));
+  if (expected) {
+    expect(elem).toBeTruthy();
+  } else {
+    expect(elem).toBeFalsy();
+  }
+}
