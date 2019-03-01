@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { SearchViewModel } from './search.viewmodel';
-
+// file.only
 describe('SearchViewModel', () => {
   let searchViewModel: SearchViewModel;
 

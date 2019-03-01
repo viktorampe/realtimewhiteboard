@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import { switchMap, take } from 'rxjs/operators';
 import {
   SearchFilterFactory,
   SearchFilterInterface,
@@ -23,6 +24,8 @@ export class SearchViewModel {
   private searchState: SearchStateInterface;
   private searchMode: SearchModeInterface;
   private filterFactory: SearchFilterFactory;
+  // source streams
+  private factoryFilters$: Subject<SearchFilterInterface[]>;
 
   constructor(private mockViewmodel: MockSearchViewModel) {
     this.getMocks();
@@ -45,9 +48,12 @@ export class SearchViewModel {
       this.searchState.from = 0;
       this.searchState.sort = '';
     }
-    this.searchFilters$.next([
-      ...this.filterFactory.getFilters([this.searchState])
-    ]);
+
+    this.filterFactory.getFilters([this.searchState]).pipe(
+      take(1),
+      switchMap((filters: SearchFilterInterface[]) => this.factoryFilters$)
+    );
+
     this.searchState$.next({ ...this.searchState });
   }
   public changeSort(sortMode: SortModeInterface): void {}
