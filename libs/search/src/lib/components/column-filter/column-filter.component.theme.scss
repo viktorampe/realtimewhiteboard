@@ -1,18 +1,23 @@
 @mixin column-filter-theme() {
+  // color pallette
+  $column-filter--selected-background-color: $secondary-font-color-accent !default;
+
+  $column-filter-font-size: $ui-primary-font-size !default;
+
   .column__filter {
     & &__value {
       &.mat-list-item {
-        height: $primary-font-size * 2;
+        height: $column-filter-font-size * 2;
       }
 
       mat-icon {
-        height: $primary-font-size;
-        width: $primary-font-size;
+        height: $column-filter-font-size;
+        width: $column-filter-font-size;
       }
 
       &:hover,
       &--selected {
-        background-color: $secondary-font-color-accent;
+        background-color: $column-filter--selected-background-color;
       }
     }
   }

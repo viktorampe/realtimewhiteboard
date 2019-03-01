@@ -1,12 +1,15 @@
 @mixin search-checkbox-line-filter--deep() {
   // color pallette
-  $checkbox-background-color: $tertiary-bg-color;
-  $checkbox-title-border-color: $tertiary-bg-color-2;
-  $checkbox--disabled-color: $color-gray-2;
+  $checkbox-line-background-color: $ui-tertiary-bg-color !default;
+  $checkbox-line-title-border-color: $ui-tertiary-bg-color-2 !default;
+  $checkbox-line--disabled-color: $ui-tertiary-bg-color-2 !default;
+
+  $checkbox-line-filter-font-size: $ui-primary-font-size !default;
 
   .checkbox-line-filter-component {
     &__title {
-      border-bottom: solid 1px $checkbox-title-border-color;
+      border-bottom: solid 1px $checkbox-line-title-border-color;
+      font-size: $checkbox-line-filter-font-size * 1.2;
     }
 
     .mat-checkbox {
@@ -24,13 +27,13 @@
           height: 4px;
           width: 100%;
           margin-top: 6px;
-          background-color: $checkbox-title-border-color;
+          background-color: $checkbox-line-title-border-color;
           position: absolute;
         }
       }
 
       &-frame {
-        background-color: $checkbox-background-color;
+        background-color: $checkbox-line-background-color;
       }
 
       &-label {
@@ -45,15 +48,15 @@
     &__checkbox--disabled {
       .mat-checkbox {
         &-frame {
-          border-color: $checkbox--disabled-color;
+          border-color: $checkbox-line--disabled-color;
         }
 
         &-background {
-          background-color: $checkbox--disabled-color !important;
+          background-color: $checkbox-line--disabled-color !important;
         }
 
         &-label {
-          color: $checkbox--disabled-color;
+          color: $checkbox-line--disabled-color;
         }
       }
     }
