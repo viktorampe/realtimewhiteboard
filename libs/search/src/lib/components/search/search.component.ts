@@ -3,6 +3,7 @@ import { EventEmitter } from 'events';
 import { SearchModeInterface } from './../../interfaces/search-mode-interface';
 import { SearchResultInterface } from './../../interfaces/search-result-interface';
 import { SearchStateInterface } from './../../interfaces/search-state.interface';
+import { SearchViewModel } from './../search.viewmodel';
 
 @Component({
   selector: 'campus-search',
@@ -16,11 +17,15 @@ export class SearchComponent implements OnInit {
   @Input() public searchResults: SearchResultInterface;
 
   @Output() public searchState = new EventEmitter();
-  constructor() {}
+  constructor(private searchViewmodel: SearchViewModel) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.reset(this.initialState);
+  }
 
-  public reset(): void {}
+  public reset(initialState: SearchStateInterface = null): void {
+    this.searchViewmodel.reset(initialState, this.searchMode);
+  }
   public onSort(): void {}
   public onFilterSelectionChange(): void {}
   public onSearchTermChange(): void {}
