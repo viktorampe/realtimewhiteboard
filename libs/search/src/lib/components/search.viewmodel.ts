@@ -17,7 +17,7 @@ import { MockSearchViewModel } from './search.viewmodel.mock';
 })
 export class SearchViewModel {
   public searchState$: Observable<SearchStateInterface>;
-  public searchFilters$: Observable<SearchFilterInterface>;
+  public searchFilters$: Observable<SearchFilterInterface[]>;
 
   constructor(private mockViewmodel: MockSearchViewModel) {
     this.getMocks();

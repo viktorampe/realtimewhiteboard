@@ -13,8 +13,12 @@ import {
   SearchFilterCriteriaFixture,
   SearchFilterCriteriaValuesFixture
 } from './../+fixtures/search-filter-criteria.fixture';
+import { BreadcrumbFilterComponent } from './breadcrumb-filter/breadcrumb-filter.component';
 import { CheckboxLineFilterComponent } from './checkbox-line-filter/checkbox-line-filter-component';
+import { CheckboxListFilterComponent } from './checkbox-list-filter/checkbox-list-filter.component';
+import { ColumnFilterComponent } from './column-filter/column-filter.component';
 import { SearchViewModel } from './search.viewmodel';
+import { SelectFilterComponent } from './select-filter-component/select-filter.component';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +26,7 @@ import { SearchViewModel } from './search.viewmodel';
 export class MockSearchViewModel
   implements ViewModelInterface<SearchViewModel> {
   public searchState$ = new Subject<SearchStateInterface>();
-  public searchFilters$ = new Subject<SearchFilterInterface>();
+  public searchFilters$ = new Subject<SearchFilterInterface[]>();
 
   constructor() {
     this.searchState$.next(this.getMockSearchState());
@@ -45,14 +49,74 @@ export class MockSearchViewModel
     return mockSearchState;
   }
 
-  private getMockSearchFilter(): SearchFilterInterface {
-    const mockSearchFilter = {
-      criteria: new SearchFilterCriteriaFixture({}, [
-        new SearchFilterCriteriaValuesFixture()
-      ]),
-      component: new CheckboxLineFilterComponent(),
-      domHost: 'host'
-    };
+  private getMockSearchFilter(): SearchFilterInterface[] {
+    const mockSearchFilter = [
+      {
+        criteria: new SearchFilterCriteriaFixture({}, [
+          new SearchFilterCriteriaValuesFixture(),
+          new SearchFilterCriteriaValuesFixture({
+            data: { id: 2, name: 'foo' }
+          }),
+          new SearchFilterCriteriaValuesFixture({
+            data: { id: 3, name: 'foo bar' }
+          })
+        ]),
+        component: new CheckboxLineFilterComponent(),
+        domHost: 'host-left'
+      },
+      {
+        criteria: new SearchFilterCriteriaFixture({}, [
+          new SearchFilterCriteriaValuesFixture(),
+          new SearchFilterCriteriaValuesFixture({
+            data: { id: 2, name: 'foo' }
+          }),
+          new SearchFilterCriteriaValuesFixture({
+            data: { id: 3, name: 'foo bar' }
+          })
+        ]),
+        component: new CheckboxListFilterComponent(),
+        domHost: 'host-left'
+      },
+      {
+        criteria: new SearchFilterCriteriaFixture({}, [
+          new SearchFilterCriteriaValuesFixture(),
+          new SearchFilterCriteriaValuesFixture({
+            data: { id: 2, name: 'foo' }
+          }),
+          new SearchFilterCriteriaValuesFixture({
+            data: { id: 3, name: 'foo bar' }
+          })
+        ]),
+        component: new BreadcrumbFilterComponent(),
+        domHost: 'host-top'
+      },
+      {
+        criteria: new SearchFilterCriteriaFixture({}, [
+          new SearchFilterCriteriaValuesFixture(),
+          new SearchFilterCriteriaValuesFixture({
+            data: { id: 2, name: 'foo' }
+          }),
+          new SearchFilterCriteriaValuesFixture({
+            data: { id: 3, name: 'foo bar' }
+          })
+        ]),
+        component: new ColumnFilterComponent(),
+        domHost: 'host-left'
+      },
+      {
+        criteria: new SearchFilterCriteriaFixture({}, [
+          new SearchFilterCriteriaValuesFixture(),
+          new SearchFilterCriteriaValuesFixture({
+            data: { id: 2, name: 'foo' }
+          }),
+          new SearchFilterCriteriaValuesFixture({
+            data: { id: 3, name: 'foo bar' }
+          })
+        ]),
+        component: new SelectFilterComponent(),
+        domHost: 'host-top'
+      }
+    ];
 
     return mockSearchFilter;
   }
