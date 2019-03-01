@@ -1,4 +1,10 @@
 <div style="max-width: 300px; padding: 10px;">
+  <campus-checkbox-line-filter
+    [filterCriteria]="selectFilter"
+    (filterSelectionChange)="onFilterSelectionChange($event)"
+  >
+  </campus-checkbox-line-filter>
+
   <campus-checkbox-list-filter
     [filterCriteria]="selectFilter"
     (filterSelectionChange)="onFilterSelectionChange($event)"
