@@ -37,12 +37,12 @@ export class MockSearchViewModel
   public updateResult(result: SearchResultInterface<any>): void {} //TODO: remove <any> when other scaffold branch is merged
 
   private getMockSearchState(): SearchStateInterface {
-    const mockSeachState = {
+    const mockSearchState = {
       searchTerm: 'nemo',
       filterCriteriaSelections: new Map<string, string[]>()
     };
 
-    return mockSeachState;
+    return mockSearchState;
   }
 
   private getMockSearchFilter(): SearchFilterInterface {
