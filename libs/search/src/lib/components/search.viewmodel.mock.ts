@@ -38,7 +38,7 @@ export class MockSearchViewModel
   public getNextPage(): void {}
   public changeFilters(criteria: SearchFilterCriteriaInterface): void {}
   public changeSearchTerm(searchTerm: string): void {}
-  public updateResult(result: SearchResultInterface<any>): void {} //TODO: remove <any> when other scaffold branch is merged
+  public updateResult(result: SearchResultInterface): void {}
 
   private getMockSearchState(): SearchStateInterface {
     const mockSearchState = {

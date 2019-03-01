@@ -28,7 +28,7 @@ export class SearchViewModel {
   public getNextPage(): void {}
   public changeFilters(criteria: SearchFilterCriteriaInterface): void {}
   public changeSearchTerm(searchTerm: string): void {}
-  public updateResult(result: SearchResultInterface<any>): void {} //TODO: remove <any> when other scaffold branch is merged
+  public updateResult(result: SearchResultInterface): void {}
 
   private getMocks(): void {
     this.searchState$ = this.mockViewmodel.searchState$;
