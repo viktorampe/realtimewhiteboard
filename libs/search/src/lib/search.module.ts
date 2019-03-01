@@ -19,6 +19,7 @@ import { CheckboxLineFilterComponent } from './components/checkbox-line-filter/c
 import { CheckboxFilterComponent } from './components/checkbox-list-filter/checkbox-filter/checkbox-filter.component';
 import { CheckboxListFilterComponent } from './components/checkbox-list-filter/checkbox-list-filter.component';
 import { ColumnFilterComponent } from './components/column-filter/column-filter.component';
+import { ResultItemBase } from './components/results-list/result.component.base';
 import {
   ResultListDirective,
   ResultsListComponent
@@ -47,6 +48,7 @@ import { SelectFilterComponent } from './components/select-filter-component/sele
     FormsModule
   ],
   declarations: [
+    ResultItemBase,
     BreadcrumbFilterComponent,
     SelectFilterComponent,
     SearchTermComponent,
