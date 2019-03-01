@@ -1,4 +1,5 @@
 <campus-shell
+  *ngIf="this.useShell"
   [sidebarOpen]="sideNavOpen$ | async"
   (sidebarToggled)="onSideBarToggle($event)"
 >
@@ -23,3 +24,5 @@
   </campus-shell-top>
   <campus-shell-body> <router-outlet></router-outlet> </campus-shell-body>
 </campus-shell>
+
+<router-outlet *ngIf="!this.useShell"></router-outlet>

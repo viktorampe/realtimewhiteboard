@@ -1,5 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { Title } from '@angular/platform-browser';
+import { WINDOW } from '@campus/browser';
 import { EffectFeedbackInterface } from '@campus/dal';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
@@ -18,7 +19,8 @@ export class AppComponent {
   public title = 'polpo-classroom-web';
   public navItems$ = this.appViewModel.navigationItems$;
   public bannerFeedback$: Observable<EffectFeedbackInterface>;
-  sideNavOpen$: Observable<boolean>;
+  public sideNavOpen$: Observable<boolean>;
+  public useShell: boolean;
 
   /**
    * the link to the promo website, used on the logo
@@ -29,12 +31,14 @@ export class AppComponent {
     private appViewModel: AppViewModel,
     private titleService: Title,
     @Inject(FAVICON_SERVICE_TOKEN)
-    private faviconService: FavIconServiceInterface
+    private faviconService: FavIconServiceInterface,
+    @Inject(WINDOW) window: Window
   ) {
     this.sideNavOpen$ = appViewModel.sideNavOpen$;
     this.titleService.setTitle(environment.website.title);
     this.faviconService.setFavicon(environment.website.favicon, 'image/png');
     this.bannerFeedback$ = this.appViewModel.bannerFeedback$;
+    this.useShell = window.location.search.indexOf('useShell=0') === -1;
   }
 
   public onSideBarToggle(open: boolean) {
