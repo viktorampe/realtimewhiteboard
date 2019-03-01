@@ -5,7 +5,6 @@
 .collapsible-sheet {
   display: flex;
   flex-direction: row;
-  align-items: center;
   flex: 1 1 auto;
 
   > * {
@@ -15,6 +14,7 @@
   &__aside {
     min-width: 20px;
     overflow: hidden;
+    flex: 0 0 auto;
   }
   &__main {
     position: relative;
