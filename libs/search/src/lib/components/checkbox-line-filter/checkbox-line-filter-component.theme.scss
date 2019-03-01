@@ -4,12 +4,12 @@
   $checkbox-line-title-border-color: $ui-tertiary-bg-color-2 !default;
   $checkbox-line--disabled-color: $ui-tertiary-bg-color-2 !default;
 
-  $checkbox-line-filter-font-size: $ui-primary-font-size !default;
+  $checkbox-line-filter-font-size: $ui-primary-font-size*1.2 !default;
 
   .checkbox-line-filter-component {
     &__title {
       border-bottom: solid 1px $checkbox-line-title-border-color;
-      font-size: $checkbox-line-filter-font-size * 1.2;
+      font-size: $checkbox-line-filter-font-size;
     }
 
     .mat-checkbox {
