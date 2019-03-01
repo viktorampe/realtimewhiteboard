@@ -1,6 +1,5 @@
 import {
   animate,
-  AnimationStateMetadata,
   state,
   style,
   transition,
@@ -19,14 +18,7 @@ const defaultBreakpoints = {
   'large-closed': '20%',
   'large-open': '50%'
 };
-
-const animationState = (breakpointState: string): AnimationStateMetadata => {
-  return state(
-    breakpointState,
-    style({ width: '{{' + breakpointState + '}}' }),
-    { params: defaultBreakpoints }
-  );
-};
+const defaults = { params: defaultBreakpoints };
 
 @Component({
   selector: 'campus-collapsible-sheet',
@@ -35,14 +27,14 @@ const animationState = (breakpointState: string): AnimationStateMetadata => {
   animations: [
     trigger('collapseExpand', [
       // breakpoints (states)
-      animationState('xsmall-closed'),
-      animationState('xsmall-open'),
-      animationState('small-closed'),
-      animationState('small-open'),
-      animationState('medium-closed'),
-      animationState('medium-open'),
-      animationState('large-closed'),
-      animationState('large-open'),
+      state('xsmall-closed', style({ width: '{{xsmall-closed}}' }), defaults),
+      state('xsmall-open', style({ width: '{{xsmall-open}}' }), defaults),
+      state('small-closed', style({ width: '{{small-closed}}' }), defaults),
+      state('small-open', style({ width: '{{small-open}}' }), defaults),
+      state('medium-closed', style({ width: '{{medium-closed}}' }), defaults),
+      state('medium-open', style({ width: '{{medium-open}}' }), defaults),
+      state('large-closed', style({ width: '{{large-closed}}' }), defaults),
+      state('large-open', style({ width: '{{large-open}}' }), defaults),
       // animation
       transition('void => *', animate(0)), // start without animation
       transition('* => *', animate('200ms ease-in'))
@@ -81,10 +73,6 @@ export class CollapsibleSheetComponent {
 
   constructor(public breakpointObserver: BreakpointObserver) {}
 
-  toggleCollapsed(): void {
-    this.collapsed = !this.collapsed;
-  }
-
   collapseExpandState(): string {
     return `${this.breakPointSize()}-${this.collapsed ? 'closed' : 'open'}`;
   }
@@ -101,6 +89,10 @@ export class CollapsibleSheetComponent {
         )
       ? 'medium'
       : 'large';
+  }
+
+  toggleCollapsed(): void {
+    this.collapsed = !this.collapsed;
   }
 }
 
