@@ -67,7 +67,8 @@ import { SelectFilterComponent } from './components/select-filter-component/sele
     SearchComponent,
     CheckboxListFilterComponent,
     CheckboxFilterComponent,
-    ColumnFilterComponent
+    ColumnFilterComponent,
+    SearchComponent
   ]
 })
 export class SearchModule {}
