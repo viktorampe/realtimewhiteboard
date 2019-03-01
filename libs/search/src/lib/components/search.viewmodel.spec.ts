@@ -1,5 +1,3 @@
-//file.only
-
 import { TestBed } from '@angular/core/testing';
 import { hot } from '@nrwl/nx/testing';
 import { SearchModeInterface, SearchStateInterface } from '../interfaces';
