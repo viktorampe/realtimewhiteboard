@@ -85,19 +85,14 @@ export class CollapsibleSheetComponent {
     };
 
     if (this.breakpointObserver.isMatched(breakpointsMap.xsmall)) {
-      console.log('xsmall');
-
       return 'xsmall';
     }
     if (this.breakpointObserver.isMatched(breakpointsMap.small)) {
-      console.log('small');
       return 'small';
     }
     if (this.breakpointObserver.isMatched(breakpointsMap.medium)) {
-      console.log('medium');
       return 'medium';
     }
-    console.log('large');
     return 'large';
   }
 
