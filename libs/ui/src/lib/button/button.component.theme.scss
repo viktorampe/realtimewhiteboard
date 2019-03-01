@@ -211,7 +211,8 @@
       }
       // --primary--bordered
       &.ui-button--bordered {
-        border-color: $ui-button--primary-border-color; // --primary--bordered--disabled
+        border-color: $ui-button--primary-border-color;
+        // --primary--bordered--disabled
         &.ui-button--disabled {
           border-color: $ui-button--primary--disabled-border-color;
         }

@@ -10,7 +10,7 @@ import { DisabledDirective } from './button-disabled.directive';
   // tslint:disable-next-line:component-selector
   selector: 'test-container',
   template: `
-    <campus-button disabled>tekst</campus-button>
+    <campus-button button-disabled>tekst</campus-button>
   `
 })
 export class TestContainerComponent {}
