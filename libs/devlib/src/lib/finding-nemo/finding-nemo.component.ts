@@ -355,6 +355,7 @@ export class FindingNemoComponent implements OnInit {
     this.filterCriteria$.next(this.mockData);
 
     this.selectFilter = mockListCriteria;
+    this.loadMoreResults();
   }
 
   catchEvent($event: SearchFilterCriteriaInterface[]) {

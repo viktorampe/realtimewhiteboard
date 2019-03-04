@@ -69,7 +69,6 @@ export class ResultsListComponent implements OnDestroy, AfterViewInit {
   public loading = false;
 
   private subscriptions: Subscription = new Subscription();
-  private loadedCount = 0;
   private clearResultsTimer: number;
   private scrollEnabled = false;
   private componentFactory: ComponentFactory<
@@ -168,8 +167,7 @@ export class ResultsListComponent implements OnDestroy, AfterViewInit {
       this.clearResults();
       this.scrollEnabled = false;
     } else if (searchState.from === 0) {
-      this.loadedCount = 0;
-      this.checkForMoreResults();
+      this.loading = true;
       // UX: don't clear results immediately to avoid flicker effects
       this.clearResultsTimer = this.nativeWindow.setTimeout(() => {
         this.clearResults();
@@ -196,7 +194,6 @@ export class ResultsListComponent implements OnDestroy, AfterViewInit {
     results.forEach(result => this.createResultComponent(result));
 
     // update private state variables
-    this.loadedCount += results.length;
     this.scrollEnabled = true;
 
     // in case there's no scrollbar yet, we should manually trigger search
@@ -224,12 +221,11 @@ export class ResultsListComponent implements OnDestroy, AfterViewInit {
     }
     if (this.listview) this.listview.resetItems();
     this.resultListHost.viewContainerRef.clear();
-    this.loadedCount = 0;
   }
 
   private checkForMoreResults(): void {
     const fromBottom = this.viewPort.measureScrollOffset('bottom');
-    if (this.loadedCount === 0 || fromBottom <= 4 * this.itemSize) {
+    if (fromBottom <= 4 * this.itemSize) {
       // disable multiple event triggers for the same page
       this.scrollEnabled = false;
       this.loading = true;
