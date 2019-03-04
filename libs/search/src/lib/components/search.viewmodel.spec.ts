@@ -39,7 +39,7 @@ describe('SearchViewModel', () => {
 
       const expected = oldValue;
       expected.sort = mockSortMode.name;
-      expected.from = null;
+      expected.from = 0;
 
       expect(searchViewModel.searchState$).toBeObservable(
         hot('a', { a: expected })

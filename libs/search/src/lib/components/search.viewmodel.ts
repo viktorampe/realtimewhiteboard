@@ -32,8 +32,8 @@ export class SearchViewModel {
   public changeSort(sortMode: SortModeInterface): void {
     const newValue = {
       ...this.searchState$.value,
-      ...{ sort: sortMode.name },
-      ...{ from: null }
+      sort: sortMode.name,
+      from: 0
     };
     this.searchState$.next(newValue);
   }
