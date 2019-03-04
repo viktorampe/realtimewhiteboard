@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { hot } from 'jasmine-marbles';
+import { SearchModule } from '../../search.module';
 import { SearchViewModel } from '../search.viewmodel';
 import { MockSearchViewModel } from '../search.viewmodel.mock';
 import { SearchComponent } from './search.component';
@@ -11,7 +12,8 @@ describe('SearchComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [SearchComponent],
+      imports: [SearchModule],
+      declarations: [],
       providers: [{ provide: SearchViewModel, useClass: MockSearchViewModel }]
     }).compileComponents();
   }));
@@ -39,4 +41,6 @@ describe('SearchComponent', () => {
       );
     });
   });
+
+  describe('events', () => {});
 });
