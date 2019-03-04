@@ -93,13 +93,14 @@ describe('SearchComponent', () => {
       expect(component.reset).toHaveBeenCalled();
       expect(component.reset).toHaveBeenCalledWith(component.initialState);
     });
-  describe('searchState', () => {
-    it('should emit the viewmodel searchState$ value', () => {
-      searchViewmodel.searchState$.next(mockSearchState);
+    describe('searchState', () => {
+      it('should emit the viewmodel searchState$ value', () => {
+        searchViewmodel.searchState$.next(mockSearchState);
 
-      expect(component.searchState).toBeObservable(
-        hot('a', { a: mockSearchState })
-      );
+        expect(component.searchState).toBeObservable(
+          hot('a', { a: mockSearchState })
+        );
+      });
     });
   });
 });
