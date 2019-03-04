@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs';
 import { SearchFilterComponentInterface } from './search-filter-component-interface';
 import { SearchFilterCriteriaInterface } from './search-filter-criteria.interface';
 import { SearchStateInterface } from './search-state.interface';
@@ -10,5 +11,7 @@ export interface SearchFilterInterface {
 }
 
 export interface SearchFilterFactory {
-  getFilters(searchState: SearchStateInterface[]): SearchFilterInterface[];
+  getFilters(
+    searchState: SearchStateInterface[]
+  ): Observable<SearchFilterInterface[]>;
 }
