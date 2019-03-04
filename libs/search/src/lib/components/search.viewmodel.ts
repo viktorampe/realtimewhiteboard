@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import {
   SearchFilterInterface,
   SearchResultInterface,
@@ -17,32 +17,40 @@ import { MockSearchViewModel } from './search.viewmodel.mock';
 })
 export class SearchViewModel {
   private searchMode: SearchModeInterface;
-  private searchState: SearchStateInterface;
 
-  public searchState$: Subject<SearchStateInterface>;
-  public searchFilters$: Subject<SearchFilterInterface[]>;
+  public searchState$ = new BehaviorSubject<SearchStateInterface>(null);
+  public searchFilters$ = new BehaviorSubject<SearchFilterInterface[]>([]);
 
   constructor(private mockViewmodel: MockSearchViewModel) {
     this.getMocks();
   }
 
-  public reset(state: SearchStateInterface, mode: SearchModeInterface): void {}
+  public reset(
+    mode: SearchModeInterface,
+    state: SearchStateInterface = null
+  ): void {}
   public changeSort(sortMode: SortModeInterface): void {
-    this.searchState = {
-      ...this.searchState,
+    const newValue = {
+      ...this.searchState$.value,
       ...{ sort: sortMode.name },
       ...{ from: null }
     };
-    this.searchState$.next(this.searchState);
+    this.searchState$.next(newValue);
   }
-  public getNextPage(): void {}
+  public getNextPage(): void {
+    const newValue = { ...this.searchState$.value };
+    newValue.from =
+      (this.searchState$.value.from || 0) + this.searchMode.results.pageSize;
+    this.searchState$.next(newValue);
+  }
   public changeFilters(criteria: SearchFilterCriteriaInterface): void {}
   public changeSearchTerm(searchTerm: string): void {}
   public updateResult(result: SearchResultInterface): void {}
 
   private getMocks(): void {
-    this.searchState = this.mockViewmodel.searchState;
-    this.searchState$ = this.mockViewmodel.searchState$;
+    this.searchState$ = new BehaviorSubject<SearchStateInterface>(
+      this.mockViewmodel.searchState$.value
+    );
     this.searchFilters$ = this.mockViewmodel.searchFilters$;
   }
 }
