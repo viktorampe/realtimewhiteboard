@@ -132,4 +132,25 @@ describe('SearchViewModel', () => {
       );
     });
   });
+
+  describe('updateFilters', () => {
+    it('should update the filters via the filterFactory', () => {
+      searchViewModel['filterFactory'] = { getFilters: jest.fn(() => of()) };
+
+      // set initial state
+      const mockSearchState = {
+        searchTerm: 'foo'
+      } as SearchStateInterface;
+      searchViewModel.searchState$.next(mockSearchState);
+
+      searchViewModel['updateFilters']();
+
+      expect(searchViewModel['filterFactory'].getFilters).toHaveBeenCalledTimes(
+        1
+      );
+      expect(searchViewModel['filterFactory'].getFilters).toHaveBeenCalledWith(
+        mockSearchState
+      );
+    });
+  });
 });
