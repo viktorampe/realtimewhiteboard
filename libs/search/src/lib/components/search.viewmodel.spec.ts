@@ -1,6 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { LearningAreaFixture } from '@campus/dal';
-import { SearchStateInterface } from '../interfaces';
+import { hot } from '@nrwl/nx/testing';
+import {
+  SearchFilterCriteriaInterface,
+  SearchStateInterface
+} from '../interfaces';
 import { SearchViewModel } from './search.viewmodel';
 
 describe('SearchViewModel', () => {
@@ -21,14 +25,14 @@ describe('SearchViewModel', () => {
   describe('changeFilters', () => {
     beforeEach(() => {
       const searchState: SearchStateInterface = {
-        searchTerm: '',
-        filterCriteriaSelections: new Map([['foo', [3]], ['bar', [1, 2]]])
-      };
+        from: 10,
+        filterCriteriaSelections: new Map([['foo', [3]], ['bar', [4, 5, 6]]])
+      } as SearchStateInterface;
       searchViewModel.searchState$.next(searchState);
     });
 
-    fit('should update searchFilterCriteria', done => {
-      const searchFilterCriteria = {
+    it('should update `searchFilterCriteria` and reset `from` in searchState', () => {
+      const searchFilterCriteria: SearchFilterCriteriaInterface = {
         name: 'foo',
         label: 'foo',
         keyProperty: 'id',
@@ -50,12 +54,17 @@ describe('SearchViewModel', () => {
       };
       searchViewModel.changeFilters(searchFilterCriteria);
 
-      searchViewModel.searchState$.subscribe(state => {
-        expect(state.filterCriteriaSelections).toEqual(
-          new Map([['foo', [1, 2]], ['bar', [1, 2]]])
-        );
-        done();
-      });
+      expect(searchViewModel.searchState$).toBeObservable(
+        hot('a', {
+          a: {
+            from: 0,
+            filterCriteriaSelections: new Map([
+              ['foo', [1, 2]],
+              ['bar', [4, 5, 6]]
+            ])
+          }
+        })
+      );
     });
   });
 });
