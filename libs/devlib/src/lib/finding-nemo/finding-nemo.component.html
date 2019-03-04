@@ -38,6 +38,10 @@
       [autoCompleteValues]="['waarde 1', ' waarde 2', 'waarde 3', 'waarde 4']"
       (valueChange)="onChange($event)"
     ></campus-search-term>
+
+    <div *ngIf="selectedFilterCriteria">
+      <p>Selected:</p> <p>{{ selectedFilterCriteria | json }}</p>
+    </div>
   </div>
   <div style="display: flex; flex-direction: column; flex: 1 1 auto;">
     <campus-results-list
@@ -45,9 +49,7 @@
       [searchMode]="searchMode"
       [searchState]="searchState | async"
       (getNextPage)="onGetNextPage($event)"
+      (sortBy)="onSortBy($event)"
     ></campus-results-list>
   </div>
-</div>
-<div *ngIf="selectedFilterCriteria">
-  <p>Selected:</p> <p>{{ selectedFilterCriteria | json }}</p>
 </div>

@@ -74,7 +74,6 @@ export class ResultsListComponent implements OnDestroy, AfterViewInit {
   private componentFactory: ComponentFactory<
     SearchResultItemComponentInterface
   >;
-  private _searchState: SearchStateInterface;
   private _searchMode: SearchModeInterface;
 
   @Input() itemSize = 100;
@@ -92,12 +91,8 @@ export class ResultsListComponent implements OnDestroy, AfterViewInit {
   @Input()
   set searchState(searchState: SearchStateInterface) {
     if (searchState) {
-      this._searchState = searchState;
-      this.setSearchState(searchState);
+      this.updateViewFromSearchState(searchState);
     }
-  }
-  get searchState(): SearchStateInterface {
-    return this._searchState;
   }
 
   @Input()
@@ -141,8 +136,6 @@ export class ResultsListComponent implements OnDestroy, AfterViewInit {
 
   sortModeClicked(sortMode: SortModeInterface): void {
     if (this.activeSortMode !== sortMode.name) {
-      this.activeSortMode = sortMode.name;
-      this.searchState.sort = sortMode.name;
       this.sortBy.emit(sortMode);
     }
   }
@@ -161,12 +154,14 @@ export class ResultsListComponent implements OnDestroy, AfterViewInit {
     }
   }
 
-  private setSearchState(searchState: SearchStateInterface): void {
+  private updateViewFromSearchState(searchState: SearchStateInterface): void {
     if (searchState.from === undefined || searchState.from === null) {
       // no search running
       this.clearResults();
       this.scrollEnabled = false;
+      this.loading = false;
     } else if (searchState.from === 0) {
+      this.scrollEnabled = false;
       this.loading = true;
       // UX: don't clear results immediately to avoid flicker effects
       this.clearResultsTimer = this.nativeWindow.setTimeout(() => {
@@ -184,8 +179,6 @@ export class ResultsListComponent implements OnDestroy, AfterViewInit {
       this.clearResults();
     }
     if (results.length === 0) {
-      // disable scroll event when there are no new results
-      this.scrollEnabled = false;
       this.loading = false;
       return;
     }

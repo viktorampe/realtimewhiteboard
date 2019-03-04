@@ -7,7 +7,8 @@ import {
   SearchModeInterface,
   SearchResultInterface,
   SearchResultItemComponentInterface,
-  SearchStateInterface
+  SearchStateInterface,
+  SortModeInterface
 } from '@campus/search';
 import { EduContentMetadataApi } from '@diekeure/polpo-api-angular-sdk';
 import { BehaviorSubject, Subject } from 'rxjs';
@@ -427,6 +428,14 @@ export class FindingNemoComponent implements OnInit {
   onGetNextPage(from) {
     console.log('getNextPage from', from);
     this.loadMoreResults(from);
+  }
+
+  onSortBy(sort: SortModeInterface) {
+    this.searchState.next({
+      ...this.searchState.value,
+      sort: sort.name
+    });
+    this.loadMoreResults();
   }
 
   onChange(value: string) {
