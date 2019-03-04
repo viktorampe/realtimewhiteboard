@@ -1,8 +1,9 @@
 import { Component, Input, OnInit, Output } from '@angular/core';
-import { EventEmitter } from 'events';
+import { Observable } from 'rxjs';
 import { SearchModeInterface } from './../../interfaces/search-mode-interface';
 import { SearchResultInterface } from './../../interfaces/search-result-interface';
 import { SearchStateInterface } from './../../interfaces/search-state.interface';
+import { SearchViewModel } from './../search.viewmodel';
 
 @Component({
   selector: 'campus-search',
@@ -15,10 +16,13 @@ export class SearchComponent implements OnInit {
   @Input() public initialState: SearchStateInterface;
   @Input() public searchResults: SearchResultInterface;
 
-  @Output() public searchState = new EventEmitter();
-  constructor() {}
+  @Output() public searchState: Observable<SearchStateInterface>;
 
-  ngOnInit() {}
+  constructor(private searchViewmodel: SearchViewModel) {}
+
+  ngOnInit() {
+    this.searchState = this.searchViewmodel.searchState$;
+  }
 
   public reset(): void {}
   public onSort(): void {}
