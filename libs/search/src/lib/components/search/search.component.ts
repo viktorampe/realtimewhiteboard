@@ -22,9 +22,12 @@ export class SearchComponent implements OnInit {
 
   ngOnInit() {
     this.searchState = this.searchViewmodel.searchState$;
+    this.reset(this.initialState);
   }
 
-  public reset(): void {}
+  public reset(initialState: SearchStateInterface = null): void {
+    this.searchViewmodel.reset(this.searchMode, initialState);
+  }
   public onSort(): void {}
   public onFilterSelectionChange(): void {}
   public onSearchTermChange(): void {}
