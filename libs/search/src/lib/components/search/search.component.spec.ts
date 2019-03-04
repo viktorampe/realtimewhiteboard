@@ -165,7 +165,7 @@ describe('SearchComponent', () => {
           new LearningAreaFixture({ id: 2 })
         ],
         filterCriteriaPredictions: new Map([
-          ['id', new Map([[1, 100], [2, 50]])]
+          ['LearningArea', new Map([[1, 100], [2, 50]])]
         ])
       };
     });
@@ -199,7 +199,7 @@ describe('SearchComponent', () => {
           new LearningAreaFixture({ id: 3 })
         ],
         filterCriteriaPredictions: new Map([
-          ['id', new Map([[1, 100], [2, 50], [3, 0]])]
+          ['LearningArea', new Map([[1, 100], [2, 50], [3, 0]])]
         ])
       } as SearchResultInterface;
 
