@@ -29,7 +29,14 @@ export class SearchViewModel {
     mode: SearchModeInterface,
     state: SearchStateInterface = null
   ): void {}
-  public changeSort(sortMode: SortModeInterface): void {}
+  public changeSort(sortMode: SortModeInterface): void {
+    const newValue = {
+      ...this.searchState$.value,
+      sort: sortMode.name,
+      from: 0
+    };
+    this.searchState$.next(newValue);
+  }
   public getNextPage(): void {
     const newValue = { ...this.searchState$.value };
     newValue.from =
