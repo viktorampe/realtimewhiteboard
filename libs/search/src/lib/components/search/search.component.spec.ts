@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { hot } from 'jasmine-marbles';
 import { SearchModeInterface, SearchStateInterface } from '../../interfaces';
 import { ResultItemBase } from '../results-list/result.component.base';
 import { SearchViewModel } from './../search.viewmodel';
@@ -91,6 +92,14 @@ describe('SearchComponent', () => {
       component.ngOnInit();
       expect(component.reset).toHaveBeenCalled();
       expect(component.reset).toHaveBeenCalledWith(component.initialState);
+    });
+  describe('searchState', () => {
+    it('should emit the viewmodel searchState$ value', () => {
+      searchViewmodel.searchState$.next(mockSearchState);
+
+      expect(component.searchState).toBeObservable(
+        hot('a', { a: mockSearchState })
+      );
     });
   });
 });
