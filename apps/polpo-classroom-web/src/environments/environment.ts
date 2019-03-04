@@ -124,7 +124,7 @@ export const environment: EnvironmentInterface = {
     home: 'assets/icons/material/home.svg',
     'breadcrumb-separator': 'assets/icons/material/chevron-right.svg',
     'arrow-back': 'assets/icons/material/arrow-back.svg',
-    'collapsible-sheet-back-icon': 'assets/icons/material/arrow-back.svg',
+    'collapsible-sheet-back': 'assets/icons/material/arrow-back.svg',
     menu: 'assets/icons/material/menu.svg',
     // alert: 'assets/icons/alert.svg',
     notifications: 'assets/icons/material/notifications.svg',
