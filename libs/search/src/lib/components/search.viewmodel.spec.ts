@@ -10,11 +10,11 @@ import {
 } from '../interfaces';
 import { SearchViewModel } from './search.viewmodel';
 
-class MockClass implements SearchFilterFactory {
+class MockFilterFactory implements SearchFilterFactory {
   getFilters(
     searchState: SearchStateInterface
   ): Observable<SearchFilterInterface[]> {
-    return of();
+    return of([]);
   }
   constructor() {}
 }
@@ -102,7 +102,7 @@ describe('SearchViewModel', () => {
       searchViewModel.reset(
         <SearchModeInterface>{
           name: 'foo',
-          searchFilterFactory: MockClass
+          searchFilterFactory: MockFilterFactory
         },
         <SearchStateInterface>{ searchTerm: 'bar', from: 60 }
       );
@@ -116,7 +116,7 @@ describe('SearchViewModel', () => {
       searchViewModel.reset(
         <SearchModeInterface>{
           name: 'foo',
-          searchFilterFactory: MockClass
+          searchFilterFactory: MockFilterFactory
         },
         null
       );
@@ -135,7 +135,8 @@ describe('SearchViewModel', () => {
 
   describe('updateFilters', () => {
     it('should update the filters via the filterFactory', () => {
-      searchViewModel['filterFactory'] = { getFilters: jest.fn(() => of()) };
+      searchViewModel['filterFactory'] = new MockFilterFactory();
+      const spy = jest.spyOn(searchViewModel['filterFactory'], 'getFilters');
 
       // set initial state
       const mockSearchState = {
@@ -145,12 +146,8 @@ describe('SearchViewModel', () => {
 
       searchViewModel['updateFilters']();
 
-      expect(searchViewModel['filterFactory'].getFilters).toHaveBeenCalledTimes(
-        1
-      );
-      expect(searchViewModel['filterFactory'].getFilters).toHaveBeenCalledWith(
-        mockSearchState
-      );
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(mockSearchState);
     });
   });
 });
