@@ -36,7 +36,6 @@ export class SearchComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log(changes);
     if (changes.searchResults) {
       this.searchViewmodel.updateResult(this.searchResults);
     }
