@@ -32,6 +32,7 @@ export class SearchComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.searchState = this.searchViewmodel.searchState$;
+    this.reset(this.initialState);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -40,11 +41,14 @@ export class SearchComponent implements OnInit, OnChanges {
       this.searchViewmodel.updateResult(this.searchResults);
     }
   }
+  public reset(initialState: SearchStateInterface = null): void {
+    this.searchViewmodel.reset(this.searchMode, initialState);
+  }
 
-  public reset(): void {}
   public onSort(event: SortModeInterface): void {
     this.searchViewmodel.changeSort(event);
   }
+
   public onFilterSelectionChange(): void {}
   public onSearchTermChange(): void {}
   public onScroll(): void {
