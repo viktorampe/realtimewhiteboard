@@ -72,7 +72,7 @@ describe('SearchComponent', () => {
       component.reset();
 
       expect(searchViewmodel.reset).toHaveBeenCalled();
-      expect(searchViewmodel.reset).toHaveBeenCalledWith(null, mockSearchMode);
+      expect(searchViewmodel.reset).toHaveBeenCalledWith(mockSearchMode, null);
 
       jest.resetAllMocks();
 
@@ -80,8 +80,8 @@ describe('SearchComponent', () => {
 
       expect(searchViewmodel.reset).toHaveBeenCalled();
       expect(searchViewmodel.reset).toHaveBeenCalledWith(
-        mockSearchState,
-        mockSearchMode
+        mockSearchMode,
+        mockSearchState
       );
     });
 

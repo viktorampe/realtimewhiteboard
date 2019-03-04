@@ -24,7 +24,7 @@ export class SearchComponent implements OnInit {
   }
 
   public reset(initialState: SearchStateInterface = null): void {
-    this.searchViewmodel.reset(initialState, this.searchMode);
+    this.searchViewmodel.reset(this.searchMode, initialState);
   }
   public onSort(): void {}
   public onFilterSelectionChange(): void {}
