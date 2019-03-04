@@ -2,6 +2,9 @@ export {
   BreadcrumbLinkInterface
 } from './lib/breadcrumbs/breadcrumbs.component';
 export {
+  CollapsibleBreakpointsInterface
+} from './lib/collapsible-sheet/collapsible-sheet.component';
+export {
   SelectOption
 } from './lib/confirmable-select/confirmable-select.component';
 export {
