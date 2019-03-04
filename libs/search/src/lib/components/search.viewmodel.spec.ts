@@ -100,11 +100,11 @@ describe('SearchViewModel', () => {
 
     it('should update the state', () => {
       searchViewModel.reset(
-        <SearchModeInterface>{
+        {
           name: 'foo',
           searchFilterFactory: MockFilterFactory
-        },
-        <SearchStateInterface>{ searchTerm: 'bar', from: 60 }
+        } as SearchModeInterface,
+        { searchTerm: 'bar', from: 60 } as SearchStateInterface
       );
 
       expect(searchViewModel.searchState$).toBeObservable(
@@ -114,10 +114,10 @@ describe('SearchViewModel', () => {
 
     it('should reset the state', () => {
       searchViewModel.reset(
-        <SearchModeInterface>{
+        {
           name: 'foo',
           searchFilterFactory: MockFilterFactory
-        },
+        } as SearchModeInterface,
         null
       );
 
