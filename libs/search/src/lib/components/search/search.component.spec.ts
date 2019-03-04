@@ -1,7 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { hot } from 'jasmine-marbles';
-import { Subject } from 'rxjs';
-import { SearchStateInterface } from '../../interfaces';
 import { SearchViewModel } from '../search.viewmodel';
 import { MockSearchViewModel } from '../search.viewmodel.mock';
 import { SearchComponent } from './search.component';
@@ -33,10 +31,8 @@ describe('SearchComponent', () => {
 
   describe('searchState', () => {
     it('should emit the viewmodel searchState$ value', () => {
-      const mockSearchState = null; //TODO delete this when mock is merged
-      (searchViewmodel.searchState$ as Subject<SearchStateInterface>).next(
-        mockSearchState
-      );
+      const mockSearchState = null; //TODO delete this when mock is merged see pr #700
+      searchViewmodel.searchState$.next(mockSearchState);
 
       expect(component.searchState).toBeObservable(
         hot('a', { a: mockSearchState })
