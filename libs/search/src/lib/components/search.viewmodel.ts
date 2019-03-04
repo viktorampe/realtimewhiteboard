@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import {
   SearchFilterFactory,
   SearchFilterInterface,
@@ -17,14 +17,14 @@ import { MockSearchViewModel } from './search.viewmodel.mock';
   providedIn: 'root'
 })
 export class SearchViewModel {
-  public searchState$: Subject<SearchStateInterface>;
-  public searchFilters$: Subject<SearchFilterInterface[]>;
-
-  private searchState: SearchStateInterface;
   private searchMode: SearchModeInterface;
   private filterFactory: SearchFilterFactory;
-  // source streams
-  private factoryFilters$: Subject<SearchFilterInterface[]>;
+
+  // source stream
+  private filters$ = new BehaviorSubject<SearchFilterInterface[]>([]); // used by getFilters()
+
+  public searchState$ = new BehaviorSubject<SearchStateInterface>(null);
+  public searchFilters$ = new BehaviorSubject<SearchFilterInterface[]>([]);
 
   constructor(private mockViewmodel: MockSearchViewModel) {
     this.getMocks();
@@ -34,37 +34,47 @@ export class SearchViewModel {
     mode: SearchModeInterface,
     state: SearchStateInterface = null
   ): void {
+    let newSearchState: SearchStateInterface;
     this.searchMode = mode;
-    this.filterFactory = new this.searchMode.searchFilterFactory();
+    this.filterFactory = new this.searchMode.searchFilterFactory(); // used by getFilters()
 
     if (state) {
       // we want to update the state
-      this.searchState = state;
+      newSearchState = { ...state };
     } else {
       // we want to reset the state
       // note: sort mode should stay the same on reset
-      this.searchState.searchTerm = '';
-      this.searchState.filterCriteriaSelections.clear();
-      this.searchState.from = 0;
+      newSearchState = { ...this.searchState$.value };
+      newSearchState.searchTerm = '';
+      newSearchState.filterCriteriaSelections.clear();
+      newSearchState.from = 0;
     }
+    // request new filters
+    this.getFilters();
 
-    this.factoryFilters$.next(this.getFilters());
-
-    this.searchState$.next({ ...this.searchState });
+    // trigger new search
+    this.searchState$.next(newSearchState);
   }
   public changeSort(sortMode: SortModeInterface): void {}
-  public getNextPage(): void {}
+  public getNextPage(): void {
+    const newValue = { ...this.searchState$.value };
+    newValue.from =
+      (this.searchState$.value.from || 0) + this.searchMode.results.pageSize;
+    this.searchState$.next(newValue);
+  }
   public changeFilters(criteria: SearchFilterCriteriaInterface): void {}
   public changeSearchTerm(searchTerm: string): void {}
   public updateResult(result: SearchResultInterface): void {}
 
   private getFilters(): SearchFilterInterface[] {
-    // implementation is another ticket
+    // implementation is another ticket (#689)
     return [];
   }
 
   private getMocks(): void {
-    this.searchState$ = this.mockViewmodel.searchState$;
+    this.searchState$ = new BehaviorSubject<SearchStateInterface>(
+      this.mockViewmodel.searchState$.value
+    );
     this.searchFilters$ = this.mockViewmodel.searchFilters$;
   }
 }
