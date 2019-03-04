@@ -4,6 +4,7 @@ import {
   SearchFilterCriteriaFixture,
   SearchFilterCriteriaInterface,
   SearchFilterCriteriaValuesFixture,
+  SearchFilterFactory,
   SearchModeInterface,
   SearchResultInterface,
   SearchResultItemComponentInterface,
@@ -319,7 +320,7 @@ export class FindingNemoComponent implements OnInit {
       name: 'demo',
       label: 'demo',
       dynamicFilters: false,
-      searchFilterFactory: [],
+      searchFilterFactory: {} as Type<SearchFilterFactory>,
       results: {
         component: PolpoResultItemComponent,
         sortModes: [
