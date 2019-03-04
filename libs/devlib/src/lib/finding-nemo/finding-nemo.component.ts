@@ -1,9 +1,7 @@
 import { Component, Type } from '@angular/core';
 import { EduContentMetadataFixture, LearningAreaFixture } from '@campus/dal';
 import {
-  SearchFilterCriteriaFixture,
   SearchFilterCriteriaInterface,
-  SearchFilterCriteriaValuesFixture,
   SearchFilterFactory,
   SearchFilterInterface,
   SearchModeInterface,
@@ -12,14 +10,11 @@ import {
   SearchStateInterface
 } from '@campus/search';
 import { EduContentMetadataApi } from '@diekeure/polpo-api-angular-sdk';
-import { BreadcrumbFilterComponent } from 'libs/search/src/lib/components/breadcrumb-filter/breadcrumb-filter.component';
-import { CheckboxLineFilterComponent } from 'libs/search/src/lib/components/checkbox-line-filter/checkbox-line-filter-component';
-import { CheckboxListFilterComponent } from 'libs/search/src/lib/components/checkbox-list-filter/checkbox-list-filter.component';
-import { ColumnFilterComponent } from 'libs/search/src/lib/components/column-filter/column-filter.component';
-import { SelectFilterComponent } from 'libs/search/src/lib/components/select-filter-component/select-filter.component';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { PolpoResultItemComponent } from '../polpo-result-item/polpo-result-item.component';
+// tslint:disable-next-line:nx-enforce-module-boundaries
+import { MockSearchViewModel } from './../../../../search/src/lib/components/search.viewmodel.mock';
 
 @Component({
   selector: 'campus-finding-nemo',
@@ -208,82 +203,11 @@ export class FindingNemoComponent {
 }
 
 class MockFactory implements SearchFilterFactory {
+  constructor(private mockSearchViewModel: MockSearchViewModel) {}
+
   getFilters(
     searchState: SearchStateInterface[]
   ): Observable<SearchFilterInterface[]> {
-    return of(this.getMockSearchFilter());
-  }
-
-  // copy paste of the mockviewmodel code
-  private getMockSearchFilter(): SearchFilterInterface[] {
-    const mockSearchFilter = [
-      {
-        criteria: new SearchFilterCriteriaFixture({}, [
-          new SearchFilterCriteriaValuesFixture(),
-          new SearchFilterCriteriaValuesFixture({
-            data: { id: 2, name: 'foo' }
-          }),
-          new SearchFilterCriteriaValuesFixture({
-            data: { id: 3, name: 'foo bar' }
-          })
-        ]),
-        component: new CheckboxLineFilterComponent(),
-        domHost: 'hostleft'
-      },
-      {
-        criteria: new SearchFilterCriteriaFixture({}, [
-          new SearchFilterCriteriaValuesFixture(),
-          new SearchFilterCriteriaValuesFixture({
-            data: { id: 2, name: 'foo' }
-          }),
-          new SearchFilterCriteriaValuesFixture({
-            data: { id: 3, name: 'foo bar' }
-          })
-        ]),
-        component: new CheckboxListFilterComponent(),
-        domHost: 'hostleft'
-      },
-      {
-        criteria: new SearchFilterCriteriaFixture({}, [
-          new SearchFilterCriteriaValuesFixture(),
-          new SearchFilterCriteriaValuesFixture({
-            data: { id: 2, name: 'foo' }
-          }),
-          new SearchFilterCriteriaValuesFixture({
-            data: { id: 3, name: 'foo bar' }
-          })
-        ]),
-        component: new BreadcrumbFilterComponent(),
-        domHost: 'hosttop'
-      },
-      {
-        criteria: new SearchFilterCriteriaFixture({}, [
-          new SearchFilterCriteriaValuesFixture(),
-          new SearchFilterCriteriaValuesFixture({
-            data: { id: 2, name: 'foo' }
-          }),
-          new SearchFilterCriteriaValuesFixture({
-            data: { id: 3, name: 'foo bar' }
-          })
-        ]),
-        component: new ColumnFilterComponent(),
-        domHost: 'hostleft'
-      },
-      {
-        criteria: new SearchFilterCriteriaFixture({}, [
-          new SearchFilterCriteriaValuesFixture(),
-          new SearchFilterCriteriaValuesFixture({
-            data: { id: 2, name: 'foo' }
-          }),
-          new SearchFilterCriteriaValuesFixture({
-            data: { id: 3, name: 'foo bar' }
-          })
-        ]),
-        component: new SelectFilterComponent(),
-        domHost: 'hosttop'
-      }
-    ];
-
-    return mockSearchFilter;
+    return this.mockSearchViewModel.searchFilters$;
   }
 }
