@@ -50,7 +50,7 @@ export class SearchViewModel {
       newSearchState.from = 0;
     }
     // request new filters
-    this.getFilters();
+    this.updateFilters();
 
     // trigger new search
     this.searchState$.next(newSearchState);
@@ -67,7 +67,7 @@ export class SearchViewModel {
   public changeSearchTerm(searchTerm: string): void {}
   public updateResult(result: SearchResultInterface): void {}
 
-  private getFilters(): SearchFilterInterface[] {
+  private updateFilters(): SearchFilterInterface[] {
     // implementation is another ticket (#689)
     return [];
   }
