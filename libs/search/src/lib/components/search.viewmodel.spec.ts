@@ -1,6 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { hot } from '@nrwl/nx/testing';
-import { SearchModeInterface, SearchStateInterface } from '../interfaces';
+import {
+  SearchModeInterface,
+  SearchStateInterface,
+  SortModeInterface
+} from '../interfaces';
 import { SearchViewModel } from './search.viewmodel';
 
 class MockClass {
@@ -19,6 +23,31 @@ describe('SearchViewModel', () => {
 
   it('should be defined', () => {
     expect(searchViewModel).toBeDefined();
+  });
+
+  describe('changeSort', () => {
+    let mockSortMode: SortModeInterface;
+
+    beforeEach(() => {
+      mockSortMode = {
+        name: 'new sort mode',
+        description: 'this is the hottest new sortmode',
+        icon: 'foo'
+      };
+    });
+
+    it('should trigger an emit the new searchState', () => {
+      const oldValue = searchViewModel.searchState$.value;
+      searchViewModel.changeSort(mockSortMode);
+
+      const expected = oldValue;
+      expected.sort = mockSortMode.name;
+      expected.from = 0;
+
+      expect(searchViewModel.searchState$).toBeObservable(
+        hot('a', { a: expected })
+      );
+    });
   });
 
   describe('getNextPage', () => {

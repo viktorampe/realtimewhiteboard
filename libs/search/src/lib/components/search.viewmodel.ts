@@ -21,7 +21,7 @@ export class SearchViewModel {
   private filterFactory: SearchFilterFactory;
 
   // source stream
-  private filters$ = new BehaviorSubject<SearchFilterInterface[]>([]); // used by getFilters()
+  private filters$ = new BehaviorSubject<SearchFilterInterface[]>([]); // used by updateFilters()
 
   public searchState$ = new BehaviorSubject<SearchStateInterface>(null);
   public searchFilters$ = new BehaviorSubject<SearchFilterInterface[]>([]);
@@ -36,7 +36,7 @@ export class SearchViewModel {
   ): void {
     let newSearchState: SearchStateInterface;
     this.searchMode = mode;
-    this.filterFactory = new this.searchMode.searchFilterFactory(); // used by getFilters()
+    this.filterFactory = new this.searchMode.searchFilterFactory(); // used by updateFilters()
 
     if (state) {
       // we want to update the state
@@ -56,7 +56,14 @@ export class SearchViewModel {
     this.searchState$.next(newSearchState);
   }
 
-  public changeSort(sortMode: SortModeInterface): void {}
+  public changeSort(sortMode: SortModeInterface): void {
+    const newValue = {
+      ...this.searchState$.value,
+      sort: sortMode.name,
+      from: 0
+    };
+    this.searchState$.next(newValue);
+  }
   public getNextPage(): void {
     const newValue = { ...this.searchState$.value };
     newValue.from =
