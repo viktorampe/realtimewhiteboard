@@ -1,8 +1,15 @@
 import { TestBed } from '@angular/core/testing';
 import { hot } from '@nrwl/nx/testing';
-import { SearchModeInterface, SearchStateInterface } from '../interfaces';
+import {
+  SearchModeInterface,
+  SearchStateInterface,
+  SortModeInterface
+} from '../interfaces';
 import { SearchViewModel } from './search.viewmodel';
 
+class MockClass {
+  constructor() {}
+}
 describe('SearchViewModel', () => {
   let searchViewModel: SearchViewModel;
 
@@ -16,6 +23,31 @@ describe('SearchViewModel', () => {
 
   it('should be defined', () => {
     expect(searchViewModel).toBeDefined();
+  });
+
+  describe('changeSort', () => {
+    let mockSortMode: SortModeInterface;
+
+    beforeEach(() => {
+      mockSortMode = {
+        name: 'new sort mode',
+        description: 'this is the hottest new sortmode',
+        icon: 'foo'
+      };
+    });
+
+    it('should trigger an emit the new searchState', () => {
+      const oldValue = searchViewModel.searchState$.value;
+      searchViewModel.changeSort(mockSortMode);
+
+      const expected = oldValue;
+      expected.sort = mockSortMode.name;
+      expected.from = 0;
+
+      expect(searchViewModel.searchState$).toBeObservable(
+        hot('a', { a: expected })
+      );
+    });
   });
 
   describe('getNextPage', () => {
@@ -40,6 +72,56 @@ describe('SearchViewModel', () => {
           })
         );
       });
+    });
+  });
+
+  describe('reset', () => {
+    beforeEach(() => {
+      const mockSelections = new Map<string, string[]>();
+      mockSelections.set('foo', ['bar', 'baz']);
+
+      const mockSearchState: SearchStateInterface = {
+        searchTerm: 'foo',
+        from: 30,
+        filterCriteriaSelections: mockSelections
+      };
+
+      // set initial state
+      searchViewModel.searchState$.next(mockSearchState);
+    });
+
+    it('should update the state', () => {
+      searchViewModel.reset(
+        <SearchModeInterface>{
+          name: 'foo',
+          searchFilterFactory: MockClass
+        },
+        <SearchStateInterface>{ searchTerm: 'bar', from: 60 }
+      );
+
+      expect(searchViewModel.searchState$).toBeObservable(
+        hot('a', { a: { searchTerm: 'bar', from: 60 } })
+      );
+    });
+
+    it('should reset the state', () => {
+      searchViewModel.reset(
+        <SearchModeInterface>{
+          name: 'foo',
+          searchFilterFactory: MockClass
+        },
+        null
+      );
+
+      expect(searchViewModel.searchState$).toBeObservable(
+        hot('a', {
+          a: {
+            searchTerm: '',
+            filterCriteriaSelections: new Map<string, string[]>(),
+            from: 0
+          }
+        })
+      );
     });
   });
 });
