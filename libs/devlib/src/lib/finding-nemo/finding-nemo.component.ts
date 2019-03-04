@@ -320,7 +320,7 @@ export class FindingNemoComponent implements OnInit {
       name: 'demo',
       label: 'demo',
       dynamicFilters: false,
-      searchFilterFactory: <Type<SearchFilterFactory>>{},
+      searchFilterFactory: {} as Type<SearchFilterFactory>,
       results: {
         component: PolpoResultItemComponent,
         sortModes: [
