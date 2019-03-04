@@ -11,7 +11,7 @@
 
   &__results {
     flex: 1 0 auto;
-    height: 0;
+    // height: 0; //TODO: what was the function of this?
     overflow: auto;
   }
 }

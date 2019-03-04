@@ -1,10 +1,11 @@
-import { Component, SimpleChange } from '@angular/core';
+import { Component, SimpleChange, Type } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { LearningAreaFixture } from '@campus/dal';
 import { hot } from 'jasmine-marbles';
 import {
+  SearchFilterFactory,
   SearchModeInterface,
   SearchResultInterface,
   SearchStateInterface
@@ -52,7 +53,7 @@ describe('SearchComponent', () => {
       name: 'mock',
       label: 'mockSearchMode',
       dynamicFilters: false,
-      searchFilterFactory: [],
+      searchFilterFactory: {} as Type<SearchFilterFactory>,
 
       results: {
         component: ResultItemComponent,

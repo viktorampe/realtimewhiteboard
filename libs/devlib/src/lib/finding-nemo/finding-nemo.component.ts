@@ -1,13 +1,23 @@
-import { Component } from '@angular/core';
+import { Component, Type } from '@angular/core';
 import { EduContentMetadataFixture, LearningAreaFixture } from '@campus/dal';
 import {
+  SearchFilterCriteriaFixture,
   SearchFilterCriteriaInterface,
+  SearchFilterCriteriaValuesFixture,
+  SearchFilterFactory,
+  SearchFilterInterface,
   SearchModeInterface,
   SearchResultInterface,
+  SearchResultItemComponentInterface,
   SearchStateInterface
 } from '@campus/search';
 import { EduContentMetadataApi } from '@diekeure/polpo-api-angular-sdk';
-import { BehaviorSubject } from 'rxjs';
+import { BreadcrumbFilterComponent } from 'libs/search/src/lib/components/breadcrumb-filter/breadcrumb-filter.component';
+import { CheckboxLineFilterComponent } from 'libs/search/src/lib/components/checkbox-line-filter/checkbox-line-filter-component';
+import { CheckboxListFilterComponent } from 'libs/search/src/lib/components/checkbox-list-filter/checkbox-list-filter.component';
+import { ColumnFilterComponent } from 'libs/search/src/lib/components/column-filter/column-filter.component';
+import { SelectFilterComponent } from 'libs/search/src/lib/components/select-filter-component/select-filter.component';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { PolpoResultItemComponent } from '../polpo-result-item/polpo-result-item.component';
 
@@ -17,7 +27,7 @@ import { PolpoResultItemComponent } from '../polpo-result-item/polpo-result-item
   styleUrls: ['./finding-nemo.component.scss']
 })
 export class FindingNemoComponent {
-  // public resultItemComponent: Type<SearchResultItemComponentInterface>;
+  public resultItemComponent: Type<SearchResultItemComponentInterface>;
   public resultsPage$ = new BehaviorSubject<SearchResultInterface>(null);
   public searchMode: SearchModeInterface;
   public searchState = new BehaviorSubject<SearchStateInterface>(null);
@@ -114,7 +124,8 @@ export class FindingNemoComponent {
       name: 'demo',
       label: 'demo',
       dynamicFilters: false,
-      searchFilterFactory: [],
+      // tslint:disable-next-line: no-use-before-declare
+      searchFilterFactory: MockFactory,
       results: {
         component: PolpoResultItemComponent,
         sortModes: [
@@ -193,5 +204,86 @@ export class FindingNemoComponent {
         ]
       }
     ];
+  }
+}
+
+class MockFactory implements SearchFilterFactory {
+  getFilters(
+    searchState: SearchStateInterface[]
+  ): Observable<SearchFilterInterface[]> {
+    return of(this.getMockSearchFilter());
+  }
+
+  // copy paste of the mockviewmodel code
+  private getMockSearchFilter(): SearchFilterInterface[] {
+    const mockSearchFilter = [
+      {
+        criteria: new SearchFilterCriteriaFixture({}, [
+          new SearchFilterCriteriaValuesFixture(),
+          new SearchFilterCriteriaValuesFixture({
+            data: { id: 2, name: 'foo' }
+          }),
+          new SearchFilterCriteriaValuesFixture({
+            data: { id: 3, name: 'foo bar' }
+          })
+        ]),
+        component: new CheckboxLineFilterComponent(),
+        domHost: 'hostleft'
+      },
+      {
+        criteria: new SearchFilterCriteriaFixture({}, [
+          new SearchFilterCriteriaValuesFixture(),
+          new SearchFilterCriteriaValuesFixture({
+            data: { id: 2, name: 'foo' }
+          }),
+          new SearchFilterCriteriaValuesFixture({
+            data: { id: 3, name: 'foo bar' }
+          })
+        ]),
+        component: new CheckboxListFilterComponent(),
+        domHost: 'hostleft'
+      },
+      {
+        criteria: new SearchFilterCriteriaFixture({}, [
+          new SearchFilterCriteriaValuesFixture(),
+          new SearchFilterCriteriaValuesFixture({
+            data: { id: 2, name: 'foo' }
+          }),
+          new SearchFilterCriteriaValuesFixture({
+            data: { id: 3, name: 'foo bar' }
+          })
+        ]),
+        component: new BreadcrumbFilterComponent(),
+        domHost: 'hosttop'
+      },
+      {
+        criteria: new SearchFilterCriteriaFixture({}, [
+          new SearchFilterCriteriaValuesFixture(),
+          new SearchFilterCriteriaValuesFixture({
+            data: { id: 2, name: 'foo' }
+          }),
+          new SearchFilterCriteriaValuesFixture({
+            data: { id: 3, name: 'foo bar' }
+          })
+        ]),
+        component: new ColumnFilterComponent(),
+        domHost: 'hostleft'
+      },
+      {
+        criteria: new SearchFilterCriteriaFixture({}, [
+          new SearchFilterCriteriaValuesFixture(),
+          new SearchFilterCriteriaValuesFixture({
+            data: { id: 2, name: 'foo' }
+          }),
+          new SearchFilterCriteriaValuesFixture({
+            data: { id: 3, name: 'foo bar' }
+          })
+        ]),
+        component: new SelectFilterComponent(),
+        domHost: 'hosttop'
+      }
+    ];
+
+    return mockSearchFilter;
   }
 }
