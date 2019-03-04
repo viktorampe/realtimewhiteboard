@@ -2,7 +2,10 @@ import { TestBed } from '@angular/core/testing';
 import { hot } from '@nrwl/nx/testing';
 import { SearchModeInterface, SearchStateInterface } from '../interfaces';
 import { SearchViewModel } from './search.viewmodel';
-// file.only
+
+class MockClass {
+  constructor() {}
+}
 describe('SearchViewModel', () => {
   let searchViewModel: SearchViewModel;
 
@@ -40,6 +43,56 @@ describe('SearchViewModel', () => {
           })
         );
       });
+    });
+  });
+
+  describe('reset', () => {
+    beforeEach(() => {
+      const mockSelections = new Map<string, string[]>();
+      mockSelections.set('foo', ['bar', 'baz']);
+
+      const mockSearchState: SearchStateInterface = {
+        searchTerm: 'foo',
+        from: 30,
+        filterCriteriaSelections: mockSelections
+      };
+
+      // set initial state
+      searchViewModel.searchState$.next(mockSearchState);
+    });
+
+    it('should update the state', () => {
+      searchViewModel.reset(
+        <SearchModeInterface>{
+          name: 'foo',
+          searchFilterFactory: MockClass
+        },
+        <SearchStateInterface>{ searchTerm: 'bar', from: 60 }
+      );
+
+      expect(searchViewModel.searchState$).toBeObservable(
+        hot('a', { a: { searchTerm: 'bar', from: 60 } })
+      );
+    });
+
+    it('should reset the state', () => {
+      searchViewModel.reset(
+        <SearchModeInterface>{
+          name: 'foo',
+          searchFilterFactory: MockClass
+        },
+        null
+      );
+
+      expect(searchViewModel.searchState$).toBeObservable(
+        hot('a', {
+          a: {
+            searchTerm: '',
+            filterCriteriaSelections: new Map<string, string[]>(),
+            from: 0
+          }
+        })
+      );
     });
   });
 });

@@ -55,6 +55,7 @@ export class SearchViewModel {
     // trigger new search
     this.searchState$.next(newSearchState);
   }
+
   public changeSort(sortMode: SortModeInterface): void {}
   public getNextPage(): void {
     const newValue = { ...this.searchState$.value };
