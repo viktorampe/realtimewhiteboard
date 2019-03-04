@@ -1,13 +1,21 @@
 import { TestBed } from '@angular/core/testing';
 import { hot } from '@nrwl/nx/testing';
+import { Observable, of } from 'rxjs';
 import {
+  SearchFilterFactory,
+  SearchFilterInterface,
   SearchModeInterface,
   SearchStateInterface,
   SortModeInterface
 } from '../interfaces';
 import { SearchViewModel } from './search.viewmodel';
 
-class MockClass {
+class MockClass implements SearchFilterFactory {
+  getFilters(
+    searchState: SearchStateInterface
+  ): Observable<SearchFilterInterface[]> {
+    return of();
+  }
   constructor() {}
 }
 describe('SearchViewModel', () => {
