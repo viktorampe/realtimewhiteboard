@@ -8,7 +8,7 @@ import {
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, Input } from '@angular/core';
 
-const defaultBreakpoints = {
+const defaultBreakpoints: CollapsibleBreakpointsInterface = {
   'xsmall-closed': '5%',
   'xsmall-open': '95%',
   'small-closed': '15%',
@@ -52,16 +52,7 @@ export class CollapsibleSheetComponent {
 
   @Input() collapsed = true;
   @Input()
-  set breakpoints(breakpoints: {
-    'xsmall-open'?: string;
-    'xsmall-closed'?: string;
-    'small-open'?: string;
-    'small-closed'?: string;
-    'medium-closed'?: string;
-    'medium-open'?: string;
-    'large-closed'?: string;
-    'large-open'?: string;
-  }) {
+  set breakpoints(breakpoints: CollapsibleBreakpointsInterface) {
     this._breakpoints = {
       ...defaultBreakpoints,
       ...(breakpoints || {})
@@ -99,4 +90,15 @@ export class CollapsibleSheetComponent {
   toggleCollapsed(): void {
     this.collapsed = !this.collapsed;
   }
+}
+
+export interface CollapsibleBreakpointsInterface {
+  'xsmall-open'?: string;
+  'xsmall-closed'?: string;
+  'small-open'?: string;
+  'small-closed'?: string;
+  'medium-closed'?: string;
+  'medium-open'?: string;
+  'large-closed'?: string;
+  'large-open'?: string;
 }
