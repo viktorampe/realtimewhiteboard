@@ -4,13 +4,15 @@ import {
   SearchFilterCriteriaFixture,
   SearchFilterCriteriaInterface,
   SearchFilterCriteriaValuesFixture,
+  SearchFilterFactory,
+  SearchFilterInterface,
   SearchModeInterface,
   SearchResultInterface,
   SearchResultItemComponentInterface,
   SearchStateInterface
 } from '@campus/search';
 import { EduContentMetadataApi } from '@diekeure/polpo-api-angular-sdk';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { PolpoResultItemComponent } from '../polpo-result-item/polpo-result-item.component';
 
@@ -252,6 +254,14 @@ const mockListCriteria = new SearchFilterCriteriaFixture(
   ]
 );
 
+class MockFilterFactory implements SearchFilterFactory {
+  getFilters(
+    searchState: SearchStateInterface
+  ): Observable<SearchFilterInterface[]> {
+    return of();
+  }
+}
+
 @Component({
   selector: 'campus-finding-nemo',
   templateUrl: './finding-nemo.component.html',
@@ -319,7 +329,7 @@ export class FindingNemoComponent implements OnInit {
       name: 'demo',
       label: 'demo',
       dynamicFilters: false,
-      searchFilterFactory: [],
+      searchFilterFactory: MockFilterFactory,
       results: {
         component: PolpoResultItemComponent,
         sortModes: [

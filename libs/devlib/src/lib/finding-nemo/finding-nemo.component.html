@@ -47,3 +47,8 @@
 <div *ngIf="selectedFilterCriteria">
   <p>Selected:</p> <p>{{ selectedFilterCriteria | json }}</p>
 </div>
+
+<campus-search
+  [initialState]="searchState | async"
+  [searchMode]="searchMode"
+></campus-search>
