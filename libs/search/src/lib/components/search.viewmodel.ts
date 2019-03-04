@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { take } from 'rxjs/operators';
 import {
   SearchFilterFactory,
   SearchFilterInterface,
@@ -21,7 +22,7 @@ export class SearchViewModel {
   private filterFactory: SearchFilterFactory;
 
   // source stream
-  private filters$ = new BehaviorSubject<SearchFilterInterface[]>([]); // used by updateFilters()
+  private filters$ = new BehaviorSubject<SearchFilterInterface[]>([]);
 
   public searchState$ = new BehaviorSubject<SearchStateInterface>(null);
   public searchFilters$ = new BehaviorSubject<SearchFilterInterface[]>([]);
@@ -49,11 +50,12 @@ export class SearchViewModel {
       newSearchState.filterCriteriaSelections.clear();
       newSearchState.from = 0;
     }
-    // request new filters
-    this.updateFilters();
 
     // trigger new search
     this.searchState$.next(newSearchState);
+
+    // request new filters
+    this.updateFilters();
   }
 
   public changeSort(sortMode: SortModeInterface): void {
@@ -75,7 +77,10 @@ export class SearchViewModel {
   public updateResult(result: SearchResultInterface): void {}
 
   private updateFilters(): void {
-    // implementation is another ticket (#689)
+    this.filterFactory
+      .getFilters(this.searchState$.value)
+      .pipe(take(1))
+      .subscribe(this.filters$.next);
   }
 
   private getMocks(): void {
