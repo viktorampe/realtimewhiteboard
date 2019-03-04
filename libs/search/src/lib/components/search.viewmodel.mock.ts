@@ -29,8 +29,8 @@ export class MockSearchViewModel
   public searchFilters$ = new BehaviorSubject<SearchFilterInterface[]>([]);
 
   constructor() {
-    // this.searchState$.next(this.getMockSearchState());
-    // this.searchFilters$.next(this.getMockSearchFilter());
+    this.searchState$.next(this.getMockSearchState());
+    this.searchFilters$.next(this.getMockSearchFilter());
   }
 
   public reset(

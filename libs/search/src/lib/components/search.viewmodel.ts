@@ -46,12 +46,14 @@ export class SearchViewModel {
       number[] | string[]
     > = this.extractSelectedValuesFromCriteria(criteria);
 
-    const searchState: SearchStateInterface = this.searchState$.value;
+    const searchState: SearchStateInterface = { ...this.searchState$.value };
+    const selection = new Map(searchState.filterCriteriaSelections); // clone criteria
     updatedCriteria.forEach((value, key) => {
-      searchState.filterCriteriaSelections.set(key, value);
+      selection.set(key, value);
     });
-
-    this.searchState$.next({ ...searchState, from: 0 });
+    searchState.filterCriteriaSelections = selection;
+    searchState.from = 0;
+    this.searchState$.next(searchState);
 
     if (this.searchMode && this.searchMode.dynamicFilters === true) {
       // request new filters
