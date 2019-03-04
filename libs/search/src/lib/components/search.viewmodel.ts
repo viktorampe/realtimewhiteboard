@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { switchMap, take } from 'rxjs/operators';
 import {
   SearchFilterFactory,
   SearchFilterInterface,
@@ -43,16 +42,13 @@ export class SearchViewModel {
       this.searchState = state;
     } else {
       // we want to reset the state
+      // note: sort mode should stay the same on reset
       this.searchState.searchTerm = '';
       this.searchState.filterCriteriaSelections.clear();
       this.searchState.from = 0;
-      this.searchState.sort = '';
     }
 
-    this.filterFactory.getFilters([this.searchState]).pipe(
-      take(1),
-      switchMap((filters: SearchFilterInterface[]) => this.factoryFilters$)
-    );
+    this.factoryFilters$.next(this.getFilters());
 
     this.searchState$.next({ ...this.searchState });
   }
@@ -61,6 +57,11 @@ export class SearchViewModel {
   public changeFilters(criteria: SearchFilterCriteriaInterface): void {}
   public changeSearchTerm(searchTerm: string): void {}
   public updateResult(result: SearchResultInterface): void {}
+
+  private getFilters(): SearchFilterInterface[] {
+    // implementation is another ticket
+    return [];
+  }
 
   private getMocks(): void {
     this.searchState$ = this.mockViewmodel.searchState$;
