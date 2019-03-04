@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import {
   SearchFilterInterface,
   SearchResultInterface,
@@ -18,19 +18,23 @@ import { MockSearchViewModel } from './search.viewmodel.mock';
 export class SearchViewModel {
   private searchMode: SearchModeInterface;
 
-  public searchState$: BehaviorSubject<SearchStateInterface>;
-  public searchFilters$ = new Subject<SearchFilterInterface[]>();
+  public searchState$ = new BehaviorSubject<SearchStateInterface>(null);
+  public searchFilters$ = new BehaviorSubject<SearchFilterInterface[]>([]);
 
   constructor(private mockViewmodel: MockSearchViewModel) {
     this.getMocks();
   }
 
-  public reset(state: SearchStateInterface, mode: SearchModeInterface): void {}
+  public reset(
+    mode: SearchModeInterface,
+    state: SearchStateInterface = null
+  ): void {}
   public changeSort(sortMode: SortModeInterface): void {}
   public getNextPage(): void {
-    this.searchState$.value.from =
+    const newValue = { ...this.searchState$.value };
+    newValue.from =
       (this.searchState$.value.from || 0) + this.searchMode.results.pageSize;
-    this.searchState$.next({ ...this.searchState$.value });
+    this.searchState$.next(newValue);
   }
   public changeFilters(criteria: SearchFilterCriteriaInterface): void {}
   public changeSearchTerm(searchTerm: string): void {}
