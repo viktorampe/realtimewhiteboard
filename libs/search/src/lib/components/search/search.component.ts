@@ -6,7 +6,7 @@ import {
   Output,
   SimpleChanges
 } from '@angular/core';
-import { EventEmitter } from 'events';
+import { Observable } from 'rxjs';
 import { SearchViewModel } from '../search.viewmodel';
 import {
   SearchModeInterface,
@@ -26,10 +26,13 @@ export class SearchComponent implements OnInit, OnChanges {
   @Input() public initialState: SearchStateInterface;
   @Input() public searchResults: SearchResultInterface;
 
-  @Output() public searchState = new EventEmitter();
+  @Output() public searchState: Observable<SearchStateInterface>;
+
   constructor(private searchViewmodel: SearchViewModel) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.searchState = this.searchViewmodel.searchState$;
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     console.log(changes);
