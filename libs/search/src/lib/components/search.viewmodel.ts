@@ -54,10 +54,8 @@ export class SearchViewModel {
     this.searchState$.next({ ...searchState, from: 0 });
 
     if (this.searchMode && this.searchMode.dynamicFilters === true) {
-      // TODO: enable when available
-      // this.factoryFilters$.next(
+      // request new filters
       this.getFilters();
-      // );
     }
   }
   public changeSearchTerm(searchTerm: string): void {}
