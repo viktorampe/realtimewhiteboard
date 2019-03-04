@@ -67,9 +67,8 @@ export class SearchViewModel {
   public changeSearchTerm(searchTerm: string): void {}
   public updateResult(result: SearchResultInterface): void {}
 
-  private updateFilters(): SearchFilterInterface[] {
+  private updateFilters(): void {
     // implementation is another ticket (#689)
-    return [];
   }
 
   private getMocks(): void {
