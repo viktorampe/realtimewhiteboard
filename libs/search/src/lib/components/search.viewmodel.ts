@@ -53,12 +53,20 @@ export class SearchViewModel {
 
     this.searchState$.next({ ...searchState, from: 0 });
 
-    if (this.searchMode && this.searchMode.dynamicFilters) {
-      // this.requestNewFilters();
+    if (this.searchMode && this.searchMode.dynamicFilters === true) {
+      // TODO: enable when available
+      // this.factoryFilters$.next(
+      this.getFilters();
+      // );
     }
   }
   public changeSearchTerm(searchTerm: string): void {}
   public updateResult(result: SearchResultInterface): void {}
+
+  private getFilters(): SearchFilterInterface[] {
+    // implementation is another ticket
+    return [];
+  }
 
   private getMocks(): void {
     this.searchState$ = new BehaviorSubject<SearchStateInterface>(

@@ -67,6 +67,30 @@ describe('SearchViewModel', () => {
         })
       );
     });
+
+    it('should not request new filters when dynamicfilters !== true', () => {
+      searchViewModel['searchMode'] = {
+        dynamicFilters: false
+      } as SearchModeInterface;
+      const spy = jest.spyOn(searchViewModel as any, 'getFilters');
+      searchViewModel.changeFilters({
+        values: []
+      } as SearchFilterCriteriaInterface);
+      expect(spy).not.toHaveBeenCalled();
+      spy.mockRestore();
+    });
+
+    it('should request new filters when dynamicfilters === true', () => {
+      searchViewModel['searchMode'] = {
+        dynamicFilters: true
+      } as SearchModeInterface;
+      const spy = jest.spyOn(searchViewModel as any, 'getFilters');
+      searchViewModel.changeFilters({
+        values: []
+      } as SearchFilterCriteriaInterface);
+      expect(spy).toHaveBeenCalled();
+      spy.mockRestore();
+    });
   });
 
   describe('getNextPage', () => {
