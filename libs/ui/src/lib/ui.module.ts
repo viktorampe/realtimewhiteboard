@@ -28,6 +28,7 @@ import { LargeDirective } from './button/directives/button-large.directive';
 import { PrimaryDirective } from './button/directives/button-primary.directive';
 import { RoundedCornersDirective } from './button/directives/button-rounded-corners.directive';
 import { WarningDirective } from './button/directives/button-warning.directive';
+import { CollapsibleSheetComponent } from './collapsible-sheet/collapsible-sheet.component';
 import { ConfirmableSelectComponent } from './confirmable-select/confirmable-select.component';
 import { ContentPreviewComponent } from './content-preview/content-preview.component';
 import { ContentThumbnailComponent } from './content-thumbnail/content-thumbnail.component';
@@ -138,7 +139,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     PrimaryDirective,
     PersonSummaryComponent,
     BannerComponent,
-    DropdownDirective
+    DropdownDirective,
+    CollapsibleSheetComponent
   ],
   exports: [
     FilterTextInputComponent,
@@ -187,7 +189,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     PrimaryDirective,
     PersonSummaryComponent,
     BannerComponent,
-    DropdownDirective
+    DropdownDirective,
+    CollapsibleSheetComponent
   ]
 })
 export class UiModule {}
