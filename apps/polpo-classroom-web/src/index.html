@@ -29,7 +29,9 @@
         .replace(/^.*?([^.]+\.[^.]+)$/, '$1')
         .replace(/\:(\d)+/, '');
 
-      window.location.href = window.location.href.replace('/#/?', '/?');
+      if (window.location.href.includes('/#/?')) {
+        window.location.href = window.location.href.replace('/#/?', '/?');
+      }
     </script>
   </head>
 
