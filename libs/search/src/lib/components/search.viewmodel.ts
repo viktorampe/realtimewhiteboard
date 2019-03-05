@@ -1,19 +1,15 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import {
+  SearchFilterCriteriaInterface,
+  SearchFilterCriteriaValuesInterface,
   SearchFilterFactory,
   SearchFilterInterface,
-  SearchResultInterface,
-  SearchStateInterface
-} from '../interfaces';
-import {
-  SearchFilterCriteriaInterface,
-  SearchFilterCriteriaValuesInterface
-} from './../interfaces/search-filter-criteria.interface';
-import {
   SearchModeInterface,
+  SearchResultInterface,
+  SearchStateInterface,
   SortModeInterface
-} from './../interfaces/search-mode-interface';
+} from '../interfaces';
 import { MockSearchViewModel } from './search.viewmodel.mock';
 
 @Injectable({
@@ -25,6 +21,7 @@ export class SearchViewModel {
 
   // source stream
   private filters$ = new BehaviorSubject<SearchFilterInterface[]>([]); // used by updateFilters()
+  private results$ = new BehaviorSubject<SearchResultInterface>(null);
 
   public searchState$ = new BehaviorSubject<SearchStateInterface>(null);
   public searchFilters$ = new BehaviorSubject<SearchFilterInterface[]>([]);
@@ -95,7 +92,10 @@ export class SearchViewModel {
     }
   }
   public changeSearchTerm(searchTerm: string): void {}
-  public updateResult(result: SearchResultInterface): void {}
+
+  public updateResult(result: SearchResultInterface): void {
+    this.results$.next(result);
+  }
 
   private updateFilters(): void {
     // implementation is another ticket (#689)
