@@ -73,7 +73,7 @@ describe('AuthenticationGuard', () => {
     isLoggedInMock = false;
     expect(
       authenticationGuard.canActivate(
-        <ActivatedRouteSnapshot>{},
+        <ActivatedRouteSnapshot>{ queryParams: {} },
         <RouterStateSnapshot>{}
       )
     ).toBe(false);
@@ -84,7 +84,7 @@ describe('AuthenticationGuard', () => {
     isLoggedInMock = true;
     expect(
       authenticationGuard.canActivate(
-        <ActivatedRouteSnapshot>{},
+        <ActivatedRouteSnapshot>{ queryParams: {} },
         <RouterStateSnapshot>{}
       )
     ).toBeObservable(hot(''));
@@ -95,7 +95,7 @@ describe('AuthenticationGuard', () => {
     store.dispatch(new UserActions.UserLoaded(new PersonFixture()));
     expect(
       authenticationGuard.canActivate(
-        <ActivatedRouteSnapshot>{},
+        <ActivatedRouteSnapshot>{ queryParams: {} },
         <RouterStateSnapshot>{}
       )
     ).toBeObservable(hot(''));
@@ -107,10 +107,12 @@ describe('AuthenticationGuard', () => {
     store.dispatch(new UserActions.PermissionsLoaded([]));
     expect(
       authenticationGuard.canActivate(
-        <ActivatedRouteSnapshot>{},
+        <ActivatedRouteSnapshot>{ queryParams: {} },
         <RouterStateSnapshot>{}
       )
     ).toBeObservable(hot('a', { a: true }));
     expect(assignSpy).toHaveBeenCalledTimes(0);
   });
+
+  it('should call authservice loginWithToken when provided in routes', () => {});
 });

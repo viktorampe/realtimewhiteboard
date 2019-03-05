@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
-import { PersonApi, PersonInterface } from '@diekeure/polpo-api-angular-sdk';
+import {
+  LoopBackAuth,
+  PersonApi,
+  PersonInterface,
+  SDKToken
+} from '@diekeure/polpo-api-angular-sdk';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import {
@@ -15,7 +20,10 @@ export class AuthService implements AuthServiceInterface {
     return this.personApi.getCurrentId();
   }
 
-  constructor(private personApi: PersonApi) {}
+  constructor(
+    private personApi: PersonApi,
+    private loopbackAuth: LoopBackAuth
+  ) {}
 
   /**
    * gets the current logged in user, throws a 401 error if not logged in
@@ -70,5 +78,15 @@ export class AuthService implements AuthServiceInterface {
     return this.personApi
       .getData(this.userId, 'permissions')
       .pipe(map((res: { permissions: string[] }) => res.permissions));
+  }
+
+  loginWithToken(token: string, userId: string) {
+    const sdkToken = new SDKToken({
+      id: token,
+      userId: userId,
+      scopes: null
+    });
+    this.loopbackAuth.setRememberMe(true);
+    this.loopbackAuth.setToken(sdkToken);
   }
 }
