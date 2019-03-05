@@ -8,7 +8,7 @@
       matInput
       [(ngModel)]="currentValue"
       [placeholder]="placeholder"
-      (keydown.enter)="onChange($event)"
+      (keyup.enter)="onChange($event)"
     />
   </mat-form-field>
   <campus-button
@@ -25,7 +25,7 @@
         [(ngModel)]="currentValue"
         [placeholder]="placeholder"
         [matAutocomplete]="auto"
-        (keydown.enter)="onChange($event)"
+        (keyup.enter)="onChange($event)"
       />
 
       <mat-autocomplete

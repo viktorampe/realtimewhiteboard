@@ -67,7 +67,7 @@ describe('SearchTermComponent', () => {
       const inputEl = fixture.debugElement.query(By.css('input')).nativeElement;
 
       inputEl.focus();
-      inputEl.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      inputEl.dispatchEvent(new KeyboardEvent('keyup', { key: 'Enter' }));
 
       expect(component.valueChange.emit).toHaveBeenCalled();
       expect(component.valueChange.emit).toHaveBeenCalledTimes(1);
