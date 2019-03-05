@@ -20,6 +20,7 @@ export class SearchViewModel {
 
   // source stream
   private filters$ = new BehaviorSubject<SearchFilterInterface[]>([]); // used by updateFilters()
+  private results$ = new BehaviorSubject<SearchResultInterface>(null);
 
   public searchState$ = new BehaviorSubject<SearchStateInterface>(null);
   public searchFilters$ = new BehaviorSubject<SearchFilterInterface[]>([]);
@@ -71,7 +72,9 @@ export class SearchViewModel {
   public changeFilters(criteria: SearchFilterCriteriaInterface): void {}
   public changeSearchTerm(searchTerm: string): void {}
 
-  public updateResult(result: SearchResultInterface): void {}
+  public updateResult(result: SearchResultInterface): void {
+    this.results$.next(result);
+  }
 
   private updateFilters(): void {
     // implementation is another ticket (#689)
