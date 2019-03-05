@@ -124,7 +124,7 @@ describe('SearchComponent', () => {
       it('should emit the viewmodel searchState$ value', () => {
         searchViewmodel.searchState$.next(mockSearchState);
 
-        expect(component.searchState).toBeObservable(
+        expect(component.searchState$).toBeObservable(
           hot('a', { a: mockSearchState })
         );
       });
