@@ -38,29 +38,46 @@ export class SearchViewModel {
       this.searchState$,
       this.results$
     ).pipe(
-      map(([filters, state, results]) => {
-        filters.forEach(filter => {
-          //if array loop and get updatedCriterium for each
-          if (Array.isArray(filter.criteria))
-            filter.criteria.map(criterium =>
-              this.getUpdatedCriterium(
-                criterium,
-                state.filterCriteriaSelections,
-                results.filterCriteriaPredictions
-              )
-            );
-          //if single get updatedCriterium
-          else
-            filter.criteria = this.getUpdatedCriterium(
-              filter.criteria,
-              state.filterCriteriaSelections,
-              results.filterCriteriaPredictions
-            );
-        });
-        //return updated filters
-        return filters;
-      })
+      map(([filters, state, results]) =>
+        filters.map(filter =>
+          this.getUpdatedSearchFilter(filter, state, results)
+        )
+      )
     );
+  }
+
+  /**
+   * updates and returns the given filter using the given state and results sets
+   *
+   * @private
+   * @param {SearchFilterInterface} filter
+   * @param {SearchStateInterface} state
+   * @param {SearchResultInterface} results
+   * @returns {SearchFilterInterface}
+   * @memberof SearchViewModel
+   */
+  private getUpdatedSearchFilter(
+    filter: SearchFilterInterface,
+    state: SearchStateInterface,
+    results: SearchResultInterface
+  ): SearchFilterInterface {
+    //if array loop and get updatedCriterium for each
+    if (Array.isArray(filter.criteria))
+      filter.criteria = filter.criteria.map(criterium =>
+        this.getUpdatedCriterium(
+          criterium,
+          state.filterCriteriaSelections,
+          results.filterCriteriaPredictions
+        )
+      );
+    //if single get updatedCriterium
+    else
+      filter.criteria = this.getUpdatedCriterium(
+        filter.criteria,
+        state.filterCriteriaSelections,
+        results.filterCriteriaPredictions
+      );
+    return filter;
   }
 
   /**
@@ -78,14 +95,14 @@ export class SearchViewModel {
     filterCriteriaSelections: Map<string, (number | string)[]>,
     filterCriteriaPredictions: Map<string, Map<string | number, number>>
   ): SearchFilterCriteriaInterface {
-    criterium.values.forEach(value => {
-      value = this.getUpdatedCriteriumValue(
+    criterium.values = criterium.values.map(value =>
+      this.getUpdatedCriteriumValue(
         criterium,
         value,
         filterCriteriaSelections,
         filterCriteriaPredictions
-      );
-    });
+      )
+    );
     return criterium;
   }
 
