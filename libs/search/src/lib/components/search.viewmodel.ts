@@ -1,16 +1,15 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import {
+  SearchFilterCriteriaInterface,
+  SearchFilterCriteriaValuesInterface,
   SearchFilterFactory,
   SearchFilterInterface,
-  SearchResultInterface,
-  SearchStateInterface
-} from '../interfaces';
-import { SearchFilterCriteriaInterface } from './../interfaces/search-filter-criteria.interface';
-import {
   SearchModeInterface,
+  SearchResultInterface,
+  SearchStateInterface,
   SortModeInterface
-} from './../interfaces/search-mode-interface';
+} from '../interfaces';
 import { MockSearchViewModel } from './search.viewmodel.mock';
 
 @Injectable({
@@ -22,6 +21,7 @@ export class SearchViewModel {
 
   // source stream
   private filters$ = new BehaviorSubject<SearchFilterInterface[]>([]); // used by updateFilters()
+  private results$ = new BehaviorSubject<SearchResultInterface>(null);
 
   public searchState$ = new BehaviorSubject<SearchStateInterface>(null);
   public searchFilters$ = new BehaviorSubject<SearchFilterInterface[]>([]);
@@ -70,9 +70,32 @@ export class SearchViewModel {
       (this.searchState$.value.from || 0) + this.searchMode.results.pageSize;
     this.searchState$.next(newValue);
   }
-  public changeFilters(criteria: SearchFilterCriteriaInterface): void {}
+  public changeFilters(criteria: SearchFilterCriteriaInterface): void {
+    // update state
+    const updatedCriteria: Map<
+      string,
+      (number | string)[]
+    > = this.extractSelectedValuesFromCriteria(criteria);
+
+    const searchState: SearchStateInterface = { ...this.searchState$.value };
+    const selection = new Map(searchState.filterCriteriaSelections); // clone criteria
+    updatedCriteria.forEach((value, key) => {
+      selection.set(key, value);
+    });
+    searchState.filterCriteriaSelections = selection;
+    searchState.from = 0;
+    this.searchState$.next(searchState);
+
+    if (this.searchMode && this.searchMode.dynamicFilters === true) {
+      // request new filters
+      this.updateFilters();
+    }
+  }
   public changeSearchTerm(searchTerm: string): void {}
-  public updateResult(result: SearchResultInterface): void {}
+
+  public updateResult(result: SearchResultInterface): void {
+    this.results$.next(result);
+  }
 
   private updateFilters(): void {
     // implementation is another ticket (#689)
@@ -83,5 +106,31 @@ export class SearchViewModel {
       this.mockViewmodel.searchState$.value
     );
     this.searchFilters$ = this.mockViewmodel.searchFilters$;
+  }
+
+  private extractSelectedValuesFromCriteria(
+    criteria: SearchFilterCriteriaInterface,
+    filterCriteriaSelections = new Map()
+  ): Map<string, (number | string)[]> {
+    return criteria.values.reduce(
+      (
+        acc: Map<string, (number | string)[]>,
+        value: SearchFilterCriteriaValuesInterface
+      ) => {
+        // extract selected IDs
+        if (value.selected) {
+          if (!acc.has(criteria.name)) {
+            acc.set(criteria.name, []);
+          }
+          acc.get(criteria.name).push(value.data[criteria.keyProperty]);
+        }
+        // check for selection in child
+        if (value.child) {
+          this.extractSelectedValuesFromCriteria(value.child, acc);
+        }
+        return acc;
+      },
+      filterCriteriaSelections
+    );
   }
 }
