@@ -210,7 +210,7 @@ class MockFactory implements SearchFilterFactory {
   constructor(private mockSearchViewModel: MockSearchViewModel) {}
 
   getFilters(
-    searchState: SearchStateInterface[]
+    searchState: SearchStateInterface
   ): Observable<SearchFilterInterface[]> {
     return this.mockSearchViewModel.searchFilters$;
   }

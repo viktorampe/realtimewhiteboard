@@ -12,6 +12,6 @@ export interface SearchFilterInterface {
 
 export interface SearchFilterFactory {
   getFilters(
-    searchState: SearchStateInterface[]
+    searchState: SearchStateInterface
   ): Observable<SearchFilterInterface[]>;
 }
