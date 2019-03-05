@@ -12,7 +12,7 @@ import { Dictionary } from '@ngrx/entity';
 })
 export class NavItemService {
   private standardNavItems: Dictionary<NavItem> = {
-    taken: { title: 'Taken', icon: 'taak', link: '/tasks' },
+    taken: { title: 'Taken', icon: 'task', link: '/tasks' },
     boeken: { title: 'Boeken', icon: 'book', link: '/books' },
     bundels: { title: 'Bundels', icon: 'lesmateriaal', link: '/bundles' },
     resultaten: {

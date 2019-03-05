@@ -5,9 +5,9 @@ describe('Alert class', () => {
     iconAssertion('educontent', 'educontent');
     iconAssertion('message', 'messages');
     iconAssertion('bundle', 'educontent');
-    iconAssertion('task', 'taak');
-    iconAssertion('task-start', 'taak');
-    iconAssertion('task-end', 'taak');
+    iconAssertion('task', 'task');
+    iconAssertion('task-start', 'task');
+    iconAssertion('task-end', 'task');
     iconAssertion('boek-e', 'book');
     iconAssertion('marketing', 'marketing-message');
     iconAssertion('', 'notifications');
