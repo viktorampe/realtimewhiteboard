@@ -59,6 +59,7 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnDestroy(): void {
     this.portalhosts.forEach(host => host.detach());
+    this.portalhosts = [];
     this.subscriptions.unsubscribe();
   }
 
@@ -82,7 +83,7 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
     searchMode: SearchModeInterface,
     searchState: SearchStateInterface
   ): void {
-    if (!(searchMode.searchTerm && searchState)) return;
+    if (!searchMode.searchTerm || !searchState.searchTerm) return;
 
     // needed to avoid ExpressionChangedAfterItHasBeenCheckedError
     setTimeout(() => {

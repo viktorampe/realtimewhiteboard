@@ -1,8 +1,11 @@
-import { Component, SimpleChange, Type } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, NgModule, SimpleChange, Type } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { LearningAreaFixture } from '@campus/dal';
+import { UiModule } from '@campus/ui';
 import { hot } from 'jasmine-marbles';
 import {
   SearchFilterFactory,
@@ -13,6 +16,7 @@ import {
 import { SearchModule } from '../../search.module';
 import { ResultItemBase } from '../results-list/result.component.base';
 import { ResultsListComponent } from '../results-list/results-list.component';
+import { SearchTermComponent } from '../search-term/search-term.component';
 import { SearchViewModel } from '../search.viewmodel';
 import { MockSearchViewModel } from '../search.viewmodel.mock';
 import { SortModeInterface } from './../../interfaces/search-mode-interface';
@@ -26,6 +30,23 @@ class ResultItemComponent extends ResultItemBase {
   data: any;
   listRef: null;
 }
+
+@Component({
+  // tslint:disable-next-line:component-selector
+  selector: 'test-container',
+  template: `
+    <div id="mockPortalHost"></div>
+    <campus-search></campus-search>
+  `
+})
+export class TestContainerComponent {}
+
+@NgModule({
+  declarations: [TestContainerComponent],
+  imports: [CommonModule, UiModule, SearchModule, NoopAnimationsModule],
+  exports: [TestContainerComponent]
+})
+export class TestModule {}
 
 describe('SearchComponent', () => {
   let component: SearchComponent;
@@ -54,7 +75,9 @@ describe('SearchComponent', () => {
       label: 'mockSearchMode',
       dynamicFilters: false,
       searchFilterFactory: {} as Type<SearchFilterFactory>,
-
+      searchTerm: {
+        domHost: '#mockPortalHost'
+      },
       results: {
         component: ResultItemComponent,
         sortModes: [mockSortMode],
@@ -65,12 +88,12 @@ describe('SearchComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [SearchModule],
+      imports: [TestModule],
       declarations: [ResultItemComponent],
       providers: [{ provide: SearchViewModel, useClass: MockSearchViewModel }]
     })
       .overrideModule(BrowserDynamicTestingModule, {
-        set: { entryComponents: [ResultItemComponent] }
+        set: { entryComponents: [ResultItemComponent, SearchTermComponent] }
       })
       .compileComponents();
   }));
@@ -120,6 +143,7 @@ describe('SearchComponent', () => {
       expect(component.reset).toHaveBeenCalled();
       expect(component.reset).toHaveBeenCalledWith(component.initialState);
     });
+
     describe('searchState', () => {
       it('should emit the viewmodel searchState$ value', () => {
         searchViewmodel.searchState$.next(mockSearchState);
@@ -212,6 +236,91 @@ describe('SearchComponent', () => {
       // the rest of the flow is the ResultListComponent's problem
       expect(setterSpy).toHaveBeenCalled();
       expect(setterSpy).toHaveBeenCalledWith(newSearchResults);
+    });
+  });
+
+  describe('searchTermComponent', () => {
+    let hostFixture: ComponentFixture<TestContainerComponent>;
+    let hostComponent: TestContainerComponent;
+    let searchComponent: SearchComponent;
+
+    describe('should create', () => {
+      // creating a host component with a portal component
+      beforeEach(() => {
+        hostFixture = TestBed.createComponent(TestContainerComponent);
+        hostComponent = hostFixture.componentInstance;
+
+        searchComponent = hostFixture.debugElement.query(
+          By.directive(SearchComponent)
+        ).componentInstance;
+
+        searchComponent.initialState = mockSearchState;
+        searchComponent.searchMode = mockSearchMode;
+
+        hostFixture.detectChanges();
+      });
+
+      it('should create', () => {
+        expect(hostComponent).toBeDefined();
+        expect(searchComponent).toBeDefined();
+      });
+
+      it('should create a searchTermComponent and add it to the specified portalHost', async(() => {
+        hostFixture.whenStable().then(() => {
+          expect(searchComponent['portalhosts'].length).toBe(1);
+          expect('#' + searchComponent['portalhosts'][0].outletElement.id).toBe(
+            mockSearchMode.searchTerm.domHost
+          );
+        });
+      }));
+    });
+
+    describe('should not create - missing searchTerm in InitialState', () => {
+      beforeEach(() => {
+        const newInitialState = { ...mockSearchState, searchTerm: null };
+
+        hostFixture = TestBed.createComponent(TestContainerComponent);
+        hostComponent = hostFixture.componentInstance;
+
+        searchComponent = hostFixture.debugElement.query(
+          By.directive(SearchComponent)
+        ).componentInstance;
+
+        searchComponent.initialState = newInitialState;
+        searchComponent.searchMode = mockSearchMode;
+
+        hostFixture.detectChanges();
+      });
+
+      it('should not create a searchTermComponent', async(() => {
+        hostFixture.whenStable().then(() => {
+          expect(searchComponent['portalhosts'].length).toBe(0);
+        });
+      }));
+    });
+
+    describe('should not create - missing searchTerm in SearchMode', () => {
+      beforeEach(() => {
+        const newSearchMode = { ...mockSearchMode, searchTerm: null };
+
+        hostFixture = TestBed.createComponent(TestContainerComponent);
+        hostComponent = hostFixture.componentInstance;
+
+        searchComponent = hostFixture.debugElement.query(
+          By.directive(SearchComponent)
+        ).componentInstance;
+
+        searchComponent.initialState = mockSearchState;
+        searchComponent.searchMode = newSearchMode;
+
+        hostFixture.detectChanges();
+      });
+
+      it('should not create a searchTermComponent', async(() => {
+        hostFixture.whenStable().then(() => {
+          expect(searchComponent['portalhosts'].length).toBe(0);
+        });
+      }));
     });
   });
 });
