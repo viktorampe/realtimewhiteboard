@@ -121,6 +121,10 @@ export class FindingNemoComponent {
       dynamicFilters: false,
       // tslint:disable-next-line: no-use-before-declare
       searchFilterFactory: MockFactory,
+      searchTerm: {
+        // autocompleteEl: string; //reference to material autocomplete component
+        domHost: 'search-term-container'
+      },
       results: {
         component: PolpoResultItemComponent,
         sortModes: [
