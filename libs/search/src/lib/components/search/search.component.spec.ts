@@ -1,10 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, NgModule, SimpleChange, Type } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { LearningAreaFixture } from '@campus/dal';
+import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { hot } from 'jasmine-marbles';
 import {
@@ -90,7 +92,10 @@ describe('SearchComponent', () => {
     TestBed.configureTestingModule({
       imports: [TestModule],
       declarations: [ResultItemComponent],
-      providers: [{ provide: SearchViewModel, useClass: MockSearchViewModel }]
+      providers: [
+        { provide: SearchViewModel, useClass: MockSearchViewModel },
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
+      ]
     })
       .overrideModule(BrowserDynamicTestingModule, {
         set: { entryComponents: [ResultItemComponent, SearchTermComponent] }
