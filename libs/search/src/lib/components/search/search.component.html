@@ -2,7 +2,7 @@
   class="search-results"
   [resultsPage]="searchResults"
   [searchMode]="searchMode"
-  [searchState]="searchState"
+  [searchState]="searchState | async"
   (sortBy)="onSort($event)"
   (getNextPage)="onScroll()"
 ></campus-results-list>

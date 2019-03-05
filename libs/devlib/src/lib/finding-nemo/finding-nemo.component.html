@@ -9,5 +9,6 @@
     [autoComplete]="null"
     [initialState]="searchState | async"
     [searchResults]="resultsPage$ | async"
+    (searchState)="onChange($event)"
   ></campus-search>
 </campus-collapsible-sheet>

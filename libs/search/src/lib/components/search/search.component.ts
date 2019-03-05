@@ -28,10 +28,11 @@ export class SearchComponent implements OnInit, OnChanges {
 
   @Output() public searchState: Observable<SearchStateInterface>;
 
-  constructor(private searchViewmodel: SearchViewModel) {}
+  constructor(private searchViewmodel: SearchViewModel) {
+    this.searchState = this.searchViewmodel.searchState$;
+  }
 
   ngOnInit() {
-    this.searchState = this.searchViewmodel.searchState$;
     this.reset(this.initialState);
   }
 
