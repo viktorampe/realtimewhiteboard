@@ -10,6 +10,7 @@ import {
   SearchStateInterface
 } from '@campus/search';
 import { EduContentMetadataApi } from '@diekeure/polpo-api-angular-sdk';
+import { StandardSearchService } from 'apps/polpo-classroom-web/src/app/services/standard-search.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { PolpoResultItemComponent } from '../polpo-result-item/polpo-result-item.component';
@@ -32,9 +33,14 @@ export class FindingNemoComponent {
   );
 
   private loadTimer: number;
+  public searchFilters$: Observable<SearchFilterInterface[]>;
 
-  constructor(private eduContentMetadataApi: EduContentMetadataApi) {
+  constructor(
+    private eduContentMetadataApi: EduContentMetadataApi,
+    private factory: StandardSearchService
+  ) {
     this.setMockData();
+    this.searchFilters$ = this.factory.getFilters({} as SearchStateInterface);
   }
 
   setMockData() {
