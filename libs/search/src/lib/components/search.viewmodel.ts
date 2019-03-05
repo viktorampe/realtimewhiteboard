@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import {
   SearchFilterCriteriaInterface,
-  SearchFilterCriteriaValuesInterface,
   SearchFilterFactory,
   SearchFilterInterface,
   SearchModeInterface,
@@ -72,63 +71,7 @@ export class SearchViewModel {
   public changeFilters(criteria: SearchFilterCriteriaInterface): void {}
   public changeSearchTerm(searchTerm: string): void {}
 
-  public updateResult(result: SearchResultInterface): void {
-    const newSearchFilters = { ...this.searchFilters$.value };
-    newSearchFilters.forEach(searchFilter => {
-      if (Array.isArray(searchFilter.criteria)) {
-        searchFilter.criteria.map(criteria =>
-          this.getUpdatedSearchFilterCriteria(
-            criteria,
-            result.filterCriteriaPredictions
-          )
-        );
-      } else {
-        searchFilter.criteria = this.getUpdatedSearchFilterCriteria(
-          searchFilter.criteria,
-          result.filterCriteriaPredictions
-        );
-      }
-    });
-  }
-
-  private getUpdatedSearchFilterCriteria(
-    criteria: SearchFilterCriteriaInterface,
-    filterCriteriaPredictions: Map<string, Map<string | number, number>>
-  ): SearchFilterCriteriaInterface {
-    const newFilterCriteriaPrediction = filterCriteriaPredictions.get(
-      criteria.name
-    );
-    if (newFilterCriteriaPrediction) {
-      criteria.values.forEach(value => {
-        value.prediction = this.getNewPrediction(
-          newFilterCriteriaPrediction,
-          value,
-          criteria
-        );
-        if (value.child) {
-          value.child = this.getUpdatedSearchFilterCriteria(
-            criteria,
-            filterCriteriaPredictions
-          );
-        }
-      });
-    }
-    return criteria;
-  }
-
-  private getNewPrediction(
-    newFilterCriteriaPrediction: Map<string | number, number>,
-    value: SearchFilterCriteriaValuesInterface,
-    criteria: SearchFilterCriteriaInterface
-  ): number {
-    const newPrediction = newFilterCriteriaPrediction.get(
-      value.data[criteria.keyProperty]
-    );
-    if (newPrediction) {
-      value.prediction = newPrediction.valueOf();
-    }
-    return newPrediction;
-  }
+  public updateResult(result: SearchResultInterface): void {}
 
   private updateFilters(): void {
     // implementation is another ticket (#689)
