@@ -22,8 +22,11 @@ export class SearchTermComponent implements OnInit {
   public set currentValue(value) {
     if (value !== this._value) {
       this._value = value;
-      this.valueChange.emit(value || '');
     }
+  }
+
+  onChange(event) {
+    this.valueChange.emit(this.currentValue || '');
   }
 
   // emits on every change -> parent component should debounce

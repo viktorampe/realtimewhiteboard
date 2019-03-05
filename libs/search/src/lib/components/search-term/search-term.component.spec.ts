@@ -61,18 +61,16 @@ describe('SearchTermComponent', () => {
   });
 
   describe('output', () => {
-    it('should emit a value when the user changes it', () => {
+    it('should emit a value when the user presses enter', () => {
       spyOn(component.valueChange, 'emit');
 
-      const userInput = 'Ik heb goesting in kebab';
-
       const inputEl = fixture.debugElement.query(By.css('input')).nativeElement;
-      inputEl.value = userInput;
-      inputEl.dispatchEvent(new Event('input'));
+
+      inputEl.focus();
+      inputEl.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
 
       expect(component.valueChange.emit).toHaveBeenCalled();
       expect(component.valueChange.emit).toHaveBeenCalledTimes(1);
-      expect(component.valueChange.emit).toHaveBeenCalledWith(userInput);
     });
   });
 
