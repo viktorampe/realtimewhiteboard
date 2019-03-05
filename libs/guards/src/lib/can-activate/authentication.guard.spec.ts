@@ -49,7 +49,8 @@ describe('AuthenticationGuard', () => {
           useValue: {
             isLoggedIn: () => {
               return isLoggedInMock;
-            }
+            },
+            loginWithToken: jest.fn()
           }
         },
         {
@@ -114,5 +115,31 @@ describe('AuthenticationGuard', () => {
     expect(assignSpy).toHaveBeenCalledTimes(0);
   });
 
-  it('should call authservice loginWithToken when provided in routes', () => {});
+  it('should call authservice loginWithToken when provided in routes', () => {
+    const spy = TestBed.get(AUTH_SERVICE_TOKEN).loginWithToken;
+    canActivate({
+      accessToken: 'test',
+      userId: '1'
+    });
+    expect(spy).toHaveBeenCalled();
+
+    canActivate({ accessToken: 'test' });
+    expect(spy).not.toHaveBeenCalled();
+
+    canActivate({ userId: 'test' });
+    expect(spy).not.toHaveBeenCalled();
+
+    canActivate({});
+    expect(spy).not.toHaveBeenCalled();
+
+    function canActivate(params) {
+      spy.mockReset();
+      authenticationGuard.canActivate(
+        <ActivatedRouteSnapshot>{
+          queryParams: params
+        },
+        <RouterStateSnapshot>{}
+      );
+    }
+  });
 });
