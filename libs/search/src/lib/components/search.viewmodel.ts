@@ -107,13 +107,13 @@ export class SearchViewModel {
     filterCriteriaPredictions: Map<string, Map<string | number, number>>
   ): SearchFilterCriteriaValuesInterface {
     // update prediction
-    value.prediction = this.getUpdatedPrediction(
+    value.prediction = this.getUpdatedValuePrediction(
       criterium,
       value,
       filterCriteriaPredictions
     );
     // update selection
-    value.selected = this.getUpdatedSelection(
+    value.selected = this.getUpdatedValueSelection(
       criterium,
       value,
       filterCriteriaSelections
@@ -138,7 +138,7 @@ export class SearchViewModel {
    * @returns {boolean}
    * @memberof SearchViewModel
    */
-  private getUpdatedSelection(
+  private getUpdatedValueSelection(
     criterium: SearchFilterCriteriaInterface,
     value: SearchFilterCriteriaValuesInterface,
     filterCriteriaSelections: Map<string, (string | number)[]>
@@ -164,7 +164,7 @@ export class SearchViewModel {
    * @returns {number}
    * @memberof SearchViewModel
    */
-  private getUpdatedPrediction(
+  private getUpdatedValuePrediction(
     criterium: SearchFilterCriteriaInterface,
     value: SearchFilterCriteriaValuesInterface,
     filterCriteriaPredictions: Map<string, Map<string | number, number>>
