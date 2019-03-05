@@ -77,16 +77,19 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
   private createSearchTermComponent(searchMode: SearchModeInterface): void {
     if (!searchMode.searchTerm) return;
 
-    const portalContent = new ComponentPortal(SearchTermComponent);
-    const portalHost = this.getPortalHost(searchMode.searchTerm.domHost);
+    // needed to avoid
+    setTimeout(() => {
+      const portalContent = new ComponentPortal(SearchTermComponent);
+      const portalHost = this.getPortalHost(searchMode.searchTerm.domHost);
 
-    if (portalHost !== null) {
-      if (!this.portalhosts.includes(portalHost)) {
-        this.portalhosts.push(portalHost);
+      if (portalHost !== null) {
+        if (!this.portalhosts.includes(portalHost)) {
+          this.portalhosts.push(portalHost);
+        }
+
+        portalHost.attach(portalContent);
       }
-
-      portalHost.attach(portalContent);
-    }
+    });
   }
 
   private getPortalHost(
