@@ -1,6 +1,17 @@
-import { Component, Input, OnInit, Output } from '@angular/core';
-import { EventEmitter } from 'events';
-import { SearchModeInterface } from './../../interfaces/search-mode-interface';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges
+} from '@angular/core';
+import { Observable } from 'rxjs';
+import { SearchViewModel } from '../search.viewmodel';
+import {
+  SearchModeInterface,
+  SortModeInterface
+} from './../../interfaces/search-mode-interface';
 import { SearchResultInterface } from './../../interfaces/search-result-interface';
 import { SearchStateInterface } from './../../interfaces/search-state.interface';
 
@@ -9,20 +20,38 @@ import { SearchStateInterface } from './../../interfaces/search-state.interface'
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss']
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent implements OnInit, OnChanges {
   @Input() public searchMode: SearchModeInterface;
   @Input() public autoComplete: string[];
   @Input() public initialState: SearchStateInterface;
   @Input() public searchResults: SearchResultInterface;
 
-  @Output() public searchState = new EventEmitter();
-  constructor() {}
+  @Output() public searchState$: Observable<SearchStateInterface>;
 
-  ngOnInit() {}
+  constructor(private searchViewmodel: SearchViewModel) {
+    this.searchState$ = this.searchViewmodel.searchState$;
+  }
 
-  public reset(): void {}
-  public onSort(): void {}
+  ngOnInit() {
+    this.reset(this.initialState);
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.searchResults) {
+      this.searchViewmodel.updateResult(this.searchResults);
+    }
+  }
+  public reset(initialState: SearchStateInterface = null): void {
+    this.searchViewmodel.reset(this.searchMode, initialState);
+  }
+
+  public onSort(event: SortModeInterface): void {
+    this.searchViewmodel.changeSort(event);
+  }
+
   public onFilterSelectionChange(): void {}
   public onSearchTermChange(): void {}
-  public onScroll(): void {}
+  public onScroll(): void {
+    this.searchViewmodel.getNextPage();
+  }
 }
