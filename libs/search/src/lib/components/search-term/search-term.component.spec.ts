@@ -72,6 +72,17 @@ describe('SearchTermComponent', () => {
       expect(component.valueChange.emit).toHaveBeenCalled();
       expect(component.valueChange.emit).toHaveBeenCalledTimes(1);
     });
+
+    it('should emit a value when the user clicks search button', () => {
+      spyOn(component.valueChange, 'emit');
+
+      const buttonEl = fixture.debugElement.query(By.css('campus-button'))
+        .nativeElement;
+      buttonEl.dispatchEvent(new Event('click'));
+
+      expect(component.valueChange.emit).toHaveBeenCalled();
+      expect(component.valueChange.emit).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe('autoComplete', () => {
