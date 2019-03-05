@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { hot } from 'jasmine-marbles';
 import { SearchModeInterface, SearchStateInterface } from '../../interfaces';
 import { ResultItemBase } from '../results-list/result.component.base';
@@ -34,8 +35,7 @@ describe('SearchComponent', () => {
       name: 'mock',
       label: 'mockSearchMode',
       dynamicFilters: false,
-      searchFilterFactory: [],
-
+      searchFilterFactory: null,
       results: {
         component: ResultItemComponent,
         sortModes: [],
@@ -46,9 +46,15 @@ describe('SearchComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [SearchComponent],
+      declarations: [SearchComponent, ResultItemComponent],
       providers: [{ provide: SearchViewModel, useClass: MockSearchViewModel }]
-    }).compileComponents();
+    })
+      .overrideModule(BrowserDynamicTestingModule, {
+        set: {
+          entryComponents: [ResultItemComponent]
+        }
+      })
+      .compileComponents();
   }));
 
   beforeEach(() => {

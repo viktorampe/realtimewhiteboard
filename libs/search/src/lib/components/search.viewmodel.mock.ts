@@ -53,7 +53,7 @@ export class MockSearchViewModel
   }
 
   private getMockSearchFilter(): SearchFilterInterface[] {
-    const mockSearchFilter = [
+    const mockSearchFilter: SearchFilterInterface[] = [
       {
         criteria: new SearchFilterCriteriaFixture({}, [
           new SearchFilterCriteriaValuesFixture(),
@@ -64,8 +64,8 @@ export class MockSearchViewModel
             data: { id: 3, name: 'foo bar' }
           })
         ]),
-        component: new CheckboxLineFilterComponent(),
-        domHost: 'host-left'
+        component: CheckboxLineFilterComponent,
+        domHost: '#hostleft'
       },
       {
         criteria: new SearchFilterCriteriaFixture({}, [
@@ -77,8 +77,8 @@ export class MockSearchViewModel
             data: { id: 3, name: 'foo bar' }
           })
         ]),
-        component: new CheckboxListFilterComponent(),
-        domHost: 'host-left'
+        component: CheckboxListFilterComponent,
+        domHost: '#hostleft'
       },
       {
         criteria: new SearchFilterCriteriaFixture({}, [
@@ -90,8 +90,8 @@ export class MockSearchViewModel
             data: { id: 3, name: 'foo bar' }
           })
         ]),
-        component: new BreadcrumbFilterComponent(),
-        domHost: 'host-top'
+        component: BreadcrumbFilterComponent,
+        domHost: '#hosttop'
       },
       {
         criteria: new SearchFilterCriteriaFixture({}, [
@@ -103,8 +103,8 @@ export class MockSearchViewModel
             data: { id: 3, name: 'foo bar' }
           })
         ]),
-        component: new ColumnFilterComponent(),
-        domHost: 'host-left'
+        component: ColumnFilterComponent,
+        domHost: '#hostleft'
       },
       {
         criteria: new SearchFilterCriteriaFixture({}, [
@@ -116,8 +116,8 @@ export class MockSearchViewModel
             data: { id: 3, name: 'foo bar' }
           })
         ]),
-        component: new SelectFilterComponent(),
-        domHost: 'host-top'
+        component: SelectFilterComponent,
+        domHost: '#hosttop'
       }
     ];
 
