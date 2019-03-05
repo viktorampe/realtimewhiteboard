@@ -16,6 +16,11 @@ export class SearchTermComponent implements OnInit {
   @Input() public autoComplete: string | boolean;
   @Input() public autoCompleteValues: string[] = [];
 
+  // emits on every change -> parent component should debounce
+  // change event exists by default -> emits on blur
+  // input event exists by default -> emits single characters
+  @Output() public valueChange = new EventEmitter<string>();
+
   public get currentValue(): string {
     return this._value;
   }
@@ -28,11 +33,6 @@ export class SearchTermComponent implements OnInit {
   onChange(event) {
     this.valueChange.emit(this.currentValue || '');
   }
-
-  // emits on every change -> parent component should debounce
-  // change event exists by default -> emits on blur
-  // input event exists by default -> emits single characters
-  @Output() public valueChange = new EventEmitter<string>();
 
   ngOnInit() {
     this._value = this.initialValue;
