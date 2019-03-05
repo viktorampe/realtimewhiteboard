@@ -80,7 +80,7 @@ export class SearchViewModel {
     this.filterFactory
       .getFilters(this.searchState$.value)
       .pipe(take(1))
-      .subscribe(this.filters$.next);
+      .subscribe(filters => this.filters$.next(filters));
   }
 
   private getMocks(): void {
