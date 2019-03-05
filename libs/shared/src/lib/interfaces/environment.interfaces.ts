@@ -1,3 +1,5 @@
+import { SearchModeInterface } from '@campus/search';
+
 export interface EnvironmentInterface {
   production: boolean;
   iconMapping: EnvironmentIconMappingInterface;
@@ -11,10 +13,14 @@ export interface EnvironmentInterface {
     errorManagement: EnvironmentErrorManagementFeatureInterface;
   };
   sso: EnvironmentSsoInterface;
+  searchModes: EnvironmentSearchMode;
 }
 
 export interface EnvironmentIconMappingInterface {
   [icon: string]: string;
+}
+export interface EnvironmentSearchMode {
+  [searchMode: string]: SearchModeInterface;
 }
 
 export interface EnvironmentAlertsFeatureInterface {
