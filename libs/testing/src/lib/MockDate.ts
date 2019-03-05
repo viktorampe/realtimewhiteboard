@@ -25,6 +25,7 @@ export class MockDate {
     global.Date = jest.fn(() => mockDate);
     global.Date.UTC = this._Date.UTC;
     global.Date.parse = this._Date.parse;
+    // @ts-ignore
     global.Date.now = jest.fn(() => mockDate.getTime());
   }
 }
