@@ -11,7 +11,7 @@
 
   &__results {
     flex: 1 0 auto;
-    // height: 0; //TODO: what was the function of this?
+    height: 0; // needed for overflow -> scolling only on resultlist
     overflow: auto;
   }
 }
