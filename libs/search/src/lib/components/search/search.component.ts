@@ -1,5 +1,7 @@
 import {
   Component,
+  ComponentFactory,
+  ComponentFactoryResolver,
   Input,
   OnChanges,
   OnInit,
@@ -7,6 +9,7 @@ import {
   SimpleChanges
 } from '@angular/core';
 import { Observable } from 'rxjs';
+import { SearchTermComponent } from '../search-term/search-term.component';
 import { SearchViewModel } from '../search.viewmodel';
 import {
   SearchModeInterface,
@@ -21,6 +24,8 @@ import { SearchStateInterface } from './../../interfaces/search-state.interface'
   styleUrls: ['./search.component.scss']
 })
 export class SearchComponent implements OnInit, OnChanges {
+  private searchTermComponentFactory: ComponentFactory<SearchTermComponent>;
+
   @Input() public searchMode: SearchModeInterface;
   @Input() public autoComplete: string[];
   @Input() public initialState: SearchStateInterface;
@@ -28,12 +33,16 @@ export class SearchComponent implements OnInit, OnChanges {
 
   @Output() public searchState$: Observable<SearchStateInterface>;
 
-  constructor(private searchViewmodel: SearchViewModel) {
+  constructor(
+    private searchViewmodel: SearchViewModel,
+    private componentFactoryResolver: ComponentFactoryResolver
+  ) {
     this.searchState$ = this.searchViewmodel.searchState$;
   }
 
   ngOnInit() {
     this.reset(this.initialState);
+    this.createSearchTermComponent(this.searchMode);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -53,5 +62,22 @@ export class SearchComponent implements OnInit, OnChanges {
   public onSearchTermChange(): void {}
   public onScroll(): void {
     this.searchViewmodel.getNextPage();
+  }
+
+  private createSearchTermComponent(searchMode: SearchModeInterface): void {
+    if (!searchMode.searchTerm) return;
+
+    if (!this.searchTermComponentFactory) {
+      this.searchTermComponentFactory = this.componentFactoryResolver.resolveComponentFactory(
+        SearchTermComponent
+      );
+    }
+
+    // const componentRef = this.resultListHost.viewContainerRef.createComponent(
+    //   this.componentFactory
+    // );
+    // const resultItem = componentRef.instance as SearchResultItemComponentInterface;
+    // resultItem.data = result;
+    // resultItem.listRef = this.listview;
   }
 }
