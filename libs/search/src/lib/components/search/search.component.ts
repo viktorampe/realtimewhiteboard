@@ -11,7 +11,7 @@ import {
   Output,
   SimpleChanges
 } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { SearchTermComponent } from '../search-term/search-term.component';
 import { SearchViewModel } from '../search.viewmodel';
 import {
@@ -28,6 +28,7 @@ import { SearchStateInterface } from './../../interfaces/search-state.interface'
 })
 export class SearchComponent implements OnInit, OnChanges, OnDestroy {
   private portalhosts: DomPortalHost[] = [];
+  private subscriptions = new Subscription();
 
   @Input() public searchMode: SearchModeInterface;
   @Input() public autoComplete: string[];
@@ -47,7 +48,7 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit() {
     this.reset(this.initialState);
-    this.createSearchTermComponent(this.searchMode);
+    this.createSearchTermComponent(this.searchMode, this.initialState);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -58,6 +59,7 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnDestroy(): void {
     this.portalhosts.forEach(host => host.detach());
+    this.subscriptions.unsubscribe();
   }
 
   public reset(initialState: SearchStateInterface = null): void {
@@ -69,15 +71,20 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public onFilterSelectionChange(): void {}
-  public onSearchTermChange(): void {}
+  public onSearchTermChange(searchTerm: string): void {
+    console.log(searchTerm);
+  }
   public onScroll(): void {
     this.searchViewmodel.getNextPage();
   }
 
-  private createSearchTermComponent(searchMode: SearchModeInterface): void {
-    if (!searchMode.searchTerm) return;
+  private createSearchTermComponent(
+    searchMode: SearchModeInterface,
+    searchState: SearchStateInterface
+  ): void {
+    if (!(searchMode.searchTerm && searchState)) return;
 
-    // needed to avoid
+    // needed to avoid ExpressionChangedAfterItHasBeenCheckedError
     setTimeout(() => {
       const portalContent = new ComponentPortal(SearchTermComponent);
       const portalHost = this.getPortalHost(searchMode.searchTerm.domHost);
@@ -87,7 +94,20 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
           this.portalhosts.push(portalHost);
         }
 
-        portalHost.attach(portalContent);
+        const searchTermComponent = portalHost.attach(portalContent)
+          .instance as SearchTermComponent;
+
+        searchTermComponent.initialValue = searchState.searchTerm;
+        searchTermComponent.autoComplete = !!(
+          this.autoComplete && this.autoComplete.length
+        );
+        searchTermComponent.autoCompleteValues = this.autoComplete;
+
+        this.subscriptions.add(
+          searchTermComponent.valueChange.subscribe(value =>
+            this.onSearchTermChange(value)
+          )
+        );
       }
     });
   }

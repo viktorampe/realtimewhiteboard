@@ -31,7 +31,7 @@ export class FindingNemoComponent {
   public resultsPage$ = new BehaviorSubject<SearchResultInterface>(null);
   public searchMode: SearchModeInterface;
   public searchState = new BehaviorSubject<SearchStateInterface>(null);
-  // public autoComplete = true;
+  public autoComplete: string[];
   public filterCriteria$ = new BehaviorSubject<SearchFilterCriteriaInterface[]>(
     null
   );
@@ -47,6 +47,7 @@ export class FindingNemoComponent {
     this.searchState.next(this.getMockSearchState());
     this.resultsPage$.next(this.getMockResults());
     this.filterCriteria$.next(this.getMockSearchFilters());
+    this.autoComplete = this.getMockAutoCompleteValues();
   }
 
   catchEvent($event: SearchFilterCriteriaInterface[]) {
@@ -156,7 +157,7 @@ export class FindingNemoComponent {
 
   private getMockSearchState(): SearchStateInterface {
     return {
-      searchTerm: '',
+      searchTerm: 'nemo',
       filterCriteriaSelections: new Map(),
       from: 0
     };
@@ -208,6 +209,10 @@ export class FindingNemoComponent {
         ]
       }
     ];
+  }
+
+  private getMockAutoCompleteValues(): string[] {
+    return ['waarde1', 'waarde2', 'waarde3', 'waarde4'];
   }
 }
 
