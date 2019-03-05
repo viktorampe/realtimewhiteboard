@@ -44,7 +44,8 @@ configureBufferSize(150);
       environment.website,
       environment.logout,
       environment.api,
-      environment.sso
+      environment.sso,
+      environment.searchModes
     ),
     BrowserAnimationsModule,
     NxModule.forRoot(),

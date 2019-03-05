@@ -1,3 +1,8 @@
+import { Type } from '@angular/core';
+import {
+  SearchFilterFactory,
+  SearchResultItemComponentInterface
+} from '@campus/search';
 import { EnvironmentInterface } from '@campus/shared';
 
 export const environment: EnvironmentInterface = {
@@ -277,6 +282,41 @@ export const environment: EnvironmentInterface = {
       logoIcon: 'smartschool:orange',
       className: 'button-smartschool',
       maxNumberAllowed: 10
+    }
+  },
+  searchModes: {
+    toc: {
+      name: 'toc',
+      label: 'Inhoudstafel',
+      dynamicFilters: false,
+      searchFilterFactory: {} as Type<SearchFilterFactory>,
+      results: {
+        component: {} as Type<SearchResultItemComponentInterface>,
+        sortModes: null,
+        pageSize: 20
+      }
+    },
+    plan: {
+      name: 'plan',
+      label: 'Leerplan',
+      dynamicFilters: false,
+      searchFilterFactory: {} as Type<SearchFilterFactory>,
+      results: {
+        component: {} as Type<SearchResultItemComponentInterface>,
+        sortModes: null,
+        pageSize: 20
+      }
+    },
+    search: {
+      name: 'search',
+      label: 'Standaard zoeken',
+      dynamicFilters: true,
+      searchFilterFactory: {} as Type<SearchFilterFactory>,
+      results: {
+        component: {} as Type<SearchResultItemComponentInterface>,
+        sortModes: [],
+        pageSize: 20
+      }
     }
   }
 };

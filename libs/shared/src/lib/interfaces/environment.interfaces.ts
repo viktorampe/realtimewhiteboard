@@ -13,14 +13,11 @@ export interface EnvironmentInterface {
     errorManagement: EnvironmentErrorManagementFeatureInterface;
   };
   sso: EnvironmentSsoInterface;
-  searchModes: EnvironmentSearchMode;
+  searchModes: EnvironmentSearchModesInterface;
 }
 
 export interface EnvironmentIconMappingInterface {
   [icon: string]: string;
-}
-export interface EnvironmentSearchMode {
-  [searchMode: string]: SearchModeInterface;
 }
 
 export interface EnvironmentAlertsFeatureInterface {
@@ -72,6 +69,10 @@ export interface EnvironmentSsoProviderInterface {
   className?: string;
   description?: string;
   logoIcon?: string;
+}
+
+export interface EnvironmentSearchModesInterface {
+  [mode: string]: SearchModeInterface;
 }
 
 export interface EnvironmentWebsiteInterface {
