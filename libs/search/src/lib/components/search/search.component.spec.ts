@@ -1,9 +1,26 @@
 import { Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
+import {
+  MatBadgeModule,
+  MatCheckboxModule,
+  MatIconModule,
+  MatIconRegistry,
+  MatListModule,
+  MatSelectModule
+} from '@angular/material';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
+import { MockMatIconRegistry } from '@campus/testing';
+import { UiModule } from '@campus/ui';
 import { hot } from 'jasmine-marbles';
 import { SearchModeInterface, SearchStateInterface } from '../../interfaces';
+import { BreadcrumbFilterComponent } from '../breadcrumb-filter/breadcrumb-filter.component';
+import { CheckboxLineFilterComponent } from '../checkbox-line-filter/checkbox-line-filter-component';
+import { CheckboxFilterComponent } from '../checkbox-list-filter/checkbox-filter/checkbox-filter.component';
+import { CheckboxListFilterComponent } from '../checkbox-list-filter/checkbox-list-filter.component';
+import { ColumnFilterComponent } from '../column-filter/column-filter.component';
 import { ResultItemBase } from '../results-list/result.component.base';
+import { SelectFilterComponent } from '../select-filter-component/select-filter.component';
 import { SearchViewModel } from './../search.viewmodel';
 import { MockSearchViewModel } from './../search.viewmodel.mock';
 import { SearchComponent } from './search.component';
@@ -46,12 +63,40 @@ describe('SearchComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [SearchComponent, ResultItemComponent],
-      providers: [{ provide: SearchViewModel, useClass: MockSearchViewModel }]
+      imports: [
+        MatCheckboxModule,
+        UiModule,
+        MatIconModule,
+        MatListModule,
+        MatSelectModule,
+        MatBadgeModule,
+        ReactiveFormsModule
+      ],
+      declarations: [
+        SearchComponent,
+        ResultItemComponent,
+        CheckboxFilterComponent,
+        CheckboxLineFilterComponent,
+        CheckboxListFilterComponent,
+        BreadcrumbFilterComponent,
+        ColumnFilterComponent,
+        SelectFilterComponent
+      ],
+      providers: [
+        { provide: SearchViewModel, useClass: MockSearchViewModel },
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
+      ]
     })
       .overrideModule(BrowserDynamicTestingModule, {
         set: {
-          entryComponents: [ResultItemComponent]
+          entryComponents: [
+            ResultItemComponent,
+            CheckboxLineFilterComponent,
+            CheckboxListFilterComponent,
+            BreadcrumbFilterComponent,
+            ColumnFilterComponent,
+            SelectFilterComponent
+          ]
         }
       })
       .compileComponents();
