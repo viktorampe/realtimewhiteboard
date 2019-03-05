@@ -1,15 +1,23 @@
 import { TestBed } from '@angular/core/testing';
 import { LearningAreaFixture } from '@campus/dal';
 import { hot } from '@nrwl/nx/testing';
+import { Observable, of } from 'rxjs';
 import {
   SearchFilterCriteriaInterface,
+  SearchFilterFactory,
+  SearchFilterInterface,
   SearchModeInterface,
   SearchStateInterface,
   SortModeInterface
 } from '../interfaces';
 import { SearchViewModel } from './search.viewmodel';
 
-class MockClass {
+class MockFilterFactory implements SearchFilterFactory {
+  getFilters(
+    searchState: SearchStateInterface
+  ): Observable<SearchFilterInterface[]> {
+    return of([]);
+  }
   constructor() {}
 }
 describe('SearchViewModel', () => {
@@ -186,6 +194,7 @@ describe('SearchViewModel', () => {
     });
 
     it('should request new filters when dynamicfilters === true', () => {
+      searchViewModel['filterFactory'] = new MockFilterFactory();
       searchViewModel['searchMode'] = {
         dynamicFilters: true
       } as SearchModeInterface;
@@ -265,11 +274,11 @@ describe('SearchViewModel', () => {
 
     it('should update the state', () => {
       searchViewModel.reset(
-        <SearchModeInterface>{
+        {
           name: 'foo',
-          searchFilterFactory: MockClass
-        },
-        <SearchStateInterface>{ searchTerm: 'bar', from: 60 }
+          searchFilterFactory: MockFilterFactory
+        } as SearchModeInterface,
+        { searchTerm: 'bar', from: 60 } as SearchStateInterface
       );
 
       expect(searchViewModel.searchState$).toBeObservable(
@@ -279,10 +288,10 @@ describe('SearchViewModel', () => {
 
     it('should reset the state', () => {
       searchViewModel.reset(
-        <SearchModeInterface>{
+        {
           name: 'foo',
-          searchFilterFactory: MockClass
-        },
+          searchFilterFactory: MockFilterFactory
+        } as SearchModeInterface,
         null
       );
 
@@ -295,6 +304,24 @@ describe('SearchViewModel', () => {
           }
         })
       );
+    });
+  });
+
+  describe('updateFilters', () => {
+    it('should update the filters via the filterFactory', () => {
+      searchViewModel['filterFactory'] = new MockFilterFactory();
+      const spy = jest.spyOn(searchViewModel['filterFactory'], 'getFilters');
+
+      // set initial state
+      const mockSearchState = {
+        searchTerm: 'foo'
+      } as SearchStateInterface;
+      searchViewModel.searchState$.next(mockSearchState);
+
+      searchViewModel['updateFilters']();
+
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(mockSearchState);
     });
   });
 });

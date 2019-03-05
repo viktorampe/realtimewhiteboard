@@ -1,5 +1,5 @@
 import { CdkScrollable, ScrollingModule } from '@angular/cdk/scrolling';
-import { Component } from '@angular/core';
+import { Component, Type } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconRegistry, MatTooltipModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
@@ -7,6 +7,7 @@ import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/t
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import {
+  SearchFilterFactory,
   SearchModeInterface,
   SearchResultInterface,
   SearchStateInterface
@@ -34,7 +35,7 @@ describe('ResultsListComponentComponent', () => {
     name: 'foo',
     label: 'foo',
     dynamicFilters: false,
-    searchFilterFactory: [],
+    searchFilterFactory: {} as Type<SearchFilterFactory>,
     results: {
       component: ResultItemComponent,
       sortModes: [

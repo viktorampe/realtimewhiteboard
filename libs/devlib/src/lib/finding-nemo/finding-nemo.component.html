@@ -1,49 +1,14 @@
+<div id="search-term-container"></div>
+
+<div #hosttop></div>
 <campus-collapsible-sheet>
-  <div aside>ier staat iets</div>
-  <div main>en ik wil er rechts ook iets van zetten</div>
+  <div aside #hostleft></div>
+  <campus-search
+    main
+    [searchMode]="searchMode"
+    [autoComplete]="null"
+    [initialState]="searchState | async"
+    [searchResults]="resultsPage$ | async"
+    (searchState$)="onChange($event)"
+  ></campus-search>
 </campus-collapsible-sheet>
-
-<div style="max-width: 300px; padding: 10px;">
-  <campus-checkbox-line-filter
-    [filterCriteria]="selectFilter"
-    (filterSelectionChange)="onFilterSelectionChange($event)"
-  >
-  </campus-checkbox-line-filter>
-
-  <campus-checkbox-list-filter
-    [filterCriteria]="selectFilter"
-    (filterSelectionChange)="onFilterSelectionChange($event)"
-    [maxVisibleItems]="2"
-  >
-  </campus-checkbox-list-filter>
-
-  <campus-column-filter
-    [filterCriteria]="filterCriteria$ | async"
-    (filterSelectionChange)="catchEvent($event)"
-  ></campus-column-filter>
-  <button (click)="setMockData()">setMockData</button>
-
-  <campus-breadcrumb-filter
-    [rootLabel]="'Alle'"
-    [filterCriteria]="breadCrumbFilterCriteria"
-    (filterSelectionChange)="onFilterSelectionChange($event)"
-  ></campus-breadcrumb-filter>
-
-  <campus-select-filter
-    [filterCriteria]="selectFilter"
-    [multiple]="true"
-    resetLabel="None"
-    (filterSelectionChange)="onFilterSelectionChange($event)"
-  ></campus-select-filter>
-
-  <campus-search-term
-    [initialValue]="'123'"
-    [autoComplete]="true"
-    [autoCompleteValues]="['waarde 1', ' waarde 2', 'waarde 3', 'waarde 4']"
-    (valueChange)="onChange($event)"
-  ></campus-search-term>
-</div>
-
-<div *ngIf="selectedFilterCriteria">
-  <p>Selected:</p> <p>{{ selectedFilterCriteria | json }}</p>
-</div>
