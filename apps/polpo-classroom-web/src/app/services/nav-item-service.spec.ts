@@ -58,7 +58,7 @@ describe('NavItemServiceService', () => {
           title: 'Bundels'
         },
         {
-          icon: 'taak',
+          icon: 'task',
           link: '/tasks',
           title: 'Taken'
         },
@@ -95,7 +95,7 @@ describe('NavItemServiceService', () => {
         },
         {
           title: 'Taken',
-          icon: 'taak',
+          icon: 'task',
           link: '/tasks',
           children: []
         },
@@ -134,7 +134,7 @@ describe('NavItemServiceService', () => {
         },
         {
           title: 'Taken',
-          icon: 'taak',
+          icon: 'task',
           link: '/tasks',
           children: [
             {

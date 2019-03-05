@@ -1,3 +1,5 @@
+@import 'libs/ui/src/lib/breakpoints.scss';
+
 // thematic variables
 @mixin pages-shared() {
   $pages-padding: 20px !default;
@@ -6,6 +8,12 @@
   .campus-page {
     display: block;
     padding: $pages-padding;
+  }
+
+  @media #{$ui-breakpoint-xsmall} {
+    campus-info-panel [title__right] {
+      display: none;
+    }
   }
 }
 
