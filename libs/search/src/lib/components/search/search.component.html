@@ -1,13 +1,9 @@
-<div #hosttop></div>
-<campus-collapsible-sheet>
-  <div aside #hostleft></div>
-  <campus-results-list
-    main
-    style="height: 100%"
-    [resultsPage]="searchResults"
-    [searchMode]="searchMode"
-    [searchState]="searchState"
-    (sortBy)="onSort($event)"
-    (getNextPage)="onScroll()"
-  ></campus-results-list>
-</campus-collapsible-sheet>
+<campus-results-list
+  main
+  style="height: 100%"
+  [resultsPage]="searchResults"
+  [searchMode]="searchMode"
+  [searchState]="searchState"
+  (sortBy)="onSort($event)"
+  (getNextPage)="onScroll()"
+></campus-results-list>
