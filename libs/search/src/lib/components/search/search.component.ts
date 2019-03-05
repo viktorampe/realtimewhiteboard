@@ -11,9 +11,11 @@ import {
   EmbeddedViewRef,
   Injector,
   Input,
+  OnChanges,
   OnDestroy,
   OnInit,
-  Output
+  Output,
+  SimpleChanges
 } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -22,17 +24,20 @@ import {
   SearchFilterCriteriaInterface,
   SearchFilterInterface
 } from '../../interfaces';
-import { SearchModeInterface } from './../../interfaces/search-mode-interface';
+import { SearchViewModel } from '../search.viewmodel';
+import {
+  SearchModeInterface,
+  SortModeInterface
+} from './../../interfaces/search-mode-interface';
 import { SearchResultInterface } from './../../interfaces/search-result-interface';
 import { SearchStateInterface } from './../../interfaces/search-state.interface';
-import { SearchViewModel } from './../search.viewmodel';
 
 @Component({
   selector: 'campus-search',
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss']
 })
-export class SearchComponent implements OnInit, OnDestroy {
+export class SearchComponent implements OnInit, OnDestroy, OnChanges {
   private subscriptions = new Subscription();
   private portalHosts: { [key: string]: DomPortalHost } = {};
   private portalOutlets: { [key: string]: DomPortalOutlet } = {};
@@ -43,17 +48,18 @@ export class SearchComponent implements OnInit, OnDestroy {
   @Input() public initialState: SearchStateInterface;
   @Input() public searchResults: SearchResultInterface;
 
-  @Output() public searchState: Observable<SearchStateInterface>;
+  @Output() public searchState$: Observable<SearchStateInterface>;
 
   constructor(
     private searchViewmodel: SearchViewModel,
     private componentFactoryResolver: ComponentFactoryResolver,
     private appRef: ApplicationRef,
     private injector: Injector
-  ) {}
+  ) {
+    this.searchState$ = this.searchViewmodel.searchState$;
+  }
 
   ngOnInit() {
-    this.searchState = this.searchViewmodel.searchState$;
     this.createFilters();
     this.reset(this.initialState);
   }
@@ -63,13 +69,25 @@ export class SearchComponent implements OnInit, OnDestroy {
     Object.values(this.portalHosts).forEach(portal => portal.detach());
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.searchResults) {
+      this.searchViewmodel.updateResult(this.searchResults);
+    }
+  }
+
   public reset(initialState: SearchStateInterface = null): void {
     this.searchViewmodel.reset(this.searchMode, initialState);
   }
-  public onSort(): void {}
+
+  public onSort(event: SortModeInterface): void {
+    this.searchViewmodel.changeSort(event);
+  }
+
   public onFilterSelectionChange(): void {}
   public onSearchTermChange(): void {}
-  public onScroll(): void {}
+  public onScroll(): void {
+    this.searchViewmodel.getNextPage();
+  }
 
   private createFilters(): void {
     this.subscriptions.add(

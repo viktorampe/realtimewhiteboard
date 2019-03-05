@@ -1,366 +1,53 @@
-import { Component, OnInit, Type } from '@angular/core';
-import { CredentialFixture, EduContentMetadataFixture } from '@campus/dal';
+import { Component, Type } from '@angular/core';
+import { EduContentMetadataFixture, LearningAreaFixture } from '@campus/dal';
 import {
-  SearchFilterCriteriaFixture,
   SearchFilterCriteriaInterface,
-  SearchFilterCriteriaValuesFixture,
   SearchFilterFactory,
+  SearchFilterInterface,
   SearchModeInterface,
   SearchResultInterface,
   SearchResultItemComponentInterface,
-  SearchStateInterface
+  SearchStateInterface,
+  SortModeInterface
 } from '@campus/search';
 import { EduContentMetadataApi } from '@diekeure/polpo-api-angular-sdk';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { PolpoResultItemComponent } from '../polpo-result-item/polpo-result-item.component';
-
-const mockBreadcrumbFilterCriteria: SearchFilterCriteriaInterface[] = [
-  {
-    name: 'breadCrumbFilter',
-    label: 'koepels',
-    keyProperty: 'id',
-    displayProperty: 'name',
-    values: [
-      {
-        data: {
-          id: 1,
-          name: 'Gemeenschapsonderwijs'
-        },
-        selected: true
-      },
-      {
-        data: {
-          id: 2,
-          name: 'Officieel gesubsidieerd onderwijs'
-        },
-        selected: false
-      },
-      {
-        data: {
-          id: 3,
-          name: 'Vrij gesubsidieerd onderwijs'
-        },
-        selected: false
-      }
-    ]
-  },
-  {
-    name: 'breadCrumbFilter',
-    label: 'Stromen',
-    keyProperty: 'id',
-    displayProperty: 'name',
-    values: [
-      {
-        data: {
-          id: 1,
-          name: 'A-stroom'
-        },
-        selected: true
-      },
-      {
-        data: {
-          id: 2,
-          name: 'ASO'
-        },
-        selected: false
-      },
-      {
-        data: {
-          id: 3,
-          name: 'B-Stroom'
-        },
-        selected: false
-      },
-      {
-        data: {
-          id: 4,
-          name: 'BSO'
-        },
-        selected: false
-      }
-    ]
-  },
-  {
-    name: 'breadCrumbFilter',
-    label: 'jaren',
-    keyProperty: 'id',
-    displayProperty: 'name',
-    values: [
-      {
-        data: {
-          id: 1,
-          name: '1e jaar'
-        },
-        selected: true
-      },
-      {
-        data: {
-          id: 2,
-          name: '2de jaar'
-        },
-        selected: false
-      }
-    ]
-  },
-  {
-    name: 'breadCrumbFilter',
-    label: 'richtingen',
-    keyProperty: 'id',
-    displayProperty: 'name',
-    values: [
-      {
-        data: {
-          id: 1,
-          name: 'Economie'
-        },
-        selected: false
-      },
-      {
-        data: {
-          id: 2,
-          name: 'Grieks'
-        },
-        selected: true
-      },
-      {
-        data: {
-          id: 2,
-          name: 'Grieks-Latijn'
-        },
-        selected: false
-      }
-    ]
-  }
-];
-
-const mockListCriteria = new SearchFilterCriteriaFixture(
-  { keyProperty: 'id', displayProperty: 'provider' },
-  [
-    new SearchFilterCriteriaValuesFixture(
-      {
-        data: new CredentialFixture({
-          id: 1,
-          provider: 'smartschool'
-        })
-      },
-      new SearchFilterCriteriaFixture(
-        { keyProperty: 'id', displayProperty: 'provider' },
-        [
-          new SearchFilterCriteriaValuesFixture(
-            {
-              data: new CredentialFixture({
-                id: 1,
-                provider: 'x'
-              })
-            },
-
-            new SearchFilterCriteriaFixture(
-              { keyProperty: 'id', displayProperty: 'provider' },
-              [
-                new SearchFilterCriteriaValuesFixture({
-                  data: new CredentialFixture({
-                    id: 1,
-                    provider: 'xx'
-                  })
-                }),
-                new SearchFilterCriteriaValuesFixture({
-                  data: new CredentialFixture({
-                    id: 2,
-                    provider: 'xx'
-                  })
-                }),
-                new SearchFilterCriteriaValuesFixture({
-                  data: new CredentialFixture({
-                    id: 3,
-                    provider: 'xx'
-                  })
-                })
-              ]
-            )
-          ),
-          new SearchFilterCriteriaValuesFixture({
-            data: new CredentialFixture({
-              id: 2,
-              provider: 'x'
-            })
-          }),
-          new SearchFilterCriteriaValuesFixture(
-            {
-              data: new CredentialFixture({
-                id: 3,
-                provider: 'x'
-              })
-            },
-            new SearchFilterCriteriaFixture(
-              { keyProperty: 'id', displayProperty: 'provider' },
-              [
-                new SearchFilterCriteriaValuesFixture({
-                  data: new CredentialFixture({
-                    id: 1,
-                    provider: 'xy'
-                  })
-                }),
-                new SearchFilterCriteriaValuesFixture({
-                  data: new CredentialFixture({
-                    id: 2,
-                    provider: 'xy'
-                  })
-                }),
-                new SearchFilterCriteriaValuesFixture(
-                  {
-                    data: new CredentialFixture({
-                      id: 3,
-                      provider: 'xy'
-                    })
-                  },
-                  new SearchFilterCriteriaFixture(
-                    {
-                      keyProperty: 'id',
-                      displayProperty: 'provider'
-                    },
-                    [
-                      new SearchFilterCriteriaValuesFixture({
-                        data: new CredentialFixture({
-                          id: 1,
-                          provider: 'xyz'
-                        })
-                      }),
-                      new SearchFilterCriteriaValuesFixture({
-                        data: new CredentialFixture({
-                          id: 2,
-                          provider: 'xyz'
-                        })
-                      }),
-                      new SearchFilterCriteriaValuesFixture({
-                        data: new CredentialFixture({
-                          id: 3,
-                          provider: 'xyz'
-                        })
-                      })
-                    ]
-                  )
-                )
-              ]
-            )
-          )
-        ]
-      )
-    ),
-    new SearchFilterCriteriaValuesFixture({
-      data: new CredentialFixture({ id: 2, provider: 'google' })
-    })
-  ]
-);
+// tslint:disable-next-line:nx-enforce-module-boundaries
+import { MockSearchViewModel } from './../../../../search/src/lib/components/search.viewmodel.mock';
 
 @Component({
   selector: 'campus-finding-nemo',
   templateUrl: './finding-nemo.component.html',
   styleUrls: ['./finding-nemo.component.scss']
 })
-export class FindingNemoComponent implements OnInit {
-  public selectFilter: SearchFilterCriteriaInterface;
-  public selectedFilterCriteria: SearchFilterCriteriaInterface;
+export class FindingNemoComponent {
   public resultItemComponent: Type<SearchResultItemComponentInterface>;
-  public resultsPage$: Subject<SearchResultInterface> = new Subject();
+  public resultsPage$ = new BehaviorSubject<SearchResultInterface>(null);
   public searchMode: SearchModeInterface;
-  public searchState: BehaviorSubject<
-    SearchStateInterface
-  > = new BehaviorSubject(null);
-  public breadCrumbFilterCriteria: SearchFilterCriteriaInterface[];
-  public autoComplete = true;
+  public searchState = new BehaviorSubject<SearchStateInterface>(null);
+  // public autoComplete = true;
   public filterCriteria$ = new BehaviorSubject<SearchFilterCriteriaInterface[]>(
     null
   );
 
   private loadTimer: number;
-  private mockData: SearchFilterCriteriaInterface[] = [
-    {
-      name: 'criteria name',
-      label: 'The label of the criteria',
-      keyProperty: 'id',
-      displayProperty: 'name',
-      values: [
-        {
-          data: {
-            id: 1,
-            name: 'foo jaar'
-          },
-          selected: false
-        },
-        {
-          data: {
-            id: 2,
-            name: 'bar jaar'
-          },
-          selected: false
-        },
-        {
-          data: {
-            id: 3,
-            name: 'baz jaar'
-          },
-          selected: false,
-          prediction: 3
-        }
-      ]
-    }
-  ];
 
-  constructor(private eduContentMetadataApi: EduContentMetadataApi) {}
-
-  ngOnInit(): void {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
+  constructor(private eduContentMetadataApi: EduContentMetadataApi) {
     this.setMockData();
   }
 
   setMockData() {
-    this.searchMode = {
-      name: 'demo',
-      label: 'demo',
-      dynamicFilters: false,
-      searchFilterFactory: {} as Type<SearchFilterFactory>,
-      results: {
-        component: PolpoResultItemComponent,
-        sortModes: [
-          {
-            description: 'book',
-            name: 'book',
-            icon: 'book'
-          },
-          {
-            description: 'bundle',
-            name: 'bundle',
-            icon: 'bundle'
-          },
-          {
-            description: 'taak',
-            name: 'taak',
-            icon: 'taak'
-          }
-        ],
-        pageSize: 3
-      }
-    };
-
-    this.breadCrumbFilterCriteria = mockBreadcrumbFilterCriteria;
-
-    this.searchState.next({
-      searchTerm: '',
-      filterCriteriaSelections: new Map(),
-      from: 0
-      // sort: null,
-    });
-
-    this.filterCriteria$.next(this.mockData);
-
-    this.selectFilter = mockListCriteria;
+    this.searchMode = this.getMockSearchMode();
+    this.searchState.next(this.getMockSearchState());
+    this.resultsPage$.next(this.getMockResults());
+    this.filterCriteria$.next(this.getMockSearchFilters());
   }
 
   catchEvent($event: SearchFilterCriteriaInterface[]) {
     console.log($event);
-    this.filterCriteria$.next([...this.mockData, ...$event]);
+    this.filterCriteria$.next([...this.getMockSearchFilters(), ...$event]);
   }
 
   loadMoreResults(from = 0) {
@@ -415,18 +102,17 @@ export class FindingNemoComponent implements OnInit {
       });
   }
 
-  resetResults() {
-    this.searchState.next({
-      searchTerm: '',
-      filterCriteriaSelections: new Map(),
-      from: 0,
-      sort: 'bundle'
-    });
-  }
-
   onGetNextPage(from) {
     console.log('getNextPage from', from);
     this.loadMoreResults(from);
+  }
+
+  onSortBy(sort: SortModeInterface) {
+    this.searchState.next({
+      ...this.searchState.value,
+      sort: sort.name
+    });
+    this.loadMoreResults();
   }
 
   onChange(value: string) {
@@ -435,5 +121,103 @@ export class FindingNemoComponent implements OnInit {
 
   onFilterSelectionChange(value: string) {
     console.log(value);
+  }
+
+  private getMockSearchMode(): SearchModeInterface {
+    return {
+      name: 'demo',
+      label: 'demo',
+      dynamicFilters: false,
+      // tslint:disable-next-line: no-use-before-declare
+      searchFilterFactory: MockFactory,
+      results: {
+        component: PolpoResultItemComponent,
+        sortModes: [
+          {
+            description: 'book',
+            name: 'book',
+            icon: 'book'
+          },
+          {
+            description: 'bundle',
+            name: 'bundle',
+            icon: 'bundle'
+          },
+          {
+            description: 'taak',
+            name: 'taak',
+            icon: 'taak'
+          }
+        ],
+        pageSize: 3
+      }
+    };
+  }
+
+  private getMockSearchState(): SearchStateInterface {
+    return {
+      searchTerm: '',
+      filterCriteriaSelections: new Map(),
+      from: 0
+    };
+  }
+
+  private getMockResults(): SearchResultInterface {
+    return {
+      count: 2,
+      results: [
+        new LearningAreaFixture({ id: 1 }),
+        new LearningAreaFixture({ id: 2 })
+      ],
+      filterCriteriaPredictions: new Map([
+        ['LearningArea', new Map([[1, 100], [2, 50]])]
+      ])
+    };
+  }
+
+  private getMockSearchFilters(): SearchFilterCriteriaInterface[] {
+    return [
+      {
+        name: 'criteria name',
+        label: 'The label of the criteria',
+        keyProperty: 'id',
+        displayProperty: 'name',
+        values: [
+          {
+            data: {
+              id: 1,
+              name: 'foo jaar'
+            },
+            selected: false
+          },
+          {
+            data: {
+              id: 2,
+              name: 'bar jaar'
+            },
+            selected: false
+          },
+          {
+            data: {
+              id: 3,
+              name: 'baz jaar'
+            },
+            selected: false,
+            prediction: 3
+          }
+        ]
+      }
+    ];
+  }
+}
+
+class MockFactory implements SearchFilterFactory {
+  mockSearchViewModel = new MockSearchViewModel();
+  constructor() {}
+
+  getFilters(
+    searchState: SearchStateInterface
+  ): Observable<SearchFilterInterface[]> {
+    return this.mockSearchViewModel.searchFilters$;
   }
 }
