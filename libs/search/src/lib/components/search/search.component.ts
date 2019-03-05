@@ -1,4 +1,8 @@
-import { ComponentPortal, DomPortalHost } from '@angular/cdk/portal';
+import {
+  ComponentPortal,
+  DomPortalHost,
+  DomPortalOutlet
+} from '@angular/cdk/portal';
 import {
   ApplicationRef,
   Component,
@@ -31,6 +35,7 @@ import { SearchViewModel } from './../search.viewmodel';
 export class SearchComponent implements OnInit, OnDestroy {
   private subscriptions = new Subscription();
   private portalHosts: { [key: string]: DomPortalHost } = {};
+  private portalOutlets: { [key: string]: DomPortalOutlet } = {};
   private domHosts: { [key: string]: Element } = {};
 
   @Input() public searchMode: SearchModeInterface;
@@ -73,7 +78,8 @@ export class SearchComponent implements OnInit, OnDestroy {
           return;
         }
         searchFilters.forEach(filter => {
-          this.addFilterToPage(filter);
+          this.addFilter(filter);
+          // this.addFilterToPage(filter);
         });
       })
     );
@@ -130,12 +136,14 @@ export class SearchComponent implements OnInit, OnDestroy {
   private addFilter(filter: SearchFilterInterface): void {
     // find portal host
     const portalHost = this.getPortalHost(filter.domHost);
+    // const portalHost = this.getPortalHost(filter.domHost);
     if (!portalHost) {
       return;
     }
     const portal = new ComponentPortal(filter.component);
 
-    const filterItem = portalHost.attach(portal)
+    // const filterItem = portalHost.attach(portal)
+    const filterItem = portalHost.attachComponentPortal(portal)
       .instance as SearchFilterComponentInterface;
 
     filterItem.filterCriteria = filter.criteria;
@@ -144,6 +152,35 @@ export class SearchComponent implements OnInit, OnDestroy {
       .subscribe((criteria: SearchFilterCriteriaInterface) => {
         this.searchViewmodel.changeFilters(criteria);
       });
+  }
+
+  private getPortalOutlet(
+    selector: string,
+    componentFactoryResolver: ComponentFactoryResolver = this
+      .componentFactoryResolver,
+    appRef: ApplicationRef = this.appRef,
+    injector: Injector = this.injector
+  ): DomPortalOutlet {
+    // check if already created
+    if (this.portalOutlets[selector]) {
+      return this.portalOutlets[selector];
+    }
+
+    //TODO  e2e test, see https://github.com/diekeure/campus/issues/206
+    const el = document.querySelector(selector);
+    if (el === null) {
+      return null;
+    }
+
+    const portalOutlet = new DomPortalOutlet(
+      el,
+      componentFactoryResolver,
+      appRef,
+      injector
+    );
+    this.portalOutlets[selector] = portalOutlet;
+
+    return portalOutlet;
   }
 
   private getPortalHost(
