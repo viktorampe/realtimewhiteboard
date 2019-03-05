@@ -155,13 +155,12 @@ export class ResultsListComponent implements OnDestroy, AfterViewInit {
   }
 
   private updateViewFromSearchState(searchState: SearchStateInterface): void {
+    this.scrollEnabled = false;
     if (searchState.from === undefined || searchState.from === null) {
       // no search running
       this.clearResults();
-      this.scrollEnabled = false;
       this.loading = false;
     } else if (searchState.from === 0) {
-      this.scrollEnabled = false;
       this.loading = true;
       // UX: don't clear results immediately to avoid flicker effects
       this.clearResultsTimer = this.nativeWindow.setTimeout(() => {
