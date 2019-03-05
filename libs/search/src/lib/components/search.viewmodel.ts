@@ -65,7 +65,6 @@ export class SearchViewModel {
     this.searchState$.next(newValue);
   }
   public getNextPage(): void {
-    console.log(this.searchMode);
     const newValue = { ...this.searchState$.value };
     newValue.from =
       (this.searchState$.value.from || 0) + this.searchMode.results.pageSize;
