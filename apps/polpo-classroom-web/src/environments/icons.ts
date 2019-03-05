@@ -175,8 +175,7 @@ export const icons = {
   // 'split-arrow': 'assets/icons/split-arrow.svg',
   // student: 'assets/icons/student.svg',
   student: 'assets/icons/student2.svg',
-  taak: 'assets/icons/taak.svg',
-  // task: 'assets/icons/task.svg'
+  task: 'assets/icons/taak.svg',
   // timeline: 'assets/icons/timeline.svg',
   // twitter: 'assets/icons/twitter.svg',
   // 'user-exception': 'assets/icons/user-exception.svg',

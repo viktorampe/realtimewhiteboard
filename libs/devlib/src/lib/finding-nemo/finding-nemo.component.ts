@@ -335,9 +335,9 @@ export class FindingNemoComponent implements OnInit {
             icon: 'bundle'
           },
           {
-            description: 'taak',
-            name: 'taak',
-            icon: 'taak'
+            description: 'task',
+            name: 'task',
+            icon: 'task'
           }
         ],
         pageSize: 3
