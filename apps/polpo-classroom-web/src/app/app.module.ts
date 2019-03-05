@@ -4,6 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { CustomSerializer, DalModule } from '@campus/dal';
 import { GuardsModule } from '@campus/guards';
+import { SearchModule } from '@campus/search';
 import { SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
 import { EffectsModule } from '@ngrx/effects';
@@ -33,6 +34,7 @@ configureBufferSize(150);
 @NgModule({
   declarations: [AppComponent],
   imports: [
+    SearchModule,
     UiModule,
     BrowserModule,
     AppRoutingModule,

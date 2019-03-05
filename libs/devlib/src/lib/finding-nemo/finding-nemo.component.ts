@@ -123,7 +123,7 @@ export class FindingNemoComponent {
       searchFilterFactory: MockFactory,
       searchTerm: {
         // autocompleteEl: string; //reference to material autocomplete component
-        domHost: 'search-term-container'
+        domHost: '#searchTermContainer'
       },
       results: {
         component: PolpoResultItemComponent,
