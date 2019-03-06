@@ -1,0 +1,93 @@
+.ui-tile {
+  display: flex;
+  flex-direction: column;
+  width: 280px; //TODO: theme related
+  cursor: pointer;
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  box-sizing: border-box;
+
+  &__content {
+    display: flex;
+    flex-direction: row;
+    /*background: transparent url(/img/polpo-overlay-white-003.png) no-repeat
+      right center;
+    background-size: contain;*/ //TODO: dunno how yet
+    height: 105px; //TODO: theme related
+    overflow: hidden;
+
+    &__label {
+      height: auto;
+      font-size: 18px; //TODO: theme related
+      font-weight: 700; //TODO: theme related
+      margin-left: auto;
+      margin-right: 16px;
+      overflow: hidden;
+      color: #79c5ba; //TODO: theme related
+    }
+
+    &__icon {
+      margin-right: auto;
+    }
+
+    /*.icon,
+    span {
+      // vertical align
+      position: absolute;
+      top: 50%;
+      -webkit-transform: translateY(-50%);
+      -ms-transform: translateY(-50%);
+      transform: translateY(-50%);
+    }
+
+    .icon {
+      border-radius: 50% 50%;
+      width: 65px;
+      height: 65px;
+      font-size: 61px;
+      left: 15px;
+      line-height: normal;
+      border: solid 2px #c7d3df;
+
+      &.icon-small {
+        font-size: 41px;
+        padding: 10px;
+        margin: 0;
+      }
+    }*/
+  }
+
+  &__actions {
+    background-color: rgba(0, 0, 0, 0.2);
+    height: 25px;
+    font-weight: 400;
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+
+    a {
+      text-decoration: none;
+      display: table-cell;
+      height: 25px;
+      padding: 2px 15px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+
+      i {
+        display: inline-block;
+        vertical-align: middle;
+        width: 11px;
+        height: 11px;
+        font-size: 11px;
+        margin: 0 5px 0 0;
+      }
+    }
+
+    span {
+      color: #6a737d;
+      float: right;
+    }
+  }
+}

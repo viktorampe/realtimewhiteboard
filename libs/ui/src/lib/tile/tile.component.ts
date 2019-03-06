@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'campus-tile',
@@ -6,10 +6,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./tile.component.scss']
 })
 export class TileComponent implements OnInit {
+  @Input() label: string;
+  @Input() icon: string;
+  @Input() secondaryActions: TileSecondaryActionInterface[];
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
+}
 
+export interface TileSecondaryActionInterface {
+  label: string;
+  icon: string;
+  routerLink?: string[];
+  onClick?: (event: Event) => {};
 }

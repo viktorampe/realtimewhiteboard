@@ -1,0 +1,7 @@
+@mixin ui-tile() {
+  $ui-tile-background-color: $ui-primary-color-accent;
+
+  .ui-tile {
+    background-color: $ui-tile-background-color;
+  }
+}
