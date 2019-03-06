@@ -59,22 +59,28 @@ export class SearchViewModel {
     state: SearchStateInterface,
     results: SearchResultInterface
   ): SearchFilterInterface {
-    //if array loop and get updatedCriterium for each
+    const filterCriteriaSelections = !!state
+      ? state.filterCriteriaSelections
+      : new Map<string, (number | string)[]>();
+    const filterCriteriaPredictions = !!results
+      ? results.filterCriteriaPredictions
+      : new Map<string, Map<string | number, number>>();
     if (Array.isArray(filter.criteria))
       filter.criteria = filter.criteria.map(criterium =>
         this.getUpdatedCriterium(
           criterium,
-          state.filterCriteriaSelections,
-          results.filterCriteriaPredictions
+          filterCriteriaSelections,
+          filterCriteriaPredictions
         )
       );
     //if single get updatedCriterium
-    else
+    else {
       filter.criteria = this.getUpdatedCriterium(
         filter.criteria,
-        state.filterCriteriaSelections,
-        results.filterCriteriaPredictions
+        filterCriteriaSelections,
+        filterCriteriaPredictions
       );
+    }
     return filter;
   }
 
