@@ -324,3 +324,64 @@ describe('SearchViewModel', () => {
     });
   });
 });
+function getTestSearchResult(
+  name: string,
+  predictions: Map<string | number, number>
+): SearchResultInterface {
+  return {
+    count: 0,
+    results: [],
+    filterCriteriaPredictions: new Map<string, Map<string | number, number>>([
+      [name, new Map<string | number, number>(predictions)]
+    ])
+  };
+}
+
+function getTestSearchState(
+  name: string,
+  selections: (number | string)[]
+): SearchStateInterface {
+  return {
+    searchTerm: '',
+    filterCriteriaSelections: new Map<string, (number | string)[]>([
+      [name, selections]
+    ])
+  };
+}
+
+function getTestFilter(
+  name: string,
+  id: string | number,
+  prediction: number,
+  selected: boolean,
+  criteriaIsArray: boolean,
+  child?: SearchFilterCriteriaInterface
+) {
+  return {
+    criteria: criteriaIsArray
+      ? [getTestFilterCriteria(name, id, prediction, selected, child)]
+      : getTestFilterCriteria(name, id, prediction, selected, child),
+    component: new CheckboxLineFilterComponent(),
+    domHost: 'hostleft'
+  };
+}
+
+function getTestFilterCriteria(
+  name: string,
+  id: string | number,
+  prediction: number,
+  selected: boolean,
+  child?: SearchFilterCriteriaInterface
+): SearchFilterCriteriaInterface {
+  return new SearchFilterCriteriaFixture({ name: name }, [
+    new SearchFilterCriteriaValuesFixture(
+      {
+        data: { id: id },
+        prediction: prediction,
+        selected: selected
+      },
+      child
+    ),
+    new SearchFilterCriteriaValuesFixture({})
+  ]);
+}
