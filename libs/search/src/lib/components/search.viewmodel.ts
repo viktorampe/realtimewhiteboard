@@ -27,8 +27,7 @@ export class SearchViewModel {
   public searchState$ = new BehaviorSubject<SearchStateInterface>(null);
   public searchFilters$: Observable<SearchFilterInterface[]>;
 
-  constructor(private mockViewmodel: MockSearchViewModel) {
-    this.getMocks();
+  constructor() {
     this.initiateStreams();
   }
 
