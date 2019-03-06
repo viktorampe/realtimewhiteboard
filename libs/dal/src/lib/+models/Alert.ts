@@ -49,7 +49,7 @@ export class Alert implements AlertQueueInterface {
       case 'task':
       case 'task-start':
       case 'task-end':
-        return 'taak';
+        return 'task';
 
       case 'boek-e':
         return 'book';
