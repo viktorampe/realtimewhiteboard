@@ -25,8 +25,13 @@
     <script>
       //discard subdomain for window.opener to work on cross-domain subdomains
       var parts = window.location.hostname.split('.');
-      document.domain =
-        parts.length > 2 ? parts.slice(1).join('.') : parts.join('.');
+      document.domain = location.host
+        .replace(/^.*?([^.]+\.[^.]+)$/, '$1')
+        .replace(/\:(\d)+/, '');
+
+      if (window.location.href.includes('/#/?')) {
+        window.location.href = window.location.href.replace('/#/?', '/?');
+      }
     </script>
   </head>
 

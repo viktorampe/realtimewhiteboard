@@ -1,6 +1,10 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { LoginCredentials, PersonInterface } from '@campus/dal';
-import { LoopBackAuth, PersonApi } from '@diekeure/polpo-api-angular-sdk';
+import {
+  LoopBackAuth,
+  PersonApi,
+  SDKToken
+} from '@diekeure/polpo-api-angular-sdk';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
 import { AuthService } from './auth-service';
@@ -37,13 +41,20 @@ class MockPersonApi {
 
 describe('AuthService', () => {
   let authService: AuthService;
+  const setTokenSpy = jest.fn();
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
         AuthService,
         { provide: PersonApi, useValue: new MockPersonApi() },
-        { provide: LoopBackAuth, useValue: {} }
+        {
+          provide: LoopBackAuth,
+          useValue: {
+            setToken: setTokenSpy,
+            setRememberMe: jest.fn()
+          }
+        }
       ]
     });
 
@@ -90,6 +101,17 @@ describe('AuthService', () => {
     expect(authService.getPermissions()).toBeObservable(
       hot('-a-|', {
         a: ['permission-1', 'permission-2']
+      })
+    );
+  });
+
+  it('should call loopbackAuth and set a token', () => {
+    authService.loginWithToken('taukun', 'itsme');
+    expect(setTokenSpy).toHaveBeenCalledWith(
+      new SDKToken({
+        id: 'taukun',
+        userId: 'itsme',
+        scopes: null
       })
     );
   });

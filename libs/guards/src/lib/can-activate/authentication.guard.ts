@@ -33,6 +33,12 @@ export class AuthenticationGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
+    if (route.queryParams.accessToken && route.queryParams.userId) {
+      this.authService.loginWithToken(
+        route.queryParams.accessToken,
+        route.queryParams.userId
+      );
+    }
     if (!this.authService.isLoggedIn()) {
       this.window.location.assign(this.environmentLogin.url);
       return false;
