@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, InjectionToken } from '@angular/core';
 import {
   CheckboxLineFilterComponent,
   CheckboxListFilterComponent,
@@ -8,6 +8,10 @@ import {
   SearchStateInterface
 } from '@campus/search';
 import { Observable, of } from 'rxjs';
+
+export const STANDARD_SEARCH_SERVICE_TOKEN = new InjectionToken(
+  'StandardSearchService'
+);
 
 @Injectable()
 export class StandardSearchService implements SearchFilterFactory {
@@ -28,6 +32,16 @@ export class StandardSearchService implements SearchFilterFactory {
     schoolTypes: CheckboxListFilterComponent,
     eduContentProductType: CheckboxListFilterComponent,
     learningArea: CheckboxListFilterComponent
+  };
+
+  private domHostCriteriaMap = {
+    methods: 'hostLeft',
+    years: 'hostLeft',
+    grades: 'hostLeft',
+    eduNets: 'hostLeft',
+    schoolTypes: 'hostLeft',
+    eduContentProductType: 'hostLeft',
+    learningArea: 'hostLeft'
   };
   private searchCriteria = {
     // learningDomains: {
@@ -94,7 +108,7 @@ export class StandardSearchService implements SearchFilterFactory {
     const searchFilter: SearchFilterInterface = {
       criteria: this.searchCriteria[criteriaName],
       component: this.componentCriteriaMap[criteriaName],
-      domHost: 'hostLeft'
+      domHost: this.domHostCriteriaMap[criteriaName]
     };
     return searchFilter;
   });
