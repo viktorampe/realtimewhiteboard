@@ -31,6 +31,7 @@ import {
 } from './+state/current-exercise';
 import { EduContentReducer, EduContentsEffects } from './+state/edu-content';
 import { EffectFeedbackReducer } from './+state/effect-feedback';
+import { FavoriteEffects, FavoriteReducer } from './+state/favorite';
 import {
   LearningAreaReducer,
   LearningAreasEffects
@@ -226,6 +227,9 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
       EffectFeedbackReducer.reducer,
       { initialState: EffectFeedbackReducer.initialState }
     ),
+    StoreModule.forFeature(FavoriteReducer.NAME, FavoriteReducer.reducer, {
+      initialState: FavoriteReducer.initialState
+    }),
     EffectsModule.forFeature([
       BundlesEffects,
       UserEffects,
@@ -247,7 +251,8 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
       CurrentExerciseEffects,
       TeacherStudentEffects,
       LinkedPersonEffects,
-      CredentialEffects
+      CredentialEffects,
+      FavoriteEffects
     ])
   ],
   providers: [

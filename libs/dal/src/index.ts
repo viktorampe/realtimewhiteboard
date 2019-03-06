@@ -10,6 +10,7 @@ export * from './lib/+state/current-exercise';
 export * from './lib/+state/dal.state.feature.builder';
 export * from './lib/+state/edu-content';
 export * from './lib/+state/effect-feedback';
+export * from './lib/+state/favorite';
 export * from './lib/+state/learning-area';
 export * from './lib/+state/linked-person';
 export * from './lib/+state/method';
