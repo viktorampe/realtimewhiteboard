@@ -270,12 +270,12 @@ describe('SearchComponent', () => {
         expect(searchComponent).toBeDefined();
       });
 
-      it('should create a searchTermComponent and add it to the specified portalHost', async(() => {
+      it('should create a searchTermComponent and add it to the specified portalHost', () => {
         expect(searchComponent['portalhosts'].length).toBe(1);
         expect('#' + searchComponent['portalhosts'][0].outletElement.id).toBe(
           mockSearchMode.searchTerm.domHost
         );
-      }));
+      });
     });
 
     describe('should not create', () => {
