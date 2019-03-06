@@ -1,4 +1,4 @@
-import { Component, Type } from '@angular/core';
+import { Component, Inject, Type } from '@angular/core';
 import { EduContentMetadataFixture, LearningAreaFixture } from '@campus/dal';
 import {
   SearchFilterCriteriaInterface,
@@ -11,6 +11,8 @@ import {
   SortModeInterface
 } from '@campus/search';
 import { EduContentMetadataApi } from '@diekeure/polpo-api-angular-sdk';
+// tslint:disable-next-line:nx-enforce-module-boundaries
+import { STANDARD_SEARCH_SERVICE_TOKEN } from 'apps/polpo-classroom-web/src/app/services/standard-search.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { PolpoResultItemComponent } from '../polpo-result-item/polpo-result-item.component';
@@ -33,9 +35,17 @@ export class FindingNemoComponent {
   );
 
   private loadTimer: number;
+  public searchFilters$: Observable<SearchFilterInterface[]>;
 
-  constructor(private eduContentMetadataApi: EduContentMetadataApi) {
+  constructor(
+    private eduContentMetadataApi: EduContentMetadataApi,
+    @Inject(STANDARD_SEARCH_SERVICE_TOKEN)
+    private standardSearchFactory: SearchFilterFactory
+  ) {
     this.setMockData();
+    this.searchFilters$ = this.standardSearchFactory.getFilters(
+      {} as SearchStateInterface
+    );
   }
 
   setMockData() {
