@@ -30,7 +30,7 @@ export class SearchViewModel {
     this.initiateStreams();
   }
 
-  initiateStreams(): void {
+  private initiateStreams(): void {
     this.searchFilters$ = combineLatest(
       this.filters$,
       this.searchState$,
