@@ -1,6 +1,7 @@
 import { Type } from '@angular/core';
 import { SearchFilterFactory } from '@campus/search';
 import { EnvironmentInterface } from '@campus/shared';
+// tslint:disable-next-line:nx-enforce-module-boundaries
 import { PolpoResultItemComponent } from 'libs/devlib/src/lib/polpo-result-item/polpo-result-item.component';
 
 // This file can be replaced during build by using the `fileReplacements` array.
