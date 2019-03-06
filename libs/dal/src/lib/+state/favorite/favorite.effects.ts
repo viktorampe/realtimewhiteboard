@@ -29,7 +29,6 @@ export class FavoriteEffects {
 
   constructor(
     private actions: Actions,
-    private dataPersistence: DataPersistence<DalState> // @Inject(FAVORITE_SERVICE_TOKEN)
-  ) // private favoriteService: FavoriteServiceInterface
-  {}
+    private dataPersistence: DataPersistence<DalState> // @Inject(FAVORITE_SERVICE_TOKEN) // private favoriteService: FavoriteServiceInterface
+  ) {}
 }

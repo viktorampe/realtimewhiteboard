@@ -9,7 +9,8 @@ export enum FavoritesActionTypes {
   AddFavorites = '[Favorites] Add Favorites',
   DeleteFavorite = '[Favorites] Delete Favorite',
   DeleteFavorites = '[Favorites] Delete Favorites',
-  ClearFavorites = '[Favorites] Clear Favorites'
+  ClearFavorites = '[Favorites] Clear Favorites',
+  ToggleFavorite = '[Favorites] Toggle Favorite'
 }
 
 export class LoadFavorites implements Action {
@@ -33,6 +34,11 @@ export class FavoritesLoadError implements Action {
 
 export class AddFavorite implements Action {
   readonly type = FavoritesActionTypes.AddFavorite;
+
+  constructor(public payload: { favorite: FavoriteInterface }) {}
+}
+export class ToggleFavorite implements Action {
+  readonly type = FavoritesActionTypes.ToggleFavorite;
 
   constructor(public payload: { favorite: FavoriteInterface }) {}
 }
@@ -66,4 +72,5 @@ export type FavoritesActions =
   | AddFavorites
   | DeleteFavorite
   | DeleteFavorites
-  | ClearFavorites;
+  | ClearFavorites
+  | ToggleFavorite;
