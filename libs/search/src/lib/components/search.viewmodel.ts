@@ -165,9 +165,7 @@ export class SearchViewModel {
     filterCriteriaSelections: Map<string, (string | number)[]>
   ): boolean {
     //check if there is selection data
-    const criteriaSelections = filterCriteriaSelections.get(
-      value.data[criterium.name]
-    );
+    const criteriaSelections = filterCriteriaSelections.get(criterium.name);
     // if there is data and check if the selection is present or not, return true or false depending on data presence
     return criteriaSelections &&
       criteriaSelections.includes(value.data[criterium.keyProperty])
