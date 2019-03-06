@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output
+} from '@angular/core';
 
 @Component({
   selector: 'campus-search-term',
@@ -31,7 +38,13 @@ export class SearchTermComponent implements OnInit {
   // input event exists by default -> emits single characters
   @Output() public valueChange = new EventEmitter<string>();
 
+  constructor(private cd: ChangeDetectorRef) {}
+
   ngOnInit() {
     this._value = this.initialValue;
+  }
+
+  public detectChanges(): void {
+    this.cd.detectChanges();
   }
 }

@@ -244,7 +244,7 @@ describe('SearchComponent', () => {
     });
   });
 
-  describe('searchTermComponent', () => {
+  describe('searchTermComponent in portal', () => {
     let hostFixture: ComponentFixture<TestContainerComponent>;
     let hostComponent: TestContainerComponent;
     let searchComponent: SearchComponent;
@@ -271,60 +271,41 @@ describe('SearchComponent', () => {
       });
 
       it('should create a searchTermComponent and add it to the specified portalHost', async(() => {
-        hostFixture.whenStable().then(() => {
-          expect(searchComponent['portalhosts'].length).toBe(1);
-          expect('#' + searchComponent['portalhosts'][0].outletElement.id).toBe(
-            mockSearchMode.searchTerm.domHost
-          );
-        });
+        expect(searchComponent['portalhosts'].length).toBe(1);
+        expect('#' + searchComponent['portalhosts'][0].outletElement.id).toBe(
+          mockSearchMode.searchTerm.domHost
+        );
       }));
     });
 
-    describe('should not create - missing searchTerm in InitialState', () => {
+    describe('should not create', () => {
       beforeEach(() => {
-        const newInitialState = { ...mockSearchState, searchTerm: null };
-
         hostFixture = TestBed.createComponent(TestContainerComponent);
         hostComponent = hostFixture.componentInstance;
 
         searchComponent = hostFixture.debugElement.query(
           By.directive(SearchComponent)
         ).componentInstance;
+      });
 
+      it('should not create a searchTermComponent', async(() => {
+        const newInitialState = { ...mockSearchState, searchTerm: null };
         searchComponent.initialState = newInitialState;
         searchComponent.searchMode = mockSearchMode;
 
         hostFixture.detectChanges();
-      });
+
+        expect(searchComponent['portalhosts'].length).toBe(0);
+      }));
 
       it('should not create a searchTermComponent', async(() => {
-        hostFixture.whenStable().then(() => {
-          expect(searchComponent['portalhosts'].length).toBe(0);
-        });
-      }));
-    });
-
-    describe('should not create - missing searchTerm in SearchMode', () => {
-      beforeEach(() => {
         const newSearchMode = { ...mockSearchMode, searchTerm: null };
-
-        hostFixture = TestBed.createComponent(TestContainerComponent);
-        hostComponent = hostFixture.componentInstance;
-
-        searchComponent = hostFixture.debugElement.query(
-          By.directive(SearchComponent)
-        ).componentInstance;
-
         searchComponent.initialState = mockSearchState;
         searchComponent.searchMode = newSearchMode;
 
         hostFixture.detectChanges();
-      });
 
-      it('should not create a searchTermComponent', async(() => {
-        hostFixture.whenStable().then(() => {
-          expect(searchComponent['portalhosts'].length).toBe(0);
-        });
+        expect(searchComponent['portalhosts'].length).toBe(0);
       }));
     });
   });

@@ -58,6 +58,7 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    console.log('on destroy');
     this.portalhosts.forEach(host => host.detach());
     this.portalhosts = [];
     this.subscriptions.unsubscribe();
@@ -85,32 +86,32 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
   ): void {
     if (!searchMode.searchTerm || !searchState.searchTerm) return;
 
-    // needed to avoid ExpressionChangedAfterItHasBeenCheckedError
-    setTimeout(() => {
-      const portalContent = new ComponentPortal(SearchTermComponent);
-      const portalHost = this.getPortalHost(searchMode.searchTerm.domHost);
+    const portalContent = new ComponentPortal(SearchTermComponent);
+    const portalHost = this.getPortalHost(searchMode.searchTerm.domHost);
 
-      if (portalHost !== null) {
-        if (!this.portalhosts.includes(portalHost)) {
-          this.portalhosts.push(portalHost);
-        }
-
-        const searchTermComponent = portalHost.attach(portalContent)
-          .instance as SearchTermComponent;
-
-        searchTermComponent.initialValue = searchState.searchTerm;
-        searchTermComponent.autoComplete = !!(
-          this.autoComplete && this.autoComplete.length
-        );
-        searchTermComponent.autoCompleteValues = this.autoComplete;
-
-        this.subscriptions.add(
-          searchTermComponent.valueChange.subscribe(value =>
-            this.onSearchTermChange(value)
-          )
-        );
+    if (portalHost !== null) {
+      if (!this.portalhosts.includes(portalHost)) {
+        this.portalhosts.push(portalHost);
       }
-    });
+
+      const searchTermComponent = portalHost.attach(portalContent)
+        .instance as SearchTermComponent;
+
+      searchTermComponent.initialValue = searchState.searchTerm;
+      searchTermComponent.autoComplete = !!(
+        this.autoComplete && this.autoComplete.length
+      );
+      searchTermComponent.autoCompleteValues = this.autoComplete;
+
+      // needed to avoid ExpressionChangedAfterItHasBeenCheckedError
+      searchTermComponent.detectChanges();
+
+      this.subscriptions.add(
+        searchTermComponent.valueChange.subscribe(value =>
+          this.onSearchTermChange(value)
+        )
+      );
+    }
   }
 
   private getPortalHost(
