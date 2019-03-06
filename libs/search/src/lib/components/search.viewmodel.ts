@@ -11,7 +11,6 @@ import {
   SearchStateInterface,
   SortModeInterface
 } from '../interfaces';
-import { MockSearchViewModel } from './search.viewmodel.mock';
 
 @Injectable({
   providedIn: 'root'
