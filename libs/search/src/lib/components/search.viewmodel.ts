@@ -275,13 +275,6 @@ export class SearchViewModel {
       .subscribe(filters => this.filters$.next(filters));
   }
 
-  private getMocks(): void {
-    this.searchState$ = new BehaviorSubject<SearchStateInterface>(
-      this.mockViewmodel.searchState$.value
-    );
-    // this.searchFilters$ = this.mockViewmodel.searchFilters$;
-  }
-
   private extractSelectedValuesFromCriteria(
     criteria: SearchFilterCriteriaInterface,
     filterCriteriaSelections = new Map()
