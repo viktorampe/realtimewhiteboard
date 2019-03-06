@@ -288,7 +288,7 @@ describe('SearchComponent', () => {
         ).componentInstance;
       });
 
-      it('should not create a searchTermComponent', async(() => {
+      it('because the initial state is missing searchTerm', () => {
         const newInitialState = { ...mockSearchState, searchTerm: null };
         searchComponent.initialState = newInitialState;
         searchComponent.searchMode = mockSearchMode;
@@ -296,9 +296,9 @@ describe('SearchComponent', () => {
         hostFixture.detectChanges();
 
         expect(searchComponent['portalhosts'].length).toBe(0);
-      }));
+      });
 
-      it('should not create a searchTermComponent', async(() => {
+      it('because the searchMode is missing searchTerm', () => {
         const newSearchMode = { ...mockSearchMode, searchTerm: null };
         searchComponent.initialState = mockSearchState;
         searchComponent.searchMode = newSearchMode;
@@ -306,7 +306,7 @@ describe('SearchComponent', () => {
         hostFixture.detectChanges();
 
         expect(searchComponent['portalhosts'].length).toBe(0);
-      }));
+      });
     });
   });
 });
