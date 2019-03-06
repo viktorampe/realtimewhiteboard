@@ -3,10 +3,9 @@ language: node_js
 node_js:
   - 10.3
 cache:
-  # cache both npm modules and Cypress binary
   npm: true
   directories:
-    - ~/.cache
+    - '~/.cache'
   override:
     - npm ci
 addons:
@@ -31,9 +30,9 @@ deploy:
     bucket: site.student-staging-polpo-be
     access_key_id: AKIAJGQLNGBYXV4THJLQ
     secret_access_key:
-      secure: ZQr+6G0Q0SIO/xck0TFe2y/xIPIIRavj2gKPZCNjg93v51CzaN6nZRcR5D9zmK9yzfmAI6bse2pP6uH8hp5+0UiN6TkPN0poPqFFAXCaPorOrQvN4wbdJTVa/Pe1k69MaSavLp9WnVVdTv53rv909N9gPa3KrKFoBbW+RFpaZOM5TVgq6R5aT2E4s5F1krrjX6mWf/21P4S4Sq5XOLUji2ZPRrV6YC3xgOVSO1CtIGeCl4/cfs5SdG+c/nLteEwqTjdaDHgSTCYWLDntkEqAB5vjG/jYqrZbfP2TW6J5CLeusULnMXrdSiih7pJc+9VTqBQdN9uvdzMexvGdNqaPo6dkg+lfyaZQyhVtcnh4O1qAQU2+CZWESsCa34y+SgZbEOdeoOb5axUjadJZyp+qbksVpke7LhPZOS1bCbHa5dfePog54jCI9t3j9brw1oOUTK4Llt4bYVfWPelCCAYEufmI4/K1KP3engtKCY/3/FVRcnGlHZDcueeyQ26bz7hEhfmoJCeNibMkzxTxFuMUzL8e/hAYFY2RJj+iEeGwK8MKOxXju323E4jovD01OZ6D29NWIqxzmlYC7Nj+WW+2qezz1OtNrnCqL7O9/tBgIKp+17Y2Yn0rG+bLjpSs4/3z8DnlWzfySKobLCwvzi/j2ZbcT2u+P0XQf3KYxOuzk6g=
+      secure: nsbT1i6XCkVKJzGMvqTYhSK7GWgn8PU75+A2gqYX4FZb+5tlso0QACtN2cnTFiiaSbJ3Y0V6/RLqRfPzoM9uNrq0PxRhGP2qL3H5ntod1U5KcmYrIiYcnltQejl4pq19AKEqUam9LGimuljCi5TuaW6FBnMkan0FxgNunhNtsZ6Pw6mIX5GeQlQG1fT2n/eqQOOp92q8DYIkb2X0xuZZZHrLUyjKiSSSL04sjkt+WjVOOfuCZg9HWNdX9hjoUDlR3Yux8Dm/cDQZUAEBSN1t2PYp8+iYtnqbZEuJPeqLASpB5MpoVpo0/ESJHP/i+Zt6nu8NWaVxrx5oRml4x0C0ncvhCPBJkHhx/2K/Kd0BwSpiY9lsnaAn8fNtHrz8izuhWIF7LByqCYXgQWqlss9lqntUnw2xG7ccbNCimZbQeoQ+Bo5oqaEc1geO73htc8zLgijnW7DCq/QTIckZtuDs4CVKRbvAXRAuS3VEi0ycA5cSLFfsmPkA7epX8gMIOtHfoBIP89AGHMOb30FadQs4UWwEoWq1X84W6FR9eh2YBh0anMDA9XTp9ozebsJZGYrUbyGmNLi6MwOzMLCnntk5iGXLguvmZ7aHTYDQePisFujoZ65MQEoyoMbY9H2Q4/60THxt7UUZ7GKiOUuFBddzUvb0JuKjFlyFTlhCqM4zWug=
     skip_cleanup: true
     region: eu-west-1
-    local_dir: dist/app/polpo-classroom-web
+    local_dir: dist/apps/polpo-classroom-web
     on:
-      branch: disabledfornow
+      branch: deploy/staging-polpo-classroom-web

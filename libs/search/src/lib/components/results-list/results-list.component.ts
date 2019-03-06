@@ -69,13 +69,11 @@ export class ResultsListComponent implements OnDestroy, AfterViewInit {
   public loading = false;
 
   private subscriptions: Subscription = new Subscription();
-  private loadedCount = 0;
   private clearResultsTimer: number;
   private scrollEnabled = false;
   private componentFactory: ComponentFactory<
     SearchResultItemComponentInterface
   >;
-  private _searchState: SearchStateInterface;
   private _searchMode: SearchModeInterface;
 
   @Input() itemSize = 100;
@@ -93,12 +91,8 @@ export class ResultsListComponent implements OnDestroy, AfterViewInit {
   @Input()
   set searchState(searchState: SearchStateInterface) {
     if (searchState) {
-      this._searchState = searchState;
-      this.setSearchState(searchState);
+      this.updateViewFromSearchState(searchState);
     }
-  }
-  get searchState(): SearchStateInterface {
-    return this._searchState;
   }
 
   @Input()
@@ -142,8 +136,6 @@ export class ResultsListComponent implements OnDestroy, AfterViewInit {
 
   sortModeClicked(sortMode: SortModeInterface): void {
     if (this.activeSortMode !== sortMode.name) {
-      this.activeSortMode = sortMode.name;
-      this.searchState.sort = sortMode.name;
       this.sortBy.emit(sortMode);
     }
   }
@@ -162,14 +154,14 @@ export class ResultsListComponent implements OnDestroy, AfterViewInit {
     }
   }
 
-  private setSearchState(searchState: SearchStateInterface): void {
+  private updateViewFromSearchState(searchState: SearchStateInterface): void {
+    this.scrollEnabled = false;
     if (searchState.from === undefined || searchState.from === null) {
       // no search running
       this.clearResults();
-      this.scrollEnabled = false;
+      this.loading = false;
     } else if (searchState.from === 0) {
-      this.loadedCount = 0;
-      this.checkForMoreResults();
+      this.loading = true;
       // UX: don't clear results immediately to avoid flicker effects
       this.clearResultsTimer = this.nativeWindow.setTimeout(() => {
         this.clearResults();
@@ -186,8 +178,6 @@ export class ResultsListComponent implements OnDestroy, AfterViewInit {
       this.clearResults();
     }
     if (results.length === 0) {
-      // disable scroll event when there are no new results
-      this.scrollEnabled = false;
       this.loading = false;
       return;
     }
@@ -196,7 +186,6 @@ export class ResultsListComponent implements OnDestroy, AfterViewInit {
     results.forEach(result => this.createResultComponent(result));
 
     // update private state variables
-    this.loadedCount += results.length;
     this.scrollEnabled = true;
 
     // in case there's no scrollbar yet, we should manually trigger search
@@ -224,12 +213,11 @@ export class ResultsListComponent implements OnDestroy, AfterViewInit {
     }
     if (this.listview) this.listview.resetItems();
     this.resultListHost.viewContainerRef.clear();
-    this.loadedCount = 0;
   }
 
   private checkForMoreResults(): void {
     const fromBottom = this.viewPort.measureScrollOffset('bottom');
-    if (this.loadedCount === 0 || fromBottom <= 4 * this.itemSize) {
+    if (fromBottom <= 4 * this.itemSize) {
       // disable multiple event triggers for the same page
       this.scrollEnabled = false;
       this.loading = true;

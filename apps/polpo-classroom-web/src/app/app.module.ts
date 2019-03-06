@@ -4,6 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { CustomSerializer, DalModule } from '@campus/dal';
 import { GuardsModule } from '@campus/guards';
+import { SearchModule } from '@campus/search';
 import { SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
 import { EffectsModule } from '@ngrx/effects';
@@ -26,6 +27,10 @@ import {
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FavIconService, FAVICON_SERVICE_TOKEN } from './services/favicons';
+import {
+  StandardSearchService,
+  STANDARD_SEARCH_SERVICE_TOKEN
+} from './services/standard-search.service';
 
 // if you want to update the buffer (which defaults to 100)
 configureBufferSize(150);
@@ -33,6 +38,7 @@ configureBufferSize(150);
 @NgModule({
   declarations: [AppComponent],
   imports: [
+    SearchModule,
     UiModule,
     BrowserModule,
     AppRoutingModule,
@@ -72,7 +78,8 @@ configureBufferSize(150);
     {
       provide: FAVICON_SERVICE_TOKEN,
       useClass: FavIconService
-    }
+    },
+    { provide: STANDARD_SEARCH_SERVICE_TOKEN, useClass: StandardSearchService }
   ],
   bootstrap: [AppComponent],
   exports: [RouterModule],
