@@ -1,14 +1,9 @@
-import {
-  ComponentPortal,
-  DomPortalHost,
-  DomPortalOutlet
-} from '@angular/cdk/portal';
+import { ComponentPortal, DomPortalHost } from '@angular/cdk/portal';
 import {
   ApplicationRef,
   Component,
   ComponentFactoryResolver,
   ComponentRef,
-  EmbeddedViewRef,
   Injector,
   Input,
   OnChanges,
@@ -18,7 +13,6 @@ import {
   SimpleChanges
 } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
-import { take } from 'rxjs/operators';
 import {
   SearchFilterComponentInterface,
   SearchFilterCriteriaInterface,
@@ -39,9 +33,13 @@ import { SearchStateInterface } from './../../interfaces/search-state.interface'
 })
 export class SearchComponent implements OnInit, OnDestroy, OnChanges {
   private subscriptions = new Subscription();
-  private portalHosts: { [key: string]: DomPortalHost } = {};
-  private portalOutlets: { [key: string]: DomPortalOutlet } = {};
-  private domHosts: { [key: string]: Element } = {};
+  private filterSubscriptions = new Subscription();
+  private filterPortalHosts: {
+    [key: string]: {
+      host: DomPortalHost;
+      filters: ComponentRef<any>[];
+    };
+  } = {};
 
   @Input() public searchMode: SearchModeInterface;
   @Input() public autoComplete: string[];
@@ -65,8 +63,16 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnDestroy() {
+    // remove filters
+    this.removeFilters();
+
+    // detach portalhost
+    Object.values(this.filterPortalHosts).forEach(portalHost =>
+      portalHost.host.detach()
+    );
+
+    // clean up subscriptions
     this.subscriptions.unsubscribe();
-    Object.values(this.portalHosts).forEach(portal => portal.detach());
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -92,113 +98,58 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
   private createFilters(): void {
     this.subscriptions.add(
       this.searchViewmodel.searchFilters$.subscribe(searchFilters => {
-        if (!searchFilters) {
-          return;
-        }
-        searchFilters.forEach(filter => {
-          this.addFilter(filter);
-          // this.addFilterToPage(filter);
-        });
+        // remove old filters
+        this.removeFilters();
+
+        // add updated filters
+        searchFilters.forEach(filter => this.addFilter(filter));
       })
     );
   }
 
-  private addFilterToPage(filter: SearchFilterInterface): void {
-    // 0. Get DOM element where to append component
-    const targetEl =
-      this.domHosts[filter.domHost] || document.querySelector(filter.domHost);
-    if (!this.domHosts[filter.domHost]) {
-      if (!targetEl) {
-        return;
-      }
-      // cache DOM element
-      this.domHosts[filter.domHost] = targetEl;
-    }
-
-    // 1. Create a component reference from the component
-    const componentRef = this.componentFactoryResolver
-      .resolveComponentFactory(filter.component)
-      .create(this.injector);
-    if (!componentRef) {
-      return;
-    }
-
-    const filterItem: SearchFilterComponentInterface = componentRef.instance;
-    filterItem.filterCriteria = filter.criteria;
-    filterItem.filterSelectionChange
-      .pipe(take(1))
-      .subscribe((criteria: SearchFilterCriteriaInterface) => {
-        this.searchViewmodel.changeFilters(criteria);
-      });
-
-    // 2. Attach component to the appRef so that it's inside the ng component tree
-    this.appRef.attachView(componentRef.hostView);
-
-    // 3. Get DOM element from component
-    const domElem = (componentRef.hostView as EmbeddedViewRef<any>)
-      .rootNodes[0] as HTMLElement;
-
-    // 4. Append component DOM element to the page
-    targetEl.appendChild(domElem);
-  }
-
-  private removeFilterComponent(
-    componentRef: ComponentRef<SearchFilterInterface>
-  ) {
-    // 1. Detach the view from the ApplicationRef so that no change detection will be performed by Angular.
-    this.appRef.detachView(componentRef.hostView);
-    // 2. Destroy the Component Ref. This will automatically remove the DOM element from the document.
-    componentRef.destroy();
-  }
-
   private addFilter(filter: SearchFilterInterface): void {
-    // find portal host
     const portalHost = this.getPortalHost(filter.domHost);
-    // const portalHost = this.getPortalHost(filter.domHost);
-    if (!portalHost) {
+    if (!portalHost || !portalHost.host) {
       return;
     }
+    // create component
     const portal = new ComponentPortal(filter.component);
 
-    // const filterItem = portalHost.attach(portal)
-    const filterItem = portalHost.attachComponentPortal(portal)
-      .instance as SearchFilterComponentInterface;
+    // attach filter
+    const componentRef = portalHost.host.attachComponentPortal(portal);
+    portalHost.filters.push(componentRef);
 
+    // set inputs
+    const filterItem = componentRef.instance;
     filterItem.filterCriteria = filter.criteria;
-    filterItem.filterSelectionChange
-      .pipe(take(1))
-      .subscribe((criteria: SearchFilterCriteriaInterface) => {
-        this.searchViewmodel.changeFilters(criteria);
-      });
+
+    // subscribe to outputs
+    this.filterSubscriptions.add(
+      filterItem.filterSelectionChange.subscribe(
+        (criteria: SearchFilterCriteriaInterface) => {
+          this.searchViewmodel.changeFilters(criteria);
+        }
+      )
+    );
+
+    // solve "Expression has changed after it was checked" error
+    componentRef.changeDetectorRef.detectChanges();
   }
 
-  private getPortalOutlet(
-    selector: string,
-    componentFactoryResolver: ComponentFactoryResolver = this
-      .componentFactoryResolver,
-    appRef: ApplicationRef = this.appRef,
-    injector: Injector = this.injector
-  ): DomPortalOutlet {
-    // check if already created
-    if (this.portalOutlets[selector]) {
-      return this.portalOutlets[selector];
-    }
+  private removeFilters(): void {
+    // close subscriptions
+    this.filterSubscriptions.unsubscribe();
 
-    //TODO  e2e test, see https://github.com/diekeure/campus/issues/206
-    const el = document.querySelector(selector);
-    if (el === null) {
-      return null;
-    }
+    // remove filters from portals
+    Object.values(this.filterPortalHosts).forEach(portalHost => {
+      portalHost.filters.forEach(componentRef => {
+        // exclude element from change detection
+        this.appRef.detachView(componentRef.hostView);
 
-    const portalOutlet = new DomPortalOutlet(
-      el,
-      componentFactoryResolver,
-      appRef,
-      injector
-    );
-    this.portalOutlets[selector] = portalOutlet;
-
-    return portalOutlet;
+        // remove element from html
+        componentRef.destroy();
+      });
+    });
   }
 
   private getPortalHost(
@@ -207,10 +158,13 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
       .componentFactoryResolver,
     appRef: ApplicationRef = this.appRef,
     injector: Injector = this.injector
-  ): DomPortalHost {
+  ): {
+    host: DomPortalHost;
+    filters: ComponentRef<SearchFilterComponentInterface>[];
+  } {
     // check if already created
-    if (this.portalHosts[selector]) {
-      return this.portalHosts[selector];
+    if (this.filterPortalHosts[selector]) {
+      return this.filterPortalHosts[selector];
     }
 
     //TODO  e2e test, see https://github.com/diekeure/campus/issues/206
@@ -225,8 +179,8 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
       appRef,
       injector
     );
-    this.portalHosts[selector] = portalHost;
+    this.filterPortalHosts[selector] = { host: portalHost, filters: [] };
 
-    return portalHost;
+    return this.filterPortalHosts[selector];
   }
 }

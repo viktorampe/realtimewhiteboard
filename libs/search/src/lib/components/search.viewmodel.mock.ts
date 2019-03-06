@@ -81,28 +81,32 @@ export class MockSearchViewModel
         domHost: '#hostleft'
       },
       {
-        criteria: new SearchFilterCriteriaFixture({}, [
-          new SearchFilterCriteriaValuesFixture(),
-          new SearchFilterCriteriaValuesFixture({
-            data: { id: 2, name: 'foo' }
-          }),
-          new SearchFilterCriteriaValuesFixture({
-            data: { id: 3, name: 'foo bar' }
-          })
-        ]),
+        criteria: [
+          new SearchFilterCriteriaFixture({}, [
+            new SearchFilterCriteriaValuesFixture(),
+            new SearchFilterCriteriaValuesFixture({
+              data: { id: 2, name: 'foo' }
+            }),
+            new SearchFilterCriteriaValuesFixture({
+              data: { id: 3, name: 'foo bar' }
+            })
+          ])
+        ],
         component: BreadcrumbFilterComponent,
         domHost: '#hosttop'
       },
       {
-        criteria: new SearchFilterCriteriaFixture({}, [
-          new SearchFilterCriteriaValuesFixture(),
-          new SearchFilterCriteriaValuesFixture({
-            data: { id: 2, name: 'foo' }
-          }),
-          new SearchFilterCriteriaValuesFixture({
-            data: { id: 3, name: 'foo bar' }
-          })
-        ]),
+        criteria: [
+          new SearchFilterCriteriaFixture({}, [
+            new SearchFilterCriteriaValuesFixture(),
+            new SearchFilterCriteriaValuesFixture({
+              data: { id: 2, name: 'foo' }
+            }),
+            new SearchFilterCriteriaValuesFixture({
+              data: { id: 3, name: 'foo bar' }
+            })
+          ])
+        ],
         component: ColumnFilterComponent,
         domHost: '#hostleft'
       },
