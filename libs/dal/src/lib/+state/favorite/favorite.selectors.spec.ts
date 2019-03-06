@@ -1,11 +1,15 @@
 import { FavoriteQueries } from '.';
-import { FavoriteInterface } from '../../+models';
+import { FavoriteInterface, FavoriteTypesEnum } from '../../+models';
 import { State } from './favorite.reducer';
 
 describe('Favorite Selectors', () => {
-  function createFavorite(id: number): FavoriteInterface | any {
+  function createFavorite(
+    id: number,
+    type: FavoriteTypesEnum = FavoriteTypesEnum.area
+  ): FavoriteInterface | any {
     return {
-      id: id
+      id: id,
+      type: type
     };
   }
 
@@ -94,6 +98,30 @@ describe('Favorite Selectors', () => {
     it('getById() should return undefined if the entity is not present', () => {
       const results = FavoriteQueries.getById(storeState, { id: 9 });
       expect(results).toBe(undefined);
+    });
+
+    it('getByType() should return all favorites with the provided type', () => {
+      favoriteState = createState(
+        [
+          createFavorite(4, FavoriteTypesEnum.boeke),
+          createFavorite(1),
+          createFavorite(2, FavoriteTypesEnum.boeke),
+          createFavorite(3, FavoriteTypesEnum.bundle)
+        ],
+        true,
+        'no error'
+      );
+
+      storeState = { favorites: favoriteState };
+
+      const results = FavoriteQueries.getByType(storeState, {
+        type: FavoriteTypesEnum.boeke
+      });
+
+      expect(results).toEqual([
+        createFavorite(2, FavoriteTypesEnum.boeke),
+        createFavorite(4, FavoriteTypesEnum.boeke)
+      ]);
     });
   });
 });

@@ -1,4 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { FavoriteTypesEnum } from '../../+models';
 import {
   NAME,
   selectAll,
@@ -20,11 +21,20 @@ export const getLoaded = createSelector(
   (state: State) => state.loaded
 );
 
-export const getAll = createSelector(selectFavoriteState, selectAll);
+export const getAll = createSelector(
+  selectFavoriteState,
+  selectAll
+);
 
-export const getCount = createSelector(selectFavoriteState, selectTotal);
+export const getCount = createSelector(
+  selectFavoriteState,
+  selectTotal
+);
 
-export const getIds = createSelector(selectFavoriteState, selectIds);
+export const getIds = createSelector(
+  selectFavoriteState,
+  selectIds
+);
 
 export const getAllEntities = createSelector(
   selectFavoriteState,
@@ -45,7 +55,6 @@ export const getByIds = createSelector(
   }
 );
 
-
 /**
  * returns array of objects in the order of the given ids
  * @example
@@ -56,4 +65,12 @@ export const getByIds = createSelector(
 export const getById = createSelector(
   selectFavoriteState,
   (state: State, props: { id: number }) => state.entities[props.id]
+);
+
+export const getByType = createSelector(
+  selectFavoriteState,
+  (state: State, props: { type: FavoriteTypesEnum }) =>
+    Object.entries(state.entities)
+      .filter(([key, value]) => value.type === props.type)
+      .map(([key, value]) => state.entities[key])
 );
