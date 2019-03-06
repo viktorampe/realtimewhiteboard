@@ -313,9 +313,6 @@ describe('SearchComponent', () => {
           'de kans dat deze string at random is ingevoerd, is nogal klein';
 
         const searchTermComponent = portals[0] as SearchTermComponent;
-
-        expect(searchTermComponent.valueChange.observers.length).toBe(1);
-
         searchComponent.onSearchTermChange = jest.fn();
 
         searchTermComponent.valueChange.next(mockInput);
