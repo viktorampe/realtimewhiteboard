@@ -16,6 +16,7 @@ export class FavoriteEffects {
     {
       run: (action: LoadFavorites, state: DalState) => {
         if (!action.payload.force && state.favorites.loaded) return;
+        // TODO: uncomment when favoriteService exists
         // return this.favoriteService
         //   .getAllForUser(action.payload.userId)
         //   .pipe(map(favorites => new FavoritesLoaded({ favorites })));
@@ -28,8 +29,7 @@ export class FavoriteEffects {
 
   constructor(
     private actions: Actions,
-    private dataPersistence: DataPersistence<DalState>
-  ) // @Inject(FAVORITE_SERVICE_TOKEN)
-  // private favoriteService: FavoriteServiceInterface
+    private dataPersistence: DataPersistence<DalState> // @Inject(FAVORITE_SERVICE_TOKEN)
+  ) // private favoriteService: FavoriteServiceInterface
   {}
 }
