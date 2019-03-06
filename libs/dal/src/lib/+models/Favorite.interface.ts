@@ -4,8 +4,17 @@ import { LearningAreaInterface } from './LearningArea.interface';
 import { PersonInterface } from './Person.interface';
 import { TaskInterface } from './Task.interface';
 
+export enum FavoriteTypesEnum {
+  area = 'area',
+  search = 'search',
+  educontent = 'educontent',
+  bundle = 'bundle',
+  task = 'task',
+  boeke = 'boek-e'
+}
+
 export interface FavoriteInterface {
-  type: string;
+  type: FavoriteTypesEnum;
   name?: string;
   criteria?: any;
   created: Date;
