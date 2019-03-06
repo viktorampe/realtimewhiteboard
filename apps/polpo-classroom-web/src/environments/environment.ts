@@ -1,9 +1,7 @@
 import { Type } from '@angular/core';
-import {
-  SearchFilterFactory,
-  SearchResultItemComponentInterface
-} from '@campus/search';
+import { SearchFilterFactory } from '@campus/search';
 import { EnvironmentInterface } from '@campus/shared';
+import { PolpoResultItemComponent } from 'libs/devlib/src/lib/polpo-result-item/polpo-result-item.component';
 
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build ---prod` replaces `environment.ts` with `environment.prod.ts`.
@@ -296,10 +294,27 @@ export const environment: EnvironmentInterface = {
       name: 'toc',
       label: 'Inhoudstafel',
       dynamicFilters: false,
+      //TODO: All '{} as Type' must be replaced with actual components
       searchFilterFactory: {} as Type<SearchFilterFactory>,
       results: {
-        component: {} as Type<SearchResultItemComponentInterface>,
-        sortModes: null,
+        component: PolpoResultItemComponent,
+        sortModes: [
+          {
+            description: 'book',
+            name: 'book',
+            icon: 'book'
+          },
+          {
+            description: 'bundle',
+            name: 'bundle',
+            icon: 'bundle'
+          },
+          {
+            description: 'taak',
+            name: 'taak',
+            icon: 'taak'
+          }
+        ],
         pageSize: 20
       }
     },
@@ -309,8 +324,24 @@ export const environment: EnvironmentInterface = {
       dynamicFilters: false,
       searchFilterFactory: {} as Type<SearchFilterFactory>,
       results: {
-        component: {} as Type<SearchResultItemComponentInterface>,
-        sortModes: null,
+        component: PolpoResultItemComponent,
+        sortModes: [
+          {
+            description: 'book',
+            name: 'book',
+            icon: 'book'
+          },
+          {
+            description: 'bundle',
+            name: 'bundle',
+            icon: 'bundle'
+          },
+          {
+            description: 'taak',
+            name: 'taak',
+            icon: 'taak'
+          }
+        ],
         pageSize: 20
       }
     },
@@ -320,8 +351,24 @@ export const environment: EnvironmentInterface = {
       dynamicFilters: true,
       searchFilterFactory: {} as Type<SearchFilterFactory>,
       results: {
-        component: {} as Type<SearchResultItemComponentInterface>,
-        sortModes: [],
+        component: PolpoResultItemComponent,
+        sortModes: [
+          {
+            description: 'book',
+            name: 'book',
+            icon: 'book'
+          },
+          {
+            description: 'bundle',
+            name: 'bundle',
+            icon: 'bundle'
+          },
+          {
+            description: 'taak',
+            name: 'taak',
+            icon: 'taak'
+          }
+        ],
         pageSize: 20
       }
     }
