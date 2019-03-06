@@ -28,6 +28,7 @@ import { SearchStateInterface } from './../../interfaces/search-state.interface'
 })
 export class SearchComponent implements OnInit, OnChanges, OnDestroy {
   private portalhosts: DomPortalHost[] = [];
+  private portals = [];
   private subscriptions = new Subscription();
 
   @Input() public searchMode: SearchModeInterface;
@@ -58,7 +59,6 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    console.log('on destroy');
     this.portalhosts.forEach(host => host.detach());
     this.portalhosts = [];
     this.subscriptions.unsubscribe();
@@ -94,8 +94,9 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
         this.portalhosts.push(portalHost);
       }
 
-      const searchTermComponent = portalHost.attach(portalContent)
-        .instance as SearchTermComponent;
+      const componentRef = portalHost.attachComponentPortal(portalContent);
+      const searchTermComponent = componentRef.instance;
+      this.portals.push(searchTermComponent);
 
       searchTermComponent.initialValue = searchState.searchTerm;
       searchTermComponent.autoComplete = !!(
@@ -104,7 +105,7 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
       searchTermComponent.autoCompleteValues = this.autoComplete;
 
       // needed to avoid ExpressionChangedAfterItHasBeenCheckedError
-      searchTermComponent.detectChanges();
+      componentRef.changeDetectorRef.detectChanges();
 
       this.subscriptions.add(
         searchTermComponent.valueChange.subscribe(value =>

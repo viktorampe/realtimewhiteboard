@@ -1,3 +1,4 @@
+import { DomPortalOutlet } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
 import { Component, NgModule, SimpleChange, Type } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
@@ -18,10 +19,10 @@ import {
 import { SearchModule } from '../../search.module';
 import { ResultItemBase } from '../results-list/result.component.base';
 import { ResultsListComponent } from '../results-list/results-list.component';
-import { SearchTermComponent } from '../search-term/search-term.component';
 import { SearchViewModel } from '../search.viewmodel';
 import { MockSearchViewModel } from '../search.viewmodel.mock';
 import { SortModeInterface } from './../../interfaces/search-mode-interface';
+import { SearchTermComponent } from './../search-term/search-term.component';
 import { SearchComponent } from './search.component';
 
 @Component({
@@ -249,6 +250,9 @@ describe('SearchComponent', () => {
     let hostComponent: TestContainerComponent;
     let searchComponent: SearchComponent;
 
+    let portals: any[];
+    let portalHosts: DomPortalOutlet[];
+
     describe('should create', () => {
       // creating a host component with a portal component
       beforeEach(() => {
@@ -262,6 +266,9 @@ describe('SearchComponent', () => {
         searchComponent.initialState = mockSearchState;
         searchComponent.searchMode = mockSearchMode;
 
+        portals = searchComponent['portals'];
+        portalHosts = searchComponent['portalhosts'];
+
         hostFixture.detectChanges();
       });
 
@@ -271,9 +278,51 @@ describe('SearchComponent', () => {
       });
 
       it('should create a searchTermComponent and add it to the specified portalHost', () => {
-        expect(searchComponent['portalhosts'].length).toBe(1);
-        expect('#' + searchComponent['portalhosts'][0].outletElement.id).toBe(
+        // does the portalHost exist and does the searchComponent have a reference to it?
+        expect(portalHosts.length).toBe(1);
+
+        const portalHost = portalHosts[0];
+
+        // is the refernce to the correct portalHost?
+        expect('#' + portalHost.outletElement.id).toBe(
           mockSearchMode.searchTerm.domHost
+        );
+
+        const portalHostDE = hostFixture.debugElement.query(
+          By.css('#' + portalHost.outletElement.id)
+        );
+
+        expect(portalHost.outletElement).toBe(portalHostDE.nativeElement);
+
+        // does the SearchTermComponent exist?
+        // is the SearchTermComponent actually inside the portalHost
+        // TODO: write better test -> debugElement.query not useable
+        expect(portalHost.outletElement.innerHTML).toContain(
+          '<campus-search-term>'
+        );
+
+        expect(portals.length).toBe(1);
+
+        const searchTermComponent = portals[0] as SearchTermComponent;
+
+        expect(searchTermComponent).toBeTruthy();
+      });
+
+      it('should subscribe to the valueChange event of the searchTermComponent', () => {
+        const mockInput =
+          'de kans dat deze string at random is ingevoerd, is nogal klein';
+
+        const searchTermComponent = portals[0] as SearchTermComponent;
+
+        expect(searchTermComponent.valueChange.observers.length).toBe(1);
+
+        searchComponent.onSearchTermChange = jest.fn();
+
+        searchTermComponent.valueChange.next(mockInput);
+
+        expect(searchComponent.onSearchTermChange).toHaveBeenCalled();
+        expect(searchComponent.onSearchTermChange).toHaveBeenCalledWith(
+          mockInput
         );
       });
     });
@@ -286,6 +335,9 @@ describe('SearchComponent', () => {
         searchComponent = hostFixture.debugElement.query(
           By.directive(SearchComponent)
         ).componentInstance;
+
+        portals = searchComponent['portals'];
+        portalHosts = searchComponent['portalhosts'];
       });
 
       it('because the initial state is missing searchTerm', () => {
@@ -295,7 +347,8 @@ describe('SearchComponent', () => {
 
         hostFixture.detectChanges();
 
-        expect(searchComponent['portalhosts'].length).toBe(0);
+        expect(portalHosts.length).toBe(0);
+        expect(portals.length).toBe(0);
       });
 
       it('because the searchMode is missing searchTerm', () => {
@@ -305,7 +358,8 @@ describe('SearchComponent', () => {
 
         hostFixture.detectChanges();
 
-        expect(searchComponent['portalhosts'].length).toBe(0);
+        expect(portalHosts.length).toBe(0);
+        expect(portals.length).toBe(0);
       });
     });
   });
