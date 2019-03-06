@@ -3,13 +3,19 @@ import { LearningAreaFixture } from '@campus/dal';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
 import {
+  SearchFilterCriteriaFixture,
+  SearchFilterCriteriaValuesFixture
+} from '../+fixtures/search-filter-criteria.fixture';
+import {
   SearchFilterCriteriaInterface,
   SearchFilterFactory,
   SearchFilterInterface,
   SearchModeInterface,
+  SearchResultInterface,
   SearchStateInterface,
   SortModeInterface
 } from '../interfaces';
+import { CheckboxLineFilterComponent } from './checkbox-line-filter/checkbox-line-filter-component';
 import { SearchViewModel } from './search.viewmodel';
 
 class MockFilterFactory implements SearchFilterFactory {
@@ -323,7 +329,135 @@ describe('SearchViewModel', () => {
       expect(spy).toHaveBeenCalledWith(mockSearchState);
     });
   });
+
+  describe('searchFilters$', () => {
+    it('should have an empty array as results to start with', () => {
+      expect(searchViewModel.searchFilters$).toBeObservable(
+        hot('a', { a: [] })
+      );
+    });
+    it('should have an empty array if only the searchState$ is updated', () => {
+      searchViewModel.searchState$.next(getTestSearchState('someName', [1]));
+
+      expect(searchViewModel.searchFilters$).toBeObservable(
+        hot('a', { a: [] })
+      );
+    });
+    it('should have an empty array if only the results$ is updated', () => {
+      searchViewModel.updateResult(
+        getTestSearchResult('someOtherName', new Map([[1, 0]]))
+      );
+
+      expect(searchViewModel.searchFilters$).toBeObservable(
+        hot('a', { a: [] })
+      );
+    });
+    it('should have an empty array if only the searchState$ and the results$ are is updated', () => {
+      searchViewModel.searchState$.next(getTestSearchState('someName', [1]));
+      searchViewModel.updateResult(
+        getTestSearchResult('someOtherName', new Map([[1, 0]]))
+      );
+
+      expect(searchViewModel.searchFilters$).toBeObservable(
+        hot('a', { a: [] })
+      );
+    });
+    it('should return the unchanged filters if no state and no result updates are done with the prediction set to 0 if it was not set before', () => {
+      [true, false].forEach(criteriaIsArray => {
+        searchViewModel['filters$'].next([
+          getTestFilter('firstFilter', 140, undefined, false, criteriaIsArray),
+          getTestFilter('secondFilter', 3484, 38, false, criteriaIsArray)
+        ]);
+        expect(searchViewModel.searchFilters$).toBeObservable(
+          hot('a', {
+            a: [
+              getTestFilter('firstFilter', 140, 0, false, criteriaIsArray),
+              getTestFilter('secondFilter', 3484, 38, false, criteriaIsArray)
+            ]
+          })
+        );
+      });
+    });
+    it('should update selections and predictions for all criteria, including children', () => {
+      [true, false].forEach(criteriaIsArray => {
+        const initFilters = [
+          getTestFilter(
+            'shouldNotBeChanged',
+            0,
+            1,
+            false,
+            criteriaIsArray,
+            getTestFilterCriteria('shouldAlsoNotChange', 1999, 1, false)
+          ),
+          getTestFilter(
+            'onlyChildShouldChange',
+            0,
+            1,
+            false,
+            criteriaIsArray,
+            getTestFilterCriteria('updatingFilter', 1999, 1, false)
+          ),
+          getTestFilter('updatingFilter', 122, 39, false, criteriaIsArray),
+          getTestFilter('updatingFilter', 140, 40, false, criteriaIsArray),
+          getTestFilter('updatingFilter', 3048, 3380, false, criteriaIsArray),
+          getTestFilter(
+            'nonUpdatingFilter',
+            3048,
+            3380,
+            false,
+            criteriaIsArray
+          ),
+          getTestFilter('nonUpdatingFilter', 140, 40, false, criteriaIsArray)
+        ];
+        const expectedFilters = [
+          getTestFilter(
+            'shouldNotBeChanged',
+            0,
+            1,
+            false,
+            criteriaIsArray,
+            getTestFilterCriteria('shouldAlsoNotChange', 1999, 1, false)
+          ),
+          getTestFilter(
+            'onlyChildShouldChange',
+            0,
+            1,
+            false,
+            criteriaIsArray,
+            getTestFilterCriteria('updatingFilter', 1999, 1, true) // false to true
+          ),
+          getTestFilter('updatingFilter', 122, 30, false, criteriaIsArray), //39 to 30
+          getTestFilter('updatingFilter', 140, 40, true, criteriaIsArray), //false to true
+          getTestFilter('updatingFilter', 3048, 390, true, criteriaIsArray), //3380 to 390 and false to true
+          getTestFilter(
+            'nonUpdatingFilter',
+            3048,
+            3380,
+            false,
+            criteriaIsArray
+          ),
+          getTestFilter('nonUpdatingFilter', 140, 40, false, criteriaIsArray)
+        ];
+        const searchResults = getTestSearchResult(
+          'updatingFilter',
+          new Map([[122, 30], [3048, 390]])
+        );
+        const searchState = getTestSearchState('updatingFilter', [
+          140,
+          1999,
+          3048
+        ]);
+        searchViewModel.updateResult(searchResults);
+        searchViewModel.searchState$.next(searchState);
+        searchViewModel['filters$'].next(initFilters);
+        expect(searchViewModel.searchFilters$).toBeObservable(
+          hot('a', { a: expectedFilters })
+        );
+      });
+    });
+  });
 });
+
 function getTestSearchResult(
   name: string,
   predictions: Map<string | number, number>
