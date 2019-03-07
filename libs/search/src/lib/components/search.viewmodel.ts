@@ -48,8 +48,8 @@ export class SearchViewModel {
             filter,
             filterCriteriaSelections,
             filterCriteriaPredictions
-        )
-    );
+          )
+        );
       })
     );
   }
@@ -199,13 +199,13 @@ export class SearchViewModel {
       const criteriaPrediction = criteriaPredictions.get(
         value.data[criterium.keyProperty]
       );
-      if (criteriaPrediction) {
+      if (criteriaPrediction !== undefined) {
         //if there is prediction data for this value, return the new prediction
         return criteriaPrediction.valueOf();
       }
     }
     //if there is no new prediction data, return the old data or 0
-    return value.prediction || 0;
+    return value.prediction === undefined ? null : value.prediction;
   }
 
   public reset(
