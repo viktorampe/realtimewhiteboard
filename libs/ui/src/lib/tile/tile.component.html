@@ -1,8 +1,24 @@
-<div class="ui-tile">
+<div class="ui-tile" [style.background-color]="color">
   <div class="ui-tile__content">
     <!-- <i></i> -->
-    <div class="ui-tile__content__icon">ico</div>
-    <div class="ui-tile__content__label">LearningArea Name</div>
+    <mat-icon
+      class="ui-tile__content__icon"
+      *ngIf="icon"
+      [svgIcon]="icon"
+    ></mat-icon>
+    <div class="ui-tile__content__label">{{ label }}</div>
   </div>
-  <div class="ui-tile__actions"> <a href="#">Hello</a> </div>
+  <div class="ui-tile__actions">
+    <div
+      *ngFor="let action of secondaryActions"
+      class="ui-tile__actions__action"
+    >
+      <mat-icon
+        class="ui-tile__actions__action__icon"
+        *ngIf="action.icon"
+        [svgIcon]="action.icon"
+      ></mat-icon>
+      <a class="ui-tile__actions__action__label" href="#">{{ action.label }}</a>
+    </div>
+  </div>
 </div>

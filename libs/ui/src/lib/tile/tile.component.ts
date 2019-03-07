@@ -8,6 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 export class TileComponent implements OnInit {
   @Input() label: string;
   @Input() icon: string;
+  @Input() color: string;
   @Input() secondaryActions: TileSecondaryActionInterface[];
 
   constructor() {}
