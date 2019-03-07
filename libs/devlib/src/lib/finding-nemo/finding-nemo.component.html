@@ -1,9 +1,9 @@
 <p>{{ searchFilters$ | async | json }}</p>
 <div id="search-term-container"></div>
 
-<div #hosttop></div>
+<div searchPortal="hostTop"></div>
 <campus-collapsible-sheet>
-  <div aside #hostleft></div>
+  <div aside searchPortal="hostLeft"></div>
   <campus-search
     main
     [searchMode]="searchMode"
