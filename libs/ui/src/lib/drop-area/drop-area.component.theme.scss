@@ -1,0 +1,8 @@
+@mixin ui-drop-area-theme() {
+  $ui-drop-area-width: 280px !default;
+  $ui-drop-area-height: 105px !default;
+  .ui-drop-area {
+    width: $ui-drop-area-width;
+    height: $ui-drop-area-height;
+  }
+}
