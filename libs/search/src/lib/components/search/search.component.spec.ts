@@ -3,11 +3,11 @@ import {
   AfterViewInit,
   Component,
   NgModule,
+  QueryList,
   SimpleChange,
   Type,
   ViewChild,
-  ViewChildren,
-  ViewContainerRef
+  ViewChildren
 } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
@@ -15,6 +15,7 @@ import { By } from '@angular/platform-browser';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { LearningAreaFixture } from '@campus/dal';
+import { SearchPortalDirective } from '@campus/search';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { hot } from 'jasmine-marbles';
@@ -46,13 +47,13 @@ class ResultItemComponent extends ResultItemBase {
   // tslint:disable-next-line:component-selector
   selector: 'test-container',
   template: `
-    <div #mockHost id="mockHost"></div>
+    <div searchPortal="mockHost"></div>
     <campus-search></campus-search>
   `
 })
 export class TestContainerComponent implements AfterViewInit {
-  @ViewChildren('mockHost', { read: ViewContainerRef })
-  private portalHosts;
+  @ViewChildren(SearchPortalDirective)
+  private portalHosts: QueryList<SearchPortalDirective>;
 
   @ViewChild(SearchComponent) private searchComponent: SearchComponent;
 
@@ -292,12 +293,9 @@ describe('SearchComponent', () => {
         // does the portalHost exist and does the searchComponent have a reference to it?
         expect(searchComponent.portalHosts.length).toBe(1);
 
-        const portalHost = searchComponent.portalHosts.first;
-
-        // is the reference to the correct portalHost?
-        expect(portalHost.element.nativeElement.id).toBe(
-          mockSearchMode.searchTerm.domHost
-        );
+        const portalHost = searchComponent.portalHosts.find(
+          portal => portal.searchPortal === mockSearchMode.searchTerm.domHost
+        ).viewContainerRef;
 
         // does the portalHost have an inner view?
         expect(portalHost.length).toBe(1);
@@ -314,9 +312,12 @@ describe('SearchComponent', () => {
           'de kans dat deze string at random is ingevoerd, is nogal klein';
 
         // get reference to searchComponent, see test above for details
-        const searchTermComponent = searchComponent.portalHosts.first.get(0)[
-          '_view'
-        ].nodes[1].instance as SearchTermComponent;
+        const searchTermComponent = searchComponent.portalHosts
+          .find(
+            portal => portal.searchPortal === mockSearchMode.searchTerm.domHost
+          )
+          .viewContainerRef.get(0)['_view'].nodes[1]
+          .instance as SearchTermComponent;
 
         searchComponent.onSearchTermChange = jest.fn();
 
@@ -346,8 +347,10 @@ describe('SearchComponent', () => {
 
         hostFixture.detectChanges();
 
+        const portalHost = searchComponent.portalHosts.first.viewContainerRef;
+
         // no projected views in portalHost = no searchTerm
-        expect(searchComponent.portalHosts.first.length).toBe(0);
+        expect(portalHost.length).toBe(0);
       });
 
       it('because the searchMode is missing searchTerm', () => {
@@ -357,8 +360,10 @@ describe('SearchComponent', () => {
 
         hostFixture.detectChanges();
 
+        const portalHost = searchComponent.portalHosts.first.viewContainerRef;
+
         // no projected views in portalHost = no searchTerm
-        expect(searchComponent.portalHosts.first.length).toBe(0);
+        expect(portalHost.length).toBe(0);
       });
     });
   });

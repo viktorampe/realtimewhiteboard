@@ -34,6 +34,7 @@ import {
   EnvironmentIconMappingInterface,
   EnvironmentLogoutInterface,
   EnvironmentMessagesFeatureInterface,
+  EnvironmentSearchModesInterface,
   EnvironmentSsoInterface,
   EnvironmentWebsiteInterface,
   ENVIRONMENT_ALERTS_FEATURE_TOKEN,
@@ -43,6 +44,7 @@ import {
   ENVIRONMENT_LOGIN_TOKEN,
   ENVIRONMENT_LOGOUT_TOKEN,
   ENVIRONMENT_MESSAGES_FEATURE_TOKEN,
+  ENVIRONMENT_SEARCHMODES_TOKEN,
   ENVIRONMENT_SSO_TOKEN,
   ENVIRONMENT_WEBSITE_TOKEN
 } from './interfaces';
@@ -121,7 +123,8 @@ export class SharedModule {
     environmentWebsite: EnvironmentWebsiteInterface,
     environmentLogout: EnvironmentLogoutInterface,
     environmentApi: EnvironmentApiInterface,
-    environmentSsoSettings: EnvironmentSsoInterface
+    environmentSsoSettings: EnvironmentSsoInterface,
+    environmentSearchModes: EnvironmentSearchModesInterface
   ): ModuleWithProviders {
     return {
       ngModule: SharedModule,
@@ -161,6 +164,10 @@ export class SharedModule {
         {
           provide: ENVIRONMENT_SSO_TOKEN,
           useValue: environmentSsoSettings
+        },
+        {
+          provide: ENVIRONMENT_SEARCHMODES_TOKEN,
+          useValue: environmentSearchModes
         }
       ]
     };

@@ -27,6 +27,7 @@ import {
 import { SearchTermComponent } from './components/search-term/search-term.component';
 import { SearchComponent } from './components/search/search.component';
 import { SelectFilterComponent } from './components/select-filter-component/select-filter.component';
+import { SearchPortalDirective } from './directives/search-portal.directive';
 
 @NgModule({
   imports: [
@@ -58,7 +59,8 @@ import { SelectFilterComponent } from './components/select-filter-component/sele
     SearchComponent,
     CheckboxListFilterComponent,
     CheckboxFilterComponent,
-    ColumnFilterComponent
+    ColumnFilterComponent,
+    SearchPortalDirective
   ],
   exports: [
     BreadcrumbFilterComponent,
@@ -70,7 +72,8 @@ import { SelectFilterComponent } from './components/select-filter-component/sele
     CheckboxListFilterComponent,
     CheckboxFilterComponent,
     ColumnFilterComponent,
-    SearchComponent
+    SearchComponent,
+    SearchPortalDirective
   ],
   entryComponents: [SearchTermComponent]
 })

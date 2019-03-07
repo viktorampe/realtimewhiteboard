@@ -1,6 +1,7 @@
 import {
   Component,
   ComponentFactoryResolver,
+  ComponentRef,
   Input,
   OnChanges,
   OnDestroy,
@@ -11,6 +12,7 @@ import {
   ViewContainerRef
 } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
+import { SearchPortalDirective } from '../../directives';
 import { SearchTermComponent } from '../search-term/search-term.component';
 import { SearchViewModel } from '../search.viewmodel';
 import {
@@ -26,8 +28,6 @@ import { SearchStateInterface } from './../../interfaces/search-state.interface'
   styleUrls: ['./search.component.scss']
 })
 export class SearchComponent implements OnInit, OnChanges, OnDestroy {
-  // private portalhosts: DomPortalHost[] = [];
-  // private portals = [];
   private subscriptions = new Subscription();
 
   @Input() public searchMode: SearchModeInterface;
@@ -37,33 +37,44 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
 
   @Output() public searchState$: Observable<SearchStateInterface>;
 
-  private _portalHosts: QueryList<ViewContainerRef>;
-  public get portalHosts(): QueryList<ViewContainerRef> {
+  private _portalHosts: QueryList<SearchPortalDirective>;
+  private portalHostsMap: PortalHostMapInterface = {};
+
+  public get portalHosts(): QueryList<SearchPortalDirective> {
     return this._portalHosts;
   }
 
   @Input()
-  public set portalHosts(value: QueryList<ViewContainerRef>) {
-    this._portalHosts = value;
+  public set portalHosts(portalHosts: QueryList<SearchPortalDirective>) {
+    if (portalHosts) {
+      portalHosts.forEach(portalHost => {
+        this.portalHostsMap[portalHost.searchPortal] = {
+          host: portalHost.viewContainerRef,
+          filters: []
+        };
+      });
+    }
 
-    // this.createComponent(this._portalHosts.first);
-    this.createSearchTermComponent(
-      this.searchMode,
-      this.initialState,
-      this._portalHosts
-    );
+    this._portalHosts = portalHosts;
+
+    if (this.searchMode.searchTerm && this.initialState.searchTerm) {
+      this.createSearchTermComponent(
+        this.searchMode,
+        this.initialState,
+        this.portalHostsMap
+      );
+    }
   }
 
   constructor(
     private searchViewmodel: SearchViewModel,
-    private componentFactoryResolver: ComponentFactoryResolver // private injector: Injector, // private appRef: ApplicationRef, // private viewContainerRef: ViewContainerRef
+    private componentFactoryResolver: ComponentFactoryResolver
   ) {
     this.searchState$ = this.searchViewmodel.searchState$;
   }
 
   ngOnInit() {
     this.reset(this.initialState);
-    // this.createSearchTermComponent(this.searchMode, this.initialState);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -73,9 +84,8 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // this.portalhosts.forEach(host => host.detach());
-    // this.portalhosts = [];
-    this.portalHosts.forEach(host => host.clear());
+    if (this.portalHosts)
+      this.portalHosts.forEach(host => host.viewContainerRef.clear());
     this.subscriptions.unsubscribe();
   }
 
@@ -88,9 +98,7 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public onFilterSelectionChange(): void {}
-  public onSearchTermChange(searchTerm: string): void {
-    console.log(searchTerm);
-  }
+  public onSearchTermChange(searchTerm: string): void {}
   public onScroll(): void {
     this.searchViewmodel.getNextPage();
   }
@@ -98,36 +106,17 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
   private createSearchTermComponent(
     searchMode: SearchModeInterface,
     searchState: SearchStateInterface,
-    portalHosts: QueryList<ViewContainerRef>
+    portalHostsMap: PortalHostMapInterface
   ): void {
-    if (!searchMode.searchTerm || !searchState.searchTerm) return;
+    const portalHost = portalHostsMap[searchMode.searchTerm.domHost];
 
-    // const portalContent = new ComponentPortal(
-    //   SearchTermComponent,
-    //   this.viewContainerRef
-    // );
-    // const portalHost = this.getPortalHost(searchMode.searchTerm.domHost);
-
-    // if (portalHost !== null) {
-    //   if (!this.portalhosts.includes(portalHost)) {
-    //     this.portalhosts.push(portalHost);
-    //   }
-
-    //   const componentRef = portalHost.attachComponentPortal(portalContent);
-    //   const searchTermComponent = componentRef.instance;
-    //   this.portals.push(searchTermComponent);
-
-    const viewContainerRef = portalHosts.find(
-      host => host.element.nativeElement.id === searchMode.searchTerm.domHost
-    );
-
-    if (!viewContainerRef) {
+    if (!portalHost) {
       throw new Error(
         `specified host '${searchMode.searchTerm.domHost}' not found`
       );
     }
 
-    const componentRef = viewContainerRef.createComponent(
+    const componentRef = portalHost.host.createComponent(
       this.componentFactoryResolver.resolveComponentFactory(SearchTermComponent)
     );
 
@@ -147,34 +136,12 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
         this.onSearchTermChange(value)
       )
     );
-
-    console.log('end create', searchTermComponent, viewContainerRef);
   }
 }
 
-// private getPortalHost(
-//   selector: string,
-//   componentFactoryResolver: ComponentFactoryResolver = this
-//     .componentFactoryResolver,
-//   appRef: ApplicationRef = this.appRef,
-//   injector: Injector = this.injector
-// ): DomPortalHost {
-//   //TODO  e2e test, see https://github.com/diekeure/campus/issues/206
-
-//   const element = document.querySelector(selector);
-//   if (element === null) return null;
-//   return new DomPortalHost(
-//     element,
-//     componentFactoryResolver,
-//     appRef,
-//     injector
-//   );
-// }
-
-// private createComponent(viewContainerRef: ViewContainerRef) {
-//   const componentRef = viewContainerRef.createComponent(
-//     this.componentFactoryResolver.resolveComponentFactory(SearchTermComponent)
-//   );
-
-//   componentRef.changeDetectorRef.detectChanges();
-// }
+interface PortalHostMapInterface {
+  [key: string]: {
+    host: ViewContainerRef;
+    filters: ComponentRef<any>[];
+  };
+}

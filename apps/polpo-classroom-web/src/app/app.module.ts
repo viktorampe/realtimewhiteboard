@@ -27,6 +27,10 @@ import {
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FavIconService, FAVICON_SERVICE_TOKEN } from './services/favicons';
+import {
+  StandardSearchService,
+  STANDARD_SEARCH_SERVICE_TOKEN
+} from './services/standard-search.service';
 
 // if you want to update the buffer (which defaults to 100)
 configureBufferSize(150);
@@ -46,7 +50,8 @@ configureBufferSize(150);
       environment.website,
       environment.logout,
       environment.api,
-      environment.sso
+      environment.sso,
+      environment.searchModes
     ),
     BrowserAnimationsModule,
     NxModule.forRoot(),
@@ -73,7 +78,8 @@ configureBufferSize(150);
     {
       provide: FAVICON_SERVICE_TOKEN,
       useClass: FavIconService
-    }
+    },
+    { provide: STANDARD_SEARCH_SERVICE_TOKEN, useClass: StandardSearchService }
   ],
   bootstrap: [AppComponent],
   exports: [RouterModule],

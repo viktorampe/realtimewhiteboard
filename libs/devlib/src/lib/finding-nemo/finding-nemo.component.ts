@@ -1,10 +1,11 @@
 import {
   AfterViewInit,
   Component,
+  Inject,
+  QueryList,
   Type,
   ViewChild,
-  ViewChildren,
-  ViewContainerRef
+  ViewChildren
 } from '@angular/core';
 import { EduContentMetadataFixture, LearningAreaFixture } from '@campus/dal';
 import {
@@ -12,16 +13,21 @@ import {
   SearchFilterFactory,
   SearchFilterInterface,
   SearchModeInterface,
+  SearchPortalDirective,
   SearchResultInterface,
   SearchResultItemComponentInterface,
   SearchStateInterface,
   SortModeInterface
 } from '@campus/search';
 import { EduContentMetadataApi } from '@diekeure/polpo-api-angular-sdk';
+// tslint:disable-next-line:nx-enforce-module-boundaries
+import { STANDARD_SEARCH_SERVICE_TOKEN } from 'apps/polpo-classroom-web/src/app/services/standard-search.service';
+// tslint:disable-next-line:nx-enforce-module-boundaries
 import { MockSearchViewModel } from 'libs/search/src/lib/components/search.viewmodel.mock';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { PolpoResultItemComponent } from '../polpo-result-item/polpo-result-item.component';
+// tslint:disable-next-line:nx-enforce-module-boundaries
 import { SearchComponent } from './../../../../search/src/lib/components/search/search.component';
 
 @Component({
@@ -40,9 +46,10 @@ export class FindingNemoComponent implements AfterViewInit {
   );
 
   private loadTimer: number;
+  public searchFilters$: Observable<SearchFilterInterface[]>;
 
-  @ViewChildren('hosttop, hostleft, pagebar', { read: ViewContainerRef })
-  private portalHosts;
+  @ViewChildren(SearchPortalDirective)
+  private portalHosts: QueryList<SearchPortalDirective>;
 
   @ViewChild(SearchComponent) private searchComponent: SearchComponent;
 
@@ -50,8 +57,15 @@ export class FindingNemoComponent implements AfterViewInit {
     this.searchComponent.portalHosts = this.portalHosts;
   }
 
-  constructor(private eduContentMetadataApi: EduContentMetadataApi) {
+  constructor(
+    private eduContentMetadataApi: EduContentMetadataApi,
+    @Inject(STANDARD_SEARCH_SERVICE_TOKEN)
+    private standardSearchFactory: SearchFilterFactory
+  ) {
     this.setMockData();
+    this.searchFilters$ = this.standardSearchFactory.getFilters(
+      {} as SearchStateInterface
+    );
   }
 
   setMockData() {
