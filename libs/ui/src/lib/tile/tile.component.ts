@@ -14,11 +14,16 @@ export class TileComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {}
+
+  onActionClick(event: Event, action: TileSecondaryActionInterface) {
+    event.stopPropagation();
+    action.onClick(event);
+  }
 }
 
 export interface TileSecondaryActionInterface {
   label: string;
   icon: string;
   routerLink?: string[];
-  onClick?: (event: Event) => {};
+  onClick?: (event: Event) => void;
 }
