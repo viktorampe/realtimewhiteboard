@@ -1,0 +1,12 @@
+.ui-drop-area {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: nowrap;
+  justify-content: center;
+  &__icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

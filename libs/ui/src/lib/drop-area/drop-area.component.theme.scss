@@ -1,8 +1,25 @@
 @mixin ui-drop-area-theme() {
   $ui-drop-area-width: 280px !default;
-  $ui-drop-area-height: 105px !default;
+  $ui-drop-area-height: 130px !default;
+  $ui-drop-area-border: 2px dashed gray !default;
+  $ui-drop-area__icon-container__mat-icon-color: gray !default;
+  $ui-drop-area__icon-container__mat-icon-size: 41px !default;
+  $ui-drop-area__icon-container__mat-icon-margin: 15px !default;
+  $ui-drop-area__icon-container-border-radius: 50% !default;
+
   .ui-drop-area {
     width: $ui-drop-area-width;
     height: $ui-drop-area-height;
+    border: $ui-drop-area-border;
+    &__icon-container {
+      border-radius: $ui-drop-area__icon-container-border-radius;
+      border: $ui-drop-area-border;
+      mat-icon {
+        margin: $ui-drop-area__icon-container__mat-icon-margin;
+        color: $ui-drop-area__icon-container__mat-icon-color;
+        height: $ui-drop-area__icon-container__mat-icon-size;
+        width: $ui-drop-area__icon-container__mat-icon-size;
+      }
+    }
   }
 }
