@@ -1,8 +1,8 @@
 <div id="search-term-container"></div>
 
-<div id="hosttop"></div>
+<div id="hosttop" #hosttop searchPortal="hosttop"></div>
 <campus-collapsible-sheet>
-  <div aside id="hostleft"> </div>
+  <div aside #hostleft searchPortal="hostleft" id="hostleft"> </div>
   <div main style="height: 100%;  display: flex;">
     <campus-search
       [searchMode]="searchMode"

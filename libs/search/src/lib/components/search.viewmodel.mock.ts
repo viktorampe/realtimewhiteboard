@@ -65,7 +65,7 @@ export class MockSearchViewModel
           })
         ]),
         component: CheckboxLineFilterComponent,
-        domHost: '#hostleft'
+        domHost: 'hostleft'
       },
       {
         criteria: new SearchFilterCriteriaFixture({}, [
@@ -78,7 +78,7 @@ export class MockSearchViewModel
           })
         ]),
         component: CheckboxListFilterComponent,
-        domHost: '#hostleft'
+        domHost: 'hostleft'
       },
       {
         criteria: [
@@ -93,7 +93,7 @@ export class MockSearchViewModel
           ])
         ],
         component: BreadcrumbFilterComponent,
-        domHost: '#hosttop'
+        domHost: 'hosttop'
       },
       {
         criteria: [
@@ -108,7 +108,7 @@ export class MockSearchViewModel
           ])
         ],
         component: ColumnFilterComponent,
-        domHost: '#hostleft'
+        domHost: 'hostleft'
       },
       {
         criteria: new SearchFilterCriteriaFixture({}, [
@@ -121,7 +121,7 @@ export class MockSearchViewModel
           })
         ]),
         component: SelectFilterComponent,
-        domHost: '#hosttop'
+        domHost: 'hosttop'
       }
     ];
 

@@ -1,16 +1,26 @@
-import { Component, Type } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  QueryList,
+  Type,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import { EduContentMetadataFixture, LearningAreaFixture } from '@campus/dal';
 import {
   SearchFilterCriteriaInterface,
   SearchFilterFactory,
   SearchFilterInterface,
   SearchModeInterface,
+  SearchPortalDirective,
   SearchResultInterface,
   SearchResultItemComponentInterface,
   SearchStateInterface,
   SortModeInterface
 } from '@campus/search';
 import { EduContentMetadataApi } from '@diekeure/polpo-api-angular-sdk';
+// tslint:disable-next-line:nx-enforce-module-boundaries
+import { SearchComponent } from 'libs/search/src/lib/components/search/search.component';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { PolpoResultItemComponent } from '../polpo-result-item/polpo-result-item.component';
@@ -22,7 +32,7 @@ import { MockSearchViewModel } from './../../../../search/src/lib/components/sea
   templateUrl: './finding-nemo.component.html',
   styleUrls: ['./finding-nemo.component.scss']
 })
-export class FindingNemoComponent {
+export class FindingNemoComponent implements AfterViewInit {
   public resultItemComponent: Type<SearchResultItemComponentInterface>;
   public resultsPage$ = new BehaviorSubject<SearchResultInterface>(null);
   public searchMode: SearchModeInterface;
@@ -32,10 +42,22 @@ export class FindingNemoComponent {
     null
   );
 
+  @ViewChildren(SearchPortalDirective)
+  portalHosts: QueryList<SearchPortalDirective>;
+  @ViewChild(SearchComponent)
+  searchComponent: SearchComponent;
+
   private loadTimer: number;
 
   constructor(private eduContentMetadataApi: EduContentMetadataApi) {
     this.setMockData();
+  }
+
+  ngAfterViewInit(): void {
+    //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
+    //Add 'implements AfterViewInit' to the class.
+    // this.portalHosts =
+    this.searchComponent.portalHosts = this.portalHosts;
   }
 
   setMockData() {

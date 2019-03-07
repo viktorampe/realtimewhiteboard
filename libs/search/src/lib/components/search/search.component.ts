@@ -1,4 +1,4 @@
-import { ComponentPortal, DomPortalHost } from '@angular/cdk/portal';
+import { DomPortalHost } from '@angular/cdk/portal';
 import {
   ApplicationRef,
   Component,
@@ -10,11 +10,13 @@ import {
   OnDestroy,
   OnInit,
   Output,
-  SimpleChanges
+  QueryList,
+  SimpleChanges,
+  ViewContainerRef
 } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
+import { SearchPortalDirective } from '../../directives';
 import {
-  SearchFilterComponentInterface,
   SearchFilterCriteriaInterface,
   SearchFilterInterface
 } from '../../interfaces';
@@ -40,11 +42,33 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
       filters: ComponentRef<any>[];
     };
   } = {};
+  private _portalHosts: QueryList<SearchPortalDirective>;
+  private portalHostsMap: {
+    [key: string]: {
+      host: ViewContainerRef;
+      filters: ComponentRef<any>[];
+    };
+  } = {};
 
   @Input() public searchMode: SearchModeInterface;
   @Input() public autoComplete: string[];
   @Input() public initialState: SearchStateInterface;
   @Input() public searchResults: SearchResultInterface;
+  @Input()
+  set portalHosts(portalHosts: QueryList<SearchPortalDirective>) {
+    if (portalHosts) {
+      portalHosts.forEach(portalHost => {
+        this.portalHostsMap[portalHost.searchPortal] = {
+          host: portalHost.viewContainerRef,
+          filters: []
+        };
+      });
+      this.createFilters();
+    }
+  }
+  get portalHosts() {
+    return this._portalHosts;
+  }
 
   @Output() public searchState$: Observable<SearchStateInterface>;
 
@@ -58,7 +82,6 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnInit() {
-    this.createFilters();
     this.reset(this.initialState);
   }
 
@@ -108,15 +131,14 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private addFilter(filter: SearchFilterInterface): void {
-    const portalHost = this.getPortalHost(filter.domHost);
-    if (!portalHost || !portalHost.host) {
+    const portalHost = this.portalHostsMap[filter.domHost];
+    if (!portalHost) {
       return;
     }
-    // create component
-    const portal = new ComponentPortal(filter.component);
 
-    // attach filter
-    const componentRef = portalHost.host.attachComponentPortal(portal);
+    const componentRef = portalHost.host.createComponent(
+      this.componentFactoryResolver.resolveComponentFactory(filter.component)
+    );
     portalHost.filters.push(componentRef);
 
     // set inputs
@@ -150,37 +172,5 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
         componentRef.destroy();
       });
     });
-  }
-
-  private getPortalHost(
-    selector: string,
-    componentFactoryResolver: ComponentFactoryResolver = this
-      .componentFactoryResolver,
-    appRef: ApplicationRef = this.appRef,
-    injector: Injector = this.injector
-  ): {
-    host: DomPortalHost;
-    filters: ComponentRef<SearchFilterComponentInterface>[];
-  } {
-    // check if already created
-    if (this.filterPortalHosts[selector]) {
-      return this.filterPortalHosts[selector];
-    }
-
-    //TODO  e2e test, see https://github.com/diekeure/campus/issues/206
-    const el = document.querySelector(selector);
-    if (el === null) {
-      return null;
-    }
-
-    const portalHost = new DomPortalHost(
-      el,
-      componentFactoryResolver,
-      appRef,
-      injector
-    );
-    this.filterPortalHosts[selector] = { host: portalHost, filters: [] };
-
-    return this.filterPortalHosts[selector];
   }
 }
