@@ -36,11 +36,21 @@ export class SearchViewModel {
       this.searchState$,
       this.results$
     ).pipe(
-      map(([filters, state, results]) =>
-        filters.map(filter =>
-          this.getUpdatedSearchFilter(filter, state, results)
+      map(([filters, state, results]) => {
+        const filterCriteriaSelections = !!state
+          ? state.filterCriteriaSelections
+          : new Map<string, (number | string)[]>();
+        const filterCriteriaPredictions = !!results
+          ? results.filterCriteriaPredictions
+          : new Map<string, Map<string | number, number>>();
+        return filters.map(filter =>
+          this.getUpdatedSearchFilter(
+            filter,
+            filterCriteriaSelections,
+            filterCriteriaPredictions
         )
-      )
+    );
+      })
     );
   }
 
@@ -56,29 +66,23 @@ export class SearchViewModel {
    */
   private getUpdatedSearchFilter(
     filter: SearchFilterInterface,
-    state: SearchStateInterface,
-    results: SearchResultInterface
+    stateFilterCriteriaSelections: Map<string, (number | string)[]>,
+    resultsFilterCriteriaPredictions: Map<string, Map<string | number, number>>
   ): SearchFilterInterface {
-    const filterCriteriaSelections = !!state
-      ? state.filterCriteriaSelections
-      : new Map<string, (number | string)[]>();
-    const filterCriteriaPredictions = !!results
-      ? results.filterCriteriaPredictions
-      : new Map<string, Map<string | number, number>>();
     if (Array.isArray(filter.criteria))
       filter.criteria = filter.criteria.map(criterium =>
         this.getUpdatedCriterium(
           criterium,
-          filterCriteriaSelections,
-          filterCriteriaPredictions
+          stateFilterCriteriaSelections,
+          resultsFilterCriteriaPredictions
         )
       );
     //if single get updatedCriterium
     else {
       filter.criteria = this.getUpdatedCriterium(
         filter.criteria,
-        filterCriteriaSelections,
-        filterCriteriaPredictions
+        stateFilterCriteriaSelections,
+        resultsFilterCriteriaPredictions
       );
     }
     return filter;
