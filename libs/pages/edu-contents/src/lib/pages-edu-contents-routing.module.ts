@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LearningAreaQueries } from '@campus/dal';
 import { EduContentLearningAreaOverviewComponent } from './components/edu-contents-learning-area-overview/edu-contents-learning-area-overview.component';
+import { EduContentSearchByColumnComponent } from './components/edu-contents-search-by-column/edu-contents-search-by-column.component';
 import { EduContentSearchByTermComponent } from './components/edu-contents-search-by-term/edu-contents-search-by-term.component';
 import { EduContentSearchModesComponent } from './components/edu-contents-search-modes/edu-contents-search-modes.component';
 import { EduContentsResolver } from './components/edu-contents.resolver';
@@ -33,8 +34,12 @@ const routes: Routes = [
             component: EduContentSearchByTermComponent
           },
           {
-            path: 'term',
-            component: EduContentSearchByTermComponent
+            path: 'plan',
+            component: EduContentSearchByColumnComponent
+          },
+          {
+            path: 'toc',
+            component: EduContentSearchByColumnComponent
           }
         ]
       }
