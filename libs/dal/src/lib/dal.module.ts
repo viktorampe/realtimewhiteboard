@@ -97,8 +97,16 @@ import { ExerciseService } from './exercise/exercise.service';
 import { EXERCISE_SERVICE_TOKEN } from './exercise/exercise.service.interface';
 import { LearningAreaService } from './learning-area/learning-area.service';
 import { LEARNINGAREA_SERVICE_TOKEN } from './learning-area/learning-area.service.interface';
+import { EduNetService } from './metadata/edu-net.service';
+import { EDU_NET_SERVICE_TOKEN } from './metadata/edu-net.service.interface';
 import { MethodService } from './metadata/method.service';
 import { METHOD_SERVICE_TOKEN } from './metadata/method.service.interface';
+import { ProductTypeService } from './metadata/product-type.service';
+import { PRODUCT_TYPE_SERVICE_TOKEN } from './metadata/product-type.service.interface';
+import { SchoolTypeService } from './metadata/school-type.service';
+import { SCHOOL_TYPE_SERVICE_TOKEN } from './metadata/school-type.service.interface';
+import { YearService } from './metadata/year.service';
+import { YEAR_SERVICE_TOKEN } from './metadata/year.service.interface';
 import { AuthService } from './persons/auth-service';
 import { AUTH_SERVICE_TOKEN } from './persons/auth-service.interface';
 import {
@@ -293,7 +301,11 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
     },
     { provide: CONTENT_REQUEST_SERVICE_TOKEN, useClass: ContentRequestService },
     { provide: RESULTS_SERVICE_TOKEN, useClass: ResultsService },
-    { provide: CREDENTIAL_SERVICE_TOKEN, useClass: CredentialService }
+    { provide: CREDENTIAL_SERVICE_TOKEN, useClass: CredentialService },
+    { provide: EDU_NET_SERVICE_TOKEN, useClass: EduNetService },
+    { provide: PRODUCT_TYPE_SERVICE_TOKEN, useClass: ProductTypeService },
+    { provide: SCHOOL_TYPE_SERVICE_TOKEN, useClass: SchoolTypeService },
+    { provide: YEAR_SERVICE_TOKEN, useClass: YearService }
   ]
 })
 export class DalModule {
