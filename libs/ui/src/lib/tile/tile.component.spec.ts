@@ -64,14 +64,14 @@ describe('TileComponent', () => {
   });
 
   it('should set the right content icon', () => {
-    let icon = fixture.debugElement.query(By.css('.ui-tile__content__icon'))
+    const icon = fixture.debugElement.query(By.css('.ui-tile__content__icon'))
       .componentInstance.svgIcon;
 
     expect(icon).toBe(mockData.icon);
   });
 
   it('should populate the content label with label text value', () => {
-    let labelText = fixture.debugElement.query(
+    const labelText = fixture.debugElement.query(
       By.css('.ui-tile__content__label')
     ).nativeElement.textContent;
 
@@ -79,7 +79,7 @@ describe('TileComponent', () => {
   });
 
   it('should change the tile color if color is set', () => {
-    let bgcolor = fixture.debugElement.query(By.css('.ui-tile')).nativeElement
+    const bgcolor = fixture.debugElement.query(By.css('.ui-tile')).nativeElement
       .style['background-color'];
 
     expect(bgcolor).toBe(mockData.color);
@@ -114,8 +114,8 @@ describe('TileComponent', () => {
   });
 
   it('should not bubble a secondary action click to the main component', async(() => {
-    let component_click = jest.fn();
-    let action_click = jest.fn();
+    const component_click = jest.fn();
+    const action_click = jest.fn();
 
     fixture.debugElement.nativeElement.addEventListener(
       'click',
