@@ -1,6 +1,7 @@
 import {
   AfterViewInit,
   Component,
+  Inject,
   QueryList,
   Type,
   ViewChild,
@@ -19,6 +20,8 @@ import {
   SortModeInterface
 } from '@campus/search';
 import { EduContentMetadataApi } from '@diekeure/polpo-api-angular-sdk';
+// tslint:disable-next-line:nx-enforce-module-boundaries
+import { STANDARD_SEARCH_SERVICE_TOKEN } from 'apps/polpo-classroom-web/src/app/services/standard-search.service';
 // tslint:disable-next-line:nx-enforce-module-boundaries
 import { SearchComponent } from 'libs/search/src/lib/components/search/search.component';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -48,9 +51,17 @@ export class FindingNemoComponent implements AfterViewInit {
   searchComponent: SearchComponent;
 
   private loadTimer: number;
+  public searchFilters$: Observable<SearchFilterInterface[]>;
 
-  constructor(private eduContentMetadataApi: EduContentMetadataApi) {
+  constructor(
+    private eduContentMetadataApi: EduContentMetadataApi,
+    @Inject(STANDARD_SEARCH_SERVICE_TOKEN)
+    private standardSearchFactory: SearchFilterFactory
+  ) {
     this.setMockData();
+    this.searchFilters$ = this.standardSearchFactory.getFilters(
+      {} as SearchStateInterface
+    );
   }
 
   ngAfterViewInit(): void {

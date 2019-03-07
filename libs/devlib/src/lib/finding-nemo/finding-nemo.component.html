@@ -1,15 +1,16 @@
+<p>{{ searchFilters$ | async | json }}</p>
 <div id="search-term-container"></div>
 
-<div id="hosttop" #hosttop searchPortal="hosttop"></div>
+<div searchPortal="hosttop"></div>
 <campus-collapsible-sheet>
-  <div aside #hostleft searchPortal="hostleft" id="hostleft"> </div>
-  <div main style="height: 100%;  display: flex;">
-    <campus-search
-      [searchMode]="searchMode"
-      [autoComplete]="null"
-      [initialState]="searchState | async"
-      [searchResults]="resultsPage$ | async"
-      (searchState$)="onChange($event)"
-    ></campus-search>
+  <div aside
+       searchPortal="hostleft"> </div>
+  <div main
+       style="height: 100%;  display: flex;">
+    <campus-search [searchMode]="searchMode"
+                   [autoComplete]="null"
+                   [initialState]="searchState | async"
+                   [searchResults]="resultsPage$ | async"
+                   (searchState$)="onChange($event)"></campus-search>
   </div>
 </campus-collapsible-sheet>
