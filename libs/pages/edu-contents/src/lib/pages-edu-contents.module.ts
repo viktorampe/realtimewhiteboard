@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { PagesSharedModule } from '@campus/pages/shared';
 import { UiModule } from '@campus/ui';
 import { EduContentsViewModel } from './components/edu-contents.viewmodel';
-import { EduContentsComponent } from './components/edu-contents/edu-contents.component';
+import { EduContentLearningAreaOverviewComponent } from './components/edu-contents/edu-contents.component';
 import { PagesEduContentsRoutingModule } from './pages-edu-contents-routing.module';
 
 @NgModule({
@@ -13,7 +13,7 @@ import { PagesEduContentsRoutingModule } from './pages-edu-contents-routing.modu
     UiModule,
     PagesSharedModule
   ],
-  declarations: [EduContentsComponent],
+  declarations: [EduContentLearningAreaOverviewComponent],
   providers: [EduContentsViewModel]
 })
 export class PagesEduContentsModule {}

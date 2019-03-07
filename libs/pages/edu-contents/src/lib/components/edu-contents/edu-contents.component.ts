@@ -5,4 +5,4 @@ import { Component } from '@angular/core';
   templateUrl: './edu-contents.component.html',
   styleUrls: ['./edu-contents.component.scss']
 })
-export class EduContentsComponent {}
+export class EduContentLearningAreaOverviewComponent {}

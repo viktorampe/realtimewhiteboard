@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { EduContentsComponent } from './components/edu-contents/edu-contents.component';
+import { EduContentLearningAreaOverviewComponent } from './components/edu-contents/edu-contents.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: EduContentsComponent
+    component: EduContentLearningAreaOverviewComponent
   }
 ];
 
