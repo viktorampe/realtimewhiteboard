@@ -340,19 +340,6 @@ describe('SearchComponent', () => {
         ).componentInstance;
       });
 
-      it('because the initial state is missing searchTerm', () => {
-        const newInitialState = { ...mockSearchState, searchTerm: null };
-        searchComponent.initialState = newInitialState;
-        searchComponent.searchMode = mockSearchMode;
-
-        hostFixture.detectChanges();
-
-        const portalHost = searchComponent.portalHosts.first.viewContainerRef;
-
-        // no projected views in portalHost = no searchTerm
-        expect(portalHost.length).toBe(0);
-      });
-
       it('because the searchMode is missing searchTerm', () => {
         const newSearchMode = { ...mockSearchMode, searchTerm: null };
         searchComponent.initialState = mockSearchState;

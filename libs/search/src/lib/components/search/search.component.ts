@@ -57,7 +57,7 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
 
     this._portalHosts = portalHosts;
 
-    if (this.searchMode.searchTerm && this.initialState.searchTerm) {
+    if (this.searchMode.searchTerm) {
       this.createSearchTermComponent(
         this.searchMode,
         this.initialState,
@@ -123,9 +123,9 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
     const searchTermComponent = componentRef.instance;
 
     searchTermComponent.initialValue = searchState.searchTerm;
-    searchTermComponent.autoComplete = !!(
-      this.autoComplete && this.autoComplete.length
-    );
+    searchTermComponent.autoComplete =
+      searchMode.searchTerm.autocompleteEl ||
+      (this.autoComplete && !!this.autoComplete.length);
     searchTermComponent.autoCompleteValues = this.autoComplete;
 
     // needed to avoid ExpressionChangedAfterItHasBeenCheckedError
