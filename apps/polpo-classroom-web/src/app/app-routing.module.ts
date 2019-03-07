@@ -23,7 +23,7 @@ const routes: Routes = [
       },
       {
         path: 'edu-content',
-        loadChildren: '@campus/pages/edu-contents#EduContentsModule',
+        loadChildren: '@campus/pages/edu-contents#PagesEduContentsModule',
         data: { breadcrumbText: 'Lesmateriaal' },
         canActivate: [PermissionGuard]
       },
