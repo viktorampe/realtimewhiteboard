@@ -1,19 +1,10 @@
 import { Component, SimpleChange, Type } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
-import {
-  MatBadgeModule,
-  MatCheckboxModule,
-  MatIconModule,
-  MatIconRegistry,
-  MatListModule,
-  MatSelectModule
-} from '@angular/material';
+import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { LearningAreaFixture } from '@campus/dal';
 import { MockMatIconRegistry } from '@campus/testing';
-import { UiModule } from '@campus/ui';
 import { hot } from 'jasmine-marbles';
 import {
   SearchFilterFactory,
@@ -21,9 +12,9 @@ import {
   SearchResultInterface,
   SearchStateInterface
 } from '../../interfaces';
+import { SearchModule } from '../../search.module';
 import { BreadcrumbFilterComponent } from '../breadcrumb-filter/breadcrumb-filter.component';
 import { CheckboxLineFilterComponent } from '../checkbox-line-filter/checkbox-line-filter-component';
-import { CheckboxFilterComponent } from '../checkbox-list-filter/checkbox-filter/checkbox-filter.component';
 import { CheckboxListFilterComponent } from '../checkbox-list-filter/checkbox-list-filter.component';
 import { ColumnFilterComponent } from '../column-filter/column-filter.component';
 import { ResultItemBase } from '../results-list/result.component.base';
@@ -81,25 +72,8 @@ describe('SearchComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [
-        MatCheckboxModule,
-        UiModule,
-        MatIconModule,
-        MatListModule,
-        MatSelectModule,
-        MatBadgeModule,
-        ReactiveFormsModule
-      ],
-      declarations: [
-        SearchComponent,
-        ResultItemComponent,
-        CheckboxFilterComponent,
-        CheckboxLineFilterComponent,
-        CheckboxListFilterComponent,
-        BreadcrumbFilterComponent,
-        ColumnFilterComponent,
-        SelectFilterComponent
-      ],
+      imports: [SearchModule],
+      declarations: [ResultItemComponent],
       providers: [
         { provide: SearchViewModel, useClass: MockSearchViewModel },
         { provide: MatIconRegistry, useClass: MockMatIconRegistry }
