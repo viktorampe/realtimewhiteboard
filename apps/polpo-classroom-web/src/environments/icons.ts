@@ -63,7 +63,7 @@ export const icons = {
 
   // -> actions
   // 'add-user': 'assets/icons/add-user.svg',
-  // add: 'assets/icons/add.svg',
+  add: 'assets/icons/add.svg',
   // archive: 'assets/icons/archive.svg',
   cancel: 'assets/icons/cancel.svg',
   delete: 'assets/icons/delete.svg',
