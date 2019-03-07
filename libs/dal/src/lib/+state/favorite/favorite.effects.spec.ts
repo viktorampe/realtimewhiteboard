@@ -320,6 +320,9 @@ describe('FavoriteEffects', () => {
 
   describe('deleteFavorite$', () => {
     let dateMock: MockDate;
+
+    const deleteFavoriteAction = new DeleteFavorite({ id: 113 });
+
     beforeAll(() => {
       dateMock = new MockDate();
     });
@@ -332,13 +335,13 @@ describe('FavoriteEffects', () => {
         mockServiceMethodReturnValue('deleteFavorite', true);
       });
       it('should dispatch a success feedback action', () => {
-        const deleteFavoriteAction = new DeleteFavorite({ id: 113 });
         const effectFeedback = new EffectFeedbackFixture({
           id: uuid(),
           triggerAction: deleteFavoriteAction,
           message: 'Het item is uit jouw favorieten verwijderd.'
         });
         const effectFeedbackAction = new AddEffectFeedback({ effectFeedback });
+
         expectInAndOut(
           effects.deleteFavorite$,
           deleteFavoriteAction,
@@ -352,7 +355,6 @@ describe('FavoriteEffects', () => {
         mockServiceMethodError('deleteFavorite', 'Something went wrong.');
       });
       it('should dispatch an undo and error feedback action', () => {
-        const deleteFavoriteAction = new DeleteFavorite({ id: 113 });
         const effectFeedback = new EffectFeedbackFixture({
           id: uuid(),
           triggerAction: deleteFavoriteAction,
@@ -364,9 +366,12 @@ describe('FavoriteEffects', () => {
             { title: 'Opnieuw proberen', userAction: deleteFavoriteAction }
           ]
         });
+
         const effectFeedbackAction = new AddEffectFeedback({ effectFeedback });
         const undoAction = undo(deleteFavoriteAction);
+
         actions = hot('a', { a: deleteFavoriteAction });
+
         expect(effects.deleteFavorite$).toBeObservable(
           hot('(ab)', {
             a: undoAction,
