@@ -38,7 +38,7 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
   @Output() public searchState$: Observable<SearchStateInterface>;
 
   private _portalHosts: QueryList<SearchPortalDirective>;
-  private portalHostsMap: PortalHostMapInterface = {};
+  private portalHostsMap: PortalHostDictionaryInterface = {};
 
   public get portalHosts(): QueryList<SearchPortalDirective> {
     return this._portalHosts;
@@ -108,7 +108,7 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
   private createSearchTermComponent(
     searchMode: SearchModeInterface,
     searchState: SearchStateInterface,
-    portalHostsMap: PortalHostMapInterface
+    portalHostsMap: PortalHostDictionaryInterface
   ): void {
     const portalHost = portalHostsMap[searchMode.searchTerm.domHost];
 
@@ -141,7 +141,7 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
   }
 }
 
-interface PortalHostMapInterface {
+interface PortalHostDictionaryInterface {
   [key: string]: {
     host: ViewContainerRef;
     filters: ComponentRef<any>[];
