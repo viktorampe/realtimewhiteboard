@@ -21,7 +21,7 @@ export const initialState: State = adapter.getInitialState({
 
 export function reducer(state = initialState, action: FavoritesActions): State {
   switch (action.type) {
-    case FavoritesActionTypes.AddFavorite: {
+    case FavoritesActionTypes.AddFavoriteSuccess: {
       return adapter.addOne(action.payload.favorite, state);
     }
 
