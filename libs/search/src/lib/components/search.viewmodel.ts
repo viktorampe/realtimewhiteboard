@@ -201,7 +201,7 @@ export class SearchViewModel {
       );
       if (criteriaPrediction !== undefined) {
         //if there is prediction data for this value, return the new prediction
-        return criteriaPrediction.valueOf();
+        return criteriaPrediction;
       }
     }
     //if there is no new prediction data, return the old data or 0
