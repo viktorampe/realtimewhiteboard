@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule, MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
+import { RouterTestingModule } from '@angular/router/testing';
 import { MockMatIconRegistry } from '@campus/testing';
 import { TileComponent, TileSecondaryActionInterface } from './tile.component';
 
@@ -17,7 +18,7 @@ describe('TileComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [TileComponent],
-      imports: [MatIconModule],
+      imports: [RouterTestingModule, MatIconModule],
       providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
     }).compileComponents();
   }));
@@ -27,12 +28,12 @@ describe('TileComponent', () => {
     component = fixture.componentInstance;
 
     mockData = {
-      label: 'Wiskunde',
+      label: 'Maths',
       icon: 'test-icon',
       color: 'blue',
       secondaryActions: [
         {
-          label: 'Bekijken',
+          label: 'View',
           icon: 'view-icon',
           onClick: (event: Event) => {}
         }
@@ -42,6 +43,7 @@ describe('TileComponent', () => {
     component.label = mockData.label;
     component.icon = mockData.icon;
     component.color = mockData.color;
+    component.secondaryActions = mockData.secondaryActions;
 
     fixture.detectChanges();
   });
@@ -51,18 +53,82 @@ describe('TileComponent', () => {
   });
 
   it('should show the content icon if provided', () => {
-    expect(
-      fixture.debugElement.query(By.css('.ui-tile__content__icon'))
-    ).toBeTruthy();
+    let icon = fixture.debugElement.query(By.css('.ui-tile__content__icon'));
+    expect(icon).toBeTruthy();
+
+    fixture.componentInstance.icon = null;
+    fixture.detectChanges();
+
+    icon = fixture.debugElement.query(By.css('.ui-tile__content__icon'));
+    expect(icon).toBeFalsy();
   });
 
-  it('should populate the content label with label text value', () => {});
+  it('should set the right content icon', () => {
+    let icon = fixture.debugElement.query(By.css('.ui-tile__content__icon'))
+      .componentInstance.svgIcon;
 
-  it('should change the tile color if color is set', () => {});
+    expect(icon).toBe(mockData.icon);
+  });
 
-  it('should show the secondary actions', () => {});
+  it('should populate the content label with label text value', () => {
+    let labelText = fixture.debugElement.query(
+      By.css('.ui-tile__content__label')
+    ).nativeElement.textContent;
 
-  it('should show the secondary action icon if provided', () => {});
+    expect(labelText).toBe(mockData.label);
+  });
 
-  it('should not bubble a secondary action click to the main component', () => {});
+  it('should change the tile color if color is set', () => {
+    let bgcolor = fixture.debugElement.query(By.css('.ui-tile')).nativeElement
+      .style['background-color'];
+
+    expect(bgcolor).toBe(mockData.color);
+  });
+
+  it('should show the secondary actions', () => {
+    let i = 0;
+
+    fixture.debugElement
+      .queryAll(By.css('.ui-tile__actions__action__label'))
+      .map(el => el.nativeElement)
+      .forEach(el => {
+        expect(el.textContent).toBe(mockData.secondaryActions[i].label);
+        i++;
+      });
+
+    expect(i).toBe(mockData.secondaryActions.length);
+  });
+
+  it('should show the secondary action icon if provided', () => {
+    let i = 0;
+
+    fixture.debugElement
+      .queryAll(By.css('.ui-tile__actions__action__icon'))
+      .map(el => el.componentInstance.svgIcon)
+      .forEach(el => {
+        expect(el).toBe(mockData.secondaryActions[i].icon);
+        i++;
+      });
+
+    expect(i).toBe(mockData.secondaryActions.length);
+  });
+
+  it('should not bubble a secondary action click to the main component', async(() => {
+    let component_click = jest.fn();
+    let action_click = jest.fn();
+
+    fixture.debugElement.nativeElement.addEventListener(
+      'click',
+      component_click
+    );
+    component.secondaryActions[0].onClick = action_click;
+    fixture.detectChanges();
+
+    fixture.debugElement
+      .queryAll(By.css('.ui-tile__actions__action a'))[0]
+      .nativeElement.click();
+
+    expect(component_click.mock.calls.length).toBe(0);
+    expect(action_click.mock.calls.length).toBe(1);
+  }));
 });
