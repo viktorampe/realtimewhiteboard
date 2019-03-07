@@ -1,11 +1,24 @@
-import { Component, SimpleChange, Type } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import {
+  AfterViewInit,
+  Component,
+  DebugElement,
+  NgModule,
+  SimpleChange,
+  Type,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { LearningAreaFixture } from '@campus/dal';
 import { MockMatIconRegistry } from '@campus/testing';
+import { UiModule } from '@campus/ui';
 import { hot } from 'jasmine-marbles';
+import { SearchPortalDirective } from '../../directives';
 import {
   SearchFilterFactory,
   SearchModeInterface,
@@ -33,6 +46,34 @@ class ResultItemComponent extends ResultItemBase {
   data: any;
   listRef: null;
 }
+
+@Component({
+  // tslint:disable-next-line:component-selector
+  selector: 'test-container',
+  template: `
+    <div><div searchPortal="hosttop"></div></div>
+    <div><div searchPortal="hostleft"></div></div>
+    <div searchPortal="mockHost"></div>
+    <campus-search></campus-search>
+  `
+})
+export class TestContainerComponent implements AfterViewInit {
+  @ViewChildren(SearchPortalDirective)
+  private portalHosts;
+
+  @ViewChild(SearchComponent) private searchComponent: SearchComponent;
+
+  ngAfterViewInit() {
+    this.searchComponent.portalHosts = this.portalHosts;
+  }
+}
+
+@NgModule({
+  declarations: [TestContainerComponent],
+  imports: [CommonModule, UiModule, SearchModule, NoopAnimationsModule],
+  exports: [TestContainerComponent]
+})
+export class TestModule {}
 
 describe('SearchComponent', () => {
   let component: SearchComponent;
@@ -72,7 +113,7 @@ describe('SearchComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [SearchModule],
+      imports: [TestModule],
       declarations: [ResultItemComponent],
       providers: [
         { provide: SearchViewModel, useClass: MockSearchViewModel },
@@ -232,5 +273,68 @@ describe('SearchComponent', () => {
       expect(setterSpy).toHaveBeenCalled();
       expect(setterSpy).toHaveBeenCalledWith(newSearchResults);
     });
+  });
+
+  describe('seachFilters', () => {
+    let hostFixture: ComponentFixture<TestContainerComponent>;
+    let hostComponent: TestContainerComponent;
+    let searchComponent: SearchComponent;
+    let checkboxLineComponent: DebugElement;
+    let checkboxListComponent: DebugElement;
+    let breadcrumbFilterComponent: DebugElement;
+    let columnFilterComponent: DebugElement;
+    let selectFilterComponent: DebugElement;
+
+    beforeEach(() => {
+      hostFixture = TestBed.createComponent(TestContainerComponent);
+      hostComponent = hostFixture.componentInstance;
+
+      searchComponent = hostFixture.debugElement.query(
+        By.directive(SearchComponent)
+      ).componentInstance;
+
+      searchComponent.initialState = mockSearchState;
+      searchComponent.searchMode = mockSearchMode;
+
+      hostFixture.detectChanges();
+
+      checkboxLineComponent = getFilterElement(CheckboxLineFilterComponent);
+      checkboxListComponent = getFilterElement(CheckboxListFilterComponent);
+      breadcrumbFilterComponent = getFilterElement(BreadcrumbFilterComponent);
+      columnFilterComponent = getFilterElement(ColumnFilterComponent);
+      selectFilterComponent = getFilterElement(SelectFilterComponent);
+    });
+
+    it('should create and add all search filter components', () => {
+      expect(hostComponent).toBeDefined();
+      expect(checkboxLineComponent.componentInstance).toBeDefined();
+      expect(checkboxListComponent.componentInstance).toBeDefined();
+      expect(breadcrumbFilterComponent.componentInstance).toBeDefined();
+      expect(columnFilterComponent.componentInstance).toBeDefined();
+      expect(selectFilterComponent.componentInstance).toBeDefined();
+    });
+
+    it('should add component to the correct host element', () => {
+      const hosts = hostFixture.debugElement.queryAll(
+        By.directive(SearchPortalDirective)
+      );
+      const hosttop = hosts.find(
+        host => host.attributes.searchPortal === 'hosttop'
+      );
+      const hostleft = hosts.find(
+        host => host.attributes.searchPortal === 'hostleft'
+      );
+
+      expect(checkboxLineComponent.parent).toBe(hostleft.parent);
+      expect(checkboxListComponent.parent).toBe(hostleft.parent);
+      expect(columnFilterComponent.parent).toBe(hostleft.parent);
+
+      expect(breadcrumbFilterComponent.parent).toBe(hosttop.parent);
+      expect(selectFilterComponent.parent).toBe(hosttop.parent);
+    });
+
+    function getFilterElement(componentDirective: any): DebugElement {
+      return hostFixture.debugElement.query(By.directive(componentDirective));
+    }
   });
 });

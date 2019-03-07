@@ -1,10 +1,13 @@
 <p>{{ searchFilters$ | async | json }}</p>
 <div id="search-term-container"></div>
 
-<div searchPortal="hosttop"></div>
+<div>
+  <ng-container searchPortal="hosttop"></ng-container>
+</div>
 <campus-collapsible-sheet>
-  <div aside
-       searchPortal="hostleft"> </div>
+  <div aside>
+    <ng-container searchPortal="hostleft"></ng-container>
+  </div>
   <div main
        style="height: 100%;  display: flex;">
     <campus-search [searchMode]="searchMode"

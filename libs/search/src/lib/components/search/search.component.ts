@@ -133,7 +133,13 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
   private addFilter(filter: SearchFilterInterface): void {
     const portalHost = this.portalHostsMap[filter.domHost];
     if (!portalHost) {
-      return;
+      throw new Error(
+        'portalhost ' +
+          filter.domHost +
+          ' not found! Did you add a `searchPortal="' +
+          filter.domHost +
+          '"` to the page?'
+      );
     }
 
     const componentRef = portalHost.host.createComponent(
@@ -165,9 +171,6 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
     // remove filters from portals
     Object.values(this.filterPortalHosts).forEach(portalHost => {
       portalHost.filters.forEach(componentRef => {
-        // exclude element from change detection
-        this.appRef.detachView(componentRef.hostView);
-
         // remove element from html
         componentRef.destroy();
       });
