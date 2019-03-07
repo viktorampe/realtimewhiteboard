@@ -6,7 +6,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
   styleUrls: ['./search-term.component.scss']
 })
 export class SearchTermComponent implements OnInit {
-  private _value: string;
+  public currentValue: string;
 
   @Input() public initialValue = '';
   @Input() public placeholder = 'Zoeken';
@@ -16,22 +16,13 @@ export class SearchTermComponent implements OnInit {
   @Input() public autoComplete: string | boolean;
   @Input() public autoCompleteValues: string[] = [];
 
-  public get currentValue(): string {
-    return this._value;
-  }
-  public set currentValue(value) {
-    if (value !== this._value) {
-      this._value = value;
-      this.valueChange.emit(value || '');
-    }
-  }
-
-  // emits on every change -> parent component should debounce
-  // change event exists by default -> emits on blur
-  // input event exists by default -> emits single characters
   @Output() public valueChange = new EventEmitter<string>();
 
+  onChange(event) {
+    this.valueChange.emit(this.currentValue || '');
+  }
+
   ngOnInit() {
-    this._value = this.initialValue;
+    this.currentValue = this.initialValue;
   }
 }

@@ -29,3 +29,7 @@ export const ENVIRONMENT_ALERTS_FEATURE_TOKEN = new InjectionToken(
 export const ENVIRONMENT_SSO_TOKEN = new InjectionToken(
   'environmentSsoSettings'
 );
+
+export const ENVIRONMENT_SEARCHMODES_TOKEN = new InjectionToken(
+  'environmentSearchModes'
+);

@@ -245,6 +245,7 @@ export class SearchViewModel {
       (this.searchState$.value.from || 0) + this.searchMode.results.pageSize;
     this.searchState$.next(newValue);
   }
+
   public changeFilters(criteria: SearchFilterCriteriaInterface): void {
     // update state
     const updatedCriteria: Map<
@@ -266,7 +267,12 @@ export class SearchViewModel {
       this.updateFilters();
     }
   }
-  public changeSearchTerm(searchTerm: string): void {}
+  public changeSearchTerm(searchTerm: string): void {
+    const newValue = { ...this.searchState$.value };
+    newValue.from = 0;
+    newValue.searchTerm = searchTerm;
+    this.searchState$.next(newValue);
+  }
 
   public updateResult(result: SearchResultInterface): void {
     this.results$.next(result);
