@@ -6,15 +6,20 @@ import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
 import { FavoriteReducer } from '.';
-// import { FAVORITE_SERVICE_TOKEN } from '../../favorite/favorite.service.interface';
+import { FavoriteTypesEnum } from '../../+models';
+import { FAVORITE_SERVICE_TOKEN } from '../../favorite/favorite.service.interface';
 import {
+  AddFavorite,
+  DeleteFavorite,
   FavoritesLoaded,
   FavoritesLoadError,
-  LoadFavorites
+  LoadFavorites,
+  ToggleFavorite
 } from './favorite.actions';
 import { FavoriteEffects } from './favorite.effects';
-// TODO: activate test when favorite service exists
-xdescribe('FavoriteEffects', () => {
+
+// file.only
+describe('FavoriteEffects', () => {
   let actions: Observable<any>;
   let effects: FavoriteEffects;
   let usedState: any;
@@ -68,9 +73,15 @@ xdescribe('FavoriteEffects', () => {
       ],
       providers: [
         {
+          provide: 'uuid',
+          useValue: () => 'foo'
+        },
+        {
           provide: FAVORITE_SERVICE_TOKEN,
           useValue: {
-            getAllForUser: () => {}
+            getAllForUser: () => {},
+            addFavorite: () => {},
+            deleteFavorite: () => {}
           }
         },
         FavoriteEffects,
@@ -168,6 +179,55 @@ xdescribe('FavoriteEffects', () => {
           effects.loadFavorites$,
           forcedLoadAction,
           loadErrorAction
+        );
+      });
+    });
+  });
+
+  describe('toggleFavorite$', () => {
+    const favorite = {
+      id: 123,
+      type: FavoriteTypesEnum.area,
+      created: new Date()
+    };
+    const toggleFavoriteAction = new ToggleFavorite({
+      favorite
+    });
+    const addFavoriteAction = new AddFavorite({ favorite });
+    const deleteFavoriteAction = new DeleteFavorite({ id: favorite.id });
+    describe('when the item is already marked as favorite', () => {
+      beforeAll(() => {
+        usedState = {
+          ...FavoriteReducer.initialState,
+          ids: [123],
+          entities: { 123: favorite }
+        };
+      });
+
+      beforeEach(() => {
+        mockServiceMethodReturnValue('deleteFavorite', true);
+      });
+      it('should dispatch a deleteFavorite action', () => {
+        expectInAndOut(
+          effects.toggleFavorite$,
+          toggleFavoriteAction,
+          deleteFavoriteAction
+        );
+      });
+    });
+    describe('when item is not yet marked as favorite', () => {
+      beforeAll(() => {
+        usedState = FavoriteReducer.initialState;
+      });
+
+      beforeEach(() => {
+        mockServiceMethodReturnValue('addFavorite', []);
+      });
+      it('should dispatch an add action if item is not yet a favorite', () => {
+        expectInAndOut(
+          effects.toggleFavorite$,
+          toggleFavoriteAction,
+          addFavoriteAction
         );
       });
     });

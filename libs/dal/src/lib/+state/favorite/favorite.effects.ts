@@ -3,8 +3,13 @@ import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { undo } from 'ngrx-undo';
 import { from } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { FavoriteActions } from '.';
 import { DalState } from '..';
+import {
+  FavoriteServiceInterface,
+  FAVORITE_SERVICE_TOKEN
+} from '../../favorite/favorite.service.interface';
 import {
   EffectFeedback,
   EffectFeedbackActions,
@@ -14,6 +19,7 @@ import {
   AddFavorite,
   DeleteFavorite,
   FavoritesActionTypes,
+  FavoritesLoaded,
   FavoritesLoadError,
   LoadFavorites,
   ToggleFavorite
@@ -27,10 +33,10 @@ export class FavoriteEffects {
     {
       run: (action: LoadFavorites, state: DalState) => {
         if (!action.payload.force && state.favorites.loaded) return;
-        // TODO: uncomment when favoriteService exists
-        // return this.favoriteService
-        //   .getAllForUser(action.payload.userId)
-        //   .pipe(map(favorites => new FavoritesLoaded({ favorites })));
+
+        return this.favoriteService
+          .getAllForUser(action.payload.userId)
+          .pipe(map(favorites => new FavoritesLoaded({ favorites })));
       },
       onError: (action: LoadFavorites, error) => {
         return new FavoritesLoadError(error);
@@ -40,10 +46,11 @@ export class FavoriteEffects {
   @Effect()
   addFavorite$ = this.dataPersistence.fetch(FavoritesActionTypes.AddFavorite, {
     run: (action: AddFavorite, state: DalState) => {
-      // TODO: uncomment when favoriteService exists
-      // return this.favoriteService
-      //   .addFavorite(action.payload.favorite)
-      //   .pipe(map(favorite => new FavoriteActions.AddFavoriteSuccess({ favorite })));
+      return this.favoriteService
+        .addFavorite(action.payload.favorite)
+        .pipe(
+          map(favorite => new FavoriteActions.AddFavoriteSuccess({ favorite }))
+        );
     },
     onError: (action: AddFavorite, error) => {
       const effectFeedback = new EffectFeedback({
@@ -65,22 +72,21 @@ export class FavoriteEffects {
     FavoritesActionTypes.DeleteFavorite,
     {
       run: (action: DeleteFavorite, state: DalState) => {
-        // TODO: uncomment when favoriteService exists
-        // return this.favoriteService.deleteFavorite(action.payload.id).pipe(
-        //   map(() => {
-        //     const effectFeedback = new EffectFeedback({
-        //       id: this.uuid(),
-        //       triggerAction: action,
-        //       message: 'Het item is uit jouw favorieten verwijderd.',
-        //       type: 'success',
-        //       display: true,
-        //       priority: Priority.NORM
-        //     });
-        //     return new EffectFeedbackActions.AddEffectFeedback({
-        //       effectFeedback
-        //     });
-        //   })
-        // );
+        return this.favoriteService.deleteFavorite(action.payload.id).pipe(
+          map(() => {
+            const effectFeedback = new EffectFeedback({
+              id: this.uuid(),
+              triggerAction: action,
+              message: 'Het item is uit jouw favorieten verwijderd.',
+              type: 'success',
+              display: true,
+              priority: Priority.NORM
+            });
+            return new EffectFeedbackActions.AddEffectFeedback({
+              effectFeedback
+            });
+          })
+        );
       },
       undoAction: (action: DeleteFavorite, error) => {
         const undoAction = undo(action);
@@ -128,6 +134,8 @@ export class FavoriteEffects {
   constructor(
     @Inject('uuid') private uuid: Function,
     private actions: Actions,
-    private dataPersistence: DataPersistence<DalState> // @Inject(FAVORITE_SERVICE_TOKEN) // private favoriteService: FavoriteServiceInterface
+    private dataPersistence: DataPersistence<DalState>,
+    @Inject(FAVORITE_SERVICE_TOKEN)
+    private favoriteService: FavoriteServiceInterface
   ) {}
 }
