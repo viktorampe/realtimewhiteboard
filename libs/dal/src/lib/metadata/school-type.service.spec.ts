@@ -1,12 +1,11 @@
 import { TestBed } from '@angular/core/testing';
+import { SchoolTypeService } from './school-type.service';
 
-import { EduNetsService } from './edu-nets.service';
-
-describe('EduNetsService', () => {
+describe('SchoolTypesService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: EduNetsService = TestBed.get(EduNetsService);
+    const service: SchoolTypeService = TestBed.get(SchoolTypeService);
     expect(service).toBeTruthy();
   });
 });
