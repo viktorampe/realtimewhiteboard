@@ -1,7 +1,7 @@
-import { EduContentsViewModel } from './components/edu-contents.viewmodel';
-import { EduContentsComponent } from './components/edu-contents.component';
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
+import { EduContentsViewModel } from './components/edu-contents.viewmodel';
+import { EduContentsComponent } from './components/edu-contents/edu-contents.component';
 
 const routes: Routes = [
   {

@@ -3,8 +3,8 @@ import { NgModule } from '@angular/core';
 import { PagesSharedModule } from '@campus/pages/shared';
 import { UiModule } from '@campus/ui';
 import { EduContentsViewModel } from './components/edu-contents.viewmodel';
-import { PagesEduContentsRoutingModule } from './pages-edu-contents-routing.module';
 import { EduContentsComponent } from './components/edu-contents/edu-contents.component';
+import { PagesEduContentsRoutingModule } from './pages-edu-contents-routing.module';
 
 @NgModule({
   imports: [
@@ -13,9 +13,7 @@ import { EduContentsComponent } from './components/edu-contents/edu-contents.com
     UiModule,
     PagesSharedModule
   ],
-  declarations: [
-    EduContentsComponent,
-  ],
+  declarations: [EduContentsComponent],
   providers: [EduContentsViewModel]
 })
 export class PagesEduContentsModule {}
