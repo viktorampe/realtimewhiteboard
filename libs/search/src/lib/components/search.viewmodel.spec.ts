@@ -35,6 +35,27 @@ describe('SearchViewModel', () => {
     expect(searchViewModel).toBeDefined();
   });
 
+  describe('changeSearchTerm', () => {
+    it('should next the state with an altered search term and the from value set to zero', () => {
+      const searchTerm = 'rekenen';
+      const startFrom = 10;
+
+      searchViewModel.searchState$.next(<SearchStateInterface>{
+        from: startFrom
+      });
+
+      searchViewModel.changeSearchTerm(searchTerm);
+      expect(searchViewModel.searchState$).toBeObservable(
+        hot('a', {
+          a: {
+            searchTerm: searchTerm,
+            from: 0
+          }
+        })
+      );
+    });
+  });
+
   describe('changeFilters', () => {
     beforeEach(() => {
       const searchState: SearchStateInterface = {
