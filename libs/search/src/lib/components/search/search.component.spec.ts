@@ -284,7 +284,7 @@ describe('SearchComponent', () => {
         hostFixture.detectChanges();
       });
 
-      it('should create', () => {
+      it('should be defined', () => {
         expect(hostComponent).toBeDefined();
         expect(searchComponent).toBeDefined();
       });
@@ -300,24 +300,38 @@ describe('SearchComponent', () => {
         // does the portalHost have an inner view?
         expect(portalHost.length).toBe(1);
 
-        // get a reference to the component of that inner view
-        const innerComponent = portalHost.get(0)['_view'].nodes[1].instance;
+        // is there a SearchTermComponent?
+        const searchTermComponentDE = hostFixture.debugElement.query(
+          By.directive(SearchTermComponent)
+        );
 
-        // is it a searchTermComponent
-        expect(innerComponent).toEqual(jasmine.any(SearchTermComponent));
+        expect(searchTermComponentDE.componentInstance).toBeTruthy();
+
+        // is the SearchTermComponent in the portalHost?
+        // it is appended to the DOM as a sibling to the host
+        expect(portalHost.element.nativeElement.nextSibling).toBe(
+          searchTermComponentDE.nativeElement
+        );
+
+        // just to be sure
+        // if I clear the portalHost's views,
+        // then the searchTermComponent should be gone
+        portalHost.clear();
+
+        const detachedSearchTermComponentDE = hostFixture.debugElement.query(
+          By.directive(SearchTermComponent)
+        );
+
+        expect(detachedSearchTermComponentDE).toBeNull();
       });
 
       it('should subscribe to the valueChange event of the searchTermComponent', () => {
         const mockInput =
           'de kans dat deze string at random is ingevoerd, is nogal klein';
 
-        // get reference to searchComponent, see test above for details
-        const searchTermComponent = searchComponent.portalHosts
-          .find(
-            portal => portal.searchPortal === mockSearchMode.searchTerm.domHost
-          )
-          .viewContainerRef.get(0)['_view'].nodes[1]
-          .instance as SearchTermComponent;
+        const searchTermComponent = hostFixture.debugElement.query(
+          By.directive(SearchTermComponent)
+        ).componentInstance;
 
         searchComponent.onSearchTermChange = jest.fn();
 
@@ -347,10 +361,32 @@ describe('SearchComponent', () => {
 
         hostFixture.detectChanges();
 
-        const portalHost = searchComponent.portalHosts.first.viewContainerRef;
+        const searchTermComponent = hostFixture.debugElement.query(
+          By.directive(SearchTermComponent)
+        );
 
-        // no projected views in portalHost = no searchTerm
-        expect(portalHost.length).toBe(0);
+        expect(searchTermComponent).toBeFalsy();
+      });
+
+      it("because specified domHost doesn't exist ", () => {
+        const newSearchMode = {
+          ...mockSearchMode,
+          searchTerm: { domHost: 'bestaat niet' }
+        };
+        searchComponent.initialState = mockSearchState;
+        searchComponent.searchMode = newSearchMode;
+
+        expect(() => {
+          hostFixture.detectChanges();
+        }).toThrowError(
+          `specified host '${newSearchMode.searchTerm.domHost}' not found`
+        );
+
+        const searchTermComponent = hostFixture.debugElement.query(
+          By.directive(SearchTermComponent)
+        );
+
+        expect(searchTermComponent).toBeFalsy();
       });
     });
   });

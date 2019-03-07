@@ -103,6 +103,8 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
     this.searchViewmodel.getNextPage();
   }
 
+  // Creates a SearchTermComponent and appends it to the DOM
+  // as a sibling to the portalHost (as defined by the SearchMode)
   private createSearchTermComponent(
     searchMode: SearchModeInterface,
     searchState: SearchStateInterface,
@@ -125,7 +127,7 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
     searchTermComponent.initialValue = searchState.searchTerm;
     searchTermComponent.autoComplete =
       searchMode.searchTerm.autocompleteEl ||
-      (this.autoComplete && !!this.autoComplete.length);
+      (Array.isArray(this.autoComplete) && !!this.autoComplete.length);
     searchTermComponent.autoCompleteValues = this.autoComplete;
 
     // needed to avoid ExpressionChangedAfterItHasBeenCheckedError
