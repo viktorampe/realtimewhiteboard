@@ -246,10 +246,14 @@ describe('SearchViewModel', () => {
     });
 
     it('should trigger an emit the new searchState', () => {
-      const oldValue: SearchStateInterface = {} as SearchStateInterface;
+      const oldValue: SearchStateInterface = {
+        searchTerm: 'some term',
+        filterCriteriaSelections: new Map<string, (number | string)[]>()
+      };
+      searchViewModel.searchState$.next(oldValue);
       searchViewModel.changeSort(mockSortMode);
 
-      const expected = oldValue;
+      const expected = { ...oldValue };
       expected.sort = mockSortMode.name;
       expected.from = 0;
       expect(searchViewModel.searchState$).toBeObservable(
