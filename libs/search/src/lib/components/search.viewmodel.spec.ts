@@ -392,7 +392,7 @@ describe('SearchViewModel', () => {
         expect(searchViewModel.searchFilters$).toBeObservable(
           hot('a', {
             a: [
-              getTestFilter('firstFilter', 140, 0, false, criteriaIsArray),
+              getTestFilter('firstFilter', 140, null, false, criteriaIsArray),
               getTestFilter('secondFilter', 3484, 38, false, criteriaIsArray)
             ]
           })
