@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LearningAreaQueries } from '@campus/dal';
-import { EduContentSearchModesComponent } from './components/edu-content-area/edu-contents-search-modes/edu-contents-search-modes.component';
 import { EduContentLearningAreaOverviewComponent } from './components/edu-contents-learning-area-overview/edu-contents-learning-area-overview.component';
 import { EduContentSearchByTermComponent } from './components/edu-contents-search-by-term/edu-contents-search-by-term.component';
+import { EduContentSearchModesComponent } from './components/edu-contents-search-modes/edu-contents-search-modes.component';
 import { EduContentsResolver } from './components/edu-contents.resolver';
 
 const routes: Routes = [
@@ -27,7 +27,16 @@ const routes: Routes = [
           displayProperty: 'name'
         },
         component: EduContentSearchModesComponent,
-        children: []
+        children: [
+          {
+            path: 'term',
+            component: EduContentSearchByTermComponent
+          },
+          {
+            path: 'term',
+            component: EduContentSearchByTermComponent
+          }
+        ]
       }
     ]
   }
