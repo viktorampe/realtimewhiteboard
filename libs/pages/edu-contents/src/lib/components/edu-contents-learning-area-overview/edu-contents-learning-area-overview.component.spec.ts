@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { UiModule } from '@campus/ui';
-import { EduContentLearningAreaOverviewComponent } from './edu-contents.component';
+import { EduContentLearningAreaOverviewComponent } from './edu-contents-learning-area-overview.component';
 
 describe('EduContentLearningAreaOverviewComponent', () => {
   let component: EduContentLearningAreaOverviewComponent;
