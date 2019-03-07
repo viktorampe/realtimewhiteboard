@@ -22,6 +22,12 @@ const routes: Routes = [
         canActivate: [CoupledTeacherGuard, PermissionGuard]
       },
       {
+        path: 'edu-content',
+        loadChildren: '@campus/pages/edu-contents#EduContentsModule',
+        data: { breadcrumbText: 'Lesmateriaal' },
+        canActivate: [PermissionGuard]
+      },
+      {
         path: 'tasks',
         loadChildren: '@campus/pages/tasks#PagesTasksModule',
         data: { breadcrumbText: 'Taken' },
@@ -121,11 +127,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(
-      [
-        {
-          path: 'edu-content',
-          loadChildren: '@campus/pages/edu-contents#EduContentsModule'
-        },RouterModule]
+  imports: [RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload' })],
+  exports: [RouterModule]
 })
 export class AppRoutingModule {}
