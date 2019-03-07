@@ -1,11 +1,41 @@
-import { TestBed } from '@angular/core/testing';
+import { inject, TestBed } from '@angular/core/testing';
+import { EduNetApi } from '@diekeure/polpo-api-angular-sdk';
+import { hot } from '@nrwl/nx/testing';
+import { EduNetFixture } from './../+fixtures/EduNet.fixture';
 import { EduNetService } from './edu-net.service';
+import { EduNetServiceInterface } from './edu-net.service.interface';
 
 describe('EduNetService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+  let eduNetService: EduNetServiceInterface;
+  let mockData$: any;
 
-  it('should be created', () => {
-    const service: EduNetService = TestBed.get(EduNetService);
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        EduNetService,
+        {
+          provide: EduNetApi,
+          useValue: {
+            find: () => mockData$
+          }
+        }
+      ]
+    });
+    eduNetService = TestBed.get(EduNetService);
+  });
+
+  it('should be created', inject([EduNetService], (service: EduNetService) => {
     expect(service).toBeTruthy();
+  }));
+
+  it('should return eduNets', async () => {
+    mockData$ = hot('-a-|', {
+      a: [new EduNetFixture({ id: 1 }), new EduNetFixture({ id: 2 })]
+    });
+    expect(eduNetService.getAll()).toBeObservable(
+      hot('-a-|', {
+        a: [new EduNetFixture({ id: 1 }), new EduNetFixture({ id: 2 })]
+      })
+    );
   });
 });
