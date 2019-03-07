@@ -1,4 +1,11 @@
-import { Component, Type } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  Type,
+  ViewChild,
+  ViewChildren,
+  ViewContainerRef
+} from '@angular/core';
 import { EduContentMetadataFixture, LearningAreaFixture } from '@campus/dal';
 import {
   SearchFilterCriteriaInterface,
@@ -15,13 +22,14 @@ import { MockSearchViewModel } from 'libs/search/src/lib/components/search.viewm
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { PolpoResultItemComponent } from '../polpo-result-item/polpo-result-item.component';
+import { SearchComponent } from './../../../../search/src/lib/components/search/search.component';
 
 @Component({
   selector: 'campus-finding-nemo',
   templateUrl: './finding-nemo.component.html',
   styleUrls: ['./finding-nemo.component.scss']
 })
-export class FindingNemoComponent {
+export class FindingNemoComponent implements AfterViewInit {
   public resultItemComponent: Type<SearchResultItemComponentInterface>;
   public resultsPage$ = new BehaviorSubject<SearchResultInterface>(null);
   public searchMode: SearchModeInterface;
@@ -32,6 +40,15 @@ export class FindingNemoComponent {
   );
 
   private loadTimer: number;
+
+  @ViewChildren('hosttop, hostleft, pagebar', { read: ViewContainerRef })
+  private portalHosts;
+
+  @ViewChild(SearchComponent) private searchComponent: SearchComponent;
+
+  ngAfterViewInit() {
+    this.searchComponent.portalHosts = this.portalHosts;
+  }
 
   constructor(private eduContentMetadataApi: EduContentMetadataApi) {
     this.setMockData();
@@ -132,7 +149,7 @@ export class FindingNemoComponent {
       searchFilterFactory: MockFactory,
       searchTerm: {
         // autocompleteEl: string; //reference to material autocomplete component
-        domHost: '#searchTermContainer'
+        domHost: 'hosttop'
       },
       results: {
         component: PolpoResultItemComponent,

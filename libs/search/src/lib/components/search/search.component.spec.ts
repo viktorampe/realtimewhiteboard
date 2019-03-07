@@ -1,6 +1,14 @@
-import { DomPortalOutlet } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
-import { Component, NgModule, SimpleChange, Type } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  NgModule,
+  SimpleChange,
+  Type,
+  ViewChild,
+  ViewChildren,
+  ViewContainerRef
+} from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
@@ -38,11 +46,20 @@ class ResultItemComponent extends ResultItemBase {
   // tslint:disable-next-line:component-selector
   selector: 'test-container',
   template: `
-    <div id="mockPortalHost"></div>
+    <div #mockHost id="mockHost"></div>
     <campus-search></campus-search>
   `
 })
-export class TestContainerComponent {}
+export class TestContainerComponent implements AfterViewInit {
+  @ViewChildren('mockHost', { read: ViewContainerRef })
+  private portalHosts;
+
+  @ViewChild(SearchComponent) private searchComponent: SearchComponent;
+
+  ngAfterViewInit() {
+    this.searchComponent.portalHosts = this.portalHosts;
+  }
+}
 
 @NgModule({
   declarations: [TestContainerComponent],
@@ -79,7 +96,7 @@ describe('SearchComponent', () => {
       dynamicFilters: false,
       searchFilterFactory: {} as Type<SearchFilterFactory>,
       searchTerm: {
-        domHost: '#mockPortalHost'
+        domHost: 'mockHost'
       },
       results: {
         component: ResultItemComponent,
@@ -250,9 +267,6 @@ describe('SearchComponent', () => {
     let hostComponent: TestContainerComponent;
     let searchComponent: SearchComponent;
 
-    let portals: any[];
-    let portalHosts: DomPortalOutlet[];
-
     describe('should create', () => {
       // creating a host component with a portal component
       beforeEach(() => {
@@ -266,9 +280,6 @@ describe('SearchComponent', () => {
         searchComponent.initialState = mockSearchState;
         searchComponent.searchMode = mockSearchMode;
 
-        portals = searchComponent['portals'];
-        portalHosts = searchComponent['portalhosts'];
-
         hostFixture.detectChanges();
       });
 
@@ -279,40 +290,34 @@ describe('SearchComponent', () => {
 
       it('should create a searchTermComponent and add it to the specified portalHost', () => {
         // does the portalHost exist and does the searchComponent have a reference to it?
-        expect(portalHosts.length).toBe(1);
+        expect(searchComponent.portalHosts.length).toBe(1);
 
-        const portalHost = portalHosts[0];
+        const portalHost = searchComponent.portalHosts.first;
 
-        // is the refernce to the correct portalHost?
-        expect('#' + portalHost.outletElement.id).toBe(
+        // is the reference to the correct portalHost?
+        expect(portalHost.element.nativeElement.id).toBe(
           mockSearchMode.searchTerm.domHost
         );
 
-        const portalHostDE = hostFixture.debugElement.query(
-          By.css('#' + portalHost.outletElement.id)
-        );
+        // does the portalHost have an inner view?
+        expect(portalHost.length).toBe(1);
 
-        expect(portalHost.outletElement).toBe(portalHostDE.nativeElement);
+        // get a reference to the component of that inner view
+        const innerComponent = portalHost.get(0)['_view'].nodes[1].instance;
 
-        // does the SearchTermComponent exist?
-        // is the SearchTermComponent actually inside the portalHost
-        // TODO: write better test -> debugElement.query not useable
-        expect(portalHost.outletElement.innerHTML).toContain(
-          '<campus-search-term>'
-        );
-
-        expect(portals.length).toBe(1);
-
-        const searchTermComponent = portals[0] as SearchTermComponent;
-
-        expect(searchTermComponent).toBeTruthy();
+        // is it a searchTermComponent
+        expect(innerComponent).toEqual(jasmine.any(SearchTermComponent));
       });
 
       it('should subscribe to the valueChange event of the searchTermComponent', () => {
         const mockInput =
           'de kans dat deze string at random is ingevoerd, is nogal klein';
 
-        const searchTermComponent = portals[0] as SearchTermComponent;
+        // get reference to searchComponent, see test above for details
+        const searchTermComponent = searchComponent.portalHosts.first.get(0)[
+          '_view'
+        ].nodes[1].instance as SearchTermComponent;
+
         searchComponent.onSearchTermChange = jest.fn();
 
         searchTermComponent.valueChange.next(mockInput);
@@ -332,9 +337,6 @@ describe('SearchComponent', () => {
         searchComponent = hostFixture.debugElement.query(
           By.directive(SearchComponent)
         ).componentInstance;
-
-        portals = searchComponent['portals'];
-        portalHosts = searchComponent['portalhosts'];
       });
 
       it('because the initial state is missing searchTerm', () => {
@@ -344,8 +346,8 @@ describe('SearchComponent', () => {
 
         hostFixture.detectChanges();
 
-        expect(portalHosts.length).toBe(0);
-        expect(portals.length).toBe(0);
+        // no projected views in portalHost = no searchTerm
+        expect(searchComponent.portalHosts.first.length).toBe(0);
       });
 
       it('because the searchMode is missing searchTerm', () => {
@@ -355,8 +357,8 @@ describe('SearchComponent', () => {
 
         hostFixture.detectChanges();
 
-        expect(portalHosts.length).toBe(0);
-        expect(portals.length).toBe(0);
+        // no projected views in portalHost = no searchTerm
+        expect(searchComponent.portalHosts.first.length).toBe(0);
       });
     });
   });
