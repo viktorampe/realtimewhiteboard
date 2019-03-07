@@ -1,7 +1,7 @@
 import { FavoriteActions } from '.';
 import { FavoriteInterface } from '../../+models';
 import { initialState, reducer, State } from './favorite.reducer';
-
+// file.only
 const typeInitialValue = 'foo';
 
 /**
@@ -83,7 +83,7 @@ describe('Favorites Reducer', () => {
   describe('add actions', () => {
     it('should add one favorite', () => {
       const favorite = favorites[0];
-      const action = new FavoriteActions.AddFavorite({
+      const action = new FavoriteActions.AddFavoriteSuccess({
         favorite
       });
 
