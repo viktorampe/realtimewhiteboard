@@ -23,7 +23,7 @@ export class TileComponent implements OnInit {
 
 export interface TileSecondaryActionInterface {
   label: string;
-  icon: string;
+  icon?: string;
   routerLink?: string[];
   onClick?: (event: Event) => void;
 }
