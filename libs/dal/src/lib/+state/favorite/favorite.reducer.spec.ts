@@ -1,7 +1,7 @@
 import { FavoriteActions } from '.';
 import { FavoriteInterface } from '../../+models';
 import { initialState, reducer, State } from './favorite.reducer';
-// file.only
+
 const typeInitialValue = 'foo';
 
 /**
