@@ -121,7 +121,11 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload' })],
-  exports: [RouterModule]
+  imports: [RouterModule.forRoot(
+      [
+        {
+          path: 'edu-content',
+          loadChildren: '@campus/pages/edu-contents#EduContentsModule'
+        },RouterModule]
 })
 export class AppRoutingModule {}
