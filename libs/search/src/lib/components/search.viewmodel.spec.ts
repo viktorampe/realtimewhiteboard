@@ -399,6 +399,24 @@ describe('SearchViewModel', () => {
         );
       });
     });
+    it('should not change null values to 0 and also not change 0 values if no new predictions where given', () => {
+      [true, false].forEach(criteriaIsArray => {
+        searchViewModel['filters$'].next([
+          getTestFilter('firstFilter', 140, null, false, criteriaIsArray),
+          getTestFilter('secondFilter', 140, 0, false, criteriaIsArray),
+          getTestFilter('thirdFilter', 3484, 38, false, criteriaIsArray)
+        ]);
+        expect(searchViewModel.searchFilters$).toBeObservable(
+          hot('a', {
+            a: [
+              getTestFilter('firstFilter', 140, null, false, criteriaIsArray),
+              getTestFilter('secondFilter', 140, 0, false, criteriaIsArray),
+              getTestFilter('thirdFilter', 3484, 38, false, criteriaIsArray)
+            ]
+          })
+        );
+      });
+    });
     it('should update selections and predictions for all criteria, including children', () => {
       [true, false].forEach(criteriaIsArray => {
         const initFilters = [
