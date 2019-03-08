@@ -1,10 +1,6 @@
-import { DomPortalHost } from '@angular/cdk/portal';
 import {
-  ApplicationRef,
   Component,
   ComponentFactoryResolver,
-  ComponentRef,
-  Injector,
   Input,
   OnChanges,
   OnDestroy,
@@ -35,18 +31,11 @@ import { SearchStateInterface } from './../../interfaces/search-state.interface'
 })
 export class SearchComponent implements OnInit, OnDestroy, OnChanges {
   private subscriptions = new Subscription();
-  private filterSubscriptions = new Subscription();
-  private filterPortalHosts: {
-    [key: string]: {
-      host: DomPortalHost;
-      filters: ComponentRef<any>[];
-    };
-  } = {};
-  private _portalHosts: QueryList<SearchPortalDirective>;
+  private _portalHosts: QueryList<SearchPortalDirective> = new QueryList();
   private portalHostsMap: {
     [key: string]: {
       host: ViewContainerRef;
-      filters: ComponentRef<any>[];
+      subscriptions: Subscription;
     };
   } = {};
 
@@ -55,18 +44,19 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public initialState: SearchStateInterface;
   @Input() public searchResults: SearchResultInterface;
   @Input()
-  set portalHosts(portalHosts: QueryList<SearchPortalDirective>) {
+  public set portalHosts(portalHosts: QueryList<SearchPortalDirective>) {
     if (portalHosts) {
+      this._portalHosts = portalHosts;
       portalHosts.forEach(portalHost => {
         this.portalHostsMap[portalHost.searchPortal] = {
           host: portalHost.viewContainerRef,
-          filters: []
+          subscriptions: new Subscription()
         };
       });
       this.createFilters();
     }
   }
-  get portalHosts() {
+  public get portalHosts() {
     return this._portalHosts;
   }
 
@@ -74,9 +64,7 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
 
   constructor(
     private searchViewmodel: SearchViewModel,
-    private componentFactoryResolver: ComponentFactoryResolver,
-    private appRef: ApplicationRef,
-    private injector: Injector
+    private componentFactoryResolver: ComponentFactoryResolver
   ) {
     this.searchState$ = this.searchViewmodel.searchState$;
   }
@@ -88,11 +76,6 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
   ngOnDestroy() {
     // remove filters
     this.removeFilters();
-
-    // detach portalhost
-    Object.values(this.filterPortalHosts).forEach(portalHost =>
-      portalHost.host.detach()
-    );
 
     // clean up subscriptions
     this.subscriptions.unsubscribe();
@@ -112,7 +95,11 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
     this.searchViewmodel.changeSort(event);
   }
 
-  public onFilterSelectionChange(): void {}
+  public onFilterSelectionChange(
+    criteria: SearchFilterCriteriaInterface
+  ): void {
+    this.searchViewmodel.changeFilters(criteria);
+  }
   public onSearchTermChange(): void {}
   public onScroll(): void {
     this.searchViewmodel.getNextPage();
@@ -122,7 +109,7 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
     this.subscriptions.add(
       this.searchViewmodel.searchFilters$.subscribe(searchFilters => {
         // remove old filters
-        this.removeFilters();
+        this.removeFilters(searchFilters);
 
         // add updated filters
         searchFilters.forEach(filter => this.addFilter(filter));
@@ -134,28 +121,25 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
     const portalHost = this.portalHostsMap[filter.domHost];
     if (!portalHost) {
       throw new Error(
-        'portalhost ' +
-          filter.domHost +
-          ' not found! Did you add a `searchPortal="' +
-          filter.domHost +
-          '"` to the page?'
+        `portalhost ${filter.domHost} not found! Did you add a 'searchPortal="${
+          filter.domHost
+        }"' to the page?'`
       );
     }
 
     const componentRef = portalHost.host.createComponent(
       this.componentFactoryResolver.resolveComponentFactory(filter.component)
     );
-    portalHost.filters.push(componentRef);
 
     // set inputs
     const filterItem = componentRef.instance;
     filterItem.filterCriteria = filter.criteria;
 
     // subscribe to outputs
-    this.filterSubscriptions.add(
+    portalHost.subscriptions.add(
       filterItem.filterSelectionChange.subscribe(
         (criteria: SearchFilterCriteriaInterface) => {
-          this.searchViewmodel.changeFilters(criteria);
+          this.onFilterSelectionChange(criteria);
         }
       )
     );
@@ -164,16 +148,22 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
     componentRef.changeDetectorRef.detectChanges();
   }
 
-  private removeFilters(): void {
-    // close subscriptions
-    this.filterSubscriptions.unsubscribe();
+  private removeFilters(filters?: SearchFilterInterface[]): void {
+    let portals = [];
+    if (filters) {
+      portals = filters.map(filter => this.portalHostsMap[filter.domHost]);
+      portals = Array.from(new Set(portals)); // only reset each host once
+    } else {
+      portals = Object.values(this.portalHostsMap);
+    }
 
-    // remove filters from portals
-    Object.values(this.filterPortalHosts).forEach(portalHost => {
-      portalHost.filters.forEach(componentRef => {
-        // remove element from html
-        componentRef.destroy();
-      });
+    portals.forEach(portal => {
+      // close subscriptions
+      portal.subscriptions.unsubscribe();
+      portal.subscriptions = new Subscription();
+
+      // remove filters from portals
+      portal.host.clear();
     });
   }
 }

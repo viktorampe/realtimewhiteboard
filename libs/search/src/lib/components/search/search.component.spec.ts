@@ -18,9 +18,14 @@ import { LearningAreaFixture } from '@campus/dal';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { hot } from 'jasmine-marbles';
+import {
+  SearchFilterCriteriaFixture,
+  SearchFilterCriteriaValuesFixture
+} from '../../+fixtures/search-filter-criteria.fixture';
 import { SearchPortalDirective } from '../../directives';
 import {
   SearchFilterFactory,
+  SearchFilterInterface,
   SearchModeInterface,
   SearchResultInterface,
   SearchStateInterface
@@ -315,26 +320,139 @@ describe('SearchComponent', () => {
     });
 
     it('should add component to the correct host element', () => {
-      const hosts = hostFixture.debugElement.queryAll(
-        By.directive(SearchPortalDirective)
+      const hosttop = getPortalContainer('hosttop');
+      const hostleft = getPortalContainer('hostleft');
+
+      // items are attached as siblings of the portal element, therefore we check if they have the same parent
+      expect(checkboxLineComponent.parent.nativeElement).toBe(hostleft);
+      expect(checkboxListComponent.parent.nativeElement).toBe(hostleft);
+      expect(columnFilterComponent.parent.nativeElement).toBe(hostleft);
+
+      expect(breadcrumbFilterComponent.parent.nativeElement).toBe(hosttop);
+      expect(selectFilterComponent.parent.nativeElement).toBe(hosttop);
+    });
+
+    it('should set the filterCriteria', () => {
+      const filterCriteria = searchViewmodel.searchFilters$.value;
+
+      expect(checkboxLineComponent.componentInstance.filterCriteria).toBe(
+        filterCriteria[0].criteria
       );
-      const hosttop = hosts.find(
-        host => host.attributes.searchPortal === 'hosttop'
+      expect(checkboxListComponent.componentInstance.filterCriteria).toBe(
+        filterCriteria[1].criteria
       );
-      const hostleft = hosts.find(
-        host => host.attributes.searchPortal === 'hostleft'
+      expect(breadcrumbFilterComponent.componentInstance.filterCriteria).toBe(
+        filterCriteria[2].criteria
+      );
+      expect(columnFilterComponent.componentInstance.filterCriteria).toBe(
+        filterCriteria[3].criteria
+      );
+      expect(selectFilterComponent.componentInstance.filterCriteria).toBe(
+        filterCriteria[4].criteria
+      );
+    });
+
+    it('should subscribe to the filterSelectionChange', () => {
+      const mockData = 'foo bar baz';
+      searchComponent.onFilterSelectionChange = jest.fn();
+      checkboxLineComponent.componentInstance.filterSelectionChange.next(
+        mockData
       );
 
-      expect(checkboxLineComponent.parent).toBe(hostleft.parent);
-      expect(checkboxListComponent.parent).toBe(hostleft.parent);
-      expect(columnFilterComponent.parent).toBe(hostleft.parent);
+      expect(searchComponent.onFilterSelectionChange).toHaveBeenCalledTimes(1);
+      expect(searchComponent.onFilterSelectionChange).toHaveBeenCalledWith(
+        mockData
+      );
+    });
 
-      expect(breadcrumbFilterComponent.parent).toBe(hosttop.parent);
-      expect(selectFilterComponent.parent).toBe(hosttop.parent);
+    it('should call the vm.changeFilters when filters onFilterSelectionChange', () => {
+      const filterCriteria = new SearchFilterCriteriaFixture();
+      searchViewmodel.changeFilters = jest.fn();
+      searchComponent.onFilterSelectionChange(filterCriteria);
+      expect(searchViewmodel.changeFilters).toHaveBeenCalledTimes(1);
+      expect(searchViewmodel.changeFilters).toHaveBeenCalledWith(
+        filterCriteria
+      );
+    });
+
+    it('should replace the filters when new filters are recieved', () => {
+      const hosttop = getPortalContainer('hosttop');
+      const hostleft = getPortalContainer('hostleft');
+      // verify that our test starts with different numbers
+      expect(hosttop.children.length).toBe(3);
+      expect(hostleft.children.length).toBe(4);
+
+      const filters = [
+        {
+          criteria: new SearchFilterCriteriaFixture({}, [
+            new SearchFilterCriteriaValuesFixture(),
+            new SearchFilterCriteriaValuesFixture({
+              data: { id: 2, name: 'foo' }
+            }),
+            new SearchFilterCriteriaValuesFixture({
+              data: { id: 3, name: 'foo bar' }
+            })
+          ]),
+          component: CheckboxLineFilterComponent,
+          domHost: 'hostleft'
+        },
+        {
+          criteria: new SearchFilterCriteriaFixture({}, [
+            new SearchFilterCriteriaValuesFixture(),
+            new SearchFilterCriteriaValuesFixture({
+              data: { id: 2, name: 'foo' }
+            }),
+            new SearchFilterCriteriaValuesFixture({
+              data: { id: 3, name: 'foo bar' }
+            })
+          ]),
+          component: CheckboxLineFilterComponent,
+          domHost: 'hosttop'
+        }
+      ];
+
+      jest.spyOn(searchComponent as any, 'removeFilters');
+
+      searchViewmodel.searchFilters$.next(filters);
+      fixture.detectChanges();
+
+      // should only contain host element and the new filter
+      expect(searchComponent['removeFilters']).toHaveBeenCalledTimes(1);
+      expect(searchComponent['removeFilters']).toHaveBeenCalledWith(filters);
+      expect(hosttop.children.length).toBe(2);
+      expect(hostleft.children.length).toBe(2);
+    });
+
+    it('should clean up on destroy', () => {
+      searchComponent['removeFilters'] = jest.fn();
+      searchComponent['subscriptions'].unsubscribe = jest.fn();
+
+      searchComponent.ngOnDestroy();
+
+      expect(searchComponent['removeFilters']).toHaveBeenCalledTimes(1);
+      expect(
+        searchComponent['subscriptions'].unsubscribe
+      ).toHaveBeenCalledTimes(1);
+    });
+
+    it('should throw error when target portal is not found', () => {
+      const filter = { domHost: 'iDontExist' } as SearchFilterInterface;
+      const expectedError = `portalhost ${
+        filter.domHost
+      } not found! Did you add a 'searchPortal="${
+        filter.domHost
+      }"' to the page?'`;
+      expect(() => searchComponent['addFilter'](filter)).toThrow(expectedError);
     });
 
     function getFilterElement(componentDirective: any): DebugElement {
       return hostFixture.debugElement.query(By.directive(componentDirective));
+    }
+
+    function getPortalContainer(domHost: string): DebugElement {
+      return searchComponent.portalHosts.find(
+        host => host.searchPortal === domHost
+      ).viewContainerRef.element.nativeElement.parentNode;
     }
   });
 });

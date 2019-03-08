@@ -17,7 +17,7 @@ export class BreadcrumbFilterComponent
 
   @Input() rootLabel: string;
   @Input()
-  set filterCriteria(filterCriteria: SearchFilterCriteriaInterface[]) {
+  public set filterCriteria(filterCriteria: SearchFilterCriteriaInterface[]) {
     this.selectedValues = [];
     filterCriteria.forEach(criteria => {
       const selectedValue = criteria.values.find(value => value.selected);
@@ -26,6 +26,9 @@ export class BreadcrumbFilterComponent
       }
     });
     this.criteria = filterCriteria;
+  }
+  public get filterCriteria() {
+    return this.criteria;
   }
   @Output() filterSelectionChange = new EventEmitter<
     SearchFilterCriteriaInterface[]
