@@ -36,17 +36,26 @@ const routes: Routes = [
           {
             path: 'term',
             component: EduContentSearchByTermComponent,
-            data: { breadcrumbText: 'Standaard zoeken' }
+            data: {
+              breadcrumbText: 'Standaard zoeken',
+              selector: undefined
+            }
           },
           {
             path: 'plan',
             component: EduContentSearchByColumnComponent,
-            data: { breadcrumbText: 'Zoeken op leerplan' }
+            data: {
+              breadcrumbText: 'Zoek op leerplan',
+              selector: undefined
+            }
           },
           {
             path: 'toc',
             component: EduContentSearchByColumnComponent,
-            data: { breadcrumbText: 'Zoeken op inhoudstafel' }
+            data: {
+              breadcrumbText: 'Zoek op inhoudstafel',
+              selector: undefined
+            }
           }
         ]
       }
