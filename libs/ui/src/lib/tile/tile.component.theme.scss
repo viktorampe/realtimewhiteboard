@@ -55,18 +55,15 @@
       }
 
       mat-icon {
-        width: calc(
-          #{$ui-tile-content-icon-size} + #{$ui-tile-content-icon-border-padding}
-        );
-        height: calc(
-          #{$ui-tile-content-icon-size} + #{$ui-tile-content-icon-border-padding}
-        );
+        width: $ui-tile-content-icon-size + $ui-tile-content-icon-border-padding;
+        height: $ui-tile-content-icon-size +
+          $ui-tile-content-icon-border-padding;
         margin-left: $ui-tile-content-icon-margin;
         @if ($ui-tile-content-icon-show-border) {
           border: solid
             $ui-tile-content-icon-border-width
             $ui-tile-content-icon-color;
-          border-radius: 50% 50%;
+          border-radius: 50%;
           padding: $ui-tile-content-icon-border-padding;
         }
         color: $ui-tile-content-icon-color;
