@@ -56,4 +56,16 @@ describe('DropAreaComponent', () => {
         .textContent
     ).toBe(message);
   });
+  it('should add the dragOverClassName when dragging over', () => {
+    component.dragOverClassName = 'some-classname';
+    const element = fixture.debugElement.query(By.css('.ui-drop-area'));
+    element.nativeElement.dispatchEvent(new Event('dragenter', null));
+    fixture.detectChanges();
+    expect(component.dragging).toBeTruthy();
+    expect(fixture.debugElement.query(By.css('.some-classname'))).toBeTruthy();
+    element.nativeElement.dispatchEvent(new Event('dragleave', null));
+    fixture.detectChanges();
+    expect(component.dragging).toBeFalsy();
+    expect(fixture.debugElement.query(By.css('.some-classname'))).toBeFalsy();
+  });
 });
