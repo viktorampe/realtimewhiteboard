@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
+import { Actions, Effect, ofType } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { undo } from 'ngrx-undo';
-import { from } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { from, Observable } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 import { DalState } from '..';
 import {
   FavoriteServiceInterface,
@@ -107,17 +107,15 @@ export class FavoriteEffects {
   );
 
   @Effect()
-  toggleFavorite$ = this.dataPersistence.fetch(
-    FavoritesActionTypes.ToggleFavorite,
-    {
-      run: (action: ToggleFavorite, state: DalState) => {
-        //  decide if we want to add or delete the provided item
-        // dispatch the right action
-      },
-      onError: (action: ToggleFavorite, error) => {
-        return new FavoritesLoadError(error);
+  toggleFavorite$ = this.dataPersistence.actions.pipe(
+    ofType(FavoritesActionTypes.ToggleFavorite),
+    switchMap(
+      (action: ToggleFavorite): Observable<AddFavorite | DeleteFavorite> => {
+        // decide if we want to add or delete the provided item
+        // dispatch the corresponding action
+        return;
       }
-    }
+    )
   );
 
   constructor(
