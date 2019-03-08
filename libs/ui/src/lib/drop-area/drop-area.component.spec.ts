@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { MatIconModule } from '@angular/material';
+import { By } from '@angular/platform-browser';
 import { DropAreaComponent } from './drop-area.component';
 
 describe('DropAreaComponent', () => {
@@ -8,9 +9,9 @@ describe('DropAreaComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DropAreaComponent ]
-    })
-    .compileComponents();
+      imports: [MatIconModule],
+      declarations: [DropAreaComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -21,5 +22,38 @@ describe('DropAreaComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+  it('should not show the icon container if icon is not given', () => {
+    expect(
+      fixture.debugElement.query(By.css('.ui-drop-area__icon-container'))
+    ).toBeFalsy();
+  });
+  it('should show the icon container and correct icon if icon is given', () => {
+    const icon = 'add';
+    component.icon = icon;
+    fixture.detectChanges();
+    expect(
+      fixture.debugElement.query(By.css('.ui-drop-area__icon-container'))
+    ).toBeTruthy();
+    expect(
+      fixture.debugElement
+        .query(By.css('mat-icon'))
+        .nativeElement.getAttribute('ng-reflect-svg-icon')
+    ).toBe(icon);
+  });
+  it('should show empty message if message is not given', () => {
+    expect(
+      fixture.debugElement.query(By.css('.ui-drop-area__message')).nativeElement
+        .textContent
+    ).toBe('');
+  });
+  it('should show the message if message is given', () => {
+    const message = 'this is the message that will be displayed';
+    component.message = message;
+    fixture.detectChanges();
+    expect(
+      fixture.debugElement.query(By.css('.ui-drop-area__message')).nativeElement
+        .textContent
+    ).toBe(message);
   });
 });
