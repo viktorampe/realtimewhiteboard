@@ -26,6 +26,7 @@ import {
 } from './+state/app.reducer';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { EduContentSearchResultComponent } from './components/searchresults/edu-content-search-result.component';
 import { FavIconService, FAVICON_SERVICE_TOKEN } from './services/favicons';
 import {
   StandardSearchService,
@@ -36,7 +37,7 @@ import {
 configureBufferSize(150);
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, EduContentSearchResultComponent],
   imports: [
     SearchModule,
     UiModule,
