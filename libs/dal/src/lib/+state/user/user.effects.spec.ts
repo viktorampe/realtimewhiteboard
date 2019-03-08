@@ -10,6 +10,7 @@ import { Observable, of } from 'rxjs';
 import { UserReducer } from '.';
 import { PersonInterface } from '../../+models';
 import { DalModule } from '../../dal.module';
+import { FAVORITE_SERVICE_TOKEN } from '../../favorite/favorite.service.interface';
 import { AUTH_SERVICE_TOKEN } from '../../persons/auth-service.interface';
 import {
   PersonServiceInterface,
@@ -110,6 +111,7 @@ describe('UserEffects', () => {
         DataPersistence,
         provideMockActions(() => actions),
         { provide: PERSON_SERVICE_TOKEN, useValue: {} },
+        { provide: FAVORITE_SERVICE_TOKEN, useValue: {} },
         {
           provide: 'uuid',
           useValue: () => 'foo'
