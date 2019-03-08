@@ -21,7 +21,6 @@
         class="ui-tile__actions__action__label"
         (click)="onActionClick($event, action)"
         [routerLink]="action.routerLink"
-        [routerLinkActive]="action.routerLink ? 'active' : ''"
         >{{ action.label }}</a
       >
     </div>
