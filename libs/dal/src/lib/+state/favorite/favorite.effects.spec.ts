@@ -23,11 +23,11 @@ import {
   DeleteFavorite,
   FavoritesLoaded,
   FavoritesLoadError,
-  LoadFavorites
+  LoadFavorites,
+  ToggleFavorite
 } from './favorite.actions';
 import { FavoriteEffects } from './favorite.effects';
 
-// file.only
 describe('FavoriteEffects', () => {
   let actions: Observable<any>;
   let effects: FavoriteEffects;
