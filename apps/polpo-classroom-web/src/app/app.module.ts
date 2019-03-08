@@ -26,6 +26,7 @@ import {
 } from './+state/app.reducer';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { DevpolComponent } from './components/devpol/devpol.component';
 import { EduContentSearchResultComponent } from './components/searchresults/edu-content-search-result.component';
 import { FavIconService, FAVICON_SERVICE_TOKEN } from './services/favicons';
 import {
@@ -37,7 +38,11 @@ import {
 configureBufferSize(150);
 
 @NgModule({
-  declarations: [AppComponent, EduContentSearchResultComponent],
+  declarations: [
+    AppComponent,
+    EduContentSearchResultComponent,
+    DevpolComponent
+  ],
   imports: [
     SearchModule,
     UiModule,
@@ -84,6 +89,7 @@ configureBufferSize(150);
   ],
   bootstrap: [AppComponent],
   exports: [RouterModule],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  entryComponents: [EduContentSearchResultComponent]
 })
 export class AppModule {}
