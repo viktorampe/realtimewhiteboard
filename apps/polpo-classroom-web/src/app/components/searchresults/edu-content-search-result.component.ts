@@ -15,5 +15,7 @@ export class EduContentSearchResultComponent extends ResultItemBase
     super();
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    super.ngOnInit();
+  }
 }

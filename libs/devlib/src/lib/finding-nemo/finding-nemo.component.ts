@@ -1,5 +1,5 @@
 import { Component, Inject, Type } from '@angular/core';
-import { EduContentMetadataFixture, LearningAreaFixture } from '@campus/dal';
+import { EduContentMetadataFixture } from '@campus/dal';
 import {
   SearchFilterCriteriaInterface,
   SearchFilterFactory,
@@ -11,11 +11,12 @@ import {
   SortModeInterface
 } from '@campus/search';
 import { EduContentMetadataApi } from '@diekeure/polpo-api-angular-sdk';
+import { EduContentSearchResultComponent } from 'apps/polpo-classroom-web/src/app/components/searchresults/edu-content-search-result.component';
+import { EduContentSearchResultInterface } from 'apps/polpo-classroom-web/src/app/components/searchresults/interfaces/educontent-search-result';
 // tslint:disable-next-line:nx-enforce-module-boundaries
 import { STANDARD_SEARCH_SERVICE_TOKEN } from 'apps/polpo-classroom-web/src/app/services/standard-search.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { PolpoResultItemComponent } from '../polpo-result-item/polpo-result-item.component';
 // tslint:disable-next-line:nx-enforce-module-boundaries
 import { MockSearchViewModel } from './../../../../search/src/lib/components/search.viewmodel.mock';
 
@@ -141,7 +142,7 @@ export class FindingNemoComponent {
       // tslint:disable-next-line: no-use-before-declare
       searchFilterFactory: MockFactory,
       results: {
-        component: PolpoResultItemComponent,
+        component: EduContentSearchResultComponent,
         sortModes: [
           {
             description: 'book',
@@ -176,8 +177,8 @@ export class FindingNemoComponent {
     return {
       count: 2,
       results: [
-        new LearningAreaFixture({ id: 1 }),
-        new LearningAreaFixture({ id: 2 })
+        { inTask: true } as EduContentSearchResultInterface,
+        { inTask: false } as EduContentSearchResultInterface
       ],
       filterCriteriaPredictions: new Map([
         ['LearningArea', new Map([[1, 100], [2, 50]])]

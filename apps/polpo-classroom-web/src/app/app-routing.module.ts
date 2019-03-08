@@ -7,7 +7,6 @@ import {
   PermissionGuard
 } from '@campus/guards';
 import { AppResolver } from './app.resolver';
-import { DevpolComponent } from './components/devpol/devpol.component';
 
 const routes: Routes = [
   {
@@ -114,10 +113,6 @@ const routes: Routes = [
     path: 'dev',
     loadChildren: '@campus/devlib#DevlibModule',
     data: { breadcrumbText: 'Full retard' }
-  },
-  {
-    path: 'devpol',
-    component: DevpolComponent
   },
   {
     path: '**',
