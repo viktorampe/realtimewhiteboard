@@ -19,7 +19,8 @@ const routes: Routes = [
       },
       {
         path: 'term',
-        component: EduContentSearchByTermComponent
+        component: EduContentSearchByTermComponent,
+        data: { breadcrumbText: 'Standaard zoeken' }
       },
       {
         path: ':area',
@@ -27,19 +28,25 @@ const routes: Routes = [
           selector: LearningAreaQueries.getById,
           displayProperty: 'name'
         },
-        component: EduContentSearchModesComponent,
         children: [
           {
+            path: '',
+            component: EduContentSearchModesComponent
+          },
+          {
             path: 'term',
-            component: EduContentSearchByTermComponent
+            component: EduContentSearchByTermComponent,
+            data: { breadcrumbText: 'Standaard zoeken' }
           },
           {
             path: 'plan',
-            component: EduContentSearchByColumnComponent
+            component: EduContentSearchByColumnComponent,
+            data: { breadcrumbText: 'Zoeken op leerplan' }
           },
           {
             path: 'toc',
-            component: EduContentSearchByColumnComponent
+            component: EduContentSearchByColumnComponent,
+            data: { breadcrumbText: 'Zoeken op inhoudstafel' }
           }
         ]
       }
