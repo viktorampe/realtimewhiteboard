@@ -301,9 +301,6 @@ describe('FavoriteEffects', () => {
         addFeedbackAction = new AddEffectFeedback({ effectFeedback });
         usedState = FavoriteReducer.initialState;
       });
-      afterAll(() => {
-        dateMock.returnRealDate();
-      });
 
       beforeEach(() => {
         mockServiceMethodError('addFavorite', 'Something went wrong.');
