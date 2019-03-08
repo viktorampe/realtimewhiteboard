@@ -1,18 +1,18 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { EduContentProductTypeApi } from '@diekeure/polpo-api-angular-sdk';
 import { hot } from '@nrwl/nx/testing';
-import { EduContentProductTypeFixture } from './../+fixtures/EduContentProductType.fixture';
-import { ProductTypeService } from './product-type.service';
-import { ProductTypeServiceInterface } from './product-type.service.interface';
+import { EduContentProductTypeFixture } from '../+fixtures/EduContentProductType.fixture';
+import { EduContentProductTypeService } from './educontent-product-type.service';
+import { EduContentProductTypeServiceInterface } from './educontent-product-type.service.interface';
 
 describe('ProductTypesService', () => {
-  let productTypeService: ProductTypeServiceInterface;
+  let eduContentProductTypeService: EduContentProductTypeServiceInterface;
   let mockData$: any;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        ProductTypeService,
+        EduContentProductTypeService,
         {
           provide: EduContentProductTypeApi,
           useValue: {
@@ -21,24 +21,24 @@ describe('ProductTypesService', () => {
         }
       ]
     });
-    productTypeService = TestBed.get(ProductTypeService);
+    eduContentProductTypeService = TestBed.get(EduContentProductTypeService);
   });
 
   it('should be created', inject(
-    [ProductTypeService],
-    (service: ProductTypeService) => {
+    [EduContentProductTypeService],
+    (service: EduContentProductTypeService) => {
       expect(service).toBeTruthy();
     }
   ));
 
-  it('should return productTypes', async () => {
+  it('should return EduContentProductTypes', async () => {
     mockData$ = hot('-a-|', {
       a: [
         new EduContentProductTypeFixture({ id: 1 }),
         new EduContentProductTypeFixture({ id: 2 })
       ]
     });
-    expect(productTypeService.getAll()).toBeObservable(
+    expect(eduContentProductTypeService.getAll()).toBeObservable(
       hot('-a-|', {
         a: [
           new EduContentProductTypeFixture({ id: 1 }),

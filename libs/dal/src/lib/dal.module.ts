@@ -99,10 +99,10 @@ import { LearningAreaService } from './learning-area/learning-area.service';
 import { LEARNINGAREA_SERVICE_TOKEN } from './learning-area/learning-area.service.interface';
 import { EduNetService } from './metadata/edu-net.service';
 import { EDU_NET_SERVICE_TOKEN } from './metadata/edu-net.service.interface';
+import { EduContentProductTypeService } from './metadata/educontent-product-type.service';
+import { EDUCONTENT_PRODUCT_TYPE_SERVICE_TOKEN } from './metadata/educontent-product-type.service.interface';
 import { MethodService } from './metadata/method.service';
 import { METHOD_SERVICE_TOKEN } from './metadata/method.service.interface';
-import { ProductTypeService } from './metadata/product-type.service';
-import { PRODUCT_TYPE_SERVICE_TOKEN } from './metadata/product-type.service.interface';
 import { SchoolTypeService } from './metadata/school-type.service';
 import { SCHOOL_TYPE_SERVICE_TOKEN } from './metadata/school-type.service.interface';
 import { YearService } from './metadata/year.service';
@@ -303,7 +303,10 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
     { provide: RESULTS_SERVICE_TOKEN, useClass: ResultsService },
     { provide: CREDENTIAL_SERVICE_TOKEN, useClass: CredentialService },
     { provide: EDU_NET_SERVICE_TOKEN, useClass: EduNetService },
-    { provide: PRODUCT_TYPE_SERVICE_TOKEN, useClass: ProductTypeService },
+    {
+      provide: EDUCONTENT_PRODUCT_TYPE_SERVICE_TOKEN,
+      useClass: EduContentProductTypeService
+    },
     { provide: SCHOOL_TYPE_SERVICE_TOKEN, useClass: SchoolTypeService },
     { provide: YEAR_SERVICE_TOKEN, useClass: YearService }
   ]

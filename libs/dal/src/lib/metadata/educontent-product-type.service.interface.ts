@@ -2,10 +2,10 @@ import { InjectionToken } from '@angular/core';
 import { Observable } from 'rxjs';
 import { EduContentProductTypeInterface } from '../+models';
 
-export const PRODUCT_TYPE_SERVICE_TOKEN = new InjectionToken(
-  'ProductTypeService'
+export const EDUCONTENT_PRODUCT_TYPE_SERVICE_TOKEN = new InjectionToken(
+  'EduContentProductTypeService'
 );
 
-export interface ProductTypeServiceInterface {
+export interface EduContentProductTypeServiceInterface {
   getAll(): Observable<EduContentProductTypeInterface[]>;
 }
