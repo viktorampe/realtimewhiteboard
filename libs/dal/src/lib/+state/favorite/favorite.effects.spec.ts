@@ -284,7 +284,7 @@ describe('FavoriteEffects', () => {
     describe('when failed', () => {
       let effectFeedback: EffectFeedback;
       let addFeedbackAction: EffectFeedbackActions.AddEffectFeedback;
-      const dateMock = new MockDate();
+
       beforeAll(() => {
         effectFeedback = new EffectFeedback({
           id: uuid(),
@@ -319,16 +319,7 @@ describe('FavoriteEffects', () => {
   });
 
   describe('deleteFavorite$', () => {
-    let dateMock: MockDate;
-
     const deleteFavoriteAction = new DeleteFavorite({ id: 113 });
-
-    beforeAll(() => {
-      dateMock = new MockDate();
-    });
-    afterAll(() => {
-      dateMock.returnRealDate();
-    });
 
     describe('when successful', () => {
       beforeEach(() => {
