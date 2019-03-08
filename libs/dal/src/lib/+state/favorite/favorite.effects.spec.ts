@@ -109,7 +109,7 @@ describe('FavoriteEffects', () => {
     mockDate = new MockDate();
   });
 
-  beforeAll(() => {
+  afterAll(() => {
     mockDate.returnRealDate();
   });
 
@@ -208,7 +208,7 @@ describe('FavoriteEffects', () => {
   xdescribe('toggleFavorite$', () => {
     const favorite = {
       id: 123,
-      type: FavoriteTypesEnum.area,
+      type: FavoriteTypesEnum.AREA,
       created: new Date()
     };
     const toggleFavoriteAction = new ToggleFavorite({
@@ -257,7 +257,7 @@ describe('FavoriteEffects', () => {
   describe('addFavorite$', () => {
     const favorite = {
       id: 123,
-      type: FavoriteTypesEnum.area,
+      type: FavoriteTypesEnum.AREA,
       created: new Date()
     };
 

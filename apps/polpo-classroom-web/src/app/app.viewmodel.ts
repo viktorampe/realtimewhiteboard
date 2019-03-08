@@ -157,7 +157,7 @@ export class AppViewModel {
   private getFavorites(): Observable<FavoriteInterface[]> {
     return of([
       {
-        type: FavoriteTypesEnum.area, // TODO in selector: filter on type:'area'
+        type: FavoriteTypesEnum.AREA, // TODO in selector: filter on type:'area'
         learningAreaId: 1,
         learningArea: new LearningAreaFixture({ icon: 'wiskunde' }),
         created: new Date(2018, 11 - 1, 30)

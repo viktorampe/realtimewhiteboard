@@ -5,7 +5,7 @@ import { State } from './favorite.reducer';
 describe('Favorite Selectors', () => {
   function createFavorite(
     id: number,
-    type: FavoriteTypesEnum = FavoriteTypesEnum.area
+    type: FavoriteTypesEnum = FavoriteTypesEnum.AREA
   ): FavoriteInterface | any {
     return {
       id: id,
@@ -103,10 +103,10 @@ describe('Favorite Selectors', () => {
     it('getByType() should return all favorites with the provided type', () => {
       favoriteState = createState(
         [
-          createFavorite(4, FavoriteTypesEnum.boeke),
+          createFavorite(4, FavoriteTypesEnum.BOEKE),
           createFavorite(1),
-          createFavorite(2, FavoriteTypesEnum.boeke),
-          createFavorite(3, FavoriteTypesEnum.bundle)
+          createFavorite(2, FavoriteTypesEnum.BOEKE),
+          createFavorite(3, FavoriteTypesEnum.BUNDLE)
         ],
         true,
         'no error'
@@ -115,12 +115,12 @@ describe('Favorite Selectors', () => {
       storeState = { favorites: favoriteState };
 
       const results = FavoriteQueries.getByType(storeState, {
-        type: FavoriteTypesEnum.boeke
+        type: FavoriteTypesEnum.BOEKE
       });
 
       expect(results).toEqual([
-        createFavorite(2, FavoriteTypesEnum.boeke),
-        createFavorite(4, FavoriteTypesEnum.boeke)
+        createFavorite(2, FavoriteTypesEnum.BOEKE),
+        createFavorite(4, FavoriteTypesEnum.BOEKE)
       ]);
     });
   });

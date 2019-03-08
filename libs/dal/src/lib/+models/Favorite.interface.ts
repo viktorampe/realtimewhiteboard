@@ -5,12 +5,12 @@ import { PersonInterface } from './Person.interface';
 import { TaskInterface } from './Task.interface';
 
 export enum FavoriteTypesEnum {
-  area = 'area',
-  search = 'search',
-  educontent = 'educontent',
-  bundle = 'bundle',
-  task = 'task',
-  boeke = 'boek-e'
+  AREA = 'area',
+  SEARCH = 'search',
+  EDUCONTENT = 'educontent',
+  BUNDLE = 'bundle',
+  TASK = 'task',
+  BOEKE = 'boek-e'
 }
 
 export interface FavoriteInterface {
