@@ -1,6 +1,6 @@
 @mixin ui-drop-area-theme() {
-  $ui-drop-area-width: 280px !default;
-  $ui-drop-area-height: 130px !default;
+  $ui-drop-area-width: $ui-tile-height !default;
+  $ui-drop-area-height: $ui-tile-width !default;
   $ui-drop-area-background: none !default;
   $ui-drop-area-border: 2px dashed gray !default;
   $ui-drop-area__icon-container__mat-icon-color: gray !default;
