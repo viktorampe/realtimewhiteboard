@@ -1,11 +1,14 @@
-import { EduContent } from '@campus/dal';
-import { Bundle, Task } from '@diekeure/polpo-api-angular-sdk';
+import {
+  BundleInterface,
+  EduContentInterface,
+  TaskInterface
+} from '@campus/dal';
 
 export interface EduContentSearchResultInterface {
-  eduContent: EduContent;
+  eduContent: EduContentInterface;
   inTask: boolean;
-  currentTask: Task;
+  currentTask: TaskInterface;
   inBundle: boolean;
-  currentBundle: Bundle;
+  currentBundle: BundleInterface;
   isFavorite: boolean;
 }
