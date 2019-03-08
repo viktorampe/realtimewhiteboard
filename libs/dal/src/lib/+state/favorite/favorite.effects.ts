@@ -4,7 +4,6 @@ import { DataPersistence } from '@nrwl/nx';
 import { undo } from 'ngrx-undo';
 import { from } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { FavoriteActions } from '.';
 import { DalState } from '..';
 import {
   FavoriteServiceInterface,
@@ -17,6 +16,7 @@ import {
 } from '../effect-feedback';
 import {
   AddFavorite,
+  AddFavoriteSuccess,
   DeleteFavorite,
   FavoritesActionTypes,
   FavoritesLoaded,
@@ -48,9 +48,7 @@ export class FavoriteEffects {
     run: (action: AddFavorite, state: DalState) => {
       return this.favoriteService
         .addFavorite(action.payload.favorite)
-        .pipe(
-          map(favorite => new FavoriteActions.AddFavoriteSuccess({ favorite }))
-        );
+        .pipe(map(favorite => new AddFavoriteSuccess({ favorite })));
     },
     onError: (action: AddFavorite, error) => {
       const effectFeedback = new EffectFeedback({
@@ -113,17 +111,8 @@ export class FavoriteEffects {
     FavoritesActionTypes.ToggleFavorite,
     {
       run: (action: ToggleFavorite, state: DalState) => {
-        if (state.favorites.entities[action.payload.favorite.id]) {
-          //  already marked as favorite --> delete it
-          return new FavoriteActions.DeleteFavorite({
-            id: action.payload.favorite.id
-          });
-        } else {
-          // new favorite --> add it
-          return new FavoriteActions.AddFavorite({
-            favorite: action.payload.favorite
-          });
-        }
+        //  decide if we want to add or delete the provided item
+        // dispatch the right action
       },
       onError: (action: ToggleFavorite, error) => {
         return new FavoritesLoadError(error);
