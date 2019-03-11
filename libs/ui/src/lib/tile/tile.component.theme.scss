@@ -71,6 +71,7 @@
       height: $ui-tile-actions-height;
       background-color: $ui-tile-actions-background-color;
       &__action {
+        line-height: $ui-tile-actions-height;
         padding-left: $ui-tile-actions-padding;
         padding-right: $ui-tile-actions-padding;
         &__label {
