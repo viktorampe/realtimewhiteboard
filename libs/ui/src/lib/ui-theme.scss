@@ -64,6 +64,10 @@ $ui-button-padding-right: $ui-primary-font-size !default;
 $ui-button-padding-top: $ui-primary-font-size/2 !default;
 $ui-button-padding-bottom: $ui-primary-font-size/2 !default;
 
+// tiles and droparea
+$ui-tile-width: 280px !default;
+$ui-tile-height: 105px !default;
+
 // helper classes
 .ui-no-link {
   cursor: inherit;

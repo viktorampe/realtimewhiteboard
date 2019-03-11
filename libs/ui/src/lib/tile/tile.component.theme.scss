@@ -1,10 +1,9 @@
 @mixin ui-tile() {
   $ui-tile-margins: 0 20px 20px 0 !default;
-  $ui-tile-width: 280px !default;
+  $ui-tile-size-width: $ui-tile-width !default;
+  $ui-tile-size-height: $ui-tile-height !default;
   $ui-tile-background-color: $ui-primary-color-accent !default;
   $ui-tile-background-image: '' !default;
-
-  $ui-tile-content-height: 105px !default;
 
   $ui-tile-content-label-color: $ui-tertiary-font-color-2 !default;
   $ui-tile-content-label-font-size: $ui-primary-font-size !default;
@@ -30,7 +29,7 @@
 
   .ui-tile {
     margin: $ui-tile-margins;
-    width: $ui-tile-width;
+    width: $ui-tile-size-width;
 
     @if ($ui-tile-background-image != '') {
       background: transparent
@@ -43,7 +42,7 @@
     background-color: $ui-tile-background-color;
 
     &__content {
-      height: $ui-tile-content-height;
+      height: $ui-tile-size-height;
 
       &__label {
         font-size: $ui-tile-content-label-font-size;
