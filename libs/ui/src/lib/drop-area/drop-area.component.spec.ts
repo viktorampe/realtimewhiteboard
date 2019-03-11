@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatIconModule } from '@angular/material';
+import { MatIconModule, MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
+import { MockMatIconRegistry } from '@campus/testing';
 import { DropAreaComponent } from './drop-area.component';
 
 describe('DropAreaComponent', () => {
@@ -10,7 +11,8 @@ describe('DropAreaComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [MatIconModule],
-      declarations: [DropAreaComponent]
+      declarations: [DropAreaComponent],
+      providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
     }).compileComponents();
   }));
 
