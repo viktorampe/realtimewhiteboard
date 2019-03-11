@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import {
   AfterViewInit,
   Component,
+  DebugElement,
   NgModule,
   QueryList,
   SimpleChange,
@@ -15,23 +16,34 @@ import { By } from '@angular/platform-browser';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { LearningAreaFixture } from '@campus/dal';
-import { SearchPortalDirective } from '@campus/search';
+import {
+  SearchFilterCriteriaFixture,
+  SearchFilterCriteriaValuesFixture,
+  SearchPortalDirective
+} from '@campus/search';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { hot } from 'jasmine-marbles';
+import { BehaviorSubject } from 'rxjs';
 import {
   SearchFilterFactory,
+  SearchFilterInterface,
   SearchModeInterface,
   SearchResultInterface,
   SearchStateInterface
 } from '../../interfaces';
 import { SearchModule } from '../../search.module';
+import { BreadcrumbFilterComponent } from '../breadcrumb-filter/breadcrumb-filter.component';
+import { CheckboxLineFilterComponent } from '../checkbox-line-filter/checkbox-line-filter-component';
+import { CheckboxListFilterComponent } from '../checkbox-list-filter/checkbox-list-filter.component';
+import { ColumnFilterComponent } from '../column-filter/column-filter.component';
 import { ResultItemBase } from '../results-list/result.component.base';
 import { ResultsListComponent } from '../results-list/results-list.component';
-import { SearchViewModel } from '../search.viewmodel';
-import { MockSearchViewModel } from '../search.viewmodel.mock';
+import { SelectFilterComponent } from '../select-filter-component/select-filter.component';
 import { SortModeInterface } from './../../interfaces/search-mode-interface';
 import { SearchTermComponent } from './../search-term/search-term.component';
+import { SearchViewModel } from './../search.viewmodel';
+import { MockSearchViewModel } from './../search.viewmodel.mock';
 import { SearchComponent } from './search.component';
 
 @Component({
@@ -47,6 +59,8 @@ class ResultItemComponent extends ResultItemBase {
   // tslint:disable-next-line:component-selector
   selector: 'test-container',
   template: `
+    <div><div searchPortal="hosttop"></div></div>
+    <div><div searchPortal="hostleft"></div></div>
     <div searchPortal="mockHost"></div>
     <campus-search></campus-search>
   `
@@ -58,7 +72,7 @@ export class TestContainerComponent implements AfterViewInit {
   @ViewChild(SearchComponent) private searchComponent: SearchComponent;
 
   ngAfterViewInit() {
-    this.searchComponent.portalHosts = this.portalHosts;
+    this.searchComponent.searchPortals = this.portalHosts;
   }
 }
 
@@ -117,7 +131,17 @@ describe('SearchComponent', () => {
       ]
     })
       .overrideModule(BrowserDynamicTestingModule, {
-        set: { entryComponents: [ResultItemComponent, SearchTermComponent] }
+        set: {
+          entryComponents: [
+            ResultItemComponent,
+            CheckboxLineFilterComponent,
+            CheckboxListFilterComponent,
+            BreadcrumbFilterComponent,
+            ColumnFilterComponent,
+            SelectFilterComponent,
+            SearchTermComponent
+          ]
+        }
       })
       .compileComponents();
   }));
@@ -291,9 +315,9 @@ describe('SearchComponent', () => {
 
       it('should create a searchTermComponent and add it to the specified portalHost', () => {
         // does the portalHost exist and does the searchComponent have a reference to it?
-        expect(searchComponent.portalHosts.length).toBe(1);
+        expect(searchComponent.searchPortals.length).toBe(1);
 
-        const portalHost = searchComponent.portalHosts.find(
+        const portalHost = searchComponent.searchPortals.find(
           portal => portal.searchPortal === mockSearchMode.searchTerm.domHost
         ).viewContainerRef;
 
@@ -379,7 +403,11 @@ describe('SearchComponent', () => {
         expect(() => {
           hostFixture.detectChanges();
         }).toThrowError(
-          `specified host '${newSearchMode.searchTerm.domHost}' not found`
+          `Portal ${
+            newSearchMode.searchTerm.domHost
+          } not found! Did you add a 'searchPortal="${
+            newSearchMode.searchTerm.domHost
+          }"' to the page?'`
         );
 
         const searchTermComponent = hostFixture.debugElement.query(
@@ -389,5 +417,183 @@ describe('SearchComponent', () => {
         expect(searchTermComponent).toBeFalsy();
       });
     });
+  });
+
+  describe('seachFilters', () => {
+    let hostFixture: ComponentFixture<TestContainerComponent>;
+    let hostComponent: TestContainerComponent;
+    let searchComponent: SearchComponent;
+    let checkboxLineComponent: DebugElement;
+    let checkboxListComponent: DebugElement;
+    let breadcrumbFilterComponent: DebugElement;
+    let columnFilterComponent: DebugElement;
+    let selectFilterComponent: DebugElement;
+    let searchFilterComponents: DebugElement[];
+
+    beforeEach(() => {
+      hostFixture = TestBed.createComponent(TestContainerComponent);
+      hostComponent = hostFixture.componentInstance;
+
+      searchComponent = hostFixture.debugElement.query(
+        By.directive(SearchComponent)
+      ).componentInstance;
+
+      searchComponent.initialState = mockSearchState;
+      searchComponent.searchMode = mockSearchMode;
+
+      hostFixture.detectChanges();
+
+      checkboxLineComponent = getFilterElement(CheckboxLineFilterComponent);
+      checkboxListComponent = getFilterElement(CheckboxListFilterComponent);
+      breadcrumbFilterComponent = getFilterElement(BreadcrumbFilterComponent);
+      columnFilterComponent = getFilterElement(ColumnFilterComponent);
+      selectFilterComponent = getFilterElement(SelectFilterComponent);
+
+      searchFilterComponents = [
+        checkboxLineComponent,
+        checkboxListComponent,
+        breadcrumbFilterComponent,
+        columnFilterComponent,
+        selectFilterComponent
+      ];
+    });
+
+    it('should create and add all search filter components', () => {
+      expect(hostComponent).toBeDefined();
+      searchFilterComponents.forEach(componentDE => {
+        expect(componentDE.componentInstance).toBeDefined();
+      });
+    });
+
+    it('should add component to the correct host element', () => {
+      const hosttop = getPortalContainer('hosttop');
+      const hostleft = getPortalContainer('hostleft');
+
+      // items are attached as siblings of the portal element, therefore we check if they have the same parent
+      expect(checkboxLineComponent.parent.nativeElement).toBe(hostleft);
+      expect(checkboxListComponent.parent.nativeElement).toBe(hostleft);
+      expect(columnFilterComponent.parent.nativeElement).toBe(hostleft);
+
+      expect(breadcrumbFilterComponent.parent.nativeElement).toBe(hosttop);
+      expect(selectFilterComponent.parent.nativeElement).toBe(hosttop);
+    });
+
+    it('should set the filterCriteria', () => {
+      const filterCriteria = (searchViewmodel.searchFilters$ as BehaviorSubject<
+        SearchFilterInterface[]
+      >).value;
+      searchFilterComponents.forEach((componentDE, i) => {
+        expect(componentDE.componentInstance.filterCriteria).toBe(
+          filterCriteria[i].criteria
+        );
+      });
+    });
+
+    it('should subscribe to the filterSelectionChange', () => {
+      const mockData = 'foo bar baz';
+      searchComponent.onFilterSelectionChange = jest.fn();
+      checkboxLineComponent.componentInstance.filterSelectionChange.next(
+        mockData
+      );
+
+      expect(searchComponent.onFilterSelectionChange).toHaveBeenCalledTimes(1);
+      expect(searchComponent.onFilterSelectionChange).toHaveBeenCalledWith(
+        mockData
+      );
+    });
+
+    it('should call the vm.changeFilters when filters onFilterSelectionChange', () => {
+      const filterCriteria = new SearchFilterCriteriaFixture();
+      searchViewmodel.changeFilters = jest.fn();
+      searchComponent.onFilterSelectionChange(filterCriteria);
+      expect(searchViewmodel.changeFilters).toHaveBeenCalledTimes(1);
+      expect(searchViewmodel.changeFilters).toHaveBeenCalledWith(
+        filterCriteria
+      );
+    });
+
+    it('should replace the filters when new filters are recieved', () => {
+      const hosttop = getPortalContainer('hosttop');
+      const hostleft = getPortalContainer('hostleft');
+      // verify that our test starts with different numbers
+      expect(hosttop.children.length).toBe(3);
+      expect(hostleft.children.length).toBe(4);
+
+      const filters = [
+        {
+          criteria: new SearchFilterCriteriaFixture({}, [
+            new SearchFilterCriteriaValuesFixture(),
+            new SearchFilterCriteriaValuesFixture({
+              data: { id: 2, name: 'foo' }
+            }),
+            new SearchFilterCriteriaValuesFixture({
+              data: { id: 3, name: 'foo bar' }
+            })
+          ]),
+          component: CheckboxLineFilterComponent,
+          domHost: 'hostleft'
+        },
+        {
+          criteria: new SearchFilterCriteriaFixture({}, [
+            new SearchFilterCriteriaValuesFixture(),
+            new SearchFilterCriteriaValuesFixture({
+              data: { id: 2, name: 'foo' }
+            }),
+            new SearchFilterCriteriaValuesFixture({
+              data: { id: 3, name: 'foo bar' }
+            })
+          ]),
+          component: CheckboxLineFilterComponent,
+          domHost: 'hosttop'
+        }
+      ];
+
+      jest.spyOn(searchComponent as any, 'removeFilters');
+
+      (searchViewmodel.searchFilters$ as BehaviorSubject<
+        SearchFilterInterface[]
+      >).next(filters);
+      fixture.detectChanges();
+
+      // should only contain host element and the new filter
+      expect(searchComponent['removeFilters']).toHaveBeenCalledTimes(1);
+      expect(searchComponent['removeFilters']).toHaveBeenCalledWith(filters);
+      expect(hosttop.children.length).toBe(2);
+      expect(hostleft.children.length).toBe(2);
+    });
+
+    it('should clean up on destroy', () => {
+      searchComponent['removeFilters'] = jest.fn();
+      searchComponent['subscriptions'].unsubscribe = jest.fn();
+
+      searchComponent.ngOnDestroy();
+
+      expect(searchComponent['removeFilters']).toHaveBeenCalledTimes(1);
+      expect(
+        searchComponent['subscriptions'].unsubscribe
+      ).toHaveBeenCalledTimes(1);
+    });
+
+    it('should throw error when target portal is not found', () => {
+      const filter = { domHost: 'iDontExist' } as SearchFilterInterface;
+      const expectedError = `Portal ${
+        filter.domHost
+      } not found! Did you add a 'searchPortal="${
+        filter.domHost
+      }"' to the page?'`;
+      expect(() => searchComponent['addSearchFilter'](filter)).toThrow(
+        expectedError
+      );
+    });
+
+    function getFilterElement(componentDirective: any): DebugElement {
+      return hostFixture.debugElement.query(By.directive(componentDirective));
+    }
+
+    function getPortalContainer(domHost: string): DebugElement {
+      return searchComponent.searchPortals.find(
+        host => host.searchPortal === domHost
+      ).viewContainerRef.element.nativeElement.parentNode;
+    }
   });
 });

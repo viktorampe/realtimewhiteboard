@@ -53,10 +53,6 @@ export class FindingNemoComponent implements AfterViewInit {
 
   @ViewChild(SearchComponent) private searchComponent: SearchComponent;
 
-  ngAfterViewInit() {
-    this.searchComponent.portalHosts = this.portalHosts;
-  }
-
   constructor(
     private eduContentMetadataApi: EduContentMetadataApi,
     @Inject(STANDARD_SEARCH_SERVICE_TOKEN)
@@ -66,6 +62,13 @@ export class FindingNemoComponent implements AfterViewInit {
     this.searchFilters$ = this.standardSearchFactory.getFilters(
       {} as SearchStateInterface
     );
+  }
+
+  ngAfterViewInit(): void {
+    //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
+    //Add 'implements AfterViewInit' to the class.
+    // this.portalHosts =
+    this.searchComponent.searchPortals = this.portalHosts;
   }
 
   setMockData() {

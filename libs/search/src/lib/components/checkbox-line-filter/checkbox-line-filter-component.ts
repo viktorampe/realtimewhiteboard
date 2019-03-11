@@ -26,12 +26,12 @@ export class CheckboxLineFilterComponent
   >();
 
   @Input()
-  get filterCriteria(): SearchFilterCriteriaInterface {
-    return this._filterCriteria;
-  }
-  set filterCriteria(value: SearchFilterCriteriaInterface) {
+  public set filterCriteria(value: SearchFilterCriteriaInterface) {
     this._filterCriteria = value;
     this.filteredFilterCriteria = this.getFilteredCriterium(value);
+  }
+  public get filterCriteria(): SearchFilterCriteriaInterface {
+    return this._filterCriteria;
   }
 
   @HostBinding('class.checkbox-line-filter-component')
