@@ -16,6 +16,7 @@ import {
   MatTooltipModule
 } from '@angular/material';
 import { RouterModule } from '@angular/router';
+import { UtilsModule } from '@campus/utils';
 import { AppBarComponent } from './app-bar/app-bar.component';
 import { BannerComponent } from './banner/banner.component';
 import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
@@ -59,6 +60,7 @@ import { SideSheetBodyDirective } from './side-sheet/directives/side-sheet-body.
 import { SideSheetHeaderDirective } from './side-sheet/directives/side-sheet-header.directive';
 import { SideSheetPageDirective } from './side-sheet/directives/side-sheet-page.directive';
 import { SideSheetComponent } from './side-sheet/side-sheet.component';
+import { TileComponent } from './tile/tile.component';
 import { TreeNavComponent } from './tree-nav/tree-nav.component';
 import { HideDesktopDirective } from './utils/directives/hide-desktop.directive';
 import { HideMobileDirective } from './utils/directives/hide-mobile.directive';
@@ -72,16 +74,12 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
   imports: [
     OverlayModule,
     MatButtonModule,
-    FormsModule,
-    ReactiveFormsModule,
     CommonModule,
     MatSidenavModule,
-    MatFormFieldModule,
     MatInputModule,
     LayoutModule,
     RouterModule,
     CdkTreeModule,
-    MatSelectModule,
     ReactiveFormsModule,
     FormsModule,
     MatSelectModule,
@@ -89,7 +87,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     MatProgressSpinnerModule,
     MatTooltipModule,
     MatIconModule,
-    MatMenuModule
+    MatMenuModule,
+    UtilsModule
   ],
   declarations: [
     FilterTextInputComponent,
@@ -140,7 +139,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     PersonSummaryComponent,
     BannerComponent,
     DropdownDirective,
-    CollapsibleSheetComponent
+    CollapsibleSheetComponent,
+    TileComponent
   ],
   exports: [
     FilterTextInputComponent,
@@ -190,7 +190,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     PersonSummaryComponent,
     BannerComponent,
     DropdownDirective,
-    CollapsibleSheetComponent
+    CollapsibleSheetComponent,
+    TileComponent
   ]
 })
 export class UiModule {}
