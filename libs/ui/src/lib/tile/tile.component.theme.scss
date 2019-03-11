@@ -30,6 +30,7 @@
   .ui-tile {
     margin: $ui-tile-margins;
     width: $ui-tile-size-width;
+    min-height: $ui-tile-size-height;
 
     @if ($ui-tile-background-image != '') {
       background: transparent
@@ -42,8 +43,6 @@
     background-color: $ui-tile-background-color;
 
     &__content {
-      height: $ui-tile-size-height;
-
       &__label {
         font-size: $ui-tile-content-label-font-size;
         font-weight: $ui-tile-content-label-weight;
@@ -69,8 +68,8 @@
       }
     }
     &__actions {
-      background-color: $ui-tile-actions-background-color;
       height: $ui-tile-actions-height;
+      background-color: $ui-tile-actions-background-color;
       &__action {
         padding-left: $ui-tile-actions-padding-left;
         &__label {

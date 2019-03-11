@@ -7,7 +7,7 @@
     ></mat-icon>
     <div class="ui-tile__content__label">{{ label }}</div>
   </div>
-  <div class="ui-tile__actions">
+  <div class="ui-tile__actions" *ngIf="secondaryActions">
     <div
       *ngFor="let action of secondaryActions"
       class="ui-tile__actions__action"
