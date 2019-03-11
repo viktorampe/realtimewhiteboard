@@ -8,6 +8,14 @@
     *ngIf="isSelected"
     class="app-educontentsearchresult__bottom"
   >
-    <div class="button-bar"> <p>shows this if selected</p> </div>
+    <div class="app-educontentsearchresult__bottom__buttonbar">
+      <campus-button
+        iconClass="learning-area:polpo-wiskunde"
+        clickStopPropagation
+        >Click me</campus-button
+      >
+      <campus-button clickStopPropagation>Or click me</campus-button>
+      <campus-button clickStopPropagation>Or click me</campus-button>
+    </div>
   </div>
 </div>

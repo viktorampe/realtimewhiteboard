@@ -1,0 +1,9 @@
+@mixin edu-content-search-result-theme() {
+  .app-educontentsearchresult {
+    &__bottom {
+      &__buttonbar {
+        background-color: $color-blue-2;
+      }
+    }
+  }
+}

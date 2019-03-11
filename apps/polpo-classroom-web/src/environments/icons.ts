@@ -125,7 +125,7 @@ export const icons = {
   book: 'assets/icons/book.svg',
   bundle: 'assets/icons/bundle.svg',
   'settings-cog': 'assets/icons/settings.svg',
-  // bundles: 'assets/icons/bundles.svg',
+  bundles: 'assets/icons/bundles.svg',
   // call: 'assets/icons/call.svg',
   // caret: 'assets/icons/caret.svg',
   // 'check-off': 'assets/icons/check-off.svg',

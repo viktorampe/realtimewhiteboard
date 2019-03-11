@@ -18,5 +18,18 @@
     flex-direction: column;
     overflow: hidden;
     text-overflow: clip;
+
+    &__buttonbar {
+      display: flex;
+      flex-direction: row;
+
+      campus-button {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        height: 70px;
+        margin: 0;
+      }
+    }
   }
 }
