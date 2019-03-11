@@ -315,14 +315,16 @@ describe('SearchComponent', () => {
 
       it('should create a searchTermComponent and add it to the specified portalHost', () => {
         // does the portalHost exist and does the searchComponent have a reference to it?
-        expect(searchComponent.searchPortals.length).toBe(1);
+        expect(searchComponent.searchPortals.length).toBe(3);
 
-        const portalHost = searchComponent.searchPortals.find(
+        const searchPortal = searchComponent.searchPortals.find(
           portal => portal.searchPortal === mockSearchMode.searchTerm.domHost
         ).viewContainerRef;
 
+        expect(searchPortal).toBeTruthy();
+
         // does the portalHost have an inner view?
-        expect(portalHost.length).toBe(1);
+        expect(searchPortal.length).toBe(1);
 
         // is there a SearchTermComponent?
         const searchTermComponentDE = hostFixture.debugElement.query(
@@ -333,14 +335,14 @@ describe('SearchComponent', () => {
 
         // is the SearchTermComponent in the portalHost?
         // it is appended to the DOM as a sibling to the host
-        expect(portalHost.element.nativeElement.nextSibling).toBe(
+        expect(searchPortal.element.nativeElement.nextSibling).toBe(
           searchTermComponentDE.nativeElement
         );
 
         // just to be sure
         // if I clear the portalHost's views,
         // then the searchTermComponent should be gone
-        portalHost.clear();
+        searchPortal.clear();
 
         const detachedSearchTermComponentDE = hostFixture.debugElement.query(
           By.directive(SearchTermComponent)
