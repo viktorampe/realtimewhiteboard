@@ -1,0 +1,22 @@
+:host {
+  width: 100%;
+}
+
+.app-educontentsearchresult {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  margin: 20px;
+
+  &__top {
+    display: flex;
+    flex-direction: row;
+  }
+
+  &__bottom {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    text-overflow: clip;
+  }
+}

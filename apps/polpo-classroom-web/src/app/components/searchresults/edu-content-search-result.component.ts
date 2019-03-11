@@ -1,3 +1,4 @@
+import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, Input, OnInit } from '@angular/core';
 import { ResultItemBase } from '@campus/search';
 import { EduContentSearchResultInterface } from './interfaces/educontent-search-result';
@@ -5,7 +6,19 @@ import { EduContentSearchResultInterface } from './interfaces/educontent-search-
 @Component({
   selector: 'edu-content-search-result',
   templateUrl: './edu-content-search-result.component.html',
-  styleUrls: ['./edu-content-search-result.component.scss']
+  styleUrls: ['./edu-content-search-result.component.scss'],
+  animations: [
+    trigger('collapseExpandTrigger', [
+      transition(':enter', [
+        style({ height: '0px' }),
+        animate('.5s ease-out', style({ height: '*' }))
+      ]),
+      transition(':leave', [
+        style({ height: '*' }),
+        animate('.5s ease-out', style({ height: '0px' }))
+      ])
+    ])
+  ]
 })
 export class EduContentSearchResultComponent extends ResultItemBase
   implements OnInit {
@@ -17,5 +30,7 @@ export class EduContentSearchResultComponent extends ResultItemBase
 
   ngOnInit() {
     super.ngOnInit();
+
+    console.log(this.data.eduContent);
   }
 }

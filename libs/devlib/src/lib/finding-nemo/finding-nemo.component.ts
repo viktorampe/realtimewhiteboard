@@ -1,5 +1,5 @@
 import { Component, Inject, Type } from '@angular/core';
-import { EduContentMetadataFixture } from '@campus/dal';
+import { EduContentFixture, EduContentMetadataFixture } from '@campus/dal';
 import {
   SearchFilterCriteriaInterface,
   SearchFilterFactory,
@@ -177,7 +177,9 @@ export class FindingNemoComponent {
     return {
       count: 2,
       results: [
-        { inTask: true } as EduContentSearchResultInterface,
+        {
+          eduContent: new EduContentFixture()
+        },
         { inTask: false } as EduContentSearchResultInterface
       ],
       filterCriteriaPredictions: new Map([
