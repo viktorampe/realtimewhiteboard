@@ -5,6 +5,9 @@
   align-items: center;
   flex-wrap: nowrap;
   justify-content: center;
+  &--justify-content-left {
+    justify-content: left;
+  }
   &__icon-container {
     display: flex;
     align-items: center;

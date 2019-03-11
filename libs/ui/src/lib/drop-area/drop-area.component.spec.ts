@@ -70,4 +70,27 @@ describe('DropAreaComponent', () => {
     expect(component.dragging).toBeFalsy();
     expect(fixture.debugElement.query(By.css('.some-classname'))).toBeFalsy();
   });
+  it('should add align justify content left class if forceJustifyContentLeft is true of if both icon and label are set', () => {
+    [
+      { icon: 'add', label: 'some label', force: false, expected: true },
+      { icon: 'add', label: 'some label', force: undefined, expected: true },
+      { icon: undefined, label: 'some label', force: false, expected: false },
+      { icon: undefined, label: 'some label', force: true, expected: true },
+      { icon: 'add', label: undefined, force: false, expected: false },
+      { icon: 'add', label: undefined, force: true, expected: true },
+      { icon: undefined, label: undefined, force: true, expected: true },
+      { icon: undefined, label: undefined, force: false, expected: false },
+      { icon: undefined, label: undefined, force: undefined, expected: false }
+    ].forEach(value => {
+      component.icon = value.icon;
+      component.label = value.label;
+      component.forceJustifyContentLeft = value.force;
+      fixture.detectChanges();
+      const element = fixture.debugElement.query(
+        By.css('.ui-drop-area--justify-content-left')
+      );
+      if (value.expected) expect(element).toBeTruthy();
+      else expect(element).toBeFalsy();
+    });
+  });
 });

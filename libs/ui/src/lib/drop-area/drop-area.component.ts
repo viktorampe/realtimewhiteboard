@@ -11,6 +11,7 @@ export class DropAreaComponent {
 
   @Input() icon: string;
   @Input() label: string;
+  @Input() forceJustifyContentLeft = false;
   @Input()
   public set dragOverClassName(value: string) {
     if (value) this._dragOverClassName = value;
