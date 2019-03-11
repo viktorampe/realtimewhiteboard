@@ -7,6 +7,7 @@ import { GuardsModule } from '@campus/guards';
 import { SearchModule } from '@campus/search';
 import { SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
+import { UtilsModule } from '@campus/utils';
 import { EffectsModule } from '@ngrx/effects';
 import {
   NavigationActionTiming,
@@ -41,6 +42,7 @@ configureBufferSize(150);
   imports: [
     SearchModule,
     UiModule,
+    UtilsModule,
     BrowserModule,
     AppRoutingModule,
     SharedModule.forRoot(

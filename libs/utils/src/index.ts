@@ -9,6 +9,12 @@ export {
   ObjectPathServiceInterface,
   OBJECT_PATH_SERVICE_TOKEN
 } from './lib/collections/object-path.service.interface';
+export {
+  ClickPreventDefaultDirective
+} from './lib/directives/click-prevent-default.directive';
+export {
+  ClickStopPropagationDirective
+} from './lib/directives/click-stop-propagation.directive';
 export * from './lib/forms';
 export { NestedPartial } from './lib/types/nestedpartial';
 export * from './lib/utils.module';

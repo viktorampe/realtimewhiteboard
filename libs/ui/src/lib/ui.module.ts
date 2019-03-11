@@ -16,6 +16,7 @@ import {
   MatTooltipModule
 } from '@angular/material';
 import { RouterModule } from '@angular/router';
+import { UtilsModule } from '@campus/utils';
 import { AppBarComponent } from './app-bar/app-bar.component';
 import { BannerComponent } from './banner/banner.component';
 import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
@@ -89,7 +90,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     MatProgressSpinnerModule,
     MatTooltipModule,
     MatIconModule,
-    MatMenuModule
+    MatMenuModule,
+    UtilsModule
   ],
   declarations: [
     FilterTextInputComponent,
