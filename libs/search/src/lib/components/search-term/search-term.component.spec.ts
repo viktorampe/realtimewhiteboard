@@ -97,11 +97,6 @@ describe('SearchTermComponent', () => {
 
   describe('autoComplete', () => {
     describe('with autoComplete', () => {
-      beforeEach(() => {
-        component.autoComplete = true;
-        fixture.detectChanges();
-      });
-
       it('should include an input with the autocomplete attribute', () => {
         expect(
           fixture.debugElement.query(By.css('input')).attributes['autocomplete']
@@ -139,6 +134,11 @@ describe('SearchTermComponent', () => {
     });
 
     describe('without autoComplete', () => {
+      beforeEach(() => {
+        component.autoComplete = false;
+        fixture.detectChanges();
+      });
+
       it('should not include an input with the autocomplete attribute', () => {
         expect(
           fixture.debugElement.query(By.css('input')).attributes['autocomplete']

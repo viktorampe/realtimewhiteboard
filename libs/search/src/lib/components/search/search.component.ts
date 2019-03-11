@@ -79,16 +79,6 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
       this.searchViewmodel.updateResult(this.searchResults);
     }
     if (changes.autoCompleteValues && this.searchTermComponent) {
-      // changing autoComplete value causes template change
-      // this makes the input lose focus
-      // I think we can safely assume that, once autoCompleteValues
-      // have been passed, there will be more in the future.
-      // once on -> stays on
-      if (!this.searchTermComponent.autoComplete) {
-        this.searchTermComponent.autoComplete =
-          Array.isArray(this.autoCompleteValues) &&
-          !!this.autoCompleteValues.length;
-      }
       this.searchTermComponent.autoCompleteValues = this.autoCompleteValues;
     }
   }
@@ -133,9 +123,6 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
     this.searchTermComponent = componentRef.instance;
 
     this.searchTermComponent.initialValue = this.initialState.searchTerm;
-    this.searchTermComponent.autoComplete =
-      Array.isArray(this.autoCompleteValues) &&
-      !!this.autoCompleteValues.length;
     this.searchTermComponent.autoCompleteValues = this.autoCompleteValues;
 
     // needed to avoid ExpressionChangedAfterItHasBeenCheckedError

@@ -13,7 +13,7 @@ export class SearchTermComponent implements OnInit {
 
   // boolean => internal reference, need array of values
   // string => external reference TODO: figure this out, when required
-  @Input() public autoComplete: string | boolean;
+  @Input() public autoComplete: string | boolean = true;
   @Input() public autoCompleteValues: string[] = [];
 
   @Output() public valueChange = new EventEmitter<string>();
