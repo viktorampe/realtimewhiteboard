@@ -68,7 +68,7 @@ export class FindingNemoComponent implements AfterViewInit {
     //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
     //Add 'implements AfterViewInit' to the class.
     // this.portalHosts =
-    this.searchComponent.portalHosts = this.portalHosts;
+    this.searchComponent.searchPortals = this.portalHosts;
   }
 
   setMockData() {

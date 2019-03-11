@@ -1,6 +1,7 @@
 import {
   Component,
   ComponentFactoryResolver,
+  ComponentRef,
   Input,
   OnChanges,
   OnDestroy,
@@ -8,11 +9,13 @@ import {
   Output,
   QueryList,
   SimpleChanges,
+  Type,
   ViewContainerRef
 } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { SearchPortalDirective } from '../../directives';
 import {
+  SearchFilterComponentInterface,
   SearchFilterCriteriaInterface,
   SearchFilterInterface
 } from '../../interfaces';
@@ -31,8 +34,8 @@ import { SearchStateInterface } from './../../interfaces/search-state.interface'
 })
 export class SearchComponent implements OnInit, OnDestroy, OnChanges {
   private subscriptions = new Subscription();
-  private _portalHosts: QueryList<SearchPortalDirective> = new QueryList();
-  private portalHostsMap: {
+  private _searchPortals: QueryList<SearchPortalDirective> = new QueryList();
+  private portalsMap: {
     [key: string]: {
       host: ViewContainerRef;
       subscriptions: Subscription;
@@ -44,11 +47,11 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public initialState: SearchStateInterface;
   @Input() public searchResults: SearchResultInterface;
   @Input()
-  public set portalHosts(portalHosts: QueryList<SearchPortalDirective>) {
-    if (portalHosts) {
-      this._portalHosts = portalHosts;
-      portalHosts.forEach(portalHost => {
-        this.portalHostsMap[portalHost.searchPortal] = {
+  public set searchPortals(searchPortals: QueryList<SearchPortalDirective>) {
+    if (searchPortals) {
+      this._searchPortals = searchPortals;
+      searchPortals.forEach(portalHost => {
+        this.portalsMap[portalHost.searchPortal] = {
           host: portalHost.viewContainerRef,
           subscriptions: new Subscription()
         };
@@ -56,8 +59,8 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
       this.createFilters();
     }
   }
-  public get portalHosts() {
-    return this._portalHosts;
+  public get searchPortals() {
+    return this._searchPortals;
   }
 
   @Output() public searchState$: Observable<SearchStateInterface>;
@@ -112,23 +115,15 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
         this.removeFilters(searchFilters);
 
         // add updated filters
-        searchFilters.forEach(filter => this.addFilter(filter));
+        searchFilters.forEach(filter => this.addSearchFilter(filter));
       })
     );
   }
 
-  private addFilter(filter: SearchFilterInterface): void {
-    const portalHost = this.portalHostsMap[filter.domHost];
-    if (!portalHost) {
-      throw new Error(
-        `portalhost ${filter.domHost} not found! Did you add a 'searchPortal="${
-          filter.domHost
-        }"' to the page?'`
-      );
-    }
-
-    const componentRef = portalHost.host.createComponent(
-      this.componentFactoryResolver.resolveComponentFactory(filter.component)
+  private addSearchFilter(filter: SearchFilterInterface): void {
+    const componentRef = this.addComponent<SearchFilterComponentInterface>(
+      filter.domHost,
+      filter.component
     );
 
     // set inputs
@@ -136,9 +131,9 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
     filterItem.filterCriteria = filter.criteria;
 
     // subscribe to outputs
-    portalHost.subscriptions.add(
+    this.portalsMap[filter.domHost].subscriptions.add(
       filterItem.filterSelectionChange.subscribe(
-        (criteria: SearchFilterCriteriaInterface) => {
+        (criteria: SearchFilterCriteriaInterface): void => {
           this.onFilterSelectionChange(criteria);
         }
       )
@@ -151,10 +146,10 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
   private removeFilters(filters?: SearchFilterInterface[]): void {
     let portals = [];
     if (filters) {
-      portals = filters.map(filter => this.portalHostsMap[filter.domHost]);
+      portals = filters.map(filter => this.portalsMap[filter.domHost]);
       portals = Array.from(new Set(portals)); // only reset each host once
     } else {
-      portals = Object.values(this.portalHostsMap);
+      portals = Object.values(this.portalsMap);
     }
 
     portals.forEach(portal => {
@@ -165,5 +160,23 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
       // remove filters from portals
       portal.host.clear();
     });
+  }
+
+  private addComponent<T>(
+    domHost: string,
+    component: Type<T>
+  ): ComponentRef<T> {
+    const portalHost = this.portalsMap[domHost];
+    if (!portalHost) {
+      throw new Error(
+        `Portal ${domHost} not found! Did you add a 'searchPortal="${domHost}"' to the page?'`
+      );
+    }
+
+    const componentRef = portalHost.host.createComponent(
+      this.componentFactoryResolver.resolveComponentFactory(component)
+    );
+
+    return componentRef;
   }
 }

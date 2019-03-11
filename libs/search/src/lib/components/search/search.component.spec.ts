@@ -69,7 +69,7 @@ export class TestContainerComponent implements AfterViewInit {
   @ViewChild(SearchComponent) private searchComponent: SearchComponent;
 
   ngAfterViewInit() {
-    this.searchComponent.portalHosts = this.portalHosts;
+    this.searchComponent.searchPortals = this.portalHosts;
   }
 }
 
@@ -289,6 +289,7 @@ describe('SearchComponent', () => {
     let breadcrumbFilterComponent: DebugElement;
     let columnFilterComponent: DebugElement;
     let selectFilterComponent: DebugElement;
+    let searchFilterComponents: DebugElement[];
 
     beforeEach(() => {
       hostFixture = TestBed.createComponent(TestContainerComponent);
@@ -308,15 +309,21 @@ describe('SearchComponent', () => {
       breadcrumbFilterComponent = getFilterElement(BreadcrumbFilterComponent);
       columnFilterComponent = getFilterElement(ColumnFilterComponent);
       selectFilterComponent = getFilterElement(SelectFilterComponent);
+
+      searchFilterComponents = [
+        checkboxLineComponent,
+        checkboxListComponent,
+        breadcrumbFilterComponent,
+        columnFilterComponent,
+        selectFilterComponent
+      ];
     });
 
     it('should create and add all search filter components', () => {
       expect(hostComponent).toBeDefined();
-      expect(checkboxLineComponent.componentInstance).toBeDefined();
-      expect(checkboxListComponent.componentInstance).toBeDefined();
-      expect(breadcrumbFilterComponent.componentInstance).toBeDefined();
-      expect(columnFilterComponent.componentInstance).toBeDefined();
-      expect(selectFilterComponent.componentInstance).toBeDefined();
+      searchFilterComponents.forEach(componentDE => {
+        expect(componentDE.componentInstance).toBeDefined();
+      });
     });
 
     it('should add component to the correct host element', () => {
@@ -334,22 +341,11 @@ describe('SearchComponent', () => {
 
     it('should set the filterCriteria', () => {
       const filterCriteria = searchViewmodel.searchFilters$.value;
-
-      expect(checkboxLineComponent.componentInstance.filterCriteria).toBe(
-        filterCriteria[0].criteria
-      );
-      expect(checkboxListComponent.componentInstance.filterCriteria).toBe(
-        filterCriteria[1].criteria
-      );
-      expect(breadcrumbFilterComponent.componentInstance.filterCriteria).toBe(
-        filterCriteria[2].criteria
-      );
-      expect(columnFilterComponent.componentInstance.filterCriteria).toBe(
-        filterCriteria[3].criteria
-      );
-      expect(selectFilterComponent.componentInstance.filterCriteria).toBe(
-        filterCriteria[4].criteria
-      );
+      searchFilterComponents.forEach((componentDE, i) => {
+        expect(componentDE.componentInstance.filterCriteria).toBe(
+          filterCriteria[i].criteria
+        );
+      });
     });
 
     it('should subscribe to the filterSelectionChange', () => {
@@ -437,12 +433,14 @@ describe('SearchComponent', () => {
 
     it('should throw error when target portal is not found', () => {
       const filter = { domHost: 'iDontExist' } as SearchFilterInterface;
-      const expectedError = `portalhost ${
+      const expectedError = `Portal ${
         filter.domHost
       } not found! Did you add a 'searchPortal="${
         filter.domHost
       }"' to the page?'`;
-      expect(() => searchComponent['addFilter'](filter)).toThrow(expectedError);
+      expect(() => searchComponent['addSearchFilter'](filter)).toThrow(
+        expectedError
+      );
     });
 
     function getFilterElement(componentDirective: any): DebugElement {
@@ -450,7 +448,7 @@ describe('SearchComponent', () => {
     }
 
     function getPortalContainer(domHost: string): DebugElement {
-      return searchComponent.portalHosts.find(
+      return searchComponent.searchPortals.find(
         host => host.searchPortal === domHost
       ).viewContainerRef.element.nativeElement.parentNode;
     }
