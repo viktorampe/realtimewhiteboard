@@ -1,8 +1,40 @@
 @mixin edu-content-search-result-theme() {
   .app-educontentsearchresult {
+    border: 3px solid $color-black-1;
+
+    &__top {
+      background-color: $color-gray-2;
+      color: $color-white-1;
+      padding: 10px 15px;
+    }
+
     &__bottom {
       &__buttonbar {
         background-color: $color-blue-2;
+
+        campus-button:hover {
+          background-color: $color-blue-1;
+        }
+
+        campus-button {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-around;
+          height: 70px;
+          margin: 0;
+          background-color: $color-blue-2;
+          color: white;
+          border-right: 1px solid $color-black-1;
+
+          mat-icon {
+            background-color: white !important;
+            border-radius: 50%;
+            padding: 4px;
+            height: 32px;
+            width: 32px;
+            color: $color-blue-2;
+          }
+        }
       }
     }
   }

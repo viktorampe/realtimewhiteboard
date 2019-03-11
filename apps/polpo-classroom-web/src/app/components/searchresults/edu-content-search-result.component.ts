@@ -11,11 +11,11 @@ import { EduContentSearchResultInterface } from './interfaces/educontent-search-
     trigger('collapseExpandTrigger', [
       transition(':enter', [
         style({ height: '0px' }),
-        animate('.5s ease-out', style({ height: '*' }))
+        animate('.2s ease-out', style({ height: '*' }))
       ]),
       transition(':leave', [
-        style({ height: '*' }),
-        animate('.5s ease-out', style({ height: '0px' }))
+        //style({ height: '*' }),
+        //animate('.2s ease-out', style({ height: '0px' }))
       ])
     ])
   ]

@@ -22,14 +22,6 @@
     &__buttonbar {
       display: flex;
       flex-direction: row;
-
-      campus-button {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        height: 70px;
-        margin: 0;
-      }
     }
   }
 }
