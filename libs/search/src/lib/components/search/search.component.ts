@@ -31,7 +31,7 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
   private subscriptions = new Subscription();
 
   @Input() public searchMode: SearchModeInterface;
-  @Input() public autoComplete: string[];
+  @Input() public autoCompleteValues: string[];
   @Input() public initialState: SearchStateInterface;
   @Input() public searchResults: SearchResultInterface;
 
@@ -39,6 +39,7 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
 
   private _portalHosts: QueryList<SearchPortalDirective>;
   private portalHostsMap: PortalHostDictionaryInterface = {};
+  private searchTermComponent: SearchTermComponent;
 
   public get portalHosts(): QueryList<SearchPortalDirective> {
     return this._portalHosts;
@@ -58,11 +59,7 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
     this._portalHosts = portalHosts;
 
     if (this.searchMode.searchTerm) {
-      this.createSearchTermComponent(
-        this.searchMode,
-        this.initialState,
-        this.portalHostsMap
-      );
+      this.createSearchTermComponent(this.portalHostsMap);
     }
   }
 
@@ -80,6 +77,19 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.searchResults) {
       this.searchViewmodel.updateResult(this.searchResults);
+    }
+    if (changes.autoCompleteValues && this.searchTermComponent) {
+      // changing autoComplete value causes template change
+      // this makes the input lose focus
+      // I think we can safely assume that, once autoCompleteValues
+      // have been passed, there will be more in the future.
+      // once on -> stays on
+      if (!this.searchTermComponent.autoComplete) {
+        this.searchTermComponent.autoComplete =
+          Array.isArray(this.autoCompleteValues) &&
+          !!this.autoCompleteValues.length;
+      }
+      this.searchTermComponent.autoCompleteValues = this.autoCompleteValues;
     }
   }
 
@@ -106,15 +116,13 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
   // Creates a SearchTermComponent and appends it to the DOM
   // as a sibling to the portalHost (as defined by the SearchMode)
   private createSearchTermComponent(
-    searchMode: SearchModeInterface,
-    searchState: SearchStateInterface,
     portalHostsMap: PortalHostDictionaryInterface
   ): void {
-    const portalHost = portalHostsMap[searchMode.searchTerm.domHost];
+    const portalHost = portalHostsMap[this.searchMode.searchTerm.domHost];
 
     if (!portalHost) {
       throw new Error(
-        `specified host '${searchMode.searchTerm.domHost}' not found`
+        `specified host '${this.searchMode.searchTerm.domHost}' not found`
       );
     }
 
@@ -122,19 +130,19 @@ export class SearchComponent implements OnInit, OnChanges, OnDestroy {
       this.componentFactoryResolver.resolveComponentFactory(SearchTermComponent)
     );
 
-    const searchTermComponent = componentRef.instance;
+    this.searchTermComponent = componentRef.instance;
 
-    searchTermComponent.initialValue = searchState.searchTerm;
-    searchTermComponent.autoComplete =
-      searchMode.searchTerm.autocompleteEl ||
-      (Array.isArray(this.autoComplete) && !!this.autoComplete.length);
-    searchTermComponent.autoCompleteValues = this.autoComplete;
+    this.searchTermComponent.initialValue = this.initialState.searchTerm;
+    this.searchTermComponent.autoComplete =
+      Array.isArray(this.autoCompleteValues) &&
+      !!this.autoCompleteValues.length;
+    this.searchTermComponent.autoCompleteValues = this.autoCompleteValues;
 
     // needed to avoid ExpressionChangedAfterItHasBeenCheckedError
     componentRef.changeDetectorRef.detectChanges();
 
     this.subscriptions.add(
-      searchTermComponent.valueChange.subscribe(value =>
+      this.searchTermComponent.valueChange.subscribe(value =>
         this.onSearchTermChange(value)
       )
     );

@@ -1,11 +1,12 @@
 <campus-page-bar> <div searchPortal="pagebar"></div> </campus-page-bar>
+<campus-button (click)="changeAutoCompleteIndex()">autoComplete</campus-button>
 <div searchPortal="hosttop"></div>
 <campus-collapsible-sheet>
   <div aside searchPortal="hostleft"></div>
   <campus-search
     main
     [searchMode]="searchMode"
-    [autoComplete]="autoComplete"
+    [autoCompleteValues]="autoComplete"
     [initialState]="searchState | async"
     [searchResults]="resultsPage$ | async"
     (searchState$)="onChange($event)"
