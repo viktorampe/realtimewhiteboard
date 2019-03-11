@@ -368,6 +368,31 @@ describe('SearchComponent', () => {
           mockInput
         );
       });
+
+      it('should update the autoCompleteValues of the searchTermComponent', () => {
+        const newAutoCompleteValues = ['new1', 'new2'];
+
+        // this does not trigger ngOnChanges
+        searchComponent.autoCompleteValues = newAutoCompleteValues;
+        // ... doing it manually
+        searchComponent.ngOnChanges({
+          autoCompleteValues: new SimpleChange(
+            null,
+            newAutoCompleteValues,
+            false
+          )
+        });
+
+        hostFixture.detectChanges();
+
+        const searchTermComponent = hostFixture.debugElement.query(
+          By.directive(SearchTermComponent)
+        ).componentInstance;
+
+        expect(searchTermComponent.autoCompleteValues).toBe(
+          newAutoCompleteValues
+        );
+      });
     });
 
     describe('should not create', () => {
