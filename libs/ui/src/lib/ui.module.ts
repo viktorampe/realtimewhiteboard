@@ -16,6 +16,7 @@ import {
   MatTooltipModule
 } from '@angular/material';
 import { RouterModule } from '@angular/router';
+import { UtilsModule } from '@campus/utils';
 import { AppBarComponent } from './app-bar/app-bar.component';
 import { BannerComponent } from './banner/banner.component';
 import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
@@ -59,6 +60,7 @@ import { SideSheetBodyDirective } from './side-sheet/directives/side-sheet-body.
 import { SideSheetHeaderDirective } from './side-sheet/directives/side-sheet-header.directive';
 import { SideSheetPageDirective } from './side-sheet/directives/side-sheet-page.directive';
 import { SideSheetComponent } from './side-sheet/side-sheet.component';
+import { TileComponent } from './tile/tile.component';
 import { TreeNavComponent } from './tree-nav/tree-nav.component';
 import { HideDesktopDirective } from './utils/directives/hide-desktop.directive';
 import { HideMobileDirective } from './utils/directives/hide-mobile.directive';
@@ -67,7 +69,6 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
 import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time.pipe';
 import { RemovePrefixStringPipe } from './utils/pipes/remove-prefix-string/remove-prefix-string.pipe';
 import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-string.pipe';
-import { TileComponent } from './tile/tile.component';
 
 @NgModule({
   imports: [
@@ -90,7 +91,8 @@ import { TileComponent } from './tile/tile.component';
     MatProgressSpinnerModule,
     MatTooltipModule,
     MatIconModule,
-    MatMenuModule
+    MatMenuModule,
+    UtilsModule
   ],
   declarations: [
     FilterTextInputComponent,

@@ -7,22 +7,21 @@
     ></mat-icon>
     <div class="ui-tile__content__label">{{ label }}</div>
   </div>
+
   <div class="ui-tile__actions" *ngIf="secondaryActions">
     <div
+      clickStopPropagation
       *ngFor="let action of secondaryActions"
       class="ui-tile__actions__action"
+      (click)="onActionClick($event, action)"
+      [routerLink]="action.routerLink"
     >
       <mat-icon
         class="ui-tile__actions__action__icon"
         *ngIf="action.icon"
         [svgIcon]="action.icon"
       ></mat-icon>
-      <a
-        class="ui-tile__actions__action__label"
-        (click)="onActionClick($event, action)"
-        [routerLink]="action.routerLink"
-        >{{ action.label }}</a
-      >
+      <span class="ui-tile__actions__action__label">{{ action.label }}</span>
     </div>
   </div>
 </div>

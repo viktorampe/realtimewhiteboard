@@ -12,8 +12,7 @@ export class TileComponent {
   @Input() secondaryActions: TileSecondaryActionInterface[];
 
   onActionClick(event: Event, action: TileSecondaryActionInterface) {
-    event.stopPropagation();
-    action.onClick(event);
+    if (action.onClick) action.onClick(event);
   }
 }
 

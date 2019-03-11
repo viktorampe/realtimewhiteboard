@@ -8,7 +8,7 @@
   $ui-tile-content-label-color: $ui-tertiary-font-color-2 !default;
   $ui-tile-content-label-font-size: $ui-primary-font-size !default;
   $ui-tile-content-label-weight: 700 !default;
-  $ui-tile-content-label-margin: $ui-primary-font-size !default;
+  $ui-tile-content-label-margin: 16px !default;
 
   $ui-tile-content-icon-color: $ui-tertiary-font-color-2 !default;
   $ui-tile-content-icon-size: $ui-icon-size-medium !default;
@@ -19,7 +19,7 @@
 
   $ui-tile-actions-height: 25px !default;
   $ui-tile-actions-background-color: rgba(0, 0, 0, 0.2) !default;
-  $ui-tile-actions-padding-left: $ui-button-padding-left !default;
+  $ui-tile-actions-padding: 4px !default;
 
   $ui-tile-actions-label-color: $ui-tertiary-font-color-2 !default;
   $ui-tile-actions-label-height: $ui-primary-font-size !default;
@@ -38,8 +38,8 @@
         no-repeat
         right
         center;
+      background-size: contain;
     }
-    background-size: contain;
     background-color: $ui-tile-background-color;
 
     &__content {
@@ -71,7 +71,8 @@
       height: $ui-tile-actions-height;
       background-color: $ui-tile-actions-background-color;
       &__action {
-        padding-left: $ui-tile-actions-padding-left;
+        padding-left: $ui-tile-actions-padding;
+        padding-right: $ui-tile-actions-padding;
         &__label {
           margin-left: $ui-tile-actions-label-margin;
           height: $ui-tile-actions-label-height;

@@ -3,6 +3,7 @@ import { MatIconModule, MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockMatIconRegistry } from '@campus/testing';
+import { UtilsModule } from '@campus/utils';
 import { TileComponent, TileSecondaryActionInterface } from './tile.component';
 
 describe('TileComponent', () => {
@@ -18,7 +19,7 @@ describe('TileComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [TileComponent],
-      imports: [RouterTestingModule, MatIconModule],
+      imports: [RouterTestingModule, MatIconModule, UtilsModule],
       providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
     }).compileComponents();
   }));
@@ -114,21 +115,21 @@ describe('TileComponent', () => {
   });
 
   it('should not bubble a secondary action click to the main component', async(() => {
-    const component_click = jest.fn();
-    const action_click = jest.fn();
+    const componentClick = jest.fn();
+    const actionClick = jest.fn();
 
     fixture.debugElement.nativeElement.addEventListener(
       'click',
-      component_click
+      componentClick
     );
-    component.secondaryActions[0].onClick = action_click;
+    component.secondaryActions[0].onClick = actionClick;
     fixture.detectChanges();
 
     fixture.debugElement
-      .queryAll(By.css('.ui-tile__actions__action a'))[0]
+      .queryAll(By.css('.ui-tile__actions__action'))[0]
       .nativeElement.click();
 
-    expect(component_click.mock.calls.length).toBe(0);
-    expect(action_click.mock.calls.length).toBe(1);
+    expect(componentClick.mock.calls.length).toBe(0);
+    expect(actionClick.mock.calls.length).toBe(1);
   }));
 });
