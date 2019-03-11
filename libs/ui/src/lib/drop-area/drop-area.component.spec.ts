@@ -43,20 +43,20 @@ describe('DropAreaComponent', () => {
         .nativeElement.getAttribute('ng-reflect-svg-icon')
     ).toBe(icon);
   });
-  it('should show empty message if message is not given', () => {
+  it('should show empty label if label is not given', () => {
     expect(
-      fixture.debugElement.query(By.css('.ui-drop-area__message')).nativeElement
+      fixture.debugElement.query(By.css('.ui-drop-area__label')).nativeElement
         .textContent
     ).toBe('');
   });
-  it('should show the message if message is given', () => {
-    const message = 'this is the message that will be displayed';
-    component.message = message;
+  it('should show the label if label is given', () => {
+    const label = 'this is the label that will be displayed';
+    component.label = label;
     fixture.detectChanges();
     expect(
-      fixture.debugElement.query(By.css('.ui-drop-area__message')).nativeElement
+      fixture.debugElement.query(By.css('.ui-drop-area__label')).nativeElement
         .textContent
-    ).toBe(message);
+    ).toBe(label);
   });
   it('should add the dragOverClassName when dragging over', () => {
     component.dragOverClassName = 'some-classname';

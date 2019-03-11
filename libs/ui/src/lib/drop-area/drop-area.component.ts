@@ -10,7 +10,7 @@ export class DropAreaComponent {
   dragging: boolean;
 
   @Input() icon: string;
-  @Input() message: string;
+  @Input() label: string;
   @Input()
   public set dragOverClassName(value: string) {
     if (value) this._dragOverClassName = value;

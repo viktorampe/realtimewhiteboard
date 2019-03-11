@@ -85,7 +85,9 @@ $ui-tile-width: 130px !default;
 // ui > drop area
 $ui-drop-area-border: 2px dashed $color-gray-1;
 $ui-drop-area__icon-container__mat-icon-color: $color-gray-1;
-$ui-drop-area__message-color: $color-gray-1;
+$ui-drop-area__label-color: $color-gray-1;
+$ui-drop-area__label-font-size: 18px;
+$ui-drop-area__icon-container__mat-icon-size: 41px;
 $ui-drop-area-background: url(/assets/images/polpo-overlay-dark.png) right
   center no-repeat $color-gray-7;
 
