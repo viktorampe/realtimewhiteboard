@@ -19,11 +19,11 @@ import {
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
 import {
   AddFavorite,
-  AddFavoriteSuccess,
   DeleteFavorite,
   FavoritesLoaded,
   FavoritesLoadError,
   LoadFavorites,
+  StartAddFavorite,
   ToggleFavorite
 } from './favorite.actions';
 import { FavoriteEffects } from './favorite.effects';
@@ -254,15 +254,15 @@ describe('FavoriteEffects', () => {
     });
   });
 
-  describe('addFavorite$', () => {
+  describe('startAddFavorite$', () => {
     const favorite = {
       id: 123,
       type: FavoriteTypesEnum.AREA,
       created: new Date()
     };
 
+    const startAddFavoriteAction = new StartAddFavorite({ favorite });
     const addFavoriteAction = new AddFavorite({ favorite });
-    const addFavoriteSuccess = new AddFavoriteSuccess({ favorite });
 
     describe('when succesful', () => {
       beforeAll(() => {
@@ -272,11 +272,11 @@ describe('FavoriteEffects', () => {
       beforeEach(() => {
         mockServiceMethodReturnValue('addFavorite', favorite);
       });
-      it('should dispatch an addFavoriteSuccess action', () => {
+      it('should dispatch an addFavorite action', () => {
         expectInAndOut(
-          effects.addFavorite$,
-          addFavoriteAction,
-          addFavoriteSuccess
+          effects.startAddFavorite$,
+          startAddFavoriteAction,
+          addFavoriteAction
         );
       });
     });
@@ -288,12 +288,12 @@ describe('FavoriteEffects', () => {
       beforeAll(() => {
         effectFeedback = new EffectFeedback({
           id: uuid(),
-          triggerAction: addFavoriteAction,
+          triggerAction: startAddFavoriteAction,
           message:
             'Het is niet gelukt om het item aan jouw favorieten toe te voegen.',
           type: 'error',
           userActions: [
-            { title: 'Opnieuw proberen', userAction: addFavoriteAction }
+            { title: 'Opnieuw proberen', userAction: startAddFavoriteAction }
           ],
           display: true,
           priority: Priority.HIGH
@@ -307,8 +307,8 @@ describe('FavoriteEffects', () => {
       });
       it('should dispatch an error feedback action', () => {
         expectInAndOut(
-          effects.addFavorite$,
-          addFavoriteAction,
+          effects.startAddFavorite$,
+          startAddFavoriteAction,
           addFeedbackAction
         );
       });

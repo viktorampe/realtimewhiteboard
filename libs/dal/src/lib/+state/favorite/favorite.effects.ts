@@ -16,12 +16,12 @@ import {
 } from '../effect-feedback';
 import {
   AddFavorite,
-  AddFavoriteSuccess,
   DeleteFavorite,
   FavoritesActionTypes,
   FavoritesLoaded,
   FavoritesLoadError,
   LoadFavorites,
+  StartAddFavorite,
   ToggleFavorite
 } from './favorite.actions';
 
@@ -44,26 +44,29 @@ export class FavoriteEffects {
     }
   );
   @Effect()
-  addFavorite$ = this.dataPersistence.fetch(FavoritesActionTypes.AddFavorite, {
-    run: (action: AddFavorite, state: DalState) => {
-      return this.favoriteService
-        .addFavorite(action.payload.favorite)
-        .pipe(map(favorite => new AddFavoriteSuccess({ favorite })));
-    },
-    onError: (action: AddFavorite, error) => {
-      const effectFeedback = new EffectFeedback({
-        id: this.uuid(),
-        triggerAction: action,
-        message:
-          'Het is niet gelukt om het item aan jouw favorieten toe te voegen.',
-        type: 'error',
-        userActions: [{ title: 'Opnieuw proberen', userAction: action }],
-        display: true,
-        priority: Priority.HIGH
-      });
-      return new EffectFeedbackActions.AddEffectFeedback({ effectFeedback });
+  startAddFavorite$ = this.dataPersistence.pessimisticUpdate(
+    FavoritesActionTypes.StartAddFavorite,
+    {
+      run: (action: StartAddFavorite, state: DalState) => {
+        return this.favoriteService
+          .addFavorite(action.payload.favorite)
+          .pipe(map(favorite => new AddFavorite({ favorite })));
+      },
+      onError: (action: StartAddFavorite, error) => {
+        const effectFeedback = new EffectFeedback({
+          id: this.uuid(),
+          triggerAction: action,
+          message:
+            'Het is niet gelukt om het item aan jouw favorieten toe te voegen.',
+          type: 'error',
+          userActions: [{ title: 'Opnieuw proberen', userAction: action }],
+          display: true,
+          priority: Priority.HIGH
+        });
+        return new EffectFeedbackActions.AddEffectFeedback({ effectFeedback });
+      }
     }
-  });
+  );
 
   @Effect()
   deleteFavorite$ = this.dataPersistence.optimisticUpdate(

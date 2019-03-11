@@ -83,7 +83,7 @@ describe('Favorites Reducer', () => {
   describe('add actions', () => {
     it('should add one favorite', () => {
       const favorite = favorites[0];
-      const action = new FavoriteActions.AddFavoriteSuccess({
+      const action = new FavoriteActions.AddFavorite({
         favorite
       });
 
