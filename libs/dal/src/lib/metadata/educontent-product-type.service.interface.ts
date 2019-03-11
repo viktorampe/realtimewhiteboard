@@ -2,7 +2,7 @@ import { InjectionToken } from '@angular/core';
 import { Observable } from 'rxjs';
 import { EduContentProductTypeInterface } from '../+models';
 
-export const EDUCONTENT_PRODUCT_TYPE_SERVICE_TOKEN = new InjectionToken(
+export const EDU_CONTENT_PRODUCT_TYPE_SERVICE_TOKEN = new InjectionToken(
   'EduContentProductTypeService'
 );
 
