@@ -70,7 +70,7 @@ describe('EduNetEffects', () => {
         {
           provide: EDU_NET_SERVICE_TOKEN,
           useValue: {
-            getAllForUser: () => {}
+            getAll: () => {}
           }
         },
         EduNetEffects,
@@ -92,7 +92,7 @@ describe('EduNetEffects', () => {
         usedState = EduNetReducer.initialState;
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAllForUser', []);
+        mockServiceMethodReturnValue('getAll', []);
       });
       it('should trigger an api call with the initialState if force is not true', () => {
         expectInAndOut(
@@ -114,7 +114,7 @@ describe('EduNetEffects', () => {
         usedState = { ...EduNetReducer.initialState, loaded: true };
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAllForUser', []);
+        mockServiceMethodReturnValue('getAll', []);
       });
       it('should not trigger an api call with the loaded state if force is not true', () => {
         expectInNoOut(effects.loadEduNets$, unforcedLoadAction);
@@ -132,7 +132,7 @@ describe('EduNetEffects', () => {
         usedState = EduNetReducer.initialState;
       });
       beforeEach(() => {
-        mockServiceMethodError('getAllForUser', 'failed');
+        mockServiceMethodError('getAll', 'failed');
       });
       it('should return a error action if force is not true', () => {
         expectInAndOut(
@@ -154,7 +154,7 @@ describe('EduNetEffects', () => {
         };
       });
       beforeEach(() => {
-        mockServiceMethodError('getAllForUser', 'failed');
+        mockServiceMethodError('getAll', 'failed');
       });
       it('should return nothing action if force is not true', () => {
         expectInNoOut(effects.loadEduNets$, unforcedLoadAction);

@@ -74,7 +74,7 @@ describe('SchoolTypeEffects', () => {
         {
           provide: SCHOOL_TYPE_SERVICE_TOKEN,
           useValue: {
-            getAllForUser: () => {}
+            getAll: () => {}
           }
         },
         SchoolTypeEffects,
@@ -96,7 +96,7 @@ describe('SchoolTypeEffects', () => {
         usedState = SchoolTypeReducer.initialState;
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAllForUser', []);
+        mockServiceMethodReturnValue('getAll', []);
       });
       it('should trigger an api call with the initialState if force is not true', () => {
         expectInAndOut(
@@ -118,7 +118,7 @@ describe('SchoolTypeEffects', () => {
         usedState = { ...SchoolTypeReducer.initialState, loaded: true };
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAllForUser', []);
+        mockServiceMethodReturnValue('getAll', []);
       });
       it('should not trigger an api call with the loaded state if force is not true', () => {
         expectInNoOut(effects.loadSchoolTypes$, unforcedLoadAction);
@@ -136,7 +136,7 @@ describe('SchoolTypeEffects', () => {
         usedState = SchoolTypeReducer.initialState;
       });
       beforeEach(() => {
-        mockServiceMethodError('getAllForUser', 'failed');
+        mockServiceMethodError('getAll', 'failed');
       });
       it('should return a error action if force is not true', () => {
         expectInAndOut(
@@ -162,7 +162,7 @@ describe('SchoolTypeEffects', () => {
         };
       });
       beforeEach(() => {
-        mockServiceMethodError('getAllForUser', 'failed');
+        mockServiceMethodError('getAll', 'failed');
       });
       it('should return nothing action if force is not true', () => {
         expectInNoOut(effects.loadSchoolTypes$, unforcedLoadAction);

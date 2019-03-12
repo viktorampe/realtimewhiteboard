@@ -66,7 +66,7 @@ describe('YearEffects', () => {
         {
           provide: YEAR_SERVICE_TOKEN,
           useValue: {
-            getAllForUser: () => {}
+            getAll: () => {}
           }
         },
         YearEffects,
@@ -88,7 +88,7 @@ describe('YearEffects', () => {
         usedState = YearReducer.initialState;
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAllForUser', []);
+        mockServiceMethodReturnValue('getAll', []);
       });
       it('should trigger an api call with the initialState if force is not true', () => {
         expectInAndOut(
@@ -110,7 +110,7 @@ describe('YearEffects', () => {
         usedState = { ...YearReducer.initialState, loaded: true };
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAllForUser', []);
+        mockServiceMethodReturnValue('getAll', []);
       });
       it('should not trigger an api call with the loaded state if force is not true', () => {
         expectInNoOut(effects.loadYears$, unforcedLoadAction);
@@ -128,7 +128,7 @@ describe('YearEffects', () => {
         usedState = YearReducer.initialState;
       });
       beforeEach(() => {
-        mockServiceMethodError('getAllForUser', 'failed');
+        mockServiceMethodError('getAll', 'failed');
       });
       it('should return a error action if force is not true', () => {
         expectInAndOut(effects.loadYears$, unforcedLoadAction, loadErrorAction);
@@ -146,7 +146,7 @@ describe('YearEffects', () => {
         };
       });
       beforeEach(() => {
-        mockServiceMethodError('getAllForUser', 'failed');
+        mockServiceMethodError('getAll', 'failed');
       });
       it('should return nothing action if force is not true', () => {
         expectInNoOut(effects.loadYears$, unforcedLoadAction);

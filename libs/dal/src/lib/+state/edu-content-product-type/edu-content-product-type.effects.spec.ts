@@ -74,7 +74,7 @@ describe('EduContentProductTypeEffects', () => {
         {
           provide: EDU_CONTENT_PRODUCT_TYPE_SERVICE_TOKEN,
           useValue: {
-            getAllForUser: () => {}
+            getAll: () => {}
           }
         },
         EduContentProductTypeEffects,
@@ -103,7 +103,7 @@ describe('EduContentProductTypeEffects', () => {
         usedState = EduContentProductTypeReducer.initialState;
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAllForUser', []);
+        mockServiceMethodReturnValue('getAll', []);
       });
       it('should trigger an api call with the initialState if force is not true', () => {
         expectInAndOut(
@@ -128,7 +128,7 @@ describe('EduContentProductTypeEffects', () => {
         };
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAllForUser', []);
+        mockServiceMethodReturnValue('getAll', []);
       });
       it('should not trigger an api call with the loaded state if force is not true', () => {
         expectInNoOut(effects.loadEduContentProductTypes$, unforcedLoadAction);
@@ -146,7 +146,7 @@ describe('EduContentProductTypeEffects', () => {
         usedState = EduContentProductTypeReducer.initialState;
       });
       beforeEach(() => {
-        mockServiceMethodError('getAllForUser', 'failed');
+        mockServiceMethodError('getAll', 'failed');
       });
       it('should return a error action if force is not true', () => {
         expectInAndOut(
@@ -172,7 +172,7 @@ describe('EduContentProductTypeEffects', () => {
         };
       });
       beforeEach(() => {
-        mockServiceMethodError('getAllForUser', 'failed');
+        mockServiceMethodError('getAll', 'failed');
       });
       it('should return nothing action if force is not true', () => {
         expectInNoOut(effects.loadEduContentProductTypes$, unforcedLoadAction);
