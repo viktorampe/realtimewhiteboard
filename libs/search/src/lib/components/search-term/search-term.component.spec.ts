@@ -1,9 +1,4 @@
-import {
-  async,
-  ComponentFixture,
-  fakeAsync,
-  TestBed
-} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import {
   MatAutocomplete,
@@ -99,7 +94,7 @@ describe('SearchTermComponent', () => {
       expect(component.valueChange.emit).toHaveBeenCalledWith(searchTerm);
     });
 
-    it('should emit the search term when the user selects an autoComplete value', fakeAsync(() => {
+    it('should emit the search term when the user selects an autoComplete value', () => {
       component.autoComplete = true;
       component.autoCompleteValues = ['waarde1', 'waarde2'];
 
@@ -114,6 +109,9 @@ describe('SearchTermComponent', () => {
       // set selected option as currentValue
       component.currentValue = autoComplete.options.first.value;
 
+      // doublecheck that setting currentValue didn't trigger the valueChange
+      expect(component.valueChange.emit).not.toHaveBeenCalled();
+
       // emit event
       autoComplete._emitSelectEvent(autoComplete.options.first);
 
@@ -122,7 +120,7 @@ describe('SearchTermComponent', () => {
       expect(component.valueChange.emit).toHaveBeenCalledWith(
         component.currentValue
       );
-    }));
+    });
   });
 
   describe('autoComplete', () => {

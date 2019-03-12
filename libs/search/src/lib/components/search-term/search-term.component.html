@@ -8,13 +8,13 @@
       matInput
       [(ngModel)]="currentValue"
       [placeholder]="placeholder"
-      (keyup.enter)="onChange($event)"
+      (keyup.enter)="onChange()"
     />
   </mat-form-field>
   <campus-button
     bordered
     [iconClass]="'magnifier'"
-    (click)="onChange($event)"
+    (click)="onChange()"
   ></campus-button>
 
   <ng-template #autoCompleteTemplate>
@@ -25,13 +25,13 @@
         [(ngModel)]="currentValue"
         [placeholder]="placeholder"
         [matAutocomplete]="auto"
-        (keyup.enter)="onChange($event)"
+        (keyup.enter)="onChange()"
         (input)="getAutoCompleteValues()"
       />
 
       <mat-autocomplete
         #auto="matAutocomplete"
-        (optionSelected)="onChange($event)"
+        (optionSelected)="onChange()"
         class="search-term__autocomplete"
       >
         <mat-option

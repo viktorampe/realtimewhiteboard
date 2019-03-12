@@ -23,7 +23,7 @@ export class SearchTermComponent implements OnInit {
     this.currentValue = this.initialValue;
   }
 
-  onChange(event) {
+  onChange() {
     this.valueChange.emit(this.currentValue || '');
   }
 
