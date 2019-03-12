@@ -22,7 +22,6 @@ import {
 import { TileSecondaryActionInterface } from '@campus/ui';
 import { EduContentMetadataApi } from '@diekeure/polpo-api-angular-sdk';
 import { EduContentSearchResultComponent } from 'apps/polpo-classroom-web/src/app/components/searchresults/edu-content-search-result.component';
-import { EduContentSearchResultInterface } from 'apps/polpo-classroom-web/src/app/components/searchresults/interfaces/educontent-search-result';
 // tslint:disable-next-line:nx-enforce-module-boundaries
 import { STANDARD_SEARCH_SERVICE_TOKEN } from 'apps/polpo-classroom-web/src/app/services/standard-search.service';
 // tslint:disable-next-line:nx-enforce-module-boundaries
@@ -219,8 +218,7 @@ export class FindingNemoComponent implements AfterViewInit {
       results: [
         {
           eduContent: new EduContentFixture()
-        },
-        { inTask: false } as EduContentSearchResultInterface
+        }
       ],
       filterCriteriaPredictions: new Map([
         ['LearningArea', new Map([[1, 100], [2, 50]])]

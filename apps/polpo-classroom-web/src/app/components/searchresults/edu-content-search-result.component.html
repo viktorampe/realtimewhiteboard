@@ -4,8 +4,14 @@
     <div class="app-educontentsearchresult__top__details">
       <header class="app-educontentsearchresult__top__details__header">
         <div class="app-educontentsearchresult__top__details__header__title"
-          ><mat-icon svgIcon="learning-area:polpo-wiskunde"></mat-icon
-        ></div>
+          ><mat-icon
+            [svgIcon]="
+              data.eduContent.publishedEduContentMetadata.eduContentProductType
+                .icon
+            "
+          ></mat-icon>
+          {{ data.eduContent.publishedEduContentMetadata.title }}
+        </div>
         <div
           class="app-educontentsearchresult__top__details__header__icons"
         ></div>
