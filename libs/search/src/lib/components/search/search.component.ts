@@ -114,7 +114,9 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
   ): void {
     this.searchViewmodel.changeFilters(criteria);
   }
-  public onSearchTermChange(value: string): void {}
+  public onSearchTermChange(value: string): void {
+    this.searchViewmodel.changeSearchTerm(value);
+  }
 
   public onSearchTermChangeForAutoComplete(value: string): void {
     // TODO notify parent(?) that new values are needed
