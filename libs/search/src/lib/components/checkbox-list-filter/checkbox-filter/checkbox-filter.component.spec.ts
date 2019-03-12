@@ -10,7 +10,6 @@ import {
   MatListModule
 } from '@angular/material';
 import { By } from '@angular/platform-browser';
-import { CredentialFixture, LearningAreaFixture } from '@campus/dal';
 import { MockMatIconRegistry } from '@campus/testing';
 import {
   SearchFilterCriteriaFixture,
@@ -44,15 +43,15 @@ describe('CheckboxFilterComponent', () => {
     mockChildFilterCriteria = new SearchFilterCriteriaFixture(
       { keyProperty: 'id', displayProperty: 'provider' },
       [
-        new SearchFilterCriteriaValuesFixture({
-          data: new CredentialFixture({ id: 1, provider: 'smartschool' })
-        }),
-        new SearchFilterCriteriaValuesFixture({
-          data: new CredentialFixture({ id: 2, provider: 'google' })
-        }),
-        new SearchFilterCriteriaValuesFixture({
-          data: new CredentialFixture({ id: 3, provider: 'facebook' })
-        })
+        {
+          data: { id: 1, provider: 'smartschool' }
+        },
+        {
+          data: { id: 2, provider: 'google' }
+        },
+        {
+          data: { id: 3, provider: 'facebook' }
+        }
       ]
     );
 
@@ -61,34 +60,34 @@ describe('CheckboxFilterComponent', () => {
       { label: 'search filter' },
       [
         new SearchFilterCriteriaValuesFixture({
-          data: new LearningAreaFixture({
+          data: {
             id: 1,
             name: 'Aardrijkskunde'
-          })
+          }
         }),
         new SearchFilterCriteriaValuesFixture({
-          data: new LearningAreaFixture({
+          data: {
             id: 2,
             name: 'Geschiedenis'
-          })
+          }
         }),
         new SearchFilterCriteriaValuesFixture({
-          data: new LearningAreaFixture({
+          data: {
             id: 3,
             name: 'Wiskunde'
-          })
+          }
         }),
         new SearchFilterCriteriaValuesFixture({
-          data: new LearningAreaFixture({
+          data: {
             id: 4,
             name: 'Informatica'
-          })
+          }
         }),
         new SearchFilterCriteriaValuesFixture({
-          data: new LearningAreaFixture({
+          data: {
             id: 5,
             name: 'Engels'
-          })
+          }
         })
       ]
     );
