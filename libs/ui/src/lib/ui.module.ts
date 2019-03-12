@@ -16,6 +16,7 @@ import {
   MatTooltipModule
 } from '@angular/material';
 import { RouterModule } from '@angular/router';
+import { UtilsModule } from '@campus/utils';
 import { AppBarComponent } from './app-bar/app-bar.component';
 import { BannerComponent } from './banner/banner.component';
 import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
@@ -32,6 +33,7 @@ import { CollapsibleSheetComponent } from './collapsible-sheet/collapsible-sheet
 import { ConfirmableSelectComponent } from './confirmable-select/confirmable-select.component';
 import { ContentPreviewComponent } from './content-preview/content-preview.component';
 import { ContentThumbnailComponent } from './content-thumbnail/content-thumbnail.component';
+import { DropAreaComponent } from './drop-area/drop-area.component';
 import { DropdownMenuItemComponent } from './dropdown-menu-item/dropdown-menu-item.component';
 import { DropdownMenuComponent } from './dropdown-menu/dropdown-menu.component';
 import { EditableInlineTagListComponent } from './editable-inline-tag-list/editable-inline-tag-list.component';
@@ -59,6 +61,7 @@ import { SideSheetBodyDirective } from './side-sheet/directives/side-sheet-body.
 import { SideSheetHeaderDirective } from './side-sheet/directives/side-sheet-header.directive';
 import { SideSheetPageDirective } from './side-sheet/directives/side-sheet-page.directive';
 import { SideSheetComponent } from './side-sheet/side-sheet.component';
+import { TileComponent } from './tile/tile.component';
 import { TreeNavComponent } from './tree-nav/tree-nav.component';
 import { HideDesktopDirective } from './utils/directives/hide-desktop.directive';
 import { HideMobileDirective } from './utils/directives/hide-mobile.directive';
@@ -67,22 +70,17 @@ import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness
 import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time.pipe';
 import { RemovePrefixStringPipe } from './utils/pipes/remove-prefix-string/remove-prefix-string.pipe';
 import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-string.pipe';
-import { DropAreaComponent } from './drop-area/drop-area.component';
 
 @NgModule({
   imports: [
     OverlayModule,
     MatButtonModule,
-    FormsModule,
-    ReactiveFormsModule,
     CommonModule,
     MatSidenavModule,
-    MatFormFieldModule,
     MatInputModule,
     LayoutModule,
     RouterModule,
     CdkTreeModule,
-    MatSelectModule,
     ReactiveFormsModule,
     FormsModule,
     MatSelectModule,
@@ -90,7 +88,8 @@ import { DropAreaComponent } from './drop-area/drop-area.component';
     MatProgressSpinnerModule,
     MatTooltipModule,
     MatIconModule,
-    MatMenuModule
+    MatMenuModule,
+    UtilsModule
   ],
   declarations: [
     FilterTextInputComponent,
@@ -142,7 +141,8 @@ import { DropAreaComponent } from './drop-area/drop-area.component';
     BannerComponent,
     DropdownDirective,
     CollapsibleSheetComponent,
-    DropAreaComponent
+    DropAreaComponent,
+    TileComponent
   ],
   exports: [
     FilterTextInputComponent,
@@ -193,7 +193,8 @@ import { DropAreaComponent } from './drop-area/drop-area.component';
     BannerComponent,
     DropdownDirective,
     CollapsibleSheetComponent,
-    DropAreaComponent
+    DropAreaComponent,
+    TileComponent
   ]
 })
 export class UiModule {}
