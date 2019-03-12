@@ -12,17 +12,26 @@
       class="column__filter__value"
       [class.column__filter__value--selected]="value.selected"
     >
-      <div
-        (click)="onFilterSelectionChange(value, false)"
-        class="column__filter__value__label"
-        >displayProperty: {{ value.data[filterCriterion.displayProperty] }}</div
-      >
-      <mat-icon
-        *ngIf="value.prediction && value.prediction !== 0"
-        class="column__filter__value__magnifier"
-        (click)="onFilterSelectionChange(value, true)"
-        [svgIcon]="'magnifier'"
-      ></mat-icon>
+      <div class="column__filter__value__button-content"
+        ><div
+          (click)="onFilterSelectionChange(value, false)"
+          class="column__filter__value__label"
+          >{{ value.data[filterCriterion.displayProperty] }}</div
+        >
+        <div class="column__filter__value__button-content__icons"
+          ><mat-icon
+            *ngIf="value.prediction && value.prediction !== 0"
+            class="column__filter__value__button-content__icons__magnifier"
+            (click)="onFilterSelectionChange(value, true)"
+            [svgIcon]="'magnifier'"
+          ></mat-icon>
+          <mat-icon
+            *ngIf="value.hasChild"
+            class="column__filter__value__button-content__icons__arrow"
+            (click)="onFilterSelectionChange(value, false)"
+            [svgIcon]="'column-filter-arrow'"
+          ></mat-icon></div
+      ></div>
     </button>
   </mat-action-list>
 </ng-container>
