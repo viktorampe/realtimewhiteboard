@@ -10,7 +10,13 @@ import {
   ViewChild,
   ViewChildren
 } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  async,
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick
+} from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
@@ -368,6 +374,52 @@ describe('SearchComponent', () => {
           mockInput
         );
       });
+
+      it('should call the changeSearchTerm method on the viewmodel', () => {
+        const mockInput =
+          'de kans dat deze string at random is ingevoerd, is nogal klein';
+
+        searchViewmodel.changeSearchTerm = jest.fn();
+
+        component.onSearchTermChange(mockInput);
+
+        expect(searchViewmodel.changeSearchTerm).toHaveBeenCalled();
+        expect(searchViewmodel.changeSearchTerm).toHaveBeenCalledWith(
+          mockInput
+        );
+      });
+
+      it(
+        'should subscribe to the valueChangeForAutoComplete event of the searchTermComponent' +
+          'and debounce the events',
+        fakeAsync(() => {
+          const mockInput =
+            'de kans dat deze string at random is ingevoerd, is nogal klein';
+
+          const searchTermComponent = hostFixture.debugElement.query(
+            By.directive(SearchTermComponent)
+          ).componentInstance;
+
+          searchComponent.onSearchTermChangeForAutoComplete = jest.fn();
+
+          searchTermComponent.valueChangeForAutoComplete.next(mockInput);
+
+          // before debounce
+          expect(
+            searchComponent.onSearchTermChangeForAutoComplete
+          ).not.toHaveBeenCalled();
+
+          tick(component.autoCompleteDebounceTime);
+
+          // after debounce
+          expect(
+            searchComponent.onSearchTermChangeForAutoComplete
+          ).toHaveBeenCalled();
+          expect(
+            searchComponent.onSearchTermChangeForAutoComplete
+          ).toHaveBeenCalledWith(mockInput);
+        })
+      );
 
       it('should update the autoCompleteValues of the searchTermComponent', () => {
         const newAutoCompleteValues = ['new1', 'new2'];

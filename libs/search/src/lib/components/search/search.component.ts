@@ -18,6 +18,7 @@ import {
   SearchFilterInterface
 } from '@campus/search';
 import { Observable, Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { SearchPortalDirective } from '../../directives';
 import { SearchTermComponent } from '../search-term/search-term.component';
 import { SearchViewModel } from '../search.viewmodel';
@@ -46,6 +47,7 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input() public searchMode: SearchModeInterface;
   @Input() public autoCompleteValues: string[];
+  @Input() public autoCompleteDebounceTime = 300;
   @Input() public initialState: SearchStateInterface;
   @Input() public searchResults: SearchResultInterface;
   @Input()
@@ -113,6 +115,11 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
     this.searchViewmodel.changeFilters(criteria);
   }
   public onSearchTermChange(value: string): void {}
+
+  public onSearchTermChangeForAutoComplete(value: string): void {
+    // TODO notify parent(?) that new values are needed
+  }
+
   public onScroll(): void {
     this.searchViewmodel.getNextPage();
   }
@@ -135,10 +142,18 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
     // needed to avoid ExpressionChangedAfterItHasBeenCheckedError
     componentRef.changeDetectorRef.detectChanges();
 
+    // listen for valueChange -> new search
     this.subscriptions.add(
       this.searchTermComponent.valueChange.subscribe(value =>
         this.onSearchTermChange(value)
       )
+    );
+
+    // listen for valueChangeForAutoComplete -> new autoComplete results
+    this.subscriptions.add(
+      this.searchTermComponent.valueChangeForAutoComplete
+        .pipe(debounceTime(this.autoCompleteDebounceTime))
+        .subscribe(value => this.onSearchTermChangeForAutoComplete(value))
     );
   }
 
