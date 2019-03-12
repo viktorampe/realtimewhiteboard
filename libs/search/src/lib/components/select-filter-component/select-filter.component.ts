@@ -37,13 +37,16 @@ export class SelectFilterComponent
   @Input() multiple = false;
   @Input() resetLabel: string;
   @Input()
-  set filterCriteria(criteria: SearchFilterCriteriaInterface) {
+  public set filterCriteria(criteria: SearchFilterCriteriaInterface) {
     this.criteria = criteria;
     this.options = this.criteriaToOptions(criteria);
     const selection = this.options
       .filter(option => option.value.selected)
       .map(option => option.value);
     this.updateView(selection);
+  }
+  public get filterCriteria() {
+    return this.criteria;
   }
 
   @Output() filterSelectionChange: EventEmitter<

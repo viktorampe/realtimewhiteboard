@@ -35,6 +35,6 @@ export * from './lib/alert';
 export * from './lib/dal.module';
 export {
   EduContentServiceInterface,
-  EDUCONTENT_SERVICE_TOKEN
+  EDU_CONTENT_SERVICE_TOKEN
 } from './lib/edu-content/edu-content.service.interface';
 export * from './lib/persons';

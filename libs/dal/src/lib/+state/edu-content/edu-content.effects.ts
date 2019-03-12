@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators';
 import { DalState } from '..';
 import {
   EduContentServiceInterface,
-  EDUCONTENT_SERVICE_TOKEN
+  EDU_CONTENT_SERVICE_TOKEN
 } from '../../edu-content/edu-content.service.interface';
 import {
   EduContentsActionTypes,
@@ -35,7 +35,7 @@ export class EduContentsEffects {
   constructor(
     private actions: Actions,
     private dataPersistence: DataPersistence<DalState>,
-    @Inject(EDUCONTENT_SERVICE_TOKEN)
+    @Inject(EDU_CONTENT_SERVICE_TOKEN)
     private eduContentService: EduContentServiceInterface
   ) {}
 }
