@@ -1,4 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { MatTooltipModule } from '@angular/material';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
@@ -43,6 +44,7 @@ configureBufferSize(150);
     SearchModule,
     UiModule,
     UtilsModule,
+    MatTooltipModule,
     BrowserModule,
     AppRoutingModule,
     SharedModule.forRoot(

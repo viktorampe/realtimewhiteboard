@@ -1,7 +1,24 @@
 <div class="app-educontentsearchresult">
   <div class="app-educontentsearchresult__top">
     <campus-file-extension extensionClass="pdf"></campus-file-extension>
-    <p> edu-content-search-result works! {{ data.inTask }} </p>
+    <div class="app-educontentsearchresult__top__details">
+      <header class="app-educontentsearchresult__top__details__header">
+        <div class="app-educontentsearchresult__top__details__header__title"
+          ><mat-icon svgIcon="learning-area:polpo-wiskunde"></mat-icon
+        ></div>
+        <div
+          class="app-educontentsearchresult__top__details__header__icons"
+        ></div>
+      </header>
+      <p class="app-educontentsearchresult__top__details__content">
+        Some content goes in here describing stuff.
+      </p>
+      <div class="app-educontentsearchresult__top__details__methods">
+        <span>A method</span><span>And another</span>
+      </div>
+      <footer class="app-educontentsearchresult__top__details__footer">
+      </footer>
+    </div>
   </div>
   <div
     @collapseExpandTrigger
