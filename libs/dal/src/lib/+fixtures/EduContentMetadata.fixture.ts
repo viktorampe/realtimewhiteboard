@@ -1,7 +1,10 @@
 import { EduContentMetadataInterface } from '../+models/EduContentMetadata.interface';
 import { EduContentProductTypeFixture } from './EduContentProductType.fixture';
+import { EduNetFixture } from './EduNet.fixture';
 import { LearningAreaFixture } from './LearningArea.fixture';
 import { MethodFixture } from './Method.fixture';
+import { SchoolTypeFixture } from './SchoolType.fixture';
+import { YearFixture } from './Year.fixture';
 
 export class EduContentMetadataFixture implements EduContentMetadataInterface {
   // defaults
@@ -44,6 +47,15 @@ export class EduContentMetadataFixture implements EduContentMetadataInterface {
     new MethodFixture({ icon: 'nando', id: 5 })
   ];
   eduContentProductType = new EduContentProductTypeFixture({ id: 33 });
+  years = [new YearFixture({ name: '5' }), new YearFixture({ name: '6' })];
+  eduNets = [
+    new EduNetFixture({ code: 'GO' }),
+    new EduNetFixture({ name: 'KathOndVla' })
+  ];
+  schoolTypes = [
+    new SchoolTypeFixture({ name: 'TSO' }),
+    new SchoolTypeFixture({ name: 'BSO' })
+  ];
 
   constructor(props: Partial<EduContentMetadataInterface> = {}) {
     // overwrite defaults
