@@ -5,8 +5,8 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
-import { EDU_NET_SERVICE_TOKEN } from '../../edu-net/edu-net.service.interface';
 import { EduNetReducer } from '.';
+import { EDU_NET_SERVICE_TOKEN } from '../../metadata/edu-net.service.interface';
 import {
   EduNetsLoaded,
   EduNetsLoadError,
@@ -18,7 +18,6 @@ describe('EduNetEffects', () => {
   let actions: Observable<any>;
   let effects: EduNetEffects;
   let usedState: any;
-
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -61,7 +60,7 @@ describe('EduNetEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature(EduNetReducer.NAME , EduNetReducer.reducer, {
+        StoreModule.forFeature(EduNetReducer.NAME, EduNetReducer.reducer, {
           initialState: usedState
         }),
         EffectsModule.forRoot([]),
@@ -143,11 +142,7 @@ describe('EduNetEffects', () => {
         );
       });
       it('should return a error action if force is true', () => {
-        expectInAndOut(
-          effects.loadEduNets$,
-          forcedLoadAction,
-          loadErrorAction
-        );
+        expectInAndOut(effects.loadEduNets$, forcedLoadAction, loadErrorAction);
       });
     });
     describe('with loaded and failing api call', () => {
@@ -165,11 +160,7 @@ describe('EduNetEffects', () => {
         expectInNoOut(effects.loadEduNets$, unforcedLoadAction);
       });
       it('should return a error action if force is true', () => {
-        expectInAndOut(
-          effects.loadEduNets$,
-          forcedLoadAction,
-          loadErrorAction
-        );
+        expectInAndOut(effects.loadEduNets$, forcedLoadAction, loadErrorAction);
       });
     });
   });

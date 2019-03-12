@@ -34,6 +34,7 @@ import {
   EduContentProductTypeEffects,
   EduContentProductTypeReducer
 } from './+state/edu-content-product-type';
+import { EduNetEffects, EduNetReducer } from './+state/edu-net';
 import { EffectFeedbackReducer } from './+state/effect-feedback';
 import {
   LearningAreaReducer,
@@ -243,6 +244,9 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
       EduContentProductTypeReducer.reducer,
       { initialState: EduContentProductTypeReducer.initialState }
     ),
+    StoreModule.forFeature(EduNetReducer.NAME, EduNetReducer.reducer, {
+      initialState: EduNetReducer.initialState
+    }),
     EffectsModule.forFeature([
       BundlesEffects,
       UserEffects,
@@ -265,7 +269,8 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
       TeacherStudentEffects,
       LinkedPersonEffects,
       CredentialEffects,
-      EduContentProductTypeEffects
+      EduContentProductTypeEffects,
+      EduNetEffects
     ])
   ],
   providers: [

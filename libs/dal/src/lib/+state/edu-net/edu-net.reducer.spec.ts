@@ -1,26 +1,29 @@
 import { Update } from '@ngrx/entity';
-import {EduNetActions } from '.';
-import { initialState, reducer, State } from './edu-net.reducer';
+import { EduNetActions } from '.';
 import { EduNetInterface } from '../../+models';
+import { initialState, reducer, State } from './edu-net.reducer';
 
-/** 
+/**
  * This file is scaffolded, but needs some special attention:
- * - find and replace '__EXTRA__PROPERTY_NAME' and replace this with a property name of the EduNet entity.
- * - set the initial property value via '[__EXTRA__PROPERTY_NAME]InitialValue'.
- * - set the updated property value via '[__EXTRA__PROPERTY_NAME]UpdatedValue'.
-*/
-const __EXTRA__PROPERTY_NAMEInitialValue = ;
-const __EXTRA__PROPERTY_NAMEUpdatedValue = ;
+ * - find and replace 'name' and replace this with a property name of the EduNet entity.
+ * - set the initial property value via '[name]InitialValue'.
+ * - set the updated property value via '[name]UpdatedValue'.
+ */
+const nameInitialValue = 'foo';
+const nameUpdatedValue = 'bar';
 
 /**
  * Creates a EduNet.
  * @param {number} id
  * @returns {EduNetInterface}
  */
-function createEduNet(id: number, __EXTRA__PROPERTY_NAME:any = __EXTRA__PROPERTY_NAMEInitialValue): EduNetInterface | any {
+function createEduNet(
+  id: number,
+  name: any = nameInitialValue
+): EduNetInterface | any {
   return {
     id: id,
-    __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAME
+    name: name
   };
 }
 
@@ -54,15 +57,10 @@ function createState(
   return state;
 }
 
-
 describe('EduNets Reducer', () => {
   let eduNets: EduNetInterface[];
   beforeEach(() => {
-    eduNets = [
-      createEduNet(1),
-      createEduNet(2),
-      createEduNet(3)
-    ];
+    eduNets = [createEduNet(1), createEduNet(2), createEduNet(3)];
   });
 
   describe('unknown action', () => {
@@ -111,7 +109,7 @@ describe('EduNets Reducer', () => {
   describe('upsert actions', () => {
     it('should upsert one eduNet', () => {
       const originalEduNet = eduNets[0];
-      
+
       const startState = reducer(
         initialState,
         new EduNetActions.AddEduNet({
@@ -119,9 +117,8 @@ describe('EduNets Reducer', () => {
         })
       );
 
-    
       const updatedEduNet = createEduNet(eduNets[0].id, 'test');
-     
+
       const action = new EduNetActions.UpsertEduNet({
         eduNet: updatedEduNet
       });
@@ -146,9 +143,7 @@ describe('EduNets Reducer', () => {
 
       const result = reducer(startState, action);
 
-      expect(result).toEqual(
-        createState(eduNetsToInsert)
-      );
+      expect(result).toEqual(createState(eduNetsToInsert));
     });
   });
 
@@ -159,31 +154,30 @@ describe('EduNets Reducer', () => {
       const update: Update<EduNetInterface> = {
         id: 1,
         changes: {
-          __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-        } 
+          name: nameUpdatedValue
+        }
       };
       const action = new EduNetActions.UpdateEduNet({
         eduNet: update
       });
       const result = reducer(startState, action);
-      expect(result).toEqual(createState([createEduNet(1, __EXTRA__PROPERTY_NAMEUpdatedValue)]));
+      expect(result).toEqual(createState([createEduNet(1, nameUpdatedValue)]));
     });
 
     it('should update multiple eduNets', () => {
       const startState = createState(eduNets);
       const updates: Update<EduNetInterface>[] = [
-        
         {
           id: 1,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          } 
+            name: nameUpdatedValue
+          }
         },
         {
           id: 2,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          }  
+            name: nameUpdatedValue
+          }
         }
       ];
       const action = new EduNetActions.UpdateEduNets({
@@ -192,7 +186,11 @@ describe('EduNets Reducer', () => {
       const result = reducer(startState, action);
 
       expect(result).toEqual(
-        createState([createEduNet(1, __EXTRA__PROPERTY_NAMEUpdatedValue), createEduNet(2, __EXTRA__PROPERTY_NAMEUpdatedValue), eduNets[2]])
+        createState([
+          createEduNet(1, nameUpdatedValue),
+          createEduNet(2, nameUpdatedValue),
+          eduNets[2]
+        ])
       );
     });
   });

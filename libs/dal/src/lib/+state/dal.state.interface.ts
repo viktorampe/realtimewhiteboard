@@ -6,6 +6,7 @@ import {
   CurrentExerciseReducer,
   EduContentProductTypeReducer,
   EduContentReducer,
+  EduNetReducer,
   LearningAreaReducer,
   LinkedPersonReducer,
   MethodReducer,
@@ -46,4 +47,5 @@ export interface DalState {
   credentials: CredentialReducer.State;
   methods: MethodReducer.State;
   eduContentProductTypes: EduContentProductTypeReducer.State;
+  eduNets: EduNetReducer.State;
 }
