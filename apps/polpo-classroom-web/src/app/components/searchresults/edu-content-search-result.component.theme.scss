@@ -3,9 +3,31 @@
     border: 3px solid $color-black-1;
 
     &__top {
+      background-color: $color-white-1;
+      color: $color-black-1;
+      padding: 10px 15px;
+
+      &__details {
+        &__header {
+          &__title {
+            mat-icon {
+              color: $color-blue-2;
+            }
+          }
+          &__icons {
+            color: $color-blue-2;
+          }
+        }
+      }
+    }
+
+    &.selected &__top {
       background-color: $color-gray-2;
       color: $color-white-1;
-      padding: 10px 15px;
+    }
+
+    &.selected &__top mat-icon {
+      color: $color-black-1;
     }
 
     &__bottom {

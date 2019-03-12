@@ -11,6 +11,7 @@
   &__top {
     display: flex;
     flex-direction: row;
+    flex: 1 0 auto;
 
     campus-file-extension {
       margin-right: 16px;
@@ -19,23 +20,39 @@
     &__details {
       display: flex;
       flex-direction: column;
+      flex: 1 0 auto;
 
       &__header {
         display: flex;
         flex-direction: row;
+        justify-content: space-between;
 
         &__title {
-          align-self: flex-start;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+
+          span {
+            display: inline-block;
+            height: 32px;
+            line-height: 32px;
+            font-size: 16px;
+          }
         }
 
         &__icons {
-          align-self: flex-end;
         }
       }
 
       &__methods {
         display: flex;
         flex-direction: row;
+        transform: scale(0.5);
+        transform-origin: 0 0;
+        height: 48px;
+
+        span {
+        }
       }
     }
   }

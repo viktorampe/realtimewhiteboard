@@ -7,7 +7,11 @@ import {
   ViewChild,
   ViewChildren
 } from '@angular/core';
-import { EduContentFixture, EduContentMetadataFixture } from '@campus/dal';
+import {
+  EduContentFixture,
+  EduContentMetadataFixture,
+  EduContentProductTypeFixture
+} from '@campus/dal';
 import {
   SearchFilterCriteriaInterface,
   SearchFilterFactory,
@@ -217,7 +221,32 @@ export class FindingNemoComponent implements AfterViewInit {
       count: 2,
       results: [
         {
-          eduContent: new EduContentFixture()
+          eduContent: new EduContentFixture(),
+          inTask: true
+        },
+        {
+          eduContent: new EduContentFixture(),
+          inBundle: true
+        },
+        {
+          eduContent: new EduContentFixture(
+            {},
+            {
+              eduContentTOC: [{} as any]
+            }
+          ),
+          inTask: true
+        },
+        {
+          eduContent: new EduContentFixture(
+            {},
+            {
+              eduContentProductType: new EduContentProductTypeFixture({
+                pedagogic: true
+              })
+            }
+          ),
+          isFavorite: true
         }
       ],
       filterCriteriaPredictions: new Map([

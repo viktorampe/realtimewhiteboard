@@ -8,8 +8,9 @@ export class EduContentMetadataFixture implements EduContentMetadataInterface {
   version = 1;
   metaVersion = '0.1';
   language = 'nl';
-  title = 'foo';
-  description = 'foo';
+  title = '(Fixture) Aanliggende hoeken';
+  description =
+    'In dit leerobject maken leerlingen 3 tikoefeningen op aanliggende hoeken.';
   created = new Date('2018-12-05T13:48:00.719Z');
   published = new Date('2018-12-05T13:48:00.719Z');
   quotable = true;
@@ -36,9 +37,12 @@ export class EduContentMetadataFixture implements EduContentMetadataInterface {
   eduContentProductTypeId = 1;
   editorStatusId = 1;
   eduContentSourceId = 1;
-  fileExt = 'zip';
+  fileExt = 'oefening';
   fileLabel = 'oefening';
-  methods = [new MethodFixture({ id: 6 })];
+  methods = [
+    new MethodFixture({ icon: 'topos', id: 6 }),
+    new MethodFixture({ icon: 'nando', id: 5 })
+  ];
   eduContentProductType = new EduContentProductTypeFixture({ id: 33 });
 
   constructor(props: Partial<EduContentMetadataInterface> = {}) {

@@ -1,6 +1,8 @@
-<div class="app-educontentsearchresult">
+<div class="app-educontentsearchresult" [ngClass]="{ selected: isSelected }">
   <div class="app-educontentsearchresult__top">
-    <campus-file-extension extensionClass="pdf"></campus-file-extension>
+    <campus-file-extension
+      [extensionClass]="data.eduContent.publishedEduContentMetadata.fileExt"
+    ></campus-file-extension>
     <div class="app-educontentsearchresult__top__details">
       <header class="app-educontentsearchresult__top__details__header">
         <div class="app-educontentsearchresult__top__details__header__title"
@@ -10,17 +12,51 @@
                 .icon
             "
           ></mat-icon>
-          {{ data.eduContent.publishedEduContentMetadata.title }}
+          <span> {{ data.eduContent.publishedEduContentMetadata.title }} </span>
         </div>
-        <div
-          class="app-educontentsearchresult__top__details__header__icons"
-        ></div>
+        <div class="app-educontentsearchresult__top__details__header__icons">
+          <mat-icon
+            matTooltip="Al toegevoegd aan de taak"
+            *ngIf="data.inTask"
+            svgIcon="check-on"
+          ></mat-icon>
+          <mat-icon
+            matTooltip="Al toegevoegd aan de bundel"
+            *ngIf="data.inBundle"
+            svgIcon="check-on"
+          ></mat-icon>
+          <mat-icon
+            matTooltip="Gekoppeld aan een bordboek"
+            *ngIf="
+              data.eduContent.publishedEduContentMetadata.eduContentTOC &&
+              data.eduContent.publishedEduContentMetadata.eduContentTOC.length
+            "
+            svgIcon="book"
+          ></mat-icon>
+          <mat-icon
+            matTooltip="Pedagogisch materiaal"
+            *ngIf="
+              data.eduContent.publishedEduContentMetadata.eduContentProductType
+                .pedagogic
+            "
+            svgIcon="student"
+          ></mat-icon>
+        </div>
       </header>
       <p class="app-educontentsearchresult__top__details__content">
-        Some content goes in here describing stuff.
+        {{ data.eduContent.publishedEduContentMetadata.description }}
       </p>
       <div class="app-educontentsearchresult__top__details__methods">
-        <span>A method</span><span>And another</span>
+        <span
+          *ngFor="
+            let method of data.eduContent.publishedEduContentMetadata.methods
+          "
+          [class]="
+            'campus-method__logo' +
+            (isSelected ? ' campus-method__logo--color ' : ' ') +
+            method.icon
+          "
+        ></span>
       </div>
       <footer class="app-educontentsearchresult__top__details__footer">
       </footer>
