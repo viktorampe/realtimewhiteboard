@@ -1,5 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { FavoriteTypesEnum } from '../../+models';
+import { FavoriteInterface, FavoriteTypesEnum } from '../../+models';
 import {
   NAME,
   selectAll,
@@ -73,4 +73,14 @@ export const getByType = createSelector(
     Object.entries(state.entities)
       .filter(([key, value]) => value.type === props.type)
       .map(([key, value]) => state.entities[key])
+);
+
+export const getByTypeAndId = createSelector(
+  selectFavoriteState,
+  getByType,
+  (
+    state: State,
+    favorites: FavoriteInterface[],
+    props: { type: FavoriteTypesEnum; id: number }
+  ) => {}
 );
