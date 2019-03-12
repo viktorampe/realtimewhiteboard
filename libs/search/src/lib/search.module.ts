@@ -74,6 +74,14 @@ import { SearchPortalDirective } from './directives/search-portal.directive';
     ColumnFilterComponent,
     SearchComponent,
     SearchPortalDirective
+  ],
+  entryComponents: [
+    CheckboxLineFilterComponent,
+    CheckboxListFilterComponent,
+    BreadcrumbFilterComponent,
+    ColumnFilterComponent,
+    SelectFilterComponent,
+    SearchTermComponent
   ]
 })
 export class SearchModule {}

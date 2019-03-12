@@ -212,7 +212,7 @@ export class ResultsListComponent implements OnDestroy, AfterViewInit {
       this.clearResultsTimer = null;
     }
     if (this.listview) this.listview.resetItems();
-    this.resultListHost.viewContainerRef.clear();
+    if (this.resultListHost) this.resultListHost.viewContainerRef.clear();
   }
 
   private checkForMoreResults(): void {
