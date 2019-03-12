@@ -36,12 +36,7 @@ describe('EduNet Selectors', () => {
   describe('EduNet Selectors', () => {
     beforeEach(() => {
       eduNetState = createState(
-        [
-          createEduNet(4),
-          createEduNet(1),
-          createEduNet(2),
-          createEduNet(3)
-        ],
+        [createEduNet(4), createEduNet(1), createEduNet(2), createEduNet(3)],
         true,
         'no error'
       );

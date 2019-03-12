@@ -8,7 +8,9 @@ import {
   State
 } from './edu-content-product-type.reducer';
 
-export const selectEduContentProductTypeState = createFeatureSelector<State>(NAME);
+export const selectEduContentProductTypeState = createFeatureSelector<State>(
+  NAME
+);
 
 export const getError = createSelector(
   selectEduContentProductTypeState,
@@ -20,11 +22,20 @@ export const getLoaded = createSelector(
   (state: State) => state.loaded
 );
 
-export const getAll = createSelector(selectEduContentProductTypeState, selectAll);
+export const getAll = createSelector(
+  selectEduContentProductTypeState,
+  selectAll
+);
 
-export const getCount = createSelector(selectEduContentProductTypeState, selectTotal);
+export const getCount = createSelector(
+  selectEduContentProductTypeState,
+  selectTotal
+);
 
-export const getIds = createSelector(selectEduContentProductTypeState, selectIds);
+export const getIds = createSelector(
+  selectEduContentProductTypeState,
+  selectIds
+);
 
 export const getAllEntities = createSelector(
   selectEduContentProductTypeState,
@@ -44,7 +55,6 @@ export const getByIds = createSelector(
     return props.ids.map(id => state.entities[id]);
   }
 );
-
 
 /**
  * returns array of objects in the order of the given ids

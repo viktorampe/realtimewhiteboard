@@ -21,7 +21,7 @@ export class LoadSchoolTypes implements Action {
   readonly type = SchoolTypesActionTypes.LoadSchoolTypes;
 
   constructor(
-    public payload: { force?: boolean, userId: number } = { userId: null }
+    public payload: { force?: boolean; userId: number } = { userId: null }
   ) {}
 }
 

@@ -21,7 +21,7 @@ export class LoadEduNets implements Action {
   readonly type = EduNetsActionTypes.LoadEduNets;
 
   constructor(
-    public payload: { force?: boolean, userId: number } = { userId: null }
+    public payload: { force?: boolean; userId: number } = { userId: null }
   ) {}
 }
 

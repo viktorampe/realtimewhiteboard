@@ -3,7 +3,9 @@ import { EduContentProductTypeInterface } from '../../+models';
 import { State } from './edu-content-product-type.reducer';
 
 describe('EduContentProductType Selectors', () => {
-  function createEduContentProductType(id: number): EduContentProductTypeInterface | any {
+  function createEduContentProductType(
+    id: number
+  ): EduContentProductTypeInterface | any {
     return {
       id: id
     };
@@ -15,7 +17,11 @@ describe('EduContentProductType Selectors', () => {
     error?: any
   ): State {
     return {
-      ids: eduContentProductTypes ? eduContentProductTypes.map(eduContentProductType => eduContentProductType.id) : [],
+      ids: eduContentProductTypes
+        ? eduContentProductTypes.map(
+            eduContentProductType => eduContentProductType.id
+          )
+        : [],
       entities: eduContentProductTypes
         ? eduContentProductTypes.reduce(
             (entityMap, eduContentProductType) => ({
@@ -88,11 +94,15 @@ describe('EduContentProductType Selectors', () => {
       ]);
     });
     it('getById() should return the desired entity', () => {
-      const results = EduContentProductTypeQueries.getById(storeState, { id: 2 });
+      const results = EduContentProductTypeQueries.getById(storeState, {
+        id: 2
+      });
       expect(results).toEqual(createEduContentProductType(2));
     });
     it('getById() should return undefined if the entity is not present', () => {
-      const results = EduContentProductTypeQueries.getById(storeState, { id: 9 });
+      const results = EduContentProductTypeQueries.getById(storeState, {
+        id: 9
+      });
       expect(results).toBe(undefined);
     });
   });

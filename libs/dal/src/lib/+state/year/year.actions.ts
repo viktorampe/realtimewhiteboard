@@ -21,7 +21,7 @@ export class LoadYears implements Action {
   readonly type = YearsActionTypes.LoadYears;
 
   constructor(
-    public payload: { force?: boolean, userId: number } = { userId: null }
+    public payload: { force?: boolean; userId: number } = { userId: null }
   ) {}
 }
 

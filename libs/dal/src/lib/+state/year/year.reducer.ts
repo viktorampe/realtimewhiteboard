@@ -1,9 +1,6 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { YearInterface } from '../../+models';
-import {
-  YearsActions,
-  YearsActionTypes
-} from './year.actions';
+import { YearsActions, YearsActionTypes } from './year.actions';
 
 export const NAME = 'years';
 
@@ -22,10 +19,7 @@ export const initialState: State = adapter.getInitialState({
   loaded: false
 });
 
-export function reducer(
-  state = initialState,
-  action: YearsActions
-): State {
+export function reducer(state = initialState, action: YearsActions): State {
   switch (action.type) {
     case YearsActionTypes.AddYear: {
       return adapter.addOne(action.payload.year, state);

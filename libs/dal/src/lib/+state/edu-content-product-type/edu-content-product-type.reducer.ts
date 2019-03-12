@@ -13,9 +13,9 @@ export interface State extends EntityState<EduContentProductTypeInterface> {
   error?: any;
 }
 
-export const adapter: EntityAdapter<EduContentProductTypeInterface> = createEntityAdapter<
+export const adapter: EntityAdapter<
   EduContentProductTypeInterface
->();
+> = createEntityAdapter<EduContentProductTypeInterface>();
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties
@@ -60,7 +60,10 @@ export function reducer(
     }
 
     case EduContentProductTypesActionTypes.EduContentProductTypesLoaded: {
-      return adapter.addAll(action.payload.eduContentProductTypes, { ...state, loaded: true });
+      return adapter.addAll(action.payload.eduContentProductTypes, {
+        ...state,
+        loaded: true
+      });
     }
 
     case EduContentProductTypesActionTypes.EduContentProductTypesLoadError: {

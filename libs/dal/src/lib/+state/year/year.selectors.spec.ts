@@ -36,12 +36,7 @@ describe('Year Selectors', () => {
   describe('Year Selectors', () => {
     beforeEach(() => {
       yearState = createState(
-        [
-          createYear(4),
-          createYear(1),
-          createYear(2),
-          createYear(3)
-        ],
+        [createYear(4), createYear(1), createYear(2), createYear(3)],
         true,
         'no error'
       );

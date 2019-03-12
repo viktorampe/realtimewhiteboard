@@ -60,7 +60,10 @@ export function reducer(
     }
 
     case SchoolTypesActionTypes.SchoolTypesLoaded: {
-      return adapter.addAll(action.payload.schoolTypes, { ...state, loaded: true });
+      return adapter.addAll(action.payload.schoolTypes, {
+        ...state,
+        loaded: true
+      });
     }
 
     case SchoolTypesActionTypes.SchoolTypesLoadError: {

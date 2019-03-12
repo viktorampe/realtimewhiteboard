@@ -1,9 +1,6 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { EduNetInterface } from '../../+models';
-import {
-  EduNetsActions,
-  EduNetsActionTypes
-} from './edu-net.actions';
+import { EduNetsActions, EduNetsActionTypes } from './edu-net.actions';
 
 export const NAME = 'eduNets';
 
@@ -22,10 +19,7 @@ export const initialState: State = adapter.getInitialState({
   loaded: false
 });
 
-export function reducer(
-  state = initialState,
-  action: EduNetsActions
-): State {
+export function reducer(state = initialState, action: EduNetsActions): State {
   switch (action.type) {
     case EduNetsActionTypes.AddEduNet: {
       return adapter.addOne(action.payload.eduNet, state);
