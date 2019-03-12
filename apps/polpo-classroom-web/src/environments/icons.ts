@@ -113,6 +113,7 @@ export const icons = {
   home: 'assets/icons/material/home.svg',
   'breadcrumb-separator': 'assets/icons/material/chevron-right.svg',
   'arrow-back': 'assets/icons/material/arrow-back.svg',
+  'column-filter-arrow': 'assets/icons/material/arrow-back.svg',
   'collapsible-sheet-back': 'assets/icons/material/arrow-back.svg',
   menu: 'assets/icons/material/menu.svg',
   // alert: 'assets/icons/alert.svg',
