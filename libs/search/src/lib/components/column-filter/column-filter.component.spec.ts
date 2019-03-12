@@ -34,7 +34,7 @@ const mockFilterCriteria: SearchFilterCriteriaInterface[] = [
     new SearchFilterCriteriaValuesFixture({ selected: false }),
     new SearchFilterCriteriaValuesFixture({ selected: false }),
     new SearchFilterCriteriaValuesFixture({ selected: false }),
-    new SearchFilterCriteriaValuesFixture({ selected: false })
+    new SearchFilterCriteriaValuesFixture({ selected: false, hasChild: true })
   ])
 ];
 
@@ -246,9 +246,20 @@ describe('ColumnFilterComponent', () => {
         .queryAll(By.css('.column__filter'))
         .filter(column => column.nativeElement.style.display !== 'none');
       const displayedMagnifiers = displayedColumns[0].queryAll(
-        By.css('.column__filter__value__magnifier')
+        By.css('.column__filter__value__button-content__icons__magnifier')
       );
       expect(displayedMagnifiers.length).toBe(4);
+    });
+    it('should show the arrow only if value.hasChild is true', () => {
+      component.filterCriteria = mockFilterCriteria;
+      fixture.detectChanges();
+      const displayedColumns = fixture.debugElement
+        .queryAll(By.css('.column__filter'))
+        .filter(column => column.nativeElement.style.display !== 'none');
+      const displayedMagnifiers = displayedColumns[0].queryAll(
+        By.css('.column__filter__value__button-content__icons__arrow')
+      );
+      expect(displayedMagnifiers.length).toBe(1);
     });
     it('should show or hide the no-criteria message if there are criteria or no criteria', () => {
       expect(
