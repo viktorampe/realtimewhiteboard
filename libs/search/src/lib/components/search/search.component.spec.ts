@@ -421,6 +421,22 @@ describe('SearchComponent', () => {
         })
       );
 
+      it('should emit the new value for AutoCompleteValues', () => {
+        const mockInput =
+          'de kans dat deze string at random is ingevoerd, is nogal klein';
+
+        component.searchTermChangeForAutoComplete.emit = jest.fn();
+
+        component.onSearchTermChangeForAutoComplete(mockInput);
+
+        expect(
+          component.searchTermChangeForAutoComplete.emit
+        ).toHaveBeenCalled();
+        expect(
+          component.searchTermChangeForAutoComplete.emit
+        ).toHaveBeenCalledWith(mockInput);
+      });
+
       it('should update the autoCompleteValues of the searchTermComponent', () => {
         const newAutoCompleteValues = ['new1', 'new2'];
 

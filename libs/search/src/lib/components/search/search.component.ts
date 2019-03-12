@@ -2,6 +2,7 @@ import {
   Component,
   ComponentFactoryResolver,
   ComponentRef,
+  EventEmitter,
   Input,
   OnChanges,
   OnDestroy,
@@ -72,6 +73,7 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   @Output() public searchState$: Observable<SearchStateInterface>;
+  @Output() public searchTermChangeForAutoComplete = new EventEmitter<string>();
 
   constructor(
     private searchViewmodel: SearchViewModel,
@@ -114,12 +116,13 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
   ): void {
     this.searchViewmodel.changeFilters(criteria);
   }
+
   public onSearchTermChange(value: string): void {
     this.searchViewmodel.changeSearchTerm(value);
   }
 
   public onSearchTermChangeForAutoComplete(value: string): void {
-    // TODO notify parent(?) that new values are needed
+    this.searchTermChangeForAutoComplete.emit(value);
   }
 
   public onScroll(): void {
