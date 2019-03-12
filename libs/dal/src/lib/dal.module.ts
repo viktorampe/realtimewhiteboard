@@ -46,6 +46,7 @@ import {
 } from './+state/linked-person';
 import { MethodEffects, MethodReducer } from './+state/method';
 import { ResultEffects, ResultReducer } from './+state/result';
+import { SchoolTypeEffects, SchoolTypeReducer } from './+state/school-type';
 import {
   StudentContentStatusesEffects,
   StudentContentStatusReducer
@@ -247,6 +248,9 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
     StoreModule.forFeature(EduNetReducer.NAME, EduNetReducer.reducer, {
       initialState: EduNetReducer.initialState
     }),
+    StoreModule.forFeature(SchoolTypeReducer.NAME, SchoolTypeReducer.reducer, {
+      initialState: SchoolTypeReducer.initialState
+    }),
     EffectsModule.forFeature([
       BundlesEffects,
       UserEffects,
@@ -270,7 +274,8 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
       LinkedPersonEffects,
       CredentialEffects,
       EduContentProductTypeEffects,
-      EduNetEffects
+      EduNetEffects,
+      SchoolTypeEffects
     ])
   ],
   providers: [

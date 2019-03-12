@@ -5,12 +5,12 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
-import { SCHOOL_TYPE_SERVICE_TOKEN } from '../../school-type/school-type.service.interface';
 import { SchoolTypeReducer } from '.';
+import { SCHOOL_TYPE_SERVICE_TOKEN } from '../../metadata/school-type.service.interface';
 import {
+  LoadSchoolTypes,
   SchoolTypesLoaded,
-  SchoolTypesLoadError,
-  LoadSchoolTypes
+  SchoolTypesLoadError
 } from './school-type.actions';
 import { SchoolTypeEffects } from './school-type.effects';
 
@@ -18,7 +18,6 @@ describe('SchoolTypeEffects', () => {
   let actions: Observable<any>;
   let effects: SchoolTypeEffects;
   let usedState: any;
-
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -61,9 +60,13 @@ describe('SchoolTypeEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature(SchoolTypeReducer.NAME , SchoolTypeReducer.reducer, {
-          initialState: usedState
-        }),
+        StoreModule.forFeature(
+          SchoolTypeReducer.NAME,
+          SchoolTypeReducer.reducer,
+          {
+            initialState: usedState
+          }
+        ),
         EffectsModule.forRoot([]),
         EffectsModule.forFeature([SchoolTypeEffects])
       ],

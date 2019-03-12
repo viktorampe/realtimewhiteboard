@@ -11,6 +11,7 @@ import {
   LinkedPersonReducer,
   MethodReducer,
   ResultReducer,
+  SchoolTypeReducer,
   StudentContentStatusReducer,
   TaskEduContentReducer,
   TaskInstanceReducer,
@@ -48,4 +49,5 @@ export interface DalState {
   methods: MethodReducer.State;
   eduContentProductTypes: EduContentProductTypeReducer.State;
   eduNets: EduNetReducer.State;
+  schoolTypes: SchoolTypeReducer.State;
 }

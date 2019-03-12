@@ -2,14 +2,17 @@ import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { map } from 'rxjs/operators';
-import { SchoolTypeServiceInterface, SCHOOL_TYPE_SERVICE_TOKEN } from '../../school-type/school-type.service.interface';
-import {
-  SchoolTypesActionTypes,
-  SchoolTypesLoadError,
-  LoadSchoolTypes,
-  SchoolTypesLoaded
-} from './school-type.actions';
 import { DalState } from '..';
+import {
+  SchoolTypeServiceInterface,
+  SCHOOL_TYPE_SERVICE_TOKEN
+} from '../../metadata/school-type.service.interface';
+import {
+  LoadSchoolTypes,
+  SchoolTypesActionTypes,
+  SchoolTypesLoaded,
+  SchoolTypesLoadError
+} from './school-type.actions';
 
 @Injectable()
 export class SchoolTypeEffects {
@@ -20,7 +23,7 @@ export class SchoolTypeEffects {
       run: (action: LoadSchoolTypes, state: DalState) => {
         if (!action.payload.force && state.schoolTypes.loaded) return;
         return this.schoolTypeService
-          .getAllForUser(action.payload.userId)
+          .getAll()
           .pipe(map(schoolTypes => new SchoolTypesLoaded({ schoolTypes })));
       },
       onError: (action: LoadSchoolTypes, error) => {

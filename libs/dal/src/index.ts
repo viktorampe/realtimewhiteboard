@@ -22,6 +22,7 @@ export {
   RouterStateUrl
 } from './lib/+state/router/route-serializer';
 export * from './lib/+state/router/router.selectors';
+export * from './lib/+state/school-type';
 export * from './lib/+state/student-content-status';
 export * from './lib/+state/task';
 export * from './lib/+state/task-edu-content';
