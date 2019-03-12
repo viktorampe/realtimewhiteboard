@@ -100,6 +100,7 @@ $ui-tile-height: 105px !default;
 @import './banner/banner.component.theme.scss';
 @import './breadcrumbs/breadcrumbs.component.theme.scss';
 @import './collapsible-sheet/collapsible-sheet.component.theme.scss';
+@import './drop-area/drop-area.component.theme.scss';
 @import './tile/tile.component.theme.scss';
 
 @mixin ui-forms() {
@@ -200,5 +201,6 @@ $ui-tile-height: 105px !default;
   @include ui-breadcrumbs_theme();
   @include ui-content-thumbnail-button();
   @include ui-collapsible-sheet();
+  @include ui-drop-area-theme();
   @include ui-tile();
 }

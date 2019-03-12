@@ -33,6 +33,7 @@ import { CollapsibleSheetComponent } from './collapsible-sheet/collapsible-sheet
 import { ConfirmableSelectComponent } from './confirmable-select/confirmable-select.component';
 import { ContentPreviewComponent } from './content-preview/content-preview.component';
 import { ContentThumbnailComponent } from './content-thumbnail/content-thumbnail.component';
+import { DropAreaComponent } from './drop-area/drop-area.component';
 import { DropdownMenuItemComponent } from './dropdown-menu-item/dropdown-menu-item.component';
 import { DropdownMenuComponent } from './dropdown-menu/dropdown-menu.component';
 import { EditableInlineTagListComponent } from './editable-inline-tag-list/editable-inline-tag-list.component';
@@ -140,6 +141,7 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     BannerComponent,
     DropdownDirective,
     CollapsibleSheetComponent,
+    DropAreaComponent,
     TileComponent
   ],
   exports: [
@@ -191,6 +193,7 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     BannerComponent,
     DropdownDirective,
     CollapsibleSheetComponent,
+    DropAreaComponent,
     TileComponent
   ]
 })
