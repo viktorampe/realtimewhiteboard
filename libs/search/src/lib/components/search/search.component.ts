@@ -118,7 +118,9 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   // Creates a SearchTermComponent and appends it to the DOM
-  // as a sibling to the portalHost (as defined by the SearchMode)
+  // as a sibling to the domHost (as defined by the SearchMode)
+  // Note: the SearchTermComponent must not by added to
+  // the same domHost as the FilterComponent
   private createSearchTermComponent(): void {
     const componentRef = this.addComponent(
       this.searchMode.searchTerm.domHost,
