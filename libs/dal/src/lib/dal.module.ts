@@ -79,6 +79,7 @@ import {
 } from './+state/unlocked-content';
 import { UserEffects, UserReducer } from './+state/user';
 import { UserContentReducer, UserContentsEffects } from './+state/user-content';
+import { YearEffects, YearReducer } from './+state/year';
 import { AlertService } from './alert/alert.service';
 import { ALERT_SERVICE_TOKEN } from './alert/alert.service.interface';
 import {
@@ -251,6 +252,9 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
     StoreModule.forFeature(SchoolTypeReducer.NAME, SchoolTypeReducer.reducer, {
       initialState: SchoolTypeReducer.initialState
     }),
+    StoreModule.forFeature(YearReducer.NAME, YearReducer.reducer, {
+      initialState: YearReducer.initialState
+    }),
     EffectsModule.forFeature([
       BundlesEffects,
       UserEffects,
@@ -275,7 +279,8 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
       CredentialEffects,
       EduContentProductTypeEffects,
       EduNetEffects,
-      SchoolTypeEffects
+      SchoolTypeEffects,
+      YearEffects
     ])
   ],
   providers: [

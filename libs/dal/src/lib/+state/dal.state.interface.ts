@@ -24,6 +24,7 @@ import {
   UserContentReducer,
   UserReducer
 } from '../..';
+import { YearReducer } from './year';
 
 export interface DalState {
   ui: UiReducer.UiState;
@@ -50,4 +51,5 @@ export interface DalState {
   eduContentProductTypes: EduContentProductTypeReducer.State;
   eduNets: EduNetReducer.State;
   schoolTypes: SchoolTypeReducer.State;
+  years: YearReducer.State;
 }

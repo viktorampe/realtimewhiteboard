@@ -5,20 +5,15 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
-import { YEAR_SERVICE_TOKEN } from '../../year/year.service.interface';
 import { YearReducer } from '.';
-import {
-  YearsLoaded,
-  YearsLoadError,
-  LoadYears
-} from './year.actions';
+import { YEAR_SERVICE_TOKEN } from '../../metadata/year.service.interface';
+import { LoadYears, YearsLoaded, YearsLoadError } from './year.actions';
 import { YearEffects } from './year.effects';
 
 describe('YearEffects', () => {
   let actions: Observable<any>;
   let effects: YearEffects;
   let usedState: any;
-
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -61,7 +56,7 @@ describe('YearEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature(YearReducer.NAME , YearReducer.reducer, {
+        StoreModule.forFeature(YearReducer.NAME, YearReducer.reducer, {
           initialState: usedState
         }),
         EffectsModule.forRoot([]),
@@ -136,18 +131,10 @@ describe('YearEffects', () => {
         mockServiceMethodError('getAllForUser', 'failed');
       });
       it('should return a error action if force is not true', () => {
-        expectInAndOut(
-          effects.loadYears$,
-          unforcedLoadAction,
-          loadErrorAction
-        );
+        expectInAndOut(effects.loadYears$, unforcedLoadAction, loadErrorAction);
       });
       it('should return a error action if force is true', () => {
-        expectInAndOut(
-          effects.loadYears$,
-          forcedLoadAction,
-          loadErrorAction
-        );
+        expectInAndOut(effects.loadYears$, forcedLoadAction, loadErrorAction);
       });
     });
     describe('with loaded and failing api call', () => {
@@ -165,11 +152,7 @@ describe('YearEffects', () => {
         expectInNoOut(effects.loadYears$, unforcedLoadAction);
       });
       it('should return a error action if force is true', () => {
-        expectInAndOut(
-          effects.loadYears$,
-          forcedLoadAction,
-          loadErrorAction
-        );
+        expectInAndOut(effects.loadYears$, forcedLoadAction, loadErrorAction);
       });
     });
   });
