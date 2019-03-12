@@ -5,8 +5,8 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
-import { EDU_CONTENT_PRODUCT_TYPE_SERVICE_TOKEN } from '../../edu-content-product-type/edu-content-product-type.service.interface';
 import { EduContentProductTypeReducer } from '.';
+import { EDU_CONTENT_PRODUCT_TYPE_SERVICE_TOKEN } from '../../metadata/edu-content-product-type.service.interface';
 import {
   EduContentProductTypesLoaded,
   EduContentProductTypesLoadError,
@@ -18,7 +18,6 @@ describe('EduContentProductTypeEffects', () => {
   let actions: Observable<any>;
   let effects: EduContentProductTypeEffects;
   let usedState: any;
-
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -61,9 +60,13 @@ describe('EduContentProductTypeEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature(EduContentProductTypeReducer.NAME , EduContentProductTypeReducer.reducer, {
-          initialState: usedState
-        }),
+        StoreModule.forFeature(
+          EduContentProductTypeReducer.NAME,
+          EduContentProductTypeReducer.reducer,
+          {
+            initialState: usedState
+          }
+        ),
         EffectsModule.forRoot([]),
         EffectsModule.forFeature([EduContentProductTypeEffects])
       ],
@@ -85,9 +88,16 @@ describe('EduContentProductTypeEffects', () => {
 
   describe('loadEduContentProductType$', () => {
     const unforcedLoadAction = new LoadEduContentProductTypes({ userId: 1 });
-    const forcedLoadAction = new LoadEduContentProductTypes({ force: true, userId: 1 });
-    const filledLoadedAction = new EduContentProductTypesLoaded({ eduContentProductTypes: [] });
-    const loadErrorAction = new EduContentProductTypesLoadError(new Error('failed'));
+    const forcedLoadAction = new LoadEduContentProductTypes({
+      force: true,
+      userId: 1
+    });
+    const filledLoadedAction = new EduContentProductTypesLoaded({
+      eduContentProductTypes: []
+    });
+    const loadErrorAction = new EduContentProductTypesLoadError(
+      new Error('failed')
+    );
     describe('with initialState', () => {
       beforeAll(() => {
         usedState = EduContentProductTypeReducer.initialState;
@@ -112,7 +122,10 @@ describe('EduContentProductTypeEffects', () => {
     });
     describe('with loaded state', () => {
       beforeAll(() => {
-        usedState = { ...EduContentProductTypeReducer.initialState, loaded: true };
+        usedState = {
+          ...EduContentProductTypeReducer.initialState,
+          loaded: true
+        };
       });
       beforeEach(() => {
         mockServiceMethodReturnValue('getAllForUser', []);

@@ -2,14 +2,17 @@ import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { map } from 'rxjs/operators';
-import { EduContentProductTypeServiceInterface, EDU_CONTENT_PRODUCT_TYPE_SERVICE_TOKEN } from '../../edu-content-product-type/edu-content-product-type.service.interface';
+import { DalState } from '..';
+import {
+  EduContentProductTypeServiceInterface,
+  EDU_CONTENT_PRODUCT_TYPE_SERVICE_TOKEN
+} from '../../metadata/edu-content-product-type.service.interface';
 import {
   EduContentProductTypesActionTypes,
+  EduContentProductTypesLoaded,
   EduContentProductTypesLoadError,
-  LoadEduContentProductTypes,
-  EduContentProductTypesLoaded
+  LoadEduContentProductTypes
 } from './edu-content-product-type.actions';
-import { DalState } from '..';
 
 @Injectable()
 export class EduContentProductTypeEffects {
@@ -18,10 +21,16 @@ export class EduContentProductTypeEffects {
     EduContentProductTypesActionTypes.LoadEduContentProductTypes,
     {
       run: (action: LoadEduContentProductTypes, state: DalState) => {
-        if (!action.payload.force && state.eduContentProductTypes.loaded) return;
+        if (!action.payload.force && state.eduContentProductTypes.loaded)
+          return;
         return this.eduContentProductTypeService
-          .getAllForUser(action.payload.userId)
-          .pipe(map(eduContentProductTypes => new EduContentProductTypesLoaded({ eduContentProductTypes })));
+          .getAll()
+          .pipe(
+            map(
+              eduContentProductTypes =>
+                new EduContentProductTypesLoaded({ eduContentProductTypes })
+            )
+          );
       },
       onError: (action: LoadEduContentProductTypes, error) => {
         return new EduContentProductTypesLoadError(error);

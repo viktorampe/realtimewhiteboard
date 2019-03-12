@@ -1,26 +1,33 @@
 import { Update } from '@ngrx/entity';
-import {EduContentProductTypeActions } from '.';
-import { initialState, reducer, State } from './edu-content-product-type.reducer';
+import { EduContentProductTypeActions } from '.';
 import { EduContentProductTypeInterface } from '../../+models';
+import {
+  initialState,
+  reducer,
+  State
+} from './edu-content-product-type.reducer';
 
-/** 
+/**
  * This file is scaffolded, but needs some special attention:
- * - find and replace '__EXTRA__PROPERTY_NAME' and replace this with a property name of the EduContentProductType entity.
- * - set the initial property value via '[__EXTRA__PROPERTY_NAME]InitialValue'.
- * - set the updated property value via '[__EXTRA__PROPERTY_NAME]UpdatedValue'.
-*/
-const __EXTRA__PROPERTY_NAMEInitialValue = ;
-const __EXTRA__PROPERTY_NAMEUpdatedValue = ;
+ * - find and replace 'name' and replace this with a property name of the EduContentProductType entity.
+ * - set the initial property value via '[name]InitialValue'.
+ * - set the updated property value via '[name]UpdatedValue'.
+ */
+const nameInitialValue = 'foo';
+const nameUpdatedValue = 'bar';
 
 /**
  * Creates a EduContentProductType.
  * @param {number} id
  * @returns {EduContentProductTypeInterface}
  */
-function createEduContentProductType(id: number, __EXTRA__PROPERTY_NAME:any = __EXTRA__PROPERTY_NAMEInitialValue): EduContentProductTypeInterface | any {
+function createEduContentProductType(
+  id: number,
+  name: any = nameInitialValue
+): EduContentProductTypeInterface | any {
   return {
     id: id,
-    __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAME
+    name: name
   };
 }
 
@@ -38,7 +45,11 @@ function createState(
   error?: any
 ): State {
   const state: any = {
-    ids: eduContentProductTypes ? eduContentProductTypes.map(eduContentProductType => eduContentProductType.id) : [],
+    ids: eduContentProductTypes
+      ? eduContentProductTypes.map(
+          eduContentProductType => eduContentProductType.id
+        )
+      : [],
     entities: eduContentProductTypes
       ? eduContentProductTypes.reduce(
           (entityMap, eduContentProductType) => ({
@@ -53,7 +64,6 @@ function createState(
   if (error !== undefined) state.error = error;
   return state;
 }
-
 
 describe('EduContentProductTypes Reducer', () => {
   let eduContentProductTypes: EduContentProductTypeInterface[];
@@ -77,14 +87,18 @@ describe('EduContentProductTypes Reducer', () => {
 
   describe('loaded action', () => {
     it('should load all eduContentProductTypes', () => {
-      const action = new EduContentProductTypeActions.EduContentProductTypesLoaded({ eduContentProductTypes });
+      const action = new EduContentProductTypeActions.EduContentProductTypesLoaded(
+        { eduContentProductTypes }
+      );
       const result = reducer(initialState, action);
       expect(result).toEqual(createState(eduContentProductTypes, true));
     });
 
     it('should error', () => {
       const error = 'Something went wrong';
-      const action = new EduContentProductTypeActions.EduContentProductTypesLoadError(error);
+      const action = new EduContentProductTypeActions.EduContentProductTypesLoadError(
+        error
+      );
       const result = reducer(initialState, action);
       expect(result).toEqual(createState([], false, error));
     });
@@ -102,7 +116,9 @@ describe('EduContentProductTypes Reducer', () => {
     });
 
     it('should add multiple eduContentProductTypes', () => {
-      const action = new EduContentProductTypeActions.AddEduContentProductTypes({ eduContentProductTypes });
+      const action = new EduContentProductTypeActions.AddEduContentProductTypes(
+        { eduContentProductTypes }
+      );
       const result = reducer(initialState, action);
 
       expect(result).toEqual(createState(eduContentProductTypes, false));
@@ -111,7 +127,7 @@ describe('EduContentProductTypes Reducer', () => {
   describe('upsert actions', () => {
     it('should upsert one eduContentProductType', () => {
       const originalEduContentProductType = eduContentProductTypes[0];
-      
+
       const startState = reducer(
         initialState,
         new EduContentProductTypeActions.AddEduContentProductType({
@@ -119,16 +135,22 @@ describe('EduContentProductTypes Reducer', () => {
         })
       );
 
-    
-      const updatedEduContentProductType = createEduContentProductType(eduContentProductTypes[0].id, 'test');
-     
-      const action = new EduContentProductTypeActions.UpsertEduContentProductType({
-        eduContentProductType: updatedEduContentProductType
-      });
+      const updatedEduContentProductType = createEduContentProductType(
+        eduContentProductTypes[0].id,
+        'test'
+      );
+
+      const action = new EduContentProductTypeActions.UpsertEduContentProductType(
+        {
+          eduContentProductType: updatedEduContentProductType
+        }
+      );
 
       const result = reducer(startState, action);
 
-      expect(result.entities[updatedEduContentProductType.id]).toEqual(updatedEduContentProductType);
+      expect(result.entities[updatedEduContentProductType.id]).toEqual(
+        updatedEduContentProductType
+      );
     });
 
     it('should upsert many eduContentProductTypes', () => {
@@ -140,15 +162,15 @@ describe('EduContentProductTypes Reducer', () => {
         createEduContentProductType(3),
         createEduContentProductType(4)
       ];
-      const action = new EduContentProductTypeActions.UpsertEduContentProductTypes({
-        eduContentProductTypes: eduContentProductTypesToInsert
-      });
+      const action = new EduContentProductTypeActions.UpsertEduContentProductTypes(
+        {
+          eduContentProductTypes: eduContentProductTypesToInsert
+        }
+      );
 
       const result = reducer(startState, action);
 
-      expect(result).toEqual(
-        createState(eduContentProductTypesToInsert)
-      );
+      expect(result).toEqual(createState(eduContentProductTypesToInsert));
     });
   });
 
@@ -159,40 +181,49 @@ describe('EduContentProductTypes Reducer', () => {
       const update: Update<EduContentProductTypeInterface> = {
         id: 1,
         changes: {
-          __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-        } 
+          name: nameUpdatedValue
+        }
       };
-      const action = new EduContentProductTypeActions.UpdateEduContentProductType({
-        eduContentProductType: update
-      });
+      const action = new EduContentProductTypeActions.UpdateEduContentProductType(
+        {
+          eduContentProductType: update
+        }
+      );
       const result = reducer(startState, action);
-      expect(result).toEqual(createState([createEduContentProductType(1, __EXTRA__PROPERTY_NAMEUpdatedValue)]));
+      expect(result).toEqual(
+        createState([createEduContentProductType(1, nameUpdatedValue)])
+      );
     });
 
     it('should update multiple eduContentProductTypes', () => {
       const startState = createState(eduContentProductTypes);
       const updates: Update<EduContentProductTypeInterface>[] = [
-        
         {
           id: 1,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          } 
+            name: nameUpdatedValue
+          }
         },
         {
           id: 2,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          }  
+            name: nameUpdatedValue
+          }
         }
       ];
-      const action = new EduContentProductTypeActions.UpdateEduContentProductTypes({
-        eduContentProductTypes: updates
-      });
+      const action = new EduContentProductTypeActions.UpdateEduContentProductTypes(
+        {
+          eduContentProductTypes: updates
+        }
+      );
       const result = reducer(startState, action);
 
       expect(result).toEqual(
-        createState([createEduContentProductType(1, __EXTRA__PROPERTY_NAMEUpdatedValue), createEduContentProductType(2, __EXTRA__PROPERTY_NAMEUpdatedValue), eduContentProductTypes[2]])
+        createState([
+          createEduContentProductType(1, nameUpdatedValue),
+          createEduContentProductType(2, nameUpdatedValue),
+          eduContentProductTypes[2]
+        ])
       );
     });
   });
@@ -201,18 +232,22 @@ describe('EduContentProductTypes Reducer', () => {
     it('should delete one eduContentProductType ', () => {
       const eduContentProductType = eduContentProductTypes[0];
       const startState = createState([eduContentProductType]);
-      const action = new EduContentProductTypeActions.DeleteEduContentProductType({
-        id: eduContentProductType.id
-      });
+      const action = new EduContentProductTypeActions.DeleteEduContentProductType(
+        {
+          id: eduContentProductType.id
+        }
+      );
       const result = reducer(startState, action);
       expect(result).toEqual(createState([]));
     });
 
     it('should delete multiple eduContentProductTypes', () => {
       const startState = createState(eduContentProductTypes);
-      const action = new EduContentProductTypeActions.DeleteEduContentProductTypes({
-        ids: [eduContentProductTypes[0].id, eduContentProductTypes[1].id]
-      });
+      const action = new EduContentProductTypeActions.DeleteEduContentProductTypes(
+        {
+          ids: [eduContentProductTypes[0].id, eduContentProductTypes[1].id]
+        }
+      );
       const result = reducer(startState, action);
       expect(result).toEqual(createState([eduContentProductTypes[2]]));
     });
@@ -220,7 +255,11 @@ describe('EduContentProductTypes Reducer', () => {
 
   describe('clear action', () => {
     it('should clear the eduContentProductTypes collection', () => {
-      const startState = createState(eduContentProductTypes, true, 'something went wrong');
+      const startState = createState(
+        eduContentProductTypes,
+        true,
+        'something went wrong'
+      );
       const action = new EduContentProductTypeActions.ClearEduContentProductTypes();
       const result = reducer(startState, action);
       expect(result).toEqual(createState([], true, 'something went wrong'));
