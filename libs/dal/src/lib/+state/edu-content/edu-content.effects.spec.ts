@@ -6,7 +6,7 @@ import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
 import { EduContentReducer } from '.';
-import { EDUCONTENT_SERVICE_TOKEN } from '../../edu-content/edu-content.service.interface';
+import { EDU_CONTENT_SERVICE_TOKEN } from '../../edu-content/edu-content.service.interface';
 import {
   EduContentsLoaded,
   EduContentsLoadError,
@@ -40,7 +40,7 @@ describe('EduContentEffects', () => {
   const mockServiceMethodReturnValue = (
     method: string,
     returnValue: any,
-    service: any = EDUCONTENT_SERVICE_TOKEN
+    service: any = EDU_CONTENT_SERVICE_TOKEN
   ) => {
     jest.spyOn(TestBed.get(service), method).mockReturnValue(of(returnValue));
   };
@@ -48,7 +48,7 @@ describe('EduContentEffects', () => {
   const mockServiceMethodError = (
     method: string,
     errorMessage: string,
-    service: any = EDUCONTENT_SERVICE_TOKEN
+    service: any = EDU_CONTENT_SERVICE_TOKEN
   ) => {
     jest.spyOn(TestBed.get(service), method).mockImplementation(() => {
       throw new Error(errorMessage);
@@ -72,7 +72,7 @@ describe('EduContentEffects', () => {
       ],
       providers: [
         {
-          provide: EDUCONTENT_SERVICE_TOKEN,
+          provide: EDU_CONTENT_SERVICE_TOKEN,
           useValue: {
             getAllForUser: () => {}
           }

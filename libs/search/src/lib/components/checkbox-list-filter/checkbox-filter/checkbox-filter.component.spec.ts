@@ -6,10 +6,12 @@ import {
   MatCheckboxChange,
   MatCheckboxModule,
   MatIconModule,
+  MatIconRegistry,
   MatListModule
 } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { CredentialFixture, LearningAreaFixture } from '@campus/dal';
+import { MockMatIconRegistry } from '@campus/testing';
 import {
   SearchFilterCriteriaFixture,
   SearchFilterCriteriaValuesFixture
@@ -30,7 +32,8 @@ describe('CheckboxFilterComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [MatListModule, MatCheckboxModule, FormsModule, MatIconModule],
-      declarations: [CheckboxFilterComponent, CheckboxListFilterComponent]
+      declarations: [CheckboxFilterComponent, CheckboxListFilterComponent],
+      providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
     }).compileComponents();
   }));
 

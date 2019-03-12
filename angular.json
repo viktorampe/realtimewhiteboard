@@ -183,6 +183,38 @@
         }
       }
     },
+    "pages-edu-contents": {
+      "root": "libs/pages/edu-contents",
+      "sourceRoot": "libs/pages/edu-contents/src",
+      "projectType": "library",
+      "prefix": "campus",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/pages/edu-contents/tsconfig.lib.json",
+              "libs/pages/edu-contents/tsconfig.spec.json",
+              "libs/pages/edu-contents/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/pages/edu-contents/jest.config.js",
+            "tsConfig": "libs/pages/edu-contents/tsconfig.spec.json",
+            "setupFile": "libs/pages/edu-contents/src/test-setup.ts"
+          },
+          "configurations": {
+            "travis": {
+              "maxWorkers": 2
+            }
+          }
+        }
+      }
+    },
     "pages-logout": {
       "root": "libs/pages/logout",
       "sourceRoot": "libs/pages/logout/src",

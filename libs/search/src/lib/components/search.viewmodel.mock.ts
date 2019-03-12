@@ -53,7 +53,7 @@ export class MockSearchViewModel
   }
 
   private getMockSearchFilter(): SearchFilterInterface[] {
-    const mockSearchFilter = [
+    const mockSearchFilter: SearchFilterInterface[] = [
       {
         criteria: new SearchFilterCriteriaFixture({}, [
           new SearchFilterCriteriaValuesFixture(),
@@ -64,7 +64,7 @@ export class MockSearchViewModel
             data: { id: 3, name: 'foo bar' }
           })
         ]),
-        component: new CheckboxLineFilterComponent(),
+        component: CheckboxLineFilterComponent,
         domHost: 'hostleft'
       },
       {
@@ -77,33 +77,37 @@ export class MockSearchViewModel
             data: { id: 3, name: 'foo bar' }
           })
         ]),
-        component: new CheckboxListFilterComponent(),
+        component: CheckboxListFilterComponent,
         domHost: 'hostleft'
       },
       {
-        criteria: new SearchFilterCriteriaFixture({}, [
-          new SearchFilterCriteriaValuesFixture(),
-          new SearchFilterCriteriaValuesFixture({
-            data: { id: 2, name: 'foo' }
-          }),
-          new SearchFilterCriteriaValuesFixture({
-            data: { id: 3, name: 'foo bar' }
-          })
-        ]),
-        component: new BreadcrumbFilterComponent(),
+        criteria: [
+          new SearchFilterCriteriaFixture({}, [
+            new SearchFilterCriteriaValuesFixture(),
+            new SearchFilterCriteriaValuesFixture({
+              data: { id: 2, name: 'foo' }
+            }),
+            new SearchFilterCriteriaValuesFixture({
+              data: { id: 3, name: 'foo bar' }
+            })
+          ])
+        ],
+        component: BreadcrumbFilterComponent,
         domHost: 'hosttop'
       },
       {
-        criteria: new SearchFilterCriteriaFixture({}, [
-          new SearchFilterCriteriaValuesFixture(),
-          new SearchFilterCriteriaValuesFixture({
-            data: { id: 2, name: 'foo' }
-          }),
-          new SearchFilterCriteriaValuesFixture({
-            data: { id: 3, name: 'foo bar' }
-          })
-        ]),
-        component: new ColumnFilterComponent(),
+        criteria: [
+          new SearchFilterCriteriaFixture({}, [
+            new SearchFilterCriteriaValuesFixture(),
+            new SearchFilterCriteriaValuesFixture({
+              data: { id: 2, name: 'foo' }
+            }),
+            new SearchFilterCriteriaValuesFixture({
+              data: { id: 3, name: 'foo bar' }
+            })
+          ])
+        ],
+        component: ColumnFilterComponent,
         domHost: 'hostleft'
       },
       {
@@ -116,7 +120,7 @@ export class MockSearchViewModel
             data: { id: 3, name: 'foo bar' }
           })
         ]),
-        component: new SelectFilterComponent(),
+        component: SelectFilterComponent,
         domHost: 'hosttop'
       }
     ];

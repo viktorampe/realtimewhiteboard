@@ -56,12 +56,17 @@ $ui-person-badge-size-small-font-size: $ui-person-badge-size-small / 2 !default;
 $ui-icon-size-large: 96px !default;
 $ui-icon-size-medium: 48px !default;
 $ui-icon-size-small: 36px !default;
+$ui-icon-size-tiny: 12px !default;
 
 // buttons
 $ui-button-padding-left: $ui-primary-font-size !default;
 $ui-button-padding-right: $ui-primary-font-size !default;
 $ui-button-padding-top: $ui-primary-font-size/2 !default;
 $ui-button-padding-bottom: $ui-primary-font-size/2 !default;
+
+// tiles and droparea
+$ui-tile-width: 280px !default;
+$ui-tile-height: 105px !default;
 
 // helper classes
 .ui-no-link {
@@ -95,6 +100,8 @@ $ui-button-padding-bottom: $ui-primary-font-size/2 !default;
 @import './banner/banner.component.theme.scss';
 @import './breadcrumbs/breadcrumbs.component.theme.scss';
 @import './collapsible-sheet/collapsible-sheet.component.theme.scss';
+@import './drop-area/drop-area.component.theme.scss';
+@import './tile/tile.component.theme.scss';
 
 @mixin ui-forms() {
   form {
@@ -194,4 +201,6 @@ $ui-button-padding-bottom: $ui-primary-font-size/2 !default;
   @include ui-breadcrumbs_theme();
   @include ui-content-thumbnail-button();
   @include ui-collapsible-sheet();
+  @include ui-drop-area-theme();
+  @include ui-tile();
 }

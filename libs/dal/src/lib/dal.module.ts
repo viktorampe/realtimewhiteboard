@@ -92,13 +92,21 @@ import {
 import { ContentRequestService } from './content-request/content-request.service';
 import { CONTENT_REQUEST_SERVICE_TOKEN } from './content-request/content-request.service.interface';
 import { EduContentService } from './edu-content/edu-content.service';
-import { EDUCONTENT_SERVICE_TOKEN } from './edu-content/edu-content.service.interface';
+import { EDU_CONTENT_SERVICE_TOKEN } from './edu-content/edu-content.service.interface';
 import { ExerciseService } from './exercise/exercise.service';
 import { EXERCISE_SERVICE_TOKEN } from './exercise/exercise.service.interface';
 import { LearningAreaService } from './learning-area/learning-area.service';
 import { LEARNINGAREA_SERVICE_TOKEN } from './learning-area/learning-area.service.interface';
+import { EduContentProductTypeService } from './metadata/edu-content-product-type.service';
+import { EDU_CONTENT_PRODUCT_TYPE_SERVICE_TOKEN } from './metadata/edu-content-product-type.service.interface';
+import { EduNetService } from './metadata/edu-net.service';
+import { EDU_NET_SERVICE_TOKEN } from './metadata/edu-net.service.interface';
 import { MethodService } from './metadata/method.service';
 import { METHOD_SERVICE_TOKEN } from './metadata/method.service.interface';
+import { SchoolTypeService } from './metadata/school-type.service';
+import { SCHOOL_TYPE_SERVICE_TOKEN } from './metadata/school-type.service.interface';
+import { YearService } from './metadata/year.service';
+import { YEAR_SERVICE_TOKEN } from './metadata/year.service.interface';
 import { AuthService } from './persons/auth-service';
 import { AUTH_SERVICE_TOKEN } from './persons/auth-service.interface';
 import {
@@ -256,7 +264,7 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
       useValue: uuid
     },
     { provide: EXERCISE_SERVICE_TOKEN, useClass: ExerciseService },
-    { provide: EDUCONTENT_SERVICE_TOKEN, useClass: EduContentService },
+    { provide: EDU_CONTENT_SERVICE_TOKEN, useClass: EduContentService },
     { provide: USER_CONTENT_SERVICE_TOKEN, useClass: UserContentService },
     {
       provide: UNLOCKED_BOEKE_STUDENT_SERVICE_TOKEN,
@@ -293,7 +301,14 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
     },
     { provide: CONTENT_REQUEST_SERVICE_TOKEN, useClass: ContentRequestService },
     { provide: RESULTS_SERVICE_TOKEN, useClass: ResultsService },
-    { provide: CREDENTIAL_SERVICE_TOKEN, useClass: CredentialService }
+    { provide: CREDENTIAL_SERVICE_TOKEN, useClass: CredentialService },
+    { provide: EDU_NET_SERVICE_TOKEN, useClass: EduNetService },
+    {
+      provide: EDU_CONTENT_PRODUCT_TYPE_SERVICE_TOKEN,
+      useClass: EduContentProductTypeService
+    },
+    { provide: SCHOOL_TYPE_SERVICE_TOKEN, useClass: SchoolTypeService },
+    { provide: YEAR_SERVICE_TOKEN, useClass: YearService }
   ]
 })
 export class DalModule {
