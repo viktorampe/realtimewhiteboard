@@ -61,7 +61,7 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
       this.createFilters();
 
       if (this.searchMode.searchTerm) {
-        this.createSearchTermComponent(this.portalsMap);
+        this.createSearchTermComponent();
       }
     }
   }
@@ -119,7 +119,7 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
 
   // Creates a SearchTermComponent and appends it to the DOM
   // as a sibling to the portalHost (as defined by the SearchMode)
-  private createSearchTermComponent(hosts: HostCollectionInterface): void {
+  private createSearchTermComponent(): void {
     const componentRef = this.addComponent(
       this.searchMode.searchTerm.domHost,
       SearchTermComponent

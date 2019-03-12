@@ -29,5 +29,6 @@ export {
   BadgePersonInterface
 } from './lib/person-badge/person-badge.component';
 export { SideSheetComponent } from './lib/side-sheet/side-sheet.component';
+export { TileSecondaryActionInterface } from './lib/tile/tile.component';
 export { NavItem } from './lib/tree-nav/tree-nav.component';
 export * from './lib/ui.module';

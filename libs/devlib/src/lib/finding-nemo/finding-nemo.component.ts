@@ -19,6 +19,7 @@ import {
   SearchStateInterface,
   SortModeInterface
 } from '@campus/search';
+import { TileSecondaryActionInterface } from '@campus/ui';
 import { EduContentMetadataApi } from '@diekeure/polpo-api-angular-sdk';
 // tslint:disable-next-line:nx-enforce-module-boundaries
 import { STANDARD_SEARCH_SERVICE_TOKEN } from 'apps/polpo-classroom-web/src/app/services/standard-search.service';
@@ -44,6 +45,7 @@ export class FindingNemoComponent implements AfterViewInit {
   public filterCriteria$ = new BehaviorSubject<SearchFilterCriteriaInterface[]>(
     null
   );
+  public secondaryActions: TileSecondaryActionInterface[];
 
   private loadTimer: number;
   public searchFilters$: Observable<SearchFilterInterface[]>;
@@ -65,13 +67,23 @@ export class FindingNemoComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
-    //Add 'implements AfterViewInit' to the class.
-    // this.portalHosts =
     this.searchComponent.searchPortals = this.portalHosts;
   }
 
+  tileClick() {
+    console.log('tile click!');
+  }
+
   setMockData() {
+    this.secondaryActions = [
+      {
+        label: 'Bekijken',
+        icon: 'magnifier',
+        onClick: event => {
+          console.log('secondaryAction');
+        }
+      }
+    ];
     this.searchMode = this.getMockSearchMode();
     this.searchState.next(this.getMockSearchState());
     this.resultsPage$.next(this.getMockResults());
