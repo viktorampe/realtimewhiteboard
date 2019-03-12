@@ -26,11 +26,12 @@
         [placeholder]="placeholder"
         [matAutocomplete]="auto"
         (keyup.enter)="onChange($event)"
-        (input)="getAutCompleteValues()"
+        (input)="getAutoCompleteValues()"
       />
 
       <mat-autocomplete
         #auto="matAutocomplete"
+        (optionSelected)="onChange($event)"
         class="search-term__autocomplete"
       >
         <mat-option

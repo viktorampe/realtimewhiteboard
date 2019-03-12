@@ -27,7 +27,7 @@ export class SearchTermComponent implements OnInit {
     this.valueChange.emit(this.currentValue || '');
   }
 
-  getAutCompleteValues() {
+  getAutoCompleteValues() {
     if (this.currentValue.length < 2 || !this.autoComplete) return;
 
     this.valueChangeForAutoComplete.emit(this.currentValue);

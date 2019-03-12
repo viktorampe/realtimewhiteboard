@@ -1,4 +1,9 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  async,
+  ComponentFixture,
+  fakeAsync,
+  TestBed
+} from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import {
   MatAutocomplete,
@@ -93,6 +98,31 @@ describe('SearchTermComponent', () => {
       expect(component.valueChange.emit).toHaveBeenCalledTimes(1);
       expect(component.valueChange.emit).toHaveBeenCalledWith(searchTerm);
     });
+
+    it('should emit the search term when the user selects an autoComplete value', fakeAsync(() => {
+      component.autoComplete = true;
+      component.autoCompleteValues = ['waarde1', 'waarde2'];
+
+      fixture.detectChanges();
+
+      spyOn(component.valueChange, 'emit');
+
+      const autoComplete = fixture.debugElement.query(
+        By.directive(MatAutocomplete)
+      ).componentInstance as MatAutocomplete;
+
+      // set selected option as currentValue
+      component.currentValue = autoComplete.options.first.value;
+
+      // emit event
+      autoComplete._emitSelectEvent(autoComplete.options.first);
+
+      expect(component.valueChange.emit).toHaveBeenCalled();
+      expect(component.valueChange.emit).toHaveBeenCalledTimes(1);
+      expect(component.valueChange.emit).toHaveBeenCalledWith(
+        component.currentValue
+      );
+    }));
   });
 
   describe('autoComplete', () => {
