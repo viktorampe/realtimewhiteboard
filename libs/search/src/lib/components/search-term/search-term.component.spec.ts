@@ -131,6 +131,35 @@ describe('SearchTermComponent', () => {
           expect(matAutoCompleteValues.includes(value))
         );
       });
+
+      it('should emit values in valueChangeForAutoComplete', () => {
+        component.valueChangeForAutoComplete.emit = jest.fn();
+
+        const searchTerm = 'rekenen';
+        const inputEl = fixture.debugElement.query(By.css('input'))
+          .nativeElement;
+        inputEl.value = searchTerm;
+        inputEl.dispatchEvent(new Event('input'));
+
+        expect(component.valueChangeForAutoComplete.emit).toHaveBeenCalled();
+        expect(component.valueChangeForAutoComplete.emit).toHaveBeenCalledWith(
+          searchTerm
+        );
+      });
+
+      it('should not emit values in valueChangeForAutoComplete when the searchTerm is less than 2 characters', () => {
+        component.valueChangeForAutoComplete.emit = jest.fn();
+
+        const searchTerm = 'r';
+        const inputEl = fixture.debugElement.query(By.css('input'))
+          .nativeElement;
+        inputEl.value = searchTerm;
+        inputEl.dispatchEvent(new Event('input'));
+
+        expect(
+          component.valueChangeForAutoComplete.emit
+        ).not.toHaveBeenCalled();
+      });
     });
 
     describe('without autoComplete', () => {
@@ -151,6 +180,20 @@ describe('SearchTermComponent', () => {
         );
 
         expect(matAutoComplete).toBeFalsy();
+      });
+
+      it('should not emit values in valueChangeForAutoComplete', () => {
+        component.valueChangeForAutoComplete.emit = jest.fn();
+
+        const searchTerm = 'rekenen';
+        const inputEl = fixture.debugElement.query(By.css('input'))
+          .nativeElement;
+        inputEl.value = searchTerm;
+        inputEl.dispatchEvent(new Event('input'));
+
+        expect(
+          component.valueChangeForAutoComplete.emit
+        ).not.toHaveBeenCalled();
       });
     });
   });
