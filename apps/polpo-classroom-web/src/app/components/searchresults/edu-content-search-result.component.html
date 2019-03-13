@@ -129,9 +129,8 @@
             <li
               *ngFor="let toc of book.tocs"
               [class]="'toc-depth-' + toc.depth"
+              >{{ toc.title }}</li
             >
-              {{ toc.title }}
-            </li>
           </ul>
         </div>
       </div>
@@ -148,6 +147,7 @@
     </div>
     <div class="app-educontentsearchresult__bottom__buttonbar">
       <campus-button
+        class="app-educontentsearchresult__bottom__buttonbar__openstatic"
         *ngIf="
           data.eduContent.publishedEduContentMetadata.fileExt !== 'ludo.zip'
         "
@@ -157,6 +157,7 @@
         >Bekijken
       </campus-button>
       <campus-button
+        class="app-educontentsearchresult__bottom__buttonbar__openexercise"
         *ngIf="
           data.eduContent.publishedEduContentMetadata.fileExt === 'ludo.zip'
         "
@@ -166,6 +167,7 @@
         >Bekijken
       </campus-button>
       <campus-button
+        class="app-educontentsearchresult__bottom__buttonbar__linkbundle"
         *ngIf="!data.currentTask && !data.inBundle"
         (click)="linkBundle()"
         iconClass="bundles"
@@ -173,13 +175,16 @@
         >Toevoegen aan bundel
       </campus-button>
       <campus-button
+        class="app-educontentsearchresult__bottom__buttonbar__unlinkbundle"
         *ngIf="data.inBundle"
         (click)="unlinkBundle()"
         iconClass="bundles"
         clickStopPropagation
         >Verwijderen uit bundel
+        <mat-icon class="checkmark" svgIcon="check-on"></mat-icon>
       </campus-button>
       <campus-button
+        class="app-educontentsearchresult__bottom__buttonbar__linktask"
         *ngIf="
           !data.currentBundle &&
           (!data.inTask &&
@@ -191,13 +196,16 @@
         >Toevoegen aan taak
       </campus-button>
       <campus-button
+        class="app-educontentsearchresult__bottom__buttonbar__unlinktask"
         *ngIf="data.inTask"
         (click)="unlinkTask()"
         iconClass="task"
         clickStopPropagation
         >Verwijderen uit taak
+        <mat-icon class="checkmark" svgIcon="check-on"></mat-icon>
       </campus-button>
       <campus-button
+        class="app-educontentsearchresult__bottom__buttonbar__togglefavorites"
         (click)="toggleFavorite()"
         iconClass="favorites"
         clickStopPropagation

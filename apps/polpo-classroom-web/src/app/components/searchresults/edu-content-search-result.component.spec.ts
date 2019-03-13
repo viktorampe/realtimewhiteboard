@@ -10,6 +10,7 @@ import {
 } from '@campus/dal';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
+import { EduContentBookInterface } from '@diekeure/polpo-api-angular-sdk';
 import { EduContentTOCFixture } from 'libs/dal/src/lib/+fixtures/EduContentTOC.fixture';
 import { EduContentSearchResultComponent } from './edu-content-search-result.component';
 import { EduContentSearchResultInterface } from './interfaces/educontent-search-result';
@@ -176,6 +177,17 @@ describe('EduContentSearchResultComponent', () => {
       expect(text).toBeTruthy();
       expect(text).toBe(description);
     });
+
+    it("should show the educontent's methods", () => {
+      const queryTopos =
+        '.app-educontentsearchresult__top__details__methods .topos';
+
+      const queryNando =
+        '.app-educontentsearchresult__top__details__methods .nando';
+
+      expect(fixture.debugElement.query(By.css(queryTopos))).toBeTruthy();
+      expect(fixture.debugElement.query(By.css(queryNando))).toBeTruthy();
+    });
   });
 
   describe('bottom uncollapsible', () => {
@@ -204,6 +216,7 @@ describe('EduContentSearchResultComponent', () => {
 
       component.isSelected = true;
       component.data.eduContent.publishedEduContentMetadata.eduContentProductType.pedagogic = false;
+      fixture.detectChanges();
 
       expect(fixture.debugElement.query(By.css(query))).toBeFalsy();
 
@@ -216,25 +229,160 @@ describe('EduContentSearchResultComponent', () => {
       expect(iconClass).toBeTruthy();
       expect(iconClass).toBe(icon);
     });
+
+    it('should show the toc', () => {
+      const queryBase = '.app-educontentsearchresult__bottom__contents__toc ';
+      const queryTitle = queryBase + 'span';
+      const title = 'mytitle';
+      const expectedTocs = ['a', 'b', 'c'];
+
+      component.isSelected = true;
+      component.data.eduContent.publishedEduContentMetadata.eduContentTOC = [
+        new EduContentTOCFixture({
+          title: expectedTocs[0],
+          depth: 0,
+          eduContentBook: {
+            title: title,
+            eduContentTOC: [
+              new EduContentTOCFixture({
+                depth: 1,
+                title: expectedTocs[1]
+              }),
+              new EduContentTOCFixture({
+                depth: 2,
+                title: expectedTocs[2]
+              })
+            ]
+          } as EduContentBookInterface
+        })
+      ];
+
+      fixture.detectChanges();
+
+      expect(
+        fixture.debugElement.query(By.css(queryTitle)).nativeElement.textContent
+      ).toBe(title);
+
+      for (let i = 0; i < 3; i++) {
+        expect(
+          fixture.debugElement.query(
+            By.css(queryBase + '.toc-depth-' + i.toString())
+          ).nativeElement.textContent
+        ).toBe(expectedTocs[i]);
+      }
+    });
   });
 
   describe('actions', () => {
-    it('should show Bekijken with icon bundles if fileExt is not ludo.zip', () => {});
+    it('should show openstatic button if fileExt is not ludo.zip', () => {
+      const query =
+        '.app-educontentsearchresult__bottom__buttonbar__openstatic';
 
-    it('should show Bekijken with icon eye if fileExt is ludo.zip', () => {});
+      component.isSelected = true;
+      component.data.eduContent.publishedEduContentMetadata.fileExt =
+        'ludo.zip';
+      fixture.detectChanges();
 
-    it('should show Toevoegen aan bundel if not currentTask and not currentBundle', () => {});
+      let el = fixture.debugElement.query(By.css(query));
+      expect(el).toBeFalsy();
 
-    it('should show Toevoegen aan taak if not currentTask and not currentBundle and taskAllowed', () => {});
+      component.data.eduContent.publishedEduContentMetadata.fileExt = '.pdf';
+      fixture.detectChanges();
 
-    it('should show Toevoegen/verwijderen uit bundel if currentBundle', () => {});
+      el = fixture.debugElement.query(By.css(query));
+      expect(el).toBeTruthy();
+    });
 
-    it('should show a checkmark on the button if the item is in the currentBundle', () => {});
+    it('should show openexercise button if fileExt is ludo.zip', () => {
+      const query =
+        '.app-educontentsearchresult__bottom__buttonbar__openexercise';
 
-    it('should show Toevoegen/verwijderen uit taak if currentTask en taskAllowed', () => {});
+      component.isSelected = true;
+      component.data.eduContent.publishedEduContentMetadata.fileExt =
+        'ludo.zip';
+      fixture.detectChanges();
 
-    it('should show a checkmark on the button if the item is in the currentTask', () => {});
+      let el = fixture.debugElement.query(By.css(query));
+      expect(el).toBeTruthy();
 
-    it('should show Toevoegen/verwijderen uit favorieten depending on isFavorite', () => {});
+      component.data.eduContent.publishedEduContentMetadata.fileExt = '.pdf';
+      fixture.detectChanges();
+
+      el = fixture.debugElement.query(By.css(query));
+      expect(el).toBeFalsy();
+    });
+
+    it('should show link bundle button if no currentTask and not in bundle', () => {
+      const query =
+        '.app-educontentsearchresult__bottom__buttonbar__linkbundle';
+
+      component.isSelected = true;
+      component.data.currentTask = new TaskFixture();
+      component.data.inBundle = true;
+      fixture.detectChanges();
+
+      let el = fixture.debugElement.query(By.css(query));
+      expect(el).toBeFalsy();
+
+      component.data.currentTask = null;
+      component.data.inBundle = false;
+      fixture.detectChanges();
+
+      el = fixture.debugElement.query(By.css(query));
+      expect(el).toBeTruthy();
+    });
+
+    it('should show unlink bundle button if in bundle', () => {
+      const query =
+        '.app-educontentsearchresult__bottom__buttonbar__unlinkbundle';
+
+      component.isSelected = true;
+      component.data.inBundle = false;
+      fixture.detectChanges();
+
+      let el = fixture.debugElement.query(By.css(query));
+      expect(el).toBeFalsy();
+
+      component.data.inBundle = true;
+      fixture.detectChanges();
+
+      el = fixture.debugElement.query(By.css(query));
+      expect(el).toBeTruthy();
+    });
+
+    it('should show link task button if no currentBundle and not in task and taskAllowed', () => {
+      const query = '.app-educontentsearchresult__bottom__buttonbar__linktask';
+
+      component.isSelected = true;
+      component.data.eduContent.publishedEduContentMetadata.taskAllowed = false;
+      fixture.detectChanges();
+
+      let el = fixture.debugElement.query(By.css(query));
+      expect(el).toBeFalsy();
+
+      component.data.eduContent.publishedEduContentMetadata.taskAllowed = true;
+      fixture.detectChanges();
+
+      el = fixture.debugElement.query(By.css(query));
+      expect(el).toBeTruthy();
+    });
+
+    it('should show unlink task button if in task', () => {
+      const query =
+        '.app-educontentsearchresult__bottom__buttonbar__unlinktask';
+
+      component.isSelected = true;
+      component.data.inTask = false;
+      fixture.detectChanges();
+
+      let el = fixture.debugElement.query(By.css(query));
+      expect(el).toBeFalsy();
+
+      component.data.inTask = true;
+      fixture.detectChanges();
+
+      el = fixture.debugElement.query(By.css(query));
+      expect(el).toBeTruthy();
+    });
   });
 });
