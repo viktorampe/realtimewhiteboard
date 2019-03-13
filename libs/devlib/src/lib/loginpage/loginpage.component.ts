@@ -1,24 +1,25 @@
+// tslint:disable:nx-enforce-module-boundaries
+// tslint:disable:member-ordering
 import { Component, Inject, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import {
-  AlertActions,
   AlertQueries,
   AlertReducer,
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   EduContentInterface,
-  EffectFeedbackActions,
   EffectFeedbackInterface,
   EffectFeedbackQueries,
-  Priority,
   UserActions
 } from '@campus/dal';
-import { AlertQueueApi, PersonApi } from '@diekeure/polpo-api-angular-sdk';
-import { Action, select, Store } from '@ngrx/store';
+import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
+import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-// tslint:disable-next-line:nx-enforce-module-boundaries
-import { AddEffectFeedback } from './../../../../dal/src/lib/+state/effect-feedback/effect-feedback.actions';
+import {
+  LearningPlanServiceInterface,
+  LEARNING_PLAN_SERVICE_TOKEN
+} from './../../../../dal/src/lib/learning-plan/learning-plan.service.interface';
 import { LoginPageViewModel } from './loginpage.viewmodel';
 
 @Component({
@@ -46,7 +47,8 @@ export class LoginpageComponent implements OnInit {
   constructor(
     public loginPageviewModel: LoginPageViewModel,
     private personApi: PersonApi,
-    private alertApi: AlertQueueApi,
+    @Inject(LEARNING_PLAN_SERVICE_TOKEN)
+    private learningPlanService: LearningPlanServiceInterface,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     private store: Store<AlertReducer.State>,
     private router: Router
@@ -67,68 +69,27 @@ export class LoginpageComponent implements OnInit {
 
   getCurrentUser() {
     this.currentUser = this.authService.getCurrent();
+    if (this.currentUser) this.loadCurrentUserinState();
   }
 
   loadCurrentUserinState() {
     this.store.dispatch(new UserActions.LoadUser({ force: true }));
   }
 
-  updateStudentContentStatus() {
-    this.loginPageviewModel.updateStudentContentStatus();
-  }
-
-  setAlertAsRead(alertId: number, displayResponse: boolean) {
-    this.store.dispatch(
-      new AlertActions.SetReadAlert({
-        personId: this.authService.userId,
-        alertIds: alertId,
-        read: true,
-        displayResponse: displayResponse
-      })
+  getAvailableYearsForSearch() {
+    this.response = this.learningPlanService.getAvailableYearsForSearch(
+      19,
+      3,
+      4
     );
   }
 
-  setAlertAsUnread(alertId: number, displayResponse: boolean) {
-    this.store.dispatch(
-      new AlertActions.SetReadAlert({
-        personId: this.authService.userId,
-        alertIds: alertId,
-        read: false,
-        displayResponse: displayResponse
-      })
-    );
-  }
-
-  removeFeedback(feedbackId: string) {
-    this.store.dispatch(
-      new EffectFeedbackActions.DeleteEffectFeedback({ id: feedbackId })
-    );
-  }
-
-  dispatchAction(action: Action) {
-    this.store.dispatch(action);
-  }
-
-  // tslint:disable-next-line:member-ordering
-  private count = 0;
-
-  dispatchFeedback(message: string, isError: boolean = true) {
-    this.count++;
-    this.store.dispatch(
-      new AddEffectFeedback({
-        effectFeedback: {
-          id: this.count.toString(),
-          triggerAction: null,
-          message,
-          type: isError ? 'error' : 'success',
-          timeStamp: Date.now(),
-          priority: Priority.NORM,
-          icon: null,
-          userActions: [],
-          display: true,
-          useDefaultCancel: true
-        }
-      })
+  getLearningPlanAssignments() {
+    this.response = this.learningPlanService.getLearningPlanAssignments(
+      3,
+      6,
+      4,
+      19
     );
   }
 }
