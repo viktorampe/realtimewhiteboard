@@ -147,11 +147,67 @@
       </div>
     </div>
     <div class="app-educontentsearchresult__bottom__buttonbar">
-      <campus-button iconClass="bundles" clickStopPropagation
-        >Bekijken</campus-button
+      <campus-button
+        *ngIf="
+          data.eduContent.publishedEduContentMetadata.fileExt !== 'ludo.zip'
+        "
+        (click)="openStatic()"
+        iconClass="bundles"
+        clickStopPropagation
+        >Bekijken
+      </campus-button>
+      <campus-button
+        *ngIf="
+          data.eduContent.publishedEduContentMetadata.fileExt === 'ludo.zip'
+        "
+        (click)="openExercise(false)"
+        iconClass="eye"
+        clickStopPropagation
+        >Bekijken
+      </campus-button>
+      <campus-button
+        *ngIf="!data.currentTask && !data.inBundle"
+        (click)="linkBundle()"
+        iconClass="bundles"
+        clickStopPropagation
+        >Toevoegen aan bundel
+      </campus-button>
+      <campus-button
+        *ngIf="data.inBundle"
+        (click)="unlinkBundle()"
+        iconClass="bundles"
+        clickStopPropagation
+        >Verwijderen uit bundel
+      </campus-button>
+      <campus-button
+        *ngIf="
+          !data.currentBundle &&
+          (!data.inTask &&
+            data.eduContent.publishedEduContentMetadata.taskAllowed)
+        "
+        (click)="linkTask()"
+        iconClass="task"
+        clickStopPropagation
+        >Toevoegen aan taak
+      </campus-button>
+      <campus-button
+        *ngIf="data.inTask"
+        (click)="unlinkTask()"
+        iconClass="task"
+        clickStopPropagation
+        >Verwijderen uit taak
+      </campus-button>
+      <campus-button
+        (click)="toggleFavorite()"
+        iconClass="favorites"
+        clickStopPropagation
       >
-      <campus-button clickStopPropagation>Or click me</campus-button>
-      <campus-button clickStopPropagation>Or click me</campus-button>
+        {{
+          data.isFavorite
+            ? 'Verwijderen uit favorieten'
+            : 'Toevoegen aan favorieten'
+        }}
+      </campus-button>
     </div>
   </div>
 </div>

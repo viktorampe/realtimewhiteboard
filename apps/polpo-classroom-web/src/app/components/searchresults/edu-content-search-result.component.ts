@@ -1,6 +1,7 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, Input, OnInit } from '@angular/core';
 import { ResultItemBase } from '@campus/search';
+import { ExerciseService } from 'libs/dal/src/lib/exercise/exercise.service';
 import { EduContentSearchResultInterface } from './interfaces/educontent-search-result';
 
 @Component({
@@ -24,7 +25,7 @@ export class EduContentSearchResultComponent extends ResultItemBase
   implements OnInit {
   @Input() data: EduContentSearchResultInterface;
 
-  constructor() {
+  constructor(private exerciseService: ExerciseService) {
     super();
   }
 
@@ -32,6 +33,37 @@ export class EduContentSearchResultComponent extends ResultItemBase
     super.ngOnInit();
 
     console.log(this.data.eduContent);
+  }
+
+  public linkTask() {}
+
+  public linkBundle() {}
+
+  public unlinkTask() {}
+
+  public unlinkBundle() {}
+
+  public toggleFavorite() {}
+
+  public openStatic() {}
+  public openExercise(answers: boolean) {}
+
+  public stream() {}
+
+  get isEduContentInCurrentBundle(): boolean {
+    return (
+      this.data.currentBundle.eduContents.filter(
+        e => e.id === this.data.eduContent.id
+      ).length != 0
+    );
+  }
+
+  get isEduContentInCurrentTask(): boolean {
+    return (
+      this.data.currentTask.eduContents.filter(
+        e => e.id === this.data.eduContent.id
+      ).length != 0
+    );
   }
 
   /**

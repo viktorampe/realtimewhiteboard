@@ -226,7 +226,8 @@ export class FindingNemoComponent implements AfterViewInit {
             {
               title: 'Aanliggende hoeken',
               description:
-                'In dit leerobject maken leerlingen 3 tikoefeningen op aanliggende hoeken.'
+                'In dit leerobject maken leerlingen 3 tikoefeningen op aanliggende hoeken.',
+              fileExt: 'ludo.zip'
             }
           ),
           inTask: true
@@ -240,15 +241,6 @@ export class FindingNemoComponent implements AfterViewInit {
             }
           ),
           inBundle: true
-        },
-        {
-          eduContent: new EduContentFixture(
-            {},
-            {
-              eduContentTOC: [{} as any]
-            }
-          ),
-          inTask: true
         },
         {
           eduContent: new EduContentFixture(

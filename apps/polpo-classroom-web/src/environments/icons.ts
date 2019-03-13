@@ -145,7 +145,7 @@ export const icons = {
   eye2: 'assets/icons/eye2.svg',
   facebook: 'assets/icons/facebook.svg',
   // favorite: 'assets/icons/favorite.svg',
-  // favorites: 'assets/icons/favorites.svg',
+  favorites: 'assets/icons/favorites.svg',
   // favorites2: 'assets/icons/favorites2.svg',
   // game: 'assets/icons/game.svg',
   // groups: 'assets/icons/groups.svg',

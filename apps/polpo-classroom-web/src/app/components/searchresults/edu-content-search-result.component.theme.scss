@@ -56,8 +56,17 @@
           background-color: $color-blue-2;
           color: white;
           border-right: 1px solid $color-black-1;
+          position: relative;
 
-          mat-icon {
+          mat-icon.checkmark {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 16px;
+            height: 16px;
+          }
+
+          mat-icon:not(.checkmark) {
             background-color: white !important;
             border-radius: 50%;
             padding: 4px;
