@@ -1,4 +1,12 @@
 @mixin edu-content-search-result-theme() {
+  $educontentsearchresult-margin: 20px !default;
+
+  $educontentsearchresult-title-fontsize: 18px !default;
+  $educontentsearchresult-title-height: 32px !default;
+
+  $educontentsearchresult-methods-scale: 0.5 !default;
+  $educontentsearchresult-methods-height: 48px !default;
+
   $educontentsearchresult-border-thickness: 3px !default;
   $educontentsearchresult-border-color: $color-black-1 !default;
 
@@ -22,6 +30,8 @@
   $educontentsearchresult-bottom-buttonbar-color: $color-white-1 !default;
 
   $educontentsearchresult-toc-margin: 12px !default;
+  $educontentsearchresult-toc-padding-left: 28px !default;
+  $educontentsearchresult-toc-list-style-type: square !default;
 
   @for $i from 0 through 10 {
     .toc-depth-#{$i} {
@@ -30,6 +40,7 @@
   }
 
   .app-educontentsearchresult {
+    margin: $educontentsearchresult-margin;
     border: $educontentsearchresult-border-thickness solid
       $educontentsearchresult-border-color;
 
@@ -38,16 +49,39 @@
       color: $educontentsearchresult-top-color;
       padding: $educontentsearchresult-top-padding;
 
+      campus-file-extension,
+      &__thumbnail {
+        margin-right: 16px;
+      }
+
+      &__thumbnail {
+        width: 84px;
+        background-size: contain;
+        background-repeat: no-repeat;
+      }
+
       &__details {
         &__header {
           &__title {
             mat-icon {
               color: $educontentsearchresult-top-icons-color;
             }
+
+            span {
+              height: $educontentsearchresult-title-height;
+              line-height: $educontentsearchresult-title-height;
+              font-size: $educontentsearchresult-title-fontsize;
+            }
           }
           &__icons {
             color: $educontentsearchresult-top-icons-color;
           }
+        }
+
+        &__methods {
+          height: $educontentsearchresult-methods-height;
+          transform: scale($educontentsearchresult-methods-scale);
+          transform-origin: 0 0;
         }
       }
     }
@@ -69,6 +103,11 @@
         padding-left: 115px;
         max-height: $educontentsearchresult-bottom-contents-max-height;
         overflow-y: auto;
+
+        &__toc {
+          padding-left: $educontentsearchresult-toc-padding-left;
+          list-style-type: $educontentsearchresult-toc-list-style-type;
+        }
       }
 
       &__buttonbar {

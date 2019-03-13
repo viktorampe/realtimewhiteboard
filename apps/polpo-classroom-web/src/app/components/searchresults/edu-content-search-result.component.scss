@@ -2,33 +2,14 @@
   width: 100%;
 }
 
-@for $i from 0 through 10 {
-  .toc-depth-#{$i} {
-    margin-left: $i * 12px;
-  }
-}
-
 .app-educontentsearchresult {
   display: flex;
   flex-direction: column;
-  background-color: white;
-  margin: 20px;
 
   &__top {
     display: flex;
     flex-direction: row;
     flex: 1 0 auto;
-
-    campus-file-extension,
-    &__thumbnail {
-      margin-right: 16px;
-    }
-
-    &__thumbnail {
-      width: 84px;
-      background-size: contain;
-      background-repeat: no-repeat;
-    }
 
     &__details {
       display: flex;
@@ -47,22 +28,13 @@
 
           span {
             display: inline-block;
-            height: 32px;
-            line-height: 32px;
-            font-size: 16px;
           }
-        }
-
-        &__icons {
         }
       }
 
       &__methods {
         display: flex;
         flex-direction: row;
-        transform: scale(0.5);
-        transform-origin: 0 0;
-        height: 48px;
 
         span {
           pointer-events: none;
@@ -89,8 +61,6 @@
       &__toc {
         ul {
           margin: 0;
-          padding-left: 28px;
-          list-style-type: square;
         }
       }
     }
