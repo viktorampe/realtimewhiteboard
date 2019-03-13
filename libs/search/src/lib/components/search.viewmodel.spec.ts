@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { LearningAreaFixture } from '@campus/dal';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
 import {
@@ -79,13 +78,13 @@ describe('SearchViewModel', () => {
         displayProperty: 'name',
         values: [
           {
-            data: new LearningAreaFixture({ id: 1, name: 'wiskunde' }),
+            data: { id: 1, name: 'wiskunde' },
             selected: true,
             visible: true,
             child: null
           },
           {
-            data: new LearningAreaFixture({ id: 2, name: 'geschiedenis' }),
+            data: { id: 2, name: 'geschiedenis' },
             selected: true,
             visible: true,
             child: null
@@ -115,7 +114,7 @@ describe('SearchViewModel', () => {
         displayProperty: 'name',
         values: [
           {
-            data: new LearningAreaFixture({ id: 1, name: 'wiskunde' }),
+            data: { id: 1, name: 'wiskunde' },
             selected: true,
             visible: true,
             child: null
@@ -129,13 +128,13 @@ describe('SearchViewModel', () => {
         displayProperty: 'name',
         values: [
           {
-            data: new LearningAreaFixture({ id: 2, name: 'geschiedenis' }),
+            data: { id: 2, name: 'geschiedenis' },
             selected: true,
             visible: true,
             child: null
           },
           {
-            data: new LearningAreaFixture({ id: 3, name: 'aardrijkskunde' }),
+            data: { id: 3, name: 'aardrijkskunde' },
             selected: true,
             visible: true,
             child: null
@@ -165,7 +164,7 @@ describe('SearchViewModel', () => {
         displayProperty: 'name',
         values: [
           {
-            data: new LearningAreaFixture({ id: 1, name: 'wiskunde' }),
+            data: { id: 1, name: 'wiskunde' },
             selected: true,
             visible: true,
             child: null
@@ -179,13 +178,13 @@ describe('SearchViewModel', () => {
         displayProperty: 'name',
         values: [
           {
-            data: new LearningAreaFixture({ id: 1, name: 'wiskunde' }),
+            data: { id: 1, name: 'wiskunde' },
             selected: true,
             visible: true,
             child: null
           },
           {
-            data: new LearningAreaFixture({ id: 3, name: 'aardrijkskunde' }),
+            data: { id: 3, name: 'aardrijkskunde' },
             selected: true,
             visible: true,
             child: null
@@ -614,7 +613,7 @@ function getTestFilter(
     criteria: criteriaIsArray
       ? [getTestFilterCriteria(name, id, prediction, selected, child)]
       : getTestFilterCriteria(name, id, prediction, selected, child),
-    component: new CheckboxLineFilterComponent(),
+    component: CheckboxLineFilterComponent,
     domHost: 'hostleft'
   };
 }
