@@ -28,7 +28,7 @@ export class EduContentService implements EduContentServiceInterface {
       .search(state)
       .pipe(map((res: { results: SearchResultInterface }) => res.results));
   }
-  autoComplete(state: SearchStateInterface): Observable<String[]> {
+  autoComplete(state: SearchStateInterface): Observable<string[]> {
     return this.eduContentApi.autocomplete(state);
   }
 }
