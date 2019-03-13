@@ -20,10 +20,15 @@ export class TocService implements TocServiceInterface {
     yearId: number,
     methodIds: number[]
   ): Observable<SearchResultInterface> {
+    const selections = new Map<string, (number | string)[]>();
+    selections.set('year', methodIds);
+    selections.set('method', [yearId]);
+
     const state: SearchStateInterface = {
       searchTerm: '',
-      filterCriteriaSelections: {}
+      filterCriteriaSelections: selections
     };
+
     return this.eduContentApi
       .search(state)
       .pipe(map((res: { results: SearchResultInterface }) => res.results));
