@@ -9,6 +9,7 @@ describe('EduContentService', () => {
   let service: EduContentServiceInterface;
   let mockGetData$: any;
   let mockSearch$: any;
+  let mockAutocomplete$: any;
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
@@ -22,7 +23,8 @@ describe('EduContentService', () => {
         {
           provide: EduContentApi,
           useValue: {
-            search: () => mockSearch$
+            search: () => mockSearch$,
+            autocomplete: () => mockAutocomplete$
           }
         }
       ]
@@ -77,14 +79,14 @@ describe('EduContentService', () => {
       })
     );
   });
-  // it('should return a string array if autoComplete is called', async () => {
-  //   mockGetData$ = hot('-a-|', {
-  //     a: { eduContents: [{ id: 1, type: 'file' }] }
-  //   });
-  //   expect(service.autoComplete()).toBeObservable(
-  //     hot('-a-|', {
-  //       a: [{ id: 1, type: 'file' }]
-  //     })
-  //   );
-  // });
+  it('should return a string array if autocomplete is called', async () => {
+    mockAutocomplete$ = hot('-a-|', {
+      a: ['array', 'of', 'strings']
+    });
+    expect(service.autoComplete({} as SearchStateInterface)).toBeObservable(
+      hot('-a-|', {
+        a: ['array', 'of', 'strings']
+      })
+    );
+  });
 });
