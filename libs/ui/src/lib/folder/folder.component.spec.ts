@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
+import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { ListFormat } from '../list-view/enums/list-format.enum';
 import { UiModule } from '../ui.module';
 import { FolderComponent } from './folder.component';
@@ -10,7 +10,13 @@ describe('FolderComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [UiModule]
+      imports: [UiModule],
+      providers: [
+        {
+          provide: HAMMER_LOADER,
+          useValue: () => new Promise(() => {})
+        }
+      ]
     }).compileComponents();
   }));
 

@@ -2,7 +2,7 @@ import { CdkScrollable, ScrollingModule } from '@angular/cdk/scrolling';
 import { Component, Type } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconRegistry, MatTooltipModule } from '@angular/material';
-import { By } from '@angular/platform-browser';
+import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
@@ -76,7 +76,12 @@ describe('ResultsListComponentComponent', () => {
       ],
       providers: [
         ResultItemComponent,
-        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry },
+
+        {
+          provide: HAMMER_LOADER,
+          useValue: () => new Promise(() => {})
+        }
       ]
     })
       .overrideModule(BrowserDynamicTestingModule, {
