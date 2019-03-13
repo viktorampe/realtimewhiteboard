@@ -43,15 +43,15 @@ describe('CheckboxFilterComponent', () => {
     mockChildFilterCriteria = new SearchFilterCriteriaFixture(
       { keyProperty: 'id', displayProperty: 'provider' },
       [
-        {
+        new SearchFilterCriteriaValuesFixture({
           data: { id: 1, provider: 'smartschool' }
-        },
-        {
+        }),
+        new SearchFilterCriteriaValuesFixture({
           data: { id: 2, provider: 'google' }
-        },
-        {
+        }),
+        new SearchFilterCriteriaValuesFixture({
           data: { id: 3, provider: 'facebook' }
-        }
+        })
       ]
     );
 
