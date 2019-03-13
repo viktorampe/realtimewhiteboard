@@ -1,61 +1,92 @@
 @mixin edu-content-search-result-theme() {
+  $educontentsearchresult-border-thickness: 3px !default;
+  $educontentsearchresult-border-color: $color-black-1 !default;
+
+  $educontentsearchresult-top-backgroundcolor: $color-white-1 !default;
+  $educontentsearchresult-top-color: $color-black-1 !default;
+  $educontentsearchresult-top-icons-color: $color-blue-2 !default;
+  $educontentsearchresult-top-padding: 10px 15px !default;
+
+  $educontentsearchresult-selected-top-backgroundcolor: $color-gray-2 !default;
+  $educontentsearchresult-selected-top-color: $color-white-1 !default;
+  $educontentsearchresult-selected-top-icons-color: $color-black-1 !default;
+
+  $educontentsearchresult-bottom-contents-backgroundcolor: $color-black-2 !default;
+  $educontentsearchresult-bottom-contents-color: $color-white-1 !default;
+  $educontentsearchresult-bottom-contents-padding: 8px !default;
+  $educontentsearchresult-bottom-contents-max-height: 100px !default;
+
+  $educontentsearchresult-bottom-buttonbar-backgroundcolor: $color-blue-2 !default;
+  $educontentsearchresult-bottom-buttonbar-hover-backgroundcolor: $color-blue-1 !default;
+  $educontentsearchresult-bottom-buttonbar-button-height: 70px !default;
+  $educontentsearchresult-bottom-buttonbar-color: $color-white-1 !default;
+
+  $educontentsearchresult-toc-margin: 12px !default;
+
+  @for $i from 0 through 10 {
+    .toc-depth-#{$i} {
+      margin-left: $i * $educontentsearchresult-toc-margin;
+    }
+  }
+
   .app-educontentsearchresult {
-    border: 3px solid $color-black-1;
+    border: $educontentsearchresult-border-thickness solid
+      $educontentsearchresult-border-color;
 
     &__top {
-      background-color: $color-white-1;
-      color: $color-black-1;
-      padding: 10px 15px;
+      background-color: $educontentsearchresult-top-backgroundcolor;
+      color: $educontentsearchresult-top-color;
+      padding: $educontentsearchresult-top-padding;
 
       &__details {
         &__header {
           &__title {
             mat-icon {
-              color: $color-blue-2;
+              color: $educontentsearchresult-top-icons-color;
             }
           }
           &__icons {
-            color: $color-blue-2;
+            color: $educontentsearchresult-top-icons-color;
           }
         }
       }
     }
 
     &.selected &__top {
-      background-color: $color-gray-2;
-      color: $color-white-1;
+      background-color: $educontentsearchresult-selected-top-backgroundcolor;
+      color: $educontentsearchresult-selected-top-color;
     }
 
     &.selected &__top mat-icon {
-      color: $color-black-1;
+      color: $educontentsearchresult-selected-top-icons-color;
     }
 
     &__bottom {
       &__contents {
-        background-color: $color-black-2;
-        color: $color-white-1;
-        padding: 8px;
+        background-color: $educontentsearchresult-bottom-contents-backgroundcolor;
+        color: $educontentsearchresult-bottom-contents-color;
+        padding: $educontentsearchresult-bottom-contents-padding;
         padding-left: 115px;
-        max-height: 100px;
+        max-height: $educontentsearchresult-bottom-contents-max-height;
         overflow-y: auto;
       }
 
       &__buttonbar {
-        background-color: $color-blue-2;
+        background-color: $educontentsearchresult-bottom-buttonbar-backgroundcolor;
 
         campus-button:hover {
-          background-color: $color-blue-1;
+          background-color: $educontentsearchresult-bottom-buttonbar-hover-backgroundcolor;
         }
 
         campus-button {
           display: flex;
           flex-direction: column;
           justify-content: space-around;
-          height: 70px;
+          height: $educontentsearchresult-bottom-buttonbar-button-height;
           margin: 0;
-          background-color: $color-blue-2;
-          color: white;
-          border-right: 1px solid $color-black-1;
+          background-color: $educontentsearchresult-bottom-buttonbar-backgroundcolor;
+          color: $educontentsearchresult-bottom-buttonbar-color;
+          border-right: 1px solid $educontentsearchresult-border-color;
           position: relative;
 
           mat-icon.checkmark {
@@ -67,12 +98,12 @@
           }
 
           mat-icon:not(.checkmark) {
-            background-color: white !important;
+            background-color: $educontentsearchresult-bottom-buttonbar-color !important;
             border-radius: 50%;
             padding: 4px;
             height: 32px;
             width: 32px;
-            color: $color-blue-2;
+            color: $educontentsearchresult-bottom-buttonbar-backgroundcolor;
           }
         }
       }
