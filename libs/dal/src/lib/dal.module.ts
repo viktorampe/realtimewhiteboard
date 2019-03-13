@@ -30,6 +30,11 @@ import {
   CurrentExerciseReducer
 } from './+state/current-exercise';
 import { EduContentReducer, EduContentsEffects } from './+state/edu-content';
+import {
+  EduContentProductTypeEffects,
+  EduContentProductTypeReducer
+} from './+state/edu-content-product-type';
+import { EduNetEffects, EduNetReducer } from './+state/edu-net';
 import { EffectFeedbackReducer } from './+state/effect-feedback';
 import {
   LearningAreaReducer,
@@ -41,6 +46,7 @@ import {
 } from './+state/linked-person';
 import { MethodEffects, MethodReducer } from './+state/method';
 import { ResultEffects, ResultReducer } from './+state/result';
+import { SchoolTypeEffects, SchoolTypeReducer } from './+state/school-type';
 import {
   StudentContentStatusesEffects,
   StudentContentStatusReducer
@@ -73,6 +79,7 @@ import {
 } from './+state/unlocked-content';
 import { UserEffects, UserReducer } from './+state/user';
 import { UserContentReducer, UserContentsEffects } from './+state/user-content';
+import { YearEffects, YearReducer } from './+state/year';
 import { AlertService } from './alert/alert.service';
 import { ALERT_SERVICE_TOKEN } from './alert/alert.service.interface';
 import {
@@ -234,6 +241,20 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
       EffectFeedbackReducer.reducer,
       { initialState: EffectFeedbackReducer.initialState }
     ),
+    StoreModule.forFeature(
+      EduContentProductTypeReducer.NAME,
+      EduContentProductTypeReducer.reducer,
+      { initialState: EduContentProductTypeReducer.initialState }
+    ),
+    StoreModule.forFeature(EduNetReducer.NAME, EduNetReducer.reducer, {
+      initialState: EduNetReducer.initialState
+    }),
+    StoreModule.forFeature(SchoolTypeReducer.NAME, SchoolTypeReducer.reducer, {
+      initialState: SchoolTypeReducer.initialState
+    }),
+    StoreModule.forFeature(YearReducer.NAME, YearReducer.reducer, {
+      initialState: YearReducer.initialState
+    }),
     EffectsModule.forFeature([
       BundlesEffects,
       UserEffects,
@@ -255,7 +276,11 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
       CurrentExerciseEffects,
       TeacherStudentEffects,
       LinkedPersonEffects,
-      CredentialEffects
+      CredentialEffects,
+      EduContentProductTypeEffects,
+      EduNetEffects,
+      SchoolTypeEffects,
+      YearEffects
     ])
   ],
   providers: [
