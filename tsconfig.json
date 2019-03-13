@@ -14,6 +14,7 @@
     "paths": {
       "@campus/devlib": ["libs/devlib/src/index.ts"],
       "@campus/pages/bundles": ["libs/pages/bundles/src/index.ts"],
+      "@campus/pages/edu-contents": ["libs/pages/edu-contents/src/index.ts"],
       "@campus/pages/alerts": ["libs/pages/alerts/src/index.ts"],
       "@campus/pages/logout": ["libs/pages/logout/src/index.ts"],
       "@campus/pages/messages": ["libs/pages/messages/src/index.ts"],
