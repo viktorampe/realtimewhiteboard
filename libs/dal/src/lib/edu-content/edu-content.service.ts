@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SearchResultInterface, SearchStateInterface } from '@campus/search';
-import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
+import { EduContentApi, PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { EduContentInterface } from '../+models/EduContent.interface';
@@ -10,7 +10,10 @@ import { EduContentServiceInterface } from './edu-content.service.interface';
   providedIn: 'root'
 })
 export class EduContentService implements EduContentServiceInterface {
-  constructor(private personApi: PersonApi) {}
+  constructor(
+    private personApi: PersonApi,
+    private eduContentApi: EduContentApi
+  ) {}
 
   getAllForUser(userId: number): Observable<EduContentInterface[]> {
     return this.personApi
@@ -21,7 +24,14 @@ export class EduContentService implements EduContentServiceInterface {
   }
 
   search(state: SearchStateInterface): Observable<SearchResultInterface> {
-    throw new Error('Method not implemented.');
+    return this.eduContentApi
+      .search(
+        state.searchTerm,
+        state.filterCriteriaSelections,
+        state.from || undefined,
+        state.sort || undefined
+      )
+      .pipe(map((res: { results: SearchResultInterface }) => res.results));
   }
   autoComplete(state: SearchStateInterface): Observable<String[]> {
     throw new Error('Method not implemented.');
