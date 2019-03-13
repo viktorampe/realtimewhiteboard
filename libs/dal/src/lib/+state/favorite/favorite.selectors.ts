@@ -93,6 +93,9 @@ export const getByTypeAndId = createSelector(
       case FavoriteTypesEnum.TASK:
         idProperty = 'taskId';
         break;
+      case FavoriteTypesEnum.SEARCH:
+        idProperty = 'criteria'; // not sure about this one
+        break;
       default:
         break;
     }
@@ -100,6 +103,7 @@ export const getByTypeAndId = createSelector(
     const favorite = Object.entries(state.entities).find(([key, value]) => {
       return value.type === props.type && value[idProperty] === props.id;
     });
+
     return favorite ? favorite.pop() : favorite;
   }
 );

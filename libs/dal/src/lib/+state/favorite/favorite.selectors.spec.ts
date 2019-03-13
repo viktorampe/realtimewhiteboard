@@ -126,26 +126,55 @@ describe('Favorite Selectors', () => {
       ]);
     });
 
-    it('getByTypeAndId() should return the favorite with the provided type and id', () => {
-      favoriteState = createState(
-        [
-          createFavorite(4, FavoriteTypesEnum.BOEKE, 15),
-          createFavorite(1, FavoriteTypesEnum.AREA, 12),
-          createFavorite(2, FavoriteTypesEnum.BOEKE, 10),
-          createFavorite(3, FavoriteTypesEnum.BUNDLE, 11)
-        ],
-        true,
-        'no error'
-      );
+    describe('getByTypeAndId()', () => {
+      beforeAll(() => {
+        const mockFavorites: FavoriteInterface[] = [
+          {
+            id: 1,
+            type: FavoriteTypesEnum.BOEKE,
+            eduContentId: 15
+          } as FavoriteInterface,
+          {
+            id: 2,
+            type: FavoriteTypesEnum.BOEKE,
+            eduContentId: 10
+          } as FavoriteInterface,
+          {
+            id: 3,
+            type: FavoriteTypesEnum.AREA,
+            learningAreaId: 5
+          } as FavoriteInterface,
+          {
+            id: 4,
+            type: FavoriteTypesEnum.BUNDLE,
+            eduContentId: 12
+          } as FavoriteInterface
+        ];
+        favoriteState = createState(mockFavorites, true, 'no error');
 
-      storeState = { favorites: favoriteState };
+        storeState = { favorites: favoriteState };
+      });
+      it('getByTypeAndId() should return the favorite with the provided type and id', () => {
+        const results = FavoriteQueries.getByTypeAndId(storeState, {
+          type: FavoriteTypesEnum.BOEKE,
+          id: 15
+        });
 
-      const results = FavoriteQueries.getByTypeAndId(storeState, {
-        type: FavoriteTypesEnum.BOEKE,
-        id: 15
+        expect(results).toEqual({
+          id: 1,
+          type: FavoriteTypesEnum.BOEKE,
+          eduContentId: 15
+        } as FavoriteInterface);
       });
 
-      expect(results).toEqual(createFavorite(4, FavoriteTypesEnum.BOEKE, 15));
+      it('getByTypeAndId() should return undefined if the provided type and id are not yet marked as favorite', () => {
+        const results = FavoriteQueries.getByTypeAndId(storeState, {
+          type: FavoriteTypesEnum.AREA,
+          id: 15
+        });
+
+        expect(results).toEqual(undefined);
+      });
     });
   });
 });
