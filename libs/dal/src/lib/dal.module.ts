@@ -104,6 +104,8 @@ import { ExerciseService } from './exercise/exercise.service';
 import { EXERCISE_SERVICE_TOKEN } from './exercise/exercise.service.interface';
 import { LearningAreaService } from './learning-area/learning-area.service';
 import { LEARNINGAREA_SERVICE_TOKEN } from './learning-area/learning-area.service.interface';
+import { LearningPlanService } from './learning-plan/learning-plan.service';
+import { LEARNING_PLAN_SERVICE_TOKEN } from './learning-plan/learning-plan.service.interface';
 import { EduContentProductTypeService } from './metadata/edu-content-product-type.service';
 import { EDU_CONTENT_PRODUCT_TYPE_SERVICE_TOKEN } from './metadata/edu-content-product-type.service.interface';
 import { EduNetService } from './metadata/edu-net.service';
@@ -333,7 +335,8 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
       useClass: EduContentProductTypeService
     },
     { provide: SCHOOL_TYPE_SERVICE_TOKEN, useClass: SchoolTypeService },
-    { provide: YEAR_SERVICE_TOKEN, useClass: YearService }
+    { provide: YEAR_SERVICE_TOKEN, useClass: YearService },
+    { provide: LEARNING_PLAN_SERVICE_TOKEN, useClass: LearningPlanService }
   ]
 })
 export class DalModule {
