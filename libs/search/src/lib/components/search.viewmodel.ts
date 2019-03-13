@@ -250,7 +250,9 @@ export class SearchViewModel {
     this.searchState$.next(newValue);
   }
 
-  public changeFilters(criteria: SearchFilterCriteriaInterface): void {
+  public changeFilters(
+    criteria: SearchFilterCriteriaInterface | SearchFilterCriteriaInterface[]
+  ): void {
     // update state
     const updatedCriteria: Map<
       string,
@@ -290,28 +292,41 @@ export class SearchViewModel {
   }
 
   private extractSelectedValuesFromCriteria(
-    criteria: SearchFilterCriteriaInterface,
+    criteria: SearchFilterCriteriaInterface | SearchFilterCriteriaInterface[],
     filterCriteriaSelections = new Map()
   ): Map<string, (number | string)[]> {
-    return criteria.values.reduce(
-      (
-        acc: Map<string, (number | string)[]>,
-        value: SearchFilterCriteriaValuesInterface
-      ) => {
-        // extract selected IDs
-        if (value.selected) {
-          if (!acc.has(criteria.name)) {
-            acc.set(criteria.name, []);
+    if (Array.isArray(criteria)) {
+      return criteria.reduce(
+        (
+          acc: Map<string, (number | string)[]>,
+          crit: SearchFilterCriteriaInterface
+        ) => {
+          this.extractSelectedValuesFromCriteria(crit, acc);
+          return acc;
+        },
+        filterCriteriaSelections
+      );
+    } else {
+      return criteria.values.reduce(
+        (
+          acc: Map<string, (number | string)[]>,
+          value: SearchFilterCriteriaValuesInterface
+        ) => {
+          // extract selected IDs
+          if (value.selected) {
+            if (!acc.has(criteria.name)) {
+              acc.set(criteria.name, []);
+            }
+            acc.get(criteria.name).push(value.data[criteria.keyProperty]);
           }
-          acc.get(criteria.name).push(value.data[criteria.keyProperty]);
-        }
-        // check for selection in child
-        if (value.child) {
-          this.extractSelectedValuesFromCriteria(value.child, acc);
-        }
-        return acc;
-      },
-      filterCriteriaSelections
-    );
+          // check for selection in child
+          if (value.child) {
+            this.extractSelectedValuesFromCriteria(value.child, acc);
+          }
+          return acc;
+        },
+        filterCriteriaSelections
+      );
+    }
   }
 }
