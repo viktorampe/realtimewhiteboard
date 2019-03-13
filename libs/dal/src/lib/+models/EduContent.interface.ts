@@ -22,4 +22,5 @@ export interface EduContentInterface {
   publishedEduContentMetadata?: EduContentMetadataInterface;
   notes?: EduContentNoteInterface[];
   favorites?: FavoriteInterface[];
+  previewImage?: string;
 }

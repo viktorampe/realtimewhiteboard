@@ -19,8 +19,15 @@
     flex-direction: row;
     flex: 1 0 auto;
 
-    campus-file-extension {
+    campus-file-extension,
+    &__thumbnail {
       margin-right: 16px;
+    }
+
+    &__thumbnail {
+      width: 84px;
+      background-size: contain;
+      background-repeat: no-repeat;
     }
 
     &__details {

@@ -28,7 +28,7 @@ export class EduContentMetadataFixture implements EduContentMetadataInterface {
   commitMessage = 'foo';
   previewId = 'foo';
   thumb = 'foo';
-  thumbSmall = 'foo';
+  thumbSmall = '';
   showCommitMessage = false;
   locked = false;
   sourceRef = 'foo';

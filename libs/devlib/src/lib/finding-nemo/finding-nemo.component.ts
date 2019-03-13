@@ -232,7 +232,13 @@ export class FindingNemoComponent implements AfterViewInit {
           inTask: true
         },
         {
-          eduContent: new EduContentFixture(),
+          eduContent: new EduContentFixture(
+            {},
+            {
+              thumbSmall:
+                'https://avatars3.githubusercontent.com/u/31932368?s=460&v=4'
+            }
+          ),
           inBundle: true
         },
         {
