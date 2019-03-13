@@ -151,6 +151,6 @@ export class LoginpageComponent implements OnInit {
   }
 
   removeFavorite(userId: number, favoriteId: number) {
-    this.favoriteService.removeFavorite(userId, favoriteId);
+    this.response = this.favoriteService.removeFavorite(userId, favoriteId);
   }
 }

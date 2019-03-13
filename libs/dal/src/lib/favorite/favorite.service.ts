@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Observable } from 'rxjs';
+import { mapTo } from 'rxjs/operators';
 import { FavoriteInterface } from '../+models';
 import { FavoriteServiceInterface } from './favorite.service.interface';
 
@@ -23,7 +24,9 @@ export class FavoriteService implements FavoriteServiceInterface {
     return this.personApi.createFavorites(userId, favorite);
   }
 
-  removeFavorite(userId: number, favoriteId: number): void {
-    this.personApi.destroyByIdFavorites(userId, favoriteId);
+  removeFavorite(userId: number, favoriteId: number): Observable<boolean> {
+    return this.personApi
+      .destroyByIdFavorites(userId, favoriteId)
+      .pipe(mapTo(true));
   }
 }
