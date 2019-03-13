@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FavoriteApi, PersonApi } from '@diekeure/polpo-api-angular-sdk';
+import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Observable } from 'rxjs';
 import { FavoriteInterface } from '../+models';
 import { FavoriteServiceInterface } from './favorite.service.interface';
@@ -8,7 +8,7 @@ import { FavoriteServiceInterface } from './favorite.service.interface';
   providedIn: 'root'
 })
 export class FavoriteService implements FavoriteServiceInterface {
-  constructor(private personApi: PersonApi, private favoriteApi: FavoriteApi) {}
+  constructor(private personApi: PersonApi) {}
 
   getAllForUser(userId: number): Observable<FavoriteInterface[]> {
     return this.personApi.getFavorites(userId);
@@ -18,10 +18,12 @@ export class FavoriteService implements FavoriteServiceInterface {
     userId: number,
     favorite: FavoriteInterface
   ): Observable<FavoriteInterface> {
-    return;
+    // note: will soft delete every other favorite with
+    // the same type and relationId (e.g. learningAreaId)
+    return this.personApi.createFavorites(userId, favorite);
   }
 
-  removeFavorite(userId: number, favoriteId: number) {
-    return;
+  removeFavorite(userId: number, favoriteId: number): void {
+    this.personApi.destroyByIdFavorites(userId, favoriteId);
   }
 }
