@@ -39,4 +39,24 @@ describe('EduContentService', () => {
       })
     );
   });
+  it('should return SearchResultInterface when search is called', async () => {
+    mockData$ = hot('-a-|', {
+      a: { eduContents: [{ id: 1, type: 'file' }] }
+    });
+    expect(service.search()).toBeObservable(
+      hot('-a-|', {
+        a: [{ id: 1, type: 'file' }]
+      })
+    );
+  });
+  it('should return a string array if autoComplete is called', async () => {
+    mockData$ = hot('-a-|', {
+      a: { eduContents: [{ id: 1, type: 'file' }] }
+    });
+    expect(service.autoComplete()).toBeObservable(
+      hot('-a-|', {
+        a: [{ id: 1, type: 'file' }]
+      })
+    );
+  });
 });
