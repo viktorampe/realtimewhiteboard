@@ -1,15 +1,17 @@
 import { FavoriteQueries } from '.';
 import { FavoriteInterface, FavoriteTypesEnum } from '../../+models';
 import { State } from './favorite.reducer';
-
+// file.only
 describe('Favorite Selectors', () => {
   function createFavorite(
     id: number,
-    type: FavoriteTypesEnum = FavoriteTypesEnum.AREA
+    type: FavoriteTypesEnum = FavoriteTypesEnum.AREA,
+    eduContentId: number = null
   ): FavoriteInterface | any {
     return {
       id: id,
-      type: type
+      type: type,
+      eduContentId: eduContentId
     };
   }
 
@@ -122,6 +124,28 @@ describe('Favorite Selectors', () => {
         createFavorite(2, FavoriteTypesEnum.BOEKE),
         createFavorite(4, FavoriteTypesEnum.BOEKE)
       ]);
+    });
+
+    it('getByTypeAndId() should return the favorite with the provided type and id', () => {
+      favoriteState = createState(
+        [
+          createFavorite(4, FavoriteTypesEnum.BOEKE, 15),
+          createFavorite(1, FavoriteTypesEnum.AREA, 12),
+          createFavorite(2, FavoriteTypesEnum.BOEKE, 10),
+          createFavorite(3, FavoriteTypesEnum.BUNDLE, 11)
+        ],
+        true,
+        'no error'
+      );
+
+      storeState = { favorites: favoriteState };
+
+      const results = FavoriteQueries.getByTypeAndId(storeState, {
+        type: FavoriteTypesEnum.BOEKE,
+        id: 15
+      });
+
+      expect(results).toEqual(createFavorite(4, FavoriteTypesEnum.BOEKE, 15));
     });
   });
 });

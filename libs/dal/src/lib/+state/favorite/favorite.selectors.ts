@@ -1,5 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { FavoriteInterface, FavoriteTypesEnum } from '../../+models';
+import { FavoriteTypesEnum } from '../../+models';
 import {
   NAME,
   selectAll,
@@ -77,10 +77,29 @@ export const getByType = createSelector(
 
 export const getByTypeAndId = createSelector(
   selectFavoriteState,
-  getByType,
-  (
-    state: State,
-    favorites: FavoriteInterface[],
-    props: { type: FavoriteTypesEnum; id: number }
-  ) => {}
+  (state: State, props: { type: FavoriteTypesEnum; id: number }) => {
+    let idProperty = '';
+    switch (props.type) {
+      case FavoriteTypesEnum.AREA:
+        idProperty = 'learningAreaId';
+        break;
+      case FavoriteTypesEnum.BOEKE:
+      case FavoriteTypesEnum.EDUCONTENT:
+        idProperty = 'eduContentId';
+        break;
+      case FavoriteTypesEnum.BUNDLE:
+        idProperty = 'bundleId';
+        break;
+      case FavoriteTypesEnum.TASK:
+        idProperty = 'taskId';
+        break;
+      default:
+        break;
+    }
+
+    const favorite = Object.entries(state.entities).find(([key, value]) => {
+      return value.type === props.type && value[idProperty] === props.id;
+    });
+    return favorite ? favorite.pop() : favorite;
+  }
 );
