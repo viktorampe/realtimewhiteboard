@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { LearningAreaFixture } from '@campus/dal';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
 import {
@@ -79,13 +78,13 @@ describe('SearchViewModel', () => {
         displayProperty: 'name',
         values: [
           {
-            data: new LearningAreaFixture({ id: 1, name: 'wiskunde' }),
+            data: { id: 1, name: 'wiskunde' },
             selected: true,
             visible: true,
             child: null
           },
           {
-            data: new LearningAreaFixture({ id: 2, name: 'geschiedenis' }),
+            data: { id: 2, name: 'geschiedenis' },
             selected: true,
             visible: true,
             child: null
@@ -115,7 +114,7 @@ describe('SearchViewModel', () => {
         displayProperty: 'name',
         values: [
           {
-            data: new LearningAreaFixture({ id: 1, name: 'wiskunde' }),
+            data: { id: 1, name: 'wiskunde' },
             selected: true,
             visible: true,
             child: null
@@ -129,13 +128,13 @@ describe('SearchViewModel', () => {
         displayProperty: 'name',
         values: [
           {
-            data: new LearningAreaFixture({ id: 2, name: 'geschiedenis' }),
+            data: { id: 2, name: 'geschiedenis' },
             selected: true,
             visible: true,
             child: null
           },
           {
-            data: new LearningAreaFixture({ id: 3, name: 'aardrijkskunde' }),
+            data: { id: 3, name: 'aardrijkskunde' },
             selected: true,
             visible: true,
             child: null
@@ -165,7 +164,7 @@ describe('SearchViewModel', () => {
         displayProperty: 'name',
         values: [
           {
-            data: new LearningAreaFixture({ id: 1, name: 'wiskunde' }),
+            data: { id: 1, name: 'wiskunde' },
             selected: true,
             visible: true,
             child: null
@@ -179,13 +178,13 @@ describe('SearchViewModel', () => {
         displayProperty: 'name',
         values: [
           {
-            data: new LearningAreaFixture({ id: 1, name: 'wiskunde' }),
+            data: { id: 1, name: 'wiskunde' },
             selected: true,
             visible: true,
             child: null
           },
           {
-            data: new LearningAreaFixture({ id: 3, name: 'aardrijkskunde' }),
+            data: { id: 3, name: 'aardrijkskunde' },
             selected: true,
             visible: true,
             child: null
@@ -201,6 +200,82 @@ describe('SearchViewModel', () => {
             filterCriteriaSelections: new Map([
               ['foo', [1]],
               ['bar', [4, 5, 6]],
+              ['baz', [1, 3]]
+            ])
+          }
+        })
+      );
+    });
+
+    it('should update `searchFilterCriteria` with array of searchFilters', () => {
+      const searchFilterCriteria: SearchFilterCriteriaInterface[] = [
+        {
+          name: 'foo',
+          label: 'foo',
+          keyProperty: 'id',
+          displayProperty: 'name',
+          values: [
+            {
+              data: { id: 1, name: 'wiskunde' },
+              selected: true,
+              visible: true,
+              child: null
+            }
+          ]
+        },
+        {
+          name: 'baz',
+          label: 'baz',
+          keyProperty: 'id',
+          displayProperty: 'name',
+          values: [
+            {
+              data: { id: 1, name: 'wiskunde' },
+              selected: true,
+              visible: true,
+              child: null
+            },
+            {
+              data: { id: 3, name: 'aardrijkskunde' },
+              selected: true,
+              visible: true,
+              child: null
+            }
+          ]
+        }
+      ];
+
+      searchFilterCriteria[0].values[0].child = {
+        name: 'blah',
+        label: 'blah',
+        keyProperty: 'id',
+        displayProperty: 'name',
+        values: [
+          {
+            data: { id: 8, name: 'wiskunde' },
+            selected: true,
+            visible: true,
+            child: null
+          },
+          {
+            data: { id: 9, name: 'aardrijkskunde' },
+            selected: true,
+            visible: true,
+            child: null
+          }
+        ]
+      };
+
+      searchViewModel.changeFilters(searchFilterCriteria);
+
+      expect(searchViewModel.searchState$).toBeObservable(
+        hot('a', {
+          a: {
+            from: 0,
+            filterCriteriaSelections: new Map([
+              ['foo', [1]],
+              ['bar', [4, 5, 6]],
+              ['blah', [8, 9]],
               ['baz', [1, 3]]
             ])
           }
@@ -538,7 +613,7 @@ function getTestFilter(
     criteria: criteriaIsArray
       ? [getTestFilterCriteria(name, id, prediction, selected, child)]
       : getTestFilterCriteria(name, id, prediction, selected, child),
-    component: new CheckboxLineFilterComponent(),
+    component: CheckboxLineFilterComponent,
     domHost: 'hostleft'
   };
 }

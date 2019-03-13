@@ -17,12 +17,19 @@ export class SearchTermComponent implements OnInit {
   @Input() public autoCompleteValues: string[] = [];
 
   @Output() public valueChange = new EventEmitter<string>();
-
-  onChange(event) {
-    this.valueChange.emit(this.currentValue || '');
-  }
+  @Output() public valueChangeForAutoComplete = new EventEmitter<string>();
 
   ngOnInit() {
     this.currentValue = this.initialValue;
+  }
+
+  onChange() {
+    this.valueChange.emit(this.currentValue || '');
+  }
+
+  getAutoCompleteValues() {
+    if (this.currentValue.length < 2 || !this.autoComplete) return;
+
+    this.valueChangeForAutoComplete.emit(this.currentValue);
   }
 }

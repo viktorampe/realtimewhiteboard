@@ -9,6 +9,8 @@ export * from './lib/+state/credential';
 export * from './lib/+state/current-exercise';
 export * from './lib/+state/dal.state.feature.builder';
 export * from './lib/+state/edu-content';
+export * from './lib/+state/edu-content-product-type';
+export * from './lib/+state/edu-net';
 export * from './lib/+state/effect-feedback';
 export * from './lib/+state/learning-area';
 export * from './lib/+state/linked-person';
@@ -20,6 +22,7 @@ export {
   RouterStateUrl
 } from './lib/+state/router/route-serializer';
 export * from './lib/+state/router/router.selectors';
+export * from './lib/+state/school-type';
 export * from './lib/+state/student-content-status';
 export * from './lib/+state/task';
 export * from './lib/+state/task-edu-content';
@@ -31,6 +34,7 @@ export * from './lib/+state/unlocked-boeke-student';
 export * from './lib/+state/unlocked-content';
 export * from './lib/+state/user';
 export * from './lib/+state/user-content';
+export * from './lib/+state/year';
 export * from './lib/alert';
 export * from './lib/dal.module';
 export {

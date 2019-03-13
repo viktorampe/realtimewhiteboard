@@ -93,6 +93,34 @@ describe('SearchTermComponent', () => {
       expect(component.valueChange.emit).toHaveBeenCalledTimes(1);
       expect(component.valueChange.emit).toHaveBeenCalledWith(searchTerm);
     });
+
+    it('should emit the search term when the user selects an autoComplete value', () => {
+      component.autoComplete = true;
+      component.autoCompleteValues = ['waarde1', 'waarde2'];
+
+      fixture.detectChanges();
+
+      spyOn(component.valueChange, 'emit');
+
+      const autoComplete = fixture.debugElement.query(
+        By.directive(MatAutocomplete)
+      ).componentInstance as MatAutocomplete;
+
+      // set selected option as currentValue
+      component.currentValue = autoComplete.options.first.value;
+
+      // doublecheck that setting currentValue didn't trigger the valueChange
+      expect(component.valueChange.emit).not.toHaveBeenCalled();
+
+      // emit event
+      autoComplete._emitSelectEvent(autoComplete.options.first);
+
+      expect(component.valueChange.emit).toHaveBeenCalled();
+      expect(component.valueChange.emit).toHaveBeenCalledTimes(1);
+      expect(component.valueChange.emit).toHaveBeenCalledWith(
+        component.currentValue
+      );
+    });
   });
 
   describe('autoComplete', () => {
@@ -131,6 +159,35 @@ describe('SearchTermComponent', () => {
           expect(matAutoCompleteValues.includes(value))
         );
       });
+
+      it('should emit values in valueChangeForAutoComplete', () => {
+        component.valueChangeForAutoComplete.emit = jest.fn();
+
+        const searchTerm = 'rekenen';
+        const inputEl = fixture.debugElement.query(By.css('input'))
+          .nativeElement;
+        inputEl.value = searchTerm;
+        inputEl.dispatchEvent(new Event('input'));
+
+        expect(component.valueChangeForAutoComplete.emit).toHaveBeenCalled();
+        expect(component.valueChangeForAutoComplete.emit).toHaveBeenCalledWith(
+          searchTerm
+        );
+      });
+
+      it('should not emit values in valueChangeForAutoComplete when the searchTerm is less than 2 characters', () => {
+        component.valueChangeForAutoComplete.emit = jest.fn();
+
+        const searchTerm = 'r';
+        const inputEl = fixture.debugElement.query(By.css('input'))
+          .nativeElement;
+        inputEl.value = searchTerm;
+        inputEl.dispatchEvent(new Event('input'));
+
+        expect(
+          component.valueChangeForAutoComplete.emit
+        ).not.toHaveBeenCalled();
+      });
     });
 
     describe('without autoComplete', () => {
@@ -151,6 +208,20 @@ describe('SearchTermComponent', () => {
         );
 
         expect(matAutoComplete).toBeFalsy();
+      });
+
+      it('should not emit values in valueChangeForAutoComplete', () => {
+        component.valueChangeForAutoComplete.emit = jest.fn();
+
+        const searchTerm = 'rekenen';
+        const inputEl = fixture.debugElement.query(By.css('input'))
+          .nativeElement;
+        inputEl.value = searchTerm;
+        inputEl.dispatchEvent(new Event('input'));
+
+        expect(
+          component.valueChangeForAutoComplete.emit
+        ).not.toHaveBeenCalled();
       });
     });
   });

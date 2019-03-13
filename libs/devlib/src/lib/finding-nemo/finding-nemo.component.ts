@@ -182,7 +182,7 @@ export class FindingNemoComponent implements AfterViewInit {
       searchFilterFactory: MockFactory,
       searchTerm: {
         // autocompleteEl: string; //reference to material autocomplete component
-        domHost: 'hosttop'
+        domHost: 'hostSearchTerm'
       },
       results: {
         component: EduContentSearchResultComponent,
