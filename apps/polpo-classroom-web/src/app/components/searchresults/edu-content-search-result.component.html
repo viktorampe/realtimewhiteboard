@@ -59,6 +59,26 @@
         ></span>
       </div>
       <footer class="app-educontentsearchresult__top__details__footer">
+        <span
+          >Jaar
+          {{ data.eduContent.publishedEduContentMetadata.years | join: 'name' }}
+        </span>
+        |
+        <span
+          >{{
+            data.eduContent.publishedEduContentMetadata.schoolTypes
+              | join: 'name':' - '
+          }}
+        </span>
+        |
+        <span
+          >{{
+            data.eduContent.publishedEduContentMetadata.eduNets
+              | join: 'code':' - '
+          }}
+        </span>
+        |
+        <span>{{ data.eduContent.publishedEduContentMetadata.language }}</span>
       </footer>
     </div>
   </div>

@@ -11,9 +11,8 @@ export class EduContentMetadataFixture implements EduContentMetadataInterface {
   version = 1;
   metaVersion = '0.1';
   language = 'nl';
-  title = '(Fixture) Aanliggende hoeken';
-  description =
-    'In dit leerobject maken leerlingen 3 tikoefeningen op aanliggende hoeken.';
+  title = 'foo';
+  description = 'foo';
   created = new Date('2018-12-05T13:48:00.719Z');
   published = new Date('2018-12-05T13:48:00.719Z');
   quotable = true;
@@ -50,7 +49,7 @@ export class EduContentMetadataFixture implements EduContentMetadataInterface {
   years = [new YearFixture({ name: '5' }), new YearFixture({ name: '6' })];
   eduNets = [
     new EduNetFixture({ code: 'GO' }),
-    new EduNetFixture({ name: 'KathOndVla' })
+    new EduNetFixture({ code: 'KathOndVla' })
   ];
   schoolTypes = [
     new SchoolTypeFixture({ name: 'TSO' }),
