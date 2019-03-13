@@ -4,6 +4,7 @@ import { ResultItemBase } from '@campus/search';
 import { EduContentSearchResultInterface } from './interfaces/educontent-search-result';
 
 @Component({
+  // tslint:disable-next-line
   selector: 'edu-content-search-result',
   templateUrl: './edu-content-search-result.component.html',
   styleUrls: ['./edu-content-search-result.component.scss'],
@@ -51,7 +52,7 @@ export class EduContentSearchResultComponent extends ResultItemBase
     return (
       this.data.currentBundle.eduContents.filter(
         e => e.id === this.data.eduContent.id
-      ).length != 0
+      ).length !== 0
     );
   }
 
@@ -59,7 +60,7 @@ export class EduContentSearchResultComponent extends ResultItemBase
     return (
       this.data.currentTask.eduContents.filter(
         e => e.id === this.data.eduContent.id
-      ).length != 0
+      ).length !== 0
     );
   }
 
@@ -67,7 +68,7 @@ export class EduContentSearchResultComponent extends ResultItemBase
    * Returns an array containing objects with the title and tocs list of every book
    */
   getNormalizedEduContentToc() {
-    let root = this.data.eduContent.publishedEduContentMetadata.eduContentTOC;
+    const root = this.data.eduContent.publishedEduContentMetadata.eduContentTOC;
     return root.map(rootTOC => {
       return {
         title: rootTOC.eduContentBook.title,

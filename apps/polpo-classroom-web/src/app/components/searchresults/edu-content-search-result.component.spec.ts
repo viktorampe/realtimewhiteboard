@@ -6,12 +6,12 @@ import {
   BundleFixture,
   EduContentFixture,
   EduContentProductTypeFixture,
+  EduContentTOCFixture,
   TaskFixture
 } from '@campus/dal';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { EduContentBookInterface } from '@diekeure/polpo-api-angular-sdk';
-import { EduContentTOCFixture } from 'libs/dal/src/lib/+fixtures/EduContentTOC.fixture';
 import { EduContentSearchResultComponent } from './edu-content-search-result.component';
 import { EduContentSearchResultInterface } from './interfaces/educontent-search-result';
 
@@ -143,7 +143,7 @@ describe('EduContentSearchResultComponent', () => {
       component.data.eduContent.publishedEduContentMetadata.fileExt = extension;
       fixture.detectChanges();
 
-      let extensionClass = fixture.debugElement.query(By.css(query))
+      const extensionClass = fixture.debugElement.query(By.css(query))
         .componentInstance.extensionClass;
       expect(extensionClass).toBeTruthy();
       expect(extensionClass).toBe(extension);
@@ -157,7 +157,7 @@ describe('EduContentSearchResultComponent', () => {
       component.data.eduContent.publishedEduContentMetadata.title = title;
       fixture.detectChanges();
 
-      let text = fixture.debugElement.query(By.css(query)).nativeElement
+      const text = fixture.debugElement.query(By.css(query)).nativeElement
         .textContent;
 
       expect(text).toBeTruthy();
@@ -171,7 +171,7 @@ describe('EduContentSearchResultComponent', () => {
       component.data.eduContent.publishedEduContentMetadata.description = description;
       fixture.detectChanges();
 
-      let text = fixture.debugElement.query(By.css(query)).nativeElement
+      const text = fixture.debugElement.query(By.css(query)).nativeElement
         .textContent;
 
       expect(text).toBeTruthy();
@@ -202,7 +202,7 @@ describe('EduContentSearchResultComponent', () => {
       );
       fixture.detectChanges();
 
-      let iconClass = fixture.debugElement.query(By.css(query))
+      const iconClass = fixture.debugElement.query(By.css(query))
         .componentInstance.svgIcon;
 
       expect(iconClass).toBeTruthy();
@@ -223,7 +223,7 @@ describe('EduContentSearchResultComponent', () => {
       component.data.eduContent.publishedEduContentMetadata.eduContentProductType.pedagogic = true;
       fixture.detectChanges();
 
-      let iconClass = fixture.debugElement.query(By.css(query))
+      const iconClass = fixture.debugElement.query(By.css(query))
         .componentInstance.svgIcon;
 
       expect(iconClass).toBeTruthy();
