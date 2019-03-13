@@ -14,8 +14,8 @@
     >
       <div class="column__filter__value__button-content"
         ><div
-          (click)="onFilterSelectionChange(value, false)"
-          class="column__filter__value__label"
+          (click)="onFilterSelectionChange(value, !value.hasChild)"
+          class="column__filter__value__button-content__label"
           >{{ value.data[filterCriterion.displayProperty] }}</div
         >
         <div class="column__filter__value__button-content__icons"

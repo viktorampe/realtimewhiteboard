@@ -2,13 +2,10 @@
   &__value {
     display: flex;
     flex-direction: row;
-    // justify-content: space-between;
-    // flex-grow: 1;
     transition: padding 0.25s ease-in-out;
     &__button-content {
       display: flex;
       flex-direction: row;
-      justify-content: space-between;
       flex-wrap: nowrap;
       width: 100%;
       &__label {
@@ -22,7 +19,6 @@
       &__icons {
         display: flex;
         flex-direction: row;
-        justify-content: left;
         &__magnifier,
         &__arrow {
           justify-self: flex-end;
