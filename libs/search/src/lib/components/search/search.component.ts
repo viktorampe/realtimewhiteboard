@@ -112,7 +112,7 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public onFilterSelectionChange(
-    criteria: SearchFilterCriteriaInterface
+    criteria: SearchFilterCriteriaInterface | SearchFilterCriteriaInterface[]
   ): void {
     this.searchViewmodel.changeFilters(criteria);
   }
@@ -187,7 +187,11 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
     // subscribe to outputs
     this.portalsMap[filter.domHost].subscriptions.add(
       filterItem.filterSelectionChange.subscribe(
-        (criteria: SearchFilterCriteriaInterface): void => {
+        (
+          criteria:
+            | SearchFilterCriteriaInterface
+            | SearchFilterCriteriaInterface[]
+        ): void => {
           this.onFilterSelectionChange(criteria);
         }
       )
