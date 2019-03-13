@@ -25,12 +25,7 @@ export class EduContentService implements EduContentServiceInterface {
 
   search(state: SearchStateInterface): Observable<SearchResultInterface> {
     return this.eduContentApi
-      .search(
-        state.searchTerm,
-        state.filterCriteriaSelections,
-        state.from || undefined,
-        state.sort || undefined
-      )
+      .search(state)
       .pipe(map((res: { results: SearchResultInterface }) => res.results));
   }
   autoComplete(state: SearchStateInterface): Observable<String[]> {
