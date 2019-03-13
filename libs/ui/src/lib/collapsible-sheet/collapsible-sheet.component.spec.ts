@@ -11,6 +11,8 @@ describe('CollapsibleSheetComponent', () => {
     TestBed.configureTestingModule({
       imports: [MatIconModule, NoopAnimationsModule],
       declarations: [CollapsibleSheetComponent]
+      // Not usable in this test suite -> actual MatIcon is needed, MockMatIconRegistry returns null
+      // providers: [{ provide: MatIconRegistry, useValue: MockMatIconRegistry }]
     }).compileComponents();
   }));
 
