@@ -295,7 +295,7 @@ export class SearchViewModel {
     criteria: SearchFilterCriteriaInterface | SearchFilterCriteriaInterface[],
     filterCriteriaSelections = new Map()
   ): Map<string, (number | string)[]> {
-    if (Array.isArray(criteria))
+    if (Array.isArray(criteria)) {
       return criteria.reduce(
         (
           acc: Map<string, (number | string)[]>,
@@ -306,7 +306,7 @@ export class SearchViewModel {
         },
         filterCriteriaSelections
       );
-    else
+    } else {
       return criteria.values.reduce(
         (
           acc: Map<string, (number | string)[]>,
@@ -327,5 +327,6 @@ export class SearchViewModel {
         },
         filterCriteriaSelections
       );
+    }
   }
 }
