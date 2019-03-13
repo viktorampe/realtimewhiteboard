@@ -15,6 +15,7 @@ import {
 } from '@campus/dal';
 import { AlertQueueApi, PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Action, select, Store } from '@ngrx/store';
+import { FavoriteService } from 'libs/dal/src/lib/favorite/favorite.service';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 // tslint:disable-next-line:nx-enforce-module-boundaries
@@ -47,6 +48,7 @@ export class LoginpageComponent implements OnInit {
     public loginPageviewModel: LoginPageViewModel,
     private personApi: PersonApi,
     private alertApi: AlertQueueApi,
+    private favoriteService: FavoriteService,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     private store: Store<AlertReducer.State>,
     private router: Router
@@ -130,5 +132,9 @@ export class LoginpageComponent implements OnInit {
         }
       })
     );
+  }
+
+  getFavorites(userId: number) {
+    this.response = this.favoriteService.getAllForUser(userId);
   }
 }
