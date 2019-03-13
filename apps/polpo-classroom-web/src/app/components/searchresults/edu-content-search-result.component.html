@@ -18,17 +18,17 @@
                 .icon
             "
           ></mat-icon>
-          <span> {{ data.eduContent.publishedEduContentMetadata.title }} </span>
+          <span>{{ data.eduContent.publishedEduContentMetadata.title }}</span>
         </div>
         <div class="app-educontentsearchresult__top__details__header__icons">
           <mat-icon
             matTooltip="Al toegevoegd aan de taak"
-            *ngIf="data.inTask"
+            *ngIf="data.currentTask && data.inTask"
             svgIcon="check-on"
           ></mat-icon>
           <mat-icon
             matTooltip="Al toegevoegd aan de bundel"
-            *ngIf="data.inBundle"
+            *ngIf="data.currentBundle && data.inBundle"
             svgIcon="check-on"
           ></mat-icon>
           <mat-icon
@@ -49,9 +49,9 @@
           ></mat-icon>
         </div>
       </header>
-      <p class="app-educontentsearchresult__top__details__content">
-        {{ data.eduContent.publishedEduContentMetadata.description }}
-      </p>
+      <p class="app-educontentsearchresult__top__details__content">{{
+        data.eduContent.publishedEduContentMetadata.description
+      }}</p>
       <div class="app-educontentsearchresult__top__details__methods">
         <span
           *ngFor="
