@@ -85,11 +85,12 @@ export class LoginpageComponent implements OnInit {
   }
 
   getLearningPlanAssignments() {
+    console.log(this.response);
     this.response = this.learningPlanService.getLearningPlanAssignments(
       3,
       6,
       4,
       19
-    );
+    ); // this returns {} -> JSON.stringify on Map
   }
 }

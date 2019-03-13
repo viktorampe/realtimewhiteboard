@@ -4,7 +4,10 @@ import {
   LearningPlanApi
 } from '@diekeure/polpo-api-angular-sdk';
 import { Observable } from 'rxjs';
-import { YearInterface } from '../+models';
+import { map } from 'rxjs/operators';
+import { LearningPlanInterface, YearInterface } from '../+models';
+import { LearningPlanAssignmentInterface } from './../+models/LearningPlanAssignment.interface';
+import { SpecialtyInterface } from './../+models/Specialty.interface';
 import { LearningPlanServiceInterface } from './learning-plan.service.interface';
 
 @Injectable({
@@ -27,22 +30,47 @@ export class LearningPlanService implements LearningPlanServiceInterface {
       schooltypeId
     );
   }
-  // this can use the same end-point as we do now
 
   getLearningPlanAssignments(
     eduNetId,
     yearId,
     schoolTypeId,
     learningAreaId
-  ): Observable<any> {
-    return this.learningPlanApi.find({
-      where: { learningAreaId, eduNetId },
-      include: {
-        relation: 'assignments',
-        scope: { include: ['specialty'], where: { schoolTypeId, yearId } }
-      }
-    });
+  ): Observable<Map<SpecialtyInterface, LearningPlanAssignmentInterface[]>> {
+    return this.learningPlanApi
+      .find({
+        where: { learningAreaId, eduNetId },
+        include: {
+          relation: 'assignments',
+          scope: { include: ['specialty'], where: { schoolTypeId, yearId } }
+        }
+      })
+      .pipe(map(this.toSpecialitiesMap));
   }
-  // currently calls api/learning-plan/ with this filter: {"where":{"learningAreaId":9,"eduNetId":1},"include":{"relation":"assignments","scope":{"include":["specialty"],"where":{"schoolTypeId":2,"yearId":5}}}}
-  // should return a nested object with specialty -> learningPlanAssignment structure
+
+  private toSpecialitiesMap(
+    learningPlans: LearningPlanInterface[]
+  ): Map<SpecialtyInterface, LearningPlanAssignmentInterface[]> {
+    const learningPlanAssignments = learningPlans.reduce(
+      (acc, plan) => {
+        plan.assignments.forEach(assignment => {
+          assignment.learningPlan = plan;
+          assignment.learningPlanId = plan.id;
+          acc.push(assignment);
+        });
+        return acc;
+      },
+      [] as LearningPlanAssignmentInterface[]
+    );
+
+    const specialitiesMap = learningPlanAssignments.reduce(
+      (sMap, assignment) => {
+        const prevValues = sMap.get(assignment.specialty) || [];
+        return sMap.set(assignment.specialty, [...prevValues, assignment]);
+      },
+      new Map()
+    );
+
+    return specialitiesMap;
+  }
 }
