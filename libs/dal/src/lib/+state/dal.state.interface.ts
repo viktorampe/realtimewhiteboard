@@ -22,9 +22,9 @@ import {
   UnlockedBoekeStudentReducer,
   UnlockedContentReducer,
   UserContentReducer,
-  UserReducer
+  UserReducer,
+  YearReducer
 } from '../..';
-import { YearReducer } from './year';
 
 export interface DalState {
   ui: UiReducer.UiState;
