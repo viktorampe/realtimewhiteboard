@@ -1,3 +1,5 @@
+// tslint:disable:nx-enforce-module-boundaries
+// tslint:disable:member-ordering
 import { Component, Inject, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import {
@@ -10,16 +12,19 @@ import {
   EffectFeedbackActions,
   EffectFeedbackInterface,
   EffectFeedbackQueries,
+  FavoriteFixture,
   Priority,
   UserActions
 } from '@campus/dal';
 import { AlertQueueApi, PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Action, select, Store } from '@ngrx/store';
-import { FavoriteService } from 'libs/dal/src/lib/favorite/favorite.service';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-// tslint:disable-next-line:nx-enforce-module-boundaries
 import { AddEffectFeedback } from './../../../../dal/src/lib/+state/effect-feedback/effect-feedback.actions';
+import {
+  FavoriteServiceInterface,
+  FAVORITE_SERVICE_TOKEN
+} from './../../../../dal/src/lib/favorite/favorite.service.interface';
 import { LoginPageViewModel } from './loginpage.viewmodel';
 
 @Component({
@@ -48,7 +53,8 @@ export class LoginpageComponent implements OnInit {
     public loginPageviewModel: LoginPageViewModel,
     private personApi: PersonApi,
     private alertApi: AlertQueueApi,
-    private favoriteService: FavoriteService,
+    @Inject(FAVORITE_SERVICE_TOKEN)
+    private favoriteService: FavoriteServiceInterface,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     private store: Store<AlertReducer.State>,
     private router: Router
@@ -111,7 +117,6 @@ export class LoginpageComponent implements OnInit {
     this.store.dispatch(action);
   }
 
-  // tslint:disable-next-line:member-ordering
   private count = 0;
 
   dispatchFeedback(message: string, isError: boolean = true) {
@@ -136,5 +141,16 @@ export class LoginpageComponent implements OnInit {
 
   getFavorites(userId: number) {
     this.response = this.favoriteService.getAllForUser(userId);
+  }
+
+  addFavorite(userId: number) {
+    this.response = this.favoriteService.addFavorite(
+      userId,
+      new FavoriteFixture({ id: null, personId: userId, learningAreaId: 2 })
+    );
+  }
+
+  removeFavorite(userId: number, favoriteId: number) {
+    this.favoriteService.removeFavorite(userId, favoriteId);
   }
 }

@@ -59,5 +59,7 @@
      routerLinkActive="router-link-active">go to finding-nemo page</a></div>
 <div>
   <button (click)="getFavorites(186)">get favorites</button>
+  <button (click)="addFavorite(186)">add favorite</button>
+  <button (click)="removeFavorite(186,4)">remove favorite</button>
   <div>{{ response | async | json }}</div>
 </div>
