@@ -12,3 +12,12 @@ export interface FavoriteServiceInterface {
   ): Observable<FavoriteInterface>;
   removeFavorite(userId: number, favoriteId: number);
 }
+
+export enum FavoriteTypeEnum {
+  'AREA' = 'area',
+  'SEARCH' = 'search',
+  'EDUCONTENT' = 'educontent',
+  'BUNDLE' = 'bundle',
+  'TASK' = 'task',
+  'BOEK-E' = 'boek-e'
+}
