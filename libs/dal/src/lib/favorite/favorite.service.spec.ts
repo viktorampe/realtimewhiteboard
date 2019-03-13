@@ -24,9 +24,9 @@ describe('FavoriteService', () => {
         {
           provide: PersonApi,
           useValue: {
-            getFavorites: () => of([]),
-            createFavorites: () => of({}),
-            destroyByIdFavorites: () => of({})
+            getFavorites: () => {},
+            createFavorites: () => {},
+            destroyByIdFavorites: () => {}
           }
         }
       ]
@@ -48,27 +48,18 @@ describe('FavoriteService', () => {
 
       const response = favoriteService.getAllForUser(mockUserId);
 
-      expect(personApi.getFavorites).toHaveBeenCalled();
-      expect(personApi.getFavorites).toHaveBeenCalledTimes(1);
-      expect(personApi.getFavorites).toHaveBeenCalledWith(mockUserId);
-
       expect(response).toBeObservable(cold('(a|)', { a: mockReturnValue }));
     });
   });
 
   describe('addFavorite', () => {
     it('should call the api and return the created favorite', () => {
-      mockFavorite.id = null;
       personApi.createFavorites = jest.fn().mockReturnValue(of(mockFavorite));
 
-      const response = favoriteService.addFavorite(mockUserId, mockFavorite);
-
-      expect(personApi.createFavorites).toHaveBeenCalled();
-      expect(personApi.createFavorites).toHaveBeenCalledTimes(1);
-      expect(personApi.createFavorites).toHaveBeenCalledWith(
-        mockUserId,
-        mockFavorite
-      );
+      const response = favoriteService.addFavorite(mockUserId, {
+        ...mockFavorite,
+        id: null // we don't know the id yet
+      });
 
       expect(response).toBeObservable(cold('(a|)', { a: mockFavorite }));
     });
@@ -83,8 +74,6 @@ describe('FavoriteService', () => {
         mockFavorite.id
       );
 
-      expect(personApi.destroyByIdFavorites).toHaveBeenCalled();
-      expect(personApi.destroyByIdFavorites).toHaveBeenCalledTimes(1);
       expect(personApi.destroyByIdFavorites).toHaveBeenCalledWith(
         mockUserId,
         mockFavorite.id
