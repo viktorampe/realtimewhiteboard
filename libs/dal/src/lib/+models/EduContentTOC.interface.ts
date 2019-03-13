@@ -9,4 +9,5 @@ export interface EduContentTOCInterface {
   id?: number;
   eduContentBook?: EduContentBookInterface;
   eduContentMetadata?: EduContentMetadataInterface[];
+  children?: EduContentTOCInterface[];
 }
