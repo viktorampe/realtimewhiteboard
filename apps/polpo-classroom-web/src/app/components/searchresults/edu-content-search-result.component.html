@@ -87,6 +87,59 @@
     *ngIf="isSelected"
     class="app-educontentsearchresult__bottom"
   >
+    <div class="app-educontentsearchresult__bottom__contents">
+      <div class="app-educontentsearchresult__bottom__contents__producttype">
+        <mat-icon
+          [svgIcon]="
+            data.eduContent.publishedEduContentMetadata.eduContentProductType
+              .icon
+          "
+        ></mat-icon>
+        =
+        {{
+          data.eduContent.publishedEduContentMetadata.eduContentProductType.name
+        }}
+      </div>
+      <div
+        *ngIf="
+          data.eduContent.publishedEduContentMetadata.eduContentTOC &&
+          data.eduContent.publishedEduContentMetadata.eduContentTOC.length
+        "
+        class="app-educontentsearchresult__bottom__contents__tocheader"
+      >
+        <mat-icon svgIcon="book"></mat-icon> = Dit is materiaal dat je kan
+        gebruiken bij:
+      </div>
+      <div
+        *ngIf="
+          data.eduContent.publishedEduContentMetadata.eduContentTOC &&
+          data.eduContent.publishedEduContentMetadata.eduContentTOC.length
+        "
+        class="app-educontentsearchresult__bottom__contents__toc"
+      >
+        <div *ngFor="let book of getNormalizedEduContentToc()">
+          <span>{{ book.title }}</span>
+          <ul>
+            <li
+              *ngFor="let toc of book.tocs"
+              [class]="'toc-depth-' + toc.depth"
+            >
+              {{ toc.title }}
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div
+        *ngIf="
+          data.eduContent.publishedEduContentMetadata.eduContentProductType
+            .pedagogic
+        "
+        class="app-educontentsearchresult__bottom__contents__pedagogic"
+      >
+        <mat-icon svgIcon="student"></mat-icon> = Dit is pedagogisch materiaal:
+        dit is niet voor leerlingen bestemd
+      </div>
+    </div>
     <div class="app-educontentsearchresult__bottom__buttonbar">
       <campus-button iconClass="bundles" clickStopPropagation
         >Bekijken</campus-button

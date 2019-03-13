@@ -33,4 +33,17 @@ export class EduContentSearchResultComponent extends ResultItemBase
 
     console.log(this.data.eduContent);
   }
+
+  /**
+   * Returns an array containing objects with the title and tocs list of every book
+   */
+  getNormalizedEduContentToc() {
+    let root = this.data.eduContent.publishedEduContentMetadata.eduContentTOC;
+    return root.map(rootTOC => {
+      return {
+        title: rootTOC.eduContentBook.title,
+        tocs: [rootTOC].concat(rootTOC.eduContentBook.eduContentTOC)
+      };
+    });
+  }
 }

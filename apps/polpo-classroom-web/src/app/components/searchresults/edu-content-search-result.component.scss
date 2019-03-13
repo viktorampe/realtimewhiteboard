@@ -2,6 +2,12 @@
   width: 100%;
 }
 
+@for $i from 0 through 10 {
+  .toc-depth-#{$i} {
+    margin-left: $i * 12px;
+  }
+}
+
 .app-educontentsearchresult {
   display: flex;
   flex-direction: column;
@@ -63,6 +69,24 @@
     flex-direction: column;
     overflow: hidden;
     text-overflow: clip;
+
+    &__contents {
+      &__producttype,
+      &__tocheader,
+      &__pedagogic {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+      }
+
+      &__toc {
+        ul {
+          margin: 0;
+          padding-left: 28px;
+          list-style-type: square;
+        }
+      }
+    }
 
     &__buttonbar {
       display: flex;

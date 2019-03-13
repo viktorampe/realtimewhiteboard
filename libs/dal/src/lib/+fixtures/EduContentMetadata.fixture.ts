@@ -1,5 +1,7 @@
+import { EduContentBookInterface } from '@diekeure/polpo-api-angular-sdk';
 import { EduContentMetadataInterface } from '../+models/EduContentMetadata.interface';
 import { EduContentProductTypeFixture } from './EduContentProductType.fixture';
+import { EduContentTOCFixture } from './EduContentTOC.fixture';
 import { EduNetFixture } from './EduNet.fixture';
 import { LearningAreaFixture } from './LearningArea.fixture';
 import { MethodFixture } from './Method.fixture';
@@ -54,6 +56,37 @@ export class EduContentMetadataFixture implements EduContentMetadataInterface {
   schoolTypes = [
     new SchoolTypeFixture({ name: 'TSO' }),
     new SchoolTypeFixture({ name: 'BSO' })
+  ];
+  eduContentTOC = [
+    new EduContentTOCFixture({
+      title: "Unit 2 - I'm not an addict",
+      depth: 0,
+      eduContentBook: {
+        title: 'Shuffle 5',
+        eduContentTOC: [
+          new EduContentTOCFixture({
+            depth: 1,
+            title: 'Focus on'
+          }),
+          new EduContentTOCFixture({
+            depth: 2,
+            title: 'What are you hooked on?'
+          }),
+          new EduContentTOCFixture({
+            depth: 2,
+            title: 'Legalising drugs'
+          }),
+          new EduContentTOCFixture({
+            depth: 1,
+            title: 'The basics'
+          }),
+          new EduContentTOCFixture({
+            depth: 2,
+            title: 'Comparisons'
+          })
+        ]
+      } as EduContentBookInterface
+    })
   ];
 
   constructor(props: Partial<EduContentMetadataInterface> = {}) {

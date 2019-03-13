@@ -221,7 +221,14 @@ export class FindingNemoComponent implements AfterViewInit {
       count: 2,
       results: [
         {
-          eduContent: new EduContentFixture(),
+          eduContent: new EduContentFixture(
+            {},
+            {
+              title: 'Aanliggende hoeken',
+              description:
+                'In dit leerobject maken leerlingen 3 tikoefeningen op aanliggende hoeken.'
+            }
+          ),
           inTask: true
         },
         {
