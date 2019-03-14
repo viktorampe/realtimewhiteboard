@@ -51,15 +51,17 @@ export class MapObjectConversionService {
         };
   }
 
-  public objectToMap<
+  objectToMap<
     KeyType extends string | number,
+    ValueType,
     ForceNumberBooleanType extends boolean,
     ConvertSecondLevelBooleanType extends boolean,
-    SecondLevelForceNumberType extends boolean
+    SecondLevelForceNumberType extends boolean,
+    SecondLevelValueType
   >(
     obj: KeyType extends string
-      ? { [key: string]: any }
-      : { [key: number]: any },
+      ? { [key: string]: ValueType }
+      : { [key: number]: ValueType },
     forceToNumberType?: ForceNumberBooleanType,
     convertSecondLevel?: ConvertSecondLevelBooleanType,
     forceSecondLevel?: SecondLevelForceNumberType
@@ -67,17 +69,17 @@ export class MapObjectConversionService {
     ForceNumberBooleanType extends true ? number : string,
     ConvertSecondLevelBooleanType extends true
       ? SecondLevelForceNumberType extends true
-        ? Map<number, any>
-        : Map<string, any>
-      : any
+        ? Map<number, SecondLevelValueType>
+        : Map<string, SecondLevelValueType>
+      : ValueType
   > {
     const map = new Map<
       ForceNumberBooleanType extends true ? number : string,
       ConvertSecondLevelBooleanType extends true
         ? SecondLevelForceNumberType extends true
-          ? Map<number, any>
-          : Map<string, any>
-        : any
+          ? Map<number, SecondLevelValueType>
+          : Map<string, SecondLevelValueType>
+        : ValueType
     >();
     Object.keys(obj).forEach(key => {
       map.set(
