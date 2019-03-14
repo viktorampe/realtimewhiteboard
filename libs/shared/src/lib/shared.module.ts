@@ -12,7 +12,11 @@ import {
 import { DomSanitizer } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { UiModule } from '@campus/ui';
-import { FilterService, FILTER_SERVICE_TOKEN } from '@campus/utils';
+import {
+  FilterService,
+  FILTER_SERVICE_TOKEN,
+  MapObjectConvertionService
+} from '@campus/utils';
 import { HasPermissionDirective } from './auth/has-permission.directive';
 import { PermissionService } from './auth/permission.service';
 import { PERMISSION_SERVICE_TOKEN } from './auth/permission.service.interface';
@@ -86,6 +90,7 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     AlertToNotificationItemPipe
   ],
   providers: [
+    MapObjectConvertionService,
     { provide: FILTER_SERVICE_TOKEN, useClass: FilterService },
     { provide: SCORM_EXERCISE_SERVICE_TOKEN, useClass: ScormExerciseService },
     { provide: PERMISSION_SERVICE_TOKEN, useClass: PermissionService },
