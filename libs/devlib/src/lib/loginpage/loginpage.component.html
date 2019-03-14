@@ -54,11 +54,7 @@
 <button (click)="getCurrentUser()">fetch current user</button>
 <div>{{ currentUser | async | json }}</div>
 
-<div
-  ><button (click)="updateStudentContentStatus()"
-    >update student content status</button
-  ></div
->
+<br /><br />
 
 <div
   ><a [routerLink]="['/bundles']" routerLinkActive="router-link-active"
@@ -71,72 +67,18 @@
   ></div
 >
 
-<ng-container *ngIf="(effectFeedback$ | async) as feedback">
-  <p>Feedback:{{ feedback.message }} </p>
-  <ng-container *ngFor="let action of feedback.userActions">
-    <button (click)="dispatchAction(action.userAction)">{{
-      action.title
-    }}</button>
-  </ng-container>
-  <p
-    ><button (click)="removeFeedback(feedback.id)"
-      >Feedback verwijderen</button
-    ></p
-  >
-</ng-container>
+<div
+  ><a [routerLink]="['./finding-nemo']" routerLinkActive="router-link-active"
+    >go to finding-nemo page</a
+  ></div
+>
 
-<div *ngIf="(alert$ | async) as alert">
-  <p
-    ><button (click)="setAlertAsRead(alert.id, true)"
-      >Markeer melding met id {{ alert.id }} als gelezen EN toon feedback
-    </button></p
-  >
-  <p
-    ><button (click)="setAlertAsRead(alert.id, false)"
-      >Markeer melding met id {{ alert.id }} als gelezen EN toon geen feedback
-    </button></p
-  >
-  <p
-    ><button (click)="setAlertAsUnread(alert.id, true)"
-      >Markeer melding met id {{ alert.id }} als ongelezen EN toon
-      feedback</button
-    ></p
-  >
+<br />
+<br />
 
-  <p
-    ><button (click)="setAlertAsUnread(alert.id, false)"
-      >Markeer melding met id {{ alert.id }} als ongelezen EN toon geen
-      feedback</button
-    ></p
-  >
+<div>
+  <button (click)="getFavorites(186)">get favorites</button>
+  <button (click)="addFavorite(186)">add favorite</button>
+  <button (click)="removeFavorite(186, 4)">remove favorite</button>
+  <div>{{ response | async | json }}</div>
 </div>
-<br />
-<div
-  ><button (click)="dispatchFeedback('123')">Feedback: 123 Error</button></div
->
-<div
-  ><button (click)="dispatchFeedback('456')">Feedback: 456 Error</button></div
->
-<br />
-<div
-  ><button (click)="dispatchFeedback('123', false)"
-    >Feedback: 123 Success</button
-  ></div
->
-<div
-  ><button (click)="dispatchFeedback('456', false)"
-    >Feedback: 456 Success</button
-  ></div
->
-<br />
-<a [campusRouterLink]="'/home'">INTERNAL LINK</a><br />
-<a [campusRouterLink]="'http://melvin-kellner.com'">EXTERNAL LINK</a><br />
-<a [campusRouterLink]="'https://imgur.com/gallery/jlGc4'">EXTERNAL LINK</a
-><br />
-<a [campusRouterLink]="'http://google.com'">EXTERNAL LINK</a><br />
-<a
-  [campusRouterLink]="
-    'https://www.google.com/search?q=recursion&spell=1&sa=X&ved=0ahUKEwjQ8NOh0ZLgAhUNmbQKHbKVC7IQBQgrKAA&biw=983&bih=743'
-  "
-  >EXTERNAL LINK</a
->

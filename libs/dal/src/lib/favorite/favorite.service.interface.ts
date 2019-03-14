@@ -6,6 +6,9 @@ export const FAVORITE_SERVICE_TOKEN = new InjectionToken('FavoriteService');
 
 export interface FavoriteServiceInterface {
   getAllForUser(userId: number): Observable<FavoriteInterface[]>;
-  addFavorite(favorite: FavoriteInterface): Observable<FavoriteInterface>;
-  deleteFavorite(favoriteId: number): Observable<boolean>;
+  addFavorite(
+    userId: number,
+    favorite: FavoriteInterface
+  ): Observable<FavoriteInterface>;
+  deleteFavorite(userId: number, favoriteId: number);
 }
