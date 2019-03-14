@@ -19,8 +19,8 @@ export class TocService implements TocServiceInterface {
     methodIds: number[]
   ): Observable<EduContentBookInterface[]> {
     return this.eduContentBookApi.find({
-      where: { methodId: { inq: methodIds }, years: yearId },
-      include: 'years'
+      where: { methodId: { inq: methodIds } },
+      include: [{ relation: 'years', scope: { where: { id: yearId } } }]
     });
   }
 

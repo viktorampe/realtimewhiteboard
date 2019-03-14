@@ -51,8 +51,8 @@ describe('TocService', () => {
 
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith({
-        where: { methodId: { inq: [2, 3] }, years: 1 },
-        include: 'years'
+        where: { methodId: { inq: [2, 3] } },
+        include: [{ relation: 'years', scope: { where: { id: 1 } } }]
       });
       expect(response).toBeObservable(
         hot('-a|', { a: { results: { foo: 'bar' } } })
