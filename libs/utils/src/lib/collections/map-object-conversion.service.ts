@@ -2,78 +2,89 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class MapObjectConversionService {
-  public mapToObject<T extends string | number, U, I>(
-    map: Map<T, U>
-  ): T extends string
+  public mapToObject<
+    KeyType extends string | number,
+    ValueType,
+    SecondLevelType
+  >(
+    map: Map<KeyType, ValueType>
+  ): KeyType extends string
     ? {
-        [key: string]: U extends Map<string, I>
-          ? { [key: string]: I }
-          : U extends Map<number, I>
-          ? { [key: number]: I }
-          : U;
+        [key: string]: ValueType extends Map<string, SecondLevelType>
+          ? { [key: string]: SecondLevelType }
+          : ValueType extends Map<number, SecondLevelType>
+          ? { [key: number]: SecondLevelType }
+          : ValueType;
       }
     : {
-        [key: number]: U extends Map<string, I>
-          ? { [key: string]: I }
-          : U extends Map<number, I>
-          ? { [key: number]: I }
-          : U;
+        [key: number]: ValueType extends Map<string, SecondLevelType>
+          ? { [key: string]: SecondLevelType }
+          : ValueType extends Map<number, SecondLevelType>
+          ? { [key: number]: SecondLevelType }
+          : ValueType;
       } {
     return Array.from(map).reduce(
       (
-        obj: T extends string ? { [key: string]: U } : { [key: number]: U },
-        [key, value]: [string | number, U]
+        obj: KeyType extends string
+          ? { [key: string]: ValueType }
+          : { [key: number]: ValueType },
+        [key, value]: [string | number, ValueType]
       ) => {
         obj[key] = value instanceof Map ? this.mapToObject(value) : value;
         return obj;
       },
       {}
-    ) as T extends string
+    ) as KeyType extends string
       ? {
-          [key: string]: U extends Map<string, I>
-            ? { [key: string]: I }
-            : U extends Map<number, I>
-            ? { [key: number]: I }
-            : U;
+          [key: string]: ValueType extends Map<string, SecondLevelType>
+            ? { [key: string]: SecondLevelType }
+            : ValueType extends Map<number, SecondLevelType>
+            ? { [key: number]: SecondLevelType }
+            : ValueType;
         }
       : {
-          [key: number]: U extends Map<string, I>
-            ? { [key: string]: I }
-            : U extends Map<number, I>
-            ? { [key: number]: I }
-            : U;
+          [key: number]: ValueType extends Map<string, SecondLevelType>
+            ? { [key: string]: SecondLevelType }
+            : ValueType extends Map<number, SecondLevelType>
+            ? { [key: number]: SecondLevelType }
+            : ValueType;
         };
   }
 
   public objectToMap<
-    T extends string | number,
-    U extends boolean,
-    I extends boolean,
-    O extends boolean
+    KeyType extends string | number,
+    ForceNumberBooleanType extends boolean,
+    ConvertSecondLevelBooleanType extends boolean,
+    SecondLevelForceNumberType extends boolean
   >(
-    obj: T extends string ? { [key: string]: any } : { [key: number]: any },
-    force?: U,
-    convertSecondLevel?: I,
-    forceSecondLevel?: O
+    obj: KeyType extends string
+      ? { [key: string]: any }
+      : { [key: number]: any },
+    forceToNumberType?: ForceNumberBooleanType,
+    convertSecondLevel?: ConvertSecondLevelBooleanType,
+    forceSecondLevel?: SecondLevelForceNumberType
   ): Map<
-    U extends true ? number : string,
-    I extends true
-      ? O extends true
+    ForceNumberBooleanType extends true ? number : string,
+    ConvertSecondLevelBooleanType extends true
+      ? SecondLevelForceNumberType extends true
         ? Map<number, any>
         : Map<string, any>
       : any
   > {
     const map = new Map<
-      U extends true ? number : string,
-      I extends true
-        ? O extends true
+      ForceNumberBooleanType extends true ? number : string,
+      ConvertSecondLevelBooleanType extends true
+        ? SecondLevelForceNumberType extends true
           ? Map<number, any>
           : Map<string, any>
         : any
     >();
     Object.keys(obj).forEach(key => {
       map.set(
-        this.stringNumberConverter<typeof force>(key, force),
+        this.stringNumberConverter<typeof forceToNumberType>(
+          key,
+          forceToNumberType
+        ),
         convertSecondLevel
           ? this.objectToMap(obj[key], forceSecondLevel)
           : obj[key]
@@ -82,12 +93,12 @@ export class MapObjectConversionService {
     return map;
   }
 
-  private stringNumberConverter<T>(
+  private stringNumberConverter<ToNumberBooleanType extends boolean>(
     value: string,
-    toNumber: T
-  ): T extends true ? number : string {
-    return (toNumber ? parseInt(value, 10) : value) as T extends true
-      ? number
-      : string;
+    toNumber: ToNumberBooleanType
+  ): ToNumberBooleanType extends true ? number : string {
+    return (toNumber
+      ? parseInt(value, 10)
+      : value) as ToNumberBooleanType extends true ? number : string;
   }
 }
