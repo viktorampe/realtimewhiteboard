@@ -215,7 +215,10 @@ describe('FavoriteEffects', () => {
       favorite
     });
     const addFavoriteAction = new AddFavorite({ favorite });
-    const deleteFavoriteAction = new DeleteFavorite({ id: favorite.id });
+    const deleteFavoriteAction = new DeleteFavorite({
+      userId: 1,
+      id: favorite.id
+    });
     describe('when the item is already marked as favorite', () => {
       beforeAll(() => {
         usedState = {
@@ -261,7 +264,10 @@ describe('FavoriteEffects', () => {
       created: new Date()
     };
 
-    const startAddFavoriteAction = new StartAddFavorite({ favorite });
+    const startAddFavoriteAction = new StartAddFavorite({
+      userId: 1,
+      favorite
+    });
     const addFavoriteAction = new AddFavorite({ favorite });
 
     describe('when succesful', () => {
@@ -316,7 +322,7 @@ describe('FavoriteEffects', () => {
   });
 
   describe('deleteFavorite$', () => {
-    const deleteFavoriteAction = new DeleteFavorite({ id: 113 });
+    const deleteFavoriteAction = new DeleteFavorite({ userId: 1, id: 113 });
 
     describe('when successful', () => {
       beforeEach(() => {
