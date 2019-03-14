@@ -44,7 +44,7 @@ describe('TocService', () => {
     it('should get books by year and number', () => {
       mockData$ = hot('-a|', {
         a: [
-          { years: [{ years: [{ name: '6', id: 6 }] }] },
+          { years: [{ name: '6', id: 6 }] },
           { years: [{ name: '5', id: 5 }] }
         ]
       });
@@ -60,7 +60,7 @@ describe('TocService', () => {
       expect(response).toBeObservable(
         hot('-a|', {
           a: [
-            { years: [{ years: [{ name: '6', id: 6 }] }] },
+            { years: [{ name: '6', id: 6 }] },
             { years: [{ name: '5', id: 5 }] }
           ]
         })
