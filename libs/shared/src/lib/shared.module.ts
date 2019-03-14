@@ -15,7 +15,7 @@ import { UiModule } from '@campus/ui';
 import {
   FilterService,
   FILTER_SERVICE_TOKEN,
-  MapObjectConvertionService
+  MapObjectConversionService
 } from '@campus/utils';
 import { HasPermissionDirective } from './auth/has-permission.directive';
 import { PermissionService } from './auth/permission.service';
@@ -90,7 +90,7 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     AlertToNotificationItemPipe
   ],
   providers: [
-    MapObjectConvertionService,
+    MapObjectConversionService,
     { provide: FILTER_SERVICE_TOKEN, useClass: FilterService },
     { provide: SCORM_EXERCISE_SERVICE_TOKEN, useClass: ScormExerciseService },
     { provide: PERMISSION_SERVICE_TOKEN, useClass: PermissionService },

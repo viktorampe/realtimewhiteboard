@@ -1,19 +1,19 @@
 import { TestBed } from '@angular/core/testing';
-import { MapObjectConvertionService } from './map-object-convertion.service';
+import { MapObjectConversionService } from './map-object-conversion.service';
 
 describe('FilterService', () => {
-  let mapObjectConvertionService: MapObjectConvertionService;
+  let mapObjectConversionService: MapObjectConversionService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [MapObjectConvertionService]
+      providers: [MapObjectConversionService]
     });
 
-    mapObjectConvertionService = TestBed.get(MapObjectConvertionService);
+    mapObjectConversionService = TestBed.get(MapObjectConversionService);
   });
 
   it('should be created', () => {
-    expect(mapObjectConvertionService).toBeTruthy();
+    expect(mapObjectConversionService).toBeTruthy();
   });
   describe('mapToObject', () => {
     it('should return an object if the map type is string', () => {
@@ -22,7 +22,7 @@ describe('FilterService', () => {
         ['two', 838],
         ['three', 847]
       ]);
-      expect(mapObjectConvertionService.mapToObject(map)).toEqual({
+      expect(mapObjectConversionService.mapToObject(map)).toEqual({
         one: 23,
         two: 838,
         three: 847
@@ -30,7 +30,7 @@ describe('FilterService', () => {
     });
     it('should return an object if the map type is number', () => {
       const map = new Map<number, number>([[1, 23], [2, 838], [3, 847]]);
-      const obj = mapObjectConvertionService.mapToObject(map);
+      const obj = mapObjectConversionService.mapToObject(map);
       expect(obj).toEqual({
         1: 23,
         2: 838,
@@ -52,7 +52,7 @@ describe('FilterService', () => {
           ])
         ]
       ]);
-      expect(mapObjectConvertionService.mapToObject(map)).toEqual({
+      expect(mapObjectConversionService.mapToObject(map)).toEqual({
         one: {
           some: 'value for some',
           foo: 'value for foo'
@@ -69,7 +69,7 @@ describe('FilterService', () => {
         two: 838,
         three: 847
       };
-      expect(mapObjectConvertionService.objectToMap(obj)).toEqual(
+      expect(mapObjectConversionService.objectToMap(obj)).toEqual(
         new Map<string, number>([['one', 23], ['two', 838], ['three', 847]])
       );
     });
@@ -79,7 +79,7 @@ describe('FilterService', () => {
         2: 838,
         3: 847
       };
-      expect(mapObjectConvertionService.objectToMap(obj, true)).toEqual(
+      expect(mapObjectConversionService.objectToMap(obj, true)).toEqual(
         new Map<number, number>([[1, 23], [2, 838], [3, 847]])
       );
     });
@@ -89,7 +89,7 @@ describe('FilterService', () => {
         2: 838,
         3: 847
       };
-      expect(mapObjectConvertionService.objectToMap(obj, false)).toEqual(
+      expect(mapObjectConversionService.objectToMap(obj, false)).toEqual(
         new Map<string, number>([['1', 23], ['2', 838], ['3', 847]])
       );
     });
@@ -100,7 +100,7 @@ describe('FilterService', () => {
         3: { three: 847 }
       };
       expect(
-        mapObjectConvertionService.objectToMap(obj, true, true, false)
+        mapObjectConversionService.objectToMap(obj, true, true, false)
       ).toEqual(
         new Map<number, Map<string, number>>([
           [1, new Map<string, number>([['one', 23]])],
