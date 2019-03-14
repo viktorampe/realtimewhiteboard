@@ -23,7 +23,8 @@ export class TocService implements TocServiceInterface {
     const selections = new Map<string, (number | string)[]>();
     selections.set('year', methodIds);
     selections.set('method', [yearId]);
-
+    // map still needs to be converted to object
+    // see ticket #788
     const state: SearchStateInterface = {
       searchTerm: '',
       filterCriteriaSelections: selections
@@ -33,6 +34,7 @@ export class TocService implements TocServiceInterface {
       .search(state)
       .pipe(map((res: { results: SearchResultInterface }) => res.results));
   }
+
   getTree(bookId: number): Observable<EduContentTOCInterface[]> {
     return this.tocApi.tree(bookId);
   }
