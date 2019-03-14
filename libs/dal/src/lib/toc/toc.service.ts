@@ -4,6 +4,7 @@ import {
   EduContentTOCApi
 } from '@diekeure/polpo-api-angular-sdk';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { EduContentBookInterface, EduContentTOCInterface } from '../+models';
 import { TocServiceInterface } from './toc.service.interface';
 
@@ -18,10 +19,16 @@ export class TocService implements TocServiceInterface {
     yearId: number,
     methodIds: number[]
   ): Observable<EduContentBookInterface[]> {
-    return this.eduContentBookApi.find({
-      where: { methodId: { inq: methodIds } },
-      include: [{ relation: 'years', scope: { where: { id: yearId } } }]
-    });
+    return this.eduContentBookApi
+      .find({
+        where: { methodId: { inq: methodIds } },
+        include: [{ relation: 'years', scope: { where: { id: yearId } } }]
+      })
+      .pipe(
+        map((books: EduContentBookInterface[]) =>
+          books.filter(book => book.years.length)
+        )
+      );
   }
 
   getTree(bookId: number): Observable<EduContentTOCInterface[]> {
