@@ -10,7 +10,7 @@ import { TocServiceInterface } from './toc.service.interface';
 @Injectable()
 export class TocService implements TocServiceInterface {
   constructor(
-    private tocApi: EduContentTOCApi,
+    private eduContentTOCApi: EduContentTOCApi,
     private eduContentBookApi: EduContentBookApi
   ) {}
 
@@ -25,6 +25,6 @@ export class TocService implements TocServiceInterface {
   }
 
   getTree(bookId: number): Observable<EduContentTOCInterface[]> {
-    return this.tocApi.tree(bookId);
+    return this.eduContentTOCApi.tree(bookId);
   }
 }
