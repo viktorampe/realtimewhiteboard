@@ -55,6 +55,7 @@ export class LearningPlanService implements LearningPlanServiceInterface {
       (acc, plan) => {
         plan.assignments.forEach(assignment => {
           assignment.learningPlan = plan;
+          assignment.learningPlan.assignments = null;
           assignment.learningPlanId = plan.id;
           acc.push(assignment);
         });
