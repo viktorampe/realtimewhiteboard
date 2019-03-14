@@ -36,7 +36,9 @@ export class FavoritesLoadError implements Action {
 export class StartAddFavorite implements Action {
   readonly type = FavoritesActionTypes.StartAddFavorite;
 
-  constructor(public payload: { favorite: FavoriteInterface }) {}
+  constructor(
+    public payload: { favorite: FavoriteInterface; userId: number }
+  ) {}
 }
 
 export class AddFavorite implements Action {
@@ -59,7 +61,7 @@ export class AddFavorites implements Action {
 export class DeleteFavorite implements Action {
   readonly type = FavoritesActionTypes.DeleteFavorite;
 
-  constructor(public payload: { id: number }) {}
+  constructor(public payload: { id: number; userId: number }) {}
 }
 
 export class DeleteFavorites implements Action {

@@ -49,7 +49,7 @@ export class FavoriteEffects {
     {
       run: (action: StartAddFavorite, state: DalState) => {
         return this.favoriteService
-          .addFavorite(action.payload.favorite)
+          .addFavorite(action.payload.userId, action.payload.favorite)
           .pipe(map(favorite => new AddFavorite({ favorite })));
       },
       onError: (action: StartAddFavorite, error) => {
@@ -73,21 +73,23 @@ export class FavoriteEffects {
     FavoritesActionTypes.DeleteFavorite,
     {
       run: (action: DeleteFavorite, state: DalState) => {
-        return this.favoriteService.deleteFavorite(action.payload.id).pipe(
-          map(() => {
-            const effectFeedback = new EffectFeedback({
-              id: this.uuid(),
-              triggerAction: action,
-              message: 'Het item is uit jouw favorieten verwijderd.',
-              type: 'success',
-              display: true,
-              priority: Priority.NORM
-            });
-            return new EffectFeedbackActions.AddEffectFeedback({
-              effectFeedback
-            });
-          })
-        );
+        return this.favoriteService
+          .deleteFavorite(action.payload.userId, action.payload.id)
+          .pipe(
+            map(() => {
+              const effectFeedback = new EffectFeedback({
+                id: this.uuid(),
+                triggerAction: action,
+                message: 'Het item is uit jouw favorieten verwijderd.',
+                type: 'success',
+                display: true,
+                priority: Priority.NORM
+              });
+              return new EffectFeedbackActions.AddEffectFeedback({
+                effectFeedback
+              });
+            })
+          );
       },
       undoAction: (action: DeleteFavorite, error) => {
         const undoAction = undo(action);
@@ -113,7 +115,9 @@ export class FavoriteEffects {
   toggleFavorite$ = this.dataPersistence.actions.pipe(
     ofType(FavoritesActionTypes.ToggleFavorite),
     switchMap(
-      (action: ToggleFavorite): Observable<AddFavorite | DeleteFavorite> => {
+      (
+        action: ToggleFavorite
+      ): Observable<StartAddFavorite | DeleteFavorite> => {
         // decide if we want to add or delete the provided item
         // dispatch the corresponding action
         return;
