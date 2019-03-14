@@ -68,7 +68,7 @@ describe('TocService', () => {
     });
     it('should filter out books without the provided year', () => {
       mockData$ = hot('-a|', {
-        a: [{ years: [{ years: ['bar'] }] }, { years: [] }]
+        a: [{ years: [{ name: '5', id: 5 }] }, { years: [] }]
       });
 
       const spy = jest.spyOn(eduContentBookApi, 'find');
@@ -80,7 +80,7 @@ describe('TocService', () => {
         include: [{ relation: 'years', scope: { where: { id: 1 } } }]
       });
       expect(response).toBeObservable(
-        hot('-a|', { a: [{ years: [{ years: ['bar'] }] }] })
+        hot('-a|', { a: [{ years: [{ name: '5', id: 5 }] }] })
       );
     });
   });
