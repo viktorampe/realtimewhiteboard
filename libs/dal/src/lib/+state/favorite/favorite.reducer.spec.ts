@@ -104,7 +104,8 @@ describe('Favorites Reducer', () => {
       const favorite = favorites[0];
       const startState = createState([favorite]);
       const action = new FavoriteActions.DeleteFavorite({
-        id: favorite.id
+        id: favorite.id,
+        userId: 1
       });
       const result = reducer(startState, action);
       expect(result).toEqual(createState([]));
