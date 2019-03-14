@@ -1,24 +1,26 @@
+// tslint:disable:nx-enforce-module-boundaries
+// tslint:disable:member-ordering
 import { Component, Inject, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import {
-  AlertActions,
   AlertQueries,
   AlertReducer,
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   EduContentInterface,
-  EffectFeedbackActions,
   EffectFeedbackInterface,
   EffectFeedbackQueries,
-  Priority,
+  FavoriteFixture,
   UserActions
 } from '@campus/dal';
-import { AlertQueueApi, PersonApi } from '@diekeure/polpo-api-angular-sdk';
-import { Action, select, Store } from '@ngrx/store';
+import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
+import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-// tslint:disable-next-line:nx-enforce-module-boundaries
-import { AddEffectFeedback } from './../../../../dal/src/lib/+state/effect-feedback/effect-feedback.actions';
+import {
+  FavoriteServiceInterface,
+  FAVORITE_SERVICE_TOKEN
+} from './../../../../dal/src/lib/favorite/favorite.service.interface';
 import { LoginPageViewModel } from './loginpage.viewmodel';
 
 @Component({
@@ -46,7 +48,8 @@ export class LoginpageComponent implements OnInit {
   constructor(
     public loginPageviewModel: LoginPageViewModel,
     private personApi: PersonApi,
-    private alertApi: AlertQueueApi,
+    @Inject(FAVORITE_SERVICE_TOKEN)
+    private favoriteService: FavoriteServiceInterface,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     private store: Store<AlertReducer.State>,
     private router: Router
@@ -67,68 +70,25 @@ export class LoginpageComponent implements OnInit {
 
   getCurrentUser() {
     this.currentUser = this.authService.getCurrent();
+    if (this.currentUser) this.loadCurrentUserinState();
   }
 
   loadCurrentUserinState() {
     this.store.dispatch(new UserActions.LoadUser({ force: true }));
   }
 
-  updateStudentContentStatus() {
-    this.loginPageviewModel.updateStudentContentStatus();
+  getFavorites(userId: number) {
+    this.response = this.favoriteService.getAllForUser(userId);
   }
 
-  setAlertAsRead(alertId: number, displayResponse: boolean) {
-    this.store.dispatch(
-      new AlertActions.SetReadAlert({
-        personId: this.authService.userId,
-        alertIds: alertId,
-        read: true,
-        displayResponse: displayResponse
-      })
+  addFavorite(userId: number) {
+    this.response = this.favoriteService.addFavorite(
+      userId,
+      new FavoriteFixture({ id: null, personId: userId, learningAreaId: 2 })
     );
   }
 
-  setAlertAsUnread(alertId: number, displayResponse: boolean) {
-    this.store.dispatch(
-      new AlertActions.SetReadAlert({
-        personId: this.authService.userId,
-        alertIds: alertId,
-        read: false,
-        displayResponse: displayResponse
-      })
-    );
-  }
-
-  removeFeedback(feedbackId: string) {
-    this.store.dispatch(
-      new EffectFeedbackActions.DeleteEffectFeedback({ id: feedbackId })
-    );
-  }
-
-  dispatchAction(action: Action) {
-    this.store.dispatch(action);
-  }
-
-  // tslint:disable-next-line:member-ordering
-  private count = 0;
-
-  dispatchFeedback(message: string, isError: boolean = true) {
-    this.count++;
-    this.store.dispatch(
-      new AddEffectFeedback({
-        effectFeedback: {
-          id: this.count.toString(),
-          triggerAction: null,
-          message,
-          type: isError ? 'error' : 'success',
-          timeStamp: Date.now(),
-          priority: Priority.NORM,
-          icon: null,
-          userActions: [],
-          display: true,
-          useDefaultCancel: true
-        }
-      })
-    );
+  removeFavorite(userId: number, favoriteId: number) {
+    this.response = this.favoriteService.deleteFavorite(userId, favoriteId);
   }
 }
