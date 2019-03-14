@@ -78,27 +78,7 @@ export const getByType = createSelector(
 export const getByTypeAndId = createSelector(
   selectFavoriteState,
   (state: State, props: { type: FavoriteTypesEnum; id: number }) => {
-    let idProperty = '';
-    switch (props.type) {
-      case FavoriteTypesEnum.AREA:
-        idProperty = 'learningAreaId';
-        break;
-      case FavoriteTypesEnum.BOEKE:
-      case FavoriteTypesEnum.EDUCONTENT:
-        idProperty = 'eduContentId';
-        break;
-      case FavoriteTypesEnum.BUNDLE:
-        idProperty = 'bundleId';
-        break;
-      case FavoriteTypesEnum.TASK:
-        idProperty = 'taskId';
-        break;
-      case FavoriteTypesEnum.SEARCH:
-        idProperty = 'criteria'; // not sure about this one
-        break;
-      default:
-        break;
-    }
+    const idProperty = getIdProperty(props.type);
 
     const favorite = Object.entries(state.entities).find(([key, value]) => {
       return value.type === props.type && value[idProperty] === props.id;
@@ -107,3 +87,21 @@ export const getByTypeAndId = createSelector(
     return favorite ? favorite.pop() : favorite;
   }
 );
+
+function getIdProperty(type: FavoriteTypesEnum): string {
+  switch (type) {
+    case FavoriteTypesEnum.AREA:
+      return 'learningAreaId';
+    case FavoriteTypesEnum.BOEKE:
+    case FavoriteTypesEnum.EDUCONTENT:
+      return 'eduContentId';
+    case FavoriteTypesEnum.BUNDLE:
+      return 'bundleId';
+    case FavoriteTypesEnum.TASK:
+      return 'taskId';
+    case FavoriteTypesEnum.SEARCH:
+      return 'criteria'; // not sure about this one
+    default:
+      return;
+  }
+}
