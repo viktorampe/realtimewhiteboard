@@ -103,6 +103,8 @@ import { EduContentService } from './edu-content/edu-content.service';
 import { EDU_CONTENT_SERVICE_TOKEN } from './edu-content/edu-content.service.interface';
 import { ExerciseService } from './exercise/exercise.service';
 import { EXERCISE_SERVICE_TOKEN } from './exercise/exercise.service.interface';
+import { FavoriteService } from './favorite/favorite.service';
+import { FAVORITE_SERVICE_TOKEN } from './favorite/favorite.service.interface';
 import { LearningAreaService } from './learning-area/learning-area.service';
 import { LEARNINGAREA_SERVICE_TOKEN } from './learning-area/learning-area.service.interface';
 import { EduContentProductTypeService } from './metadata/edu-content-product-type.service';
@@ -243,7 +245,7 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
       { initialState: EffectFeedbackReducer.initialState }
     ),
     StoreModule.forFeature(FavoriteReducer.NAME, FavoriteReducer.reducer, {
-      initialState: FavoriteReducer.initialState 
+      initialState: FavoriteReducer.initialState
     }),
     StoreModule.forFeature(
       EduContentProductTypeReducer.NAME,
@@ -338,7 +340,8 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
       useClass: EduContentProductTypeService
     },
     { provide: SCHOOL_TYPE_SERVICE_TOKEN, useClass: SchoolTypeService },
-    { provide: YEAR_SERVICE_TOKEN, useClass: YearService }
+    { provide: YEAR_SERVICE_TOKEN, useClass: YearService },
+    { provide: FAVORITE_SERVICE_TOKEN, useClass: FavoriteService }
   ]
 })
 export class DalModule {
