@@ -33,7 +33,7 @@ export class EduContentSearchResultComponent extends ResultItemBase
   implements OnInit, OnChanges {
   @Input() data: EduContentSearchResultInterface;
 
-  protected normalizedEduContentToc: any;
+  public normalizedEduContentToc: any;
 
   constructor(
     @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
@@ -46,6 +46,12 @@ export class EduContentSearchResultComponent extends ResultItemBase
     super.ngOnInit();
 
     this.normalizedEduContentToc = this.getNormalizedEduContentToc();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.data) {
+      this.normalizedEduContentToc = this.getNormalizedEduContentToc();
+    }
   }
 
   public linkTask() {}
@@ -115,11 +121,5 @@ export class EduContentSearchResultComponent extends ResultItemBase
       books: books,
       booksToc: booksToc
     };
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['data']) {
-      this.normalizedEduContentToc = this.getNormalizedEduContentToc();
-    }
   }
 }

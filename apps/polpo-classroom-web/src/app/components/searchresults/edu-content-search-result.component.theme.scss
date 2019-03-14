@@ -5,6 +5,9 @@
   $educontentsearchresult-title-height: 32px !default;
 
   $educontentsearchresult-methods-scale: 0.5 !default;
+  $educontentsearchresult-methods-margin-bottom: (
+    -$campus-method-logo-height * (1 - $educontentsearchresult-methods-scale)
+  ) !default;
 
   $educontentsearchresult-border-thickness: 3px !default;
   $educontentsearchresult-border-color: $color-black-1 !default;
@@ -84,7 +87,7 @@
 
         &__methods {
           height: auto;
-          margin-bottom: -$campus-method-logo-height/2;
+          margin-bottom: $educontentsearchresult-methods-margin-bottom;
           transform: scale($educontentsearchresult-methods-scale);
           transform-origin: 0 0;
         }
