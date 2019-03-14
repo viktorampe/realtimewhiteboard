@@ -6,7 +6,7 @@ import {
 import { hot } from '@nrwl/nx/testing';
 import { TocService } from './toc.service';
 import { TocServiceInterface } from './toc.service.interface';
-// file.only
+
 describe('TocService', () => {
   let service: TocServiceInterface;
   let eduContentBookApi: EduContentBookApi;
