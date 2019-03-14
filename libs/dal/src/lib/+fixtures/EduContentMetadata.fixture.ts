@@ -59,25 +59,57 @@ export class EduContentMetadataFixture implements EduContentMetadataInterface {
   eduContentTOC = [
     new EduContentTOCFixture({
       treeId: 1,
-      eduContentBook: { id: 1, title: 'Shuffle 5' },
+      eduContentBook: {
+        method: null,
+        methodId: null,
+        years: null,
+        eduContentTOC: [],
+        ISBN: '',
+        id: 1,
+        title: 'Shuffle 5'
+      },
       title: "Unit 2 - I'm not an addict",
       depth: 0
     }),
     new EduContentTOCFixture({
       treeId: 1,
-      eduContentBook: { id: 1 },
+      eduContentBook: {
+        method: null,
+        methodId: null,
+        years: null,
+        eduContentTOC: [],
+        ISBN: '',
+        id: 1,
+        title: 'Shuffle 5'
+      },
       title: 'Focus on',
       depth: 1
     }),
     new EduContentTOCFixture({
       treeId: 2,
-      eduContentBook: { id: 2, title: 'Another book' },
+      eduContentBook: {
+        method: null,
+        methodId: null,
+        years: null,
+        eduContentTOC: [],
+        ISBN: '',
+        id: 2,
+        title: 'Another book'
+      },
       title: 'Chapter',
       depth: 0
     }),
     new EduContentTOCFixture({
       treeId: 2,
-      eduContentBook: { id: 2 },
+      eduContentBook: {
+        method: null,
+        methodId: null,
+        years: null,
+        eduContentTOC: [],
+        ISBN: '',
+        id: 2,
+        title: 'Another book'
+      },
       title: 'Subchapter',
       depth: 1
     })
