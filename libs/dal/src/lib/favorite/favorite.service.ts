@@ -1,3 +1,4 @@
+import { Injectable } from '@angular/core';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Observable } from 'rxjs';
 import { mapTo } from 'rxjs/operators';
@@ -29,4 +30,3 @@ export class FavoriteService implements FavoriteServiceInterface {
       .pipe(mapTo(true));
   }
 }
-
