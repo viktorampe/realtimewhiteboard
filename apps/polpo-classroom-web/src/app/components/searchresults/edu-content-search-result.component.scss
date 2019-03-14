@@ -14,7 +14,7 @@
     &__details {
       display: flex;
       flex-direction: column;
-      flex: 1 0 auto;
+      flex: 1 1 auto;
 
       &__header {
         display: flex;
@@ -51,7 +51,7 @@
 
     &__contents {
       &__producttype,
-      &__tocheader,
+      &__toc-header,
       &__pedagogic {
         display: flex;
         flex-direction: row;

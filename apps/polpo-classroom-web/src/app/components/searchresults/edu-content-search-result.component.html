@@ -22,11 +22,13 @@
         </div>
         <div class="app-educontentsearchresult__top__details__header__icons">
           <mat-icon
+            class="app-educontentsearchresult__top__details__header__icons__added-task"
             matTooltip="Al toegevoegd aan de taak"
             *ngIf="data.currentTask && data.inTask"
             svgIcon="check-on"
           ></mat-icon>
           <mat-icon
+            class="app-educontentsearchresult__top__details__header__icons__added-bundle"
             matTooltip="Al toegevoegd aan de bundel"
             *ngIf="data.currentBundle && data.inBundle"
             svgIcon="check-on"
@@ -111,7 +113,7 @@
           data.eduContent.publishedEduContentMetadata.eduContentTOC &&
           data.eduContent.publishedEduContentMetadata.eduContentTOC.length
         "
-        class="app-educontentsearchresult__bottom__contents__tocheader"
+        class="app-educontentsearchresult__bottom__contents__toc-header"
       >
         <mat-icon svgIcon="book"></mat-icon> = Dit is materiaal dat je kan
         gebruiken bij:
@@ -123,7 +125,7 @@
         "
         class="app-educontentsearchresult__bottom__contents__toc"
       >
-        <div *ngFor="let book of getNormalizedEduContentToc()">
+        <div *ngFor="let book of normalizedEduContentToc">
           <span>{{ book.title }}</span>
           <ul>
             <li

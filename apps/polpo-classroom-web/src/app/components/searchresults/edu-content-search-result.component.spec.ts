@@ -1,3 +1,4 @@
+import { SimpleChange } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule, MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
@@ -50,7 +51,7 @@ describe('EduContentSearchResultComponent', () => {
   describe('contents', () => {
     it('should show a check icon top right if currentTask and inTask', () => {
       const query =
-        '.app-educontentsearchresult__top__details__header__icons mat-icon[mattooltip="Al toegevoegd aan de taak"]';
+        '.app-educontentsearchresult__top__details__header__icons__added-task';
 
       let el = fixture.debugElement.query(By.css(query));
       expect(el).toBeFalsy();
@@ -66,7 +67,7 @@ describe('EduContentSearchResultComponent', () => {
 
     it('should show a check icon top right if currentBundle and inBundle', () => {
       const query =
-        '.app-educontentsearchresult__top__details__header__icons mat-icon[mattooltip="Al toegevoegd aan de bundel"]';
+        '.app-educontentsearchresult__top__details__header__icons__added-bundle';
 
       let el = fixture.debugElement.query(By.css(query));
       expect(el).toBeFalsy();
@@ -134,6 +135,7 @@ describe('EduContentSearchResultComponent', () => {
       el = fixture.debugElement.query(By.css(query));
 
       expect(el).toBeTruthy();
+      expect(el.styles.backgroundImage).toBe('url(' + imgUrl + ')');
     });
 
     it('should show the file extension (extensionClass = fileExt)', () => {
@@ -160,7 +162,6 @@ describe('EduContentSearchResultComponent', () => {
       const text = fixture.debugElement.query(By.css(query)).nativeElement
         .textContent;
 
-      expect(text).toBeTruthy();
       expect(text).toBe(title);
     });
 
@@ -174,7 +175,6 @@ describe('EduContentSearchResultComponent', () => {
       const text = fixture.debugElement.query(By.css(query)).nativeElement
         .textContent;
 
-      expect(text).toBeTruthy();
       expect(text).toBe(description);
     });
 
@@ -209,7 +209,7 @@ describe('EduContentSearchResultComponent', () => {
       expect(iconClass).toBe(icon);
     });
 
-    it('should show the student icon icon if isPedagogic', () => {
+    it('should show the student icon if isPedagogic', () => {
       const query =
         '.app-educontentsearchresult__bottom__contents__pedagogic mat-icon';
       const icon = 'student';
@@ -256,6 +256,10 @@ describe('EduContentSearchResultComponent', () => {
           } as EduContentBookInterface
         })
       ];
+
+      component.ngOnChanges({
+        data: new SimpleChange(component.data, component.data, false)
+      });
 
       fixture.detectChanges();
 

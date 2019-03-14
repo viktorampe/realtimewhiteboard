@@ -1,5 +1,11 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges
+} from '@angular/core';
 import { ResultItemBase } from '@campus/search';
 import { EduContentSearchResultInterface } from './interfaces/educontent-search-result';
 
@@ -13,17 +19,15 @@ import { EduContentSearchResultInterface } from './interfaces/educontent-search-
       transition(':enter', [
         style({ height: '0px' }),
         animate('.2s ease-out', style({ height: '*' }))
-      ]),
-      transition(':leave', [
-        //style({ height: '*' }),
-        //animate('.2s ease-out', style({ height: '0px' }))
       ])
     ])
   ]
 })
 export class EduContentSearchResultComponent extends ResultItemBase
-  implements OnInit {
+  implements OnInit, OnChanges {
   @Input() data: EduContentSearchResultInterface;
+
+  protected normalizedEduContentToc: any;
 
   constructor() {
     super();
@@ -31,6 +35,8 @@ export class EduContentSearchResultComponent extends ResultItemBase
 
   ngOnInit() {
     super.ngOnInit();
+
+    this.normalizedEduContentToc = this.getNormalizedEduContentToc();
   }
 
   public linkTask() {}
@@ -67,13 +73,19 @@ export class EduContentSearchResultComponent extends ResultItemBase
   /**
    * Returns an array containing objects with the title and tocs list of every book
    */
-  getNormalizedEduContentToc() {
+  private getNormalizedEduContentToc() {
     const root = this.data.eduContent.publishedEduContentMetadata.eduContentTOC;
     return root.map(rootTOC => {
       return {
         title: rootTOC.eduContentBook.title,
-        tocs: [rootTOC].concat(rootTOC.eduContentBook.eduContentTOC)
+        tocs: [rootTOC, ...rootTOC.eduContentBook.eduContentTOC]
       };
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['data']) {
+      this.normalizedEduContentToc = this.getNormalizedEduContentToc();
+    }
   }
 }

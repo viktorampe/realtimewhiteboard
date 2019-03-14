@@ -5,7 +5,6 @@
   $educontentsearchresult-title-height: 32px !default;
 
   $educontentsearchresult-methods-scale: 0.5 !default;
-  $educontentsearchresult-methods-height: 48px !default;
 
   $educontentsearchresult-border-thickness: 3px !default;
   $educontentsearchresult-border-color: $color-black-1 !default;
@@ -14,10 +13,11 @@
   $educontentsearchresult-top-color: $color-black-1 !default;
   $educontentsearchresult-top-icons-color: $color-blue-2 !default;
   $educontentsearchresult-top-padding: 10px 15px !default;
+  $educontentsearchresult-top-footer-margin-top: 8px !default;
 
   $educontentsearchresult-selected-top-backgroundcolor: $color-gray-2 !default;
   $educontentsearchresult-selected-top-color: $color-white-1 !default;
-  $educontentsearchresult-selected-top-icons-color: $color-black-1 !default;
+  $educontentsearchresult-selected-top-icons-color: $color-white-1 !default;
 
   $educontentsearchresult-bottom-contents-backgroundcolor: $color-black-2 !default;
   $educontentsearchresult-bottom-contents-color: $color-white-1 !default;
@@ -78,8 +78,13 @@
           }
         }
 
+        &__footer {
+          margin-top: $educontentsearchresult-top-footer-margin-top;
+        }
+
         &__methods {
-          height: $educontentsearchresult-methods-height;
+          height: auto;
+          margin-bottom: -$campus-method-logo-height/2;
           transform: scale($educontentsearchresult-methods-scale);
           transform-origin: 0 0;
         }
@@ -106,7 +111,10 @@
 
         &__toc {
           padding-left: $educontentsearchresult-toc-padding-left;
-          list-style-type: $educontentsearchresult-toc-list-style-type;
+
+          ul {
+            list-style-type: $educontentsearchresult-toc-list-style-type;
+          }
         }
       }
 
@@ -127,6 +135,8 @@
           color: $educontentsearchresult-bottom-buttonbar-color;
           border-right: 1px solid $educontentsearchresult-border-color;
           position: relative;
+          flex-grow: 1;
+          max-width: 25%;
 
           mat-icon.checkmark {
             position: absolute;
