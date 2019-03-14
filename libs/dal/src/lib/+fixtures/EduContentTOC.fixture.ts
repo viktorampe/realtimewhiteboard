@@ -8,7 +8,7 @@ export class EduContentTOCFixture implements EduContentTOCInterface {
   depth = 0;
   eduContentBook = null;
 
-  constructor(props: Partial<EduContentTOCFixture> = {}) {
+  constructor(props: Partial<EduContentTOCInterface> = {}) {
     // overwrite defaults
     Object.assign(this, props);
   }

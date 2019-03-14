@@ -109,7 +109,7 @@
         max-height: $educontentsearchresult-bottom-contents-max-height;
         overflow-y: auto;
 
-        &__toc {
+        &__toc-body {
           padding-left: $educontentsearchresult-toc-padding-left;
 
           ul {

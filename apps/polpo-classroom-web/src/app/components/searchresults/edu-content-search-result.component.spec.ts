@@ -10,9 +10,9 @@ import {
   EduContentTOCFixture,
   TaskFixture
 } from '@campus/dal';
+import { OPEN_STATIC_CONTENT_SERVICE_TOKEN } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
-import { EduContentBookInterface } from '@diekeure/polpo-api-angular-sdk';
 import { EduContentSearchResultComponent } from './edu-content-search-result.component';
 import { EduContentSearchResultInterface } from './interfaces/educontent-search-result';
 
@@ -24,7 +24,13 @@ describe('EduContentSearchResultComponent', () => {
     TestBed.configureTestingModule({
       declarations: [EduContentSearchResultComponent],
       imports: [MatIconModule, UiModule, NoopAnimationsModule],
-      providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
+      providers: [
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry },
+        {
+          provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
+          useValue: { open: jest.fn() }
+        }
+      ]
     }).compileComponents();
   }));
 
@@ -231,29 +237,34 @@ describe('EduContentSearchResultComponent', () => {
     });
 
     it('should show the toc', () => {
-      const queryBase = '.app-educontentsearchresult__bottom__contents__toc ';
+      const queryBase =
+        '.app-educontentsearchresult__bottom__contents__toc-body ';
       const queryTitle = queryBase + 'span';
       const title = 'mytitle';
-      const expectedTocs = ['a', 'b', 'c'];
+      const expectedTocs = ['a', 'b'];
+      const book = {
+        method: null,
+        methodId: null,
+        years: null,
+        eduContentTOC: [],
+        ISBN: '',
+        id: 1,
+        title: title
+      };
 
       component.isSelected = true;
       component.data.eduContent.publishedEduContentMetadata.eduContentTOC = [
         new EduContentTOCFixture({
+          treeId: 1,
+          eduContentBook: book,
           title: expectedTocs[0],
-          depth: 0,
-          eduContentBook: {
-            title: title,
-            eduContentTOC: [
-              new EduContentTOCFixture({
-                depth: 1,
-                title: expectedTocs[1]
-              }),
-              new EduContentTOCFixture({
-                depth: 2,
-                title: expectedTocs[2]
-              })
-            ]
-          } as EduContentBookInterface
+          depth: 0
+        }),
+        new EduContentTOCFixture({
+          treeId: 1,
+          eduContentBook: book,
+          title: expectedTocs[1],
+          depth: 1
         })
       ];
 
@@ -267,7 +278,7 @@ describe('EduContentSearchResultComponent', () => {
         fixture.debugElement.query(By.css(queryTitle)).nativeElement.textContent
       ).toBe(title);
 
-      for (let i = 0; i < 3; i++) {
+      for (let i = 0; i < 2; i++) {
         expect(
           fixture.debugElement.query(
             By.css(queryBase + '.toc-depth-' + i.toString())
@@ -278,44 +289,6 @@ describe('EduContentSearchResultComponent', () => {
   });
 
   describe('actions', () => {
-    it('should show openstatic button if fileExt is not ludo.zip', () => {
-      const query =
-        '.app-educontentsearchresult__bottom__buttonbar__openstatic';
-
-      component.isSelected = true;
-      component.data.eduContent.publishedEduContentMetadata.fileExt =
-        'ludo.zip';
-      fixture.detectChanges();
-
-      let el = fixture.debugElement.query(By.css(query));
-      expect(el).toBeFalsy();
-
-      component.data.eduContent.publishedEduContentMetadata.fileExt = '.pdf';
-      fixture.detectChanges();
-
-      el = fixture.debugElement.query(By.css(query));
-      expect(el).toBeTruthy();
-    });
-
-    it('should show openexercise button if fileExt is ludo.zip', () => {
-      const query =
-        '.app-educontentsearchresult__bottom__buttonbar__openexercise';
-
-      component.isSelected = true;
-      component.data.eduContent.publishedEduContentMetadata.fileExt =
-        'ludo.zip';
-      fixture.detectChanges();
-
-      let el = fixture.debugElement.query(By.css(query));
-      expect(el).toBeTruthy();
-
-      component.data.eduContent.publishedEduContentMetadata.fileExt = '.pdf';
-      fixture.detectChanges();
-
-      el = fixture.debugElement.query(By.css(query));
-      expect(el).toBeFalsy();
-    });
-
     it('should show link bundle button if no currentTask and not in bundle', () => {
       const query =
         '.app-educontentsearchresult__bottom__buttonbar__linkbundle';

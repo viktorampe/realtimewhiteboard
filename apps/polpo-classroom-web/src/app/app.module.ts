@@ -1,4 +1,4 @@
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { MatIconModule, MatTooltipModule } from '@angular/material';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -89,7 +89,6 @@ configureBufferSize(150);
   ],
   bootstrap: [AppComponent],
   exports: [RouterModule],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   entryComponents: [EduContentSearchResultComponent]
 })
 export class AppModule {}

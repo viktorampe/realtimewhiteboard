@@ -1,4 +1,3 @@
-import { EduContentBookInterface } from '@diekeure/polpo-api-angular-sdk';
 import { EduContentMetadataInterface } from '../+models/EduContentMetadata.interface';
 import { EduContentProductTypeFixture } from './EduContentProductType.fixture';
 import { EduContentTOCFixture } from './EduContentTOC.fixture';
@@ -59,33 +58,28 @@ export class EduContentMetadataFixture implements EduContentMetadataInterface {
   ];
   eduContentTOC = [
     new EduContentTOCFixture({
+      treeId: 1,
+      eduContentBook: { id: 1, title: 'Shuffle 5' },
       title: "Unit 2 - I'm not an addict",
-      depth: 0,
-      eduContentBook: {
-        title: 'Shuffle 5',
-        eduContentTOC: [
-          new EduContentTOCFixture({
-            depth: 1,
-            title: 'Focus on'
-          }),
-          new EduContentTOCFixture({
-            depth: 2,
-            title: 'What are you hooked on?'
-          }),
-          new EduContentTOCFixture({
-            depth: 2,
-            title: 'Legalising drugs'
-          }),
-          new EduContentTOCFixture({
-            depth: 1,
-            title: 'The basics'
-          }),
-          new EduContentTOCFixture({
-            depth: 2,
-            title: 'Comparisons'
-          })
-        ]
-      } as EduContentBookInterface
+      depth: 0
+    }),
+    new EduContentTOCFixture({
+      treeId: 1,
+      eduContentBook: { id: 1 },
+      title: 'Focus on',
+      depth: 1
+    }),
+    new EduContentTOCFixture({
+      treeId: 2,
+      eduContentBook: { id: 2, title: 'Another book' },
+      title: 'Chapter',
+      depth: 0
+    }),
+    new EduContentTOCFixture({
+      treeId: 2,
+      eduContentBook: { id: 2 },
+      title: 'Subchapter',
+      depth: 1
     })
   ];
 

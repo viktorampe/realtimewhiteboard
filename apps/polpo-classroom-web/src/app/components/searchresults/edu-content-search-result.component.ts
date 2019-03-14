@@ -1,12 +1,18 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import {
   Component,
+  Inject,
   Input,
   OnChanges,
   OnInit,
   SimpleChanges
 } from '@angular/core';
+import { EduContentBookInterface, EduContentTOCInterface } from '@campus/dal';
 import { ResultItemBase } from '@campus/search';
+import {
+  OpenStaticContentServiceInterface,
+  OPEN_STATIC_CONTENT_SERVICE_TOKEN
+} from '@campus/shared';
 import { EduContentSearchResultInterface } from './interfaces/educontent-search-result';
 
 @Component({
@@ -29,7 +35,10 @@ export class EduContentSearchResultComponent extends ResultItemBase
 
   protected normalizedEduContentToc: any;
 
-  constructor() {
+  constructor(
+    @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
+    private openStaticContentService: OpenStaticContentServiceInterface
+  ) {
     super();
   }
 
@@ -49,24 +58,38 @@ export class EduContentSearchResultComponent extends ResultItemBase
 
   public toggleFavorite() {}
 
-  public openStatic() {}
+  public openStatic() {
+    //EduContent doesn't implement ContentInterface (yet ?)
+    //this.openStaticContentService.open(this.data.eduContent);
+  }
   public openExercise(answers: boolean) {}
 
   public stream() {}
 
+  public open() {
+    //Check what kind of content it is (ludo.zip or not) and do openStatic or openExercise
+    if (
+      this.data.eduContent.publishedEduContentMetadata.fileExt !== 'ludo.zip'
+    ) {
+      this.openStatic();
+    } else {
+      //openExercise
+    }
+  }
+
   get isEduContentInCurrentBundle(): boolean {
     return (
-      this.data.currentBundle.eduContents.filter(
+      this.data.currentBundle.eduContents.find(
         e => e.id === this.data.eduContent.id
-      ).length !== 0
+      ) !== undefined
     );
   }
 
   get isEduContentInCurrentTask(): boolean {
     return (
-      this.data.currentTask.eduContents.filter(
+      this.data.currentTask.eduContents.find(
         e => e.id === this.data.eduContent.id
-      ).length !== 0
+      ) !== undefined
     );
   }
 
@@ -74,13 +97,24 @@ export class EduContentSearchResultComponent extends ResultItemBase
    * Returns an array containing objects with the title and tocs list of every book
    */
   private getNormalizedEduContentToc() {
-    const root = this.data.eduContent.publishedEduContentMetadata.eduContentTOC;
-    return root.map(rootTOC => {
-      return {
-        title: rootTOC.eduContentBook.title,
-        tocs: [rootTOC, ...rootTOC.eduContentBook.eduContentTOC]
-      };
-    });
+    const books: EduContentBookInterface[] = [];
+    const booksToc: { [key: number]: EduContentTOCInterface[] } = {};
+
+    this.data.eduContent.publishedEduContentMetadata.eduContentTOC.forEach(
+      toc => {
+        if (!booksToc[toc.treeId]) {
+          booksToc[toc.treeId] = [];
+          books.push(toc.eduContentBook);
+        }
+
+        booksToc[toc.treeId].push(toc);
+      }
+    );
+
+    return {
+      books: books,
+      booksToc: booksToc
+    };
   }
 
   ngOnChanges(changes: SimpleChanges): void {
