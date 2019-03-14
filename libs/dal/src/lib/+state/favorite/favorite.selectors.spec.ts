@@ -127,7 +127,7 @@ describe('Favorite Selectors', () => {
     });
 
     describe('getByTypeAndId()', () => {
-      beforeAll(() => {
+      beforeEach(() => {
         const mockFavorites: FavoriteInterface[] = [
           {
             id: 1,
