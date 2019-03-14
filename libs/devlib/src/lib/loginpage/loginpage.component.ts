@@ -10,12 +10,17 @@ import {
   EduContentInterface,
   EffectFeedbackInterface,
   EffectFeedbackQueries,
+  FavoriteFixture,
   UserActions
 } from '@campus/dal';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
+import {
+  FavoriteServiceInterface,
+  FAVORITE_SERVICE_TOKEN
+} from './../../../../dal/src/lib/favorite/favorite.service.interface';
 import {
   LearningPlanServiceInterface,
   LEARNING_PLAN_SERVICE_TOKEN
@@ -49,6 +54,8 @@ export class LoginpageComponent implements OnInit {
     private personApi: PersonApi,
     @Inject(LEARNING_PLAN_SERVICE_TOKEN)
     private learningPlanService: LearningPlanServiceInterface,
+    @Inject(FAVORITE_SERVICE_TOKEN)
+    private favoriteService: FavoriteServiceInterface,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     private store: Store<AlertReducer.State>,
     private router: Router
@@ -88,5 +95,20 @@ export class LoginpageComponent implements OnInit {
     this.response = this.learningPlanService
       .getLearningPlanAssignments(3, 6, 4, 19)
       .pipe(map(sMap => Array.from(sMap)));
+  }
+
+  getFavorites(userId: number) {
+    this.response = this.favoriteService.getAllForUser(userId);
+  }
+
+  addFavorite(userId: number) {
+    this.response = this.favoriteService.addFavorite(
+      userId,
+      new FavoriteFixture({ id: null, personId: userId, learningAreaId: 2 })
+    );
+  }
+
+  removeFavorite(userId: number, favoriteId: number) {
+    this.response = this.favoriteService.deleteFavorite(userId, favoriteId);
   }
 }
