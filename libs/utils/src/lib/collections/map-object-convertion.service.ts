@@ -2,19 +2,47 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class MapObjectConvertionService {
-  public mapToObject<T extends string | number>(
-    map: Map<T, any>
-  ): T extends string ? { [key: string]: any } : { [key: number]: any } {
+  public mapToObject<T extends string | number, U, O>(
+    map: Map<T, U>
+  ): T extends string
+    ? {
+        [key: string]: U extends Map<string, O>
+          ? { [key: string]: O }
+          : U extends Map<number, O>
+          ? { [key: number]: O }
+          : U;
+      }
+    : {
+        [key: number]: U extends Map<string, O>
+          ? { [key: string]: O }
+          : U extends Map<number, O>
+          ? { [key: number]: O }
+          : U;
+      } {
     return Array.from(map).reduce(
       (
-        obj: T extends string ? { [key: string]: any } : { [key: number]: any },
-        [key, value]: [string | number, any]
+        obj: T extends string ? { [key: string]: U } : { [key: number]: U },
+        [key, value]: [string | number, U]
       ) => {
         obj[key] = value instanceof Map ? this.mapToObject(value) : value;
         return obj;
       },
       {}
-    ) as T extends string ? { [key: string]: any } : { [key: number]: any };
+    ) as T extends string
+      ? {
+          [key: string]: U extends Map<string, O>
+            ? { [key: string]: O }
+            : U extends Map<number, O>
+            ? { [key: number]: O }
+            : U;
+        }
+      : {
+          [key: number]: U extends Map<string, O>
+            ? { [key: string]: O }
+            : U extends Map<number, O>
+            ? { [key: number]: O }
+            : U;
+        };
   }
 
   public objectToMap<
