@@ -43,7 +43,10 @@ describe('TocService', () => {
   describe('getBooksByYearAndMethods()', () => {
     it('should get books by year and number', () => {
       mockData$ = hot('-a|', {
-        a: { results: { foo: 'bar' } }
+        a: [
+          { years: [{ years: [{ name: '6', id: 6 }] }] },
+          { years: [{ name: '5', id: 5 }] }
+        ]
       });
 
       const spy = jest.spyOn(eduContentBookApi, 'find');
@@ -55,7 +58,29 @@ describe('TocService', () => {
         include: [{ relation: 'years', scope: { where: { id: 1 } } }]
       });
       expect(response).toBeObservable(
-        hot('-a|', { a: { results: { foo: 'bar' } } })
+        hot('-a|', {
+          a: [
+            { years: [{ years: [{ name: '6', id: 6 }] }] },
+            { years: [{ name: '5', id: 5 }] }
+          ]
+        })
+      );
+    });
+    it('should filter out books without the provided year', () => {
+      mockData$ = hot('-a|', {
+        a: [{ years: [{ years: ['bar'] }] }, { years: [] }]
+      });
+
+      const spy = jest.spyOn(eduContentBookApi, 'find');
+      const response = service.getBooksByYearAndMethods(1, [2, 3]);
+
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith({
+        where: { methodId: { inq: [2, 3] } },
+        include: [{ relation: 'years', scope: { where: { id: 1 } } }]
+      });
+      expect(response).toBeObservable(
+        hot('-a|', { a: [{ years: [{ years: ['bar'] }] }] })
       );
     });
   });
