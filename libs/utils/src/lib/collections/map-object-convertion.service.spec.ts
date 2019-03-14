@@ -1,11 +1,8 @@
-//file.only
-
 import { TestBed } from '@angular/core/testing';
 import { MapObjectConvertionService } from './map-object-convertion.service';
 
 describe('FilterService', () => {
   let mapObjectConvertionService: MapObjectConvertionService;
-  const mockData = {};
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -94,6 +91,22 @@ describe('FilterService', () => {
       };
       expect(mapObjectConvertionService.objectToMap(obj, false)).toEqual(
         new Map<string, number>([['1', 23], ['2', 838], ['3', 847]])
+      );
+    });
+    it('should convert a multilevel string and number object to a map<string, Map<number, number>>', () => {
+      const obj: { [key: number]: { [key: string]: number } } = {
+        1: { one: 23 },
+        2: { two: 838 },
+        3: { three: 847 }
+      };
+      expect(
+        mapObjectConvertionService.objectToMap(obj, true, true, false)
+      ).toEqual(
+        new Map<number, Map<string, number>>([
+          [1, new Map<string, number>([['one', 23]])],
+          [2, new Map<string, number>([['two', 838]])],
+          [3, new Map<string, number>([['three', 847]])]
+        ])
       );
     });
   });
