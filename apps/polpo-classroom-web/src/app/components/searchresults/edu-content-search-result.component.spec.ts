@@ -13,6 +13,7 @@ import {
 import { OPEN_STATIC_CONTENT_SERVICE_TOKEN } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
+import { EduContentBookFixture } from 'libs/dal/src/lib/+fixtures/EduContentBook.fixture';
 import { EduContentSearchResultComponent } from './edu-content-search-result.component';
 import { EduContentSearchResultInterface } from './interfaces/educontent-search-result';
 
@@ -242,15 +243,10 @@ describe('EduContentSearchResultComponent', () => {
       const queryTitle = queryBase + 'span';
       const title = 'mytitle';
       const expectedTocs = ['a', 'b'];
-      const book = {
-        method: null,
-        methodId: null,
-        years: null,
-        eduContentTOC: [],
-        ISBN: '',
+      const book = new EduContentBookFixture({
         id: 1,
         title: title
-      };
+      });
 
       component.isSelected = true;
       component.data.eduContent.publishedEduContentMetadata.eduContentTOC = [
