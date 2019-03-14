@@ -1,12 +1,12 @@
-<div id="search-term-container"></div>
-
-<div #hosttop></div>
+<campus-page-bar> <div searchPortal="pagebar"></div> </campus-page-bar>
+<div> <ng-container searchPortal="hostSearchTerm"></ng-container> </div>
+<div> <ng-container searchPortal="hosttop"></ng-container> </div>
 <campus-collapsible-sheet>
-  <div aside #hostleft></div>
+  <div aside> <ng-container searchPortal="hostleft"></ng-container> </div>
   <campus-search
     main
     [searchMode]="searchMode"
-    [autoComplete]="null"
+    [autoCompleteValues]="autoComplete"
     [initialState]="searchState | async"
     [searchResults]="resultsPage$ | async"
     (searchState$)="onChange($event)"

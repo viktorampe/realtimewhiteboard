@@ -1,48 +1,94 @@
-import { Component, Type } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  Inject,
+  QueryList,
+  Type,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import { EduContentMetadataFixture, LearningAreaFixture } from '@campus/dal';
 import {
   SearchFilterCriteriaInterface,
   SearchFilterFactory,
   SearchFilterInterface,
   SearchModeInterface,
+  SearchPortalDirective,
   SearchResultInterface,
   SearchResultItemComponentInterface,
   SearchStateInterface,
   SortModeInterface
 } from '@campus/search';
+import { TileSecondaryActionInterface } from '@campus/ui';
 import { EduContentMetadataApi } from '@diekeure/polpo-api-angular-sdk';
+// tslint:disable-next-line:nx-enforce-module-boundaries
+import { STANDARD_SEARCH_SERVICE_TOKEN } from 'apps/polpo-classroom-web/src/app/services/standard-search.service';
+// tslint:disable-next-line:nx-enforce-module-boundaries
+import { MockSearchViewModel } from 'libs/search/src/lib/components/search.viewmodel.mock';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { PolpoResultItemComponent } from '../polpo-result-item/polpo-result-item.component';
 // tslint:disable-next-line:nx-enforce-module-boundaries
-import { MockSearchViewModel } from './../../../../search/src/lib/components/search.viewmodel.mock';
+import { SearchComponent } from './../../../../search/src/lib/components/search/search.component';
 
 @Component({
   selector: 'campus-finding-nemo',
   templateUrl: './finding-nemo.component.html',
   styleUrls: ['./finding-nemo.component.scss']
 })
-export class FindingNemoComponent {
+export class FindingNemoComponent implements AfterViewInit {
   public resultItemComponent: Type<SearchResultItemComponentInterface>;
   public resultsPage$ = new BehaviorSubject<SearchResultInterface>(null);
   public searchMode: SearchModeInterface;
   public searchState = new BehaviorSubject<SearchStateInterface>(null);
-  // public autoComplete = true;
+  public autoComplete: string[];
   public filterCriteria$ = new BehaviorSubject<SearchFilterCriteriaInterface[]>(
     null
   );
+  public secondaryActions: TileSecondaryActionInterface[];
 
   private loadTimer: number;
+  public searchFilters$: Observable<SearchFilterInterface[]>;
 
-  constructor(private eduContentMetadataApi: EduContentMetadataApi) {
+  @ViewChildren(SearchPortalDirective)
+  private portalHosts: QueryList<SearchPortalDirective>;
+
+  @ViewChild(SearchComponent) private searchComponent: SearchComponent;
+
+  constructor(
+    private eduContentMetadataApi: EduContentMetadataApi,
+    @Inject(STANDARD_SEARCH_SERVICE_TOKEN)
+    private standardSearchFactory: SearchFilterFactory
+  ) {
     this.setMockData();
+    this.searchFilters$ = this.standardSearchFactory.getFilters(
+      {} as SearchStateInterface
+    );
+  }
+
+  ngAfterViewInit(): void {
+    this.searchComponent.searchPortals = this.portalHosts;
+  }
+
+  tileClick() {
+    console.log('tile click!');
   }
 
   setMockData() {
+    this.secondaryActions = [
+      {
+        label: 'Bekijken',
+        icon: 'magnifier',
+        onClick: event => {
+          console.log('secondaryAction');
+        }
+      }
+    ];
     this.searchMode = this.getMockSearchMode();
     this.searchState.next(this.getMockSearchState());
     this.resultsPage$.next(this.getMockResults());
     this.filterCriteria$.next(this.getMockSearchFilters());
+    this.autoComplete = this.getMockAutoCompleteValues();
   }
 
   catchEvent($event: SearchFilterCriteriaInterface[]) {
@@ -130,6 +176,10 @@ export class FindingNemoComponent {
       dynamicFilters: false,
       // tslint:disable-next-line: no-use-before-declare
       searchFilterFactory: MockFactory,
+      searchTerm: {
+        // autocompleteEl: string; //reference to material autocomplete component
+        domHost: 'hostSearchTerm'
+      },
       results: {
         component: PolpoResultItemComponent,
         sortModes: [
@@ -156,7 +206,7 @@ export class FindingNemoComponent {
 
   private getMockSearchState(): SearchStateInterface {
     return {
-      searchTerm: '',
+      searchTerm: 'nemo',
       filterCriteriaSelections: new Map(),
       from: 0
     };
@@ -209,14 +259,18 @@ export class FindingNemoComponent {
       }
     ];
   }
+
+  private getMockAutoCompleteValues(): string[] {
+    return ['waarde1', 'waarde2', 'waarde3', 'waarde4'];
+  }
 }
 
 class MockFactory implements SearchFilterFactory {
-  constructor(private mockSearchViewModel: MockSearchViewModel) {}
+  mockSearchViewmodel = new MockSearchViewModel();
 
   getFilters(
     searchState: SearchStateInterface
   ): Observable<SearchFilterInterface[]> {
-    return this.mockSearchViewModel.searchFilters$;
+    return this.mockSearchViewmodel.searchFilters$;
   }
 }

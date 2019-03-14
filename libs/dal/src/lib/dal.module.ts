@@ -30,6 +30,11 @@ import {
   CurrentExerciseReducer
 } from './+state/current-exercise';
 import { EduContentReducer, EduContentsEffects } from './+state/edu-content';
+import {
+  EduContentProductTypeEffects,
+  EduContentProductTypeReducer
+} from './+state/edu-content-product-type';
+import { EduNetEffects, EduNetReducer } from './+state/edu-net';
 import { EffectFeedbackReducer } from './+state/effect-feedback';
 import { FavoriteEffects, FavoriteReducer } from './+state/favorite';
 import {
@@ -42,6 +47,7 @@ import {
 } from './+state/linked-person';
 import { MethodEffects, MethodReducer } from './+state/method';
 import { ResultEffects, ResultReducer } from './+state/result';
+import { SchoolTypeEffects, SchoolTypeReducer } from './+state/school-type';
 import {
   StudentContentStatusesEffects,
   StudentContentStatusReducer
@@ -74,6 +80,7 @@ import {
 } from './+state/unlocked-content';
 import { UserEffects, UserReducer } from './+state/user';
 import { UserContentReducer, UserContentsEffects } from './+state/user-content';
+import { YearEffects, YearReducer } from './+state/year';
 import { AlertService } from './alert/alert.service';
 import { ALERT_SERVICE_TOKEN } from './alert/alert.service.interface';
 import {
@@ -93,13 +100,21 @@ import {
 import { ContentRequestService } from './content-request/content-request.service';
 import { CONTENT_REQUEST_SERVICE_TOKEN } from './content-request/content-request.service.interface';
 import { EduContentService } from './edu-content/edu-content.service';
-import { EDUCONTENT_SERVICE_TOKEN } from './edu-content/edu-content.service.interface';
+import { EDU_CONTENT_SERVICE_TOKEN } from './edu-content/edu-content.service.interface';
 import { ExerciseService } from './exercise/exercise.service';
 import { EXERCISE_SERVICE_TOKEN } from './exercise/exercise.service.interface';
 import { LearningAreaService } from './learning-area/learning-area.service';
 import { LEARNINGAREA_SERVICE_TOKEN } from './learning-area/learning-area.service.interface';
+import { EduContentProductTypeService } from './metadata/edu-content-product-type.service';
+import { EDU_CONTENT_PRODUCT_TYPE_SERVICE_TOKEN } from './metadata/edu-content-product-type.service.interface';
+import { EduNetService } from './metadata/edu-net.service';
+import { EDU_NET_SERVICE_TOKEN } from './metadata/edu-net.service.interface';
 import { MethodService } from './metadata/method.service';
 import { METHOD_SERVICE_TOKEN } from './metadata/method.service.interface';
+import { SchoolTypeService } from './metadata/school-type.service';
+import { SCHOOL_TYPE_SERVICE_TOKEN } from './metadata/school-type.service.interface';
+import { YearService } from './metadata/year.service';
+import { YEAR_SERVICE_TOKEN } from './metadata/year.service.interface';
 import { AuthService } from './persons/auth-service';
 import { AUTH_SERVICE_TOKEN } from './persons/auth-service.interface';
 import {
@@ -228,7 +243,21 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
       { initialState: EffectFeedbackReducer.initialState }
     ),
     StoreModule.forFeature(FavoriteReducer.NAME, FavoriteReducer.reducer, {
-      initialState: FavoriteReducer.initialState
+      initialState: FavoriteReducer.initialState 
+    }),
+    StoreModule.forFeature(
+      EduContentProductTypeReducer.NAME,
+      EduContentProductTypeReducer.reducer,
+      { initialState: EduContentProductTypeReducer.initialState }
+    ),
+    StoreModule.forFeature(EduNetReducer.NAME, EduNetReducer.reducer, {
+      initialState: EduNetReducer.initialState
+    }),
+    StoreModule.forFeature(SchoolTypeReducer.NAME, SchoolTypeReducer.reducer, {
+      initialState: SchoolTypeReducer.initialState
+    }),
+    StoreModule.forFeature(YearReducer.NAME, YearReducer.reducer, {
+      initialState: YearReducer.initialState
     }),
     EffectsModule.forFeature([
       BundlesEffects,
@@ -252,7 +281,11 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
       TeacherStudentEffects,
       LinkedPersonEffects,
       CredentialEffects,
-      FavoriteEffects
+      FavoriteEffects,
+      EduContentProductTypeEffects,
+      EduNetEffects,
+      SchoolTypeEffects,
+      YearEffects
     ])
   ],
   providers: [
@@ -261,7 +294,7 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
       useValue: uuid
     },
     { provide: EXERCISE_SERVICE_TOKEN, useClass: ExerciseService },
-    { provide: EDUCONTENT_SERVICE_TOKEN, useClass: EduContentService },
+    { provide: EDU_CONTENT_SERVICE_TOKEN, useClass: EduContentService },
     { provide: USER_CONTENT_SERVICE_TOKEN, useClass: UserContentService },
     {
       provide: UNLOCKED_BOEKE_STUDENT_SERVICE_TOKEN,
@@ -298,7 +331,14 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
     },
     { provide: CONTENT_REQUEST_SERVICE_TOKEN, useClass: ContentRequestService },
     { provide: RESULTS_SERVICE_TOKEN, useClass: ResultsService },
-    { provide: CREDENTIAL_SERVICE_TOKEN, useClass: CredentialService }
+    { provide: CREDENTIAL_SERVICE_TOKEN, useClass: CredentialService },
+    { provide: EDU_NET_SERVICE_TOKEN, useClass: EduNetService },
+    {
+      provide: EDU_CONTENT_PRODUCT_TYPE_SERVICE_TOKEN,
+      useClass: EduContentProductTypeService
+    },
+    { provide: SCHOOL_TYPE_SERVICE_TOKEN, useClass: SchoolTypeService },
+    { provide: YEAR_SERVICE_TOKEN, useClass: YearService }
   ]
 })
 export class DalModule {

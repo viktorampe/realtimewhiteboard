@@ -4,9 +4,18 @@
     *ngIf="!autoComplete; else: autoCompleteTemplate"
   >
     <mat-label>{{ placeholder }}</mat-label>
-    <input matInput [(ngModel)]="currentValue" [placeholder]="placeholder" />
+    <input
+      matInput
+      [(ngModel)]="currentValue"
+      [placeholder]="placeholder"
+      (keyup.enter)="onChange()"
+    />
   </mat-form-field>
-  <campus-button bordered [iconClass]="'magnifier'"></campus-button>
+  <campus-button
+    bordered
+    [iconClass]="'magnifier'"
+    (click)="onChange()"
+  ></campus-button>
 
   <ng-template #autoCompleteTemplate>
     <mat-form-field [appearance]="'outline'">
@@ -16,10 +25,13 @@
         [(ngModel)]="currentValue"
         [placeholder]="placeholder"
         [matAutocomplete]="auto"
+        (keyup.enter)="onChange()"
+        (input)="getAutoCompleteValues()"
       />
 
       <mat-autocomplete
         #auto="matAutocomplete"
+        (optionSelected)="onChange()"
         class="search-term__autocomplete"
       >
         <mat-option

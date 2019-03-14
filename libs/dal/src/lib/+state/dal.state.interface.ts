@@ -4,12 +4,15 @@ import {
   ContentStatusReducer,
   CredentialReducer,
   CurrentExerciseReducer,
+  EduContentProductTypeReducer,
   EduContentReducer,
   FavoriteReducer,
+  EduNetReducer,
   LearningAreaReducer,
   LinkedPersonReducer,
   MethodReducer,
   ResultReducer,
+  SchoolTypeReducer,
   StudentContentStatusReducer,
   TaskEduContentReducer,
   TaskInstanceReducer,
@@ -20,7 +23,8 @@ import {
   UnlockedBoekeStudentReducer,
   UnlockedContentReducer,
   UserContentReducer,
-  UserReducer
+  UserReducer,
+  YearReducer
 } from '../..';
 
 export interface DalState {
@@ -46,4 +50,8 @@ export interface DalState {
   credentials: CredentialReducer.State;
   methods: MethodReducer.State;
   favorites: FavoriteReducer.State;
+  eduContentProductTypes: EduContentProductTypeReducer.State;
+  eduNets: EduNetReducer.State;
+  schoolTypes: SchoolTypeReducer.State;
+  years: YearReducer.State;
 }

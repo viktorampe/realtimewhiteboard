@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { map, take } from 'rxjs/operators';
 import {
   SearchFilterCriteriaInterface,
   SearchFilterCriteriaValuesInterface,
@@ -11,7 +11,6 @@ import {
   SearchStateInterface,
   SortModeInterface
 } from '../interfaces';
-import { MockSearchViewModel } from './search.viewmodel.mock';
 
 @Injectable({
   providedIn: 'root'
@@ -25,10 +24,188 @@ export class SearchViewModel {
   private results$ = new BehaviorSubject<SearchResultInterface>(null);
 
   public searchState$ = new BehaviorSubject<SearchStateInterface>(null);
-  public searchFilters$ = new BehaviorSubject<SearchFilterInterface[]>([]);
+  public searchFilters$: Observable<SearchFilterInterface[]>;
 
-  constructor(private mockViewmodel: MockSearchViewModel) {
-    this.getMocks();
+  constructor() {
+    this.initiateStreams();
+  }
+
+  private initiateStreams(): void {
+    this.searchFilters$ = combineLatest(
+      this.filters$,
+      this.searchState$,
+      this.results$
+    ).pipe(
+      map(([filters, state, results]) => {
+        const filterCriteriaSelections = !!state
+          ? state.filterCriteriaSelections
+          : new Map<string, (number | string)[]>();
+        const filterCriteriaPredictions = !!results
+          ? results.filterCriteriaPredictions
+          : new Map<string, Map<string | number, number>>();
+        return filters.map(filter =>
+          this.getUpdatedSearchFilter(
+            filter,
+            filterCriteriaSelections,
+            filterCriteriaPredictions
+          )
+        );
+      })
+    );
+  }
+
+  /**
+   * updates and returns the given filter using the given state and results sets
+   *
+   * @private
+   * @param {SearchFilterInterface} filter
+   * @param {SearchStateInterface} state
+   * @param {SearchResultInterface} results
+   * @returns {SearchFilterInterface}
+   * @memberof SearchViewModel
+   */
+  private getUpdatedSearchFilter(
+    filter: SearchFilterInterface,
+    stateFilterCriteriaSelections: Map<string, (number | string)[]>,
+    resultsFilterCriteriaPredictions: Map<string, Map<string | number, number>>
+  ): SearchFilterInterface {
+    if (Array.isArray(filter.criteria))
+      filter.criteria = filter.criteria.map(criterium =>
+        this.getUpdatedCriterium(
+          criterium,
+          stateFilterCriteriaSelections,
+          resultsFilterCriteriaPredictions
+        )
+      );
+    //if single get updatedCriterium
+    else {
+      filter.criteria = this.getUpdatedCriterium(
+        filter.criteria,
+        stateFilterCriteriaSelections,
+        resultsFilterCriteriaPredictions
+      );
+    }
+    return filter;
+  }
+
+  /**
+   * updates the complete criteruym that is passed using the given selection and prediction data
+   *
+   * @private
+   * @param {SearchFilterCriteriaInterface} criterium
+   * @param {(Map<string, (number | string)[]>)} filterCriteriaSelections
+   * @param {(Map<string, Map<string | number, number>>)} filterCriteriaPredictions
+   * @returns {SearchFilterCriteriaInterface}
+   * @memberof SearchViewModel
+   */
+  private getUpdatedCriterium(
+    criterium: SearchFilterCriteriaInterface,
+    filterCriteriaSelections: Map<string, (number | string)[]>,
+    filterCriteriaPredictions: Map<string, Map<string | number, number>>
+  ): SearchFilterCriteriaInterface {
+    criterium.values = criterium.values.map(value =>
+      this.getUpdatedCriteriumValue(
+        criterium,
+        value,
+        filterCriteriaSelections,
+        filterCriteriaPredictions
+      )
+    );
+    return criterium;
+  }
+
+  /**
+   * updates the value prediction, value selection and the complete child if there is a child
+   *
+   * @private
+   * @param {SearchFilterCriteriaInterface} criterium
+   * @param {SearchFilterCriteriaValuesInterface} value
+   * @param {(Map<string, (number | string)[]>)} filterCriteriaSelections
+   * @param {(Map<string, Map<string | number, number>>)} filterCriteriaPredictions
+   * @returns {SearchFilterCriteriaValuesInterface}
+   * @memberof SearchViewModel
+   */
+  private getUpdatedCriteriumValue(
+    criterium: SearchFilterCriteriaInterface,
+    value: SearchFilterCriteriaValuesInterface,
+    filterCriteriaSelections: Map<string, (number | string)[]>,
+    filterCriteriaPredictions: Map<string, Map<string | number, number>>
+  ): SearchFilterCriteriaValuesInterface {
+    // update prediction
+    value.prediction = this.getUpdatedValuePrediction(
+      criterium,
+      value,
+      filterCriteriaPredictions
+    );
+    // update selection
+    value.selected = this.getUpdatedValueSelection(
+      criterium,
+      value,
+      filterCriteriaSelections
+    );
+    // update child if there is a child
+    if (value.child)
+      value.child = this.getUpdatedCriterium(
+        value.child,
+        filterCriteriaSelections,
+        filterCriteriaPredictions
+      );
+    return value;
+  }
+
+  /**
+   * update the selection for the given value
+   *
+   * @private
+   * @param {SearchFilterCriteriaInterface} criterium
+   * @param {SearchFilterCriteriaValuesInterface} value
+   * @param {(Map<string, (string | number)[]>)} filterCriteriaSelections
+   * @returns {boolean}
+   * @memberof SearchViewModel
+   */
+  private getUpdatedValueSelection(
+    criterium: SearchFilterCriteriaInterface,
+    value: SearchFilterCriteriaValuesInterface,
+    filterCriteriaSelections: Map<string, (string | number)[]>
+  ): boolean {
+    //check if there is selection data
+    const criteriaSelections = filterCriteriaSelections.get(criterium.name);
+    // if there is data and check if the selection is present or not, return true or false depending on data presence
+    return criteriaSelections &&
+      criteriaSelections.includes(value.data[criterium.keyProperty])
+      ? true
+      : false;
+  }
+
+  /**
+   * update the selection for the given value
+   *
+   * @private
+   * @param {SearchFilterCriteriaInterface} criterium
+   * @param {SearchFilterCriteriaValuesInterface} value
+   * @param {(Map<string, Map<string | number, number>>)} filterCriteriaPredictions
+   * @returns {number}
+   * @memberof SearchViewModel
+   */
+  private getUpdatedValuePrediction(
+    criterium: SearchFilterCriteriaInterface,
+    value: SearchFilterCriteriaValuesInterface,
+    filterCriteriaPredictions: Map<string, Map<string | number, number>>
+  ): number {
+    //check if there is prediction data
+    const criteriaPredictions = filterCriteriaPredictions.get(criterium.name);
+    if (criteriaPredictions) {
+      // if there is prediction data, check if there is prediction data for this value
+      const criteriaPrediction = criteriaPredictions.get(
+        value.data[criterium.keyProperty]
+      );
+      if (criteriaPrediction !== undefined) {
+        //if there is prediction data for this value, return the new prediction
+        return criteriaPrediction;
+      }
+    }
+    //if there is no new prediction data, return the old data or 0
+    return value.prediction === undefined ? null : value.prediction;
   }
 
   public reset(
@@ -72,7 +249,10 @@ export class SearchViewModel {
       (this.searchState$.value.from || 0) + this.searchMode.results.pageSize;
     this.searchState$.next(newValue);
   }
-  public changeFilters(criteria: SearchFilterCriteriaInterface): void {
+
+  public changeFilters(
+    criteria: SearchFilterCriteriaInterface | SearchFilterCriteriaInterface[]
+  ): void {
     // update state
     const updatedCriteria: Map<
       string,
@@ -93,7 +273,12 @@ export class SearchViewModel {
       this.updateFilters();
     }
   }
-  public changeSearchTerm(searchTerm: string): void {}
+  public changeSearchTerm(searchTerm: string): void {
+    const newValue = { ...this.searchState$.value };
+    newValue.from = 0;
+    newValue.searchTerm = searchTerm;
+    this.searchState$.next(newValue);
+  }
 
   public updateResult(result: SearchResultInterface): void {
     this.results$.next(result);
@@ -106,36 +291,42 @@ export class SearchViewModel {
       .subscribe(filters => this.filters$.next(filters));
   }
 
-  private getMocks(): void {
-    this.searchState$ = new BehaviorSubject<SearchStateInterface>(
-      this.mockViewmodel.searchState$.value
-    );
-    this.searchFilters$ = this.mockViewmodel.searchFilters$;
-  }
-
   private extractSelectedValuesFromCriteria(
-    criteria: SearchFilterCriteriaInterface,
+    criteria: SearchFilterCriteriaInterface | SearchFilterCriteriaInterface[],
     filterCriteriaSelections = new Map()
   ): Map<string, (number | string)[]> {
-    return criteria.values.reduce(
-      (
-        acc: Map<string, (number | string)[]>,
-        value: SearchFilterCriteriaValuesInterface
-      ) => {
-        // extract selected IDs
-        if (value.selected) {
-          if (!acc.has(criteria.name)) {
-            acc.set(criteria.name, []);
+    if (Array.isArray(criteria)) {
+      return criteria.reduce(
+        (
+          acc: Map<string, (number | string)[]>,
+          crit: SearchFilterCriteriaInterface
+        ) => {
+          this.extractSelectedValuesFromCriteria(crit, acc);
+          return acc;
+        },
+        filterCriteriaSelections
+      );
+    } else {
+      return criteria.values.reduce(
+        (
+          acc: Map<string, (number | string)[]>,
+          value: SearchFilterCriteriaValuesInterface
+        ) => {
+          // extract selected IDs
+          if (value.selected) {
+            if (!acc.has(criteria.name)) {
+              acc.set(criteria.name, []);
+            }
+            acc.get(criteria.name).push(value.data[criteria.keyProperty]);
           }
-          acc.get(criteria.name).push(value.data[criteria.keyProperty]);
-        }
-        // check for selection in child
-        if (value.child) {
-          this.extractSelectedValuesFromCriteria(value.child, acc);
-        }
-        return acc;
-      },
-      filterCriteriaSelections
-    );
+          // check for selection in child
+          if (value.child) {
+            this.extractSelectedValuesFromCriteria(value.child, acc);
+          }
+          return acc;
+        },
+        filterCriteriaSelections
+      );
+    }
   }
 }
