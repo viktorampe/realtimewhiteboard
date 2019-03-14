@@ -6,7 +6,6 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   margin-bottom: 25px;
-  display: flex;
 
   &--default {
     justify-content: left;
@@ -16,6 +15,7 @@
       width: 32px;
     }
   }
+
   &--centered {
     font-size: 32px;
     justify-content: center;
@@ -35,6 +35,8 @@
   small {
     font-size: 16px;
     display: block;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
 
   &__icon-wrapper {
@@ -43,6 +45,7 @@
     margin-right: 5px;
   }
 }
+
 .ui-page-header-centered-subtitle {
   display: flex;
   align-items: center;
