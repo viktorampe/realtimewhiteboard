@@ -70,9 +70,7 @@ export const getById = createSelector(
 export const getByType = createSelector(
   selectFavoriteState,
   (state: State, props: { type: FavoriteTypesEnum }) =>
-    Object.entries(state.entities)
-      .filter(([key, value]) => value.type === props.type)
-      .map(([key, value]) => state.entities[key])
+    Object.values(state.entities).filter(value => value.type === props.type)
 );
 
 export const getByTypeAndId = createSelector(
@@ -80,11 +78,9 @@ export const getByTypeAndId = createSelector(
   (state: State, props: { type: FavoriteTypesEnum; id: number }) => {
     const idProperty = getIdProperty(props.type);
 
-    const favorite = Object.entries(state.entities).find(([key, value]) => {
+    return Object.values(state.entities).find(value => {
       return value.type === props.type && value[idProperty] === props.id;
     });
-
-    return favorite ? favorite.pop() : favorite;
   }
 );
 
@@ -100,7 +96,7 @@ function getIdProperty(type: FavoriteTypesEnum): string {
     case FavoriteTypesEnum.TASK:
       return 'taskId';
     case FavoriteTypesEnum.SEARCH:
-      return 'criteria'; // not sure about this one
+      return 'criteria';
     default:
       return;
   }

@@ -1,7 +1,7 @@
 import { FavoriteQueries } from '.';
 import { FavoriteInterface, FavoriteTypesEnum } from '../../+models';
 import { State } from './favorite.reducer';
-
+// file.only
 describe('Favorite Selectors', () => {
   function createFavorite(
     id: number,
