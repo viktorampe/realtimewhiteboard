@@ -6,6 +6,7 @@ export * from './ContentStatus.fixture';
 export * from './Credential.fixture';
 export * from './CurrentExercise.fixture';
 export * from './EduContent.fixture';
+export * from './EduContentBook.fixture';
 export * from './EduContentMetadata.fixture';
 export * from './EduContentProductType.fixture';
 export * from './EduContentTOC.fixture';

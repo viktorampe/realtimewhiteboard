@@ -5,6 +5,7 @@ import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
   BundleFixture,
+  EduContentBookFixture,
   EduContentFixture,
   EduContentProductTypeFixture,
   EduContentTOCFixture,
@@ -13,7 +14,6 @@ import {
 import { OPEN_STATIC_CONTENT_SERVICE_TOKEN } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
-import { EduContentBookFixture } from 'libs/dal/src/lib/+fixtures/EduContentBook.fixture';
 import { EduContentSearchResultComponent } from './edu-content-search-result.component';
 import { EduContentSearchResultInterface } from './interfaces/educontent-search-result';
 
