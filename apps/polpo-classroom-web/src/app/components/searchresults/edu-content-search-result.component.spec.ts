@@ -358,4 +358,28 @@ describe('EduContentSearchResultComponent', () => {
       expect(el).toBeTruthy();
     });
   });
+
+  describe('logic', () => {
+    it('should return the correct value if educontent is in the current bundle', () => {
+      component.data.currentBundle = new BundleFixture();
+      component.data.currentBundle.eduContents = [];
+
+      expect(component.isEduContentInCurrentBundle).toBeFalsy();
+
+      component.data.currentBundle.eduContents.push(component.data.eduContent);
+
+      expect(component.isEduContentInCurrentBundle).toBeTruthy();
+    });
+
+    it('should return the correct value if educontent is in the current task', () => {
+      component.data.currentTask = new TaskFixture();
+      component.data.currentTask.eduContents = [];
+
+      expect(component.isEduContentInCurrentTask).toBeFalsy();
+
+      component.data.currentTask.eduContents.push(component.data.eduContent);
+
+      expect(component.isEduContentInCurrentTask).toBeTruthy();
+    });
+  });
 });
