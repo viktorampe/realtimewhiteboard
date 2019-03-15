@@ -1,5 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-import { WINDOW, WindowService } from './window.service';
+import {
+  MatDialog,
+  MatDialogModule,
+  MatDialogRef
+} from '@angular/material/dialog';
+import { IframeComponent } from '../iframe/iframe.component';
+import { WINDOW } from './window';
+import { WindowService } from './window.service';
 
 const newMockWindow = {
   open: jest.fn(),
@@ -8,7 +15,10 @@ const newMockWindow = {
 
 const currentMockWindow = {
   open: jest.fn().mockReturnValue(newMockWindow),
-  close: jest.fn()
+  close: jest.fn(),
+  location: {
+    search: 'useShell=1'
+  }
 };
 
 describe('WindowService', () => {
@@ -18,10 +28,22 @@ describe('WindowService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [MatDialogModule],
       providers: [
         WindowService,
+        {
+          provide: MatDialog,
+          useValue: {
+            open: jest.fn()
+          }
+        },
+        {
+          provide: MatDialogRef,
+          useValue: {}
+        },
         { provide: WINDOW, useValue: currentMockWindow }
-      ]
+      ],
+      declarations: [IframeComponent]
     });
 
     windowService = TestBed.get(WindowService);
@@ -68,5 +90,16 @@ describe('WindowService', () => {
       'windowFoo',
       'windowBar'
     ]);
+  });
+
+  it('should open an iframe component in a modal', () => {
+    TestBed.get(WINDOW).location.search = 'useShell=0';
+    windowService.openWindow('windowFoo', 'www.foo.com');
+    expect(TestBed.get(MatDialog).open).toHaveBeenCalledWith(IframeComponent, {
+      data: {
+        url: 'www.foo.com'
+      },
+      panelClass: 'ui-iframe--fullscreen'
+    });
   });
 });

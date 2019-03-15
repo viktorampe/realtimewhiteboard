@@ -1,10 +1,8 @@
-import { Inject, Injectable, InjectionToken } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { IframeComponent } from '../iframe/iframe.component';
+import { WINDOW } from './window';
 import { WindowServiceInterface } from './window.service.interface';
-
-export const WINDOW = new InjectionToken('WindowToken', {
-  providedIn: 'root',
-  factory: () => window
-});
 
 /**
  * Class window service is used to add additional services to the native window.
@@ -15,11 +13,23 @@ export const WINDOW = new InjectionToken('WindowToken', {
 })
 export class WindowService implements WindowServiceInterface {
   private _openedWindows: { [name: string]: Window } = {};
-  constructor(@Inject(WINDOW) private nativeWindow: Window) {}
+  constructor(
+    @Inject(WINDOW) private nativeWindow: Window,
+    public dialog: MatDialog
+  ) {}
 
   openWindow(name: string, url: string) {
-    const openedWindow = this.nativeWindow.open(url, name);
-    this._openedWindows[name] = openedWindow;
+    if (this.nativeWindow.location.search.indexOf('useShell=0') === -1) {
+      const openedWindow = this.nativeWindow.open(url, name);
+      this._openedWindows[name] = openedWindow;
+    } else {
+      this.dialog.open(IframeComponent, {
+        data: {
+          url: url
+        },
+        panelClass: 'ui-iframe--fullscreen'
+      });
+    }
   }
   closeWindow(name: string) {
     if (this._openedWindows[name]) {
