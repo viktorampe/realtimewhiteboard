@@ -21,6 +21,10 @@ import {
   FavoriteServiceInterface,
   FAVORITE_SERVICE_TOKEN
 } from './../../../../dal/src/lib/favorite/favorite.service.interface';
+import {
+  LearningPlanServiceInterface,
+  LEARNING_PLAN_SERVICE_TOKEN
+} from './../../../../dal/src/lib/learning-plan/learning-plan.service.interface';
 import { LoginPageViewModel } from './loginpage.viewmodel';
 
 @Component({
@@ -48,6 +52,8 @@ export class LoginpageComponent implements OnInit {
   constructor(
     public loginPageviewModel: LoginPageViewModel,
     private personApi: PersonApi,
+    @Inject(LEARNING_PLAN_SERVICE_TOKEN)
+    private learningPlanService: LearningPlanServiceInterface,
     @Inject(FAVORITE_SERVICE_TOKEN)
     private favoriteService: FavoriteServiceInterface,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
@@ -75,6 +81,20 @@ export class LoginpageComponent implements OnInit {
 
   loadCurrentUserinState() {
     this.store.dispatch(new UserActions.LoadUser({ force: true }));
+  }
+
+  getAvailableYearsForSearch() {
+    this.response = this.learningPlanService.getAvailableYearsForSearch(
+      19,
+      3,
+      4
+    );
+  }
+
+  getLearningPlanAssignments() {
+    this.response = this.learningPlanService
+      .getLearningPlanAssignments(3, 6, 4, 19)
+      .pipe(map(sMap => Array.from(sMap)));
   }
 
   getFavorites(userId: number) {
