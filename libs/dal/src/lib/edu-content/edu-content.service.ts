@@ -36,18 +36,16 @@ export class EduContentService implements EduContentServiceInterface {
       .pipe(
         map(
           (res: {
-            results: {
-              count: number;
-              results: any[];
-              filterCriteriaPredictions: {
-                [key: string]: { [key: number]: number };
-              };
+            count: number;
+            results: any[];
+            filterCriteriaPredictions: {
+              [key: string]: { [key: number]: number };
             };
           }) => {
             const returnValue: SearchResultInterface = {
-              ...res.results,
+              ...res,
               filterCriteriaPredictions: this.mapObjectConversionService.objectToMap(
-                res.results.filterCriteriaPredictions,
+                res.filterCriteriaPredictions,
                 false, // first map key type is string
                 true, // we want to convert first map value to map as wel
                 true // second map key type is number

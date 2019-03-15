@@ -71,11 +71,9 @@ describe('EduContentService', () => {
     const apiSearchSpy = jest.spyOn(eduContentApi, 'search');
     mockSearch$ = hot('-a-|', {
       a: {
-        results: {
-          count: 29038,
-          results: [],
-          filterCriteriaPredictions: { someKey: { 2: 903 } }
-        }
+        count: 29038,
+        results: [],
+        filterCriteriaPredictions: { someKey: { 2: 903 } }
       }
     });
     expect(service.search(mockSearchState)).toBeObservable(
