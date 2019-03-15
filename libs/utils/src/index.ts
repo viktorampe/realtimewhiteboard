@@ -4,6 +4,7 @@ export {
   FILTER_SERVICE_TOKEN
 } from './lib/collections/filter.service.interface';
 export * from './lib/collections/group.service';
+export * from './lib/collections/map-object-conversion.service';
 export { ObjectPathService } from './lib/collections/object-path.service';
 export {
   ObjectPathServiceInterface,
