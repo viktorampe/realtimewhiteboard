@@ -4,9 +4,15 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   margin-bottom: 25px;
+  line-height: 1;
 
   &--default {
     justify-content: left;
+
+    .ui-page-header__icon-wrapper {
+      float: left;
+      margin-right: 5px;
+    }
   }
 
   &--centered {
@@ -18,18 +24,13 @@
     .ui-page-header__icon-wrapper {
       margin-right: 15px;
     }
-
   }
 
   small {
     display: block;
     text-overflow: ellipsis;
     overflow: hidden;
-  }
-
-  &__icon-wrapper {
-    float: left;
-    margin-right: 5px;
+    line-height: normal; //compensate for vertical overflow
   }
 }
 
