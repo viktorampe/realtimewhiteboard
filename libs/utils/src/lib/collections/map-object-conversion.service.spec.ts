@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { MapObjectConversionService } from './map-object-conversion.service';
 
-describe('FilterService', () => {
+describe('MapObjectConversionService', () => {
   let mapObjectConversionService: MapObjectConversionService;
 
   beforeEach(() => {
