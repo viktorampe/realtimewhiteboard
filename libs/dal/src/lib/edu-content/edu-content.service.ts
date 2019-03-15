@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SearchResultInterface, SearchStateInterface } from '@campus/search';
+import { MapObjectConversionService } from '@campus/utils';
 import { EduContentApi, PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -12,7 +13,8 @@ import { EduContentServiceInterface } from './edu-content.service.interface';
 export class EduContentService implements EduContentServiceInterface {
   constructor(
     private personApi: PersonApi,
-    private eduContentApi: EduContentApi
+    private eduContentApi: EduContentApi,
+    private mapObjectConversionService: MapObjectConversionService
   ) {}
 
   getAllForUser(userId: number): Observable<EduContentInterface[]> {
@@ -25,10 +27,43 @@ export class EduContentService implements EduContentServiceInterface {
 
   search(state: SearchStateInterface): Observable<SearchResultInterface> {
     return this.eduContentApi
-      .search(state)
-      .pipe(map((res: { results: SearchResultInterface }) => res.results));
+      .search({
+        ...state,
+        filterCriteriaSelections: this.mapObjectConversionService.mapToObject(
+          state.filterCriteriaSelections
+        )
+      })
+      .pipe(
+        map(
+          (res: {
+            results: {
+              count: number;
+              results: any[];
+              filterCriteriaPredictions: {
+                [key: string]: { [key: number]: number };
+              };
+            };
+          }) => {
+            const returnValue: SearchResultInterface = {
+              ...res.results,
+              filterCriteriaPredictions: this.mapObjectConversionService.objectToMap(
+                res.results.filterCriteriaPredictions,
+                false, // first map key type is string
+                true, // we want to convert first map value to map as wel
+                true // second map key type is number
+              )
+            };
+            return returnValue;
+          }
+        )
+      );
   }
   autoComplete(state: SearchStateInterface): Observable<string[]> {
-    return this.eduContentApi.autocomplete(state);
+    return this.eduContentApi.autocomplete({
+      ...state,
+      filterCriteriaSelections: this.mapObjectConversionService.mapToObject(
+        state.filterCriteriaSelections
+      )
+    });
   }
 }
