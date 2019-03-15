@@ -29,7 +29,7 @@ describe('EduContentService', () => {
     }
   ));
 
-  it('should return eduContents', async () => {
+  it('should return eduContents', () => {
     mockData$ = hot('-a-|', {
       a: { eduContents: [{ id: 1, type: 'file' }] }
     });
