@@ -1,5 +1,12 @@
 import { Injectable, InjectionToken } from '@angular/core';
-import { DalState } from '@campus/dal';
+import {
+  DalState,
+  EduContentProductTypeQueries,
+  EduNetQueries,
+  MethodQueries,
+  SchoolTypeQueries,
+  YearQueries
+} from '@campus/dal';
 import {
   CheckboxLineFilterComponent,
   CheckboxListFilterComponent,
@@ -8,7 +15,8 @@ import {
   SearchStateInterface
 } from '@campus/search';
 import { Store } from '@ngrx/store';
-import { Observable, of } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 export const SEARCH_TERM_FILTER_FACTORY_TOKEN = new InjectionToken(
   'SearchTermFilterFactory'
 );
@@ -17,117 +25,76 @@ export const SEARCH_TERM_FILTER_FACTORY_TOKEN = new InjectionToken(
   providedIn: 'root'
 })
 export class SearchTermFilterFactory implements SearchFilterFactory {
-  private componentCriteriaMap = {
-    years: CheckboxLineFilterComponent,
-    eduNets: CheckboxListFilterComponent,
-    schoolTypes: CheckboxListFilterComponent,
-    methods: CheckboxListFilterComponent,
-    learningArea: CheckboxListFilterComponent,
-    eduContentProductType: CheckboxListFilterComponent
-  };
-
-  private domHostCriteriaMap = {
-    years: 'hostLeft',
-    eduNets: 'hostLeft',
-    schoolTypes: 'hostLeft',
-    methods: 'hostLeft',
-    learningArea: 'hostLeft',
-    eduContentProductType: 'hostLeft'
-  };
-
-  private searchCriteria = {
-    years: {
+  private keyProperty = 'id';
+  private displayProperty = 'name';
+  private component = CheckboxListFilterComponent;
+  private domHost = 'hostLeft';
+  private filterQueries = [
+    {
+      query: YearQueries.getAll,
       name: 'years',
       label: 'Jaar',
-      keyProperty: 'id',
-      displayProperty: 'name',
-      values: [
-        {
-          data: ['a', 'b', 'c'],
-          visible: true
-        }
-      ]
+      component: CheckboxLineFilterComponent
     },
-    eduNets: {
-      name: 'eduNets',
-      label: 'Onderwijsnet',
-      keyProperty: 'id',
-      displayProperty: 'name',
-      values: [
-        {
-          data: ['a', 'b', 'c'],
-          visible: true
-        }
-      ]
-    },
-    schoolTypes: {
+    { query: EduNetQueries.getAll, name: 'eduNets', label: 'Onderwijsnet' },
+    {
+      query: SchoolTypeQueries.getAll,
       name: 'schoolTypes',
-      label: 'Onderwijsvorm',
-      keyProperty: 'id',
-      displayProperty: 'name',
-      values: [
-        {
-          data: ['a', 'b', 'c'],
-          visible: true
-        }
-      ]
+      label: 'Onderwijsvorm'
     },
-    methods: {
-      name: 'methods',
-      label: 'Methode',
-      keyProperty: 'id',
-      displayProperty: 'name',
-      values: [
-        {
-          data: ['a', 'b', 'c'],
-          visible: true
-        }
-      ]
-    },
-    learningArea: {
-      name: 'learningArea',
-      label: 'Leergebied',
-      keyProperty: 'id',
-      displayProperty: 'name',
-      values: [
-        {
-          data: ['a', 'b', 'c'],
-          visible: true
-        }
-      ]
-    },
-    eduContentProductType: {
+    { query: MethodQueries.getAll, name: 'methods', label: 'Methode' },
+    {
+      query: EduContentProductTypeQueries.getAll,
       name: 'eduContentProductType',
-      label: 'Type',
-      keyProperty: 'id',
-      displayProperty: 'name',
-      values: [
-        {
-          data: ['a', 'b', 'c'],
-          visible: true
-        }
-      ]
+      label: 'Type'
     }
-  };
+  ];
 
-  private searchFilters: SearchFilterInterface[] = Object.keys(
-    this.searchCriteria
-  ).map(criteriaName => {
-    const searchFilter: SearchFilterInterface = {
-      criteria: this.searchCriteria[criteriaName],
-      component: this.componentCriteriaMap[criteriaName],
-      domHost: this.domHostCriteriaMap[criteriaName]
-    };
-    return searchFilter;
-  });
+  //TODO: Missing learningdomains
 
-  constructor(private store: Store<DalState>) {
-    //this.store.select(EduNetQueries.)
-  }
+  constructor(private store: Store<DalState>) {}
 
   getFilters(
     searchState: SearchStateInterface
   ): Observable<SearchFilterInterface[]> {
-    return of(this.searchFilters);
+    const filters = this.filterQueries.map(filterQuery => {
+      return this.store.select(filterQuery.query).pipe(
+        map(entities => {
+          return {
+            criteria: {
+              name: filterQuery.name,
+              label: filterQuery.label,
+              keyProperty: this.keyProperty,
+              displayProperty: this.displayProperty,
+              values: Object.values(entities).map(entity => ({
+                data: entity,
+                selected: this.isSelectedInSearchState(
+                  entity,
+                  filterQuery.name,
+                  this.keyProperty,
+                  searchState
+                )
+              }))
+            },
+            component: filterQuery.component || this.component,
+            domHost: this.domHost
+          } as SearchFilterInterface;
+        })
+      );
+    });
+
+    return combineLatest(filters);
+  }
+
+  private isSelectedInSearchState(
+    object: any,
+    name: string,
+    keyProperty: string,
+    searchState: SearchStateInterface
+  ): boolean {
+    const key = searchState.filterCriteriaSelections.get(name);
+    return key
+      ? key.includes((object[keyProperty] as unknown) as string | number)
+      : false;
   }
 }
