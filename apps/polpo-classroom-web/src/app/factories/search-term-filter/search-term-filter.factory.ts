@@ -58,32 +58,40 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
     searchState: SearchStateInterface
   ): Observable<SearchFilterInterface[]> {
     const filters = this.filterQueries.map(filterQuery => {
-      return this.store.select(filterQuery.query).pipe(
-        map(entities => {
-          return {
-            criteria: {
-              name: filterQuery.name,
-              label: filterQuery.label,
-              keyProperty: this.keyProperty,
-              displayProperty: this.displayProperty,
-              values: Object.values(entities).map(entity => ({
-                data: entity,
-                selected: this.isSelectedInSearchState(
-                  entity,
-                  filterQuery.name,
-                  this.keyProperty,
-                  searchState
-                )
-              }))
-            },
-            component: filterQuery.component || this.component,
-            domHost: this.domHost
-          } as SearchFilterInterface;
-        })
-      );
+      return this.store
+        .select(filterQuery.query)
+        .pipe(
+          map(entities => this.getFilter(entities, filterQuery, searchState))
+        );
     });
 
     return combineLatest(filters);
+  }
+
+  private getFilter(
+    entities: any,
+    filterQuery: any,
+    searchState: SearchStateInterface
+  ): SearchFilterInterface {
+    return {
+      criteria: {
+        name: filterQuery.name,
+        label: filterQuery.label,
+        keyProperty: this.keyProperty,
+        displayProperty: this.displayProperty,
+        values: Object.values(entities).map(entity => ({
+          data: entity,
+          selected: this.isSelectedInSearchState(
+            entity,
+            filterQuery.name,
+            this.keyProperty,
+            searchState
+          )
+        }))
+      },
+      component: filterQuery.component || this.component,
+      domHost: this.domHost
+    } as SearchFilterInterface;
   }
 
   private isSelectedInSearchState(
