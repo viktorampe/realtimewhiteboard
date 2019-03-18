@@ -16,13 +16,14 @@ import {
 import { Dictionary } from '@ngrx/entity';
 import { Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
+import { take } from 'rxjs/operators';
 
-export const STANDARD_SEARCH_SERVICE_TOKEN = new InjectionToken(
-  'StandardSearchService'
+export const GLOBAL_SEARCH_TERM_FILTER_FACTORY_TOKEN = new InjectionToken(
+  'GlobalSearchTermFilterFactory'
 );
 
 @Injectable()
-export class StandardSearchService implements SearchFilterFactory {
+export class GlobalSearchTermFilterFactory implements SearchFilterFactory {
   // teacher: controller.educontent.area.js
 
   private learningAreas$: Observable<Dictionary<LearningAreaInterface>>;
@@ -122,7 +123,9 @@ export class StandardSearchService implements SearchFilterFactory {
   });
 
   constructor(private store: Store<DalState>) {
-    this.learningAreas$ = this.store.select(LearningAreaQueries.getAllEntities);
+    this.learningAreas$ = this.store
+      .select(LearningAreaQueries.getAllEntities)
+      .pipe(take(1));
   }
 
   getFilters(
