@@ -1,3 +1,26 @@
+import { Inject, Injectable } from '@angular/core';
+import {
+  DalState,
+  EduNetInterface,
+  EduNetQueries,
+  LearningAreaInterface,
+  LearningAreaQueries,
+  LearningPlanServiceInterface,
+  LEARNING_PLAN_SERVICE_TOKEN,
+  SchoolTypeInterface,
+  SchoolTypeQueries,
+  YearInterface
+} from '@campus/dal';
+import {
+  SearchFilterCriteriaInterface,
+  SearchFilterCriteriaValuesInterface,
+  SearchFilterFactory,
+  SearchFilterInterface,
+  SearchStateInterface
+} from '@campus/search';
+import { select, Store } from '@ngrx/store';
+import { combineLatest, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class LearningPlanFilterFactory implements SearchFilterFactory {
@@ -8,6 +31,8 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
 
   constructor(
     private store: Store<DalState>,
+    @Inject(LEARNING_PLAN_SERVICE_TOKEN)
+    private learningPlanService: LearningPlanServiceInterface
   ) {
     this.loadStreams();
   }
@@ -23,7 +48,101 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
   ): Observable<SearchFilterInterface[]> {
     const startingColumnIds = this.getStartingColumnIds(searchState);
     const columnLevel = this.getColumnLevel(startingColumnIds);
+    const startingFilters = this.getStartingFilters(
+      startingColumnIds,
+      columnLevel
+    );
+    return columnLevel >= 3
+      ? startingFilters
+      : this.getDeepFilters(startingColumnIds, searchState);
+  }
+
+  private getStartingFilters(
+    startingColumnIds: [number, number, number],
+    columnLevel: number
+  ): Observable<SearchFilterInterface[]> {
+    combineLatest(this.learningAreas$, this.eduNets$, this.schoolTypes$).pipe(
+      map(
+        (
+          startingColumnValues: [
+            LearningAreaInterface[],
+            EduNetInterface[],
+            SchoolTypeInterface[]
+          ]
+        ) => {
+          const startingSearchFilters: SearchFilterInterface[] = [];
+          for (let i = 0; i < columnLevel; i++) {
+            startingSearchFilters.push(
+              this.getStartingFilter(
+                i,
+                startingColumnIds[i],
+                startingColumnValues[i]
+              )
+            );
+          }
+        }
+      )
+    );
     return null;
+  }
+
+  private getStartingFilter(
+    currentColumnLevel: number,
+    propertyId: number,
+    startingColumnValues
+  ): SearchFilterInterface {
+    return {
+      criteria: this.getStartingLevelSearchFilterCriteria(
+        currentColumnLevel,
+        propertyId,
+        startingColumnValues
+      ),
+      component: undefined, //TODO -- add correct component
+      domHost: 'theColumnProbably' //TODO -- update
+    };
+  }
+
+  private getStartingLevelSearchFilterCriteria(
+    currentColumnLevel: number,
+    propertyId: number,
+    startingColumnValues
+  ): SearchFilterCriteriaInterface {
+    return {
+      name: 'naam', //TODO -- add switch
+      label: 'label', //TODO -- add switch
+      keyProperty: 'id', //TODO -- check if always the same, otherwise add switch
+      displayProperty: 'name', //TODO -- check if always the same, othewise add switch
+      values: this.getStartingLevelSearchFilterCriteriaValues(
+        currentColumnLevel,
+        propertyId,
+        startingColumnValues
+      )
+    };
+  }
+
+  private getStartingLevelSearchFilterCriteriaValues(
+    currentColumnLevel: number,
+    propertyId: number,
+    startingColumnValues: any
+  ): SearchFilterCriteriaValuesInterface[] {
+    return startingColumnValues.map(value => {
+      //TODO -- map this to value interfaces, we probebly need more data here to
+      // return {
+      //   data: value,
+      //   selected?: boolean;
+      //   prediction?: number;
+      //   visible?: boolean;
+      //   child?: SearchFilterCriteriaInterface;
+      //   hasChild?: boolean;
+      // }
+    });
+  }
+
+  private getDeepFilters(
+    startingColumnIds: [number, number, number],
+    searchState: SearchStateInterface
+  ): Observable<SearchFilterInterface[]> {
+    throw new Error('Method not implemented.');
   }
 
   private getStartingColumnIds(
@@ -51,4 +170,17 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
     if (learningAreaId) return 1;
     return 0;
   }
+
+  // private getYears(searchState: SearchStateInterface): YearInterface[] {
+
+  //   return this.learningPlanService.getAvailableYearsForSearch(
+  //     learningArea,
+  //     eduNet,
+  //     schoolType
+  //   ).pipe(
+  //     map((years: any[]) => {
+  //       return years as number[]
+  //     });
+  //   );
+  // }
 }
