@@ -9,5 +9,5 @@ export const EDU_CONTENT_SERVICE_TOKEN = new InjectionToken(
 export interface EduContentServiceInterface {
   getAllForUser(userId: number): Observable<EduContentInterface[]>;
   search(state: SearchStateInterface): Observable<SearchResultInterface>;
-  autoComplete(state: SearchStateInterface): Observable<String[]>;
+  autoComplete(state: SearchStateInterface): Observable<string[]>;
 }
