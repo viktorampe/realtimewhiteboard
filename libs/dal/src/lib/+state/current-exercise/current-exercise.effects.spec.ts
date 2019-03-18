@@ -16,6 +16,7 @@ import {
   Priority
 } from '../effect-feedback';
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
+import { LoadTaskEduContents } from '../task-edu-content/task-edu-content.actions';
 import {
   CurrentExerciseError,
   CurrentExerciseLoaded,
@@ -220,10 +221,16 @@ describe('ExerciseEffects', () => {
             })
           }
         );
-        expectInAndOut(
-          effects.saveExercise$,
-          saveExerciseAction,
-          effectFeedBackAction
+
+        actions = hot('a', { a: saveExerciseAction });
+        expect(effects.saveExercise$).toBeObservable(
+          hot('(ab)', {
+            a: effectFeedBackAction,
+            b: new LoadTaskEduContents({
+              userId: 6,
+              force: true
+            })
+          })
         );
         mockDate.returnRealDate();
       });

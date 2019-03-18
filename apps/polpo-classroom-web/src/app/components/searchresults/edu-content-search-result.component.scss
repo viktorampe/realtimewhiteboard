@@ -1,0 +1,73 @@
+:host {
+  width: 100%;
+}
+
+.app-educontentsearchresult {
+  display: flex;
+  flex-direction: column;
+
+  &__top {
+    display: flex;
+    flex-direction: row;
+    flex: 1 0 auto;
+
+    &__details {
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 auto;
+
+      &__header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        &__title {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+
+          span {
+            display: inline-block;
+          }
+        }
+      }
+
+      &__methods {
+        display: flex;
+        flex-direction: row;
+
+        span {
+          pointer-events: none;
+        }
+      }
+    }
+  }
+
+  &__bottom {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    text-overflow: clip;
+
+    &__contents {
+      &__producttype,
+      &__toc-header,
+      &__pedagogic {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+      }
+
+      &__toc {
+        ul {
+          margin: 0;
+        }
+      }
+    }
+
+    &__buttonbar {
+      display: flex;
+      flex-direction: row;
+    }
+  }
+}
