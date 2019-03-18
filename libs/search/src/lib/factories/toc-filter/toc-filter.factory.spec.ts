@@ -15,13 +15,29 @@ import {
 } from '@campus/dal';
 import { Store, StoreModule } from '@ngrx/store';
 import { cold } from 'jasmine-marbles';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { SearchFilterInterface, SearchStateInterface } from '../../interfaces';
+import { EduContentBookFixture } from './../../../../../dal/src/lib/+fixtures/EduContentBook.fixture';
 import { ColumnFilterComponent } from './../../components/column-filter/column-filter.component';
 import { TocFilterFactory } from './toc-filter.factory';
 
 describe('TocFilterFactory', () => {
   let store: Store<DalState>;
+
+  const mockLearningAreas = [
+    new LearningAreaFixture({ id: 1 }),
+    new LearningAreaFixture({ id: 2 })
+  ];
+
+  const mockYears = [new YearFixture({ id: 3 }), new YearFixture({ id: 4 })];
+
+  const mockMethods = [
+    new MethodFixture({ id: 5 }),
+    new MethodFixture({ id: 6 }),
+    new MethodFixture({ id: 7 })
+  ];
+
+  const mockBook = new EduContentBookFixture({ id: 8 });
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -33,7 +49,13 @@ describe('TocFilterFactory', () => {
           MethodReducer
         ])
       ],
-      providers: [Store, { provide: TOC_SERVICE_TOKEN, useValue: {} }]
+      providers: [
+        Store,
+        {
+          provide: TOC_SERVICE_TOKEN,
+          useValue: { getBooksByYearAndMethods: () => of([mockBook]) }
+        }
+      ]
     });
 
     store = TestBed.get(Store);
@@ -56,152 +78,87 @@ describe('TocFilterFactory', () => {
 
     beforeEach(() => {
       factory = TestBed.get(TocFilterFactory);
+
+      store.dispatch(
+        new LearningAreaActions.LearningAreasLoaded({
+          learningAreas: mockLearningAreas
+        })
+      );
+
+      store.dispatch(
+        new YearActions.YearsLoaded({
+          years: mockYears
+        })
+      );
+
+      store.dispatch(
+        new MethodActions.MethodsLoaded({
+          methods: mockMethods
+        })
+      );
+
+      result = factory.getFilters(mockSearchState);
     });
 
     describe('learningAreas', () => {
-      const mockLearningAreas = [
-        new LearningAreaFixture({ id: 1 }),
-        new LearningAreaFixture({ id: 2 })
-      ];
-
-      const expectedLearningAreaFilter = {
-        criteria: {
-          name: 'LearningArea',
-          label: 'Leergebieden',
-          keyProperty: 'id',
-          displayProperty: 'name',
-          values: [
-            {
-              data: mockLearningAreas[0],
-              selected: true
-            },
-            {
-              data: mockLearningAreas[1],
-              selected: false
-            }
-          ]
-        },
-        component: ColumnFilterComponent,
-        domHost: 'hostLeft',
-        options: undefined
-      };
+      const mockSelectedAreaId = 1;
+      const expectedLearningAreaFilter = getExpectedLearningAreaFilter(
+        mockSelectedAreaId
+      );
 
       beforeAll(() => {
-        // select learningArea with id:1
-        mockSearchState.filterCriteriaSelections.set('LearningArea', [1]);
-      });
-
-      beforeEach(() => {
-        store.dispatch(
-          new LearningAreaActions.LearningAreasLoaded({
-            learningAreas: mockLearningAreas
-          })
-        );
-
-        result = factory.getFilters(mockSearchState);
+        // select learningArea
+        mockSearchState.filterCriteriaSelections.set('LearningArea', [
+          mockSelectedAreaId
+        ]);
       });
 
       describe('last selection: learningArea', () => {
         it('should return filterCriteria', () => {
-          expected = [expectedLearningAreaFilter];
+          const expectedYearFilter = getExpectedYearFilter();
+
+          expected = [expectedLearningAreaFilter, expectedYearFilter];
 
           expect(result).toBeObservable(cold('a', { a: expected }));
         });
       });
 
       describe('years', () => {
-        const mockYears = [
-          new YearFixture({ id: 3 }),
-          new YearFixture({ id: 4 })
-        ];
-
-        const expectedYearFilter: SearchFilterInterface = {
-          criteria: {
-            name: 'Year',
-            label: 'Jaren',
-            keyProperty: 'id',
-            displayProperty: 'name',
-            values: [
-              {
-                data: mockYears[0],
-                selected: false
-              },
-              {
-                data: mockYears[1],
-                selected: true
-              }
-            ]
-          },
-          component: ColumnFilterComponent,
-          domHost: 'hostLeft',
-          options: undefined
-        };
+        const mockSelectedYearId = 4;
+        const expectedYearFilter = getExpectedYearFilter(mockSelectedYearId);
 
         beforeAll(() => {
-          // also select year with id:4
-          mockSearchState.filterCriteriaSelections.set('Year', [4]);
-        });
-
-        beforeEach(() => {
-          store.dispatch(
-            new YearActions.YearsLoaded({
-              years: mockYears
-            })
-          );
+          // also select year
+          mockSearchState.filterCriteriaSelections.set('Year', [
+            mockSelectedYearId
+          ]);
         });
 
         describe('last selection: year', () => {
           it('should return filterCriteria', () => {
-            expected = [expectedLearningAreaFilter, expectedYearFilter];
+            const expectedMethodFilter = getExpectedMethodFilter();
+
+            expected = [
+              expectedLearningAreaFilter,
+              expectedYearFilter,
+              expectedMethodFilter
+            ];
 
             expect(result).toBeObservable(cold('a', { a: expected }));
           });
         });
 
         describe('methods', () => {
-          const mockMethods = [
-            new MethodFixture({ id: 5 }),
-            new MethodFixture({ id: 6 }),
-            new MethodFixture({ id: 7 })
-          ];
-
-          const expectedMethodFilter: SearchFilterInterface = {
-            criteria: {
-              name: 'Method',
-              label: 'Methodes',
-              keyProperty: 'id',
-              displayProperty: 'name',
-              values: [
-                {
-                  data: mockMethods[0],
-                  selected: false
-                },
-                {
-                  data: mockMethods[1],
-                  selected: true
-                },
-                {
-                  data: mockMethods[2],
-                  selected: false
-                }
-              ]
-            },
-            component: ColumnFilterComponent,
-            domHost: 'hostLeft',
-            options: undefined
-          };
+          const mockSelectedMethodId = 6;
+          const expectedMethodFilter = getExpectedMethodFilter(
+            mockSelectedMethodId
+          );
 
           beforeAll(() => {
-            // also select method with id:6
-            mockSearchState.filterCriteriaSelections.set('Method', [6]);
-          });
-
-          beforeEach(() => {
-            store.dispatch(
-              new MethodActions.MethodsLoaded({
-                methods: mockMethods
-              })
-            );
+            // also select method
+            mockSearchState.filterCriteriaSelections.set('Method', [
+              mockSelectedMethodId
+            ]);
           });
 
           describe('last selection: method', () => {
@@ -215,8 +172,64 @@ describe('TocFilterFactory', () => {
               expect(result).toBeObservable(cold('a', { a: expected }));
             });
           });
+
+          describe('TOC tree', () => {});
         });
       });
     });
   });
+
+  function getExpectedLearningAreaFilter(selectedId?: number) {
+    return {
+      criteria: {
+        name: 'LearningArea',
+        label: 'Leergebieden',
+        keyProperty: 'id',
+        displayProperty: 'name',
+        values: mockLearningAreas.map(area => ({
+          data: area,
+          selected: area.id === selectedId
+        }))
+      },
+      component: ColumnFilterComponent,
+      domHost: 'hostLeft',
+      options: undefined
+    };
+  }
+
+  function getExpectedYearFilter(selectedId?: number) {
+    return {
+      criteria: {
+        name: 'Year',
+        label: 'Jaren',
+        keyProperty: 'id',
+        displayProperty: 'name',
+        values: mockYears.map(year => ({
+          data: year,
+          selected: year.id === selectedId
+        }))
+      },
+      component: ColumnFilterComponent,
+      domHost: 'hostLeft',
+      options: undefined
+    };
+  }
+
+  function getExpectedMethodFilter(selectedId?: number) {
+    return {
+      criteria: {
+        name: 'Method',
+        label: 'Methodes',
+        keyProperty: 'id',
+        displayProperty: 'name',
+        values: mockMethods.map(method => ({
+          data: method,
+          selected: method.id === selectedId
+        }))
+      },
+      component: ColumnFilterComponent,
+      domHost: 'hostLeft',
+      options: undefined
+    };
+  }
 });

@@ -1,6 +1,7 @@
 import { Inject, Injectable, Type } from '@angular/core';
 import {
   DalState,
+  EduContentTOCInterface,
   LearningAreaQueries,
   MethodQueries,
   TocServiceInterface,
@@ -12,7 +13,7 @@ import { Store } from '@ngrx/store';
 // tslint:disable-next-line: nx-enforce-module-boundaries
 import { PrimitivePropertiesKeys } from 'libs/utils/src/lib/types/generic.types';
 import { combineLatest, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { ColumnFilterComponent } from '../../components/column-filter/column-filter.component';
 import {
   SearchFilterComponentInterface,
@@ -88,14 +89,20 @@ export class TocFilterFactory implements SearchFilterFactory {
       );
 
     const filters = [];
-    if (searchState.filterCriteriaSelections.has('LearningArea')) {
-      filters.push(learningAreaFilter);
+    // learningArea is the first step
+    filters.push(learningAreaFilter);
 
+    // if a learningArea is selected...
+    if (searchState.filterCriteriaSelections.has('LearningArea')) {
+      // ... show the filter for years
+      filters.push(yearFilter);
+
+      // and so on
       if (searchState.filterCriteriaSelections.has('Year')) {
-        filters.push(yearFilter);
+        filters.push(methodFilter);
 
         if (searchState.filterCriteriaSelections.has('Method')) {
-          filters.push(methodFilter);
+          const tocTree = this.getTree(searchState);
         }
       }
     }
@@ -142,8 +149,26 @@ export class TocFilterFactory implements SearchFilterFactory {
     keyProperty: PrimitivePropertiesKeys<T>,
     searchState: SearchStateInterface
   ): boolean {
-    return searchState.filterCriteriaSelections
-      .get(name)
-      .includes((object[keyProperty] as unknown) as string | number);
+    const key = searchState.filterCriteriaSelections.get(name);
+    return key
+      ? key.includes((object[keyProperty] as unknown) as string | number)
+      : false;
+  }
+
+  private getTree(
+    searchState: SearchStateInterface
+  ): Observable<EduContentTOCInterface[]> {
+    return this.tocService
+      .getBooksByYearAndMethods(
+        // users can only select a single value in a columnFilter
+        searchState.filterCriteriaSelections.get('Year')[0] as number,
+        // users can only select a single value in a columnFilter -> method expects array
+        searchState.filterCriteriaSelections.get('Method') as number[]
+      )
+      .pipe(
+        // this should return a single value
+        map(books => books[0]),
+        switchMap(book => this.tocService.getTree(book.id))
+      );
   }
 }
