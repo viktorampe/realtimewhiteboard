@@ -23,7 +23,7 @@ export class MapObjectConversionService {
           ? { [key: number]: SecondLevelType }
           : ValueType;
       } {
-    return Array.from(map).reduce(
+    return Array.from(map || new Map()).reduce(
       (
         obj: KeyType extends string
           ? { [key: string]: ValueType }
@@ -81,7 +81,7 @@ export class MapObjectConversionService {
           : Map<string, SecondLevelValueType>
         : ValueType
     >();
-    Object.keys(obj).forEach(key => {
+    Object.keys(obj || {}).forEach(key => {
       map.set(
         this.stringNumberConverter<typeof forceToNumberType>(
           key,
