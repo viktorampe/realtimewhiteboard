@@ -16,6 +16,10 @@ describe('MapObjectConversionService', () => {
     expect(mapObjectConversionService).toBeTruthy();
   });
   describe('mapToObject', () => {
+    it('should return an empty object if undefined is passed', () => {
+      const map = undefined;
+      expect(mapObjectConversionService.mapToObject(map)).toEqual({});
+    });
     it('should return an object if the map type is string', () => {
       const map = new Map<string, number>([
         ['one', 23],
@@ -63,6 +67,12 @@ describe('MapObjectConversionService', () => {
     });
   });
   describe('objectToMap', () => {
+    it('should return an empty map if undefined is passed', () => {
+      const obj: { [key: string]: number } = undefined;
+      expect(mapObjectConversionService.objectToMap(obj)).toEqual(
+        new Map<string, number>()
+      );
+    });
     it('should convert a string object to a map', () => {
       const obj: { [key: string]: number } = {
         one: 23,

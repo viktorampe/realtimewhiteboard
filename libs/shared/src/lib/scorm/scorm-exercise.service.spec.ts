@@ -197,6 +197,6 @@ describe('ScormExerciseService', () => {
         result: new ResultFixture()
       })
     );
-    expect(openWindow).toHaveBeenCalledWith('scorm', 'lalalala');
+    expect(openWindow).toHaveBeenCalledWith('scorm', 'lalalala', true);
   });
 });

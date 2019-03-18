@@ -21,16 +21,15 @@ import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { LearningAreaFixture } from '@campus/dal';
-import {
-  SearchFilterCriteriaFixture,
-  SearchFilterCriteriaValuesFixture,
-  SearchPortalDirective
-} from '@campus/search';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { hot } from 'jasmine-marbles';
 import { BehaviorSubject } from 'rxjs';
+import {
+  SearchFilterCriteriaFixture,
+  SearchFilterCriteriaValuesFixture,
+  SearchPortalDirective
+} from '../../..';
 import {
   SearchFilterFactory,
   SearchFilterInterface,
@@ -239,10 +238,7 @@ describe('SearchComponent', () => {
     beforeEach(() => {
       mockSearchResults = {
         count: 2,
-        results: [
-          new LearningAreaFixture({ id: 1 }),
-          new LearningAreaFixture({ id: 2 })
-        ],
+        results: [{ id: 1 }, { id: 2 }],
         filterCriteriaPredictions: new Map([
           ['LearningArea', new Map([[1, 100], [2, 50]])]
         ])
@@ -272,11 +268,7 @@ describe('SearchComponent', () => {
 
       const newSearchResults = {
         count: 3,
-        results: [
-          new LearningAreaFixture({ id: 1 }),
-          new LearningAreaFixture({ id: 2 }),
-          new LearningAreaFixture({ id: 3 })
-        ],
+        results: [{ id: 1 }, { id: 2 }, { id: 3 }],
         filterCriteriaPredictions: new Map([
           ['LearningArea', new Map([[1, 100], [2, 50], [3, 0]])]
         ])
