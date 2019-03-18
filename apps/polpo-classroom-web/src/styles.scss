@@ -110,6 +110,9 @@ figure {
 @import 'libs/search/src/lib/search-theme';
 @include search-theme();
 
+@import './app/components/searchresults/edu-content-search-result.component.theme.scss';
+@include edu-content-search-result-theme();
+
 // include app specific css
 @import 'scss/social-media';
 

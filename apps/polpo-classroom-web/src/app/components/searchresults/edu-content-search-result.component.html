@@ -1,0 +1,207 @@
+<div class="app-educontentsearchresult" [ngClass]="{ selected: isSelected }">
+  <div class="app-educontentsearchresult__top">
+    <campus-file-extension
+      *ngIf="data.eduContent.previewImage === ''"
+      [extensionClass]="data.eduContent.publishedEduContentMetadata.fileExt"
+    ></campus-file-extension>
+    <div
+      class="app-educontentsearchresult__top__thumbnail"
+      *ngIf="data.eduContent.previewImage"
+      [style.backgroundImage]="'url(' + data.eduContent.previewImage + ')'"
+    ></div>
+    <div class="app-educontentsearchresult__top__details">
+      <header class="app-educontentsearchresult__top__details__header">
+        <div class="app-educontentsearchresult__top__details__header__title"
+          ><mat-icon
+            [svgIcon]="
+              data.eduContent.publishedEduContentMetadata.eduContentProductType
+                .icon
+            "
+          ></mat-icon>
+          <span>{{ data.eduContent.publishedEduContentMetadata.title }}</span>
+        </div>
+        <div class="app-educontentsearchresult__top__details__header__icons">
+          <mat-icon
+            class="app-educontentsearchresult__top__details__header__icons__added-task"
+            matTooltip="Al toegevoegd aan de taak"
+            *ngIf="data.inTask"
+            svgIcon="check-on"
+          ></mat-icon>
+          <mat-icon
+            class="app-educontentsearchresult__top__details__header__icons__added-bundle"
+            matTooltip="Al toegevoegd aan de bundel"
+            *ngIf="data.inBundle"
+            svgIcon="check-on"
+          ></mat-icon>
+          <mat-icon
+            matTooltip="Gekoppeld aan een bordboek"
+            *ngIf="
+              data.eduContent.publishedEduContentMetadata.eduContentTOC &&
+              data.eduContent.publishedEduContentMetadata.eduContentTOC.length
+            "
+            svgIcon="book"
+          ></mat-icon>
+          <mat-icon
+            matTooltip="Pedagogisch materiaal"
+            *ngIf="
+              data.eduContent.publishedEduContentMetadata.eduContentProductType
+                .pedagogic
+            "
+            svgIcon="student"
+          ></mat-icon>
+        </div>
+      </header>
+      <p class="app-educontentsearchresult__top__details__content">{{
+        data.eduContent.publishedEduContentMetadata.description
+      }}</p>
+      <div class="app-educontentsearchresult__top__details__methods">
+        <span
+          *ngFor="
+            let method of data.eduContent.publishedEduContentMetadata.methods
+          "
+          class="campus-method__logo {{ method.icon }}"
+          [class.campus-method__logo--color]="isSelected"
+        ></span>
+      </div>
+      <footer class="app-educontentsearchresult__top__details__footer">
+        <span
+          >Jaar
+          {{ data.eduContent.publishedEduContentMetadata.years | join: 'name' }}
+        </span>
+        |
+        <span
+          >{{
+            data.eduContent.publishedEduContentMetadata.eduNets
+              | join: 'code':' - '
+          }}
+        </span>
+        |
+        <span
+          >{{
+            data.eduContent.publishedEduContentMetadata.schoolTypes
+              | join: 'name':' - '
+          }}
+        </span>
+        |
+        <span>{{ data.eduContent.publishedEduContentMetadata.language }}</span>
+      </footer>
+    </div>
+  </div>
+  <div
+    @collapseExpandTrigger
+    *ngIf="isSelected"
+    class="app-educontentsearchresult__bottom"
+  >
+    <div class="app-educontentsearchresult__bottom__contents">
+      <div class="app-educontentsearchresult__bottom__contents__producttype">
+        <mat-icon
+          [svgIcon]="
+            data.eduContent.publishedEduContentMetadata.eduContentProductType
+              .icon
+          "
+        ></mat-icon>
+        =
+        {{
+          data.eduContent.publishedEduContentMetadata.eduContentProductType.name
+        }}
+      </div>
+
+      <div
+        *ngIf="
+          data.eduContent.publishedEduContentMetadata.eduContentTOC &&
+          data.eduContent.publishedEduContentMetadata.eduContentTOC.length
+        "
+        class="app-educontentsearchresult__bottom__contents__toc"
+      >
+        <div class="app-educontentsearchresult__bottom__contents__toc-header">
+          <mat-icon svgIcon="book"></mat-icon> = Dit is materiaal dat je kan
+          gebruiken bij:
+        </div>
+        <div
+          class="app-educontentsearchresult__bottom__contents__toc-body"
+          *ngFor="let book of normalizedEduContentToc.books"
+        >
+          <span>{{ book.title }}</span>
+          <ul>
+            <li
+              *ngFor="let toc of normalizedEduContentToc.booksToc[book.id]"
+              [class]="'toc-depth-' + toc.depth"
+              >{{ toc.title }}</li
+            >
+          </ul>
+        </div>
+      </div>
+      <div
+        *ngIf="
+          data.eduContent.publishedEduContentMetadata.eduContentProductType
+            .pedagogic
+        "
+        class="app-educontentsearchresult__bottom__contents__pedagogic"
+      >
+        <mat-icon svgIcon="student"></mat-icon> = Dit is pedagogisch materiaal:
+        dit is niet voor leerlingen bestemd
+      </div>
+    </div>
+    <div
+      clickStopPropagation
+      class="app-educontentsearchresult__bottom__buttonbar"
+    >
+      <campus-button
+        class="app-educontentsearchresult__bottom__buttonbar__openstatic"
+        (click)="open()"
+        iconClass="eye"
+        >Bekijken
+      </campus-button>
+      <campus-button
+        class="app-educontentsearchresult__bottom__buttonbar__linkbundle"
+        *ngIf="!data.currentTask && !data.inBundle"
+        (click)="linkBundle()"
+        iconClass="bundles"
+        >Toevoegen aan bundel
+      </campus-button>
+      <campus-button
+        class="app-educontentsearchresult__bottom__buttonbar__unlinkbundle"
+        *ngIf="data.inBundle"
+        (click)="unlinkBundle()"
+        iconClass="bundles"
+        >Verwijderen uit bundel
+        <mat-icon class="checkmark" svgIcon="check-on"></mat-icon>
+      </campus-button>
+      <campus-button
+        class="app-educontentsearchresult__bottom__buttonbar__linktask"
+        *ngIf="
+          !data.currentBundle &&
+          (!data.inTask &&
+            data.eduContent.publishedEduContentMetadata.taskAllowed)
+        "
+        (click)="linkTask()"
+        iconClass="task"
+        >Toevoegen aan taak
+      </campus-button>
+      <campus-button
+        class="app-educontentsearchresult__bottom__buttonbar__unlinktask"
+        *ngIf="data.inTask"
+        (click)="unlinkTask()"
+        iconClass="task"
+        >Verwijderen uit taak
+        <mat-icon class="checkmark" svgIcon="check-on"></mat-icon>
+      </campus-button>
+      <campus-button
+        class="app-educontentsearchresult__bottom__buttonbar__togglefavorites"
+        (click)="toggleFavorite()"
+        iconClass="favorites"
+      >
+        {{
+          data.isFavorite
+            ? 'Verwijderen uit favorieten'
+            : 'Toevoegen aan favorieten'
+        }}
+        <mat-icon
+          class="checkmark"
+          svgIcon="check-on"
+          *ngIf="data.isFavorite"
+        ></mat-icon>
+      </campus-button>
+    </div>
+  </div>
+</div>

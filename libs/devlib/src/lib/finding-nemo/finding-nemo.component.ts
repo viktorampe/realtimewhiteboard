@@ -7,7 +7,11 @@ import {
   ViewChild,
   ViewChildren
 } from '@angular/core';
-import { EduContentMetadataFixture, LearningAreaFixture } from '@campus/dal';
+import {
+  EduContentFixture,
+  EduContentMetadataFixture,
+  EduContentProductTypeFixture
+} from '@campus/dal';
 import {
   SearchFilterCriteriaInterface,
   SearchFilterFactory,
@@ -22,12 +26,13 @@ import {
 import { TileSecondaryActionInterface } from '@campus/ui';
 import { EduContentMetadataApi } from '@diekeure/polpo-api-angular-sdk';
 // tslint:disable-next-line:nx-enforce-module-boundaries
+import { EduContentSearchResultComponent } from 'apps/polpo-classroom-web/src/app/components/searchresults/edu-content-search-result.component';
+// tslint:disable-next-line:nx-enforce-module-boundaries
 import { STANDARD_SEARCH_SERVICE_TOKEN } from 'apps/polpo-classroom-web/src/app/services/standard-search.service';
 // tslint:disable-next-line:nx-enforce-module-boundaries
 import { MockSearchViewModel } from 'libs/search/src/lib/components/search.viewmodel.mock';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { PolpoResultItemComponent } from '../polpo-result-item/polpo-result-item.component';
 // tslint:disable-next-line:nx-enforce-module-boundaries
 import { SearchComponent } from './../../../../search/src/lib/components/search/search.component';
 
@@ -181,7 +186,7 @@ export class FindingNemoComponent implements AfterViewInit {
         domHost: 'hostSearchTerm'
       },
       results: {
-        component: PolpoResultItemComponent,
+        component: EduContentSearchResultComponent,
         sortModes: [
           {
             description: 'book',
@@ -216,8 +221,39 @@ export class FindingNemoComponent implements AfterViewInit {
     return {
       count: 2,
       results: [
-        new LearningAreaFixture({ id: 1 }),
-        new LearningAreaFixture({ id: 2 })
+        {
+          eduContent: new EduContentFixture(
+            {},
+            {
+              title: 'Aanliggende hoeken',
+              description:
+                'In dit leerobject maken leerlingen 3 tikoefeningen op aanliggende hoeken.',
+              fileExt: 'ludo.zip'
+            }
+          ),
+          inTask: true
+        },
+        {
+          eduContent: new EduContentFixture(
+            {},
+            {
+              thumbSmall:
+                'https://avatars3.githubusercontent.com/u/31932368?s=460&v=4'
+            }
+          ),
+          inBundle: true
+        },
+        {
+          eduContent: new EduContentFixture(
+            {},
+            {
+              eduContentProductType: new EduContentProductTypeFixture({
+                pedagogic: true
+              })
+            }
+          ),
+          isFavorite: true
+        }
       ],
       filterCriteriaPredictions: new Map([
         ['LearningArea', new Map([[1, 100], [2, 50]])]

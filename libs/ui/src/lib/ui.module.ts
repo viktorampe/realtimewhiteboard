@@ -68,6 +68,7 @@ import { HideMobileDirective } from './utils/directives/hide-mobile.directive';
 import { IsMobileDirective } from './utils/directives/is-mobile.directive';
 import { AdjustColorBrightnessPipe } from './utils/pipes/adjust-color-brightness/adjust-color-brightness.pipe';
 import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time.pipe';
+import { JoinPipe } from './utils/pipes/join/join.pipe';
 import { RemovePrefixStringPipe } from './utils/pipes/remove-prefix-string/remove-prefix-string.pipe';
 import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-string.pipe';
 
@@ -142,7 +143,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     DropdownDirective,
     CollapsibleSheetComponent,
     DropAreaComponent,
-    TileComponent
+    TileComponent,
+    JoinPipe
   ],
   exports: [
     FilterTextInputComponent,
@@ -194,7 +196,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     DropdownDirective,
     CollapsibleSheetComponent,
     DropAreaComponent,
-    TileComponent
+    TileComponent,
+    JoinPipe
   ]
 })
 export class UiModule {}

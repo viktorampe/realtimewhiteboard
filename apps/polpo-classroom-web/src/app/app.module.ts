@@ -1,4 +1,5 @@
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
+import { MatIconModule, MatTooltipModule } from '@angular/material';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
@@ -7,6 +8,7 @@ import { GuardsModule } from '@campus/guards';
 import { SearchModule } from '@campus/search';
 import { SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
+import { UtilsModule } from '@campus/utils';
 import { EffectsModule } from '@ngrx/effects';
 import {
   NavigationActionTiming,
@@ -26,6 +28,7 @@ import {
 } from './+state/app.reducer';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { EduContentSearchResultComponent } from './components/searchresults/edu-content-search-result.component';
 import { FavIconService, FAVICON_SERVICE_TOKEN } from './services/favicons';
 import {
   StandardSearchService,
@@ -36,10 +39,13 @@ import {
 configureBufferSize(150);
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, EduContentSearchResultComponent],
   imports: [
     SearchModule,
     UiModule,
+    UtilsModule,
+    MatTooltipModule,
+    MatIconModule,
     BrowserModule,
     AppRoutingModule,
     SharedModule.forRoot(
@@ -83,6 +89,6 @@ configureBufferSize(150);
   ],
   bootstrap: [AppComponent],
   exports: [RouterModule],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  entryComponents: [EduContentSearchResultComponent]
 })
 export class AppModule {}
