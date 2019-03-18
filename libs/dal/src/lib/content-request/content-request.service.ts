@@ -11,7 +11,7 @@ export class ContentRequestService implements ContentRequestServiceInterface {
   constructor(private educontentApi: EduContentApi) {}
 
   requestUrl(contentId: number): Observable<string> {
-    return this.educontentApi.requestURLRemote(contentId).pipe(
+    return this.educontentApi.requestURLRemote(contentId, false).pipe(
       map(url => {
         return (url as any).url;
       })
