@@ -43,7 +43,4 @@ export {
   EDU_CONTENT_SERVICE_TOKEN
 } from './lib/edu-content/edu-content.service.interface';
 export * from './lib/persons';
-export {
-  TocServiceInterface,
-  TOC_SERVICE_TOKEN
-} from './lib/toc/toc.service.interface';
+export * from './lib/toc';

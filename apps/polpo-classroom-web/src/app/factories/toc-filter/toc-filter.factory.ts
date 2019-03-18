@@ -22,6 +22,10 @@ import { PrimitivePropertiesKeys } from 'libs/utils/src/lib/types/generic.types'
 import { combineLatest, Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
+const LEARNING_AREA = 'LearningArea';
+const YEAR = 'Year';
+const METHOD = 'Method';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -44,7 +48,7 @@ export class TocFilterFactory implements SearchFilterFactory {
           this.getFilter(
             searchState,
             entities,
-            'LearningArea',
+            LEARNING_AREA,
             'Leergebieden',
             'id',
             'name',
@@ -61,7 +65,7 @@ export class TocFilterFactory implements SearchFilterFactory {
           this.getFilter(
             searchState,
             entities,
-            'Year',
+            YEAR,
             'Jaren',
             'id',
             'name',
@@ -78,7 +82,7 @@ export class TocFilterFactory implements SearchFilterFactory {
           this.getFilter(
             searchState,
             entities,
-            'Method',
+            METHOD,
             'Methodes',
             'id',
             'name',
@@ -93,15 +97,15 @@ export class TocFilterFactory implements SearchFilterFactory {
     filters.push(learningAreaFilter);
 
     // if a learningArea is selected...
-    if (searchState.filterCriteriaSelections.has('LearningArea')) {
+    if (searchState.filterCriteriaSelections.has(LEARNING_AREA)) {
       // ... show the filter for years
       filters.push(yearFilter);
 
       // and so on
-      if (searchState.filterCriteriaSelections.has('Year')) {
+      if (searchState.filterCriteriaSelections.has(YEAR)) {
         filters.push(methodFilter);
 
-        if (searchState.filterCriteriaSelections.has('Method')) {
+        if (searchState.filterCriteriaSelections.has(METHOD)) {
           const tocTree = this.getTree(searchState);
         }
       }
@@ -144,14 +148,14 @@ export class TocFilterFactory implements SearchFilterFactory {
   }
 
   private isSelectedInSearchState<T>(
-    object: T,
+    obj: T,
     name: string,
     keyProperty: PrimitivePropertiesKeys<T>,
     searchState: SearchStateInterface
   ): boolean {
     const key = searchState.filterCriteriaSelections.get(name);
     return key
-      ? key.includes((object[keyProperty] as unknown) as string | number)
+      ? key.includes((obj[keyProperty] as unknown) as string | number)
       : false;
   }
 
