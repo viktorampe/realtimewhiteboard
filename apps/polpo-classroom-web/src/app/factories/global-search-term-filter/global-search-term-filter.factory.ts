@@ -2,7 +2,7 @@ import { Injectable, InjectionToken } from '@angular/core';
 import {
   CheckboxLineFilterComponent,
   CheckboxListFilterComponent,
-  SearchFilterCriteriaValuesFixture,
+  SearchFilterCriteriaInterface,
   SearchFilterFactory,
   SearchFilterInterface,
   SearchStateInterface
@@ -38,7 +38,9 @@ export class StandardSearchService implements SearchFilterFactory {
     learningArea: 'hostLeft',
     learningDomains: 'hostLeft'
   };
-  private searchCriteria = {
+  private searchCriteria: {
+    [name: string]: SearchFilterCriteriaInterface;
+  } = {
     learningDomains: {
       name: 'learningDomains',
       label: 'Leerdomein',
@@ -51,49 +53,49 @@ export class StandardSearchService implements SearchFilterFactory {
       label: 'Methode',
       keyProperty: 'id',
       displayProperty: 'name',
-      values: new SearchFilterCriteriaValuesFixture()
+      values: []
     },
     years: {
       name: 'years',
       label: 'Jaar',
       keyProperty: 'id',
       displayProperty: 'name',
-      values: new SearchFilterCriteriaValuesFixture()
+      values: []
     },
     grades: {
       name: 'grades',
       label: 'Graad',
       keyProperty: 'id',
       displayProperty: 'name',
-      values: new SearchFilterCriteriaValuesFixture()
+      values: []
     },
     eduNets: {
       name: 'eduNets',
       label: 'Onderwijsnet',
       keyProperty: 'id',
       displayProperty: 'name',
-      values: new SearchFilterCriteriaValuesFixture()
+      values: []
     },
     schoolTypes: {
       name: 'schoolTypes',
       label: 'Onderwijsvorm',
       keyProperty: 'id',
       displayProperty: 'name',
-      values: new SearchFilterCriteriaValuesFixture()
+      values: []
     },
     eduContentProductType: {
       name: 'eduContentProductType',
       label: 'Type',
       keyProperty: 'id',
       displayProperty: 'name',
-      values: new SearchFilterCriteriaValuesFixture()
+      values: []
     },
     learningArea: {
       name: 'learningArea',
       label: 'Leergebied',
       keyProperty: 'id',
       displayProperty: 'name',
-      values: new SearchFilterCriteriaValuesFixture()
+      values: []
     }
   };
 
