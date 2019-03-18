@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import {
   DalState,
+  EduContentBookFixture,
   getStoreModuleForFeatures,
   LearningAreaActions,
   LearningAreaFixture,
@@ -13,12 +14,14 @@ import {
   YearFixture,
   YearReducer
 } from '@campus/dal';
+import {
+  ColumnFilterComponent,
+  SearchFilterInterface,
+  SearchStateInterface
+} from '@campus/search';
 import { Store, StoreModule } from '@ngrx/store';
 import { cold } from 'jasmine-marbles';
 import { Observable, of } from 'rxjs';
-import { SearchFilterInterface, SearchStateInterface } from '../../interfaces';
-import { EduContentBookFixture } from './../../../../../dal/src/lib/+fixtures/EduContentBook.fixture';
-import { ColumnFilterComponent } from './../../components/column-filter/column-filter.component';
 import { TocFilterFactory } from './toc-filter.factory';
 
 describe('TocFilterFactory', () => {
