@@ -42,4 +42,5 @@ export {
   EduContentServiceInterface,
   EDU_CONTENT_SERVICE_TOKEN
 } from './lib/edu-content/edu-content.service.interface';
+export * from './lib/learning-plan';
 export * from './lib/persons';
