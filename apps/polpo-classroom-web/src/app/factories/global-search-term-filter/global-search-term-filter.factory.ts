@@ -1,12 +1,20 @@
 import { Injectable, InjectionToken } from '@angular/core';
 import {
+  DalState,
+  LearningAreaInterface,
+  LearningAreaQueries
+} from '@campus/dal';
+import {
   CheckboxLineFilterComponent,
   CheckboxListFilterComponent,
   SearchFilterCriteriaInterface,
+  SearchFilterCriteriaValuesInterface,
   SearchFilterFactory,
   SearchFilterInterface,
   SearchStateInterface
 } from '@campus/search';
+import { Dictionary } from '@ngrx/entity';
+import { Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
 
 export const STANDARD_SEARCH_SERVICE_TOKEN = new InjectionToken(
@@ -16,6 +24,8 @@ export const STANDARD_SEARCH_SERVICE_TOKEN = new InjectionToken(
 @Injectable()
 export class StandardSearchService implements SearchFilterFactory {
   // teacher: controller.educontent.area.js
+
+  private learningAreas$: Observable<Dictionary<LearningAreaInterface>>;
 
   private componentCriteriaMap = {
     methods: CheckboxListFilterComponent,
@@ -38,6 +48,7 @@ export class StandardSearchService implements SearchFilterFactory {
     learningArea: 'hostLeft',
     learningDomains: 'hostLeft'
   };
+
   private searchCriteria: {
     [name: string]: SearchFilterCriteriaInterface;
   } = {
@@ -46,7 +57,7 @@ export class StandardSearchService implements SearchFilterFactory {
       label: 'Leerdomein',
       keyProperty: 'id',
       displayProperty: 'name',
-      values: null
+      values: []
     },
     methods: {
       name: 'methods',
@@ -110,9 +121,49 @@ export class StandardSearchService implements SearchFilterFactory {
     return searchFilter;
   });
 
+  constructor(private store: Store<DalState>) {
+    this.learningAreas$ = this.store.select(LearningAreaQueries.getAllEntities);
+  }
+
   getFilters(
     searchState: SearchStateInterface
   ): Observable<SearchFilterInterface[]> {
+    if (searchState.filterCriteriaSelections.has('learningArea')) {
+      this.searchCriteria['learningArea'].values = this.getCriteriaValues(
+        searchState.filterCriteriaSelections.get('learningArea')
+      );
+    }
     return of(this.searchFilters);
+  }
+
+  getSearchFilter(criteriaName: string) {
+    const searchFilter: SearchFilterInterface = {
+      criteria: this.searchCriteria[criteriaName],
+      component: this.componentCriteriaMap[criteriaName],
+      domHost: this.domHostCriteriaMap[criteriaName]
+    };
+    return searchFilter;
+  }
+
+  getCriteriaValues(
+    selectedValues: (string | number)[]
+  ): SearchFilterCriteriaValuesInterface[] {
+    let learningAreasFromStore: Dictionary<LearningAreaInterface>;
+
+    this.learningAreas$.subscribe(
+      (learningAreas: Dictionary<LearningAreaInterface>) => {
+        learningAreasFromStore = learningAreas;
+      }
+    );
+
+    return (this.searchCriteria['learningArea'].values = Object.values(
+      learningAreasFromStore
+    ).map(cur => {
+      const criteriaValue: SearchFilterCriteriaValuesInterface = {
+        data: cur,
+        selected: !!selectedValues.find(selectedId => selectedId === cur.id)
+      };
+      return criteriaValue;
+    }));
   }
 }
