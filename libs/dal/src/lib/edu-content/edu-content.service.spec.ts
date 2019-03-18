@@ -57,7 +57,7 @@ describe('EduContentService', () => {
     }
   ));
 
-  it('should return eduContents', async () => {
+  it('should return eduContents', () => {
     mockGetData$ = hot('-a-|', {
       a: { eduContents: [{ id: 1, type: 'file' }] }
     });
@@ -67,7 +67,7 @@ describe('EduContentService', () => {
       })
     );
   });
-  it('should return SearchResultInterface when search is called', async () => {
+  it('should return SearchResultInterface when search is called', () => {
     const apiSearchSpy = jest.spyOn(eduContentApi, 'search');
     mockSearch$ = hot('-a-|', {
       a: {
@@ -90,7 +90,7 @@ describe('EduContentService', () => {
     );
     expect(apiSearchSpy).toHaveBeenCalledWith(convertedMockSearchStateInput);
   });
-  it('should return a string array if autocomplete is called', async () => {
+  it('should return a string array if autocomplete is called', () => {
     const apiAutocompleteSpy = jest.spyOn(eduContentApi, 'autocomplete');
     mockAutocomplete$ = hot('-a-|', {
       a: ['array', 'of', 'strings']
