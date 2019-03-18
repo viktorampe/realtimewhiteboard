@@ -1,42 +1,13 @@
-import {
-  Alert,
-  AlertMarketingInterface,
-  AlertQueueInterface,
-  BundleInterface,
-  GroupInterface,
-  PersonInterface,
-  TaskInterface,
-  UnlockedContentInterface
-} from '../+models';
+import { Alert, AlertQueueInterface } from '../+models';
 
 export class AlertFixture extends Alert {
   title = 'Er is een bundel aangepast.';
   type = 'bundle';
-  link? = '/linknaarbundle';
+  link = '/linknaarbundle';
+  id: 1;
   validFrom = new Date();
-  validUntil?: Date;
   created = new Date();
-  sentAt?: Date;
   read = false;
-  message?: string;
-  messageId?: number;
-  id?: number;
-  senderId?: number;
-  recipientId?: number;
-  groupId?: number;
-  studentId?: number;
-  bundleId?: number;
-  unlockedContentId?: number;
-  taskId?: number;
-  alertMarketingId?: number;
-  sender?: PersonInterface;
-  recipient?: PersonInterface;
-  group?: GroupInterface;
-  student?: PersonInterface;
-  bundle?: BundleInterface;
-  unlockedContent?: UnlockedContentInterface;
-  task?: TaskInterface;
-  alertMarketing?: AlertMarketingInterface;
 
   constructor(props: Partial<AlertQueueInterface> = {}) {
     super();
