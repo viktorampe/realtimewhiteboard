@@ -8,19 +8,19 @@ import {
   TOC_SERVICE_TOKEN,
   YearQueries
 } from '@campus/dal';
+import {
+  ColumnFilterComponent,
+  SearchFilterComponentInterface,
+  SearchFilterFactory,
+  SearchFilterInterface,
+  SearchStateInterface
+} from '@campus/search';
 import { Dictionary } from '@ngrx/entity';
 import { Store } from '@ngrx/store';
 // tslint:disable-next-line: nx-enforce-module-boundaries
 import { PrimitivePropertiesKeys } from 'libs/utils/src/lib/types/generic.types';
 import { combineLatest, Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-import { ColumnFilterComponent } from '../../components/column-filter/column-filter.component';
-import {
-  SearchFilterComponentInterface,
-  SearchFilterFactory,
-  SearchFilterInterface,
-  SearchStateInterface
-} from '../../interfaces';
 
 @Injectable({
   providedIn: 'root'
