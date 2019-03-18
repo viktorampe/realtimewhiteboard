@@ -187,7 +187,7 @@ export class ScormExerciseService implements ScormExerciseServiceInterface {
   }
 
   private openWindow(url: string) {
-    this.windowService.openWindow('scorm', url);
+    this.windowService.openWindow('scorm', url, true);
   }
 
   private closeWindow() {

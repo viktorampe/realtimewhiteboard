@@ -14,7 +14,7 @@ export class IframeComponent {
   constructor(
     sanitizer: DomSanitizer,
     dialogRef: MatDialogRef<IframeComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { url },
+    @Inject(MAT_DIALOG_DATA) public data: { url: string },
     @Inject(WINDOW) public window: Window
   ) {
     this.url = sanitizer.bypassSecurityTrustResourceUrl(data.url);

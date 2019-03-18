@@ -18,8 +18,8 @@ export class WindowService implements WindowServiceInterface {
     public dialog: MatDialog
   ) {}
 
-  openWindow(name: string, url: string) {
-    if (this.nativeWindow.location.search.indexOf('useShell=0') === -1) {
+  openWindow(name: string, url: string, useIframe: boolean = false) {
+    if (!useIframe) {
       const openedWindow = this.nativeWindow.open(url, name);
       this._openedWindows[name] = openedWindow;
     } else {

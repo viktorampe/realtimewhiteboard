@@ -47,7 +47,7 @@ describe('IframeComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should allow a url on the iframe other then the current', () => {
+  it('should allow a url on the iframe other than the current', () => {
     const iframe = fixture.debugElement.query(By.css('iframe'));
     expect(iframe.nativeElement.attributes.src.value).toEqual(
       'http://www.google.be'

@@ -15,10 +15,7 @@ const newMockWindow = {
 
 const currentMockWindow = {
   open: jest.fn().mockReturnValue(newMockWindow),
-  close: jest.fn(),
-  location: {
-    search: 'useShell=1'
-  }
+  close: jest.fn()
 };
 
 describe('WindowService', () => {
@@ -93,8 +90,7 @@ describe('WindowService', () => {
   });
 
   it('should open an iframe component in a modal', () => {
-    TestBed.get(WINDOW).location.search = 'useShell=0';
-    windowService.openWindow('windowFoo', 'www.foo.com');
+    windowService.openWindow('windowFoo', 'www.foo.com', true);
     expect(TestBed.get(MatDialog).open).toHaveBeenCalledWith(IframeComponent, {
       data: {
         url: 'www.foo.com'
