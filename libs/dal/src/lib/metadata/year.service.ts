@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { YearApi, YearInterface } from '@diekeure/polpo-api-angular-sdk';
+import { YearApi } from '@diekeure/polpo-api-angular-sdk';
 import { Observable } from 'rxjs';
+import { YearInterface } from '../+models';
 import { YearServiceInterface } from './year.service.interface';
 
 @Injectable({

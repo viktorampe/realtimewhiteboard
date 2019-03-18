@@ -8,7 +8,9 @@ import { map } from 'rxjs/operators';
 import { EduContentBookInterface, EduContentTOCInterface } from '../+models';
 import { TocServiceInterface } from './toc.service.interface';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class TocService implements TocServiceInterface {
   constructor(
     private eduContentTOCApi: EduContentTOCApi,
