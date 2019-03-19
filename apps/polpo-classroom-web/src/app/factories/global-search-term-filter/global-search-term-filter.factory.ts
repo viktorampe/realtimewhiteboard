@@ -129,6 +129,8 @@ export class GlobalSearchTermFilterFactory implements SearchFilterFactory {
   getFilters(
     searchState: SearchStateInterface
   ): Observable<SearchFilterInterface[]> {
+    this.clearValues();
+
     if (searchState.filterCriteriaSelections.has('learningArea')) {
       this.searchCriteria['learningArea'].values = this.getCriteriaValues(
         'learningArea',
@@ -185,7 +187,13 @@ export class GlobalSearchTermFilterFactory implements SearchFilterFactory {
     return of(this.searchFilters);
   }
 
-  getCriteriaValues<T>(
+  private clearValues() {
+    Object.values(this.searchCriteria).map(filterCriteria => {
+      filterCriteria.values = [];
+    });
+  }
+
+  private getCriteriaValues<T>(
     filterKey: string,
     selectedValues: (string | number)[],
     source$: Observable<Dictionary<T>>
