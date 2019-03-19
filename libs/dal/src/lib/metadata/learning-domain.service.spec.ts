@@ -31,7 +31,7 @@ describe('LearningDomainService', () => {
     }
   ));
 
-  it('should return LearningDomains', async () => {
+  it('should return LearningDomains', () => {
     mockData$ = hot('-a-|', {
       a: [
         new LearningDomainFixture({ id: 1 }),
