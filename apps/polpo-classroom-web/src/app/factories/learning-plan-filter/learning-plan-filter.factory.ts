@@ -117,9 +117,9 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
   ): SearchFilterInterface {
     return {
       criteria: this.getStartingLevelSearchFilterCriteria(
-        currentColumnLevel,
         propertyId,
-        startingColumnValues
+        startingColumnValues,
+        this.getStartingFilterStringProperties(currentColumnLevel)
       ),
       component: ColumnFilterComponent,
       domHost: 'hostLeft'
