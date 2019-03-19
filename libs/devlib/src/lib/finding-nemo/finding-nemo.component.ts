@@ -69,7 +69,7 @@ export class FindingNemoComponent implements AfterViewInit {
   ) {
     this.setMockData();
     this.searchFilters$ = this.searchFactory.getFilters(
-      {} as SearchStateInterface
+      this.getMockSearchState()
     );
   }
 
@@ -182,7 +182,7 @@ export class FindingNemoComponent implements AfterViewInit {
       label: 'demo',
       dynamicFilters: false,
       // tslint:disable-next-line: no-use-before-declare
-      searchFilterFactory: SearchTermFilterFactory,
+      searchFilterFactory: MockFactory,
       searchTerm: {
         // autocompleteEl: string; //reference to material autocomplete component
         domHost: 'hostSearchTerm'

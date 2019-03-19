@@ -42,12 +42,7 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
       name: 'schoolTypes',
       label: 'Onderwijsvorm'
     },
-    { query: MethodQueries.getAll, name: 'methods', label: 'Methode' },
-    {
-      query: EduContentProductTypeQueries.getAll,
-      name: 'eduContentProductType',
-      label: 'Type'
-    }
+    { query: MethodQueries.getAll, name: 'methods', label: 'Methode' }
   ];
 
   //TODO: Missing learningdomains, will come from store but mocked for now
@@ -69,6 +64,30 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
           map(entities => this.getFilter(entities, filterQuery, searchState))
         );
     });
+
+    const nestedEduContentProductTypeFilters = this.store
+      .select(EduContentProductTypeQueries.getAll)
+      .pipe(
+        map(entities =>
+          entities
+            .map((val, ind, arr) => {
+              return {
+                children: arr.filter(child => child.parent == val.id),
+                ...val
+              };
+            })
+            .filter(val => val.parent == 0)
+        ),
+        map(entities =>
+          this.getFilter(
+            entities,
+            { name: 'eduContentProductType', label: 'Type' },
+            searchState
+          )
+        )
+      );
+
+    filters.push(nestedEduContentProductTypeFilters);
 
     //TODO: Missing learningdomains, will come from store but mocked for now
     filters.push(
@@ -107,7 +126,11 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
             filterQuery.name,
             this.keyProperty,
             searchState
-          )
+          ),
+          child: (entity as any).children
+            ? this.getFilter((entity as any).children, filterQuery, searchState)
+                .criteria
+            : undefined
         }))
       },
       component: filterQuery.component || this.component,
