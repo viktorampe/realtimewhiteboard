@@ -207,11 +207,10 @@ export class GlobalSearchTermFilterFactory implements SearchFilterFactory {
     return (this.searchCriteria[filterKey].values = Object.values(
       valuesFromStore
     ).map(value => {
-      const criteriaValue: SearchFilterCriteriaValuesInterface = {
+      return {
         data: value,
         selected: !!selectedValues.find(selectedId => selectedId === value.id)
       };
-      return criteriaValue;
     }));
   }
 }
