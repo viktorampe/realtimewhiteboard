@@ -9,7 +9,7 @@ import { EduContentServiceInterface } from './edu-content.service.interface';
 describe('EduContentService', () => {
   let service: EduContentServiceInterface;
   let eduContentApi: EduContentApi;
-  let mockGetData$: any;
+  let mockData$: any;
   let mockSearch$: any;
   let mockAutocomplete$: any;
   const mockSearchState: SearchStateInterface = {
@@ -34,7 +34,7 @@ describe('EduContentService', () => {
         {
           provide: PersonApi,
           useValue: {
-            getData: () => mockGetData$
+            getData: () => mockData$
           }
         },
         {
@@ -68,6 +68,7 @@ describe('EduContentService', () => {
     );
   });
   it('should return SearchResultInterface when search is called', () => {
+    //@ts-ignore-next-line
     const apiSearchSpy = jest.spyOn(eduContentApi, 'search');
     mockSearch$ = hot('-a-|', {
       a: {
@@ -91,6 +92,7 @@ describe('EduContentService', () => {
     expect(apiSearchSpy).toHaveBeenCalledWith(convertedMockSearchStateInput);
   });
   it('should return a string array if autocomplete is called', () => {
+    //@ts-ignore-next-line
     const apiAutocompleteSpy = jest.spyOn(eduContentApi, 'autocomplete');
     mockAutocomplete$ = hot('-a-|', {
       a: ['array', 'of', 'strings']
