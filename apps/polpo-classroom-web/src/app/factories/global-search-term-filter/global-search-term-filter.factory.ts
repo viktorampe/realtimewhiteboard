@@ -1,6 +1,7 @@
 import { Injectable, InjectionToken } from '@angular/core';
 import {
   DalState,
+  EduContentProductTypeQueries,
   EduNetQueries,
   LearningAreaQueries,
   MethodInterface,
@@ -158,6 +159,26 @@ export class GlobalSearchTermFilterFactory implements SearchFilterFactory {
         'schoolTypes',
         searchState.filterCriteriaSelections.get('schoolTypes'),
         this.store.select(SchoolTypeQueries.getAllEntities).pipe(take(1))
+      );
+    }
+
+    // if (searchState.filterCriteriaSelections.has('learningDomains')) {
+    //   this.searchCriteria['learningDomains'].values = this.getCriteriaValues(
+    //     'learningDomains',
+    //     searchState.filterCriteriaSelections.get('learningDomains'),
+    //     this.store.select(LearningDomainQueries.getAllEntities).pipe(take(1))
+    //   );
+    // }
+
+    if (searchState.filterCriteriaSelections.has('eduContentProductType')) {
+      this.searchCriteria[
+        'eduContentProductType'
+      ].values = this.getCriteriaValues(
+        'eduContentProductType',
+        searchState.filterCriteriaSelections.get('eduContentProductType'),
+        this.store
+          .select(EduContentProductTypeQueries.getAllEntities)
+          .pipe(take(1))
       );
     }
 
