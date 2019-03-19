@@ -123,7 +123,7 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
   private getSearchFilterCriteria(
     startingColumnValues,
     stringProperties: StartingLevelStringPropertiesInterface,
-    valueGetterFunction: Function
+    valueGetterFunction: ValueGetterFunctionType
   ): SearchFilterCriteriaInterface {
     return {
       ...stringProperties,
@@ -250,3 +250,6 @@ interface StartingLevelStringPropertiesInterface {
 }
 
 type SelectedPropertyIds = [number, number, number, number];
+type ValueGetterFunctionType = (
+  input: any[] | Map<SpecialtyInterface, LearningPlanInterface[]>
+) => SearchFilterCriteriaValuesInterface[];
