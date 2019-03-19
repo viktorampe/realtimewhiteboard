@@ -5,10 +5,12 @@ import {
   EduNetQueries,
   LearningAreaInterface,
   LearningAreaQueries,
+  LearningPlanAssignmentInterface,
   LearningPlanServiceInterface,
   LEARNING_PLAN_SERVICE_TOKEN,
   SchoolTypeInterface,
   SchoolTypeQueries,
+  SpecialtyInterface,
   YearInterface
 } from '@campus/dal';
 import {
@@ -86,6 +88,7 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
           ]
         ) => {
           const startingSearchFilters: SearchFilterInterface[] = [];
+          // push the store stream data
           for (let i = 0; i < columnLevel && i < 3; i++) {
             startingSearchFilters.push(
               this.getStartingFilter(
@@ -95,6 +98,7 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
               )
             );
           }
+          // push the years data if needed
           if (startingColumnValues[3]) {
             startingSearchFilters.push(
               this.getStartingFilter(
@@ -103,7 +107,7 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
                 startingColumnValues[3]
               )
             );
-        }
+          }
           return startingSearchFilters;
         }
       )
@@ -203,7 +207,60 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
     startingColumnIds: StartinColumnIdsType,
     searchState: SearchStateInterface
   ): Observable<SearchFilterInterface[]> {
-    throw new Error('Method not implemented.'); //TODO -- implement
+    return this.learningPlanService
+      .getLearningPlanAssignments(
+        startingColumnIds[1],
+        startingColumnIds[3],
+        startingColumnIds[2],
+        startingColumnIds[0]
+      )
+      .pipe(
+        map(
+          (
+            learningPlanAssignmentMap: Map<
+              SpecialtyInterface,
+              LearningPlanAssignmentInterface[]
+            >
+          ) => {
+            const ding: SearchFilterInterface[] = [];
+            learningPlanAssignmentMap.forEach((value, key) => {
+              ding.push({
+                criteria: this.getShit(key, value), //TODO -- i think this will return an array of SearchFilterCriteriaInterface s but i don't think the component can display an array
+                component: ColumnFilterComponent,
+                domHost: 'hostLeft'
+              });
+            });
+            return null;
+          }
+        )
+      );
+  }
+  getShit(
+    //TODO -- under construction
+    key: SpecialtyInterface,
+    values: LearningPlanAssignmentInterface[]
+  ): SearchFilterCriteriaInterface | SearchFilterCriteriaInterface[] {
+    return {
+      name: 'learningPlans.assignments',
+      label: 'Plan',
+      keyProperty: 'who knows amirite',
+      displayProperty: 'id', //TODO -- i guess
+      values: this.getSecondLevelShit(key, values)
+    };
+  }
+  getSecondLevelShit(
+    //TODO -- under construction
+    key: SpecialtyInterface,
+    values: LearningPlanAssignmentInterface[]
+  ): SearchFilterCriteriaValuesInterface[] {
+    return values.map(value => {
+      return {
+        data: value,
+        selected:
+          value.specialty.id === key.id && value.specialty.name === key.name, //TODO -- probably wrong
+        hasChild: true //TODO -- don't think this can be right
+      };
+    });
   }
 
   private getStartingColumnSelectedIds(
@@ -243,19 +300,6 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
     if (learningAreaId) return 1;
     return 0;
   }
-
-  // private getYears(searchState: SearchStateInterface): YearInterface[] {
-
-  //   return this.learningPlanService.getAvailableYearsForSearch(
-  //     learningArea,
-  //     eduNet,
-  //     schoolType
-  //   ).pipe(
-  //     map((years: any[]) => {
-  //       return years as number[]
-  //     });
-  //   );
-  // }
 }
 
 interface StartingLevelStringPropertiesInterface {
