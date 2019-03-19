@@ -12,6 +12,7 @@ import {
   YearInterface
 } from '@campus/dal';
 import {
+  ColumnFilterComponent,
   SearchFilterCriteriaInterface,
   SearchFilterCriteriaValuesInterface,
   SearchFilterFactory,
@@ -97,8 +98,8 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
         propertyId,
         startingColumnValues
       ),
-      component: undefined, //TODO -- add correct component
-      domHost: 'theColumnProbably' //TODO -- update
+      component: ColumnFilterComponent,
+      domHost: 'hostLeft'
     };
   }
 
