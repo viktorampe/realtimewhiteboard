@@ -103,8 +103,46 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
     };
   }
 
+  private getStartingFilterStringProperties(
+    currentColumnLevel: number
+  ): StartingLevelStringPropertiesInterface {
+    switch (currentColumnLevel) {
+      case 0:
+        return {
+          name: 'learningAreas',
+          label: 'Leergebieden',
+          keyProperty: 'id',
+          displayProperty: 'name'
+        };
+      case 1:
+        return {
+          name: 'eduNets',
+          label: 'Onderwijsnet',
+          keyProperty: 'id',
+          displayProperty: 'name'
+        };
+      case 2:
+        return {
+          name: 'schoolTypes',
+          label: 'Stroom',
+          keyProperty: 'id',
+          displayProperty: 'name'
+        };
+      case 3:
+        return {
+          name: 'years',
+          label: 'Jaar',
+          keyProperty: 'id',
+          displayProperty: 'name'
+        };
+      default:
+        throw Error(
+          `LearningPlanFilterFactory: getStartingFilterStringProperties: Given currentColumnLevel: ${currentColumnLevel} should not exist`
+        );
+    }
+  }
+
   private getStartingLevelSearchFilterCriteria(
-    currentColumnLevel: number,
     propertyId: number,
     startingColumnValues
   ): SearchFilterCriteriaInterface {
