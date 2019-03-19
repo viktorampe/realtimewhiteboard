@@ -1,26 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
-import {
-  DalState,
-  EduNetInterface,
-  EduNetQueries,
-  LearningAreaInterface,
-  LearningAreaQueries,
-  LearningPlanInterface,
-  LearningPlanServiceInterface,
-  LEARNING_PLAN_SERVICE_TOKEN,
-  SchoolTypeInterface,
-  SchoolTypeQueries,
-  SpecialtyInterface,
-  YearInterface
-} from '@campus/dal';
-import {
-  ColumnFilterComponent,
-  SearchFilterCriteriaInterface,
-  SearchFilterCriteriaValuesInterface,
-  SearchFilterFactory,
-  SearchFilterInterface,
-  SearchStateInterface
-} from '@campus/search';
+import { DalState, EduNetInterface, EduNetQueries, LearningAreaInterface, LearningAreaQueries, LearningPlanInterface, LearningPlanServiceInterface, LEARNING_PLAN_SERVICE_TOKEN, SchoolTypeInterface, SchoolTypeQueries, SpecialtyInterface, YearInterface } from '@campus/dal';
+import { ColumnFilterComponent, SearchFilterCriteriaInterface, SearchFilterCriteriaValuesInterface, SearchFilterFactory, SearchFilterInterface, SearchStateInterface } from '@campus/search';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -56,7 +36,7 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
     const deepSearchFilterStream =
       columnLevel > 3 ? this.getDeepFilter(startingColumnIds) : of(undefined);
     return combineLatest(
-      this.getStartingFilters(startingColumnIds, columnLevel),
+      this.getSearchFilters(startingColumnIds, columnLevel),
       deepSearchFilterStream
     ).pipe(
       map(
@@ -70,7 +50,7 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
     );
   }
 
-  private getStartingFilters(
+  private getSearchFilters(
     selectedPropertyIds: SelectedPropertyIds,
     columnLevel: number
   ): Observable<SearchFilterInterface[]> {
@@ -82,6 +62,7 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
             selectedPropertyIds[2]
           )
         : of(undefined);
+    
     return combineLatest(
       this.learningAreas$,
       this.eduNets$,
@@ -101,21 +82,13 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
           // push the store stream data
           for (let i = 0; i < columnLevel && i < 3; i++) {
             startingSearchFilters.push(
-              this.getStartingFilter(
-                i,
-                selectedPropertyIds[i],
-                startingColumnValues[i]
-              )
+              this.getSearchFilter(i, startingColumnValues[i])
             );
           }
           // push the years data if needed
           if (startingColumnValues[3]) {
             startingSearchFilters.push(
-              this.getStartingFilter(
-                3,
-                selectedPropertyIds[3],
-                startingColumnValues[3]
-              )
+              this.getSearchFilter(3, startingColumnValues[3])
             );
           }
           return startingSearchFilters;
@@ -124,23 +97,7 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
     );
   }
 
-  private getStartingFilter(
-    currentColumnLevel: number,
-    selectedPropertyId: number,
-    startingColumnValues
-  ): SearchFilterInterface {
-    return {
-      criteria: this.getStartingLevelSearchFilterCriteria(
-        selectedPropertyId,
-        startingColumnValues,
-        this.getStartingFilterStringProperties(currentColumnLevel)
-      ),
-      component: this.componentType,
-      domHost: this.domHostValue
-    };
-  }
-
-  private getStartingFilterStringProperties(
+  private getSearchFilterStringProperties(
     currentColumnLevel: number
   ): StartingLevelStringPropertiesInterface {
     switch (currentColumnLevel) {
@@ -172,6 +129,13 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
           keyProperty: 'id',
           displayProperty: 'name'
         };
+      case 4:
+        return {
+          name: 'learningPlans.assignments',
+          label: 'Leerplan',
+          keyProperty: 'ids',
+          displayProperty: 'label'
+        };
       default:
         throw Error(
           `LearningPlanFilterFactory: getStartingFilterStringProperties: Given currentColumnLevel: ${currentColumnLevel} should not exist`
@@ -179,35 +143,38 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
     }
   }
 
-  private getStartingLevelSearchFilterCriteria(
-    selectedPropertyId: number,
-    startingColumnValues,
-    stringProperties: StartingLevelStringPropertiesInterface
-  ): SearchFilterCriteriaInterface {
+  private getSearchFilter(
+    currentColumnLevel: number,
+    startingColumnValues
+  ): SearchFilterInterface {
     return {
-      name: stringProperties.name,
-      label: stringProperties.label,
-      keyProperty: stringProperties.keyProperty,
-      displayProperty: stringProperties.displayProperty,
-      values: this.getStartingLevelSearchFilterCriteriaValues(
-        selectedPropertyId,
+      criteria: this.getSearchFilterCriteria(
         startingColumnValues,
-        stringProperties
-      )
+        this.getSearchFilterStringProperties(currentColumnLevel),
+        this.getSearchFilterCriteriaValues
+      ),
+      component: this.componentType,
+      domHost: this.domHostValue
     };
   }
 
-  private getStartingLevelSearchFilterCriteriaValues(
-    selectedPropertyId: number,
-    startingColumnValues: [],
-    stringProperties: StartingLevelStringPropertiesInterface
+  private getSearchFilterCriteria(
+    startingColumnValues,
+    stringProperties: StartingLevelStringPropertiesInterface,
+    valueGetter: Function
+  ): SearchFilterCriteriaInterface {
+    return {
+      ...stringProperties,
+      values: valueGetter(startingColumnValues)
+    };
+  }
+
+  private getSearchFilterCriteriaValues(
+    startingColumnValues: any[]
   ): SearchFilterCriteriaValuesInterface[] {
     return startingColumnValues.map(value => {
       return {
         data: value,
-        selected:
-          selectedPropertyId &&
-          value[stringProperties.keyProperty] === selectedPropertyId,
         hasChild: true
       };
     });
