@@ -32,7 +32,6 @@ import { SearchTermFilterFactory } from './search-term-filter.factory';
 
 describe('SearchTermFilterFactory', () => {
   let store: Store<DalState>;
-  let x;
 
   const mockYears = [new YearFixture({ id: 3 }), new YearFixture({ id: 4 })];
 
