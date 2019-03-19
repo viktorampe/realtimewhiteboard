@@ -20,7 +20,7 @@ import {
   SearchStateInterface
 } from '@campus/search';
 import { select, Store } from '@ngrx/store';
-import { combineLatest, Observable } from 'rxjs';
+import { combineLatest, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
