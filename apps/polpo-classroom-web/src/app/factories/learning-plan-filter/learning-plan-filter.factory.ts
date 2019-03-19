@@ -184,26 +184,38 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
     throw new Error('Method not implemented.');
   }
 
-  private getStartingColumnIds(
+  private getStartingColumnSelectedIds(
     searchState: SearchStateInterface
-  ): [number, number, number] {
+  ): StartinColumnIdsType {
     const learningAreas = searchState.filterCriteriaSelections.get(
-      'learningArea'
+      'learningAreas'
     );
-    const eduNets = searchState.filterCriteriaSelections.get('eduNet');
-    const schoolTypes = searchState.filterCriteriaSelections.get('schoolType');
+    const eduNets = searchState.filterCriteriaSelections.get('eduNets');
+    const schoolTypes = searchState.filterCriteriaSelections.get('schoolTypes');
+    const years = searchState.filterCriteriaSelections.get('years');
     return [
-      learningAreas[0] as number,
-      eduNets[0] as number,
-      schoolTypes[0] as number
+      typeof learningAreas[0] === 'string'
+        ? parseInt(learningAreas[0] as string, 10)
+        : (learningAreas[0] as number),
+      typeof eduNets[0] === 'string'
+        ? parseInt(eduNets[0] as string, 10)
+        : (eduNets[0] as number),
+      typeof schoolTypes[0] === 'string'
+        ? parseInt(schoolTypes[0] as string, 10)
+        : (schoolTypes[0] as number),
+      typeof years[0] === 'string'
+        ? parseInt(schoolTypes[0] as string, 10)
+        : (schoolTypes[0] as number)
     ];
   }
 
-  private getColumnLevel([learningAreaId, eduNetId, schoolTypeId]: [
-    number,
-    number,
-    number
-  ]) {
+  private getColumnLevel([
+    learningAreaId,
+    eduNetId,
+    schoolTypeId,
+    yearId
+  ]: StartinColumnIdsType): number {
+    if (learningAreaId && eduNetId && schoolTypeId && yearId) return 4;
     if (learningAreaId && eduNetId && schoolTypeId) return 3;
     if (learningAreaId && eduNetId) return 2;
     if (learningAreaId) return 1;
