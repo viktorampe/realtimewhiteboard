@@ -26,6 +26,23 @@ describe('GlobalSearchTermFilterFactory', () => {
   let store: Store<DalState>;
   let factory: GlobalSearchTermFilterFactory;
 
+  const mockLearningAreas = [
+    new LearningAreaFixture({ id: 1, name: 'foo' }),
+    new LearningAreaFixture({ id: 2, name: 'bar' }),
+    new LearningAreaFixture({ id: 3, name: 'baz' })
+  ];
+  const mockMethods = [
+    new MethodFixture({ id: 1, name: 'foo' }),
+    new MethodFixture({ id: 2, name: 'bar' }),
+    new MethodFixture({ id: 3, name: 'baz' })
+  ];
+
+  const mockEduNets = [
+    new EduNetFixture({ id: 5, name: 'fooEduNet' }),
+    new EduNetFixture({ id: 6, name: 'barEduNet' }),
+    new EduNetFixture({ id: 7, name: 'bazEduNet' })
+  ];
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -44,54 +61,17 @@ describe('GlobalSearchTermFilterFactory', () => {
   });
 
   it('should be created', () => {
-    const factory: GlobalSearchTermFilterFactory = TestBed.get(
-      GlobalSearchTermFilterFactory
-    );
     expect(factory).toBeTruthy();
   });
 
   describe('getFilters()', () => {
+    // set which filters are selected
     const filterCriteriaSelections = new Map<string, (number | string)[]>();
     filterCriteriaSelections.set('learningArea', [1, 2]);
     filterCriteriaSelections.set('methods', [1]);
     filterCriteriaSelections.set('eduNets', [6]);
 
-    const mockLearningAreas = [
-      new LearningAreaFixture({ id: 1, name: 'foo' }),
-      new LearningAreaFixture({ id: 2, name: 'bar' }),
-      new LearningAreaFixture({ id: 3, name: 'baz' })
-    ];
-    const mockMethods = [
-      new MethodFixture({ id: 1, name: 'foo' }),
-      new MethodFixture({ id: 2, name: 'bar' }),
-      new MethodFixture({ id: 3, name: 'baz' })
-    ];
-
-    const mockEduNets = [
-      new EduNetFixture({ id: 5, name: 'fooEduNet' }),
-      new EduNetFixture({ id: 6, name: 'barEduNet' }),
-      new EduNetFixture({ id: 7, name: 'bazEduNet' })
-    ];
-
-    beforeEach(() => {
-      store.dispatch(
-        new LearningAreaActions.LearningAreasLoaded({
-          learningAreas: mockLearningAreas
-        })
-      );
-      store.dispatch(
-        new MethodActions.MethodsLoaded({
-          methods: mockMethods
-        })
-      );
-      store.dispatch(
-        new EduNetActions.EduNetsLoaded({
-          eduNets: mockEduNets
-        })
-      );
-    });
-
-    let mockSearchState: SearchStateInterface = {
+    const mockSearchState: SearchStateInterface = {
       searchTerm: '',
       filterCriteriaSelections: filterCriteriaSelections
     };
@@ -225,6 +205,24 @@ describe('GlobalSearchTermFilterFactory', () => {
         domHost: 'hostLeft'
       }
     ];
+
+    beforeEach(() => {
+      store.dispatch(
+        new LearningAreaActions.LearningAreasLoaded({
+          learningAreas: mockLearningAreas
+        })
+      );
+      store.dispatch(
+        new MethodActions.MethodsLoaded({
+          methods: mockMethods
+        })
+      );
+      store.dispatch(
+        new EduNetActions.EduNetsLoaded({
+          eduNets: mockEduNets
+        })
+      );
+    });
 
     it('should return the requested filters', () => {
       const expected = hot('(a|)', { a: expectedSearchFilterCriteria });
