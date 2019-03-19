@@ -59,20 +59,34 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
   }
 
   private getStartingFilters(
-    startingColumnIds: [number, number, number],
+    startingColumnIds: StartinColumnIdsType,
     columnLevel: number
   ): Observable<SearchFilterInterface[]> {
-    combineLatest(this.learningAreas$, this.eduNets$, this.schoolTypes$).pipe(
+    const years$ =
+      columnLevel >= 3
+        ? this.learningPlanService.getAvailableYearsForSearch(
+            startingColumnIds[0],
+            startingColumnIds[1],
+            startingColumnIds[2]
+          )
+        : of(undefined);
+    return combineLatest(
+      this.learningAreas$,
+      this.eduNets$,
+      this.schoolTypes$,
+      years$
+    ).pipe(
       map(
         (
           startingColumnValues: [
             LearningAreaInterface[],
             EduNetInterface[],
-            SchoolTypeInterface[]
+            SchoolTypeInterface[],
+            YearInterface[]
           ]
         ) => {
           const startingSearchFilters: SearchFilterInterface[] = [];
-          for (let i = 0; i < columnLevel; i++) {
+          for (let i = 0; i < columnLevel && i < 3; i++) {
             startingSearchFilters.push(
               this.getStartingFilter(
                 i,
@@ -81,10 +95,19 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
               )
             );
           }
+          if (startingColumnValues[3]) {
+            startingSearchFilters.push(
+              this.getStartingFilter(
+                3,
+                startingColumnIds[3],
+                startingColumnValues[3]
+              )
+            );
+        }
+          return startingSearchFilters;
         }
       )
     );
-    return null;
   }
 
   private getStartingFilter(
