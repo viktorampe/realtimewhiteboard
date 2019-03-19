@@ -58,7 +58,7 @@ describe('EduContentService', () => {
   ));
 
   it('should return eduContents', () => {
-    mockData$ = hot('-a-|', {
+    mockGetData$ = hot('-a-|', {
       a: { eduContents: [{ id: 1, type: 'file' }] }
     });
     expect(service.getAllForUser(1)).toBeObservable(
