@@ -23,18 +23,37 @@ const mockFilterCriteria: SearchFilterCriteriaInterface[] = [
   ]),
   new SearchFilterCriteriaFixture({}, [
     new SearchFilterCriteriaValuesFixture({
+      data: { id: 1, name: 'one' },
       selected: false,
       prediction: undefined
     }),
     new SearchFilterCriteriaValuesFixture({
+      data: { id: 1, name: 'two' },
       selected: false,
       prediction: null
     }),
-    new SearchFilterCriteriaValuesFixture({ selected: false, prediction: 0 }),
-    new SearchFilterCriteriaValuesFixture({ selected: false }),
-    new SearchFilterCriteriaValuesFixture({ selected: false }),
-    new SearchFilterCriteriaValuesFixture({ selected: false }),
-    new SearchFilterCriteriaValuesFixture({ selected: false })
+    new SearchFilterCriteriaValuesFixture({
+      data: { id: 1, name: 'three' },
+      selected: false,
+      prediction: 0
+    }),
+    new SearchFilterCriteriaValuesFixture({
+      data: { id: 1, name: 'four' },
+      selected: false
+    }),
+    new SearchFilterCriteriaValuesFixture({
+      data: { id: 1, name: 'five' },
+      selected: false
+    }),
+    new SearchFilterCriteriaValuesFixture({
+      data: { id: 1, name: 'six' },
+      selected: false
+    }),
+    new SearchFilterCriteriaValuesFixture({
+      data: { id: 1, name: 'seven' },
+      selected: false,
+      hasChild: true
+    })
   ])
 ];
 
@@ -239,6 +258,24 @@ describe('ColumnFilterComponent', () => {
       );
       expect(displayedValues.length).toBe(7);
     });
+    it('should show the correct content in the labels', () => {
+      component.filterCriteria = mockFilterCriteria;
+      fixture.detectChanges();
+      const displayedColumns = fixture.debugElement
+        .queryAll(By.css('.column__filter'))
+        .filter(column => column.nativeElement.style.display !== 'none');
+      const displayedLabels = displayedColumns[0].queryAll(
+        By.css('.column__filter__value__button-content__label')
+      );
+      expect(displayedLabels.length).toBe(7);
+      ['one', 'two', 'three', 'four', 'five', 'six', 'seven'].forEach(
+        (expectedLabel, i) => {
+          expect(displayedLabels[i].nativeElement.textContent).toBe(
+            expectedLabel
+          );
+        }
+      );
+    });
     it('should show the magnifier only if value.prediction is set and not 0', () => {
       component.filterCriteria = mockFilterCriteria;
       fixture.detectChanges();
@@ -246,9 +283,20 @@ describe('ColumnFilterComponent', () => {
         .queryAll(By.css('.column__filter'))
         .filter(column => column.nativeElement.style.display !== 'none');
       const displayedMagnifiers = displayedColumns[0].queryAll(
-        By.css('.column__filter__value__magnifier')
+        By.css('.column__filter__value__button-content__icons__magnifier')
       );
       expect(displayedMagnifiers.length).toBe(4);
+    });
+    it('should show the arrow only if value.hasChild is true', () => {
+      component.filterCriteria = mockFilterCriteria;
+      fixture.detectChanges();
+      const displayedColumns = fixture.debugElement
+        .queryAll(By.css('.column__filter'))
+        .filter(column => column.nativeElement.style.display !== 'none');
+      const displayedMagnifiers = displayedColumns[0].queryAll(
+        By.css('.column__filter__value__button-content__icons__arrow')
+      );
+      expect(displayedMagnifiers.length).toBe(1);
     });
     it('should show or hide the no-criteria message if there are criteria or no criteria', () => {
       expect(

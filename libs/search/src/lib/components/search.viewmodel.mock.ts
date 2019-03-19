@@ -103,7 +103,8 @@ export class MockSearchViewModel
               data: { id: 2, name: 'foo' }
             }),
             new SearchFilterCriteriaValuesFixture({
-              data: { id: 3, name: 'foo bar' }
+              data: { id: 3, name: 'foo bar' },
+              hasChild: true
             })
           ])
         ],

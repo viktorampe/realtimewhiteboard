@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { MockDate } from '@campus/testing';
+import { MapObjectConversionService } from '@campus/utils';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
@@ -109,6 +110,7 @@ describe('UserEffects', () => {
       providers: [
         UserEffects,
         DataPersistence,
+        MapObjectConversionService,
         provideMockActions(() => actions),
         { provide: PERSON_SERVICE_TOKEN, useValue: {} },
         { provide: FAVORITE_SERVICE_TOKEN, useValue: {} },

@@ -5,6 +5,8 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Inject, ModuleWithProviders, NgModule } from '@angular/core';
 import {
   MatBadgeModule,
+  MatDialog,
+  MatDialogModule,
   MatIconModule,
   MatIconRegistry,
   MatSnackBarModule
@@ -67,7 +69,8 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     MatIconModule,
     MatBadgeModule,
     RouterModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatDialogModule
   ],
   declarations: [
     HeaderComponent,
@@ -108,7 +111,8 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
       provide: SNACKBAR_DEFAULT_CONFIG_TOKEN,
       useClass: SnackBarDefaultConfig
     },
-    AlertToNotificationItemPipe
+    AlertToNotificationItemPipe,
+    MatDialog
   ]
 })
 export class SharedModule {

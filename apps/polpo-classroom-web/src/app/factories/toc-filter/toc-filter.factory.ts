@@ -15,7 +15,6 @@ import {
   SearchFilterInterface,
   SearchStateInterface
 } from '@campus/search';
-import { Dictionary } from '@ngrx/entity';
 import { Store } from '@ngrx/store';
 // tslint:disable-next-line: nx-enforce-module-boundaries
 import { PrimitivePropertiesKeys } from 'libs/utils/src/lib/types/generic.types';
@@ -59,7 +58,7 @@ export class TocFilterFactory implements SearchFilterFactory {
     searchState: SearchStateInterface
   ): Observable<SearchFilterInterface[]> {
     const learningAreaFilter = this.store
-      .select(LearningAreaQueries.getAllEntities)
+      .select(LearningAreaQueries.getAll)
       .pipe(
         map(entities =>
           this.getFilter(
@@ -76,7 +75,7 @@ export class TocFilterFactory implements SearchFilterFactory {
       );
 
     const yearFilter = this.store
-      .select(YearQueries.getAllEntities)
+      .select(YearQueries.getAll)
       .pipe(
         map(entities =>
           this.getFilter(
@@ -93,7 +92,7 @@ export class TocFilterFactory implements SearchFilterFactory {
       );
 
     const methodFilter = this.store
-      .select(MethodQueries.getAllEntities)
+      .select(MethodQueries.getAll)
       .pipe(
         map(entities =>
           this.getFilter(
@@ -149,7 +148,7 @@ export class TocFilterFactory implements SearchFilterFactory {
 
   private getFilter<T>(
     searchState: SearchStateInterface,
-    entities: Dictionary<T>,
+    entities: T[],
     entityName: string,
     entityLabel: string,
     entityKeyProperty: PrimitivePropertiesKeys<T>,
@@ -158,9 +157,7 @@ export class TocFilterFactory implements SearchFilterFactory {
     domHost: string,
     options?: any
   ): SearchFilterInterface {
-    const entityValues = Object.values(entities);
-
-    if (!entityValues.length) return;
+    if (!entities || !entities.length) return;
 
     return {
       criteria: {
@@ -168,7 +165,7 @@ export class TocFilterFactory implements SearchFilterFactory {
         label: entityLabel,
         keyProperty: entityKeyProperty as string,
         displayProperty: entityDisplayProperty as string,
-        values: entityValues.map(entity => ({
+        values: entities.map(entity => ({
           data: entity,
           selected: this.isSelectedInSearchState(
             entity,
@@ -221,7 +218,7 @@ export class TocFilterFactory implements SearchFilterFactory {
     if (!tree || !searchState) return;
 
     const treeFilter: SearchFilterInterface[] = [];
-    let treeDict = this.toDictionary(tree, 'id');
+    let tocs = tree;
 
     let depth = 0;
     do {
@@ -230,13 +227,13 @@ export class TocFilterFactory implements SearchFilterFactory {
           TOC + '_' + (depth - 1)
         )[0];
 
-        treeDict = this.toDictionary(treeDict[selectedTOC].children, 'id');
+        tocs = tocs.find(toc => toc.id === selectedTOC).children;
       }
 
       treeFilter.push(
         this.getFilter(
           searchState,
-          treeDict,
+          tocs,
           TOC + '_' + depth,
           'Inhoudstafel',
           'id',
@@ -250,17 +247,6 @@ export class TocFilterFactory implements SearchFilterFactory {
     } while (searchState.filterCriteriaSelections.has(TOC + '_' + (depth - 1)));
 
     return treeFilter;
-  }
-
-  // note: dictionary entries contain single values
-  private toDictionary<T>(
-    entities: T[],
-    keyProperty: PrimitivePropertiesKeys<T>
-  ): Dictionary<T> {
-    return entities.reduce((acc, ent) => {
-      acc[ent[keyProperty as string]] = ent;
-      return acc;
-    }, {});
   }
 
   private updateTreeCache(searchState: SearchStateInterface) {
