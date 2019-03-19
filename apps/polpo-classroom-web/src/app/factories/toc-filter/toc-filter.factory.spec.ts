@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import {
   DalState,
   EduContentBookFixture,
+  EduContentTOCFixture,
   getStoreModuleForFeatures,
   LearningAreaActions,
   LearningAreaFixture,
@@ -40,7 +41,48 @@ describe('TocFilterFactory', () => {
     new MethodFixture({ id: 7 })
   ];
 
-  const mockBook = new EduContentBookFixture({ id: 8 });
+  const mockBook = new EduContentBookFixture({ id: 8, title: 'Shuffle 5' });
+
+  const mockTree = [
+    new EduContentTOCFixture({
+      treeId: 1,
+      id: 1,
+      eduContentBook: mockBook,
+      title: "Unit 2 - I'm not an addict",
+      depth: 0,
+      lft: 1,
+      rgt: 6,
+      children: [
+        new EduContentTOCFixture({
+          treeId: 1,
+          id: 2,
+          eduContentBook: mockBook,
+          title: 'Focus on',
+          depth: 1,
+          lft: 2,
+          rgt: 3
+        }),
+        new EduContentTOCFixture({
+          treeId: 1,
+          id: 3,
+          eduContentBook: mockBook,
+          title: 'I am the pope of dope',
+          depth: 1,
+          lft: 4,
+          rgt: 5
+        })
+      ]
+    }),
+    new EduContentTOCFixture({
+      treeId: 1,
+      id: 4,
+      eduContentBook: mockBook,
+      title: 'Unit 3 - Believe',
+      depth: 0,
+      lft: 7,
+      rgt: 8
+    })
+  ];
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -56,7 +98,10 @@ describe('TocFilterFactory', () => {
         Store,
         {
           provide: TOC_SERVICE_TOKEN,
-          useValue: { getBooksByYearAndMethods: () => of([mockBook]) }
+          useValue: {
+            getBooksByYearAndMethods: () => of([mockBook]),
+            getTree: () => of([mockTree])
+          }
         }
       ]
     });

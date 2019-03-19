@@ -19,12 +19,13 @@ import { Dictionary } from '@ngrx/entity';
 import { Store } from '@ngrx/store';
 // tslint:disable-next-line: nx-enforce-module-boundaries
 import { PrimitivePropertiesKeys } from 'libs/utils/src/lib/types/generic.types';
-import { combineLatest, Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { map, switchMap, take } from 'rxjs/operators';
 
 const LEARNING_AREA = 'LearningArea';
 const YEAR = 'Year';
 const METHOD = 'Method';
+const TOC = 'EduContentTOC';
 
 @Injectable({
   providedIn: 'root'
@@ -33,10 +34,26 @@ export class TocFilterFactory implements SearchFilterFactory {
   private filterComponent = ColumnFilterComponent;
   private domHost = 'hostLeft';
 
+  private cachedTree: {
+    learningAreaId?: number;
+    yearId?: number;
+    methodId?: number;
+    searchState?: SearchStateInterface;
+    toc: BehaviorSubject<EduContentTOCInterface[]>;
+  } = { toc: new BehaviorSubject<EduContentTOCInterface[]>([]) };
+
+  private treeFilters = new BehaviorSubject<SearchFilterInterface[]>([]);
+
   constructor(
     @Inject(TOC_SERVICE_TOKEN) private tocService: TocServiceInterface,
     private store: Store<DalState>
-  ) {}
+  ) {
+    this.cachedTree.toc.subscribe(tree =>
+      this.treeFilters.next(
+        this.getFiltersForTree(this.cachedTree.searchState, tree)
+      )
+    );
+  }
 
   public getFilters(
     searchState: SearchStateInterface
@@ -92,7 +109,9 @@ export class TocFilterFactory implements SearchFilterFactory {
         )
       );
 
-    const filters = [];
+    const filters: Observable<SearchFilterInterface>[] = [];
+    let treeFilters: Observable<SearchFilterInterface[]> = null;
+
     // learningArea is the first step
     filters.push(learningAreaFilter);
 
@@ -106,12 +125,25 @@ export class TocFilterFactory implements SearchFilterFactory {
         filters.push(methodFilter);
 
         if (searchState.filterCriteriaSelections.has(METHOD)) {
-          const tocTree = this.getTree(searchState);
+          // update the cached tree
+          this.updateTreeCache(searchState);
+
+          // subscription will handle this.treeFilters
+          treeFilters = this.treeFilters;
         }
       }
     }
 
-    return combineLatest(filters);
+    if (treeFilters) {
+      return combineLatest(combineLatest(filters), treeFilters).pipe(
+        map(([filterArray, treeFilterArray]) => [
+          ...filterArray,
+          ...treeFilterArray
+        ])
+      );
+    } else {
+      return combineLatest(filters);
+    }
   }
 
   private getFilter<T>(
@@ -160,19 +192,84 @@ export class TocFilterFactory implements SearchFilterFactory {
   }
 
   private getTree(
-    searchState: SearchStateInterface
+    yearId: number,
+    methodId: number
   ): Observable<EduContentTOCInterface[]> {
     return this.tocService
       .getBooksByYearAndMethods(
         // users can only select a single value in a columnFilter
-        searchState.filterCriteriaSelections.get('Year')[0] as number,
+        yearId,
         // users can only select a single value in a columnFilter -> method expects array
-        searchState.filterCriteriaSelections.get('Method') as number[]
+        [methodId]
       )
       .pipe(
         // this should return a single value
         map(books => books[0]),
         switchMap(book => this.tocService.getTree(book.id))
       );
+  }
+
+  private getFiltersForTree(
+    searchState: SearchStateInterface,
+    tree: EduContentTOCInterface[]
+  ): SearchFilterInterface[] {
+    if (!tree) return;
+
+    const treeFilter: SearchFilterInterface[] = [];
+
+    let depth = 0;
+    do {
+      treeFilter.push(
+        this.getFilter(
+          searchState,
+          this.toDictionary(tree, 'id'),
+          TOC + '_' + depth + 1,
+          'Inhoudstafel',
+          'id',
+          'title',
+          this.filterComponent,
+          this.domHost
+        )
+      );
+      depth++;
+    } while (searchState.filterCriteriaSelections.has(TOC + '_' + depth));
+
+    return treeFilter;
+  }
+
+  private toDictionary<T>(
+    entities: T[],
+    keyProperty: PrimitivePropertiesKeys<T>
+  ): Dictionary<T> {
+    return entities.reduce((acc, ent) => {
+      if (acc[keyProperty as string]) {
+        acc[keyProperty as string] = [];
+      }
+      acc[keyProperty as string].push(ent);
+      return acc;
+    }, {});
+  }
+
+  private updateTreeCache(searchState: SearchStateInterface) {
+    const selections = searchState.filterCriteriaSelections;
+    if (
+      // at least one of those values changes
+      this.cachedTree.learningAreaId !==
+        (selections.get(LEARNING_AREA)[0] as number) ||
+      this.cachedTree.yearId !== (selections.get(YEAR)[0] as number) ||
+      this.cachedTree.methodId !== (selections.get(METHOD)[0] as number)
+    ) {
+      // then update the cache
+      this.cachedTree.learningAreaId = selections.get(
+        LEARNING_AREA
+      )[0] as number;
+      this.cachedTree.yearId = selections.get(YEAR)[0] as number;
+      this.cachedTree.methodId = selections.get(METHOD)[0] as number;
+      this.cachedTree.searchState = searchState;
+
+      this.getTree(this.cachedTree.yearId, this.cachedTree.methodId)
+        .pipe(take(1))
+        .subscribe(tree => this.cachedTree.toc.next(tree));
+    }
   }
 }
