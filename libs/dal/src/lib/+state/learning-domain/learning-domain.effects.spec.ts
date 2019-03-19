@@ -5,8 +5,8 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
-import { LEARNING_DOMAIN_SERVICE_TOKEN } from '../../learning-domain/learning-domain.service.interface';
 import { LearningDomainReducer } from '.';
+import { LEARNING_DOMAIN_SERVICE_TOKEN } from '../../metadata/learning-domain.service.interface';
 import {
   LearningDomainsLoaded,
   LearningDomainsLoadError,
@@ -18,7 +18,6 @@ describe('LearningDomainEffects', () => {
   let actions: Observable<any>;
   let effects: LearningDomainEffects;
   let usedState: any;
-
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -61,9 +60,13 @@ describe('LearningDomainEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature(LearningDomainReducer.NAME , LearningDomainReducer.reducer, {
-          initialState: usedState
-        }),
+        StoreModule.forFeature(
+          LearningDomainReducer.NAME,
+          LearningDomainReducer.reducer,
+          {
+            initialState: usedState
+          }
+        ),
         EffectsModule.forRoot([]),
         EffectsModule.forFeature([LearningDomainEffects])
       ],
@@ -71,7 +74,7 @@ describe('LearningDomainEffects', () => {
         {
           provide: LEARNING_DOMAIN_SERVICE_TOKEN,
           useValue: {
-            getAllForUser: () => {}
+            getAll: () => {}
           }
         },
         LearningDomainEffects,
@@ -85,15 +88,20 @@ describe('LearningDomainEffects', () => {
 
   describe('loadLearningDomain$', () => {
     const unforcedLoadAction = new LoadLearningDomains({ userId: 1 });
-    const forcedLoadAction = new LoadLearningDomains({ force: true, userId: 1 });
-    const filledLoadedAction = new LearningDomainsLoaded({ learningDomains: [] });
+    const forcedLoadAction = new LoadLearningDomains({
+      force: true,
+      userId: 1
+    });
+    const filledLoadedAction = new LearningDomainsLoaded({
+      learningDomains: []
+    });
     const loadErrorAction = new LearningDomainsLoadError(new Error('failed'));
     describe('with initialState', () => {
       beforeAll(() => {
         usedState = LearningDomainReducer.initialState;
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAllForUser', []);
+        mockServiceMethodReturnValue('getAll', []);
       });
       it('should trigger an api call with the initialState if force is not true', () => {
         expectInAndOut(
@@ -115,7 +123,7 @@ describe('LearningDomainEffects', () => {
         usedState = { ...LearningDomainReducer.initialState, loaded: true };
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAllForUser', []);
+        mockServiceMethodReturnValue('getAll', []);
       });
       it('should not trigger an api call with the loaded state if force is not true', () => {
         expectInNoOut(effects.loadLearningDomains$, unforcedLoadAction);
@@ -133,7 +141,7 @@ describe('LearningDomainEffects', () => {
         usedState = LearningDomainReducer.initialState;
       });
       beforeEach(() => {
-        mockServiceMethodError('getAllForUser', 'failed');
+        mockServiceMethodError('getAll', 'failed');
       });
       it('should return a error action if force is not true', () => {
         expectInAndOut(
@@ -159,7 +167,7 @@ describe('LearningDomainEffects', () => {
         };
       });
       beforeEach(() => {
-        mockServiceMethodError('getAllForUser', 'failed');
+        mockServiceMethodError('getAll', 'failed');
       });
       it('should return nothing action if force is not true', () => {
         expectInNoOut(effects.loadLearningDomains$, unforcedLoadAction);

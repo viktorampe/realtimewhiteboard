@@ -6,8 +6,8 @@ import {
   CurrentExerciseReducer,
   EduContentProductTypeReducer,
   EduContentReducer,
-  FavoriteReducer,
   EduNetReducer,
+  FavoriteReducer,
   LearningAreaReducer,
   LinkedPersonReducer,
   MethodReducer,
@@ -26,10 +26,12 @@ import {
   UserReducer,
   YearReducer
 } from '../..';
+import { LearningDomainReducer } from './learning-domain';
 
 export interface DalState {
   ui: UiReducer.UiState;
   learningAreas: LearningAreaReducer.State;
+  learningDomains: LearningDomainReducer.State;
   bundles: BundleReducer.State;
   eduContents: EduContentReducer.State;
   userContents: UserContentReducer.State;

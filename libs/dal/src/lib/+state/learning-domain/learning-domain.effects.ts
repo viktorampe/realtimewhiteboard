@@ -2,14 +2,17 @@ import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { map } from 'rxjs/operators';
-import { LearningDomainServiceInterface, LEARNING_DOMAIN_SERVICE_TOKEN } from '../../learning-domain/learning-domain.service.interface';
+import { DalState } from '..';
+import {
+  LearningDomainServiceInterface,
+  LEARNING_DOMAIN_SERVICE_TOKEN
+} from '../../metadata/learning-domain.service.interface';
 import {
   LearningDomainsActionTypes,
+  LearningDomainsLoaded,
   LearningDomainsLoadError,
-  LoadLearningDomains,
-  LearningDomainsLoaded
+  LoadLearningDomains
 } from './learning-domain.actions';
-import { DalState } from '..';
 
 @Injectable()
 export class LearningDomainEffects {
@@ -20,8 +23,12 @@ export class LearningDomainEffects {
       run: (action: LoadLearningDomains, state: DalState) => {
         if (!action.payload.force && state.learningDomains.loaded) return;
         return this.learningDomainService
-          .getAllForUser(action.payload.userId)
-          .pipe(map(learningDomains => new LearningDomainsLoaded({ learningDomains })));
+          .getAll()
+          .pipe(
+            map(
+              learningDomains => new LearningDomainsLoaded({ learningDomains })
+            )
+          );
       },
       onError: (action: LoadLearningDomains, error) => {
         return new LearningDomainsLoadError(error);
