@@ -1,8 +1,11 @@
 import { Injectable, InjectionToken } from '@angular/core';
 import {
   DalState,
-  LearningAreaInterface,
-  LearningAreaQueries
+  EduNetQueries,
+  LearningAreaQueries,
+  MethodInterface,
+  MethodQueries,
+  SchoolTypeQueries
 } from '@campus/dal';
 import {
   CheckboxLineFilterComponent,
@@ -25,8 +28,6 @@ export const GLOBAL_SEARCH_TERM_FILTER_FACTORY_TOKEN = new InjectionToken(
 @Injectable()
 export class GlobalSearchTermFilterFactory implements SearchFilterFactory {
   // teacher: controller.educontent.area.js
-
-  private learningAreas$: Observable<Dictionary<LearningAreaInterface>>;
 
   private componentCriteriaMap = {
     methods: CheckboxListFilterComponent,
@@ -122,49 +123,64 @@ export class GlobalSearchTermFilterFactory implements SearchFilterFactory {
     return searchFilter;
   });
 
-  constructor(private store: Store<DalState>) {
-    this.learningAreas$ = this.store
-      .select(LearningAreaQueries.getAllEntities)
-      .pipe(take(1));
-  }
+  constructor(private store: Store<DalState>) {}
 
   getFilters(
     searchState: SearchStateInterface
   ): Observable<SearchFilterInterface[]> {
     if (searchState.filterCriteriaSelections.has('learningArea')) {
       this.searchCriteria['learningArea'].values = this.getCriteriaValues(
-        searchState.filterCriteriaSelections.get('learningArea')
+        'learningArea',
+        searchState.filterCriteriaSelections.get('learningArea'),
+        this.store.select(LearningAreaQueries.getAllEntities).pipe(take(1))
+      );
+
+      // only when learning area is selected
+      this.searchCriteria['methods'].values = this.getCriteriaValues<
+        MethodInterface
+      >(
+        'methods',
+        searchState.filterCriteriaSelections.get('methods'),
+        this.store.select(MethodQueries.getAllEntities)
       );
     }
+
+    if (searchState.filterCriteriaSelections.has('eduNets')) {
+      this.searchCriteria['eduNets'].values = this.getCriteriaValues(
+        'eduNets',
+        searchState.filterCriteriaSelections.get('eduNets'),
+        this.store.select(EduNetQueries.getAllEntities).pipe(take(1))
+      );
+    }
+
+    if (searchState.filterCriteriaSelections.has('schoolTypes')) {
+      this.searchCriteria['schoolTypes'].values = this.getCriteriaValues(
+        'schoolTypes',
+        searchState.filterCriteriaSelections.get('schoolTypes'),
+        this.store.select(SchoolTypeQueries.getAllEntities).pipe(take(1))
+      );
+    }
+
     return of(this.searchFilters);
   }
 
-  getSearchFilter(criteriaName: string) {
-    const searchFilter: SearchFilterInterface = {
-      criteria: this.searchCriteria[criteriaName],
-      component: this.componentCriteriaMap[criteriaName],
-      domHost: this.domHostCriteriaMap[criteriaName]
-    };
-    return searchFilter;
-  }
-
-  getCriteriaValues(
-    selectedValues: (string | number)[]
+  getCriteriaValues<T>(
+    filterKey: string,
+    selectedValues: (string | number)[],
+    source$: Observable<Dictionary<T>>
   ): SearchFilterCriteriaValuesInterface[] {
-    let learningAreasFromStore: Dictionary<LearningAreaInterface>;
+    let valuesFromStore: Dictionary<T>;
 
-    this.learningAreas$.subscribe(
-      (learningAreas: Dictionary<LearningAreaInterface>) => {
-        learningAreasFromStore = learningAreas;
-      }
-    );
+    source$.subscribe((entities: Dictionary<T>) => {
+      valuesFromStore = entities;
+    });
 
-    return (this.searchCriteria['learningArea'].values = Object.values(
-      learningAreasFromStore
-    ).map(cur => {
+    return (this.searchCriteria[filterKey].values = Object.values(
+      valuesFromStore
+    ).map(value => {
       const criteriaValue: SearchFilterCriteriaValuesInterface = {
-        data: cur,
-        selected: !!selectedValues.find(selectedId => selectedId === cur.id)
+        data: value,
+        selected: !!selectedValues.find(selectedId => selectedId === value.id)
       };
       return criteriaValue;
     }));
