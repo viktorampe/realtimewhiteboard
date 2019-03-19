@@ -15,7 +15,7 @@ import {
   SearchStateInterface
 } from '@campus/search';
 import { Store } from '@ngrx/store';
-import { combineLatest, Observable } from 'rxjs';
+import { combineLatest, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 export const SEARCH_TERM_FILTER_FACTORY_TOKEN = new InjectionToken(
   'SearchTermFilterFactory'
@@ -50,7 +50,12 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
     }
   ];
 
-  //TODO: Missing learningdomains
+  //TODO: Missing learningdomains, will come from store but mocked for now
+  public static learningDomains = [
+    { id: 1, name: 'Lezen' },
+    { id: 2, name: 'Luisteren' },
+    { id: 3, name: 'Schrijven' }
+  ];
 
   constructor(private store: Store<DalState>) {}
 
@@ -64,6 +69,22 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
           map(entities => this.getFilter(entities, filterQuery, searchState))
         );
     });
+
+    //TODO: Missing learningdomains, will come from store but mocked for now
+    filters.push(
+      of(SearchTermFilterFactory.learningDomains).pipe(
+        map(entities =>
+          this.getFilter(
+            entities,
+            {
+              name: 'learningDomains',
+              label: 'Leergebied'
+            },
+            searchState
+          )
+        )
+      )
+    );
 
     return combineLatest(filters);
   }
@@ -90,7 +111,8 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
         }))
       },
       component: filterQuery.component || this.component,
-      domHost: this.domHost
+      domHost: this.domHost,
+      options: undefined
     } as SearchFilterInterface;
   }
 

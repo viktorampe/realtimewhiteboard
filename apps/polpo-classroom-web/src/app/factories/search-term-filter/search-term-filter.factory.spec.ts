@@ -50,6 +50,8 @@ describe('SearchTermFilterFactory', () => {
     new MethodFixture({ id: 7 })
   ];
 
+  const mockLearningDomains = SearchTermFilterFactory.learningDomains;
+
   const mockEduContentProductTypes = [
     new EduContentProductTypeFixture({ id: 12 }),
     new EduContentProductTypeFixture({ id: 13 })
@@ -89,6 +91,15 @@ describe('SearchTermFilterFactory', () => {
       searchTerm: '',
       filterCriteriaSelections: new Map<string, (number | string)[]>()
     };
+
+    const expectedFilters = [
+      getExpectedYearFilter(),
+      getExpectedEduNetFilter(),
+      getExpectedSchoolTypeFilter(),
+      getExpectedMethodFilter(),
+      getExpectedEduContentProductTypeFilter(),
+      getExpectedLearningDomainFilter()
+    ];
 
     beforeEach(() => {
       factory = TestBed.get(SearchTermFilterFactory);
@@ -132,13 +143,13 @@ describe('SearchTermFilterFactory', () => {
 
       beforeAll(() => {
         // select learningArea
-        mockSearchState.filterCriteriaSelections.set('Year', [
+        /*mockSearchState.filterCriteriaSelections.set('years', [
           mockSelectedYearId
-        ]);
+        ]);*/
       });
 
       it('should return filterCriteria', () => {
-        expect(result).toBeObservable(cold('a', { a: [expectedYearFilter] }));
+        expect(result).toBeObservable(cold('a', { a: expectedFilters }));
       });
     });
   });
@@ -225,6 +236,24 @@ describe('SearchTermFilterFactory', () => {
         values: mockEduContentProductTypes.map(eduContentProductType => ({
           data: eduContentProductType,
           selected: eduContentProductType.id === selectedId
+        }))
+      },
+      component: CheckboxListFilterComponent,
+      domHost: 'hostLeft',
+      options: undefined
+    };
+  }
+
+  function getExpectedLearningDomainFilter(selectedId?: number) {
+    return {
+      criteria: {
+        name: 'learningDomains',
+        label: 'Leergebied',
+        keyProperty: 'id',
+        displayProperty: 'name',
+        values: mockLearningDomains.map(learningDomain => ({
+          data: learningDomain,
+          selected: learningDomain.id === selectedId
         }))
       },
       component: CheckboxListFilterComponent,
