@@ -73,15 +73,15 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
   }
 
   private getStartingFilters(
-    startingColumnIds: StartinColumnIdsType,
+    selectedPropertyIds: SelectedPropertyIds,
     columnLevel: number
   ): Observable<SearchFilterInterface[]> {
-    const years$ =
+    const years$: Observable<YearInterface[]> =
       columnLevel >= 3
         ? this.learningPlanService.getAvailableYearsForSearch(
-            startingColumnIds[0],
-            startingColumnIds[1],
-            startingColumnIds[2]
+            selectedPropertyIds[0],
+            selectedPropertyIds[1],
+            selectedPropertyIds[2]
           )
         : of(undefined);
     return combineLatest(
@@ -105,7 +105,7 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
             startingSearchFilters.push(
               this.getStartingFilter(
                 i,
-                startingColumnIds[i],
+                selectedPropertyIds[i],
                 startingColumnValues[i]
               )
             );
@@ -115,7 +115,7 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
             startingSearchFilters.push(
               this.getStartingFilter(
                 3,
-                startingColumnIds[3],
+                selectedPropertyIds[3],
                 startingColumnValues[3]
               )
             );
@@ -128,12 +128,12 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
 
   private getStartingFilter(
     currentColumnLevel: number,
-    propertyId: number,
+    selectedPropertyId: number,
     startingColumnValues
   ): SearchFilterInterface {
     return {
       criteria: this.getStartingLevelSearchFilterCriteria(
-        propertyId,
+        selectedPropertyId,
         startingColumnValues,
         this.getStartingFilterStringProperties(currentColumnLevel)
       ),
@@ -182,7 +182,7 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
   }
 
   private getStartingLevelSearchFilterCriteria(
-    propertyId: number,
+    selectedPropertyId: number,
     startingColumnValues,
     stringProperties: StartingLevelStringPropertiesInterface
   ): SearchFilterCriteriaInterface {
@@ -192,7 +192,7 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
       keyProperty: stringProperties.keyProperty,
       displayProperty: stringProperties.displayProperty,
       values: this.getStartingLevelSearchFilterCriteriaValues(
-        propertyId,
+        selectedPropertyId,
         startingColumnValues,
         stringProperties
       )
@@ -216,15 +216,15 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
   }
 
   private getDeepFilters(
-    startingColumnIds: StartinColumnIdsType,
+    selectedPropertyIds: SelectedPropertyIds,
     searchState: SearchStateInterface
   ): Observable<SearchFilterInterface[]> {
     return this.learningPlanService
       .getLearningPlanAssignments(
-        startingColumnIds[1],
-        startingColumnIds[3],
-        startingColumnIds[2],
-        startingColumnIds[0]
+        selectedPropertyIds[1],
+        selectedPropertyIds[3],
+        selectedPropertyIds[2],
+        selectedPropertyIds[0]
       )
       .pipe(
         map(
@@ -254,9 +254,9 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
   ): SearchFilterCriteriaInterface | SearchFilterCriteriaInterface[] {
     return {
       name: 'learningPlans.assignments',
-      label: 'Plan',
-      keyProperty: 'who knows amirite',
-      displayProperty: 'id', //TODO -- i guess
+      label: 'Leerplan',
+      keyProperty: 'id',
+      displayProperty: key.name,
       values: this.getDeepLevelSearchFilterCriteriaValues(key, values)
     };
   }
@@ -270,14 +270,14 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
         data: value,
         selected:
           value.specialty.id === key.id && value.specialty.name === key.name, //TODO -- probably wrong
-        hasChild: true //TODO -- don't think this can be right
+        hasChild: false
       };
     });
   }
 
   private getStartingColumnSelectedIds(
     searchState: SearchStateInterface
-  ): StartinColumnIdsType {
+  ): SelectedPropertyIds {
     const learningAreas = searchState.filterCriteriaSelections.get(
       'learningAreas'
     );
@@ -305,7 +305,7 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
     eduNetId,
     schoolTypeId,
     yearId
-  ]: StartinColumnIdsType): number {
+  ]: SelectedPropertyIds): number {
     if (learningAreaId && eduNetId && schoolTypeId && yearId) return 4;
     if (learningAreaId && eduNetId && schoolTypeId) return 3;
     if (learningAreaId && eduNetId) return 2;
@@ -321,4 +321,4 @@ interface StartingLevelStringPropertiesInterface {
   displayProperty: string;
 }
 
-type StartinColumnIdsType = [number, number, number, number];
+type SelectedPropertyIds = [number, number, number, number];
