@@ -33,7 +33,6 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
   learningAreas$: Observable<LearningAreaInterface[]>;
   eduNets$: Observable<EduNetInterface[]>;
   schoolTypes$: Observable<SchoolTypeInterface[]>;
-  years$: Observable<YearInterface[]>;
 
   constructor(
     private store: Store<DalState>,
