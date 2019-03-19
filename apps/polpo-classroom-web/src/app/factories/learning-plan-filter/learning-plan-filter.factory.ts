@@ -225,7 +225,7 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
             const ding: SearchFilterInterface[] = [];
             learningPlanAssignmentMap.forEach((value, key) => {
               ding.push({
-                criteria: this.getShit(key, value), //TODO -- i think this will return an array of SearchFilterCriteriaInterface s but i don't think the component can display an array
+                criteria: this.getDeepLevelSearchFilterCriteria(key, value), //TODO -- i think this will return an array of SearchFilterCriteriaInterface s but i don't think the component can display an array
                 component: ColumnFilterComponent,
                 domHost: 'hostLeft'
               });
@@ -235,7 +235,7 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
         )
       );
   }
-  getShit(
+  getDeepLevelSearchFilterCriteria(
     //TODO -- under construction
     key: SpecialtyInterface,
     values: LearningPlanAssignmentInterface[]
@@ -245,10 +245,10 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
       label: 'Plan',
       keyProperty: 'who knows amirite',
       displayProperty: 'id', //TODO -- i guess
-      values: this.getSecondLevelShit(key, values)
+      values: this.getDeepLevelSearchFilterCriteriaValues(key, values)
     };
   }
-  getSecondLevelShit(
+  getDeepLevelSearchFilterCriteriaValues(
     //TODO -- under construction
     key: SpecialtyInterface,
     values: LearningPlanAssignmentInterface[]
