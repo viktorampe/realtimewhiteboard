@@ -41,7 +41,7 @@ export class GlobalSearchTermFilterFactory implements SearchFilterFactory {
     learningDomains: CheckboxListFilterComponent
   };
 
-  private domHostCriteriaMap = {
+  private domHostCriteriaMap: { [filterKey: string]: string } = {
     methods: 'hostLeft',
     years: 'hostLeft',
     grades: 'hostLeft',
