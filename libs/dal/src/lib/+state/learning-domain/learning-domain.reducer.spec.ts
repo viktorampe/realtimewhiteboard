@@ -1,26 +1,23 @@
 import { Update } from '@ngrx/entity';
-import {LearningDomainActions } from '.';
-import { initialState, reducer, State } from './learning-domain.reducer';
+import { LearningDomainActions } from '.';
 import { LearningDomainInterface } from '../../+models';
+import { initialState, reducer, State } from './learning-domain.reducer';
 
-/** 
- * This file is scaffolded, but needs some special attention:
- * - find and replace '__EXTRA__PROPERTY_NAME' and replace this with a property name of the LearningDomain entity.
- * - set the initial property value via '[__EXTRA__PROPERTY_NAME]InitialValue'.
- * - set the updated property value via '[__EXTRA__PROPERTY_NAME]UpdatedValue'.
-*/
-const __EXTRA__PROPERTY_NAMEInitialValue = ;
-const __EXTRA__PROPERTY_NAMEUpdatedValue = ;
+const nameInitialValue = 'Metend lezen';
+const nameUpdatedValue = 'Begrijpend luisteren';
 
 /**
  * Creates a LearningDomain.
  * @param {number} id
  * @returns {LearningDomainInterface}
  */
-function createLearningDomain(id: number, __EXTRA__PROPERTY_NAME:any = __EXTRA__PROPERTY_NAMEInitialValue): LearningDomainInterface | any {
+function createLearningDomain(
+  id: number,
+  name: any = nameInitialValue
+): LearningDomainInterface | any {
   return {
     id: id,
-    __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAME
+    name: name
   };
 }
 
@@ -38,7 +35,9 @@ function createState(
   error?: any
 ): State {
   const state: any = {
-    ids: learningDomains ? learningDomains.map(learningDomain => learningDomain.id) : [],
+    ids: learningDomains
+      ? learningDomains.map(learningDomain => learningDomain.id)
+      : [],
     entities: learningDomains
       ? learningDomains.reduce(
           (entityMap, learningDomain) => ({
@@ -53,7 +52,6 @@ function createState(
   if (error !== undefined) state.error = error;
   return state;
 }
-
 
 describe('LearningDomains Reducer', () => {
   let learningDomains: LearningDomainInterface[];
@@ -77,7 +75,9 @@ describe('LearningDomains Reducer', () => {
 
   describe('loaded action', () => {
     it('should load all learningDomains', () => {
-      const action = new LearningDomainActions.LearningDomainsLoaded({ learningDomains });
+      const action = new LearningDomainActions.LearningDomainsLoaded({
+        learningDomains
+      });
       const result = reducer(initialState, action);
       expect(result).toEqual(createState(learningDomains, true));
     });
@@ -102,7 +102,9 @@ describe('LearningDomains Reducer', () => {
     });
 
     it('should add multiple learningDomains', () => {
-      const action = new LearningDomainActions.AddLearningDomains({ learningDomains });
+      const action = new LearningDomainActions.AddLearningDomains({
+        learningDomains
+      });
       const result = reducer(initialState, action);
 
       expect(result).toEqual(createState(learningDomains, false));
@@ -111,7 +113,7 @@ describe('LearningDomains Reducer', () => {
   describe('upsert actions', () => {
     it('should upsert one learningDomain', () => {
       const originalLearningDomain = learningDomains[0];
-      
+
       const startState = reducer(
         initialState,
         new LearningDomainActions.AddLearningDomain({
@@ -119,16 +121,20 @@ describe('LearningDomains Reducer', () => {
         })
       );
 
-    
-      const updatedLearningDomain = createLearningDomain(learningDomains[0].id, 'test');
-     
+      const updatedLearningDomain = createLearningDomain(
+        learningDomains[0].id,
+        'test'
+      );
+
       const action = new LearningDomainActions.UpsertLearningDomain({
         learningDomain: updatedLearningDomain
       });
 
       const result = reducer(startState, action);
 
-      expect(result.entities[updatedLearningDomain.id]).toEqual(updatedLearningDomain);
+      expect(result.entities[updatedLearningDomain.id]).toEqual(
+        updatedLearningDomain
+      );
     });
 
     it('should upsert many learningDomains', () => {
@@ -146,9 +152,7 @@ describe('LearningDomains Reducer', () => {
 
       const result = reducer(startState, action);
 
-      expect(result).toEqual(
-        createState(learningDomainsToInsert)
-      );
+      expect(result).toEqual(createState(learningDomainsToInsert));
     });
   });
 
@@ -159,31 +163,32 @@ describe('LearningDomains Reducer', () => {
       const update: Update<LearningDomainInterface> = {
         id: 1,
         changes: {
-          __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-        } 
+          name: nameUpdatedValue
+        }
       };
       const action = new LearningDomainActions.UpdateLearningDomain({
         learningDomain: update
       });
       const result = reducer(startState, action);
-      expect(result).toEqual(createState([createLearningDomain(1, __EXTRA__PROPERTY_NAMEUpdatedValue)]));
+      expect(result).toEqual(
+        createState([createLearningDomain(1, nameUpdatedValue)])
+      );
     });
 
     it('should update multiple learningDomains', () => {
       const startState = createState(learningDomains);
       const updates: Update<LearningDomainInterface>[] = [
-        
         {
           id: 1,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          } 
+            name: nameUpdatedValue
+          }
         },
         {
           id: 2,
           changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          }  
+            name: nameUpdatedValue
+          }
         }
       ];
       const action = new LearningDomainActions.UpdateLearningDomains({
@@ -192,7 +197,11 @@ describe('LearningDomains Reducer', () => {
       const result = reducer(startState, action);
 
       expect(result).toEqual(
-        createState([createLearningDomain(1, __EXTRA__PROPERTY_NAMEUpdatedValue), createLearningDomain(2, __EXTRA__PROPERTY_NAMEUpdatedValue), learningDomains[2]])
+        createState([
+          createLearningDomain(1, nameUpdatedValue),
+          createLearningDomain(2, nameUpdatedValue),
+          learningDomains[2]
+        ])
       );
     });
   });
@@ -220,7 +229,11 @@ describe('LearningDomains Reducer', () => {
 
   describe('clear action', () => {
     it('should clear the learningDomains collection', () => {
-      const startState = createState(learningDomains, true, 'something went wrong');
+      const startState = createState(
+        learningDomains,
+        true,
+        'something went wrong'
+      );
       const action = new LearningDomainActions.ClearLearningDomains();
       const result = reducer(startState, action);
       expect(result).toEqual(createState([], true, 'something went wrong'));

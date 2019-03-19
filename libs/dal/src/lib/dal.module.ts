@@ -41,6 +41,7 @@ import {
   LearningAreaReducer,
   LearningAreasEffects
 } from './+state/learning-area';
+import { LearningDomainReducer } from './+state/learning-domain';
 import {
   LinkedPersonEffects,
   LinkedPersonReducer
@@ -158,6 +159,11 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
       LearningAreaReducer.NAME,
       LearningAreaReducer.reducer,
       { initialState: LearningAreaReducer.initialState }
+    ),
+    StoreModule.forFeature(
+      LearningDomainReducer.NAME,
+      LearningDomainReducer.reducer,
+      { initialState: LearningDomainReducer.initialState }
     ),
     StoreModule.forFeature(MethodReducer.NAME, MethodReducer.reducer, {
       initialState: MethodReducer.initialState
