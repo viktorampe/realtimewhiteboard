@@ -15,6 +15,7 @@ import {
   SearchStateInterface
 } from '@campus/search';
 import { Store } from '@ngrx/store';
+import { CheckboxFilterComponent } from 'libs/search/src/lib/components/checkbox-list-filter/checkbox-filter/checkbox-filter.component';
 import { combineLatest, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 export const SEARCH_TERM_FILTER_FACTORY_TOKEN = new InjectionToken(
@@ -65,6 +66,10 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
         );
     });
 
+    /*
+    Transforms the eduContentProductTypes to have FilterCriteriaValues that employ the 'child' 
+    attribute for every productType that has a parent. This results in a nested checkboxlist.
+    */
     const nestedEduContentProductTypeFilters = this.store
       .select(EduContentProductTypeQueries.getAll)
       .pipe(
@@ -81,7 +86,11 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
         map(entities =>
           this.getFilter(
             entities,
-            { name: 'eduContentProductType', label: 'Type' },
+            {
+              name: 'eduContentProductType',
+              label: 'Type',
+              component: CheckboxFilterComponent
+            },
             searchState
           )
         )
