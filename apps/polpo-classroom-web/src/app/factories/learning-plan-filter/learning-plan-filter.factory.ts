@@ -27,6 +27,9 @@ import { map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class LearningPlanFilterFactory implements SearchFilterFactory {
+  private componentType = ColumnFilterComponent;
+  private domHostValue = 'hostLeft';
+
   learningAreas$: Observable<LearningAreaInterface[]>;
   eduNets$: Observable<EduNetInterface[]>;
   schoolTypes$: Observable<SchoolTypeInterface[]>;
@@ -135,8 +138,8 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
         startingColumnValues,
         this.getStartingFilterStringProperties(currentColumnLevel)
       ),
-      component: ColumnFilterComponent,
-      domHost: 'hostLeft'
+      component: this.componentType,
+      domHost: this.domHostValue
     };
   }
 
@@ -236,8 +239,8 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
             learningPlanAssignmentMap.forEach((value, key) => {
               ding.push({
                 criteria: this.getDeepLevelSearchFilterCriteria(key, value), //TODO -- i think this will return an array of SearchFilterCriteriaInterface s but i don't think the component can display an array
-                component: ColumnFilterComponent,
-                domHost: 'hostLeft'
+                component: this.componentType,
+                domHost: this.domHostValue
               });
             });
             return null;
