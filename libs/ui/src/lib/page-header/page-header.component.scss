@@ -2,7 +2,6 @@
   font-family: 'Open Sans', Sans-Serif;
   font-weight: 600;
   white-space: nowrap;
-  text-overflow: ellipsis;
   margin-bottom: 25px;
   line-height: 1;
 
@@ -24,6 +23,12 @@
     .ui-page-header__icon-wrapper {
       margin-right: 15px;
     }
+  }
+
+  > div {
+    display: block;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
 
   small {
