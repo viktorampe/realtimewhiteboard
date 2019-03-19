@@ -5,7 +5,7 @@ import {
   EduNetQueries,
   LearningAreaInterface,
   LearningAreaQueries,
-  LearningPlanAssignmentInterface,
+  LearningPlanInterface,
   LearningPlanServiceInterface,
   LEARNING_PLAN_SERVICE_TOKEN,
   SchoolTypeInterface,
@@ -54,9 +54,7 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
     const startingColumnIds = this.getStartingColumnSelectedIds(searchState);
     const columnLevel = this.getColumnLevel(startingColumnIds);
     const deepSearchFilterStream =
-      columnLevel > 3
-        ? this.getDeepFilters(startingColumnIds, searchState)
-        : of([]);
+      columnLevel > 3 ? this.getDeepFilter(startingColumnIds) : of(undefined);
     return combineLatest(
       this.getStartingFilters(startingColumnIds, columnLevel),
       deepSearchFilterStream
@@ -64,9 +62,9 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
       map(
         ([startingSearchFitlers, deepSearchFilters]: [
           SearchFilterInterface[],
-          SearchFilterInterface[]
+          SearchFilterInterface
         ]) => {
-          return [...startingSearchFitlers, ...deepSearchFilters];
+          return [...startingSearchFitlers, deepSearchFilters];
         }
       )
     );
@@ -215,10 +213,9 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
     });
   }
 
-  private getDeepFilters(
-    selectedPropertyIds: SelectedPropertyIds,
-    searchState: SearchStateInterface
-  ): Observable<SearchFilterInterface[]> {
+  private getDeepFilter(
+    selectedPropertyIds: SelectedPropertyIds
+  ): Observable<SearchFilterInterface> {
     return this.learningPlanService
       .getLearningPlanAssignments(
         selectedPropertyIds[1],
@@ -231,48 +228,45 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
           (
             learningPlanAssignmentMap: Map<
               SpecialtyInterface,
-              LearningPlanAssignmentInterface[]
+              LearningPlanInterface[]
             >
           ) => {
-            const ding: SearchFilterInterface[] = [];
-            learningPlanAssignmentMap.forEach((value, key) => {
-              ding.push({
-                criteria: this.getDeepLevelSearchFilterCriteria(key, value), //TODO -- i think this will return an array of SearchFilterCriteriaInterface s but i don't think the component can display an array
-                component: this.componentType,
-                domHost: this.domHostValue
-              });
-            });
-            return null;
+            return {
+              criteria: this.getDeepLevelSearchFilterCriteria(
+                learningPlanAssignmentMap
+              ),
+              component: this.componentType,
+              domHost: this.domHostValue
+            };
           }
         )
       );
   }
   getDeepLevelSearchFilterCriteria(
-    //TODO -- under construction
-    key: SpecialtyInterface,
-    values: LearningPlanAssignmentInterface[]
+    lpaMap: Map<SpecialtyInterface, LearningPlanInterface[]>
   ): SearchFilterCriteriaInterface | SearchFilterCriteriaInterface[] {
     return {
       name: 'learningPlans.assignments',
       label: 'Leerplan',
-      keyProperty: 'id',
-      displayProperty: key.name,
-      values: this.getDeepLevelSearchFilterCriteriaValues(key, values)
+      keyProperty: 'ids',
+      displayProperty: 'label',
+      values: this.getDeepLevelSearchFilterCriteriaValues(lpaMap)
     };
   }
   getDeepLevelSearchFilterCriteriaValues(
-    //TODO -- under construction
-    key: SpecialtyInterface,
-    values: LearningPlanAssignmentInterface[]
+    lpaMap: Map<SpecialtyInterface, LearningPlanInterface[]>
   ): SearchFilterCriteriaValuesInterface[] {
-    return values.map(value => {
-      return {
-        data: value,
-        selected:
-          value.specialty.id === key.id && value.specialty.name === key.name, //TODO -- probably wrong
-        hasChild: false
-      };
-    });
+    return Array.from(lpaMap).map(
+      ([specialty, learningPlans]: [
+        SpecialtyInterface,
+        LearningPlanInterface[]
+      ]) => {
+        return {
+          data: { label: specialty.name, ids: learningPlans.map(a => a.id) },
+          hasChild: false
+        };
+      }
+    );
   }
 
   private getStartingColumnSelectedIds(
