@@ -184,20 +184,18 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
   }
 
   private getStartingLevelSearchFilterCriteriaValues(
-    currentColumnLevel: number,
-    propertyId: number,
-    startingColumnValues: any
+    selectedPropertyId: number,
+    startingColumnValues: [],
+    stringProperties: StartingLevelStringPropertiesInterface
   ): SearchFilterCriteriaValuesInterface[] {
     return startingColumnValues.map(value => {
-      //TODO -- map this to value interfaces, we probebly need more data here to
-      // return {
-      //   data: value,
-      //   selected?: boolean;
-      //   prediction?: number;
-      //   visible?: boolean;
-      //   child?: SearchFilterCriteriaInterface;
-      //   hasChild?: boolean;
-      // }
+      return {
+        data: value,
+        selected:
+          selectedPropertyId &&
+          value[stringProperties.keyProperty] === selectedPropertyId,
+        hasChild: true
+      };
     });
   }
 
