@@ -167,17 +167,18 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
 
   private getStartingLevelSearchFilterCriteria(
     propertyId: number,
-    startingColumnValues
+    startingColumnValues,
+    stringProperties: StartingLevelStringPropertiesInterface
   ): SearchFilterCriteriaInterface {
     return {
-      name: 'naam', //TODO -- add switch
-      label: 'label', //TODO -- add switch
-      keyProperty: 'id', //TODO -- check if always the same, otherwise add switch
-      displayProperty: 'name', //TODO -- check if always the same, othewise add switch
+      name: stringProperties.name,
+      label: stringProperties.label,
+      keyProperty: stringProperties.keyProperty,
+      displayProperty: stringProperties.displayProperty,
       values: this.getStartingLevelSearchFilterCriteriaValues(
-        currentColumnLevel,
         propertyId,
-        startingColumnValues
+        startingColumnValues,
+        stringProperties
       )
     };
   }
