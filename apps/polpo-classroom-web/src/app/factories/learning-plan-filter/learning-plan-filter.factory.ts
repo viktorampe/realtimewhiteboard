@@ -200,10 +200,10 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
   }
 
   private getDeepFilters(
-    startingColumnIds: [number, number, number],
+    startingColumnIds: StartinColumnIdsType,
     searchState: SearchStateInterface
   ): Observable<SearchFilterInterface[]> {
-    throw new Error('Method not implemented.');
+    throw new Error('Method not implemented.'); //TODO -- implement
   }
 
   private getStartingColumnSelectedIds(
