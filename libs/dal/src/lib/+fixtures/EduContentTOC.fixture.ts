@@ -4,6 +4,7 @@ export class EduContentTOCFixture implements EduContentTOCInterface {
   lft = 1;
   rgt = 2;
   treeId = 1;
+  id = 1;
   title = 'foo';
   depth = 0;
   eduContentBook = null;
