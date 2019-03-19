@@ -47,15 +47,15 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
   getFilters(
     searchState: SearchStateInterface
   ): Observable<SearchFilterInterface[]> {
-    const startingColumnIds = this.getStartingColumnIds(searchState);
+    const startingColumnIds = this.getStartingColumnSelectedIds(searchState);
     const columnLevel = this.getColumnLevel(startingColumnIds);
     const startingFilters = this.getStartingFilters(
       startingColumnIds,
       columnLevel
     );
-    return columnLevel >= 3
+    return columnLevel > 3
       ? startingFilters
-      : this.getDeepFilters(startingColumnIds, searchState);
+      : this.getDeepFilters(startingColumnIds, searchState); //TODO -- merge the deeps with the starting observable here, maybe do a combineLatest with the startingFiltersMethod
   }
 
   private getStartingFilters(
