@@ -11,6 +11,6 @@ export class LearningDomainService implements LearningDomainServiceInterface {
   constructor(private learningDomainApi: LearningDomainApi) {}
 
   getAll(): Observable<LearningDomainInterface[]> {
-    return this.learningDomainApi.find<LearningDomainInterface[]>();
+    return this.learningDomainApi.find<LearningDomainInterface>();
   }
 }
