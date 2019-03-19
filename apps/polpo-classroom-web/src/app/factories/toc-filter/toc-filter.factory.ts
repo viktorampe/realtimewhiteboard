@@ -57,6 +57,10 @@ export class TocFilterFactory implements SearchFilterFactory {
   public getFilters(
     searchState: SearchStateInterface
   ): Observable<SearchFilterInterface[]> {
+    const filters: Observable<SearchFilterInterface>[] = [];
+    let treeFilters: Observable<SearchFilterInterface[]> = null;
+
+    // learningArea is the first step
     const learningAreaFilter = this.store
       .select(LearningAreaQueries.getAll)
       .pipe(
@@ -73,60 +77,57 @@ export class TocFilterFactory implements SearchFilterFactory {
           )
         )
       );
-
-    const yearFilter = this.store
-      .select(YearQueries.getAll)
-      .pipe(
-        map(entities =>
-          this.getFilter(
-            searchState,
-            entities,
-            YEAR,
-            'Jaren',
-            'id',
-            'name',
-            this.filterComponent,
-            this.domHost
-          )
-        )
-      );
-
-    const methodFilter = this.store
-      .select(MethodQueries.getAll)
-      .pipe(
-        map(entities =>
-          this.getFilter(
-            searchState,
-            entities,
-            METHOD,
-            'Methodes',
-            'id',
-            'name',
-            this.filterComponent,
-            this.domHost
-          )
-        )
-      );
-
-    const filters: Observable<SearchFilterInterface>[] = [];
-    let treeFilters: Observable<SearchFilterInterface[]> = null;
-
-    // learningArea is the first step
     filters.push(learningAreaFilter);
 
     // if a learningArea is selected...
     if (searchState.filterCriteriaSelections.has(LEARNING_AREA)) {
       // ... show the filter for years
+      const yearFilter = this.store
+        .select(YearQueries.getAll)
+        .pipe(
+          map(entities =>
+            this.getFilter(
+              searchState,
+              entities,
+              YEAR,
+              'Jaren',
+              'id',
+              'name',
+              this.filterComponent,
+              this.domHost
+            )
+          )
+        );
       filters.push(yearFilter);
 
-      // and so on
+      // if a year is selected...
       if (searchState.filterCriteriaSelections.has(YEAR)) {
+        // ... show the filter for methods
+        const methodFilter = this.store
+          .select(MethodQueries.getAll)
+          .pipe(
+            map(entities =>
+              this.getFilter(
+                searchState,
+                entities,
+                METHOD,
+                'Methodes',
+                'id',
+                'name',
+                this.filterComponent,
+                this.domHost
+              )
+            )
+          );
         filters.push(methodFilter);
 
+        // if a method is selected...
         if (searchState.filterCriteriaSelections.has(METHOD)) {
           // update the cached tree
+          // include a check if it is needed
           this.updateTreeCache(searchState);
 
+          // ... show the tree filter
           // subscription will handle this.treeFilters
           treeFilters = this.treeFilters;
         }
