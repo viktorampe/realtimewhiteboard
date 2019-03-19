@@ -1,8 +1,8 @@
-import { EduContentTOCInterface } from '@diekeure/polpo-api-angular-sdk';
+import { EduContentTOCInterface } from '../+models';
 
 export class EduContentTOCFixture implements EduContentTOCInterface {
-  lft = 0;
-  rgt = 0;
+  lft = 1;
+  rgt = 2;
   treeId = 1;
   title = 'foo';
   depth = 0;
