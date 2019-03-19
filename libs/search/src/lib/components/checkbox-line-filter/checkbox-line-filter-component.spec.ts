@@ -5,7 +5,6 @@ import {
   MatIconRegistry
 } from '@angular/material';
 import { By } from '@angular/platform-browser';
-import { CredentialFixture, LearningAreaFixture } from '@campus/dal';
 import { MockMatIconRegistry } from '@campus/testing';
 import {
   SearchFilterCriteriaInterface,
@@ -39,82 +38,82 @@ describe('CheckboxLineFilterComponent', () => {
       [
         new SearchFilterCriteriaValuesFixture(
           {
-            data: new LearningAreaFixture({
+            data: {
               id: 1,
               name: 'Aardrijkskunde'
-            })
+            }
           },
           new SearchFilterCriteriaFixture(
             { keyProperty: 'id', displayProperty: 'provider' },
             [
               new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 1, provider: 'smartschool' })
+                data: { id: 1, provider: 'smartschool' }
               }),
               new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 2, provider: 'google' })
+                data: { id: 2, provider: 'google' }
               }),
               new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 3, provider: 'facebook' })
+                data: { id: 3, provider: 'facebook' }
               })
             ]
           )
         ),
         new SearchFilterCriteriaValuesFixture(
           {
-            data: new LearningAreaFixture({
+            data: {
               id: 2,
               name: 'Geschiedenis'
-            })
+            }
           },
           new SearchFilterCriteriaFixture(
             { keyProperty: 'id', displayProperty: 'provider' },
             [
               new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 1, provider: 'smartschool' })
+                data: { id: 1, provider: 'smartschool' }
               }),
               new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 2, provider: 'google' })
+                data: { id: 2, provider: 'google' }
               }),
               new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 3, provider: 'facebook' })
+                data: { id: 3, provider: 'facebook' }
               })
             ]
           )
         ),
         new SearchFilterCriteriaValuesFixture(
           {
-            data: new LearningAreaFixture({
+            data: {
               id: 3,
               name: 'Wiskunde'
-            })
+            }
           },
           new SearchFilterCriteriaFixture(
             { keyProperty: 'id', displayProperty: 'provider' },
             [
               new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 1, provider: 'smartschool' })
+                data: { id: 1, provider: 'smartschool' }
               }),
               new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 2, provider: 'google' })
+                data: { id: 2, provider: 'google' }
               }),
               new SearchFilterCriteriaValuesFixture({
-                data: new CredentialFixture({ id: 3, provider: 'facebook' })
+                data: { id: 3, provider: 'facebook' }
               })
             ]
           )
         ),
         new SearchFilterCriteriaValuesFixture({
-          data: new LearningAreaFixture({
+          data: {
             id: 4,
             name: 'Informatica'
-          }),
+          },
           visible: false
         }),
         new SearchFilterCriteriaValuesFixture({
-          data: new LearningAreaFixture({
+          data: {
             id: 5,
             name: 'Engels'
-          }),
+          },
           prediction: 0
         })
       ]

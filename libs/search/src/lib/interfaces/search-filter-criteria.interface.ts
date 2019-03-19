@@ -12,4 +12,5 @@ export interface SearchFilterCriteriaValuesInterface {
   prediction?: number;
   visible?: boolean;
   child?: SearchFilterCriteriaInterface;
+  hasChild?: boolean;
 }

@@ -1,25 +1,53 @@
 import { inject, TestBed } from '@angular/core/testing';
-import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
+import { SearchStateInterface } from '@campus/search';
+import { MapObjectConversionService } from '@campus/utils';
+import { EduContentApi, PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { hot } from '@nrwl/nx/testing';
 import { EduContentService } from './edu-content.service';
 import { EduContentServiceInterface } from './edu-content.service.interface';
 
 describe('EduContentService', () => {
   let service: EduContentServiceInterface;
-  let mockData$: any;
+  let eduContentApi: EduContentApi;
+  let mockGetData$: any;
+  let mockSearch$: any;
+  let mockAutocomplete$: any;
+  const mockSearchState: SearchStateInterface = {
+    searchTerm: 'search the term',
+    sort: 'sort string',
+    from: 83,
+    filterCriteriaSelections: new Map<string, (number | string)[]>([
+      ['key here', [3, 3, 'klsdk', 5, '3lde', 5, 0]]
+    ])
+  };
+  const convertedMockSearchStateInput = {
+    searchTerm: 'search the term',
+    sort: 'sort string',
+    from: 83,
+    filterCriteriaSelections: { 'key here': [3, 3, 'klsdk', 5, '3lde', 5, 0] }
+  };
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
         EduContentService,
+        MapObjectConversionService,
         {
           provide: PersonApi,
           useValue: {
-            getData: () => mockData$
+            getData: () => mockGetData$
+          }
+        },
+        {
+          provide: EduContentApi,
+          useValue: {
+            search: () => mockSearch$,
+            autocomplete: () => mockAutocomplete$
           }
         }
       ]
     });
     service = TestBed.get(EduContentService);
+    eduContentApi = TestBed.get(EduContentApi);
   });
 
   it('should be created and available via DI', inject(
@@ -37,6 +65,43 @@ describe('EduContentService', () => {
       hot('-a-|', {
         a: [{ id: 1, type: 'file' }]
       })
+    );
+  });
+  it('should return SearchResultInterface when search is called', () => {
+    const apiSearchSpy = jest.spyOn(eduContentApi, 'search');
+    mockSearch$ = hot('-a-|', {
+      a: {
+        count: 29038,
+        results: [],
+        filterCriteriaPredictions: { someKey: { 2: 903 } }
+      }
+    });
+    expect(service.search(mockSearchState)).toBeObservable(
+      hot('-a-|', {
+        a: {
+          count: 29038,
+          results: [],
+          filterCriteriaPredictions: new Map<
+            string,
+            Map<string | number, number>
+          >([['someKey', new Map<number, number>([[2, 903]])]])
+        }
+      })
+    );
+    expect(apiSearchSpy).toHaveBeenCalledWith(convertedMockSearchStateInput);
+  });
+  it('should return a string array if autocomplete is called', () => {
+    const apiAutocompleteSpy = jest.spyOn(eduContentApi, 'autocomplete');
+    mockAutocomplete$ = hot('-a-|', {
+      a: ['array', 'of', 'strings']
+    });
+    expect(service.autoComplete(mockSearchState)).toBeObservable(
+      hot('-a-|', {
+        a: ['array', 'of', 'strings']
+      })
+    );
+    expect(apiAutocompleteSpy).toHaveBeenCalledWith(
+      convertedMockSearchStateInput
     );
   });
 });

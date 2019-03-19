@@ -4,7 +4,7 @@ import { Action } from '@ngrx/store';
 import { DataPersistence } from '@nrwl/nx';
 import { undo } from 'ngrx-undo';
 import { from } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { DalState } from '..';
 import {
   ExerciseServiceInterface,
@@ -12,6 +12,7 @@ import {
 } from '../../exercise/exercise.service.interface';
 import { EffectFeedback, Priority } from '../effect-feedback';
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
+import { LoadTaskEduContents } from '../task-edu-content/task-edu-content.actions';
 import {
   CurrentExerciseActionTypes,
   CurrentExerciseError,
@@ -55,17 +56,20 @@ export class CurrentExerciseEffects {
         if (!exercise.saveToApi) return;
 
         return this.exerciseService.saveExercise(state.currentExercise).pipe(
-          map(
-            ex =>
-              new AddEffectFeedback({
-                effectFeedback: new EffectFeedback({
-                  id: this.uuid(),
-                  triggerAction: action,
-                  message: 'Oefening is bewaard.',
-                  display: action.payload.displayResponse
-                })
+          switchMap(ex => [
+            new AddEffectFeedback({
+              effectFeedback: new EffectFeedback({
+                id: this.uuid(),
+                triggerAction: action,
+                message: 'Oefening is bewaard.',
+                display: action.payload.displayResponse
               })
-          )
+            }),
+            new LoadTaskEduContents({
+              userId: action.payload.userId,
+              force: action.payload.displayResponse
+            })
+          ])
         );
       },
       undoAction: (action: SaveCurrentExercise, e: any) => {
