@@ -20,11 +20,20 @@ export const getLoaded = createSelector(
   (state: State) => state.loaded
 );
 
-export const getAll = createSelector(selectLearningDomainState, selectAll);
+export const getAll = createSelector(
+  selectLearningDomainState,
+  selectAll
+);
 
-export const getCount = createSelector(selectLearningDomainState, selectTotal);
+export const getCount = createSelector(
+  selectLearningDomainState,
+  selectTotal
+);
 
-export const getIds = createSelector(selectLearningDomainState, selectIds);
+export const getIds = createSelector(
+  selectLearningDomainState,
+  selectIds
+);
 
 export const getAllEntities = createSelector(
   selectLearningDomainState,
@@ -45,7 +54,6 @@ export const getByIds = createSelector(
   }
 );
 
-
 /**
  * returns array of objects in the order of the given ids
  * @example
@@ -56,4 +64,12 @@ export const getByIds = createSelector(
 export const getById = createSelector(
   selectLearningDomainState,
   (state: State, props: { id: number }) => state.entities[props.id]
+);
+
+export const getByLearningArea = createSelector(
+  selectLearningDomainState,
+  (state: State, props: { learningAreaId: Number }) =>
+    Object.values(state.entities).filter(
+      value => value.learningAreaId === props.learningAreaId
+    )
 );

@@ -1,4 +1,5 @@
 import { LearningDomainQueries } from '.';
+import { LearningDomainFixture } from '../../+fixtures';
 import { LearningDomainInterface } from '../../+models';
 import { State } from './learning-domain.reducer';
 
@@ -15,7 +16,9 @@ describe('LearningDomain Selectors', () => {
     error?: any
   ): State {
     return {
-      ids: learningDomains ? learningDomains.map(learningDomain => learningDomain.id) : [],
+      ids: learningDomains
+        ? learningDomains.map(learningDomain => learningDomain.id)
+        : [],
       entities: learningDomains
         ? learningDomains.reduce(
             (entityMap, learningDomain) => ({
@@ -94,6 +97,30 @@ describe('LearningDomain Selectors', () => {
     it('getById() should return undefined if the entity is not present', () => {
       const results = LearningDomainQueries.getById(storeState, { id: 9 });
       expect(results).toBe(undefined);
+    });
+
+    it('getByLearningArea() should return all learningDomains with the provided learningAreaId', () => {
+      learningDomainState = createState(
+        [
+          new LearningDomainFixture({ id: 1, learningAreaId: 10 }),
+          new LearningDomainFixture({ id: 2, learningAreaId: 12 }),
+          new LearningDomainFixture({ id: 3, learningAreaId: 11 }),
+          new LearningDomainFixture({ id: 4, learningAreaId: 10 })
+        ],
+        true,
+        'no error'
+      );
+
+      storeState = { learningDomains: learningDomainState };
+
+      const results = LearningDomainQueries.getByLearningArea(storeState, {
+        learningAreaId: 10
+      });
+
+      expect(results).toEqual([
+        new LearningDomainFixture({ id: 1, learningAreaId: 10 }),
+        new LearningDomainFixture({ id: 4, learningAreaId: 10 })
+      ]);
     });
   });
 });
