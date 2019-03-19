@@ -1,6 +1,26 @@
 import { Inject, Injectable } from '@angular/core';
-import { DalState, EduNetInterface, EduNetQueries, LearningAreaInterface, LearningAreaQueries, LearningPlanInterface, LearningPlanServiceInterface, LEARNING_PLAN_SERVICE_TOKEN, SchoolTypeInterface, SchoolTypeQueries, SpecialtyInterface, YearInterface } from '@campus/dal';
-import { ColumnFilterComponent, SearchFilterCriteriaInterface, SearchFilterCriteriaValuesInterface, SearchFilterFactory, SearchFilterInterface, SearchStateInterface } from '@campus/search';
+import {
+  DalState,
+  EduNetInterface,
+  EduNetQueries,
+  LearningAreaInterface,
+  LearningAreaQueries,
+  LearningPlanInterface,
+  LearningPlanServiceInterface,
+  LEARNING_PLAN_SERVICE_TOKEN,
+  SchoolTypeInterface,
+  SchoolTypeQueries,
+  SpecialtyInterface,
+  YearInterface
+} from '@campus/dal';
+import {
+  ColumnFilterComponent,
+  SearchFilterCriteriaInterface,
+  SearchFilterCriteriaValuesInterface,
+  SearchFilterFactory,
+  SearchFilterInterface,
+  SearchStateInterface
+} from '@campus/search';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -9,10 +29,9 @@ import { map } from 'rxjs/operators';
 export class LearningPlanFilterFactory implements SearchFilterFactory {
   private componentType = ColumnFilterComponent;
   private domHostValue = 'hostLeft';
-
-  learningAreas$: Observable<LearningAreaInterface[]>;
-  eduNets$: Observable<EduNetInterface[]>;
-  schoolTypes$: Observable<SchoolTypeInterface[]>;
+  private learningAreas$: Observable<LearningAreaInterface[]>;
+  private eduNets$: Observable<EduNetInterface[]>;
+  private schoolTypes$: Observable<SchoolTypeInterface[]>;
 
   constructor(
     private store: Store<DalState>,
@@ -33,21 +52,7 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
   ): Observable<SearchFilterInterface[]> {
     const startingColumnIds = this.getStartingColumnSelectedIds(searchState);
     const columnLevel = this.getColumnLevel(startingColumnIds);
-    const deepSearchFilterStream =
-      columnLevel > 3 ? this.getDeepFilter(startingColumnIds) : of(undefined);
-    return combineLatest(
-      this.getSearchFilters(startingColumnIds, columnLevel),
-      deepSearchFilterStream
-    ).pipe(
-      map(
-        ([startingSearchFitlers, deepSearchFilters]: [
-          SearchFilterInterface[],
-          SearchFilterInterface
-        ]) => {
-          return [...startingSearchFitlers, deepSearchFilters];
-        }
-      )
-    );
+    return this.getSearchFilters(startingColumnIds, columnLevel);
   }
 
   private getSearchFilters(
@@ -62,39 +67,134 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
             selectedPropertyIds[2]
           )
         : of(undefined);
-    
+    const learningPlans$: Observable<
+      Map<SpecialtyInterface, LearningPlanInterface[]>
+    > =
+      columnLevel >= 4
+        ? this.learningPlanService.getLearningPlanAssignments(
+            selectedPropertyIds[1],
+            selectedPropertyIds[3],
+            selectedPropertyIds[2],
+            selectedPropertyIds[0]
+          )
+        : of(undefined);
     return combineLatest(
       this.learningAreas$,
       this.eduNets$,
       this.schoolTypes$,
-      years$
+      years$,
+      learningPlans$
     ).pipe(
       map(
         (
-          startingColumnValues: [
+          columnValuesData: [
             LearningAreaInterface[],
             EduNetInterface[],
             SchoolTypeInterface[],
-            YearInterface[]
+            YearInterface[],
+            Map<SpecialtyInterface, LearningPlanInterface[]>
           ]
         ) => {
-          const startingSearchFilters: SearchFilterInterface[] = [];
-          // push the store stream data
-          for (let i = 0; i < columnLevel && i < 3; i++) {
-            startingSearchFilters.push(
-              this.getSearchFilter(i, startingColumnValues[i])
-            );
+          const searchFilters: SearchFilterInterface[] = [];
+          for (let i = 0; i <= columnLevel; i++) {
+            searchFilters.push(this.getSearchFilter(i, columnValuesData[i]));
           }
-          // push the years data if needed
-          if (startingColumnValues[3]) {
-            startingSearchFilters.push(
-              this.getSearchFilter(3, startingColumnValues[3])
-            );
-          }
-          return startingSearchFilters;
+          return searchFilters;
         }
       )
     );
+  }
+
+  private getSearchFilter(
+    currentColumnLevel: number,
+    startingColumnValues
+  ): SearchFilterInterface {
+    return {
+      criteria: this.getSearchFilterCriteria(
+        startingColumnValues,
+        this.getSearchFilterStringProperties(currentColumnLevel),
+        currentColumnLevel < 4
+          ? this.getSearchFilterCriteriaValues
+          : this.getLearningPlanSearchFilterCriteriaValues
+      ),
+      component: this.componentType,
+      domHost: this.domHostValue
+    };
+  }
+
+  private getSearchFilterCriteria(
+    startingColumnValues,
+    stringProperties: StartingLevelStringPropertiesInterface,
+    valueGetterFunction: Function
+  ): SearchFilterCriteriaInterface {
+    return {
+      ...stringProperties,
+      values: valueGetterFunction(startingColumnValues)
+    };
+  }
+
+  private getSearchFilterCriteriaValues(
+    startingColumnValues: any[]
+  ): SearchFilterCriteriaValuesInterface[] {
+    return startingColumnValues.map(value => {
+      return {
+        data: value,
+        hasChild: true
+      };
+    });
+  }
+
+  private getLearningPlanSearchFilterCriteriaValues(
+    learningPlanMap: Map<SpecialtyInterface, LearningPlanInterface[]>
+  ): SearchFilterCriteriaValuesInterface[] {
+    return Array.from(learningPlanMap).map(
+      ([specialty, learningPlans]: [
+        SpecialtyInterface,
+        LearningPlanInterface[]
+      ]) => {
+        return {
+          data: { label: specialty.name, ids: learningPlans.map(a => a.id) },
+          hasChild: false
+        };
+      }
+    );
+  }
+
+  private getStartingColumnSelectedIds(
+    searchState: SearchStateInterface
+  ): SelectedPropertyIds {
+    const learningAreas = searchState.filterCriteriaSelections.get(
+      'learningAreas'
+    );
+    const eduNets = searchState.filterCriteriaSelections.get('eduNets');
+    const schoolTypes = searchState.filterCriteriaSelections.get('schoolTypes');
+    const years = searchState.filterCriteriaSelections.get('years');
+    return [
+      this.getFirstValueAsNumber(learningAreas),
+      this.getFirstValueAsNumber(eduNets),
+      this.getFirstValueAsNumber(schoolTypes),
+      this.getFirstValueAsNumber(years)
+    ];
+  }
+
+  private getFirstValueAsNumber(arr: (string | number)[]): number {
+    if (!arr) return undefined;
+    return typeof arr[0] === 'string'
+      ? parseInt(arr[0] as string, 10)
+      : (arr[0] as number);
+  }
+
+  private getColumnLevel([
+    learningAreaId,
+    eduNetId,
+    schoolTypeId,
+    yearId
+  ]: SelectedPropertyIds): number {
+    if (learningAreaId && eduNetId && schoolTypeId && yearId) return 4;
+    if (learningAreaId && eduNetId && schoolTypeId) return 3;
+    if (learningAreaId && eduNetId) return 2;
+    if (learningAreaId) return 1;
+    return 0;
   }
 
   private getSearchFilterStringProperties(
@@ -141,137 +241,6 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
           `LearningPlanFilterFactory: getStartingFilterStringProperties: Given currentColumnLevel: ${currentColumnLevel} should not exist`
         );
     }
-  }
-
-  private getSearchFilter(
-    currentColumnLevel: number,
-    startingColumnValues
-  ): SearchFilterInterface {
-    return {
-      criteria: this.getSearchFilterCriteria(
-        startingColumnValues,
-        this.getSearchFilterStringProperties(currentColumnLevel),
-        this.getSearchFilterCriteriaValues
-      ),
-      component: this.componentType,
-      domHost: this.domHostValue
-    };
-  }
-
-  private getSearchFilterCriteria(
-    startingColumnValues,
-    stringProperties: StartingLevelStringPropertiesInterface,
-    valueGetter: Function
-  ): SearchFilterCriteriaInterface {
-    return {
-      ...stringProperties,
-      values: valueGetter(startingColumnValues)
-    };
-  }
-
-  private getSearchFilterCriteriaValues(
-    startingColumnValues: any[]
-  ): SearchFilterCriteriaValuesInterface[] {
-    return startingColumnValues.map(value => {
-      return {
-        data: value,
-        hasChild: true
-      };
-    });
-  }
-
-  private getDeepFilter(
-    selectedPropertyIds: SelectedPropertyIds
-  ): Observable<SearchFilterInterface> {
-    return this.learningPlanService
-      .getLearningPlanAssignments(
-        selectedPropertyIds[1],
-        selectedPropertyIds[3],
-        selectedPropertyIds[2],
-        selectedPropertyIds[0]
-      )
-      .pipe(
-        map(
-          (
-            learningPlanAssignmentMap: Map<
-              SpecialtyInterface,
-              LearningPlanInterface[]
-            >
-          ) => {
-            return {
-              criteria: this.getDeepLevelSearchFilterCriteria(
-                learningPlanAssignmentMap
-              ),
-              component: this.componentType,
-              domHost: this.domHostValue
-            };
-          }
-        )
-      );
-  }
-  getDeepLevelSearchFilterCriteria(
-    lpaMap: Map<SpecialtyInterface, LearningPlanInterface[]>
-  ): SearchFilterCriteriaInterface | SearchFilterCriteriaInterface[] {
-    return {
-      name: 'learningPlans.assignments',
-      label: 'Leerplan',
-      keyProperty: 'ids',
-      displayProperty: 'label',
-      values: this.getDeepLevelSearchFilterCriteriaValues(lpaMap)
-    };
-  }
-  getDeepLevelSearchFilterCriteriaValues(
-    lpaMap: Map<SpecialtyInterface, LearningPlanInterface[]>
-  ): SearchFilterCriteriaValuesInterface[] {
-    return Array.from(lpaMap).map(
-      ([specialty, learningPlans]: [
-        SpecialtyInterface,
-        LearningPlanInterface[]
-      ]) => {
-        return {
-          data: { label: specialty.name, ids: learningPlans.map(a => a.id) },
-          hasChild: false
-        };
-      }
-    );
-  }
-
-  private getStartingColumnSelectedIds(
-    searchState: SearchStateInterface
-  ): SelectedPropertyIds {
-    const learningAreas = searchState.filterCriteriaSelections.get(
-      'learningAreas'
-    );
-    const eduNets = searchState.filterCriteriaSelections.get('eduNets');
-    const schoolTypes = searchState.filterCriteriaSelections.get('schoolTypes');
-    const years = searchState.filterCriteriaSelections.get('years');
-    return [
-      typeof learningAreas[0] === 'string'
-        ? parseInt(learningAreas[0] as string, 10)
-        : (learningAreas[0] as number),
-      typeof eduNets[0] === 'string'
-        ? parseInt(eduNets[0] as string, 10)
-        : (eduNets[0] as number),
-      typeof schoolTypes[0] === 'string'
-        ? parseInt(schoolTypes[0] as string, 10)
-        : (schoolTypes[0] as number),
-      typeof years[0] === 'string'
-        ? parseInt(schoolTypes[0] as string, 10)
-        : (schoolTypes[0] as number)
-    ];
-  }
-
-  private getColumnLevel([
-    learningAreaId,
-    eduNetId,
-    schoolTypeId,
-    yearId
-  ]: SelectedPropertyIds): number {
-    if (learningAreaId && eduNetId && schoolTypeId && yearId) return 4;
-    if (learningAreaId && eduNetId && schoolTypeId) return 3;
-    if (learningAreaId && eduNetId) return 2;
-    if (learningAreaId) return 1;
-    return 0;
   }
 }
 
