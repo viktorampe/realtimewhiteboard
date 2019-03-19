@@ -27,8 +27,6 @@ import { map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class LearningPlanFilterFactory implements SearchFilterFactory {
-  private componentType = ColumnFilterComponent;
-  private domHostValue = 'hostLeft';
   private learningAreas$: Observable<LearningAreaInterface[]>;
   private eduNets$: Observable<EduNetInterface[]>;
   private schoolTypes$: Observable<SchoolTypeInterface[]>;
@@ -117,8 +115,8 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
           ? this.getSearchFilterCriteriaValues
           : this.getLearningPlanSearchFilterCriteriaValues
       ),
-      component: this.componentType,
-      domHost: this.domHostValue
+      component: ColumnFilterComponent,
+      domHost: 'hostLeft'
     };
   }
 
