@@ -204,13 +204,11 @@ export class GlobalSearchTermFilterFactory implements SearchFilterFactory {
       valuesFromStore = entities;
     });
 
-    return (this.searchCriteria[filterKey].values = Object.values(
-      valuesFromStore
-    ).map(value => {
+    return Object.values(valuesFromStore).map(value => {
       return {
         data: value,
         selected: !!selectedValues.find(selectedId => selectedId === value.id)
       };
-    }));
+    });
   }
 }
