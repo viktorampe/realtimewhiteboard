@@ -19,6 +19,7 @@ import {
   YearReducer
 } from '@campus/dal';
 import {
+  CheckboxFilterComponent,
   CheckboxLineFilterComponent,
   CheckboxListFilterComponent,
   SearchFilterInterface,
@@ -26,7 +27,6 @@ import {
 } from '@campus/search';
 import { Store, StoreModule } from '@ngrx/store';
 import { cold } from 'jasmine-marbles';
-import { CheckboxFilterComponent } from 'libs/search/src/lib/components/checkbox-list-filter/checkbox-filter/checkbox-filter.component';
 import { Observable } from 'rxjs';
 import { SearchTermFilterFactory } from './search-term-filter.factory';
 
@@ -86,7 +86,6 @@ describe('SearchTermFilterFactory', () => {
 
   describe('getFilters', () => {
     let factory: SearchTermFilterFactory;
-    let expected: SearchFilterInterface[];
     let result: Observable<SearchFilterInterface[]>;
 
     const mockSearchState: SearchStateInterface = {
@@ -244,11 +243,11 @@ describe('SearchTermFilterFactory', () => {
     const extendedProductTypes = mockEduContentProductTypes
       .map((val, ind, arr) => {
         return {
-          children: arr.filter(child => child.parent == val.id),
+          children: arr.filter(child => child.parent === val.id),
           ...val
         };
       })
-      .filter(val => val.parent == 0);
+      .filter(val => val.parent === 0);
 
     return getExpectedFilter(
       'eduContentProductType',

@@ -8,6 +8,7 @@ import {
   YearQueries
 } from '@campus/dal';
 import {
+  CheckboxFilterComponent,
   CheckboxLineFilterComponent,
   CheckboxListFilterComponent,
   SearchFilterFactory,
@@ -15,7 +16,6 @@ import {
   SearchStateInterface
 } from '@campus/search';
 import { Store } from '@ngrx/store';
-import { CheckboxFilterComponent } from 'libs/search/src/lib/components/checkbox-list-filter/checkbox-filter/checkbox-filter.component';
 import { combineLatest, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 export const SEARCH_TERM_FILTER_FACTORY_TOKEN = new InjectionToken(
@@ -26,6 +26,13 @@ export const SEARCH_TERM_FILTER_FACTORY_TOKEN = new InjectionToken(
   providedIn: 'root'
 })
 export class SearchTermFilterFactory implements SearchFilterFactory {
+  //TODO: Missing learningdomains, will come from store but mocked for now
+  public static learningDomains = [
+    { id: 1, name: 'Lezen' },
+    { id: 2, name: 'Luisteren' },
+    { id: 3, name: 'Schrijven' }
+  ];
+
   private keyProperty = 'id';
   private displayProperty = 'name';
   private component = CheckboxListFilterComponent;
@@ -44,13 +51,6 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
       label: 'Onderwijsvorm'
     },
     { query: MethodQueries.getAll, name: 'methods', label: 'Methode' }
-  ];
-
-  //TODO: Missing learningdomains, will come from store but mocked for now
-  public static learningDomains = [
-    { id: 1, name: 'Lezen' },
-    { id: 2, name: 'Luisteren' },
-    { id: 3, name: 'Schrijven' }
   ];
 
   constructor(private store: Store<DalState>) {}
@@ -77,11 +77,11 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
           entities
             .map((val, ind, arr) => {
               return {
-                children: arr.filter(child => child.parent == val.id),
+                children: arr.filter(child => child.parent === val.id),
                 ...val
               };
             })
-            .filter(val => val.parent == 0)
+            .filter(val => val.parent === 0)
         ),
         map(entities =>
           this.getFilter(

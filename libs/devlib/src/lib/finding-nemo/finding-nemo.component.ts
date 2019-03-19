@@ -27,6 +27,7 @@ import { TileSecondaryActionInterface } from '@campus/ui';
 import { EduContentMetadataApi } from '@diekeure/polpo-api-angular-sdk';
 // tslint:disable-next-line:nx-enforce-module-boundaries
 import { EduContentSearchResultComponent } from 'apps/polpo-classroom-web/src/app/components/searchresults/edu-content-search-result.component';
+// tslint:disable-next-line:nx-enforce-module-boundaries
 import {
   SearchTermFilterFactory,
   SEARCH_TERM_FILTER_FACTORY_TOKEN
