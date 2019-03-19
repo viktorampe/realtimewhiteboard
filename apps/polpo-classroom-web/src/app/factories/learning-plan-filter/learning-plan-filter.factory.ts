@@ -223,3 +223,12 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
   //   );
   // }
 }
+
+interface StartingLevelStringPropertiesInterface {
+  name: string;
+  label: string;
+  keyProperty: string;
+  displayProperty: string;
+}
+
+type StartinColumnIdsType = [number, number, number, number];
