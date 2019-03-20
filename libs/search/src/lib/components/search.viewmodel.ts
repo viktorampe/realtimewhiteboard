@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import {
@@ -26,7 +26,7 @@ export class SearchViewModel {
   public searchState$ = new BehaviorSubject<SearchStateInterface>(null);
   public searchFilters$: Observable<SearchFilterInterface[]>;
 
-  constructor() {
+  constructor(private injector: Injector) {
     this.initiateStreams();
   }
 
@@ -214,7 +214,7 @@ export class SearchViewModel {
   ): void {
     let newSearchState: SearchStateInterface;
     this.searchMode = mode;
-    this.filterFactory = new this.searchMode.searchFilterFactory(); // used by updateFilters()
+    this.filterFactory = new this.searchMode.searchFilterFactory(this.injector); // used by updateFilters()
 
     if (state) {
       // we want to update the state
