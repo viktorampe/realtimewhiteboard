@@ -158,7 +158,7 @@ describe('TocFilterFactory', () => {
     describe('learningAreas', () => {
       beforeEach(() => {
         mockSearchState.filterCriteriaSelections.clear();
-        mockSearchState.filterCriteriaSelections.set('LearningArea', [
+        mockSearchState.filterCriteriaSelections.set('learningArea', [
           mockSelectedAreaId
         ]);
 
@@ -182,10 +182,10 @@ describe('TocFilterFactory', () => {
     describe('years', () => {
       beforeEach(() => {
         mockSearchState.filterCriteriaSelections.clear();
-        mockSearchState.filterCriteriaSelections.set('LearningArea', [
+        mockSearchState.filterCriteriaSelections.set('learningArea', [
           mockSelectedAreaId
         ]);
-        mockSearchState.filterCriteriaSelections.set('Year', [
+        mockSearchState.filterCriteriaSelections.set('year', [
           mockSelectedYearId
         ]);
 
@@ -214,13 +214,13 @@ describe('TocFilterFactory', () => {
     describe('methods', () => {
       beforeEach(() => {
         mockSearchState.filterCriteriaSelections.clear();
-        mockSearchState.filterCriteriaSelections.set('LearningArea', [
+        mockSearchState.filterCriteriaSelections.set('learningArea', [
           mockSelectedAreaId
         ]);
-        mockSearchState.filterCriteriaSelections.set('Year', [
+        mockSearchState.filterCriteriaSelections.set('year', [
           mockSelectedYearId
         ]);
-        mockSearchState.filterCriteriaSelections.set('Method', [
+        mockSearchState.filterCriteriaSelections.set('method', [
           mockSelectedMethodId
         ]);
 
@@ -259,16 +259,16 @@ describe('TocFilterFactory', () => {
     describe('TOC tree', () => {
       beforeEach(() => {
         mockSearchState.filterCriteriaSelections.clear();
-        mockSearchState.filterCriteriaSelections.set('LearningArea', [
+        mockSearchState.filterCriteriaSelections.set('learningArea', [
           mockSelectedAreaId
         ]);
-        mockSearchState.filterCriteriaSelections.set('Year', [
+        mockSearchState.filterCriteriaSelections.set('year', [
           mockSelectedYearId
         ]);
-        mockSearchState.filterCriteriaSelections.set('Method', [
+        mockSearchState.filterCriteriaSelections.set('method', [
           mockSelectedMethodId
         ]);
-        mockSearchState.filterCriteriaSelections.set('EduContentTOC_0', [
+        mockSearchState.filterCriteriaSelections.set('eduContentTOC_0', [
           mockSelectedTocId
         ]);
 
@@ -313,7 +313,7 @@ describe('TocFilterFactory', () => {
         // also select second EduContentTOC
         // this doesn't have children
         const mockSelectedTocId_1 = 2;
-        mockSearchState.filterCriteriaSelections.set('EduContentTOC_1', [
+        mockSearchState.filterCriteriaSelections.set('eduContentTOC_1', [
           mockSelectedTocId_1
         ]);
 
@@ -335,7 +335,7 @@ describe('TocFilterFactory', () => {
           // at this point LearningArea 1 is selected
 
           const newSearchState = { ...mockSearchState };
-          newSearchState.filterCriteriaSelections.set('LearningArea', [2]);
+          newSearchState.filterCriteriaSelections.set('learningArea', [2]);
 
           const newTree = mockTree[0];
 
@@ -350,7 +350,7 @@ describe('TocFilterFactory', () => {
           // at this point Year 4 is selected
 
           const newSearchState = { ...mockSearchState };
-          newSearchState.filterCriteriaSelections.set('Year', [5]);
+          newSearchState.filterCriteriaSelections.set('year', [5]);
 
           const newTree = mockTree[0];
 
@@ -365,7 +365,7 @@ describe('TocFilterFactory', () => {
           // at this point Method 6 is selected
 
           const newSearchState = { ...mockSearchState };
-          newSearchState.filterCriteriaSelections.set('Method', [7]);
+          newSearchState.filterCriteriaSelections.set('method', [7]);
 
           const newTree = mockTree[0];
 
@@ -399,21 +399,21 @@ describe('TocFilterFactory', () => {
           expect(cachedTree.toc).toBeObservable(hot('a', { a: mockTree }));
 
           // select LearningArea
-          newSearchState.filterCriteriaSelections.set('LearningArea', [
+          newSearchState.filterCriteriaSelections.set('learningArea', [
             mockSelectedAreaId
           ]);
           factory.getFilters(newSearchState);
           expect(cachedTree.toc).toBeObservable(hot('a', { a: mockTree }));
 
           // select Year
-          newSearchState.filterCriteriaSelections.set('Year', [
+          newSearchState.filterCriteriaSelections.set('year', [
             mockSelectedYearId
           ]);
           factory.getFilters(newSearchState);
           expect(cachedTree.toc).toBeObservable(hot('a', { a: mockTree }));
 
           // select Method
-          newSearchState.filterCriteriaSelections.set('Method', [
+          newSearchState.filterCriteriaSelections.set('method', [
             mockSelectedMethodId
           ]);
           factory.getFilters(newSearchState);
@@ -421,7 +421,7 @@ describe('TocFilterFactory', () => {
 
           // select a different Toc
           // Toc 1 was selected
-          newSearchState.filterCriteriaSelections.set('EduContentTOC_0', [2]);
+          newSearchState.filterCriteriaSelections.set('eduContentTOC_0', [2]);
           factory.getFilters(newSearchState);
           expect(cachedTree.toc).toBeObservable(hot('a', { a: mockTree }));
         });
@@ -432,7 +432,7 @@ describe('TocFilterFactory', () => {
   function getExpectedLearningAreaFilter(selectedId?: number) {
     return {
       criteria: {
-        name: 'LearningArea',
+        name: 'learningArea',
         label: 'Leergebieden',
         keyProperty: 'id',
         displayProperty: 'name',
@@ -450,7 +450,7 @@ describe('TocFilterFactory', () => {
   function getExpectedYearFilter(selectedId?: number) {
     return {
       criteria: {
-        name: 'Year',
+        name: 'year',
         label: 'Jaren',
         keyProperty: 'id',
         displayProperty: 'name',
@@ -468,7 +468,7 @@ describe('TocFilterFactory', () => {
   function getExpectedMethodFilter(selectedId?: number) {
     return {
       criteria: {
-        name: 'Method',
+        name: 'method',
         label: 'Methodes',
         keyProperty: 'id',
         displayProperty: 'name',
@@ -497,7 +497,7 @@ describe('TocFilterFactory', () => {
 
     return {
       criteria: {
-        name: 'EduContentTOC_' + depth,
+        name: 'eduContentTOC_' + depth,
         label: 'Inhoudstafel',
         keyProperty: 'id',
         displayProperty: 'title',

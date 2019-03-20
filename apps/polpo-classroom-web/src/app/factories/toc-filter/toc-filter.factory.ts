@@ -21,10 +21,10 @@ import { PrimitivePropertiesKeys } from 'libs/utils/src/lib/types/generic.types'
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map, switchMap, take } from 'rxjs/operators';
 
-const LEARNING_AREA = 'LearningArea';
-const YEAR = 'Year';
-const METHOD = 'Method';
-const TOC = 'EduContentTOC';
+const LEARNING_AREA = 'learningArea';
+const YEAR = 'year';
+const METHOD = 'method';
+const TOC = 'eduContentTOC';
 
 @Injectable({
   providedIn: 'root'
