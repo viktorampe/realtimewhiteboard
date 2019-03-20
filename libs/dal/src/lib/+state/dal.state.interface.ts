@@ -9,6 +9,7 @@ import {
   EduNetReducer,
   FavoriteReducer,
   LearningAreaReducer,
+  LearningDomainReducer,
   LinkedPersonReducer,
   MethodReducer,
   ResultReducer,
@@ -26,7 +27,6 @@ import {
   UserReducer,
   YearReducer
 } from '../..';
-import { LearningDomainReducer } from './learning-domain';
 
 export interface DalState {
   ui: UiReducer.UiState;

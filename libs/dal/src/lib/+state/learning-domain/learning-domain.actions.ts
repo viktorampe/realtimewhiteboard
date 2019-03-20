@@ -20,9 +20,7 @@ export enum LearningDomainsActionTypes {
 export class LoadLearningDomains implements Action {
   readonly type = LearningDomainsActionTypes.LoadLearningDomains;
 
-  constructor(
-    public payload: { force?: boolean, userId: number } = { userId: null }
-  ) {}
+  constructor(public payload: { force?: boolean } = {}) {}
 }
 
 export class LearningDomainsLoaded implements Action {
@@ -63,13 +61,17 @@ export class UpsertLearningDomains implements Action {
 export class UpdateLearningDomain implements Action {
   readonly type = LearningDomainsActionTypes.UpdateLearningDomain;
 
-  constructor(public payload: { learningDomain: Update<LearningDomainInterface> }) {}
+  constructor(
+    public payload: { learningDomain: Update<LearningDomainInterface> }
+  ) {}
 }
 
 export class UpdateLearningDomains implements Action {
   readonly type = LearningDomainsActionTypes.UpdateLearningDomains;
 
-  constructor(public payload: { learningDomains: Update<LearningDomainInterface>[] }) {}
+  constructor(
+    public payload: { learningDomains: Update<LearningDomainInterface>[] }
+  ) {}
 }
 
 export class DeleteLearningDomain implements Action {

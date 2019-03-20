@@ -14,6 +14,7 @@ export * from './lib/+state/edu-net';
 export * from './lib/+state/effect-feedback';
 export * from './lib/+state/favorite';
 export * from './lib/+state/learning-area';
+export * from './lib/+state/learning-domain';
 export * from './lib/+state/linked-person';
 export * from './lib/+state/method';
 export * from './lib/+state/resolver';

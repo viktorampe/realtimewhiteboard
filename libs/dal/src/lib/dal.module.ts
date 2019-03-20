@@ -41,7 +41,10 @@ import {
   LearningAreaReducer,
   LearningAreasEffects
 } from './+state/learning-area';
-import { LearningDomainReducer } from './+state/learning-domain';
+import {
+  LearningDomainEffects,
+  LearningDomainReducer
+} from './+state/learning-domain';
 import {
   LinkedPersonEffects,
   LinkedPersonReducer
@@ -289,6 +292,7 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
       AlertsEffects,
       TaskEduContentEffects,
       ResultEffects,
+      LearningDomainEffects,
       CurrentExerciseEffects,
       TeacherStudentEffects,
       LinkedPersonEffects,
