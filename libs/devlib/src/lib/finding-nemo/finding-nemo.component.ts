@@ -1,7 +1,7 @@
+// tslint:disable:nx-enforce-module-boundaries
 import {
   AfterViewInit,
   Component,
-  Inject,
   QueryList,
   Type,
   ViewChild,
@@ -14,8 +14,6 @@ import {
 } from '@campus/dal';
 import {
   SearchFilterCriteriaInterface,
-  SearchFilterFactory,
-  SearchFilterInterface,
   SearchModeInterface,
   SearchPortalDirective,
   SearchResultInterface,
@@ -25,19 +23,12 @@ import {
 } from '@campus/search';
 import { TileSecondaryActionInterface } from '@campus/ui';
 import { EduContentMetadataApi } from '@diekeure/polpo-api-angular-sdk';
-// tslint:disable-next-line:nx-enforce-module-boundaries
 import { EduContentSearchResultComponent } from 'apps/polpo-classroom-web/src/app/components/searchresults/edu-content-search-result.component';
-// tslint:disable-next-line:nx-enforce-module-boundaries
-import {
-  SearchTermFilterFactory,
-  SEARCH_TERM_FILTER_FACTORY_TOKEN
-} from 'apps/polpo-classroom-web/src/app/factories/search-term-filter/search-term-filter.factory';
-// tslint:disable-next-line:nx-enforce-module-boundaries
-import { MockSearchViewModel } from 'libs/search/src/lib/components/search.viewmodel.mock';
+import { SearchTermFilterFactory } from 'apps/polpo-classroom-web/src/app/factories/search-term-filter/search-term-filter.factory';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-// tslint:disable-next-line:nx-enforce-module-boundaries
 import { SearchComponent } from './../../../../search/src/lib/components/search/search.component';
+import { SearchFilterInterface } from './../../../../search/src/lib/interfaces/search-filter-interface';
 
 @Component({
   selector: 'campus-finding-nemo',
@@ -63,15 +54,8 @@ export class FindingNemoComponent implements AfterViewInit {
 
   @ViewChild(SearchComponent) private searchComponent: SearchComponent;
 
-  constructor(
-    private eduContentMetadataApi: EduContentMetadataApi,
-    @Inject(SEARCH_TERM_FILTER_FACTORY_TOKEN)
-    private searchFactory: SearchTermFilterFactory
-  ) {
+  constructor(private eduContentMetadataApi: EduContentMetadataApi) {
     this.setMockData();
-    this.searchFilters$ = this.searchFactory.getFilters(
-      this.getMockSearchState()
-    );
   }
 
   ngAfterViewInit(): void {
@@ -95,7 +79,6 @@ export class FindingNemoComponent implements AfterViewInit {
     this.searchMode = this.getMockSearchMode();
     this.searchState.next(this.getMockSearchState());
     this.resultsPage$.next(this.getMockResults());
-    this.filterCriteria$.next(this.getMockSearchFilters());
     this.autoComplete = this.getMockAutoCompleteValues();
   }
 
@@ -183,10 +166,10 @@ export class FindingNemoComponent implements AfterViewInit {
       label: 'demo',
       dynamicFilters: false,
       // tslint:disable-next-line: no-use-before-declare
-      searchFilterFactory: MockFactory,
+      searchFilterFactory: SearchTermFilterFactory,
       searchTerm: {
         // autocompleteEl: string; //reference to material autocomplete component
-        domHost: 'hostSearchTerm'
+        domHost: 'hostLeft'
       },
       results: {
         component: EduContentSearchResultComponent,
@@ -301,15 +284,5 @@ export class FindingNemoComponent implements AfterViewInit {
 
   private getMockAutoCompleteValues(): string[] {
     return ['waarde1', 'waarde2', 'waarde3', 'waarde4'];
-  }
-}
-
-class MockFactory implements SearchFilterFactory {
-  mockSearchViewmodel = new MockSearchViewModel();
-
-  getFilters(
-    searchState: SearchStateInterface
-  ): Observable<SearchFilterInterface[]> {
-    return this.mockSearchViewmodel.searchFilters$;
   }
 }
