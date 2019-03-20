@@ -1,4 +1,4 @@
-import { Injectable, InjectionToken } from '@angular/core';
+import { Injectable, InjectionToken, Type } from '@angular/core';
 import {
   DalState,
   EduContentProductTypeQueries,
@@ -8,14 +8,14 @@ import {
   YearQueries
 } from '@campus/dal';
 import {
-  CheckboxFilterComponent,
   CheckboxLineFilterComponent,
   CheckboxListFilterComponent,
+  SearchFilterComponentInterface,
   SearchFilterFactory,
   SearchFilterInterface,
   SearchStateInterface
 } from '@campus/search';
-import { Store } from '@ngrx/store';
+import { MemoizedSelector, Store } from '@ngrx/store';
 import { combineLatest, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 export const SEARCH_TERM_FILTER_FACTORY_TOKEN = new InjectionToken(
@@ -37,7 +37,8 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
   private displayProperty = 'name';
   private component = CheckboxListFilterComponent;
   private domHost = 'hostLeft';
-  private filterQueries = [
+
+  private filterQueries: FilterQueryInterface[] = [
     {
       query: YearQueries.getAll,
       name: 'years',
@@ -73,23 +74,26 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
     const nestedEduContentProductTypeFilters = this.store
       .select(EduContentProductTypeQueries.getAll)
       .pipe(
-        map(entities =>
-          entities
-            .map((val, ind, arr) => {
-              return {
-                children: arr.filter(child => child.parent === val.id),
-                ...val
-              };
-            })
-            .filter(val => val.parent === 0)
+        map(productTypes =>
+          productTypes.reduce((acc, cur, idx, src) => {
+            if (cur.parent == 0) {
+              return [
+                {
+                  children: src.filter(child => child.parent === cur.id),
+                  ...cur
+                },
+                ...acc
+              ];
+            } else return acc;
+          }, [])
         ),
-        map(entities =>
+        map(nestedProductTypes =>
           this.getFilter(
-            entities,
+            nestedProductTypes,
             {
               name: 'eduContentProductType',
               label: 'Type',
-              component: CheckboxFilterComponent
+              component: CheckboxListFilterComponent
             },
             searchState
           )
@@ -101,9 +105,9 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
     //TODO: Missing learningdomains, will come from store but mocked for now
     filters.push(
       of(SearchTermFilterFactory.learningDomains).pipe(
-        map(entities =>
+        map(domains =>
           this.getFilter(
-            entities,
+            domains,
             {
               name: 'learningDomains',
               label: 'Leergebied'
@@ -117,9 +121,9 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
     return combineLatest(filters);
   }
 
-  private getFilter(
-    entities: any,
-    filterQuery: any,
+  private getFilter<T>(
+    entities: T[],
+    filterQuery: FilterQueryInterface,
     searchState: SearchStateInterface
   ): SearchFilterInterface {
     return {
@@ -149,14 +153,22 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
   }
 
   private isSelectedInSearchState(
-    object: any,
+    obj: any,
     name: string,
     keyProperty: string,
     searchState: SearchStateInterface
   ): boolean {
     const key = searchState.filterCriteriaSelections.get(name);
     return key
-      ? key.includes((object[keyProperty] as unknown) as string | number)
+      ? key.includes((obj[keyProperty] as unknown) as string | number)
       : false;
   }
+}
+
+//Small interface used just here to simplify making filters for the non-special properties
+interface FilterQueryInterface {
+  query?: MemoizedSelector<object, any[]>;
+  name: string;
+  label: string;
+  component?: Type<SearchFilterComponentInterface>;
 }
