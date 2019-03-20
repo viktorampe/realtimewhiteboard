@@ -19,7 +19,6 @@ import {
   YearReducer
 } from '@campus/dal';
 import {
-  CheckboxFilterComponent,
   CheckboxLineFilterComponent,
   CheckboxListFilterComponent,
   SearchFilterInterface,
@@ -255,7 +254,7 @@ describe('SearchTermFilterFactory', () => {
       'id',
       'name',
       extendedProductTypes,
-      CheckboxFilterComponent
+      CheckboxListFilterComponent
     );
   }
 });
