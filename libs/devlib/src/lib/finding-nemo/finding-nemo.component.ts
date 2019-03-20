@@ -8,9 +8,16 @@ import {
   ViewChildren
 } from '@angular/core';
 import {
+  DalState,
   EduContentFixture,
   EduContentMetadataFixture,
-  EduContentProductTypeFixture
+  EduContentProductTypeFixture,
+  LearningAreaActions,
+  LearningAreaQueries,
+  MethodActions,
+  MethodQueries,
+  YearActions,
+  YearQueries
 } from '@campus/dal';
 import {
   SearchFilterCriteriaInterface,
@@ -25,14 +32,14 @@ import {
 } from '@campus/search';
 import { TileSecondaryActionInterface } from '@campus/ui';
 import { EduContentMetadataApi } from '@diekeure/polpo-api-angular-sdk';
+import { Store } from '@ngrx/store';
 // tslint:disable-next-line:nx-enforce-module-boundaries
 import { EduContentSearchResultComponent } from 'apps/polpo-classroom-web/src/app/components/searchresults/edu-content-search-result.component';
+import { TocFilterFactory } from 'apps/polpo-classroom-web/src/app/factories/toc-filter/toc-filter.factory';
 // tslint:disable-next-line:nx-enforce-module-boundaries
 import { STANDARD_SEARCH_SERVICE_TOKEN } from 'apps/polpo-classroom-web/src/app/services/standard-search.service';
-// tslint:disable-next-line:nx-enforce-module-boundaries
-import { MockSearchViewModel } from 'libs/search/src/lib/components/search.viewmodel.mock';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { filter, map, take } from 'rxjs/operators';
 // tslint:disable-next-line:nx-enforce-module-boundaries
 import { SearchComponent } from './../../../../search/src/lib/components/search/search.component';
 
@@ -63,15 +70,27 @@ export class FindingNemoComponent implements AfterViewInit {
   constructor(
     private eduContentMetadataApi: EduContentMetadataApi,
     @Inject(STANDARD_SEARCH_SERVICE_TOKEN)
-    private standardSearchFactory: SearchFilterFactory
+    private standardSearchFactory: SearchFilterFactory,
+    private store: Store<DalState>
   ) {
     this.setMockData();
-    this.searchFilters$ = this.standardSearchFactory.getFilters(
-      {} as SearchStateInterface
-    );
+    this.store.dispatch(new LearningAreaActions.LoadLearningAreas());
+    this.store.dispatch(new YearActions.LoadYears());
+    this.store.dispatch(new MethodActions.LoadMethods());
   }
 
   ngAfterViewInit(): void {
+    combineLatest(
+      this.store.select(LearningAreaQueries.getLoaded),
+      this.store.select(YearQueries.getLoaded),
+      this.store.select(MethodQueries.getLoaded)
+    )
+      .pipe(
+        filter(loadedArray => loadedArray.every(value => value)),
+        take(1)
+      )
+      .subscribe(() => this.searchComponent.reset());
+
     this.searchComponent.searchPortals = this.portalHosts;
   }
 
@@ -92,13 +111,11 @@ export class FindingNemoComponent implements AfterViewInit {
     this.searchMode = this.getMockSearchMode();
     this.searchState.next(this.getMockSearchState());
     this.resultsPage$.next(this.getMockResults());
-    this.filterCriteria$.next(this.getMockSearchFilters());
     this.autoComplete = this.getMockAutoCompleteValues();
   }
 
   catchEvent($event: SearchFilterCriteriaInterface[]) {
     console.log($event);
-    this.filterCriteria$.next([...this.getMockSearchFilters(), ...$event]);
   }
 
   loadMoreResults(from = 0) {
@@ -180,10 +197,10 @@ export class FindingNemoComponent implements AfterViewInit {
       label: 'demo',
       dynamicFilters: false,
       // tslint:disable-next-line: no-use-before-declare
-      searchFilterFactory: MockFactory,
+      searchFilterFactory: TocFilterFactory,
       searchTerm: {
         // autocompleteEl: string; //reference to material autocomplete component
-        domHost: 'hostSearchTerm'
+        domHost: 'hostLeft'
       },
       results: {
         component: EduContentSearchResultComponent,
@@ -261,52 +278,7 @@ export class FindingNemoComponent implements AfterViewInit {
     };
   }
 
-  private getMockSearchFilters(): SearchFilterCriteriaInterface[] {
-    return [
-      {
-        name: 'criteria name',
-        label: 'The label of the criteria',
-        keyProperty: 'id',
-        displayProperty: 'name',
-        values: [
-          {
-            data: {
-              id: 1,
-              name: 'foo jaar'
-            },
-            selected: false
-          },
-          {
-            data: {
-              id: 2,
-              name: 'bar jaar'
-            },
-            selected: false
-          },
-          {
-            data: {
-              id: 3,
-              name: 'baz jaar'
-            },
-            selected: false,
-            prediction: 3
-          }
-        ]
-      }
-    ];
-  }
-
   private getMockAutoCompleteValues(): string[] {
     return ['waarde1', 'waarde2', 'waarde3', 'waarde4'];
-  }
-}
-
-class MockFactory implements SearchFilterFactory {
-  mockSearchViewmodel = new MockSearchViewModel();
-
-  getFilters(
-    searchState: SearchStateInterface
-  ): Observable<SearchFilterInterface[]> {
-    return this.mockSearchViewmodel.searchFilters$;
   }
 }

@@ -1,3 +1,4 @@
+import { Injector } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
@@ -23,7 +24,7 @@ class MockFilterFactory implements SearchFilterFactory {
   ): Observable<SearchFilterInterface[]> {
     return of([]);
   }
-  constructor() {}
+  constructor(private injector: Injector) {}
 }
 describe('SearchViewModel', () => {
   let searchViewModel: SearchViewModel;

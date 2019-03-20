@@ -1,4 +1,4 @@
-import { Inject, Injectable, Type } from '@angular/core';
+import { Injectable, Injector, Type } from '@angular/core';
 import {
   DalState,
   EduContentTOCInterface,
@@ -15,7 +15,7 @@ import {
   SearchFilterInterface,
   SearchStateInterface
 } from '@campus/search';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 // tslint:disable-next-line: nx-enforce-module-boundaries
 import { PrimitivePropertiesKeys } from 'libs/utils/src/lib/types/generic.types';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
@@ -30,6 +30,9 @@ const TOC = 'eduContentTOC';
   providedIn: 'root'
 })
 export class TocFilterFactory implements SearchFilterFactory {
+  private store: Store<DalState>;
+  private tocService: TocServiceInterface;
+
   private filterComponent = ColumnFilterComponent;
   private domHost = 'hostLeft';
 
@@ -43,10 +46,12 @@ export class TocFilterFactory implements SearchFilterFactory {
 
   private treeFilters = new BehaviorSubject<SearchFilterInterface[]>([]);
 
-  constructor(
-    @Inject(TOC_SERVICE_TOKEN) private tocService: TocServiceInterface,
-    private store: Store<DalState>
-  ) {
+  constructor(private injector: Injector) {
+    this.store = this.injector.get(Store) as Store<DalState>;
+    this.tocService = this.injector.get(
+      TOC_SERVICE_TOKEN
+    ) as TocServiceInterface;
+
     this.cachedTree.toc.subscribe(tree => {
       this.treeFilters.next(
         this.getFiltersForTree(this.cachedTree.searchState, tree)
@@ -61,15 +66,34 @@ export class TocFilterFactory implements SearchFilterFactory {
     let treeFilters: Observable<SearchFilterInterface[]> = null;
 
     // learningArea is the first step
-    const learningAreaFilter = this.store
-      .select(LearningAreaQueries.getAll)
-      .pipe(
+    const learningAreaFilter = this.store.pipe(
+      select(LearningAreaQueries.getAll),
+      map(entities =>
+        this.getFilter(
+          searchState,
+          entities,
+          LEARNING_AREA,
+          'Leergebieden',
+          'id',
+          'name',
+          this.filterComponent,
+          this.domHost
+        )
+      )
+    );
+    filters.push(learningAreaFilter);
+
+    // if a learningArea is selected...
+    if (searchState.filterCriteriaSelections.has(LEARNING_AREA)) {
+      // ... show the filter for years
+      const yearFilter = this.store.pipe(
+        select(YearQueries.getAll),
         map(entities =>
           this.getFilter(
             searchState,
             entities,
-            LEARNING_AREA,
-            'Leergebieden',
+            YEAR,
+            'Jaren',
             'id',
             'name',
             this.filterComponent,
@@ -77,20 +101,19 @@ export class TocFilterFactory implements SearchFilterFactory {
           )
         )
       );
-    filters.push(learningAreaFilter);
+      filters.push(yearFilter);
 
-    // if a learningArea is selected...
-    if (searchState.filterCriteriaSelections.has(LEARNING_AREA)) {
-      // ... show the filter for years
-      const yearFilter = this.store
-        .select(YearQueries.getAll)
-        .pipe(
+      // if a year is selected...
+      if (searchState.filterCriteriaSelections.has(YEAR)) {
+        // ... show the filter for methods
+        const methodFilter = this.store.pipe(
+          select(MethodQueries.getAll), // TODO .select(MethodQueries.getByLearningAreaId, {learningAreaId})
           map(entities =>
             this.getFilter(
               searchState,
               entities,
-              YEAR,
-              'Jaren',
+              METHOD,
+              'Methodes',
               'id',
               'name',
               this.filterComponent,
@@ -98,27 +121,6 @@ export class TocFilterFactory implements SearchFilterFactory {
             )
           )
         );
-      filters.push(yearFilter);
-
-      // if a year is selected...
-      if (searchState.filterCriteriaSelections.has(YEAR)) {
-        // ... show the filter for methods
-        const methodFilter = this.store
-          .select(MethodQueries.getAll)
-          .pipe(
-            map(entities =>
-              this.getFilter(
-                searchState,
-                entities,
-                METHOD,
-                'Methodes',
-                'id',
-                'name',
-                this.filterComponent,
-                this.domHost
-              )
-            )
-          );
         filters.push(methodFilter);
 
         // if a method is selected...
