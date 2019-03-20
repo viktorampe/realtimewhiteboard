@@ -113,6 +113,8 @@ import { EduContentProductTypeService } from './metadata/edu-content-product-typ
 import { EDU_CONTENT_PRODUCT_TYPE_SERVICE_TOKEN } from './metadata/edu-content-product-type.service.interface';
 import { EduNetService } from './metadata/edu-net.service';
 import { EDU_NET_SERVICE_TOKEN } from './metadata/edu-net.service.interface';
+import { LearningDomainService } from './metadata/learning-domain.service';
+import { LEARNING_DOMAIN_SERVICE_TOKEN } from './metadata/learning-domain.service.interface';
 import { MethodService } from './metadata/method.service';
 import { METHOD_SERVICE_TOKEN } from './metadata/method.service.interface';
 import { SchoolTypeService } from './metadata/school-type.service';
@@ -347,7 +349,8 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
     { provide: YEAR_SERVICE_TOKEN, useClass: YearService },
     { provide: LEARNING_PLAN_SERVICE_TOKEN, useClass: LearningPlanService },
     { provide: FAVORITE_SERVICE_TOKEN, useClass: FavoriteService },
-    { provide: TOC_SERVICE_TOKEN, useClass: TocService }
+    { provide: TOC_SERVICE_TOKEN, useClass: TocService },
+    { provide: LEARNING_DOMAIN_SERVICE_TOKEN, useClass: LearningDomainService }
   ]
 })
 export class DalModule {
