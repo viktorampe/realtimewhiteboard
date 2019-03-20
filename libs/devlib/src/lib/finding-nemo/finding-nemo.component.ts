@@ -8,9 +8,15 @@ import {
   ViewChildren
 } from '@angular/core';
 import {
+  DalState,
   EduContentFixture,
   EduContentMetadataFixture,
-  EduContentProductTypeFixture
+  EduContentProductTypeActions,
+  EduContentProductTypeFixture,
+  EduNetActions,
+  MethodActions,
+  SchoolTypeActions,
+  YearActions
 } from '@campus/dal';
 import {
   SearchFilterCriteriaInterface,
@@ -23,6 +29,7 @@ import {
 } from '@campus/search';
 import { TileSecondaryActionInterface } from '@campus/ui';
 import { EduContentMetadataApi } from '@diekeure/polpo-api-angular-sdk';
+import { Store } from '@ngrx/store';
 import { EduContentSearchResultComponent } from 'apps/polpo-classroom-web/src/app/components/searchresults/edu-content-search-result.component';
 import { SearchTermFilterFactory } from 'apps/polpo-classroom-web/src/app/factories/search-term-filter/search-term-filter.factory';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -54,12 +61,27 @@ export class FindingNemoComponent implements AfterViewInit {
 
   @ViewChild(SearchComponent) private searchComponent: SearchComponent;
 
-  constructor(private eduContentMetadataApi: EduContentMetadataApi) {
+  constructor(
+    private eduContentMetadataApi: EduContentMetadataApi,
+    private store: Store<DalState>
+  ) {
+    this.store.dispatch(
+      new EduContentProductTypeActions.LoadEduContentProductTypes()
+    );
+
+    this.store.dispatch(new YearActions.LoadYears());
+    this.store.dispatch(new EduNetActions.LoadEduNets());
+    this.store.dispatch(new SchoolTypeActions.LoadSchoolTypes());
+    this.store.dispatch(new MethodActions.LoadMethods());
+
     this.setMockData();
   }
 
   ngAfterViewInit(): void {
     this.searchComponent.searchPortals = this.portalHosts;
+    setTimeout(() => {
+      this.searchComponent.reset(this.searchState.value);
+    }, 3000);
   }
 
   tileClick() {
