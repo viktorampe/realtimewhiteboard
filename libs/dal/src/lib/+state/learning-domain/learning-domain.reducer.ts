@@ -13,9 +13,9 @@ export interface State extends EntityState<LearningDomainInterface> {
   error?: any;
 }
 
-export const adapter: EntityAdapter<LearningDomainInterface> = createEntityAdapter<
+export const adapter: EntityAdapter<
   LearningDomainInterface
->();
+> = createEntityAdapter<LearningDomainInterface>();
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties
@@ -60,7 +60,10 @@ export function reducer(
     }
 
     case LearningDomainsActionTypes.LearningDomainsLoaded: {
-      return adapter.addAll(action.payload.learningDomains, { ...state, loaded: true });
+      return adapter.addAll(action.payload.learningDomains, {
+        ...state,
+        loaded: true
+      });
     }
 
     case LearningDomainsActionTypes.LearningDomainsLoadError: {

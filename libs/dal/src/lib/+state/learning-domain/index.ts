@@ -3,4 +3,9 @@ import { LearningDomainEffects } from './learning-domain.effects';
 import * as LearningDomainReducer from './learning-domain.reducer';
 import * as LearningDomainQueries from './learning-domain.selectors';
 
-export { LearningDomainActions, LearningDomainReducer, LearningDomainQueries, LearningDomainEffects };
+export {
+  LearningDomainActions,
+  LearningDomainReducer,
+  LearningDomainQueries,
+  LearningDomainEffects
+};
