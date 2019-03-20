@@ -161,6 +161,7 @@ describe('SearchTermFilterFactory', () => {
         values: values.map(val => ({
           data: val,
           selected: val.id === selectedId,
+          visible: true,
           child: (val as any).children
             ? this.getExpectedFilter(
                 name,
@@ -255,8 +256,7 @@ describe('SearchTermFilterFactory', () => {
       'id',
       'name',
       extendedProductTypes,
-      CheckboxFilterComponent
+      CheckboxListFilterComponent
     );
   }
 });
-//file.only

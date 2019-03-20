@@ -1,4 +1,4 @@
-import { Injectable, InjectionToken, Type } from '@angular/core';
+import { Injectable, InjectionToken, Injector, Type } from '@angular/core';
 import {
   DalState,
   EduContentProductTypeQueries,
@@ -18,6 +18,7 @@ import {
 import { MemoizedSelector, Store } from '@ngrx/store';
 import { combineLatest, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
+
 export const SEARCH_TERM_FILTER_FACTORY_TOKEN = new InjectionToken(
   'SearchTermFilterFactory'
 );
@@ -33,6 +34,7 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
     { id: 3, name: 'Schrijven' }
   ];
 
+  private store: Store<DalState>;
   private keyProperty = 'id';
   private displayProperty = 'name';
   private component = CheckboxListFilterComponent;
@@ -54,7 +56,9 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
     { query: MethodQueries.getAll, name: 'methods', label: 'Methode' }
   ];
 
-  constructor(private store: Store<DalState>) {}
+  constructor(private injector: Injector) {
+    this.store = this.injector.get(Store) as Store<DalState>;
+  }
 
   getFilters(
     searchState: SearchStateInterface
@@ -68,7 +72,7 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
     });
 
     /*
-    Transforms the eduContentProductTypes to have FilterCriteriaValues that employ the 'child' 
+    Transforms the eduContentProductTypes to have FilterCriteriaValues that employ the 'child'
     attribute for every productType that has a parent. This results in a nested checkboxlist.
     */
     const nestedEduContentProductTypeFilters = this.store
@@ -140,6 +144,7 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
             this.keyProperty,
             searchState
           ),
+          visible: true,
           child: (entity as any).children
             ? this.getFilter((entity as any).children, filterQuery, searchState)
                 .criteria
