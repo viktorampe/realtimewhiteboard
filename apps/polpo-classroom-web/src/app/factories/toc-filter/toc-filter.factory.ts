@@ -1,4 +1,4 @@
-import { Injectable, Injector, Type } from '@angular/core';
+import { Injector, Type } from '@angular/core';
 import {
   DalState,
   EduContentTOCInterface,
@@ -26,9 +26,6 @@ const YEAR = 'year';
 const METHOD = 'method';
 const TOC = 'eduContentTOC';
 
-@Injectable({
-  providedIn: 'root'
-})
 export class TocFilterFactory implements SearchFilterFactory {
   private store: Store<DalState>;
   private tocService: TocServiceInterface;

@@ -1,3 +1,4 @@
+// tslint:disable:nx-enforce-module-boundaries
 import {
   AfterViewInit,
   Component,
@@ -33,14 +34,11 @@ import {
 import { TileSecondaryActionInterface } from '@campus/ui';
 import { EduContentMetadataApi } from '@diekeure/polpo-api-angular-sdk';
 import { Store } from '@ngrx/store';
-// tslint:disable-next-line:nx-enforce-module-boundaries
 import { EduContentSearchResultComponent } from 'apps/polpo-classroom-web/src/app/components/searchresults/edu-content-search-result.component';
 import { TocFilterFactory } from 'apps/polpo-classroom-web/src/app/factories/toc-filter/toc-filter.factory';
-// tslint:disable-next-line:nx-enforce-module-boundaries
 import { STANDARD_SEARCH_SERVICE_TOKEN } from 'apps/polpo-classroom-web/src/app/services/standard-search.service';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
-// tslint:disable-next-line:nx-enforce-module-boundaries
 import { SearchComponent } from './../../../../search/src/lib/components/search/search.component';
 
 @Component({
@@ -73,7 +71,7 @@ export class FindingNemoComponent implements AfterViewInit {
     private standardSearchFactory: SearchFilterFactory,
     private store: Store<DalState>
   ) {
-    this.setMockData();
+    this.setMockData(TocFilterFactory);
     this.store.dispatch(new LearningAreaActions.LoadLearningAreas());
     this.store.dispatch(new YearActions.LoadYears());
     this.store.dispatch(new MethodActions.LoadMethods());
@@ -89,7 +87,10 @@ export class FindingNemoComponent implements AfterViewInit {
         filter(loadedArray => loadedArray.every(value => value)),
         take(1)
       )
-      .subscribe(() => this.searchComponent.reset());
+      .subscribe(() => {
+        console.log('state loaded');
+        this.searchComponent.reset(this.searchState.value);
+      });
 
     this.searchComponent.searchPortals = this.portalHosts;
   }
@@ -98,7 +99,7 @@ export class FindingNemoComponent implements AfterViewInit {
     console.log('tile click!');
   }
 
-  setMockData() {
+  setMockData(searchFilterFactory: Type<SearchFilterFactory>) {
     this.secondaryActions = [
       {
         label: 'Bekijken',
@@ -108,7 +109,7 @@ export class FindingNemoComponent implements AfterViewInit {
         }
       }
     ];
-    this.searchMode = this.getMockSearchMode();
+    this.searchMode = this.getMockSearchMode(searchFilterFactory);
     this.searchState.next(this.getMockSearchState());
     this.resultsPage$.next(this.getMockResults());
     this.autoComplete = this.getMockAutoCompleteValues();
@@ -191,13 +192,15 @@ export class FindingNemoComponent implements AfterViewInit {
     console.log(value);
   }
 
-  private getMockSearchMode(): SearchModeInterface {
+  private getMockSearchMode(
+    searchFilterFactory: Type<SearchFilterFactory>
+  ): SearchModeInterface {
     return {
       name: 'demo',
       label: 'demo',
       dynamicFilters: false,
       // tslint:disable-next-line: no-use-before-declare
-      searchFilterFactory: TocFilterFactory,
+      searchFilterFactory: searchFilterFactory,
       searchTerm: {
         // autocompleteEl: string; //reference to material autocomplete component
         domHost: 'hostLeft'

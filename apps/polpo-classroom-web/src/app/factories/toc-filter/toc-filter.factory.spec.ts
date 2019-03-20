@@ -1,3 +1,4 @@
+import { Injector } from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
 import {
   DalState,
@@ -98,6 +99,12 @@ describe('TocFilterFactory', () => {
         ])
       ],
       providers: [
+        {
+          provide: TocFilterFactory,
+          useClass: TocFilterFactory,
+          deps: [Injector]
+        },
+        Injector,
         Store,
         {
           provide: TOC_SERVICE_TOKEN,

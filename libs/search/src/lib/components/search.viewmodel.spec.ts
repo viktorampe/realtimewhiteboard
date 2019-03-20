@@ -297,7 +297,7 @@ describe('SearchViewModel', () => {
     });
 
     it('should request new filters when dynamicfilters === true', () => {
-      searchViewModel['filterFactory'] = new MockFilterFactory();
+      searchViewModel['filterFactory'] = new MockFilterFactory(null);
       searchViewModel['searchMode'] = {
         dynamicFilters: true
       } as SearchModeInterface;
@@ -382,7 +382,10 @@ describe('SearchViewModel', () => {
       searchViewModel.reset(
         {
           name: 'foo',
-          searchFilterFactory: MockFilterFactory
+          searchFilterFactory: MockFilterFactory,
+          label: '',
+          dynamicFilters: null,
+          results: null
         } as SearchModeInterface,
         { searchTerm: 'bar', from: 60 } as SearchStateInterface
       );
@@ -396,7 +399,10 @@ describe('SearchViewModel', () => {
       searchViewModel.reset(
         {
           name: 'foo',
-          searchFilterFactory: MockFilterFactory
+          searchFilterFactory: MockFilterFactory,
+          label: '',
+          dynamicFilters: null,
+          results: null
         } as SearchModeInterface,
         null
       );
@@ -415,7 +421,7 @@ describe('SearchViewModel', () => {
 
   describe('updateFilters', () => {
     it('should update the filters via the filterFactory', () => {
-      searchViewModel['filterFactory'] = new MockFilterFactory();
+      searchViewModel['filterFactory'] = new MockFilterFactory(null);
       const spy = jest.spyOn(searchViewModel['filterFactory'], 'getFilters');
 
       // set initial state
