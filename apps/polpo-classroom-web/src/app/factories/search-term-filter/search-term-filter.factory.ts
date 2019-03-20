@@ -76,7 +76,7 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
       .pipe(
         map(productTypes =>
           productTypes.reduce((acc, cur, idx, src) => {
-            if (cur.parent == 0) {
+            if (cur.parent === 0) {
               return [
                 {
                   children: src.filter(child => child.parent === cur.id),
