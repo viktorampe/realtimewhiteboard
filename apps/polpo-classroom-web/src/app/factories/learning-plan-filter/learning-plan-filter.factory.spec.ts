@@ -7,12 +7,14 @@ import {
   LearningAreaActions,
   LearningAreaFixture,
   LearningAreaReducer,
-  LearningPlanAssignmentInterface,
+  LearningPlanFixture,
+  LearningPlanInterface,
   LEARNING_PLAN_SERVICE_TOKEN,
   SchoolTypeActions,
   SchoolTypeFixture,
   SchoolTypeReducer,
   SpecialtyInterface,
+  YearFixture,
   YearInterface
 } from '@campus/dal';
 import {
@@ -95,6 +97,7 @@ describe('LearningPlanFilterFactory', () => {
 
   describe('getFilters', () => {
     let learningPlanFilterFactory;
+    let searchFilterCriterias;
     beforeEach(() => {
       store.dispatch(
         new LearningAreaActions.LearningAreasLoaded({
@@ -113,6 +116,63 @@ describe('LearningPlanFilterFactory', () => {
       );
 
       learningPlanFilterFactory = TestBed.get(LearningPlanFilterFactory);
+
+      searchFilterCriterias = [
+        {
+          ...learningPlanFilterFactory['getSearchFilterStringProperties'](0),
+          values: mockLearningAreas.map(mockLearningArea => {
+            return {
+              data: mockLearningArea,
+              hasChild: true
+            };
+          })
+        },
+        {
+          ...learningPlanFilterFactory['getSearchFilterStringProperties'](1),
+          values: mockEduNets.map(mockEduNet => {
+            return {
+              data: mockEduNet,
+              hasChild: true
+            };
+          })
+        },
+        {
+          ...learningPlanFilterFactory['getSearchFilterStringProperties'](2),
+          values: mockSchoolTypes.map(mockSchoolType => {
+            return {
+              data: mockSchoolType,
+              hasChild: true
+            };
+          })
+        },
+        {
+          ...learningPlanFilterFactory['getSearchFilterStringProperties'](3),
+          values: mockAvailableYears.map(mockAvailableYear => {
+            return {
+              data: mockAvailableYear,
+              hasChild: true
+            };
+          })
+        },
+        {
+          ...learningPlanFilterFactory['getSearchFilterStringProperties'](4),
+          values: Array.from(mockLearningPlans).map(
+            ([specialty, learningPlans]: [
+              SpecialtyInterface,
+              LearningPlanInterface[]
+            ]) => {
+              return {
+                data: {
+                  label: specialty.name,
+                  ids: learningPlans.map(a => a.id)
+                },
+                hasChild: false
+              };
+            }
+          )
+        }
+      ];
+    });
     it('should throw an error if a value higher thatn 4 is given to getSearchFilterStringProperties', () => {
       expect(() => {
         learningPlanFilterFactory['getSearchFilterStringProperties'](5);
@@ -123,23 +183,88 @@ describe('LearningPlanFilterFactory', () => {
     it('should return the correct searchFitlerInterface array', () => {
       const loopValues: {
         filterCriteriaSelection: Map<string, (number | string)[]>;
-        searchFilterCriteria: SearchFilterCriteriaInterface;
+        expectedSearchFilterCriterias: SearchFilterCriteriaInterface[];
         getLearningPlanAssignmentsCalled: boolean;
         getAvailableYearsForSearchCalled: boolean;
       }[] = [
         {
+          filterCriteriaSelection: new Map<string, (number | string)[]>([
+            ['learningAreas', []] // test if empty array is handled as nothing is selected
+          ]),
+          expectedSearchFilterCriterias: [searchFilterCriterias[0]],
+          getAvailableYearsForSearchCalled: false,
+          getLearningPlanAssignmentsCalled: false
+        },
+        {
+          filterCriteriaSelection: new Map<string, (number | string)[]>([
+            ['learningAreas', []],
+            ['eduNets', ['2']] // test to make sure no column level can be skipped
+          ]),
+          expectedSearchFilterCriterias: [searchFilterCriterias[0]],
+          getAvailableYearsForSearchCalled: false,
+          getLearningPlanAssignmentsCalled: false
+        },
+        {
           filterCriteriaSelection: new Map<string, (number | string)[]>([]),
-          searchFilterCriteria: {
-            ...learningPlanFilterFactory['getSearchFilterStringProperties'](0),
-            values: mockLearningAreas.map(mockLearningArea => {
-              return {
-                data: mockLearningArea,
-                hasChild: true
-              };
-            })
-          },
-          getLearningPlanAssignmentsCalled: false,
-          getAvailableYearsForSearchCalled: false
+          expectedSearchFilterCriterias: [searchFilterCriterias[0]],
+          getAvailableYearsForSearchCalled: false,
+          getLearningPlanAssignmentsCalled: false
+        },
+        {
+          filterCriteriaSelection: new Map<string, (number | string)[]>([
+            ['learningAreas', [1]]
+          ]),
+          expectedSearchFilterCriterias: [
+            searchFilterCriterias[0],
+            searchFilterCriterias[1]
+          ],
+          getAvailableYearsForSearchCalled: false,
+          getLearningPlanAssignmentsCalled: false
+        },
+        {
+          filterCriteriaSelection: new Map<string, (number | string)[]>([
+            ['learningAreas', [1]],
+            ['eduNets', ['2']] //testing string to number convertion
+          ]),
+          expectedSearchFilterCriterias: [
+            searchFilterCriterias[0],
+            searchFilterCriterias[1],
+            searchFilterCriterias[2]
+          ],
+          getAvailableYearsForSearchCalled: false,
+          getLearningPlanAssignmentsCalled: false
+        },
+        {
+          filterCriteriaSelection: new Map<string, (number | string)[]>([
+            ['learningAreas', [1]],
+            ['eduNets', [2]],
+            ['schoolTypes', [4]]
+          ]),
+          expectedSearchFilterCriterias: [
+            searchFilterCriterias[0],
+            searchFilterCriterias[1],
+            searchFilterCriterias[2],
+            searchFilterCriterias[3]
+          ],
+          getAvailableYearsForSearchCalled: true,
+          getLearningPlanAssignmentsCalled: false
+        },
+        {
+          filterCriteriaSelection: new Map<string, (number | string)[]>([
+            ['learningAreas', [1]],
+            ['eduNets', [2]],
+            ['schoolTypes', [4]],
+            ['years', [4]]
+          ]),
+          expectedSearchFilterCriterias: [
+            searchFilterCriterias[0],
+            searchFilterCriterias[1],
+            searchFilterCriterias[2],
+            searchFilterCriterias[3],
+            searchFilterCriterias[4]
+          ],
+          getAvailableYearsForSearchCalled: true,
+          getLearningPlanAssignmentsCalled: true
         }
       ];
       loopValues.forEach(loopValue => {
@@ -159,21 +284,24 @@ describe('LearningPlanFilterFactory', () => {
           learningPlanFilterFactory.getFilters(searchState)
         ).toBeObservable(
           hot('a', {
-            a: [
-              {
-                criteria: loopValue.searchFilterCriteria,
-                component: ColumnFilterComponent,
-                domHost: 'hostLeft'
+            a: loopValue.expectedSearchFilterCriterias.map(
+              expectedSearchFilterCriteria => {
+                return {
+                  criteria: expectedSearchFilterCriteria,
+                  component: ColumnFilterComponent,
+                  domHost: 'hostLeft'
+                };
               }
-            ]
+            )
           })
-        );
-        expect(getLearningPlanAssignmentsSpy).toHaveBeenCalledTimes(
-          loopValue.getLearningPlanAssignmentsCalled ? 1 : 0
         );
         expect(getAvailableYearsForSearchSpy).toHaveBeenCalledTimes(
           loopValue.getAvailableYearsForSearchCalled ? 1 : 0
         );
+        expect(getLearningPlanAssignmentsSpy).toHaveBeenCalledTimes(
+          loopValue.getLearningPlanAssignmentsCalled ? 1 : 0
+        );
+        jest.restoreAllMocks();
       });
     });
   });
