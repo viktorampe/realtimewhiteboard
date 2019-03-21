@@ -1,5 +1,6 @@
 import { MethodQueries } from '.';
 import { MethodInterface } from '../../+models';
+import { MethodFixture } from './../../+fixtures/Method.fixture';
 import { State } from './method.reducer';
 
 describe('Method Selectors', () => {
@@ -89,6 +90,40 @@ describe('Method Selectors', () => {
     it('getById() should return undefined if the entity is not present', () => {
       const results = MethodQueries.getById(storeState, { id: 9 });
       expect(results).toBe(undefined);
+    });
+
+    describe('getByLearningAreaId', () => {
+      let mockMethods: MethodInterface[];
+
+      beforeEach(() => {
+        mockMethods = [
+          new MethodFixture({ id: 4, learningAreaId: 1 }),
+          new MethodFixture({ id: 1, learningAreaId: 1 }),
+          new MethodFixture({ id: 2, learningAreaId: 2 }),
+          new MethodFixture({ id: 3, learningAreaId: 3 })
+        ];
+
+        methodState = createState(mockMethods, true, 'no error');
+        storeState = { methods: methodState };
+      });
+
+      it('should only return the methods with the correct learningAreaId', () => {
+        const results = MethodQueries.getByLearningAreaId(storeState, {
+          learningAreaId: 1
+        });
+
+        const expected = [mockMethods[1], mockMethods[0]]; // ordered by id
+        expect(results).toEqual(expected);
+      });
+
+      it('should return an empty array if no methods match the learningAreaId', () => {
+        const results = MethodQueries.getByLearningAreaId(storeState, {
+          learningAreaId: 9
+        });
+
+        const expected = [];
+        expect(results).toEqual(expected);
+      });
     });
   });
 });
