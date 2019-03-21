@@ -69,6 +69,11 @@ export class SearchViewModel {
     stateFilterCriteriaSelections: Map<string, (number | string)[]>,
     resultsFilterCriteriaPredictions: Map<string, Map<string | number, number>>
   ): SearchFilterInterface {
+    if (!filter) {
+      console.error('no filter provided');
+      return;
+    }
+
     if (Array.isArray(filter.criteria))
       filter.criteria = filter.criteria.map(criterium =>
         this.getUpdatedCriterium(
@@ -214,7 +219,8 @@ export class SearchViewModel {
   ): void {
     let newSearchState: SearchStateInterface;
     this.searchMode = mode;
-    this.filterFactory = new this.searchMode.searchFilterFactory(this.injector); // used by updateFilters()
+    this.filterFactory = this.injector.get(this.searchMode.searchFilterFactory);
+    // this.filterFactory = new this.searchMode.searchFilterFactory(this.injector); // used by updateFilters()
 
     if (state) {
       // we want to update the state

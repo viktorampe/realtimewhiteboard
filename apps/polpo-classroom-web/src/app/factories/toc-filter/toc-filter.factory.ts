@@ -1,4 +1,4 @@
-import { Injector, Type } from '@angular/core';
+import { Inject, Injectable, Type } from '@angular/core';
 import {
   DalState,
   EduContentTOCInterface,
@@ -26,10 +26,10 @@ const YEAR = 'year';
 const METHOD = 'method';
 const TOC = 'eduContentTOC';
 
+@Injectable({
+  providedIn: 'root'
+})
 export class TocFilterFactory implements SearchFilterFactory {
-  private store: Store<DalState>;
-  private tocService: TocServiceInterface;
-
   private filterComponent = ColumnFilterComponent;
   private domHost = 'hostLeft';
 
@@ -43,12 +43,10 @@ export class TocFilterFactory implements SearchFilterFactory {
 
   private treeFilters = new BehaviorSubject<SearchFilterInterface[]>([]);
 
-  constructor(private injector: Injector) {
-    this.store = this.injector.get(Store) as Store<DalState>;
-    this.tocService = this.injector.get(
-      TOC_SERVICE_TOKEN
-    ) as TocServiceInterface;
-
+  constructor(
+    private store: Store<DalState>,
+    @Inject(TOC_SERVICE_TOKEN) private tocService: TocServiceInterface
+  ) {
     this.cachedTree.toc.subscribe(tree => {
       this.treeFilters.next(
         this.getFiltersForTree(this.cachedTree.searchState, tree)
@@ -61,6 +59,7 @@ export class TocFilterFactory implements SearchFilterFactory {
   ): Observable<SearchFilterInterface[]> {
     const filters: Observable<SearchFilterInterface>[] = [];
     let treeFilters: Observable<SearchFilterInterface[]> = null;
+    console.log(this.store);
 
     // learningArea is the first step
     const learningAreaFilter = this.store.pipe(

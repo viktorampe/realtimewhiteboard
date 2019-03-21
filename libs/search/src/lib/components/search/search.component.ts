@@ -203,7 +203,7 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
 
   private removeFilters(filters?: SearchFilterInterface[]): void {
     let portals = [];
-    if (filters) {
+    if (filters && filters.every(value => !!value)) {
       portals = filters.map(filter => this.portalsMap[filter.domHost]);
       portals = Array.from(new Set(portals)); // only reset each host once
     } else {

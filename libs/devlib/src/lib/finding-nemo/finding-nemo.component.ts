@@ -185,11 +185,11 @@ export class FindingNemoComponent implements AfterViewInit {
   }
 
   onChange(value: string) {
-    console.log(value);
+    // console.log(value);
   }
 
   onFilterSelectionChange(value: string) {
-    console.log(value);
+    // console.log(value);
   }
 
   private getMockSearchMode(
