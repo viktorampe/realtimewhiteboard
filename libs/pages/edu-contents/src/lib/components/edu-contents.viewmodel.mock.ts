@@ -6,16 +6,19 @@ import {
   LearningAreaInterface,
   TaskFixture
 } from '@campus/dal';
-import { SearchModeInterface, SearchStateInterface } from '@campus/search';
+import {
+  FilterFactoryFixture,
+  ResultItemBase,
+  SearchModeInterface,
+  SearchStateInterface
+} from '@campus/search';
 import { ViewModelInterface } from '@campus/testing';
 // tslint:disable-next-line: nx-enforce-module-boundaries
-import { EduContentSearchResultComponent } from 'apps/polpo-classroom-web/src/app/components/searchresults/edu-content-search-result.component';
-// tslint:disable-next-line: nx-enforce-module-boundaries
 import { EduContentSearchResultInterface } from 'apps/polpo-classroom-web/src/app/components/searchresults/interfaces/educontent-search-result';
-// tslint:disable-next-line: nx-enforce-module-boundaries
-import { StandardSearchService } from 'apps/polpo-classroom-web/src/app/services/standard-search.service';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { EduContentsViewModel } from './edu-contents.viewmodel';
+
+class ResultItemMock extends ResultItemBase {}
 
 @Injectable({
   providedIn: 'root'
@@ -54,13 +57,13 @@ export class EduContentsViewModelMock
     name: 'demo',
     label: 'demo',
     dynamicFilters: false,
-    searchFilterFactory: StandardSearchService,
+    searchFilterFactory: FilterFactoryFixture,
     searchTerm: {
       // autocompleteEl: string; //reference to material autocomplete component
       domHost: 'hostSearchTerm'
     },
     results: {
-      component: EduContentSearchResultComponent,
+      component: ResultItemMock,
       sortModes: [
         {
           description: 'book',
