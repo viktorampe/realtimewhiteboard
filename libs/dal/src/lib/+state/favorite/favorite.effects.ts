@@ -2,9 +2,8 @@ import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { select } from '@ngrx/store';
 import { DataPersistence } from '@nrwl/nx';
-import { undo } from 'ngrx-undo';
-import { from, Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map, switchMap, take } from 'rxjs/operators';
 import { DalState } from '..';
 import {
   FavoriteServiceInterface,
@@ -26,7 +25,7 @@ import {
   StartAddFavorite,
   ToggleFavorite
 } from './favorite.actions';
-import { getById } from './favorite.selectors';
+import { getByTypeAndId } from './favorite.selectors';
 
 @Injectable()
 export class FavoriteEffects {
@@ -72,7 +71,7 @@ export class FavoriteEffects {
   );
 
   @Effect()
-  deleteFavorite$ = this.dataPersistence.optimisticUpdate(
+  deleteFavorite$ = this.dataPersistence.pessimisticUpdate(
     FavoritesActionTypes.DeleteFavorite,
     {
       run: (action: DeleteFavorite, state: DalState) => {
@@ -94,8 +93,7 @@ export class FavoriteEffects {
             })
           );
       },
-      undoAction: (action: DeleteFavorite, error) => {
-        const undoAction = undo(action);
+      onError: (action: DeleteFavorite, error) => {
         const effectFeedback = new EffectFeedback({
           id: this.uuid(),
           triggerAction: action,
@@ -106,10 +104,9 @@ export class FavoriteEffects {
           display: true,
           priority: Priority.HIGH
         });
-        const effectFeedbackAction = new EffectFeedbackActions.AddEffectFeedback(
-          { effectFeedback }
-        );
-        return from([undoAction, effectFeedbackAction]);
+        return [
+          new EffectFeedbackActions.AddEffectFeedback({ effectFeedback })
+        ];
       }
     }
   );
@@ -122,18 +119,22 @@ export class FavoriteEffects {
         action: ToggleFavorite
       ): Observable<StartAddFavorite | DeleteFavorite> => {
         return this.dataPersistence.store.pipe(
-          select(getById, { id: action.payload.favorite.id }),
+          select(getByTypeAndId, {
+            type: action.payload.favorite.type,
+            id:
+              action.payload.favorite.eduContentId ||
+              action.payload.favorite.learningAreaId ||
+              action.payload.favorite.bundleId ||
+              action.payload.favorite.taskId
+          }),
+          take(1),
           map(favorite => {
             if (favorite) {
-              console.log('delete');
-
               return new DeleteFavorite({
-                id: action.payload.favorite.id,
+                id: favorite.id,
                 userId: this.authService.userId
               });
             } else {
-              console.log('start');
-
               return new StartAddFavorite({
                 favorite: action.payload.favorite,
                 userId: this.authService.userId
