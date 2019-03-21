@@ -31,7 +31,7 @@ describe('SearchViewModel', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [SearchViewModel]
+      providers: [SearchViewModel, MockFilterFactory]
     });
 
     searchViewModel = TestBed.get(SearchViewModel);
