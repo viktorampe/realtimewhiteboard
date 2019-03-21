@@ -1,4 +1,4 @@
-import { Injectable, InjectionToken } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import {
   CheckboxLineFilterComponent,
@@ -10,10 +10,6 @@ import {
   SearchStateInterface
 } from '../interfaces';
 import { SearchFilterCriteriaValuesFixture } from './search-filter-criteria.fixture';
-
-export const STANDARD_SEARCH_SERVICE_TOKEN = new InjectionToken(
-  'StandardSearchService'
-);
 
 @Injectable()
 export class FilterFactoryFixture implements SearchFilterFactory {
