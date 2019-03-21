@@ -4,6 +4,7 @@ import {
   EduContentProductTypeInterface,
   EduContentProductTypeQueries,
   EduNetQueries,
+  LearningDomainQueries,
   MethodQueries,
   SchoolTypeQueries,
   YearQueries
@@ -16,8 +17,12 @@ import {
   SearchFilterInterface,
   SearchStateInterface
 } from '@campus/search';
-import { MemoizedSelector, Store } from '@ngrx/store';
-import { combineLatest, Observable, of } from 'rxjs';
+import {
+  MemoizedSelector,
+  MemoizedSelectorWithProps,
+  Store
+} from '@ngrx/store';
+import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 export const SEARCH_TERM_FILTER_FACTORY_TOKEN = new InjectionToken(
@@ -28,68 +33,85 @@ export const SEARCH_TERM_FILTER_FACTORY_TOKEN = new InjectionToken(
   providedIn: 'root'
 })
 export class SearchTermFilterFactory implements SearchFilterFactory {
-  //TODO: Missing learningdomains, will come from store but mocked for now
-  public static learningDomains = [
-    { id: 1, name: 'Lezen' },
-    { id: 2, name: 'Luisteren' },
-    { id: 3, name: 'Schrijven' }
-  ];
-
   private keyProperty = 'id';
   private displayProperty = 'name';
   private component = CheckboxListFilterComponent;
   private domHost = 'hostLeft';
 
-  private filterQueries: FilterQueryInterface[] = [
-    {
+  public filterQueries: {
+    [key: string]: FilterQueryInterface;
+  } = {
+    years: {
       query: YearQueries.getAll,
       name: 'years',
       label: 'Jaar',
       component: CheckboxLineFilterComponent
     },
-    { query: EduNetQueries.getAll, name: 'eduNets', label: 'Onderwijsnet' },
-    {
+    eduNets: {
+      query: EduNetQueries.getAll,
+      name: 'eduNets',
+      label: 'Onderwijsnet'
+    },
+    schoolTypes: {
       query: SchoolTypeQueries.getAll,
       name: 'schoolTypes',
       label: 'Onderwijsvorm'
     },
-    { query: MethodQueries.getAll, name: 'methods', label: 'Methode' }
-  ];
+    methods: {
+      query: MethodQueries.getByLearningAreaId,
+      name: 'methods',
+      label: 'Methode',
+      learningAreaDependent: true
+    },
+    learningDomains: {
+      query: LearningDomainQueries.getByLearningArea,
+      label: 'Leerdomein',
+      name: 'learningDomains',
+      learningAreaDependent: true
+    }
+  };
 
   constructor(private store: Store<DalState>) {}
+
+  public buildFilter(
+    name: string,
+    searchState: SearchStateInterface
+  ): Observable<SearchFilterInterface> {
+    const filterQuery = this.filterQueries[name];
+
+    if (filterQuery.learningAreaDependent) {
+      return this.store
+        .select(
+          filterQuery.query as MemoizedSelectorWithProps<Object, any, any[]>,
+          {
+            learningAreaId: searchState.filterCriteriaSelections.get(
+              'learningArea'
+            )[0]
+          }
+        )
+        .pipe(
+          map(entities => this.getFilter(entities, filterQuery, searchState))
+        );
+    } else {
+      return this.store
+        .select(filterQuery.query as MemoizedSelector<Object, any[]>)
+        .pipe(
+          map(entities => this.getFilter(entities, filterQuery, searchState))
+        );
+    }
+  }
 
   getFilters(
     searchState: SearchStateInterface
   ): Observable<SearchFilterInterface[]> {
-    const filters = this.filterQueries.map(filterQuery => {
-      return this.store
-        .select(filterQuery.query)
-        .pipe(
-          map(entities => this.getFilter(entities, filterQuery, searchState))
-        );
-    });
-
-    const nestedEduContentProductTypeFilters = this.getNestedEduContentProductTypes(
-      searchState
+    const filters = ['years', 'eduNets', 'schoolTypes', 'methods'].map(
+      filterName => {
+        return this.buildFilter(filterName, searchState);
+      }
     );
 
-    filters.push(nestedEduContentProductTypeFilters);
-
-    //TODO: Missing learningdomains, will come from store but mocked for now
-    filters.push(
-      of(SearchTermFilterFactory.learningDomains).pipe(
-        map(domains =>
-          this.getFilter(
-            domains,
-            {
-              name: 'learningDomains',
-              label: 'Leergebied'
-            },
-            searchState
-          )
-        )
-      )
-    );
+    filters.push(this.getNestedEduContentProductTypes(searchState));
+    filters.push(this.buildFilter('learningDomains', searchState));
 
     return combineLatest(filters);
   }
@@ -177,9 +199,12 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
 }
 
 //Small interface used just here to simplify making filters for the non-special properties
-interface FilterQueryInterface {
-  query?: MemoizedSelector<object, any[]>;
+export interface FilterQueryInterface {
+  query?:
+    | MemoizedSelector<object, any[]>
+    | MemoizedSelectorWithProps<object, any, any[]>;
   name: string;
   label: string;
   component?: Type<SearchFilterComponentInterface>;
+  learningAreaDependent?: boolean;
 }

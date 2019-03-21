@@ -15,6 +15,7 @@ import {
   EduContentProductTypeActions,
   EduContentProductTypeFixture,
   EduNetActions,
+  LearningDomainActions,
   MethodActions,
   SchoolTypeActions,
   YearActions
@@ -76,6 +77,7 @@ export class FindingNemoComponent implements AfterViewInit {
     this.store.dispatch(new EduNetActions.LoadEduNets());
     this.store.dispatch(new SchoolTypeActions.LoadSchoolTypes());
     this.store.dispatch(new MethodActions.LoadMethods());
+    this.store.dispatch(new LearningDomainActions.LoadLearningDomains());
 
     this.setMockData();
   }
@@ -223,7 +225,7 @@ export class FindingNemoComponent implements AfterViewInit {
   private getMockSearchState(): SearchStateInterface {
     return {
       searchTerm: 'nemo',
-      filterCriteriaSelections: new Map(),
+      filterCriteriaSelections: new Map([['learningArea', [2]]]),
       from: 0
     };
   }
