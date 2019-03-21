@@ -113,6 +113,12 @@ describe('LearningPlanFilterFactory', () => {
       );
 
       learningPlanFilterFactory = TestBed.get(LearningPlanFilterFactory);
+    it('should throw an error if a value higher thatn 4 is given to getSearchFilterStringProperties', () => {
+      expect(() => {
+        learningPlanFilterFactory['getSearchFilterStringProperties'](5);
+      }).toThrowError(
+        `LearningPlanFilterFactory: getStartingFilterStringProperties: Given currentColumnLevel: ${5} should not exist`
+      );
     });
     it('should return the correct searchFitlerInterface array', () => {
       const loopValues: {
