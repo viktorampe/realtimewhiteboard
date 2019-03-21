@@ -161,7 +161,7 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
         label: filterQuery.label,
         keyProperty: this.keyProperty,
         displayProperty: this.displayProperty,
-        values: Object.values(entities).map(entity => ({
+        values: entities.map(entity => ({
           data: entity,
           visible: true,
           child: (entity as any).children
