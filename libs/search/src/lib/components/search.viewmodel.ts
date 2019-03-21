@@ -43,6 +43,7 @@ export class SearchViewModel {
         const filterCriteriaPredictions = !!results
           ? results.filterCriteriaPredictions
           : new Map<string, Map<string | number, number>>();
+        console.log(filters);
         return filters.map(filter =>
           this.getUpdatedSearchFilter(
             filter,

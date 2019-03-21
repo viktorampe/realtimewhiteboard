@@ -165,6 +165,9 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
   private createFilters(): void {
     this.subscriptions.add(
       this.searchViewmodel.searchFilters$.subscribe(searchFilters => {
+        // possible if selectors return empty values
+        if (!searchFilters || !searchFilters.some(value => !!value)) return;
+
         // remove old filters
         this.removeFilters(searchFilters);
 
@@ -203,7 +206,7 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
 
   private removeFilters(filters?: SearchFilterInterface[]): void {
     let portals = [];
-    if (filters && filters.every(value => !!value)) {
+    if (filters) {
       portals = filters.map(filter => this.portalsMap[filter.domHost]);
       portals = Array.from(new Set(portals)); // only reset each host once
     } else {

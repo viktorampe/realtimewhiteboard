@@ -59,7 +59,6 @@ export class TocFilterFactory implements SearchFilterFactory {
   ): Observable<SearchFilterInterface[]> {
     const filters: Observable<SearchFilterInterface>[] = [];
     let treeFilters: Observable<SearchFilterInterface[]> = null;
-    console.log(this.store);
 
     // learningArea is the first step
     const learningAreaFilter = this.store.pipe(

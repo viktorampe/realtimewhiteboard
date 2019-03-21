@@ -1,4 +1,3 @@
-import { Injector } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
@@ -24,7 +23,6 @@ class MockFilterFactory implements SearchFilterFactory {
   ): Observable<SearchFilterInterface[]> {
     return of([]);
   }
-  constructor(private injector: Injector) {}
 }
 describe('SearchViewModel', () => {
   let searchViewModel: SearchViewModel;
@@ -297,7 +295,7 @@ describe('SearchViewModel', () => {
     });
 
     it('should request new filters when dynamicfilters === true', () => {
-      searchViewModel['filterFactory'] = new MockFilterFactory(null);
+      searchViewModel['filterFactory'] = new MockFilterFactory();
       searchViewModel['searchMode'] = {
         dynamicFilters: true
       } as SearchModeInterface;
@@ -421,7 +419,7 @@ describe('SearchViewModel', () => {
 
   describe('updateFilters', () => {
     it('should update the filters via the filterFactory', () => {
-      searchViewModel['filterFactory'] = new MockFilterFactory(null);
+      searchViewModel['filterFactory'] = new MockFilterFactory();
       const spy = jest.spyOn(searchViewModel['filterFactory'], 'getFilters');
 
       // set initial state
