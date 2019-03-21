@@ -42,6 +42,10 @@ import {
   LearningAreasEffects
 } from './+state/learning-area';
 import {
+  LearningDomainEffects,
+  LearningDomainReducer
+} from './+state/learning-domain';
+import {
   LinkedPersonEffects,
   LinkedPersonReducer
 } from './+state/linked-person';
@@ -160,6 +164,11 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
       LearningAreaReducer.NAME,
       LearningAreaReducer.reducer,
       { initialState: LearningAreaReducer.initialState }
+    ),
+    StoreModule.forFeature(
+      LearningDomainReducer.NAME,
+      LearningDomainReducer.reducer,
+      { initialState: LearningDomainReducer.initialState }
     ),
     StoreModule.forFeature(MethodReducer.NAME, MethodReducer.reducer, {
       initialState: MethodReducer.initialState
@@ -283,6 +292,7 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
       AlertsEffects,
       TaskEduContentEffects,
       ResultEffects,
+      LearningDomainEffects,
       CurrentExerciseEffects,
       TeacherStudentEffects,
       LinkedPersonEffects,
