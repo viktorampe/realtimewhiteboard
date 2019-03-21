@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import {
   EduNetActions,
+  EduNetFixture,
   EduNetReducer,
   getStoreModuleForFeatures,
   LearningAreaActions,
@@ -9,20 +10,27 @@ import {
   LearningPlanAssignmentInterface,
   LEARNING_PLAN_SERVICE_TOKEN,
   SchoolTypeActions,
+  SchoolTypeFixture,
   SchoolTypeReducer,
   SpecialtyInterface,
   YearInterface
 } from '@campus/dal';
+import {
+  ColumnFilterComponent,
+  SearchFilterCriteriaInterface,
+  SearchStateInterface
+} from '@campus/search';
 import { Store, StoreModule } from '@ngrx/store';
+import { hot } from '@nrwl/nx/testing';
 import { of } from 'rxjs';
 import { LearningPlanFilterFactory } from './learning-plan-filter.factory';
 
 const mockLearningAreas = [
-  new LearningAreaFixture({ id: 1 }),
-  new LearningAreaFixture({ id: 2 })
+  new LearningAreaFixture({ id: 1, name: 'Wiskunde' }),
+  new LearningAreaFixture({ id: 2, name: 'Aardrijkskunde' })
 ];
-const mockEduNets = []; //TODO -- expand
-const mockSchoolTypes = []; //TODO -- expand
+const mockEduNets = [new EduNetFixture({}), new EduNetFixture({})];
+const mockSchoolTypes = [new SchoolTypeFixture({}), new SchoolTypeFixture({})];
 
 describe('LearningPlanFilterFactory', () => {
   let store;
@@ -85,6 +93,62 @@ describe('LearningPlanFilterFactory', () => {
       );
 
       learningPlanFilterFactory = TestBed.get(LearningPlanFilterFactory);
+    });
+    it('should return the correct searchFitlerInterface array', () => {
+      const loopValues: {
+        filterCriteriaSelection: Map<string, (number | string)[]>;
+        searchFilterCriteria: SearchFilterCriteriaInterface;
+        getLearningPlanAssignmentsCalled: boolean;
+        getAvailableYearsForSearchCalled: boolean;
+      }[] = [
+        {
+          filterCriteriaSelection: new Map<string, (number | string)[]>([]),
+          searchFilterCriteria: {
+            ...learningPlanFilterFactory['getSearchFilterStringProperties'](0),
+            values: mockLearningAreas.map(mockLearningArea => {
+              return {
+                data: mockLearningArea,
+                hasChild: true
+              };
+            })
+          },
+          getLearningPlanAssignmentsCalled: false,
+          getAvailableYearsForSearchCalled: false
+        }
+      ];
+      loopValues.forEach(loopValue => {
+        const searchState: SearchStateInterface = {
+          filterCriteriaSelections: loopValue.filterCriteriaSelection,
+          searchTerm: ''
+        };
+        const getLearningPlanAssignmentsSpy = jest.spyOn(
+          learningPlanService,
+          'getLearningPlanAssignments'
+        );
+        const getAvailableYearsForSearchSpy = jest.spyOn(
+          learningPlanService,
+          'getAvailableYearsForSearch'
+        );
+        expect(
+          learningPlanFilterFactory.getFilters(searchState)
+        ).toBeObservable(
+          hot('a', {
+            a: [
+              {
+                criteria: loopValue.searchFilterCriteria,
+                component: ColumnFilterComponent,
+                domHost: 'hostLeft'
+              }
+            ]
+          })
+        );
+        expect(getLearningPlanAssignmentsSpy).toHaveBeenCalledTimes(
+          loopValue.getLearningPlanAssignmentsCalled ? 1 : 0
+        );
+        expect(getAvailableYearsForSearchSpy).toHaveBeenCalledTimes(
+          loopValue.getAvailableYearsForSearchCalled ? 1 : 0
+        );
+      });
     });
   });
 });
