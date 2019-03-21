@@ -23,18 +23,24 @@ export class EduContentsViewModel {
   /*
    * make auto-complete request to api service and return observable
    */
-  public requestAutoComplete(string): Observable<string[]> {}
+  public requestAutoComplete(string): Observable<string[]> {
+    return;
+  }
 
   /*
    * determine the searchMode for a given string
    */
-  public getSearchMode(mode: string): SearchModeInterface {}
+  public getSearchMode(mode: string): SearchModeInterface {
+    return;
+  }
 
   /*
    * determine the initial searchState from the router state store
    * can  be constructed from various parameters like querystring, ... TBD
    */
-  public getInitialSearchState(): Observable<SearchStateInterface> {}
+  public getInitialSearchState(): Observable<SearchStateInterface> {
+    return;
+  }
 
   /*
    * dispatch toggle action
