@@ -1,1 +1,29 @@
-<div> edu-contents search modes page works! </div>
+<div
+  *ngIf="(learningArea$ | async) as learningArea"
+  class="pages-edu-contents-search-modes"
+>
+  <div *ngIf="searchModes.search" class="pages-edu-contents-search-modes-item">
+    <h2 [innerHTML]="searchModes.search.label"></h2>
+    <campus-search-term
+      [placeholder]="'Zoeken in ' + learningArea.name"
+      [autoComplete]="true"
+      [autoCompleteValues]="autoCompleteValues"
+      (valueChange)="openSearchByTerm($event)"
+      (valueChangeForAutoComplete)="searchTermChanged($event)"
+    ></campus-search-term>
+  </div>
+
+  <div *ngIf="searchModes.toc" class="pages-edu-contents-search-modes-item">
+    <h2 [innerHTML]="searchModes.toc.label"></h2>
+    <campus-button primary bordered routerLink="toc"
+      >&#8594; naar de zoekfunctie</campus-button
+    >
+  </div>
+
+  <div *ngIf="searchModes.plan" class="pages-edu-contents-search-modes-item">
+    <h2 [innerHTML]="searchModes.plan.label"></h2>
+    <campus-button primary bordered routerLink="plan"
+      >&#8594; naar de zoekfunctie</campus-button
+    >
+  </div>
+</div>

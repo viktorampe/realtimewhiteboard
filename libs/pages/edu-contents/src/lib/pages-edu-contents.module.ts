@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { PagesSharedModule } from '@campus/pages/shared';
+import { SearchModule } from '@campus/search';
 import { UiModule } from '@campus/ui';
 import { EduContentLearningAreaOverviewComponent } from './components/edu-contents-learning-area-overview/edu-contents-learning-area-overview.component';
 import { EduContentSearchByColumnComponent } from './components/edu-contents-search-by-column/edu-contents-search-by-column.component';
@@ -14,7 +15,8 @@ import { PagesEduContentsRoutingModule } from './pages-edu-contents-routing.modu
     CommonModule,
     PagesEduContentsRoutingModule,
     UiModule,
-    PagesSharedModule
+    PagesSharedModule,
+    SearchModule
   ],
   declarations: [
     EduContentLearningAreaOverviewComponent,

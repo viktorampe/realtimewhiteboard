@@ -1,0 +1,36 @@
+:host {
+  display: flex;
+  height: 100%;
+  align-items: center;
+}
+
+.pages-edu-contents-search-modes {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 0 auto;
+  text-align: center;
+
+  &-item {
+    flex: 1 1 auto;
+  }
+}
+
+@import 'libs/ui/src/lib/breakpoints.scss';
+
+@media #{$ui-breakpoint-medium}, #{$ui-breakpoint-small}, #{$ui-breakpoint-xsmall} {
+  .pages-edu-contents-search-modes {
+    flex-direction: column;
+  }
+}
+
+@media #{$ui-breakpoint-xsmall} {
+  .pages-edu-contents-search-modes {
+    margin: 0;
+    width: 100%;
+
+    &-item {
+      width: auto;
+    }
+  }
+}
