@@ -2,16 +2,11 @@ import { Injectable } from '@angular/core';
 import {
   BundleFixture,
   EduContentFixture,
-  EduContentProductTypeFixture,
   LearningAreaFixture,
   LearningAreaInterface,
   TaskFixture
 } from '@campus/dal';
-import {
-  SearchModeInterface,
-  SearchResultInterface,
-  SearchStateInterface
-} from '@campus/search';
+import { SearchModeInterface, SearchStateInterface } from '@campus/search';
 import { ViewModelInterface } from '@campus/testing';
 import { EduContentSearchResultComponent } from 'apps/polpo-classroom-web/src/app/components/searchresults/edu-content-search-result.component';
 import { EduContentSearchResultInterface } from 'apps/polpo-classroom-web/src/app/components/searchresults/interfaces/educontent-search-result';
@@ -51,48 +46,6 @@ export class EduContentsViewModelMock
       ['learningArea', [1]]
     ]),
     from: 0
-  };
-
-  private searchResult: SearchResultInterface = {
-    count: 2,
-    results: [
-      {
-        eduContent: new EduContentFixture(
-          {},
-          {
-            title: 'Aanliggende hoeken',
-            description:
-              'In dit leerobject maken leerlingen 3 tikoefeningen op aanliggende hoeken.',
-            fileExt: 'ludo.zip'
-          }
-        ),
-        inTask: true
-      },
-      {
-        eduContent: new EduContentFixture(
-          {},
-          {
-            thumbSmall:
-              'https://avatars3.githubusercontent.com/u/31932368?s=460&v=4'
-          }
-        ),
-        inBundle: true
-      },
-      {
-        eduContent: new EduContentFixture(
-          {},
-          {
-            eduContentProductType: new EduContentProductTypeFixture({
-              pedagogic: true
-            })
-          }
-        ),
-        isFavorite: true
-      }
-    ],
-    filterCriteriaPredictions: new Map([
-      ['LearningArea', new Map([[1, 2], [82, 50]])]
-    ])
   };
 
   private searchMode: SearchModeInterface = {
