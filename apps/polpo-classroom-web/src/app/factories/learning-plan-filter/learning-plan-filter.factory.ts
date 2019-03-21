@@ -25,6 +25,14 @@ import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+enum ColumnLevel {
+  LEARNING_AREA,
+  EDU_NET,
+  SCHOOL_TYPE,
+  YEAR,
+  LEARNING_PLAN
+}
+
 @Injectable({ providedIn: 'root' })
 export class LearningPlanFilterFactory implements SearchFilterFactory {
   private learningAreas$: Observable<LearningAreaInterface[]>;
@@ -58,22 +66,22 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
     columnLevel: number
   ): Observable<SearchFilterInterface[]> {
     const years$: Observable<YearInterface[]> =
-      columnLevel >= 3
+      columnLevel >= ColumnLevel.YEAR
         ? this.learningPlanService.getAvailableYearsForSearch(
-            selectedPropertyIds[0],
-            selectedPropertyIds[1],
-            selectedPropertyIds[2]
+            selectedPropertyIds[ColumnLevel.LEARNING_AREA],
+            selectedPropertyIds[ColumnLevel.EDU_NET],
+            selectedPropertyIds[ColumnLevel.SCHOOL_TYPE]
           )
         : of(undefined);
     const learningPlans$: Observable<
       Map<SpecialtyInterface, LearningPlanInterface[]>
     > =
-      columnLevel >= 4
+      columnLevel >= ColumnLevel.LEARNING_PLAN
         ? this.learningPlanService.getLearningPlanAssignments(
-            selectedPropertyIds[1],
-            selectedPropertyIds[3],
-            selectedPropertyIds[2],
-            selectedPropertyIds[0]
+            selectedPropertyIds[ColumnLevel.EDU_NET],
+            selectedPropertyIds[ColumnLevel.YEAR],
+            selectedPropertyIds[ColumnLevel.SCHOOL_TYPE],
+            selectedPropertyIds[ColumnLevel.LEARNING_AREA]
           )
         : of(undefined);
     return combineLatest(
@@ -187,47 +195,48 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
     eduNetId,
     schoolTypeId,
     yearId
-  ]: SelectedPropertyIds): number {
-    if (learningAreaId && eduNetId && schoolTypeId && yearId) return 4;
-    if (learningAreaId && eduNetId && schoolTypeId) return 3;
-    if (learningAreaId && eduNetId) return 2;
-    if (learningAreaId) return 1;
-    return 0;
+  ]: SelectedPropertyIds): ColumnLevel {
+    if (learningAreaId && eduNetId && schoolTypeId && yearId)
+      return ColumnLevel.LEARNING_PLAN;
+    if (learningAreaId && eduNetId && schoolTypeId) return ColumnLevel.YEAR;
+    if (learningAreaId && eduNetId) return ColumnLevel.SCHOOL_TYPE;
+    if (learningAreaId) return ColumnLevel.EDU_NET;
+    return ColumnLevel.LEARNING_AREA;
   }
 
   private getSearchFilterStringProperties(
-    currentColumnLevel: number
+    currentColumnLevel: ColumnLevel
   ): StartingLevelStringPropertiesInterface {
     switch (currentColumnLevel) {
-      case 0:
+      case ColumnLevel.LEARNING_AREA:
         return {
           name: 'learningAreas',
           label: 'Leergebieden',
           keyProperty: 'id',
           displayProperty: 'name'
         };
-      case 1:
+      case ColumnLevel.EDU_NET:
         return {
           name: 'eduNets',
           label: 'Onderwijsnet',
           keyProperty: 'id',
           displayProperty: 'name'
         };
-      case 2:
+      case ColumnLevel.SCHOOL_TYPE:
         return {
           name: 'schoolTypes',
           label: 'Stroom',
           keyProperty: 'id',
           displayProperty: 'name'
         };
-      case 3:
+      case ColumnLevel.YEAR:
         return {
           name: 'years',
           label: 'Jaar',
           keyProperty: 'id',
           displayProperty: 'name'
         };
-      case 4:
+      case ColumnLevel.LEARNING_PLAN:
         return {
           name: 'learningPlans.assignments',
           label: 'Leerplan',
