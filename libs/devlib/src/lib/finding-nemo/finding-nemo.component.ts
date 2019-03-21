@@ -1,7 +1,6 @@
 import {
   AfterViewInit,
   Component,
-  Inject,
   Injectable,
   QueryList,
   Type,
@@ -14,6 +13,7 @@ import {
   EduContentProductTypeFixture
 } from '@campus/dal';
 import {
+  FilterFactoryFixture,
   SearchFilterCriteriaInterface,
   SearchFilterFactory,
   SearchFilterInterface,
@@ -28,8 +28,6 @@ import { TileSecondaryActionInterface } from '@campus/ui';
 import { EduContentMetadataApi } from '@diekeure/polpo-api-angular-sdk';
 // tslint:disable-next-line:nx-enforce-module-boundaries
 import { EduContentSearchResultComponent } from 'apps/polpo-classroom-web/src/app/components/searchresults/edu-content-search-result.component';
-// tslint:disable-next-line:nx-enforce-module-boundaries
-import { STANDARD_SEARCH_SERVICE_TOKEN } from 'apps/polpo-classroom-web/src/app/services/standard-search.service';
 // tslint:disable-next-line:nx-enforce-module-boundaries
 import { MockSearchViewModel } from 'libs/search/src/lib/components/search.viewmodel.mock';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -61,13 +59,9 @@ export class FindingNemoComponent implements AfterViewInit {
 
   @ViewChild(SearchComponent) private searchComponent: SearchComponent;
 
-  constructor(
-    private eduContentMetadataApi: EduContentMetadataApi,
-    @Inject(STANDARD_SEARCH_SERVICE_TOKEN)
-    private standardSearchFactory: SearchFilterFactory
-  ) {
+  constructor(private eduContentMetadataApi: EduContentMetadataApi) {
     this.setMockData();
-    this.searchFilters$ = this.standardSearchFactory.getFilters(
+    this.searchFilters$ = new FilterFactoryFixture().getFilters(
       {} as SearchStateInterface
     );
   }
