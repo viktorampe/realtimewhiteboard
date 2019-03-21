@@ -9,7 +9,7 @@ import { EduContentServiceInterface } from './edu-content.service.interface';
 describe('EduContentService', () => {
   let service: EduContentServiceInterface;
   let eduContentApi: EduContentApi;
-  let mockGetData$: any;
+  let mockData$: any;
   let mockSearch$: any;
   let mockAutocomplete$: any;
   const mockSearchState: SearchStateInterface = {
@@ -34,7 +34,7 @@ describe('EduContentService', () => {
         {
           provide: PersonApi,
           useValue: {
-            getData: () => mockGetData$
+            getData: () => mockData$
           }
         },
         {

@@ -2,6 +2,7 @@ import {
   AfterViewInit,
   Component,
   Inject,
+  Injectable,
   QueryList,
   Type,
   ViewChild,
@@ -301,6 +302,7 @@ export class FindingNemoComponent implements AfterViewInit {
   }
 }
 
+@Injectable({ providedIn: 'root' })
 class MockFactory implements SearchFilterFactory {
   mockSearchViewmodel = new MockSearchViewModel();
 
