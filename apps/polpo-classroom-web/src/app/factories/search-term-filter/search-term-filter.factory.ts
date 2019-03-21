@@ -1,6 +1,7 @@
-import { Injectable, InjectionToken, Injector, Type } from '@angular/core';
+import { Injectable, InjectionToken, Type } from '@angular/core';
 import {
   DalState,
+  EduContentProductTypeInterface,
   EduContentProductTypeQueries,
   EduNetQueries,
   MethodQueries,
@@ -34,7 +35,6 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
     { id: 3, name: 'Schrijven' }
   ];
 
-  private store: Store<DalState>;
   private keyProperty = 'id';
   private displayProperty = 'name';
   private component = CheckboxListFilterComponent;
@@ -56,9 +56,7 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
     { query: MethodQueries.getAll, name: 'methods', label: 'Methode' }
   ];
 
-  constructor(private injector: Injector) {
-    this.store = this.injector.get(Store) as Store<DalState>;
-  }
+  constructor(private store: Store<DalState>) {}
 
   getFilters(
     searchState: SearchStateInterface
@@ -71,38 +69,9 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
         );
     });
 
-    /*
-    Transforms the eduContentProductTypes to have FilterCriteriaValues that employ the 'child'
-    attribute for every productType that has a parent. This results in a nested checkboxlist.
-    */
-    const nestedEduContentProductTypeFilters = this.store
-      .select(EduContentProductTypeQueries.getAll)
-      .pipe(
-        map(productTypes =>
-          productTypes.reduce((acc, cur, idx, src) => {
-            if (cur.parent === 0) {
-              return [
-                {
-                  children: src.filter(child => child.parent === cur.id),
-                  ...cur
-                },
-                ...acc
-              ];
-            } else return acc;
-          }, [])
-        ),
-        map(nestedProductTypes =>
-          this.getFilter(
-            nestedProductTypes,
-            {
-              name: 'eduContentProductType',
-              label: 'Type',
-              component: CheckboxListFilterComponent
-            },
-            searchState
-          )
-        )
-      );
+    const nestedEduContentProductTypeFilters = this.getNestedEduContentProductTypes(
+      searchState
+    );
 
     filters.push(nestedEduContentProductTypeFilters);
 
@@ -125,6 +94,62 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
     return combineLatest(filters);
   }
 
+  /**
+   * Reducer function for EduContent product types
+   *
+   * Normally, the hierarchy for EduContent product types is defined by the parentIds in the database.
+   * This function transforms an array of EduContent product types so that they have a children property
+   * containing all the EduContent product type children.
+   *
+   * @param acc Accumulator, should be an array
+   * @param cur Current EduContent product type
+   * @param idx Index, unused
+   * @param src The source array
+   */
+  productTypesToHierarchy(
+    acc: EduContentProductTypeInterface[],
+    cur: EduContentProductTypeInterface,
+    idx,
+    src: EduContentProductTypeInterface[]
+  ) {
+    if (cur.parent === 0) {
+      return [
+        {
+          children: src.filter(child => child.parent === cur.id),
+          ...cur
+        },
+        ...acc
+      ];
+    } else return acc;
+  }
+
+  /**
+   * Transforms the eduContentProductTypes to have FilterCriteriaValues that employ the 'child'
+   * attribute for every productType that has a parent. This results in a nested checkboxlist.
+   *
+   * @param searchState The search state which was passed to getFilters
+   */
+  getNestedEduContentProductTypes(
+    searchState: SearchStateInterface
+  ): Observable<SearchFilterInterface> {
+    return this.store.select(EduContentProductTypeQueries.getAll).pipe(
+      map(productTypes =>
+        productTypes.reduce(this.productTypesToHierarchy, [])
+      ),
+      map(nestedProductTypes =>
+        this.getFilter(
+          nestedProductTypes,
+          {
+            name: 'eduContentProductType',
+            label: 'Type',
+            component: CheckboxListFilterComponent
+          },
+          searchState
+        )
+      )
+    );
+  }
+
   private getFilter<T>(
     entities: T[],
     filterQuery: FilterQueryInterface,
@@ -138,12 +163,6 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
         displayProperty: this.displayProperty,
         values: Object.values(entities).map(entity => ({
           data: entity,
-          selected: this.isSelectedInSearchState(
-            entity,
-            filterQuery.name,
-            this.keyProperty,
-            searchState
-          ),
           visible: true,
           child: (entity as any).children
             ? this.getFilter((entity as any).children, filterQuery, searchState)
@@ -152,21 +171,8 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
         }))
       },
       component: filterQuery.component || this.component,
-      domHost: this.domHost,
-      options: undefined
+      domHost: this.domHost
     } as SearchFilterInterface;
-  }
-
-  private isSelectedInSearchState(
-    obj: any,
-    name: string,
-    keyProperty: string,
-    searchState: SearchStateInterface
-  ): boolean {
-    const key = searchState.filterCriteriaSelections.get(name);
-    return key
-      ? key.includes((obj[keyProperty] as unknown) as string | number)
-      : false;
   }
 }
 

@@ -21,12 +21,10 @@ import {
 import {
   CheckboxLineFilterComponent,
   CheckboxListFilterComponent,
-  SearchFilterInterface,
   SearchStateInterface
 } from '@campus/search';
 import { Store, StoreModule } from '@ngrx/store';
 import { cold } from 'jasmine-marbles';
-import { Observable } from 'rxjs';
 import { SearchTermFilterFactory } from './search-term-filter.factory';
 
 describe('SearchTermFilterFactory', () => {
@@ -58,6 +56,14 @@ describe('SearchTermFilterFactory', () => {
     new EduContentProductTypeFixture({ id: 14, parent: 13 })
   ];
 
+  const nestedMockEduContentProductTypes = [
+    new EduContentProductTypeFixture({ id: 12 }),
+    {
+      id: 13,
+      children: [new EduContentProductTypeFixture({ id: 14, parent: 13 })]
+    }
+  ];
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -85,25 +91,13 @@ describe('SearchTermFilterFactory', () => {
 
   describe('getFilters', () => {
     let factory: SearchTermFilterFactory;
-    let result: Observable<SearchFilterInterface[]>;
 
     const mockSearchState: SearchStateInterface = {
       searchTerm: '',
       filterCriteriaSelections: new Map<string, (number | string)[]>()
     };
 
-    const expectedFilters = [
-      getExpectedYearFilter(),
-      getExpectedEduNetFilter(),
-      getExpectedSchoolTypeFilter(),
-      getExpectedMethodFilter(),
-      getExpectedEduContentProductTypeFilter(),
-      getExpectedLearningDomainFilter()
-    ];
-
-    beforeEach(() => {
-      factory = TestBed.get(SearchTermFilterFactory);
-
+    function loadInStore() {
       store.dispatch(
         new YearActions.YearsLoaded({
           years: mockYears
@@ -133,11 +127,25 @@ describe('SearchTermFilterFactory', () => {
           eduContentProductTypes: mockEduContentProductTypes
         })
       );
+    }
 
-      result = factory.getFilters(mockSearchState);
+    beforeEach(() => {
+      factory = TestBed.get(SearchTermFilterFactory);
+
+      loadInStore();
     });
 
     it('should return the right filters', () => {
+      const result = factory.getFilters(mockSearchState);
+      const expectedFilters = [
+        getExpectedYearFilter(),
+        getExpectedEduNetFilter(),
+        getExpectedSchoolTypeFilter(),
+        getExpectedMethodFilter(),
+        getExpectedEduContentProductTypeFilter(),
+        getExpectedLearningDomainFilter()
+      ];
+
       expect(result).toBeObservable(cold('a', { a: expectedFilters }));
     });
   });
@@ -148,8 +156,7 @@ describe('SearchTermFilterFactory', () => {
     keyProperty,
     displayProperty,
     values,
-    component,
-    selectedId?: number
+    component
   ) {
     return {
       criteria: {
@@ -159,10 +166,9 @@ describe('SearchTermFilterFactory', () => {
         displayProperty: displayProperty,
         values: values.map(val => ({
           data: val,
-          selected: val.id === selectedId,
           visible: true,
           child: (val as any).children
-            ? this.getExpectedFilter(
+            ? getExpectedFilter(
                 name,
                 label,
                 keyProperty,
@@ -174,68 +180,62 @@ describe('SearchTermFilterFactory', () => {
         }))
       },
       component: component,
-      domHost: 'hostLeft',
-      options: undefined
+      domHost: 'hostLeft'
     };
   }
 
-  function getExpectedYearFilter(selectedId?: number) {
+  function getExpectedYearFilter() {
     return getExpectedFilter(
       'years',
       'Jaar',
       'id',
       'name',
       mockYears,
-      CheckboxLineFilterComponent,
-      selectedId
+      CheckboxLineFilterComponent
     );
   }
 
-  function getExpectedEduNetFilter(selectedId?: number) {
+  function getExpectedEduNetFilter() {
     return getExpectedFilter(
       'eduNets',
       'Onderwijsnet',
       'id',
       'name',
       mockEduNets,
-      CheckboxListFilterComponent,
-      selectedId
+      CheckboxListFilterComponent
     );
   }
 
-  function getExpectedSchoolTypeFilter(selectedId?: number) {
+  function getExpectedSchoolTypeFilter() {
     return getExpectedFilter(
       'schoolTypes',
       'Onderwijsvorm',
       'id',
       'name',
       mockSchoolTypes,
-      CheckboxListFilterComponent,
-      selectedId
+      CheckboxListFilterComponent
     );
   }
 
-  function getExpectedMethodFilter(selectedId?: number) {
+  function getExpectedMethodFilter() {
     return getExpectedFilter(
       'methods',
       'Methode',
       'id',
       'name',
       mockMethods,
-      CheckboxListFilterComponent,
-      selectedId
+      CheckboxListFilterComponent
     );
   }
 
-  function getExpectedLearningDomainFilter(selectedId?: number) {
+  function getExpectedLearningDomainFilter() {
     return getExpectedFilter(
       'learningDomains',
       'Leergebied',
       'id',
       'name',
       mockLearningDomains,
-      CheckboxListFilterComponent,
-      selectedId
+      CheckboxListFilterComponent
     );
   }
 
