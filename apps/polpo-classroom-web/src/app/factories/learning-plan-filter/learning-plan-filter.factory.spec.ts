@@ -29,17 +29,37 @@ const mockLearningAreas = [
   new LearningAreaFixture({ id: 1, name: 'Wiskunde' }),
   new LearningAreaFixture({ id: 2, name: 'Aardrijkskunde' })
 ];
-const mockEduNets = [new EduNetFixture({}), new EduNetFixture({})];
-const mockSchoolTypes = [new SchoolTypeFixture({}), new SchoolTypeFixture({})];
+const mockEduNets = [
+  new EduNetFixture({ id: 1 }),
+  new EduNetFixture({ id: 2 })
+];
+const mockSchoolTypes = [
+  new SchoolTypeFixture({ id: 2 }),
+  new SchoolTypeFixture({ id: 3 })
+];
+
+const mockAvailableYears: YearInterface[] = [
+  new YearFixture({ id: 4 }),
+  new YearFixture({ id: 6 })
+];
+
+const mockLearningPlans: Map<
+  SpecialtyInterface,
+  LearningPlanInterface[]
+> = new Map([
+  [
+    { name: 'one', id: 1 },
+    [new LearningPlanFixture({ id: 1 }), new LearningPlanFixture({ id: 2 })]
+  ],
+  [
+    { name: 'two', id: 2 },
+    [new LearningPlanFixture({ id: 1 }), new LearningPlanFixture({ id: 2 })]
+  ]
+]);
 
 describe('LearningPlanFilterFactory', () => {
   let store;
   let learningPlanService;
-  let mockLearningPlans: Map<
-    SpecialtyInterface,
-    LearningPlanAssignmentInterface[]
-  >;
-  let mockAvailableYears: YearInterface[];
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
