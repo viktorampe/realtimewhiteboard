@@ -214,7 +214,7 @@ export class SearchViewModel {
   ): void {
     let newSearchState: SearchStateInterface;
     this.searchMode = mode;
-    this.filterFactory = new this.searchMode.searchFilterFactory(this.injector); // used by updateFilters()
+    this.filterFactory = this.injector.get(this.searchMode.searchFilterFactory); // used by updateFilters()
 
     if (state) {
       // we want to update the state

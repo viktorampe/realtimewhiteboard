@@ -6,4 +6,5 @@ export const YEAR_SERVICE_TOKEN = new InjectionToken('YearService');
 
 export interface YearServiceInterface {
   getAll(): Observable<YearInterface[]>;
+  getAllByMethodIds(methodIds: number[]): Observable<YearInterface[]>;
 }

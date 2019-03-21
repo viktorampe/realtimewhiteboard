@@ -2,6 +2,7 @@
 import {
   AfterViewInit,
   Component,
+  Injectable,
   QueryList,
   Type,
   ViewChild,
@@ -19,7 +20,11 @@ import {
   YearActions
 } from '@campus/dal';
 import {
+  MockSearchViewModel,
+  SearchComponent,
   SearchFilterCriteriaInterface,
+  SearchFilterFactory,
+  SearchFilterInterface,
   SearchModeInterface,
   SearchPortalDirective,
   SearchResultInterface,
@@ -34,8 +39,6 @@ import { EduContentSearchResultComponent } from 'apps/polpo-classroom-web/src/ap
 import { SearchTermFilterFactory } from 'apps/polpo-classroom-web/src/app/factories/search-term-filter/search-term-filter.factory';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { SearchComponent } from './../../../../search/src/lib/components/search/search.component';
-import { SearchFilterInterface } from './../../../../search/src/lib/interfaces/search-filter-interface';
 
 @Component({
   selector: 'campus-finding-nemo',
@@ -306,5 +309,16 @@ export class FindingNemoComponent implements AfterViewInit {
 
   private getMockAutoCompleteValues(): string[] {
     return ['waarde1', 'waarde2', 'waarde3', 'waarde4'];
+  }
+}
+
+@Injectable({ providedIn: 'root' })
+class MockFactory implements SearchFilterFactory {
+  mockSearchViewmodel = new MockSearchViewModel();
+
+  getFilters(
+    searchState: SearchStateInterface
+  ): Observable<SearchFilterInterface[]> {
+    return this.mockSearchViewmodel.searchFilters$;
   }
 }
