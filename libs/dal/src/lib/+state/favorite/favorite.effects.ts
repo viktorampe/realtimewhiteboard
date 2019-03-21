@@ -104,9 +104,7 @@ export class FavoriteEffects {
           display: true,
           priority: Priority.HIGH
         });
-        return [
-          new EffectFeedbackActions.AddEffectFeedback({ effectFeedback })
-        ];
+        return new EffectFeedbackActions.AddEffectFeedback({ effectFeedback });
       }
     }
   );
