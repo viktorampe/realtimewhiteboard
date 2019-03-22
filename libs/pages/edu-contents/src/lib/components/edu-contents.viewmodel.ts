@@ -24,8 +24,8 @@ export class EduContentsViewModel {
    * make auto-complete request to api service and return observable
    */
   public requestAutoComplete(
-    searchInput: string,
-    filterCriteriaSelections?: Map<string, (number | string)[]>
+    searchTerm: string,
+    criteria: Map<string, (number | string)[]> = new Map()
   ): Observable<string[]> {
     return;
   }
