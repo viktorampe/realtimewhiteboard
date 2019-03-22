@@ -4,10 +4,12 @@
   [displayAsRows]="true"
 >
   <campus-tile
-    label="Wiskunde"
-    icon="favorites"
-    color="blue"
-    [secondaryActions]="[]"
+    *ngFor="let favoriteLearningArea of favoriteLearningAreas"
+    [label]="favoriteLearningArea.name"
+    icon="learning-area:{{favoriteLearningArea.icon}}"
+    [color]="favoriteLearningArea.color"
+    [routerLink]="favoriteLearningArea.id"
+    [secondaryActions]="[createSecondaryAction(favoriteLearningAreas)]"
   ></campus-tile>
 
   <campus-drop-area icon="add" label="Sleep je favoriet leergebied naar hier">
