@@ -103,7 +103,10 @@ export class EduContentsViewModelMock
   /*
    * make auto-complete request to api service and return observable
    */
-  public requestAutoComplete(string): Observable<string[]> {
+  public requestAutoComplete(
+    searchInput: string,
+    filterCriteriaSelections?: Map<string, (number | string)[]>
+  ): Observable<string[]> {
     return of(['foo', 'bar', 'baz']);
   }
 
