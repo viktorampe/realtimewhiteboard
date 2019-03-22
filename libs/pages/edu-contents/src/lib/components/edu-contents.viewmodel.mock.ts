@@ -12,9 +12,8 @@ import {
   SearchModeInterface,
   SearchStateInterface
 } from '@campus/search';
+import { EduContentSearchResultInterface } from '@campus/shared';
 import { ViewModelInterface } from '@campus/testing';
-// tslint:disable-next-line: nx-enforce-module-boundaries
-import { EduContentSearchResultInterface } from 'apps/polpo-classroom-web/src/app/components/searchresults/interfaces/educontent-search-result';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { EduContentsViewModel } from './edu-contents.viewmodel';
 
