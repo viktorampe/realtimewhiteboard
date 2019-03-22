@@ -1,4 +1,10 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  async,
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick
+} from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { LearningAreaFixture } from '@campus/dal';
@@ -28,6 +34,8 @@ describe('EduContentSearchModesComponent', () => {
   const searchModes: { [key: string]: SearchModeInterface } = {};
   let params: BehaviorSubject<Params>;
   let eduContentsViewModel: EduContentsViewModel;
+  let router: Router;
+  let route: ActivatedRoute;
   let component: EduContentSearchModesComponent;
   let fixture: ComponentFixture<EduContentSearchModesComponent>;
 
@@ -48,6 +56,8 @@ describe('EduContentSearchModesComponent', () => {
       ]
     }).compileComponents();
 
+    router = TestBed.get(Router);
+    route = TestBed.get(ActivatedRoute);
     eduContentsViewModel = TestBed.get(EduContentsViewModel);
   }));
 
@@ -59,5 +69,39 @@ describe('EduContentSearchModesComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should get learningArea from viewmodel', () => {
+    jest.spyOn(eduContentsViewModel, 'getLearningAreaById');
+    params.next({ area: 2 });
+    expect(eduContentsViewModel.getLearningAreaById).toHaveBeenCalledTimes(1);
+    expect(eduContentsViewModel.getLearningAreaById).toHaveBeenCalledWith(2);
+  });
+
+  it('should request autoComplete values from the viewmodel on searchTerm change', fakeAsync(() => {
+    jest.spyOn(component as any, 'getAutoCompleteValues');
+    jest.spyOn(eduContentsViewModel, 'requestAutoComplete');
+    component.searchTermChanged('foo');
+    tick(500);
+
+    expect(component['getAutoCompleteValues']).toHaveBeenCalledTimes(1);
+    expect(component['getAutoCompleteValues']).toHaveBeenCalledWith('foo');
+
+    expect(eduContentsViewModel.requestAutoComplete).toHaveBeenCalledTimes(1);
+    expect(eduContentsViewModel.requestAutoComplete).toHaveBeenCalledWith(
+      'foo',
+      new Map([['learningArea', [1]]])
+    );
+  }));
+
+  it('should redirect to with searchTerm querystring', () => {
+    jest.spyOn(router, 'navigate');
+    component.openSearchByTerm('foo');
+
+    expect(router.navigate).toHaveBeenCalledTimes(1);
+    expect(router.navigate).toHaveBeenCalledWith(['term'], {
+      relativeTo: route,
+      queryParams: { searchTerm: 'foo' }
+    });
   });
 });

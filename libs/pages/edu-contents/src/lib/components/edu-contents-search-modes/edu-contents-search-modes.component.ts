@@ -4,7 +4,12 @@ import { LearningAreaInterface } from '@campus/dal';
 import { SearchModeInterface } from '@campus/search';
 import { ENVIRONMENT_SEARCHMODES_TOKEN } from '@campus/shared';
 import { Observable, Subject, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  shareReplay,
+  switchMap
+} from 'rxjs/operators';
 import { EduContentsViewModel } from '../edu-contents.viewmodel';
 
 @Component({
@@ -17,7 +22,8 @@ export class EduContentSearchModesComponent implements OnInit, OnDestroy {
   public learningArea$: Observable<LearningAreaInterface>;
 
   private searchTerm = new Subject<string>();
-  private subscriptions: Subscription = new Subscription();
+  private subscriptions = new Subscription();
+  private routeParams$ = this.route.params.pipe(shareReplay(1));
 
   constructor(
     private router: Router,
@@ -61,18 +67,18 @@ export class EduContentSearchModesComponent implements OnInit, OnDestroy {
   }
 
   private getAutoCompleteValues(searchTerm: string): Observable<string[]> {
-    return this.route.params.pipe(
-      switchMap(params => {
-        return this.eduContentsViewModel.requestAutoComplete(
+    return this.routeParams$.pipe(
+      switchMap(params =>
+        this.eduContentsViewModel.requestAutoComplete(
           searchTerm,
           new Map([['learningArea', [+params.area]]])
-        );
-      })
+        )
+      )
     );
   }
 
   private getLearningArea(): Observable<LearningAreaInterface> {
-    return this.route.params.pipe(
+    return this.routeParams$.pipe(
       switchMap(params =>
         this.eduContentsViewModel.getLearningAreaById(+params.area)
       )
