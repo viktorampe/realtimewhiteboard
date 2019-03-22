@@ -65,13 +65,13 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
     },
     learningDomains: {
       query: LearningDomainQueries.getByLearningArea,
-      label: 'Leerdomein',
+      label: 'Leergebied',
       name: 'learningDomains',
       learningAreaDependent: true
     }
   };
 
-  constructor(private store: Store<DalState>) {}
+  constructor(public store: Store<DalState>) {}
 
   public buildFilter(
     name: string,
@@ -151,7 +151,7 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
    *
    * @param searchState The search state which was passed to getFilters
    */
-  getNestedEduContentProductTypes(
+  public getNestedEduContentProductTypes(
     searchState: SearchStateInterface
   ): Observable<SearchFilterInterface> {
     return this.store.select(EduContentProductTypeQueries.getAll).pipe(
@@ -172,7 +172,7 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
     );
   }
 
-  private getFilter<T>(
+  public getFilter<T>(
     entities: T[],
     filterQuery: FilterQueryInterface,
     searchState: SearchStateInterface

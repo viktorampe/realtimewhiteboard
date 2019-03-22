@@ -8,6 +8,10 @@ import {
   EduNetFixture,
   EduNetReducer,
   getStoreModuleForFeatures,
+  LearningAreaReducer,
+  LearningDomainActions,
+  LearningDomainFixture,
+  LearningDomainReducer,
   MethodActions,
   MethodFixture,
   MethodReducer,
@@ -31,6 +35,7 @@ describe('SearchTermFilterFactory', () => {
   let store: Store<DalState>;
 
   const mockYears = [new YearFixture({ id: 3 }), new YearFixture({ id: 4 })];
+  const currentLearningAreaId = 2;
 
   const mockEduNets = [
     new EduNetFixture({ id: 8 }),
@@ -43,25 +48,29 @@ describe('SearchTermFilterFactory', () => {
   ];
 
   const mockMethods = [
-    new MethodFixture({ id: 5 }),
-    new MethodFixture({ id: 6 }),
+    new MethodFixture({ id: 5, learningAreaId: currentLearningAreaId }),
+    new MethodFixture({ id: 6, learningAreaId: currentLearningAreaId }),
     new MethodFixture({ id: 7 })
   ];
 
-  const mockLearningDomains = SearchTermFilterFactory.learningDomains;
+  const mockLearningDomains = [
+    new LearningDomainFixture({
+      id: 15,
+      learningAreaId: currentLearningAreaId
+    }),
+    new LearningDomainFixture({
+      id: 16,
+      learningAreaId: currentLearningAreaId
+    }),
+    new LearningDomainFixture({
+      id: 17
+    })
+  ];
 
   const mockEduContentProductTypes = [
     new EduContentProductTypeFixture({ id: 12 }),
     new EduContentProductTypeFixture({ id: 13 }),
     new EduContentProductTypeFixture({ id: 14, parent: 13 })
-  ];
-
-  const nestedMockEduContentProductTypes = [
-    new EduContentProductTypeFixture({ id: 12 }),
-    {
-      id: 13,
-      children: [new EduContentProductTypeFixture({ id: 14, parent: 13 })]
-    }
   ];
 
   beforeEach(() => {
@@ -73,7 +82,9 @@ describe('SearchTermFilterFactory', () => {
           EduNetReducer,
           SchoolTypeReducer,
           MethodReducer,
-          EduContentProductTypeReducer
+          EduContentProductTypeReducer,
+          LearningDomainReducer,
+          LearningAreaReducer
         ])
       ],
       providers: [Store]
@@ -94,7 +105,9 @@ describe('SearchTermFilterFactory', () => {
 
     const mockSearchState: SearchStateInterface = {
       searchTerm: '',
-      filterCriteriaSelections: new Map<string, (number | string)[]>()
+      filterCriteriaSelections: new Map<string, (number | string)[]>([
+        ['learningArea', [2]]
+      ])
     };
 
     function loadInStore() {
@@ -125,6 +138,12 @@ describe('SearchTermFilterFactory', () => {
       store.dispatch(
         new EduContentProductTypeActions.EduContentProductTypesLoaded({
           eduContentProductTypes: mockEduContentProductTypes
+        })
+      );
+
+      store.dispatch(
+        new LearningDomainActions.LearningDomainsLoaded({
+          learningDomains: mockLearningDomains
         })
       );
     }
@@ -223,7 +242,9 @@ describe('SearchTermFilterFactory', () => {
       'Methode',
       'id',
       'name',
-      mockMethods,
+      mockMethods.filter(
+        method => method.learningAreaId === currentLearningAreaId
+      ),
       CheckboxListFilterComponent
     );
   }
@@ -234,7 +255,9 @@ describe('SearchTermFilterFactory', () => {
       'Leergebied',
       'id',
       'name',
-      mockLearningDomains,
+      mockLearningDomains.filter(
+        ld => ld.learningAreaId === currentLearningAreaId
+      ),
       CheckboxListFilterComponent
     );
   }
