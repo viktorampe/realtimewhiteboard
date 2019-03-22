@@ -5,8 +5,7 @@ import {
   LearningAreaQueries,
   MethodQueries,
   TocServiceInterface,
-  TOC_SERVICE_TOKEN,
-  YearQueries
+  TOC_SERVICE_TOKEN
 } from '@campus/dal';
 import {
   ColumnFilterComponent,
@@ -19,7 +18,11 @@ import { select, Store } from '@ngrx/store';
 // tslint:disable-next-line: nx-enforce-module-boundaries
 import { PrimitivePropertiesKeys } from 'libs/utils/src/lib/types/generic.types';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { map, switchMap, take } from 'rxjs/operators';
+import { map, mapTo, switchMap, take, tap } from 'rxjs/operators';
+import {
+  YearServiceInterface,
+  YEAR_SERVICE_TOKEN
+} from './../../../../../../libs/dal/src/lib/metadata/year.service.interface';
 
 const LEARNING_AREA = 'learningArea';
 const YEAR = 'year';
@@ -33,26 +36,19 @@ export class TocFilterFactory implements SearchFilterFactory {
   private filterComponent = ColumnFilterComponent;
   private domHost = 'hostLeft';
 
+  // caches tree as a map
   private cachedTree: {
-    learningAreaId?: number;
-    yearId?: number;
-    methodId?: number;
     searchState?: SearchStateInterface;
-    toc: BehaviorSubject<EduContentTOCInterface[]>;
-  } = { toc: new BehaviorSubject<EduContentTOCInterface[]>([]) };
+    treeMap?: Map<number, EduContentTOCInterface[]>;
+  } = {};
 
   private treeFilters = new BehaviorSubject<SearchFilterInterface[]>([]);
 
   constructor(
     private store: Store<DalState>,
-    @Inject(TOC_SERVICE_TOKEN) private tocService: TocServiceInterface
-  ) {
-    this.cachedTree.toc.subscribe(tree => {
-      this.treeFilters.next(
-        this.getFiltersForTree(this.cachedTree.searchState, tree)
-      );
-    });
-  }
+    @Inject(TOC_SERVICE_TOKEN) private tocService: TocServiceInterface,
+    @Inject(YEAR_SERVICE_TOKEN) private yearService: YearServiceInterface
+  ) {}
 
   public getFilters(
     searchState: SearchStateInterface
@@ -81,8 +77,24 @@ export class TocFilterFactory implements SearchFilterFactory {
     // if a learningArea is selected...
     if (searchState.filterCriteriaSelections.has(LEARNING_AREA)) {
       // ... show the filter for years
-      const yearFilter = this.store.pipe(
-        select(YearQueries.getAll),
+      const learningAreaId = searchState.filterCriteriaSelections.get(
+        LEARNING_AREA
+      )[0] as number;
+
+      const years = this.store.pipe(
+        // look up the methods associated with the learningArea
+        select(MethodQueries.getByLearningAreaId, {
+          learningAreaId
+        }),
+        switchMap(methodArray =>
+          // get the years that have books for those methods
+          this.yearService.getAllByMethodIds(
+            methodArray.map(method => method.id)
+          )
+        )
+      );
+
+      const yearFilter = years.pipe(
         map(entities =>
           this.getFilter(
             searchState,
@@ -101,8 +113,11 @@ export class TocFilterFactory implements SearchFilterFactory {
       // if a year is selected...
       if (searchState.filterCriteriaSelections.has(YEAR)) {
         // ... show the filter for methods
+
         const methodFilter = this.store.pipe(
-          select(MethodQueries.getAll), // TODO .select(MethodQueries.getByLearningAreaId, {learningAreaId})
+          select(MethodQueries.getByLearningAreaId, {
+            learningAreaId
+          }),
           map(entities =>
             this.getFilter(
               searchState,
@@ -120,9 +135,21 @@ export class TocFilterFactory implements SearchFilterFactory {
 
         // if a method is selected...
         if (searchState.filterCriteriaSelections.has(METHOD)) {
-          // update the cached tree
-          // include a check if it is needed
-          this.updateTreeCache(searchState);
+          if (this.treeCacheNeedsUpdate(searchState)) {
+            // update the cached tree
+            // and wait for new value to emit new filters
+            this.updateTreeCache(searchState)
+              .toPromise()
+              .then(() =>
+                this.treeFilters.next(
+                  this.getFiltersForTree(searchState, this.cachedTree.treeMap)
+                )
+              );
+          } else {
+            this.treeFilters.next(
+              this.getFiltersForTree(searchState, this.cachedTree.treeMap)
+            );
+          }
 
           // ... show the tree filter
           // subscription will handle this.treeFilters
@@ -211,28 +238,36 @@ export class TocFilterFactory implements SearchFilterFactory {
 
   private getFiltersForTree(
     searchState: SearchStateInterface,
-    tree: EduContentTOCInterface[]
+    treeMap: Map<number, EduContentTOCInterface[]>
   ): SearchFilterInterface[] {
-    if (!tree || !searchState) return;
+    if (!treeMap || !searchState) return;
 
-    const treeFilter: SearchFilterInterface[] = [];
-    let tocs = tree;
+    // filter for top level of tree
+    const filterForTree = this.getFilter(
+      searchState,
+      treeMap.get(0),
+      TOC,
+      'Inhoudstafel',
+      'id',
+      'title',
+      this.filterComponent,
+      this.domHost
+    );
 
-    let depth = 0;
-    do {
-      if (depth !== 0) {
-        const selectedTOC = searchState.filterCriteriaSelections.get(
-          TOC + '_' + (depth - 1)
-        )[0];
+    let filtersForBranches = [];
+    if (searchState.filterCriteriaSelections.has(TOC)) {
+      const selectedTocId = searchState.filterCriteriaSelections.get(
+        TOC
+      )[0] as number;
 
-        tocs = tocs.find(toc => toc.id === selectedTOC).children;
-      }
+      const tocs = treeMap.get(selectedTocId);
 
-      treeFilter.push(
+      // filter for branches
+      filtersForBranches = tocs.map(toc =>
         this.getFilter(
           searchState,
-          tocs,
-          TOC + '_' + depth,
+          toc.children,
+          TOC,
           'Inhoudstafel',
           'id',
           'title',
@@ -240,35 +275,89 @@ export class TocFilterFactory implements SearchFilterFactory {
           this.domHost
         )
       );
+    }
 
-      depth++;
-    } while (searchState.filterCriteriaSelections.has(TOC + '_' + (depth - 1)));
-
-    return treeFilter;
+    return [filterForTree, ...filtersForBranches];
   }
 
-  private updateTreeCache(searchState: SearchStateInterface) {
-    this.cachedTree.searchState = searchState;
-
+  private updateTreeCache(
+    searchState: SearchStateInterface
+  ): Observable<boolean> {
     const selections = searchState.filterCriteriaSelections;
-    if (
-      // at least one of these values changes
-      this.cachedTree.learningAreaId !==
-        (selections.get(LEARNING_AREA)[0] as number) ||
-      this.cachedTree.yearId !== (selections.get(YEAR)[0] as number) ||
-      this.cachedTree.methodId !== (selections.get(METHOD)[0] as number)
-    ) {
-      // then update the cache
-      this.cachedTree.learningAreaId = selections.get(
-        LEARNING_AREA
-      )[0] as number;
-      this.cachedTree.yearId = selections.get(YEAR)[0] as number;
-      this.cachedTree.methodId = selections.get(METHOD)[0] as number;
+    const yearId = selections.get(YEAR)[0] as number;
+    const methodId = selections.get(METHOD)[0] as number;
 
-      // emit new value
-      this.getTree(this.cachedTree.yearId, this.cachedTree.methodId)
-        .pipe(take(1))
-        .subscribe(tree => this.cachedTree.toc.next(tree));
+    const updatedTreeMap = this.getTree(yearId, methodId).pipe(
+      take(1),
+      // calculate tree
+      map(tree => this.getTreeMap(tree)),
+      // update cache
+      tap(treeMap => (this.cachedTree.treeMap = treeMap)),
+      mapTo(true)
+    );
+
+    return updatedTreeMap;
+  }
+
+  // returns a map of all branches in the tree
+  // example (with ids for brevity):
+  // tree:
+  // 1
+  //  - 2
+  //    - 5
+  //  - 3
+  // 4
+  // Map { 0 => [ 1, 4 ], 1 => [1], 2 => [ 1, 2 ], 5 => [ 1, 2, 5 ], 3 => [ 1, 3 ], 4 => [4] }
+  // the values in the arrays are the branches, top to bottom
+  // id = 0 is original tree
+  private getTreeMap(
+    tree: EduContentTOCInterface[],
+    treeMap: Map<number, EduContentTOCInterface[]> = new Map(),
+    parentBranches: EduContentTOCInterface[] = []
+  ): Map<number, EduContentTOCInterface[]> {
+    // no parentBranches -> 1st time executed
+    // set original tree as id:0
+    if (!parentBranches.length) treeMap.set(0, tree);
+
+    tree.forEach(branch => {
+      // add own id to map
+      treeMap.set(branch.id, [...parentBranches, branch]);
+
+      // let children do the same
+      if (Array.isArray(branch.children)) {
+        this.getTreeMap(branch.children, treeMap, [...parentBranches, branch]);
+      }
+    });
+
+    return treeMap;
+  }
+
+  private treeCacheNeedsUpdate(searchState): boolean {
+    const newSelections = searchState.filterCriteriaSelections;
+
+    //does the new selection contain enough values?
+    if (
+      !(
+        newSelections.has(LEARNING_AREA) &&
+        newSelections.has(YEAR) &&
+        newSelections.has(METHOD)
+      )
+    ) {
+      return false;
     }
+
+    // if there are no old values -> update
+    if (!this.cachedTree.searchState) {
+      return true;
+    }
+
+    const oldSelections = this.cachedTree.searchState.filterCriteriaSelections;
+
+    // has at least one of the values changed
+    return !(
+      oldSelections.get(LEARNING_AREA) === newSelections.get(LEARNING_AREA) &&
+      oldSelections.get(YEAR) === newSelections.get(YEAR) &&
+      oldSelections.get(METHOD) === newSelections.get(METHOD)
+    );
   }
 }

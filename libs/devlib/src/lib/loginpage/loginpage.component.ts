@@ -22,9 +22,9 @@ import {
   FAVORITE_SERVICE_TOKEN
 } from './../../../../dal/src/lib/favorite/favorite.service.interface';
 import {
-  LearningPlanServiceInterface,
-  LEARNING_PLAN_SERVICE_TOKEN
-} from './../../../../dal/src/lib/learning-plan/learning-plan.service.interface';
+  YearServiceInterface,
+  YEAR_SERVICE_TOKEN
+} from './../../../../dal/src/lib/metadata/year.service.interface';
 import { LoginPageViewModel } from './loginpage.viewmodel';
 
 @Component({
@@ -52,13 +52,12 @@ export class LoginpageComponent implements OnInit {
   constructor(
     public loginPageviewModel: LoginPageViewModel,
     private personApi: PersonApi,
-    @Inject(LEARNING_PLAN_SERVICE_TOKEN)
-    private learningPlanService: LearningPlanServiceInterface,
     @Inject(FAVORITE_SERVICE_TOKEN)
     private favoriteService: FavoriteServiceInterface,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     private store: Store<AlertReducer.State>,
-    private router: Router
+    private router: Router,
+    @Inject(YEAR_SERVICE_TOKEN) private yearService: YearServiceInterface
   ) {}
 
   ngOnInit() {
@@ -83,20 +82,6 @@ export class LoginpageComponent implements OnInit {
     this.store.dispatch(new UserActions.LoadUser({ force: true }));
   }
 
-  getAvailableYearsForSearch() {
-    this.response = this.learningPlanService.getAvailableYearsForSearch(
-      19,
-      3,
-      4
-    );
-  }
-
-  getLearningPlanAssignments() {
-    this.response = this.learningPlanService
-      .getLearningPlanAssignments(3, 6, 4, 19)
-      .pipe(map(sMap => Array.from(sMap)));
-  }
-
   getFavorites(userId: number) {
     this.response = this.favoriteService.getAllForUser(userId);
   }
@@ -110,5 +95,9 @@ export class LoginpageComponent implements OnInit {
 
   removeFavorite(userId: number, favoriteId: number) {
     this.response = this.favoriteService.deleteFavorite(userId, favoriteId);
+  }
+
+  getYearsForMethods() {
+    this.response = this.yearService.getAllByMethodIds([1, 2, 3]);
   }
 }

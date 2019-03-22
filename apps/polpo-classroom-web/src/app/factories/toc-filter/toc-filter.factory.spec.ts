@@ -23,8 +23,9 @@ import {
   SearchStateInterface
 } from '@campus/search';
 import { Store, StoreModule } from '@ngrx/store';
-import { cold, hot } from 'jasmine-marbles';
+import { cold } from 'jasmine-marbles';
 import { Observable, of } from 'rxjs';
+import { YEAR_SERVICE_TOKEN } from './../../../../../../libs/dal/src/lib/metadata/year.service.interface';
 import { TocFilterFactory } from './toc-filter.factory';
 
 describe('TocFilterFactory', () => {
@@ -36,12 +37,15 @@ describe('TocFilterFactory', () => {
     new LearningAreaFixture({ id: 2 })
   ];
 
-  const mockYears = [new YearFixture({ id: 3 }), new YearFixture({ id: 4 })];
+  const mockYears = [
+    new YearFixture({ id: 3, name: '3' }),
+    new YearFixture({ id: 4, name: '4' })
+  ];
 
   const mockMethods = [
-    new MethodFixture({ id: 5 }),
-    new MethodFixture({ id: 6 }),
-    new MethodFixture({ id: 7 })
+    new MethodFixture({ id: 5, learningAreaId: 1 }),
+    new MethodFixture({ id: 6, learningAreaId: 1 }),
+    new MethodFixture({ id: 7, learningAreaId: 1 })
   ];
 
   const mockBook = new EduContentBookFixture({ id: 8, title: 'Shuffle 5' });
@@ -87,6 +91,14 @@ describe('TocFilterFactory', () => {
     })
   ];
 
+  const mockTreeMap = new Map<number, EduContentTOCInterface[]>([
+    [0, mockTree],
+    [1, [mockTree[0]]],
+    [2, [mockTree[0], mockTree[0].children[0]]],
+    [3, [mockTree[0], mockTree[0].children[1]]],
+    [4, [mockTree[1]]]
+  ]);
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -105,6 +117,12 @@ describe('TocFilterFactory', () => {
           useValue: {
             getBooksByYearAndMethods: () => of([mockBook]),
             getTree: () => of(mockTree)
+          }
+        },
+        {
+          provide: YEAR_SERVICE_TOKEN,
+          useValue: {
+            getAllByMethodIds: () => of(mockYears)
           }
         }
       ]
@@ -252,7 +270,7 @@ describe('TocFilterFactory', () => {
 
         it('should cache the TOC from the service', async(() => {
           const cachedTree = factory['cachedTree'];
-          expect(cachedTree.toc).toBeObservable(hot('a', { a: mockTree }));
+          expect(cachedTree.treeMap).toEqual(mockTreeMap);
         }));
       });
     });
@@ -269,7 +287,7 @@ describe('TocFilterFactory', () => {
         mockSearchState.filterCriteriaSelections.set('method', [
           mockSelectedMethodId
         ]);
-        mockSearchState.filterCriteriaSelections.set('eduContentTOC_0', [
+        mockSearchState.filterCriteriaSelections.set('eduContentTOC', [
           mockSelectedTocId
         ]);
 
@@ -314,7 +332,7 @@ describe('TocFilterFactory', () => {
         // also select second EduContentTOC
         // this doesn't have children
         const mockSelectedTocId_1 = 2;
-        mockSearchState.filterCriteriaSelections.set('eduContentTOC_1', [
+        mockSearchState.filterCriteriaSelections.set('eduContentTOC', [
           mockSelectedTocId_1
         ]);
 
@@ -338,13 +356,19 @@ describe('TocFilterFactory', () => {
           const newSearchState = { ...mockSearchState };
           newSearchState.filterCriteriaSelections.set('learningArea', [2]);
 
-          const newTree = mockTree[0];
-
+          const newTree = [mockTree[0]];
           tocService.getTree = jest.fn().mockReturnValue(of(newTree));
+
+          const newTreeMap = new Map([
+            [0, newTree],
+            [1, [newTree[0]]],
+            [2, [newTree[0], newTree[0].children[0]]],
+            [3, [newTree[0], newTree[0].children[1]]]
+          ]);
 
           factory.getFilters(newSearchState);
           const cachedTree = factory['cachedTree'];
-          expect(cachedTree.toc).toBeObservable(hot('a', { a: newTree }));
+          expect(cachedTree.treeMap).toEqual(newTreeMap);
         });
 
         it('should update the cached Toc - Year', () => {
@@ -353,13 +377,19 @@ describe('TocFilterFactory', () => {
           const newSearchState = { ...mockSearchState };
           newSearchState.filterCriteriaSelections.set('year', [5]);
 
-          const newTree = mockTree[0];
-
+          const newTree = [mockTree[0]];
           tocService.getTree = jest.fn().mockReturnValue(of(newTree));
+
+          const newTreeMap = new Map([
+            [0, newTree],
+            [1, [newTree[0]]],
+            [2, [newTree[0], newTree[0].children[0]]],
+            [3, [newTree[0], newTree[0].children[1]]]
+          ]);
 
           factory.getFilters(newSearchState);
           const cachedTree = factory['cachedTree'];
-          expect(cachedTree.toc).toBeObservable(hot('a', { a: newTree }));
+          expect(cachedTree.treeMap).toEqual(newTreeMap);
         });
 
         it('should update the cached Toc - Method', () => {
@@ -368,23 +398,24 @@ describe('TocFilterFactory', () => {
           const newSearchState = { ...mockSearchState };
           newSearchState.filterCriteriaSelections.set('method', [7]);
 
-          const newTree = mockTree[0];
-
+          const newTree = [mockTree[0]];
           tocService.getTree = jest.fn().mockReturnValue(of(newTree));
+
+          const newTreeMap = new Map([
+            [0, newTree],
+            [1, [newTree[0]]],
+            [2, [newTree[0], newTree[0].children[0]]],
+            [3, [newTree[0], newTree[0].children[1]]]
+          ]);
 
           factory.getFilters(newSearchState);
           const cachedTree = factory['cachedTree'];
-          expect(cachedTree.toc).toBeObservable(hot('a', { a: newTree }));
+          expect(cachedTree.treeMap).toEqual(newTreeMap);
         });
       });
 
       describe('do not update cache', () => {
         // getFilters() has already been called once in the beforeEach
-
-        beforeEach(() => {
-          // manually change cache
-          // can't change returnValue of Service, since that triggers update of
-        });
 
         it('should not update the cached Toc', () => {
           // service return different value
@@ -392,39 +423,39 @@ describe('TocFilterFactory', () => {
           tocService.getTree = jest.fn().mockReturnValue(of(mockTree[0]));
 
           const newSearchState = { ...mockSearchState };
-          const cachedTree = factory['cachedTree'];
+          const cachedTreeMap = factory['cachedTree'].treeMap;
 
           // no selection
           newSearchState.filterCriteriaSelections.clear();
           factory.getFilters(newSearchState);
-          expect(cachedTree.toc).toBeObservable(hot('a', { a: mockTree }));
+          expect(cachedTreeMap).toEqual(mockTreeMap);
 
           // select LearningArea
           newSearchState.filterCriteriaSelections.set('learningArea', [
             mockSelectedAreaId
           ]);
           factory.getFilters(newSearchState);
-          expect(cachedTree.toc).toBeObservable(hot('a', { a: mockTree }));
+          expect(cachedTreeMap).toEqual(mockTreeMap);
 
           // select Year
           newSearchState.filterCriteriaSelections.set('year', [
             mockSelectedYearId
           ]);
           factory.getFilters(newSearchState);
-          expect(cachedTree.toc).toBeObservable(hot('a', { a: mockTree }));
+          expect(cachedTreeMap).toEqual(mockTreeMap);
 
           // select Method
           newSearchState.filterCriteriaSelections.set('method', [
             mockSelectedMethodId
           ]);
           factory.getFilters(newSearchState);
-          expect(cachedTree.toc).toBeObservable(hot('a', { a: mockTree }));
+          expect(cachedTreeMap).toEqual(mockTreeMap);
 
           // select a different Toc
           // Toc 1 was selected
-          newSearchState.filterCriteriaSelections.set('eduContentTOC_0', [2]);
+          newSearchState.filterCriteriaSelections.set('eduContentTOC', [2]);
           factory.getFilters(newSearchState);
-          expect(cachedTree.toc).toBeObservable(hot('a', { a: mockTree }));
+          expect(cachedTreeMap).toEqual(mockTreeMap);
         });
       });
     });
@@ -498,7 +529,7 @@ describe('TocFilterFactory', () => {
 
     return {
       criteria: {
-        name: 'eduContentTOC_' + depth,
+        name: 'eduContentTOC',
         label: 'Inhoudstafel',
         keyProperty: 'id',
         displayProperty: 'title',
