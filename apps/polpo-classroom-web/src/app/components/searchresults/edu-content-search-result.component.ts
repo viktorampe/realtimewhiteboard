@@ -10,10 +10,10 @@ import {
 import { EduContentBookInterface, EduContentTOCInterface } from '@campus/dal';
 import { ResultItemBase } from '@campus/search';
 import {
+  EduContentSearchResultInterface,
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN
 } from '@campus/shared';
-import { EduContentSearchResultInterface } from './interfaces/educontent-search-result';
 
 @Component({
   // tslint:disable-next-line
