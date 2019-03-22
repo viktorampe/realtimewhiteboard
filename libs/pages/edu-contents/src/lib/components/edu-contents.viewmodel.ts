@@ -10,7 +10,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class EduContentsViewModel {
   public learningAreas$: Observable<LearningAreaInterface[]>;
   public favoriteLearningAreas$: Observable<LearningAreaInterface[]>;
-  public searchResults$: Observable<EduContentSearchResultInterface>;
+  public searchResults$: Observable<EduContentSearchResultInterface[]>;
 
   private searchState$: BehaviorSubject<SearchStateInterface>;
   private eduContentFavorites$: Observable<FavoriteInterface[]>;

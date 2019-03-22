@@ -35,14 +35,16 @@ export class EduContentsViewModelMock
     new LearningAreaFixture({ id: 3, name: 'bazLearningArea' })
   ];
 
-  private searchResults: EduContentSearchResultInterface = {
-    eduContent: new EduContentFixture(),
-    inTask: false,
-    currentTask: new TaskFixture(),
-    inBundle: false,
-    currentBundle: new BundleFixture(),
-    isFavorite: true
-  };
+  private searchResults: EduContentSearchResultInterface[] = [
+    {
+      eduContent: new EduContentFixture(),
+      inTask: false,
+      currentTask: new TaskFixture(),
+      inBundle: false,
+      currentBundle: new BundleFixture(),
+      isFavorite: true
+    }
+  ];
 
   private searchState: SearchStateInterface = {
     searchTerm: 'foo',
@@ -90,9 +92,9 @@ export class EduContentsViewModelMock
   public favoriteLearningAreas$ = new BehaviorSubject<LearningAreaInterface[]>(
     this.favoriteLearningAreas
   );
-  public searchResults$ = new BehaviorSubject<EduContentSearchResultInterface>(
-    this.searchResults
-  );
+  public searchResults$ = new BehaviorSubject<
+    EduContentSearchResultInterface[]
+  >(this.searchResults);
 
   /*
    * let the page component pass through the updated state from the search component
