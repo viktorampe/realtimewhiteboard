@@ -43,6 +43,7 @@ export class TocFilterFactory implements SearchFilterFactory {
     treeMap?: Map<number, EduContentTOCInterface[]>;
   } = {};
 
+  // emits on update of cahcedtree
   private treeFilters = new BehaviorSubject<SearchFilterInterface[]>([]);
 
   constructor(
@@ -54,6 +55,7 @@ export class TocFilterFactory implements SearchFilterFactory {
   public getFilters(
     searchState: SearchStateInterface
   ): Observable<SearchFilterInterface[]> {
+    const selections = searchState.filterCriteriaSelections;
     const filters: Observable<SearchFilterInterface>[] = [];
     let treeFilters: Observable<SearchFilterInterface[]> = null;
 
@@ -76,11 +78,9 @@ export class TocFilterFactory implements SearchFilterFactory {
     filters.push(learningAreaFilter);
 
     // if a learningArea is selected...
-    if (searchState.filterCriteriaSelections.has(LEARNING_AREA)) {
+    if (selections.has(LEARNING_AREA)) {
       // ... show the filter for years
-      const learningAreaId = searchState.filterCriteriaSelections.get(
-        LEARNING_AREA
-      )[0] as number;
+      const learningAreaId = selections.get(LEARNING_AREA)[0] as number;
 
       const years = this.store.pipe(
         // look up the methods associated with the learningArea
@@ -112,9 +112,17 @@ export class TocFilterFactory implements SearchFilterFactory {
       filters.push(yearFilter);
 
       // if a year is selected...
-      if (searchState.filterCriteriaSelections.has(YEAR)) {
+      if (selections.has(YEAR)) {
         // ... show the filter for methods
 
+        // TODO -> won't I need the yearId somehow?
+        // Is this situation possible?
+        // there are 2 methods
+        // one for years [1,2,3]
+        // and one for years [5]
+        // the range of selected years will be [1,2,3,5]
+        // suppose the user selects 5
+        // how do I know that I only need to show method 2?
         const methodFilter = this.store.pipe(
           select(MethodQueries.getByLearningAreaId, {
             learningAreaId
@@ -135,7 +143,7 @@ export class TocFilterFactory implements SearchFilterFactory {
         filters.push(methodFilter);
 
         // if a method is selected...
-        if (searchState.filterCriteriaSelections.has(METHOD)) {
+        if (selections.has(METHOD)) {
           if (this.treeCacheNeedsUpdate(searchState)) {
             // update the cached tree
             // and wait for new value to emit new filters
@@ -150,7 +158,9 @@ export class TocFilterFactory implements SearchFilterFactory {
             );
           }
 
+          // update the searchState in the cache
           this.cachedTree.searchState = searchState;
+
           // ... show the tree filter
           // subscription will handle this.treeFilters
           treeFilters = this.treeFilters;
@@ -340,8 +350,6 @@ export class TocFilterFactory implements SearchFilterFactory {
 
   private treeCacheNeedsUpdate(searchState): boolean {
     const newSelections = searchState.filterCriteriaSelections;
-
-    console.log(newSelections);
 
     //does the new selection contain enough values?
     if (
