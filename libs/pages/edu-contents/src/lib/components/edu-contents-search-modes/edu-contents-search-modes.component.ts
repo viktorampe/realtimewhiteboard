@@ -67,14 +67,7 @@ export class EduContentSearchModesComponent implements OnInit, OnDestroy {
   }
 
   private getAutoCompleteValues(searchTerm: string): Observable<string[]> {
-    return this.routeParams$.pipe(
-      switchMap(params =>
-        this.eduContentsViewModel.requestAutoComplete(
-          searchTerm,
-          new Map([['learningArea', [+params.area]]])
-        )
-      )
-    );
+    return this.eduContentsViewModel.requestAutoComplete(searchTerm);
   }
 
   private getLearningArea(): Observable<LearningAreaInterface> {

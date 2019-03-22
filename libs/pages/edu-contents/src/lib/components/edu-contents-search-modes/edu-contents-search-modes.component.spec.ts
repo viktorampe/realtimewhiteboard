@@ -89,8 +89,7 @@ describe('EduContentSearchModesComponent', () => {
 
     expect(eduContentsViewModel.requestAutoComplete).toHaveBeenCalledTimes(1);
     expect(eduContentsViewModel.requestAutoComplete).toHaveBeenCalledWith(
-      'foo',
-      new Map([['learningArea', [1]]])
+      'foo'
     );
   }));
 
