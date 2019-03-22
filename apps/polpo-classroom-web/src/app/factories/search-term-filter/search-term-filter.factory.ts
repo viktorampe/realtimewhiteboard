@@ -41,6 +41,12 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
   public filterQueries: {
     [key: string]: FilterQueryInterface;
   } = {
+    learningArea: {
+      query: YearQueries.getAll,
+      name: 'learningArea',
+      label: 'Leergebied',
+      component: CheckboxListFilterComponent
+    },
     years: {
       query: YearQueries.getAll,
       name: 'years',
@@ -57,13 +63,13 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
       name: 'schoolTypes',
       label: 'Onderwijsvorm'
     },
-    methods: {
+    methodsByLearningArea: {
       query: MethodQueries.getByLearningAreaId,
       name: 'methods',
       label: 'Methode',
       learningAreaDependent: true
     },
-    learningDomains: {
+    learningDomainsByLearningArea: {
       query: LearningDomainQueries.getByLearningArea,
       label: 'Leergebied',
       name: 'learningDomains',
@@ -75,7 +81,8 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
 
   public buildFilter(
     name: string,
-    searchState: SearchStateInterface
+    searchState: SearchStateInterface,
+    learningAreaOverride: number = 0
   ): Observable<SearchFilterInterface> {
     const filterQuery = this.filterQueries[name];
 
@@ -84,9 +91,9 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
         .select(
           filterQuery.query as MemoizedSelectorWithProps<Object, any, any[]>,
           {
-            learningAreaId: searchState.filterCriteriaSelections.get(
-              'learningArea'
-            )[0]
+            learningAreaId:
+              learningAreaOverride ||
+              searchState.filterCriteriaSelections.get('learningArea')[0]
           }
         )
         .pipe(
@@ -104,14 +111,19 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
   getFilters(
     searchState: SearchStateInterface
   ): Observable<SearchFilterInterface[]> {
-    const filters = ['years', 'eduNets', 'schoolTypes', 'methods'].map(
-      filterName => {
-        return this.buildFilter(filterName, searchState);
-      }
-    );
+    const filters = [
+      'years',
+      'eduNets',
+      'schoolTypes',
+      'methodsByLearningArea'
+    ].map(filterName => {
+      return this.buildFilter(filterName, searchState);
+    });
 
     filters.push(this.getNestedEduContentProductTypes(searchState));
-    filters.push(this.buildFilter('learningDomains', searchState));
+    filters.push(
+      this.buildFilter('learningDomainsByLearningArea', searchState)
+    );
 
     return combineLatest(filters);
   }
