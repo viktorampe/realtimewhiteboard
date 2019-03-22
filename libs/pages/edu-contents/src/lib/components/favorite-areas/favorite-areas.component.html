@@ -1,1 +1,15 @@
-<div> favorite areas </div>
+<campus-info-panel
+  titleText="Mijn favoriete leergebieden"
+  titleIcon="favorites"
+  [displayAsRows]="true"
+>
+  <campus-tile
+    label="Wiskunde"
+    icon="favorites"
+    color="blue"
+    [secondaryActions]="[]"
+  ></campus-tile>
+
+  <campus-drop-area icon="add" label="Sleep je favoriet leergebied naar hier">
+  </campus-drop-area>
+</campus-info-panel>
