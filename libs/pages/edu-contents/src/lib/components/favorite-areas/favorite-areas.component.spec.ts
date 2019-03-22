@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule, MatIconRegistry } from '@angular/material';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterTestingModule } from '@angular/router/testing';
 import { LearningAreaFixture } from '@campus/dal';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
@@ -9,6 +9,7 @@ import { FavoriteAreasComponent } from './favorite-areas.component';
 describe('FavoriteAreasComponent', () => {
   let component: FavoriteAreasComponent;
   let fixture: ComponentFixture<FavoriteAreasComponent>;
+  let x;
 
   const mockLearningAreas = [
     new LearningAreaFixture({
@@ -27,7 +28,7 @@ describe('FavoriteAreasComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [UiModule, NoopAnimationsModule, MatIconModule],
+      imports: [UiModule, RouterTestingModule, MatIconModule],
       declarations: [FavoriteAreasComponent],
       providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
     }).compileComponents();
@@ -45,4 +46,9 @@ describe('FavoriteAreasComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  /*
+  it should show the learning areas (with the right router link?)
+  it should emit an event when delete favorites is clicked
+  */
 });
