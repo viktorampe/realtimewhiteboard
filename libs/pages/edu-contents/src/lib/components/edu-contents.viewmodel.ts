@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FavoriteInterface, LearningAreaInterface } from '@campus/dal';
 import { SearchModeInterface, SearchStateInterface } from '@campus/search';
-import { EduContentSearchResultInterface } from 'apps/polpo-classroom-web/src/app/components/searchresults/interfaces/educontent-search-result';
+import { EduContentSearchResultInterface } from '@campus/shared';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
