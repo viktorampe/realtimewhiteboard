@@ -37,6 +37,7 @@ export class TocFilterFactory implements SearchFilterFactory {
   private domHost = 'hostLeft';
 
   // caches tree as a map
+  // only contains values if a tree was needed at least once
   private cachedTree: {
     searchState?: SearchStateInterface;
     treeMap?: Map<number, EduContentTOCInterface[]>;
@@ -138,19 +139,18 @@ export class TocFilterFactory implements SearchFilterFactory {
           if (this.treeCacheNeedsUpdate(searchState)) {
             // update the cached tree
             // and wait for new value to emit new filters
-            this.updateTreeCache(searchState)
-              .toPromise()
-              .then(() =>
-                this.treeFilters.next(
-                  this.getFiltersForTree(searchState, this.cachedTree.treeMap)
-                )
-              );
+            this.updateTreeCache(searchState).subscribe(() =>
+              this.treeFilters.next(
+                this.getFiltersForTree(searchState, this.cachedTree.treeMap)
+              )
+            );
           } else {
             this.treeFilters.next(
               this.getFiltersForTree(searchState, this.cachedTree.treeMap)
             );
           }
 
+          this.cachedTree.searchState = searchState;
           // ... show the tree filter
           // subscription will handle this.treeFilters
           treeFilters = this.treeFilters;
@@ -263,18 +263,24 @@ export class TocFilterFactory implements SearchFilterFactory {
       const tocs = treeMap.get(selectedTocId);
 
       // filter for branches
-      filtersForBranches = tocs.map(toc =>
-        this.getFilter(
-          searchState,
-          toc.children,
-          TOC,
-          'Inhoudstafel',
-          'id',
-          'title',
-          this.filterComponent,
-          this.domHost
-        )
-      );
+      // this creates the filter for the level after the current branch
+      filtersForBranches = tocs.reduce((acc, toc) => {
+        if (toc.children) {
+          acc.push(
+            this.getFilter(
+              searchState,
+              toc.children,
+              TOC,
+              'Inhoudstafel',
+              'id',
+              'title',
+              this.filterComponent,
+              this.domHost
+            )
+          );
+        }
+        return acc;
+      }, []);
     }
 
     return [filterForTree, ...filtersForBranches];
@@ -334,6 +340,8 @@ export class TocFilterFactory implements SearchFilterFactory {
 
   private treeCacheNeedsUpdate(searchState): boolean {
     const newSelections = searchState.filterCriteriaSelections;
+
+    console.log(newSelections);
 
     //does the new selection contain enough values?
     if (

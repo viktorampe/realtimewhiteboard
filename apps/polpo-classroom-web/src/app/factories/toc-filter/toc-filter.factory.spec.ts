@@ -142,11 +142,6 @@ describe('TocFilterFactory', () => {
     let expected: SearchFilterInterface[];
     let result: Observable<SearchFilterInterface[]>;
 
-    const mockSearchState: SearchStateInterface = {
-      searchTerm: '',
-      filterCriteriaSelections: new Map<string, (number | string)[]>()
-    };
-
     const mockSelectedAreaId = 1;
     const mockSelectedYearId = 4;
     const mockSelectedMethodId = 6;
@@ -176,11 +171,7 @@ describe('TocFilterFactory', () => {
 
     describe('learningAreas', () => {
       beforeEach(() => {
-        mockSearchState.filterCriteriaSelections.clear();
-        mockSearchState.filterCriteriaSelections.set('learningArea', [
-          mockSelectedAreaId
-        ]);
-
+        const mockSearchState = getMockSearchState(mockSelectedAreaId);
         result = factory.getFilters(mockSearchState);
       });
 
@@ -200,14 +191,10 @@ describe('TocFilterFactory', () => {
 
     describe('years', () => {
       beforeEach(() => {
-        mockSearchState.filterCriteriaSelections.clear();
-        mockSearchState.filterCriteriaSelections.set('learningArea', [
-          mockSelectedAreaId
-        ]);
-        mockSearchState.filterCriteriaSelections.set('year', [
+        const mockSearchState = getMockSearchState(
+          mockSelectedAreaId,
           mockSelectedYearId
-        ]);
-
+        );
         result = factory.getFilters(mockSearchState);
       });
 
@@ -232,17 +219,11 @@ describe('TocFilterFactory', () => {
 
     describe('methods', () => {
       beforeEach(() => {
-        mockSearchState.filterCriteriaSelections.clear();
-        mockSearchState.filterCriteriaSelections.set('learningArea', [
-          mockSelectedAreaId
-        ]);
-        mockSearchState.filterCriteriaSelections.set('year', [
-          mockSelectedYearId
-        ]);
-        mockSearchState.filterCriteriaSelections.set('method', [
+        const mockSearchState = getMockSearchState(
+          mockSelectedAreaId,
+          mockSelectedYearId,
           mockSelectedMethodId
-        ]);
-
+        );
         result = factory.getFilters(mockSearchState);
       });
 
@@ -277,20 +258,12 @@ describe('TocFilterFactory', () => {
 
     describe('TOC tree', () => {
       beforeEach(() => {
-        mockSearchState.filterCriteriaSelections.clear();
-        mockSearchState.filterCriteriaSelections.set('learningArea', [
-          mockSelectedAreaId
-        ]);
-        mockSearchState.filterCriteriaSelections.set('year', [
-          mockSelectedYearId
-        ]);
-        mockSearchState.filterCriteriaSelections.set('method', [
-          mockSelectedMethodId
-        ]);
-        mockSearchState.filterCriteriaSelections.set('eduContentTOC', [
+        const mockSearchState = getMockSearchState(
+          mockSelectedAreaId,
+          mockSelectedYearId,
+          mockSelectedMethodId,
           mockSelectedTocId
-        ]);
-
+        );
         result = factory.getFilters(mockSearchState);
       });
 
@@ -326,15 +299,25 @@ describe('TocFilterFactory', () => {
         const expectedMethodFilter = getExpectedMethodFilter(
           mockSelectedMethodId
         );
-        const expectedTreeFilter = getExpectedTreeFilter([], mockSelectedTocId);
-        const expectedTreeFilter_1 = getExpectedTreeFilter([mockSelectedTocId]);
+        const expectedTreeFilter = getExpectedTreeFilter();
 
+        const mockSearchState = getMockSearchState(
+          mockSelectedAreaId,
+          mockSelectedYearId,
+          mockSelectedMethodId,
+          mockSelectedTocId
+        );
         // also select second EduContentTOC
         // this doesn't have children
         const mockSelectedTocId_1 = 2;
         mockSearchState.filterCriteriaSelections.set('eduContentTOC', [
           mockSelectedTocId_1
         ]);
+
+        const expectedTreeFilter_1 = getExpectedTreeFilter(
+          [mockSelectedTocId],
+          mockSelectedTocId_1
+        );
 
         expected = [
           expectedLearningAreaFilter,
@@ -343,18 +326,22 @@ describe('TocFilterFactory', () => {
           expectedTreeFilter,
           expectedTreeFilter_1
         ];
-
+        result = factory.getFilters(mockSearchState);
         expect(result).toBeObservable(cold('a', { a: expected }));
       });
 
       describe('update cache', () => {
-        // getFilters() has already been called once in the beforeEach
-
         it('should update the cached Toc - LearningArea', () => {
           // at this point LearningArea 1 is selected
+          const cachedTree = factory['cachedTree'];
+          expect(cachedTree.treeMap).toEqual(mockTreeMap);
 
-          const newSearchState = { ...mockSearchState };
-          newSearchState.filterCriteriaSelections.set('learningArea', [2]);
+          const newSearchState = getMockSearchState(
+            2,
+            mockSelectedYearId,
+            mockSelectedMethodId,
+            mockSelectedTocId
+          );
 
           const newTree = [mockTree[0]];
           tocService.getTree = jest.fn().mockReturnValue(of(newTree));
@@ -367,15 +354,19 @@ describe('TocFilterFactory', () => {
           ]);
 
           factory.getFilters(newSearchState);
-          const cachedTree = factory['cachedTree'];
+
           expect(cachedTree.treeMap).toEqual(newTreeMap);
         });
 
         it('should update the cached Toc - Year', () => {
           // at this point Year 4 is selected
 
-          const newSearchState = { ...mockSearchState };
-          newSearchState.filterCriteriaSelections.set('year', [5]);
+          const newSearchState = getMockSearchState(
+            mockSelectedAreaId,
+            5,
+            mockSelectedMethodId,
+            mockSelectedTocId
+          );
 
           const newTree = [mockTree[0]];
           tocService.getTree = jest.fn().mockReturnValue(of(newTree));
@@ -395,8 +386,12 @@ describe('TocFilterFactory', () => {
         it('should update the cached Toc - Method', () => {
           // at this point Method 6 is selected
 
-          const newSearchState = { ...mockSearchState };
-          newSearchState.filterCriteriaSelections.set('method', [7]);
+          const newSearchState = getMockSearchState(
+            mockSelectedAreaId,
+            mockSelectedYearId,
+            7,
+            mockSelectedTocId
+          );
 
           const newTree = [mockTree[0]];
           tocService.getTree = jest.fn().mockReturnValue(of(newTree));
@@ -422,7 +417,12 @@ describe('TocFilterFactory', () => {
           // cached value should not return this
           tocService.getTree = jest.fn().mockReturnValue(of(mockTree[0]));
 
-          const newSearchState = { ...mockSearchState };
+          const newSearchState = getMockSearchState(
+            mockSelectedAreaId,
+            mockSelectedYearId,
+            mockSelectedMethodId,
+            mockSelectedTocId
+          );
           const cachedTreeMap = factory['cachedTree'].treeMap;
 
           // no selection
@@ -542,5 +542,29 @@ describe('TocFilterFactory', () => {
       domHost: 'hostLeft',
       options: undefined
     };
+  }
+
+  function getMockSearchState(
+    areaId?: number,
+    yearId?: number,
+    methodId?: number,
+    tocId?: number
+  ): SearchStateInterface {
+    const newSearchState = {
+      searchTerm: '',
+      filterCriteriaSelections: new Map<string, (number | string)[]>()
+    };
+    if (areaId)
+      newSearchState.filterCriteriaSelections.set('learningArea', [areaId]);
+
+    if (yearId) newSearchState.filterCriteriaSelections.set('year', [yearId]);
+
+    if (methodId)
+      newSearchState.filterCriteriaSelections.set('method', [methodId]);
+
+    if (tocId)
+      newSearchState.filterCriteriaSelections.set('eduContentTOC', [tocId]);
+
+    return newSearchState;
   }
 });
