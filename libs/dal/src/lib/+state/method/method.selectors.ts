@@ -65,3 +65,15 @@ export const getById = createSelector(
   selectMethodState,
   (state: State, props: { id: number }) => state.entities[props.id]
 );
+
+/**
+ * returns array of objects filtered by learning area id as key
+ */
+export const getByLearningAreaId = createSelector(
+  selectMethodState,
+  (state: State, props: { learningAreaId: number }) => {
+    return Object.values(state.entities).filter(
+      method => method.learningAreaId === props.learningAreaId
+    );
+  }
+);

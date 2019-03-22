@@ -11,11 +11,13 @@ import {
   EduContentTOCFixture,
   TaskFixture
 } from '@campus/dal';
-import { OPEN_STATIC_CONTENT_SERVICE_TOKEN } from '@campus/shared';
+import {
+  EduContentSearchResultInterface,
+  OPEN_STATIC_CONTENT_SERVICE_TOKEN
+} from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { EduContentSearchResultComponent } from './edu-content-search-result.component';
-import { EduContentSearchResultInterface } from './interfaces/educontent-search-result';
 
 describe('EduContentSearchResultComponent', () => {
   let component: EduContentSearchResultComponent;
