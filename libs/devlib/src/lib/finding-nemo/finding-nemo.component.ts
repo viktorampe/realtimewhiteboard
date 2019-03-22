@@ -23,6 +23,7 @@ import {
 import {
   MockSearchViewModel,
   SearchComponent,
+  FilterFactoryFixture,
   SearchFilterCriteriaInterface,
   SearchFilterFactory,
   SearchFilterInterface,
@@ -38,6 +39,8 @@ import { EduContentMetadataApi } from '@diekeure/polpo-api-angular-sdk';
 import { Store } from '@ngrx/store';
 import { EduContentSearchResultComponent } from 'apps/polpo-classroom-web/src/app/components/searchresults/edu-content-search-result.component';
 import { SearchTermFilterFactory } from 'apps/polpo-classroom-web/src/app/factories/search-term-filter/search-term-filter.factory';
+// tslint:disable-next-line:nx-enforce-module-boundaries
+import { MockSearchViewModel } from 'libs/search/src/lib/components/search.viewmodel.mock';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
