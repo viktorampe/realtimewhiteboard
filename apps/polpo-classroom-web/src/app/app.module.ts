@@ -10,11 +10,7 @@ import { SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
 import { UtilsModule } from '@campus/utils';
 import { EffectsModule } from '@ngrx/effects';
-import {
-  NavigationActionTiming,
-  routerReducer,
-  StoreRouterConnectingModule
-} from '@ngrx/router-store';
+import { NavigationActionTiming, routerReducer, StoreRouterConnectingModule } from '@ngrx/router-store';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { NxModule } from '@nrwl/nx';
@@ -22,17 +18,11 @@ import { storeFreeze } from 'ngrx-store-freeze';
 import { configureBufferSize, handleUndo } from 'ngrx-undo';
 import { environment } from '../environments/environment';
 import { AppEffects } from './+state/app.effects';
-import {
-  appReducer,
-  initialState as appInitialState
-} from './+state/app.reducer';
+import { appReducer, initialState as appInitialState } from './+state/app.reducer';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EduContentSearchResultComponent } from './components/searchresults/edu-content-search-result.component';
-import {
-  SearchTermFilterFactory,
-  SEARCH_TERM_FILTER_FACTORY_TOKEN
-} from './factories/search-term-filter/search-term-filter.factory';
+import { SearchTermFilterFactory, SEARCH_TERM_FILTER_FACTORY_TOKEN } from './factories/search-term-filter/search-term-filter.factory';
 import { FavIconService, FAVICON_SERVICE_TOKEN } from './services/favicons';
 
 // if you want to update the buffer (which defaults to 100)
@@ -85,7 +75,6 @@ configureBufferSize(150);
       provide: FAVICON_SERVICE_TOKEN,
       useClass: FavIconService
     },
-    { provide: STANDARD_SEARCH_SERVICE_TOKEN, useClass: StandardSearchService },
     {
       provide: SEARCH_TERM_FILTER_FACTORY_TOKEN,
       useClass: SearchTermFilterFactory
