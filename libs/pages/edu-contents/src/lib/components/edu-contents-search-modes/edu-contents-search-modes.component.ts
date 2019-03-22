@@ -1,7 +1,7 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LearningAreaInterface } from '@campus/dal';
-import { SearchModeInterface, SearchStateInterface } from '@campus/search';
+import { SearchModeInterface } from '@campus/search';
 import { ENVIRONMENT_SEARCHMODES_TOKEN } from '@campus/shared';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
@@ -16,7 +16,6 @@ export class EduContentSearchModesComponent implements OnInit, OnDestroy {
   public autoCompleteValues: string[] = [];
   public learningArea$: Observable<LearningAreaInterface>;
 
-  private learningAreaId: number;
   private searchTerm = new Subject<string>();
   private subscriptions: Subscription = new Subscription();
 
@@ -25,11 +24,10 @@ export class EduContentSearchModesComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private eduContentsViewModel: EduContentsViewModel,
     @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
-    public searchModes: SearchModeInterface[]
+    public searchModes: { [key: string]: SearchModeInterface }
   ) {}
 
   public ngOnInit(): void {
-    this.learningAreaId = +this.route.snapshot.paramMap.get('area');
     this.learningArea$ = this.getLearningArea();
 
     this.subscriptions.add(
@@ -63,16 +61,21 @@ export class EduContentSearchModesComponent implements OnInit, OnDestroy {
   }
 
   private getAutoCompleteValues(searchTerm: string): Observable<string[]> {
-    const searchState: SearchStateInterface = {
-      searchTerm,
-      filterCriteriaSelections: new Map([
-        ['learningArea', [this.learningAreaId]]
-      ])
-    };
-    return this.eduContentsViewModel.getAutoCompleteValues(searchState);
+    return this.route.params.pipe(
+      switchMap(params => {
+        return this.eduContentsViewModel.requestAutoComplete(
+          searchTerm,
+          new Map([['learningArea', [+params.area]]])
+        );
+      })
+    );
   }
 
   private getLearningArea(): Observable<LearningAreaInterface> {
-    return this.eduContentsViewModel.getLearningAreaById(this.learningAreaId);
+    return this.route.params.pipe(
+      switchMap(params =>
+        this.eduContentsViewModel.getLearningAreaById(+params.area)
+      )
+    );
   }
 }

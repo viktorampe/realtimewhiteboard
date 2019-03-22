@@ -26,9 +26,14 @@ export class EduContentsViewModel {
     return this.store.pipe(select(LearningAreaQueries.getById, { id: areaId }));
   }
 
-  public getAutoCompleteValues(
-    searchState: SearchStateInterface
+  public requestAutoComplete(
+    searchTerm: string,
+    criteria: Map<string, (number | string)[]> = new Map()
   ): Observable<string[]> {
+    const searchState: SearchStateInterface = {
+      searchTerm,
+      filterCriteriaSelections: criteria
+    };
     return this.eduContentService.autoComplete(searchState);
   }
 }
