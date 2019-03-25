@@ -77,3 +77,17 @@ export const getByLearningAreaId = createSelector(
     );
   }
 );
+
+/**
+ * returns array of objects filtered by learning area id as key
+ */
+export const getByLearningAreaIds = createSelector(
+  selectMethodState,
+  (state: State, props: { learningAreaIds: number[] }) => {
+    return Object.values(state.entities).filter(method =>
+      props.learningAreaIds.some(
+        learningAreaId => method.learningAreaId === learningAreaId
+      )
+    );
+  }
+);

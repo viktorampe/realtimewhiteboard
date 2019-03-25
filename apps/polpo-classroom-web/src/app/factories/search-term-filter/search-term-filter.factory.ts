@@ -65,13 +65,13 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
       label: 'Onderwijsvorm'
     },
     methodsByLearningArea: {
-      query: MethodQueries.getByLearningAreaId,
+      query: MethodQueries.getByLearningAreaIds,
       name: 'methods',
       label: 'Methode',
       learningAreaDependent: true
     },
     learningDomainsByLearningArea: {
-      query: LearningDomainQueries.getByLearningArea,
+      query: LearningDomainQueries.getByLearningAreas,
       label: 'Leergebied',
       name: 'learningDomains',
       learningAreaDependent: true
@@ -88,7 +88,7 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
   public buildFilter(
     name: string,
     searchState: SearchStateInterface,
-    learningAreaOverride: number = 0
+    learningAreaOverride: number[] = null
   ): Observable<SearchFilterInterface> {
     const filterQuery = this.filterQueries[name];
     if (filterQuery.learningAreaDependent) {
@@ -96,9 +96,9 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
         .select(
           filterQuery.query as MemoizedSelectorWithProps<Object, any, any[]>,
           {
-            learningAreaId:
-              learningAreaOverride ||
+            learningAreaIds: learningAreaOverride || [
               searchState.filterCriteriaSelections.get('learningArea')[0]
+            ]
           }
         )
         .pipe(

@@ -271,7 +271,6 @@ describe('SearchTermFilterFactory', () => {
         };
       })
       .filter(val => val.parent === 0);
-    console.log(extendedProductTypes);
 
     return getExpectedFilter(
       'eduContentProductType',

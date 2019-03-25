@@ -122,5 +122,30 @@ describe('LearningDomain Selectors', () => {
         new LearningDomainFixture({ id: 4, learningAreaId: 10 })
       ]);
     });
+
+    it('getByLearningAreas() should return all learningDomains with the provided learningAreaIds', () => {
+      learningDomainState = createState(
+        [
+          new LearningDomainFixture({ id: 1, learningAreaId: 10 }),
+          new LearningDomainFixture({ id: 2, learningAreaId: 12 }),
+          new LearningDomainFixture({ id: 3, learningAreaId: 11 }),
+          new LearningDomainFixture({ id: 4, learningAreaId: 10 })
+        ],
+        true,
+        'no error'
+      );
+
+      storeState = { learningDomains: learningDomainState };
+
+      const results = LearningDomainQueries.getByLearningAreas(storeState, {
+        learningAreaIds: [10, 11]
+      });
+
+      expect(results).toEqual([
+        new LearningDomainFixture({ id: 1, learningAreaId: 10 }),
+        new LearningDomainFixture({ id: 3, learningAreaId: 11 }),
+        new LearningDomainFixture({ id: 4, learningAreaId: 10 })
+      ]);
+    });
   });
 });

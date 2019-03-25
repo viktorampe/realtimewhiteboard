@@ -14,7 +14,7 @@ export class GlobalSearchTermFilterFactory extends SearchTermFilterFactory {
   // teacher: controller.educontent.area.js
   private globalSearchTermFilters = [
     'years',
-    'grades',
+    // 'grades',
     'eduNets',
     'schoolTypes',
     'learningArea'
@@ -32,27 +32,22 @@ export class GlobalSearchTermFilterFactory extends SearchTermFilterFactory {
 
     const selectedLearningAreas = searchState.filterCriteriaSelections.get(
       'learningArea'
-    );
+    ) as number[];
 
     if (selectedLearningAreas.length) {
-      const methodsByLearningAreaFilters = selectedLearningAreas.map(
-        (learningAreaId: number) =>
-          this.buildFilter('methodsByLearningArea', searchState, learningAreaId)
+      const methodsByLearningAreaFilters = this.buildFilter(
+        'methodsByLearningArea',
+        searchState,
+        selectedLearningAreas
       );
-      const learningDomainsByLearningArea = selectedLearningAreas.map(
-        (learningAreaId: number) =>
-          this.buildFilter(
-            'learningDomainsByLearningArea',
-            searchState,
-            learningAreaId
-          )
-      );
+      filters.push(methodsByLearningAreaFilters);
 
-      filters = [
-        ...filters,
-        ...methodsByLearningAreaFilters,
-        ...learningDomainsByLearningArea
-      ];
+      const learningDomainsByLearningArea = this.buildFilter(
+        'learningDomainsByLearningArea',
+        searchState,
+        selectedLearningAreas
+      );
+      filters.push(learningDomainsByLearningArea);
     }
 
     filters.push(this.getNestedEduContentProductTypes(searchState));
