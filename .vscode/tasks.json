@@ -26,6 +26,7 @@
       "description": "Project choises to run wallaby with",
       "type": "pickString",
       "options": [
+        "polpo-classroom-web",
         "dal",
         "browser",
         "guards",
@@ -50,7 +51,7 @@
         "pages-settings-dashboard",
         "pages-settings-profile"
       ],
-      "default": "dal"
+      "default": "polpo-classroom-web"
     },
     {
       "id": "wallabyFileName",
