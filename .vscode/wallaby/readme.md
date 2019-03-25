@@ -24,7 +24,7 @@
 
 ![image](https://user-images.githubusercontent.com/5224266/54906788-4e9e0680-4ee4-11e9-9ec7-f91dd5ff9cd2.png)
 
-2. Choose `wallaby-singel-file-setup`
+2. Choose `wallaby-single-file-setup`
 
 ![image](https://user-images.githubusercontent.com/5224266/54918137-c593c900-4efd-11e9-83d8-ee5871dd4264.png)
 
