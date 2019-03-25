@@ -32,7 +32,8 @@
         "pages-messages",
         "pages-reports",
         "pages-shared",
-        "pages-tasks"
+        "pages-tasks",
+        "pages-settings-alerts"
       ],
       "default": "all"
     }
