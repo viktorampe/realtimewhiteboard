@@ -11,7 +11,6 @@ export const GLOBAL_SEARCH_TERM_FILTER_FACTORY_TOKEN = new InjectionToken(
 
 @Injectable()
 export class GlobalSearchTermFilterFactory extends SearchTermFilterFactory {
-  // teacher: controller.educontent.area.js
   private globalSearchTermFilters = [
     'years',
     'eduNets',

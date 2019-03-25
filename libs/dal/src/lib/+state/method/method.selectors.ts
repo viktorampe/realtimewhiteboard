@@ -79,7 +79,7 @@ export const getByLearningAreaId = createSelector(
 );
 
 /**
- * returns array of objects filtered by learning area id as key
+ * returns array of objects filtered by learning area ids as key
  */
 export const getByLearningAreaIds = createSelector(
   selectMethodState,
