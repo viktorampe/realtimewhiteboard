@@ -68,13 +68,9 @@ describe('EduContentSearchModesComponent', () => {
   });
 
   it('should request autoComplete values from the viewmodel on searchTerm change', fakeAsync(() => {
-    jest.spyOn(component as any, 'getAutoCompleteValues');
     jest.spyOn(eduContentsViewModel, 'requestAutoComplete');
     component.searchTermChanged('foo');
     tick(500);
-
-    expect(component['getAutoCompleteValues']).toHaveBeenCalledTimes(1);
-    expect(component['getAutoCompleteValues']).toHaveBeenCalledWith('foo');
 
     expect(eduContentsViewModel.requestAutoComplete).toHaveBeenCalledTimes(1);
     expect(eduContentsViewModel.requestAutoComplete).toHaveBeenCalledWith(
