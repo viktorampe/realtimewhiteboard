@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule, MatIconRegistry } from '@angular/material';
+import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { LearningAreaFixture } from '@campus/dal';
 import { MockMatIconRegistry } from '@campus/testing';
@@ -9,7 +10,6 @@ import { FavoriteAreasComponent } from './favorite-areas.component';
 describe('FavoriteAreasComponent', () => {
   let component: FavoriteAreasComponent;
   let fixture: ComponentFixture<FavoriteAreasComponent>;
-  let x;
 
   const mockLearningAreas = [
     new LearningAreaFixture({
@@ -47,8 +47,36 @@ describe('FavoriteAreasComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  /*
-  it should show the learning areas (with the right router link?)
-  it should emit an event when delete favorites is clicked
-  */
+  it('should have a drop area', () => {
+    const dropArea = fixture.debugElement.queryAll(By.css('campus-drop-area'));
+
+    expect(dropArea).toBeTruthy();
+  });
+
+  it('should show the favorite learning areas correctly', () => {
+    const tiles = fixture.debugElement.queryAll(By.css('campus-tile'));
+
+    for (let i = 0; i < mockLearningAreas.length; i++) {
+      const area = mockLearningAreas[i];
+      const tile = tiles[i];
+
+      expect(tile.componentInstance.label).toBe(area.name);
+      expect(tile.componentInstance.icon).toBe('learning-area:' + area.icon);
+      expect(tile.componentInstance.color).toBe(area.color);
+    }
+  });
+
+  it('should emit learning area when delete favorite is clicked', () => {
+    const deleteSpy = spyOn(
+      fixture.componentInstance.removeAreaFromFavorites,
+      'emit'
+    );
+    const deleteLink = fixture.debugElement.query(
+      By.css('campus-tile .ui-tile__actions__action')
+    );
+    deleteLink.nativeElement.click();
+
+    expect(deleteSpy).toHaveBeenCalled();
+    expect(deleteSpy).toHaveBeenCalledWith(mockLearningAreas[0]);
+  });
 });
