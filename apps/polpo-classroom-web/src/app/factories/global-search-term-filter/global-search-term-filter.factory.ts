@@ -13,14 +13,11 @@ export const GLOBAL_SEARCH_TERM_FILTER_FACTORY_TOKEN = new InjectionToken(
 export class GlobalSearchTermFilterFactory extends SearchTermFilterFactory {
   // teacher: controller.educontent.area.js
   private globalSearchTermFilters = [
-    // 'methodsByLearningArea',
     'years',
     'grades',
     'eduNets',
     'schoolTypes',
-    // 'eduContentProductType',
     'learningArea'
-    // 'learningDomainsByLearningArea'
   ];
   constructor(public store: Store<DalState>) {
     super(store);
@@ -50,6 +47,7 @@ export class GlobalSearchTermFilterFactory extends SearchTermFilterFactory {
             learningAreaId
           )
       );
+
       filters = [
         ...filters,
         ...methodsByLearningAreaFilters,
