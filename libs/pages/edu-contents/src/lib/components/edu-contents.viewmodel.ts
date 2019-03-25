@@ -11,6 +11,7 @@ import {
 import { SearchModeInterface, SearchStateInterface } from '@campus/search';
 import {
   EduContentSearchResultInterface,
+  EnvironmentSearchModesInterface,
   ENVIRONMENT_SEARCHMODES_TOKEN
 } from '@campus/shared';
 import { select, Store } from '@ngrx/store';
@@ -33,7 +34,7 @@ export class EduContentsViewModel {
     @Inject(EDU_CONTENT_SERVICE_TOKEN)
     private eduContentService: EduContentServiceInterface,
     @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
-    public searchModes: { [key: string]: SearchModeInterface }
+    public searchModes: EnvironmentSearchModesInterface
   ) {}
 
   public getLearningAreaById(
