@@ -1,7 +1,7 @@
+// tslint:disable:nx-enforce-module-boundaries
 import {
   AfterViewInit,
   Component,
-  Inject,
   Injectable,
   QueryList,
   Type,
@@ -9,11 +9,20 @@ import {
   ViewChildren
 } from '@angular/core';
 import {
+  DalState,
   EduContentFixture,
   EduContentMetadataFixture,
-  EduContentProductTypeFixture
+  EduContentProductTypeActions,
+  EduContentProductTypeFixture,
+  EduNetActions,
+  LearningDomainActions,
+  MethodActions,
+  SchoolTypeActions,
+  YearActions
 } from '@campus/dal';
 import {
+  MockSearchViewModel,
+  SearchComponent,
   SearchFilterCriteriaInterface,
   SearchFilterFactory,
   SearchFilterInterface,
@@ -26,16 +35,11 @@ import {
 } from '@campus/search';
 import { TileSecondaryActionInterface } from '@campus/ui';
 import { EduContentMetadataApi } from '@diekeure/polpo-api-angular-sdk';
-// tslint:disable-next-line:nx-enforce-module-boundaries
+import { Store } from '@ngrx/store';
 import { EduContentSearchResultComponent } from 'apps/polpo-classroom-web/src/app/components/searchresults/edu-content-search-result.component';
-// tslint:disable-next-line:nx-enforce-module-boundaries
-import { STANDARD_SEARCH_SERVICE_TOKEN } from 'apps/polpo-classroom-web/src/app/services/standard-search.service';
-// tslint:disable-next-line:nx-enforce-module-boundaries
-import { MockSearchViewModel } from 'libs/search/src/lib/components/search.viewmodel.mock';
+import { SearchTermFilterFactory } from 'apps/polpo-classroom-web/src/app/factories/search-term-filter/search-term-filter.factory';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-// tslint:disable-next-line:nx-enforce-module-boundaries
-import { SearchComponent } from './../../../../search/src/lib/components/search/search.component';
 
 @Component({
   selector: 'campus-finding-nemo',
@@ -63,17 +67,26 @@ export class FindingNemoComponent implements AfterViewInit {
 
   constructor(
     private eduContentMetadataApi: EduContentMetadataApi,
-    @Inject(STANDARD_SEARCH_SERVICE_TOKEN)
-    private standardSearchFactory: SearchFilterFactory
+    private store: Store<DalState>
   ) {
-    this.setMockData();
-    this.searchFilters$ = this.standardSearchFactory.getFilters(
-      {} as SearchStateInterface
+    this.store.dispatch(
+      new EduContentProductTypeActions.LoadEduContentProductTypes()
     );
+
+    this.store.dispatch(new YearActions.LoadYears());
+    this.store.dispatch(new EduNetActions.LoadEduNets());
+    this.store.dispatch(new SchoolTypeActions.LoadSchoolTypes());
+    this.store.dispatch(new MethodActions.LoadMethods());
+    this.store.dispatch(new LearningDomainActions.LoadLearningDomains());
+
+    this.setMockData();
   }
 
   ngAfterViewInit(): void {
     this.searchComponent.searchPortals = this.portalHosts;
+    setTimeout(() => {
+      this.searchComponent.reset(this.searchState.value);
+    }, 3000);
   }
 
   tileClick() {
@@ -93,7 +106,6 @@ export class FindingNemoComponent implements AfterViewInit {
     this.searchMode = this.getMockSearchMode();
     this.searchState.next(this.getMockSearchState());
     this.resultsPage$.next(this.getMockResults());
-    this.filterCriteria$.next(this.getMockSearchFilters());
     this.autoComplete = this.getMockAutoCompleteValues();
   }
 
@@ -181,10 +193,10 @@ export class FindingNemoComponent implements AfterViewInit {
       label: 'demo',
       dynamicFilters: false,
       // tslint:disable-next-line: no-use-before-declare
-      searchFilterFactory: MockFactory,
+      searchFilterFactory: SearchTermFilterFactory,
       searchTerm: {
         // autocompleteEl: string; //reference to material autocomplete component
-        domHost: 'hostSearchTerm'
+        domHost: 'hostLeft'
       },
       results: {
         component: EduContentSearchResultComponent,
@@ -213,7 +225,7 @@ export class FindingNemoComponent implements AfterViewInit {
   private getMockSearchState(): SearchStateInterface {
     return {
       searchTerm: 'nemo',
-      filterCriteriaSelections: new Map(),
+      filterCriteriaSelections: new Map([['learningArea', [2]]]),
       from: 0
     };
   }

@@ -1,29 +1,20 @@
-import { Injectable, InjectionToken } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
 import {
   CheckboxLineFilterComponent,
-  CheckboxListFilterComponent,
-  SearchFilterCriteriaValuesFixture,
+  CheckboxListFilterComponent
+} from '../components';
+import {
   SearchFilterFactory,
   SearchFilterInterface,
   SearchStateInterface
-} from '@campus/search';
-import { Observable, of } from 'rxjs';
-
-export const STANDARD_SEARCH_SERVICE_TOKEN = new InjectionToken(
-  'StandardSearchService'
-);
+} from '../interfaces';
+import { SearchFilterCriteriaValuesFixture } from './search-filter-criteria.fixture';
 
 @Injectable()
-export class StandardSearchService implements SearchFilterFactory {
-  // teacher: controller.educontent.area.js
-  // reference for options
-  // 0 Leerdomein
-  // 1 Methode
-  // 2 Jaar
-  // 3 Graad
-  // 4 Onderwijsnet
-  // 5 Onderwijsvorm
-  // 6 Type
+export class FilterFactoryFixture implements SearchFilterFactory {
+  // polpo reference: teacher: controller.educontent.area.js
+
   private componentCriteriaMap = {
     methods: CheckboxListFilterComponent,
     years: CheckboxLineFilterComponent,
