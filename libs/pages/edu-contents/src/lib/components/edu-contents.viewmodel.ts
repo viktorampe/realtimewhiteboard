@@ -1,5 +1,10 @@
-import { Injectable } from '@angular/core';
-import { FavoriteInterface, LearningAreaInterface } from '@campus/dal';
+import { Inject, Injectable } from '@angular/core';
+import {
+  EduContentServiceInterface,
+  EDU_CONTENT_SERVICE_TOKEN,
+  FavoriteInterface,
+  LearningAreaInterface
+} from '@campus/dal';
 import { SearchModeInterface, SearchStateInterface } from '@campus/search';
 import { EduContentSearchResultInterface } from '@campus/shared';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -15,6 +20,11 @@ export class EduContentsViewModel {
   private searchState$: BehaviorSubject<SearchStateInterface>;
   private eduContentFavorites$: Observable<FavoriteInterface[]>;
 
+  constructor(
+    @Inject(EDU_CONTENT_SERVICE_TOKEN)
+    private eduContentService: EduContentServiceInterface
+  ) {}
+
   /*
    * let the page component pass through the updated state from the search component
    */
@@ -24,7 +34,8 @@ export class EduContentsViewModel {
    * make auto-complete request to api service and return observable
    */
   public requestAutoComplete(searchTerm: string): Observable<string[]> {
-    return;
+    this.searchState$.value.searchTerm = searchTerm;
+    return this.eduContentService.autoComplete(this.searchState$.value);
   }
 
   /*
