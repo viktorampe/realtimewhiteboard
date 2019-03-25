@@ -26,8 +26,8 @@
       "description": "Project choises to run wallaby with",
       "type": "pickString",
       "options": [
-        "browser",
         "dal",
+        "browser",
         "guards",
         "scorm",
         "search",
@@ -50,7 +50,7 @@
         "pages-settings-dashboard",
         "pages-settings-profile"
       ],
-      "default": "all"
+      "default": "dal"
     },
     {
       "id": "wallabyFileName",
