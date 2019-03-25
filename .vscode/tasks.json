@@ -5,10 +5,7 @@
       "label": "wallaby-setup",
       "type": "shell",
       "command": "node",
-      "args": [
-        ".vscode/wallaby/wallaby-setup",
-        "${input:wallabyProject}"
-      ],
+      "args": [".vscode/wallaby/wallaby-setup", "${input:wallabyProject}"],
       "problemMatcher": []
     }
   ],
@@ -17,7 +14,17 @@
       "id": "wallabyProject",
       "description": "Project choises to run wallaby with",
       "type": "pickString",
-      "options": ["all", "ui"],
+      "options": [
+        "all",
+        "browser",
+        "dal",
+        "guards",
+        "scorm",
+        "search",
+        "shared",
+        "testing",
+        "ui"
+      ],
       "default": "all"
     }
   ]
