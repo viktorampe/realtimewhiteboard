@@ -29,7 +29,8 @@
         "pages-edu-contents",
         "pages-error",
         "pages-logout",
-        "pages-messages"
+        "pages-messages",
+        "pages-reports"
       ],
       "default": "all"
     }
