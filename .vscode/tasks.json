@@ -35,7 +35,8 @@
         "pages-tasks",
         "pages-settings-alerts",
         "pages-settings-coupled-teachers",
-        "pages-settings-credentials"
+        "pages-settings-credentials",
+        "pages-settings-dashboard"
       ],
       "default": "all"
     }
