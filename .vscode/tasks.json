@@ -26,7 +26,8 @@
         "ui",
         "pages-books",
         "pages-bundles",
-        "pages-edu-contents"
+        "pages-edu-contents",
+        "pages-error"
       ],
       "default": "all"
     }
