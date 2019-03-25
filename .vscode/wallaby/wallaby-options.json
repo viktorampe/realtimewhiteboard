@@ -298,5 +298,15 @@
       "!libs/browser/**/*.spec.ts"
     ],
     "tests": ["libs/pages/reports/**/*.spec.ts"]
+  },
+  "pages-shared": {
+    "files": [
+      "tsconfig.json",
+      "wallaby-test-setup.ts",
+      "jest.config.js",
+      "libs/pages/shared/**/*.+(ts|html|json|snap|css|less|sass|scss|jpg|jpeg|gif|png|svg)",
+      "!libs/pages/shared/**/*.spec.ts"
+    ],
+    "tests": ["libs/pages/shared/**/*.spec.ts"]
   }
 }
