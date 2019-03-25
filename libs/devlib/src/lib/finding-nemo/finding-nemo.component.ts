@@ -2,7 +2,6 @@
 import {
   AfterViewInit,
   Component,
-  Inject,
   QueryList,
   Type,
   ViewChild,
@@ -21,6 +20,7 @@ import {
   YearQueries
 } from '@campus/dal';
 import {
+  SearchComponent,
   SearchFilterCriteriaInterface,
   SearchFilterFactory,
   SearchFilterInterface,
@@ -36,10 +36,8 @@ import { EduContentMetadataApi } from '@diekeure/polpo-api-angular-sdk';
 import { Store } from '@ngrx/store';
 import { EduContentSearchResultComponent } from 'apps/polpo-classroom-web/src/app/components/searchresults/edu-content-search-result.component';
 import { TocFilterFactory } from 'apps/polpo-classroom-web/src/app/factories/toc-filter/toc-filter.factory';
-import { STANDARD_SEARCH_SERVICE_TOKEN } from 'apps/polpo-classroom-web/src/app/services/standard-search.service';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
-import { SearchComponent } from './../../../../search/src/lib/components/search/search.component';
 
 @Component({
   selector: 'campus-finding-nemo',
@@ -67,8 +65,6 @@ export class FindingNemoComponent implements AfterViewInit {
 
   constructor(
     private eduContentMetadataApi: EduContentMetadataApi,
-    @Inject(STANDARD_SEARCH_SERVICE_TOKEN)
-    private standardSearchFactory: SearchFilterFactory,
     private store: Store<DalState>
   ) {
     this.setMockData(TocFilterFactory);
@@ -93,6 +89,9 @@ export class FindingNemoComponent implements AfterViewInit {
       });
 
     this.searchComponent.searchPortals = this.portalHosts;
+    setTimeout(() => {
+      this.searchComponent.reset(this.searchState.value);
+    }, 3000);
   }
 
   tileClick() {
@@ -232,7 +231,7 @@ export class FindingNemoComponent implements AfterViewInit {
   private getMockSearchState(): SearchStateInterface {
     return {
       searchTerm: 'nemo',
-      filterCriteriaSelections: new Map(),
+      filterCriteriaSelections: new Map([['learningArea', [2]]]),
       from: 0
     };
   }

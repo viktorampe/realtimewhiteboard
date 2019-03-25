@@ -6,5 +6,6 @@ export interface EduContentProductTypeInterface {
   pedagogic?: boolean;
   excludeFromFilter?: boolean;
   id?: number;
+  parent?: number;
   eduContentMetadata?: EduContentMetadataInterface[];
 }

@@ -29,11 +29,11 @@ import {
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EduContentSearchResultComponent } from './components/searchresults/edu-content-search-result.component';
-import { FavIconService, FAVICON_SERVICE_TOKEN } from './services/favicons';
 import {
-  StandardSearchService,
-  STANDARD_SEARCH_SERVICE_TOKEN
-} from './services/standard-search.service';
+  SearchTermFilterFactory,
+  SEARCH_TERM_FILTER_FACTORY_TOKEN
+} from './factories/search-term-filter/search-term-filter.factory';
+import { FavIconService, FAVICON_SERVICE_TOKEN } from './services/favicons';
 
 // if you want to update the buffer (which defaults to 100)
 configureBufferSize(150);
@@ -85,7 +85,10 @@ configureBufferSize(150);
       provide: FAVICON_SERVICE_TOKEN,
       useClass: FavIconService
     },
-    { provide: STANDARD_SEARCH_SERVICE_TOKEN, useClass: StandardSearchService }
+    {
+      provide: SEARCH_TERM_FILTER_FACTORY_TOKEN,
+      useClass: SearchTermFilterFactory
+    }
   ],
   bootstrap: [AppComponent],
   exports: [RouterModule],
