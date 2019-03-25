@@ -49,3 +49,13 @@
 2. Choose `wallaby-vscode.js`
 
 ![image](https://user-images.githubusercontent.com/5224266/54906686-1991b400-4ee4-11e9-9420-634e7cf225ca.png)
+
+## Adding new projects
+
+1. Add the project to the task option list
+
+![image](https://user-images.githubusercontent.com/5224266/54932252-c555f680-4f1a-11e9-81d5-fcf92d7d7035.png)
+
+2. If the project is an app and not a lib, add it to the apps array in `wallaby-setup.js`
+
+![image](https://user-images.githubusercontent.com/5224266/54932241-c25b0600-4f1a-11e9-8dd3-ea4cd63e905a.png)
