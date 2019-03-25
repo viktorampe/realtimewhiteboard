@@ -30,3 +30,7 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# vscode wallaby autorun setup file
+
+.vscode/wallaby/wallaby-used.json
