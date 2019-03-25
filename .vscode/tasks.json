@@ -23,7 +23,8 @@
         "search",
         "shared",
         "testing",
-        "ui"
+        "ui",
+        "pages-books"
       ],
       "default": "all"
     }
