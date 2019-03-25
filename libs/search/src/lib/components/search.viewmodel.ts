@@ -312,11 +312,12 @@ export class SearchViewModel {
           acc: Map<string, (number | string)[]>,
           value: SearchFilterCriteriaValuesInterface
         ) => {
+          if (!acc.has(criteria.name)) {
+            acc.set(criteria.name, []);
+          }
+
           // extract selected IDs
           if (value.selected) {
-            if (!acc.has(criteria.name)) {
-              acc.set(criteria.name, []);
-            }
             acc.get(criteria.name).push(value.data[criteria.keyProperty]);
           }
           // check for selection in child

@@ -6,7 +6,7 @@
     mat-list-item
     class="checkbox-filter__title"
     [class.checkbox-filter__item--hidden]="
-      i >= maxVisibleItems && !showMoreItems
+      maxVisibleItems && i >= maxVisibleItems && !showMoreItems
     "
     [value]="option"
     [checked]="option.selected"
@@ -21,7 +21,7 @@
   <campus-checkbox-filter
     class="checkbox-filter__items"
     [class.checkbox-filter__item--hidden]="
-      i >= maxVisibleItems && !showMoreItems
+      maxVisibleItems && i >= maxVisibleItems && !showMoreItems
     "
     *ngIf="option.child"
     [criterium]="option.child"
