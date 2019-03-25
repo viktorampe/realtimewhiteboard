@@ -27,8 +27,7 @@ import { PagesEduContentsRoutingModule } from './pages-edu-contents-routing.modu
   exports: [
     EduContentSearchByTermComponent,
     EduContentSearchModesComponent,
-    EduContentSearchByColumnComponent,
-    FavoriteAreasComponent
+    EduContentSearchByColumnComponent
   ],
   providers: [EduContentsViewModel]
 })
