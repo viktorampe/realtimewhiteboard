@@ -31,7 +31,8 @@
         "pages-logout",
         "pages-messages",
         "pages-reports",
-        "pages-shared"
+        "pages-shared",
+        "pages-tasks"
       ],
       "default": "all"
     }
