@@ -77,34 +77,18 @@ export class EduContentsViewModel {
    */
   private setupSearchResults(): void {}
 
-  /*
-   * set the streams for favorites, learningAreas via store selectors
-   */
-  private setupStreams(): void {}
-
   private getFavoriteLearningAreas(): Observable<LearningAreaInterface[]> {
     return this.store.pipe(
       select(FavoriteQueries.getByType, { type: 'area' }),
       map(
-        (favorites): { [key: number]: FavoriteInterface } => {
-          const learningAreaIds: { [key: number]: FavoriteInterface } = {};
-          favorites.forEach(favorite => {
-            learningAreaIds[favorite.learningAreaId] = favorite;
-          });
-          return learningAreaIds;
-        }
+        (favorites): number[] =>
+          favorites.map(favorite => favorite.learningAreaId)
       ),
       switchMap(
-        (learningAreaIds): Observable<LearningAreaInterface[]> => {
-          return this.learningAreas$.pipe(
-            map(
-              (learningAreas): LearningAreaInterface[] =>
-                learningAreas.filter(
-                  learningArea => !!learningAreaIds[learningArea.id]
-                )
-            )
-          );
-        }
+        (learningAreaIds): Observable<LearningAreaInterface[]> =>
+          this.store.pipe(
+            select(LearningAreaQueries.getByIds, { ids: learningAreaIds })
+          )
       )
     );
   }
