@@ -1,4 +1,3 @@
-const options = require('./wallaby-options');
 const fs = require('fs');
 const exec = require('child_process').exec;
 
@@ -12,7 +11,6 @@ exec(
       console.log('\x1b[31m%s\x1b[0m', err.message);
       return;
     }
-    console.log(stdout);
     const dependencies = getDependencies(selectedOption);
     console.log(`The following test dependencies were found: ${dependencies}`);
     updateUsedOptionsWithDependencies(dependencies);
@@ -45,10 +43,20 @@ function retrieveOptionsBase() {
 
 function getDependencies(project) {
   const graph = require('./graph');
+  if (!graph.deps[project])
+    console.log(
+      '\x1b[31m%s\x1b[0m',
+      `Given project - ${project} - not found in dependency graph`
+    );
   const levelOneDependencies = graph.deps[project].map(dep => dep.projectName);
   const finalDependencies = [project];
   levelOneDependencies.forEach(levelOneDependency => {
     finalDependencies.push(levelOneDependency);
+    if (!graph.deps[levelOneDependency])
+      console.log(
+        '\x1b[31m%s\x1b[0m',
+        `Given sub dependency - ${levelOneDependency} - not found in dependency graph`
+      );
     graph.deps[levelOneDependency].forEach(levelTwoDependency =>
       finalDependencies.push(levelTwoDependency.projectName)
     );
@@ -59,9 +67,10 @@ function getDependencies(project) {
 }
 
 function updateUsedOptionsWithDependencies(dependencies) {
+  const apps = ['polpo-classroom-web'];
   dependencies.forEach(dependency => {
     const startOfUrl = `${
-      dependency.includes('app') ? 'apps' : 'libs'
+      apps.indexOf(dependency) > -1 ? 'apps' : 'libs'
     }/${dependency
       .replace('pages-settings-', 'pages/settings/')
       .replace('pages-', 'pages/')}`;
