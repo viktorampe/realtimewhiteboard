@@ -117,6 +117,16 @@
     ],
     "tests": ["libs/shared/**/*.spec.ts"]
   },
+  "testing": {
+    "files": [
+      "tsconfig.json",
+      "wallaby-test-setup.ts",
+      "jest.config.js",
+      "libs/testing/**/*.+(ts|html|json|snap|css|less|sass|scss|jpg|jpeg|gif|png|svg)",
+      "!libs/testing/**/*.spec.ts"
+    ],
+    "tests": ["libs/testing/**/*.spec.ts"]
+  },
   "ui": {
     "files": [
       "tsconfig.json",
