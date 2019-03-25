@@ -32,7 +32,7 @@ export class GlobalSearchTermFilterFactory extends SearchTermFilterFactory {
       'learningArea'
     ) as number[];
 
-    if (selectedLearningAreas.length) {
+    if (selectedLearningAreas && selectedLearningAreas.length) {
       const methodsByLearningAreaFilters = this.buildFilter(
         'methodsByLearningArea',
         searchState,
