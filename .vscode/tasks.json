@@ -36,7 +36,8 @@
         "pages-settings-alerts",
         "pages-settings-coupled-teachers",
         "pages-settings-credentials",
-        "pages-settings-dashboard"
+        "pages-settings-dashboard",
+        "pages-settings-profile"
       ],
       "default": "all"
     }
