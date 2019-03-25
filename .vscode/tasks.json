@@ -7,6 +7,17 @@
       "command": "node",
       "args": [".vscode/wallaby/wallaby-setup", "${input:wallabyProject}"],
       "problemMatcher": []
+    },
+    {
+      "label": "wallaby-single-file-setup",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        ".vscode/wallaby/wallaby-setup",
+        "${input:wallabyProject}",
+        "${input:wallabyFileName}"
+      ],
+      "problemMatcher": []
     }
   ],
   "inputs": [
@@ -40,6 +51,11 @@
         "pages-settings-profile"
       ],
       "default": "all"
+    },
+    {
+      "id": "wallabyFileName",
+      "description": "Name of the *.spec.ts file without the '.spec.ts'",
+      "type": "promptString"
     }
   ]
 }
