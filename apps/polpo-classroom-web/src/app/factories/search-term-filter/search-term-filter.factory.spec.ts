@@ -68,8 +68,8 @@ describe('SearchTermFilterFactory', () => {
   ];
 
   const mockEduContentProductTypes = [
-    new EduContentProductTypeFixture({ id: 12 }),
-    new EduContentProductTypeFixture({ id: 13 }),
+    new EduContentProductTypeFixture({ id: 12, parent: 0 }),
+    new EduContentProductTypeFixture({ id: 13, parent: 0 }),
     new EduContentProductTypeFixture({ id: 14, parent: 13 })
   ];
 
@@ -271,6 +271,7 @@ describe('SearchTermFilterFactory', () => {
         };
       })
       .filter(val => val.parent === 0);
+    console.log(extendedProductTypes);
 
     return getExpectedFilter(
       'eduContentProductType',

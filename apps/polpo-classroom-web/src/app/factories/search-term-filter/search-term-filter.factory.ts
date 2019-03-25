@@ -4,6 +4,7 @@ import {
   EduContentProductTypeInterface,
   EduContentProductTypeQueries,
   EduNetQueries,
+  LearningAreaQueries,
   LearningDomainQueries,
   MethodQueries,
   SchoolTypeQueries,
@@ -42,7 +43,7 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
     [key: string]: FilterQueryInterface;
   } = {
     learningArea: {
-      query: YearQueries.getAll,
+      query: LearningAreaQueries.getAll,
       name: 'learningArea',
       label: 'Leergebied',
       component: CheckboxListFilterComponent
@@ -74,6 +75,11 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
       label: 'Leergebied',
       name: 'learningDomains',
       learningAreaDependent: true
+    },
+    grades: {
+      query: LearningDomainQueries.getByLearningArea,
+      label: 'Graad',
+      name: 'grades'
     }
   };
 
@@ -85,7 +91,6 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
     learningAreaOverride: number = 0
   ): Observable<SearchFilterInterface> {
     const filterQuery = this.filterQueries[name];
-
     if (filterQuery.learningAreaDependent) {
       return this.store
         .select(
@@ -148,11 +153,11 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
   ) {
     if (cur.parent === 0) {
       return [
+        ...acc,
         {
           children: src.filter(child => child.parent === cur.id),
           ...cur
-        },
-        ...acc
+        }
       ];
     } else return acc;
   }
