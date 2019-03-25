@@ -34,3 +34,4 @@ Thumbs.db
 # vscode wallaby autorun setup file
 
 .vscode/wallaby/wallaby-used.json
+.vscode/wallaby/graph.json
