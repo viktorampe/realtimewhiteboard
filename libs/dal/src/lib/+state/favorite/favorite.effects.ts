@@ -2,7 +2,8 @@ import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { select } from '@ngrx/store';
 import { DataPersistence } from '@nrwl/nx';
-import { Observable } from 'rxjs';
+import { undo } from 'ngrx-undo';
+import { from, Observable } from 'rxjs';
 import { map, switchMap, take } from 'rxjs/operators';
 import { DalState } from '..';
 import {
@@ -71,7 +72,7 @@ export class FavoriteEffects {
   );
 
   @Effect()
-  deleteFavorite$ = this.dataPersistence.pessimisticUpdate(
+  deleteFavorite$ = this.dataPersistence.optimisticUpdate(
     FavoritesActionTypes.DeleteFavorite,
     {
       run: (action: DeleteFavorite, state: DalState) => {
@@ -93,7 +94,8 @@ export class FavoriteEffects {
             })
           );
       },
-      onError: (action: DeleteFavorite, error) => {
+      undoAction: (action: DeleteFavorite, error) => {
+        const undoAction = undo(action);
         const effectFeedback = new EffectFeedback({
           id: this.uuid(),
           triggerAction: action,
@@ -104,7 +106,10 @@ export class FavoriteEffects {
           display: true,
           priority: Priority.HIGH
         });
-        return new EffectFeedbackActions.AddEffectFeedback({ effectFeedback });
+        const effectFeedbackAction = new EffectFeedbackActions.AddEffectFeedback(
+          { effectFeedback }
+        );
+        return from([undoAction, effectFeedbackAction]);
       }
     }
   );
@@ -121,9 +126,9 @@ export class FavoriteEffects {
             type: action.payload.favorite.type,
             id:
               action.payload.favorite.eduContentId ||
-              action.payload.favorite.learningAreaId ||
               action.payload.favorite.bundleId ||
-              action.payload.favorite.taskId
+              action.payload.favorite.taskId ||
+              action.payload.favorite.learningAreaId
           }),
           take(1),
           map(favorite => {
