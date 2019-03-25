@@ -26,7 +26,6 @@
       "description": "Project choises to run wallaby with",
       "type": "pickString",
       "options": [
-        "all",
         "browser",
         "dal",
         "guards",
@@ -35,6 +34,7 @@
         "shared",
         "testing",
         "ui",
+        "utils",
         "pages-books",
         "pages-bundles",
         "pages-edu-contents",
