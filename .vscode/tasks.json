@@ -24,7 +24,8 @@
         "shared",
         "testing",
         "ui",
-        "pages-books"
+        "pages-books",
+        "pages-bundles"
       ],
       "default": "all"
     }
