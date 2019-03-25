@@ -17,7 +17,14 @@ import {
 } from '@campus/dal';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
-import { map, skipWhile, switchMap, switchMapTo, tap } from 'rxjs/operators';
+import {
+  map,
+  skipWhile,
+  switchMap,
+  switchMapTo,
+  tap,
+  withLatestFrom
+} from 'rxjs/operators';
 
 export enum RolesEnum {
   Teacher = 'teacher',
@@ -106,10 +113,13 @@ export class CoupledTeacherGuard implements CanActivate {
       })
     );
     this.hasTeachers$ = this.linkedPersonsIds$.pipe(
+      withLatestFrom(this.currentUser$),
       //this will need to be changed once the role setup will be changed
-      switchMap(linkedPersonIds =>
+      switchMap(([linkedPersonIds, currentUser]) =>
         this.store.pipe(
-          select(LinkedPersonQueries.getByIds, { ids: linkedPersonIds })
+          select(LinkedPersonQueries.getByIds, {
+            ids: linkedPersonIds.filter(id => id !== currentUser.id) // exclude own id
+          })
         )
       ),
       map(linkedPersons =>
