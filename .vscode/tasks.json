@@ -25,7 +25,8 @@
         "testing",
         "ui",
         "pages-books",
-        "pages-bundles"
+        "pages-bundles",
+        "pages-edu-contents"
       ],
       "default": "all"
     }
