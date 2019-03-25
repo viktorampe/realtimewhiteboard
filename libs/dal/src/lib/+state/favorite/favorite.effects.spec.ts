@@ -5,6 +5,7 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
+import { undo } from 'ngrx-undo';
 import { Observable, of } from 'rxjs';
 import { FavoriteReducer } from '.';
 import { EffectFeedbackFixture } from '../../+fixtures';
@@ -210,7 +211,6 @@ describe('FavoriteEffects', () => {
     });
   });
 
-  // activate and update tests when logic is implemented
   describe('toggleFavorite$', () => {
     const favorite = {
       id: 123,
@@ -372,12 +372,14 @@ describe('FavoriteEffects', () => {
         });
 
         const effectFeedbackAction = new AddEffectFeedback({ effectFeedback });
+        const undoAction = undo(deleteFavoriteAction);
 
         actions = hot('a', { a: deleteFavoriteAction });
 
         expect(effects.deleteFavorite$).toBeObservable(
-          hot('(a)', {
-            a: effectFeedbackAction
+          hot('(ab)', {
+            a: undoAction,
+            b: effectFeedbackAction
           })
         );
       });
