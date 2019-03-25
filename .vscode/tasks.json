@@ -27,6 +27,7 @@
       "type": "pickString",
       "options": [
         "all",
+        "nope",
         "browser",
         "dal",
         "guards",
