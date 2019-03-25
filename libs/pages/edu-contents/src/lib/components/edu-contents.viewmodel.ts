@@ -1,8 +1,22 @@
 import { Injectable } from '@angular/core';
-import { FavoriteInterface, LearningAreaInterface } from '@campus/dal';
+import {
+  DalState,
+  FavoriteInterface,
+  getRouterState,
+  LearningAreaInterface
+} from '@campus/dal';
 import { SearchModeInterface, SearchStateInterface } from '@campus/search';
 import { EduContentSearchResultInterface } from '@campus/shared';
+import { select, Store } from '@ngrx/store';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { map, withLatestFrom } from 'rxjs/operators';
+
+// values correspond with router url string
+enum LocationEnum {
+  'LEARNINGAREA' = 'learningareas',
+  'TASK' = 'tasks',
+  'BUNDLE' = 'bundles'
+}
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +28,8 @@ export class EduContentsViewModel {
 
   private searchState$: BehaviorSubject<SearchStateInterface>;
   private eduContentFavorites$: Observable<FavoriteInterface[]>;
+
+  constructor(private store: Store<DalState>) {}
 
   /*
    * let the page component pass through the updated state from the search component
@@ -55,10 +71,31 @@ export class EduContentsViewModel {
    * - switch map that to an api request
    * - map that to an EduContentSearchResultInterface
    */
-  private setupSearchResults(): void {}
+  private setupSearchResults(): void {
+    this.searchState$.pipe(
+      withLatestFrom(this.getLocation()),
+      map(([searchState, location]) => {})
+    );
+  }
 
   /*
    * set the streams for favorites, learningAreas via store selectors
    */
   private setupStreams(): void {}
+
+  private getLocation(): Observable<LocationEnum> {
+    return this.store.pipe(
+      select(getRouterState),
+      map(routerState => {
+        const foundKey = Object.keys(LocationEnum).find(
+          key =>
+            !!routerState.state.routeParts.find(
+              part => part.url === LocationEnum[key]
+            )
+        );
+
+        return LocationEnum[foundKey];
+      })
+    );
+  }
 }
