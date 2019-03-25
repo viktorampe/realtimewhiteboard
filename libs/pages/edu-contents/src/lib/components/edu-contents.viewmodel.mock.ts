@@ -96,6 +96,10 @@ export class EduContentsViewModelMock
     EduContentSearchResultInterface[]
   >(this.searchResults);
 
+  public searchModes: { [key: string]: SearchModeInterface } = {
+    demo: this.searchMode
+  };
+
   /*
    * let the page component pass through the updated state from the search component
    */

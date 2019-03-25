@@ -1,8 +1,7 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LearningAreaInterface } from '@campus/dal';
 import { SearchModeInterface } from '@campus/search';
-import { ENVIRONMENT_SEARCHMODES_TOKEN } from '@campus/shared';
 import { Observable, Subject, Subscription } from 'rxjs';
 import {
   debounceTime,
@@ -20,6 +19,7 @@ import { EduContentsViewModel } from '../edu-contents.viewmodel';
 export class EduContentSearchModesComponent implements OnInit, OnDestroy {
   public autoCompleteValues: string[] = [];
   public learningArea$: Observable<LearningAreaInterface>;
+  public searchModes: { [key: string]: SearchModeInterface };
 
   private searchTerm = new Subject<string>();
   private subscriptions = new Subscription();
@@ -28,12 +28,11 @@ export class EduContentSearchModesComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private eduContentsViewModel: EduContentsViewModel,
-    @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
-    public searchModes: { [key: string]: SearchModeInterface }
+    private eduContentsViewModel: EduContentsViewModel
   ) {}
 
   public ngOnInit(): void {
+    this.searchModes = this.eduContentsViewModel.searchModes;
     this.learningArea$ = this.getLearningArea();
 
     this.subscriptions.add(

@@ -9,7 +9,10 @@ import {
   LearningAreaQueries
 } from '@campus/dal';
 import { SearchModeInterface, SearchStateInterface } from '@campus/search';
-import { EduContentSearchResultInterface } from '@campus/shared';
+import {
+  EduContentSearchResultInterface,
+  ENVIRONMENT_SEARCHMODES_TOKEN
+} from '@campus/shared';
 import { select, Store } from '@ngrx/store';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
@@ -28,7 +31,9 @@ export class EduContentsViewModel {
   constructor(
     private store: Store<DalState>,
     @Inject(EDU_CONTENT_SERVICE_TOKEN)
-    private eduContentService: EduContentServiceInterface
+    private eduContentService: EduContentServiceInterface,
+    @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
+    public searchModes: { [key: string]: SearchModeInterface }
   ) {}
 
   public getLearningAreaById(
