@@ -127,6 +127,20 @@
     ],
     "tests": ["libs/testing/**/*.spec.ts"]
   },
+  "ui": {
+    "files": [
+      "tsconfig.json",
+      "wallaby-test-setup.ts",
+      "jest.config.js",
+      "libs/ui/**/*.+(ts|html|json|snap|css|less|sass|scss|jpg|jpeg|gif|png|svg)",
+      "!libs/ui/**/*.spec.ts",
+      "libs/utils/**/*.+(ts|html|json|snap|css|less|sass|scss|jpg|jpeg|gif|png|svg)",
+      "!libs/utils/**/*.spec.ts",
+      "libs/testing/**/*.+(ts|html|json|snap|css|less|sass|scss|jpg|jpeg|gif|png|svg)",
+      "!libs/testing/**/*.spec.ts"
+    ],
+    "tests": ["libs/ui/**/*.spec.ts"]
+  },
   "pages-books": {
     "files": [
       "tsconfig.json",
@@ -249,18 +263,14 @@
     ],
     "tests": ["libs/pages/logout/**/*.spec.ts"]
   },
-  "ui": {
+  "pages-messages": {
     "files": [
       "tsconfig.json",
       "wallaby-test-setup.ts",
       "jest.config.js",
-      "libs/ui/**/*.+(ts|html|json|snap|css|less|sass|scss|jpg|jpeg|gif|png|svg)",
-      "!libs/ui/**/*.spec.ts",
-      "libs/utils/**/*.+(ts|html|json|snap|css|less|sass|scss|jpg|jpeg|gif|png|svg)",
-      "!libs/utils/**/*.spec.ts",
-      "libs/testing/**/*.+(ts|html|json|snap|css|less|sass|scss|jpg|jpeg|gif|png|svg)",
-      "!libs/testing/**/*.spec.ts"
+      "libs/pages/messages/**/*.+(ts|html|json|snap|css|less|sass|scss|jpg|jpeg|gif|png|svg)",
+      "!libs/pages/messages/**/*.spec.ts"
     ],
-    "tests": ["libs/ui/**/*.spec.ts"]
+    "tests": ["libs/pages/messages/**/*.spec.ts"]
   }
 }

@@ -28,7 +28,8 @@
         "pages-bundles",
         "pages-edu-contents",
         "pages-error",
-        "pages-logout"
+        "pages-logout",
+        "pages-messages"
       ],
       "default": "all"
     }
