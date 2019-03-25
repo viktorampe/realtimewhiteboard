@@ -1,14 +1,16 @@
 import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
+import { select } from '@ngrx/store';
 import { DataPersistence } from '@nrwl/nx';
 import { undo } from 'ngrx-undo';
 import { from, Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, take } from 'rxjs/operators';
 import { DalState } from '..';
 import {
   FavoriteServiceInterface,
   FAVORITE_SERVICE_TOKEN
 } from '../../favorite/favorite.service.interface';
+import { AuthServiceInterface, AUTH_SERVICE_TOKEN } from '../../persons';
 import {
   EffectFeedback,
   EffectFeedbackActions,
@@ -24,6 +26,7 @@ import {
   StartAddFavorite,
   ToggleFavorite
 } from './favorite.actions';
+import { getByTypeAndId } from './favorite.selectors';
 
 @Injectable()
 export class FavoriteEffects {
@@ -118,9 +121,30 @@ export class FavoriteEffects {
       (
         action: ToggleFavorite
       ): Observable<StartAddFavorite | DeleteFavorite> => {
-        // decide if we want to add or delete the provided item
-        // dispatch the corresponding action
-        return;
+        return this.dataPersistence.store.pipe(
+          select(getByTypeAndId, {
+            type: action.payload.favorite.type,
+            id:
+              action.payload.favorite.eduContentId ||
+              action.payload.favorite.bundleId ||
+              action.payload.favorite.taskId ||
+              action.payload.favorite.learningAreaId
+          }),
+          take(1),
+          map(favorite => {
+            if (favorite) {
+              return new DeleteFavorite({
+                id: favorite.id,
+                userId: this.authService.userId
+              });
+            } else {
+              return new StartAddFavorite({
+                favorite: action.payload.favorite,
+                userId: this.authService.userId
+              });
+            }
+          })
+        );
       }
     )
   );
@@ -130,6 +154,8 @@ export class FavoriteEffects {
     private actions: Actions,
     private dataPersistence: DataPersistence<DalState>,
     @Inject(FAVORITE_SERVICE_TOKEN)
-    private favoriteService: FavoriteServiceInterface
+    private favoriteService: FavoriteServiceInterface,
+    @Inject(AUTH_SERVICE_TOKEN)
+    private authService: AuthServiceInterface
   ) {}
 }
