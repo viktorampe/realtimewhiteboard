@@ -11,7 +11,7 @@ export class FavoriteAreasComponent {
   @Input() favoriteLearningAreas: LearningAreaInterface[];
   @Output() removeAreaFromFavorites = new EventEmitter<LearningAreaInterface>();
 
-  createSecondaryAction(
+  removeAreaFromFavoritesAction(
     learningArea: LearningAreaInterface
   ): TileSecondaryActionInterface {
     return {

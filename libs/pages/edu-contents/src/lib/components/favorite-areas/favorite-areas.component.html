@@ -9,7 +9,7 @@
     icon="learning-area:{{favoriteLearningArea.icon}}"
     [color]="favoriteLearningArea.color"
     [routerLink]="favoriteLearningArea.id"
-    [secondaryActions]="[createSecondaryAction(favoriteLearningArea)]"
+    [secondaryActions]="[removeAreaFromFavoritesAction(favoriteLearningArea)]"
   ></campus-tile>
 
   <campus-drop-area icon="add" label="Sleep je favoriet leergebied naar hier">

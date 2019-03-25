@@ -67,10 +67,7 @@ describe('FavoriteAreasComponent', () => {
   });
 
   it('should emit learning area when delete favorite is clicked', () => {
-    const deleteSpy = spyOn(
-      fixture.componentInstance.removeAreaFromFavorites,
-      'emit'
-    );
+    const deleteSpy = spyOn(component.removeAreaFromFavorites, 'emit');
     const deleteLink = fixture.debugElement.query(
       By.css('campus-tile .ui-tile__actions__action')
     );
