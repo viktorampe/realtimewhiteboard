@@ -8,7 +8,6 @@ import {
   EduNetFixture,
   EduNetReducer,
   getStoreModuleForFeatures,
-  GradeFixture,
   LearningAreaActions,
   LearningAreaFixture,
   LearningAreaReducer,
@@ -58,12 +57,6 @@ describe('GlobalSearchTermFilterFactory', () => {
 
   const mockYears = [new YearFixture({ id: 3 }), new YearFixture({ id: 4 })];
 
-  const mockGrades = [
-    new GradeFixture({ id: 1, name: 'fooGrade' }),
-    new GradeFixture({ id: 2, name: 'barGrade' }),
-    new GradeFixture({ id: 3, name: 'bazGrade' })
-  ];
-
   const mockSchoolTypes = [
     new SchoolTypeFixture({ id: 10, name: 'fooSchoolType' }),
     new SchoolTypeFixture({ id: 11, name: 'barSchoolType' })
@@ -110,7 +103,6 @@ describe('GlobalSearchTermFilterFactory', () => {
           LearningAreaReducer,
           MethodReducer,
           EduNetReducer,
-          // GradeReducer,  TODO: add to store?
           YearReducer,
           SchoolTypeReducer,
           LearningDomainReducer,

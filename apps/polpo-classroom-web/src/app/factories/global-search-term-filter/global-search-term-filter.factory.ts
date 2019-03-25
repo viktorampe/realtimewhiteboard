@@ -14,7 +14,6 @@ export class GlobalSearchTermFilterFactory extends SearchTermFilterFactory {
   // teacher: controller.educontent.area.js
   private globalSearchTermFilters = [
     'years',
-    // 'grades',
     'eduNets',
     'schoolTypes',
     'learningArea'
@@ -26,7 +25,7 @@ export class GlobalSearchTermFilterFactory extends SearchTermFilterFactory {
   getFilters(
     searchState: SearchStateInterface
   ): Observable<SearchFilterInterface[]> {
-    let filters = this.globalSearchTermFilters.map(filterName =>
+    const filters = this.globalSearchTermFilters.map(filterName =>
       this.buildFilter(filterName, searchState)
     );
 
