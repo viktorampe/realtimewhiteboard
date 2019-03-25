@@ -11,6 +11,16 @@
     ],
     "tests": ["apps/**/*.spec.ts"]
   },
+  "browser": {
+    "files": [
+      "tsconfig.json",
+      "wallaby-test-setup.ts",
+      "jest.config.js",
+      "libs/browser/**/*.+(ts|html|json|snap|css|less|sass|scss|jpg|jpeg|gif|png|svg)",
+      "!libs/browser/**/*.spec.ts"
+    ],
+    "tests": ["libs/browser/**/*.spec.ts"]
+  },
   "ui": {
     "files": [
       "tsconfig.json",
