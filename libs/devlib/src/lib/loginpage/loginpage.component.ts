@@ -11,6 +11,8 @@ import {
   EffectFeedbackInterface,
   EffectFeedbackQueries,
   FavoriteFixture,
+  TocServiceInterface,
+  TOC_SERVICE_TOKEN,
   UserActions
 } from '@campus/dal';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
@@ -21,10 +23,6 @@ import {
   FavoriteServiceInterface,
   FAVORITE_SERVICE_TOKEN
 } from './../../../../dal/src/lib/favorite/favorite.service.interface';
-import {
-  YearServiceInterface,
-  YEAR_SERVICE_TOKEN
-} from './../../../../dal/src/lib/metadata/year.service.interface';
 import { LoginPageViewModel } from './loginpage.viewmodel';
 
 @Component({
@@ -57,7 +55,7 @@ export class LoginpageComponent implements OnInit {
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     private store: Store<AlertReducer.State>,
     private router: Router,
-    @Inject(YEAR_SERVICE_TOKEN) private yearService: YearServiceInterface
+    @Inject(TOC_SERVICE_TOKEN) private tocService: TocServiceInterface
   ) {}
 
   ngOnInit() {
@@ -97,7 +95,7 @@ export class LoginpageComponent implements OnInit {
     this.response = this.favoriteService.deleteFavorite(userId, favoriteId);
   }
 
-  getYearsForMethods() {
-    this.response = this.yearService.getAllByMethodIds([1, 2, 3]);
+  getBooksForMethods() {
+    this.response = this.tocService.getBooksByMethodIds([1, 2, 3]);
   }
 }

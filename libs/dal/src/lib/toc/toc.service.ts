@@ -33,6 +33,15 @@ export class TocService implements TocServiceInterface {
       );
   }
 
+  getBooksByMethodIds(
+    methodIds: number[]
+  ): Observable<EduContentBookInterface[]> {
+    return this.eduContentBookApi.find({
+      where: { methodId: { inq: methodIds } },
+      include: [{ relation: 'years' }]
+    });
+  }
+
   getTree(bookId: number): Observable<EduContentTOCInterface[]> {
     return this.eduContentTOCApi.tree(bookId);
   }

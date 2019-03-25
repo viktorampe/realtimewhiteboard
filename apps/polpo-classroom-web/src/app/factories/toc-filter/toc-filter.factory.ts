@@ -1,6 +1,7 @@
 import { Inject, Injectable, Type } from '@angular/core';
 import {
   DalState,
+  EduContentBookInterface,
   EduContentTOCInterface,
   LearningAreaQueries,
   MethodQueries,
@@ -14,15 +15,17 @@ import {
   SearchFilterInterface,
   SearchStateInterface
 } from '@campus/search';
+import { PrimitivePropertiesKeys } from '@campus/utils';
 import { select, Store } from '@ngrx/store';
-// tslint:disable-next-line: nx-enforce-module-boundaries
-import { PrimitivePropertiesKeys } from 'libs/utils/src/lib/types/generic.types';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { map, mapTo, switchMap, take, tap } from 'rxjs/operators';
 import {
-  YearServiceInterface,
-  YEAR_SERVICE_TOKEN
-} from './../../../../../../libs/dal/src/lib/metadata/year.service.interface';
+  map,
+  shareReplay,
+  switchMap,
+  take,
+  tap,
+  withLatestFrom
+} from 'rxjs/operators';
 
 const LEARNING_AREA = 'learningArea';
 const YEAR = 'year';
@@ -48,8 +51,7 @@ export class TocFilterFactory implements SearchFilterFactory {
 
   constructor(
     private store: Store<DalState>,
-    @Inject(TOC_SERVICE_TOKEN) private tocService: TocServiceInterface,
-    @Inject(YEAR_SERVICE_TOKEN) private yearService: YearServiceInterface
+    @Inject(TOC_SERVICE_TOKEN) private tocService: TocServiceInterface
   ) {}
 
   public getFilters(
@@ -57,15 +59,61 @@ export class TocFilterFactory implements SearchFilterFactory {
   ): Observable<SearchFilterInterface[]> {
     const selections = searchState.filterCriteriaSelections;
     const filters: Observable<SearchFilterInterface>[] = [];
-    let treeFilters: Observable<SearchFilterInterface[]> = null;
+    let treeFiltersNeeded = false;
 
     // learningArea is the first step
-    const learningAreaFilter = this.store.pipe(
+    const learningAreaFilter = this.getLearningAreaFilter(searchState);
+    filters.push(learningAreaFilter);
+
+    // if a learningArea is selected...
+    if (selections.has(LEARNING_AREA)) {
+      // get all books in that learningArea, with years
+      const booksWithYears$ = this.getBooksWithYears(searchState);
+
+      // ... show the filter for years
+      const yearFilter = this.getYearFilter(searchState, booksWithYears$);
+      filters.push(yearFilter);
+
+      // if a year is selected...
+      if (selections.has(YEAR)) {
+        // ... show the filter for methods
+
+        const methodFilter = this.getMethodFilter(searchState, booksWithYears$);
+        filters.push(methodFilter);
+
+        // if a method is selected...
+        if (selections.has(METHOD)) {
+          // ... show the tree filter
+          treeFiltersNeeded = true;
+
+          // subscription will handle this.treeFilters
+          this.updateCache(searchState, booksWithYears$);
+        }
+      }
+    }
+
+    if (treeFiltersNeeded) {
+      // map all those filters to a single observable
+      return combineLatest(this.treeFilters, ...filters).pipe(
+        map(([treeFilterArray, ...filterArray]) => [
+          ...filterArray,
+          ...treeFilterArray
+        ])
+      );
+    } else {
+      return combineLatest(filters);
+    }
+  }
+
+  private getLearningAreaFilter(
+    searchState: SearchStateInterface
+  ): Observable<SearchFilterInterface> {
+    return this.store.pipe(
       select(LearningAreaQueries.getAll),
-      map(entities =>
+      map(areas =>
         this.getFilter(
           searchState,
-          entities,
+          areas,
           LEARNING_AREA,
           'Leergebieden',
           'id',
@@ -75,110 +123,118 @@ export class TocFilterFactory implements SearchFilterFactory {
         )
       )
     );
-    filters.push(learningAreaFilter);
+  }
 
-    // if a learningArea is selected...
-    if (selections.has(LEARNING_AREA)) {
-      // ... show the filter for years
-      const learningAreaId = selections.get(LEARNING_AREA)[0] as number;
+  private getBooksWithYears(
+    searchState: SearchStateInterface
+  ): Observable<EduContentBookInterface[]> {
+    const learningAreaId = searchState.filterCriteriaSelections.get(
+      LEARNING_AREA
+    )[0] as number;
 
-      const years = this.store.pipe(
-        // look up the methods associated with the learningArea
-        select(MethodQueries.getByLearningAreaId, {
-          learningAreaId
-        }),
-        switchMap(methodArray =>
-          // get the years that have books for those methods
-          this.yearService.getAllByMethodIds(
-            methodArray.map(method => method.id)
-          )
+    return this.store.pipe(
+      // look up the methods associated with the learningArea
+      select(MethodQueries.getByLearningAreaId, {
+        learningAreaId
+      }),
+      switchMap(methodArray =>
+        // get the books for those methods, with the years attached
+        this.tocService.getBooksByMethodIds(
+          methodArray.map(method => method.id)
         )
-      );
+      ),
+      shareReplay(1)
+    );
+  }
 
-      const yearFilter = years.pipe(
-        map(entities =>
-          this.getFilter(
-            searchState,
-            entities,
-            YEAR,
-            'Jaren',
-            'id',
-            'name',
-            this.filterComponent,
-            this.domHost
-          )
+  private getYearFilter(
+    searchState: SearchStateInterface,
+    booksWithYears: Observable<EduContentBookInterface[]>
+  ): Observable<SearchFilterInterface> {
+    return booksWithYears.pipe(
+      // reduce to set of years
+      map((books: EduContentBookInterface[]) =>
+        Array.from(
+          new Set(books.reduce((acc, book) => [...acc, ...book.years], []))
+        ).sort((a, b) => a.id - b.id)
+      ),
+      map(years =>
+        this.getFilter(
+          searchState,
+          years,
+          YEAR,
+          'Jaren',
+          'id',
+          'name',
+          this.filterComponent,
+          this.domHost
         )
-      );
-      filters.push(yearFilter);
+      )
+    );
+  }
 
-      // if a year is selected...
-      if (selections.has(YEAR)) {
-        // ... show the filter for methods
+  private getMethodFilter(
+    searchState: SearchStateInterface,
+    booksWithYears: Observable<EduContentBookInterface[]>
+  ): Observable<SearchFilterInterface> {
+    const learningAreaId = searchState.filterCriteriaSelections.get(
+      LEARNING_AREA
+    )[0] as number;
+    const selectedYearId = searchState.filterCriteriaSelections.get(
+      YEAR
+    )[0] as number;
 
-        // TODO -> won't I need the yearId somehow?
-        // Is this situation possible?
-        // there are 2 methods
-        // one for years [1,2,3]
-        // and one for years [5]
-        // the range of selected years will be [1,2,3,5]
-        // suppose the user selects 5
-        // how do I know that I only need to show method 2?
-        const methodFilter = this.store.pipe(
-          select(MethodQueries.getByLearningAreaId, {
-            learningAreaId
-          }),
-          map(entities =>
-            this.getFilter(
-              searchState,
-              entities,
-              METHOD,
-              'Methodes',
-              'id',
-              'name',
-              this.filterComponent,
-              this.domHost
-            )
-          )
+    return this.store.pipe(
+      select(MethodQueries.getByLearningAreaId, {
+        learningAreaId
+      }),
+      withLatestFrom(booksWithYears),
+      map(([methods, books]) => {
+        const booksForYear = books.filter(book =>
+          book.years.some(year => year.id === selectedYearId)
         );
-        filters.push(methodFilter);
 
-        // if a method is selected...
-        if (selections.has(METHOD)) {
-          if (this.treeCacheNeedsUpdate(searchState)) {
-            // update the cached tree
-            // and wait for new value to emit new filters
-            this.updateTreeCache(searchState).subscribe(() =>
-              this.treeFilters.next(
-                this.getFiltersForTree(searchState, this.cachedTree.treeMap)
-              )
-            );
-          } else {
-            this.treeFilters.next(
-              this.getFiltersForTree(searchState, this.cachedTree.treeMap)
-            );
-          }
+        const filteredMethods = methods.filter(
+          method =>
+            booksForYear.filter(
+              book =>
+                book.methodId === method.id &&
+                book.years.some(year => year.id === selectedYearId)
+            ).length
+        );
 
-          // update the searchState in the cache
-          this.cachedTree.searchState = searchState;
+        return this.getFilter(
+          searchState,
+          filteredMethods,
+          METHOD,
+          'Methodes',
+          'id',
+          'name',
+          this.filterComponent,
+          this.domHost
+        );
+      })
+    );
+  }
 
-          // ... show the tree filter
-          // subscription will handle this.treeFilters
-          treeFilters = this.treeFilters;
-        }
-      }
-    }
-
-    if (treeFilters) {
-      // map all those filters to a single observable
-      return combineLatest(combineLatest(filters), treeFilters).pipe(
-        map(([filterArray, treeFilterArray]) => [
-          ...filterArray,
-          ...treeFilterArray
-        ])
+  private updateCache(
+    searchState: SearchStateInterface,
+    booksWithYears: Observable<EduContentBookInterface[]>
+  ) {
+    if (this.treeCacheNeedsUpdate(searchState)) {
+      // update the cached tree
+      // and wait for new value to emit new filters
+      this.updateTreeCache(searchState, booksWithYears).subscribe(treeMap =>
+        this.treeFilters.next(this.getFiltersForTree(searchState, treeMap))
       );
     } else {
-      return combineLatest(filters);
+      this.treeFilters.next(
+        this.getFiltersForTree(searchState, this.cachedTree.treeMap)
+      );
     }
+
+    // update the searchState in the cache
+    this.cachedTree.searchState = searchState;
   }
 
   private getFilter<T>(
@@ -201,13 +257,7 @@ export class TocFilterFactory implements SearchFilterFactory {
         keyProperty: entityKeyProperty as string,
         displayProperty: entityDisplayProperty as string,
         values: entities.map(entity => ({
-          data: entity,
-          selected: this.isSelectedInSearchState(
-            entity,
-            entityName,
-            entityKeyProperty,
-            searchState
-          )
+          data: entity
         }))
       },
       component,
@@ -216,34 +266,30 @@ export class TocFilterFactory implements SearchFilterFactory {
     };
   }
 
-  private isSelectedInSearchState<T>(
-    obj: T,
-    name: string,
-    keyProperty: PrimitivePropertiesKeys<T>,
-    searchState: SearchStateInterface
-  ): boolean {
-    const key = searchState.filterCriteriaSelections.get(name);
-    return key
-      ? key.includes((obj[keyProperty] as unknown) as string | number)
-      : false;
-  }
-
+  /**
+   * Return TOC-tree, first level is already an array of branches
+   *
+   * @private
+   * @param {number} yearId
+   * @param {number} methodId
+   * @returns {Observable<EduContentTOCInterface[]>}
+   * @memberof TocFilterFactory
+   */
   private getTree(
     yearId: number,
-    methodId: number
+    methodId: number,
+    booksWithYears: Observable<EduContentBookInterface[]>
   ): Observable<EduContentTOCInterface[]> {
-    return this.tocService
-      .getBooksByYearAndMethods(
-        // users can only select a single value in a columnFilter
-        yearId,
-        // users can only select a single value in a columnFilter -> method expects array
-        [methodId]
-      )
-      .pipe(
-        // this should return a single value
-        map(books => books[0]),
-        switchMap(book => this.tocService.getTree(book.id))
-      );
+    return booksWithYears.pipe(
+      map(books =>
+        books.find(
+          book =>
+            book.methodId === methodId &&
+            book.years.some(year => year.id === yearId)
+        )
+      ),
+      switchMap(book => this.tocService.getTree(book.id))
+    );
   }
 
   private getFiltersForTree(
@@ -297,26 +343,24 @@ export class TocFilterFactory implements SearchFilterFactory {
   }
 
   private updateTreeCache(
-    searchState: SearchStateInterface
-  ): Observable<boolean> {
+    searchState: SearchStateInterface,
+    booksWithYears: Observable<EduContentBookInterface[]>
+  ): Observable<Map<number, EduContentTOCInterface[]>> {
     const selections = searchState.filterCriteriaSelections;
     const yearId = selections.get(YEAR)[0] as number;
     const methodId = selections.get(METHOD)[0] as number;
 
-    const updatedTreeMap = this.getTree(yearId, methodId).pipe(
+    return this.getTree(yearId, methodId, booksWithYears).pipe(
       take(1),
       // calculate tree
       map(tree => this.getTreeMap(tree)),
       // update cache
-      tap(treeMap => (this.cachedTree.treeMap = treeMap)),
-      mapTo(true)
+      tap(treeMap => (this.cachedTree.treeMap = treeMap))
     );
-
-    return updatedTreeMap;
   }
 
   // returns a map of all branches in the tree
-  // example (with ids for brevity):
+  // example (with ids for brevity, actual map values contain references):
   // tree:
   // 1
   //  - 2

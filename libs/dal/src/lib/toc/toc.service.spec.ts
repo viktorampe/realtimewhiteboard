@@ -1,9 +1,11 @@
 import { inject, TestBed } from '@angular/core/testing';
+import { EduContentBookFixture, YearFixture } from '@campus/dal';
 import {
   EduContentBookApi,
   EduContentTOCApi
 } from '@diekeure/polpo-api-angular-sdk';
 import { hot } from '@nrwl/nx/testing';
+import { of } from 'rxjs';
 import { TocService } from './toc.service';
 import { TocServiceInterface } from './toc.service.interface';
 
@@ -98,6 +100,41 @@ describe('TocService', () => {
       expect(spy).toHaveBeenCalledWith(1);
       expect(response).toBeObservable(
         hot('-a|', { a: { results: { foo: 'bar' } } })
+      );
+    });
+  });
+
+  describe('getBooksByMethodIds', () => {
+    it('should return books', () => {
+      const eduContentApi = TestBed.get(EduContentBookApi);
+
+      const mockYears = [
+        new YearFixture({ id: 1, name: '1' }),
+        new YearFixture({ id: 2, name: '2' }),
+        new YearFixture({ id: 3, name: '3' }),
+        new YearFixture({ id: 4, name: '4' }),
+        new YearFixture({ id: 5, name: '5' }),
+        new YearFixture({ id: 6, name: '6' })
+      ];
+
+      const mockData = [
+        new EduContentBookFixture({
+          id: 1,
+          years: [mockYears[0], mockYears[1], mockYears[3]]
+        }),
+        new EduContentBookFixture({
+          id: 1,
+          years: [mockYears[0], mockYears[2]]
+        })
+      ];
+
+      eduContentApi.find = jest.fn().mockReturnValue(of(mockData));
+
+      // passed parameter is not evaluated -> mocks
+      expect(service.getBooksByMethodIds(null)).toBeObservable(
+        hot('(a|)', {
+          a: mockData
+        })
       );
     });
   });
