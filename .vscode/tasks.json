@@ -33,7 +33,8 @@
         "pages-reports",
         "pages-shared",
         "pages-tasks",
-        "pages-settings-alerts"
+        "pages-settings-alerts",
+        "pages-settings-coupled-teachers"
       ],
       "default": "all"
     }

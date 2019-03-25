@@ -358,5 +358,29 @@
       "!libs/utils/**/*.spec.ts"
     ],
     "tests": ["libs/pages/settings/alerts/**/*.spec.ts"]
+  },
+  "pages-settings-coupled-teachers": {
+    "files": [
+      "tsconfig.json",
+      "wallaby-test-setup.ts",
+      "jest.config.js",
+      "libs/pages/settings/coupled-teachers/**/*.+(ts|html|json|snap|css|less|sass|scss|jpg|jpeg|gif|png|svg)",
+      "!libs/pages/settings/coupled-teachers/**/*.spec.ts",
+      "libs/shared/**/*.+(ts|html|json|snap|css|less|sass|scss|jpg|jpeg|gif|png|svg)",
+      "!libs/shared/**/*.spec.ts",
+      "libs/ui/**/*.+(ts|html|json|snap|css|less|sass|scss|jpg|jpeg|gif|png|svg)",
+      "!libs/ui/**/*.spec.ts",
+      "libs/dal/**/*.+(ts|html|json|snap|css|less|sass|scss|jpg|jpeg|gif|png|svg)",
+      "!libs/dal/**/*.spec.ts",
+      "libs/testing/**/*.+(ts|html|json|snap|css|less|sass|scss|jpg|jpeg|gif|png|svg)",
+      "!libs/testing/**/*.spec.ts",
+      "libs/scorm/**/*.+(ts|html|json|snap|css|less|sass|scss|jpg|jpeg|gif|png|svg)",
+      "!libs/scorm/**/*.spec.ts",
+      "libs/browser/**/*.+(ts|html|json|snap|css|less|sass|scss|jpg|jpeg|gif|png|svg)",
+      "!libs/browser/**/*.spec.ts",
+      "libs/utils/**/*.+(ts|html|json|snap|css|less|sass|scss|jpg|jpeg|gif|png|svg)",
+      "!libs/utils/**/*.spec.ts"
+    ],
+    "tests": ["libs/pages/settings/coupled-teachers/**/*.spec.ts"]
   }
 }
