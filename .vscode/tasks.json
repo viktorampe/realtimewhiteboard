@@ -27,7 +27,8 @@
         "pages-books",
         "pages-bundles",
         "pages-edu-contents",
-        "pages-error"
+        "pages-error",
+        "pages-logout"
       ],
       "default": "all"
     }
