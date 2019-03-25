@@ -1,0 +1,28 @@
+{
+  "all": {
+    "files": [
+      "tsconfig.json",
+      "wallaby-test-setup.ts",
+      "jest.config.js",
+      "apps/**/*.+(ts|html|json|snap|css|less|sass|scss|jpg|jpeg|gif|png|svg)",
+      "!apps/**/*.spec.ts",
+      "libs/**/*.+(ts|html|json|snap|css|less|sass|scss|jpg|jpeg|gif|png|svg)",
+      "!libs/**/*.spec.ts"
+    ],
+    "tests": ["apps/**/*.spec.ts"]
+  },
+  "ui": {
+    "files": [
+      "tsconfig.json",
+      "wallaby-test-setup.ts",
+      "jest.config.js",
+      "libs/ui/**/*.+(ts|html|json|snap|css|less|sass|scss|jpg|jpeg|gif|png|svg)",
+      "!libs/ui/**/*.spec.ts",
+      "libs/utils/**/*.+(ts|html|json|snap|css|less|sass|scss|jpg|jpeg|gif|png|svg)",
+      "!libs/utils/**/*.spec.ts",
+      "libs/testing/**/*.+(ts|html|json|snap|css|less|sass|scss|jpg|jpeg|gif|png|svg)",
+      "!libs/testing/**/*.spec.ts"
+    ],
+    "tests": ["libs/ui/**/*.spec.ts"]
+  }
+}

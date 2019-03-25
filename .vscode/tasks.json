@@ -1,0 +1,24 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "wallaby-setup",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        ".vscode/wallaby/wallaby-setup",
+        "${input:wallabyProject}"
+      ],
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "wallabyProject",
+      "description": "Project choises to run wallaby with",
+      "type": "pickString",
+      "options": ["all", "ui"],
+      "default": "all"
+    }
+  ]
+}
