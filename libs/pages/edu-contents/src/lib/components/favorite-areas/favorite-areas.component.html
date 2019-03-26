@@ -1,0 +1,17 @@
+<campus-info-panel
+  titleText="Mijn favoriete leergebieden"
+  titleIcon="favorites"
+  [displayAsRows]="true"
+>
+  <campus-tile
+    *ngFor="let favoriteLearningArea of favoriteLearningAreas"
+    [label]="favoriteLearningArea.name"
+    icon="learning-area:{{favoriteLearningArea.icon}}"
+    [color]="favoriteLearningArea.color"
+    [routerLink]="favoriteLearningArea.id"
+    [secondaryActions]="[removeAreaFromFavoritesAction(favoriteLearningArea)]"
+  ></campus-tile>
+
+  <campus-drop-area icon="add" label="Sleep je favoriet leergebied naar hier">
+  </campus-drop-area>
+</campus-info-panel>
