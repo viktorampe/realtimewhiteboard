@@ -42,14 +42,15 @@ describe('EduContentsViewModel', () => {
   describe('requestAutoComplete', () => {
     it('should call autoComplete on the eduContentService', () => {
       const autoCompleteSpy = jest.spyOn(eduContentService, 'autoComplete');
+      const mockNewSearchTerm = 'new search term';
       eduContentsViewModel['searchState$'] = new BehaviorSubject<
         SearchStateInterface
       >(mockSearchState);
-      eduContentsViewModel.requestAutoComplete('new search term');
+      eduContentsViewModel.requestAutoComplete(mockNewSearchTerm);
       expect(autoCompleteSpy).toHaveBeenCalledTimes(1);
       expect(autoCompleteSpy).toHaveBeenCalledWith({
         ...mockSearchState,
-        searchTerm: 'new search term'
+        searchTerm: mockNewSearchTerm
       });
     });
   });
