@@ -17,7 +17,7 @@ import {
   ENVIRONMENT_SEARCHMODES_TOKEN
 } from '@campus/shared';
 import { select, Store } from '@ngrx/store';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
 
 @Injectable({
@@ -74,7 +74,8 @@ export class EduContentsViewModel {
    * make auto-complete request to api service and return observable
    */
   public requestAutoComplete(searchTerm: string): Observable<string[]> {
-    return of(['foo', 'bar', 'baz']);
+    this.searchState$.value.searchTerm = searchTerm;
+    return this.eduContentService.autoComplete(this.searchState$.value);
   }
 
   /*
