@@ -69,11 +69,7 @@ describe('EduContentsViewModel', () => {
         })
       ],
       declarations: [MockComponent],
-      providers: [
-        EduContentsViewModel,
-        Store
-        // { provide: getRouterStateParams, useValue: new Memoized<> }
-      ]
+      providers: [EduContentsViewModel, Store]
     });
 
     eduContentsViewModel = TestBed.get(EduContentsViewModel);
@@ -105,6 +101,10 @@ describe('EduContentsViewModel', () => {
       [
         {
           usedRoute: '/',
+          expectedMap: new Map<string, (number | string)[]>([])
+        },
+        {
+          usedRoute: '/edu-contents',
           expectedMap: new Map<string, (number | string)[]>([])
         },
         {

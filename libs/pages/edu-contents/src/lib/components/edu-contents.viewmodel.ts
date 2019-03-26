@@ -53,36 +53,14 @@ export class EduContentsViewModel {
     const routerStateParams$ = this.store.pipe(select(getRouterStateParams));
     return combineLatest(this.searchState$, routerStateParams$).pipe(
       map(([searchState, routerStateParams]: [SearchStateInterface, any]) => {
-        console.log(searchState);
-        console.log(routerStateParams);
-        console.log(routerStateParams.area);
         if (routerStateParams.area) {
-          console.log(routerStateParams.area);
           searchState.filterCriteriaSelections.set('learningArea', [
             parseInt(routerStateParams.area, 10)
           ]);
         }
-        console.log(searchState);
         return searchState;
       })
     );
-    // return this.store.pipe(
-    //   select(getRouterStateParams),
-    //   map(routerStateParams => {
-    //     const searchState = { ...this.searchState$.value };
-    //     console.log(searchState.filterCriteriaSelections);
-    //     if (routerStateParams.area) {
-    //       console.log(routerStateParams.area);
-    //       searchState.filterCriteriaSelections.set('learningArea', [
-    //         routerStateParams.area
-    //       ]);
-    //     }
-    //     console.log(routerStateParams);
-    //     console.log(searchState.filterCriteriaSelections);
-    //     console.log(searchState);
-    //     return searchState;
-    //   })
-    // );
   }
 
   /*
