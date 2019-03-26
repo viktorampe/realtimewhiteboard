@@ -5,6 +5,7 @@ import {
   EDU_CONTENT_SERVICE_TOKEN,
   FavoriteActions,
   FavoriteInterface,
+  FavoriteQueries,
   FavoriteTypesEnum,
   getRouterStateParams,
   LearningAreaInterface,
@@ -28,9 +29,9 @@ export class EduContentsViewModel {
   public learningAreas$: Observable<LearningAreaInterface[]>;
   public favoriteLearningAreas$: Observable<LearningAreaInterface[]>;
   public searchResults$: Observable<EduContentSearchResultInterface[]>;
+  public eduContentFavorites$: Observable<FavoriteInterface[]>;
 
   private searchState$: BehaviorSubject<SearchStateInterface>;
-  private eduContentFavorites$: Observable<FavoriteInterface[]>;
 
   constructor(
     private store: Store<DalState>,
@@ -39,7 +40,17 @@ export class EduContentsViewModel {
     private eduContentService: EduContentServiceInterface,
     @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
     public searchModes: EnvironmentSearchModesInterface
-  ) {}
+  ) {
+    this.initialize();
+  }
+
+  private initialize() {
+    this.learningAreas$ = this.store.pipe(select(LearningAreaQueries.getAll));
+    this.favoriteLearningAreas$ = this.getFavoriteLearningAreas();
+    this.eduContentFavorites$ = this.store.pipe(
+      select(FavoriteQueries.getByType, { type: 'educontent' })
+    );
+  }
 
   public getLearningAreaById(
     areaId: number
@@ -122,8 +133,19 @@ export class EduContentsViewModel {
    */
   private setupSearchResults(): void {}
 
-  /*
-   * set the streams for favorites, learningAreas via store selectors
-   */
-  private setupStreams(): void {}
+  private getFavoriteLearningAreas(): Observable<LearningAreaInterface[]> {
+    return this.store.pipe(
+      select(FavoriteQueries.getByType, { type: 'area' }),
+      map(
+        (favorites): number[] =>
+          favorites.map(favorite => favorite.learningAreaId)
+      ),
+      switchMap(
+        (learningAreaIds): Observable<LearningAreaInterface[]> =>
+          this.store.pipe(
+            select(LearningAreaQueries.getByIds, { ids: learningAreaIds })
+          )
+      )
+    );
+  }
 }

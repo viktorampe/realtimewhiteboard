@@ -16,9 +16,10 @@ import { ENVIRONMENT_SEARCHMODES_TOKEN } from '@campus/shared';
 import { MockDate } from '@campus/testing';
 import { MapObjectConversionService } from '@campus/utils';
 import { Store, StoreModule } from '@ngrx/store';
+import { hot } from '@nrwl/nx/testing';
 import { EduContentsViewModel } from './edu-contents.viewmodel';
 
-describe('BundlesViewModel', () => {
+describe('EduContentsViewModel', () => {
   let eduContentsViewModel: EduContentsViewModel;
   let store: Store<DalState>;
 
@@ -122,6 +123,34 @@ describe('BundlesViewModel', () => {
           created: mockDate.mockDate
         }
       });
+    });
+  });
+
+  describe('learningAreas$', () => {
+    it('should return all the learningareas', () => {
+      expect(eduContentsViewModel.learningAreas$).toBeObservable(
+        hot('a', { a: mockLearningAreas })
+      );
+    });
+  });
+
+  describe('favoriteLearningAreas$', () => {
+    it('should return the favorite learningareas', () => {
+      expect(eduContentsViewModel.favoriteLearningAreas$).toBeObservable(
+        hot('a', {
+          a: mockLearningAreas.filter(area => [2, 3].indexOf(area.id) !== -1)
+        })
+      );
+    });
+  });
+
+  describe('eduContentFavorites$', () => {
+    it('should return the eduContent favorites', () => {
+      expect(eduContentsViewModel.eduContentFavorites$).toBeObservable(
+        hot('a', {
+          a: mockFavorites.filter(favorite => favorite.type === 'educontent')
+        })
+      );
     });
   });
 });
