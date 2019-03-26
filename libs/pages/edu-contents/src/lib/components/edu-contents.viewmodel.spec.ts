@@ -17,6 +17,7 @@ import {
 import { SearchStateInterface } from '@campus/search';
 import { ENVIRONMENT_SEARCHMODES_TOKEN } from '@campus/shared';
 import {
+  NavigationActionTiming,
   routerReducer,
   RouterStateSerializer,
   StoreRouterConnectingModule
@@ -49,21 +50,26 @@ describe('EduContentsViewModel', () => {
         RouterTestingModule.withRoutes([
           {
             path: '',
-            redirectTo: '2',
+            redirectTo: 'edu-content',
             pathMatch: 'full'
           },
           {
-            path: ':area',
-            component: Component
+            path: 'edu-content',
+            component: Component,
+            children: [
+              {
+                path: ':area',
+                component: Component
+              }
+            ]
           }
         ]),
-        StoreModule.forRoot({
-          router: routerReducer
-        }),
+        StoreModule.forRoot({ router: routerReducer }),
+        ...getStoreModuleForFeatures([FavoriteReducer, LearningAreaReducer]),
         StoreRouterConnectingModule.forRoot({
-          stateKey: 'router'
-        }),
-        ...getStoreModuleForFeatures([FavoriteReducer, LearningAreaReducer])
+          navigationActionTiming: NavigationActionTiming.PostActivation,
+          serializer: CustomSerializer
+        })
       ],
       providers: [
         EduContentsViewModel,
@@ -132,13 +138,15 @@ describe('EduContentsViewModel', () => {
   });
 
   describe('learningArea$', () => {
-    it('should return the learningarea for current route', () => {
+    it('should return the learningarea for current route', fakeAsync(() => {
+      router.navigate(['edu-content', '1']);
+      tick();
       expect(eduContentsViewModel.learningArea$).toBeObservable(
         hot('a', {
-          a: mockLearningAreas[1]
+          a: mockLearningAreas[0]
         })
       );
-    });
+    }));
   });
 
   describe('autoCompleteValues$', () => {
