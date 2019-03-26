@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LearningAreaInterface } from '@campus/dal';
 import { EnvironmentSearchModesInterface } from '@campus/shared';
 import { Observable, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { EduContentsViewModel } from '../edu-contents.viewmodel';
 
 @Component({
@@ -25,8 +26,14 @@ export class EduContentSearchModesComponent implements OnInit {
   public ngOnInit(): void {
     this.learningArea$ = this.eduContentsViewModel.learningArea$;
     this.searchModes = this.eduContentsViewModel.searchModes;
-    this.searchTerm$ = this.eduContentsViewModel.searchTerm$;
-    this.autoCompleteValues$ = this.eduContentsViewModel.autoCompleteValues$;
+    this.searchTerm$ = new Subject();
+    this.autoCompleteValues$ = this.searchTerm$.pipe(
+      debounceTime(500),
+      distinctUntilChanged(),
+      switchMap(searchTerm =>
+        this.eduContentsViewModel.requestAutoComplete(searchTerm)
+      )
+    );
   }
 
   public openSearchByTerm(searchTerm: string) {

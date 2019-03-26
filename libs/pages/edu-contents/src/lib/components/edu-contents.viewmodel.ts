@@ -17,14 +17,8 @@ import {
   ENVIRONMENT_SEARCHMODES_TOKEN
 } from '@campus/shared';
 import { select, Store } from '@ngrx/store';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import {
-  debounceTime,
-  distinctUntilChanged,
-  filter,
-  map,
-  switchMap
-} from 'rxjs/operators';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { filter, map, switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -33,8 +27,6 @@ export class EduContentsViewModel {
   public learningArea$: Observable<LearningAreaInterface>;
   public learningAreas$: Observable<LearningAreaInterface[]>;
   public favoriteLearningAreas$: Observable<LearningAreaInterface[]>;
-  public searchTerm$ = new Subject<string>();
-  public autoCompleteValues$: Observable<string[]>;
   public searchResults$: Observable<EduContentSearchResultInterface[]>;
   public eduContentFavorites$: Observable<FavoriteInterface[]>;
 
@@ -52,11 +44,6 @@ export class EduContentsViewModel {
 
   private initialize() {
     this.learningArea$ = this.getLearningArea();
-    this.autoCompleteValues$ = this.searchTerm$.pipe(
-      debounceTime(500),
-      distinctUntilChanged(),
-      switchMap(searchTerm => this.requestAutoComplete(searchTerm))
-    );
     this.learningAreas$ = this.store.pipe(select(LearningAreaQueries.getAll));
     this.favoriteLearningAreas$ = this.getFavoriteLearningAreas();
     this.eduContentFavorites$ = this.store.pipe(
@@ -86,18 +73,8 @@ export class EduContentsViewModel {
   /*
    * make auto-complete request to api service and return observable
    */
-  private requestAutoComplete(searchTerm: string): Observable<string[]> {
-    return this.store.pipe(
-      select(getRouterStateParams),
-      map(params => new Map([['learningArea', [+params.area]]])),
-      switchMap(criteria => {
-        const searchState: SearchStateInterface = {
-          searchTerm,
-          filterCriteriaSelections: criteria
-        };
-        return this.eduContentService.autoComplete(searchState);
-      })
-    );
+  public requestAutoComplete(searchTerm: string): Observable<string[]> {
+    return of(['foo', 'bar', 'baz']);
   }
 
   /*
