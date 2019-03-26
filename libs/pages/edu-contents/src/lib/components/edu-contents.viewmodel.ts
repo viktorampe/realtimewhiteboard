@@ -3,7 +3,9 @@ import {
   DalState,
   EduContentServiceInterface,
   EDU_CONTENT_SERVICE_TOKEN,
+  FavoriteActions,
   FavoriteInterface,
+  FavoriteTypesEnum,
   getRouterStateParams,
   LearningAreaInterface,
   LearningAreaQueries
@@ -14,6 +16,7 @@ import {
   EnvironmentSearchModesInterface,
   ENVIRONMENT_SEARCHMODES_TOKEN
 } from '@campus/shared';
+import { MapObjectConversionService } from '@campus/utils';
 import { select, Store } from '@ngrx/store';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
@@ -31,6 +34,7 @@ export class EduContentsViewModel {
 
   constructor(
     private store: Store<DalState>,
+    private mapObjectConversionService: MapObjectConversionService,
     @Inject(EDU_CONTENT_SERVICE_TOKEN)
     private eduContentService: EduContentServiceInterface,
     @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
@@ -82,7 +86,31 @@ export class EduContentsViewModel {
   /*
    * dispatch toggle action
    */
-  public toggleFavoriteArea(area: LearningAreaInterface): void {}
+  public toggleFavoriteArea(area: LearningAreaInterface): void {
+    const favorite: FavoriteInterface = {
+      type: FavoriteTypesEnum.AREA,
+      learningAreaId: area.id,
+      created: new Date()
+    };
+    this.store.dispatch(new FavoriteActions.ToggleFavorite({ favorite }));
+  }
+
+  /*
+   * dispatch save action for search state
+   */
+  public saveSearchState(searchState: SearchStateInterface): void {
+    const favorite: FavoriteInterface = {
+      type: FavoriteTypesEnum.SEARCH,
+      criteria: JSON.stringify({
+        ...searchState,
+        filterCriteriaSelections: this.mapObjectConversionService.mapToObject(
+          searchState.filterCriteriaSelections
+        )
+      }),
+      created: new Date()
+    };
+    this.store.dispatch(new FavoriteActions.ToggleFavorite({ favorite }));
+  }
 
   /*
    * make a result stream derived from :
