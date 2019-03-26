@@ -13,7 +13,7 @@ import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { EduContentsViewModel } from './edu-contents.viewmodel';
 
-describe('BundlesViewModel', () => {
+describe('EduContentsViewModel', () => {
   let eduContentsViewModel: EduContentsViewModel;
   let store: Store<DalState>;
 
