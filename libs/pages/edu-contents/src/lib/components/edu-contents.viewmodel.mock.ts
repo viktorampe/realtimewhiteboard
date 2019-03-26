@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   BundleFixture,
   EduContentFixture,
+  FavoriteFixture,
   LearningAreaFixture,
   LearningAreaInterface,
   TaskFixture
@@ -99,6 +100,13 @@ export class EduContentsViewModelMock
   public searchResults$ = new BehaviorSubject<
     EduContentSearchResultInterface[]
   >(this.searchResults);
+
+  public eduContentFavorites$ = new BehaviorSubject([
+    new FavoriteFixture({ id: 1, learningAreaId: 2, type: 'area' }),
+    new FavoriteFixture({ id: 2, learningAreaId: 3, type: 'area' }),
+    new FavoriteFixture({ id: 3, eduContentId: 1, type: 'educontent' }),
+    new FavoriteFixture({ id: 4, eduContentId: 2, type: 'educontent' })
+  ]);
 
   public searchModes: { [key: string]: SearchModeInterface } = {
     demo: this.searchMode

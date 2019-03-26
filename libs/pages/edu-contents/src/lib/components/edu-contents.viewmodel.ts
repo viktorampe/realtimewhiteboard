@@ -5,6 +5,7 @@ import {
   EduContentServiceInterface,
   EDU_CONTENT_SERVICE_TOKEN,
   FavoriteInterface,
+  FavoriteQueries,
   getRouterStateParams,
   LearningAreaInterface,
   LearningAreaQueries
@@ -35,9 +36,9 @@ export class EduContentsViewModel {
   public searchTerm$ = new Subject<string>();
   public autoCompleteValues$: Observable<string[]>;
   public searchResults$: Observable<EduContentSearchResultInterface[]>;
+  public eduContentFavorites$: Observable<FavoriteInterface[]>;
 
   private searchState$: BehaviorSubject<SearchStateInterface>;
-  private eduContentFavorites$: Observable<FavoriteInterface[]>;
 
   constructor(
     private store: Store<DalState>,
@@ -49,11 +50,6 @@ export class EduContentsViewModel {
     this.initialize();
   }
 
-  /*
-   * let the page component pass through the updated state from the search component
-   */
-  public updateState(state: SearchStateInterface) {}
-
   private initialize() {
     this.learningArea$ = this.getLearningArea();
     this.autoCompleteValues$ = this.searchTerm$.pipe(
@@ -61,7 +57,17 @@ export class EduContentsViewModel {
       distinctUntilChanged(),
       switchMap(searchTerm => this.requestAutoComplete(searchTerm))
     );
+    this.learningAreas$ = this.store.pipe(select(LearningAreaQueries.getAll));
+    this.favoriteLearningAreas$ = this.getFavoriteLearningAreas();
+    this.eduContentFavorites$ = this.store.pipe(
+      select(FavoriteQueries.getByType, { type: 'educontent' })
+    );
   }
+
+  /*
+   * let the page component pass through the updated state from the search component
+   */
+  public updateState(state: SearchStateInterface) {}
 
   /**
    * get learningarea for active route
@@ -123,8 +129,19 @@ export class EduContentsViewModel {
    */
   private setupSearchResults(): void {}
 
-  /*
-   * set the streams for favorites, learningAreas via store selectors
-   */
-  private setupStreams(): void {}
+  private getFavoriteLearningAreas(): Observable<LearningAreaInterface[]> {
+    return this.store.pipe(
+      select(FavoriteQueries.getByType, { type: 'area' }),
+      map(
+        (favorites): number[] =>
+          favorites.map(favorite => favorite.learningAreaId)
+      ),
+      switchMap(
+        (learningAreaIds): Observable<LearningAreaInterface[]> =>
+          this.store.pipe(
+            select(LearningAreaQueries.getByIds, { ids: learningAreaIds })
+          )
+      )
+    );
+  }
 }
