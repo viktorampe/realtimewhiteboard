@@ -1,6 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {
   DalState,
+  EduContentServiceInterface,
+  EDU_CONTENT_SERVICE_TOKEN,
   FavoriteInterface,
   FavoriteQueries,
   LearningAreaInterface,
@@ -23,7 +25,11 @@ export class EduContentsViewModel {
 
   private searchState$: BehaviorSubject<SearchStateInterface>;
 
-  constructor(private store: Store<DalState>) {
+  constructor(
+    private store: Store<DalState>,
+    @Inject(EDU_CONTENT_SERVICE_TOKEN)
+    private eduContentService: EduContentServiceInterface
+  ) {
     this.initialize();
   }
 
@@ -44,7 +50,8 @@ export class EduContentsViewModel {
    * make auto-complete request to api service and return observable
    */
   public requestAutoComplete(searchTerm: string): Observable<string[]> {
-    return;
+    this.searchState$.value.searchTerm = searchTerm;
+    return this.eduContentService.autoComplete(this.searchState$.value);
   }
 
   /*
