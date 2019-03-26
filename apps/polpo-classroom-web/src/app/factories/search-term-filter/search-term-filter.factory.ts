@@ -130,7 +130,11 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
       this.buildFilter('learningDomainsByLearningArea', searchState)
     );
 
-    return combineLatest(filters);
+    return combineLatest(filters).pipe(
+      map(searchFilters =>
+        searchFilters.filter(f => f.criteria.values.length > 0)
+      )
+    );
   }
 
   /**

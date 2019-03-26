@@ -167,6 +167,22 @@ describe('SearchTermFilterFactory', () => {
 
       expect(result).toBeObservable(cold('a', { a: expectedFilters }));
     });
+
+    it('should remove filters without values', () => {
+      // empty years from store
+      store.dispatch(new YearActions.ClearYears());
+
+      const result = factory.getFilters(mockSearchState);
+      const expectedFilters = [
+        getExpectedEduNetFilter(),
+        getExpectedSchoolTypeFilter(),
+        getExpectedMethodFilter(),
+        getExpectedEduContentProductTypeFilter(),
+        getExpectedLearningDomainFilter()
+      ];
+
+      expect(result).toBeObservable(cold('a', { a: expectedFilters }));
+    });
   });
 
   function getExpectedFilter(
