@@ -38,15 +38,13 @@ export class GlobalSearchTermFilterFactory extends SearchTermFilterFactory {
     if (selectedLearningAreas && selectedLearningAreas.length) {
       const methodsByLearningAreaFilters = this.buildFilter(
         'methodsByLearningArea',
-        searchState,
-        selectedLearningAreas
+        searchState
       );
       filters.push(methodsByLearningAreaFilters);
 
       const learningDomainsByLearningArea = this.buildFilter(
         'learningDomainsByLearningArea',
-        searchState,
-        selectedLearningAreas
+        searchState
       );
       filters.push(learningDomainsByLearningArea);
     }

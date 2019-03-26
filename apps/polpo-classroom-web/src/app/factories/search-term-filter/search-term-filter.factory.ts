@@ -87,8 +87,7 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
 
   public buildFilter(
     name: string,
-    searchState: SearchStateInterface,
-    learningAreaOverride: number[] = null
+    searchState: SearchStateInterface
   ): Observable<SearchFilterInterface> {
     const filterQuery = this.filterQueries[name];
     if (filterQuery.learningAreaDependent) {
@@ -96,9 +95,9 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
         .select(
           filterQuery.query as MemoizedSelectorWithProps<Object, any, any[]>,
           {
-            learningAreaIds: learningAreaOverride || [
-              searchState.filterCriteriaSelections.get('learningArea')[0]
-            ]
+            learningAreaIds: searchState.filterCriteriaSelections.get(
+              'learningArea'
+            )
           }
         )
         .pipe(
