@@ -18,7 +18,9 @@ export class EduContentsViewModel {
   /*
    * let the page component pass through the updated state from the search component
    */
-  public updateState(state: SearchStateInterface) {}
+  public updateState(state: SearchStateInterface) {
+    this.searchState$.next(state);
+  }
 
   /*
    * make auto-complete request to api service and return observable
