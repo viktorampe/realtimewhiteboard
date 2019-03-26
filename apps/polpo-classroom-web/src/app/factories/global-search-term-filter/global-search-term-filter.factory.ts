@@ -9,7 +9,9 @@ export const GLOBAL_SEARCH_TERM_FILTER_FACTORY_TOKEN = new InjectionToken(
   'GlobalSearchTermFilterFactory'
 );
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class GlobalSearchTermFilterFactory extends SearchTermFilterFactory {
   private globalSearchTermFilters = [
     'years',
@@ -49,7 +51,7 @@ export class GlobalSearchTermFilterFactory extends SearchTermFilterFactory {
     }
 
     filters.push(this.getNestedEduContentProductTypes(searchState));
-
+    console.log(filters);
     return combineLatest(filters);
   }
 }

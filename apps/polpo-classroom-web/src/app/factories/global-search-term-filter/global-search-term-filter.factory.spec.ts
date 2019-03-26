@@ -19,6 +19,7 @@ import {
   MethodReducer,
   SchoolTypeActions,
   SchoolTypeFixture,
+  SchoolTypeQueries,
   SchoolTypeReducer,
   YearActions,
   YearFixture,
@@ -120,40 +121,75 @@ describe('GlobalSearchTermFilterFactory', () => {
     expect(factory).toBeTruthy();
   });
 
-  describe('getFilters()', () => {
+  // describe('getFilters()', () => {
+  //   beforeEach(() => {
+  //     // fill the store with data
+  //     hydrateStore();
+  //   });
+
+  //   it('should return the requested filters', () => {
+  //     // set which filters are selected
+  //     const filterCriteriaSelections = new Map<string, (number | string)[]>();
+  //     filterCriteriaSelections.set('learningArea', [1, 2]);
+
+  //     const mockSearchState: SearchStateInterface = {
+  //       searchTerm: '',
+  //       filterCriteriaSelections: filterCriteriaSelections
+  //     };
+  //     const expectedFilters = [
+  //       getExpectedYearFilter(),
+  //       getExpectedEduNetFilter(),
+  //       getExpectedSchoolTypeFilter(),
+  //       getExpectedLearningAreaFilter(),
+  //       getExpectedMethodFilter(),
+  //       getExpectedLearningDomainFilter(),
+  //       getExpectedEduContentProductTypeFilter()
+  //     ];
+
+  //     const expected = hot('a', { a: expectedFilters });
+
+  //     const result = factory.getFilters(mockSearchState);
+  //     expect(result).toBeObservable(expected);
+  //   });
+
+  //   it('should not have method filters nor learning domain filters if no learning area is selected', () => {
+  //     // no learning areas selected
+  //     const filterCriteriaSelections = new Map<string, (number | string)[]>();
+
+  //     const mockSearchState: SearchStateInterface = {
+  //       searchTerm: '',
+  //       filterCriteriaSelections: filterCriteriaSelections
+  //     };
+
+  //     const expectedFilters = [
+  //       getExpectedYearFilter(),
+  //       getExpectedEduNetFilter(),
+  //       getExpectedSchoolTypeFilter(),
+  //       getExpectedLearningAreaFilter(),
+  //       getExpectedEduContentProductTypeFilter()
+  //     ];
+
+  //     const expected = hot('a', { a: expectedFilters });
+
+  //     const result = factory.getFilters(mockSearchState);
+  //     expect(result).toBeObservable(expected);
+  //   });
+  // });
+
+  describe('', () => {
     beforeEach(() => {
-      // fill the store with data
       hydrateStore();
+      // empty school types from store
+      store.dispatch(new SchoolTypeActions.ClearSchoolTypes());
+
+      store
+        .select(SchoolTypeQueries.getAll)
+        .subscribe(entities => console.log(entities));
     });
-
-    it('should return the requested filters', () => {
-      // set which filters are selected
+    fit('should remove filters without values', () => {
+      // do selected learning areas
       const filterCriteriaSelections = new Map<string, (number | string)[]>();
-      filterCriteriaSelections.set('learningArea', [1, 2]);
-
-      const mockSearchState: SearchStateInterface = {
-        searchTerm: '',
-        filterCriteriaSelections: filterCriteriaSelections
-      };
-      const expectedFilters = [
-        getExpectedYearFilter(),
-        getExpectedEduNetFilter(),
-        getExpectedSchoolTypeFilter(),
-        getExpectedLearningAreaFilter(),
-        getExpectedMethodFilter(),
-        getExpectedLearningDomainFilter(),
-        getExpectedEduContentProductTypeFilter()
-      ];
-
-      const expected = hot('a', { a: expectedFilters });
-
-      const result = factory.getFilters(mockSearchState);
-      expect(result).toBeObservable(expected);
-    });
-
-    it('should not have method filters nor learning domain filters of no learning area is selected', () => {
-      // do not any selected learning areas
-      const filterCriteriaSelections = new Map<string, (number | string)[]>();
+      // filterCriteriaSelections.set('learningArea', [1, 2]);
 
       const mockSearchState: SearchStateInterface = {
         searchTerm: '',
@@ -163,7 +199,6 @@ describe('GlobalSearchTermFilterFactory', () => {
       const expectedFilters = [
         getExpectedYearFilter(),
         getExpectedEduNetFilter(),
-        getExpectedSchoolTypeFilter(),
         getExpectedLearningAreaFilter(),
         getExpectedEduContentProductTypeFilter()
       ];

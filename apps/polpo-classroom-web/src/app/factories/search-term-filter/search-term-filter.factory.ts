@@ -24,7 +24,7 @@ import {
   Store
 } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { filter, map, tap } from 'rxjs/operators';
 
 export const SEARCH_TERM_FILTER_FACTORY_TOKEN = new InjectionToken(
   'SearchTermFilterFactory'
@@ -102,12 +102,16 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
           }
         )
         .pipe(
+          filter(entities => entities.length > 0),
           map(entities => this.getFilter(entities, filterQuery, searchState))
         );
     } else {
       return this.store
         .select(filterQuery.query as MemoizedSelector<Object, any[]>)
         .pipe(
+          tap(entities => console.log(entities.length)),
+          // filter(entities => entities.length > 0),
+          tap(entities => console.log(entities)),
           map(entities => this.getFilter(entities, filterQuery, searchState))
         );
     }
