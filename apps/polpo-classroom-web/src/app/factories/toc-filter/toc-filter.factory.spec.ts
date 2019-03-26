@@ -20,6 +20,7 @@ import {
 } from '@campus/dal';
 import {
   ColumnFilterComponent,
+  SearchFilterCriteriaInterface,
   SearchFilterInterface,
   SearchStateInterface
 } from '@campus/search';
@@ -152,7 +153,7 @@ describe('TocFilterFactory', () => {
 
   describe('getfilters', () => {
     let factory: TocFilterFactory;
-    let expected: SearchFilterInterface[];
+    let expected: SearchFilterCriteriaInterface[];
     let result: Observable<SearchFilterInterface[]>;
 
     const mockSelectedAreaId = 1;
@@ -190,12 +191,12 @@ describe('TocFilterFactory', () => {
 
       describe('last selection: learningArea', () => {
         it('should return filterCriteria', () => {
-          const expectedLearningAreaFilter = getExpectedLearningAreaFilter();
-          const expectedYearFilter = getExpectedYearFilter();
+          const expectedLearningAreaFilter = getExpectedLearningAreaFilterCriterium();
+          const expectedYearFilter = getExpectedYearFilterCriterium();
 
           expected = [expectedLearningAreaFilter, expectedYearFilter];
 
-          expect(result).toBeObservable(hot('a', { a: expected }));
+          expect(result).toBeObservable(hot('a', { a: getFilter(expected) }));
         });
       });
     });
@@ -211,9 +212,9 @@ describe('TocFilterFactory', () => {
 
       describe('last selection: year', () => {
         it('should return filterCriteria', () => {
-          const expectedLearningAreaFilter = getExpectedLearningAreaFilter();
-          const expectedYearFilter = getExpectedYearFilter();
-          const expectedMethodFilter = getExpectedMethodFilter([6, 7]);
+          const expectedLearningAreaFilter = getExpectedLearningAreaFilterCriterium();
+          const expectedYearFilter = getExpectedYearFilterCriterium();
+          const expectedMethodFilter = getExpectedMethodFilterCriterium([6, 7]);
 
           expected = [
             expectedLearningAreaFilter,
@@ -221,7 +222,7 @@ describe('TocFilterFactory', () => {
             expectedMethodFilter
           ];
 
-          expect(result).toBeObservable(hot('a', { a: expected }));
+          expect(result).toBeObservable(hot('a', { a: getFilter(expected) }));
         });
       });
     });
@@ -238,11 +239,11 @@ describe('TocFilterFactory', () => {
 
       describe('last selection: method', () => {
         it('should return filterCriteria', () => {
-          const expectedLearningAreaFilter = getExpectedLearningAreaFilter();
-          const expectedYearFilter = getExpectedYearFilter();
+          const expectedLearningAreaFilter = getExpectedLearningAreaFilterCriterium();
+          const expectedYearFilter = getExpectedYearFilterCriterium();
 
-          const expectedMethodFilter = getExpectedMethodFilter([6, 7]);
-          const expectedTreeFilter = getExpectedTreeFilter();
+          const expectedMethodFilter = getExpectedMethodFilterCriterium([6, 7]);
+          const expectedTreeFilter = getExpectedTreeFilterCriteria();
 
           expected = [
             expectedLearningAreaFilter,
@@ -251,7 +252,7 @@ describe('TocFilterFactory', () => {
             expectedTreeFilter
           ];
 
-          expect(result).toBeObservable(cold('a', { a: expected }));
+          expect(result).toBeObservable(cold('a', { a: getFilter(expected) }));
         });
       });
     });
@@ -268,12 +269,14 @@ describe('TocFilterFactory', () => {
       });
 
       it('should return filterCriteria', () => {
-        const expectedLearningAreaFilter = getExpectedLearningAreaFilter();
-        const expectedYearFilter = getExpectedYearFilter();
+        const expectedLearningAreaFilter = getExpectedLearningAreaFilterCriterium();
+        const expectedYearFilter = getExpectedYearFilterCriterium();
 
-        const expectedMethodFilter = getExpectedMethodFilter([6, 7]);
-        const expectedTreeFilter = getExpectedTreeFilter([]);
-        const expectedTreeFilter_1 = getExpectedTreeFilter([mockSelectedTocId]);
+        const expectedMethodFilter = getExpectedMethodFilterCriterium([6, 7]);
+        const expectedTreeFilter = getExpectedTreeFilterCriteria([]);
+        const expectedTreeFilter_1 = getExpectedTreeFilterCriteria([
+          mockSelectedTocId
+        ]);
 
         expected = [
           expectedLearningAreaFilter,
@@ -283,15 +286,15 @@ describe('TocFilterFactory', () => {
           expectedTreeFilter_1
         ];
 
-        expect(result).toBeObservable(cold('a', { a: expected }));
+        expect(result).toBeObservable(cold('a', { a: getFilter(expected) }));
       });
 
       it("should not return extra filterCriteria if there aren't any children", () => {
-        const expectedLearningAreaFilter = getExpectedLearningAreaFilter();
-        const expectedYearFilter = getExpectedYearFilter();
+        const expectedLearningAreaFilter = getExpectedLearningAreaFilterCriterium();
+        const expectedYearFilter = getExpectedYearFilterCriterium();
 
-        const expectedMethodFilter = getExpectedMethodFilter([6, 7]);
-        const expectedTreeFilter = getExpectedTreeFilter();
+        const expectedMethodFilter = getExpectedMethodFilterCriterium([6, 7]);
+        const expectedTreeFilter = getExpectedTreeFilterCriteria();
 
         const mockSearchState = getMockSearchState(
           mockSelectedAreaId,
@@ -306,7 +309,9 @@ describe('TocFilterFactory', () => {
           mockSelectedTocId_1
         ]);
 
-        const expectedTreeFilter_1 = getExpectedTreeFilter([mockSelectedTocId]);
+        const expectedTreeFilter_1 = getExpectedTreeFilterCriteria([
+          mockSelectedTocId
+        ]);
 
         expected = [
           expectedLearningAreaFilter,
@@ -316,7 +321,7 @@ describe('TocFilterFactory', () => {
           expectedTreeFilter_1
         ];
         result = factory.getFilters(mockSearchState);
-        expect(result).toBeObservable(cold('a', { a: expected }));
+        expect(result).toBeObservable(cold('a', { a: getFilter(expected) }));
       });
 
       describe('update cache', () => {
@@ -438,41 +443,42 @@ describe('TocFilterFactory', () => {
     });
   });
 
-  function getExpectedLearningAreaFilter() {
+  function getFilter(criteria) {
+    return [
+      {
+        criteria,
+        component: ColumnFilterComponent,
+        domHost: 'hostLeft',
+        options: undefined
+      }
+    ];
+  }
+
+  function getExpectedLearningAreaFilterCriterium() {
     return {
-      criteria: {
-        name: 'learningArea',
-        label: 'Leergebieden',
-        keyProperty: 'id',
-        displayProperty: 'name',
-        values: mockLearningAreas.map(area => ({
-          data: area
-        }))
-      },
-      component: ColumnFilterComponent,
-      domHost: 'hostLeft',
-      options: undefined
+      name: 'learningArea',
+      label: 'Leergebieden',
+      keyProperty: 'id',
+      displayProperty: 'name',
+      values: mockLearningAreas.map(area => ({
+        data: area
+      }))
     };
   }
 
-  function getExpectedYearFilter() {
+  function getExpectedYearFilterCriterium() {
     return {
-      criteria: {
-        name: 'year',
-        label: 'Jaren',
-        keyProperty: 'id',
-        displayProperty: 'name',
-        values: mockYears.map(year => ({
-          data: year
-        }))
-      },
-      component: ColumnFilterComponent,
-      domHost: 'hostLeft',
-      options: undefined
+      name: 'year',
+      label: 'Jaren',
+      keyProperty: 'id',
+      displayProperty: 'name',
+      values: mockYears.map(year => ({
+        data: year
+      }))
     };
   }
 
-  function getExpectedMethodFilter(methodIds?: number[]) {
+  function getExpectedMethodFilterCriterium(methodIds?: number[]) {
     let expectedMethods: MethodInterface[];
     if (!methodIds) {
       expectedMethods = mockMethods;
@@ -483,24 +489,19 @@ describe('TocFilterFactory', () => {
     }
 
     return {
-      criteria: {
-        name: 'method',
-        label: 'Methodes',
-        keyProperty: 'id',
-        displayProperty: 'name',
-        values: mockMethods
-          .filter(method => methodIds.includes(method.id))
-          .map(method => ({
-            data: method
-          }))
-      },
-      component: ColumnFilterComponent,
-      domHost: 'hostLeft',
-      options: undefined
+      name: 'method',
+      label: 'Methodes',
+      keyProperty: 'id',
+      displayProperty: 'name',
+      values: mockMethods
+        .filter(method => methodIds.includes(method.id))
+        .map(method => ({
+          data: method
+        }))
     };
   }
 
-  function getExpectedTreeFilter(
+  function getExpectedTreeFilterCriteria(
     parentIds: number[] = [] // Note: you are expected to pass ids that exist
   ) {
     const depth = parentIds.length;
@@ -512,18 +513,13 @@ describe('TocFilterFactory', () => {
     if (!tree) return;
 
     return {
-      criteria: {
-        name: 'eduContentTOC',
-        label: 'Inhoudstafel',
-        keyProperty: 'id',
-        displayProperty: 'title',
-        values: tree.map(toc => ({
-          data: toc
-        }))
-      },
-      component: ColumnFilterComponent,
-      domHost: 'hostLeft',
-      options: undefined
+      name: 'eduContentTOC',
+      label: 'Inhoudstafel',
+      keyProperty: 'id',
+      displayProperty: 'title',
+      values: tree.map(toc => ({
+        data: toc
+      }))
     };
   }
 

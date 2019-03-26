@@ -11,6 +11,7 @@ import {
 import {
   ColumnFilterComponent,
   SearchFilterComponentInterface,
+  SearchFilterCriteriaInterface,
   SearchFilterFactory,
   SearchFilterInterface,
   SearchStateInterface
@@ -26,6 +27,7 @@ import {
   shareReplay,
   startWith,
   switchMap,
+  switchMapTo,
   withLatestFrom
 } from 'rxjs/operators';
 
@@ -45,14 +47,13 @@ export class TocFilterFactory implements SearchFilterFactory {
   // base for all other streams
   private searchState$ = new BehaviorSubject<SearchStateInterface>(null);
 
-  // private learningAreafilter$: Observable<SearchFilterInterface>;
-  // private booksWithYears$: Observable<EduContentBookInterface[]>;
-  // private yearfilter$: Observable<SearchFilterInterface>;
-  // private methodfilter$: Observable<SearchFilterInterface>;
-  // private treefilters$: Observable<SearchFilterInterface[]>;
+  // keeps track of differences between inputs
+  private searchStateDiff$: Observable<
+    [SearchStateInterface, SearchStateInterface]
+  >;
 
-  // output for viewmodel
-  private filters$: Observable<SearchFilterInterface[]>;
+  // stores the available books of a learningArea
+  private booksWithYears$: Observable<EduContentBookInterface[]>;
 
   constructor(
     private store: Store<DalState>,
@@ -61,18 +62,58 @@ export class TocFilterFactory implements SearchFilterFactory {
     this.setupStreams();
   }
 
+  public getFilters(
+    searchState: SearchStateInterface
+  ): Observable<SearchFilterInterface[]> {
+    this.searchState$.next(searchState);
+
+    return this.searchState$.pipe(
+      withLatestFrom(
+        this.getLearningAreaFilterCriteria$(),
+        this.getYearFilterCriteria$(),
+        this.getMethodFilterCriteria$(),
+        this.getTreeFilterCriteria$()
+      ),
+      map(
+        ([
+          newSearchState, // not used
+          learningAreaFilterCriterium,
+          yearFilterCriterium,
+          methodFilterCriterium,
+          treeFilterCriteria // is an array
+        ]) => {
+          // combine values
+          const filterCriteriaArray = [
+            learningAreaFilterCriterium,
+            yearFilterCriterium,
+            methodFilterCriterium,
+            ...treeFilterCriteria
+          ]
+            // filter out null values
+            .filter(value => !!value);
+
+          // make filter
+          // interface expects array
+          return [
+            this.getFilter(
+              filterCriteriaArray,
+              this.filterComponent,
+              this.domHost
+            )
+          ];
+        }
+      )
+    );
+  }
+
   private setupStreams() {
-    const searchStateDiff$ = this.searchState$.pipe(
+    this.searchStateDiff$ = this.searchState$.pipe(
       startWith(null),
       pairwise(),
       shareReplay(1)
     );
 
-    const learningAreafilter$ = this.searchState$.pipe(
-      switchMap(searchstate => this.getLearningAreaFilter(searchstate))
-    );
-
-    const booksWithYears$ = searchStateDiff$.pipe(
+    this.booksWithYears$ = this.searchStateDiff$.pipe(
       filter(searchStateDiff =>
         this.hasSearchStateChanged(searchStateDiff, LEARNING_AREA)
       ),
@@ -81,134 +122,45 @@ export class TocFilterFactory implements SearchFilterFactory {
       ),
       shareReplay(1)
     );
-
-    const yearfilter$ = this.searchState$.pipe(
-      filter(searchState =>
-        this.hasSearchStateData(searchState, LEARNING_AREA)
-      ),
-      withLatestFrom(booksWithYears$),
-      map(([searchState, books]) => this.getYearFilter(searchState, books))
-    );
-
-    const emptyYearFilter$: Observable<
-      SearchFilterInterface
-    > = this.searchState$.pipe(
-      filter(
-        searchState => !this.hasSearchStateData(searchState, LEARNING_AREA)
-      ),
-      mapTo(null)
-    );
-
-    const methodfilter$ = this.searchState$.pipe(
-      filter(
-        searchState =>
-          this.hasSearchStateData(searchState, LEARNING_AREA) &&
-          this.hasSearchStateData(searchState, YEAR)
-      ),
-      withLatestFrom(booksWithYears$),
-      switchMap(([searchState, books]) =>
-        this.getMethodFilter$(searchState, books)
-      )
-    );
-
-    const emptyMethodfilter$ = this.searchState$.pipe(
-      filter(
-        searchState =>
-          !(
-            this.hasSearchStateData(searchState, LEARNING_AREA) &&
-            this.hasSearchStateData(searchState, YEAR)
-          )
-      ),
-      mapTo(null)
-    );
-
-    const treefilters$ = searchStateDiff$.pipe(
-      filter(
-        searchStateDiff =>
-          this.hasSearchStateData(searchStateDiff[1], LEARNING_AREA) &&
-          this.hasSearchStateData(searchStateDiff[1], YEAR) &&
-          this.hasSearchStateData(searchStateDiff[1], METHOD) &&
-          // has at least one of the values changed
-          (this.hasSearchStateChanged(searchStateDiff, LEARNING_AREA) ||
-            this.hasSearchStateChanged(searchStateDiff, YEAR) ||
-            this.hasSearchStateChanged(searchStateDiff, METHOD))
-      ),
-      withLatestFrom(booksWithYears$),
-      switchMap(([[oldSearchstate, newSearchstate], books]) => {
-        return this.getTree(newSearchstate, books).pipe(
-          map(tree =>
-            this.getFiltersForTree(newSearchstate, this.getTreeMap(tree))
-          )
-        );
-      })
-    );
-
-    const emptyTreefilters$ = searchStateDiff$.pipe(
-      filter(
-        searchStateDiff =>
-          !(
-            this.hasSearchStateData(searchStateDiff[1], LEARNING_AREA) &&
-            this.hasSearchStateData(searchStateDiff[1], YEAR) &&
-            this.hasSearchStateData(searchStateDiff[1], METHOD) &&
-            // has at least one of the values changed
-            (this.hasSearchStateChanged(searchStateDiff, LEARNING_AREA) ||
-              this.hasSearchStateChanged(searchStateDiff, YEAR) ||
-              this.hasSearchStateChanged(searchStateDiff, METHOD))
-          )
-      ),
-      mapTo(null)
-    );
-
-    this.filters$ = this.searchState$.pipe(
-      withLatestFrom(
-        learningAreafilter$,
-        merge(yearfilter$, emptyYearFilter$),
-        merge(methodfilter$, emptyMethodfilter$),
-        merge(treefilters$, emptyTreefilters$)
-      ),
-      map(
-        ([
-          searchState,
-          learningAreaFilter,
-          yearFilter,
-          methodFilter,
-          treeFilters
-        ]) =>
-          [learningAreaFilter, yearFilter, methodFilter, ...treeFilters]
-            // filter out null values
-            .filter(value => !!value)
-      )
-    );
   }
 
-  public getFilters(
-    searchState: SearchStateInterface
-  ): Observable<SearchFilterInterface[]> {
-    this.searchState$.next(searchState);
-
-    return this.filters$;
-  }
-
-  private getLearningAreaFilter(
-    searchState: SearchStateInterface
-  ): Observable<SearchFilterInterface> {
-    return this.store.pipe(
-      select(LearningAreaQueries.getAll),
-      map(areas =>
-        this.getFilter(
-          searchState,
-          areas,
-          LEARNING_AREA,
-          'Leergebieden',
-          'id',
-          'name',
-          this.filterComponent,
-          this.domHost
+  /**
+   * Returns the filterCriterium for the learningAreas
+   *
+   * @private
+   * @returns {Observable<SearchFilterCriteriaInterface>}
+   * @memberof TocFilterFactory
+   */
+  private getLearningAreaFilterCriteria$(): Observable<
+    SearchFilterCriteriaInterface
+  > {
+    return this.searchState$.pipe(
+      switchMapTo(
+        this.store.pipe(
+          select(LearningAreaQueries.getAll),
+          map(areas =>
+            this.getFilterCriterium(
+              areas,
+              LEARNING_AREA,
+              'Leergebieden',
+              'id',
+              'name'
+            )
+          )
         )
       )
     );
   }
 
+  /**
+   * returns array of books from the Api
+   * uses learningAreaId from the searchState selections
+   *
+   * @private
+   * @param {SearchStateInterface} searchState
+   * @returns {Observable<EduContentBookInterface[]>}
+   * @memberof TocFilterFactory
+   */
   private getBooksWithYears(
     searchState: SearchStateInterface
   ): Observable<EduContentBookInterface[]> {
@@ -230,93 +182,253 @@ export class TocFilterFactory implements SearchFilterFactory {
     );
   }
 
-  private getYearFilter(
-    searchState: SearchStateInterface,
-    booksWithYears: EduContentBookInterface[]
-  ): SearchFilterInterface {
-    // reduce to set of years
-    const years = Array.from(
-      new Set(booksWithYears.reduce((acc, book) => [...acc, ...book.years], []))
-    ).sort((a, b) => a.id - b.id);
+  /**
+   * Returns the filterCriterium for the years,
+   * or null when there isn't enough data
+   *
+   * @private
+   * @returns {Observable<SearchFilterCriteriaInterface>}
+   * @memberof TocFilterFactory
+   */
+  private getYearFilterCriteria$(): Observable<SearchFilterCriteriaInterface> {
+    const yearFilterCriteria$ = this.searchState$.pipe(
+      filter(searchState =>
+        this.hasSearchStateData(searchState, LEARNING_AREA)
+      ),
+      withLatestFrom(this.booksWithYears$),
+      map(([searchState, books]) => {
+        // reduce to set of years
+        const years = Array.from(
+          new Set(books.reduce((acc, book) => [...acc, ...book.years], []))
+        ).sort((a, b) => a.id - b.id);
 
-    return this.getFilter(
-      searchState,
-      years,
-      YEAR,
-      'Jaren',
-      'id',
-      'name',
-      this.filterComponent,
-      this.domHost
+        return this.getFilterCriterium(years, YEAR, 'Jaren', 'id', 'name');
+      })
     );
+
+    const emptyYearFilterCriteria$ = this.searchState$.pipe(
+      filter(
+        searchState => !this.hasSearchStateData(searchState, LEARNING_AREA)
+      ),
+      mapTo(null)
+    );
+
+    return merge(yearFilterCriteria$, emptyYearFilterCriteria$);
   }
 
-  private getMethodFilter$(
-    searchState: SearchStateInterface,
-    booksWithYears: EduContentBookInterface[]
-  ): Observable<SearchFilterInterface> {
-    const learningAreaId = searchState.filterCriteriaSelections.get(
-      LEARNING_AREA
-    )[0] as number;
-    const selectedYearId = searchState.filterCriteriaSelections.get(
-      YEAR
-    )[0] as number;
+  /**
+   * Returns the filterCriterium for the methods,
+   * or null when there isn't enough data
+   *
+   * @private
+   * @returns {Observable<SearchFilterCriteriaInterface>}
+   * @memberof TocFilterFactory
+   */
+  private getMethodFilterCriteria$(): Observable<
+    SearchFilterCriteriaInterface
+  > {
+    const methodFilterCriteria$ = this.searchState$.pipe(
+      filter(
+        searchState =>
+          this.hasSearchStateData(searchState, LEARNING_AREA) &&
+          this.hasSearchStateData(searchState, YEAR)
+      ),
+      withLatestFrom(this.booksWithYears$),
+      switchMap(([searchState, books]) => {
+        const learningAreaId = searchState.filterCriteriaSelections.get(
+          LEARNING_AREA
+        )[0] as number;
+        const selectedYearId = searchState.filterCriteriaSelections.get(
+          YEAR
+        )[0] as number;
 
-    return this.store.pipe(
-      select(MethodQueries.getByLearningAreaId, {
-        learningAreaId
-      }),
-      map(methods => {
-        const booksForYear = booksWithYears.filter(book =>
-          book.years.some(year => year.id === selectedYearId)
-        );
+        return this.store.pipe(
+          select(MethodQueries.getByLearningAreaId, {
+            learningAreaId
+          }),
+          map(methods => {
+            const booksForYear = books.filter(book =>
+              book.years.some(year => year.id === selectedYearId)
+            );
 
-        const filteredMethods = methods.filter(
-          method =>
-            booksForYear.filter(
-              book =>
-                book.methodId === method.id &&
-                book.years.some(year => year.id === selectedYearId)
-            ).length
-        );
+            const filteredMethods = methods.filter(
+              method =>
+                booksForYear.filter(
+                  book =>
+                    book.methodId === method.id &&
+                    book.years.some(year => year.id === selectedYearId)
+                ).length
+            );
 
-        return this.getFilter(
-          searchState,
-          filteredMethods,
-          METHOD,
-          'Methodes',
-          'id',
-          'name',
-          this.filterComponent,
-          this.domHost
+            return this.getFilterCriterium(
+              filteredMethods,
+              METHOD,
+              'Methodes',
+              'id',
+              'name'
+            );
+          })
         );
       })
     );
+
+    const emptyMethodFilterCriteria$ = this.searchState$.pipe(
+      filter(
+        searchState =>
+          !(
+            this.hasSearchStateData(searchState, LEARNING_AREA) &&
+            this.hasSearchStateData(searchState, YEAR)
+          )
+      ),
+      mapTo(null)
+    );
+
+    return merge(methodFilterCriteria$, emptyMethodFilterCriteria$);
   }
 
-  private getFilter<T>(
-    searchState: SearchStateInterface,
+  /**
+   * Returns the filterCriteria for the tree,
+   * or null when there isn't enough data
+   *
+   * @private
+   * @returns {Observable<SearchFilterCriteriaInterface[]>}
+   * @memberof TocFilterFactory
+   */
+  private getTreeFilterCriteria$(): Observable<
+    SearchFilterCriteriaInterface[]
+  > {
+    const treeFilterCriteria$ = this.searchStateDiff$.pipe(
+      filter(
+        searchStateDiff =>
+          this.hasSearchStateData(searchStateDiff[1], LEARNING_AREA) &&
+          this.hasSearchStateData(searchStateDiff[1], YEAR) &&
+          this.hasSearchStateData(searchStateDiff[1], METHOD) &&
+          // has at least one of the values changed
+          (this.hasSearchStateChanged(searchStateDiff, LEARNING_AREA) ||
+            this.hasSearchStateChanged(searchStateDiff, YEAR) ||
+            this.hasSearchStateChanged(searchStateDiff, METHOD))
+      ),
+      withLatestFrom(this.booksWithYears$),
+      switchMap(([[oldSearchstate, newSearchstate], books]) => {
+        return this.getTree(newSearchstate, books).pipe(
+          map(tree => {
+            const treeMap = this.getTreeMap(tree);
+            if (!treeMap) return;
+
+            // filter for top level of tree
+            const filterForTree = this.getFilterCriterium(
+              treeMap.get(0),
+              TOC,
+              'Inhoudstafel',
+              'id',
+              'title'
+            );
+
+            let filtersForBranches = [];
+            if (newSearchstate.filterCriteriaSelections.has(TOC)) {
+              const selectedTocId = newSearchstate.filterCriteriaSelections.get(
+                TOC
+              )[0] as number;
+
+              const tocs = treeMap.get(selectedTocId);
+
+              // filter for branches
+              // this creates the filter for the level after the current branch
+              filtersForBranches = tocs.reduce((acc, toc) => {
+                if (toc.children) {
+                  acc.push(
+                    this.getFilterCriterium(
+                      toc.children,
+                      TOC,
+                      'Inhoudstafel',
+                      'id',
+                      'title'
+                    )
+                  );
+                }
+                return acc;
+              }, []);
+            }
+
+            return [filterForTree, ...filtersForBranches];
+          })
+        );
+      })
+    );
+
+    const emptyTreeFilterCriteria$ = this.searchStateDiff$.pipe(
+      filter(
+        searchStateDiff =>
+          !(
+            this.hasSearchStateData(searchStateDiff[1], LEARNING_AREA) &&
+            this.hasSearchStateData(searchStateDiff[1], YEAR) &&
+            this.hasSearchStateData(searchStateDiff[1], METHOD) &&
+            // has at least one of the values changed
+            (this.hasSearchStateChanged(searchStateDiff, LEARNING_AREA) ||
+              this.hasSearchStateChanged(searchStateDiff, YEAR) ||
+              this.hasSearchStateChanged(searchStateDiff, METHOD))
+          )
+      ),
+      mapTo(null)
+    );
+
+    return merge(treeFilterCriteria$, emptyTreeFilterCriteria$);
+  }
+
+  /**
+   * Wraps entities in a searchFilterCriterium
+   *
+   * @private
+   * @template T
+   * @param {T[]} entities
+   * @param {string} entityName
+   * @param {string} entityLabel
+   * @param {PrimitivePropertiesKeys<T>} entityKeyProperty
+   * @param {PrimitivePropertiesKeys<T>} entityDisplayProperty
+   * @returns {SearchFilterCriteriaInterface}
+   * @memberof TocFilterFactory
+   */
+  private getFilterCriterium<T>(
     entities: T[],
     entityName: string,
     entityLabel: string,
     entityKeyProperty: PrimitivePropertiesKeys<T>,
-    entityDisplayProperty: PrimitivePropertiesKeys<T>,
+    entityDisplayProperty: PrimitivePropertiesKeys<T>
+  ): SearchFilterCriteriaInterface {
+    if (!entities || !entities.length) return;
+
+    return {
+      name: entityName,
+      label: entityLabel,
+      keyProperty: entityKeyProperty as string,
+      displayProperty: entityDisplayProperty as string,
+      values: entities.map(entity => ({
+        data: entity
+      }))
+    };
+  }
+
+  /**
+   * Wraps filterCriteria in a searchFilter
+   *
+   * @private
+   * @param {SearchFilterCriteriaInterface[]} criteria
+   * @param {Type<SearchFilterComponentInterface>} component
+   * @param {string} domHost
+   * @param {*} [options]
+   * @returns {SearchFilterInterface}
+   * @memberof TocFilterFactory
+   */
+  private getFilter(
+    criteria: SearchFilterCriteriaInterface[],
     component: Type<SearchFilterComponentInterface>,
     domHost: string,
     options?: any
   ): SearchFilterInterface {
-    if (!entities || !entities.length) return;
+    if (!criteria || !criteria.length) return;
 
     return {
-      criteria: {
-        name: entityName,
-        label: entityLabel,
-        keyProperty: entityKeyProperty as string,
-        displayProperty: entityDisplayProperty as string,
-        values: entities.map(entity => ({
-          data: entity
-        }))
-      },
+      criteria,
       component,
       domHost,
       options
@@ -324,7 +436,7 @@ export class TocFilterFactory implements SearchFilterFactory {
   }
 
   /**
-   * Return TOC-tree, first level is already an array of branches
+   * Return TOC-tree from API, first level is already an array of branches
    *
    * @private
    * @param {number} yearId
@@ -350,67 +462,30 @@ export class TocFilterFactory implements SearchFilterFactory {
     return this.tocService.getTree(neededBook.id);
   }
 
-  private getFiltersForTree(
-    searchState: SearchStateInterface,
-    treeMap: Map<number, EduContentTOCInterface[]>
-  ): SearchFilterInterface[] {
-    if (!treeMap || !searchState) return;
-
-    // filter for top level of tree
-    const filterForTree = this.getFilter(
-      searchState,
-      treeMap.get(0),
-      TOC,
-      'Inhoudstafel',
-      'id',
-      'title',
-      this.filterComponent,
-      this.domHost
-    );
-
-    let filtersForBranches = [];
-    if (searchState.filterCriteriaSelections.has(TOC)) {
-      const selectedTocId = searchState.filterCriteriaSelections.get(
-        TOC
-      )[0] as number;
-
-      const tocs = treeMap.get(selectedTocId);
-
-      // filter for branches
-      // this creates the filter for the level after the current branch
-      filtersForBranches = tocs.reduce((acc, toc) => {
-        if (toc.children) {
-          acc.push(
-            this.getFilter(
-              searchState,
-              toc.children,
-              TOC,
-              'Inhoudstafel',
-              'id',
-              'title',
-              this.filterComponent,
-              this.domHost
-            )
-          );
-        }
-        return acc;
-      }, []);
-    }
-
-    return [filterForTree, ...filtersForBranches];
-  }
-
-  // returns a map of all branches in the tree
-  // example (with ids for brevity, actual map values contain references):
-  // tree:
-  // 1
-  //  - 2
-  //    - 5
-  //  - 3
-  // 4
-  // Map { 0 => [ 1, 4 ], 1 => [1], 2 => [ 1, 2 ], 5 => [ 1, 2, 5 ], 3 => [ 1, 3 ], 4 => [4] }
-  // the values in the arrays are the branches, top to bottom
-  // id = 0 is original tree
+  /**
+   * Returns a map of all branches in the tree
+   * Every key (id) maps to the path towards the Toc,
+   * including the Toc as a last value
+   * key 0 maps the top level of the tree
+   *
+   * @private
+   * @param {EduContentTOCInterface[]} tree
+   * @param {Map<number, EduContentTOCInterface[]>} [treeMap=new Map()]
+   * @param {EduContentTOCInterface[]} [parentBranches=[]]
+   * @returns {Map<number, EduContentTOCInterface[]>}
+   * @memberof TocFilterFactory
+   *
+   * @example  (with ids for brevity, actual map values contain references):
+   * tree:
+   * 1
+   * - 2
+   * - - 5
+   * - 3
+   * 4
+   * Map { 0 => [ 1, 4 ], 1 => [1], 2 => [ 1, 2 ], 5 => [ 1, 2, 5 ], 3 => [ 1, 3 ], 4 => [4] }
+   * the values in the arrays are the branches, top to bottom
+   * id = 0 is original tree
+   */
   private getTreeMap(
     tree: EduContentTOCInterface[],
     treeMap: Map<number, EduContentTOCInterface[]> = new Map(),
@@ -433,6 +508,19 @@ export class TocFilterFactory implements SearchFilterFactory {
     return treeMap;
   }
 
+  /**
+   * Returns if the new searchState selection differs enough from the previous value
+   * to warrant an update of values from the Api
+   *
+   * @private
+   * @param {[
+   *       SearchStateInterface,
+   *       SearchStateInterface
+   *     ]} [oldSearchState, newSearchState]
+   * @param {string} selectionKey
+   * @returns {boolean}
+   * @memberof TocFilterFactory
+   */
   private hasSearchStateChanged(
     [oldSearchState, newSearchState]: [
       SearchStateInterface,
@@ -453,6 +541,15 @@ export class TocFilterFactory implements SearchFilterFactory {
     );
   }
 
+  /**
+   * Return if the searchState contains a certain selection
+   *
+   * @private
+   * @param {SearchStateInterface} searchState
+   * @param {string} selectionKey
+   * @returns {boolean}
+   * @memberof TocFilterFactory
+   */
   private hasSearchStateData(
     searchState: SearchStateInterface,
     selectionKey: string
