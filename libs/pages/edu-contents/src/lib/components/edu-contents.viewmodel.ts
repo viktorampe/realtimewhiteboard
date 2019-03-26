@@ -1,13 +1,22 @@
 import { Injectable } from '@angular/core';
-import { FavoriteInterface, LearningAreaInterface } from '@campus/dal';
+import {
+  DalState,
+  FavoriteInterface,
+  getRouterStateParams,
+  LearningAreaInterface
+} from '@campus/dal';
 import { SearchModeInterface, SearchStateInterface } from '@campus/search';
 import { EduContentSearchResultInterface } from '@campus/shared';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { select, Store } from '@ngrx/store';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EduContentsViewModel {
+  constructor(private store: Store<DalState>) {}
+
   public learningAreas$: Observable<LearningAreaInterface[]>;
   public favoriteLearningAreas$: Observable<LearningAreaInterface[]>;
   public searchResults$: Observable<EduContentSearchResultInterface[]>;
@@ -41,7 +50,39 @@ export class EduContentsViewModel {
    * can  be constructed from various parameters like querystring, ... TBD
    */
   public getInitialSearchState(): Observable<SearchStateInterface> {
-    return;
+    const routerStateParams$ = this.store.pipe(select(getRouterStateParams));
+    return combineLatest(this.searchState$, routerStateParams$).pipe(
+      map(([searchState, routerStateParams]: [SearchStateInterface, any]) => {
+        console.log(searchState);
+        console.log(routerStateParams);
+        console.log(routerStateParams.area);
+        if (routerStateParams.area) {
+          console.log(routerStateParams.area);
+          searchState.filterCriteriaSelections.set('learningArea', [
+            parseInt(routerStateParams.area, 10)
+          ]);
+        }
+        console.log(searchState);
+        return searchState;
+      })
+    );
+    // return this.store.pipe(
+    //   select(getRouterStateParams),
+    //   map(routerStateParams => {
+    //     const searchState = { ...this.searchState$.value };
+    //     console.log(searchState.filterCriteriaSelections);
+    //     if (routerStateParams.area) {
+    //       console.log(routerStateParams.area);
+    //       searchState.filterCriteriaSelections.set('learningArea', [
+    //         routerStateParams.area
+    //       ]);
+    //     }
+    //     console.log(routerStateParams);
+    //     console.log(searchState.filterCriteriaSelections);
+    //     console.log(searchState);
+    //     return searchState;
+    //   })
+    // );
   }
 
   /*
