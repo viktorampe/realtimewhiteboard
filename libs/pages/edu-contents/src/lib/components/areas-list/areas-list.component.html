@@ -1,0 +1,32 @@
+<campus-info-panel
+  titleText="Alle leergebieden"
+  titleIcon="lesmateriaal"
+  [displayAsRows]="true"
+>
+  <mat-form-field title__right class="pages-edu-contents-areas-list__filter">
+    <input
+      [(ngModel)]="filter"
+      (ngModelChange)="onFilterChange($event)"
+      placeholder="Filter op leergebied"
+      matInput
+    />
+  </mat-form-field>
+
+  <div
+    class="pages-edu-contents-areas-list__area"
+    *ngFor="let learningArea of filteredLearningAreas"
+    [class.pages-edu-contents-areas-list__area--selected]="
+      isFavoriteArea(learningArea)
+    "
+  >
+    <mat-icon
+      class="pages-edu-contents-areas-list__area__icon"
+      svgIcon="learning-area:{{learningArea.icon}}"
+    ></mat-icon>
+    <a
+      class="pages-edu-contents-areas-list__area__link"
+      [routerLink]="learningArea.id"
+      >{{ learningArea.name }}</a
+    >
+  </div>
+</campus-info-panel>
