@@ -125,5 +125,39 @@ describe('Method Selectors', () => {
         expect(results).toEqual(expected);
       });
     });
+
+    describe('getByLearningAreaIds', () => {
+      let mockMethods: MethodInterface[];
+
+      beforeEach(() => {
+        mockMethods = [
+          new MethodFixture({ id: 4, learningAreaId: 1 }),
+          new MethodFixture({ id: 1, learningAreaId: 1 }),
+          new MethodFixture({ id: 2, learningAreaId: 2 }),
+          new MethodFixture({ id: 3, learningAreaId: 3 })
+        ];
+
+        methodState = createState(mockMethods, true, 'no error');
+        storeState = { methods: methodState };
+      });
+
+      it('should only return the methods with the correct learningAreaIds', () => {
+        const results = MethodQueries.getByLearningAreaIds(storeState, {
+          learningAreaIds: [1, 3]
+        });
+
+        const expected = [mockMethods[1], mockMethods[3], mockMethods[0]]; // ordered by id
+        expect(results).toEqual(expected);
+      });
+
+      it('should return an empty array if no methods match the learningAreaIds', () => {
+        const results = MethodQueries.getByLearningAreaIds(storeState, {
+          learningAreaIds: [9, 12]
+        });
+
+        const expected = [];
+        expect(results).toEqual(expected);
+      });
+    });
   });
 });
