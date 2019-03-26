@@ -1,4 +1,4 @@
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import {
   DalState,
   EduContentBookFixture,
@@ -24,7 +24,7 @@ import {
   SearchStateInterface
 } from '@campus/search';
 import { Store, StoreModule } from '@ngrx/store';
-import { cold } from 'jasmine-marbles';
+import { cold, hot } from 'jasmine-marbles';
 import { Observable, of } from 'rxjs';
 import { TocFilterFactory } from './toc-filter.factory';
 
@@ -195,7 +195,7 @@ describe('TocFilterFactory', () => {
 
           expected = [expectedLearningAreaFilter, expectedYearFilter];
 
-          expect(result).toBeObservable(cold('a', { a: expected }));
+          expect(result).toBeObservable(hot('a', { a: expected }));
         });
       });
     });
@@ -221,7 +221,7 @@ describe('TocFilterFactory', () => {
             expectedMethodFilter
           ];
 
-          expect(result).toBeObservable(cold('a', { a: expected }));
+          expect(result).toBeObservable(hot('a', { a: expected }));
         });
       });
     });
@@ -253,11 +253,6 @@ describe('TocFilterFactory', () => {
 
           expect(result).toBeObservable(cold('a', { a: expected }));
         });
-
-        it('should cache the TOC from the service', async(() => {
-          const cachedTree = factory['cachedTree'];
-          expect(cachedTree.treeMap).toEqual(mockTreeMap);
-        }));
       });
     });
 
@@ -327,8 +322,6 @@ describe('TocFilterFactory', () => {
       describe('update cache', () => {
         it('should update the cached Toc - LearningArea', () => {
           // at this point LearningArea 1 is selected
-          const cachedTree = factory['cachedTree'];
-          expect(cachedTree.treeMap).toEqual(mockTreeMap);
 
           const newSearchState = getMockSearchState(
             2,
@@ -340,16 +333,10 @@ describe('TocFilterFactory', () => {
           const newTree = [mockTree[0]];
           tocService.getTree = jest.fn().mockReturnValue(of(newTree));
 
-          const newTreeMap = new Map([
-            [0, newTree],
-            [1, [newTree[0]]],
-            [2, [newTree[0], newTree[0].children[0]]],
-            [3, [newTree[0], newTree[0].children[1]]]
-          ]);
+          result = factory.getFilters(newSearchState);
+          result.subscribe();
 
-          factory.getFilters(newSearchState);
-
-          expect(cachedTree.treeMap).toEqual(newTreeMap);
+          expect(tocService.getTree).toHaveBeenCalled();
         });
 
         it('should update the cached Toc - Year', () => {
@@ -365,16 +352,10 @@ describe('TocFilterFactory', () => {
           const newTree = [mockTree[0]];
           tocService.getTree = jest.fn().mockReturnValue(of(newTree));
 
-          const newTreeMap = new Map([
-            [0, newTree],
-            [1, [newTree[0]]],
-            [2, [newTree[0], newTree[0].children[0]]],
-            [3, [newTree[0], newTree[0].children[1]]]
-          ]);
+          result = factory.getFilters(newSearchState);
+          result.subscribe();
 
-          factory.getFilters(newSearchState);
-          const cachedTree = factory['cachedTree'];
-          expect(cachedTree.treeMap).toEqual(newTreeMap);
+          expect(tocService.getTree).toHaveBeenCalled();
         });
 
         it('should update the cached Toc - Method', () => {
@@ -390,23 +371,21 @@ describe('TocFilterFactory', () => {
           const newTree = [mockTree[0]];
           tocService.getTree = jest.fn().mockReturnValue(of(newTree));
 
-          const newTreeMap = new Map([
-            [0, newTree],
-            [1, [newTree[0]]],
-            [2, [newTree[0], newTree[0].children[0]]],
-            [3, [newTree[0], newTree[0].children[1]]]
-          ]);
+          result = factory.getFilters(newSearchState);
+          result.subscribe();
 
-          factory.getFilters(newSearchState);
-          const cachedTree = factory['cachedTree'];
-          expect(cachedTree.treeMap).toEqual(newTreeMap);
+          expect(tocService.getTree).toHaveBeenCalled();
         });
       });
 
-      describe('do not update cache', () => {
+      fdescribe('do not update cache', () => {
         // getFilters() has already been called once in the beforeEach
 
         it('should not update the cached Toc', () => {
+          // not subscribing in expects
+          // subscribong manually
+          result.subscribe();
+
           // service return different value
           // cached value should not return this
           tocService.getTree = jest.fn().mockReturnValue(of(mockTree[0]));
@@ -417,39 +396,43 @@ describe('TocFilterFactory', () => {
             mockSelectedMethodId,
             mockSelectedTocId
           );
-          const cachedTreeMap = factory['cachedTree'].treeMap;
 
           // no selection
           newSearchState.filterCriteriaSelections.clear();
-          factory.getFilters(newSearchState);
-          expect(cachedTreeMap).toEqual(mockTreeMap);
+          result = factory.getFilters(newSearchState);
+
+          expect(tocService.getTree).not.toHaveBeenCalled();
 
           // select LearningArea
           newSearchState.filterCriteriaSelections.set('learningArea', [
             mockSelectedAreaId
           ]);
-          factory.getFilters(newSearchState);
-          expect(cachedTreeMap).toEqual(mockTreeMap);
+          result = factory.getFilters(newSearchState);
+
+          expect(tocService.getTree).not.toHaveBeenCalled();
 
           // select Year
           newSearchState.filterCriteriaSelections.set('year', [
             mockSelectedYearId
           ]);
-          factory.getFilters(newSearchState);
-          expect(cachedTreeMap).toEqual(mockTreeMap);
+          result = factory.getFilters(newSearchState);
+
+          expect(tocService.getTree).not.toHaveBeenCalled();
 
           // select Method
           newSearchState.filterCriteriaSelections.set('method', [
             mockSelectedMethodId
           ]);
-          factory.getFilters(newSearchState);
-          expect(cachedTreeMap).toEqual(mockTreeMap);
+          result = factory.getFilters(newSearchState);
+
+          expect(tocService.getTree).not.toHaveBeenCalled();
 
           // select a different Toc
           // Toc 1 was selected
           newSearchState.filterCriteriaSelections.set('eduContentTOC', [2]);
-          factory.getFilters(newSearchState);
-          expect(cachedTreeMap).toEqual(mockTreeMap);
+          result = factory.getFilters(newSearchState);
+
+          expect(tocService.getTree).not.toHaveBeenCalled();
         });
       });
     });
