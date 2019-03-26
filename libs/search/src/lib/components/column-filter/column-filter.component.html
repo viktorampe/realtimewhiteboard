@@ -1,8 +1,7 @@
 <ng-container *ngIf="filterCriteria && filterCriteria.length !== 0; else: noCriteria">
   <mat-action-list *ngFor="let filterCriterion of filterCriteria; let i = index"
                    [@slideInOut]="animationState(i)"
-                   class="column__filter"
-                   [class.column__filter--invisisble]="!columnVisible(i)">
+                   class="column__filter">
     <button mat-list-item
             *ngFor="let value of filterCriterion.values"
             class="column__filter__value"
