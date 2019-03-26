@@ -24,12 +24,22 @@ import {
 } from '@ngrx/router-store';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
-import { of } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { EduContentsViewModel } from './edu-contents.viewmodel';
 
 describe('EduContentsViewModel', () => {
   let eduContentsViewModel: EduContentsViewModel;
   let router: Router;
+  let eduContentService;
+
+  const mockSearchState: SearchStateInterface = {
+    searchTerm: 'not this',
+    filterCriteriaSelections: new Map<string, (number | string)[]>([
+      ['thing', ['one', 'two']],
+      ['other thing', ['three', 'four']]
+    ])
+  };
+
   let store: Store<DalState>;
 
   const mockLearningAreas = [
@@ -89,8 +99,8 @@ describe('EduContentsViewModel', () => {
         }
       ]
     });
-
     eduContentsViewModel = TestBed.get(EduContentsViewModel);
+    eduContentService = TestBed.get(EDU_CONTENT_SERVICE_TOKEN);
     router = TestBed.get(Router);
     store = TestBed.get(Store);
 
@@ -107,6 +117,22 @@ describe('EduContentsViewModel', () => {
 
   it('should be defined', () => {
     expect(eduContentsViewModel).toBeDefined();
+  });
+
+  describe('requestAutoComplete', () => {
+    it('should call autoComplete on the eduContentService', () => {
+      const autoCompleteSpy = jest.spyOn(eduContentService, 'autoComplete');
+      const mockNewSearchTerm = 'new search term';
+      eduContentsViewModel['searchState$'] = new BehaviorSubject<
+        SearchStateInterface
+      >(mockSearchState);
+      eduContentsViewModel.requestAutoComplete(mockNewSearchTerm);
+      expect(autoCompleteSpy).toHaveBeenCalledTimes(1);
+      expect(autoCompleteSpy).toHaveBeenCalledWith({
+        ...mockSearchState,
+        searchTerm: mockNewSearchTerm
+      });
+    });
   });
 
   describe('learningAreas$', () => {
@@ -146,18 +172,6 @@ describe('EduContentsViewModel', () => {
           a: mockLearningAreas[0]
         })
       );
-    }));
-  });
-
-  describe('autoCompleteValues$', () => {
-    it('should be updated when searchTerm$ is updated', fakeAsync(() => {
-      let autoCompleteValues;
-      eduContentsViewModel.autoCompleteValues$.subscribe(values => {
-        autoCompleteValues = values;
-      });
-      eduContentsViewModel.searchTerm$.next('foo');
-      tick(500);
-      expect(autoCompleteValues).toEqual(['strings', 'for', 'autocomplete']);
     }));
   });
 });

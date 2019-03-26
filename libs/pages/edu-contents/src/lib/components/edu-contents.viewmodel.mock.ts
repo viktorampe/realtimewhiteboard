@@ -112,7 +112,8 @@ export class EduContentsViewModelMock
   ]);
 
   public searchModes: EnvironmentSearchModesInterface = {
-    demo: this.searchMode
+    demo: this.searchMode,
+    search: this.searchMode
   };
 
   /*
