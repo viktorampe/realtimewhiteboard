@@ -1,33 +1,33 @@
 @mixin pages-edu-contents-search-modes() {
-  $pages-edu-contents-search-modes-width: 335px !default;
-  $pages-edu-contents-search-modes-height: 160px !default;
-  $pages-edu-contents-search-modes-padding: 25px !default;
-  $pages-edu-contents-search-modes-margin: 6px !default;
-  $pages-edu-contents-search-modes-border: 1px solid $ui-tertiary-bg-color-2 !default;
-  $pages-edu-contents-search-modes-background: $ui-tertiary-bg-color !default;
+  $pages-edu-contents__search-modes__item-width: 335px !default;
+  $pages-edu-contents__search-modes__item-padding: 25px !default;
+  $pages-edu-contents__search-modes__item-margin: 6px !default;
+  $pages-edu-contents__search-modes__item-border: 1px solid
+    $ui-tertiary-bg-color-2 !default;
+  $pages-edu-contents__search-modes__item-background: $ui-tertiary-bg-color !default;
 
-  $pages-edu-contents-search-modes-title-font-size: $ui-primary-font-size !default;
-  $pages-edu-contents-search-modes-title-color: $ui-primary-font-color-2 !default;
-  $pages-edu-contents-search-modes-title-color-accent: $ui-primary-font-color !default;
+  $pages-edu-contents__search-modes__title-font-size: $ui-primary-font-size !default;
+  $pages-edu-contents__search-modes__title-color: $ui-primary-font-color-2 !default;
+  $pages-edu-contents__search-modes__title-color--accent: $ui-primary-font-color !default;
 
   .pages-edu-contents__search-modes {
     &__item {
-      width: $pages-edu-contents-search-modes-width;
-      padding: $pages-edu-contents-search-modes-padding;
-      margin: $pages-edu-contents-search-modes-margin;
-      border: $pages-edu-contents-search-modes-border;
-      background-color: $pages-edu-contents-search-modes-background;
+      width: $pages-edu-contents__search-modes__item-width;
+      padding: $pages-edu-contents__search-modes__item-padding;
+      margin: $pages-edu-contents__search-modes__item-margin;
+      border: $pages-edu-contents__search-modes__item-border;
+      background-color: $pages-edu-contents__search-modes__item-background;
     }
 
     h2 {
       font-weight: normal;
-      font-size: $pages-edu-contents-search-modes-title-font-size;
-      color: $pages-edu-contents-search-modes-title-color;
+      font-size: $pages-edu-contents__search-modes__title-font-size;
+      color: $pages-edu-contents__search-modes__title-color;
       text-transform: uppercase;
       margin-top: 0;
 
       b {
-        color: $pages-edu-contents-search-modes-title-color-accent;
+        color: $pages-edu-contents__search-modes__title-color--accent;
       }
     }
 

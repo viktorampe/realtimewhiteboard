@@ -148,16 +148,4 @@ describe('EduContentsViewModel', () => {
       );
     }));
   });
-
-  describe('autoCompleteValues$', () => {
-    it('should be updated when searchTerm$ is updated', fakeAsync(() => {
-      let autoCompleteValues;
-      eduContentsViewModel.autoCompleteValues$.subscribe(values => {
-        autoCompleteValues = values;
-      });
-      eduContentsViewModel.searchTerm$.next('foo');
-      tick(500);
-      expect(autoCompleteValues).toEqual(['strings', 'for', 'autocomplete']);
-    }));
-  });
 });
