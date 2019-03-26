@@ -68,8 +68,8 @@ describe('SearchTermFilterFactory', () => {
   ];
 
   const mockEduContentProductTypes = [
-    new EduContentProductTypeFixture({ id: 12 }),
-    new EduContentProductTypeFixture({ id: 13 }),
+    new EduContentProductTypeFixture({ id: 12, parent: 0 }),
+    new EduContentProductTypeFixture({ id: 13, parent: 0 }),
     new EduContentProductTypeFixture({ id: 14, parent: 13 })
   ];
 
@@ -158,6 +158,22 @@ describe('SearchTermFilterFactory', () => {
       const result = factory.getFilters(mockSearchState);
       const expectedFilters = [
         getExpectedYearFilter(),
+        getExpectedEduNetFilter(),
+        getExpectedSchoolTypeFilter(),
+        getExpectedMethodFilter(),
+        getExpectedEduContentProductTypeFilter(),
+        getExpectedLearningDomainFilter()
+      ];
+
+      expect(result).toBeObservable(cold('a', { a: expectedFilters }));
+    });
+
+    it('should remove filters without values', () => {
+      // empty years from store
+      store.dispatch(new YearActions.ClearYears());
+
+      const result = factory.getFilters(mockSearchState);
+      const expectedFilters = [
         getExpectedEduNetFilter(),
         getExpectedSchoolTypeFilter(),
         getExpectedMethodFilter(),

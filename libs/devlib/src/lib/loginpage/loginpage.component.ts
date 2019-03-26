@@ -10,7 +10,11 @@ import {
   EduContentInterface,
   EffectFeedbackInterface,
   EffectFeedbackQueries,
+  FavoriteActions,
   FavoriteFixture,
+  FavoriteInterface,
+  FavoriteQueries,
+  FavoriteTypesEnum,
   TocServiceInterface,
   TOC_SERVICE_TOKEN,
   UserActions
@@ -36,6 +40,12 @@ export class LoginpageComponent implements OnInit {
   route$: Observable<string[]>;
   response: Observable<any>;
 
+  private myFavorite: FavoriteInterface = {
+    type: FavoriteTypesEnum.EDUCONTENT,
+    created: new Date(),
+    eduContentId: 1
+  };
+
   alert$ = this.store.pipe(
     select(AlertQueries.getAll),
     map(alerts => alerts[0])
@@ -56,7 +66,11 @@ export class LoginpageComponent implements OnInit {
     private store: Store<AlertReducer.State>,
     private router: Router,
     @Inject(TOC_SERVICE_TOKEN) private tocService: TocServiceInterface
-  ) {}
+  ) {
+    this.store.dispatch(
+      new FavoriteActions.LoadFavorites({ userId: this.authService.userId })
+    );
+  }
 
   ngOnInit() {
     this.route$ = this.router.events.pipe(
@@ -82,6 +96,32 @@ export class LoginpageComponent implements OnInit {
 
   getFavorites(userId: number) {
     this.response = this.favoriteService.getAllForUser(userId);
+  }
+
+  getAllFavorites() {
+    this.store.dispatch(
+      new FavoriteActions.LoadFavorites({ userId: this.authService.userId })
+    );
+    setTimeout(() => {
+      this.store.select(FavoriteQueries.getAll).subscribe(favs => {
+        console.log(favs);
+      });
+    }, 2000);
+  }
+
+  addNewFavorite() {
+    this.store.dispatch(
+      new FavoriteActions.StartAddFavorite({
+        favorite: this.myFavorite,
+        userId: this.authService.userId
+      })
+    );
+  }
+
+  toggleFavorite() {
+    this.store.dispatch(
+      new FavoriteActions.ToggleFavorite({ favorite: this.myFavorite })
+    );
   }
 
   addFavorite(userId: number) {
