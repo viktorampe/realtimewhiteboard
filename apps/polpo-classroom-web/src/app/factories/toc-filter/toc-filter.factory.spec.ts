@@ -378,7 +378,7 @@ describe('TocFilterFactory', () => {
         });
       });
 
-      fdescribe('do not update cache', () => {
+      describe('do not update cache', () => {
         // getFilters() has already been called once in the beforeEach
 
         it('should not update the cached Toc', () => {

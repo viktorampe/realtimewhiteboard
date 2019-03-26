@@ -165,9 +165,6 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
   private createFilters(): void {
     this.subscriptions.add(
       this.searchViewmodel.searchFilters$.subscribe(searchFilters => {
-        // possible if selectors return empty values
-        if (!searchFilters || !searchFilters.some(value => !!value)) return;
-
         // remove old filters
         this.removeFilters(searchFilters);
 
