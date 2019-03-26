@@ -14,7 +14,7 @@ import {
 } from '@campus/search';
 import { EduContentSearchResultInterface } from '@campus/shared';
 import { ViewModelInterface } from '@campus/testing';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { EduContentsViewModel } from './edu-contents.viewmodel';
 
 class ResultItemMock extends ResultItemBase {}
@@ -85,6 +85,10 @@ export class EduContentsViewModelMock
       pageSize: 3
     }
   };
+
+  public searchTerm$ = new Subject<string>();
+  public autoCompleteValues$ = new BehaviorSubject(['foo', 'bar']);
+  public learningArea$ = new BehaviorSubject(this.learningAreas[0]);
 
   public learningAreas$ = new BehaviorSubject<LearningAreaInterface[]>(
     this.learningAreas

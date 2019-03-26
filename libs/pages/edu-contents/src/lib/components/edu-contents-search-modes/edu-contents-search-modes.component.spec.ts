@@ -1,14 +1,11 @@
-import {
-  async,
-  ComponentFixture,
-  fakeAsync,
-  TestBed,
-  tick
-} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { SearchModeInterface, SearchModule } from '@campus/search';
-import { ENVIRONMENT_SEARCHMODES_TOKEN } from '@campus/shared';
+import { SearchModule } from '@campus/search';
+import {
+  EnvironmentSearchModesInterface,
+  ENVIRONMENT_SEARCHMODES_TOKEN
+} from '@campus/shared';
 import { UiModule } from '@campus/ui';
 import { BehaviorSubject } from 'rxjs';
 import { EduContentsViewModel } from '../edu-contents.viewmodel';
@@ -20,7 +17,7 @@ export class MockRouter {
 }
 
 describe('EduContentSearchModesComponent', () => {
-  const searchModes: { [key: string]: SearchModeInterface } = {};
+  const searchModes: EnvironmentSearchModesInterface = {};
   let params: BehaviorSubject<Params>;
   let eduContentsViewModel: EduContentsViewModel;
   let router: Router;
@@ -61,24 +58,23 @@ describe('EduContentSearchModesComponent', () => {
   });
 
   it('should get learningArea from viewmodel', () => {
-    jest.spyOn(eduContentsViewModel, 'getLearningAreaById');
-    params.next({ area: 2 });
-    expect(eduContentsViewModel.getLearningAreaById).toHaveBeenCalledTimes(1);
-    expect(eduContentsViewModel.getLearningAreaById).toHaveBeenCalledWith(2);
+    expect(component.learningArea$).toBe(eduContentsViewModel.learningArea$);
   });
 
-  it('should request autoComplete values from the viewmodel on searchTerm change', fakeAsync(() => {
-    jest.spyOn(eduContentsViewModel, 'requestAutoComplete');
-    component.searchTermChanged('foo');
-    tick(500);
-
-    expect(eduContentsViewModel.requestAutoComplete).toHaveBeenCalledTimes(1);
-    expect(eduContentsViewModel.requestAutoComplete).toHaveBeenCalledWith(
-      'foo'
+  it('should get autoComplete values from viewmodel', () => {
+    expect(component.autoCompleteValues$).toBe(
+      eduContentsViewModel.autoCompleteValues$
     );
-  }));
+  });
 
-  it('should redirect to with searchTerm querystring', () => {
+  it('should send searchText to viewmodel subject', () => {
+    jest.spyOn(eduContentsViewModel.searchTerm$, 'next');
+    component.searchTermChanged('foo');
+    expect(eduContentsViewModel.searchTerm$.next).toHaveBeenCalledTimes(1);
+    expect(eduContentsViewModel.searchTerm$.next).toHaveBeenCalledWith('foo');
+  });
+
+  it('should redirect to term search results with searchTerm querystring', () => {
     jest.spyOn(router, 'navigate');
     component.openSearchByTerm('foo');
 

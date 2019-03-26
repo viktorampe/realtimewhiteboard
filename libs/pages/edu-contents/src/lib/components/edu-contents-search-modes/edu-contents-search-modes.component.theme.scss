@@ -10,8 +10,8 @@
   $pages-edu-contents-search-modes-title-color: $ui-primary-font-color-2 !default;
   $pages-edu-contents-search-modes-title-color-accent: $ui-primary-font-color !default;
 
-  .pages-edu-contents-search-modes {
-    &-item {
+  .pages-edu-contents__search-modes {
+    &__item {
       width: $pages-edu-contents-search-modes-width;
       padding: $pages-edu-contents-search-modes-padding;
       margin: $pages-edu-contents-search-modes-margin;
@@ -32,8 +32,7 @@
     }
 
     .ui-button--primary {
-      height: 50px;
-      padding: 0 20px;
+      margin: 10px;
     }
   }
 }
