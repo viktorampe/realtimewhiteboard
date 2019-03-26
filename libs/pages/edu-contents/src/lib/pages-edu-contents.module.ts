@@ -1,3 +1,4 @@
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { PagesSharedModule } from '@campus/pages/shared';
@@ -15,7 +16,8 @@ import { PagesEduContentsRoutingModule } from './pages-edu-contents-routing.modu
     CommonModule,
     PagesEduContentsRoutingModule,
     UiModule,
-    PagesSharedModule
+    PagesSharedModule,
+    DragDropModule
   ],
   declarations: [
     EduContentLearningAreaOverviewComponent,

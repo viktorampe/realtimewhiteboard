@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import {
   BundleFixture,
   EduContentFixture,
+  FavoriteFixture,
+  FavoriteInterface,
   LearningAreaFixture,
   LearningAreaInterface,
   TaskFixture
@@ -25,9 +27,21 @@ class ResultItemMock extends ResultItemBase {}
 export class EduContentsViewModelMock
   implements ViewModelInterface<EduContentsViewModel> {
   private learningAreas = [
-    new LearningAreaFixture({ id: 1, name: 'fooLearningArea' }),
-    new LearningAreaFixture({ id: 2, name: 'barLearningArea' }),
-    new LearningAreaFixture({ id: 3, name: 'bazLearningArea' })
+    new LearningAreaFixture({
+      id: 1,
+      name: 'fooLearningArea',
+      icon: 'learning-area:polpo-aardrijkskunde'
+    }),
+    new LearningAreaFixture({
+      id: 2,
+      name: 'barLearningArea',
+      icon: 'learning-area:polpo-engels'
+    }),
+    new LearningAreaFixture({
+      id: 3,
+      name: 'bazLearningArea',
+      icon: 'learning-area:polpo-biologie'
+    })
   ];
 
   private favoriteLearningAreas = [
@@ -95,7 +109,12 @@ export class EduContentsViewModelMock
   public searchResults$ = new BehaviorSubject<
     EduContentSearchResultInterface[]
   >(this.searchResults);
-
+  public eduContentFavorites$ = new BehaviorSubject<FavoriteInterface[]>([
+    new FavoriteFixture({ id: 1, learningAreaId: 2, type: 'area' }),
+    new FavoriteFixture({ id: 2, learningAreaId: 3, type: 'area' }),
+    new FavoriteFixture({ id: 3, eduContentId: 1, type: 'educontent' }),
+    new FavoriteFixture({ id: 4, eduContentId: 2, type: 'educontent' })
+  ]);
   /*
    * let the page component pass through the updated state from the search component
    */

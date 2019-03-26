@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { LearningAreaInterface } from '@campus/dal';
 import { TileSecondaryActionInterface } from '@campus/ui';
-import { LearningAreaInterface } from '@diekeure/polpo-api-angular-sdk';
-
 @Component({
   selector: 'campus-favorite-areas',
   templateUrl: './favorite-areas.component.html',

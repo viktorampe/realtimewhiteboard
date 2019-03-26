@@ -1,2 +1,30 @@
-<div> edu-contents page works! </div>
-<campus-favorite-areas></campus-favorite-areas>
+<div
+  #favoriteList="cdkDropList"
+  cdkDropList
+  (cdkDropListDropped)="onFavoriteDrop($event)"
+>
+  <campus-favorite-areas
+    [favoriteLearningAreas]="viewModel.favoriteLearningAreas$ | async"
+  ></campus-favorite-areas
+></div>
+
+<div
+  cdkDropList
+  [cdkDropListData]="viewModel.learningAreas$ | async"
+  [cdkDropListConnectedTo]="[favoriteList]"
+  style="display:flex"
+  ><div
+    *ngFor="let learningArea of (viewModel.learningAreas$ | async)"
+    cdkDrag
+    [cdkDragData]="learningArea"
+    [class.drag--active]="dragStarted"
+    class="drag"
+    style="width:100px;height:100px;"
+    >{{ learningArea | json }}
+    <campus-tile
+      *cdkDragPreview
+      [icon]="learningArea.icon"
+      [label]="learningArea.name"
+    ></campus-tile>
+  </div>
+</div>
