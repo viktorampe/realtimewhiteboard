@@ -3,6 +3,7 @@ import { DalState } from '@campus/dal';
 import { SearchFilterInterface, SearchStateInterface } from '@campus/search';
 import { Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { SearchTermFilterFactory } from '../search-term-filter/search-term-filter.factory';
 
 export const GLOBAL_SEARCH_TERM_FILTER_FACTORY_TOKEN = new InjectionToken(
@@ -51,7 +52,10 @@ export class GlobalSearchTermFilterFactory extends SearchTermFilterFactory {
     }
 
     filters.push(this.getNestedEduContentProductTypes(searchState));
-    console.log(filters);
-    return combineLatest(filters);
+    return combineLatest(filters).pipe(
+      map(searchFilters =>
+        searchFilters.filter(f => f.criteria.values.length > 0)
+      )
+    );
   }
 }
