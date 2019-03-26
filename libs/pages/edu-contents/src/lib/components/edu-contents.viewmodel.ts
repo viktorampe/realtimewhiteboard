@@ -87,7 +87,8 @@ export class EduContentsViewModel {
    * make auto-complete request to api service and return observable
    */
   private requestAutoComplete(searchTerm: string): Observable<string[]> {
-    return this.store.select(getRouterStateParams).pipe(
+    return this.store.pipe(
+      select(getRouterStateParams),
       map(params => new Map([['learningArea', [+params.area]]])),
       switchMap(criteria => {
         const searchState: SearchStateInterface = {

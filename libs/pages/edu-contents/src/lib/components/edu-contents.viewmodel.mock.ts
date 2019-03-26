@@ -13,7 +13,10 @@ import {
   SearchModeInterface,
   SearchStateInterface
 } from '@campus/search';
-import { EduContentSearchResultInterface } from '@campus/shared';
+import {
+  EduContentSearchResultInterface,
+  EnvironmentSearchModesInterface
+} from '@campus/shared';
 import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { EduContentsViewModel } from './edu-contents.viewmodel';
@@ -108,7 +111,7 @@ export class EduContentsViewModelMock
     new FavoriteFixture({ id: 4, eduContentId: 2, type: 'educontent' })
   ]);
 
-  public searchModes: { [key: string]: SearchModeInterface } = {
+  public searchModes: EnvironmentSearchModesInterface = {
     demo: this.searchMode
   };
 
@@ -143,8 +146,4 @@ export class EduContentsViewModelMock
    * dispatch toggle action
    */
   public toggleFavoriteArea(area: LearningAreaInterface): void {}
-
-  public getLearningAreaById(): Observable<LearningAreaInterface> {
-    return of(new LearningAreaFixture());
-  }
 }

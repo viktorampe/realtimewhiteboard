@@ -1,6 +1,11 @@
-import { TestBed } from '@angular/core/testing';
+import { Component } from '@angular/core';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import {
+  CustomSerializer,
   DalState,
+  EDU_CONTENT_SERVICE_TOKEN,
   FavoriteActions,
   FavoriteFixture,
   FavoriteReducer,
@@ -9,12 +14,21 @@ import {
   LearningAreaFixture,
   LearningAreaReducer
 } from '@campus/dal';
+import { SearchStateInterface } from '@campus/search';
+import { ENVIRONMENT_SEARCHMODES_TOKEN } from '@campus/shared';
+import {
+  routerReducer,
+  RouterStateSerializer,
+  StoreRouterConnectingModule
+} from '@ngrx/router-store';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
+import { of } from 'rxjs';
 import { EduContentsViewModel } from './edu-contents.viewmodel';
 
 describe('EduContentsViewModel', () => {
   let eduContentsViewModel: EduContentsViewModel;
+  let router: Router;
   let store: Store<DalState>;
 
   const mockLearningAreas = [
@@ -32,15 +46,49 @@ describe('EduContentsViewModel', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        StoreModule.forRoot({}),
+        RouterTestingModule.withRoutes([
+          {
+            path: '',
+            redirectTo: '2',
+            pathMatch: 'full'
+          },
+          {
+            path: ':area',
+            component: Component
+          }
+        ]),
+        StoreModule.forRoot({
+          router: routerReducer
+        }),
+        StoreRouterConnectingModule.forRoot({
+          stateKey: 'router'
+        }),
         ...getStoreModuleForFeatures([FavoriteReducer, LearningAreaReducer])
       ],
-      providers: [EduContentsViewModel, Store]
+      providers: [
+        EduContentsViewModel,
+        Store,
+        { provide: RouterStateSerializer, useClass: CustomSerializer },
+        {
+          provide: EDU_CONTENT_SERVICE_TOKEN,
+          useValue: {
+            autoComplete: (state: SearchStateInterface) => {
+              return of(['strings', 'for', 'autocomplete']);
+            }
+          }
+        },
+        {
+          provide: ENVIRONMENT_SEARCHMODES_TOKEN,
+          useValue: {}
+        }
+      ]
     });
 
     eduContentsViewModel = TestBed.get(EduContentsViewModel);
+    router = TestBed.get(Router);
     store = TestBed.get(Store);
 
+    router.initialNavigation();
     store.dispatch(
       new LearningAreaActions.LearningAreasLoaded({
         learningAreas: mockLearningAreas
@@ -81,5 +129,27 @@ describe('EduContentsViewModel', () => {
         })
       );
     });
+  });
+
+  describe('learningArea$', () => {
+    it('should return the learningarea for current route', () => {
+      expect(eduContentsViewModel.learningArea$).toBeObservable(
+        hot('a', {
+          a: mockLearningAreas[1]
+        })
+      );
+    });
+  });
+
+  describe('autoCompleteValues$', () => {
+    it('should be updated when searchTerm$ is updated', fakeAsync(() => {
+      let autoCompleteValues;
+      eduContentsViewModel.autoCompleteValues$.subscribe(values => {
+        autoCompleteValues = values;
+      });
+      eduContentsViewModel.searchTerm$.next('foo');
+      tick(500);
+      expect(autoCompleteValues).toEqual(['strings', 'for', 'autocomplete']);
+    }));
   });
 });
