@@ -125,7 +125,6 @@ export class FavoriteEffects {
           select(getByTypeAndId, {
             type: action.payload.favorite.type,
             id:
-              action.payload.favorite.criteria ||
               action.payload.favorite.eduContentId ||
               action.payload.favorite.bundleId ||
               action.payload.favorite.taskId ||
