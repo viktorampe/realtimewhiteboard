@@ -13,9 +13,11 @@
   </mat-form-field>
 
   <div
+    [class.small]="isSmallScreen$ | async"
+    [class.medium]="isMediumScreen$ | async"
     class="pages-edu-contents-areas-list__area"
     *ngFor="let learningArea of filteredLearningAreas"
-    [class.pages-edu-contents-areas-list__area--selected]="
+    [class.pages-edu-contents-areas-list__area--favorite]="
       isFavoriteArea(learningArea)
     "
   >

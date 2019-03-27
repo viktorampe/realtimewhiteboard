@@ -1,6 +1,6 @@
 @mixin pages-edu-contents-areas-list() {
-  $pages-edu-contents-areas-list-selected-border-color: $ui-secondary-bg-color-accent !default;
-  $pages-edu-contents-areas-list-selected-border-width: 4px !default;
+  $pages-edu-contents-areas-list-favorite-border-color: $ui-secondary-bg-color-accent !default;
+  $pages-edu-contents-areas-list-favorite-border-width: 4px !default;
   $pages-edu-contents-areas-list-grid-border-color: $ui-tertiary-bg-color-2 !default;
   $pages-edu-contents-areas-list-grid-border-width: 1px !default;
   $pages-edu-contents-areas-list-area-height: 32px !default;
@@ -14,7 +14,7 @@
       height: $pages-edu-contents-areas-list-area-height;
 
       &__icon {
-        margin-left: $pages-edu-contents-areas-list-selected-border-width;
+        margin-left: $pages-edu-contents-areas-list-favorite-border-width;
         margin-right: $pages-edu-contents-areas-list-area-icon-margin-right;
       }
 
@@ -24,9 +24,9 @@
     }
   }
 
-  .pages-edu-contents-areas-list__area--selected {
-    border-left: $pages-edu-contents-areas-list-selected-border-width solid
-      $pages-edu-contents-areas-list-selected-border-color;
+  .pages-edu-contents-areas-list__area--favorite {
+    border-left: $pages-edu-contents-areas-list-favorite-border-width solid
+      $pages-edu-contents-areas-list-favorite-border-color;
     .pages-edu-contents-areas-list__area__icon {
       margin-left: $pages-edu-contents-areas-list-grid-border-width;
     }

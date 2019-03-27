@@ -68,13 +68,9 @@ describe('AreasListComponent', () => {
 
   it('should show the learning areas correctly', () => {
     const areas = fixture.debugElement.queryAll(
-      By.css(
-        '.pages-edu-contents-areas-list__area, ' +
-          '.pages-edu-contents-areas-list__area--selected'
-      )
+      By.css('.pages-edu-contents-areas-list__area')
     );
 
-    var favoriteLearningAreaCount = 0;
     for (let i = 0; i < mockLearningAreas.length; i++) {
       const areaModel = mockLearningAreas[i];
       const area = areas[i];
@@ -83,21 +79,15 @@ describe('AreasListComponent', () => {
 
       //Check if the learning area is a favorite one
       if (mockFavoriteLearningAreas.indexOf(areaModel) !== -1) {
-        favoriteLearningAreaCount++;
-
         //Check if it has the correct class
-        expect(
-          Object.keys(area.classes).indexOf(
-            'pages-edu-contents-areas-list__area--selected'
-          )
-        ).not.toBe(-1);
+        expect(area.nativeElement.classList).toContain(
+          'pages-edu-contents-areas-list__area--favorite'
+        );
       }
 
       expect(areaIcon).toBe('learning-area:' + areaModel.icon);
       expect(areaText).toBe(areaModel.name);
     }
-
-    expect(favoriteLearningAreaCount).toBe(mockFavoriteLearningAreas.length);
   });
 
   it('should filter the learning areas correctly', () => {
@@ -109,10 +99,7 @@ describe('AreasListComponent', () => {
 
     const expectedAreas = [mockLearningAreas[0], mockLearningAreas[2]];
     const areas = fixture.debugElement.queryAll(
-      By.css(
-        '.pages-edu-contents-areas-list__area, ' +
-          '.pages-edu-contents-areas-list__area--selected'
-      )
+      By.css('.pages-edu-contents-areas-list__area')
     );
 
     areas.forEach((area, index) => {
