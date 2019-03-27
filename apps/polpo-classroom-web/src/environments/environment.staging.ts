@@ -71,7 +71,7 @@ export const environment: EnvironmentInterface = {
   searchModes: {
     toc: {
       name: 'toc',
-      label: 'Inhoudstafel',
+      label: 'Zoeken op <b>inhoudstafel</b>',
       dynamicFilters: false,
       //TODO: All '{} as Type' must be replaced with actual components
       searchFilterFactory: {} as Type<SearchFilterFactory>,
@@ -99,7 +99,7 @@ export const environment: EnvironmentInterface = {
     },
     plan: {
       name: 'plan',
-      label: 'Leerplan',
+      label: 'Zoeken op <b>leerplan</b>',
       dynamicFilters: false,
       searchFilterFactory: {} as Type<SearchFilterFactory>,
       results: {
@@ -126,7 +126,7 @@ export const environment: EnvironmentInterface = {
     },
     search: {
       name: 'search',
-      label: 'Standaard zoeken',
+      label: '<b>Standaard</b> zoeken',
       dynamicFilters: true,
       searchFilterFactory: {} as Type<SearchFilterFactory>,
       results: {

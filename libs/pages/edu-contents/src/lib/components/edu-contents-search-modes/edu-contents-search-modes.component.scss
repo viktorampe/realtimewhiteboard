@@ -4,14 +4,14 @@
   align-items: center;
 }
 
-.pages-edu-contents-search-modes {
+.pages-edu-contents__search-modes {
   display: flex;
   flex-direction: row;
   justify-content: center;
   margin: 0 auto;
   text-align: center;
 
-  &-item {
+  &__item {
     flex: 1 1 auto;
   }
 }
@@ -19,17 +19,17 @@
 @import 'libs/ui/src/lib/breakpoints.scss';
 
 @media #{$ui-breakpoint-medium}, #{$ui-breakpoint-small}, #{$ui-breakpoint-xsmall} {
-  .pages-edu-contents-search-modes {
+  .pages-edu-contents__search-modes {
     flex-direction: column;
   }
 }
 
 @media #{$ui-breakpoint-xsmall} {
-  .pages-edu-contents-search-modes {
+  .pages-edu-contents__search-modes {
     margin: 0;
     width: 100%;
 
-    &-item {
+    &__item {
       width: auto;
     }
   }

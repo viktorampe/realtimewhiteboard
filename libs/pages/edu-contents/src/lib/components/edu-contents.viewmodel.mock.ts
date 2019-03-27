@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   BundleFixture,
   EduContentFixture,
+  FavoriteFixture,
   LearningAreaFixture,
   LearningAreaInterface,
   TaskFixture
@@ -12,9 +13,12 @@ import {
   SearchModeInterface,
   SearchStateInterface
 } from '@campus/search';
-import { EduContentSearchResultInterface } from '@campus/shared';
+import {
+  EduContentSearchResultInterface,
+  EnvironmentSearchModesInterface
+} from '@campus/shared';
 import { ViewModelInterface } from '@campus/testing';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { EduContentsViewModel } from './edu-contents.viewmodel';
 
 class ResultItemMock extends ResultItemBase {}
@@ -86,6 +90,10 @@ export class EduContentsViewModelMock
     }
   };
 
+  public searchTerm$ = new Subject<string>();
+  public autoCompleteValues$ = new BehaviorSubject(['foo', 'bar']);
+  public learningArea$ = new BehaviorSubject(this.learningAreas[0]);
+
   public learningAreas$ = new BehaviorSubject<LearningAreaInterface[]>(
     this.learningAreas
   );
@@ -96,8 +104,16 @@ export class EduContentsViewModelMock
     EduContentSearchResultInterface[]
   >(this.searchResults);
 
-  public searchModes: { [key: string]: SearchModeInterface } = {
-    demo: this.searchMode
+  public eduContentFavorites$ = new BehaviorSubject([
+    new FavoriteFixture({ id: 1, learningAreaId: 2, type: 'area' }),
+    new FavoriteFixture({ id: 2, learningAreaId: 3, type: 'area' }),
+    new FavoriteFixture({ id: 3, eduContentId: 1, type: 'educontent' }),
+    new FavoriteFixture({ id: 4, eduContentId: 2, type: 'educontent' })
+  ]);
+
+  public searchModes: EnvironmentSearchModesInterface = {
+    demo: this.searchMode,
+    search: this.searchMode
   };
 
   /*
@@ -131,8 +147,4 @@ export class EduContentsViewModelMock
    * dispatch toggle action
    */
   public toggleFavoriteArea(area: LearningAreaInterface): void {}
-
-  public getLearningAreaById(): Observable<LearningAreaInterface> {
-    return of(new LearningAreaFixture());
-  }
 }

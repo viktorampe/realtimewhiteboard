@@ -7,8 +7,7 @@ import {
 } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { SearchModeInterface, SearchModule } from '@campus/search';
-import { ENVIRONMENT_SEARCHMODES_TOKEN } from '@campus/shared';
+import { SearchModule } from '@campus/search';
 import { UiModule } from '@campus/ui';
 import { BehaviorSubject } from 'rxjs';
 import { EduContentsViewModel } from '../edu-contents.viewmodel';
@@ -20,7 +19,6 @@ export class MockRouter {
 }
 
 describe('EduContentSearchModesComponent', () => {
-  const searchModes: { [key: string]: SearchModeInterface } = {};
   let params: BehaviorSubject<Params>;
   let eduContentsViewModel: EduContentsViewModel;
   let router: Router;
@@ -37,11 +35,7 @@ describe('EduContentSearchModesComponent', () => {
       providers: [
         { provide: Router, useClass: MockRouter },
         { provide: ActivatedRoute, useValue: { params: params } },
-        { provide: EduContentsViewModel, useClass: EduContentsViewModelMock },
-        {
-          provide: ENVIRONMENT_SEARCHMODES_TOKEN,
-          useValue: searchModes
-        }
+        { provide: EduContentsViewModel, useClass: EduContentsViewModelMock }
       ]
     }).compileComponents();
 
@@ -61,14 +55,12 @@ describe('EduContentSearchModesComponent', () => {
   });
 
   it('should get learningArea from viewmodel', () => {
-    jest.spyOn(eduContentsViewModel, 'getLearningAreaById');
-    params.next({ area: 2 });
-    expect(eduContentsViewModel.getLearningAreaById).toHaveBeenCalledTimes(1);
-    expect(eduContentsViewModel.getLearningAreaById).toHaveBeenCalledWith(2);
+    expect(component.learningArea$).toBe(eduContentsViewModel.learningArea$);
   });
 
-  it('should request autoComplete values from the viewmodel on searchTerm change', fakeAsync(() => {
+  it('should send searchText to viewmodel subject', fakeAsync(() => {
     jest.spyOn(eduContentsViewModel, 'requestAutoComplete');
+
     component.searchTermChanged('foo');
     tick(500);
 
@@ -78,7 +70,7 @@ describe('EduContentSearchModesComponent', () => {
     );
   }));
 
-  it('should redirect to with searchTerm querystring', () => {
+  it('should redirect to term search results with searchTerm querystring', () => {
     jest.spyOn(router, 'navigate');
     component.openSearchByTerm('foo');
 

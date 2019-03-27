@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
+import { Params } from '@angular/router';
 import {
   DalState,
   EduContentServiceInterface,
@@ -20,12 +21,13 @@ import {
 import { MapObjectConversionService } from '@campus/utils';
 import { select, Store } from '@ngrx/store';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { filter, map, switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EduContentsViewModel {
+  public learningArea$: Observable<LearningAreaInterface>;
   public learningAreas$: Observable<LearningAreaInterface[]>;
   public favoriteLearningAreas$: Observable<LearningAreaInterface[]>;
   public searchResults$: Observable<EduContentSearchResultInterface[]>;
@@ -45,6 +47,7 @@ export class EduContentsViewModel {
   }
 
   private initialize() {
+    this.learningArea$ = this.getLearningArea();
     this.learningAreas$ = this.store.pipe(select(LearningAreaQueries.getAll));
     this.favoriteLearningAreas$ = this.getFavoriteLearningAreas();
     this.eduContentFavorites$ = this.store.pipe(
@@ -63,20 +66,26 @@ export class EduContentsViewModel {
    */
   public updateState(state: SearchStateInterface) {}
 
+  /**
+   * get learningarea for active route
+   */
+  private getLearningArea(): Observable<LearningAreaInterface> {
+    return this.store.pipe(
+      select(getRouterStateParams),
+      map((params: Params): number => +params.area),
+      filter(id => !!id),
+      switchMap(id =>
+        this.store.pipe(select(LearningAreaQueries.getById, { id }))
+      )
+    );
+  }
+
   /*
    * make auto-complete request to api service and return observable
    */
   public requestAutoComplete(searchTerm: string): Observable<string[]> {
-    return this.store.select(getRouterStateParams).pipe(
-      map(params => new Map([['learningArea', [+params.area]]])),
-      switchMap(criteria => {
-        const searchState: SearchStateInterface = {
-          searchTerm,
-          filterCriteriaSelections: criteria
-        };
-        return this.eduContentService.autoComplete(searchState);
-      })
-    );
+    this.searchState$.value.searchTerm = searchTerm;
+    return this.eduContentService.autoComplete(this.searchState$.value);
   }
 
   /*

@@ -1,14 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LearningAreaInterface } from '@campus/dal';
 import { EnvironmentSearchModesInterface } from '@campus/shared';
-import { Observable, Subject, Subscription } from 'rxjs';
-import {
-  debounceTime,
-  distinctUntilChanged,
-  shareReplay,
-  switchMap
-} from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { EduContentsViewModel } from '../edu-contents.viewmodel';
 
 @Component({
@@ -16,14 +11,11 @@ import { EduContentsViewModel } from '../edu-contents.viewmodel';
   templateUrl: './edu-contents-search-modes.component.html',
   styleUrls: ['./edu-contents-search-modes.component.scss']
 })
-export class EduContentSearchModesComponent implements OnInit, OnDestroy {
-  public autoCompleteValues: string[] = [];
+export class EduContentSearchModesComponent implements OnInit {
   public learningArea$: Observable<LearningAreaInterface>;
   public searchModes: EnvironmentSearchModesInterface;
-
-  private searchTerm = new Subject<string>();
-  private subscriptions = new Subscription();
-  private routeParams$ = this.route.params.pipe(shareReplay(1));
+  public searchTerm$: Subject<string>;
+  public autoCompleteValues$: Observable<string[]>;
 
   constructor(
     private router: Router,
@@ -32,26 +24,16 @@ export class EduContentSearchModesComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit(): void {
+    this.learningArea$ = this.eduContentsViewModel.learningArea$;
     this.searchModes = this.eduContentsViewModel.searchModes;
-    this.learningArea$ = this.getLearningArea();
-
-    this.subscriptions.add(
-      this.searchTerm
-        .pipe(
-          debounceTime(500),
-          distinctUntilChanged(),
-          switchMap(searchTerm => this.getAutoCompleteValues(searchTerm))
-        )
-        .subscribe(
-          (values: string[]): void => {
-            this.autoCompleteValues = values;
-          }
-        )
+    this.searchTerm$ = new Subject();
+    this.autoCompleteValues$ = this.searchTerm$.pipe(
+      debounceTime(500),
+      distinctUntilChanged(),
+      switchMap(searchTerm =>
+        this.eduContentsViewModel.requestAutoComplete(searchTerm)
+      )
     );
-  }
-
-  public ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
   }
 
   public openSearchByTerm(searchTerm: string) {
@@ -62,18 +44,6 @@ export class EduContentSearchModesComponent implements OnInit, OnDestroy {
   }
 
   public searchTermChanged(searchTerm: string) {
-    this.searchTerm.next(searchTerm);
-  }
-
-  private getAutoCompleteValues(searchTerm: string): Observable<string[]> {
-    return this.eduContentsViewModel.requestAutoComplete(searchTerm);
-  }
-
-  private getLearningArea(): Observable<LearningAreaInterface> {
-    return this.routeParams$.pipe(
-      switchMap(params =>
-        this.eduContentsViewModel.getLearningAreaById(+params.area)
-      )
-    );
+    this.searchTerm$.next(searchTerm);
   }
 }
