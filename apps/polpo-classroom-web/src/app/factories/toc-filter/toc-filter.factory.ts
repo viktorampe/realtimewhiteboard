@@ -198,7 +198,7 @@ export class TocFilterFactory implements SearchFilterFactory {
       withLatestFrom(this.booksWithYears$),
       map(([searchState, books]) => {
         // reduce to set of years
-        const years = Array.from(
+        const years: YearInterface[] = Array.from(
           new Set(books.reduce((acc, book) => [...acc, ...book.years], []))
         ).sort((a, b) => a.id - b.id);
 
