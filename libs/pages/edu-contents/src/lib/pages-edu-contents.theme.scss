@@ -1,0 +1,5 @@
+@import './components/areas-list/areas-list.component.theme.scss';
+
+@mixin pages-edu-contents-theme() {
+  @include pages-edu-contents-areas-list();
+}

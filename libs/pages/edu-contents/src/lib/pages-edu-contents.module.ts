@@ -1,8 +1,11 @@
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MatIconModule, MatInputModule } from '@angular/material';
 import { PagesSharedModule } from '@campus/pages/shared';
 import { UiModule } from '@campus/ui';
+import { AreasListComponent } from './components/areas-list/areas-list.component';
 import { EduContentLearningAreaOverviewComponent } from './components/edu-contents-learning-area-overview/edu-contents-learning-area-overview.component';
 import { EduContentSearchByColumnComponent } from './components/edu-contents-search-by-column/edu-contents-search-by-column.component';
 import { EduContentSearchByTermComponent } from './components/edu-contents-search-by-term/edu-contents-search-by-term.component';
@@ -17,14 +20,18 @@ import { PagesEduContentsRoutingModule } from './pages-edu-contents-routing.modu
     PagesEduContentsRoutingModule,
     UiModule,
     PagesSharedModule,
-    DragDropModule
+    DragDropModule,
+    MatIconModule,
+    MatInputModule,
+    FormsModule
   ],
   declarations: [
     EduContentLearningAreaOverviewComponent,
     EduContentSearchByTermComponent,
     EduContentSearchModesComponent,
     EduContentSearchByColumnComponent,
-    FavoriteAreasComponent
+    FavoriteAreasComponent,
+    AreasListComponent
   ],
   exports: [
     EduContentSearchByTermComponent,
