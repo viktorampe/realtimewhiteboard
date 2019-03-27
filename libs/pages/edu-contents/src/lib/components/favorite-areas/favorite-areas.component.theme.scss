@@ -1,0 +1,18 @@
+@mixin pages-edu-contents-favorite-areas() {
+  campus-drop-area {
+    &.hovered {
+      mat-icon {
+        color: blue;
+      }
+      .ui-drop-area {
+        border: 2px dashed blue;
+        &__icon-container {
+          border: 2px dashed blue;
+        }
+        &__label {
+          color: blue;
+        }
+      }
+    }
+  }
+}

@@ -10,6 +10,7 @@ import { EduContentsViewModelMock } from '../edu-contents.viewmodel.mock';
 })
 export class EduContentLearningAreaOverviewComponent {
   dragStarted = false;
+  dropZoneIsHovered = false;
   constructor(public viewModel: EduContentsViewModelMock) {}
 
   changeDragStatus(started: boolean) {
@@ -20,5 +21,15 @@ export class EduContentLearningAreaOverviewComponent {
     const learningAreaToAddToFavorite = event.item.data;
     console.log(learningAreaToAddToFavorite);
     this.viewModel.toggleFavoriteArea(learningAreaToAddToFavorite);
+  }
+
+  setHoverState(state: boolean) {
+    console.log(state);
+
+    this.dropZoneIsHovered = state;
+  }
+
+  onDragEnter(event: DragEvent) {
+    console.log('drag enter', event);
   }
 }

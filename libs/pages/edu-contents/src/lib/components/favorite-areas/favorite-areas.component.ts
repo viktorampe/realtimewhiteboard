@@ -8,6 +8,7 @@ import { TileSecondaryActionInterface } from '@campus/ui';
 })
 export class FavoriteAreasComponent {
   @Input() favoriteLearningAreas: LearningAreaInterface[];
+  @Input() isHovered = false;
   @Output() removeAreaFromFavorites = new EventEmitter<LearningAreaInterface>();
 
   removeAreaFromFavoritesAction(
