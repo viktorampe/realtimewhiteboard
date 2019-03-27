@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import {
   DalState,
+  EduContentServiceInterface,
   EDU_CONTENT_SERVICE_TOKEN,
   FavoriteActions,
   FavoriteFixture,
@@ -13,23 +14,19 @@ import {
 import { SearchStateInterface } from '@campus/search';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
-import { BehaviorSubject, of } from 'rxjs';
-import { EduContentsViewModel } from './edu-contents.viewmodel';
+import { Observable, of } from 'rxjs';
+import {
+  EduContentsViewModel,
+  RouterStateParamsInterface
+} from './edu-contents.viewmodel';
 
 describe('EduContentsViewModel', () => {
   let eduContentsViewModel: EduContentsViewModel;
-  let eduContentService;
-
-  const mockSearchState: SearchStateInterface = {
-    searchTerm: 'not this',
-    filterCriteriaSelections: new Map<string, (number | string)[]>([
-      ['thing', ['one', 'two']],
-      ['other thing', ['three', 'four']]
-    ])
-  };
+  let eduContentService: EduContentServiceInterface;
 
   let store: Store<DalState>;
 
+  const mockAutoCompleteReturnValue = ['strings', 'for', 'autocomplete'];
   const mockLearningAreas = [
     new LearningAreaFixture({ id: 1 }),
     new LearningAreaFixture({ id: 2 }),
@@ -55,7 +52,7 @@ describe('EduContentsViewModel', () => {
           provide: EDU_CONTENT_SERVICE_TOKEN,
           useValue: {
             autoComplete: (state: SearchStateInterface) => {
-              return of(['strings', 'for', 'autocomplete']);
+              return of(mockAutoCompleteReturnValue);
             }
           }
         }
@@ -76,22 +73,6 @@ describe('EduContentsViewModel', () => {
 
   it('should be defined', () => {
     expect(eduContentsViewModel).toBeDefined();
-  });
-
-  describe('requestAutoComplete', () => {
-    it('should call autoComplete on the eduContentService', () => {
-      const autoCompleteSpy = jest.spyOn(eduContentService, 'autoComplete');
-      const mockNewSearchTerm = 'new search term';
-      eduContentsViewModel['searchState$'] = new BehaviorSubject<
-        SearchStateInterface
-      >(mockSearchState);
-      eduContentsViewModel.requestAutoComplete(mockNewSearchTerm);
-      expect(autoCompleteSpy).toHaveBeenCalledTimes(1);
-      expect(autoCompleteSpy).toHaveBeenCalledWith({
-        ...mockSearchState,
-        searchTerm: mockNewSearchTerm
-      });
-    });
   });
 
   describe('learningAreas$', () => {
@@ -121,15 +102,74 @@ describe('EduContentsViewModel', () => {
       );
     });
   });
-  describe('updateState', () => {
-    it('should update the stream with the given value', () => {
-      eduContentsViewModel['searchState$'] = new BehaviorSubject<
-        SearchStateInterface
-      >(null);
-      expect(eduContentsViewModel['searchState$']).toBeObservable(
-        hot('a', { a: mockSearchState })
+  describe('getInitialSearchState', () => {
+    it('should create the initialState with the correct params data', () => {
+      const mockRouterParams$: Observable<RouterStateParamsInterface> = hot(
+        'a-b-c-d',
+        {
+          a: {},
+          b: { area: '3' },
+          c: { area: '4', task: '894' },
+          d: { task: '38948' }
+        }
+      );
+      eduContentsViewModel['routerStateParams$'] = mockRouterParams$;
+      expect(eduContentsViewModel.getInitialSearchState()).toBeObservable(
+        hot('a-b-c-d', {
+          a: {
+            searchTerm: '',
+            filterCriteriaSelections: new Map<string, (number | string)[]>([])
+          },
+          b: {
+            searchTerm: '',
+            filterCriteriaSelections: new Map<string, (number | string)[]>([
+              ['learningArea', [3]]
+            ])
+          },
+          c: {
+            searchTerm: '',
+            filterCriteriaSelections: new Map<string, (number | string)[]>([
+              ['learningArea', [4]]
+            ]),
+            filterCriteriaOptions: new Map<string, number | string | boolean>([
+              ['taskAllowed', true]
+            ])
+          },
+          d: {
+            searchTerm: '',
+            filterCriteriaSelections: new Map<string, (number | string)[]>([]),
+            filterCriteriaOptions: new Map<string, number | string | boolean>([
+              ['taskAllowed', true]
+            ])
+          }
+        })
       );
     });
   });
-      eduContentsViewModel.updateState(mockSearchState);
+  describe('requestAutoComplete', () => {
+    it('should call getInitialSearchState', () => {
+      const getInitialSearchStateSpy = jest.spyOn(
+        eduContentsViewModel,
+        'getInitialSearchState'
+      );
+      eduContentsViewModel.requestAutoComplete('some string');
+      expect(getInitialSearchStateSpy).toHaveBeenCalledTimes(1);
+    });
+    it('should call the eduContentService.autoComplete with the correct parameters and return a string[] observable', () => {
+      const mockRouterParams$: Observable<RouterStateParamsInterface> = hot(
+        'a',
+        { a: {} }
+      );
+      eduContentsViewModel['routerStateParams$'] = mockRouterParams$;
+      const getAutoCompleteSpy = jest.spyOn(eduContentService, 'autoComplete');
+      expect(
+        eduContentsViewModel.requestAutoComplete('some string')
+      ).toBeObservable(hot('a', { a: mockAutoCompleteReturnValue }));
+      expect(getAutoCompleteSpy).toHaveBeenCalledTimes(1);
+      expect(getAutoCompleteSpy).toHaveBeenCalledWith({
+        searchTerm: 'some string',
+        filterCriteriaSelections: new Map<string, (number | string)[]>([])
+      });
+    });
+  });
 });

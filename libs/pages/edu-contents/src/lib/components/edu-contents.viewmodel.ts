@@ -5,6 +5,7 @@ import {
   EDU_CONTENT_SERVICE_TOKEN,
   FavoriteInterface,
   FavoriteQueries,
+  getRouterStateParams,
   LearningAreaInterface,
   LearningAreaQueries
 } from '@campus/dal';
@@ -18,14 +19,13 @@ import { map, switchMap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class EduContentsViewModel {
-  constructor(private store: Store<DalState>) {}
-
   public learningAreas$: Observable<LearningAreaInterface[]>;
   public favoriteLearningAreas$: Observable<LearningAreaInterface[]>;
   public searchResults$: Observable<EduContentSearchResultInterface[]>;
   public eduContentFavorites$: Observable<FavoriteInterface[]>;
 
   private searchState$: BehaviorSubject<SearchStateInterface>;
+  private routerStateParams$: Observable<RouterStateParamsInterface>;
 
   constructor(
     private store: Store<DalState>,
@@ -41,6 +41,8 @@ export class EduContentsViewModel {
     this.eduContentFavorites$ = this.store.pipe(
       select(FavoriteQueries.getByType, { type: 'educontent' })
     );
+    this.routerStateParams$ = this.store.pipe(select(getRouterStateParams));
+    this.searchState$ = new BehaviorSubject<SearchStateInterface>(null);
   }
 
   /*
@@ -48,14 +50,21 @@ export class EduContentsViewModel {
    */
   public updateState(state: SearchStateInterface) {
     this.searchState$.next(state);
+    //TODO -- tests can only be added once the results method has been implemented and the results are updated due to a trigger on the stream that calls the api
   }
 
   /*
    * make auto-complete request to api service and return observable
    */
   public requestAutoComplete(searchTerm: string): Observable<string[]> {
-    this.searchState$.value.searchTerm = searchTerm;
-    return this.eduContentService.autoComplete(this.searchState$.value);
+    return this.getInitialSearchState().pipe(
+      map(initialSearchState => {
+        return { ...initialSearchState, searchTerm };
+      }),
+      switchMap(initialSearchState =>
+        this.eduContentService.autoComplete(initialSearchState)
+      )
+    );
   }
 
   /*
@@ -70,15 +79,25 @@ export class EduContentsViewModel {
    * can  be constructed from various parameters like querystring, ... TBD
    */
   public getInitialSearchState(): Observable<SearchStateInterface> {
-    const routerStateParams$ = this.store.pipe(select(getRouterStateParams));
-    return combineLatest(this.searchState$, routerStateParams$).pipe(
-      map(([searchState, routerStateParams]: [SearchStateInterface, any]) => {
+    return this.routerStateParams$.pipe(
+      map((routerStateParams: RouterStateParamsInterface) => {
+        const initialSearchState: SearchStateInterface = {
+          searchTerm: '',
+          filterCriteriaSelections: new Map<string, (number | string)[]>([])
+        };
         if (routerStateParams.area) {
-          searchState.filterCriteriaSelections.set('learningArea', [
+          initialSearchState.filterCriteriaSelections.set('learningArea', [
             parseInt(routerStateParams.area, 10)
           ]);
         }
-        return searchState;
+        if (routerStateParams.task) {
+          initialSearchState.filterCriteriaOptions = new Map<
+            string,
+            number | string | boolean
+          >([]);
+          initialSearchState.filterCriteriaOptions.set('taskAllowed', true);
+        }
+        return initialSearchState;
       })
     );
   }
@@ -113,4 +132,10 @@ export class EduContentsViewModel {
       )
     );
   }
+}
+
+export interface RouterStateParamsInterface {
+  area?: string;
+  task?: string;
+  [key: string]: string;
 }
