@@ -1,8 +1,4 @@
-<div
-  id="favorite-drop-area"
-  cdkDropList
-  (cdkDropListDropped)="onFavoriteDrop($event)"
->
+<div cdkDropList id="favorite-areas">
   <campus-favorite-areas
     [favoriteLearningAreas]="viewModel.favoriteLearningAreas$ | async"
   ></campus-favorite-areas

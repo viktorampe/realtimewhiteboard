@@ -13,8 +13,8 @@
   </mat-form-field>
   <div
     cdkDropList
+    [cdkDropListConnectedTo]="['favorite-areas']"
     [cdkDropListData]="filteredLearningAreas"
-    [cdkDropListConnectedTo]="['favorite-drop-area']"
     class="pages-edu-contents-areas-list"
   >
     <div
@@ -26,6 +26,7 @@
       cdkDrag
       [cdkDragData]="learningArea"
       [cdkDragDisabled]="isFavoriteArea(learningArea)"
+      (cdkDragDropped)="onFavoriteDrop($event)"
     >
       <mat-icon
         class="pages-edu-contents-areas-list__area__icon"
@@ -36,6 +37,7 @@
         [routerLink]="learningArea.id"
         >{{ learningArea.name }}</a
       >
+      <div style="display:none" *cdkDragPlaceholder></div>
       <campus-tile
         *cdkDragPreview
         icon="learning-area:{{learningArea.icon}}"

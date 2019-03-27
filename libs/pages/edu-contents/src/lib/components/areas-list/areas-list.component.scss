@@ -5,10 +5,11 @@
   &__area {
     width: 33%;
     max-width: 33%;
-    &__link {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
+    transform: none !important;
+  }
+  &__link {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
