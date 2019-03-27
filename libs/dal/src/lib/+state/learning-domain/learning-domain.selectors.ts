@@ -74,3 +74,15 @@ export const getByLearningArea = createSelector(
       .map(id => state.entities[id]);
   }
 );
+export const getByLearningAreas = createSelector(
+  selectLearningDomainState,
+  (state: State, props: { learningAreaIds: Number[] }) => {
+    return (<number[]>state.ids)
+      .filter(id =>
+        props.learningAreaIds.some(
+          learningAreaId => state.entities[id].learningAreaId === learningAreaId
+        )
+      )
+      .map(id => state.entities[id]);
+  }
+);

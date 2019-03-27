@@ -1,4 +1,4 @@
-import { EduContentBookInterface } from '@diekeure/polpo-api-angular-sdk';
+import { EduContentBookInterface } from '../+models';
 
 export class EduContentBookFixture implements EduContentBookInterface {
   title = 'foo';

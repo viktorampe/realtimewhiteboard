@@ -11,6 +11,7 @@ export class EduContentProductTypeFixture
   excludeFromFilter?: boolean;
   id?: number;
   eduContentMetadata?: EduContentMetadataInterface[];
+  parent?: number;
 
   constructor(props: Partial<EduContentProductTypeFixture> = {}) {
     // overwrite defaults
