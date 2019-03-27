@@ -1,4 +1,12 @@
-<campus-page-bar> <campus-search-term></campus-search-term> </campus-page-bar>
+<campus-page-bar>
+  <campus-search-term
+    placeholder="Zoeken in alle leergebieden"
+    [autoComplete]="true"
+    [autoCompleteValues]="autoCompleteValues$ | async"
+    (valueChange)="openSearchByTerm($event)"
+    (valueChangeForAutoComplete)="searchTermChanged($event)"
+  ></campus-search-term>
+</campus-page-bar>
 
 <div> edu-contents page works! </div>
 <campus-favorite-areas></campus-favorite-areas>
