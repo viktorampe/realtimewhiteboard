@@ -3,21 +3,15 @@
   titleIcon="favorites"
   [displayAsRows]="true"
 >
-  <div
-    id="favorite-drop-area"
-    cdkDropList
-    (cdkDropListDropped)="onFavoriteDrop($event)"
-  >
-    <campus-tile
-      *ngFor="let favoriteLearningArea of favoriteLearningAreas"
-      [label]="favoriteLearningArea.name"
-      icon="learning-area:{{favoriteLearningArea.icon}}"
-      [color]="favoriteLearningArea.color"
-      [routerLink]="favoriteLearningArea.id"
-      [secondaryActions]="[removeAreaFromFavoritesAction(favoriteLearningArea)]"
-    ></campus-tile>
+  <campus-tile
+    *ngFor="let favoriteLearningArea of favoriteLearningAreas"
+    [label]="favoriteLearningArea.name"
+    icon="learning-area:{{favoriteLearningArea.icon}}"
+    [color]="favoriteLearningArea.color"
+    [routerLink]="favoriteLearningArea.id"
+    [secondaryActions]="[removeAreaFromFavoritesAction(favoriteLearningArea)]"
+  ></campus-tile>
 
-    <campus-drop-area icon="add" label="Sleep je favoriet leergebied naar hier">
-    </campus-drop-area>
-  </div>
+  <campus-drop-area icon="add" label="Sleep je favoriet leergebied naar hier">
+  </campus-drop-area>
 </campus-info-panel>

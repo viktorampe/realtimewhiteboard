@@ -1,11 +1,10 @@
 .pages-edu-contents-areas-list {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
   &__area {
-    flex-grow: 1;
     width: 33%;
     max-width: 33%;
-    display: flex;
-    align-items: center;
-
     &__link {
       overflow: hidden;
       text-overflow: ellipsis;

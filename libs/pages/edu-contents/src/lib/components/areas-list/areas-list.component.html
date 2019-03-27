@@ -11,22 +11,35 @@
       matInput
     />
   </mat-form-field>
-
   <div
-    class="pages-edu-contents-areas-list__area"
-    *ngFor="let learningArea of filteredLearningAreas"
-    [class.pages-edu-contents-areas-list__area--selected]="
-      isFavoriteArea(learningArea)
-    "
+    cdkDropList
+    [cdkDropListData]="filteredLearningAreas"
+    [cdkDropListConnectedTo]="['favorite-drop-area']"
+    class="pages-edu-contents-areas-list"
   >
-    <mat-icon
-      class="pages-edu-contents-areas-list__area__icon"
-      svgIcon="learning-area:{{learningArea.icon}}"
-    ></mat-icon>
-    <a
-      class="pages-edu-contents-areas-list__area__link"
-      [routerLink]="learningArea.id"
-      >{{ learningArea.name }}</a
+    <div
+      class="pages-edu-contents-areas-list__area"
+      *ngFor="let learningArea of filteredLearningAreas"
+      [class.pages-edu-contents-areas-list__area--selected]="
+        isFavoriteArea(learningArea)
+      "
+      cdkDrag
+      [cdkDragData]="learningArea"
     >
+      <mat-icon
+        class="pages-edu-contents-areas-list__area__icon"
+        svgIcon="learning-area:{{learningArea.icon}}"
+      ></mat-icon>
+      <a
+        class="pages-edu-contents-areas-list__area__link"
+        [routerLink]="learningArea.id"
+        >{{ learningArea.name }}</a
+      >
+      <campus-tile
+        *cdkDragPreview
+        icon="learning-area:{{learningArea.icon}}"
+        [label]="learningArea.name"
+      ></campus-tile>
+    </div>
   </div>
 </campus-info-panel>
