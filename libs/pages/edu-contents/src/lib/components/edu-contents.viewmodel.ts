@@ -82,7 +82,7 @@ export class EduContentsViewModel {
    * determine the searchMode for a given string
    */
   public getSearchMode(mode: string): SearchModeInterface {
-    return;
+    return this.searchModes[mode];
   }
 
   /*
