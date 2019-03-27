@@ -1,6 +1,8 @@
 import { Inject, Injectable } from '@angular/core';
 import { Params } from '@angular/router';
 import {
+  AuthServiceInterface,
+  AUTH_SERVICE_TOKEN,
   DalState,
   EduContentServiceInterface,
   EDU_CONTENT_SERVICE_TOKEN,
@@ -38,6 +40,7 @@ export class EduContentsViewModel {
   constructor(
     private store: Store<DalState>,
     private mapObjectConversionService: MapObjectConversionService,
+    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     @Inject(EDU_CONTENT_SERVICE_TOKEN)
     private eduContentService: EduContentServiceInterface,
     @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
@@ -102,6 +105,7 @@ export class EduContentsViewModel {
    */
   public toggleFavoriteArea(area: LearningAreaInterface): void {
     const favorite: FavoriteInterface = {
+      name: area.name,
       type: FavoriteTypesEnum.AREA,
       learningAreaId: area.id,
       created: new Date()
@@ -114,6 +118,7 @@ export class EduContentsViewModel {
    */
   public saveSearchState(searchState: SearchStateInterface): void {
     const favorite: FavoriteInterface = {
+      name: 'Zoekopdracht',
       type: FavoriteTypesEnum.SEARCH,
       criteria: JSON.stringify({
         ...searchState,
@@ -123,7 +128,12 @@ export class EduContentsViewModel {
       }),
       created: new Date()
     };
-    this.store.dispatch(new FavoriteActions.ToggleFavorite({ favorite }));
+    this.store.dispatch(
+      new FavoriteActions.StartAddFavorite({
+        favorite,
+        userId: this.authService.userId
+      })
+    );
   }
 
   /*
