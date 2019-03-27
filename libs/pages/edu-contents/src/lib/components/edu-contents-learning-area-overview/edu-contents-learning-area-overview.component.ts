@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EnvironmentSearchModesInterface } from '@campus/shared';
 import { Observable, Subject } from 'rxjs';
@@ -10,7 +10,7 @@ import { EduContentsViewModel } from '../edu-contents.viewmodel';
   templateUrl: './edu-contents-learning-area-overview.component.html',
   styleUrls: ['./edu-contents-learning-area-overview.component.scss']
 })
-export class EduContentLearningAreaOverviewComponent {
+export class EduContentLearningAreaOverviewComponent implements OnInit {
   public searchModes: EnvironmentSearchModesInterface;
   public searchTerm$: Subject<string>;
   public autoCompleteValues$: Observable<string[]>;
