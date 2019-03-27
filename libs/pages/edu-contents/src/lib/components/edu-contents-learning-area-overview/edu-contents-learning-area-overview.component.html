@@ -1,17 +1,21 @@
-<div
-  #favoriteList="cdkDropList"
-  cdkDropList
-  (cdkDropListDropped)="onFavoriteDrop($event)"
->
-  <campus-favorite-areas
-    [favoriteLearningAreas]="viewModel.favoriteLearningAreas$ | async"
-  ></campus-favorite-areas
-></div>
-
+<!--
+  <div
+    #favoriteList="cdkDropList"
+    cdkDropList
+    (cdkDropListDropped)="onFavoriteDrop($event)"
+  >
+    <campus-favorite-areas
+      [favoriteLearningAreas]="viewModel.favoriteLearningAreas$ | async"
+    ></campus-favorite-areas
+  ></div>
+-->
+<campus-favorite-areas
+  [favoriteLearningAreas]="viewModel.favoriteLearningAreas$ | async"
+></campus-favorite-areas>
 <div
   cdkDropList
   [cdkDropListData]="viewModel.learningAreas$ | async"
-  [cdkDropListConnectedTo]="[favoriteList]"
+  [cdkDropListConnectedTo]="['favorite-drop-area']"
   style="display:flex"
   ><div
     *ngFor="let learningArea of (viewModel.learningAreas$ | async)"

@@ -1,3 +1,4 @@
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { LearningAreaInterface } from '@campus/dal';
 import { TileSecondaryActionInterface } from '@campus/ui';
@@ -20,5 +21,10 @@ export class FavoriteAreasComponent {
         this.removeAreaFromFavorites.emit(learningArea);
       }
     };
+  }
+
+  onFavoriteDrop(event: CdkDragDrop<LearningAreaInterface[]>) {
+    const learningAreaToAddToFavorite = event.item.data;
+    console.log(learningAreaToAddToFavorite);
   }
 }
