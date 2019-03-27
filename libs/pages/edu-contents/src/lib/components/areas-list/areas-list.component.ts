@@ -1,8 +1,7 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit, ViewChild } from '@angular/core';
 import { LearningAreaInterface } from '@campus/dal';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { FilterTextInputComponent } from '@campus/ui';
+import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 
 @Component({
   selector: 'campus-areas-list',
@@ -13,25 +12,18 @@ export class AreasListComponent implements OnInit {
   @Input() learningAreas: LearningAreaInterface[];
   @Input() favoriteLearningAreas: LearningAreaInterface[];
 
-  isSmallScreen$: Observable<boolean>;
-  isMediumScreen$: Observable<boolean>;
-  filteredLearningAreas: LearningAreaInterface[];
-  filter = '';
+  @ViewChild(FilterTextInputComponent)
+  filterTextInput: FilterTextInputComponent<
+    LearningAreaInterface[],
+    LearningAreaInterface
+  >;
 
-  constructor(private breakPointObserver: BreakpointObserver) {}
+  constructor(
+    @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface
+  ) {}
 
   ngOnInit() {
-    this.filteredLearningAreas = this.learningAreas;
-    this.loadOutputStreams();
-  }
-
-  private loadOutputStreams() {
-    this.isSmallScreen$ = this.breakPointObserver
-      .observe([Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
-      .pipe(map(result => !result.matches));
-    this.isMediumScreen$ = this.breakPointObserver
-      .observe([Breakpoints.Small, Breakpoints.Large, Breakpoints.XLarge])
-      .pipe(map(result => !result.matches));
+    this.filterTextInput.setFilterableItem(this);
   }
 
   isFavoriteArea(area: LearningAreaInterface) {
@@ -40,15 +32,10 @@ export class AreasListComponent implements OnInit {
     );
   }
 
-  onFilterChange(event: any) {
-    if (this.filter.trim().length > 0) {
-      const filter = this.filter.trim().toLowerCase();
-
-      this.filteredLearningAreas = this.learningAreas.filter(area =>
-        area.name.toLowerCase().includes(filter)
-      );
-    } else {
-      this.filteredLearningAreas = this.learningAreas;
-    }
+  filterFn(
+    source: LearningAreaInterface[],
+    searchText: string
+  ): LearningAreaInterface[] {
+    return this.filterService.filter(source, { name: searchText });
   }
 }

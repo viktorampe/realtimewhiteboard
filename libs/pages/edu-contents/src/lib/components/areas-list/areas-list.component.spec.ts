@@ -11,6 +11,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { LearningAreaFixture } from '@campus/dal';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
+import { FilterService, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { AreasListComponent } from './areas-list.component';
 
 describe('AreasListComponent', () => {
@@ -48,7 +49,10 @@ describe('AreasListComponent', () => {
         NoopAnimationsModule
       ],
       declarations: [AreasListComponent],
-      providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
+      providers: [
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry },
+        { provide: FILTER_SERVICE_TOKEN, useClass: FilterService }
+      ]
     }).compileComponents();
   }));
 
@@ -90,23 +94,22 @@ describe('AreasListComponent', () => {
     }
   });
 
-  it('should filter the learning areas correctly', () => {
-    const input = fixture.debugElement.query(By.css('input'));
-    input.nativeElement.value = 'kunde';
-    input.nativeElement.dispatchEvent(new Event('input'));
-
+  it('should filter the learning areas correctly', async(() => {
+    component.filterTextInput.setValue('kunde');
     fixture.detectChanges();
 
-    const expectedAreas = [mockLearningAreas[0], mockLearningAreas[2]];
-    const areas = fixture.debugElement.queryAll(
-      By.css('.pages-edu-contents-areas-list__area')
-    );
+    fixture.whenStable().then(() => {
+      const expectedAreas = [mockLearningAreas[0], mockLearningAreas[2]];
+      const areas = fixture.debugElement.queryAll(
+        By.css('.pages-edu-contents-areas-list__area')
+      );
 
-    areas.forEach((area, index) => {
-      const areaModel = expectedAreas[index];
-      const areaText = area.query(By.css('a')).nativeElement.textContent;
+      areas.forEach((area, index) => {
+        const areaModel = expectedAreas[index];
+        const areaText = area.query(By.css('a')).nativeElement.textContent;
 
-      expect(areaText).toBe(areaModel.name);
+        expect(areaText).toBe(areaModel.name);
+      });
     });
-  });
+  }));
 });
