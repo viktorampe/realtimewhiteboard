@@ -102,6 +102,9 @@ figure {
 @import 'libs/pages/settings/alerts/src/lib/pages-settings-alerts.theme';
 @include pages-settings-alerts-theme();
 
+@import 'libs/pages/edu-contents/src/lib/pages-edu-contents.theme';
+@include pages-edu-contents-theme();
+
 // include shared lib scss
 @import 'libs/shared/src/lib/shared-theme';
 @include shared-theme();

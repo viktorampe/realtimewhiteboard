@@ -11,11 +11,7 @@
       (keyup.enter)="onChange()"
     />
   </mat-form-field>
-  <campus-button
-    bordered
-    [iconClass]="'magnifier'"
-    (click)="onChange()"
-  ></campus-button>
+  <campus-button [iconClass]="'magnifier'" (click)="onChange()"></campus-button>
 
   <ng-template #autoCompleteTemplate>
     <mat-form-field [appearance]="'outline'">

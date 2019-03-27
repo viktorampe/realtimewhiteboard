@@ -1,0 +1,71 @@
+@mixin pages-edu-contents-search-modes() {
+  $pages-edu-contents__search-modes__item-width: 335px !default;
+  $pages-edu-contents__search-modes__item-padding: 25px !default;
+  $pages-edu-contents__search-modes__item-margin: 6px !default;
+  $pages-edu-contents__search-modes__item-border: 1px solid
+    $ui-tertiary-bg-color-2 !default;
+  $pages-edu-contents__search-modes__item-background: $ui-tertiary-bg-color !default;
+
+  $pages-edu-contents__search-modes__title-font-size: $ui-primary-font-size !default;
+  $pages-edu-contents__search-modes__title-color: $ui-primary-font-color-2 !default;
+  $pages-edu-contents__search-modes__title-color--accent: $ui-primary-font-color !default;
+
+  .pages-edu-contents__search-modes {
+    &__item {
+      width: $pages-edu-contents__search-modes__item-width;
+      padding: $pages-edu-contents__search-modes__item-padding;
+      margin: $pages-edu-contents__search-modes__item-margin;
+      border: $pages-edu-contents__search-modes__item-border;
+      background-color: $pages-edu-contents__search-modes__item-background;
+    }
+
+    h2 {
+      font-weight: normal;
+      font-size: $pages-edu-contents__search-modes__title-font-size;
+      color: $pages-edu-contents__search-modes__title-color;
+      text-transform: uppercase;
+      margin-top: 0;
+
+      b {
+        color: $pages-edu-contents__search-modes__title-color--accent;
+      }
+    }
+
+    .ui-button--primary {
+      margin: 10px;
+    }
+
+    campus-search-term {
+      margin: 20px 10px 0;
+    }
+
+    .mat-form-field-appearance-outline .mat-form-field-infix {
+      padding: 2px;
+      border-top: 0;
+      line-height: 28px;
+    }
+
+    input {
+      border: none;
+      height: 31px;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+
+    .mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float
+      .mat-form-field-label,
+    .mat-form-field-appearance-outline.mat-form-field-can-float
+      .mat-input-server:focus
+      + .mat-form-field-label-wrapper
+      .mat-form-field-label {
+      -webkit-transform: translateY(-1.1) scale(0.75);
+      transform: translateY(-1.1em) scale(0.75);
+      width: 133.33333333%;
+      opacity: 0.5;
+    }
+
+    .mat-form-field-label-wrapper {
+      margin-top: -6px;
+    }
+  }
+}
