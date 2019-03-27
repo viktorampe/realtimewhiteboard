@@ -1,5 +1,9 @@
-import { TestBed } from '@angular/core/testing';
+import { Component } from '@angular/core';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import {
+  CustomSerializer,
   DalState,
   EDU_CONTENT_SERVICE_TOKEN,
   FavoriteActions,
@@ -11,6 +15,13 @@ import {
   LearningAreaReducer
 } from '@campus/dal';
 import { SearchStateInterface } from '@campus/search';
+import { ENVIRONMENT_SEARCHMODES_TOKEN } from '@campus/shared';
+import {
+  NavigationActionTiming,
+  routerReducer,
+  RouterStateSerializer,
+  StoreRouterConnectingModule
+} from '@ngrx/router-store';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { BehaviorSubject, of } from 'rxjs';
@@ -18,6 +29,7 @@ import { EduContentsViewModel } from './edu-contents.viewmodel';
 
 describe('EduContentsViewModel', () => {
   let eduContentsViewModel: EduContentsViewModel;
+  let router: Router;
   let eduContentService;
 
   const mockSearchState: SearchStateInterface = {
@@ -45,12 +57,34 @@ describe('EduContentsViewModel', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        StoreModule.forRoot({}),
-        ...getStoreModuleForFeatures([FavoriteReducer, LearningAreaReducer])
+        RouterTestingModule.withRoutes([
+          {
+            path: '',
+            redirectTo: 'edu-content',
+            pathMatch: 'full'
+          },
+          {
+            path: 'edu-content',
+            component: Component,
+            children: [
+              {
+                path: ':area',
+                component: Component
+              }
+            ]
+          }
+        ]),
+        StoreModule.forRoot({ router: routerReducer }),
+        ...getStoreModuleForFeatures([FavoriteReducer, LearningAreaReducer]),
+        StoreRouterConnectingModule.forRoot({
+          navigationActionTiming: NavigationActionTiming.PostActivation,
+          serializer: CustomSerializer
+        })
       ],
       providers: [
         EduContentsViewModel,
         Store,
+        { provide: RouterStateSerializer, useClass: CustomSerializer },
         {
           provide: EDU_CONTENT_SERVICE_TOKEN,
           useValue: {
@@ -58,12 +92,19 @@ describe('EduContentsViewModel', () => {
               return of(['strings', 'for', 'autocomplete']);
             }
           }
+        },
+        {
+          provide: ENVIRONMENT_SEARCHMODES_TOKEN,
+          useValue: {}
         }
       ]
     });
     eduContentsViewModel = TestBed.get(EduContentsViewModel);
     eduContentService = TestBed.get(EDU_CONTENT_SERVICE_TOKEN);
+    router = TestBed.get(Router);
     store = TestBed.get(Store);
+
+    router.initialNavigation();
     store.dispatch(
       new LearningAreaActions.LearningAreasLoaded({
         learningAreas: mockLearningAreas
@@ -120,5 +161,17 @@ describe('EduContentsViewModel', () => {
         })
       );
     });
+  });
+
+  describe('learningArea$', () => {
+    it('should return the learningarea for current route', fakeAsync(() => {
+      router.navigate(['edu-content', '1']);
+      tick();
+      expect(eduContentsViewModel.learningArea$).toBeObservable(
+        hot('a', {
+          a: mockLearningAreas[0]
+        })
+      );
+    }));
   });
 });

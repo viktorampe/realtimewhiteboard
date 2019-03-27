@@ -53,7 +53,7 @@ describe('NavItemServiceService', () => {
       const result = navService.getSideNavItems(mockUser, []);
       const expected = [
         {
-          icon: 'lesmateriaal',
+          icon: 'bundles',
           link: '/bundles',
           title: 'Bundels'
         },
@@ -88,8 +88,14 @@ describe('NavItemServiceService', () => {
       const result = navService.getSideNavItems(mockUser, []);
       const expected = [
         {
-          title: 'Bundels',
+          title: 'Lesmateriaal',
           icon: 'lesmateriaal',
+          link: '/edu-content',
+          children: []
+        },
+        {
+          title: 'Bundels',
+          icon: 'bundles',
           link: '/bundles',
           children: []
         },
@@ -121,8 +127,20 @@ describe('NavItemServiceService', () => {
       const result = navService.getSideNavItems(mockUser, [mockFavorite]);
       const expected = [
         {
-          title: 'Bundels',
+          title: 'Lesmateriaal',
           icon: 'lesmateriaal',
+          link: '/edu-content',
+          children: [
+            {
+              title: mockFavorite.name,
+              icon: mockFavorite.learningArea.icon,
+              link: '/edu-content/' + mockFavorite.learningAreaId
+            }
+          ]
+        },
+        {
+          title: 'Bundels',
+          icon: 'bundles',
           link: '/bundles',
           children: [
             {

@@ -1,12 +1,12 @@
 @mixin search-term() {
-  $search-search-term-background-color: $ui-primary-bg-color;
-  $search-search-term-border-color: $ui-primary-bg-color !default;
+  $search-search-term-background-color: $ui-tertiary-bg-color;
+  $search-search-term-border-color: $ui-tertiary-bg-color !default;
   $search-search-term-button-background-color: $ui-button-bg-color-1 !default;
   $search-search-term-button-border-color: darken(
     $search-search-term-button-background-color,
     10%
   ) !default;
-  $search-search-term-autocomplete-background-color: $ui-primary-bg-color !default;
+  $search-search-term-autocomplete-background-color: $ui-tertiary-bg-color !default;
   .search-term {
     background-color: $search-search-term-background-color;
     border: 1px solid $search-search-term-border-color;
