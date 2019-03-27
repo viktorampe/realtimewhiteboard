@@ -17,14 +17,7 @@ import {
 } from '@campus/dal';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
-import {
-  map,
-  skipWhile,
-  switchMap,
-  switchMapTo,
-  tap,
-  withLatestFrom
-} from 'rxjs/operators';
+import { map, skipWhile, switchMap, switchMapTo, tap } from 'rxjs/operators';
 
 export enum RolesEnum {
   Teacher = 'teacher',
@@ -94,9 +87,6 @@ export class CoupledTeacherGuard implements CanActivate {
     this.personsLoaded$ = this.store.pipe(
       select(LinkedPersonQueries.getLoaded)
     );
-    this.linkedPersonsIds$ = this.store.pipe(
-      select(TeacherStudentQueries.getTeacherIdsFromTeacherStudents)
-    );
   }
 
   private loadIntermediateStream(): void {
@@ -112,13 +102,19 @@ export class CoupledTeacherGuard implements CanActivate {
         return this.containsRole(currentUser.roles, RolesEnum.Teacher);
       })
     );
-    this.hasTeachers$ = this.linkedPersonsIds$.pipe(
-      withLatestFrom(this.currentUser$),
+    this.hasTeachers$ = this.currentUser$.pipe(
+      switchMap(user =>
+        this.store.pipe(
+          select(TeacherStudentQueries.getCoupledTeacherIds, {
+            userId: user.id
+          })
+        )
+      ),
       //this will need to be changed once the role setup will be changed
-      switchMap(([linkedPersonIds, currentUser]) =>
+      switchMap(teacherStudentIds =>
         this.store.pipe(
           select(LinkedPersonQueries.getByIds, {
-            ids: linkedPersonIds.filter(id => id !== currentUser.id) // exclude own id
+            ids: teacherStudentIds
           })
         )
       ),

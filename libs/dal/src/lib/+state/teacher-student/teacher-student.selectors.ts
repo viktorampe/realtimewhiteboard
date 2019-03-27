@@ -76,3 +76,17 @@ export const getTeacherIdsFromTeacherStudents = createSelector(
       teacherStudent => teacherStudent.teacherId
     )
 );
+
+/**
+ * returns array of ids (number[]) of the linked persons
+ */
+export const getCoupledTeacherIds = createSelector(
+  selectTeacherStudentState,
+  (state: State, props: { userId: number }) => {
+    return Object.values(state.entities)
+      .map(teacherStudent => {
+        return teacherStudent.teacherId;
+      })
+      .filter(id => id !== props.userId);
+  }
+);
