@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule, MatInputModule } from '@angular/material';
 import { PagesSharedModule } from '@campus/pages/shared';
+import { SearchModule } from '@campus/search';
 import { UiModule } from '@campus/ui';
 import { AreasListComponent } from './components/areas-list/areas-list.component';
 import { EduContentLearningAreaOverviewComponent } from './components/edu-contents-learning-area-overview/edu-contents-learning-area-overview.component';
@@ -21,7 +22,8 @@ import { PagesEduContentsRoutingModule } from './pages-edu-contents-routing.modu
     PagesSharedModule,
     MatIconModule,
     MatInputModule,
-    FormsModule
+    FormsModule,
+    SearchModule
   ],
   declarations: [
     EduContentLearningAreaOverviewComponent,

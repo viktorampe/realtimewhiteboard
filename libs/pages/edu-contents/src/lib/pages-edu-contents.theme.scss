@@ -1,5 +1,7 @@
 @import './components/areas-list/areas-list.component.theme.scss';
+@import './components/edu-contents-search-modes/edu-contents-search-modes.component.theme.scss';
 
 @mixin pages-edu-contents-theme() {
   @include pages-edu-contents-areas-list();
+  @include pages-edu-contents-search-modes();
 }

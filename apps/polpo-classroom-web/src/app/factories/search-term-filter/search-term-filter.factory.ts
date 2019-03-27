@@ -4,6 +4,7 @@ import {
   EduContentProductTypeInterface,
   EduContentProductTypeQueries,
   EduNetQueries,
+  LearningAreaQueries,
   LearningDomainQueries,
   MethodQueries,
   SchoolTypeQueries,
@@ -42,7 +43,7 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
     [key: string]: FilterQueryInterface;
   } = {
     learningArea: {
-      query: YearQueries.getAll,
+      query: LearningAreaQueries.getAll,
       name: 'learningArea',
       label: 'Leergebied',
       component: CheckboxListFilterComponent
@@ -64,16 +65,21 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
       label: 'Onderwijsvorm'
     },
     methodsByLearningArea: {
-      query: MethodQueries.getByLearningAreaId,
+      query: MethodQueries.getByLearningAreaIds,
       name: 'methods',
       label: 'Methode',
       learningAreaDependent: true
     },
     learningDomainsByLearningArea: {
-      query: LearningDomainQueries.getByLearningArea,
+      query: LearningDomainQueries.getByLearningAreas,
       label: 'Leergebied',
       name: 'learningDomains',
       learningAreaDependent: true
+    },
+    grades: {
+      query: LearningDomainQueries.getByLearningArea,
+      label: 'Graad',
+      name: 'grades'
     }
   };
 
@@ -81,19 +87,17 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
 
   public buildFilter(
     name: string,
-    searchState: SearchStateInterface,
-    learningAreaOverride: number = 0
+    searchState: SearchStateInterface
   ): Observable<SearchFilterInterface> {
     const filterQuery = this.filterQueries[name];
-
     if (filterQuery.learningAreaDependent) {
       return this.store
         .select(
           filterQuery.query as MemoizedSelectorWithProps<Object, any, any[]>,
           {
-            learningAreaId:
-              learningAreaOverride ||
-              searchState.filterCriteriaSelections.get('learningArea')[0]
+            learningAreaIds: searchState.filterCriteriaSelections.get(
+              'learningArea'
+            )
           }
         )
         .pipe(
@@ -125,7 +129,11 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
       this.buildFilter('learningDomainsByLearningArea', searchState)
     );
 
-    return combineLatest(filters);
+    return combineLatest(filters).pipe(
+      map(searchFilters =>
+        searchFilters.filter(f => f.criteria.values.length > 0)
+      )
+    );
   }
 
   /**
@@ -148,11 +156,11 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
   ) {
     if (cur.parent === 0) {
       return [
+        ...acc,
         {
           children: src.filter(child => child.parent === cur.id),
           ...cur
-        },
-        ...acc
+        }
       ];
     } else return acc;
   }
