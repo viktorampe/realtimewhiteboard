@@ -30,23 +30,31 @@ export class EduContentsViewModelMock
     new LearningAreaFixture({
       id: 1,
       name: 'fooLearningArea',
-      icon: 'learning-area:polpo-aardrijkskunde'
+      icon: 'polpo-aardrijkskunde'
     }),
     new LearningAreaFixture({
       id: 2,
       name: 'barLearningArea',
-      icon: 'learning-area:polpo-engels'
+      icon: 'polpo-engels'
     }),
     new LearningAreaFixture({
       id: 3,
       name: 'bazLearningArea',
-      icon: 'learning-area:polpo-biologie'
+      icon: 'polpo-biologie'
     })
   ];
 
   private favoriteLearningAreas = [
-    new LearningAreaFixture({ id: 2, name: 'barLearningArea' }),
-    new LearningAreaFixture({ id: 3, name: 'bazLearningArea' })
+    new LearningAreaFixture({
+      id: 2,
+      name: 'barLearningArea',
+      icon: 'polpo-engels'
+    }),
+    new LearningAreaFixture({
+      id: 3,
+      name: 'bazLearningArea',
+      icon: 'polpo-biologie'
+    })
   ];
 
   private searchResults: EduContentSearchResultInterface[] = [
