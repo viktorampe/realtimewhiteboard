@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
+import { Params } from '@angular/router';
 import {
   DalState,
   EduContentServiceInterface,
@@ -10,15 +11,20 @@ import {
   LearningAreaQueries
 } from '@campus/dal';
 import { SearchModeInterface, SearchStateInterface } from '@campus/search';
-import { EduContentSearchResultInterface } from '@campus/shared';
+import {
+  EduContentSearchResultInterface,
+  EnvironmentSearchModesInterface,
+  ENVIRONMENT_SEARCHMODES_TOKEN
+} from '@campus/shared';
 import { select, Store } from '@ngrx/store';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { filter, map, switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EduContentsViewModel {
+  public learningArea$: Observable<LearningAreaInterface>;
   public learningAreas$: Observable<LearningAreaInterface[]>;
   public favoriteLearningAreas$: Observable<LearningAreaInterface[]>;
   public searchResults$: Observable<EduContentSearchResultInterface[]>;
@@ -30,12 +36,15 @@ export class EduContentsViewModel {
   constructor(
     private store: Store<DalState>,
     @Inject(EDU_CONTENT_SERVICE_TOKEN)
-    private eduContentService: EduContentServiceInterface
+    private eduContentService: EduContentServiceInterface,
+    @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
+    public searchModes: EnvironmentSearchModesInterface
   ) {
     this.initialize();
   }
 
   private initialize() {
+    this.learningArea$ = this.getLearningArea();
     this.learningAreas$ = this.store.pipe(select(LearningAreaQueries.getAll));
     this.favoriteLearningAreas$ = this.getFavoriteLearningAreas();
     this.eduContentFavorites$ = this.store.pipe(
@@ -51,6 +60,20 @@ export class EduContentsViewModel {
   public updateState(state: SearchStateInterface) {
     this.searchState$.next(state);
     //TODO -- tests can only be added once the results method has been implemented and the results are updated due to a trigger on the stream that calls the api
+  }
+
+  /**
+   * get learningarea for active route
+   */
+  private getLearningArea(): Observable<LearningAreaInterface> {
+    return this.store.pipe(
+      select(getRouterStateParams),
+      map((params: Params): number => +params.area),
+      filter(id => !!id),
+      switchMap(id =>
+        this.store.pipe(select(LearningAreaQueries.getById, { id }))
+      )
+    );
   }
 
   /*

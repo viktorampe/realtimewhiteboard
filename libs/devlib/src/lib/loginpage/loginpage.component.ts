@@ -70,6 +70,7 @@ export class LoginpageComponent implements OnInit {
     private store: Store<DalState>,
     private router: Router
   ) {
+    return;
     this.store.dispatch(
       new FavoriteActions.LoadFavorites({ userId: this.authService.userId })
     );
@@ -112,10 +113,12 @@ export class LoginpageComponent implements OnInit {
   }
 
   getFavorites(userId: number) {
+    return;
     this.response = this.favoriteService.getAllForUser(userId);
   }
 
   getAllFavorites() {
+    return;
     this.store.dispatch(
       new FavoriteActions.LoadFavorites({ userId: this.authService.userId })
     );
