@@ -55,12 +55,6 @@ export class EduContentsViewModel {
     );
   }
 
-  public getLearningAreaById(
-    areaId: number
-  ): Observable<LearningAreaInterface> {
-    return this.store.pipe(select(LearningAreaQueries.getById, { id: areaId }));
-  }
-
   /*
    * let the page component pass through the updated state from the search component
    */
