@@ -24,6 +24,13 @@ import {
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
+import {
+  EDU_NETS_FILTER_PROPS,
+  LEARNING_AREA_FILTER_PROPS,
+  LEARNING_PLAN_ASSIGNMENTS_FILTER_PROPS,
+  SCHOOL_TYPES_FILTER_PROPS,
+  YEARS_FILTER_PROPS
+} from './learning-plan-filter-props';
 
 enum ColumnLevel {
   LEARNING_AREA,
@@ -209,40 +216,15 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
   ): StartingLevelStringPropertiesInterface {
     switch (currentColumnLevel) {
       case ColumnLevel.LEARNING_AREA:
-        return {
-          name: 'learningAreas',
-          label: 'Leergebieden',
-          keyProperty: 'id',
-          displayProperty: 'name'
-        };
+        return LEARNING_AREA_FILTER_PROPS;
       case ColumnLevel.EDU_NET:
-        return {
-          name: 'eduNets',
-          label: 'Onderwijsnet',
-          keyProperty: 'id',
-          displayProperty: 'name'
-        };
+        return EDU_NETS_FILTER_PROPS;
       case ColumnLevel.SCHOOL_TYPE:
-        return {
-          name: 'schoolTypes',
-          label: 'Stroom',
-          keyProperty: 'id',
-          displayProperty: 'name'
-        };
+        return SCHOOL_TYPES_FILTER_PROPS;
       case ColumnLevel.YEAR:
-        return {
-          name: 'years',
-          label: 'Jaar',
-          keyProperty: 'id',
-          displayProperty: 'name'
-        };
+        return YEARS_FILTER_PROPS;
       case ColumnLevel.LEARNING_PLAN:
-        return {
-          name: 'learningPlans.assignments',
-          label: 'Leerplan',
-          keyProperty: 'ids',
-          displayProperty: 'label'
-        };
+        return LEARNING_PLAN_ASSIGNMENTS_FILTER_PROPS;
       default:
         throw Error(
           `LearningPlanFilterFactory: getStartingFilterStringProperties: Given currentColumnLevel: ${currentColumnLevel} should not exist`

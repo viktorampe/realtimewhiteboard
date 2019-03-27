@@ -25,6 +25,13 @@ import {
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { of } from 'rxjs';
+import {
+  EDU_NETS_FILTER_PROPS,
+  LEARNING_AREA_FILTER_PROPS,
+  LEARNING_PLAN_ASSIGNMENTS_FILTER_PROPS,
+  SCHOOL_TYPES_FILTER_PROPS,
+  YEARS_FILTER_PROPS
+} from './learning-plan-filter-props';
 import { LearningPlanFilterFactory } from './learning-plan-filter.factory';
 
 const mockLearningAreas = [
@@ -119,7 +126,7 @@ describe('LearningPlanFilterFactory', () => {
 
       searchFilterCriterias = [
         {
-          ...learningPlanFilterFactory['getSearchFilterStringProperties'](0),
+          ...LEARNING_AREA_FILTER_PROPS,
           values: mockLearningAreas.map(mockLearningArea => {
             return {
               data: mockLearningArea,
@@ -128,7 +135,7 @@ describe('LearningPlanFilterFactory', () => {
           })
         },
         {
-          ...learningPlanFilterFactory['getSearchFilterStringProperties'](1),
+          ...EDU_NETS_FILTER_PROPS,
           values: mockEduNets.map(mockEduNet => {
             return {
               data: mockEduNet,
@@ -137,7 +144,7 @@ describe('LearningPlanFilterFactory', () => {
           })
         },
         {
-          ...learningPlanFilterFactory['getSearchFilterStringProperties'](2),
+          ...SCHOOL_TYPES_FILTER_PROPS,
           values: mockSchoolTypes.map(mockSchoolType => {
             return {
               data: mockSchoolType,
@@ -146,7 +153,7 @@ describe('LearningPlanFilterFactory', () => {
           })
         },
         {
-          ...learningPlanFilterFactory['getSearchFilterStringProperties'](3),
+          ...YEARS_FILTER_PROPS,
           values: mockAvailableYears.map(mockAvailableYear => {
             return {
               data: mockAvailableYear,
@@ -155,7 +162,7 @@ describe('LearningPlanFilterFactory', () => {
           })
         },
         {
-          ...learningPlanFilterFactory['getSearchFilterStringProperties'](4),
+          ...LEARNING_PLAN_ASSIGNMENTS_FILTER_PROPS,
           values: Array.from(mockLearningPlans).map(
             ([specialty, learningPlans]: [
               SpecialtyInterface,
@@ -173,14 +180,8 @@ describe('LearningPlanFilterFactory', () => {
         }
       ];
     });
-    it('should throw an error if a value higher thatn 4 is given to getSearchFilterStringProperties', () => {
-      expect(() => {
-        learningPlanFilterFactory['getSearchFilterStringProperties'](5);
-      }).toThrowError(
-        `LearningPlanFilterFactory: getStartingFilterStringProperties: Given currentColumnLevel: ${5} should not exist`
-      );
-    });
-    it('should return the correct searchFitlerInterface array', () => {
+
+    it('should return the correct searchFilterInterface array', () => {
       const loopValues: {
         filterCriteriaSelection: Map<string, (number | string)[]>;
         expectedSearchFilterCriterias: SearchFilterCriteriaInterface[];
