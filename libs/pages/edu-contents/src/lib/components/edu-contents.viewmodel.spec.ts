@@ -1,130 +1,135 @@
-import { Component, OnInit } from '@angular/core';
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { TestBed } from '@angular/core/testing';
 import {
-  CustomSerializer,
   DalState,
+  EDU_CONTENT_SERVICE_TOKEN,
+  FavoriteActions,
+  FavoriteFixture,
   FavoriteReducer,
   getStoreModuleForFeatures,
+  LearningAreaActions,
+  LearningAreaFixture,
   LearningAreaReducer
 } from '@campus/dal';
 import { SearchStateInterface } from '@campus/search';
-import {
-  NavigationActionTiming,
-  routerReducer,
-  StoreRouterConnectingModule
-} from '@ngrx/router-store';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { EduContentsViewModel } from './edu-contents.viewmodel';
-
-@Component({
-  selector: 'campus-mock-component',
-  template: ``,
-  styles: [``]
-})
-export class MockComponent implements OnInit {
-  constructor() {}
-
-  ngOnInit(): void {}
-}
 
 describe('EduContentsViewModel', () => {
   let eduContentsViewModel: EduContentsViewModel;
-  let store: Store<DalState>;
-  let router: Router;
+  let eduContentService;
 
   const mockSearchState: SearchStateInterface = {
     searchTerm: 'not this',
-    filterCriteriaSelections: new Map<string, (number | string)[]>([])
+    filterCriteriaSelections: new Map<string, (number | string)[]>([
+      ['thing', ['one', 'two']],
+      ['other thing', ['three', 'four']]
+    ])
   };
+
+  let store: Store<DalState>;
+
+  const mockLearningAreas = [
+    new LearningAreaFixture({ id: 1 }),
+    new LearningAreaFixture({ id: 2 }),
+    new LearningAreaFixture({ id: 3 })
+  ];
+  const mockFavorites = [
+    new FavoriteFixture({ id: 1, learningAreaId: 2, type: 'area' }),
+    new FavoriteFixture({ id: 2, learningAreaId: 3, type: 'area' }),
+    new FavoriteFixture({ id: 3, eduContentId: 1, type: 'educontent' }),
+    new FavoriteFixture({ id: 4, eduContentId: 2, type: 'educontent' })
+  ];
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule.withRoutes([
-          {
-            path: '',
-            redirectTo: 'edu-content',
-            pathMatch: 'full'
-          },
-          {
-            path: 'edu-contents',
-            component: MockComponent,
-            children: [
-              {
-                path: ':area',
-                component: MockComponent
-              }
-            ]
-          }
-        ]),
-        StoreModule.forRoot({ router: routerReducer }),
-        ...getStoreModuleForFeatures([FavoriteReducer, LearningAreaReducer]),
-        StoreRouterConnectingModule.forRoot({
-          navigationActionTiming: NavigationActionTiming.PostActivation,
-          serializer: CustomSerializer
-        })
+        StoreModule.forRoot({}),
+        ...getStoreModuleForFeatures([FavoriteReducer, LearningAreaReducer])
       ],
-      declarations: [MockComponent],
-      providers: [EduContentsViewModel, Store]
+      providers: [
+        EduContentsViewModel,
+        Store,
+        {
+          provide: EDU_CONTENT_SERVICE_TOKEN,
+          useValue: {
+            autoComplete: (state: SearchStateInterface) => {
+              return of(['strings', 'for', 'autocomplete']);
+            }
+          }
+        }
+      ]
     });
-
     eduContentsViewModel = TestBed.get(EduContentsViewModel);
+    eduContentService = TestBed.get(EDU_CONTENT_SERVICE_TOKEN);
     store = TestBed.get(Store);
-    router = TestBed.get(Router);
-    router.initialNavigation();
+    store.dispatch(
+      new LearningAreaActions.LearningAreasLoaded({
+        learningAreas: mockLearningAreas
+      })
+    );
+    store.dispatch(
+      new FavoriteActions.FavoritesLoaded({ favorites: mockFavorites })
+    );
   });
 
   it('should be defined', () => {
     expect(eduContentsViewModel).toBeDefined();
   });
 
+  describe('requestAutoComplete', () => {
+    it('should call autoComplete on the eduContentService', () => {
+      const autoCompleteSpy = jest.spyOn(eduContentService, 'autoComplete');
+      const mockNewSearchTerm = 'new search term';
+      eduContentsViewModel['searchState$'] = new BehaviorSubject<
+        SearchStateInterface
+      >(mockSearchState);
+      eduContentsViewModel.requestAutoComplete(mockNewSearchTerm);
+      expect(autoCompleteSpy).toHaveBeenCalledTimes(1);
+      expect(autoCompleteSpy).toHaveBeenCalledWith({
+        ...mockSearchState,
+        searchTerm: mockNewSearchTerm
+      });
+    });
+  });
+
+  describe('learningAreas$', () => {
+    it('should return all the learningareas', () => {
+      expect(eduContentsViewModel.learningAreas$).toBeObservable(
+        hot('a', { a: mockLearningAreas })
+      );
+    });
+  });
+
+  describe('favoriteLearningAreas$', () => {
+    it('should return the favorite learningareas', () => {
+      expect(eduContentsViewModel.favoriteLearningAreas$).toBeObservable(
+        hot('a', {
+          a: mockLearningAreas.filter(area => [2, 3].indexOf(area.id) !== -1)
+        })
+      );
+    });
+  });
+
+  describe('eduContentFavorites$', () => {
+    it('should return the eduContent favorites', () => {
+      expect(eduContentsViewModel.eduContentFavorites$).toBeObservable(
+        hot('a', {
+          a: mockFavorites.filter(favorite => favorite.type === 'educontent')
+        })
+      );
+    });
+  });
   describe('updateState', () => {
     it('should update the stream with the given value', () => {
       eduContentsViewModel['searchState$'] = new BehaviorSubject<
         SearchStateInterface
       >(null);
-      eduContentsViewModel.updateState(mockSearchState);
       expect(eduContentsViewModel['searchState$']).toBeObservable(
         hot('a', { a: mockSearchState })
       );
     });
   });
-  describe('getInitialSearchState', () => {
-    it('should add the correct filterCriteriaSelections', fakeAsync(() => {
-      eduContentsViewModel['searchState$'] = new BehaviorSubject<
-        SearchStateInterface
-      >(mockSearchState);
-      [
-        {
-          usedRoute: '/',
-          expectedMap: new Map<string, (number | string)[]>([])
-        },
-        {
-          usedRoute: '/edu-contents',
-          expectedMap: new Map<string, (number | string)[]>([])
-        },
-        {
-          usedRoute: '/edu-contents/34',
-          expectedMap: new Map<string, (number | string)[]>([
-            ['learningArea', [34]]
-          ])
-        }
-      ].forEach(value => {
-        router.navigate([value.usedRoute]);
-        tick();
-        expect(eduContentsViewModel.getInitialSearchState()).toBeObservable(
-          hot('a', {
-            a: {
-              searchTerm: 'not this',
-              filterCriteriaSelections: value.expectedMap
-            }
-          })
-        );
-      });
-    }));
-  });
+      eduContentsViewModel.updateState(mockSearchState);
 });
