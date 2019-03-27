@@ -200,7 +200,7 @@ export class TocFilterFactory implements SearchFilterFactory {
         // reduce to set of years
         const years: YearInterface[] = Array.from(
           new Set(books.reduce((acc, book) => [...acc, ...book.years], []))
-        ).sort((a, b) => a.id - b.id);
+        ).sort((a, b) => a.name < b.name ? -1 : 1);
 
         return this.getFilterCriterium(years, YEAR, 'Jaren', 'id', 'name');
       })
