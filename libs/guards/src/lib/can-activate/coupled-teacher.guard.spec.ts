@@ -339,4 +339,35 @@ describe('coupledTeacherGuard', () => {
     ).toBeObservable(hot('a', { a: true }));
     expect(spy).toHaveBeenCalledTimes(0);
   });
+
+  it('should return true if the user has teacherStudent, of which the user is the teacher', () => {
+    store.dispatch(
+      new UserActions.UserLoaded(
+        new PersonFixture({ id: 101, roles: [{ name: 'teacher' }] })
+      )
+    );
+    store.dispatch(
+      new TeacherStudentActions.TeacherStudentsLoaded({
+        teacherStudents: [
+          new TeacherStudentFixture({ id: 1, teacherId: 100, studentId: 1 }),
+          new TeacherStudentFixture({ id: 2, teacherId: 101, studentId: 1 })
+        ]
+      })
+    );
+    store.dispatch(
+      new LinkedPersonActions.LinkedPersonsLoaded({
+        persons: [
+          new PersonFixture({ id: 100, type: 'teacher' })
+          // LinkedPersons does not return the user as it's own linked person
+        ]
+      })
+    );
+    expect(
+      coupledTeacherGuard.canActivate(
+        <ActivatedRouteSnapshot>{},
+        <RouterStateSnapshot>{}
+      )
+    ).toBeObservable(hot('a', { a: true }));
+    expect(spy).toHaveBeenCalledTimes(0);
+  });
 });

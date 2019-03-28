@@ -146,6 +146,8 @@ import { TaskInstanceService } from './tasks/task-instance.service';
 import { TASK_INSTANCE_SERVICE_TOKEN } from './tasks/task-instance.service.interface';
 import { TASK_SERVICE_TOKEN } from './tasks/task.service.interface';
 import { TaskService } from './tasks/tasks.service';
+import { TocService } from './toc/toc.service';
+import { TOC_SERVICE_TOKEN } from './toc/toc.service.interface';
 
 interface DalOptions {
   apiBaseUrl: string;
@@ -357,6 +359,7 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
     { provide: YEAR_SERVICE_TOKEN, useClass: YearService },
     { provide: LEARNING_PLAN_SERVICE_TOKEN, useClass: LearningPlanService },
     { provide: FAVORITE_SERVICE_TOKEN, useClass: FavoriteService },
+    { provide: TOC_SERVICE_TOKEN, useClass: TocService },
     { provide: LEARNING_DOMAIN_SERVICE_TOKEN, useClass: LearningDomainService }
   ]
 })

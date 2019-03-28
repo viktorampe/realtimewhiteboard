@@ -270,7 +270,7 @@ describe('ColumnFilterComponent', () => {
       expect(displayedLabels.length).toBe(7);
       ['one', 'two', 'three', 'four', 'five', 'six', 'seven'].forEach(
         (expectedLabel, i) => {
-          expect(displayedLabels[i].nativeElement.textContent).toBe(
+          expect(displayedLabels[i].nativeElement.textContent.trim()).toBe(
             expectedLabel
           );
         }
