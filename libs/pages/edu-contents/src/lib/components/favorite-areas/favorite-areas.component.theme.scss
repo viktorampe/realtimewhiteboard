@@ -1,17 +1,17 @@
 @mixin pages-edu-contents-favorite-areas() {
-  $ui-drop-area__label-color: $ui-primary-color-accent !default;
+  $ui-drop-area__label-color--hover: $ui-primary-color-accent !default;
   campus-drop-area {
     &.hovered {
       mat-icon {
-        color: $ui-drop-area__label-color;
+        color: $ui-drop-area__label-color--hover;
       }
       .ui-drop-area {
-        border: 2px dashed $ui-drop-area__label-color;
+        border: 2px dashed $ui-drop-area__label-color--hover;
         &__icon-container {
-          border: 2px dashed $ui-drop-area__label-color;
+          border: 2px dashed $ui-drop-area__label-color--hover;
         }
         &__label {
-          color: $ui-drop-area__label-color;
+          color: $ui-drop-area__label-color--hover;
         }
       }
     }
