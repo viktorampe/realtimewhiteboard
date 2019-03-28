@@ -17,7 +17,11 @@ import {
   LearningAreaInterface,
   LearningAreaReducer
 } from '@campus/dal';
-import { SearchStateInterface } from '@campus/search';
+import {
+  FilterFactoryFixture,
+  SearchModeInterface,
+  SearchStateInterface
+} from '@campus/search';
 import { ENVIRONMENT_SEARCHMODES_TOKEN } from '@campus/shared';
 import { MockDate } from '@campus/testing';
 import { MapObjectConversionService } from '@campus/utils';
@@ -43,6 +47,37 @@ describe('EduContentsViewModel', () => {
       ['thing', ['one', 'two']],
       ['other thing', ['three', 'four']]
     ])
+  };
+  const searchMode: SearchModeInterface = {
+    name: 'demo',
+    label: 'demo',
+    dynamicFilters: false,
+    searchFilterFactory: FilterFactoryFixture,
+    searchTerm: {
+      // autocompleteEl: string; //reference to material autocomplete component
+      domHost: 'hostSearchTerm'
+    },
+    results: {
+      component: null,
+      sortModes: [
+        {
+          description: 'book',
+          name: 'book',
+          icon: 'book'
+        },
+        {
+          description: 'bundle',
+          name: 'bundle',
+          icon: 'bundle'
+        },
+        {
+          description: 'taak',
+          name: 'taak',
+          icon: 'taak'
+        }
+      ],
+      pageSize: 3
+    }
   };
 
   let store: Store<DalState>;
@@ -102,7 +137,9 @@ describe('EduContentsViewModel', () => {
         },
         {
           provide: ENVIRONMENT_SEARCHMODES_TOKEN,
-          useValue: {}
+          useValue: {
+            demo: searchMode
+          }
         }
       ]
     });
@@ -241,5 +278,12 @@ describe('EduContentsViewModel', () => {
         })
       );
     }));
+  });
+
+  describe('getSearchMode', () => {
+    it('should return the correct searchmode', () => {
+      expect(eduContentsViewModel.getSearchMode('demo')).toEqual(searchMode);
+      expect(eduContentsViewModel.getSearchMode('foo')).toBeUndefined();
+    });
   });
 });
