@@ -44,7 +44,7 @@ describe('EduContentsViewModel', () => {
   let eduContentsViewModel: EduContentsViewModel;
   let eduContentService: EduContentServiceInterface;
   let router: Router;
-  let eduContentService;
+  let store: Store<DalState>;
 
   const mockSearchState: SearchStateInterface = {
     searchTerm: 'not this',
@@ -84,8 +84,6 @@ describe('EduContentsViewModel', () => {
       pageSize: 3
     }
   };
-
-  let store: Store<DalState>;
 
   const mockAutoCompleteReturnValue = ['strings', 'for', 'autocomplete'];
   const mockLearningAreas = [
@@ -227,22 +225,6 @@ describe('EduContentsViewModel', () => {
       });
 
       spyFavAction.mockClear();
-    });
-  });
-
-  describe('requestAutoComplete', () => {
-    it('should call autoComplete on the eduContentService', () => {
-      const autoCompleteSpy = jest.spyOn(eduContentService, 'autoComplete');
-      const mockNewSearchTerm = 'new search term';
-      eduContentsViewModel['searchState$'] = new BehaviorSubject<
-        SearchStateInterface
-      >(mockSearchState);
-      eduContentsViewModel.requestAutoComplete(mockNewSearchTerm);
-      expect(autoCompleteSpy).toHaveBeenCalledTimes(1);
-      expect(autoCompleteSpy).toHaveBeenCalledWith({
-        ...mockSearchState,
-        searchTerm: mockNewSearchTerm
-      });
     });
   });
 
