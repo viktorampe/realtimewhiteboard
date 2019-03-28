@@ -84,8 +84,8 @@ export class EduContentsViewModel {
       map(initialSearchState => {
         return { ...initialSearchState, searchTerm };
       }),
-      switchMap(initialSearchState =>
-        this.eduContentService.autoComplete(initialSearchState)
+      switchMap(enrichedSearchState =>
+        this.eduContentService.autoComplete(enrichedSearchState)
       )
     );
   }
@@ -106,7 +106,7 @@ export class EduContentsViewModel {
       map((routerStateParams: RouterStateParamsInterface) => {
         const initialSearchState: SearchStateInterface = {
           searchTerm: '',
-          filterCriteriaSelections: new Map<string, (number | string)[]>([])
+          filterCriteriaSelections: new Map<string, (number | string)[]>()
         };
         if (routerStateParams.area) {
           initialSearchState.filterCriteriaSelections.set('learningArea', [
@@ -117,7 +117,7 @@ export class EduContentsViewModel {
           initialSearchState.filterCriteriaOptions = new Map<
             string,
             number | string | boolean
-          >([]);
+          >();
           initialSearchState.filterCriteriaOptions.set('taskAllowed', true);
         }
         return initialSearchState;
