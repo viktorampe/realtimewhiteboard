@@ -10,6 +10,7 @@ import { EduContentsViewModelMock } from '../edu-contents.viewmodel.mock';
 })
 export class EduContentLearningAreaOverviewComponent {
   dropZoneIsHovered = false;
+  favoritesDropListId = 'favorites-area';
   constructor(public viewModel: EduContentsViewModelMock) {}
 
   toggleFavorite(learningArea: LearningAreaInterface) {
