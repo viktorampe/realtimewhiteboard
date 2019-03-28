@@ -1,11 +1,15 @@
 import { Inject, Injectable } from '@angular/core';
 import { Params } from '@angular/router';
 import {
+  AuthServiceInterface,
+  AUTH_SERVICE_TOKEN,
   DalState,
   EduContentServiceInterface,
   EDU_CONTENT_SERVICE_TOKEN,
+  FavoriteActions,
   FavoriteInterface,
   FavoriteQueries,
+  FavoriteTypesEnum,
   getRouterStateParams,
   LearningAreaInterface,
   LearningAreaQueries
@@ -16,6 +20,7 @@ import {
   EnvironmentSearchModesInterface,
   ENVIRONMENT_SEARCHMODES_TOKEN
 } from '@campus/shared';
+import { MapObjectConversionService } from '@campus/utils';
 import { select, Store } from '@ngrx/store';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
@@ -34,6 +39,8 @@ export class EduContentsViewModel {
 
   constructor(
     private store: Store<DalState>,
+    private mapObjectConversionService: MapObjectConversionService,
+    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     @Inject(EDU_CONTENT_SERVICE_TOKEN)
     private eduContentService: EduContentServiceInterface,
     @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
@@ -96,7 +103,38 @@ export class EduContentsViewModel {
   /*
    * dispatch toggle action
    */
-  public toggleFavoriteArea(area: LearningAreaInterface): void {}
+  public toggleFavoriteArea(area: LearningAreaInterface): void {
+    const favorite: FavoriteInterface = {
+      name: area.name,
+      type: FavoriteTypesEnum.AREA,
+      learningAreaId: area.id,
+      created: new Date()
+    };
+    this.store.dispatch(new FavoriteActions.ToggleFavorite({ favorite }));
+  }
+
+  /*
+   * dispatch save action for search state
+   */
+  public saveSearchState(searchState: SearchStateInterface): void {
+    const favorite: FavoriteInterface = {
+      name: 'Zoekopdracht',
+      type: FavoriteTypesEnum.SEARCH,
+      criteria: JSON.stringify({
+        ...searchState,
+        filterCriteriaSelections: this.mapObjectConversionService.mapToObject(
+          searchState.filterCriteriaSelections
+        )
+      }),
+      created: new Date()
+    };
+    this.store.dispatch(
+      new FavoriteActions.StartAddFavorite({
+        favorite,
+        userId: this.authService.userId
+      })
+    );
+  }
 
   /*
    * make a result stream derived from :
