@@ -45,7 +45,7 @@ import {
 } from '@ngrx/router-store';
 import { Store, StoreModule } from '@ngrx/store';
 import { cold, hot } from '@nrwl/nx/testing';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import {
   EduContentsViewModel,
   RouterStateParamsInterface
@@ -263,13 +263,19 @@ describe('EduContentsViewModel', () => {
     it('should call autoComplete on the eduContentService', () => {
       const autoCompleteSpy = jest.spyOn(eduContentService, 'autoComplete');
       const mockNewSearchTerm = 'new search term';
-      eduContentsViewModel['searchState$'] = new BehaviorSubject<
-        SearchStateInterface
-      >(mockSearchState);
-      eduContentsViewModel.requestAutoComplete(mockNewSearchTerm);
+      const results = eduContentsViewModel.requestAutoComplete(
+        mockNewSearchTerm
+      );
+      results.subscribe(); // needed for observable to trigger
+
+      const inititalSearchState = {
+        searchTerm: '',
+        filterCriteriaSelections: new Map()
+      };
+
       expect(autoCompleteSpy).toHaveBeenCalledTimes(1);
       expect(autoCompleteSpy).toHaveBeenCalledWith({
-        ...mockSearchState,
+        ...inititalSearchState,
         searchTerm: mockNewSearchTerm
       });
     });
