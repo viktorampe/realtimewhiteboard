@@ -58,6 +58,7 @@ describe('AreasListComponent', () => {
     fixture = TestBed.createComponent(AreasListComponent);
     component = fixture.componentInstance;
 
+    component.connectedDropList = 'foo';
     component.learningAreas = mockLearningAreas;
     component.favoriteLearningAreas = mockFavoriteLearningAreas;
 
@@ -71,8 +72,7 @@ describe('AreasListComponent', () => {
   it('should show the learning areas correctly', () => {
     const areas = fixture.debugElement.queryAll(
       By.css(
-        '.pages-edu-contents-areas-list__area, ' +
-          '.pages-edu-contents-areas-list__area--selected'
+        '.pages-edu-contents-areas-list__area,.pages-edu-contents-areas-list__area--selected'
       )
     );
 

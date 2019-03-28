@@ -9,6 +9,7 @@ import { LearningAreaInterface } from '@campus/dal';
 export class AreasListComponent implements OnInit {
   @Input() learningAreas: LearningAreaInterface[];
   @Input() favoriteLearningAreas: LearningAreaInterface[];
+  @Input() connectedDropList: string;
 
   filteredLearningAreas: LearningAreaInterface[];
   filter: string = '';
