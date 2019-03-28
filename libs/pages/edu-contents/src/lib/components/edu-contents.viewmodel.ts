@@ -34,8 +34,7 @@ export class EduContentsViewModel {
   public favoriteLearningAreas$: Observable<LearningAreaInterface[]>;
   public searchResults$: Observable<EduContentSearchResultInterface[]>;
   public eduContentFavorites$: Observable<FavoriteInterface[]>;
-
-  private searchState$: BehaviorSubject<SearchStateInterface>;
+  public searchState$: BehaviorSubject<SearchStateInterface>;
 
   constructor(
     private store: Store<DalState>,
