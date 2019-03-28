@@ -14,7 +14,7 @@ export class NavItemService {
   private standardNavItems: Dictionary<NavItem> = {
     taken: { title: 'Taken', icon: 'task', link: '/tasks' },
     boeken: { title: 'Boeken', icon: 'book', link: '/books' },
-    bundels: { title: 'Bundels', icon: 'lesmateriaal', link: '/bundles' },
+    bundels: { title: 'Bundels', icon: 'bundles', link: '/bundles' },
     resultaten: {
       title: 'Resultaten',
       icon: 'increase',
@@ -25,7 +25,7 @@ export class NavItemService {
     lesmateriaal: {
       title: 'Lesmateriaal',
       icon: 'lesmateriaal',
-      link: '/eduContent'
+      link: '/edu-content'
     },
     leerlingen: {
       title: 'Leerlingen',
@@ -92,6 +92,10 @@ export class NavItemService {
       );
 
       navItems.push(
+        this.withFavorites(
+          { ...this.standardNavItems.lesmateriaal },
+          favoritesNavItems
+        ),
         this.withFavorites(
           { ...this.standardNavItems.bundels },
           favoritesNavItems
