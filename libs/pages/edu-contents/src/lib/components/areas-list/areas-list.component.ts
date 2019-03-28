@@ -1,5 +1,4 @@
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { LearningAreaInterface } from '@campus/dal';
 
 @Component({
@@ -10,7 +9,6 @@ import { LearningAreaInterface } from '@campus/dal';
 export class AreasListComponent implements OnInit {
   @Input() learningAreas: LearningAreaInterface[];
   @Input() favoriteLearningAreas: LearningAreaInterface[];
-  @Output() dropAreaOnFavorites = new EventEmitter<LearningAreaInterface>();
 
   filteredLearningAreas: LearningAreaInterface[];
   filter: string = '';
@@ -36,12 +34,5 @@ export class AreasListComponent implements OnInit {
     } else {
       this.filteredLearningAreas = this.learningAreas;
     }
-  }
-
-  onLearningAreaDrop(event: CdkDragDrop<LearningAreaInterface[]>) {
-    // only emit event when the learning area is dropped above the favorites container
-    if (event.container === event.previousContainer) return;
-    const learningAreaToAddToFavorite = event.item.data;
-    this.dropAreaOnFavorites.emit(learningAreaToAddToFavorite);
   }
 }

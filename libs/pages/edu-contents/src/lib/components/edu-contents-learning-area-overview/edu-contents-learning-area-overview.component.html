@@ -1,9 +1,9 @@
 <campus-favorite-areas
+  id="favorite-areas"
   cdkDropList
   (cdkDropListEntered)="setHoverState(true)"
   (cdkDropListExited)="setHoverState(false)"
-  (cdkDropListDropped)="setHoverState(false)"
-  id="favorite-areas"
+  (cdkDropListDropped)="onFavoritesDropped($event)"
   [isHovered]="dropZoneIsHovered"
   [favoriteLearningAreas]="viewModel.favoriteLearningAreas$ | async"
 ></campus-favorite-areas>

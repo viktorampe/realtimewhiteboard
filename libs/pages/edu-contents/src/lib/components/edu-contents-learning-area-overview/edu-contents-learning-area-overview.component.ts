@@ -1,3 +1,4 @@
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Component } from '@angular/core';
 import { LearningAreaInterface } from '@campus/dal';
 import { EduContentsViewModelMock } from '../edu-contents.viewmodel.mock';
@@ -17,5 +18,10 @@ export class EduContentLearningAreaOverviewComponent {
 
   setHoverState(state: boolean) {
     this.dropZoneIsHovered = state;
+  }
+
+  onFavoritesDropped($event: CdkDragDrop<LearningAreaInterface>) {
+    this.setHoverState(false); // item is dropped, so drop area is not hovered anymore
+    this.toggleFavorite($event.item.data);
   }
 }
