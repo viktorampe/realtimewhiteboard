@@ -162,7 +162,7 @@ describe('EduContentsViewModel', () => {
           d: { task: '38948' }
         }
       );
-      eduContentsViewModel.routerStateParams$ = mockRouterParams$;
+      eduContentsViewModel['routerStateParams$'] = mockRouterParams$;
       expect(eduContentsViewModel.getInitialSearchState()).toBeObservable(
         hot('a-b-c-d', {
           a: {
@@ -209,7 +209,7 @@ describe('EduContentsViewModel', () => {
         'a',
         { a: {} }
       );
-      eduContentsViewModel.routerStateParams$ = mockRouterParams$;
+      eduContentsViewModel['routerStateParams$'] = mockRouterParams$;
       const getAutoCompleteSpy = jest.spyOn(eduContentService, 'autoComplete');
       expect(
         eduContentsViewModel.requestAutoComplete('some string')
