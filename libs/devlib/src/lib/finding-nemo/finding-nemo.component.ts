@@ -2,7 +2,6 @@
 import {
   AfterViewInit,
   Component,
-  Injectable,
   QueryList,
   Type,
   ViewChild,
@@ -12,16 +11,15 @@ import {
   DalState,
   EduContentFixture,
   EduContentMetadataFixture,
-  EduContentProductTypeActions,
   EduContentProductTypeFixture,
-  EduNetActions,
-  LearningDomainActions,
+  LearningAreaActions,
+  LearningAreaQueries,
   MethodActions,
-  SchoolTypeActions,
-  YearActions
+  MethodQueries,
+  YearActions,
+  YearQueries
 } from '@campus/dal';
 import {
-  MockSearchViewModel,
   SearchComponent,
   SearchFilterCriteriaInterface,
   SearchFilterFactory,
@@ -37,9 +35,9 @@ import { TileSecondaryActionInterface } from '@campus/ui';
 import { EduContentMetadataApi } from '@diekeure/polpo-api-angular-sdk';
 import { Store } from '@ngrx/store';
 import { EduContentSearchResultComponent } from 'apps/polpo-classroom-web/src/app/components/searchresults/edu-content-search-result.component';
-import { SearchTermFilterFactory } from 'apps/polpo-classroom-web/src/app/factories/search-term-filter/search-term-filter.factory';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { TocFilterFactory } from 'apps/polpo-classroom-web/src/app/factories/toc-filter/toc-filter.factory';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { filter, map, take } from 'rxjs/operators';
 
 @Component({
   selector: 'campus-finding-nemo',
@@ -69,20 +67,27 @@ export class FindingNemoComponent implements AfterViewInit {
     private eduContentMetadataApi: EduContentMetadataApi,
     private store: Store<DalState>
   ) {
-    this.store.dispatch(
-      new EduContentProductTypeActions.LoadEduContentProductTypes()
-    );
-
+    this.setMockData(TocFilterFactory);
+    this.store.dispatch(new LearningAreaActions.LoadLearningAreas());
     this.store.dispatch(new YearActions.LoadYears());
-    this.store.dispatch(new EduNetActions.LoadEduNets());
-    this.store.dispatch(new SchoolTypeActions.LoadSchoolTypes());
     this.store.dispatch(new MethodActions.LoadMethods());
-    this.store.dispatch(new LearningDomainActions.LoadLearningDomains());
-
-    this.setMockData();
   }
 
   ngAfterViewInit(): void {
+    combineLatest(
+      this.store.select(LearningAreaQueries.getLoaded),
+      this.store.select(YearQueries.getLoaded),
+      this.store.select(MethodQueries.getLoaded)
+    )
+      .pipe(
+        filter(loadedArray => loadedArray.every(value => value)),
+        take(1)
+      )
+      .subscribe(() => {
+        console.log('state loaded');
+        this.searchComponent.reset(this.searchState.value);
+      });
+
     this.searchComponent.searchPortals = this.portalHosts;
     setTimeout(() => {
       this.searchComponent.reset(this.searchState.value);
@@ -93,7 +98,7 @@ export class FindingNemoComponent implements AfterViewInit {
     console.log('tile click!');
   }
 
-  setMockData() {
+  setMockData(searchFilterFactory: Type<SearchFilterFactory>) {
     this.secondaryActions = [
       {
         label: 'Bekijken',
@@ -103,7 +108,7 @@ export class FindingNemoComponent implements AfterViewInit {
         }
       }
     ];
-    this.searchMode = this.getMockSearchMode();
+    this.searchMode = this.getMockSearchMode(searchFilterFactory);
     this.searchState.next(this.getMockSearchState());
     this.resultsPage$.next(this.getMockResults());
     this.autoComplete = this.getMockAutoCompleteValues();
@@ -111,7 +116,6 @@ export class FindingNemoComponent implements AfterViewInit {
 
   catchEvent($event: SearchFilterCriteriaInterface[]) {
     console.log($event);
-    this.filterCriteria$.next([...this.getMockSearchFilters(), ...$event]);
   }
 
   loadMoreResults(from = 0) {
@@ -180,20 +184,22 @@ export class FindingNemoComponent implements AfterViewInit {
   }
 
   onChange(value: string) {
-    console.log(value);
+    // console.log(value);
   }
 
   onFilterSelectionChange(value: string) {
-    console.log(value);
+    // console.log(value);
   }
 
-  private getMockSearchMode(): SearchModeInterface {
+  private getMockSearchMode(
+    searchFilterFactory: Type<SearchFilterFactory>
+  ): SearchModeInterface {
     return {
       name: 'demo',
       label: 'demo',
       dynamicFilters: false,
       // tslint:disable-next-line: no-use-before-declare
-      searchFilterFactory: SearchTermFilterFactory,
+      searchFilterFactory: searchFilterFactory,
       searchTerm: {
         // autocompleteEl: string; //reference to material autocomplete component
         domHost: 'hostLeft'
@@ -274,53 +280,7 @@ export class FindingNemoComponent implements AfterViewInit {
     };
   }
 
-  private getMockSearchFilters(): SearchFilterCriteriaInterface[] {
-    return [
-      {
-        name: 'criteria name',
-        label: 'The label of the criteria',
-        keyProperty: 'id',
-        displayProperty: 'name',
-        values: [
-          {
-            data: {
-              id: 1,
-              name: 'foo jaar'
-            },
-            selected: false
-          },
-          {
-            data: {
-              id: 2,
-              name: 'bar jaar'
-            },
-            selected: false
-          },
-          {
-            data: {
-              id: 3,
-              name: 'baz jaar'
-            },
-            selected: false,
-            prediction: 3
-          }
-        ]
-      }
-    ];
-  }
-
   private getMockAutoCompleteValues(): string[] {
     return ['waarde1', 'waarde2', 'waarde3', 'waarde4'];
-  }
-}
-
-@Injectable({ providedIn: 'root' })
-class MockFactory implements SearchFilterFactory {
-  mockSearchViewmodel = new MockSearchViewModel();
-
-  getFilters(
-    searchState: SearchStateInterface
-  ): Observable<SearchFilterInterface[]> {
-    return this.mockSearchViewmodel.searchFilters$;
   }
 }

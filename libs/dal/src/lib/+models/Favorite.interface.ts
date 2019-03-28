@@ -16,7 +16,7 @@ export enum FavoriteTypesEnum {
 export interface FavoriteInterface {
   type: FavoriteTypesEnum | string;
   name?: string;
-  criteria?: any;
+  criteria?: string;
   created: Date;
   id?: number;
   personId?: number;

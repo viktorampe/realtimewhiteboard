@@ -8,3 +8,8 @@ campus-collapsible-sheet {
   flex: 1 1 auto;
   flex-direction: column;
 }
+
+[aside] {
+  overflow-y: auto;
+  height: 100%;
+}

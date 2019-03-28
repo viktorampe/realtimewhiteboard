@@ -87,9 +87,6 @@ export class CoupledTeacherGuard implements CanActivate {
     this.personsLoaded$ = this.store.pipe(
       select(LinkedPersonQueries.getLoaded)
     );
-    this.linkedPersonsIds$ = this.store.pipe(
-      select(TeacherStudentQueries.getTeacherIdsFromTeacherStudents)
-    );
   }
 
   private loadIntermediateStream(): void {
@@ -105,11 +102,20 @@ export class CoupledTeacherGuard implements CanActivate {
         return this.containsRole(currentUser.roles, RolesEnum.Teacher);
       })
     );
-    this.hasTeachers$ = this.linkedPersonsIds$.pipe(
-      //this will need to be changed once the role setup will be changed
-      switchMap(linkedPersonIds =>
+    this.hasTeachers$ = this.currentUser$.pipe(
+      switchMap(user =>
         this.store.pipe(
-          select(LinkedPersonQueries.getByIds, { ids: linkedPersonIds })
+          select(TeacherStudentQueries.getCoupledTeacherIds, {
+            userId: user.id
+          })
+        )
+      ),
+      //this will need to be changed once the role setup will be changed
+      switchMap(teacherStudentIds =>
+        this.store.pipe(
+          select(LinkedPersonQueries.getByIds, {
+            ids: teacherStudentIds
+          })
         )
       ),
       map(linkedPersons =>

@@ -3,6 +3,7 @@ import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
+  AUTH_SERVICE_TOKEN,
   BundleActions,
   BundleFixture,
   BundleReducer,
@@ -14,19 +15,28 @@ import {
   FavoriteActions,
   FavoriteFixture,
   FavoriteReducer,
+  FavoriteTypesEnum,
   getStoreModuleForFeatures,
   LearningAreaActions,
   LearningAreaFixture,
+  LearningAreaInterface,
   LearningAreaReducer,
   TaskActions,
   TaskFixture,
   TaskReducer
 } from '@campus/dal';
-import { SearchResultInterface, SearchStateInterface } from '@campus/search';
+import {
+  FilterFactoryFixture,
+  SearchModeInterface,
+  SearchResultInterface,
+  SearchStateInterface
+} from '@campus/search';
 import {
   EduContentSearchResultFixture,
   ENVIRONMENT_SEARCHMODES_TOKEN
 } from '@campus/shared';
+import { MockDate } from '@campus/testing';
+import { MapObjectConversionService } from '@campus/utils';
 import {
   NavigationActionTiming,
   routerReducer,
@@ -35,7 +45,7 @@ import {
 } from '@ngrx/router-store';
 import { Store, StoreModule } from '@ngrx/store';
 import { cold, hot } from '@nrwl/nx/testing';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import {
   EduContentsViewModel,
   RouterStateParamsInterface
@@ -45,6 +55,46 @@ describe('EduContentsViewModel', () => {
   let eduContentsViewModel: EduContentsViewModel;
   let eduContentService: EduContentServiceInterface;
   let router: Router;
+
+  const mockSearchState: SearchStateInterface = {
+    searchTerm: 'not this',
+    filterCriteriaSelections: new Map<string, (number | string)[]>([
+      ['thing', ['one', 'two']],
+      ['other thing', ['three', 'four']]
+    ])
+  };
+  const searchMode: SearchModeInterface = {
+    name: 'demo',
+    label: 'demo',
+    dynamicFilters: false,
+    searchFilterFactory: FilterFactoryFixture,
+    searchTerm: {
+      // autocompleteEl: string; //reference to material autocomplete component
+      domHost: 'hostSearchTerm'
+    },
+    results: {
+      component: null,
+      sortModes: [
+        {
+          description: 'book',
+          name: 'book',
+          icon: 'book'
+        },
+        {
+          description: 'bundle',
+          name: 'bundle',
+          icon: 'bundle'
+        },
+        {
+          description: 'taak',
+          name: 'taak',
+          icon: 'taak'
+        }
+      ],
+      pageSize: 3
+    }
+  };
+
   let store: Store<DalState>;
 
   const mockAutoCompleteReturnValue = ['strings', 'for', 'autocomplete'];
@@ -105,7 +155,9 @@ describe('EduContentsViewModel', () => {
       providers: [
         EduContentsViewModel,
         Store,
+        MapObjectConversionService,
         { provide: RouterStateSerializer, useClass: CustomSerializer },
+        { provide: AUTH_SERVICE_TOKEN, useValue: { userId: 1 } },
         {
           provide: EDU_CONTENT_SERVICE_TOKEN,
           useValue: {
@@ -116,7 +168,9 @@ describe('EduContentsViewModel', () => {
         },
         {
           provide: ENVIRONMENT_SEARCHMODES_TOKEN,
-          useValue: {}
+          useValue: {
+            demo: searchMode
+          }
         }
       ]
     });
@@ -142,6 +196,83 @@ describe('EduContentsViewModel', () => {
 
   it('should be defined', () => {
     expect(eduContentsViewModel).toBeDefined();
+  });
+
+  describe('toggle favorites', () => {
+    let mockDate: MockDate;
+    let spyFavAction;
+
+    beforeAll(() => {
+      mockDate = new MockDate();
+    });
+
+    afterAll(() => {
+      mockDate.returnRealDate();
+    });
+
+    it('toggleFavoriteArea should dispatch ToggleFavorite action', () => {
+      spyFavAction = jest.spyOn(FavoriteActions, 'ToggleFavorite');
+      const area: LearningAreaInterface = new LearningAreaFixture();
+
+      eduContentsViewModel.toggleFavoriteArea(area);
+
+      expect(FavoriteActions.ToggleFavorite).toHaveBeenCalledTimes(1);
+      expect(FavoriteActions.ToggleFavorite).toHaveBeenCalledWith({
+        favorite: {
+          name: area.name,
+          type: FavoriteTypesEnum.AREA,
+          learningAreaId: area.id,
+          created: mockDate.mockDate
+        }
+      });
+
+      spyFavAction.mockClear();
+    });
+
+    it('saveSearchState should dispatch StartAddFavorite action', () => {
+      spyFavAction = jest.spyOn(FavoriteActions, 'StartAddFavorite');
+      const expectedFavoriteCriteria: string = JSON.stringify({
+        searchTerm: 'foo',
+        filterCriteriaSelections: {
+          bar: [1, 2],
+          baz: [5, 6]
+        }
+      });
+
+      eduContentsViewModel.saveSearchState({
+        searchTerm: 'foo',
+        filterCriteriaSelections: new Map([['bar', [1, 2]], ['baz', [5, 6]]])
+      });
+
+      expect(FavoriteActions.StartAddFavorite).toHaveBeenCalledTimes(1);
+      expect(FavoriteActions.StartAddFavorite).toHaveBeenCalledWith({
+        favorite: {
+          name: 'Zoekopdracht',
+          type: FavoriteTypesEnum.SEARCH,
+          criteria: expectedFavoriteCriteria,
+          created: mockDate.mockDate
+        },
+        userId: 1
+      });
+
+      spyFavAction.mockClear();
+    });
+  });
+
+  describe('requestAutoComplete', () => {
+    it('should call autoComplete on the eduContentService', () => {
+      const autoCompleteSpy = jest.spyOn(eduContentService, 'autoComplete');
+      const mockNewSearchTerm = 'new search term';
+      eduContentsViewModel['searchState$'] = new BehaviorSubject<
+        SearchStateInterface
+      >(mockSearchState);
+      eduContentsViewModel.requestAutoComplete(mockNewSearchTerm);
+      expect(autoCompleteSpy).toHaveBeenCalledTimes(1);
+      expect(autoCompleteSpy).toHaveBeenCalledWith({
+        ...mockSearchState,
+        searchTerm: mockNewSearchTerm
+      });
+    });
   });
 
   describe('learningAreas$', () => {
@@ -272,13 +403,13 @@ describe('EduContentsViewModel', () => {
     });
 
     describe('searchState selection contains taskId', () => {
-      const mockSearchState: SearchStateInterface = {
+      const mockSearchStateTask: SearchStateInterface = {
         searchTerm: '',
         filterCriteriaSelections: new Map([['task', [1]]])
       };
 
       beforeEach(() => {
-        eduContentsViewModel.updateState(mockSearchState);
+        eduContentsViewModel.updateState(mockSearchStateTask);
       });
 
       it('should set currentTask, inTask = true and inBundle = false', () => {
@@ -296,13 +427,13 @@ describe('EduContentsViewModel', () => {
     });
 
     describe('searchState selection contains bundleId', () => {
-      const mockSearchState: SearchStateInterface = {
+      const mockSearchStateBundle: SearchStateInterface = {
         searchTerm: '',
         filterCriteriaSelections: new Map([['bundle', [1]]])
       };
 
       beforeEach(() => {
-        eduContentsViewModel.updateState(mockSearchState);
+        eduContentsViewModel.updateState(mockSearchStateBundle);
       });
 
       it('should set currentBundle, inBundle = true and inTask = false', () => {
@@ -317,6 +448,13 @@ describe('EduContentsViewModel', () => {
           cold('a', { a: expected })
         );
       });
+    });
+  });
+
+  describe('getSearchMode', () => {
+    it('should return the correct searchmode', () => {
+      expect(eduContentsViewModel.getSearchMode('demo')).toEqual(searchMode);
+      expect(eduContentsViewModel.getSearchMode('foo')).toBeUndefined();
     });
   });
 });

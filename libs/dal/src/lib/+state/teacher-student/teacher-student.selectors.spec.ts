@@ -1,7 +1,13 @@
 import { TeacherStudentQueries } from '.';
 import { TeacherStudentFixture } from '../../+fixtures';
 import { TeacherStudentInterface } from '../../+models';
-import { State } from './teacher-student.reducer';
+import { TeacherStudentsLoaded } from './teacher-student.actions';
+import {
+  initialState,
+  reducer as TeacherStudentReducer,
+  State
+} from './teacher-student.reducer';
+import { getCoupledTeacherIds } from './teacher-student.selectors';
 
 describe('TeacherStudent Selectors', () => {
   const date = new Date();
@@ -107,6 +113,18 @@ describe('TeacherStudent Selectors', () => {
         storeState
       );
       expect(results).toEqual([2, 3, 4, 5]);
+    });
+
+    it('should return coupled teacherIds except own userId', () => {
+      const action = new TeacherStudentsLoaded({
+        teacherStudents: [
+          new TeacherStudentFixture({ studentId: 2, teacherId: 4 }),
+          new TeacherStudentFixture({ studentId: 3, teacherId: 4 }),
+          new TeacherStudentFixture({ studentId: 4, teacherId: 3 })
+        ]
+      });
+      const state = TeacherStudentReducer(initialState, action);
+      expect(getCoupledTeacherIds.projector(state, { userId: 3 })).toEqual([4]);
     });
   });
 });
