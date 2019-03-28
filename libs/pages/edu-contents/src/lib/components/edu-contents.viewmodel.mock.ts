@@ -151,4 +151,6 @@ export class EduContentsViewModelMock
    * dispatch toggle action
    */
   public toggleFavoriteArea(area: LearningAreaInterface): void {}
+
+  public saveSearchState(searchState: SearchStateInterface): void {}
 }
