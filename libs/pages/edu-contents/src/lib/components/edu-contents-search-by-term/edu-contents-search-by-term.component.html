@@ -1,8 +1,8 @@
-<div> edu-contents search by term page works! </div>
 <campus-collapsible-sheet>
   <div aside> <ng-container searchPortal="hostLeft"></ng-container> </div>
   <campus-search
     main
+    (searchTermChangeForAutoComplete)="onAutoCompleteRequest($event)"
     [searchMode]="searchMode"
     [initialState]="initialSearchState$ | async"
     [searchResults]="searchResults$ | async"

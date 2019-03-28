@@ -41,4 +41,8 @@ export class EduContentSearchByTermComponent {
   onSearchStateChange(searchState: SearchStateInterface): void {
     this.eduContentsViewModel.updateState(searchState);
   }
+
+  onAutoCompleteRequest(term: string) {
+    this.eduContentsViewModel.requestAutoComplete(term);
+  }
 }
