@@ -4,6 +4,8 @@ import {
   SearchResultItemComponentInterface
 } from '@campus/search';
 import { EnvironmentInterface } from '@campus/shared';
+import { EduContentSearchResultComponent } from '../app/components/searchresults/edu-content-search-result.component';
+import { SearchTermFilterFactory } from '../app/factories/search-term-filter/search-term-filter.factory';
 import { icons } from './icons';
 
 // This file can be replaced during build by using the `fileReplacements` array.
@@ -129,13 +131,13 @@ export const environment: EnvironmentInterface = {
         pageSize: 20
       }
     },
-    search: {
-      name: 'search',
+    term: {
+      name: 'term',
       label: '<b>Standaard</b> zoeken',
       dynamicFilters: true,
-      searchFilterFactory: {} as Type<SearchFilterFactory>,
+      searchFilterFactory: SearchTermFilterFactory,
       results: {
-        component: {} as Type<SearchResultItemComponentInterface>,
+        component: EduContentSearchResultComponent,
         sortModes: [
           {
             description: 'book',
