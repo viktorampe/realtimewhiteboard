@@ -41,8 +41,8 @@ export class EduContentsViewModel {
   public favoriteLearningAreas$: Observable<LearningAreaInterface[]>;
   public searchResults$: Observable<EduContentSearchResultInterface[]>;
   public eduContentFavorites$: Observable<FavoriteInterface[]>;
+  public searchState$: BehaviorSubject<SearchStateInterface>;
 
-  private searchState$: BehaviorSubject<SearchStateInterface>;
   private routerStateParams$: Observable<RouterStateParamsInterface>;
 
   constructor(
@@ -113,7 +113,7 @@ export class EduContentsViewModel {
         };
         if (routerStateParams.area) {
           initialSearchState.filterCriteriaSelections.set('learningArea', [
-            parseInt(routerStateParams.area, 10)
+            +routerStateParams.area
           ]);
         }
         if (routerStateParams.task) {

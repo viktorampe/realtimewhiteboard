@@ -55,6 +55,7 @@ describe('EduContentsViewModel', () => {
   let eduContentsViewModel: EduContentsViewModel;
   let eduContentService: EduContentServiceInterface;
   let router: Router;
+  let store: Store<DalState>;
 
   const mockSearchState: SearchStateInterface = {
     searchTerm: 'not this',
@@ -94,8 +95,6 @@ describe('EduContentsViewModel', () => {
       pageSize: 3
     }
   };
-
-  let store: Store<DalState>;
 
   const mockAutoCompleteReturnValue = ['strings', 'for', 'autocomplete'];
   const mockLearningAreas = [
@@ -259,28 +258,6 @@ describe('EduContentsViewModel', () => {
     });
   });
 
-  describe('requestAutoComplete', () => {
-    it('should call autoComplete on the eduContentService', () => {
-      const autoCompleteSpy = jest.spyOn(eduContentService, 'autoComplete');
-      const mockNewSearchTerm = 'new search term';
-      const results = eduContentsViewModel.requestAutoComplete(
-        mockNewSearchTerm
-      );
-      results.subscribe(); // needed for observable to trigger
-
-      const inititalSearchState = {
-        searchTerm: '',
-        filterCriteriaSelections: new Map()
-      };
-
-      expect(autoCompleteSpy).toHaveBeenCalledTimes(1);
-      expect(autoCompleteSpy).toHaveBeenCalledWith({
-        ...inititalSearchState,
-        searchTerm: mockNewSearchTerm
-      });
-    });
-  });
-
   describe('learningAreas$', () => {
     it('should return all the learningareas', () => {
       expect(eduContentsViewModel.learningAreas$).toBeObservable(
@@ -359,6 +336,13 @@ describe('EduContentsViewModel', () => {
           }
         })
       );
+    });
+  });
+
+  describe('getSearchMode', () => {
+    it('should return the correct searchmode', () => {
+      expect(eduContentsViewModel.getSearchMode('demo')).toEqual(searchMode);
+      expect(eduContentsViewModel.getSearchMode('foo')).toBeUndefined();
     });
   });
   describe('requestAutoComplete', () => {
@@ -454,13 +438,6 @@ describe('EduContentsViewModel', () => {
           cold('a', { a: expected })
         );
       });
-    });
-  });
-
-  describe('getSearchMode', () => {
-    it('should return the correct searchmode', () => {
-      expect(eduContentsViewModel.getSearchMode('demo')).toEqual(searchMode);
-      expect(eduContentsViewModel.getSearchMode('foo')).toBeUndefined();
     });
   });
 });
