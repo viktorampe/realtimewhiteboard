@@ -88,7 +88,8 @@ export class EduContentsViewModel {
   /*
    * determine the searchMode for a given string
    */
-  public getSearchMode(mode: string): SearchModeInterface {
+  public getSearchMode(mode: string, area?: number): SearchModeInterface {
+    //if (area && mode === 'term') return this.searchModes[]
     return this.searchModes[mode];
   }
 

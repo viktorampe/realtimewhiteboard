@@ -32,7 +32,8 @@ export class EduContentSearchByTermComponent {
 
   initialize(): void {
     this.searchMode = this.eduContentsViewModel.getSearchMode(
-      this.activatedRoute.snapshot.routeConfig.path
+      this.activatedRoute.snapshot.routeConfig.path,
+      +this.activatedRoute.snapshot.params.area
     );
     this.initialSearchState$ = this.eduContentsViewModel.getInitialSearchState();
     this.searchState$ = this.eduContentsViewModel.searchState$;
