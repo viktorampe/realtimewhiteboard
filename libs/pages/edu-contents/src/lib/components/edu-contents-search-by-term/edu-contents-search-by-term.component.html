@@ -1,7 +1,12 @@
+<campus-page-bar>
+  <ng-container searchPortal="hostTop"></ng-container>
+</campus-page-bar>
+
 <campus-collapsible-sheet>
   <div aside> <ng-container searchPortal="hostLeft"></ng-container> </div>
   <campus-search
     main
+    [autoCompleteValues]="autoCompleteValues$ | async"
     (searchTermChangeForAutoComplete)="onAutoCompleteRequest($event)"
     [searchMode]="searchMode"
     [initialState]="initialSearchState$ | async"

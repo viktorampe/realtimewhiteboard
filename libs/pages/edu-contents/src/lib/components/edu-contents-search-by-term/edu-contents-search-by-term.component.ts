@@ -19,6 +19,7 @@ export class EduContentSearchByTermComponent {
   public initialSearchState$: Observable<SearchStateInterface>;
   public searchState$: Observable<SearchStateInterface>;
   public searchResults$: Observable<EduContentSearchResultInterface[]>;
+  public autoCompleteValues$: Observable<string[]>;
 
   @ViewChild(SearchComponent) public searchComponent: SearchComponent;
 
@@ -43,6 +44,8 @@ export class EduContentSearchByTermComponent {
   }
 
   onAutoCompleteRequest(term: string) {
-    this.eduContentsViewModel.requestAutoComplete(term);
+    this.autoCompleteValues$ = this.eduContentsViewModel.requestAutoComplete(
+      term
+    );
   }
 }

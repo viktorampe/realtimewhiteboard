@@ -134,7 +134,10 @@ export const environment: EnvironmentInterface = {
     term: {
       name: 'term',
       label: '<b>Standaard</b> zoeken',
-      dynamicFilters: true,
+      dynamicFilters: false,
+      searchTerm: {
+        domHost: 'hostTop'
+      },
       searchFilterFactory: SearchTermFilterFactory,
       results: {
         component: EduContentSearchResultComponent,
