@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
@@ -44,9 +45,14 @@ describe('EduContentSearchByTermComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should reset search filters when clearSearchFilters is called', () => {
-    component.searchComponent = { reset: () => {} } as SearchComponent;
-    const spyReset = jest.spyOn(component.searchComponent, 'reset');
+  xit('should reset search filters when clearSearchFilters is called', () => {
+    const searchComponentDebugElement = fixture.debugElement.query(
+      By.directive(SearchComponent)
+    );
+    const spyReset = jest.spyOn(
+      searchComponentDebugElement.componentInstance,
+      'reset'
+    );
     component.clearSearchFilters();
 
     expect(spyReset).toHaveBeenCalledTimes(1);

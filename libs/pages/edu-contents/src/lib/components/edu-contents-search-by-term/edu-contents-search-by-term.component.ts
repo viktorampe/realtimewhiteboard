@@ -16,7 +16,7 @@ export class EduContentSearchByTermComponent implements OnInit {
   public searchMode: SearchModeInterface;
   public searchState$: Observable<SearchStateInterface>;
 
-  @ViewChild(SearchComponent) public searchComponent: SearchComponent;
+  @ViewChild(SearchComponent) private searchComponent: SearchComponent;
 
   constructor(private eduContentsViewModel: EduContentsViewModel) {}
 
