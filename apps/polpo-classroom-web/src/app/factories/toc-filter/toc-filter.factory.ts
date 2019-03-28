@@ -303,6 +303,7 @@ export class TocFilterFactory implements SearchFilterFactory {
     const bookFilterCriteria$ = this.searchStateDiff$.pipe(
       filter(
         searchStateDiff =>
+          this.hasSearchStateData(searchStateDiff[1], YEAR) &&
           this.hasSearchStateData(searchStateDiff[1], METHOD) &&
           this.hasSearchStateChanged(searchStateDiff, METHOD)
       ),
