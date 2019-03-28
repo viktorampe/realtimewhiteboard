@@ -69,6 +69,8 @@ export class SearchViewModel {
     stateFilterCriteriaSelections: Map<string, (number | string)[]>,
     resultsFilterCriteriaPredictions: Map<string, Map<string | number, number>>
   ): SearchFilterInterface {
+    if (!filter) return;
+
     if (Array.isArray(filter.criteria))
       filter.criteria = filter.criteria.map(criterium =>
         this.getUpdatedCriterium(

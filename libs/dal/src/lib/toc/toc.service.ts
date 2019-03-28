@@ -8,7 +8,9 @@ import { map } from 'rxjs/operators';
 import { EduContentBookInterface, EduContentTOCInterface } from '../+models';
 import { TocServiceInterface } from './toc.service.interface';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class TocService implements TocServiceInterface {
   constructor(
     private eduContentTOCApi: EduContentTOCApi,
@@ -29,6 +31,15 @@ export class TocService implements TocServiceInterface {
           books.filter(book => book.years.length)
         )
       );
+  }
+
+  getBooksByMethodIds(
+    methodIds: number[]
+  ): Observable<EduContentBookInterface[]> {
+    return this.eduContentBookApi.find({
+      where: { methodId: { inq: methodIds } },
+      include: [{ relation: 'years' }]
+    });
   }
 
   getTree(bookId: number): Observable<EduContentTOCInterface[]> {
