@@ -41,6 +41,51 @@ export class EduContentsViewModelMock
       id: 3,
       name: 'bazLearningArea',
       icon: 'polpo-biologie'
+    }),
+    new LearningAreaFixture({
+      id: 4,
+      name: 'fooLearningArea',
+      icon: 'polpo-aardrijkskunde'
+    }),
+    new LearningAreaFixture({
+      id: 5,
+      name: 'barLearningArea',
+      icon: 'polpo-engels'
+    }),
+    new LearningAreaFixture({
+      id: 6,
+      name: 'bazLearningArea',
+      icon: 'polpo-biologie'
+    }),
+    new LearningAreaFixture({
+      id: 7,
+      name: 'fooLearningArea',
+      icon: 'polpo-aardrijkskunde'
+    }),
+    new LearningAreaFixture({
+      id: 8,
+      name: 'barLearningArea',
+      icon: 'polpo-engels'
+    }),
+    new LearningAreaFixture({
+      id: 9,
+      name: 'bazLearningArea',
+      icon: 'polpo-biologie'
+    }),
+    new LearningAreaFixture({
+      id: 10,
+      name: 'fooLearningArea',
+      icon: 'polpo-aardrijkskunde'
+    }),
+    new LearningAreaFixture({
+      id: 11,
+      name: 'barLearningArea',
+      icon: 'polpo-engels'
+    }),
+    new LearningAreaFixture({
+      id: 12,
+      name: 'bazLearningArea',
+      icon: 'polpo-biologie'
     })
   ];
 
