@@ -29,8 +29,8 @@ export class EduContentsViewModel {
   public favoriteLearningAreas$: Observable<LearningAreaInterface[]>;
   public searchResults$: Observable<EduContentSearchResultInterface[]>;
   public eduContentFavorites$: Observable<FavoriteInterface[]>;
+  public searchState$: BehaviorSubject<SearchStateInterface>;
 
-  private searchState$: BehaviorSubject<SearchStateInterface>;
   private routerStateParams$: Observable<RouterStateParamsInterface>;
 
   constructor(
