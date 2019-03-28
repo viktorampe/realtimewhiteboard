@@ -1,22 +1,24 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {
+  BundleInterface,
+  BundleQueries,
   DalState,
+  EduContentServiceInterface,
+  EDU_CONTENT_SERVICE_TOKEN,
   FavoriteInterface,
-  getRouterState,
-  LearningAreaInterface
+  LearningAreaInterface,
+  TaskInterface,
+  TaskQueries
 } from '@campus/dal';
 import { SearchModeInterface, SearchStateInterface } from '@campus/search';
 import { EduContentSearchResultInterface } from '@campus/shared';
 import { select, Store } from '@ngrx/store';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map, withLatestFrom } from 'rxjs/operators';
+import { map, switchMap, take, withLatestFrom } from 'rxjs/operators';
 
-// values correspond with router url string
-enum LocationEnum {
-  'LEARNINGAREA' = 'learningareas',
-  'TASK' = 'tasks',
-  'BUNDLE' = 'bundles'
-}
+const LEARNINGAREA = 'learningArea';
+const TASK = 'task';
+const BUNDLE = 'bundle';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +31,11 @@ export class EduContentsViewModel {
   private searchState$: BehaviorSubject<SearchStateInterface>;
   private eduContentFavorites$: Observable<FavoriteInterface[]>;
 
-  constructor(private store: Store<DalState>) {}
+  constructor(
+    private store: Store<DalState>,
+    @Inject(EDU_CONTENT_SERVICE_TOKEN)
+    private eduContentService: EduContentServiceInterface
+  ) {}
 
   /*
    * let the page component pass through the updated state from the search component
@@ -65,16 +71,30 @@ export class EduContentsViewModel {
 
   /*
    * make a result stream derived from :
-   * - combining into a searchState
-   *   - current location in app (in bundle, in task, in learning-area)
-   *   - search component state observable
+   * - combining into a searchState -> done in getInitialSearchState
    * - switch map that to an api request
    * - map that to an EduContentSearchResultInterface
    */
   private setupSearchResults(): void {
-    this.searchState$.pipe(
-      withLatestFrom(this.getLocation()),
-      map(([searchState, location]) => {})
+    this.searchResults$ = this.searchState$.pipe(
+      switchMap(searchState => this.eduContentService.search(searchState)),
+      withLatestFrom(this.searchState$),
+      map(([searchResult, searchState]) => {
+        let adjustedSearchResults: EduContentSearchResultInterface[] =
+          searchResult.results;
+
+        adjustedSearchResults = this.adjustSearchResultsForTask(
+          searchState,
+          adjustedSearchResults
+        );
+
+        adjustedSearchResults = this.adjustSearchResultsForBundle(
+          searchState,
+          adjustedSearchResults
+        );
+
+        return adjustedSearchResults;
+      })
     );
   }
 
@@ -83,19 +103,65 @@ export class EduContentsViewModel {
    */
   private setupStreams(): void {}
 
-  private getLocation(): Observable<LocationEnum> {
-    return this.store.pipe(
-      select(getRouterState),
-      map(routerState => {
-        const foundKey = Object.keys(LocationEnum).find(
-          key =>
-            !!routerState.state.routeParts.find(
-              part => part.url === LocationEnum[key]
-            )
-        );
+  private adjustSearchResultsForTask(
+    searchState: SearchStateInterface,
+    searchResults: EduContentSearchResultInterface[]
+  ): EduContentSearchResultInterface[] {
+    if (
+      searchState.filterCriteriaSelections.has(TASK) &&
+      searchState.filterCriteriaSelections.get(TASK).length === 1
+    ) {
+      // get value from Store synchronously
+      let currentTask: TaskInterface;
+      const id = searchState.filterCriteriaSelections.get(TASK)[0];
+      this.store
+        .pipe(
+          select(TaskQueries.getById, { id }),
+          take(1)
+        )
+        .subscribe(task => (currentTask = task));
 
-        return LocationEnum[foundKey];
-      })
-    );
+      searchResults.forEach(result => {
+        result.inTask = true;
+        result.currentTask = currentTask;
+      });
+    } else {
+      searchResults.forEach(result => {
+        result.inTask = false;
+      });
+    }
+
+    return searchResults;
+  }
+
+  private adjustSearchResultsForBundle(
+    searchState: SearchStateInterface,
+    searchResults: EduContentSearchResultInterface[]
+  ): EduContentSearchResultInterface[] {
+    if (
+      searchState.filterCriteriaSelections.has(BUNDLE) &&
+      searchState.filterCriteriaSelections.get(BUNDLE).length === 1
+    ) {
+      // get value from Store synchronously
+      let currentBundle: BundleInterface;
+      const id = searchState.filterCriteriaSelections.get(BUNDLE)[0];
+      this.store
+        .pipe(
+          select(BundleQueries.getById, { id }),
+          take(1)
+        )
+        .subscribe(bundle => (currentBundle = bundle));
+
+      searchResults.forEach(result => {
+        result.inBundle = true;
+        result.currentBundle = currentBundle;
+      });
+    } else {
+      searchResults.forEach(result => {
+        result.inBundle = false;
+      });
+    }
+
+    return searchResults;
   }
 }
