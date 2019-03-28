@@ -1,16 +1,17 @@
 @mixin pages-edu-contents-favorite-areas() {
+  $ui-drop-area__label-color: $ui-primary-color-accent !default;
   campus-drop-area {
     &.hovered {
       mat-icon {
-        color: blue;
+        color: $ui-drop-area__label-color;
       }
       .ui-drop-area {
-        border: 2px dashed blue;
+        border: 2px dashed $ui-drop-area__label-color;
         &__icon-container {
-          border: 2px dashed blue;
+          border: 2px dashed $ui-drop-area__label-color;
         }
         &__label {
-          color: blue;
+          color: $ui-drop-area__label-color;
         }
       }
     }

@@ -1,23 +1,16 @@
-<div (dragenter)="onDragEnter($event)">
-  <div
-    cdkDropList
-    (cdkDropListEntered)="setHoverState(true)"
-    (cdkDropListExited)="setHoverState(false)"
-    id="favorite-areas"
-  >
-    <campus-favorite-areas
-      [isHovered]="dropZoneIsHovered"
-      [favoriteLearningAreas]="viewModel.favoriteLearningAreas$ | async"
-    ></campus-favorite-areas
-  ></div>
-</div>
+<div
+  cdkDropList
+  (cdkDropListEntered)="setHoverState(true)"
+  (cdkDropListExited)="setHoverState(false)"
+  id="favorite-areas"
+>
+  <campus-favorite-areas
+    [isHovered]="dropZoneIsHovered"
+    [favoriteLearningAreas]="viewModel.favoriteLearningAreas$ | async"
+  ></campus-favorite-areas
+></div>
 
 <campus-areas-list
   [favoriteLearningAreas]="viewModel.favoriteLearningAreas$ | async"
   [learningAreas]="viewModel.learningAreas$ | async"
 ></campus-areas-list>
-
-<div
-  style="width:100px;height:100px;background-color:red"
-  draggable="true"
-></div>
