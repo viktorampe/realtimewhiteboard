@@ -85,6 +85,11 @@
   >
 </div>
 <div>
+  State related favorites:
+  <button (click)="addNewFavorite()">add new favorite to the store</button>
+  <button (click)="toggleFavorite()">toggle a favorite from the store</button>
+</div>
+<div>
   <button (click)="getFavorites(186)">get favorites</button>
   <button (click)="addFavorite(186)">add favorite</button>
   <button (click)="removeFavorite(186, 4)">remove favorite</button>

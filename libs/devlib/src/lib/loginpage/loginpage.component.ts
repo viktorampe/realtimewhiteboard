@@ -4,13 +4,17 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import {
   AlertQueries,
-  AlertReducer,
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
+  DalState,
   EduContentInterface,
   EffectFeedbackInterface,
   EffectFeedbackQueries,
+  FavoriteActions,
   FavoriteFixture,
+  FavoriteInterface,
+  FavoriteQueries,
+  FavoriteTypesEnum,
   UserActions
 } from '@campus/dal';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
@@ -38,6 +42,12 @@ export class LoginpageComponent implements OnInit {
   route$: Observable<string[]>;
   response: Observable<any>;
 
+  private myFavorite: FavoriteInterface = {
+    type: FavoriteTypesEnum.EDUCONTENT,
+    created: new Date(),
+    eduContentId: 1
+  };
+
   alert$ = this.store.pipe(
     select(AlertQueries.getAll),
     map(alerts => alerts[0])
@@ -57,9 +67,14 @@ export class LoginpageComponent implements OnInit {
     @Inject(FAVORITE_SERVICE_TOKEN)
     private favoriteService: FavoriteServiceInterface,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
-    private store: Store<AlertReducer.State>,
+    private store: Store<DalState>,
     private router: Router
-  ) {}
+  ) {
+    return;
+    this.store.dispatch(
+      new FavoriteActions.LoadFavorites({ userId: this.authService.userId })
+    );
+  }
 
   ngOnInit() {
     this.route$ = this.router.events.pipe(
@@ -98,7 +113,35 @@ export class LoginpageComponent implements OnInit {
   }
 
   getFavorites(userId: number) {
+    return;
     this.response = this.favoriteService.getAllForUser(userId);
+  }
+
+  getAllFavorites() {
+    return;
+    this.store.dispatch(
+      new FavoriteActions.LoadFavorites({ userId: this.authService.userId })
+    );
+    setTimeout(() => {
+      this.store.select(FavoriteQueries.getAll).subscribe(favs => {
+        console.log(favs);
+      });
+    }, 2000);
+  }
+
+  addNewFavorite() {
+    this.store.dispatch(
+      new FavoriteActions.StartAddFavorite({
+        favorite: this.myFavorite,
+        userId: this.authService.userId
+      })
+    );
+  }
+
+  toggleFavorite() {
+    this.store.dispatch(
+      new FavoriteActions.ToggleFavorite({ favorite: this.myFavorite })
+    );
   }
 
   addFavorite(userId: number) {
