@@ -25,7 +25,7 @@ export class EduContentLearningAreaOverviewComponent implements OnInit {
     this.searchModes = this.eduContentsViewModel.searchModes;
     this.searchTerm$ = new Subject();
     this.autoCompleteValues$ = this.searchTerm$.pipe(
-      debounceTime(500),
+      debounceTime(300),
       distinctUntilChanged(),
       switchMap(searchTerm =>
         this.eduContentsViewModel.requestAutoComplete(searchTerm)
