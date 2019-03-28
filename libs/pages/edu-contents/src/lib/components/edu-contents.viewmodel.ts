@@ -110,7 +110,7 @@ export class EduContentsViewModel {
         };
         if (routerStateParams.area) {
           initialSearchState.filterCriteriaSelections.set('learningArea', [
-            parseInt(routerStateParams.area, 10)
+            +routerStateParams.area
           ]);
         }
         if (routerStateParams.task) {
