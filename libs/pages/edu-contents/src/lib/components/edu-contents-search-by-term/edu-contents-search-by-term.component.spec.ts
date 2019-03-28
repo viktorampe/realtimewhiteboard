@@ -2,7 +2,11 @@ import { CommonModule } from '@angular/common';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { FilterFactoryFixture, SearchModule } from '@campus/search';
+import {
+  FilterFactoryFixture,
+  SearchComponent,
+  SearchModule
+} from '@campus/search';
 import { UiModule } from '@campus/ui';
 import { EduContentsViewModel } from '../edu-contents.viewmodel';
 import {
@@ -41,6 +45,7 @@ describe('EduContentSearchByTermComponent', () => {
   });
 
   it('should reset search filters when clearSearchFilters is called', () => {
+    component.searchComponent = { reset: () => {} } as SearchComponent;
     const spyReset = jest.spyOn(component.searchComponent, 'reset');
     component.clearSearchFilters();
 
