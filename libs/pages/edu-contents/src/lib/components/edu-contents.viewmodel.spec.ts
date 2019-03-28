@@ -2,14 +2,34 @@ import { Component } from '@angular/core';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { CustomSerializer, DalState, EduContentServiceInterface, EDU_CONTENT_SERVICE_TOKEN, FavoriteActions, FavoriteFixture, FavoriteReducer, getStoreModuleForFeatures, LearningAreaActions, LearningAreaFixture, LearningAreaReducer } from '@campus/dal';
+import {
+  CustomSerializer,
+  DalState,
+  EduContentServiceInterface,
+  EDU_CONTENT_SERVICE_TOKEN,
+  FavoriteActions,
+  FavoriteFixture,
+  FavoriteReducer,
+  getStoreModuleForFeatures,
+  LearningAreaActions,
+  LearningAreaFixture,
+  LearningAreaReducer
+} from '@campus/dal';
 import { SearchStateInterface } from '@campus/search';
 import { ENVIRONMENT_SEARCHMODES_TOKEN } from '@campus/shared';
-import { NavigationActionTiming, routerReducer, RouterStateSerializer, StoreRouterConnectingModule } from '@ngrx/router-store';
+import {
+  NavigationActionTiming,
+  routerReducer,
+  RouterStateSerializer,
+  StoreRouterConnectingModule
+} from '@ngrx/router-store';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
-import { EduContentsViewModel, RouterStateParamsInterface } from './edu-contents.viewmodel';
+import {
+  EduContentsViewModel,
+  RouterStateParamsInterface
+} from './edu-contents.viewmodel';
 
 describe('EduContentsViewModel', () => {
   let eduContentsViewModel: EduContentsViewModel;
@@ -102,15 +122,14 @@ describe('EduContentsViewModel', () => {
       );
     });
     it('should return the learningarea for current route', fakeAsync(() => {
-        router.navigate(['edu-content', '1']);
-        tick();
-        expect(eduContentsViewModel.learningArea$).toBeObservable(
-          hot('a', {
-            a: mockLearningAreas[0]
-          })
-        );
-      })
-    );
+      router.navigate(['edu-content', '1']);
+      tick();
+      expect(eduContentsViewModel.learningArea$).toBeObservable(
+        hot('a', {
+          a: mockLearningAreas[0]
+        })
+      );
+    }));
   });
 
   describe('favoriteLearningAreas$', () => {
