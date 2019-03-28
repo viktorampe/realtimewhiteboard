@@ -1,3 +1,5 @@
+@import 'libs/ui/src/lib/breakpoints.scss';
+
 .pages-edu-contents-areas-list {
   flex-grow: 1;
   display: flex;
@@ -15,5 +17,31 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  //1 column
+  @media #{$ui-breakpoint-xsmall} {
+    &__area {
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+
+  //2 columns
+  @media #{$ui-breakpoint-medium}, #{$ui-breakpoint-small} {
+    &__area {
+      width: 50%;
+      max-width: 50%;
+    }
+  }
+
+  //3 columns is the default if no other queries match
+
+  //4 columns
+  @media #{$ui-breakpoint-xlarge} {
+    &__area {
+      width: 20%;
+      max-width: 20%;
+    }
   }
 }

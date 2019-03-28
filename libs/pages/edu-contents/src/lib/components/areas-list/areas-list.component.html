@@ -3,45 +3,46 @@
   titleIcon="lesmateriaal"
   [displayAsRows]="true"
 >
-  <mat-form-field title__right class="pages-edu-contents-areas-list__filter">
-    <input
-      [(ngModel)]="filter"
-      (ngModelChange)="onFilterChange($event)"
-      placeholder="Filter op leergebied"
-      matInput
-    />
-  </mat-form-field>
-  <div
-    cdkDropList
-    [cdkDropListConnectedTo]="[connectedDropList]"
-    [cdkDropListData]="filteredLearningAreas"
-    class="pages-edu-contents-areas-list"
-  >
+  <campus-filter-text-input
+    title__right
+    theme="dark"
+    [source]="learningAreas"
+  ></campus-filter-text-input>
+
+  <ng-container *ngIf="(filterTextInput.result$ | async) as filteredAreas">
     <div
-      class="pages-edu-contents-areas-list__area"
-      *ngFor="let learningArea of filteredLearningAreas"
-      [class.pages-edu-contents-areas-list__area--selected]="
-        isFavoriteArea(learningArea)
-      "
-      cdkDrag
-      [cdkDragData]="learningArea"
-      [cdkDragDisabled]="isFavoriteArea(learningArea)"
+      cdkDropList
+      [cdkDropListConnectedTo]="[connectedDropList]"
+      [cdkDropListData]="filteredAreas"
+      class="pages-edu-contents-areas-list"
     >
-      <mat-icon
-        class="pages-edu-contents-areas-list__area__icon"
-        svgIcon="learning-area:{{learningArea.icon}}"
-      ></mat-icon>
-      <a
-        class="pages-edu-contents-areas-list__area__link"
-        [routerLink]="learningArea.id"
-        >{{ learningArea.name }}</a
+      <div
+        class="pages-edu-contents-areas-list__area"
+        *ngFor="let learningArea of filteredAreas"
+        [class.pages-edu-contents-areas-list__area--favorite]="
+          isFavoriteArea(learningArea)
+        "
+        cdkDrag
+        [cdkDragData]="learningArea"
+        [cdkDragDisabled]="isFavoriteArea(learningArea)"
       >
-      <div style="display:none" *cdkDragPlaceholder></div>
-      <campus-tile
-        *cdkDragPreview
-        icon="learning-area:{{learningArea.icon}}"
-        [label]="learningArea.name"
-      ></campus-tile>
+        <mat-icon
+          class="pages-edu-contents-areas-list__area__icon"
+          svgIcon="learning-area:{{learningArea.icon}}"
+        ></mat-icon>
+        <a
+          class="pages-edu-contents-areas-list__area__link"
+          [routerLink]="learningArea.id"
+          >{{ learningArea.name }}</a
+        >
+
+        <div style="display:none" *cdkDragPlaceholder></div>
+        <campus-tile
+          *cdkDragPreview
+          icon="learning-area:{{learningArea.icon}}"
+          [label]="learningArea.name"
+        ></campus-tile>
+      </div>
     </div>
-  </div>
+  </ng-container>
 </campus-info-panel>

@@ -1,5 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit, ViewChild } from '@angular/core';
 import { LearningAreaInterface } from '@campus/dal';
+import { FilterTextInputComponent } from '@campus/ui';
+import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 
 @Component({
   selector: 'campus-areas-list',
@@ -11,29 +13,30 @@ export class AreasListComponent implements OnInit {
   @Input() favoriteLearningAreas: LearningAreaInterface[];
   @Input() connectedDropList: string;
 
-  filteredLearningAreas: LearningAreaInterface[];
-  filter: string = '';
+  @ViewChild(FilterTextInputComponent)
+  filterTextInput: FilterTextInputComponent<
+    LearningAreaInterface[],
+    LearningAreaInterface
+  >;
+
+  constructor(
+    @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface
+  ) {}
 
   ngOnInit() {
-    this.filteredLearningAreas = this.learningAreas;
+    this.filterTextInput.setFilterableItem(this);
   }
 
   isFavoriteArea(area: LearningAreaInterface) {
-    return (
-      this.favoriteLearningAreas.find(favorite => favorite.id === area.id) !=
-      null
+    return !!this.favoriteLearningAreas.find(
+      favorite => favorite.id === area.id
     );
   }
 
-  onFilterChange(event: any) {
-    if (this.filter.trim().length > 0) {
-      const filter = this.filter.trim().toLowerCase();
-
-      this.filteredLearningAreas = this.learningAreas.filter(area =>
-        area.name.toLowerCase().includes(filter)
-      );
-    } else {
-      this.filteredLearningAreas = this.learningAreas;
-    }
+  filterFn(
+    source: LearningAreaInterface[],
+    searchText: string
+  ): LearningAreaInterface[] {
+    return this.filterService.filter(source, { name: searchText });
   }
 }

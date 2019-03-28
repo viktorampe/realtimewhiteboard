@@ -12,6 +12,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { LearningAreaFixture } from '@campus/dal';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
+import { FilterService, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { AreasListComponent } from './areas-list.component';
 
 describe('AreasListComponent', () => {
@@ -50,7 +51,10 @@ describe('AreasListComponent', () => {
         DragDropModule
       ],
       declarations: [AreasListComponent],
-      providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
+      providers: [
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry },
+        { provide: FILTER_SERVICE_TOKEN, useClass: FilterService }
+      ]
     }).compileComponents();
   }));
 
@@ -71,12 +75,9 @@ describe('AreasListComponent', () => {
 
   it('should show the learning areas correctly', () => {
     const areas = fixture.debugElement.queryAll(
-      By.css(
-        '.pages-edu-contents-areas-list__area,.pages-edu-contents-areas-list__area--selected'
-      )
+      By.css('.pages-edu-contents-areas-list__area')
     );
 
-    var favoriteLearningAreaCount = 0;
     for (let i = 0; i < mockLearningAreas.length; i++) {
       const areaModel = mockLearningAreas[i];
       const area = areas[i];
@@ -85,43 +86,33 @@ describe('AreasListComponent', () => {
 
       //Check if the learning area is a favorite one
       if (mockFavoriteLearningAreas.indexOf(areaModel) !== -1) {
-        favoriteLearningAreaCount++;
-
         //Check if it has the correct class
-        expect(
-          Object.keys(area.classes).indexOf(
-            'pages-edu-contents-areas-list__area--selected'
-          )
-        ).not.toBe(-1);
+        expect(area.nativeElement.classList).toContain(
+          'pages-edu-contents-areas-list__area--favorite'
+        );
       }
 
       expect(areaIcon).toBe('learning-area:' + areaModel.icon);
       expect(areaText).toBe(areaModel.name);
     }
-
-    expect(favoriteLearningAreaCount).toBe(mockFavoriteLearningAreas.length);
   });
 
-  it('should filter the learning areas correctly', () => {
-    const input = fixture.debugElement.query(By.css('input'));
-    input.nativeElement.value = 'kunde';
-    input.nativeElement.dispatchEvent(new Event('input'));
-
+  it('should filter the learning areas correctly', async(() => {
+    component.filterTextInput.setValue('kunde');
     fixture.detectChanges();
 
-    const expectedAreas = [mockLearningAreas[0], mockLearningAreas[2]];
-    const areas = fixture.debugElement.queryAll(
-      By.css(
-        '.pages-edu-contents-areas-list__area, ' +
-          '.pages-edu-contents-areas-list__area--selected'
-      )
-    );
+    fixture.whenStable().then(() => {
+      const expectedAreas = [mockLearningAreas[0], mockLearningAreas[2]];
+      const areas = fixture.debugElement.queryAll(
+        By.css('.pages-edu-contents-areas-list__area')
+      );
 
-    areas.forEach((area, index) => {
-      const areaModel = expectedAreas[index];
-      const areaText = area.query(By.css('a')).nativeElement.textContent;
+      areas.forEach((area, index) => {
+        const areaModel = expectedAreas[index];
+        const areaText = area.query(By.css('a')).nativeElement.textContent;
 
-      expect(areaText).toBe(areaModel.name);
+        expect(areaText).toBe(areaModel.name);
+      });
     });
-  });
+  }));
 });

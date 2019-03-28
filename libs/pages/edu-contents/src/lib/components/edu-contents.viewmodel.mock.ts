@@ -14,9 +14,12 @@ import {
   SearchModeInterface,
   SearchStateInterface
 } from '@campus/search';
-import { EduContentSearchResultInterface } from '@campus/shared';
+import {
+  EduContentSearchResultInterface,
+  EnvironmentSearchModesInterface
+} from '@campus/shared';
 import { ViewModelInterface } from '@campus/testing';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { EduContentsViewModel } from './edu-contents.viewmodel';
 
 class ResultItemMock extends ResultItemBase {}
@@ -153,6 +156,10 @@ export class EduContentsViewModelMock
     }
   };
 
+  public searchTerm$ = new Subject<string>();
+  public autoCompleteValues$ = new BehaviorSubject(['foo', 'bar']);
+  public learningArea$ = new BehaviorSubject(this.learningAreas[0]);
+
   public learningAreas$ = new BehaviorSubject<LearningAreaInterface[]>(
     this.learningAreas
   );
@@ -168,6 +175,12 @@ export class EduContentsViewModelMock
     new FavoriteFixture({ id: 3, eduContentId: 1, type: 'educontent' }),
     new FavoriteFixture({ id: 4, eduContentId: 2, type: 'educontent' })
   ]);
+
+  public searchModes: EnvironmentSearchModesInterface = {
+    demo: this.searchMode,
+    search: this.searchMode
+  };
+
   /*
    * let the page component pass through the updated state from the search component
    */
