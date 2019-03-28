@@ -64,7 +64,11 @@ export class ColumnFilterComponent implements SearchFilterComponentInterface {
     if (value) {
       this.forwardAnimation = this.previousFilterCriteriaCount < value.length;
       this.previousFilterCriteriaCount = value.length;
+
+      // input is set by searchComponent, which can also be a single criterium
+      if (!Array.isArray(value)) value = [value];
     }
+
     this._filterCriteria = value;
   }
   public get filterCriteria() {
