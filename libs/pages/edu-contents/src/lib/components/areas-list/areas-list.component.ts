@@ -38,7 +38,7 @@ export class AreasListComponent implements OnInit {
     }
   }
 
-  onFavoriteDrop(event: CdkDragDrop<LearningAreaInterface[]>) {
+  onLearningAreaDrop(event: CdkDragDrop<LearningAreaInterface[]>) {
     // only emit event when the learning area is dropped above the favorites container
     if (event.container === event.previousContainer) return;
     const learningAreaToAddToFavorite = event.item.data;

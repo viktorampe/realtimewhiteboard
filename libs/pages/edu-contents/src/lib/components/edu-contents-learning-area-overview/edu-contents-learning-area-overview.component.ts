@@ -1,4 +1,3 @@
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Component } from '@angular/core';
 import { LearningAreaInterface } from '@campus/dal';
 import { EduContentsViewModelMock } from '../edu-contents.viewmodel.mock';
@@ -12,9 +11,8 @@ export class EduContentLearningAreaOverviewComponent {
   dropZoneIsHovered = false;
   constructor(public viewModel: EduContentsViewModelMock) {}
 
-  onFavoriteDrop(event: CdkDragDrop<LearningAreaInterface[]>) {
-    const learningAreaToAddToFavorite = event.item.data;
-    this.viewModel.toggleFavoriteArea(learningAreaToAddToFavorite);
+  toggleFavorite(learningArea: LearningAreaInterface) {
+    this.viewModel.toggleFavoriteArea(learningArea);
   }
 
   setHoverState(state: boolean) {
