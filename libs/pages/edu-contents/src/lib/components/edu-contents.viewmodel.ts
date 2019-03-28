@@ -55,15 +55,15 @@ export class EduContentsViewModel {
   }
 
   private initialize() {
+    this._searchState$ = new BehaviorSubject<SearchStateInterface>(null);
+    this.searchState$ = this._searchState$;
+    this.routerState$ = this.store.pipe(select(getRouterState));
     this.learningArea$ = this.getLearningArea();
     this.learningAreas$ = this.store.pipe(select(LearningAreaQueries.getAll));
     this.favoriteLearningAreas$ = this.getFavoriteLearningAreas();
     this.eduContentFavorites$ = this.store.pipe(
       select(FavoriteQueries.getByType, { type: 'educontent' })
     );
-    this._searchState$ = new BehaviorSubject<SearchStateInterface>(null);
-    this.searchState$ = this._searchState$;
-    this.routerState$ = this.store.pipe(select(getRouterState));
   }
 
   /*
@@ -78,9 +78,11 @@ export class EduContentsViewModel {
    * get learningarea for active route
    */
   private getLearningArea(): Observable<LearningAreaInterface> {
-    return this.store.pipe(
-      select(getRouterStateParams),
-      map((params: Params): number => +params.area),
+    return this.routerState$.pipe(
+      map(
+        (routerState: RouterReducerState<RouterStateUrl>): number =>
+          +routerState.state.params.area
+      ),
       filter(id => !!id),
       switchMap(id =>
         this.store.pipe(select(LearningAreaQueries.getById, { id }))
