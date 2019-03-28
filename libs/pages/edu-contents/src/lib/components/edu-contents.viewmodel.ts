@@ -89,7 +89,8 @@ export class EduContentsViewModel {
    * determine the searchMode for a given string
    */
   public getSearchMode(mode: string, area?: number): SearchModeInterface {
-    //if (area && mode === 'term') return this.searchModes[]
+    //Use the global mode if we're in a learning area
+    if (area && mode === 'term') return this.searchModes['globalterm'];
     return this.searchModes[mode];
   }
 

@@ -5,6 +5,7 @@ import {
 } from '@campus/search';
 import { EnvironmentInterface } from '@campus/shared';
 import { EduContentSearchResultComponent } from '../app/components/searchresults/edu-content-search-result.component';
+import { GlobalSearchTermFilterFactory } from '../app/factories/global-search-term-filter/global-search-term-filter.factory';
 import { SearchTermFilterFactory } from '../app/factories/search-term-filter/search-term-filter.factory';
 import { icons } from './icons';
 
@@ -139,6 +140,36 @@ export const environment: EnvironmentInterface = {
         domHost: 'hostTop'
       },
       searchFilterFactory: SearchTermFilterFactory,
+      results: {
+        component: EduContentSearchResultComponent,
+        sortModes: [
+          {
+            description: 'book',
+            name: 'book',
+            icon: 'book'
+          },
+          {
+            description: 'bundle',
+            name: 'bundle',
+            icon: 'bundle'
+          },
+          {
+            description: 'taak',
+            name: 'taak',
+            icon: 'taak'
+          }
+        ],
+        pageSize: 20
+      }
+    },
+    globalterm: {
+      name: 'globalterm',
+      label: '<b>Standaard</b> zoeken',
+      dynamicFilters: true,
+      searchTerm: {
+        domHost: 'hostTop'
+      },
+      searchFilterFactory: GlobalSearchTermFilterFactory,
       results: {
         component: EduContentSearchResultComponent,
         sortModes: [
