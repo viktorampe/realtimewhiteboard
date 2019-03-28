@@ -4,9 +4,9 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import {
   AlertQueries,
+  AlertReducer,
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
-  DalState,
   EduContentInterface,
   EffectFeedbackInterface,
   EffectFeedbackQueries,
@@ -15,6 +15,8 @@ import {
   FavoriteInterface,
   FavoriteQueries,
   FavoriteTypesEnum,
+  TocServiceInterface,
+  TOC_SERVICE_TOKEN,
   UserActions
 } from '@campus/dal';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
@@ -25,10 +27,6 @@ import {
   FavoriteServiceInterface,
   FAVORITE_SERVICE_TOKEN
 } from './../../../../dal/src/lib/favorite/favorite.service.interface';
-import {
-  LearningPlanServiceInterface,
-  LEARNING_PLAN_SERVICE_TOKEN
-} from './../../../../dal/src/lib/learning-plan/learning-plan.service.interface';
 import { LoginPageViewModel } from './loginpage.viewmodel';
 
 @Component({
@@ -62,13 +60,12 @@ export class LoginpageComponent implements OnInit {
   constructor(
     public loginPageviewModel: LoginPageViewModel,
     private personApi: PersonApi,
-    @Inject(LEARNING_PLAN_SERVICE_TOKEN)
-    private learningPlanService: LearningPlanServiceInterface,
     @Inject(FAVORITE_SERVICE_TOKEN)
     private favoriteService: FavoriteServiceInterface,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
-    private store: Store<DalState>,
-    private router: Router
+    private store: Store<AlertReducer.State>,
+    private router: Router,
+    @Inject(TOC_SERVICE_TOKEN) private tocService: TocServiceInterface
   ) {
     return;
     this.store.dispatch(
@@ -96,20 +93,6 @@ export class LoginpageComponent implements OnInit {
 
   loadCurrentUserinState() {
     this.store.dispatch(new UserActions.LoadUser({ force: true }));
-  }
-
-  getAvailableYearsForSearch() {
-    this.response = this.learningPlanService.getAvailableYearsForSearch(
-      19,
-      3,
-      4
-    );
-  }
-
-  getLearningPlanAssignments() {
-    this.response = this.learningPlanService
-      .getLearningPlanAssignments(3, 6, 4, 19)
-      .pipe(map(sMap => Array.from(sMap)));
   }
 
   getFavorites(userId: number) {
@@ -153,5 +136,9 @@ export class LoginpageComponent implements OnInit {
 
   removeFavorite(userId: number, favoriteId: number) {
     this.response = this.favoriteService.deleteFavorite(userId, favoriteId);
+  }
+
+  getBooksForMethods() {
+    this.response = this.tocService.getBooksByMethodIds([1, 2, 3]);
   }
 }

@@ -23,7 +23,6 @@ class MockFilterFactory implements SearchFilterFactory {
   ): Observable<SearchFilterInterface[]> {
     return of([]);
   }
-  constructor() {}
 }
 describe('SearchViewModel', () => {
   let searchViewModel: SearchViewModel;
@@ -381,7 +380,10 @@ describe('SearchViewModel', () => {
       searchViewModel.reset(
         {
           name: 'foo',
-          searchFilterFactory: MockFilterFactory
+          searchFilterFactory: MockFilterFactory,
+          label: '',
+          dynamicFilters: null,
+          results: null
         } as SearchModeInterface,
         { searchTerm: 'bar', from: 60 } as SearchStateInterface
       );
@@ -395,7 +397,10 @@ describe('SearchViewModel', () => {
       searchViewModel.reset(
         {
           name: 'foo',
-          searchFilterFactory: MockFilterFactory
+          searchFilterFactory: MockFilterFactory,
+          label: '',
+          dynamicFilters: null,
+          results: null
         } as SearchModeInterface,
         null
       );
