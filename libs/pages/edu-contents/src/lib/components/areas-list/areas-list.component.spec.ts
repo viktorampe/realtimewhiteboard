@@ -1,4 +1,4 @@
-import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import {
@@ -9,7 +9,7 @@ import {
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
-import { LearningAreaFixture, LearningAreaInterface } from '@campus/dal';
+import { LearningAreaFixture } from '@campus/dal';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { AreasListComponent } from './areas-list.component';
@@ -123,32 +123,5 @@ describe('AreasListComponent', () => {
 
       expect(areaText).toBe(areaModel.name);
     });
-  });
-
-  it('should emit when a learning area is dropped on the favorites area', () => {
-    const spy = jest.spyOn(component.dropAreaOnFavorites, 'emit');
-    const event = {
-      container: 'foo',
-      previousContainer: 'bar',
-      item: { data: new LearningAreaFixture() }
-    };
-    component.onLearningAreaDrop((event as unknown) as CdkDragDrop<
-      LearningAreaInterface[]
-    >);
-
-    expect(spy).toHaveBeenCalledWith(new LearningAreaFixture());
-  });
-  it('should not emit when a learning area is dropped outside the favorites area', () => {
-    const spy = jest.spyOn(component.dropAreaOnFavorites, 'emit');
-    const event = {
-      container: 'foo',
-      previousContainer: 'foo',
-      item: { data: new LearningAreaFixture() }
-    };
-    component.onLearningAreaDrop((event as unknown) as CdkDragDrop<
-      LearningAreaInterface[]
-    >);
-
-    expect(spy).not.toHaveBeenCalled();
   });
 });
