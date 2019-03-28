@@ -47,18 +47,7 @@ export class EduContentsViewModel {
     @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
     public searchModes: EnvironmentSearchModesInterface
   ) {
-    this.initialize();
-  }
-
-  private initialize() {
-    this.learningArea$ = this.getLearningArea();
-    this.learningAreas$ = this.store.pipe(select(LearningAreaQueries.getAll));
-    this.favoriteLearningAreas$ = this.getFavoriteLearningAreas();
-    this.eduContentFavorites$ = this.store.pipe(
-      select(FavoriteQueries.getByType, { type: 'educontent' })
-    );
-    this.routerStateParams$ = this.store.pipe(select(getRouterStateParams));
-    this.searchState$ = new BehaviorSubject<SearchStateInterface>(null);
+    this.setupStreams();
   }
 
   /*
@@ -145,6 +134,7 @@ export class EduContentsViewModel {
    */
   private setupSearchResults(): void {
     this.searchResults$ = this.searchState$.pipe(
+      filter(searchState => !!searchState),
       switchMap(searchState => this.eduContentService.search(searchState)),
       withLatestFrom(this.searchState$),
       map(([searchResult, searchState]) => {
@@ -169,7 +159,22 @@ export class EduContentsViewModel {
   /*
    * set the streams for favorites, learningAreas via store selectors
    */
-  private setupStreams(): void {}
+  private setupStreams(): void {
+    this.learningArea$ = this.getLearningArea();
+    this.learningAreas$ = this.store.pipe(select(LearningAreaQueries.getAll));
+    this.favoriteLearningAreas$ = this.getFavoriteLearningAreas();
+    this.eduContentFavorites$ = this.store.pipe(
+      select(FavoriteQueries.getByType, { type: 'educontent' })
+    );
+    this.routerStateParams$ = this.store.pipe(select(getRouterStateParams));
+
+    this.searchState$ = new BehaviorSubject<SearchStateInterface>(null);
+    this.getInitialSearchState()
+      .pipe(take(1))
+      .subscribe(searchState => this.searchState$.next(searchState));
+
+    this.setupSearchResults();
+  }
 
   private adjustSearchResultsForTask(
     searchState: SearchStateInterface,
