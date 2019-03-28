@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import {
   DalState,
   EduContentBookFixture,
+  EduContentBookInterface,
   EduContentTOCFixture,
   EduContentTOCInterface,
   getStoreModuleForFeatures,
@@ -10,7 +11,6 @@ import {
   LearningAreaReducer,
   MethodActions,
   MethodFixture,
-  MethodInterface,
   MethodReducer,
   TocServiceInterface,
   TOC_SERVICE_TOKEN,
@@ -63,6 +63,12 @@ describe('TocFilterFactory', () => {
       years: [mockYears[1]]
     }),
     new EduContentBookFixture({
+      id: 5,
+      title: 'Shuffle 4 GO',
+      methodId: 6,
+      years: [mockYears[1]]
+    }),
+    new EduContentBookFixture({
       id: 9,
       title: 'Not Shuffle 4',
       methodId: 7,
@@ -72,7 +78,7 @@ describe('TocFilterFactory', () => {
 
   const mockTree: EduContentTOCInterface[] = [
     new EduContentTOCFixture({
-      treeId: 1,
+      treeId: mockBooks[1].id,
       id: 1,
       eduContentBook: mockBooks[1],
       title: "Unit 2 - I'm not an addict",
@@ -81,7 +87,7 @@ describe('TocFilterFactory', () => {
       rgt: 6,
       children: [
         new EduContentTOCFixture({
-          treeId: 1,
+          treeId: mockBooks[1].id,
           id: 2,
           eduContentBook: mockBooks[1],
           title: 'Focus on',
@@ -90,7 +96,7 @@ describe('TocFilterFactory', () => {
           rgt: 3
         }),
         new EduContentTOCFixture({
-          treeId: 1,
+          treeId: mockBooks[1].id,
           id: 3,
           eduContentBook: mockBooks[1],
           title: 'I am the pope of dope',
@@ -101,7 +107,7 @@ describe('TocFilterFactory', () => {
       ]
     }),
     new EduContentTOCFixture({
-      treeId: 1,
+      treeId: mockBooks[1].id,
       id: 4,
       eduContentBook: mockBooks[1],
       title: 'Unit 3 - Believe',
@@ -159,6 +165,7 @@ describe('TocFilterFactory', () => {
     const mockSelectedAreaId = 1;
     const mockSelectedYearId = 4;
     const mockSelectedMethodId = 6;
+    const mockSelectedBookId = 7;
     const mockSelectedTocId = 1;
 
     beforeEach(() => {
@@ -243,13 +250,13 @@ describe('TocFilterFactory', () => {
           const expectedYearFilter = getExpectedYearFilterCriterium();
 
           const expectedMethodFilter = getExpectedMethodFilterCriterium([6, 7]);
-          const expectedTreeFilter = getExpectedTreeFilterCriteria();
+          const expectedBookFilter = getExpectedBookFilterCriteria([8, 5]);
 
           expected = [
             expectedLearningAreaFilter,
             expectedYearFilter,
             expectedMethodFilter,
-            expectedTreeFilter
+            expectedBookFilter
           ];
 
           expect(result).toBeObservable(cold('a', { a: getFilter(expected) }));
@@ -263,25 +270,26 @@ describe('TocFilterFactory', () => {
           mockSelectedAreaId,
           mockSelectedYearId,
           mockSelectedMethodId,
+          mockSelectedBookId,
           mockSelectedTocId
         );
         result = factory.getFilters(mockSearchState);
       });
 
-      it('should return filterCriteria', () => {
+      it('should return toc filterCriteria', () => {
         const expectedLearningAreaFilter = getExpectedLearningAreaFilterCriterium();
         const expectedYearFilter = getExpectedYearFilterCriterium();
 
         const expectedMethodFilter = getExpectedMethodFilterCriterium([6, 7]);
-        const expectedTreeFilter = getExpectedTreeFilterCriteria([]);
-        const expectedTreeFilter_1 = getExpectedTreeFilterCriteria([
-          mockSelectedTocId
-        ]);
+        const expectedBookFilter = getExpectedBookFilterCriteria([8, 5]);
+        const expectedTreeFilter = getExpectedTreeFilterCriteria();
+        const expectedTreeFilter_1 = getExpectedTreeFilterCriteria([1]);
 
         expected = [
           expectedLearningAreaFilter,
           expectedYearFilter,
           expectedMethodFilter,
+          expectedBookFilter,
           expectedTreeFilter,
           expectedTreeFilter_1
         ];
@@ -292,14 +300,15 @@ describe('TocFilterFactory', () => {
       it("should not return extra filterCriteria if there aren't any children", () => {
         const expectedLearningAreaFilter = getExpectedLearningAreaFilterCriterium();
         const expectedYearFilter = getExpectedYearFilterCriterium();
-
         const expectedMethodFilter = getExpectedMethodFilterCriterium([6, 7]);
+        const expectedBookFilter = getExpectedBookFilterCriteria([8, 5]);
         const expectedTreeFilter = getExpectedTreeFilterCriteria();
 
         const mockSearchState = getMockSearchState(
           mockSelectedAreaId,
           mockSelectedYearId,
           mockSelectedMethodId,
+          mockSelectedBookId,
           mockSelectedTocId
         );
         // also select second EduContentTOC
@@ -317,6 +326,7 @@ describe('TocFilterFactory', () => {
           expectedLearningAreaFilter,
           expectedYearFilter,
           expectedMethodFilter,
+          expectedBookFilter,
           expectedTreeFilter,
           expectedTreeFilter_1
         ];
@@ -332,6 +342,7 @@ describe('TocFilterFactory', () => {
             2,
             mockSelectedYearId,
             mockSelectedMethodId,
+            mockSelectedBookId,
             mockSelectedTocId
           );
 
@@ -351,6 +362,7 @@ describe('TocFilterFactory', () => {
             mockSelectedAreaId,
             3,
             mockSelectedMethodId,
+            mockSelectedBookId,
             mockSelectedTocId
           );
 
@@ -370,6 +382,7 @@ describe('TocFilterFactory', () => {
             mockSelectedAreaId,
             mockSelectedYearId,
             7,
+            mockSelectedBookId,
             mockSelectedTocId
           );
 
@@ -399,6 +412,7 @@ describe('TocFilterFactory', () => {
             mockSelectedAreaId,
             mockSelectedYearId,
             mockSelectedMethodId,
+            mockSelectedBookId,
             mockSelectedTocId
           );
 
@@ -461,7 +475,8 @@ describe('TocFilterFactory', () => {
       keyProperty: 'id',
       displayProperty: 'name',
       values: mockLearningAreas.map(area => ({
-        data: area
+        data: area,
+        hasChild: true
       }))
     };
   }
@@ -473,21 +488,13 @@ describe('TocFilterFactory', () => {
       keyProperty: 'id',
       displayProperty: 'name',
       values: mockYears.map(year => ({
-        data: year
+        data: year,
+        hasChild: true
       }))
     };
   }
 
   function getExpectedMethodFilterCriterium(methodIds?: number[]) {
-    let expectedMethods: MethodInterface[];
-    if (!methodIds) {
-      expectedMethods = mockMethods;
-    } else {
-      expectedMethods = mockMethods.filter(method =>
-        methodIds.includes(method.id)
-      );
-    }
-
     return {
       name: 'method',
       label: 'Methodes',
@@ -496,11 +503,39 @@ describe('TocFilterFactory', () => {
       values: mockMethods
         .filter(method => methodIds.includes(method.id))
         .map(method => ({
-          data: method
+          data: method,
+          hasChild: true
         }))
     };
   }
 
+  function getExpectedBookFilterCriteria(expectedBooksIds: number[]) {
+    let expectedBooks: EduContentBookInterface[];
+    if (!expectedBooksIds) {
+      expectedBooks = mockBooks;
+    } else {
+      expectedBooks = mockBooks.filter(book =>
+        expectedBooksIds.includes(book.id)
+      );
+    }
+
+    return {
+      name: 'eduContentTOC.tree',
+      label: 'Boeken',
+      keyProperty: 'id',
+      displayProperty: 'title',
+      values: expectedBooks.map(book => ({
+        data: book,
+        hasChild: true
+      }))
+    };
+  }
+
+  /**
+   * This function walks the mocking tree and returns a filter
+   * with the children for the deepest toc it can find from the parent ids
+   * @param parentIds parentIds in anchestor to child order
+   */
   function getExpectedTreeFilterCriteria(
     parentIds: number[] = [] // Note: you are expected to pass ids that exist
   ) {
@@ -518,7 +553,8 @@ describe('TocFilterFactory', () => {
       keyProperty: 'id',
       displayProperty: 'title',
       values: tree.map(toc => ({
-        data: toc
+        data: toc,
+        hasChild: toc.children !== undefined && !!toc.children.length
       }))
     };
   }
@@ -527,6 +563,7 @@ describe('TocFilterFactory', () => {
     areaId?: number,
     yearId?: number,
     methodId?: number,
+    bookId?: number,
     tocId?: number
   ): SearchStateInterface {
     const newSearchState = {
@@ -540,6 +577,10 @@ describe('TocFilterFactory', () => {
 
     if (methodId)
       newSearchState.filterCriteriaSelections.set('method', [methodId]);
+    if (bookId)
+      newSearchState.filterCriteriaSelections.set('eduContentTOC.tree', [
+        bookId
+      ]);
 
     if (tocId)
       newSearchState.filterCriteriaSelections.set('eduContentTOC', [tocId]);

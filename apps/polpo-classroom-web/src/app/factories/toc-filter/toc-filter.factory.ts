@@ -6,7 +6,8 @@ import {
   LearningAreaQueries,
   MethodQueries,
   TocServiceInterface,
-  TOC_SERVICE_TOKEN
+  TOC_SERVICE_TOKEN,
+  YearInterface
 } from '@campus/dal';
 import {
   ColumnFilterComponent,
@@ -35,6 +36,7 @@ const LEARNING_AREA = 'learningArea';
 const YEAR = 'year';
 const METHOD = 'method';
 const TOC = 'eduContentTOC';
+const BOOK = 'eduContentTOC.tree';
 
 @Injectable({
   providedIn: 'root'
@@ -72,6 +74,7 @@ export class TocFilterFactory implements SearchFilterFactory {
         this.getLearningAreaFilterCriteria$(),
         this.getYearFilterCriteria$(),
         this.getMethodFilterCriteria$(),
+        this.getBookFilterCriteria$(),
         this.getTreeFilterCriteria$()
       ),
       map(
@@ -80,6 +83,7 @@ export class TocFilterFactory implements SearchFilterFactory {
           learningAreaFilterCriterium,
           yearFilterCriterium,
           methodFilterCriterium,
+          bookFilterCriterium,
           treeFilterCriteria // is an array
         ]) => {
           // combine values
@@ -87,6 +91,7 @@ export class TocFilterFactory implements SearchFilterFactory {
             learningAreaFilterCriterium,
             yearFilterCriterium,
             methodFilterCriterium,
+            bookFilterCriterium,
             ...treeFilterCriteria
           ]
             // filter out null values
@@ -200,7 +205,7 @@ export class TocFilterFactory implements SearchFilterFactory {
         // reduce to set of years
         const years: YearInterface[] = Array.from(
           new Set(books.reduce((acc, book) => [...acc, ...book.years], []))
-        ).sort((a, b) => a.name < b.name ? -1 : 1);
+        ).sort((a, b) => (a.name < b.name ? -1 : 1));
 
         return this.getFilterCriterium(years, YEAR, 'Jaren', 'id', 'name');
       })
@@ -287,6 +292,54 @@ export class TocFilterFactory implements SearchFilterFactory {
   }
 
   /**
+   * Returns the filterCriterium for the books,
+   * or null when there isn't enough data
+   *
+   * @private
+   * @returns {Observable<SearchFilterCriteriaInterface>}
+   * @memberof TocFilterFactory
+   */
+  private getBookFilterCriteria$(): Observable<SearchFilterCriteriaInterface> {
+    const bookFilterCriteria$ = this.searchStateDiff$.pipe(
+      filter(
+        searchStateDiff =>
+          this.hasSearchStateData(searchStateDiff[1], METHOD) &&
+          this.hasSearchStateChanged(searchStateDiff, METHOD)
+      ),
+      withLatestFrom(this.booksWithYears$),
+      map(([[oldSearchstate, newSearchstate], books]) => {
+        const selectedYearId = newSearchstate.filterCriteriaSelections.get(
+          YEAR
+        )[0] as number;
+        const selectedMethodId = newSearchstate.filterCriteriaSelections.get(
+          METHOD
+        )[0] as number;
+
+        const filteredBooks = books.filter(
+          book =>
+            book.years.some(year => year.id === selectedYearId) &&
+            book.methodId === selectedMethodId
+        );
+
+        return this.getFilterCriterium(
+          filteredBooks,
+          BOOK,
+          'Boeken',
+          'id',
+          'title'
+        );
+      })
+    );
+
+    const emptyBookFilterCriteria$ = this.searchState$.pipe(
+      filter(searchState => !this.hasSearchStateData(searchState, METHOD)),
+      mapTo(null)
+    );
+
+    return merge(bookFilterCriteria$, emptyBookFilterCriteria$);
+  }
+
+  /**
    * Returns the filterCriteria for the tree,
    * or null when there isn't enough data
    *
@@ -300,17 +353,14 @@ export class TocFilterFactory implements SearchFilterFactory {
     const treeFilterCriteria$ = this.searchStateDiff$.pipe(
       filter(
         searchStateDiff =>
-          this.hasSearchStateData(searchStateDiff[1], LEARNING_AREA) &&
-          this.hasSearchStateData(searchStateDiff[1], YEAR) &&
-          this.hasSearchStateData(searchStateDiff[1], METHOD) &&
-          // has at least one of the values changed
-          (this.hasSearchStateChanged(searchStateDiff, LEARNING_AREA) ||
-            this.hasSearchStateChanged(searchStateDiff, YEAR) ||
-            this.hasSearchStateChanged(searchStateDiff, METHOD))
+          this.hasSearchStateData(searchStateDiff[1], BOOK) &&
+          this.hasSearchStateChanged(searchStateDiff, BOOK)
       ),
-      withLatestFrom(this.booksWithYears$),
-      switchMap(([[oldSearchstate, newSearchstate], books]) => {
-        return this.getTree(newSearchstate, books).pipe(
+      switchMap(([, newSearchstate]) => {
+        const neededBookId = newSearchstate.filterCriteriaSelections.get(
+          BOOK
+        )[0] as number;
+        return this.tocService.getTree(neededBookId).pipe(
           map(tree => {
             const treeMap = this.getTreeMap(tree);
             if (!treeMap) return;
@@ -360,13 +410,9 @@ export class TocFilterFactory implements SearchFilterFactory {
       filter(
         searchStateDiff =>
           !(
-            this.hasSearchStateData(searchStateDiff[1], LEARNING_AREA) &&
-            this.hasSearchStateData(searchStateDiff[1], YEAR) &&
-            this.hasSearchStateData(searchStateDiff[1], METHOD) &&
+            this.hasSearchStateData(searchStateDiff[1], BOOK) &&
             // has at least one of the values changed
-            (this.hasSearchStateChanged(searchStateDiff, LEARNING_AREA) ||
-              this.hasSearchStateChanged(searchStateDiff, YEAR) ||
-              this.hasSearchStateChanged(searchStateDiff, METHOD))
+            this.hasSearchStateChanged(searchStateDiff, BOOK)
           )
       ),
       mapTo(null)
@@ -396,14 +442,17 @@ export class TocFilterFactory implements SearchFilterFactory {
     entityDisplayProperty: PrimitivePropertiesKeys<T>
   ): SearchFilterCriteriaInterface {
     if (!entities || !entities.length) return;
-
     return {
       name: entityName,
       label: entityLabel,
       keyProperty: entityKeyProperty as string,
       displayProperty: entityDisplayProperty as string,
       values: entities.map(entity => ({
-        data: entity
+        data: entity,
+        hasChild: !(
+          entity.hasOwnProperty('treeId') && // only if eduContentTOC check for children
+          (entity['children'] === undefined || entity['children'].length === 0)
+        ) // otherwise default true
       }))
     };
   }
@@ -433,33 +482,6 @@ export class TocFilterFactory implements SearchFilterFactory {
       domHost,
       options
     };
-  }
-
-  /**
-   * Return TOC-tree from API, first level is already an array of branches
-   *
-   * @private
-   * @param {number} yearId
-   * @param {number} methodId
-   * @returns {Observable<EduContentTOCInterface[]>}
-   * @memberof TocFilterFactory
-   */
-  private getTree(
-    searchState: SearchStateInterface,
-    booksWithYears: EduContentBookInterface[]
-  ): Observable<EduContentTOCInterface[]> {
-    const yearId = searchState.filterCriteriaSelections.get(YEAR)[0] as number;
-    const methodId = searchState.filterCriteriaSelections.get(
-      METHOD
-    )[0] as number;
-
-    const neededBook = booksWithYears.find(
-      book =>
-        book.methodId === methodId &&
-        book.years.some(year => year.id === yearId)
-    );
-
-    return this.tocService.getTree(neededBook.id);
   }
 
   /**
