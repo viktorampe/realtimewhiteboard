@@ -21,6 +21,7 @@ import {
   LearningAreaFixture,
   LearningAreaInterface,
   LearningAreaReducer,
+  RouterStateUrl,
   TaskActions,
   TaskFixture,
   TaskReducer
@@ -40,16 +41,14 @@ import { MapObjectConversionService } from '@campus/utils';
 import {
   NavigationActionTiming,
   routerReducer,
+  RouterReducerState,
   RouterStateSerializer,
   StoreRouterConnectingModule
 } from '@ngrx/router-store';
 import { Store, StoreModule } from '@ngrx/store';
 import { cold, hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
-import {
-  EduContentsViewModel,
-  RouterStateParamsInterface
-} from './edu-contents.viewmodel';
+import { EduContentsViewModel } from './edu-contents.viewmodel';
 
 describe('EduContentsViewModel', () => {
   let eduContentsViewModel: EduContentsViewModel;
@@ -296,18 +295,18 @@ describe('EduContentsViewModel', () => {
   });
   describe('getInitialSearchState', () => {
     it('should create the initialState with the correct params data', () => {
-      const mockRouterParams$: Observable<RouterStateParamsInterface> = hot(
-        'a-b-c-d',
-        {
-          a: {},
-          b: { area: '3' },
-          c: { area: '4', task: '894' },
-          d: { task: '38948' }
-        }
-      );
-      eduContentsViewModel['routerStateParams$'] = mockRouterParams$;
+      const mockRouterParams$: Observable<
+        RouterReducerState<RouterStateUrl>
+      > = hot('a-b-c-d-e', {
+        a: { state: { params: {} } },
+        b: { state: { params: { area: '3' } } },
+        c: { state: { params: { area: '4', task: '894' } } },
+        d: { state: { params: { task: '38948' } } },
+        e: { state: { params: {}, queryParams: { searchTerm: 'the term' } } }
+      });
+      eduContentsViewModel['routerState$'] = mockRouterParams$;
       expect(eduContentsViewModel.getInitialSearchState()).toBeObservable(
-        hot('a-b-c-d', {
+        hot('a-b-c-d-e', {
           a: {
             searchTerm: '',
             filterCriteriaSelections: new Map<string, (number | string)[]>([])
@@ -333,6 +332,10 @@ describe('EduContentsViewModel', () => {
             filterCriteriaOptions: new Map<string, number | string | boolean>([
               ['taskAllowed', true]
             ])
+          },
+          e: {
+            searchTerm: 'the term',
+            filterCriteriaSelections: new Map<string, (number | string)[]>([])
           }
         })
       );
@@ -355,11 +358,11 @@ describe('EduContentsViewModel', () => {
       expect(getInitialSearchStateSpy).toHaveBeenCalledTimes(1);
     });
     it('should call the eduContentService.autoComplete with the correct parameters and return a string[] observable', () => {
-      const mockRouterParams$: Observable<RouterStateParamsInterface> = hot(
+      const mockRouter$: Observable<RouterReducerState<RouterStateUrl>> = hot(
         'a',
-        { a: {} }
+        { a: { state: { params: {} } } }
       );
-      eduContentsViewModel['routerStateParams$'] = mockRouterParams$;
+      eduContentsViewModel['routerState$'] = mockRouter$;
       const getAutoCompleteSpy = jest.spyOn(eduContentService, 'autoComplete');
       expect(
         eduContentsViewModel.requestAutoComplete('some string')

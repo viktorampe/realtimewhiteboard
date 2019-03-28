@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@angular/core';
-import { Params } from '@angular/router';
 import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
@@ -12,9 +11,10 @@ import {
   FavoriteInterface,
   FavoriteQueries,
   FavoriteTypesEnum,
-  getRouterStateParams,
+  getRouterState,
   LearningAreaInterface,
   LearningAreaQueries,
+  RouterStateUrl,
   TaskInterface,
   TaskQueries
 } from '@campus/dal';
@@ -25,6 +25,7 @@ import {
   ENVIRONMENT_SEARCHMODES_TOKEN
 } from '@campus/shared';
 import { MapObjectConversionService } from '@campus/utils';
+import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter, map, switchMap, take, withLatestFrom } from 'rxjs/operators';
@@ -41,9 +42,10 @@ export class EduContentsViewModel {
   public favoriteLearningAreas$: Observable<LearningAreaInterface[]>;
   public searchResults$: Observable<EduContentSearchResultInterface[]>;
   public eduContentFavorites$: Observable<FavoriteInterface[]>;
-  public searchState$: BehaviorSubject<SearchStateInterface>;
+  public searchState$: Observable<SearchStateInterface>;
 
-  private routerStateParams$: Observable<RouterStateParamsInterface>;
+  private _searchState$: BehaviorSubject<SearchStateInterface>;
+  private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
 
   constructor(
     private store: Store<DalState>,
@@ -55,13 +57,26 @@ export class EduContentsViewModel {
     public searchModes: EnvironmentSearchModesInterface
   ) {
     this.setupStreams();
+    this.initialize();
+  }
+
+  private initialize() {
+    this._searchState$ = new BehaviorSubject<SearchStateInterface>(null);
+    this.searchState$ = this._searchState$;
+    this.routerState$ = this.store.pipe(select(getRouterState));
+    this.learningArea$ = this.getLearningArea();
+    this.learningAreas$ = this.store.pipe(select(LearningAreaQueries.getAll));
+    this.favoriteLearningAreas$ = this.getFavoriteLearningAreas();
+    this.eduContentFavorites$ = this.store.pipe(
+      select(FavoriteQueries.getByType, { type: 'educontent' })
+    );
   }
 
   /*
    * let the page component pass through the updated state from the search component
    */
   public updateState(state: SearchStateInterface) {
-    this.searchState$.next(state);
+    this._searchState$.next(state);
     //TODO -- tests can only be added once the results method has been implemented and the results are updated due to a trigger on the stream that calls the api
   }
 
@@ -69,9 +84,11 @@ export class EduContentsViewModel {
    * get learningarea for active route
    */
   private getLearningArea(): Observable<LearningAreaInterface> {
-    return this.store.pipe(
-      select(getRouterStateParams),
-      map((params: Params): number => +params.area),
+    return this.routerState$.pipe(
+      map(
+        (routerState: RouterReducerState<RouterStateUrl>): number =>
+          +routerState.state.params.area
+      ),
       filter(id => !!id),
       switchMap(id =>
         this.store.pipe(select(LearningAreaQueries.getById, { id }))
@@ -105,18 +122,25 @@ export class EduContentsViewModel {
    * can  be constructed from various parameters like querystring, ... TBD
    */
   public getInitialSearchState(): Observable<SearchStateInterface> {
-    return this.routerStateParams$.pipe(
-      map((routerStateParams: RouterStateParamsInterface) => {
+    return this.routerState$.pipe(
+      map((routerState: RouterReducerState<RouterStateUrl>) => {
         const initialSearchState: SearchStateInterface = {
           searchTerm: '',
           filterCriteriaSelections: new Map<string, (number | string)[]>()
         };
-        if (routerStateParams.area) {
+        if (
+          routerState.state.queryParams &&
+          routerState.state.queryParams.searchTerm
+        ) {
+          initialSearchState.searchTerm =
+            routerState.state.queryParams.searchTerm;
+        }
+        if (routerState.state.params.area) {
           initialSearchState.filterCriteriaSelections.set('learningArea', [
-            +routerStateParams.area
+            +routerState.state.params.area
           ]);
         }
-        if (routerStateParams.task) {
+        if (routerState.state.params.task) {
           initialSearchState.filterCriteriaOptions = new Map<
             string,
             number | string | boolean
@@ -204,12 +228,13 @@ export class EduContentsViewModel {
     this.eduContentFavorites$ = this.store.pipe(
       select(FavoriteQueries.getByType, { type: 'educontent' })
     );
-    this.routerStateParams$ = this.store.pipe(select(getRouterStateParams));
+    this.routerState$ = this.store.pipe(select(getRouterState));
+    this._searchState$ = new BehaviorSubject<SearchStateInterface>(null);
+    this.searchState$ = this._searchState$;
 
-    this.searchState$ = new BehaviorSubject<SearchStateInterface>(null);
     this.getInitialSearchState()
       .pipe(take(1))
-      .subscribe(searchState => this.searchState$.next(searchState));
+      .subscribe(searchState => this._searchState$.next(searchState));
 
     this.setupSearchResults();
   }
@@ -290,10 +315,4 @@ export class EduContentsViewModel {
       )
     );
   }
-}
-
-export interface RouterStateParamsInterface {
-  area?: string;
-  task?: string;
-  [key: string]: string;
 }
