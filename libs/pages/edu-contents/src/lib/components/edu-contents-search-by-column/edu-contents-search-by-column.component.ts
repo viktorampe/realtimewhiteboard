@@ -3,9 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 import {
   SearchComponent,
   SearchModeInterface,
+  SearchResultInterface,
   SearchStateInterface
 } from '@campus/search';
-import { EduContentSearchResultInterface } from '@campus/shared';
 import { Observable } from 'rxjs';
 import { EduContentsViewModel } from '../edu-contents.viewmodel';
 
@@ -18,7 +18,7 @@ export class EduContentSearchByColumnComponent {
   public searchMode: SearchModeInterface;
   public initialSearchState$: Observable<SearchStateInterface>;
   public searchState$: Observable<SearchStateInterface>;
-  public searchResults$: Observable<EduContentSearchResultInterface[]>;
+  public searchResults$: Observable<SearchResultInterface>;
 
   @ViewChild(SearchComponent) public searchComponent: SearchComponent;
 
