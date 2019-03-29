@@ -3,11 +3,13 @@
     display: flex;
     flex-direction: row;
     transition: padding 0.25s ease-in-out;
+
     &__button-content {
       display: flex;
       flex-direction: row;
       flex-wrap: nowrap;
       width: 100%;
+
       &__label {
         flex: 1 1 auto;
         text-align: start;
@@ -16,9 +18,11 @@
         margin: auto;
         white-space: nowrap;
       }
+
       &__icons {
         display: flex;
         flex-direction: row;
+
         &__magnifier,
         &__arrow {
           justify-self: flex-end;
@@ -26,6 +30,7 @@
         }
       }
     }
+
     &:hover {
       padding-left: 4px;
     }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LearningAreaInterface } from '@campus/dal';
-import { EnvironmentSearchModesInterface } from '@campus/shared';
+import { SearchModeInterface } from '@campus/search';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { EduContentsViewModel } from '../edu-contents.viewmodel';
@@ -13,9 +13,12 @@ import { EduContentsViewModel } from '../edu-contents.viewmodel';
 })
 export class EduContentSearchModesComponent implements OnInit {
   public learningArea$: Observable<LearningAreaInterface>;
-  public searchModes: EnvironmentSearchModesInterface;
   public searchTerm$: Subject<string>;
   public autoCompleteValues$: Observable<string[]>;
+
+  public termMode: SearchModeInterface;
+  public planMode: SearchModeInterface;
+  public tocMode: SearchModeInterface;
 
   constructor(
     private router: Router,
@@ -25,7 +28,6 @@ export class EduContentSearchModesComponent implements OnInit {
 
   public ngOnInit(): void {
     this.learningArea$ = this.eduContentsViewModel.learningArea$;
-    this.searchModes = this.eduContentsViewModel.searchModes;
     this.searchTerm$ = new Subject();
     this.autoCompleteValues$ = this.searchTerm$.pipe(
       debounceTime(500),
@@ -34,6 +36,10 @@ export class EduContentSearchModesComponent implements OnInit {
         this.eduContentsViewModel.requestAutoComplete(searchTerm)
       )
     );
+
+    this.termMode = this.eduContentsViewModel.getSearchMode('term');
+    this.planMode = this.eduContentsViewModel.getSearchMode('plan');
+    this.tocMode = this.eduContentsViewModel.getSearchMode('toc');
   }
 
   public openSearchByTerm(searchTerm: string) {

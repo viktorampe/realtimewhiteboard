@@ -1,3 +1,12 @@
+<campus-page-bar>
+  <campus-search-term
+    placeholder="Zoeken in alle leergebieden"
+    [autoComplete]="true"
+    [autoCompleteValues]="autoCompleteValues$ | async"
+    (valueChange)="openSearchByTerm($event)"
+    (valueChangeForAutoComplete)="searchTermChanged($event)"
+  ></campus-search-term>
+</campus-page-bar>
 <campus-favorite-areas
   id="{{favoritesDropListId}}"
   cdkDropList
@@ -5,11 +14,11 @@
   (cdkDropListExited)="setHoverState(false)"
   (cdkDropListDropped)="onFavoritesDropped($event)"
   [isHovered]="dropZoneIsHovered"
-  [favoriteLearningAreas]="viewModel.favoriteLearningAreas$ | async"
+  [favoriteLearningAreas]="eduContentsViewModel.favoriteLearningAreas$ | async"
 ></campus-favorite-areas>
 
 <campus-areas-list
-  [favoriteLearningAreas]="viewModel.favoriteLearningAreas$ | async"
-  [learningAreas]="viewModel.learningAreas$ | async"
+  [favoriteLearningAreas]="eduContentsViewModel.favoriteLearningAreas$ | async"
+  [learningAreas]="eduContentsViewModel.learningAreas$ | async"
   [connectedDropList]="favoritesDropListId"
 ></campus-areas-list>

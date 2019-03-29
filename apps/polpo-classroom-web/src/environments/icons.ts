@@ -158,6 +158,7 @@ export const icons = {
   // 'laptop-images': 'assets/icons/laptop-images.svg',
   // 'laptop-text': 'assets/icons/laptop-text.svg',
   magnifier: 'assets/icons/magnifier.svg',
+  'reset-search': 'assets/icons/reset-search.svg',
   // marker: 'assets/icons/marker.svg',
   // phone: 'assets/icons/phone.svg',
   // pinterest: 'assets/icons/pinterest.svg',
