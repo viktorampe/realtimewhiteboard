@@ -1,8 +1,16 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  OnInit,
+  QueryList,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {
   SearchComponent,
   SearchModeInterface,
+  SearchPortalDirective,
   SearchResultInterface,
   SearchStateInterface
 } from '@campus/search';
@@ -14,12 +22,14 @@ import { EduContentsViewModel } from '../edu-contents.viewmodel';
   templateUrl: './edu-contents-search-by-term.component.html',
   styleUrls: ['./edu-contents-search-by-term.component.scss']
 })
-export class EduContentSearchByTermComponent implements OnInit {
+export class EduContentSearchByTermComponent implements OnInit, AfterViewInit {
   public searchMode: SearchModeInterface;
   public searchState$: Observable<SearchStateInterface>;
   public searchResults$: Observable<SearchResultInterface>;
   public autoCompleteValues$: Observable<string[]>;
 
+  @ViewChildren(SearchPortalDirective)
+  private portalHosts: QueryList<SearchPortalDirective>;
   @ViewChild(SearchComponent) public searchComponent: SearchComponent;
 
   constructor(
@@ -34,6 +44,10 @@ export class EduContentSearchByTermComponent implements OnInit {
     );
     this.searchState$ = this.eduContentsViewModel.getInitialSearchState();
     this.searchResults$ = this.eduContentsViewModel.searchResults$;
+  }
+
+  ngAfterViewInit(): void {
+    this.searchComponent.searchPortals = this.portalHosts;
   }
 
   onSearchStateChange(searchState: SearchStateInterface): void {
