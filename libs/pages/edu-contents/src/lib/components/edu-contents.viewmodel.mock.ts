@@ -11,12 +11,10 @@ import {
   FilterFactoryFixture,
   ResultItemBase,
   SearchModeInterface,
+  SearchResultInterface,
   SearchStateInterface
 } from '@campus/search';
-import {
-  EduContentSearchResultInterface,
-  EnvironmentSearchModesInterface
-} from '@campus/shared';
+import { EnvironmentSearchModesInterface } from '@campus/shared';
 import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { EduContentsViewModel } from './edu-contents.viewmodel';
@@ -43,16 +41,20 @@ export class EduContentsViewModelMock
     new LearningAreaFixture({ id: 3, name: 'bazLearningArea' })
   ];
 
-  private searchResults: EduContentSearchResultInterface[] = [
-    {
-      eduContent: new EduContentFixture(),
-      inTask: false,
-      currentTask: new TaskFixture(),
-      inBundle: false,
-      currentBundle: new BundleFixture(),
-      isFavorite: true
-    }
-  ];
+  private searchResults: SearchResultInterface = {
+    results: [
+      {
+        eduContent: new EduContentFixture(),
+        inTask: false,
+        currentTask: new TaskFixture(),
+        inBundle: false,
+        currentBundle: new BundleFixture(),
+        isFavorite: true
+      }
+    ],
+    filterCriteriaPredictions: null,
+    count: 1
+  };
 
   private searchState: SearchStateInterface = {
     searchTerm: 'foo',
@@ -104,9 +106,9 @@ export class EduContentsViewModelMock
   public favoriteLearningAreas$ = new BehaviorSubject<LearningAreaInterface[]>(
     this.favoriteLearningAreas
   );
-  public searchResults$ = new BehaviorSubject<
-    EduContentSearchResultInterface[]
-  >(this.searchResults);
+  public searchResults$ = new BehaviorSubject<SearchResultInterface>(
+    this.searchResults
+  );
 
   public eduContentFavorites$ = new BehaviorSubject([
     new FavoriteFixture({ id: 1, learningAreaId: 2, type: 'area' }),
