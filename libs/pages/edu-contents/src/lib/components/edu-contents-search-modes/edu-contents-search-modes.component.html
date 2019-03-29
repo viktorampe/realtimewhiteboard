@@ -2,11 +2,8 @@
   *ngIf="(learningArea$ | async) as learningArea"
   class="pages-edu-contents__search-modes"
 >
-  <div
-    *ngIf="searchModes.search"
-    class="pages-edu-contents__search-modes__item"
-  >
-    <h2 [innerHTML]="searchModes.search.label"></h2>
+  <div *ngIf="termMode" class="pages-edu-contents__search-modes__item">
+    <h2 [innerHTML]="termMode.label"></h2>
     <campus-search-term
       [placeholder]="'Zoeken in ' + learningArea.name"
       [autoComplete]="true"
@@ -16,15 +13,15 @@
     ></campus-search-term>
   </div>
 
-  <div *ngIf="searchModes.toc" class="pages-edu-contents__search-modes__item">
-    <h2 [innerHTML]="searchModes.toc.label"></h2>
+  <div *ngIf="tocMode" class="pages-edu-contents__search-modes__item">
+    <h2 [innerHTML]="tocMode.label"></h2>
     <campus-button primary bordered routerLink="toc"
       >&#8594; naar de zoekfunctie</campus-button
     >
   </div>
 
-  <div *ngIf="searchModes.plan" class="pages-edu-contents__search-modes__item">
-    <h2 [innerHTML]="searchModes.plan.label"></h2>
+  <div *ngIf="planMode" class="pages-edu-contents__search-modes__item">
+    <h2 [innerHTML]="planMode.label"></h2>
     <campus-button primary bordered routerLink="plan"
       >&#8594; naar de zoekfunctie</campus-button
     >
