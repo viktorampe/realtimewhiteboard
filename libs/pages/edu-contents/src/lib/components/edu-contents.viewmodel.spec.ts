@@ -420,6 +420,7 @@ describe('EduContentsViewModel', () => {
             inBundle: false
           }))
         };
+        eduContentsViewModel.updateState(mockSearchState);
 
         expect(eduContentsViewModel.searchResults$).toBeObservable(
           cold('a', { a: expected })
@@ -449,6 +450,7 @@ describe('EduContentsViewModel', () => {
             inBundle: true
           }))
         };
+        eduContentsViewModel.updateState(mockSearchState);
 
         expect(eduContentsViewModel.searchResults$).toBeObservable(
           cold('a', { a: expected })
