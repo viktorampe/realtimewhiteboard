@@ -28,7 +28,7 @@ export class EduContentLearningAreaOverviewComponent implements OnInit {
     public eduContentsViewModel: EduContentsViewModel
   ) {}
 
-  public ngOnInit(): void {
+  ngOnInit(): void {
     this.learningAreas$ = this.eduContentsViewModel.learningAreas$;
     this.favoriteLearningAreas$ = this.eduContentsViewModel.favoriteLearningAreas$;
     this.searchModes = this.eduContentsViewModel.searchModes;
