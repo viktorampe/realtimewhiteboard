@@ -2,20 +2,20 @@
   <ng-container searchPortal="hostTop"></ng-container>
 </campus-page-bar>
 
-<campus-collapsible-sheet>
-  <div aside>
+<div class="pages-edu-contents-search-by-term__wrapper">
+  <div class="pages-edu-contents-search-by-term__wrapper__aside">
     <campus-button
       iconClass="reset-search"
       primary
       bordered
-      class="edu-content-search__reset-button"
+      class="pages-edu-contents-search-by-term__reset"
       (click)="clearSearchFilters()"
       >wis alle filters</campus-button
     >
     <ng-container searchPortal="hostLeft"></ng-container>
   </div>
   <campus-search
-    main
+    class="pages-edu-contents-search-by-term__wrapper__main"
     [autoCompleteValues]="autoCompleteValues$ | async"
     (searchTermChangeForAutoComplete)="onAutoCompleteRequest($event)"
     [searchMode]="searchMode"
@@ -23,4 +23,4 @@
     [searchResults]="searchResults$ | async"
     (searchState$)="onSearchStateChange($event)"
   ></campus-search>
-</campus-collapsible-sheet>
+</div>
