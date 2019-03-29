@@ -7,9 +7,15 @@
   align-items: center;
   &__area {
     display: flex;
+    flex-direction: row;
+    width: 100%;
+    position: relative;
+    flex-grow: 1;
+    width: 33.33%;
+    max-width: 33.33%;
+
     align-items: center;
-    width: 33%;
-    max-width: 33%;
+
     transform: none !important;
     cursor: pointer;
   }
@@ -19,7 +25,7 @@
     white-space: nowrap;
   }
 
-  //1 column
+  // 1 column
   @media #{$ui-breakpoint-xsmall} {
     &__area {
       width: 100%;
@@ -27,7 +33,7 @@
     }
   }
 
-  //2 columns
+  // 2 columns
   @media #{$ui-breakpoint-medium}, #{$ui-breakpoint-small} {
     &__area {
       width: 50%;
@@ -35,9 +41,9 @@
     }
   }
 
-  //3 columns is the default if no other queries match
+  // 3 columns is the default if no other queries match
 
-  //4 columns
+  // 4 columns
   @media #{$ui-breakpoint-xlarge} {
     &__area {
       width: 20%;

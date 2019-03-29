@@ -13,6 +13,8 @@ import { EduContentsViewModel } from '../edu-contents.viewmodel';
   styleUrls: ['./edu-contents-learning-area-overview.component.scss']
 })
 export class EduContentLearningAreaOverviewComponent implements OnInit {
+  public learningAreas$: Observable<LearningAreaInterface[]>;
+  public favoriteLearningAreas$: Observable<LearningAreaInterface[]>;
   public searchModes: EnvironmentSearchModesInterface;
   public searchTerm$: Subject<string>;
   public autoCompleteValues$: Observable<string[]>;
@@ -27,6 +29,8 @@ export class EduContentLearningAreaOverviewComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
+    this.learningAreas$ = this.eduContentsViewModel.learningAreas$;
+    this.favoriteLearningAreas$ = this.eduContentsViewModel.favoriteLearningAreas$;
     this.searchModes = this.eduContentsViewModel.searchModes;
     this.searchTerm$ = new Subject();
     this.autoCompleteValues$ = this.searchTerm$.pipe(

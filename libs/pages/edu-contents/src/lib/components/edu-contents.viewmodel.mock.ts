@@ -160,6 +160,9 @@ export class EduContentsViewModelMock
     }
   };
 
+  public searchState$ = new BehaviorSubject<SearchStateInterface>(
+    this.searchState
+  );
   public searchTerm$ = new Subject<string>();
   public autoCompleteValues$ = new BehaviorSubject(['foo', 'bar']);
   public learningArea$ = new BehaviorSubject(this.learningAreas[0]);

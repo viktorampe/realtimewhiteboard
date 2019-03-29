@@ -7,7 +7,6 @@ import {
   TestBed,
   tick
 } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
 import {
   MatIconModule,
   MatIconRegistry,
@@ -16,13 +15,20 @@ import {
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { LearningAreaFixture, LearningAreaInterface } from '@campus/dal';
+import {
+  DalState,
+  FavoriteReducer,
+  getStoreModuleForFeatures,
+  LearningAreaFixture,
+  LearningAreaInterface,
+  LearningAreaReducer
+} from '@campus/dal';
 import { SearchModule } from '@campus/search';
 import { ENVIRONMENT_ICON_MAPPING_TOKEN, SharedModule } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { FilterService, FILTER_SERVICE_TOKEN } from '@campus/utils';
-import { Store } from '@ngrx/store';
+import { Store, StoreModule } from '@ngrx/store';
 import { EduContentsViewModel } from '../edu-contents.viewmodel';
 import { EduContentsViewModelMock } from '../edu-contents.viewmodel.mock';
 import { FavoriteAreasComponent } from '../favorite-areas/favorite-areas.component';
@@ -45,6 +51,7 @@ export class MockAreasListComponent {
 describe('EduContentLearningAreaOverviewComponent', () => {
   let component: EduContentLearningAreaOverviewComponent;
   let fixture: ComponentFixture<EduContentLearningAreaOverviewComponent>;
+  let store: Store<DalState>;
   let router: Router;
   let route: ActivatedRoute;
   let eduContentsViewModel: EduContentsViewModel;
@@ -54,13 +61,16 @@ describe('EduContentLearningAreaOverviewComponent', () => {
       imports: [
         UiModule,
         RouterTestingModule,
-        NoopAnimationsModule,
-        FormsModule,
         MatIconModule,
         MatInputModule,
         DragDropModule,
         SharedModule,
-        SearchModule
+        SearchModule,
+        NoopAnimationsModule,
+        SearchModule,
+        SharedModule,
+        StoreModule.forRoot({}),
+        ...getStoreModuleForFeatures([LearningAreaReducer, FavoriteReducer])
       ],
       declarations: [
         EduContentLearningAreaOverviewComponent,
@@ -77,10 +87,12 @@ describe('EduContentLearningAreaOverviewComponent', () => {
         },
         { provide: Router, useClass: MockRouter },
         { provide: ActivatedRoute, useValue: {} },
-        { provide: EduContentsViewModel, useClass: EduContentsViewModelMock }
+        { provide: EduContentsViewModel, useClass: EduContentsViewModelMock },
+        { provide: FILTER_SERVICE_TOKEN, useClass: FilterService }
       ]
     }).compileComponents();
 
+    store = TestBed.get(Store);
     router = TestBed.get(Router);
     route = TestBed.get(ActivatedRoute);
     eduContentsViewModel = TestBed.get(EduContentsViewModel);

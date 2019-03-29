@@ -1,0 +1,7 @@
+@mixin pages-edu-contents-learning-area-overview() {
+  campus-areas-list {
+    .info-panel__body {
+      padding: 0;
+    }
+  }
+}
