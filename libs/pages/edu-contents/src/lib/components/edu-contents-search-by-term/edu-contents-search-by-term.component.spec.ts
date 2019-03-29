@@ -3,12 +3,15 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ActivatedRoute, Params } from '@angular/router';
 import {
   FilterFactoryFixture,
   SearchComponent,
   SearchModule
 } from '@campus/search';
+import { ENVIRONMENT_ICON_MAPPING_TOKEN, SharedModule } from '@campus/shared';
 import { UiModule } from '@campus/ui';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { EduContentsViewModel } from '../edu-contents.viewmodel';
 import {
   EduContentsViewModelMock,
@@ -17,14 +20,35 @@ import {
 import { EduContentSearchByTermComponent } from './edu-contents-search-by-term.component';
 
 describe('EduContentSearchByTermComponent', () => {
+  let params: Subject<Params>;
   let component: EduContentSearchByTermComponent;
   let fixture: ComponentFixture<EduContentSearchByTermComponent>;
 
   beforeEach(async(() => {
+    params = new BehaviorSubject<Params>({ area: 1 });
     TestBed.configureTestingModule({
-      imports: [CommonModule, UiModule, NoopAnimationsModule, SearchModule],
+      imports: [
+        CommonModule,
+        UiModule,
+        SharedModule,
+        NoopAnimationsModule,
+        SearchModule
+      ],
       declarations: [EduContentSearchByTermComponent, ResultItemMockComponent],
       providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              routeConfig: { path: 'term' },
+              params: params
+            }
+          }
+        },
+        {
+          provide: ENVIRONMENT_ICON_MAPPING_TOKEN,
+          useValue: {}
+        },
         { provide: EduContentsViewModel, useClass: EduContentsViewModelMock },
         FilterFactoryFixture
       ]
