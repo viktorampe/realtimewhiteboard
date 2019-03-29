@@ -5,6 +5,7 @@ import {
   BundleInterface,
   BundleQueries,
   DalState,
+  EduContentInterface,
   EduContentServiceInterface,
   EDU_CONTENT_SERVICE_TOKEN,
   FavoriteActions,
@@ -24,7 +25,6 @@ import {
   SearchStateInterface
 } from '@campus/search';
 import {
-  EduContentSearchResultInterface,
   EnvironmentSearchModesInterface,
   ENVIRONMENT_SEARCHMODES_TOKEN
 } from '@campus/shared';
@@ -251,62 +251,25 @@ export class EduContentsViewModel {
       switchMap(searchState => this.eduContentService.search(searchState)),
       withLatestFrom(this.getTask(), this.getBundle()),
       map(([searchResult, task, bundle]) => {
-        let adjustedSearchResults: EduContentSearchResultInterface[] =
-          searchResult.results;
-
-        adjustedSearchResults = this.adjustSearchResultsForTask(
-          task,
-          adjustedSearchResults
-        );
-
-        adjustedSearchResults = this.adjustSearchResultsForBundle(
-          bundle,
-          adjustedSearchResults
-        );
-
-        return {
+        const ret = {
           ...searchResult,
-          results: adjustedSearchResults
+          results: searchResult.results.map(
+            (eduContent: EduContentInterface) => {
+              return {
+                eduContent,
+                currentTask: task || undefined,
+                inTask: !!task,
+                currentBundle: bundle || undefined,
+                inBundle: !!bundle
+              };
+            }
+          )
         };
+        return ret;
       })
     );
   }
 
-  private adjustSearchResultsForTask(
-    task: TaskInterface,
-    searchResults: EduContentSearchResultInterface[]
-  ): EduContentSearchResultInterface[] {
-    if (!!task) {
-      searchResults.forEach(result => {
-        result.inTask = true;
-        result.currentTask = task;
-      });
-    } else {
-      searchResults.forEach(result => {
-        result.inTask = false;
-      });
-    }
-
-    return searchResults;
-  }
-
-  private adjustSearchResultsForBundle(
-    bundle: BundleInterface,
-    searchResults: EduContentSearchResultInterface[]
-  ): EduContentSearchResultInterface[] {
-    if (!!bundle) {
-      searchResults.forEach(result => {
-        result.inBundle = true;
-        result.currentBundle = bundle;
-      });
-    } else {
-      searchResults.forEach(result => {
-        result.inBundle = false;
-      });
-    }
-
-    return searchResults;
-  }
   private getFavoriteLearningAreas(): Observable<LearningAreaInterface[]> {
     return this.store.pipe(
       select(FavoriteQueries.getByType, { type: 'area' }),
