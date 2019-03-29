@@ -1,5 +1,7 @@
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LearningAreaInterface } from '@campus/dal';
 import { EnvironmentSearchModesInterface } from '@campus/shared';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
@@ -11,17 +13,24 @@ import { EduContentsViewModel } from '../edu-contents.viewmodel';
   styleUrls: ['./edu-contents-learning-area-overview.component.scss']
 })
 export class EduContentLearningAreaOverviewComponent implements OnInit {
+  public learningAreas$: Observable<LearningAreaInterface[]>;
+  public favoriteLearningAreas$: Observable<LearningAreaInterface[]>;
   public searchModes: EnvironmentSearchModesInterface;
   public searchTerm$: Subject<string>;
   public autoCompleteValues$: Observable<string[]>;
 
+  dropZoneIsHovered = false;
+  favoritesDropListId = 'favorites-area';
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private eduContentsViewModel: EduContentsViewModel
+    public eduContentsViewModel: EduContentsViewModel
   ) {}
 
-  public ngOnInit(): void {
+  ngOnInit(): void {
+    this.learningAreas$ = this.eduContentsViewModel.learningAreas$;
+    this.favoriteLearningAreas$ = this.eduContentsViewModel.favoriteLearningAreas$;
     this.searchModes = this.eduContentsViewModel.searchModes;
     this.searchTerm$ = new Subject();
     this.autoCompleteValues$ = this.searchTerm$.pipe(
@@ -42,5 +51,18 @@ export class EduContentLearningAreaOverviewComponent implements OnInit {
 
   public searchTermChanged(searchTerm: string) {
     this.searchTerm$.next(searchTerm);
+  }
+
+  toggleFavorite(learningArea: LearningAreaInterface) {
+    this.eduContentsViewModel.toggleFavoriteArea(learningArea);
+  }
+
+  setHoverState(state: boolean) {
+    this.dropZoneIsHovered = state;
+  }
+
+  onFavoritesDropped($event: CdkDragDrop<LearningAreaInterface>) {
+    this.setHoverState(false); // item is dropped, so drop area is not hovered anymore
+    this.toggleFavorite($event.item.data);
   }
 }
