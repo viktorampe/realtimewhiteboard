@@ -4,8 +4,12 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
   AUTH_SERVICE_TOKEN,
+  BundleActions,
+  BundleFixture,
+  BundleReducer,
   CustomSerializer,
   DalState,
+  EduContentFixture,
   EduContentServiceInterface,
   EDU_CONTENT_SERVICE_TOKEN,
   FavoriteActions,
@@ -17,25 +21,35 @@ import {
   LearningAreaFixture,
   LearningAreaInterface,
   LearningAreaReducer,
-  RouterStateUrl
+  RouterStateUrl,
+  TaskActions,
+  TaskFixture,
+  TaskReducer
 } from '@campus/dal';
 import {
   FilterFactoryFixture,
   SearchModeInterface,
+  SearchResultInterface,
   SearchStateInterface
 } from '@campus/search';
-import { ENVIRONMENT_SEARCHMODES_TOKEN } from '@campus/shared';
+import {
+  EduContentSearchResultFixture,
+  ENVIRONMENT_SEARCHMODES_TOKEN
+} from '@campus/shared';
 import { MockDate } from '@campus/testing';
 import { MapObjectConversionService } from '@campus/utils';
 import {
   NavigationActionTiming,
+  RouterNavigationAction,
+  RouterNavigationPayload,
   routerReducer,
   RouterReducerState,
   RouterStateSerializer,
+  ROUTER_NAVIGATION,
   StoreRouterConnectingModule
 } from '@ngrx/router-store';
 import { Store, StoreModule } from '@ngrx/store';
-import { hot } from '@nrwl/nx/testing';
+import { cold, hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
 import { EduContentsViewModel } from './edu-contents.viewmodel';
 
@@ -96,6 +110,16 @@ describe('EduContentsViewModel', () => {
     new FavoriteFixture({ id: 3, eduContentId: 1, type: 'educontent' }),
     new FavoriteFixture({ id: 4, eduContentId: 2, type: 'educontent' })
   ];
+  const mockBundles = [
+    new BundleFixture({ id: 1 }),
+    new BundleFixture({ id: 2 }),
+    new BundleFixture({ id: 3 })
+  ];
+  const mockTasks = [
+    new TaskFixture({ id: 1 }),
+    new TaskFixture({ id: 2 }),
+    new TaskFixture({ id: 3 })
+  ];
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -118,7 +142,12 @@ describe('EduContentsViewModel', () => {
           }
         ]),
         StoreModule.forRoot({ router: routerReducer }),
-        ...getStoreModuleForFeatures([FavoriteReducer, LearningAreaReducer]),
+        ...getStoreModuleForFeatures([
+          FavoriteReducer,
+          LearningAreaReducer,
+          BundleReducer,
+          TaskReducer
+        ]),
         StoreRouterConnectingModule.forRoot({
           navigationActionTiming: NavigationActionTiming.PostActivation,
           serializer: CustomSerializer
@@ -160,6 +189,10 @@ describe('EduContentsViewModel', () => {
     store.dispatch(
       new FavoriteActions.FavoritesLoaded({ favorites: mockFavorites })
     );
+
+    store.dispatch(new BundleActions.BundlesLoaded({ bundles: mockBundles }));
+
+    store.dispatch(new TaskActions.TasksLoaded({ tasks: mockTasks }));
   });
 
   it('should be defined', () => {
@@ -341,6 +374,85 @@ describe('EduContentsViewModel', () => {
       expect(getAutoCompleteSpy).toHaveBeenCalledWith({
         searchTerm: 'some string',
         filterCriteriaSelections: new Map<string, (number | string)[]>([])
+      });
+    });
+  });
+
+  describe('this.searchResults$', () => {
+    const mockSearchResult: SearchResultInterface = {
+      count: 2,
+      results: [
+        new EduContentSearchResultFixture({
+          eduContent: new EduContentFixture({ id: 1 })
+        }),
+        new EduContentSearchResultFixture({
+          eduContent: new EduContentFixture({ id: 2 })
+        })
+      ],
+      filterCriteriaPredictions: new Map()
+    };
+
+    beforeEach(() => {
+      eduContentService.search = jest
+        .fn()
+        .mockReturnValue(of(mockSearchResult));
+    });
+
+    describe('routerstate contains taskId', () => {
+      beforeEach(() => {
+        const navigationAction = {
+          type: ROUTER_NAVIGATION,
+          payload: {
+            routerState: { params: { task: '1' } },
+            event: {}
+          } as RouterNavigationPayload<any>
+        } as RouterNavigationAction;
+        store.dispatch(navigationAction);
+      });
+
+      it('should set currentTask, inTask = true and inBundle = false', () => {
+        const expected = {
+          ...mockSearchResult,
+          results: mockSearchResult.results.map(result => ({
+            ...result,
+            currentTask: mockTasks[0],
+            inTask: true,
+            inBundle: false
+          }))
+        };
+
+        expect(eduContentsViewModel.searchResults$).toBeObservable(
+          cold('a', { a: expected })
+        );
+      });
+    });
+
+    describe('routerstate contains bundleId', () => {
+      beforeEach(() => {
+        const navigationAction = {
+          type: ROUTER_NAVIGATION,
+          payload: {
+            routerState: { params: { bundle: '1' } },
+            event: {}
+          } as RouterNavigationPayload<any>
+        } as RouterNavigationAction;
+        store.dispatch(navigationAction);
+      });
+
+      it('should set currentBundle, inBundle = true and inTask = false', () => {
+        const expected = {
+          ...mockSearchResult,
+          results: mockSearchResult.results.map(result => ({
+            ...result,
+            currentBundle: mockBundles[0],
+            inTask: false,
+            inBundle: true
+          }))
+        };
+
+        expect(eduContentsViewModel.searchResults$).toBeObservable(
+          cold('a', { a: expected })
+        );
       });
     });
   });
