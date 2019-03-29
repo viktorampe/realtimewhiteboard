@@ -8,5 +8,21 @@
   ></campus-search-term>
 </campus-page-bar>
 
-<div> edu-contents page works! </div>
-<campus-favorite-areas></campus-favorite-areas>
+<div class="campus-page" *ngIf="(favoriteLearningAreas$ | async) as favorites">
+  <campus-favorite-areas
+    id="{{favoritesDropListId}}"
+    cdkDropList
+    (cdkDropListEntered)="setHoverState(true)"
+    (cdkDropListExited)="setHoverState(false)"
+    (cdkDropListDropped)="onFavoritesDropped($event)"
+    [isHovered]="dropZoneIsHovered"
+    [favoriteLearningAreas]="favorites"
+  ></campus-favorite-areas>
+  <ng-container *ngIf="(learningAreas$ | async) as learningAreas">
+    <campus-areas-list
+      [favoriteLearningAreas]="favorites"
+      [learningAreas]="learningAreas"
+      [connectedDropList]="favoritesDropListId"
+    ></campus-areas-list>
+  </ng-container>
+</div>

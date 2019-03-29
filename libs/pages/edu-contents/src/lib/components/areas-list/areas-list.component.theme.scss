@@ -1,0 +1,127 @@
+@mixin pages-edu-contents-areas-list() {
+  $pages-edu-contents-areas-list_filter-font-size: $ui-primary-font-size !default;
+  $pages-edu-contents-areas-list_favorite-border-color: $ui-secondary-bg-color-accent !default;
+  $pages-edu-contents-areas-list_favorite-border-width: 4px !default;
+  $pages-edu-contents-areas-list_grid-border-color: $ui-tertiary-bg-color-2 !default;
+  $pages-edu-contents-areas-list_grid-border-width: 1px !default;
+  $pages-edu-contents-areas-list_area-height: 32px !default;
+  $pages-edu-contents-areas-list_area_icon-margin-right: 8px !default;
+  $pages-edu-contents-areas-list_area_link-color: $ui-primary-font-color !default;
+  $pages-edu-contents-areas-list_area-bg-color: $ui-list-row-bg-even !default;
+
+  .pages-edu-contents-areas-list {
+    border: $pages-edu-contents-areas-list_grid-border-width solid
+      $pages-edu-contents-areas-list_grid-border-color;
+    border-bottom-width: 0;
+    border-right-width: 0;
+
+    &__area {
+      border: $pages-edu-contents-areas-list_grid-border-width solid
+        $pages-edu-contents-areas-list_grid-border-color;
+      border-top-width: 0;
+      border-left-width: 0;
+      height: $pages-edu-contents-areas-list_area-height;
+
+      &__icon {
+        margin-left: $pages-edu-contents-areas-list_favorite-border-width;
+        margin-right: $pages-edu-contents-areas-list_area_icon-margin-right;
+      }
+
+      &__link {
+        color: $pages-edu-contents-areas-list_area_link-color;
+      }
+
+      // 1 column
+      @media #{$ui-breakpoint-xsmall} {
+        @include color_even_row(
+          1,
+          $pages-edu-contents-areas-list_area-bg-color,
+          $pages-edu-contents-areas-list_grid-border-color
+        );
+      }
+      // 2 columns
+      @media #{$ui-breakpoint-medium}, #{$ui-breakpoint-small} {
+        @include color_even_row(
+          2,
+          $pages-edu-contents-areas-list_area-bg-color,
+          $pages-edu-contents-areas-list_grid-border-color
+        );
+      }
+      // 3 columns is the default if no other queries match
+      @media #{$ui-breakpoint-large} {
+        @include color_even_row(
+          3,
+          $pages-edu-contents-areas-list_area-bg-color,
+          $pages-edu-contents-areas-list_grid-border-color
+        );
+      }
+      // 4 columns
+      @media #{$ui-breakpoint-xlarge} {
+        @include color_even_row(
+          5,
+          $pages-edu-contents-areas-list_area-bg-color,
+          $pages-edu-contents-areas-list_grid-border-color
+        );
+      }
+    }
+    &__filter {
+      .ui-filter-text-input {
+        font-size: $pages-edu-contents-areas-list_filter-font-size;
+      }
+      input {
+        height: 24px;
+        border: none;
+      }
+      .mat-icon {
+        top: 2px;
+      }
+    }
+  }
+  .pages-edu-contents-areas-list__area--favorite {
+    &:before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: $pages-edu-contents-areas-list_favorite-border-width;
+      background-color: $pages-edu-contents-areas-list_favorite-border-color;
+    }
+  }
+}
+@mixin color_even_row($columns, $bg-color, $border-color) {
+  // set background color for alternating rows
+  $alternating-elements: $columns * 2;
+  @for $column from 0 to $columns {
+    $alternating-elements-index: $columns + $column + 1;
+    &:nth-child(#{$alternating-elements}n + #{$alternating-elements-index}) {
+      background-color: $bg-color;
+      &:after {
+        background-color: $bg-color;
+      }
+    }
+  }
+  // extend background color and borders to fill remaining space
+  &:last-child {
+    &:after {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 0;
+      left: calc(100% + 1px);
+      height: 100%;
+      border-right: 1px solid $border-color;
+      border-bottom: 1px solid $border-color;
+    }
+    @for $column from 0 to $columns {
+      $alternating-elements-index: $columns + $column + 1;
+      &:nth-child(#{$columns}n + #{$column + 1}):after {
+        width: calc((100% + 1px) * #{$columns - $column - 1} - 1px);
+      }
+    }
+    // no extra background needed for last column
+    &:nth-child(#{$columns}n + #{$columns}):after {
+      display: none;
+    }
+  }
+}

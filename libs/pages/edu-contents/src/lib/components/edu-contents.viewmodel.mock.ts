@@ -3,6 +3,7 @@ import {
   BundleFixture,
   EduContentFixture,
   FavoriteFixture,
+  FavoriteInterface,
   LearningAreaFixture,
   LearningAreaInterface,
   TaskFixture
@@ -33,14 +34,79 @@ export class ResultItemMockComponent extends ResultItemBase {}
 export class EduContentsViewModelMock
   implements ViewModelInterface<EduContentsViewModel> {
   private learningAreas = [
-    new LearningAreaFixture({ id: 1, name: 'fooLearningArea' }),
-    new LearningAreaFixture({ id: 2, name: 'barLearningArea' }),
-    new LearningAreaFixture({ id: 3, name: 'bazLearningArea' })
+    new LearningAreaFixture({
+      id: 1,
+      name: 'fooLearningArea',
+      icon: 'polpo-aardrijkskunde'
+    }),
+    new LearningAreaFixture({
+      id: 2,
+      name: 'barLearningArea',
+      icon: 'polpo-engels'
+    }),
+    new LearningAreaFixture({
+      id: 3,
+      name: 'bazLearningArea',
+      icon: 'polpo-biologie'
+    }),
+    new LearningAreaFixture({
+      id: 4,
+      name: 'fooLearningArea',
+      icon: 'polpo-aardrijkskunde'
+    }),
+    new LearningAreaFixture({
+      id: 5,
+      name: 'barLearningArea',
+      icon: 'polpo-engels'
+    }),
+    new LearningAreaFixture({
+      id: 6,
+      name: 'bazLearningArea',
+      icon: 'polpo-biologie'
+    }),
+    new LearningAreaFixture({
+      id: 7,
+      name: 'fooLearningArea',
+      icon: 'polpo-aardrijkskunde'
+    }),
+    new LearningAreaFixture({
+      id: 8,
+      name: 'barLearningArea',
+      icon: 'polpo-engels'
+    }),
+    new LearningAreaFixture({
+      id: 9,
+      name: 'bazLearningArea',
+      icon: 'polpo-biologie'
+    }),
+    new LearningAreaFixture({
+      id: 10,
+      name: 'fooLearningArea',
+      icon: 'polpo-aardrijkskunde'
+    }),
+    new LearningAreaFixture({
+      id: 11,
+      name: 'barLearningArea',
+      icon: 'polpo-engels'
+    }),
+    new LearningAreaFixture({
+      id: 12,
+      name: 'bazLearningArea',
+      icon: 'polpo-biologie'
+    })
   ];
 
   private favoriteLearningAreas = [
-    new LearningAreaFixture({ id: 2, name: 'barLearningArea' }),
-    new LearningAreaFixture({ id: 3, name: 'bazLearningArea' })
+    new LearningAreaFixture({
+      id: 2,
+      name: 'barLearningArea',
+      icon: 'polpo-engels'
+    }),
+    new LearningAreaFixture({
+      id: 3,
+      name: 'bazLearningArea',
+      icon: 'polpo-biologie'
+    })
   ];
 
   private searchResults: EduContentSearchResultInterface[] = [
@@ -94,6 +160,9 @@ export class EduContentsViewModelMock
     }
   };
 
+  public searchState$ = new BehaviorSubject<SearchStateInterface>(
+    this.searchState
+  );
   public searchTerm$ = new Subject<string>();
   public autoCompleteValues$ = new BehaviorSubject(['foo', 'bar']);
   public learningArea$ = new BehaviorSubject(this.learningAreas[0]);
@@ -107,8 +176,7 @@ export class EduContentsViewModelMock
   public searchResults$ = new BehaviorSubject<
     EduContentSearchResultInterface[]
   >(this.searchResults);
-
-  public eduContentFavorites$ = new BehaviorSubject([
+  public eduContentFavorites$ = new BehaviorSubject<FavoriteInterface[]>([
     new FavoriteFixture({ id: 1, learningAreaId: 2, type: 'area' }),
     new FavoriteFixture({ id: 2, learningAreaId: 3, type: 'area' }),
     new FavoriteFixture({ id: 3, eduContentId: 1, type: 'educontent' }),

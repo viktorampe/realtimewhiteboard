@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { LearningAreaInterface } from '@campus/dal';
 import { TileSecondaryActionInterface } from '@campus/ui';
-import { LearningAreaInterface } from '@diekeure/polpo-api-angular-sdk';
-
 @Component({
   selector: 'campus-favorite-areas',
   templateUrl: './favorite-areas.component.html',
@@ -9,6 +8,7 @@ import { LearningAreaInterface } from '@diekeure/polpo-api-angular-sdk';
 })
 export class FavoriteAreasComponent {
   @Input() favoriteLearningAreas: LearningAreaInterface[];
+  @Input() isHovered = false;
   @Output() removeAreaFromFavorites = new EventEmitter<LearningAreaInterface>();
 
   removeAreaFromFavoritesAction(
