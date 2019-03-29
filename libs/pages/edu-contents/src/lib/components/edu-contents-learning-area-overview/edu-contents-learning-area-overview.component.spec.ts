@@ -1,4 +1,5 @@
 import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
+import { Component, Input } from '@angular/core';
 import {
   async,
   ComponentFixture,
@@ -12,7 +13,6 @@ import {
   MatIconRegistry,
   MatInputModule
 } from '@angular/material';
-import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -23,7 +23,6 @@ import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { FilterService, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { Store } from '@ngrx/store';
-import { AreasListComponent } from '../areas-list/areas-list.component';
 import { EduContentsViewModel } from '../edu-contents.viewmodel';
 import { EduContentsViewModelMock } from '../edu-contents.viewmodel.mock';
 import { FavoriteAreasComponent } from '../favorite-areas/favorite-areas.component';
@@ -33,8 +32,17 @@ export class MockRouter {
   navigate = jest.fn();
 }
 
+@Component({
+  selector: 'campus-areas-list',
+  template: '<div></div>'
+})
+export class MockAreasListComponent {
+  @Input() learningAreas: LearningAreaInterface[];
+  @Input() favoriteLearningAreas: LearningAreaInterface[];
+  @Input() connectedDropList: string;
+}
+
 describe('EduContentLearningAreaOverviewComponent', () => {
-  let areaListComponent: AreasListComponent;
   let component: EduContentLearningAreaOverviewComponent;
   let fixture: ComponentFixture<EduContentLearningAreaOverviewComponent>;
   let router: Router;
@@ -57,7 +65,7 @@ describe('EduContentLearningAreaOverviewComponent', () => {
       declarations: [
         EduContentLearningAreaOverviewComponent,
         FavoriteAreasComponent,
-        AreasListComponent
+        MockAreasListComponent
       ],
       providers: [
         Store,
@@ -81,9 +89,6 @@ describe('EduContentLearningAreaOverviewComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(EduContentLearningAreaOverviewComponent);
     component = fixture.componentInstance;
-    areaListComponent = fixture.debugElement.query(
-      By.directive(AreasListComponent)
-    ).componentInstance;
 
     fixture.detectChanges();
   });
