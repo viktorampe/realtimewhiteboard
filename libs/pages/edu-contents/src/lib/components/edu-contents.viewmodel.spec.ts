@@ -414,7 +414,7 @@ describe('EduContentsViewModel', () => {
         const expected = {
           ...mockSearchResult,
           results: mockSearchResult.results.map(result => ({
-            ...result,
+            eduContent: result,
             currentTask: mockTasks[0],
             inTask: true,
             inBundle: false
@@ -443,7 +443,7 @@ describe('EduContentsViewModel', () => {
         const expected = {
           ...mockSearchResult,
           results: mockSearchResult.results.map(result => ({
-            ...result,
+            eduContent: result,
             currentBundle: mockBundles[0],
             inTask: false,
             inBundle: true
