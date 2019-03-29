@@ -33,7 +33,7 @@ describe('EduContentSearchByTermComponent', () => {
   let component: EduContentSearchByTermComponent;
   let fixture: ComponentFixture<EduContentSearchByTermComponent>;
   let eduContentsViewModel: EduContentsViewModel;
-  let mockSearchState: SearchStateInterface = {
+  const mockSearchState: SearchStateInterface = {
     searchTerm: 'foo',
     filterCriteriaSelections: new Map<string, (string | number)[]>()
   };
