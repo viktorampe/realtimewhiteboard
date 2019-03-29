@@ -2,6 +2,8 @@ import { Inject, Injectable } from '@angular/core';
 import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
+  BundleInterface,
+  BundleQueries,
   DalState,
   EduContentServiceInterface,
   EDU_CONTENT_SERVICE_TOKEN,
@@ -12,9 +14,15 @@ import {
   getRouterState,
   LearningAreaInterface,
   LearningAreaQueries,
-  RouterStateUrl
+  RouterStateUrl,
+  TaskInterface,
+  TaskQueries
 } from '@campus/dal';
-import { SearchModeInterface, SearchStateInterface } from '@campus/search';
+import {
+  SearchModeInterface,
+  SearchResultInterface,
+  SearchStateInterface
+} from '@campus/search';
 import {
   EduContentSearchResultInterface,
   EnvironmentSearchModesInterface,
@@ -23,8 +31,11 @@ import {
 import { MapObjectConversionService } from '@campus/utils';
 import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { filter, map, switchMap } from 'rxjs/operators';
+import { BehaviorSubject, merge, Observable } from 'rxjs';
+import { filter, map, mapTo, switchMap, withLatestFrom } from 'rxjs/operators';
+
+const TASK = 'task';
+const BUNDLE = 'bundle';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +44,7 @@ export class EduContentsViewModel {
   public learningArea$: Observable<LearningAreaInterface>;
   public learningAreas$: Observable<LearningAreaInterface[]>;
   public favoriteLearningAreas$: Observable<LearningAreaInterface[]>;
-  public searchResults$: Observable<EduContentSearchResultInterface[]>;
+  public searchResults$: Observable<SearchResultInterface>;
   public eduContentFavorites$: Observable<FavoriteInterface[]>;
   public searchState$: Observable<SearchStateInterface>;
 
@@ -62,6 +73,8 @@ export class EduContentsViewModel {
     this.eduContentFavorites$ = this.store.pipe(
       select(FavoriteQueries.getByType, { type: 'educontent' })
     );
+
+    this.setupSearchResults();
   }
 
   /*
@@ -86,6 +99,54 @@ export class EduContentsViewModel {
         this.store.pipe(select(LearningAreaQueries.getById, { id }))
       )
     );
+  }
+
+  /**
+   * get task for active route
+   */
+  private getTask(): Observable<TaskInterface> {
+    const router$ = this.routerState$.pipe(
+      map(
+        (routerState: RouterReducerState<RouterStateUrl>): number =>
+          +routerState.state.params.task
+      )
+    );
+
+    const task$ = router$.pipe(
+      filter(id => !!id),
+      switchMap(id => this.store.pipe(select(TaskQueries.getById, { id })))
+    );
+
+    const emptyTask$ = router$.pipe(
+      filter(id => !id),
+      mapTo(null)
+    );
+
+    return merge(task$, emptyTask$);
+  }
+
+  /**
+   * get bundle for active route
+   */
+  private getBundle(): Observable<BundleInterface> {
+    const router$ = this.routerState$.pipe(
+      map(
+        (routerState: RouterReducerState<RouterStateUrl>): number =>
+          +routerState.state.params.bundle
+      )
+    );
+
+    const bundle$ = router$.pipe(
+      filter(id => !!id),
+      switchMap(id => this.store.pipe(select(BundleQueries.getById, { id })))
+    );
+
+    const emptyBundle$ = router$.pipe(
+      filter(id => !id),
+      mapTo(null)
+    );
+
+    return merge(bundle$, emptyBundle$);
   }
 
   /*
@@ -180,16 +241,72 @@ export class EduContentsViewModel {
     );
   }
 
-  /*
-   * make a result stream derived from :
-   * - combining into a searchState
-   *   - current location in app (in bundle, in task, in learning-area)
-   *   - search component state observable
-   * - switch map that to an api request
-   * - map that to an EduContentSearchResultInterface
-   */
-  private setupSearchResults(): void {}
+  private setupSearchResults(): void {
+    this.searchResults$ = this.searchState$.pipe(
+      withLatestFrom(this.getInitialSearchState()),
+      map(([searchState, initialSearchState]) => ({
+        ...searchState,
+        ...initialSearchState
+      })),
+      switchMap(searchState => this.eduContentService.search(searchState)),
+      withLatestFrom(this.getTask(), this.getBundle()),
+      map(([searchResult, task, bundle]) => {
+        let adjustedSearchResults: EduContentSearchResultInterface[] =
+          searchResult.results;
 
+        adjustedSearchResults = this.adjustSearchResultsForTask(
+          task,
+          adjustedSearchResults
+        );
+
+        adjustedSearchResults = this.adjustSearchResultsForBundle(
+          bundle,
+          adjustedSearchResults
+        );
+
+        return {
+          ...searchResult,
+          results: adjustedSearchResults
+        };
+      })
+    );
+  }
+
+  private adjustSearchResultsForTask(
+    task: TaskInterface,
+    searchResults: EduContentSearchResultInterface[]
+  ): EduContentSearchResultInterface[] {
+    if (!!task) {
+      searchResults.forEach(result => {
+        result.inTask = true;
+        result.currentTask = task;
+      });
+    } else {
+      searchResults.forEach(result => {
+        result.inTask = false;
+      });
+    }
+
+    return searchResults;
+  }
+
+  private adjustSearchResultsForBundle(
+    bundle: BundleInterface,
+    searchResults: EduContentSearchResultInterface[]
+  ): EduContentSearchResultInterface[] {
+    if (!!bundle) {
+      searchResults.forEach(result => {
+        result.inBundle = true;
+        result.currentBundle = bundle;
+      });
+    } else {
+      searchResults.forEach(result => {
+        result.inBundle = false;
+      });
+    }
+
+    return searchResults;
+  }
   private getFavoriteLearningAreas(): Observable<LearningAreaInterface[]> {
     return this.store.pipe(
       select(FavoriteQueries.getByType, { type: 'area' }),
