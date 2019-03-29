@@ -251,7 +251,7 @@ export class EduContentsViewModel {
       switchMap(searchState => this.eduContentService.search(searchState)),
       withLatestFrom(this.getTask(), this.getBundle()),
       map(([searchResult, task, bundle]) => {
-        const ret = {
+        return {
           ...searchResult,
           results: searchResult.results.map(
             (eduContent: EduContentInterface) => {
@@ -265,7 +265,6 @@ export class EduContentsViewModel {
             }
           )
         };
-        return ret;
       })
     );
   }
