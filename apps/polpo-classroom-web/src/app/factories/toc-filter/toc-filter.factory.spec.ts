@@ -34,6 +34,17 @@ describe('TocFilterFactory', () => {
   let store: Store<DalState>;
   let tocService: TocServiceInterface;
 
+  const expectedOutputFilters = [
+    {
+      component: ColumnFilterComponent,
+      domHost: 'hostLeft'
+    },
+    {
+      component: BreadcrumbFilterComponent,
+      domHost: 'hostTop'
+    }
+  ];
+
   const mockLearningAreas = [
     new LearningAreaFixture({ id: 1 }),
     new LearningAreaFixture({ id: 2 })
@@ -459,20 +470,12 @@ describe('TocFilterFactory', () => {
   });
 
   function getFilter(criteria) {
-    return [
-      {
-        criteria,
-        component: ColumnFilterComponent,
-        domHost: 'hostLeft',
-        options: undefined
-      },
-      {
-        criteria,
-        component: BreadcrumbFilterComponent,
-        domHost: 'hostTop',
-        options: undefined
-      }
-    ];
+    return expectedOutputFilters.map(outputFilter => ({
+      criteria,
+      component: outputFilter.component,
+      domHost: outputFilter.domHost,
+      options: undefined
+    }));
   }
 
   function getExpectedLearningAreaFilterCriterium() {
