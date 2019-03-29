@@ -243,7 +243,7 @@ export class EduContentsViewModel {
 
   private setupSearchResults(): void {
     this.searchResults$ = this.searchState$.pipe(
-      filter(a => a !== null),
+      filter(searchState => searchState !== null),
       withLatestFrom(this.getInitialSearchState()),
       map(([searchState, initialSearchState]) => ({
         ...searchState,
