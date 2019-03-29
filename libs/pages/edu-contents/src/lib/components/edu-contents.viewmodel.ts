@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@angular/core';
-import { Params } from '@angular/router';
 import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
@@ -11,7 +10,6 @@ import {
   FavoriteQueries,
   FavoriteTypesEnum,
   getRouterState,
-  getRouterStateParams,
   LearningAreaInterface,
   LearningAreaQueries,
   RouterStateUrl
