@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {
   SearchComponent,
@@ -14,9 +14,8 @@ import { EduContentsViewModel } from '../edu-contents.viewmodel';
   templateUrl: './edu-contents-search-by-term.component.html',
   styleUrls: ['./edu-contents-search-by-term.component.scss']
 })
-export class EduContentSearchByTermComponent {
+export class EduContentSearchByTermComponent implements OnInit {
   public searchMode: SearchModeInterface;
-  public initialSearchState$: Observable<SearchStateInterface>;
   public searchState$: Observable<SearchStateInterface>;
   public searchResults$: Observable<EduContentSearchResultInterface[]>;
   public autoCompleteValues$: Observable<string[]>;
@@ -26,17 +25,14 @@ export class EduContentSearchByTermComponent {
   constructor(
     private eduContentsViewModel: EduContentsViewModel,
     private activatedRoute: ActivatedRoute
-  ) {
-    this.initialize();
-  }
+  ) {}
 
-  initialize(): void {
+  ngOnInit(): void {
     this.searchMode = this.eduContentsViewModel.getSearchMode(
       this.activatedRoute.snapshot.routeConfig.path,
       +this.activatedRoute.snapshot.params.area
     );
-    this.initialSearchState$ = this.eduContentsViewModel.getInitialSearchState();
-    this.searchState$ = this.eduContentsViewModel.searchState$;
+    this.searchState$ = this.eduContentsViewModel.getInitialSearchState();
     this.searchResults$ = this.eduContentsViewModel.searchResults$;
   }
 
@@ -48,5 +44,11 @@ export class EduContentSearchByTermComponent {
     this.autoCompleteValues$ = this.eduContentsViewModel.requestAutoComplete(
       term
     );
+  }
+
+  clearSearchFilters() {
+    if (this.searchComponent) {
+      this.searchComponent.reset();
+    }
   }
 }

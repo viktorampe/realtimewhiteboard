@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Component, Injectable } from '@angular/core';
 import {
   BundleFixture,
   EduContentFixture,
@@ -21,7 +21,11 @@ import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { EduContentsViewModel } from './edu-contents.viewmodel';
 
-class ResultItemMock extends ResultItemBase {}
+@Component({
+  selector: 'campus-result-item',
+  template: '{{data}}'
+})
+export class ResultItemMockComponent extends ResultItemBase {}
 
 @Injectable({
   providedIn: 'root'
@@ -68,7 +72,7 @@ export class EduContentsViewModelMock
       domHost: 'hostSearchTerm'
     },
     results: {
-      component: ResultItemMock,
+      component: ResultItemMockComponent,
       sortModes: [
         {
           description: 'book',
@@ -147,4 +151,6 @@ export class EduContentsViewModelMock
    * dispatch toggle action
    */
   public toggleFavoriteArea(area: LearningAreaInterface): void {}
+
+  public saveSearchState(searchState: SearchStateInterface): void {}
 }
