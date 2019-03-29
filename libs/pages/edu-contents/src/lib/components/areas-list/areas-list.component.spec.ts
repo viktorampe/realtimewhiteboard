@@ -1,4 +1,5 @@
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { SimpleChanges } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import {
@@ -38,6 +39,7 @@ describe('AreasListComponent', () => {
   ];
 
   const mockFavoriteLearningAreas = [mockLearningAreas[0]];
+  const mockOtherLearningAreas = [mockLearningAreas[1], mockLearningAreas[2]];
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -73,24 +75,24 @@ describe('AreasListComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should show the learning areas correctly', () => {
+  it('should show only show learning areas that are not marked as favorite', () => {
+    // fake an update to the favorites[]
+    const changes = {
+      favoriteLearningAreas: []
+    };
+    component.ngOnChanges((changes as unknown) as SimpleChanges);
+    //update the view
+    fixture.detectChanges();
+
     const areas = fixture.debugElement.queryAll(
       By.css('.pages-edu-contents-areas-list__area')
     );
 
-    for (let i = 0; i < mockLearningAreas.length; i++) {
-      const areaModel = mockLearningAreas[i];
+    for (let i = 0; i < mockOtherLearningAreas.length; i++) {
+      const areaModel = mockOtherLearningAreas[i];
       const area = areas[i];
       const areaIcon = area.query(By.css('mat-icon')).componentInstance.svgIcon;
       const areaText = area.query(By.css('a')).nativeElement.textContent;
-
-      //Check if the learning area is a favorite one
-      if (mockFavoriteLearningAreas.indexOf(areaModel) !== -1) {
-        //Check if it has the correct class
-        expect(area.nativeElement.classList).toContain(
-          'pages-edu-contents-areas-list__area--favorite'
-        );
-      }
 
       expect(areaIcon).toBe('learning-area:' + areaModel.icon);
       expect(areaText).toBe(areaModel.name);

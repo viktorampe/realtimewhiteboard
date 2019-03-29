@@ -18,9 +18,6 @@
       <div
         class="pages-edu-contents-areas-list__area"
         *ngFor="let learningArea of filteredAreas"
-        [class.pages-edu-contents-areas-list__area--favorite]="
-          isFavoriteArea(learningArea)
-        "
         cdkDrag
         [cdkDragData]="learningArea"
         [cdkDragDisabled]="isFavoriteArea(learningArea)"
