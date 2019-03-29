@@ -55,9 +55,6 @@ describe('EduContentSearchByColumnComponent', () => {
     expect(component).toBeTruthy();
   });
   describe('initialize', () => {
-    // afterEach(() => {
-    //   jest.resetAllMocks();
-    // });
     it('should call getSearchMode', () => {
       const getSearchModeSpy = jest.spyOn(
         eduContentsViewModel,
