@@ -7,8 +7,8 @@
     title__right
     theme="dark"
     [source]="learningAreas"
+    class="pages-edu-contents-areas-list__filter"
   ></campus-filter-text-input>
-
   <ng-container *ngIf="(filterTextInput.result$ | async) as filteredAreas">
     <div
       cdkDropList
