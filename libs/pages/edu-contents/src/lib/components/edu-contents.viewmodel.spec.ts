@@ -411,12 +411,15 @@ describe('EduContentsViewModel', () => {
       });
 
       it('should set currentTask, inTask = true and inBundle = false', () => {
-        const expected = mockSearchResult.results.map(result => ({
-          ...result,
-          currentTask: mockTasks[0],
-          inTask: true,
-          inBundle: false
-        }));
+        const expected = {
+          ...mockSearchResult,
+          results: mockSearchResult.results.map(result => ({
+            ...result,
+            currentTask: mockTasks[0],
+            inTask: true,
+            inBundle: false
+          }))
+        };
 
         expect(eduContentsViewModel.searchResults$).toBeObservable(
           cold('a', { a: expected })
@@ -437,12 +440,15 @@ describe('EduContentsViewModel', () => {
       });
 
       it('should set currentBundle, inBundle = true and inTask = false', () => {
-        const expected = mockSearchResult.results.map(result => ({
-          ...result,
-          currentBundle: mockBundles[0],
-          inTask: false,
-          inBundle: true
-        }));
+        const expected = {
+          ...mockSearchResult,
+          results: mockSearchResult.results.map(result => ({
+            ...result,
+            currentBundle: mockBundles[0],
+            inTask: false,
+            inBundle: true
+          }))
+        };
 
         expect(eduContentsViewModel.searchResults$).toBeObservable(
           cold('a', { a: expected })
