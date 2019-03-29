@@ -18,7 +18,11 @@ import {
   TaskInterface,
   TaskQueries
 } from '@campus/dal';
-import { SearchModeInterface, SearchStateInterface } from '@campus/search';
+import {
+  SearchModeInterface,
+  SearchResultInterface,
+  SearchStateInterface
+} from '@campus/search';
 import {
   EduContentSearchResultInterface,
   EnvironmentSearchModesInterface,
@@ -40,7 +44,7 @@ export class EduContentsViewModel {
   public learningArea$: Observable<LearningAreaInterface>;
   public learningAreas$: Observable<LearningAreaInterface[]>;
   public favoriteLearningAreas$: Observable<LearningAreaInterface[]>;
-  public searchResults$: Observable<EduContentSearchResultInterface[]>;
+  public searchResults$: Observable<SearchResultInterface>;
   public eduContentFavorites$: Observable<FavoriteInterface[]>;
   public searchState$: Observable<SearchStateInterface>;
 
@@ -260,7 +264,10 @@ export class EduContentsViewModel {
           adjustedSearchResults
         );
 
-        return adjustedSearchResults;
+        return {
+          ...searchResult,
+          results: adjustedSearchResults
+        };
       })
     );
   }
