@@ -243,10 +243,15 @@ export class EduContentsViewModel {
 
   private setupSearchResults(): void {
     this.searchResults$ = this.searchState$.pipe(
+      filter(a => a !== null),
       withLatestFrom(this.getInitialSearchState()),
       map(([searchState, initialSearchState]) => ({
         ...searchState,
-        ...initialSearchState
+        ...initialSearchState,
+        filterCriteriaSelections: new Map([
+          ...Array.from(searchState.filterCriteriaSelections.entries()),
+          ...Array.from(initialSearchState.filterCriteriaSelections.entries())
+        ])
       })),
       switchMap(searchState => this.eduContentService.search(searchState)),
       withLatestFrom(this.getTask(), this.getBundle()),
