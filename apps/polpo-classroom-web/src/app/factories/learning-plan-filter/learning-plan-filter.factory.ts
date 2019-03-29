@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, Type } from '@angular/core';
 import {
   DalState,
   EduNetInterface,
@@ -14,7 +14,9 @@ import {
   YearInterface
 } from '@campus/dal';
 import {
+  BreadcrumbFilterComponent,
   ColumnFilterComponent,
+  SearchFilterComponentInterface,
   SearchFilterCriteriaInterface,
   SearchFilterCriteriaValuesInterface,
   SearchFilterFactory,
@@ -42,6 +44,14 @@ enum ColumnLevel {
 
 @Injectable({ providedIn: 'root' })
 export class LearningPlanFilterFactory implements SearchFilterFactory {
+  private outputFilters: {
+    component: Type<SearchFilterComponentInterface>;
+    domHost: string;
+  }[] = [
+    { component: ColumnFilterComponent, domHost: 'hostLeft' },
+    { component: BreadcrumbFilterComponent, domHost: 'hostTop' }
+  ];
+
   private learningAreas$: Observable<LearningAreaInterface[]>;
   private eduNets$: Observable<EduNetInterface[]>;
   private schoolTypes$: Observable<SchoolTypeInterface[]>;
@@ -65,13 +75,24 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
   ): Observable<SearchFilterInterface[]> {
     const startingColumnIds = this.getStartingColumnSelectedIds(searchState);
     const columnLevel = this.getColumnLevel(startingColumnIds);
-    return this.getSearchFilters(startingColumnIds, columnLevel);
+    return this.getSearchFilterCriteria(startingColumnIds, columnLevel).pipe(
+      map(criteria =>
+        this.outputFilters.map(
+          outputFilter =>
+            ({
+              criteria,
+              component: outputFilter.component,
+              domHost: outputFilter.domHost
+            } as SearchFilterInterface)
+        )
+      )
+    );
   }
 
-  private getSearchFilters(
+  private getSearchFilterCriteria(
     selectedPropertyIds: SelectedPropertyIds,
     columnLevel: number
-  ): Observable<SearchFilterInterface[]> {
+  ): Observable<SearchFilterCriteriaInterface[]> {
     const years$: Observable<YearInterface[]> =
       columnLevel >= ColumnLevel.YEAR
         ? this.learningPlanService.getAvailableYearsForSearch(
@@ -108,34 +129,32 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
             Map<SpecialtyInterface, LearningPlanInterface[]>
           ]
         ) => {
-          const searchFilters: SearchFilterInterface[] = [];
+          const searchFilterCriteria: SearchFilterCriteriaInterface[] = [];
           for (let i = 0; i <= columnLevel; i++) {
-            searchFilters.push(this.getSearchFilter(i, columnValuesData[i]));
+            searchFilterCriteria.push(
+              this.getSearchFilterCriteriaForColumns(i, columnValuesData[i])
+            );
           }
-          return searchFilters;
+          return searchFilterCriteria;
         }
       )
     );
   }
 
-  private getSearchFilter(
+  private getSearchFilterCriteriaForColumns(
     currentColumnLevel: number,
     startingColumnValues
-  ): SearchFilterInterface {
-    return {
-      criteria: this.getSearchFilterCriteria(
-        startingColumnValues,
-        this.getSearchFilterStringProperties(currentColumnLevel),
-        currentColumnLevel < 4
-          ? this.getSearchFilterCriteriaValues
-          : this.getLearningPlanSearchFilterCriteriaValues
-      ),
-      component: ColumnFilterComponent,
-      domHost: 'hostLeft'
-    };
+  ): SearchFilterCriteriaInterface {
+    return this.getSearchFilterCriteriaWithValues(
+      startingColumnValues,
+      this.getSearchFilterStringProperties(currentColumnLevel),
+      currentColumnLevel < 4
+        ? this.getSearchFilterCriteriaValues
+        : this.getLearningPlanSearchFilterCriteriaValues
+    );
   }
 
-  private getSearchFilterCriteria(
+  private getSearchFilterCriteriaWithValues(
     startingColumnValues,
     stringProperties: StartingLevelStringPropertiesInterface,
     valueGetterFunction: ValueGetterFunctionType

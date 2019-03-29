@@ -10,6 +10,7 @@ import {
   YearInterface
 } from '@campus/dal';
 import {
+  BreadcrumbFilterComponent,
   ColumnFilterComponent,
   SearchFilterComponentInterface,
   SearchFilterCriteriaInterface,
@@ -42,8 +43,13 @@ const BOOK = 'eduContentTOC.tree';
   providedIn: 'root'
 })
 export class TocFilterFactory implements SearchFilterFactory {
-  private filterComponent = ColumnFilterComponent;
-  private domHost = 'hostLeft';
+  private outputFilters: {
+    component: Type<SearchFilterComponentInterface>;
+    domHost: string;
+  }[] = [
+    { component: ColumnFilterComponent, domHost: 'hostLeft' },
+    { component: BreadcrumbFilterComponent, domHost: 'hostTop' }
+  ];
 
   // input from viewmodel
   // base for all other streams
@@ -99,13 +105,13 @@ export class TocFilterFactory implements SearchFilterFactory {
 
           // make filter
           // interface expects array
-          return [
+          return this.outputFilters.map(outputFilter =>
             this.getFilter(
               filterCriteriaArray,
-              this.filterComponent,
-              this.domHost
+              outputFilter.component,
+              outputFilter.domHost
             )
-          ];
+          );
         }
       )
     );
