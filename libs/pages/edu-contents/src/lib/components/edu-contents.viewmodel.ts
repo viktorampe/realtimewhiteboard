@@ -10,9 +10,11 @@ import {
   FavoriteInterface,
   FavoriteQueries,
   FavoriteTypesEnum,
+  getRouterState,
   getRouterStateParams,
   LearningAreaInterface,
-  LearningAreaQueries
+  LearningAreaQueries,
+  RouterStateUrl
 } from '@campus/dal';
 import { SearchModeInterface, SearchStateInterface } from '@campus/search';
 import {
@@ -21,6 +23,7 @@ import {
   ENVIRONMENT_SEARCHMODES_TOKEN
 } from '@campus/shared';
 import { MapObjectConversionService } from '@campus/utils';
+import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
@@ -34,7 +37,10 @@ export class EduContentsViewModel {
   public favoriteLearningAreas$: Observable<LearningAreaInterface[]>;
   public searchResults$: Observable<EduContentSearchResultInterface[]>;
   public eduContentFavorites$: Observable<FavoriteInterface[]>;
-  public searchState$: BehaviorSubject<SearchStateInterface>;
+  public searchState$: Observable<SearchStateInterface>;
+
+  private _searchState$: BehaviorSubject<SearchStateInterface>;
+  private routerState$: Observable<RouterReducerState<RouterStateUrl>>;
 
   constructor(
     private store: Store<DalState>,
@@ -49,6 +55,9 @@ export class EduContentsViewModel {
   }
 
   private initialize() {
+    this._searchState$ = new BehaviorSubject<SearchStateInterface>(null);
+    this.searchState$ = this._searchState$;
+    this.routerState$ = this.store.pipe(select(getRouterState));
     this.learningArea$ = this.getLearningArea();
     this.learningAreas$ = this.store.pipe(select(LearningAreaQueries.getAll));
     this.favoriteLearningAreas$ = this.getFavoriteLearningAreas();
@@ -60,15 +69,20 @@ export class EduContentsViewModel {
   /*
    * let the page component pass through the updated state from the search component
    */
-  public updateState(state: SearchStateInterface) {}
+  public updateState(state: SearchStateInterface) {
+    this._searchState$.next(state);
+    //TODO -- tests can only be added once the results method has been implemented and the results are updated due to a trigger on the stream that calls the api
+  }
 
   /**
    * get learningarea for active route
    */
   private getLearningArea(): Observable<LearningAreaInterface> {
-    return this.store.pipe(
-      select(getRouterStateParams),
-      map((params: Params): number => +params.area),
+    return this.routerState$.pipe(
+      map(
+        (routerState: RouterReducerState<RouterStateUrl>): number =>
+          +routerState.state.params.area
+      ),
       filter(id => !!id),
       switchMap(id =>
         this.store.pipe(select(LearningAreaQueries.getById, { id }))
@@ -80,8 +94,14 @@ export class EduContentsViewModel {
    * make auto-complete request to api service and return observable
    */
   public requestAutoComplete(searchTerm: string): Observable<string[]> {
-    this.searchState$.value.searchTerm = searchTerm;
-    return this.eduContentService.autoComplete(this.searchState$.value);
+    return this.getInitialSearchState().pipe(
+      map(initialSearchState => {
+        return { ...initialSearchState, searchTerm };
+      }),
+      switchMap(enrichedSearchState =>
+        this.eduContentService.autoComplete(enrichedSearchState)
+      )
+    );
   }
 
   /*
@@ -96,7 +116,34 @@ export class EduContentsViewModel {
    * can  be constructed from various parameters like querystring, ... TBD
    */
   public getInitialSearchState(): Observable<SearchStateInterface> {
-    return;
+    return this.routerState$.pipe(
+      map((routerState: RouterReducerState<RouterStateUrl>) => {
+        const initialSearchState: SearchStateInterface = {
+          searchTerm: '',
+          filterCriteriaSelections: new Map<string, (number | string)[]>()
+        };
+        if (
+          routerState.state.queryParams &&
+          routerState.state.queryParams.searchTerm
+        ) {
+          initialSearchState.searchTerm =
+            routerState.state.queryParams.searchTerm;
+        }
+        if (routerState.state.params.area) {
+          initialSearchState.filterCriteriaSelections.set('learningArea', [
+            +routerState.state.params.area
+          ]);
+        }
+        if (routerState.state.params.task) {
+          initialSearchState.filterCriteriaOptions = new Map<
+            string,
+            number | string | boolean
+          >();
+          initialSearchState.filterCriteriaOptions.set('taskAllowed', true);
+        }
+        return initialSearchState;
+      })
+    );
   }
 
   /*
