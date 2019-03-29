@@ -27,8 +27,8 @@ import {
 import { MapObjectConversionService } from '@campus/utils';
 import { RouterReducerState } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { filter, map, switchMap, take, withLatestFrom } from 'rxjs/operators';
+import { BehaviorSubject, merge, Observable } from 'rxjs';
+import { filter, map, mapTo, switchMap, withLatestFrom } from 'rxjs/operators';
 
 const TASK = 'task';
 const BUNDLE = 'bundle';
@@ -56,7 +56,6 @@ export class EduContentsViewModel {
     @Inject(ENVIRONMENT_SEARCHMODES_TOKEN)
     public searchModes: EnvironmentSearchModesInterface
   ) {
-    this.setupStreams();
     this.initialize();
   }
 
@@ -70,6 +69,8 @@ export class EduContentsViewModel {
     this.eduContentFavorites$ = this.store.pipe(
       select(FavoriteQueries.getByType, { type: 'educontent' })
     );
+
+    this.setupSearchResults();
   }
 
   /*
@@ -94,6 +95,54 @@ export class EduContentsViewModel {
         this.store.pipe(select(LearningAreaQueries.getById, { id }))
       )
     );
+  }
+
+  /**
+   * get task for active route
+   */
+  private getTask(): Observable<TaskInterface> {
+    const router$ = this.routerState$.pipe(
+      map(
+        (routerState: RouterReducerState<RouterStateUrl>): number =>
+          +routerState.state.params.task
+      )
+    );
+
+    const task$ = router$.pipe(
+      filter(id => !!id),
+      switchMap(id => this.store.pipe(select(TaskQueries.getById, { id })))
+    );
+
+    const emptyTask$ = router$.pipe(
+      filter(id => !id),
+      mapTo(null)
+    );
+
+    return merge(task$, emptyTask$);
+  }
+
+  /**
+   * get bundle for active route
+   */
+  private getBundle(): Observable<BundleInterface> {
+    const router$ = this.routerState$.pipe(
+      map(
+        (routerState: RouterReducerState<RouterStateUrl>): number =>
+          +routerState.state.params.bundle
+      )
+    );
+
+    const bundle$ = router$.pipe(
+      filter(id => !!id),
+      switchMap(id => this.store.pipe(select(BundleQueries.getById, { id })))
+    );
+
+    const emptyBundle$ = router$.pipe(
+      filter(id => !id),
+      mapTo(null)
+    );
+
+    return merge(bundle$, emptyBundle$);
   }
 
   /*
@@ -188,28 +237,26 @@ export class EduContentsViewModel {
     );
   }
 
-  /*
-   * make a result stream derived from :
-   * - combining into a searchState -> done in getInitialSearchState
-   * - switch map that to an api request
-   * - map that to an EduContentSearchResultInterface
-   */
   private setupSearchResults(): void {
     this.searchResults$ = this.searchState$.pipe(
-      filter(searchState => !!searchState),
+      withLatestFrom(this.getInitialSearchState()),
+      map(([searchState, initialSearchState]) => ({
+        ...searchState,
+        ...initialSearchState
+      })),
       switchMap(searchState => this.eduContentService.search(searchState)),
-      withLatestFrom(this.searchState$),
-      map(([searchResult, searchState]) => {
+      withLatestFrom(this.getTask(), this.getBundle()),
+      map(([searchResult, task, bundle]) => {
         let adjustedSearchResults: EduContentSearchResultInterface[] =
           searchResult.results;
 
         adjustedSearchResults = this.adjustSearchResultsForTask(
-          searchState,
+          task,
           adjustedSearchResults
         );
 
         adjustedSearchResults = this.adjustSearchResultsForBundle(
-          searchState,
+          bundle,
           adjustedSearchResults
         );
 
@@ -218,48 +265,14 @@ export class EduContentsViewModel {
     );
   }
 
-  /*
-   * set the streams for favorites, learningAreas via store selectors
-   */
-  private setupStreams(): void {
-    this.learningArea$ = this.getLearningArea();
-    this.learningAreas$ = this.store.pipe(select(LearningAreaQueries.getAll));
-    this.favoriteLearningAreas$ = this.getFavoriteLearningAreas();
-    this.eduContentFavorites$ = this.store.pipe(
-      select(FavoriteQueries.getByType, { type: 'educontent' })
-    );
-    this.routerState$ = this.store.pipe(select(getRouterState));
-    this._searchState$ = new BehaviorSubject<SearchStateInterface>(null);
-    this.searchState$ = this._searchState$;
-
-    this.getInitialSearchState()
-      .pipe(take(1))
-      .subscribe(searchState => this._searchState$.next(searchState));
-
-    this.setupSearchResults();
-  }
-
   private adjustSearchResultsForTask(
-    searchState: SearchStateInterface,
+    task: TaskInterface,
     searchResults: EduContentSearchResultInterface[]
   ): EduContentSearchResultInterface[] {
-    if (
-      searchState.filterCriteriaSelections.has(TASK) &&
-      searchState.filterCriteriaSelections.get(TASK).length === 1
-    ) {
-      // get value from Store synchronously
-      let currentTask: TaskInterface;
-      const id = searchState.filterCriteriaSelections.get(TASK)[0];
-      this.store
-        .pipe(
-          select(TaskQueries.getById, { id }),
-          take(1)
-        )
-        .subscribe(task => (currentTask = task));
-
+    if (!!task) {
       searchResults.forEach(result => {
         result.inTask = true;
-        result.currentTask = currentTask;
+        result.currentTask = task;
       });
     } else {
       searchResults.forEach(result => {
@@ -271,26 +284,13 @@ export class EduContentsViewModel {
   }
 
   private adjustSearchResultsForBundle(
-    searchState: SearchStateInterface,
+    bundle: BundleInterface,
     searchResults: EduContentSearchResultInterface[]
   ): EduContentSearchResultInterface[] {
-    if (
-      searchState.filterCriteriaSelections.has(BUNDLE) &&
-      searchState.filterCriteriaSelections.get(BUNDLE).length === 1
-    ) {
-      // get value from Store synchronously
-      let currentBundle: BundleInterface;
-      const id = searchState.filterCriteriaSelections.get(BUNDLE)[0];
-      this.store
-        .pipe(
-          select(BundleQueries.getById, { id }),
-          take(1)
-        )
-        .subscribe(bundle => (currentBundle = bundle));
-
+    if (!!bundle) {
       searchResults.forEach(result => {
         result.inBundle = true;
-        result.currentBundle = currentBundle;
+        result.currentBundle = bundle;
       });
     } else {
       searchResults.forEach(result => {

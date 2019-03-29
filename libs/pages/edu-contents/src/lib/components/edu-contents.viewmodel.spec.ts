@@ -40,9 +40,12 @@ import { MockDate } from '@campus/testing';
 import { MapObjectConversionService } from '@campus/utils';
 import {
   NavigationActionTiming,
+  RouterNavigationAction,
+  RouterNavigationPayload,
   routerReducer,
   RouterReducerState,
   RouterStateSerializer,
+  ROUTER_NAVIGATION,
   StoreRouterConnectingModule
 } from '@ngrx/router-store';
 import { Store, StoreModule } from '@ngrx/store';
@@ -396,13 +399,15 @@ describe('EduContentsViewModel', () => {
     });
 
     describe('searchState selection contains taskId', () => {
-      const mockSearchStateTask: SearchStateInterface = {
-        searchTerm: '',
-        filterCriteriaSelections: new Map([['task', [1]]])
-      };
-
       beforeEach(() => {
-        eduContentsViewModel.updateState(mockSearchStateTask);
+        const navigationAction = {
+          type: ROUTER_NAVIGATION,
+          payload: {
+            routerState: { params: { task: '1' } },
+            event: {}
+          } as RouterNavigationPayload<any>
+        } as RouterNavigationAction;
+        store.dispatch(navigationAction);
       });
 
       it('should set currentTask, inTask = true and inBundle = false', () => {
@@ -420,13 +425,15 @@ describe('EduContentsViewModel', () => {
     });
 
     describe('searchState selection contains bundleId', () => {
-      const mockSearchStateBundle: SearchStateInterface = {
-        searchTerm: '',
-        filterCriteriaSelections: new Map([['bundle', [1]]])
-      };
-
       beforeEach(() => {
-        eduContentsViewModel.updateState(mockSearchStateBundle);
+        const navigationAction = {
+          type: ROUTER_NAVIGATION,
+          payload: {
+            routerState: { params: { bundle: '1' } },
+            event: {}
+          } as RouterNavigationPayload<any>
+        } as RouterNavigationAction;
+        store.dispatch(navigationAction);
       });
 
       it('should set currentBundle, inBundle = true and inTask = false', () => {
