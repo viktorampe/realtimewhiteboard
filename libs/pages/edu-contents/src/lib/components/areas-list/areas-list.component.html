@@ -1,5 +1,5 @@
 <campus-info-panel
-  titleText="Alle leergebieden"
+  titleText="Overige leergebieden"
   titleIcon="lesmateriaal"
   [displayAsRows]="true"
 >
@@ -13,7 +13,6 @@
     <div
       cdkDropList
       [cdkDropListConnectedTo]="[connectedDropList]"
-      [cdkDropListData]="filteredAreas"
       class="pages-edu-contents-areas-list"
     >
       <div
@@ -36,7 +35,7 @@
           >{{ learningArea.name }}</a
         >
 
-        <div style="display:none" *cdkDragPlaceholder></div>
+        <div *cdkDragPlaceholder></div>
         <campus-tile
           *cdkDragPreview
           icon="learning-area:{{learningArea.icon}}"

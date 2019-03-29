@@ -1,4 +1,12 @@
-import { Component, Inject, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  Inject,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import { LearningAreaInterface } from '@campus/dal';
 import { FilterTextInputComponent } from '@campus/ui';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
@@ -8,7 +16,7 @@ import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
   templateUrl: './areas-list.component.html',
   styleUrls: ['./areas-list.component.scss']
 })
-export class AreasListComponent implements OnInit {
+export class AreasListComponent implements OnInit, OnChanges {
   @Input() learningAreas: LearningAreaInterface[];
   @Input() favoriteLearningAreas: LearningAreaInterface[];
   @Input() connectedDropList: string;
@@ -25,6 +33,13 @@ export class AreasListComponent implements OnInit {
 
   ngOnInit() {
     this.filterTextInput.setFilterableItem(this);
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['favoriteLearningAreas']) {
+      this.learningAreas = this.learningAreas.filter(
+        area => !this.isFavoriteArea(area)
+      );
+    }
   }
 
   isFavoriteArea(area: LearningAreaInterface) {
