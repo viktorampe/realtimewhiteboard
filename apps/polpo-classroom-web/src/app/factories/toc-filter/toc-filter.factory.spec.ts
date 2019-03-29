@@ -19,6 +19,7 @@ import {
   YearReducer
 } from '@campus/dal';
 import {
+  BreadcrumbFilterComponent,
   ColumnFilterComponent,
   SearchFilterCriteriaInterface,
   SearchFilterInterface,
@@ -463,6 +464,12 @@ describe('TocFilterFactory', () => {
         criteria,
         component: ColumnFilterComponent,
         domHost: 'hostLeft',
+        options: undefined
+      },
+      {
+        criteria,
+        component: BreadcrumbFilterComponent,
+        domHost: 'hostTop',
         options: undefined
       }
     ];
