@@ -398,7 +398,7 @@ describe('EduContentsViewModel', () => {
         .mockReturnValue(of(mockSearchResult));
     });
 
-    describe('searchState selection contains taskId', () => {
+    describe('routerstate contains taskId', () => {
       beforeEach(() => {
         const navigationAction = {
           type: ROUTER_NAVIGATION,
@@ -424,7 +424,7 @@ describe('EduContentsViewModel', () => {
       });
     });
 
-    describe('searchState selection contains bundleId', () => {
+    describe('routerstate contains bundleId', () => {
       beforeEach(() => {
         const navigationAction = {
           type: ROUTER_NAVIGATION,
