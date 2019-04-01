@@ -1,7 +1,9 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatIconRegistry } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute } from '@angular/router';
+import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { hot } from '@nrwl/nx/testing';
 import { of } from 'rxjs';
@@ -38,7 +40,9 @@ describe('EduContentSearchByColumnComponent', () => {
             searchState$: of(mockSearchState),
             searchResults$: of(mockSearchResults)
           }
-        }
+        },
+
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
