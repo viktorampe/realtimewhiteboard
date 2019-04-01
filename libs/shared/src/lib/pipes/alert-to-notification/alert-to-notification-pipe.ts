@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { AlertQueueInterface, Alert } from '@campus/dal';
+import { Alert } from '@campus/dal';
 import { NotificationItemInterface } from '@campus/ui';
 
 @Pipe({
