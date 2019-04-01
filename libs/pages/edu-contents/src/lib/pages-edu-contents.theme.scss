@@ -1,5 +1,11 @@
+@import './components/areas-list/areas-list.component.theme.scss';
+@import './components/favorite-areas/favorite-areas.component.theme.scss';
 @import './components/edu-contents-search-modes/edu-contents-search-modes.component.theme.scss';
+@import './components/edu-contents-learning-area-overview/edu-contents-learning-area-overview.component.theme.scss';
 
 @mixin pages-edu-contents-theme() {
+  @include pages-edu-contents-areas-list();
+  @include pages-edu-contents-favorite-areas();
   @include pages-edu-contents-search-modes();
+  @include pages-edu-contents-learning-area-overview();
 }

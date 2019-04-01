@@ -19,6 +19,7 @@ import {
   YearReducer
 } from '@campus/dal';
 import {
+  BreadcrumbFilterComponent,
   ColumnFilterComponent,
   SearchFilterCriteriaInterface,
   SearchFilterInterface,
@@ -32,6 +33,17 @@ import { TocFilterFactory } from './toc-filter.factory';
 describe('TocFilterFactory', () => {
   let store: Store<DalState>;
   let tocService: TocServiceInterface;
+
+  const expectedOutputFilters = [
+    {
+      component: ColumnFilterComponent,
+      domHost: 'hostLeft'
+    },
+    {
+      component: BreadcrumbFilterComponent,
+      domHost: 'hostTop'
+    }
+  ];
 
   const mockLearningAreas = [
     new LearningAreaFixture({ id: 1 }),
@@ -458,14 +470,12 @@ describe('TocFilterFactory', () => {
   });
 
   function getFilter(criteria) {
-    return [
-      {
-        criteria,
-        component: ColumnFilterComponent,
-        domHost: 'hostLeft',
-        options: undefined
-      }
-    ];
+    return expectedOutputFilters.map(outputFilter => ({
+      criteria,
+      component: outputFilter.component,
+      domHost: outputFilter.domHost,
+      options: undefined
+    }));
   }
 
   function getExpectedLearningAreaFilterCriterium() {

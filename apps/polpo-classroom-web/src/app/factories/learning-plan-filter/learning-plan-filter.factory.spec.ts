@@ -18,6 +18,7 @@ import {
   YearInterface
 } from '@campus/dal';
 import {
+  BreadcrumbFilterComponent,
   ColumnFilterComponent,
   SearchFilterCriteriaInterface,
   SearchStateInterface
@@ -33,6 +34,17 @@ import {
   YEARS_FILTER_PROPS
 } from './learning-plan-filter-props';
 import { LearningPlanFilterFactory } from './learning-plan-filter.factory';
+
+const expectedOutputFilters = [
+  {
+    component: ColumnFilterComponent,
+    domHost: 'hostLeft'
+  },
+  {
+    component: BreadcrumbFilterComponent,
+    domHost: 'hostTop'
+  }
+];
 
 const mockLearningAreas = [
   new LearningAreaFixture({ id: 1, name: 'Wiskunde' }),
@@ -285,15 +297,11 @@ describe('LearningPlanFilterFactory', () => {
           learningPlanFilterFactory.getFilters(searchState)
         ).toBeObservable(
           hot('a', {
-            a: loopValue.expectedSearchFilterCriterias.map(
-              expectedSearchFilterCriteria => {
-                return {
-                  criteria: expectedSearchFilterCriteria,
-                  component: ColumnFilterComponent,
-                  domHost: 'hostLeft'
-                };
-              }
-            )
+            a: expectedOutputFilters.map(outputFilter => ({
+              criteria: loopValue.expectedSearchFilterCriterias,
+              component: outputFilter.component,
+              domHost: outputFilter.domHost
+            }))
           })
         );
         expect(getAvailableYearsForSearchSpy).toHaveBeenCalledTimes(

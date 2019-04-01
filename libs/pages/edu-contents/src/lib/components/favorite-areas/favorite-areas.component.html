@@ -11,7 +11,10 @@
     [routerLink]="favoriteLearningArea.id"
     [secondaryActions]="[removeAreaFromFavoritesAction(favoriteLearningArea)]"
   ></campus-tile>
-
-  <campus-drop-area icon="add" label="Sleep je favoriet leergebied naar hier">
+  <campus-drop-area
+    icon="add"
+    label="Sleep je favoriet leergebied naar hier"
+    [class.hovered]="isHovered"
+  >
   </campus-drop-area>
 </campus-info-panel>

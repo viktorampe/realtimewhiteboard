@@ -1,0 +1,44 @@
+<campus-info-panel
+  titleText="Overige leergebieden"
+  titleIcon="lesmateriaal"
+  [displayAsRows]="true"
+>
+  <campus-filter-text-input
+    title__right
+    theme="dark"
+    [source]="learningAreas"
+    class="pages-edu-contents-areas-list__filter"
+  ></campus-filter-text-input>
+  <ng-container *ngIf="(filterTextInput.result$ | async) as filteredAreas">
+    <div
+      cdkDropList
+      [cdkDropListConnectedTo]="[connectedDropList]"
+      class="pages-edu-contents-areas-list"
+    >
+      <div
+        class="pages-edu-contents-areas-list__area"
+        *ngFor="let learningArea of filteredAreas"
+        cdkDrag
+        [cdkDragData]="learningArea"
+        [cdkDragDisabled]="isFavoriteArea(learningArea)"
+      >
+        <mat-icon
+          class="pages-edu-contents-areas-list__area__icon"
+          svgIcon="learning-area:{{learningArea.icon}}"
+        ></mat-icon>
+        <a
+          class="pages-edu-contents-areas-list__area__link"
+          [routerLink]="learningArea.id"
+          >{{ learningArea.name }}</a
+        >
+
+        <div *cdkDragPlaceholder></div>
+        <campus-tile
+          *cdkDragPreview
+          icon="learning-area:{{learningArea.icon}}"
+          [label]="learningArea.name"
+        ></campus-tile>
+      </div>
+    </div>
+  </ng-container>
+</campus-info-panel>
