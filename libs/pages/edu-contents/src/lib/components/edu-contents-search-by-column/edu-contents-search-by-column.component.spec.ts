@@ -7,6 +7,7 @@ import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { hot } from '@nrwl/nx/testing';
 import { of } from 'rxjs';
+import { SearchComponent } from '../../../../../../search/src';
 import { EduContentsViewModel } from '../edu-contents.viewmodel';
 import { EduContentSearchByColumnComponent } from './edu-contents-search-by-column.component';
 
@@ -19,6 +20,7 @@ const mockSearchResults = 'results value';
 describe('EduContentSearchByColumnComponent', () => {
   let component: EduContentSearchByColumnComponent;
   let fixture: ComponentFixture<EduContentSearchByColumnComponent>;
+  let searchComponent;
   let eduContentsViewModel;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -41,7 +43,7 @@ describe('EduContentSearchByColumnComponent', () => {
             searchResults$: of(mockSearchResults)
           }
         },
-
+        { provide: SearchComponent, useValue: {} },
         { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ],
       schemas: [NO_ERRORS_SCHEMA]
@@ -51,7 +53,9 @@ describe('EduContentSearchByColumnComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(EduContentSearchByColumnComponent);
+    searchComponent = TestBed.get(SearchComponent);
     component = fixture.componentInstance;
+    component.searchComponent = searchComponent;
     fixture.detectChanges();
   });
 

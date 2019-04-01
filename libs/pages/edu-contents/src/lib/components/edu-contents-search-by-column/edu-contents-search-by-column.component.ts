@@ -1,8 +1,15 @@
-import { Component, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  QueryList,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {
   SearchComponent,
   SearchModeInterface,
+  SearchPortalDirective,
   SearchResultInterface,
   SearchStateInterface
 } from '@campus/search';
@@ -14,7 +21,7 @@ import { EduContentsViewModel } from '../edu-contents.viewmodel';
   templateUrl: './edu-contents-search-by-column.component.html',
   styleUrls: ['./edu-contents-search-by-column.component.scss']
 })
-export class EduContentSearchByColumnComponent {
+export class EduContentSearchByColumnComponent implements AfterViewInit {
   public searchMode: SearchModeInterface;
   public initialSearchState$: Observable<SearchStateInterface>;
   public searchState$: Observable<SearchStateInterface>;
@@ -22,11 +29,18 @@ export class EduContentSearchByColumnComponent {
 
   @ViewChild(SearchComponent) public searchComponent: SearchComponent;
 
+  @ViewChildren(SearchPortalDirective)
+  private portalHosts: QueryList<SearchPortalDirective>;
+
   constructor(
     private eduContentsViewModel: EduContentsViewModel,
     private activatedRoute: ActivatedRoute
   ) {
     this.initialize();
+  }
+
+  ngAfterViewInit(): void {
+    this.searchComponent.searchPortals = this.portalHosts;
   }
 
   initialize(): void {
