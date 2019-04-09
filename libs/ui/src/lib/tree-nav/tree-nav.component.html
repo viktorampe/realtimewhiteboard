@@ -1,36 +1,33 @@
-<cdk-tree
-  [dataSource]="nestedDataSource"
-  [treeControl]="nestedTreeControl"
-  class="ui-tree-nav__root"
->
-  <cdk-tree-node *cdkTreeNodeDef="let node" cdkTreeNodeToggle>
+<cdk-tree [dataSource]="nestedDataSource"
+          [treeControl]="nestedTreeControl"
+          class="ui-tree-nav__root">
+  <cdk-tree-node *cdkTreeNodeDef="let node"
+                 cdkTreeNodeToggle>
     <li class="ui-tree-nav__node">
-      <a [routerLink]="node.link" routerLinkActive="ui-tree-nav__node--active">
-        <mat-icon [svgIcon]="node.icon" *ngIf="node.icon"></mat-icon>
+      <a [routerLink]="node.link"
+         routerLinkActive="ui-tree-nav__node--active">
+        <mat-icon [svgIcon]="node.icon"
+                  *ngIf="node.icon"></mat-icon>
         {{ node.title }}
       </a>
     </li>
   </cdk-tree-node>
 
   <cdk-nested-tree-node *cdkTreeNodeDef="let node; when: hasChildren">
-    <li
-      class="ui-tree-nav__node"
-      [class.ui-tree-nav__node--closed]="!nestedTreeControl.isExpanded(node)"
-    >
-      <a
-        [routerLink]="node.link"
-        routerLinkActive="ui-tree-nav__node--active"
-        cdkTreeNodeToggle
-      >
-        <mat-icon *ngIf="node.icon" [svgIcon]="node.icon"></mat-icon>
+    <li class="ui-tree-nav__node"
+        [class.ui-tree-nav__node--closed]="!nestedTreeControl.isExpanded(node)">
+      <a [routerLink]="node.link"
+         routerLinkActive="ui-tree-nav__node--active"
+         cdkTreeNodeToggle
+         (click)="toggleNode(node)">
+        <mat-icon *ngIf="node.icon"
+                  [svgIcon]="node.icon"></mat-icon>
         {{ node.title }}
-        <mat-icon
-          *ngIf="hasChildren(0, node)"
-          class="ui-tree-nav__node__arrow"
-          [svgIcon]="
+        <mat-icon *ngIf="hasChildren(0, node)"
+                  class="ui-tree-nav__node__arrow"
+                  [svgIcon]="
             nestedTreeControl.isExpanded(node) ? 'expand-less' : 'expand-more'
-          "
-        ></mat-icon>
+          "></mat-icon>
       </a>
       <ul>
         <ng-container cdkTreeNodeOutlet></ng-container>

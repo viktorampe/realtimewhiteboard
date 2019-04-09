@@ -48,4 +48,8 @@ export class AppComponent {
   public onBannerDismiss(event) {
     this.appViewModel.onFeedbackDismiss(event);
   }
+
+  public onNavItemChanged(event) {
+    this.appViewModel.onNavItemChanged(event);
+  }
 }

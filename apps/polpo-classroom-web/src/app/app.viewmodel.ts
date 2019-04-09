@@ -75,6 +75,10 @@ export class AppViewModel {
     );
   }
 
+  public onNavItemChanged(navItem: NavItem) {
+    this.store.dispatch(new UiActions.UpdateNavItem({ navItem }));
+  }
+
   private initialize() {
     this.setProfileItems();
     this.setNavItems();
