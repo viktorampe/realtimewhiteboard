@@ -42,7 +42,7 @@ const expectedOutputFilters = [
   },
   {
     component: BreadcrumbFilterComponent,
-    domHost: 'hostTop'
+    domHost: 'hostBreadCrumbs'
   }
 ];
 
