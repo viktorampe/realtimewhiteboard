@@ -65,4 +65,8 @@ export class EduContentLearningAreaOverviewComponent implements OnInit {
     this.setHoverState(false); // item is dropped, so drop area is not hovered anymore
     this.toggleFavorite($event.item.data);
   }
+
+  onFavoriteRemoved($event: LearningAreaInterface) {
+    this.toggleFavorite($event);
+  }
 }
