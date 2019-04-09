@@ -3,7 +3,6 @@ import {
   BundleFixture,
   EduContentFixture,
   FavoriteFixture,
-  FavoriteInterface,
   LearningAreaFixture,
   LearningAreaInterface,
   TaskFixture
@@ -118,7 +117,7 @@ export class EduContentsViewModelMock
         isFavorite: true
       }
     ],
-    filterCriteriaPredictions: null,
+    filterCriteriaPredictions: new Map(),
     count: 1
   };
 
@@ -137,7 +136,7 @@ export class EduContentsViewModelMock
     searchFilterFactory: FilterFactoryFixture,
     searchTerm: {
       // autocompleteEl: string; //reference to material autocomplete component
-      domHost: 'hostSearchTerm'
+      domHost: 'hostTop'
     },
     results: {
       component: ResultItemMockComponent,
