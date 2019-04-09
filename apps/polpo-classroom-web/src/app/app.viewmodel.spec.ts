@@ -206,6 +206,14 @@ describe('AppViewModel', () => {
       );
     });
 
+    it('should dispatch action on sidenavItem change', () => {
+      store.dispatch(new UserActions.UserLoaded(new PersonFixture()));
+      viewModel.onNavItemChanged(mockNavItem);
+      expect(store.dispatch).toHaveBeenCalledWith(
+        new UiActions.UpdateNavItem({ navItem: mockNavItem })
+      );
+    });
+
     it('should load the sidenav status from the store', () => {
       store.dispatch(new UiActions.ToggleSideNav({ open: true }));
       expect(viewModel.sideNavOpen$).toBeObservable(hot('a', { a: true }));
