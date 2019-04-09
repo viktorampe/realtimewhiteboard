@@ -43,8 +43,6 @@ export class EduContentSearchByTermComponent implements OnInit, AfterViewInit {
         this.activatedRoute.routeConfig.path,
         +params.area
       );
-
-      console.log(params);
     });
 
     this.searchState$ = this.eduContentsViewModel.getInitialSearchState();
