@@ -38,10 +38,15 @@ export class EduContentSearchByTermComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    this.searchMode = this.eduContentsViewModel.getSearchMode(
-      this.activatedRoute.snapshot.routeConfig.path,
-      +this.activatedRoute.snapshot.params.area
-    );
+    this.activatedRoute.params.subscribe(params => {
+      this.searchMode = this.eduContentsViewModel.getSearchMode(
+        this.activatedRoute.routeConfig.path,
+        +params.area
+      );
+
+      console.log(params);
+    });
+
     this.searchState$ = this.eduContentsViewModel.getInitialSearchState();
     this.searchResults$ = this.eduContentsViewModel.searchResults$;
   }

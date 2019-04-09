@@ -1,6 +1,7 @@
 .pages-edu-contents-search-by-term {
   &__reset {
     display: flex;
+    margin-bottom: 24px;
   }
 
   &__wrapper {
@@ -14,8 +15,8 @@
 
     &__aside {
       min-width: 20px;
-      overflow: hidden;
       flex: 0 0 auto;
+      padding: 10px;
     }
 
     &__main {

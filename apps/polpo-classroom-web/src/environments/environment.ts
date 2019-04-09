@@ -144,18 +144,18 @@ export const environment: EnvironmentInterface = {
         component: EduContentSearchResultComponent,
         sortModes: [
           {
-            description: 'book',
-            name: 'book',
+            description: 'relevantie',
+            name: '_score',
             icon: 'book'
           },
           {
-            description: 'bundle',
-            name: 'bundle',
+            description: 'alfabetisch',
+            name: 'title.raw',
             icon: 'bundle'
           },
           {
-            description: 'taak',
-            name: 'taak',
+            description: 'laatst gewijzigd',
+            name: 'published',
             icon: 'taak'
           }
         ],
