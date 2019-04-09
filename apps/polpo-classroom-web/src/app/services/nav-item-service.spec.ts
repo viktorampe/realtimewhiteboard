@@ -43,7 +43,9 @@ describe('NavItemServiceService', () => {
     beforeEach(() => {
       mockUser = new PersonFixture();
       mockFavorite = new FavoriteFixture({
-        learningArea: new LearningAreaFixture({ icon: 'bar' })
+        learningArea: new LearningAreaFixture({
+          icon: 'learning-area:polpo-bar'
+        })
       });
     });
 
