@@ -248,8 +248,8 @@ export class EduContentsViewModel {
       filter(searchState => searchState !== null),
       withLatestFrom(this.getInitialSearchState()),
       map(([searchState, initialSearchState]) => ({
-        ...searchState,
         ...initialSearchState,
+        ...searchState,
         filterCriteriaSelections: new Map([
           ...Array.from(searchState.filterCriteriaSelections.entries()),
           ...Array.from(initialSearchState.filterCriteriaSelections.entries())
