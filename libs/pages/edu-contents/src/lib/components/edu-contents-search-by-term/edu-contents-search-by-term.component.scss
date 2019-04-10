@@ -9,10 +9,6 @@
     flex-direction: row;
     flex: 1 1 auto;
 
-    > * {
-      height: 100%;
-    }
-
     &__aside {
       min-width: 20px;
       flex: 0 0 auto;
