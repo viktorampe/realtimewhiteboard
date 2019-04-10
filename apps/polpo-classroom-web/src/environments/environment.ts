@@ -146,17 +146,17 @@ export const environment: EnvironmentInterface = {
           {
             description: 'relevantie',
             name: '_score',
-            icon: 'book'
+            icon: 'sort-numeric-down'
           },
           {
             description: 'alfabetisch',
             name: 'title.raw',
-            icon: 'bundle'
+            icon: 'sort-alpha-down'
           },
           {
             description: 'laatst gewijzigd',
             name: 'published',
-            icon: 'taak'
+            icon: 'calendar-plus'
           }
         ],
         pageSize: 20
@@ -176,17 +176,17 @@ export const environment: EnvironmentInterface = {
           {
             description: 'relevantie',
             name: '_score',
-            icon: 'book'
+            icon: 'sort-numeric-down'
           },
           {
             description: 'alfabetisch',
             name: 'title.raw',
-            icon: 'bundle'
+            icon: 'sort-alpha-down'
           },
           {
             description: 'laatst gewijzigd',
             name: 'published',
-            icon: 'taak'
+            icon: 'calendar-plus'
           }
         ],
         pageSize: 20
