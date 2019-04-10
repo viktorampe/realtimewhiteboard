@@ -1,0 +1,17 @@
+@mixin pages-edu-contents-search-by-term() {
+  $pages-edu-contents-search-by-term-margin-right: 20px !default;
+  $pages-edu-contents-search-by-term-padding-right: 20px !default;
+  $pages-edu-contents-search-by-term-border-thickness: 1px !default;
+  $pages-edu-contents-search-by-term-border-color: #a9a9a9 !default;
+
+  .pages-edu-contents-search-by-term {
+    &__wrapper {
+      &__aside {
+        border-right: $pages-edu-contents-search-by-term-border-thickness solid
+          $pages-edu-contents-search-by-term-border-color;
+        padding: 0 $pages-edu-contents-search-by-term-padding-right 0 0;
+        margin-right: $pages-edu-contents-search-by-term-margin-right;
+      }
+    }
+  }
+}

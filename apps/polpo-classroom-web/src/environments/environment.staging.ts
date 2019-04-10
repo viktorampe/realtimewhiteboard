@@ -1,8 +1,6 @@
 import { Type } from '@angular/core';
 import { SearchFilterFactory } from '@campus/search';
 import { EnvironmentInterface } from '@campus/shared';
-// tslint:disable-next-line:nx-enforce-module-boundaries
-import { PolpoResultItemComponent } from 'libs/devlib/src/lib/polpo-result-item/polpo-result-item.component';
 import { EduContentSearchResultComponent } from '../app/components/searchresults/edu-content-search-result.component';
 import { GlobalSearchTermFilterFactory } from '../app/factories/global-search-term-filter/global-search-term-filter.factory';
 import { SearchTermFilterFactory } from '../app/factories/search-term-filter/search-term-filter.factory';
@@ -79,7 +77,7 @@ export const environment: EnvironmentInterface = {
       //TODO: All '{} as Type' must be replaced with actual components
       searchFilterFactory: {} as Type<SearchFilterFactory>,
       results: {
-        component: PolpoResultItemComponent,
+        component: EduContentSearchResultComponent,
         sortModes: [
           {
             description: 'book',
@@ -106,7 +104,7 @@ export const environment: EnvironmentInterface = {
       dynamicFilters: false,
       searchFilterFactory: {} as Type<SearchFilterFactory>,
       results: {
-        component: PolpoResultItemComponent,
+        component: EduContentSearchResultComponent,
         sortModes: [
           {
             description: 'book',
