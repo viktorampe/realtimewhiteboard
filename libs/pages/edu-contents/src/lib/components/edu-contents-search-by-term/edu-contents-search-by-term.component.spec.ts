@@ -20,7 +20,7 @@ import {
 import { ENVIRONMENT_ICON_MAPPING_TOKEN, SharedModule } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, of, Subject } from 'rxjs';
 import { EduContentsViewModel } from '../edu-contents.viewmodel';
 import {
   EduContentsViewModelMock,
@@ -59,10 +59,8 @@ describe('EduContentSearchByTermComponent', () => {
         {
           provide: ActivatedRoute,
           useValue: {
-            snapshot: {
-              routeConfig: { path: 'term' },
-              params: params
-            }
+            routeConfig: { path: 'term' },
+            params: of(params)
           }
         },
         {
