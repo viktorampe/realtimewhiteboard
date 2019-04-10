@@ -48,7 +48,7 @@ export class TocFilterFactory implements SearchFilterFactory {
     domHost: string;
   }[] = [
     { component: ColumnFilterComponent, domHost: 'hostLeft' },
-    { component: BreadcrumbFilterComponent, domHost: 'hostTop' }
+    { component: BreadcrumbFilterComponent, domHost: 'hostBreadCrumbs' }
   ];
 
   // input from viewmodel

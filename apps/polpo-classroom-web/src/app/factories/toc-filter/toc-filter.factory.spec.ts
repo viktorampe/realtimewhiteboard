@@ -41,7 +41,7 @@ describe('TocFilterFactory', () => {
     },
     {
       component: BreadcrumbFilterComponent,
-      domHost: 'hostTop'
+      domHost: 'hostBreadCrumbs'
     }
   ];
 

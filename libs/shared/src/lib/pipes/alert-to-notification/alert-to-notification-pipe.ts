@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { AlertQueueInterface } from '@campus/dal';
+import { Alert } from '@campus/dal';
 import { NotificationItemInterface } from '@campus/ui';
 
 @Pipe({
@@ -10,7 +10,7 @@ export class AlertToNotificationItemPipe implements PipeTransform {
    * takes an alert object
    * returns a notification object
    */
-  transform(alert: AlertQueueInterface): NotificationItemInterface {
+  transform(alert: Alert): NotificationItemInterface {
     let link = alert.link;
     //todo clean up once API changed URLs
     if (link.match(new RegExp('.*.polpo.(localhost|be)(.*)/#/(.*)', 'i'))) {
@@ -21,7 +21,7 @@ export class AlertToNotificationItemPipe implements PipeTransform {
       titleText: alert.title,
       read: alert.read,
       accented: alert.type === 'marketing',
-      icon: alert.type,
+      icon: alert.icon,
       link: link,
       notificationText: alert.message,
       notificationDate: new Date(alert.sentAt)

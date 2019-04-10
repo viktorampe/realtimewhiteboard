@@ -8,13 +8,17 @@ describe('AlertToNotificationItemPipe', () => {
   });
 
   it('should get the correct badge', () => {
-    const alert = new AlertFixture({ sentAt: new Date(), message: 'bloe' });
+    const alert = new AlertFixture({
+      sentAt: new Date(),
+      message: 'bloe',
+      type: 'bundle'
+    });
     const pipe = new AlertToNotificationItemPipe();
     const expected = {
       titleText: 'Er is een bundel aangepast.',
       read: false,
       accented: false,
-      icon: 'bundle',
+      icon: 'educontent',
       link: '/linknaarbundle',
       notificationText: 'bloe',
       notificationDate: new Date(alert.sentAt)
@@ -34,7 +38,7 @@ describe('AlertToNotificationItemPipe', () => {
       titleText: 'Er is een bundel aangepast.',
       read: false,
       accented: false,
-      icon: 'bundle',
+      icon: 'educontent',
       link: 'http://www.polpo.be/linknaarbundle',
       notificationText: 'wortel',
       notificationDate: new Date(alert.sentAt)
