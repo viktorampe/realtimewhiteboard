@@ -1,12 +1,14 @@
 .edu-contents-search-by-column {
   height: 100%;
+  display: flex;
+  flex-flow: column nowrap;
 
   campus-collapsible-sheet {
-    height: 100%;
+    height: 0px;
+    flex: 1 0 auto;
 
     div[aside] {
       overflow: auto;
-      height: 100%;
     }
   }
 }
