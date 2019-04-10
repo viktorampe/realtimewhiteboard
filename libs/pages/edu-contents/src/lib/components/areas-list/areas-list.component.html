@@ -6,7 +6,7 @@
   <campus-filter-text-input
     title__right
     theme="dark"
-    [source]="learningAreas"
+    [source]="displayedLearningAreas"
     class="pages-edu-contents-areas-list__filter"
   ></campus-filter-text-input>
   <ng-container *ngIf="(filterTextInput.result$ | async) as filteredAreas">
