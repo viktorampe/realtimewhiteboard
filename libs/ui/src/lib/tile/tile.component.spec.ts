@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule, MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UtilsModule } from '@campus/utils';
@@ -15,13 +16,19 @@ describe('TileComponent', () => {
     color: string;
     secondaryActions: TileSecondaryActionInterface[];
   };
+  let router: Router;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [TileComponent],
       imports: [RouterTestingModule, MatIconModule, UtilsModule],
-      providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
+      providers: [
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry },
+        { provide: Router, useValue: { navigate: jest.fn() } }
+      ]
     }).compileComponents();
+
+    router = TestBed.get(Router);
   }));
 
   beforeEach(() => {
@@ -131,5 +138,36 @@ describe('TileComponent', () => {
 
     expect(componentClick.mock.calls.length).toBe(0);
     expect(actionClick.mock.calls.length).toBe(1);
+  }));
+
+  it('should execute the secondary action', async(() => {
+    const actionClick = jest.fn();
+
+    component.secondaryActions[0].onClick = actionClick;
+    fixture.detectChanges();
+
+    fixture.debugElement
+      .queryAll(By.css('.ui-tile__actions__action'))[0]
+      .nativeElement.click();
+
+    expect(actionClick.mock.calls.length).toBe(1);
+  }));
+
+  it('should navigate', async(() => {
+    component.secondaryActions = [
+      {
+        label: 'View',
+        icon: 'view-icon',
+        routerLink: ['/foo']
+      }
+    ];
+    fixture.detectChanges();
+
+    fixture.debugElement
+      .queryAll(By.css('.ui-tile__actions__action'))[0]
+      .nativeElement.click();
+
+    expect(router.navigate).toHaveBeenCalled();
+    expect(router.navigate).toHaveBeenCalledWith(['/foo']);
   }));
 });
