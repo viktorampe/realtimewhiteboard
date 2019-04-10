@@ -119,6 +119,13 @@ describe('EduContentLearningAreaOverviewComponent', () => {
     expect(setHoverStateSpy).toHaveBeenCalledWith(false);
   });
 
+  it('should call toggleFavorite when a favorite is removed', fakeAsync(() => {
+    const toggleFavoriteSpy = jest.spyOn(component, 'toggleFavorite');
+    const eventResult = new LearningAreaFixture();
+    component.onFavoriteRemoved(eventResult);
+    expect(toggleFavoriteSpy).toHaveBeenCalledWith(eventResult);
+  }));
+
   it('should send searchText to viewmodel subject', fakeAsync(() => {
     jest.spyOn(eduContentsViewModel, 'requestAutoComplete');
 

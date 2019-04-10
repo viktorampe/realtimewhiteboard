@@ -17,6 +17,7 @@
     (cdkDropListDropped)="onFavoritesDropped($event)"
     [isHovered]="dropZoneIsHovered"
     [favoriteLearningAreas]="favorites"
+    (removeAreaFromFavorites)="onFavoriteRemoved($event)"
   ></campus-favorite-areas>
   <ng-container *ngIf="(learningAreas$ | async) as learningAreas">
     <campus-areas-list

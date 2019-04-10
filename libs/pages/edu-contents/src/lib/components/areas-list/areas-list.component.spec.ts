@@ -104,7 +104,7 @@ describe('AreasListComponent', () => {
     fixture.detectChanges();
 
     fixture.whenStable().then(() => {
-      const expectedAreas = [mockLearningAreas[0], mockLearningAreas[2]];
+      const expectedAreas = [mockLearningAreas[2]];
       const areas = fixture.debugElement.queryAll(
         By.css('.pages-edu-contents-areas-list__area')
       );
