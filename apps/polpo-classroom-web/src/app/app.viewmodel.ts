@@ -6,8 +6,8 @@ import {
   EffectFeedbackInterface,
   EffectFeedbackQueries,
   FavoriteInterface,
-  FavoriteTypesEnum,
-  LearningAreaFixture,
+  FavoriteQueries,
+  LearningAreaQueries,
   PassportUserCredentialInterface,
   PersonInterface,
   UiActions,
@@ -20,8 +20,15 @@ import {
 } from '@campus/shared';
 import { DropdownMenuItemInterface, NavItem } from '@campus/ui';
 import { Action, select, Store } from '@ngrx/store';
-import { combineLatest, Observable, of } from 'rxjs';
-import { filter, map, skipWhile, switchMap, switchMapTo } from 'rxjs/operators';
+import { combineLatest, Observable } from 'rxjs';
+import {
+  filter,
+  map,
+  skipWhile,
+  switchMap,
+  switchMapTo,
+  withLatestFrom
+} from 'rxjs/operators';
 import { NavItemService } from './services/nav-item-service';
 
 @Injectable({
@@ -51,17 +58,6 @@ export class AppViewModel {
     this.store.dispatch(new UiActions.ToggleSideNav({ open }));
   }
 
-  private setIntermediateStreams() {
-    this.sideNavItems$ = combineLatest(
-      this.getCurrentUser(),
-      this.getFavorites()
-    ).pipe(
-      filter(([user, favorites]) => !!user),
-      map(([user, favorites]) =>
-        this.navItemService.getSideNavItems(user, favorites)
-      )
-    );
-  }
   // event handler for feedback dismiss
   // used by banner and snackbar
   public onFeedbackDismiss(event: {
@@ -107,7 +103,7 @@ export class AppViewModel {
     // send data to service -> get array of navItems
     this.sideNavItems$ = combineLatest(
       this.getCurrentUser(),
-      this.getFavorites()
+      this.getFavoriteAreas()
     ).pipe(
       map(([user, favorites]) =>
         this.navItemService.getSideNavItems(user, favorites)
@@ -157,16 +153,22 @@ export class AppViewModel {
     );
   }
 
-  // TODO Service/State needed
-  private getFavorites(): Observable<FavoriteInterface[]> {
-    return of([
-      {
-        type: FavoriteTypesEnum.AREA, // TODO in selector: filter on type:'area'
-        learningAreaId: 1,
-        learningArea: new LearningAreaFixture({ icon: 'wiskunde' }),
-        created: new Date(2018, 11 - 1, 30)
-      }
-    ]);
+  private getFavoriteAreas(): Observable<FavoriteInterface[]> {
+    return this.store.pipe(
+      select(FavoriteQueries.getAll),
+      map(favoriteArray =>
+        favoriteArray.filter(favorite => favorite.type === 'area')
+      ),
+      withLatestFrom(
+        this.store.pipe(select(LearningAreaQueries.getAllEntities))
+      ),
+      map(([favorites, learningAreas]) =>
+        favorites.map(favorite => ({
+          ...favorite,
+          learningArea: learningAreas[favorite.learningAreaId]
+        }))
+      )
+    );
   }
 
   private getCredentials(): Observable<PassportUserCredentialInterface[]> {
