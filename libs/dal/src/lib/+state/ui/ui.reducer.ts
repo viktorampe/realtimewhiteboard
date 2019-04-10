@@ -83,11 +83,11 @@ export function reducer(
       };
       break;
     case UiActionTypes.UpdateNavItem:
-      const newSideNavArray = [...state.sideNavItems];
-      const indexToUpdate = newSideNavArray.findIndex(
-        item => item.title === action.payload.navItem.title
+      const newSideNavArray = state.sideNavItems.map(item =>
+        item.title === action.payload.navItem.title
+          ? action.payload.navItem
+          : item
       );
-      newSideNavArray[indexToUpdate] = action.payload.navItem;
       state = {
         ...state,
         sideNavItems: newSideNavArray
