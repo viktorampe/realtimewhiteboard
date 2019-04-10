@@ -196,11 +196,17 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
     searchState: SearchStateInterface
   ): SelectedPropertyIds {
     const learningAreas = searchState.filterCriteriaSelections.get(
-      'learningAreas'
+      LEARNING_AREA_FILTER_PROPS.name
     );
-    const eduNets = searchState.filterCriteriaSelections.get('eduNets');
-    const schoolTypes = searchState.filterCriteriaSelections.get('schoolTypes');
-    const years = searchState.filterCriteriaSelections.get('years');
+    const eduNets = searchState.filterCriteriaSelections.get(
+      EDU_NETS_FILTER_PROPS.name
+    );
+    const schoolTypes = searchState.filterCriteriaSelections.get(
+      SCHOOL_TYPES_FILTER_PROPS.name
+    );
+    const years = searchState.filterCriteriaSelections.get(
+      YEARS_FILTER_PROPS.name
+    );
     return [
       this.getFirstValueAsNumber(learningAreas),
       this.getFirstValueAsNumber(eduNets),

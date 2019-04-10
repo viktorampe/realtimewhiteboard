@@ -108,7 +108,7 @@ export const environment: EnvironmentInterface = {
     plan: {
       name: 'plan',
       label: 'Zoeken op <b>leerplan</b>',
-      dynamicFilters: false,
+      dynamicFilters: true,
       searchFilterFactory: LearningPlanFilterFactory,
       results: {
         component: EduContentSearchResultComponent,
