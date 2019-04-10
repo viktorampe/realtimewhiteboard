@@ -21,6 +21,8 @@ export class AreasListComponent implements OnInit, OnChanges {
   @Input() favoriteLearningAreas: LearningAreaInterface[];
   @Input() connectedDropList: string;
 
+  displayedLearningAreas: LearningAreaInterface[];
+
   @ViewChild(FilterTextInputComponent)
   filterTextInput: FilterTextInputComponent<
     LearningAreaInterface[],
@@ -32,14 +34,19 @@ export class AreasListComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit() {
+    this.updateDisplayedLearningAreas();
     this.filterTextInput.setFilterableItem(this);
   }
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['favoriteLearningAreas']) {
-      this.learningAreas = this.learningAreas.filter(
-        area => !this.isFavoriteArea(area)
-      );
+      this.updateDisplayedLearningAreas();
     }
+  }
+
+  updateDisplayedLearningAreas() {
+    this.displayedLearningAreas = this.learningAreas.filter(
+      area => !this.isFavoriteArea(area)
+    );
   }
 
   isFavoriteArea(area: LearningAreaInterface) {
