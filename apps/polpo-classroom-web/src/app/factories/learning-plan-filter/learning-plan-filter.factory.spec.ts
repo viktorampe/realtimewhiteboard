@@ -202,7 +202,7 @@ describe('LearningPlanFilterFactory', () => {
       }[] = [
         {
           filterCriteriaSelection: new Map<string, (number | string)[]>([
-            ['learningAreas', []] // test if empty array is handled as nothing is selected
+            ['learningArea', []] // test if empty array is handled as nothing is selected
           ]),
           expectedSearchFilterCriterias: [searchFilterCriterias[0]],
           getAvailableYearsForSearchCalled: false,
@@ -210,8 +210,8 @@ describe('LearningPlanFilterFactory', () => {
         },
         {
           filterCriteriaSelection: new Map<string, (number | string)[]>([
-            ['learningAreas', []],
-            ['eduNets', ['2']] // test to make sure no column level can be skipped
+            ['learningArea', []],
+            ['eduNet', ['2']] // test to make sure no column level can be skipped
           ]),
           expectedSearchFilterCriterias: [searchFilterCriterias[0]],
           getAvailableYearsForSearchCalled: false,
@@ -225,7 +225,7 @@ describe('LearningPlanFilterFactory', () => {
         },
         {
           filterCriteriaSelection: new Map<string, (number | string)[]>([
-            ['learningAreas', [1]]
+            ['learningArea', [1]]
           ]),
           expectedSearchFilterCriterias: [
             searchFilterCriterias[0],
@@ -236,8 +236,8 @@ describe('LearningPlanFilterFactory', () => {
         },
         {
           filterCriteriaSelection: new Map<string, (number | string)[]>([
-            ['learningAreas', [1]],
-            ['eduNets', ['2']] //testing string to number convertion
+            ['learningArea', [1]],
+            ['eduNet', ['2']] //testing string to number convertion
           ]),
           expectedSearchFilterCriterias: [
             searchFilterCriterias[0],
@@ -249,9 +249,9 @@ describe('LearningPlanFilterFactory', () => {
         },
         {
           filterCriteriaSelection: new Map<string, (number | string)[]>([
-            ['learningAreas', [1]],
-            ['eduNets', [2]],
-            ['schoolTypes', [4]]
+            ['learningArea', [1]],
+            ['eduNet', [2]],
+            ['schoolType', [4]]
           ]),
           expectedSearchFilterCriterias: [
             searchFilterCriterias[0],
@@ -264,10 +264,10 @@ describe('LearningPlanFilterFactory', () => {
         },
         {
           filterCriteriaSelection: new Map<string, (number | string)[]>([
-            ['learningAreas', [1]],
-            ['eduNets', [2]],
-            ['schoolTypes', [4]],
-            ['years', [4]]
+            ['learningArea', [1]],
+            ['eduNet', [2]],
+            ['schoolType', [4]],
+            ['year', [4]]
           ]),
           expectedSearchFilterCriterias: [
             searchFilterCriterias[0],
