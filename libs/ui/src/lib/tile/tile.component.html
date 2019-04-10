@@ -9,38 +9,18 @@
   </div>
 
   <div class="ui-tile__actions" *ngIf="secondaryActions">
-    <ng-container *ngFor="let action of secondaryActions">
-      <div
-        *ngIf="action.routerLink; else: noRouterLink"
-        clickStopPropagation
-        class="ui-tile__actions__action"
-        (click)="onActionClick($event, action)"
-        [routerLink]="action.routerLink"
-      >
-        <mat-icon
-          class="ui-tile__actions__action__icon"
-          *ngIf="action.icon"
-          [svgIcon]="action.icon"
-        ></mat-icon>
-        <span class="ui-tile__actions__action__label">{{ action.label }}</span>
-      </div>
-      <ng-template #noRouterLink>
-        <div
-          #noRouterLink
-          clickStopPropagation
-          class="ui-tile__actions__action"
-          (click)="onActionClick($event, action)"
-        >
-          <mat-icon
-            class="ui-tile__actions__action__icon"
-            *ngIf="action.icon"
-            [svgIcon]="action.icon"
-          ></mat-icon>
-          <span class="ui-tile__actions__action__label">{{
-            action.label
-          }}</span>
-        </div>
-      </ng-template>
-    </ng-container>
+    <div
+      clickStopPropagation
+      *ngFor="let action of secondaryActions"
+      class="ui-tile__actions__action"
+      (click)="onActionClick($event, action)"
+    >
+      <mat-icon
+        class="ui-tile__actions__action__icon"
+        *ngIf="action.icon"
+        [svgIcon]="action.icon"
+      ></mat-icon>
+      <span class="ui-tile__actions__action__label">{{ action.label }}</span>
+    </div>
   </div>
 </div>
