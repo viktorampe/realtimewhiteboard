@@ -99,7 +99,7 @@ export const environment: EnvironmentInterface = {
           {
             description: 'taak',
             name: 'taak',
-            icon: 'taak'
+            icon: 'task'
           }
         ],
         pageSize: 20
@@ -126,7 +126,7 @@ export const environment: EnvironmentInterface = {
           {
             description: 'taak',
             name: 'taak',
-            icon: 'taak'
+            icon: 'task'
           }
         ],
         pageSize: 20
@@ -153,7 +153,7 @@ export const environment: EnvironmentInterface = {
           {
             description: 'taak',
             name: 'taak',
-            icon: 'taak'
+            icon: 'task'
           }
         ],
         pageSize: 20

@@ -1,6 +1,12 @@
 .edu-contents-search-by-column {
   height: 100%;
+
   campus-collapsible-sheet {
     height: 100%;
+
+    div[aside] {
+      overflow: auto;
+      height: 100%;
+    }
   }
 }
