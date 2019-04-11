@@ -147,7 +147,7 @@ describe('TileComponent', () => {
     fixture.detectChanges();
 
     fixture.debugElement
-      .queryAll(By.css('.ui-tile__actions__action'))[0]
+      .query(By.css('.ui-tile__actions__action'))
       .nativeElement.click();
 
     expect(actionClick.mock.calls.length).toBe(1);
