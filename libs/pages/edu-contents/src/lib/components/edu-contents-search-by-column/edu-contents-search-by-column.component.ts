@@ -26,6 +26,7 @@ export class EduContentSearchByColumnComponent implements AfterViewInit {
   public initialSearchState$: Observable<SearchStateInterface>;
   public searchState$: Observable<SearchStateInterface>;
   public searchResults$: Observable<SearchResultInterface>;
+  public currentLearningArea: number;
 
   @ViewChild(SearchComponent) public searchComponent: SearchComponent;
 
@@ -50,6 +51,7 @@ export class EduContentSearchByColumnComponent implements AfterViewInit {
     this.initialSearchState$ = this.eduContentsViewModel.getInitialSearchState();
     this.searchState$ = this.eduContentsViewModel.searchState$;
     this.searchResults$ = this.eduContentsViewModel.searchResults$;
+    this.currentLearningArea = this.activatedRoute.snapshot.params['area'];
   }
 
   onSearchStateChange(searchState: SearchStateInterface): void {

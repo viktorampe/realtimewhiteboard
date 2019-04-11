@@ -1,9 +1,15 @@
 <campus-page-bar>
   <div class="edu-contents-search-by-column__page-bar">
-    <span> Of zoek op: </span>
-    <campus-button>Standaard zoeken</campus-button>
-    <span>of</span>
-    <campus-button>Inhoudstafel</campus-button>
+    <span class="edu-contents-search-by-column__page-bar__label"
+      >Of zoek op:</span
+    >
+    <campus-button [routerLink]="['/edu-content', currentLearningArea, 'term']"
+      >Standaard zoeken</campus-button
+    >
+    <span class="edu-contents-search-by-column__page-bar__label">of</span>
+    <campus-button [routerLink]="['/edu-content', currentLearningArea, 'toc']"
+      >Inhoudstafel</campus-button
+    >
   </div>
 </campus-page-bar>
 
