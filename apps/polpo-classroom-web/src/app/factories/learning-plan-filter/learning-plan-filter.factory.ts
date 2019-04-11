@@ -130,7 +130,7 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
           ]
         ) => {
           const searchFilterCriteria: SearchFilterCriteriaInterface[] = [];
-          for (let i = 0; i <= columnLevel; i++) {
+          for (let i = 1; i <= columnLevel; i++) {
             searchFilterCriteria.push(
               this.getSearchFilterCriteriaForColumns(i, columnValuesData[i])
             );
