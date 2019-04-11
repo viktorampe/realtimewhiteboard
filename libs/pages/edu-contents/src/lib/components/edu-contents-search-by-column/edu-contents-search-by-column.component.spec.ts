@@ -30,7 +30,10 @@ describe('EduContentSearchByColumnComponent', () => {
         {
           provide: ActivatedRoute,
           useValue: {
-            snapshot: { routeConfig: { path: mockPath } }
+            snapshot: {
+              routeConfig: { path: mockPath },
+              params: { area: 1 }
+            }
           }
         },
         {

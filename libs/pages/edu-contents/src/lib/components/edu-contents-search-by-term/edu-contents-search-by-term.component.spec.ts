@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -8,6 +9,7 @@ import {
   SearchComponent,
   SearchModule
 } from '@campus/search';
+import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { EduContentsViewModel } from '../edu-contents.viewmodel';
 import {
@@ -26,7 +28,8 @@ describe('EduContentSearchByTermComponent', () => {
       declarations: [EduContentSearchByTermComponent, ResultItemMockComponent],
       providers: [
         { provide: EduContentsViewModel, useClass: EduContentsViewModelMock },
-        FilterFactoryFixture
+        FilterFactoryFixture,
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ]
     })
       .overrideModule(BrowserDynamicTestingModule, {
