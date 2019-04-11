@@ -20,7 +20,7 @@ import {
 } from '@campus/search';
 import { PrimitivePropertiesKeys } from '@campus/utils';
 import { select, Store } from '@ngrx/store';
-import { BehaviorSubject, merge, Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, merge, Observable } from 'rxjs';
 import {
   filter,
   map,
@@ -75,17 +75,15 @@ export class TocFilterFactory implements SearchFilterFactory {
   ): Observable<SearchFilterInterface[]> {
     this.searchState$.next(searchState);
 
-    return this.searchState$.pipe(
-      withLatestFrom(
-        this.getLearningAreaFilterCriteria$(),
-        this.getYearFilterCriteria$(),
-        this.getMethodFilterCriteria$(),
-        this.getBookFilterCriteria$(),
-        this.getTreeFilterCriteria$()
-      ),
+    return combineLatest(
+      this.getLearningAreaFilterCriteria$(),
+      this.getYearFilterCriteria$(),
+      this.getMethodFilterCriteria$(),
+      this.getBookFilterCriteria$(),
+      this.getTreeFilterCriteria$()
+    ).pipe(
       map(
         ([
-          newSearchState, // not used
           learningAreaFilterCriterium,
           yearFilterCriterium,
           methodFilterCriterium,
@@ -206,8 +204,8 @@ export class TocFilterFactory implements SearchFilterFactory {
       filter(searchState =>
         this.hasSearchStateData(searchState, LEARNING_AREA)
       ),
-      withLatestFrom(this.booksWithYears$),
-      map(([searchState, books]) => {
+      switchMapTo(this.booksWithYears$),
+      map(books => {
         // reduce to set of years
         const years: YearInterface[] = Array.from(
           new Set(books.reduce((acc, book) => [...acc, ...book.years], []))
