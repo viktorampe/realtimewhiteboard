@@ -171,6 +171,10 @@ body {
   }
 }
 
+:focus {
+  outline: none;
+}
+
 .hidden-item__container {
   // .hidden-item--not-hover
   // only hide if container is not hover()
