@@ -159,6 +159,8 @@ export class AppViewModel {
       map(favoriteArray =>
         favoriteArray.filter(favorite => favorite.type === 'area')
       ),
+      // TODO: Investigate why this causes an infinite loop
+      // select(FavoriteQueries.getByType, { type: FavoriteTypesEnum.AREA }),
       withLatestFrom(
         this.store.pipe(select(LearningAreaQueries.getAllEntities))
       ),
