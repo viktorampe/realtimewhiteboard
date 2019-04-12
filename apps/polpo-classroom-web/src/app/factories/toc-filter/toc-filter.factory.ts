@@ -30,7 +30,6 @@ import {
   startWith,
   switchMap,
   switchMapTo,
-  tap,
   withLatestFrom
 } from 'rxjs/operators';
 
@@ -79,19 +78,12 @@ export class TocFilterFactory implements SearchFilterFactory {
   ): Observable<SearchFilterInterface[]> {
     this.searchState$.next(searchState);
 
-    console.log('---------------------------------------');
-    console.log('searchState', searchState);
-
     return combineLatest([
-      this.getLearningAreaFilterCriteria$().pipe(
-        tap(f => console.log('learingArea', f))
-      ),
-      this.getYearFilterCriteria$().pipe(tap(f => console.log('Year', f))),
-      this.getMethodFilterCriteria$().pipe(tap(f => console.log('Method', f))),
-      this.getBookFilterCriteria$().pipe(tap(f => console.log('Book', f))),
-      this.getTreeFilterCriteria$().pipe(
-        tap(treeFilter => console.log('Tree', treeFilter))
-      )
+      this.getLearningAreaFilterCriteria$(),
+      this.getYearFilterCriteria$(),
+      this.getMethodFilterCriteria$(),
+      this.getBookFilterCriteria$(),
+      this.getTreeFilterCriteria$()
     ]).pipe(
       map(
         ([
@@ -111,8 +103,6 @@ export class TocFilterFactory implements SearchFilterFactory {
           ]
             // filter out null values
             .filter(value => !!value);
-
-          console.log('filterCriteriaArray', filterCriteriaArray);
 
           // make filter
           // interface expects array
@@ -413,8 +403,6 @@ export class TocFilterFactory implements SearchFilterFactory {
 
         let filtersForBranches = [];
         if (this.hasSearchStateData(newSearchstate, TOC)) {
-          console.log('branches', newSearchstate.filterCriteriaSelections);
-
           const selectedTocIds = newSearchstate.filterCriteriaSelections.get(
             TOC
           ) as number[];
@@ -424,8 +412,6 @@ export class TocFilterFactory implements SearchFilterFactory {
           const selectedTocId = selectedTocIds[selectedTocIds.length - 1];
 
           const tocs = treeMap.get(selectedTocId);
-
-          console.log('tocs', tocs);
 
           // filter for branches
           // this creates the filter for the level after the current branch
