@@ -7,7 +7,14 @@
       >Standaard zoeken</campus-button
     >
     <span class="edu-contents-search-by-column__page-bar__label">of</span>
-    <campus-button [routerLink]="['/edu-content', currentLearningArea, 'toc']"
+    <campus-button
+      *ngIf="searchMode.name === 'toc'"
+      [routerLink]="['/edu-content', currentLearningArea, 'plan']"
+      >Leerplan</campus-button
+    >
+    <campus-button
+      *ngIf="searchMode.name === 'plan'"
+      [routerLink]="['/edu-content', currentLearningArea, 'toc']"
       >Inhoudstafel</campus-button
     >
   </div>
