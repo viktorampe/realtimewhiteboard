@@ -14,7 +14,6 @@
       *ngFor="let action of secondaryActions"
       class="ui-tile__actions__action"
       (click)="onActionClick($event, action)"
-      [routerLink]="action.routerLink"
     >
       <mat-icon
         class="ui-tile__actions__action__icon"
