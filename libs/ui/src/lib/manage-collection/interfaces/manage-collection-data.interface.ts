@@ -1,4 +1,4 @@
-import { ManageCollectionItemInterface } from '../manage-collection.component';
+import { ManageCollectionItemInterface } from './manage-collection-item.interface';
 
 export interface ManageCollectionsDataInterface {
   title: string;

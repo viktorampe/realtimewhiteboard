@@ -125,10 +125,3 @@ export class ManageCollectionComponent
     this.cd.detectChanges();
   }
 }
-
-export interface ManageCollectionItemInterface {
-  icon?: string;
-  label: string;
-  id: number;
-  className?: string;
-}
