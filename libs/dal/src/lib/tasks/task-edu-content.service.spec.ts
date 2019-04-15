@@ -1,13 +1,14 @@
 import { inject, TestBed } from '@angular/core/testing';
-import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
+import { PersonApi, TaskEduContentApi } from '@diekeure/polpo-api-angular-sdk';
 import { hot } from '@nrwl/nx/testing';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { TaskEduContentService } from './task-edu-content.service';
 import { TaskEduContentServiceInterface } from './task-edu-content.service.interface';
 
 describe('TaskEduContentService', () => {
   let service: TaskEduContentServiceInterface;
   let mockData$: Observable<object>;
+  let mockDestroyResult$: Observable<boolean>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -17,6 +18,12 @@ describe('TaskEduContentService', () => {
           provide: PersonApi,
           useValue: {
             getData: () => mockData$
+          }
+        },
+        {
+          provide: TaskEduContentApi,
+          useValue: {
+            destroyById: () => mockDestroyResult$
           }
         }
       ]
@@ -38,6 +45,15 @@ describe('TaskEduContentService', () => {
     expect(service.getAllForUser(1)).toBeObservable(
       hot('-a-|', {
         a: [{ id: 12331 }]
+      })
+    );
+  });
+
+  it('should remove taskEduContents', () => {
+    mockDestroyResult$ = of(true);
+    expect(service.remove(1)).toBeObservable(
+      hot('-a-|', {
+        a: true
       })
     );
   });
