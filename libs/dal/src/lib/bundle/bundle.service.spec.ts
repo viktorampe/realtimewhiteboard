@@ -11,6 +11,67 @@ describe('BundleService', () => {
   let bundleApi: BundleApi;
   let mockGetData$: Observable<object>;
   let mockLinkEduContentData$: Observable<UnlockedContent[]>;
+  let mockLinkUserContentData$: Observable<UnlockedContent[]>;
+
+  const mockLinkEduContentData = [
+    {
+      index: 10000,
+      exception: false,
+      id: 634,
+      eduContentId: 5,
+      teacherId: 186,
+      bundleId: 1,
+      userContentId: null
+    },
+    {
+      index: 10000,
+      exception: false,
+      id: 635,
+      eduContentId: 6,
+      teacherId: 186,
+      bundleId: 1,
+      userContentId: null
+    },
+    {
+      index: 10000,
+      exception: false,
+      id: 636,
+      eduContentId: 7,
+      teacherId: 186,
+      bundleId: 1,
+      userContentId: null
+    }
+  ];
+
+  const mockLinkUserContentData = [
+    {
+      index: 10000,
+      exception: false,
+      id: 640,
+      eduContentId: null,
+      teacherId: 186,
+      bundleId: 1,
+      userContentId: 1
+    },
+    {
+      index: 10000,
+      exception: false,
+      id: 641,
+      eduContentId: null,
+      teacherId: 186,
+      bundleId: 1,
+      userContentId: 2
+    },
+    {
+      index: 10000,
+      exception: false,
+      id: 642,
+      eduContentId: null,
+      teacherId: 186,
+      bundleId: 1,
+      userContentId: 3
+    }
+  ];
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -25,7 +86,8 @@ describe('BundleService', () => {
         {
           provide: BundleApi,
           useValue: {
-            linkEduContent: () => mockLinkEduContentData$
+            linkEduContent: () => mockLinkEduContentData$,
+            linkUserContent: () => mockLinkUserContentData$
           }
         }
       ]
@@ -53,35 +115,6 @@ describe('BundleService', () => {
   });
   describe('linkEduContent', () => {
     it('should return the link result', () => {
-      const mockLinkEduContentData = [
-        {
-          index: 10000,
-          exception: false,
-          id: 634,
-          eduContentId: 5,
-          teacherId: 186,
-          bundleId: 1,
-          userContentId: null
-        },
-        {
-          index: 10000,
-          exception: false,
-          id: 635,
-          eduContentId: 6,
-          teacherId: 186,
-          bundleId: 1,
-          userContentId: null
-        },
-        {
-          index: 10000,
-          exception: false,
-          id: 636,
-          eduContentId: 7,
-          teacherId: 186,
-          bundleId: 1,
-          userContentId: null
-        }
-      ];
       mockLinkEduContentData$ = hot('-a-|', {
         a: mockLinkEduContentData
       });
@@ -92,6 +125,20 @@ describe('BundleService', () => {
         })
       );
       expect(spy).toHaveBeenCalledWith(1, [5, 6, 7]);
+    });
+  });
+  describe('linkUserContent', () => {
+    it('should return the link result', () => {
+      mockLinkUserContentData$ = hot('-a-|', {
+        a: mockLinkUserContentData
+      });
+      const spy = jest.spyOn(bundleApi, 'linkUserContent');
+      expect(service.linkUserContent(1, [1, 2, 3])).toBeObservable(
+        hot('-a-|', {
+          a: mockLinkUserContentData
+        })
+      );
+      expect(spy).toHaveBeenCalledWith(1, [1, 2, 3]);
     });
   });
 });
