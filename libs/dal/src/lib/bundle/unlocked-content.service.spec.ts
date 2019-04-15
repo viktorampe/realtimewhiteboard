@@ -1,5 +1,5 @@
 import { inject, TestBed } from '@angular/core/testing';
-import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
+import { PersonApi, UnlockedContentApi } from '@diekeure/polpo-api-angular-sdk';
 import { hot } from '@nrwl/nx/testing';
 import { Observable } from 'rxjs';
 import { UnlockedContentService } from './unlocked-content.service';
@@ -7,7 +7,8 @@ import { UnlockedContentServiceInterface } from './unlocked-content.service.inte
 
 describe('UnlockedContentService', () => {
   let service: UnlockedContentServiceInterface;
-  let mockData$: Observable<object>;
+  let mockGetData$: Observable<object>;
+  let mockDeleteById$: Observable<boolean>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -16,7 +17,13 @@ describe('UnlockedContentService', () => {
         {
           provide: PersonApi,
           useValue: {
-            getData: () => mockData$
+            getData: () => mockGetData$
+          }
+        },
+        {
+          provide: UnlockedContentApi,
+          useValue: {
+            deleteById: () => mockDeleteById$
           }
         }
       ]
@@ -32,7 +39,7 @@ describe('UnlockedContentService', () => {
   ));
 
   it('should return unlockedContents', () => {
-    mockData$ = hot('-a-|', {
+    mockGetData$ = hot('-a-|', {
       a: {
         unlockedContents: [
           {
@@ -54,6 +61,28 @@ describe('UnlockedContentService', () => {
             type: 'type'
           }
         ]
+      })
+    );
+  });
+
+  it('should remove a single unlockedContent', () => {
+    mockDeleteById$ = hot('-a-|', {
+      a: true
+    });
+    expect(service.remove(1)).toBeObservable(
+      hot('-a-|', {
+        a: true
+      })
+    );
+  });
+
+  it('should remove multiple unlockedContents', () => {
+    mockDeleteById$ = hot('-a-|', {
+      a: true
+    });
+    expect(service.removeAll([1, 2, 3])).toBeObservable(
+      hot('-a-|', {
+        a: true
       })
     );
   });

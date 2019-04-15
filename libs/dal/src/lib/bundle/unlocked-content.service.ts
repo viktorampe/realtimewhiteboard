@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { PersonApi, UnlockedContentApi } from '@diekeure/polpo-api-angular-sdk';
+import { combineLatest, Observable } from 'rxjs';
+import { map, mapTo } from 'rxjs/operators';
 import { UnlockedContentInterface } from '../+models';
 import { UnlockedContentServiceInterface } from './unlocked-content.service.interface';
 
@@ -20,5 +20,20 @@ export class UnlockedContentService implements UnlockedContentServiceInterface {
       );
   }
 
-  constructor(private personApi: PersonApi) {}
+  remove(unlockedContentId: number): Observable<any> {
+    return this.unlockedContentApi
+      .deleteById(unlockedContentId)
+      .pipe(mapTo(true));
+  }
+
+  removeAll(unlockedContentIds: number[]): Observable<any> {
+    return combineLatest(unlockedContentIds.map(id => this.remove(id))).pipe(
+      mapTo(true)
+    );
+  }
+
+  constructor(
+    private personApi: PersonApi,
+    private unlockedContentApi: UnlockedContentApi
+  ) {}
 }
