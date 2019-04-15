@@ -25,13 +25,13 @@ export class TaskEduContentService implements TaskEduContentServiceInterface {
       );
   }
 
-  remove(taskEduContentId: number): Observable<any> {
+  remove(taskEduContentId: number): Observable<boolean> {
     return this.taskEduContentApi
       .deleteById(taskEduContentId)
       .pipe(mapTo(true));
   }
 
-  removeAll(taskEduContentIds: number[]): Observable<any> {
+  removeAll(taskEduContentIds: number[]): Observable<boolean> {
     return combineLatest(taskEduContentIds.map(id => this.remove(id))).pipe(
       mapTo(true)
     );

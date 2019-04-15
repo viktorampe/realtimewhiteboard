@@ -61,6 +61,8 @@ describe('TaskEduContentService', () => {
   });
 
   it('should remove multiple taskEduContents', () => {
+    const deleteByIdSpy = spyOn(TestBed.get(TaskEduContentApi), 'deleteById');
+
     mockDeleteById$ = hot('-a-|', {
       a: true
     });
@@ -69,5 +71,6 @@ describe('TaskEduContentService', () => {
         a: true
       })
     );
+    expect(deleteByIdSpy).toHaveBeenCalledTimes(3);
   });
 });
