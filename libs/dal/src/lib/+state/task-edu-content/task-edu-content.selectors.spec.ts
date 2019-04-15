@@ -159,5 +159,4 @@ describe('TaskEduContent Selectors', () => {
       );
     });
   });
-  let x;
 });
