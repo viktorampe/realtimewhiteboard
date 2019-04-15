@@ -98,6 +98,20 @@ export const getByBundleId = createSelector(
   }
 );
 
+export const getByBundleAndEduContentId = createSelector(
+  selectUnlockedContentState,
+  (state: State, props: { bundleId: number; eduContentId: number }) => {
+    const ids = <number[]>state.ids;
+
+    return ids.reduce((acc, id) => {
+      return state.entities[id].bundleId === +props.bundleId &&
+        state.entities[id].eduContentId === +props.eduContentId //TODO -- an extra check might be needed for userContent, left out since it's not in the issue
+        ? [...acc, asUnlockedContent(state.entities[id])]
+        : acc;
+    }, []);
+  }
+);
+
 function asUnlockedContent(item: UnlockedContentInterface): UnlockedContent {
   if (item) {
     return Object.assign<UnlockedContent, UnlockedContentInterface>(
