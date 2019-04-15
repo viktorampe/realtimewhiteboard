@@ -225,10 +225,17 @@ export class TocFilterFactory implements SearchFilterFactory {
       ),
       switchMapTo(this.booksWithYears$),
       map(books => {
-        // reduce to set of years
-        const years: YearInterface[] = Array.from(
-          new Set(books.reduce((acc, book) => [...acc, ...book.years], []))
-        ).sort((a, b) => (a.name < b.name ? -1 : 1));
+        // reduce to array of unique years
+        const years: YearInterface[] = books
+          .reduce((acc: YearInterface[], book) => {
+            book.years.forEach(bookYear => {
+              if (!acc.some(year => year.id === bookYear.id)) {
+                acc.push(bookYear);
+              }
+            });
+            return acc;
+          }, [])
+          .sort((a, b) => (a.name < b.name ? -1 : 1));
 
         return this.getFilterCriterium(years, YEAR, 'Jaren', 'id', 'name');
       })
@@ -411,7 +418,7 @@ export class TocFilterFactory implements SearchFilterFactory {
           // get last one
           const selectedTocId = selectedTocIds[selectedTocIds.length - 1];
 
-          const tocs = treeMap.get(selectedTocId);
+          const tocs = treeMap.get(selectedTocId) || [];
 
           // filter for branches
           // this creates the filter for the level after the current branch
