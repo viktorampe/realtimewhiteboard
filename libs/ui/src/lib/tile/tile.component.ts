@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'campus-tile',
@@ -11,8 +12,12 @@ export class TileComponent {
   @Input() color: string;
   @Input() secondaryActions: TileSecondaryActionInterface[];
 
+  constructor(private router: Router) {}
+
   onActionClick(event: Event, action: TileSecondaryActionInterface) {
-    if (action.onClick) action.onClick(event);
+    if (action.onClick) {
+      action.onClick(event);
+    } else if (action.routerLink) this.router.navigate(action.routerLink);
   }
 }
 
