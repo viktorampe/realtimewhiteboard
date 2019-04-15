@@ -10,4 +10,8 @@ export interface BundleServiceInterface {
     bundleId: number,
     eduContentIds: number[]
   ): Observable<UnlockedContentInterface[]>;
+  linkUserContent(
+    bundleId: number,
+    userContentIds: number[]
+  ): Observable<UnlockedContentInterface[]>;
 }

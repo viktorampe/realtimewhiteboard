@@ -24,4 +24,10 @@ export class BundleService implements BundleServiceInterface {
   ): Observable<UnlockedContentInterface[]> {
     return this.bundleApi.linkEduContent(bundleId, eduContentIds);
   }
+  linkUserContent(
+    bundleId: number,
+    userContentIds: number[]
+  ): Observable<UnlockedContentInterface[]> {
+    return this.bundleApi.linkUserContent(bundleId, userContentIds);
+  }
 }
