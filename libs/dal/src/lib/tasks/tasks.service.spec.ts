@@ -1,13 +1,15 @@
 import { inject, TestBed } from '@angular/core/testing';
-import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
+import { PersonApi, TaskApi } from '@diekeure/polpo-api-angular-sdk';
 import { hot } from '@nrwl/nx/testing';
 import { Observable } from 'rxjs';
+import { TaskEduContentInterface } from '../+models';
 import { TaskServiceInterface } from './task.service.interface';
 import { TaskService } from './tasks.service';
 
 describe('TaskService', () => {
   let service: TaskServiceInterface;
-  let mockData$: Observable<object>;
+  let mockGetData$: Observable<object>;
+  let mockLinkEduContentsResult$: Observable<TaskEduContentInterface>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -16,7 +18,13 @@ describe('TaskService', () => {
         {
           provide: PersonApi,
           useValue: {
-            getData: () => mockData$
+            getData: () => mockGetData$
+          }
+        },
+        {
+          provide: TaskApi,
+          useValue: {
+            linkEduContents: () => mockLinkEduContentsResult$
           }
         }
       ]
@@ -32,7 +40,7 @@ describe('TaskService', () => {
   ));
 
   it('should return tasks', () => {
-    mockData$ = hot('-a-|', {
+    mockGetData$ = hot('-a-|', {
       a: { tasks: [{ id: 12331 }] }
     });
     expect(service.getAllForUser(1)).toBeObservable(
@@ -40,5 +48,24 @@ describe('TaskService', () => {
         a: [{ id: 12331 }]
       })
     );
+  });
+  describe('linkEduContent', () => {
+    it('should return the link result', () => {
+      const mockLinkEduContentsResult = {
+        index: 10000,
+        id: 49,
+        teacherId: 186,
+        eduContentId: 9,
+        taskId: 1
+      };
+      mockLinkEduContentsResult$ = hot('-a-|', {
+        a: mockLinkEduContentsResult
+      });
+      expect(service.linkEduContent(1, 9)).toBeObservable(
+        hot('-a-|', {
+          a: mockLinkEduContentsResult
+        })
+      );
+    });
   });
 });
