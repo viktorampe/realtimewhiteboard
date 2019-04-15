@@ -8,6 +8,7 @@ import { TaskService } from './tasks.service';
 
 describe('TaskService', () => {
   let service: TaskServiceInterface;
+  let taskApi: TaskApi;
   let mockGetData$: Observable<object>;
   let mockLinkEduContentsResult$: Observable<TaskEduContentInterface>;
 
@@ -30,6 +31,7 @@ describe('TaskService', () => {
       ]
     });
     service = TestBed.get(TaskService);
+    taskApi = TestBed.get(TaskApi);
   });
 
   it('should be created and available via DI', inject(
@@ -61,11 +63,13 @@ describe('TaskService', () => {
       mockLinkEduContentsResult$ = hot('-a-|', {
         a: mockLinkEduContentsResult
       });
+      const spy = jest.spyOn(taskApi, 'linkEduContents');
       expect(service.linkEduContent(1, 9)).toBeObservable(
         hot('-a-|', {
           a: mockLinkEduContentsResult
         })
       );
+      expect(spy).toHaveBeenCalledWith(1, 9);
     });
   });
 });
