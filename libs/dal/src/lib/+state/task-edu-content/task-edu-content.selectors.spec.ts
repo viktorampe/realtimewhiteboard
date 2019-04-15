@@ -149,7 +149,7 @@ describe('TaskEduContent Selectors', () => {
         {
           taskEduContents: createState([
             new TaskEduContentFixture({ id: 1, taskId: 11, eduContentId: 12 }),
-            new TaskEduContentFixture({ id: 1, taskId: 13, eduContentId: 14 })
+            new TaskEduContentFixture({ id: 2, taskId: 13, eduContentId: 14 })
           ])
         },
         { taskId: 11, eduContentId: 12 }
@@ -159,4 +159,5 @@ describe('TaskEduContent Selectors', () => {
       );
     });
   });
+  let x;
 });
