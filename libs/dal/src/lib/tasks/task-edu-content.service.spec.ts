@@ -1,14 +1,14 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { PersonApi, TaskEduContentApi } from '@diekeure/polpo-api-angular-sdk';
 import { hot } from '@nrwl/nx/testing';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { TaskEduContentService } from './task-edu-content.service';
 import { TaskEduContentServiceInterface } from './task-edu-content.service.interface';
 
 describe('TaskEduContentService', () => {
   let service: TaskEduContentServiceInterface;
-  let mockData$: Observable<object>;
-  let mockDestroyResult$: Observable<boolean>;
+  let mockGetData$: Observable<object>;
+  let mockDeleteById$: Observable<boolean>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -17,13 +17,13 @@ describe('TaskEduContentService', () => {
         {
           provide: PersonApi,
           useValue: {
-            getData: () => mockData$
+            getData: () => mockGetData$
           }
         },
         {
           provide: TaskEduContentApi,
           useValue: {
-            destroyById: () => mockDestroyResult$
+            deleteById: () => mockDeleteById$
           }
         }
       ]
@@ -39,7 +39,7 @@ describe('TaskEduContentService', () => {
   ));
 
   it('should return tasksEduContents', () => {
-    mockData$ = hot('-a-|', {
+    mockGetData$ = hot('-a-|', {
       a: { taskEduContents: [{ id: 12331 }] }
     });
     expect(service.getAllForUser(1)).toBeObservable(
@@ -49,9 +49,22 @@ describe('TaskEduContentService', () => {
     );
   });
 
-  it('should remove taskEduContents', () => {
-    mockDestroyResult$ = of(true);
+  it('should remove a single taskEduContent', () => {
+    mockDeleteById$ = hot('-a-|', {
+      a: true
+    });
     expect(service.remove(1)).toBeObservable(
+      hot('-a-|', {
+        a: true
+      })
+    );
+  });
+
+  it('should remove multiple taskEduContents', () => {
+    mockDeleteById$ = hot('-a-|', {
+      a: true
+    });
+    expect(service.removeAll([1, 2, 3])).toBeObservable(
       hot('-a-|', {
         a: true
       })
