@@ -1,3 +1,28 @@
-<p>
-  manage-collection works!
-</p>
+<campus-info-panel [titleText]="data.item.label"
+                   [titleIcon]="data.item.icon">
+  <campus-filter-text-input title__right
+                            theme="dark"
+                            [source]="data.linkableItems"
+                            class="ui-manage-collection__filter"></campus-filter-text-input>
+  <mat-selection-list (selectionChange)="onSelectionChanged($event)"
+                      disableRipple=true>
+    <h3 mat-subheader>Recent gebruikt</h3>
+    <mat-list-option *ngFor="let item of recentLinkableItems"
+                     [value]="item.id"
+                     class="ui-manage-collection__recent-item">
+      <mat-icon mat-list-icon
+                [svgIcon]="item.icon"></mat-icon>
+      <p mat-line>{{item.label}}</p>
+    </mat-list-option>
+    <mat-divider></mat-divider>
+    <ng-container *ngIf="(filterTextInput.result$ | async) as filteredItems">
+      <h3 mat-subheader>Alle</h3>
+      <mat-list-option *ngFor="let item of filteredItems"
+                       [value]="item.id">
+        <mat-icon mat-list-icon
+                  [svgIcon]="item.icon"></mat-icon>
+        <p mat-line>{{item.label}}</p>
+      </mat-list-option>
+    </ng-container>
+  </mat-selection-list>
+</campus-info-panel>

@@ -4,9 +4,15 @@ $ui-primary-font-color: #000 !default;
 $ui-primary-font-size: 16px !default;
 $ui-primary-color-accent: #fff !default; // link, button (borders)
 $ui-primary-font-color-2: #aaa !default; // subtitle
-$ui-primary-font-family: 'Helvetica', 'Arial', 'Open Sans', sans-serif !default;
-$ui-primary-font-family-2: 'Lato', sans-serif !default; // title
-$ui-primary-font-family-3: 'Oswald', 'Arial Narrow', Sans-Serif !default; // list item label
+$ui-primary-font-family: 'Helvetica',
+'Arial',
+'Open Sans',
+sans-serif !default;
+$ui-primary-font-family-2: 'Lato',
+sans-serif !default; // title
+$ui-primary-font-family-3: 'Oswald',
+'Arial Narrow',
+Sans-Serif !default; // list item label
 $ui-danger-bg-color: #f00 !default;
 $ui-danger-font-color: #fff !default;
 $ui-warning-bg-color: #f80 !default;
@@ -102,6 +108,7 @@ $ui-tile-height: 105px !default;
 @import './collapsible-sheet/collapsible-sheet.component.theme.scss';
 @import './drop-area/drop-area.component.theme.scss';
 @import './tile/tile.component.theme.scss';
+@import './manage-collection/manage-collection.component.theme.scss';
 
 @mixin ui-forms() {
   form {
@@ -153,7 +160,9 @@ $ui-tile-height: 105px !default;
         height: $ui-content-thumbnail-button-size;
       }
     }
+
     .ui-button--disabled {
+
       &,
       &:hover {
         background-color: $ui-content-thumbnail-button-background-color;
@@ -203,4 +212,5 @@ $ui-tile-height: 105px !default;
   @include ui-collapsible-sheet();
   @include ui-drop-area-theme();
   @include ui-tile();
+  @include ui-manage-collection();
 }

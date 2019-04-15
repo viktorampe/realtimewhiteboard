@@ -9,6 +9,7 @@ import {
   MatFormFieldModule,
   MatIconModule,
   MatInputModule,
+  MatListModule,
   MatMenuModule,
   MatProgressSpinnerModule,
   MatSelectModule,
@@ -46,6 +47,7 @@ import {
   ListViewComponent,
   ListViewItemDirective
 } from './list-view/list-view.component';
+import { ManageCollectionComponent } from './manage-collection/manage-collection.component';
 import { DropdownDirective } from './notification/directives/notification-dropdown.directive';
 import { NotificationComponent } from './notification/notification.component';
 import { PageHeaderComponent } from './page-header/page-header.component';
@@ -71,7 +73,6 @@ import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time
 import { JoinPipe } from './utils/pipes/join/join.pipe';
 import { RemovePrefixStringPipe } from './utils/pipes/remove-prefix-string/remove-prefix-string.pipe';
 import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-string.pipe';
-import { ManageCollectionComponent } from './manage-collection/manage-collection.component';
 
 @NgModule({
   imports: [
@@ -91,6 +92,7 @@ import { ManageCollectionComponent } from './manage-collection/manage-collection
     MatTooltipModule,
     MatIconModule,
     MatMenuModule,
+    MatListModule,
     UtilsModule
   ],
   declarations: [
