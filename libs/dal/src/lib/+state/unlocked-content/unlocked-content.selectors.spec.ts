@@ -10,6 +10,18 @@ describe('UnlockedContent Selectors', () => {
     };
   }
 
+  function createUnlockedContentWithIds(
+    id: number,
+    bundleId: number,
+    eduContentId: number
+  ): UnlockedContentInterface | any {
+    return {
+      id: id,
+      bundleId: bundleId,
+      eduContentId: eduContentId
+    };
+  }
+
   function createState(
     unlockedContents: UnlockedContentInterface[],
     loaded: boolean = false,
@@ -33,12 +45,12 @@ describe('UnlockedContent Selectors', () => {
     };
   }
 
-  let unlockedContentState: State;
-  let storeState: any;
+  let unlockedContentStateWithIds: State;
+  let storeStateWithIds: any;
 
   describe('UnlockedContent Selectors', () => {
     beforeEach(() => {
-      unlockedContentState = createState(
+      unlockedContentStateWithIds = createState(
         [
           createUnlockedContent(4),
           createUnlockedContent(1),
@@ -48,18 +60,18 @@ describe('UnlockedContent Selectors', () => {
         true,
         'no error'
       );
-      storeState = { unlockedContents: unlockedContentState };
+      storeStateWithIds = { unlockedContents: unlockedContentStateWithIds };
     });
     it('getError() should return the error', () => {
-      const results = UnlockedContentQueries.getError(storeState);
-      expect(results).toBe(unlockedContentState.error);
+      const results = UnlockedContentQueries.getError(storeStateWithIds);
+      expect(results).toBe(unlockedContentStateWithIds.error);
     });
     it('getLoaded() should return the loaded boolean', () => {
-      const results = UnlockedContentQueries.getLoaded(storeState);
-      expect(results).toBe(unlockedContentState.loaded);
+      const results = UnlockedContentQueries.getLoaded(storeStateWithIds);
+      expect(results).toBe(unlockedContentStateWithIds.loaded);
     });
     it('getAll() should return an array of the entities in the order from the ids', () => {
-      const results = UnlockedContentQueries.getAll(storeState);
+      const results = UnlockedContentQueries.getAll(storeStateWithIds);
       expect(results).toEqual([
         createUnlockedContent(4),
         createUnlockedContent(1),
@@ -68,19 +80,19 @@ describe('UnlockedContent Selectors', () => {
       ]);
     });
     it('getCount() should return number of entities', () => {
-      const results = UnlockedContentQueries.getCount(storeState);
+      const results = UnlockedContentQueries.getCount(storeStateWithIds);
       expect(results).toBe(4);
     });
     it('getIds() should return an array with ids in the correct order', () => {
-      const results = UnlockedContentQueries.getIds(storeState);
+      const results = UnlockedContentQueries.getIds(storeStateWithIds);
       expect(results).toEqual([4, 1, 2, 3]);
     });
     it('getAllEntities() should return a key value object with all the entities', () => {
-      const results = UnlockedContentQueries.getAllEntities(storeState);
-      expect(results).toEqual(unlockedContentState.entities);
+      const results = UnlockedContentQueries.getAllEntities(storeStateWithIds);
+      expect(results).toEqual(unlockedContentStateWithIds.entities);
     });
     it('getByIds() should return an array of the requested entities in order and undefined if the id is not present', () => {
-      const results = UnlockedContentQueries.getByIds(storeState, {
+      const results = UnlockedContentQueries.getByIds(storeStateWithIds, {
         ids: [3, 1, 90, 2]
       });
       expect(results).toEqual([
@@ -91,19 +103,45 @@ describe('UnlockedContent Selectors', () => {
       ]);
     });
     it('getById() should return the desired entity', () => {
-      const results = UnlockedContentQueries.getById(storeState, { id: 2 });
+      const results = UnlockedContentQueries.getById(storeStateWithIds, {
+        id: 2
+      });
       expect(results).toEqual(createUnlockedContent(2));
     });
     it('getById() should return undefined if the entity is not present', () => {
-      const results = UnlockedContentQueries.getById(storeState, { id: 9 });
+      const results = UnlockedContentQueries.getById(storeStateWithIds, {
+        id: 9
+      });
       expect(results).toBe(undefined);
     });
     it('getByBundleIds() should return undefined if the entity is not present', () => {
-      const results = UnlockedContentQueries.getByBundleIds(storeState);
+      const results = UnlockedContentQueries.getByBundleIds(storeStateWithIds);
       expect(results).toEqual({
         1: [createUnlockedContent(1), createUnlockedContent(2)],
         2: [createUnlockedContent(4), createUnlockedContent(3)]
       });
+    });
+    it('getByBundleAndEduContentId() should return only the unlockedContent with the given ids', () => {
+      const unlockedContentStateWithIds = createState(
+        [
+          createUnlockedContentWithIds(11, 3, 1),
+          createUnlockedContentWithIds(21, 8, 5),
+          createUnlockedContentWithIds(31, 3, 9),
+          createUnlockedContentWithIds(41, 8, 1),
+          createUnlockedContentWithIds(51, 3, 5),
+          createUnlockedContentWithIds(61, 8, 9)
+        ],
+        true,
+        'no error'
+      );
+      const storeStateWithIds = {
+        unlockedContents: unlockedContentStateWithIds
+      };
+      const results = UnlockedContentQueries.getByBundleAndEduContentId(
+        storeStateWithIds,
+        { bundleId: 3, eduContentId: 9 }
+      );
+      expect(results).toEqual([createUnlockedContentWithIds(31, 3, 9)]);
     });
   });
 });
