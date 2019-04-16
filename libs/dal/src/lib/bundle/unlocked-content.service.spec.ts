@@ -81,6 +81,8 @@ describe('UnlockedContentService', () => {
         a: true
       })
     );
+
+    expect(mockUnlockedContentApi.deleteById).toHaveBeenCalledWith(1);
   });
 
   it('should remove multiple unlockedContents', () => {
@@ -93,6 +95,10 @@ describe('UnlockedContentService', () => {
       })
     );
 
-    expect(mockUnlockedContentApi.deleteById).toHaveBeenCalledTimes(3);
+    expect(mockUnlockedContentApi.deleteById.mock.calls).toEqual([
+      [1],
+      [2],
+      [3]
+    ]);
   });
 });
