@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
+import { Action } from '@ngrx/store';
 import { DataPersistence } from '@nrwl/nx';
 import { from } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
@@ -17,6 +18,7 @@ import {
   BundlesLoaded,
   BundlesLoadError,
   LinkEduContent,
+  LinkUserContent,
   LoadBundles
 } from './bundle.actions';
 
@@ -54,25 +56,59 @@ export class BundlesEffects {
           );
       },
       onError: (action: LinkEduContent, error) => {
-        const effectFeedback = new EffectFeedback({
-          id: this.uuid(),
-          triggerAction: action,
-          message:
-            'Het is niet gelukt om het lesmateriaal aan de bundel toe te voegen.',
-          type: 'error',
-          userActions: [
-            {
-              title: 'Opniew proberen',
-              userAction: action
-            }
-          ],
-          priority: Priority.HIGH
+        return new AddEffectFeedback({
+          effectFeedback: this.generateErrorFeedback(
+            action,
+            'Het is niet gelukt om het lesmateriaal aan de bundel toe te voegen.'
+          )
         });
-
-        return new AddEffectFeedback({ effectFeedback });
       }
     }
   );
+  @Effect()
+  linkUserContent$ = this.dataPersistence.fetch(
+    BundlesActionTypes.LinkUserContent,
+    {
+      run: (action: LinkUserContent, state: DalState) => {
+        return this.bundleService
+          .linkUserContent(action.payload.bundleId, [
+            action.payload.userContentId
+          ])
+          .pipe(
+            switchMap((unlockedContents: UnlockedContentInterface[]) => {
+              const actions = unlockedContents.map(
+                unlockedContent => new AddUnlockedContent({ unlockedContent })
+              );
+              return from(actions);
+            })
+          );
+      },
+      onError: (action: LinkUserContent, error) => {
+        return new AddEffectFeedback({
+          effectFeedback: this.generateErrorFeedback(
+            action,
+            'Het is niet gelukt om het eigen lesmateriaal aan de bundel toe te voegen.'
+          )
+        });
+      }
+    }
+  );
+
+  private generateErrorFeedback(action: Action, message: string) {
+    return new EffectFeedback({
+      id: this.uuid(),
+      triggerAction: action,
+      message: message,
+      type: 'error',
+      userActions: [
+        {
+          title: 'Opniew proberen',
+          userAction: action
+        }
+      ],
+      priority: Priority.HIGH
+    });
+  }
 
   constructor(
     private actions: Actions,
