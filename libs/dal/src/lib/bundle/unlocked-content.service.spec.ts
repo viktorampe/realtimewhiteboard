@@ -9,34 +9,41 @@ describe('UnlockedContentService', () => {
   let service: UnlockedContentServiceInterface;
   let mockGetData$: Observable<object>;
   let mockDeleteById$: Observable<boolean>;
+  const mockPersonApi = {
+    getData: jest.fn().mockImplementation(() => mockGetData$)
+  };
+  const mockUnlockedContentApi = {
+    deleteById: jest.fn().mockImplementation(() => mockDeleteById$)
+  };
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [
-        UnlockedContentService,
-        {
-          provide: PersonApi,
-          useValue: {
-            getData: () => mockGetData$
-          }
-        },
-        {
-          provide: UnlockedContentApi,
-          useValue: {
-            deleteById: () => mockDeleteById$
-          }
-        }
-      ]
-    });
-    service = TestBed.get(UnlockedContentService);
+    jest.clearAllMocks();
+
+    service = new UnlockedContentService(
+      mockPersonApi as any,
+      mockUnlockedContentApi as any
+    );
   });
 
-  it('should be created and available via DI', inject(
-    [UnlockedContentService],
-    (unlockedContentService: UnlockedContentService) => {
-      expect(unlockedContentService).toBeTruthy();
-    }
-  ));
+  describe('Dependency injection', () => {
+    beforeEach(() => {
+      TestBed.configureTestingModule({
+        providers: [
+          UnlockedContentService,
+          { provide: PersonApi, useValue: {} },
+          { provide: UnlockedContentApi, useValue: {} }
+        ]
+      });
+      service = TestBed.get(UnlockedContentService);
+    });
+
+    it('should be created and available via DI', inject(
+      [UnlockedContentService],
+      (unlockedContentService: UnlockedContentService) => {
+        expect(unlockedContentService).toBeTruthy();
+      }
+    ));
+  });
 
   it('should return unlockedContents', () => {
     mockGetData$ = hot('-a-|', {
@@ -85,5 +92,7 @@ describe('UnlockedContentService', () => {
         a: true
       })
     );
+
+    expect(mockUnlockedContentApi.deleteById).toHaveBeenCalledTimes(3);
   });
 });
