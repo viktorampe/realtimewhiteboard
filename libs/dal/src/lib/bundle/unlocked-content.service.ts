@@ -20,13 +20,13 @@ export class UnlockedContentService implements UnlockedContentServiceInterface {
       );
   }
 
-  remove(unlockedContentId: number): Observable<any> {
+  remove(unlockedContentId: number): Observable<boolean> {
     return this.unlockedContentApi
       .deleteById(unlockedContentId)
       .pipe(mapTo(true));
   }
 
-  removeAll(unlockedContentIds: number[]): Observable<any> {
+  removeAll(unlockedContentIds: number[]): Observable<boolean> {
     return combineLatest(unlockedContentIds.map(id => this.remove(id))).pipe(
       mapTo(true)
     );
