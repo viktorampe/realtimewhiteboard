@@ -1,4 +1,5 @@
 import { UnlockedContentQueries } from '.';
+import { UnlockedContentFixture } from '../../+fixtures';
 import { UnlockedContentInterface } from '../../+models';
 import { State } from './unlocked-content.reducer';
 
@@ -16,12 +17,12 @@ describe('UnlockedContent Selectors', () => {
     eduContentId: number,
     userContentId: number
   ): UnlockedContentInterface | any {
-    return {
+    return new UnlockedContentFixture({
       id: id,
       bundleId: bundleId,
       eduContentId: eduContentId,
       userContentId: userContentId
-    };
+    });
   }
 
   function createState(
