@@ -65,6 +65,8 @@ describe('TaskEduContentService', () => {
         a: true
       })
     );
+
+    expect(mockTaskEduContentApi.deleteById).toHaveBeenCalledWith(1);
   });
 
   it('should remove multiple taskEduContents', () => {
@@ -77,6 +79,8 @@ describe('TaskEduContentService', () => {
       })
     );
 
-    expect(mockTaskEduContentApi.deleteById).toHaveBeenCalledTimes(3);
+    expect(mockTaskEduContentApi.deleteById).toHaveBeenCalledWith(3);
+    expect(mockTaskEduContentApi.deleteById).toHaveBeenCalledWith(2);
+    expect(mockTaskEduContentApi.deleteById).toHaveBeenCalledWith(1);
   });
 });
