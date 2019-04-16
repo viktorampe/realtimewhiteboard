@@ -70,11 +70,9 @@ describe('EduContentSearchByTermComponent', () => {
         { provide: EduContentsViewModel, useClass: EduContentsViewModelMock },
         FilterFactoryFixture
       ]
-    })
-      .overrideModule(BrowserDynamicTestingModule, {
-        set: { entryComponents: [ResultItemMockComponent] }
-      })
-      .compileComponents();
+    }).overrideModule(BrowserDynamicTestingModule, {
+      set: { entryComponents: [ResultItemMockComponent] }
+    });
 
     eduContentsViewModel = TestBed.get(EduContentsViewModel);
   }));

@@ -34,7 +34,7 @@ describe('SelectFilterComponentComponent', () => {
         NoopAnimationsModule
       ],
       declarations: [SelectFilterComponent]
-    }).compileComponents();
+    });
 
     mockFilterCriteria = new SearchFilterCriteriaFixture({}, [
       new SearchFilterCriteriaValuesFixture({

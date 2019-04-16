@@ -56,7 +56,7 @@ describe('ListViewComponent', () => {
     TestBed.configureTestingModule({
       imports: [TestModule],
       providers: [ListViewComponent, ListViewItemInterface]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

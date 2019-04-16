@@ -6,7 +6,7 @@ describe('PagesSettingsCredentialsModule', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [PagesSettingsCredentialsModule, SharedModule]
-    }).compileComponents();
+    });
   }));
 
   it('should create', () => {

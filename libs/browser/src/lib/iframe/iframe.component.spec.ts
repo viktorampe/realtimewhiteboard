@@ -34,7 +34,7 @@ describe('IframeComponent', () => {
           }
         }
       ]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

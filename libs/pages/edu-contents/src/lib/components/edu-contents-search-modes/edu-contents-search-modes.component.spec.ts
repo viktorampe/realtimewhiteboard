@@ -37,7 +37,7 @@ describe('EduContentSearchModesComponent', () => {
         { provide: ActivatedRoute, useValue: { params: params } },
         { provide: EduContentsViewModel, useClass: EduContentsViewModelMock }
       ]
-    }).compileComponents();
+    });
 
     router = TestBed.get(Router);
     route = TestBed.get(ActivatedRoute);

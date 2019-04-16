@@ -5,7 +5,7 @@ describe('PagesBooksModule', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [PagesBooksModule]
-    }).compileComponents();
+    });
   }));
 
   it('should create', () => {

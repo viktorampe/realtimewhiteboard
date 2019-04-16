@@ -52,7 +52,7 @@ describe('CredentialsComponent', () => {
         },
         { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ]
-    }).compileComponents();
+    });
     viewmodel = TestBed.get(CredentialsViewModel);
     mockActivatedRoute = TestBed.get(ActivatedRoute);
   }));

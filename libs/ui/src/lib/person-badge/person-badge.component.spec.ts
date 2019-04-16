@@ -12,7 +12,7 @@ describe('PersonBadgeComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [PersonBadgeComponent, PersonInitialsPipe]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {
