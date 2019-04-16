@@ -50,7 +50,8 @@ export class SearchViewModel {
             filterCriteriaPredictions
           )
         );
-      })
+      }),
+      startWith([]) // intial value -> empty array of filters
     );
   }
 
