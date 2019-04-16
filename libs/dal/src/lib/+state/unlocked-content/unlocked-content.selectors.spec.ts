@@ -122,7 +122,7 @@ describe('UnlockedContent Selectors', () => {
       });
     });
     it('getByBundleAndEduContentId() should return only the unlockedContent with the given ids', () => {
-      const unlockedContentStateWithIds = createState(
+      unlockedContentStateWithIds = createState(
         [
           createUnlockedContentWithIds(11, 3, 1),
           createUnlockedContentWithIds(21, 8, 5),
@@ -134,14 +134,14 @@ describe('UnlockedContent Selectors', () => {
         true,
         'no error'
       );
-      const storeStateWithIds = {
+      storeStateWithIds = {
         unlockedContents: unlockedContentStateWithIds
       };
       const results = UnlockedContentQueries.getByBundleAndEduContentId(
         storeStateWithIds,
         { bundleId: 3, eduContentId: 9 }
       );
-      expect(results).toEqual([createUnlockedContentWithIds(31, 3, 9)]);
+      expect(results).toEqual(createUnlockedContentWithIds(31, 3, 9));
     });
   });
 });
