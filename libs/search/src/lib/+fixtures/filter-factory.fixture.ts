@@ -47,49 +47,49 @@ export class FilterFactoryFixture implements SearchFilterFactory {
       label: 'Methode',
       keyProperty: 'id',
       displayProperty: 'name',
-      values: new SearchFilterCriteriaValuesFixture()
+      values: [new SearchFilterCriteriaValuesFixture()]
     },
     years: {
       name: 'years',
       label: 'Jaar',
       keyProperty: 'id',
       displayProperty: 'name',
-      values: new SearchFilterCriteriaValuesFixture()
+      values: [new SearchFilterCriteriaValuesFixture()]
     },
     grades: {
       name: 'grades',
       label: 'Graad',
       keyProperty: 'id',
       displayProperty: 'name',
-      values: new SearchFilterCriteriaValuesFixture()
+      values: [new SearchFilterCriteriaValuesFixture()]
     },
     eduNets: {
       name: 'eduNets',
       label: 'Onderwijsnet',
       keyProperty: 'id',
       displayProperty: 'name',
-      values: new SearchFilterCriteriaValuesFixture()
+      values: [new SearchFilterCriteriaValuesFixture()]
     },
     schoolTypes: {
       name: 'schoolTypes',
       label: 'Onderwijsvorm',
       keyProperty: 'id',
       displayProperty: 'name',
-      values: new SearchFilterCriteriaValuesFixture()
+      values: [new SearchFilterCriteriaValuesFixture()]
     },
     eduContentProductType: {
       name: 'eduContentProductType',
       label: 'Type',
       keyProperty: 'id',
       displayProperty: 'name',
-      values: new SearchFilterCriteriaValuesFixture()
+      values: [new SearchFilterCriteriaValuesFixture()]
     },
     learningArea: {
       name: 'learningArea',
       label: 'Leergebied',
       keyProperty: 'id',
       displayProperty: 'name',
-      values: new SearchFilterCriteriaValuesFixture()
+      values: [new SearchFilterCriteriaValuesFixture()]
     }
   };
 

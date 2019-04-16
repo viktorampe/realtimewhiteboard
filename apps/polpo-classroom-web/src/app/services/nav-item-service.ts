@@ -129,6 +129,9 @@ export class NavItemService {
   private withFavorites(navItem: NavItem, favorites: NavItem[]): NavItem {
     const children = favorites.map(fav => ({
       ...fav,
+      icon: fav.icon.startsWith('learning-area:')
+        ? fav.icon
+        : 'learning-area:' + fav.icon,
       link: navItem.link + '/' + fav.link
     }));
 

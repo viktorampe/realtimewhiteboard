@@ -82,6 +82,17 @@ export function reducer(
         breadcrumbs: action.payload.breadcrumbs
       };
       break;
+    case UiActionTypes.UpdateNavItem:
+      const newSideNavArray = state.sideNavItems.map(item =>
+        item.title === action.payload.navItem.title
+          ? action.payload.navItem
+          : item
+      );
+      state = {
+        ...state,
+        sideNavItems: newSideNavArray
+      };
+      break;
   }
   return state;
 }

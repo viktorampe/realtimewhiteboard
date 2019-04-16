@@ -9,7 +9,10 @@
     </a>
   </campus-shell-logo>
   <campus-shell-left>
-    <campus-tree-nav [treeNav]="navItems$ | async"></campus-tree-nav>
+    <campus-tree-nav
+      [treeNav]="navItems$ | async"
+      (navItemChanged)="onNavItemChanged($event)"
+    ></campus-tree-nav>
   </campus-shell-left>
   <campus-shell-top>
     <campus-header></campus-header>

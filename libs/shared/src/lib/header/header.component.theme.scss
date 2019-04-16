@@ -56,6 +56,20 @@
         width: $shared-header__page-bar__element-height;
       }
 
+      //override of standard searchterm values to make the searchterm fit in the page bar
+      campus-search-term {
+        .mat-form-field-hide-placeholder {
+          .mat-form-field-infix {
+            line-height: $shared-header__page-bar__element-height - 11px;
+          }
+        }
+        .mat-form-field-appearance-outline {
+          .mat-form-field-infix {
+            line-height: $shared-header__page-bar__element-height - 11px;
+          }
+        }
+      }
+
       .pages__toolbar__filter {
         input {
           border: $shared-header__page-bar__element-border-width solid

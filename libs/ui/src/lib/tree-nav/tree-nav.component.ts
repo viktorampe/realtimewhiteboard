@@ -1,5 +1,5 @@
 import { NestedTreeControl } from '@angular/cdk/tree';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatTreeNestedDataSource } from '@angular/material';
 
 /**
@@ -47,6 +47,8 @@ export class TreeNavComponent {
     this.updateTreeNav();
   }
 
+  @Output() navItemChanged = new EventEmitter<NavItem>();
+
   /**
    * Datasource for CdkTree from Angular Material CDK
    *
@@ -65,6 +67,10 @@ export class TreeNavComponent {
   constructor() {
     this.nestedDataSource = new MatTreeNestedDataSource();
     this.nestedTreeControl = new NestedTreeControl<NavItem>(this.getChildren);
+  }
+
+  public toggleNode(node: NavItem) {
+    this.navItemChanged.emit({ ...node, expanded: !node.expanded });
   }
 
   /**
