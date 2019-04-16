@@ -131,8 +131,8 @@ export const environment: EnvironmentInterface = {
         pageSize: 20
       }
     },
-    search: {
-      name: 'search',
+    term: {
+      name: 'term',
       label: '<b>Standaard</b> zoeken',
       dynamicFilters: true,
       searchFilterFactory: SearchTermFilterFactory,
