@@ -39,7 +39,7 @@ describe('TreeNavComponent', () => {
       imports: [RouterTestingModule, CdkTreeModule, MatIconModule],
       declarations: [TreeNavComponent],
       providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

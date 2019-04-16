@@ -33,7 +33,7 @@ describe('CheckboxFilterComponent', () => {
       imports: [MatListModule, MatCheckboxModule, FormsModule, MatIconModule],
       declarations: [CheckboxFilterComponent, CheckboxListFilterComponent],
       providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

@@ -17,7 +17,7 @@ describe('FolderComponent', () => {
           useValue: () => new Promise(() => {})
         }
       ]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

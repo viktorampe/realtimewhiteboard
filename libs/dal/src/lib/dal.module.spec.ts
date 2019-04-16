@@ -5,7 +5,7 @@ describe('DalModule', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [DalModule]
-    }).compileComponents();
+    });
   }));
 
   it('should create', () => {

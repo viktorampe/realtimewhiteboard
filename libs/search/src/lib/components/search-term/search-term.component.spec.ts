@@ -27,7 +27,7 @@ describe('SearchTermComponent', () => {
       ],
       declarations: [SearchTermComponent],
       providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {
