@@ -194,6 +194,9 @@ describe('BundleEffects', () => {
   });
 
   describe('linkEduContent$', () => {
+    let effectFeedback: EffectFeedback;
+    let addFeedbackAction: EffectFeedbackActions.AddEffectFeedback;
+
     const unlockedContent = new UnlockedContentFixture();
     const linkEduContentAction = new LinkEduContent({
       bundleId: 1,
@@ -204,6 +207,14 @@ describe('BundleEffects', () => {
     });
 
     describe('when successful', () => {
+      beforeAll(() => {
+        effectFeedback = new EffectFeedback({
+          id: uuid(),
+          triggerAction: linkEduContentAction,
+          message: 'Het lesmateriaal is aan de bundel toegevoegd.'
+        });
+        addFeedbackAction = new AddEffectFeedback({ effectFeedback });
+      });
       beforeEach(() => {
         mockServiceMethodReturnValue('linkEduContent', [
           unlockedContent,
@@ -216,18 +227,16 @@ describe('BundleEffects', () => {
           a: linkEduContentAction
         });
         expect(effects.linkEduContent$).toBeObservable(
-          hot('(ab)', {
+          hot('(abc)', {
             a: addUserContentAction,
-            b: addUserContentAction
+            b: addUserContentAction,
+            c: addFeedbackAction
           })
         );
       });
     });
 
     describe('when errored', () => {
-      let effectFeedback: EffectFeedback;
-      let addFeedbackAction: EffectFeedbackActions.AddEffectFeedback;
-
       beforeAll(() => {
         effectFeedback = new EffectFeedback({
           id: uuid(),
@@ -267,7 +276,18 @@ describe('BundleEffects', () => {
       unlockedContent
     });
 
+    let effectFeedback: EffectFeedback;
+    let addFeedbackAction: EffectFeedbackActions.AddEffectFeedback;
+
     describe('when successful', () => {
+      beforeAll(() => {
+        effectFeedback = new EffectFeedback({
+          id: uuid(),
+          triggerAction: linkUserContentAction,
+          message: 'Het eigen lesmateriaal is aan de bundel toegevoegd.'
+        });
+        addFeedbackAction = new AddEffectFeedback({ effectFeedback });
+      });
       beforeEach(() => {
         mockServiceMethodReturnValue('linkUserContent', [
           unlockedContent,
@@ -280,18 +300,16 @@ describe('BundleEffects', () => {
           a: linkUserContentAction
         });
         expect(effects.linkUserContent$).toBeObservable(
-          hot('(ab)', {
+          hot('(abc)', {
             a: addUserContentAction,
-            b: addUserContentAction
+            b: addUserContentAction,
+            c: addFeedbackAction
           })
         );
       });
     });
 
     describe('when errored', () => {
-      let effectFeedback: EffectFeedback;
-      let addFeedbackAction: EffectFeedbackActions.AddEffectFeedback;
-
       beforeAll(() => {
         effectFeedback = new EffectFeedback({
           id: uuid(),

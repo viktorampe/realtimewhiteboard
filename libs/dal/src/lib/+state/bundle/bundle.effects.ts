@@ -48,9 +48,16 @@ export class BundlesEffects {
           ])
           .pipe(
             switchMap((unlockedContents: UnlockedContentInterface[]) => {
-              const actions = unlockedContents.map(
+              const actions: (
+                | AddEffectFeedback
+                | AddUnlockedContent)[] = unlockedContents.map(
                 unlockedContent => new AddUnlockedContent({ unlockedContent })
               );
+              const effectFeedback = this.generateSuccessFeedback(
+                action,
+                'Het lesmateriaal is aan de bundel toegevoegd.'
+              );
+              actions.push(new AddEffectFeedback({ effectFeedback }));
               return from(actions);
             })
           );
@@ -76,9 +83,16 @@ export class BundlesEffects {
           ])
           .pipe(
             switchMap((unlockedContents: UnlockedContentInterface[]) => {
-              const actions = unlockedContents.map(
+              const actions: (
+                | AddEffectFeedback
+                | AddUnlockedContent)[] = unlockedContents.map(
                 unlockedContent => new AddUnlockedContent({ unlockedContent })
               );
+              const effectFeedback = this.generateSuccessFeedback(
+                action,
+                'Het eigen lesmateriaal is aan de bundel toegevoegd.'
+              );
+              actions.push(new AddEffectFeedback({ effectFeedback }));
               return from(actions);
             })
           );
@@ -94,7 +108,10 @@ export class BundlesEffects {
     }
   );
 
-  private generateErrorFeedback(action: Action, message: string) {
+  private generateErrorFeedback(
+    action: Action,
+    message: string
+  ): EffectFeedback {
     return new EffectFeedback({
       id: this.uuid(),
       triggerAction: action,
@@ -107,6 +124,17 @@ export class BundlesEffects {
         }
       ],
       priority: Priority.HIGH
+    });
+  }
+
+  private generateSuccessFeedback(
+    action: Action,
+    message: string
+  ): EffectFeedback {
+    return new EffectFeedback({
+      id: this.uuid(),
+      triggerAction: action,
+      message: message
     });
   }
 
