@@ -8,4 +8,6 @@ export const TASK_EDU_CONTENT_SERVICE_TOKEN = new InjectionToken(
 
 export interface TaskEduContentServiceInterface {
   getAllForUser(userId: number): Observable<TaskEduContentInterface[]>;
+  remove(taskEduContentId: number): Observable<boolean>;
+  removeAll(taskEduContentIds: number[]): Observable<boolean>;
 }

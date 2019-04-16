@@ -13,7 +13,7 @@ describe('InfoPanelTaskComponent', () => {
     TestBed.configureTestingModule({
       declarations: [InfoPanelTaskComponent],
       schemas: [NO_ERRORS_SCHEMA]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

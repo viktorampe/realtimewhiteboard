@@ -74,7 +74,7 @@ describe('BreadcrumbComponent', () => {
     TestBed.configureTestingModule({
       imports: [UiModule, RouterTestingModule],
       providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

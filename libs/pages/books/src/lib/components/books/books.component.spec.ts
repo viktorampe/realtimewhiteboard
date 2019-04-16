@@ -27,7 +27,7 @@ describe('BooksComponent', () => {
         { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ],
       schemas: [NO_ERRORS_SCHEMA]
-    }).compileComponents();
+    });
 
     bookViewModel = TestBed.get(BooksViewModel);
   }));

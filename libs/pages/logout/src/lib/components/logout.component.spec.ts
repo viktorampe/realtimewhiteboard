@@ -33,7 +33,7 @@ describe('LogoutComponent', () => {
       ],
       declarations: [LogoutComponent],
       schemas: [NO_ERRORS_SCHEMA]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

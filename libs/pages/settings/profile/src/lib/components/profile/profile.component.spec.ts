@@ -37,7 +37,7 @@ describe('ProfileComponent', () => {
       ],
       declarations: [ProfileComponent],
       schemas: [NO_ERRORS_SCHEMA]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

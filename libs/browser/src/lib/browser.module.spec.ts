@@ -5,7 +5,7 @@ describe('BrowserModule', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [BrowserModule]
-    }).compileComponents();
+    });
   }));
 
   it('should create', () => {

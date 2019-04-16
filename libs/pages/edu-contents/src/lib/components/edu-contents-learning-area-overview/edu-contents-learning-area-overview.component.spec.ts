@@ -90,7 +90,7 @@ describe('EduContentLearningAreaOverviewComponent', () => {
         { provide: EduContentsViewModel, useClass: EduContentsViewModelMock },
         { provide: FILTER_SERVICE_TOKEN, useClass: FilterService }
       ]
-    }).compileComponents();
+    });
 
     store = TestBed.get(Store);
     router = TestBed.get(Router);

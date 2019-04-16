@@ -15,7 +15,7 @@ describe('PageHeaderComponent', () => {
     TestBed.configureTestingModule({
       imports: [UiModule],
       providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

@@ -5,7 +5,7 @@ describe('UiModule', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [UiModule]
-    }).compileComponents();
+    });
   }));
 
   it('should create', () => {

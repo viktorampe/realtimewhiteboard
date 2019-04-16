@@ -71,11 +71,9 @@ describe('EduContentSearchByTermComponent', () => {
         FilterFactoryFixture,
         { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ]
-    })
-      .overrideModule(BrowserDynamicTestingModule, {
-        set: { entryComponents: [ResultItemMockComponent] }
-      })
-      .compileComponents();
+    }).overrideModule(BrowserDynamicTestingModule, {
+      set: { entryComponents: [ResultItemMockComponent] }
+    });
 
     eduContentsViewModel = TestBed.get(EduContentsViewModel);
   }));

@@ -45,7 +45,7 @@ describe('ProfileFormComponent', () => {
         }
       ],
       declarations: [ProfileFormComponent]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

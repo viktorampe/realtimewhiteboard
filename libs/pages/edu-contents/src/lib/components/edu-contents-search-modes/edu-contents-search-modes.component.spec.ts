@@ -40,7 +40,7 @@ describe('EduContentSearchModesComponent', () => {
         { provide: EduContentsViewModel, useClass: EduContentsViewModelMock },
         { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ]
-    }).compileComponents();
+    });
 
     router = TestBed.get(Router);
     route = TestBed.get(ActivatedRoute);

@@ -33,7 +33,7 @@ describe('AvatarComponent', () => {
         { provide: AUTH_SERVICE_TOKEN, useValue: { userId: 1 } },
         { provide: FILEREADER_SERVICE_TOKEN, useClass: FileReaderService }
       ]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {
