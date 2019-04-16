@@ -91,7 +91,7 @@ export const getByBundleId = createSelector(
     const ids = <number[]>state.ids;
 
     return ids.reduce((acc, id, idx, arr) => {
-      return state.entities[id].bundleId === +props.bundleId
+      return state.entities[id].bundleId === props.bundleId
         ? [...acc, state.entities[id]]
         : acc;
     }, []);
@@ -105,11 +105,11 @@ export const getByBundleAndEduContentId = createSelector(
 
     const desiredId = ids.find(id => {
       return (
-        state.entities[id].bundleId === +props.bundleId &&
-        state.entities[id].eduContentId === +props.eduContentId
+        state.entities[id].bundleId === props.bundleId &&
+        state.entities[id].eduContentId === props.eduContentId
       );
     });
-    return state.entities[desiredId];
+    return asUnlockedContent(state.entities[desiredId]);
   }
 );
 
@@ -120,11 +120,11 @@ export const getByBundleAndUserContentId = createSelector(
 
     const desiredId = ids.find(id => {
       return (
-        state.entities[id].bundleId === +props.bundleId &&
-        state.entities[id].userContentId === +props.userContentId
+        state.entities[id].bundleId === props.bundleId &&
+        state.entities[id].userContentId === props.userContentId
       );
     });
-    return state.entities[desiredId];
+    return asUnlockedContent(state.entities[desiredId]);
   }
 );
 
