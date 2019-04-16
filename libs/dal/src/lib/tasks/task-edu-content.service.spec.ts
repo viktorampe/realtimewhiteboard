@@ -74,7 +74,7 @@ describe('TaskEduContentService', () => {
       a: true
     });
     expect(service.removeAll([1, 2, 3])).toBeObservable(
-      hot('-a-|', {
+      hot('---(a|)', {
         a: true
       })
     );
