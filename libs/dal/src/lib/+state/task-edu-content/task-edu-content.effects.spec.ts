@@ -76,16 +76,6 @@ describe('TaskEduContentEffects', () => {
     jest.spyOn(TestBed.get(service), method).mockReturnValue(of(returnValue));
   };
 
-  const mockTaskServiceMethodError = (
-    method: string,
-    errorMessage: string,
-    service: any = TASK_SERVICE_TOKEN
-  ) => {
-    jest.spyOn(TestBed.get(service), method).mockImplementation(() => {
-      throw new Error(errorMessage);
-    });
-  };
-
   beforeAll(() => {
     dateMock = new MockDate();
     effectFeedback = new EffectFeedbackFixture({
@@ -246,9 +236,6 @@ describe('TaskEduContentEffects', () => {
     });
 
     describe('with initialState', () => {
-      beforeAll(() => {
-        usedState = TaskEduContentReducer.initialState;
-      });
       beforeEach(() => {
         mockTaskServiceMethodReturnValue(
           'linkEduContent',
@@ -260,11 +247,7 @@ describe('TaskEduContentEffects', () => {
       });
     });
     describe('with initialState and failing api call', () => {
-      beforeAll(() => {
-        usedState = TaskEduContentReducer.initialState;
-      });
       beforeEach(() => {
-        mockTaskServiceMethodError('linkEduContent', 'error');
         effectFeedback.message =
           'Het is niet gelukt om het leermateriaal aan de taak toe te voegen.';
         effectFeedback.triggerAction = linkAction;
