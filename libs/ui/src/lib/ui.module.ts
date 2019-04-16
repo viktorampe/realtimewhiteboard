@@ -15,6 +15,7 @@ import {
   MatSidenavModule,
   MatTooltipModule
 } from '@angular/material';
+import { MatDialogModule } from '@angular/material/dialog';
 import { RouterModule } from '@angular/router';
 import { UtilsModule } from '@campus/utils';
 import { AppBarComponent } from './app-bar/app-bar.component';
@@ -90,7 +91,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     MatTooltipModule,
     MatIconModule,
     MatMenuModule,
-    UtilsModule
+    UtilsModule,
+    MatDialogModule
   ],
   declarations: [
     FilterTextInputComponent,
