@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { MockDate } from '@campus/testing';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
@@ -6,13 +7,17 @@ import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
 import { TaskEduContentReducer } from '.';
-import { TaskEduContentFixture } from '../../+fixtures';
+import { EffectFeedbackFixture, TaskEduContentFixture } from '../../+fixtures';
 import { TASK_EDU_CONTENT_SERVICE_TOKEN } from '../../tasks/task-edu-content.service.interface';
 import { TASK_SERVICE_TOKEN } from '../../tasks/task.service.interface';
 import {
+  EffectFeedbackActions,
+  EffectFeedbackInterface,
+  Priority
+} from '../effect-feedback';
+import {
   AddTaskEduContent,
   LinkTaskEduContent,
-  LinkTaskEduContentError,
   LoadTaskEduContents,
   TaskEduContentsLoaded,
   TaskEduContentsLoadError
@@ -23,6 +28,9 @@ describe('TaskEduContentEffects', () => {
   let actions: Observable<any>;
   let effects: TaskEduContentEffects;
   let usedState: any;
+  let effectFeedback: EffectFeedbackInterface;
+  let uuid: Function;
+  let dateMock: MockDate;
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -78,6 +86,17 @@ describe('TaskEduContentEffects', () => {
     });
   };
 
+  beforeAll(() => {
+    dateMock = new MockDate();
+    effectFeedback = new EffectFeedbackFixture({
+      timeStamp: dateMock.mockDate.getTime()
+    });
+  });
+
+  afterAll(() => {
+    dateMock.returnRealDate();
+  });
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -106,6 +125,10 @@ describe('TaskEduContentEffects', () => {
             linkEduContent: () => {}
           }
         },
+        {
+          provide: 'uuid',
+          useValue: (): string => 'foo'
+        },
         TaskEduContentEffects,
         DataPersistence,
         provideMockActions(() => actions)
@@ -113,6 +136,8 @@ describe('TaskEduContentEffects', () => {
     });
 
     effects = TestBed.get(TaskEduContentEffects);
+    uuid = TestBed.get('uuid');
+    effectFeedback.id = uuid();
   });
 
   describe('loadTaskEduContent$', () => {
@@ -211,11 +236,15 @@ describe('TaskEduContentEffects', () => {
     });
   });
   describe('linkTaskEduContent$', () => {
-    const linkAction = new LinkTaskEduContent({ taskId: 1, eduContentId: 2 });
+    const linkAction = new LinkTaskEduContent({
+      taskId: 1,
+      eduContentId: 2,
+      displayResponse: true
+    });
     const linkedAction = new AddTaskEduContent({
       taskEduContent: new TaskEduContentFixture()
     });
-    const errorAction = new LinkTaskEduContentError(new Error('failed'));
+
     describe('with initialState', () => {
       beforeAll(() => {
         usedState = TaskEduContentReducer.initialState;
@@ -235,9 +264,23 @@ describe('TaskEduContentEffects', () => {
         usedState = TaskEduContentReducer.initialState;
       });
       beforeEach(() => {
-        mockTaskServiceMethodError('linkEduContent', 'failed');
+        mockTaskServiceMethodError('linkEduContent', 'error');
+        effectFeedback.message =
+          'Het is niet gelukt om het leermateriaal aan de taak toe te voegen.';
+        effectFeedback.triggerAction = linkAction;
+        effectFeedback.type = 'error';
+        effectFeedback.userActions = [
+          {
+            title: 'Opnieuw proberen.',
+            userAction: linkAction
+          }
+        ];
+        effectFeedback.priority = Priority.HIGH;
       });
       it('should return a error action if force is not true', () => {
+        const errorAction = new EffectFeedbackActions.AddEffectFeedback({
+          effectFeedback: effectFeedback
+        });
         expectInAndOut(effects.linkTaskEduContent$, linkAction, errorAction);
       });
     });
