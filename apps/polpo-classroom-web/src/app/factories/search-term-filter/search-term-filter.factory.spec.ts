@@ -25,6 +25,7 @@ import {
 import {
   CheckboxLineFilterComponent,
   CheckboxListFilterComponent,
+  SearchFilterInterface,
   SearchStateInterface
 } from '@campus/search';
 import { Store, StoreModule } from '@ngrx/store';
@@ -191,8 +192,9 @@ describe('SearchTermFilterFactory', () => {
     keyProperty,
     displayProperty,
     values,
-    component
-  ) {
+    component,
+    maxVisibleItems?
+  ): SearchFilterInterface {
     return {
       criteria: {
         name: name,
@@ -215,7 +217,8 @@ describe('SearchTermFilterFactory', () => {
         }))
       },
       component: component,
-      domHost: 'hostLeft'
+      domHost: 'hostLeft',
+      options: { maxVisibleItems: 5 }
     };
   }
 
