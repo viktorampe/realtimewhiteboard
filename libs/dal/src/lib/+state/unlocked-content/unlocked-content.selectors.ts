@@ -113,6 +113,21 @@ export const getByBundleAndEduContentId = createSelector(
   }
 );
 
+export const getByBundleAndUserContentId = createSelector(
+  selectUnlockedContentState,
+  (state: State, props: { bundleId: number; userContentId: number }) => {
+    const ids = <number[]>state.ids;
+
+    const desiredId = ids.find(id => {
+      return (
+        state.entities[id].bundleId === +props.bundleId &&
+        state.entities[id].userContentId === +props.userContentId
+      );
+    });
+    return state.entities[desiredId];
+  }
+);
+
 function asUnlockedContent(item: UnlockedContentInterface): UnlockedContent {
   if (item) {
     return Object.assign<UnlockedContent, UnlockedContentInterface>(
