@@ -16,7 +16,8 @@ export enum UiActionTypes {
   ToggleSideNav = '[Ui] Ui Toggle Side Nav',
   SetSideNavItems = '[Ui] Ui Set Side Nav Items',
   SetProfileMenuItems = '[Ui] Ui Set Profile Menu Items',
-  SetBreadcrumbs = '[Ui] Ui Set Breadcrumbs'
+  SetBreadcrumbs = '[Ui] Ui Set Breadcrumbs',
+  UpdateNavItem = '[Ui] Ui Update NavItem'
 }
 
 export class LoadUi implements Action {
@@ -61,6 +62,11 @@ export class SetBreadcrumbs implements Action {
   constructor(public payload: { breadcrumbs: BreadcrumbLinkInterface[] }) {}
 }
 
+export class UpdateNavItem implements Action {
+  readonly type = UiActionTypes.UpdateNavItem;
+  constructor(public payload: { navItem: NavItem }) {}
+}
+
 export type UiAction =
   | LoadUi
   | UiLoaded
@@ -70,7 +76,8 @@ export type UiAction =
   | ToggleSideNav
   | SetSideNavItems
   | SetProfileMenuItems
-  | SetBreadcrumbs;
+  | SetBreadcrumbs
+  | UpdateNavItem;
 
 export const fromUiActions = {
   LoadUi,
@@ -81,5 +88,6 @@ export const fromUiActions = {
   ToggleSideNav,
   SetSideNavItems,
   SetProfileMenuItems,
-  SetBreadcrumbs
+  SetBreadcrumbs,
+  UpdateNavItem
 };
