@@ -2,20 +2,8 @@ import { Type } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
-import {
-  SearchFilterCriteriaFixture,
-  SearchFilterCriteriaValuesFixture
-} from '../+fixtures/search-filter-criteria.fixture';
-import {
-  SearchFilterComponentInterface,
-  SearchFilterCriteriaInterface,
-  SearchFilterFactory,
-  SearchFilterInterface,
-  SearchModeInterface,
-  SearchResultInterface,
-  SearchStateInterface,
-  SortModeInterface
-} from '../interfaces';
+import { SearchFilterCriteriaFixture, SearchFilterCriteriaValuesFixture } from '../+fixtures/search-filter-criteria.fixture';
+import { SearchFilterComponentInterface, SearchFilterCriteriaInterface, SearchFilterFactory, SearchFilterInterface, SearchModeInterface, SearchResultInterface, SearchStateInterface, SortModeInterface } from '../interfaces';
 import { CheckboxLineFilterComponent } from './checkbox-line-filter/checkbox-line-filter-component';
 import { SearchViewModel } from './search.viewmodel';
 
@@ -330,7 +318,7 @@ describe('SearchViewModel', () => {
     it('should trigger an emit the new searchState', () => {
       const oldValue: SearchStateInterface = {
         searchTerm: 'some term',
-        filterCriteriaSelections: new Map<string, (number | string)[]>()
+        filterCriteriaSelections: new Map<string, (number | string | number [] | string [])[]>()
       };
       searchViewModel.searchState$.next(oldValue);
       searchViewModel.changeSort(mockSortMode);
@@ -627,13 +615,14 @@ function getTestSearchResult(
 
 function getTestSearchState(
   name: string,
-  selections: (number | string)[]
+  selections: (number | string | number[] | string[])[]
 ): SearchStateInterface {
   return {
     searchTerm: '',
-    filterCriteriaSelections: new Map<string, (number | string)[]>([
-      [name, selections]
-    ])
+    filterCriteriaSelections: new Map<
+      string,
+      (number | string | number[] | string[])[]
+    >([[name, selections]])
   };
 }
 

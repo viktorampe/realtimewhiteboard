@@ -16,9 +16,10 @@ describe('EduContentService', () => {
     searchTerm: 'search the term',
     sort: 'sort string',
     from: 83,
-    filterCriteriaSelections: new Map<string, (number | string)[]>([
-      ['key here', [3, 3, 'klsdk', 5, '3lde', 5, 0]]
-    ])
+    filterCriteriaSelections: new Map<
+      string,
+      (number | string | number[] | string[])[]
+    >([['key here', [3, 3, 'klsdk', 5, '3lde', 5, 0]]])
   };
   const convertedMockSearchStateInput = {
     searchTerm: 'search the term',

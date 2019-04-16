@@ -215,7 +215,9 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
     ];
   }
 
-  private getFirstValueAsNumber(arr: (string | number)[]): number {
+  private getFirstValueAsNumber(
+    arr: (string | number | number[] | string[])[]
+  ): number {
     if (!arr) return undefined;
     return typeof arr[0] === 'string'
       ? parseInt(arr[0] as string, 10)

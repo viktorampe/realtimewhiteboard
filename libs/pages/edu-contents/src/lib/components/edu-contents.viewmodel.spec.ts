@@ -61,10 +61,10 @@ describe('EduContentsViewModel', () => {
 
   const mockSearchState: SearchStateInterface = {
     searchTerm: 'not this',
-    filterCriteriaSelections: new Map<string, (number | string)[]>([
-      ['thing', ['one', 'two']],
-      ['other thing', ['three', 'four']]
-    ])
+    filterCriteriaSelections: new Map<
+      string,
+      (number | string | number[] | string[])[]
+    >([['thing', ['one', 'two']], ['other thing', ['three', 'four']]])
   };
   const searchMode: SearchModeInterface = {
     name: 'demo',
@@ -312,33 +312,44 @@ describe('EduContentsViewModel', () => {
         hot('a-b-c-d-e', {
           a: {
             searchTerm: '',
-            filterCriteriaSelections: new Map<string, (number | string)[]>([])
+            filterCriteriaSelections: new Map<
+              string,
+              (number | string | number[] | string[])[]
+            >([])
           },
           b: {
             searchTerm: '',
-            filterCriteriaSelections: new Map<string, (number | string)[]>([
-              ['learningArea', [3]]
-            ])
+            filterCriteriaSelections: new Map<
+              string,
+              (number | string | number[] | string[])[]
+            >([['learningArea', [3]]])
           },
           c: {
             searchTerm: '',
-            filterCriteriaSelections: new Map<string, (number | string)[]>([
-              ['learningArea', [4]]
-            ]),
+            filterCriteriaSelections: new Map<
+              string,
+              (number | string | number[] | string[])[]
+            >([['learningArea', [4]]]),
             filterCriteriaOptions: new Map<string, number | string | boolean>([
               ['taskAllowed', true]
             ])
           },
           d: {
             searchTerm: '',
-            filterCriteriaSelections: new Map<string, (number | string)[]>([]),
+            filterCriteriaSelections: new Map<
+              string,
+              (number | string | number[] | string[])[]
+            >([]),
             filterCriteriaOptions: new Map<string, number | string | boolean>([
               ['taskAllowed', true]
             ])
           },
           e: {
             searchTerm: 'the term',
-            filterCriteriaSelections: new Map<string, (number | string)[]>([])
+            filterCriteriaSelections: new Map<
+              string,
+              (number | string | number[] | string[])[]
+            >([])
           }
         })
       );
@@ -373,7 +384,10 @@ describe('EduContentsViewModel', () => {
       expect(getAutoCompleteSpy).toHaveBeenCalledTimes(1);
       expect(getAutoCompleteSpy).toHaveBeenCalledWith({
         searchTerm: 'some string',
-        filterCriteriaSelections: new Map<string, (number | string)[]>([])
+        filterCriteriaSelections: new Map<
+          string,
+          (number | string | number[] | string[])[]
+        >([])
       });
     });
   });

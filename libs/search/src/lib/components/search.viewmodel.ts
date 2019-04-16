@@ -39,7 +39,7 @@ export class SearchViewModel {
       map(([state, results, filters]) => {
         const filterCriteriaSelections = !!state
           ? state.filterCriteriaSelections
-          : new Map<string, (number | string)[]>();
+          : new Map<string, (number | string | number[] | string[])[]>();
         const filterCriteriaPredictions = !!results
           ? results.filterCriteriaPredictions
           : new Map<string, Map<string | number, number>>();
@@ -67,7 +67,10 @@ export class SearchViewModel {
    */
   private getUpdatedSearchFilter(
     filter: SearchFilterInterface,
-    stateFilterCriteriaSelections: Map<string, (number | string)[]>,
+    stateFilterCriteriaSelections: Map<
+      string,
+      (number | string | number[] | string[])[]
+    >,
     resultsFilterCriteriaPredictions: Map<string, Map<string | number, number>>
   ): SearchFilterInterface {
     if (!filter) return;
@@ -97,14 +100,17 @@ export class SearchViewModel {
    *
    * @private
    * @param {SearchFilterCriteriaInterface} criterium
-   * @param {(Map<string, (number | string)[]>)} filterCriteriaSelections
+   * @param {(Map<string, (number | string| number[] | string[])[]>)} filterCriteriaSelections
    * @param {(Map<string, Map<string | number, number>>)} filterCriteriaPredictions
    * @returns {SearchFilterCriteriaInterface}
    * @memberof SearchViewModel
    */
   private getUpdatedCriterium(
     criterium: SearchFilterCriteriaInterface,
-    filterCriteriaSelections: Map<string, (number | string)[]>,
+    filterCriteriaSelections: Map<
+      string,
+      (number | string | number[] | string[])[]
+    >,
     filterCriteriaPredictions: Map<string, Map<string | number, number>>
   ): SearchFilterCriteriaInterface {
     criterium.values = criterium.values.map(value =>
@@ -124,7 +130,7 @@ export class SearchViewModel {
    * @private
    * @param {SearchFilterCriteriaInterface} criterium
    * @param {SearchFilterCriteriaValuesInterface} value
-   * @param {(Map<string, (number | string)[]>)} filterCriteriaSelections
+   * @param {(Map<string, (number | string| number[] | string[])[]>)} filterCriteriaSelections
    * @param {(Map<string, Map<string | number, number>>)} filterCriteriaPredictions
    * @returns {SearchFilterCriteriaValuesInterface}
    * @memberof SearchViewModel
@@ -132,7 +138,10 @@ export class SearchViewModel {
   private getUpdatedCriteriumValue(
     criterium: SearchFilterCriteriaInterface,
     value: SearchFilterCriteriaValuesInterface,
-    filterCriteriaSelections: Map<string, (number | string)[]>,
+    filterCriteriaSelections: Map<
+      string,
+      (number | string | number[] | string[])[]
+    >,
     filterCriteriaPredictions: Map<string, Map<string | number, number>>
   ): SearchFilterCriteriaValuesInterface {
     // update prediction
@@ -170,7 +179,10 @@ export class SearchViewModel {
   private getUpdatedValueSelection(
     criterium: SearchFilterCriteriaInterface,
     value: SearchFilterCriteriaValuesInterface,
-    filterCriteriaSelections: Map<string, (string | number)[]>
+    filterCriteriaSelections: Map<
+      string,
+      (string | number | number[] | string[])[]
+    >
   ): boolean {
     //check if there is selection data
     const criteriaSelections = filterCriteriaSelections.get(criterium.name);
@@ -272,7 +284,7 @@ export class SearchViewModel {
     // update state
     const updatedCriteria: Map<
       string,
-      (number | string)[]
+      (number | string | number[] | string[])[]
     > = this.extractSelectedValuesFromCriteria(criteria);
 
     const searchState: SearchStateInterface = { ...this.searchState$.value };
@@ -317,11 +329,11 @@ export class SearchViewModel {
   private extractSelectedValuesFromCriteria(
     criteria: SearchFilterCriteriaInterface | SearchFilterCriteriaInterface[],
     filterCriteriaSelections = new Map()
-  ): Map<string, (number | string)[]> {
+  ): Map<string, (number | string | number[] | string[])[]> {
     if (Array.isArray(criteria)) {
       return criteria.reduce(
         (
-          acc: Map<string, (number | string)[]>,
+          acc: Map<string, (number | string | number[] | string[])[]>,
           crit: SearchFilterCriteriaInterface
         ) => {
           this.extractSelectedValuesFromCriteria(crit, acc);
@@ -332,7 +344,7 @@ export class SearchViewModel {
     } else {
       return criteria.values.reduce(
         (
-          acc: Map<string, (number | string)[]>,
+          acc: Map<string, (number | string | number[] | string[])[]>,
           value: SearchFilterCriteriaValuesInterface
         ) => {
           if (!acc.has(criteria.name)) {

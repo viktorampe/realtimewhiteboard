@@ -128,7 +128,10 @@ describe('GlobalSearchTermFilterFactory', () => {
 
     it('should return the requested filters', () => {
       // set which filters are selected
-      const filterCriteriaSelections = new Map<string, (number | string)[]>();
+      const filterCriteriaSelections = new Map<
+        string,
+        (number | string | number[] | string[])[]
+      >();
       filterCriteriaSelections.set('learningArea', [1, 2]);
 
       const mockSearchState: SearchStateInterface = {
@@ -153,7 +156,10 @@ describe('GlobalSearchTermFilterFactory', () => {
 
     it('should not have method filters nor learning domain filters if no learning area is selected', () => {
       // no learning areas selected
-      const filterCriteriaSelections = new Map<string, (number | string)[]>();
+      const filterCriteriaSelections = new Map<
+        string,
+        (number | string | number[] | string[])[]
+      >();
 
       const mockSearchState: SearchStateInterface = {
         searchTerm: '',
@@ -179,7 +185,10 @@ describe('GlobalSearchTermFilterFactory', () => {
       store.dispatch(new SchoolTypeActions.ClearSchoolTypes());
 
       // don't select learning areas for simplicity
-      const filterCriteriaSelections = new Map<string, (number | string)[]>();
+      const filterCriteriaSelections = new Map<
+        string,
+        (number | string | number[] | string[])[]
+      >();
 
       const mockSearchState: SearchStateInterface = {
         searchTerm: '',

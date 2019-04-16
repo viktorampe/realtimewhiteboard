@@ -578,7 +578,10 @@ describe('TocFilterFactory', () => {
   ): SearchStateInterface {
     const newSearchState = {
       searchTerm: '',
-      filterCriteriaSelections: new Map<string, (number | string)[]>()
+      filterCriteriaSelections: new Map<
+        string,
+        (number | string | number[] | string[])[]
+      >()
     };
     if (areaId)
       newSearchState.filterCriteriaSelections.set('learningArea', [areaId]);
