@@ -20,6 +20,7 @@ import {
   BundlesLoaded,
   BundlesLoadError,
   LinkEduContent,
+  LinkUserContent,
   LoadBundles
 } from './bundle.actions';
 import { BundlesEffects } from './bundle.effects';
@@ -251,6 +252,70 @@ describe('BundleEffects', () => {
         expectInAndOut(
           effects.linkEduContent$,
           linkEduContentAction,
+          addFeedbackAction
+        );
+      });
+    });
+  });
+  describe('linkUserContent$', () => {
+    const unlockedContent = new UnlockedContentFixture();
+    const linkUserContentAction = new LinkUserContent({
+      bundleId: 1,
+      userContentId: 1
+    });
+    const addUserContentAction = new AddUnlockedContent({
+      unlockedContent
+    });
+
+    describe('when successful', () => {
+      beforeEach(() => {
+        mockServiceMethodReturnValue('linkUserContent', [
+          unlockedContent,
+          unlockedContent
+        ]);
+      });
+
+      it('should dispatch addUnlockedContent actions', () => {
+        actions = hot('a', {
+          a: linkUserContentAction
+        });
+        expect(effects.linkUserContent$).toBeObservable(
+          hot('(ab)', {
+            a: addUserContentAction,
+            b: addUserContentAction
+          })
+        );
+      });
+    });
+
+    describe('when errored', () => {
+      let effectFeedback: EffectFeedback;
+      let addFeedbackAction: EffectFeedbackActions.AddEffectFeedback;
+
+      beforeAll(() => {
+        effectFeedback = new EffectFeedback({
+          id: uuid(),
+          triggerAction: linkUserContentAction,
+          message:
+            'Het is niet gelukt om het eigen lesmateriaal aan de bundel toe te voegen.',
+          type: 'error',
+          userActions: [
+            { title: 'Opnieuw proberen', userAction: linkUserContentAction }
+          ],
+          display: true,
+          priority: Priority.HIGH
+        });
+        addFeedbackAction = new AddEffectFeedback({ effectFeedback });
+      });
+
+      beforeEach(() => {
+        mockServiceMethodError('linkUserContent', 'Something went wrong');
+      });
+
+      it('should dispatch an error feedback action', () => {
+        expectInAndOut(
+          effects.linkUserContent$,
+          linkUserContentAction,
           addFeedbackAction
         );
       });
