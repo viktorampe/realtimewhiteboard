@@ -13,12 +13,14 @@ describe('UnlockedContent Selectors', () => {
   function createUnlockedContentWithIds(
     id: number,
     bundleId: number,
-    eduContentId: number
+    eduContentId: number,
+    userContentId: number
   ): UnlockedContentInterface | any {
     return {
       id: id,
       bundleId: bundleId,
-      eduContentId: eduContentId
+      eduContentId: eduContentId,
+      userContentId: userContentId
     };
   }
 
@@ -124,12 +126,12 @@ describe('UnlockedContent Selectors', () => {
     it('getByBundleAndEduContentId() should return only the unlockedContent with the given ids', () => {
       unlockedContentStateWithIds = createState(
         [
-          createUnlockedContentWithIds(11, 3, 1),
-          createUnlockedContentWithIds(21, 8, 5),
-          createUnlockedContentWithIds(31, 3, 9),
-          createUnlockedContentWithIds(41, 8, 1),
-          createUnlockedContentWithIds(51, 3, 5),
-          createUnlockedContentWithIds(61, 8, 9)
+          createUnlockedContentWithIds(11, 3, 1, 1),
+          createUnlockedContentWithIds(21, 8, 5, 55),
+          createUnlockedContentWithIds(31, 3, 9, 109),
+          createUnlockedContentWithIds(41, 8, 1, 163),
+          createUnlockedContentWithIds(51, 3, 5, 217),
+          createUnlockedContentWithIds(61, 8, 9, 271)
         ],
         true,
         'no error'
@@ -141,7 +143,29 @@ describe('UnlockedContent Selectors', () => {
         storeStateWithIds,
         { bundleId: 3, eduContentId: 9 }
       );
-      expect(results).toEqual(createUnlockedContentWithIds(31, 3, 9));
+      expect(results).toEqual(createUnlockedContentWithIds(31, 3, 9, 109));
+    });
+    it('getByBundleAndUserContentId() should return only the unlockedContent with the given ids', () => {
+      unlockedContentStateWithIds = createState(
+        [
+          createUnlockedContentWithIds(11, 3, 1, 1),
+          createUnlockedContentWithIds(21, 8, 5, 55),
+          createUnlockedContentWithIds(31, 3, 9, 109),
+          createUnlockedContentWithIds(41, 8, 1, 163),
+          createUnlockedContentWithIds(51, 3, 5, 217),
+          createUnlockedContentWithIds(61, 8, 9, 271)
+        ],
+        true,
+        'no error'
+      );
+      storeStateWithIds = {
+        unlockedContents: unlockedContentStateWithIds
+      };
+      const results = UnlockedContentQueries.getByBundleAndUserContentId(
+        storeStateWithIds,
+        { bundleId: 8, userContentId: 163 }
+      );
+      expect(results).toEqual(createUnlockedContentWithIds(41, 8, 1, 163));
     });
   });
 });
