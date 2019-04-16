@@ -7,12 +7,11 @@ import {
   LearningAreaActions,
   LearningAreaFixture,
   LearningAreaReducer,
-  LearningPlanFixture,
-  LearningPlanInterface,
   LEARNING_PLAN_SERVICE_TOKEN,
   SchoolTypeActions,
   SchoolTypeFixture,
   SchoolTypeReducer,
+  SpecialtyFixture,
   SpecialtyInterface,
   YearFixture,
   YearInterface
@@ -29,8 +28,8 @@ import { of } from 'rxjs';
 import {
   EDU_NETS_FILTER_PROPS,
   LEARNING_AREA_FILTER_PROPS,
-  LEARNING_PLAN_ASSIGNMENTS_FILTER_PROPS,
   SCHOOL_TYPES_FILTER_PROPS,
+  SPECIALITIES_FILTER_PROPS,
   YEARS_FILTER_PROPS
 } from './learning-plan-filter-props';
 import { LearningPlanFilterFactory } from './learning-plan-filter.factory';
@@ -64,19 +63,10 @@ const mockAvailableYears: YearInterface[] = [
   new YearFixture({ id: 6 })
 ];
 
-const mockLearningPlans: Map<
-  SpecialtyInterface,
-  LearningPlanInterface[]
-> = new Map([
-  [
-    { name: 'one', id: 1 },
-    [new LearningPlanFixture({ id: 1 }), new LearningPlanFixture({ id: 2 })]
-  ],
-  [
-    { name: 'two', id: 2 },
-    [new LearningPlanFixture({ id: 1 }), new LearningPlanFixture({ id: 2 })]
-  ]
-]);
+const mockSpecialities: SpecialtyInterface[] = [
+  new SpecialtyFixture({ id: 1, name: 'speciality 1' }),
+  new SpecialtyFixture({ id: 2, name: 'speciality 2' })
+];
 
 describe('LearningPlanFilterFactory', () => {
   let store;
@@ -96,7 +86,7 @@ describe('LearningPlanFilterFactory', () => {
         {
           provide: LEARNING_PLAN_SERVICE_TOKEN,
           useValue: {
-            getLearningPlanAssignments: () => of(mockLearningPlans),
+            getSpecialities: () => of(mockSpecialities),
             getAvailableYearsForSearch: () => of(mockAvailableYears)
           }
         }
@@ -174,21 +164,13 @@ describe('LearningPlanFilterFactory', () => {
           })
         },
         {
-          ...LEARNING_PLAN_ASSIGNMENTS_FILTER_PROPS,
-          values: Array.from(mockLearningPlans).map(
-            ([specialty, learningPlans]: [
-              SpecialtyInterface,
-              LearningPlanInterface[]
-            ]) => {
-              return {
-                data: {
-                  label: specialty.name,
-                  ids: learningPlans.map(a => a.id)
-                },
-                hasChild: false
-              };
-            }
-          )
+          ...SPECIALITIES_FILTER_PROPS,
+          values: mockSpecialities.map(mockSpeciality => {
+            return {
+              data: mockSpeciality,
+              hasChild: false
+            };
+          })
         }
       ];
     });
@@ -197,7 +179,7 @@ describe('LearningPlanFilterFactory', () => {
       const loopValues: {
         filterCriteriaSelection: Map<string, (number | string)[]>;
         expectedSearchFilterCriterias: SearchFilterCriteriaInterface[];
-        getLearningPlanAssignmentsCalled: boolean;
+        getSpecialitiesCalled: boolean;
         getAvailableYearsForSearchCalled: boolean;
       }[] = [
         {
@@ -206,7 +188,7 @@ describe('LearningPlanFilterFactory', () => {
           ]),
           expectedSearchFilterCriterias: [],
           getAvailableYearsForSearchCalled: false,
-          getLearningPlanAssignmentsCalled: false
+          getSpecialitiesCalled: false
         },
         {
           filterCriteriaSelection: new Map<string, (number | string)[]>([
@@ -215,13 +197,13 @@ describe('LearningPlanFilterFactory', () => {
           ]),
           expectedSearchFilterCriterias: [],
           getAvailableYearsForSearchCalled: false,
-          getLearningPlanAssignmentsCalled: false
+          getSpecialitiesCalled: false
         },
         {
           filterCriteriaSelection: new Map<string, (number | string)[]>([]),
           expectedSearchFilterCriterias: [],
           getAvailableYearsForSearchCalled: false,
-          getLearningPlanAssignmentsCalled: false
+          getSpecialitiesCalled: false
         },
         {
           filterCriteriaSelection: new Map<string, (number | string)[]>([
@@ -229,7 +211,7 @@ describe('LearningPlanFilterFactory', () => {
           ]),
           expectedSearchFilterCriterias: [searchFilterCriterias[1]],
           getAvailableYearsForSearchCalled: false,
-          getLearningPlanAssignmentsCalled: false
+          getSpecialitiesCalled: false
         },
         {
           filterCriteriaSelection: new Map<string, (number | string)[]>([
@@ -241,7 +223,7 @@ describe('LearningPlanFilterFactory', () => {
             searchFilterCriterias[2]
           ],
           getAvailableYearsForSearchCalled: false,
-          getLearningPlanAssignmentsCalled: false
+          getSpecialitiesCalled: false
         },
         {
           filterCriteriaSelection: new Map<string, (number | string)[]>([
@@ -255,7 +237,7 @@ describe('LearningPlanFilterFactory', () => {
             searchFilterCriterias[3]
           ],
           getAvailableYearsForSearchCalled: true,
-          getLearningPlanAssignmentsCalled: false
+          getSpecialitiesCalled: false
         },
         {
           filterCriteriaSelection: new Map<string, (number | string)[]>([
@@ -271,7 +253,7 @@ describe('LearningPlanFilterFactory', () => {
             searchFilterCriterias[4]
           ],
           getAvailableYearsForSearchCalled: true,
-          getLearningPlanAssignmentsCalled: true
+          getSpecialitiesCalled: true
         }
       ];
       loopValues.forEach(loopValue => {
@@ -279,9 +261,9 @@ describe('LearningPlanFilterFactory', () => {
           filterCriteriaSelections: loopValue.filterCriteriaSelection,
           searchTerm: ''
         };
-        const getLearningPlanAssignmentsSpy = jest.spyOn(
+        const getSpecialitiesSpy = jest.spyOn(
           learningPlanService,
-          'getLearningPlanAssignments'
+          'getSpecialities'
         );
         const getAvailableYearsForSearchSpy = jest.spyOn(
           learningPlanService,
@@ -301,8 +283,8 @@ describe('LearningPlanFilterFactory', () => {
         expect(getAvailableYearsForSearchSpy).toHaveBeenCalledTimes(
           loopValue.getAvailableYearsForSearchCalled ? 1 : 0
         );
-        expect(getLearningPlanAssignmentsSpy).toHaveBeenCalledTimes(
-          loopValue.getLearningPlanAssignmentsCalled ? 1 : 0
+        expect(getSpecialitiesSpy).toHaveBeenCalledTimes(
+          loopValue.getSpecialitiesCalled ? 1 : 0
         );
         jest.restoreAllMocks();
       });

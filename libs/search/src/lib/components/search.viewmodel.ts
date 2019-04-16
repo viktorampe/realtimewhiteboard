@@ -174,23 +174,11 @@ export class SearchViewModel {
   ): boolean {
     //check if there is selection data
     const criteriaSelections = filterCriteriaSelections.get(criterium.name);
-    if (!criteriaSelections) return false;
 
-    // key property can also be an array
-    const keyProp = value.data[criterium.keyProperty];
-    if (Array.isArray(keyProp)) {
-      // convert to strings
-      const selectionArrayStrings = criteriaSelections
-        .filter(selection => Array.isArray(selection))
-        .map(selection => JSON.stringify(selection));
-
-      // compare that
-      return selectionArrayStrings.includes(
-        JSON.stringify(value.data[criterium.keyProperty])
-      );
-    } else {
-      return criteriaSelections.includes(keyProp);
-    }
+    return (
+      !!criteriaSelections &&
+      criteriaSelections.includes(value.data[criterium.keyProperty])
+    );
   }
 
   /**
