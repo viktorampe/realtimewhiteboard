@@ -95,10 +95,8 @@ describe('UnlockedContentService', () => {
       })
     );
 
-    expect(mockUnlockedContentApi.deleteById.mock.calls).toEqual([
-      [1],
-      [2],
-      [3]
-    ]);
+    expect(mockUnlockedContentApi.deleteById).toHaveBeenCalledWith(3);
+    expect(mockUnlockedContentApi.deleteById).toHaveBeenCalledWith(2);
+    expect(mockUnlockedContentApi.deleteById).toHaveBeenCalledWith(1);
   });
 });
