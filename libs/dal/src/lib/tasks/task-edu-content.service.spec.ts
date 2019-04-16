@@ -9,34 +9,41 @@ describe('TaskEduContentService', () => {
   let service: TaskEduContentServiceInterface;
   let mockGetData$: Observable<object>;
   let mockDeleteById$: Observable<boolean>;
+  const mockPersonApi = {
+    getData: jest.fn().mockImplementation(() => mockGetData$)
+  };
+  const mockTaskEduContentApi = {
+    deleteById: jest.fn().mockImplementation(() => mockDeleteById$)
+  };
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [
-        TaskEduContentService,
-        {
-          provide: PersonApi,
-          useValue: {
-            getData: () => mockGetData$
-          }
-        },
-        {
-          provide: TaskEduContentApi,
-          useValue: {
-            deleteById: () => mockDeleteById$
-          }
-        }
-      ]
-    });
-    service = TestBed.get(TaskEduContentService);
+    jest.clearAllMocks();
+
+    service = new TaskEduContentService(
+      mockPersonApi as any,
+      mockTaskEduContentApi as any
+    );
   });
 
-  it('should be created and available via DI', inject(
-    [TaskEduContentService],
-    (taskEduContentService: TaskEduContentService) => {
-      expect(taskEduContentService).toBeTruthy();
-    }
-  ));
+  describe('Dependency injection', () => {
+    beforeEach(() => {
+      TestBed.configureTestingModule({
+        providers: [
+          TaskEduContentService,
+          { provide: PersonApi, useValue: {} },
+          { provide: TaskEduContentApi, useValue: {} }
+        ]
+      });
+      service = TestBed.get(TaskEduContentService);
+    });
+
+    it('should be created and available via DI', inject(
+      [TaskEduContentService],
+      (taskEduContentService: TaskEduContentService) => {
+        expect(taskEduContentService).toBeTruthy();
+      }
+    ));
+  });
 
   it('should return tasksEduContents', () => {
     mockGetData$ = hot('-a-|', {
@@ -61,10 +68,6 @@ describe('TaskEduContentService', () => {
   });
 
   it('should remove multiple taskEduContents', () => {
-    const deleteByIdSpy = jest
-      .spyOn(TestBed.get(TaskEduContentApi), 'deleteById')
-      .mockImplementation(() => mockDeleteById$);
-
     mockDeleteById$ = hot('-a-|', {
       a: true
     });
@@ -73,6 +76,7 @@ describe('TaskEduContentService', () => {
         a: true
       })
     );
-    expect(deleteByIdSpy).toHaveBeenCalledTimes(3);
+
+    expect(mockTaskEduContentApi.deleteById.mock.calls.length).toBe(3);
   });
 });
