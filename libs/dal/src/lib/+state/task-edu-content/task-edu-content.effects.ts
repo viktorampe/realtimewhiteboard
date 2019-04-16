@@ -8,6 +8,13 @@ import {
   TASK_EDU_CONTENT_SERVICE_TOKEN
 } from '../../tasks/task-edu-content.service.interface';
 import {
+  TaskServiceInterface,
+  TASK_SERVICE_TOKEN
+} from '../../tasks/task.service.interface';
+import {
+  AddTaskEduContent,
+  LinkTaskEduContent,
+  LinkTaskEduContentError,
   LoadTaskEduContents,
   TaskEduContentsActionTypes,
   TaskEduContentsLoaded,
@@ -36,10 +43,28 @@ export class TaskEduContentEffects {
     }
   );
 
+  @Effect()
+  linkTaskEduContent$ = this.dataPersistence.fetch<LinkTaskEduContent>(
+    TaskEduContentsActionTypes.LinkTaskEduContent,
+    {
+      run: (action: LinkTaskEduContent, state: DalState) => {
+        return this.taskService
+          .linkEduContent(action.payload.taskId, action.payload.eduContentId)
+          .pipe(
+            map(taskEduContent => new AddTaskEduContent({ taskEduContent }))
+          );
+      },
+      onError: (action: LinkTaskEduContent, error) => {
+        return new LinkTaskEduContentError(error);
+      }
+    }
+  );
+
   constructor(
     private actions: Actions,
     private dataPersistence: DataPersistence<DalState>,
     @Inject(TASK_EDU_CONTENT_SERVICE_TOKEN)
-    private taskEduContentService: TaskEduContentServiceInterface
+    private taskEduContentService: TaskEduContentServiceInterface,
+    @Inject(TASK_SERVICE_TOKEN) private taskService: TaskServiceInterface
   ) {}
 }
