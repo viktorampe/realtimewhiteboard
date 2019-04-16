@@ -5,6 +5,7 @@ export interface SearchFilterComponentInterface {
   filterCriteria:
     | SearchFilterCriteriaInterface
     | SearchFilterCriteriaInterface[];
+  filterOptions?: any;
   filterSelectionChange: EventEmitter<
     SearchFilterCriteriaInterface | SearchFilterCriteriaInterface[]
   >;
