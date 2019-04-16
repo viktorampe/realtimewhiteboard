@@ -11,10 +11,11 @@ import {
   TaskServiceInterface,
   TASK_SERVICE_TOKEN
 } from '../../tasks/task.service.interface';
+import { EffectFeedback, Priority } from '../effect-feedback';
+import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
 import {
   AddTaskEduContent,
   LinkTaskEduContent,
-  LinkTaskEduContentError,
   LoadTaskEduContents,
   TaskEduContentsActionTypes,
   TaskEduContentsLoaded,
@@ -55,7 +56,23 @@ export class TaskEduContentEffects {
           );
       },
       onError: (action: LinkTaskEduContent, error) => {
-        return new LinkTaskEduContentError(error);
+        return new AddEffectFeedback({
+          effectFeedback: new EffectFeedback({
+            id: this.uuid(),
+            triggerAction: action,
+            message:
+              'Het is niet gelukt om het leermateriaal aan de taak toe te voegen.',
+            userActions: [
+              {
+                title: 'Opnieuw proberen.',
+                userAction: action
+              }
+            ],
+            display: action.payload.displayResponse,
+            type: 'error',
+            priority: Priority.HIGH
+          })
+        });
       }
     }
   );
@@ -65,6 +82,7 @@ export class TaskEduContentEffects {
     private dataPersistence: DataPersistence<DalState>,
     @Inject(TASK_EDU_CONTENT_SERVICE_TOKEN)
     private taskEduContentService: TaskEduContentServiceInterface,
-    @Inject(TASK_SERVICE_TOKEN) private taskService: TaskServiceInterface
+    @Inject(TASK_SERVICE_TOKEN) private taskService: TaskServiceInterface,
+    @Inject('uuid') private uuid: Function
   ) {}
 }
