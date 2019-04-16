@@ -1,8 +1,9 @@
 import { Type } from '@angular/core';
 import { SearchFilterFactory } from '@campus/search';
 import { EnvironmentInterface } from '@campus/shared';
-// tslint:disable-next-line:nx-enforce-module-boundaries
-import { PolpoResultItemComponent } from 'libs/devlib/src/lib/polpo-result-item/polpo-result-item.component';
+import { EduContentSearchResultComponent } from '../app/components/searchresults/edu-content-search-result.component';
+import { GlobalSearchTermFilterFactory } from '../app/factories/global-search-term-filter/global-search-term-filter.factory';
+import { SearchTermFilterFactory } from '../app/factories/search-term-filter/search-term-filter.factory';
 import { icons } from './icons';
 
 export const environment: EnvironmentInterface = {
@@ -76,7 +77,7 @@ export const environment: EnvironmentInterface = {
       //TODO: All '{} as Type' must be replaced with actual components
       searchFilterFactory: {} as Type<SearchFilterFactory>,
       results: {
-        component: PolpoResultItemComponent,
+        component: EduContentSearchResultComponent,
         sortModes: [
           {
             description: 'book',
@@ -103,7 +104,7 @@ export const environment: EnvironmentInterface = {
       dynamicFilters: false,
       searchFilterFactory: {} as Type<SearchFilterFactory>,
       results: {
-        component: PolpoResultItemComponent,
+        component: EduContentSearchResultComponent,
         sortModes: [
           {
             description: 'book',
@@ -124,28 +125,61 @@ export const environment: EnvironmentInterface = {
         pageSize: 20
       }
     },
-    search: {
-      name: 'search',
+    term: {
+      name: 'term',
       label: '<b>Standaard</b> zoeken',
-      dynamicFilters: true,
-      searchFilterFactory: {} as Type<SearchFilterFactory>,
+      dynamicFilters: false,
+      searchTerm: {
+        domHost: 'hostTop'
+      },
+      searchFilterFactory: SearchTermFilterFactory,
       results: {
-        component: PolpoResultItemComponent,
+        component: EduContentSearchResultComponent,
         sortModes: [
           {
-            description: 'book',
-            name: 'book',
-            icon: 'book'
+            description: 'relevantie',
+            name: '_score',
+            icon: 'sort-numeric-down'
           },
           {
-            description: 'bundle',
-            name: 'bundle',
-            icon: 'bundle'
+            description: 'alfabetisch',
+            name: 'title.raw',
+            icon: 'sort-alpha-down'
           },
           {
-            description: 'taak',
-            name: 'taak',
-            icon: 'taak'
+            description: 'laatst gewijzigd',
+            name: 'published',
+            icon: 'calendar-plus'
+          }
+        ],
+        pageSize: 20
+      }
+    },
+    globalterm: {
+      name: 'globalterm',
+      label: '<b>Standaard</b> zoeken',
+      dynamicFilters: true,
+      searchTerm: {
+        domHost: 'hostTop'
+      },
+      searchFilterFactory: GlobalSearchTermFilterFactory,
+      results: {
+        component: EduContentSearchResultComponent,
+        sortModes: [
+          {
+            description: 'relevantie',
+            name: '_score',
+            icon: 'sort-numeric-down'
+          },
+          {
+            description: 'alfabetisch',
+            name: 'title.raw',
+            icon: 'sort-alpha-down'
+          },
+          {
+            description: 'laatst gewijzigd',
+            name: 'published',
+            icon: 'calendar-plus'
           }
         ],
         pageSize: 20
