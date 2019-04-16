@@ -103,10 +103,7 @@ describe('EduContentSearchByColumnComponent', () => {
     it('should call the vm updateState method with the passed property', () => {
       const mockPassedProperty = {
         searchTerm: 'some term',
-        filterCriteriaSelections: new Map<
-          string,
-          (number | string | number[] | string[])[]
-        >()
+        filterCriteriaSelections: new Map<string, (number | string)[]>()
       };
       const updateStateSpy = jest.spyOn(eduContentsViewModel, 'updateState');
       component.onSearchStateChange(mockPassedProperty);

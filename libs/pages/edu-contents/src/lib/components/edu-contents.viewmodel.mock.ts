@@ -123,10 +123,9 @@ export class EduContentsViewModelMock
 
   private searchState: SearchStateInterface = {
     searchTerm: 'foo',
-    filterCriteriaSelections: new Map<
-      string,
-      (number | string | number[] | string[])[]
-    >([['learningArea', [1]]]),
+    filterCriteriaSelections: new Map<string, (number | string)[]>([
+      ['learningArea', [1]]
+    ]),
     from: 0
   };
 

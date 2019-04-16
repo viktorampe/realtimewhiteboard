@@ -181,10 +181,7 @@ export class EduContentsViewModel {
       map((routerState: RouterReducerState<RouterStateUrl>) => {
         const initialSearchState: SearchStateInterface = {
           searchTerm: '',
-          filterCriteriaSelections: new Map<
-            string,
-            (number | string | number[] | string[])[]
-          >()
+          filterCriteriaSelections: new Map<string, (number | string)[]>()
         };
         if (
           routerState.state.queryParams &&

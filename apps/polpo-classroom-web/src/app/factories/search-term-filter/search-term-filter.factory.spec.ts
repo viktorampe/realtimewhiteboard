@@ -105,10 +105,9 @@ describe('SearchTermFilterFactory', () => {
 
     const mockSearchState: SearchStateInterface = {
       searchTerm: '',
-      filterCriteriaSelections: new Map<
-        string,
-        (number | string | number[] | string[])[]
-      >([['learningArea', [2]]])
+      filterCriteriaSelections: new Map<string, (number | string)[]>([
+        ['learningArea', [2]]
+      ])
     };
 
     function loadInStore() {
