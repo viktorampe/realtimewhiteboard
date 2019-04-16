@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { PersonApi, TaskEduContentApi } from '@diekeure/polpo-api-angular-sdk';
-import { combineLatest, Observable } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { map, mapTo } from 'rxjs/operators';
 import { TaskEduContentInterface } from '../+models';
 import { TaskEduContentServiceInterface } from './task-edu-content.service.interface';
@@ -32,7 +32,7 @@ export class TaskEduContentService implements TaskEduContentServiceInterface {
   }
 
   removeAll(taskEduContentIds: number[]): Observable<boolean> {
-    return combineLatest(taskEduContentIds.map(id => this.remove(id))).pipe(
+    return forkJoin(taskEduContentIds.map(id => this.remove(id))).pipe(
       mapTo(true)
     );
   }
