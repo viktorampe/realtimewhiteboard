@@ -7,6 +7,10 @@ import {
   CredentialActions,
   CredentialQueries,
   DalState,
+  FavoriteActions,
+  FavoriteQueries,
+  LearningAreaActions,
+  LearningAreaQueries,
   StateResolver,
   UiActions,
   UiQuery
@@ -30,6 +34,8 @@ export class AppResolver extends StateResolver {
         userId: this.authService.userId
       }),
       new AlertActions.LoadAlerts({ userId: this.authService.userId }),
+      new LearningAreaActions.LoadLearningAreas(),
+      new FavoriteActions.LoadFavorites({ userId: this.authService.userId }),
       new UiActions.LoadUi()
     ];
   }
@@ -37,6 +43,8 @@ export class AppResolver extends StateResolver {
     return [
       CredentialQueries.getLoaded,
       AlertQueries.getLoaded,
+      LearningAreaQueries.getLoaded,
+      FavoriteQueries.getLoaded,
       UiQuery.getLoaded
     ];
   }

@@ -97,3 +97,16 @@ export const getAllByTaskId = createSelector(
       .map(t => state.entities[t]);
   }
 );
+
+export const getByTaskAndEduContentId = createSelector(
+  selectTaskEduContentState,
+  (state: State, props: { taskId: number; eduContentId: number }) => {
+    const taskEduContentId = (<number[]>state.ids).find(
+      id =>
+        state.entities[id].taskId === props.taskId &&
+        state.entities[id].eduContentId === props.eduContentId
+    );
+
+    return state.entities[taskEduContentId];
+  }
+);
