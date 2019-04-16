@@ -143,5 +143,20 @@ describe('TaskEduContent Selectors', () => {
         new TaskEduContentFixture({ id: 2, taskId: 11, submitted: true })
       ]);
     });
+
+    it('getByTaskAndEduContentId should return ', () => {
+      const results = TaskEduContentQueries.getByTaskAndEduContentId(
+        {
+          taskEduContents: createState([
+            new TaskEduContentFixture({ id: 1, taskId: 11, eduContentId: 12 }),
+            new TaskEduContentFixture({ id: 2, taskId: 13, eduContentId: 14 })
+          ])
+        },
+        { taskId: 11, eduContentId: 12 }
+      );
+      expect(results).toEqual(
+        new TaskEduContentFixture({ id: 1, taskId: 11, eduContentId: 12 })
+      );
+    });
   });
 });
