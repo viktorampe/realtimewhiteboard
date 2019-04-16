@@ -6,8 +6,13 @@ import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
 import { TaskEduContentReducer } from '.';
+import { TaskEduContentFixture } from '../../+fixtures';
 import { TASK_EDU_CONTENT_SERVICE_TOKEN } from '../../tasks/task-edu-content.service.interface';
+import { TASK_SERVICE_TOKEN } from '../../tasks/task.service.interface';
 import {
+  AddTaskEduContent,
+  LinkTaskEduContent,
+  LinkTaskEduContentError,
   LoadTaskEduContents,
   TaskEduContentsLoaded,
   TaskEduContentsLoadError
@@ -37,7 +42,7 @@ describe('TaskEduContentEffects', () => {
     expect(effect).toBeObservable(hot('---|'));
   };
 
-  const mockServiceMethodReturnValue = (
+  const mockTaskEduContentServiceMethodReturnValue = (
     method: string,
     returnValue: any,
     service: any = TASK_EDU_CONTENT_SERVICE_TOKEN
@@ -45,10 +50,28 @@ describe('TaskEduContentEffects', () => {
     jest.spyOn(TestBed.get(service), method).mockReturnValue(of(returnValue));
   };
 
-  const mockServiceMethodError = (
+  const mockTaskEduContentServiceMethodError = (
     method: string,
     errorMessage: string,
     service: any = TASK_EDU_CONTENT_SERVICE_TOKEN
+  ) => {
+    jest.spyOn(TestBed.get(service), method).mockImplementation(() => {
+      throw new Error(errorMessage);
+    });
+  };
+
+  const mockTaskServiceMethodReturnValue = (
+    method: string,
+    returnValue: any,
+    service: any = TASK_SERVICE_TOKEN
+  ) => {
+    jest.spyOn(TestBed.get(service), method).mockReturnValue(of(returnValue));
+  };
+
+  const mockTaskServiceMethodError = (
+    method: string,
+    errorMessage: string,
+    service: any = TASK_SERVICE_TOKEN
   ) => {
     jest.spyOn(TestBed.get(service), method).mockImplementation(() => {
       throw new Error(errorMessage);
@@ -77,6 +100,12 @@ describe('TaskEduContentEffects', () => {
             getAllForUser: () => {}
           }
         },
+        {
+          provide: TASK_SERVICE_TOKEN,
+          useValue: {
+            linkEduContent: () => {}
+          }
+        },
         TaskEduContentEffects,
         DataPersistence,
         provideMockActions(() => actions)
@@ -101,7 +130,7 @@ describe('TaskEduContentEffects', () => {
         usedState = TaskEduContentReducer.initialState;
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAllForUser', []);
+        mockTaskEduContentServiceMethodReturnValue('getAllForUser', []);
       });
       it('should trigger an api call with the initialState if force is not true', () => {
         expectInAndOut(
@@ -123,7 +152,7 @@ describe('TaskEduContentEffects', () => {
         usedState = { ...TaskEduContentReducer.initialState, loaded: true };
       });
       beforeEach(() => {
-        mockServiceMethodReturnValue('getAllForUser', []);
+        mockTaskEduContentServiceMethodReturnValue('getAllForUser', []);
       });
       it('should not trigger an api call with the loaded state if force is not true', () => {
         expectInNoOut(effects.loadTaskEduContents$, unforcedLoadAction);
@@ -141,7 +170,7 @@ describe('TaskEduContentEffects', () => {
         usedState = TaskEduContentReducer.initialState;
       });
       beforeEach(() => {
-        mockServiceMethodError('getAllForUser', 'failed');
+        mockTaskEduContentServiceMethodError('getAllForUser', 'failed');
       });
       it('should return a error action if force is not true', () => {
         expectInAndOut(
@@ -167,7 +196,7 @@ describe('TaskEduContentEffects', () => {
         };
       });
       beforeEach(() => {
-        mockServiceMethodError('getAllForUser', 'failed');
+        mockTaskEduContentServiceMethodError('getAllForUser', 'failed');
       });
       it('should return nothing action if force is not true', () => {
         expectInNoOut(effects.loadTaskEduContents$, unforcedLoadAction);
@@ -178,6 +207,38 @@ describe('TaskEduContentEffects', () => {
           forcedLoadAction,
           loadErrorAction
         );
+      });
+    });
+  });
+  describe('linkTaskEduContent$', () => {
+    const linkAction = new LinkTaskEduContent({ taskId: 1, eduContentId: 2 });
+    const linkedAction = new AddTaskEduContent({
+      taskEduContent: new TaskEduContentFixture()
+    });
+    const errorAction = new LinkTaskEduContentError(new Error('failed'));
+    describe('with initialState', () => {
+      beforeAll(() => {
+        usedState = TaskEduContentReducer.initialState;
+      });
+      beforeEach(() => {
+        mockTaskServiceMethodReturnValue(
+          'linkEduContent',
+          new TaskEduContentFixture()
+        );
+      });
+      it('should trigger an api call with the initialState if force is not true', () => {
+        expectInAndOut(effects.linkTaskEduContent$, linkAction, linkedAction);
+      });
+    });
+    describe('with initialState and failing api call', () => {
+      beforeAll(() => {
+        usedState = TaskEduContentReducer.initialState;
+      });
+      beforeEach(() => {
+        mockTaskServiceMethodError('linkEduContent', 'failed');
+      });
+      it('should return a error action if force is not true', () => {
+        expectInAndOut(effects.linkTaskEduContent$, linkAction, errorAction);
       });
     });
   });
