@@ -11,6 +11,7 @@ import {
   SearchFilterCriteriaInterface,
   SearchFilterCriteriaValuesInterface
 } from '../../interfaces';
+import { ColumnFilterService } from './column-filter.service';
 
 @Component({
   selector: 'campus-column-filter',
@@ -56,13 +57,12 @@ import {
 export class ColumnFilterComponent implements SearchFilterComponentInterface {
   private _filterCriteria: SearchFilterCriteriaInterface[];
   private previousFilterCriteriaCount: number;
-  preserveColumn = false;
-  forwardAnimation = true;
 
   @Input()
   public set filterCriteria(value: SearchFilterCriteriaInterface[]) {
     if (value) {
-      this.forwardAnimation = this.previousFilterCriteriaCount < value.length;
+      this.columnFilterService.forwardAnimation =
+        this.previousFilterCriteriaCount < value.length;
       this.previousFilterCriteriaCount = value.length;
 
       // input is set by searchComponent, which can also be a single criterium
@@ -78,6 +78,8 @@ export class ColumnFilterComponent implements SearchFilterComponentInterface {
   @Output()
   filterSelectionChange = new EventEmitter<SearchFilterCriteriaInterface[]>();
 
+  constructor(private columnFilterService: ColumnFilterService) {}
+
   /**
    * determines if a column should be visible or not
    *
@@ -87,7 +89,9 @@ export class ColumnFilterComponent implements SearchFilterComponentInterface {
    */
   columnVisible(columnIndex: number): boolean {
     return (
-      columnIndex === this.filterCriteria.length - (this.preserveColumn ? 2 : 1)
+      columnIndex ===
+      this.filterCriteria.length -
+        (this.columnFilterService.preserveColumn ? 2 : 1)
     );
   }
 
@@ -104,9 +108,9 @@ export class ColumnFilterComponent implements SearchFilterComponentInterface {
    * @memberof ColumnFilterComponent
    */
   animationState(columnIndex: number): string {
-    return `${this.forwardAnimation ? 'forward' : 'backward'}${
-      this.columnVisible(columnIndex) ? 'Enter' : 'Leave'
-    }`;
+    return `${
+      this.columnFilterService.forwardAnimation ? 'forward' : 'backward'
+    }${this.columnVisible(columnIndex) ? 'Enter' : 'Leave'}`;
   }
 
   onFilterSelectionChange(
@@ -114,7 +118,7 @@ export class ColumnFilterComponent implements SearchFilterComponentInterface {
     preserveColumn: boolean = false
   ) {
     const selectionChanged = !filterCriterionValue.selected;
-    this.preserveColumn = preserveColumn;
+    this.columnFilterService.preserveColumn = preserveColumn;
 
     // first reset alle selected markers to false
     this.filterCriteria.forEach(filterCriterion => {
