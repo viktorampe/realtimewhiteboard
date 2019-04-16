@@ -2,6 +2,7 @@ import { inject, TestBed } from '@angular/core/testing';
 import { BundleApi, PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { hot } from '@nrwl/nx/testing';
 import { Observable } from 'rxjs';
+import { UnlockedContentFixture, UserContentFixture } from '../+fixtures';
 import { UnlockedContent } from '../+models';
 import { BundleService } from './bundle.service';
 import { BundleServiceInterface } from './bundle.service.interface';
@@ -14,63 +15,15 @@ describe('BundleService', () => {
   let mockLinkUserContentData$: Observable<UnlockedContent[]>;
 
   const mockLinkEduContentData = [
-    {
-      index: 10000,
-      exception: false,
-      id: 634,
-      eduContentId: 5,
-      teacherId: 186,
-      bundleId: 1,
-      userContentId: null
-    },
-    {
-      index: 10000,
-      exception: false,
-      id: 635,
-      eduContentId: 6,
-      teacherId: 186,
-      bundleId: 1,
-      userContentId: null
-    },
-    {
-      index: 10000,
-      exception: false,
-      id: 636,
-      eduContentId: 7,
-      teacherId: 186,
-      bundleId: 1,
-      userContentId: null
-    }
+    new UnlockedContentFixture(),
+    new UnlockedContentFixture(),
+    new UnlockedContentFixture()
   ];
 
   const mockLinkUserContentData = [
-    {
-      index: 10000,
-      exception: false,
-      id: 640,
-      eduContentId: null,
-      teacherId: 186,
-      bundleId: 1,
-      userContentId: 1
-    },
-    {
-      index: 10000,
-      exception: false,
-      id: 641,
-      eduContentId: null,
-      teacherId: 186,
-      bundleId: 1,
-      userContentId: 2
-    },
-    {
-      index: 10000,
-      exception: false,
-      id: 642,
-      eduContentId: null,
-      teacherId: 186,
-      bundleId: 1,
-      userContentId: 3
-    }
+    new UserContentFixture(),
+    new UserContentFixture(),
+    new UserContentFixture()
   ];
 
   beforeEach(() => {
