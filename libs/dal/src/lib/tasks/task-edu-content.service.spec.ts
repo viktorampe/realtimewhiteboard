@@ -77,6 +77,6 @@ describe('TaskEduContentService', () => {
       })
     );
 
-    expect(mockTaskEduContentApi.deleteById.mock.calls.length).toBe(3);
+    expect(mockTaskEduContentApi.deleteById).toHaveBeenCalledTimes(3);
   });
 });
