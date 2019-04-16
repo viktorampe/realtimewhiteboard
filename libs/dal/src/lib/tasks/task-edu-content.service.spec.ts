@@ -61,7 +61,9 @@ describe('TaskEduContentService', () => {
   });
 
   it('should remove multiple taskEduContents', () => {
-    const deleteByIdSpy = spyOn(TestBed.get(TaskEduContentApi), 'deleteById');
+    const deleteByIdSpy = jest
+      .spyOn(TestBed.get(TaskEduContentApi), 'deleteById')
+      .mockImplementation(() => mockDeleteById$);
 
     mockDeleteById$ = hot('-a-|', {
       a: true
