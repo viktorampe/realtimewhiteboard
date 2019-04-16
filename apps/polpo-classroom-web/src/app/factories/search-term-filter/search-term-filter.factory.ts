@@ -39,6 +39,7 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
   private component = CheckboxListFilterComponent;
   private domHost = 'hostLeft';
 
+  public readonly maxVisibleItems = 5;
   public filterQueries: {
     [key: string]: FilterQueryInterface;
   } = {
@@ -131,7 +132,10 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
 
     return combineLatest(filters).pipe(
       map(searchFilters =>
-        searchFilters.filter(f => f.criteria.values.length > 0)
+        searchFilters.filter(f => {
+          f.options = { maxVisibleItems: this.maxVisibleItems };
+          return f.criteria.values.length > 0;
+        })
       )
     );
   }
