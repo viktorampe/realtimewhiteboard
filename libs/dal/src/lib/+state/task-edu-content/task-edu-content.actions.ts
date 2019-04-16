@@ -15,8 +15,7 @@ export enum TaskEduContentsActionTypes {
   DeleteTaskEduContent = '[TaskEduContents] Delete TaskEduContent',
   DeleteTaskEduContents = '[TaskEduContents] Delete TaskEduContents',
   ClearTaskEduContents = '[TaskEduContents] Clear TaskEduContents',
-  LinkTaskEduContent = '[TaskEduContents] Link TaskEduContent',
-  LinkTaskEduContentError = '[TaskEduContents] Link TaskEduContent Error'
+  LinkTaskEduContent = '[TaskEduContents] Link TaskEduContent'
 }
 
 export class LoadTaskEduContents implements Action {
@@ -96,12 +95,13 @@ export class ClearTaskEduContents implements Action {
 
 export class LinkTaskEduContent implements Action {
   readonly type = TaskEduContentsActionTypes.LinkTaskEduContent;
-  constructor(public payload: { taskId: number; eduContentId: number }) {}
-}
-
-export class LinkTaskEduContentError implements Action {
-  readonly type = TaskEduContentsActionTypes.LinkTaskEduContentError;
-  constructor(public payload: any) {}
+  constructor(
+    public payload: {
+      taskId: number;
+      eduContentId: number;
+      displayResponse?: boolean;
+    }
+  ) {}
 }
 
 export type TaskEduContentsActions =
@@ -117,5 +117,4 @@ export type TaskEduContentsActions =
   | DeleteTaskEduContent
   | DeleteTaskEduContents
   | ClearTaskEduContents
-  | LinkTaskEduContent
-  | LinkTaskEduContentError;
+  | LinkTaskEduContent;
