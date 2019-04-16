@@ -102,7 +102,7 @@ export class BundlesEffects {
       type: 'error',
       userActions: [
         {
-          title: 'Opniew proberen',
+          title: 'Opnieuw proberen',
           userAction: action
         }
       ],

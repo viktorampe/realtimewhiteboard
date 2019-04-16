@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { MockDate } from '@campus/testing';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
@@ -6,14 +7,29 @@ import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
 import { BundleReducer } from '.';
+import { UnlockedContentFixture } from '../../+fixtures';
 import { BUNDLE_SERVICE_TOKEN } from '../../bundle/bundle.service.interface';
-import { BundlesLoaded, BundlesLoadError, LoadBundles } from './bundle.actions';
+import {
+  EffectFeedback,
+  EffectFeedbackActions,
+  Priority
+} from '../effect-feedback';
+import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
+import { AddUnlockedContent } from '../unlocked-content/unlocked-content.actions';
+import {
+  BundlesLoaded,
+  BundlesLoadError,
+  LinkEduContent,
+  LoadBundles
+} from './bundle.actions';
 import { BundlesEffects } from './bundle.effects';
 
 describe('BundleEffects', () => {
   let actions: Observable<any>;
   let effects: BundlesEffects;
   let usedState: any;
+  let uuid: Function;
+  let mockDate: MockDate;
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -66,16 +82,31 @@ describe('BundleEffects', () => {
         {
           provide: BUNDLE_SERVICE_TOKEN,
           useValue: {
-            getAllForUser: () => {}
+            getAllForUser: () => {},
+            linkEduContent: () => [],
+            linkUserContent: () => []
           }
         },
         BundlesEffects,
         DataPersistence,
-        provideMockActions(() => actions)
+        provideMockActions(() => actions),
+        {
+          provide: 'uuid',
+          useValue: () => 'foo'
+        }
       ]
     });
 
     effects = TestBed.get(BundlesEffects);
+    uuid = TestBed.get('uuid');
+  });
+
+  beforeAll(() => {
+    mockDate = new MockDate();
+  });
+
+  afterAll(() => {
+    mockDate.returnRealDate();
   });
 
   describe('loadBundle$', () => {
@@ -157,6 +188,71 @@ describe('BundleEffects', () => {
       });
       it('should return a error action if force is true', () => {
         expectInAndOut(effects.loadBundles$, forcedLoadAction, loadErrorAction);
+      });
+    });
+  });
+
+  describe('linkEduContent$', () => {
+    const unlockedContent = new UnlockedContentFixture();
+    const linkEduContentAction = new LinkEduContent({
+      bundleId: 1,
+      eduContentId: 1
+    });
+    const addUserContentAction = new AddUnlockedContent({
+      unlockedContent
+    });
+
+    describe('when successful', () => {
+      beforeEach(() => {
+        mockServiceMethodReturnValue('linkEduContent', [
+          unlockedContent,
+          unlockedContent
+        ]);
+      });
+
+      it('should dispatch addUnlockedContent actions', () => {
+        actions = hot('a', {
+          a: linkEduContentAction
+        });
+        expect(effects.linkEduContent$).toBeObservable(
+          hot('(ab)', {
+            a: addUserContentAction,
+            b: addUserContentAction
+          })
+        );
+      });
+    });
+
+    describe('when errored', () => {
+      let effectFeedback: EffectFeedback;
+      let addFeedbackAction: EffectFeedbackActions.AddEffectFeedback;
+
+      beforeAll(() => {
+        effectFeedback = new EffectFeedback({
+          id: uuid(),
+          triggerAction: linkEduContentAction,
+          message:
+            'Het is niet gelukt om het lesmateriaal aan de bundel toe te voegen.',
+          type: 'error',
+          userActions: [
+            { title: 'Opnieuw proberen', userAction: linkEduContentAction }
+          ],
+          display: true,
+          priority: Priority.HIGH
+        });
+        addFeedbackAction = new AddEffectFeedback({ effectFeedback });
+      });
+
+      beforeEach(() => {
+        mockServiceMethodError('linkEduContent', 'Something went wrong');
+      });
+
+      it('should dispatch an error feedback action', () => {
+        expectInAndOut(
+          effects.linkEduContent$,
+          linkEduContentAction,
+          addFeedbackAction
+        );
       });
     });
   });
