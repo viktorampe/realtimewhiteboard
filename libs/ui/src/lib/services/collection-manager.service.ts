@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { Observable, Subject, Subscription } from 'rxjs';
-import { map, take, tap } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { ManageCollectionItemInterface } from '../manage-collection/interfaces/ManageCollectionItem.interface';
 import { ItemToggledInCollectionInterface } from './ItemToggledInCollection.interface';
 
@@ -45,21 +45,24 @@ interface ManageCollectionsForContentDataInterface {
 })
 export class CollectionManagerService {
   private subscription: Subscription;
-  private itemToggledInCollection$ = new Subject<
-    ItemToggledInCollectionInterface
-  >();
 
   constructor(public dialog: MatDialog) {}
 
   manageCollections(
+    title: string,
     item: ManageCollectionItemInterface,
     linkableItems: ManageCollectionItemInterface[],
     linkedItemIds: number[],
     recentItemIds: number[]
   ): Observable<ItemToggledInCollectionInterface> {
+    // setup observable
+    const itemToggledInCollection$ = new Subject<
+      ItemToggledInCollectionInterface
+    >();
+
     // open dialog
     const dialogData: ManageCollectionsForContentDataInterface = {
-      title: 'foo', // where does this title come from? I guess the item?
+      title: title,
       item: item,
       linkableItems: linkableItems,
       linkedItemIds: new Set(linkedItemIds),
@@ -69,26 +72,26 @@ export class CollectionManagerService {
     const dialogRef = this.openDialog(dialogData);
 
     // listen to component and bubble itemToggledInCollectionEvent
-    this.subscription = dialogRef.componentInstance.selectionChanged
+    this.subscription = dialogRef.componentInstance.selectionChanged.subscribe(
+      (itemToggleEvent: ItemToggledInCollectionInterface) =>
+        itemToggledInCollection$.next(itemToggleEvent)
+    );
+
+    dialogRef
+      .afterClosed()
       .pipe(
-        tap((itemToggleEvent: ItemToggledInCollectionInterface) =>
-          this.itemToggledInCollection$.next(itemToggleEvent)
-        )
+        take(1),
+        map(() => {
+          // clean up subscription on dialog close
+          this.subscription.unsubscribe();
+          // complete observable on dialog close
+          itemToggledInCollection$.complete();
+        })
       )
       .subscribe();
 
-    dialogRef.afterClosed().pipe(
-      take(1),
-      map(result => {
-        // clean up subscription on dialog close
-        this.subscription.unsubscribe();
-        // complete observable on dialog close
-        this.itemToggledInCollection$.complete();
-      })
-    );
-
     // return observable
-    return this.itemToggledInCollection$;
+    return itemToggledInCollection$;
   }
 
   openDialog(
