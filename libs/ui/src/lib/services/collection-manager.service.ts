@@ -22,15 +22,6 @@ export class ManageCollectionComponent {
     ItemToggledInCollectionInterface
   >();
 }
-
-interface ManageCollectionsForContentDataInterface {
-  title: string;
-  item: ManageCollectionItemInterface;
-  linkableItems: ManageCollectionItemInterface[];
-  linkedItemIds: Set<number>;
-  recentItemIds: Set<number>;
-}
-
 // ------------------- END REMOVE -------------------------------------- //
 
 const COLLECTION_MANAGER_SERVICE_TOKEN = new InjectionToken(
@@ -39,6 +30,14 @@ const COLLECTION_MANAGER_SERVICE_TOKEN = new InjectionToken(
 
 export interface CollectionMangerInterface {
   mangeCollections(): Observable<ItemToggledInCollectionInterface>;
+}
+
+interface ManageCollectionsForContentDataInterface {
+  title: string;
+  item: ManageCollectionItemInterface;
+  linkableItems: ManageCollectionItemInterface[];
+  linkedItemIds: Set<number>;
+  recentItemIds: Set<number>;
 }
 
 @Injectable({
