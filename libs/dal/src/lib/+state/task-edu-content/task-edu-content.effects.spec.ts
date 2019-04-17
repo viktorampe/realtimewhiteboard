@@ -35,7 +35,6 @@ describe('TaskEduContentEffects', () => {
   let effectFeedback: EffectFeedbackInterface;
   let uuid: Function;
   let dateMock: MockDate;
-  let mockDate: MockDate;
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -116,7 +115,6 @@ describe('TaskEduContentEffects', () => {
 
   beforeAll(() => {
     dateMock = new MockDate();
-    mockDate = new MockDate();
 
     effectFeedback = new EffectFeedbackFixture({
       timeStamp: dateMock.mockDate.getTime()
@@ -125,7 +123,6 @@ describe('TaskEduContentEffects', () => {
 
   afterAll(() => {
     dateMock.returnRealDate();
-    mockDate.returnRealDate();
   });
 
   beforeEach(() => {
