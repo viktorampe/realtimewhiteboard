@@ -45,7 +45,7 @@ export class TaskEduContentEffects {
   );
 
   @Effect()
-  linkTaskEduContent$ = this.dataPersistence.fetch<LinkTaskEduContent>(
+  linkTaskEduContent$ = this.dataPersistence.pessimisticUpdate(
     TaskEduContentsActionTypes.LinkTaskEduContent,
     {
       run: (action: LinkTaskEduContent, state: DalState) => {
