@@ -217,7 +217,7 @@ describe('UnlockedContentEffects', () => {
         displayResponse: true
       });
       effectFeedback.triggerAction = deleteAction;
-      effectFeedback.message = 'Het lesmateriaal is uit de bundel verwijdert.';
+      effectFeedback.message = 'Het lesmateriaal is uit de bundel verwijderd.';
       effectFeedback.display = deleteAction.payload.displayResponse;
       effectFeedback.userActions = null;
       effectFeedback.type = 'success';
@@ -228,7 +228,7 @@ describe('UnlockedContentEffects', () => {
         new AddEffectFeedback({ effectFeedback })
       );
     });
-    it('should return a success feedback action if the service returns a value', () => {
+    it('should return an undo and error feedback action if the service fails', () => {
       const deleteAction = new DeleteUnlockedContent({
         id: 1,
         displayResponse: true
@@ -263,7 +263,7 @@ describe('UnlockedContentEffects', () => {
       });
       effectFeedback.triggerAction = deleteAction;
       effectFeedback.message =
-        'De lesmaterialen zijn uit de bundel verwijdert.';
+        'De lesmaterialen zijn uit de bundel verwijderd.';
       effectFeedback.display = deleteAction.payload.displayResponse;
       effectFeedback.userActions = null;
       effectFeedback.type = 'success';
@@ -274,7 +274,7 @@ describe('UnlockedContentEffects', () => {
         new AddEffectFeedback({ effectFeedback })
       );
     });
-    it('should return an error feedback action if the service fails', () => {
+    it('should return an undo and error feedback action if the service fails', () => {
       const deleteAction = new DeleteUnlockedContents({
         ids: [1],
         displayResponse: true

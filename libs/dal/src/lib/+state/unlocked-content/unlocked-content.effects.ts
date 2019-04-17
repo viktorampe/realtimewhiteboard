@@ -56,7 +56,7 @@ export class UnlockedContentsEffects {
                 effectFeedback: new EffectFeedback({
                   id: this.uuid(),
                   triggerAction: action,
-                  message: 'Het lesmateriaal is uit de bundel verwijdert.',
+                  message: 'Het lesmateriaal is uit de bundel verwijderd.',
                   display: action.payload.displayResponse,
                   userActions: null,
                   type: 'success',
@@ -99,7 +99,7 @@ export class UnlockedContentsEffects {
                 effectFeedback: new EffectFeedback({
                   id: this.uuid(),
                   triggerAction: action,
-                  message: 'De lesmaterialen zijn uit de bundel verwijdert.',
+                  message: 'De lesmaterialen zijn uit de bundel verwijderd.',
                   display: action.payload.displayResponse,
                   userActions: null,
                   type: 'success',
