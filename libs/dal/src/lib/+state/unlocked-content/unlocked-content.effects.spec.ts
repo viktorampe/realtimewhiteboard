@@ -274,7 +274,7 @@ describe('UnlockedContentEffects', () => {
         new AddEffectFeedback({ effectFeedback })
       );
     });
-    it('should return a success feedback action if the service returns a value', () => {
+    it('should return an error feedback action if the service fails', () => {
       const deleteAction = new DeleteUnlockedContents({
         ids: [1],
         displayResponse: true
