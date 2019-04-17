@@ -127,6 +127,7 @@ describe('TaskEduContentEffects', () => {
           provide: TASK_EDU_CONTENT_SERVICE_TOKEN,
           useValue: {
             getAllForUser: () => {},
+            linkEduContent: () => {},
             remove: () => {}
           }
         },
@@ -298,7 +299,10 @@ describe('TaskEduContentEffects', () => {
           }
         ];
         effectFeedback.priority = Priority.HIGH;
+
+        mockTaskEduContentServiceMethodError('linkEduContent', 'failed');
       });
+
       it('should return a error action', () => {
         const errorAction = new EffectFeedbackActions.AddEffectFeedback({
           effectFeedback: effectFeedback
