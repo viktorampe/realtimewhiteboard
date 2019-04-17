@@ -38,7 +38,7 @@ export class BundlesEffects {
   });
 
   @Effect()
-  linkEduContent$ = this.dataPersistence.fetch(
+  linkEduContent$ = this.dataPersistence.pessimisticUpdate(
     BundlesActionTypes.LinkEduContent,
     {
       run: (action: LinkEduContent, state: DalState) => {
@@ -73,7 +73,7 @@ export class BundlesEffects {
     }
   );
   @Effect()
-  linkUserContent$ = this.dataPersistence.fetch(
+  linkUserContent$ = this.dataPersistence.pessimisticUpdate(
     BundlesActionTypes.LinkUserContent,
     {
       run: (action: LinkUserContent, state: DalState) => {
