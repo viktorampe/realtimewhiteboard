@@ -506,7 +506,7 @@ describe('SearchComponent', () => {
     });
   });
 
-  describe('seachFilters', () => {
+  describe('searchFilters', () => {
     let hostFixture: ComponentFixture<TestContainerComponent>;
     let hostComponent: TestContainerComponent;
     let searchComponent: SearchComponent;
@@ -573,6 +573,24 @@ describe('SearchComponent', () => {
         expect(componentDE.componentInstance.filterCriteria).toBe(
           filterCriteria[i].criteria
         );
+      });
+    });
+
+    it('should set the maxVisibleItems', () => {
+      const filterCriteria = (searchViewmodel.searchFilters$ as BehaviorSubject<
+        SearchFilterInterface[]
+      >).value;
+      searchFilterComponents.forEach((componentDE, i) => {
+        if (
+          filterCriteria[i].options &&
+          filterCriteria[i].options.maxVisibleItems
+        ) {
+          expect(componentDE.componentInstance.maxVisibleItems).toBe(
+            filterCriteria[i].options.maxVisibleItems
+          );
+          expect(componentDE.name).toBe('campus-checkbox-list-filter');
+        } else
+          expect(componentDE.componentInstance.maxVisibleItems).toBeFalsy();
       });
     });
 

@@ -78,7 +78,8 @@ export class MockSearchViewModel
           })
         ]),
         component: CheckboxListFilterComponent,
-        domHost: 'hostleft'
+        domHost: 'hostleft',
+        options: { maxVisibleItems: 5 }
       },
       {
         criteria: [
