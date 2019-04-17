@@ -1,6 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
-import { Action } from '@ngrx/store';
 import { DataPersistence } from '@nrwl/nx';
 import { from } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
@@ -10,7 +9,7 @@ import {
   BUNDLE_SERVICE_TOKEN
 } from '../../bundle/bundle.service.interface';
 import { DalState } from '../dal.state.interface';
-import { EffectFeedback, Priority } from '../effect-feedback';
+import { EffectFeedback } from '../effect-feedback';
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
 import { AddUnlockedContent } from '../unlocked-content/unlocked-content.actions';
 import {
@@ -53,7 +52,8 @@ export class BundlesEffects {
                 | AddUnlockedContent)[] = unlockedContents.map(
                 unlockedContent => new AddUnlockedContent({ unlockedContent })
               );
-              const effectFeedback = this.generateSuccessFeedback(
+              const effectFeedback = EffectFeedback.generateSuccessFeedback(
+                this.uuid(),
                 action,
                 'Het lesmateriaal is aan de bundel toegevoegd.'
               );
@@ -64,7 +64,8 @@ export class BundlesEffects {
       },
       onError: (action: LinkEduContent, error) => {
         return new AddEffectFeedback({
-          effectFeedback: this.generateErrorFeedback(
+          effectFeedback: EffectFeedback.generateErrorFeedback(
+            this.uuid(),
             action,
             'Het is niet gelukt om het lesmateriaal aan de bundel toe te voegen.'
           )
@@ -88,7 +89,8 @@ export class BundlesEffects {
                 | AddUnlockedContent)[] = unlockedContents.map(
                 unlockedContent => new AddUnlockedContent({ unlockedContent })
               );
-              const effectFeedback = this.generateSuccessFeedback(
+              const effectFeedback = EffectFeedback.generateSuccessFeedback(
+                this.uuid(),
                 action,
                 'Het eigen lesmateriaal is aan de bundel toegevoegd.'
               );
@@ -99,7 +101,8 @@ export class BundlesEffects {
       },
       onError: (action: LinkUserContent, error) => {
         return new AddEffectFeedback({
-          effectFeedback: this.generateErrorFeedback(
+          effectFeedback: EffectFeedback.generateErrorFeedback(
+            this.uuid(),
             action,
             'Het is niet gelukt om het eigen lesmateriaal aan de bundel toe te voegen.'
           )
@@ -107,36 +110,6 @@ export class BundlesEffects {
       }
     }
   );
-
-  private generateErrorFeedback(
-    action: Action,
-    message: string
-  ): EffectFeedback {
-    return new EffectFeedback({
-      id: this.uuid(),
-      triggerAction: action,
-      message: message,
-      type: 'error',
-      userActions: [
-        {
-          title: 'Opnieuw proberen',
-          userAction: action
-        }
-      ],
-      priority: Priority.HIGH
-    });
-  }
-
-  private generateSuccessFeedback(
-    action: Action,
-    message: string
-  ): EffectFeedback {
-    return new EffectFeedback({
-      id: this.uuid(),
-      triggerAction: action,
-      message: message
-    });
-  }
 
   constructor(
     private actions: Actions,
