@@ -24,6 +24,7 @@ import {
 } from './task-edu-content.actions';
 import { TaskEduContentEffects } from './task-edu-content.effects';
 
+let x;
 describe('TaskEduContentEffects', () => {
   let actions: Observable<any>;
   let effects: TaskEduContentEffects;
@@ -41,6 +42,21 @@ describe('TaskEduContentEffects', () => {
     expect(effect).toBeObservable(
       hot('-a-|', {
         a: effectOutput
+      })
+    );
+  };
+
+  const expectInAndOutDouble = (
+    effect: Observable<any>,
+    triggerAction: Action,
+    firstEffectOutput: any,
+    secondEffectOutput: any
+  ) => {
+    actions = hot('-a-', { a: triggerAction });
+    expect(effect).toBeObservable(
+      hot('-(ab)-', {
+        a: firstEffectOutput,
+        b: secondEffectOutput
       })
     );
   };
@@ -237,13 +253,29 @@ describe('TaskEduContentEffects', () => {
 
     describe('with initialState', () => {
       beforeEach(() => {
+        effectFeedback.message =
+          'Het leermateriaal werd aan de taak toegevoegd.';
+        effectFeedback.triggerAction = linkAction;
+        effectFeedback.type = 'success';
+        effectFeedback.display = true;
+        effectFeedback.priority = Priority.NORM;
+
         mockTaskServiceMethodReturnValue(
           'linkEduContent',
           new TaskEduContentFixture()
         );
       });
       it('should trigger an api call with the initialState', () => {
-        expectInAndOut(effects.linkTaskEduContent$, linkAction, linkedAction);
+        const addFeedback = new EffectFeedbackActions.AddEffectFeedback({
+          effectFeedback: effectFeedback
+        });
+
+        expectInAndOutDouble(
+          effects.linkTaskEduContent$,
+          linkAction,
+          addFeedback,
+          linkedAction
+        );
       });
     });
     describe('with initialState and failing api call', () => {
