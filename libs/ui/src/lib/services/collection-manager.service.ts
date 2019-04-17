@@ -46,7 +46,9 @@ export interface CollectionMangerInterface {
 })
 export class CollectionManagerService {
   private subscription: Subscription;
-  private itemToggledInCollection$ = new Subject<any>();
+  private itemToggledInCollection$ = new Subject<
+    ItemToggledInCollectionInterface
+  >();
 
   constructor(public dialog: MatDialog) {}
 
