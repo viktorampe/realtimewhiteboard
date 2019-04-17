@@ -1,30 +1,20 @@
 import { Component, EventEmitter, Injectable, Output } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
-import { Observable, of, Subject, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, Subject, Subscription } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { ManageCollectionItemInterface } from '../manage-collection/interfaces/ManageCollectionItem.interface';
+import { ItemToggledInCollectionInterface } from './ItemToggledInCollection.interface';
 
+//----------- TO DO: REMOVE WHEN OTHER ISSUES ARE IMPLEMENTED --------------
 // mock component
 @Component({
   selector: 'campus-manage-collection',
   template: ``
 })
 export class ManageCollectionComponent {
-  @Output() selectionChanged = new EventEmitter<{
-    relatedItem: ManageCollectionItemInterface;
-    item: ManageCollectionItemInterface;
-    selected: boolean;
-  }>();
-  constructor() {}
-}
-// TODO: remove
-class ItemToggledInCollectionEvent {}
-
-// TODO: remove
-interface ManageCollectionItemInterface {
-  icon?: string;
-  label: string;
-  id: number;
-  className?: string;
+  @Output() selectionChanged = new EventEmitter<
+    ItemToggledInCollectionInterface
+  >();
 }
 
 interface ManageCollectionsForContentDataInterface {
@@ -34,6 +24,8 @@ interface ManageCollectionsForContentDataInterface {
   linkedItemIds: Set<number>;
   recentItemIds: Set<number>;
 }
+
+// ------------------- END REMOVE -------------------------------------- //
 
 @Injectable({
   providedIn: 'root'
@@ -49,10 +41,10 @@ export class CollectionManagerService {
     linkableItems: ManageCollectionItemInterface[],
     linkedItemIds: number[],
     recentItemIds: number[]
-  ): Observable<ItemToggledInCollectionEvent> {
+  ): Observable<ItemToggledInCollectionInterface> {
     // open dialog
     const dialogData: ManageCollectionsForContentDataInterface = {
-      title: '',
+      title: 'foo', // where does this title come from? I guess the item?
       item: item,
       linkableItems: linkableItems,
       linkedItemIds: new Set(linkedItemIds),
@@ -64,7 +56,7 @@ export class CollectionManagerService {
     // listen to component and bubble itemToggledInCollectionEvent
     this.subscription = dialogRef.componentInstance.selectionChanged
       .pipe(
-        map(itemToggleEvent =>
+        tap((itemToggleEvent: ItemToggledInCollectionInterface) =>
           this.itemToggledInCollection$.next(itemToggleEvent)
         )
       )
@@ -78,7 +70,7 @@ export class CollectionManagerService {
     });
 
     // return observable
-    return of(new ItemToggledInCollectionEvent());
+    return this.itemToggledInCollection$;
   }
 
   openDialog(
@@ -86,7 +78,6 @@ export class CollectionManagerService {
   ): MatDialogRef<ManageCollectionComponent> {
     // use the ManageCollectionComponent
     // inject the right data
-
     return this.dialog.open(ManageCollectionComponent, {
       data: data
     });
