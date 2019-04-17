@@ -215,9 +215,8 @@ describe('ColumnFilterComponent', () => {
         mockFilterCriterium.values.forEach((value, vIndex) => {
           const expected =
             (cIndex === passedCIndex && vIndex === passedVIndex) || // changed criterion and changed value
-            cIndex !== passedCIndex // other criterion
-              ? true
-              : false;
+            cIndex !== passedCIndex; // other criterion
+
 
           expect(value.selected).toBe(expected);
         });

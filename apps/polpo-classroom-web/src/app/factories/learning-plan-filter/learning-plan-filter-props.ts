@@ -27,7 +27,7 @@ export const YEARS_FILTER_PROPS = {
 };
 
 export const SPECIALITIES_FILTER_PROPS = {
-  name: 'learningPlan.assignment.specialityId',
+  name: 'learningPlans.assignments.specialty',
   label: 'Richting',
   keyProperty: 'id',
   displayProperty: 'name'
