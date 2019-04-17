@@ -13,7 +13,7 @@ describe('CollapsibleSheetComponent', () => {
       declarations: [CollapsibleSheetComponent]
       // Not usable in this test suite -> actual MatIcon is needed, MockMatIconRegistry returns null
       // providers: [{ provide: MatIconRegistry, useValue: MockMatIconRegistry }]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

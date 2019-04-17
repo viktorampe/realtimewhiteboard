@@ -5,7 +5,7 @@ describe('PagesSettingsAlertsModule', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [PagesSettingsAlertsModule]
-    }).compileComponents();
+    });
   }));
 
   it('should create', () => {

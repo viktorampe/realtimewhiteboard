@@ -60,7 +60,7 @@ describe('ErrorComponent', () => {
         }
       ],
       declarations: [ErrorComponent]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

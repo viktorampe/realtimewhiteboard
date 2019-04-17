@@ -5,7 +5,7 @@ describe('PagesReportsModule', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [PagesReportsModule]
-    }).compileComponents();
+    });
   }));
 
   it('should create', () => {

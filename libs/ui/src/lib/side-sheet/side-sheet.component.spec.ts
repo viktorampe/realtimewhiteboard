@@ -44,7 +44,7 @@ describe('SideSheetComponent', () => {
         SideSheetBodyDirective,
         SideSheetPageDirective
       ]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

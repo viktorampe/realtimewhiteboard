@@ -8,4 +8,6 @@ export const UNLOCKED_CONTENT_SERVICE_TOKEN = new InjectionToken(
 
 export interface UnlockedContentServiceInterface {
   getAllForUser(userId: number): Observable<UnlockedContentInterface[]>;
+  remove(unlockedContentId: number): Observable<boolean>;
+  removeAll(unlockedContentIds: number[]): Observable<boolean>;
 }

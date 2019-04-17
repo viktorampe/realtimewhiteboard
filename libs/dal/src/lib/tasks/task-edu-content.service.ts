@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { PersonApi, TaskEduContentApi } from '@diekeure/polpo-api-angular-sdk';
+import { forkJoin, Observable } from 'rxjs';
+import { map, mapTo } from 'rxjs/operators';
 import { TaskEduContentInterface } from '../+models';
 import { TaskEduContentServiceInterface } from './task-edu-content.service.interface';
 
@@ -9,7 +9,10 @@ import { TaskEduContentServiceInterface } from './task-edu-content.service.inter
   providedIn: 'root'
 })
 export class TaskEduContentService implements TaskEduContentServiceInterface {
-  constructor(private personApi: PersonApi) {}
+  constructor(
+    private personApi: PersonApi,
+    private taskEduContentApi: TaskEduContentApi
+  ) {}
 
   getAllForUser(userId: number): Observable<TaskEduContentInterface[]> {
     return this.personApi
@@ -20,5 +23,17 @@ export class TaskEduContentService implements TaskEduContentServiceInterface {
             res.taskEduContents
         )
       );
+  }
+
+  remove(taskEduContentId: number): Observable<boolean> {
+    return this.taskEduContentApi
+      .deleteById(taskEduContentId)
+      .pipe(mapTo(true));
+  }
+
+  removeAll(taskEduContentIds: number[]): Observable<boolean> {
+    return forkJoin(taskEduContentIds.map(id => this.remove(id))).pipe(
+      mapTo(true)
+    );
   }
 }

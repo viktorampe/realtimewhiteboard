@@ -17,7 +17,7 @@ describe('PeriodLabelComponent', () => {
     TestBed.configureTestingModule({
       declarations: [PeriodLabelComponent],
       imports: [ReactiveFormsModule, FormsModule]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

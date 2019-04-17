@@ -66,7 +66,7 @@ describe('ColumnFilterComponent', () => {
       declarations: [ColumnFilterComponent],
       imports: [MatListModule, NoopAnimationsModule, MatIconModule],
       providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

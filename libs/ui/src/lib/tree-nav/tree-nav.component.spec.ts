@@ -39,7 +39,7 @@ describe('TreeNavComponent', () => {
       imports: [RouterTestingModule, CdkTreeModule, MatIconModule],
       declarations: [TreeNavComponent],
       providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {
@@ -152,4 +152,21 @@ describe('TreeNavComponent', () => {
   });
 
   // no tests for click handler because that is triggered through the "cdkTreeNodeToggle" Angular Material directive
+  // -> had to add click event handler to update data
+
+  it('should emit navItemChanged when a navItem link is clicked', () => {
+    const node = treeNodesDE[1];
+    const navItemLink = node.query(By.css('a'));
+    const navItem = component.nestedDataSource.data[1];
+    component.navItemChanged.emit = jest.fn();
+
+    navItemLink.nativeElement.click();
+
+    expect(component.navItemChanged.emit).toHaveBeenCalled();
+    expect(component.navItemChanged.emit).toHaveBeenCalledTimes(1);
+    expect(component.navItemChanged.emit).toHaveBeenCalledWith({
+      ...navItem,
+      expanded: true
+    });
+  });
 });

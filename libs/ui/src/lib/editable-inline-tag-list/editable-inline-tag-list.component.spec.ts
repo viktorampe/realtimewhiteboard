@@ -15,7 +15,7 @@ describe('EditableInlineTagListComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [EditableInlineTagListComponent]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

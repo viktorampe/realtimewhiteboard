@@ -23,7 +23,7 @@ describe('AlertsComponent', () => {
         AlertToNotificationItemPipe,
         { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

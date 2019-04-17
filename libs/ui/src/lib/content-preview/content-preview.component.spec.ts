@@ -42,7 +42,7 @@ describe('ContentPreviewComponent', () => {
     TestBed.configureTestingModule({
       imports: [TestModule],
       schemas: [NO_ERRORS_SCHEMA]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

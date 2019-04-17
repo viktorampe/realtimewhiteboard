@@ -83,11 +83,9 @@ describe('ResultsListComponentComponent', () => {
           useValue: () => new Promise(() => {})
         }
       ]
-    })
-      .overrideModule(BrowserDynamicTestingModule, {
-        set: { entryComponents: [ResultItemComponent] }
-      })
-      .compileComponents();
+    }).overrideModule(BrowserDynamicTestingModule, {
+      set: { entryComponents: [ResultItemComponent] }
+    });
   }));
 
   beforeEach(() => {

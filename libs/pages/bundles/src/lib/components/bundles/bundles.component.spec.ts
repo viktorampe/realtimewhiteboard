@@ -36,7 +36,7 @@ describe('BundlesComponent', () => {
         { provide: FILTER_SERVICE_TOKEN, useClass: FilterService },
         { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ]
-    }).compileComponents();
+    });
     bundlesViewModel = TestBed.get(BundlesViewModel);
   }));
 

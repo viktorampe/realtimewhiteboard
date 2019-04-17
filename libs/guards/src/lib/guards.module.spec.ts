@@ -5,7 +5,7 @@ describe('GuardsModule', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [GuardsModule]
-    }).compileComponents();
+    });
   }));
 
   it('should create', () => {

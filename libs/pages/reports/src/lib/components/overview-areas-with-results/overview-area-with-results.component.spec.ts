@@ -33,7 +33,7 @@ describe('OverviewAreaWithResultsComponent', () => {
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
         { provide: ReportsViewModel, useClass: MockReportsViewModel }
       ]
-    }).compileComponents();
+    });
     reportsViewModel = TestBed.get(ReportsViewModel);
     filterService = TestBed.get(FILTER_SERVICE_TOKEN);
   }));

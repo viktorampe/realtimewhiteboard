@@ -36,7 +36,7 @@ describe('HeaderComponent', () => {
         BreakpointObserver,
         { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ]
-    }).compileComponents();
+    });
     headerViewModel = TestBed.get(HeaderViewModel);
     const breakpointObserver: BreakpointObserver = TestBed.get(
       BreakpointObserver

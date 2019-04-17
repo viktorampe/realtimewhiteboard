@@ -30,7 +30,7 @@ describe('ResultsByPersonAndAreaComponent', () => {
         { provide: ReportsViewModel, useClass: MockReportsViewModel },
         { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

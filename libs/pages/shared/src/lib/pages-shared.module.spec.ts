@@ -5,7 +5,7 @@ describe('PagesSharedModule', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [PagesSharedModule]
-    }).compileComponents();
+    });
   }));
 
   it('should create', () => {
