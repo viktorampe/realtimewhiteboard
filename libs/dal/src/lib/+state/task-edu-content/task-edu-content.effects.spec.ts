@@ -231,7 +231,7 @@ describe('TaskEduContentEffects', () => {
 
     describe('when failed', () => {
       beforeAll(() => {
-        effectFeedback = effectFeedback = new EffectFeedbackFixture({
+        effectFeedback = new EffectFeedbackFixture({
           id: uuid(),
           triggerAction: deleteTaskEduContentAction,
           message:
