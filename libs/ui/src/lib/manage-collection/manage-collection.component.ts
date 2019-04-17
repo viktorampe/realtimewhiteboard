@@ -3,6 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
+  HostBinding,
   Inject,
   OnDestroy,
   OnInit,
@@ -10,6 +11,7 @@ import {
   ViewChild
 } from '@angular/core';
 import {
+  MatDialogRef,
   MatSelectionList,
   MatSelectionListChange,
   MAT_DIALOG_DATA
@@ -44,11 +46,16 @@ export class ManageCollectionComponent
     ManageCollectionItemInterface
   >;
 
+  @HostBinding('class.ui-manage-collection')
+  get isManageCollectionClass() {
+    return true;
+  }
   constructor(
     @Inject(MAT_DIALOG_DATA)
     public data: ManageCollectionsDataInterface,
     @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private dialogRef: MatDialogRef<ManageCollectionComponent>
   ) {
     this.recentLinkableItems = data.linkableItems.filter(item =>
       data.recentItemIds.has(item.id)
@@ -102,6 +109,10 @@ export class ManageCollectionComponent
       relatedItem: changedItem,
       selected: event.option.selected
     });
+  }
+
+  public onCloseButtonClick() {
+    this.dialogRef.close();
   }
 
   filterFn(

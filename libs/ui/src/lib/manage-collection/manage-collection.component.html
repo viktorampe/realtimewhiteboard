@@ -42,7 +42,9 @@
   </mat-dialog-content>
 </campus-info-panel>
 <mat-dialog-actions align="end">
-  <campus-button mat-dialog-close primary>Sluiten</campus-button>
+  <campus-button primary rounded-corners (click)="onCloseButtonClick()"
+    >Sluiten</campus-button
+  >
 </mat-dialog-actions>
 
 <ng-template #noResultsTemplate>

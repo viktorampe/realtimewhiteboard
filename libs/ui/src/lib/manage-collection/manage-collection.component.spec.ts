@@ -2,6 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatDialogModule,
+  MatDialogRef,
   MatIcon,
   MatIconModule,
   MatIconRegistry,
@@ -47,6 +48,7 @@ describe('ManageCollectionComponent', () => {
       ],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: mockInjectedData },
+        { provide: MatDialogRef, useValue: { close: () => {} } },
         {
           provide: FILTER_SERVICE_TOKEN,
           useValue: { filter: () => mockInjectedData.linkableItems } // all injected items
@@ -339,10 +341,15 @@ describe('ManageCollectionComponent', () => {
       expect(selectionList.parent).toBe(dialogContent);
     });
     it('should include a close button', () => {
-      // just testing if there is a button with the mat-dialog-close attribute
+      // just testing if MatDialogRef.close() is called
       // the rest should be handled by Material's unit tests
+      const dialogRef = TestBed.get(MatDialogRef);
+      dialogRef.close = jest.fn();
+
       const button = fixture.debugElement.query(By.directive(ButtonComponent));
-      expect(button.attributes['mat-dialog-close']).toBeDefined();
+      button.triggerEventHandler('click', null);
+
+      expect(dialogRef.close).toHaveBeenCalled();
     });
   });
 });
