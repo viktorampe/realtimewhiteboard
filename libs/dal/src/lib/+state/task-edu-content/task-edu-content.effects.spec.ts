@@ -24,7 +24,6 @@ import {
 } from './task-edu-content.actions';
 import { TaskEduContentEffects } from './task-edu-content.effects';
 
-let x;
 describe('TaskEduContentEffects', () => {
   let actions: Observable<any>;
   let effects: TaskEduContentEffects;
