@@ -68,6 +68,26 @@ export const getById = createSelector(
   (state: State, props: { id: number }) => asTask(state.entities[props.id])
 );
 
+/**
+ * returns an object with tasks grouped by learning area id as key
+ * @example
+ * tasksByLearningArea$ = this.store.pipe(select(TaskQueries.getByLearningAreaId))
+ */
+export const getByLearningAreaId = createSelector(
+  selectTaskState,
+  (state: State) => {
+    const byKey: any = {};
+    (state.ids as number[]).forEach((id: number) => {
+      const item = asTask(state.entities[id]);
+      if (!byKey[item.learningAreaId]) {
+        byKey[item.learningAreaId] = [];
+      }
+      byKey[item.learningAreaId].push(item);
+    });
+    return byKey;
+  }
+);
+
 export const getShared = createSelector(
   selectTaskState,
   (state: State, props: { userId: number }) => {

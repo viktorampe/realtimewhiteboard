@@ -2,12 +2,14 @@ import { Inject, Injectable, InjectionToken } from '@angular/core';
 import {
   BundleInterface,
   BundleQueries,
-  ContentInterface,
   DalState,
   EduContentInterface,
   FavoriteQueries,
   FavoriteTypesEnum,
+  TaskEduContentInterface,
+  TaskEduContentQueries,
   TaskInterface,
+  TaskQueries,
   UnlockedContent,
   UnlockedContentQueries,
   UserContentInterface
@@ -60,18 +62,95 @@ export class EduContentCollectionManagerService {
   ) {}
 
   manageBundlesForEduContent(content: EduContentInterface): void {
-    // 1. select info from store
-    //      - select all bundles with content.learningAreaId as area
-    //      - select bundle ids in which content is included (unlockedContentState)
-    //      - select favorite bundleIds
-    //      - select history bundle Ids
     combineLatest(
-      this.store.select(BundleQueries.getByLearningAreaId, {
-        area: content.publishedEduContentMetadata.learningAreaId
-      }),
+      this.store
+        .select(BundleQueries.getByLearningAreaId)
+        .pipe(
+          map(
+            (bundlesByLearningArea: {
+              [key: string]: BundleInterface[];
+            }): BundleInterface[] =>
+              bundlesByLearningArea[
+                content.publishedEduContentMetadata.learningAreaId
+              ] || []
+          )
+        ),
       this.store
         .select(UnlockedContentQueries.getByEduContentId, {
           eduContentId: content.id
+        })
+        .pipe(
+          map(
+            (unlockedContents: UnlockedContent[]): number[] =>
+              Array.from(
+                new Set(
+                  unlockedContents.map(
+                    unlockedContent => unlockedContent.bundleId
+                  )
+                )
+              )
+          ),
+          shareReplay(1)
+        ),
+      this.store
+        .select(FavoriteQueries.getByType, { type: FavoriteTypesEnum.BUNDLE })
+        .pipe(
+          map(
+            (favorites): number[] =>
+              favorites.map(favorite => favorite.bundleId)
+          ),
+          shareReplay(1)
+        ),
+      // TODO: combine with history when state is available
+      // this.store
+      //   .select(HistoryQueries.getByType, { type: HistoryTypesEnum.BUNDLE })
+      //   .pipe(
+      //     map((histories): number[] => histories.map(history => history.bundleId)),
+      //     shareReplay(1)
+      //   )
+      of([])
+    )
+      .pipe(
+        switchMap(
+          ([bundles, linkedBundleIds, favoriteBundleIds, historyBundleIds]: [
+            BundleInterface[],
+            number[],
+            number[],
+            number[]
+          ]): Observable<ItemToggledInCollectionInterface> => {
+            const recentBundleIds = Array.from(
+              new Set([...favoriteBundleIds, ...historyBundleIds])
+            );
+            return this.collectionManagerService.manageCollections(
+              content,
+              bundles,
+              linkedBundleIds,
+              recentBundleIds
+            );
+          }
+        )
+      )
+      .subscribe((bundleToggled: ItemToggledInCollectionInterface) => {
+        if (bundleToggled.selected) {
+          this.addEduContentToBundle(
+            bundleToggled.item,
+            bundleToggled.relatedItem
+          );
+        } else {
+          this.removeEduContentFromBundle(
+            bundleToggled.item,
+            bundleToggled.relatedItem
+          );
+        }
+      });
+  }
+
+  manageBundlesForUserContent(content: UserContentInterface): void {
+    combineLatest(
+      this.store.select(BundleQueries.getAll),
+      this.store
+        .select(UnlockedContentQueries.getByUserContentId, {
+          userContentId: content.id
         })
         .pipe(
           map(
@@ -102,13 +181,13 @@ export class EduContentCollectionManagerService {
       of([])
     )
       .pipe(
-        //  2. combine all info needed and pass to manageCollectionsForContent
-        //      - content
-        //      - collections: all collections
-        //      - selectedCollectionIds: in which the content is already selected
-        //      - recentCollectionIds: which should be display first in the list
         switchMap(
-          ([bundles, linkedBundleIds, favoriteBundleIds, historyBundleIds]) => {
+          ([bundles, linkedBundleIds, favoriteBundleIds, historyBundleIds]: [
+            BundleInterface[],
+            number[],
+            number[],
+            number[]
+          ]): Observable<ItemToggledInCollectionInterface> => {
             const recentBundleIds = Array.from(
               new Set([...favoriteBundleIds, ...historyBundleIds])
             );
@@ -122,15 +201,13 @@ export class EduContentCollectionManagerService {
         )
       )
       .subscribe((bundleToggled: ItemToggledInCollectionInterface) => {
-        //  3. subscribe the returned observable
-        //  4. map events to functions below
         if (bundleToggled.selected) {
-          this.addContentToBundle(
+          this.addUserContentToBundle(
             bundleToggled.item,
             bundleToggled.relatedItem
           );
         } else {
-          this.removeContentFromBundle(
+          this.removeUserContentFromBundle(
             bundleToggled.item,
             bundleToggled.relatedItem
           );
@@ -138,18 +215,86 @@ export class EduContentCollectionManagerService {
       });
   }
 
-  manageBundlesForUserContent(content: UserContentInterface): void {
-    //
-  }
-
   manageTasksForContent(content: EduContentInterface): void {
-    // analog to bundles
+    combineLatest(
+      this.store
+        .select(TaskQueries.getByLearningAreaId)
+        .pipe(
+          map(
+            (tasksByLearningArea: {
+              [key: string]: TaskInterface[];
+            }): TaskInterface[] =>
+              tasksByLearningArea[
+                content.publishedEduContentMetadata.learningAreaId
+              ] || []
+          )
+        ),
+      this.store
+        .select(TaskEduContentQueries.getByEduContentId, {
+          eduContentId: content.id
+        })
+        .pipe(
+          map(
+            (taskEduContents: TaskEduContentInterface[]): number[] =>
+              taskEduContents.map(taskEduContent => taskEduContent.taskId)
+          )
+        ),
+      this.store
+        .select(FavoriteQueries.getByType, { type: FavoriteTypesEnum.TASK })
+        .pipe(
+          map(
+            (favorites): number[] => favorites.map(favorite => favorite.taskId)
+          ),
+          shareReplay(1)
+        ),
+      // TODO: combine with history when state is available
+      // this.store
+      //   .select(HistoryQueries.getByType, { type: HistoryTypesEnum.TASK })
+      //   .pipe(
+      //     map((histories): number[] => histories.map(history => history.taskId)),
+      //     shareReplay(1)
+      //   )
+      of([])
+    )
+      .pipe(
+        switchMap(
+          ([tasks, linkedTaskIds, favoriteTaskIds, historyTaskIds]: [
+            TaskInterface[],
+            number[],
+            number[],
+            number[]
+          ]): Observable<ItemToggledInCollectionInterface> => {
+            const recentTaskIds = Array.from(
+              new Set([...favoriteTaskIds, ...historyTaskIds])
+            );
+            return this.collectionManagerService.manageCollections(
+              content,
+              tasks,
+              linkedTaskIds,
+              recentTaskIds
+            );
+          }
+        )
+      )
+      .subscribe((taskToggled: ItemToggledInCollectionInterface) => {
+        if (taskToggled.selected) {
+          this.addContentToTask(taskToggled.item, taskToggled.relatedItem);
+        } else {
+          this.removeContentFromTask(taskToggled.item, taskToggled.relatedItem);
+        }
+      });
   }
 
   addContentToTask(content: EduContentInterface, task: TaskInterface) {
     //store actions
   }
-  addContentToBundle(content: ContentInterface, bundle: BundleInterface) {
+  addEduContentToBundle(content: EduContentInterface, bundle: BundleInterface) {
+    //store actions
+  }
+  addUserContentToBundle(
+    content: UserContentInterface,
+    bundle: BundleInterface
+  ) {
     //store actions
   }
 
@@ -157,8 +302,17 @@ export class EduContentCollectionManagerService {
     // select taskEduContent from store by task and content
     // dispatch action to delete taskEduContent
   }
-
-  removeContentFromBundle(content: ContentInterface, bundle: BundleInterface) {
+  removeEduContentFromBundle(
+    content: EduContentInterface,
+    bundle: BundleInterface
+  ) {
+    // select UnlockedContent from store by bundle and contentId
+    // dispatch action to delete UnlockedContent
+  }
+  removeUserContentFromBundle(
+    content: UserContentInterface,
+    bundle: BundleInterface
+  ) {
     // select UnlockedContent from store by bundle and contentId
     // dispatch action to delete UnlockedContent
   }

@@ -8,7 +8,8 @@ describe('UnlockedContent Selectors', () => {
     return {
       id: id,
       bundleId: Math.round(id / 2),
-      eduContentId: Math.round(id / 2)
+      eduContentId: Math.round(id / 2),
+      userContentId: Math.round(id / 2)
     };
   }
 
@@ -135,6 +136,18 @@ describe('UnlockedContent Selectors', () => {
       expect(results).toEqual([
         createUnlockedContent(4),
         createUnlockedContent(3)
+      ]);
+    });
+    it('getByUserContentId() should return only the unlockedContents for the given userContentId', () => {
+      const results = UnlockedContentQueries.getByUserContentId(
+        storeStateWithIds,
+        {
+          userContentId: 1
+        }
+      );
+      expect(results).toEqual([
+        createUnlockedContent(1),
+        createUnlockedContent(2)
       ]);
     });
     it('getByBundleAndEduContentId() should return only the unlockedContent with the given ids', () => {

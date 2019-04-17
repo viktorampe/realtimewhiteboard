@@ -144,6 +144,25 @@ describe('TaskEduContent Selectors', () => {
       ]);
     });
 
+    it('getByEduContentId() should return only the unlockedContents for the given eduContentId', () => {
+      const results = TaskEduContentQueries.getByEduContentId(
+        {
+          taskEduContents: createState([
+            new TaskEduContentFixture({ id: 1, taskId: 11, eduContentId: 12 }),
+            new TaskEduContentFixture({ id: 2, taskId: 12, eduContentId: 12 }),
+            new TaskEduContentFixture({ id: 3, taskId: 13, eduContentId: 14 })
+          ])
+        },
+        {
+          eduContentId: 12
+        }
+      );
+      expect(results).toEqual([
+        new TaskEduContentFixture({ id: 1, taskId: 11, eduContentId: 12 }),
+        new TaskEduContentFixture({ id: 2, taskId: 12, eduContentId: 12 })
+      ]);
+    });
+
     it('getByTaskAndEduContentId should return ', () => {
       const results = TaskEduContentQueries.getByTaskAndEduContentId(
         {
