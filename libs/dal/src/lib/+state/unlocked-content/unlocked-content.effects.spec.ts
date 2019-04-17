@@ -1,13 +1,23 @@
 import { TestBed } from '@angular/core/testing';
+import { MockDate } from '@campus/testing';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
+import { undo } from 'ngrx-undo';
 import { Observable, of } from 'rxjs';
 import { UnlockedContentReducer } from '.';
-import { UNLOCKED_CONTENT_SERVICE_TOKEN } from '../../bundle/unlocked-content.service.interface';
 import {
+  EffectFeedbackFixture,
+  EffectFeedbackInterface,
+  Priority
+} from '../../..';
+import { UNLOCKED_CONTENT_SERVICE_TOKEN } from '../../bundle/unlocked-content.service.interface';
+import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
+import {
+  DeleteUnlockedContent,
+  DeleteUnlockedContents,
   LoadUnlockedContents,
   UnlockedContentsLoaded,
   UnlockedContentsLoadError
@@ -18,6 +28,9 @@ describe('UnlockedContentEffects', () => {
   let actions: Observable<any>;
   let effects: UnlockedContentsEffects;
   let usedState: any;
+  let uuid: Function;
+  let dateMock: MockDate;
+  let effectFeedback: EffectFeedbackInterface;
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -55,6 +68,13 @@ describe('UnlockedContentEffects', () => {
     });
   };
 
+  beforeAll(() => {
+    dateMock = new MockDate();
+    effectFeedback = new EffectFeedbackFixture({
+      timeStamp: dateMock.mockDate.getTime()
+    });
+  });
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -74,16 +94,24 @@ describe('UnlockedContentEffects', () => {
         {
           provide: UNLOCKED_CONTENT_SERVICE_TOKEN,
           useValue: {
-            getAllForUser: () => {}
+            getAllForUser: () => {},
+            remove: () => {},
+            removeAll: () => {}
           }
         },
         UnlockedContentsEffects,
         DataPersistence,
-        provideMockActions(() => actions)
+        provideMockActions(() => actions),
+        {
+          provide: 'uuid',
+          useValue: (): string => 'foo'
+        }
       ]
     });
 
     effects = TestBed.get(UnlockedContentsEffects);
+    uuid = TestBed.get('uuid');
+    effectFeedback.id = uuid();
   });
 
   describe('loadUnlockedContent$', () => {
@@ -179,6 +207,97 @@ describe('UnlockedContentEffects', () => {
           loadErrorAction
         );
       });
+    });
+  });
+  describe('deleteUnlockedContent$', () => {
+    it('should return a success feedback action if the service returns a value', () => {
+      mockServiceMethodReturnValue('remove', {});
+      const deleteAction = new DeleteUnlockedContent({
+        id: 1,
+        displayResponse: true
+      });
+      effectFeedback.triggerAction = deleteAction;
+      effectFeedback.message = 'Het lesmateriaal is uit de bundel verwijdert.';
+      effectFeedback.display = deleteAction.payload.displayResponse;
+      effectFeedback.userActions = null;
+      effectFeedback.type = 'success';
+      effectFeedback.priority = Priority.NORM;
+      expectInAndOut(
+        effects.deleteUnlockedContent$,
+        deleteAction,
+        new AddEffectFeedback({ effectFeedback })
+      );
+    });
+    it('should return a success feedback action if the service returns a value', () => {
+      const deleteAction = new DeleteUnlockedContent({
+        id: 1,
+        displayResponse: true
+      });
+      const undoAction = undo(deleteAction);
+
+      effectFeedback.triggerAction = deleteAction;
+      effectFeedback.message =
+        'Het is niet gelukt om het lesmateriaal uit de bundel te verwijderen.';
+      effectFeedback.display = deleteAction.payload.displayResponse;
+      effectFeedback.userActions = [
+        { title: 'Opnieuw', userAction: deleteAction }
+      ];
+      effectFeedback.type = 'error';
+      effectFeedback.priority = Priority.HIGH;
+
+      actions = hot('a', { a: deleteAction });
+      expect(effects.deleteUnlockedContent$).toBeObservable(
+        hot('(ab)', {
+          a: undoAction,
+          b: new AddEffectFeedback({ effectFeedback })
+        })
+      );
+    });
+  });
+  describe('deleteUnlockedContents$', () => {
+    it('should return a success feedback action if the service returns a value', () => {
+      mockServiceMethodReturnValue('removeAll', {});
+      const deleteAction = new DeleteUnlockedContents({
+        ids: [1],
+        displayResponse: true
+      });
+      effectFeedback.triggerAction = deleteAction;
+      effectFeedback.message =
+        'De lesmaterialen zijn uit de bundel verwijdert.';
+      effectFeedback.display = deleteAction.payload.displayResponse;
+      effectFeedback.userActions = null;
+      effectFeedback.type = 'success';
+      effectFeedback.priority = Priority.NORM;
+      expectInAndOut(
+        effects.deleteUnlockedContents$,
+        deleteAction,
+        new AddEffectFeedback({ effectFeedback })
+      );
+    });
+    it('should return a success feedback action if the service returns a value', () => {
+      const deleteAction = new DeleteUnlockedContents({
+        ids: [1],
+        displayResponse: true
+      });
+      const undoAction = undo(deleteAction);
+
+      effectFeedback.triggerAction = deleteAction;
+      effectFeedback.message =
+        'Het is niet gelukt om de lesmaterialen uit de bundel te verwijderen.';
+      effectFeedback.display = deleteAction.payload.displayResponse;
+      effectFeedback.userActions = [
+        { title: 'Opnieuw', userAction: deleteAction }
+      ];
+      effectFeedback.type = 'error';
+      effectFeedback.priority = Priority.HIGH;
+
+      actions = hot('a', { a: deleteAction });
+      expect(effects.deleteUnlockedContents$).toBeObservable(
+        hot('(ab)', {
+          a: undoAction,
+          b: new AddEffectFeedback({ effectFeedback })
+        })
+      );
     });
   });
 });
