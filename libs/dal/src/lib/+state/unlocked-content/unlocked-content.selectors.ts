@@ -98,6 +98,19 @@ export const getByBundleId = createSelector(
   }
 );
 
+export const getByEduContentId = createSelector(
+  selectUnlockedContentState,
+  (state: State, props: { eduContentId: number }) => {
+    const ids = <number[]>state.ids;
+
+    return ids.reduce((acc, id, idx, arr) => {
+      return state.entities[id].eduContentId === props.eduContentId
+        ? [...acc, state.entities[id]]
+        : acc;
+    }, []);
+  }
+);
+
 export const getByBundleAndEduContentId = createSelector(
   selectUnlockedContentState,
   (state: State, props: { bundleId: number; eduContentId: number }) => {

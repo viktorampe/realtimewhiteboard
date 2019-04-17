@@ -7,7 +7,8 @@ describe('UnlockedContent Selectors', () => {
   function createUnlockedContent(id: number): UnlockedContentInterface | any {
     return {
       id: id,
-      bundleId: Math.round(id / 2)
+      bundleId: Math.round(id / 2),
+      eduContentId: Math.round(id / 2)
     };
   }
 
@@ -123,6 +124,18 @@ describe('UnlockedContent Selectors', () => {
         1: [createUnlockedContent(1), createUnlockedContent(2)],
         2: [createUnlockedContent(4), createUnlockedContent(3)]
       });
+    });
+    it('getByEduContentId() should return only the unlockedContents for the given eduContentId', () => {
+      const results = UnlockedContentQueries.getByEduContentId(
+        storeStateWithIds,
+        {
+          eduContentId: 2
+        }
+      );
+      expect(results).toEqual([
+        createUnlockedContent(4),
+        createUnlockedContent(3)
+      ]);
     });
     it('getByBundleAndEduContentId() should return only the unlockedContent with the given ids', () => {
       unlockedContentStateWithIds = createState(
