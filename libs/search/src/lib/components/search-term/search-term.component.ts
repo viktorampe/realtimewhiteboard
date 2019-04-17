@@ -33,4 +33,8 @@ export class SearchTermComponent implements OnInit {
 
     this.valueChangeForAutoComplete.emit(this.currentValue);
   }
+
+  getAutoFocusValue() {
+    return this.autofocus ? 'autofocus' : null;
+  }
 }

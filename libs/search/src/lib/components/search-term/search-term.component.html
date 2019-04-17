@@ -5,7 +5,7 @@
   >
     <mat-label>{{ placeholder }}</mat-label>
     <input
-      [autofocus]="autofocus ? 'autofocus' : null"
+      [autofocus]="getAutoFocusValue()"
       matInput
       [(ngModel)]="currentValue"
       [placeholder]="placeholder"
@@ -18,7 +18,7 @@
     <mat-form-field [appearance]="'outline'">
       <mat-label>{{ placeholder }}</mat-label>
       <input
-        [autofocus]="autofocus ? 'autofocus' : null"
+        [autofocus]="getAutoFocusValue()"
         matInput
         [(ngModel)]="currentValue"
         [placeholder]="placeholder"

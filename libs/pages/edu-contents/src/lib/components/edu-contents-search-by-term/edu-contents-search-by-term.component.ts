@@ -49,11 +49,13 @@ export class EduContentSearchByTermComponent implements OnInit, AfterViewInit {
 
     this.searchState$ = this.eduContentsViewModel.getInitialSearchState();
     this.autoFocusSearchTerm$ = this.searchState$.pipe(
-      map(searchState => {
-        return searchState.searchTerm.length === 0;
-      })
+      map(this.isSearchTermEmpty)
     );
     this.searchResults$ = this.eduContentsViewModel.searchResults$;
+  }
+
+  private isSearchTermEmpty(searchState: SearchStateInterface) {
+    return searchState.searchTerm.length === 0;
   }
 
   ngAfterViewInit(): void {
