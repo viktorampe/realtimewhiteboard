@@ -1,7 +1,9 @@
 import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
-import { map } from 'rxjs/operators';
+import { undo } from 'ngrx-undo';
+import { from } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 import { DalState } from '..';
 import {
   TaskEduContentServiceInterface,
@@ -45,18 +47,34 @@ export class TaskEduContentEffects {
   );
 
   @Effect()
-  linkTaskEduContent$ = this.dataPersistence.pessimisticUpdate(
+  linkTaskEduContent$ = this.dataPersistence.optimisticUpdate(
     TaskEduContentsActionTypes.LinkTaskEduContent,
     {
       run: (action: LinkTaskEduContent, state: DalState) => {
         return this.taskService
           .linkEduContent(action.payload.taskId, action.payload.eduContentId)
           .pipe(
-            map(taskEduContent => new AddTaskEduContent({ taskEduContent }))
+            switchMap(taskEduContent => [
+              new AddEffectFeedback({
+                effectFeedback: new EffectFeedback({
+                  id: this.uuid(),
+                  triggerAction: action,
+                  message: 'Het leermateriaal werd aan de taak toegevoegd.',
+                  type: 'success',
+                  display: true,
+                  priority: Priority.NORM
+                })
+              }),
+              new AddTaskEduContent({
+                taskEduContent
+              })
+            ])
           );
       },
-      onError: (action: LinkTaskEduContent, error) => {
-        return new AddEffectFeedback({
+      undoAction: (action: LinkTaskEduContent, error) => {
+        const undoAction = undo(action);
+
+        const effectFeedbackAction = new AddEffectFeedback({
           effectFeedback: new EffectFeedback({
             id: this.uuid(),
             triggerAction: action,
@@ -73,6 +91,8 @@ export class TaskEduContentEffects {
             priority: Priority.HIGH
           })
         });
+
+        return from([undoAction, effectFeedbackAction]);
       }
     }
   );
