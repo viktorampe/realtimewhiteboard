@@ -242,7 +242,7 @@ describe('TaskEduContentEffects', () => {
           new TaskEduContentFixture()
         );
       });
-      it('should trigger an api call with the initialState if force is not true', () => {
+      it('should trigger an api call with the initialState', () => {
         expectInAndOut(effects.linkTaskEduContent$, linkAction, linkedAction);
       });
     });
@@ -260,7 +260,7 @@ describe('TaskEduContentEffects', () => {
         ];
         effectFeedback.priority = Priority.HIGH;
       });
-      it('should return a error action if force is not true', () => {
+      it('should return a error action', () => {
         const errorAction = new EffectFeedbackActions.AddEffectFeedback({
           effectFeedback: effectFeedback
         });
