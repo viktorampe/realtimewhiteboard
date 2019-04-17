@@ -10,6 +10,7 @@ export class SearchTermComponent implements OnInit {
 
   @Input() public initialValue = '';
   @Input() public placeholder = 'Zoeken';
+  @Input() public autofocus = false;
 
   // boolean => internal reference, need array of values
   // string => external reference TODO: figure this out, when required
