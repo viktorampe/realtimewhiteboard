@@ -31,7 +31,7 @@ describe('FavoriteAreasComponent', () => {
       imports: [UiModule, RouterTestingModule, MatIconModule],
       declarations: [FavoriteAreasComponent],
       providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

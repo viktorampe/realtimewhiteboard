@@ -30,7 +30,7 @@ describe('CheckboxListFilterComponentComponent', () => {
         FormsModule
       ],
       declarations: [CheckboxListFilterComponent, CheckboxFilterComponent]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

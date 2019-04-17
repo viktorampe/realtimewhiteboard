@@ -23,7 +23,7 @@ describe('DropdownMenuItemComponent', () => {
       declarations: [DropdownMenuItemComponent],
       imports: [MatIconModule, RouterTestingModule],
       providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

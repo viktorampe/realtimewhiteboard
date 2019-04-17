@@ -29,7 +29,7 @@ describe('BreadcrumbFilterComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [BreadcrumbFilterComponent]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

@@ -35,7 +35,7 @@ describe('ButtonComponent', () => {
     TestBed.configureTestingModule({
       imports: [TestModule],
       providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

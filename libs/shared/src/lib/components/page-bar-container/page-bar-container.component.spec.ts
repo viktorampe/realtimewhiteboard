@@ -18,7 +18,7 @@ describe('PageBarContainerComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [PageBarContainerComponent]
-    }).compileComponents();
+    });
   }));
   describe('creation', () => {
     beforeEach(() => {

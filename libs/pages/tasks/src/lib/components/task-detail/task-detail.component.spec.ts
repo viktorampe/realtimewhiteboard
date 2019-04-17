@@ -39,7 +39,7 @@ describe('TaskDetailComponent', () => {
         { provide: TasksViewModel, useClass: MockTasksViewModel },
         { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

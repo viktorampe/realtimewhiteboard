@@ -48,7 +48,7 @@ describe('ClickStopPropagationDirective', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [TestModule]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

@@ -26,7 +26,7 @@ describe('CheckboxLineFilterComponent', () => {
       declarations: [CheckboxLineFilterComponent],
       imports: [MatCheckboxModule],
       providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

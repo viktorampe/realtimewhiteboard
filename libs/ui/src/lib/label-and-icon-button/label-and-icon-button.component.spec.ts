@@ -18,7 +18,7 @@ describe('LabelAndIconButtonComponent', () => {
       declarations: [LabelAndIconButtonComponent],
       imports: [MatIconModule],
       providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

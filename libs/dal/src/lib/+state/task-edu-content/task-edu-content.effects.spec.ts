@@ -5,18 +5,22 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
+import { undo } from 'ngrx-undo';
 import { Observable, of } from 'rxjs';
 import { TaskEduContentReducer } from '.';
 import { EffectFeedbackFixture, TaskEduContentFixture } from '../../+fixtures';
 import { TASK_EDU_CONTENT_SERVICE_TOKEN } from '../../tasks/task-edu-content.service.interface';
 import { TASK_SERVICE_TOKEN } from '../../tasks/task.service.interface';
 import {
+  EffectFeedback,
   EffectFeedbackActions,
   EffectFeedbackInterface,
   Priority
 } from '../effect-feedback';
+import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
 import {
   AddTaskEduContent,
+  DeleteTaskEduContent,
   LinkTaskEduContent,
   LoadTaskEduContents,
   TaskEduContentsLoaded,
@@ -31,6 +35,7 @@ describe('TaskEduContentEffects', () => {
   let effectFeedback: EffectFeedbackInterface;
   let uuid: Function;
   let dateMock: MockDate;
+  let mockDate: MockDate;
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -91,8 +96,28 @@ describe('TaskEduContentEffects', () => {
     jest.spyOn(TestBed.get(service), method).mockReturnValue(of(returnValue));
   };
 
+  const mockServiceMethodReturnValue = (
+    method: string,
+    returnValue: any,
+    service: any = TASK_EDU_CONTENT_SERVICE_TOKEN
+  ) => {
+    jest.spyOn(TestBed.get(service), method).mockReturnValue(of(returnValue));
+  };
+
+  const mockServiceMethodError = (
+    method: string,
+    errorMessage: string,
+    service: any = TASK_EDU_CONTENT_SERVICE_TOKEN
+  ) => {
+    jest.spyOn(TestBed.get(service), method).mockImplementation(() => {
+      throw new Error(errorMessage);
+    });
+  };
+
   beforeAll(() => {
     dateMock = new MockDate();
+    mockDate = new MockDate();
+
     effectFeedback = new EffectFeedbackFixture({
       timeStamp: dateMock.mockDate.getTime()
     });
@@ -100,6 +125,7 @@ describe('TaskEduContentEffects', () => {
 
   afterAll(() => {
     dateMock.returnRealDate();
+    mockDate.returnRealDate();
   });
 
   beforeEach(() => {
@@ -121,7 +147,8 @@ describe('TaskEduContentEffects', () => {
         {
           provide: TASK_EDU_CONTENT_SERVICE_TOKEN,
           useValue: {
-            getAllForUser: () => {}
+            getAllForUser: () => {},
+            remove: () => {}
           }
         },
         {
@@ -136,7 +163,8 @@ describe('TaskEduContentEffects', () => {
         },
         TaskEduContentEffects,
         DataPersistence,
-        provideMockActions(() => actions)
+        provideMockActions(() => actions),
+        { provide: 'uuid', useValue: () => 'foo' }
       ]
     });
 
@@ -240,6 +268,7 @@ describe('TaskEduContentEffects', () => {
       });
     });
   });
+
   describe('linkTaskEduContent$', () => {
     const linkAction = new LinkTaskEduContent({
       taskId: 1,
@@ -296,6 +325,72 @@ describe('TaskEduContentEffects', () => {
           effectFeedback: effectFeedback
         });
         expectInAndOut(effects.linkTaskEduContent$, linkAction, errorAction);
+      });
+    });
+  });
+
+  describe('deleteTaskEduContent$', () => {
+    let effectFeedback: EffectFeedback;
+    let addFeedbackAction: AddEffectFeedback;
+    const deleteTaskEduContentAction = new DeleteTaskEduContent({ id: 321 });
+
+    describe('when successful', () => {
+      beforeAll(() => {
+        effectFeedback = new EffectFeedback({
+          id: uuid(),
+          triggerAction: deleteTaskEduContentAction,
+          message: 'Het lesmateriaal is uit de taak verwijderd.'
+        });
+        addFeedbackAction = new AddEffectFeedback({ effectFeedback });
+      });
+
+      beforeEach(() => {
+        mockServiceMethodReturnValue('remove', true);
+      });
+
+      it('should dispatch a success feedback action', () => {
+        expectInAndOut(
+          effects.deleteTaskEduContent$,
+          deleteTaskEduContentAction,
+          addFeedbackAction
+        );
+      });
+    });
+
+    describe('when failed', () => {
+      beforeAll(() => {
+        effectFeedback = new EffectFeedbackFixture({
+          id: uuid(),
+          triggerAction: deleteTaskEduContentAction,
+          message:
+            'Het is niet gelukt om het lesmateriaal uit de taak te verwijderen.',
+          type: 'error',
+          priority: Priority.HIGH,
+          userActions: [
+            {
+              title: 'Opnieuw',
+              userAction: deleteTaskEduContentAction
+            }
+          ]
+        });
+        addFeedbackAction = new AddEffectFeedback({ effectFeedback });
+      });
+
+      beforeEach(() => {
+        mockServiceMethodError('remove', 'Something went wrong.');
+      });
+
+      it('should dispatch an error feedback action', () => {
+        const undoAction = undo(deleteTaskEduContentAction);
+
+        actions = hot('a', { a: deleteTaskEduContentAction });
+
+        expect(effects.deleteTaskEduContent$).toBeObservable(
+          hot('(ab)', {
+            a: undoAction,
+            b: addFeedbackAction
+          })
+        );
       });
     });
   });

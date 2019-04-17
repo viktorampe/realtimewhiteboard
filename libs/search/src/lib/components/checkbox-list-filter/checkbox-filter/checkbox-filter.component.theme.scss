@@ -11,8 +11,15 @@
         height: $checkbox-filter-font-size;
       }
 
+      &-layout {
+        width: 100%;
+      }
+
       &-label {
         line-height: $checkbox-filter-font-size + 2;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        width: 100%;
       }
     }
 

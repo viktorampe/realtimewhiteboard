@@ -5,7 +5,7 @@ describe('SearchModule', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [SearchModule]
-    }).compileComponents();
+    });
   }));
 
   it('should create', () => {

@@ -5,7 +5,7 @@ describe('ScormModule', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [ScormModule]
-    }).compileComponents();
+    });
   }));
 
   it('should create', () => {

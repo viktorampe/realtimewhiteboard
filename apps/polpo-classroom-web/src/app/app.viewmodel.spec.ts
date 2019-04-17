@@ -9,7 +9,13 @@ import {
   EffectFeedbackFixture,
   EffectFeedbackInterface,
   EffectFeedbackReducer,
+  FavoriteActions,
+  FavoriteInterface,
+  FavoriteReducer,
+  LearningAreaActions,
   LearningAreaFixture,
+  LearningAreaInterface,
+  LearningAreaReducer,
   PassportUserCredentialInterface,
   PersonFixture,
   PersonInterface,
@@ -36,6 +42,8 @@ describe('AppViewModel', () => {
   let store: Store<DalState>;
   let mockCredentials: PassportUserCredentialInterface[];
   let mockFeedBack: EffectFeedbackInterface;
+  let mockLearningAreas: LearningAreaInterface[];
+  let mockFavorites: FavoriteInterface[];
   let mockAction: Action;
   let storeSpy: jasmine.Spy;
 
@@ -59,6 +67,8 @@ describe('AppViewModel', () => {
             reducer: CredentialReducer.reducer,
             initialState: CredentialReducer.initialState
           },
+          FavoriteReducer,
+          LearningAreaReducer,
           EffectFeedbackReducer
         ])
       ],
@@ -92,7 +102,7 @@ describe('AppViewModel', () => {
           }
         }
       ]
-    }).compileComponents();
+    });
 
     viewModel = TestBed.get(AppViewModel);
     store = TestBed.get(Store);
@@ -136,6 +146,20 @@ describe('AppViewModel', () => {
       priority: Priority.HIGH,
       useDefaultCancel: false
     });
+
+    mockLearningAreas = [
+      new LearningAreaFixture({ id: 1 }),
+      new LearningAreaFixture({ id: 2 })
+    ];
+
+    mockFavorites = [
+      {
+        type: 'area', // TODO in selector: filter on type:'area'
+        learningAreaId: 1,
+        learningArea: mockLearningAreas[0],
+        created: new Date(2018, 11 - 1, 30)
+      }
+    ];
   });
 
   beforeEach(() => {
@@ -143,6 +167,16 @@ describe('AppViewModel', () => {
     store.dispatch(
       new CredentialActions.CredentialsLoaded({
         credentials: mockCredentials
+      })
+    );
+    store.dispatch(
+      new LearningAreaActions.LearningAreasLoaded({
+        learningAreas: mockLearningAreas
+      })
+    );
+    store.dispatch(
+      new FavoriteActions.FavoritesLoaded({
+        favorites: mockFavorites
       })
     );
     storeSpy.calls.reset();
@@ -157,16 +191,6 @@ describe('AppViewModel', () => {
   describe('intermediate streams', () => {
     it('should call the NavItemService', () => {
       const navItemService = TestBed.get(NavItemService);
-
-      // current value hardcoded in viewmodel
-      const mockFavorites = [
-        {
-          type: 'area', // TODO in selector: filter on type:'area'
-          learningAreaId: 1,
-          learningArea: new LearningAreaFixture({ icon: 'wiskunde' }),
-          created: new Date(2018, 11 - 1, 30)
-        }
-      ];
 
       expect(navItemService.getSideNavItems).toHaveBeenCalledWith(
         user,
@@ -203,6 +227,14 @@ describe('AppViewModel', () => {
       viewModel.toggleSidebar(true);
       expect(store.dispatch).toHaveBeenCalledWith(
         new UiActions.ToggleSideNav({ open: true })
+      );
+    });
+
+    it('should dispatch action on sidenavItem change', () => {
+      store.dispatch(new UserActions.UserLoaded(new PersonFixture()));
+      viewModel.onNavItemChanged(mockNavItem);
+      expect(store.dispatch).toHaveBeenCalledWith(
+        new UiActions.UpdateNavItem({ navItem: mockNavItem })
       );
     });
 

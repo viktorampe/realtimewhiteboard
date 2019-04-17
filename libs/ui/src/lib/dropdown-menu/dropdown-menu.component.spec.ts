@@ -56,7 +56,7 @@ describe('DropdownMenuComponent', () => {
     TestBed.configureTestingModule({
       imports: [TestModule],
       declarations: []
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

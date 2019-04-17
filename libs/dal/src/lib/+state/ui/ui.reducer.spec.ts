@@ -11,7 +11,8 @@ import {
   SetSideNavItems,
   ToggleSideNav,
   ToggleSideSheet,
-  UiLoaded
+  UiLoaded,
+  UpdateNavItem
 } from './ui.actions';
 import { initialState, reducer, UiState } from './ui.reducer';
 
@@ -109,6 +110,31 @@ describe('Ui Reducer', () => {
       });
       const result: UiState = reducer(initialState, action);
       expect(result.breadcrumbs).toEqual([mockBreadcrumb]);
+    });
+
+    it('should update a navItem', () => {
+      const mockNavItemArray = [
+        { ...mockNavItem, title: 'title1' },
+        { ...mockNavItem, title: 'title2' },
+        { ...mockNavItem, title: 'title3' }
+      ];
+
+      const loadAction = new SetSideNavItems({ navItems: mockNavItemArray });
+      const filledState: UiState = reducer(initialState, loadAction);
+
+      const updatedNavItem = {
+        ...mockNavItem,
+        title: 'title2',
+        expanded: true
+      };
+
+      const action = new UpdateNavItem({ navItem: updatedNavItem });
+
+      const expectedArray = [...mockNavItemArray];
+      expectedArray[1] = updatedNavItem;
+
+      const result: UiState = reducer(filledState, action);
+      expect(result.sideNavItems).toEqual(expectedArray);
     });
   });
 
