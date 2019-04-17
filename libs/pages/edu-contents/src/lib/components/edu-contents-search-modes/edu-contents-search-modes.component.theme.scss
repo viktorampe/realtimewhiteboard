@@ -11,7 +11,23 @@
   $pages-edu-contents__search-modes__title-color--accent: $ui-primary-font-color !default;
 
   .pages-edu-contents__search-modes {
+    $campus_search_term--line_height__overrride: 20px;
     &__item {
+      .ui-button {
+        height: $campus_search_term--line_height__overrride + 11px;
+      }
+      campus-search-term {
+        .mat-form-field-hide-placeholder {
+          .mat-form-field-infix {
+            line-height: $campus_search_term--line_height__overrride;
+          }
+        }
+        .mat-form-field-appearance-outline {
+          .mat-form-field-infix {
+            line-height: $campus_search_term--line_height__overrride;
+          }
+        }
+      }
       width: $pages-edu-contents__search-modes__item-width;
       padding: $pages-edu-contents__search-modes__item-padding;
       margin: $pages-edu-contents__search-modes__item-margin;
