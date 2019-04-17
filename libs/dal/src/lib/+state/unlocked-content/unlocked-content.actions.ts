@@ -85,13 +85,13 @@ export class UpdateUnlockedContents implements Action {
 export class DeleteUnlockedContent implements Action {
   readonly type = UnlockedContentsActionTypes.DeleteUnlockedContent;
 
-  constructor(public payload: { id: number }) {}
+  constructor(public payload: { id: number; displayResponse?: boolean }) {}
 }
 
 export class DeleteUnlockedContents implements Action {
   readonly type = UnlockedContentsActionTypes.DeleteUnlockedContents;
 
-  constructor(public payload: { ids: number[] }) {}
+  constructor(public payload: { ids: number[]; displayResponse?: boolean }) {}
 }
 
 export class ClearUnlockedContents implements Action {
