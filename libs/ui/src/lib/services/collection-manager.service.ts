@@ -38,7 +38,7 @@ export interface CollectionMangerInterface {
   ): Observable<ItemToggledInCollectionInterface>;
 }
 
-interface ManageCollectionsForContentDataInterface {
+export interface ManageCollectionsForContentDataInterface {
   title: string;
   item: ManageCollectionItemInterface;
   linkableItems: ManageCollectionItemInterface[];
@@ -52,7 +52,7 @@ interface ManageCollectionsForContentDataInterface {
 export class CollectionManagerService {
   private subscription: Subscription;
 
-  constructor(public dialog: MatDialog) {}
+  constructor(private dialog: MatDialog) {}
 
   manageCollections(
     title: string,
@@ -100,7 +100,7 @@ export class CollectionManagerService {
     return itemToggledInCollection$;
   }
 
-  openDialog(
+  private openDialog(
     data: ManageCollectionsForContentDataInterface
   ): MatDialogRef<ManageCollectionComponent> {
     // use the ManageCollectionComponent
