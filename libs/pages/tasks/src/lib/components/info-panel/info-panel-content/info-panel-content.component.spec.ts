@@ -13,7 +13,7 @@ describe('InfoPanelContentComponent', () => {
     TestBed.configureTestingModule({
       declarations: [InfoPanelContentComponent],
       schemas: [NO_ERRORS_SCHEMA]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

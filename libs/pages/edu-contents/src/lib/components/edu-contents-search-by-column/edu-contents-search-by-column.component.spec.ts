@@ -10,7 +10,7 @@ describe('EduContentSearchByColumnComponent', () => {
     TestBed.configureTestingModule({
       imports: [UiModule, NoopAnimationsModule],
       declarations: [EduContentSearchByColumnComponent]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

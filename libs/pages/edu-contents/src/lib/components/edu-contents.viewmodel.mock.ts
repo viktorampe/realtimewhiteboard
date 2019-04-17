@@ -3,7 +3,6 @@ import {
   BundleFixture,
   EduContentFixture,
   FavoriteFixture,
-  FavoriteInterface,
   LearningAreaFixture,
   LearningAreaInterface,
   TaskFixture
@@ -12,12 +11,10 @@ import {
   FilterFactoryFixture,
   ResultItemBase,
   SearchModeInterface,
+  SearchResultInterface,
   SearchStateInterface
 } from '@campus/search';
-import {
-  EduContentSearchResultInterface,
-  EnvironmentSearchModesInterface
-} from '@campus/shared';
+import { EnvironmentSearchModesInterface } from '@campus/shared';
 import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { EduContentsViewModel } from './edu-contents.viewmodel';
@@ -109,16 +106,20 @@ export class EduContentsViewModelMock
     })
   ];
 
-  private searchResults: EduContentSearchResultInterface[] = [
-    {
-      eduContent: new EduContentFixture(),
-      inTask: false,
-      currentTask: new TaskFixture(),
-      inBundle: false,
-      currentBundle: new BundleFixture(),
-      isFavorite: true
-    }
-  ];
+  private searchResults: SearchResultInterface = {
+    results: [
+      {
+        eduContent: new EduContentFixture(),
+        inTask: false,
+        currentTask: new TaskFixture(),
+        inBundle: false,
+        currentBundle: new BundleFixture(),
+        isFavorite: true
+      }
+    ],
+    filterCriteriaPredictions: new Map(),
+    count: 1
+  };
 
   private searchState: SearchStateInterface = {
     searchTerm: 'foo',
@@ -135,7 +136,7 @@ export class EduContentsViewModelMock
     searchFilterFactory: FilterFactoryFixture,
     searchTerm: {
       // autocompleteEl: string; //reference to material autocomplete component
-      domHost: 'hostSearchTerm'
+      domHost: 'hostTop'
     },
     results: {
       component: ResultItemMockComponent,
@@ -173,10 +174,11 @@ export class EduContentsViewModelMock
   public favoriteLearningAreas$ = new BehaviorSubject<LearningAreaInterface[]>(
     this.favoriteLearningAreas
   );
-  public searchResults$ = new BehaviorSubject<
-    EduContentSearchResultInterface[]
-  >(this.searchResults);
-  public eduContentFavorites$ = new BehaviorSubject<FavoriteInterface[]>([
+  public searchResults$ = new BehaviorSubject<SearchResultInterface>(
+    this.searchResults
+  );
+
+  public eduContentFavorites$ = new BehaviorSubject([
     new FavoriteFixture({ id: 1, learningAreaId: 2, type: 'area' }),
     new FavoriteFixture({ id: 2, learningAreaId: 3, type: 'area' }),
     new FavoriteFixture({ id: 3, eduContentId: 1, type: 'educontent' }),

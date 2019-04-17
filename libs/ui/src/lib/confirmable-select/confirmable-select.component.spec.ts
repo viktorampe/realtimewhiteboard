@@ -30,7 +30,7 @@ describe('ConfirmableSelectComponent', () => {
         MatIconModule
       ],
       providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

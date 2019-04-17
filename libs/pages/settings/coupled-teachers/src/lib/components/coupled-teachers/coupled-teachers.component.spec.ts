@@ -61,7 +61,7 @@ describe('CoupledTeachersComponent', () => {
         },
         { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

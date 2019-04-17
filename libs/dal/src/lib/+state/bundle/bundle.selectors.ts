@@ -1,4 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { Bundle, BundleInterface } from '../../+models';
 import {
   NAME,
   selectAll,
@@ -50,7 +51,7 @@ export const getAllEntities = createSelector(
 export const getByIds = createSelector(
   selectBundleState,
   (state: State, props: { ids: number[] }) => {
-    return props.ids.map(id => state.entities[id]);
+    return props.ids.map(id => asBundle(state.entities[id]));
   }
 );
 
@@ -78,7 +79,7 @@ export const getByLearningAreaId = createSelector(
     // must cast state.ids to number[] (from 'string[] | number[]') or we can't use array functions like forEach
     const ids: number[] = <number[]>state.ids;
     ids.forEach((id: number) => {
-      const item = state.entities[id];
+      const item = asBundle(state.entities[id]);
       if (!byKey[item.learningAreaId]) {
         byKey[item.learningAreaId] = [];
       }
@@ -94,7 +95,7 @@ export const getShared = createSelector(
     const ids: number[] = <number[]>state.ids;
     return ids
       .filter(id => state.entities[id].teacherId !== props.userId)
-      .map(id => state.entities[id]);
+      .map(id => asBundle(state.entities[id]));
   }
 );
 
@@ -104,6 +105,12 @@ export const getOwn = createSelector(
     const ids: number[] = <number[]>state.ids;
     return ids
       .filter(id => state.entities[id].teacherId === props.userId)
-      .map(id => state.entities[id]);
+      .map(id => asBundle(state.entities[id]));
   }
 );
+
+function asBundle(item: BundleInterface): Bundle {
+  if (item) {
+    return Object.assign<Bundle, BundleInterface>(new Bundle(), item);
+  }
+}

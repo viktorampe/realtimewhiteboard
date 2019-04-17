@@ -5,7 +5,7 @@ describe('PagesErrorModule', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [PagesErrorModule]
-    }).compileComponents();
+    });
   }));
 
   it('should create', () => {

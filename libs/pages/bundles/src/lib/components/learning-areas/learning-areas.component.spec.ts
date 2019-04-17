@@ -29,7 +29,7 @@ describe('LearningAreasComponent', () => {
         { provide: FILTER_SERVICE_TOKEN, useClass: FilterService },
         { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ]
-    }).compileComponents();
+    });
     bundlesViewModel = TestBed.get(BundlesViewModel);
     filterService = TestBed.get(FILTER_SERVICE_TOKEN);
   }));

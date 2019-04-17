@@ -21,6 +21,7 @@
         [routerLink]="node.link"
         routerLinkActive="ui-tree-nav__node--active"
         cdkTreeNodeToggle
+        (click)="toggleNode(node)"
       >
         <mat-icon *ngIf="node.icon" [svgIcon]="node.icon"></mat-icon>
         {{ node.title }}
@@ -30,6 +31,9 @@
           [svgIcon]="
             nestedTreeControl.isExpanded(node) ? 'expand-less' : 'expand-more'
           "
+          (click)="toggleNode(node)"
+          campusClickPreventDefault
+          campusClickStopPropagation
         ></mat-icon>
       </a>
       <ul>

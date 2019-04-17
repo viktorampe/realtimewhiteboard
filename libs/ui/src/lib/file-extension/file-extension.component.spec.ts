@@ -9,7 +9,7 @@ describe('FileExtensionComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [FileExtensionComponent]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

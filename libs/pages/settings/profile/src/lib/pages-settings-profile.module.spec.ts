@@ -5,7 +5,7 @@ describe('PagesSettingsProfileModule', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [PagesSettingsProfileModule]
-    }).compileComponents();
+    });
   }));
 
   it('should create', () => {

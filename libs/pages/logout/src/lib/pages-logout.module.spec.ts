@@ -5,7 +5,7 @@ describe('PagesLogoutModule', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [PagesLogoutModule]
-    }).compileComponents();
+    });
   }));
 
   it('should create', () => {

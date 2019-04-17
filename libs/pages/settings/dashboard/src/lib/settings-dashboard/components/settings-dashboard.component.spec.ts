@@ -46,7 +46,7 @@ describe('SettingsDashboardComponent', () => {
         },
         { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

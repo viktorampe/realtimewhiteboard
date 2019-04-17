@@ -26,7 +26,7 @@ describe('TileComponent', () => {
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
         { provide: Router, useValue: { navigate: jest.fn() } }
       ]
-    }).compileComponents();
+    });
 
     router = TestBed.get(Router);
   }));

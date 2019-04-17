@@ -32,7 +32,7 @@ describe('TasksComponent', () => {
           }
         }
       ]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

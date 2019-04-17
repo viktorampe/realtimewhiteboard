@@ -13,7 +13,7 @@ describe('InputLabelComponent', () => {
     TestBed.configureTestingModule({
       declarations: [InputLabelComponent],
       imports: [ReactiveFormsModule, FormsModule]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {
