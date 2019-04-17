@@ -19,6 +19,7 @@ import { Subscription } from 'rxjs';
 import { startWith } from 'rxjs/operators';
 import { FilterTextInputComponent } from '../filter-text-input/filter-text-input.component';
 import { ManageCollectionsDataInterface } from './interfaces/manage-collection-data.interface';
+import { ManageCollectionItemInterface } from './interfaces/manage-collection-item.interface';
 
 @Component({
   selector: 'campus-manage-collection',
@@ -33,11 +34,7 @@ export class ManageCollectionComponent
   private selectedIds: Set<number>;
   private subscriptions = new Subscription();
 
-  @Output() selectionChanged = new EventEmitter<{
-    relatedItem: ManageCollectionItemInterface;
-    item: ManageCollectionItemInterface;
-    selected: boolean;
-  }>();
+  @Output() selectionChanged = new EventEmitter<ItemToggledInCollectionEvent>();
 
   @ViewChild(MatSelectionList) private selectionList: MatSelectionList;
 
@@ -124,4 +121,11 @@ export class ManageCollectionComponent
 
     this.cd.detectChanges();
   }
+}
+
+// TODO import from Service folder
+export interface ItemToggledInCollectionEvent {
+  relatedItem: ManageCollectionItemInterface;
+  item: ManageCollectionItemInterface;
+  selected: boolean;
 }

@@ -1,28 +1,53 @@
-<campus-info-panel [titleText]="data.item.label"
-                   [titleIcon]="data.item.icon">
-  <campus-filter-text-input title__right
-                            theme="dark"
-                            [source]="data.linkableItems"
-                            class="ui-manage-collection__filter"></campus-filter-text-input>
-  <mat-selection-list (selectionChange)="onSelectionChanged($event)"
-                      disableRipple=true>
-    <h3 mat-subheader>Recent gebruikt</h3>
-    <mat-list-option *ngFor="let item of recentLinkableItems"
-                     [value]="item.id"
-                     class="ui-manage-collection__recent-item">
-      <mat-icon mat-list-icon
-                [svgIcon]="item.icon"></mat-icon>
-      <p mat-line>{{item.label}}</p>
-    </mat-list-option>
-    <mat-divider></mat-divider>
-    <ng-container *ngIf="(filterTextInput.result$ | async) as filteredItems">
-      <h3 mat-subheader>Alle</h3>
-      <mat-list-option *ngFor="let item of filteredItems"
-                       [value]="item.id">
-        <mat-icon mat-list-icon
-                  [svgIcon]="item.icon"></mat-icon>
-        <p mat-line>{{item.label}}</p>
-      </mat-list-option>
-    </ng-container>
-  </mat-selection-list>
+<div mat-dialog-title>{{ data.title }}</div>
+<campus-info-panel [titleText]="data.item.label" [titleIcon]="data.item.icon">
+  <campus-filter-text-input
+    title__right
+    theme="dark"
+    [source]="data.linkableItems"
+    class="ui-manage-collection__filter"
+  ></campus-filter-text-input>
+  <mat-dialog-content>
+    <mat-selection-list
+      (selectionChange)="onSelectionChanged($event)"
+      disableRipple="true"
+    >
+      <div
+        class="ui-manage-collection__recent-items"
+        *ngIf="!filterTextInput.input.value"
+      >
+        <h3 mat-subheader>Recent gebruikt</h3>
+        <mat-list-option
+          *ngFor="let item of recentLinkableItems"
+          [value]="item.id"
+          class="ui-manage-collection__recent-item"
+        >
+          <mat-icon mat-list-icon [svgIcon]="item.icon"></mat-icon>
+          <p mat-line>{{ item.label }}</p>
+        </mat-list-option>
+        <mat-divider></mat-divider>
+      </div>
+      <ng-container *ngIf="(filterTextInput.result$ | async) as filteredItems">
+        <div
+          class="ui-manage-collection__all-items"
+          *ngIf="filteredItems.length; else: noResultsTemplate"
+        >
+          <h3 mat-subheader>Alle</h3>
+          <mat-list-option *ngFor="let item of filteredItems" [value]="item.id">
+            <mat-icon mat-list-icon [svgIcon]="item.icon"></mat-icon>
+            <p mat-line>{{ item.label }}</p>
+          </mat-list-option>
+        </div>
+      </ng-container>
+    </mat-selection-list>
+  </mat-dialog-content>
 </campus-info-panel>
+<mat-dialog-actions align="end">
+  <campus-button mat-dialog-close primary>Sluiten</campus-button>
+</mat-dialog-actions>
+
+<ng-template #noResultsTemplate>
+  <div class="ui-manage-collection__no-results">
+    <span>Het filteren leverde geen resultaten op.</span>
+    <a (click)="filterTextInput.clear()">Filter verwijderen</a>
+  </div>
+</ng-template>
