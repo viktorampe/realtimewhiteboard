@@ -1,8 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
-import { undo } from 'ngrx-undo';
-import { from } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { DalState } from '..';
 import {
@@ -47,7 +45,7 @@ export class TaskEduContentEffects {
   );
 
   @Effect()
-  linkTaskEduContent$ = this.dataPersistence.optimisticUpdate(
+  linkTaskEduContent$ = this.dataPersistence.pessimisticUpdate(
     TaskEduContentsActionTypes.LinkTaskEduContent,
     {
       run: (action: LinkTaskEduContent, state: DalState) => {
@@ -71,10 +69,8 @@ export class TaskEduContentEffects {
             ])
           );
       },
-      undoAction: (action: LinkTaskEduContent, error) => {
-        const undoAction = undo(action);
-
-        const effectFeedbackAction = new AddEffectFeedback({
+      onError: (action: LinkTaskEduContent, error) => {
+        return new AddEffectFeedback({
           effectFeedback: new EffectFeedback({
             id: this.uuid(),
             triggerAction: action,
@@ -91,8 +87,6 @@ export class TaskEduContentEffects {
             priority: Priority.HIGH
           })
         });
-
-        return from([undoAction, effectFeedbackAction]);
       }
     }
   );
