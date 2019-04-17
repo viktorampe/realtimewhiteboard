@@ -29,7 +29,13 @@ const COLLECTION_MANAGER_SERVICE_TOKEN = new InjectionToken(
 );
 
 export interface CollectionMangerInterface {
-  mangeCollections(): Observable<ItemToggledInCollectionInterface>;
+  manageCollections(
+    title: string,
+    item: ManageCollectionItemInterface,
+    linkableItems: ManageCollectionItemInterface[],
+    linkedItemIds: number[],
+    recentItemIds: number[]
+  ): Observable<ItemToggledInCollectionInterface>;
 }
 
 interface ManageCollectionsForContentDataInterface {
