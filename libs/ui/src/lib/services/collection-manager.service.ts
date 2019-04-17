@@ -1,7 +1,13 @@
-import { Component, EventEmitter, Injectable, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Injectable,
+  InjectionToken,
+  Output
+} from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { Observable, Subject, Subscription } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { map, take, tap } from 'rxjs/operators';
 import { ManageCollectionItemInterface } from '../manage-collection/interfaces/ManageCollectionItem.interface';
 import { ItemToggledInCollectionInterface } from './ItemToggledInCollection.interface';
 
@@ -26,6 +32,14 @@ interface ManageCollectionsForContentDataInterface {
 }
 
 // ------------------- END REMOVE -------------------------------------- //
+
+const COLLECTION_MANAGER_SERVICE_TOKEN = new InjectionToken(
+  'CollectionManagerService'
+);
+
+export interface CollectionMangerInterface {
+  mangeCollections(): Observable<ItemToggledInCollectionInterface>;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -62,12 +76,15 @@ export class CollectionManagerService {
       )
       .subscribe();
 
-    dialogRef.afterClosed().subscribe(result => {
-      // clean up subscription on dialog close
-      this.subscription.unsubscribe();
-      // complete observable on dialog close
-      this.itemToggledInCollection$.complete();
-    });
+    dialogRef.afterClosed().pipe(
+      take(1),
+      map(result => {
+        // clean up subscription on dialog close
+        this.subscription.unsubscribe();
+        // complete observable on dialog close
+        this.itemToggledInCollection$.complete();
+      })
+    );
 
     // return observable
     return this.itemToggledInCollection$;
