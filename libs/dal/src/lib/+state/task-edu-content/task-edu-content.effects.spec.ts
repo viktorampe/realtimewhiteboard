@@ -327,7 +327,6 @@ describe('TaskEduContentEffects', () => {
   });
 
   describe('deleteTaskEduContent$', () => {
-    let effectFeedback: EffectFeedback;
     let addFeedbackAction: AddEffectFeedback;
     const deleteTaskEduContentAction = new DeleteTaskEduContent({ id: 321 });
 
