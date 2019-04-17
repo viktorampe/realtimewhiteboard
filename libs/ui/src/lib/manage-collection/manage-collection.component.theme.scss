@@ -1,6 +1,6 @@
 @mixin ui-manage-collection() {
   $ui-manage-collection-list_filter-font-size: $ui-primary-font-size !default;
-  $ui-manage-collection-list_recent-item-color: #44b0aa !default;
+  $ui-manage-collection-list_recent-item-color: $ui-form-button-primary-bg-color !default;
 
   .ui-manage-collection {
     &__filter {
@@ -19,7 +19,6 @@
     }
 
     &__recent-item {
-
       .mat-icon,
       p {
         color: $ui-manage-collection-list_recent-item-color;

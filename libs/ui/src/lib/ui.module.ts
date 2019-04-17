@@ -6,6 +6,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatButtonModule,
+  MatDialogModule,
   MatFormFieldModule,
   MatIconModule,
   MatInputModule,
@@ -93,6 +94,7 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     MatIconModule,
     MatMenuModule,
     MatListModule,
+    MatDialogModule,
     UtilsModule
   ],
   declarations: [

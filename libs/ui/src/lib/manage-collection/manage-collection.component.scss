@@ -1,0 +1,12 @@
+.ui-manage-collection {
+  &__no-results {
+    *:not(:last-child) {
+      margin-right: 5px;
+    }
+
+    a {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+}
