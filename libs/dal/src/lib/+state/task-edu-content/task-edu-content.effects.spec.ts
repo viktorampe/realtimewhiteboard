@@ -95,24 +95,6 @@ describe('TaskEduContentEffects', () => {
     jest.spyOn(TestBed.get(service), method).mockReturnValue(of(returnValue));
   };
 
-  const mockServiceMethodReturnValue = (
-    method: string,
-    returnValue: any,
-    service: any = TASK_EDU_CONTENT_SERVICE_TOKEN
-  ) => {
-    jest.spyOn(TestBed.get(service), method).mockReturnValue(of(returnValue));
-  };
-
-  const mockServiceMethodError = (
-    method: string,
-    errorMessage: string,
-    service: any = TASK_EDU_CONTENT_SERVICE_TOKEN
-  ) => {
-    jest.spyOn(TestBed.get(service), method).mockImplementation(() => {
-      throw new Error(errorMessage);
-    });
-  };
-
   beforeAll(() => {
     dateMock = new MockDate();
 
@@ -279,7 +261,7 @@ describe('TaskEduContentEffects', () => {
     describe('with initialState', () => {
       beforeEach(() => {
         effectFeedback.message =
-          'Het leermateriaal werd aan de taak toegevoegd.';
+          'Het lesmateriaal werd aan de taak toegevoegd.';
         effectFeedback.triggerAction = linkAction;
         effectFeedback.type = 'success';
         effectFeedback.display = true;
@@ -306,7 +288,7 @@ describe('TaskEduContentEffects', () => {
     describe('with initialState and failing api call', () => {
       beforeEach(() => {
         effectFeedback.message =
-          'Het is niet gelukt om het leermateriaal aan de taak toe te voegen.';
+          'Het is niet gelukt om het lesmateriaal aan de taak toe te voegen.';
         effectFeedback.triggerAction = linkAction;
         effectFeedback.type = 'error';
         effectFeedback.userActions = [
@@ -341,7 +323,7 @@ describe('TaskEduContentEffects', () => {
       });
 
       beforeEach(() => {
-        mockServiceMethodReturnValue('remove', true);
+        mockTaskEduContentServiceMethodReturnValue('remove', true);
       });
 
       it('should dispatch a success feedback action', () => {
@@ -373,7 +355,7 @@ describe('TaskEduContentEffects', () => {
       });
 
       beforeEach(() => {
-        mockServiceMethodError('remove', 'Something went wrong.');
+        mockTaskEduContentServiceMethodError('remove', 'Something went wrong.');
       });
 
       it('should dispatch an error feedback action', () => {

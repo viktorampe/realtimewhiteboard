@@ -61,7 +61,7 @@ export class TaskEduContentEffects {
                 effectFeedback: new EffectFeedback({
                   id: this.uuid(),
                   triggerAction: action,
-                  message: 'Het leermateriaal werd aan de taak toegevoegd.',
+                  message: 'Het lesmateriaal werd aan de taak toegevoegd.',
                   type: 'success',
                   display: true,
                   priority: Priority.NORM
@@ -79,7 +79,7 @@ export class TaskEduContentEffects {
             id: this.uuid(),
             triggerAction: action,
             message:
-              'Het is niet gelukt om het leermateriaal aan de taak toe te voegen.',
+              'Het is niet gelukt om het lesmateriaal aan de taak toe te voegen.',
             userActions: [
               {
                 title: 'Opnieuw proberen.',
