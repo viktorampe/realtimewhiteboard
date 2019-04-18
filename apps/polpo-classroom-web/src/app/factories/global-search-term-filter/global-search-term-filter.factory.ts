@@ -53,7 +53,6 @@ export class GlobalSearchTermFilterFactory extends SearchTermFilterFactory {
     return combineLatest(filters).pipe(
       map(searchFilters =>
         searchFilters.filter(f => {
-          f.options = { maxVisibleItems: this.maxVisibleItems };
           return f.criteria.values.length > 0;
         })
       )

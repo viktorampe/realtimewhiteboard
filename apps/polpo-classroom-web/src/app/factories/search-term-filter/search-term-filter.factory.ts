@@ -133,7 +133,6 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
     return combineLatest(filters).pipe(
       map(searchFilters =>
         searchFilters.filter(f => {
-          f.options = { maxVisibleItems: this.maxVisibleItems };
           return f.criteria.values.length > 0;
         })
       )
@@ -217,7 +216,8 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
         }))
       },
       component: filterQuery.component || this.component,
-      domHost: this.domHost
+      domHost: this.domHost,
+      options: { maxVisibleItems: this.maxVisibleItems }
     } as SearchFilterInterface;
   }
 }
