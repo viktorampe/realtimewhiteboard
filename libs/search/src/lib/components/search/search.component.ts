@@ -187,6 +187,7 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
     // set inputs
     const filterItem = componentRef.instance;
     filterItem.filterCriteria = filter.criteria;
+    if (filter.options) filterItem.filterOptions = filter.options;
 
     // subscribe to outputs
     this.portalsMap[filter.domHost].subscriptions.add(
