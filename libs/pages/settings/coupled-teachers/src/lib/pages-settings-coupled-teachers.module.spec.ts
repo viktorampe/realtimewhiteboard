@@ -5,7 +5,7 @@ describe('PagesSettingsCoupledTeachersModule', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [PagesSettingsCoupledTeachersModule]
-    }).compileComponents();
+    });
   }));
 
   it('should create', () => {

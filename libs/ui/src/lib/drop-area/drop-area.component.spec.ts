@@ -13,7 +13,7 @@ describe('DropAreaComponent', () => {
       imports: [MatIconModule],
       declarations: [DropAreaComponent],
       providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

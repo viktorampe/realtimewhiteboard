@@ -26,7 +26,7 @@ describe('BasicAppBarComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [AppBarComponent, AppBarHostComponent]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

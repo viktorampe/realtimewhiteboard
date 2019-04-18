@@ -34,7 +34,7 @@ describe('EduContentSearchResultComponent', () => {
           useValue: { open: jest.fn() }
         }
       ]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

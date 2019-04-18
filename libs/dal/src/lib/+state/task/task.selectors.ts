@@ -1,4 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { TaskInterface } from '../../+models';
+import { Task } from '../../+models/Task';
 import {
   NAME,
   selectAll,
@@ -50,7 +52,7 @@ export const getAllEntities = createSelector(
 export const getByIds = createSelector(
   selectTaskState,
   (state: State, props: { ids: number[] }) => {
-    return props.ids.map(id => state.entities[id]);
+    return props.ids.map(id => asTask(state.entities[id]));
   }
 );
 
@@ -63,7 +65,7 @@ export const getByIds = createSelector(
  */
 export const getById = createSelector(
   selectTaskState,
-  (state: State, props: { id: number }) => state.entities[props.id]
+  (state: State, props: { id: number }) => asTask(state.entities[props.id])
 );
 
 export const getShared = createSelector(
@@ -72,7 +74,7 @@ export const getShared = createSelector(
     const ids: number[] = <number[]>state.ids;
     return ids
       .filter(id => state.entities[id].personId !== props.userId) //personId is the teacherId
-      .map(id => state.entities[id]);
+      .map(id => asTask(state.entities[id]));
   }
 );
 
@@ -82,7 +84,7 @@ export const getOwn = createSelector(
     const ids: number[] = <number[]>state.ids;
     return ids
       .filter(id => state.entities[id].personId === props.userId) //personId is the teacherId
-      .map(id => state.entities[id]);
+      .map(id => asTask(state.entities[id]));
   }
 );
 
@@ -108,3 +110,9 @@ export const getSharedTaskIdsByLearningAreaId = createSelector(
     );
   }
 );
+
+function asTask(item: TaskInterface): Task {
+  if (item) {
+    return Object.assign<Task, TaskInterface>(new Task(), item);
+  }
+}

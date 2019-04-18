@@ -48,6 +48,24 @@ export class LearningPlanService implements LearningPlanServiceInterface {
       .pipe(map(this.toSpecialitiesMap));
   }
 
+  // TODO: move to own service?
+  getSpecialities(
+    eduNetId,
+    yearId,
+    schoolTypeId,
+    learningAreaId
+  ): Observable<SpecialtyInterface[]> {
+    return this.learningPlanApi
+      .find({
+        where: { learningAreaId, eduNetId },
+        include: {
+          relation: 'assignments',
+          scope: { include: ['specialty'], where: { schoolTypeId, yearId } }
+        }
+      })
+      .pipe(map(this.toSpecialitiesArray));
+  }
+
   private toSpecialitiesMap(
     learningPlans: LearningPlanInterface[]
   ): Map<SpecialtyInterface, LearningPlanAssignmentInterface[]> {
@@ -73,5 +91,21 @@ export class LearningPlanService implements LearningPlanServiceInterface {
     );
 
     return specialitiesMap;
+  }
+
+  private toSpecialitiesArray(
+    learningPlans: LearningPlanInterface[]
+  ): SpecialtyInterface[] {
+    const specialities = {};
+
+    learningPlans.forEach(plan =>
+      plan.assignments.forEach(assignment => {
+        if (!specialities[assignment.specialty.id]) {
+          specialities[assignment.specialty.id] = assignment.specialty;
+        }
+      })
+    );
+
+    return Object.values(specialities);
   }
 }

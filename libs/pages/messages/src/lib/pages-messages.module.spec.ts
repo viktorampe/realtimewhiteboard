@@ -5,7 +5,7 @@ describe('PagesMessagesModule', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [PagesMessagesModule]
-    }).compileComponents();
+    });
   }));
 
   it('should create', () => {

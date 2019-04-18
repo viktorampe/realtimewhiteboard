@@ -29,7 +29,7 @@ describe('SearchPortalDirective', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [TestModule]
-    }).compileComponents();
+    });
   });
 
   beforeEach(() => {

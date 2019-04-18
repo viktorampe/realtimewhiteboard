@@ -66,7 +66,7 @@ describe('HasPermissionDirective', () => {
           useValue: {}
         }
       ]
-    }).compileComponents();
+    });
   });
 
   beforeEach(() => {
