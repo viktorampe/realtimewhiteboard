@@ -1,10 +1,10 @@
-import { Component, EventEmitter, Output } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MatDialog } from '@angular/material';
 import { hot } from '@nrwl/nx/testing';
 import { ManageCollectionItemFixture } from '../../manage-collection/fixtures/manage-collection-item.fixture';
 import {
   CollectionManagerService,
+  ManageCollectionComponent,
   ManageCollectionsForContentDataInterface
 } from './collection-manager.service';
 import { CollectionManagerServiceInterface } from './collection-manager.service.interface';
@@ -32,16 +32,6 @@ const mockSelectionChangedData: ItemToggledInCollectionInterface = {
 
 let mockDataSelectionChanged$: any;
 let mockDataAfterclosed$: any;
-
-@Component({
-  selector: 'campus-manage-collection',
-  template: ``
-})
-export class ManageCollectionComponent {
-  @Output() selectionChanged = new EventEmitter<
-    ItemToggledInCollectionInterface
-  >();
-}
 
 describe('CollectionManagerService', () => {
   let collectionManagerService: CollectionManagerServiceInterface;
@@ -93,7 +83,7 @@ describe('CollectionManagerService', () => {
       );
 
       expect(openSpy).toHaveBeenCalledTimes(1);
-      expect(openSpy).toHaveBeenCalledWith(expect.any(Function), {
+      expect(openSpy).toHaveBeenCalledWith(ManageCollectionComponent, {
         data: {
           title: mockData.title,
           item: mockData.item,
