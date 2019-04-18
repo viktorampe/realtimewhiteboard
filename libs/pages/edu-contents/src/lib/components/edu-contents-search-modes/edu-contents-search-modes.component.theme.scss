@@ -9,14 +9,14 @@
   $pages-edu-contents__search-modes__title-font-size: $ui-primary-font-size !default;
   $pages-edu-contents__search-modes__title-color: $ui-primary-font-color-2 !default;
   $pages-edu-contents__search-modes__title-color--accent: $ui-primary-font-color !default;
+  $campus_search_term--line_height__override: 20px;
 
   .pages-edu-contents__search-modes {
-    $campus_search_term--line_height__override: 20px;
     &__item {
-      .ui-button {
-        height: $campus_search_term--line_height__override + 11px;
-      }
       campus-search-term {
+        .ui-button {
+          height: $campus_search_term--line_height__override + 11px;
+        }
         .mat-form-field-infix {
           line-height: $campus_search_term--line_height__override;
         }

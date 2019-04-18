@@ -38,11 +38,11 @@ campus-search-term {
 // local override example
 // $campus_search_term--line_height__override: 20px;
 // .containing-container-example {
-//   width: 250px;
-//   .ui-button {
-//     height: $campus_search_term--line_height__override + 11px;
-//   }
 //   campus-search-term {
+//     width: 250px;
+//     .ui-button {
+//       height: $campus_search_term--line_height__override + 11px;
+//     }
 //     .mat-form-field-infix {
 //       line-height: $campus_search_term--line_height__override;
 //     }
