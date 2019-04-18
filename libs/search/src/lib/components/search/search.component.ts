@@ -51,6 +51,7 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public autoCompleteDebounceTime = 300;
   @Input() public initialState: SearchStateInterface;
   @Input() public searchResults: SearchResultInterface;
+  @Input() public autoFocusSearchTerm = false;
   @Input()
   public set searchPortals(searchPortals: QueryList<SearchPortalDirective>) {
     if (searchPortals) {
@@ -145,6 +146,7 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
 
     this.searchTermComponent.initialValue = this.initialState.searchTerm;
     this.searchTermComponent.autoCompleteValues = this.autoCompleteValues;
+    this.searchTermComponent.autofocus = this.autoFocusSearchTerm;
 
     // needed to avoid ExpressionChangedAfterItHasBeenCheckedError
     componentRef.changeDetectorRef.detectChanges();
