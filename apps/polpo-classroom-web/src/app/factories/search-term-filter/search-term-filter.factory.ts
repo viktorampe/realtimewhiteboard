@@ -47,7 +47,8 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
       query: LearningAreaQueries.getAll,
       name: 'learningArea',
       label: 'Leergebied',
-      component: CheckboxListFilterComponent
+      component: CheckboxListFilterComponent,
+      options: { maxVisibleItems: this.maxVisibleItems }
     },
     years: {
       query: YearQueries.getAll,
@@ -58,29 +59,40 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
     eduNets: {
       query: EduNetQueries.getAll,
       name: 'eduNets',
-      label: 'Onderwijsnet'
+      label: 'Onderwijsnet',
+      options: { maxVisibleItems: this.maxVisibleItems }
     },
     schoolTypes: {
       query: SchoolTypeQueries.getAll,
       name: 'schoolTypes',
-      label: 'Onderwijsvorm'
+      label: 'Onderwijsvorm',
+      options: { maxVisibleItems: this.maxVisibleItems }
     },
     methodsByLearningArea: {
       query: MethodQueries.getByLearningAreaIds,
       name: 'methods',
       label: 'Methode',
-      learningAreaDependent: true
+      learningAreaDependent: true,
+      options: { maxVisibleItems: this.maxVisibleItems }
     },
     learningDomainsByLearningArea: {
       query: LearningDomainQueries.getByLearningAreas,
       label: 'Leergebied',
       name: 'learningDomains',
-      learningAreaDependent: true
+      learningAreaDependent: true,
+      options: { maxVisibleItems: this.maxVisibleItems }
     },
     grades: {
       query: LearningDomainQueries.getByLearningArea,
       label: 'Graad',
-      name: 'grades'
+      name: 'grades',
+      options: { maxVisibleItems: this.maxVisibleItems }
+    },
+    eduContentProductType: {
+      name: 'eduContentProductType',
+      label: 'Type',
+      component: CheckboxListFilterComponent,
+      options: { maxVisibleItems: this.maxVisibleItems }
     }
   };
 
@@ -182,11 +194,7 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
       map(nestedProductTypes =>
         this.getFilter(
           nestedProductTypes,
-          {
-            name: 'eduContentProductType',
-            label: 'Type',
-            component: CheckboxListFilterComponent
-          },
+          this.filterQueries['eduContentProductType'],
           searchState
         )
       )
@@ -198,6 +206,7 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
     filterQuery: FilterQueryInterface,
     searchState: SearchStateInterface
   ): SearchFilterInterface {
+    console.log(filterQuery);
     return {
       criteria: {
         name: filterQuery.name,
@@ -214,8 +223,8 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
         }))
       },
       component: filterQuery.component || this.component,
-      domHost: this.domHost,
-      options: { maxVisibleItems: this.maxVisibleItems }
+      domHost: filterQuery.domHost || this.domHost,
+      options: filterQuery.options
     } as SearchFilterInterface;
   }
 }
@@ -229,4 +238,6 @@ export interface FilterQueryInterface {
   label: string;
   component?: Type<SearchFilterComponentInterface>;
   learningAreaDependent?: boolean;
+  domHost?: string;
+  options?: any;
 }
