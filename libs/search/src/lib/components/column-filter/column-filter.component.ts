@@ -56,15 +56,13 @@ import { ColumnFilterService } from './column-filter.service';
 })
 export class ColumnFilterComponent implements SearchFilterComponentInterface {
   private _filterCriteria: SearchFilterCriteriaInterface[];
-  private previousFilterCriteriaCount: number;
 
   @Input()
   public set filterCriteria(value: SearchFilterCriteriaInterface[]) {
     if (value) {
       this.columnFilterService.forwardAnimation =
-        this.previousFilterCriteriaCount < value.length;
-      this.previousFilterCriteriaCount = value.length;
-
+        this.columnFilterService.previousFilterCriteriaCount < value.length;
+      this.columnFilterService.previousFilterCriteriaCount = value.length;
       // input is set by searchComponent, which can also be a single criterium
       if (!Array.isArray(value)) value = [value];
     }
