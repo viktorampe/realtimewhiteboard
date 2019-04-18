@@ -1,6 +1,6 @@
 import { Injectable, Injector } from '@angular/core';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { BehaviorSubject, Observable, zip } from 'rxjs';
+import { map, skipWhile, startWith, take } from 'rxjs/operators';
 import {
   SearchFilterCriteriaInterface,
   SearchFilterCriteriaValuesInterface,
@@ -31,12 +31,12 @@ export class SearchViewModel {
   }
 
   private initiateStreams(): void {
-    this.searchFilters$ = combineLatest(
-      this.filters$,
+    this.searchFilters$ = zip(
       this.searchState$,
-      this.results$
+      this.results$.pipe(skipWhile(result => !result)), // skip initial value
+      this.filters$.pipe(skipWhile(filters => !filters.length)) // skip initial value
     ).pipe(
-      map(([filters, state, results]) => {
+      map(([state, results, filters]) => {
         const filterCriteriaSelections = !!state
           ? state.filterCriteriaSelections
           : new Map<string, (number | string)[]>();
@@ -50,7 +50,8 @@ export class SearchViewModel {
             filterCriteriaPredictions
           )
         );
-      })
+      }),
+      startWith([]) // intial value -> empty array of filters
     );
   }
 
@@ -87,6 +88,7 @@ export class SearchViewModel {
         resultsFilterCriteriaPredictions
       );
     }
+
     return filter;
   }
 
@@ -172,11 +174,11 @@ export class SearchViewModel {
   ): boolean {
     //check if there is selection data
     const criteriaSelections = filterCriteriaSelections.get(criterium.name);
-    // if there is data and check if the selection is present or not, return true or false depending on data presence
-    return criteriaSelections &&
+
+    return (
+      !!criteriaSelections &&
       criteriaSelections.includes(value.data[criterium.keyProperty])
-      ? true
-      : false;
+    );
   }
 
   /**
@@ -270,9 +272,17 @@ export class SearchViewModel {
     searchState.from = 0;
     this.searchState$.next(searchState);
 
-    if (this.searchMode && this.searchMode.dynamicFilters === true) {
-      // request new filters
-      this.updateFilters();
+    if (this.searchMode) {
+      if (this.searchMode.dynamicFilters === true) {
+        // request new filters
+        // response from factory will trigger emit
+        this.updateFilters();
+      } else {
+        // emit unchanged value
+        // needed for searchFilter$
+        // -> zip() needs new emit
+        this.filters$.next(this.filters$.value);
+      }
     }
   }
   public changeSearchTerm(searchTerm: string): void {

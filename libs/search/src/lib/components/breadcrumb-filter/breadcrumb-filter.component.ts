@@ -15,7 +15,7 @@ export class BreadcrumbFilterComponent
   selectedValues: SearchFilterCriteriaValuesInterface[];
   private criteria: SearchFilterCriteriaInterface[];
 
-  @Input() rootLabel: string;
+  @Input() rootLabel = 'Alle';
   @Input()
   public set filterCriteria(filterCriteria: SearchFilterCriteriaInterface[]) {
     this.selectedValues = [];

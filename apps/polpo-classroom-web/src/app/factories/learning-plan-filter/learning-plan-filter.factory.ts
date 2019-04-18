@@ -5,7 +5,6 @@ import {
   EduNetQueries,
   LearningAreaInterface,
   LearningAreaQueries,
-  LearningPlanInterface,
   LearningPlanServiceInterface,
   LEARNING_PLAN_SERVICE_TOKEN,
   SchoolTypeInterface,
@@ -18,7 +17,6 @@ import {
   ColumnFilterComponent,
   SearchFilterComponentInterface,
   SearchFilterCriteriaInterface,
-  SearchFilterCriteriaValuesInterface,
   SearchFilterFactory,
   SearchFilterInterface,
   SearchStateInterface
@@ -29,8 +27,8 @@ import { map } from 'rxjs/operators';
 import {
   EDU_NETS_FILTER_PROPS,
   LEARNING_AREA_FILTER_PROPS,
-  LEARNING_PLAN_ASSIGNMENTS_FILTER_PROPS,
   SCHOOL_TYPES_FILTER_PROPS,
+  SPECIALITIES_FILTER_PROPS,
   YEARS_FILTER_PROPS
 } from './learning-plan-filter-props';
 
@@ -39,7 +37,7 @@ enum ColumnLevel {
   EDU_NET,
   SCHOOL_TYPE,
   YEAR,
-  LEARNING_PLAN
+  SPECIALITY
 }
 
 @Injectable({ providedIn: 'root' })
@@ -101,11 +99,9 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
             selectedPropertyIds[ColumnLevel.SCHOOL_TYPE]
           )
         : of(undefined);
-    const learningPlans$: Observable<
-      Map<SpecialtyInterface, LearningPlanInterface[]>
-    > =
-      columnLevel >= ColumnLevel.LEARNING_PLAN
-        ? this.learningPlanService.getLearningPlanAssignments(
+    const specialities$: Observable<SpecialtyInterface[]> =
+      columnLevel >= ColumnLevel.SPECIALITY
+        ? this.learningPlanService.getSpecialities(
             selectedPropertyIds[ColumnLevel.EDU_NET],
             selectedPropertyIds[ColumnLevel.YEAR],
             selectedPropertyIds[ColumnLevel.SCHOOL_TYPE],
@@ -117,7 +113,7 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
       this.eduNets$,
       this.schoolTypes$,
       years$,
-      learningPlans$
+      specialities$
     ).pipe(
       map(
         (
@@ -126,7 +122,7 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
             EduNetInterface[],
             SchoolTypeInterface[],
             YearInterface[],
-            Map<SpecialtyInterface, LearningPlanInterface[]>
+            SpecialtyInterface[]
           ]
         ) => {
           const searchFilterCriteria: SearchFilterCriteriaInterface[] = [];
@@ -145,62 +141,32 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
     currentColumnLevel: number,
     startingColumnValues
   ): SearchFilterCriteriaInterface {
-    return this.getSearchFilterCriteriaWithValues(
-      startingColumnValues,
-      this.getSearchFilterStringProperties(currentColumnLevel),
-      currentColumnLevel < 4
-        ? this.getSearchFilterCriteriaValues
-        : this.getLearningPlanSearchFilterCriteriaValues
-    );
-  }
-
-  private getSearchFilterCriteriaWithValues(
-    startingColumnValues,
-    stringProperties: StartingLevelStringPropertiesInterface,
-    valueGetterFunction: ValueGetterFunctionType
-  ): SearchFilterCriteriaInterface {
     return {
-      ...stringProperties,
-      values: valueGetterFunction(startingColumnValues)
-    };
-  }
-
-  private getSearchFilterCriteriaValues(
-    startingColumnValues: any[]
-  ): SearchFilterCriteriaValuesInterface[] {
-    return startingColumnValues.map(value => {
-      return {
+      ...this.getSearchFilterStringProperties(currentColumnLevel),
+      values: startingColumnValues.map(value => ({
         data: value,
-        hasChild: true
-      };
-    });
-  }
-
-  private getLearningPlanSearchFilterCriteriaValues(
-    learningPlanMap: Map<SpecialtyInterface, LearningPlanInterface[]>
-  ): SearchFilterCriteriaValuesInterface[] {
-    return Array.from(learningPlanMap).map(
-      ([specialty, learningPlans]: [
-        SpecialtyInterface,
-        LearningPlanInterface[]
-      ]) => {
-        return {
-          data: { label: specialty.name, ids: learningPlans.map(a => a.id) },
-          hasChild: false
-        };
-      }
-    );
+        hasChild:
+          currentColumnLevel !==
+          Object.keys(ColumnLevel).filter(key => isNaN(Number(key))).length - 1
+      }))
+    };
   }
 
   private getStartingColumnSelectedIds(
     searchState: SearchStateInterface
   ): SelectedPropertyIds {
     const learningAreas = searchState.filterCriteriaSelections.get(
-      'learningAreas'
+      LEARNING_AREA_FILTER_PROPS.name
     );
-    const eduNets = searchState.filterCriteriaSelections.get('eduNets');
-    const schoolTypes = searchState.filterCriteriaSelections.get('schoolTypes');
-    const years = searchState.filterCriteriaSelections.get('years');
+    const eduNets = searchState.filterCriteriaSelections.get(
+      EDU_NETS_FILTER_PROPS.name
+    );
+    const schoolTypes = searchState.filterCriteriaSelections.get(
+      SCHOOL_TYPES_FILTER_PROPS.name
+    );
+    const years = searchState.filterCriteriaSelections.get(
+      YEARS_FILTER_PROPS.name
+    );
     return [
       this.getFirstValueAsNumber(learningAreas),
       this.getFirstValueAsNumber(eduNets),
@@ -223,7 +189,7 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
     yearId
   ]: SelectedPropertyIds): ColumnLevel {
     if (learningAreaId && eduNetId && schoolTypeId && yearId)
-      return ColumnLevel.LEARNING_PLAN;
+      return ColumnLevel.SPECIALITY;
     if (learningAreaId && eduNetId && schoolTypeId) return ColumnLevel.YEAR;
     if (learningAreaId && eduNetId) return ColumnLevel.SCHOOL_TYPE;
     if (learningAreaId) return ColumnLevel.EDU_NET;
@@ -242,8 +208,8 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
         return SCHOOL_TYPES_FILTER_PROPS;
       case ColumnLevel.YEAR:
         return YEARS_FILTER_PROPS;
-      case ColumnLevel.LEARNING_PLAN:
-        return LEARNING_PLAN_ASSIGNMENTS_FILTER_PROPS;
+      case ColumnLevel.SPECIALITY:
+        return SPECIALITIES_FILTER_PROPS;
       default:
         throw Error(
           `LearningPlanFilterFactory: getStartingFilterStringProperties: Given currentColumnLevel: ${currentColumnLevel} should not exist`
@@ -260,6 +226,3 @@ interface StartingLevelStringPropertiesInterface {
 }
 
 type SelectedPropertyIds = [number, number, number, number];
-type ValueGetterFunctionType = (
-  input: any[] | Map<SpecialtyInterface, LearningPlanInterface[]>
-) => SearchFilterCriteriaValuesInterface[];
