@@ -249,7 +249,7 @@ describe('GlobalSearchTermFilterFactory', () => {
     component,
     maxVisibleItems?
   ): SearchFilterInterface {
-    const searchFitler = {
+    const searchFilter = {
       criteria: {
         name: name,
         label: label,
@@ -273,8 +273,8 @@ describe('GlobalSearchTermFilterFactory', () => {
       component: component,
       domHost: 'hostLeft'
     } as SearchFilterInterface;
-    if (maxVisibleItems) searchFitler.options = { maxVisibleItems };
-    return searchFitler;
+    if (maxVisibleItems) searchFilter.options = { maxVisibleItems };
+    return searchFilter;
   }
 
   function getExpectedYearFilter() {
