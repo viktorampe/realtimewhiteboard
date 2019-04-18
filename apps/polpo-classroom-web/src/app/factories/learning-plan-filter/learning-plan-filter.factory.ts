@@ -152,44 +152,6 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
     };
   }
 
-  // private getSearchFilterCriteriaWithValues(
-  //   startingColumnValues,
-  //   stringProperties: StartingLevelStringPropertiesInterface,
-  //   valueGetterFunction: ValueGetterFunctionType
-  // ): SearchFilterCriteriaInterface {
-  //   return {
-  //     ...stringProperties,
-  //     values: valueGetterFunction(startingColumnValues)
-  //   };
-  // }
-
-  // private getSearchFilterCriteriaValues(
-  //   startingColumnValues: any[]
-  // ): SearchFilterCriteriaValuesInterface[] {
-  //   return startingColumnValues.map(value => {
-  //     return {
-  //       data: value,
-  //       hasChild: true
-  //     };
-  //   });
-  // }
-
-  // private getLearningPlanSearchFilterCriteriaValues(
-  //   learningPlanMap: Map<SpecialtyInterface, LearningPlanInterface[]>
-  // ): SearchFilterCriteriaValuesInterface[] {
-  //   return Array.from(learningPlanMap).map(
-  //     ([specialty, learningPlans]: [
-  //       SpecialtyInterface,
-  //       LearningPlanInterface[]
-  //     ]) => {
-  //       return {
-  //         data: { label: specialty.name, ids: learningPlans.map(a => a.id) },
-  //         hasChild: false
-  //       };
-  //     }
-  //   );
-  // }
-
   private getStartingColumnSelectedIds(
     searchState: SearchStateInterface
   ): SelectedPropertyIds {
@@ -264,6 +226,3 @@ interface StartingLevelStringPropertiesInterface {
 }
 
 type SelectedPropertyIds = [number, number, number, number];
-// type ValueGetterFunctionType = (
-//   input: any[] | Map<SpecialtyInterface, LearningPlanInterface[]>
-// ) => SearchFilterCriteriaValuesInterface[];

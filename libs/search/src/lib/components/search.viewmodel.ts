@@ -280,6 +280,7 @@ export class SearchViewModel {
       } else {
         // emit unchanged value
         // needed for searchFilter$
+        // -> zip() needs new emit
         this.filters$.next(this.filters$.value);
       }
     }
