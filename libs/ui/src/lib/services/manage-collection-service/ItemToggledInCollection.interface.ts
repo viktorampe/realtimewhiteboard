@@ -1,4 +1,4 @@
-import { ManageCollectionItemInterface } from '../manage-collection/interfaces/ManageCollectionItem.interface';
+import { ManageCollectionItemInterface } from '../../manage-collection/interfaces/manage-collection-item.interface';
 
 export interface ItemToggledInCollectionInterface {
   relatedItem: ManageCollectionItemInterface;

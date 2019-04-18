@@ -1,14 +1,9 @@
-import {
-  Component,
-  EventEmitter,
-  Injectable,
-  InjectionToken,
-  Output
-} from '@angular/core';
+import { Component, EventEmitter, Injectable, Output } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { Observable, Subject, Subscription } from 'rxjs';
-import { map, take } from 'rxjs/operators';
-import { ManageCollectionItemInterface } from '../manage-collection/interfaces/ManageCollectionItem.interface';
+import { take } from 'rxjs/operators';
+import { ManageCollectionItemInterface } from '../../manage-collection/interfaces/manage-collection-item.interface';
+import { CollectionManagerServiceInterface } from './collection-manager.service.interface';
 import { ItemToggledInCollectionInterface } from './ItemToggledInCollection.interface';
 
 //----------- TO DO: REMOVE WHEN OTHER ISSUES ARE IMPLEMENTED --------------
@@ -24,20 +19,6 @@ export class ManageCollectionComponent {
 }
 // ------------------- END REMOVE -------------------------------------- //
 
-const COLLECTION_MANAGER_SERVICE_TOKEN = new InjectionToken(
-  'CollectionManagerService'
-);
-
-export interface CollectionMangerInterface {
-  manageCollections(
-    title: string,
-    item: ManageCollectionItemInterface,
-    linkableItems: ManageCollectionItemInterface[],
-    linkedItemIds: number[],
-    recentItemIds: number[]
-  ): Observable<ItemToggledInCollectionInterface>;
-}
-
 export interface ManageCollectionsForContentDataInterface {
   title: string;
   item: ManageCollectionItemInterface;
@@ -49,9 +30,8 @@ export interface ManageCollectionsForContentDataInterface {
 @Injectable({
   providedIn: 'root'
 })
-export class CollectionManagerService {
-  private subscription: Subscription;
-
+export class CollectionManagerService
+  implements CollectionManagerServiceInterface {
   constructor(private dialog: MatDialog) {}
 
   manageCollections(
@@ -66,6 +46,8 @@ export class CollectionManagerService {
       ItemToggledInCollectionInterface
     >();
 
+    let subscription: Subscription;
+
     // open dialog
     const dialogData: ManageCollectionsForContentDataInterface = {
       title: title,
@@ -78,23 +60,20 @@ export class CollectionManagerService {
     const dialogRef = this.openDialog(dialogData);
 
     // listen to component and bubble itemToggledInCollectionEvent
-    this.subscription = dialogRef.componentInstance.selectionChanged.subscribe(
+    subscription = dialogRef.componentInstance.selectionChanged.subscribe(
       (itemToggleEvent: ItemToggledInCollectionInterface) =>
         itemToggledInCollection$.next(itemToggleEvent)
     );
 
     dialogRef
       .afterClosed()
-      .pipe(
-        take(1),
-        map(() => {
-          // clean up subscription on dialog close
-          this.subscription.unsubscribe();
-          // complete observable on dialog close
-          itemToggledInCollection$.complete();
-        })
-      )
-      .subscribe();
+      .pipe(take(1))
+      .subscribe(() => {
+        // clean up subscription on dialog close
+        subscription.unsubscribe();
+        // complete observable on dialog close
+        itemToggledInCollection$.complete();
+      });
 
     // return observable
     return itemToggledInCollection$;

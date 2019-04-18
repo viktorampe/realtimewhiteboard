@@ -1,11 +1,11 @@
-import { ManageCollectionItemInterface } from '../interfaces/ManageCollectionItem.interface';
+import { ManageCollectionItemInterface } from '../interfaces/manage-collection-item.interface';
 
 export class ManageCollectionItemFixture
   implements ManageCollectionItemInterface {
-  icon? = 'foo-icon';
+  icon = 'foo-icon';
   label = 'bar';
   id = 1;
-  className?: string;
+  className = 'foo-class';
 
   constructor(props: Partial<ManageCollectionItemInterface> = {}) {
     Object.assign(this, props);
