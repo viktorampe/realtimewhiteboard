@@ -27,7 +27,7 @@ const mockData: ManageCollectionsForContentDataInterface = {
 const mockSelectionChangedData: ItemToggledInCollectionInterface = {
   relatedItem: new ManageCollectionItemFixture({ id: 2 }),
   item: new ManageCollectionItemFixture({ id: 1 }),
-  selected: true
+  selected: false
 };
 
 let mockDataSelectionChanged$: any;
