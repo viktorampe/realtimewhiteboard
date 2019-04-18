@@ -15,7 +15,6 @@ import {
   SearchStateInterface
 } from '@campus/search';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { EduContentsViewModel } from '../edu-contents.viewmodel';
 
 @Component({
@@ -28,7 +27,7 @@ export class EduContentSearchByTermComponent implements OnInit, AfterViewInit {
   public searchState$: Observable<SearchStateInterface>;
   public searchResults$: Observable<SearchResultInterface>;
   public autoCompleteValues$: Observable<string[]>;
-  public autoFocusSearchTerm$: Observable<boolean>;
+  public autoFocusSearchTerm: boolean;
 
   @ViewChildren(SearchPortalDirective)
   private portalHosts: QueryList<SearchPortalDirective>;
@@ -48,9 +47,9 @@ export class EduContentSearchByTermComponent implements OnInit, AfterViewInit {
     });
 
     this.searchState$ = this.eduContentsViewModel.getInitialSearchState();
-    this.autoFocusSearchTerm$ = this.searchState$.pipe(
-      map(this.isSearchTermEmpty)
-    );
+    this.searchState$.subscribe(state => {
+      this.autoFocusSearchTerm = this.isSearchTermEmpty(state);
+    });
     this.searchResults$ = this.eduContentsViewModel.searchResults$;
   }
 

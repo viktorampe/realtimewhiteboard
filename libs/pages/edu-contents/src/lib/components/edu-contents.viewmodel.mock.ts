@@ -214,7 +214,7 @@ export class EduContentsViewModelMock
    * can  be constructed from various parameters like querystring, ... TBD
    */
   public getInitialSearchState(): Observable<SearchStateInterface> {
-    return of(this.searchState);
+    return this.searchState$;
   }
 
   /*

@@ -17,7 +17,7 @@
   <campus-search
     class="pages-edu-contents-search-by-term__wrapper__main"
     [autoCompleteValues]="autoCompleteValues$ | async"
-    [autoFocusSearchTerm]="autoFocusSearchTerm$ | async"
+    [autoFocusSearchTerm]="autoFocusSearchTerm"
     (searchTermChangeForAutoComplete)="onAutoCompleteRequest($event)"
     [searchMode]="searchMode"
     [initialState]="searchState$ | async"

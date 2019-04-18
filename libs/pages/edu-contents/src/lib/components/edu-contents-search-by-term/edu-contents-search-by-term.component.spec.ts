@@ -125,4 +125,23 @@ describe('EduContentSearchByTermComponent', () => {
       mockSearchState
     );
   }));
+
+  describe('searchterm input autofocus', () => {
+    it('should have autofocus on if no searchterm present', fakeAsync(() => {
+      (eduContentsViewModel.searchState$ as BehaviorSubject<
+        SearchStateInterface
+      >).next({
+        searchTerm: '',
+        filterCriteriaSelections: new Map<string, (string | number)[]>()
+      });
+
+      component.ngOnInit();
+
+      expect(component.autoFocusSearchTerm).toBe(true);
+    }));
+
+    it('should have autofocus off if searchterm is present', fakeAsync(() => {
+      expect(component.autoFocusSearchTerm).toBe(false);
+    }));
+  });
 });
