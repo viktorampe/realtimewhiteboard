@@ -68,7 +68,8 @@ describe('EduContentSearchByTermComponent', () => {
           useValue: {}
         },
         { provide: EduContentsViewModel, useClass: EduContentsViewModelMock },
-        FilterFactoryFixture
+        FilterFactoryFixture,
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ]
     }).overrideModule(BrowserDynamicTestingModule, {
       set: { entryComponents: [ResultItemMockComponent] }

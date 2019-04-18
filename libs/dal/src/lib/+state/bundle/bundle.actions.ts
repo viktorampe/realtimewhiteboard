@@ -14,7 +14,9 @@ export enum BundlesActionTypes {
   UpdateBundles = '[Bundles] Update Bundles',
   DeleteBundle = '[Bundles] Delete Bundle',
   DeleteBundles = '[Bundles] Delete Bundles',
-  ClearBundles = '[Bundles] Clear Bundles'
+  ClearBundles = '[Bundles] Clear Bundles',
+  LinkEduContent = '[Bundles] Link EduContent',
+  LinkUserContent = '[Bundles] Link UserContent'
 }
 
 export class LoadBundles implements Action {
@@ -88,6 +90,18 @@ export class ClearBundles implements Action {
   readonly type = BundlesActionTypes.ClearBundles;
 }
 
+export class LinkEduContent implements Action {
+  readonly type = BundlesActionTypes.LinkEduContent;
+
+  constructor(public payload: { bundleId: number; eduContentId: number }) {}
+}
+
+export class LinkUserContent implements Action {
+  readonly type = BundlesActionTypes.LinkUserContent;
+
+  constructor(public payload: { bundleId: number; userContentId: number }) {}
+}
+
 export type BundlesActions =
   | LoadBundles
   | BundlesLoaded
@@ -100,4 +114,6 @@ export type BundlesActions =
   | UpdateBundles
   | DeleteBundle
   | DeleteBundles
-  | ClearBundles;
+  | ClearBundles
+  | LinkEduContent
+  | LinkUserContent;

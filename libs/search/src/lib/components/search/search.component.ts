@@ -19,7 +19,7 @@ import {
   SearchFilterInterface
 } from '@campus/search';
 import { Observable, Subscription } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, skipWhile } from 'rxjs/operators';
 import { SearchPortalDirective } from '../../directives';
 import { SearchTermComponent } from '../search-term/search-term.component';
 import { SearchViewModel } from '../search.viewmodel';
@@ -79,7 +79,9 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
     private searchViewmodel: SearchViewModel,
     private componentFactoryResolver: ComponentFactoryResolver
   ) {
-    this.searchState$ = this.searchViewmodel.searchState$;
+    this.searchState$ = this.searchViewmodel.searchState$.pipe(
+      skipWhile(searchState => !searchState) // first emit from viewmodel is null
+    );
   }
 
   ngOnInit() {

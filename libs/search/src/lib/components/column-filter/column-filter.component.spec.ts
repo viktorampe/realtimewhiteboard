@@ -170,7 +170,8 @@ describe('ColumnFilterComponent', () => {
       expect(component.preserveColumn).toBe(false);
       component.onFilterSelectionChange(
         new SearchFilterCriteriaValuesFixture(),
-        true
+        true,
+        mockFilterCriteria[0].name
       );
       expect(component.preserveColumn).toBe(true);
     });
@@ -181,7 +182,8 @@ describe('ColumnFilterComponent', () => {
       expect(component.preserveColumn).toBe(true);
       component.onFilterSelectionChange(
         new SearchFilterCriteriaValuesFixture(),
-        false
+        false,
+        mockFilterCriteria[0].name
       );
       expect(component.preserveColumn).toBe(false);
     });
@@ -193,7 +195,7 @@ describe('ColumnFilterComponent', () => {
           new SearchFilterCriteriaValuesFixture({ selected: true }),
           new SearchFilterCriteriaValuesFixture({ selected: true })
         ]),
-        new SearchFilterCriteriaFixture({}, [
+        new SearchFilterCriteriaFixture({ name: 'filterCriteriumToChange' }, [
           new SearchFilterCriteriaValuesFixture({ selected: true }),
           new SearchFilterCriteriaValuesFixture({ selected: true }),
           new SearchFilterCriteriaValuesFixture({ selected: true }),
@@ -206,13 +208,16 @@ describe('ColumnFilterComponent', () => {
       const passedVIndex = 2;
       component.onFilterSelectionChange(
         component.filterCriteria[passedCIndex].values[passedVIndex],
-        false
+        false,
+        component.filterCriteria[passedCIndex].name
       );
       selectedTrueMockFilterCriteria.forEach((mockFilterCriterium, cIndex) => {
         mockFilterCriterium.values.forEach((value, vIndex) => {
-          expect(value.selected).toBe(
-            cIndex === passedCIndex && vIndex === passedVIndex ? true : false
-          );
+          const expected =
+            (cIndex === passedCIndex && vIndex === passedVIndex) || // changed criterion and changed value
+            cIndex !== passedCIndex; // other criterion
+
+          expect(value.selected).toBe(expected);
         });
       });
     });
@@ -222,7 +227,8 @@ describe('ColumnFilterComponent', () => {
       fixture.detectChanges();
       component.onFilterSelectionChange(
         new SearchFilterCriteriaValuesFixture({ selected: false }),
-        false
+        false,
+        mockFilterCriteria[0].name
       );
       expect(emitSpy).toHaveBeenCalled();
       expect(emitSpy).toHaveBeenCalledTimes(1);
@@ -233,7 +239,8 @@ describe('ColumnFilterComponent', () => {
       fixture.detectChanges();
       component.onFilterSelectionChange(
         new SearchFilterCriteriaValuesFixture({ selected: true }),
-        false
+        false,
+        mockFilterCriteria[0].name
       );
       expect(emitSpy).not.toHaveBeenCalled();
     });

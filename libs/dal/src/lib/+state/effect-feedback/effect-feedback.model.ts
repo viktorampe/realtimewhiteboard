@@ -42,4 +42,36 @@ export class EffectFeedback implements EffectFeedbackInterface {
   constructor(props: EffectFeedbackInterface) {
     Object.assign(this, props);
   }
+
+  static generateErrorFeedback(
+    uuid: string,
+    action: Action,
+    message: string
+  ): EffectFeedback {
+    return new EffectFeedback({
+      id: uuid,
+      triggerAction: action,
+      message: message,
+      type: 'error',
+      userActions: [
+        {
+          title: 'Opnieuw proberen',
+          userAction: action
+        }
+      ],
+      priority: Priority.HIGH
+    });
+  }
+
+  static generateSuccessFeedback(
+    uuid: string,
+    action: Action,
+    message: string
+  ): EffectFeedback {
+    return new EffectFeedback({
+      id: uuid,
+      triggerAction: action,
+      message: message
+    });
+  }
 }

@@ -95,4 +95,37 @@ describe('LearningPlanService', () => {
       expect(response).toBeObservable(cold('(a|)', { a: expected }));
     });
   });
+
+  describe('getSpecialities', () => {
+    it('should return the learningPlanAssignments from the api', () => {
+      const mockSpecialty = new SpecialtyFixture({ id: 1 });
+      const mockSpecialty2 = new SpecialtyFixture({ id: 2 });
+
+      const mockReturnValue = [
+        new LearningPlanFixture({ id: 1 }, [
+          new LearningPlanAssignmentFixture({
+            id: 1,
+            learningPlanId: 1,
+            specialtyId: mockSpecialty.id,
+            specialty: mockSpecialty
+          })
+        ]),
+        new LearningPlanFixture({ id: 2 }, [
+          new LearningPlanAssignmentFixture({
+            id: 2,
+            learningPlanId: 2,
+            specialtyId: mockSpecialty2.id,
+            specialty: mockSpecialty2
+          })
+        ])
+      ];
+      learningPlanApi.find = jest.fn().mockReturnValue(of(mockReturnValue));
+
+      const response = learningPlanService.getSpecialities(1, 1, 1, 1);
+
+      const expected = [mockSpecialty, mockSpecialty2];
+
+      expect(response).toBeObservable(cold('(a|)', { a: expected }));
+    });
+  });
 });
