@@ -22,7 +22,7 @@ describe('NotificationComponent', () => {
         HumanDateTimePipe
       ],
       providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

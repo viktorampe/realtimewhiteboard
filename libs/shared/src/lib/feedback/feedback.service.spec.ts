@@ -73,7 +73,7 @@ describe('FeedBackService', () => {
           useClass: SnackBarDefaultConfig
         }
       ]
-    }).compileComponents();
+    });
 
     service = TestBed.get(FeedBackService);
 

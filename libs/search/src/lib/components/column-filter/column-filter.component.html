@@ -14,7 +14,13 @@
     >
       <div class="column__filter__value__button-content">
         <div
-          (click)="onFilterSelectionChange(value, !value.hasChild)"
+          (click)="
+            onFilterSelectionChange(
+              value,
+              !value.hasChild,
+              filterCriterion.name
+            )
+          "
           class="column__filter__value__button-content__label"
           >{{ value.data[filterCriterion.displayProperty] }}
         </div>
@@ -22,13 +28,15 @@
           <mat-icon
             *ngIf="value.prediction && value.prediction !== 0"
             class="column__filter__value__button-content__icons__magnifier"
-            (click)="onFilterSelectionChange(value, true)"
+            (click)="onFilterSelectionChange(value, true, filterCriterion.name)"
             [svgIcon]="'magnifier'"
           ></mat-icon>
           <mat-icon
             *ngIf="value.hasChild"
             class="column__filter__value__button-content__icons__arrow"
-            (click)="onFilterSelectionChange(value, false)"
+            (click)="
+              onFilterSelectionChange(value, false, filterCriterion.name)
+            "
             [svgIcon]="'column-filter-arrow'"
           ></mat-icon>
         </div>

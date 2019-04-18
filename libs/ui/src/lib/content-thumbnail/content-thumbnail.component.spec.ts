@@ -10,7 +10,7 @@ describe('ContentThumbnailComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ContentThumbnailComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

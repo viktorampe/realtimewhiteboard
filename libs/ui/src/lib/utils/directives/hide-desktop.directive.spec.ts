@@ -46,8 +46,6 @@ describe('HideDesktopDirective', () => {
       BreakpointObserver
     );
     jest.spyOn(breakpointObserver, 'observe').mockReturnValue(breakpointStream);
-
-    testbed.compileComponents();
   }));
 
   beforeEach(() => {

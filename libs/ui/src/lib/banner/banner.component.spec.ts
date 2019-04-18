@@ -24,7 +24,7 @@ describe('BannerComponent', () => {
           useValue: { observe: jest.fn().mockReturnValue(breakpointStream) }
         }
       ]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

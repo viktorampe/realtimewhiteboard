@@ -134,21 +134,19 @@ describe('SearchComponent', () => {
         { provide: SearchViewModel, useClass: MockSearchViewModel },
         { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ]
-    })
-      .overrideModule(BrowserDynamicTestingModule, {
-        set: {
-          entryComponents: [
-            ResultItemComponent,
-            CheckboxLineFilterComponent,
-            CheckboxListFilterComponent,
-            BreadcrumbFilterComponent,
-            ColumnFilterComponent,
-            SelectFilterComponent,
-            SearchTermComponent
-          ]
-        }
-      })
-      .compileComponents();
+    }).overrideModule(BrowserDynamicTestingModule, {
+      set: {
+        entryComponents: [
+          ResultItemComponent,
+          CheckboxLineFilterComponent,
+          CheckboxListFilterComponent,
+          BreadcrumbFilterComponent,
+          ColumnFilterComponent,
+          SelectFilterComponent,
+          SearchTermComponent
+        ]
+      }
+    });
   }));
 
   beforeEach(() => {

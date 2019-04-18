@@ -8,7 +8,7 @@ describe('PolpoResultItemComponentComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [PolpoResultItemComponent]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

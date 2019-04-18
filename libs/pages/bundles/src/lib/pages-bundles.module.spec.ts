@@ -5,7 +5,7 @@ describe('PagesBundlesModule', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [PagesBundlesModule]
-    }).compileComponents();
+    });
   }));
 
   it('should create', () => {

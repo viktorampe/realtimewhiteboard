@@ -32,7 +32,7 @@ describe('PrimaryDirective', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [TestModule]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

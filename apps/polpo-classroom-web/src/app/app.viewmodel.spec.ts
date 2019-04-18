@@ -102,7 +102,7 @@ describe('AppViewModel', () => {
           }
         }
       ]
-    }).compileComponents();
+    });
 
     viewModel = TestBed.get(AppViewModel);
     store = TestBed.get(Store);

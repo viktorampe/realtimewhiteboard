@@ -37,7 +37,7 @@ describe('TasksAreaComponent', () => {
         { provide: FILTER_SERVICE_TOKEN, useClass: FilterService },
         { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ]
-    }).compileComponents();
+    });
 
     tasksViewModel = TestBed.get(TasksViewModel);
     filterService = TestBed.get(FILTER_SERVICE_TOKEN);

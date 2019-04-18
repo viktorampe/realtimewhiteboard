@@ -57,7 +57,7 @@ describe('AreasListComponent', () => {
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
         { provide: FILTER_SERVICE_TOKEN, useClass: FilterService }
       ]
-    }).compileComponents();
+    });
   }));
 
   beforeEach(() => {

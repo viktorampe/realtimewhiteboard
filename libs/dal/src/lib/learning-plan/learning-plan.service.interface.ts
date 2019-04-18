@@ -23,4 +23,11 @@ export interface LearningPlanServiceInterface {
     schoolTypeId: number,
     learningAreaId: number
   ): Observable<Map<SpecialtyInterface, LearningPlanAssignmentInterface[]>>;
+
+  getSpecialities(
+    eduNetId: number,
+    yearId: number,
+    schoolTypeId: number,
+    learningAreaId: number
+  ): Observable<SpecialtyInterface[]>;
 }

@@ -5,7 +5,7 @@ describe('SharedModule', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [TestingModule]
-    }).compileComponents();
+    });
   }));
 
   it('should create', () => {
