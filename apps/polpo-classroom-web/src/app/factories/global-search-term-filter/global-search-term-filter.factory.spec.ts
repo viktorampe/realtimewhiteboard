@@ -246,9 +246,10 @@ describe('GlobalSearchTermFilterFactory', () => {
     keyProperty,
     displayProperty,
     values,
-    component
+    component,
+    maxVisibleItems?
   ): SearchFilterInterface {
-    return {
+    const searchFitler = {
       criteria: {
         name: name,
         label: label,
@@ -270,9 +271,10 @@ describe('GlobalSearchTermFilterFactory', () => {
         }))
       },
       component: component,
-      domHost: 'hostLeft',
-      options: { maxVisibleItems: 5 }
-    };
+      domHost: 'hostLeft'
+    } as SearchFilterInterface;
+    if (maxVisibleItems) searchFitler.options = { maxVisibleItems };
+    return searchFitler;
   }
 
   function getExpectedYearFilter() {
@@ -293,7 +295,8 @@ describe('GlobalSearchTermFilterFactory', () => {
       'id',
       'name',
       mockEduNets,
-      CheckboxListFilterComponent
+      CheckboxListFilterComponent,
+      5
     );
   }
 
@@ -304,7 +307,8 @@ describe('GlobalSearchTermFilterFactory', () => {
       'id',
       'name',
       mockSchoolTypes,
-      CheckboxListFilterComponent
+      CheckboxListFilterComponent,
+      5
     );
   }
 
@@ -315,7 +319,8 @@ describe('GlobalSearchTermFilterFactory', () => {
       'id',
       'name',
       mockLearningAreas,
-      CheckboxListFilterComponent
+      CheckboxListFilterComponent,
+      5
     );
   }
 
@@ -335,7 +340,8 @@ describe('GlobalSearchTermFilterFactory', () => {
       'id',
       'name',
       extendedProductTypes,
-      CheckboxListFilterComponent
+      CheckboxListFilterComponent,
+      5
     );
   }
 
@@ -348,7 +354,8 @@ describe('GlobalSearchTermFilterFactory', () => {
       mockMethods.filter(
         method => method.learningAreaId === 1 || method.learningAreaId === 2 // see mocks to know the learningAreaIds
       ),
-      CheckboxListFilterComponent
+      CheckboxListFilterComponent,
+      5
     );
   }
 
@@ -361,7 +368,8 @@ describe('GlobalSearchTermFilterFactory', () => {
       mockLearningDomains.filter(
         ld => ld.learningAreaId === 1 || ld.learningAreaId === 2
       ),
-      CheckboxListFilterComponent
+      CheckboxListFilterComponent,
+      5
     );
   }
 });
