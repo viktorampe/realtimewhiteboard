@@ -53,6 +53,8 @@ import { PageHeaderComponent } from './page-header/page-header.component';
 import { PersonBadgeComponent } from './person-badge/person-badge.component';
 import { PersonInitialsPipe } from './person-badge/pipes/person-initials.pipe';
 import { PersonSummaryComponent } from './person-summary-component/person-summary.component';
+import { CollectionManagerService } from './services/manage-collection-service/collection-manager.service';
+import { COLLECTION_MANAGER_SERVICE_TOKEN } from './services/manage-collection-service/collection-manager.service.interface';
 import { ShellBodyDirective } from './shell/directives/shell-body.directive';
 import { ShellLeftDirective } from './shell/directives/shell-left.directive';
 import { ShellLogoDirective } from './shell/directives/shell-logo.directive';
@@ -200,6 +202,12 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     DropAreaComponent,
     TileComponent,
     JoinPipe
+  ],
+  providers: [
+    {
+      provide: COLLECTION_MANAGER_SERVICE_TOKEN,
+      useClass: CollectionManagerService
+    }
   ]
 })
 export class UiModule {}
