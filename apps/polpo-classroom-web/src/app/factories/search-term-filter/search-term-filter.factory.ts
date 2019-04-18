@@ -1,7 +1,28 @@
 import { Injectable, InjectionToken, Type } from '@angular/core';
-import { DalState, EduContentProductTypeInterface, EduContentProductTypeQueries, EduNetQueries, LearningAreaQueries, LearningDomainQueries, MethodQueries, SchoolTypeQueries, YearQueries } from '@campus/dal';
-import { CheckboxLineFilterComponent, CheckboxListFilterComponent, SearchFilterComponentInterface, SearchFilterFactory, SearchFilterInterface, SearchStateInterface } from '@campus/search';
-import { MemoizedSelector, MemoizedSelectorWithProps, Store } from '@ngrx/store';
+import {
+  DalState,
+  EduContentProductTypeInterface,
+  EduContentProductTypeQueries,
+  EduNetQueries,
+  LearningAreaQueries,
+  LearningDomainQueries,
+  MethodQueries,
+  SchoolTypeQueries,
+  YearQueries
+} from '@campus/dal';
+import {
+  CheckboxLineFilterComponent,
+  CheckboxListFilterComponent,
+  SearchFilterComponentInterface,
+  SearchFilterFactory,
+  SearchFilterInterface,
+  SearchStateInterface
+} from '@campus/search';
+import {
+  MemoizedSelector,
+  MemoizedSelectorWithProps,
+  Store
+} from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -183,7 +204,7 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
     filterQuery: FilterQueryInterface,
     searchState: SearchStateInterface
   ): SearchFilterInterface {
-    return {
+    const searchFilter = {
       criteria: {
         name: filterQuery.name,
         label: filterQuery.label,
@@ -199,9 +220,10 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
         }))
       },
       component: filterQuery.component || this.component,
-      domHost: filterQuery.domHost || this.domHost,
-      options: filterQuery.options
+      domHost: filterQuery.domHost || this.domHost
     } as SearchFilterInterface;
+    if (filterQuery.options) searchFilter.options = filterQuery.options;
+    return searchFilter;
   }
 }
 
