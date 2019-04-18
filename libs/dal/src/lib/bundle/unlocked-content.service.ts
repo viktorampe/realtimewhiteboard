@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { PersonApi, UnlockedContentApi } from '@diekeure/polpo-api-angular-sdk';
-import { combineLatest, Observable } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { map, mapTo } from 'rxjs/operators';
 import { UnlockedContentInterface } from '../+models';
 import { UnlockedContentServiceInterface } from './unlocked-content.service.interface';
@@ -27,7 +27,7 @@ export class UnlockedContentService implements UnlockedContentServiceInterface {
   }
 
   removeAll(unlockedContentIds: number[]): Observable<boolean> {
-    return combineLatest(unlockedContentIds.map(id => this.remove(id))).pipe(
+    return forkJoin(unlockedContentIds.map(id => this.remove(id))).pipe(
       mapTo(true)
     );
   }
