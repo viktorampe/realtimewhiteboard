@@ -217,7 +217,6 @@ describe('ColumnFilterComponent', () => {
             (cIndex === passedCIndex && vIndex === passedVIndex) || // changed criterion and changed value
             cIndex !== passedCIndex; // other criterion
 
-
           expect(value.selected).toBe(expected);
         });
       });
