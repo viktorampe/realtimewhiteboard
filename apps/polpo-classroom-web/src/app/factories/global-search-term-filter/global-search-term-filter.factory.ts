@@ -52,9 +52,7 @@ export class GlobalSearchTermFilterFactory extends SearchTermFilterFactory {
     filters.push(this.getNestedEduContentProductTypes(searchState));
     return combineLatest(filters).pipe(
       map(searchFilters =>
-        searchFilters.filter(f => {
-          return f.criteria.values.length > 0;
-        })
+        searchFilters.filter(f => f.criteria.values.length > 0)
       )
     );
   }
