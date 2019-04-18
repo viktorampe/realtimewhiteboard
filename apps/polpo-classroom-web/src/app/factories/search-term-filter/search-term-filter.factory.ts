@@ -1,28 +1,7 @@
 import { Injectable, InjectionToken, Type } from '@angular/core';
-import {
-  DalState,
-  EduContentProductTypeInterface,
-  EduContentProductTypeQueries,
-  EduNetQueries,
-  LearningAreaQueries,
-  LearningDomainQueries,
-  MethodQueries,
-  SchoolTypeQueries,
-  YearQueries
-} from '@campus/dal';
-import {
-  CheckboxLineFilterComponent,
-  CheckboxListFilterComponent,
-  SearchFilterComponentInterface,
-  SearchFilterFactory,
-  SearchFilterInterface,
-  SearchStateInterface
-} from '@campus/search';
-import {
-  MemoizedSelector,
-  MemoizedSelectorWithProps,
-  Store
-} from '@ngrx/store';
+import { DalState, EduContentProductTypeInterface, EduContentProductTypeQueries, EduNetQueries, LearningAreaQueries, LearningDomainQueries, MethodQueries, SchoolTypeQueries, YearQueries } from '@campus/dal';
+import { CheckboxLineFilterComponent, CheckboxListFilterComponent, SearchFilterComponentInterface, SearchFilterFactory, SearchFilterInterface, SearchStateInterface } from '@campus/search';
+import { MemoizedSelector, MemoizedSelectorWithProps, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -47,7 +26,6 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
       query: LearningAreaQueries.getAll,
       name: 'learningArea',
       label: 'Leergebied',
-      component: CheckboxListFilterComponent,
       options: { maxVisibleItems: this.maxVisibleItems }
     },
     years: {
@@ -91,7 +69,6 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
     eduContentProductType: {
       name: 'eduContentProductType',
       label: 'Type',
-      component: CheckboxListFilterComponent,
       options: { maxVisibleItems: this.maxVisibleItems }
     }
   };
@@ -206,7 +183,6 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
     filterQuery: FilterQueryInterface,
     searchState: SearchStateInterface
   ): SearchFilterInterface {
-    console.log(filterQuery);
     return {
       criteria: {
         name: filterQuery.name,
