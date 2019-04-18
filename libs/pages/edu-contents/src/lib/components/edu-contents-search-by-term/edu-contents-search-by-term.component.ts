@@ -15,6 +15,7 @@ import {
   SearchStateInterface
 } from '@campus/search';
 import { Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { EduContentsViewModel } from '../edu-contents.viewmodel';
 
 @Component({
@@ -47,7 +48,7 @@ export class EduContentSearchByTermComponent implements OnInit, AfterViewInit {
     });
 
     this.searchState$ = this.eduContentsViewModel.getInitialSearchState();
-    this.searchState$.subscribe(state => {
+    this.searchState$.pipe(take(1)).subscribe(state => {
       this.autoFocusSearchTerm = this.isSearchTermEmpty(state);
     });
     this.searchResults$ = this.eduContentsViewModel.searchResults$;

@@ -1,11 +1,5 @@
 import { CommonModule } from '@angular/common';
-import {
-  async,
-  ComponentFixture,
-  fakeAsync,
-  TestBed,
-  tick
-} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule, MatIconRegistry } from '@angular/material';
 import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
@@ -102,32 +96,30 @@ describe('EduContentSearchByTermComponent', () => {
     spyReset.mockRestore();
   });
 
-  it('should send searchText to viewmodel subject', fakeAsync(() => {
+  it('should send searchText to viewmodel subject', () => {
     jest.spyOn(eduContentsViewModel, 'requestAutoComplete');
 
     component.onAutoCompleteRequest('foo');
-    tick(500);
 
     expect(eduContentsViewModel.requestAutoComplete).toHaveBeenCalledTimes(1);
     expect(eduContentsViewModel.requestAutoComplete).toHaveBeenCalledWith(
       'foo'
     );
-  }));
+  });
 
-  it('should send searchstate to viewmodel on change', fakeAsync(() => {
+  it('should send searchstate to viewmodel on change', () => {
     jest.spyOn(eduContentsViewModel, 'updateState');
 
     component.onSearchStateChange(mockSearchState);
-    tick(500);
 
     expect(eduContentsViewModel.updateState).toHaveBeenCalledTimes(1);
     expect(eduContentsViewModel.updateState).toHaveBeenCalledWith(
       mockSearchState
     );
-  }));
+  });
 
   describe('searchterm input autofocus', () => {
-    it('should have autofocus on if no searchterm present', fakeAsync(() => {
+    it('should have autofocus on if no searchterm present', () => {
       (eduContentsViewModel.searchState$ as BehaviorSubject<
         SearchStateInterface
       >).next({
@@ -138,10 +130,10 @@ describe('EduContentSearchByTermComponent', () => {
       component.ngOnInit();
 
       expect(component.autoFocusSearchTerm).toBe(true);
-    }));
+    });
 
-    it('should have autofocus off if searchterm is present', fakeAsync(() => {
+    it('should have autofocus off if searchterm is present', () => {
       expect(component.autoFocusSearchTerm).toBe(false);
-    }));
+    });
   });
 });
