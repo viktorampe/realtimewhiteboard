@@ -3,8 +3,9 @@ import {
   BundleActions,
   BundleInterface,
   BundleQueries,
+  ContentInterface,
   DalState,
-  EduContent,
+  EduContentInterface,
   FavoriteQueries,
   FavoriteTypesEnum,
   TaskEduContentActions,
@@ -19,7 +20,7 @@ import {
 } from '@campus/dal';
 import { Store } from '@ngrx/store';
 import { combineLatest, Observable, of } from 'rxjs';
-import { map, switchMap, take } from 'rxjs/operators';
+import { filter, map, switchMap, take } from 'rxjs/operators';
 
 //----------- TO DO: REMOVE WHEN OTHER ISSUES ARE IMPLEMENTED --------------
 // mock interface
@@ -64,10 +65,11 @@ export class EduContentCollectionManagerService {
     private collectionManagerService: CollectionManagerService
   ) {}
 
-  manageBundlesForEduContent(content: EduContent): void {
-    const learningAreaId =
-      content.publishedEduContentMetadata &&
-      content.publishedEduContentMetadata.learningAreaId;
+  manageBundlesForContent(
+    content: ContentInterface,
+    learningAreaId: number = null
+  ): void {
+    // prepare streams
     let bundles$: Observable<BundleInterface[]>;
     if (learningAreaId) {
       bundles$ = this.store
@@ -123,6 +125,8 @@ export class EduContentCollectionManagerService {
           Array.from(new Set([...favoriteBundleIds, ...historyBundleIds]))
       )
     );
+
+    // subscribe to changeEvent
     combineLatest(bundles$, linkedBundleIds$, recentBundleIds$)
       .pipe(
         switchMap(
@@ -141,21 +145,36 @@ export class EduContentCollectionManagerService {
         )
       )
       .subscribe((bundleToggled: ItemToggledInCollectionInterface) => {
-        if (bundleToggled.selected) {
-          this.addEduContentToBundle(
-            bundleToggled.item,
-            bundleToggled.relatedItem
-          );
+        if (learningAreaId) {
+          if (bundleToggled.selected) {
+            this.addEduContentToBundle(
+              bundleToggled.item,
+              bundleToggled.relatedItem
+            );
+          } else {
+            this.removeEduContentFromBundle(
+              bundleToggled.item,
+              bundleToggled.relatedItem
+            );
+          }
         } else {
-          this.removeEduContentFromBundle(
-            bundleToggled.item,
-            bundleToggled.relatedItem
-          );
+          if (bundleToggled.selected) {
+            this.addUserContentToBundle(
+              bundleToggled.item,
+              bundleToggled.relatedItem
+            );
+          } else {
+            this.removeUserContentFromBundle(
+              bundleToggled.item,
+              bundleToggled.relatedItem
+            );
+          }
         }
       });
   }
 
-  manageTasksForContent(content: EduContent): void {
+  manageTasksForContent(content: EduContentInterface): void {
+    // prepare streams
     const tasks$: Observable<TaskInterface[]> = this.store
       .select(TaskQueries.getByLearningAreaId)
       .pipe(
@@ -199,6 +218,8 @@ export class EduContentCollectionManagerService {
           Array.from(new Set([...favoriteTaskIds, ...historyTaskIds]))
       )
     );
+
+    // subscribe to changeEvent
     combineLatest(tasks$, linkedTaskIds$, recentTaskIds$)
       .pipe(
         switchMap(
@@ -225,7 +246,7 @@ export class EduContentCollectionManagerService {
       });
   }
 
-  addContentToTask(content: EduContent, task: TaskInterface): void {
+  addContentToTask(content: EduContentInterface, task: TaskInterface): void {
     this.store.dispatch(
       new TaskEduContentActions.LinkTaskEduContent({
         taskId: task.id,
@@ -235,7 +256,10 @@ export class EduContentCollectionManagerService {
     );
   }
 
-  addEduContentToBundle(content: EduContent, bundle: BundleInterface): void {
+  addEduContentToBundle(
+    content: ContentInterface,
+    bundle: BundleInterface
+  ): void {
     this.store.dispatch(
       new BundleActions.LinkEduContent({
         bundleId: bundle.id,
@@ -256,13 +280,16 @@ export class EduContentCollectionManagerService {
     );
   }
 
-  removeContentFromTask(content: EduContent, task: TaskInterface): void {
+  removeContentFromTask(content: ContentInterface, task: TaskInterface): void {
     this.store
       .select(TaskEduContentQueries.getByTaskAndEduContentId, {
         taskId: task.id,
         eduContentId: content.id
       })
-      .pipe(take(1))
+      .pipe(
+        take(1),
+        filter(val => !!val)
+      )
       .subscribe(taskEduContent => {
         this.store.dispatch(
           new TaskEduContentActions.DeleteTaskEduContent({
@@ -273,7 +300,7 @@ export class EduContentCollectionManagerService {
   }
 
   removeEduContentFromBundle(
-    content: EduContent,
+    content: ContentInterface,
     bundle: BundleInterface
   ): void {
     this.store
@@ -281,7 +308,10 @@ export class EduContentCollectionManagerService {
         bundleId: bundle.id,
         eduContentId: content.id
       })
-      .pipe(take(1))
+      .pipe(
+        take(1),
+        filter(val => !!val)
+      )
       .subscribe(unlockedContent => {
         this.store.dispatch(
           new UnlockedContentActions.DeleteUnlockedContent({
@@ -292,7 +322,7 @@ export class EduContentCollectionManagerService {
   }
 
   removeUserContentFromBundle(
-    content: EduContent,
+    content: ContentInterface,
     bundle: BundleInterface
   ): void {
     this.store
@@ -300,7 +330,10 @@ export class EduContentCollectionManagerService {
         bundleId: bundle.id,
         userContentId: content.id
       })
-      .pipe(take(1))
+      .pipe(
+        take(1),
+        filter(val => !!val)
+      )
       .subscribe(unlockedContent => {
         this.store.dispatch(
           new UnlockedContentActions.DeleteUnlockedContent({
