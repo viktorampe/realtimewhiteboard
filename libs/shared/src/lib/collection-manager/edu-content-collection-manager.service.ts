@@ -72,15 +72,9 @@ export class EduContentCollectionManagerService {
     // prepare streams
     let bundles$: Observable<BundleInterface[]>;
     if (learningAreaId) {
-      bundles$ = this.store
-        .select(BundleQueries.getByLearningAreaId)
-        .pipe(
-          map(
-            (bundlesByLearningArea: {
-              [key: string]: BundleInterface[];
-            }): BundleInterface[] => bundlesByLearningArea[learningAreaId] || []
-          )
-        );
+      bundles$ = this.store.select(BundleQueries.getForLearningAreaId, {
+        learningAreaId
+      });
     } else {
       bundles$ = this.store.select(BundleQueries.getAll);
     }
@@ -175,18 +169,12 @@ export class EduContentCollectionManagerService {
 
   manageTasksForContent(content: EduContentInterface): void {
     // prepare streams
-    const tasks$: Observable<TaskInterface[]> = this.store
-      .select(TaskQueries.getByLearningAreaId)
-      .pipe(
-        map(
-          (tasksByLearningArea: {
-            [key: string]: TaskInterface[];
-          }): TaskInterface[] =>
-            tasksByLearningArea[
-              content.publishedEduContentMetadata.learningAreaId
-            ] || []
-        )
-      );
+    const learningAreaId: number =
+      content.publishedEduContentMetadata.learningAreaId;
+    const tasks$: Observable<TaskInterface[]> = this.store.select(
+      TaskQueries.getForLearningAreaId,
+      { learningAreaId }
+    );
     const linkedTaskIds$: Observable<number[]> = this.store
       .select(TaskEduContentQueries.getByEduContentId, {
         eduContentId: content.id
