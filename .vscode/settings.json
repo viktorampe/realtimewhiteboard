@@ -14,5 +14,8 @@
   "html.format.wrapAttributes": "force-aligned",
   "eslint.enable": false,
   "todo-tree.tags": ["TODO", "Todo", "todo", "Fixme", "fixme", "FIXME"],
-  "todo-tree.showCountsInTree": true
+  "todo-tree.showCountsInTree": true,
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }
