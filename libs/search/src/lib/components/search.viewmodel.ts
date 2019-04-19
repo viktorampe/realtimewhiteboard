@@ -356,8 +356,6 @@ export class SearchViewModel {
   ) {
     const selection = new Map(searchState.filterCriteriaSelections); // clone criteria
 
-    searchState.filterCriteriaSelections.clear();
-
     // re-set selected values
     if (criteria) {
       const updatedCriteria: Map<
@@ -370,11 +368,12 @@ export class SearchViewModel {
       });
     }
 
+    searchState.filterCriteriaSelections.clear();
+    searchState.filterCriteriaSelections = selection;
+
     // add filterCriteria for predictions
     this.filterFactory.getPredictionFilterNames(searchState).forEach(name => {
       if (!selection.has(name)) selection.set(name, []);
     });
-
-    searchState.filterCriteriaSelections = selection;
   }
 }
