@@ -1,39 +1,32 @@
-<ng-container
-  *ngIf="filterCriteria && filterCriteria.length !== 0; else: noCriteria"
->
-  <mat-action-list
-    *ngFor="let filterCriterion of filterCriteria; let i = index"
-    [@slideInOut]="animationState(i)"
-    class="column__filter"
-  >
-    <button
-      mat-list-item
-      *ngFor="let value of filterCriterion.values"
-      class="column__filter__value"
-      [class.column__filter__value--selected]="value.selected"
-      (click)="
+<ng-container *ngIf="filterCriteria && filterCriteria.length !== 0; else: noCriteria">
+  <mat-action-list *ngFor="let filterCriterion of filterCriteria; let i = index"
+                   [@slideInOut]="animationState(i)"
+                   class="column__filter">
+    <button mat-list-item
+            *ngFor="let value of filterCriterion.values"
+            class="column__filter__value"
+            [class.column__filter__value--selected]="value.selected"
+            (click)="
         onFilterSelectionChange(value, !value.hasChild, filterCriterion.name)
-      "
-    >
+      ">
       <div class="column__filter__value__button-content">
-        <div class="column__filter__value__button-content__label"
-          >{{ value.data[filterCriterion.displayProperty] }}
+        <div class="column__filter__value__button-content__label">{{ value.data[filterCriterion.displayProperty] }}
         </div>
         <div class="column__filter__value__button-content__icons">
-          <mat-icon
-            *ngIf="value.prediction && value.prediction !== 0"
-            class="column__filter__value__button-content__icons__magnifier"
-            (click)="onFilterSelectionChange(value, true, filterCriterion.name)"
-            [svgIcon]="'magnifier'"
-          ></mat-icon>
-          <mat-icon
-            *ngIf="value.hasChild"
-            class="column__filter__value__button-content__icons__arrow"
-            (click)="
+          <mat-icon campusClickPreventDefault
+                    campusClickStopPropagation
+                    *ngIf="value.prediction && value.prediction !== 0"
+                    class="column__filter__value__button-content__icons__magnifier"
+                    (click)="onFilterSelectionChange(value, true, filterCriterion.name)"
+                    [svgIcon]="'magnifier'"></mat-icon>
+          <mat-icon campusClickPreventDefault
+                    campusClickStopPropagation
+                    *ngIf="value.hasChild"
+                    class="column__filter__value__button-content__icons__arrow"
+                    (click)="
               onFilterSelectionChange(value, false, filterCriterion.name)
             "
-            [svgIcon]="'column-filter-arrow'"
-          ></mat-icon>
+                    [svgIcon]="'column-filter-arrow'"></mat-icon>
         </div>
       </div>
     </button>
@@ -41,7 +34,5 @@
 </ng-container>
 
 <ng-template #noCriteria>
-  <div class="column__filter--no-criteria"
-    >Er is geen inhoudstafel om op te filteren.</div
-  >
+  <div class="column__filter--no-criteria">Er is geen inhoudstafel om op te filteren.</div>
 </ng-template>
