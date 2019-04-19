@@ -28,7 +28,8 @@ import {
   CollectionManagerService,
   COLLECTION_MANAGER_SERVICE_TOKEN,
   EduContentCollectionManagerService,
-  ItemToggledInCollectionInterface
+  ItemToggledInCollectionInterface,
+  ManageCollectionItemInterface
 } from './edu-content-collection-manager.service';
 
 describe('EduContentCollectionManagerService', () => {
@@ -41,6 +42,10 @@ describe('EduContentCollectionManagerService', () => {
     new BundleFixture({ id: 5, learningAreaId: 1 }),
     new BundleFixture({ id: 6, learningAreaId: 2 }),
     new BundleFixture({ id: 7, learningAreaId: 2 })
+  ];
+  const bundlesCollection: ManageCollectionItemInterface[] = [
+    { id: 6, label: 'foo' },
+    { id: 7, label: 'foo' }
   ];
   const selectedBundle = bundles[2];
   const selectedEduContent = new EduContentFixture(
@@ -64,6 +69,10 @@ describe('EduContentCollectionManagerService', () => {
     new TaskFixture({ id: 5, learningAreaId: 1 }),
     new TaskFixture({ id: 6, learningAreaId: 2 }),
     new TaskFixture({ id: 7, learningAreaId: 2 })
+  ];
+  const tasksCollection: ManageCollectionItemInterface[] = [
+    { id: 6, label: 'foo' },
+    { id: 7, label: 'foo' }
   ];
   const selectedTask = tasks[2];
   const taskEduContents: TaskEduContentInterface[] = [
@@ -142,8 +151,9 @@ describe('EduContentCollectionManagerService', () => {
         1
       );
       expect(collectionManagerService.manageCollections).toHaveBeenCalledWith(
-        selectedEduContent,
-        [bundles[1], bundles[2]], // bundles[0] has different learningAreaId
+        '"foo" toevoegen aan je bundels',
+        { id: 4, label: 'foo' },
+        bundlesCollection, // bundles[0] has different learningAreaId
         [7],
         []
       );
@@ -250,8 +260,9 @@ describe('EduContentCollectionManagerService', () => {
         1
       );
       expect(collectionManagerService.manageCollections).toHaveBeenCalledWith(
-        selectedEduContent,
-        [tasks[1], tasks[2]], // tasks[0] has different learningAreaId
+        '"foo" toevoegen aan je taken',
+        { id: 4, label: 'foo' },
+        tasksCollection,
         [7],
         []
       );

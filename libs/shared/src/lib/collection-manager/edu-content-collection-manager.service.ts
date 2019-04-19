@@ -6,8 +6,10 @@ import {
   ContentInterface,
   DalState,
   EduContentInterface,
+  FavoriteInterface,
   FavoriteQueries,
   FavoriteTypesEnum,
+  HistoryInterface,
   TaskEduContentActions,
   TaskEduContentInterface,
   TaskEduContentQueries,
@@ -20,7 +22,7 @@ import {
 } from '@campus/dal';
 import { Store } from '@ngrx/store';
 import { combineLatest, Observable, of } from 'rxjs';
-import { filter, map, switchMap, take } from 'rxjs/operators';
+import { filter, map, shareReplay, switchMap, take } from 'rxjs/operators';
 
 //----------- TO DO: REMOVE WHEN OTHER ISSUES ARE IMPLEMENTED --------------
 // mock interface
@@ -28,6 +30,13 @@ export interface ItemToggledInCollectionInterface {
   relatedItem: any;
   item: any;
   selected: boolean;
+}
+
+export interface ManageCollectionItemInterface {
+  icon?: string;
+  label: string;
+  id: number;
+  className?: string;
 }
 
 // mock token
@@ -41,8 +50,9 @@ export const COLLECTION_MANAGER_SERVICE_TOKEN = new InjectionToken(
 })
 export class CollectionManagerService {
   manageCollections(
-    item: any,
-    linkableItems: any[],
+    title: string,
+    item: ManageCollectionItemInterface,
+    linkableItems: ManageCollectionItemInterface[],
     linkedItemIds: number[],
     recentItemIds: number[]
   ): Observable<ItemToggledInCollectionInterface> {
@@ -65,6 +75,12 @@ export class EduContentCollectionManagerService {
     private collectionManagerService: CollectionManagerService
   ) {}
 
+  /**
+   * Open dialog and set up subscriptions to link content to bundles
+   *
+   * @param content {ContentInterface}
+   * @param learningAreaId {number} requiered for EduContent, leave blank for UserContent
+   */
   manageBundlesForContent(
     content: ContentInterface,
     learningAreaId: number = null
@@ -78,6 +94,21 @@ export class EduContentCollectionManagerService {
     } else {
       bundles$ = this.store.select(BundleQueries.getAll);
     }
+    const bundlesCollection$: Observable<
+      ManageCollectionItemInterface[]
+    > = bundles$.pipe(
+      map(
+        (bundles: BundleInterface[]): ManageCollectionItemInterface[] => {
+          return bundles.map(
+            (bundle): ManageCollectionItemInterface => ({
+              id: bundle.id,
+              label: bundle.name
+            })
+          );
+        }
+      ),
+      shareReplay(1)
+    );
     const linkedBundleIds$: Observable<number[]> = this.store
       .select(UnlockedContentQueries.getByEduContentId, {
         eduContentId: content.id
@@ -92,89 +123,81 @@ export class EduContentCollectionManagerService {
                 )
               )
             )
-        )
-      );
-    const recentBundleIds$: Observable<number[]> = combineLatest(
-      this.store
-        .select(FavoriteQueries.getByType, { type: FavoriteTypesEnum.BUNDLE })
-        .pipe(
-          map(
-            (favorites): number[] =>
-              favorites.map(favorite => favorite.bundleId)
-          )
         ),
-      // TODO: combine with history when state is available
-      // this.store
-      //   .select(HistoryQueries.getByType, { type: HistoryTypesEnum.BUNDLE })
-      //   .pipe(
-      //     map((histories): number[] => histories.map(history => history.bundleId))
-      //   )
-      of([])
-    ).pipe(
-      map(
-        ([favoriteBundleIds, historyBundleIds]: [
-          number[],
-          number[]
-        ]): number[] =>
-          Array.from(new Set([...favoriteBundleIds, ...historyBundleIds]))
-      )
+        shareReplay(1)
+      );
+    const recentBundleIds$: Observable<number[]> = this.getRecentItemsStream(
+      FavoriteTypesEnum.BUNDLE,
+      'bundleId'
     );
 
     // subscribe to changeEvent
-    combineLatest(bundles$, linkedBundleIds$, recentBundleIds$)
-      .pipe(
-        switchMap(
-          ([bundles, linkedBundleIds, recentBundleIds]: [
-            BundleInterface[],
-            number[],
-            number[]
-          ]): Observable<ItemToggledInCollectionInterface> => {
-            return this.collectionManagerService.manageCollections(
-              content,
-              bundles,
-              linkedBundleIds,
-              recentBundleIds
-            );
-          }
-        )
-      )
-      .subscribe((bundleToggled: ItemToggledInCollectionInterface) => {
-        if (learningAreaId) {
-          if (bundleToggled.selected) {
-            this.addEduContentToBundle(
-              bundleToggled.item,
-              bundleToggled.relatedItem
-            );
-          } else {
-            this.removeEduContentFromBundle(
-              bundleToggled.item,
-              bundleToggled.relatedItem
-            );
-          }
+    const item: ManageCollectionItemInterface = {
+      id: content.id,
+      label: content.name
+    };
+    const itemToggle$ = this.getItemToggleStream(
+      '"' + item.label + '" toevoegen aan je bundels',
+      item,
+      bundlesCollection$,
+      linkedBundleIds$,
+      recentBundleIds$
+    );
+    itemToggle$.subscribe((bundleToggled: ItemToggledInCollectionInterface) => {
+      if (learningAreaId) {
+        if (bundleToggled.selected) {
+          this.addEduContentToBundle(
+            bundleToggled.item,
+            bundleToggled.relatedItem
+          );
         } else {
-          if (bundleToggled.selected) {
-            this.addUserContentToBundle(
-              bundleToggled.item,
-              bundleToggled.relatedItem
-            );
-          } else {
-            this.removeUserContentFromBundle(
-              bundleToggled.item,
-              bundleToggled.relatedItem
-            );
-          }
+          this.removeEduContentFromBundle(
+            bundleToggled.item,
+            bundleToggled.relatedItem
+          );
         }
-      });
+      } else {
+        if (bundleToggled.selected) {
+          this.addUserContentToBundle(
+            bundleToggled.item,
+            bundleToggled.relatedItem
+          );
+        } else {
+          this.removeUserContentFromBundle(
+            bundleToggled.item,
+            bundleToggled.relatedItem
+          );
+        }
+      }
+    });
   }
 
   manageTasksForContent(content: EduContentInterface): void {
+    const item: ManageCollectionItemInterface = {
+      id: content.id,
+      label: content.publishedEduContentMetadata.title
+    };
+
     // prepare streams
     const learningAreaId: number =
       content.publishedEduContentMetadata.learningAreaId;
-    const tasks$: Observable<TaskInterface[]> = this.store.select(
-      TaskQueries.getForLearningAreaId,
-      { learningAreaId }
-    );
+    const tasksCollection$: Observable<
+      ManageCollectionItemInterface[]
+    > = this.store
+      .select(TaskQueries.getForLearningAreaId, { learningAreaId })
+      .pipe(
+        map(
+          (tasks: TaskInterface[]): ManageCollectionItemInterface[] => {
+            return tasks.map(
+              (task): ManageCollectionItemInterface => ({
+                id: task.id,
+                label: task.name
+              })
+            );
+          }
+        ),
+        shareReplay(1)
+      );
     const linkedTaskIds$: Observable<number[]> = this.store
       .select(TaskEduContentQueries.getByEduContentId, {
         eduContentId: content.id
@@ -183,55 +206,31 @@ export class EduContentCollectionManagerService {
         map(
           (taskEduContents: TaskEduContentInterface[]): number[] =>
             taskEduContents.map(taskEduContent => taskEduContent.taskId)
-        )
-      );
-    const recentTaskIds$: Observable<number[]> = combineLatest(
-      this.store
-        .select(FavoriteQueries.getByType, { type: FavoriteTypesEnum.TASK })
-        .pipe(
-          map(
-            (favorites): number[] => favorites.map(favorite => favorite.taskId)
-          )
         ),
-      // TODO: combine with history when state is available
-      // this.store
-      //   .select(HistoryQueries.getByType, { type: HistoryTypesEnum.TASK })
-      //   .pipe(
-      //     map((histories): number[] => histories.map(history => history.taskId))
-      //   )
-      of([])
-    ).pipe(
-      map(
-        ([favoriteTaskIds, historyTaskIds]: [number[], number[]]): number[] =>
-          Array.from(new Set([...favoriteTaskIds, ...historyTaskIds]))
-      )
+        shareReplay(1)
+      );
+    const recentTaskIds$: Observable<number[]> = this.getRecentItemsStream(
+      FavoriteTypesEnum.TASK,
+      'taskId'
     );
 
     // subscribe to changeEvent
-    combineLatest(tasks$, linkedTaskIds$, recentTaskIds$)
-      .pipe(
-        switchMap(
-          ([tasks, linkedTaskIds, recentTaskIds]: [
-            TaskInterface[],
-            number[],
-            number[]
-          ]): Observable<ItemToggledInCollectionInterface> => {
-            return this.collectionManagerService.manageCollections(
-              content,
-              tasks,
-              linkedTaskIds,
-              recentTaskIds
-            );
-          }
-        )
-      )
-      .subscribe((taskToggled: ItemToggledInCollectionInterface) => {
-        if (taskToggled.selected) {
-          this.addContentToTask(taskToggled.item, taskToggled.relatedItem);
-        } else {
-          this.removeContentFromTask(taskToggled.item, taskToggled.relatedItem);
-        }
-      });
+    const itemToggle$: Observable<
+      ItemToggledInCollectionInterface
+    > = this.getItemToggleStream(
+      '"' + item.label + '" toevoegen aan je taken',
+      item,
+      tasksCollection$,
+      linkedTaskIds$,
+      recentTaskIds$
+    );
+    itemToggle$.subscribe((taskToggled: ItemToggledInCollectionInterface) => {
+      if (taskToggled.selected) {
+        this.addContentToTask(taskToggled.item, taskToggled.relatedItem);
+      } else {
+        this.removeContentFromTask(taskToggled.item, taskToggled.relatedItem);
+      }
+    });
   }
 
   addContentToTask(content: EduContentInterface, task: TaskInterface): void {
@@ -329,5 +328,56 @@ export class EduContentCollectionManagerService {
           })
         );
       });
+  }
+
+  private getRecentItemsStream(
+    type: FavoriteTypesEnum,
+    key: string
+  ): Observable<number[]> {
+    return combineLatest(
+      this.store.select(FavoriteQueries.getByType, { type }),
+      // TODO: combine with history when state is available
+      // this.store.select(HistoryQueries.getByType, { type })
+      of([])
+    ).pipe(
+      map(
+        ([favorites, historys]: [
+          FavoriteInterface[],
+          HistoryInterface[]
+        ]): number[] => {
+          return Array.from(
+            new Set<number>(
+              ...favorites.map(favorite => favorite[key]),
+              ...historys.map(history => history[key])
+            )
+          );
+        }
+      ),
+      shareReplay(1)
+    );
+  }
+
+  private getItemToggleStream(
+    title: string,
+    item: ManageCollectionItemInterface,
+    linkableItems$: Observable<ManageCollectionItemInterface[]>,
+    linkedItemIds$: Observable<number[]>,
+    recentItemIds$: Observable<number[]>
+  ) {
+    return combineLatest(linkableItems$, linkedItemIds$, recentItemIds$).pipe(
+      switchMap(
+        ([linkableItems, linkedIds, recentIds]): Observable<
+          ItemToggledInCollectionInterface
+        > => {
+          return this.collectionManagerService.manageCollections(
+            title,
+            item,
+            linkableItems,
+            linkedIds,
+            recentIds
+          );
+        }
+      )
+    );
   }
 }
