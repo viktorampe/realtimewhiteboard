@@ -109,4 +109,8 @@ export class FilterFactoryFixture implements SearchFilterFactory {
   ): Observable<SearchFilterInterface[]> {
     return of(this.searchFilters);
   }
+
+  getPredictionFilterNames(): string[] {
+    return Object.values(this.searchCriteria).map(value => value.name);
+  }
 }

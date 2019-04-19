@@ -68,6 +68,10 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
     this.schoolTypes$ = this.store.pipe(select(SchoolTypeQueries.getAll));
   }
 
+  public getPredictionFilterNames(searchState: SearchStateInterface): string[] {
+    return [];
+  }
+
   getFilters(
     searchState: SearchStateInterface
   ): Observable<SearchFilterInterface[]> {

@@ -118,6 +118,10 @@ export class TocFilterFactory implements SearchFilterFactory {
     );
   }
 
+  public getPredictionFilterNames(searchState: SearchStateInterface): string[] {
+    return [];
+  }
+
   private setupStreams() {
     this.searchStateDiff$ = this.searchState$.pipe(
       startWith(null),

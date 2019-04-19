@@ -216,6 +216,10 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
       domHost: this.domHost
     } as SearchFilterInterface;
   }
+
+  public getPredictionFilterNames(searchState: SearchStateInterface): string[] {
+    return Object.values(this.filterQueries).map(value => value.name);
+  }
 }
 
 //Small interface used just here to simplify making filters for the non-special properties
