@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   ComponentFactoryResolver,
   ComponentRef,
@@ -35,7 +36,8 @@ import { SearchStateInterface } from './../../interfaces/search-state.interface'
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss']
 })
-export class SearchComponent implements OnInit, OnDestroy, OnChanges {
+export class SearchComponent
+  implements OnInit, AfterViewInit, OnDestroy, OnChanges {
   private searchTermComponent: SearchTermComponent;
   private subscriptions = new Subscription();
   private _searchPortals: QueryList<SearchPortalDirective> = new QueryList();
@@ -87,6 +89,14 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnInit() {
     this.reset(this.initialState);
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      if (!Object.keys(this.portalsMap).length) {
+        throw new Error("My searchPortals are missing :'(");
+      }
+    });
   }
 
   ngOnDestroy() {
