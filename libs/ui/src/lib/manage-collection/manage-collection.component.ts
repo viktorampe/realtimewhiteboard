@@ -20,6 +20,7 @@ import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { Subscription } from 'rxjs';
 import { startWith } from 'rxjs/operators';
 import { FilterTextInputComponent } from '../filter-text-input/filter-text-input.component';
+import { ItemToggledInCollectionInterface } from './interfaces/item-toggled-in-collection.interface';
 import { ManageCollectionsDataInterface } from './interfaces/manage-collection-data.interface';
 import { ManageCollectionItemInterface } from './interfaces/manage-collection-item.interface';
 
@@ -36,7 +37,9 @@ export class ManageCollectionComponent
   private selectedIds: Set<number>;
   private subscriptions = new Subscription();
 
-  @Output() selectionChanged = new EventEmitter<ItemToggledInCollectionEvent>();
+  @Output() selectionChanged = new EventEmitter<
+    ItemToggledInCollectionInterface
+  >();
 
   @ViewChild(MatSelectionList) private selectionList: MatSelectionList;
 
@@ -132,11 +135,4 @@ export class ManageCollectionComponent
 
     this.cd.detectChanges();
   }
-}
-
-// TODO import from Service folder
-export interface ItemToggledInCollectionEvent {
-  relatedItem: ManageCollectionItemInterface;
-  item: ManageCollectionItemInterface;
-  selected: boolean;
 }
