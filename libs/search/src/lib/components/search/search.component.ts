@@ -93,7 +93,7 @@ export class SearchComponent
 
   ngAfterViewInit() {
     setTimeout(() => {
-      if (!Object.keys(this.portalsMap).length) {
+      if (!this.searchPortals.length) {
         throw new Error("My searchPortals are missing :'(");
       }
     });
