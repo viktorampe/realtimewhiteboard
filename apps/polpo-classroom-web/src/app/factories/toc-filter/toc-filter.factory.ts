@@ -127,12 +127,11 @@ export class TocFilterFactory implements SearchFilterFactory {
       neededFilterNames.push(METHOD);
     }
     if (this.hasSearchStateData(searchState, METHOD)) {
-      neededFilterNames.push(TOC);
-    }
-    if (this.hasSearchStateData(searchState, TOC)) {
       neededFilterNames.push(BOOK);
     }
-    console.log(neededFilterNames.toString());
+    if (this.hasSearchStateData(searchState, BOOK)) {
+      neededFilterNames.push(TOC);
+    }
     return neededFilterNames;
   }
 
