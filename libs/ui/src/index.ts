@@ -23,6 +23,9 @@ export {
   ListViewItemDirective
 } from './lib/list-view/list-view.component';
 export {
+  ManageCollectionComponent
+} from './lib/manage-collection/manage-collection.component';
+export {
   NotificationItemInterface
 } from './lib/notification/notification.component';
 export {
