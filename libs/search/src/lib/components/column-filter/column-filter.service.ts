@@ -11,6 +11,6 @@ export class ColumnFilterService {
   constructor() {
     this.preserveColumn = false;
     this.forwardAnimation = true;
-    this.previousFilterCriteriaCount = 0;
+    this.previousFilterCriteriaCount = undefined;
   }
 }
