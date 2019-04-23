@@ -210,10 +210,9 @@ describe('TocFilterFactory', () => {
 
       describe('last selection: learningArea', () => {
         it('should return filterCriteria', () => {
-          const expectedLearningAreaFilter = getExpectedLearningAreaFilterCriterium();
           const expectedYearFilter = getExpectedYearFilterCriterium();
 
-          expected = [expectedLearningAreaFilter, expectedYearFilter];
+          expected = [expectedYearFilter];
 
           expect(result).toBeObservable(hot('a', { a: getFilter(expected) }));
         });
@@ -231,15 +230,10 @@ describe('TocFilterFactory', () => {
 
       describe('last selection: year', () => {
         it('should return filterCriteria', () => {
-          const expectedLearningAreaFilter = getExpectedLearningAreaFilterCriterium();
           const expectedYearFilter = getExpectedYearFilterCriterium();
           const expectedMethodFilter = getExpectedMethodFilterCriterium([6, 7]);
 
-          expected = [
-            expectedLearningAreaFilter,
-            expectedYearFilter,
-            expectedMethodFilter
-          ];
+          expected = [expectedYearFilter, expectedMethodFilter];
 
           expect(result).toBeObservable(hot('a', { a: getFilter(expected) }));
         });
@@ -258,14 +252,12 @@ describe('TocFilterFactory', () => {
 
       describe('last selection: method', () => {
         it('should return filterCriteria', () => {
-          const expectedLearningAreaFilter = getExpectedLearningAreaFilterCriterium();
           const expectedYearFilter = getExpectedYearFilterCriterium();
 
           const expectedMethodFilter = getExpectedMethodFilterCriterium([6, 7]);
           const expectedBookFilter = getExpectedBookFilterCriteria([8, 5]);
 
           expected = [
-            expectedLearningAreaFilter,
             expectedYearFilter,
             expectedMethodFilter,
             expectedBookFilter
@@ -289,16 +281,13 @@ describe('TocFilterFactory', () => {
       });
 
       it('should return toc filterCriteria', () => {
-        const expectedLearningAreaFilter = getExpectedLearningAreaFilterCriterium();
         const expectedYearFilter = getExpectedYearFilterCriterium();
-
         const expectedMethodFilter = getExpectedMethodFilterCriterium([6, 7]);
         const expectedBookFilter = getExpectedBookFilterCriteria([8, 5]);
         const expectedTreeFilter = getExpectedTreeFilterCriteria();
         const expectedTreeFilter_1 = getExpectedTreeFilterCriteria([1]);
 
         expected = [
-          expectedLearningAreaFilter,
           expectedYearFilter,
           expectedMethodFilter,
           expectedBookFilter,
@@ -310,7 +299,6 @@ describe('TocFilterFactory', () => {
       });
 
       it("should not return extra filterCriteria if there aren't any children", () => {
-        const expectedLearningAreaFilter = getExpectedLearningAreaFilterCriterium();
         const expectedYearFilter = getExpectedYearFilterCriterium();
         const expectedMethodFilter = getExpectedMethodFilterCriterium([6, 7]);
         const expectedBookFilter = getExpectedBookFilterCriteria([8, 5]);
@@ -335,7 +323,6 @@ describe('TocFilterFactory', () => {
         ]);
 
         expected = [
-          expectedLearningAreaFilter,
           expectedYearFilter,
           expectedMethodFilter,
           expectedBookFilter,
