@@ -233,7 +233,10 @@ export class EduContentCollectionManagerService {
     });
   }
 
-  addContentToTask(content: EduContentInterface, task: TaskInterface): void {
+  private addContentToTask(
+    content: EduContentInterface,
+    task: TaskInterface
+  ): void {
     this.store.dispatch(
       new TaskEduContentActions.LinkTaskEduContent({
         taskId: task.id,
@@ -243,7 +246,7 @@ export class EduContentCollectionManagerService {
     );
   }
 
-  addEduContentToBundle(
+  private addEduContentToBundle(
     content: ContentInterface,
     bundle: BundleInterface
   ): void {
@@ -255,7 +258,7 @@ export class EduContentCollectionManagerService {
     );
   }
 
-  addUserContentToBundle(
+  private addUserContentToBundle(
     content: UserContentInterface,
     bundle: BundleInterface
   ) {
@@ -267,7 +270,10 @@ export class EduContentCollectionManagerService {
     );
   }
 
-  removeContentFromTask(content: ContentInterface, task: TaskInterface): void {
+  private removeContentFromTask(
+    content: ContentInterface,
+    task: TaskInterface
+  ): void {
     this.store
       .select(TaskEduContentQueries.getByTaskAndEduContentId, {
         taskId: task.id,
@@ -286,7 +292,7 @@ export class EduContentCollectionManagerService {
       });
   }
 
-  removeEduContentFromBundle(
+  private removeEduContentFromBundle(
     content: ContentInterface,
     bundle: BundleInterface
   ): void {
@@ -308,7 +314,7 @@ export class EduContentCollectionManagerService {
       });
   }
 
-  removeUserContentFromBundle(
+  private removeUserContentFromBundle(
     content: ContentInterface,
     bundle: BundleInterface
   ): void {
@@ -341,14 +347,14 @@ export class EduContentCollectionManagerService {
       of([])
     ).pipe(
       map(
-        ([favorites, historys]: [
+        ([favorites, histories]: [
           FavoriteInterface[],
           HistoryInterface[]
         ]): number[] => {
           return Array.from(
             new Set<number>(
               ...favorites.map(favorite => favorite[key]),
-              ...historys.map(history => history[key])
+              ...histories.map(history => history[key])
             )
           );
         }

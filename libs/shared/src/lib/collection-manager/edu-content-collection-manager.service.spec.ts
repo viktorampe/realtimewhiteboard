@@ -135,9 +135,14 @@ describe('EduContentCollectionManagerService', () => {
   ));
 
   describe('manageBundlesForEduContent', () => {
+    let actionSpy: jest.SpyInstance;
+    beforeEach(() => {
+      actionSpy = jest.spyOn(store, 'dispatch');
+    });
+
     it('should subscribe to collectionManager changeEvent', () => {
       // create spies and mocks
-      jest
+      const spy = jest
         .spyOn(collectionManagerService, 'manageCollections')
         .mockImplementation(() => of());
 
@@ -147,10 +152,8 @@ describe('EduContentCollectionManagerService', () => {
         selectedEduContent.publishedEduContentMetadata.learningAreaId
       );
 
-      expect(collectionManagerService.manageCollections).toHaveBeenCalledTimes(
-        1
-      );
-      expect(collectionManagerService.manageCollections).toHaveBeenCalledWith(
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(
         '"foo" toevoegen aan je bundels',
         { id: 4, label: 'foo' },
         bundlesCollection, // bundles[0] has different learningAreaId
@@ -159,9 +162,8 @@ describe('EduContentCollectionManagerService', () => {
       );
     });
 
-    it('should call addEduContentToBundle for itemToggledEvent with selected = true', () => {
+    it('should link eduContent to bundle for itemToggledEvent with selected = true', () => {
       // create spies and mocks
-      const actionSpy = jest.spyOn(service, 'addEduContentToBundle');
       mockToggleEvent = {
         item: selectedEduContent,
         relatedItem: selectedBundle,
@@ -176,16 +178,15 @@ describe('EduContentCollectionManagerService', () => {
 
       expect(actionSpy).toHaveBeenCalledTimes(1);
       expect(actionSpy).toHaveBeenCalledWith(
-        selectedEduContent,
-        selectedBundle
+        new BundleActions.LinkEduContent({
+          bundleId: selectedBundle.id,
+          eduContentId: selectedEduContent.id
+        })
       );
     });
 
-    it('should call removeEduContentFromBundle for itemToggledEvent with selected = false', () => {
+    it('should remove eduContent from bundle for itemToggledEvent with selected = false', () => {
       // create spies and mocks
-      const actionSpy = jest
-        .spyOn(service, 'removeEduContentFromBundle')
-        .mockImplementation(() => of());
       mockToggleEvent = {
         item: selectedEduContent,
         relatedItem: selectedBundle,
@@ -200,14 +201,14 @@ describe('EduContentCollectionManagerService', () => {
 
       expect(actionSpy).toHaveBeenCalledTimes(1);
       expect(actionSpy).toHaveBeenCalledWith(
-        selectedEduContent,
-        selectedBundle
+        new UnlockedContentActions.DeleteUnlockedContent({
+          id: 11
+        })
       );
     });
 
-    it('should call addUserContentToBundle for itemToggledEvent with selected = true', () => {
+    it('should link userContent to bundle for itemToggledEvent with selected = true', () => {
       // create spies and mocks
-      const actionSpy = jest.spyOn(service, 'addUserContentToBundle');
       mockToggleEvent = {
         item: selectedUserContent,
         relatedItem: selectedBundle,
@@ -219,16 +220,15 @@ describe('EduContentCollectionManagerService', () => {
 
       expect(actionSpy).toHaveBeenCalledTimes(1);
       expect(actionSpy).toHaveBeenCalledWith(
-        selectedUserContent,
-        selectedBundle
+        new BundleActions.LinkUserContent({
+          bundleId: selectedBundle.id,
+          userContentId: selectedUserContent.id
+        })
       );
     });
 
-    it('should call removeUserContentFromBundle for itemToggledEvent with selected = false', () => {
+    it('should remove userContent from bundle for itemToggledEvent with selected = false', () => {
       // create spies and mocks
-      const actionSpy = jest
-        .spyOn(service, 'removeUserContentFromBundle')
-        .mockImplementation(() => of());
       mockToggleEvent = {
         item: selectedUserContent,
         relatedItem: selectedBundle,
@@ -240,26 +240,30 @@ describe('EduContentCollectionManagerService', () => {
 
       expect(actionSpy).toHaveBeenCalledTimes(1);
       expect(actionSpy).toHaveBeenCalledWith(
-        selectedUserContent,
-        selectedBundle
+        new UnlockedContentActions.DeleteUnlockedContent({
+          id: 12
+        })
       );
     });
   });
 
   describe('manageTasksForContent', () => {
+    let actionSpy: jest.SpyInstance;
+    beforeEach(() => {
+      actionSpy = jest.spyOn(store, 'dispatch');
+    });
+
     it('should subscribe to collectionManager changeEvent', () => {
       // create spies and mocks
-      jest
+      const spy = jest
         .spyOn(collectionManagerService, 'manageCollections')
         .mockImplementation(() => of());
 
       // subscribe to collectionManager changeEvent
       service.manageTasksForContent(selectedEduContent);
 
-      expect(collectionManagerService.manageCollections).toHaveBeenCalledTimes(
-        1
-      );
-      expect(collectionManagerService.manageCollections).toHaveBeenCalledWith(
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(
         '"foo" toevoegen aan je taken',
         { id: 4, label: 'foo' },
         tasksCollection,
@@ -268,9 +272,8 @@ describe('EduContentCollectionManagerService', () => {
       );
     });
 
-    it('should call addContentToTask for itemToggledEvent with selected = true', () => {
+    it('should link eduContent to task for itemToggledEvent with selected = true', () => {
       // create spies and mocks
-      const actionSpy = jest.spyOn(service, 'addContentToTask');
       mockToggleEvent = {
         item: selectedEduContent,
         relatedItem: selectedTask,
@@ -280,37 +283,6 @@ describe('EduContentCollectionManagerService', () => {
       // subscribe to collectionManager changeEvent
       service.manageTasksForContent(selectedEduContent);
 
-      expect(actionSpy).toHaveBeenCalledTimes(1);
-      expect(actionSpy).toHaveBeenCalledWith(selectedEduContent, selectedTask);
-    });
-
-    it('should call removeContentFromTask for itemToggledEvent with selected = false', () => {
-      // create spies and mocks
-      const actionSpy = jest
-        .spyOn(service, 'removeContentFromTask')
-        .mockImplementation(() => of());
-      mockToggleEvent = {
-        item: selectedEduContent,
-        relatedItem: selectedTask,
-        selected: false
-      };
-
-      // subscribe to collectionManager changeEvent
-      service.manageTasksForContent(selectedEduContent);
-
-      expect(actionSpy).toHaveBeenCalledTimes(1);
-      expect(actionSpy).toHaveBeenCalledWith(selectedEduContent, selectedTask);
-    });
-  });
-
-  describe('store dispatch actions', () => {
-    let actionSpy: jest.SpyInstance;
-    beforeEach(() => {
-      actionSpy = jest.spyOn(store, 'dispatch');
-    });
-
-    it('addContentToTask', () => {
-      service.addContentToTask(selectedEduContent, selectedTask);
       expect(actionSpy).toHaveBeenCalledTimes(1);
       expect(actionSpy).toHaveBeenCalledWith(
         new TaskEduContentActions.LinkTaskEduContent({
@@ -321,54 +293,21 @@ describe('EduContentCollectionManagerService', () => {
       );
     });
 
-    it('addEduContentToBundle', () => {
-      service.addEduContentToBundle(selectedEduContent, selectedBundle);
-      expect(actionSpy).toHaveBeenCalledTimes(1);
-      expect(actionSpy).toHaveBeenCalledWith(
-        new BundleActions.LinkEduContent({
-          bundleId: selectedBundle.id,
-          eduContentId: selectedEduContent.id
-        })
-      );
-    });
+    it('should remove eduContent from task for itemToggledEvent with selected = false', () => {
+      // create spies and mocks
+      mockToggleEvent = {
+        item: selectedEduContent,
+        relatedItem: selectedTask,
+        selected: false
+      };
 
-    it('addUserContentToBundle', () => {
-      service.addUserContentToBundle(selectedUserContent, selectedBundle);
-      expect(actionSpy).toHaveBeenCalledTimes(1);
-      expect(actionSpy).toHaveBeenCalledWith(
-        new BundleActions.LinkUserContent({
-          bundleId: selectedBundle.id,
-          userContentId: selectedUserContent.id
-        })
-      );
-    });
+      // subscribe to collectionManager changeEvent
+      service.manageTasksForContent(selectedEduContent);
 
-    it('removeContentFromTask', () => {
-      service.removeContentFromTask(selectedEduContent, selectedTask);
       expect(actionSpy).toHaveBeenCalledTimes(1);
       expect(actionSpy).toHaveBeenCalledWith(
         new TaskEduContentActions.DeleteTaskEduContent({
           id: 13
-        })
-      );
-    });
-
-    it('removeEduContentFromBundle', () => {
-      service.removeEduContentFromBundle(selectedEduContent, selectedBundle);
-      expect(actionSpy).toHaveBeenCalledTimes(1);
-      expect(actionSpy).toHaveBeenCalledWith(
-        new UnlockedContentActions.DeleteUnlockedContent({
-          id: 11
-        })
-      );
-    });
-
-    it('removeUserContentFromBundle', () => {
-      service.removeUserContentFromBundle(selectedUserContent, selectedBundle);
-      expect(actionSpy).toHaveBeenCalledTimes(1);
-      expect(actionSpy).toHaveBeenCalledWith(
-        new UnlockedContentActions.DeleteUnlockedContent({
-          id: 12
         })
       );
     });
