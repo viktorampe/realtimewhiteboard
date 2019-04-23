@@ -51,7 +51,6 @@ export class CoupledTeachersViewModel {
           TeacherStudentActions.TeacherStudentActionTypes.LinkTeacherStudent
       })
     );
-
     this.unlinkPersonError$ = this.store.pipe(
       select(EffectFeedbackQueries.getFeedbackForAction, {
         actionType:
@@ -84,6 +83,7 @@ export class CoupledTeachersViewModel {
   }
 
   public linkPerson(publicKey: string): void {
+    //TODO -- removing previous errors might provide solution that was currently solved by reversing array for selector for feedbackmessages
     this.store.dispatch(
       new TeacherStudentActions.LinkTeacherStudent({
         publicKey,
