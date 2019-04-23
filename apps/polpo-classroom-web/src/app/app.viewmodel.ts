@@ -1,3 +1,4 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Inject, Injectable } from '@angular/core';
 import {
   CredentialQueries,
@@ -20,7 +21,7 @@ import {
 } from '@campus/shared';
 import { DropdownMenuItemInterface, NavItem } from '@campus/ui';
 import { Action, select, Store } from '@ngrx/store';
-import { combineLatest, Observable } from 'rxjs';
+import { combineLatest, Observable, Subscription } from 'rxjs';
 import {
   filter,
   map,
@@ -44,18 +45,24 @@ export class AppViewModel {
   public navigationItems$: Observable<NavItem[]>;
   public bannerFeedback$: Observable<EffectFeedbackInterface>;
 
+  private isDesktop: boolean;
+  private breakpointSubscription = new Subscription();
+
   constructor(
     private store: Store<DalState>,
     private navItemService: NavItemService,
     @Inject(FEEDBACK_SERVICE_TOKEN)
-    private feedbackService: FeedBackServiceInterface
+    private feedbackService: FeedBackServiceInterface,
+    private breakPointObserver: BreakpointObserver
   ) {
     this.initialize();
   }
 
   // sets sideNav opened state
   public toggleSidebar(open: boolean) {
-    this.store.dispatch(new UiActions.ToggleSideNav({ open }));
+    if (!this.isDesktop) {
+      this.store.dispatch(new UiActions.ToggleSideNav({ open }));
+    }
   }
 
   // event handler for feedback dismiss
@@ -73,12 +80,25 @@ export class AppViewModel {
 
   public onNavItemChanged(navItem: NavItem) {
     this.store.dispatch(new UiActions.UpdateNavItem({ navItem }));
+    this.toggleSidebar(false);
   }
 
   private initialize() {
     this.setProfileItems();
     this.setNavItems();
     this.setFeedbackFlow();
+    this.subscribeToBreakpoints();
+  }
+
+  private subscribeToBreakpoints() {
+    this.breakpointSubscription.add(
+      this.breakPointObserver
+        .observe([Breakpoints.XSmall, Breakpoints.Small])
+        .pipe(map(result => result.matches))
+        .subscribe(result => {
+          this.isDesktop = !result;
+        })
+    );
   }
 
   private setProfileItems() {
