@@ -1,16 +1,14 @@
 import { TestBed } from '@angular/core/testing';
 import { MatDialog } from '@angular/material';
 import { hot } from '@nrwl/nx/testing';
-import { ManageCollectionItemFixture } from '../../manage-collection/fixtures/manage-collection-item.fixture';
-import {
-  CollectionManagerService,
-  ManageCollectionComponent,
-  ManageCollectionsForContentDataInterface
-} from './collection-manager.service';
+import { ManageCollectionItemFixture } from '../fixtures/manage-collection-item.fixture';
+import { ItemToggledInCollectionInterface } from '../interfaces/item-toggled-in-collection.interface';
+import { ManageCollectionsDataInterface } from '../interfaces/manage-collection-data.interface';
+import { ManageCollectionComponent } from '../manage-collection.component';
+import { CollectionManagerService } from './collection-manager.service';
 import { CollectionManagerServiceInterface } from './collection-manager.service.interface';
-import { ItemToggledInCollectionInterface } from './ItemToggledInCollection.interface';
 
-const mockData: ManageCollectionsForContentDataInterface = {
+const mockData: ManageCollectionsDataInterface = {
   title: 'bar',
   item: new ManageCollectionItemFixture(),
   linkableItems: [

@@ -1,31 +1,12 @@
-import { Component, EventEmitter, Injectable, Output } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { ManageCollectionsDataInterface } from '../../manage-collection/interfaces/manage-collection-data.interface';
 import { ManageCollectionItemInterface } from '../../manage-collection/interfaces/manage-collection-item.interface';
+import { ManageCollectionComponent } from '../../manage-collection/manage-collection.component';
+import { ItemToggledInCollectionInterface } from '../interfaces/item-toggled-in-collection.interface';
 import { CollectionManagerServiceInterface } from './collection-manager.service.interface';
-import { ItemToggledInCollectionInterface } from './ItemToggledInCollection.interface';
-
-//----------- TO DO: REMOVE WHEN OTHER ISSUES ARE IMPLEMENTED --------------
-// mock component
-@Component({
-  selector: 'campus-manage-collection',
-  template: ``
-})
-export class ManageCollectionComponent {
-  @Output() selectionChanged = new EventEmitter<
-    ItemToggledInCollectionInterface
-  >();
-}
-// ------------------- END REMOVE -------------------------------------- //
-
-export interface ManageCollectionsForContentDataInterface {
-  title: string;
-  item: ManageCollectionItemInterface;
-  linkableItems: ManageCollectionItemInterface[];
-  linkedItemIds: Set<number>;
-  recentItemIds: Set<number>;
-}
 
 @Injectable({
   providedIn: 'root'
@@ -49,7 +30,7 @@ export class CollectionManagerService
     let subscription: Subscription;
 
     // open dialog
-    const dialogData: ManageCollectionsForContentDataInterface = {
+    const dialogData: ManageCollectionsDataInterface = {
       title: title,
       item: item,
       linkableItems: linkableItems,
@@ -80,7 +61,7 @@ export class CollectionManagerService
   }
 
   private openDialog(
-    data: ManageCollectionsForContentDataInterface
+    data: ManageCollectionsDataInterface
   ): MatDialogRef<ManageCollectionComponent> {
     // use the ManageCollectionComponent
     // inject the right data
