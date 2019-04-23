@@ -4,6 +4,7 @@ import {
   BundleFixture,
   BundleInterface,
   BundleReducer,
+  ContentInterface,
   DalState,
   EduContentFixture,
   FavoriteReducer,
@@ -22,20 +23,23 @@ import {
   UnlockedContentReducer,
   UserContentFixture
 } from '@campus/dal';
+import {
+  CollectionManagerServiceInterface,
+  COLLECTION_MANAGER_SERVICE_TOKEN,
+  ItemToggledInCollectionInterface,
+  ManageCollectionItemInterface
+} from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
 import { of } from 'rxjs';
 import {
-  CollectionManagerService,
-  COLLECTION_MANAGER_SERVICE_TOKEN,
   EduContentCollectionManagerService,
-  ItemToggledInCollectionInterface,
-  ManageCollectionItemInterface
+  EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN
 } from './edu-content-collection-manager.service';
 
 describe('EduContentCollectionManagerService', () => {
   let service: EduContentCollectionManagerService;
   let store: Store<DalState>;
-  let collectionManagerService: CollectionManagerService;
+  let collectionManagerService: CollectionManagerServiceInterface;
   let mockToggleEvent: ItemToggledInCollectionInterface;
 
   const bundles: BundleInterface[] = [
@@ -98,6 +102,10 @@ describe('EduContentCollectionManagerService', () => {
       providers: [
         Store,
         {
+          provide: EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN,
+          useClass: EduContentCollectionManagerService
+        },
+        {
           provide: COLLECTION_MANAGER_SERVICE_TOKEN,
           useValue: {
             manageCollections: jest
@@ -108,7 +116,7 @@ describe('EduContentCollectionManagerService', () => {
       ]
     });
 
-    service = TestBed.get(EduContentCollectionManagerService);
+    service = TestBed.get(EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN);
     store = TestBed.get(Store);
     collectionManagerService = TestBed.get(COLLECTION_MANAGER_SERVICE_TOKEN);
 
@@ -164,11 +172,11 @@ describe('EduContentCollectionManagerService', () => {
 
     it('should link eduContent to bundle for itemToggledEvent with selected = true', () => {
       // create spies and mocks
-      mockToggleEvent = {
+      mockToggleEvent = getMockToggleEvent({
         item: selectedEduContent,
         relatedItem: selectedBundle,
         selected: true
-      };
+      });
 
       // subscribe to collectionManager changeEvent
       service.manageBundlesForContent(
@@ -187,11 +195,11 @@ describe('EduContentCollectionManagerService', () => {
 
     it('should remove eduContent from bundle for itemToggledEvent with selected = false', () => {
       // create spies and mocks
-      mockToggleEvent = {
+      mockToggleEvent = getMockToggleEvent({
         item: selectedEduContent,
         relatedItem: selectedBundle,
         selected: false
-      };
+      });
 
       // subscribe to collectionManager changeEvent
       service.manageBundlesForContent(
@@ -209,11 +217,11 @@ describe('EduContentCollectionManagerService', () => {
 
     it('should link userContent to bundle for itemToggledEvent with selected = true', () => {
       // create spies and mocks
-      mockToggleEvent = {
+      mockToggleEvent = getMockToggleEvent({
         item: selectedUserContent,
         relatedItem: selectedBundle,
         selected: true
-      };
+      });
 
       // subscribe to collectionManager changeEvent
       service.manageBundlesForContent(selectedUserContent);
@@ -229,11 +237,11 @@ describe('EduContentCollectionManagerService', () => {
 
     it('should remove userContent from bundle for itemToggledEvent with selected = false', () => {
       // create spies and mocks
-      mockToggleEvent = {
+      mockToggleEvent = getMockToggleEvent({
         item: selectedUserContent,
         relatedItem: selectedBundle,
         selected: false
-      };
+      });
 
       // subscribe to collectionManager changeEvent
       service.manageBundlesForContent(selectedUserContent);
@@ -274,11 +282,11 @@ describe('EduContentCollectionManagerService', () => {
 
     it('should link eduContent to task for itemToggledEvent with selected = true', () => {
       // create spies and mocks
-      mockToggleEvent = {
+      mockToggleEvent = getMockToggleEvent({
         item: selectedEduContent,
         relatedItem: selectedTask,
         selected: true
-      };
+      });
 
       // subscribe to collectionManager changeEvent
       service.manageTasksForContent(selectedEduContent);
@@ -295,11 +303,11 @@ describe('EduContentCollectionManagerService', () => {
 
     it('should remove eduContent from task for itemToggledEvent with selected = false', () => {
       // create spies and mocks
-      mockToggleEvent = {
+      mockToggleEvent = getMockToggleEvent({
         item: selectedEduContent,
         relatedItem: selectedTask,
         selected: false
-      };
+      });
 
       // subscribe to collectionManager changeEvent
       service.manageTasksForContent(selectedEduContent);
@@ -312,4 +320,20 @@ describe('EduContentCollectionManagerService', () => {
       );
     });
   });
+
+  function getMockToggleEvent({
+    item,
+    relatedItem,
+    selected
+  }: {
+    item: ContentInterface;
+    relatedItem: TaskInterface | BundleInterface;
+    selected: boolean;
+  }) {
+    return {
+      item: { id: item.id, label: item.name },
+      relatedItem: { id: relatedItem.id, label: relatedItem.name },
+      selected
+    };
+  }
 });

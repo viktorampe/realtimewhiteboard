@@ -17,49 +17,17 @@ import {
   TaskQueries,
   UnlockedContent,
   UnlockedContentActions,
-  UnlockedContentQueries,
-  UserContentInterface
+  UnlockedContentQueries
 } from '@campus/dal';
+import {
+  CollectionManagerServiceInterface,
+  COLLECTION_MANAGER_SERVICE_TOKEN,
+  ItemToggledInCollectionInterface,
+  ManageCollectionItemInterface
+} from '@campus/ui';
 import { Store } from '@ngrx/store';
 import { combineLatest, Observable, of } from 'rxjs';
 import { filter, map, shareReplay, switchMap, take } from 'rxjs/operators';
-
-//----------- TO DO: REMOVE WHEN OTHER ISSUES ARE IMPLEMENTED --------------
-// mock interface
-export interface ItemToggledInCollectionInterface {
-  relatedItem: any;
-  item: any;
-  selected: boolean;
-}
-
-export interface ManageCollectionItemInterface {
-  icon?: string;
-  label: string;
-  id: number;
-  className?: string;
-}
-
-// mock token
-export const COLLECTION_MANAGER_SERVICE_TOKEN = new InjectionToken(
-  'CollectionManagerService'
-);
-
-// mock service
-@Injectable({
-  providedIn: 'root'
-})
-export class CollectionManagerService {
-  manageCollections(
-    title: string,
-    item: ManageCollectionItemInterface,
-    linkableItems: ManageCollectionItemInterface[],
-    linkedItemIds: number[],
-    recentItemIds: number[]
-  ): Observable<ItemToggledInCollectionInterface> {
-    return of();
-  }
-}
-// ------------------- END REMOVE -------------------------------------- //
 
 export const EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN = new InjectionToken(
   'EduContentCollectionManagerService'
@@ -72,7 +40,7 @@ export class EduContentCollectionManagerService {
   constructor(
     private store: Store<DalState>,
     @Inject(COLLECTION_MANAGER_SERVICE_TOKEN)
-    private collectionManagerService: CollectionManagerService
+    private collectionManagerService: CollectionManagerServiceInterface
   ) {}
 
   /**
@@ -234,8 +202,8 @@ export class EduContentCollectionManagerService {
   }
 
   private addContentToTask(
-    content: EduContentInterface,
-    task: TaskInterface
+    content: ManageCollectionItemInterface,
+    task: ManageCollectionItemInterface
   ): void {
     this.store.dispatch(
       new TaskEduContentActions.LinkTaskEduContent({
@@ -247,8 +215,8 @@ export class EduContentCollectionManagerService {
   }
 
   private addEduContentToBundle(
-    content: ContentInterface,
-    bundle: BundleInterface
+    content: ManageCollectionItemInterface,
+    bundle: ManageCollectionItemInterface
   ): void {
     this.store.dispatch(
       new BundleActions.LinkEduContent({
@@ -259,8 +227,8 @@ export class EduContentCollectionManagerService {
   }
 
   private addUserContentToBundle(
-    content: UserContentInterface,
-    bundle: BundleInterface
+    content: ManageCollectionItemInterface,
+    bundle: ManageCollectionItemInterface
   ) {
     this.store.dispatch(
       new BundleActions.LinkUserContent({
@@ -271,8 +239,8 @@ export class EduContentCollectionManagerService {
   }
 
   private removeContentFromTask(
-    content: ContentInterface,
-    task: TaskInterface
+    content: ManageCollectionItemInterface,
+    task: ManageCollectionItemInterface
   ): void {
     this.store
       .select(TaskEduContentQueries.getByTaskAndEduContentId, {
@@ -293,8 +261,8 @@ export class EduContentCollectionManagerService {
   }
 
   private removeEduContentFromBundle(
-    content: ContentInterface,
-    bundle: BundleInterface
+    content: ManageCollectionItemInterface,
+    bundle: ManageCollectionItemInterface
   ): void {
     this.store
       .select(UnlockedContentQueries.getByBundleAndEduContentId, {
@@ -315,8 +283,8 @@ export class EduContentCollectionManagerService {
   }
 
   private removeUserContentFromBundle(
-    content: ContentInterface,
-    bundle: BundleInterface
+    content: ManageCollectionItemInterface,
+    bundle: ManageCollectionItemInterface
   ): void {
     this.store
       .select(UnlockedContentQueries.getByBundleAndUserContentId, {
