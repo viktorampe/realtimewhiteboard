@@ -21,7 +21,7 @@ import {
 } from '@campus/shared';
 import { DropdownMenuItemInterface, NavItem } from '@campus/ui';
 import { Action, select, Store } from '@ngrx/store';
-import { combineLatest, Observable, Subscription } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import {
   filter,
   map,
@@ -46,7 +46,6 @@ export class AppViewModel {
   public bannerFeedback$: Observable<EffectFeedbackInterface>;
 
   private isDesktop: boolean;
-  private breakpointSubscription = new Subscription();
 
   constructor(
     private store: Store<DalState>,
@@ -91,14 +90,12 @@ export class AppViewModel {
   }
 
   private subscribeToBreakpoints() {
-    this.breakpointSubscription.add(
-      this.breakPointObserver
-        .observe([Breakpoints.XSmall, Breakpoints.Small])
-        .pipe(map(result => result.matches))
-        .subscribe(result => {
-          this.isDesktop = !result;
-        })
-    );
+    this.breakPointObserver
+      .observe([Breakpoints.XSmall, Breakpoints.Small])
+      .pipe(map(result => result.matches))
+      .subscribe(result => {
+        this.isDesktop = !result;
+      });
   }
 
   private setProfileItems() {
