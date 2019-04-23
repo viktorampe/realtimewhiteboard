@@ -87,6 +87,23 @@ export class CheckboxFilterComponent implements AfterViewInit, OnDestroy {
     return value.data[this.criterium.displayProperty];
   }
 
+  public getIndeterminateStatus(
+    filterCriteriaValue: SearchFilterCriteriaValuesInterface
+  ): boolean {
+    return (
+      !filterCriteriaValue.selected &&
+      filterCriteriaValue.child &&
+      !(
+        filterCriteriaValue.child.values.every(
+          childValue => childValue.selected
+        ) ||
+        filterCriteriaValue.child.values.every(
+          childValue => !childValue.selected
+        )
+      )
+    );
+  }
+
   // expand aantal zichtbare titels bij CHILD
   public toggleShowMore() {
     this.showMoreItems = !this.showMoreItems;
@@ -162,15 +179,13 @@ export class CheckboxFilterComponent implements AfterViewInit, OnDestroy {
   ): SearchFilterCriteriaInterface {
     return {
       ...criterium,
-      ...{
-        values: criterium.values
-          .filter(
-            value => value.visible && (value.prediction !== 0 || value.selected)
-          )
-          // order by selected status
-          // needed so selected values aren't hidden
-          .sort((a, b) => (a.selected === b.selected ? 0 : a.selected ? -1 : 1))
-      }
+      values: criterium.values
+        .filter(
+          value => value.visible && (value.prediction !== 0 || value.selected)
+        )
+        // order by selected status
+        // needed so selected values aren't hidden
+        .sort((a, b) => (a.selected === b.selected ? 0 : a.selected ? -1 : 1))
     };
   }
 
@@ -208,16 +223,17 @@ export class CheckboxFilterComponent implements AfterViewInit, OnDestroy {
     checkboxAssociation: AssociatedCheckBoxesInterface
   ): ChildrenStatusInterface {
     return {
-      allChecked: checkboxAssociation.children
-        .toArray()
-        .every(
-          child => child.checked === true && child.indeterminate === false
-        ),
-      allUnChecked: checkboxAssociation.children
-        .toArray()
-        .every(
-          child => child.checked === false && child.indeterminate === false
-        )
+      allChecked: checkboxAssociation.children // null check
+        ? checkboxAssociation.children
+            .toArray()
+            .every(child => child.checked && !child.indeterminate)
+        : true, // if no children -> parent should respond as if they're all selected
+
+      allUnChecked: checkboxAssociation.children // null check
+        ? checkboxAssociation.children
+            .toArray()
+            .every(child => !child.checked && !child.indeterminate)
+        : false // if no children -> parent should respond as if they're all selected
     };
   }
 }

@@ -23,6 +23,9 @@ export class CheckboxListFilterComponent
   filterSelectionChange = new EventEmitter<SearchFilterCriteriaInterface[]>();
 
   public onSelectionChange() {
-    this.filterSelectionChange.emit([this.filterCriteria]);
+    // wait for changes to propagate through entire structure
+    setTimeout(() => {
+      this.filterSelectionChange.emit([this.filterCriteria]);
+    });
   }
 }
