@@ -83,19 +83,23 @@ describe('ColumnFilterComponent', () => {
       component.filterCriteria = undefined;
       fixture.detectChanges();
       expect(component['columnFilterService'].forwardAnimation).toBe(true);
-      expect(component['previousFilterCriteriaCount']).toBe(undefined);
+      expect(component['columnFilterService'].previousFilterCriteriaCount).toBe(
+        undefined
+      );
     });
     it('should not change forwardAnimation and previousFilterCriteriaCount if passed value is null', () => {
       component.filterCriteria = null;
       fixture.detectChanges();
       expect(component['columnFilterService'].forwardAnimation).toBe(true);
-      expect(component['previousFilterCriteriaCount']).toBe(undefined);
+      expect(component['columnFilterService'].previousFilterCriteriaCount).toBe(
+        undefined
+      );
     });
     it('should update forwardAnimation to false and previousFilterCriteriaCount to the count if the first value is passed', () => {
       component.filterCriteria = mockFilterCriteria;
       fixture.detectChanges();
       expect(component['columnFilterService'].forwardAnimation).toBe(false);
-      expect(component['previousFilterCriteriaCount']).toBe(
+      expect(component['columnFilterService'].previousFilterCriteriaCount).toBe(
         mockFilterCriteria.length
       );
     });
@@ -105,7 +109,7 @@ describe('ColumnFilterComponent', () => {
       component.filterCriteria = [...mockFilterCriteria, ...mockFilterCriteria];
       fixture.detectChanges();
       expect(component['columnFilterService'].forwardAnimation).toBe(true);
-      expect(component['previousFilterCriteriaCount']).toBe(
+      expect(component['columnFilterService'].previousFilterCriteriaCount).toBe(
         mockFilterCriteria.length * 2
       );
     });
@@ -115,7 +119,7 @@ describe('ColumnFilterComponent', () => {
       component.filterCriteria = mockFilterCriteria;
       fixture.detectChanges();
       expect(component['columnFilterService'].forwardAnimation).toBe(false);
-      expect(component['previousFilterCriteriaCount']).toBe(
+      expect(component['columnFilterService'].previousFilterCriteriaCount).toBe(
         mockFilterCriteria.length
       );
     });
