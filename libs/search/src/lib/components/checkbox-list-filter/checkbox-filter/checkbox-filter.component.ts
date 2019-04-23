@@ -140,13 +140,10 @@ export class CheckboxFilterComponent implements AfterViewInit, OnDestroy {
     const childrenStatus = this.getAllChildrenStatus(parentAssociation);
     if (childrenStatus.allChecked) {
       parentAssociation.parent.checked = true;
-      parentAssociation.parent.indeterminate = false;
     } else if (childrenStatus.allUnChecked) {
       parentAssociation.parent.checked = false;
-      parentAssociation.parent.indeterminate = false;
     } else {
       parentAssociation.parent.checked = false;
-      parentAssociation.parent.indeterminate = true;
     }
 
     // notify parent
