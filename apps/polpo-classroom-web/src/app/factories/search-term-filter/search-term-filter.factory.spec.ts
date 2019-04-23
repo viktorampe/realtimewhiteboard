@@ -202,7 +202,8 @@ describe('SearchTermFilterFactory', () => {
         'schoolTypes',
         'methods',
         'learningDomains',
-        'grades'
+        'grades',
+        'eduContentProductType'
       ]);
     });
   });
