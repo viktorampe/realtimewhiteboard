@@ -10,6 +10,7 @@ export class SearchTermComponent implements OnInit {
 
   @Input() public initialValue = '';
   @Input() public placeholder = 'Zoeken';
+  @Input() public autofocus = false;
 
   // boolean => internal reference, need array of values
   // string => external reference TODO: figure this out, when required
@@ -31,5 +32,9 @@ export class SearchTermComponent implements OnInit {
     if (this.currentValue.length < 2 || !this.autoComplete) return;
 
     this.valueChangeForAutoComplete.emit(this.currentValue);
+  }
+
+  getAutoFocusValue() {
+    return this.autofocus ? 'autofocus' : null;
   }
 }

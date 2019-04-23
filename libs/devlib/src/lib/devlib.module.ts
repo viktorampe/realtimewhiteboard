@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material';
 import { ScormModule } from '@campus/scorm';
 import { SearchModule } from '@campus/search';
 import { SharedModule } from '@campus/shared';
-import { UiModule } from '@campus/ui';
+import { ManageCollectionComponent, UiModule } from '@campus/ui';
 import { DevlibRoutingModule } from './devlib.routing.module';
 import { EduContentComponent } from './edu-content/edu-content.component';
 import { EduContentViewModel } from './edu-content/edu-content.viewmodel';
@@ -33,6 +33,6 @@ import { PolpoResultItemComponent } from './polpo-result-item/polpo-result-item.
     PolpoResultItemComponent
   ],
   exports: [],
-  entryComponents: [PolpoResultItemComponent]
+  entryComponents: [PolpoResultItemComponent, ManageCollectionComponent]
 })
 export class DevlibModule {}

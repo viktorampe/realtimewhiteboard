@@ -6,9 +6,11 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatButtonModule,
+  MatDialogModule,
   MatFormFieldModule,
   MatIconModule,
   MatInputModule,
+  MatListModule,
   MatMenuModule,
   MatProgressSpinnerModule,
   MatSelectModule,
@@ -46,6 +48,7 @@ import {
   ListViewComponent,
   ListViewItemDirective
 } from './list-view/list-view.component';
+import { ManageCollectionComponent } from './manage-collection/manage-collection.component';
 import { DropdownDirective } from './notification/directives/notification-dropdown.directive';
 import { NotificationComponent } from './notification/notification.component';
 import { PageHeaderComponent } from './page-header/page-header.component';
@@ -90,6 +93,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     MatTooltipModule,
     MatIconModule,
     MatMenuModule,
+    MatListModule,
+    MatDialogModule,
     UtilsModule
   ],
   declarations: [
@@ -144,7 +149,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     CollapsibleSheetComponent,
     DropAreaComponent,
     TileComponent,
-    JoinPipe
+    JoinPipe,
+    ManageCollectionComponent
   ],
   exports: [
     FilterTextInputComponent,
@@ -197,7 +203,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     CollapsibleSheetComponent,
     DropAreaComponent,
     TileComponent,
-    JoinPipe
+    JoinPipe,
+    ManageCollectionComponent
   ]
 })
 export class UiModule {}

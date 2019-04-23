@@ -27,6 +27,7 @@ import {
 import {
   CheckboxLineFilterComponent,
   CheckboxListFilterComponent,
+  SearchFilterInterface,
   SearchStateInterface
 } from '@campus/search';
 import { Store, StoreModule } from '@ngrx/store';
@@ -245,9 +246,10 @@ describe('GlobalSearchTermFilterFactory', () => {
     keyProperty,
     displayProperty,
     values,
-    component
-  ) {
-    return {
+    component,
+    maxVisibleItems?
+  ): SearchFilterInterface {
+    const searchFilter = {
       criteria: {
         name: name,
         label: label,
@@ -270,7 +272,9 @@ describe('GlobalSearchTermFilterFactory', () => {
       },
       component: component,
       domHost: 'hostLeft'
-    };
+    } as SearchFilterInterface;
+    if (maxVisibleItems) searchFilter.options = { maxVisibleItems };
+    return searchFilter;
   }
 
   function getExpectedYearFilter() {
@@ -291,7 +295,8 @@ describe('GlobalSearchTermFilterFactory', () => {
       'id',
       'name',
       mockEduNets,
-      CheckboxListFilterComponent
+      CheckboxListFilterComponent,
+      5
     );
   }
 
@@ -302,7 +307,8 @@ describe('GlobalSearchTermFilterFactory', () => {
       'id',
       'name',
       mockSchoolTypes,
-      CheckboxListFilterComponent
+      CheckboxListFilterComponent,
+      5
     );
   }
 
@@ -313,7 +319,8 @@ describe('GlobalSearchTermFilterFactory', () => {
       'id',
       'name',
       mockLearningAreas,
-      CheckboxListFilterComponent
+      CheckboxListFilterComponent,
+      5
     );
   }
 
@@ -333,7 +340,8 @@ describe('GlobalSearchTermFilterFactory', () => {
       'id',
       'name',
       extendedProductTypes,
-      CheckboxListFilterComponent
+      CheckboxListFilterComponent,
+      5
     );
   }
 
@@ -346,7 +354,8 @@ describe('GlobalSearchTermFilterFactory', () => {
       mockMethods.filter(
         method => method.learningAreaId === 1 || method.learningAreaId === 2 // see mocks to know the learningAreaIds
       ),
-      CheckboxListFilterComponent
+      CheckboxListFilterComponent,
+      5
     );
   }
 
@@ -359,7 +368,8 @@ describe('GlobalSearchTermFilterFactory', () => {
       mockLearningDomains.filter(
         ld => ld.learningAreaId === 1 || ld.learningAreaId === 2
       ),
-      CheckboxListFilterComponent
+      CheckboxListFilterComponent,
+      5
     );
   }
 });

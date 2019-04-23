@@ -79,7 +79,6 @@ export class TocFilterFactory implements SearchFilterFactory {
     this.searchState$.next(searchState);
 
     return combineLatest([
-      this.getLearningAreaFilterCriteria$(),
       this.getYearFilterCriteria$(),
       this.getMethodFilterCriteria$(),
       this.getBookFilterCriteria$(),
@@ -87,7 +86,6 @@ export class TocFilterFactory implements SearchFilterFactory {
     ]).pipe(
       map(
         ([
-          learningAreaFilterCriterium,
           yearFilterCriterium,
           methodFilterCriterium,
           bookFilterCriterium,
@@ -95,7 +93,6 @@ export class TocFilterFactory implements SearchFilterFactory {
         ]) => {
           // combine values
           const filterCriteriaArray = [
-            learningAreaFilterCriterium,
             yearFilterCriterium,
             methodFilterCriterium,
             bookFilterCriterium,

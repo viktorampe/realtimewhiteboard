@@ -25,6 +25,7 @@ import {
 import {
   CheckboxLineFilterComponent,
   CheckboxListFilterComponent,
+  SearchFilterInterface,
   SearchStateInterface
 } from '@campus/search';
 import { Store, StoreModule } from '@ngrx/store';
@@ -212,9 +213,10 @@ describe('SearchTermFilterFactory', () => {
     keyProperty,
     displayProperty,
     values,
-    component
-  ) {
-    return {
+    component,
+    maxVisibleItems?
+  ): SearchFilterInterface {
+    const searchFilter = {
       criteria: {
         name: name,
         label: label,
@@ -237,7 +239,9 @@ describe('SearchTermFilterFactory', () => {
       },
       component: component,
       domHost: 'hostLeft'
-    };
+    } as SearchFilterInterface;
+    if (maxVisibleItems) searchFilter.options = { maxVisibleItems };
+    return searchFilter;
   }
 
   function getExpectedYearFilter() {
@@ -258,7 +262,8 @@ describe('SearchTermFilterFactory', () => {
       'id',
       'name',
       mockEduNets,
-      CheckboxListFilterComponent
+      CheckboxListFilterComponent,
+      5
     );
   }
 
@@ -269,7 +274,8 @@ describe('SearchTermFilterFactory', () => {
       'id',
       'name',
       mockSchoolTypes,
-      CheckboxListFilterComponent
+      CheckboxListFilterComponent,
+      5
     );
   }
 
@@ -282,7 +288,8 @@ describe('SearchTermFilterFactory', () => {
       mockMethods.filter(
         method => method.learningAreaId === currentLearningAreaId
       ),
-      CheckboxListFilterComponent
+      CheckboxListFilterComponent,
+      5
     );
   }
 
@@ -295,7 +302,8 @@ describe('SearchTermFilterFactory', () => {
       mockLearningDomains.filter(
         ld => ld.learningAreaId === currentLearningAreaId
       ),
-      CheckboxListFilterComponent
+      CheckboxListFilterComponent,
+      5
     );
   }
 
@@ -315,7 +323,8 @@ describe('SearchTermFilterFactory', () => {
       'id',
       'name',
       extendedProductTypes,
-      CheckboxListFilterComponent
+      CheckboxListFilterComponent,
+      5
     );
   }
 });
