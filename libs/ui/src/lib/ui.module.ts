@@ -6,16 +6,17 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatButtonModule,
+  MatDialogModule,
   MatFormFieldModule,
   MatIconModule,
   MatInputModule,
+  MatListModule,
   MatMenuModule,
   MatProgressSpinnerModule,
   MatSelectModule,
   MatSidenavModule,
   MatTooltipModule
 } from '@angular/material';
-import { MatDialogModule } from '@angular/material/dialog';
 import { RouterModule } from '@angular/router';
 import { UtilsModule } from '@campus/utils';
 import { AppBarComponent } from './app-bar/app-bar.component';
@@ -47,6 +48,7 @@ import {
   ListViewComponent,
   ListViewItemDirective
 } from './list-view/list-view.component';
+import { ManageCollectionComponent } from './manage-collection/manage-collection.component';
 import { DropdownDirective } from './notification/directives/notification-dropdown.directive';
 import { NotificationComponent } from './notification/notification.component';
 import { PageHeaderComponent } from './page-header/page-header.component';
@@ -94,7 +96,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     MatIconModule,
     MatMenuModule,
     UtilsModule,
-    MatDialogModule
+    MatDialogModule,
+    MatListModule
   ],
   declarations: [
     FilterTextInputComponent,
@@ -148,7 +151,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     CollapsibleSheetComponent,
     DropAreaComponent,
     TileComponent,
-    JoinPipe
+    JoinPipe,
+    ManageCollectionComponent
   ],
   exports: [
     FilterTextInputComponent,
@@ -207,7 +211,8 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     {
       provide: COLLECTION_MANAGER_SERVICE_TOKEN,
       useClass: CollectionManagerService
-    }
+    },
+    ManageCollectionComponent
   ]
 })
 export class UiModule {}

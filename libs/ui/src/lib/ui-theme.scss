@@ -102,6 +102,7 @@ $ui-tile-height: 105px !default;
 @import './collapsible-sheet/collapsible-sheet.component.theme.scss';
 @import './drop-area/drop-area.component.theme.scss';
 @import './tile/tile.component.theme.scss';
+@import './manage-collection/manage-collection.component.theme.scss';
 
 @mixin ui-forms() {
   form {
@@ -153,6 +154,7 @@ $ui-tile-height: 105px !default;
         height: $ui-content-thumbnail-button-size;
       }
     }
+
     .ui-button--disabled {
       &,
       &:hover {
@@ -203,4 +205,5 @@ $ui-tile-height: 105px !default;
   @include ui-collapsible-sheet();
   @include ui-drop-area-theme();
   @include ui-tile();
+  @include ui-manage-collection();
 }

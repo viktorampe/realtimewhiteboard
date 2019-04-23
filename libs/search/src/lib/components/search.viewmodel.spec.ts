@@ -1,3 +1,4 @@
+import { Type } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
@@ -6,6 +7,7 @@ import {
   SearchFilterCriteriaValuesFixture
 } from '../+fixtures/search-filter-criteria.fixture';
 import {
+  SearchFilterComponentInterface,
   SearchFilterCriteriaInterface,
   SearchFilterFactory,
   SearchFilterInterface,
@@ -18,10 +20,16 @@ import { CheckboxLineFilterComponent } from './checkbox-line-filter/checkbox-lin
 import { SearchViewModel } from './search.viewmodel';
 
 class MockFilterFactory implements SearchFilterFactory {
+  private mockFilter: SearchFilterInterface = {
+    criteria: null,
+    component: {} as Type<SearchFilterComponentInterface>,
+    domHost: 'mockHost'
+  };
+
   getFilters(
     searchState: SearchStateInterface
   ): Observable<SearchFilterInterface[]> {
-    return of([]);
+    return of([this.mockFilter]);
   }
 }
 describe('SearchViewModel', () => {
@@ -467,22 +475,38 @@ describe('SearchViewModel', () => {
         hot('a', { a: [] })
       );
     });
-    it('should return the unchanged filters if no state and no result updates are done with the prediction set to 0 if it was not set before', () => {
-      [true, false].forEach(criteriaIsArray => {
-        searchViewModel['filters$'].next([
-          getTestFilter('firstFilter', 140, undefined, false, criteriaIsArray),
-          getTestFilter('secondFilter', 3484, 38, false, criteriaIsArray)
-        ]);
-        expect(searchViewModel.searchFilters$).toBeObservable(
-          hot('a', {
-            a: [
-              getTestFilter('firstFilter', 140, null, false, criteriaIsArray),
-              getTestFilter('secondFilter', 3484, 38, false, criteriaIsArray)
-            ]
-          })
-        );
-      });
-    });
+    it(
+      'should return the unchanged filters' +
+        'if no state and no result updates are done with the prediction set to 0' +
+        ' if it was not set before',
+      () => {
+        [true, false].forEach(criteriaIsArray => {
+          searchViewModel['filters$'].next([
+            getTestFilter(
+              'firstFilter',
+              140,
+              undefined,
+              false,
+              criteriaIsArray
+            ),
+            getTestFilter('secondFilter', 3484, 38, false, criteriaIsArray)
+          ]);
+          searchViewModel.updateResult(
+            getTestSearchResult('someOtherName', new Map()) // searchResult without predictions
+          );
+
+          expect(searchViewModel.searchFilters$).toBeObservable(
+            hot('(ab)', {
+              a: [], // initial value
+              b: [
+                getTestFilter('firstFilter', 140, null, false, criteriaIsArray),
+                getTestFilter('secondFilter', 3484, 38, false, criteriaIsArray)
+              ]
+            })
+          );
+        });
+      }
+    );
     it('should not change null values to 0 and also not change 0 values if no new predictions where given', () => {
       [true, false].forEach(criteriaIsArray => {
         searchViewModel['filters$'].next([
@@ -490,9 +514,13 @@ describe('SearchViewModel', () => {
           getTestFilter('secondFilter', 140, 0, false, criteriaIsArray),
           getTestFilter('thirdFilter', 3484, 38, false, criteriaIsArray)
         ]);
+        searchViewModel.updateResult(
+          getTestSearchResult('someOtherName', new Map()) // searchResult without predictions
+        );
         expect(searchViewModel.searchFilters$).toBeObservable(
-          hot('a', {
-            a: [
+          hot('(ab)', {
+            a: [], // initial value
+            b: [
               getTestFilter('firstFilter', 140, null, false, criteriaIsArray),
               getTestFilter('secondFilter', 140, 0, false, criteriaIsArray),
               getTestFilter('thirdFilter', 3484, 38, false, criteriaIsArray)
@@ -574,7 +602,10 @@ describe('SearchViewModel', () => {
         searchViewModel.searchState$.next(searchState);
         searchViewModel['filters$'].next(initFilters);
         expect(searchViewModel.searchFilters$).toBeObservable(
-          hot('a', { a: expectedFilters })
+          hot('(ab)', {
+            a: [], // initial value
+            b: expectedFilters
+          })
         );
       });
     });

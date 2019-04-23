@@ -2,6 +2,7 @@
 @import './components/favorite-areas/favorite-areas.component.theme.scss';
 @import './components/edu-contents-search-modes/edu-contents-search-modes.component.theme.scss';
 @import './components/edu-contents-learning-area-overview/edu-contents-learning-area-overview.component.theme.scss';
+@import './components/edu-contents-search-by-column/edu-contents-search-by-column.component.theme.scss';
 @import './components/edu-contents-search-by-term/edu-contents-search-by-term.component.theme.scss';
 
 @mixin pages-edu-contents-theme() {
@@ -9,5 +10,6 @@
   @include pages-edu-contents-favorite-areas();
   @include pages-edu-contents-search-modes();
   @include pages-edu-contents-learning-area-overview();
+  @include pages-edu-contents-search-by-column();
   @include pages-edu-contents-search-by-term();
 }

@@ -60,6 +60,21 @@ describe('SearchTermComponent', () => {
     }));
   });
 
+  describe('autofocus', () => {
+    it('should set autofocus correctly', async(() => {
+      const inputEl = fixture.debugElement.query(By.css('input')).nativeElement;
+      expect(inputEl.autofocus).toBe(false);
+
+      component.autofocus = true;
+      component['ngOnInit']();
+      fixture.detectChanges();
+
+      fixture.whenStable().then(() => {
+        expect(inputEl.autofocus).toBe(true);
+      });
+    }));
+  });
+
   describe('output', () => {
     it('should emit the search term when the user presses enter', () => {
       spyOn(component.valueChange, 'emit');
