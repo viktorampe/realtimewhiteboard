@@ -1,9 +1,2 @@
 @mixin pages-edu-contents-search-by-column() {
-  .edu-contents-search-by-column__page-bar__label {
-    margin-right: $ui-form-spacing;
-
-    &:last-child {
-      margin-right: 0;
-    }
-  }
 }
