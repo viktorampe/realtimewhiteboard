@@ -1,6 +1,7 @@
 // tslint:disable:nx-enforce-module-boundaries
 // tslint:disable:member-ordering
 import { Component, Inject, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material';
 import { NavigationEnd, Router } from '@angular/router';
 import {
   AlertQueries,
@@ -11,9 +12,7 @@ import {
   EffectFeedbackInterface,
   EffectFeedbackQueries,
   FavoriteActions,
-  FavoriteFixture,
   FavoriteInterface,
-  FavoriteQueries,
   FavoriteTypesEnum,
   TocServiceInterface,
   TOC_SERVICE_TOKEN,
@@ -27,6 +26,7 @@ import {
   FavoriteServiceInterface,
   FAVORITE_SERVICE_TOKEN
 } from './../../../../dal/src/lib/favorite/favorite.service.interface';
+import { ManageCollectionComponent } from './../../../../ui/src/lib/manage-collection/manage-collection.component';
 import { LoginPageViewModel } from './loginpage.viewmodel';
 
 @Component({
@@ -65,7 +65,8 @@ export class LoginpageComponent implements OnInit {
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     private store: Store<AlertReducer.State>,
     private router: Router,
-    @Inject(TOC_SERVICE_TOKEN) private tocService: TocServiceInterface
+    @Inject(TOC_SERVICE_TOKEN) private tocService: TocServiceInterface,
+    private dialog: MatDialog
   ) {
     return;
     this.store.dispatch(
@@ -95,50 +96,47 @@ export class LoginpageComponent implements OnInit {
     this.store.dispatch(new UserActions.LoadUser({ force: true }));
   }
 
-  getFavorites(userId: number) {
-    return;
-    this.response = this.favoriteService.getAllForUser(userId);
+  openDialog() {
+    const dialogRef = this.dialog.open(ManageCollectionComponent, {
+      data: this.getDialogData()
+    });
+
+    dialogRef.componentInstance.selectionChanged.subscribe(result => {
+      console.log('Selection changed:', result);
+    });
   }
 
-  getAllFavorites() {
-    return;
-    this.store.dispatch(
-      new FavoriteActions.LoadFavorites({ userId: this.authService.userId })
-    );
-    setTimeout(() => {
-      this.store.select(FavoriteQueries.getAll).subscribe(favs => {
-        console.log(favs);
-      });
-    }, 2000);
-  }
-
-  addNewFavorite() {
-    this.store.dispatch(
-      new FavoriteActions.StartAddFavorite({
-        favorite: this.myFavorite,
-        userId: this.authService.userId
-      })
-    );
-  }
-
-  toggleFavorite() {
-    this.store.dispatch(
-      new FavoriteActions.ToggleFavorite({ favorite: this.myFavorite })
-    );
-  }
-
-  addFavorite(userId: number) {
-    this.response = this.favoriteService.addFavorite(
-      userId,
-      new FavoriteFixture({ id: null, personId: userId, learningAreaId: 2 })
-    );
-  }
-
-  removeFavorite(userId: number, favoriteId: number) {
-    this.response = this.favoriteService.deleteFavorite(userId, favoriteId);
-  }
-
-  getBooksForMethods() {
-    this.response = this.tocService.getBooksByMethodIds([1, 2, 3]);
+  private getDialogData() {
+    return {
+      title: 'Zelda needs some Links',
+      item: {
+        icon: 'task',
+        label: 'Zelda',
+        id: 42,
+        className: 'itemReceivingLinks'
+      },
+      linkableItems: [
+        {
+          icon: 'bundle',
+          label: 'Link',
+          id: 1,
+          className: 'itemToLink'
+        },
+        {
+          icon: 'bundle',
+          label: 'Toon Link',
+          id: 2,
+          className: 'itemToLink'
+        },
+        {
+          icon: 'bundle',
+          label: 'Dark Link',
+          id: 3,
+          className: 'itemToLink'
+        }
+      ],
+      linkedItemIds: new Set([1, 3]),
+      recentItemIds: new Set([1])
+    };
   }
 }
