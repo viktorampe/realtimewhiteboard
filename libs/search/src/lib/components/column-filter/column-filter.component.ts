@@ -25,14 +25,13 @@ import {
       ]),
       transition('* => backwardEnter', [
         //enter from left to right, position absolute needs to be added so a redrew due a new array will work
-        style({ transform: 'translateX(-100%)', position: 'absolute' }),
+        style({ transform: 'translateX(-100%)' }),
         animate('200ms ease-in-out', style({ transform: 'translateX(0%)' }))
       ]),
       transition(
         'forwardEnter => forwardLeave, backwardEnter => forwardLeave',
         [
           // leave right to left (* can not be used, only entered elements can animate leave)
-          style({ position: 'absolute' }),
           animate(
             '200ms ease-in-out',
             style({ transform: 'translateX(-100%)' })
@@ -43,11 +42,9 @@ import {
         'forwardEnter => backwardLeave, backwardEnter => backwardLeave, forwardEnter => void, backwardEnter => void',
         [
           // leave left to right, (* can not be used, only entered elements can animate leave)
-          style({ position: 'absolute' }),
           animate('200ms ease-in-out', style({ transform: 'translateX(100%)' }))
         ]
       ),
-      state('backwardEnter', style({ position: 'static' })), // set enter style absolute back to default static
       state('forwardLeave', style({ display: 'none' })), // hide using display none
       state('backwardLeave', style({ display: 'none' })) // hide using display none
     ])
