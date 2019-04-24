@@ -44,13 +44,9 @@ export const getNextError = createSelector(
 export const getFeedbackForAction = createSelector(
   selectEffectFeedbackState,
   (state: State, props: { actionType: string }) => {
-    const filteredId = Array.from(state.ids as string[])
-      .reverse()
-      .find(id => {
-        return state.entities[id].triggerAction.type === props.actionType;
-      });
-    console.log(state.entities[filteredId]);
+    const filteredId = (state.ids as string[]).find(id => {
+      return state.entities[id].triggerAction.type === props.actionType;
+    });
     return state.entities[filteredId];
-    //TODO -- instead of this, the error might need to be removed
   }
 );
