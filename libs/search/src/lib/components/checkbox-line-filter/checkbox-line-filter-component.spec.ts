@@ -107,7 +107,9 @@ describe('CheckboxLineFilterComponent', () => {
             id: 4,
             name: 'Informatica'
           },
-          visible: false
+          visible: false,
+          selected: true,
+          prediction: null
         }),
         new SearchFilterCriteriaValuesFixture({
           data: {
@@ -134,10 +136,15 @@ describe('CheckboxLineFilterComponent', () => {
   });
 
   it('should have this correct number of disabled items', () => {
-    const checkboxes = fixture.debugElement.queryAll(
+    const fakeDisabledcheckboxes = fixture.debugElement.queryAll(
       By.css('.mat-checkbox-disabled')
     );
-    expect(checkboxes.length).toBe(1);
+    expect(fakeDisabledcheckboxes.length).toBe(1);
+
+    const disabledCheckboxes = fixture.debugElement.queryAll(
+      By.css('[disabled]')
+    );
+    expect(disabledCheckboxes.length).toBe(1);
   });
 
   it('should emit the updated filtercriterium the selection changes', () => {
