@@ -35,7 +35,7 @@
           [svgIcon]="
             nestedTreeControl.isExpanded(node) ? 'expand-less' : 'expand-more'
           "
-          (click)="toggleNode(node)"
+          (click)="toggleNode(node, true)"
           campusClickPreventDefault
           campusClickStopPropagation
         ></mat-icon>

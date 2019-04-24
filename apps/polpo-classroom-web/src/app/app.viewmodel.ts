@@ -1,5 +1,5 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, OnDestroy } from '@angular/core';
 import {
   CredentialQueries,
   DalState,
@@ -21,7 +21,8 @@ import {
 } from '@campus/shared';
 import { DropdownMenuItemInterface, NavItem } from '@campus/ui';
 import { Action, select, Store } from '@ngrx/store';
-import { combineLatest, Observable } from 'rxjs';
+import { NavItemChanged } from 'libs/ui/src/lib/tree-nav/tree-nav.component';
+import { combineLatest, Observable, Subscription } from 'rxjs';
 import {
   filter,
   map,
@@ -35,7 +36,7 @@ import { NavItemService } from './services/nav-item-service';
 @Injectable({
   providedIn: 'root'
 })
-export class AppViewModel {
+export class AppViewModel implements OnDestroy {
   // intermediate streams
   private sideNavItems$: Observable<NavItem[]>;
   private profileMenuItems$: Observable<DropdownMenuItemInterface[]>;
@@ -46,6 +47,7 @@ export class AppViewModel {
   public bannerFeedback$: Observable<EffectFeedbackInterface>;
 
   private isDesktop: boolean;
+  private subscriptions: Subscription;
 
   constructor(
     private store: Store<DalState>,
@@ -77,25 +79,36 @@ export class AppViewModel {
     );
   }
 
-  public onNavItemChanged(navItem: NavItem) {
+  public onNavItemChanged(navItemChanged: NavItemChanged) {
+    const navItem = navItemChanged.navItem;
     this.store.dispatch(new UiActions.UpdateNavItem({ navItem }));
-    this.toggleSidebar(false);
+    if (!navItemChanged.clickedExpand) {
+      this.toggleSidebar(false);
+    }
   }
 
   private initialize() {
     this.setProfileItems();
     this.setNavItems();
     this.setFeedbackFlow();
+
+    this.subscriptions = new Subscription();
     this.subscribeToBreakpoints();
   }
 
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
+  }
+
   private subscribeToBreakpoints() {
-    this.breakPointObserver
-      .observe([Breakpoints.XSmall, Breakpoints.Small])
-      .pipe(map(result => result.matches))
-      .subscribe(result => {
-        this.isDesktop = !result;
-      });
+    this.subscriptions.add(
+      this.breakPointObserver
+        .observe([Breakpoints.XSmall, Breakpoints.Small])
+        .pipe(map(result => result.matches))
+        .subscribe(result => {
+          this.isDesktop = !result;
+        })
+    );
   }
 
   private setProfileItems() {
