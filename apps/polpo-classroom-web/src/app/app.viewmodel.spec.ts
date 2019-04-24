@@ -10,6 +10,7 @@ import {
   EffectFeedbackInterface,
   EffectFeedbackReducer,
   FavoriteActions,
+  FavoriteFixture,
   FavoriteInterface,
   FavoriteReducer,
   LearningAreaActions,
@@ -153,12 +154,13 @@ describe('AppViewModel', () => {
     ];
 
     mockFavorites = [
-      {
+      new FavoriteFixture({
+        id: 1,
         type: 'area', // TODO in selector: filter on type:'area'
         learningAreaId: 1,
         learningArea: mockLearningAreas[0],
         created: new Date(2018, 11 - 1, 30)
-      }
+      })
     ];
   });
 
@@ -232,7 +234,7 @@ describe('AppViewModel', () => {
 
     it('should dispatch action on sidenavItem change', () => {
       store.dispatch(new UserActions.UserLoaded(new PersonFixture()));
-      viewModel.onNavItemChanged(mockNavItem);
+      viewModel.onNavItemChanged({ navItem: mockNavItem });
       expect(store.dispatch).toHaveBeenCalledWith(
         new UiActions.UpdateNavItem({ navItem: mockNavItem })
       );

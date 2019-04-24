@@ -18,7 +18,7 @@ export interface NavItem {
 
 export interface NavItemChanged {
   navItem: NavItem;
-  clickedExpand: boolean;
+  clickedExpand?: boolean;
 }
 
 /**

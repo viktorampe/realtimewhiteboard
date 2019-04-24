@@ -165,8 +165,10 @@ describe('TreeNavComponent', () => {
     expect(component.navItemChanged.emit).toHaveBeenCalled();
     expect(component.navItemChanged.emit).toHaveBeenCalledTimes(1);
     expect(component.navItemChanged.emit).toHaveBeenCalledWith({
-      ...navItem,
-      expanded: true
+      navItem: {
+        ...navItem,
+        expanded: true
+      }
     });
   });
 });
