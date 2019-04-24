@@ -158,6 +158,17 @@ describe('ManageCollectionComponent', () => {
       expect(itemsInRecentList).toEqual(mappedLinkableItems);
     });
 
+    it('should not  show the recent linkable items block if there are none', () => {
+      component.recentLinkableItems = [];
+      fixture.detectChanges();
+
+      expect(
+        fixture.debugElement.query(
+          By.css('.ui-manage-collection__recent-items')
+        )
+      ).toBeFalsy();
+    });
+
     describe('filter', () => {
       let filterService: FilterServiceInterface;
       beforeEach(() => {
