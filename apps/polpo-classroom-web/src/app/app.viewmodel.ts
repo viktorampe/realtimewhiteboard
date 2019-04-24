@@ -61,9 +61,7 @@ export class AppViewModel implements OnDestroy {
 
   // sets sideNav opened state
   public toggleSidebar(open: boolean) {
-    if (!this.isDesktop) {
-      this.store.dispatch(new UiActions.ToggleSideNav({ open }));
-    }
+    this.store.dispatch(new UiActions.ToggleSideNav({ open }));
   }
 
   // event handler for feedback dismiss
@@ -82,7 +80,8 @@ export class AppViewModel implements OnDestroy {
   public onNavItemChanged(navItemChanged: NavItemChanged) {
     const navItem = navItemChanged.navItem;
     this.store.dispatch(new UiActions.UpdateNavItem({ navItem }));
-    if (!navItemChanged.clickedExpand) {
+
+    if (!navItemChanged.clickedExpand && !this.isDesktop) {
       this.toggleSidebar(false);
     }
   }
