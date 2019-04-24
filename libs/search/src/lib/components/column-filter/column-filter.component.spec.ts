@@ -82,20 +82,24 @@ describe('ColumnFilterComponent', () => {
     it('should not change forwardAnimation and previousFilterCriteriaCount if passed value is undefined', () => {
       component.filterCriteria = undefined;
       fixture.detectChanges();
-      expect(component.forwardAnimation).toBe(true);
-      expect(component['previousFilterCriteriaCount']).toBe(undefined);
+      expect(component['columnFilterService'].forwardAnimation).toBe(true);
+      expect(component['columnFilterService'].previousFilterCriteriaCount).toBe(
+        undefined
+      );
     });
     it('should not change forwardAnimation and previousFilterCriteriaCount if passed value is null', () => {
       component.filterCriteria = null;
       fixture.detectChanges();
-      expect(component.forwardAnimation).toBe(true);
-      expect(component['previousFilterCriteriaCount']).toBe(undefined);
+      expect(component['columnFilterService'].forwardAnimation).toBe(true);
+      expect(component['columnFilterService'].previousFilterCriteriaCount).toBe(
+        undefined
+      );
     });
     it('should update forwardAnimation to false and previousFilterCriteriaCount to the count if the first value is passed', () => {
       component.filterCriteria = mockFilterCriteria;
       fixture.detectChanges();
-      expect(component.forwardAnimation).toBe(false);
-      expect(component['previousFilterCriteriaCount']).toBe(
+      expect(component['columnFilterService'].forwardAnimation).toBe(false);
+      expect(component['columnFilterService'].previousFilterCriteriaCount).toBe(
         mockFilterCriteria.length
       );
     });
@@ -104,8 +108,8 @@ describe('ColumnFilterComponent', () => {
       fixture.detectChanges();
       component.filterCriteria = [...mockFilterCriteria, ...mockFilterCriteria];
       fixture.detectChanges();
-      expect(component.forwardAnimation).toBe(true);
-      expect(component['previousFilterCriteriaCount']).toBe(
+      expect(component['columnFilterService'].forwardAnimation).toBe(true);
+      expect(component['columnFilterService'].previousFilterCriteriaCount).toBe(
         mockFilterCriteria.length * 2
       );
     });
@@ -114,8 +118,8 @@ describe('ColumnFilterComponent', () => {
       fixture.detectChanges();
       component.filterCriteria = mockFilterCriteria;
       fixture.detectChanges();
-      expect(component.forwardAnimation).toBe(false);
-      expect(component['previousFilterCriteriaCount']).toBe(
+      expect(component['columnFilterService'].forwardAnimation).toBe(false);
+      expect(component['columnFilterService'].previousFilterCriteriaCount).toBe(
         mockFilterCriteria.length
       );
     });
@@ -130,7 +134,7 @@ describe('ColumnFilterComponent', () => {
       });
     });
     it('should return true only for the second to last column if new criteria are passed and preserveColumn is true', () => {
-      component.preserveColumn = true;
+      component['columnFilterService'].preserveColumn = true;
       component.filterCriteria = [...mockFilterCriteria, ...mockFilterCriteria];
       fixture.detectChanges();
       const expectedReturnValues = [false, false, true, false];
@@ -167,25 +171,25 @@ describe('ColumnFilterComponent', () => {
   describe('onFilterSelectionChange', () => {
     it(`should set the new 'preserveColumn' value (false to true)`, () => {
       component.filterCriteria = mockFilterCriteria;
-      expect(component.preserveColumn).toBe(false);
+      expect(component['columnFilterService'].preserveColumn).toBe(false);
       component.onFilterSelectionChange(
         new SearchFilterCriteriaValuesFixture(),
         true,
         mockFilterCriteria[0].name
       );
-      expect(component.preserveColumn).toBe(true);
+      expect(component['columnFilterService'].preserveColumn).toBe(true);
     });
     it(`should set the new 'preserveColumn' value (true to false)`, () => {
       component.filterCriteria = mockFilterCriteria;
-      component.preserveColumn = true;
+      component['columnFilterService'].preserveColumn = true;
       fixture.detectChanges();
-      expect(component.preserveColumn).toBe(true);
+      expect(component['columnFilterService'].preserveColumn).toBe(true);
       component.onFilterSelectionChange(
         new SearchFilterCriteriaValuesFixture(),
         false,
         mockFilterCriteria[0].name
       );
-      expect(component.preserveColumn).toBe(false);
+      expect(component['columnFilterService'].preserveColumn).toBe(false);
     });
     it('should reset all the selected values to false exept the value that is passed', () => {
       const selectedTrueMockFilterCriteria: SearchFilterCriteriaInterface[] = [

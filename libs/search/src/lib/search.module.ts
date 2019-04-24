@@ -20,6 +20,7 @@ import { CheckboxLineFilterComponent } from './components/checkbox-line-filter/c
 import { CheckboxFilterComponent } from './components/checkbox-list-filter/checkbox-filter/checkbox-filter.component';
 import { CheckboxListFilterComponent } from './components/checkbox-list-filter/checkbox-list-filter.component';
 import { ColumnFilterComponent } from './components/column-filter/column-filter.component';
+import { ColumnFilterService } from './components/column-filter/column-filter.service';
 import { ResultItemBase } from './components/results-list/result.component.base';
 import {
   ResultListDirective,
@@ -77,6 +78,7 @@ import { SearchPortalDirective } from './directives/search-portal.directive';
     SearchComponent,
     SearchPortalDirective
   ],
+  providers: [ColumnFilterService],
   entryComponents: [
     CheckboxFilterComponent,
     CheckboxLineFilterComponent,
