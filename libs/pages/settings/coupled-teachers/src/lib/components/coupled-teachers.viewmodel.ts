@@ -97,7 +97,8 @@ export class CoupledTeachersViewModel {
     this.store.dispatch(
       new TeacherStudentActions.LinkTeacherStudent({
         publicKey,
-        userId: this.authService.userId
+        userId: this.authService.userId,
+        handleErrorAutomatically: false
       })
     );
   }
