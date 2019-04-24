@@ -1,5 +1,4 @@
 <ng-container
-  @items
   *ngFor="let option of filteredFilterCriterium.values; let i = index"
 >
   <!-- titles -->
@@ -11,7 +10,7 @@
     "
     [value]="option"
     [checked]="option.selected"
-    [indeterminate]="getIndeterminateStatus(option)"
+    [indeterminate]="indeterminateStatus[option.data.id]"
     (change)="onChange($event)"
     >{{ getDisplayValue(option)
     }}<span *ngIf="option.prediction" class="checkbox-filter__item__prediction">

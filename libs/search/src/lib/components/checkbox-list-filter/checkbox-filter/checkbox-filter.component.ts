@@ -23,6 +23,7 @@ export class CheckboxFilterComponent implements AfterViewInit, OnDestroy {
   public showMoreItems: boolean; // expand aantal zichtbare titels
   public filteredFilterCriterium: SearchFilterCriteriaInterface;
   public notifyChildren$ = new Subject<MatCheckboxChange>();
+  public indeterminateStatus: { [key: string]: boolean };
 
   private subscriptions = new Subscription();
   private _criterium: SearchFilterCriteriaInterface;
@@ -37,6 +38,13 @@ export class CheckboxFilterComponent implements AfterViewInit, OnDestroy {
   set criterium(value: SearchFilterCriteriaInterface) {
     this._criterium = value;
     this.filteredFilterCriterium = this.getFilteredCriterium(value);
+
+    this.indeterminateStatus = {};
+    this.filteredFilterCriterium.values.forEach(critValue => {
+      this.indeterminateStatus[critValue.data.id] = this.getIndeterminateStatus(
+        critValue
+      );
+    });
   }
 
   @Input() public parentValueRef: SearchFilterCriteriaValuesInterface;
@@ -87,12 +95,12 @@ export class CheckboxFilterComponent implements AfterViewInit, OnDestroy {
     return value.data[this.criterium.displayProperty];
   }
 
-  public getIndeterminateStatus(
+  private getIndeterminateStatus(
     filterCriteriaValue: SearchFilterCriteriaValuesInterface
   ): boolean {
     return (
       !filterCriteriaValue.selected &&
-      filterCriteriaValue.child &&
+      !!filterCriteriaValue.child &&
       !(
         filterCriteriaValue.child.values.every(
           childValue => childValue.selected
