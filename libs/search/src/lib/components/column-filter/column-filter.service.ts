@@ -6,7 +6,6 @@ import { SearchFilterCriteriaInterface } from '../../interfaces';
 })
 export class ColumnFilterService {
   public preserveColumn: boolean;
-  public forwardAnimation: boolean;
   public previousFilterCriteriaCount: number;
   public previousFilterCriteria: SearchFilterCriteriaInterface;
 
@@ -15,9 +14,7 @@ export class ColumnFilterService {
   }
 
   public reset(): void {
-    console.log('ColumnFilterService');
     this.preserveColumn = false;
-    this.forwardAnimation = true;
     this.previousFilterCriteriaCount = 0;
     // start with an empty criteria state
     this.previousFilterCriteria = {

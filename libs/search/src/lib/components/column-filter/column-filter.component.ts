@@ -14,12 +14,12 @@ import { ColumnFilterService } from './column-filter.service';
   animations: [
     trigger('slideInOut', [
       transition('* => forwardEnter', [
-        //enter from right to left
+        //enter from left to right
         style({ transform: 'translateX(-50%)' }),
         animate('2000ms ease-in-out', style({ transform: 'translateX(0%)' }))
       ]),
       transition('* => backwardEnter', [
-        //enter from left to right
+        //enter from right to left
         style({ transform: 'translateX(0%)' }),
         animate('2000ms ease-in-out', style({ transform: 'translateX(-50%)' }))
       ])
@@ -28,6 +28,7 @@ import { ColumnFilterService } from './column-filter.service';
 })
 export class ColumnFilterComponent implements SearchFilterComponentInterface {
   private _filterCriteria: SearchFilterCriteriaInterface[];
+  private forwardAnimation: boolean;
   filterCriteriaToToggle: SearchFilterCriteriaInterface[];
 
   @Input()
@@ -36,15 +37,21 @@ export class ColumnFilterComponent implements SearchFilterComponentInterface {
       // input is set by searchComponent, which can also be a single criterium
       if (!Array.isArray(value)) value = [value];
 
-      this.columnFilterService.forwardAnimation =
+      this.forwardAnimation =
         this.columnFilterService.previousFilterCriteriaCount > value.length;
       this.columnFilterService.previousFilterCriteriaCount = value.length;
 
-      const newCriteria: SearchFilterCriteriaInterface = value.slice(-1)[0];
-      this.filterCriteriaToToggle = this.columnFilterService.forwardAnimation
-        ? [newCriteria, this.columnFilterService.previousFilterCriteria]
-        : [this.columnFilterService.previousFilterCriteria, newCriteria];
-      this.columnFilterService.previousFilterCriteria = newCriteria;
+      if (this.columnFilterService.preserveColumn) {
+        // render last 2 columns
+        // because clicking through to the next level will not trigger new filterCriteria,
+        // we want the next level to already be ready in the tree
+        this.filterCriteriaToToggle = value.slice(-2);
+      } else {
+        const newCriteria: SearchFilterCriteriaInterface = value.slice(-1)[0];
+        this.filterCriteriaToToggle = this.forwardAnimation
+          ? [newCriteria, this.columnFilterService.previousFilterCriteria]
+          : [this.columnFilterService.previousFilterCriteria, newCriteria];
+      }
     }
 
     this._filterCriteria = value;
@@ -59,7 +66,7 @@ export class ColumnFilterComponent implements SearchFilterComponentInterface {
   constructor(private columnFilterService: ColumnFilterService) {}
 
   /**
-   * returns the animation state string that is used to provide specific animations of forward and backward enter
+   * returns the animation state string that is used to provide forward or backward animations
    * forward means the animation will go from left to right, backward from right to left
    *
    * @returns {string}
@@ -69,9 +76,7 @@ export class ColumnFilterComponent implements SearchFilterComponentInterface {
     if (this.columnFilterService.preserveColumn) {
       return 'noAnimation';
     }
-    return `${
-      this.columnFilterService.forwardAnimation ? 'forward' : 'backward'
-    }Enter`;
+    return this.forwardAnimation ? 'forwardEnter' : 'backwardEnter';
   }
 
   animationDone(event): void {
@@ -81,7 +86,10 @@ export class ColumnFilterComponent implements SearchFilterComponentInterface {
     } else if (event.toState === 'forwardEnter') {
       // remove last column
       this.filterCriteriaToToggle = this.filterCriteriaToToggle.slice(0, 1);
+    } else if (event.toState === 'noAnimation') {
+      // this.columnFilterService.preserveColumn = false;
     }
+    this.columnFilterService.previousFilterCriteria = this.filterCriteriaToToggle[0];
   }
 
   onFilterSelectionChange(
@@ -89,7 +97,7 @@ export class ColumnFilterComponent implements SearchFilterComponentInterface {
     preserveColumn: boolean = false,
     filterCriterionName: string
   ) {
-    const selectionChanged = !filterCriterionValue.selected;
+    const selectionChanged = filterCriterionValue.selected !== true;
     this.columnFilterService.preserveColumn = preserveColumn;
 
     // first reset all selected markers of criteria with the same name to false
