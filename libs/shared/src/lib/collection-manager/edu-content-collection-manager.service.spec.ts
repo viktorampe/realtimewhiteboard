@@ -31,13 +31,14 @@ import {
 } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
 import { of } from 'rxjs';
+import { EduContentCollectionManagerService } from './edu-content-collection-manager.service';
 import {
-  EduContentCollectionManagerService,
+  EduContentCollectionManagerServiceInterface,
   EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN
-} from './edu-content-collection-manager.service';
+} from './edu-content-collection-manager.service.interface';
 
 describe('EduContentCollectionManagerService', () => {
-  let service: EduContentCollectionManagerService;
+  let service: EduContentCollectionManagerServiceInterface;
   let store: Store<DalState>;
   let collectionManagerService: CollectionManagerServiceInterface;
   let mockToggleEvent: ItemToggledInCollectionInterface;

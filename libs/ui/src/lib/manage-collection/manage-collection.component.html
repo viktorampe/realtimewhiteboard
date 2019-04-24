@@ -10,7 +10,7 @@
     <mat-selection-list (selectionChange)="onSelectionChanged($event)">
       <div
         class="ui-manage-collection__recent-items"
-        *ngIf="!filterTextInput.input.value"
+        *ngIf="!filterTextInput.input.value && recentLinkableItems.length > 0"
       >
         <h3 mat-subheader>Recent gebruikt</h3>
         <mat-list-option

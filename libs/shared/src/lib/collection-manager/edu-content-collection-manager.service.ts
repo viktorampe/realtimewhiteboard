@@ -1,4 +1,4 @@
-import { Inject, Injectable, InjectionToken } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {
   BundleActions,
   BundleInterface,
@@ -28,15 +28,13 @@ import {
 import { Store } from '@ngrx/store';
 import { combineLatest, Observable, of } from 'rxjs';
 import { filter, map, shareReplay, switchMap, take } from 'rxjs/operators';
-
-export const EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN = new InjectionToken(
-  'EduContentCollectionManagerService'
-);
+import { EduContentCollectionManagerServiceInterface } from './edu-content-collection-manager.service.interface';
 
 @Injectable({
   providedIn: 'root'
 })
-export class EduContentCollectionManagerService {
+export class EduContentCollectionManagerService
+  implements EduContentCollectionManagerServiceInterface {
   constructor(
     private store: Store<DalState>,
     @Inject(COLLECTION_MANAGER_SERVICE_TOKEN)
@@ -339,6 +337,7 @@ export class EduContentCollectionManagerService {
     recentItemIds$: Observable<number[]>
   ) {
     return combineLatest(linkableItems$, linkedItemIds$, recentItemIds$).pipe(
+      take(1),
       switchMap(
         ([linkableItems, linkedIds, recentIds]): Observable<
           ItemToggledInCollectionInterface
