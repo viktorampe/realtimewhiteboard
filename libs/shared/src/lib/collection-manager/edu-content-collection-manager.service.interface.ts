@@ -8,7 +8,7 @@ export const EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN = new InjectionToken(
 export interface EduContentCollectionManagerServiceInterface {
   manageBundlesForContent(
     content: ContentInterface,
-    learningAreaId: number
+    learningAreaId?: number
   ): void;
 
   manageTasksForContent(content: EduContentInterface): void;
