@@ -86,7 +86,7 @@ export class TeacherStudentEffects {
           triggerAction: action,
           message: error.message,
           type: 'error',
-          display: false,
+          display: action.payload.handleErrorAutomatically,
           priority: Priority.HIGH
         });
         return new EffectFeedbackActions.AddEffectFeedback({
