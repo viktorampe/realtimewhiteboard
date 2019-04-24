@@ -32,7 +32,7 @@
     }
 
     &__icon {
-      color: $ui-notification_icon-color;
+      color: $ui-notification_icon-color !important;
       background-color: $ui-notification_icon-bg-color;
     }
 
@@ -56,6 +56,19 @@
 
       &.ui-notification--unread {
         border-left: solid 5px $ui-notification--accented--unread_border-color;
+      }
+
+      & .ui-notification__text {
+        font-style: italic;
+
+        > span {
+          padding-left: 10px;
+          white-space: nowrap;
+
+          span {
+            text-decoration: underline;
+          }
+        }
       }
     }
   }

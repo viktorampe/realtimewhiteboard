@@ -1,11 +1,21 @@
 @import '../../lib/breakpoints.scss';
 
 :host {
-  padding: 10px;
-  padding-left: 5px; //compensate for border-left -> theme
-  position: relative;
-  text-decoration: none;
   display: flex;
+}
+
+:host[dropdown] {
+  margin: 5px 0px;
+}
+
+[mat-menu-item] {
+  display: flex;
+  white-space: normal;
+  line-height: unset;
+  height: unset;
+  padding-left: 8px;
+  padding-right: 8px;
+  width: 100%;
 }
 
 .ui-notification {
@@ -13,6 +23,7 @@
     display: flex;
     flex-direction: row;
     flex: 1 1 auto;
+    align-items: center;
   }
 
   &__badge {
@@ -50,27 +61,9 @@
     flex: 0 0 auto;
   }
 
-  &__text {
-    margin: 5px;
-    align-self: center;
-  }
-
   &__buttons {
     align-self: center;
     display: flex;
-  }
-
-  &--accent &__text {
-    font-style: italic;
-
-    > span {
-      padding-left: 10px;
-      white-space: nowrap;
-
-      span {
-        text-decoration: underline;
-      }
-    }
   }
 }
 
@@ -83,6 +76,7 @@
     &__title,
     &__text {
       align-self: flex-start;
+      margin: auto 0;
     }
 
     &__end {
@@ -112,10 +106,12 @@
       height: 34px;
     }
 
+    &__icon,
     &__date,
     &__title,
     &__text {
       margin-top: 0px;
+      margin-bottom: 0px;
       align-self: flex-start;
     }
 

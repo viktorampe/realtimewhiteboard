@@ -58,8 +58,10 @@
             height: $shared-header__page-bar__element-height;
             width: $shared-header__page-bar__page-bar-style--searchmode-button-width;
           }
+
           &--searchmode-label {
             margin-right: $ui-form-spacing;
+
             &:last-child {
               margin-right: 0;
             }
@@ -80,6 +82,7 @@
 
     .shared-header__app-bar__alerts {
       display: flex;
+      align-items: center;
       margin-right: $shared-header__page-bar__divider-margin-left-right;
 
       &__button {
@@ -89,6 +92,10 @@
         &:hover {
           color: lighten($shared-color-1, 10%);
         }
+      }
+
+      .ui-dropdown-menu__trigger {
+        height: $shared-header__app-bar-height * 1.2; // used for vertical positioning dropdown
       }
     }
 
