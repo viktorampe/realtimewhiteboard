@@ -19,9 +19,8 @@ import {
   FeedBackServiceInterface,
   FEEDBACK_SERVICE_TOKEN
 } from '@campus/shared';
-import { DropdownMenuItemInterface, NavItem } from '@campus/ui';
+import { DropdownMenuItemInterface, NavItem, NavItemChanged } from '@campus/ui';
 import { Action, select, Store } from '@ngrx/store';
-import { NavItemChanged } from 'libs/ui/src/lib/tree-nav/tree-nav.component';
 import { combineLatest, Observable, Subscription } from 'rxjs';
 import {
   filter,

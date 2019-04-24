@@ -36,6 +36,6 @@ export {
   TileComponent,
   TileSecondaryActionInterface
 } from './lib/tile/tile.component';
-export { NavItem } from './lib/tree-nav/tree-nav.component';
+export { NavItem, NavItemChanged } from './lib/tree-nav/tree-nav.component';
 export * from './lib/ui.module';
 export { JoinPipe } from './lib/utils/pipes/join/join.pipe';
