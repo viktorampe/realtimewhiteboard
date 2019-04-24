@@ -60,11 +60,12 @@ export class ColumnFilterComponent implements SearchFilterComponentInterface {
   @Input()
   public set filterCriteria(value: SearchFilterCriteriaInterface[]) {
     if (value) {
+      // input is set by searchComponent, which can also be a single criterium
+      if (!Array.isArray(value)) value = [value];
+
       this.columnFilterService.forwardAnimation =
         this.columnFilterService.previousFilterCriteriaCount < value.length;
       this.columnFilterService.previousFilterCriteriaCount = value.length;
-      // input is set by searchComponent, which can also be a single criterium
-      if (!Array.isArray(value)) value = [value];
     }
 
     this._filterCriteria = value;

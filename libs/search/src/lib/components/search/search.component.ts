@@ -21,6 +21,7 @@ import {
 import { Observable, Subscription } from 'rxjs';
 import { debounceTime, skipWhile } from 'rxjs/operators';
 import { SearchPortalDirective } from '../../directives';
+import { ColumnFilterService } from '../column-filter/column-filter.service';
 import { SearchTermComponent } from '../search-term/search-term.component';
 import { SearchViewModel } from '../search.viewmodel';
 import {
@@ -77,7 +78,8 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
 
   constructor(
     private searchViewmodel: SearchViewModel,
-    private componentFactoryResolver: ComponentFactoryResolver
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private columnFilterService: ColumnFilterService
   ) {
     this.searchState$ = this.searchViewmodel.searchState$.pipe(
       skipWhile(searchState => !searchState) // first emit from viewmodel is null
@@ -94,6 +96,9 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
 
     // clean up subscriptions
     this.subscriptions.unsubscribe();
+
+    // reset filter-specific services
+    this.columnFilterService.reset();
   }
 
   ngOnChanges(changes: SimpleChanges) {

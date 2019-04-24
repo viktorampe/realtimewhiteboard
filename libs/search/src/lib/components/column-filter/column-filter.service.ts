@@ -9,6 +9,10 @@ export class ColumnFilterService {
   public previousFilterCriteriaCount: number;
 
   constructor() {
+    this.reset();
+  }
+
+  public reset(): void {
     this.preserveColumn = false;
     this.forwardAnimation = true;
     this.previousFilterCriteriaCount = undefined;
