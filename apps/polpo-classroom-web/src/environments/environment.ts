@@ -25,6 +25,9 @@ export const environment: EnvironmentInterface = {
   login: {
     url: 'http://student.polpo.localhost:3014/dev'
   },
+  termPrivacy: {
+    url: 'http://student.polpo.localhost:3014/dev'
+  },
   api: {
     APIBase: 'http://api.polpo.localhost:3000'
   },
