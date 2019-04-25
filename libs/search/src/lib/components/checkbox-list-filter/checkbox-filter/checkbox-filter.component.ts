@@ -24,6 +24,7 @@ export class CheckboxFilterComponent implements AfterViewInit, OnDestroy {
   public filteredFilterCriterium: SearchFilterCriteriaInterface;
   public notifyChildren$ = new Subject<MatCheckboxChange>();
   public indeterminateStatus: { [key: string]: boolean };
+  public showMoreStatus: boolean;
 
   private subscriptions = new Subscription();
   private _criterium: SearchFilterCriteriaInterface;
@@ -48,6 +49,12 @@ export class CheckboxFilterComponent implements AfterViewInit, OnDestroy {
         critValue
       );
     });
+
+    this.showMoreStatus = this.getShowMoreStatus(
+      this.maxVisibleItems,
+      this.filteredFilterCriterium,
+      this.indeterminateStatus
+    );
   }
 
   @Input() public parentValueRef: SearchFilterCriteriaValuesInterface;
@@ -99,17 +106,19 @@ export class CheckboxFilterComponent implements AfterViewInit, OnDestroy {
     return value.data[this.criterium.displayProperty];
   }
 
-  public showShowMore(): boolean {
-    if (
-      this.maxVisibleItems &&
-      this.filteredFilterCriterium.values.length > this.maxVisibleItems
-    ) {
-      const valuesAboveMaxVisibleItems = this.filteredFilterCriterium.values.slice(
-        this.maxVisibleItems
+  // calculates if a 'show more' link is needed
+  private getShowMoreStatus(
+    maxVisibleItems: number,
+    filterCriterium: SearchFilterCriteriaInterface,
+    indeterminateStatusDict
+  ): boolean {
+    if (maxVisibleItems && filterCriterium.values.length > maxVisibleItems) {
+      const valuesAboveMaxVisibleItems = filterCriterium.values.slice(
+        maxVisibleItems
       );
 
       const invisibleItems = valuesAboveMaxVisibleItems.filter(
-        value => !value.selected && !this.indeterminateStatus[value.data.id]
+        value => !value.selected && !indeterminateStatusDict[value.data.id]
       );
 
       return invisibleItems.length > 0;
@@ -118,6 +127,8 @@ export class CheckboxFilterComponent implements AfterViewInit, OnDestroy {
     }
   }
 
+  // calculates if a checkbox selection status is indeterminate
+  // based on the selection values of it's children
   private getIndeterminateStatus(
     filterCriteriaValue: SearchFilterCriteriaValuesInterface
   ): boolean {
