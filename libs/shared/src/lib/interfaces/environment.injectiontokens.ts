@@ -14,6 +14,10 @@ export const ENVIRONMENT_LOGOUT_TOKEN = new InjectionToken('environmentLogout');
 
 export const ENVIRONMENT_LOGIN_TOKEN = new InjectionToken('environmentLogin');
 
+export const ENVIRONMENT_TERM_PRIVACY_TOKEN = new InjectionToken(
+  'environmentTermPrivacy'
+);
+
 export const ENVIRONMENT_ERROR_MANAGEMENT_FEATURE_TOKEN = new InjectionToken(
   'environmentErrorManagementFeature'
 );
