@@ -5,6 +5,7 @@
     theme="dark"
     [source]="data.linkableItems"
     class="ui-manage-collection__filter"
+    autocomplete="off"
   ></campus-filter-text-input>
   <mat-dialog-content>
     <mat-selection-list (selectionChange)="onSelectionChanged($event)">

@@ -30,6 +30,7 @@ export class FilterTextInputComponent<I, O> {
   public input = new FormControl('');
   private filterableItem: FilterableItem<I, O>;
 
+  @Input() autocomplete = 'on';
   @Input() theme: FilterTextInputTheme;
   @Input() placeholder = 'Filter';
   @Input()
