@@ -84,24 +84,31 @@ export class AppViewModel implements OnDestroy {
     this.setProfileItems();
     this.setNavItems();
     this.setFeedbackFlow();
+    this.toggleSidebarOnNavigation();
+  }
 
-    this.subscriptions = new Subscription();
+  private toggleSidebarOnNavigation() {
+    //We have to drain the microtask queue, or something
+    //This executes after all current tasks have finished
+    setTimeout(() => {
+      this.subscriptions = new Subscription();
 
-    const isMobile$: Observable<Boolean> = this.breakPointObserver
-      .observe([Breakpoints.XSmall, Breakpoints.Small])
-      .pipe(map(result => result.matches));
-
-    //Hide sidebar on mobile if we navigate or change screensize
-    this.subscriptions.add(
-      this.store
-        .pipe(
-          select(getRouterState),
-          switchMap(() => isMobile$)
-        )
-        .subscribe(isMobile => {
-          this.toggleSidebar(!isMobile);
-        })
-    );
+      //Hide sidebar on mobile if we navigate or change screensize
+      this.subscriptions.add(
+        this.store
+          .pipe(
+            select(getRouterState),
+            switchMap(() => {
+              return this.breakPointObserver
+                .observe([Breakpoints.XSmall, Breakpoints.Small])
+                .pipe(map(result => result.matches));
+            })
+          )
+          .subscribe(isMobile => {
+            this.toggleSidebar(!isMobile);
+          })
+      );
+    });
   }
 
   ngOnDestroy() {
