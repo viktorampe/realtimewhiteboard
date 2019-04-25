@@ -25,7 +25,7 @@ import { EduContentsViewModel } from '../edu-contents.viewmodel';
 })
 export class EduContentSearchByTermComponent implements OnInit, AfterViewInit {
   public searchMode: SearchModeInterface;
-  public searchState$: Observable<SearchStateInterface>;
+  public initialSearchState$: Observable<SearchStateInterface>;
   public searchResults$: Observable<SearchResultInterface>;
   public autoCompleteValues$: Observable<string[]>;
   public autoFocusSearchTerm: boolean;
@@ -47,8 +47,8 @@ export class EduContentSearchByTermComponent implements OnInit, AfterViewInit {
       );
     });
 
-    this.searchState$ = this.eduContentsViewModel.getInitialSearchState();
-    this.searchState$.pipe(take(1)).subscribe(state => {
+    this.initialSearchState$ = this.eduContentsViewModel.getInitialSearchState();
+    this.initialSearchState$.pipe(take(1)).subscribe(state => {
       this.autoFocusSearchTerm = this.isSearchTermEmpty(state);
     });
     this.searchResults$ = this.eduContentsViewModel.searchResults$;

@@ -226,7 +226,7 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
     return searchFilter;
   }
 
-  public getPredictionFilterNames(searchState: SearchStateInterface): string[] {
+  public getPredictionFilterNames(): string[] {
     return Object.values(this.filterQueries).map(value => value.name);
   }
 }
