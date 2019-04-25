@@ -45,6 +45,7 @@ import {
   EnvironmentMessagesFeatureInterface,
   EnvironmentSearchModesInterface,
   EnvironmentSsoInterface,
+  EnvironmentTermPrivacyInterface,
   EnvironmentWebsiteInterface,
   ENVIRONMENT_ALERTS_FEATURE_TOKEN,
   ENVIRONMENT_API_TOKEN,
@@ -55,6 +56,7 @@ import {
   ENVIRONMENT_MESSAGES_FEATURE_TOKEN,
   ENVIRONMENT_SEARCHMODES_TOKEN,
   ENVIRONMENT_SSO_TOKEN,
+  ENVIRONMENT_TERM_PRIVACY_TOKEN,
   ENVIRONMENT_WEBSITE_TOKEN
 } from './interfaces';
 import { AlertToNotificationItemPipe } from './pipes/alert-to-notification/alert-to-notification-pipe';
@@ -139,6 +141,7 @@ export class SharedModule {
     environmentWebsite: EnvironmentWebsiteInterface,
     environmentLogout: EnvironmentLogoutInterface,
     environmentLogin: EnvironmentLoginInterface,
+    environmentTermPrivacy: EnvironmentTermPrivacyInterface,
     environmentApi: EnvironmentApiInterface,
     environmentSsoSettings: EnvironmentSsoInterface,
     environmentSearchModes: EnvironmentSearchModesInterface
@@ -169,6 +172,10 @@ export class SharedModule {
         {
           provide: ENVIRONMENT_LOGIN_TOKEN,
           useValue: environmentLogin
+        },
+        {
+          provide: ENVIRONMENT_TERM_PRIVACY_TOKEN,
+          useValue: environmentTermPrivacy
         },
         {
           provide: ENVIRONMENT_ICON_MAPPING_TOKEN,

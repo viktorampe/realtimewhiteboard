@@ -56,6 +56,7 @@ configureBufferSize(150);
       environment.website,
       environment.logout,
       environment.login,
+      environment.termPrivacy,
       environment.api,
       environment.sso,
       environment.searchModes
