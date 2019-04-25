@@ -85,6 +85,17 @@ export class LoginpageComponent implements OnInit {
         );
       })
     );
+
+    // fill store
+    /*this.store.dispatch(new BundleActions.LoadBundles({ userId: 186 }));
+    this.store.dispatch(
+      new UnlockedContentActions.LoadUnlockedContents({ userId: 186 })
+    );
+    this.store.dispatch(new TaskActions.LoadTasks({ userId: 186 }));
+    this.store.dispatch(
+      new TaskEduContentActions.LoadTaskEduContents({ userId: 186 })
+    );
+    this.store.dispatch(new EduContentActions.LoadEduContents({ userId: 186 }));*/
   }
 
   getCurrentUser() {
