@@ -1,10 +1,6 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import {
-  SearchFilterComponentInterface,
-  SearchFilterCriteriaInterface,
-  SearchFilterCriteriaValuesInterface
-} from '../../interfaces';
+import { SearchFilterComponentInterface, SearchFilterCriteriaInterface, SearchFilterCriteriaValuesInterface } from '../../interfaces';
 import { ColumnFilterService } from './column-filter.service';
 
 @Component({
@@ -37,6 +33,21 @@ export class ColumnFilterComponent implements SearchFilterComponentInterface {
       // input is set by searchComponent, which can also be a single criterium
       if (!Array.isArray(value)) value = [value];
 
+      if (this.columnFilterService.actionSource !== 'self') {
+        if (this.columnFilterService.preserveColumn) {
+          this.columnFilterService.preserveColumn =
+            this.columnFilterService.previousFilterCriteriaCount >=
+            value.length - 1;
+        } else {
+          if (
+            this.columnFilterService.previousFilterCriteriaCount ===
+            value.length
+          ) {
+            this.columnFilterService.preserveColumn = true;
+          }
+        }
+      }
+
       this.forwardAnimation =
         this.columnFilterService.previousFilterCriteriaCount > value.length;
       this.columnFilterService.previousFilterCriteriaCount = value.length;
@@ -45,13 +56,18 @@ export class ColumnFilterComponent implements SearchFilterComponentInterface {
         // render last 2 columns
         // because clicking through to the next level will not trigger new filterCriteria,
         // we want the next level to already be ready in the tree
-        this.filterCriteriaToToggle = value.slice(-2);
+        // unless we selected an item in the deepest level
+        const lastColumn = value.slice(-1)[0];
+        const sliceColumns = lastColumn.values.find(v => v.selected) ? -1 : -2;
+        this.filterCriteriaToToggle = value.slice(sliceColumns);
       } else {
         const newCriteria: SearchFilterCriteriaInterface = value.slice(-1)[0];
         this.filterCriteriaToToggle = this.forwardAnimation
           ? [newCriteria, this.columnFilterService.previousFilterCriteria]
           : [this.columnFilterService.previousFilterCriteria, newCriteria];
       }
+
+      this.columnFilterService.actionSource = null;
     }
 
     this._filterCriteria = value;
@@ -86,8 +102,6 @@ export class ColumnFilterComponent implements SearchFilterComponentInterface {
     } else if (event.toState === 'forwardEnter') {
       // remove last column
       this.filterCriteriaToToggle = this.filterCriteriaToToggle.slice(0, 1);
-    } else if (event.toState === 'noAnimation') {
-      // this.columnFilterService.preserveColumn = false;
     }
     this.columnFilterService.previousFilterCriteria = this.filterCriteriaToToggle[0];
   }
@@ -98,7 +112,9 @@ export class ColumnFilterComponent implements SearchFilterComponentInterface {
     filterCriterionName: string
   ) {
     const selectionChanged = filterCriterionValue.selected !== true;
-    this.columnFilterService.preserveColumn = preserveColumn;
+    this.columnFilterService.preserveColumn =
+      preserveColumn || filterCriterionValue.hasChild === false;
+    this.columnFilterService.actionSource = 'self';
 
     // first reset all selected markers of criteria with the same name to false
     this.filterCriteria
@@ -114,6 +130,8 @@ export class ColumnFilterComponent implements SearchFilterComponentInterface {
 
     if (selectionChanged) {
       this.filterSelectionChange.emit(this.filterCriteria);
+    } else {
+      this.columnFilterService.actionSource = null;
     }
   }
 }

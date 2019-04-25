@@ -121,8 +121,10 @@ describe('ColumnFilterComponent', () => {
       expect(component.animationState()).toBe('forwardEnter');
     });
     it(`should return correct 'noAnimation' string value when preserveColumn === true`, () => {
+      component.filterCriteria = [...mockFilterCriteria];
+      fixture.detectChanges();
       component['columnFilterService'].preserveColumn = true;
-      component.filterCriteria = [...mockFilterCriteria, ...mockFilterCriteria];
+      component.filterCriteria = [...mockFilterCriteria];
       fixture.detectChanges();
       expect(component.animationState()).toBe('noAnimation');
     });
