@@ -1,5 +1,4 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Inject, Injectable, OnDestroy } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {
   CredentialQueries,
   DalState,
@@ -19,9 +18,9 @@ import {
   FeedBackServiceInterface,
   FEEDBACK_SERVICE_TOKEN
 } from '@campus/shared';
-import { DropdownMenuItemInterface, NavItem, NavItemChanged } from '@campus/ui';
+import { DropdownMenuItemInterface, NavItem } from '@campus/ui';
 import { Action, select, Store } from '@ngrx/store';
-import { combineLatest, Observable, Subscription } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import {
   filter,
   map,
@@ -35,7 +34,7 @@ import { NavItemService } from './services/nav-item-service';
 @Injectable({
   providedIn: 'root'
 })
-export class AppViewModel implements OnDestroy {
+export class AppViewModel {
   // intermediate streams
   private sideNavItems$: Observable<NavItem[]>;
   private profileMenuItems$: Observable<DropdownMenuItemInterface[]>;
@@ -45,15 +44,11 @@ export class AppViewModel implements OnDestroy {
   public navigationItems$: Observable<NavItem[]>;
   public bannerFeedback$: Observable<EffectFeedbackInterface>;
 
-  private isDesktop: boolean;
-  private subscriptions: Subscription;
-
   constructor(
     private store: Store<DalState>,
     private navItemService: NavItemService,
     @Inject(FEEDBACK_SERVICE_TOKEN)
-    private feedbackService: FeedBackServiceInterface,
-    private breakPointObserver: BreakpointObserver
+    private feedbackService: FeedBackServiceInterface
   ) {
     this.initialize();
   }
@@ -76,37 +71,14 @@ export class AppViewModel implements OnDestroy {
     );
   }
 
-  public onNavItemChanged(navItemChanged: NavItemChanged) {
-    const navItem = navItemChanged.navItem;
+  public onNavItemChanged(navItem: NavItem) {
     this.store.dispatch(new UiActions.UpdateNavItem({ navItem }));
-
-    if (!navItemChanged.clickedExpand && !this.isDesktop) {
-      this.toggleSidebar(false);
-    }
   }
 
   private initialize() {
     this.setProfileItems();
     this.setNavItems();
     this.setFeedbackFlow();
-
-    this.subscriptions = new Subscription();
-    this.subscribeToBreakpoints();
-  }
-
-  ngOnDestroy() {
-    this.subscriptions.unsubscribe();
-  }
-
-  private subscribeToBreakpoints() {
-    this.subscriptions.add(
-      this.breakPointObserver
-        .observe([Breakpoints.XSmall, Breakpoints.Small])
-        .pipe(map(result => result.matches))
-        .subscribe(result => {
-          this.isDesktop = !result;
-        })
-    );
   }
 
   private setProfileItems() {

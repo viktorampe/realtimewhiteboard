@@ -16,11 +16,6 @@ export interface NavItem {
   expanded?: boolean;
 }
 
-export interface NavItemChanged {
-  navItem: NavItem;
-  clickedExpand?: boolean;
-}
-
 /**
  * Navigation tree
  *
@@ -52,7 +47,7 @@ export class TreeNavComponent {
     this.updateTreeNav();
   }
 
-  @Output() navItemChanged = new EventEmitter<NavItemChanged>();
+  @Output() navItemChanged = new EventEmitter<NavItem>();
 
   /**
    * Datasource for CdkTree from Angular Material CDK
@@ -76,8 +71,8 @@ export class TreeNavComponent {
 
   public toggleNode(node: NavItem, clickedExpand: boolean) {
     this.navItemChanged.emit({
-      navItem: { ...node, expanded: !node.expanded },
-      clickedExpand: clickedExpand
+      ...node,
+      expanded: !node.expanded
     });
   }
 

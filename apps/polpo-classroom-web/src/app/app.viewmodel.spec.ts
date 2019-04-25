@@ -234,7 +234,7 @@ describe('AppViewModel', () => {
 
     it('should dispatch action on sidenavItem change', () => {
       store.dispatch(new UserActions.UserLoaded(new PersonFixture()));
-      viewModel.onNavItemChanged({ navItem: mockNavItem });
+      viewModel.onNavItemChanged(mockNavItem);
       expect(store.dispatch).toHaveBeenCalledWith(
         new UiActions.UpdateNavItem({ navItem: mockNavItem })
       );

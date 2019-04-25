@@ -5,11 +5,7 @@
 >
   <cdk-tree-node *cdkTreeNodeDef="let node" cdkTreeNodeToggle>
     <li class="ui-tree-nav__node">
-      <a
-        [routerLink]="node.link"
-        (click)="toggleNode(node)"
-        routerLinkActive="ui-tree-nav__node--active"
-      >
+      <a [routerLink]="node.link" routerLinkActive="ui-tree-nav__node--active">
         <mat-icon [svgIcon]="node.icon" *ngIf="node.icon"></mat-icon>
         {{ node.title }}
       </a>
@@ -35,7 +31,7 @@
           [svgIcon]="
             nestedTreeControl.isExpanded(node) ? 'expand-less' : 'expand-more'
           "
-          (click)="toggleNode(node, true)"
+          (click)="toggleNode(node)"
           campusClickPreventDefault
           campusClickStopPropagation
         ></mat-icon>
