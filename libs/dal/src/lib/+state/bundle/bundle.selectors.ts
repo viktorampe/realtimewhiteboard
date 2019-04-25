@@ -89,6 +89,13 @@ export const getByLearningAreaId = createSelector(
   }
 );
 
+export const getForLearningAreaId = createSelector(
+  getByLearningAreaId,
+  (state: State, props: { learningAreaId: number }) => {
+    return state[props.learningAreaId] || [];
+  }
+);
+
 export const getShared = createSelector(
   selectBundleState,
   (state: State, props: { userId: number }) => {

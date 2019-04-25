@@ -49,6 +49,8 @@ import {
   ListViewItemDirective
 } from './list-view/list-view.component';
 import { ManageCollectionComponent } from './manage-collection/manage-collection.component';
+import { CollectionManagerService } from './manage-collection/services/collection-manager.service';
+import { COLLECTION_MANAGER_SERVICE_TOKEN } from './manage-collection/services/collection-manager.service.interface';
 import { DropdownDirective } from './notification/directives/notification-dropdown.directive';
 import { NotificationComponent } from './notification/notification.component';
 import { PageHeaderComponent } from './page-header/page-header.component';
@@ -93,9 +95,9 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     MatTooltipModule,
     MatIconModule,
     MatMenuModule,
-    MatListModule,
+    UtilsModule,
     MatDialogModule,
-    UtilsModule
+    MatListModule
   ],
   declarations: [
     FilterTextInputComponent,
@@ -203,7 +205,13 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     CollapsibleSheetComponent,
     DropAreaComponent,
     TileComponent,
-    JoinPipe,
+    JoinPipe
+  ],
+  providers: [
+    {
+      provide: COLLECTION_MANAGER_SERVICE_TOKEN,
+      useClass: CollectionManagerService
+    },
     ManageCollectionComponent
   ]
 })

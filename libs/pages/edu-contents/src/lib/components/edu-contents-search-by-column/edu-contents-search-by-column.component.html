@@ -1,18 +1,26 @@
 <campus-page-bar>
   <div class="edu-contents-search-by-column__page-bar">
-    <span class="edu-contents-search-by-column__page-bar__label"
+    <span
+      class="edu-contents-search-by-column__page-bar__label page-bar-style--searchmode-label"
       >Of zoek op:</span
     >
-    <campus-button [routerLink]="['/edu-content', currentLearningArea, 'term']"
+    <campus-button
+      class="page-bar-style--searchmode-button"
+      [routerLink]="['/edu-content', currentLearningArea, 'term']"
       >Standaard zoeken</campus-button
     >
-    <span class="edu-contents-search-by-column__page-bar__label">of</span>
+    <span
+      class="edu-contents-search-by-column__page-bar__label page-bar-style--searchmode-label"
+      >of</span
+    >
     <campus-button
+      class="page-bar-style--searchmode-button"
       *ngIf="searchMode.name === 'toc'"
       [routerLink]="['/edu-content', currentLearningArea, 'plan']"
       >Leerplan</campus-button
     >
     <campus-button
+      class="page-bar-style--searchmode-button"
       *ngIf="searchMode.name === 'plan'"
       [routerLink]="['/edu-content', currentLearningArea, 'toc']"
       >Inhoudstafel</campus-button

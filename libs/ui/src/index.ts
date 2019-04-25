@@ -23,8 +23,18 @@ export {
   ListViewItemDirective
 } from './lib/list-view/list-view.component';
 export {
+  ItemToggledInCollectionInterface
+} from './lib/manage-collection/interfaces/item-toggled-in-collection.interface';
+export {
+  ManageCollectionItemInterface
+} from './lib/manage-collection/interfaces/manage-collection-item.interface';
+export {
   ManageCollectionComponent
 } from './lib/manage-collection/manage-collection.component';
+export {
+  CollectionManagerServiceInterface,
+  COLLECTION_MANAGER_SERVICE_TOKEN
+} from './lib/manage-collection/services/collection-manager.service.interface';
 export {
   NotificationItemInterface
 } from './lib/notification/notification.component';
