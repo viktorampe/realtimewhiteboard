@@ -7,6 +7,7 @@
   $shared-header__page-bar__divider-height: 40px !default;
   $shared-header__page-bar__divider-width: 2px !default;
   $shared-header__page-bar__element-height: 40px !default;
+  $shared-header__page-bar__page-bar-style--searchmode-button-width: 140px !default;
   $shared-header__page-bar__element-border-width: 2px !default;
   $shared-header__page-bar__element-padding-top: 2px !default;
   $shared-header__page-bar__element-padding-bottom: 2px !default;
@@ -47,25 +48,21 @@
         background-color: $shared-header__page-bar__divider-background-color;
       }
 
-      #page-bar-container .ui-button {
-        border: $shared-header__page-bar__element-border-width solid
-          $shared-header__page-bar__element-border-color;
-        padding-top: $shared-header__page-bar__element-padding-top;
-        padding-bottom: $shared-header__page-bar__element-padding-bottom;
-        height: $shared-header__page-bar__element-height;
-        width: $shared-header__page-bar__element-height;
-      }
-
-      //override of standard searchterm values to make the searchterm fit in the page bar
-      campus-search-term {
-        .mat-form-field-hide-placeholder {
-          .mat-form-field-infix {
-            line-height: $shared-header__page-bar__element-height - 11px;
+      #page-bar-container {
+        .page-bar-style {
+          &--searchmode-button {
+            border: $shared-header__page-bar__element-border-width solid
+              $shared-header__page-bar__element-border-color;
+            padding-top: $shared-header__page-bar__element-padding-top;
+            padding-bottom: $shared-header__page-bar__element-padding-bottom;
+            height: $shared-header__page-bar__element-height;
+            width: $shared-header__page-bar__page-bar-style--searchmode-button-width;
           }
-        }
-        .mat-form-field-appearance-outline {
-          .mat-form-field-infix {
-            line-height: $shared-header__page-bar__element-height - 11px;
+          &--searchmode-label {
+            margin-right: $ui-form-spacing;
+            &:last-child {
+              margin-right: 0;
+            }
           }
         }
       }
