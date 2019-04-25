@@ -19,6 +19,7 @@
     &__image {
       width: $ui-dropdown-menu-image-size;
       height: $ui-dropdown-menu-image-size;
+      margin-right: 16px; // == mat-menu-item default
     }
 
     &__header {

@@ -53,7 +53,6 @@ export class NavItemService {
       dividerBefore: true
     }, // icon-key in current site
     smartschool: {
-      header: 'Ga naar Smartschool',
       // description will be added later
       image: '/assets/images/icon-smartschool.png',
       // link will be added later
