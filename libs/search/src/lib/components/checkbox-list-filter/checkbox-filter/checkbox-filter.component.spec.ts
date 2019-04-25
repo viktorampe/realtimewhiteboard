@@ -207,6 +207,8 @@ describe('CheckboxFilterComponent', () => {
     });
 
     it('should sort selected values to the front of the values-array', () => {
+      component.sortBySelection = true;
+
       // doublecheck values[4] isn't first on init
       expect(component.filteredFilterCriterium.values[0]).not.toBe(
         component.criterium.values[4]

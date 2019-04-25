@@ -37,7 +37,10 @@ export class CheckboxFilterComponent implements AfterViewInit, OnDestroy {
   @Input()
   set criterium(value: SearchFilterCriteriaInterface) {
     this._criterium = value;
-    this.filteredFilterCriterium = this.getFilteredCriterium(value);
+    this.filteredFilterCriterium = this.getFilteredCriterium(
+      value,
+      this.sortBySelection
+    );
 
     this.indeterminateStatus = {};
     this.filteredFilterCriterium.values.forEach(critValue => {
@@ -48,6 +51,7 @@ export class CheckboxFilterComponent implements AfterViewInit, OnDestroy {
   }
 
   @Input() public parentValueRef: SearchFilterCriteriaValuesInterface;
+  @Input() public sortBySelection: boolean;
 
   @Input()
   public set notificationFromParent(event: MatCheckboxChange) {
@@ -93,6 +97,25 @@ export class CheckboxFilterComponent implements AfterViewInit, OnDestroy {
 
   public getDisplayValue(value: SearchFilterCriteriaValuesInterface): string {
     return value.data[this.criterium.displayProperty];
+  }
+
+  public showShowMore(): boolean {
+    if (
+      this.maxVisibleItems &&
+      this.filteredFilterCriterium.values.length > this.maxVisibleItems
+    ) {
+      const valuesAboveMaxVisibleItems = this.filteredFilterCriterium.values.slice(
+        this.maxVisibleItems
+      );
+
+      const invisibleItems = valuesAboveMaxVisibleItems.filter(
+        value => !value.selected && !this.indeterminateStatus[value.data.id]
+      );
+
+      return invisibleItems.length > 0;
+    } else {
+      return false;
+    }
   }
 
   private getIndeterminateStatus(
@@ -180,18 +203,20 @@ export class CheckboxFilterComponent implements AfterViewInit, OnDestroy {
 
   // filter and sort values
   private getFilteredCriterium(
-    criterium: SearchFilterCriteriaInterface
+    criterium: SearchFilterCriteriaInterface,
+    sortBySelection?: boolean
   ): SearchFilterCriteriaInterface {
-    return {
+    const filteredCriterium = {
       ...criterium,
-      values: criterium.values
-        .filter(
-          value => value.visible && (value.prediction !== 0 || value.selected)
-        )
-        // order by selected status
-        // needed so selected values aren't hidden
-        .sort((a, b) => (a.selected === b.selected ? 0 : a.selected ? -1 : 1))
+      values: criterium.values.filter(
+        value => value.visible && (value.prediction !== 0 || value.selected)
+      )
     };
+    if (sortBySelection)
+      filteredCriterium.values.sort((a, b) =>
+        a.selected === b.selected ? 0 : a.selected ? -1 : 1
+      );
+    return filteredCriterium;
   }
 
   // helper function to convert MatCheckBox value (a string by default)

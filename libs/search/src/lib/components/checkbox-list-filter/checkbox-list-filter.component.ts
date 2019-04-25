@@ -13,6 +13,8 @@ export class CheckboxListFilterComponent
   public maxVisibleItems = 0; // 0 == no limit
 
   @Input() filterCriteria: SearchFilterCriteriaInterface;
+  @Input() public sortBySelection = false;
+
   @Input()
   public set filterOptions(value: any) {
     if (value && value.maxVisibleItems) {

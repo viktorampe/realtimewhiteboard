@@ -6,7 +6,11 @@
     mat-list-item
     class="checkbox-filter__title"
     [class.checkbox-filter__item--hidden]="
-      maxVisibleItems && i >= maxVisibleItems && !showMoreItems
+      maxVisibleItems &&
+      i >= maxVisibleItems &&
+      !showMoreItems &&
+      !option.selected &&
+      !indeterminateStatus[option.data.id]
     "
     [value]="option"
     [checked]="option.selected"
@@ -22,21 +26,24 @@
   <campus-checkbox-filter
     class="checkbox-filter__items"
     [class.checkbox-filter__item--hidden]="
-      maxVisibleItems && i >= maxVisibleItems && !showMoreItems
+      maxVisibleItems &&
+      i >= maxVisibleItems &&
+      !showMoreItems &&
+      !option.selected &&
+      !indeterminateStatus[option.data.id]
     "
     *ngIf="option.child"
     [criterium]="option.child"
     [maxVisibleItems]="maxVisibleItems"
     [parentValueRef]="option"
+    [sortBySelection]="sortBySelection"
     (selectionChanged)="onChildChange($event)"
   >
   </campus-checkbox-filter>
 </ng-container>
 <!-- show more titles ? -->
 <a
-  *ngIf="
-    maxVisibleItems && maxVisibleItems < filteredFilterCriterium.values.length
-  "
+  *ngIf="showShowMore()"
   (click)="toggleShowMore()"
   class="checkbox-filter__footer"
 >
