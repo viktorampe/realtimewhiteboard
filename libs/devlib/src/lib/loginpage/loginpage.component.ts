@@ -8,7 +8,9 @@ import {
   AlertReducer,
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
+  EduContent,
   EduContentInterface,
+  EduContentQueries,
   EffectFeedbackInterface,
   EffectFeedbackQueries,
   FavoriteActions,
@@ -20,13 +22,14 @@ import {
 } from '@campus/dal';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { select, Store } from '@ngrx/store';
+import { EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN } from 'libs/shared/src/lib/collection-manager/edu-content-collection-manager.service.interface';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, take } from 'rxjs/operators';
 import {
   FavoriteServiceInterface,
   FAVORITE_SERVICE_TOKEN
 } from './../../../../dal/src/lib/favorite/favorite.service.interface';
-import { ManageCollectionComponent } from './../../../../ui/src/lib/manage-collection/manage-collection.component';
+import { EduContentCollectionManagerService } from './../../../../shared/src/lib/collection-manager/edu-content-collection-manager.service';
 import { LoginPageViewModel } from './loginpage.viewmodel';
 
 @Component({
@@ -66,7 +69,9 @@ export class LoginpageComponent implements OnInit {
     private store: Store<AlertReducer.State>,
     private router: Router,
     @Inject(TOC_SERVICE_TOKEN) private tocService: TocServiceInterface,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    @Inject(EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN)
+    private eduContentCollectionManagerService: EduContentCollectionManagerService
   ) {
     return;
     this.store.dispatch(
@@ -108,46 +113,17 @@ export class LoginpageComponent implements OnInit {
   }
 
   openDialog() {
-    const dialogRef = this.dialog.open(ManageCollectionComponent, {
-      data: this.getDialogData()
-    });
-
-    dialogRef.componentInstance.selectionChanged.subscribe(result => {
-      console.log('Selection changed:', result);
-    });
-  }
-
-  private getDialogData() {
-    return {
-      title: 'Zelda needs some Links',
-      item: {
-        icon: 'task',
-        label: 'Zelda',
-        id: 42,
-        className: 'itemReceivingLinks'
-      },
-      linkableItems: [
-        {
-          icon: 'bundle',
-          label: 'Link',
-          id: 1,
-          className: 'itemToLink'
-        },
-        {
-          icon: 'bundle',
-          label: 'Toon Link',
-          id: 2,
-          className: 'itemToLink'
-        },
-        {
-          icon: 'bundle',
-          label: 'Dark Link',
-          id: 3,
-          className: 'itemToLink'
-        }
-      ],
-      linkedItemIds: new Set([1, 3]),
-      recentItemIds: new Set([1])
-    };
+    this.store
+      .pipe(
+        select(EduContentQueries.getAll),
+        take(1)
+      )
+      .subscribe(entities => {
+        const content = Object.assign(new EduContent(), entities[0]);
+        this.eduContentCollectionManagerService.manageBundlesForContent(
+          content,
+          19
+        );
+      });
   }
 }

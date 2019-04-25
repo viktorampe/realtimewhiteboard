@@ -100,6 +100,17 @@ describe('Bundle Selectors', () => {
         2: [createBundle(4), createBundle(3)]
       });
     });
+    it('getForLearningAreaId() should return an array of bundles for that learningAreaId', () => {
+      const results1 = BundleQueries.getForLearningAreaId(storeState, {
+        learningAreaId: 1
+      });
+      expect(results1).toEqual([createBundle(1), createBundle(2)]);
+
+      const results2 = BundleQueries.getForLearningAreaId(storeState, {
+        learningAreaId: 10
+      });
+      expect(results2).toEqual([]);
+    });
     it('getShared() should return undefined if the entity is not present', () => {
       const results = BundleQueries.getShared(storeState, { userId: 1 });
       expect(results).toEqual([createBundle(4), createBundle(3)]);

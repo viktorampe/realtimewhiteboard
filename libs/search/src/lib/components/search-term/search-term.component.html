@@ -18,12 +18,13 @@
     <mat-form-field [appearance]="'outline'">
       <mat-label>{{ placeholder }}</mat-label>
       <input
+        #trigger="matAutocompleteTrigger"
         [autofocus]="getAutoFocusValue()"
         matInput
         [(ngModel)]="currentValue"
         [placeholder]="placeholder"
         [matAutocomplete]="auto"
-        (keyup.enter)="onChange()"
+        (keyup.enter)="onChange(); trigger.closePanel()"
         (input)="getAutoCompleteValues()"
       />
 

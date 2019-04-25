@@ -6,8 +6,10 @@
   <mat-checkbox
     *ngFor="let value of filteredFilterCriteria.values"
     class="checkbox-line-filter-component__checkbox"
-    [class.checkbox-line-filter-component__checkbox--disabled]="value.prediction === 0 && value.selected"
-    [disabled]="value.prediction === 0 && !value.selected"
+    [class.checkbox-line-filter-component__checkbox--disabled]="
+      !value.prediction && value.selected
+    "
+    [disabled]="!value.prediction && !value.selected"
     [checked]="value.selected"
     [value]="value"
     (change)="itemChanged(value)"
