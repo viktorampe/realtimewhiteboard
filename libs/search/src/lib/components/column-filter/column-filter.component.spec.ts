@@ -100,7 +100,6 @@ describe('ColumnFilterComponent', () => {
       );
     });
   });
-  // file.only
   describe('animationState', () => {
     it(`should return correct 'backward' string value when criteria are passed for the first time`, () => {
       component.filterCriteria = mockFilterCriteria;
