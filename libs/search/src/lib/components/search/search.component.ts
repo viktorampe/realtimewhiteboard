@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   Component,
   ComponentFactoryResolver,
   ComponentRef,
@@ -20,7 +19,7 @@ import {
   SearchFilterInterface
 } from '@campus/search';
 import { Observable, Subscription } from 'rxjs';
-import { debounceTime, skipWhile } from 'rxjs/operators';
+import { debounceTime, skipWhile, take } from 'rxjs/operators';
 import { SearchPortalDirective } from '../../directives';
 import { SearchTermComponent } from '../search-term/search-term.component';
 import { SearchViewModel } from '../search.viewmodel';
@@ -36,8 +35,7 @@ import { SearchStateInterface } from './../../interfaces/search-state.interface'
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss']
 })
-export class SearchComponent
-  implements OnInit, AfterViewInit, OnDestroy, OnChanges {
+export class SearchComponent implements OnInit, OnDestroy, OnChanges {
   private searchTermComponent: SearchTermComponent;
   private subscriptions = new Subscription();
   private _searchPortals: QueryList<SearchPortalDirective> = new QueryList();
@@ -89,14 +87,17 @@ export class SearchComponent
 
   ngOnInit() {
     this.reset(this.initialState);
-  }
 
-  ngAfterViewInit() {
-    setTimeout(() => {
-      if (!this.searchPortals.length) {
-        throw new Error("My searchPortals are missing :'(");
-      }
-    });
+    this.searchViewmodel.searchFilters$
+      .pipe(
+        skipWhile(filters => !filters.length),
+        take(1)
+      )
+      .subscribe(() => {
+        if (!this.searchPortals.length) {
+          console.warn('The searchportals are not set');
+        }
+      });
   }
 
   ngOnDestroy() {
