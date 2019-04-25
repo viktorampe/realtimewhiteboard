@@ -40,6 +40,7 @@ import {
   EnvironmentApiInterface,
   EnvironmentErrorManagementFeatureInterface,
   EnvironmentIconMappingInterface,
+  EnvironmentLoginInterface,
   EnvironmentLogoutInterface,
   EnvironmentMessagesFeatureInterface,
   EnvironmentSearchModesInterface,
@@ -137,6 +138,7 @@ export class SharedModule {
     environmentIconMapping: EnvironmentIconMappingInterface,
     environmentWebsite: EnvironmentWebsiteInterface,
     environmentLogout: EnvironmentLogoutInterface,
+    environmentLogin: EnvironmentLoginInterface,
     environmentApi: EnvironmentApiInterface,
     environmentSsoSettings: EnvironmentSsoInterface,
     environmentSearchModes: EnvironmentSearchModesInterface
@@ -166,7 +168,7 @@ export class SharedModule {
         },
         {
           provide: ENVIRONMENT_LOGIN_TOKEN,
-          useValue: environmentLogout
+          useValue: environmentLogin
         },
         {
           provide: ENVIRONMENT_ICON_MAPPING_TOKEN,

@@ -55,6 +55,7 @@ configureBufferSize(150);
       environment.iconMapping,
       environment.website,
       environment.logout,
+      environment.login,
       environment.api,
       environment.sso,
       environment.searchModes
