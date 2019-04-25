@@ -1,6 +1,10 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { SearchFilterComponentInterface, SearchFilterCriteriaInterface, SearchFilterCriteriaValuesInterface } from '../../interfaces';
+import {
+  SearchFilterComponentInterface,
+  SearchFilterCriteriaInterface,
+  SearchFilterCriteriaValuesInterface
+} from '../../interfaces';
 import { ColumnFilterService } from './column-filter.service';
 
 @Component({
@@ -12,12 +16,12 @@ import { ColumnFilterService } from './column-filter.service';
       transition('* => forwardEnter', [
         //enter from left to right
         style({ transform: 'translateX(-50%)' }),
-        animate('2000ms ease-in-out', style({ transform: 'translateX(0%)' }))
+        animate('200ms ease-in-out', style({ transform: 'translateX(0%)' }))
       ]),
       transition('* => backwardEnter', [
         //enter from right to left
         style({ transform: 'translateX(0%)' }),
-        animate('2000ms ease-in-out', style({ transform: 'translateX(-50%)' }))
+        animate('200ms ease-in-out', style({ transform: 'translateX(-50%)' }))
       ])
     ])
   ]
@@ -34,34 +38,33 @@ export class ColumnFilterComponent implements SearchFilterComponentInterface {
       if (!Array.isArray(value)) value = [value];
 
       if (this.columnFilterService.actionSource !== 'self') {
-        if (this.columnFilterService.preserveColumn) {
-          this.columnFilterService.preserveColumn =
-            this.columnFilterService.previousFilterCriteriaCount >=
-            value.length - 1;
-        } else {
-          if (
-            this.columnFilterService.previousFilterCriteriaCount ===
-            value.length
-          ) {
-            this.columnFilterService.preserveColumn = true;
-          }
-        }
+        this.columnFilterService.preserveColumn =
+          this.columnFilterService.visibleColumnIndex === value.length - 1;
       }
 
       this.forwardAnimation =
-        this.columnFilterService.previousFilterCriteriaCount > value.length;
-      this.columnFilterService.previousFilterCriteriaCount = value.length;
+        this.columnFilterService.visibleColumnIndex > value.length - 1;
 
       if (this.columnFilterService.preserveColumn) {
         // render last 2 columns
         // because clicking through to the next level will not trigger new filterCriteria,
         // we want the next level to already be ready in the tree
-        // unless we selected an item in the deepest level
-        const lastColumn = value.slice(-1)[0];
-        const sliceColumns = lastColumn.values.find(v => v.selected) ? -1 : -2;
-        this.filterCriteriaToToggle = value.slice(sliceColumns);
+        // if we happen to be at the deepest level or the change is triggered from an external filter
+        // we have to show the last column from our filters
+        const sliceColumns: number =
+          this.columnFilterService.isLastChild ||
+          this.columnFilterService.actionSource !== 'self'
+            ? 1
+            : 2;
+        this.columnFilterService.visibleColumnIndex =
+          value.length - sliceColumns;
+        this.filterCriteriaToToggle = value.slice(
+          this.columnFilterService.visibleColumnIndex
+        );
       } else {
-        const newCriteria: SearchFilterCriteriaInterface = value.slice(-1)[0];
+        this.columnFilterService.visibleColumnIndex = value.length - 1;
+        const newCriteria: SearchFilterCriteriaInterface =
+          value[this.columnFilterService.visibleColumnIndex];
         this.filterCriteriaToToggle = this.forwardAnimation
           ? [newCriteria, this.columnFilterService.previousFilterCriteria]
           : [this.columnFilterService.previousFilterCriteria, newCriteria];
@@ -115,6 +118,7 @@ export class ColumnFilterComponent implements SearchFilterComponentInterface {
     this.columnFilterService.preserveColumn =
       preserveColumn || filterCriterionValue.hasChild === false;
     this.columnFilterService.actionSource = 'self';
+    this.columnFilterService.isLastChild = !filterCriterionValue.hasChild;
 
     // first reset all selected markers of criteria with the same name to false
     this.filterCriteria
@@ -132,6 +136,7 @@ export class ColumnFilterComponent implements SearchFilterComponentInterface {
       this.filterSelectionChange.emit(this.filterCriteria);
     } else {
       this.columnFilterService.actionSource = null;
+      this.columnFilterService.visibleColumnIndex += 1;
     }
   }
 }

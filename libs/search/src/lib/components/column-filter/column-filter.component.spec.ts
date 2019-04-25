@@ -79,27 +79,28 @@ describe('ColumnFilterComponent', () => {
     expect(component).toBeTruthy();
   });
   describe('filterCriteria input setter', () => {
-    it('should update forwardAnimation to false and previousFilterCriteriaCount to the new count if a new value is passed that has a bigger length', () => {
+    it('should update forwardAnimation to false and visibleColumnIndex to the new count if a new value is passed that has a bigger length', () => {
       component.filterCriteria = mockFilterCriteria;
       fixture.detectChanges();
       component.filterCriteria = [...mockFilterCriteria, ...mockFilterCriteria];
       fixture.detectChanges();
       expect(component['forwardAnimation']).toBe(false);
-      expect(component['columnFilterService'].previousFilterCriteriaCount).toBe(
-        mockFilterCriteria.length * 2
+      expect(component['columnFilterService'].visibleColumnIndex).toBe(
+        mockFilterCriteria.length * 2 - 1
       );
     });
-    it('should update forwardAnimation to true and previousFilterCriteriaCount to the new count if a new value is passed that has a lower length', () => {
+    it('should update forwardAnimation to true and visibleColumnIndex to the new count if a new value is passed that has a lower length', () => {
       component.filterCriteria = [...mockFilterCriteria, ...mockFilterCriteria];
       fixture.detectChanges();
       component.filterCriteria = mockFilterCriteria;
       fixture.detectChanges();
       expect(component['forwardAnimation']).toBe(true);
-      expect(component['columnFilterService'].previousFilterCriteriaCount).toBe(
-        mockFilterCriteria.length
+      expect(component['columnFilterService'].visibleColumnIndex).toBe(
+        mockFilterCriteria.length - 1
       );
     });
   });
+  // file.only
   describe('animationState', () => {
     it(`should return correct 'backward' string value when criteria are passed for the first time`, () => {
       component.filterCriteria = mockFilterCriteria;
