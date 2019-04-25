@@ -22,6 +22,8 @@ import {
 import { HasPermissionDirective } from './auth/has-permission.directive';
 import { PermissionService } from './auth/permission.service';
 import { PERMISSION_SERVICE_TOKEN } from './auth/permission.service.interface';
+import { EduContentCollectionManagerService } from './collection-manager/edu-content-collection-manager.service';
+import { EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN } from './collection-manager/edu-content-collection-manager.service.interface';
 import { PageBarContainerComponent } from './components/page-bar-container/page-bar-container.component';
 import { OPEN_STATIC_CONTENT_SERVICE_TOKEN } from './content/open-static-content.interface';
 import { OpenStaticContentService } from './content/open-static-content.service';
@@ -110,6 +112,10 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     {
       provide: SNACKBAR_DEFAULT_CONFIG_TOKEN,
       useClass: SnackBarDefaultConfig
+    },
+    {
+      provide: EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN,
+      useClass: EduContentCollectionManagerService
     },
     AlertToNotificationItemPipe,
     MatDialog
