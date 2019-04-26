@@ -210,22 +210,14 @@ describe('ColumnFilterComponent', () => {
       expect(emitSpy).not.toHaveBeenCalled();
     });
   });
-  xdescribe('view', () => {
-    it('should show only one column', () => {
-      component.filterCriteria = mockFilterCriteria;
-      fixture.detectChanges();
-      const displayedColumns = fixture.debugElement
-        .queryAll(By.css('.column__filter'))
-        .filter(column => column.nativeElement.style.display !== 'none');
-      expect(displayedColumns.length).toBe(1);
-    });
+  describe('view', () => {
     it('should show the correct amount of values', () => {
       component.filterCriteria = mockFilterCriteria;
       fixture.detectChanges();
-      const displayedColumns = fixture.debugElement
-        .queryAll(By.css('.column__filter'))
-        .filter(column => column.nativeElement.style.display !== 'none');
-      const displayedValues = displayedColumns[0].queryAll(
+      const displayedColumns = fixture.debugElement.queryAll(
+        By.css('.column__filter')
+      );
+      const displayedValues = displayedColumns[1].queryAll(
         By.css('.column__filter__value')
       );
       expect(displayedValues.length).toBe(7);
@@ -233,10 +225,10 @@ describe('ColumnFilterComponent', () => {
     it('should show the correct content in the labels', () => {
       component.filterCriteria = mockFilterCriteria;
       fixture.detectChanges();
-      const displayedColumns = fixture.debugElement
-        .queryAll(By.css('.column__filter'))
-        .filter(column => column.nativeElement.style.display !== 'none');
-      const displayedLabels = displayedColumns[0].queryAll(
+      const displayedColumns = fixture.debugElement.queryAll(
+        By.css('.column__filter')
+      );
+      const displayedLabels = displayedColumns[1].queryAll(
         By.css('.column__filter__value__button-content__label')
       );
       expect(displayedLabels.length).toBe(7);
@@ -251,10 +243,10 @@ describe('ColumnFilterComponent', () => {
     it('should show the magnifier only if value.prediction is set and not 0', () => {
       component.filterCriteria = mockFilterCriteria;
       fixture.detectChanges();
-      const displayedColumns = fixture.debugElement
-        .queryAll(By.css('.column__filter'))
-        .filter(column => column.nativeElement.style.display !== 'none');
-      const displayedMagnifiers = displayedColumns[0].queryAll(
+      const displayedColumns = fixture.debugElement.queryAll(
+        By.css('.column__filter')
+      );
+      const displayedMagnifiers = displayedColumns[1].queryAll(
         By.css('.column__filter__value__button-content__icons__magnifier')
       );
       expect(displayedMagnifiers.length).toBe(4);
@@ -262,10 +254,10 @@ describe('ColumnFilterComponent', () => {
     it('should show the arrow only if value.hasChild is true', () => {
       component.filterCriteria = mockFilterCriteria;
       fixture.detectChanges();
-      const displayedColumns = fixture.debugElement
-        .queryAll(By.css('.column__filter'))
-        .filter(column => column.nativeElement.style.display !== 'none');
-      const displayedMagnifiers = displayedColumns[0].queryAll(
+      const displayedColumns = fixture.debugElement.queryAll(
+        By.css('.column__filter')
+      );
+      const displayedMagnifiers = displayedColumns[1].queryAll(
         By.css('.column__filter__value__button-content__icons__arrow')
       );
       expect(displayedMagnifiers.length).toBe(1);
