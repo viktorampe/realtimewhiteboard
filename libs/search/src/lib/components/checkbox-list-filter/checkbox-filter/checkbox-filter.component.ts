@@ -112,7 +112,7 @@ export class CheckboxFilterComponent implements AfterViewInit, OnDestroy {
     filterCriterium: SearchFilterCriteriaInterface,
     indeterminateStatusDict
   ): boolean {
-    if (maxVisibleItems && filterCriterium.values.length > maxVisibleItems) {
+    if (!!maxVisibleItems && filterCriterium.values.length > maxVisibleItems) {
       const valuesAboveMaxVisibleItems = filterCriterium.values.slice(
         maxVisibleItems
       );

@@ -107,6 +107,7 @@ describe('CheckboxFilterComponent', () => {
     describe('set', () => {
       beforeEach(() => {
         component.maxVisibleItems = 2; // there are 5 values in the mock
+        component.criterium = component.criterium; // re-trigger setter
         fixture.detectChanges();
 
         matListItemsDE = fixture.debugElement.queryAll(
@@ -137,6 +138,7 @@ describe('CheckboxFilterComponent', () => {
 
       it("should not show 'toon meer/minder...' when no items are hidden", () => {
         component.maxVisibleItems = component.criterium.values.length;
+        component.criterium = component.criterium; // re-trigger setter
         fixture.detectChanges();
 
         expect(fixture.nativeElement.textContent).not.toContain('toon meer...');
@@ -149,6 +151,7 @@ describe('CheckboxFilterComponent', () => {
     describe('not set', () => {
       beforeEach(() => {
         component.maxVisibleItems = null;
+        component.criterium = component.criterium; // re-trigger setter
         fixture.detectChanges();
 
         matListItemsDE = fixture.debugElement.queryAll(
