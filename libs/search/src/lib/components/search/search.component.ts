@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   ComponentFactoryResolver,
   ComponentRef,
@@ -35,7 +36,8 @@ import { SearchStateInterface } from './../../interfaces/search-state.interface'
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss']
 })
-export class SearchComponent implements OnInit, OnDestroy, OnChanges {
+export class SearchComponent
+  implements OnInit, AfterViewInit, OnDestroy, OnChanges {
   private searchTermComponent: SearchTermComponent;
   private subscriptions = new Subscription();
   private _searchPortals: QueryList<SearchPortalDirective> = new QueryList();
@@ -87,17 +89,10 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnInit() {
     this.reset(this.initialState);
+  }
 
-    this.searchViewmodel.searchFilters$
-      .pipe(
-        skipWhile(filters => !filters.length),
-        take(1)
-      )
-      .subscribe(() => {
-        if (!this.searchPortals.length) {
-          console.warn('The searchportals are not set');
-        }
-      });
+  ngAfterViewInit() {
+    this.warnMissingSearchPortals();
   }
 
   ngOnDestroy() {
@@ -252,6 +247,19 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
     );
 
     return componentRef;
+  }
+
+  private warnMissingSearchPortals(): void {
+    this.searchViewmodel.searchFilters$
+      .pipe(
+        skipWhile(filters => !filters.length),
+        take(1)
+      )
+      .subscribe(() => {
+        if (!this.searchPortals.length) {
+          console.warn('The searchportals are not set');
+        }
+      });
   }
 }
 interface HostCollectionInterface {

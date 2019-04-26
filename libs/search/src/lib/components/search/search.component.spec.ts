@@ -150,10 +150,14 @@ describe('SearchComponent', () => {
   }));
 
   beforeEach(() => {
+    // suppress warnings about missing search portals
+    SearchComponent.prototype['warnMissingSearchPortals'] = () => {};
+
     fixture = TestBed.createComponent(SearchComponent);
     component = fixture.componentInstance;
 
     searchViewmodel = TestBed.get(SearchViewModel);
+
     component.initialState = mockSearchState;
     component.searchMode = mockSearchMode;
 
