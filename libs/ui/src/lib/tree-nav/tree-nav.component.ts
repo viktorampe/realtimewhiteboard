@@ -69,11 +69,8 @@ export class TreeNavComponent {
     this.nestedTreeControl = new NestedTreeControl<NavItem>(this.getChildren);
   }
 
-  public toggleNode(node: NavItem, clickedExpand: boolean) {
-    this.navItemChanged.emit({
-      ...node,
-      expanded: !node.expanded
-    });
+  public toggleNode(node: NavItem) {
+    this.navItemChanged.emit({ ...node, expanded: !node.expanded });
   }
 
   /**

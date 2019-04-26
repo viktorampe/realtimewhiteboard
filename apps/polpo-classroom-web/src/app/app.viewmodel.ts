@@ -1,5 +1,5 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Inject, Injectable, NgZone, OnDestroy } from '@angular/core';
+import { Inject, Injectable, OnDestroy } from '@angular/core';
 import {
   CredentialQueries,
   DalState,
@@ -50,7 +50,6 @@ export class AppViewModel implements OnDestroy {
 
   constructor(
     private store: Store<DalState>,
-    private ngZone: NgZone,
     private navItemService: NavItemService,
     @Inject(FEEDBACK_SERVICE_TOKEN)
     private feedbackService: FeedBackServiceInterface,
