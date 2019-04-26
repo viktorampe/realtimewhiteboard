@@ -25,7 +25,8 @@ describe('AppComponent', () => {
         {
           provide: AppViewModel,
           useValue: {
-            toggleSidebar: () => {}
+            toggleSidebar: () => {},
+            toggleSidebarOnNavigation: () => {}
           }
         },
         {
