@@ -17,17 +17,21 @@
     }
   }
 
-  .mat-menu-panel.ui-dropdown-menu--large {
-    width: $ui-dropdown-menu-width--large;
-    max-width: $ui-dropdown-menu-width--large;
+  .mat-menu-panel {
+    border-radius: 0px !important;
 
-    .ui-dropdown-menu__body {
-      height: $ui-dropdown-menu-body-height;
+    &.ui-dropdown-menu--large {
+      width: $ui-dropdown-menu-width--large;
+      max-width: $ui-dropdown-menu-width--large;
+
+      .ui-dropdown-menu__body {
+        height: $ui-dropdown-menu-body-height;
+      }
     }
-  }
 
-  .mat-menu-panel.ui-dropdown-menu--small {
-    width: $ui-dropdown-menu-width--small;
-    max-width: $ui-dropdown-menu-width--small;
+    &.ui-dropdown-menu--small {
+      width: $ui-dropdown-menu-width--small;
+      max-width: $ui-dropdown-menu-width--small;
+    }
   }
 }

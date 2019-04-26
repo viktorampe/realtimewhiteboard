@@ -64,7 +64,13 @@ export class ClearTeacherStudents implements Action {
 export class LinkTeacherStudent implements Action {
   readonly type = TeacherStudentActionTypes.LinkTeacherStudent;
 
-  constructor(public payload: { publicKey: string; userId: number }) {}
+  constructor(
+    public payload: {
+      publicKey: string;
+      userId: number;
+      handleErrorAutomatically: boolean;
+    }
+  ) {}
 }
 
 export class UnlinkTeacherStudent implements Action {
