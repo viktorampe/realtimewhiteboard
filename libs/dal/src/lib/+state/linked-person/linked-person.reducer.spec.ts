@@ -135,7 +135,9 @@ describe('LinkedPersons Reducer', () => {
     it('should trigger from LinkTeacherStudent', () => {
       const startState = createState(persons, true);
       const action = new TeacherStudentActions.LinkTeacherStudent({
-        publicKey: 'foo'
+        publicKey: 'foo',
+        userId: 1,
+        handleErrorAutomatically: true
       });
       const result = reducer(startState, action);
       expect(result).toEqual(createState(persons, false));
@@ -144,7 +146,8 @@ describe('LinkedPersons Reducer', () => {
     it('should trigger from UnlinkTeacherStudent', () => {
       const startState = createState(persons, true);
       const action = new TeacherStudentActions.UnlinkTeacherStudent({
-        teacherId: 1
+        teacherId: 1,
+        userId: 1
       });
       const result = reducer(startState, action);
       expect(result).toEqual(createState(persons, false));

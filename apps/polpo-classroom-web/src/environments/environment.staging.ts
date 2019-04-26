@@ -41,6 +41,10 @@ export const environment: EnvironmentInterface = {
           status: 404,
           statusText: 'Not Found',
           urlRegex: 'http.*assets\\/icons.*.svg'
+        },
+        {
+          status: 404,
+          messageRegex: 'no_teacher_found_for_given_key'
         }
       ]
     }

@@ -238,7 +238,8 @@ describe('TeacherStudentsEffects', () => {
     describe('linkTeacher$', () => {
       const linkTeacherAction = new LinkTeacherStudent({
         publicKey: mockPublicKey,
-        userId: mockCurrentUser.id
+        userId: mockCurrentUser.id,
+        handleErrorAutomatically: false
       });
 
       it('should call the linkedPersonService', () => {
