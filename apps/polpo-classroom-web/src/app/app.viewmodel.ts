@@ -1,5 +1,5 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Inject, Injectable, OnDestroy } from '@angular/core';
+import { Inject, Injectable, NgZone, OnDestroy } from '@angular/core';
 import {
   CredentialQueries,
   DalState,
@@ -50,6 +50,7 @@ export class AppViewModel implements OnDestroy {
 
   constructor(
     private store: Store<DalState>,
+    private ngZone: NgZone,
     private navItemService: NavItemService,
     @Inject(FEEDBACK_SERVICE_TOKEN)
     private feedbackService: FeedBackServiceInterface,
@@ -84,31 +85,26 @@ export class AppViewModel implements OnDestroy {
     this.setProfileItems();
     this.setNavItems();
     this.setFeedbackFlow();
-    this.toggleSidebarOnNavigation();
+
+    this.subscriptions = new Subscription();
   }
 
-  private toggleSidebarOnNavigation() {
-    //We have to drain the microtask queue, or something
-    //This executes after all current tasks have finished
-    setTimeout(() => {
-      this.subscriptions = new Subscription();
-
-      //Hide sidebar on mobile if we navigate or change screensize
-      this.subscriptions.add(
-        this.store
-          .pipe(
-            select(getRouterState),
-            switchMap(() => {
-              return this.breakPointObserver
-                .observe([Breakpoints.XSmall, Breakpoints.Small])
-                .pipe(map(result => result.matches));
-            })
-          )
-          .subscribe(isMobile => {
-            this.toggleSidebar(!isMobile);
+  public toggleSidebarOnNavigation() {
+    //Hide sidebar on mobile if we navigate or change screensize
+    this.subscriptions.add(
+      this.store
+        .pipe(
+          select(getRouterState),
+          switchMap(() => {
+            return this.breakPointObserver
+              .observe([Breakpoints.XSmall, Breakpoints.Small])
+              .pipe(map(result => result.matches));
           })
-      );
-    });
+        )
+        .subscribe(isMobile => {
+          this.toggleSidebar(!isMobile);
+        })
+    );
   }
 
   ngOnDestroy() {

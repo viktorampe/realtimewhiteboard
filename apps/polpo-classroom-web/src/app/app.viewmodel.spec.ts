@@ -29,6 +29,7 @@ import {
 } from '@campus/dal';
 import { FEEDBACK_SERVICE_TOKEN } from '@campus/shared';
 import { DropdownMenuItemInterface, NavItem } from '@campus/ui';
+import { routerReducer } from '@ngrx/router-store';
 import { Action, Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { of } from 'rxjs';
@@ -51,7 +52,7 @@ describe('AppViewModel', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        StoreModule.forRoot({}),
+        StoreModule.forRoot({ router: routerReducer }),
         ...StateFeatureBuilder.getModuleWithForFeatureProviders([
           {
             NAME: UserReducer.NAME,

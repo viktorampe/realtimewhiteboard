@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { AfterViewInit, Component, Inject } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { WINDOW } from '@campus/browser';
 import { EffectFeedbackInterface } from '@campus/dal';
@@ -15,7 +15,7 @@ import {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements AfterViewInit {
   public title = 'polpo-classroom-web';
   public navItems$ = this.appViewModel.navigationItems$;
   public bannerFeedback$: Observable<EffectFeedbackInterface>;
@@ -39,6 +39,10 @@ export class AppComponent {
     this.faviconService.setFavicon(environment.website.favicon, 'image/png');
     this.bannerFeedback$ = this.appViewModel.bannerFeedback$;
     this.useShell = window.location.search.indexOf('useShell=0') === -1;
+  }
+
+  ngAfterViewInit() {
+    this.appViewModel.toggleSidebarOnNavigation();
   }
 
   public onSideBarToggle(open: boolean) {
