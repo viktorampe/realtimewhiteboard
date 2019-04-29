@@ -94,10 +94,15 @@
 
     .shared-header__app-bar__profile-menu {
       display: flex;
+      align-items: center;
       cursor: pointer;
 
       &:hover {
         color: lighten($shared-color-1, 10%);
+      }
+
+      .ui-dropdown-menu__trigger {
+        height: $shared-header__app-bar-height * 1.2; // used for vertical positioning dropdown
       }
     }
 

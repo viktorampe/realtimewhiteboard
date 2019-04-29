@@ -185,7 +185,24 @@ describe(`AuthHttpInterceptor`, () => {
         managedStatusCodes: [404],
         allowedErrors: [
           {
-            messageRegex: /(.*)brown(.)*/i
+            messageRegex: '(.*)brown(.)*'
+          }
+        ]
+      });
+      expect(interceptor.isAllowedError(error)).toBe(true);
+    });
+
+    it('should allow the error on message regex match for error.error object message', () => {
+      error.status = 404;
+      error.error = {
+        error: { message: 'deep error message here' }
+      };
+      const interceptor = new CampusHttpInterceptor(<Router>{}, {
+        managedStatusCodes: [404],
+        allowedErrors: [
+          {
+            status: 404,
+            messageRegex: 'deep error message here'
           }
         ]
       });
@@ -198,7 +215,7 @@ describe(`AuthHttpInterceptor`, () => {
         managedStatusCodes: [404],
         allowedErrors: [
           {
-            messageRegex: /(.*)brown(.)*/i
+            messageRegex: '(.*)brown(.)*'
           }
         ]
       });
@@ -211,7 +228,7 @@ describe(`AuthHttpInterceptor`, () => {
         managedStatusCodes: [404],
         allowedErrors: [
           {
-            urlRegex: /(.*)\.svg/i
+            urlRegex: '(.*).svg'
           }
         ]
       });
@@ -224,7 +241,7 @@ describe(`AuthHttpInterceptor`, () => {
         managedStatusCodes: [404],
         allowedErrors: [
           {
-            urlRegex: /(.*)\.svg/i
+            urlRegex: '(.*).svg'
           }
         ]
       });
@@ -242,8 +259,8 @@ describe(`AuthHttpInterceptor`, () => {
           {
             status: 422,
             statusText: 'holy cow',
-            messageRegex: /.*brown.*/,
-            urlRegex: /(.*)\.svg/i
+            messageRegex: '.*brown.*',
+            urlRegex: '(.*).svg'
           }
         ]
       });
@@ -261,8 +278,8 @@ describe(`AuthHttpInterceptor`, () => {
           {
             status: 422,
             statusText: 'holy cow',
-            messageRegex: /.*brown.*/,
-            urlRegex: /(.*)\.svg/i
+            messageRegex: '.*brown.*',
+            urlRegex: '(.*).svg'
           }
         ]
       });

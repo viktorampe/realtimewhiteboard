@@ -3,12 +3,11 @@
     font-size: 12px;
     padding-left: 10px;
     margin-top: 2px;
-    margin-bottom: -5px;
+    cursor: default;
   }
 
   &__body {
     display: flex;
-    padding: 10px;
     position: relative;
     text-decoration: none;
     align-items: center;
@@ -21,5 +20,6 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    text-transform: capitalize;
   }
 }

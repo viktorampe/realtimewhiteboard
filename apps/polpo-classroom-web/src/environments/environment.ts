@@ -25,6 +25,9 @@ export const environment: EnvironmentInterface = {
   login: {
     url: 'http://student.polpo.localhost:3014/dev'
   },
+  termPrivacy: {
+    url: 'http://student.polpo.localhost:3014/dev'
+  },
   api: {
     APIBase: 'http://api.polpo.localhost:3000'
   },
@@ -45,6 +48,10 @@ export const environment: EnvironmentInterface = {
           status: 404,
           statusText: 'Not Found',
           urlRegex: 'http.*assets\\/icons.*.svg'
+        },
+        {
+          status: 404,
+          messageRegex: 'no_teacher_found_for_given_key'
         }
       ]
     }

@@ -20,6 +20,9 @@ export const environment: EnvironmentInterface = {
   logout: {
     url: 'https://www.staging.polpo.be/identificatie/start'
   },
+  termPrivacy: {
+    url: 'https://www.staging.polpo.be/identificatie/start'
+  },
   iconMapping: icons,
   api: {
     APIBase: 'https://api.staging.polpo.be'
@@ -41,6 +44,10 @@ export const environment: EnvironmentInterface = {
           status: 404,
           statusText: 'Not Found',
           urlRegex: 'http.*assets\\/icons.*.svg'
+        },
+        {
+          status: 404,
+          messageRegex: 'no_teacher_found_for_given_key'
         }
       ]
     }

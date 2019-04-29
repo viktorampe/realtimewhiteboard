@@ -224,7 +224,9 @@ describe('Bundles Reducer', () => {
     it('should trigger from LinkTeacherStudent', () => {
       const startState = createState(bundles, true);
       const action = new TeacherStudentActions.LinkTeacherStudent({
-        publicKey: 'foo'
+        publicKey: 'foo',
+        userId: 1,
+        handleErrorAutomatically: false
       });
       const result = reducer(startState, action);
       expect(result).toEqual(createState(bundles, false));
@@ -233,7 +235,8 @@ describe('Bundles Reducer', () => {
     it('should trigger from UnlinkTeacherStudent', () => {
       const startState = createState(bundles, true);
       const action = new TeacherStudentActions.UnlinkTeacherStudent({
-        teacherId: 1
+        teacherId: 1,
+        userId: 1
       });
       const result = reducer(startState, action);
       expect(result).toEqual(createState(bundles, false));

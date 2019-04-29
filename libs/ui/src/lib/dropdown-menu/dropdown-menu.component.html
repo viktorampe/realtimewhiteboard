@@ -1,7 +1,12 @@
-<div [matMenuTriggerFor]="toolBarItemDropdown"></div>
+<div
+  [matMenuTriggerFor]="toolBarItemDropdown"
+  class="ui-dropdown-menu__trigger"
+></div>
 <mat-menu
   #toolBarItemDropdown="matMenu"
   class="ui-dropdown-menu  {{smallWidth ? 'ui-dropdown-menu--small' : 'ui-dropdown-menu--large' }}"
+  [overlapTrigger]="false"
+  [yPosition]="'below'"
 >
   <div *ngIf="showHeader" class="ui-dropdown-menu__header">
     <h3>

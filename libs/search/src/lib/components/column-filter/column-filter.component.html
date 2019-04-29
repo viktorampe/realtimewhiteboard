@@ -1,9 +1,11 @@
-<ng-container
+<div
+  class="column__filter__container"
   *ngIf="filterCriteria && filterCriteria.length !== 0; else: noCriteria"
+  [@slideInOut]="animationState()"
+  (@slideInOut.done)="animationDone($event)"
 >
   <mat-action-list
-    *ngFor="let filterCriterion of filterCriteria; let i = index"
-    [@slideInOut]="animationState(i)"
+    *ngFor="let filterCriterion of filterCriteriaToToggle; let i = index"
     class="column__filter"
   >
     <button
@@ -42,7 +44,7 @@
       </div>
     </button>
   </mat-action-list>
-</ng-container>
+</div>
 
 <ng-template #noCriteria>
   <div class="column__filter--no-criteria"

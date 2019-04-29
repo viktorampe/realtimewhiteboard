@@ -308,7 +308,6 @@ describe('NavItemServiceService', () => {
         {
           description: 'foo',
           externalLink: 'foo.smartschool.be',
-          header: 'Ga naar Smartschool',
           image: '/assets/images/icon-smartschool.png',
           dividerBefore: true
         },
@@ -362,14 +361,12 @@ describe('NavItemServiceService', () => {
         {
           description: 'foo',
           externalLink: 'foo.smartschool.be',
-          header: 'Ga naar Smartschool',
           image: '/assets/images/icon-smartschool.png',
           dividerBefore: true
         },
         {
           description: 'foo',
           externalLink: 'foo.smartschool.be',
-          header: 'Ga naar Smartschool',
           image: '/assets/images/icon-smartschool.png',
           dividerBefore: false
         },
