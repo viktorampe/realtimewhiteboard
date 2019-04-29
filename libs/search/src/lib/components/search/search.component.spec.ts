@@ -174,7 +174,10 @@ describe('SearchComponent', () => {
       component.reset();
 
       expect(searchViewmodel.reset).toHaveBeenCalled();
-      expect(searchViewmodel.reset).toHaveBeenCalledWith(mockSearchMode, null);
+      expect(searchViewmodel.reset).toHaveBeenCalledWith(
+        mockSearchMode,
+        component.initialState
+      );
 
       jest.resetAllMocks();
 

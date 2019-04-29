@@ -365,7 +365,6 @@ export class SearchViewModel {
       });
     }
 
-    searchState.filterCriteriaSelections.clear();
     searchState.filterCriteriaSelections = selection;
 
     // add filterCriteria for predictions

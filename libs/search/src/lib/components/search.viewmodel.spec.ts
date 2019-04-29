@@ -424,7 +424,7 @@ describe('SearchViewModel', () => {
       );
     });
 
-    it('should reset the state', () => {
+    it('should reset the state without an initial searchState', () => {
       searchViewModel.reset(
         {
           name: 'foo',
@@ -440,9 +440,34 @@ describe('SearchViewModel', () => {
         hot('a', {
           a: {
             searchTerm: '',
-            filterCriteriaSelections: mockSelections, // empty selections for predictions
+            filterCriteriaSelections: new Map(),
             from: 0
           }
+        })
+      );
+    });
+
+    it('should reset the state with an initial searchState', () => {
+      const mockInitialSearchState = {
+        searchTerm: 'foo',
+        from: 0,
+        filterCriteriaSelections: mockSelections
+      } as SearchStateInterface;
+
+      searchViewModel.reset(
+        {
+          name: 'foo',
+          searchFilterFactory: MockFilterFactory,
+          label: '',
+          dynamicFilters: null,
+          results: null
+        } as SearchModeInterface,
+        mockInitialSearchState
+      );
+
+      expect(searchViewModel.searchState$).toBeObservable(
+        hot('a', {
+          a: mockInitialSearchState
         })
       );
     });
@@ -468,32 +493,6 @@ describe('SearchViewModel', () => {
 
   describe('searchFilters$', () => {
     it('should have an empty array as results to start with', () => {
-      expect(searchViewModel.searchFilters$).toBeObservable(
-        hot('a', { a: [] })
-      );
-    });
-    it('should have an empty array if only the searchState$ is updated', () => {
-      searchViewModel.searchState$.next(getTestSearchState('someName', [1]));
-
-      expect(searchViewModel.searchFilters$).toBeObservable(
-        hot('a', { a: [] })
-      );
-    });
-    it('should have an empty array if only the results$ is updated', () => {
-      searchViewModel.updateResult(
-        getTestSearchResult('someOtherName', new Map([[1, 0]]))
-      );
-
-      expect(searchViewModel.searchFilters$).toBeObservable(
-        hot('a', { a: [] })
-      );
-    });
-    it('should have an empty array if only the searchState$ and the results$ are is updated', () => {
-      searchViewModel.searchState$.next(getTestSearchState('someName', [1]));
-      searchViewModel.updateResult(
-        getTestSearchResult('someOtherName', new Map([[1, 0]]))
-      );
-
       expect(searchViewModel.searchFilters$).toBeObservable(
         hot('a', { a: [] })
       );
@@ -614,7 +613,7 @@ describe('SearchViewModel', () => {
         ];
         const searchResults = getTestSearchResult(
           'updatingFilter',
-          new Map([[122, 30], [3048, 390]])
+          new Map([[122, 30], [140, 40], [3048, 390], [1999, 1]])
         );
         const searchState = getTestSearchState('updatingFilter', [
           140,
@@ -693,6 +692,6 @@ function getTestFilterCriteria(
       },
       child
     ),
-    new SearchFilterCriteriaValuesFixture({})
+    new SearchFilterCriteriaValuesFixture({ prediction: 0 })
   ]);
 }
