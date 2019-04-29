@@ -31,9 +31,20 @@ class MockFilterFactory implements SearchFilterFactory {
   ): Observable<SearchFilterInterface[]> {
     return of([this.mockFilter]);
   }
+
+  getPredictionFilterNames(searchState: SearchStateInterface): string[] {
+    return [];
+  }
 }
 describe('SearchViewModel', () => {
   let searchViewModel: SearchViewModel;
+  const mockSearchMode: SearchModeInterface = {
+    name: 'searchMode',
+    label: 'foo',
+    dynamicFilters: true,
+    searchFilterFactory: MockFilterFactory,
+    results: null
+  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -74,7 +85,8 @@ describe('SearchViewModel', () => {
         from: 10,
         filterCriteriaSelections: new Map([['foo', [3]], ['bar', [4, 5, 6]]])
       } as SearchStateInterface;
-      searchViewModel.searchState$.next(searchState);
+      searchViewModel.reset(mockSearchMode, searchState);
+      // searchViewModel.searchState$.next(searchState);
     });
 
     it('should update `searchFilterCriteria` and reset `from` in searchState', () => {
@@ -370,14 +382,15 @@ describe('SearchViewModel', () => {
   });
 
   describe('reset', () => {
+    let mockSelections: Map<string, string[]>;
     beforeEach(() => {
-      const mockSelections = new Map<string, string[]>();
+      mockSelections = new Map<string, string[]>();
       mockSelections.set('foo', ['bar', 'baz']);
 
       const mockSearchState: SearchStateInterface = {
         searchTerm: 'foo',
         from: 30,
-        filterCriteriaSelections: mockSelections
+        filterCriteriaSelections: new Map(mockSelections) // clone of map -> gets reset
       };
 
       // set initial state
@@ -393,11 +406,21 @@ describe('SearchViewModel', () => {
           dynamicFilters: null,
           results: null
         } as SearchModeInterface,
-        { searchTerm: 'bar', from: 60 } as SearchStateInterface
+        {
+          searchTerm: 'bar',
+          from: 60,
+          filterCriteriaSelections: new Map()
+        } as SearchStateInterface
       );
 
       expect(searchViewModel.searchState$).toBeObservable(
-        hot('a', { a: { searchTerm: 'bar', from: 60 } })
+        hot('a', {
+          a: {
+            searchTerm: 'bar',
+            from: 60,
+            filterCriteriaSelections: new Map()
+          }
+        })
       );
     });
 
@@ -417,7 +440,7 @@ describe('SearchViewModel', () => {
         hot('a', {
           a: {
             searchTerm: '',
-            filterCriteriaSelections: new Map<string, string[]>(),
+            filterCriteriaSelections: mockSelections, // empty selections for predictions
             from: 0
           }
         })

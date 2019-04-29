@@ -20,7 +20,7 @@
     [autoFocusSearchTerm]="autoFocusSearchTerm"
     (searchTermChangeForAutoComplete)="onAutoCompleteRequest($event)"
     [searchMode]="searchMode"
-    [initialState]="searchState$ | async"
+    [initialState]="initialSearchState$ | async"
     [searchResults]="searchResults$ | async"
     (searchState$)="onSearchStateChange($event)"
   ></campus-search>

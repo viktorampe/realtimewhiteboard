@@ -20,6 +20,9 @@ export const environment: EnvironmentInterface = {
   logout: {
     url: 'https://www.staging.polpo.be/identificatie/start'
   },
+  termPrivacy: {
+    url: 'https://www.staging.polpo.be/identificatie/start'
+  },
   iconMapping: icons,
   api: {
     APIBase: 'https://api.staging.polpo.be'

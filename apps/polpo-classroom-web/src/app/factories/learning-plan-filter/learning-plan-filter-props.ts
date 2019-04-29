@@ -6,21 +6,21 @@ export const LEARNING_AREA_FILTER_PROPS = {
 };
 
 export const EDU_NETS_FILTER_PROPS = {
-  name: 'eduNet',
+  name: 'eduNets',
   label: 'Onderwijsnet',
   keyProperty: 'id',
   displayProperty: 'name'
 };
 
 export const SCHOOL_TYPES_FILTER_PROPS = {
-  name: 'schoolType',
+  name: 'schoolTypes',
   label: 'Stroom',
   keyProperty: 'id',
   displayProperty: 'name'
 };
 
 export const YEARS_FILTER_PROPS = {
-  name: 'year',
+  name: 'years',
   label: 'Jaar',
   keyProperty: 'id',
   displayProperty: 'name'

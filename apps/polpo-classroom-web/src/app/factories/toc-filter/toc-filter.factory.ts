@@ -34,8 +34,8 @@ import {
 } from 'rxjs/operators';
 
 const LEARNING_AREA = 'learningArea';
-const YEAR = 'year';
-const METHOD = 'method';
+const YEAR = 'years';
+const METHOD = 'methods';
 const TOC = 'eduContentTOC';
 const BOOK = 'eduContentTOC.tree';
 
@@ -113,6 +113,23 @@ export class TocFilterFactory implements SearchFilterFactory {
         }
       )
     );
+  }
+
+  public getPredictionFilterNames(searchState: SearchStateInterface): string[] {
+    const neededFilterNames: string[] = [];
+    if (this.hasSearchStateData(searchState, LEARNING_AREA)) {
+      neededFilterNames.push(YEAR);
+    }
+    if (this.hasSearchStateData(searchState, YEAR)) {
+      neededFilterNames.push(METHOD);
+    }
+    if (this.hasSearchStateData(searchState, METHOD)) {
+      neededFilterNames.push(BOOK);
+    }
+    if (this.hasSearchStateData(searchState, BOOK)) {
+      neededFilterNames.push(TOC);
+    }
+    return neededFilterNames;
   }
 
   private setupStreams() {

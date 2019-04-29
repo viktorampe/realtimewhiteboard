@@ -33,7 +33,7 @@
           [headerIcon]="'notifications'"
           itemType="meldingen"
           linkText="Alle meldingen"
-          linkUrl="/notifications"
+          linkUrl="/settings/alerts"
         >
           <ng-container *ngIf="(alertNotifications$ | async) as notifications">
             <campus-notification

@@ -1,6 +1,12 @@
 import { Injectable, Injector } from '@angular/core';
 import { BehaviorSubject, Observable, zip } from 'rxjs';
-import { map, skipWhile, startWith, take } from 'rxjs/operators';
+import {
+  map,
+  skipWhile,
+  startWith,
+  take,
+  withLatestFrom
+} from 'rxjs/operators';
 import {
   SearchFilterCriteriaInterface,
   SearchFilterCriteriaValuesInterface,
@@ -32,11 +38,11 @@ export class SearchViewModel {
 
   private initiateStreams(): void {
     this.searchFilters$ = zip(
-      this.searchState$,
       this.results$.pipe(skipWhile(result => !result)), // skip initial value
       this.filters$.pipe(skipWhile(filters => !filters.length)) // skip initial value
     ).pipe(
-      map(([state, results, filters]) => {
+      withLatestFrom(this.searchState$),
+      map(([[results, filters], state]) => {
         const filterCriteriaSelections = !!state
           ? state.filterCriteriaSelections
           : new Map<string, (number | string)[]>();
@@ -228,10 +234,9 @@ export class SearchViewModel {
       // note: sort mode should stay the same on reset
       newSearchState = { ...this.searchState$.value };
       newSearchState.searchTerm = '';
-      newSearchState.filterCriteriaSelections.clear();
       newSearchState.from = 0;
     }
-
+    this.setFilterCriteria(newSearchState, null);
     // trigger new search
     this.searchState$.next(newSearchState);
 
@@ -258,20 +263,12 @@ export class SearchViewModel {
     criteria: SearchFilterCriteriaInterface | SearchFilterCriteriaInterface[]
   ): void {
     // update state
-    const updatedCriteria: Map<
-      string,
-      (number | string)[]
-    > = this.extractSelectedValuesFromCriteria(criteria);
-
     const searchState: SearchStateInterface = { ...this.searchState$.value };
-    const selection = new Map(searchState.filterCriteriaSelections); // clone criteria
-    updatedCriteria.forEach((value, key) => {
-      selection.set(key, value);
-    });
-    searchState.filterCriteriaSelections = selection;
+    this.setFilterCriteria(searchState, criteria);
     searchState.from = 0;
     this.searchState$.next(searchState);
 
+    // update filters
     if (this.searchMode) {
       if (this.searchMode.dynamicFilters === true) {
         // request new filters
@@ -293,6 +290,16 @@ export class SearchViewModel {
   }
 
   public updateResult(result: SearchResultInterface): void {
+    // check searchState if is a results refresh
+    // -> if so, keep current predictions
+    if (
+      this.searchState$.value &&
+      this.searchState$.value.from !== 0 &&
+      this.results$.value
+    ) {
+      result.filterCriteriaPredictions = this.results$.value.filterCriteriaPredictions;
+    }
+
     this.results$.next(result);
   }
 
@@ -341,5 +348,32 @@ export class SearchViewModel {
         filterCriteriaSelections
       );
     }
+  }
+
+  private setFilterCriteria(
+    searchState: SearchStateInterface,
+    criteria: SearchFilterCriteriaInterface | SearchFilterCriteriaInterface[]
+  ) {
+    const selection = new Map(searchState.filterCriteriaSelections); // clone criteria
+
+    // re-set selected values
+    if (criteria) {
+      const updatedCriteria: Map<
+        string,
+        (number | string)[]
+      > = this.extractSelectedValuesFromCriteria(criteria);
+
+      updatedCriteria.forEach((value, key) => {
+        selection.set(key, value);
+      });
+    }
+
+    searchState.filterCriteriaSelections.clear();
+    searchState.filterCriteriaSelections = selection;
+
+    // add filterCriteria for predictions
+    this.filterFactory.getPredictionFilterNames(searchState).forEach(name => {
+      if (!selection.has(name)) selection.set(name, []);
+    });
   }
 }

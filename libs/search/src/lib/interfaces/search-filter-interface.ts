@@ -15,4 +15,6 @@ export interface SearchFilterFactory {
   getFilters(
     searchState: SearchStateInterface
   ): Observable<SearchFilterInterface[]>;
+
+  getPredictionFilterNames(searchState: SearchStateInterface): string[];
 }

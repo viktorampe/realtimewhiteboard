@@ -4,7 +4,8 @@ import { Permissions } from '@campus/dal';
 import {
   AuthenticationGuard,
   CoupledTeacherGuard,
-  PermissionGuard
+  PermissionGuard,
+  TermPrivacyGuard
 } from '@campus/guards';
 import { AppResolver } from './app.resolver';
 
@@ -13,7 +14,7 @@ const routes: Routes = [
     path: '',
     resolve: { isResolved: AppResolver },
     runGuardsAndResolvers: 'always',
-    canActivate: [AuthenticationGuard],
+    canActivate: [AuthenticationGuard, TermPrivacyGuard],
     children: [
       {
         path: 'books',

@@ -186,6 +186,28 @@ describe('SearchTermFilterFactory', () => {
     });
   });
 
+  describe('getPredictionFilterNames', () => {
+    it('should return the correct filter names', () => {
+      const factory: SearchTermFilterFactory = TestBed.get(
+        SearchTermFilterFactory
+      );
+
+      // this specific factory doesn't need the searchState for this
+      const result = factory.getPredictionFilterNames(null);
+
+      expect(result).toEqual([
+        'learningArea',
+        'years',
+        'eduNets',
+        'schoolTypes',
+        'methods',
+        'learningDomains',
+        'grades',
+        'eduContentProductType'
+      ]);
+    });
+  });
+
   function getExpectedFilter(
     name,
     label,
