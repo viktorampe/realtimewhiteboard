@@ -12,16 +12,14 @@ import {
   TaskFixture
 } from '@campus/dal';
 import {
+  EduContentCollectionManagerServiceInterface,
   EduContentSearchResultInterface,
+  EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN,
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN
 } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
-import {
-  EduContentCollectionManagerServiceInterface,
-  EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN
-} from 'libs/shared/src/lib/collection-manager/edu-content-collection-manager.service.interface';
 import { EduContentSearchResultComponent } from './edu-content-search-result.component';
 
 describe('EduContentSearchResultComponent', () => {

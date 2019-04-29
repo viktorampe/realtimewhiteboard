@@ -262,10 +262,10 @@ export class EduContentsViewModel {
         return {
           ...searchResult,
           results: searchResult.results.map(
-            (eduContentInterface: EduContentInterface) => {
+            (searchResultItem: EduContentInterface) => {
               const eduContent = Object.assign<EduContent, EduContentInterface>(
                 new EduContent(),
-                eduContentInterface
+                searchResultItem
               );
 
               return {

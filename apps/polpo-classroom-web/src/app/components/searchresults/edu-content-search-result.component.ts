@@ -10,12 +10,12 @@ import {
 import { EduContentBookInterface, EduContentTOCInterface } from '@campus/dal';
 import { ResultItemBase } from '@campus/search';
 import {
+  EduContentCollectionManagerServiceInterface,
   EduContentSearchResultInterface,
+  EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN,
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN
 } from '@campus/shared';
-import { EduContentCollectionManagerService } from 'libs/shared/src/lib/collection-manager/edu-content-collection-manager.service';
-import { EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN } from 'libs/shared/src/lib/collection-manager/edu-content-collection-manager.service.interface';
 
 @Component({
   // tslint:disable-next-line
@@ -41,7 +41,7 @@ export class EduContentSearchResultComponent extends ResultItemBase
     @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
     private openStaticContentService: OpenStaticContentServiceInterface,
     @Inject(EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN)
-    private eduContentManagerService: EduContentCollectionManagerService
+    private eduContentManagerService: EduContentCollectionManagerServiceInterface
   ) {
     super();
   }
@@ -63,7 +63,10 @@ export class EduContentSearchResultComponent extends ResultItemBase
   }
 
   public linkBundle() {
-    this.eduContentManagerService.manageBundlesForContent(this.data.eduContent);
+    this.eduContentManagerService.manageBundlesForContent(
+      this.data.eduContent,
+      this.data.eduContent.publishedEduContentMetadata.learningAreaId
+    );
   }
 
   public unlinkTask() {}

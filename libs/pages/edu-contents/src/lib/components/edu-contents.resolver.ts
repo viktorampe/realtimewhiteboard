@@ -2,6 +2,8 @@ import { Inject, Injectable } from '@angular/core';
 import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
+  BundleActions,
+  BundleQueries,
   DalState,
   EduContentActions,
   EduContentProductTypeActions,
@@ -18,6 +20,8 @@ import {
   SchoolTypeActions,
   SchoolTypeQueries,
   StateResolver,
+  TaskActions,
+  TaskQueries,
   YearActions,
   YearQueries
 } from '@campus/dal';
@@ -46,7 +50,13 @@ export class EduContentsResolver extends StateResolver {
       new EduContentProductTypeActions.LoadEduContentProductTypes(),
       new EduNetActions.LoadEduNets(),
       new SchoolTypeActions.LoadSchoolTypes(),
-      new YearActions.LoadYears()
+      new YearActions.LoadYears(),
+      new BundleActions.LoadBundles({
+        userId: this.authService.userId
+      }),
+      new TaskActions.LoadTasks({
+        userId: this.authService.userId
+      })
     ];
   }
 
@@ -59,7 +69,9 @@ export class EduContentsResolver extends StateResolver {
       EduContentProductTypeQueries.getLoaded,
       EduNetQueries.getLoaded,
       SchoolTypeQueries.getLoaded,
-      YearQueries.getLoaded
+      YearQueries.getLoaded,
+      BundleQueries.getLoaded,
+      TaskQueries.getLoaded
     ];
   }
 }
