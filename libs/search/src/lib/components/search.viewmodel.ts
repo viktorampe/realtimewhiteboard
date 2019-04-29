@@ -1,5 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
-import { BehaviorSubject, Observable, zip } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import {
   map,
   skipWhile,
@@ -37,12 +37,10 @@ export class SearchViewModel {
   }
 
   private initiateStreams(): void {
-    this.searchFilters$ = zip(
-      this.results$.pipe(skipWhile(result => !result)), // skip initial value
-      this.filters$.pipe(skipWhile(filters => !filters.length)) // skip initial value
-    ).pipe(
-      withLatestFrom(this.searchState$),
-      map(([[results, filters], state]) => {
+    this.searchFilters$ = this.results$.pipe(
+      skipWhile(result => !result), // skip initial value
+      withLatestFrom(this.filters$, this.searchState$),
+      map(([results, filters, state]) => {
         const filterCriteriaSelections = !!state
           ? state.filterCriteriaSelections
           : new Map<string, (number | string)[]>();
@@ -212,10 +210,13 @@ export class SearchViewModel {
       if (criteriaPrediction !== undefined) {
         //if there is prediction data for this value, return the new prediction
         return criteriaPrediction;
+      } else {
+        //if there is no prediction data for this value, return 0
+        return 0;
       }
     }
     //if there is no new prediction data, return the old data or 0
-    return value.prediction === undefined ? null : value.prediction;
+    return value.prediction === undefined ? 0 : value.prediction;
   }
 
   public reset(
@@ -235,6 +236,7 @@ export class SearchViewModel {
       newSearchState = { ...this.searchState$.value };
       newSearchState.searchTerm = '';
       newSearchState.from = 0;
+      newSearchState.filterCriteriaSelections = new Map();
     }
     this.setFilterCriteria(newSearchState, null);
     // trigger new search
@@ -274,11 +276,6 @@ export class SearchViewModel {
         // request new filters
         // response from factory will trigger emit
         this.updateFilters();
-      } else {
-        // emit unchanged value
-        // needed for searchFilter$
-        // -> zip() needs new emit
-        this.filters$.next(this.filters$.value);
       }
     }
   }
