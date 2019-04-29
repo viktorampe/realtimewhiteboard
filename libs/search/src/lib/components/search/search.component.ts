@@ -112,7 +112,10 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public reset(initialState: SearchStateInterface = this.initialState): void {
-    this.searchViewmodel.reset(this.searchMode, { ...initialState });
+    this.searchViewmodel.reset(this.searchMode, {
+      ...initialState,
+      filterCriteriaSelections: new Map(initialState.filterCriteriaSelections)
+    });
   }
 
   public onSort(event: SortModeInterface): void {
