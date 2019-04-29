@@ -68,6 +68,18 @@ export class LearningPlanFilterFactory implements SearchFilterFactory {
     this.schoolTypes$ = this.store.pipe(select(SchoolTypeQueries.getAll));
   }
 
+  public getPredictionFilterNames(searchState: SearchStateInterface): string[] {
+    const startingColumnIds = this.getStartingColumnSelectedIds(searchState);
+    const columnLevel = this.getColumnLevel(startingColumnIds);
+
+    const filterNames: string[] = [];
+    for (let index = 1; index <= columnLevel; index++) {
+      filterNames.push(this.getSearchFilterStringProperties(index).name);
+    }
+
+    return filterNames;
+  }
+
   getFilters(
     searchState: SearchStateInterface
   ): Observable<SearchFilterInterface[]> {

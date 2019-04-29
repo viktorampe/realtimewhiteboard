@@ -456,6 +456,47 @@ describe('TocFilterFactory', () => {
     });
   });
 
+  describe('getPredictionFilterNames', () => {
+    it('should return the filternames', () => {
+      const factory: TocFilterFactory = TestBed.get(TocFilterFactory);
+
+      // learningarea present
+      let mockSearchState = getMockSearchState(1);
+      let result = factory.getPredictionFilterNames(mockSearchState);
+      expect(result).toEqual(['years']);
+
+      // learningarea, years present
+      mockSearchState = getMockSearchState(1, 1);
+      result = factory.getPredictionFilterNames(mockSearchState);
+      expect(result).toEqual(['years', 'methods']);
+
+      // learningarea, years, methods present
+      mockSearchState = getMockSearchState(1, 1, 1);
+      result = factory.getPredictionFilterNames(mockSearchState);
+      expect(result).toEqual(['years', 'methods', 'eduContentTOC.tree']);
+
+      // learningarea, years, methods, book present
+      mockSearchState = getMockSearchState(1, 1, 1, 1);
+      result = factory.getPredictionFilterNames(mockSearchState);
+      expect(result).toEqual([
+        'years',
+        'methods',
+        'eduContentTOC.tree',
+        'eduContentTOC'
+      ]);
+
+      // learningarea, years, methods, book, toc present -> same as last
+      mockSearchState = getMockSearchState(1, 1, 1, 1, 1);
+      result = factory.getPredictionFilterNames(mockSearchState);
+      expect(result).toEqual([
+        'years',
+        'methods',
+        'eduContentTOC.tree',
+        'eduContentTOC'
+      ]);
+    });
+  });
+
   function getFilter(criteria) {
     return expectedOutputFilters.map(outputFilter => ({
       criteria,
@@ -480,7 +521,7 @@ describe('TocFilterFactory', () => {
 
   function getExpectedYearFilterCriterium() {
     return {
-      name: 'year',
+      name: 'years',
       label: 'Jaren',
       keyProperty: 'id',
       displayProperty: 'name',
@@ -493,7 +534,7 @@ describe('TocFilterFactory', () => {
 
   function getExpectedMethodFilterCriterium(methodIds?: number[]) {
     return {
-      name: 'method',
+      name: 'methods',
       label: 'Methodes',
       keyProperty: 'id',
       displayProperty: 'name',
@@ -570,10 +611,10 @@ describe('TocFilterFactory', () => {
     if (areaId)
       newSearchState.filterCriteriaSelections.set('learningArea', [areaId]);
 
-    if (yearId) newSearchState.filterCriteriaSelections.set('year', [yearId]);
+    if (yearId) newSearchState.filterCriteriaSelections.set('years', [yearId]);
 
     if (methodId)
-      newSearchState.filterCriteriaSelections.set('method', [methodId]);
+      newSearchState.filterCriteriaSelections.set('methods', [methodId]);
     if (bookId)
       newSearchState.filterCriteriaSelections.set('eduContentTOC.tree', [
         bookId

@@ -225,6 +225,10 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
     if (filterQuery.options) searchFilter.options = filterQuery.options;
     return searchFilter;
   }
+
+  public getPredictionFilterNames(): string[] {
+    return Object.values(this.filterQueries).map(value => value.name);
+  }
 }
 
 //Small interface used just here to simplify making filters for the non-special properties

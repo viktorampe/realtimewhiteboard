@@ -193,7 +193,7 @@ describe('LearningPlanFilterFactory', () => {
         {
           filterCriteriaSelection: new Map<string, (number | string)[]>([
             ['learningArea', []],
-            ['eduNet', ['2']] // test to make sure no column level can be skipped
+            ['eduNets', ['2']] // test to make sure no column level can be skipped
           ]),
           expectedSearchFilterCriterias: [],
           getAvailableYearsForSearchCalled: false,
@@ -216,7 +216,7 @@ describe('LearningPlanFilterFactory', () => {
         {
           filterCriteriaSelection: new Map<string, (number | string)[]>([
             ['learningArea', [1]],
-            ['eduNet', ['2']] //testing string to number convertion
+            ['eduNets', ['2']] //testing string to number convertion
           ]),
           expectedSearchFilterCriterias: [
             searchFilterCriterias[1],
@@ -228,8 +228,8 @@ describe('LearningPlanFilterFactory', () => {
         {
           filterCriteriaSelection: new Map<string, (number | string)[]>([
             ['learningArea', [1]],
-            ['eduNet', [2]],
-            ['schoolType', [4]]
+            ['eduNets', [2]],
+            ['schoolTypes', [4]]
           ]),
           expectedSearchFilterCriterias: [
             searchFilterCriterias[1],
@@ -242,9 +242,9 @@ describe('LearningPlanFilterFactory', () => {
         {
           filterCriteriaSelection: new Map<string, (number | string)[]>([
             ['learningArea', [1]],
-            ['eduNet', [2]],
-            ['schoolType', [4]],
-            ['year', [4]]
+            ['eduNets', [2]],
+            ['schoolTypes', [4]],
+            ['years', [4]]
           ]),
           expectedSearchFilterCriterias: [
             searchFilterCriterias[1],
@@ -288,6 +288,55 @@ describe('LearningPlanFilterFactory', () => {
         );
         jest.restoreAllMocks();
       });
+    });
+  });
+
+  describe('getPredictionFilterNames', () => {
+    it('should return the filternames', () => {
+      const factory: LearningPlanFilterFactory = TestBed.get(
+        LearningPlanFilterFactory
+      );
+
+      // learningarea present
+      const mockSearchState = {
+        filterCriteriaSelections: new Map([['learningArea', [1]]]),
+        searchTerm: ''
+      } as SearchStateInterface;
+      let result = factory.getPredictionFilterNames(mockSearchState);
+      expect(result).toEqual(['eduNets']);
+
+      // learningArea, eduNets present
+      mockSearchState.filterCriteriaSelections.set('eduNets', [1]);
+      result = factory.getPredictionFilterNames(mockSearchState);
+      expect(result).toEqual(['eduNets', 'schoolTypes']);
+
+      // learningArea, eduNets, schoolTypes present
+      mockSearchState.filterCriteriaSelections.set('schoolTypes', [1]);
+      result = factory.getPredictionFilterNames(mockSearchState);
+      expect(result).toEqual(['eduNets', 'schoolTypes', 'years']);
+
+      // learningArea, eduNets, schoolTypes, years present
+      mockSearchState.filterCriteriaSelections.set('years', [1]);
+      result = factory.getPredictionFilterNames(mockSearchState);
+      expect(result).toEqual([
+        'eduNets',
+        'schoolTypes',
+        'years',
+        'learningPlans.assignments.specialty'
+      ]);
+
+      // learningArea, eduNets, schoolTypes, years, specialty present -> same as last
+      mockSearchState.filterCriteriaSelections.set(
+        'learningPlans.assignments.specialty',
+        [1]
+      );
+      result = factory.getPredictionFilterNames(mockSearchState);
+      expect(result).toEqual([
+        'eduNets',
+        'schoolTypes',
+        'years',
+        'learningPlans.assignments.specialty'
+      ]);
     });
   });
 });
