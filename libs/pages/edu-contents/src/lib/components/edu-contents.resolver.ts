@@ -22,6 +22,8 @@ import {
   StateResolver,
   TaskActions,
   TaskQueries,
+  UnlockedContentActions,
+  UnlockedContentQueries,
   YearActions,
   YearQueries
 } from '@campus/dal';
@@ -56,6 +58,9 @@ export class EduContentsResolver extends StateResolver {
       }),
       new TaskActions.LoadTasks({
         userId: this.authService.userId
+      }),
+      new UnlockedContentActions.LoadUnlockedContents({
+        userId: this.authService.userId
       })
     ];
   }
@@ -71,7 +76,8 @@ export class EduContentsResolver extends StateResolver {
       SchoolTypeQueries.getLoaded,
       YearQueries.getLoaded,
       BundleQueries.getLoaded,
-      TaskQueries.getLoaded
+      TaskQueries.getLoaded,
+      UnlockedContentQueries.getLoaded
     ];
   }
 }
