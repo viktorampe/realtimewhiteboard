@@ -10,7 +10,6 @@ import {
   ViewChild,
   ViewChildren
 } from '@angular/core';
-import { ComponentFactoryResolver } from '@angular/core/src/render3';
 import {
   async,
   ComponentFixture,
@@ -27,6 +26,7 @@ import { UiModule } from '@campus/ui';
 import { hot } from 'jasmine-marbles';
 import { BehaviorSubject } from 'rxjs';
 import {
+  MockSearchViewModel,
   SearchFilterCriteriaFixture,
   SearchFilterCriteriaValuesFixture,
   SearchPortalDirective
@@ -50,7 +50,6 @@ import { SelectFilterComponent } from '../select-filter-component/select-filter.
 import { SortModeInterface } from './../../interfaces/search-mode-interface';
 import { SearchTermComponent } from './../search-term/search-term.component';
 import { SearchViewModel } from './../search.viewmodel';
-import { MockSearchViewModel } from './../search.viewmodel.mock';
 import { SearchComponent } from './search.component';
 
 @Component({
@@ -86,8 +85,7 @@ export class TestContainerComponent implements AfterViewInit {
 @NgModule({
   declarations: [TestContainerComponent],
   imports: [CommonModule, UiModule, SearchModule, NoopAnimationsModule],
-  exports: [TestContainerComponent],
-  providers: [ColumnFilterService]
+  exports: [TestContainerComponent]
 })
 export class TestModule {}
 
@@ -133,32 +131,37 @@ describe('SearchComponent', () => {
     TestBed.configureTestingModule({
       imports: [TestModule],
       declarations: [ResultItemComponent],
-      providers: [
-        { provide: SearchViewModel, useClass: MockSearchViewModel },
-        { provide: MatIconRegistry, useClass: MockMatIconRegistry },
-        { provide: ColumnFilterService, useValue: {} },
-        { provide: ComponentFactoryResolver, useValue: {} }
-      ]
-    }).overrideModule(BrowserDynamicTestingModule, {
-      set: {
-        entryComponents: [
-          ResultItemComponent,
-          CheckboxLineFilterComponent,
-          CheckboxListFilterComponent,
-          BreadcrumbFilterComponent,
-          ColumnFilterComponent,
-          SelectFilterComponent,
-          SearchTermComponent
-        ]
-      }
-    });
+      providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
+    })
+      .overrideModule(BrowserDynamicTestingModule, {
+        set: {
+          entryComponents: [
+            ResultItemComponent,
+            CheckboxLineFilterComponent,
+            CheckboxListFilterComponent,
+            BreadcrumbFilterComponent,
+            ColumnFilterComponent,
+            SelectFilterComponent,
+            SearchTermComponent
+          ]
+        }
+      })
+      // these are provided at the Component level
+      .overrideComponent(SearchComponent, {
+        set: {
+          providers: [
+            { provide: ColumnFilterService, useValue: { reset: () => {} } },
+            { provide: SearchViewModel, useClass: MockSearchViewModel }
+          ]
+        }
+      });
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SearchComponent);
     component = fixture.componentInstance;
 
-    searchViewmodel = TestBed.get(SearchViewModel);
+    searchViewmodel = component['searchViewmodel'];
     component.initialState = mockSearchState;
     component.searchMode = mockSearchMode;
 
@@ -534,6 +537,8 @@ describe('SearchComponent', () => {
       searchComponent.initialState = mockSearchState;
       searchComponent.searchMode = mockSearchMode;
 
+      searchViewmodel = searchComponent['searchViewmodel'];
+
       hostFixture.detectChanges();
 
       checkboxLineComponent = getFilterElement(CheckboxLineFilterComponent);
@@ -576,7 +581,7 @@ describe('SearchComponent', () => {
         SearchFilterInterface[]
       >).value;
       searchFilterComponents.forEach((componentDE, i) => {
-        expect(componentDE.componentInstance.filterCriteria).toBe(
+        expect(componentDE.componentInstance.filterCriteria).toEqual(
           filterCriteria[i].criteria
         );
       });
