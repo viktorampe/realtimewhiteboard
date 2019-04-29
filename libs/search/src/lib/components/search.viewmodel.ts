@@ -294,7 +294,7 @@ export class SearchViewModel {
     // -> if so, keep current predictions
     if (
       this.searchState$.value &&
-      this.searchState$.value.from !== 0 &&
+      !!this.searchState$.value.from &&
       this.results$.value
     ) {
       result.filterCriteriaPredictions = this.results$.value.filterCriteriaPredictions;
