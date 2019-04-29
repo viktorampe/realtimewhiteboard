@@ -419,7 +419,10 @@ describe('EduContentSearchResultComponent', () => {
         ).toHaveBeenCalled();
         expect(
           collectionManagerService.manageBundlesForContent
-        ).toHaveBeenCalledWith(component.data.eduContent);
+        ).toHaveBeenCalledWith(
+          component.data.eduContent,
+          component.data.eduContent.publishedEduContentMetadata.learningAreaId
+        );
       });
 
       it('should call open on static content service when calling openStatic', () => {
