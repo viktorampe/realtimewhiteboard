@@ -34,7 +34,8 @@ import { SearchStateInterface } from './../../interfaces/search-state.interface'
 @Component({
   selector: 'campus-search',
   templateUrl: './search.component.html',
-  styleUrls: ['./search.component.scss']
+  styleUrls: ['./search.component.scss'],
+  providers: [SearchViewModel, ColumnFilterService]
 })
 export class SearchComponent implements OnInit, OnDestroy, OnChanges {
   private searchTermComponent: SearchTermComponent;
@@ -100,6 +101,7 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
 
     // reset filter-specific services
     this.columnFilterService.reset();
+    console.log('destroy');
   }
 
   ngOnChanges(changes: SimpleChanges) {

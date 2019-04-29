@@ -1,11 +1,12 @@
 import {
   AfterViewInit,
   Component,
+  OnDestroy,
   QueryList,
   ViewChild,
   ViewChildren
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import {
   SearchComponent,
   SearchModeInterface,
@@ -13,7 +14,7 @@ import {
   SearchResultInterface,
   SearchStateInterface
 } from '@campus/search';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { EduContentsViewModel } from '../edu-contents.viewmodel';
 
 @Component({
@@ -21,12 +22,15 @@ import { EduContentsViewModel } from '../edu-contents.viewmodel';
   templateUrl: './edu-contents-search-by-column.component.html',
   styleUrls: ['./edu-contents-search-by-column.component.scss']
 })
-export class EduContentSearchByColumnComponent implements AfterViewInit {
+export class EduContentSearchByColumnComponent
+  implements AfterViewInit, OnDestroy {
   public searchMode: SearchModeInterface;
   public initialSearchState$: Observable<SearchStateInterface>;
   public searchState$: Observable<SearchStateInterface>;
   public searchResults$: Observable<SearchResultInterface>;
   public currentLearningArea: number;
+
+  private subscriptions = new Subscription();
 
   @ViewChild(SearchComponent) public searchComponent: SearchComponent;
 
@@ -35,9 +39,19 @@ export class EduContentSearchByColumnComponent implements AfterViewInit {
 
   constructor(
     private eduContentsViewModel: EduContentsViewModel,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private router: Router
   ) {
-    this.initialize();
+    // always re-initialise after navigation
+    // 2 routes use same component
+    this.subscriptions.add(
+      router.events.subscribe(e => {
+        if (e instanceof NavigationEnd) {
+          this.initialize();
+          console.log('initialise');
+        }
+      })
+    );
   }
 
   ngAfterViewInit(): void {
@@ -56,5 +70,9 @@ export class EduContentSearchByColumnComponent implements AfterViewInit {
 
   onSearchStateChange(searchState: SearchStateInterface): void {
     this.eduContentsViewModel.updateState(searchState);
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 }

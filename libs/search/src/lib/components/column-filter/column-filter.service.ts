@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SearchFilterCriteriaInterface } from '../../interfaces';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ColumnFilterService {
   public preserveColumn: boolean;
   public previousFilterCriteria: SearchFilterCriteriaInterface;

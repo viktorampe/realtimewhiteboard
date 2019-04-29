@@ -1,12 +1,6 @@
 import { Injectable, Injector } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import {
-  map,
-  skipWhile,
-  startWith,
-  take,
-  withLatestFrom
-} from 'rxjs/operators';
+import { BehaviorSubject, Observable, zip } from 'rxjs';
+import { filter, map, startWith, take, tap } from 'rxjs/operators';
 import {
   SearchFilterCriteriaInterface,
   SearchFilterCriteriaValuesInterface,
@@ -18,9 +12,7 @@ import {
   SortModeInterface
 } from '../interfaces';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class SearchViewModel {
   private searchMode: SearchModeInterface;
   private filterFactory: SearchFilterFactory;
@@ -36,10 +28,47 @@ export class SearchViewModel {
     this.initiateStreams();
   }
 
+  private resultsCount: number;
+  private filtersCount: number;
+  private stateCount: number;
   private initiateStreams(): void {
-    this.searchFilters$ = this.results$.pipe(
-      skipWhile(result => !result), // skip initial value
-      withLatestFrom(this.filters$, this.searchState$),
+    this.resultsCount = 0;
+    this.filtersCount = 0;
+    this.stateCount = 0;
+
+    this.results$.pipe(filter(result => !!result)).subscribe(res => {
+      this.resultsCount++;
+      console.log('results', this.resultsCount, res);
+    });
+
+    this.filters$
+      .pipe(filter(searchFilter => !!searchFilter.length))
+      .subscribe(res => {
+        this.filtersCount++;
+        console.log('filter', this.filtersCount, res);
+      });
+
+    this.searchState$.pipe(filter(state => !!state)).subscribe(res => {
+      this.stateCount++;
+      console.log('state', this.stateCount, res);
+    });
+
+    this.searchFilters$ = zip(
+      // skip initial values
+      this.results$.pipe(filter(result => !!result)),
+      this.filters$.pipe(filter(searchFilter => !!searchFilter.length)),
+      this.searchState$.pipe(filter(state => !!state))
+    ).pipe(
+      tap(() => {
+        console.log(
+          'Results',
+          this.resultsCount,
+          'Filters',
+          this.filtersCount,
+          'State',
+          this.stateCount
+        );
+      }),
       map(([results, filters, state]) => {
         const filterCriteriaSelections = !!state
           ? state.filterCriteriaSelections
@@ -47,9 +76,9 @@ export class SearchViewModel {
         const filterCriteriaPredictions = !!results
           ? results.filterCriteriaPredictions
           : new Map<string, Map<string | number, number>>();
-        return filters.map(filter =>
+        return filters.map(searchFilters =>
           this.getUpdatedSearchFilter(
-            filter,
+            searchFilters,
             filterCriteriaSelections,
             filterCriteriaPredictions
           )
@@ -70,14 +99,14 @@ export class SearchViewModel {
    * @memberof SearchViewModel
    */
   private getUpdatedSearchFilter(
-    filter: SearchFilterInterface,
+    searchFilter: SearchFilterInterface,
     stateFilterCriteriaSelections: Map<string, (number | string)[]>,
     resultsFilterCriteriaPredictions: Map<string, Map<string | number, number>>
   ): SearchFilterInterface {
     if (!filter) return;
 
-    if (Array.isArray(filter.criteria))
-      filter.criteria = filter.criteria.map(criterium =>
+    if (Array.isArray(searchFilter.criteria))
+      searchFilter.criteria = searchFilter.criteria.map(criterium =>
         this.getUpdatedCriterium(
           criterium,
           stateFilterCriteriaSelections,
@@ -86,14 +115,14 @@ export class SearchViewModel {
       );
     //if single get updatedCriterium
     else {
-      filter.criteria = this.getUpdatedCriterium(
-        filter.criteria,
+      searchFilter.criteria = this.getUpdatedCriterium(
+        searchFilter.criteria,
         stateFilterCriteriaSelections,
         resultsFilterCriteriaPredictions
       );
     }
 
-    return filter;
+    return searchFilter;
   }
 
   /**
@@ -253,12 +282,14 @@ export class SearchViewModel {
       from: 0
     };
     this.searchState$.next(newValue);
+    this.filters$.next(this.filters$.value);
   }
   public getNextPage(): void {
     const newValue = { ...this.searchState$.value };
     newValue.from =
       (this.searchState$.value.from || 0) + this.searchMode.results.pageSize;
     this.searchState$.next(newValue);
+    this.filters$.next(this.filters$.value);
   }
 
   public changeFilters(
@@ -276,6 +307,8 @@ export class SearchViewModel {
         // request new filters
         // response from factory will trigger emit
         this.updateFilters();
+      } else {
+        this.filters$.next(this.filters$.value);
       }
     }
   }
@@ -284,6 +317,7 @@ export class SearchViewModel {
     newValue.from = 0;
     newValue.searchTerm = searchTerm;
     this.searchState$.next(newValue);
+    this.filters$.next(this.filters$.value);
   }
 
   public updateResult(result: SearchResultInterface): void {
