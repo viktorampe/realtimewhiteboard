@@ -1,10 +1,4 @@
-import {
-  animate,
-  state,
-  style,
-  transition,
-  trigger
-} from '@angular/animations';
+import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import {
   SearchFilterComponentInterface,
@@ -20,42 +14,22 @@ import { ColumnFilterService } from './column-filter.service';
   animations: [
     trigger('slideInOut', [
       transition('* => forwardEnter', [
-        //enter from right to left
-        style({ transform: 'translateX(100%)' }),
+        //enter from left to right
+        style({ transform: 'translateX(-50%)' }),
         animate('200ms ease-in-out', style({ transform: 'translateX(0%)' }))
       ]),
       transition('* => backwardEnter', [
-        //enter from left to right, position absolute needs to be added so a redrew due a new array will work
-        style({ transform: 'translateX(-100%)', position: 'absolute' }),
-        animate('200ms ease-in-out', style({ transform: 'translateX(0%)' }))
-      ]),
-      transition(
-        'forwardEnter => forwardLeave, backwardEnter => forwardLeave',
-        [
-          // leave right to left (* can not be used, only entered elements can animate leave)
-          style({ position: 'absolute' }),
-          animate(
-            '200ms ease-in-out',
-            style({ transform: 'translateX(-100%)' })
-          )
-        ]
-      ),
-      transition(
-        'forwardEnter => backwardLeave, backwardEnter => backwardLeave, forwardEnter => void, backwardEnter => void',
-        [
-          // leave left to right, (* can not be used, only entered elements can animate leave)
-          style({ position: 'absolute' }),
-          animate('200ms ease-in-out', style({ transform: 'translateX(100%)' }))
-        ]
-      ),
-      state('backwardEnter', style({ position: 'static' })), // set enter style absolute back to default static
-      state('forwardLeave', style({ display: 'none' })), // hide using display none
-      state('backwardLeave', style({ display: 'none' })) // hide using display none
+        //enter from right to left
+        style({ transform: 'translateX(0%)' }),
+        animate('200ms ease-in-out', style({ transform: 'translateX(-50%)' }))
+      ])
     ])
   ]
 })
 export class ColumnFilterComponent implements SearchFilterComponentInterface {
   private _filterCriteria: SearchFilterCriteriaInterface[];
+  private forwardAnimation: boolean;
+  filterCriteriaToToggle: SearchFilterCriteriaInterface[];
 
   @Input()
   public set filterCriteria(value: SearchFilterCriteriaInterface[]) {
@@ -63,9 +37,40 @@ export class ColumnFilterComponent implements SearchFilterComponentInterface {
       // input is set by searchComponent, which can also be a single criterium
       if (!Array.isArray(value)) value = [value];
 
-      this.columnFilterService.forwardAnimation =
-        this.columnFilterService.previousFilterCriteriaCount < value.length;
-      this.columnFilterService.previousFilterCriteriaCount = value.length;
+      if (this.columnFilterService.actionSource !== 'self') {
+        this.columnFilterService.preserveColumn =
+          this.columnFilterService.visibleColumnIndex === value.length - 1;
+      }
+
+      this.forwardAnimation =
+        this.columnFilterService.visibleColumnIndex > value.length - 1;
+
+      if (this.columnFilterService.preserveColumn) {
+        // render last 2 columns
+        // because clicking through to the next level will not trigger new filterCriteria,
+        // we want the next level to already be ready in the tree
+        // if we happen to be at the deepest level or the change is triggered from an external filter
+        // we have to show the last column from our filters
+        const sliceColumns: number =
+          this.columnFilterService.isLastChild ||
+          this.columnFilterService.actionSource !== 'self'
+            ? 1
+            : 2;
+        this.columnFilterService.visibleColumnIndex =
+          value.length - sliceColumns;
+        this.filterCriteriaToToggle = value.slice(
+          this.columnFilterService.visibleColumnIndex
+        );
+      } else {
+        this.columnFilterService.visibleColumnIndex = value.length - 1;
+        const newCriteria: SearchFilterCriteriaInterface =
+          value[this.columnFilterService.visibleColumnIndex];
+        this.filterCriteriaToToggle = this.forwardAnimation
+          ? [newCriteria, this.columnFilterService.previousFilterCriteria]
+          : [this.columnFilterService.previousFilterCriteria, newCriteria];
+      }
+
+      this.columnFilterService.actionSource = null;
     }
 
     this._filterCriteria = value;
@@ -80,36 +85,28 @@ export class ColumnFilterComponent implements SearchFilterComponentInterface {
   constructor(private columnFilterService: ColumnFilterService) {}
 
   /**
-   * determines if a column should be visible or not
+   * returns the animation state string that is used to provide forward or backward animations
+   * forward means the animation will go from left to right, backward from right to left
    *
-   * @param {number} columnIndex
-   * @returns {boolean}
-   * @memberof ColumnFilterComponent
-   */
-  columnVisible(columnIndex: number): boolean {
-    return (
-      columnIndex ===
-      this.filterCriteria.length -
-        (this.columnFilterService.preserveColumn ? 2 : 1)
-    );
-  }
-
-  /**
-   * returns the animation state string that is used to provide specific animations of enter , leave , forward and backward
-   * the string wil always be a combination of these options, eg forwardEnter, forwardLeave, backwardEnter, backwardLeave
-   *
-   * forward means the animation will go from right to left, backward from left to right
-   *
-   * Enter meand the animation will make the element enter the page to stay, Leave means the animation will make the element disappear
-   *
-   * @param {number} columnIndex
    * @returns {string}
    * @memberof ColumnFilterComponent
    */
-  animationState(columnIndex: number): string {
-    return `${
-      this.columnFilterService.forwardAnimation ? 'forward' : 'backward'
-    }${this.columnVisible(columnIndex) ? 'Enter' : 'Leave'}`;
+  animationState(): string {
+    if (this.columnFilterService.preserveColumn) {
+      return 'noAnimation';
+    }
+    return this.forwardAnimation ? 'forwardEnter' : 'backwardEnter';
+  }
+
+  animationDone(event): void {
+    if (event.toState === 'backwardEnter') {
+      // remove first column
+      this.filterCriteriaToToggle = this.filterCriteriaToToggle.slice(1, 2);
+    } else if (event.toState === 'forwardEnter') {
+      // remove last column
+      this.filterCriteriaToToggle = this.filterCriteriaToToggle.slice(0, 1);
+    }
+    this.columnFilterService.previousFilterCriteria = this.filterCriteriaToToggle[0];
   }
 
   onFilterSelectionChange(
@@ -117,8 +114,11 @@ export class ColumnFilterComponent implements SearchFilterComponentInterface {
     preserveColumn: boolean = false,
     filterCriterionName: string
   ) {
-    const selectionChanged = !filterCriterionValue.selected;
-    this.columnFilterService.preserveColumn = preserveColumn;
+    const selectionChanged = filterCriterionValue.selected !== true;
+    this.columnFilterService.preserveColumn =
+      preserveColumn || filterCriterionValue.hasChild === false;
+    this.columnFilterService.actionSource = 'self';
+    this.columnFilterService.isLastChild = !filterCriterionValue.hasChild;
 
     // first reset all selected markers of criteria with the same name to false
     this.filterCriteria
@@ -134,6 +134,9 @@ export class ColumnFilterComponent implements SearchFilterComponentInterface {
 
     if (selectionChanged) {
       this.filterSelectionChange.emit(this.filterCriteria);
+    } else {
+      this.columnFilterService.actionSource = null;
+      this.columnFilterService.visibleColumnIndex += 1;
     }
   }
 }

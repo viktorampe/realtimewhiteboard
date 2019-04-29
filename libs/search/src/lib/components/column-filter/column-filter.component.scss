@@ -1,4 +1,19 @@
+:host {
+  overflow: hidden;
+  display: block;
+  height: 100%;
+}
+
+.column__filter__container {
+  display: flex;
+  width: 200%;
+  height: 100%;
+}
+
 .column__filter {
+  flex: 0 0 50%;
+  overflow: auto;
+
   &__value {
     display: flex;
     flex-direction: row;

@@ -79,93 +79,54 @@ describe('ColumnFilterComponent', () => {
     expect(component).toBeTruthy();
   });
   describe('filterCriteria input setter', () => {
-    it('should not change forwardAnimation and previousFilterCriteriaCount if passed value is undefined', () => {
-      component.filterCriteria = undefined;
-      fixture.detectChanges();
-      expect(component['columnFilterService'].forwardAnimation).toBe(true);
-      expect(component['columnFilterService'].previousFilterCriteriaCount).toBe(
-        undefined
-      );
-    });
-    it('should not change forwardAnimation and previousFilterCriteriaCount if passed value is null', () => {
-      component.filterCriteria = null;
-      fixture.detectChanges();
-      expect(component['columnFilterService'].forwardAnimation).toBe(true);
-      expect(component['columnFilterService'].previousFilterCriteriaCount).toBe(
-        undefined
-      );
-    });
-    it('should update forwardAnimation to false and previousFilterCriteriaCount to the count if the first value is passed', () => {
-      component.filterCriteria = mockFilterCriteria;
-      fixture.detectChanges();
-      expect(component['columnFilterService'].forwardAnimation).toBe(false);
-      expect(component['columnFilterService'].previousFilterCriteriaCount).toBe(
-        mockFilterCriteria.length
-      );
-    });
-    it('should update forwardAnimation to true and previousFilterCriteriaCount to the new count if a new value is passed that has a bigger length', () => {
+    it('should update forwardAnimation to false and visibleColumnIndex to the new count if a new value is passed that has a bigger length', () => {
       component.filterCriteria = mockFilterCriteria;
       fixture.detectChanges();
       component.filterCriteria = [...mockFilterCriteria, ...mockFilterCriteria];
       fixture.detectChanges();
-      expect(component['columnFilterService'].forwardAnimation).toBe(true);
-      expect(component['columnFilterService'].previousFilterCriteriaCount).toBe(
-        mockFilterCriteria.length * 2
+      expect(component['forwardAnimation']).toBe(false);
+      expect(component['columnFilterService'].visibleColumnIndex).toBe(
+        mockFilterCriteria.length * 2 - 1
       );
     });
-    it('should update forwardAnimation to false and previousFilterCriteriaCount to the new count if a new value is passed that has a lower length', () => {
+    it('should update forwardAnimation to true and visibleColumnIndex to the new count if a new value is passed that has a lower length', () => {
       component.filterCriteria = [...mockFilterCriteria, ...mockFilterCriteria];
       fixture.detectChanges();
       component.filterCriteria = mockFilterCriteria;
       fixture.detectChanges();
-      expect(component['columnFilterService'].forwardAnimation).toBe(false);
-      expect(component['columnFilterService'].previousFilterCriteriaCount).toBe(
-        mockFilterCriteria.length
+      expect(component['forwardAnimation']).toBe(true);
+      expect(component['columnFilterService'].visibleColumnIndex).toBe(
+        mockFilterCriteria.length - 1
       );
-    });
-  });
-  describe('columnVisible', () => {
-    it('should return true only for the last column if new criteria are passed and preserveColumn is false', () => {
-      component.filterCriteria = [...mockFilterCriteria, ...mockFilterCriteria];
-      fixture.detectChanges();
-      const expectedReturnValues = [false, false, false, true];
-      expectedReturnValues.forEach((expectedReturnValue, index) => {
-        expect(component.columnVisible(index)).toBe(expectedReturnValue);
-      });
-    });
-    it('should return true only for the second to last column if new criteria are passed and preserveColumn is true', () => {
-      component['columnFilterService'].preserveColumn = true;
-      component.filterCriteria = [...mockFilterCriteria, ...mockFilterCriteria];
-      fixture.detectChanges();
-      const expectedReturnValues = [false, false, true, false];
-      expectedReturnValues.forEach((expectedReturnValue, index) => {
-        expect(component.columnVisible(index)).toBe(expectedReturnValue);
-      });
     });
   });
   describe('animationState', () => {
-    it(`should return correct 'backward' string values when criteria are passed for the first time`, () => {
+    it(`should return correct 'backward' string value when criteria are passed for the first time`, () => {
       component.filterCriteria = mockFilterCriteria;
       fixture.detectChanges();
-      const expectedReturnValues = ['backwardLeave', 'backwardEnter'];
-      expectedReturnValues.forEach((expectedReturnValue, index) => {
-        expect(component.animationState(index)).toBe(expectedReturnValue);
-      });
+      expect(component.animationState()).toBe('backwardEnter');
     });
-    it(`should return correct 'forward' string values when criteria are passed for the second time that have a bigger length`, () => {
+    it(`should return correct 'backward' string value when criteria are passed for the second time that have a bigger length`, () => {
       component.filterCriteria = mockFilterCriteria;
       fixture.detectChanges();
       component.filterCriteria = [...mockFilterCriteria, ...mockFilterCriteria];
       fixture.detectChanges();
-      const expectedReturnValues = [
-        'forwardLeave',
-        'forwardLeave',
-        'forwardLeave',
-        'forwardEnter'
-      ];
-      expectedReturnValues.forEach((expectedReturnValue, index) => {
-        expect(component.animationState(index)).toBe(expectedReturnValue);
-      });
+      expect(component.animationState()).toBe('backwardEnter');
+    });
+    it(`should return correct 'forward' string value when criteria are passed for the second time that have a lower length`, () => {
+      component.filterCriteria = [...mockFilterCriteria, ...mockFilterCriteria];
+      fixture.detectChanges();
+      component.filterCriteria = mockFilterCriteria;
+      fixture.detectChanges();
+      expect(component.animationState()).toBe('forwardEnter');
+    });
+    it(`should return correct 'noAnimation' string value when preserveColumn === true`, () => {
+      component.filterCriteria = [...mockFilterCriteria];
+      fixture.detectChanges();
+      component['columnFilterService'].preserveColumn = true;
+      component.filterCriteria = [...mockFilterCriteria];
+      fixture.detectChanges();
+      expect(component.animationState()).toBe('noAnimation');
     });
   });
   describe('onFilterSelectionChange', () => {
@@ -250,21 +211,13 @@ describe('ColumnFilterComponent', () => {
     });
   });
   describe('view', () => {
-    it('should show only one column', () => {
-      component.filterCriteria = mockFilterCriteria;
-      fixture.detectChanges();
-      const displayedColumns = fixture.debugElement
-        .queryAll(By.css('.column__filter'))
-        .filter(column => column.nativeElement.style.display !== 'none');
-      expect(displayedColumns.length).toBe(1);
-    });
     it('should show the correct amount of values', () => {
       component.filterCriteria = mockFilterCriteria;
       fixture.detectChanges();
-      const displayedColumns = fixture.debugElement
-        .queryAll(By.css('.column__filter'))
-        .filter(column => column.nativeElement.style.display !== 'none');
-      const displayedValues = displayedColumns[0].queryAll(
+      const displayedColumns = fixture.debugElement.queryAll(
+        By.css('.column__filter')
+      );
+      const displayedValues = displayedColumns[1].queryAll(
         By.css('.column__filter__value')
       );
       expect(displayedValues.length).toBe(7);
@@ -272,10 +225,10 @@ describe('ColumnFilterComponent', () => {
     it('should show the correct content in the labels', () => {
       component.filterCriteria = mockFilterCriteria;
       fixture.detectChanges();
-      const displayedColumns = fixture.debugElement
-        .queryAll(By.css('.column__filter'))
-        .filter(column => column.nativeElement.style.display !== 'none');
-      const displayedLabels = displayedColumns[0].queryAll(
+      const displayedColumns = fixture.debugElement.queryAll(
+        By.css('.column__filter')
+      );
+      const displayedLabels = displayedColumns[1].queryAll(
         By.css('.column__filter__value__button-content__label')
       );
       expect(displayedLabels.length).toBe(7);
@@ -290,10 +243,10 @@ describe('ColumnFilterComponent', () => {
     it('should show the magnifier only if value.prediction is set and not 0', () => {
       component.filterCriteria = mockFilterCriteria;
       fixture.detectChanges();
-      const displayedColumns = fixture.debugElement
-        .queryAll(By.css('.column__filter'))
-        .filter(column => column.nativeElement.style.display !== 'none');
-      const displayedMagnifiers = displayedColumns[0].queryAll(
+      const displayedColumns = fixture.debugElement.queryAll(
+        By.css('.column__filter')
+      );
+      const displayedMagnifiers = displayedColumns[1].queryAll(
         By.css('.column__filter__value__button-content__icons__magnifier')
       );
       expect(displayedMagnifiers.length).toBe(4);
@@ -301,10 +254,10 @@ describe('ColumnFilterComponent', () => {
     it('should show the arrow only if value.hasChild is true', () => {
       component.filterCriteria = mockFilterCriteria;
       fixture.detectChanges();
-      const displayedColumns = fixture.debugElement
-        .queryAll(By.css('.column__filter'))
-        .filter(column => column.nativeElement.style.display !== 'none');
-      const displayedMagnifiers = displayedColumns[0].queryAll(
+      const displayedColumns = fixture.debugElement.queryAll(
+        By.css('.column__filter')
+      );
+      const displayedMagnifiers = displayedColumns[1].queryAll(
         By.css('.column__filter__value__button-content__icons__arrow')
       );
       expect(displayedMagnifiers.length).toBe(1);
