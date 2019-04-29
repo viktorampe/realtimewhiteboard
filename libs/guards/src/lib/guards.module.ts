@@ -7,6 +7,11 @@ import { TermPrivacyGuard } from './can-activate/term-privacy.guard';
 
 @NgModule({
   imports: [CommonModule],
-  providers: [CoupledTeacherGuard, AuthenticationGuard, PermissionGuard, TermPrivacyGuard]
+  providers: [
+    CoupledTeacherGuard,
+    AuthenticationGuard,
+    PermissionGuard,
+    TermPrivacyGuard
+  ]
 })
 export class GuardsModule {}
