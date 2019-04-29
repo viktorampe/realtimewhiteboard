@@ -5,6 +5,7 @@ import {
   BundleInterface,
   BundleQueries,
   DalState,
+  EduContent,
   EduContentInterface,
   EduContentServiceInterface,
   EDU_CONTENT_SERVICE_TOKEN,
@@ -261,9 +262,14 @@ export class EduContentsViewModel {
         return {
           ...searchResult,
           results: searchResult.results.map(
-            (eduContent: EduContentInterface) => {
+            (eduContentInterface: EduContentInterface) => {
+              const eduContent = Object.assign<EduContent, EduContentInterface>(
+                new EduContent(),
+                eduContentInterface
+              );
+
               return {
-                eduContent,
+                eduContent: eduContent,
                 currentTask: task || undefined,
                 inTask: !!task,
                 currentBundle: bundle || undefined,

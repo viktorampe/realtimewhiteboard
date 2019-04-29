@@ -14,6 +14,8 @@ import {
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN
 } from '@campus/shared';
+import { EduContentCollectionManagerService } from 'libs/shared/src/lib/collection-manager/edu-content-collection-manager.service';
+import { EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN } from 'libs/shared/src/lib/collection-manager/edu-content-collection-manager.service.interface';
 
 @Component({
   // tslint:disable-next-line
@@ -37,7 +39,9 @@ export class EduContentSearchResultComponent extends ResultItemBase
 
   constructor(
     @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
-    private openStaticContentService: OpenStaticContentServiceInterface
+    private openStaticContentService: OpenStaticContentServiceInterface,
+    @Inject(EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN)
+    private eduContentManagerService: EduContentCollectionManagerService
   ) {
     super();
   }
@@ -54,9 +58,13 @@ export class EduContentSearchResultComponent extends ResultItemBase
     }
   }
 
-  public linkTask() {}
+  public linkTask() {
+    this.eduContentManagerService.manageTasksForContent(this.data.eduContent);
+  }
 
-  public linkBundle() {}
+  public linkBundle() {
+    this.eduContentManagerService.manageBundlesForContent(this.data.eduContent);
+  }
 
   public unlinkTask() {}
 
@@ -65,8 +73,7 @@ export class EduContentSearchResultComponent extends ResultItemBase
   public toggleFavorite() {}
 
   public openStatic() {
-    //EduContent doesn't implement ContentInterface (yet ?)
-    //this.openStaticContentService.open(this.data.eduContent);
+    this.openStaticContentService.open(this.data.eduContent);
   }
   public openExercise(answers: boolean) {}
 
