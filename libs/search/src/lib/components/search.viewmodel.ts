@@ -229,7 +229,10 @@ export class SearchViewModel {
 
     if (state) {
       // we want to update the state
-      newSearchState = { ...state };
+      newSearchState = {
+        ...state,
+        filterCriteriaSelections: new Map(state.filterCriteriaSelections)
+      };
     } else {
       // we want to reset the state
       // note: sort mode should stay the same on reset
