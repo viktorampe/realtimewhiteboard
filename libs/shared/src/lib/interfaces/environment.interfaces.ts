@@ -6,6 +6,7 @@ export interface EnvironmentInterface {
   website: EnvironmentWebsiteInterface;
   logout: EnvironmentLogoutInterface;
   login: EnvironmentLoginInterface;
+  termPrivacy: EnvironmentTermPrivacyInterface;
   api: EnvironmentApiInterface;
   features: {
     alerts: EnvironmentAlertsFeatureInterface;
@@ -55,6 +56,10 @@ export interface EnvironmentLogoutInterface {
 }
 
 export interface EnvironmentLoginInterface {
+  url: string;
+}
+
+export interface EnvironmentTermPrivacyInterface {
   url: string;
 }
 
