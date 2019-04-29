@@ -1,4 +1,10 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  async,
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick
+} from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import {
   MatCheckboxModule,
@@ -131,7 +137,7 @@ describe('CheckboxListFilterComponentComponent', () => {
   });
 
   describe('output', () => {
-    it('should emit the updated filtercriterium when the childcomponent emits', () => {
+    it('should emit the updated filtercriterium when the childcomponent emits', fakeAsync(() => {
       spyOn(component.filterSelectionChange, 'emit');
 
       const child: CheckboxFilterComponent = fixture.debugElement.query(
@@ -147,11 +153,13 @@ describe('CheckboxListFilterComponentComponent', () => {
       child.criterium.values[0].selected = true;
       child.selectionChanged.next();
 
+      tick();
+
       expect(component.filterSelectionChange.emit).toHaveBeenCalled();
       expect(component.filterSelectionChange.emit).toHaveBeenCalledTimes(1);
       expect(component.filterSelectionChange.emit).toHaveBeenCalledWith([
         expected
       ]);
-    });
+    }));
   });
 });

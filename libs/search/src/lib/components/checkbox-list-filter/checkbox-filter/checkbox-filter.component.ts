@@ -23,6 +23,8 @@ export class CheckboxFilterComponent implements AfterViewInit, OnDestroy {
   public showMoreItems: boolean; // expand aantal zichtbare titels
   public filteredFilterCriterium: SearchFilterCriteriaInterface;
   public notifyChildren$ = new Subject<MatCheckboxChange>();
+  public indeterminateStatus: { [key: string]: boolean };
+  public showMoreStatus: boolean;
 
   private subscriptions = new Subscription();
   private _criterium: SearchFilterCriteriaInterface;
@@ -36,10 +38,27 @@ export class CheckboxFilterComponent implements AfterViewInit, OnDestroy {
   @Input()
   set criterium(value: SearchFilterCriteriaInterface) {
     this._criterium = value;
-    this.filteredFilterCriterium = this.getFilteredCriterium(value);
+    this.filteredFilterCriterium = this.getFilteredCriterium(
+      value,
+      this.sortBySelection
+    );
+
+    this.indeterminateStatus = {};
+    this.filteredFilterCriterium.values.forEach(critValue => {
+      this.indeterminateStatus[critValue.data.id] = this.getIndeterminateStatus(
+        critValue
+      );
+    });
+
+    this.showMoreStatus = this.getShowMoreStatus(
+      this.maxVisibleItems,
+      this.filteredFilterCriterium,
+      this.indeterminateStatus
+    );
   }
 
   @Input() public parentValueRef: SearchFilterCriteriaValuesInterface;
+  @Input() public sortBySelection: boolean;
 
   @Input()
   public set notificationFromParent(event: MatCheckboxChange) {
@@ -87,6 +106,46 @@ export class CheckboxFilterComponent implements AfterViewInit, OnDestroy {
     return value.data[this.criterium.displayProperty];
   }
 
+  // calculates if a 'show more' link is needed
+  private getShowMoreStatus(
+    maxVisibleItems: number,
+    filterCriterium: SearchFilterCriteriaInterface,
+    indeterminateStatusDict
+  ): boolean {
+    if (!!maxVisibleItems && filterCriterium.values.length > maxVisibleItems) {
+      const valuesAboveMaxVisibleItems = filterCriterium.values.slice(
+        maxVisibleItems
+      );
+
+      const invisibleItems = valuesAboveMaxVisibleItems.filter(
+        value => !value.selected && !indeterminateStatusDict[value.data.id]
+      );
+
+      return invisibleItems.length > 0;
+    } else {
+      return false;
+    }
+  }
+
+  // calculates if a checkbox selection status is indeterminate
+  // based on the selection values of it's children
+  private getIndeterminateStatus(
+    filterCriteriaValue: SearchFilterCriteriaValuesInterface
+  ): boolean {
+    return (
+      !filterCriteriaValue.selected &&
+      !!filterCriteriaValue.child &&
+      !(
+        filterCriteriaValue.child.values.every(
+          childValue => childValue.selected
+        ) ||
+        filterCriteriaValue.child.values.every(
+          childValue => !childValue.selected
+        )
+      )
+    );
+  }
+
   // expand aantal zichtbare titels bij CHILD
   public toggleShowMore() {
     this.showMoreItems = !this.showMoreItems;
@@ -123,13 +182,10 @@ export class CheckboxFilterComponent implements AfterViewInit, OnDestroy {
     const childrenStatus = this.getAllChildrenStatus(parentAssociation);
     if (childrenStatus.allChecked) {
       parentAssociation.parent.checked = true;
-      parentAssociation.parent.indeterminate = false;
     } else if (childrenStatus.allUnChecked) {
       parentAssociation.parent.checked = false;
-      parentAssociation.parent.indeterminate = false;
     } else {
       parentAssociation.parent.checked = false;
-      parentAssociation.parent.indeterminate = true;
     }
 
     // notify parent
@@ -158,20 +214,20 @@ export class CheckboxFilterComponent implements AfterViewInit, OnDestroy {
 
   // filter and sort values
   private getFilteredCriterium(
-    criterium: SearchFilterCriteriaInterface
+    criterium: SearchFilterCriteriaInterface,
+    sortBySelection?: boolean
   ): SearchFilterCriteriaInterface {
-    return {
+    const filteredCriterium = {
       ...criterium,
-      ...{
-        values: criterium.values
-          .filter(
-            value => value.visible && (value.prediction !== 0 || value.selected)
-          )
-          // order by selected status
-          // needed so selected values aren't hidden
-          .sort((a, b) => (a.selected === b.selected ? 0 : a.selected ? -1 : 1))
-      }
+      values: criterium.values.filter(
+        value => value.visible && (value.prediction !== 0 || value.selected)
+      )
     };
+    if (sortBySelection)
+      filteredCriterium.values.sort((a, b) =>
+        a.selected === b.selected ? 0 : a.selected ? -1 : 1
+      );
+    return filteredCriterium;
   }
 
   // helper function to convert MatCheckBox value (a string by default)
@@ -208,16 +264,17 @@ export class CheckboxFilterComponent implements AfterViewInit, OnDestroy {
     checkboxAssociation: AssociatedCheckBoxesInterface
   ): ChildrenStatusInterface {
     return {
-      allChecked: checkboxAssociation.children
-        .toArray()
-        .every(
-          child => child.checked === true && child.indeterminate === false
-        ),
-      allUnChecked: checkboxAssociation.children
-        .toArray()
-        .every(
-          child => child.checked === false && child.indeterminate === false
-        )
+      allChecked: checkboxAssociation.children // null check
+        ? checkboxAssociation.children
+            .toArray()
+            .every(child => child.checked && !child.indeterminate)
+        : true, // if no children -> parent should respond as if they're all selected
+
+      allUnChecked: checkboxAssociation.children // null check
+        ? checkboxAssociation.children
+            .toArray()
+            .every(child => !child.checked && !child.indeterminate)
+        : false // if no children -> parent should respond as if they're all selected
     };
   }
 }
