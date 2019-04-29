@@ -1,6 +1,6 @@
 import { Injectable, Injector } from '@angular/core';
 import { BehaviorSubject, Observable, zip } from 'rxjs';
-import { filter, map, startWith, take, tap } from 'rxjs/operators';
+import { filter, map, startWith, take } from 'rxjs/operators';
 import {
   SearchFilterCriteriaInterface,
   SearchFilterCriteriaValuesInterface,
@@ -28,47 +28,13 @@ export class SearchViewModel {
     this.initiateStreams();
   }
 
-  private resultsCount: number;
-  private filtersCount: number;
-  private stateCount: number;
   private initiateStreams(): void {
-    this.resultsCount = 0;
-    this.filtersCount = 0;
-    this.stateCount = 0;
-
-    this.results$.pipe(filter(result => !!result)).subscribe(res => {
-      this.resultsCount++;
-      console.log('results', this.resultsCount, res);
-    });
-
-    this.filters$
-      .pipe(filter(searchFilter => !!searchFilter.length))
-      .subscribe(res => {
-        this.filtersCount++;
-        console.log('filter', this.filtersCount, res);
-      });
-
-    this.searchState$.pipe(filter(state => !!state)).subscribe(res => {
-      this.stateCount++;
-      console.log('state', this.stateCount, res);
-    });
-
     this.searchFilters$ = zip(
       // skip initial values
       this.results$.pipe(filter(result => !!result)),
       this.filters$.pipe(filter(searchFilter => !!searchFilter.length)),
       this.searchState$.pipe(filter(state => !!state))
     ).pipe(
-      tap(() => {
-        console.log(
-          'Results',
-          this.resultsCount,
-          'Filters',
-          this.filtersCount,
-          'State',
-          this.stateCount
-        );
-      }),
       map(([results, filters, state]) => {
         const filterCriteriaSelections = !!state
           ? state.filterCriteriaSelections

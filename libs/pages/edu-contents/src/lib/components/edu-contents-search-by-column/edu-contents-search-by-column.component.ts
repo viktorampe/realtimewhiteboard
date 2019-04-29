@@ -48,7 +48,6 @@ export class EduContentSearchByColumnComponent
       router.events.subscribe(e => {
         if (e instanceof NavigationEnd) {
           this.initialize();
-          console.log('initialise');
         }
       })
     );

@@ -13,6 +13,7 @@ import {
 } from '../../+fixtures/search-filter-criteria.fixture';
 import { SearchFilterCriteriaInterface } from '../../interfaces/search-filter-criteria.interface';
 import { ColumnFilterComponent } from './column-filter.component';
+import { ColumnFilterService } from './column-filter.service';
 
 const mockFilterCriteria: SearchFilterCriteriaInterface[] = [
   new SearchFilterCriteriaFixture({}, [
@@ -65,7 +66,10 @@ describe('ColumnFilterComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ColumnFilterComponent],
       imports: [MatListModule, NoopAnimationsModule, MatIconModule],
-      providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
+      providers: [
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry },
+        ColumnFilterService
+      ]
     });
   }));
 

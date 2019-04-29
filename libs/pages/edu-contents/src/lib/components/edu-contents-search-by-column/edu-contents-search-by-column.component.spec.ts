@@ -1,8 +1,15 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  async,
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick
+} from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { hot } from '@nrwl/nx/testing';
@@ -22,9 +29,10 @@ describe('EduContentSearchByColumnComponent', () => {
   let fixture: ComponentFixture<EduContentSearchByColumnComponent>;
   let searchComponent;
   let eduContentsViewModel;
+  let router: Router;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [UiModule, NoopAnimationsModule],
+      imports: [UiModule, NoopAnimationsModule, RouterTestingModule],
       declarations: [EduContentSearchByColumnComponent],
       providers: [
         {
@@ -59,13 +67,22 @@ describe('EduContentSearchByColumnComponent', () => {
     searchComponent = TestBed.get(SearchComponent);
     component = fixture.componentInstance;
     component.searchComponent = searchComponent;
+    component.initialize(); // manually execute initialize -> navigation hasn't triggered yet
     fixture.detectChanges();
+
+    router = TestBed.get(Router);
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
   describe('initialize', () => {
+    it('should call initialise on navigation', fakeAsync(() => {
+      component.initialize = jest.fn();
+      router.navigate([]);
+      tick();
+      expect(component.initialize).toHaveBeenCalledTimes(1);
+    }));
     it('should call getSearchMode', () => {
       const getSearchModeSpy = jest.spyOn(
         eduContentsViewModel,

@@ -492,6 +492,12 @@ describe('SearchViewModel', () => {
   });
 
   describe('searchFilters$', () => {
+    const emptySearchState = {
+      from: 0,
+      searchTerm: '',
+      filterCriteriaSelections: new Map()
+    } as SearchStateInterface;
+
     it('should have an empty array as results to start with', () => {
       expect(searchViewModel.searchFilters$).toBeObservable(
         hot('a', { a: [] })
@@ -517,6 +523,8 @@ describe('SearchViewModel', () => {
             getTestSearchResult('someOtherName', new Map()) // searchResult without predictions
           );
 
+          searchViewModel.searchState$.next(emptySearchState);
+
           expect(searchViewModel.searchFilters$).toBeObservable(
             hot('(ab)', {
               a: [], // initial value
@@ -539,6 +547,8 @@ describe('SearchViewModel', () => {
         searchViewModel.updateResult(
           getTestSearchResult('someOtherName', new Map()) // searchResult without predictions
         );
+        searchViewModel.searchState$.next(emptySearchState);
+
         expect(searchViewModel.searchFilters$).toBeObservable(
           hot('(ab)', {
             a: [], // initial value

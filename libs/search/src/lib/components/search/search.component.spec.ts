@@ -10,6 +10,7 @@ import {
   ViewChild,
   ViewChildren
 } from '@angular/core';
+import { ComponentFactoryResolver } from '@angular/core/src/render3';
 import {
   async,
   ComponentFixture,
@@ -42,6 +43,7 @@ import { BreadcrumbFilterComponent } from '../breadcrumb-filter/breadcrumb-filte
 import { CheckboxLineFilterComponent } from '../checkbox-line-filter/checkbox-line-filter-component';
 import { CheckboxListFilterComponent } from '../checkbox-list-filter/checkbox-list-filter.component';
 import { ColumnFilterComponent } from '../column-filter/column-filter.component';
+import { ColumnFilterService } from '../column-filter/column-filter.service';
 import { ResultItemBase } from '../results-list/result.component.base';
 import { ResultsListComponent } from '../results-list/results-list.component';
 import { SelectFilterComponent } from '../select-filter-component/select-filter.component';
@@ -84,7 +86,8 @@ export class TestContainerComponent implements AfterViewInit {
 @NgModule({
   declarations: [TestContainerComponent],
   imports: [CommonModule, UiModule, SearchModule, NoopAnimationsModule],
-  exports: [TestContainerComponent]
+  exports: [TestContainerComponent],
+  providers: [ColumnFilterService]
 })
 export class TestModule {}
 
@@ -132,7 +135,9 @@ describe('SearchComponent', () => {
       declarations: [ResultItemComponent],
       providers: [
         { provide: SearchViewModel, useClass: MockSearchViewModel },
-        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry },
+        { provide: ColumnFilterService, useValue: {} },
+        { provide: ComponentFactoryResolver, useValue: {} }
       ]
     }).overrideModule(BrowserDynamicTestingModule, {
       set: {

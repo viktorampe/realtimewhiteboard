@@ -101,7 +101,6 @@ export class SearchComponent implements OnInit, OnDestroy, OnChanges {
 
     // reset filter-specific services
     this.columnFilterService.reset();
-    console.log('destroy');
   }
 
   ngOnChanges(changes: SimpleChanges) {
