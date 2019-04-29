@@ -13,15 +13,22 @@ import {
 } from '@campus/dal';
 import {
   EduContentSearchResultInterface,
+  OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN
 } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
+import {
+  EduContentCollectionManagerServiceInterface,
+  EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN
+} from 'libs/shared/src/lib/collection-manager/edu-content-collection-manager.service.interface';
 import { EduContentSearchResultComponent } from './edu-content-search-result.component';
 
 describe('EduContentSearchResultComponent', () => {
   let component: EduContentSearchResultComponent;
   let fixture: ComponentFixture<EduContentSearchResultComponent>;
+  let openStaticContentService: OpenStaticContentServiceInterface;
+  let collectionManagerService: EduContentCollectionManagerServiceInterface;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -32,9 +39,21 @@ describe('EduContentSearchResultComponent', () => {
         {
           provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
           useValue: { open: jest.fn() }
+        },
+        {
+          provide: EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN,
+          useValue: {
+            manageTasksForContent: jest.fn(),
+            manageBundlesForContent: jest.fn()
+          }
         }
       ]
     });
+
+    openStaticContentService = TestBed.get(OPEN_STATIC_CONTENT_SERVICE_TOKEN);
+    collectionManagerService = TestBed.get(
+      EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN
+    );
   }));
 
   beforeEach(() => {
@@ -382,6 +401,36 @@ describe('EduContentSearchResultComponent', () => {
       component.data.currentTask.eduContents.push(component.data.eduContent);
 
       expect(component.isEduContentInCurrentTask).toBeTruthy();
+    });
+
+    describe('EduContent actions', () => {
+      it('should call manageTasksForContent on collection manager when calling linkTask', () => {
+        component.linkTask();
+        expect(
+          collectionManagerService.manageTasksForContent
+        ).toHaveBeenCalled();
+        expect(
+          collectionManagerService.manageTasksForContent
+        ).toHaveBeenCalledWith(component.data.eduContent);
+      });
+
+      it('should call manageBundlesForContent on collection manager when calling linkBundle', () => {
+        component.linkBundle();
+        expect(
+          collectionManagerService.manageBundlesForContent
+        ).toHaveBeenCalled();
+        expect(
+          collectionManagerService.manageBundlesForContent
+        ).toHaveBeenCalledWith(component.data.eduContent);
+      });
+
+      it('should call open on static content service when calling openStatic', () => {
+        component.openStatic();
+        expect(openStaticContentService.open).toHaveBeenCalled();
+        expect(openStaticContentService.open).toHaveBeenCalledWith(
+          component.data.eduContent
+        );
+      });
     });
   });
 });
