@@ -21,6 +21,8 @@ import {
   SchoolTypeQueries,
   StateResolver,
   TaskActions,
+  TaskEduContentActions,
+  TaskEduContentQueries,
   TaskQueries,
   UnlockedContentActions,
   UnlockedContentQueries,
@@ -61,6 +63,9 @@ export class EduContentsResolver extends StateResolver {
       }),
       new UnlockedContentActions.LoadUnlockedContents({
         userId: this.authService.userId
+      }),
+      new TaskEduContentActions.LoadTaskEduContents({
+        userId: this.authService.userId
       })
     ];
   }
@@ -77,7 +82,8 @@ export class EduContentsResolver extends StateResolver {
       YearQueries.getLoaded,
       BundleQueries.getLoaded,
       TaskQueries.getLoaded,
-      UnlockedContentQueries.getLoaded
+      UnlockedContentQueries.getLoaded,
+      TaskEduContentQueries.getLoaded
     ];
   }
 }
