@@ -1,14 +1,14 @@
 import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule, MatIconRegistry } from '@angular/material';
-import { By, HAMMER_LOADER } from '@angular/platform-browser';
+import { HAMMER_LOADER } from '@angular/platform-browser';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Params } from '@angular/router';
 import {
   FilterFactoryFixture,
   SearchComponent,
-  SearchModule,
   SearchStateInterface
 } from '@campus/search';
 import { ENVIRONMENT_ICON_MAPPING_TOKEN, SharedModule } from '@campus/shared';
@@ -21,6 +21,25 @@ import {
   ResultItemMockComponent
 } from '../edu-contents.viewmodel.mock';
 import { EduContentSearchByTermComponent } from './edu-contents-search-by-term.component';
+
+@Component({
+  template: `
+    <div></div>
+  `,
+  selector: 'campus-search'
+})
+class SearchStubComponent {
+  @Input() public searchMode;
+  @Input() public autoCompleteValues;
+  @Input() public autoCompleteDebounceTime;
+  @Input() public initialState;
+  @Input() public searchResults;
+  @Input() public autoFocusSearchTerm;
+  @Input() public searchPortals;
+  @Output() public searchState$ = of(null);
+  @Output() public searchTermChangeForAutoComplete = new EventEmitter<string>();
+  reset(): void {}
+}
 
 describe('EduContentSearchByTermComponent', () => {
   let params: Subject<Params>;
@@ -40,10 +59,13 @@ describe('EduContentSearchByTermComponent', () => {
         UiModule,
         SharedModule,
         NoopAnimationsModule,
-        SearchModule,
         MatIconModule
       ],
-      declarations: [EduContentSearchByTermComponent, ResultItemMockComponent],
+      declarations: [
+        EduContentSearchByTermComponent,
+        ResultItemMockComponent,
+        SearchStubComponent
+      ],
       providers: [
         {
           provide: HAMMER_LOADER,
@@ -63,7 +85,8 @@ describe('EduContentSearchByTermComponent', () => {
         },
         { provide: EduContentsViewModel, useClass: EduContentsViewModelMock },
         FilterFactoryFixture,
-        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry },
+        { provide: SearchComponent, useValue: SearchStubComponent }
       ]
     }).overrideModule(BrowserDynamicTestingModule, {
       set: { entryComponents: [ResultItemMockComponent] }
@@ -75,6 +98,7 @@ describe('EduContentSearchByTermComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(EduContentSearchByTermComponent);
     component = fixture.componentInstance;
+    component.searchComponent = TestBed.get(SearchComponent);
     fixture.detectChanges();
   });
 
@@ -83,18 +107,10 @@ describe('EduContentSearchByTermComponent', () => {
   });
 
   it('should reset search filters when clearSearchFilters is called', () => {
-    const searchComponentDebugElement = fixture.debugElement.query(
-      By.directive(SearchComponent)
-    );
-    const spyReset = jest.spyOn(
-      searchComponentDebugElement.componentInstance,
-      'reset'
-    );
+    component.searchComponent.reset = jest.fn();
     component.clearSearchFilters();
 
-    expect(spyReset).toHaveBeenCalledTimes(1);
-
-    spyReset.mockRestore();
+    expect(component.searchComponent.reset).toHaveBeenCalledTimes(1);
   });
 
   it('should send searchText to viewmodel subject', () => {
