@@ -120,6 +120,7 @@ export class ColumnFilterComponent implements SearchFilterComponentInterface {
     this.columnFilterService.actionSource = 'self';
     this.columnFilterService.isLastChild = !filterCriterionValue.hasChild;
 
+    // set the selected values to false only for the filterCriteria if the column is preserved to prevent more than one selection
     if (this.columnFilterService.preserveColumn) {
       this.columnFilterService.previousFilterCriteria.values.forEach(value => {
         value.selected = false;
