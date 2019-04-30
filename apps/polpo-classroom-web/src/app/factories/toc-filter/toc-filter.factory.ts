@@ -624,7 +624,7 @@ export class TocFilterFactory implements SearchFilterFactory {
     // new searchState has sufficient data
     return (
       searchState.filterCriteriaSelections.has(selectionKey) &&
-      searchState.filterCriteriaSelections.get(selectionKey).length === 1
+      searchState.filterCriteriaSelections.get(selectionKey).length > 0 // it is possible to have more than one in a deeper tree
     );
   }
 }
