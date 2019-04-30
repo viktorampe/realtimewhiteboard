@@ -180,7 +180,7 @@ describe('ColumnFilterComponent', () => {
         mockFilterCriterium.values.forEach((value, vIndex) => {
           const expected =
             cIndex !== selectedTrueMockFilterCriteria.length - 1
-              ? value.selected
+              ? value.selected // the values that are not in the last criteria should not be changed so we just check the original here
               : (cIndex === passedCIndex && vIndex === passedVIndex) || // changed criterion and changed value
                 cIndex !== passedCIndex;
           // other criterion
