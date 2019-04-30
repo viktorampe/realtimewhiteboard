@@ -8,11 +8,13 @@
       iconClass="reset-search"
       primary
       bordered
-      class="pages-edu-contents-search-by-term__reset"
+      class="pages-edu-contents-search-by-term__wrapper__aside__reset"
       (click)="clearSearchFilters()"
       >wis alle filters</campus-button
     >
-    <ng-container searchPortal="hostLeft"></ng-container>
+    <div class="pages-edu-contents-search-by-term__wrapper__aside__scroll">
+      <ng-container searchPortal="hostLeft"></ng-container>
+    </div>
   </div>
   <campus-search
     class="pages-edu-contents-search-by-term__wrapper__main"

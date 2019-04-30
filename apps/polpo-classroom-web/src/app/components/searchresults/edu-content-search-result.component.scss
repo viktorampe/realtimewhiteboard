@@ -1,10 +1,15 @@
 :host {
   width: 100%;
+  transform: none !important;
 }
 
 .app-educontentsearchresult {
   display: flex;
   flex-direction: column;
+
+  &.selected {
+    box-shadow: none;
+  }
 
   &__top {
     display: flex;

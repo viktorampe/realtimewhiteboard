@@ -1,5 +1,5 @@
 @mixin edu-content-search-result-theme() {
-  $educontentsearchresult-margin: 20px !default;
+  $educontentsearchresult-margin: 0 20px 10px 0 !default;
 
   $educontentsearchresult-title-fontsize: 18px !default;
   $educontentsearchresult-title-height: 32px !default;
@@ -10,66 +10,61 @@
   ) !default;
 
   $educontentsearchresult-border-thickness: 3px !default;
-  $educontentsearchresult-border-color: $color-black-1 !default;
+  $educontentsearchresult-border-color: $ui-tertiary-bg-color !default;
 
-  $educontentsearchresult-top-backgroundcolor: $color-white-1 !default;
-  $educontentsearchresult-top-color: $color-black-1 !default;
-  $educontentsearchresult-top-icons-color: $color-blue-2 !default;
+  $educontentsearchresult-top-backgroundcolor: $ui-tertiary-bg-color !default;
+  $educontentsearchresult-top-color: $ui-tertiary-font-color !default;
+  $educontentsearchresult-top-icons-color: $ui-tertiary-color-accent !default;
   $educontentsearchresult-top-padding: 10px 15px !default;
   $educontentsearchresult-top-footer-margin-top: 8px !default;
 
-  $educontentsearchresult-selected-top-backgroundcolor: $color-gray-2 !default;
-  $educontentsearchresult-selected-top-color: $color-white-1 !default;
-  $educontentsearchresult-selected-top-icons-color: $color-white-1 !default;
+  $educontentsearchresult-selected-top-backgroundcolor: $ui-tertiary-bg-color-2 !default;
+  $educontentsearchresult-selected-top-color: $ui-tertiary-font-color-2 !default;
+  $educontentsearchresult-selected-top-icons-color: $ui-tertiary-font-color-2 !default;
 
-  $educontentsearchresult-bottom-contents-backgroundcolor: $color-black-2 !default;
-  $educontentsearchresult-bottom-contents-color: $color-white-1 !default;
+  $educontentsearchresult-bottom-contents-backgroundcolor: $ui-app-bar-background-color !default;
+  $educontentsearchresult-bottom-contents-color: $ui-secondary-font-color !default;
   $educontentsearchresult-bottom-contents-padding: 8px !default;
   $educontentsearchresult-bottom-contents-max-height: 100px !default;
 
-  $educontentsearchresult-bottom-buttonbar-backgroundcolor: $color-blue-2 !default;
-  $educontentsearchresult-bottom-buttonbar-hover-backgroundcolor: $color-blue-1 !default;
+  $educontentsearchresult-bottom-buttonbar-backgroundcolor: $ui-button-bg-color-1 !default;
+  $educontentsearchresult-bottom-buttonbar-hover-backgroundcolor: darken(
+    $educontentsearchresult-bottom-buttonbar-backgroundcolor,
+    2
+  ) !default;
   $educontentsearchresult-bottom-buttonbar-button-height: 70px !default;
-  $educontentsearchresult-bottom-buttonbar-color: $color-white-1 !default;
-
+  $educontentsearchresult-bottom-buttonbar-color: $ui-button-font-color !default;
   $educontentsearchresult-toc-margin: 12px !default;
   $educontentsearchresult-toc-padding-left: 28px !default;
   $educontentsearchresult-toc-list-style-type: square !default;
-
   @for $i from 0 through 10 {
     .toc-depth-#{$i} {
       margin-left: $i * $educontentsearchresult-toc-margin;
     }
   }
-
   .app-educontentsearchresult {
     margin: $educontentsearchresult-margin;
     border: $educontentsearchresult-border-thickness solid
       $educontentsearchresult-border-color;
-
     &__top {
       background-color: $educontentsearchresult-top-backgroundcolor;
       color: $educontentsearchresult-top-color;
       padding: $educontentsearchresult-top-padding;
-
       campus-file-extension,
       &__thumbnail {
         margin-right: 16px;
       }
-
       &__thumbnail {
         width: 84px;
         background-size: contain;
         background-repeat: no-repeat;
       }
-
       &__details {
         &__header {
           &__title {
             mat-icon {
               color: $educontentsearchresult-top-icons-color;
             }
-
             span {
               height: $educontentsearchresult-title-height;
               line-height: $educontentsearchresult-title-height;
@@ -80,11 +75,9 @@
             color: $educontentsearchresult-top-icons-color;
           }
         }
-
         &__footer {
           margin-top: $educontentsearchresult-top-footer-margin-top;
         }
-
         &__methods {
           height: auto;
           margin-bottom: $educontentsearchresult-methods-margin-bottom;
@@ -93,16 +86,13 @@
         }
       }
     }
-
     &.selected &__top {
       background-color: $educontentsearchresult-selected-top-backgroundcolor;
       color: $educontentsearchresult-selected-top-color;
     }
-
     &.selected &__top mat-icon {
       color: $educontentsearchresult-selected-top-icons-color;
     }
-
     &__bottom {
       &__contents {
         background-color: $educontentsearchresult-bottom-contents-backgroundcolor;
@@ -111,23 +101,18 @@
         padding-left: 115px;
         max-height: $educontentsearchresult-bottom-contents-max-height;
         overflow-y: auto;
-
         &__toc-body {
           padding-left: $educontentsearchresult-toc-padding-left;
-
           ul {
             list-style-type: $educontentsearchresult-toc-list-style-type;
           }
         }
       }
-
       &__buttonbar {
         background-color: $educontentsearchresult-bottom-buttonbar-backgroundcolor;
-
         campus-button:hover {
           background-color: $educontentsearchresult-bottom-buttonbar-hover-backgroundcolor;
         }
-
         campus-button {
           display: flex;
           flex-direction: column;
@@ -140,7 +125,6 @@
           position: relative;
           flex-grow: 1;
           max-width: 25%;
-
           mat-icon.checkmark {
             position: absolute;
             top: 4px;
@@ -148,7 +132,6 @@
             width: 16px;
             height: 16px;
           }
-
           mat-icon:not(.checkmark) {
             background-color: $educontentsearchresult-bottom-buttonbar-color !important;
             border-radius: 50%;

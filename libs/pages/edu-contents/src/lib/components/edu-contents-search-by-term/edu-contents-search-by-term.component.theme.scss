@@ -1,23 +1,28 @@
 @mixin pages-edu-contents-search-by-term() {
-  $pages-edu-contents-search-by-term-margin-right: 20px !default;
-  $pages-edu-contents-search-by-term-padding-right: 20px !default;
+  $pages-edu-contents-search-by-term-margin: 20px !default;
   $pages-edu-contents-search-by-term-border-thickness: 1px !default;
   $pages-edu-contents-search-by-term-border-color: #a9a9a9 !default;
 
   .pages-edu-contents-search-by-term {
     &__wrapper {
+      &.campus-page {
+        padding-right: 0;
+      }
+
       &__aside {
         border-right: $pages-edu-contents-search-by-term-border-thickness solid
           $pages-edu-contents-search-by-term-border-color;
-        padding: 0 $pages-edu-contents-search-by-term-padding-right 0 0;
-        margin-right: $pages-edu-contents-search-by-term-margin-right;
+        margin-right: $pages-edu-contents-search-by-term-margin;
+
+        &__reset {
+          margin-right: $pages-edu-contents-search-by-term-margin;
+          margin-bottom: $pages-edu-contents-search-by-term-margin;
+        }
+
+        &__scroll {
+          padding-right: $pages-edu-contents-search-by-term-margin;
+        }
       }
     }
-  }
-
-  .pages-edu-contents-search-by-term__wrapper
-    .pages-edu-contents-search-by-term__wrapper__main
-    .search-results-list__results {
-    overflow: visible;
   }
 }

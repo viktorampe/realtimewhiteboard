@@ -1,2 +1,15 @@
 @mixin pages-edu-contents-search-by-column() {
+  $pages-edu-contents-search-by-column-padding: 20px !default;
+
+  .edu-contents-search-by-column {
+    &__search-results {
+      height: 100%;
+      padding-left: $pages-edu-contents-search-by-column-padding;
+    }
+
+    &__breadcrumbs {
+      padding-left: $pages-edu-contents-search-by-column-padding;
+      padding-right: $pages-edu-contents-search-by-column-padding;
+    }
+  }
 }
