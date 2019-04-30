@@ -29,16 +29,17 @@
 </campus-page-bar>
 
 <div class="edu-contents-search-by-column">
-  <div> <ng-container searchPortal="hostBreadCrumbs"></ng-container> </div>
+  <div class="edu-contents-search-by-column__breadcrumbs"> <ng-container searchPortal="hostBreadCrumbs"></ng-container> </div>
   <campus-collapsible-sheet>
     <div aside> <ng-container searchPortal="hostLeft"></ng-container> </div>
-    <div main> <ng-container searchPortal="hostTop"></ng-container> </div>
-    <campus-search
-      main
-      [searchMode]="searchMode"
-      [initialState]="initialSearchState$ | async"
-      [searchResults]="searchResults$ | async"
-      (searchState$)="onSearchStateChange($event)"
-    ></campus-search>
+    <div main class="edu-contents-search-by-column__search-results">
+      <ng-container searchPortal="hostTop"></ng-container>
+      <campus-search
+        [searchMode]="searchMode"
+        [initialState]="initialSearchState$ | async"
+        [searchResults]="searchResults$ | async"
+        (searchState$)="onSearchStateChange($event)"
+      ></campus-search>
+    </div>
   </campus-collapsible-sheet>
 </div>
