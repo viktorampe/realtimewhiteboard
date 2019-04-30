@@ -102,7 +102,7 @@ describe('EduContentSearchByColumnComponent', () => {
     expect(component).toBeTruthy();
   });
   describe('initialize', () => {
-    it('should call initialise on navigation', fakeAsync(() => {
+    it('should call initialize on navigation', fakeAsync(() => {
       component.initialize = jest.fn();
       router.navigate([]);
       tick();
