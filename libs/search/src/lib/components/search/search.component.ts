@@ -35,7 +35,8 @@ import { SearchStateInterface } from './../../interfaces/search-state.interface'
 @Component({
   selector: 'campus-search',
   templateUrl: './search.component.html',
-  styleUrls: ['./search.component.scss']
+  styleUrls: ['./search.component.scss'],
+  providers: [SearchViewModel, ColumnFilterService]
 })
 export class SearchComponent
   implements OnInit, AfterViewInit, OnDestroy, OnChanges {
@@ -117,8 +118,11 @@ export class SearchComponent
     }
   }
 
-  public reset(initialState: SearchStateInterface = null): void {
-    this.searchViewmodel.reset(this.searchMode, initialState);
+  public reset(initialState: SearchStateInterface = this.initialState): void {
+    this.searchViewmodel.reset(this.searchMode, {
+      ...initialState,
+      filterCriteriaSelections: new Map(initialState.filterCriteriaSelections)
+    });
   }
 
   public onSort(event: SortModeInterface): void {

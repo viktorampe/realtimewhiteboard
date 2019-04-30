@@ -1,12 +1,6 @@
 import { Injectable, Injector } from '@angular/core';
 import { BehaviorSubject, Observable, zip } from 'rxjs';
-import {
-  map,
-  skipWhile,
-  startWith,
-  take,
-  withLatestFrom
-} from 'rxjs/operators';
+import { filter, map, startWith, take } from 'rxjs/operators';
 import {
   SearchFilterCriteriaInterface,
   SearchFilterCriteriaValuesInterface,
@@ -18,9 +12,7 @@ import {
   SortModeInterface
 } from '../interfaces';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class SearchViewModel {
   private searchMode: SearchModeInterface;
   private filterFactory: SearchFilterFactory;
@@ -38,20 +30,21 @@ export class SearchViewModel {
 
   private initiateStreams(): void {
     this.searchFilters$ = zip(
-      this.results$.pipe(skipWhile(result => !result)), // skip initial value
-      this.filters$.pipe(skipWhile(filters => !filters.length)) // skip initial value
+      // skip initial values
+      this.results$.pipe(filter(result => !!result)),
+      this.filters$.pipe(filter(searchFilter => !!searchFilter.length)),
+      this.searchState$.pipe(filter(state => !!state))
     ).pipe(
-      withLatestFrom(this.searchState$),
-      map(([[results, filters], state]) => {
+      map(([results, filters, state]) => {
         const filterCriteriaSelections = !!state
           ? state.filterCriteriaSelections
           : new Map<string, (number | string)[]>();
         const filterCriteriaPredictions = !!results
           ? results.filterCriteriaPredictions
           : new Map<string, Map<string | number, number>>();
-        return filters.map(filter =>
+        return filters.map(searchFilters =>
           this.getUpdatedSearchFilter(
-            filter,
+            searchFilters,
             filterCriteriaSelections,
             filterCriteriaPredictions
           )
@@ -72,14 +65,14 @@ export class SearchViewModel {
    * @memberof SearchViewModel
    */
   private getUpdatedSearchFilter(
-    filter: SearchFilterInterface,
+    searchFilter: SearchFilterInterface,
     stateFilterCriteriaSelections: Map<string, (number | string)[]>,
     resultsFilterCriteriaPredictions: Map<string, Map<string | number, number>>
   ): SearchFilterInterface {
     if (!filter) return;
 
-    if (Array.isArray(filter.criteria))
-      filter.criteria = filter.criteria.map(criterium =>
+    if (Array.isArray(searchFilter.criteria))
+      searchFilter.criteria = searchFilter.criteria.map(criterium =>
         this.getUpdatedCriterium(
           criterium,
           stateFilterCriteriaSelections,
@@ -88,14 +81,14 @@ export class SearchViewModel {
       );
     //if single get updatedCriterium
     else {
-      filter.criteria = this.getUpdatedCriterium(
-        filter.criteria,
+      searchFilter.criteria = this.getUpdatedCriterium(
+        searchFilter.criteria,
         stateFilterCriteriaSelections,
         resultsFilterCriteriaPredictions
       );
     }
 
-    return filter;
+    return searchFilter;
   }
 
   /**
@@ -212,10 +205,13 @@ export class SearchViewModel {
       if (criteriaPrediction !== undefined) {
         //if there is prediction data for this value, return the new prediction
         return criteriaPrediction;
+      } else {
+        //if there is no prediction data for this value, return 0
+        return 0;
       }
     }
     //if there is no new prediction data, return the old data or 0
-    return value.prediction === undefined ? null : value.prediction;
+    return value.prediction === undefined ? 0 : value.prediction;
   }
 
   public reset(
@@ -228,13 +224,14 @@ export class SearchViewModel {
 
     if (state) {
       // we want to update the state
-      newSearchState = { ...state };
+      newSearchState = state;
     } else {
       // we want to reset the state
       // note: sort mode should stay the same on reset
       newSearchState = { ...this.searchState$.value };
       newSearchState.searchTerm = '';
       newSearchState.from = 0;
+      newSearchState.filterCriteriaSelections = new Map();
     }
     this.setFilterCriteria(newSearchState, null);
     // trigger new search
@@ -251,12 +248,14 @@ export class SearchViewModel {
       from: 0
     };
     this.searchState$.next(newValue);
+    this.filters$.next(this.filters$.value);
   }
   public getNextPage(): void {
     const newValue = { ...this.searchState$.value };
     newValue.from =
       (this.searchState$.value.from || 0) + this.searchMode.results.pageSize;
     this.searchState$.next(newValue);
+    this.filters$.next(this.filters$.value);
   }
 
   public changeFilters(
@@ -275,9 +274,6 @@ export class SearchViewModel {
         // response from factory will trigger emit
         this.updateFilters();
       } else {
-        // emit unchanged value
-        // needed for searchFilter$
-        // -> zip() needs new emit
         this.filters$.next(this.filters$.value);
       }
     }
@@ -287,6 +283,7 @@ export class SearchViewModel {
     newValue.from = 0;
     newValue.searchTerm = searchTerm;
     this.searchState$.next(newValue);
+    this.filters$.next(this.filters$.value);
   }
 
   public updateResult(result: SearchResultInterface): void {
@@ -294,7 +291,7 @@ export class SearchViewModel {
     // -> if so, keep current predictions
     if (
       this.searchState$.value &&
-      this.searchState$.value.from !== 0 &&
+      !!this.searchState$.value.from &&
       this.results$.value
     ) {
       result.filterCriteriaPredictions = this.results$.value.filterCriteriaPredictions;
@@ -368,7 +365,6 @@ export class SearchViewModel {
       });
     }
 
-    searchState.filterCriteriaSelections.clear();
     searchState.filterCriteriaSelections = selection;
 
     // add filterCriteria for predictions

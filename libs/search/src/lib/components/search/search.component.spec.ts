@@ -26,6 +26,7 @@ import { UiModule } from '@campus/ui';
 import { hot } from 'jasmine-marbles';
 import { BehaviorSubject } from 'rxjs';
 import {
+  MockSearchViewModel,
   SearchFilterCriteriaFixture,
   SearchFilterCriteriaValuesFixture,
   SearchPortalDirective
@@ -42,13 +43,13 @@ import { BreadcrumbFilterComponent } from '../breadcrumb-filter/breadcrumb-filte
 import { CheckboxLineFilterComponent } from '../checkbox-line-filter/checkbox-line-filter-component';
 import { CheckboxListFilterComponent } from '../checkbox-list-filter/checkbox-list-filter.component';
 import { ColumnFilterComponent } from '../column-filter/column-filter.component';
+import { ColumnFilterService } from '../column-filter/column-filter.service';
 import { ResultItemBase } from '../results-list/result.component.base';
 import { ResultsListComponent } from '../results-list/results-list.component';
 import { SelectFilterComponent } from '../select-filter-component/select-filter.component';
 import { SortModeInterface } from './../../interfaces/search-mode-interface';
 import { SearchTermComponent } from './../search-term/search-term.component';
 import { SearchViewModel } from './../search.viewmodel';
-import { MockSearchViewModel } from './../search.viewmodel.mock';
 import { SearchComponent } from './search.component';
 
 @Component({
@@ -130,23 +131,30 @@ describe('SearchComponent', () => {
     TestBed.configureTestingModule({
       imports: [TestModule],
       declarations: [ResultItemComponent],
-      providers: [
-        { provide: SearchViewModel, useClass: MockSearchViewModel },
-        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
-      ]
-    }).overrideModule(BrowserDynamicTestingModule, {
-      set: {
-        entryComponents: [
-          ResultItemComponent,
-          CheckboxLineFilterComponent,
-          CheckboxListFilterComponent,
-          BreadcrumbFilterComponent,
-          ColumnFilterComponent,
-          SelectFilterComponent,
-          SearchTermComponent
-        ]
-      }
-    });
+      providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
+    })
+      .overrideModule(BrowserDynamicTestingModule, {
+        set: {
+          entryComponents: [
+            ResultItemComponent,
+            CheckboxLineFilterComponent,
+            CheckboxListFilterComponent,
+            BreadcrumbFilterComponent,
+            ColumnFilterComponent,
+            SelectFilterComponent,
+            SearchTermComponent
+          ]
+        }
+      })
+      // these are provided at the Component level
+      .overrideComponent(SearchComponent, {
+        set: {
+          providers: [
+            { provide: ColumnFilterService, useValue: { reset: () => {} } },
+            { provide: SearchViewModel, useClass: MockSearchViewModel }
+          ]
+        }
+      });
   }));
 
   beforeEach(() => {
@@ -156,8 +164,7 @@ describe('SearchComponent', () => {
     fixture = TestBed.createComponent(SearchComponent);
     component = fixture.componentInstance;
 
-    searchViewmodel = TestBed.get(SearchViewModel);
-
+    searchViewmodel = component['searchViewmodel'];
     component.initialState = mockSearchState;
     component.searchMode = mockSearchMode;
 
@@ -178,7 +185,10 @@ describe('SearchComponent', () => {
       component.reset();
 
       expect(searchViewmodel.reset).toHaveBeenCalled();
-      expect(searchViewmodel.reset).toHaveBeenCalledWith(mockSearchMode, null);
+      expect(searchViewmodel.reset).toHaveBeenCalledWith(
+        mockSearchMode,
+        component.initialState
+      );
 
       jest.resetAllMocks();
 
@@ -530,6 +540,8 @@ describe('SearchComponent', () => {
       searchComponent.initialState = mockSearchState;
       searchComponent.searchMode = mockSearchMode;
 
+      searchViewmodel = searchComponent['searchViewmodel'];
+
       hostFixture.detectChanges();
 
       checkboxLineComponent = getFilterElement(CheckboxLineFilterComponent);
@@ -572,7 +584,7 @@ describe('SearchComponent', () => {
         SearchFilterInterface[]
       >).value;
       searchFilterComponents.forEach((componentDE, i) => {
-        expect(componentDE.componentInstance.filterCriteria).toBe(
+        expect(componentDE.componentInstance.filterCriteria).toEqual(
           filterCriteria[i].criteria
         );
       });

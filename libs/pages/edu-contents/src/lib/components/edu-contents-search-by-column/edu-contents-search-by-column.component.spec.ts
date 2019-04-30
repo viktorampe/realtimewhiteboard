@@ -1,15 +1,21 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  async,
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick
+} from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { SearchComponent } from '@campus/search';
 import { ENVIRONMENT_ICON_MAPPING_TOKEN, SharedModule } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { hot } from '@nrwl/nx/testing';
 import { of } from 'rxjs';
-import { SearchComponent } from '../../../../../../search/src';
 import { EduContentsViewModel } from '../edu-contents.viewmodel';
 import { EduContentSearchByColumnComponent } from './edu-contents-search-by-column.component';
 
@@ -43,6 +49,7 @@ describe('EduContentSearchByColumnComponent', () => {
   let fixture: ComponentFixture<EduContentSearchByColumnComponent>;
   let searchComponent;
   let eduContentsViewModel;
+  let router: Router;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -85,13 +92,22 @@ describe('EduContentSearchByColumnComponent', () => {
     searchComponent = TestBed.get(SearchComponent);
     component = fixture.componentInstance;
     component.searchComponent = searchComponent;
+    component.initialize(); // manually execute initialize -> navigation hasn't triggered yet
     fixture.detectChanges();
+
+    router = TestBed.get(Router);
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
   describe('initialize', () => {
+    it('should call initialize on navigation', fakeAsync(() => {
+      component.initialize = jest.fn();
+      router.navigate([]);
+      tick();
+      expect(component.initialize).toHaveBeenCalledTimes(1);
+    }));
     it('should call getSearchMode', () => {
       const getSearchModeSpy = jest.spyOn(
         eduContentsViewModel,
