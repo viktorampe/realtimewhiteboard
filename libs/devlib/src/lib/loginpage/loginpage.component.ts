@@ -8,9 +8,7 @@ import {
   AlertReducer,
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
-  BundleActions,
   EduContent,
-  EduContentActions,
   EduContentInterface,
   EduContentQueries,
   EffectFeedbackInterface,
@@ -18,11 +16,8 @@ import {
   FavoriteActions,
   FavoriteInterface,
   FavoriteTypesEnum,
-  TaskActions,
-  TaskEduContentActions,
   TocServiceInterface,
   TOC_SERVICE_TOKEN,
-  UnlockedContentActions,
   UserActions
 } from '@campus/dal';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
@@ -97,7 +92,7 @@ export class LoginpageComponent implements OnInit {
     );
 
     // fill store
-    this.store.dispatch(new BundleActions.LoadBundles({ userId: 186 }));
+    /*this.store.dispatch(new BundleActions.LoadBundles({ userId: 186 }));
     this.store.dispatch(
       new UnlockedContentActions.LoadUnlockedContents({ userId: 186 })
     );
@@ -105,7 +100,7 @@ export class LoginpageComponent implements OnInit {
     this.store.dispatch(
       new TaskEduContentActions.LoadTaskEduContents({ userId: 186 })
     );
-    this.store.dispatch(new EduContentActions.LoadEduContents({ userId: 186 }));
+    this.store.dispatch(new EduContentActions.LoadEduContents({ userId: 186 }));*/
   }
 
   getCurrentUser() {

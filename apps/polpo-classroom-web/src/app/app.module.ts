@@ -7,7 +7,7 @@ import { CustomSerializer, DalModule } from '@campus/dal';
 import { GuardsModule } from '@campus/guards';
 import { SearchModule } from '@campus/search';
 import { SharedModule } from '@campus/shared';
-import { UiModule } from '@campus/ui';
+import { ManageCollectionComponent, UiModule } from '@campus/ui';
 import { UtilsModule } from '@campus/utils';
 import { EffectsModule } from '@ngrx/effects';
 import {
@@ -94,6 +94,6 @@ configureBufferSize(150);
   ],
   bootstrap: [AppComponent],
   exports: [RouterModule],
-  entryComponents: [EduContentSearchResultComponent]
+  entryComponents: [EduContentSearchResultComponent, ManageCollectionComponent]
 })
 export class AppModule {}

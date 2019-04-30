@@ -1,5 +1,5 @@
 <div class="shared-header">
-  <div hide-mobile class="shared-header__app-bar">
+  <div class="shared-header__app-bar">
     <campus-app-bar>
       <campus-breadcrumbs
         bar__left
@@ -83,14 +83,12 @@
       [routerLink]="link"
       class="shared-header__page-bar__nav-button"
       [iconClass]="'arrow-back'"
-      hide-desktop
     ></campus-button>
     <ng-template #hamburgerMenu>
       <campus-button
         (click)="onMenuClick()"
         class="shared-header__page-bar__nav-button"
         [iconClass]="'menu'"
-        hide-desktop
       ></campus-button>
     </ng-template>
     <div id="page-bar-container"></div>

@@ -1,4 +1,4 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import {
   async,
   ComponentFixture,
@@ -10,13 +10,33 @@ import { MatIconRegistry } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { SearchComponent } from '@campus/search';
+import { ENVIRONMENT_ICON_MAPPING_TOKEN, SharedModule } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { hot } from '@nrwl/nx/testing';
 import { of } from 'rxjs';
-import { SearchComponent } from '../../../../../../search/src';
 import { EduContentsViewModel } from '../edu-contents.viewmodel';
 import { EduContentSearchByColumnComponent } from './edu-contents-search-by-column.component';
+
+@Component({
+  template: `
+    <div></div>
+  `,
+  selector: 'campus-search'
+})
+class SearchStubComponent {
+  @Input() public searchMode;
+  @Input() public autoCompleteValues;
+  @Input() public autoCompleteDebounceTime;
+  @Input() public initialState;
+  @Input() public searchResults;
+  @Input() public autoFocusSearchTerm;
+  @Input() public searchPortals;
+  @Output() public searchState$ = of(null);
+  @Output() public searchTermChangeForAutoComplete = new EventEmitter<string>();
+  reset(): void {}
+}
 
 const mockPath = 'the path we need';
 const mockInitialSearchStateReturnValue = 'searchState function';
@@ -32,8 +52,13 @@ describe('EduContentSearchByColumnComponent', () => {
   let router: Router;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [UiModule, NoopAnimationsModule, RouterTestingModule],
-      declarations: [EduContentSearchByColumnComponent],
+      imports: [
+        UiModule,
+        SharedModule,
+        NoopAnimationsModule,
+        RouterTestingModule
+      ],
+      declarations: [EduContentSearchByColumnComponent, SearchStubComponent],
       providers: [
         {
           provide: ActivatedRoute,
@@ -54,10 +79,10 @@ describe('EduContentSearchByColumnComponent', () => {
             searchResults$: of(mockSearchResults)
           }
         },
-        { provide: SearchComponent, useValue: {} },
-        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
+        { provide: SearchComponent, useClass: SearchStubComponent },
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry },
+        { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} }
+      ]
     }).compileComponents();
     eduContentsViewModel = TestBed.get(EduContentsViewModel);
   }));

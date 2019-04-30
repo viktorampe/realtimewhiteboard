@@ -134,4 +134,16 @@
       }
     }
   }
+
+  .ui--desktop {
+    .shared-header__page-bar__nav-button {
+      display: none;
+    }
+  }
+
+  .ui--mobile {
+    .shared-header__app-bar {
+      display: none;
+    }
+  }
 }

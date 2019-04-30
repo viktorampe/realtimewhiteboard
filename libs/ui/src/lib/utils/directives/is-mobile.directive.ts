@@ -18,6 +18,11 @@ export class IsMobileDirective implements OnDestroy {
     return this.mobile;
   }
 
+  @HostBinding('class.ui--desktop')
+  get isDesktop() {
+    return !this.mobile;
+  }
+
   constructor(private breakpointObserver: BreakpointObserver) {
     this.subscriptions.add(
       this.breakpointObserver

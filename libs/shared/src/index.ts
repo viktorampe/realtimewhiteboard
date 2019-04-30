@@ -1,5 +1,9 @@
 export * from './lib/auth';
 export {
+  EduContentCollectionManagerServiceInterface,
+  EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN
+} from './lib/collection-manager/edu-content-collection-manager.service.interface';
+export {
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN
 } from './lib/content/open-static-content.interface';
