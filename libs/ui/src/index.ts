@@ -1,6 +1,7 @@
 export {
   BreadcrumbLinkInterface
 } from './lib/breadcrumbs/breadcrumbs.component';
+export { ButtonComponent } from './lib/button/button.component';
 export {
   CollapsibleBreakpointsInterface
 } from './lib/collapsible-sheet/collapsible-sheet.component';

@@ -29,6 +29,7 @@ export class EduContentSearchByTermComponent implements OnInit, AfterViewInit {
   public searchResults$: Observable<SearchResultInterface>;
   public autoCompleteValues$: Observable<string[]>;
   public autoFocusSearchTerm: boolean;
+  public currentLearningArea: number;
 
   @ViewChildren(SearchPortalDirective)
   private portalHosts: QueryList<SearchPortalDirective>;
@@ -45,6 +46,7 @@ export class EduContentSearchByTermComponent implements OnInit, AfterViewInit {
         this.activatedRoute.routeConfig.path,
         +params.area
       );
+      this.currentLearningArea = +params.area;
     });
 
     this.initialSearchState$ = this.eduContentsViewModel.getInitialSearchState();
