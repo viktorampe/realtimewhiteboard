@@ -1,4 +1,8 @@
-import { async, TestBed } from '@angular/core/testing';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { Component } from '@angular/core';
+import { async, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import {
   CredentialActions,
   CredentialFixture,
@@ -10,6 +14,7 @@ import {
   EffectFeedbackInterface,
   EffectFeedbackReducer,
   FavoriteActions,
+  FavoriteFixture,
   FavoriteInterface,
   FavoriteReducer,
   LearningAreaActions,
@@ -28,9 +33,15 @@ import {
 } from '@campus/dal';
 import { FEEDBACK_SERVICE_TOKEN } from '@campus/shared';
 import { DropdownMenuItemInterface, NavItem } from '@campus/ui';
+import {
+  RouterNavigationAction,
+  RouterNavigationPayload,
+  routerReducer,
+  ROUTER_NAVIGATION
+} from '@ngrx/router-store';
 import { Action, Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
-import { of } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { AppViewModel } from './app.viewmodel';
 import { NavItemService } from './services/nav-item-service';
 
@@ -46,11 +57,34 @@ describe('AppViewModel', () => {
   let mockFavorites: FavoriteInterface[];
   let mockAction: Action;
   let storeSpy: jasmine.Spy;
+  let router: Router;
+  let breakpointSubject: BehaviorSubject<BreakpointState>;
 
   beforeEach(async(() => {
+    breakpointSubject = new BehaviorSubject<BreakpointState>(<BreakpointState>{
+      matches: false
+    });
+
+    const fakeObserve = () => breakpointSubject.asObservable();
+
+    const breakpointSpy = { observe: jest.fn() };
+    breakpointSpy.observe.mockImplementation(fakeObserve);
+
     TestBed.configureTestingModule({
       imports: [
-        StoreModule.forRoot({}),
+        RouterTestingModule.withRoutes([
+          {
+            path: 'test',
+            component: Component,
+            pathMatch: 'full'
+          },
+          {
+            path: 'test2',
+            component: Component,
+            pathMatch: 'full'
+          }
+        ]),
+        StoreModule.forRoot({ router: routerReducer }),
         ...StateFeatureBuilder.getModuleWithForFeatureProviders([
           {
             NAME: UserReducer.NAME,
@@ -75,6 +109,7 @@ describe('AppViewModel', () => {
       providers: [
         AppViewModel,
         Store,
+        { provide: BreakpointObserver, useValue: breakpointSpy },
         {
           provide: NavItemService,
           useValue: {
@@ -106,6 +141,7 @@ describe('AppViewModel', () => {
 
     viewModel = TestBed.get(AppViewModel);
     store = TestBed.get(Store);
+    router = TestBed.get(Router);
     storeSpy = spyOn(store, 'dispatch').and.callThrough();
   }));
 
@@ -153,12 +189,13 @@ describe('AppViewModel', () => {
     ];
 
     mockFavorites = [
-      {
+      new FavoriteFixture({
+        id: 1,
         type: 'area', // TODO in selector: filter on type:'area'
         learningAreaId: 1,
         learningArea: mockLearningAreas[0],
         created: new Date(2018, 11 - 1, 30)
-      }
+      })
     ];
   });
 
@@ -207,6 +244,57 @@ describe('AppViewModel', () => {
       expect(viewModel.navigationItems$).toBeObservable(
         hot('a', { a: [mockNavItem] })
       );
+    });
+
+    describe('sidebar toggling', () => {
+      const navigationAction = {
+        type: ROUTER_NAVIGATION,
+        payload: {
+          routerState: {},
+          event: {}
+        } as RouterNavigationPayload<any>
+      } as RouterNavigationAction;
+
+      beforeEach(() => {
+        //Enable the subscription (normally called in app.component AfterViewInit)
+        viewModel.toggleSidebarOnNavigation();
+      });
+
+      it('should hide sidebar on router navigation on mobile', fakeAsync(() => {
+        breakpointSubject.next(<BreakpointState>{ matches: true });
+
+        spyOn(viewModel, 'toggleSidebar');
+        store.dispatch(navigationAction);
+        tick();
+        expect(viewModel.toggleSidebar).toHaveBeenCalled();
+        expect(viewModel.toggleSidebar).toHaveBeenCalledWith(false);
+      }));
+
+      it('should show sidebar on router navigation on desktop', fakeAsync(() => {
+        breakpointSubject.next(<BreakpointState>{ matches: false });
+
+        spyOn(viewModel, 'toggleSidebar');
+        store.dispatch(navigationAction);
+        tick();
+        expect(viewModel.toggleSidebar).toHaveBeenCalled();
+        expect(viewModel.toggleSidebar).toHaveBeenCalledWith(true);
+      }));
+
+      it('should hide sidebar on screen size change on mobile', fakeAsync(() => {
+        spyOn(viewModel, 'toggleSidebar');
+        breakpointSubject.next(<BreakpointState>{ matches: true });
+        tick();
+        expect(viewModel.toggleSidebar).toHaveBeenCalled();
+        expect(viewModel.toggleSidebar).toHaveBeenCalledWith(false);
+      }));
+
+      it('should show sidebar on screen size change on desktop', fakeAsync(() => {
+        spyOn(viewModel, 'toggleSidebar');
+        breakpointSubject.next(<BreakpointState>{ matches: false });
+        tick();
+        expect(viewModel.toggleSidebar).toHaveBeenCalled();
+        expect(viewModel.toggleSidebar).toHaveBeenCalledWith(true);
+      }));
     });
 
     it('should dispatch actions on user update', () => {

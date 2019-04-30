@@ -1,4 +1,5 @@
-import { Inject, Injectable } from '@angular/core';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Inject, Injectable, OnDestroy } from '@angular/core';
 import {
   CredentialQueries,
   DalState,
@@ -7,6 +8,7 @@ import {
   EffectFeedbackQueries,
   FavoriteInterface,
   FavoriteQueries,
+  getRouterState,
   LearningAreaQueries,
   PassportUserCredentialInterface,
   PersonInterface,
@@ -20,7 +22,7 @@ import {
 } from '@campus/shared';
 import { DropdownMenuItemInterface, NavItem } from '@campus/ui';
 import { Action, select, Store } from '@ngrx/store';
-import { combineLatest, Observable } from 'rxjs';
+import { combineLatest, Observable, Subscription } from 'rxjs';
 import {
   filter,
   map,
@@ -34,7 +36,7 @@ import { NavItemService } from './services/nav-item-service';
 @Injectable({
   providedIn: 'root'
 })
-export class AppViewModel {
+export class AppViewModel implements OnDestroy {
   // intermediate streams
   private sideNavItems$: Observable<NavItem[]>;
   private profileMenuItems$: Observable<DropdownMenuItemInterface[]>;
@@ -44,11 +46,14 @@ export class AppViewModel {
   public navigationItems$: Observable<NavItem[]>;
   public bannerFeedback$: Observable<EffectFeedbackInterface>;
 
+  private subscriptions: Subscription;
+
   constructor(
     private store: Store<DalState>,
     private navItemService: NavItemService,
     @Inject(FEEDBACK_SERVICE_TOKEN)
-    private feedbackService: FeedBackServiceInterface
+    private feedbackService: FeedBackServiceInterface,
+    private breakPointObserver: BreakpointObserver
   ) {
     this.initialize();
   }
@@ -79,6 +84,30 @@ export class AppViewModel {
     this.setProfileItems();
     this.setNavItems();
     this.setFeedbackFlow();
+
+    this.subscriptions = new Subscription();
+  }
+
+  public toggleSidebarOnNavigation() {
+    //Hide sidebar on mobile if we navigate or change screensize
+    this.subscriptions.add(
+      this.store
+        .pipe(
+          select(getRouterState),
+          switchMap(() => {
+            return this.breakPointObserver
+              .observe([Breakpoints.XSmall, Breakpoints.Small])
+              .pipe(map(result => result.matches));
+          })
+        )
+        .subscribe(isMobile => {
+          this.toggleSidebar(!isMobile);
+        })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 
   private setProfileItems() {
