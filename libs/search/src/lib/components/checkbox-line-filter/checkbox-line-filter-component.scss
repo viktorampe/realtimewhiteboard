@@ -8,7 +8,11 @@
     padding-bottom: 4px;
     margin-bottom: 10px;
   }
-
+  &__checkbox {
+    &.mat-checkbox-disabled {
+      cursor: not-allowed;
+    }
+  }
   &__checkbox-holder {
     display: flex;
     flex-direction: row;
