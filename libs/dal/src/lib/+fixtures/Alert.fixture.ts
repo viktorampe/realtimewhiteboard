@@ -4,7 +4,7 @@ export class AlertFixture extends Alert {
   title = 'Er is een bundel aangepast.';
   type = 'bundle';
   link = '/linknaarbundle';
-  id: 1;
+  id = 1;
   validFrom = new Date();
   created = new Date();
   read = false;
