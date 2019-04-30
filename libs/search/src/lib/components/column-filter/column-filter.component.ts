@@ -120,14 +120,11 @@ export class ColumnFilterComponent implements SearchFilterComponentInterface {
     this.columnFilterService.actionSource = 'self';
     this.columnFilterService.isLastChild = !filterCriterionValue.hasChild;
 
-    // first reset all selected markers of criteria with the same name to false
-    this.filterCriteria
-      .filter(crit => crit.name === filterCriterionName)
-      .forEach(crit => {
-        crit.values.forEach(value => {
-          value.selected = false;
-        });
+    if (this.columnFilterService.preserveColumn) {
+      this.columnFilterService.previousFilterCriteria.values.forEach(value => {
+        value.selected = false;
       });
+    }
 
     // then set the passed value to selected true
     filterCriterionValue.selected = true;
