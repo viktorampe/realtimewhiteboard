@@ -1,11 +1,7 @@
-import {
-  BundleInterface,
-  EduContentInterface,
-  TaskInterface
-} from '@campus/dal';
+import { BundleInterface, EduContent, TaskInterface } from '@campus/dal';
 
 export interface EduContentSearchResultInterface {
-  eduContent: EduContentInterface;
+  eduContent: EduContent;
   inTask: boolean;
   currentTask: TaskInterface;
   inBundle: boolean;
