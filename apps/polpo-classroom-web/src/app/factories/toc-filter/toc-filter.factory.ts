@@ -20,12 +20,13 @@ import {
 } from '@campus/search';
 import { PrimitivePropertiesKeys } from '@campus/utils';
 import { select, Store } from '@ngrx/store';
-import { BehaviorSubject, combineLatest, merge, Observable } from 'rxjs';
+import { BehaviorSubject, merge, Observable, zip } from 'rxjs';
 import {
   filter,
   map,
   mapTo,
   pairwise,
+  share,
   shareReplay,
   startWith,
   switchMap,
@@ -78,12 +79,12 @@ export class TocFilterFactory implements SearchFilterFactory {
   ): Observable<SearchFilterInterface[]> {
     this.searchState$.next(searchState);
 
-    return combineLatest([
+    return zip(
       this.getYearFilterCriteria$(),
       this.getMethodFilterCriteria$(),
       this.getBookFilterCriteria$(),
       this.getTreeFilterCriteria$()
-    ]).pipe(
+    ).pipe(
       map(
         ([
           yearFilterCriterium,
@@ -149,21 +150,7 @@ export class TocFilterFactory implements SearchFilterFactory {
       shareReplay(1)
     );
 
-    this.treeForBook$ = this.searchStateDiff$.pipe(
-      filter(
-        searchStateDiff =>
-          this.hasSearchStateData(searchStateDiff[1], BOOK) &&
-          this.hasSearchStateChanged(searchStateDiff, BOOK)
-      ),
-      map(
-        ([, newSearchstate]) =>
-          newSearchstate.filterCriteriaSelections.get(BOOK)[0] as number
-      ),
-      switchMap(neededBookId => {
-        return this.tocService.getTree(neededBookId);
-      }),
-      shareReplay(1)
-    );
+    this.treeForBook$ = this.getTreeForBook$();
   }
 
   /**
@@ -389,6 +376,37 @@ export class TocFilterFactory implements SearchFilterFactory {
     return merge(bookFilterCriteria$, emptyBookFilterCriteria$);
   }
 
+  private getTreeForBook$() {
+    const newTreeForBook$ = this.searchStateDiff$.pipe(
+      filter(
+        searchStateDiff =>
+          this.hasSearchStateData(searchStateDiff[1], BOOK) &&
+          this.hasSearchStateChanged(searchStateDiff, BOOK)
+      ),
+      map(
+        ([, newSearchstate]) =>
+          newSearchstate.filterCriteriaSelections.get(BOOK)[0] as number
+      ),
+      switchMap(neededBookId => {
+        return this.tocService.getTree(neededBookId);
+      }),
+      share() // so cachedTreeForBook$ doesn't make a second call
+    );
+
+    const cachedTreeForBook$ = newTreeForBook$.pipe(
+      shareReplay(1),
+      withLatestFrom(this.searchStateDiff$),
+      filter(
+        ([, searchStateDiff]) =>
+          this.hasSearchStateData(searchStateDiff[1], BOOK) &&
+          !this.hasSearchStateChanged(searchStateDiff, BOOK)
+      ),
+      map(([tree]) => tree)
+    );
+
+    return merge(newTreeForBook$, cachedTreeForBook$);
+  }
+
   /**
    * Returns the filterCriteria for the tree,
    * or null when there isn't enough data
@@ -400,7 +418,7 @@ export class TocFilterFactory implements SearchFilterFactory {
   private getTreeFilterCriteria$(): Observable<
     SearchFilterCriteriaInterface[]
   > {
-    const treeFilterCriteria$ = combineLatest(
+    const treeFilterCriteria$ = zip(
       this.searchStateDiff$.pipe(
         filter(searchStateDiff =>
           this.hasSearchStateData(searchStateDiff[1], BOOK)
