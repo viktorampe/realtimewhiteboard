@@ -15,6 +15,14 @@
       &--hidden {
         display: none;
       }
+
+      &__prediction {
+        display: inline-block;
+      }
+
+      &__name {
+        display: inline-block;
+      }
     }
 
     &__footer {
