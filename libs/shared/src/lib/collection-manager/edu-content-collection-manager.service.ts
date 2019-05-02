@@ -318,10 +318,10 @@ export class EduContentCollectionManagerService
           HistoryInterface[]
         ]): number[] => {
           return Array.from(
-            new Set<number>(
+            new Set<number>([
               ...favorites.map(favorite => favorite[key]),
               ...histories.map(history => history[key])
-            )
+            ])
           );
         }
       ),
