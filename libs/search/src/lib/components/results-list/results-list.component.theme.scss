@@ -1,9 +1,17 @@
 @mixin search-results-list() {
+  $search-results-list__info-height: 60px !default;
   $search-results-list__sorting-padding: 3px !default;
+  $search-results-list__sorting-margin: 20px !default;
   $search-results-list__sorting-size: 15px !default;
 
   .search-results-list {
+    &__info {
+      height: $search-results-list__info-height;
+    }
+
     &__sorting {
+      right: $search-results-list__sorting-margin;
+
       .ui-button {
         padding: $search-results-list__sorting-padding;
       }

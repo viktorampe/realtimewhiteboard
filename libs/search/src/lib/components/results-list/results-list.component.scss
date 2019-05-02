@@ -9,6 +9,15 @@
   flex-direction: column;
   flex: 1 0 auto;
 
+  &__info {
+    position: relative;
+  }
+
+  &__sorting {
+    position: absolute;
+    bottom: 10px;
+  }
+
   &__results {
     flex: 1 0 auto;
     height: 0; // needed for overflow -> scolling only on resultlist

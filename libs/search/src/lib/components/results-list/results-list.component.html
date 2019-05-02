@@ -1,8 +1,6 @@
 <div class="search-results-list">
-  <div>
-    <div class="search-results-list__info"
-      >{{ count + (count === 1 ? ' resultaat' : ' resultaten') }}.</div
-    >
+  <div class="search-results-list__info">
+    <div>{{ count + (count === 1 ? ' resultaat' : ' resultaten') }}.</div>
     <div *ngIf="sortModes" class="search-results-list__sorting"
       >Sorteer op
       <campus-button

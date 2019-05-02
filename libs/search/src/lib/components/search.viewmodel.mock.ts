@@ -20,9 +20,7 @@ import { ColumnFilterComponent } from './column-filter/column-filter.component';
 import { SearchViewModel } from './search.viewmodel';
 import { SelectFilterComponent } from './select-filter-component/select-filter.component';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class MockSearchViewModel
   implements ViewModelInterface<SearchViewModel> {
   public searchState$ = new BehaviorSubject<SearchStateInterface>(undefined);
