@@ -69,7 +69,7 @@ export class SearchViewModel {
     stateFilterCriteriaSelections: Map<string, (number | string)[]>,
     resultsFilterCriteriaPredictions: Map<string, Map<string | number, number>>
   ): SearchFilterInterface {
-    if (!filter) return;
+    if (!searchFilter) return;
 
     if (Array.isArray(searchFilter.criteria))
       searchFilter.criteria = searchFilter.criteria.map(criterium =>
