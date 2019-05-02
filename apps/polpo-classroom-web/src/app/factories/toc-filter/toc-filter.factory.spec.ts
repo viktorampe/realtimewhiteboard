@@ -169,6 +169,40 @@ describe('TocFilterFactory', () => {
     expect(factory).toBeTruthy();
   });
 
+  describe('hasSearchStateData', () => {
+    let factory: TocFilterFactory;
+    beforeEach(() => {
+      factory = TestBed.get(TocFilterFactory);
+    });
+    it('should return true if there is at least one filterCriteriaSelection', () => {
+      [
+        {
+          map: new Map<string, (number | string)[]>([]),
+          exp: []
+        },
+        {
+          map: new Map<string, (number | string)[]>([['years', [1]]]),
+          exp: ['methods']
+        },
+        {
+          map: new Map<string, (number | string)[]>([
+            ['years', [1]],
+            ['years', [3, 2]]
+          ]),
+          exp: ['methods']
+        }
+      ].forEach(item => {
+        const mockSearchState: SearchStateInterface = {
+          searchTerm: 'some random shit',
+          filterCriteriaSelections: item.map
+        };
+        expect(factory.getPredictionFilterNames(mockSearchState)).toEqual(
+          item.exp
+        );
+      });
+    });
+  });
+
   describe('getfilters', () => {
     let factory: TocFilterFactory;
     let expected: SearchFilterCriteriaInterface[];
