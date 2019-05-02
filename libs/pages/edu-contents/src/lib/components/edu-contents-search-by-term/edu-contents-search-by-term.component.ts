@@ -74,7 +74,7 @@ export class EduContentSearchByTermComponent implements OnInit, AfterViewInit {
 
   clearSearchFilters() {
     if (this.searchComponent) {
-      this.searchComponent.reset();
+      this.searchComponent.reset(undefined, true);
     }
   }
 }
