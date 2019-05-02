@@ -20,6 +20,7 @@
         text-overflow: ellipsis;
         overflow: hidden;
         width: 100%;
+        display: flex;
       }
     }
 
@@ -31,11 +32,10 @@
       &__prediction {
         color: $checkbox-filter-text-color--accent;
         text-align: right;
-        width: 20%;
       }
 
       &__name {
-        width: 80%;
+        width: 100%;
         overflow: hidden;
         text-overflow: ellipsis;
       }
