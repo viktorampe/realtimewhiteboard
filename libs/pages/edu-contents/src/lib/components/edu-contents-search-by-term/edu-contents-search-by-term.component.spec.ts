@@ -1,11 +1,19 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  DebugElement,
+  EventEmitter,
+  Input,
+  NgModule,
+  Output
+} from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule, MatIconRegistry } from '@angular/material';
-import { HAMMER_LOADER } from '@angular/platform-browser';
+import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Params } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import {
   FilterFactoryFixture,
   SearchComponent,
@@ -28,7 +36,7 @@ import { EduContentSearchByTermComponent } from './edu-contents-search-by-term.c
   `,
   selector: 'campus-search'
 })
-class SearchStubComponent {
+export class SearchStubComponent {
   @Input() public searchMode;
   @Input() public autoCompleteValues;
   @Input() public autoCompleteDebounceTime;
@@ -41,6 +49,37 @@ class SearchStubComponent {
   reset(): void {}
 }
 
+@Component({
+  // tslint:disable-next-line:component-selector
+  selector: 'test-container',
+  template: `
+    <div id="page-bar-container"></div>
+    <campus-edu-contents-search-by-term></campus-edu-contents-search-by-term>
+  `
+})
+export class TestContainerComponent {}
+
+@NgModule({
+  declarations: [
+    TestContainerComponent,
+    SearchStubComponent,
+    EduContentSearchByTermComponent
+  ],
+  imports: [
+    CommonModule,
+    UiModule,
+    NoopAnimationsModule,
+    SharedModule,
+    RouterTestingModule
+  ],
+  exports: [
+    TestContainerComponent,
+    SearchStubComponent,
+    EduContentSearchByTermComponent
+  ]
+})
+export class TestModule {}
+
 describe('EduContentSearchByTermComponent', () => {
   let params: Subject<Params>;
   let component: EduContentSearchByTermComponent;
@@ -50,22 +89,13 @@ describe('EduContentSearchByTermComponent', () => {
     searchTerm: 'foo',
     filterCriteriaSelections: new Map<string, (string | number)[]>()
   };
+  let searchComponent;
 
   beforeEach(async(() => {
     params = new BehaviorSubject<Params>({ area: 1 });
     TestBed.configureTestingModule({
-      imports: [
-        CommonModule,
-        UiModule,
-        SharedModule,
-        NoopAnimationsModule,
-        MatIconModule
-      ],
-      declarations: [
-        EduContentSearchByTermComponent,
-        ResultItemMockComponent,
-        SearchStubComponent
-      ],
+      imports: [TestModule, MatIconModule],
+      declarations: [ResultItemMockComponent],
       providers: [
         {
           provide: HAMMER_LOADER,
@@ -98,7 +128,8 @@ describe('EduContentSearchByTermComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(EduContentSearchByTermComponent);
     component = fixture.componentInstance;
-    component.searchComponent = TestBed.get(SearchComponent);
+    searchComponent = TestBed.get(SearchComponent);
+    component.searchComponent = searchComponent;
     fixture.detectChanges();
   });
 
@@ -151,6 +182,42 @@ describe('EduContentSearchByTermComponent', () => {
 
     it('should have autofocus off if searchterm is present', () => {
       expect(component.autoFocusSearchTerm).toBe(false);
+    });
+  });
+
+  describe('page bar', () => {
+    let hostFixture: ComponentFixture<TestContainerComponent>;
+    let pageBarDE: DebugElement;
+    beforeEach(() => {
+      hostFixture = TestBed.createComponent(TestContainerComponent);
+      component = hostFixture.debugElement.query(
+        By.directive(EduContentSearchByTermComponent)
+      ).componentInstance;
+      component.searchComponent = searchComponent;
+
+      pageBarDE = hostFixture.debugElement.query(By.css('#page-bar-container'));
+      hostFixture.detectChanges();
+    });
+    it('should not show buttons when there is no currentLearningArea', () => {
+      component.currentLearningArea = undefined;
+      hostFixture.detectChanges();
+
+      const buttonsNE = pageBarDE.nativeElement.querySelectorAll(
+        'campus-button'
+      );
+
+      expect(buttonsNE.length).toBe(0);
+    });
+    it('should show the correct buttons when there is a currentLearningArea', () => {
+      component.currentLearningArea = 1;
+      hostFixture.detectChanges();
+
+      const buttonsNE = pageBarDE.nativeElement.querySelectorAll(
+        'campus-button'
+      );
+
+      expect(buttonsNE[0].textContent).toBe('Leerplan');
+      expect(buttonsNE[1].textContent).toBe('Inhoudstafel');
     });
   });
 });

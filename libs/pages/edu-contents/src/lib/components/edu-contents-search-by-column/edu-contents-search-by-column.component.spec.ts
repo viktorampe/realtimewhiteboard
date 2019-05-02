@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import {
+  Component,
+  DebugElement,
+  EventEmitter,
+  Input,
+  NgModule,
+  Output
+} from '@angular/core';
 import {
   async,
   ComponentFixture,
@@ -7,10 +15,11 @@ import {
   tick
 } from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
+import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { SearchComponent } from '@campus/search';
+import { SearchComponent, SearchModeInterface } from '@campus/search';
 import { ENVIRONMENT_ICON_MAPPING_TOKEN, SharedModule } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
@@ -25,7 +34,7 @@ import { EduContentSearchByColumnComponent } from './edu-contents-search-by-colu
   `,
   selector: 'campus-search'
 })
-class SearchStubComponent {
+export class SearchStubComponent {
   @Input() public searchMode;
   @Input() public autoCompleteValues;
   @Input() public autoCompleteDebounceTime;
@@ -38,9 +47,42 @@ class SearchStubComponent {
   reset(): void {}
 }
 
+@Component({
+  // tslint:disable-next-line:component-selector
+  selector: 'test-container',
+  template: `
+    <div id="page-bar-container"></div>
+    <campus-edu-contents-search-by-column></campus-edu-contents-search-by-column>
+  `
+})
+export class TestContainerComponent {}
+
+@NgModule({
+  declarations: [
+    TestContainerComponent,
+    SearchStubComponent,
+    EduContentSearchByColumnComponent
+  ],
+  imports: [
+    CommonModule,
+    UiModule,
+    NoopAnimationsModule,
+    SharedModule,
+    RouterTestingModule
+  ],
+  exports: [
+    TestContainerComponent,
+    SearchStubComponent,
+    EduContentSearchByColumnComponent
+  ]
+})
+export class TestModule {}
+
 const mockPath = 'the path we need';
 const mockInitialSearchStateReturnValue = 'searchState function';
-const mockSearchModeReturnValue = 'searchMode function';
+const mockSearchModeReturnValue: Partial<SearchModeInterface> = {
+  name: 'searchMode function'
+};
 const mockSearchState = 'state value';
 const mockSearchResults = 'results value';
 
@@ -52,13 +94,8 @@ describe('EduContentSearchByColumnComponent', () => {
   let router: Router;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [
-        UiModule,
-        SharedModule,
-        NoopAnimationsModule,
-        RouterTestingModule
-      ],
-      declarations: [EduContentSearchByColumnComponent, SearchStubComponent],
+      imports: [TestModule],
+      declarations: [],
       providers: [
         {
           provide: ActivatedRoute,
@@ -151,6 +188,42 @@ describe('EduContentSearchByColumnComponent', () => {
       component.onSearchStateChange(mockPassedProperty);
       expect(updateStateSpy).toHaveBeenCalledTimes(1);
       expect(updateStateSpy).toHaveBeenCalledWith(mockPassedProperty);
+    });
+  });
+
+  describe('page bar', () => {
+    let hostFixture: ComponentFixture<TestContainerComponent>;
+    let pageBarDE: DebugElement;
+    beforeEach(() => {
+      hostFixture = TestBed.createComponent(TestContainerComponent);
+      component = hostFixture.debugElement.query(
+        By.directive(EduContentSearchByColumnComponent)
+      ).componentInstance;
+      component.searchComponent = searchComponent;
+      component.initialize();
+      pageBarDE = hostFixture.debugElement.query(By.css('#page-bar-container'));
+    });
+    it('should show the correct buttons when the searchMode is toc', () => {
+      component.searchMode.name = 'toc';
+      hostFixture.detectChanges();
+
+      const buttonsNE = pageBarDE.nativeElement.querySelectorAll(
+        'campus-button'
+      );
+
+      expect(buttonsNE[0].textContent).toBe('Standaard zoeken');
+      expect(buttonsNE[1].textContent).toBe('Leerplan');
+    });
+    it('should show the correct buttons when the searchMode is plan', () => {
+      component.searchMode.name = 'plan';
+      hostFixture.detectChanges();
+
+      const buttonsNE = pageBarDE.nativeElement.querySelectorAll(
+        'campus-button'
+      );
+
+      expect(buttonsNE[0].textContent).toBe('Standaard zoeken');
+      expect(buttonsNE[1].textContent).toBe('Inhoudstafel');
     });
   });
 });

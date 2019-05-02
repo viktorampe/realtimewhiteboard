@@ -31,4 +31,11 @@
       width: 100%;
     }
   }
+
+  &__page-bar {
+    display: flex;
+    flex: 0 1 auto;
+    align-items: center;
+    margin: auto;
+  }
 }

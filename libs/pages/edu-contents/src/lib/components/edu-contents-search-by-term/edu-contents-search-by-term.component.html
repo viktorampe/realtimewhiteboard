@@ -1,5 +1,30 @@
 <campus-page-bar>
   <ng-container searchPortal="hostTop"></ng-container>
+
+  <div
+    class="pages-edu-contents-search-by-term__page-bar"
+    *ngIf="currentLearningArea"
+  >
+    <span
+      class="pages-edu-contents-search-by-term__page-bar__label page-bar-style--searchmode-label"
+      >Of zoek op:</span
+    >
+    <campus-button
+      class="page-bar-style--searchmode-button"
+      [routerLink]="['/edu-content', currentLearningArea, 'plan']"
+      >Leerplan</campus-button
+    >
+    <span
+      class="pages-edu-contents-search-by-term__page-bar__label page-bar-style--searchmode-label"
+      >of</span
+    >
+
+    <campus-button
+      class="page-bar-style--searchmode-button"
+      [routerLink]="['/edu-content', currentLearningArea, 'toc']"
+      >Inhoudstafel</campus-button
+    >
+  </div>
 </campus-page-bar>
 
 <div class="pages-edu-contents-search-by-term__wrapper campus-page">
