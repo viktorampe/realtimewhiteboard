@@ -31,13 +31,6 @@
     &__item {
       &__prediction {
         color: $checkbox-filter-text-color--accent;
-        text-align: right;
-      }
-
-      &__name {
-        width: 100%;
-        overflow: hidden;
-        text-overflow: ellipsis;
       }
     }
 

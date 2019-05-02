@@ -15,6 +15,16 @@
       &--hidden {
         display: none;
       }
+
+      &__prediction {
+        text-align: right;
+      }
+
+      &__name {
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     }
 
     &__footer {
