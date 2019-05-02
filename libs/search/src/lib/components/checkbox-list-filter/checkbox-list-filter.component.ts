@@ -11,6 +11,7 @@ export class CheckboxListFilterComponent
   implements SearchFilterComponentInterface {
   public showMoreChildren = false;
   public maxVisibleItems = 0; // 0 == no limit
+  public hasPredictions = false;
 
   @Input() filterCriteria: SearchFilterCriteriaInterface;
   @Input() public sortBySelection = false;

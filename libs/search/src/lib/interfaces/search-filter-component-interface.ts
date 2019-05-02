@@ -9,4 +9,5 @@ export interface SearchFilterComponentInterface {
   filterSelectionChange: EventEmitter<
     SearchFilterCriteriaInterface | SearchFilterCriteriaInterface[]
   >;
+  hasPredictions: boolean;
 }
