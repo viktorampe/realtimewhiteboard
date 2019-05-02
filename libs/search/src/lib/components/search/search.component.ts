@@ -184,11 +184,13 @@ export class SearchComponent
   private createFilters(): void {
     this.subscriptions.add(
       this.searchViewmodel.searchFilters$.subscribe(searchFilters => {
+        // remove all undefined filters
+        const filters = searchFilters.filter(filter => filter);
         // remove old filters
-        this.removeFilters(searchFilters);
+        this.removeFilters(filters);
 
         // add updated filters
-        searchFilters.forEach(filter => this.addSearchFilter(filter));
+        filters.forEach(filter => this.addSearchFilter(filter));
       })
     );
   }
