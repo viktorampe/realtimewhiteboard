@@ -1,8 +1,6 @@
 @import 'libs/ui/src/lib/breakpoints.scss';
 
 :host() {
-  display: block;
-  height: 40px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -32,17 +30,20 @@ a {
     max-width: none;
   }
 }
+
 .breadcrumb-filter--mobile {
   display: none;
 }
 
-@media #{$ui-breakpoint-xsmall}, #{$ui-breakpoint-small} {
+@media #{$ui-breakpoint-xsmall},
+#{$ui-breakpoint-small} {
   a {
     display: none;
     pointer-events: none;
 
     &:last-child {
       display: inline-block;
+
       &:before {
         content: none;
       }

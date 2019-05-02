@@ -19,4 +19,9 @@
     align-items: center;
     margin: auto;
   }
+
+  &__breadcrumbs {
+    display: flex;
+    align-items: center;
+  }
 }

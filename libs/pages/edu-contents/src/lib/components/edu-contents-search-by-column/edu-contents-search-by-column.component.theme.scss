@@ -1,15 +1,23 @@
 @mixin pages-edu-contents-search-by-column() {
   $pages-edu-contents-search-by-column-padding: 20px !default;
+  $pages-edu-contents-search-by-column__breadcrumbs-height: 40px !default;
+  $pages-edu-contents-search-by-column__breadcrumbs-border-color: $ui-tertiary-bg-color-2 !default;
+  $pages-edu-contents-search-by-column__results-padding-top: 12px !default;
+  // = mat-list default top padding + mat-list-item text padding
 
   .edu-contents-search-by-column {
     &__search-results {
       height: 100%;
       padding-left: $pages-edu-contents-search-by-column-padding;
+      padding-top: $pages-edu-contents-search-by-column__results-padding-top;
     }
 
     &__breadcrumbs {
+      height: $pages-edu-contents-search-by-column__breadcrumbs-height;
       padding-left: $pages-edu-contents-search-by-column-padding;
       padding-right: $pages-edu-contents-search-by-column-padding;
+      border-bottom: 1px solid
+        $pages-edu-contents-search-by-column__breadcrumbs-border-color;
     }
   }
 }
