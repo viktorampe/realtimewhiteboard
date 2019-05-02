@@ -1,11 +1,8 @@
-<div class="checkbox-line-filter-component__title" *ngIf="hasPredictions">{{
+<div class="checkbox-line-filter-component__title">{{
   filterCriteria.label
 }}</div>
 
-<div
-  class="checkbox-line-filter-component__checkbox-holder"
-  *ngIf="hasPredictions"
->
+<div class="checkbox-line-filter-component__checkbox-holder">
   <mat-checkbox
     *ngFor="let value of filteredFilterCriteria.values"
     class="checkbox-line-filter-component__checkbox"
