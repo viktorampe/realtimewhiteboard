@@ -200,6 +200,7 @@ describe('EduContentSearchByColumnComponent', () => {
         By.directive(EduContentSearchByColumnComponent)
       ).componentInstance;
       component.searchComponent = searchComponent;
+      component.initialize();
       pageBarDE = hostFixture.debugElement.query(By.css('#page-bar-container'));
     });
     it('should show the correct buttons when the searchMode is toc', () => {
