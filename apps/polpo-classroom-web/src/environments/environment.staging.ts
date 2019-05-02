@@ -90,16 +90,6 @@ export const environment: EnvironmentInterface = {
             description: 'book',
             name: 'book',
             icon: 'book'
-          },
-          {
-            description: 'bundle',
-            name: 'bundle',
-            icon: 'bundle'
-          },
-          {
-            description: 'taak',
-            name: 'taak',
-            icon: 'taak'
           }
         ],
         pageSize: 20
