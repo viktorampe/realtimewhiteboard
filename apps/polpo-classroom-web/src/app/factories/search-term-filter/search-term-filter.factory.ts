@@ -87,7 +87,7 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
     },
     learningDomainsByLearningArea: {
       query: LearningDomainQueries.getByLearningAreas,
-      label: 'Leergebied',
+      label: 'Leerdomein',
       name: 'learningDomains',
       learningAreaDependent: true,
       options: { maxVisibleItems: this.maxVisibleItems }

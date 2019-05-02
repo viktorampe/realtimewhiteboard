@@ -155,15 +155,15 @@ describe('SearchTermFilterFactory', () => {
       loadInStore();
     });
 
-    it('should return the right filters', () => {
+    it('should return the right filters, in the correct order', () => {
       const result = factory.getFilters(mockSearchState);
       const expectedFilters = [
         getExpectedYearFilter(),
-        getExpectedEduNetFilter(),
-        getExpectedSchoolTypeFilter(),
         getExpectedMethodFilter(),
+        getExpectedLearningDomainFilter(),
         getExpectedEduContentProductTypeFilter(),
-        getExpectedLearningDomainFilter()
+        getExpectedEduNetFilter(),
+        getExpectedSchoolTypeFilter()
       ];
 
       expect(result).toBeObservable(cold('a', { a: expectedFilters }));
@@ -175,11 +175,11 @@ describe('SearchTermFilterFactory', () => {
 
       const result = factory.getFilters(mockSearchState);
       const expectedFilters = [
-        getExpectedEduNetFilter(),
-        getExpectedSchoolTypeFilter(),
         getExpectedMethodFilter(),
+        getExpectedLearningDomainFilter(),
         getExpectedEduContentProductTypeFilter(),
-        getExpectedLearningDomainFilter()
+        getExpectedEduNetFilter(),
+        getExpectedSchoolTypeFilter()
       ];
 
       expect(result).toBeObservable(cold('a', { a: expectedFilters }));
@@ -193,7 +193,7 @@ describe('SearchTermFilterFactory', () => {
       );
 
       // this specific factory doesn't need the searchState for this
-      const result = factory.getPredictionFilterNames(null);
+      const result = factory.getPredictionFilterNames();
 
       expect(result).toEqual([
         'learningArea',
@@ -297,7 +297,7 @@ describe('SearchTermFilterFactory', () => {
   function getExpectedLearningDomainFilter() {
     return getExpectedFilter(
       'learningDomains',
-      'Leergebied',
+      'Leerdomein',
       'id',
       'name',
       mockLearningDomains.filter(
