@@ -15,6 +15,7 @@ describe('AlertToNotificationItemPipe', () => {
     });
     const pipe = new AlertToNotificationItemPipe();
     const expected = {
+      id: 1,
       titleText: 'Er is een bundel aangepast.',
       read: false,
       accented: false,
@@ -35,6 +36,7 @@ describe('AlertToNotificationItemPipe', () => {
     });
     const pipe = new AlertToNotificationItemPipe();
     const expected = {
+      id: 1,
       titleText: 'Er is een bundel aangepast.',
       read: false,
       accented: false,

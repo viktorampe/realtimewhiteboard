@@ -3,6 +3,7 @@ import { DebugElement } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule, MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockMatIconRegistry } from '@campus/testing';
 import { NavItem, TreeNavComponent } from './tree-nav.component';
@@ -61,6 +62,12 @@ describe('TreeNavComponent', () => {
 
     treeDE = fixture.debugElement.query(By.css('cdk-tree'));
     treeNodesDE = treeDE.children;
+
+    // spy on router methods so no actual navigating occurs
+    const router = TestBed.get(Router) as Router;
+    spyOn(router, 'navigate');
+    spyOn(router, 'navigateByUrl');
+    spyOn(router, 'initialNavigation');
   });
 
   it('should create', () => {
