@@ -19,7 +19,6 @@ import {
 export class CheckboxLineFilterComponent
   implements SearchFilterComponentInterface {
   public filteredFilterCriteria: SearchFilterCriteriaInterface;
-  public hasPredictions = false;
   private _filterCriteria: SearchFilterCriteriaInterface;
 
   @Output() filterSelectionChange = new EventEmitter<

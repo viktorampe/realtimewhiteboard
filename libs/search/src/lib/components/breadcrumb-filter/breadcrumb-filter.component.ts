@@ -12,8 +12,6 @@ import {
 })
 export class BreadcrumbFilterComponent
   implements SearchFilterComponentInterface {
-  public hasPredictions = false;
-
   selectedValues: SearchFilterCriteriaValuesInterface[];
   private criteria: SearchFilterCriteriaInterface[];
 

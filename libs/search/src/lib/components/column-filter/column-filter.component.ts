@@ -27,7 +27,6 @@ import { ColumnFilterService } from './column-filter.service';
   ]
 })
 export class ColumnFilterComponent implements SearchFilterComponentInterface {
-  public hasPredictions = false;
   private _filterCriteria: SearchFilterCriteriaInterface[];
   private forwardAnimation: boolean;
   filterCriteriaToToggle: SearchFilterCriteriaInterface[];

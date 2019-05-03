@@ -27,7 +27,6 @@ interface SelectOption {
 })
 export class SelectFilterComponent
   implements SearchFilterComponentInterface, OnInit, OnDestroy {
-  public hasPredictions = false;
   criteria: SearchFilterCriteriaInterface;
   options: SelectOption[];
   selectControl: FormControl = new FormControl();

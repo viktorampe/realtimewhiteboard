@@ -202,17 +202,6 @@ export class SearchComponent
     // set inputs
     const filterItem = componentRef.instance;
     filterItem.filterCriteria = filter.criteria;
-
-    if (filter.criteria instanceof Array) {
-      filterItem.hasPredictions = filter.criteria.some(criterium =>
-        criterium.values.some(value => !!value.prediction)
-      );
-    } else {
-      filterItem.hasPredictions = filter.criteria.values.some(
-        value => !!value.prediction
-      );
-    }
-
     if (filter.options) filterItem.filterOptions = filter.options;
 
     // subscribe to outputs
