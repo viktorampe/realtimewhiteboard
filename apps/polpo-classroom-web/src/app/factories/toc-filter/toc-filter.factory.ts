@@ -251,7 +251,7 @@ export class TocFilterFactory implements SearchFilterFactory {
           }, [])
           .sort((a, b) => (a.name < b.name ? -1 : 1));
 
-        return this.getFilterCriterium(years, YEAR, 'Jaren', 'id', 'name');
+        return this.getFilterCriterium(years, YEAR, 'Jaren', 'id', 'label');
       })
     );
 
