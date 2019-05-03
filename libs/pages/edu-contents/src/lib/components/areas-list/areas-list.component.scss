@@ -42,12 +42,4 @@
   }
 
   // 3 columns is the default if no other queries match
-
-  // 4 columns
-  @media #{$ui-breakpoint-xlarge} {
-    &__area {
-      width: 20%;
-      max-width: 20%;
-    }
-  }
 }

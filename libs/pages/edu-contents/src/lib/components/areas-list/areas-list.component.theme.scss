@@ -55,10 +55,10 @@
           $pages-edu-contents-areas-list_grid-border-color
         );
       }
-      // 4 columns
+      // 3 columns
       @media #{$ui-breakpoint-xlarge} {
         @include color_even_row(
-          5,
+          3,
           $pages-edu-contents-areas-list_area-bg-color,
           $pages-edu-contents-areas-list_grid-border-color
         );
