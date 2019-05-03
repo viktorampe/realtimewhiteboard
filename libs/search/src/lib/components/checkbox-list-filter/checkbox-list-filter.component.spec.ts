@@ -136,6 +136,38 @@ describe('CheckboxListFilterComponentComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  describe('predictions', () => {
+    it('should display the component if there are predictions', () => {
+      component.hasPredictions = true;
+      fixture.detectChanges();
+
+      let title = fixture.debugElement.query(
+        By.css('.checkbox__list__filter__title')
+      );
+      let list = fixture.debugElement.query(
+        By.css('.checkbox__list__filter__list')
+      );
+
+      expect(title).toBeTruthy();
+      expect(list).toBeTruthy();
+    });
+
+    it('should hide the component if there are no predictions', () => {
+      component.hasPredictions = false;
+      fixture.detectChanges();
+
+      let title = fixture.debugElement.query(
+        By.css('.checkbox__list__filter__title')
+      );
+      let list = fixture.debugElement.query(
+        By.css('.checkbox__list__filter__list')
+      );
+
+      expect(title).toBeFalsy();
+      expect(list).toBeFalsy();
+    });
+  });
+
   describe('output', () => {
     it('should emit the updated filtercriterium when the childcomponent emits', fakeAsync(() => {
       spyOn(component.filterSelectionChange, 'emit');
