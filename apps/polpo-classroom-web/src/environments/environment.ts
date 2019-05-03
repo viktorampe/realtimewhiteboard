@@ -90,9 +90,9 @@ export const environment: EnvironmentInterface = {
         component: EduContentSearchResultComponent,
         sortModes: [
           {
-            description: 'book',
-            name: 'book',
-            icon: 'book'
+            description: 'alfabetisch',
+            name: 'title.raw',
+            icon: 'sort-alpha-down'
           }
         ],
         pageSize: 20
@@ -107,19 +107,9 @@ export const environment: EnvironmentInterface = {
         component: EduContentSearchResultComponent,
         sortModes: [
           {
-            description: 'book',
-            name: 'book',
-            icon: 'book'
-          },
-          {
-            description: 'bundle',
-            name: 'bundle',
-            icon: 'bundle'
-          },
-          {
-            description: 'taak',
-            name: 'taak',
-            icon: 'task'
+            description: 'alfabetisch',
+            name: 'title.raw',
+            icon: 'sort-alpha-down'
           }
         ],
         pageSize: 20
