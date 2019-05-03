@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { SearchFilterComponentInterface } from '../../interfaces';
 import { SearchFilterCriteriaInterface } from './../../interfaces/search-filter-criteria.interface';
 
@@ -8,7 +8,7 @@ import { SearchFilterCriteriaInterface } from './../../interfaces/search-filter-
   styleUrls: ['./checkbox-list-filter.component.scss']
 })
 export class CheckboxListFilterComponent
-  implements SearchFilterComponentInterface {
+  implements SearchFilterComponentInterface, OnInit {
   public showMoreChildren = false;
   public maxVisibleItems = 0; // 0 == no limit
   public hasPredictions = false;
@@ -24,6 +24,22 @@ export class CheckboxListFilterComponent
   }
   @Output()
   filterSelectionChange = new EventEmitter<SearchFilterCriteriaInterface[]>();
+
+  ngOnInit() {
+    this.calculateHasPredictions();
+  }
+
+  private calculateHasPredictions() {
+    if (this.filterCriteria instanceof Array) {
+      this.hasPredictions = this.filterCriteria.some(criterium =>
+        criterium.values.some(value => !!value.prediction)
+      );
+    } else {
+      this.hasPredictions = this.filterCriteria.values.some(
+        value => !!value.prediction
+      );
+    }
+  }
 
   public onSelectionChange() {
     // wait for changes to propagate through entire structure
