@@ -24,7 +24,8 @@ function createAlert(
 ): AlertQueueInterface | any {
   return {
     id: id,
-    read: read
+    read: read,
+    validFrom: new Date(1983, 3, 6, -id)
   };
 }
 
@@ -43,15 +44,16 @@ function createState(
   error?: any
 ): State {
   const state: any = {
-    ids: alerts ? alerts.map(alert => alert.id) : [],
+    ids: alerts
+      ? alerts
+          .sort((a, b) => b.validFrom.getTime() - a.validFrom.getTime())
+          .map(alert => alert.id)
+      : [],
     entities: alerts
-      ? alerts.reduce(
-          (entityMap, alert) => ({
-            ...entityMap,
-            [alert.id]: alert
-          }),
-          {}
-        )
+      ? alerts.reduce((entityMap, alert) => {
+          entityMap[alert.id] = alert;
+          return entityMap;
+        }, {})
       : {},
     loaded: loaded
   };
