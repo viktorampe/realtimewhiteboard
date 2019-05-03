@@ -23,6 +23,17 @@ export class GlobalSearchTermFilterFactory extends SearchTermFilterFactory {
 
   constructor(public store: Store<DalState>) {
     super(store);
+
+    // override filterSortOrder from base class
+    this.filterSortOrder = [
+      'learningArea',
+      'years',
+      'methods',
+      'learningDomains',
+      'eduContentProductType',
+      'eduNets',
+      'schoolTypes'
+    ];
   }
 
   getFilters(

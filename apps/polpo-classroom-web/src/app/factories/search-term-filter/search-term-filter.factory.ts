@@ -41,15 +41,13 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
   private domHost = 'hostLeft';
 
   public filterSortOrder = [
-    'learningArea',
     'years',
+    'eduNets',
+    'schoolTypes',
     'methods',
     'learningDomains',
-    'eduContentProductType',
-    'eduNets',
-    'schoolTypes'
+    'eduContentProductType'
   ];
-
   public readonly maxVisibleItems = 5;
   public filterQueries: {
     [key: string]: FilterQueryInterface;
