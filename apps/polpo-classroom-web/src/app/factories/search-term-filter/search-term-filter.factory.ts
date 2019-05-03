@@ -14,6 +14,7 @@ import {
   CheckboxLineFilterComponent,
   CheckboxListFilterComponent,
   SearchFilterComponentInterface,
+  SearchFilterCriteriaInterface,
   SearchFilterFactory,
   SearchFilterInterface,
   SearchStateInterface
@@ -39,6 +40,14 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
   private component = CheckboxListFilterComponent;
   private domHost = 'hostLeft';
 
+  public filterSortOrder = [
+    'years',
+    'eduNets',
+    'schoolTypes',
+    'methods',
+    'learningDomains',
+    'eduContentProductType'
+  ];
   public readonly maxVisibleItems = 5;
   public filterQueries: {
     [key: string]: FilterQueryInterface;
@@ -76,7 +85,7 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
     },
     learningDomainsByLearningArea: {
       query: LearningDomainQueries.getByLearningAreas,
-      label: 'Leergebied',
+      label: 'Leerdomein',
       name: 'learningDomains',
       learningAreaDependent: true,
       options: { maxVisibleItems: this.maxVisibleItems }
@@ -142,7 +151,9 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
 
     return combineLatest(filters).pipe(
       map(searchFilters =>
-        searchFilters.filter(f => f.criteria.values.length > 0)
+        searchFilters
+          .filter(f => f.criteria.values.length > 0)
+          .sort((a, b) => this.filterSorter(a, b, this.filterSortOrder))
       )
     );
   }
@@ -228,6 +239,24 @@ export class SearchTermFilterFactory implements SearchFilterFactory {
 
   public getPredictionFilterNames(): string[] {
     return Object.values(this.filterQueries).map(value => value.name);
+  }
+
+  public filterSorter(
+    a: SearchFilterInterface,
+    b: SearchFilterInterface,
+    order: string[]
+  ): number {
+    let aIndex = order.indexOf(
+      (a.criteria as SearchFilterCriteriaInterface).name
+    );
+    aIndex = aIndex === -1 ? order.length : aIndex; // not found -> add at end
+
+    let bIndex = order.indexOf(
+      (b.criteria as SearchFilterCriteriaInterface).name
+    );
+    bIndex = bIndex === -1 ? order.length : bIndex; // not found -> add at end
+
+    return aIndex - bIndex;
   }
 }
 
