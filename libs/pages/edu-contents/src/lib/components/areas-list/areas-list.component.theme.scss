@@ -48,15 +48,7 @@
         );
       }
       // 3 columns is the default if no other queries match
-      @media #{$ui-breakpoint-large} {
-        @include color_even_row(
-          3,
-          $pages-edu-contents-areas-list_area-bg-color,
-          $pages-edu-contents-areas-list_grid-border-color
-        );
-      }
-      // 3 columns
-      @media #{$ui-breakpoint-xlarge} {
+      @media #{$ui-breakpoint-large}, #{$ui-breakpoint-xlarge} {
         @include color_even_row(
           3,
           $pages-edu-contents-areas-list_area-bg-color,
@@ -100,8 +92,7 @@
         background-color: $bg-color;
       }
     }
-  }
-  // extend background color and borders to fill remaining space
+  } // extend background color and borders to fill remaining space
   &:last-child {
     &:after {
       content: '';
