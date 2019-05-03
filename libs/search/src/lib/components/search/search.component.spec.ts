@@ -189,6 +189,7 @@ describe('SearchComponent', () => {
         mockSearchMode,
         component.initialState
       );
+      expect(component.initialState.searchTerm).toBe('nemo');
 
       jest.resetAllMocks();
 
@@ -199,6 +200,25 @@ describe('SearchComponent', () => {
         mockSearchMode,
         mockSearchState
       );
+    });
+
+    it('should call the reset method on the viewmodel and reset the searchTerm in the initialState and in the searchTermComponent initialValue if true is passed for clearSearchTerm', () => {
+      searchViewmodel.reset = jest.fn();
+      component['searchTermComponent'] = <SearchTermComponent>{
+        currentValue: mockSearchState.searchTerm
+      };
+      expect(component['searchTermComponent'].currentValue).toBe('nemo');
+      component.reset(undefined, true);
+
+      expect(searchViewmodel.reset).toHaveBeenCalled();
+      expect(searchViewmodel.reset).toHaveBeenCalledWith(
+        mockSearchMode,
+        component.initialState
+      );
+      expect(component.initialState.searchTerm).toBe(undefined);
+      expect(component['searchTermComponent'].currentValue).toBe(undefined);
+
+      jest.resetAllMocks();
     });
 
     it('should call reset with the initial state on init', () => {

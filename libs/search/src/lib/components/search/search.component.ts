@@ -118,7 +118,14 @@ export class SearchComponent
     }
   }
 
-  public reset(initialState: SearchStateInterface = this.initialState): void {
+  public reset(
+    initialState: SearchStateInterface = this.initialState,
+    clearSearchTerm?: boolean
+  ): void {
+    if (clearSearchTerm) {
+      initialState.searchTerm = undefined;
+      this.searchTermComponent.currentValue = undefined;
+    }
     this.searchViewmodel.reset(this.searchMode, {
       ...initialState,
       filterCriteriaSelections: new Map(initialState.filterCriteriaSelections)
