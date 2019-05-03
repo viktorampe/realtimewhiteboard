@@ -632,30 +632,44 @@ describe('TocFilterFactory', () => {
   }
 
   function getMockSearchState(
-    areaId?: number,
-    yearId?: number,
-    methodId?: number,
-    bookId?: number,
-    tocId?: number
+    areaId?: number | number[],
+    yearId?: number | number[],
+    methodId?: number | number[],
+    bookId?: number | number[],
+    tocId?: number | number[]
   ): SearchStateInterface {
     const newSearchState = {
       searchTerm: '',
       filterCriteriaSelections: new Map<string, (number | string)[]>()
     };
     if (areaId)
-      newSearchState.filterCriteriaSelections.set('learningArea', [areaId]);
+      newSearchState.filterCriteriaSelections.set(
+        'learningArea',
+        Array.isArray(areaId) ? areaId : [areaId]
+      );
 
-    if (yearId) newSearchState.filterCriteriaSelections.set('years', [yearId]);
+    if (yearId)
+      newSearchState.filterCriteriaSelections.set(
+        'years',
+        Array.isArray(yearId) ? yearId : [yearId]
+      );
 
     if (methodId)
-      newSearchState.filterCriteriaSelections.set('methods', [methodId]);
+      newSearchState.filterCriteriaSelections.set(
+        'methods',
+        Array.isArray(methodId) ? methodId : [methodId]
+      );
     if (bookId)
-      newSearchState.filterCriteriaSelections.set('eduContentTOC.tree', [
-        bookId
-      ]);
+      newSearchState.filterCriteriaSelections.set(
+        'eduContentTOC.tree',
+        Array.isArray(bookId) ? bookId : [bookId]
+      );
 
     if (tocId)
-      newSearchState.filterCriteriaSelections.set('eduContentTOC', [tocId]);
+      newSearchState.filterCriteriaSelections.set(
+        'eduContentTOC',
+        Array.isArray(tocId) ? tocId : [tocId]
+      );
 
     return newSearchState;
   }
