@@ -30,15 +30,19 @@ export class CheckboxListFilterComponent
   }
 
   private calculateHasPredictions() {
-    if (this.filterCriteria instanceof Array) {
-      this.hasPredictions = this.filterCriteria.some(criterium =>
-        criterium.values.some(value => !!value.prediction)
-      );
-    } else {
-      this.hasPredictions = this.filterCriteria.values.some(
-        value => !!value.prediction
-      );
-    }
+    this.hasPredictions = this.checkVisible(this.filterCriteria.values);
+  }
+
+  private checkVisible(values) {
+    return values.some(value => {
+      if (!!value.prediction || value.selected) {
+        return true;
+      }
+      if (value.child) {
+        return this.checkVisible(value.child.values);
+      }
+      return false;
+    });
   }
 
   public onSelectionChange() {
