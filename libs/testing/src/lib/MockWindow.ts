@@ -5,7 +5,8 @@ export class MockWindow {
   close = jest.fn();
   location = {
     // @ts-ignore
-    assign: jest.fn()
+    assign: jest.fn(),
+    origin: 'foo'
   };
   // @ts-ignore
   clearTimeout = jest.fn();

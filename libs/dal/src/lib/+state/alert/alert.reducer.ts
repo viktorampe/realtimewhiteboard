@@ -13,8 +13,8 @@ export function sortAlerts(
   b: AlertQueueInterface
 ): number {
   // sort by date DESC
-  const dateA = new Date(a.sentAt || a.validFrom);
-  const dateB = new Date(b.sentAt || b.validFrom);
+  const dateA: Date = new Date(a.sentAt || a.validFrom);
+  const dateB: Date = new Date(b.sentAt || b.validFrom);
   return dateB.getTime() - dateA.getTime();
 }
 
