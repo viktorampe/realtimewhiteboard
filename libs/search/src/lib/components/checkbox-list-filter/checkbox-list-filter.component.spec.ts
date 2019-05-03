@@ -141,10 +141,10 @@ describe('CheckboxListFilterComponentComponent', () => {
       component.hasPredictions = true;
       fixture.detectChanges();
 
-      let title = fixture.debugElement.query(
+      const title = fixture.debugElement.query(
         By.css('.checkbox__list__filter__title')
       );
-      let list = fixture.debugElement.query(
+      const list = fixture.debugElement.query(
         By.css('.checkbox__list__filter__list')
       );
 
@@ -156,15 +156,62 @@ describe('CheckboxListFilterComponentComponent', () => {
       component.hasPredictions = false;
       fixture.detectChanges();
 
-      let title = fixture.debugElement.query(
+      const title = fixture.debugElement.query(
         By.css('.checkbox__list__filter__title')
       );
-      let list = fixture.debugElement.query(
+      const list = fixture.debugElement.query(
         By.css('.checkbox__list__filter__list')
       );
 
       expect(title).toBeFalsy();
       expect(list).toBeFalsy();
+    });
+
+    it('should display title when child value is selected', () => {
+      component.filterCriteria = {
+        displayProperty: 'label',
+        keyProperty: 'id',
+        name: 'foo',
+        label: 'foo',
+        values: [
+          {
+            data: { id: 1 },
+            child: {
+              displayProperty: 'label',
+              keyProperty: 'id',
+              values: [
+                {
+                  data: { id: 2 },
+                  selected: true
+                }
+              ]
+            } as SearchFilterCriteriaInterface
+          }
+        ]
+      };
+
+      component.ngOnInit();
+
+      expect(component.hasPredictions).toBe(true);
+    });
+
+    it('should display title when a value is selected', () => {
+      component.filterCriteria = {
+        displayProperty: 'label',
+        keyProperty: 'id',
+        name: 'foo',
+        label: 'foo',
+        values: [
+          {
+            selected: true,
+            data: { id: 1 }
+          }
+        ]
+      };
+
+      component.ngOnInit();
+
+      expect(component.hasPredictions).toBe(true);
     });
   });
 
