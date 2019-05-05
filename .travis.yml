@@ -19,6 +19,7 @@ branches:
 before_install:
   - npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
 before_script:
+  - git fetch origin/$TRAVIS_BRANCH
   - npm run affected:lint -- --base "origin/$TRAVIS_BRANCH" --head HEAD --parallel
   - npm run format:check
   - npm run affected:test -- --base "origin/$TRAVIS_BRANCH" --head HEAD --parallel --configuration=travis
