@@ -19,9 +19,9 @@ branches:
 before_install:
   - npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
 before_script:
-  - npm run affected:lint -- --base "$TRAVIS_BRANCH" --head HEAD --parallel
+  - npm run affected:lint -- --base "origin/$TRAVIS_BRANCH" --head HEAD --parallel
   - npm run format:check
-  - npm run affected:test -- --base "$TRAVIS_BRANCH" --head HEAD --parallel --configuration=travis
+  - npm run affected:test -- --base "origin/$TRAVIS_BRANCH" --head HEAD --parallel --configuration=travis
   - npm run e2e:ci
 script:
   - if [ $TRAVIS_BRANCH == "deploy/staging-polpo-classroom-web" ]  && [ $TRAVIS_PULL_REQUEST == "false" ] ; then ng build -c staging ; fi
