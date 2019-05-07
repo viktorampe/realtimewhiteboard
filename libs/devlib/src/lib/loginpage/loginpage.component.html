@@ -76,7 +76,11 @@
 <div>{{ response | async | json }}</div>
 
 <div>
-  <campus-button campusPrimary (click)="openDialog()"
-    >Open Collection Manager</campus-button
+  <campus-button campusPrimary (click)="loadStore()">Load store</campus-button>
+</div>
+
+<div>
+  <campus-button campusPrimary (click)="updateFavorite()"
+    >Update favorite</campus-button
   >
 </div>

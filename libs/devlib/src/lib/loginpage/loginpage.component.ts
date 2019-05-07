@@ -8,16 +8,23 @@ import {
   AlertReducer,
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
+  BundleActions,
   EduContent,
+  EduContentActions,
   EduContentInterface,
   EduContentQueries,
   EffectFeedbackInterface,
   EffectFeedbackQueries,
   FavoriteActions,
   FavoriteInterface,
+  FavoriteQueries,
   FavoriteTypesEnum,
+  LearningAreaActions,
+  TaskActions,
+  TaskEduContentActions,
   TocServiceInterface,
   TOC_SERVICE_TOKEN,
+  UnlockedContentActions,
   UserActions
 } from '@campus/dal';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
@@ -90,17 +97,6 @@ export class LoginpageComponent implements OnInit {
         );
       })
     );
-
-    // fill store
-    /*this.store.dispatch(new BundleActions.LoadBundles({ userId: 186 }));
-    this.store.dispatch(
-      new UnlockedContentActions.LoadUnlockedContents({ userId: 186 })
-    );
-    this.store.dispatch(new TaskActions.LoadTasks({ userId: 186 }));
-    this.store.dispatch(
-      new TaskEduContentActions.LoadTaskEduContents({ userId: 186 })
-    );
-    this.store.dispatch(new EduContentActions.LoadEduContents({ userId: 186 }));*/
   }
 
   getCurrentUser() {
@@ -125,5 +121,33 @@ export class LoginpageComponent implements OnInit {
           19
         );
       });
+  }
+
+  loadStore() {
+    // fill store
+    this.store.dispatch(new BundleActions.LoadBundles({ userId: 186 }));
+    this.store.dispatch(
+      new UnlockedContentActions.LoadUnlockedContents({ userId: 186 })
+    );
+    this.store.dispatch(new TaskActions.LoadTasks({ userId: 186 }));
+    this.store.dispatch(
+      new TaskEduContentActions.LoadTaskEduContents({ userId: 186 })
+    );
+    this.store.dispatch(new EduContentActions.LoadEduContents({ userId: 186 }));
+    this.store.dispatch(new FavoriteActions.LoadFavorites({ userId: 186 }));
+    this.store.dispatch(new LearningAreaActions.LoadLearningAreas());
+  }
+
+  updateFavorite() {
+    let favorite: FavoriteInterface;
+    this.store.pipe(select(FavoriteQueries.getAll)).subscribe(favorites => {
+      favorite = favorites[0];
+    });
+    console.log(favorite);
+
+    this.response = this.favoriteService.updateFavorite(186, {
+      ...favorite,
+      name: favorite.name + 'x'
+    });
   }
 }
