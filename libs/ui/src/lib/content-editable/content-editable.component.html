@@ -1,1 +1,14 @@
-<span>ContentEditable says hi</span>
+<div>
+  <div>
+    <span *ngIf="!active">{{ text }}</span>
+    <mat-form-field [style.display]="active ? null : 'none'">
+      <input
+        #inputField
+        (focus)="$event.target.select()"
+        matInput
+        [(ngModel)]="text"
+      />
+    </mat-form-field>
+  </div>
+  <div> <campus-button (click)="toggleActive()">Edit</campus-button> </div>
+</div>
