@@ -82,6 +82,10 @@
 </div>
 
 <div>
-  <h1>Content Editable</h1>
-  <campus-content-editable text="Try to edit me"></campus-content-editable>
+  <h2>Content Editable Component</h2>
+  <campus-content-editable
+    #contentEditable
+    text="Try to edit me"
+  ></campus-content-editable>
+  <campus-button (click)="toggleEditable()">Edit</campus-button>
 </div>

@@ -16,12 +16,23 @@ import {
   styleUrls: ['./content-editable.component.scss']
 })
 export class ContentEditableComponent implements OnInit, OnChanges {
+  private _active: boolean;
+
   @Input() text: string;
-  @Input() active: boolean;
+
+  get active() {
+    return this._active;
+  }
+  @Input()
+  set active(value: boolean) {
+    this._active = value;
+    if (this._active) {
+      this.focusInputField();
+    }
+  }
 
   //Submit on <enter> is true if multiline is off
   @Input() multiline = false;
-
   @Output() textChanged: EventEmitter<string> = new EventEmitter();
 
   @ViewChild('inputField')
@@ -30,7 +41,7 @@ export class ContentEditableComponent implements OnInit, OnChanges {
   ngOnInit() {}
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.active) {
+    if (changes.active && changes.active.currentValue) {
       this.focusInputField();
     }
   }
@@ -39,10 +50,5 @@ export class ContentEditableComponent implements OnInit, OnChanges {
     setTimeout(() => {
       this.inputField.nativeElement.focus();
     });
-  }
-
-  toggleActive() {
-    this.active = !this.active;
-    this.focusInputField();
   }
 }

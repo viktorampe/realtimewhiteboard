@@ -1,6 +1,6 @@
 // tslint:disable:nx-enforce-module-boundaries
 // tslint:disable:member-ordering
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { NavigationEnd, Router } from '@angular/router';
 import {
@@ -23,6 +23,7 @@ import {
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { select, Store } from '@ngrx/store';
 import { EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN } from 'libs/shared/src/lib/collection-manager/edu-content-collection-manager.service.interface';
+import { ContentEditableComponent } from 'libs/ui/src/lib/content-editable/content-editable.component';
 import { Observable } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
 import {
@@ -42,6 +43,9 @@ export class LoginpageComponent implements OnInit {
   currentUser: Observable<any>;
   route$: Observable<string[]>;
   response: Observable<any>;
+
+  @ViewChild(ContentEditableComponent)
+  contentEditable: ContentEditableComponent;
 
   private myFavorite: FavoriteInterface = {
     type: FavoriteTypesEnum.EDUCONTENT,
@@ -125,5 +129,9 @@ export class LoginpageComponent implements OnInit {
           19
         );
       });
+  }
+
+  toggleEditable() {
+    this.contentEditable.active = !this.contentEditable.active;
   }
 }
