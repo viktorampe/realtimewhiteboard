@@ -7,9 +7,7 @@ import {
 import { Observable } from 'rxjs';
 import { QuickLinkTypeEnum } from './quick-link-type.enum';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class QuickLinkViewModel {
   public quickLinks$: Observable<HistoryInterface[] | FavoriteInterface[]>;
   public feedback$: Observable<EffectFeedbackInterface>;
