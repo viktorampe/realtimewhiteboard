@@ -34,7 +34,6 @@ export class ContentEditableComponent implements OnInit, OnChanges {
 
   //Optional: input could be added here to add an upper length limit
 
-  //Submit on <enter> is true if multiline is off
   @Input() multiline = false;
   @Output() textChanged: EventEmitter<string> = new EventEmitter();
 
@@ -52,6 +51,7 @@ export class ContentEditableComponent implements OnInit, OnChanges {
   startEditing() {
     this.newText = this.text;
 
+    //Input is not visible yet, so setTimeout
     setTimeout(() => {
       this.inputField.nativeElement.focus();
     });
