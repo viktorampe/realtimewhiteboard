@@ -6,8 +6,20 @@
         #inputField
         (focus)="$event.target.select()"
         matInput
-        [(ngModel)]="text"
+        [(ngModel)]="newText"
+        (keydown.enter)="saveChanges()"
       />
     </mat-form-field>
+    <span *ngIf="active">
+      <campus-button
+        *ngIf="this.newText.length > 0"
+        iconClass="finished"
+        (click)="saveChanges()"
+      ></campus-button>
+      <campus-button
+        iconClass="cancel"
+        (click)="cancelChanges()"
+      ></campus-button>
+    </span>
   </div>
 </div>

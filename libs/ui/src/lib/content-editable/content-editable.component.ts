@@ -17,6 +17,7 @@ import {
 })
 export class ContentEditableComponent implements OnInit, OnChanges {
   private _active: boolean;
+  public newText: string;
 
   @Input() text: string;
 
@@ -27,9 +28,11 @@ export class ContentEditableComponent implements OnInit, OnChanges {
   set active(value: boolean) {
     this._active = value;
     if (this._active) {
-      this.focusInputField();
+      this.startEditing();
     }
   }
+
+  //Optional: input could be added here to add an upper length limit
 
   //Submit on <enter> is true if multiline is off
   @Input() multiline = false;
@@ -42,13 +45,30 @@ export class ContentEditableComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.active && changes.active.currentValue) {
-      this.focusInputField();
+      this.startEditing();
     }
   }
 
-  focusInputField() {
+  startEditing() {
+    this.newText = this.text;
+
     setTimeout(() => {
       this.inputField.nativeElement.focus();
     });
+  }
+
+  saveChanges() {
+    //If user left it blank, assume they didn't intend to change anything
+    if (this.newText.length > 0) {
+      this.text = this.newText;
+    }
+
+    this.active = false;
+
+    this.textChanged.emit(this.text);
+  }
+
+  cancelChanges() {
+    this.active = false;
   }
 }
