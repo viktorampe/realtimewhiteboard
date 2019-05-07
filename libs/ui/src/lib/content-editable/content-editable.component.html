@@ -13,11 +13,11 @@
     <span *ngIf="active">
       <campus-button
         *ngIf="this.newText.length > 0"
-        iconClass="finished"
+        iconClass="check"
         (click)="saveChanges()"
       ></campus-button>
       <campus-button
-        iconClass="cancel"
+        iconClass="close"
         (click)="cancelChanges()"
       ></campus-button>
     </span>
