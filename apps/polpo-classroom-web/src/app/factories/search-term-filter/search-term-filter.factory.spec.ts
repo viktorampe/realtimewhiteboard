@@ -159,11 +159,11 @@ describe('SearchTermFilterFactory', () => {
       const result = factory.getFilters(mockSearchState);
       const expectedFilters = [
         getExpectedYearFilter(),
+        getExpectedEduNetFilter(),
+        getExpectedSchoolTypeFilter(),
         getExpectedMethodFilter(),
         getExpectedLearningDomainFilter(),
-        getExpectedEduContentProductTypeFilter(),
-        getExpectedEduNetFilter(),
-        getExpectedSchoolTypeFilter()
+        getExpectedEduContentProductTypeFilter()
       ];
 
       expect(result).toBeObservable(cold('a', { a: expectedFilters }));
@@ -175,11 +175,11 @@ describe('SearchTermFilterFactory', () => {
 
       const result = factory.getFilters(mockSearchState);
       const expectedFilters = [
+        getExpectedEduNetFilter(),
+        getExpectedSchoolTypeFilter(),
         getExpectedMethodFilter(),
         getExpectedLearningDomainFilter(),
-        getExpectedEduContentProductTypeFilter(),
-        getExpectedEduNetFilter(),
-        getExpectedSchoolTypeFilter()
+        getExpectedEduContentProductTypeFilter()
       ];
 
       expect(result).toBeObservable(cold('a', { a: expectedFilters }));
