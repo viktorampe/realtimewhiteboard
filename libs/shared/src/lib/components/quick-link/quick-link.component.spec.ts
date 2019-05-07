@@ -8,9 +8,8 @@ describe('QuickLinkComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ QuickLinkComponent ]
-    })
-    .compileComponents();
+      declarations: [QuickLinkComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
