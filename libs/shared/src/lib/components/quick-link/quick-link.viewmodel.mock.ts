@@ -10,6 +10,7 @@ import {
   Priority
 } from '@campus/dal';
 import { BehaviorSubject } from 'rxjs';
+import { QuickLinkTypeEnum } from './quick-link-type.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -142,5 +143,3 @@ export class MockQuickLinkViewModel {
     return mockFeedBack;
   }
 }
-
-enum QuickLinkTypeEnum {} // todo: replace with actual enum
