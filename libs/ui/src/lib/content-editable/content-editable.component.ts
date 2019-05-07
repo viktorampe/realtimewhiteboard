@@ -59,7 +59,7 @@ export class ContentEditableComponent implements OnInit, OnChanges {
 
   saveChanges() {
     //If user left it blank, assume they didn't intend to change anything
-    if (this.newText.trim().length > 0 && this.newText != this.text) {
+    if (this.newText.trim().length > 0 && this.newText !== this.text) {
       this.text = this.newText;
       this.textChanged.emit(this.text);
     }
