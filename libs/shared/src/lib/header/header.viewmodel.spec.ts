@@ -220,8 +220,8 @@ function setInitialState() {
   );
 
   unreadAlerts = [
-    new AlertFixture({ id: 1, sentAt: new Date(), type: 'bundle' }),
-    new AlertFixture({ id: 2, sentAt: new Date(), type: 'educontent' })
+    new AlertFixture({ id: 1, sentAt: new Date(), type: 'bundle' }) as Alert,
+    new AlertFixture({ id: 2, sentAt: new Date(), type: 'educontent' }) as Alert
   ];
   usedUnreadAlertsState = AlertReducer.reducer(
     AlertReducer.initialState,
