@@ -1,34 +1,37 @@
-<div>
-  <div>
-    <span *ngIf="!active">{{ text }}</span>
-    <mat-form-field [style.display]="active ? null : 'none'">
-      <input
-        *ngIf="!multiline"
-        #inputField
-        (focus)="$event.target.select()"
-        matInput
-        [(ngModel)]="newText"
-        (keydown.enter)="saveChanges()"
-      />
-      <textarea
-        *ngIf="multiline"
-        #inputField
-        matInput
-        (focus)="$event.target.select()"
-        [(ngModel)]="newText"
-      >
-      </textarea>
-    </mat-form-field>
-    <span *ngIf="active">
-      <campus-button
-        *ngIf="this.newText.trim().length > 0"
-        iconClass="check"
-        (click)="saveChanges()"
-      ></campus-button>
-      <campus-button
-        iconClass="close"
-        (click)="cancelChanges()"
-      ></campus-button>
-    </span>
-  </div>
+<div class="ui-content-editable">
+  <span class="ui-content-editable__text" *ngIf="!active">{{ text }}</span>
+  <mat-form-field
+    class="ui-content-editable__form-field"
+    [style.display]="active ? null : 'none'"
+  >
+    <input
+      *ngIf="!multiline"
+      #inputField
+      (focus)="$event.target.select()"
+      matInput
+      [(ngModel)]="newText"
+      (keydown.enter)="saveChanges()"
+    />
+    <textarea
+      *ngIf="multiline"
+      #inputField
+      matInput
+      (focus)="$event.target.select()"
+      [(ngModel)]="newText"
+    >
+    </textarea>
+  </mat-form-field>
+  <span *ngIf="active" class="ui-content-editable__actions">
+    <campus-button
+      class="ui-content-editable__actions__confirm"
+      *ngIf="this.newText.trim().length > 0"
+      iconClass="check"
+      (click)="saveChanges()"
+    ></campus-button>
+    <campus-button
+      class="ui-content-editable__actions__cancel"
+      iconClass="close"
+      (click)="cancelChanges()"
+    ></campus-button>
+  </span>
 </div>

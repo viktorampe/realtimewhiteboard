@@ -134,4 +134,8 @@ export class LoginpageComponent implements OnInit {
   toggleEditable() {
     this.contentEditable.active = !this.contentEditable.active;
   }
+
+  textChanged(text: string) {
+    console.log('ContentEditable was changed, new text: ' + text);
+  }
 }

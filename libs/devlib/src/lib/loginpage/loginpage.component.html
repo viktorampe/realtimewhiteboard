@@ -83,8 +83,15 @@
 
 <div>
   <h2>Content Editable Component</h2>
+
+  <h2>
+    <campus-content-editable
+      (textChanged)="textChanged($event)"
+      text="Try to edit me"
+    ></campus-content-editable>
+  </h2>
+
   <campus-content-editable
-    #contentEditable
     [multiline]="true"
     text="Try to edit me"
   ></campus-content-editable>
