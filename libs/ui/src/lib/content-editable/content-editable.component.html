@@ -3,16 +3,25 @@
     <span *ngIf="!active">{{ text }}</span>
     <mat-form-field [style.display]="active ? null : 'none'">
       <input
+        *ngIf="!multiline"
         #inputField
         (focus)="$event.target.select()"
         matInput
         [(ngModel)]="newText"
         (keydown.enter)="saveChanges()"
       />
+      <textarea
+        *ngIf="multiline"
+        #inputField
+        matInput
+        (focus)="$event.target.select()"
+        [(ngModel)]="newText"
+      >
+      </textarea>
     </mat-form-field>
     <span *ngIf="active">
       <campus-button
-        *ngIf="this.newText.length > 0"
+        *ngIf="this.newText.trim().length > 0"
         iconClass="check"
         (click)="saveChanges()"
       ></campus-button>
