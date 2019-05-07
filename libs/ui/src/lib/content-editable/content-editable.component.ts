@@ -19,7 +19,7 @@ export class ContentEditableComponent implements OnInit, OnChanges {
   private _active: boolean;
   public newText: string;
 
-  @Input() text: string;
+  @Input() text = '';
 
   get active() {
     return this._active;
