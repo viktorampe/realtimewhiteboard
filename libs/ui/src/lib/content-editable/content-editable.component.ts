@@ -16,8 +16,8 @@ import {
   styleUrls: ['./content-editable.component.scss']
 })
 export class ContentEditableComponent implements OnInit, OnChanges {
-  private _active: boolean;
-  public newText: string;
+  private _active = false;
+  protected newText: string;
 
   @Input() text = '';
 

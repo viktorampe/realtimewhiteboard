@@ -1,4 +1,10 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  async,
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick
+} from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import {
   MatFormFieldModule,
@@ -41,15 +47,38 @@ describe('ContentEditableComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('enabling editing', () => {
-    it('should display an input when active is true', () => {
-      console.log(component.text);
-      component.text = 'a';
-      let input = fixture.debugElement.query(
-        By.css('.ui-content-editable__form-field input')
+  it('should not display the inputs when active is false', () => {
+    let input = fixture.debugElement.query(
+      By.css('.ui-content-editable__form-field')
+    );
+
+    expect(input.styles['display']).toBe('none');
+  });
+
+  describe('editing enabled (active = true)', () => {
+    it('should display the form field containing the inputs', () => {
+      component.active = true;
+      fixture.detectChanges();
+
+      const formField = fixture.debugElement.query(
+        By.css('.ui-content-editable__form-field')
       );
 
-      expect(input).toBeFalsy();
+      expect(formField.styles['display']).toBeNull();
     });
+
+    it('should focus the input ', fakeAsync(() => {
+      const inputElement = fixture.debugElement.query(
+        By.css('.ui-content-editable__form-field input')
+      ).nativeElement;
+
+      spyOn(inputElement, 'focus');
+
+      component.active = true;
+      fixture.detectChanges();
+      tick();
+
+      expect(inputElement.focus).toHaveBeenCalled();
+    }));
   });
 });
