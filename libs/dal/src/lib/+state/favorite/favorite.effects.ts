@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
+import { FavoriteInterface } from '@campus/dal';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { select } from '@ngrx/store';
 import { DataPersistence } from '@nrwl/nx';
@@ -111,8 +112,18 @@ export class FavoriteEffects {
     FavoritesActionTypes.UpdateFavorite,
     {
       run: (action: UpdateFavorite, state: DalState) => {
+        // the type of action.payload.favorite is:
+        // UpdateNum<T> {
+        //     id: number;
+        //     changes: Partial<T>;
+        // }
+        // the service expects a FavoriteInterface
+        const changedFavorite: FavoriteInterface = {
+          ...action.payload.favorite.id,
+          ...action.payload.changes
+        };
         return this.favoriteService
-          .updateFavorite(action.payload.userId, action.payload.favorite)
+          .updateFavorite(action.payload.userId, changedFavorite)
           .pipe(
             map(favorite => {
               const effectFeedback = EffectFeedback.generateSuccessFeedback(
