@@ -15,12 +15,14 @@ import { QuickLinkTypeEnum } from './quick-link-type.enum';
 
 @Injectable()
 export class QuickLinkViewModel {
+  public quickLinks$: Observable<HistoryInterface[] | FavoriteInterface[]>;
+  public feedback$: Observable<EffectFeedbackInterface>;
+
   constructor(
     private store: Store<DalState>,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
   ) {}
-  public quickLinks$: Observable<HistoryInterface[] | FavoriteInterface[]>;
-  public feedback$: Observable<EffectFeedbackInterface>;
+
   public update(id: number, name: string, mode: QuickLinkTypeEnum): void {
     let action: Action;
     switch (mode) {
