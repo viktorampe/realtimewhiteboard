@@ -24,6 +24,13 @@ export class FavoriteService implements FavoriteServiceInterface {
     return this.personApi.createFavorites(userId, favorite);
   }
 
+  updateFavorite(
+    userId: number,
+    favorite: FavoriteInterface
+  ): Observable<FavoriteInterface> {
+    return this.personApi.updateByIdFavorites(userId, favorite.id, favorite);
+  }
+
   deleteFavorite(userId: number, favoriteId: number): Observable<boolean> {
     return this.personApi
       .destroyByIdFavorites(userId, favoriteId)

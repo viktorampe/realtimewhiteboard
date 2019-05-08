@@ -76,14 +76,21 @@
 <div>{{ response | async | json }}</div>
 
 <div>
-  <campus-button campusPrimary (click)="openDialog()"
-    >Open Collection Manager</campus-button
+  <campus-button campusPrimary (click)="loadStore()">Load store</campus-button>
+</div>
+
+<div>
+  <campus-button campusPrimary (click)="updateFavorite()"
+    >Update favorite</campus-button
   >
 </div>
 
 <div>
   <h2>Content Editable Component</h2>
 
-  <campus-content-editable text="Try to edit me"></campus-content-editable>
+  <campus-content-editable
+    [multiline]="true"
+    text="Try to edit me"
+  ></campus-content-editable>
   <campus-button (click)="toggleEditable()">Edit</campus-button>
 </div>

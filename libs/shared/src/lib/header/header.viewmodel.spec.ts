@@ -4,6 +4,7 @@ import {
   Alert,
   AlertActions,
   AlertFixture,
+  AlertQueueInterface,
   AlertReducer,
   AUTH_SERVICE_TOKEN,
   DalState,
@@ -14,6 +15,7 @@ import {
   UserActions,
   UserReducer
 } from '@campus/dal';
+import { MockDate } from '@campus/testing';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { ENVIRONMENT_ALERTS_FEATURE_TOKEN } from '../interfaces/environment.injectiontokens';
@@ -35,6 +37,7 @@ let usedUnreadAlertsState: any;
 let spy: jest.SpyInstance;
 let dispatchSpy: jest.SpyInstance;
 let store: Store<DalState>;
+let dateMock: MockDate;
 
 @Injectable({
   providedIn: 'root'
@@ -44,6 +47,14 @@ class MockHeaderResolver {
 }
 
 describe('headerViewModel', () => {
+  beforeAll(() => {
+    dateMock = new MockDate();
+  });
+
+  afterAll(() => {
+    dateMock.returnRealDate();
+  });
+
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -125,68 +136,72 @@ describe('headerViewModel', () => {
     checkFeatureToggles(false, false, false);
     checkFeatureToggles(false, true, false);
   });
-  describe('state streams', () => {
+  describe('streams', () => {
     beforeAll(() => {
       setInitialState();
     });
-    it('should get the user from the provided state', () => {
-      expect(headerViewModel.currentUser$).toBeObservable(
-        hot('a', { a: user })
-      );
-    });
 
-    it('should get unread alerts from the provided state', () => {
-      expect(headerViewModel.unreadAlerts$).toBeObservable(
-        hot('a', { a: unreadAlerts })
-      );
-    });
-  });
-
-  describe('display streams', () => {
-    it('should setup the unread alert count stream', () => {
-      const expected = unreadAlerts.length;
-      expect(headerViewModel.unreadAlertCount$).toBeObservable(
-        hot('a', { a: expected })
-      );
-    });
-    it('should setup the alert notifications stream', () => {
-      expect(headerViewModel.alertNotifications$).toBeObservable(
-        hot('a', { a: unreadAlerts })
-      );
-    });
-
-    describe('should setup the back link stream', () => {
-      const mockBreadcrumbs = [
-        { displayText: 'foo', link: ['foo'] },
-        { displayText: 'foo', link: ['foo bar'] }
-      ];
-
-      it('should return a link when one is available', () => {
-        store.dispatch(
-          new UiActions.SetBreadcrumbs({ breadcrumbs: mockBreadcrumbs })
+    describe('state streams', () => {
+      it('should get the user from the provided state', () => {
+        expect(headerViewModel.currentUser$).toBeObservable(
+          hot('a', { a: user })
         );
+      });
 
-        const expected = mockBreadcrumbs[mockBreadcrumbs.length - 2].link;
-        expect(headerViewModel.backLink$).toBeObservable(
+      it('should get unread alerts from the provided state', () => {
+        expect(headerViewModel.unreadAlerts$).toBeObservable(
+          hot('a', { a: unreadAlerts.map(asAlert) })
+        );
+      });
+    });
+
+    describe('display streams', () => {
+      it('should setup the unread alert count stream', () => {
+        const expected = unreadAlerts.length;
+        expect(headerViewModel.unreadAlertCount$).toBeObservable(
           hot('a', { a: expected })
         );
       });
 
-      it('should not return a link when none is available', () => {
-        // no breadcrumbs -> not actually possible
-        store.dispatch(new UiActions.SetBreadcrumbs({ breadcrumbs: [] }));
-        const expected = undefined;
-        expect(headerViewModel.backLink$).toBeObservable(
-          hot('a', { a: expected })
+      it('should setup the alert notifications stream', () => {
+        expect(headerViewModel.alertNotifications$).toBeObservable(
+          hot('a', { a: unreadAlerts.map(asAlert) })
         );
+      });
 
-        // 1 breadcrumb
-        store.dispatch(
-          new UiActions.SetBreadcrumbs({ breadcrumbs: [mockBreadcrumbs[0]] })
-        );
-        expect(headerViewModel.backLink$).toBeObservable(
-          hot('a', { a: expected })
-        );
+      describe('should setup the back link stream', () => {
+        const mockBreadcrumbs = [
+          { displayText: 'foo', link: ['foo'] },
+          { displayText: 'foo', link: ['foo bar'] }
+        ];
+
+        it('should return a link when one is available', () => {
+          store.dispatch(
+            new UiActions.SetBreadcrumbs({ breadcrumbs: mockBreadcrumbs })
+          );
+
+          const expected = mockBreadcrumbs[mockBreadcrumbs.length - 2].link;
+          expect(headerViewModel.backLink$).toBeObservable(
+            hot('a', { a: expected })
+          );
+        });
+
+        it('should not return a link when none is available', () => {
+          // no breadcrumbs -> not actually possible
+          store.dispatch(new UiActions.SetBreadcrumbs({ breadcrumbs: [] }));
+          const expected = undefined;
+          expect(headerViewModel.backLink$).toBeObservable(
+            hot('a', { a: expected })
+          );
+
+          // 1 breadcrumb
+          store.dispatch(
+            new UiActions.SetBreadcrumbs({ breadcrumbs: [mockBreadcrumbs[0]] })
+          );
+          expect(headerViewModel.backLink$).toBeObservable(
+            hot('a', { a: expected })
+          );
+        });
       });
     });
   });
@@ -230,4 +245,11 @@ function setInitialState() {
       timeStamp: Date.now()
     })
   );
+}
+
+// copy from alert selector
+function asAlert(item: AlertQueueInterface): Alert {
+  if (item) {
+    return Object.assign<Alert, AlertQueueInterface>(new Alert(), item);
+  }
 }
