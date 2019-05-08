@@ -78,6 +78,14 @@
           padding-bottom: $shared-header__page-bar__element-padding-bottom;
         }
       }
+
+      &__quicklink {
+        &__button,
+        &__button:hover {
+          color: $shared-header__app-bar-color;
+          background-color: $shared-header__page-bar-background-color;
+        }
+      }
     }
 
     .shared-header__app-bar__alerts {

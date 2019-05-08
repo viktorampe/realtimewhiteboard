@@ -92,5 +92,19 @@
       ></campus-button>
     </ng-template>
     <div id="page-bar-container"></div>
+    <div class="shared-header__page-bar__quicklink">
+      <campus-button
+        *hasPermission="'manageFavorites'"
+        (click)="onManageFavoritesClick()"
+        class="shared-header__page-bar__quicklink__button"
+        [iconClass]="'bordered:favorites'"
+      ></campus-button>
+      <campus-button
+        *hasPermission="'manageHistory'"
+        (click)="onManageHistoryClick()"
+        class="shared-header__page-bar__quicklink__button"
+        [iconClass]="'bordered:history'"
+      ></campus-button>
+    </div>
   </div>
 </div>
