@@ -1,8 +1,5 @@
 export * from './lib/auth';
-export {
-  EduContentCollectionManagerServiceInterface,
-  EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN
-} from './lib/collection-manager/edu-content-collection-manager.service.interface';
+export * from './lib/collection-manager';
 export {
   QuickLinkTypeEnum
 } from './lib/components/quick-link/quick-link-type.enum';
