@@ -147,34 +147,55 @@ describe('ContentEditableComponent', () => {
       cancelEl = fixture.debugElement.query(
         By.css('.ui-content-editable__actions__cancel')
       ).nativeElement;
+
+      spyOn(component, 'saveChanges').and.callThrough();
+      spyOn(component, 'cancelChanges').and.callThrough();
     });
 
     it('should save changes on pressing enter', () => {
       enterText(inputEl, newText);
       pressEnter(inputEl);
 
-      expect(component.text).toBe(newText);
+      expect(component.saveChanges).toHaveBeenCalled();
     });
 
-    it('should save changes when clicking confirm', () => {
+    it('should change text when saving changes', () => {
+      expect(component.text).toBe(defaultText);
+
       enterText(inputEl, newText);
-      clickConfirm();
+      pressEnter(inputEl);
 
       expect(component.text).toBe(newText);
     });
 
-    it('should NOT save changes when clicking cancel', () => {
+    it('should put old text back when cancelling changes', () => {
+      expect(component.text).toBe(defaultText);
+
       enterText(inputEl, newText);
       clickCancel();
 
       expect(component.text).toBe(defaultText);
     });
 
-    it('should NOT save changes when pressing enter with empty value', () => {
+    it('should save changes when clicking confirm', () => {
+      enterText(inputEl, newText);
+      clickConfirm();
+
+      expect(component.saveChanges).toHaveBeenCalled();
+    });
+
+    it('should NOT save changes when clicking cancel', () => {
+      enterText(inputEl, newText);
+      clickCancel();
+
+      expect(component.saveChanges).not.toHaveBeenCalled();
+    });
+
+    it('should cancel changes when pressing enter with empty value', () => {
       enterText(inputEl, '');
       pressEnter(inputEl);
 
-      expect(component.text).toBe(defaultText);
+      expect(component.cancelChanges).toHaveBeenCalled();
     });
 
     it('should not show confirm button if new text is empty', () => {
@@ -215,8 +236,6 @@ describe('ContentEditableComponent', () => {
       });
 
       it('should NOT call saveChanges when pressing enter in multiline', () => {
-        spyOn(component, 'saveChanges');
-
         enterText(textareaEl, newText);
         pressEnter(textareaEl);
 
