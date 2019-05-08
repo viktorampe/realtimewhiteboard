@@ -12,7 +12,8 @@ export interface FavoriteServiceInterface {
   ): Observable<FavoriteInterface>;
   updateFavorite(
     userId: number,
-    favorite: FavoriteInterface
+    favoriteId: number,
+    changes: Partial<FavoriteInterface>
   ): Observable<FavoriteInterface>;
   deleteFavorite(userId: number, favoriteId: number): Observable<boolean>;
 }
