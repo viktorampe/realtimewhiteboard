@@ -68,7 +68,7 @@ export class UpdateFavorite implements Action {
     public payload: {
       userId: number;
       favorite: Update<FavoriteInterface>;
-      handleErrorAutomatically: true;
+      handleErrorAutomatically: false; // quicklink component should handle error feedback
     }
   ) {}
 }
