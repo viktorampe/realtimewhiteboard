@@ -25,7 +25,8 @@ import {
   FavoritesLoadError,
   LoadFavorites,
   StartAddFavorite,
-  ToggleFavorite
+  ToggleFavorite,
+  UpdateFavorite
 } from './favorite.actions';
 import { FavoriteEffects } from './favorite.effects';
 
@@ -93,7 +94,8 @@ describe('FavoriteEffects', () => {
           useValue: {
             getAllForUser: () => {},
             addFavorite: () => {},
-            deleteFavorite: () => {}
+            deleteFavorite: () => {},
+            updateFavorite: () => {}
           }
         },
         {
@@ -389,31 +391,56 @@ describe('FavoriteEffects', () => {
   describe('updateFavorite$', () => {
     const updateFavoriteAction = new UpdateFavorite({
       userId: 1,
-      favorite: { id: 1, changes: { name: 'bar' } },
+      favorite: { id: 2, changes: { name: 'bar' } },
       handleErrorAutomatically: false
     });
-    const successFeedback = new AddEffectFeedback({
-      effectFeedback: EffectFeedback.generateSuccessFeedback(
-        uuid(),
-        updateFavoriteAction,
-        'Je favoriet is gewijzigd.'
-      )
+    const undoUpdateAction = undo(updateFavoriteAction);
+    let successFeedbackAction: AddEffectFeedback;
+    let errorFeedbackAction: AddEffectFeedback;
+    beforeAll(() => {
+      successFeedbackAction = new AddEffectFeedback({
+        effectFeedback: EffectFeedback.generateSuccessFeedback(
+          uuid(),
+          updateFavoriteAction,
+          'Je favoriet is gewijzigd.'
+        )
+      });
+      errorFeedbackAction = new AddEffectFeedback({
+        effectFeedback: EffectFeedback.generateErrorFeedback(
+          uuid(),
+          updateFavoriteAction,
+          'Het is niet gelukt om je favoriet te wijzigen.'
+        )
+      });
     });
 
-    it('should call favoriteService.updateFavorite', () => {
-      mockServiceMethodReturnValue('updateFavorite', { id: 1, name: 'bar' });
+    it('should call favoriteService.updateFavorite and trigger feedback message on success', () => {
+      mockServiceMethodReturnValue('updateFavorite', { id: 2, name: 'bar' });
+
       const spy = jest.spyOn(
         TestBed.get(FAVORITE_SERVICE_TOKEN),
         'updateFavorite'
       );
-      expect(spy).toHaveBeenCalledWith({ id: 1, name: 'bar' });
+
       expectInAndOut(
         effects.updateFavorite$,
         updateFavoriteAction,
-        successFeedback
+        successFeedbackAction
+      );
+
+      expect(spy).toHaveBeenCalledWith(1, 2, { name: 'bar' });
+    });
+
+    it('should trigger an undo and feedback action on failure', () => {
+      mockServiceMethodError('updateFavorite', 'Something went wrong!');
+
+      actions = hot('a', { a: updateFavoriteAction });
+      expect(effects.updateFavorite$).toBeObservable(
+        hot('(ab)', {
+          a: undoUpdateAction,
+          b: errorFeedbackAction
+        })
       );
     });
-    it('should trigger feedback action on success', () => {});
-    it('should trigger an undo and feedback action on failure', () => {});
   });
 });
