@@ -1,3 +1,4 @@
+import { Update } from '@ngrx/entity';
 import { Action } from '@ngrx/store';
 import { FavoriteInterface } from '../../+models';
 
@@ -8,6 +9,7 @@ export enum FavoritesActionTypes {
   StartAddFavorite = '[Favorites] Start Add Favorite',
   AddFavorite = '[Favorites] Add Favorite',
   AddFavorites = '[Favorites] Add Favorites',
+  UpdateFavorite = '[Favorites] Update Favorite',
   DeleteFavorite = '[Favorites] Delete Favorite',
   DeleteFavorites = '[Favorites] Delete Favorites',
   ClearFavorites = '[Favorites] Clear Favorites',
@@ -46,6 +48,7 @@ export class AddFavorite implements Action {
 
   constructor(public payload: { favorite: FavoriteInterface }) {}
 }
+
 export class ToggleFavorite implements Action {
   readonly type = FavoritesActionTypes.ToggleFavorite;
 
@@ -56,6 +59,18 @@ export class AddFavorites implements Action {
   readonly type = FavoritesActionTypes.AddFavorites;
 
   constructor(public payload: { favorites: FavoriteInterface[] }) {}
+}
+
+export class UpdateFavorite implements Action {
+  readonly type = FavoritesActionTypes.UpdateFavorite;
+
+  constructor(
+    public payload: {
+      userId: number;
+      favorite: Update<FavoriteInterface>;
+      handleErrorAutomatically: boolean;
+    }
+  ) {}
 }
 
 export class DeleteFavorite implements Action {
@@ -81,6 +96,7 @@ export type FavoritesActions =
   | StartAddFavorite
   | AddFavorite
   | AddFavorites
+  | UpdateFavorite
   | DeleteFavorite
   | DeleteFavorites
   | ClearFavorites
