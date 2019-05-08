@@ -240,7 +240,6 @@ describe('headerViewModel', () => {
 
   describe('open dialog', () => {
     it('should open the modal dialog with the correct mode', () => {
-      // const spy = jest.spyOn(matDialog, 'open');
       headerViewModel.openDialog(QuickLinkTypeEnum.FAVORITES);
       expect(matDialog.open).toHaveBeenCalledWith(QuickLinkComponent, {
         data: { mode: QuickLinkTypeEnum.FAVORITES }
