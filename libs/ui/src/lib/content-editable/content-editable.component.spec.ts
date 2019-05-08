@@ -64,36 +64,22 @@ describe('ContentEditableComponent', () => {
   });
 
   describe('begin editing (= setting active to true)', () => {
-    it('should display the form field containing the inputs', () => {
-      component.active = true;
+    const text = 'hello';
+
+    beforeEach(fakeAsync(() => {
+      component.text = text;
       fixture.detectChanges();
+    }));
+
+    it('should display the form field containing the inputs', fakeAsync(() => {
+      enableEditing();
 
       const formField = fixture.debugElement.query(
         By.css('.ui-content-editable__form-field')
       );
 
       expect(formField.styles['display']).toBeNull();
-    });
-
-    function validateElementFocused(element) {
-      const text = 'hello';
-      component.text = text;
-      enableEditing();
-
-      expect(element.value).toBe(text);
-      expect(element.selectionStart).toBe(0);
-      expect(element.selectionEnd).toBe(text.length);
-    }
-
-    function validateElementTextSelected(element) {
-      const text = 'hello';
-      component.text = text;
-      enableEditing();
-
-      expect(element.value).toBe(text);
-      expect(element.selectionStart).toBe(0);
-      expect(element.selectionEnd).toBe(text.length);
-    }
+    }));
 
     describe('input (no multiline)', () => {
       let inputEl;
@@ -105,11 +91,19 @@ describe('ContentEditableComponent', () => {
       });
 
       it('should focus the input ', fakeAsync(() => {
-        validateElementFocused(inputEl);
+        spyOn(inputEl, 'focus');
+
+        enableEditing();
+
+        expect(inputEl.focus).toHaveBeenCalled();
       }));
 
       it('should select all text in the input on focus ', fakeAsync(() => {
-        validateElementTextSelected(inputEl);
+        enableEditing();
+
+        expect(inputEl.value).toBe(text);
+        expect(inputEl.selectionStart).toBe(0);
+        expect(inputEl.selectionEnd).toBe(text.length);
       }));
     });
 
@@ -126,11 +120,19 @@ describe('ContentEditableComponent', () => {
       });
 
       it('should focus the textarea ', fakeAsync(() => {
-        validateElementFocused(textareaEl);
+        spyOn(textareaEl, 'focus');
+
+        enableEditing();
+
+        expect(textareaEl.focus).toHaveBeenCalled();
       }));
 
       it('should select all text in the textarea on focus ', fakeAsync(() => {
-        validateElementTextSelected(textareaEl);
+        enableEditing();
+
+        expect(textareaEl.value).toBe(text);
+        expect(textareaEl.selectionStart).toBe(0);
+        expect(textareaEl.selectionEnd).toBe(text.length);
       }));
     });
   });
@@ -148,44 +150,41 @@ describe('ContentEditableComponent', () => {
         By.css('.ui-content-editable__form-field input')
       ).nativeElement;
 
-      //We don't make a variable for the confirm button
-      //because it's only sometimes there, when there's an input value
-
       cancelEl = fixture.debugElement.query(
         By.css('.ui-content-editable__actions__cancel')
       ).nativeElement;
     }));
 
     it('should save changes on pressing enter', () => {
-      enterText(newText);
-      pressEnter();
+      enterText(inputEl, newText);
+      pressEnter(inputEl);
 
       expect(component.text).toBe(newText);
     });
 
     it('should save changes when clicking confirm', () => {
-      enterText(newText);
+      enterText(inputEl, newText);
       clickConfirm();
 
       expect(component.text).toBe(newText);
     });
 
     it('should NOT save changes when clicking cancel', () => {
-      enterText(newText);
+      enterText(inputEl, newText);
       clickCancel();
 
       expect(component.text).toBe(defaultText);
     });
 
     it('should NOT save changes when pressing enter with empty value', () => {
-      enterText('');
-      pressEnter();
+      enterText(inputEl, '');
+      pressEnter(inputEl);
 
       expect(component.text).toBe(defaultText);
     });
 
     it('should not show confirm button if new text is empty', () => {
-      enterText('');
+      enterText(inputEl, '');
       fixture.detectChanges();
 
       expect(getConfirmButton()).toBeFalsy();
@@ -194,8 +193,8 @@ describe('ContentEditableComponent', () => {
     it('should emit event when changes are confirmed', () => {
       component.textChanged.emit = jest.fn();
 
-      enterText(newText);
-      pressEnter();
+      enterText(inputEl, newText);
+      pressEnter(inputEl);
 
       expect(component.textChanged.emit).toHaveBeenCalledWith(newText);
     });
@@ -203,8 +202,8 @@ describe('ContentEditableComponent', () => {
     it('should NOT emit event when confirming with empty value', () => {
       component.textChanged.emit = jest.fn();
 
-      enterText('');
-      pressEnter();
+      enterText(inputEl, '');
+      pressEnter(inputEl);
 
       expect(component.textChanged.emit).not.toHaveBeenCalled();
     });
@@ -224,26 +223,23 @@ describe('ContentEditableComponent', () => {
       it('should NOT call saveChanges when pressing enter in multiline', () => {
         spyOn(component, 'saveChanges');
 
-        textareaEl.value = newText;
-        textareaEl.dispatchEvent(new Event('input'));
-        textareaEl.dispatchEvent(
-          new KeyboardEvent('keydown', { key: 'Enter' })
-        );
+        enterText(textareaEl, newText);
+        pressEnter(textareaEl);
 
         expect(component.saveChanges).not.toHaveBeenCalled();
       });
     });
 
-    function enterText(text: string) {
-      inputEl.value = text;
-      inputEl.dispatchEvent(new Event('input'));
+    function enterText(el: any, text: string) {
+      el.value = text;
+      el.dispatchEvent(new Event('input'));
     }
 
-    function pressEnter() {
-      inputEl.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+    function pressEnter(el: any) {
+      el.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
     }
 
-    //Used to also check for its existence, that's why this is separate
+    //Confirm button only exists sometimes in the DOM, so the query must be reusable
     function getConfirmButton() {
       return fixture.debugElement.query(
         By.css('.ui-content-editable__actions__confirm')

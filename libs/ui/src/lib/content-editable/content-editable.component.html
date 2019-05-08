@@ -6,25 +6,23 @@
   >
     <input
       *ngIf="!multiline"
-      #inputField
-      (focus)="$event.target.select()"
+      (focus)="onFocus($event)"
       matInput
-      [(ngModel)]="newText"
+      [(ngModel)]="text"
       (keydown.enter)="saveChanges()"
     />
     <textarea
       *ngIf="multiline"
-      #inputField
       matInput
-      (focus)="$event.target.select()"
-      [(ngModel)]="newText"
+      (focus)="onFocus($event)"
+      [(ngModel)]="text"
     >
     </textarea>
   </mat-form-field>
   <span *ngIf="active" class="ui-content-editable__actions">
     <campus-button
       class="ui-content-editable__actions__confirm"
-      *ngIf="this.newText.trim().length > 0"
+      *ngIf="textIsValid()"
       iconClass="check"
       (click)="saveChanges()"
     ></campus-button>

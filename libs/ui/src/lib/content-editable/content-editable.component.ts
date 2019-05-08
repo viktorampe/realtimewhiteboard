@@ -1,23 +1,22 @@
 import {
+  ChangeDetectorRef,
   Component,
-  ElementRef,
   EventEmitter,
   Input,
-  OnChanges,
   OnInit,
   Output,
-  SimpleChanges,
   ViewChild
 } from '@angular/core';
+import { MatInput } from '@angular/material';
 
 @Component({
   selector: 'campus-content-editable',
   templateUrl: './content-editable.component.html',
   styleUrls: ['./content-editable.component.scss']
 })
-export class ContentEditableComponent implements OnInit, OnChanges {
+export class ContentEditableComponent implements OnInit {
   private _active = false;
-  protected newText: string;
+  protected oldText: string;
 
   @Input() text = '';
 
@@ -37,37 +36,40 @@ export class ContentEditableComponent implements OnInit, OnChanges {
   @Input() multiline = false;
   @Output() textChanged: EventEmitter<string> = new EventEmitter();
 
-  @ViewChild('inputField')
-  inputField: ElementRef;
+  @ViewChild(MatInput)
+  private inputField: MatInput;
+
+  constructor(private cd: ChangeDetectorRef) {}
 
   ngOnInit() {}
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.active && changes.active.currentValue) {
-      this.startEditing();
-    }
-  }
-
   startEditing() {
-    this.newText = this.text;
+    this.oldText = this.text;
+    this.cd.detectChanges();
 
-    //Input is not visible yet, so setTimeout
-    setTimeout(() => {
-      this.inputField.nativeElement.focus();
-    });
+    this.inputField.focus();
   }
 
   saveChanges() {
     //If user left it blank, assume they didn't intend to change anything
-    if (this.newText.trim().length > 0 && this.newText !== this.text) {
-      this.text = this.newText;
+    if (this.textIsValid() && this.oldText !== this.text) {
       this.textChanged.emit(this.text);
+      this.active = false;
+    } else {
+      this.cancelChanges();
     }
-
-    this.active = false;
   }
 
   cancelChanges() {
+    this.text = this.oldText;
     this.active = false;
+  }
+
+  onFocus($event: any) {
+    $event.target.select();
+  }
+
+  textIsValid() {
+    return this.text.trim().length > 0;
   }
 }
