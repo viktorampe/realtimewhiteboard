@@ -106,9 +106,65 @@ describe('EffectFeedback selectors', () => {
   });
 
   it('getFeedbackForAction() should return the first effect feedback with the specified trigger action', () => {
+    effectFeedbackState = createEffectFeedbackState([
+      new EffectFeedbackFixture({
+        id: 'guid11',
+        display: false,
+        triggerAction: { type: 'foo' }
+      }),
+      new EffectFeedbackFixture({
+        id: 'guid12',
+        display: false,
+        triggerAction: { type: 'bar' }
+      })
+    ]);
+    storeState = { effectFeedback: effectFeedbackState };
+
     const results = EffectFeedbackQueries.getFeedbackForAction(storeState, {
       actionType: 'bar'
     });
+    expect(results).toBeDefined();
     expect(results).toBe(effectFeedbackState.entities['guid12']);
   });
+
+  it(
+    'getNextErrorFeedbackForAction() should return the first effect feedback' +
+      ' with the specified trigger action' +
+      ' and type error',
+    () => {
+      effectFeedbackState = createEffectFeedbackState([
+        new EffectFeedbackFixture({
+          // error, wrong action type
+          id: 'guid11',
+          display: false,
+          triggerAction: { type: 'foo' },
+          type: 'error'
+        }),
+        new EffectFeedbackFixture({
+          // success, correct action type
+          id: 'guid12',
+          display: false,
+          triggerAction: { type: 'bar' },
+          type: 'success'
+        }),
+        new EffectFeedbackFixture({
+          // error, correct action type -> this should be the result
+          id: 'guid13',
+          display: false,
+          triggerAction: { type: 'bar' },
+          type: 'error'
+        })
+      ]);
+      storeState = { effectFeedback: effectFeedbackState };
+
+      const results = EffectFeedbackQueries.getNextErrorFeedbackForAction(
+        storeState,
+        {
+          actionType: 'bar'
+        }
+      );
+      expect(results).toBeDefined();
+      expect(results).toBe(effectFeedbackState.entities['guid13']);
+    }
+  );
 });

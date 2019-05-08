@@ -50,3 +50,15 @@ export const getFeedbackForAction = createSelector(
     return state.entities[filteredId];
   }
 );
+export const getNextErrorFeedbackForAction = createSelector(
+  selectEffectFeedbackState,
+  (state: State, props: { actionType: string }) => {
+    const filteredId = (state.ids as string[]).find(id => {
+      return (
+        state.entities[id].triggerAction.type === props.actionType &&
+        state.entities[id].type === 'error'
+      );
+    });
+    return state.entities[filteredId];
+  }
+);
