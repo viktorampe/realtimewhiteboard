@@ -24,7 +24,8 @@ import {
   FavoritesLoadError,
   LoadFavorites,
   StartAddFavorite,
-  ToggleFavorite
+  ToggleFavorite,
+  UpdateFavorite
 } from './favorite.actions';
 import { getByTypeAndId } from './favorite.selectors';
 
@@ -97,6 +98,40 @@ export class FavoriteEffects {
           this.uuid(),
           action,
           'Het is niet gelukt om het item uit jouw favorieten te verwijderen.'
+        );
+        const effectFeedbackAction = new EffectFeedbackActions.AddEffectFeedback(
+          { effectFeedback }
+        );
+        return from([undoAction, effectFeedbackAction]);
+      }
+    }
+  );
+  @Effect()
+  updateFavorite$ = this.dataPersistence.optimisticUpdate(
+    FavoritesActionTypes.UpdateFavorite,
+    {
+      run: (action: UpdateFavorite, state: DalState) => {
+        return this.favoriteService
+          .updateFavorite(action.payload.userId, action.payload.favorite)
+          .pipe(
+            map(favorite => {
+              const effectFeedback = EffectFeedback.generateSuccessFeedback(
+                this.uuid(),
+                action,
+                'Je favoriet is gewijzigd.'
+              );
+              return new EffectFeedbackActions.AddEffectFeedback({
+                effectFeedback
+              });
+            })
+          );
+      },
+      undoAction: (action: UpdateFavorite, error) => {
+        const undoAction = undo(action);
+        const effectFeedback = EffectFeedback.generateErrorFeedback(
+          this.uuid(),
+          action,
+          'Het is niet gelukt om je favoriet te wijzigen.'
         );
         const effectFeedbackAction = new EffectFeedbackActions.AddEffectFeedback(
           { effectFeedback }
