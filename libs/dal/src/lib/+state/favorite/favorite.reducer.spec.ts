@@ -1,8 +1,10 @@
+import { Update } from '@ngrx/entity';
 import { FavoriteActions } from '.';
 import { FavoriteInterface } from '../../+models';
 import { initialState, reducer, State } from './favorite.reducer';
 
 const typeInitialValue = 'foo';
+const typeUpdatedValue = 'bar';
 
 /**
  * Creates a Favorite.
@@ -96,6 +98,28 @@ describe('Favorites Reducer', () => {
       const result = reducer(initialState, action);
 
       expect(result).toEqual(createState(favorites, false));
+    });
+  });
+
+  describe('update actions', () => {
+    it('should update a favorite', () => {
+      const favorite = favorites[0];
+      const startState = createState([favorite]);
+      const update: Update<FavoriteInterface> = {
+        id: favorite.id,
+        changes: {
+          type: typeUpdatedValue
+        }
+      };
+      const action = new FavoriteActions.UpdateFavorite({
+        userId: 1,
+        favorite: update,
+        handleErrorAutomatically: false
+      });
+      const result = reducer(startState, action);
+      expect(result).toEqual(
+        createState([createFavorite(1, typeUpdatedValue)])
+      );
     });
   });
 
