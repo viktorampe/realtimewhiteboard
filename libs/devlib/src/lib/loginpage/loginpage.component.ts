@@ -18,7 +18,9 @@ import {
   FavoriteActions,
   FavoriteInterface,
   FavoriteQueries,
+  FavoriteServiceInterface,
   FavoriteTypesEnum,
+  FAVORITE_SERVICE_TOKEN,
   LearningAreaActions,
   TaskActions,
   TaskEduContentActions,
@@ -27,16 +29,14 @@ import {
   UnlockedContentActions,
   UserActions
 } from '@campus/dal';
+import {
+  EduContentCollectionManagerService,
+  EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN
+} from '@campus/shared';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { select, Store } from '@ngrx/store';
-import { EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN } from 'libs/shared/src/lib/collection-manager/edu-content-collection-manager.service.interface';
 import { Observable } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
-import {
-  FavoriteServiceInterface,
-  FAVORITE_SERVICE_TOKEN
-} from './../../../../dal/src/lib/favorite/favorite.service.interface';
-import { EduContentCollectionManagerService } from './../../../../shared/src/lib/collection-manager/edu-content-collection-manager.service';
 import { LoginPageViewModel } from './loginpage.viewmodel';
 
 @Component({
@@ -79,12 +79,7 @@ export class LoginpageComponent implements OnInit {
     private dialog: MatDialog,
     @Inject(EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN)
     private eduContentCollectionManagerService: EduContentCollectionManagerService
-  ) {
-    return;
-    this.store.dispatch(
-      new FavoriteActions.LoadFavorites({ userId: this.authService.userId })
-    );
-  }
+  ) {}
 
   ngOnInit() {
     this.route$ = this.router.events.pipe(
@@ -124,17 +119,22 @@ export class LoginpageComponent implements OnInit {
   }
 
   loadStore() {
-    // fill store
-    this.store.dispatch(new BundleActions.LoadBundles({ userId: 186 }));
+    const userId = this.authService.userId;
+
+    this.store.dispatch(new BundleActions.LoadBundles({ userId }));
     this.store.dispatch(
-      new UnlockedContentActions.LoadUnlockedContents({ userId: 186 })
+      new UnlockedContentActions.LoadUnlockedContents({
+        userId: this.authService.userId
+      })
     );
-    this.store.dispatch(new TaskActions.LoadTasks({ userId: 186 }));
+    this.store.dispatch(new TaskActions.LoadTasks({ userId }));
     this.store.dispatch(
-      new TaskEduContentActions.LoadTaskEduContents({ userId: 186 })
+      new TaskEduContentActions.LoadTaskEduContents({
+        userId: this.authService.userId
+      })
     );
-    this.store.dispatch(new EduContentActions.LoadEduContents({ userId: 186 }));
-    this.store.dispatch(new FavoriteActions.LoadFavorites({ userId: 186 }));
+    this.store.dispatch(new EduContentActions.LoadEduContents({ userId }));
+    this.store.dispatch(new FavoriteActions.LoadFavorites({ userId }));
     this.store.dispatch(new LearningAreaActions.LoadLearningAreas());
   }
 
@@ -145,9 +145,12 @@ export class LoginpageComponent implements OnInit {
     });
     console.log(favorite);
 
-    this.response = this.favoriteService.updateFavorite(186, {
-      ...favorite,
-      name: favorite.name + 'x'
-    });
+    this.response = this.favoriteService.updateFavorite(
+      this.authService.userId,
+      {
+        ...favorite,
+        name: favorite.name + 'x'
+      }
+    );
   }
 }
