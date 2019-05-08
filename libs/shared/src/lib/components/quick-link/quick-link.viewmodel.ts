@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {
   AuthServiceInterface,
+  AUTH_SERVICE_TOKEN,
   DalState,
   EffectFeedbackInterface,
   FavoriteActions,
@@ -16,12 +17,12 @@ import { QuickLinkTypeEnum } from './quick-link-type.enum';
 export class QuickLinkViewModel {
   constructor(
     private store: Store<DalState>,
-    private authService: AuthServiceInterface
+    @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
   ) {}
   public quickLinks$: Observable<HistoryInterface[] | FavoriteInterface[]>;
   public feedback$: Observable<EffectFeedbackInterface>;
   public update(id: number, name: string, mode: QuickLinkTypeEnum): void {
-    let action: Action = null;
+    let action: Action;
     switch (mode) {
       case QuickLinkTypeEnum.FAVORITES:
         const favorite: Update<FavoriteInterface> = {
@@ -37,7 +38,7 @@ export class QuickLinkViewModel {
         break;
       case QuickLinkTypeEnum.HISTORY:
         // TODO: dispatch update history action if relevant
-        break;
+        throw new Error('no History State yet');
       default:
         return;
     }
@@ -45,11 +46,20 @@ export class QuickLinkViewModel {
     this.store.dispatch(action);
   }
   public delete(id: number, mode: QuickLinkTypeEnum): void {
-    this.store.dispatch(
-      new FavoriteActions.DeleteFavorite({
-        id: id,
-        userId: this.authService.userId
-      })
-    );
+    let action: Action;
+    switch (mode) {
+      case QuickLinkTypeEnum.FAVORITES:
+        action = new FavoriteActions.DeleteFavorite({
+          id: id,
+          userId: this.authService.userId
+        });
+        break;
+      case QuickLinkTypeEnum.HISTORY:
+        // TODO: dispatch delete history action if relevant
+        throw new Error('no History State yet');
+      default:
+        return;
+    }
+    this.store.dispatch(action);
   }
 }
