@@ -385,4 +385,35 @@ describe('FavoriteEffects', () => {
       });
     });
   });
+
+  describe('updateFavorite$', () => {
+    const updateFavoriteAction = new UpdateFavorite({
+      userId: 1,
+      favorite: { id: 1, changes: { name: 'bar' } },
+      handleErrorAutomatically: false
+    });
+    const successFeedback = new AddEffectFeedback({
+      effectFeedback: EffectFeedback.generateSuccessFeedback(
+        uuid(),
+        updateFavoriteAction,
+        'Je favoriet is gewijzigd.'
+      )
+    });
+
+    it('should call favoriteService.updateFavorite', () => {
+      mockServiceMethodReturnValue('updateFavorite', { id: 1, name: 'bar' });
+      const spy = jest.spyOn(
+        TestBed.get(FAVORITE_SERVICE_TOKEN),
+        'updateFavorite'
+      );
+      expect(spy).toHaveBeenCalledWith({ id: 1, name: 'bar' });
+      expectInAndOut(
+        effects.updateFavorite$,
+        updateFavoriteAction,
+        successFeedback
+      );
+    });
+    it('should trigger feedback action on success', () => {});
+    it('should trigger an undo and feedback action on failure', () => {});
+  });
 });
