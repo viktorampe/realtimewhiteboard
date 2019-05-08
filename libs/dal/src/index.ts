@@ -43,7 +43,8 @@ export {
   EduContentServiceInterface,
   EDU_CONTENT_SERVICE_TOKEN
 } from './lib/edu-content/edu-content.service.interface';
-export * from './lib/metadata';
+export * from './lib/favorite';
 export * from './lib/learning-plan';
+export * from './lib/metadata';
 export * from './lib/persons';
 export * from './lib/toc';
