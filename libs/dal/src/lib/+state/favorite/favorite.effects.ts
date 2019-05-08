@@ -80,14 +80,11 @@ export class FavoriteEffects {
           .deleteFavorite(action.payload.userId, action.payload.id)
           .pipe(
             map(() => {
-              const effectFeedback = new EffectFeedback({
-                id: this.uuid(),
-                triggerAction: action,
-                message: 'Het item is uit jouw favorieten verwijderd.',
-                type: 'success',
-                display: true,
-                priority: Priority.NORM
-              });
+              const effectFeedback = EffectFeedback.generateSuccessFeedback(
+                this.uuid(),
+                action,
+                'Het item is uit jouw favorieten verwijderd.'
+              );
               return new EffectFeedbackActions.AddEffectFeedback({
                 effectFeedback
               });
@@ -96,16 +93,11 @@ export class FavoriteEffects {
       },
       undoAction: (action: DeleteFavorite, error) => {
         const undoAction = undo(action);
-        const effectFeedback = new EffectFeedback({
-          id: this.uuid(),
-          triggerAction: action,
-          message:
-            'Het is niet gelukt om het item uit jouw favorieten te verwijderen.',
-          type: 'error',
-          userActions: [{ title: 'Opnieuw proberen', userAction: action }],
-          display: true,
-          priority: Priority.HIGH
-        });
+        const effectFeedback = EffectFeedback.generateErrorFeedback(
+          this.uuid(),
+          action,
+          'Het is niet gelukt om het item uit jouw favorieten te verwijderen.'
+        );
         const effectFeedbackAction = new EffectFeedbackActions.AddEffectFeedback(
           { effectFeedback }
         );
