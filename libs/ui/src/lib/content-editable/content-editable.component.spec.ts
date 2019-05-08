@@ -1,10 +1,4 @@
-import {
-  async,
-  ComponentFixture,
-  fakeAsync,
-  TestBed,
-  tick
-} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import {
   MatFormFieldModule,
@@ -66,12 +60,12 @@ describe('ContentEditableComponent', () => {
   describe('begin editing (= setting active to true)', () => {
     const text = 'hello';
 
-    beforeEach(fakeAsync(() => {
+    beforeEach(() => {
       component.text = text;
       fixture.detectChanges();
-    }));
+    });
 
-    it('should display the form field containing the inputs', fakeAsync(() => {
+    it('should display the form field containing the inputs', () => {
       enableEditing();
 
       const formField = fixture.debugElement.query(
@@ -79,7 +73,7 @@ describe('ContentEditableComponent', () => {
       );
 
       expect(formField.styles['display']).toBeNull();
-    }));
+    });
 
     describe('input (no multiline)', () => {
       let inputEl;
@@ -90,21 +84,21 @@ describe('ContentEditableComponent', () => {
         ).nativeElement;
       });
 
-      it('should focus the input ', fakeAsync(() => {
+      it('should focus the input ', () => {
         spyOn(inputEl, 'focus');
 
         enableEditing();
 
         expect(inputEl.focus).toHaveBeenCalled();
-      }));
+      });
 
-      it('should select all text in the input on focus ', fakeAsync(() => {
+      it('should select all text in the input on focus ', () => {
         enableEditing();
 
         expect(inputEl.value).toBe(text);
         expect(inputEl.selectionStart).toBe(0);
         expect(inputEl.selectionEnd).toBe(text.length);
-      }));
+      });
     });
 
     describe('textarea (multiline on)', () => {
@@ -119,21 +113,21 @@ describe('ContentEditableComponent', () => {
         ).nativeElement;
       });
 
-      it('should focus the textarea ', fakeAsync(() => {
+      it('should focus the textarea ', () => {
         spyOn(textareaEl, 'focus');
 
         enableEditing();
 
         expect(textareaEl.focus).toHaveBeenCalled();
-      }));
+      });
 
-      it('should select all text in the textarea on focus ', fakeAsync(() => {
+      it('should select all text in the textarea on focus ', () => {
         enableEditing();
 
         expect(textareaEl.value).toBe(text);
         expect(textareaEl.selectionStart).toBe(0);
         expect(textareaEl.selectionEnd).toBe(text.length);
-      }));
+      });
     });
   });
 
@@ -142,7 +136,7 @@ describe('ContentEditableComponent', () => {
     const newText = 'world';
     let inputEl, cancelEl;
 
-    beforeEach(fakeAsync(() => {
+    beforeEach(() => {
       component.text = defaultText;
       enableEditing();
 
@@ -153,7 +147,7 @@ describe('ContentEditableComponent', () => {
       cancelEl = fixture.debugElement.query(
         By.css('.ui-content-editable__actions__cancel')
       ).nativeElement;
-    }));
+    });
 
     it('should save changes on pressing enter', () => {
       enterText(inputEl, newText);
@@ -258,6 +252,5 @@ describe('ContentEditableComponent', () => {
   function enableEditing() {
     component.active = true;
     fixture.detectChanges();
-    tick();
   }
 });
