@@ -27,6 +27,8 @@ export class ContentEditableComponent {
     this._active = value;
     if (this._active) {
       this.startEditing();
+    } else {
+      this.cancelChanges();
     }
   }
 
@@ -52,12 +54,9 @@ export class ContentEditableComponent {
   }
 
   saveChanges() {
-    //If user left it blank, assume they didn't intend to change anything
     if (this.textIsValid() && this.oldText !== this.text) {
       this.textChanged.emit(this.text.trim());
-      this.active = false;
-    } else {
-      this.cancelChanges();
+      this._active = false;
     }
   }
 

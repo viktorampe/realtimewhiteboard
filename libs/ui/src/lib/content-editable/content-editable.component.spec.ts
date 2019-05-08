@@ -191,13 +191,6 @@ describe('ContentEditableComponent', () => {
       expect(component.saveChanges).not.toHaveBeenCalled();
     });
 
-    it('should cancel changes when pressing enter with empty value', () => {
-      enterText(inputEl, '');
-      pressEnter(inputEl);
-
-      expect(component.cancelChanges).toHaveBeenCalled();
-    });
-
     it('should not show confirm button if new text is empty', () => {
       enterText(inputEl, '');
       fixture.detectChanges();
