@@ -356,7 +356,7 @@ describe('Alerts Reducer', () => {
       const action = new TeacherStudentActions.LinkTeacherStudent({
         publicKey: 'foo',
         userId: 1,
-        handleErrorAutomatically: false
+        useCustomErrorHandler: true
       });
       const result = reducer(startState, action);
       expect(result).toEqual(createState(alerts, false));
