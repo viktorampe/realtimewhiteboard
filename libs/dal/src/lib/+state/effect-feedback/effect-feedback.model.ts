@@ -62,7 +62,7 @@ export class EffectFeedback implements EffectFeedbackInterface {
       priority: Priority.HIGH,
       display: !(action['payload']
         ? action['payload']['useCustomErrorHandler']
-        : undefined)
+        : false)
     });
   }
 
