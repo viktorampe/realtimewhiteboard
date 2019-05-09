@@ -19,7 +19,8 @@ import { UiModule } from '@campus/ui';
 import {
   FilterService,
   FILTER_SERVICE_TOKEN,
-  MapObjectConversionService
+  MapObjectConversionService,
+  UtilsModule
 } from '@campus/utils';
 import { HasPermissionDirective } from './auth/has-permission.directive';
 import { PermissionService } from './auth/permission.service';
@@ -80,7 +81,8 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     MatSnackBarModule,
     MatDialogModule,
     MatListModule,
-    MatTooltipModule
+    MatTooltipModule,
+    UtilsModule
   ],
   declarations: [
     HeaderComponent,

@@ -15,7 +15,7 @@
           mat-list-item
           class="quick-link__item"
           *ngFor="let quickLink of category.quickLinks"
-          (click)="quickLink.defaultAction.handler(quickLink.id)"
+          (click)="quickLink.defaultAction.handler(quickLink)"
         >
           <mat-icon mat-list-icon [svgIcon]="quickLink.icon"></mat-icon>
           <div
@@ -30,7 +30,13 @@
             <ng-container
               *ngFor="let action of quickLink.alternativeOpenActions"
             >
-              <a [matTooltip]="action.tooltip"> {{ action.label }}</a>
+              <a
+                [matTooltip]="action.tooltip"
+                (click)="action.handler(quickLink)"
+                campusClickStopPropagation
+              >
+                {{ action.label }}</a
+              >
               <span style="margin-left: 8px; margin-right: 8px;">|</span>
             </ng-container>
           </div>
@@ -43,7 +49,8 @@
                 circle
                 [iconClass]="action.icon"
                 [matTooltip]="action.tooltip"
-                (click)="action.handler(quickLink.id)"
+                (click)="action.handler(quickLink)"
+                campusClickStopPropagation
               ></campus-button>
             </ng-container>
           </div>

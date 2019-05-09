@@ -7,7 +7,7 @@ import {
 } from '@campus/dal';
 import { QuickLinkTypeEnum } from '@campus/shared';
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { QuickLinkViewModel } from './quick-link.viewmodel';
 import { MockQuickLinkViewModel } from './quick-link.viewmodel.mock';
 
@@ -32,28 +32,28 @@ export class QuickLinkComponent implements OnInit {
       label: 'Openen',
       icon: 'edit',
       tooltip: 'open oefening zonder oplossingen',
-      handler: () => {}
+      handler: this.openAsExercise
     },
     openAsSolution: {
       actionType: 'open',
       label: 'met oplossing',
       icon: 'edit',
       tooltip: 'open oefening met oplossingen',
-      handler: () => {}
+      handler: this.openAsSolution
     },
     edit: {
       actionType: 'manage',
       label: 'Bewerken',
       icon: 'edit',
       tooltip: 'naam aanpassen',
-      handler: () => {}
+      handler: this.update
     },
     delete: {
       actionType: 'manage',
       label: 'Verwijderen',
       icon: 'verwijder',
       tooltip: 'item verwijderen',
-      handler: () => {}
+      handler: this.delete
     }
   };
 
@@ -72,18 +72,32 @@ export class QuickLinkComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  public openAsExercise(quickLink: QuickLinkInterface) {
+    console.log('openExercise', quickLink);
+  }
+
+  public openAsSolution(quickLink: QuickLinkInterface) {
+    console.log('openAsSolution', quickLink);
+  }
+
+  public update(quickLink: QuickLinkInterface) {
+    console.log('update', quickLink);
+  }
+
+  public delete(quickLink: QuickLinkInterface) {
+    console.log('delete', quickLink);
+    this.quickLinkViewModel.delete(quickLink.id, this.data.mode);
+  }
+
   private setupStreams() {
     this.contentData$ = this.quickLinkViewModel.quickLinks$.pipe(
-      map(qL => this.convertToQuickLinkData(qL)),
-      tap(console.log)
+      map(qL => this.convertToQuickLinkData(qL))
     );
   }
 
   private convertToQuickLinkData(
     values: FavoriteInterface[] | HistoryInterface[]
   ): ContentDataInterface[] {
-    console.log(values);
-
     return values
       .reduce(
         (acc, value) => {
@@ -114,7 +128,6 @@ export class QuickLinkComponent implements OnInit {
   private convertToQuickLink(
     value: FavoriteInterface | HistoryInterface
   ): QuickLinkInterface {
-    console.log(value);
     return {
       ...value,
       defaultAction: this.getDefaultAction(value),
@@ -160,5 +173,5 @@ interface QuickLinkActionInterface {
   label: string;
   icon: string;
   tooltip: string;
-  handler: (id: number) => void;
+  handler: (quickLink: QuickLinkInterface) => void;
 }

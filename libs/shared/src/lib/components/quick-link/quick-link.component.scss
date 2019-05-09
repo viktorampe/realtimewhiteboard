@@ -6,8 +6,6 @@
 }
 
 .quick-link {
-
-
   &__item {
     &__title {
       height: 100%;
@@ -17,62 +15,61 @@
     }
 
     text-align: left;
-  }
 
-  &__actions {
-    justify-self: flex-end;
-    display: flex;
 
-    &__icon {
-      margin: 8px;
-    }
+    &__actions {
+      justify-self: flex-end;
+      display: flex;
 
-    &--links {
-      padding-left: 8px;
+      &__icon {
+        margin: 8px;
+      }
 
-      a {
-        font-style: italic;
+      &--links {
+        padding-left: 8px;
+
+        a {
+          font-style: italic;
+        }
+      }
+
+      &--hover {
+        display: none
       }
     }
 
-    &--hover {
-      display: none
+    &:hover {
+      background-color: whitesmoke;
+
+      .quick-link {
+        &__item {
+          &__actions {
+            &--hover {
+              display: flex;
+            }
+          }
+        }
+      }
     }
-  }
 
-  &:hover {
-    background-color: whitesmoke;
+    &--multiline {
+      .quick-link {
+        &__item {
 
-    .quick-link {
-      &__item {
-        &__actions {
-          &--hover {
-            display: flex;
+          &__title {
+            margin-top: 0px;
+            margin-bottom: 0px;
+            line-height: initial;
+          }
+
+          &__actions {
+            line-height: initial;
+            color: grey
           }
         }
       }
     }
   }
-
-  &--multiline {
-    .quick-link {
-      &__item {
-
-        &__title {
-          margin-top: 0px;
-          margin-bottom: 0px;
-          line-height: initial;
-        }
-
-        &__actions {
-          line-height: initial;
-          color: grey
-        }
-      }
-    }
-
-  }
-
 
   &__dialog__actions {
     display: flex;
@@ -84,6 +81,7 @@
     }
   }
 }
+
 
 .flex-spacer {
   flex-grow: 1;
