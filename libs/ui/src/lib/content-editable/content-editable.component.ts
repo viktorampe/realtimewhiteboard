@@ -67,7 +67,7 @@ export class ContentEditableComponent {
 
   cancelChanges() {
     this.text = this.oldText;
-    this.active = false;
+    this._active = false;
   }
 
   onFocus($event: any) {
