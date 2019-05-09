@@ -1,13 +1,14 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import {
+  EffectFeedbackInterface,
   FavoriteInterface,
   FavoriteTypesEnum,
   HistoryInterface
 } from '@campus/dal';
-import { QuickLinkTypeEnum } from '@campus/shared';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { QuickLinkTypeEnum } from './quick-link-type.enum';
 import { QuickLinkViewModel } from './quick-link.viewmodel';
 import { MockQuickLinkViewModel } from './quick-link.viewmodel.mock';
 
@@ -21,8 +22,17 @@ import { MockQuickLinkViewModel } from './quick-link.viewmodel.mock';
 })
 export class QuickLinkComponent implements OnInit {
   public contentData$: Observable<ContentDataInterface[]>;
-  public dialogTitle = '';
-  public diablogTitleIcon = '';
+  public feedback$: Observable<EffectFeedbackInterface>;
+  public dialogTitle: string;
+  public dialogTitleIcon: string;
+
+  private dialogTitles = new Map<
+    QuickLinkTypeEnum,
+    { title: string; icon: string }
+  >([
+    [QuickLinkTypeEnum.FAVORITES, { title: 'Favorieten', icon: 'favorites' }],
+    [QuickLinkTypeEnum.HISTORY, { title: 'Recente items', icon: 'unfinished' }]
+  ]);
 
   private quickLinkActions: {
     [key: string]: QuickLinkActionInterface;
@@ -30,14 +40,14 @@ export class QuickLinkComponent implements OnInit {
     openAsExercise: {
       actionType: 'open',
       label: 'Openen',
-      icon: 'edit',
+      icon: 'exercise:open',
       tooltip: 'open oefening zonder oplossingen',
       handler: this.openAsExercise
     },
     openAsSolution: {
       actionType: 'open',
       label: 'met oplossing',
-      icon: 'edit',
+      icon: 'exercise:finished',
       tooltip: 'open oefening met oplossingen',
       handler: this.openAsSolution
     },
@@ -66,9 +76,15 @@ export class QuickLinkComponent implements OnInit {
 
   ngOnInit() {
     this.setupStreams();
+
+    if (this.dialogTitles.has(this.data.mode)) {
+      const titleData = this.dialogTitles.get(this.data.mode);
+      this.dialogTitle = titleData.title;
+      this.dialogTitleIcon = titleData.icon;
+    }
   }
 
-  closeDialog() {
+  public closeDialog() {
     this.dialogRef.close();
   }
 
@@ -90,9 +106,12 @@ export class QuickLinkComponent implements OnInit {
   }
 
   private setupStreams() {
+    // TODO: use getQuickLinks$() from viewmodel when merged
     this.contentData$ = this.quickLinkViewModel.quickLinks$.pipe(
       map(qL => this.convertToQuickLinkData(qL))
     );
+
+    this.feedback$ = this.quickLinkViewModel.feedback$;
   }
 
   private convertToQuickLinkData(
@@ -100,6 +119,7 @@ export class QuickLinkComponent implements OnInit {
   ): ContentDataInterface[] {
     return values
       .reduce(
+        // group into categories
         (acc, value) => {
           const found = acc.find(cD => cD.type === value.type);
           let newObject: ContentDataInterface;
@@ -121,7 +141,11 @@ export class QuickLinkComponent implements OnInit {
         },
         [] as ContentDataInterface[]
       )
-      .sort(this.quickLinkDataSorter);
+      .map(category => ({
+        ...category,
+        quickLinks: category.quickLinks.sort(this.quickLinkSorter) // order items in category
+      }))
+      .sort(this.quickLinkDataCategorySorter); // order categories
   }
 
   // adds actions to Favorites and Histories
@@ -148,11 +172,18 @@ export class QuickLinkComponent implements OnInit {
     return [this.quickLinkActions.openAsSolution];
   }
 
-  private quickLinkDataSorter(
+  private quickLinkDataCategorySorter(
     a: ContentDataInterface,
     b: ContentDataInterface
   ): number {
     return a.type > b.type ? 1 : -1; // TODO: write actual sorting,  sorting alphabetically for now
+  }
+
+  private quickLinkSorter(
+    a: QuickLinkInterface,
+    b: QuickLinkInterface
+  ): number {
+    return b.created.getTime() - a.created.getTime(); // sorting descending
   }
 }
 

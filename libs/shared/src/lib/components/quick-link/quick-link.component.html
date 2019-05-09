@@ -1,8 +1,4 @@
-<campus-info-panel
-  mat-dialog-title
-  [titleText]="dialogTitle"
-  [titleIcon]="diablogTitleIcon"
->
+<campus-info-panel [titleText]="dialogTitle" [titleIcon]="dialogTitleIcon">
   <campus-filter-text-input
     title__right
     theme="dark"
@@ -17,7 +13,10 @@
           *ngFor="let quickLink of category.quickLinks"
           (click)="quickLink.defaultAction.handler(quickLink)"
         >
-          <mat-icon mat-list-icon [svgIcon]="quickLink.icon"></mat-icon>
+          <mat-icon
+            mat-list-icon
+            [svgIcon]="quickLink.learningArea.icon"
+          ></mat-icon>
           <div
             class="quick-link__item__title"
             [matTooltip]="quickLink.defaultAction.tooltip"
@@ -55,7 +54,9 @@
             </ng-container>
           </div>
         </button>
-        <mat-divider *ngIf="i !== contentData.length - 1"></mat-divider>
+        <!--
+          <mat-divider *ngIf="i !== contentData.length - 1"></mat-divider>
+        -->
       </ng-container>
     </mat-action-list>
   </mat-dialog-content>
