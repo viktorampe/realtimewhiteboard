@@ -9,6 +9,9 @@ export {
   SelectOption
 } from './lib/confirmable-select/confirmable-select.component';
 export {
+  ContentEditableComponent
+} from './lib/content-editable/content-editable.component';
+export {
   DropdownMenuItemInterface
 } from './lib/dropdown-menu-item/dropdown-menu-item.component';
 export {

@@ -129,6 +129,8 @@ export const icons = {
   bundles: 'assets/icons/bundles.svg',
   // call: 'assets/icons/call.svg',
   // caret: 'assets/icons/caret.svg',
+  check: 'assets/icons/check.svg',
+  close: 'assets/icons/close.svg',
   // 'check-off': 'assets/icons/check-off.svg',
   'check-on': 'assets/icons/check-on.svg',
   // checklist: 'assets/icons/checklist.svg',
