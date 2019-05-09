@@ -118,7 +118,7 @@ export class FavoriteEffects {
             action.payload.favorite.changes
           )
           .pipe(
-            map(favorite => {
+            map(() => {
               const effectFeedback = EffectFeedback.generateSuccessFeedback(
                 this.uuid(),
                 action,

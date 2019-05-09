@@ -361,19 +361,15 @@ describe('FavoriteEffects', () => {
         mockServiceMethodError('deleteFavorite', 'Something went wrong.');
       });
       it('should dispatch an error feedback action', () => {
-        const effectFeedback = new EffectFeedbackFixture({
-          id: uuid(),
-          triggerAction: deleteFavoriteAction,
-          message:
-            'Het is niet gelukt om het item uit jouw favorieten te verwijderen.',
-          type: 'error',
-          priority: Priority.HIGH,
-          userActions: [
-            { title: 'Opnieuw proberen', userAction: deleteFavoriteAction }
-          ]
-        });
+        const errorFeedback = EffectFeedback.generateErrorFeedback(
+          uuid(),
+          deleteFavoriteAction,
+          'Het is niet gelukt om het item uit jouw favorieten te verwijderen.'
+        );
 
-        const effectFeedbackAction = new AddEffectFeedback({ effectFeedback });
+        const effectFeedbackAction = new AddEffectFeedback({
+          effectFeedback: errorFeedback
+        });
         const undoAction = undo(deleteFavoriteAction);
 
         actions = hot('a', { a: deleteFavoriteAction });

@@ -68,8 +68,8 @@ export class UpdateFavorite implements Action {
     public payload: {
       userId: number;
       favorite: Update<FavoriteInterface>;
-      handleErrorAutomatically: boolean;
-    }
+    },
+    public useCustomErrorHandler = false
   ) {}
 }
 
