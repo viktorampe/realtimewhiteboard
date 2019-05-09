@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { QuickLinkComponent } from './quick-link.component';
 
 describe('QuickLinkComponent', () => {
@@ -8,7 +8,11 @@ describe('QuickLinkComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [QuickLinkComponent]
+      declarations: [QuickLinkComponent],
+      providers: [
+        { provide: MAT_DIALOG_DATA, useValue: {} },
+        { provide: MatDialogRef, useValue: { close: () => {} } }
+      ]
     }).compileComponents();
   }));
 

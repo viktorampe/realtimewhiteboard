@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { MatDialog } from '@angular/material';
 import {
   Alert,
   AlertActions,
@@ -18,6 +19,8 @@ import {
 import { MockDate } from '@campus/testing';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
+import { QuickLinkTypeEnum } from '../components/quick-link/quick-link-type.enum';
+import { QuickLinkComponent } from '../components/quick-link/quick-link.component';
 import { ENVIRONMENT_ALERTS_FEATURE_TOKEN } from '../interfaces/environment.injectiontokens';
 import { EnvironmentAlertsFeatureInterface } from '../interfaces/environment.interfaces';
 import { AlertToNotificationItemPipe } from '../pipes/alert-to-notification/alert-to-notification-pipe';
@@ -47,6 +50,8 @@ class MockHeaderResolver {
 }
 
 describe('headerViewModel', () => {
+  let matDialog: MatDialog;
+
   beforeAll(() => {
     dateMock = new MockDate();
   });
@@ -96,11 +101,18 @@ describe('headerViewModel', () => {
           provide: ENVIRONMENT_ALERTS_FEATURE_TOKEN,
           useValue: environmentAlertsFeature
         },
-        Store
+        Store,
+        {
+          provide: MatDialog,
+          useValue: {
+            open: jest.fn()
+          }
+        }
       ]
     });
     headerViewModel = TestBed.get(HeaderViewModel);
     store = TestBed.get(Store);
+    matDialog = TestBed.get(MatDialog);
     dispatchSpy = jest.spyOn(store, 'dispatch');
   });
 
@@ -223,6 +235,15 @@ describe('headerViewModel', () => {
       headerViewModel.toggleSideNav();
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(new UiActions.ToggleSideNav());
+    });
+  });
+
+  describe('open dialog', () => {
+    it('should open the modal dialog with the correct mode', () => {
+      headerViewModel.openDialog(QuickLinkTypeEnum.FAVORITES);
+      expect(matDialog.open).toHaveBeenCalledWith(QuickLinkComponent, {
+        data: { mode: QuickLinkTypeEnum.FAVORITES }
+      });
     });
   });
 });
