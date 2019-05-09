@@ -6,6 +6,7 @@ import { ScormModule } from '@campus/scorm';
 import { SearchModule } from '@campus/search';
 import { SharedModule } from '@campus/shared';
 import { ManageCollectionComponent, UiModule } from '@campus/ui';
+// tslint:disable-next-line:nx-enforce-module-boundaries
 import { QuickLinkViewModel } from 'libs/shared/src/lib/components/quick-link/quick-link.viewmodel';
 import { DevlibRoutingModule } from './devlib.routing.module';
 import { EduContentComponent } from './edu-content/edu-content.component';
