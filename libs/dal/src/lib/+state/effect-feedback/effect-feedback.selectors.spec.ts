@@ -128,7 +128,7 @@ describe('EffectFeedback selectors', () => {
   });
 
   it(
-    'getNextErrorFeedbackForAction() should return the first effect feedback' +
+    'getNextErrorFeedbackForActions() should return the first effect feedback' +
       ' with the specified trigger action' +
       ' and type error',
     () => {
@@ -153,18 +153,33 @@ describe('EffectFeedback selectors', () => {
           display: false,
           triggerAction: { type: 'bar' },
           type: 'error'
+        }),
+        new EffectFeedbackFixture({
+          // error, correct action type -> but it is less urgent
+          id: 'guid14',
+          display: false,
+          triggerAction: { type: 'baz' },
+          type: 'error'
         })
       ]);
       storeState = { effectFeedback: effectFeedbackState };
 
-      const results = EffectFeedbackQueries.getNextErrorFeedbackForAction(
+      const results = EffectFeedbackQueries.getNextErrorFeedbackForActions(
         storeState,
         {
-          actionType: 'bar'
+          actionTypes: ['bar', 'baz', 'notFeedbackInState']
         }
       );
       expect(results).toBeDefined();
       expect(results).toBe(effectFeedbackState.entities['guid13']);
+
+      const resultsForUnknownActionTypes = EffectFeedbackQueries.getNextErrorFeedbackForActions(
+        storeState,
+        {
+          actionTypes: ['unknown', 'alsoUnknown']
+        }
+      );
+      expect(resultsForUnknownActionTypes).toBeUndefined();
     }
   );
 });

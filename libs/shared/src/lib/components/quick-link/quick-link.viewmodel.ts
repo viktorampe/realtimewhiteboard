@@ -5,7 +5,6 @@ import {
   EduContentQueries,
   EffectFeedbackInterface,
   EffectFeedbackQueries,
-  EffectFeedbackReducer,
   FavoriteActions,
   FavoriteInterface,
   FavoriteQueries,
@@ -95,23 +94,9 @@ export class QuickLinkViewModel {
     // TODO once History has actions
     // const actionTypes = [...FavoriteActions.FavoritesActionTypes,...HistoryActions.HistoryActionTypes]
 
-    return combineLatest(
-      this.getErrorFeedBackForActionType(actionTypes.UpdateFavorite),
-      this.getErrorFeedBackForActionType(actionTypes.DeleteFavorite)
-    ).pipe(
-      map(
-        feedbackArray =>
-          feedbackArray.sort(EffectFeedbackReducer.sortByPriority)[0]
-      )
-    );
-  }
-
-  private getErrorFeedBackForActionType(
-    actionType: string
-  ): Observable<EffectFeedbackInterface> {
     return this.store.pipe(
-      select(EffectFeedbackQueries.getNextErrorFeedbackForAction, {
-        actionType
+      select(EffectFeedbackQueries.getNextErrorFeedbackForActions, {
+        actionTypes: [actionTypes.UpdateFavorite, actionTypes.DeleteFavorite]
       })
     );
   }

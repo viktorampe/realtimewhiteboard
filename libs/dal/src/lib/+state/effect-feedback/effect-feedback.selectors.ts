@@ -50,15 +50,16 @@ export const getFeedbackForAction = createSelector(
     return state.entities[filteredId];
   }
 );
-export const getNextErrorFeedbackForAction = createSelector(
+export const getNextErrorFeedbackForActions = createSelector(
   selectEffectFeedbackState,
-  (state: State, props: { actionType: string }) => {
-    const filteredId = (state.ids as string[]).find(id => {
-      return (
-        state.entities[id].triggerAction.type === props.actionType &&
-        state.entities[id].type === 'error'
-      );
-    });
-    return state.entities[filteredId];
+  (state: State, props: { actionTypes: string[] }) => {
+    const filteredIds = (state.ids as string[]).filter(
+      id =>
+        props.actionTypes.some(
+          actionType => state.entities[id].triggerAction.type === actionType
+        ) && state.entities[id].type === 'error'
+    );
+
+    return filteredIds ? state.entities[filteredIds[0]] : undefined;
   }
 );
