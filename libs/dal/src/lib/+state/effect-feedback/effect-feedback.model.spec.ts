@@ -29,6 +29,17 @@ describe('EffectFeedback model', () => {
       expect(result.display).toEqual(true);
     });
 
+    it('should display feedback if the action does not have a payload', () => {
+      const action = ({} as unknown) as Action;
+
+      const result = EffectFeedback.generateErrorFeedback(
+        'foo',
+        action,
+        'foo message'
+      );
+      expect(result.display).toBe(true);
+    });
+
     it('should not display feedback if useCustomErrorHandler = true', () => {
       const action = ({
         payload: { useCustomErrorHandler: true }
