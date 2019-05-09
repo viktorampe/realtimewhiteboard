@@ -33,6 +33,7 @@ import { RoundedCornersDirective } from './button/directives/button-rounded-corn
 import { WarningDirective } from './button/directives/button-warning.directive';
 import { CollapsibleSheetComponent } from './collapsible-sheet/collapsible-sheet.component';
 import { ConfirmableSelectComponent } from './confirmable-select/confirmable-select.component';
+import { ContentEditableComponent } from './content-editable/content-editable.component';
 import { ContentPreviewComponent } from './content-preview/content-preview.component';
 import { ContentThumbnailComponent } from './content-thumbnail/content-thumbnail.component';
 import { DropAreaComponent } from './drop-area/drop-area.component';
@@ -117,6 +118,7 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     InfoPanelComponent,
     PersonBadgeComponent,
     PersonInitialsPipe,
+    ContentEditableComponent,
     ContentPreviewComponent,
     ConfirmableSelectComponent,
     EditableInlineTagListComponent,
@@ -168,6 +170,7 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     AppBarComponent,
     PageHeaderComponent,
     InfoPanelComponent,
+    ContentEditableComponent,
     ContentPreviewComponent,
     ConfirmableSelectComponent,
     EditableInlineTagListComponent,
