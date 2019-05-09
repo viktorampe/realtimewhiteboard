@@ -95,13 +95,11 @@ export class CoupledTeachersViewModel {
       })
     );
     this.store.dispatch(
-      new TeacherStudentActions.LinkTeacherStudent(
-        {
-          publicKey,
-          userId: this.authService.userId
-        },
-        true
-      )
+      new TeacherStudentActions.LinkTeacherStudent({
+        publicKey,
+        userId: this.authService.userId,
+        useCustomErrorHandler: true
+      })
     );
   }
 

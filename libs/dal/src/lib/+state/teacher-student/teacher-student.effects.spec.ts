@@ -236,13 +236,11 @@ describe('TeacherStudentsEffects', () => {
     });
 
     describe('linkTeacher$', () => {
-      const linkTeacherAction = new LinkTeacherStudent(
-        {
-          publicKey: mockPublicKey,
-          userId: mockCurrentUser.id
-        },
-        true
-      );
+      const linkTeacherAction = new LinkTeacherStudent({
+        publicKey: mockPublicKey,
+        userId: mockCurrentUser.id,
+        useCustomErrorHandler: true
+      });
 
       it('should call the linkedPersonService', () => {
         linkedPersonService.linkStudentToTeacher = jest.fn();

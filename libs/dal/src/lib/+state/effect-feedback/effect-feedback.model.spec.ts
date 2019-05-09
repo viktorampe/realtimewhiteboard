@@ -5,8 +5,7 @@ describe('EffectFeedback model', () => {
   describe('generateErrorFeedback', () => {
     it('should display feedback if useCustomErrorHandler = false', () => {
       const action = ({
-        payload: {},
-        useCustomErrorHandler: false
+        payload: { useCustomErrorHandler: false }
       } as unknown) as Action;
 
       const result = EffectFeedback.generateErrorFeedback(
@@ -32,8 +31,7 @@ describe('EffectFeedback model', () => {
 
     it('should not display feedback if useCustomErrorHandler = true', () => {
       const action = ({
-        payload: {},
-        useCustomErrorHandler: true
+        payload: { useCustomErrorHandler: true }
       } as unknown) as Action;
 
       const result = EffectFeedback.generateErrorFeedback(

@@ -353,13 +353,11 @@ describe('Alerts Reducer', () => {
   describe('invalidate action', () => {
     it('should trigger from LinkTeacherStudent', () => {
       const startState = createState(alerts, true);
-      const action = new TeacherStudentActions.LinkTeacherStudent(
-        {
-          publicKey: 'foo',
-          userId: 1
-        },
-        true
-      );
+      const action = new TeacherStudentActions.LinkTeacherStudent({
+        publicKey: 'foo',
+        userId: 1,
+        useCustomErrorHandler: true
+      });
       const result = reducer(startState, action);
       expect(result).toEqual(createState(alerts, false));
     });

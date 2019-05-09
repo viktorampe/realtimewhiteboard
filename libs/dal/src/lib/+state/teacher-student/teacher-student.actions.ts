@@ -68,8 +68,8 @@ export class LinkTeacherStudent implements Action {
     public payload: {
       publicKey: string;
       userId: number;
-    },
-    public useCustomErrorHandler = false
+      useCustomErrorHandler?: boolean;
+    }
   ) {}
 }
 

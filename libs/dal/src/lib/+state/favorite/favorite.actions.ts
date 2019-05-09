@@ -68,15 +68,21 @@ export class UpdateFavorite implements Action {
     public payload: {
       userId: number;
       favorite: Update<FavoriteInterface>;
-    },
-    public useCustomErrorHandler = false
+      useCustomErrorHandler?: boolean;
+    }
   ) {}
 }
 
 export class DeleteFavorite implements Action {
   readonly type = FavoritesActionTypes.DeleteFavorite;
 
-  constructor(public payload: { id: number; userId: number }) {}
+  constructor(
+    public payload: {
+      id: number;
+      userId: number;
+      useCustomErrorHandler?: boolean;
+    }
+  ) {}
 }
 
 export class DeleteFavorites implements Action {
