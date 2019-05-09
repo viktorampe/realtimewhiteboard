@@ -31,11 +31,13 @@ export class QuickLinkViewModel {
           id,
           changes: { name }
         };
-        action = new FavoriteActions.UpdateFavorite({
-          userId: this.authService.userId,
-          favorite,
-          handleErrorAutomatically: false
-        });
+        action = new FavoriteActions.UpdateFavorite(
+          {
+            userId: this.authService.userId,
+            favorite
+          },
+          true
+        );
 
         break;
       case QuickLinkTypeEnum.HISTORY:
@@ -51,10 +53,13 @@ export class QuickLinkViewModel {
     let action: Action;
     switch (mode) {
       case QuickLinkTypeEnum.FAVORITES:
-        action = new FavoriteActions.DeleteFavorite({
-          id: id,
-          userId: this.authService.userId
-        });
+        action = new FavoriteActions.DeleteFavorite(
+          {
+            id: id,
+            userId: this.authService.userId
+          },
+          true
+        );
         break;
       case QuickLinkTypeEnum.HISTORY:
         // TODO: dispatch delete history action if relevant

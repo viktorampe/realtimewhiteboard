@@ -30,20 +30,25 @@ describe('QuickLinkViewModel', () => {
   describe('action handlers', () => {
     it('should dispatch an update favorite action', () => {
       const spy = jest.spyOn(store, 'dispatch');
-      const expectedAction = new FavoriteActions.UpdateFavorite({
-        userId: 1,
-        favorite: { id: 1, changes: { name: 'foo' } },
-        handleErrorAutomatically: false
-      });
+      const expectedAction = new FavoriteActions.UpdateFavorite(
+        {
+          userId: 1,
+          favorite: { id: 1, changes: { name: 'foo' } }
+        },
+        true
+      );
       quickLinkViewModel.update(1, 'foo', QuickLinkTypeEnum.FAVORITES);
       expect(spy).toHaveBeenCalledWith(expectedAction);
     });
     it('should dispatch a delete favorite action', () => {
       const spy = jest.spyOn(store, 'dispatch');
-      const expectedAction = new FavoriteActions.DeleteFavorite({
-        userId: 1,
-        id: 1
-      });
+      const expectedAction = new FavoriteActions.DeleteFavorite(
+        {
+          userId: 1,
+          id: 1
+        },
+        true
+      );
       quickLinkViewModel.delete(1, QuickLinkTypeEnum.FAVORITES);
       expect(spy).toHaveBeenCalledWith(expectedAction);
     });
