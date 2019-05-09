@@ -25,6 +25,7 @@ import { PERMISSION_SERVICE_TOKEN } from './auth/permission.service.interface';
 import { EduContentCollectionManagerService } from './collection-manager/edu-content-collection-manager.service';
 import { EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN } from './collection-manager/edu-content-collection-manager.service.interface';
 import { PageBarContainerComponent } from './components/page-bar-container/page-bar-container.component';
+import { QuickLinkComponent } from './components/quick-link/quick-link.component';
 import { OPEN_STATIC_CONTENT_SERVICE_TOKEN } from './content/open-static-content.interface';
 import { OpenStaticContentService } from './content/open-static-content.service';
 import { CampusRouterlinkDirective } from './directives/campus-routerlink.directive';
@@ -64,7 +65,6 @@ import { MailToByCredentialPipe } from './pipes/mail-to/mail-to-credential-pipe'
 import { PersonBadgeFromCredentialPipe } from './pipes/person-badge-from-credential/person-badge-from-credential-pipe';
 import { ScormExerciseService } from './scorm/scorm-exercise.service';
 import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.interface';
-import { QuickLinkComponent } from './components/quick-link/quick-link.component';
 
 @NgModule({
   imports: [
@@ -125,7 +125,8 @@ import { QuickLinkComponent } from './components/quick-link/quick-link.component
     },
     AlertToNotificationItemPipe,
     MatDialog
-  ]
+  ],
+  entryComponents: [QuickLinkComponent]
 })
 export class SharedModule {
   constructor(
