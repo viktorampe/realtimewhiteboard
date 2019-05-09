@@ -1,1 +1,63 @@
-<p> quick-link works! </p>
+<campus-info-panel
+  mat-dialog-title
+  [titleText]="dialogTitle"
+  [titleIcon]="diablogTitleIcon"
+>
+  <campus-filter-text-input
+    title__right
+    theme="dark"
+  ></campus-filter-text-input>
+  <mat-dialog-content>
+    <mat-action-list *ngIf="(contentData$ | async) as contentData">
+      <ng-container *ngFor="let category of contentData; let i = index">
+        <h3 mat-subheader>{{ category.title }}</h3>
+        <button
+          mat-list-item
+          class="quick-link__item"
+          *ngFor="let quickLink of category.quickLinks"
+          (click)="quickLink.defaultAction.handler(quickLink.id)"
+        >
+          <mat-icon mat-list-icon [svgIcon]="quickLink.icon"></mat-icon>
+          <div
+            class="quick-link__item__title"
+            [matTooltip]="quickLink.defaultAction.tooltip"
+            >{{ quickLink.name }}</div
+          >
+          <div class="flex-spacer"></div>
+          <div
+            class="quick-link__item__actions quick-link__item__actions--hover"
+          >
+            <ng-container
+              *ngFor="let action of quickLink.alternativeOpenActions"
+            >
+              <a [matTooltip]="action.tooltip"> {{ action.label }}</a>
+              <span style="margin-left: 8px; margin-right: 8px;">|</span>
+            </ng-container>
+          </div>
+
+          <div
+            class="quick-link__item__actions quick-link__item__actions--hover"
+          >
+            <ng-container *ngFor="let action of quickLink.manageActions">
+              <campus-button
+                circle
+                [iconClass]="action.icon"
+                [matTooltip]="action.tooltip"
+                (click)="action.handler(quickLink.id)"
+              ></campus-button>
+            </ng-container>
+          </div>
+        </button>
+        <mat-divider *ngIf="i !== contentData.length - 1"></mat-divider>
+      </ng-container>
+    </mat-action-list>
+  </mat-dialog-content>
+</campus-info-panel>
+<mat-dialog-actions class="quick-link__dialog__actions">
+  <campus-button
+    primary
+    class="quick-link__dialog__actions__button"
+    (click)="closeDialog()"
+    >Sluiten</campus-button
+  >
+</mat-dialog-actions>
