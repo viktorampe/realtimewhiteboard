@@ -385,11 +385,13 @@ describe('FavoriteEffects', () => {
   });
 
   describe('updateFavorite$', () => {
-    const updateFavoriteAction = new UpdateFavorite({
-      userId: 1,
-      favorite: { id: 2, changes: { name: 'bar' } },
-      handleErrorAutomatically: false
-    });
+    const updateFavoriteAction = new UpdateFavorite(
+      {
+        userId: 1,
+        favorite: { id: 2, changes: { name: 'bar' } }
+      },
+      true
+    );
     const undoUpdateAction = undo(updateFavoriteAction);
     let successFeedbackAction: AddEffectFeedback;
     let errorFeedbackAction: AddEffectFeedback;

@@ -223,11 +223,13 @@ describe('Bundles Reducer', () => {
   describe('invalidate action', () => {
     it('should trigger from LinkTeacherStudent', () => {
       const startState = createState(bundles, true);
-      const action = new TeacherStudentActions.LinkTeacherStudent({
-        publicKey: 'foo',
-        userId: 1,
-        handleErrorAutomatically: false
-      });
+      const action = new TeacherStudentActions.LinkTeacherStudent(
+        {
+          publicKey: 'foo',
+          userId: 1
+        },
+        true
+      );
       const result = reducer(startState, action);
       expect(result).toEqual(createState(bundles, false));
     });
