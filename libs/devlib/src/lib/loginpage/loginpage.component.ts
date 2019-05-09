@@ -1,4 +1,3 @@
-// tslint:disable:nx-enforce-module-boundaries
 // tslint:disable:member-ordering
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material';
@@ -36,8 +35,6 @@ import {
 import { ContentEditableComponent } from '@campus/ui';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { select, Store } from '@ngrx/store';
-// tslint:disable-next-line:nx-enforce-module-boundaries
-import { QuickLinkViewModel } from 'libs/shared/src/lib/components/quick-link/quick-link.viewmodel';
 import { Observable } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
 import { LoginPageViewModel } from './loginpage.viewmodel';
@@ -84,8 +81,7 @@ export class LoginpageComponent implements OnInit {
     @Inject(TOC_SERVICE_TOKEN) private tocService: TocServiceInterface,
     private dialog: MatDialog,
     @Inject(EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN)
-    private eduContentCollectionManagerService: EduContentCollectionManagerService,
-    private quickLinkVM: QuickLinkViewModel
+    private eduContentCollectionManagerService: EduContentCollectionManagerService
   ) {}
 
   ngOnInit() {
@@ -166,26 +162,6 @@ export class LoginpageComponent implements OnInit {
         ...favorite,
         name: favorite.name + 'x'
       }
-    );
-  }
-
-  openFavorite(type: FavoriteTypesEnum, option?: string) {
-    let favorite: FavoriteInterface;
-    this.store
-      .pipe(select(FavoriteQueries.getByType, { type }))
-      .subscribe(favorites => {
-        favorite = { ...favorites[0] };
-        if (type === 'educontent' || 'boek-e') {
-          favorite.eduContent = {
-            id: favorite.eduContentId,
-            type: option
-          };
-        }
-      });
-    console.log(favorite);
-    this.quickLinkVM.openContent(
-      favorite,
-      option === 'download' ? option : null
     );
   }
 }

@@ -1,11 +1,13 @@
 import { Inject, Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { Params, Router } from '@angular/router';
 import {
+  BundleInterface,
   EduContent,
   EffectFeedbackInterface,
   FavoriteInterface,
-  FavoriteTypesEnum,
-  HistoryInterface
+  HistoryInterface,
+  LearningAreaInterface,
+  TaskInterface
 } from '@campus/dal';
 import { Observable } from 'rxjs';
 import {
@@ -33,57 +35,46 @@ export class QuickLinkViewModel {
   public update(id: number, name: string, mode: QuickLinkTypeEnum): void {}
   public delete(id: number, mode: QuickLinkTypeEnum): void {}
 
-  public openContent(
+  public openBundle(bundle: BundleInterface) {
+    this.router.navigate(['/bundles', bundle.learningAreaId, bundle.id]);
+  }
+
+  public openTask(task: TaskInterface) {
+    this.router.navigate(['/tasks', task.learningAreaId, task.id]);
+  }
+
+  public openArea(area: LearningAreaInterface) {
+    this.router.navigate(['/edu-content', area.id]);
+  }
+
+  public openStaticContent(eduContent: EduContent, stream?: boolean) {
+    this.openStaticContentService.open(eduContent, stream);
+  }
+
+  public openExercise(eduContent: EduContent, withSolution?: boolean) {
+    this.scormExerciseService.previewExerciseFromUnlockedContent(
+      null,
+      eduContent.id,
+      null,
+      !!withSolution
+    );
+  }
+
+  public openSearch(
     quickLink: FavoriteInterface | HistoryInterface,
-    option?: 'download' | 'withSolution' | 'fromHistory'
-  ): void {
-    switch (quickLink.type) {
-      case FavoriteTypesEnum.AREA:
-        this.router.navigate(['/edu-content', quickLink.learningAreaId]);
+    type: QuickLinkTypeEnum
+  ) {
+    let queryParams: Params;
+    switch (type) {
+      case QuickLinkTypeEnum.FAVORITES:
+        queryParams = { favorite_id: quickLink.id };
         break;
-      case FavoriteTypesEnum.BOEKE:
-      case FavoriteTypesEnum.EDUCONTENT:
-        const eduContent: EduContent = Object.assign(
-          new EduContent(),
-          quickLink.eduContent
-        );
-        if (eduContent.type === 'exercise') {
-          this.scormExerciseService.previewExerciseFromUnlockedContent(
-            null,
-            quickLink.eduContentId,
-            null,
-            option === 'withSolution'
-          );
-        } else {
-          this.openStaticContentService.open(eduContent, option !== 'download');
-        }
-        break;
-      case FavoriteTypesEnum.BUNDLE:
-        this.router.navigate([
-          '/bundles',
-          quickLink.learningAreaId,
-          quickLink.bundleId
-        ]);
-        break;
-      case FavoriteTypesEnum.TASK:
-        this.router.navigate([
-          '/tasks',
-          quickLink.learningAreaId,
-          quickLink.taskId
-        ]);
-        break;
-      case FavoriteTypesEnum.SEARCH:
-        this.router.navigate(
-          ['/edu-content', quickLink.learningAreaId, 'term'],
-          {
-            queryParams: {
-              [option === 'fromHistory'
-                ? 'history_id'
-                : 'favorite_id']: quickLink.id
-            }
-          }
-        );
+      case QuickLinkTypeEnum.HISTORY:
+        queryParams = { history_id: quickLink.id };
         break;
     }
+    this.router.navigate(['/edu-content', quickLink.learningAreaId, 'term'], {
+      queryParams
+    });
   }
 }
