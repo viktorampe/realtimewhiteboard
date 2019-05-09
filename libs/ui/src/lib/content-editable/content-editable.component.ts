@@ -54,10 +54,15 @@ export class ContentEditableComponent {
   }
 
   saveChanges() {
-    if (this.textIsValid() && this.oldText !== this.text) {
-      this.textChanged.emit(this.text.trim());
-      this._active = false;
+    if (!this.textIsValid()) {
+      return;
     }
+
+    if (this.oldText !== this.text) {
+      this.textChanged.emit(this.text.trim());
+    }
+
+    this._active = false;
   }
 
   cancelChanges() {
