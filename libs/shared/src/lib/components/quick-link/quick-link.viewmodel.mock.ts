@@ -9,14 +9,16 @@ import {
   LearningAreaFixture,
   Priority
 } from '@campus/dal';
+import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject } from 'rxjs';
 import { QuickLinkTypeEnum } from './quick-link-type.enum';
+import { QuickLinkViewModel } from './quick-link.viewmodel';
 
 @Injectable({
   providedIn: 'root'
 })
-export class MockQuickLinkViewModel {
-  // TODO: implements ViewModelInterface<QuickLinkViewModel>
+export class MockQuickLinkViewModel
+  implements ViewModelInterface<QuickLinkViewModel> {
   public quickLinks$ = new BehaviorSubject(this.getMockFavoriteQuickLinks());
   public feedback$ = new BehaviorSubject(this.getMockEffectFeedBack());
 
