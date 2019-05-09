@@ -34,9 +34,9 @@ describe('QuickLinkViewModel', () => {
         userId: 1,
         favorite: {
           id: 1,
-          changes: { name: 'foo' },
-          useCustomErrorHandler: true
-        }
+          changes: { name: 'foo' }
+        },
+        useCustomErrorHandler: true
       });
       quickLinkViewModel.update(1, 'foo', QuickLinkTypeEnum.FAVORITES);
       expect(spy).toHaveBeenCalledWith(expectedAction);
