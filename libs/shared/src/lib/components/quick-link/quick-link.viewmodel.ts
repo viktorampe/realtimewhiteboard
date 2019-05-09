@@ -33,53 +33,56 @@ export class QuickLinkViewModel {
   public update(id: number, name: string, mode: QuickLinkTypeEnum): void {}
   public delete(id: number, mode: QuickLinkTypeEnum): void {}
 
-  public openFavoriteContent(
-    favorite: FavoriteInterface,
+  public openContent(
+    quickLink: FavoriteInterface | HistoryInterface,
     option?: 'download' | 'withSolution' | 'fromHistory'
   ): void {
-    switch (favorite.type) {
+    switch (quickLink.type) {
       case FavoriteTypesEnum.AREA:
-        this.router.navigate(['/edu-content', favorite.learningAreaId]);
+        this.router.navigate(['/edu-content', quickLink.learningAreaId]);
         break;
       case FavoriteTypesEnum.BOEKE:
       case FavoriteTypesEnum.EDUCONTENT:
         const eduContent: EduContent = Object.assign(
           new EduContent(),
-          favorite.eduContent
+          quickLink.eduContent
         );
         if (eduContent.type === 'exercise') {
           this.scormExerciseService.previewExerciseFromUnlockedContent(
             null,
-            favorite.eduContentId,
+            quickLink.eduContentId,
             null,
             option === 'withSolution'
           );
         } else {
-          this.openStaticContentService.open(eduContent);
+          this.openStaticContentService.open(eduContent, option !== 'download');
         }
         break;
       case FavoriteTypesEnum.BUNDLE:
         this.router.navigate([
           '/bundles',
-          favorite.learningAreaId,
-          favorite.bundleId
+          quickLink.learningAreaId,
+          quickLink.bundleId
         ]);
         break;
       case FavoriteTypesEnum.TASK:
         this.router.navigate([
           '/tasks',
-          favorite.learningAreaId,
-          favorite.taskId
+          quickLink.learningAreaId,
+          quickLink.taskId
         ]);
         break;
       case FavoriteTypesEnum.SEARCH:
-        this.router.navigate(['/edu-content', favorite.learningAreaId], {
-          queryParams: {
-            [option === 'fromHistory'
-              ? 'history_id'
-              : 'favorite_id']: favorite.id
+        this.router.navigate(
+          ['/edu-content', quickLink.learningAreaId, 'term'],
+          {
+            queryParams: {
+              [option === 'fromHistory'
+                ? 'history_id'
+                : 'favorite_id']: quickLink.id
+            }
           }
-        });
+        );
         break;
     }
   }

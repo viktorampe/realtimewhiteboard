@@ -156,14 +156,23 @@ export class LoginpageComponent implements OnInit {
     );
   }
 
-  openFavorite(type: FavoriteTypesEnum) {
+  openFavorite(type: FavoriteTypesEnum, option?: string) {
     let favorite: FavoriteInterface;
     this.store
       .pipe(select(FavoriteQueries.getByType, { type }))
       .subscribe(favorites => {
-        favorite = favorites[0];
+        favorite = { ...favorites[0] };
+        if (type === 'educontent' || 'boek-e') {
+          favorite.eduContent = {
+            id: favorite.eduContentId,
+            type: option
+          };
+        }
       });
     console.log(favorite);
-    this.quickLinkVM.openFavoriteContent(favorite);
+    this.quickLinkVM.openContent(
+      favorite,
+      option === 'download' ? option : null
+    );
   }
 }
