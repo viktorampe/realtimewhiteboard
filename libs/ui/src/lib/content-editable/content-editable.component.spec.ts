@@ -207,6 +207,15 @@ describe('ContentEditableComponent', () => {
       expect(component.textChanged.emit).toHaveBeenCalledWith(newText);
     });
 
+    it('should not emit event when new text is the same as the old', () => {
+      component.textChanged.emit = jest.fn();
+
+      enterText(inputEl, defaultText);
+      pressEnter(inputEl);
+
+      expect(component.textChanged.emit).not.toHaveBeenCalled();
+    });
+
     it('should NOT emit event when confirming with empty value', () => {
       component.textChanged.emit = jest.fn();
 
