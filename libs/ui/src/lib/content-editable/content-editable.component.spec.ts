@@ -159,6 +159,13 @@ describe('ContentEditableComponent', () => {
       expect(component.saveChanges).toHaveBeenCalled();
     });
 
+    it('should cancel changes on pressing escape', () => {
+      enterText(inputEl, newText);
+      pressEscape(inputEl);
+
+      expect(component.cancelChanges).toHaveBeenCalled();
+    });
+
     it('should change text when saving changes', () => {
       expect(component.text).toBe(defaultText);
 
@@ -243,6 +250,13 @@ describe('ContentEditableComponent', () => {
 
         expect(component.saveChanges).not.toHaveBeenCalled();
       });
+
+      it('should cancel changes when pressing escape in multiline', () => {
+        enterText(textareaEl, newText);
+        pressEscape(textareaEl);
+
+        expect(component.cancelChanges).toHaveBeenCalled();
+      });
     });
 
     function enterText(el: any, text: string) {
@@ -252,6 +266,10 @@ describe('ContentEditableComponent', () => {
 
     function pressEnter(el: any) {
       el.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+    }
+
+    function pressEscape(el: any) {
+      el.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
     }
 
     //Confirm button only exists sometimes in the DOM, so the query must be reusable

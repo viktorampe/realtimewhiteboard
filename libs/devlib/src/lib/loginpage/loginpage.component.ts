@@ -156,13 +156,5 @@ export class LoginpageComponent implements OnInit {
       favorite = favorites[0];
     });
     console.log(favorite);
-
-    this.response = this.favoriteService.updateFavorite(
-      this.authService.userId,
-      {
-        ...favorite,
-        name: favorite.name + 'x'
-      }
-    );
   }
 }

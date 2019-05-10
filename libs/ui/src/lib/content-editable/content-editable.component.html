@@ -10,12 +10,14 @@
       matInput
       [(ngModel)]="text"
       (keydown.enter)="saveChanges()"
+      (keydown.escape)="cancelChanges()"
     />
     <textarea
       *ngIf="multiline"
       matInput
       (focus)="onFocus($event)"
       [(ngModel)]="text"
+      (keydown.escape)="cancelChanges()"
     >
     </textarea>
   </mat-form-field>
