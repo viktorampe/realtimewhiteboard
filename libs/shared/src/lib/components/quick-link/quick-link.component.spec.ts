@@ -1,9 +1,14 @@
-//file.only
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  async,
+  ComponentFixture,
+  fakeAsync,
+  TestBed
+} from '@angular/core/testing';
 import {
   MatDialogActions,
   MatDialogModule,
   MatDialogRef,
+  MatIcon,
   MatIconModule,
   MatIconRegistry,
   MatList,
@@ -18,7 +23,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 import {
   FavoriteFixture,
   FavoriteInterface,
-  HistoryInterface
+  HistoryInterface,
+  LearningAreaFixture
 } from '@campus/dal';
 import { MockMatIconRegistry } from '@campus/testing';
 import { ButtonComponent, InfoPanelComponent, UiModule } from '@campus/ui';
@@ -117,6 +123,7 @@ describe('QuickLinkComponent', () => {
 
         expect(listItems.length).toBe(quickLinks.length);
         // every quickLink should have a listItem with the same name
+        // mock data contains quicklinks with unique names
         expect(
           quickLinks.every(qL =>
             listItemTitles.some(title => title === qL.name)
@@ -147,11 +154,90 @@ describe('QuickLinkComponent', () => {
     });
 
     describe('per quickLink', () => {
-      it('should show the learning area icon', () => {});
-      it('should show quickLink name', () => {});
-      it('should show the alternativeOpenActions as links', () => {});
-      it('should show the manageActions as buttons', () => {});
-      it('should call the correct action handler on element click', () => {});
+      it('should show the learning area icon', () => {
+        const mockQuickLink = new FavoriteFixture({
+          learningArea: new LearningAreaFixture({ icon: 'foo' })
+        }) as FavoriteInterface;
+
+        vmQuickLinks$.next([mockQuickLink]);
+        fixture.detectChanges();
+
+        const listItemIcon = fixture.debugElement
+          .query(By.directive(MatListItem))
+          .query(By.directive(MatIcon)).componentInstance as MatIcon;
+
+        expect(listItemIcon.svgIcon).toBe(mockQuickLink.learningArea.icon);
+      });
+
+      it('should show quickLink name', () => {
+        const mockQuickLink = new FavoriteFixture({
+          name: 'foo',
+          learningArea: new LearningAreaFixture()
+        }) as FavoriteInterface;
+
+        vmQuickLinks$.next([mockQuickLink]);
+        fixture.detectChanges();
+
+        const listItemName = fixture.debugElement
+          .query(By.directive(MatListItem))
+          .query(By.css('.quick-link__item__title')).nativeElement.textContent;
+
+        expect(listItemName).toBe(mockQuickLink.name);
+      });
+
+      it('should show the alternativeOpenActions as links', () => {
+        const listItemLinks = fixture.debugElement
+          .query(By.directive(MatListItem))
+          .queryAll(By.css('a'));
+
+        expect(listItemLinks.length).toBe(1);
+        expect(listItemLinks[0].nativeElement.textContent.trim()).toBe(
+          'met oplossing'
+        );
+      });
+
+      it('should show the manageActions as buttons', () => {
+        const listItemButtons = fixture.debugElement
+          .query(By.directive(MatListItem))
+          .queryAll(By.directive(ButtonComponent))
+          .map(dE => dE.componentInstance as ButtonComponent);
+
+        expect(listItemButtons.length).toBe(2);
+        expect(listItemButtons[0].iconClass).toBe('edit');
+        expect(listItemButtons[1].iconClass).toBe('verwijder');
+      });
+
+      it('should call the correct action handler on element click', fakeAsync(() => {
+        const listItem = fixture.debugElement.query(By.directive(MatListItem));
+
+        const listItemLinks = fixture.debugElement
+          .query(By.directive(MatListItem))
+          .queryAll(By.css('a'));
+
+        const listItemButtons = fixture.debugElement
+          .query(By.directive(MatListItem))
+          .queryAll(By.directive(ButtonComponent));
+
+        // default action
+        spyOn(component, 'openAsExercise');
+        listItem.triggerEventHandler('click', null);
+        expect(component.openAsExercise).toHaveBeenCalled();
+
+        // alternative open action
+        spyOn(component, 'openAsSolution');
+        listItemLinks[0].triggerEventHandler('click', null);
+        expect(component.openAsSolution).toHaveBeenCalled();
+
+        // manage actions - update
+        spyOn(component, 'update');
+        listItemButtons[0].triggerEventHandler('click', null);
+        expect(component.update).toHaveBeenCalled();
+
+        // manage actions - delete
+        spyOn(component, 'delete');
+        listItemButtons[1].triggerEventHandler('click', null);
+        expect(component.delete).toHaveBeenCalled();
+      }));
     });
   });
 
@@ -181,20 +267,20 @@ describe('QuickLinkComponent', () => {
               type: 'foo',
               title: 'foo',
               quickLinks: [
-                // add actions on quickLink that are not tested
-                withIgnoredActions(mockFavorites[0]),
-                withIgnoredActions(mockFavorites[1])
+                // ignore missing properties
+                jasmine.objectContaining(mockFavorites[0]),
+                jasmine.objectContaining(mockFavorites[1])
               ]
             },
             {
               type: 'bar',
               title: 'bar',
-              quickLinks: [withIgnoredActions(mockFavorites[2])]
+              quickLinks: [jasmine.objectContaining(mockFavorites[2])]
             },
             {
               type: 'baz',
               title: 'baz',
-              quickLinks: [withIgnoredActions(mockFavorites[3])]
+              quickLinks: [jasmine.objectContaining(mockFavorites[3])]
             }
           ]);
 
@@ -216,21 +302,15 @@ describe('QuickLinkComponent', () => {
           // only test category order
           // TODO: fix order when component sorter is refactored
           const expected = [
-            {
-              type: 'bar',
-              title: jasmine.anything(),
-              quickLinks: jasmine.anything()
-            },
-            {
-              type: 'baz',
-              title: jasmine.anything(),
-              quickLinks: jasmine.anything()
-            },
-            {
-              type: 'foo',
-              title: jasmine.anything(),
-              quickLinks: jasmine.anything()
-            }
+            jasmine.objectContaining({
+              type: 'bar'
+            }),
+            jasmine.objectContaining({
+              type: 'baz'
+            }),
+            jasmine.objectContaining({
+              type: 'foo'
+            })
           ];
 
           expect(component.contentData$).toBeObservable(
@@ -255,10 +335,10 @@ describe('QuickLinkComponent', () => {
 
           // only test quickLink order
           const expected = [
-            withIgnoredActions(mockFavorites[1]),
-            withIgnoredActions(mockFavorites[3]),
-            withIgnoredActions(mockFavorites[2]),
-            withIgnoredActions(mockFavorites[0])
+            jasmine.objectContaining(mockFavorites[1]),
+            jasmine.objectContaining(mockFavorites[3]),
+            jasmine.objectContaining(mockFavorites[2]),
+            jasmine.objectContaining(mockFavorites[0])
           ];
 
           expect(quickLinks$).toBeObservable(hot('a', { a: expected }));
@@ -266,6 +346,23 @@ describe('QuickLinkComponent', () => {
       });
 
       describe('actions on a quickLink', () => {
+        let quickLinkActions;
+        const mockOpenAsExerciseFunction = () => {};
+        const mockOpenAsSolutionFunction = () => {};
+        const mockUpdateFunction = () => {};
+        const mockDeleteFunction = () => {};
+
+        beforeEach(() => {
+          // replace functions that should be added as handlers with mocks
+          // tests need same instance reference
+          // there are other tests to check if clicks call the correct handler
+          quickLinkActions = component['quickLinkActions'];
+          quickLinkActions.openAsExercise.handler = mockOpenAsExerciseFunction;
+          quickLinkActions.openAsSolution.handler = mockOpenAsSolutionFunction;
+          quickLinkActions.edit.handler = mockUpdateFunction;
+          quickLinkActions.delete.handler = mockDeleteFunction;
+        });
+
         it('should add a defaultAction', () => {
           const mockFavorite = new FavoriteFixture({ type: 'foo' });
 
@@ -281,15 +378,13 @@ describe('QuickLinkComponent', () => {
             label: 'Openen',
             icon: 'exercise:open',
             tooltip: 'open oefening zonder oplossingen',
-            handler: component.openAsExercise
+            handler: mockOpenAsExerciseFunction
           };
 
-          const expected = {
+          const expected = jasmine.objectContaining({
             ...mockFavorite,
-            defaultAction: expectedDefaultAction,
-            alternativeOpenActions: jasmine.anything(),
-            manageActions: jasmine.anything()
-          };
+            defaultAction: expectedDefaultAction
+          });
 
           expect(quickLink$).toBeObservable(hot('a', { a: expected }));
         });
@@ -309,16 +404,14 @@ describe('QuickLinkComponent', () => {
               label: 'met oplossing',
               icon: 'exercise:finished',
               tooltip: 'open oefening met oplossingen',
-              handler: component.openAsSolution
+              handler: mockOpenAsSolutionFunction
             }
           ];
 
-          const expected = {
+          const expected = jasmine.objectContaining({
             ...mockFavorite,
-            defaultAction: jasmine.anything(),
-            alternativeOpenActions: expectedAlternativeOpenActions,
-            manageActions: jasmine.anything()
-          };
+            alternativeOpenActions: expectedAlternativeOpenActions
+          });
 
           expect(quickLink$).toBeObservable(hot('a', { a: expected }));
         });
@@ -338,23 +431,21 @@ describe('QuickLinkComponent', () => {
               label: 'Bewerken',
               icon: 'edit',
               tooltip: 'naam aanpassen',
-              handler: component.update
+              handler: mockUpdateFunction
             },
             {
               actionType: 'manage',
               label: 'Verwijderen',
               icon: 'verwijder',
               tooltip: 'item verwijderen',
-              handler: component.delete
+              handler: mockDeleteFunction
             }
           ];
 
-          const expected = {
+          const expected = jasmine.objectContaining({
             ...mockFavorite,
-            defaultAction: jasmine.anything(),
-            alternativeOpenActions: jasmine.anything(),
             manageActions: expectedManageActions
-          };
+          });
 
           expect(quickLink$).toBeObservable(hot('a', { a: expected }));
         });
@@ -393,12 +484,3 @@ describe('QuickLinkComponent', () => {
     });
   });
 });
-
-function withIgnoredActions(expectedItem) {
-  return {
-    ...expectedItem,
-    defaultAction: jasmine.anything(),
-    alternativeOpenActions: jasmine.anything(),
-    manageActions: jasmine.anything()
-  };
-}

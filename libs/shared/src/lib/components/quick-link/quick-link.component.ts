@@ -42,28 +42,28 @@ export class QuickLinkComponent implements OnInit {
       label: 'Openen',
       icon: 'exercise:open',
       tooltip: 'open oefening zonder oplossingen',
-      handler: this.openAsExercise
+      handler: input => this.openAsExercise(input)
     },
     openAsSolution: {
       actionType: 'open',
-      label: 'met oplossing',
+      label: 'toon oplossing',
       icon: 'exercise:finished',
       tooltip: 'open oefening met oplossingen',
-      handler: this.openAsSolution
+      handler: input => this.openAsSolution(input)
     },
     edit: {
       actionType: 'manage',
       label: 'Bewerken',
       icon: 'edit',
       tooltip: 'naam aanpassen',
-      handler: this.update
+      handler: input => this.update(input)
     },
     delete: {
       actionType: 'manage',
       label: 'Verwijderen',
       icon: 'verwijder',
       tooltip: 'item verwijderen',
-      handler: this.delete
+      handler: input => this.delete(input)
     }
   };
 
