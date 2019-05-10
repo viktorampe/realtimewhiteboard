@@ -34,7 +34,6 @@ import { MockDate } from '@campus/testing';
 import { Update } from '@ngrx/entity';
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
-import { FEEDBACK_SERVICE_TOKEN } from '../../feedback';
 import { QuickLinkTypeEnum } from './quick-link-type.enum';
 import { QuickLinkViewModel } from './quick-link.viewmodel';
 
@@ -175,18 +174,7 @@ describe('QuickLinkViewModel', () => {
           EffectFeedbackReducer
         ])
       ],
-      providers: [
-        Store,
-        QuickLinkViewModel,
-        {
-          provide: FEEDBACK_SERVICE_TOKEN,
-          useValue: {
-            addDefaultCancelButton(feedBack) {
-              return feedBack;
-            }
-          }
-        }
-      ]
+      providers: [Store, QuickLinkViewModel]
     });
 
     quickLinkViewModel = TestBed.get(QuickLinkViewModel);

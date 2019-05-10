@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import {
   BundleQueries,
   DalState,
@@ -15,10 +15,6 @@ import {
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import {
-  FeedBackServiceInterface,
-  FEEDBACK_SERVICE_TOKEN
-} from '../../feedback';
 import { QuickLinkTypeEnum } from './quick-link-type.enum';
 
 @Injectable()
@@ -27,11 +23,7 @@ export class QuickLinkViewModel {
   public update(id: number, name: string, mode: QuickLinkTypeEnum): void {}
   public delete(id: number, mode: QuickLinkTypeEnum): void {}
 
-  constructor(
-    private store: Store<DalState>,
-    @Inject(FEEDBACK_SERVICE_TOKEN)
-    private feedbackService: FeedBackServiceInterface
-  ) {}
+  constructor(private store: Store<DalState>) {}
 
   public getQuickLinks$(
     mode: QuickLinkTypeEnum
@@ -66,7 +58,7 @@ export class QuickLinkViewModel {
           eduContentDict,
           taskDict,
           bundleDict
-        ]) => {
+        ]) =>
           quickLinks.map(qL => {
             if (qL.learningAreaId) {
               qL.learningArea = learningAreaDict[qL.learningAreaId];
@@ -82,9 +74,7 @@ export class QuickLinkViewModel {
             }
 
             return qL;
-          });
-          return quickLinks;
-        }
+          })
       )
     );
   }
