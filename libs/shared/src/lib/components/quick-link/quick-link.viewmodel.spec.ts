@@ -25,6 +25,7 @@ import {
 import { QuickLinkTypeEnum } from './quick-link-type.enum';
 import { QuickLinkViewModel } from './quick-link.viewmodel';
 
+// file.only
 describe('QuickLinkViewModel', () => {
   let quickLinkViewModel: QuickLinkViewModel;
   let store: Store<DalState>;
@@ -78,8 +79,6 @@ describe('QuickLinkViewModel', () => {
     router = TestBed.get(Router);
     openStaticContentService = TestBed.get(OPEN_STATIC_CONTENT_SERVICE_TOKEN);
     scormExerciseService = TestBed.get(SCORM_EXERCISE_SERVICE_TOKEN);
-
-    router.initialNavigation();
   });
 
   describe('creation', () => {
@@ -126,11 +125,11 @@ describe('QuickLinkViewModel', () => {
         id: 4,
         learningAreaId: 7
       });
-      const spy = jest.spyOn(router, 'navigate');
+      router.navigate = jest.fn();
 
       quickLinkViewModel.openBundle(bundle);
 
-      expect(spy).toHaveBeenCalledWith([
+      expect(router.navigate).toHaveBeenCalledWith([
         '/bundles',
         bundle.learningAreaId,
         bundle.id
@@ -142,11 +141,11 @@ describe('QuickLinkViewModel', () => {
         id: 4,
         learningAreaId: 7
       });
-      const spy = jest.spyOn(router, 'navigate');
+      router.navigate = jest.fn();
 
       quickLinkViewModel.openTask(task);
 
-      expect(spy).toHaveBeenCalledWith([
+      expect(router.navigate).toHaveBeenCalledWith([
         '/tasks',
         task.learningAreaId,
         task.id
@@ -157,11 +156,11 @@ describe('QuickLinkViewModel', () => {
       const area = new LearningAreaFixture({
         id: 4
       });
-      const spy = jest.spyOn(router, 'navigate');
+      router.navigate = jest.fn();
 
       quickLinkViewModel.openArea(area);
 
-      expect(spy).toHaveBeenCalledWith(['/edu-content', area.id]);
+      expect(router.navigate).toHaveBeenCalledWith(['/edu-content', area.id]);
     });
 
     it('should open eduContent', () => {
@@ -219,11 +218,11 @@ describe('QuickLinkViewModel', () => {
         id: 4,
         learningAreaId: 7
       });
-      const spy = jest.spyOn(router, 'navigate');
+      router.navigate = jest.fn();
 
       quickLinkViewModel.openSearch(favorite, QuickLinkTypeEnum.FAVORITES);
 
-      expect(spy).toHaveBeenCalledWith(
+      expect(router.navigate).toHaveBeenCalledWith(
         ['/edu-content', favorite.learningAreaId, 'term'],
         { queryParams: { favorite_id: favorite.id } }
       );
@@ -235,11 +234,11 @@ describe('QuickLinkViewModel', () => {
         id: 4,
         learningAreaId: 7
       }) as HistoryInterface;
-      const spy = jest.spyOn(router, 'navigate');
+      router.navigate = jest.fn();
 
       quickLinkViewModel.openSearch(history, QuickLinkTypeEnum.HISTORY);
 
-      expect(spy).toHaveBeenCalledWith(
+      expect(router.navigate).toHaveBeenCalledWith(
         ['/edu-content', history.learningAreaId, 'term'],
         { queryParams: { history_id: history.id } }
       );
