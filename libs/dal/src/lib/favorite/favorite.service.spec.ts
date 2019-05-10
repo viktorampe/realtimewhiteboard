@@ -72,7 +72,11 @@ describe('FavoriteService', () => {
         .fn()
         .mockReturnValue(of(mockFavorite));
 
-      const response = favoriteService.updateFavorite(mockUserId, mockFavorite);
+      const response = favoriteService.updateFavorite(
+        mockUserId,
+        mockFavorite.id,
+        mockFavorite
+      );
 
       expect(personApi.updateByIdFavorites).toHaveBeenCalledWith(
         mockUserId,

@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import {
+  AUTH_SERVICE_TOKEN,
   BundleActions,
   BundleFixture,
   BundleInterface,
@@ -107,7 +108,7 @@ describe('QuickLinkViewModel', () => {
     new FavoriteActions.UpdateFavorite({
       userId: mockUserId,
       favorite: { changes: mockFavorites[0] } as Update<FavoriteInterface>,
-      handleErrorAutomatically: false
+      useCustomErrorHandler: false
     }),
     new FavoriteActions.DeleteFavorite({
       id: mockFavorites[0].id,
@@ -174,7 +175,11 @@ describe('QuickLinkViewModel', () => {
           EffectFeedbackReducer
         ])
       ],
-      providers: [Store, QuickLinkViewModel]
+      providers: [
+        Store,
+        QuickLinkViewModel,
+        { provide: AUTH_SERVICE_TOKEN, useValue: { userId: 1 } }
+      ]
     });
 
     quickLinkViewModel = TestBed.get(QuickLinkViewModel);
@@ -272,4 +277,35 @@ describe('QuickLinkViewModel', () => {
     store.dispatch(new TaskActions.TasksLoaded({ tasks: mockTasks }));
     store.dispatch(new BundleActions.BundlesLoaded({ bundles: mockBundles }));
   }
+  describe('action handlers', () => {
+    it('should dispatch an update favorite action', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+      const expectedAction = new FavoriteActions.UpdateFavorite({
+        userId: 1,
+        favorite: {
+          id: 1,
+          changes: { name: 'foo' }
+        },
+        useCustomErrorHandler: true
+      });
+      quickLinkViewModel.update(1, 'foo', QuickLinkTypeEnum.FAVORITES);
+      expect(spy).toHaveBeenCalledWith(expectedAction);
+    });
+    it('should dispatch a delete favorite action', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+      const expectedAction = new FavoriteActions.DeleteFavorite({
+        userId: 1,
+        id: 1,
+        useCustomErrorHandler: true
+      });
+      quickLinkViewModel.delete(1, QuickLinkTypeEnum.FAVORITES);
+      expect(spy).toHaveBeenCalledWith(expectedAction);
+    });
+    it('should not dispatch if the mode is not supported ', () => {
+      const spy = jest.spyOn(store, 'dispatch');
+      quickLinkViewModel.delete(1, 'bar' as QuickLinkTypeEnum);
+      quickLinkViewModel.update(1, 'foo', 'bar' as QuickLinkTypeEnum);
+      expect(spy).not.toHaveBeenCalled();
+    });
+  });
 });
