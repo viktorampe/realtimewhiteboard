@@ -60,15 +60,13 @@ describe('QuickLinkComponent', () => {
         { provide: MatDialogRef, useValue: { close: () => {} } },
         { provide: MatIconRegistry, useClass: MockMatIconRegistry }
       ]
-    })
-      .overrideComponent(QuickLinkComponent, {
-        set: {
-          providers: [
-            { provide: QuickLinkViewModel, useClass: MockQuickLinkViewModel }
-          ]
-        }
-      })
-      .compileComponents();
+    }).overrideComponent(QuickLinkComponent, {
+      set: {
+        providers: [
+          { provide: QuickLinkViewModel, useClass: MockQuickLinkViewModel }
+        ]
+      }
+    });
   }));
 
   beforeEach(() => {
@@ -199,7 +197,7 @@ describe('QuickLinkComponent', () => {
 
         expect(listItemLinks.length).toBe(1);
         expect(listItemLinks[0].nativeElement.textContent.trim()).toBe(
-          'toon oplossing'
+          'Toon oplossing'
         );
       });
 
@@ -240,10 +238,10 @@ describe('QuickLinkComponent', () => {
         listItemButtons[0].triggerEventHandler('click', null);
         expect(component.update).toHaveBeenCalled();
 
-        // manage actions - delete
-        spyOn(component, 'delete');
+        // manage actions - remove
+        spyOn(component, 'remove');
         listItemButtons[1].triggerEventHandler('click', null);
-        expect(component.delete).toHaveBeenCalled();
+        expect(component.remove).toHaveBeenCalled();
       }));
     });
   });
@@ -357,7 +355,7 @@ describe('QuickLinkComponent', () => {
         const mockOpenAsExerciseFunction = () => {};
         const mockOpenAsSolutionFunction = () => {};
         const mockUpdateFunction = () => {};
-        const mockDeleteFunction = () => {};
+        const mockRemoveFunction = () => {};
 
         beforeEach(() => {
           // replace functions that should be added as handlers with mocks
@@ -367,7 +365,7 @@ describe('QuickLinkComponent', () => {
           quickLinkActions.openAsExercise.handler = mockOpenAsExerciseFunction;
           quickLinkActions.openAsSolution.handler = mockOpenAsSolutionFunction;
           quickLinkActions.edit.handler = mockUpdateFunction;
-          quickLinkActions.delete.handler = mockDeleteFunction;
+          quickLinkActions.remove.handler = mockRemoveFunction;
         });
 
         it('should add a defaultAction', () => {
@@ -408,7 +406,7 @@ describe('QuickLinkComponent', () => {
           const expectedAlternativeOpenActions = [
             {
               actionType: 'open',
-              label: 'toon oplossing',
+              label: 'Toon oplossing',
               icon: 'exercise:finished',
               tooltip: 'open oefening met oplossingen',
               handler: mockOpenAsSolutionFunction
@@ -445,7 +443,7 @@ describe('QuickLinkComponent', () => {
               label: 'Verwijderen',
               icon: 'verwijder',
               tooltip: 'item verwijderen',
-              handler: mockDeleteFunction
+              handler: mockRemoveFunction
             }
           ];
 

@@ -7,6 +7,8 @@
 
 .quick-link {
   &__item {
+    text-align: left;
+
     &__title {
       height: 100%;
       margin-left: 4px;
@@ -14,14 +16,16 @@
       align-items: center;
     }
 
-    text-align: left;
-
     &__actions {
       justify-self: flex-end;
       display: flex;
 
       &__icon {
         margin: 8px;
+      }
+
+      &__divider {
+        margin: 0px 8px;
       }
 
       &--links {

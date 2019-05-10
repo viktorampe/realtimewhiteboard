@@ -39,28 +39,28 @@ export class QuickLinkComponent implements OnInit {
       label: 'Openen',
       icon: 'exercise:open',
       tooltip: 'open oefening zonder oplossingen',
-      handler: input => this.openAsExercise(input)
+      handler: (input: QuickLinkInterface): void => this.openAsExercise(input)
     },
     openAsSolution: {
       actionType: 'open',
-      label: 'toon oplossing',
+      label: 'Toon oplossing',
       icon: 'exercise:finished',
       tooltip: 'open oefening met oplossingen',
-      handler: input => this.openAsSolution(input)
+      handler: (input: QuickLinkInterface): void => this.openAsSolution(input)
     },
     edit: {
       actionType: 'manage',
       label: 'Bewerken',
       icon: 'edit',
       tooltip: 'naam aanpassen',
-      handler: input => this.update(input)
+      handler: (input: QuickLinkInterface): void => this.update(input)
     },
-    delete: {
+    remove: {
       actionType: 'manage',
       label: 'Verwijderen',
       icon: 'verwijder',
       tooltip: 'item verwijderen',
-      handler: input => this.delete(input)
+      handler: (input: QuickLinkInterface): void => this.remove(input)
     }
   };
 
@@ -97,8 +97,8 @@ export class QuickLinkComponent implements OnInit {
     console.log('update', quickLink);
   }
 
-  public delete(quickLink: QuickLinkInterface) {
-    console.log('delete', quickLink);
+  public remove(quickLink: QuickLinkInterface) {
+    console.log('remove', quickLink);
     this.quickLinkViewModel.delete(quickLink.id, this.data.mode);
   }
 
@@ -152,7 +152,7 @@ export class QuickLinkComponent implements OnInit {
       ...value,
       defaultAction: this.getDefaultAction(value),
       alternativeOpenActions: this.getAlternativeOpenActions(value),
-      manageActions: [this.quickLinkActions.edit, this.quickLinkActions.delete]
+      manageActions: [this.quickLinkActions.edit, this.quickLinkActions.remove]
     };
   }
 
@@ -179,7 +179,7 @@ export class QuickLinkComponent implements OnInit {
     a: QuickLinkInterface,
     b: QuickLinkInterface
   ): number {
-    return b.created.getTime() - a.created.getTime(); // sorting descending
+    return new Date(b.created).getTime() - new Date(a.created).getTime(); // sorting descending
   }
 }
 
