@@ -136,8 +136,7 @@ describe('LinkedPersons Reducer', () => {
       const startState = createState(persons, true);
       const action = new TeacherStudentActions.LinkTeacherStudent({
         publicKey: 'foo',
-        userId: 1,
-        handleErrorAutomatically: true
+        userId: 1
       });
       const result = reducer(startState, action);
       expect(result).toEqual(createState(persons, false));

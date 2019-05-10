@@ -1,6 +1,6 @@
 // tslint:disable:nx-enforce-module-boundaries
 // tslint:disable:member-ordering
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { NavigationEnd, Router } from '@angular/router';
 import {
@@ -35,6 +35,7 @@ import {
   QuickLinkComponent,
   QuickLinkTypeEnum
 } from '@campus/shared';
+import { ContentEditableComponent } from '@campus/ui';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -51,6 +52,9 @@ export class LoginpageComponent implements OnInit {
   currentUser: Observable<any>;
   route$: Observable<string[]>;
   response: Observable<any>;
+
+  @ViewChild(ContentEditableComponent)
+  contentEditable: ContentEditableComponent;
 
   private myFavorite: FavoriteInterface = {
     type: FavoriteTypesEnum.EDUCONTENT,
@@ -127,6 +131,14 @@ export class LoginpageComponent implements OnInit {
       });
   }
 
+  toggleEditable() {
+    this.contentEditable.active = !this.contentEditable.active;
+  }
+
+  textChanged(text: string) {
+    console.log('ContentEditable was changed, new text: ' + text);
+  }
+
   loadStore() {
     const userId = this.authService.userId;
 
@@ -156,8 +168,8 @@ export class LoginpageComponent implements OnInit {
 
     this.response = this.favoriteService.updateFavorite(
       this.authService.userId,
+      favorite.id,
       {
-        ...favorite,
         name: favorite.name + 'x'
       }
     );

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { map } from 'rxjs/operators';
+import { QuickLinkTypeEnum } from '../components/quick-link/quick-link-type.enum';
 import { AlertToNotificationItemPipe } from '../pipes/alert-to-notification/alert-to-notification-pipe';
 import { HeaderViewModel } from './header.viewmodel';
 
@@ -38,5 +39,13 @@ export class HeaderComponent implements OnInit {
 
   onMenuClick() {
     this.headerViewModel.toggleSideNav();
+  }
+
+  onManageFavoritesClick(): void {
+    this.headerViewModel.openDialog(QuickLinkTypeEnum.FAVORITES);
+  }
+
+  onManageHistoryClick(): void {
+    this.headerViewModel.openDialog(QuickLinkTypeEnum.HISTORY);
   }
 }

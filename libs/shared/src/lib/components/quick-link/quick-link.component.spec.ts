@@ -192,7 +192,7 @@ describe('QuickLinkComponent', () => {
 
         expect(listItemLinks.length).toBe(1);
         expect(listItemLinks[0].nativeElement.textContent.trim()).toBe(
-          'met oplossing'
+          'toon oplossing'
         );
       });
 
@@ -401,7 +401,7 @@ describe('QuickLinkComponent', () => {
           const expectedAlternativeOpenActions = [
             {
               actionType: 'open',
-              label: 'met oplossing',
+              label: 'toon oplossing',
               icon: 'exercise:finished',
               tooltip: 'open oefening met oplossingen',
               handler: mockOpenAsSolutionFunction
