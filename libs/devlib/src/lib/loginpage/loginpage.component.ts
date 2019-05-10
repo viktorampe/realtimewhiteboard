@@ -102,9 +102,6 @@ export class LoginpageComponent implements OnInit {
     if (this.currentUser) {
       this.loadStore();
     }
-    setTimeout(() => {
-      this.openQuickLinkManager();
-    });
   }
 
   getCurrentUser() {

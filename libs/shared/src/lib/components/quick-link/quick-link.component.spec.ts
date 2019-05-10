@@ -74,15 +74,22 @@ describe('QuickLinkComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(QuickLinkComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
 
     // provided on component level
     quickLinkViewModel = component['quickLinkViewModel'];
 
     // in the mockViewmodel this is a BehaviorSubject
-    vmQuickLinks$ = quickLinkViewModel.quickLinks$ as BehaviorSubject<
+    // in the mockViewmodel the mode parameter isn't used
+    vmQuickLinks$ = quickLinkViewModel.getQuickLinks$(null) as BehaviorSubject<
       FavoriteInterface[] | HistoryInterface[]
     >;
+    // from now on, this particular instance of the stream is always returned
+    quickLinkViewModel.getQuickLinks$ = jest
+      .fn()
+      .mockReturnValue(vmQuickLinks$);
+    // make component 'attach' to mocked stream
+    component['setupStreams']();
+    fixture.detectChanges();
   });
 
   it('should create', () => {

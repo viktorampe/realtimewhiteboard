@@ -107,22 +107,18 @@ export class QuickLinkViewModel {
           taskDict,
           bundleDict
         ]) =>
-          quickLinks.map(qL => {
-            if (qL.learningAreaId) {
-              qL.learningArea = learningAreaDict[qL.learningAreaId];
-            }
-            if (qL.eduContentId) {
-              qL.eduContent = eduContentDict[qL.eduContentId];
-            }
-            if (qL.taskId) {
-              qL.task = taskDict[qL.taskId];
-            }
-            if (qL.bundleId) {
-              qL.bundle = bundleDict[qL.bundleId];
-            }
-
-            return qL;
-          })
+          quickLinks.map(qL => ({
+            ...qL,
+            // add relation data
+            learningArea: qL.learningAreaId
+              ? learningAreaDict[qL.learningAreaId]
+              : undefined,
+            eduContent: qL.eduContentId
+              ? eduContentDict[qL.eduContentId]
+              : undefined,
+            task: qL.taskId ? taskDict[qL.taskId] : undefined,
+            bundle: qL.bundleId ? bundleDict[qL.bundleId] : undefined
+          }))
       )
     );
   }

@@ -10,15 +10,12 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { QuickLinkTypeEnum } from './quick-link-type.enum';
 import { QuickLinkViewModel } from './quick-link.viewmodel';
-import { MockQuickLinkViewModel } from './quick-link.viewmodel.mock';
 
 @Component({
   selector: 'campus-quick-link',
   templateUrl: './quick-link.component.html',
   styleUrls: ['./quick-link.component.scss'],
-  providers: [{ provide: QuickLinkViewModel, useClass: MockQuickLinkViewModel }]
-  // TODO: use actual viewModel
-  // providers: [  QuickLinkViewModel ]
+  providers: [QuickLinkViewModel]
 })
 export class QuickLinkComponent implements OnInit {
   public contentData$: Observable<ContentDataInterface[]>;
@@ -106,10 +103,9 @@ export class QuickLinkComponent implements OnInit {
   }
 
   private setupStreams() {
-    // TODO: use getQuickLinks$() from viewmodel when merged
-    this.contentData$ = this.quickLinkViewModel.quickLinks$.pipe(
-      map(qL => this.convertToQuickLinkData(qL))
-    );
+    this.contentData$ = this.quickLinkViewModel
+      .getQuickLinks$(this.data.mode)
+      .pipe(map(qL => this.convertToQuickLinkData(qL)));
 
     this.feedback$ = this.quickLinkViewModel.feedback$;
   }
