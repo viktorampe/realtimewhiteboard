@@ -25,7 +25,6 @@ import {
 import { QuickLinkTypeEnum } from './quick-link-type.enum';
 import { QuickLinkViewModel } from './quick-link.viewmodel';
 
-// file.only
 describe('QuickLinkViewModel', () => {
   let quickLinkViewModel: QuickLinkViewModel;
   let store: Store<DalState>;
