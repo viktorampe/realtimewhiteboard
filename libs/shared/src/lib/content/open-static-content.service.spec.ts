@@ -45,4 +45,12 @@ describe('OpenStaticContentServiceService', () => {
       'http://www.frankdeboosere.be'
     );
   });
+
+  it('should open a window for the provided content with the stream param', () => {
+    service.open(new EduContentFixture({ id: 1 }), true);
+    expect(mockWindow.open).toHaveBeenCalledTimes(1);
+    expect(mockWindow.open).toHaveBeenCalledWith(
+      'http://foo.bar:5000/api/eduContents/1/redirectURL?stream=true'
+    );
+  });
 });

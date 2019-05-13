@@ -101,7 +101,7 @@ export class ScormExerciseService implements ScormExerciseServiceInterface {
   }
 
   /**
-   * Only open an new window, when the current exercise changes the eduConent
+   * Only open an new window, when the current exercise changes the eduContent
    */
   private listenToStoreForNewExercise() {
     this.store
@@ -112,7 +112,7 @@ export class ScormExerciseService implements ScormExerciseServiceInterface {
       )
       .subscribe(newCurrentExercise => {
         this.scormApi.init(
-          newCurrentExercise.result.cmi,
+          newCurrentExercise.result && newCurrentExercise.result.cmi,
           newCurrentExercise.cmiMode
         );
         this.openNewUrl(newCurrentExercise.url);

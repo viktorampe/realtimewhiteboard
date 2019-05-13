@@ -5,7 +5,7 @@
   ></campus-filter-text-input>
   <mat-dialog-content>
     <mat-action-list *ngIf="(contentData$ | async) as contentData">
-      <ng-container *ngFor="let category of contentData; last as isLast">
+      <ng-container *ngFor="let category of contentData">
         <h3 mat-subheader>{{ category.title }}</h3>
         <button
           mat-list-item
@@ -54,8 +54,6 @@
             </ng-container>
           </div>
         </button>
-
-        <mat-divider *ngIf="!isLast"></mat-divider>
       </ng-container>
     </mat-action-list>
   </mat-dialog-content>
