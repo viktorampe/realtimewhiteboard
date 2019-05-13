@@ -2,6 +2,7 @@ import { FavoriteInterface, FavoriteTypesEnum } from '../+models';
 
 export class FavoriteFixture implements FavoriteInterface {
   // defaults
+  id: 1;
   type = FavoriteTypesEnum.AREA;
   created = new Date();
   name = 'foo';
