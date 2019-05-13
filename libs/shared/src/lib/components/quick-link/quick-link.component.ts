@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import {
+  EduContent,
   EffectFeedbackInterface,
   FavoriteInterface,
   FavoriteTypesEnum,
@@ -34,19 +35,72 @@ export class QuickLinkComponent implements OnInit {
   private quickLinkActions: {
     [key: string]: QuickLinkActionInterface;
   } = {
-    openAsExercise: {
+    openEduContentAsExercise: {
       actionType: 'open',
       label: 'Openen',
       icon: 'exercise:open',
       tooltip: 'open oefening zonder oplossingen',
-      handler: (input: QuickLinkInterface): void => this.openAsExercise(input)
+      handler: (input: QuickLinkInterface): void =>
+        this.openEduContentAsExercise(input)
     },
-    openAsSolution: {
+    openEduContentAsSolution: {
       actionType: 'open',
       label: 'Toon oplossing',
       icon: 'exercise:finished',
       tooltip: 'open oefening met oplossingen',
-      handler: (input: QuickLinkInterface): void => this.openAsSolution(input)
+      handler: (input: QuickLinkInterface): void =>
+        this.openEduContentAsSolution(input)
+    },
+    openEduContentAsStream: {
+      actionType: 'open',
+      label: 'Openen',
+      icon: 'lesmateriaal',
+      tooltip: 'Open het lesmateriaal',
+      handler: (input: QuickLinkInterface): void =>
+        this.openEduContentAsStream(input)
+    },
+    openEduContentAsDownload: {
+      actionType: 'open',
+      label: 'Downloaden',
+      icon: 'download',
+      tooltip: 'Download het lesmateriaal',
+      handler: (input: QuickLinkInterface): void =>
+        this.openEduContentAsDownload(input)
+    },
+    openBundle: {
+      actionType: 'open',
+      label: 'Openen',
+      icon: 'bundle',
+      tooltip: 'Navigeer naar de bundel pagina',
+      handler: (input: QuickLinkInterface): void => this.openBundle(input)
+    },
+    openTask: {
+      actionType: 'open',
+      label: 'Openen',
+      icon: 'task',
+      tooltip: 'Navigeer naar de taken pagina',
+      handler: (input: QuickLinkInterface): void => this.openTask(input)
+    },
+    openArea: {
+      actionType: 'open',
+      label: 'Openen',
+      icon: 'lesmateriaal',
+      tooltip: 'Navigeer naar de leergebied pagina',
+      handler: (input: QuickLinkInterface): void => this.openArea(input)
+    },
+    openBoeke: {
+      actionType: 'open',
+      label: 'Openen',
+      icon: 'boeken',
+      tooltip: 'Open het bordboek',
+      handler: (input: QuickLinkInterface): void => this.openBoeke(input)
+    },
+    openSearch: {
+      actionType: 'open',
+      label: 'Openen',
+      icon: 'magnifier',
+      tooltip: 'Open de zoekopdracht',
+      handler: (input: QuickLinkInterface): void => this.openSearch(input)
     },
     edit: {
       actionType: 'manage',
@@ -58,7 +112,7 @@ export class QuickLinkComponent implements OnInit {
     remove: {
       actionType: 'manage',
       label: 'Verwijderen',
-      icon: 'verwijder',
+      icon: 'delete',
       tooltip: 'item verwijderen',
       handler: (input: QuickLinkInterface): void => this.remove(input)
     }
@@ -85,21 +139,52 @@ export class QuickLinkComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  public openAsExercise(quickLink: QuickLinkInterface) {
-    console.log('openExercise', quickLink);
+  public openEduContentAsExercise(quickLink: QuickLinkInterface) {
+    this.quickLinkViewModel.openExercise(quickLink.eduContent);
   }
 
-  public openAsSolution(quickLink: QuickLinkInterface) {
-    console.log('openAsSolution', quickLink);
+  public openEduContentAsSolution(quickLink: QuickLinkInterface) {
+    this.quickLinkViewModel.openExercise(quickLink.eduContent, true);
+  }
+
+  public openEduContentAsStream(quickLink: QuickLinkInterface) {
+    this.quickLinkViewModel.openStaticContent(quickLink.eduContent, true);
+  }
+
+  public openEduContentAsDownload(quickLink: QuickLinkInterface) {
+    this.quickLinkViewModel.openStaticContent(quickLink.eduContent);
+  }
+
+  public openBundle(quickLink: QuickLinkInterface) {
+    this.quickLinkViewModel.openBundle(quickLink.bundle);
+  }
+
+  public openTask(quickLink: QuickLinkInterface) {
+    this.quickLinkViewModel.openTask(quickLink.task);
+  }
+
+  public openArea(quickLink: QuickLinkInterface) {
+    this.quickLinkViewModel.openArea(quickLink.learningArea);
+  }
+
+  public openSearch(quickLink: QuickLinkInterface) {
+    this.quickLinkViewModel.openSearch(quickLink, this.data.mode);
+  }
+
+  public openBoeke(quickLink: QuickLinkInterface) {
+    this.quickLinkViewModel.openStaticContent(quickLink.eduContent);
   }
 
   public update(quickLink: QuickLinkInterface) {
-    console.log('update', quickLink);
+    this.quickLinkViewModel.update(
+      quickLink.id,
+      quickLink.name,
+      this.data.mode
+    );
   }
 
   public remove(quickLink: QuickLinkInterface) {
-    console.log('remove', quickLink);
-    this.quickLinkViewModel.delete(quickLink.id, this.data.mode);
+    this.quickLinkViewModel.remove(quickLink.id, this.data.mode);
   }
 
   public onBannerDismiss(event) {
@@ -121,23 +206,20 @@ export class QuickLinkComponent implements OnInit {
       .reduce(
         // group into categories
         (acc, value) => {
-          const found = acc.find(cD => cD.type === value.type);
-          let newObject: ContentDataInterface;
-          if (found) {
-            acc = acc.filter(obj => obj !== found);
-            newObject = {
-              ...found,
-              quickLinks: [...found.quickLinks, this.convertToQuickLink(value)]
-            };
-          } else {
-            newObject = {
+          let category = acc.find(cD => cD.type === value.type);
+
+          if (!category) {
+            category = {
               type: value.type,
               title: value.type, // TODO: add actual name -> function? enum?
-              quickLinks: [this.convertToQuickLink(value)]
+              quickLinks: []
             };
+            acc.push(category);
           }
 
-          return [...acc, newObject];
+          category.quickLinks.push(this.convertToQuickLink(value));
+
+          return acc;
         },
         [] as ContentDataInterface[]
       )
@@ -154,6 +236,7 @@ export class QuickLinkComponent implements OnInit {
   ): QuickLinkInterface {
     return {
       ...value,
+      eduContent: value.eduContent as EduContent,
       defaultAction: this.getDefaultAction(value),
       alternativeOpenActions: this.getAlternativeOpenActions(value),
       manageActions: [this.quickLinkActions.edit, this.quickLinkActions.remove]
@@ -161,15 +244,51 @@ export class QuickLinkComponent implements OnInit {
   }
 
   private getDefaultAction(
-    value: FavoriteInterface | HistoryInterface
+    quickLink: FavoriteInterface | HistoryInterface
   ): QuickLinkActionInterface {
-    return this.quickLinkActions.openAsExercise;
+    switch (quickLink.type) {
+      case FavoriteTypesEnum.AREA:
+      case 'area':
+        return this.quickLinkActions.openArea;
+      case FavoriteTypesEnum.BOEKE:
+      case 'boek-e':
+        return this.quickLinkActions.openBoeke;
+      case FavoriteTypesEnum.EDUCONTENT:
+      case 'educontent':
+        const eduContent = quickLink.eduContent as EduContent;
+        if (eduContent.contentType === 'exercise') {
+          return this.quickLinkActions.openEduContentAsExercise;
+        } else if (eduContent.streamable) {
+          return this.quickLinkActions.openEduContentAsStream;
+        } else {
+          return this.quickLinkActions.openEduContentAsDownload;
+        }
+      case FavoriteTypesEnum.BUNDLE:
+      case 'bundle':
+        return this.quickLinkActions.openBundle;
+      case FavoriteTypesEnum.TASK:
+      case 'task':
+        return this.quickLinkActions.openTask;
+      case FavoriteTypesEnum.SEARCH:
+      case 'search':
+        return this.quickLinkActions.openSearch;
+    }
   }
 
   private getAlternativeOpenActions(
-    value: FavoriteInterface | HistoryInterface
+    quickLink: FavoriteInterface | HistoryInterface
   ): QuickLinkActionInterface[] {
-    return [this.quickLinkActions.openAsSolution];
+    switch (quickLink.type) {
+      case FavoriteTypesEnum.EDUCONTENT:
+      case 'educontent':
+        const eduContent = quickLink.eduContent as EduContent;
+        if (eduContent.contentType === 'exercise') {
+          return [this.quickLinkActions.openEduContentAsSolution];
+        } else if (eduContent.streamable) {
+          return [this.quickLinkActions.openEduContentAsDownload];
+        }
+    }
+    return [];
   }
 
   private quickLinkDataCategorySorter(
@@ -197,6 +316,8 @@ interface QuickLinkInterface extends FavoriteInterface, HistoryInterface {
   defaultAction: QuickLinkActionInterface;
   alternativeOpenActions: QuickLinkActionInterface[];
   manageActions: QuickLinkActionInterface[];
+  // override eduContent property -> is always cast to EduContent
+  eduContent: EduContent;
 }
 
 interface QuickLinkActionInterface {

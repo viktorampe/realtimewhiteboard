@@ -65,4 +65,10 @@ export class EduContent implements EduContentInterface, ContentInterface {
       ? this.publishedEduContentMetadata.methods.map(m => 'method:' + m.icon)
       : [];
   }
+  get streamable(): boolean {
+    return (
+      this.publishedEduContentMetadata &&
+      this.publishedEduContentMetadata.streamable
+    );
+  }
 }
