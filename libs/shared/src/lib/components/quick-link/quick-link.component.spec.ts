@@ -32,7 +32,7 @@ import {
   LearningAreaFixture,
   TaskFixture
 } from '@campus/dal';
-import { MockMatIconRegistry } from '@campus/testing';
+import { MockDate, MockMatIconRegistry } from '@campus/testing';
 import {
   ButtonComponent,
   ContentEditableComponent,
@@ -52,6 +52,7 @@ describe('QuickLinkComponent', () => {
   let fixture: ComponentFixture<QuickLinkComponent>;
   let quickLinkViewModel: QuickLinkViewModel;
   let vmQuickLinks$: BehaviorSubject<FavoriteInterface[] | HistoryInterface[]>;
+  let dateMock: MockDate;
 
   const mockInjectedData = { mode: 'foo' };
 
@@ -80,6 +81,14 @@ describe('QuickLinkComponent', () => {
       }
     });
   }));
+
+  beforeAll(() => {
+    dateMock = new MockDate();
+  });
+
+  afterAll(() => {
+    dateMock.returnRealDate();
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(QuickLinkComponent);
@@ -495,7 +504,7 @@ describe('QuickLinkComponent', () => {
 
           expect(listItemButtons.length).toBe(2);
           expect(listItemButtons[0].iconClass).toBe('edit');
-          expect(listItemButtons[1].iconClass).toBe('verwijder');
+          expect(listItemButtons[1].iconClass).toBe('delete');
         });
 
         it('should call the correct action handler on element click', fakeAsync(() => {
@@ -657,7 +666,7 @@ describe('QuickLinkComponent', () => {
               const expectedDefaultAction = {
                 actionType: 'open',
                 label: 'Openen',
-                icon: 'learningarea',
+                icon: 'lesmateriaal',
                 tooltip: 'Navigeer naar de leergebied pagina',
                 handler: mockOpenAreaFunction
               };
@@ -792,7 +801,7 @@ describe('QuickLinkComponent', () => {
               const expectedDefaultAction = {
                 actionType: 'open',
                 label: 'Openen',
-                icon: 'learningarea', // TODO What icon to use?
+                icon: 'boeken',
                 tooltip: 'Open het bordboek',
                 handler: mockOpenBoekeFunction
               };
@@ -837,7 +846,7 @@ describe('QuickLinkComponent', () => {
               const expectedDefaultAction = {
                 actionType: 'open',
                 label: 'Openen',
-                icon: 'learningarea', // TODO What icon to use?
+                icon: 'magnifier',
                 tooltip: 'Open de zoekopdracht',
                 handler: mockOpenSearchFunction
               };
@@ -970,7 +979,7 @@ describe('QuickLinkComponent', () => {
                   {
                     actionType: 'open',
                     label: 'Downloaden',
-                    icon: 'lesmateriaal', // TODO What icon to use?
+                    icon: 'download',
                     tooltip: 'Download het lesmateriaal',
                     handler: mockOpenEduContentAsDownloadFunction
                   }
@@ -1009,7 +1018,7 @@ describe('QuickLinkComponent', () => {
                 const expectedDefaultAction = {
                   actionType: 'open',
                   label: 'Downloaden',
-                  icon: 'lesmateriaal', // TODO What icon to use?
+                  icon: 'download',
                   tooltip: 'Download het lesmateriaal',
                   handler: mockOpenEduContentAsDownloadFunction
                 };
@@ -1069,7 +1078,7 @@ describe('QuickLinkComponent', () => {
               {
                 actionType: 'manage',
                 label: 'Verwijderen',
-                icon: 'verwijder',
+                icon: 'delete',
                 tooltip: 'item verwijderen',
                 handler: mockRemoveFunction
               }
@@ -1170,8 +1179,7 @@ describe('QuickLinkComponent', () => {
       expect(quickLinkViewModel.openExercise).toHaveBeenCalled();
       expect(quickLinkViewModel.openExercise).toHaveBeenCalledTimes(1);
       expect(quickLinkViewModel.openExercise).toHaveBeenCalledWith(
-        mockQuickLink.eduContent,
-        false
+        mockQuickLink.eduContent
       );
     });
 
@@ -1221,8 +1229,7 @@ describe('QuickLinkComponent', () => {
       expect(quickLinkViewModel.openStaticContent).toHaveBeenCalled();
       expect(quickLinkViewModel.openStaticContent).toHaveBeenCalledTimes(1);
       expect(quickLinkViewModel.openStaticContent).toHaveBeenCalledWith(
-        mockQuickLink.eduContent,
-        false
+        mockQuickLink.eduContent
       );
     });
 
@@ -1296,13 +1303,12 @@ describe('QuickLinkComponent', () => {
 
       quickLinkViewModel.openStaticContent = jest.fn();
 
-      component.openEduContentAsDownload(mockQuickLink);
+      component.openBoeke(mockQuickLink);
 
       expect(quickLinkViewModel.openStaticContent).toHaveBeenCalled();
       expect(quickLinkViewModel.openStaticContent).toHaveBeenCalledTimes(1);
       expect(quickLinkViewModel.openStaticContent).toHaveBeenCalledWith(
-        mockQuickLink.eduContent,
-        false
+        mockQuickLink.eduContent
       );
     });
 
