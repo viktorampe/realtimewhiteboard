@@ -103,7 +103,6 @@ export class QuickLinkComponent implements OnInit {
   }
 
   public onBannerDismiss(event) {
-    console.log(event);
     this.quickLinkViewModel.onFeedbackDismiss(event);
   }
 
