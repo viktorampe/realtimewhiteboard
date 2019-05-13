@@ -11,7 +11,6 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { QuickLinkTypeEnum } from './quick-link-type.enum';
 import { QuickLinkViewModel } from './quick-link.viewmodel';
-import { MockQuickLinkViewModel } from './quick-link.viewmodel.mock';
 
 @Component({
   selector: 'campus-quick-link',
@@ -338,6 +337,8 @@ export class QuickLinkComponent implements OnInit {
   }
 
   private getCategoryTitle(quickLink: FavoriteInterface | HistoryInterface) {
+    console.log(quickLink);
+
     return this.categories.has(quickLink.type)
       ? this.categories.get(quickLink.type).label
       : quickLink.type;

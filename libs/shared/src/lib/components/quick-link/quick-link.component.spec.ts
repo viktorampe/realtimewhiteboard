@@ -22,6 +22,7 @@ import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
   BundleFixture,
+  EduContent,
   EduContentFixture,
   EduContentMetadataFixture,
   FavoriteFixture,
@@ -575,9 +576,21 @@ describe('QuickLinkComponent', () => {
           const mockFavorites = [
             new FavoriteFixture({ type: FavoriteTypesEnum.TASK }),
             new FavoriteFixture({ type: 'type not in list' }),
-            new FavoriteFixture({ type: FavoriteTypesEnum.BOEKE }),
+            new FavoriteFixture({
+              type: FavoriteTypesEnum.BOEKE,
+              eduContent: Object.assign(
+                new EduContent(),
+                new EduContentFixture()
+              )
+            }),
             new FavoriteFixture({ type: FavoriteTypesEnum.SEARCH }),
-            new FavoriteFixture({ type: FavoriteTypesEnum.EDUCONTENT }),
+            new FavoriteFixture({
+              type: FavoriteTypesEnum.EDUCONTENT,
+              eduContent: Object.assign(
+                new EduContent(),
+                new EduContentFixture()
+              )
+            }),
             new FavoriteFixture({ type: FavoriteTypesEnum.BUNDLE })
           ];
 
