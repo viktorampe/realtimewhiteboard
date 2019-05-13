@@ -82,7 +82,6 @@ export class EffectFeedback implements EffectFeedbackInterface {
     action: FeedbackTriggeringAction,
     message: string
   ): EffectFeedback {
-    console.log(action['payload']['useCustomErrorHandler']);
     return new EffectFeedback({
       id: uuid,
       triggerAction: action,
