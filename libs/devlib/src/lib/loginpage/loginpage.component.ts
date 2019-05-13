@@ -160,7 +160,6 @@ export class LoginpageComponent implements OnInit {
       this.authService.userId,
       favorite.id,
       {
-        ...favorite,
         name: favorite.name + 'x'
       }
     );
