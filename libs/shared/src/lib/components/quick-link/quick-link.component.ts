@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import {
   EduContent,
@@ -7,6 +7,8 @@ import {
   FavoriteTypesEnum,
   HistoryInterface
 } from '@campus/dal';
+import { FilterTextInputComponent } from '@campus/ui';
+import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { QuickLinkTypeEnum } from './quick-link-type.enum';
@@ -24,6 +26,12 @@ export class QuickLinkComponent implements OnInit {
   public feedback$: Observable<EffectFeedbackInterface>;
   public dialogTitle: string;
   public dialogTitleIcon: string;
+
+  @ViewChild(FilterTextInputComponent)
+  filterTextInput: FilterTextInputComponent<
+    QuickLinkInterface[],
+    QuickLinkInterface
+  >;
 
   private dialogTitles = new Map<
     QuickLinkTypeEnum,
@@ -123,17 +131,29 @@ export class QuickLinkComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA)
     public data: { mode: QuickLinkTypeEnum },
     private dialogRef: MatDialogRef<QuickLinkComponent>,
-    private quickLinkViewModel: QuickLinkViewModel
+    private quickLinkViewModel: QuickLinkViewModel,
+    @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface
   ) {}
 
   ngOnInit() {
     this.setupStreams();
+    this.filterTextInput.setFilterableItem(this);
 
     if (this.dialogTitles.has(this.data.mode)) {
       const titleData = this.dialogTitles.get(this.data.mode);
       this.dialogTitle = titleData.title;
       this.dialogTitleIcon = titleData.icon;
     }
+  }
+
+  filterFn(
+    source: QuickLinkInterface[],
+    searchText: string
+  ): QuickLinkInterface[] {
+    const filteredItems = this.filterService.filter(source, {
+      name: searchText
+    });
+    return filteredItems;
   }
 
   public closeDialog() {

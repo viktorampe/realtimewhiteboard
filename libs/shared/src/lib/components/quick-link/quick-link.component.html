@@ -2,6 +2,7 @@
   <campus-filter-text-input
     title__right
     theme="dark"
+    [source]="contentData$ | async"
   ></campus-filter-text-input>
   <mat-dialog-content>
     <mat-action-list *ngIf="(contentData$ | async) as contentData">
