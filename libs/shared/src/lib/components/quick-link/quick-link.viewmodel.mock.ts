@@ -1,13 +1,20 @@
 import { Injectable } from '@angular/core';
 import {
+  BundleInterface,
   DalActions,
+  EduContent,
+  EduContentFixture,
+  EduContentMetadataFixture,
   EffectFeedbackFixture,
   EffectFeedbackInterface,
   FavoriteFixture,
   FavoriteInterface,
   FavoriteTypesEnum,
+  HistoryInterface,
   LearningAreaFixture,
-  Priority
+  LearningAreaInterface,
+  Priority,
+  TaskInterface
 } from '@campus/dal';
 import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject } from 'rxjs';
@@ -24,7 +31,7 @@ export class MockQuickLinkViewModel
   public getQuickLinks$ = (mode: QuickLinkTypeEnum) =>
     new BehaviorSubject(this.getMockFavoriteQuickLinks());
   public update(id: number, name: string, mode: QuickLinkTypeEnum): void {}
-  public delete(id: number, mode: QuickLinkTypeEnum): void {}
+  public remove(id: number, mode: QuickLinkTypeEnum): void {}
 
   private getMockFavoriteQuickLinks(): FavoriteInterface[] {
     const mockCreatedDate = new Date(2019, 5, 7, 12, 0, 0, 0);
@@ -72,7 +79,9 @@ export class MockQuickLinkViewModel
           id: 1,
           icon: 'learning-area:polpo-aardrijkskunde'
         }),
-        created: new Date(mockCreatedDate.setHours(13))
+        created: new Date(mockCreatedDate.setHours(13)),
+        eduContentId: 1,
+        eduContent: new EduContentFixture({ contentType: 'exercise' })
       }),
       new FavoriteFixture({
         id: 5,
@@ -83,7 +92,14 @@ export class MockQuickLinkViewModel
           id: 19,
           icon: 'learning-area:polpo-wiskunde'
         }),
-        created: new Date(mockCreatedDate.setHours(16))
+        created: new Date(mockCreatedDate.setHours(16)),
+        eduContentId: 2,
+        eduContent: new EduContentFixture(
+          { id: 2, contentType: 'video' },
+          new EduContentMetadataFixture({
+            streamable: true
+          })
+        )
       }),
       new FavoriteFixture({
         id: 6,
@@ -117,6 +133,24 @@ export class MockQuickLinkViewModel
           icon: 'learning-area:polpo-wiskunde'
         }),
         created: new Date(mockCreatedDate.setHours(15))
+      }),
+      new FavoriteFixture({
+        id: 9,
+        name: 'Favorite_9',
+        type: FavoriteTypesEnum.EDUCONTENT,
+        learningAreaId: 19,
+        learningArea: new LearningAreaFixture({
+          id: 19,
+          icon: 'learning-area:polpo-wiskunde'
+        }),
+        created: new Date(mockCreatedDate.setHours(16)),
+        eduContentId: 2,
+        eduContent: new EduContentFixture(
+          { id: 2, contentType: 'video' },
+          new EduContentMetadataFixture({
+            streamable: false
+          })
+        )
       })
     ];
   }
@@ -145,4 +179,19 @@ export class MockQuickLinkViewModel
 
     return mockFeedBack;
   }
+
+  public openBundle(bundle: BundleInterface): void {}
+
+  public openTask(task: TaskInterface): void {}
+
+  public openArea(area: LearningAreaInterface): void {}
+
+  public openStaticContent(eduContent: EduContent, stream?: boolean): void {}
+
+  public openExercise(eduContent: EduContent, withSolution?: boolean): void {}
+
+  public openSearch(
+    quickLink: FavoriteInterface | HistoryInterface,
+    type: QuickLinkTypeEnum
+  ) {}
 }
