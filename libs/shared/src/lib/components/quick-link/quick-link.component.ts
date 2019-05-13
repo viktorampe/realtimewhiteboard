@@ -11,13 +11,13 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { QuickLinkTypeEnum } from './quick-link-type.enum';
 import { QuickLinkViewModel } from './quick-link.viewmodel';
-import { MockQuickLinkViewModel } from './quick-link.viewmodel.mock';
 
 @Component({
   selector: 'campus-quick-link',
   templateUrl: './quick-link.component.html',
   styleUrls: ['./quick-link.component.scss'],
-  providers: [{ provide: QuickLinkViewModel, useClass: MockQuickLinkViewModel }]
+  providers: [QuickLinkViewModel]
+  // providers: [{ provide: QuickLinkViewModel, useClass: MockQuickLinkViewModel }]
 })
 export class QuickLinkComponent implements OnInit {
   public contentData$: Observable<ContentDataInterface[]>;
@@ -322,7 +322,7 @@ interface QuickLinkInterface extends FavoriteInterface, HistoryInterface {
   defaultAction: QuickLinkActionInterface;
   alternativeOpenActions: QuickLinkActionInterface[];
   manageActions: QuickLinkActionInterface[];
-  // override eduContent property -> always cast to EduContent
+  // override eduContent property -> is always cast to EduContent
   eduContent: EduContent;
 }
 
