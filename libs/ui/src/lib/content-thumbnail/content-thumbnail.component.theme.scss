@@ -77,7 +77,8 @@
           padding: $ui-content-thumbnail_image--grid--padding;
         }
         & > campus-file-extension {
-          margin-top: -$ui-content-thumbnail_header--grid-height; // show underneath header
+          margin-top: -$ui-content-thumbnail_header--grid-height;
+          // show underneath header
         }
         & > mat-icon {
           height: $ui-content-thumbnail_image--grid-height;

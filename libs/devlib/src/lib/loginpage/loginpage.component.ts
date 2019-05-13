@@ -1,4 +1,3 @@
-// tslint:disable:nx-enforce-module-boundaries
 // tslint:disable:member-ordering
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material';
