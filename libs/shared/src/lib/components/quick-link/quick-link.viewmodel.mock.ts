@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import {
+  BundleInterface,
   DalActions,
+  EduContent,
   EduContentFixture,
   EduContentMetadataFixture,
   EffectFeedbackFixture,
@@ -8,8 +10,11 @@ import {
   FavoriteFixture,
   FavoriteInterface,
   FavoriteTypesEnum,
+  HistoryInterface,
   LearningAreaFixture,
-  Priority
+  LearningAreaInterface,
+  Priority,
+  TaskInterface
 } from '@campus/dal';
 import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject } from 'rxjs';
@@ -174,4 +179,19 @@ export class MockQuickLinkViewModel
 
     return mockFeedBack;
   }
+
+  public openBundle(bundle: BundleInterface): void {}
+
+  public openTask(task: TaskInterface): void {}
+
+  public openArea(area: LearningAreaInterface): void {}
+
+  public openStaticContent(eduContent: EduContent, stream?: boolean): void {}
+
+  public openExercise(eduContent: EduContent, withSolution?: boolean): void {}
+
+  public openSearch(
+    quickLink: FavoriteInterface | HistoryInterface,
+    type: QuickLinkTypeEnum
+  ) {}
 }
