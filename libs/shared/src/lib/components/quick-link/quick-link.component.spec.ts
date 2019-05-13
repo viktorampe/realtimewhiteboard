@@ -33,6 +33,7 @@ import {
 } from '@campus/dal';
 import { MockMatIconRegistry } from '@campus/testing';
 import { ButtonComponent, InfoPanelComponent, UiModule } from '@campus/ui';
+import { FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { hot } from '@nrwl/nx/testing';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -63,7 +64,11 @@ describe('QuickLinkComponent', () => {
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: mockInjectedData },
         { provide: MatDialogRef, useValue: { close: () => {} } },
-        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry },
+        {
+          provide: FILTER_SERVICE_TOKEN,
+          useValue: { filter: () => {} } // all injected items
+        }
       ]
     }).overrideComponent(QuickLinkComponent, {
       set: {
