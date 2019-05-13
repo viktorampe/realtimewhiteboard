@@ -13,6 +13,8 @@ import {
   EduContentActions,
   EduContentInterface,
   EduContentQueries,
+  EffectFeedback,
+  EffectFeedbackActions,
   EffectFeedbackInterface,
   EffectFeedbackQueries,
   FavoriteActions,
@@ -102,6 +104,25 @@ export class LoginpageComponent implements OnInit {
     if (this.currentUser) {
       this.loadStore();
     }
+  }
+
+  addErrorFeedback(): void {
+    const mockAction = new FavoriteActions.UpdateFavorite({
+      userId: this.authService.userId,
+      favorite: { id: 1, changes: { name: 'foo' } },
+      useCustomErrorHandler: true
+    });
+    const mockFeedBack = EffectFeedback.generateErrorFeedback(
+      'foo',
+      mockAction,
+      'Het is niet gelukt de favoriet te wijzigen.'
+    );
+
+    this.store.dispatch(
+      new EffectFeedbackActions.AddEffectFeedback({
+        effectFeedback: mockFeedBack
+      })
+    );
   }
 
   getCurrentUser() {
