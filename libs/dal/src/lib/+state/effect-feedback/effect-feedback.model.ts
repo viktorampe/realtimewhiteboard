@@ -6,9 +6,16 @@ export enum Priority {
   HIGH = 3
 }
 
-export interface EffectFeedbackInterface {
+export interface FeedbackTriggeringAction extends Action {
+  payload: FeedbackTriggeringPayload;
+}
+export interface FeedbackTriggeringPayload {
+  useCustomErrorHandler?: boolean;
+}
+
+export interface EffectFeedbackConstructorInterface {
   id: string;
-  triggerAction: Action;
+  triggerAction: FeedbackTriggeringAction;
   icon?: string;
   message: string;
   type?: 'success' | 'error';
@@ -18,14 +25,18 @@ export interface EffectFeedbackInterface {
     userAction: Action;
   }[];
   timeStamp?: number;
-  display?: boolean;
   priority?: Priority;
   useDefaultCancel?: boolean;
 }
 
+export interface EffectFeedbackInterface
+  extends EffectFeedbackConstructorInterface {
+  display?: boolean;
+}
+
 export class EffectFeedback implements EffectFeedbackInterface {
   id: string;
-  triggerAction: Action;
+  triggerAction: FeedbackTriggeringAction;
   icon?: string;
   message: string;
   type: 'success' | 'error' = 'success';
@@ -35,17 +46,20 @@ export class EffectFeedback implements EffectFeedbackInterface {
     userAction: Action;
   }[] = [];
   timeStamp?: number = Date.now();
-  display = true;
+  display: boolean;
   priority?: Priority = Priority.NORM;
   useDefaultCancel? = true;
 
-  constructor(props: EffectFeedbackInterface) {
+  constructor(props: EffectFeedbackConstructorInterface) {
     Object.assign(this, props);
+    this.display = !(this.triggerAction['payload']
+      ? this.triggerAction['payload']['useCustomErrorHandler']
+      : false);
   }
 
   static generateErrorFeedback(
     uuid: string,
-    action: Action,
+    action: FeedbackTriggeringAction,
     message: string
   ): EffectFeedback {
     return new EffectFeedback({
@@ -59,18 +73,16 @@ export class EffectFeedback implements EffectFeedbackInterface {
           userAction: action
         }
       ],
-      priority: Priority.HIGH,
-      display: !(action['payload']
-        ? action['payload']['useCustomErrorHandler']
-        : false)
+      priority: Priority.HIGH
     });
   }
 
   static generateSuccessFeedback(
     uuid: string,
-    action: Action,
+    action: FeedbackTriggeringAction,
     message: string
   ): EffectFeedback {
+    console.log(action['payload']['useCustomErrorHandler']);
     return new EffectFeedback({
       id: uuid,
       triggerAction: action,

@@ -71,8 +71,7 @@ export class AlertsEffects {
               personId: action.payload.personId,
               alertIds: ids,
               intended: action.payload.intended,
-              read: action.payload.read,
-              displayResponse: action.payload.displayResponse
+              read: action.payload.read
             });
           }),
           take(1)
@@ -147,7 +146,6 @@ export class AlertsEffects {
                 message: action.payload.read
                   ? 'Melding als gelezen gemarkeerd.'
                   : 'Melding als ongelezen gemarkeerd.',
-                display: action.payload.displayResponse,
                 userActions: null,
                 type: 'success'
               });
@@ -167,7 +165,6 @@ export class AlertsEffects {
           message: action.payload.read
             ? 'Het is niet gelukt om de melding als gelezen te markeren.'
             : 'Het is niet gelukt om de melding als ongelezen te markeren.',
-          display: action.payload.displayResponse,
           userActions: [{ title: 'Opnieuw', userAction: action }],
           type: 'error',
           priority: Priority.HIGH
