@@ -1,4 +1,10 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import {
+  Component,
+  Inject,
+  OnInit,
+  QueryList,
+  ViewChildren
+} from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import {
   EffectFeedbackInterface,
@@ -6,6 +12,7 @@ import {
   FavoriteTypesEnum,
   HistoryInterface
 } from '@campus/dal';
+import { ContentEditableComponent } from '@campus/ui';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { QuickLinkTypeEnum } from './quick-link-type.enum';
@@ -22,6 +29,10 @@ export class QuickLinkComponent implements OnInit {
   public feedback$: Observable<EffectFeedbackInterface>;
   public dialogTitle: string;
   public dialogTitleIcon: string;
+
+  @ViewChildren(ContentEditableComponent)
+  private contentEditables: QueryList<ContentEditableComponent>;
+  private activeContentEditable: ContentEditableComponent;
 
   private dialogTitles = new Map<
     QuickLinkTypeEnum,
@@ -94,7 +105,20 @@ export class QuickLinkComponent implements OnInit {
   }
 
   public update(quickLink: QuickLinkInterface) {
-    console.log('update', quickLink);
+    if (this.activeContentEditable) {
+      this.activeContentEditable.active = false;
+    }
+
+    const contentEditable = this.contentEditables.find(
+      editable => editable.relatedItem === quickLink
+    );
+
+    this.activeContentEditable = contentEditable;
+    this.activeContentEditable.active = true;
+  }
+
+  public rename(quickLink: QuickLinkInterface, newName: string) {
+    this.quickLinkViewModel.update(quickLink.id, newName, this.data.mode);
   }
 
   public remove(quickLink: QuickLinkInterface) {
