@@ -574,6 +574,7 @@ describe('QuickLinkComponent', () => {
         it('should sort the quicklink categories and use a readable name', () => {
           const mockFavorites = [
             new FavoriteFixture({ type: FavoriteTypesEnum.TASK }),
+            new FavoriteFixture({ type: 'type not in list' }),
             new FavoriteFixture({ type: FavoriteTypesEnum.BOEKE }),
             new FavoriteFixture({ type: FavoriteTypesEnum.SEARCH }),
             new FavoriteFixture({ type: FavoriteTypesEnum.EDUCONTENT }),
@@ -603,6 +604,10 @@ describe('QuickLinkComponent', () => {
             jasmine.objectContaining({
               type: FavoriteTypesEnum.TASK,
               title: 'Taken'
+            }),
+            jasmine.objectContaining({
+              type: 'type not in list',
+              title: 'type not in list'
             })
           ];
 
