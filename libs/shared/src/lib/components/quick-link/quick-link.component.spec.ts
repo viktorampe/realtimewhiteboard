@@ -497,7 +497,7 @@ describe('QuickLinkComponent', () => {
 
           expect(listItemButtons.length).toBe(2);
           expect(listItemButtons[0].iconClass).toBe('edit');
-          expect(listItemButtons[1].iconClass).toBe('verwijder');
+          expect(listItemButtons[1].iconClass).toBe('delete');
         });
 
         it('should call the correct action handler on element click', fakeAsync(() => {
@@ -659,7 +659,7 @@ describe('QuickLinkComponent', () => {
               const expectedDefaultAction = {
                 actionType: 'open',
                 label: 'Openen',
-                icon: 'learningarea',
+                icon: 'lesmateriaal',
                 tooltip: 'Navigeer naar de leergebied pagina',
                 handler: mockOpenAreaFunction
               };
@@ -1071,7 +1071,7 @@ describe('QuickLinkComponent', () => {
               {
                 actionType: 'manage',
                 label: 'Verwijderen',
-                icon: 'verwijder',
+                icon: 'delete',
                 tooltip: 'item verwijderen',
                 handler: mockRemoveFunction
               }
