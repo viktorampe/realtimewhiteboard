@@ -639,10 +639,17 @@ export class TocFilterFactory implements SearchFilterFactory {
     searchState: SearchStateInterface,
     selectionKey: string
   ): boolean {
-    // new searchState has sufficient data
+    // only these keys have an implementation that supports multiple selected values
+    const selectionKeysThatCanContainMultipleValues = ['eduContentTOC'];
+
     return (
       searchState.filterCriteriaSelections.has(selectionKey) &&
-      searchState.filterCriteriaSelections.get(selectionKey).length === 1
+      // only certain keys can contain multiple values
+      ((selectionKeysThatCanContainMultipleValues.includes(selectionKey) &&
+        searchState.filterCriteriaSelections.get(selectionKey).length > 0) ||
+        // by default, only a single value can be selected
+        (!selectionKeysThatCanContainMultipleValues.includes(selectionKey) &&
+          searchState.filterCriteriaSelections.get(selectionKey).length === 1))
     );
   }
 }

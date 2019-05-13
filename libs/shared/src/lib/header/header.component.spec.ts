@@ -10,7 +10,10 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { hot } from '@nrwl/nx/testing';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, of, Subject } from 'rxjs';
+import { PERMISSION_SERVICE_TOKEN } from '../auth';
+import { HasPermissionDirective } from '../auth/has-permission.directive';
+import { QuickLinkTypeEnum } from '../components/quick-link/quick-link-type.enum';
 import { CampusRouterlinkDirective } from '../directives/campus-routerlink.directive';
 import { AlertToNotificationItemPipe } from '../pipes/alert-to-notification/alert-to-notification-pipe';
 import { HeaderComponent } from './header.component';
@@ -23,10 +26,15 @@ describe('HeaderComponent', () => {
   let headerViewModel: MockHeaderViewModel;
   const breakpointStream: Subject<{ matches: boolean }> = new Subject();
   let pageBarNavButton: HTMLElement;
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [UiModule, RouterTestingModule, MatIconModule, MatBadgeModule],
-      declarations: [HeaderComponent, CampusRouterlinkDirective],
+      declarations: [
+        HeaderComponent,
+        CampusRouterlinkDirective,
+        HasPermissionDirective
+      ],
       providers: [
         AlertToNotificationItemPipe,
         {
@@ -34,7 +42,13 @@ describe('HeaderComponent', () => {
           useClass: MockHeaderViewModel
         },
         BreakpointObserver,
-        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry },
+        {
+          provide: PERMISSION_SERVICE_TOKEN,
+          useValue: {
+            hasPermission: () => of(true)
+          }
+        }
       ]
     });
     headerViewModel = TestBed.get(HeaderViewModel);
@@ -164,6 +178,20 @@ describe('HeaderComponent', () => {
           backLink
         );
       });
+    });
+  });
+
+  describe('quicklinks', () => {
+    it('should call header vm method for favorites', () => {
+      const spy = jest.spyOn(headerViewModel, 'openDialog');
+      component.onManageFavoritesClick();
+      expect(spy).toHaveBeenCalledWith(QuickLinkTypeEnum.FAVORITES);
+    });
+
+    it('should call header vm method for history', () => {
+      const spy = jest.spyOn(headerViewModel, 'openDialog');
+      component.onManageHistoryClick();
+      expect(spy).toHaveBeenCalledWith(QuickLinkTypeEnum.HISTORY);
     });
   });
 });

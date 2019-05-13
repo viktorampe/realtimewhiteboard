@@ -1,8 +1,11 @@
 export * from './lib/auth';
+export * from './lib/collection-manager';
 export {
-  EduContentCollectionManagerServiceInterface,
-  EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN
-} from './lib/collection-manager/edu-content-collection-manager.service.interface';
+  QuickLinkTypeEnum
+} from './lib/components/quick-link/quick-link-type.enum';
+export {
+  QuickLinkComponent
+} from './lib/components/quick-link/quick-link.component';
 export {
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN

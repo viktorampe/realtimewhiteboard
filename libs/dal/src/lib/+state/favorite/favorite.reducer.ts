@@ -29,6 +29,10 @@ export function reducer(state = initialState, action: FavoritesActions): State {
       return adapter.addMany(action.payload.favorites, state);
     }
 
+    case FavoritesActionTypes.UpdateFavorite: {
+      return adapter.updateOne(action.payload.favorite, state);
+    }
+
     case FavoritesActionTypes.DeleteFavorite: {
       return adapter.removeOne(action.payload.id, state);
     }
