@@ -10,7 +10,7 @@
   >
     <button
       mat-list-item
-      *ngFor="let value of filterCriterion.values"
+      *ngFor="let value of filterCriterion?.values"
       class="column__filter__value"
       [class.column__filter__value--selected]="value.selected"
       (click)="

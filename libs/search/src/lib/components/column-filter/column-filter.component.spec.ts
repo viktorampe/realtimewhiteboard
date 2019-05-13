@@ -183,8 +183,11 @@ describe('ColumnFilterComponent', () => {
       selectedTrueMockFilterCriteria.forEach((mockFilterCriterium, cIndex) => {
         mockFilterCriterium.values.forEach((value, vIndex) => {
           const expected =
-            (cIndex === passedCIndex && vIndex === passedVIndex) || // changed criterion and changed value
-            cIndex !== passedCIndex; // other criterion
+            cIndex !== selectedTrueMockFilterCriteria.length - 1
+              ? value.selected // the values that are not in the last criteria should not be changed so we just check the original here
+              : (cIndex === passedCIndex && vIndex === passedVIndex) || // changed criterion and changed value
+                cIndex !== passedCIndex;
+          // other criterion
 
           expect(value.selected).toBe(expected);
         });
@@ -212,6 +215,92 @@ describe('ColumnFilterComponent', () => {
         mockFilterCriteria[0].name
       );
       expect(emitSpy).not.toHaveBeenCalled();
+    });
+    it('should return the selected values in the same order as the columns, without preserveColumn', () => {
+      const mockMultipleFilterCriteria: SearchFilterCriteriaInterface[] = [
+        new SearchFilterCriteriaFixture({ name: 'sameNameForAllFilters' }, [
+          new SearchFilterCriteriaValuesFixture({ selected: true }),
+          new SearchFilterCriteriaValuesFixture({ selected: false }),
+          new SearchFilterCriteriaValuesFixture({ selected: false }),
+          new SearchFilterCriteriaValuesFixture({ selected: false })
+        ]),
+        new SearchFilterCriteriaFixture({ name: 'sameNameForAllFilters' }, [
+          new SearchFilterCriteriaValuesFixture({ selected: false }),
+          new SearchFilterCriteriaValuesFixture({ selected: true }),
+          new SearchFilterCriteriaValuesFixture({ selected: false }),
+          new SearchFilterCriteriaValuesFixture({ selected: false })
+        ]),
+        new SearchFilterCriteriaFixture({ name: 'sameNameForAllFilters' }, [
+          new SearchFilterCriteriaValuesFixture({ selected: false }),
+          new SearchFilterCriteriaValuesFixture({ selected: false }),
+          new SearchFilterCriteriaValuesFixture({ selected: false }),
+          new SearchFilterCriteriaValuesFixture({ selected: false })
+        ])
+      ];
+      component.filterCriteria = mockMultipleFilterCriteria;
+      fixture.detectChanges();
+
+      component.filterSelectionChange.emit = jest.fn();
+
+      component.onFilterSelectionChange(
+        component.filterCriteria[2].values[2],
+        false,
+        component.filterCriteria[2].name
+      );
+
+      const expected = [
+        component.filterCriteria[0],
+        component.filterCriteria[1],
+        component.filterCriteria[2]
+      ];
+
+      expect(component.filterSelectionChange.emit).toHaveBeenCalledWith(
+        expected
+      );
+    });
+    it('should return the selected values in the same order as the columns, with preserveColumn', () => {
+      const mockMultipleFilterCriteria: SearchFilterCriteriaInterface[] = [
+        new SearchFilterCriteriaFixture({ name: 'sameNameForAllFilters' }, [
+          new SearchFilterCriteriaValuesFixture({ selected: true }),
+          new SearchFilterCriteriaValuesFixture({ selected: false }),
+          new SearchFilterCriteriaValuesFixture({ selected: false }),
+          new SearchFilterCriteriaValuesFixture({ selected: false })
+        ]),
+        new SearchFilterCriteriaFixture({ name: 'sameNameForAllFilters' }, [
+          new SearchFilterCriteriaValuesFixture({ selected: false }),
+          new SearchFilterCriteriaValuesFixture({ selected: true }),
+          new SearchFilterCriteriaValuesFixture({ selected: false }),
+          new SearchFilterCriteriaValuesFixture({ selected: false })
+        ]),
+        new SearchFilterCriteriaFixture({ name: 'sameNameForAllFilters' }, [
+          new SearchFilterCriteriaValuesFixture({ selected: false }),
+          new SearchFilterCriteriaValuesFixture({ selected: false }),
+          new SearchFilterCriteriaValuesFixture({ selected: false }),
+          new SearchFilterCriteriaValuesFixture({ selected: false })
+        ])
+      ];
+      component.filterCriteria = mockMultipleFilterCriteria;
+      fixture.detectChanges();
+
+      component.filterSelectionChange.emit = jest.fn();
+
+      // select in last-but-one column
+      // preserveColumn == true
+      component.onFilterSelectionChange(
+        component.filterCriteria[1].values[2],
+        true,
+        component.filterCriteria[1].name
+      );
+
+      const expected = [
+        component.filterCriteria[0],
+        component.filterCriteria[1],
+        component.filterCriteria[2]
+      ];
+
+      expect(component.filterSelectionChange.emit).toHaveBeenCalledWith(
+        expected
+      );
     });
   });
   describe('view', () => {

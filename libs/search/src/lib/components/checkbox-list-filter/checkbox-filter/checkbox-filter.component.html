@@ -16,8 +16,10 @@
     [checked]="option.selected"
     [indeterminate]="indeterminateStatus[option.data.id]"
     (change)="onChange($event)"
-    >{{ getDisplayValue(option)
-    }}<span *ngIf="option.prediction" class="checkbox-filter__item__prediction">
+    ><span class="checkbox-filter__item__name">{{
+      getDisplayValue(option)
+    }}</span
+    ><span *ngIf="option.prediction" class="checkbox-filter__item__prediction">
       {{ ' (' + option.prediction + ')' }}</span
     ></mat-checkbox
   >

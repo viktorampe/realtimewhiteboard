@@ -25,6 +25,7 @@ import { PERMISSION_SERVICE_TOKEN } from './auth/permission.service.interface';
 import { EduContentCollectionManagerService } from './collection-manager/edu-content-collection-manager.service';
 import { EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN } from './collection-manager/edu-content-collection-manager.service.interface';
 import { PageBarContainerComponent } from './components/page-bar-container/page-bar-container.component';
+import { QuickLinkComponent } from './components/quick-link/quick-link.component';
 import { OPEN_STATIC_CONTENT_SERVICE_TOKEN } from './content/open-static-content.interface';
 import { OpenStaticContentService } from './content/open-static-content.service';
 import { CampusRouterlinkDirective } from './directives/campus-routerlink.directive';
@@ -84,7 +85,8 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     PersonBadgeFromCredentialPipe,
     MailToByCredentialPipe,
     CampusRouterlinkDirective,
-    AlertToNotificationItemPipe
+    AlertToNotificationItemPipe,
+    QuickLinkComponent
   ],
   exports: [
     HeaderComponent,
@@ -95,7 +97,8 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     PersonBadgeFromCredentialPipe,
     MailToByCredentialPipe,
     CampusRouterlinkDirective,
-    AlertToNotificationItemPipe
+    AlertToNotificationItemPipe,
+    QuickLinkComponent
   ],
   providers: [
     MapObjectConversionService,
@@ -122,7 +125,8 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     },
     AlertToNotificationItemPipe,
     MatDialog
-  ]
+  ],
+  entryComponents: [QuickLinkComponent]
 })
 export class SharedModule {
   constructor(

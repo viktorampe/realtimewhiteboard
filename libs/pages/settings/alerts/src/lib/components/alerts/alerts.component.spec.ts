@@ -2,13 +2,18 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule, MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
-import { AlertToNotificationItemPipe } from '@campus/shared';
+import {
+  AlertToNotificationItemPipe,
+  ENVIRONMENT_ICON_MAPPING_TOKEN,
+  SharedModule
+} from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
 import { NotificationItemInterface, UiModule } from '@campus/ui';
 import { BehaviorSubject } from 'rxjs';
 import { AlertsComponent } from './alerts.component';
 import { AlertsViewModel } from './alerts.viewmodel';
 import { MockAlertsViewModel } from './alerts.viewmodel.mock';
+
 describe('AlertsComponent', () => {
   let component: AlertsComponent;
   let fixture: ComponentFixture<AlertsComponent>;
@@ -16,12 +21,13 @@ describe('AlertsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [UiModule, RouterTestingModule, MatIconModule],
+      imports: [UiModule, RouterTestingModule, MatIconModule, SharedModule],
       declarations: [AlertsComponent],
       providers: [
         { provide: AlertsViewModel, useClass: MockAlertsViewModel },
         AlertToNotificationItemPipe,
-        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry },
+        { provide: ENVIRONMENT_ICON_MAPPING_TOKEN, useValue: {} }
       ]
     });
   }));

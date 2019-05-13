@@ -1,0 +1,37 @@
+<div class="ui-content-editable">
+  <span class="ui-content-editable__text" *ngIf="!active">{{ text }}</span>
+  <mat-form-field
+    class="ui-content-editable__form-field"
+    [style.display]="active ? null : 'none'"
+  >
+    <input
+      *ngIf="!multiline"
+      (focus)="onFocus($event)"
+      matInput
+      [(ngModel)]="text"
+      (keydown.enter)="saveChanges()"
+      (keydown.escape)="cancelChanges()"
+    />
+    <textarea
+      *ngIf="multiline"
+      matInput
+      (focus)="onFocus($event)"
+      [(ngModel)]="text"
+      (keydown.escape)="cancelChanges()"
+    >
+    </textarea>
+  </mat-form-field>
+  <span *ngIf="active" class="ui-content-editable__actions">
+    <campus-button
+      class="ui-content-editable__actions__confirm"
+      *ngIf="textIsValid()"
+      iconClass="check"
+      (click)="saveChanges()"
+    ></campus-button>
+    <campus-button
+      class="ui-content-editable__actions__cancel"
+      iconClass="close"
+      (click)="cancelChanges()"
+    ></campus-button>
+  </span>
+</div>
