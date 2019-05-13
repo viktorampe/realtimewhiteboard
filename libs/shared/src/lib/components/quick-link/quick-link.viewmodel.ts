@@ -10,6 +10,7 @@ import {
   FavoriteActions,
   FavoriteInterface,
   FavoriteQueries,
+  FavoriteTypesEnum,
   HistoryInterface,
   LearningAreaQueries,
   TaskQueries
@@ -34,7 +35,12 @@ export class QuickLinkViewModel {
   ): Observable<FavoriteInterface[] | HistoryInterface[]> {
     if (mode === QuickLinkTypeEnum.FAVORITES) {
       return this.composeQuickLink$(
-        this.store.pipe(select(FavoriteQueries.getAll))
+        this.store.pipe(
+          select(FavoriteQueries.getAll),
+          map(favorites =>
+            favorites.filter(fav => fav.type !== FavoriteTypesEnum.AREA)
+          )
+        )
       );
     }
     if (mode === QuickLinkTypeEnum.HISTORY) {
@@ -70,7 +76,7 @@ export class QuickLinkViewModel {
     this.store.dispatch(action);
   }
 
-  public delete(id: number, mode: QuickLinkTypeEnum): void {
+  public remove(id: number, mode: QuickLinkTypeEnum): void {
     let action: Action;
     switch (mode) {
       case QuickLinkTypeEnum.FAVORITES:
