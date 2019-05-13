@@ -13,16 +13,18 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { QuickLinkTypeEnum } from './quick-link-type.enum';
 import { QuickLinkViewModel } from './quick-link.viewmodel';
+import { MockQuickLinkViewModel } from './quick-link.viewmodel.mock';
 
 @Component({
   selector: 'campus-quick-link',
   templateUrl: './quick-link.component.html',
   styleUrls: ['./quick-link.component.scss'],
-  providers: [QuickLinkViewModel]
-  // providers: [{ provide: QuickLinkViewModel, useClass: MockQuickLinkViewModel }]
+  //providers: [QuickLinkViewModel]
+  providers: [{ provide: QuickLinkViewModel, useClass: MockQuickLinkViewModel }]
 })
 export class QuickLinkComponent implements OnInit {
   public contentData$: Observable<ContentDataInterface[]>;
+  public quickLinksFlattened$: Observable<QuickLinkInterface[]>;
   public feedback$: Observable<EffectFeedbackInterface>;
   public dialogTitle: string;
   public dialogTitleIcon: string;
@@ -212,6 +214,14 @@ export class QuickLinkComponent implements OnInit {
     this.contentData$ = this.quickLinkViewModel
       .getQuickLinks$(this.data.mode)
       .pipe(map(qL => this.convertToQuickLinkData(qL)));
+
+    this.quickLinksFlattened$ = this.contentData$.pipe(
+      map(e => {
+        return e.reduce<QuickLinkInterface[]>((array, contentDataInterface) => {
+          return [...contentDataInterface.quickLinks, ...array];
+        }, []);
+      })
+    );
 
     this.feedback$ = this.quickLinkViewModel.feedback$;
   }

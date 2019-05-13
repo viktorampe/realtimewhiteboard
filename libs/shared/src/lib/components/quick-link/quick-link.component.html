@@ -2,12 +2,17 @@
   <campus-filter-text-input
     title__right
     theme="dark"
-    [source]="contentData$ | async"
+    [source]="quickLinksFlattened$ | async"
   ></campus-filter-text-input>
   <mat-dialog-content>
     <mat-action-list *ngIf="(contentData$ | async) as contentData">
       <ng-container *ngFor="let category of contentData">
         <h3 mat-subheader>{{ category.title }}</h3>
+        <ul *ngIf="(filterTextInput.result$ | async) as filteredItems">
+          <li *ngFor="let filteredItem of filteredItems">{{
+            filteredItem.name
+          }}</li>
+        </ul>
         <button
           mat-list-item
           class="quick-link__item"
