@@ -21,13 +21,15 @@ import {
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
+  BundleFixture,
   EduContentFixture,
   EduContentMetadataFixture,
   FavoriteFixture,
   FavoriteInterface,
   FavoriteTypesEnum,
   HistoryInterface,
-  LearningAreaFixture
+  LearningAreaFixture,
+  TaskFixture
 } from '@campus/dal';
 import { MockMatIconRegistry } from '@campus/testing';
 import { ButtonComponent, InfoPanelComponent, UiModule } from '@campus/ui';
@@ -1081,6 +1083,187 @@ describe('QuickLinkComponent', () => {
       it('should get the feedback data from the quickLinkViewmodel', () => {
         expect(component.feedback$).toBe(quickLinkViewModel.feedback$);
       });
+    });
+  });
+
+  describe('event handlers', () => {
+    it('openEduContentAsExercise should call the correct method on the viewmodel', () => {
+      const mockQuickLink = new FavoriteFixture({
+        eduContent: new EduContentFixture()
+      }) as any;
+
+      quickLinkViewModel.openExercise = jest.fn();
+
+      component.openEduContentAsExercise(mockQuickLink);
+
+      expect(quickLinkViewModel.openExercise).toHaveBeenCalled();
+      expect(quickLinkViewModel.openExercise).toHaveBeenCalledTimes(1);
+      expect(quickLinkViewModel.openExercise).toHaveBeenCalledWith(
+        mockQuickLink.eduContent,
+        false
+      );
+    });
+
+    it('openEduContentAsSolution should call the correct method on the viewmodel', () => {
+      const mockQuickLink = new FavoriteFixture({
+        eduContent: new EduContentFixture()
+      }) as any;
+
+      quickLinkViewModel.openExercise = jest.fn();
+
+      component.openEduContentAsSolution(mockQuickLink);
+
+      expect(quickLinkViewModel.openExercise).toHaveBeenCalled();
+      expect(quickLinkViewModel.openExercise).toHaveBeenCalledTimes(1);
+      expect(quickLinkViewModel.openExercise).toHaveBeenCalledWith(
+        mockQuickLink.eduContent,
+        true
+      );
+    });
+
+    it('openEduContentAsStream should call the correct method on the viewmodel', () => {
+      const mockQuickLink = new FavoriteFixture({
+        eduContent: new EduContentFixture()
+      }) as any;
+
+      quickLinkViewModel.openStaticContent = jest.fn();
+
+      component.openEduContentAsStream(mockQuickLink);
+
+      expect(quickLinkViewModel.openStaticContent).toHaveBeenCalled();
+      expect(quickLinkViewModel.openStaticContent).toHaveBeenCalledTimes(1);
+      expect(quickLinkViewModel.openStaticContent).toHaveBeenCalledWith(
+        mockQuickLink.eduContent,
+        true
+      );
+    });
+
+    it('openEduContentAsDownload should call the correct method on the viewmodel', () => {
+      const mockQuickLink = new FavoriteFixture({
+        eduContent: new EduContentFixture()
+      }) as any;
+
+      quickLinkViewModel.openStaticContent = jest.fn();
+
+      component.openEduContentAsDownload(mockQuickLink);
+
+      expect(quickLinkViewModel.openStaticContent).toHaveBeenCalled();
+      expect(quickLinkViewModel.openStaticContent).toHaveBeenCalledTimes(1);
+      expect(quickLinkViewModel.openStaticContent).toHaveBeenCalledWith(
+        mockQuickLink.eduContent,
+        false
+      );
+    });
+
+    it('openBundle should call the correct method on the viewmodel', () => {
+      const mockQuickLink = new FavoriteFixture({
+        bundle: new BundleFixture()
+      }) as any;
+
+      quickLinkViewModel.openBundle = jest.fn();
+
+      component.openBundle(mockQuickLink);
+
+      expect(quickLinkViewModel.openBundle).toHaveBeenCalled();
+      expect(quickLinkViewModel.openBundle).toHaveBeenCalledTimes(1);
+      expect(quickLinkViewModel.openBundle).toHaveBeenCalledWith(
+        mockQuickLink.bundle
+      );
+    });
+
+    it('openTask should call the correct method on the viewmodel', () => {
+      const mockQuickLink = new FavoriteFixture({
+        task: new TaskFixture()
+      }) as any;
+
+      quickLinkViewModel.openTask = jest.fn();
+
+      component.openTask(mockQuickLink);
+
+      expect(quickLinkViewModel.openTask).toHaveBeenCalled();
+      expect(quickLinkViewModel.openTask).toHaveBeenCalledTimes(1);
+      expect(quickLinkViewModel.openTask).toHaveBeenCalledWith(
+        mockQuickLink.task
+      );
+    });
+
+    it('openArea should call the correct method on the viewmodel', () => {
+      const mockQuickLink = new FavoriteFixture({
+        learningArea: new LearningAreaFixture()
+      }) as any;
+
+      quickLinkViewModel.openArea = jest.fn();
+
+      component.openArea(mockQuickLink);
+
+      expect(quickLinkViewModel.openArea).toHaveBeenCalled();
+      expect(quickLinkViewModel.openArea).toHaveBeenCalledTimes(1);
+      expect(quickLinkViewModel.openArea).toHaveBeenCalledWith(
+        mockQuickLink.learningArea
+      );
+    });
+
+    it('openSearch should call the correct method on the viewmodel', () => {
+      const mockQuickLink = new FavoriteFixture() as any;
+
+      quickLinkViewModel.openSearch = jest.fn();
+
+      component.openSearch(mockQuickLink);
+
+      expect(quickLinkViewModel.openSearch).toHaveBeenCalled();
+      expect(quickLinkViewModel.openSearch).toHaveBeenCalledTimes(1);
+      expect(quickLinkViewModel.openSearch).toHaveBeenCalledWith(
+        mockQuickLink,
+        mockInjectedData.mode
+      );
+    });
+
+    it('openBoeke should call the correct method on the viewmodel', () => {
+      const mockQuickLink = new FavoriteFixture({
+        eduContent: new EduContentFixture()
+      }) as any;
+
+      quickLinkViewModel.openStaticContent = jest.fn();
+
+      component.openEduContentAsDownload(mockQuickLink);
+
+      expect(quickLinkViewModel.openStaticContent).toHaveBeenCalled();
+      expect(quickLinkViewModel.openStaticContent).toHaveBeenCalledTimes(1);
+      expect(quickLinkViewModel.openStaticContent).toHaveBeenCalledWith(
+        mockQuickLink.eduContent,
+        false
+      );
+    });
+
+    it('update should call the correct method on the viewmodel', () => {
+      const mockQuickLink = new FavoriteFixture() as any;
+
+      quickLinkViewModel.update = jest.fn();
+
+      component.update(mockQuickLink);
+
+      expect(quickLinkViewModel.update).toHaveBeenCalled();
+      expect(quickLinkViewModel.update).toHaveBeenCalledTimes(1);
+      expect(quickLinkViewModel.update).toHaveBeenCalledWith(
+        mockQuickLink.id,
+        mockQuickLink.name,
+        mockInjectedData.mode
+      );
+    });
+
+    it('update should call the correct method on the viewmodel', () => {
+      const mockQuickLink = new FavoriteFixture() as any;
+
+      quickLinkViewModel.remove = jest.fn();
+
+      component.remove(mockQuickLink);
+
+      expect(quickLinkViewModel.remove).toHaveBeenCalled();
+      expect(quickLinkViewModel.remove).toHaveBeenCalledTimes(1);
+      expect(quickLinkViewModel.remove).toHaveBeenCalledWith(
+        mockQuickLink.id,
+        mockInjectedData.mode
+      );
     });
   });
 

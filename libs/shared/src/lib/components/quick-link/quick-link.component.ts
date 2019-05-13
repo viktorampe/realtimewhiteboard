@@ -141,47 +141,50 @@ export class QuickLinkComponent implements OnInit {
   }
 
   public openEduContentAsExercise(quickLink: QuickLinkInterface) {
-    console.log('openExercise', quickLink);
+    this.quickLinkViewModel.openExercise(quickLink.eduContent, false);
   }
 
   public openEduContentAsSolution(quickLink: QuickLinkInterface) {
-    console.log('openExercise', quickLink);
+    this.quickLinkViewModel.openExercise(quickLink.eduContent, true);
   }
 
   public openEduContentAsStream(quickLink: QuickLinkInterface) {
-    console.log('openAsStream', quickLink);
+    this.quickLinkViewModel.openStaticContent(quickLink.eduContent, true);
   }
 
   public openEduContentAsDownload(quickLink: QuickLinkInterface) {
-    console.log('openAsDownload', quickLink);
+    this.quickLinkViewModel.openStaticContent(quickLink.eduContent, false);
   }
 
   public openBundle(quickLink: QuickLinkInterface) {
-    console.log('openBundle', quickLink);
+    this.quickLinkViewModel.openBundle(quickLink.bundle);
   }
 
   public openTask(quickLink: QuickLinkInterface) {
-    console.log('openTask', quickLink);
+    this.quickLinkViewModel.openTask(quickLink.task);
   }
 
   public openArea(quickLink: QuickLinkInterface) {
-    console.log('openArea', quickLink);
+    this.quickLinkViewModel.openArea(quickLink.learningArea);
   }
 
   public openSearch(quickLink: QuickLinkInterface) {
-    console.log('openSearch', quickLink);
+    this.quickLinkViewModel.openSearch(quickLink, this.data.mode);
   }
 
   public openBoeke(quickLink: QuickLinkInterface) {
-    console.log('openBoeke', quickLink);
+    this.quickLinkViewModel.openStaticContent(quickLink.eduContent, false);
   }
 
   public update(quickLink: QuickLinkInterface) {
-    console.log('update', quickLink);
+    this.quickLinkViewModel.update(
+      quickLink.id,
+      quickLink.name,
+      this.data.mode
+    );
   }
 
   public remove(quickLink: QuickLinkInterface) {
-    console.log('remove', quickLink);
     this.quickLinkViewModel.remove(quickLink.id, this.data.mode);
   }
 
@@ -230,6 +233,7 @@ export class QuickLinkComponent implements OnInit {
   ): QuickLinkInterface {
     return {
       ...value,
+      eduContent: value.eduContent as EduContent,
       defaultAction: this.getDefaultAction(value),
       alternativeOpenActions: this.getAlternativeOpenActions(value),
       manageActions: [this.quickLinkActions.edit, this.quickLinkActions.remove]
@@ -318,6 +322,8 @@ interface QuickLinkInterface extends FavoriteInterface, HistoryInterface {
   defaultAction: QuickLinkActionInterface;
   alternativeOpenActions: QuickLinkActionInterface[];
   manageActions: QuickLinkActionInterface[];
+  // override eduContent property -> always cast to EduContent
+  eduContent: EduContent;
 }
 
 interface QuickLinkActionInterface {
