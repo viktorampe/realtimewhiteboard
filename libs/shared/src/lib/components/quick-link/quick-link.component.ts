@@ -18,7 +18,6 @@ import { MockQuickLinkViewModel } from './quick-link.viewmodel.mock';
   templateUrl: './quick-link.component.html',
   styleUrls: ['./quick-link.component.scss'],
   providers: [QuickLinkViewModel]
-  // providers: [{ provide: QuickLinkViewModel, useClass: MockQuickLinkViewModel }]
 })
 export class QuickLinkComponent implements OnInit {
   public contentData$: Observable<ContentDataInterface[]>;
@@ -82,7 +81,7 @@ export class QuickLinkComponent implements OnInit {
     openEduContentAsDownload: {
       actionType: 'open',
       label: 'Downloaden',
-      icon: 'lesmateriaal', // TODO What icon to use?
+      icon: 'download',
       tooltip: 'Download het lesmateriaal',
       handler: (input: QuickLinkInterface): void =>
         this.openEduContentAsDownload(input)
@@ -104,21 +103,21 @@ export class QuickLinkComponent implements OnInit {
     openArea: {
       actionType: 'open',
       label: 'Openen',
-      icon: 'learningarea', // TODO What icon to use?
+      icon: 'lesmateriaal',
       tooltip: 'Navigeer naar de leergebied pagina',
       handler: (input: QuickLinkInterface): void => this.openArea(input)
     },
     openBoeke: {
       actionType: 'open',
       label: 'Openen',
-      icon: 'learningarea', // TODO What icon to use?
+      icon: 'boeken',
       tooltip: 'Open het bordboek',
       handler: (input: QuickLinkInterface): void => this.openBoeke(input)
     },
     openSearch: {
       actionType: 'open',
       label: 'Openen',
-      icon: 'learningarea', // TODO What icon to use?
+      icon: 'magnifier',
       tooltip: 'Open de zoekopdracht',
       handler: (input: QuickLinkInterface): void => this.openSearch(input)
     },
@@ -132,7 +131,7 @@ export class QuickLinkComponent implements OnInit {
     remove: {
       actionType: 'manage',
       label: 'Verwijderen',
-      icon: 'verwijder',
+      icon: 'delete',
       tooltip: 'item verwijderen',
       handler: (input: QuickLinkInterface): void => this.remove(input)
     }
@@ -160,7 +159,7 @@ export class QuickLinkComponent implements OnInit {
   }
 
   public openEduContentAsExercise(quickLink: QuickLinkInterface) {
-    this.quickLinkViewModel.openExercise(quickLink.eduContent, false);
+    this.quickLinkViewModel.openExercise(quickLink.eduContent);
   }
 
   public openEduContentAsSolution(quickLink: QuickLinkInterface) {
@@ -172,7 +171,7 @@ export class QuickLinkComponent implements OnInit {
   }
 
   public openEduContentAsDownload(quickLink: QuickLinkInterface) {
-    this.quickLinkViewModel.openStaticContent(quickLink.eduContent, false);
+    this.quickLinkViewModel.openStaticContent(quickLink.eduContent);
   }
 
   public openBundle(quickLink: QuickLinkInterface) {
@@ -192,7 +191,7 @@ export class QuickLinkComponent implements OnInit {
   }
 
   public openBoeke(quickLink: QuickLinkInterface) {
-    this.quickLinkViewModel.openStaticContent(quickLink.eduContent, false);
+    this.quickLinkViewModel.openStaticContent(quickLink.eduContent);
   }
 
   public update(quickLink: QuickLinkInterface) {
@@ -273,10 +272,7 @@ export class QuickLinkComponent implements OnInit {
         return this.quickLinkActions.openBoeke;
       case FavoriteTypesEnum.EDUCONTENT:
       case 'educontent':
-        const eduContent = Object.assign(
-          new EduContent(),
-          quickLink.eduContent
-        );
+        const eduContent = quickLink.eduContent as EduContent;
         if (eduContent.contentType === 'exercise') {
           return this.quickLinkActions.openEduContentAsExercise;
         } else if (eduContent.streamable) {
@@ -302,20 +298,14 @@ export class QuickLinkComponent implements OnInit {
     switch (quickLink.type) {
       case FavoriteTypesEnum.EDUCONTENT:
       case 'educontent':
-        const eduContent = Object.assign(
-          new EduContent(),
-          quickLink.eduContent
-        );
+        const eduContent = quickLink.eduContent as EduContent;
         if (eduContent.contentType === 'exercise') {
           return [this.quickLinkActions.openEduContentAsSolution];
         } else if (eduContent.streamable) {
           return [this.quickLinkActions.openEduContentAsDownload];
-        } else {
-          return [];
         }
-      default:
-        return [];
     }
+    return [];
   }
 
   private quickLinkDataCategorySorter(
