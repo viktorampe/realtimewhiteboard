@@ -27,11 +27,13 @@
       *ngIf="textIsValid()"
       iconClass="check"
       (click)="saveChanges()"
+      campusClickStopPropagation
     ></campus-button>
     <campus-button
       class="ui-content-editable__actions__cancel"
       iconClass="close"
       (click)="cancelChanges()"
+      campusClickStopPropagation
     ></campus-button>
   </span>
 </div>
