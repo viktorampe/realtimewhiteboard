@@ -84,23 +84,23 @@ export class QuickLinkViewModel {
     this.store.dispatch(action);
   }
 
-  public openBundle(bundle: BundleInterface) {
+  public openBundle(bundle: BundleInterface): void {
     this.router.navigate(['/bundles', bundle.learningAreaId, bundle.id]);
   }
 
-  public openTask(task: TaskInterface) {
+  public openTask(task: TaskInterface): void {
     this.router.navigate(['/tasks', task.learningAreaId, task.id]);
   }
 
-  public openArea(area: LearningAreaInterface) {
+  public openArea(area: LearningAreaInterface): void {
     this.router.navigate(['/edu-content', area.id]);
   }
 
-  public openStaticContent(eduContent: EduContent, stream?: boolean) {
+  public openStaticContent(eduContent: EduContent, stream?: boolean): void {
     this.openStaticContentService.open(eduContent, stream);
   }
 
-  public openExercise(eduContent: EduContent, withSolution?: boolean) {
+  public openExercise(eduContent: EduContent, withSolution?: boolean): void {
     this.scormExerciseService.previewExerciseFromUnlockedContent(
       null,
       eduContent.id,
@@ -112,7 +112,7 @@ export class QuickLinkViewModel {
   public openSearch(
     quickLink: FavoriteInterface | HistoryInterface,
     type: QuickLinkTypeEnum
-  ) {
+  ): void {
     let queryParams: Params;
     switch (type) {
       case QuickLinkTypeEnum.FAVORITES:

@@ -158,6 +158,7 @@ export class LoginpageComponent implements OnInit {
 
     this.response = this.favoriteService.updateFavorite(
       this.authService.userId,
+      favorite.id,
       {
         ...favorite,
         name: favorite.name + 'x'

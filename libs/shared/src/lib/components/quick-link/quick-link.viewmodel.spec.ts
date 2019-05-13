@@ -1,4 +1,3 @@
-import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -25,7 +24,6 @@ import {
 import { QuickLinkTypeEnum } from './quick-link-type.enum';
 import { QuickLinkViewModel } from './quick-link.viewmodel';
 
-// file.only
 describe('QuickLinkViewModel', () => {
   let quickLinkViewModel: QuickLinkViewModel;
   let store: Store<DalState>;
@@ -35,31 +33,7 @@ describe('QuickLinkViewModel', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        StoreModule.forRoot({}),
-        RouterTestingModule.withRoutes([
-          {
-            path: 'bundles/:area/:id',
-            component: Component,
-            pathMatch: 'full'
-          },
-          {
-            path: 'tasks/:area/:id',
-            component: Component,
-            pathMatch: 'full'
-          },
-          {
-            path: 'edu-content/:id',
-            component: Component,
-            pathMatch: 'full'
-          },
-          {
-            path: 'edu-content/:id/term',
-            component: Component,
-            pathMatch: 'full'
-          }
-        ])
-      ],
+      imports: [StoreModule.forRoot({}), RouterTestingModule],
       providers: [
         Store,
         QuickLinkViewModel,
