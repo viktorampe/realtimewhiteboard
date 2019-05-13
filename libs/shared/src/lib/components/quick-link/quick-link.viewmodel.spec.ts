@@ -36,7 +36,7 @@ import {
 } from '@campus/dal';
 import { MockDate } from '@campus/testing';
 import { Update } from '@ngrx/entity';
-import { Store, StoreModule } from '@ngrx/store';
+import { Action, Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import {
   OpenStaticContentServiceInterface,
@@ -303,6 +303,7 @@ describe('QuickLinkViewModel', () => {
     store.dispatch(new TaskActions.TasksLoaded({ tasks: mockTasks }));
     store.dispatch(new BundleActions.BundlesLoaded({ bundles: mockBundles }));
   }
+
   describe('action handlers', () => {
     it('should dispatch an update favorite action', () => {
       const spy = jest.spyOn(store, 'dispatch');
@@ -332,6 +333,34 @@ describe('QuickLinkViewModel', () => {
       quickLinkViewModel.delete(1, 'bar' as QuickLinkTypeEnum);
       quickLinkViewModel.update(1, 'foo', 'bar' as QuickLinkTypeEnum);
       expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('should handle feedback dissmiss with action', () => {
+      const spy = jest.spyOn(store, 'dispatch').mockImplementation(() => {});
+      const feedbackDismissEvent = {
+        action: {} as Action,
+        feedbackId: 'foo'
+      };
+      quickLinkViewModel.onFeedbackDismiss(feedbackDismissEvent);
+
+      expect(spy).toHaveBeenCalledTimes(2);
+      expect(spy).toHaveBeenCalledWith(feedbackDismissEvent.action);
+      expect(spy).toHaveBeenCalledWith(
+        new EffectFeedbackActions.DeleteEffectFeedback({ id: 'foo' })
+      );
+    });
+    it('should handle feedback dissmiss without action', () => {
+      const spy = jest.spyOn(store, 'dispatch').mockImplementation(() => {});
+      const feedbackDismissEvent = {
+        action: null,
+        feedbackId: 'foo'
+      };
+      quickLinkViewModel.onFeedbackDismiss(feedbackDismissEvent);
+
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(
+        new EffectFeedbackActions.DeleteEffectFeedback({ id: 'foo' })
+      );
     });
   });
 
