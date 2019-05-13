@@ -3,6 +3,7 @@ import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
   DalState,
+  EffectFeedbackActions,
   EffectFeedbackInterface,
   FavoriteActions,
   FavoriteInterface,
@@ -64,5 +65,16 @@ export class QuickLinkViewModel {
         return;
     }
     this.store.dispatch(action);
+  }
+
+  public onFeedbackDismiss(event: {
+    action: Action;
+    feedbackId: string;
+  }): void {
+    if (event.action) this.store.dispatch(event.action);
+
+    this.store.dispatch(
+      new EffectFeedbackActions.DeleteEffectFeedback({ id: event.feedbackId })
+    );
   }
 }

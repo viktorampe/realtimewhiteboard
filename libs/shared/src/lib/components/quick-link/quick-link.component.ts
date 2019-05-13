@@ -105,6 +105,11 @@ export class QuickLinkComponent implements OnInit {
     this.quickLinkViewModel.delete(quickLink.id, this.data.mode);
   }
 
+  public onBannerDismiss(event) {
+    console.log(event);
+    this.quickLinkViewModel.onFeedbackDismiss(event);
+  }
+
   private setupStreams() {
     // TODO: use getQuickLinks$() from viewmodel when merged
     this.contentData$ = this.quickLinkViewModel.quickLinks$.pipe(

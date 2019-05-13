@@ -25,6 +25,8 @@ export class MockQuickLinkViewModel
   public update(id: number, name: string, mode: QuickLinkTypeEnum): void {}
   public delete(id: number, mode: QuickLinkTypeEnum): void {}
 
+  public onFeedbackDismiss(): void {}
+
   private getMockFavoriteQuickLinks(): FavoriteInterface[] {
     const mockCreatedDate = new Date(2019, 5, 7, 12, 0, 0, 0);
 
