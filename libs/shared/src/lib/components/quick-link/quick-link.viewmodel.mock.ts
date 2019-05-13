@@ -36,7 +36,7 @@ export class MockQuickLinkViewModel
         learningAreaId: 1,
         learningArea: new LearningAreaFixture({
           id: 1,
-          icon: 'learning-area:aardrijkskunde'
+          icon: 'learning-area:polpo-aardrijkskunde'
         }),
         created: new Date(mockCreatedDate.setHours(15))
       }),
@@ -47,7 +47,7 @@ export class MockQuickLinkViewModel
         learningAreaId: 1,
         learningArea: new LearningAreaFixture({
           id: 1,
-          icon: 'learning-area:aardrijkskunde'
+          icon: 'learning-area:polpo-aardrijkskunde'
         }),
         created: new Date(mockCreatedDate.setHours(12))
       }),
@@ -58,7 +58,7 @@ export class MockQuickLinkViewModel
         learningAreaId: 19,
         learningArea: new LearningAreaFixture({
           id: 19,
-          icon: 'learning-area:wiskunde'
+          icon: 'learning-area:polpo-wiskunde'
         }),
         created: new Date(mockCreatedDate.setHours(13))
       }),
@@ -69,7 +69,7 @@ export class MockQuickLinkViewModel
         learningAreaId: 1,
         learningArea: new LearningAreaFixture({
           id: 1,
-          icon: 'learning-area:aardrijkskunde'
+          icon: 'learning-area:polpo-aardrijkskunde'
         }),
         created: new Date(mockCreatedDate.setHours(13))
       }),
@@ -80,7 +80,7 @@ export class MockQuickLinkViewModel
         learningAreaId: 19,
         learningArea: new LearningAreaFixture({
           id: 19,
-          icon: 'learning-area:wiskunde'
+          icon: 'learning-area:polpo-wiskunde'
         }),
         created: new Date(mockCreatedDate.setHours(16))
       }),
@@ -91,7 +91,7 @@ export class MockQuickLinkViewModel
         learningAreaId: 19,
         learningArea: new LearningAreaFixture({
           id: 19,
-          icon: 'learning-area:wiskunde'
+          icon: 'learning-area:polpo-wiskunde'
         }),
         created: new Date(mockCreatedDate.setHours(14))
       }),
@@ -102,7 +102,7 @@ export class MockQuickLinkViewModel
         learningAreaId: 19,
         learningArea: new LearningAreaFixture({
           id: 19,
-          icon: 'learning-area:wiskunde'
+          icon: 'learning-area:polpo-wiskunde'
         }),
         created: new Date(mockCreatedDate.setHours(13))
       }),
@@ -113,7 +113,7 @@ export class MockQuickLinkViewModel
         learningAreaId: 19,
         learningArea: new LearningAreaFixture({
           id: 19,
-          icon: 'learning-area:wiskunde'
+          icon: 'learning-area:polpo-wiskunde'
         }),
         created: new Date(mockCreatedDate.setHours(15))
       })

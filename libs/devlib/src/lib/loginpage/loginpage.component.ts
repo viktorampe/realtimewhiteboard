@@ -31,7 +31,9 @@ import {
 } from '@campus/dal';
 import {
   EduContentCollectionManagerService,
-  EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN
+  EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN,
+  QuickLinkComponent,
+  QuickLinkTypeEnum
 } from '@campus/shared';
 import { ContentEditableComponent } from '@campus/ui';
 import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
@@ -96,6 +98,13 @@ export class LoginpageComponent implements OnInit {
         );
       })
     );
+
+    if (this.currentUser) {
+      this.loadStore();
+    }
+    setTimeout(() => {
+      this.openQuickLinkManager();
+    });
   }
 
   getCurrentUser() {
@@ -156,5 +165,11 @@ export class LoginpageComponent implements OnInit {
       favorite = favorites[0];
     });
     console.log(favorite);
+  }
+
+  openQuickLinkManager(): void {
+    this.dialog.open(QuickLinkComponent, {
+      data: { mode: QuickLinkTypeEnum.FAVORITES }
+    });
   }
 }

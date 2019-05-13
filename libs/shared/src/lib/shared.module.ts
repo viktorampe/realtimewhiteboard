@@ -9,7 +9,9 @@ import {
   MatDialogModule,
   MatIconModule,
   MatIconRegistry,
-  MatSnackBarModule
+  MatListModule,
+  MatSnackBarModule,
+  MatTooltipModule
 } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
@@ -17,7 +19,8 @@ import { UiModule } from '@campus/ui';
 import {
   FilterService,
   FILTER_SERVICE_TOKEN,
-  MapObjectConversionService
+  MapObjectConversionService,
+  UtilsModule
 } from '@campus/utils';
 import { HasPermissionDirective } from './auth/has-permission.directive';
 import { PermissionService } from './auth/permission.service';
@@ -76,7 +79,10 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     MatBadgeModule,
     RouterModule,
     MatSnackBarModule,
-    MatDialogModule
+    MatDialogModule,
+    MatListModule,
+    MatTooltipModule,
+    UtilsModule
   ],
   declarations: [
     HeaderComponent,
