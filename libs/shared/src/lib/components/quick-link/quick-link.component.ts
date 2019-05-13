@@ -227,7 +227,7 @@ export class QuickLinkComponent implements OnInit {
           if (!category) {
             category = {
               type: value.type,
-              title: value.type, // TODO: add actual name -> function? enum?
+              title: this.getCategoryTitle(value),
               quickLinks: []
             };
             acc.push(category);

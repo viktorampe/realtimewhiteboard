@@ -562,27 +562,38 @@ describe('QuickLinkComponent', () => {
           );
         });
 
-        it('should sort the quicklink categories', () => {
+        it('should sort the quicklink categories and use a readable name', () => {
           const mockFavorites = [
-            new FavoriteFixture({ type: 'foo' }),
-            new FavoriteFixture({ type: 'foo' }),
-            new FavoriteFixture({ type: 'bar' }),
-            new FavoriteFixture({ type: 'baz' })
+            new FavoriteFixture({ type: FavoriteTypesEnum.TASK }),
+            new FavoriteFixture({ type: FavoriteTypesEnum.BOEKE }),
+            new FavoriteFixture({ type: FavoriteTypesEnum.SEARCH }),
+            new FavoriteFixture({ type: FavoriteTypesEnum.EDUCONTENT }),
+            new FavoriteFixture({ type: FavoriteTypesEnum.BUNDLE })
           ];
 
           vmQuickLinks$.next(mockFavorites);
 
-          // only test category order
-          // TODO: fix order when component sorter is refactored
+          // only test category order + title
           const expected = [
             jasmine.objectContaining({
-              type: 'bar'
+              type: FavoriteTypesEnum.BOEKE,
+              title: 'Bordboeken'
             }),
             jasmine.objectContaining({
-              type: 'baz'
+              type: FavoriteTypesEnum.EDUCONTENT,
+              title: 'Lesmateriaal'
             }),
             jasmine.objectContaining({
-              type: 'foo'
+              type: FavoriteTypesEnum.SEARCH,
+              title: 'Zoekopdrachten'
+            }),
+            jasmine.objectContaining({
+              type: FavoriteTypesEnum.BUNDLE,
+              title: 'Bundels'
+            }),
+            jasmine.objectContaining({
+              type: FavoriteTypesEnum.TASK,
+              title: 'Taken'
             })
           ];
 
