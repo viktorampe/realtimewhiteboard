@@ -3,6 +3,8 @@ import {
   BundleInterface,
   DalActions,
   EduContent,
+  EduContentFixture,
+  EduContentMetadataFixture,
   EffectFeedbackFixture,
   EffectFeedbackInterface,
   FavoriteFixture,
@@ -29,7 +31,7 @@ export class MockQuickLinkViewModel
   public getQuickLinks$ = (mode: QuickLinkTypeEnum) =>
     new BehaviorSubject(this.getMockFavoriteQuickLinks());
   public update(id: number, name: string, mode: QuickLinkTypeEnum): void {}
-  public delete(id: number, mode: QuickLinkTypeEnum): void {}
+  public remove(id: number, mode: QuickLinkTypeEnum): void {}
 
   private getMockFavoriteQuickLinks(): FavoriteInterface[] {
     const mockCreatedDate = new Date(2019, 5, 7, 12, 0, 0, 0);
@@ -42,7 +44,7 @@ export class MockQuickLinkViewModel
         learningAreaId: 1,
         learningArea: new LearningAreaFixture({
           id: 1,
-          icon: 'learning-area:aardrijkskunde'
+          icon: 'learning-area:polpo-aardrijkskunde'
         }),
         created: new Date(mockCreatedDate.setHours(15))
       }),
@@ -53,7 +55,7 @@ export class MockQuickLinkViewModel
         learningAreaId: 1,
         learningArea: new LearningAreaFixture({
           id: 1,
-          icon: 'learning-area:aardrijkskunde'
+          icon: 'learning-area:polpo-aardrijkskunde'
         }),
         created: new Date(mockCreatedDate.setHours(12))
       }),
@@ -64,7 +66,7 @@ export class MockQuickLinkViewModel
         learningAreaId: 19,
         learningArea: new LearningAreaFixture({
           id: 19,
-          icon: 'learning-area:wiskunde'
+          icon: 'learning-area:polpo-wiskunde'
         }),
         created: new Date(mockCreatedDate.setHours(13))
       }),
@@ -75,9 +77,11 @@ export class MockQuickLinkViewModel
         learningAreaId: 1,
         learningArea: new LearningAreaFixture({
           id: 1,
-          icon: 'learning-area:aardrijkskunde'
+          icon: 'learning-area:polpo-aardrijkskunde'
         }),
-        created: new Date(mockCreatedDate.setHours(13))
+        created: new Date(mockCreatedDate.setHours(13)),
+        eduContentId: 1,
+        eduContent: new EduContentFixture({ contentType: 'exercise' })
       }),
       new FavoriteFixture({
         id: 5,
@@ -86,9 +90,16 @@ export class MockQuickLinkViewModel
         learningAreaId: 19,
         learningArea: new LearningAreaFixture({
           id: 19,
-          icon: 'learning-area:wiskunde'
+          icon: 'learning-area:polpo-wiskunde'
         }),
-        created: new Date(mockCreatedDate.setHours(16))
+        created: new Date(mockCreatedDate.setHours(16)),
+        eduContentId: 2,
+        eduContent: new EduContentFixture(
+          { id: 2, contentType: 'video' },
+          new EduContentMetadataFixture({
+            streamable: true
+          })
+        )
       }),
       new FavoriteFixture({
         id: 6,
@@ -97,7 +108,7 @@ export class MockQuickLinkViewModel
         learningAreaId: 19,
         learningArea: new LearningAreaFixture({
           id: 19,
-          icon: 'learning-area:wiskunde'
+          icon: 'learning-area:polpo-wiskunde'
         }),
         created: new Date(mockCreatedDate.setHours(14))
       }),
@@ -108,7 +119,7 @@ export class MockQuickLinkViewModel
         learningAreaId: 19,
         learningArea: new LearningAreaFixture({
           id: 19,
-          icon: 'learning-area:wiskunde'
+          icon: 'learning-area:polpo-wiskunde'
         }),
         created: new Date(mockCreatedDate.setHours(13))
       }),
@@ -119,9 +130,27 @@ export class MockQuickLinkViewModel
         learningAreaId: 19,
         learningArea: new LearningAreaFixture({
           id: 19,
-          icon: 'learning-area:wiskunde'
+          icon: 'learning-area:polpo-wiskunde'
         }),
         created: new Date(mockCreatedDate.setHours(15))
+      }),
+      new FavoriteFixture({
+        id: 9,
+        name: 'Favorite_9',
+        type: FavoriteTypesEnum.EDUCONTENT,
+        learningAreaId: 19,
+        learningArea: new LearningAreaFixture({
+          id: 19,
+          icon: 'learning-area:polpo-wiskunde'
+        }),
+        created: new Date(mockCreatedDate.setHours(16)),
+        eduContentId: 2,
+        eduContent: new EduContentFixture(
+          { id: 2, contentType: 'video' },
+          new EduContentMetadataFixture({
+            streamable: false
+          })
+        )
       })
     ];
   }

@@ -7,7 +7,7 @@ import { TaskInterface } from './Task.interface';
 export interface HistoryInterface {
   type: string;
   name?: string;
-  criteria?: any;
+  criteria?: string;
   created: Date;
   id?: number;
   personId?: number;

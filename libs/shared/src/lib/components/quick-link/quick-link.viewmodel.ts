@@ -13,6 +13,7 @@ import {
   FavoriteActions,
   FavoriteInterface,
   FavoriteQueries,
+  FavoriteTypesEnum,
   HistoryInterface,
   LearningAreaInterface,
   LearningAreaQueries,
@@ -52,7 +53,12 @@ export class QuickLinkViewModel {
   ): Observable<FavoriteInterface[] | HistoryInterface[]> {
     if (mode === QuickLinkTypeEnum.FAVORITES) {
       return this.composeQuickLink$(
-        this.store.pipe(select(FavoriteQueries.getAll))
+        this.store.pipe(
+          select(FavoriteQueries.getAll),
+          map(favorites =>
+            favorites.filter(fav => fav.type !== FavoriteTypesEnum.AREA)
+          )
+        )
       );
     }
     if (mode === QuickLinkTypeEnum.HISTORY) {
@@ -88,7 +94,7 @@ export class QuickLinkViewModel {
     this.store.dispatch(action);
   }
 
-  public delete(id: number, mode: QuickLinkTypeEnum): void {
+  public remove(id: number, mode: QuickLinkTypeEnum): void {
     let action: Action;
     switch (mode) {
       case QuickLinkTypeEnum.FAVORITES:
@@ -149,9 +155,9 @@ export class QuickLinkViewModel {
       queryParams
     });
   }
-  private composeQuickLink$<T extends FavoriteInterface | HistoryInterface>(
-    quickLinksData$: Observable<T[]>
-  ): Observable<T[]> {
+  private composeQuickLink$(
+    quickLinksData$: Observable<FavoriteInterface[] | HistoryInterface[]>
+  ): Observable<FavoriteInterface[] | HistoryInterface[]> {
     return combineLatest(
       quickLinksData$,
       this.store.pipe(select(LearningAreaQueries.getAllEntities)),
@@ -167,22 +173,18 @@ export class QuickLinkViewModel {
           taskDict,
           bundleDict
         ]) =>
-          quickLinks.map(qL => {
-            if (qL.learningAreaId) {
-              qL.learningArea = learningAreaDict[qL.learningAreaId];
-            }
-            if (qL.eduContentId) {
-              qL.eduContent = eduContentDict[qL.eduContentId];
-            }
-            if (qL.taskId) {
-              qL.task = taskDict[qL.taskId];
-            }
-            if (qL.bundleId) {
-              qL.bundle = bundleDict[qL.bundleId];
-            }
-
-            return qL;
-          })
+          quickLinks.map(qL => ({
+            ...qL,
+            // add relation data
+            learningArea: qL.learningAreaId
+              ? learningAreaDict[qL.learningAreaId]
+              : undefined,
+            eduContent: qL.eduContentId
+              ? eduContentDict[qL.eduContentId]
+              : undefined,
+            task: qL.taskId ? taskDict[qL.taskId] : undefined,
+            bundle: qL.bundleId ? bundleDict[qL.bundleId] : undefined
+          }))
       )
     );
   }

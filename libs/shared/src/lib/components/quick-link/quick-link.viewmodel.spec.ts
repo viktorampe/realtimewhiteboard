@@ -230,7 +230,7 @@ describe('QuickLinkViewModel', () => {
         ).toBeObservable(
           hot('a', {
             a: [
-              { ...mockFavorites[0], learningArea: mockLearningAreas[0] },
+              // mockFavorite[0] is not included -> learningArea favorites are filtered out
               {
                 ...mockFavorites[1],
                 learningArea: mockLearningAreas[1],
@@ -324,12 +324,12 @@ describe('QuickLinkViewModel', () => {
         id: 1,
         useCustomErrorHandler: true
       });
-      quickLinkViewModel.delete(1, QuickLinkTypeEnum.FAVORITES);
+      quickLinkViewModel.remove(1, QuickLinkTypeEnum.FAVORITES);
       expect(spy).toHaveBeenCalledWith(expectedAction);
     });
     it('should not dispatch if the mode is not supported ', () => {
       const spy = jest.spyOn(store, 'dispatch');
-      quickLinkViewModel.delete(1, 'bar' as QuickLinkTypeEnum);
+      quickLinkViewModel.remove(1, 'bar' as QuickLinkTypeEnum);
       quickLinkViewModel.update(1, 'foo', 'bar' as QuickLinkTypeEnum);
       expect(spy).not.toHaveBeenCalled();
     });
