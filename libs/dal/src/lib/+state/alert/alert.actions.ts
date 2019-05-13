@@ -2,7 +2,10 @@ import { NestedPartial } from '@campus/utils';
 import { Update } from '@ngrx/entity';
 import { Action } from '@ngrx/store';
 import { AlertQueueInterface } from '../../+models';
-import { FeedbackTriggeringAction } from '../effect-feedback';
+import {
+  CustomFeedbackHandlersInterface,
+  FeedbackTriggeringAction
+} from '../effect-feedback';
 export enum AlertsActionTypes {
   AlertsLoaded = '[Alerts] Alerts Loaded',
   AlertsLoadError = '[Alerts] Load Error',
@@ -79,7 +82,7 @@ export class SetReadAlert implements FeedbackTriggeringAction {
       alertIds: number | number[];
       read?: boolean;
       intended?: boolean;
-      useCustomErrorHandler?: boolean;
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
     }
   ) {
     // alertIds altijd in een array

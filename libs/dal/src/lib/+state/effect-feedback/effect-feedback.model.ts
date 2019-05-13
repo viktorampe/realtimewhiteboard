@@ -10,15 +10,22 @@ export interface FeedbackTriggeringAction extends Action {
   payload: FeedbackTriggeringPayload;
 }
 export interface FeedbackTriggeringPayload {
+  customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+}
+
+export interface CustomFeedbackHandlersInterface {
+  useCustomSuccessHandler?: boolean;
   useCustomErrorHandler?: boolean;
 }
+
+export type EffectFeedbackType = 'success' | 'error';
 
 export interface EffectFeedbackConstructorInterface {
   id: string;
   triggerAction: FeedbackTriggeringAction;
   icon?: string;
   message: string;
-  type?: 'success' | 'error';
+  type?: EffectFeedbackType;
   userActions?: {
     // buttons: expected action is right aligned, first in array
     title: string;
@@ -39,7 +46,7 @@ export class EffectFeedback implements EffectFeedbackInterface {
   triggerAction: FeedbackTriggeringAction;
   icon?: string;
   message: string;
-  type: 'success' | 'error' = 'success';
+  type: EffectFeedbackType = 'success';
   userActions: {
     // buttons: expected action is right aligned, first in array
     title: string;
@@ -52,9 +59,25 @@ export class EffectFeedback implements EffectFeedbackInterface {
 
   constructor(props: EffectFeedbackConstructorInterface) {
     Object.assign(this, props);
-    this.display = !(this.triggerAction['payload']
-      ? this.triggerAction['payload']['useCustomErrorHandler']
-      : false);
+    this.display = !EffectFeedback.getCustomHandlerValue(
+      this.triggerAction.payload,
+      this.type
+    );
+  }
+
+  private static getCustomHandlerValue(
+    payload: FeedbackTriggeringPayload,
+    type: EffectFeedbackType
+  ) {
+    if (!payload || !payload.customFeedbackHandlers) return false;
+    switch (type) {
+      case 'error':
+        return payload.customFeedbackHandlers.useCustomErrorHandler || false;
+      case 'success':
+        return payload.customFeedbackHandlers.useCustomSuccessHandler || false;
+      default:
+        return false;
+    }
   }
 
   static generateErrorFeedback(

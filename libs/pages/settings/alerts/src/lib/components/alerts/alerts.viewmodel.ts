@@ -41,7 +41,10 @@ export class AlertsViewModel {
         personId: this.authService.userId,
         read: false,
         intended: true,
-        useCustomErrorHandler: true
+        customFeedbackHandlers: {
+          useCustomSuccessHandler: true,
+          useCustomErrorHandler: false
+        }
       })
     );
   }
