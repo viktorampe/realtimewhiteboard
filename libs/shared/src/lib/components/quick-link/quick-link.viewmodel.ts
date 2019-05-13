@@ -2,27 +2,49 @@ import { Inject, Injectable } from '@angular/core';
 import {
   AuthServiceInterface,
   AUTH_SERVICE_TOKEN,
+  BundleQueries,
   DalState,
+  EduContentQueries,
   EffectFeedbackActions,
   EffectFeedbackInterface,
+  EffectFeedbackQueries,
   FavoriteActions,
   FavoriteInterface,
-  HistoryInterface
+  FavoriteQueries,
+  HistoryInterface,
+  LearningAreaQueries,
+  TaskQueries
 } from '@campus/dal';
 import { Update } from '@ngrx/entity';
-import { Action, Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Action, select, Store } from '@ngrx/store';
+import { combineLatest, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { QuickLinkTypeEnum } from './quick-link-type.enum';
 
 @Injectable()
 export class QuickLinkViewModel {
-  public quickLinks$: Observable<HistoryInterface[] | FavoriteInterface[]>;
-  public feedback$: Observable<EffectFeedbackInterface>;
+  public feedback$: Observable<EffectFeedbackInterface> = this.getFeedback$();
 
   constructor(
     private store: Store<DalState>,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface
   ) {}
+
+  public getQuickLinks$(
+    mode: QuickLinkTypeEnum
+  ): Observable<FavoriteInterface[] | HistoryInterface[]> {
+    if (mode === QuickLinkTypeEnum.FAVORITES) {
+      return this.composeQuickLink$(
+        this.store.pipe(select(FavoriteQueries.getAll))
+      );
+    }
+    if (mode === QuickLinkTypeEnum.HISTORY) {
+      throw new Error('no History State yet');
+      // return this.composeQuickLink$(
+      //   this.store.pipe(select(HistoryQueries.getAll))
+      // );
+    }
+  }
 
   public update(id: number, name: string, mode: QuickLinkTypeEnum): void {
     let action: Action;
@@ -48,6 +70,7 @@ export class QuickLinkViewModel {
 
     this.store.dispatch(action);
   }
+
   public delete(id: number, mode: QuickLinkTypeEnum): void {
     let action: Action;
     switch (mode) {
@@ -75,6 +98,52 @@ export class QuickLinkViewModel {
 
     this.store.dispatch(
       new EffectFeedbackActions.DeleteEffectFeedback({ id: event.feedbackId })
+    );
+  }
+
+  private composeQuickLink$(
+    quickLinksData$: Observable<(FavoriteInterface | HistoryInterface)[]>
+  ): Observable<(FavoriteInterface | HistoryInterface)[]> {
+    return combineLatest(
+      quickLinksData$,
+      this.store.pipe(select(LearningAreaQueries.getAllEntities)),
+      this.store.pipe(select(EduContentQueries.getAllEntities)),
+      this.store.pipe(select(TaskQueries.getAllEntities)),
+      this.store.pipe(select(BundleQueries.getAllEntities))
+    ).pipe(
+      map(
+        ([
+          quickLinks,
+          learningAreaDict,
+          eduContentDict,
+          taskDict,
+          bundleDict
+        ]) =>
+          quickLinks.map(qL => ({
+            ...qL,
+            // add relation data
+            learningArea: qL.learningAreaId
+              ? learningAreaDict[qL.learningAreaId]
+              : undefined,
+            eduContent: qL.eduContentId
+              ? eduContentDict[qL.eduContentId]
+              : undefined,
+            task: qL.taskId ? taskDict[qL.taskId] : undefined,
+            bundle: qL.bundleId ? bundleDict[qL.bundleId] : undefined
+          }))
+      )
+    );
+  }
+
+  private getFeedback$(): Observable<EffectFeedbackInterface> {
+    const actionTypes = FavoriteActions.FavoritesActionTypes;
+    // TODO once History has actions
+    // const actionTypes = [...FavoriteActions.FavoritesActionTypes,...HistoryActions.HistoryActionTypes]
+
+    return this.store.pipe(
+      select(EffectFeedbackQueries.getNextErrorFeedbackForActions, {
+        actionTypes: [actionTypes.UpdateFavorite, actionTypes.DeleteFavorite]
+      })
     );
   }
 }

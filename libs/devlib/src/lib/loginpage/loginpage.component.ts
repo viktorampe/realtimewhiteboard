@@ -102,9 +102,6 @@ export class LoginpageComponent implements OnInit {
     if (this.currentUser) {
       this.loadStore();
     }
-    setTimeout(() => {
-      this.openQuickLinkManager();
-    });
   }
 
   getCurrentUser() {
@@ -165,6 +162,13 @@ export class LoginpageComponent implements OnInit {
       favorite = favorites[0];
     });
     console.log(favorite);
+    this.response = this.favoriteService.updateFavorite(
+      this.authService.userId,
+      favorite.id,
+      {
+        name: favorite.name + 'x'
+      }
+    );
   }
 
   openQuickLinkManager(): void {
