@@ -155,9 +155,9 @@ export class QuickLinkViewModel {
       queryParams
     });
   }
-  private composeQuickLink$<T extends FavoriteInterface | HistoryInterface>(
-    quickLinksData$: Observable<T[]>
-  ): Observable<T[]> {
+  private composeQuickLink$(
+    quickLinksData$: Observable<FavoriteInterface[] | HistoryInterface[]>
+  ): Observable<FavoriteInterface[] | HistoryInterface[]> {
     return combineLatest(
       quickLinksData$,
       this.store.pipe(select(LearningAreaQueries.getAllEntities)),
