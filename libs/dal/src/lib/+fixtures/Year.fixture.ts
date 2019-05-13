@@ -3,8 +3,8 @@ import { YearInterface } from '../+models';
 export class YearFixture implements YearInterface {
   // defaults
   id = 1;
-  name: 'foo';
-  label: '1e jaar';
+  name = 'foo';
+  label = this.name + 'e jaar';
 
   constructor(props: Partial<YearInterface> = {}) {
     // overwrite defaults
