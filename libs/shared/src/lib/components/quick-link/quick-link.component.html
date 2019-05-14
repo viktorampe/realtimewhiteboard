@@ -1,4 +1,8 @@
-<campus-info-panel [titleText]="dialogTitle" [titleIcon]="dialogTitleIcon">
+<campus-info-panel
+  [titleText]="dialogTitle"
+  [titleIcon]="dialogTitleIcon"
+  class="quick-link__info-panel"
+>
   <campus-filter-text-input
     title__right
     theme="dark"
@@ -25,7 +29,7 @@
           >
           <div class="flex-spacer"></div>
           <div
-            class="quick-link__item__actions quick-link__item__actions--hover"
+            class="quick-link__item__actions quick-link__item__actions--links quick-link__item__actions--hover"
           >
             <ng-container
               *ngFor="let action of quickLink.alternativeOpenActions"
@@ -34,6 +38,7 @@
                 [matTooltip]="action.tooltip"
                 (click)="action.handler(quickLink)"
                 campusClickStopPropagation
+                class="quick-link__item__actions__link"
               >
                 {{ action.label }}</a
               >
@@ -59,8 +64,8 @@
               circle
               mat-icon-button
               [matMenuTriggerFor]="allActionDropDown"
+              [iconClass]="'context_menu'"
             >
-              <mat-icon>more_vert</mat-icon>
             </campus-button>
             <mat-menu #allActionDropDown="matMenu">
               <button

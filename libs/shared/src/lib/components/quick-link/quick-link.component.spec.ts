@@ -15,6 +15,7 @@ import {
   MatListItem,
   MatListModule,
   MatListSubheaderCssMatStyler,
+  MatMenuModule,
   MatTooltipModule,
   MAT_DIALOG_DATA
 } from '@angular/material';
@@ -58,7 +59,8 @@ describe('QuickLinkComponent', () => {
         MatTooltipModule,
         MatListModule,
         MatDialogModule,
-        RouterTestingModule
+        RouterTestingModule,
+        MatMenuModule
       ],
       declarations: [QuickLinkComponent],
       providers: [
@@ -495,9 +497,11 @@ describe('QuickLinkComponent', () => {
             .queryAll(By.directive(ButtonComponent))
             .map(dE => dE.componentInstance as ButtonComponent);
 
-          expect(listItemButtons.length).toBe(2);
+          expect(listItemButtons.length).toBe(3);
           expect(listItemButtons[0].iconClass).toBe('edit');
           expect(listItemButtons[1].iconClass).toBe('delete');
+          // context menu button is hidden with css on desktop
+          expect(listItemButtons[2].iconClass).toBe('context_menu');
         });
 
         it('should call the correct action handler on element click', fakeAsync(() => {
@@ -888,7 +892,7 @@ describe('QuickLinkComponent', () => {
                 actionType: 'open',
                 label: 'Openen',
                 icon: 'exercise:open',
-                tooltip: 'open oefening zonder oplossingen',
+                tooltip: 'Open oefening zonder oplossingen',
                 handler: mockOpenEduContentAsExerciseFunction
               };
 
@@ -906,7 +910,7 @@ describe('QuickLinkComponent', () => {
                   actionType: 'open',
                   label: 'Toon oplossing',
                   icon: 'exercise:finished',
-                  tooltip: 'open oefening met oplossingen',
+                  tooltip: 'Open oefening met oplossingen',
                   handler: mockOpenEduContentAsSolutionFunction
                 }
               ];
@@ -1065,14 +1069,14 @@ describe('QuickLinkComponent', () => {
                 actionType: 'manage',
                 label: 'Bewerken',
                 icon: 'edit',
-                tooltip: 'naam aanpassen',
+                tooltip: 'Pas de naam van het item aan',
                 handler: mockUpdateFunction
               },
               {
                 actionType: 'manage',
                 label: 'Verwijderen',
                 icon: 'delete',
-                tooltip: 'item verwijderen',
+                tooltip: 'Verwijder het item',
                 handler: mockRemoveFunction
               }
             ];

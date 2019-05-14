@@ -81,6 +81,7 @@ export const icons = {
   'exercise:open': 'assets/icons/exercise-open.svg',
   'exercise:finished': 'assets/icons/exercise-finished.svg',
   download: 'assets/icons/material/download.svg',
+  context_menu: 'assets/icons/material/more_vert.svg',
 
   // -> product types
   'list-view': 'assets/icons/material/list-view.svg',
