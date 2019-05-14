@@ -7,7 +7,15 @@ import {
   OnInit,
   SimpleChanges
 } from '@angular/core';
-import { EduContentBookInterface, EduContentTOCInterface } from '@campus/dal';
+import {
+  DalState,
+  EduContentBookInterface,
+  EduContentTOCInterface,
+  FavoriteActions,
+  FavoriteInterface,
+  FavoriteQueries,
+  FavoriteTypesEnum
+} from '@campus/dal';
 import { ResultItemBase } from '@campus/search';
 import {
   EduContentCollectionManagerServiceInterface,
@@ -16,6 +24,7 @@ import {
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN
 } from '@campus/shared';
+import { Store } from '@ngrx/store';
 
 @Component({
   // tslint:disable-next-line
@@ -41,7 +50,8 @@ export class EduContentSearchResultComponent extends ResultItemBase
     @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
     private openStaticContentService: OpenStaticContentServiceInterface,
     @Inject(EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN)
-    private eduContentManagerService: EduContentCollectionManagerServiceInterface
+    private eduContentManagerService: EduContentCollectionManagerServiceInterface,
+    private store: Store<DalState>
   ) {
     super();
   }
@@ -49,6 +59,14 @@ export class EduContentSearchResultComponent extends ResultItemBase
   ngOnInit() {
     super.ngOnInit();
 
+    this.store
+      .select(FavoriteQueries.getByTypeAndId, {
+        type: FavoriteTypesEnum.EDUCONTENT,
+        id: this.data.eduContent.id
+      })
+      .subscribe(favorite => {
+        this.data.isFavorite = !!favorite;
+      });
     this.normalizedEduContentToc = this.getNormalizedEduContentToc();
   }
 
@@ -73,7 +91,15 @@ export class EduContentSearchResultComponent extends ResultItemBase
 
   public unlinkBundle() {}
 
-  public toggleFavorite() {}
+  public toggleFavorite() {
+    const favorite: FavoriteInterface = {
+      name: this.data.eduContent.name,
+      type: FavoriteTypesEnum.EDUCONTENT,
+      eduContentId: this.data.eduContent.id,
+      created: new Date()
+    };
+    this.store.dispatch(new FavoriteActions.ToggleFavorite({ favorite }));
+  }
 
   public openStatic() {
     this.openStaticContentService.open(this.data.eduContent);
