@@ -30,6 +30,10 @@ import {
   OPEN_STATIC_CONTENT_SERVICE_TOKEN
 } from '../../content/open-static-content.interface';
 import {
+  FeedBackServiceInterface,
+  FEEDBACK_SERVICE_TOKEN
+} from '../../feedback';
+import {
   ScormExerciseServiceInterface,
   SCORM_EXERCISE_SERVICE_TOKEN
 } from '../../scorm/scorm-exercise.service.interface';
@@ -44,7 +48,9 @@ export class QuickLinkViewModel {
     @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
     private openStaticContentService: OpenStaticContentServiceInterface,
     @Inject(SCORM_EXERCISE_SERVICE_TOKEN)
-    private scormExerciseService: ScormExerciseServiceInterface
+    private scormExerciseService: ScormExerciseServiceInterface,
+    @Inject(FEEDBACK_SERVICE_TOKEN)
+    private feedBackService: FeedBackServiceInterface
   ) {}
 
   public getQuickLinks$(
@@ -207,7 +213,8 @@ export class QuickLinkViewModel {
     return this.store.pipe(
       select(EffectFeedbackQueries.getNextErrorFeedbackForActions, {
         actionTypes: [actionTypes.UpdateFavorite, actionTypes.DeleteFavorite]
-      })
+      }),
+      map(feedBack => this.feedBackService.addDefaultCancelButton(feedBack))
     );
   }
 }

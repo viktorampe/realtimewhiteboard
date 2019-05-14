@@ -43,6 +43,10 @@ import {
   OPEN_STATIC_CONTENT_SERVICE_TOKEN
 } from '../../content/open-static-content.interface';
 import {
+  FeedBackServiceInterface,
+  FEEDBACK_SERVICE_TOKEN
+} from '../../feedback';
+import {
   ScormExerciseServiceInterface,
   SCORM_EXERCISE_SERVICE_TOKEN
 } from '../../scorm/scorm-exercise.service.interface';
@@ -55,6 +59,7 @@ describe('QuickLinkViewModel', () => {
   let router: Router;
   let openStaticContentService: OpenStaticContentServiceInterface;
   let scormExerciseService: ScormExerciseServiceInterface;
+  let feedBackService: FeedBackServiceInterface;
   let dateMock: MockDate;
 
   const mockUserId = 186;
@@ -201,6 +206,14 @@ describe('QuickLinkViewModel', () => {
         {
           provide: SCORM_EXERCISE_SERVICE_TOKEN,
           useValue: { previewExerciseFromUnlockedContent: jest.fn() }
+        },
+        {
+          provide: FEEDBACK_SERVICE_TOKEN,
+          useValue: {
+            addDefaultCancelButton: (val: EffectFeedbackInterface) => {
+              return val;
+            }
+          }
         }
       ]
     });
@@ -210,6 +223,7 @@ describe('QuickLinkViewModel', () => {
     router = TestBed.get(Router);
     openStaticContentService = TestBed.get(OPEN_STATIC_CONTENT_SERVICE_TOKEN);
     scormExerciseService = TestBed.get(SCORM_EXERCISE_SERVICE_TOKEN);
+    feedBackService = TestBed.get(FEEDBACK_SERVICE_TOKEN);
   });
 
   describe('creation', () => {
@@ -263,27 +277,32 @@ describe('QuickLinkViewModel', () => {
 
     describe('feedback', () => {
       it('should emit an error triggered by UpdateFavorite', () => {
+        const spy = jest.spyOn(feedBackService, 'addDefaultCancelButton');
         store.dispatch(
           new EffectFeedbackActions.AddEffectFeedback({
             effectFeedback: mockFeedBack.updateFavoriteError
           })
         );
-
-        expect(quickLinkViewModel.feedback$).toBeObservable(
+        expect(quickLinkViewModel.getFeedback$()).toBeObservable(
           hot('a', { a: mockFeedBack.updateFavoriteError })
         );
+        expect(spy).toHaveBeenCalledWith(mockFeedBack.updateFavoriteError);
       });
 
       it('should emit an error triggered by DeleteFavorite', () => {
+        const spy = jest.spyOn(feedBackService, 'addDefaultCancelButton');
+
         store.dispatch(
           new EffectFeedbackActions.AddEffectFeedback({
             effectFeedback: mockFeedBack.deleteFavoriteError
           })
         );
 
-        expect(quickLinkViewModel.feedback$).toBeObservable(
+        expect(quickLinkViewModel.getFeedback$()).toBeObservable(
           hot('a', { a: mockFeedBack.deleteFavoriteError })
         );
+
+        expect(spy).toHaveBeenCalledWith(mockFeedBack.deleteFavoriteError);
       });
     });
   });
@@ -335,7 +354,7 @@ describe('QuickLinkViewModel', () => {
       expect(spy).not.toHaveBeenCalled();
     });
 
-    it('should handle feedback dissmiss with action', () => {
+    it('should handle feedback dismiss with action', () => {
       const spy = jest.spyOn(store, 'dispatch').mockImplementation(() => {});
       const feedbackDismissEvent = {
         action: {} as Action,
@@ -349,7 +368,7 @@ describe('QuickLinkViewModel', () => {
         new EffectFeedbackActions.DeleteEffectFeedback({ id: 'foo' })
       );
     });
-    it('should handle feedback dissmiss without action', () => {
+    it('should handle feedback dismiss without action', () => {
       const spy = jest.spyOn(store, 'dispatch').mockImplementation(() => {});
       const feedbackDismissEvent = {
         action: null,
