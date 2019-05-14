@@ -8,5 +8,5 @@ $shared-color-1: #95a0aa !default;
 
 @mixin shared-theme() {
   @include shared-header();
-  @include quick-link();
+  @include shared-quick-link();
 }
