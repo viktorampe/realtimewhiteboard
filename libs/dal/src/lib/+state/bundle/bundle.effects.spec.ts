@@ -247,7 +247,6 @@ describe('BundleEffects', () => {
           userActions: [
             { title: 'Opnieuw proberen', userAction: linkEduContentAction }
           ],
-          display: true,
           priority: Priority.HIGH
         });
         addFeedbackAction = new AddEffectFeedback({ effectFeedback });
@@ -320,7 +319,6 @@ describe('BundleEffects', () => {
           userActions: [
             { title: 'Opnieuw proberen', userAction: linkUserContentAction }
           ],
-          display: true,
           priority: Priority.HIGH
         });
         addFeedbackAction = new AddEffectFeedback({ effectFeedback });
