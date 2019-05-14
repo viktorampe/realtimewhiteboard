@@ -312,18 +312,16 @@ export class QuickLinkComponent implements OnInit {
     b: ContentDataInterface
   ): number {
     let aIndex, bIndex: number;
-    const numberOfKeys = Array.from(this.categories.keys()).length;
-
     if (this.categories.has(a.type)) {
       aIndex = this.categories.get(a.type).order;
     } else {
-      aIndex = numberOfKeys; // not in map -> always last
+      return 1;
     }
 
     if (this.categories.has(b.type)) {
       bIndex = this.categories.get(b.type).order;
     } else {
-      bIndex = numberOfKeys; // not in map -> always last
+      return -1;
     }
 
     return aIndex - bIndex;
