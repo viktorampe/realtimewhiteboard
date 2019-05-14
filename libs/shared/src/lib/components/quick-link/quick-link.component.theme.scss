@@ -30,17 +30,17 @@
           padding: 0px;
         }
 
-        .ui-button {
-          &:not(:hover) {
-            background-color: inherit;
-          }
-        }
+
       }
     }
 
     &__item {
       &__icon {
         color: rgba(0, 0, 0, 0.54); //mat-icon default color in list
+      }
+
+      campus-button {
+        background: transparent;
       }
     }
   }

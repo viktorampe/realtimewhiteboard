@@ -11,12 +11,13 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { QuickLinkTypeEnum } from './quick-link-type.enum';
 import { QuickLinkViewModel } from './quick-link.viewmodel';
+import { MockQuickLinkViewModel } from './quick-link.viewmodel.mock';
 
 @Component({
   selector: 'campus-quick-link',
   templateUrl: './quick-link.component.html',
   styleUrls: ['./quick-link.component.scss'],
-  providers: [QuickLinkViewModel]
+  providers: [{ provide: QuickLinkViewModel, useClass: MockQuickLinkViewModel }]
 })
 export class QuickLinkComponent implements OnInit {
   public contentData$: Observable<ContentDataInterface[]>;
@@ -39,7 +40,7 @@ export class QuickLinkComponent implements OnInit {
       actionType: 'open',
       label: 'Openen',
       icon: 'exercise:open',
-      tooltip: 'open oefening zonder oplossingen',
+      tooltip: 'Open oefening zonder oplossingen',
       handler: (input: QuickLinkInterface): void =>
         this.openEduContentAsExercise(input)
     },
@@ -47,7 +48,7 @@ export class QuickLinkComponent implements OnInit {
       actionType: 'open',
       label: 'Toon oplossing',
       icon: 'exercise:finished',
-      tooltip: 'open oefening met oplossingen',
+      tooltip: 'Open oefening met oplossingen',
       handler: (input: QuickLinkInterface): void =>
         this.openEduContentAsSolution(input)
     },
@@ -106,14 +107,14 @@ export class QuickLinkComponent implements OnInit {
       actionType: 'manage',
       label: 'Bewerken',
       icon: 'edit',
-      tooltip: 'naam aanpassen',
+      tooltip: 'Pas de naam van het item aan',
       handler: (input: QuickLinkInterface): void => this.update(input)
     },
     remove: {
       actionType: 'manage',
       label: 'Verwijderen',
       icon: 'delete',
-      tooltip: 'item verwijderen',
+      tooltip: 'Verwijder het item',
       handler: (input: QuickLinkInterface): void => this.remove(input)
     }
   };
