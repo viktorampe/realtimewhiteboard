@@ -1,8 +1,36 @@
-import { async, ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
-import { MatDialogActions, MatDialogModule, MatDialogRef, MatIcon, MatIconModule, MatIconRegistry, MatList, MatListItem, MatListModule, MatListSubheaderCssMatStyler, MatTooltipModule, MAT_DIALOG_DATA } from '@angular/material';
+import {
+  async,
+  ComponentFixture,
+  fakeAsync,
+  TestBed
+} from '@angular/core/testing';
+import {
+  MatDialogActions,
+  MatDialogModule,
+  MatDialogRef,
+  MatIcon,
+  MatIconModule,
+  MatIconRegistry,
+  MatList,
+  MatListItem,
+  MatListModule,
+  MatListSubheaderCssMatStyler,
+  MatTooltipModule,
+  MAT_DIALOG_DATA
+} from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
-import { BundleFixture, EduContentFixture, EduContentMetadataFixture, FavoriteFixture, FavoriteInterface, FavoriteTypesEnum, HistoryInterface, LearningAreaFixture, TaskFixture } from '@campus/dal';
+import {
+  BundleFixture,
+  EduContentFixture,
+  EduContentMetadataFixture,
+  FavoriteFixture,
+  FavoriteInterface,
+  FavoriteTypesEnum,
+  HistoryInterface,
+  LearningAreaFixture,
+  TaskFixture
+} from '@campus/dal';
 import { MockDate, MockMatIconRegistry } from '@campus/testing';
 import { ButtonComponent, InfoPanelComponent, UiModule } from '@campus/ui';
 import { hot } from '@nrwl/nx/testing';
@@ -1243,9 +1271,9 @@ describe('QuickLinkComponent', () => {
         mockInjectedData.mode
       );
     });
-    it('onBannerDismiss should call the correct method on the viewmodel',()=>{
+    it('onBannerDismiss should call the correct method on the viewmodel', () => {
       const spy = jest.spyOn(quickLinkViewModel, 'onFeedbackDismiss');
-      const mockEvent = {action: 'foo', feedbackId: 'bar'};
+      const mockEvent = { action: 'foo', feedbackId: 'bar' };
       component.onBannerDismiss(mockEvent);
       expect(spy).toHaveBeenCalledWith(mockEvent);
     });
