@@ -14,7 +14,6 @@ import {
   Priority
 } from '../../..';
 import { UNLOCKED_CONTENT_SERVICE_TOKEN } from '../../bundle/unlocked-content.service.interface';
-import { EffectFeedback } from '../effect-feedback';
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
 import {
   DeleteUnlockedContent,
@@ -222,10 +221,7 @@ describe('UnlockedContentEffects', () => {
       });
       effectFeedback.triggerAction = deleteAction;
       effectFeedback.message = 'Het lesmateriaal is uit de bundel verwijderd.';
-      effectFeedback.display = !EffectFeedback['getCustomHandlerValue'](
-        deleteAction.payload,
-        'success'
-      );
+      effectFeedback.display = true;
       effectFeedback.userActions = null;
       effectFeedback.type = 'success';
       effectFeedback.priority = Priority.NORM;
@@ -244,10 +240,7 @@ describe('UnlockedContentEffects', () => {
       effectFeedback.triggerAction = deleteAction;
       effectFeedback.message =
         'Het is niet gelukt om het lesmateriaal uit de bundel te verwijderen.';
-      effectFeedback.display = !EffectFeedback['getCustomHandlerValue'](
-        deleteAction.payload,
-        'error'
-      );
+      effectFeedback.display = true;
       effectFeedback.userActions = [
         { title: 'Opnieuw', userAction: deleteAction }
       ];
@@ -272,10 +265,7 @@ describe('UnlockedContentEffects', () => {
       effectFeedback.triggerAction = deleteAction;
       effectFeedback.message =
         'De lesmaterialen zijn uit de bundel verwijderd.';
-      effectFeedback.display = !EffectFeedback['getCustomHandlerValue'](
-        deleteAction.payload,
-        'success'
-      );
+      effectFeedback.display = true;
       effectFeedback.userActions = null;
       effectFeedback.type = 'success';
       effectFeedback.priority = Priority.NORM;
@@ -294,10 +284,7 @@ describe('UnlockedContentEffects', () => {
       effectFeedback.triggerAction = deleteAction;
       effectFeedback.message =
         'Het is niet gelukt om de lesmaterialen uit de bundel te verwijderen.';
-      effectFeedback.display = !EffectFeedback['getCustomHandlerValue'](
-        deleteAction.payload,
-        'error'
-      );
+      effectFeedback.display = true;
       effectFeedback.userActions = [
         { title: 'Opnieuw', userAction: deleteAction }
       ];
