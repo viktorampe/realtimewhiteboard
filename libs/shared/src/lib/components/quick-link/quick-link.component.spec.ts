@@ -682,10 +682,22 @@ describe('QuickLinkComponent', () => {
 
         it('should sort the quicklinks [per category] on created date, descending', () => {
           const mockFavorites = [
-            new FavoriteFixture({ id: 1, type: 'foo', created: new Date(1) }),
-            new FavoriteFixture({ id: 2, type: 'foo', created: new Date(4) }),
-            new FavoriteFixture({ id: 3, type: 'foo', created: new Date(2) }),
-            new FavoriteFixture({ id: 4, type: 'foo', created: new Date(3) })
+            new FavoriteFixture({
+              id: 1,
+              type: 'boek-e',
+              created: new Date(1)
+            }),
+            new FavoriteFixture({
+              id: 2,
+              type: 'boek-e',
+              created: new Date(4)
+            }),
+            new FavoriteFixture({
+              id: 3,
+              type: 'boek-e',
+              created: new Date(2)
+            }),
+            new FavoriteFixture({ id: 4, type: 'boek-e', created: new Date(3) })
           ];
 
           vmQuickLinks$.next(mockFavorites);
