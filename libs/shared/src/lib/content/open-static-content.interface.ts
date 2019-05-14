@@ -6,5 +6,5 @@ export const OPEN_STATIC_CONTENT_SERVICE_TOKEN = new InjectionToken<
 >('OpenStaticContentService');
 
 export interface OpenStaticContentServiceInterface {
-  open(content: ContentInterface): void;
+  open(content: ContentInterface, stream?: boolean): void;
 }

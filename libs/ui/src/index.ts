@@ -18,6 +18,7 @@ export {
   FilterableItem,
   FilterTextInputComponent
 } from './lib/filter-text-input/filter-text-input.component';
+export { InfoPanelComponent } from './lib/info-panel/info-panel.component';
 export { ListFormat } from './lib/list-view/enums/list-format.enum';
 export {
   ListViewItemInterface
