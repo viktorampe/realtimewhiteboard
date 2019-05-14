@@ -1,0 +1,13 @@
+@mixin shared-quick-link() {
+  .quick-link {
+    &__item {
+      .ui-content-editable__form-field {
+        margin-right: 8px;
+      }
+
+      campus-button {
+        background: transparent;
+      }
+    }
+  }
+}
