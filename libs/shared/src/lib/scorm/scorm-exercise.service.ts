@@ -159,7 +159,7 @@ export class ScormExerciseService implements ScormExerciseServiceInterface {
       new CurrentExerciseActions.SaveCurrentExercise({
         userId: userId,
         exercise: currentExercise,
-        displayResponse: displayResponse
+        customFeedbackHandlers: { useCustomSuccessHandler: !displayResponse }
       })
     );
   }
