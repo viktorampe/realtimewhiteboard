@@ -551,19 +551,19 @@ describe('QuickLinkComponent', () => {
               title: 'foo',
               quickLinks: [
                 // ignore missing properties
-                jasmine.objectContaining(mockFavorites[0]),
-                jasmine.objectContaining(mockFavorites[1])
+                jasmine.objectContaining({ ...mockFavorites[0] }),
+                jasmine.objectContaining({ ...mockFavorites[1] })
               ]
             },
             {
               type: 'bar',
               title: 'bar',
-              quickLinks: [jasmine.objectContaining(mockFavorites[2])]
+              quickLinks: [jasmine.objectContaining({ ...mockFavorites[2] })]
             },
             {
               type: 'baz',
               title: 'baz',
-              quickLinks: [jasmine.objectContaining(mockFavorites[3])]
+              quickLinks: [jasmine.objectContaining({ ...mockFavorites[3] })]
             }
           ]);
 
