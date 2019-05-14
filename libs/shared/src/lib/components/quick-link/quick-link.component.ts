@@ -22,14 +22,14 @@ import { MockQuickLinkViewModel } from './quick-link.viewmodel.mock';
   providers: [{ provide: QuickLinkViewModel, useClass: MockQuickLinkViewModel }]
 })
 export class QuickLinkComponent implements OnInit {
-  public contentData$: Observable<ContentDataInterface[]>;
+  public contentData$: Observable<QuickLinkInterface[]>;
   public feedback$: Observable<EffectFeedbackInterface>;
   public dialogTitle: string;
   public dialogTitleIcon: string;
 
   @ViewChild(FilterTextInputComponent)
   filterTextInput: FilterTextInputComponent<
-    ContentDataInterface[],
+    QuickLinkInterface[],
     ContentDataInterface
   >;
 
@@ -147,14 +147,24 @@ export class QuickLinkComponent implements OnInit {
   }
 
   filterFn(
-    source: ContentDataInterface[],
+    source: QuickLinkInterface[],
     searchText: string
   ): ContentDataInterface[] {
-    /*const filteredItems = this.filterService.filter(source, {
-      name: searchText
-    });
-    return filteredItems;*/
-    return source;
+    if (searchText.trim().length > 0) {
+      const results = this.filterService
+        .filter(source, { name: searchText })
+        .sort(this.quickLinkSorter);
+
+      const contentData: ContentDataInterface = {
+        type: 'Gevonden items',
+        title: 'Gevonden items',
+        quickLinks: results
+      };
+
+      return [contentData];
+    } else {
+      return this.convertToQuickLinkData(source);
+    }
   }
 
   public closeDialog() {
@@ -215,8 +225,7 @@ export class QuickLinkComponent implements OnInit {
       .pipe(
         map(quickLinks =>
           quickLinks.map(quickLink => this.convertToQuickLink(quickLink))
-        ),
-        map(qL => this.convertToQuickLinkData(qL))
+        )
       );
 
     this.feedback$ = this.quickLinkViewModel.feedback$;
