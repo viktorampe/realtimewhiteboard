@@ -32,6 +32,24 @@ export class QuickLinkComponent implements OnInit {
     [QuickLinkTypeEnum.HISTORY, { title: 'Recente items', icon: 'unfinished' }]
   ]);
 
+  private categories = new Map<
+    FavoriteTypesEnum | string,
+    { label: string; order: number }
+  >([
+    // Favorites
+    [FavoriteTypesEnum.BOEKE, { label: 'Bordboeken', order: 0 }],
+    [FavoriteTypesEnum.EDUCONTENT, { label: 'Lesmateriaal', order: 1 }],
+    [FavoriteTypesEnum.SEARCH, { label: 'Zoekopdrachten', order: 2 }],
+    [FavoriteTypesEnum.BUNDLE, { label: 'Bundels', order: 3 }],
+    [FavoriteTypesEnum.TASK, { label: 'Taken', order: 4 }],
+    // History
+    ['boek-e', { label: 'Bordboeken', order: 0 }],
+    ['educontent', { label: 'Lesmateriaal', order: 1 }],
+    ['search', { label: 'Zoekopdrachten', order: 2 }],
+    ['bundle', { label: 'Bundels', order: 3 }],
+    ['task', { label: 'Taken', order: 4 }]
+  ]);
+
   private quickLinkActions: {
     [key: string]: QuickLinkActionInterface;
   } = {
@@ -207,7 +225,7 @@ export class QuickLinkComponent implements OnInit {
           if (!category) {
             category = {
               type: value.type,
-              title: value.type, // TODO: add actual name -> function? enum?
+              title: this.getCategoryTitle(value),
               quickLinks: []
             };
             acc.push(category);
@@ -221,9 +239,11 @@ export class QuickLinkComponent implements OnInit {
       )
       .map(category => ({
         ...category,
-        quickLinks: category.quickLinks.sort(this.quickLinkSorter) // order items in category
+        quickLinks: category.quickLinks.sort((a, b) =>
+          this.quickLinkSorter(a, b)
+        ) // order items in category
       }))
-      .sort(this.quickLinkDataCategorySorter); // order categories
+      .sort((a, b) => this.quickLinkDataCategorySorter(a, b)); // order categories
   }
 
   // adds actions to Favorites and Histories
@@ -291,7 +311,20 @@ export class QuickLinkComponent implements OnInit {
     a: ContentDataInterface,
     b: ContentDataInterface
   ): number {
-    return a.type > b.type ? 1 : -1; // TODO: write actual sorting,  sorting alphabetically for now
+    let aIndex, bIndex: number;
+    if (this.categories.has(a.type)) {
+      aIndex = this.categories.get(a.type).order;
+    } else {
+      return 1;
+    }
+
+    if (this.categories.has(b.type)) {
+      bIndex = this.categories.get(b.type).order;
+    } else {
+      return -1;
+    }
+
+    return aIndex - bIndex;
   }
 
   private quickLinkSorter(
@@ -299,6 +332,12 @@ export class QuickLinkComponent implements OnInit {
     b: QuickLinkInterface
   ): number {
     return new Date(b.created).getTime() - new Date(a.created).getTime(); // sorting descending
+  }
+
+  private getCategoryTitle(quickLink: FavoriteInterface | HistoryInterface) {
+    return this.categories.has(quickLink.type)
+      ? this.categories.get(quickLink.type).label
+      : quickLink.type;
   }
 }
 
