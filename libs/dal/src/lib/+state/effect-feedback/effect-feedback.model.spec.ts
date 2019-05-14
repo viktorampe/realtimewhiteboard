@@ -6,121 +6,112 @@ import {
 
 describe('EffectFeedback model', () => {
   describe('generateErrorFeedback', () => {
-    it('should display error feedback depending on action.payload.customFeedbackHandlers.useCustomErrorHandler data', () => {
+    it('should display error and succes feedback depending on action.payload.customFeedbackHandlers data', () => {
       const assertionData: {
         action: { payload: FeedbackTriggeringPayload };
-        expectedDisplay: boolean;
+        expectedErrorDisplay: boolean;
+        expectedSuccessDisplay: boolean;
       }[] = [
         {
+          action: undefined,
+          expectedErrorDisplay: true,
+          expectedSuccessDisplay: true
+        },
+        {
           action: null,
-          expectedDisplay: true
+          expectedErrorDisplay: true,
+          expectedSuccessDisplay: true
+        },
+        {
+          action: { payload: undefined },
+          expectedErrorDisplay: true,
+          expectedSuccessDisplay: true
         },
         {
           action: { payload: null },
-          expectedDisplay: true
+          expectedErrorDisplay: true,
+          expectedSuccessDisplay: true
         },
         {
           action: { payload: {} },
-          expectedDisplay: true
+          expectedErrorDisplay: true,
+          expectedSuccessDisplay: true
+        },
+        {
+          action: { payload: { customFeedbackHandlers: undefined } },
+          expectedErrorDisplay: true,
+          expectedSuccessDisplay: true
         },
         {
           action: { payload: { customFeedbackHandlers: null } },
-          expectedDisplay: true
+          expectedErrorDisplay: true,
+          expectedSuccessDisplay: true
         },
         {
           action: {
             payload: {
-              customFeedbackHandlers: { useCustomErrorHandler: null }
+              customFeedbackHandlers: {
+                useCustomErrorHandler: undefined,
+                useCustomSuccessHandler: undefined
+              }
             }
           },
-          expectedDisplay: true
+          expectedErrorDisplay: true,
+          expectedSuccessDisplay: true
         },
         {
           action: {
             payload: {
-              customFeedbackHandlers: { useCustomErrorHandler: false }
+              customFeedbackHandlers: {
+                useCustomErrorHandler: null,
+                useCustomSuccessHandler: null
+              }
             }
           },
-          expectedDisplay: true
+          expectedErrorDisplay: true,
+          expectedSuccessDisplay: true
         },
         {
           action: {
             payload: {
-              customFeedbackHandlers: { useCustomErrorHandler: true }
+              customFeedbackHandlers: {
+                useCustomErrorHandler: false,
+                useCustomSuccessHandler: false
+              }
             }
           },
-          expectedDisplay: false
+          expectedErrorDisplay: true,
+          expectedSuccessDisplay: true
+        },
+        {
+          action: {
+            payload: {
+              customFeedbackHandlers: {
+                useCustomErrorHandler: true,
+                useCustomSuccessHandler: true
+              }
+            }
+          },
+          expectedErrorDisplay: false,
+          expectedSuccessDisplay: false
         }
       ];
       assertionData.forEach(data => {
         const action = (data.action as unknown) as FeedbackTriggeringAction;
 
-        const result = EffectFeedback.generateErrorFeedback(
+        const errorResult = EffectFeedback.generateErrorFeedback(
           'foo',
           action,
-          'foo message'
+          'foo error message'
         );
-        expect(result.display).toEqual(data.expectedDisplay);
-      });
-    });
+        expect(errorResult.display).toEqual(data.expectedErrorDisplay);
 
-    it('should display success feedback depending on action.payload.customFeedbackHandlers.useCustomSuccessHandler data', () => {
-      const assertionData: {
-        action: { payload: FeedbackTriggeringPayload };
-        expectedDisplay: boolean;
-      }[] = [
-        {
-          action: null,
-          expectedDisplay: true
-        },
-        {
-          action: { payload: null },
-          expectedDisplay: true
-        },
-        {
-          action: { payload: {} },
-          expectedDisplay: true
-        },
-        {
-          action: {
-            payload: { customFeedbackHandlers: null }
-          },
-          expectedDisplay: true
-        },
-        {
-          action: {
-            payload: {
-              customFeedbackHandlers: { useCustomSuccessHandler: null }
-            }
-          },
-          expectedDisplay: true
-        },
-        {
-          action: {
-            payload: {
-              customFeedbackHandlers: { useCustomSuccessHandler: false }
-            }
-          },
-          expectedDisplay: true
-        },
-        {
-          action: {
-            payload: {
-              customFeedbackHandlers: { useCustomSuccessHandler: true }
-            }
-          },
-          expectedDisplay: false
-        }
-      ];
-      assertionData.forEach(data => {
-        const action = (data.action as unknown) as FeedbackTriggeringAction;
-
-        const result = EffectFeedback.generateSuccessFeedback(
+        const successResult = EffectFeedback.generateSuccessFeedback(
           'foo',
           action,
-          'foo message'
+          'foo success message'
         );
-        expect(result.display).toEqual(data.expectedDisplay);
+        expect(successResult.display).toEqual(data.expectedSuccessDisplay);
       });
     });
   });
