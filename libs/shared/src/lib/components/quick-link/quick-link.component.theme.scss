@@ -1,0 +1,55 @@
+@mixin quick-link {
+  .quick-link {
+    &__dialog {
+      .mat-dialog {
+        &-container {
+          padding: 0px;
+          overflow-y: hidden;
+          border-radius: 0px;
+        }
+
+        &-content {
+          padding: 0 !important;
+          margin: 0 !important;
+        }
+
+        &-actions {
+          margin-bottom: 0;
+
+          campus-button {
+            min-width: 95px;
+            font-size: 16px;
+          }
+        }
+      }
+
+      .info-panel {
+        margin: 0px;
+
+        &__body {
+          padding: 0px;
+        }
+
+        .ui-button {
+          &:not(:hover) {
+            background-color: inherit;
+          }
+        }
+      }
+    }
+
+    &__item {
+      &__icon {
+        color: rgba(0, 0, 0, 0.54); //mat-icon default color in list
+      }
+    }
+  }
+}
+
+@media #{$ui-breakpoint-xsmall} {
+  .quick-link {
+    &__dialog {
+      min-width: 95vw; // not really sure about this, 100vw seems too much?
+    }
+  }
+}

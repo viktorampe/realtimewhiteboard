@@ -16,6 +16,7 @@
           <mat-icon
             mat-list-icon
             [svgIcon]="quickLink.learningArea.icon"
+            class="quick-link__item__icon"
           ></mat-icon>
           <div
             class="quick-link__item__title"
@@ -52,6 +53,33 @@
                 campusClickStopPropagation
               ></campus-button>
             </ng-container>
+          </div>
+          <div class="quick-link__item__actions__context-menu">
+            <campus-button
+              circle
+              mat-icon-button
+              [matMenuTriggerFor]="allActionDropDown"
+            >
+              <mat-icon>more_vert</mat-icon>
+            </campus-button>
+            <mat-menu #allActionDropDown="matMenu">
+              <button
+                mat-menu-item
+                *ngFor="let action of quickLink.alternativeOpenActions"
+                (click)="action.handler(quickLink)"
+              >
+                <mat-icon [svgIcon]="action.icon"></mat-icon>
+                {{ action.label }}</button
+              >
+              <button
+                mat-menu-item
+                *ngFor="let action of quickLink.manageActions"
+                (click)="action.handler(quickLink)"
+              >
+                <mat-icon [svgIcon]="action.icon"></mat-icon
+                >{{ action.label }}</button
+              >
+            </mat-menu>
           </div>
         </button>
       </ng-container>

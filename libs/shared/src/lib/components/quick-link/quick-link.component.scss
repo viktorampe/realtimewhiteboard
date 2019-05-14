@@ -1,3 +1,5 @@
+@import 'libs/ui/src/lib/breakpoints.scss';
+
 :host {
   .mat-dialog-content {
     min-height: 33vh;
@@ -26,6 +28,10 @@
 
       &__divider {
         margin: 0px 8px;
+      }
+
+      &__context-menu {
+        display: none;
       }
 
       &--links {
@@ -80,6 +86,30 @@
 
     &__button {
       margin: 16px;
+    }
+  }
+}
+
+@media #{$ui-breakpoint-xsmall} {
+  .quick-link {
+    &__item {
+      &__actions {
+        &__context-menu {
+          display: block;
+        }
+      }
+
+      &:hover {
+        .quick-link {
+          &__item {
+            &__actions {
+              &--hover {
+                display: none;
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
