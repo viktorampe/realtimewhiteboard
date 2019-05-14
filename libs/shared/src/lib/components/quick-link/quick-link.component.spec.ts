@@ -32,8 +32,13 @@ import {
   TaskFixture
 } from '@campus/dal';
 import { MockDate, MockMatIconRegistry } from '@campus/testing';
-import { ButtonComponent, InfoPanelComponent, UiModule } from '@campus/ui';
-import { FILTER_SERVICE_TOKEN } from '@campus/utils';
+import {
+  ButtonComponent,
+  FilterTextInputComponent,
+  InfoPanelComponent,
+  UiModule
+} from '@campus/ui';
+import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { hot } from '@nrwl/nx/testing';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -524,6 +529,38 @@ describe('QuickLinkComponent', () => {
           listItemButtons[1].triggerEventHandler('click', null);
           expect(component.remove).toHaveBeenCalled();
         }));
+      });
+    });
+  });
+
+  describe('filtering', () => {
+    let filterService: FilterServiceInterface;
+    beforeEach(() => {
+      filterService = TestBed.get(FILTER_SERVICE_TOKEN);
+    });
+
+    it('should filter the items', () => {
+      const filterText = fixture.debugElement.query(
+        By.directive(FilterTextInputComponent)
+      );
+
+      component.quickLinksFlattened$.subscribe(quickLinks => {
+        const returnedItem = quickLinks[0];
+
+        filterService.filter = jest.fn().mockReturnValue([returnedItem]);
+        filterText.componentInstance.setValue("it doesn't matter");
+
+        fixture.detectChanges();
+
+        const sectionHeaders = fixture.debugElement.queryAll(By.css('h3'));
+        expect(sectionHeaders.length).toBe(0);
+
+        const linkItems = fixture.debugElement.queryAll(
+          By.css('.quick-link__item__title')
+        );
+
+        expect(linkItems.length).toBe(1);
+        expect(linkItems[0].name).toBe(returnedItem.name);
       });
     });
   });
