@@ -337,8 +337,6 @@ export class QuickLinkComponent implements OnInit {
   }
 
   private getCategoryTitle(quickLink: FavoriteInterface | HistoryInterface) {
-    console.log(quickLink);
-
     return this.categories.has(quickLink.type)
       ? this.categories.get(quickLink.type).label
       : quickLink.type;
