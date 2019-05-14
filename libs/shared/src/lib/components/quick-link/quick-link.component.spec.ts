@@ -22,6 +22,7 @@ import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
   BundleFixture,
+  EduContent,
   EduContentFixture,
   EduContentMetadataFixture,
   FavoriteFixture,
@@ -597,7 +598,7 @@ describe('QuickLinkComponent', () => {
           const expected = jasmine.arrayContaining([
             {
               type: 'boek-e',
-              title: 'boek-e',
+              title: 'Bordboeken',
               quickLinks: [
                 // ignore missing properties
                 jasmine.objectContaining({ ...mockFavorites[0] }),
@@ -606,12 +607,12 @@ describe('QuickLinkComponent', () => {
             },
             {
               type: 'task',
-              title: 'task',
+              title: 'Taken',
               quickLinks: [jasmine.objectContaining({ ...mockFavorites[2] })]
             },
             {
               type: 'bundle',
-              title: 'bundle',
+              title: 'Bundels',
               quickLinks: [jasmine.objectContaining({ ...mockFavorites[3] })]
             }
           ]);
@@ -621,28 +622,56 @@ describe('QuickLinkComponent', () => {
           );
         });
 
-        it('should sort the quicklink categories', () => {
+        it('should sort the quicklink categories and use a readable name', () => {
           const mockFavorites = [
-            new FavoriteFixture({ type: 'foo' }),
-            new FavoriteFixture({ type: 'foo' }),
-            new FavoriteFixture({ type: 'bar' }),
-            new FavoriteFixture({ type: 'baz' })
+            new FavoriteFixture({ type: FavoriteTypesEnum.TASK }),
+            new FavoriteFixture({ type: 'type not in list' }),
+            new FavoriteFixture({
+              type: FavoriteTypesEnum.BOEKE,
+              eduContent: Object.assign(
+                new EduContent(),
+                new EduContentFixture()
+              )
+            }),
+            new FavoriteFixture({ type: FavoriteTypesEnum.SEARCH }),
+            new FavoriteFixture({
+              type: FavoriteTypesEnum.EDUCONTENT,
+              eduContent: Object.assign(
+                new EduContent(),
+                new EduContentFixture()
+              )
+            }),
+            new FavoriteFixture({ type: FavoriteTypesEnum.BUNDLE })
           ];
 
           vmQuickLinks$.next(mockFavorites);
           fixture.detectChanges();
 
-          // only test category order
-          // TODO: fix order when component sorter is refactored
+          // only test category order + title
           const expected = [
             jasmine.objectContaining({
-              type: 'bar'
+              type: FavoriteTypesEnum.BOEKE,
+              title: 'Bordboeken'
             }),
             jasmine.objectContaining({
-              type: 'baz'
+              type: FavoriteTypesEnum.EDUCONTENT,
+              title: 'Lesmateriaal'
             }),
             jasmine.objectContaining({
-              type: 'foo'
+              type: FavoriteTypesEnum.SEARCH,
+              title: 'Zoekopdrachten'
+            }),
+            jasmine.objectContaining({
+              type: FavoriteTypesEnum.BUNDLE,
+              title: 'Bundels'
+            }),
+            jasmine.objectContaining({
+              type: FavoriteTypesEnum.TASK,
+              title: 'Taken'
+            }),
+            jasmine.objectContaining({
+              type: 'type not in list',
+              title: 'type not in list'
             })
           ];
 
