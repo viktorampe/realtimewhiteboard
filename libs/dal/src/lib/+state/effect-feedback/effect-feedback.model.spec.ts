@@ -1,12 +1,14 @@
-import { Action } from '@ngrx/store';
-import { EffectFeedback } from './effect-feedback.model';
+import {
+  EffectFeedback,
+  FeedbackTriggeringAction
+} from './effect-feedback.model';
 
 describe('EffectFeedback model', () => {
   describe('generateErrorFeedback', () => {
     it('should display feedback if useCustomErrorHandler = false', () => {
       const action = ({
-        payload: { useCustomErrorHandler: false }
-      } as unknown) as Action;
+        payload: { customFeedbackHandlers: { useCustomErrorHandler: false } }
+      } as unknown) as FeedbackTriggeringAction;
 
       const result = EffectFeedback.generateErrorFeedback(
         'foo',
@@ -19,7 +21,7 @@ describe('EffectFeedback model', () => {
     it('should display feedback if the action does not have a useCustomErrorHandler flag', () => {
       const action = ({
         payload: {}
-      } as unknown) as Action;
+      } as unknown) as FeedbackTriggeringAction;
 
       const result = EffectFeedback.generateErrorFeedback(
         'foo',
@@ -30,7 +32,7 @@ describe('EffectFeedback model', () => {
     });
 
     it('should display feedback if the action does not have a payload', () => {
-      const action = ({} as unknown) as Action;
+      const action = ({} as unknown) as FeedbackTriggeringAction;
 
       const result = EffectFeedback.generateErrorFeedback(
         'foo',
@@ -42,8 +44,8 @@ describe('EffectFeedback model', () => {
 
     it('should not display feedback if useCustomErrorHandler = true', () => {
       const action = ({
-        payload: { useCustomErrorHandler: true }
-      } as unknown) as Action;
+        payload: { customFeedbackHandlers: { useCustomErrorHandler: true } }
+      } as unknown) as FeedbackTriggeringAction;
 
       const result = EffectFeedback.generateErrorFeedback(
         'foo',
