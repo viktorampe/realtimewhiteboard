@@ -13,24 +13,24 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { QuickLinkTypeEnum } from './quick-link-type.enum';
 import { QuickLinkViewModel } from './quick-link.viewmodel';
+import { MockQuickLinkViewModel } from './quick-link.viewmodel.mock';
 
 @Component({
   selector: 'campus-quick-link',
   templateUrl: './quick-link.component.html',
   styleUrls: ['./quick-link.component.scss'],
-  providers: [QuickLinkViewModel]
+  providers: [{ provide: QuickLinkViewModel, useClass: MockQuickLinkViewModel }]
 })
 export class QuickLinkComponent implements OnInit {
   public contentData$: Observable<ContentDataInterface[]>;
-  public quickLinksFlattened$: Observable<QuickLinkInterface[]>;
   public feedback$: Observable<EffectFeedbackInterface>;
   public dialogTitle: string;
   public dialogTitleIcon: string;
 
   @ViewChild(FilterTextInputComponent)
   filterTextInput: FilterTextInputComponent<
-    QuickLinkInterface[],
-    QuickLinkInterface
+    ContentDataInterface[],
+    ContentDataInterface
   >;
 
   private dialogTitles = new Map<
@@ -147,13 +147,14 @@ export class QuickLinkComponent implements OnInit {
   }
 
   filterFn(
-    source: QuickLinkInterface[],
+    source: ContentDataInterface[],
     searchText: string
-  ): QuickLinkInterface[] {
-    const filteredItems = this.filterService.filter(source, {
+  ): ContentDataInterface[] {
+    /*const filteredItems = this.filterService.filter(source, {
       name: searchText
     });
-    return filteredItems;
+    return filteredItems;*/
+    return source;
   }
 
   public closeDialog() {
@@ -211,21 +212,18 @@ export class QuickLinkComponent implements OnInit {
   private setupStreams() {
     this.contentData$ = this.quickLinkViewModel
       .getQuickLinks$(this.data.mode)
-      .pipe(map(qL => this.convertToQuickLinkData(qL)));
-
-    this.quickLinksFlattened$ = this.contentData$.pipe(
-      map(e => {
-        return e.reduce<QuickLinkInterface[]>((array, contentDataInterface) => {
-          return [...contentDataInterface.quickLinks, ...array];
-        }, []);
-      })
-    );
+      .pipe(
+        map(quickLinks =>
+          quickLinks.map(quickLink => this.convertToQuickLink(quickLink))
+        ),
+        map(qL => this.convertToQuickLinkData(qL))
+      );
 
     this.feedback$ = this.quickLinkViewModel.feedback$;
   }
 
   private convertToQuickLinkData(
-    values: FavoriteInterface[] | HistoryInterface[]
+    values: QuickLinkInterface[]
   ): ContentDataInterface[] {
     return values
       .reduce(
@@ -242,7 +240,7 @@ export class QuickLinkComponent implements OnInit {
             acc.push(category);
           }
 
-          category.quickLinks.push(this.convertToQuickLink(value));
+          category.quickLinks.push(value);
 
           return acc;
         },
