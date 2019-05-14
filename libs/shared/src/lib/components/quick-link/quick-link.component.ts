@@ -304,6 +304,8 @@ export class QuickLinkComponent implements OnInit {
       case FavoriteTypesEnum.SEARCH:
       case 'search':
         return this.quickLinkActions.openSearch;
+      default:
+        return this.quickLinkActions.openSearch;
     }
   }
 
