@@ -157,11 +157,15 @@ export class UpdateAlerts implements Action {
   constructor(public payload: { alerts: Update<AlertQueueInterface>[] }) {}
 }
 
-export class DeleteAlert implements Action {
+export class DeleteAlert implements FeedbackTriggeringAction {
   readonly type = AlertsActionTypes.DeleteAlert;
 
   constructor(
-    public payload: { id: number; personId: number; displayResponse?: boolean }
+    public payload: {
+      id: number;
+      personId: number;
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
   ) {}
 }
 

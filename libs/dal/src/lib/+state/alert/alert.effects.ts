@@ -193,7 +193,6 @@ export class AlertsEffects {
                 id: this.uuid(),
                 triggerAction: action,
                 message: 'Melding is verwijderd.',
-                display: action.payload.displayResponse,
                 userActions: null,
                 type: 'success',
                 priority: Priority.NORM
@@ -213,7 +212,6 @@ export class AlertsEffects {
           id: this.uuid(),
           triggerAction: action,
           message: 'Het is niet gelukt om de melding te verwijderen.',
-          display: action.payload.displayResponse,
           userActions: [{ title: 'Opnieuw', userAction: action }],
           type: 'error',
           priority: Priority.HIGH
