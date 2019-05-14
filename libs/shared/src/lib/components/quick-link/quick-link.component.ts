@@ -196,7 +196,7 @@ export class QuickLinkComponent implements OnInit {
       .getQuickLinks$(this.data.mode)
       .pipe(map(qL => this.convertToQuickLinkData(qL)));
 
-    this.feedback$ = this.quickLinkViewModel.feedback$;
+    this.feedback$ = this.quickLinkViewModel.getFeedback$();
   }
 
   private convertToQuickLinkData(

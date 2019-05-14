@@ -37,8 +37,6 @@ import { QuickLinkTypeEnum } from './quick-link-type.enum';
 
 @Injectable()
 export class QuickLinkViewModel {
-  public feedback$: Observable<EffectFeedbackInterface> = this.getFeedback$();
-
   constructor(
     private store: Store<DalState>,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
@@ -201,7 +199,7 @@ export class QuickLinkViewModel {
     );
   }
 
-  private getFeedback$(): Observable<EffectFeedbackInterface> {
+  public getFeedback$(): Observable<EffectFeedbackInterface> {
     const actionTypes = FavoriteActions.FavoritesActionTypes;
     // TODO once History has actions
     // const actionTypes = [...FavoriteActions.FavoritesActionTypes,...HistoryActions.HistoryActionTypes]

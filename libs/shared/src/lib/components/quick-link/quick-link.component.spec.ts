@@ -24,15 +24,23 @@ import {
   BundleFixture,
   EduContentFixture,
   EduContentMetadataFixture,
+  EffectFeedbackFixture,
+  EffectFeedbackInterface,
   FavoriteFixture,
   FavoriteInterface,
   FavoriteTypesEnum,
   HistoryInterface,
   LearningAreaFixture,
+  Priority,
   TaskFixture
 } from '@campus/dal';
 import { MockDate, MockMatIconRegistry } from '@campus/testing';
-import { ButtonComponent, InfoPanelComponent, UiModule } from '@campus/ui';
+import {
+  BannerComponent,
+  ButtonComponent,
+  InfoPanelComponent,
+  UiModule
+} from '@campus/ui';
 import { hot } from '@nrwl/nx/testing';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -46,6 +54,7 @@ describe('QuickLinkComponent', () => {
   let fixture: ComponentFixture<QuickLinkComponent>;
   let quickLinkViewModel: QuickLinkViewModel;
   let vmQuickLinks$: BehaviorSubject<FavoriteInterface[] | HistoryInterface[]>;
+  let vmFeedback$: BehaviorSubject<EffectFeedbackInterface>;
   let dateMock: MockDate;
 
   const mockInjectedData = { mode: 'foo' };
@@ -99,6 +108,12 @@ describe('QuickLinkComponent', () => {
     quickLinkViewModel.getQuickLinks$ = jest
       .fn()
       .mockReturnValue(vmQuickLinks$);
+
+    vmFeedback$ = quickLinkViewModel.getFeedback$() as BehaviorSubject<
+      EffectFeedbackInterface
+    >;
+    quickLinkViewModel.getFeedback$ = jest.fn().mockReturnValue(vmFeedback$);
+
     // make component 'attach' to mocked stream
     component['setupStreams']();
     fixture.detectChanges();
@@ -519,6 +534,34 @@ describe('QuickLinkComponent', () => {
           listItemButtons[1].triggerEventHandler('click', null);
           expect(component.remove).toHaveBeenCalled();
         }));
+      });
+    });
+
+    describe('error feedback', () => {
+      it('should not show the banner when there is no error feedback', () => {
+        // clear errors
+        vmFeedback$.next(null);
+        fixture.detectChanges();
+
+        const banner = fixture.debugElement.query(
+          By.directive(BannerComponent)
+        );
+        expect(banner).toBeFalsy();
+      });
+
+      it('should show the banner when there is error feedback', () => {
+        const mockErrorFeedback = new EffectFeedbackFixture({
+          type: 'error',
+          priority: Priority.HIGH
+        });
+
+        vmFeedback$.next(mockErrorFeedback);
+        fixture.detectChanges();
+
+        const banner = fixture.debugElement.query(
+          By.directive(BannerComponent)
+        );
+        expect(banner).toBeTruthy();
       });
     });
   });
@@ -1090,7 +1133,7 @@ describe('QuickLinkComponent', () => {
 
     describe('feedback$', () => {
       it('should get the feedback data from the quickLinkViewmodel', () => {
-        expect(component.feedback$).toBe(quickLinkViewModel.feedback$);
+        expect(component.feedback$).toBe(quickLinkViewModel.getFeedback$());
       });
     });
   });

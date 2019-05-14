@@ -26,7 +26,7 @@ import { QuickLinkViewModel } from './quick-link.viewmodel';
 })
 export class MockQuickLinkViewModel
   implements ViewModelInterface<QuickLinkViewModel> {
-  public feedback$ = new BehaviorSubject(this.getMockEffectFeedBack());
+  public getFeedback$ = () => new BehaviorSubject(this.getMockEffectFeedBack());
 
   public getQuickLinks$ = (mode: QuickLinkTypeEnum) =>
     new BehaviorSubject(this.getMockFavoriteQuickLinks());
