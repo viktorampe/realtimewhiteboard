@@ -60,7 +60,7 @@ export class EffectFeedback implements EffectFeedbackInterface {
   constructor(props: EffectFeedbackConstructorInterface) {
     Object.assign(this, props);
     this.display = !EffectFeedback.getCustomHandlerValue(
-      this.triggerAction.payload,
+      this.triggerAction ? this.triggerAction.payload : null,
       this.type
     );
   }
