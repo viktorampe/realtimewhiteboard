@@ -11,6 +11,8 @@
       [(ngModel)]="text"
       (keydown.enter)="saveChanges()"
       (keydown.escape)="cancelChanges()"
+      campusClickPreventDefault
+      campusClickStopPropagation
     />
     <textarea
       *ngIf="multiline"
@@ -18,6 +20,8 @@
       (focus)="onFocus($event)"
       [(ngModel)]="text"
       (keydown.escape)="cancelChanges()"
+      campusClickPreventDefault
+      campusClickStopPropagation
     >
     </textarea>
   </mat-form-field>

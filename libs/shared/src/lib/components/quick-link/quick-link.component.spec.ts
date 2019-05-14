@@ -1105,13 +1105,15 @@ describe('QuickLinkComponent', () => {
   describe('manageActions implementation', () => {
     describe('update', () => {
       it('should activate the right ContentEditable when clicking update', () => {
-        const updateButton = fixture.debugElement
-          .query(By.directive(MatListItem))
-          .query(By.directive(ButtonComponent));
+        const firstListItem = fixture.debugElement.query(
+          By.directive(MatListItem)
+        );
 
-        const contentEditable = fixture.debugElement
-          .query(By.directive(MatListItem))
-          .query(By.directive(ContentEditableComponent));
+        const updateButton = firstListItem.query(By.directive(ButtonComponent));
+
+        const contentEditable = firstListItem.query(
+          By.directive(ContentEditableComponent)
+        );
 
         expect(contentEditable.componentInstance.active).toBe(false);
 
