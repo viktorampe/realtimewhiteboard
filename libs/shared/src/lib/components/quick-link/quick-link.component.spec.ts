@@ -106,12 +106,7 @@ describe('QuickLinkComponent', () => {
     vmQuickLinks$ = quickLinkViewModel.getQuickLinks$(null) as BehaviorSubject<
       FavoriteInterface[] | HistoryInterface[]
     >;
-    // from now on, this particular instance of the stream is always returned
-    quickLinkViewModel.getQuickLinks$ = jest
-      .fn()
-      .mockReturnValue(vmQuickLinks$);
-    // make component 'attach' to mocked stream
-    component['setupStreams']();
+
     fixture.detectChanges();
   });
 
