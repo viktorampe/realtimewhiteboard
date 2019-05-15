@@ -9,6 +9,7 @@
       (focus)="onFocus($event)"
       matInput
       [(ngModel)]="text"
+      (keyup.space)="$event.preventDefault()"
       (keydown.enter)="saveChanges()"
       (keydown.escape)="cancelChanges()"
       campusClickPreventDefault
@@ -19,6 +20,7 @@
       matInput
       (focus)="onFocus($event)"
       [(ngModel)]="text"
+      (keyup.space)="$event.preventDefault()"
       (keydown.escape)="cancelChanges()"
       campusClickPreventDefault
       campusClickStopPropagation
