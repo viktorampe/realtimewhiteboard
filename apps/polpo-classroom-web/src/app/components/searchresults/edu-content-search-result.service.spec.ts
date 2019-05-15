@@ -9,9 +9,10 @@ import {
 import { Store, StoreModule } from '@ngrx/store';
 import { hot } from '@nrwl/nx/testing';
 import { EduContentSearchResultItemService } from './edu-content-search-result.service';
+import { EduContentSearchResultItemServiceInterface } from './edu-content-search-result.service.interface';
 
 describe('EduContentSearchResultItemService', () => {
-  let eduContentSearchResultItemService: EduContentSearchResultItemService;
+  let eduContentSearchResultItemService: EduContentSearchResultItemServiceInterface;
   let store: Store<DalState>;
 
   beforeEach(() => {

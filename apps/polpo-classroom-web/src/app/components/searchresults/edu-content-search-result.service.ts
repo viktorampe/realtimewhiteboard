@@ -7,11 +7,13 @@ import {
 } from '@campus/dal';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { EduContentSearchResultItemServiceInterface } from './edu-content-search-result.service.interface';
 
 @Injectable({
   providedIn: 'root'
 })
-export class EduContentSearchResultItemService {
+export class EduContentSearchResultItemService
+  implements EduContentSearchResultItemServiceInterface {
   constructor(private store: Store<DalState>) {}
 
   isFavorite$(eduContentId: number): Observable<boolean> {
