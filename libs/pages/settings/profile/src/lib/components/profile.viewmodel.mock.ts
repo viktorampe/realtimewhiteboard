@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PersonFixture, PersonInterface, UserReducer } from '@campus/dal';
+import { PersonFixture, PersonInterface } from '@campus/dal';
 import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject } from 'rxjs';
 import { ProfileViewModel } from './profile.viewmodel';
@@ -18,14 +18,6 @@ export class MockProfileViewModel
       avatar: getAvatarString()
     })
   );
-
-  public messages$ = new BehaviorSubject<
-    UserReducer.State['lastUpdateMessage']
-  >({
-    message: "Look at me! I'm an update message.",
-    timeStamp: 1,
-    type: 'success'
-  });
 
   public updateProfile(changedProps: Partial<PersonInterface>): void {}
 }

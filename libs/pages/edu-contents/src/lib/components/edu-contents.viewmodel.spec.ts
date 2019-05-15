@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { Component, NgZone } from '@angular/core';
+import { async, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
@@ -58,6 +58,7 @@ describe('EduContentsViewModel', () => {
   let eduContentService: EduContentServiceInterface;
   let router: Router;
   let store: Store<DalState>;
+  let zone: NgZone;
 
   const mockSearchState: SearchStateInterface = {
     searchTerm: 'not this',
@@ -179,8 +180,11 @@ describe('EduContentsViewModel', () => {
     eduContentService = TestBed.get(EDU_CONTENT_SERVICE_TOKEN);
     router = TestBed.get(Router);
     store = TestBed.get(Store);
+    zone = TestBed.get(NgZone);
 
-    router.initialNavigation();
+    zone.run(() => {
+      router.initialNavigation();
+    });
     store.dispatch(
       new LearningAreaActions.LearningAreasLoaded({
         learningAreas: mockLearningAreas
@@ -212,26 +216,28 @@ describe('EduContentsViewModel', () => {
     });
 
     it('toggleFavoriteArea should dispatch ToggleFavorite action', () => {
-      spyFavAction = jest.spyOn(FavoriteActions, 'ToggleFavorite');
+      spyFavAction = jest.spyOn(store, 'dispatch');
       const area: LearningAreaInterface = new LearningAreaFixture();
 
       eduContentsViewModel.toggleFavoriteArea(area);
 
-      expect(FavoriteActions.ToggleFavorite).toHaveBeenCalledTimes(1);
-      expect(FavoriteActions.ToggleFavorite).toHaveBeenCalledWith({
-        favorite: {
-          name: area.name,
-          type: FavoriteTypesEnum.AREA,
-          learningAreaId: area.id,
-          created: mockDate.mockDate
-        }
-      });
+      expect(spyFavAction).toHaveBeenCalledTimes(1);
+      expect(spyFavAction).toHaveBeenCalledWith(
+        new FavoriteActions.ToggleFavorite({
+          favorite: {
+            name: area.name,
+            type: FavoriteTypesEnum.AREA,
+            learningAreaId: area.id,
+            created: mockDate.mockDate
+          }
+        })
+      );
 
       spyFavAction.mockClear();
     });
 
     it('saveSearchState should dispatch StartAddFavorite action', () => {
-      spyFavAction = jest.spyOn(FavoriteActions, 'StartAddFavorite');
+      spyFavAction = jest.spyOn(store, 'dispatch');
       const expectedFavoriteCriteria: string = JSON.stringify({
         searchTerm: 'foo',
         filterCriteriaSelections: {
@@ -245,16 +251,18 @@ describe('EduContentsViewModel', () => {
         filterCriteriaSelections: new Map([['bar', [1, 2]], ['baz', [5, 6]]])
       });
 
-      expect(FavoriteActions.StartAddFavorite).toHaveBeenCalledTimes(1);
-      expect(FavoriteActions.StartAddFavorite).toHaveBeenCalledWith({
-        favorite: {
-          name: 'Zoekopdracht',
-          type: FavoriteTypesEnum.SEARCH,
-          criteria: expectedFavoriteCriteria,
-          created: mockDate.mockDate
-        },
-        userId: 1
-      });
+      expect(spyFavAction).toHaveBeenCalledTimes(1);
+      expect(spyFavAction).toHaveBeenCalledWith(
+        new FavoriteActions.StartAddFavorite({
+          favorite: {
+            name: 'Zoekopdracht',
+            type: FavoriteTypesEnum.SEARCH,
+            criteria: expectedFavoriteCriteria,
+            created: mockDate.mockDate
+          },
+          userId: 1
+        })
+      );
 
       spyFavAction.mockClear();
     });
@@ -266,14 +274,16 @@ describe('EduContentsViewModel', () => {
         hot('a', { a: mockLearningAreas })
       );
     });
-    it('should return the learningarea for current route', fakeAsync(() => {
-      router.navigate(['edu-content', '1']);
-      tick();
-      expect(eduContentsViewModel.learningArea$).toBeObservable(
-        hot('a', {
-          a: mockLearningAreas[0]
-        })
-      );
+    it('should return the learningarea for current route', async(() => {
+      zone.run(() => {
+        router.navigate(['edu-content', '1']).then(() => {
+          expect(eduContentsViewModel.learningArea$).toBeObservable(
+            hot('a', {
+              a: mockLearningAreas[0]
+            })
+          );
+        });
+      });
     }));
   });
 
@@ -400,14 +410,16 @@ describe('EduContentsViewModel', () => {
 
     describe('routerstate contains taskId', () => {
       beforeEach(() => {
-        const navigationAction = {
-          type: ROUTER_NAVIGATION,
-          payload: {
-            routerState: { params: { task: '1' } },
-            event: {}
-          } as RouterNavigationPayload<any>
-        } as RouterNavigationAction;
-        store.dispatch(navigationAction);
+        zone.run(() => {
+          const navigationAction = {
+            type: ROUTER_NAVIGATION,
+            payload: {
+              routerState: { params: { task: '1' } },
+              event: {}
+            } as RouterNavigationPayload<any>
+          } as RouterNavigationAction;
+          store.dispatch(navigationAction);
+        });
       });
 
       it('should set currentTask, inTask = true and inBundle = false', () => {
@@ -430,14 +442,16 @@ describe('EduContentsViewModel', () => {
 
     describe('routerstate contains bundleId', () => {
       beforeEach(() => {
-        const navigationAction = {
-          type: ROUTER_NAVIGATION,
-          payload: {
-            routerState: { params: { bundle: '1' } },
-            event: {}
-          } as RouterNavigationPayload<any>
-        } as RouterNavigationAction;
-        store.dispatch(navigationAction);
+        zone.run(() => {
+          const navigationAction = {
+            type: ROUTER_NAVIGATION,
+            payload: {
+              routerState: { params: { bundle: '1' } },
+              event: {}
+            } as RouterNavigationPayload<any>
+          } as RouterNavigationAction;
+          store.dispatch(navigationAction);
+        });
       });
 
       it('should set currentBundle, inBundle = true and inTask = false', () => {

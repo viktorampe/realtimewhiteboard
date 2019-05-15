@@ -131,7 +131,7 @@ export class TaskEduContentEffects {
         });
 
         // undo the failed action and trigger feedback for user
-        return from<Action>([undoAction, feedbackAction]);
+        return from<Action[]>([undoAction, feedbackAction]);
       }
     }
   );

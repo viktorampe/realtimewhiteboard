@@ -1,4 +1,4 @@
-import { BreakpointObserver } from '@angular/cdk/layout';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
 import {
   Component,
@@ -35,7 +35,7 @@ describe('HideDesktopDirective', () => {
   let testContainerFixture: ComponentFixture<TestContainerComponent>;
   let testContainerComponent: TestContainerComponent;
   let componentDE: DebugElement;
-  const breakpointStream: Subject<{ matches: boolean }> = new Subject();
+  const breakpointStream: Subject<BreakpointState> = new Subject();
 
   beforeEach(async(() => {
     const testbed = TestBed.configureTestingModule({
@@ -65,12 +65,12 @@ describe('HideDesktopDirective', () => {
   it('should apply the correct attribute based on the BreakpointObserver', () => {
     const isMobileBreakpoint = true;
 
-    breakpointStream.next({ matches: !isMobileBreakpoint });
+    breakpointStream.next({ matches: !isMobileBreakpoint, breakpoints: {} });
     testContainerFixture.detectChanges();
 
     expect(componentDE.nativeElement.style.display).toBe('none');
 
-    breakpointStream.next({ matches: isMobileBreakpoint });
+    breakpointStream.next({ matches: isMobileBreakpoint, breakpoints: {} });
     testContainerFixture.detectChanges();
 
     expect(componentDE.nativeElement.style.display).not.toBe('none');

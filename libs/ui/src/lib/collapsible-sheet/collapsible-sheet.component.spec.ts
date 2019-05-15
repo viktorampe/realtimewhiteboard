@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatIconModule } from '@angular/material';
+import { MatIconModule, MatIconRegistry } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MockMatIconRegistry } from '@campus/testing';
 import { CollapsibleSheetComponent } from './collapsible-sheet.component';
 
 describe('CollapsibleSheetComponent', () => {
@@ -10,9 +11,8 @@ describe('CollapsibleSheetComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [MatIconModule, NoopAnimationsModule],
-      declarations: [CollapsibleSheetComponent]
-      // Not usable in this test suite -> actual MatIcon is needed, MockMatIconRegistry returns null
-      // providers: [{ provide: MatIconRegistry, useValue: MockMatIconRegistry }]
+      declarations: [CollapsibleSheetComponent],
+      providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
     });
   }));
 

@@ -50,7 +50,8 @@
         "libs/pages/settings/alerts/src/index.ts"
       ],
       "@campus/search": ["libs/search/src/index.ts"]
-    }
+    },
+    "module": "es2015"
   },
   "exclude": ["node_modules", "tmp", "apps/*e2e*"],
   "include": ["**/*.ts"]

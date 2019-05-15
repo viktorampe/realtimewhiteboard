@@ -881,5 +881,18 @@
     },
     "defaultCollection": "@nrwl/schematics"
   },
-  "defaultProject": "polpo-classroom-web"
+  "defaultProject": "polpo-classroom-web",
+  "schematics": {
+    "@nrwl/schematics:library": {
+      "unitTestRunner": "karma",
+      "framework": "angular"
+    },
+    "@nrwl/schematics:application": {
+      "unitTestRunner": "karma",
+      "e2eTestRunner": "protractor"
+    },
+    "@nrwl/schematics:node-application": {
+      "framework": "express"
+    }
+  }
 }
