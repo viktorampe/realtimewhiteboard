@@ -4,7 +4,7 @@
     theme="dark"
   ></campus-filter-text-input>
   <campus-banner
-    dialog
+    class="ui-banner--dialog"
     *ngIf="(feedback$ | async) as feedback"
     [id]="feedback.id"
     [message]="feedback.message"

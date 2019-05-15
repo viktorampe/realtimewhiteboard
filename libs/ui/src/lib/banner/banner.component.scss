@@ -10,17 +10,28 @@
 :host.ui-banner--dialog {
   .ui-banner {
     justify-content: space-between;
+    padding: 0px 0px 10px 0px;
+    margin-top: -15px;
     &__content {
-      max-width: 60%;
+      mat-icon {
+        width: 24px;
+        height: 24px;
+      }
+    }
+    &__buttons {
+      campus-button {
+        margin: auto 8px auto 0px;
+      }
     }
   }
   &.ui-banner--mobile {
     .ui-banner {
-      &__content {
-        max-width: 100%;
-      }
+      margin-top: 0px;
       &__buttons {
         justify-content: start;
+        campus-button:first-child {
+          margin: auto 0px auto 0px;
+        }
       }
     }
   }
