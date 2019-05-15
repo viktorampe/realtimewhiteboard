@@ -239,7 +239,7 @@ describe('TeacherStudentsEffects', () => {
       const linkTeacherAction = new LinkTeacherStudent({
         publicKey: mockPublicKey,
         userId: mockCurrentUser.id,
-        useCustomErrorHandler: true
+        customFeedbackHandlers: { useCustomErrorHandler: false }
       });
 
       it('should call the linkedPersonService', () => {

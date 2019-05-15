@@ -2,6 +2,10 @@ import { NestedPartial } from '@campus/utils';
 import { Update } from '@ngrx/entity';
 import { Action } from '@ngrx/store';
 import { AlertQueueInterface } from '../../+models';
+import {
+  CustomFeedbackHandlersInterface,
+  FeedbackTriggeringAction
+} from '../effect-feedback';
 export enum AlertsActionTypes {
   AlertsLoaded = '[Alerts] Alerts Loaded',
   AlertsLoadError = '[Alerts] Load Error',
@@ -68,7 +72,7 @@ export class StopPollAlerts implements Action {
   constructor() {}
 }
 
-export class SetReadAlert implements Action {
+export class SetReadAlert implements FeedbackTriggeringAction {
   readonly type = AlertsActionTypes.SetReadAlert;
   readonly updatePayload: Update<AlertQueueInterface>[];
 
@@ -78,7 +82,7 @@ export class SetReadAlert implements Action {
       alertIds: number | number[];
       read?: boolean;
       intended?: boolean;
-      displayResponse?: boolean;
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
     }
   ) {
     // alertIds altijd in een array
@@ -153,11 +157,15 @@ export class UpdateAlerts implements Action {
   constructor(public payload: { alerts: Update<AlertQueueInterface>[] }) {}
 }
 
-export class DeleteAlert implements Action {
+export class DeleteAlert implements FeedbackTriggeringAction {
   readonly type = AlertsActionTypes.DeleteAlert;
 
   constructor(
-    public payload: { id: number; personId: number; displayResponse?: boolean }
+    public payload: {
+      id: number;
+      personId: number;
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
   ) {}
 }
 

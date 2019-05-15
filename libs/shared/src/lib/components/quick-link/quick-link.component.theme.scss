@@ -1,12 +1,17 @@
-@mixin shared-quick-link() {
-  .quick-link {
-    &__item {
-      .ui-content-editable__form-field {
-        margin-right: 8px;
-      }
+@mixin shared-quick-link {
+  $shared-quick-link_filter-font-size: $ui-primary-font-size !default;
 
-      campus-button {
-        background: transparent;
+  .quick-link {
+    &__filter {
+      .ui-filter-text-input {
+        font-size: $shared-quick-link_filter-font-size;
+      }
+      input {
+        height: 24px;
+        border: none;
+      }
+      .mat-icon {
+        top: 2px;
       }
     }
   }

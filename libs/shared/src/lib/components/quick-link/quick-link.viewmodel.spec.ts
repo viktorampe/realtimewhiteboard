@@ -121,8 +121,7 @@ describe('QuickLinkViewModel', () => {
     }),
     new FavoriteActions.UpdateFavorite({
       userId: mockUserId,
-      favorite: { changes: mockFavorites[0] } as Update<FavoriteInterface>,
-      useCustomErrorHandler: false
+      favorite: { changes: mockFavorites[0] } as Update<FavoriteInterface>
     }),
     new FavoriteActions.DeleteFavorite({
       id: mockFavorites[0].id,
@@ -136,7 +135,7 @@ describe('QuickLinkViewModel', () => {
   } = {
     updateFavoriteError: new EffectFeedbackFixture({
       id: '1',
-      triggerAction: mockActions[1], //UpdateFavorite
+      triggerAction: mockActions[1] as FavoriteActions.UpdateFavorite, //UpdateFavorite
       message: 'This is a message',
       type: 'error',
       userActions: [
@@ -146,13 +145,12 @@ describe('QuickLinkViewModel', () => {
         }
       ],
       timeStamp: 1,
-      display: true,
       priority: Priority.HIGH,
       useDefaultCancel: false
     }),
     deleteFavoriteError: new EffectFeedbackFixture({
       id: '2',
-      triggerAction: mockActions[2], //DeleteFavorite
+      triggerAction: mockActions[2] as FavoriteActions.DeleteFavorite, //DeleteFavorite
       message: 'This is a message',
       type: 'error',
       userActions: [
@@ -162,7 +160,6 @@ describe('QuickLinkViewModel', () => {
         }
       ],
       timeStamp: 2,
-      display: true,
       priority: Priority.HIGH,
       useDefaultCancel: false
     })
@@ -312,7 +309,7 @@ describe('QuickLinkViewModel', () => {
           id: 1,
           changes: { name: 'foo' }
         },
-        useCustomErrorHandler: true
+        customFeedbackHandlers: { useCustomErrorHandler: true }
       });
       quickLinkViewModel.update(1, 'foo', QuickLinkTypeEnum.FAVORITES);
       expect(spy).toHaveBeenCalledWith(expectedAction);
@@ -322,7 +319,7 @@ describe('QuickLinkViewModel', () => {
       const expectedAction = new FavoriteActions.DeleteFavorite({
         userId: 1,
         id: 1,
-        useCustomErrorHandler: true
+        customFeedbackHandlers: { useCustomErrorHandler: true }
       });
       quickLinkViewModel.remove(1, QuickLinkTypeEnum.FAVORITES);
       expect(spy).toHaveBeenCalledWith(expectedAction);
