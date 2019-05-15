@@ -8,12 +8,9 @@ import {
   SimpleChanges
 } from '@angular/core';
 import {
-  DalState,
   EduContentBookInterface,
   EduContentTOCInterface,
-  FavoriteActions,
   FavoriteInterface,
-  FavoriteQueries,
   FavoriteTypesEnum
 } from '@campus/dal';
 import { ResultItemBase } from '@campus/search';
@@ -24,8 +21,8 @@ import {
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN
 } from '@campus/shared';
-import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { EduContentSearchResultItemService } from './edu-content-search-result.service';
 
 @Component({
   // tslint:disable-next-line
@@ -54,7 +51,7 @@ export class EduContentSearchResultComponent extends ResultItemBase
     private openStaticContentService: OpenStaticContentServiceInterface,
     @Inject(EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN)
     private eduContentManagerService: EduContentCollectionManagerServiceInterface,
-    private store: Store<DalState>
+    private eduContentSearchResultService: EduContentSearchResultItemService
   ) {
     super();
   }
@@ -62,11 +59,8 @@ export class EduContentSearchResultComponent extends ResultItemBase
   ngOnInit() {
     super.ngOnInit();
 
-    this.isFavorite$ = this.store.select(
-      FavoriteQueries.getIsFavoriteEduContent,
-      {
-        eduContentId: this.data.eduContent.id
-      }
+    this.isFavorite$ = this.eduContentSearchResultService.isFavorite$(
+      this.data.eduContent.id
     );
 
     this.normalizedEduContentToc = this.getNormalizedEduContentToc();
@@ -100,7 +94,7 @@ export class EduContentSearchResultComponent extends ResultItemBase
       eduContentId: this.data.eduContent.id,
       created: new Date()
     };
-    this.store.dispatch(new FavoriteActions.ToggleFavorite({ favorite }));
+    this.eduContentSearchResultService.toggleFavorite(favorite);
   }
 
   public openStatic() {

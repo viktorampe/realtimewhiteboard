@@ -1,25 +1,15 @@
 import { SimpleChange } from '@angular/core';
-import {
-  async,
-  ComponentFixture,
-  fakeAsync,
-  TestBed,
-  tick
-} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule, MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
   BundleFixture,
-  DalState,
   EduContentBookFixture,
   EduContentFixture,
   EduContentProductTypeFixture,
-  EduContentReducer,
   EduContentTOCFixture,
-  FavoriteActions,
-  FavoriteReducer,
-  getStoreModuleForFeatures,
+  FavoriteTypesEnum,
   TaskFixture
 } from '@campus/dal';
 import {
@@ -29,29 +19,32 @@ import {
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN
 } from '@campus/shared';
-import { MockMatIconRegistry } from '@campus/testing';
+import { MockDate, MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
-import { Store, StoreModule } from '@ngrx/store';
-import { hot } from '@nrwl/nx/testing';
+import { BehaviorSubject } from 'rxjs';
 import { EduContentSearchResultComponent } from './edu-content-search-result.component';
+import { EduContentSearchResultItemService } from './edu-content-search-result.service';
 
 describe('EduContentSearchResultComponent', () => {
   let component: EduContentSearchResultComponent;
   let fixture: ComponentFixture<EduContentSearchResultComponent>;
   let openStaticContentService: OpenStaticContentServiceInterface;
   let collectionManagerService: EduContentCollectionManagerServiceInterface;
-  let store: Store<DalState>;
+  let eduContentSearchResultItemService: EduContentSearchResultItemService;
+  const mockIsFavorite = new BehaviorSubject(false);
+  let dateMock: MockDate;
+
+  beforeAll(() => {
+    dateMock = new MockDate();
+  });
+  afterAll(() => {
+    dateMock.returnRealDate();
+  });
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [EduContentSearchResultComponent],
-      imports: [
-        StoreModule.forRoot({}),
-        ...getStoreModuleForFeatures([FavoriteReducer, EduContentReducer]),
-        MatIconModule,
-        UiModule,
-        NoopAnimationsModule
-      ],
+      imports: [MatIconModule, UiModule, NoopAnimationsModule],
       providers: [
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
         {
@@ -65,7 +58,13 @@ describe('EduContentSearchResultComponent', () => {
             manageBundlesForContent: jest.fn()
           }
         },
-        Store
+        {
+          provide: EduContentSearchResultItemService,
+          useValue: {
+            isFavorite$: () => mockIsFavorite,
+            toggleFavorite: jest.fn()
+          }
+        }
       ]
     });
 
@@ -73,12 +72,8 @@ describe('EduContentSearchResultComponent', () => {
     collectionManagerService = TestBed.get(
       EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN
     );
-
-    store = TestBed.get(Store);
-    store.dispatch(
-      new FavoriteActions.FavoritesLoaded({
-        favorites: []
-      })
+    eduContentSearchResultItemService = TestBed.get(
+      EduContentSearchResultItemService
     );
   }));
 
@@ -405,19 +400,34 @@ describe('EduContentSearchResultComponent', () => {
       expect(el).toBeTruthy();
     });
 
-    it('should not show favorite checkmark if educontent is not favorited', fakeAsync(() => {
-      const query =
-        '.app-educontentsearchresult__bottom__buttonbar__togglefavorites mat-icon';
-
+    it('should update the toggleFavorite button content', () => {
       component.isSelected = true;
-      expect(component.isFavorite$).toBeObservable(hot('a', { a: false }));
-
-      tick(1000);
       fixture.detectChanges();
 
-      let el = fixture.debugElement.query(By.css(query));
-      expect(el).toBeFalsy();
-    }));
+      const toggleFavoriteButton = fixture.debugElement.query(
+        By.css(
+          '.app-educontentsearchresult__bottom__buttonbar__togglefavorites'
+        )
+      );
+
+      mockIsFavorite.next(false);
+      fixture.detectChanges();
+
+      let checkmarkDE = toggleFavoriteButton.query(By.css('.checkmark'));
+      expect(checkmarkDE).toBeFalsy();
+      expect(toggleFavoriteButton.nativeElement.textContent.trim()).toBe(
+        'Toevoegen aan favorieten'
+      );
+
+      mockIsFavorite.next(true);
+      fixture.detectChanges();
+
+      checkmarkDE = toggleFavoriteButton.query(By.css('.checkmark'));
+      expect(checkmarkDE).toBeTruthy();
+      expect(toggleFavoriteButton.nativeElement.textContent.trim()).toBe(
+        'Verwijderen uit favorieten'
+      );
+    });
   });
 
   describe('logic', () => {
@@ -473,6 +483,24 @@ describe('EduContentSearchResultComponent', () => {
         expect(openStaticContentService.open).toHaveBeenCalledWith(
           component.data.eduContent
         );
+      });
+
+      it('should call toggleFavorite on EduContentSearchResultItemService when calling toggleFavorite', () => {
+        component.toggleFavorite();
+
+        const expected = {
+          name: component.data.eduContent.name,
+          type: FavoriteTypesEnum.EDUCONTENT,
+          eduContentId: component.data.eduContent.id,
+          created: new Date()
+        };
+
+        expect(
+          eduContentSearchResultItemService.toggleFavorite
+        ).toHaveBeenCalled();
+        expect(
+          eduContentSearchResultItemService.toggleFavorite
+        ).toHaveBeenCalledWith(expected);
       });
     });
   });
