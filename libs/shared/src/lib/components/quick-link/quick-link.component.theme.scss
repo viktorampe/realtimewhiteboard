@@ -1,4 +1,6 @@
 @mixin shared-quick-link {
+  $shared-quick-link_filter-font-size: $ui-primary-font-size !default;
+
   .quick-link {
     &__dialog {
       .mat-dialog {
@@ -39,6 +41,21 @@
 
       campus-button {
         background: transparent;
+      }
+    }
+
+    &__filter {
+      .ui-filter-text-input {
+        font-size: $shared-quick-link_filter-font-size;
+      }
+
+      input {
+        height: 24px;
+        border: none;
+      }
+
+      .mat-icon {
+        top: 2px;
       }
     }
   }

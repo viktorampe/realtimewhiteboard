@@ -4,11 +4,13 @@
   class="quick-link__info-panel"
 >
   <campus-filter-text-input
+    class="quick-link__filter"
     title__right
     theme="dark"
+    [source]="contentData$ | async"
   ></campus-filter-text-input>
   <mat-dialog-content>
-    <mat-action-list *ngIf="(contentData$ | async) as contentData">
+    <mat-action-list *ngIf="(filterTextInput.result$ | async) as contentData">
       <ng-container *ngFor="let category of contentData">
         <h3 mat-subheader>{{ category.title }}</h3>
         <button

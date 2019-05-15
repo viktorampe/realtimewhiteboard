@@ -1,6 +1,10 @@
 import { ScormCmiMode } from '@campus/scorm';
 import { Action } from '@ngrx/store';
 import { ResultInterface } from '../../+models';
+import {
+  CustomFeedbackHandlersInterface,
+  FeedbackTriggeringAction
+} from '../effect-feedback';
 import { CurrentExerciseInterface } from './current-exercise.reducer';
 
 export enum CurrentExerciseActionTypes {
@@ -38,14 +42,14 @@ export class CurrentExerciseError implements Action {
   constructor(public payload: any) {}
 }
 
-export class SaveCurrentExercise implements Action {
+export class SaveCurrentExercise implements FeedbackTriggeringAction {
   readonly type = CurrentExerciseActionTypes.SaveCurrentExercise;
 
   constructor(
     public payload: {
       userId: number;
       exercise: CurrentExerciseInterface;
-      displayResponse?: boolean;
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
     }
   ) {}
 }
