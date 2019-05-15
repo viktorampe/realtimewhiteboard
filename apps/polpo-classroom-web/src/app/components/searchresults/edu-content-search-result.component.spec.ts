@@ -5,10 +5,14 @@ import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
   BundleFixture,
+  DalState,
   EduContentBookFixture,
   EduContentFixture,
   EduContentProductTypeFixture,
+  EduContentReducer,
   EduContentTOCFixture,
+  FavoriteReducer,
+  getStoreModuleForFeatures,
   TaskFixture
 } from '@campus/dal';
 import {
@@ -20,6 +24,7 @@ import {
 } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
+import { Store, StoreModule } from '@ngrx/store';
 import { EduContentSearchResultComponent } from './edu-content-search-result.component';
 
 describe('EduContentSearchResultComponent', () => {
@@ -27,11 +32,18 @@ describe('EduContentSearchResultComponent', () => {
   let fixture: ComponentFixture<EduContentSearchResultComponent>;
   let openStaticContentService: OpenStaticContentServiceInterface;
   let collectionManagerService: EduContentCollectionManagerServiceInterface;
+  let store: Store<DalState>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [EduContentSearchResultComponent],
-      imports: [MatIconModule, UiModule, NoopAnimationsModule],
+      imports: [
+        StoreModule.forRoot({}),
+        ...getStoreModuleForFeatures([FavoriteReducer, EduContentReducer]),
+        MatIconModule,
+        UiModule,
+        NoopAnimationsModule
+      ],
       providers: [
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
         {
@@ -44,7 +56,8 @@ describe('EduContentSearchResultComponent', () => {
             manageTasksForContent: jest.fn(),
             manageBundlesForContent: jest.fn()
           }
-        }
+        },
+        Store
       ]
     });
 
@@ -52,6 +65,8 @@ describe('EduContentSearchResultComponent', () => {
     collectionManagerService = TestBed.get(
       EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN
     );
+
+    store = TestBed.get(Store);
   }));
 
   beforeEach(() => {

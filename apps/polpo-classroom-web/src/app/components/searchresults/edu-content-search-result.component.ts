@@ -25,6 +25,7 @@ import {
   OPEN_STATIC_CONTENT_SERVICE_TOKEN
 } from '@campus/shared';
 import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 
 @Component({
   // tslint:disable-next-line
@@ -46,6 +47,8 @@ export class EduContentSearchResultComponent extends ResultItemBase
 
   public normalizedEduContentToc: any;
 
+  protected isFavorite$: Observable<Boolean>;
+
   constructor(
     @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
     private openStaticContentService: OpenStaticContentServiceInterface,
@@ -59,14 +62,13 @@ export class EduContentSearchResultComponent extends ResultItemBase
   ngOnInit() {
     super.ngOnInit();
 
-    this.store
-      .select(FavoriteQueries.getByTypeAndId, {
-        type: FavoriteTypesEnum.EDUCONTENT,
-        id: this.data.eduContent.id
-      })
-      .subscribe(favorite => {
-        this.data.isFavorite = !!favorite;
-      });
+    this.isFavorite$ = this.store.select(
+      FavoriteQueries.getIsFavoriteEduContent,
+      {
+        eduContentId: this.data.eduContent.id
+      }
+    );
+
     this.normalizedEduContentToc = this.getNormalizedEduContentToc();
   }
 

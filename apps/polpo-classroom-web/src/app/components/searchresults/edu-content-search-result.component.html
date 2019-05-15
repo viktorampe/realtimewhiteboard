@@ -192,14 +192,14 @@
         iconClass="favorites"
       >
         {{
-          data.isFavorite
+          (isFavorite$ | async)
             ? 'Verwijderen uit favorieten'
             : 'Toevoegen aan favorieten'
         }}
         <mat-icon
           class="checkmark"
           svgIcon="check-on"
-          *ngIf="data.isFavorite"
+          *ngIf="(isFavorite$ | async)"
         ></mat-icon>
       </campus-button>
     </div>

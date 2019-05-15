@@ -74,6 +74,23 @@ export const getByType = createSelector(
     Object.values(state.entities).filter(value => value.type === props.type)
 );
 
+export const getFavoriteEduContents = createSelector(
+  selectFavoriteState,
+  (state: State) => {
+    const byEduContentId: State = {
+      ids: [],
+      entities: {},
+      loaded: true
+    };
+    Object.values(state.entities).forEach(value => {
+      if (value.eduContentId) {
+        byEduContentId.entities[value.eduContentId] = value;
+      }
+    });
+    return byEduContentId;
+  }
+);
+
 export const getByTypeAndId = createSelector(
   selectFavoriteState,
   (state: State, props: { type: FavoriteTypesEnum; id: number }) => {
@@ -82,6 +99,13 @@ export const getByTypeAndId = createSelector(
     return Object.values(state.entities).find(value => {
       return value.type === props.type && value[idProperty] === props.id;
     });
+  }
+);
+
+export const getIsFavoriteEduContent = createSelector(
+  getFavoriteEduContents,
+  (state: State, props: { eduContentId: number }) => {
+    return !!state.entities[props.eduContentId];
   }
 );
 
