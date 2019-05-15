@@ -59,7 +59,8 @@ configureBufferSize(150);
       environment.termPrivacy,
       environment.api,
       environment.sso,
-      environment.searchModes
+      environment.searchModes,
+      environment.testing
     ),
     BrowserAnimationsModule,
     NxModule.forRoot(),
