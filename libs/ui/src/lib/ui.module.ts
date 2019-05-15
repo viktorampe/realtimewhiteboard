@@ -21,7 +21,6 @@ import { RouterModule } from '@angular/router';
 import { UtilsModule } from '@campus/utils';
 import { AppBarComponent } from './app-bar/app-bar.component';
 import { BannerComponent } from './banner/banner.component';
-import { DialogDirective } from './banner/directive/banner-dialog.directive';
 import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
 import { ButtonComponent } from './button/button.component';
 import { BorderDirective } from './button/directives/button-border.directive';
@@ -78,7 +77,6 @@ import { HumanDateTimePipe } from './utils/pipes/human-date-time/human-date-time
 import { JoinPipe } from './utils/pipes/join/join.pipe';
 import { RemovePrefixStringPipe } from './utils/pipes/remove-prefix-string/remove-prefix-string.pipe';
 import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-string.pipe';
-
 @NgModule({
   imports: [
     OverlayModule,
@@ -155,8 +153,7 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     DropAreaComponent,
     TileComponent,
     JoinPipe,
-    ManageCollectionComponent,
-    DialogDirective
+    ManageCollectionComponent
   ],
   exports: [
     FilterTextInputComponent,
@@ -208,7 +205,6 @@ import { TruncateStringPipe } from './utils/pipes/truncate-string/truncate-strin
     BannerComponent,
     DropdownDirective,
     CollapsibleSheetComponent,
-    DialogDirective,
     DropAreaComponent,
     TileComponent,
     JoinPipe
