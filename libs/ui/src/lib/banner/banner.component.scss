@@ -1,9 +1,30 @@
 :host.ui-banner--mobile {
   .ui-banner {
     flex-flow: column nowrap;
+    &__content {
+      margin: 0px 0px 15px 0px;
+    }
   }
 }
 
+:host.ui-banner--dialog {
+  .ui-banner {
+    justify-content: space-between;
+    &__content {
+      max-width: 60%;
+    }
+  }
+  &.ui-banner--mobile {
+    .ui-banner {
+      &__content {
+        max-width: 100%;
+      }
+      &__buttons {
+        justify-content: start;
+      }
+    }
+  }
+}
 .ui-banner {
   display: flex;
   flex-flow: row nowrap;

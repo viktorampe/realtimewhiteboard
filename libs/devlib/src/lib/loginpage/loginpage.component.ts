@@ -116,6 +116,7 @@ export class LoginpageComponent implements OnInit {
       mockAction,
       'Het is niet gelukt de favoriet te wijzigen.'
     );
+    mockFeedBack.icon = 'warning';
 
     this.store.dispatch(
       new EffectFeedbackActions.AddEffectFeedback({
