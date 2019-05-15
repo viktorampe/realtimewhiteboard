@@ -1,5 +1,11 @@
 import { SimpleChange } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  async,
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick
+} from '@angular/core/testing';
 import { MatIconModule, MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -11,6 +17,7 @@ import {
   EduContentProductTypeFixture,
   EduContentReducer,
   EduContentTOCFixture,
+  FavoriteActions,
   FavoriteReducer,
   getStoreModuleForFeatures,
   TaskFixture
@@ -25,6 +32,7 @@ import {
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { Store, StoreModule } from '@ngrx/store';
+import { hot } from '@nrwl/nx/testing';
 import { EduContentSearchResultComponent } from './edu-content-search-result.component';
 
 describe('EduContentSearchResultComponent', () => {
@@ -67,6 +75,11 @@ describe('EduContentSearchResultComponent', () => {
     );
 
     store = TestBed.get(Store);
+    store.dispatch(
+      new FavoriteActions.FavoritesLoaded({
+        favorites: []
+      })
+    );
   }));
 
   beforeEach(() => {
@@ -74,7 +87,7 @@ describe('EduContentSearchResultComponent', () => {
     component = fixture.componentInstance;
 
     component.data = {
-      eduContent: new EduContentFixture(),
+      eduContent: new EduContentFixture({ id: 1 }),
       currentBundle: null,
       currentTask: null,
       inTask: false,
@@ -391,6 +404,20 @@ describe('EduContentSearchResultComponent', () => {
       el = fixture.debugElement.query(By.css(query));
       expect(el).toBeTruthy();
     });
+
+    it('should not show favorite checkmark if educontent is not favorited', fakeAsync(() => {
+      const query =
+        '.app-educontentsearchresult__bottom__buttonbar__togglefavorites mat-icon';
+
+      component.isSelected = true;
+      expect(component.isFavorite$).toBeObservable(hot('a', { a: false }));
+
+      tick(1000);
+      fixture.detectChanges();
+
+      let el = fixture.debugElement.query(By.css(query));
+      expect(el).toBeFalsy();
+    }));
   });
 
   describe('logic', () => {

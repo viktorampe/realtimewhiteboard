@@ -47,7 +47,7 @@ export class EduContentSearchResultComponent extends ResultItemBase
 
   public normalizedEduContentToc: any;
 
-  protected isFavorite$: Observable<Boolean>;
+  public isFavorite$: Observable<Boolean>;
 
   constructor(
     @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
