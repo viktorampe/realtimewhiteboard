@@ -296,8 +296,7 @@ describe('EduContentCollectionManagerService', () => {
       expect(actionSpy).toHaveBeenCalledWith(
         new TaskEduContentActions.LinkTaskEduContent({
           taskId: selectedTask.id,
-          eduContentId: selectedEduContent.id,
-          displayResponse: true
+          eduContentId: selectedEduContent.id
         })
       );
     });

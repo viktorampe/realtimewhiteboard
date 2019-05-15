@@ -1,5 +1,9 @@
 import { Action } from '@ngrx/store';
 import { PassportUserCredentialInterface } from '../../+models';
+import {
+  CustomFeedbackHandlersInterface,
+  FeedbackTriggeringAction
+} from '../effect-feedback';
 
 export enum CredentialsActionTypes {
   CredentialsLoaded = '[Credentials] Credentials Loaded',
@@ -38,11 +42,14 @@ export class UnlinkCredential implements Action {
   ) {}
 }
 
-export class UseCredentialProfilePicture implements Action {
+export class UseCredentialProfilePicture implements FeedbackTriggeringAction {
   readonly type = CredentialsActionTypes.UseCredentialProfilePicture;
 
   constructor(
-    public payload: { credential: PassportUserCredentialInterface }
+    public payload: {
+      credential: PassportUserCredentialInterface;
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
   ) {}
 }
 

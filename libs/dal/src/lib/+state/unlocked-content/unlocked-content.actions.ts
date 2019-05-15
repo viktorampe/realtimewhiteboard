@@ -1,6 +1,10 @@
 import { Update } from '@ngrx/entity';
 import { Action } from '@ngrx/store';
 import { UnlockedContentInterface } from '../../+models';
+import {
+  CustomFeedbackHandlersInterface,
+  FeedbackTriggeringAction
+} from '../effect-feedback';
 
 export enum UnlockedContentsActionTypes {
   UnlockedContentsLoaded = '[UnlockedContents] UnlockedContents Loaded',
@@ -82,16 +86,26 @@ export class UpdateUnlockedContents implements Action {
   ) {}
 }
 
-export class DeleteUnlockedContent implements Action {
+export class DeleteUnlockedContent implements FeedbackTriggeringAction {
   readonly type = UnlockedContentsActionTypes.DeleteUnlockedContent;
 
-  constructor(public payload: { id: number; displayResponse?: boolean }) {}
+  constructor(
+    public payload: {
+      id: number;
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
+  ) {}
 }
 
-export class DeleteUnlockedContents implements Action {
+export class DeleteUnlockedContents implements FeedbackTriggeringAction {
   readonly type = UnlockedContentsActionTypes.DeleteUnlockedContents;
 
-  constructor(public payload: { ids: number[]; displayResponse?: boolean }) {}
+  constructor(
+    public payload: {
+      ids: number[];
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
+  ) {}
 }
 
 export class ClearUnlockedContents implements Action {

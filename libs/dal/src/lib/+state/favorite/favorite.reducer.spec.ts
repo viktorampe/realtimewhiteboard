@@ -114,7 +114,7 @@ describe('Favorites Reducer', () => {
       const action = new FavoriteActions.UpdateFavorite({
         userId: 1,
         favorite: update,
-        handleErrorAutomatically: false
+        customFeedbackHandlers: { useCustomErrorHandler: true }
       });
       const result = reducer(startState, action);
       expect(result).toEqual(

@@ -206,8 +206,7 @@ export class EduContentCollectionManagerService
     this.store.dispatch(
       new TaskEduContentActions.LinkTaskEduContent({
         taskId: task.id,
-        eduContentId: content.id,
-        displayResponse: true
+        eduContentId: content.id
       })
     );
   }

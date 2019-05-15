@@ -252,8 +252,7 @@ describe('TaskEduContentEffects', () => {
   describe('linkTaskEduContent$', () => {
     const linkAction = new LinkTaskEduContent({
       taskId: 1,
-      eduContentId: 2,
-      displayResponse: true
+      eduContentId: 2
     });
     const linkedAction = new AddTaskEduContent({
       taskEduContent: new TaskEduContentFixture()

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import {
   EduContent,
@@ -7,6 +7,8 @@ import {
   FavoriteTypesEnum,
   HistoryInterface
 } from '@campus/dal';
+import { FilterTextInputComponent } from '@campus/ui';
+import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { QuickLinkTypeEnum } from './quick-link-type.enum';
@@ -19,10 +21,16 @@ import { QuickLinkViewModel } from './quick-link.viewmodel';
   providers: [QuickLinkViewModel]
 })
 export class QuickLinkComponent implements OnInit {
-  public contentData$: Observable<ContentDataInterface[]>;
+  public contentData$: Observable<QuickLinkInterface[]>;
   public feedback$: Observable<EffectFeedbackInterface>;
   public dialogTitle: string;
   public dialogTitleIcon: string;
+
+  @ViewChild(FilterTextInputComponent)
+  filterTextInput: FilterTextInputComponent<
+    QuickLinkInterface[],
+    ContentDataInterface
+  >;
 
   private dialogTitles = new Map<
     QuickLinkTypeEnum,
@@ -30,6 +38,24 @@ export class QuickLinkComponent implements OnInit {
   >([
     [QuickLinkTypeEnum.FAVORITES, { title: 'Favorieten', icon: 'favorites' }],
     [QuickLinkTypeEnum.HISTORY, { title: 'Recente items', icon: 'unfinished' }]
+  ]);
+
+  private categories = new Map<
+    FavoriteTypesEnum | string,
+    { label: string; order: number }
+  >([
+    // Favorites
+    [FavoriteTypesEnum.BOEKE, { label: 'Bordboeken', order: 0 }],
+    [FavoriteTypesEnum.EDUCONTENT, { label: 'Lesmateriaal', order: 1 }],
+    [FavoriteTypesEnum.SEARCH, { label: 'Zoekopdrachten', order: 2 }],
+    [FavoriteTypesEnum.BUNDLE, { label: 'Bundels', order: 3 }],
+    [FavoriteTypesEnum.TASK, { label: 'Taken', order: 4 }],
+    // History
+    ['boek-e', { label: 'Bordboeken', order: 0 }],
+    ['educontent', { label: 'Lesmateriaal', order: 1 }],
+    ['search', { label: 'Zoekopdrachten', order: 2 }],
+    ['bundle', { label: 'Bundels', order: 3 }],
+    ['task', { label: 'Taken', order: 4 }]
   ]);
 
   private quickLinkActions: {
@@ -115,6 +141,13 @@ export class QuickLinkComponent implements OnInit {
       icon: 'delete',
       tooltip: 'item verwijderen',
       handler: (input: QuickLinkInterface): void => this.remove(input)
+    },
+    none: {
+      actionType: 'open',
+      label: '',
+      icon: '',
+      tooltip: '',
+      handler: () => {}
     }
   };
 
@@ -122,16 +155,39 @@ export class QuickLinkComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA)
     public data: { mode: QuickLinkTypeEnum },
     private dialogRef: MatDialogRef<QuickLinkComponent>,
-    private quickLinkViewModel: QuickLinkViewModel
+    private quickLinkViewModel: QuickLinkViewModel,
+    @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface
   ) {}
 
   ngOnInit() {
     this.setupStreams();
+    this.filterTextInput.setFilterableItem(this);
 
     if (this.dialogTitles.has(this.data.mode)) {
       const titleData = this.dialogTitles.get(this.data.mode);
       this.dialogTitle = titleData.title;
       this.dialogTitleIcon = titleData.icon;
+    }
+  }
+
+  filterFn(
+    source: QuickLinkInterface[],
+    searchText: string
+  ): ContentDataInterface[] {
+    if (searchText.trim().length > 0) {
+      const results = this.filterService
+        .filter(source, { name: searchText })
+        .sort(this.quickLinkSorter);
+
+      const contentData: ContentDataInterface = {
+        type: 'Gevonden items',
+        title: 'Gevonden items',
+        quickLinks: results
+      };
+
+      return [contentData];
+    } else {
+      return this.convertToQuickLinkData(source);
     }
   }
 
@@ -194,13 +250,17 @@ export class QuickLinkComponent implements OnInit {
   private setupStreams() {
     this.contentData$ = this.quickLinkViewModel
       .getQuickLinks$(this.data.mode)
-      .pipe(map(qL => this.convertToQuickLinkData(qL)));
+      .pipe(
+        map(quickLinks =>
+          quickLinks.map(quickLink => this.convertToQuickLink(quickLink))
+        )
+      );
 
     this.feedback$ = this.quickLinkViewModel.getFeedback$();
   }
 
   private convertToQuickLinkData(
-    values: FavoriteInterface[] | HistoryInterface[]
+    values: QuickLinkInterface[]
   ): ContentDataInterface[] {
     return values
       .reduce(
@@ -211,13 +271,13 @@ export class QuickLinkComponent implements OnInit {
           if (!category) {
             category = {
               type: value.type,
-              title: value.type, // TODO: add actual name -> function? enum?
+              title: this.getCategoryTitle(value),
               quickLinks: []
             };
             acc.push(category);
           }
 
-          category.quickLinks.push(this.convertToQuickLink(value));
+          category.quickLinks.push(value);
 
           return acc;
         },
@@ -225,9 +285,11 @@ export class QuickLinkComponent implements OnInit {
       )
       .map(category => ({
         ...category,
-        quickLinks: category.quickLinks.sort(this.quickLinkSorter) // order items in category
+        quickLinks: category.quickLinks.sort((a, b) =>
+          this.quickLinkSorter(a, b)
+        ) // order items in category
       }))
-      .sort(this.quickLinkDataCategorySorter); // order categories
+      .sort((a, b) => this.quickLinkDataCategorySorter(a, b)); // order categories
   }
 
   // adds actions to Favorites and Histories
@@ -272,6 +334,8 @@ export class QuickLinkComponent implements OnInit {
       case FavoriteTypesEnum.SEARCH:
       case 'search':
         return this.quickLinkActions.openSearch;
+      default:
+        return this.quickLinkActions.none;
     }
   }
 
@@ -295,7 +359,20 @@ export class QuickLinkComponent implements OnInit {
     a: ContentDataInterface,
     b: ContentDataInterface
   ): number {
-    return a.type > b.type ? 1 : -1; // TODO: write actual sorting,  sorting alphabetically for now
+    let aIndex, bIndex: number;
+    if (this.categories.has(a.type)) {
+      aIndex = this.categories.get(a.type).order;
+    } else {
+      return 1;
+    }
+
+    if (this.categories.has(b.type)) {
+      bIndex = this.categories.get(b.type).order;
+    } else {
+      return -1;
+    }
+
+    return aIndex - bIndex;
   }
 
   private quickLinkSorter(
@@ -303,6 +380,12 @@ export class QuickLinkComponent implements OnInit {
     b: QuickLinkInterface
   ): number {
     return new Date(b.created).getTime() - new Date(a.created).getTime(); // sorting descending
+  }
+
+  private getCategoryTitle(quickLink: FavoriteInterface | HistoryInterface) {
+    return this.categories.has(quickLink.type)
+      ? this.categories.get(quickLink.type).label
+      : quickLink.type;
   }
 }
 

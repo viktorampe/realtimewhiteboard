@@ -109,7 +109,9 @@ export class LoginpageComponent implements OnInit {
     const mockAction = new FavoriteActions.UpdateFavorite({
       userId: this.authService.userId,
       favorite: { id: 1, changes: { name: 'foo' } },
-      useCustomErrorHandler: true
+      customFeedbackHandlers: {
+        useCustomErrorHandler: true
+      }
     });
     const mockFeedBack = EffectFeedback.generateErrorFeedback(
       'foo',

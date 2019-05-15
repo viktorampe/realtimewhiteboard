@@ -1,6 +1,10 @@
 import { Update } from '@ngrx/entity';
 import { Action } from '@ngrx/store';
 import { BundleInterface } from '../../+models';
+import {
+  CustomFeedbackHandlersInterface,
+  FeedbackTriggeringAction
+} from '../effect-feedback';
 
 export enum BundlesActionTypes {
   BundlesLoaded = '[Bundles] Bundles Loaded',
@@ -90,16 +94,28 @@ export class ClearBundles implements Action {
   readonly type = BundlesActionTypes.ClearBundles;
 }
 
-export class LinkEduContent implements Action {
+export class LinkEduContent implements FeedbackTriggeringAction {
   readonly type = BundlesActionTypes.LinkEduContent;
 
-  constructor(public payload: { bundleId: number; eduContentId: number }) {}
+  constructor(
+    public payload: {
+      bundleId: number;
+      eduContentId: number;
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
+  ) {}
 }
 
-export class LinkUserContent implements Action {
+export class LinkUserContent implements FeedbackTriggeringAction {
   readonly type = BundlesActionTypes.LinkUserContent;
 
-  constructor(public payload: { bundleId: number; userContentId: number }) {}
+  constructor(
+    public payload: {
+      bundleId: number;
+      userContentId: number;
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
+  ) {}
 }
 
 export type BundlesActions =

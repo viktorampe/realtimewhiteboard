@@ -4,6 +4,7 @@ import { LearningPlanInterface } from './LearningPlan.interface';
 
 export interface YearInterface {
   name: string;
+  label: string;
   id?: number;
   eduContentMetadata?: EduContentMetadataInterface[];
   learningPlans?: LearningPlanInterface[];

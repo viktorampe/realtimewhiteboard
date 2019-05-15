@@ -64,7 +64,6 @@ export class FavoriteEffects {
             'Het is niet gelukt om het item aan jouw favorieten toe te voegen.',
           type: 'error',
           userActions: [{ title: 'Opnieuw proberen', userAction: action }],
-          display: true,
           priority: Priority.HIGH
         });
         return new EffectFeedbackActions.AddEffectFeedback({ effectFeedback });

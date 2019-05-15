@@ -45,7 +45,7 @@ describe('CoupledTeacherViewModel', () => {
         new TeacherStudentActions.LinkTeacherStudent({
           publicKey: 'somePublicKey',
           userId: 10,
-          useCustomErrorHandler: true
+          customFeedbackHandlers: { useCustomErrorHandler: true }
         })
       );
     });

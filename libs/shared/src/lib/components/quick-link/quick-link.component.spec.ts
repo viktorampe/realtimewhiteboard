@@ -22,6 +22,7 @@ import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
   BundleFixture,
+  EduContent,
   EduContentFixture,
   EduContentMetadataFixture,
   EffectFeedbackFixture,
@@ -38,9 +39,11 @@ import { MockDate, MockMatIconRegistry } from '@campus/testing';
 import {
   BannerComponent,
   ButtonComponent,
+  FilterTextInputComponent,
   InfoPanelComponent,
   UiModule
 } from '@campus/ui';
+import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { hot } from '@nrwl/nx/testing';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -73,7 +76,11 @@ describe('QuickLinkComponent', () => {
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: mockInjectedData },
         { provide: MatDialogRef, useValue: { close: () => {} } },
-        { provide: MatIconRegistry, useClass: MockMatIconRegistry }
+        { provide: MatIconRegistry, useClass: MockMatIconRegistry },
+        {
+          provide: FILTER_SERVICE_TOKEN,
+          useValue: { filter: () => {} } // all injected items
+        }
       ]
     }).overrideComponent(QuickLinkComponent, {
       set: {
@@ -566,6 +573,37 @@ describe('QuickLinkComponent', () => {
     });
   });
 
+  describe('filtering', () => {
+    let filterService: FilterServiceInterface;
+    beforeEach(() => {
+      filterService = TestBed.get(FILTER_SERVICE_TOKEN);
+    });
+
+    it('should filter the items', () => {
+      const filterText = fixture.debugElement.query(
+        By.directive(FilterTextInputComponent)
+      );
+
+      component.contentData$.subscribe(quickLinks => {
+        const returnedItem = quickLinks[0];
+
+        filterService.filter = jest.fn().mockReturnValue([returnedItem]);
+        filterText.componentInstance.setValue("it doesn't matter");
+
+        fixture.detectChanges();
+
+        const linkItems = fixture.debugElement.queryAll(
+          By.css('.quick-link__item__title')
+        );
+
+        expect(linkItems.length).toBe(1);
+        expect(linkItems[0].nativeElement.textContent.trim()).toBe(
+          returnedItem.name
+        );
+      });
+    });
+  });
+
   describe('data and streams', () => {
     describe('data', () => {
       it('should inject the mode-data', () => {
@@ -578,83 +616,134 @@ describe('QuickLinkComponent', () => {
       describe('grouping and sorting', () => {
         it('should group the quicklinks in categories, by type', () => {
           const mockFavorites = [
-            new FavoriteFixture({ type: 'foo' }),
-            new FavoriteFixture({ type: 'foo' }),
-            new FavoriteFixture({ type: 'bar' }),
-            new FavoriteFixture({ type: 'baz' })
+            new FavoriteFixture({
+              type: 'boek-e'
+            }),
+            new FavoriteFixture({
+              type: 'boek-e'
+            }),
+            new FavoriteFixture({
+              type: 'task'
+            }),
+            new FavoriteFixture({
+              type: 'bundle'
+            })
           ];
 
           vmQuickLinks$.next(mockFavorites);
+          fixture.detectChanges();
 
           // doesn't test array order
           const expected = jasmine.arrayContaining([
             {
-              type: 'foo',
-              title: 'foo',
+              type: 'boek-e',
+              title: 'Bordboeken',
               quickLinks: [
                 // ignore missing properties
-                jasmine.objectContaining(mockFavorites[0]),
-                jasmine.objectContaining(mockFavorites[1])
+                jasmine.objectContaining({ ...mockFavorites[0] }),
+                jasmine.objectContaining({ ...mockFavorites[1] })
               ]
             },
             {
-              type: 'bar',
-              title: 'bar',
-              quickLinks: [jasmine.objectContaining(mockFavorites[2])]
+              type: 'task',
+              title: 'Taken',
+              quickLinks: [jasmine.objectContaining({ ...mockFavorites[2] })]
             },
             {
-              type: 'baz',
-              title: 'baz',
-              quickLinks: [jasmine.objectContaining(mockFavorites[3])]
+              type: 'bundle',
+              title: 'Bundels',
+              quickLinks: [jasmine.objectContaining({ ...mockFavorites[3] })]
             }
           ]);
 
-          expect(component.contentData$).toBeObservable(
+          expect(component.filterTextInput.result$).toBeObservable(
             hot('a', { a: expected })
           );
         });
 
-        it('should sort the quicklink categories', () => {
+        it('should sort the quicklink categories and use a readable name', () => {
           const mockFavorites = [
-            new FavoriteFixture({ type: 'foo' }),
-            new FavoriteFixture({ type: 'foo' }),
-            new FavoriteFixture({ type: 'bar' }),
-            new FavoriteFixture({ type: 'baz' })
+            new FavoriteFixture({ type: FavoriteTypesEnum.TASK }),
+            new FavoriteFixture({ type: 'type not in list' }),
+            new FavoriteFixture({
+              type: FavoriteTypesEnum.BOEKE,
+              eduContent: Object.assign(
+                new EduContent(),
+                new EduContentFixture()
+              )
+            }),
+            new FavoriteFixture({ type: FavoriteTypesEnum.SEARCH }),
+            new FavoriteFixture({
+              type: FavoriteTypesEnum.EDUCONTENT,
+              eduContent: Object.assign(
+                new EduContent(),
+                new EduContentFixture()
+              )
+            }),
+            new FavoriteFixture({ type: FavoriteTypesEnum.BUNDLE })
           ];
 
           vmQuickLinks$.next(mockFavorites);
+          fixture.detectChanges();
 
-          // only test category order
-          // TODO: fix order when component sorter is refactored
+          // only test category order + title
           const expected = [
             jasmine.objectContaining({
-              type: 'bar'
+              type: FavoriteTypesEnum.BOEKE,
+              title: 'Bordboeken'
             }),
             jasmine.objectContaining({
-              type: 'baz'
+              type: FavoriteTypesEnum.EDUCONTENT,
+              title: 'Lesmateriaal'
             }),
             jasmine.objectContaining({
-              type: 'foo'
+              type: FavoriteTypesEnum.SEARCH,
+              title: 'Zoekopdrachten'
+            }),
+            jasmine.objectContaining({
+              type: FavoriteTypesEnum.BUNDLE,
+              title: 'Bundels'
+            }),
+            jasmine.objectContaining({
+              type: FavoriteTypesEnum.TASK,
+              title: 'Taken'
+            }),
+            jasmine.objectContaining({
+              type: 'type not in list',
+              title: 'type not in list'
             })
           ];
 
-          expect(component.contentData$).toBeObservable(
+          expect(component.filterTextInput.result$).toBeObservable(
             hot('a', { a: expected })
           );
         });
 
         it('should sort the quicklinks [per category] on created date, descending', () => {
           const mockFavorites = [
-            new FavoriteFixture({ id: 1, type: 'foo', created: new Date(1) }),
-            new FavoriteFixture({ id: 2, type: 'foo', created: new Date(4) }),
-            new FavoriteFixture({ id: 3, type: 'foo', created: new Date(2) }),
-            new FavoriteFixture({ id: 4, type: 'foo', created: new Date(3) })
+            new FavoriteFixture({
+              id: 1,
+              type: 'boek-e',
+              created: new Date(1)
+            }),
+            new FavoriteFixture({
+              id: 2,
+              type: 'boek-e',
+              created: new Date(4)
+            }),
+            new FavoriteFixture({
+              id: 3,
+              type: 'boek-e',
+              created: new Date(2)
+            }),
+            new FavoriteFixture({ id: 4, type: 'boek-e', created: new Date(3) })
           ];
 
           vmQuickLinks$.next(mockFavorites);
+          fixture.detectChanges();
 
           // only need quickLinks, only 1 category
-          const quickLinks$ = component.contentData$.pipe(
+          const quickLinks$ = component.filterTextInput.result$.pipe(
             map(cD => cD[0].quickLinks)
           );
 
@@ -691,9 +780,10 @@ describe('QuickLinkComponent', () => {
             beforeEach(() => {
               quickLinkActions.openArea.handler = mockOpenAreaFunction;
               vmQuickLinks$.next([mockFavorite]);
+              fixture.detectChanges();
 
               // only 1 category with 1 quickLink
-              quickLink$ = component.contentData$.pipe(
+              quickLink$ = component.filterTextInput.result$.pipe(
                 map(cD => cD[0].quickLinks[0])
               );
             });
@@ -736,9 +826,10 @@ describe('QuickLinkComponent', () => {
             beforeEach(() => {
               quickLinkActions.openBundle.handler = mockOpenBundleFunction;
               vmQuickLinks$.next([mockFavorite]);
+              fixture.detectChanges();
 
               // only 1 category with 1 quickLink
-              quickLink$ = component.contentData$.pipe(
+              quickLink$ = component.filterTextInput.result$.pipe(
                 map(cD => cD[0].quickLinks[0])
               );
             });
@@ -781,9 +872,10 @@ describe('QuickLinkComponent', () => {
             beforeEach(() => {
               quickLinkActions.openTask.handler = mockOpenTaskFunction;
               vmQuickLinks$.next([mockFavorite]);
+              fixture.detectChanges();
 
               // only 1 category with 1 quickLink
-              quickLink$ = component.contentData$.pipe(
+              quickLink$ = component.filterTextInput.result$.pipe(
                 map(cD => cD[0].quickLinks[0])
               );
             });
@@ -826,9 +918,10 @@ describe('QuickLinkComponent', () => {
             beforeEach(() => {
               quickLinkActions.openBoeke.handler = mockOpenBoekeFunction;
               vmQuickLinks$.next([mockFavorite]);
+              fixture.detectChanges();
 
               // only 1 category with 1 quickLink
-              quickLink$ = component.contentData$.pipe(
+              quickLink$ = component.filterTextInput.result$.pipe(
                 map(cD => cD[0].quickLinks[0])
               );
             });
@@ -871,9 +964,10 @@ describe('QuickLinkComponent', () => {
             beforeEach(() => {
               quickLinkActions.openSearch.handler = mockOpenSearchFunction;
               vmQuickLinks$.next([mockFavorite]);
+              fixture.detectChanges();
 
               // only 1 category with 1 quickLink
-              quickLink$ = component.contentData$.pipe(
+              quickLink$ = component.filterTextInput.result$.pipe(
                 map(cD => cD[0].quickLinks[0])
               );
             });
@@ -919,9 +1013,10 @@ describe('QuickLinkComponent', () => {
               quickLinkActions.openEduContentAsExercise.handler = mockOpenEduContentAsExerciseFunction;
               quickLinkActions.openEduContentAsSolution.handler = mockOpenEduContentAsSolutionFunction;
               vmQuickLinks$.next([mockFavorite]);
+              fixture.detectChanges();
 
               // only 1 category with 1 quickLink
-              quickLink$ = component.contentData$.pipe(
+              quickLink$ = component.filterTextInput.result$.pipe(
                 map(cD => cD[0].quickLinks[0])
               );
             });
@@ -986,9 +1081,10 @@ describe('QuickLinkComponent', () => {
                 });
 
                 vmQuickLinks$.next([mockFavorite]);
+                fixture.detectChanges();
 
                 // only 1 category with 1 quickLink
-                quickLink$ = component.contentData$.pipe(
+                quickLink$ = component.filterTextInput.result$.pipe(
                   map(cD => cD[0].quickLinks[0])
                 );
               });
@@ -1043,9 +1139,10 @@ describe('QuickLinkComponent', () => {
                 });
 
                 vmQuickLinks$.next([mockFavorite]);
+                fixture.detectChanges();
 
                 // only 1 category with 1 quickLink
-                quickLink$ = component.contentData$.pipe(
+                quickLink$ = component.filterTextInput.result$.pipe(
                   map(cD => cD[0].quickLinks[0])
                 );
               });
@@ -1095,9 +1192,10 @@ describe('QuickLinkComponent', () => {
 
             mockFavorite = new FavoriteFixture({ type: 'task' });
             vmQuickLinks$.next([mockFavorite]);
+            fixture.detectChanges();
 
             // only 1 category with 1 quickLink
-            quickLink$ = component.contentData$.pipe(
+            quickLink$ = component.filterTextInput.result$.pipe(
               map(cD => cD[0].quickLinks[0])
             );
           });
