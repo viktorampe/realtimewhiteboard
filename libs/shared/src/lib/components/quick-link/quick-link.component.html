@@ -7,8 +7,7 @@
     <mat-action-list *ngIf="(contentData$ | async) as contentData">
       <ng-container *ngFor="let category of contentData">
         <h3 mat-subheader>{{ category.title }}</h3>
-        <button
-          mat-list-item
+        <mat-list-item
           class="quick-link__item"
           *ngFor="let quickLink of category.quickLinks"
           (click)="quickLink.defaultAction.handler(quickLink)"
@@ -57,7 +56,7 @@
               ></campus-button>
             </ng-container>
           </div>
-        </button>
+        </mat-list-item>
       </ng-container>
     </mat-action-list>
   </mat-dialog-content>

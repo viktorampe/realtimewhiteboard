@@ -3,27 +3,23 @@
   <mat-form-field
     class="ui-content-editable__form-field"
     [style.display]="active ? null : 'none'"
+    campusClickPreventDefault
+    campusClickStopPropagation
   >
     <input
       *ngIf="!multiline"
       (focus)="onFocus($event)"
       matInput
       [(ngModel)]="text"
-      (keyup.space)="$event.preventDefault()"
       (keydown.enter)="saveChanges()"
       (keydown.escape)="cancelChanges()"
-      campusClickPreventDefault
-      campusClickStopPropagation
     />
     <textarea
       *ngIf="multiline"
       matInput
       (focus)="onFocus($event)"
       [(ngModel)]="text"
-      (keyup.space)="$event.preventDefault()"
       (keydown.escape)="cancelChanges()"
-      campusClickPreventDefault
-      campusClickStopPropagation
     >
     </textarea>
   </mat-form-field>
