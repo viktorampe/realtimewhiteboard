@@ -23,7 +23,7 @@ export const YEARS_FILTER_PROPS = {
   name: 'years',
   label: 'Jaar',
   keyProperty: 'id',
-  displayProperty: 'name'
+  displayProperty: 'label'
 };
 
 export const SPECIALITIES_FILTER_PROPS = {
