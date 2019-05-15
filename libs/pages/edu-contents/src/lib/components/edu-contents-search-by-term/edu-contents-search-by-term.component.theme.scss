@@ -2,6 +2,7 @@
   $pages-edu-contents-search-by-term-margin: 20px !default;
   $pages-edu-contents-search-by-term-border-thickness: 1px !default;
   $pages-edu-contents-search-by-term-border-color: #a9a9a9 !default;
+  $pages-edu-contents-search-by-term-aside-min-width: 235px !default;
 
   .pages-edu-contents-search-by-term {
     &__wrapper {
@@ -13,6 +14,7 @@
         border-right: $pages-edu-contents-search-by-term-border-thickness solid
           $pages-edu-contents-search-by-term-border-color;
         margin-right: $pages-edu-contents-search-by-term-margin;
+        min-width: $pages-edu-contents-search-by-term-aside-min-width;
 
         &__reset {
           margin-right: $pages-edu-contents-search-by-term-margin;

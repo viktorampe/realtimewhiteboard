@@ -75,9 +75,9 @@ export const getById = createSelector(
 export const getUnread = createSelector(
   selectAlertState,
   (state: State) =>
-    Object.entries(state.entities)
-      .filter(([key, value]) => !value.read)
-      .map(([key, value]) => asAlert(state.entities[key]))
+    (state.ids as number[])
+      .filter(id => !state.entities[id].read)
+      .map(id => asAlert(state.entities[id]))
 );
 
 /**

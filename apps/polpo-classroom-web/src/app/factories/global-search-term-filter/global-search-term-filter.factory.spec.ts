@@ -137,13 +137,13 @@ describe('GlobalSearchTermFilterFactory', () => {
         filterCriteriaSelections: filterCriteriaSelections
       };
       const expectedFilters = [
-        getExpectedYearFilter(),
-        getExpectedEduNetFilter(),
-        getExpectedSchoolTypeFilter(),
         getExpectedLearningAreaFilter(),
+        getExpectedYearFilter(),
         getExpectedMethodFilter(),
         getExpectedLearningDomainFilter(),
-        getExpectedEduContentProductTypeFilter()
+        getExpectedEduContentProductTypeFilter(),
+        getExpectedEduNetFilter(),
+        getExpectedSchoolTypeFilter()
       ];
 
       const expected = hot('a', { a: expectedFilters });
@@ -162,11 +162,11 @@ describe('GlobalSearchTermFilterFactory', () => {
       };
 
       const expectedFilters = [
-        getExpectedYearFilter(),
-        getExpectedEduNetFilter(),
-        getExpectedSchoolTypeFilter(),
         getExpectedLearningAreaFilter(),
-        getExpectedEduContentProductTypeFilter()
+        getExpectedYearFilter(),
+        getExpectedEduContentProductTypeFilter(),
+        getExpectedEduNetFilter(),
+        getExpectedSchoolTypeFilter()
       ];
 
       const expected = hot('a', { a: expectedFilters });
@@ -188,10 +188,10 @@ describe('GlobalSearchTermFilterFactory', () => {
       };
 
       const expectedFilters = [
-        getExpectedYearFilter(),
-        getExpectedEduNetFilter(),
         getExpectedLearningAreaFilter(),
-        getExpectedEduContentProductTypeFilter()
+        getExpectedYearFilter(),
+        getExpectedEduContentProductTypeFilter(),
+        getExpectedEduNetFilter()
       ];
 
       const expected = hot('a', { a: expectedFilters });
@@ -362,7 +362,7 @@ describe('GlobalSearchTermFilterFactory', () => {
   function getExpectedLearningDomainFilter() {
     return getExpectedFilter(
       'learningDomains',
-      'Leergebied',
+      'Leerdomein',
       'id',
       'name',
       mockLearningDomains.filter(

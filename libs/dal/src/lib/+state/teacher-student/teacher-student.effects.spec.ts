@@ -239,7 +239,7 @@ describe('TeacherStudentsEffects', () => {
       const linkTeacherAction = new LinkTeacherStudent({
         publicKey: mockPublicKey,
         userId: mockCurrentUser.id,
-        handleErrorAutomatically: false
+        useCustomErrorHandler: true
       });
 
       it('should call the linkedPersonService', () => {
@@ -271,11 +271,11 @@ describe('TeacherStudentsEffects', () => {
             force: true
           }),
           c: new AddEffectFeedback({
-            effectFeedback: new EffectFeedback({
-              id: uuid(),
-              triggerAction: linkTeacherAction,
-              message: 'Leerkracht is gekoppeld.'
-            })
+            effectFeedback: EffectFeedback.generateSuccessFeedback(
+              uuid(),
+              linkTeacherAction,
+              'Leerkracht is gekoppeld.'
+            )
           })
         });
 
@@ -293,19 +293,15 @@ describe('TeacherStudentsEffects', () => {
           .mockImplementation(() => {
             throw new Error(errorMessage);
           });
-
         actions = hot('-a-', { a: linkTeacherAction });
 
         const expectedAction$ = hot('-a', {
           a: new AddEffectFeedback({
-            effectFeedback: new EffectFeedback({
-              id: uuid(),
-              triggerAction: linkTeacherAction,
-              message: 'Het is niet gelukt om de leerkracht te ontkoppelen.',
-              type: 'error',
-              priority: Priority.HIGH,
-              display: false
-            })
+            effectFeedback: EffectFeedback.generateErrorFeedback(
+              uuid(),
+              linkTeacherAction,
+              'Het is niet gelukt om de leerkracht te ontkoppelen.'
+            )
           })
         });
 

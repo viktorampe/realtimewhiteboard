@@ -15,6 +15,8 @@ import {
   FavoriteQueries,
   LearningAreaActions,
   LearningAreaQueries,
+  LearningDomainActions,
+  LearningDomainQueries,
   MethodActions,
   MethodQueries,
   SchoolTypeActions,
@@ -66,7 +68,8 @@ export class EduContentsResolver extends StateResolver {
       }),
       new TaskEduContentActions.LoadTaskEduContents({
         userId: this.authService.userId
-      })
+      }),
+      new LearningDomainActions.LoadLearningDomains()
     ];
   }
 
@@ -83,7 +86,8 @@ export class EduContentsResolver extends StateResolver {
       BundleQueries.getLoaded,
       TaskQueries.getLoaded,
       UnlockedContentQueries.getLoaded,
-      TaskEduContentQueries.getLoaded
+      TaskEduContentQueries.getLoaded,
+      LearningDomainQueries.getLoaded
     ];
   }
 }

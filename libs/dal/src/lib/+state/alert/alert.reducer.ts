@@ -8,6 +8,16 @@ import { AlertsActions, AlertsActionTypes } from './alert.actions';
 
 export const NAME = 'alerts';
 
+export function sortAlerts(
+  a: AlertQueueInterface,
+  b: AlertQueueInterface
+): number {
+  // sort by date DESC
+  const dateA: Date = new Date(a.sentAt || a.validFrom);
+  const dateB: Date = new Date(b.sentAt || b.validFrom);
+  return dateB.getTime() - dateA.getTime();
+}
+
 export interface State extends EntityState<AlertQueueInterface> {
   // additional entities state properties
   loaded: boolean;
@@ -17,7 +27,9 @@ export interface State extends EntityState<AlertQueueInterface> {
 
 export const adapter: EntityAdapter<AlertQueueInterface> = createEntityAdapter<
   AlertQueueInterface
->();
+>({
+  sortComparer: sortAlerts
+});
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties

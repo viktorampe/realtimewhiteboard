@@ -136,6 +136,85 @@ describe('CheckboxListFilterComponentComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  describe('predictions', () => {
+    it('should display the component if there are predictions', () => {
+      component.hasPredictions = true;
+      fixture.detectChanges();
+
+      const title = fixture.debugElement.query(
+        By.css('.checkbox__list__filter__title')
+      );
+      const list = fixture.debugElement.query(
+        By.css('.checkbox__list__filter__list')
+      );
+
+      expect(title).toBeTruthy();
+      expect(list).toBeTruthy();
+    });
+
+    it('should hide the component if there are no predictions', () => {
+      component.hasPredictions = false;
+      fixture.detectChanges();
+
+      const title = fixture.debugElement.query(
+        By.css('.checkbox__list__filter__title')
+      );
+      const list = fixture.debugElement.query(
+        By.css('.checkbox__list__filter__list')
+      );
+
+      expect(title).toBeFalsy();
+      expect(list).toBeFalsy();
+    });
+
+    it('should display title when child value is selected', () => {
+      component.filterCriteria = {
+        displayProperty: 'label',
+        keyProperty: 'id',
+        name: 'foo',
+        label: 'foo',
+        values: [
+          {
+            data: { id: 1 },
+            child: {
+              displayProperty: 'label',
+              keyProperty: 'id',
+              values: [
+                {
+                  data: { id: 2 },
+                  selected: true
+                }
+              ]
+            } as SearchFilterCriteriaInterface
+          }
+        ]
+      };
+
+      component.ngOnInit();
+
+      expect(component.hasPredictions).toBe(true);
+    });
+
+    it('should display title when a value is selected', () => {
+      component.filterCriteria = {
+        displayProperty: 'label',
+        keyProperty: 'id',
+        name: 'foo',
+        label: 'foo',
+        values: [
+          {
+            selected: true,
+            data: { id: 1 }
+          }
+        ]
+      };
+
+      component.ngOnInit();
+
+      expect(component.hasPredictions).toBe(true);
+    });
+  });
+
   describe('output', () => {
     it('should emit the updated filtercriterium when the childcomponent emits', fakeAsync(() => {
       spyOn(component.filterSelectionChange, 'emit');

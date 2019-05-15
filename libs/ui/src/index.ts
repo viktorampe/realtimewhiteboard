@@ -9,12 +9,16 @@ export {
   SelectOption
 } from './lib/confirmable-select/confirmable-select.component';
 export {
+  ContentEditableComponent
+} from './lib/content-editable/content-editable.component';
+export {
   DropdownMenuItemInterface
 } from './lib/dropdown-menu-item/dropdown-menu-item.component';
 export {
   FilterableItem,
   FilterTextInputComponent
 } from './lib/filter-text-input/filter-text-input.component';
+export { InfoPanelComponent } from './lib/info-panel/info-panel.component';
 export { ListFormat } from './lib/list-view/enums/list-format.enum';
 export {
   ListViewItemInterface

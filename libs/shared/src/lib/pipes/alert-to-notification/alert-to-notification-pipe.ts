@@ -13,7 +13,10 @@ export class AlertToNotificationItemPipe implements PipeTransform {
   transform(alert: Alert): NotificationItemInterface {
     let link = alert.link;
     //todo clean up once API changed URLs
-    if (link.match(new RegExp('.*.polpo.(localhost|be)(.*)/#/(.*)', 'i'))) {
+    if (
+      link &&
+      link.match(new RegExp('.*\\.polpo\\.(localhost|be)(.*)/#/(.*)', 'i'))
+    ) {
       link = link.replace('/#/', '/');
     }
     return {
@@ -24,7 +27,7 @@ export class AlertToNotificationItemPipe implements PipeTransform {
       icon: alert.icon,
       link: link,
       notificationText: alert.message,
-      notificationDate: new Date(alert.sentAt)
+      notificationDate: new Date(alert.sentAt || alert.validFrom)
     };
   }
 }

@@ -15,22 +15,36 @@ export const GLOBAL_SEARCH_TERM_FILTER_FACTORY_TOKEN = new InjectionToken(
 })
 export class GlobalSearchTermFilterFactory extends SearchTermFilterFactory {
   private globalSearchTermFilters = [
+    'learningArea',
     'years',
     'eduNets',
-    'schoolTypes',
-    'learningArea'
+    'schoolTypes'
   ];
+
   constructor(public store: Store<DalState>) {
     super(store);
+
+    // override filterSortOrder from base class
+    this.filterSortOrder = [
+      'learningArea',
+      'years',
+      'methods',
+      'learningDomains',
+      'eduContentProductType',
+      'eduNets',
+      'schoolTypes'
+    ];
   }
 
   getFilters(
     searchState: SearchStateInterface
   ): Observable<SearchFilterInterface[]> {
+    // create 'standard' filters
     const filters = this.globalSearchTermFilters.map(filterName =>
       this.buildFilter(filterName, searchState)
     );
 
+    // conditional filters: learningArea -> methods, learningDomains
     const selectedLearningAreas = searchState.filterCriteriaSelections.get(
       'learningArea'
     ) as number[];
@@ -49,10 +63,14 @@ export class GlobalSearchTermFilterFactory extends SearchTermFilterFactory {
       filters.push(learningDomainsByLearningArea);
     }
 
+    // nested filters: productTypes
     filters.push(this.getNestedEduContentProductTypes(searchState));
+
     return combineLatest(filters).pipe(
       map(searchFilters =>
-        searchFilters.filter(f => f.criteria.values.length > 0)
+        searchFilters
+          .filter(f => f.criteria.values.length > 0)
+          .sort((a, b) => this.filterSorter(a, b, this.filterSortOrder))
       )
     );
   }

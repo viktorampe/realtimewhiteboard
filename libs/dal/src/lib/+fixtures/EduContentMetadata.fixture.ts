@@ -95,6 +95,7 @@ export class EduContentMetadataFixture implements EduContentMetadataInterface {
       depth: 1
     })
   ];
+  streamable = false;
 
   constructor(props: Partial<EduContentMetadataInterface> = {}) {
     // overwrite defaults
