@@ -313,7 +313,6 @@ describe('FavoriteEffects', () => {
           userActions: [
             { title: 'Opnieuw proberen', userAction: startAddFavoriteAction }
           ],
-          display: true,
           priority: Priority.HIGH
         });
         addFeedbackAction = new AddEffectFeedback({ effectFeedback });
@@ -388,7 +387,7 @@ describe('FavoriteEffects', () => {
     const updateFavoriteAction = new UpdateFavorite({
       userId: 1,
       favorite: { id: 2, changes: { name: 'bar' } },
-      useCustomErrorHandler: true
+      customFeedbackHandlers: { useCustomErrorHandler: true }
     });
     const undoUpdateAction = undo(updateFavoriteAction);
     let successFeedbackAction: AddEffectFeedback;

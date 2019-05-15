@@ -1,5 +1,9 @@
 import { PersonInterface } from '@campus/dal';
 import { Action } from '@ngrx/store';
+import {
+  CustomFeedbackHandlersInterface,
+  FeedbackTriggeringAction
+} from '../effect-feedback';
 
 export enum UserActionTypes {
   LoadUser = '[User] Load User',
@@ -50,10 +54,14 @@ export class UserRemoveError implements Action {
   constructor(public payload: { error: any }) {}
 }
 
-export class UpdateUser implements Action {
+export class UpdateUser implements FeedbackTriggeringAction {
   readonly type = UserActionTypes.UpdateUser;
   constructor(
-    public payload: { userId: number; changedProps: Partial<PersonInterface> }
+    public payload: {
+      userId: number;
+      changedProps: Partial<PersonInterface>;
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
   ) {}
 }
 

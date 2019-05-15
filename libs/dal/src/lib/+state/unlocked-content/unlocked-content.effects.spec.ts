@@ -214,11 +214,14 @@ describe('UnlockedContentEffects', () => {
       mockServiceMethodReturnValue('remove', {});
       const deleteAction = new DeleteUnlockedContent({
         id: 1,
-        displayResponse: true
+        customFeedbackHandlers: {
+          useCustomErrorHandler: false,
+          useCustomSuccessHandler: false
+        }
       });
       effectFeedback.triggerAction = deleteAction;
       effectFeedback.message = 'Het lesmateriaal is uit de bundel verwijderd.';
-      effectFeedback.display = deleteAction.payload.displayResponse;
+      effectFeedback.display = true;
       effectFeedback.userActions = null;
       effectFeedback.type = 'success';
       effectFeedback.priority = Priority.NORM;
@@ -230,15 +233,14 @@ describe('UnlockedContentEffects', () => {
     });
     it('should return an undo and error feedback action if the service fails', () => {
       const deleteAction = new DeleteUnlockedContent({
-        id: 1,
-        displayResponse: true
+        id: 1
       });
       const undoAction = undo(deleteAction);
 
       effectFeedback.triggerAction = deleteAction;
       effectFeedback.message =
         'Het is niet gelukt om het lesmateriaal uit de bundel te verwijderen.';
-      effectFeedback.display = deleteAction.payload.displayResponse;
+      effectFeedback.display = true;
       effectFeedback.userActions = [
         { title: 'Opnieuw', userAction: deleteAction }
       ];
@@ -258,13 +260,12 @@ describe('UnlockedContentEffects', () => {
     it('should return a success feedback action if the service returns a value', () => {
       mockServiceMethodReturnValue('removeAll', {});
       const deleteAction = new DeleteUnlockedContents({
-        ids: [1],
-        displayResponse: true
+        ids: [1]
       });
       effectFeedback.triggerAction = deleteAction;
       effectFeedback.message =
         'De lesmaterialen zijn uit de bundel verwijderd.';
-      effectFeedback.display = deleteAction.payload.displayResponse;
+      effectFeedback.display = true;
       effectFeedback.userActions = null;
       effectFeedback.type = 'success';
       effectFeedback.priority = Priority.NORM;
@@ -276,15 +277,14 @@ describe('UnlockedContentEffects', () => {
     });
     it('should return an undo and error feedback action if the service fails', () => {
       const deleteAction = new DeleteUnlockedContents({
-        ids: [1],
-        displayResponse: true
+        ids: [1]
       });
       const undoAction = undo(deleteAction);
 
       effectFeedback.triggerAction = deleteAction;
       effectFeedback.message =
         'Het is niet gelukt om de lesmaterialen uit de bundel te verwijderen.';
-      effectFeedback.display = deleteAction.payload.displayResponse;
+      effectFeedback.display = true;
       effectFeedback.userActions = [
         { title: 'Opnieuw', userAction: deleteAction }
       ];

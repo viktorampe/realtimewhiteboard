@@ -1,6 +1,10 @@
 import { Update } from '@ngrx/entity';
 import { Action } from '@ngrx/store';
 import { StudentContentStatusInterface } from '../../+models';
+import {
+  CustomFeedbackHandlersInterface,
+  FeedbackTriggeringAction
+} from '../effect-feedback';
 
 export enum StudentContentStatusesActionTypes {
   StudentContentStatusesLoaded = '[StudentContentStatuses] StudentContentStatuses Loaded',
@@ -41,11 +45,14 @@ export class StudentContentStatusesLoadError implements Action {
   constructor(public payload: any) {}
 }
 
-export class AddStudentContentStatus implements Action {
+export class AddStudentContentStatus implements FeedbackTriggeringAction {
   readonly type = StudentContentStatusesActionTypes.AddStudentContentStatus;
 
   constructor(
-    public payload: { studentContentStatus: StudentContentStatusInterface }
+    public payload: {
+      studentContentStatus: StudentContentStatusInterface;
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
   ) {}
 }
 
@@ -57,11 +64,14 @@ export class StudentContentStatusAdded implements Action {
   ) {}
 }
 
-export class UpsertStudentContentStatus implements Action {
+export class UpsertStudentContentStatus implements FeedbackTriggeringAction {
   readonly type = StudentContentStatusesActionTypes.UpsertStudentContentStatus;
 
   constructor(
-    public payload: { studentContentStatus: StudentContentStatusInterface }
+    public payload: {
+      studentContentStatus: StudentContentStatusInterface;
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
   ) {}
 }
 
@@ -91,12 +101,13 @@ export class UpsertStudentContentStatuses implements Action {
   ) {}
 }
 
-export class UpdateStudentContentStatus implements Action {
+export class UpdateStudentContentStatus implements FeedbackTriggeringAction {
   readonly type = StudentContentStatusesActionTypes.UpdateStudentContentStatus;
 
   constructor(
     public payload: {
       studentContentStatus: Update<StudentContentStatusInterface>;
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
     }
   ) {}
 }
