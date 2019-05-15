@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import {
   EduContent,
@@ -7,6 +7,8 @@ import {
   FavoriteTypesEnum,
   HistoryInterface
 } from '@campus/dal';
+import { FilterTextInputComponent } from '@campus/ui';
+import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { QuickLinkTypeEnum } from './quick-link-type.enum';
@@ -19,10 +21,16 @@ import { QuickLinkViewModel } from './quick-link.viewmodel';
   providers: [QuickLinkViewModel]
 })
 export class QuickLinkComponent implements OnInit {
-  public contentData$: Observable<ContentDataInterface[]>;
+  public contentData$: Observable<QuickLinkInterface[]>;
   public feedback$: Observable<EffectFeedbackInterface>;
   public dialogTitle: string;
   public dialogTitleIcon: string;
+
+  @ViewChild(FilterTextInputComponent)
+  filterTextInput: FilterTextInputComponent<
+    QuickLinkInterface[],
+    ContentDataInterface
+  >;
 
   private dialogTitles = new Map<
     QuickLinkTypeEnum,
@@ -133,6 +141,13 @@ export class QuickLinkComponent implements OnInit {
       icon: 'delete',
       tooltip: 'item verwijderen',
       handler: (input: QuickLinkInterface): void => this.remove(input)
+    },
+    none: {
+      actionType: 'open',
+      label: '',
+      icon: '',
+      tooltip: '',
+      handler: () => {}
     }
   };
 
@@ -140,16 +155,39 @@ export class QuickLinkComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA)
     public data: { mode: QuickLinkTypeEnum },
     private dialogRef: MatDialogRef<QuickLinkComponent>,
-    private quickLinkViewModel: QuickLinkViewModel
+    private quickLinkViewModel: QuickLinkViewModel,
+    @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface
   ) {}
 
   ngOnInit() {
     this.setupStreams();
+    this.filterTextInput.setFilterableItem(this);
 
     if (this.dialogTitles.has(this.data.mode)) {
       const titleData = this.dialogTitles.get(this.data.mode);
       this.dialogTitle = titleData.title;
       this.dialogTitleIcon = titleData.icon;
+    }
+  }
+
+  filterFn(
+    source: QuickLinkInterface[],
+    searchText: string
+  ): ContentDataInterface[] {
+    if (searchText.trim().length > 0) {
+      const results = this.filterService
+        .filter(source, { name: searchText })
+        .sort(this.quickLinkSorter);
+
+      const contentData: ContentDataInterface = {
+        type: 'Gevonden items',
+        title: 'Gevonden items',
+        quickLinks: results
+      };
+
+      return [contentData];
+    } else {
+      return this.convertToQuickLinkData(source);
     }
   }
 
@@ -208,13 +246,17 @@ export class QuickLinkComponent implements OnInit {
   private setupStreams() {
     this.contentData$ = this.quickLinkViewModel
       .getQuickLinks$(this.data.mode)
-      .pipe(map(qL => this.convertToQuickLinkData(qL)));
+      .pipe(
+        map(quickLinks =>
+          quickLinks.map(quickLink => this.convertToQuickLink(quickLink))
+        )
+      );
 
     this.feedback$ = this.quickLinkViewModel.feedback$;
   }
 
   private convertToQuickLinkData(
-    values: FavoriteInterface[] | HistoryInterface[]
+    values: QuickLinkInterface[]
   ): ContentDataInterface[] {
     return values
       .reduce(
@@ -231,7 +273,7 @@ export class QuickLinkComponent implements OnInit {
             acc.push(category);
           }
 
-          category.quickLinks.push(this.convertToQuickLink(value));
+          category.quickLinks.push(value);
 
           return acc;
         },
@@ -288,6 +330,8 @@ export class QuickLinkComponent implements OnInit {
       case FavoriteTypesEnum.SEARCH:
       case 'search':
         return this.quickLinkActions.openSearch;
+      default:
+        return this.quickLinkActions.none;
     }
   }
 
