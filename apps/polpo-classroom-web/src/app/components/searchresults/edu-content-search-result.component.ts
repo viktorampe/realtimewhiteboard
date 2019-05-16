@@ -7,7 +7,12 @@ import {
   OnInit,
   SimpleChanges
 } from '@angular/core';
-import { EduContentBookInterface, EduContentTOCInterface } from '@campus/dal';
+import {
+  DalState,
+  EduContentActions,
+  EduContentBookInterface,
+  EduContentTOCInterface
+} from '@campus/dal';
 import { ResultItemBase } from '@campus/search';
 import {
   EduContentCollectionManagerServiceInterface,
@@ -16,6 +21,7 @@ import {
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN
 } from '@campus/shared';
+import { Store } from '@ngrx/store';
 
 @Component({
   // tslint:disable-next-line
@@ -38,6 +44,7 @@ export class EduContentSearchResultComponent extends ResultItemBase
   public normalizedEduContentToc: any;
 
   constructor(
+    private store: Store<DalState>,
     @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
     private openStaticContentService: OpenStaticContentServiceInterface,
     @Inject(EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN)
@@ -73,9 +80,12 @@ export class EduContentSearchResultComponent extends ResultItemBase
 
   public unlinkBundle() {}
 
-  public toggleFavorite() {}
+  public toggleFavorite() {
+    this.upsertEduContentToStore();
+  }
 
   public openStatic() {
+    this.upsertEduContentToStore();
     this.openStaticContentService.open(this.data.eduContent);
   }
   public openExercise(answers: boolean) {}
@@ -131,5 +141,13 @@ export class EduContentSearchResultComponent extends ResultItemBase
       books: books,
       booksToc: booksToc
     };
+  }
+
+  private upsertEduContentToStore(): void {
+    this.store.dispatch(
+      new EduContentActions.UpsertEduContent({
+        eduContent: this.data.eduContent.minimal
+      })
+    );
   }
 }

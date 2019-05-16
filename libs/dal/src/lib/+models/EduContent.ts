@@ -25,6 +25,7 @@ export class EduContent implements EduContentInterface, ContentInterface {
   publishedEduContentMetadata?: EduContentMetadataInterface;
   notes?: EduContentNoteInterface[];
   favorites?: FavoriteInterface[];
+  minimal?: EduContentInterface;
   get name(): string {
     return this.publishedEduContentMetadata
       ? this.publishedEduContentMetadata.title
