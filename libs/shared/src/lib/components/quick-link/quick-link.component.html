@@ -13,6 +13,13 @@
     <mat-action-list *ngIf="(filterTextInput.result$ | async) as contentData">
       <ng-container *ngFor="let category of contentData">
         <h3 mat-subheader>{{ category.title }}</h3>
+        <div
+          *ngIf="contentData[0].quickLinks.length === 0"
+          class="quick-link__no-results"
+        >
+          <span>Het filteren leverde geen resultaten op.</span>
+          <a (click)="filterTextInput.clear()">Filter verwijderen</a>
+        </div>
         <mat-list-item
           class="quick-link__item"
           *ngFor="let quickLink of category.quickLinks"
