@@ -208,14 +208,17 @@ export class QuickLinkComponent implements OnInit {
 
   public openEduContentAsExercise(quickLink: QuickLinkInterface) {
     this.quickLinkViewModel.openExercise(quickLink.eduContent);
+    this.closeDialog();
   }
 
   public openEduContentAsSolution(quickLink: QuickLinkInterface) {
     this.quickLinkViewModel.openExercise(quickLink.eduContent, true);
+    this.closeDialog();
   }
 
   public openEduContentAsStream(quickLink: QuickLinkInterface) {
     this.quickLinkViewModel.openStaticContent(quickLink.eduContent, true);
+    this.closeDialog();
   }
 
   public openEduContentAsDownload(quickLink: QuickLinkInterface) {
@@ -224,18 +227,22 @@ export class QuickLinkComponent implements OnInit {
 
   public openBundle(quickLink: QuickLinkInterface) {
     this.quickLinkViewModel.openBundle(quickLink.bundle);
+    this.closeDialog();
   }
 
   public openTask(quickLink: QuickLinkInterface) {
     this.quickLinkViewModel.openTask(quickLink.task);
+    this.closeDialog();
   }
 
   public openArea(quickLink: QuickLinkInterface) {
     this.quickLinkViewModel.openArea(quickLink.learningArea);
+    this.closeDialog();
   }
 
   public openSearch(quickLink: QuickLinkInterface) {
     this.quickLinkViewModel.openSearch(quickLink, this.data.mode);
+    this.closeDialog();
   }
 
   public openBoeke(quickLink: QuickLinkInterface) {
