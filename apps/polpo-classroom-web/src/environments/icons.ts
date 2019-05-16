@@ -77,7 +77,7 @@ export const icons = {
   // print: 'assets/icons/print.svg',
   // 'user-add': 'assets/icons/user-add.svg',
   // 'user-del': 'assets/icons/user-del.svg',
-  verwijder: 'assets/icons/verwijder.svg',
+  remove: 'assets/icons/verwijder.svg',
   'exercise:open': 'assets/icons/exercise-open.svg',
   'exercise:finished': 'assets/icons/exercise-finished.svg',
   download: 'assets/icons/material/download.svg',
