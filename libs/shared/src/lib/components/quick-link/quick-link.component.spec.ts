@@ -46,11 +46,7 @@ import {
   InfoPanelComponent,
   UiModule
 } from '@campus/ui';
-import {
-  FilterService,
-  FilterServiceInterface,
-  FILTER_SERVICE_TOKEN
-} from '@campus/utils';
+import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { hot } from '@nrwl/nx/testing';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -87,7 +83,9 @@ describe('QuickLinkComponent', () => {
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
         {
           provide: FILTER_SERVICE_TOKEN,
-          useClass: FilterService
+          useValue: {
+            filter: () => {}
+          }
         },
         {
           provide: HAMMER_LOADER,
@@ -590,7 +588,8 @@ describe('QuickLinkComponent', () => {
         }),
         new FavoriteFixture({
           name: 'bar',
-          type: FavoriteTypesEnum.EDUCONTENT
+          type: FavoriteTypesEnum.EDUCONTENT,
+          eduContent: new EduContentFixture()
         })
       ];
 
@@ -606,7 +605,9 @@ describe('QuickLinkComponent', () => {
       component.contentData$.subscribe(quickLinks => {
         const returnedItem = quickLinks[0];
 
-        filterText.componentInstance.setValue(returnedItem.name);
+        filterService.filter = jest.fn().mockReturnValue([returnedItem]);
+        filterText.componentInstance.setValue("text here doesn't matter");
+
         fixture.detectChanges();
 
         const linkItems = fixture.debugElement.queryAll(
@@ -625,7 +626,8 @@ describe('QuickLinkComponent', () => {
         By.directive(FilterTextInputComponent)
       );
 
-      filterText.componentInstance.setValue("item that doesn't exist");
+      filterService.filter = jest.fn().mockReturnValue([]);
+      filterText.componentInstance.setValue("text here doesn't matter");
       fixture.detectChanges();
 
       const linkItems = fixture.debugElement.queryAll(
@@ -647,6 +649,7 @@ describe('QuickLinkComponent', () => {
         By.directive(FilterTextInputComponent)
       );
 
+      filterService.filter = jest.fn().mockReturnValue([]);
       filterText.componentInstance.setValue("item that doesn't exist");
       fixture.detectChanges();
 
