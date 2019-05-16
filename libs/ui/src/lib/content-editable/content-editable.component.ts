@@ -18,6 +18,7 @@ export class ContentEditableComponent {
   private oldText: string;
 
   @Input() text = '';
+  @Input() relatedItem: any;
 
   get active() {
     return this._active;

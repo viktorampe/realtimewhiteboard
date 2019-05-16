@@ -19,7 +19,8 @@ import {
   MatTooltipModule,
   MAT_DIALOG_DATA
 } from '@angular/material';
-import { By } from '@angular/platform-browser';
+import { By, HAMMER_LOADER } from '@angular/platform-browser';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
   BundleFixture,
@@ -36,6 +37,7 @@ import {
 import { MockDate, MockMatIconRegistry } from '@campus/testing';
 import {
   ButtonComponent,
+  ContentEditableComponent,
   FilterTextInputComponent,
   InfoPanelComponent,
   UiModule
@@ -67,7 +69,8 @@ describe('QuickLinkComponent', () => {
         MatListModule,
         MatDialogModule,
         RouterTestingModule,
-        MatMenuModule
+        MatMenuModule,
+        NoopAnimationsModule
       ],
       declarations: [QuickLinkComponent],
       providers: [
@@ -77,6 +80,10 @@ describe('QuickLinkComponent', () => {
         {
           provide: FILTER_SERVICE_TOKEN,
           useValue: { filter: () => {} } // all injected items
+        },
+        {
+          provide: HAMMER_LOADER,
+          useValue: () => new Promise(() => {})
         }
       ]
     }).overrideComponent(QuickLinkComponent, {
@@ -108,12 +115,7 @@ describe('QuickLinkComponent', () => {
     vmQuickLinks$ = quickLinkViewModel.getQuickLinks$(null) as BehaviorSubject<
       FavoriteInterface[] | HistoryInterface[]
     >;
-    // from now on, this particular instance of the stream is always returned
-    quickLinkViewModel.getQuickLinks$ = jest
-      .fn()
-      .mockReturnValue(vmQuickLinks$);
-    // make component 'attach' to mocked stream
-    component['setupStreams']();
+
     fixture.detectChanges();
   });
 
@@ -524,10 +526,10 @@ describe('QuickLinkComponent', () => {
             By.directive(ButtonComponent)
           );
 
-          // update
-          spyOn(component, 'update');
+          // enableEditing
+          spyOn(component, 'enableEditing');
           listItemButtons[0].triggerEventHandler('click', null);
-          expect(component.update).toHaveBeenCalled();
+          expect(component.enableEditing).toHaveBeenCalled();
 
           // remove
           spyOn(component, 'remove');
@@ -1201,6 +1203,72 @@ describe('QuickLinkComponent', () => {
     });
   });
 
+  describe('manageActions implementation', () => {
+    describe('update', () => {
+      it('should activate the right ContentEditable when clicking update', () => {
+        const firstListItem = fixture.debugElement.query(
+          By.directive(MatListItem)
+        );
+
+        const updateButton = firstListItem.query(By.directive(ButtonComponent));
+
+        const contentEditable = firstListItem.query(
+          By.directive(ContentEditableComponent)
+        );
+
+        expect(contentEditable.componentInstance.active).toBe(false);
+
+        updateButton.nativeElement.click();
+
+        expect(contentEditable.componentInstance.active).toBe(true);
+      });
+
+      it('should deactivate the previously activated ContentEditable when clicking update', () => {
+        const updateButtons = fixture.debugElement
+          .queryAll(By.directive(MatListItem))
+          .map(listItem => listItem.query(By.directive(ButtonComponent)));
+
+        const contentEditables = fixture.debugElement
+          .queryAll(By.directive(MatListItem))
+          .map(listItem =>
+            listItem.query(By.directive(ContentEditableComponent))
+          );
+
+        updateButtons[0].nativeElement.click();
+
+        expect(contentEditables[0].componentInstance.active).toBe(true);
+
+        updateButtons[1].nativeElement.click();
+
+        expect(contentEditables[0].componentInstance.active).toBe(false);
+        expect(contentEditables[1].componentInstance.active).toBe(true);
+      });
+
+      it('should call rename when a change is committed in the ContentEditable', () => {
+        const updateButton = fixture.debugElement
+          .query(By.directive(MatListItem))
+          .query(By.directive(ButtonComponent));
+
+        const contentEditable = fixture.debugElement
+          .query(By.directive(MatListItem))
+          .query(By.directive(ContentEditableComponent));
+
+        const newText = 'brown cow';
+
+        spyOn(component, 'update');
+
+        updateButton.nativeElement.click();
+        contentEditable.componentInstance.textChanged.emit(newText);
+
+        expect(component.update).toHaveBeenCalled();
+        expect(component.update).toHaveBeenCalledWith(
+          contentEditable.componentInstance.relatedItem,
+          newText
+        );
+      });
+    });
+  });
+
   describe('event handlers', () => {
     it('openEduContentAsExercise should call the correct method on the viewmodel', () => {
       const mockQuickLink = new FavoriteFixture({
@@ -1285,9 +1353,13 @@ describe('QuickLinkComponent', () => {
     });
 
     it('openTask should call the correct method on the viewmodel', () => {
-      const mockQuickLink = new FavoriteFixture({
-        task: new TaskFixture()
-      }) as any;
+      const mockQuickLink = {
+        ...new FavoriteFixture(),
+        task: new TaskFixture(),
+        defaultAction: null,
+        alternativeOpenActions: [],
+        manageActions: []
+      };
 
       quickLinkViewModel.openTask = jest.fn();
 
@@ -1352,18 +1424,19 @@ describe('QuickLinkComponent', () => {
 
       quickLinkViewModel.update = jest.fn();
 
-      component.update(mockQuickLink);
+      const newName = 'brown cow';
+      component.update(mockQuickLink, newName);
 
       expect(quickLinkViewModel.update).toHaveBeenCalled();
       expect(quickLinkViewModel.update).toHaveBeenCalledTimes(1);
       expect(quickLinkViewModel.update).toHaveBeenCalledWith(
         mockQuickLink.id,
-        mockQuickLink.name,
+        newName,
         mockInjectedData.mode
       );
     });
 
-    it('update should call the correct method on the viewmodel', () => {
+    it('remove should call the correct method on the viewmodel', () => {
       const mockQuickLink = new FavoriteFixture() as any;
 
       quickLinkViewModel.remove = jest.fn();

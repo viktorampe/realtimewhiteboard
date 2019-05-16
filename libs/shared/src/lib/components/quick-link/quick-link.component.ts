@@ -1,4 +1,11 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  Inject,
+  OnInit,
+  QueryList,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import {
   EduContent,
@@ -7,24 +14,29 @@ import {
   FavoriteTypesEnum,
   HistoryInterface
 } from '@campus/dal';
-import { FilterTextInputComponent } from '@campus/ui';
+import { ContentEditableComponent, FilterTextInputComponent } from '@campus/ui';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { QuickLinkTypeEnum } from './quick-link-type.enum';
 import { QuickLinkViewModel } from './quick-link.viewmodel';
+import { MockQuickLinkViewModel } from './quick-link.viewmodel.mock';
 
 @Component({
   selector: 'campus-quick-link',
   templateUrl: './quick-link.component.html',
   styleUrls: ['./quick-link.component.scss'],
-  providers: [QuickLinkViewModel]
+  providers: [{ provide: QuickLinkViewModel, useClass: MockQuickLinkViewModel }]
 })
 export class QuickLinkComponent implements OnInit {
   public contentData$: Observable<QuickLinkInterface[]>;
   public feedback$: Observable<EffectFeedbackInterface>;
   public dialogTitle: string;
   public dialogTitleIcon: string;
+
+  @ViewChildren(ContentEditableComponent)
+  private contentEditables: QueryList<ContentEditableComponent>;
+  private activeContentEditable: ContentEditableComponent;
 
   @ViewChild(FilterTextInputComponent)
   filterTextInput: FilterTextInputComponent<
@@ -133,7 +145,7 @@ export class QuickLinkComponent implements OnInit {
       label: 'Bewerken',
       icon: 'edit',
       tooltip: 'Pas de naam van het item aan',
-      handler: (input: QuickLinkInterface): void => this.update(input)
+      handler: (input: QuickLinkInterface): void => this.enableEditing(input)
     },
     remove: {
       actionType: 'manage',
@@ -231,12 +243,23 @@ export class QuickLinkComponent implements OnInit {
     this.quickLinkViewModel.openStaticContent(quickLink.eduContent);
   }
 
-  public update(quickLink: QuickLinkInterface) {
-    this.quickLinkViewModel.update(
-      quickLink.id,
-      quickLink.name,
-      this.data.mode
+  public update(quickLink: QuickLinkInterface, newName: string) {
+    this.quickLinkViewModel.update(quickLink.id, newName, this.data.mode);
+  }
+
+  public enableEditing(quickLink: QuickLinkInterface) {
+    if (this.activeContentEditable) {
+      this.activeContentEditable.active = false;
+    }
+
+    const contentEditable = this.contentEditables.find(
+      editable => editable.relatedItem === quickLink
     );
+
+    if (contentEditable) {
+      this.activeContentEditable = contentEditable;
+      this.activeContentEditable.active = true;
+    }
   }
 
   public remove(quickLink: QuickLinkInterface) {
@@ -396,7 +419,7 @@ interface QuickLinkInterface extends FavoriteInterface, HistoryInterface {
   alternativeOpenActions: QuickLinkActionInterface[];
   manageActions: QuickLinkActionInterface[];
   // override eduContent property -> is always cast to EduContent
-  eduContent: EduContent;
+  eduContent?: EduContent;
 }
 
 interface QuickLinkActionInterface {
