@@ -1,5 +1,7 @@
 @mixin ui_banner_theme() {
   $ui-banner-background-color: $ui-tertiary-bg-color !default;
+  $ui-banner-border-color: rgba($ui-tertiary-bg-color-2, 0.2) !default;
+
   $ui-banner-padding: 10px !default; // same as page-bar-padding
   $ui-banner-min-height: 55px !default; // same as page-bar-height
 
@@ -10,6 +12,7 @@
 
   .ui-banner {
     background-color: $ui-banner-background-color;
+    border-bottom: 1px solid $ui-banner-border-color;
     padding: $ui-banner-padding;
     color: $ui-banner-text-color;
     min-height: $ui-banner-min-height;

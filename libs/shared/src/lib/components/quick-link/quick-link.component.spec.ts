@@ -541,7 +541,6 @@ describe('QuickLinkComponent', () => {
     describe('error feedback', () => {
       it('should not show the banner when there is no error feedback', () => {
         // clear errors
-        // quickLinkViewModel.feedback$.next(null);
         vmFeedback$.next(null);
         fixture.detectChanges();
 
