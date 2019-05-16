@@ -80,7 +80,7 @@ export class QuickLinkViewModel {
         action = new FavoriteActions.UpdateFavorite({
           userId: this.authService.userId,
           favorite,
-          useCustomErrorHandler: true
+          customFeedbackHandlers: { useCustomErrorHandler: true }
         });
 
         break;
@@ -101,7 +101,7 @@ export class QuickLinkViewModel {
         action = new FavoriteActions.DeleteFavorite({
           id: id,
           userId: this.authService.userId,
-          useCustomErrorHandler: true
+          customFeedbackHandlers: { useCustomErrorHandler: true }
         });
         break;
       case QuickLinkTypeEnum.HISTORY:

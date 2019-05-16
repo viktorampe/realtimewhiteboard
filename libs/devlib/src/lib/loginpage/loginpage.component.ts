@@ -173,7 +173,9 @@ export class LoginpageComponent implements OnInit {
 
   openQuickLinkManager(): void {
     this.dialog.open(QuickLinkComponent, {
-      data: { mode: QuickLinkTypeEnum.FAVORITES }
+      data: { mode: QuickLinkTypeEnum.FAVORITES },
+      autoFocus: true,
+      panelClass: 'quick-link__dialog'
     });
   }
 }

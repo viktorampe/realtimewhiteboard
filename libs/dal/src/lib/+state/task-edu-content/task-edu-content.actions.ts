@@ -1,6 +1,10 @@
 import { Update } from '@ngrx/entity';
 import { Action } from '@ngrx/store';
 import { TaskEduContentInterface } from '../../+models';
+import {
+  CustomFeedbackHandlersInterface,
+  FeedbackTriggeringAction
+} from '../effect-feedback';
 
 export enum TaskEduContentsActionTypes {
   TaskEduContentsLoaded = '[TaskEduContents] TaskEduContents Loaded',
@@ -77,10 +81,15 @@ export class UpdateTaskEduContents implements Action {
   ) {}
 }
 
-export class DeleteTaskEduContent implements Action {
+export class DeleteTaskEduContent implements FeedbackTriggeringAction {
   readonly type = TaskEduContentsActionTypes.DeleteTaskEduContent;
 
-  constructor(public payload: { id: number }) {}
+  constructor(
+    public payload: {
+      id: number;
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
+  ) {}
 }
 
 export class DeleteTaskEduContents implements Action {
@@ -93,13 +102,13 @@ export class ClearTaskEduContents implements Action {
   readonly type = TaskEduContentsActionTypes.ClearTaskEduContents;
 }
 
-export class LinkTaskEduContent implements Action {
+export class LinkTaskEduContent implements FeedbackTriggeringAction {
   readonly type = TaskEduContentsActionTypes.LinkTaskEduContent;
   constructor(
     public payload: {
       taskId: number;
       eduContentId: number;
-      displayResponse?: boolean;
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
     }
   ) {}
 }

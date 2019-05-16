@@ -1,6 +1,10 @@
 import { Update } from '@ngrx/entity';
 import { Action } from '@ngrx/store';
 import { FavoriteInterface } from '../../+models';
+import {
+  CustomFeedbackHandlersInterface,
+  FeedbackTriggeringAction
+} from '../effect-feedback';
 
 export enum FavoritesActionTypes {
   FavoritesLoaded = '[Favorites] Favorites Loaded',
@@ -35,11 +39,15 @@ export class FavoritesLoadError implements Action {
   constructor(public payload: any) {}
 }
 
-export class StartAddFavorite implements Action {
+export class StartAddFavorite implements FeedbackTriggeringAction {
   readonly type = FavoritesActionTypes.StartAddFavorite;
 
   constructor(
-    public payload: { favorite: FavoriteInterface; userId: number }
+    public payload: {
+      favorite: FavoriteInterface;
+      userId: number;
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
   ) {}
 }
 
@@ -61,26 +69,26 @@ export class AddFavorites implements Action {
   constructor(public payload: { favorites: FavoriteInterface[] }) {}
 }
 
-export class UpdateFavorite implements Action {
+export class UpdateFavorite implements FeedbackTriggeringAction {
   readonly type = FavoritesActionTypes.UpdateFavorite;
 
   constructor(
     public payload: {
       userId: number;
       favorite: Update<FavoriteInterface>;
-      useCustomErrorHandler?: boolean;
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
     }
   ) {}
 }
 
-export class DeleteFavorite implements Action {
+export class DeleteFavorite implements FeedbackTriggeringAction {
   readonly type = FavoritesActionTypes.DeleteFavorite;
 
   constructor(
     public payload: {
       id: number;
       userId: number;
-      useCustomErrorHandler?: boolean;
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
     }
   ) {}
 }

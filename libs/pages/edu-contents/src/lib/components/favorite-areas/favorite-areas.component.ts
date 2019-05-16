@@ -16,7 +16,7 @@ export class FavoriteAreasComponent {
   ): TileSecondaryActionInterface {
     return {
       label: 'Verwijderen uit favorieten',
-      icon: 'verwijder',
+      icon: 'remove',
       onClick: () => {
         this.removeAreaFromFavorites.emit(learningArea);
       }
