@@ -1,4 +1,5 @@
 import { FavoriteInterface, FavoriteTypesEnum } from '../+models';
+import { EduContentFixture } from './EduContent.fixture';
 import { LearningAreaFixture } from './LearningArea.fixture';
 
 export class FavoriteFixture implements FavoriteInterface {
@@ -10,6 +11,7 @@ export class FavoriteFixture implements FavoriteInterface {
   personId = 1;
   learningAreaId = 1;
   learningArea = new LearningAreaFixture();
+  eduContent = new EduContentFixture();
 
   constructor(props: Partial<FavoriteInterface> = {}) {
     // overwrite defaults
