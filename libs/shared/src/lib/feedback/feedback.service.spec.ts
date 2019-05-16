@@ -173,7 +173,7 @@ describe('FeedBackService', () => {
     it('should pass add a cancel userAction when needed', () => {
       mockFeedBack.useDefaultCancel = true;
 
-      const cancelBannerAction = { title: 'annuleren', userAction: null };
+      const cancelBannerAction = { title: 'Annuleren', userAction: null };
 
       // add the cancel button
       const expectedFeedback = {
