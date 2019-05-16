@@ -347,7 +347,7 @@ export class QuickLinkComponent implements OnInit {
       case FavoriteTypesEnum.EDUCONTENT:
       case 'educontent':
         const eduContent = quickLink.eduContent as EduContent;
-        if (eduContent.contentType === 'exercise') {
+        if (eduContent.type === 'exercise') {
           return this.quickLinkActions.openEduContentAsExercise;
         } else if (eduContent.streamable) {
           return this.quickLinkActions.openEduContentAsStream;
@@ -375,7 +375,7 @@ export class QuickLinkComponent implements OnInit {
       case FavoriteTypesEnum.EDUCONTENT:
       case 'educontent':
         const eduContent = quickLink.eduContent as EduContent;
-        if (eduContent.contentType === 'exercise') {
+        if (eduContent.type === 'exercise') {
           return [this.quickLinkActions.openEduContentAsSolution];
         } else if (eduContent.streamable) {
           return [this.quickLinkActions.openEduContentAsDownload];

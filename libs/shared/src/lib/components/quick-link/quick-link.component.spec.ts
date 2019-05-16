@@ -388,7 +388,7 @@ describe('QuickLinkComponent', () => {
               name: 'foo',
               learningArea: new LearningAreaFixture(),
               type: FavoriteTypesEnum.EDUCONTENT,
-              eduContent: new EduContentFixture({ contentType: 'exercise' })
+              eduContent: new EduContentFixture({ type: 'exercise' })
             }) as FavoriteInterface;
 
             vmQuickLinks$.next([mockQuickLink]);
@@ -433,7 +433,7 @@ describe('QuickLinkComponent', () => {
                 learningArea: new LearningAreaFixture(),
                 type: FavoriteTypesEnum.EDUCONTENT,
                 eduContent: new EduContentFixture(
-                  { contentType: 'not an exercise' },
+                  { type: 'not an exercise' },
                   new EduContentMetadataFixture({ streamable: true })
                 )
               }) as FavoriteInterface;
@@ -479,7 +479,7 @@ describe('QuickLinkComponent', () => {
                 learningArea: new LearningAreaFixture(),
                 type: FavoriteTypesEnum.EDUCONTENT,
                 eduContent: new EduContentFixture(
-                  { contentType: 'not an exercise' },
+                  { type: 'not an exercise' },
                   new EduContentMetadataFixture({ streamable: false })
                 )
               }) as FavoriteInterface;
@@ -1007,7 +1007,7 @@ describe('QuickLinkComponent', () => {
             const mockOpenEduContentAsSolutionFunction = () => {};
             const mockFavorite = new FavoriteFixture({
               type: FavoriteTypesEnum.EDUCONTENT,
-              eduContent: new EduContentFixture({ contentType: 'exercise' })
+              eduContent: new EduContentFixture({ type: 'exercise' })
             });
 
             beforeEach(() => {
@@ -1075,7 +1075,7 @@ describe('QuickLinkComponent', () => {
                   type: FavoriteTypesEnum.EDUCONTENT,
                   eduContent: new EduContentFixture(
                     {
-                      contentType: 'not an exercise'
+                      type: 'not an exercise'
                     },
                     new EduContentMetadataFixture({ streamable: true })
                   )
@@ -1133,7 +1133,7 @@ describe('QuickLinkComponent', () => {
                   type: FavoriteTypesEnum.EDUCONTENT,
                   eduContent: new EduContentFixture(
                     {
-                      contentType: 'not an exercise'
+                      type: 'not an exercise'
                     },
                     new EduContentMetadataFixture({ streamable: false })
                   )
