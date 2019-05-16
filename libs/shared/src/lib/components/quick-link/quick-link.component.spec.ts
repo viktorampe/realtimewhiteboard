@@ -1,13 +1,53 @@
-import { async, ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
-import { MatDialogActions, MatDialogModule, MatDialogRef, MatIcon, MatIconModule, MatIconRegistry, MatList, MatListItem, MatListModule, MatListSubheaderCssMatStyler, MatTooltipModule, MAT_DIALOG_DATA } from '@angular/material';
+import {
+  async,
+  ComponentFixture,
+  fakeAsync,
+  TestBed
+} from '@angular/core/testing';
+import {
+  MatDialogActions,
+  MatDialogModule,
+  MatDialogRef,
+  MatIcon,
+  MatIconModule,
+  MatIconRegistry,
+  MatList,
+  MatListItem,
+  MatListModule,
+  MatListSubheaderCssMatStyler,
+  MatTooltipModule,
+  MAT_DIALOG_DATA
+} from '@angular/material';
 import { By } from '@angular/platform-browser';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
-import { BundleFixture, EduContent, EduContentFixture, EduContentMetadataFixture, EffectFeedbackFixture, EffectFeedbackInterface, FavoriteFixture, FavoriteInterface, FavoriteTypesEnum, HistoryInterface, LearningAreaFixture, Priority, TaskFixture } from '@campus/dal';
+import {
+  BundleFixture,
+  EduContent,
+  EduContentFixture,
+  EduContentMetadataFixture,
+  EffectFeedbackFixture,
+  EffectFeedbackInterface,
+  FavoriteFixture,
+  FavoriteInterface,
+  FavoriteTypesEnum,
+  HistoryInterface,
+  LearningAreaFixture,
+  Priority,
+  TaskFixture
+} from '@campus/dal';
 import { MockDate, MockMatIconRegistry } from '@campus/testing';
-import { BannerComponent, ButtonComponent, FilterTextInputComponent, InfoPanelComponent, UiModule } from '@campus/ui';
+import {
+  BannerComponent,
+  ButtonComponent,
+  ContentEditableComponent,
+  FilterTextInputComponent,
+  InfoPanelComponent,
+  UiModule
+} from '@campus/ui';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { hot } from '@nrwl/nx/testing';
-import { BehaviorSubject, of, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { QuickLinkTypeEnum } from './quick-link-type.enum';
 import { QuickLinkComponent } from './quick-link.component';
@@ -19,7 +59,7 @@ describe('QuickLinkComponent', () => {
   let fixture: ComponentFixture<QuickLinkComponent>;
   let quickLinkViewModel: QuickLinkViewModel;
   let vmQuickLinks$: BehaviorSubject<FavoriteInterface[] | HistoryInterface[]>;
-  let vmFeedback$:BehaviorSubject<EffectFeedbackInterface>;
+  let vmFeedback$: BehaviorSubject<EffectFeedbackInterface>;
   let dateMock: MockDate;
   const mockInjectedData = { mode: 'foo' };
 
@@ -31,7 +71,8 @@ describe('QuickLinkComponent', () => {
         MatTooltipModule,
         MatListModule,
         MatDialogModule,
-        RouterTestingModule
+        RouterTestingModule,
+        NoopAnimationsModule
       ],
       declarations: [QuickLinkComponent],
       providers: [
@@ -72,14 +113,10 @@ describe('QuickLinkComponent', () => {
     vmQuickLinks$ = quickLinkViewModel.getQuickLinks$(null) as BehaviorSubject<
       FavoriteInterface[] | HistoryInterface[]
     >;
-    // from now on, this particular instance of the stream is always returned
-    quickLinkViewModel.getQuickLinks$ = jest
-      .fn()
-      .mockReturnValue(vmQuickLinks$);
+    vmFeedback$ = quickLinkViewModel.getFeedback$() as BehaviorSubject<
+      EffectFeedbackInterface
+    >;
 
-    // make component 'attach' to mocked stream
-    component['setupStreams']();
-    vmFeedback$ = quickLinkViewModel.getFeedback$() as BehaviorSubject<EffectFeedbackInterface>;
     fixture.detectChanges();
   });
 
@@ -488,10 +525,10 @@ describe('QuickLinkComponent', () => {
             By.directive(ButtonComponent)
           );
 
-          // update
-          spyOn(component, 'update');
+          // enableEditing
+          spyOn(component, 'enableEditing');
           listItemButtons[0].triggerEventHandler('click', null);
-          expect(component.update).toHaveBeenCalled();
+          expect(component.enableEditing).toHaveBeenCalled();
 
           // remove
           spyOn(component, 'remove');
@@ -1193,6 +1230,72 @@ describe('QuickLinkComponent', () => {
     });
   });
 
+  describe('manageActions implementation', () => {
+    describe('update', () => {
+      it('should activate the right ContentEditable when clicking update', () => {
+        const firstListItem = fixture.debugElement.query(
+          By.directive(MatListItem)
+        );
+
+        const updateButton = firstListItem.query(By.directive(ButtonComponent));
+
+        const contentEditable = firstListItem.query(
+          By.directive(ContentEditableComponent)
+        );
+
+        expect(contentEditable.componentInstance.active).toBe(false);
+
+        updateButton.nativeElement.click();
+
+        expect(contentEditable.componentInstance.active).toBe(true);
+      });
+
+      it('should deactivate the previously activated ContentEditable when clicking update', () => {
+        const updateButtons = fixture.debugElement
+          .queryAll(By.directive(MatListItem))
+          .map(listItem => listItem.query(By.directive(ButtonComponent)));
+
+        const contentEditables = fixture.debugElement
+          .queryAll(By.directive(MatListItem))
+          .map(listItem =>
+            listItem.query(By.directive(ContentEditableComponent))
+          );
+
+        updateButtons[0].nativeElement.click();
+
+        expect(contentEditables[0].componentInstance.active).toBe(true);
+
+        updateButtons[1].nativeElement.click();
+
+        expect(contentEditables[0].componentInstance.active).toBe(false);
+        expect(contentEditables[1].componentInstance.active).toBe(true);
+      });
+
+      it('should call rename when a change is committed in the ContentEditable', () => {
+        const updateButton = fixture.debugElement
+          .query(By.directive(MatListItem))
+          .query(By.directive(ButtonComponent));
+
+        const contentEditable = fixture.debugElement
+          .query(By.directive(MatListItem))
+          .query(By.directive(ContentEditableComponent));
+
+        const newText = 'brown cow';
+
+        spyOn(component, 'update');
+
+        updateButton.nativeElement.click();
+        contentEditable.componentInstance.textChanged.emit(newText);
+
+        expect(component.update).toHaveBeenCalled();
+        expect(component.update).toHaveBeenCalledWith(
+          contentEditable.componentInstance.relatedItem,
+          newText
+        );
+      });
+    });
+  });
+
   describe('event handlers', () => {
     it('openEduContentAsExercise should call the correct method on the viewmodel', () => {
       const mockQuickLink = new FavoriteFixture({
@@ -1344,18 +1447,19 @@ describe('QuickLinkComponent', () => {
 
       quickLinkViewModel.update = jest.fn();
 
-      component.update(mockQuickLink);
+      const newName = 'brown cow';
+      component.update(mockQuickLink, newName);
 
       expect(quickLinkViewModel.update).toHaveBeenCalled();
       expect(quickLinkViewModel.update).toHaveBeenCalledTimes(1);
       expect(quickLinkViewModel.update).toHaveBeenCalledWith(
         mockQuickLink.id,
-        mockQuickLink.name,
+        newName,
         mockInjectedData.mode
       );
     });
 
-    it('update should call the correct method on the viewmodel', () => {
+    it('remove should call the correct method on the viewmodel', () => {
       const mockQuickLink = new FavoriteFixture() as any;
 
       quickLinkViewModel.remove = jest.fn();

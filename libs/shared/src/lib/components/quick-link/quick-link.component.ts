@@ -1,4 +1,11 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  Inject,
+  OnInit,
+  QueryList,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import {
   EduContent,
@@ -7,7 +14,7 @@ import {
   FavoriteTypesEnum,
   HistoryInterface
 } from '@campus/dal';
-import { FilterTextInputComponent } from '@campus/ui';
+import { ContentEditableComponent, FilterTextInputComponent } from '@campus/ui';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -25,6 +32,10 @@ export class QuickLinkComponent implements OnInit {
   public feedback$: Observable<EffectFeedbackInterface>;
   public dialogTitle: string;
   public dialogTitleIcon: string;
+
+  @ViewChildren(ContentEditableComponent)
+  private contentEditables: QueryList<ContentEditableComponent>;
+  private activeContentEditable: ContentEditableComponent;
 
   @ViewChild(FilterTextInputComponent)
   filterTextInput: FilterTextInputComponent<
@@ -133,7 +144,7 @@ export class QuickLinkComponent implements OnInit {
       label: 'Bewerken',
       icon: 'edit',
       tooltip: 'naam aanpassen',
-      handler: (input: QuickLinkInterface): void => this.update(input)
+      handler: (input: QuickLinkInterface): void => this.enableEditing(input)
     },
     remove: {
       actionType: 'manage',
@@ -231,12 +242,23 @@ export class QuickLinkComponent implements OnInit {
     this.quickLinkViewModel.openStaticContent(quickLink.eduContent);
   }
 
-  public update(quickLink: QuickLinkInterface) {
-    this.quickLinkViewModel.update(
-      quickLink.id,
-      quickLink.name,
-      this.data.mode
+  public update(quickLink: QuickLinkInterface, newName: string) {
+    this.quickLinkViewModel.update(quickLink.id, newName, this.data.mode);
+  }
+
+  public enableEditing(quickLink: QuickLinkInterface) {
+    if (this.activeContentEditable) {
+      this.activeContentEditable.active = false;
+    }
+
+    const contentEditable = this.contentEditables.find(
+      editable => editable.relatedItem === quickLink
     );
+
+    if (contentEditable) {
+      this.activeContentEditable = contentEditable;
+      this.activeContentEditable.active = true;
+    }
   }
 
   public remove(quickLink: QuickLinkInterface) {
