@@ -10,8 +10,7 @@
 :host.ui-banner--dialog {
   .ui-banner {
     justify-content: space-between;
-    padding: 0px 0px 10px 0px;
-    margin-top: -15px;
+
     &__content {
       mat-icon {
         width: 24px;
@@ -20,7 +19,7 @@
     }
     &__buttons {
       campus-button {
-        margin: auto 8px auto 0px;
+        margin: auto 0px auto 8px;
       }
     }
   }
@@ -29,9 +28,6 @@
       margin-top: 0px;
       &__buttons {
         justify-content: start;
-        campus-button:first-child {
-          margin: auto 0px auto 0px;
-        }
       }
     }
   }
@@ -41,6 +37,7 @@
   flex-flow: row nowrap;
   justify-content: space-around;
   align-content: center;
+  padding: 15px;
 
   &__content {
     display: flex;
