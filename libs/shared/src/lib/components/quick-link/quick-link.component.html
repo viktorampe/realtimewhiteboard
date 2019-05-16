@@ -20,97 +20,102 @@
   ></campus-banner>
   <mat-dialog-content>
     <mat-action-list *ngIf="(filterTextInput.result$ | async) as contentData">
-      <ng-container *ngFor="let category of contentData">
-        <h3 mat-subheader>{{ category.title }}</h3>
-        <mat-list-item
-          class="quick-link__item"
-          *ngFor="let quickLink of category.quickLinks"
-          (click)="quickLink.defaultAction.handler(quickLink)"
+      <ng-container *ngIf="contentData.length; else: noContentTemplate">
+        <ng-container
+          *ngIf="contentData[0].quickLinks.length; else: noResultsTemplate"
         >
-          <campus-file-extension
-            *ngIf="quickLink.type === 'educontent'; else: notEduContent"
-            [showIcon]="false"
-            [extensionClass]="quickLink.eduContent.fileExtension"
-            class="quick-link__item__file-extension"
-          ></campus-file-extension>
-
-          <ng-template #notEduContent>
-            <mat-icon
-              mat-list-icon
-              [svgIcon]="quickLink.learningArea.icon"
-              class="quick-link__item__icon"
-            ></mat-icon>
-          </ng-template>
-
-          <div
-            class="quick-link__item__title"
-            [matTooltip]="quickLink.defaultAction.tooltip"
-            ><campus-content-editable
-              [relatedItem]="quickLink"
-              [text]="quickLink.name"
-              (textChanged)="update(quickLink, $event)"
-            ></campus-content-editable
-          ></div>
-          <div class="flex-spacer"></div>
-          <div
-            class="quick-link__item__actions quick-link__item__actions--links quick-link__item__actions--hover"
-          >
-            <ng-container
-              *ngFor="let action of quickLink.alternativeOpenActions"
+          <ng-container *ngFor="let category of contentData">
+            <h3 mat-subheader>{{ category.title }}</h3>
+            <mat-list-item
+              class="quick-link__item"
+              *ngFor="let quickLink of category.quickLinks"
+              (click)="quickLink.defaultAction.handler(quickLink)"
             >
-              <a
-                [matTooltip]="action.tooltip"
-                (click)="action.handler(quickLink)"
-                campusClickStopPropagation
-                class="quick-link__item__actions__link"
-              >
-                {{ action.label }}</a
-              >
-              <span class="quick-link__item__actions__divider">|</span>
-            </ng-container>
-          </div>
+              <campus-file-extension
+                *ngIf="quickLink.type === 'educontent'; else: notEduContent"
+                [showIcon]="false"
+                [extensionClass]="quickLink.eduContent.fileExtension"
+                class="quick-link__item__file-extension"
+              ></campus-file-extension>
 
-          <div
-            class="quick-link__item__actions quick-link__item__actions--hover"
-          >
-            <ng-container *ngFor="let action of quickLink.manageActions">
-              <campus-button
-                circle
-                [iconClass]="action.icon"
-                [matTooltip]="action.tooltip"
-                (click)="action.handler(quickLink)"
-                campusClickStopPropagation
-              ></campus-button>
-            </ng-container>
-          </div>
-          <div class="quick-link__item__actions__context-menu">
-            <campus-button
-              circle
-              mat-icon-button
-              [matMenuTriggerFor]="allActionDropDown"
-              [iconClass]="'context_menu'"
-            >
-            </campus-button>
-            <mat-menu #allActionDropDown="matMenu">
-              <button
-                mat-menu-item
-                *ngFor="let action of quickLink.alternativeOpenActions"
-                (click)="action.handler(quickLink)"
+              <ng-template #notEduContent>
+                <mat-icon
+                  mat-list-icon
+                  [svgIcon]="quickLink.learningArea.icon"
+                  class="quick-link__item__icon"
+                ></mat-icon>
+              </ng-template>
+              <div
+                class="quick-link__item__title"
+                [matTooltip]="quickLink.defaultAction.tooltip"
+                ><campus-content-editable
+                  [relatedItem]="quickLink"
+                  [text]="quickLink.name"
+                  (textChanged)="update(quickLink, $event)"
+                ></campus-content-editable
+              ></div>
+              <div class="flex-spacer"></div>
+              <div
+                class="quick-link__item__actions quick-link__item__actions--links quick-link__item__actions--hover"
               >
-                <mat-icon [svgIcon]="action.icon"></mat-icon
-                >{{ action.label }}</button
+                <ng-container
+                  *ngFor="let action of quickLink.alternativeOpenActions"
+                >
+                  <a
+                    [matTooltip]="action.tooltip"
+                    (click)="action.handler(quickLink)"
+                    campusClickStopPropagation
+                    class="quick-link__item__actions__link"
+                  >
+                    {{ action.label }}</a
+                  >
+                  <span class="quick-link__item__actions__divider">|</span>
+                </ng-container>
+              </div>
+
+              <div
+                class="quick-link__item__actions quick-link__item__actions--hover"
               >
-              <button
-                mat-menu-item
-                *ngFor="let action of quickLink.manageActions"
-                (click)="action.handler(quickLink)"
-              >
-                <mat-icon [svgIcon]="action.icon"></mat-icon
-                >{{ action.label }}</button
-              >
-            </mat-menu>
-          </div>
-        </mat-list-item>
+                <ng-container *ngFor="let action of quickLink.manageActions">
+                  <campus-button
+                    circle
+                    [iconClass]="action.icon"
+                    [matTooltip]="action.tooltip"
+                    (click)="action.handler(quickLink)"
+                    campusClickStopPropagation
+                  ></campus-button>
+                </ng-container>
+              </div>
+              <div class="quick-link__item__actions__context-menu">
+                <campus-button
+                  circle
+                  mat-icon-button
+                  [matMenuTriggerFor]="allActionDropDown"
+                  [iconClass]="'context_menu'"
+                >
+                </campus-button>
+                <mat-menu #allActionDropDown="matMenu">
+                  <button
+                    mat-menu-item
+                    *ngFor="let action of quickLink.alternativeOpenActions"
+                    (click)="action.handler(quickLink)"
+                  >
+                    <mat-icon [svgIcon]="action.icon"></mat-icon
+                    >{{ action.label }}</button
+                  >
+                  <button
+                    mat-menu-item
+                    *ngFor="let action of quickLink.manageActions"
+                    (click)="action.handler(quickLink)"
+                  >
+                    <mat-icon [svgIcon]="action.icon"></mat-icon
+                    >{{ action.label }}</button
+                  >
+                </mat-menu>
+              </div>
+            </mat-list-item>
+          </ng-container>
+        </ng-container>
       </ng-container>
     </mat-action-list>
   </mat-dialog-content>
@@ -123,3 +128,16 @@
     >Sluiten</campus-button
   >
 </mat-dialog-actions>
+
+<ng-template #noContentTemplate>
+  <div class="quick-link__no-results">
+    <span>Er zijn geen items om weer te geven.</span>
+  </div>
+</ng-template>
+
+<ng-template #noResultsTemplate>
+  <div class="quick-link__no-results">
+    <span>Het filteren leverde geen resultaten op.</span>
+    <a (click)="filterTextInput.clear()">Filter verwijderen</a>
+  </div>
+</ng-template>

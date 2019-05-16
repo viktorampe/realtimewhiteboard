@@ -1,5 +1,6 @@
 @mixin shared-quick-link {
   $shared-quick-link_filter-font-size: $ui-primary-font-size !default;
+  $shared-quick-link__no-results-padding: 24px !default;
 
   // extract material colors from theme
   $shared-quick-link_item_icon-color: map-get(map-get($polpo-theme, foreground), secondary-text) !default;
@@ -7,6 +8,10 @@
 
 
   .quick-link {
+    &__no-results {
+      padding: $shared-quick-link__no-results-padding;
+    }
+
     &__dialog {
       .mat-dialog {
         &-container {
