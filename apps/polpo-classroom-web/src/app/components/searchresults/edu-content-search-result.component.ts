@@ -10,7 +10,8 @@ import {
 import {
   EduContentBookInterface,
   EduContentTOCInterface,
-  FavoriteInterface
+  FavoriteInterface,
+  FavoriteTypesEnum
 } from '@campus/dal';
 import { ResultItemBase } from '@campus/search';
 import {
@@ -91,10 +92,17 @@ export class EduContentSearchResultComponent extends ResultItemBase
   public toggleFavorite() {
     const favorite: FavoriteInterface = {
       name: this.data.eduContent.name,
-      type: this.data.eduContent.type,
+      type:
+        this.data.eduContent.type === 'boeke-e'
+          ? FavoriteTypesEnum.BOEKE
+          : FavoriteTypesEnum.EDUCONTENT,
       eduContentId: this.data.eduContent.id,
-      created: new Date()
+      created: new Date(),
+      learningAreaId: this.data.eduContent.publishedEduContentMetadata
+        .learningAreaId
     };
+
+    console.log(favorite);
     this.eduContentSearchResultService.toggleFavorite(favorite);
   }
 
