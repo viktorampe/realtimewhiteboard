@@ -58,7 +58,7 @@
       *ngIf="(learningArea$ | async) as learningArea"
       [title]="bundle.name"
       [subtitle]="bundle.description"
-      [iconClass]="'learning-area:' + learningArea.icon"
+      [iconClass]="learningArea.icon"
     >
     </campus-page-header>
 
