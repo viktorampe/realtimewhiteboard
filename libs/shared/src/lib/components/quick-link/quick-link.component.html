@@ -9,6 +9,15 @@
     theme="dark"
     [source]="contentData$ | async"
   ></campus-filter-text-input>
+  <campus-banner
+    class="ui-banner--dialog"
+    *ngIf="(feedback$ | async) as feedback"
+    [id]="feedback.id"
+    [message]="feedback.message"
+    [icon]="feedback.icon"
+    [actions]="feedback.userActions"
+    (afterDismiss)="onBannerDismiss($event)"
+  ></campus-banner>
   <mat-dialog-content>
     <mat-action-list *ngIf="(filterTextInput.result$ | async) as contentData">
       <ng-container *ngFor="let category of contentData">

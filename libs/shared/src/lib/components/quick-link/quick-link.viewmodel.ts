@@ -8,6 +8,7 @@ import {
   DalState,
   EduContent,
   EduContentQueries,
+  EffectFeedbackActions,
   EffectFeedbackInterface,
   EffectFeedbackQueries,
   FavoriteActions,
@@ -29,6 +30,10 @@ import {
   OPEN_STATIC_CONTENT_SERVICE_TOKEN
 } from '../../content/open-static-content.interface';
 import {
+  FeedBackServiceInterface,
+  FEEDBACK_SERVICE_TOKEN
+} from '../../feedback';
+import {
   ScormExerciseServiceInterface,
   SCORM_EXERCISE_SERVICE_TOKEN
 } from '../../scorm/scorm-exercise.service.interface';
@@ -36,8 +41,6 @@ import { QuickLinkTypeEnum } from './quick-link-type.enum';
 
 @Injectable()
 export class QuickLinkViewModel {
-  public feedback$: Observable<EffectFeedbackInterface> = this.getFeedback$();
-
   constructor(
     private store: Store<DalState>,
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
@@ -45,7 +48,9 @@ export class QuickLinkViewModel {
     @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
     private openStaticContentService: OpenStaticContentServiceInterface,
     @Inject(SCORM_EXERCISE_SERVICE_TOKEN)
-    private scormExerciseService: ScormExerciseServiceInterface
+    private scormExerciseService: ScormExerciseServiceInterface,
+    @Inject(FEEDBACK_SERVICE_TOKEN)
+    private feedBackService: FeedBackServiceInterface
   ) {}
 
   public getQuickLinks$(
@@ -111,6 +116,17 @@ export class QuickLinkViewModel {
         return;
     }
     this.store.dispatch(action);
+  }
+
+  public onFeedbackDismiss(event: {
+    action: Action;
+    feedbackId: string;
+  }): void {
+    if (event.action) this.store.dispatch(event.action);
+
+    this.store.dispatch(
+      new EffectFeedbackActions.DeleteEffectFeedback({ id: event.feedbackId })
+    );
   }
 
   public openBundle(bundle: BundleInterface): void {
@@ -189,7 +205,7 @@ export class QuickLinkViewModel {
     );
   }
 
-  private getFeedback$(): Observable<EffectFeedbackInterface> {
+  public getFeedback$(): Observable<EffectFeedbackInterface> {
     const actionTypes = FavoriteActions.FavoritesActionTypes;
     // TODO once History has actions
     // const actionTypes = [...FavoriteActions.FavoritesActionTypes,...HistoryActions.HistoryActionTypes]
@@ -197,7 +213,8 @@ export class QuickLinkViewModel {
     return this.store.pipe(
       select(EffectFeedbackQueries.getNextErrorFeedbackForActions, {
         actionTypes: [actionTypes.UpdateFavorite, actionTypes.DeleteFavorite]
-      })
+      }),
+      map(feedBack => this.feedBackService.addDefaultCancelButton(feedBack))
     );
   }
 }

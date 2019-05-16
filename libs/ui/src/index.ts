@@ -1,3 +1,4 @@
+export * from './lib/banner/banner.component';
 export {
   BreadcrumbLinkInterface
 } from './lib/breadcrumbs/breadcrumbs.component';

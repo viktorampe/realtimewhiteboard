@@ -10,8 +10,6 @@
   <div class="ui-banner__buttons">
     <campus-button
       *ngFor="let action of actions"
-      rounded-corners
-      bordered
       (click)="onAction(action.userAction)"
       >{{ action.title }}</campus-button
     >
