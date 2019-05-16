@@ -8,5 +8,7 @@ module.exports = {
   collectCoverage: false,
   coverageReporters: ['html'],
   bail: true,
-  verbose: false
+  verbose: false,
+  detectLeaks: false,
+  logHeapUsage: true
 };

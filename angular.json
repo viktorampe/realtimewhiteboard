@@ -100,7 +100,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 1
+              "maxWorkers": 4
             }
           }
         }
@@ -177,7 +177,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 1
+              "maxWorkers": 4
             }
           }
         }
@@ -209,7 +209,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 1
+              "maxWorkers": 4
             }
           }
         }
@@ -241,7 +241,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 1
+              "maxWorkers": 4
             }
           }
         }
@@ -273,7 +273,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 1
+              "maxWorkers": 4
             }
           }
         }
@@ -305,7 +305,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 1
+              "maxWorkers": 4
             }
           }
         }
@@ -337,7 +337,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 1
+              "maxWorkers": 4
             }
           }
         }
@@ -369,7 +369,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 1
+              "maxWorkers": 4
             }
           }
         }
@@ -401,7 +401,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 1
+              "maxWorkers": 4
             }
           }
         }
@@ -433,7 +433,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 1
+              "maxWorkers": 4
             }
           }
         }
@@ -464,7 +464,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 1
+              "maxWorkers": 4
             }
           }
         }
@@ -495,7 +495,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 1
+              "maxWorkers": 4
             }
           }
         }
@@ -526,7 +526,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 1
+              "maxWorkers": 4
             }
           }
         }
@@ -557,7 +557,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 1
+              "maxWorkers": 4
             }
           }
         }
@@ -588,7 +588,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 1
+              "maxWorkers": 4
             }
           }
         }
@@ -619,7 +619,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 1
+              "maxWorkers": 4
             }
           }
         }
@@ -650,7 +650,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 1
+              "maxWorkers": 4
             }
           }
         }
@@ -681,7 +681,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 1
+              "maxWorkers": 4
             }
           }
         }
@@ -712,7 +712,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 1
+              "maxWorkers": 4
             }
           }
         }
@@ -743,7 +743,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 1
+              "maxWorkers": 4
             }
           }
         }
@@ -774,7 +774,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 1
+              "maxWorkers": 4
             }
           }
         }
@@ -805,7 +805,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 1
+              "maxWorkers": 4
             }
           }
         }
@@ -836,7 +836,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 1
+              "maxWorkers": 4
             }
           }
         }
@@ -867,7 +867,7 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 1
+              "maxWorkers": 4
             }
           }
         }
