@@ -242,7 +242,8 @@ describe('headerViewModel', () => {
     it('should open the modal dialog with the correct mode', () => {
       headerViewModel.openDialog(QuickLinkTypeEnum.FAVORITES);
       expect(matDialog.open).toHaveBeenCalledWith(QuickLinkComponent, {
-        data: { mode: QuickLinkTypeEnum.FAVORITES }
+        data: { mode: QuickLinkTypeEnum.FAVORITES },
+        panelClass: 'quick-link__dialog'
       });
     });
   });

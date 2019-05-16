@@ -1,4 +1,8 @@
-<campus-info-panel [titleText]="dialogTitle" [titleIcon]="dialogTitleIcon">
+<campus-info-panel
+  [titleText]="dialogTitle"
+  [titleIcon]="dialogTitleIcon"
+  class="quick-link__info-panel"
+>
   <campus-filter-text-input
     class="quick-link__filter"
     title__right
@@ -17,6 +21,7 @@
           <mat-icon
             mat-list-icon
             [svgIcon]="quickLink.learningArea.icon"
+            class="quick-link__item__icon"
           ></mat-icon>
           <div
             class="quick-link__item__title"
@@ -29,7 +34,7 @@
           ></div>
           <div class="flex-spacer"></div>
           <div
-            class="quick-link__item__actions quick-link__item__actions--hover"
+            class="quick-link__item__actions quick-link__item__actions--links quick-link__item__actions--hover"
           >
             <ng-container
               *ngFor="let action of quickLink.alternativeOpenActions"
@@ -38,6 +43,7 @@
                 [matTooltip]="action.tooltip"
                 (click)="action.handler(quickLink)"
                 campusClickStopPropagation
+                class="quick-link__item__actions__link"
               >
                 {{ action.label }}</a
               >
@@ -57,6 +63,33 @@
                 campusClickStopPropagation
               ></campus-button>
             </ng-container>
+          </div>
+          <div class="quick-link__item__actions__context-menu">
+            <campus-button
+              circle
+              mat-icon-button
+              [matMenuTriggerFor]="allActionDropDown"
+              [iconClass]="'context_menu'"
+            >
+            </campus-button>
+            <mat-menu #allActionDropDown="matMenu">
+              <button
+                mat-menu-item
+                *ngFor="let action of quickLink.alternativeOpenActions"
+                (click)="action.handler(quickLink)"
+              >
+                <mat-icon [svgIcon]="action.icon"></mat-icon
+                >{{ action.label }}</button
+              >
+              <button
+                mat-menu-item
+                *ngFor="let action of quickLink.manageActions"
+                (click)="action.handler(quickLink)"
+              >
+                <mat-icon [svgIcon]="action.icon"></mat-icon
+                >{{ action.label }}</button
+              >
+            </mat-menu>
           </div>
         </mat-list-item>
       </ng-container>

@@ -15,10 +15,11 @@ import {
   MatListItem,
   MatListModule,
   MatListSubheaderCssMatStyler,
+  MatMenuModule,
   MatTooltipModule,
   MAT_DIALOG_DATA
 } from '@angular/material';
-import { By } from '@angular/platform-browser';
+import { By, HAMMER_LOADER } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
@@ -68,6 +69,7 @@ describe('QuickLinkComponent', () => {
         MatListModule,
         MatDialogModule,
         RouterTestingModule,
+        MatMenuModule,
         NoopAnimationsModule
       ],
       declarations: [QuickLinkComponent],
@@ -78,6 +80,10 @@ describe('QuickLinkComponent', () => {
         {
           provide: FILTER_SERVICE_TOKEN,
           useValue: { filter: () => {} } // all injected items
+        },
+        {
+          provide: HAMMER_LOADER,
+          useValue: () => new Promise(() => {})
         }
       ]
     }).overrideComponent(QuickLinkComponent, {
@@ -504,9 +510,11 @@ describe('QuickLinkComponent', () => {
             .queryAll(By.directive(ButtonComponent))
             .map(dE => dE.componentInstance as ButtonComponent);
 
-          expect(listItemButtons.length).toBe(2);
+          expect(listItemButtons.length).toBe(3);
           expect(listItemButtons[0].iconClass).toBe('edit');
           expect(listItemButtons[1].iconClass).toBe('delete');
+          // context menu button is hidden with css on desktop
+          expect(listItemButtons[2].iconClass).toBe('context_menu');
         });
 
         it('should call the correct action handler on element click', fakeAsync(() => {
@@ -985,7 +993,7 @@ describe('QuickLinkComponent', () => {
                 actionType: 'open',
                 label: 'Openen',
                 icon: 'exercise:open',
-                tooltip: 'open oefening zonder oplossingen',
+                tooltip: 'Open oefening zonder oplossingen',
                 handler: mockOpenEduContentAsExerciseFunction
               };
 
@@ -1003,7 +1011,7 @@ describe('QuickLinkComponent', () => {
                   actionType: 'open',
                   label: 'Toon oplossing',
                   icon: 'exercise:finished',
-                  tooltip: 'open oefening met oplossingen',
+                  tooltip: 'Open oefening met oplossingen',
                   handler: mockOpenEduContentAsSolutionFunction
                 }
               ];
@@ -1165,14 +1173,14 @@ describe('QuickLinkComponent', () => {
                 actionType: 'manage',
                 label: 'Bewerken',
                 icon: 'edit',
-                tooltip: 'naam aanpassen',
+                tooltip: 'Pas de naam van het item aan',
                 handler: mockUpdateFunction
               },
               {
                 actionType: 'manage',
                 label: 'Verwijderen',
                 icon: 'delete',
-                tooltip: 'item verwijderen',
+                tooltip: 'Verwijder het item',
                 handler: mockRemoveFunction
               }
             ];
@@ -1345,9 +1353,13 @@ describe('QuickLinkComponent', () => {
     });
 
     it('openTask should call the correct method on the viewmodel', () => {
-      const mockQuickLink = new FavoriteFixture({
-        task: new TaskFixture()
-      }) as any;
+      const mockQuickLink = {
+        ...new FavoriteFixture(),
+        task: new TaskFixture(),
+        defaultAction: null,
+        alternativeOpenActions: [],
+        manageActions: []
+      };
 
       quickLinkViewModel.openTask = jest.fn();
 

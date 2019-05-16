@@ -67,7 +67,7 @@ export const icons = {
   // archive: 'assets/icons/archive.svg',
   cancel: 'assets/icons/cancel.svg',
   delete: 'assets/icons/material/delete.svg',
-  edit: 'assets/icons/edit.svg',
+  edit: 'assets/icons/material/edit.svg',
   filter: 'assets/icons/filter.svg',
   // lock: 'assets/icons/lock.svg',
   // filter: 'assets/icons/filter.svg',
@@ -77,10 +77,11 @@ export const icons = {
   // print: 'assets/icons/print.svg',
   // 'user-add': 'assets/icons/user-add.svg',
   // 'user-del': 'assets/icons/user-del.svg',
-  verwijder: 'assets/icons/verwijder.svg',
+  remove: 'assets/icons/verwijder.svg',
   'exercise:open': 'assets/icons/exercise-open.svg',
   'exercise:finished': 'assets/icons/exercise-finished.svg',
   download: 'assets/icons/material/download.svg',
+  context_menu: 'assets/icons/material/more_vert.svg',
 
   // -> product types
   'list-view': 'assets/icons/material/list-view.svg',
