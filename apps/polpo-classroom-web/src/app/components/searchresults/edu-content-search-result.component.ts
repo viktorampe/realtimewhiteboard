@@ -102,7 +102,6 @@ export class EduContentSearchResultComponent extends ResultItemBase
         .learningAreaId
     };
 
-    console.log(favorite);
     this.eduContentSearchResultService.toggleFavorite(favorite);
   }
 

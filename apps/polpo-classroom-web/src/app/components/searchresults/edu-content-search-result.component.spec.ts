@@ -493,7 +493,9 @@ describe('EduContentSearchResultComponent', () => {
           name: component.data.eduContent.name,
           type: FavoriteTypesEnum.EDUCONTENT,
           eduContentId: component.data.eduContent.id,
-          created: new Date()
+          created: new Date(),
+          learningAreaId:
+            component.data.eduContent.publishedEduContentMetadata.learningAreaId
         };
 
         expect(
