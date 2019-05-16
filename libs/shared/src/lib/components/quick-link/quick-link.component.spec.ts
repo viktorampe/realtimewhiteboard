@@ -42,7 +42,11 @@ import {
   InfoPanelComponent,
   UiModule
 } from '@campus/ui';
-import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
+import {
+  FilterService,
+  FilterServiceInterface,
+  FILTER_SERVICE_TOKEN
+} from '@campus/utils';
 import { hot } from '@nrwl/nx/testing';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -79,7 +83,7 @@ describe('QuickLinkComponent', () => {
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
         {
           provide: FILTER_SERVICE_TOKEN,
-          useValue: { filter: () => {} } // all injected items
+          useClass: FilterService
         },
         {
           provide: HAMMER_LOADER,
@@ -544,6 +548,20 @@ describe('QuickLinkComponent', () => {
     let filterService: FilterServiceInterface;
     beforeEach(() => {
       filterService = TestBed.get(FILTER_SERVICE_TOKEN);
+
+      const mockQuickLinks = [
+        new FavoriteFixture({
+          name: 'foo',
+          type: FavoriteTypesEnum.BOEKE
+        }),
+        new FavoriteFixture({
+          name: 'bar',
+          type: FavoriteTypesEnum.EDUCONTENT
+        })
+      ];
+
+      vmQuickLinks$.next(mockQuickLinks);
+      fixture.detectChanges();
     });
 
     it('should filter the items', () => {
@@ -554,9 +572,7 @@ describe('QuickLinkComponent', () => {
       component.contentData$.subscribe(quickLinks => {
         const returnedItem = quickLinks[0];
 
-        filterService.filter = jest.fn().mockReturnValue([returnedItem]);
-        filterText.componentInstance.setValue("it doesn't matter");
-
+        filterText.componentInstance.setValue(returnedItem.name);
         fixture.detectChanges();
 
         const linkItems = fixture.debugElement.queryAll(
@@ -568,6 +584,56 @@ describe('QuickLinkComponent', () => {
           returnedItem.name
         );
       });
+    });
+
+    it('should display a no results message when no items are found', () => {
+      const filterText = fixture.debugElement.query(
+        By.directive(FilterTextInputComponent)
+      );
+
+      filterText.componentInstance.setValue("item that doesn't exist");
+      fixture.detectChanges();
+
+      const linkItems = fixture.debugElement.queryAll(
+        By.css('.quick-link__item__title')
+      );
+
+      const noResultsMessage = fixture.debugElement.query(
+        By.css('.quick-link__no-results')
+      );
+
+      expect(linkItems.length).toBe(0);
+      expect(noResultsMessage).toBeTruthy();
+    });
+
+    it('should reset the filter when clicking the reset link in the no results message', () => {
+      spyOn(component.filterTextInput, 'clear').and.callThrough();
+
+      const filterText = fixture.debugElement.query(
+        By.directive(FilterTextInputComponent)
+      );
+
+      filterText.componentInstance.setValue("item that doesn't exist");
+      fixture.detectChanges();
+
+      let linkItems = fixture.debugElement.queryAll(
+        By.css('.quick-link__item__title')
+      );
+
+      expect(linkItems.length).toBe(0);
+
+      fixture.debugElement
+        .query(By.css('.quick-link__no-results a'))
+        .nativeElement.click();
+
+      fixture.detectChanges();
+
+      linkItems = fixture.debugElement.queryAll(
+        By.css('.quick-link__item__title')
+      );
+
+      expect(linkItems.length).not.toBe(0);
+      expect(component.filterTextInput.clear).toHaveBeenCalled();
     });
   });
 
