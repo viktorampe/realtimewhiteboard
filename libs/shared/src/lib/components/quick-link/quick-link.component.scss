@@ -95,13 +95,10 @@
   }
 
   &__dialog__actions {
+    padding: 15px;
     display: flex;
     justify-content: flex-end;
     align-content: center;
-
-    &__button {
-      margin: 16px;
-    }
   }
 }
 
