@@ -1,51 +1,13 @@
-import {
-  async,
-  ComponentFixture,
-  fakeAsync,
-  TestBed
-} from '@angular/core/testing';
-import {
-  MatDialogActions,
-  MatDialogModule,
-  MatDialogRef,
-  MatIcon,
-  MatIconModule,
-  MatIconRegistry,
-  MatList,
-  MatListItem,
-  MatListModule,
-  MatListSubheaderCssMatStyler,
-  MatTooltipModule,
-  MAT_DIALOG_DATA
-} from '@angular/material';
+import { async, ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
+import { MatDialogActions, MatDialogModule, MatDialogRef, MatIcon, MatIconModule, MatIconRegistry, MatList, MatListItem, MatListModule, MatListSubheaderCssMatStyler, MatTooltipModule, MAT_DIALOG_DATA } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
-import {
-  BundleFixture,
-  EduContent,
-  EduContentFixture,
-  EduContentMetadataFixture,
-  EffectFeedbackFixture,
-  EffectFeedbackInterface,
-  FavoriteFixture,
-  FavoriteInterface,
-  FavoriteTypesEnum,
-  HistoryInterface,
-  LearningAreaFixture,
-  Priority,
-  TaskFixture
-} from '@campus/dal';
+import { BundleFixture, EduContent, EduContentFixture, EduContentMetadataFixture, EffectFeedbackFixture, EffectFeedbackInterface, FavoriteFixture, FavoriteInterface, FavoriteTypesEnum, HistoryInterface, LearningAreaFixture, Priority, TaskFixture } from '@campus/dal';
 import { MockDate, MockMatIconRegistry } from '@campus/testing';
-import {
-  BannerComponent,
-  ButtonComponent,
-  FilterTextInputComponent,
-  InfoPanelComponent,
-  UiModule
-} from '@campus/ui';
+import { BannerComponent, ButtonComponent, FilterTextInputComponent, InfoPanelComponent, UiModule } from '@campus/ui';
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { hot } from '@nrwl/nx/testing';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { QuickLinkTypeEnum } from './quick-link-type.enum';
 import { QuickLinkComponent } from './quick-link.component';
@@ -57,9 +19,8 @@ describe('QuickLinkComponent', () => {
   let fixture: ComponentFixture<QuickLinkComponent>;
   let quickLinkViewModel: QuickLinkViewModel;
   let vmQuickLinks$: BehaviorSubject<FavoriteInterface[] | HistoryInterface[]>;
-  let vmFeedback$: BehaviorSubject<EffectFeedbackInterface>;
+  let vmFeedback$:BehaviorSubject<EffectFeedbackInterface>;
   let dateMock: MockDate;
-
   const mockInjectedData = { mode: 'foo' };
 
   beforeEach(async(() => {
@@ -116,13 +77,9 @@ describe('QuickLinkComponent', () => {
       .fn()
       .mockReturnValue(vmQuickLinks$);
 
-    vmFeedback$ = quickLinkViewModel.getFeedback$() as BehaviorSubject<
-      EffectFeedbackInterface
-    >;
-    quickLinkViewModel.getFeedback$ = jest.fn().mockReturnValue(vmFeedback$);
-
     // make component 'attach' to mocked stream
     component['setupStreams']();
+    vmFeedback$ = quickLinkViewModel.getFeedback$() as BehaviorSubject<EffectFeedbackInterface>;
     fixture.detectChanges();
   });
 
@@ -547,6 +504,7 @@ describe('QuickLinkComponent', () => {
     describe('error feedback', () => {
       it('should not show the banner when there is no error feedback', () => {
         // clear errors
+        // quickLinkViewModel.feedback$.next(null);
         vmFeedback$.next(null);
         fixture.detectChanges();
 
@@ -561,7 +519,6 @@ describe('QuickLinkComponent', () => {
           type: 'error',
           priority: Priority.HIGH
         });
-
         vmFeedback$.next(mockErrorFeedback);
         fixture.detectChanges();
 
