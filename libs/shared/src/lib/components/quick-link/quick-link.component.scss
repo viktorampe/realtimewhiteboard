@@ -5,6 +5,13 @@
     min-height: 33vh;
     min-width: 40vw;
   }
+
+  mat-list-item {
+    &.quick-link__item.mat-list-item {
+      height: 100%;
+      min-height: 56px; // default material height
+    }
+  }
 }
 
 .quick-link {
@@ -25,11 +32,6 @@
 
   &__item {
     text-align: left;
-
-    &.mat-list-item {
-      height: 100%;
-      min-height: 56px; // default material height
-    }
 
     &__title {
       height: 100%;
