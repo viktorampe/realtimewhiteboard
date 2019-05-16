@@ -93,7 +93,7 @@ export class EduContentSearchResultComponent extends ResultItemBase
     const favorite: FavoriteInterface = {
       name: this.data.eduContent.name,
       type:
-        this.data.eduContent.type === 'boeke-e'
+        this.data.eduContent.type === 'boek-e'
           ? FavoriteTypesEnum.BOEKE
           : FavoriteTypesEnum.EDUCONTENT,
       eduContentId: this.data.eduContent.id,
