@@ -265,6 +265,10 @@ export class QuickLinkComponent implements OnInit {
     this.quickLinkViewModel.remove(quickLink.id, this.data.mode);
   }
 
+  public onBannerDismiss(event) {
+    this.quickLinkViewModel.onFeedbackDismiss(event);
+  }
+
   private setupStreams() {
     this.contentData$ = this.quickLinkViewModel
       .getQuickLinks$(this.data.mode)
@@ -274,7 +278,7 @@ export class QuickLinkComponent implements OnInit {
         )
       );
 
-    this.feedback$ = this.quickLinkViewModel.feedback$;
+    this.feedback$ = this.quickLinkViewModel.getFeedback$();
   }
 
   private convertToQuickLinkData(
