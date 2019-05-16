@@ -26,6 +26,11 @@
   &__item {
     text-align: left;
 
+    &.mat-list-item {
+      height: 100%;
+      min-height: 56px; // default material height
+    }
+
     &__title {
       height: 100%;
       margin-left: 4px;
