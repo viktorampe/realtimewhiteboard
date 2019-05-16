@@ -1304,12 +1304,13 @@ describe('QuickLinkComponent', () => {
   });
 
   describe('event handlers', () => {
-    it('openEduContentAsExercise should call the correct method on the viewmodel', () => {
+    it('openEduContentAsExercise should call the correct method on the viewmodel and close the dialog', () => {
       const mockQuickLink = new FavoriteFixture({
         eduContent: new EduContentFixture()
       }) as any;
 
       quickLinkViewModel.openExercise = jest.fn();
+      component.closeDialog = jest.fn();
 
       component.openEduContentAsExercise(mockQuickLink);
 
@@ -1318,14 +1319,16 @@ describe('QuickLinkComponent', () => {
       expect(quickLinkViewModel.openExercise).toHaveBeenCalledWith(
         mockQuickLink.eduContent
       );
+      expect(component.closeDialog).toHaveBeenCalled();
     });
 
-    it('openEduContentAsSolution should call the correct method on the viewmodel', () => {
+    it('openEduContentAsSolution should call the correct method on the viewmodel and close the dialog', () => {
       const mockQuickLink = new FavoriteFixture({
         eduContent: new EduContentFixture()
       }) as any;
 
       quickLinkViewModel.openExercise = jest.fn();
+      component.closeDialog = jest.fn();
 
       component.openEduContentAsSolution(mockQuickLink);
 
@@ -1335,14 +1338,16 @@ describe('QuickLinkComponent', () => {
         mockQuickLink.eduContent,
         true
       );
+      expect(component.closeDialog).toHaveBeenCalled();
     });
 
-    it('openEduContentAsStream should call the correct method on the viewmodel', () => {
+    it('openEduContentAsStream should call the correct method on the viewmodel and close the dialog', () => {
       const mockQuickLink = new FavoriteFixture({
         eduContent: new EduContentFixture()
       }) as any;
 
       quickLinkViewModel.openStaticContent = jest.fn();
+      component.closeDialog = jest.fn();
 
       component.openEduContentAsStream(mockQuickLink);
 
@@ -1352,14 +1357,16 @@ describe('QuickLinkComponent', () => {
         mockQuickLink.eduContent,
         true
       );
+      expect(component.closeDialog).toHaveBeenCalled();
     });
 
-    it('openEduContentAsDownload should call the correct method on the viewmodel', () => {
+    it('openEduContentAsDownload should call the correct method on the viewmodel and not close the dialog', () => {
       const mockQuickLink = new FavoriteFixture({
         eduContent: new EduContentFixture()
       }) as any;
 
       quickLinkViewModel.openStaticContent = jest.fn();
+      component.closeDialog = jest.fn();
 
       component.openEduContentAsDownload(mockQuickLink);
 
@@ -1368,14 +1375,16 @@ describe('QuickLinkComponent', () => {
       expect(quickLinkViewModel.openStaticContent).toHaveBeenCalledWith(
         mockQuickLink.eduContent
       );
+      expect(component.closeDialog).not.toHaveBeenCalled();
     });
 
-    it('openBundle should call the correct method on the viewmodel', () => {
+    it('openBundle should call the correct method on the viewmodel and close the dialog', () => {
       const mockQuickLink = new FavoriteFixture({
         bundle: new BundleFixture()
       }) as any;
 
       quickLinkViewModel.openBundle = jest.fn();
+      component.closeDialog = jest.fn();
 
       component.openBundle(mockQuickLink);
 
@@ -1384,9 +1393,10 @@ describe('QuickLinkComponent', () => {
       expect(quickLinkViewModel.openBundle).toHaveBeenCalledWith(
         mockQuickLink.bundle
       );
+      expect(component.closeDialog).toHaveBeenCalled();
     });
 
-    it('openTask should call the correct method on the viewmodel', () => {
+    it('openTask should call the correct method on the viewmodel and close the dialog', () => {
       const mockQuickLink = {
         ...new FavoriteFixture(),
         task: new TaskFixture(),
@@ -1396,6 +1406,7 @@ describe('QuickLinkComponent', () => {
       };
 
       quickLinkViewModel.openTask = jest.fn();
+      component.closeDialog = jest.fn();
 
       component.openTask(mockQuickLink);
 
@@ -1404,14 +1415,16 @@ describe('QuickLinkComponent', () => {
       expect(quickLinkViewModel.openTask).toHaveBeenCalledWith(
         mockQuickLink.task
       );
+      expect(component.closeDialog).toHaveBeenCalled();
     });
 
-    it('openArea should call the correct method on the viewmodel', () => {
+    it('openArea should call the correct method on the viewmodel and close the dialog', () => {
       const mockQuickLink = new FavoriteFixture({
         learningArea: new LearningAreaFixture()
       }) as any;
 
       quickLinkViewModel.openArea = jest.fn();
+      component.closeDialog = jest.fn();
 
       component.openArea(mockQuickLink);
 
@@ -1420,12 +1433,14 @@ describe('QuickLinkComponent', () => {
       expect(quickLinkViewModel.openArea).toHaveBeenCalledWith(
         mockQuickLink.learningArea
       );
+      expect(component.closeDialog).toHaveBeenCalled();
     });
 
-    it('openSearch should call the correct method on the viewmodel', () => {
+    it('openSearch should call the correct method on the viewmodel and close the dialog', () => {
       const mockQuickLink = new FavoriteFixture() as any;
 
       quickLinkViewModel.openSearch = jest.fn();
+      component.closeDialog = jest.fn();
 
       component.openSearch(mockQuickLink);
 
@@ -1435,14 +1450,16 @@ describe('QuickLinkComponent', () => {
         mockQuickLink,
         mockInjectedData.mode
       );
+      expect(component.closeDialog).toHaveBeenCalled();
     });
 
-    it('openBoeke should call the correct method on the viewmodel', () => {
+    it('openBoeke should call the correct method on the viewmodel and close the dialog', () => {
       const mockQuickLink = new FavoriteFixture({
         eduContent: new EduContentFixture()
       }) as any;
 
       quickLinkViewModel.openStaticContent = jest.fn();
+      component.closeDialog = jest.fn();
 
       component.openBoeke(mockQuickLink);
 
@@ -1451,6 +1468,7 @@ describe('QuickLinkComponent', () => {
       expect(quickLinkViewModel.openStaticContent).toHaveBeenCalledWith(
         mockQuickLink.eduContent
       );
+      expect(component.closeDialog).not.toHaveBeenCalled();
     });
 
     it('update should call the correct method on the viewmodel', () => {
