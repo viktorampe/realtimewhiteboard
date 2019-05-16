@@ -208,12 +208,10 @@ export class QuickLinkComponent implements OnInit {
 
   public openEduContentAsExercise(quickLink: QuickLinkInterface) {
     this.quickLinkViewModel.openExercise(quickLink.eduContent);
-    this.closeDialog();
   }
 
   public openEduContentAsSolution(quickLink: QuickLinkInterface) {
     this.quickLinkViewModel.openExercise(quickLink.eduContent, true);
-    this.closeDialog();
   }
 
   public openEduContentAsStream(quickLink: QuickLinkInterface) {

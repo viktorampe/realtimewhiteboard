@@ -1069,7 +1069,7 @@ describe('QuickLinkComponent', () => {
               quickLinkActions.openEduContentAsDownload.handler = mockOpenEduContentAsDownloadFunction;
             });
 
-            describe('educContent is streamable', () => {
+            describe('eduContent is streamable', () => {
               beforeEach(() => {
                 mockFavorite = new FavoriteFixture({
                   type: FavoriteTypesEnum.EDUCONTENT,
@@ -1127,7 +1127,7 @@ describe('QuickLinkComponent', () => {
               });
             });
 
-            describe('educContent is not streamable', () => {
+            describe('eduContent is not streamable', () => {
               beforeEach(() => {
                 mockFavorite = new FavoriteFixture({
                   type: FavoriteTypesEnum.EDUCONTENT,
@@ -1304,7 +1304,7 @@ describe('QuickLinkComponent', () => {
   });
 
   describe('event handlers', () => {
-    it('openEduContentAsExercise should call the correct method on the viewmodel and close the dialog', () => {
+    it('openEduContentAsExercise should call the correct method on the viewmodel and not close the dialog', () => {
       const mockQuickLink = new FavoriteFixture({
         eduContent: new EduContentFixture()
       }) as any;
@@ -1319,10 +1319,10 @@ describe('QuickLinkComponent', () => {
       expect(quickLinkViewModel.openExercise).toHaveBeenCalledWith(
         mockQuickLink.eduContent
       );
-      expect(component.closeDialog).toHaveBeenCalled();
+      expect(component.closeDialog).not.toHaveBeenCalled();
     });
 
-    it('openEduContentAsSolution should call the correct method on the viewmodel and close the dialog', () => {
+    it('openEduContentAsSolution should call the correct method on the viewmodel and not close the dialog', () => {
       const mockQuickLink = new FavoriteFixture({
         eduContent: new EduContentFixture()
       }) as any;
@@ -1338,7 +1338,7 @@ describe('QuickLinkComponent', () => {
         mockQuickLink.eduContent,
         true
       );
-      expect(component.closeDialog).toHaveBeenCalled();
+      expect(component.closeDialog).not.toHaveBeenCalled();
     });
 
     it('openEduContentAsStream should call the correct method on the viewmodel and close the dialog', () => {
@@ -1453,7 +1453,7 @@ describe('QuickLinkComponent', () => {
       expect(component.closeDialog).toHaveBeenCalled();
     });
 
-    it('openBoeke should call the correct method on the viewmodel and close the dialog', () => {
+    it('openBoeke should call the correct method on the viewmodel and not close the dialog', () => {
       const mockQuickLink = new FavoriteFixture({
         eduContent: new EduContentFixture()
       }) as any;
