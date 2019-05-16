@@ -12,6 +12,17 @@
     max-height: 100%;
   }
 
+  &__no-results {
+    *:not(:last-child) {
+      margin-right: 5px;
+    }
+
+    a {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+
   &__item {
     text-align: left;
 
@@ -84,13 +95,10 @@
   }
 
   &__dialog__actions {
+    padding: 15px;
     display: flex;
     justify-content: flex-end;
     align-content: center;
-
-    &__button {
-      margin: 16px;
-    }
   }
 }
 

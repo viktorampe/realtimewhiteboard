@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import {
   DalState,
+  EduContentActions,
+  EduContentInterface,
   FavoriteActions,
   FavoriteInterface,
   FavoriteQueries
@@ -26,5 +28,13 @@ export class EduContentSearchResultItemService
 
   toggleFavorite(favorite: FavoriteInterface): void {
     this.store.dispatch(new FavoriteActions.ToggleFavorite({ favorite }));
+  }
+
+  upsertEduContentToStore(eduContent: EduContentInterface): void {
+    this.store.dispatch(
+      new EduContentActions.UpsertEduContent({
+        eduContent
+      })
+    );
   }
 }

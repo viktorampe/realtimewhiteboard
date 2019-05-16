@@ -63,7 +63,8 @@ describe('EduContentSearchResultComponent', () => {
           provide: EDUCONTENT_SEARCH_RESULT_ITEM_SERVICE_TOKEN,
           useValue: {
             isFavorite$: () => mockIsFavorite,
-            toggleFavorite: jest.fn()
+            toggleFavorite: jest.fn(),
+            upsertEduContentToStore: jest.fn()
           }
         }
       ]
@@ -88,7 +89,8 @@ describe('EduContentSearchResultComponent', () => {
       currentTask: null,
       inTask: false,
       inBundle: false,
-      isFavorite: false
+      isFavorite: false,
+      minimal: new EduContentFixture({ id: 1 })
     } as EduContentSearchResultInterface;
 
     fixture.detectChanges();
@@ -428,6 +430,48 @@ describe('EduContentSearchResultComponent', () => {
       expect(toggleFavoriteButton.nativeElement.textContent.trim()).toBe(
         'Verwijderen uit favorieten'
       );
+    });
+
+    describe('update store', () => {
+      it('should add eduContent on toggleFavorite()', () => {
+        component.toggleFavorite();
+        expect(
+          eduContentSearchResultItemService.upsertEduContentToStore
+        ).toHaveBeenCalled();
+        expect(
+          eduContentSearchResultItemService.upsertEduContentToStore
+        ).toHaveBeenCalledWith(component.data.eduContent.minimal);
+      });
+
+      it('should add eduContent on openStatic()', () => {
+        component.openStatic();
+        expect(
+          eduContentSearchResultItemService.upsertEduContentToStore
+        ).toHaveBeenCalled();
+        expect(
+          eduContentSearchResultItemService.upsertEduContentToStore
+        ).toHaveBeenCalledWith(component.data.eduContent.minimal);
+      });
+
+      it('should add eduContent on openExercise()', () => {
+        component.openExercise(false);
+        expect(
+          eduContentSearchResultItemService.upsertEduContentToStore
+        ).toHaveBeenCalled();
+        expect(
+          eduContentSearchResultItemService.upsertEduContentToStore
+        ).toHaveBeenCalledWith(component.data.eduContent.minimal);
+      });
+
+      it('should add eduContent on stream()', () => {
+        component.stream();
+        expect(
+          eduContentSearchResultItemService.upsertEduContentToStore
+        ).toHaveBeenCalled();
+        expect(
+          eduContentSearchResultItemService.upsertEduContentToStore
+        ).toHaveBeenCalledWith(component.data.eduContent.minimal);
+      });
     });
   });
 

@@ -103,14 +103,28 @@ export class EduContentSearchResultComponent extends ResultItemBase
     };
 
     this.eduContentSearchResultService.toggleFavorite(favorite);
+    this.eduContentSearchResultService.upsertEduContentToStore(
+      this.data.eduContent.minimal
+    );
   }
 
   public openStatic() {
     this.openStaticContentService.open(this.data.eduContent);
+    this.eduContentSearchResultService.upsertEduContentToStore(
+      this.data.eduContent.minimal
+    );
   }
-  public openExercise(answers: boolean) {}
+  public openExercise(answers: boolean) {
+    this.eduContentSearchResultService.upsertEduContentToStore(
+      this.data.eduContent.minimal
+    );
+  }
 
-  public stream() {}
+  public stream() {
+    this.eduContentSearchResultService.upsertEduContentToStore(
+      this.data.eduContent.minimal
+    );
+  }
 
   public open() {
     //Check what kind of content it is (ludo.zip or not) and do openStatic or openExercise

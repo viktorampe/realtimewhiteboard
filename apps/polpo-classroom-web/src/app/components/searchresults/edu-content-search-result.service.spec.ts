@@ -1,6 +1,9 @@
 import { inject, TestBed } from '@angular/core/testing';
 import {
   DalState,
+  EduContentActions,
+  EduContentFixture,
+  EduContentInterface,
   FavoriteActions,
   FavoriteFixture,
   FavoriteReducer,
@@ -67,6 +70,20 @@ describe('EduContentSearchResultItemService', () => {
       expect(store.dispatch).toHaveBeenCalled();
       expect(store.dispatch).toHaveBeenCalledWith(
         new FavoriteActions.ToggleFavorite({ favorite })
+      );
+    });
+  });
+
+  describe('upsertEduContentToStore', () => {
+    it('should dispatch a UpsertEduContent action', () => {
+      store.dispatch = jest.fn();
+      const eduContent: EduContentInterface = new EduContentFixture();
+
+      eduContentSearchResultItemService.upsertEduContentToStore(eduContent);
+
+      expect(store.dispatch).toHaveBeenCalled();
+      expect(store.dispatch).toHaveBeenCalledWith(
+        new EduContentActions.UpsertEduContent({ eduContent })
       );
     });
   });
