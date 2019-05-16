@@ -88,7 +88,7 @@ export const getByTypeAndId = createSelector(
 export const getIsFavoriteEduContent = createSelector(
   selectFavoriteState,
   (state: State, props: { eduContentId: number }) => {
-    return state.ids.some(
+    return (state.ids as number[]).some(
       id => state.entities[id].eduContentId === props.eduContentId
     );
   }
