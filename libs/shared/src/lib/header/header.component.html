@@ -79,7 +79,7 @@
   </div>
   <div class="shared-header__page-bar">
     <campus-button
-      *ngIf="(backLink$ | async) as link; else: hamburgerMenu"
+      *ngIf="(backLink$ | async) as link; else hamburgerMenu"
       [routerLink]="link"
       class="shared-header__page-bar__nav-button"
       [iconClass]="'arrow-back'"

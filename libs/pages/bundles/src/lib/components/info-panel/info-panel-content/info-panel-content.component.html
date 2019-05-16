@@ -9,7 +9,7 @@
     [extensionClass]="content.fileExtension"
     [title]="content.fileTypeLabel"
   ></campus-file-extension>
-  <div *ngIf="content.productType" class="{{content.productType}}"></div>
+  <div *ngIf="content.productType" class="{{ content.productType }}"></div>
   <div *ngFor="let badge of content.methodLogos"> {{ badge }} </div>
 </campus-content-preview>
 <campus-confirmable-select

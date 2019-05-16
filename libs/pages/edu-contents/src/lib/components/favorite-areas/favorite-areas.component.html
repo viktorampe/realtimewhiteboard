@@ -6,7 +6,7 @@
   <campus-tile
     *ngFor="let favoriteLearningArea of favoriteLearningAreas"
     [label]="favoriteLearningArea.name"
-    icon="learning-area:{{favoriteLearningArea.icon}}"
+    icon="learning-area:{{ favoriteLearningArea.icon }}"
     [color]="favoriteLearningArea.color"
     [routerLink]="favoriteLearningArea.id"
     [secondaryActions]="[removeAreaFromFavoritesAction(favoriteLearningArea)]"

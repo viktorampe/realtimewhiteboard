@@ -43,7 +43,7 @@
         *ngFor="let instance of filteredTaskInstances"
         [routerLink]="[instance.taskInstance.taskId]"
         campusListItem
-        progress="{{instance.taskInstance.progress}}"
+        progress="{{ instance.taskInstance.progress }}"
         [itemCount]="instance.taskEduContentsCount"
         [title]="instance.task.name"
         [backgroundColor]="(learningArea$ | async).color"

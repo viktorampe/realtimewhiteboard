@@ -26,14 +26,14 @@
     <div>Er zijn momenteel geen boeken met jou gedeeld.</div>
   </ng-template>
 
-  <ng-container *ngIf="books.length; else: noBooks">
+  <ng-container *ngIf="books.length; else noBooks">
     <ng-container *ngIf="(filterTextInput.result$ | async) as filteredBooks">
       <div
         class="pages-books__container__books-count"
         *ngIf="
           filteredBooks.length === books.length;
-          then: noFilter;
-          else: filter
+          then noFilter;
+          else filter
         "
       ></div>
 

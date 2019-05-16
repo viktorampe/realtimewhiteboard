@@ -27,7 +27,7 @@
       <ng-container *ngIf="(filterTextInput.result$ | async) as filteredItems">
         <div
           class="ui-manage-collection__all-items"
-          *ngIf="filteredItems.length; else: noResultsTemplate"
+          *ngIf="filteredItems.length; else noResultsTemplate"
         >
           <h3 mat-subheader>Alle</h3>
           <mat-list-option *ngFor="let item of filteredItems" [value]="item.id">
