@@ -32,11 +32,20 @@
               *ngFor="let quickLink of category.quickLinks"
               (click)="quickLink.defaultAction.handler(quickLink)"
             >
-              <mat-icon
-                mat-list-icon
-                [svgIcon]="quickLink.learningArea.icon"
-                class="quick-link__item__icon"
-              ></mat-icon>
+              <campus-file-extension
+                *ngIf="quickLink.type === 'educontent'; else: notEduContent"
+                [showIcon]="false"
+                [extensionClass]="quickLink.eduContent.fileExtension"
+                class="quick-link__item__file-extension"
+              ></campus-file-extension>
+
+              <ng-template #notEduContent>
+                <mat-icon
+                  mat-list-icon
+                  [svgIcon]="quickLink.learningArea.icon"
+                  class="quick-link__item__icon"
+                ></mat-icon>
+              </ng-template>
               <div
                 class="quick-link__item__title"
                 [matTooltip]="quickLink.defaultAction.tooltip"
