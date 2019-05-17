@@ -61,7 +61,7 @@ describe('FavoriteAreasComponent', () => {
       const tile = tiles[i];
 
       expect(tile.componentInstance.label).toBe(area.name);
-      expect(tile.componentInstance.icon).toBe('learning-area:' + area.icon);
+      expect(tile.componentInstance.icon).toBe(area.icon);
       expect(tile.componentInstance.color).toBe(area.color);
     }
   });

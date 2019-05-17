@@ -191,16 +191,13 @@
         (click)="toggleFavorite()"
         iconClass="favorites"
       >
-        {{
-          data.isFavorite
-            ? 'Verwijderen uit favorieten'
-            : 'Toevoegen aan favorieten'
-        }}
-        <mat-icon
-          class="checkmark"
-          svgIcon="check-on"
-          *ngIf="data.isFavorite"
-        ></mat-icon>
+        <ng-container
+          *ngIf="(isFavorite$ | async) as isFavorite; else: notFavorite"
+        >
+          Verwijderen uit favorieten
+          <mat-icon class="checkmark" svgIcon="check-on"></mat-icon>
+        </ng-container>
+        <ng-template #notFavorite> Toevoegen aan favorieten </ng-template>
       </campus-button>
     </div>
   </div>

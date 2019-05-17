@@ -8,10 +8,10 @@ import {
   SimpleChanges
 } from '@angular/core';
 import {
-  DalState,
-  EduContentActions,
   EduContentBookInterface,
-  EduContentTOCInterface
+  EduContentTOCInterface,
+  FavoriteInterface,
+  FavoriteTypesEnum
 } from '@campus/dal';
 import { ResultItemBase } from '@campus/search';
 import {
@@ -21,7 +21,11 @@ import {
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN
 } from '@campus/shared';
-import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import {
+  EduContentSearchResultItemServiceInterface,
+  EDUCONTENT_SEARCH_RESULT_ITEM_SERVICE_TOKEN
+} from './edu-content-search-result.service.interface';
 
 @Component({
   // tslint:disable-next-line
@@ -43,18 +47,25 @@ export class EduContentSearchResultComponent extends ResultItemBase
 
   public normalizedEduContentToc: any;
 
+  public isFavorite$: Observable<Boolean>;
+
   constructor(
-    private store: Store<DalState>,
     @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
     private openStaticContentService: OpenStaticContentServiceInterface,
     @Inject(EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN)
-    private eduContentManagerService: EduContentCollectionManagerServiceInterface
+    private eduContentManagerService: EduContentCollectionManagerServiceInterface,
+    @Inject(EDUCONTENT_SEARCH_RESULT_ITEM_SERVICE_TOKEN)
+    private eduContentSearchResultService: EduContentSearchResultItemServiceInterface
   ) {
     super();
   }
 
   ngOnInit() {
     super.ngOnInit();
+
+    this.isFavorite$ = this.eduContentSearchResultService.isFavorite$(
+      this.data.eduContent.id
+    );
 
     this.normalizedEduContentToc = this.getNormalizedEduContentToc();
   }
@@ -81,16 +92,41 @@ export class EduContentSearchResultComponent extends ResultItemBase
   public unlinkBundle() {}
 
   public toggleFavorite() {
-    this.upsertEduContentToStore();
+    const favorite: FavoriteInterface = {
+      name: this.data.eduContent.name,
+      type:
+        this.data.eduContent.type === 'boek-e'
+          ? FavoriteTypesEnum.BOEKE
+          : FavoriteTypesEnum.EDUCONTENT,
+      eduContentId: this.data.eduContent.id,
+      created: new Date(),
+      learningAreaId: this.data.eduContent.publishedEduContentMetadata
+        .learningAreaId
+    };
+
+    this.eduContentSearchResultService.toggleFavorite(favorite);
+    this.eduContentSearchResultService.upsertEduContentToStore(
+      this.data.eduContent.minimal
+    );
   }
 
   public openStatic() {
-    this.upsertEduContentToStore();
     this.openStaticContentService.open(this.data.eduContent);
+    this.eduContentSearchResultService.upsertEduContentToStore(
+      this.data.eduContent.minimal
+    );
   }
-  public openExercise(answers: boolean) {}
+  public openExercise(answers: boolean) {
+    this.eduContentSearchResultService.upsertEduContentToStore(
+      this.data.eduContent.minimal
+    );
+  }
 
-  public stream() {}
+  public stream() {
+    this.eduContentSearchResultService.upsertEduContentToStore(
+      this.data.eduContent.minimal
+    );
+  }
 
   public open() {
     //Check what kind of content it is (ludo.zip or not) and do openStatic or openExercise
@@ -141,13 +177,5 @@ export class EduContentSearchResultComponent extends ResultItemBase
       books: books,
       booksToc: booksToc
     };
-  }
-
-  private upsertEduContentToStore(): void {
-    this.store.dispatch(
-      new EduContentActions.UpsertEduContent({
-        eduContent: this.data.eduContent.minimal
-      })
-    );
   }
 }

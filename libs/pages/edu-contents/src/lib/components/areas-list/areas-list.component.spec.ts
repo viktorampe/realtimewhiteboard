@@ -94,7 +94,7 @@ describe('AreasListComponent', () => {
       const areaIcon = area.query(By.css('mat-icon')).componentInstance.svgIcon;
       const areaText = area.query(By.css('a')).nativeElement.textContent;
 
-      expect(areaIcon).toBe('learning-area:' + areaModel.icon);
+      expect(areaIcon).toBe(areaModel.icon);
       expect(areaText).toBe(areaModel.name);
     }
   });

@@ -176,5 +176,55 @@ describe('Favorite Selectors', () => {
         expect(results).toEqual(undefined);
       });
     });
+
+    describe('getIsFavoriteEduContent()', () => {
+      beforeEach(() => {
+        const mockFavorites: FavoriteInterface[] = [
+          {
+            id: 1,
+            type: FavoriteTypesEnum.BOEKE,
+            eduContentId: 15
+          } as FavoriteInterface,
+          {
+            id: 2,
+            type: FavoriteTypesEnum.BOEKE,
+            eduContentId: 10
+          } as FavoriteInterface,
+          {
+            id: 3,
+            type: FavoriteTypesEnum.AREA,
+            learningAreaId: 5
+          } as FavoriteInterface,
+          {
+            id: 4,
+            type: FavoriteTypesEnum.BUNDLE,
+            eduContentId: 12
+          } as FavoriteInterface
+        ];
+        favoriteState = createState(mockFavorites, true, 'no error');
+
+        storeState = { favorites: favoriteState };
+      });
+
+      it('should return if an eduContent is a favorite', () => {
+        const resultsTrue = FavoriteQueries.getIsFavoriteEduContent(
+          storeState,
+          {
+            eduContentId: 15
+          }
+        );
+
+        expect(resultsTrue).toEqual(true);
+
+        const resultsFalse = FavoriteQueries.getIsFavoriteEduContent(
+          storeState,
+          {
+            eduContentId: 123456789
+          }
+        );
+
+        expect(resultsFalse).toEqual(false);
+      });
+    });
   });
 });
