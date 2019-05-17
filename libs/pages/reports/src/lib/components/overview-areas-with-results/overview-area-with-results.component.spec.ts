@@ -120,9 +120,7 @@ describe('OverviewAreaWithResultsComponent', () => {
     const folder = folderDE.componentInstance;
 
     expect(folder.backgroundColor).toEqual(mockLearningArea.learningArea.color);
-    expect(folder.icon).toEqual(
-      'learning-area:' + mockLearningArea.learningArea.icon
-    );
+    expect(folder.icon).toEqual(mockLearningArea.learningArea.icon);
     expect(folder.title).toEqual(mockLearningArea.learningArea.name);
     expect(folder.itemCount).toEqual(
       mockLearningArea.tasksWithResultsCount +
