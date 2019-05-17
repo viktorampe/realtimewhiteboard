@@ -3,14 +3,10 @@
   $shared-quick-link__no-results-padding: 24px !default;
 
   // extract material colors from theme
-  $shared-quick-link_item_icon-color: map-get(
-    map-get($polpo-theme, foreground),
-    secondary-text
-  ) !default;
-  $shared-quick-link_item_hover-color: map-get(
-    map-get($polpo-theme, background),
-    hover
-  ) !default;
+  $shared-quick-link_item_icon-color: map-get(map-get($polpo-theme, foreground),
+      secondary-text) !default;
+  $shared-quick-link_item_hover-color: map-get(map-get($polpo-theme, background),
+      hover) !default;
 
   .quick-link {
     &__no-results {
@@ -60,11 +56,18 @@
 
       .ui-content-editable__form-field {
         margin-right: 8px;
+
+        .mat-form-field-infix {
+          width: unset;
+        }
       }
 
       &:hover {
         background-color: $shared-quick-link_item_hover-color;
       }
+
+
+
     }
 
     &__filter {
