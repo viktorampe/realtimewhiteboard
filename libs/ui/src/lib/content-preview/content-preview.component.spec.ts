@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { configureTestSuite } from 'ng-bullet';
 import { UiModule } from '../../lib/ui.module';
 import { ContentPreviewComponent } from './content-preview.component';
 
@@ -38,12 +39,12 @@ describe('ContentPreviewComponent', () => {
     methods?: string[];
   };
 
-  beforeEach(async(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [TestModule],
       schemas: [NO_ERRORS_SCHEMA]
     });
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ContentPreviewComponent);

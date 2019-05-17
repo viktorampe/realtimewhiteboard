@@ -5,12 +5,13 @@ import {
   OnInit,
   ViewChild
 } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockMatIconRegistry } from '@campus/testing';
+import { configureTestSuite } from 'ng-bullet';
 import { UiModule } from '../ui.module';
 import { DropdownMenuComponent } from './dropdown-menu.component';
 
@@ -52,12 +53,12 @@ describe('DropdownMenuComponent', () => {
   let hostFixture: ComponentFixture<HostComponent>;
   let hostComponent: HostComponent;
 
-  beforeEach(async(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [TestModule],
       declarations: []
     });
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DropdownMenuComponent);
