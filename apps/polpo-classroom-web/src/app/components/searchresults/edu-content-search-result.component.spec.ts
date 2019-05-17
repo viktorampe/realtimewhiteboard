@@ -12,15 +12,7 @@ import {
   FavoriteTypesEnum,
   TaskFixture
 } from '@campus/dal';
-import {
-  EduContentCollectionManagerServiceInterface,
-  EduContentSearchResultInterface,
-  EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN,
-  OpenStaticContentServiceInterface,
-  OPEN_STATIC_CONTENT_SERVICE_TOKEN,
-  ScormExerciseServiceInterface,
-  SCORM_EXERCISE_SERVICE_TOKEN
-} from '@campus/shared';
+import { EduContentSearchResultInterface } from '@campus/shared';
 import { MockDate, MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { BehaviorSubject } from 'rxjs';
@@ -33,9 +25,6 @@ import {
 describe('EduContentSearchResultComponent', () => {
   let component: EduContentSearchResultComponent;
   let fixture: ComponentFixture<EduContentSearchResultComponent>;
-  let openStaticContentService: OpenStaticContentServiceInterface;
-  let scormExerciseService: ScormExerciseServiceInterface;
-  let collectionManagerService: EduContentCollectionManagerServiceInterface;
   let eduContentSearchResultItemService: EduContentSearchResultItemServiceInterface;
   const mockIsFavorite = new BehaviorSubject(false);
   let dateMock: MockDate;
@@ -54,38 +43,20 @@ describe('EduContentSearchResultComponent', () => {
       providers: [
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
         {
-          provide: OPEN_STATIC_CONTENT_SERVICE_TOKEN,
-          useValue: { open: jest.fn() }
-        },
-        {
-          provide: EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN,
-          useValue: {
-            manageTasksForContent: jest.fn(),
-            manageBundlesForContent: jest.fn()
-          }
-        },
-        {
           provide: EDUCONTENT_SEARCH_RESULT_ITEM_SERVICE_TOKEN,
           useValue: {
             isFavorite$: () => mockIsFavorite,
             toggleFavorite: jest.fn(),
-            upsertEduContentToStore: jest.fn()
-          }
-        },
-        {
-          provide: SCORM_EXERCISE_SERVICE_TOKEN,
-          useValue: {
-            previewExerciseFromUnlockedContent: jest.fn()
+            upsertEduContentToStore: jest.fn(),
+            linkTask: jest.fn(),
+            linkBundle: jest.fn(),
+            openStatic: jest.fn(),
+            openExercise: jest.fn()
           }
         }
       ]
     });
 
-    openStaticContentService = TestBed.get(OPEN_STATIC_CONTENT_SERVICE_TOKEN);
-    scormExerciseService = TestBed.get(SCORM_EXERCISE_SERVICE_TOKEN);
-    collectionManagerService = TestBed.get(
-      EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN
-    );
     eduContentSearchResultItemService = TestBed.get(
       EDUCONTENT_SEARCH_RESULT_ITEM_SERVICE_TOKEN
     );
@@ -549,16 +520,6 @@ describe('EduContentSearchResultComponent', () => {
           eduContentSearchResultItemService.upsertEduContentToStore
         ).toHaveBeenCalledWith(component.data.eduContent.minimal);
       });
-
-      it('should add eduContent on stream()', () => {
-        component.stream();
-        expect(
-          eduContentSearchResultItemService.upsertEduContentToStore
-        ).toHaveBeenCalled();
-        expect(
-          eduContentSearchResultItemService.upsertEduContentToStore
-        ).toHaveBeenCalledWith(component.data.eduContent.minimal);
-      });
     });
   });
 
@@ -588,54 +549,46 @@ describe('EduContentSearchResultComponent', () => {
     describe('EduContent actions', () => {
       it('should call manageTasksForContent on collection manager when calling linkTask', () => {
         component.linkTask();
-        expect(
-          collectionManagerService.manageTasksForContent
-        ).toHaveBeenCalled();
-        expect(
-          collectionManagerService.manageTasksForContent
-        ).toHaveBeenCalledWith(component.data.eduContent);
+        expect(eduContentSearchResultItemService.linkTask).toHaveBeenCalled();
+        expect(eduContentSearchResultItemService.linkTask).toHaveBeenCalledWith(
+          component.data.eduContent
+        );
       });
 
       it('should call manageBundlesForContent on collection manager when calling linkBundle', () => {
         component.linkBundle();
+        expect(eduContentSearchResultItemService.linkBundle).toHaveBeenCalled();
         expect(
-          collectionManagerService.manageBundlesForContent
-        ).toHaveBeenCalled();
-        expect(
-          collectionManagerService.manageBundlesForContent
-        ).toHaveBeenCalledWith(
-          component.data.eduContent,
-          component.data.eduContent.publishedEduContentMetadata.learningAreaId
-        );
+          eduContentSearchResultItemService.linkBundle
+        ).toHaveBeenCalledWith(component.data.eduContent);
       });
 
       it('should call open on static content service when calling openStatic', () => {
         component.openStatic(true);
-        expect(openStaticContentService.open).toHaveBeenCalled();
-        expect(openStaticContentService.open).toHaveBeenCalledWith(
-          component.data.eduContent,
-          true
-        );
+        expect(eduContentSearchResultItemService.openStatic).toHaveBeenCalled();
+        expect(
+          eduContentSearchResultItemService.openStatic
+        ).toHaveBeenCalledWith(component.data.eduContent, true);
       });
 
       it('should call open without solutions on scorm exercise service when calling openExercise(false)', () => {
         component.openExercise(false);
         expect(
-          scormExerciseService.previewExerciseFromUnlockedContent
+          eduContentSearchResultItemService.openExercise
         ).toHaveBeenCalled();
         expect(
-          scormExerciseService.previewExerciseFromUnlockedContent
-        ).toHaveBeenCalledWith(null, component.data.eduContent.id, null, false);
+          eduContentSearchResultItemService.openExercise
+        ).toHaveBeenCalledWith(component.data.eduContent.id, false);
       });
 
       it('should call open with solutions on scorm exercise service when calling openExercise(true)', () => {
         component.openExercise(true);
         expect(
-          scormExerciseService.previewExerciseFromUnlockedContent
+          eduContentSearchResultItemService.openExercise
         ).toHaveBeenCalled();
         expect(
-          scormExerciseService.previewExerciseFromUnlockedContent
-        ).toHaveBeenCalledWith(null, component.data.eduContent.id, null, true);
+          eduContentSearchResultItemService.openExercise
+        ).toHaveBeenCalledWith(component.data.eduContent.id, true);
       });
 
       it('should call toggleFavorite on EduContentSearchResultItemService when calling toggleFavorite', () => {
