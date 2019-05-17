@@ -8,8 +8,11 @@
 
   mat-list-item {
     &.quick-link__item.mat-list-item {
-      height: 100%;
-      min-height: 56px; // default material height
+      // min-height + padding = 56px = angular material default list-item height
+      height: auto;
+      min-height: 38px;
+      padding-top: 9px;
+      padding-bottom: 9px;
     }
   }
 }
@@ -34,7 +37,11 @@
     text-align: left;
 
     &__file-extension {
-      margin-right: 4px;
+      margin: 7px 4px 7px 0;
+    }
+
+    &__icon {
+      margin: 3px 0;
     }
 
     &__title {
@@ -47,6 +54,7 @@
     &__actions {
       justify-self: flex-end;
       display: flex;
+      white-space: nowrap;
 
       &__icon {
         margin: 8px;
