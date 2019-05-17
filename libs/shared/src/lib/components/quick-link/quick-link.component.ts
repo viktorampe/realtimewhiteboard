@@ -216,6 +216,7 @@ export class QuickLinkComponent implements OnInit {
 
   public openEduContentAsStream(quickLink: QuickLinkInterface) {
     this.quickLinkViewModel.openStaticContent(quickLink.eduContent, true);
+    this.closeDialog();
   }
 
   public openEduContentAsDownload(quickLink: QuickLinkInterface) {
@@ -224,18 +225,22 @@ export class QuickLinkComponent implements OnInit {
 
   public openBundle(quickLink: QuickLinkInterface) {
     this.quickLinkViewModel.openBundle(quickLink.bundle);
+    this.closeDialog();
   }
 
   public openTask(quickLink: QuickLinkInterface) {
     this.quickLinkViewModel.openTask(quickLink.task);
+    this.closeDialog();
   }
 
   public openArea(quickLink: QuickLinkInterface) {
     this.quickLinkViewModel.openArea(quickLink.learningArea);
+    this.closeDialog();
   }
 
   public openSearch(quickLink: QuickLinkInterface) {
     this.quickLinkViewModel.openSearch(quickLink, this.data.mode);
+    this.closeDialog();
   }
 
   public openBoeke(quickLink: QuickLinkInterface) {
@@ -340,7 +345,7 @@ export class QuickLinkComponent implements OnInit {
       case FavoriteTypesEnum.EDUCONTENT:
       case 'educontent':
         const eduContent = quickLink.eduContent as EduContent;
-        if (eduContent.contentType === 'exercise') {
+        if (eduContent.type === 'exercise') {
           return this.quickLinkActions.openEduContentAsExercise;
         } else if (eduContent.streamable) {
           return this.quickLinkActions.openEduContentAsStream;
@@ -368,7 +373,7 @@ export class QuickLinkComponent implements OnInit {
       case FavoriteTypesEnum.EDUCONTENT:
       case 'educontent':
         const eduContent = quickLink.eduContent as EduContent;
-        if (eduContent.contentType === 'exercise') {
+        if (eduContent.type === 'exercise') {
           return [this.quickLinkActions.openEduContentAsSolution];
         } else if (eduContent.streamable) {
           return [this.quickLinkActions.openEduContentAsDownload];

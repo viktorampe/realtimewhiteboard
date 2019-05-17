@@ -20,6 +20,7 @@ import {
 } from '@campus/shared';
 import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
+import { StoreModule } from '@ngrx/store';
 import { EduContentSearchResultComponent } from './edu-content-search-result.component';
 
 describe('EduContentSearchResultComponent', () => {
@@ -31,7 +32,12 @@ describe('EduContentSearchResultComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [EduContentSearchResultComponent],
-      imports: [MatIconModule, UiModule, NoopAnimationsModule],
+      imports: [
+        MatIconModule,
+        UiModule,
+        NoopAnimationsModule,
+        StoreModule.forRoot({})
+      ],
       providers: [
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
         {
