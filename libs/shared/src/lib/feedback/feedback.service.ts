@@ -54,7 +54,7 @@ export class FeedBackService implements FeedBackServiceInterface {
       feedbackToDisplay.userActions = [
         ...feedbackToDisplay.userActions,
         {
-          title: 'annuleren',
+          title: 'Annuleren',
           userAction: null
         }
       ];

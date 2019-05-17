@@ -33,6 +33,10 @@
   &__item {
     text-align: left;
 
+    &__file-extension {
+      margin-right: 4px;
+    }
+
     &__title {
       height: 100%;
       margin-left: 4px;
@@ -70,8 +74,6 @@
     }
 
     &:hover {
-      background-color: whitesmoke;
-
       .quick-link {
         &__item {
           &__actions {
@@ -94,7 +96,6 @@
 
           &__actions {
             line-height: initial;
-            color: grey;
           }
         }
       }
@@ -102,13 +103,10 @@
   }
 
   &__dialog__actions {
+    padding: 15px;
     display: flex;
     justify-content: flex-end;
     align-content: center;
-
-    &__button {
-      margin: 16px;
-    }
   }
 }
 

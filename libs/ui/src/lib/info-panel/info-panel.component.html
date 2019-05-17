@@ -15,10 +15,7 @@
       ><ng-content select="[title__right]"></ng-content
     ></div>
   </div>
-  <div
-    class="info-panel__body"
-    [style.flex-direction]="displayAsRows ? 'row' : 'column'"
-  >
+  <div class="info-panel__body" [class.info-panel__body--rows]="displayAsRows">
     <ng-content></ng-content>
   </div>
 </div>

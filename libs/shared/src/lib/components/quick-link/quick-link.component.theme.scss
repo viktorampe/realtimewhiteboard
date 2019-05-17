@@ -2,6 +2,16 @@
   $shared-quick-link_filter-font-size: $ui-primary-font-size !default;
   $shared-quick-link__no-results-padding: 24px !default;
 
+  // extract material colors from theme
+  $shared-quick-link_item_icon-color: map-get(
+    map-get($polpo-theme, foreground),
+    secondary-text
+  ) !default;
+  $shared-quick-link_item_hover-color: map-get(
+    map-get($polpo-theme, background),
+    hover
+  ) !default;
+
   .quick-link {
     &__no-results {
       padding: $shared-quick-link__no-results-padding;
@@ -41,7 +51,7 @@
 
     &__item {
       &__icon {
-        color: rgba(0, 0, 0, 0.54); //mat-icon default color in list
+        color: $shared-quick-link_item_icon-color;
       }
 
       campus-button {
@@ -50,6 +60,10 @@
 
       .ui-content-editable__form-field {
         margin-right: 8px;
+      }
+
+      &:hover {
+        background-color: $shared-quick-link_item_hover-color;
       }
     }
 
