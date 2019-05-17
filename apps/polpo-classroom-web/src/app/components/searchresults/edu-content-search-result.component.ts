@@ -19,7 +19,9 @@ import {
   EduContentSearchResultInterface,
   EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN,
   OpenStaticContentServiceInterface,
-  OPEN_STATIC_CONTENT_SERVICE_TOKEN
+  OPEN_STATIC_CONTENT_SERVICE_TOKEN,
+  ScormExerciseServiceInterface,
+  SCORM_EXERCISE_SERVICE_TOKEN
 } from '@campus/shared';
 import { Observable } from 'rxjs';
 import {
@@ -50,6 +52,8 @@ export class EduContentSearchResultComponent extends ResultItemBase
   public isFavorite$: Observable<Boolean>;
 
   constructor(
+    @Inject(SCORM_EXERCISE_SERVICE_TOKEN)
+    private scormExerciseService: ScormExerciseServiceInterface,
     @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
     private openStaticContentService: OpenStaticContentServiceInterface,
     @Inject(EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN)
@@ -110,13 +114,19 @@ export class EduContentSearchResultComponent extends ResultItemBase
     );
   }
 
-  public openStatic() {
-    this.openStaticContentService.open(this.data.eduContent);
+  public openStatic(stream: boolean = false) {
+    this.openStaticContentService.open(this.data.eduContent, stream);
     this.eduContentSearchResultService.upsertEduContentToStore(
       this.data.eduContent.minimal
     );
   }
   public openExercise(answers: boolean) {
+    this.scormExerciseService.previewExerciseFromUnlockedContent(
+      null,
+      this.data.eduContent.id,
+      null,
+      answers
+    );
     this.eduContentSearchResultService.upsertEduContentToStore(
       this.data.eduContent.minimal
     );
@@ -126,17 +136,6 @@ export class EduContentSearchResultComponent extends ResultItemBase
     this.eduContentSearchResultService.upsertEduContentToStore(
       this.data.eduContent.minimal
     );
-  }
-
-  public open() {
-    //Check what kind of content it is (ludo.zip or not) and do openStatic or openExercise
-    if (
-      this.data.eduContent.publishedEduContentMetadata.fileExt !== 'ludo.zip'
-    ) {
-      this.openStatic();
-    } else {
-      //openExercise
-    }
   }
 
   get isEduContentInCurrentBundle(): boolean {

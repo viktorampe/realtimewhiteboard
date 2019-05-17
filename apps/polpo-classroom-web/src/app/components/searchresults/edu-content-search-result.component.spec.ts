@@ -17,7 +17,9 @@ import {
   EduContentSearchResultInterface,
   EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN,
   OpenStaticContentServiceInterface,
-  OPEN_STATIC_CONTENT_SERVICE_TOKEN
+  OPEN_STATIC_CONTENT_SERVICE_TOKEN,
+  ScormExerciseServiceInterface,
+  SCORM_EXERCISE_SERVICE_TOKEN
 } from '@campus/shared';
 import { MockDate, MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
@@ -32,6 +34,7 @@ describe('EduContentSearchResultComponent', () => {
   let component: EduContentSearchResultComponent;
   let fixture: ComponentFixture<EduContentSearchResultComponent>;
   let openStaticContentService: OpenStaticContentServiceInterface;
+  let scormExerciseService: ScormExerciseServiceInterface;
   let collectionManagerService: EduContentCollectionManagerServiceInterface;
   let eduContentSearchResultItemService: EduContentSearchResultItemServiceInterface;
   const mockIsFavorite = new BehaviorSubject(false);
@@ -68,11 +71,18 @@ describe('EduContentSearchResultComponent', () => {
             toggleFavorite: jest.fn(),
             upsertEduContentToStore: jest.fn()
           }
+        },
+        {
+          provide: SCORM_EXERCISE_SERVICE_TOKEN,
+          useValue: {
+            previewExerciseFromUnlockedContent: jest.fn()
+          }
         }
       ]
     });
 
     openStaticContentService = TestBed.get(OPEN_STATIC_CONTENT_SERVICE_TOKEN);
+    scormExerciseService = TestBed.get(SCORM_EXERCISE_SERVICE_TOKEN);
     collectionManagerService = TestBed.get(
       EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN
     );
@@ -405,6 +415,81 @@ describe('EduContentSearchResultComponent', () => {
       expect(el).toBeTruthy();
     });
 
+    it('should show download button if educontent is streamable', () => {
+      const query =
+        '.app-educontentsearchresult__bottom__buttonbar__openstatic__download';
+
+      component.isSelected = true;
+      component.data.eduContent.publishedEduContentMetadata.streamable = false;
+      fixture.detectChanges();
+
+      let el = fixture.debugElement.query(By.css(query));
+      expect(el).toBeFalsy();
+
+      component.data.eduContent.publishedEduContentMetadata.streamable = true;
+      fixture.detectChanges();
+
+      el = fixture.debugElement.query(By.css(query));
+      expect(el).toBeTruthy();
+    });
+
+    it('should show openstatic view button if content is not an exercise', () => {
+      const query =
+        '.app-educontentsearchresult__bottom__buttonbar__openstatic';
+
+      component.isSelected = true;
+      component.data.eduContent.publishedEduContentMetadata.fileExt =
+        'ludo.zip';
+      fixture.detectChanges();
+
+      let el = fixture.debugElement.query(By.css(query));
+      expect(el).toBeFalsy();
+
+      component.data.eduContent.publishedEduContentMetadata.fileExt = 'pdf';
+      fixture.detectChanges();
+
+      el = fixture.debugElement.query(By.css(query));
+      expect(el).toBeTruthy();
+    });
+
+    it('should show open exercise without solutions button if content is an exercise', () => {
+      const query =
+        '.app-educontentsearchresult__bottom__buttonbar__openexercise';
+
+      component.isSelected = true;
+      component.data.eduContent.publishedEduContentMetadata.fileExt = 'pdf';
+      fixture.detectChanges();
+
+      let el = fixture.debugElement.query(By.css(query));
+      expect(el).toBeFalsy();
+
+      component.data.eduContent.publishedEduContentMetadata.fileExt =
+        'ludo.zip';
+      fixture.detectChanges();
+
+      el = fixture.debugElement.query(By.css(query));
+      expect(el).toBeTruthy();
+    });
+
+    it('should show open exercise with solutions button if content is an exercise', () => {
+      const query =
+        '.app-educontentsearchresult__bottom__buttonbar__openexercise__solutions';
+
+      component.isSelected = true;
+      component.data.eduContent.publishedEduContentMetadata.fileExt = 'pdf';
+      fixture.detectChanges();
+
+      let el = fixture.debugElement.query(By.css(query));
+      expect(el).toBeFalsy();
+
+      component.data.eduContent.publishedEduContentMetadata.fileExt =
+        'ludo.zip';
+      fixture.detectChanges();
+
+      el = fixture.debugElement.query(By.css(query));
+      expect(el).toBeTruthy();
+    });
+
     it('should update the toggleFavorite button content', () => {
       component.isSelected = true;
       fixture.detectChanges();
@@ -525,11 +610,32 @@ describe('EduContentSearchResultComponent', () => {
       });
 
       it('should call open on static content service when calling openStatic', () => {
-        component.openStatic();
+        component.openStatic(true);
         expect(openStaticContentService.open).toHaveBeenCalled();
         expect(openStaticContentService.open).toHaveBeenCalledWith(
-          component.data.eduContent
+          component.data.eduContent,
+          true
         );
+      });
+
+      it('should call open without solutions on scorm exercise service when calling openExercise(false)', () => {
+        component.openExercise(false);
+        expect(
+          scormExerciseService.previewExerciseFromUnlockedContent
+        ).toHaveBeenCalled();
+        expect(
+          scormExerciseService.previewExerciseFromUnlockedContent
+        ).toHaveBeenCalledWith(null, component.data.eduContent.id, null, false);
+      });
+
+      it('should call open with solutions on scorm exercise service when calling openExercise(true)', () => {
+        component.openExercise(true);
+        expect(
+          scormExerciseService.previewExerciseFromUnlockedContent
+        ).toHaveBeenCalled();
+        expect(
+          scormExerciseService.previewExerciseFromUnlockedContent
+        ).toHaveBeenCalledWith(null, component.data.eduContent.id, null, true);
       });
 
       it('should call toggleFavorite on EduContentSearchResultItemService when calling toggleFavorite', () => {
