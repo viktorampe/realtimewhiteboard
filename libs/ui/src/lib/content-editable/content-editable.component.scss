@@ -1,13 +1,39 @@
 :host {
-  max-width: 100%;
+  width: 100%;
 }
 
 .ui-content-editable {
+  display: flex;
+  align-items: center;
+  position: relative;
+
   &__text {
     white-space: pre-wrap;
-    max-width: 100%;
     text-overflow: ellipsis;
     display: inline-block;
     overflow: hidden;
+  }
+
+  &__form-field {
+    flex: 1 1 auto;
+  }
+
+  &__actions {
+    display: flex;
+
+    &.on-bottom {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+
+      .ui-button {
+        padding: 4px;
+
+        .mat-icon {
+          width: 18px;
+          height: 18px;
+        }
+      }
+    }
   }
 }

@@ -37,6 +37,7 @@
       display: flex;
       align-items: center;
       overflow: hidden;
+      flex-grow: 1;
     }
 
     &__actions {
@@ -145,8 +146,4 @@
       }
     }
   }
-}
-
-.flex-spacer {
-  flex-grow: 1;
 }
