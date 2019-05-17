@@ -121,7 +121,6 @@ describe('ShellComponent', () => {
   });
 
   it('should alter sidebar behavior on small screen', () => {
-    console.log('nexting now true');
     breakpointStream.next({ matches: true, breakpoints: {} });
     expect(fixture.componentInstance.sidebar.mode).toBe('over');
     expect(fixture.componentInstance.sidebar.disableClose).toBe(false);
