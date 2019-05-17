@@ -23,6 +23,10 @@ describe('LearningAreaService', () => {
     learningAreaService = TestBed.get(LearningAreaService);
   });
 
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   it('should be created', inject(
     [LearningAreaService],
     (service: LearningAreaService) => {
@@ -36,7 +40,7 @@ describe('LearningAreaService', () => {
       new LearningAreaFixture({ id: 2, icon: 'learning-area:bar' })
     ];
 
-    learningAreaApi.find = jest.fn().mockReturnValue(of(mockLearningArea));
+    jest.spyOn(learningAreaApi, 'find').mockReturnValue(of(mockLearningArea));
 
     expect(learningAreaService.getAll()).toBeObservable(
       cold('(a|)', {

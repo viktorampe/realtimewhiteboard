@@ -23,15 +23,17 @@ import { MockDate, MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { BehaviorSubject } from 'rxjs';
 import { EduContentSearchResultComponent } from './edu-content-search-result.component';
-import { EduContentSearchResultItemService } from './edu-content-search-result.service';
-import { EDUCONTENT_SEARCH_RESULT_ITEM_SERVICE_TOKEN } from './edu-content-search-result.service.interface';
+import {
+  EduContentSearchResultItemServiceInterface,
+  EDUCONTENT_SEARCH_RESULT_ITEM_SERVICE_TOKEN
+} from './edu-content-search-result.service.interface';
 
 describe('EduContentSearchResultComponent', () => {
   let component: EduContentSearchResultComponent;
   let fixture: ComponentFixture<EduContentSearchResultComponent>;
   let openStaticContentService: OpenStaticContentServiceInterface;
   let collectionManagerService: EduContentCollectionManagerServiceInterface;
-  let eduContentSearchResultItemService: EduContentSearchResultItemService;
+  let eduContentSearchResultItemService: EduContentSearchResultItemServiceInterface;
   const mockIsFavorite = new BehaviorSubject(false);
   let dateMock: MockDate;
 

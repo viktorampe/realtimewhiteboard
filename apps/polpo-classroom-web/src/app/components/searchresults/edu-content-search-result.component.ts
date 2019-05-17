@@ -22,8 +22,10 @@ import {
   OPEN_STATIC_CONTENT_SERVICE_TOKEN
 } from '@campus/shared';
 import { Observable } from 'rxjs';
-import { EduContentSearchResultItemService } from './edu-content-search-result.service';
-import { EDUCONTENT_SEARCH_RESULT_ITEM_SERVICE_TOKEN } from './edu-content-search-result.service.interface';
+import {
+  EduContentSearchResultItemServiceInterface,
+  EDUCONTENT_SEARCH_RESULT_ITEM_SERVICE_TOKEN
+} from './edu-content-search-result.service.interface';
 
 @Component({
   // tslint:disable-next-line
@@ -53,7 +55,7 @@ export class EduContentSearchResultComponent extends ResultItemBase
     @Inject(EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN)
     private eduContentManagerService: EduContentCollectionManagerServiceInterface,
     @Inject(EDUCONTENT_SEARCH_RESULT_ITEM_SERVICE_TOKEN)
-    private eduContentSearchResultService: EduContentSearchResultItemService
+    private eduContentSearchResultService: EduContentSearchResultItemServiceInterface
   ) {
     super();
   }
