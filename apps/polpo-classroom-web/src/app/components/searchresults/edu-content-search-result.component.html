@@ -151,7 +151,9 @@
           data.eduContent.publishedEduContentMetadata.fileExt !== 'ludo.zip'
         "
         class="app-educontentsearchresult__bottom__buttonbar__openstatic"
-        (click)="openStatic(data.eduContent.publishedEduContentMetadata.streamable)"
+        (click)="
+          openStatic(data.eduContent.publishedEduContentMetadata.streamable)
+        "
         iconClass="eye"
         >Bekijken
       </campus-button>
