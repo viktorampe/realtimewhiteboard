@@ -1,4 +1,3 @@
-import { InjectionToken } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
@@ -12,15 +11,12 @@ import {
   HistoryLoadError,
   LoadHistory
 } from './history.actions';
-import { HistoryEffects } from './history.effects';
+import { HistoryEffects, HISTORY_SERVICE_TOKEN } from './history.effects';
 
 describe('HistoryEffects', () => {
   let actions: Observable<any>;
   let effects: HistoryEffects;
   let usedState: any;
-
-  //TODO remove when actual token is available
-  const HISTORY_SERVICE_TOKEN = new InjectionToken('HistoryService');
 
   const expectInAndOut = (
     effect: Observable<any>,

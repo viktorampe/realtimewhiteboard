@@ -20,7 +20,7 @@ describe('History Selectors', () => {
         ? history.reduce(
             (entityMap, historyItem) => ({
               ...entityMap,
-              [historyItem.id]: history
+              [historyItem.id]: historyItem
             }),
             {}
           )
