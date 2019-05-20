@@ -60,6 +60,10 @@
 
       .ui-content-editable__form-field {
         margin-right: 8px;
+
+        .mat-form-field-infix {
+          width: unset;
+        }
       }
 
       &:hover {

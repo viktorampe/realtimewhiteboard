@@ -9,6 +9,7 @@ import {
   EduContentFixture,
   EduContentProductTypeFixture,
   EduContentTOCFixture,
+  FavoriteTypesEnum,
   TaskFixture
 } from '@campus/dal';
 import {
@@ -18,26 +19,35 @@ import {
   OpenStaticContentServiceInterface,
   OPEN_STATIC_CONTENT_SERVICE_TOKEN
 } from '@campus/shared';
-import { MockMatIconRegistry } from '@campus/testing';
+import { MockDate, MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
-import { StoreModule } from '@ngrx/store';
+import { BehaviorSubject } from 'rxjs';
 import { EduContentSearchResultComponent } from './edu-content-search-result.component';
+import {
+  EduContentSearchResultItemServiceInterface,
+  EDUCONTENT_SEARCH_RESULT_ITEM_SERVICE_TOKEN
+} from './edu-content-search-result.service.interface';
 
 describe('EduContentSearchResultComponent', () => {
   let component: EduContentSearchResultComponent;
   let fixture: ComponentFixture<EduContentSearchResultComponent>;
   let openStaticContentService: OpenStaticContentServiceInterface;
   let collectionManagerService: EduContentCollectionManagerServiceInterface;
+  let eduContentSearchResultItemService: EduContentSearchResultItemServiceInterface;
+  const mockIsFavorite = new BehaviorSubject(false);
+  let dateMock: MockDate;
+
+  beforeAll(() => {
+    dateMock = new MockDate();
+  });
+  afterAll(() => {
+    dateMock.returnRealDate();
+  });
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [EduContentSearchResultComponent],
-      imports: [
-        MatIconModule,
-        UiModule,
-        NoopAnimationsModule,
-        StoreModule.forRoot({})
-      ],
+      imports: [MatIconModule, UiModule, NoopAnimationsModule],
       providers: [
         { provide: MatIconRegistry, useClass: MockMatIconRegistry },
         {
@@ -50,6 +60,14 @@ describe('EduContentSearchResultComponent', () => {
             manageTasksForContent: jest.fn(),
             manageBundlesForContent: jest.fn()
           }
+        },
+        {
+          provide: EDUCONTENT_SEARCH_RESULT_ITEM_SERVICE_TOKEN,
+          useValue: {
+            isFavorite$: () => mockIsFavorite,
+            toggleFavorite: jest.fn(),
+            upsertEduContentToStore: jest.fn()
+          }
         }
       ]
     });
@@ -58,6 +76,9 @@ describe('EduContentSearchResultComponent', () => {
     collectionManagerService = TestBed.get(
       EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN
     );
+    eduContentSearchResultItemService = TestBed.get(
+      EDUCONTENT_SEARCH_RESULT_ITEM_SERVICE_TOKEN
+    );
   }));
 
   beforeEach(() => {
@@ -65,12 +86,13 @@ describe('EduContentSearchResultComponent', () => {
     component = fixture.componentInstance;
 
     component.data = {
-      eduContent: new EduContentFixture(),
+      eduContent: new EduContentFixture({ id: 1 }),
       currentBundle: null,
       currentTask: null,
       inTask: false,
       inBundle: false,
-      isFavorite: false
+      isFavorite: false,
+      minimal: new EduContentFixture({ id: 1 })
     } as EduContentSearchResultInterface;
 
     fixture.detectChanges();
@@ -382,6 +404,77 @@ describe('EduContentSearchResultComponent', () => {
       el = fixture.debugElement.query(By.css(query));
       expect(el).toBeTruthy();
     });
+
+    it('should update the toggleFavorite button content', () => {
+      component.isSelected = true;
+      fixture.detectChanges();
+
+      const toggleFavoriteButton = fixture.debugElement.query(
+        By.css(
+          '.app-educontentsearchresult__bottom__buttonbar__togglefavorites'
+        )
+      );
+
+      mockIsFavorite.next(false);
+      fixture.detectChanges();
+
+      let checkmarkDE = toggleFavoriteButton.query(By.css('.checkmark'));
+      expect(checkmarkDE).toBeFalsy();
+      expect(toggleFavoriteButton.nativeElement.textContent.trim()).toBe(
+        'Toevoegen aan favorieten'
+      );
+
+      mockIsFavorite.next(true);
+      fixture.detectChanges();
+
+      checkmarkDE = toggleFavoriteButton.query(By.css('.checkmark'));
+      expect(checkmarkDE).toBeTruthy();
+      expect(toggleFavoriteButton.nativeElement.textContent.trim()).toBe(
+        'Verwijderen uit favorieten'
+      );
+    });
+
+    describe('update store', () => {
+      it('should add eduContent on toggleFavorite()', () => {
+        component.toggleFavorite();
+        expect(
+          eduContentSearchResultItemService.upsertEduContentToStore
+        ).toHaveBeenCalled();
+        expect(
+          eduContentSearchResultItemService.upsertEduContentToStore
+        ).toHaveBeenCalledWith(component.data.eduContent.minimal);
+      });
+
+      it('should add eduContent on openStatic()', () => {
+        component.openStatic();
+        expect(
+          eduContentSearchResultItemService.upsertEduContentToStore
+        ).toHaveBeenCalled();
+        expect(
+          eduContentSearchResultItemService.upsertEduContentToStore
+        ).toHaveBeenCalledWith(component.data.eduContent.minimal);
+      });
+
+      it('should add eduContent on openExercise()', () => {
+        component.openExercise(false);
+        expect(
+          eduContentSearchResultItemService.upsertEduContentToStore
+        ).toHaveBeenCalled();
+        expect(
+          eduContentSearchResultItemService.upsertEduContentToStore
+        ).toHaveBeenCalledWith(component.data.eduContent.minimal);
+      });
+
+      it('should add eduContent on stream()', () => {
+        component.stream();
+        expect(
+          eduContentSearchResultItemService.upsertEduContentToStore
+        ).toHaveBeenCalled();
+        expect(
+          eduContentSearchResultItemService.upsertEduContentToStore
+        ).toHaveBeenCalledWith(component.data.eduContent.minimal);
+      });
+    });
   });
 
   describe('logic', () => {
@@ -437,6 +530,26 @@ describe('EduContentSearchResultComponent', () => {
         expect(openStaticContentService.open).toHaveBeenCalledWith(
           component.data.eduContent
         );
+      });
+
+      it('should call toggleFavorite on EduContentSearchResultItemService when calling toggleFavorite', () => {
+        component.toggleFavorite();
+
+        const expected = {
+          name: component.data.eduContent.name,
+          type: FavoriteTypesEnum.EDUCONTENT,
+          eduContentId: component.data.eduContent.id,
+          created: new Date(),
+          learningAreaId:
+            component.data.eduContent.publishedEduContentMetadata.learningAreaId
+        };
+
+        expect(
+          eduContentSearchResultItemService.toggleFavorite
+        ).toHaveBeenCalled();
+        expect(
+          eduContentSearchResultItemService.toggleFavorite
+        ).toHaveBeenCalledWith(expected);
       });
     });
   });

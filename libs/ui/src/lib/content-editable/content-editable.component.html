@@ -25,6 +25,7 @@
   </mat-form-field>
   <span *ngIf="active" class="ui-content-editable__actions">
     <campus-button
+      circle
       class="ui-content-editable__actions__confirm"
       *ngIf="textIsValid()"
       iconClass="check"
@@ -32,6 +33,7 @@
       campusClickStopPropagation
     ></campus-button>
     <campus-button
+      circle
       class="ui-content-editable__actions__cancel"
       iconClass="close"
       (click)="cancelChanges()"

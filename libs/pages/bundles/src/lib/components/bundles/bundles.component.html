@@ -25,7 +25,7 @@
     <campus-page-header
       [title]="learningArea.name"
       [subtitle]="'Bundels'"
-      [iconClass]="'learning-area:' + learningArea.icon"
+      [iconClass]="learningArea.icon"
     >
     </campus-page-header>
 
@@ -58,7 +58,7 @@
               [itemCount]="bundleInfo.contentsCount"
               [title]="bundleInfo.bundle.name"
               [backgroundColor]="learningArea.color"
-              [icon]="'learning-area:' + learningArea.icon"
+              [icon]="learningArea.icon"
             >
               <campus-folder-details>
                 {{ bundleInfo.contentsCount }}
@@ -75,7 +75,7 @@
       <campus-page-header
         [title]="learningArea.name"
         [subtitle]="'Boeken'"
-        [iconClass]="'learning-area:' + learningArea.icon"
+        [iconClass]="learningArea.icon"
       ></campus-page-header>
       <div class="pages-bundles__container__books-count">
         Je hebt {{ sharedInfo.books.length }}
