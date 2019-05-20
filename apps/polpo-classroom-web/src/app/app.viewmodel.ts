@@ -69,10 +69,16 @@ export class AppViewModel implements OnDestroy {
     action: Action;
     feedbackId: string;
   }): void {
-    if (event.action) this.store.dispatch(event.action);
+    const payload: { id: string; userAction?: Action } = {
+      id: event.feedbackId
+    };
+    if (event.action) {
+      this.store.dispatch(event.action);
+      payload.userAction = event.action;
+    }
 
     this.store.dispatch(
-      new EffectFeedbackActions.DeleteEffectFeedback({ id: event.feedbackId })
+      new EffectFeedbackActions.DeleteEffectFeedback(payload)
     );
   }
 

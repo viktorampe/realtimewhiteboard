@@ -5,7 +5,6 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { getTestScheduler, hot } from '@nrwl/nx/testing';
-import { undo } from 'ngrx-undo';
 import { Observable, of } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { AlertFixture, EffectFeedbackFixture } from '../../+fixtures';
@@ -31,6 +30,7 @@ import {
 } from './alert.actions';
 import { AlertsEffects } from './alert.effects';
 import { initialState, reducer, State as AlertState } from './alert.reducer';
+import { undo } from 'ngrx-undo';
 
 describe('AlertEffects', () => {
   let actions: Observable<any>;
@@ -617,29 +617,43 @@ describe('AlertEffects', () => {
       mockServiceMethodReturnValue('deleteAlert', {});
     });
 
-    describe('when deletion is successful', () => {
-      it('should dispatch a success action', () => {
-        expectInAndOut(
-          effects.deleteAlert$,
-          deleteAlertAction,
-          deleteAlertSuccessAction
-        );
+    describe('the user does not cancel the deletion', () => {
+      describe('when deletion is successfull', () => {
+        it('should dispatch a success action', () => {
+          const deleteFeedbackAction = new EffectFeedbackActions.DeleteEffectFeedback(
+            { id: 'foo' }
+          );
+          actions = hot('-ab|', {
+            a: deleteAlertAction,
+            b: deleteFeedbackAction
+          });
+          expect(effects.deleteAlert$).toBeObservable(
+            hot('--a|', {
+              a: deleteAlertSuccessAction
+            })
+          );
+        });
       });
-    });
 
-    describe('when there is an error', () => {
-      beforeEach(() => {
-        mockServiceMethodError('deleteAlert', 'Oops, something went wrong!');
-      });
-      it('should dispatch an undo action', () => {
-        actions = hot('a', { a: deleteAlertAction });
-        expect(effects.deleteAlert$).toBeObservable(
-          hot('(ab)', {
-            a: deleteAlertUndoAction,
-            b: deleteAlertFailureAction
-          })
-        );
+      describe('when there is an error', () => {
+        beforeEach(() => {
+          mockServiceMethodError('deleteAlert', 'Oops, something went wrong!');
+        });
+        it('should dispatch an undo action', () => {
+          const deleteFeedbackAction = new EffectFeedbackActions.DeleteEffectFeedback(
+            { id: 'foo' }
+          );
+          actions = hot('ab', {
+            a: deleteAlertAction,
+            b: deleteFeedbackAction
+          });
+          expect(effects.deleteAlert$).toBeObservable(
+            hot('-(ab)', {
+              a: deleteAlertUndoAction,
+              b: deleteAlertFailureAction
+            })
+          );
+        });
       });
     });
-  });
 });

@@ -4,7 +4,7 @@ import { Action, select } from '@ngrx/store';
 import { DataPersistence } from '@nrwl/nx';
 import { undo } from 'ngrx-undo';
 import { from, interval, Observable, Subject } from 'rxjs';
-import { map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
+import { filter, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { AlertActions } from '.';
 import { DalActions } from '..';
 import {
@@ -12,6 +12,7 @@ import {
   ALERT_SERVICE_TOKEN
 } from '../../alert/alert.service.interface';
 import { EffectFeedbackActions } from '../effect-feedback';
+import { EffectFeedbackActionTypes } from '../effect-feedback/effect-feedback.actions';
 import {
   EffectFeedback,
   Priority
@@ -185,24 +186,72 @@ export class AlertsEffects {
     AlertsActionTypes.DeleteAlert,
     {
       run: (action: AlertActions.DeleteAlert, state: DalState) => {
-        return this.alertService
-          .deleteAlert(action.payload.personId, action.payload.id)
-          .pipe(
-            map(res => {
-              const effectFeedback = new EffectFeedback({
-                id: this.uuid(),
-                triggerAction: action,
-                message: 'Melding is verwijderd.',
-                userActions: null,
-                type: 'success',
-                priority: Priority.NORM
-              });
+        const undoAction = undo(action);
+        const uuid = this.uuid();
+        const warningFeedback = new EffectFeedback({
+          id: uuid,
+          triggerAction: action,
+          message: 'Melding wordt verwijderd.',
+          userActions: [{ title: 'Annuleren', userAction: undoAction }],
+          type: 'success',
+          priority: Priority.NORM
+        });
+        this.dataPersistence.store.dispatch(
+          new EffectFeedbackActions.AddEffectFeedback({
+            effectFeedback: warningFeedback
+          })
+        );
+        return this.dataPersistence.actions.pipe(
+          ofType(EffectFeedbackActionTypes.DeleteEffectFeedback),
+          filter(
+            (
+              deleteFeedbackAction: EffectFeedbackActions.DeleteEffectFeedback
+            ) => deleteFeedbackAction.payload.id === uuid
+          ),
+          take(1),
+          switchMap(
+            (
+              deleteFeedbackAction: EffectFeedbackActions.DeleteEffectFeedback
+            ) => {
+              console.log(deleteFeedbackAction.payload.userAction);
+              console.log(undoAction);
+              if (deleteFeedbackAction.payload.userAction !== undoAction) {
+                return this.alertService
+                  .deleteAlert(action.payload.personId, action.payload.id)
+                  .pipe(
+                    map(res => {
+                      const effectFeedback = new EffectFeedback({
+                        id: this.uuid(),
+                        triggerAction: action,
+                        message: 'Melding is verwijderd.',
+                        userActions: null,
+                        type: 'success',
+                        priority: Priority.NORM
+                      });
 
-              return new EffectFeedbackActions.AddEffectFeedback({
-                effectFeedback
-              });
-            })
-          );
+                      return new EffectFeedbackActions.AddEffectFeedback({
+                        effectFeedback
+                      });
+                    })
+                  );
+              } else {
+                const effectFeedback = new EffectFeedback({
+                  id: this.uuid(),
+                  triggerAction: action,
+                  message: 'Melding is niet verwijderd.',
+                  userActions: null,
+                  type: 'success',
+                  priority: Priority.NORM
+                });
+                return from([
+                  new EffectFeedbackActions.AddEffectFeedback({
+                    effectFeedback
+                  })
+                ]);
+              }
+            }
+          )
+        );
       },
       undoAction: (action: AlertActions.DeleteAlert, error: any) => {
         // Something went wrong: could be a 401 or 404 ...
