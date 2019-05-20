@@ -1,3 +1,4 @@
+import { InjectionToken } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { EffectsModule } from '@ngrx/effects';
 import { provideMockActions } from '@ngrx/effects/testing';
@@ -5,7 +6,6 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
-import { HISTORY_SERVICE_TOKEN } from '../../history/history.service.interface';
 import { HistoryReducer } from '.';
 import {
   HistoryLoaded,
@@ -19,6 +19,8 @@ describe('HistoryEffects', () => {
   let effects: HistoryEffects;
   let usedState: any;
 
+  //TODO remove when actual token is available
+  const HISTORY_SERVICE_TOKEN = new InjectionToken('HistoryService');
 
   const expectInAndOut = (
     effect: Observable<any>,
@@ -61,7 +63,7 @@ describe('HistoryEffects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        StoreModule.forFeature(HistoryReducer.NAME , HistoryReducer.reducer, {
+        StoreModule.forFeature(HistoryReducer.NAME, HistoryReducer.reducer, {
           initialState: usedState
         }),
         EffectsModule.forRoot([]),
@@ -143,11 +145,7 @@ describe('HistoryEffects', () => {
         );
       });
       it('should return a error action if force is true', () => {
-        expectInAndOut(
-          effects.loadHistory$,
-          forcedLoadAction,
-          loadErrorAction
-        );
+        expectInAndOut(effects.loadHistory$, forcedLoadAction, loadErrorAction);
       });
     });
     describe('with loaded and failing api call', () => {
@@ -165,11 +163,7 @@ describe('HistoryEffects', () => {
         expectInNoOut(effects.loadHistory$, unforcedLoadAction);
       });
       it('should return a error action if force is true', () => {
-        expectInAndOut(
-          effects.loadHistory$,
-          forcedLoadAction,
-          loadErrorAction
-        );
+        expectInAndOut(effects.loadHistory$, forcedLoadAction, loadErrorAction);
       });
     });
   });

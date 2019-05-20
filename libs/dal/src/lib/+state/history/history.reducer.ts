@@ -1,9 +1,6 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { HistoryInterface } from '../../+models';
-import {
-  HistoryActions,
-  HistoryActionTypes
-} from './history.actions';
+import { HistoryActions, HistoryActionTypes } from './history.actions';
 
 export const NAME = 'history';
 
@@ -22,10 +19,7 @@ export const initialState: State = adapter.getInitialState({
   loaded: false
 });
 
-export function reducer(
-  state = initialState,
-  action: HistoryActions
-): State {
+export function reducer(state = initialState, action: HistoryActions): State {
   switch (action.type) {
     case HistoryActionTypes.AddHistory: {
       return adapter.addOne(action.payload.history, state);
@@ -35,28 +29,12 @@ export function reducer(
       return adapter.upsertOne(action.payload.history, state);
     }
 
-    case HistoryActionTypes.AddHistory: {
-      return adapter.addMany(action.payload.history, state);
-    }
-
-    case HistoryActionTypes.UpsertHistory: {
-      return adapter.upsertMany(action.payload.history, state);
-    }
-
     case HistoryActionTypes.UpdateHistory: {
       return adapter.updateOne(action.payload.history, state);
     }
 
-    case HistoryActionTypes.UpdateHistory: {
-      return adapter.updateMany(action.payload.history, state);
-    }
-
     case HistoryActionTypes.DeleteHistory: {
       return adapter.removeOne(action.payload.id, state);
-    }
-
-    case HistoryActionTypes.DeleteHistory: {
-      return adapter.removeMany(action.payload.ids, state);
     }
 
     case HistoryActionTypes.HistoryLoaded: {

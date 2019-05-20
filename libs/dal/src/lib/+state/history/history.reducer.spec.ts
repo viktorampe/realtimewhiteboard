@@ -1,26 +1,23 @@
 import { Update } from '@ngrx/entity';
-import {HistoryActions } from '.';
-import { initialState, reducer, State } from './history.reducer';
+import { HistoryActions } from '.';
 import { HistoryInterface } from '../../+models';
+import { initialState, reducer, State } from './history.reducer';
 
-/** 
- * This file is scaffolded, but needs some special attention:
- * - find and replace '__EXTRA__PROPERTY_NAME' and replace this with a property name of the History entity.
- * - set the initial property value via '[__EXTRA__PROPERTY_NAME]InitialValue'.
- * - set the updated property value via '[__EXTRA__PROPERTY_NAME]UpdatedValue'.
-*/
-const __EXTRA__PROPERTY_NAMEInitialValue = ;
-const __EXTRA__PROPERTY_NAMEUpdatedValue = ;
+const nameInitialValue = 'name_initial';
+const nameUpdatedValue = 'name_updated';
 
 /**
  * Creates a History.
  * @param {number} id
  * @returns {HistoryInterface}
  */
-function createHistory(id: number, __EXTRA__PROPERTY_NAME:any = __EXTRA__PROPERTY_NAMEInitialValue): HistoryInterface | any {
+function createHistory(
+  id: number,
+  name: any = nameInitialValue
+): HistoryInterface | any {
   return {
     id: id,
-    __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAME
+    name: name
   };
 }
 
@@ -38,12 +35,12 @@ function createState(
   error?: any
 ): State {
   const state: any = {
-    ids: history ? history.map(history => history.id) : [],
+    ids: history ? history.map(historyItem => historyItem.id) : [],
     entities: history
       ? history.reduce(
-          (entityMap, history) => ({
+          (entityMap, historyItem) => ({
             ...entityMap,
-            [history.id]: history
+            [historyItem.id]: history
           }),
           {}
         )
@@ -54,15 +51,10 @@ function createState(
   return state;
 }
 
-
 describe('History Reducer', () => {
   let history: HistoryInterface[];
   beforeEach(() => {
-    history = [
-      createHistory(1),
-      createHistory(2),
-      createHistory(3)
-    ];
+    history = [createHistory(1), createHistory(2), createHistory(3)];
   });
 
   describe('unknown action', () => {
@@ -92,26 +84,20 @@ describe('History Reducer', () => {
 
   describe('add actions', () => {
     it('should add one history', () => {
-      const history = history[0];
+      const historyItem = history[0];
       const action = new HistoryActions.AddHistory({
-        history
+        history: historyItem
       });
 
       const result = reducer(initialState, action);
-      expect(result).toEqual(createState([history], false));
-    });
-
-    it('should add multiple history', () => {
-      const action = new HistoryActions.AddHistory({ history });
-      const result = reducer(initialState, action);
-
-      expect(result).toEqual(createState(history, false));
+      expect(result).toEqual(createState([historyItem], false));
     });
   });
+
   describe('upsert actions', () => {
     it('should upsert one history', () => {
       const originalHistory = history[0];
-      
+
       const startState = reducer(
         initialState,
         new HistoryActions.AddHistory({
@@ -119,9 +105,8 @@ describe('History Reducer', () => {
         })
       );
 
-    
       const updatedHistory = createHistory(history[0].id, 'test');
-     
+
       const action = new HistoryActions.UpsertHistory({
         history: updatedHistory
       });
@@ -130,98 +115,42 @@ describe('History Reducer', () => {
 
       expect(result.entities[updatedHistory.id]).toEqual(updatedHistory);
     });
-
-    it('should upsert many history', () => {
-      const startState = createState(history);
-
-      const historyToInsert = [
-        createHistory(1),
-        createHistory(2),
-        createHistory(3),
-        createHistory(4)
-      ];
-      const action = new HistoryActions.UpsertHistory({
-        history: historyToInsert
-      });
-
-      const result = reducer(startState, action);
-
-      expect(result).toEqual(
-        createState(historyToInsert)
-      );
-    });
   });
 
   describe('update actions', () => {
     it('should update an history', () => {
-      const history = history[0];
-      const startState = createState([history]);
+      const historyItem = history[0];
+      const startState = createState([historyItem]);
       const update: Update<HistoryInterface> = {
         id: 1,
         changes: {
-          __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-        } 
+          name: nameUpdatedValue
+        }
       };
       const action = new HistoryActions.UpdateHistory({
         history: update
       });
       const result = reducer(startState, action);
-      expect(result).toEqual(createState([createHistory(1, __EXTRA__PROPERTY_NAMEUpdatedValue)]));
-    });
-
-    it('should update multiple history', () => {
-      const startState = createState(history);
-      const updates: Update<HistoryInterface>[] = [
-        
-        {
-          id: 1,
-          changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          } 
-        },
-        {
-          id: 2,
-          changes: {
-            __EXTRA__PROPERTY_NAME: __EXTRA__PROPERTY_NAMEUpdatedValue
-          }  
-        }
-      ];
-      const action = new HistoryActions.UpdateHistory({
-        history: updates
-      });
-      const result = reducer(startState, action);
-
-      expect(result).toEqual(
-        createState([createHistory(1, __EXTRA__PROPERTY_NAMEUpdatedValue), createHistory(2, __EXTRA__PROPERTY_NAMEUpdatedValue), history[2]])
-      );
+      expect(result).toEqual(createState([createHistory(1, nameUpdatedValue)]));
     });
   });
 
   describe('delete actions', () => {
     it('should delete one history ', () => {
-      const history = history[0];
-      const startState = createState([history]);
+      const historyItem = history[0];
+      const startState = createState([historyItem]);
       const action = new HistoryActions.DeleteHistory({
-        id: history.id
+        id: historyItem.id
       });
       const result = reducer(startState, action);
       expect(result).toEqual(createState([]));
-    });
-
-    it('should delete multiple history', () => {
-      const startState = createState(history);
-      const action = new HistoryActions.DeleteHistory({
-        ids: [history[0].id, history[1].id]
-      });
-      const result = reducer(startState, action);
-      expect(result).toEqual(createState([history[2]]));
     });
   });
 
   describe('clear action', () => {
     it('should clear the history collection', () => {
       const startState = createState(history, true, 'something went wrong');
-      const action = new HistoryActions.ClearHistorys();
+      const action = new HistoryActions.ClearHistory();
       const result = reducer(startState, action);
       expect(result).toEqual(createState([], true, 'something went wrong'));
     });

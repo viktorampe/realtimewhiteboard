@@ -15,12 +15,12 @@ describe('History Selectors', () => {
     error?: any
   ): State {
     return {
-      ids: history ? history.map(history => history.id) : [],
+      ids: history ? history.map(historyItem => historyItem.id) : [],
       entities: history
         ? history.reduce(
-            (entityMap, history) => ({
+            (entityMap, historyItem) => ({
               ...entityMap,
-              [history.id]: history
+              [historyItem.id]: history
             }),
             {}
           )

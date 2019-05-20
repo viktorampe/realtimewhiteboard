@@ -8,11 +8,7 @@ export enum HistoryActionTypes {
   LoadHistory = '[History] Load History',
   AddHistory = '[History] Add History',
   UpsertHistory = '[History] Upsert History',
-  AddHistory = '[History] Add History',
-  UpsertHistory = '[History] Upsert History',
   UpdateHistory = '[History] Update History',
-  UpdateHistory = '[History] Update History',
-  DeleteHistory = '[History] Delete History',
   DeleteHistory = '[History] Delete History',
   ClearHistory = '[History] Clear History'
 }
@@ -21,7 +17,7 @@ export class LoadHistory implements Action {
   readonly type = HistoryActionTypes.LoadHistory;
 
   constructor(
-    public payload: { force?: boolean, userId: number } = { userId: null }
+    public payload: { force?: boolean; userId: number } = { userId: null }
   ) {}
 }
 
@@ -48,40 +44,16 @@ export class UpsertHistory implements Action {
   constructor(public payload: { history: HistoryInterface }) {}
 }
 
-export class AddHistory implements Action {
-  readonly type = HistoryActionTypes.AddHistory;
-
-  constructor(public payload: { history: HistoryInterface[] }) {}
-}
-
-export class UpsertHistory implements Action {
-  readonly type = HistoryActionTypes.UpsertHistory;
-
-  constructor(public payload: { history: HistoryInterface[] }) {}
-}
-
 export class UpdateHistory implements Action {
   readonly type = HistoryActionTypes.UpdateHistory;
 
   constructor(public payload: { history: Update<HistoryInterface> }) {}
 }
 
-export class UpdateHistory implements Action {
-  readonly type = HistoryActionTypes.UpdateHistory;
-
-  constructor(public payload: { history: Update<HistoryInterface>[] }) {}
-}
-
 export class DeleteHistory implements Action {
   readonly type = HistoryActionTypes.DeleteHistory;
 
   constructor(public payload: { id: number }) {}
-}
-
-export class DeleteHistory implements Action {
-  readonly type = HistoryActionTypes.DeleteHistory;
-
-  constructor(public payload: { ids: number[] }) {}
 }
 
 export class ClearHistory implements Action {
@@ -94,10 +66,6 @@ export type HistoryActions =
   | HistoryLoadError
   | AddHistory
   | UpsertHistory
-  | AddHistory
-  | UpsertHistory
   | UpdateHistory
-  | UpdateHistory
-  | DeleteHistory
   | DeleteHistory
   | ClearHistory;
