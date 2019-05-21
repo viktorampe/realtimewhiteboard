@@ -20,6 +20,7 @@ import {
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { v4 as uuid } from 'uuid';
+import { UndoService } from '..';
 import { AlertReducer, AlertsEffects } from './+state/alert';
 import { BundleReducer, BundlesEffects } from './+state/bundle';
 import { ContentStatusReducer } from './+state/content-status';
@@ -311,6 +312,7 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
       provide: 'uuid',
       useValue: uuid
     },
+    UndoService,
     { provide: EXERCISE_SERVICE_TOKEN, useClass: ExerciseService },
     { provide: EDU_CONTENT_SERVICE_TOKEN, useClass: EduContentService },
     { provide: USER_CONTENT_SERVICE_TOKEN, useClass: UserContentService },
