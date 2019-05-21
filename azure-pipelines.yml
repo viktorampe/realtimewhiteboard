@@ -25,5 +25,5 @@ steps:
     #  npm run format:check
     #displayName: 'linting and formatting'
   - script: |
-      npm run affected:test -- --base $(Build.SourceBranch) --head HEAD --parallel --configuration=travis
+      npm run affected:test -- --base $(Build.SourceBranchName) --head HEAD --parallel --configuration=travis
     displayName: 'unit tests'
