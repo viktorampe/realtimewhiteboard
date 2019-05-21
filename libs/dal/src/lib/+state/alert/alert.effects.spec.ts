@@ -9,7 +9,7 @@ import { undo } from 'ngrx-undo';
 import { Observable, of } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { AlertFixture, EffectFeedbackFixture } from '../../+fixtures';
-import { UndoService } from '../../../lib/undo';
+import { UndoService, UNDO_SERVICE_TOKEN } from '../../../lib/undo';
 import { ALERT_SERVICE_TOKEN } from '../../alert/alert.service.interface';
 import {
   EffectFeedback,
@@ -113,7 +113,10 @@ describe('AlertEffects', () => {
         EffectsModule.forFeature([AlertsEffects])
       ],
       providers: [
-        UndoService,
+        {
+          provide: UNDO_SERVICE_TOKEN,
+          useClass: UndoService
+        },
         {
           provide: ALERT_SERVICE_TOKEN,
           useValue: {
@@ -141,7 +144,7 @@ describe('AlertEffects', () => {
     effects = TestBed.get(AlertsEffects);
     uuid = TestBed.get('uuid');
     effectFeedback.id = uuid();
-    undoService = TestBed.get(UndoService);
+    undoService = TestBed.get(UNDO_SERVICE_TOKEN);
   });
 
   describe('loadAlert$', () => {

@@ -6,11 +6,14 @@ import { from, interval, Observable, Subject } from 'rxjs';
 import { filter, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { AlertActions } from '.';
 import { DalActions } from '..';
-import { UndoService } from '../../..';
 import {
   AlertServiceInterface,
   ALERT_SERVICE_TOKEN
 } from '../../alert/alert.service.interface';
+import {
+  UndoServiceInterface,
+  UNDO_SERVICE_TOKEN
+} from '../../undo/undo.service.interface';
 import { EffectFeedbackActions } from '../effect-feedback';
 import { EffectFeedbackActionTypes } from '../effect-feedback/effect-feedback.actions';
 import {
@@ -277,9 +280,9 @@ export class AlertsEffects {
   constructor(
     private actions: Actions,
     private dataPersistence: DataPersistence<DalState>,
+    @Inject(UNDO_SERVICE_TOKEN) private undoService: UndoServiceInterface,
     @Inject(ALERT_SERVICE_TOKEN) private alertService: AlertServiceInterface,
-    @Inject('uuid') private uuid: Function,
-    private undoService: UndoService
+    @Inject('uuid') private uuid: Function
   ) {}
 
   private getNewTimer(startPollAction: StartPollAlerts) {
