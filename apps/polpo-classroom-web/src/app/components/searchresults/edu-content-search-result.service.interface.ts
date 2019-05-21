@@ -1,5 +1,9 @@
 import { InjectionToken } from '@angular/core';
-import { EduContentInterface, FavoriteInterface } from '@campus/dal';
+import {
+  EduContent,
+  EduContentInterface,
+  FavoriteInterface
+} from '@campus/dal';
 import { Observable } from 'rxjs';
 
 export const EDUCONTENT_SEARCH_RESULT_ITEM_SERVICE_TOKEN = new InjectionToken(
@@ -8,6 +12,14 @@ export const EDUCONTENT_SEARCH_RESULT_ITEM_SERVICE_TOKEN = new InjectionToken(
 
 export interface EduContentSearchResultItemServiceInterface {
   isFavorite$(eduContentId: number): Observable<boolean>;
+
+  linkTask(eduContent: EduContent): void;
+
+  linkBundle(eduContent: EduContent): void;
+
+  openStatic(eduContent: EduContent, stream: boolean): void;
+
+  openExercise(eduContentId: number, answers: boolean): void;
 
   toggleFavorite(favorite: FavoriteInterface): void;
 

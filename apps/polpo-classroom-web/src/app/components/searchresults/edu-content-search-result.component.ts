@@ -14,13 +14,7 @@ import {
   FavoriteTypesEnum
 } from '@campus/dal';
 import { ResultItemBase } from '@campus/search';
-import {
-  EduContentCollectionManagerServiceInterface,
-  EduContentSearchResultInterface,
-  EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN,
-  OpenStaticContentServiceInterface,
-  OPEN_STATIC_CONTENT_SERVICE_TOKEN
-} from '@campus/shared';
+import { EduContentSearchResultInterface } from '@campus/shared';
 import { Observable } from 'rxjs';
 import {
   EduContentSearchResultItemServiceInterface,
@@ -50,10 +44,6 @@ export class EduContentSearchResultComponent extends ResultItemBase
   public isFavorite$: Observable<Boolean>;
 
   constructor(
-    @Inject(OPEN_STATIC_CONTENT_SERVICE_TOKEN)
-    private openStaticContentService: OpenStaticContentServiceInterface,
-    @Inject(EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN)
-    private eduContentManagerService: EduContentCollectionManagerServiceInterface,
     @Inject(EDUCONTENT_SEARCH_RESULT_ITEM_SERVICE_TOKEN)
     private eduContentSearchResultService: EduContentSearchResultItemServiceInterface
   ) {
@@ -77,14 +67,11 @@ export class EduContentSearchResultComponent extends ResultItemBase
   }
 
   public linkTask() {
-    this.eduContentManagerService.manageTasksForContent(this.data.eduContent);
+    this.eduContentSearchResultService.linkTask(this.data.eduContent);
   }
 
   public linkBundle() {
-    this.eduContentManagerService.manageBundlesForContent(
-      this.data.eduContent,
-      this.data.eduContent.publishedEduContentMetadata.learningAreaId
-    );
+    this.eduContentSearchResultService.linkBundle(this.data.eduContent);
   }
 
   public unlinkTask() {}
@@ -110,33 +97,20 @@ export class EduContentSearchResultComponent extends ResultItemBase
     );
   }
 
-  public openStatic() {
-    this.openStaticContentService.open(this.data.eduContent);
+  public openStatic(stream: boolean = false) {
+    this.eduContentSearchResultService.openStatic(this.data.eduContent, stream);
     this.eduContentSearchResultService.upsertEduContentToStore(
       this.data.eduContent.minimal
     );
   }
   public openExercise(answers: boolean) {
+    this.eduContentSearchResultService.openExercise(
+      this.data.eduContent.id,
+      answers
+    );
     this.eduContentSearchResultService.upsertEduContentToStore(
       this.data.eduContent.minimal
     );
-  }
-
-  public stream() {
-    this.eduContentSearchResultService.upsertEduContentToStore(
-      this.data.eduContent.minimal
-    );
-  }
-
-  public open() {
-    //Check what kind of content it is (ludo.zip or not) and do openStatic or openExercise
-    if (
-      this.data.eduContent.publishedEduContentMetadata.fileExt !== 'ludo.zip'
-    ) {
-      this.openStatic();
-    } else {
-      //openExercise
-    }
   }
 
   get isEduContentInCurrentBundle(): boolean {
