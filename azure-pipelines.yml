@@ -3,8 +3,8 @@
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
-trigger:
-- master
+pr:
+- develop
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -18,12 +18,12 @@ steps:
   inputs:
     customEndpoint: diekeure-registry
 - script: |
-    npm install -g @angular/cli
-  displayName: 'npm install'
-- script: |
-    ng lint
-    npm run format:check
-  displayName: 'linting and formatting'
-- script: |
-    ng test
-  displayName: 'unit tests'
+      npm install -g @angular/cli
+    displayName: 'npm install'
+  #- script: |
+  #   ng lint
+  #  npm run format:check
+  #displayName: 'linting and formatting'
+  - script: |
+      npm run affected:test -- --base "develop" --head HEAD --parallel --configuration=travis
+    displayName: 'Run affected tests'
