@@ -14,9 +14,10 @@ steps:
   inputs:
     versionSpec: '10.x'
   displayName: 'Install Node.js'
-
+- task: Npm@1
+  inputs:
+    customEndpoint: diekeure-registry
 - script: |
     npm install -g @angular/cli
-    npm ci
     ng build --prod
   displayName: 'npm install and build'
