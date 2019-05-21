@@ -24,5 +24,7 @@ steps:
   #  npm run format:check
   #displayName: 'linting and formatting'
   - script: |
-      npm run affected:test -- --base "$(System.PullRequest.TargetBranch)" --head HEAD --parallel --configuration=travis
+      npm run affected:test -- --base "$TARGET_BRANCH" --head HEAD --parallel --configuration=travis
+    env:
+      TARGET_BRANCH: $(System.PullRequest.TargetBranch)
     displayName: 'Run affected tests'
