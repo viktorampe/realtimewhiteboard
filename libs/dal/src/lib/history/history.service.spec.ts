@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { PersonApi } from '@diekeure/polpo-api-angular-sdk';
+import { HistoryApi, PersonApi } from '@diekeure/polpo-api-angular-sdk';
 import { cold } from '@nrwl/nx/testing';
 import { of } from 'rxjs';
 import { HistoryFixture } from '../+fixtures/History.fixture';
@@ -8,11 +8,18 @@ import { HistoryService } from './history.service';
 describe('HistoryService', () => {
   let historyService: HistoryService;
   let personApi: PersonApi;
+  let historyApi: HistoryApi;
   const mockUserId = 1;
   const mockHistory = new HistoryFixture();
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
+        {
+          provide: HistoryApi,
+          useValue: {
+            upsertByInstance: () => {}
+          }
+        },
         {
           provide: PersonApi,
           useValue: {
@@ -25,6 +32,7 @@ describe('HistoryService', () => {
     });
     historyService = TestBed.get(HistoryService);
     personApi = TestBed.get(PersonApi);
+    historyApi = TestBed.get(HistoryApi);
   });
 
   afterEach(() => {
@@ -49,12 +57,21 @@ describe('HistoryService', () => {
 
   describe('addHistory', () => {
     it('should call the api and return the created history', () => {
-      jest.spyOn(personApi, 'createHistory').mockReturnValue(of(mockHistory));
+      const spy = jest
+        .spyOn(historyApi, 'upsertByInstance')
+        .mockReturnValue(of(mockHistory));
 
-      const response = historyService.addHistory(mockUserId, {
-        ...mockHistory,
-        id: null // we don't know the id yet
-      });
+      const response = historyService.upsertHistory(mockHistory);
+
+      expect(spy).toHaveBeenCalledWith(
+        mockHistory.name,
+        mockHistory.type,
+        mockHistory.learningAreaId,
+        mockHistory.criteria,
+        mockHistory.eduContentId,
+        mockHistory.bundleId,
+        mockHistory.taskId
+      );
 
       expect(response).toBeObservable(cold('(a|)', { a: mockHistory }));
     });
