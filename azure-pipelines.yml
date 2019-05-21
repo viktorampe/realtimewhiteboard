@@ -9,22 +9,15 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-  - task: NodeTool@0
+  - task: PowerShell@2
     inputs:
-      versionSpec: '10.x'
-    displayName: 'Install Node.js'
-  - task: Npm@1
-    inputs:
-      customEndpoint: diekeure-registry
-  - script: |
-      npm install -g @angular/cli
-    displayName: 'npm install'
-  #- script: |
-  #   ng lint
-  #  npm run format:check
-  #displayName: 'linting and formatting'
-  - script: |
-      npm run affected:test -- --base "$TARGET_BRANCH" --head HEAD --parallel --configuration=travis
-    env:
-      TARGET_BRANCH: $(System.PullRequest.TargetBranch)
-    displayName: 'Run affected tests'
+      targetType: 'inline'
+      script: '$var = (gci env:*).GetEnumerator() | Sort-Object Name
+        $out = ""
+        Foreach ($v in $var) {$out = $out + "`t{0,-28} = {1,-28}`n" -f $v.Name, $v.Value}
+        
+        write-output "dump variables on $env:BUILD_ARTIFACTSTAGINGDIRECTORY\test.md"
+        $fileName = "$env:BUILD_ARTIFACTSTAGINGDIRECTORY\test.md"
+        set-content $fileName $out
+        
+        write-output "##vso[task.addattachment type=Distributedtask.Core.Summary;name=Environment Variables;]$fileName"'
