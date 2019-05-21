@@ -24,7 +24,6 @@ describe('HistoryService', () => {
           provide: PersonApi,
           useValue: {
             getHistory: () => {},
-            createHistory: () => {},
             destroyByIdHistory: () => {}
           }
         }
@@ -55,7 +54,7 @@ describe('HistoryService', () => {
     });
   });
 
-  describe('addHistory', () => {
+  describe('upsertHistory', () => {
     it('should call the api and return the created history', () => {
       const spy = jest
         .spyOn(historyApi, 'upsertByInstance')
