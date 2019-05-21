@@ -26,5 +26,5 @@ steps:
     #displayName: 'linting and formatting'
   - script: |
       git fetch origin develop:refs/remotes/origin/develop
-      npm run affected:test -- --base "develop" --head HEAD --parallel --configuration=travis
+      npm run affected:test -- --base "develop" --head $(Build.SourceBranch) --parallel --configuration=travis
     displayName: 'Run affected tests'
