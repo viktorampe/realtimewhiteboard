@@ -25,4 +25,4 @@ steps:
   #displayName: 'linting and formatting'
   - script: |
       npm run affected:test -- --base $(System.PullRequest.TargetBranch) --head HEAD --parallel --configuration=travis
-    displayName: 'unit tests'
+    displayName: 'running affected tests'
