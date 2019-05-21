@@ -25,5 +25,5 @@ steps:
     #  npm run format:check
     #displayName: 'linting and formatting'
   - script: |
-      node --expose-gc ./node_modules/.bin/ng test
+      node --expose-gc ./node_modules/.bin/ng test --configuration=travis
     displayName: 'unit tests'
