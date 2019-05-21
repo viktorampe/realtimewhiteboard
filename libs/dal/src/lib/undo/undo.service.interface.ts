@@ -14,14 +14,14 @@ export interface UndoServiceInterface {
     type: string;
     payload: Action;
   };
-  dispatchActionAsUndoable<T extends DalState>(
-    payload: UndoableActionInterface<T>
+  dispatchActionAsUndoable(
+    payload: UndoableActionInterface
   ): Observable<Action>;
 }
 
-export interface UndoableActionInterface<T extends DalState> {
+export interface UndoableActionInterface {
   action: FeedbackTriggeringAction;
-  dataPersistence: DataPersistence<T>;
+  dataPersistence: DataPersistence<DalState>;
   undoLabel: string;
   undoneLabel: string;
   doneLabel: string;

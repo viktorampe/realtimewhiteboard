@@ -4,7 +4,6 @@ import { Action } from '@ngrx/store';
 import { undo } from 'ngrx-undo';
 import { from, Observable } from 'rxjs';
 import { filter, map, switchMap, take } from 'rxjs/operators';
-import { DalState } from '../+state';
 import {
   EffectFeedback,
   EffectFeedbackActions,
@@ -27,7 +26,7 @@ export class UndoService implements UndoServiceInterface {
   } {
     return undo(action);
   }
-  public dispatchActionAsUndoable<T extends DalState>({
+  public dispatchActionAsUndoable({
     action,
     dataPersistence,
     undoLabel,
@@ -35,7 +34,7 @@ export class UndoService implements UndoServiceInterface {
     doneLabel,
     intendedAction,
     undoButtonLabel = 'Annuleren'
-  }: UndoableActionInterface<T>): Observable<Action> {
+  }: UndoableActionInterface): Observable<Action> {
     const undoAction = this.undo(action);
     const uuid = this.uuid();
     const warningFeedback = new EffectFeedback({
