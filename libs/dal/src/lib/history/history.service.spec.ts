@@ -27,6 +27,10 @@ describe('HistoryService', () => {
     personApi = TestBed.get(PersonApi);
   });
 
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   it('should be created', () => {
     const service: HistoryService = TestBed.get(HistoryService);
     expect(service).toBeTruthy();
