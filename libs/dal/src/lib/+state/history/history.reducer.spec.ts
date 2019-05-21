@@ -1,4 +1,3 @@
-import { Update } from '@ngrx/entity';
 import { HistoryActions } from '.';
 import { HistoryInterface } from '../../+models';
 import { initialState, reducer, State } from './history.reducer';
@@ -82,25 +81,13 @@ describe('History Reducer', () => {
     });
   });
 
-  describe('add actions', () => {
-    it('should add one history', () => {
-      const historyItem = history[0];
-      const action = new HistoryActions.AddHistory({
-        history: historyItem
-      });
-
-      const result = reducer(initialState, action);
-      expect(result).toEqual(createState([historyItem], false));
-    });
-  });
-
   describe('upsert actions', () => {
     it('should upsert one history', () => {
       const originalHistory = history[0];
 
       const startState = reducer(
         initialState,
-        new HistoryActions.AddHistory({
+        new HistoryActions.UpsertHistory({
           history: originalHistory
         })
       );
@@ -114,24 +101,6 @@ describe('History Reducer', () => {
       const result = reducer(startState, action);
 
       expect(result.entities[updatedHistory.id]).toEqual(updatedHistory);
-    });
-  });
-
-  describe('update actions', () => {
-    it('should update an history', () => {
-      const historyItem = history[0];
-      const startState = createState([historyItem]);
-      const update: Update<HistoryInterface> = {
-        id: 1,
-        changes: {
-          name: nameUpdatedValue
-        }
-      };
-      const action = new HistoryActions.UpdateHistory({
-        history: update
-      });
-      const result = reducer(startState, action);
-      expect(result).toEqual(createState([createHistory(1, nameUpdatedValue)]));
     });
   });
 

@@ -1,4 +1,3 @@
-import { Update } from '@ngrx/entity';
 import { Action } from '@ngrx/store';
 import { HistoryInterface } from '../../+models';
 
@@ -6,9 +5,7 @@ export enum HistoryActionTypes {
   HistoryLoaded = '[History] History Loaded',
   HistoryLoadError = '[History] Load Error',
   LoadHistory = '[History] Load History',
-  AddHistory = '[History] Add History',
   UpsertHistory = '[History] Upsert History',
-  UpdateHistory = '[History] Update History',
   DeleteHistory = '[History] Delete History',
   ClearHistory = '[History] Clear History'
 }
@@ -32,22 +29,10 @@ export class HistoryLoadError implements Action {
   constructor(public payload: any) {}
 }
 
-export class AddHistory implements Action {
-  readonly type = HistoryActionTypes.AddHistory;
-
-  constructor(public payload: { history: HistoryInterface }) {}
-}
-
 export class UpsertHistory implements Action {
   readonly type = HistoryActionTypes.UpsertHistory;
 
   constructor(public payload: { history: HistoryInterface }) {}
-}
-
-export class UpdateHistory implements Action {
-  readonly type = HistoryActionTypes.UpdateHistory;
-
-  constructor(public payload: { history: Update<HistoryInterface> }) {}
 }
 
 export class DeleteHistory implements Action {
@@ -64,8 +49,6 @@ export type HistoryActions =
   | LoadHistory
   | HistoryLoaded
   | HistoryLoadError
-  | AddHistory
   | UpsertHistory
-  | UpdateHistory
   | DeleteHistory
   | ClearHistory;

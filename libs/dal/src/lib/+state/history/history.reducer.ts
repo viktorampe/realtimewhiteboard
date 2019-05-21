@@ -21,16 +21,8 @@ export const initialState: State = adapter.getInitialState({
 
 export function reducer(state = initialState, action: HistoryActions): State {
   switch (action.type) {
-    case HistoryActionTypes.AddHistory: {
-      return adapter.addOne(action.payload.history, state);
-    }
-
     case HistoryActionTypes.UpsertHistory: {
       return adapter.upsertOne(action.payload.history, state);
-    }
-
-    case HistoryActionTypes.UpdateHistory: {
-      return adapter.updateOne(action.payload.history, state);
     }
 
     case HistoryActionTypes.DeleteHistory: {
