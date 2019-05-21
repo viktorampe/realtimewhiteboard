@@ -17,14 +17,13 @@ steps:
   - task: Npm@1
     inputs:
       customEndpoint: diekeure-registry
+  # - script: |
+  #     npm install -g @angular/cli
+  #   displayName: 'npm install'
+  #- script: |
+  #   ng lint
+  #  npm run format:check
+  #displayName: 'linting and formatting'
   - script: |
-      npm install -g @angular/cli
-    displayName: 'npm install'
-    #- script: |
-    #   ng lint
-    #  npm run format:check
-    #displayName: 'linting and formatting'
-  - script: |
-      git fetch origin develop:refs/remotes/origin/develop
       npm run affected:test -- --base "develop" --head $(Build.SourceBranch) --parallel --configuration=travis
     displayName: 'Run affected tests'
