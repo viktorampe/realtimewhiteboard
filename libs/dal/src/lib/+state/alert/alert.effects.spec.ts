@@ -5,9 +5,11 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { getTestScheduler, hot } from '@nrwl/nx/testing';
+import { undo } from 'ngrx-undo';
 import { Observable, of } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { AlertFixture, EffectFeedbackFixture } from '../../+fixtures';
+import { UndoService } from '../../../lib/undo';
 import { ALERT_SERVICE_TOKEN } from '../../alert/alert.service.interface';
 import {
   EffectFeedback,
@@ -30,11 +32,11 @@ import {
 } from './alert.actions';
 import { AlertsEffects } from './alert.effects';
 import { initialState, reducer, State as AlertState } from './alert.reducer';
-import { undo } from 'ngrx-undo';
 
 describe('AlertEffects', () => {
   let actions: Observable<any>;
   let effects: AlertsEffects;
+  let undoService: UndoService;
   let usedState: AlertState;
   let uuid: Function;
   let dateMock: MockDate;
@@ -111,6 +113,7 @@ describe('AlertEffects', () => {
         EffectsModule.forFeature([AlertsEffects])
       ],
       providers: [
+        UndoService,
         {
           provide: ALERT_SERVICE_TOKEN,
           useValue: {
@@ -138,6 +141,7 @@ describe('AlertEffects', () => {
     effects = TestBed.get(AlertsEffects);
     uuid = TestBed.get('uuid');
     effectFeedback.id = uuid();
+    undoService = TestBed.get(UndoService);
   });
 
   describe('loadAlert$', () => {
@@ -656,4 +660,46 @@ describe('AlertEffects', () => {
         });
       });
     });
+
+    describe('the user does cancels the deletion', () => {
+      describe('when deletion is successfull', () => {
+        it('should dispatch a success action', () => {
+          const undoAction = {
+            type: 'ngrx-undo/UNDO_ACTION',
+            payload: deleteAlertAction
+          };
+          const undoServiceSpy = jest
+            .spyOn(undoService, 'undo')
+            .mockReturnValue(undoAction);
+          const deleteFeedbackAction = new EffectFeedbackActions.DeleteEffectFeedback(
+            {
+              id: 'foo',
+              userAction: undoAction
+            }
+          );
+          const expectedEffectFeedback = new EffectFeedback({
+            id: 'foo',
+            triggerAction: deleteAlertAction,
+            message: 'Melding is niet verwijderd.',
+            userActions: null,
+            type: 'success',
+            priority: Priority.NORM
+          });
+          actions = hot('-ab|', {
+            a: deleteAlertAction,
+            b: deleteFeedbackAction
+          });
+          expect(effects.deleteAlert$).toBeObservable(
+            hot('--a|', {
+              a: new EffectFeedbackActions.AddEffectFeedback({
+                effectFeedback: expectedEffectFeedback
+              })
+            })
+          );
+          expect(undoServiceSpy).toHaveBeenCalledTimes(1);
+          expect(undoServiceSpy).toHaveBeenCalledWith(deleteAlertAction);
+        });
+      });
+    });
+  });
 });

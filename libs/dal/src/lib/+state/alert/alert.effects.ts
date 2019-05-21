@@ -2,11 +2,11 @@ import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action, select } from '@ngrx/store';
 import { DataPersistence } from '@nrwl/nx';
-import { undo } from 'ngrx-undo';
 import { from, interval, Observable, Subject } from 'rxjs';
 import { filter, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { AlertActions } from '.';
 import { DalActions } from '..';
+import { UndoService } from '../../..';
 import {
   AlertServiceInterface,
   ALERT_SERVICE_TOKEN
@@ -158,7 +158,7 @@ export class AlertsEffects {
           );
       },
       undoAction: (action: SetReadAlert, state: any) => {
-        const undoAction = undo(action);
+        const undoAction = this.undoService.undo(action);
 
         const effectFeedback = new EffectFeedback({
           id: this.uuid(),
@@ -186,7 +186,7 @@ export class AlertsEffects {
     AlertsActionTypes.DeleteAlert,
     {
       run: (action: AlertActions.DeleteAlert, state: DalState) => {
-        const undoAction = undo(action);
+        const undoAction = this.undoService.undo(action);
         const uuid = this.uuid();
         const warningFeedback = new EffectFeedback({
           id: uuid,
@@ -213,8 +213,6 @@ export class AlertsEffects {
             (
               deleteFeedbackAction: EffectFeedbackActions.DeleteEffectFeedback
             ) => {
-              console.log(deleteFeedbackAction.payload.userAction);
-              console.log(undoAction);
               if (deleteFeedbackAction.payload.userAction !== undoAction) {
                 return this.alertService
                   .deleteAlert(action.payload.personId, action.payload.id)
@@ -255,7 +253,7 @@ export class AlertsEffects {
       },
       undoAction: (action: AlertActions.DeleteAlert, error: any) => {
         // Something went wrong: could be a 401 or 404 ...
-        const undoAction = undo(action);
+        const undoAction = this.undoService.undo(action);
 
         const effectFeedback = new EffectFeedback({
           id: this.uuid(),
@@ -280,7 +278,8 @@ export class AlertsEffects {
     private actions: Actions,
     private dataPersistence: DataPersistence<DalState>,
     @Inject(ALERT_SERVICE_TOKEN) private alertService: AlertServiceInterface,
-    @Inject('uuid') private uuid: Function
+    @Inject('uuid') private uuid: Function,
+    private undoService: UndoService
   ) {}
 
   private getNewTimer(startPollAction: StartPollAlerts) {
