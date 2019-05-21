@@ -4,26 +4,26 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
 pr:
-- develop
+  - develop
 
 pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '10.x'
-  displayName: 'Install Node.js'
-- task: Npm@1
-  inputs:
-    customEndpoint: diekeure-registry
-- script: |
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '10.x'
+    displayName: 'Install Node.js'
+  - task: Npm@1
+    inputs:
+      customEndpoint: diekeure-registry
+  - script: |
       npm install -g @angular/cli
     displayName: 'npm install'
-  #- script: |
-  #   ng lint
-  #  npm run format:check
-  #displayName: 'linting and formatting'
-- script: |
-    npm run affected:test -- --base "develop" --head HEAD --parallel --configuration=travis
-  displayName: 'Run affected tests'
+    #- script: |
+    #   ng lint
+    #  npm run format:check
+    #displayName: 'linting and formatting'
+  - script: |
+      npm run affected:test -- --base "develop" --head HEAD --parallel --configuration=travis
+    displayName: 'Run affected tests'
