@@ -8,7 +8,7 @@
     class="quick-link__filter"
     title__right
     theme="dark"
-    [source]="contentData$ | async"
+    [source]="quickLinkCategories$ | async"
   ></campus-filter-text-input>
   <campus-banner
     class="ui-banner--dialog"
@@ -20,17 +20,17 @@
     (afterDismiss)="onBannerDismiss($event)"
   ></campus-banner>
   <mat-dialog-content>
-    <mat-action-list *ngIf="(filterTextInput.result$ | async) as contentData">
-      <ng-container *ngIf="contentData.length; else: noContentTemplate">
+    <mat-action-list *ngIf="(filterTextInput.result$ | async) as categories">
+      <ng-container *ngIf="categories.length; else: noContentTemplate">
         <ng-container
-          *ngIf="contentData[0].quickLinks.length; else: noResultsTemplate"
+          *ngIf="categories[0].quickLinks.length; else: noResultsTemplate"
         >
-          <ng-container *ngFor="let category of contentData">
+          <ng-container *ngFor="let category of categories">
             <h3 mat-subheader>{{ category.title }}</h3>
             <mat-list-item
               class="quick-link__item"
               *ngFor="let quickLink of category.quickLinks"
-              (click)="quickLink.defaultAction.handler(quickLink)"
+              (click)="quickLink.defaultonActionClick(action, quickLink)"
             >
               <campus-file-extension
                 *ngIf="quickLink.type === 'educontent'; else: notEduContent"
@@ -63,7 +63,7 @@
                 >
                   <a
                     [matTooltip]="action.tooltip"
-                    (click)="action.handler(quickLink)"
+                    (click)="onActionClick(action, quickLink)"
                     campusClickStopPropagation
                     class="quick-link__item__actions__link"
                   >
@@ -81,7 +81,7 @@
                     circle
                     [iconClass]="action.icon"
                     [matTooltip]="action.tooltip"
-                    (click)="action.handler(quickLink)"
+                    (click)="onActionClick(action, quickLink)"
                     campusClickStopPropagation
                   ></campus-button>
                 </ng-container>
@@ -99,7 +99,7 @@
                   <button
                     mat-menu-item
                     *ngFor="let action of quickLink.alternativeOpenActions"
-                    (click)="action.handler(quickLink)"
+                    (click)="onActionClick(action, quickLink)"
                   >
                     <mat-icon [svgIcon]="action.icon"></mat-icon
                     >{{ action.label }}</button
@@ -107,7 +107,7 @@
                   <button
                     mat-menu-item
                     *ngFor="let action of quickLink.manageActions"
-                    (click)="action.handler(quickLink)"
+                    (click)="onActionClick(action, quickLink)"
                   >
                     <mat-icon [svgIcon]="action.icon"></mat-icon
                     >{{ action.label }}</button
