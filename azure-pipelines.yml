@@ -20,10 +20,10 @@ steps:
   - script: |
       npm install -g @angular/cli
     displayName: 'npm install'
+  #- script: |
+   #   ng lint
+    #  npm run format:check
+    #displayName: 'linting and formatting'
   - script: |
-      ng lint
-      npm run format:check
-    displayName: 'linting and formatting'
-  - script: |
-      ng test
+      node --expose-gc ./node_modules/.bin/ng test
     displayName: 'unit tests'
