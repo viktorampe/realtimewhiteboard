@@ -5,13 +5,13 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { Observable, of } from 'rxjs';
-import { HistoryReducer } from '.';
+import { HistoryEffects, HistoryReducer } from '.';
+import { HISTORY_SERVICE_TOKEN } from '../../history';
 import {
   HistoryLoaded,
   HistoryLoadError,
   LoadHistory
 } from './history.actions';
-import { HistoryEffects, HISTORY_SERVICE_TOKEN } from './history.effects';
 
 describe('HistoryEffects', () => {
   let actions: Observable<any>;

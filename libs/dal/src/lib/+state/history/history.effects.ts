@@ -1,22 +1,15 @@
-import { Inject, Injectable, InjectionToken } from '@angular/core';
-import { HistoryInterface } from '@campus/dal';
+import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
-import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { DalState } from '..';
+import { HistoryServiceInterface, HISTORY_SERVICE_TOKEN } from '../../history';
 import {
   HistoryActionTypes,
   HistoryLoaded,
   HistoryLoadError,
   LoadHistory
 } from './history.actions';
-
-//TODO remove when actual token is available
-export const HISTORY_SERVICE_TOKEN = new InjectionToken('HistoryService');
-interface HistoryServiceInterface {
-  getAllForUser(id: number): Observable<HistoryInterface[]>;
-}
 
 @Injectable()
 export class HistoryEffects {
