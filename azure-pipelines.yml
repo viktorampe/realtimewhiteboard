@@ -24,6 +24,6 @@ steps:
   #   ng lint
   #  npm run format:check
   #displayName: 'linting and formatting'
-  - script: |
-      npm run affected:test -- --base "develop" --head HEAD --parallel --configuration=travis
-    displayName: 'Run affected tests'
+- script: |
+    npm run affected:test -- --base "develop" --head HEAD --parallel --configuration=travis
+  displayName: 'Run affected tests'
