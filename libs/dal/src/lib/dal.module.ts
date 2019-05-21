@@ -20,7 +20,6 @@ import {
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { v4 as uuid } from 'uuid';
-import { UndoService } from '..';
 import { AlertReducer, AlertsEffects } from './+state/alert';
 import { BundleReducer, BundlesEffects } from './+state/bundle';
 import { ContentStatusReducer } from './+state/content-status';
@@ -149,6 +148,8 @@ import { TASK_SERVICE_TOKEN } from './tasks/task.service.interface';
 import { TaskService } from './tasks/tasks.service';
 import { TocService } from './toc/toc.service';
 import { TOC_SERVICE_TOKEN } from './toc/toc.service.interface';
+import { UndoService } from './undo/undo.service';
+import { UNDO_SERVICE_TOKEN } from './undo/undo.service.interface';
 
 interface DalOptions {
   apiBaseUrl: string;
@@ -312,7 +313,7 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
       provide: 'uuid',
       useValue: uuid
     },
-    UndoService,
+    { provide: UNDO_SERVICE_TOKEN, useClass: UndoService },
     { provide: EXERCISE_SERVICE_TOKEN, useClass: ExerciseService },
     { provide: EDU_CONTENT_SERVICE_TOKEN, useClass: EduContentService },
     { provide: USER_CONTENT_SERVICE_TOKEN, useClass: UserContentService },
