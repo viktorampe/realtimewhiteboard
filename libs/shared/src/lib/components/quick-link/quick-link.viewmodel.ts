@@ -177,9 +177,10 @@ export class QuickLinkViewModel {
     if (mode === QuickLinkTypeEnum.FAVORITES) {
       quickLinksDict$ = this.store.pipe(
         select(FavoriteQueries.favoritesByType),
-        map(favorites =>
-          favorites.filter(fav => fav.type !== FavoriteTypesEnum.AREA)
-        )
+        map(favoriteCategories => {
+          delete favoriteCategories['area']; // filter out category learning area
+          return favoriteCategories;
+        })
       );
     }
 
