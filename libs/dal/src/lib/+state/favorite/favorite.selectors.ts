@@ -1,5 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { FavoriteTypesEnum } from '../../+models';
+import { FavoriteInterface, FavoriteTypesEnum } from '../../+models';
 import {
   NAME,
   selectAll,
@@ -91,6 +91,36 @@ export const getIsFavoriteEduContent = createSelector(
     return (state.ids as number[]).some(
       id => state.entities[id].eduContentId === props.eduContentId
     );
+  }
+);
+
+/**
+ * returns an object with favorites grouped by type, ordered by date descending
+ * @example
+ * favorites$: FavoriteInterface = this.store.pipe(
+  select(HistoryQueries.favoritesByType)
+);
+*/
+export const favoritesByType = createSelector(
+  selectFavoriteState,
+  (state: State) => {
+    const byKey: { [key: string]: FavoriteInterface[] } = {};
+    // must cast state.ids to number[] (from 'string[] | number[]') or we can't use array functions like forEach
+    (state.ids as number[]).forEach((id: number) => {
+      const item = state.entities[id];
+      if (!byKey[item.type]) {
+        byKey[item.type] = [];
+      }
+      byKey[item.type].push(item);
+    });
+
+    Object.keys(byKey).forEach(key =>
+      byKey[key].sort((a, b) =>
+        new Date(a.created) < new Date(b.created) ? 1 : -1
+      )
+    );
+
+    return byKey;
   }
 );
 

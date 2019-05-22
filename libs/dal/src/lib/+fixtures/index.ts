@@ -14,6 +14,7 @@ export * from './EduNet.fixture';
 export * from './EffectFeedback.fixture';
 export * from './Favorite.fixture';
 export * from './Grade.fixture';
+export * from './History.fixture';
 export * from './LearningArea.fixture';
 export * from './LearningDomain.fixture';
 export * from './LearningPlan.fixture';
