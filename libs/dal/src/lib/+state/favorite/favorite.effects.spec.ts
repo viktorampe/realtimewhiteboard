@@ -6,33 +6,21 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { undo } from 'ngrx-undo';
-import { Observable, of } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { FavoriteReducer } from '.';
-import { EffectFeedbackFixture } from '../../+fixtures';
 import { FavoriteTypesEnum } from '../../+models';
 import { FAVORITE_SERVICE_TOKEN } from '../../favorite/favorite.service.interface';
 import { AUTH_SERVICE_TOKEN } from '../../persons';
-import {
-  EffectFeedback,
-  EffectFeedbackActions,
-  Priority
-} from '../effect-feedback';
+import { UndoService, UNDO_SERVICE_TOKEN } from '../../undo';
+import { EffectFeedback, EffectFeedbackActions, Priority } from '../effect-feedback';
 import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
-import {
-  AddFavorite,
-  DeleteFavorite,
-  FavoritesLoaded,
-  FavoritesLoadError,
-  LoadFavorites,
-  StartAddFavorite,
-  ToggleFavorite,
-  UpdateFavorite
-} from './favorite.actions';
+import { AddFavorite, DeleteFavorite, FavoritesLoaded, FavoritesLoadError, LoadFavorites, StartAddFavorite, ToggleFavorite, UpdateFavorite } from './favorite.actions';
 import { FavoriteEffects } from './favorite.effects';
 
 describe('FavoriteEffects', () => {
   let actions: Observable<any>;
   let effects: FavoriteEffects;
+  let undoService: UndoService;
   let usedState: any;
   let uuid: Function;
   let mockDate: MockDate;
@@ -86,6 +74,10 @@ describe('FavoriteEffects', () => {
       ],
       providers: [
         {
+          provide: UNDO_SERVICE_TOKEN,
+          useClass: UndoService
+        },
+        {
           provide: 'uuid',
           useValue: (): string => 'foo'
         },
@@ -94,7 +86,7 @@ describe('FavoriteEffects', () => {
           useValue: {
             getAllForUser: () => {},
             addFavorite: () => {},
-            deleteFavorite: () => {},
+            deleteFavorite: () => { return 'returnValue'},
             updateFavorite: () => {}
           }
         },
@@ -112,6 +104,7 @@ describe('FavoriteEffects', () => {
 
     effects = TestBed.get(FavoriteEffects);
     uuid = TestBed.get('uuid');
+    undoService = TestBed.get(UNDO_SERVICE_TOKEN);
   });
 
   beforeAll(() => {
@@ -332,54 +325,58 @@ describe('FavoriteEffects', () => {
     });
   });
 
-  describe('deleteFavorite$', () => {
-    const deleteFavoriteAction = new DeleteFavorite({ userId: 1, id: 113 });
-
-    describe('when successful', () => {
-      beforeEach(() => {
-        mockServiceMethodReturnValue('deleteFavorite', true);
+  describe('deleteFavorite', () => {
+    it('should call service.dispatchActionAsUndoable with the correct payload and return an addFeedbackAction if no error occured', () => {
+      const deleteAction = new DeleteFavorite({ id: 0, userId: 1 });
+      const effectFeedback = new EffectFeedback({
+        id: uuid(),
+        triggerAction: deleteAction,
+        message: 'some message',
+        type: 'success',
+        priority: Priority.HIGH
       });
-      it('should dispatch a success feedback action', () => {
-        const effectFeedback = new EffectFeedbackFixture({
-          id: uuid(),
-          triggerAction: deleteFavoriteAction,
-          message: 'Het item is uit jouw favorieten verwijderd.'
-        });
-        const effectFeedbackAction = new AddEffectFeedback({ effectFeedback });
+      const addFeedbackAction = new AddEffectFeedback({ effectFeedback });
+      const spy = jest
+        .spyOn(undoService, 'dispatchActionAsUndoable')
+        .mockReturnValue(from([addFeedbackAction]));
 
-        expectInAndOut(
-          effects.deleteFavorite$,
-          deleteFavoriteAction,
-          effectFeedbackAction
-        );
-      });
+      const payload = {
+        action: deleteAction,
+        dataPersistence: effects['dataPersistence'],
+        intendedAction: 'returnValue',
+        undoLabel: 'Favoriet wordt verwijderd.',
+        undoneLabel: 'Favoriet is niet verwijderd.',
+        doneLabel: 'Favoriet is verwijderd.'
+      };
+      expectInAndOut(effects.deleteFavorite$, deleteAction, addFeedbackAction);
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(payload);
     });
-
-    describe('when failed', () => {
-      beforeEach(() => {
-        mockServiceMethodError('deleteFavorite', 'Something went wrong.');
-      });
-      it('should dispatch an error feedback action', () => {
-        const errorFeedback = EffectFeedback.generateErrorFeedback(
-          uuid(),
-          deleteFavoriteAction,
-          'Het is niet gelukt om het item uit jouw favorieten te verwijderen.'
-        );
-
-        const effectFeedbackAction = new AddEffectFeedback({
-          effectFeedback: errorFeedback
+    it('should return an undoAction and a feedbackAction if an error occured', () => {
+      const deleteAction = new DeleteFavorite({ id: 0, userId: 1 });
+      const spy = jest
+        .spyOn(undoService, 'dispatchActionAsUndoable')
+        .mockImplementation(() => {
+          throw Error('some error');
         });
-        const undoAction = undo(deleteFavoriteAction);
-
-        actions = hot('a', { a: deleteFavoriteAction });
-
-        expect(effects.deleteFavorite$).toBeObservable(
-          hot('(ab)', {
-            a: undoAction,
-            b: effectFeedbackAction
-          })
-        );
+      const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
+        effectFeedback: new EffectFeedback({
+          id: uuid(),
+          triggerAction: deleteAction,
+          message: 'Het is niet gelukt om het item uit jouw favorieten te verwijderen.',
+          userActions: [{ title: 'Opnieuw proberen', userAction: deleteAction }],
+          type: 'error',
+          priority: Priority.HIGH
+        })
       });
+      actions = hot('-a', { a: deleteAction });
+      expect(effects.deleteFavorite$).toBeObservable(
+        hot('-(ab)', {
+          a: undo(deleteAction),
+          b: feedbackAction
+        })
+      );
+      expect(spy).toHaveBeenCalledTimes(1);
     });
   });
 

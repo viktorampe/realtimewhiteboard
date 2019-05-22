@@ -11,6 +11,7 @@ import {
   FAVORITE_SERVICE_TOKEN
 } from '../../favorite/favorite.service.interface';
 import { AuthServiceInterface, AUTH_SERVICE_TOKEN } from '../../persons';
+import { UndoServiceInterface, UNDO_SERVICE_TOKEN } from '../../undo';
 import {
   EffectFeedback,
   EffectFeedbackActions,
@@ -76,20 +77,17 @@ export class FavoriteEffects {
     FavoritesActionTypes.DeleteFavorite,
     {
       run: (action: DeleteFavorite, state: DalState) => {
-        return this.favoriteService
-          .deleteFavorite(action.payload.userId, action.payload.id)
-          .pipe(
-            map(() => {
-              const effectFeedback = EffectFeedback.generateSuccessFeedback(
-                this.uuid(),
-                action,
-                'Het item is uit jouw favorieten verwijderd.'
-              );
-              return new EffectFeedbackActions.AddEffectFeedback({
-                effectFeedback
-              });
-            })
-          );
+        return this.undoService.dispatchActionAsUndoable({
+          action: action,
+          dataPersistence: this.dataPersistence,
+          intendedAction: this.favoriteService.deleteFavorite(
+            action.payload.userId,
+            action.payload.id
+          ),
+          undoLabel: 'Favoriet wordt verwijderd.',
+          doneLabel: 'Favoriet is verwijderd.',
+          undoneLabel: 'Favoriet is niet verwijderd.'
+        });
       },
       undoAction: (action: DeleteFavorite, error) => {
         const undoAction = undo(action);
@@ -186,6 +184,7 @@ export class FavoriteEffects {
     @Inject(FAVORITE_SERVICE_TOKEN)
     private favoriteService: FavoriteServiceInterface,
     @Inject(AUTH_SERVICE_TOKEN)
-    private authService: AuthServiceInterface
+    private authService: AuthServiceInterface,
+    @Inject(UNDO_SERVICE_TOKEN) private undoService: UndoServiceInterface
   ) {}
 }
