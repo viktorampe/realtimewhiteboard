@@ -2,15 +2,18 @@ import { Inject, Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { map } from 'rxjs/operators';
-import { HistoryActions } from '.';
 import { DalState } from '..';
-import { HistoryServiceInterface, HISTORY_SERVICE_TOKEN } from '../../history';
+import {
+  HistoryServiceInterface,
+  HISTORY_SERVICE_TOKEN
+} from '../../history/history.service.interface';
 import {
   HistoryActionTypes,
   HistoryLoaded,
   HistoryLoadError,
   LoadHistory,
-  StartUpsertHistory
+  StartUpsertHistory,
+  UpsertHistory
 } from './history.actions';
 
 @Injectable()
@@ -35,7 +38,7 @@ export class HistoryEffects {
       run: (action: StartUpsertHistory, state: DalState) => {
         return this.historyService
           .upsertHistory(action.payload.history)
-          .pipe(map(history => new HistoryActions.UpsertHistory({ history })));
+          .pipe(map(history => new UpsertHistory({ history })));
       },
       onError: (action: StartUpsertHistory, error) => {
         // Feedback for failed add to history ?
