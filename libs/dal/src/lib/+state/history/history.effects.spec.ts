@@ -5,6 +5,7 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { BehaviorSubject, Observable, of } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { HistoryReducer } from '.';
 import { FavoriteFixture } from '../../+fixtures';
 import { HistoryInterface } from '../../+models';
@@ -193,7 +194,7 @@ describe('HistoryEffects', () => {
       upsertAction$.next(mockStartUpsertAction);
 
       // service won't be called unless there is a subscriber
-      effects.startUpsertHistory$.subscribe();
+      effects.startUpsertHistory$.pipe(take(1)).subscribe();
 
       expect(historyService.upsertHistory).toHaveBeenCalled();
       expect(historyService.upsertHistory).toHaveBeenCalledTimes(1);
