@@ -79,7 +79,7 @@ describe('ShellComponent', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.restoreAllMocks();
   });
 
   it('should create', () => {

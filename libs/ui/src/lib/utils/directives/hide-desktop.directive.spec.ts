@@ -60,7 +60,7 @@ describe('HideDesktopDirective', () => {
   });
 
   afterAll(() => {
-    jest.clearAllMocks();
+    jest.restoreAllMocks();
   });
 
   it('should create the host with the directive attached', () => {
