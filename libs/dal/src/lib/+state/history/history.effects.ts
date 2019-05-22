@@ -4,18 +4,21 @@ import { Actions, Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { HistoryActions } from '.';
 import { DalState } from '..';
 import {
   HistoryActionTypes,
   HistoryLoaded,
   HistoryLoadError,
-  LoadHistory
+  LoadHistory,
+  StartUpsertHistory
 } from './history.actions';
 
 //TODO remove when actual token is available
 export const HISTORY_SERVICE_TOKEN = new InjectionToken('HistoryService');
-interface HistoryServiceInterface {
+export interface HistoryServiceInterface {
   getAllForUser(id: number): Observable<HistoryInterface[]>;
+  upsertHistory(history: HistoryInterface): Observable<HistoryInterface>;
 }
 
 @Injectable()
@@ -32,6 +35,21 @@ export class HistoryEffects {
       return new HistoryLoadError(error);
     }
   });
+
+  @Effect()
+  startUpsertHistory$ = this.dataPersistence.pessimisticUpdate(
+    HistoryActionTypes.StartUpsertHistory,
+    {
+      run: (action: StartUpsertHistory, state: DalState) => {
+        return this.historyService
+          .upsertHistory(action.payload.history)
+          .pipe(map(history => new HistoryActions.UpsertHistory({ history })));
+      },
+      onError: (action: StartUpsertHistory, error) => {
+        // Feedback for failed add to history ?
+      }
+    }
+  );
 
   constructor(
     private actions: Actions,
