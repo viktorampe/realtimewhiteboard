@@ -1,4 +1,5 @@
 import { FavoriteQueries } from '.';
+import { FavoriteFixture } from '../../+fixtures';
 import { FavoriteInterface, FavoriteTypesEnum } from '../../+models';
 import { State } from './favorite.reducer';
 
@@ -224,6 +225,35 @@ describe('Favorite Selectors', () => {
         );
 
         expect(resultsFalse).toEqual(false);
+      });
+    });
+
+    describe('favoritesByType', () => {
+      let mockFavorites: FavoriteInterface[];
+
+      beforeEach(() => {
+        mockFavorites = [
+          new FavoriteFixture({ id: 1, type: 'foo', created: new Date(1) }),
+          new FavoriteFixture({ id: 2, type: 'foo', created: new Date(2) }),
+          new FavoriteFixture({ id: 3, type: 'bar', created: new Date(229) }),
+          new FavoriteFixture({ id: 4, type: 'baz', created: new Date(1) }),
+          new FavoriteFixture({ id: 5, type: 'bar', created: new Date(114) })
+        ];
+
+        favoriteState = createState(mockFavorites, true, 'no error');
+        storeState = { favorites: favoriteState };
+      });
+
+      it('should group the historyitems by type, ordered -descending- by created date', () => {
+        const result = FavoriteQueries.favoritesByType(storeState);
+
+        const expected = {
+          foo: [mockFavorites[1], mockFavorites[0]],
+          bar: [mockFavorites[2], mockFavorites[4]],
+          baz: [mockFavorites[3]]
+        };
+
+        expect(result).toEqual(expected);
       });
     });
   });

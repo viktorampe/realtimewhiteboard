@@ -95,5 +95,34 @@ describe('History Selectors', () => {
       const results = HistoryQueries.getById(storeState, { id: 9 });
       expect(results).toBe(undefined);
     });
+
+    describe('historyByType', () => {
+      let mockHistory: HistoryInterface[];
+      beforeEach(() => {
+        // TODO use fixture when merged
+        mockHistory = [
+          { ...createHistory(4), type: 'foo', created: new Date(1) },
+          { ...createHistory(1), type: 'foo', created: new Date(2) },
+          { ...createHistory(2), type: 'bar', created: new Date(229) },
+          { ...createHistory(3), type: 'baz', created: new Date(1) },
+          { ...createHistory(5), type: 'bar', created: new Date(114) }
+        ];
+
+        historyState = createState(mockHistory, true, 'no error');
+        storeState = { history: historyState };
+      });
+
+      it('should group the historyitems by type, ordered -descending- by created date', () => {
+        const result = HistoryQueries.historyByType(storeState);
+
+        const expected = {
+          foo: [mockHistory[1], mockHistory[0]],
+          bar: [mockHistory[2], mockHistory[4]],
+          baz: [mockHistory[3]]
+        };
+
+        expect(result).toEqual(expected);
+      });
+    });
   });
 });
