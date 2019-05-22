@@ -72,6 +72,7 @@
     "husky": "^1.0.0-rc.13",
     "jasmine-marbles": "^0.4.0",
     "jest": "^23.6.0",
+    "jest-junit": "^6.4.0",
     "jest-preset-angular": "6.0.1",
     "ng-packagr": "^4.7.1",
     "ngrx-store-freeze": "0.2.4",

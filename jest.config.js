@@ -7,5 +7,8 @@ module.exports = {
   moduleFileExtensions: ['ts', 'js', 'html'],
   collectCoverage: false,
   coverageReporters: ['html'],
+  reporters: process.env.JUNIT
+    ? ['default', ['jest-junit', { outputDirectory: './junit', outputName: new Date().getTime() + '.xml' }]]
+    : ['default'],
   bail: true
 };
