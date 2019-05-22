@@ -209,8 +209,9 @@ export class LoginpageComponent implements OnInit {
   upsertHistory(): void {
     const history = new HistoryFixture({
       name: 'test',
-      type: 'boek-e',
-      learningAreaId: 19
+      type: 'educontent',
+      learningAreaId: 19,
+      taskId: 1
     });
     this.response = this.historyService.upsertHistory(history);
   }

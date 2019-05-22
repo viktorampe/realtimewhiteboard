@@ -20,10 +20,10 @@ export class HistoryService implements HistoryServiceInterface {
       history.name,
       history.type,
       history.learningAreaId,
-      history.criteria,
-      history.eduContentId,
-      history.bundleId,
-      history.taskId
+      history.criteria || null,
+      history.eduContentId || null,
+      history.bundleId || null,
+      history.taskId || null
     );
   }
 
