@@ -25,9 +25,13 @@ steps:
   #  npm run format:check
   #displayName: 'linting and formatting'
   - script: |
-      JUNIT=1 npm run test --  --parallel --configuration=travis
+      CI=1 npm run test --  --parallel --configuration=travis
     displayName: 'Run all tests'
   - task: PublishTestResults@2
     inputs:
       testResultsFormat: 'JUnit'
       testResultsFiles: 'junit/*.xml'
+  - task: PublishCodeCoverageResults@1
+    inputs:
+      codeCoverageTool: 'cobertura'
+      summaryFileLocation: $(System.DefaultWorkingDirectory)/coverage/**/cobertura-coverage.xml
