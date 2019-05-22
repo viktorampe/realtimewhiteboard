@@ -1,7 +1,8 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule, MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { MockMatIconRegistry } from '@campus/testing';
+import { configureTestSuite } from 'ng-bullet';
 import { ButtonComponent } from '../button/button.component';
 import {
   BadgePersonInterface,
@@ -15,7 +16,7 @@ describe('PersonSummaryComponent', () => {
   let fixture: ComponentFixture<PersonSummaryComponent>;
   let mockPerson: BadgePersonInterface;
 
-  beforeEach(async(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       declarations: [
         PersonSummaryComponent,
@@ -26,7 +27,7 @@ describe('PersonSummaryComponent', () => {
       imports: [MatIconModule],
       providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
     });
-  }));
+  });
 
   beforeEach(() => {
     mockPerson = {

@@ -401,7 +401,8 @@
           },
           "configurations": {
             "travis": {
-              "maxWorkers": 4
+              "maxWorkers": 4,
+              "reporters": "jest-junit"
             }
           }
         }

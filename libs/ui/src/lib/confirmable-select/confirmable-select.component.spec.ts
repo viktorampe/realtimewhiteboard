@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule, MatIconRegistry } from '@angular/material';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -6,6 +6,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockMatIconRegistry } from '@campus/testing';
+import { configureTestSuite } from 'ng-bullet';
 import { ButtonComponent } from '../button/button.component';
 import {
   ConfirmableSelectComponent,
@@ -18,7 +19,7 @@ describe('ConfirmableSelectComponent', () => {
 
   let mockData: any;
 
-  beforeEach(async(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       declarations: [ConfirmableSelectComponent, ButtonComponent],
       imports: [
@@ -31,7 +32,7 @@ describe('ConfirmableSelectComponent', () => {
       ],
       providers: [{ provide: MatIconRegistry, useClass: MockMatIconRegistry }]
     });
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ConfirmableSelectComponent);

@@ -1,6 +1,7 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { configureTestSuite } from 'ng-bullet';
 import { InfoPanelComponent } from './info-panel.component';
 
 describe('InfoPanelComponent', () => {
@@ -9,12 +10,12 @@ describe('InfoPanelComponent', () => {
 
   let mockData: { titleText: string };
 
-  beforeEach(async(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       declarations: [InfoPanelComponent],
       schemas: [NO_ERRORS_SCHEMA]
     });
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(InfoPanelComponent);

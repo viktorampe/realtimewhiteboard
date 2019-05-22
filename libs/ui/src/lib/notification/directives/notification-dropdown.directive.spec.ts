@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, DebugElement, NgModule } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
+import { configureTestSuite } from 'ng-bullet';
 import { UiModule } from '../../ui.module';
 import { NotificationComponent } from './../notification.component';
 import { DropdownDirective } from './notification-dropdown.directive';
@@ -30,11 +31,11 @@ describe('DropdownDirective', () => {
   let testContainerFixture: ComponentFixture<TestContainerComponent>;
   let componentDE: DebugElement;
 
-  beforeEach(async(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
       imports: [TestModule]
     });
-  }));
+  });
 
   beforeEach(() => {
     testContainerFixture = TestBed.createComponent(TestContainerComponent);
