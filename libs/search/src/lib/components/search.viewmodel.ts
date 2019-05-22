@@ -14,61 +14,140 @@ import {
 
 @Injectable()
 export class SearchViewModel {
-  private searchMode: SearchModeInterface;
-  private filterFactory: SearchFilterFactory;
-
-  // source stream
-  private filters$ = new BehaviorSubject<SearchFilterInterface[]>([]);
-  private results$ = new BehaviorSubject<SearchResultInterface>(null);
-
   public searchState$ = new BehaviorSubject<SearchStateInterface>(null);
   public searchFilters$: Observable<SearchFilterInterface[]>;
+
+  private results$ = new BehaviorSubject<SearchResultInterface>(null);
+
+  // observable that emits when all data is available to construct new SearchFilters
+  private searchFilterData$: BehaviorSubject<{
+    state: SearchStateInterface;
+    predictions: Map<string, Map<string | number, number>>;
+    factoryFilters: SearchFilterInterface[];
+  }> = new BehaviorSubject(null);
+
+  // caches data for searchFilterData$
+  private _predictionsCache: Map<string, Map<string | number, number>>;
+  private _factoryFiltersCache: SearchFilterInterface[];
+
+  private searchMode: SearchModeInterface;
+  private filterFactory: SearchFilterFactory;
 
   constructor(private injector: Injector) {
     this.initiateStreams();
   }
 
-  private combo$: BehaviorSubject<{
-    state: any;
-    predictions: any;
-    factoryFilters: any;
-  }> = new BehaviorSubject(null);
-  private _predictions;
-  private _factoryFilters;
-  private setFilters(factoryFilters: SearchFilterInterface[]) {
-    this._factoryFilters = factoryFilters;
-    this.checkCombo();
-  }
-  private setPredictions(results: SearchResultInterface) {
-    if (results.filterCriteriaPredictions.size !== 0) {
-      console.log('in if');
+  public reset(
+    mode: SearchModeInterface,
+    state: SearchStateInterface = null
+  ): void {
+    let newSearchState: SearchStateInterface;
+    this.searchMode = mode;
+    this.filterFactory = this.injector.get(this.searchMode.searchFilterFactory); // used by updateFilters()
 
-      this._predictions = results.filterCriteriaPredictions;
+    if (state) {
+      // we want to update the state
+      newSearchState = state;
+    } else {
+      // we want to reset the state
+      // note: sort mode should stay the same on reset
+      newSearchState = { ...this.searchState$.value };
+      newSearchState.searchTerm = '';
+      newSearchState.from = 0;
+      newSearchState.filterCriteriaSelections = new Map();
     }
-    this.checkCombo();
+    this.setFilterCriteria(newSearchState, null);
+    // trigger new search
+    this.searchState$.next(newSearchState);
+    this.clearSearchFilterDataCache();
+
+    // request new filters
+    this.updateFilters();
   }
-  private checkCombo() {
-    if (this._predictions && this._factoryFilters) {
-      // do stuff
-      this.combo$.next({
+
+  public changeSort(sortMode: SortModeInterface): void {
+    const newValue = {
+      ...this.searchState$.value,
+      sort: sortMode.name,
+      from: 0
+    };
+    this.searchState$.next(newValue);
+  }
+  public getNextPage(): void {
+    const newValue = { ...this.searchState$.value };
+    newValue.from =
+      (this.searchState$.value.from || 0) + this.searchMode.results.pageSize;
+    this.searchState$.next(newValue);
+  }
+
+  public updateFilterCriteria(
+    criteria: SearchFilterCriteriaInterface | SearchFilterCriteriaInterface[]
+  ): void {
+    // update state
+    const searchState: SearchStateInterface = { ...this.searchState$.value };
+    this.setFilterCriteria(searchState, criteria);
+    searchState.from = 0;
+    this.searchState$.next(searchState);
+    this.clearSearchFilterDataCache();
+
+    // update filters
+    if (this.searchMode) {
+      if (this.searchMode.dynamicFilters === true) {
+        // request new filters
+        // response from factory will trigger emit
+        this.updateFilters();
+      }
+    }
+  }
+  public changeSearchTerm(searchTerm: string): void {
+    const newValue = { ...this.searchState$.value };
+    newValue.from = 0;
+    newValue.searchTerm = searchTerm;
+    this.searchState$.next(newValue);
+    this.clearSearchFilterDataCache();
+  }
+
+  public updateResult(result: SearchResultInterface): void {
+    if (!result) return;
+
+    this.results$.next(result);
+    this.setPredictionsCache(result);
+  }
+
+  private setFactoryFilterCache(factoryFilters: SearchFilterInterface[]) {
+    this._factoryFiltersCache = factoryFilters;
+    this.checkSearchFilterDataCache();
+  }
+
+  private setPredictionsCache(results: SearchResultInterface) {
+    if (results.filterCriteriaPredictions.size !== 0) {
+      this._predictionsCache = results.filterCriteriaPredictions;
+    }
+    this.checkSearchFilterDataCache();
+  }
+
+  // check if suffient data is present to emit new SearchFilterData
+  private checkSearchFilterDataCache() {
+    if (this._predictionsCache && this._factoryFiltersCache) {
+      this.searchFilterData$.next({
         state: this.searchState$.value,
-        predictions: this._predictions,
-        factoryFilters: this._factoryFilters
+        predictions: this._predictionsCache,
+        factoryFilters: this._factoryFiltersCache
       });
 
-      this.clearCombo();
+      this.clearSearchFilterDataCache();
     }
   }
 
-  private clearCombo() {
+  private clearSearchFilterDataCache() {
     if (this.searchMode && this.searchMode.dynamicFilters)
-      this._factoryFilters = null;
-    this._predictions = null;
+      this._factoryFiltersCache = null;
+    this._predictionsCache = null;
   }
 
   private initiateStreams(): void {
-    this.searchFilters$ = this.combo$.pipe(
-      filter(x => !!x),
+    this.searchFilters$ = this.searchFilterData$.pipe(
+      filter(data => !!data),
       map(({ predictions, factoryFilters, state }) => {
         return factoryFilters.map(factoryFilter =>
           this.getUpdatedSearchFilter(
@@ -244,90 +323,11 @@ export class SearchViewModel {
     return value.prediction === undefined ? 0 : value.prediction;
   }
 
-  public reset(
-    mode: SearchModeInterface,
-    state: SearchStateInterface = null
-  ): void {
-    let newSearchState: SearchStateInterface;
-    this.searchMode = mode;
-    this.filterFactory = this.injector.get(this.searchMode.searchFilterFactory); // used by updateFilters()
-
-    if (state) {
-      // we want to update the state
-      newSearchState = state;
-    } else {
-      // we want to reset the state
-      // note: sort mode should stay the same on reset
-      newSearchState = { ...this.searchState$.value };
-      newSearchState.searchTerm = '';
-      newSearchState.from = 0;
-      newSearchState.filterCriteriaSelections = new Map();
-    }
-    this.setFilterCriteria(newSearchState, null);
-    // trigger new search
-    this.searchState$.next(newSearchState);
-    this.clearCombo();
-
-    // request new filters
-    this.updateFilters();
-  }
-
-  public changeSort(sortMode: SortModeInterface): void {
-    const newValue = {
-      ...this.searchState$.value,
-      sort: sortMode.name,
-      from: 0
-    };
-    this.searchState$.next(newValue);
-    this.filters$.next(this.filters$.value);
-  }
-  public getNextPage(): void {
-    const newValue = { ...this.searchState$.value };
-    newValue.from =
-      (this.searchState$.value.from || 0) + this.searchMode.results.pageSize;
-    this.searchState$.next(newValue);
-    this.filters$.next(this.filters$.value);
-  }
-
-  public updateFilterCriteria(
-    criteria: SearchFilterCriteriaInterface | SearchFilterCriteriaInterface[]
-  ): void {
-    // update state
-    const searchState: SearchStateInterface = { ...this.searchState$.value };
-    this.setFilterCriteria(searchState, criteria);
-    searchState.from = 0;
-    this.searchState$.next(searchState);
-    this.clearCombo();
-
-    // update filters
-    if (this.searchMode) {
-      if (this.searchMode.dynamicFilters === true) {
-        // request new filters
-        // response from factory will trigger emit
-        this.updateFilters();
-      }
-    }
-  }
-  public changeSearchTerm(searchTerm: string): void {
-    const newValue = { ...this.searchState$.value };
-    newValue.from = 0;
-    newValue.searchTerm = searchTerm;
-    this.searchState$.next(newValue);
-    this.clearCombo();
-  }
-
-  public updateResult(result: SearchResultInterface): void {
-    if (!result) return;
-
-    this.results$.next(result);
-    this.setPredictions(result);
-  }
-
   private updateFilters(): void {
     this.filterFactory
       .getFilters(this.searchState$.value)
       .pipe(take(1))
-      .subscribe(filters => this.setFilters(filters));
+      .subscribe(filters => this.setFactoryFilterCache(filters));
   }
 
   private extractSelectedValuesFromCriteria(
