@@ -1,4 +1,3 @@
-// tslint:disable:member-ordering
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { NavigationEnd, Router } from '@angular/router';
@@ -22,6 +21,9 @@ import {
   FavoriteServiceInterface,
   FavoriteTypesEnum,
   FAVORITE_SERVICE_TOKEN,
+  HistoryFixture,
+  HistoryServiceInterface,
+  HISTORY_SERVICE_TOKEN,
   LearningAreaActions,
   TaskActions,
   TaskEduContentActions,
@@ -85,7 +87,9 @@ export class LoginpageComponent implements OnInit {
     @Inject(TOC_SERVICE_TOKEN) private tocService: TocServiceInterface,
     private dialog: MatDialog,
     @Inject(EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN)
-    private eduContentCollectionManagerService: EduContentCollectionManagerService
+    private eduContentCollectionManagerService: EduContentCollectionManagerService,
+    @Inject(HISTORY_SERVICE_TOKEN)
+    private historyService: HistoryServiceInterface
   ) {}
 
   ngOnInit() {
@@ -200,5 +204,15 @@ export class LoginpageComponent implements OnInit {
       autoFocus: true,
       panelClass: 'quick-link__dialog'
     });
+  }
+
+  upsertHistory(): void {
+    const history = new HistoryFixture({
+      name: 'test',
+      type: 'educontent',
+      learningAreaId: 19,
+      taskId: 1
+    });
+    this.response = this.historyService.upsertHistory(history);
   }
 }

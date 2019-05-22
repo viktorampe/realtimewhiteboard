@@ -7,7 +7,8 @@ export enum HistoryActionTypes {
   LoadHistory = '[History] Load History',
   UpsertHistory = '[History] Upsert History',
   DeleteHistory = '[History] Delete History',
-  ClearHistory = '[History] Clear History'
+  ClearHistory = '[History] Clear History',
+  StartUpsertHistory = '[History] Start Upsert History'
 }
 
 export class LoadHistory implements Action {
@@ -45,10 +46,17 @@ export class ClearHistory implements Action {
   readonly type = HistoryActionTypes.ClearHistory;
 }
 
+export class StartUpsertHistory implements Action {
+  readonly type = HistoryActionTypes.StartUpsertHistory;
+
+  constructor(public payload: { history: HistoryInterface }) {}
+}
+
 export type HistoryActions =
   | LoadHistory
   | HistoryLoaded
   | HistoryLoadError
   | UpsertHistory
   | DeleteHistory
-  | ClearHistory;
+  | ClearHistory
+  | StartUpsertHistory;
