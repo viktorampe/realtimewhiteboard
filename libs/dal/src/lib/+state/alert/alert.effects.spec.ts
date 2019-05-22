@@ -6,18 +6,19 @@ import { Action, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
 import { getTestScheduler, hot } from '@nrwl/nx/testing';
 import { undo } from 'ngrx-undo';
-import { Observable, of } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { AlertFixture, EffectFeedbackFixture } from '../../+fixtures';
 import { UndoService, UNDO_SERVICE_TOKEN } from '../../../lib/undo';
+import { AlertService } from '../../alert';
 import { ALERT_SERVICE_TOKEN } from '../../alert/alert.service.interface';
+import { EffectFeedbackActions, Priority } from '../effect-feedback';
+import { AddEffectFeedback } from '../effect-feedback/effect-feedback.actions';
+import { ActionSuccessful } from './../dal.actions';
 import {
   EffectFeedback,
-  EffectFeedbackActions,
-  Priority
-} from '../effect-feedback';
-import { ActionSuccessful } from './../dal.actions';
-import { EffectFeedbackInterface } from './../effect-feedback/effect-feedback.model';
+  EffectFeedbackInterface
+} from './../effect-feedback/effect-feedback.model';
 import {
   AlertsLoaded,
   AlertsLoadError,
@@ -37,6 +38,7 @@ describe('AlertEffects', () => {
   let actions: Observable<any>;
   let effects: AlertsEffects;
   let undoService: UndoService;
+  let alertService: AlertService;
   let usedState: AlertState;
   let uuid: Function;
   let dateMock: MockDate;
@@ -127,7 +129,9 @@ describe('AlertEffects', () => {
               read?: boolean,
               intended?: boolean
             ) => {},
-            deleteAlert: (userId: number, alertId: number) => {}
+            deleteAlert: (userId: number, alertId: number) => {
+              return 'returnValue';
+            }
           }
         },
         AlertsEffects,
@@ -145,6 +149,7 @@ describe('AlertEffects', () => {
     uuid = TestBed.get('uuid');
     effectFeedback.id = uuid();
     undoService = TestBed.get(UNDO_SERVICE_TOKEN);
+    alertService = TestBed.get(ALERT_SERVICE_TOKEN);
   });
 
   describe('loadAlert$', () => {
@@ -579,130 +584,51 @@ describe('AlertEffects', () => {
       );
     });
   });
+  describe('deleteAlert', () => {
+    it('should call service.dispatchActionAsUndoable with the correct payload and return an addFeedbackAction if no error occured', () => {
+      const deleteAction = new DeleteAlert({ id: 0, personId: 1 });
+      const addFeedbackAction = new AddEffectFeedback({ effectFeedback });
+      const spy = jest
+        .spyOn(undoService, 'dispatchActionAsUndoable')
+        .mockReturnValue(from([addFeedbackAction]));
 
-  describe('deleteAlert$', () => {
-    let deleteAlertSuccessAction: EffectFeedbackActions.AddEffectFeedback;
-    let deleteAlertFailureAction: EffectFeedbackActions.AddEffectFeedback;
-    let effectFeedbackSuccess: EffectFeedback;
-    let effectFeedbackError: EffectFeedback;
-
-    const deleteAlertAction = new DeleteAlert({
-      id: mockData.alertId,
-      personId: mockData.userId
-    });
-    const deleteAlertUndoAction = undo(deleteAlertAction);
-
-    beforeAll(() => {
-      usedState = initialState;
-
-      effectFeedbackSuccess = {
-        ...effectFeedback,
-        triggerAction: deleteAlertAction,
-        message: 'Melding is verwijderd.',
-        type: 'success',
-        display: true,
-        priority: Priority.NORM,
-        userActions: null
+      const payload = {
+        action: deleteAction,
+        dataPersistence: effects['dataPersistence'],
+        intendedAction: 'returnValue',
+        undoLabel: 'Melding wordt verwijderd.',
+        undoneLabel: 'Melding is niet verwijderd.',
+        doneLabel: 'Melding is verwijderd.'
       };
-
-      effectFeedbackError = {
-        ...effectFeedbackSuccess,
-        message: 'Het is niet gelukt om de melding te verwijderen.',
-        type: 'error',
-        userActions: [{ title: 'Opnieuw', userAction: deleteAlertAction }],
-        priority: Priority.HIGH
-      };
-
-      deleteAlertSuccessAction = new EffectFeedbackActions.AddEffectFeedback({
-        effectFeedback: effectFeedbackSuccess
-      });
-      deleteAlertFailureAction = new EffectFeedbackActions.AddEffectFeedback({
-        effectFeedback: effectFeedbackError
-      });
+      expectInAndOut(effects.deleteAlert$, deleteAction, addFeedbackAction);
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(payload);
     });
-    beforeEach(() => {
-      mockServiceMethodReturnValue('deleteAlert', {});
-    });
-
-    describe('the user does not cancel the deletion', () => {
-      describe('when deletion is successfull', () => {
-        it('should dispatch a success action', () => {
-          const deleteFeedbackAction = new EffectFeedbackActions.DeleteEffectFeedback(
-            { id: 'foo' }
-          );
-          actions = hot('-ab|', {
-            a: deleteAlertAction,
-            b: deleteFeedbackAction
-          });
-          expect(effects.deleteAlert$).toBeObservable(
-            hot('--a|', {
-              a: deleteAlertSuccessAction
-            })
-          );
+    it('should return an undoAction and a feedbackAction if an error occured', () => {
+      const deleteAction = new DeleteAlert({ id: 0, personId: 1 });
+      const spy = jest
+        .spyOn(undoService, 'dispatchActionAsUndoable')
+        .mockImplementation(() => {
+          throw Error('some error');
         });
+      const feedbackAction = new EffectFeedbackActions.AddEffectFeedback({
+        effectFeedback: new EffectFeedback({
+          id: uuid(),
+          triggerAction: deleteAction,
+          message: 'Het is niet gelukt om de melding te verwijderen.',
+          userActions: [{ title: 'Opnieuw', userAction: deleteAction }],
+          type: 'error',
+          priority: Priority.HIGH
+        })
       });
-
-      describe('when there is an error', () => {
-        beforeEach(() => {
-          mockServiceMethodError('deleteAlert', 'Oops, something went wrong!');
-        });
-        it('should dispatch an undo action', () => {
-          const deleteFeedbackAction = new EffectFeedbackActions.DeleteEffectFeedback(
-            { id: 'foo' }
-          );
-          actions = hot('ab', {
-            a: deleteAlertAction,
-            b: deleteFeedbackAction
-          });
-          expect(effects.deleteAlert$).toBeObservable(
-            hot('-(ab)', {
-              a: deleteAlertUndoAction,
-              b: deleteAlertFailureAction
-            })
-          );
-        });
-      });
-    });
-
-    describe('the user does cancels the deletion', () => {
-      describe('when deletion is successfull', () => {
-        it('should dispatch a success action', () => {
-          const undoAction = {
-            type: 'ngrx-undo/UNDO_ACTION',
-            payload: deleteAlertAction
-          };
-          const undoServiceSpy = jest
-            .spyOn(undoService, 'undo')
-            .mockReturnValue(undoAction);
-          const deleteFeedbackAction = new EffectFeedbackActions.DeleteEffectFeedback(
-            {
-              id: 'foo',
-              userAction: undoAction
-            }
-          );
-          const expectedEffectFeedback = new EffectFeedback({
-            id: 'foo',
-            triggerAction: deleteAlertAction,
-            message: 'Melding is niet verwijderd.',
-            userActions: null,
-            type: 'success',
-            priority: Priority.NORM
-          });
-          actions = hot('-ab|', {
-            a: deleteAlertAction,
-            b: deleteFeedbackAction
-          });
-          expect(effects.deleteAlert$).toBeObservable(
-            hot('--a|', {
-              a: new EffectFeedbackActions.AddEffectFeedback({
-                effectFeedback: expectedEffectFeedback
-              })
-            })
-          );
-          expect(undoServiceSpy).toHaveBeenCalledTimes(1);
-          expect(undoServiceSpy).toHaveBeenCalledWith(deleteAlertAction);
-        });
-      });
+      actions = hot('-a', { a: deleteAction });
+      expect(effects.deleteAlert$).toBeObservable(
+        hot('-(ab)', {
+          a: undo(deleteAction),
+          b: feedbackAction
+        })
+      );
+      expect(spy).toHaveBeenCalledTimes(1);
     });
   });
 });
