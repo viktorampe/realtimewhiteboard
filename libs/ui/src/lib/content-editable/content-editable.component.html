@@ -3,6 +3,8 @@
   <mat-form-field
     class="ui-content-editable__form-field"
     [style.display]="active ? null : 'none'"
+    campusClickPreventDefault
+    campusClickStopPropagation
   >
     <input
       *ngIf="!multiline"
@@ -23,15 +25,19 @@
   </mat-form-field>
   <span *ngIf="active" class="ui-content-editable__actions">
     <campus-button
+      circle
       class="ui-content-editable__actions__confirm"
       *ngIf="textIsValid()"
       iconClass="check"
       (click)="saveChanges()"
+      campusClickStopPropagation
     ></campus-button>
     <campus-button
+      circle
       class="ui-content-editable__actions__cancel"
       iconClass="close"
       (click)="cancelChanges()"
+      campusClickStopPropagation
     ></campus-button>
   </span>
 </div>

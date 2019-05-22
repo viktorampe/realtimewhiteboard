@@ -147,10 +147,40 @@
       class="app-educontentsearchresult__bottom__buttonbar"
     >
       <campus-button
+        *ngIf="
+          data.eduContent.publishedEduContentMetadata.fileExt !== 'ludo.zip'
+        "
         class="app-educontentsearchresult__bottom__buttonbar__openstatic"
-        (click)="open()"
+        (click)="
+          openStatic(data.eduContent.publishedEduContentMetadata.streamable)
+        "
         iconClass="eye"
         >Bekijken
+      </campus-button>
+      <campus-button
+        *ngIf="data.eduContent.publishedEduContentMetadata.streamable"
+        class="app-educontentsearchresult__bottom__buttonbar__openstatic__download"
+        (click)="openStatic(false)"
+        iconClass="download"
+        >Downloaden
+      </campus-button>
+      <campus-button
+        *ngIf="
+          data.eduContent.publishedEduContentMetadata.fileExt === 'ludo.zip'
+        "
+        class="app-educontentsearchresult__bottom__buttonbar__openexercise"
+        (click)="openExercise(false)"
+        iconClass="eye"
+        >Bekijken
+      </campus-button>
+      <campus-button
+        *ngIf="
+          data.eduContent.publishedEduContentMetadata.fileExt === 'ludo.zip'
+        "
+        class="app-educontentsearchresult__bottom__buttonbar__openexercise__solutions"
+        (click)="openExercise(true)"
+        iconClass="eye"
+        >Bekijken met oplossingen
       </campus-button>
       <campus-button
         class="app-educontentsearchresult__bottom__buttonbar__linkbundle"
@@ -191,16 +221,13 @@
         (click)="toggleFavorite()"
         iconClass="favorites"
       >
-        {{
-          data.isFavorite
-            ? 'Verwijderen uit favorieten'
-            : 'Toevoegen aan favorieten'
-        }}
-        <mat-icon
-          class="checkmark"
-          svgIcon="check-on"
-          *ngIf="data.isFavorite"
-        ></mat-icon>
+        <ng-container
+          *ngIf="(isFavorite$ | async) as isFavorite; else: notFavorite"
+        >
+          Verwijderen uit favorieten
+          <mat-icon class="checkmark" svgIcon="check-on"></mat-icon>
+        </ng-container>
+        <ng-template #notFavorite> Toevoegen aan favorieten </ng-template>
       </campus-button>
     </div>
   </div>

@@ -1,4 +1,3 @@
-// tslint:disable:member-ordering
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { NavigationEnd, Router } from '@angular/router';
@@ -12,6 +11,8 @@ import {
   EduContentActions,
   EduContentInterface,
   EduContentQueries,
+  EffectFeedback,
+  EffectFeedbackActions,
   EffectFeedbackInterface,
   EffectFeedbackQueries,
   FavoriteActions,
@@ -20,6 +21,9 @@ import {
   FavoriteServiceInterface,
   FavoriteTypesEnum,
   FAVORITE_SERVICE_TOKEN,
+  HistoryFixture,
+  HistoryServiceInterface,
+  HISTORY_SERVICE_TOKEN,
   LearningAreaActions,
   TaskActions,
   TaskEduContentActions,
@@ -83,7 +87,9 @@ export class LoginpageComponent implements OnInit {
     @Inject(TOC_SERVICE_TOKEN) private tocService: TocServiceInterface,
     private dialog: MatDialog,
     @Inject(EDU_CONTENT_COLLECTION_MANAGER_SERVICE_TOKEN)
-    private eduContentCollectionManagerService: EduContentCollectionManagerService
+    private eduContentCollectionManagerService: EduContentCollectionManagerService,
+    @Inject(HISTORY_SERVICE_TOKEN)
+    private historyService: HistoryServiceInterface
   ) {}
 
   ngOnInit() {
@@ -101,6 +107,28 @@ export class LoginpageComponent implements OnInit {
     if (this.currentUser) {
       this.loadStore();
     }
+  }
+
+  addErrorFeedback(): void {
+    const mockAction = new FavoriteActions.UpdateFavorite({
+      userId: this.authService.userId,
+      favorite: { id: 1, changes: { name: 'foo' } },
+      customFeedbackHandlers: {
+        useCustomErrorHandler: true
+      }
+    });
+    const mockFeedBack = EffectFeedback.generateErrorFeedback(
+      'foo',
+      mockAction,
+      'Het is niet gelukt de favoriet te wijzigen.'
+    );
+    mockFeedBack.icon = 'warning';
+
+    this.store.dispatch(
+      new EffectFeedbackActions.AddEffectFeedback({
+        effectFeedback: mockFeedBack
+      })
+    );
   }
 
   getCurrentUser() {
@@ -161,7 +189,6 @@ export class LoginpageComponent implements OnInit {
       favorite = favorites[0];
     });
     console.log(favorite);
-
     this.response = this.favoriteService.updateFavorite(
       this.authService.userId,
       favorite.id,
@@ -173,7 +200,19 @@ export class LoginpageComponent implements OnInit {
 
   openQuickLinkManager(): void {
     this.dialog.open(QuickLinkComponent, {
-      data: { mode: QuickLinkTypeEnum.FAVORITES }
+      data: { mode: QuickLinkTypeEnum.FAVORITES },
+      autoFocus: true,
+      panelClass: 'quick-link__dialog'
     });
+  }
+
+  upsertHistory(): void {
+    const history = new HistoryFixture({
+      name: 'test',
+      type: 'educontent',
+      learningAreaId: 19,
+      taskId: 1
+    });
+    this.response = this.historyService.upsertHistory(history);
   }
 }

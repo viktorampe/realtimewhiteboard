@@ -78,7 +78,11 @@
 <div>
   <campus-button campusPrimary (click)="loadStore()">Load store</campus-button>
 </div>
-
+<div>
+  <campus-button campusPrimary (click)="addErrorFeedback()"
+    >Add error feedback to store</campus-button
+  >
+</div>
 <div>
   <campus-button campusPrimary (click)="openQuickLinkManager()"
     >Open quicklink</campus-button
@@ -90,4 +94,10 @@
 
   <campus-content-editable text="Try to edit me"></campus-content-editable>
   <campus-button (click)="toggleEditable()">Edit</campus-button>
+</div>
+
+<div>
+  <campus-button campusPrimary (click)="upsertHistory()"
+    >Upsert History</campus-button
+  >
 </div>

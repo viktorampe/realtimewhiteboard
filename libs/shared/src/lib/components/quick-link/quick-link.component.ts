@@ -1,4 +1,11 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import {
+  Component,
+  Inject,
+  OnInit,
+  QueryList,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import {
   EduContent,
@@ -7,6 +14,8 @@ import {
   FavoriteTypesEnum,
   HistoryInterface
 } from '@campus/dal';
+import { ContentEditableComponent, FilterTextInputComponent } from '@campus/ui';
+import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { QuickLinkTypeEnum } from './quick-link-type.enum';
@@ -19,10 +28,20 @@ import { QuickLinkViewModel } from './quick-link.viewmodel';
   providers: [QuickLinkViewModel]
 })
 export class QuickLinkComponent implements OnInit {
-  public contentData$: Observable<ContentDataInterface[]>;
+  public contentData$: Observable<QuickLinkInterface[]>;
   public feedback$: Observable<EffectFeedbackInterface>;
   public dialogTitle: string;
   public dialogTitleIcon: string;
+
+  @ViewChildren(ContentEditableComponent)
+  private contentEditables: QueryList<ContentEditableComponent>;
+  private activeContentEditable: ContentEditableComponent;
+
+  @ViewChild(FilterTextInputComponent)
+  filterTextInput: FilterTextInputComponent<
+    QuickLinkInterface[],
+    ContentDataInterface
+  >;
 
   private dialogTitles = new Map<
     QuickLinkTypeEnum,
@@ -57,7 +76,7 @@ export class QuickLinkComponent implements OnInit {
       actionType: 'open',
       label: 'Openen',
       icon: 'exercise:open',
-      tooltip: 'open oefening zonder oplossingen',
+      tooltip: 'Open oefening zonder oplossingen',
       handler: (input: QuickLinkInterface): void =>
         this.openEduContentAsExercise(input)
     },
@@ -65,7 +84,7 @@ export class QuickLinkComponent implements OnInit {
       actionType: 'open',
       label: 'Toon oplossing',
       icon: 'exercise:finished',
-      tooltip: 'open oefening met oplossingen',
+      tooltip: 'Open oefening met oplossingen',
       handler: (input: QuickLinkInterface): void =>
         this.openEduContentAsSolution(input)
     },
@@ -124,15 +143,22 @@ export class QuickLinkComponent implements OnInit {
       actionType: 'manage',
       label: 'Bewerken',
       icon: 'edit',
-      tooltip: 'naam aanpassen',
-      handler: (input: QuickLinkInterface): void => this.update(input)
+      tooltip: 'Pas de naam van het item aan',
+      handler: (input: QuickLinkInterface): void => this.enableEditing(input)
     },
     remove: {
       actionType: 'manage',
       label: 'Verwijderen',
       icon: 'delete',
-      tooltip: 'item verwijderen',
+      tooltip: 'Verwijder het item',
       handler: (input: QuickLinkInterface): void => this.remove(input)
+    },
+    none: {
+      actionType: 'open',
+      label: '',
+      icon: '',
+      tooltip: '',
+      handler: () => {}
     }
   };
 
@@ -140,16 +166,39 @@ export class QuickLinkComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA)
     public data: { mode: QuickLinkTypeEnum },
     private dialogRef: MatDialogRef<QuickLinkComponent>,
-    private quickLinkViewModel: QuickLinkViewModel
+    private quickLinkViewModel: QuickLinkViewModel,
+    @Inject(FILTER_SERVICE_TOKEN) private filterService: FilterServiceInterface
   ) {}
 
   ngOnInit() {
     this.setupStreams();
+    this.filterTextInput.setFilterableItem(this);
 
     if (this.dialogTitles.has(this.data.mode)) {
       const titleData = this.dialogTitles.get(this.data.mode);
       this.dialogTitle = titleData.title;
       this.dialogTitleIcon = titleData.icon;
+    }
+  }
+
+  filterFn(
+    source: QuickLinkInterface[],
+    searchText: string
+  ): ContentDataInterface[] {
+    if (searchText.trim().length > 0) {
+      const results = this.filterService
+        .filter(source, { name: searchText })
+        .sort(this.quickLinkSorter);
+
+      const contentData: ContentDataInterface = {
+        type: 'Gevonden items',
+        title: 'Gevonden items',
+        quickLinks: results
+      };
+
+      return [contentData];
+    } else {
+      return this.convertToQuickLinkData(source);
     }
   }
 
@@ -167,6 +216,7 @@ export class QuickLinkComponent implements OnInit {
 
   public openEduContentAsStream(quickLink: QuickLinkInterface) {
     this.quickLinkViewModel.openStaticContent(quickLink.eduContent, true);
+    this.closeDialog();
   }
 
   public openEduContentAsDownload(quickLink: QuickLinkInterface) {
@@ -175,46 +225,69 @@ export class QuickLinkComponent implements OnInit {
 
   public openBundle(quickLink: QuickLinkInterface) {
     this.quickLinkViewModel.openBundle(quickLink.bundle);
+    this.closeDialog();
   }
 
   public openTask(quickLink: QuickLinkInterface) {
     this.quickLinkViewModel.openTask(quickLink.task);
+    this.closeDialog();
   }
 
   public openArea(quickLink: QuickLinkInterface) {
     this.quickLinkViewModel.openArea(quickLink.learningArea);
+    this.closeDialog();
   }
 
   public openSearch(quickLink: QuickLinkInterface) {
     this.quickLinkViewModel.openSearch(quickLink, this.data.mode);
+    this.closeDialog();
   }
 
   public openBoeke(quickLink: QuickLinkInterface) {
     this.quickLinkViewModel.openStaticContent(quickLink.eduContent);
   }
 
-  public update(quickLink: QuickLinkInterface) {
-    this.quickLinkViewModel.update(
-      quickLink.id,
-      quickLink.name,
-      this.data.mode
+  public update(quickLink: QuickLinkInterface, newName: string) {
+    this.quickLinkViewModel.update(quickLink.id, newName, this.data.mode);
+  }
+
+  public enableEditing(quickLink: QuickLinkInterface) {
+    if (this.activeContentEditable) {
+      this.activeContentEditable.active = false;
+    }
+
+    const contentEditable = this.contentEditables.find(
+      editable => editable.relatedItem === quickLink
     );
+
+    if (contentEditable) {
+      this.activeContentEditable = contentEditable;
+      this.activeContentEditable.active = true;
+    }
   }
 
   public remove(quickLink: QuickLinkInterface) {
     this.quickLinkViewModel.remove(quickLink.id, this.data.mode);
   }
 
+  public onBannerDismiss(event) {
+    this.quickLinkViewModel.onFeedbackDismiss(event);
+  }
+
   private setupStreams() {
     this.contentData$ = this.quickLinkViewModel
       .getQuickLinks$(this.data.mode)
-      .pipe(map(qL => this.convertToQuickLinkData(qL)));
+      .pipe(
+        map(quickLinks =>
+          quickLinks.map(quickLink => this.convertToQuickLink(quickLink))
+        )
+      );
 
-    this.feedback$ = this.quickLinkViewModel.feedback$;
+    this.feedback$ = this.quickLinkViewModel.getFeedback$();
   }
 
   private convertToQuickLinkData(
-    values: FavoriteInterface[] | HistoryInterface[]
+    values: QuickLinkInterface[]
   ): ContentDataInterface[] {
     return values
       .reduce(
@@ -231,7 +304,7 @@ export class QuickLinkComponent implements OnInit {
             acc.push(category);
           }
 
-          category.quickLinks.push(this.convertToQuickLink(value));
+          category.quickLinks.push(value);
 
           return acc;
         },
@@ -272,7 +345,7 @@ export class QuickLinkComponent implements OnInit {
       case FavoriteTypesEnum.EDUCONTENT:
       case 'educontent':
         const eduContent = quickLink.eduContent as EduContent;
-        if (eduContent.contentType === 'exercise') {
+        if (eduContent.type === 'exercise') {
           return this.quickLinkActions.openEduContentAsExercise;
         } else if (eduContent.streamable) {
           return this.quickLinkActions.openEduContentAsStream;
@@ -288,6 +361,8 @@ export class QuickLinkComponent implements OnInit {
       case FavoriteTypesEnum.SEARCH:
       case 'search':
         return this.quickLinkActions.openSearch;
+      default:
+        return this.quickLinkActions.none;
     }
   }
 
@@ -298,7 +373,7 @@ export class QuickLinkComponent implements OnInit {
       case FavoriteTypesEnum.EDUCONTENT:
       case 'educontent':
         const eduContent = quickLink.eduContent as EduContent;
-        if (eduContent.contentType === 'exercise') {
+        if (eduContent.type === 'exercise') {
           return [this.quickLinkActions.openEduContentAsSolution];
         } else if (eduContent.streamable) {
           return [this.quickLinkActions.openEduContentAsDownload];
@@ -352,7 +427,7 @@ interface QuickLinkInterface extends FavoriteInterface, HistoryInterface {
   alternativeOpenActions: QuickLinkActionInterface[];
   manageActions: QuickLinkActionInterface[];
   // override eduContent property -> is always cast to EduContent
-  eduContent: EduContent;
+  eduContent?: EduContent;
 }
 
 interface QuickLinkActionInterface {

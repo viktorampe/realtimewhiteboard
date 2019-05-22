@@ -26,12 +26,19 @@ import { QuickLinkViewModel } from './quick-link.viewmodel';
 })
 export class MockQuickLinkViewModel
   implements ViewModelInterface<QuickLinkViewModel> {
-  public feedback$ = new BehaviorSubject(this.getMockEffectFeedBack());
+  private feedback$ = new BehaviorSubject<EffectFeedbackInterface>(
+    this.getMockEffectFeedBack()
+  );
+  private _quickLink$ = new BehaviorSubject(this.getMockFavoriteQuickLinks());
 
-  public getQuickLinks$ = (mode: QuickLinkTypeEnum) =>
-    new BehaviorSubject(this.getMockFavoriteQuickLinks());
+  public getFeedback$ = () => this.feedback$;
+
+  public getQuickLinks$ = (mode: QuickLinkTypeEnum) => this._quickLink$;
+
   public update(id: number, name: string, mode: QuickLinkTypeEnum): void {}
   public remove(id: number, mode: QuickLinkTypeEnum): void {}
+
+  public onFeedbackDismiss(): void {}
 
   private getMockFavoriteQuickLinks(): FavoriteInterface[] {
     const mockCreatedDate = new Date(2019, 5, 7, 12, 0, 0, 0);

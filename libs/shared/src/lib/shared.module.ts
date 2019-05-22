@@ -10,6 +10,7 @@ import {
   MatIconModule,
   MatIconRegistry,
   MatListModule,
+  MatMenuModule,
   MatSnackBarModule,
   MatTooltipModule
 } from '@angular/material';
@@ -85,7 +86,8 @@ import { SCORM_EXERCISE_SERVICE_TOKEN } from './scorm/scorm-exercise.service.int
     MatDialogModule,
     MatListModule,
     MatTooltipModule,
-    UtilsModule
+    UtilsModule,
+    MatMenuModule
   ],
   declarations: [
     HeaderComponent,

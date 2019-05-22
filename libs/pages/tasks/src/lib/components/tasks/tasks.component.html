@@ -26,7 +26,7 @@
       *ngIf="(learningArea$ | async) as learningArea"
       [title]="learningArea.name"
       [subtitle]="'Taken'"
-      [iconClass]="'learning-area:' + learningArea.icon"
+      [iconClass]="learningArea.icon"
     >
     </campus-page-header>
 
