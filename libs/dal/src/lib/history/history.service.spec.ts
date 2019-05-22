@@ -10,7 +10,7 @@ describe('HistoryService', () => {
   let personApi: PersonApi;
   let historyApi: HistoryApi;
   const mockUserId = 1;
-  const mockHistory = new HistoryFixture();
+  const mockHistory = new HistoryFixture({ taskId: 2 });
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
@@ -66,9 +66,9 @@ describe('HistoryService', () => {
         mockHistory.name,
         mockHistory.type,
         mockHistory.learningAreaId,
-        mockHistory.criteria,
-        mockHistory.eduContentId,
-        mockHistory.bundleId,
+        null,
+        null,
+        null,
         mockHistory.taskId
       );
 
