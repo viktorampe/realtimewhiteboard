@@ -1,8 +1,18 @@
 import { Injectable } from '@angular/core';
 import { ViewModelInterface } from '@campus/testing';
 import { BehaviorSubject } from 'rxjs';
-import { SearchFilterCriteriaInterface, SearchFilterInterface, SearchModeInterface, SearchResultInterface, SearchStateInterface, SortModeInterface } from '../interfaces';
-import { SearchFilterCriteriaFixture, SearchFilterCriteriaValuesFixture } from './../+fixtures/search-filter-criteria.fixture';
+import {
+  SearchFilterCriteriaInterface,
+  SearchFilterInterface,
+  SearchModeInterface,
+  SearchResultInterface,
+  SearchStateInterface,
+  SortModeInterface
+} from '../interfaces';
+import {
+  SearchFilterCriteriaFixture,
+  SearchFilterCriteriaValuesFixture
+} from './../+fixtures/search-filter-criteria.fixture';
 import { BreadcrumbFilterComponent } from './breadcrumb-filter/breadcrumb-filter.component';
 import { CheckboxLineFilterComponent } from './checkbox-line-filter/checkbox-line-filter-component';
 import { CheckboxListFilterComponent } from './checkbox-list-filter/checkbox-list-filter.component';

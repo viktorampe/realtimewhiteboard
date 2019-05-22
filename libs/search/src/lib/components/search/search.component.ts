@@ -1,12 +1,34 @@
-import { AfterViewInit, Component, ComponentFactoryResolver, ComponentRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, Type, ViewContainerRef } from '@angular/core';
-import { SearchFilterComponentInterface, SearchFilterCriteriaInterface, SearchFilterInterface } from '@campus/search';
+import {
+  AfterViewInit,
+  Component,
+  ComponentFactoryResolver,
+  ComponentRef,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  QueryList,
+  SimpleChanges,
+  Type,
+  ViewContainerRef
+} from '@angular/core';
+import {
+  SearchFilterComponentInterface,
+  SearchFilterCriteriaInterface,
+  SearchFilterInterface
+} from '@campus/search';
 import { Observable, Subscription } from 'rxjs';
 import { debounceTime, skipWhile, take } from 'rxjs/operators';
 import { SearchPortalDirective } from '../../directives';
 import { ColumnFilterService } from '../column-filter/column-filter.service';
 import { SearchTermComponent } from '../search-term/search-term.component';
 import { SearchViewModel } from '../search.viewmodel';
-import { SearchModeInterface, SortModeInterface } from './../../interfaces/search-mode-interface';
+import {
+  SearchModeInterface,
+  SortModeInterface
+} from './../../interfaces/search-mode-interface';
 import { SearchResultInterface } from './../../interfaces/search-result-interface';
 import { SearchStateInterface } from './../../interfaces/search-state.interface';
 
