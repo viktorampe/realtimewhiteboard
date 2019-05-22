@@ -52,6 +52,7 @@ import { BehaviorSubject } from 'rxjs';
 import { QuickLinkTypeEnum } from './quick-link-type.enum';
 import { QuickLinkComponent } from './quick-link.component';
 import {
+  QuickLinkActionInterface,
   QuickLinkCategoryInterface,
   QuickLinkInterface
 } from './quick-link.interface';
@@ -62,7 +63,7 @@ describe('QuickLinkComponent', () => {
   let component: QuickLinkComponent;
   let fixture: ComponentFixture<QuickLinkComponent>;
   let quickLinkViewModel: QuickLinkViewModel;
-  let vmQuickLinks$: BehaviorSubject<QuickLinkCategoryInterface[]>;
+  let vmQuickLinkCategories$: BehaviorSubject<QuickLinkCategoryInterface[]>;
   let vmFeedback$: BehaviorSubject<EffectFeedbackInterface>;
   let dateMock: MockDate;
   const mockInjectedData = { mode: 'foo' };
@@ -121,7 +122,7 @@ describe('QuickLinkComponent', () => {
 
     // in the mockViewmodel this is a BehaviorSubject
     // in the mockViewmodel the mode parameter isn't used
-    vmQuickLinks$ = quickLinkViewModel.getQuickLinkCategories$(
+    vmQuickLinkCategories$ = quickLinkViewModel.getQuickLinkCategories$(
       null
     ) as BehaviorSubject<QuickLinkCategoryInterface[]>;
     vmFeedback$ = quickLinkViewModel.getFeedback$() as BehaviorSubject<
@@ -156,7 +157,11 @@ describe('QuickLinkComponent', () => {
       });
 
       it('should show the quicklinks in a list', () => {
-        const quickLinks = vmQuickLinks$.value;
+        const quickLinkCategories = vmQuickLinkCategories$.value;
+        const quickLinkAmount = quickLinkCategories.reduce((acc, cat) => {
+          acc += cat.quickLinks.length;
+          return acc;
+        }, 0);
 
         const listItems = fixture.debugElement.queryAll(
           By.directive(MatListItem)
@@ -167,11 +172,11 @@ describe('QuickLinkComponent', () => {
               .textContent
         );
 
-        expect(listItems.length).toBe(quickLinks.length);
+        expect(listItems.length).toBe(quickLinkAmount);
         // every quickLink should have a listItem with the same name
         // mock data contains quicklinks with unique names
         expect(
-          quickLinks.every(qL =>
+          quickLinkCategories.every(qL =>
             listItemTitles.some(title => title === qL.title)
           )
         );
@@ -179,7 +184,7 @@ describe('QuickLinkComponent', () => {
 
       it('should show the unique quicklink categories as headers in the list', () => {
         const headers = Array.from(
-          new Set(vmQuickLinks$.value.map(qL => qL.type))
+          new Set(vmQuickLinkCategories$.value.map(qL => qL.type))
         );
 
         const listHeaders = fixture.debugElement.queryAll(
@@ -214,7 +219,7 @@ describe('QuickLinkComponent', () => {
           quickLinks: [mockQuickLink]
         };
 
-        vmQuickLinks$.next([mockQuickLinkCategory]);
+        vmQuickLinkCategories$.next([mockQuickLinkCategory]);
         fixture.detectChanges();
 
         const listItemIcon = fixture.debugElement
@@ -239,7 +244,7 @@ describe('QuickLinkComponent', () => {
           quickLinks: [mockQuickLink]
         };
 
-        vmQuickLinks$.next([mockQuickLinkCategory]);
+        vmQuickLinkCategories$.next([mockQuickLinkCategory]);
         fixture.detectChanges();
 
         const listItemName = fixture.debugElement
@@ -258,7 +263,7 @@ describe('QuickLinkComponent', () => {
                 learningArea: new LearningAreaFixture(),
                 type: FavoriteTypesEnum.AREA
               }),
-              'openArea'
+              { handler: 'openArea' }
             );
 
             const mockQuickLinkCategory: QuickLinkCategoryInterface = {
@@ -268,7 +273,7 @@ describe('QuickLinkComponent', () => {
               quickLinks: [mockQuickLink]
             };
 
-            vmQuickLinks$.next([mockQuickLinkCategory]);
+            vmQuickLinkCategories$.next([mockQuickLinkCategory]);
             fixture.detectChanges();
           });
           it('should not show the alternativeOpenActions as links', () => {
@@ -299,7 +304,7 @@ describe('QuickLinkComponent', () => {
                 learningArea: new LearningAreaFixture(),
                 type: FavoriteTypesEnum.BUNDLE
               }),
-              'openBundle'
+              { handler: 'openBundle' }
             );
 
             const mockQuickLinkCategory: QuickLinkCategoryInterface = {
@@ -309,7 +314,7 @@ describe('QuickLinkComponent', () => {
               quickLinks: [mockQuickLink]
             };
 
-            vmQuickLinks$.next([mockQuickLinkCategory]);
+            vmQuickLinkCategories$.next([mockQuickLinkCategory]);
             fixture.detectChanges();
           });
           it('should not show the alternativeOpenActions as links', () => {
@@ -340,7 +345,7 @@ describe('QuickLinkComponent', () => {
                 learningArea: new LearningAreaFixture(),
                 type: FavoriteTypesEnum.TASK
               }),
-              'openTask'
+              { handler: 'openTask' }
             );
 
             const mockQuickLinkCategory: QuickLinkCategoryInterface = {
@@ -350,7 +355,7 @@ describe('QuickLinkComponent', () => {
               quickLinks: [mockQuickLink]
             };
 
-            vmQuickLinks$.next([mockQuickLinkCategory]);
+            vmQuickLinkCategories$.next([mockQuickLinkCategory]);
             fixture.detectChanges();
           });
           it('should not show the alternativeOpenActions as links', () => {
@@ -381,7 +386,7 @@ describe('QuickLinkComponent', () => {
                 learningArea: new LearningAreaFixture(),
                 type: FavoriteTypesEnum.BOEKE
               }),
-              'openTask'
+              { handler: 'openBoeke' }
             );
 
             const mockQuickLinkCategory: QuickLinkCategoryInterface = {
@@ -391,7 +396,7 @@ describe('QuickLinkComponent', () => {
               quickLinks: [mockQuickLink]
             };
 
-            vmQuickLinks$.next([mockQuickLinkCategory]);
+            vmQuickLinkCategories$.next([mockQuickLinkCategory]);
             fixture.detectChanges();
           });
           it('should not show the alternativeOpenActions as links', () => {
@@ -422,7 +427,7 @@ describe('QuickLinkComponent', () => {
                 learningArea: new LearningAreaFixture(),
                 type: FavoriteTypesEnum.SEARCH
               }),
-              'openTask'
+              { handler: 'openSearch' }
             );
 
             const mockQuickLinkCategory: QuickLinkCategoryInterface = {
@@ -432,7 +437,7 @@ describe('QuickLinkComponent', () => {
               quickLinks: [mockQuickLink]
             };
 
-            vmQuickLinks$.next([mockQuickLinkCategory]);
+            vmQuickLinkCategories$.next([mockQuickLinkCategory]);
             fixture.detectChanges();
           });
           it('should not show the alternativeOpenActions as links', () => {
@@ -443,7 +448,7 @@ describe('QuickLinkComponent', () => {
             expect(listItemLinks.length).toBe(0);
           });
 
-          it('should call the correct action handler on element click', fakeAsync(() => {
+          it('should call the correct action handler on element click', () => {
             const listItem = fixture.debugElement.query(
               By.directive(MatListItem)
             );
@@ -452,7 +457,7 @@ describe('QuickLinkComponent', () => {
             spyOn(component, 'openSearch');
             listItem.triggerEventHandler('click', null);
             expect(component.openSearch).toHaveBeenCalled();
-          }));
+          });
         });
 
         describe('type: educontent - exercise', () => {
@@ -464,8 +469,13 @@ describe('QuickLinkComponent', () => {
                 type: FavoriteTypesEnum.EDUCONTENT,
                 eduContent: new EduContentFixture({ type: 'exercise' })
               }),
-              'openEduContentAsExercise',
-              ['openEduContentAsSolution']
+              { handler: 'openEduContentAsExercise' },
+              [
+                {
+                  handler: 'openEduContentAsSolution',
+                  label: 'Toon oplossing'
+                }
+              ]
             );
 
             const mockQuickLinkCategory: QuickLinkCategoryInterface = {
@@ -475,7 +485,7 @@ describe('QuickLinkComponent', () => {
               quickLinks: [mockQuickLink]
             };
 
-            vmQuickLinks$.next([mockQuickLinkCategory]);
+            vmQuickLinkCategories$.next([mockQuickLinkCategory]);
             fixture.detectChanges();
           });
 
@@ -522,8 +532,8 @@ describe('QuickLinkComponent', () => {
                     new EduContentMetadataFixture({ streamable: true })
                   )
                 }),
-                'openEduContentAsStream',
-                ['openEduContentAsDownload']
+                { handler: 'openEduContentAsStream' },
+                [{ handler: 'openEduContentAsDownload', label: 'Downloaden' }]
               );
 
               const mockQuickLinkCategory: QuickLinkCategoryInterface = {
@@ -533,7 +543,7 @@ describe('QuickLinkComponent', () => {
                 quickLinks: [mockQuickLink]
               };
 
-              vmQuickLinks$.next([mockQuickLinkCategory]);
+              vmQuickLinkCategories$.next([mockQuickLinkCategory]);
               fixture.detectChanges();
             });
 
@@ -579,7 +589,7 @@ describe('QuickLinkComponent', () => {
                     new EduContentMetadataFixture({ streamable: false })
                   )
                 }),
-                'openEduContentAsDownload'
+                { handler: 'openEduContentAsDownload', label: 'Downloaden' }
               );
 
               const mockQuickLinkCategory: QuickLinkCategoryInterface = {
@@ -589,7 +599,7 @@ describe('QuickLinkComponent', () => {
                 quickLinks: [mockQuickLink]
               };
 
-              vmQuickLinks$.next([mockQuickLinkCategory]);
+              vmQuickLinkCategories$.next([mockQuickLinkCategory]);
               fixture.detectChanges();
             });
 
@@ -715,7 +725,10 @@ describe('QuickLinkComponent', () => {
         quickLinks: [mockQuickLinks[1]]
       };
 
-      vmQuickLinks$.next([mockQuickLinkCategory1, mockQuickLinkCategory2]);
+      vmQuickLinkCategories$.next([
+        mockQuickLinkCategory1,
+        mockQuickLinkCategory2
+      ]);
       fixture.detectChanges();
     });
 
@@ -806,7 +819,7 @@ describe('QuickLinkComponent', () => {
 
     describe('quickLinkCategories$', () => {
       describe('sorting', () => {
-        fit('should sort the quicklink categories', () => {
+        it('should sort the quicklink categories', () => {
           const mockCategories: QuickLinkCategoryInterface[] = [
             {
               order: 5,
@@ -821,7 +834,7 @@ describe('QuickLinkComponent', () => {
               quickLinks: []
             },
             {
-              order: undefined,
+              order: -1,
               type: '',
               title: '2',
               quickLinks: []
@@ -840,7 +853,7 @@ describe('QuickLinkComponent', () => {
             }
           ];
 
-          vmQuickLinks$.next([...mockCategories]);
+          vmQuickLinkCategories$.next([...mockCategories]);
           fixture.detectChanges();
 
           const expected = [
@@ -850,11 +863,6 @@ describe('QuickLinkComponent', () => {
             mockCategories[0],
             mockCategories[2]
           ];
-
-          console.log(expected.map(ex => ex.order));
-          component.filterTextInput.result$.subscribe(results =>
-            console.log(results.map(res => res.order))
-          );
 
           expect(component.filterTextInput.result$).toBeObservable(
             hot('a', { a: expected })
@@ -1171,28 +1179,30 @@ describe('QuickLinkComponent', () => {
 
 function addActions(
   fixture: FavoriteInterface | HistoryInterface,
-  defaultActionHandler = '',
-  alternativeOpenActionhandlers: string[] = [],
-  manageActionHandlers: string[] = ['edit', 'remove']
+  defaultAction: Partial<QuickLinkActionInterface> = { handler: '' },
+  alternativeOpenActions: Partial<QuickLinkActionInterface>[] = [],
+  manageActions: Partial<QuickLinkActionInterface>[] = [
+    { handler: 'edit' },
+    { handler: 'remove' }
+  ]
 ): QuickLinkInterface {
-  const alternativeOpenActions: any[] = alternativeOpenActionhandlers.map(
-    handler => ({ handler })
-  );
-  const manageActions: any[] = manageActionHandlers.map(handler => ({
-    handler
-  }));
+  const emptyAction = {
+    actionType: 'open',
+    label: 'foo label',
+    icon: 'foo icon',
+    tooltip: 'foo tooltip',
+    handler: 'foo handler'
+  };
 
   return {
     ...fixture,
     eduContent: Object.assign(new EduContent(), fixture.eduContent),
-    defaultAction: {
-      actionType: 'open',
-      label: '',
-      icon: '',
-      tooltip: 'foo tooltip',
-      handler: defaultActionHandler
-    },
-    alternativeOpenActions,
-    manageActions
+    defaultAction: Object.assign({ ...emptyAction }, defaultAction),
+    alternativeOpenActions: alternativeOpenActions.map(aOA =>
+      Object.assign({ ...emptyAction }, aOA)
+    ),
+    manageActions: manageActions.map(mA =>
+      Object.assign({ ...emptyAction }, mA)
+    )
   };
 }
