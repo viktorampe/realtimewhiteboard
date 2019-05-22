@@ -106,8 +106,7 @@ export const favoritesByType = createSelector(
   (state: State) => {
     const byKey: { [key: string]: FavoriteInterface[] } = {};
     // must cast state.ids to number[] (from 'string[] | number[]') or we can't use array functions like forEach
-    const ids: number[] = <number[]>state.ids;
-    ids.forEach((id: number) => {
+    (state.ids as number[]).forEach((id: number) => {
       const item = state.entities[id];
       if (!byKey[item.type]) {
         byKey[item.type] = [];
