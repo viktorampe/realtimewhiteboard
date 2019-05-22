@@ -98,7 +98,7 @@ export class CoupledTeachersViewModel {
       new TeacherStudentActions.LinkTeacherStudent({
         publicKey,
         userId: this.authService.userId,
-        handleErrorAutomatically: false
+        customFeedbackHandlers: { useCustomErrorHandler: true }
       })
     );
   }

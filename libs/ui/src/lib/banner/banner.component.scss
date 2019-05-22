@@ -1,14 +1,43 @@
 :host.ui-banner--mobile {
   .ui-banner {
     flex-flow: column nowrap;
+    &__content {
+      margin: 0px 0px 15px 0px;
+    }
   }
 }
 
+:host.ui-banner--dialog {
+  .ui-banner {
+    justify-content: space-between;
+
+    &__content {
+      mat-icon {
+        width: 24px;
+        height: 24px;
+      }
+    }
+    &__buttons {
+      campus-button {
+        margin: auto 0px auto 8px;
+      }
+    }
+  }
+  &.ui-banner--mobile {
+    .ui-banner {
+      margin-top: 0px;
+      &__buttons {
+        justify-content: start;
+      }
+    }
+  }
+}
 .ui-banner {
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-around;
   align-content: center;
+  padding: 15px;
 
   &__content {
     display: flex;

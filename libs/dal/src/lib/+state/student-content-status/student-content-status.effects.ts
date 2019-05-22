@@ -78,7 +78,6 @@ export class StudentContentStatusesEffects {
                 triggerAction: action,
                 message: 'Status is aangepast.',
                 type: 'success',
-                display: true,
                 priority: Priority.NORM
               });
 
@@ -96,7 +95,6 @@ export class StudentContentStatusesEffects {
           message: 'Status kon niet worden aangepast.',
           type: 'error',
           userActions: [{ title: 'Opnieuw proberen', userAction: action }],
-          display: true,
           priority: Priority.HIGH
         });
         const effectFeedbackAction = new EffectFeedbackActions.AddEffectFeedback(

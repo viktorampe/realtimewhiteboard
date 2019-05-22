@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material';
 import {
   Alert,
   AlertActions,
@@ -16,6 +17,8 @@ import { BreadcrumbLinkInterface, DropdownMenuItemInterface } from '@campus/ui';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { QuickLinkTypeEnum } from '../components/quick-link/quick-link-type.enum';
+import { QuickLinkComponent } from '../components/quick-link/quick-link.component';
 import { ENVIRONMENT_ALERTS_FEATURE_TOKEN } from '../interfaces/environment.injectiontokens';
 import { EnvironmentAlertsFeatureInterface } from '../interfaces/environment.interfaces';
 
@@ -43,6 +46,7 @@ export class HeaderViewModel {
     @Inject(AUTH_SERVICE_TOKEN) private authService: AuthServiceInterface,
     @Inject(ENVIRONMENT_ALERTS_FEATURE_TOKEN)
     private environmentAlertsFeature: EnvironmentAlertsFeatureInterface,
+    private dialog: MatDialog,
     private store: Store<DalState>
   ) {
     this.loadAlertsLoaded();
@@ -117,5 +121,12 @@ export class HeaderViewModel {
 
   toggleSideNav() {
     this.store.dispatch(new UiActions.ToggleSideNav());
+  }
+
+  openDialog(mode: QuickLinkTypeEnum): void {
+    this.dialog.open(QuickLinkComponent, {
+      data: { mode },
+      panelClass: 'quick-link__dialog'
+    });
   }
 }

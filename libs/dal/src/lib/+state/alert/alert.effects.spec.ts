@@ -405,14 +405,12 @@ describe('AlertEffects', () => {
     const setReadSingleAction = new SetReadAlert({
       personId: mockData.userId,
       alertIds: mockData.alertId,
-      read: true,
-      displayResponse: true
+      read: true
     });
     const setReadMultipleAction = new SetReadAlert({
       personId: mockData.userId,
       alertIds: [mockData.alertId, mockData.alertId + 1],
-      read: true,
-      displayResponse: true
+      read: true
     });
 
     const loadAlertsAction = new LoadAlerts({
@@ -583,8 +581,7 @@ describe('AlertEffects', () => {
 
     const deleteAlertAction = new DeleteAlert({
       id: mockData.alertId,
-      personId: mockData.userId,
-      displayResponse: true
+      personId: mockData.userId
     });
     const deleteAlertUndoAction = undo(deleteAlertAction);
 

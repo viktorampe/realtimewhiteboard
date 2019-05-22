@@ -25,7 +25,8 @@ import {
   FavoritesLoadError,
   LoadFavorites,
   StartAddFavorite,
-  ToggleFavorite
+  ToggleFavorite,
+  UpdateFavorite
 } from './favorite.actions';
 import { FavoriteEffects } from './favorite.effects';
 
@@ -93,7 +94,8 @@ describe('FavoriteEffects', () => {
           useValue: {
             getAllForUser: () => {},
             addFavorite: () => {},
-            deleteFavorite: () => {}
+            deleteFavorite: () => {},
+            updateFavorite: () => {}
           }
         },
         {
@@ -311,7 +313,6 @@ describe('FavoriteEffects', () => {
           userActions: [
             { title: 'Opnieuw proberen', userAction: startAddFavoriteAction }
           ],
-          display: true,
           priority: Priority.HIGH
         });
         addFeedbackAction = new AddEffectFeedback({ effectFeedback });
@@ -359,19 +360,15 @@ describe('FavoriteEffects', () => {
         mockServiceMethodError('deleteFavorite', 'Something went wrong.');
       });
       it('should dispatch an error feedback action', () => {
-        const effectFeedback = new EffectFeedbackFixture({
-          id: uuid(),
-          triggerAction: deleteFavoriteAction,
-          message:
-            'Het is niet gelukt om het item uit jouw favorieten te verwijderen.',
-          type: 'error',
-          priority: Priority.HIGH,
-          userActions: [
-            { title: 'Opnieuw proberen', userAction: deleteFavoriteAction }
-          ]
-        });
+        const errorFeedback = EffectFeedback.generateErrorFeedback(
+          uuid(),
+          deleteFavoriteAction,
+          'Het is niet gelukt om het item uit jouw favorieten te verwijderen.'
+        );
 
-        const effectFeedbackAction = new AddEffectFeedback({ effectFeedback });
+        const effectFeedbackAction = new AddEffectFeedback({
+          effectFeedback: errorFeedback
+        });
         const undoAction = undo(deleteFavoriteAction);
 
         actions = hot('a', { a: deleteFavoriteAction });
@@ -383,6 +380,62 @@ describe('FavoriteEffects', () => {
           })
         );
       });
+    });
+  });
+
+  describe('updateFavorite$', () => {
+    const updateFavoriteAction = new UpdateFavorite({
+      userId: 1,
+      favorite: { id: 2, changes: { name: 'bar' } },
+      customFeedbackHandlers: { useCustomErrorHandler: true }
+    });
+    const undoUpdateAction = undo(updateFavoriteAction);
+    let successFeedbackAction: AddEffectFeedback;
+    let errorFeedbackAction: AddEffectFeedback;
+    beforeAll(() => {
+      successFeedbackAction = new AddEffectFeedback({
+        effectFeedback: EffectFeedback.generateSuccessFeedback(
+          uuid(),
+          updateFavoriteAction,
+          'Je favoriet is gewijzigd.'
+        )
+      });
+      errorFeedbackAction = new AddEffectFeedback({
+        effectFeedback: EffectFeedback.generateErrorFeedback(
+          uuid(),
+          updateFavoriteAction,
+          'Het is niet gelukt om je favoriet te wijzigen.'
+        )
+      });
+    });
+
+    it('should call favoriteService.updateFavorite and trigger feedback message on success', () => {
+      mockServiceMethodReturnValue('updateFavorite', { id: 2, name: 'bar' });
+
+      const spy = jest.spyOn(
+        TestBed.get(FAVORITE_SERVICE_TOKEN),
+        'updateFavorite'
+      );
+
+      expectInAndOut(
+        effects.updateFavorite$,
+        updateFavoriteAction,
+        successFeedbackAction
+      );
+
+      expect(spy).toHaveBeenCalledWith(1, 2, { name: 'bar' });
+    });
+
+    it('should trigger an undo and feedback action on failure', () => {
+      mockServiceMethodError('updateFavorite', 'Something went wrong!');
+
+      actions = hot('a', { a: updateFavoriteAction });
+      expect(effects.updateFavorite$).toBeObservable(
+        hot('(ab)', {
+          a: undoUpdateAction,
+          b: errorFeedbackAction
+        })
+      );
     });
   });
 });

@@ -1,5 +1,9 @@
 import { Action } from '@ngrx/store';
 import { TeacherStudentInterface } from '../../+models';
+import {
+  CustomFeedbackHandlersInterface,
+  FeedbackTriggeringAction
+} from '../effect-feedback';
 
 export enum TeacherStudentActionTypes {
   TeacherStudentsLoaded = '[TeacherStudents] TeacherStudents Loaded',
@@ -61,22 +65,28 @@ export class ClearTeacherStudents implements Action {
   readonly type = TeacherStudentActionTypes.ClearTeacherStudents;
 }
 
-export class LinkTeacherStudent implements Action {
+export class LinkTeacherStudent implements FeedbackTriggeringAction {
   readonly type = TeacherStudentActionTypes.LinkTeacherStudent;
 
   constructor(
     public payload: {
       publicKey: string;
       userId: number;
-      handleErrorAutomatically: boolean;
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
     }
   ) {}
 }
 
-export class UnlinkTeacherStudent implements Action {
+export class UnlinkTeacherStudent implements FeedbackTriggeringAction {
   readonly type = TeacherStudentActionTypes.UnlinkTeacherStudent;
 
-  constructor(public payload: { teacherId: number; userId: number }) {}
+  constructor(
+    public payload: {
+      teacherId: number;
+      userId: number;
+      customFeedbackHandlers?: CustomFeedbackHandlersInterface;
+    }
+  ) {}
 }
 
 export type TeacherStudentActions =

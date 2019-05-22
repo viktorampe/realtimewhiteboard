@@ -25,6 +25,7 @@ export class EduContent implements EduContentInterface, ContentInterface {
   publishedEduContentMetadata?: EduContentMetadataInterface;
   notes?: EduContentNoteInterface[];
   favorites?: FavoriteInterface[];
+  minimal?: EduContentInterface;
   get name(): string {
     return this.publishedEduContentMetadata
       ? this.publishedEduContentMetadata.title
@@ -64,5 +65,11 @@ export class EduContent implements EduContentInterface, ContentInterface {
       this.publishedEduContentMetadata.methods[0] // but element can be undefined
       ? this.publishedEduContentMetadata.methods.map(m => 'method:' + m.icon)
       : [];
+  }
+  get streamable(): boolean {
+    return (
+      this.publishedEduContentMetadata &&
+      this.publishedEduContentMetadata.streamable
+    );
   }
 }

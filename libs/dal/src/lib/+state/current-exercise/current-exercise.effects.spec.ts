@@ -190,8 +190,7 @@ describe('ExerciseEffects', () => {
 
     const saveExerciseAction = new SaveCurrentExercise({
       userId: 6,
-      exercise: mockExercise,
-      displayResponse: true
+      exercise: mockExercise
     });
 
     const noSaveExerciseAction = new SaveCurrentExercise({
@@ -216,8 +215,7 @@ describe('ExerciseEffects', () => {
             effectFeedback: new EffectFeedback({
               id: uuid(),
               triggerAction: saveExerciseAction,
-              message: 'Oefening is bewaard.',
-              display: true
+              message: 'Oefening is bewaard.'
             })
           }
         );
@@ -266,7 +264,6 @@ describe('ExerciseEffects', () => {
                 }
               ],
               type: 'error',
-              display: true,
               priority: Priority.HIGH
             })
           }),

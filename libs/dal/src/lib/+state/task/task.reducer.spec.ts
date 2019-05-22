@@ -230,8 +230,7 @@ describe('Tasks Reducer', () => {
       const startState = createState(tasks, true);
       const action = new TeacherStudentActions.LinkTeacherStudent({
         publicKey: 'foo',
-        userId: 1,
-        handleErrorAutomatically: true
+        userId: 1
       });
       const result = reducer(startState, action);
       expect(result).toEqual(createState(tasks, false));
