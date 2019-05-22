@@ -1,22 +1,6 @@
 import { CommonModule } from '@angular/common';
-import {
-  AfterViewInit,
-  Component,
-  DebugElement,
-  NgModule,
-  QueryList,
-  SimpleChange,
-  Type,
-  ViewChild,
-  ViewChildren
-} from '@angular/core';
-import {
-  async,
-  ComponentFixture,
-  fakeAsync,
-  TestBed,
-  tick
-} from '@angular/core/testing';
+import { AfterViewInit, Component, DebugElement, NgModule, QueryList, SimpleChange, Type, ViewChild, ViewChildren } from '@angular/core';
+import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { MatIconRegistry } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
@@ -25,19 +9,8 @@ import { MockMatIconRegistry } from '@campus/testing';
 import { UiModule } from '@campus/ui';
 import { hot } from 'jasmine-marbles';
 import { BehaviorSubject } from 'rxjs';
-import {
-  MockSearchViewModel,
-  SearchFilterCriteriaFixture,
-  SearchFilterCriteriaValuesFixture,
-  SearchPortalDirective
-} from '../../..';
-import {
-  SearchFilterFactory,
-  SearchFilterInterface,
-  SearchModeInterface,
-  SearchResultInterface,
-  SearchStateInterface
-} from '../../interfaces';
+import { MockSearchViewModel, SearchFilterCriteriaFixture, SearchFilterCriteriaValuesFixture, SearchPortalDirective } from '../../..';
+import { SearchFilterFactory, SearchFilterInterface, SearchModeInterface, SearchResultInterface, SearchStateInterface } from '../../interfaces';
 import { SearchModule } from '../../search.module';
 import { BreadcrumbFilterComponent } from '../breadcrumb-filter/breadcrumb-filter.component';
 import { CheckboxLineFilterComponent } from '../checkbox-line-filter/checkbox-line-filter-component';
@@ -643,10 +616,10 @@ describe('SearchComponent', () => {
 
     it('should call the vm.changeFilters when filters onFilterSelectionChange', () => {
       const filterCriteria = new SearchFilterCriteriaFixture();
-      searchViewmodel.changeFilters = jest.fn();
+      searchViewmodel.updateFilterCriteria = jest.fn();
       searchComponent.onFilterSelectionChange(filterCriteria);
-      expect(searchViewmodel.changeFilters).toHaveBeenCalledTimes(1);
-      expect(searchViewmodel.changeFilters).toHaveBeenCalledWith(
+      expect(searchViewmodel.updateFilterCriteria).toHaveBeenCalledTimes(1);
+      expect(searchViewmodel.updateFilterCriteria).toHaveBeenCalledWith(
         filterCriteria
       );
     });

@@ -51,6 +51,8 @@ export class EduContentService implements EduContentServiceInterface {
                 true // second map key type is number
               )
             };
+            console.log(returnValue);
+
             return returnValue;
           }
         )

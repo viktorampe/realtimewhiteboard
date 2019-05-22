@@ -1,6 +1,6 @@
 import { Injectable, Injector } from '@angular/core';
-import { BehaviorSubject, Observable, zip } from 'rxjs';
-import { filter, map, startWith, take } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { filter, map, share, startWith, take } from 'rxjs/operators';
 import {
   SearchFilterCriteriaInterface,
   SearchFilterCriteriaValuesInterface,
@@ -28,29 +28,58 @@ export class SearchViewModel {
     this.initiateStreams();
   }
 
+  private combo$: BehaviorSubject<{
+    state: any;
+    predictions: any;
+    factoryFilters: any;
+  }> = new BehaviorSubject(null);
+  private _predictions;
+  private _factoryFilters;
+  private setFilters(factoryFilters: SearchFilterInterface[]) {
+    this._factoryFilters = factoryFilters;
+    this.checkCombo();
+  }
+  private setPredictions(results: SearchResultInterface) {
+    if (results.filterCriteriaPredictions.size !== 0) {
+      console.log('in if');
+
+      this._predictions = results.filterCriteriaPredictions;
+    }
+    this.checkCombo();
+  }
+  private checkCombo() {
+    if (this._predictions && this._factoryFilters) {
+      // do stuff
+      this.combo$.next({
+        state: this.searchState$.value,
+        predictions: this._predictions,
+        factoryFilters: this._factoryFilters
+      });
+
+      this.clearCombo();
+    }
+  }
+
+  private clearCombo() {
+    if (this.searchMode && this.searchMode.dynamicFilters)
+      this._factoryFilters = null;
+    this._predictions = null;
+  }
+
   private initiateStreams(): void {
-    this.searchFilters$ = zip(
-      // skip initial values
-      this.results$.pipe(filter(result => !!result)),
-      this.filters$.pipe(filter(searchFilter => !!searchFilter.length)),
-      this.searchState$.pipe(filter(state => !!state))
-    ).pipe(
-      map(([results, filters, state]) => {
-        const filterCriteriaSelections = !!state
-          ? state.filterCriteriaSelections
-          : new Map<string, (number | string)[]>();
-        const filterCriteriaPredictions = !!results
-          ? results.filterCriteriaPredictions
-          : new Map<string, Map<string | number, number>>();
-        return filters.map(searchFilters =>
+    this.searchFilters$ = this.combo$.pipe(
+      filter(x => !!x),
+      map(({ predictions, factoryFilters, state }) => {
+        return factoryFilters.map(factoryFilter =>
           this.getUpdatedSearchFilter(
-            searchFilters,
-            filterCriteriaSelections,
-            filterCriteriaPredictions
+            factoryFilter,
+            state.filterCriteriaSelections,
+            predictions
           )
         );
       }),
-      startWith([]) // intial value -> empty array of filters
+      startWith([]), // intial value -> empty array of filters
+      share()
     );
   }
 
@@ -71,7 +100,7 @@ export class SearchViewModel {
   ): SearchFilterInterface {
     if (!searchFilter) return;
 
-    if (Array.isArray(searchFilter.criteria))
+    if (Array.isArray(searchFilter.criteria)) {
       searchFilter.criteria = searchFilter.criteria.map(criterium =>
         this.getUpdatedCriterium(
           criterium,
@@ -79,6 +108,7 @@ export class SearchViewModel {
           resultsFilterCriteriaPredictions
         )
       );
+    }
     //if single get updatedCriterium
     else {
       searchFilter.criteria = this.getUpdatedCriterium(
@@ -236,6 +266,7 @@ export class SearchViewModel {
     this.setFilterCriteria(newSearchState, null);
     // trigger new search
     this.searchState$.next(newSearchState);
+    this.clearCombo();
 
     // request new filters
     this.updateFilters();
@@ -258,7 +289,7 @@ export class SearchViewModel {
     this.filters$.next(this.filters$.value);
   }
 
-  public changeFilters(
+  public updateFilterCriteria(
     criteria: SearchFilterCriteriaInterface | SearchFilterCriteriaInterface[]
   ): void {
     // update state
@@ -266,6 +297,7 @@ export class SearchViewModel {
     this.setFilterCriteria(searchState, criteria);
     searchState.from = 0;
     this.searchState$.next(searchState);
+    this.clearCombo();
 
     // update filters
     if (this.searchMode) {
@@ -273,8 +305,6 @@ export class SearchViewModel {
         // request new filters
         // response from factory will trigger emit
         this.updateFilters();
-      } else {
-        this.filters$.next(this.filters$.value);
       }
     }
   }
@@ -283,28 +313,21 @@ export class SearchViewModel {
     newValue.from = 0;
     newValue.searchTerm = searchTerm;
     this.searchState$.next(newValue);
-    this.filters$.next(this.filters$.value);
+    this.clearCombo();
   }
 
   public updateResult(result: SearchResultInterface): void {
-    // check searchState if is a results refresh
-    // -> if so, keep current predictions
-    if (
-      this.searchState$.value &&
-      !!this.searchState$.value.from &&
-      this.results$.value
-    ) {
-      result.filterCriteriaPredictions = this.results$.value.filterCriteriaPredictions;
-    }
+    if (!result) return;
 
     this.results$.next(result);
+    this.setPredictions(result);
   }
 
   private updateFilters(): void {
     this.filterFactory
       .getFilters(this.searchState$.value)
       .pipe(take(1))
-      .subscribe(filters => this.filters$.next(filters));
+      .subscribe(filters => this.setFilters(filters));
   }
 
   private extractSelectedValuesFromCriteria(

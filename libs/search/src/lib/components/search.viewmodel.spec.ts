@@ -79,14 +79,13 @@ describe('SearchViewModel', () => {
     });
   });
 
-  describe('changeFilters', () => {
+  describe('updateFilterCriteria', () => {
     beforeEach(() => {
       const searchState: SearchStateInterface = {
         from: 10,
         filterCriteriaSelections: new Map([['foo', [3]], ['bar', [4, 5, 6]]])
       } as SearchStateInterface;
       searchViewModel.reset(mockSearchMode, searchState);
-      // searchViewModel.searchState$.next(searchState);
     });
 
     it('should update `searchFilterCriteria` and reset `from` in searchState', () => {
@@ -110,7 +109,7 @@ describe('SearchViewModel', () => {
           }
         ]
       };
-      searchViewModel.changeFilters(searchFilterCriteria);
+      searchViewModel.updateFilterCriteria(searchFilterCriteria);
 
       expect(searchViewModel.searchState$).toBeObservable(
         hot('a', {
@@ -160,7 +159,7 @@ describe('SearchViewModel', () => {
           }
         ]
       };
-      searchViewModel.changeFilters(searchFilterCriteria);
+      searchViewModel.updateFilterCriteria(searchFilterCriteria);
 
       expect(searchViewModel.searchState$).toBeObservable(
         hot('a', {
@@ -210,7 +209,7 @@ describe('SearchViewModel', () => {
           }
         ]
       };
-      searchViewModel.changeFilters(searchFilterCriteria);
+      searchViewModel.updateFilterCriteria(searchFilterCriteria);
 
       expect(searchViewModel.searchState$).toBeObservable(
         hot('a', {
@@ -226,7 +225,7 @@ describe('SearchViewModel', () => {
       );
     });
 
-    it('should update `searchFilterCriteria` with array of searchFilters', () => {
+    it('should update `searchFilterCriteria` with array of searchFilterCriteria', () => {
       const searchFilterCriteria: SearchFilterCriteriaInterface[] = [
         {
           name: 'foo',
@@ -285,7 +284,7 @@ describe('SearchViewModel', () => {
         ]
       };
 
-      searchViewModel.changeFilters(searchFilterCriteria);
+      searchViewModel.updateFilterCriteria(searchFilterCriteria);
 
       expect(searchViewModel.searchState$).toBeObservable(
         hot('a', {
@@ -303,11 +302,10 @@ describe('SearchViewModel', () => {
     });
 
     it('should not request new filters when dynamicfilters !== true', () => {
-      searchViewModel['searchMode'] = {
-        dynamicFilters: false
-      } as SearchModeInterface;
-      const spy = jest.spyOn(searchViewModel as any, 'updateFilters');
-      searchViewModel.changeFilters({
+      searchViewModel.reset({ ...mockSearchMode, dynamicFilters: false });
+
+      const spy = jest.spyOn(TestBed.get(MockFilterFactory), 'getFilters');
+      searchViewModel.updateFilterCriteria({
         values: []
       } as SearchFilterCriteriaInterface);
       expect(spy).not.toHaveBeenCalled();
@@ -315,12 +313,10 @@ describe('SearchViewModel', () => {
     });
 
     it('should request new filters when dynamicfilters === true', () => {
-      searchViewModel['filterFactory'] = new MockFilterFactory();
-      searchViewModel['searchMode'] = {
-        dynamicFilters: true
-      } as SearchModeInterface;
-      const spy = jest.spyOn(searchViewModel as any, 'updateFilters');
-      searchViewModel.changeFilters({
+      searchViewModel.reset({ ...mockSearchMode, dynamicFilters: true });
+
+      const spy = jest.spyOn(TestBed.get(MockFilterFactory), 'getFilters');
+      searchViewModel.updateFilterCriteria({
         values: []
       } as SearchFilterCriteriaInterface);
       expect(spy).toHaveBeenCalled();
@@ -347,9 +343,8 @@ describe('SearchViewModel', () => {
       searchViewModel.searchState$.next(oldValue);
       searchViewModel.changeSort(mockSortMode);
 
-      const expected = { ...oldValue };
-      expected.sort = mockSortMode.name;
-      expected.from = 0;
+      const expected = { ...oldValue, sort: mockSortMode.name, from: 0 };
+
       expect(searchViewModel.searchState$).toBeObservable(
         hot('a', { a: expected })
       );
@@ -363,12 +358,15 @@ describe('SearchViewModel', () => {
         { pageSize: 20, from: 0, expectedFrom: 20 },
         { pageSize: 30, from: 10, expectedFrom: 40 }
       ].forEach(values => {
+        searchViewModel.reset({
+          ...mockSearchMode,
+          results: { ...mockSearchMode.results, pageSize: values.pageSize }
+        });
+
         searchViewModel.searchState$.next(<SearchStateInterface>{
           from: values.from
         });
-        searchViewModel['searchMode'] = <SearchModeInterface>{
-          results: { pageSize: values.pageSize }
-        };
+
         searchViewModel.getNextPage();
         expect(searchViewModel.searchState$).toBeObservable(
           hot('a', {
@@ -398,43 +396,23 @@ describe('SearchViewModel', () => {
     });
 
     it('should update the state', () => {
-      searchViewModel.reset(
-        {
-          name: 'foo',
-          searchFilterFactory: MockFilterFactory,
-          label: '',
-          dynamicFilters: null,
-          results: null
-        } as SearchModeInterface,
-        {
-          searchTerm: 'bar',
-          from: 60,
-          filterCriteriaSelections: new Map()
-        } as SearchStateInterface
-      );
+      const mockSearchState = {
+        searchTerm: 'bar',
+        from: 60,
+        filterCriteriaSelections: new Map()
+      } as SearchStateInterface;
+
+      searchViewModel.reset(mockSearchMode, mockSearchState);
 
       expect(searchViewModel.searchState$).toBeObservable(
         hot('a', {
-          a: {
-            searchTerm: 'bar',
-            from: 60,
-            filterCriteriaSelections: new Map()
-          }
+          a: mockSearchState
         })
       );
     });
 
     it('should reset the state without an initial searchState', () => {
-      searchViewModel.reset(
-        {
-          name: 'foo',
-          searchFilterFactory: MockFilterFactory,
-          label: '',
-          dynamicFilters: null,
-          results: null
-        } as SearchModeInterface,
-        null
-      );
+      searchViewModel.reset(mockSearchMode, null);
 
       expect(searchViewModel.searchState$).toBeObservable(
         hot('a', {
@@ -471,20 +449,16 @@ describe('SearchViewModel', () => {
         })
       );
     });
-  });
 
-  describe('updateFilters', () => {
     it('should update the filters via the filterFactory', () => {
-      searchViewModel['filterFactory'] = new MockFilterFactory();
-      const spy = jest.spyOn(searchViewModel['filterFactory'], 'getFilters');
+      const spy = jest.spyOn(TestBed.get(MockFilterFactory), 'getFilters');
 
       // set initial state
       const mockSearchState = {
         searchTerm: 'foo'
       } as SearchStateInterface;
-      searchViewModel.searchState$.next(mockSearchState);
 
-      searchViewModel['updateFilters']();
+      searchViewModel.reset(mockSearchMode, mockSearchState);
 
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenCalledWith(mockSearchState);
@@ -503,66 +477,48 @@ describe('SearchViewModel', () => {
         hot('a', { a: [] })
       );
     });
-    it(
-      'should return the unchanged filters' +
-        'if no state and no result updates are done with the prediction set to 0' +
-        ' if it was not set before',
-      () => {
-        [true, false].forEach(criteriaIsArray => {
-          searchViewModel['filters$'].next([
-            getTestFilter(
-              'firstFilter',
-              140,
-              undefined,
-              false,
-              criteriaIsArray
-            ),
-            getTestFilter('secondFilter', 3484, 38, false, criteriaIsArray)
-          ]);
-          searchViewModel.updateResult(
-            getTestSearchResult('someOtherName', new Map()) // searchResult without predictions
-          );
 
-          searchViewModel.searchState$.next(emptySearchState);
+    // interface states that the filterCriteria can either be a single value or an array
+    [true, false].forEach(criteriaIsArray => {
+      it('searchResults without predictions should not cause searchFilters$ to re emit', () => {
+        const initFilters = [
+          getTestFilter('firstFilter', 140, undefined, false, criteriaIsArray),
+          getTestFilter('secondFilter', 3484, undefined, false, criteriaIsArray)
+        ];
 
-          expect(searchViewModel.searchFilters$).toBeObservable(
-            hot('(ab)', {
-              a: [], // initial value
-              b: [
-                getTestFilter('firstFilter', 140, 0, false, criteriaIsArray),
-                getTestFilter('secondFilter', 3484, 38, false, criteriaIsArray)
-              ]
-            })
-          );
-        });
-      }
-    );
-    it('should not change null values to 0 and also not change 0 values if no new predictions where given', () => {
-      [true, false].forEach(criteriaIsArray => {
-        searchViewModel['filters$'].next([
-          getTestFilter('firstFilter', 140, null, false, criteriaIsArray),
-          getTestFilter('secondFilter', 140, 0, false, criteriaIsArray),
-          getTestFilter('thirdFilter', 3484, 38, false, criteriaIsArray)
-        ]);
+        const expectedFilters = [
+          getTestFilter('firstFilter', 140, 80, false, criteriaIsArray),
+          getTestFilter('secondFilter', 3484, 0, false, criteriaIsArray)
+        ];
+
+        const spy = jest
+          .spyOn(TestBed.get(MockFilterFactory), 'getFilters')
+          .mockReturnValue(of(initFilters));
+
+        searchViewModel.reset({ ...mockSearchMode, dynamicFilters: false });
+
         searchViewModel.updateResult(
-          getTestSearchResult('someOtherName', new Map()) // searchResult without predictions
+          getTestSearchResult('firstFilter', new Map([[140, 80]]))
         );
-        searchViewModel.searchState$.next(emptySearchState);
+
+        searchViewModel.updateResult(
+          {
+            count: 0,
+            results: [],
+            filterCriteriaPredictions: new Map()
+          } // searchResult without predictions
+        );
 
         expect(searchViewModel.searchFilters$).toBeObservable(
           hot('(ab)', {
             a: [], // initial value
-            b: [
-              getTestFilter('firstFilter', 140, null, false, criteriaIsArray),
-              getTestFilter('secondFilter', 140, 0, false, criteriaIsArray),
-              getTestFilter('thirdFilter', 3484, 38, false, criteriaIsArray)
-            ]
+            b: expectedFilters
+            // no extra emit for 2nd update result
           })
         );
       });
-    });
-    it('should update selections and predictions for all criteria, including children', () => {
-      [true, false].forEach(criteriaIsArray => {
+
+      it('should update selections and predictions for all criteria, including children', () => {
         const initFilters = [
           getTestFilter(
             'shouldNotBeChanged',
@@ -592,6 +548,11 @@ describe('SearchViewModel', () => {
           ),
           getTestFilter('nonUpdatingFilter', 140, 40, false, criteriaIsArray)
         ];
+
+        const spy = jest
+          .spyOn(TestBed.get(MockFilterFactory), 'getFilters')
+          .mockReturnValue(of(initFilters));
+
         const expectedFilters = [
           getTestFilter(
             'shouldNotBeChanged',
@@ -630,9 +591,9 @@ describe('SearchViewModel', () => {
           1999,
           3048
         ]);
+
+        searchViewModel.reset(mockSearchMode, searchState);
         searchViewModel.updateResult(searchResults);
-        searchViewModel.searchState$.next(searchState);
-        searchViewModel['filters$'].next(initFilters);
         expect(searchViewModel.searchFilters$).toBeObservable(
           hot('(ab)', {
             a: [], // initial value
