@@ -66,9 +66,9 @@ describe('HistoryService', () => {
         mockHistory.name,
         mockHistory.type,
         mockHistory.learningAreaId,
-        null,
-        null,
-        null,
+        '',
+        0,
+        0,
         mockHistory.taskId
       );
 
