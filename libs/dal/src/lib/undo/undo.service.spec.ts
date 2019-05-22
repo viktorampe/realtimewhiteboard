@@ -2,9 +2,13 @@ import { TestBed } from '@angular/core/testing';
 import { Actions, EffectsModule } from '@ngrx/effects';
 import { Action, Store, StoreModule } from '@ngrx/store';
 import { DataPersistence, NxModule } from '@nrwl/nx';
+import { hot } from '@nrwl/nx/testing';
 import { from, of } from 'rxjs';
 import { DalState } from '../+state';
-import { AddEffectFeedback } from '../+state/effect-feedback/effect-feedback.actions';
+import {
+  AddEffectFeedback,
+  DeleteEffectFeedback
+} from '../+state/effect-feedback/effect-feedback.actions';
 import { EffectFeedback, Priority } from '../..';
 import { UndoService } from './undo.service';
 import {
@@ -52,11 +56,13 @@ describe('UndoService', () => {
     });
   });
   describe('dispatchActionAsUndoable', () => {
-    it('should dispatch a AddEffectFeedback with the warning', () => {
+    let actions: Actions;
+    let payload: UndoableActionInterface;
+    let warningFeedback: EffectFeedback;
+    beforeAll(() => {
       jest.spyOn(Date, 'now').mockReturnValue(1234567890);
-      const storeSpy = jest.spyOn(store, 'dispatch');
-      const actions: Actions = from([]);
-      const payload: UndoableActionInterface = {
+      actions = from([]);
+      payload = {
         action: { type: 'deleteAlertAction', payload: {} },
         dataPersistence: { store: store, actions: actions } as DataPersistence<
           DalState
@@ -66,7 +72,7 @@ describe('UndoService', () => {
         doneLabel: 'done label',
         intendedAction: of('returnValue')
       };
-      const warningFeedback = new EffectFeedback({
+      warningFeedback = new EffectFeedback({
         id: uuid(),
         triggerAction: payload.action,
         message: payload.undoLabel,
@@ -76,10 +82,69 @@ describe('UndoService', () => {
         type: 'success',
         priority: Priority.NORM
       });
+    });
+    afterAll(() => {
+      jest.resetAllMocks();
+    });
+    it('should dispatch a AddEffectFeedback with the warning', () => {
+      const storeSpy = jest.spyOn(store, 'dispatch');
       service.dispatchActionAsUndoable(payload);
       expect(storeSpy).toHaveBeenCalledTimes(1);
       expect(storeSpy).toHaveBeenCalledWith(
         new AddEffectFeedback({ effectFeedback: warningFeedback })
+      );
+    });
+    it('should open a pipe on the dataPersistence actions', () => {
+      const actionsSpy = jest.spyOn(actions, 'pipe');
+      service.dispatchActionAsUndoable(payload);
+      expect(actionsSpy).toHaveBeenCalledTimes(1);
+    });
+    it('should return a successMessage if datePersistence has a DeleteEffectFeedback actions without userAction', () => {
+      const deleteEffectFeedback: DeleteEffectFeedback = new DeleteEffectFeedback(
+        { id: 'foo' }
+      );
+      payload.dataPersistence.actions = from([deleteEffectFeedback]);
+      const undoFeedback = new EffectFeedback({
+        id: uuid(),
+        triggerAction: payload.action,
+        message: payload.doneLabel,
+        userActions: null,
+        type: 'success',
+        priority: Priority.NORM
+      });
+
+      expect(service.dispatchActionAsUndoable(payload)).toBeObservable(
+        hot('(a|)', {
+          a: new AddEffectFeedback({
+            effectFeedback: undoFeedback
+          })
+        })
+      );
+    });
+    it('should return a successMessage if datePersistence has a DeleteEffectFeedback actions without userAction', () => {
+      jest.spyOn(service, 'undo').mockReturnValue({
+        type: 'ngrx-undo/UNDO_ACTION',
+        payload: payload.action
+      });
+      const deleteEffectFeedback: DeleteEffectFeedback = new DeleteEffectFeedback(
+        { id: 'foo', userAction: service.undo(payload.action) }
+      );
+      payload.dataPersistence.actions = from([deleteEffectFeedback]);
+      const undoFeedback = new EffectFeedback({
+        id: uuid(),
+        triggerAction: payload.action,
+        message: payload.undoneLabel,
+        userActions: null,
+        type: 'success',
+        priority: Priority.NORM
+      });
+
+      expect(service.dispatchActionAsUndoable(payload)).toBeObservable(
+        hot('(a|)', {
+          a: new AddEffectFeedback({
+            effectFeedback: undoFeedback
+          })
+        })
       );
     });
   });
