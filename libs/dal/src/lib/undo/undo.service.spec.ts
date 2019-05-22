@@ -7,7 +7,13 @@ describe('UndoService', () => {
   let service: UndoService;
   beforeAll(() => {
     TestBed.configureTestingModule({
-      providers: [{ provide: UNDO_SERVICE_TOKEN, useClass: UndoService }]
+      providers: [
+        { provide: UNDO_SERVICE_TOKEN, useClass: UndoService },
+        {
+          provide: 'uuid',
+          useValue: (): string => 'foo'
+        }
+      ]
     });
     service = TestBed.get(UNDO_SERVICE_TOKEN);
   });
