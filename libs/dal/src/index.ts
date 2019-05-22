@@ -13,6 +13,7 @@ export * from './lib/+state/edu-content-product-type';
 export * from './lib/+state/edu-net';
 export * from './lib/+state/effect-feedback';
 export * from './lib/+state/favorite';
+export * from './lib/+state/history';
 export * from './lib/+state/learning-area';
 export * from './lib/+state/learning-domain';
 export * from './lib/+state/linked-person';
@@ -44,6 +45,7 @@ export {
   EDU_CONTENT_SERVICE_TOKEN
 } from './lib/edu-content/edu-content.service.interface';
 export * from './lib/favorite';
+export * from './lib/history';
 export * from './lib/learning-plan';
 export * from './lib/metadata';
 export * from './lib/persons';

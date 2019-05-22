@@ -109,6 +109,8 @@ import { ExerciseService } from './exercise/exercise.service';
 import { EXERCISE_SERVICE_TOKEN } from './exercise/exercise.service.interface';
 import { FavoriteService } from './favorite/favorite.service';
 import { FAVORITE_SERVICE_TOKEN } from './favorite/favorite.service.interface';
+import { HistoryService } from './history/history.service';
+import { HISTORY_SERVICE_TOKEN } from './history/history.service.interface';
 import { LearningAreaService } from './learning-area/learning-area.service';
 import { LEARNINGAREA_SERVICE_TOKEN } from './learning-area/learning-area.service.interface';
 import { LearningPlanService } from './learning-plan/learning-plan.service';
@@ -363,7 +365,8 @@ export const DAL_OPTIONS = new InjectionToken('dal-options');
     { provide: LEARNING_PLAN_SERVICE_TOKEN, useClass: LearningPlanService },
     { provide: FAVORITE_SERVICE_TOKEN, useClass: FavoriteService },
     { provide: TOC_SERVICE_TOKEN, useClass: TocService },
-    { provide: LEARNING_DOMAIN_SERVICE_TOKEN, useClass: LearningDomainService }
+    { provide: LEARNING_DOMAIN_SERVICE_TOKEN, useClass: LearningDomainService },
+    { provide: HISTORY_SERVICE_TOKEN, useClass: HistoryService }
   ]
 })
 export class DalModule {

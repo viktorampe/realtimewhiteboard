@@ -8,6 +8,7 @@ import {
   EduContentReducer,
   EduNetReducer,
   FavoriteReducer,
+  HistoryReducer,
   LearningAreaReducer,
   LearningDomainReducer,
   LinkedPersonReducer,
@@ -56,4 +57,5 @@ export interface DalState {
   eduNets: EduNetReducer.State;
   schoolTypes: SchoolTypeReducer.State;
   years: YearReducer.State;
+  history: HistoryReducer.State;
 }
