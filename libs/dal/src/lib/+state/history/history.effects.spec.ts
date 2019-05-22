@@ -6,9 +6,10 @@ import { DataPersistence, NxModule } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { HistoryReducer } from '.';
+import { HistoryEffects, HistoryReducer } from '.';
 import { FavoriteFixture } from '../../+fixtures';
 import { HistoryInterface } from '../../+models';
+import { HistoryServiceInterface, HISTORY_SERVICE_TOKEN } from '../../history';
 import {
   HistoryLoaded,
   HistoryLoadError,
@@ -16,11 +17,6 @@ import {
   StartUpsertHistory,
   UpsertHistory
 } from './history.actions';
-import {
-  HistoryEffects,
-  HistoryServiceInterface,
-  HISTORY_SERVICE_TOKEN
-} from './history.effects';
 
 describe('HistoryEffects', () => {
   let actions: Observable<any>;
