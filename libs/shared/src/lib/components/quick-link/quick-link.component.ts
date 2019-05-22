@@ -140,44 +140,44 @@ export class QuickLinkComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  private openEduContentAsExercise(quickLink: QuickLinkInterface) {
+  public openEduContentAsExercise(quickLink: QuickLinkInterface) {
     this.quickLinkViewModel.openExercise(quickLink.eduContent);
   }
 
-  private openEduContentAsSolution(quickLink: QuickLinkInterface) {
+  public openEduContentAsSolution(quickLink: QuickLinkInterface) {
     this.quickLinkViewModel.openExercise(quickLink.eduContent, true);
   }
 
-  private openEduContentAsStream(quickLink: QuickLinkInterface) {
+  public openEduContentAsStream(quickLink: QuickLinkInterface) {
     this.quickLinkViewModel.openStaticContent(quickLink.eduContent, true);
     this.closeDialog();
   }
 
-  private openEduContentAsDownload(quickLink: QuickLinkInterface) {
+  public openEduContentAsDownload(quickLink: QuickLinkInterface) {
     this.quickLinkViewModel.openStaticContent(quickLink.eduContent);
   }
 
-  private openBundle(quickLink: QuickLinkInterface) {
+  public openBundle(quickLink: QuickLinkInterface) {
     this.quickLinkViewModel.openBundle(quickLink.bundle);
     this.closeDialog();
   }
 
-  private openTask(quickLink: QuickLinkInterface) {
+  public openTask(quickLink: QuickLinkInterface) {
     this.quickLinkViewModel.openTask(quickLink.task);
     this.closeDialog();
   }
 
-  private openArea(quickLink: QuickLinkInterface) {
+  public openArea(quickLink: QuickLinkInterface) {
     this.quickLinkViewModel.openArea(quickLink.learningArea);
     this.closeDialog();
   }
 
-  private openSearch(quickLink: QuickLinkInterface) {
+  public openSearch(quickLink: QuickLinkInterface) {
     this.quickLinkViewModel.openSearch(quickLink, this.data.mode);
     this.closeDialog();
   }
 
-  private openBoeke(quickLink: QuickLinkInterface) {
+  public openBoeke(quickLink: QuickLinkInterface) {
     this.quickLinkViewModel.openStaticContent(quickLink.eduContent);
   }
 
@@ -185,7 +185,7 @@ export class QuickLinkComponent implements OnInit {
     this.quickLinkViewModel.update(quickLink.id, newName, this.data.mode);
   }
 
-  private enableEditing(quickLink: QuickLinkInterface) {
+  public enableEditing(quickLink: QuickLinkInterface) {
     if (this.activeContentEditable) {
       this.activeContentEditable.active = false;
     }
@@ -200,7 +200,7 @@ export class QuickLinkComponent implements OnInit {
     }
   }
 
-  private remove(quickLink: QuickLinkInterface) {
+  public remove(quickLink: QuickLinkInterface) {
     this.quickLinkViewModel.remove(quickLink.id, this.data.mode);
   }
 

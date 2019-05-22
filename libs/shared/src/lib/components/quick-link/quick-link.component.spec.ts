@@ -49,9 +49,12 @@ import {
 import { FilterServiceInterface, FILTER_SERVICE_TOKEN } from '@campus/utils';
 import { hot } from '@nrwl/nx/testing';
 import { BehaviorSubject } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { QuickLinkTypeEnum } from './quick-link-type.enum';
 import { QuickLinkComponent } from './quick-link.component';
+import {
+  QuickLinkCategoryInterface,
+  QuickLinkInterface
+} from './quick-link.interface';
 import { QuickLinkViewModel } from './quick-link.viewmodel';
 import { MockQuickLinkViewModel } from './quick-link.viewmodel.mock';
 
@@ -59,7 +62,7 @@ describe('QuickLinkComponent', () => {
   let component: QuickLinkComponent;
   let fixture: ComponentFixture<QuickLinkComponent>;
   let quickLinkViewModel: QuickLinkViewModel;
-  let vmQuickLinks$: BehaviorSubject<FavoriteInterface[] | HistoryInterface[]>;
+  let vmQuickLinks$: BehaviorSubject<QuickLinkCategoryInterface[]>;
   let vmFeedback$: BehaviorSubject<EffectFeedbackInterface>;
   let dateMock: MockDate;
   const mockInjectedData = { mode: 'foo' };
@@ -118,9 +121,9 @@ describe('QuickLinkComponent', () => {
 
     // in the mockViewmodel this is a BehaviorSubject
     // in the mockViewmodel the mode parameter isn't used
-    vmQuickLinks$ = quickLinkViewModel.getQuickLinks$(null) as BehaviorSubject<
-      FavoriteInterface[] | HistoryInterface[]
-    >;
+    vmQuickLinks$ = quickLinkViewModel.getQuickLinkCategories$(
+      null
+    ) as BehaviorSubject<QuickLinkCategoryInterface[]>;
     vmFeedback$ = quickLinkViewModel.getFeedback$() as BehaviorSubject<
       EffectFeedbackInterface
     >;
@@ -169,7 +172,7 @@ describe('QuickLinkComponent', () => {
         // mock data contains quicklinks with unique names
         expect(
           quickLinks.every(qL =>
-            listItemTitles.some(title => title === qL.name)
+            listItemTitles.some(title => title === qL.title)
           )
         );
       });
@@ -198,11 +201,20 @@ describe('QuickLinkComponent', () => {
 
     describe('per quickLink', () => {
       it('should show the learning area icon', () => {
-        const mockQuickLink = new FavoriteFixture({
-          learningArea: new LearningAreaFixture({ icon: 'foo' })
-        }) as FavoriteInterface;
+        const mockQuickLink = addActions(
+          new FavoriteFixture({
+            learningArea: new LearningAreaFixture({ icon: 'foo' })
+          })
+        );
 
-        vmQuickLinks$.next([mockQuickLink]);
+        const mockQuickLinkCategory: QuickLinkCategoryInterface = {
+          title: 'foo',
+          type: mockQuickLink.type,
+          order: 1,
+          quickLinks: [mockQuickLink]
+        };
+
+        vmQuickLinks$.next([mockQuickLinkCategory]);
         fixture.detectChanges();
 
         const listItemIcon = fixture.debugElement
@@ -213,12 +225,21 @@ describe('QuickLinkComponent', () => {
       });
 
       it('should show quickLink name', () => {
-        const mockQuickLink = new FavoriteFixture({
-          name: 'foo',
-          learningArea: new LearningAreaFixture()
-        }) as FavoriteInterface;
+        const mockQuickLink = addActions(
+          new FavoriteFixture({
+            name: 'foo',
+            learningArea: new LearningAreaFixture({ icon: 'foo' })
+          })
+        );
 
-        vmQuickLinks$.next([mockQuickLink]);
+        const mockQuickLinkCategory: QuickLinkCategoryInterface = {
+          title: 'foo',
+          type: mockQuickLink.type,
+          order: 1,
+          quickLinks: [mockQuickLink]
+        };
+
+        vmQuickLinks$.next([mockQuickLinkCategory]);
         fixture.detectChanges();
 
         const listItemName = fixture.debugElement
@@ -231,13 +252,23 @@ describe('QuickLinkComponent', () => {
       describe('open actions', () => {
         describe('type: area', () => {
           beforeEach(() => {
-            const mockQuickLink = new FavoriteFixture({
-              name: 'foo',
-              learningArea: new LearningAreaFixture(),
-              type: FavoriteTypesEnum.AREA
-            }) as FavoriteInterface;
+            const mockQuickLink = addActions(
+              new FavoriteFixture({
+                name: 'foo',
+                learningArea: new LearningAreaFixture(),
+                type: FavoriteTypesEnum.AREA
+              }),
+              'openArea'
+            );
 
-            vmQuickLinks$.next([mockQuickLink]);
+            const mockQuickLinkCategory: QuickLinkCategoryInterface = {
+              title: 'foo',
+              type: mockQuickLink.type,
+              order: 1,
+              quickLinks: [mockQuickLink]
+            };
+
+            vmQuickLinks$.next([mockQuickLinkCategory]);
             fixture.detectChanges();
           });
           it('should not show the alternativeOpenActions as links', () => {
@@ -248,7 +279,7 @@ describe('QuickLinkComponent', () => {
             expect(listItemLinks.length).toBe(0);
           });
 
-          it('should call the correct action handler on element click', fakeAsync(() => {
+          it('should call the correct action handler on element click', () => {
             const listItem = fixture.debugElement.query(
               By.directive(MatListItem)
             );
@@ -257,18 +288,28 @@ describe('QuickLinkComponent', () => {
             spyOn(component, 'openArea');
             listItem.triggerEventHandler('click', null);
             expect(component.openArea).toHaveBeenCalled();
-          }));
+          });
         });
 
         describe('type: bundle', () => {
           beforeEach(() => {
-            const mockQuickLink = new FavoriteFixture({
-              name: 'foo',
-              learningArea: new LearningAreaFixture(),
-              type: FavoriteTypesEnum.BUNDLE
-            }) as FavoriteInterface;
+            const mockQuickLink = addActions(
+              new FavoriteFixture({
+                name: 'foo',
+                learningArea: new LearningAreaFixture(),
+                type: FavoriteTypesEnum.BUNDLE
+              }),
+              'openBundle'
+            );
 
-            vmQuickLinks$.next([mockQuickLink]);
+            const mockQuickLinkCategory: QuickLinkCategoryInterface = {
+              title: 'foo',
+              type: mockQuickLink.type,
+              order: 1,
+              quickLinks: [mockQuickLink]
+            };
+
+            vmQuickLinks$.next([mockQuickLinkCategory]);
             fixture.detectChanges();
           });
           it('should not show the alternativeOpenActions as links', () => {
@@ -293,13 +334,23 @@ describe('QuickLinkComponent', () => {
 
         describe('type: task', () => {
           beforeEach(() => {
-            const mockQuickLink = new FavoriteFixture({
-              name: 'foo',
-              learningArea: new LearningAreaFixture(),
-              type: FavoriteTypesEnum.TASK
-            }) as FavoriteInterface;
+            const mockQuickLink = addActions(
+              new FavoriteFixture({
+                name: 'foo',
+                learningArea: new LearningAreaFixture(),
+                type: FavoriteTypesEnum.TASK
+              }),
+              'openTask'
+            );
 
-            vmQuickLinks$.next([mockQuickLink]);
+            const mockQuickLinkCategory: QuickLinkCategoryInterface = {
+              title: 'foo',
+              type: mockQuickLink.type,
+              order: 1,
+              quickLinks: [mockQuickLink]
+            };
+
+            vmQuickLinks$.next([mockQuickLinkCategory]);
             fixture.detectChanges();
           });
           it('should not show the alternativeOpenActions as links', () => {
@@ -324,13 +375,23 @@ describe('QuickLinkComponent', () => {
 
         describe('type: boek-e', () => {
           beforeEach(() => {
-            const mockQuickLink = new FavoriteFixture({
-              name: 'foo',
-              learningArea: new LearningAreaFixture(),
-              type: FavoriteTypesEnum.BOEKE
-            }) as FavoriteInterface;
+            const mockQuickLink = addActions(
+              new FavoriteFixture({
+                name: 'foo',
+                learningArea: new LearningAreaFixture(),
+                type: FavoriteTypesEnum.BOEKE
+              }),
+              'openTask'
+            );
 
-            vmQuickLinks$.next([mockQuickLink]);
+            const mockQuickLinkCategory: QuickLinkCategoryInterface = {
+              title: 'foo',
+              type: mockQuickLink.type,
+              order: 1,
+              quickLinks: [mockQuickLink]
+            };
+
+            vmQuickLinks$.next([mockQuickLinkCategory]);
             fixture.detectChanges();
           });
           it('should not show the alternativeOpenActions as links', () => {
@@ -355,13 +416,23 @@ describe('QuickLinkComponent', () => {
 
         describe('type: search', () => {
           beforeEach(() => {
-            const mockQuickLink = new FavoriteFixture({
-              name: 'foo',
-              learningArea: new LearningAreaFixture(),
-              type: FavoriteTypesEnum.SEARCH
-            }) as FavoriteInterface;
+            const mockQuickLink = addActions(
+              new FavoriteFixture({
+                name: 'foo',
+                learningArea: new LearningAreaFixture(),
+                type: FavoriteTypesEnum.SEARCH
+              }),
+              'openTask'
+            );
 
-            vmQuickLinks$.next([mockQuickLink]);
+            const mockQuickLinkCategory: QuickLinkCategoryInterface = {
+              title: 'foo',
+              type: mockQuickLink.type,
+              order: 1,
+              quickLinks: [mockQuickLink]
+            };
+
+            vmQuickLinks$.next([mockQuickLinkCategory]);
             fixture.detectChanges();
           });
           it('should not show the alternativeOpenActions as links', () => {
@@ -386,14 +457,25 @@ describe('QuickLinkComponent', () => {
 
         describe('type: educontent - exercise', () => {
           beforeEach(() => {
-            const mockQuickLink = new FavoriteFixture({
-              name: 'foo',
-              learningArea: new LearningAreaFixture(),
-              type: FavoriteTypesEnum.EDUCONTENT,
-              eduContent: new EduContentFixture({ type: 'exercise' })
-            }) as FavoriteInterface;
+            const mockQuickLink = addActions(
+              new FavoriteFixture({
+                name: 'foo',
+                learningArea: new LearningAreaFixture(),
+                type: FavoriteTypesEnum.EDUCONTENT,
+                eduContent: new EduContentFixture({ type: 'exercise' })
+              }),
+              'openEduContentAsExercise',
+              ['openEduContentAsSolution']
+            );
 
-            vmQuickLinks$.next([mockQuickLink]);
+            const mockQuickLinkCategory: QuickLinkCategoryInterface = {
+              title: 'foo',
+              type: mockQuickLink.type,
+              order: 1,
+              quickLinks: [mockQuickLink]
+            };
+
+            vmQuickLinks$.next([mockQuickLinkCategory]);
             fixture.detectChanges();
           });
 
@@ -430,17 +512,28 @@ describe('QuickLinkComponent', () => {
         describe('type: educontent - not an exercise', () => {
           describe('educontent is streamable', () => {
             beforeEach(() => {
-              const mockQuickLink = new FavoriteFixture({
-                name: 'foo',
-                learningArea: new LearningAreaFixture(),
-                type: FavoriteTypesEnum.EDUCONTENT,
-                eduContent: new EduContentFixture(
-                  { type: 'not an exercise' },
-                  new EduContentMetadataFixture({ streamable: true })
-                )
-              }) as FavoriteInterface;
+              const mockQuickLink = addActions(
+                new FavoriteFixture({
+                  name: 'foo',
+                  learningArea: new LearningAreaFixture(),
+                  type: FavoriteTypesEnum.EDUCONTENT,
+                  eduContent: new EduContentFixture(
+                    { type: 'not an exercise' },
+                    new EduContentMetadataFixture({ streamable: true })
+                  )
+                }),
+                'openEduContentAsStream',
+                ['openEduContentAsDownload']
+              );
 
-              vmQuickLinks$.next([mockQuickLink]);
+              const mockQuickLinkCategory: QuickLinkCategoryInterface = {
+                title: 'foo',
+                type: mockQuickLink.type,
+                order: 1,
+                quickLinks: [mockQuickLink]
+              };
+
+              vmQuickLinks$.next([mockQuickLinkCategory]);
               fixture.detectChanges();
             });
 
@@ -476,17 +569,27 @@ describe('QuickLinkComponent', () => {
 
           describe('educontent is not streamable', () => {
             beforeEach(() => {
-              const mockQuickLink = new FavoriteFixture({
-                name: 'foo',
-                learningArea: new LearningAreaFixture(),
-                type: FavoriteTypesEnum.EDUCONTENT,
-                eduContent: new EduContentFixture(
-                  { type: 'not an exercise' },
-                  new EduContentMetadataFixture({ streamable: false })
-                )
-              }) as FavoriteInterface;
+              const mockQuickLink = addActions(
+                new FavoriteFixture({
+                  name: 'foo',
+                  learningArea: new LearningAreaFixture(),
+                  type: FavoriteTypesEnum.EDUCONTENT,
+                  eduContent: new EduContentFixture(
+                    { type: 'not an exercise' },
+                    new EduContentMetadataFixture({ streamable: false })
+                  )
+                }),
+                'openEduContentAsDownload'
+              );
 
-              vmQuickLinks$.next([mockQuickLink]);
+              const mockQuickLinkCategory: QuickLinkCategoryInterface = {
+                title: 'foo',
+                type: mockQuickLink.type,
+                order: 1,
+                quickLinks: [mockQuickLink]
+              };
+
+              vmQuickLinks$.next([mockQuickLinkCategory]);
               fixture.detectChanges();
             });
 
@@ -578,22 +681,41 @@ describe('QuickLinkComponent', () => {
 
   describe('filtering', () => {
     let filterService: FilterServiceInterface;
+    let mockQuickLinks: QuickLinkInterface[];
     beforeEach(() => {
       filterService = TestBed.get(FILTER_SERVICE_TOKEN);
 
-      const mockQuickLinks = [
-        new FavoriteFixture({
-          name: 'foo',
-          type: FavoriteTypesEnum.BOEKE
-        }),
-        new FavoriteFixture({
-          name: 'bar',
-          type: FavoriteTypesEnum.EDUCONTENT,
-          eduContent: new EduContentFixture()
-        })
+      mockQuickLinks = [
+        addActions(
+          new FavoriteFixture({
+            name: 'foo',
+            type: FavoriteTypesEnum.BOEKE
+          })
+        ),
+        addActions(
+          new FavoriteFixture({
+            name: 'bar',
+            type: FavoriteTypesEnum.EDUCONTENT,
+            eduContent: new EduContentFixture()
+          })
+        )
       ];
 
-      vmQuickLinks$.next(mockQuickLinks);
+      const mockQuickLinkCategory1: QuickLinkCategoryInterface = {
+        title: 'foo',
+        type: mockQuickLinks[0].type,
+        order: 1,
+        quickLinks: [mockQuickLinks[0]]
+      };
+
+      const mockQuickLinkCategory2: QuickLinkCategoryInterface = {
+        title: 'bar',
+        type: mockQuickLinks[1].type,
+        order: 2,
+        quickLinks: [mockQuickLinks[1]]
+      };
+
+      vmQuickLinks$.next([mockQuickLinkCategory1, mockQuickLinkCategory2]);
       fixture.detectChanges();
     });
 
@@ -602,8 +724,8 @@ describe('QuickLinkComponent', () => {
         By.directive(FilterTextInputComponent)
       );
 
-      component.contentData$.subscribe(quickLinks => {
-        const returnedItem = quickLinks[0];
+      component.quickLinkCategories$.subscribe(quickLinks => {
+        const returnedItem = mockQuickLinks[0];
 
         filterService.filter = jest.fn().mockReturnValue([returnedItem]);
         filterText.componentInstance.setValue("text here doesn't matter");
@@ -682,619 +804,61 @@ describe('QuickLinkComponent', () => {
       });
     });
 
-    describe('contentData$', () => {
-      describe('grouping and sorting', () => {
-        it('should group the quicklinks in categories, by type', () => {
-          const mockFavorites = [
-            new FavoriteFixture({
-              type: 'boek-e'
-            }),
-            new FavoriteFixture({
-              type: 'boek-e'
-            }),
-            new FavoriteFixture({
-              type: 'task'
-            }),
-            new FavoriteFixture({
-              type: 'bundle'
-            })
-          ];
-
-          vmQuickLinks$.next(mockFavorites);
-          fixture.detectChanges();
-
-          // doesn't test array order
-          const expected = jasmine.arrayContaining([
+    describe('quickLinkCategories$', () => {
+      describe('sorting', () => {
+        fit('should sort the quicklink categories', () => {
+          const mockCategories: QuickLinkCategoryInterface[] = [
             {
-              type: 'boek-e',
-              title: 'Bordboeken',
-              quickLinks: [
-                // ignore missing properties
-                jasmine.objectContaining({ ...mockFavorites[0] }),
-                jasmine.objectContaining({ ...mockFavorites[1] })
-              ]
+              order: 5,
+              type: '',
+              title: '0',
+              quickLinks: []
             },
             {
-              type: 'task',
-              title: 'Taken',
-              quickLinks: [jasmine.objectContaining({ ...mockFavorites[2] })]
+              order: 1,
+              type: '',
+              title: '1',
+              quickLinks: []
             },
             {
-              type: 'bundle',
-              title: 'Bundels',
-              quickLinks: [jasmine.objectContaining({ ...mockFavorites[3] })]
+              order: undefined,
+              type: '',
+              title: '2',
+              quickLinks: []
+            },
+            {
+              order: 2,
+              type: '',
+              title: '3',
+              quickLinks: []
+            },
+            {
+              order: 3,
+              type: '',
+              title: '4',
+              quickLinks: []
             }
-          ]);
+          ];
+
+          vmQuickLinks$.next([...mockCategories]);
+          fixture.detectChanges();
+
+          const expected = [
+            mockCategories[1],
+            mockCategories[3],
+            mockCategories[4],
+            mockCategories[0],
+            mockCategories[2]
+          ];
+
+          console.log(expected.map(ex => ex.order));
+          component.filterTextInput.result$.subscribe(results =>
+            console.log(results.map(res => res.order))
+          );
 
           expect(component.filterTextInput.result$).toBeObservable(
             hot('a', { a: expected })
           );
-        });
-
-        it('should sort the quicklink categories and use a readable name', () => {
-          const mockFavorites = [
-            new FavoriteFixture({ type: FavoriteTypesEnum.TASK }),
-            new FavoriteFixture({ type: 'type not in list' }),
-            new FavoriteFixture({
-              type: FavoriteTypesEnum.BOEKE,
-              eduContent: Object.assign(
-                new EduContent(),
-                new EduContentFixture()
-              )
-            }),
-            new FavoriteFixture({ type: FavoriteTypesEnum.SEARCH }),
-            new FavoriteFixture({
-              type: FavoriteTypesEnum.EDUCONTENT,
-              eduContent: Object.assign(
-                new EduContent(),
-                new EduContentFixture()
-              )
-            }),
-            new FavoriteFixture({ type: FavoriteTypesEnum.BUNDLE })
-          ];
-
-          vmQuickLinks$.next(mockFavorites);
-          fixture.detectChanges();
-
-          // only test category order + title
-          const expected = [
-            jasmine.objectContaining({
-              type: FavoriteTypesEnum.BOEKE,
-              title: 'Bordboeken'
-            }),
-            jasmine.objectContaining({
-              type: FavoriteTypesEnum.EDUCONTENT,
-              title: 'Lesmateriaal'
-            }),
-            jasmine.objectContaining({
-              type: FavoriteTypesEnum.SEARCH,
-              title: 'Zoekopdrachten'
-            }),
-            jasmine.objectContaining({
-              type: FavoriteTypesEnum.BUNDLE,
-              title: 'Bundels'
-            }),
-            jasmine.objectContaining({
-              type: FavoriteTypesEnum.TASK,
-              title: 'Taken'
-            }),
-            jasmine.objectContaining({
-              type: 'type not in list',
-              title: 'type not in list'
-            })
-          ];
-
-          expect(component.filterTextInput.result$).toBeObservable(
-            hot('a', { a: expected })
-          );
-        });
-
-        it('should sort the quicklinks [per category] on created date, descending', () => {
-          const mockFavorites = [
-            new FavoriteFixture({
-              id: 1,
-              type: 'boek-e',
-              created: new Date(1)
-            }),
-            new FavoriteFixture({
-              id: 2,
-              type: 'boek-e',
-              created: new Date(4)
-            }),
-            new FavoriteFixture({
-              id: 3,
-              type: 'boek-e',
-              created: new Date(2)
-            }),
-            new FavoriteFixture({ id: 4, type: 'boek-e', created: new Date(3) })
-          ];
-
-          vmQuickLinks$.next(mockFavorites);
-          fixture.detectChanges();
-
-          // only need quickLinks, only 1 category
-          const quickLinks$ = component.filterTextInput.result$.pipe(
-            map(cD => cD[0].quickLinks)
-          );
-
-          // only test quickLink order
-          const expected = [
-            jasmine.objectContaining(mockFavorites[1]),
-            jasmine.objectContaining(mockFavorites[3]),
-            jasmine.objectContaining(mockFavorites[2]),
-            jasmine.objectContaining(mockFavorites[0])
-          ];
-
-          expect(quickLinks$).toBeObservable(hot('a', { a: expected }));
-        });
-      });
-
-      describe('actions on a quickLink', () => {
-        let quickLinkActions;
-        let quickLink$;
-
-        beforeEach(() => {
-          // replace functions that should be added as handlers with mocks
-          // tests need same instance reference
-          // there are other tests to check if clicks call the correct handler
-          quickLinkActions = component['quickLinkActions'];
-        });
-
-        describe('open actions', () => {
-          describe('type: area', () => {
-            const mockOpenAreaFunction = () => {};
-            const mockFavorite = new FavoriteFixture({
-              type: FavoriteTypesEnum.AREA
-            });
-
-            beforeEach(() => {
-              quickLinkActions.openArea.handler = mockOpenAreaFunction;
-              vmQuickLinks$.next([mockFavorite]);
-              fixture.detectChanges();
-
-              // only 1 category with 1 quickLink
-              quickLink$ = component.filterTextInput.result$.pipe(
-                map(cD => cD[0].quickLinks[0])
-              );
-            });
-
-            it('should add a defaultAction', () => {
-              const expectedDefaultAction = {
-                actionType: 'open',
-                label: 'Openen',
-                icon: 'lesmateriaal',
-                tooltip: 'Navigeer naar de leergebied pagina',
-                handler: mockOpenAreaFunction
-              };
-
-              const expected = jasmine.objectContaining({
-                ...mockFavorite,
-                defaultAction: expectedDefaultAction
-              });
-
-              expect(quickLink$).toBeObservable(hot('a', { a: expected }));
-            });
-
-            it('should not add alternativeOpenActions', () => {
-              const expectedAlternativeOpenActions = [];
-
-              const expected = jasmine.objectContaining({
-                ...mockFavorite,
-                alternativeOpenActions: expectedAlternativeOpenActions
-              });
-
-              expect(quickLink$).toBeObservable(hot('a', { a: expected }));
-            });
-          });
-
-          describe('type: bundle', () => {
-            const mockOpenBundleFunction = () => {};
-            const mockFavorite = new FavoriteFixture({
-              type: FavoriteTypesEnum.BUNDLE
-            });
-
-            beforeEach(() => {
-              quickLinkActions.openBundle.handler = mockOpenBundleFunction;
-              vmQuickLinks$.next([mockFavorite]);
-              fixture.detectChanges();
-
-              // only 1 category with 1 quickLink
-              quickLink$ = component.filterTextInput.result$.pipe(
-                map(cD => cD[0].quickLinks[0])
-              );
-            });
-
-            it('should add a defaultAction', () => {
-              const expectedDefaultAction = {
-                actionType: 'open',
-                label: 'Openen',
-                icon: 'bundle',
-                tooltip: 'Navigeer naar de bundel pagina',
-                handler: mockOpenBundleFunction
-              };
-
-              const expected = jasmine.objectContaining({
-                ...mockFavorite,
-                defaultAction: expectedDefaultAction
-              });
-
-              expect(quickLink$).toBeObservable(hot('a', { a: expected }));
-            });
-
-            it('should not add alternativeOpenActions', () => {
-              const expectedAlternativeOpenActions = [];
-
-              const expected = jasmine.objectContaining({
-                ...mockFavorite,
-                alternativeOpenActions: expectedAlternativeOpenActions
-              });
-
-              expect(quickLink$).toBeObservable(hot('a', { a: expected }));
-            });
-          });
-
-          describe('type: task', () => {
-            const mockOpenTaskFunction = () => {};
-            const mockFavorite = new FavoriteFixture({
-              type: FavoriteTypesEnum.TASK
-            });
-
-            beforeEach(() => {
-              quickLinkActions.openTask.handler = mockOpenTaskFunction;
-              vmQuickLinks$.next([mockFavorite]);
-              fixture.detectChanges();
-
-              // only 1 category with 1 quickLink
-              quickLink$ = component.filterTextInput.result$.pipe(
-                map(cD => cD[0].quickLinks[0])
-              );
-            });
-
-            it('should add a defaultAction', () => {
-              const expectedDefaultAction = {
-                actionType: 'open',
-                label: 'Openen',
-                icon: 'task',
-                tooltip: 'Navigeer naar de taken pagina',
-                handler: mockOpenTaskFunction
-              };
-
-              const expected = jasmine.objectContaining({
-                ...mockFavorite,
-                defaultAction: expectedDefaultAction
-              });
-
-              expect(quickLink$).toBeObservable(hot('a', { a: expected }));
-            });
-
-            it('should not add alternativeOpenActions', () => {
-              const expectedAlternativeOpenActions = [];
-
-              const expected = jasmine.objectContaining({
-                ...mockFavorite,
-                alternativeOpenActions: expectedAlternativeOpenActions
-              });
-
-              expect(quickLink$).toBeObservable(hot('a', { a: expected }));
-            });
-          });
-
-          describe('type: boeke-e', () => {
-            const mockOpenBoekeFunction = () => {};
-            const mockFavorite = new FavoriteFixture({
-              type: FavoriteTypesEnum.BOEKE
-            });
-
-            beforeEach(() => {
-              quickLinkActions.openBoeke.handler = mockOpenBoekeFunction;
-              vmQuickLinks$.next([mockFavorite]);
-              fixture.detectChanges();
-
-              // only 1 category with 1 quickLink
-              quickLink$ = component.filterTextInput.result$.pipe(
-                map(cD => cD[0].quickLinks[0])
-              );
-            });
-
-            it('should add a defaultAction', () => {
-              const expectedDefaultAction = {
-                actionType: 'open',
-                label: 'Openen',
-                icon: 'boeken',
-                tooltip: 'Open het bordboek',
-                handler: mockOpenBoekeFunction
-              };
-
-              const expected = jasmine.objectContaining({
-                ...mockFavorite,
-                defaultAction: expectedDefaultAction
-              });
-
-              expect(quickLink$).toBeObservable(hot('a', { a: expected }));
-            });
-
-            it('should not add alternativeOpenActions', () => {
-              const expectedAlternativeOpenActions = [];
-
-              const expected = jasmine.objectContaining({
-                ...mockFavorite,
-                alternativeOpenActions: expectedAlternativeOpenActions
-              });
-
-              expect(quickLink$).toBeObservable(hot('a', { a: expected }));
-            });
-          });
-
-          describe('type: search', () => {
-            const mockOpenSearchFunction = () => {};
-            const mockFavorite = new FavoriteFixture({
-              type: FavoriteTypesEnum.SEARCH
-            });
-
-            beforeEach(() => {
-              quickLinkActions.openSearch.handler = mockOpenSearchFunction;
-              vmQuickLinks$.next([mockFavorite]);
-              fixture.detectChanges();
-
-              // only 1 category with 1 quickLink
-              quickLink$ = component.filterTextInput.result$.pipe(
-                map(cD => cD[0].quickLinks[0])
-              );
-            });
-
-            it('should add a defaultAction', () => {
-              const expectedDefaultAction = {
-                actionType: 'open',
-                label: 'Openen',
-                icon: 'magnifier',
-                tooltip: 'Open de zoekopdracht',
-                handler: mockOpenSearchFunction
-              };
-
-              const expected = jasmine.objectContaining({
-                ...mockFavorite,
-                defaultAction: expectedDefaultAction
-              });
-
-              expect(quickLink$).toBeObservable(hot('a', { a: expected }));
-            });
-
-            it('should not add alternativeOpenActions', () => {
-              const expectedAlternativeOpenActions = [];
-
-              const expected = jasmine.objectContaining({
-                ...mockFavorite,
-                alternativeOpenActions: expectedAlternativeOpenActions
-              });
-
-              expect(quickLink$).toBeObservable(hot('a', { a: expected }));
-            });
-          });
-
-          describe('type: eduContent - exercise', () => {
-            const mockOpenEduContentAsExerciseFunction = () => {};
-            const mockOpenEduContentAsSolutionFunction = () => {};
-            const mockFavorite = new FavoriteFixture({
-              type: FavoriteTypesEnum.EDUCONTENT,
-              eduContent: new EduContentFixture({ type: 'exercise' })
-            });
-
-            beforeEach(() => {
-              quickLinkActions.openEduContentAsExercise.handler = mockOpenEduContentAsExerciseFunction;
-              quickLinkActions.openEduContentAsSolution.handler = mockOpenEduContentAsSolutionFunction;
-              vmQuickLinks$.next([mockFavorite]);
-              fixture.detectChanges();
-
-              // only 1 category with 1 quickLink
-              quickLink$ = component.filterTextInput.result$.pipe(
-                map(cD => cD[0].quickLinks[0])
-              );
-            });
-
-            it('should add a defaultAction', () => {
-              const expectedDefaultAction = {
-                actionType: 'open',
-                label: 'Openen',
-                icon: 'exercise:open',
-                tooltip: 'Open oefening zonder oplossingen',
-                handler: mockOpenEduContentAsExerciseFunction
-              };
-
-              const expected = jasmine.objectContaining({
-                ...mockFavorite,
-                defaultAction: expectedDefaultAction
-              });
-
-              expect(quickLink$).toBeObservable(hot('a', { a: expected }));
-            });
-
-            it('should add alternativeOpenActions', () => {
-              const expectedAlternativeOpenActions = [
-                {
-                  actionType: 'open',
-                  label: 'Toon oplossing',
-                  icon: 'exercise:finished',
-                  tooltip: 'Open oefening met oplossingen',
-                  handler: mockOpenEduContentAsSolutionFunction
-                }
-              ];
-
-              const expected = jasmine.objectContaining({
-                ...mockFavorite,
-                alternativeOpenActions: expectedAlternativeOpenActions
-              });
-
-              expect(quickLink$).toBeObservable(hot('a', { a: expected }));
-            });
-          });
-
-          describe('type: eduContent - not an exercise', () => {
-            const mockOpenEduContentAsStreamFunction = () => {};
-            const mockOpenEduContentAsDownloadFunction = () => {};
-            let mockFavorite: FavoriteInterface;
-
-            beforeEach(() => {
-              quickLinkActions.openEduContentAsStream.handler = mockOpenEduContentAsStreamFunction;
-              quickLinkActions.openEduContentAsDownload.handler = mockOpenEduContentAsDownloadFunction;
-            });
-
-            describe('eduContent is streamable', () => {
-              beforeEach(() => {
-                mockFavorite = new FavoriteFixture({
-                  type: FavoriteTypesEnum.EDUCONTENT,
-                  eduContent: new EduContentFixture(
-                    {
-                      type: 'not an exercise'
-                    },
-                    new EduContentMetadataFixture({ streamable: true })
-                  )
-                });
-
-                vmQuickLinks$.next([mockFavorite]);
-                fixture.detectChanges();
-
-                // only 1 category with 1 quickLink
-                quickLink$ = component.filterTextInput.result$.pipe(
-                  map(cD => cD[0].quickLinks[0])
-                );
-              });
-
-              it('should add a defaultAction', () => {
-                const expectedDefaultAction = {
-                  actionType: 'open',
-                  label: 'Openen',
-                  icon: 'lesmateriaal',
-                  tooltip: 'Open het lesmateriaal',
-                  handler: mockOpenEduContentAsStreamFunction
-                };
-
-                const expected = jasmine.objectContaining({
-                  ...mockFavorite,
-                  defaultAction: expectedDefaultAction
-                });
-
-                expect(quickLink$).toBeObservable(hot('a', { a: expected }));
-              });
-
-              it('should add alternativeOpenActions', () => {
-                const expectedAlternativeOpenActions = [
-                  {
-                    actionType: 'open',
-                    label: 'Downloaden',
-                    icon: 'download',
-                    tooltip: 'Download het lesmateriaal',
-                    handler: mockOpenEduContentAsDownloadFunction
-                  }
-                ];
-
-                const expected = jasmine.objectContaining({
-                  ...mockFavorite,
-                  alternativeOpenActions: expectedAlternativeOpenActions
-                });
-
-                expect(quickLink$).toBeObservable(hot('a', { a: expected }));
-              });
-            });
-
-            describe('eduContent is not streamable', () => {
-              beforeEach(() => {
-                mockFavorite = new FavoriteFixture({
-                  type: FavoriteTypesEnum.EDUCONTENT,
-                  eduContent: new EduContentFixture(
-                    {
-                      type: 'not an exercise'
-                    },
-                    new EduContentMetadataFixture({ streamable: false })
-                  )
-                });
-
-                vmQuickLinks$.next([mockFavorite]);
-                fixture.detectChanges();
-
-                // only 1 category with 1 quickLink
-                quickLink$ = component.filterTextInput.result$.pipe(
-                  map(cD => cD[0].quickLinks[0])
-                );
-              });
-
-              it('should add a defaultAction', () => {
-                const expectedDefaultAction = {
-                  actionType: 'open',
-                  label: 'Downloaden',
-                  icon: 'download',
-                  tooltip: 'Download het lesmateriaal',
-                  handler: mockOpenEduContentAsDownloadFunction
-                };
-
-                const expected = jasmine.objectContaining({
-                  ...mockFavorite,
-                  defaultAction: expectedDefaultAction
-                });
-
-                expect(quickLink$).toBeObservable(hot('a', { a: expected }));
-              });
-
-              it('should not add alternativeOpenActions', () => {
-                const expectedAlternativeOpenActions = [];
-
-                const expected = jasmine.objectContaining({
-                  ...mockFavorite,
-                  alternativeOpenActions: expectedAlternativeOpenActions
-                });
-
-                expect(quickLink$).toBeObservable(hot('a', { a: expected }));
-              });
-            });
-          });
-        });
-
-        describe('manage actions', () => {
-          const mockUpdateFunction = () => {};
-          const mockRemoveFunction = () => {};
-          let mockFavorite;
-
-          beforeEach(() => {
-            // replace functions that should be added as handlers with mocks
-            // tests need same instance reference
-            // there are other tests to check if clicks call the correct handler
-            quickLinkActions.edit.handler = mockUpdateFunction;
-            quickLinkActions.remove.handler = mockRemoveFunction;
-
-            mockFavorite = new FavoriteFixture({ type: 'task' });
-            vmQuickLinks$.next([mockFavorite]);
-            fixture.detectChanges();
-
-            // only 1 category with 1 quickLink
-            quickLink$ = component.filterTextInput.result$.pipe(
-              map(cD => cD[0].quickLinks[0])
-            );
-          });
-
-          it('should add manageActions', () => {
-            const expectedManageActions = [
-              {
-                actionType: 'manage',
-                label: 'Bewerken',
-                icon: 'edit',
-                tooltip: 'Pas de naam van het item aan',
-                handler: mockUpdateFunction
-              },
-              {
-                actionType: 'manage',
-                label: 'Verwijderen',
-                icon: 'delete',
-                tooltip: 'Verwijder het item',
-                handler: mockRemoveFunction
-              }
-            ];
-
-            const expected = jasmine.objectContaining({
-              ...mockFavorite,
-              manageActions: expectedManageActions
-            });
-
-            expect(quickLink$).toBeObservable(hot('a', { a: expected }));
-          });
         });
       });
     });
@@ -1604,3 +1168,31 @@ describe('QuickLinkComponent', () => {
     });
   });
 });
+
+function addActions(
+  fixture: FavoriteInterface | HistoryInterface,
+  defaultActionHandler = '',
+  alternativeOpenActionhandlers: string[] = [],
+  manageActionHandlers: string[] = ['edit', 'remove']
+): QuickLinkInterface {
+  const alternativeOpenActions: any[] = alternativeOpenActionhandlers.map(
+    handler => ({ handler })
+  );
+  const manageActions: any[] = manageActionHandlers.map(handler => ({
+    handler
+  }));
+
+  return {
+    ...fixture,
+    eduContent: Object.assign(new EduContent(), fixture.eduContent),
+    defaultAction: {
+      actionType: 'open',
+      label: '',
+      icon: '',
+      tooltip: 'foo tooltip',
+      handler: defaultActionHandler
+    },
+    alternativeOpenActions,
+    manageActions
+  };
+}

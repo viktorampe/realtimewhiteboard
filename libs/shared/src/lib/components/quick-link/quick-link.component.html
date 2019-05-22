@@ -30,7 +30,7 @@
             <mat-list-item
               class="quick-link__item"
               *ngFor="let quickLink of category.quickLinks"
-              (click)="quickLink.defaultonActionClick(action, quickLink)"
+              (click)="onActionClick(quickLink.defaultAction, quickLink)"
             >
               <campus-file-extension
                 *ngIf="quickLink.type === 'educontent'; else: notEduContent"
