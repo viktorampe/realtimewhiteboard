@@ -80,7 +80,7 @@ export class FavoriteEffects {
         return this.undoService.dispatchActionAsUndoable({
           action: action,
           dataPersistence: this.dataPersistence,
-          intendedAction: this.favoriteService.deleteFavorite(
+          intendedSideEffect: this.favoriteService.deleteFavorite(
             action.payload.userId,
             action.payload.id
           ),

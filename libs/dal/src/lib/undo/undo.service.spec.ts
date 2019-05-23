@@ -70,7 +70,7 @@ describe('UndoService', () => {
         undoLabel: 'undo label',
         undoneLabel: 'undone label',
         doneLabel: 'done label',
-        intendedAction: of('returnValue')
+        intendedSideEffect: of('returnValue')
       };
       warningFeedback = new EffectFeedback({
         id: uuid(),

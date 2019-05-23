@@ -25,6 +25,6 @@ export interface UndoableActionInterface {
   undoLabel: string;
   undoneLabel: string;
   doneLabel: string;
-  intendedAction: Observable<any>;
+  intendedSideEffect: Observable<any>;
   undoButtonLabel?: string;
 }

@@ -191,7 +191,7 @@ export class AlertsEffects {
         return this.undoService.dispatchActionAsUndoable({
           action: action,
           dataPersistence: this.dataPersistence,
-          intendedAction: this.alertService.deleteAlert(
+          intendedSideEffect: this.alertService.deleteAlert(
             action.payload.personId,
             action.payload.id
           ),

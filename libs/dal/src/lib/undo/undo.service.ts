@@ -32,7 +32,7 @@ export class UndoService implements UndoServiceInterface {
     undoLabel,
     undoneLabel,
     doneLabel,
-    intendedAction,
+    intendedSideEffect,
     undoButtonLabel = 'Annuleren'
   }: UndoableActionInterface): Observable<Action> {
     const undoAction = this.undo(action);
@@ -60,7 +60,7 @@ export class UndoService implements UndoServiceInterface {
       switchMap(
         (deleteFeedbackAction: EffectFeedbackActions.DeleteEffectFeedback) => {
           if (deleteFeedbackAction.payload.userAction !== undoAction) {
-            return intendedAction.pipe(
+            return intendedSideEffect.pipe(
               map(res => {
                 const effectFeedback = new EffectFeedback({
                   id: this.uuid(),
