@@ -64,14 +64,14 @@ export class BundlesComponent implements OnInit {
   private getLearningArea(): Observable<LearningAreaInterface> {
     return this.routeParams$.pipe(
       switchMap(params => {
-        return this.bundlesViewModel.getLearningAreaById(params.area);
+        return this.bundlesViewModel.getLearningAreaById(+params.area);
       })
     );
   }
 
   private getSharedInfo(): Observable<BundlesWithContentInfoInterface> {
     return this.routeParams$.pipe(
-      map(params => params.area),
+      map(params => +params.area),
       switchMap(areaId => {
         return this.bundlesViewModel.getSharedBundlesWithContentInfo(areaId);
       })
